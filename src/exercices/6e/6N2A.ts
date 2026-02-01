@@ -22,7 +22,7 @@ export const amcType = 'AMCNum'
 export const interactifType = 'mathLive'
 export const interactifReady = true
 
-export const titre = 'Effectuer additions et soustractions de nombres décimaux'
+export const titre = 'Poser additions et soustractions de nombres décimaux'
 export const dateDeModifImportante = '01/04/2023'
 
 /**
@@ -41,7 +41,7 @@ export const dateDeModifImportante = '01/04/2023'
 export const uuid = '01873'
 
 export const refs = {
-  'fr-fr': ['6N2A'],
+  'fr-fr': ['6N2A,CM1C2C'],
   'fr-2016': ['6C20'],
   'fr-ch': ['9NO8-1'],
 }
