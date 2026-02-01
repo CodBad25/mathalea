@@ -1657,7 +1657,7 @@ export default class VariationsCourbe extends Exercice {
               }
               const fonction =
                 choix === 2
-                  ? (x: number) => (a < 0 ? 1 / (x + a) : 1 / (a - x))
+                  ? (x: number) => (a < 0 ? 1 / (x - a) : 1 / (a - x))
                   : (x: number) => (a1 * x + b1) / (x - a)
               let denomTex: string
               if (choix === 2) {
