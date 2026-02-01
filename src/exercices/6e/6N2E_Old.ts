@@ -1,8 +1,5 @@
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import {
-  handleAnswers,
-  setReponse,
-} from '../../lib/interactif/gestionInteractif'
+import { setReponse } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { arrondi } from '../../lib/outils/nombres'
 import { texNombre } from '../../lib/outils/texNombre'
@@ -16,25 +13,24 @@ export const amcType = 'AMCNum'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 
-export const titre =
-  'Poser des multiplications de nombres décimaux (paramétrables)'
+export const titre = 'Poser des multiplications de nombres décimaux (Version 2)'
 
 export const dateDePublication = '08/06/2022'
-export const dateDeModifImportante = '01/02/2026'
 
 /**
  * Multiplication de deux nombres décimaux avec des paramètres sur le nombre de chiffres et de décimales dans chaque facteur
+ * Ref 6C30
  * @author Eric Elter (sur la base de 6C30)
+ * Publié le 08/06/2022
  */
-export const uuid = 'f9113'
+export const uuid = 'f6413'
 
 export const refs = {
-  'fr-fr': ['6N2E'],
+  'fr-fr': [],
   'fr-2016': ['6C30-0'],
-  'fr-ch': ['9NO8-9'],
+  'fr-ch': [],
 }
-export default class MultiplierDecimauxParametres extends Exercice {
-  version: string
+export default class MultiplierDecimaux extends Exercice {
   constructor() {
     super()
 
@@ -43,8 +39,8 @@ export default class MultiplierDecimauxParametres extends Exercice {
     this.nbQuestions = 4
     this.sup = 3
     this.sup2 = 3
-    this.sup3 = 2
-    this.sup4 = 3
+    this.sup3 = 1
+    this.sup4 = 2
     this.besoinFormulaireNumerique = [
       'Choix du nombre de chiffres significatifs dans le premier facteur',
       4,
@@ -57,15 +53,14 @@ export default class MultiplierDecimauxParametres extends Exercice {
     ]
     this.besoinFormulaire3Numerique = [
       'Choix du nombre de décimales significatives dans le premier facteur',
-      4,
-      '1 : Aucune décimale\n2 : Une décimale\n3 : Deux décimales\n4 : Trois décimales',
+      3,
+      '1 : Une décimale\n2 : Deux décimales\n3 : Trois décimales',
     ]
     this.besoinFormulaire4Numerique = [
       'Choix du nombre de décimales significatives dans le second facteur',
-      4,
-      '1 : Aucune décimale\n2 : Une décimale\n3 : Deux décimales\n4 : Trois décimales',
+      3,
+      '1 : Une décimale\n2 : Deux décimales\n3 : Trois décimales',
     ]
-    this.version = '6eme'
   }
 
   nouvelleVersion() {
@@ -74,8 +69,8 @@ export default class MultiplierDecimauxParametres extends Exercice {
         ? 'Poser et effectuer le calcul suivant.'
         : 'Poser et effectuer les calculs suivants.'
     let reponse
-    const nbChiffresa = this.sup
-    const nbChiffresb = this.sup2
+    const nbChiffresa = parseInt(this.sup)
+    const nbChiffresb = parseInt(this.sup2)
     for (
       let i = 0, texte, texteCorr, cpt = 0, a, b;
       i < this.nbQuestions && cpt < 50;
@@ -89,21 +84,17 @@ export default class MultiplierDecimauxParametres extends Exercice {
                 Math.pow(10, nbChiffresa - 1) - 1,
               ) +
             randint(1, 9)
-      a = a / Math.pow(10, this.sup3 - 1)
-      if (this.version === 'CM1') {
-        b = this.sup2 === 10 ? randint(2, 9) : this.sup2
-      } else {
-        b =
-          this.sup2 === 1
-            ? randint(2, 9)
-            : 10 *
-                randint(
-                  Math.pow(10, nbChiffresb - 2) + 1,
-                  Math.pow(10, nbChiffresb - 1) - 1,
-                ) +
-              randint(1, 9)
-        b = b / Math.pow(10, this.sup4 - 1)
-      }
+      a = a / Math.pow(10, parseInt(this.sup3))
+      b =
+        this.sup2 === 1
+          ? randint(2, 9)
+          : 10 *
+              randint(
+                Math.pow(10, nbChiffresb - 2) + 1,
+                Math.pow(10, nbChiffresb - 1) - 1,
+              ) +
+            randint(1, 9)
+      b = b / Math.pow(10, parseInt(this.sup4))
       texte = `$${texNombre(a)}\\times${texNombre(b)}$`
       reponse = arrondi(a * b)
       texteCorr = operation({
@@ -111,42 +102,30 @@ export default class MultiplierDecimauxParametres extends Exercice {
         operande2: b,
         type: 'multiplication',
         style: 'display: inline',
-        options: { solution: true, colore: 'red' },
       })
-      if (this.version === '6eme')
-        texteCorr +=
-          '$\\phantom{espace}$' +
-          operation({
-            operande1: b,
-            operande2: a,
-            type: 'multiplication',
-            style: 'display: inline',
-          })
-      if (context.isHtml && this.interactif) {
+      texteCorr +=
+        '$\\phantom{espace}$' +
+        operation({
+          operande1: b,
+          operande2: a,
+          type: 'multiplication',
+          style: 'display: inline',
+        })
+      if (context.isHtml && this.interactif)
         texte +=
           '$~=$' +
           ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers)
-        handleAnswers(this, i, {
-          reponse: {
-            value: reponse,
-            options: { nombreDecimalSeulement: true },
-          },
-        })
+      setReponse(this, i, reponse)
+      this.autoCorrection[i].options = {
+        digits: 0,
+        decimals: 0,
+        signe: false,
+        exposantNbChiffres: 0,
+        exposantSigne: false,
+        approx: 0,
       }
 
-      if (context.isAmc) {
-        setReponse(this, i, reponse)
-
-        this.autoCorrection[i].options = {
-          digits: 0,
-          decimals: 0,
-          signe: false,
-          exposantNbChiffres: 0,
-          exposantSigne: false,
-          approx: 0,
-        }
-      }
-      if (this.questionJamaisPosee(i, a, b)) {
+      if (this.listeQuestions.indexOf(texte) === -1) {
         // Si la question n'a jamais été posée, on en crée une autre
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr
