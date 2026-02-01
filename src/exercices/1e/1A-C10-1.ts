@@ -76,7 +76,7 @@ export default class Puissances extends ExerciceQcmA {
             '$S=\\emptyset$',
             `$S=\\{-${a}\\,;\\,${a}\\}$`,
             `$S=\\{-\\sqrt{${a}}\\,;\\,\\sqrt{${a}}\\}$`,
-            `$S=\\{${a}\\}$`,
+            `$S=\\{${-a}\\}$`,
           ]
         }
         break
