@@ -44,16 +44,19 @@
     )
     if (isStatic(paramsExercice.uuid)) {
       exerciseType = 'static'
+      log(
+        `Exercice.svelte n° ${indiceExercice}: Loaded exercise of type ${exerciseType}: uuid ${paramsExercice.uuid}`,
+      )
     } else if (isSvelte(paramsExercice.uuid)) {
       exerciseType = 'svelte'
       ComponentExercice = await getSvelteComponent(paramsExercice)
     } else {
       exercise = (await getExercise(paramsExercice)) as Exercice
       exerciseType = await getExerciseType(exercise)
+      log(
+        `Exercice.svelte n° ${indiceExercice}: Loaded exercise of type ${exerciseType}: id ${exercise.id}, uuid ${exercise.uuid}`,
+      )
     }
-    log(
-      `Exercice.svelte n° ${indiceExercice}: Loaded exercise of type ${exerciseType}: id ${exercise.id}, uuid ${exercise.uuid}`,
-    )
   })
 
   async function getExercise(
