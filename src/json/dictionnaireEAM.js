@@ -6,7 +6,7 @@ export const dictionnaireEAM = {
     numeroInitial: '1',
     typeExercice: 'eam',
     filiere: 'Specialite',
-    tags: [''],
+    tags: ['QCM'],
   },
   eam_specialite_2025_06_sujet0v1_2: {
     annee: '2025',
@@ -15,7 +15,7 @@ export const dictionnaireEAM = {
     numeroInitial: '2',
     typeExercice: 'eam',
     filiere: 'Specialite',
-    tags: [''],
+    tags: ['Produit scalaire'],
   },
   eam_specialite_2025_06_sujet0v1_3: {
     annee: '2025',
@@ -24,7 +24,7 @@ export const dictionnaireEAM = {
     numeroInitial: '3',
     typeExercice: 'eam',
     filiere: 'Specialite',
-    tags: [''],
+    tags: ['Second degré', 'Dérivation', 'Suites'],
   },
   eam_specialite_2025_06_sujet0v2_1: {
     annee: '2025',
@@ -33,7 +33,7 @@ export const dictionnaireEAM = {
     numeroInitial: '1',
     typeExercice: 'eam',
     filiere: 'Specialite',
-    tags: [''],
+    tags: ['QCM'],
   },
   eam_specialite_2025_06_sujet0v2_2: {
     annee: '2025',
@@ -42,7 +42,7 @@ export const dictionnaireEAM = {
     numeroInitial: '2',
     typeExercice: 'eam',
     filiere: 'Specialite',
-    tags: [''],
+    tags: ['Suites'],
   },
   eam_specialite_2025_06_sujet0v2_3: {
     annee: '2025',
@@ -51,7 +51,7 @@ export const dictionnaireEAM = {
     numeroInitial: '3',
     typeExercice: 'eam',
     filiere: 'Specialite',
-    tags: [''],
+    tags: ['Second degré', 'Dérivation', 'Exponentielle'],
   },
   eam_specifique_2025_06_sujet0v1_1: {
     annee: '2025',
@@ -60,7 +60,7 @@ export const dictionnaireEAM = {
     numeroInitial: '1',
     typeExercice: 'eam',
     filiere: 'Specifique',
-    tags: [''],
+    tags: ['QCM'],
   },
   eam_specifique_2025_06_sujet0v1_2: {
     annee: '2025',
@@ -69,7 +69,7 @@ export const dictionnaireEAM = {
     numeroInitial: '2',
     typeExercice: 'eam',
     filiere: 'Specifique',
-    tags: [''],
+    tags: ['Suites', 'Pourcentages (évolutions)'],
   },
   eam_specifique_2025_06_sujet0v1_3: {
     annee: '2025',
@@ -78,7 +78,7 @@ export const dictionnaireEAM = {
     numeroInitial: '3',
     typeExercice: 'eam',
     filiere: 'Specifique',
-    tags: [''],
+    tags: ["Analyse de l'information", 'Probabilités'],
   },
   eam_specifique_2025_06_sujet0v1_4: {
     annee: '2025',
@@ -87,7 +87,7 @@ export const dictionnaireEAM = {
     numeroInitial: '4',
     typeExercice: 'eam',
     filiere: 'Specifique',
-    tags: [''],
+    tags: ['Croissance linéaire', 'Modélisation'],
   },
   eam_specifique_2025_06_sujet0v2_1: {
     annee: '2025',
@@ -96,7 +96,7 @@ export const dictionnaireEAM = {
     numeroInitial: '1',
     typeExercice: 'eam',
     filiere: 'Specifique',
-    tags: [''],
+    tags: ['QCM'],
   },
   eam_specifique_2025_06_sujet0v2_2: {
     annee: '2025',
@@ -105,7 +105,7 @@ export const dictionnaireEAM = {
     numeroInitial: '2',
     typeExercice: 'eam',
     filiere: 'Specifique',
-    tags: [''],
+    tags: ['Suites'],
   },
   eam_specifique_2025_06_sujet0v2_3: {
     annee: '2025',
@@ -114,7 +114,7 @@ export const dictionnaireEAM = {
     numeroInitial: '3',
     typeExercice: 'eam',
     filiere: 'Specifique',
-    tags: [''],
+    tags: ['Probabilités'],
   },
   eam_specifique_2025_06_sujet0v3_1: {
     annee: '2025',
@@ -123,7 +123,7 @@ export const dictionnaireEAM = {
     numeroInitial: '1',
     typeExercice: 'eam',
     filiere: 'Specifique',
-    tags: [''],
+    tags: ['QCM'],
   },
   eam_specifique_2025_06_sujet0v3_2: {
     annee: '2025',
@@ -132,7 +132,7 @@ export const dictionnaireEAM = {
     numeroInitial: '2',
     typeExercice: 'eam',
     filiere: 'Specifique',
-    tags: [''],
+    tags: ['Suites'],
   },
   eam_specifique_2025_06_sujet0v3_3: {
     annee: '2025',
@@ -141,7 +141,7 @@ export const dictionnaireEAM = {
     numeroInitial: '3',
     typeExercice: 'eam',
     filiere: 'Specifique',
-    tags: [''],
+    tags: ['Probabilités'],
   },
   eam_specifique_2025_06_sujet0v3_4: {
     annee: '2025',
@@ -150,7 +150,7 @@ export const dictionnaireEAM = {
     numeroInitial: '4',
     typeExercice: 'eam',
     filiere: 'Specifique',
-    tags: [''],
+    tags: ['Probabilités', 'Vrai/Faux', 'Exponentielle'],
   },
   eam_technologique_2025_06_sujet0v1_1: {
     annee: '2025',
@@ -159,7 +159,7 @@ export const dictionnaireEAM = {
     numeroInitial: '1',
     typeExercice: 'eam',
     filiere: 'Technologique',
-    tags: [''],
+    tags: ['QCM'],
   },
   eam_technologique_2025_06_sujet0v1_2: {
     annee: '2025',
@@ -168,7 +168,7 @@ export const dictionnaireEAM = {
     numeroInitial: '2',
     typeExercice: 'eam',
     filiere: 'Technologique',
-    tags: [''],
+    tags: ['Suites'],
   },
   eam_technologique_2025_06_sujet0v1_3: {
     annee: '2025',
@@ -177,7 +177,7 @@ export const dictionnaireEAM = {
     numeroInitial: '3',
     typeExercice: 'eam',
     filiere: 'Technologique',
-    tags: [''],
+    tags: ['Dérivation'],
   },
   eam_technologique_2025_06_sujet0v1_4: {
     annee: '2025',
@@ -186,7 +186,7 @@ export const dictionnaireEAM = {
     numeroInitial: '4',
     typeExercice: 'eam',
     filiere: 'Technologique',
-    tags: [''],
+    tags: ['Vrai/Faux', 'Probabilités'],
   },
   eam_technologique_2025_06_sujet0v2_1: {
     annee: '2025',
@@ -195,7 +195,7 @@ export const dictionnaireEAM = {
     numeroInitial: '1',
     typeExercice: 'eam',
     filiere: 'Technologique',
-    tags: [''],
+    tags: ['QCM'],
   },
   eam_technologique_2025_06_sujet0v2_2: {
     annee: '2025',
@@ -204,7 +204,7 @@ export const dictionnaireEAM = {
     numeroInitial: '2',
     typeExercice: 'eam',
     filiere: 'Technologique',
-    tags: [''],
+    tags: ['VRAI/Faux', 'Suites', 'Probabilités', 'Second degré'],
   },
   eam_technologique_2025_06_sujet0v2_3: {
     annee: '2025',
@@ -213,7 +213,7 @@ export const dictionnaireEAM = {
     numeroInitial: '3',
     typeExercice: 'eam',
     filiere: 'Technologique',
-    tags: [''],
+    tags: ['Second degré'],
   },
   eam_technologique_2025_06_sujet0v2_4: {
     annee: '2025',
@@ -222,6 +222,6 @@ export const dictionnaireEAM = {
     numeroInitial: '4',
     typeExercice: 'eam',
     filiere: 'Technologique',
-    tags: [''],
+    tags: ['Probabilités', 'Suites'],
   },
 }
