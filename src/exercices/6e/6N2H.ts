@@ -2,6 +2,7 @@ import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import {
   arrondi,
   nombreDeChiffresDansLaPartieDecimale,
@@ -152,7 +153,9 @@ export default class DivisionDecimale extends Exercice {
       }
       if (this.sup === 2) {
         this.consigne =
-          'Effectuer les divisions décimales suivantes et donner une valeur approchée de leur quotient au millième près.'
+          this.nbQuestions === 1
+            ? 'Effectuer la division décimale suivante et donner une valeur approchée de son quotient au millième près.'
+            : 'Effectuer les divisions décimales suivantes et donner une valeur approchée de leur quotient au millième près.'
       }
       texte = `$${texNombre(a)}\\div${b}`
       if (this.sup === 1) {
@@ -162,7 +165,7 @@ export default class DivisionDecimale extends Exercice {
           type: 'division',
           precision: 3,
         })
-        texteCorr += `<br>$${texNombre(a)}\\div${b}=${texNombre(q)}$`
+        texteCorr += `<br>$${texNombre(a)}\\div${b}=${miseEnEvidence(texNombre(q))}$`
         texte += this.interactif ? '=$' : '$'
       } else {
         texteCorr = operation({
@@ -171,7 +174,7 @@ export default class DivisionDecimale extends Exercice {
           type: 'division',
           precision: 4,
         })
-        texteCorr += `<br>$${texNombre(a)}\\div${b}\\approx${texNombre(q)}$`
+        texteCorr += `<br>$${texNombre(a)}\\div${b}\\approx${miseEnEvidence(texNombre(q))}$`
         texte += this.interactif ? '\\approx$' : '$'
       }
       handleAnswers(this, i, { reponse: { value: q } })
