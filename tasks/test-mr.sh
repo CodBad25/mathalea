@@ -27,28 +27,15 @@ fi
 echo "Récupération des merge requests ouverts..."
 echo ""
 
-# Sauvegarder les MRs dans un fichier temporaire
+# Sauvegarder les MRs dans un fichier temporaire (exclure les drafts)
 TEMP_FILE=$(mktemp)
-glab mr list 2>&1 > "$TEMP_FILE"
+glab mr list --not-draft 2>&1 > "$TEMP_FILE"
 
-# Compter le nombre de MRs
-MR_COUNT=$(grep -c "^!" "$TEMP_FILE" 2>/dev/null || echo "0")
-
-if [ "$MR_COUNT" -eq "0" ]; then
-    echo -e "${YELLOW}Aucun merge request ouvert trouvé.${NC}"
-    rm "$TEMP_FILE"
-    exit 0
-fi
-
-echo -e "${BLUE}Merge requests ouverts:${NC}"
-echo ""
-
-# Afficher la liste avec des numéros
+# Stocker dans des tableaux
 declare -a MR_NUMBERS
 declare -a MR_BRANCHES
 declare -a MR_TITLES
 
-i=1
 while IFS= read -r line; do
     if [[ $line =~ ^!([0-9]+) ]]; then
         MR_NUM="${BASH_REMATCH[1]}"
@@ -61,20 +48,36 @@ while IFS= read -r line; do
             MR_NUMBERS+=($MR_NUM)
             MR_BRANCHES+=($BRANCH)
             MR_TITLES+=("$TITLE")
-            
-            printf "%2d. !%-5s %-50s → %s\n" $i "$MR_NUM" "${TITLE:0:50}" "$BRANCH"
-            ((i++))
         fi
     fi
 done < "$TEMP_FILE"
 
 rm "$TEMP_FILE"
 
+# Vérifier qu'il y a des MRs
+if [ ${#MR_NUMBERS[@]} -eq 0 ]; then
+    echo -e "${YELLOW}Aucun merge request ouvert trouvé (hors drafts).${NC}"
+    exit 0
+fi
+
+echo -e "${BLUE}Merge requests ouverts (du plus ancien au plus récent):${NC}"
+echo ""
+
+# Afficher la liste avec des numéros (ordre inversé : ancien -> récent)
+# Les MRs sont récupérés du plus récent au plus ancien, donc on affiche dans l'ordre inverse
+i=1
+declare -a DISPLAY_INDICES
+for ((idx=${#MR_NUMBERS[@]}-1; idx>=0; idx--)); do
+    DISPLAY_INDICES+=($idx)
+    printf "%2d. !%-5s %-50s → %s\n" $i "${MR_NUMBERS[$idx]}" "${MR_TITLES[$idx]:0:50}" "${MR_BRANCHES[$idx]}"
+    ((i++))
+done
+
 echo ""
 echo -e "${BLUE}0.  all${NC} - Tester toutes les branches"
 echo ""
 
-# Demander le choix
+# Demander le choix de branche
 read -p "Entrez le numéro de la branche à tester (ou 0 pour 'all', ou 'q' pour quitter): " CHOICE
 
 if [ "$CHOICE" = "q" ] || [ "$CHOICE" = "Q" ]; then
@@ -82,38 +85,29 @@ if [ "$CHOICE" = "q" ] || [ "$CHOICE" = "Q" ]; then
     exit 0
 fi
 
-# Fonction pour merger une branche
-merge_branch() {
-    local mr_num=$1
-    local title=$2
-    
-    echo ""
-    echo -e "${YELLOW}Lancer le merge pour !${mr_num}?${NC}"
-    read -p "Voulez-vous merger cette branche maintenant ? (O/N): " MERGE_CHOICE
-    
-    if [ "$MERGE_CHOICE" = "O" ] || [ "$MERGE_CHOICE" = "o" ] || [ "$MERGE_CHOICE" = "Y" ] || [ "$MERGE_CHOICE" = "y" ]; then
-        echo ""
-        echo -e "${BLUE}Merging !${mr_num}...${NC}"
-        if glab mr merge "!${mr_num}" --yes 2>&1; then
-            echo -e "${GREEN}✓ Merge réussi pour !${mr_num}${NC}"
-            return 0
-        else
-            echo -e "${RED}✗ Échec du merge pour !${mr_num}${NC}"
-            echo "  (Le merge peut échouer si des conditions ne sont pas remplies sur GitLab)"
-            return 1
-        fi
-    else
-        echo "Merge annulé."
-        return 0
-    fi
-}
+# Demander tout de suite pour les tests E2E
+echo ""
+read -p "Lancer aussi les tests E2E (views, consistency, interactivity) ? (O/N) [recommandé]: " RUN_E2E
+if [ "$RUN_E2E" = "O" ] || [ "$RUN_E2E" = "o" ] || [ "$RUN_E2E" = "Y" ] || [ "$RUN_E2E" = "y" ] || [ -z "$RUN_E2E" ]; then
+    RUN_E2E_TESTS=true
+else
+    RUN_E2E_TESTS=false
+fi
+
+# Demander pour le test des exercices modifiés (testExosModified)
+echo ""
+read -p "Lancer le test des exercices modifiés (testExosModified) ? (O/N) [recommandé]: " RUN_EXOS
+if [ "$RUN_EXOS" = "O" ] || [ "$RUN_EXOS" = "o" ] || [ "$RUN_EXOS" = "Y" ] || [ "$RUN_EXOS" = "y" ] || [ -z "$RUN_EXOS" ]; then
+    RUN_EXOS_TESTS=true
+else
+    RUN_EXOS_TESTS=false
+fi
 
 # Fonction pour tester une branche
 test_branch() {
     local branch=$1
     local mr_num=$2
     local title=$3
-    local auto_merge=${4:-false}
     
     echo ""
     echo "========================================"
@@ -151,7 +145,7 @@ test_branch() {
     
     # Merge main dans la branche pour simuler ce que ferait le MR
     echo "Merge de main dans ${branch}..."
-    git pull origin main --no-rebase 2>/dev/null || echo "(main déjà à jour ou pas de changements)"
+    git pull origin main --no-rebase --no-edit 2>/dev/null || echo "(main déjà à jour ou pas de changements)"
     
     echo ""
     echo "Installation des dépendances..."
@@ -189,6 +183,90 @@ test_branch() {
         BUILD_PASSED=false
     fi
     
+    # Tests E2E si demandés
+    E2E_VIEWS_PASSED=true
+    E2E_CONSISTENCY_PASSED=true
+    E2E_INTERACTIVITY_PASSED=true
+    
+    if [ "$RUN_E2E_TESTS" = true ]; then
+        echo ""
+        echo -e "${BLUE}=== Tests E2E (comme sur GitLab) ===${NC}"
+        
+        # Test Views (playwright-testCanEleve)
+        echo ""
+        echo -e "${BLUE}--- Test Views (playwright-testCanEleve) ---${NC}"
+        ./tasks/run-e2e-test.sh views 8 2>&1 | tail -100
+        VIEWS_EXIT_CODE=${PIPESTATUS[0]}
+        if [ "$VIEWS_EXIT_CODE" -eq 0 ]; then
+            echo -e "${GREEN}✓ Views: OK${NC}"
+            E2E_VIEWS_PASSED=true
+        else
+            echo -e "${RED}✗ Views: ÉCHEC (code: $VIEWS_EXIT_CODE)${NC}"
+            E2E_VIEWS_PASSED=false
+        fi
+        
+        # Test Consistency (playwright-testCanEleve)
+        echo ""
+        echo -e "${BLUE}--- Test Consistency (playwright-testCanEleve) ---${NC}"
+        ./tasks/run-e2e-test.sh consistency 8 2>&1 | tail -100
+        CONSISTENCY_EXIT_CODE=${PIPESTATUS[0]}
+        if [ "$CONSISTENCY_EXIT_CODE" -eq 0 ]; then
+            echo -e "${GREEN}✓ Consistency: OK${NC}"
+            E2E_CONSISTENCY_PASSED=true
+        else
+            echo -e "${RED}✗ Consistency: ÉCHEC (code: $CONSISTENCY_EXIT_CODE)${NC}"
+            E2E_CONSISTENCY_PASSED=false
+        fi
+        
+        # Test Interactivity (playwright-testInteractivity)
+        echo ""
+        echo -e "${BLUE}--- Test Interactivity (playwright-testInteractivity) ---${NC}"
+        ./tasks/run-e2e-test.sh interactivity 10 2>&1 | tail -100
+        INTERACTIVITY_EXIT_CODE=${PIPESTATUS[0]}
+        if [ "$INTERACTIVITY_EXIT_CODE" -eq 0 ]; then
+            echo -e "${GREEN}✓ Interactivity: OK${NC}"
+            E2E_INTERACTIVITY_PASSED=true
+        else
+            echo -e "${RED}✗ Interactivity: ÉCHEC (code: $INTERACTIVITY_EXIT_CODE)${NC}"
+            E2E_INTERACTIVITY_PASSED=false
+        fi
+    fi
+    
+    # Test des exercices modifiés (testExosModified)
+    EXOS_MODIFIED_PASSED=true
+    if [ "$RUN_EXOS_TESTS" = true ]; then
+        echo ""
+        echo -e "${BLUE}=== Test des exercices modifiés (testExosModified) ===${NC}"
+        
+        # Récupérer les fichiers modifiés (comme sur GitLab)
+        echo "Récupération des fichiers modifiés..."
+        git fetch origin "$branch" --depth=10 2>/dev/null || true
+        
+        # Comparer avec main pour trouver les fichiers modifiés
+        CHANGED_FILES=$(git diff --name-only origin/main..HEAD 2>/dev/null || git diff --name-only main..HEAD 2>/dev/null || echo "")
+        
+        if [ -z "$CHANGED_FILES" ]; then
+            echo -e "${YELLOW}Aucun fichier modifié détecté${NC}"
+        else
+            echo "Fichiers modifiés:"
+            echo "$CHANGED_FILES" | head -20
+            echo ""
+            
+            # Lancer le test sur les exercices modifiés
+            echo "Lancement des tests sur les exercices modifiés..."
+            CHANGED_FILES="$CHANGED_FILES" pnpm test:e2e:console_errors 2>&1 | tail -100
+            EXOS_EXIT_CODE=${PIPESTATUS[0]}
+            
+            if [ "$EXOS_EXIT_CODE" -eq 0 ]; then
+                echo -e "${GREEN}✓ Exercices modifiés: OK${NC}"
+                EXOS_MODIFIED_PASSED=true
+            else
+                echo -e "${RED}✗ Exercices modifiés: ÉCHEC (code: $EXOS_EXIT_CODE)${NC}"
+                EXOS_MODIFIED_PASSED=false
+            fi
+        fi
+    fi
+    
     # Retour sur la branche principale
     echo ""
     echo "Retour sur la branche principale..."
@@ -204,18 +282,28 @@ test_branch() {
     echo "========================================"
     echo -e "${BLUE}RÉSULTATS pour !${mr_num}:${NC}"
     echo "========================================"
-    if [ "$UNIT_TESTS_PASSED" = true ] && [ "$SRC_TESTS_PASSED" = true ] && [ "$BUILD_PASSED" = true ]; then
+    
+    ALL_PASSED=true
+    [ "$UNIT_TESTS_PASSED" = false ] && ALL_PASSED=false
+    [ "$SRC_TESTS_PASSED" = false ] && ALL_PASSED=false
+    [ "$BUILD_PASSED" = false ] && ALL_PASSED=false
+    [ "$E2E_VIEWS_PASSED" = false ] && ALL_PASSED=false
+    [ "$E2E_CONSISTENCY_PASSED" = false ] && ALL_PASSED=false
+    [ "$E2E_INTERACTIVITY_PASSED" = false ] && ALL_PASSED=false
+    [ "$EXOS_MODIFIED_PASSED" = false ] && ALL_PASSED=false
+    
+    if [ "$ALL_PASSED" = true ]; then
         echo -e "${GREEN}✓ PRÊT POUR MERGE${NC}"
-        # Demander pour merger si mode "all" ou demander toujours
-        if [ "$auto_merge" = true ]; then
-            merge_branch "$mr_num" "$title"
-        fi
         return 0
     else
         echo -e "${RED}✗ CONTIENT DES ERREURS${NC}"
         [ "$UNIT_TESTS_PASSED" = false ] && echo "  - Tests unitaires"
         [ "$SRC_TESTS_PASSED" = false ] && echo "  - Tests src"
         [ "$BUILD_PASSED" = false ] && echo "  - Build"
+        [ "$E2E_VIEWS_PASSED" = false ] && echo "  - E2E Views"
+        [ "$E2E_CONSISTENCY_PASSED" = false ] && echo "  - E2E Consistency"
+        [ "$E2E_INTERACTIVITY_PASSED" = false ] && echo "  - E2E Interactivity"
+        [ "$EXOS_MODIFIED_PASSED" = false ] && echo "  - Exercices modifiés"
         return 1
     fi
 }
@@ -224,14 +312,25 @@ test_branch() {
 if [ "$CHOICE" = "0" ] || [ "$CHOICE" = "all" ]; then
     echo ""
     echo "Lancement des tests sur toutes les branches..."
-    echo "⚠️  Cela va prendre du temps (~$((${#MR_BRANCHES[@]} * 5)) minutes)"
+    # Calculer le temps estimé
+    TIME_PER_BRANCH=5  # Tests unitaires + build
+    if [ "$RUN_E2E_TESTS" = true ]; then
+        TIME_PER_BRANCH=$((TIME_PER_BRANCH + 25))  # +25 min pour E2E
+    fi
+    if [ "$RUN_EXOS_TESTS" = true ]; then
+        TIME_PER_BRANCH=$((TIME_PER_BRANCH + 10))  # +10 min pour testExosModified
+    fi
+    TOTAL_TIME=$((${#MR_NUMBERS[@]} * TIME_PER_BRANCH))
+    echo "⚠️  Temps estimé: ~${TOTAL_TIME} minutes (${TIME_PER_BRANCH} min par branche × ${#MR_NUMBERS[@]} branches)"
     echo ""
     
     PASSED=0
     FAILED=0
     
-    for idx in "${!MR_BRANCHES[@]}"; do
-        if test_branch "${MR_BRANCHES[$idx]}" "${MR_NUMBERS[$idx]}" "${MR_TITLES[$idx]}" true; then
+    # Tester dans l'ordre : ancien -> récent
+    for ((i=${#DISPLAY_INDICES[@]}-1; i>=0; i--)); do
+        idx=${DISPLAY_INDICES[$i]}
+        if test_branch "${MR_BRANCHES[$idx]}" "${MR_NUMBERS[$idx]}" "${MR_TITLES[$idx]}"; then
             ((PASSED++))
         else
             ((FAILED++))
@@ -249,13 +348,15 @@ if [ "$CHOICE" = "0" ] || [ "$CHOICE" = "all" ]; then
     echo ""
     
 else
-    # Convertir en index (1-based)
-    IDX=$((CHOICE - 1))
+    # Convertir le choix en index réel (inversé)
+    CHOICE_IDX=$((CHOICE - 1))
     
-    if [ "$IDX" -lt "0" ] || [ "$IDX" -ge "${#MR_BRANCHES[@]}" ]; then
+    if [ "$CHOICE_IDX" -lt "0" ] || [ "$CHOICE_IDX" -ge "${#DISPLAY_INDICES[@]}" ]; then
         echo -e "${RED}Choix invalide.${NC}"
         exit 1
     fi
     
-    test_branch "${MR_BRANCHES[$IDX]}" "${MR_NUMBERS[$IDX]}" "${MR_TITLES[$IDX]}" true
+    # Récupérer l'index réel dans le tableau original
+    REAL_IDX=${DISPLAY_INDICES[$CHOICE_IDX]}
+    test_branch "${MR_BRANCHES[$REAL_IDX]}" "${MR_NUMBERS[$REAL_IDX]}" "${MR_TITLES[$REAL_IDX]}"
 fi
