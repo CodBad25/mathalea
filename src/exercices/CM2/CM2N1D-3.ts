@@ -6,6 +6,7 @@ import {
   combinaisonListes,
   shuffle,
 } from '../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
 import type { OptionsComparaisonType } from '../../lib/types'
 import { randint } from '../../modules/outils'
@@ -18,6 +19,7 @@ export const refs = {
   'fr-2016': ['c3N10-2'],
   'fr-ch': [],
 }
+export const dateDeModifImportante = '31/01/2026'
 export const titre = 'Décomposer des nombres entiers'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -39,6 +41,7 @@ class Decomp1 extends Exercice {
     this.sup = 5 // nombre de chiffres
     this.sup2 = false
     this.sup4 = 1
+    this.consigne = "Compléter chaque décomposition d'entier."
     this.besoinFormulaireNumerique = ['Nombre de chiffres significatifs', 8]
     this.besoinFormulaire2CaseACocher = [
       "Présence de zéros à l'intérieur du nombre",
@@ -52,6 +55,13 @@ class Decomp1 extends Exercice {
   }
 
   nouvelleVersion() {
+    this.consigne =
+      this.nbQuestions === 1
+        ? "Compléter cette décomposition d'entier."
+        : "Compléter chaque décomposition d'entier."
+    if (this.interactif)
+      this.consigne +=
+        "<br>S'il y en a besoin, penser à mettre des espaces dans le nombre."
     const typeDeQuestions =
       this.sup4 % 2 === 0
         ? ['classe']
@@ -63,6 +73,7 @@ class Decomp1 extends Exercice {
       typeDeQuestions,
       this.nbQuestions,
     )
+
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 100; ) {
       const ordonne =
         this.sup4 < 3 || (this.sup4 === 5 && choice([true, false]))
@@ -122,12 +133,12 @@ class Decomp1 extends Exercice {
       > = {}
       if (listeTypesDeQuestion[i] === 'chiffre') {
         for (let k = 0; k < items.length; k++) {
-          decompo += `%{champ${k + 1}}\\text{${glossaire[items[k].exposant][items[k].chiffre > 1 ? 1 : 0]}}+`
+          decompo += `%{champ${k + 1}}~\\text{${glossaire[items[k].exposant][items[k].chiffre > 1 ? 1 : 0]}}+`
           objetReponses[`champ${k + 1}`] = { value: String(items[k].chiffre) }
         }
       } else {
         for (let k = 0; k < items.length; k++) {
-          decompo += `${String(items[k].chiffre)}\\times %{champ${k + 1}}+`
+          decompo += `(${String(items[k].chiffre)}\\times %{champ${k + 1}})+`
           objetReponses[`champ${k + 1}`] = {
             value: texNombre(10 ** items[k].exposant, 0),
             options: { nombreAvecEspace: true },
@@ -141,14 +152,19 @@ class Decomp1 extends Exercice {
       const texte = remplisLesBlancs(
         this,
         i,
-        texNombre(Number(nombreStr), 0) + '=' + decompo,
+        texNombre(Number(nombreStr), 0) + '=~' + decompo,
         classe,
-        '\\ldots',
+        '\\ldots~',
       )
+
       const morceaux = items.map(
-        (el) => `${String(el.chiffre)}\\text{ ${el.classe} }`,
+        (el) =>
+          `${listeTypesDeQuestion[i] === 'chiffre' ? miseEnEvidence(el.chiffre) : el.chiffre} ${listeTypesDeQuestion[i] !== 'chiffre' ? `\\times ${miseEnEvidence(texNombre(10 ** el.exposant))}` : `\\text{ ${el.classe}}`}`,
       )
-      const decompStr = morceaux.join('+')
+      const decompStr =
+        listeTypesDeQuestion[i] !== 'chiffre'
+          ? '(' + morceaux.join(')+(') + ')'
+          : morceaux.join('+')
       const texteCorr = `$${texNombre(Number(nombreStr), 0)}=${decompStr}$`
       if (this.questionJamaisPosee(i, nombreStr)) {
         this.listeQuestions[i] = texte
