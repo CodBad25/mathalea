@@ -1,6 +1,5 @@
 import type { MathfieldElement } from 'mathlive'
 import type { IExercice } from '../../lib/types'
-import { sp } from '../outils/outilString'
 import { fonctionComparaison } from './comparisonFunctions'
 
 // Un barème qui ne met qu'un point si tout est juste
@@ -229,19 +228,34 @@ export function verifQuestionMathLive(
             mfe.setPromptState(key, 'incorrect', true)
             if (result.feedback === 'saisieVide') result.feedback = null
             else {
-              result = {
-                isOk: false,
-                feedback:
-                  ` Le résultat dans la zone de saisie${variables.length > 1 ? ` N°${key.charAt(key.length - 1)}` : ''}  est incorrect.<br>` +
-                  sp(7),
+              const fieldNumber =
+                variables.length > 1 ? ` Champ ${key.charAt(key.length - 1)} : ` : ''
+              if (!result.feedback) {
+                // On n'écrase le feedback que s'il n'y en a pas déjà un spécifique
+                result = {
+                  isOk: false,
+                  feedback: `${fieldNumber}le résultat est incorrect.<br>`,
+                }
+              } else {
+                // On ajoute le numéro du champ avant le feedback existant
+                const firstChar = result.feedback.charAt(0)
+                const lowerFirst = /[a-zA-Z]/.test(firstChar) ? firstChar.toLowerCase() : firstChar
+                result.feedback = `${fieldNumber}${lowerFirst + result.feedback.slice(1)}<br>`
               }
             }
           }
           mfe.classList.add('corrected')
           if (result.feedback != null) feedback += result.feedback
         }
-        if (compteurBonnesReponses === variables.length) feedback = ''
-        else if (compteurBonnesReponses === 0 && compteurSaisiesVides === 0) {
+        if (compteurBonnesReponses === variables.length) {
+          // Si tout est correct mais qu'il y a déjà un feedback spécifique, on le garde
+          if (!feedback || feedback.trim() === '') feedback = ''
+        } else if (
+          compteurBonnesReponses === 0 &&
+          compteurSaisiesVides === 0 &&
+          !feedback
+        ) {
+          // On n'ajoute un feedback générique que s'il n'y en a pas déjà un spécifique
           feedback =
             variables.length === 1
               ? " Le résultat n'est pas correct."

@@ -106,7 +106,7 @@ L'expression donnée entre crochets est la formule qui permet de calculer le nom
     switch (this.sup) {
       case 1:
       case 2:
-        //listePatterns = listePatternsFor6I13
+        // listePatterns = listePatternsFor6I13
         listePatterns = listePatternsSansRatioNiFraction
         break
       /* case 2:

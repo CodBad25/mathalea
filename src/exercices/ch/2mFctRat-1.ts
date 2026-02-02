@@ -207,13 +207,13 @@ export default class ExerciceTangenteCourbe extends Exercice {
       sousquestions = this.sup3
         ? sousquestions
         : sousquestions.filter((_, index) => index !== 2)
-      let question1 =
+      const question1 =
         `Étudier la fonction $f$.` +
         createList({
           items: sousquestions,
           style: 'roman',
         })
-      let question2 = `Tracer la courbe représentative de $f$ à l'aide des informations précédemment trouvées.`
+      const question2 = `Tracer la courbe représentative de $f$ à l'aide des informations précédemment trouvées.`
       const questions = this.sup4 ? [question1, question2] : [question1]
       if (this.sup4) {
         texte += createList({
@@ -223,7 +223,7 @@ export default class ExerciceTangenteCourbe extends Exercice {
       } else {
         texte += questions[0]
       }
-      let cor1 = `On exclut du domaine de définition les valeurs de $x$ qui annulent le dénominateur, c'est-à-dire on résout l'équation $${rienSi1(c)}x${ecritureAlgebriqueSauf0(d)}=0$, ce qui donne $x=${new FractionEtendue(-d, c).texFractionSimplifiee}$.<br>$${miseEnEvidence(`D_f=\\mathbb{R}\\setminus\\left\\{${new FractionEtendue(-d, c).texFractionSimplifiee}\\right\\}`)}$.<br>`
+      const cor1 = `On exclut du domaine de définition les valeurs de $x$ qui annulent le dénominateur, c'est-à-dire on résout l'équation $${rienSi1(c)}x${ecritureAlgebriqueSauf0(d)}=0$, ce qui donne $x=${new FractionEtendue(-d, c).texFractionSimplifiee}$.<br>$${miseEnEvidence(`D_f=\\mathbb{R}\\setminus\\left\\{${new FractionEtendue(-d, c).texFractionSimplifiee}\\right\\}`)}$.<br>`
       let cor2 = `Pour déterminer l'intersection avec l'axe des abscisses, on détermine les zéros de $f$, c'est-à-dire les valeurs de $x$ qui annulent le numérateur. `
       if (this.sup2) {
         cor2 += `Comme le numérateur est constant et non nul, la fonction $f$ n'admet pas d'intersection avec l'axe des abscisses.<br>`
@@ -236,7 +236,7 @@ export default class ExerciceTangenteCourbe extends Exercice {
       } else {
         cor2 += `Ainsi, $${miseEnEvidence(`\\left\\{\\left(${new FractionEtendue(-b, a).texFractionSimplifiee}\\,;\\,0\\right)\\right\\}`)}$ et $${miseEnEvidence(`\\left\\{\\left(0\\,;\\,${new FractionEtendue(b, d).texFractionSimplifiee}\\right)\\right\\}`)}$ sont, respectivement, les points d'intersection de la courbe représentative de $f$ avec les axes des abscisses et des ordonées. <br>`
       }
-      let cor3 = `L'asymptote verticale a pour équation $${miseEnEvidence(`x=${new FractionEtendue(-d, c).texFractionSimplifiee}`)}$, la valeur exclue du domaine de définition.<br> L'asymptote horizontale a pour équation $y=\\dfrac{a}{c}$ où $a$ et $c$ sont les coefficient dans l'expression générale d'une fonction homographique $\\dfrac{ax+b}{cx+d}$. Dans notre cas, $${miseEnEvidence(`y=${new FractionEtendue(a, c).texFractionSimplifiee}`)}$.<br>`
+      const cor3 = `L'asymptote verticale a pour équation $${miseEnEvidence(`x=${new FractionEtendue(-d, c).texFractionSimplifiee}`)}$, la valeur exclue du domaine de définition.<br> L'asymptote horizontale a pour équation $y=\\dfrac{a}{c}$ où $a$ et $c$ sont les coefficient dans l'expression générale d'une fonction homographique $\\dfrac{ax+b}{cx+d}$. Dans notre cas, $${miseEnEvidence(`y=${new FractionEtendue(a, c).texFractionSimplifiee}`)}$.<br>`
       const tableHtml = tableauSignesFacteurs(
         [
           {
@@ -254,7 +254,7 @@ export default class ExerciceTangenteCourbe extends Exercice {
         15,
         { nomFonction: '$f(x)$', fractionTex: true },
       )
-      let cor4 = `Le tableau de signes de la fonction $f$ est donné par :<br>${tableHtml}.`
+      const cor4 = `Le tableau de signes de la fonction $f$ est donné par :<br>${tableHtml}.`
       let listeCor = [cor1, cor2, cor3, cor4]
       const objetsGraphiques = [
         r,
@@ -265,7 +265,7 @@ export default class ExerciceTangenteCourbe extends Exercice {
         asymptoteHorizontale,
         ...intersectionPoints,
       ]
-      let corb = mathalea2d(
+      const corb = mathalea2d(
         {
           xmin: -8,
           ymin: -8,
