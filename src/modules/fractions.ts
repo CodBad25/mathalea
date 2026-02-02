@@ -1,3 +1,5 @@
+import { ecritureParentheseSiNegatif } from '../lib/outils/ecritures'
+import { ppcm } from '../lib/outils/primalite'
 import FractionEtendue, { rationnalise } from './FractionEtendue'
 import ListeFraction from './ListeFraction'
 import { nombreEnLettres } from './nombreEnLettres'
@@ -151,5 +153,170 @@ export function denominateurEnLettre(den: number, pluriel: boolean): string {
         return `${denEnLettre}ième${pluriel ? 's' : ''}`
       }
       return `${denEnLettre.substring(0, denEnLettre.length - 1)}ième${pluriel ? 's' : ''}`
+  }
+}
+
+export function sommeDeDeuxFractions(
+  f1: FractionEtendue,
+  f2: FractionEtendue,
+  simplifier: boolean,
+): string[] {
+  const etapes: string[] = []
+  const somme = f1.sommeFraction(f2)
+  etapes.push(`${f1.texFraction}+${f2.texFraction}`)
+  if (f1.den === f2.den) {
+    etapes.push(`\\dfrac{${f1.num}+${f2.num}}{${f1.den}}`)
+    etapes.push(
+      somme.estEntiere ? `${somme.texFractionSimplifiee}` : somme.texFraction,
+    )
+    if (somme.estEntiere) {
+      etapes.push(`${somme.texFractionSimplifiee}`)
+      return etapes
+    }
+    if (simplifier && !somme.estIrreductible) {
+      etapes.push(`${somme.texFractionSimplifiee}`)
+      return etapes
+    } else {
+      return etapes
+    }
+  } else {
+    const denominateurCommun = ppcm(f1.den, f2.den)
+    const facteur1 = denominateurCommun / f1.den
+    const facteur2 = denominateurCommun / f2.den
+    const numerateurF1 = f1.num * facteur1
+    const numerateurF2 = f2.num * facteur2
+    etapes.push(
+      `${facteur1 !== 1 ? `\\dfrac{${f1.num}\\times ${facteur1}}{${f1.den}\\times ${facteur1}}` : `\\dfrac{${f1.num}}{${f1.den}}`}+${facteur2 !== 1 ? `\\dfrac{${f2.num}\\times ${facteur2}}{${f2.den}\\times ${facteur2}}` : `\\dfrac{${f2.num}}{${f2.den}}`}`,
+    )
+    etapes.push(
+      `\\dfrac{${numerateurF1}}{${denominateurCommun}}+\\dfrac{${numerateurF2}}{${denominateurCommun}}`,
+    )
+    etapes.push(
+      `\\dfrac{${numerateurF1}+${numerateurF2}}{${denominateurCommun}}`,
+    )
+    etapes.push(
+      `\\dfrac{${numerateurF1 + numerateurF2}}{${denominateurCommun}}`,
+    )
+    if (simplifier && !somme.estIrreductible) {
+      etapes.push(`${somme.texFractionSimplifiee}`)
+      return etapes
+    } else {
+      return etapes
+    }
+  }
+}
+export function differenceDeDeuxFractions(
+  f1: FractionEtendue,
+  f2: FractionEtendue,
+  simplifier: boolean,
+): string[] {
+  const etapes: string[] = []
+  const difference = f1.differenceFraction(f2)
+  etapes.push(`${f1.texFraction}-${f2.texFraction}`)
+  if (f1.den === f2.den) {
+    etapes.push(`\\dfrac{${f1.num}-${f2.num}}{${f1.den}}`)
+    etapes.push(
+      difference.estEntiere
+        ? `${difference.texFractionSimplifiee}`
+        : difference.texFraction,
+    )
+    if (simplifier && !difference.estIrreductible) {
+      etapes.push(`${difference.texFractionSimplifiee}`)
+      return etapes
+    } else {
+      return etapes
+    }
+  } else {
+    const denominateurCommun = ppcm(f1.den, f2.den)
+    const facteur1 = denominateurCommun / f1.den
+    const facteur2 = denominateurCommun / f2.den
+    const numerateurF1 = f1.num * facteur1
+    const numerateurF2 = f2.num * facteur2
+    etapes.push(
+      `${facteur1 !== 1 ? `\\dfrac{${f1.num}\\times ${facteur1}}{${f1.den}\\times ${facteur1}}` : `\\dfrac{${f1.num}}{${f1.den}}`}-${facteur2 !== 1 ? `\\dfrac{${f2.num}\\times ${facteur2}}{${f2.den}\\times ${facteur2}}` : `\\dfrac{${f2.num}}{${f2.den}}`}`,
+    )
+    etapes.push(
+      `\\dfrac{${numerateurF1}}{${denominateurCommun}}-\\dfrac{${numerateurF2}}{${denominateurCommun}}`,
+    )
+    etapes.push(
+      `\\dfrac{${numerateurF1}-${numerateurF2}}{${denominateurCommun}}`,
+    )
+    difference.estEntiere
+      ? etapes.push(`${difference.texFractionSimplifiee}`)
+      : etapes.push(difference.texFraction)
+    if (simplifier && !difference.estIrreductible && difference) {
+      etapes.push(`${difference.texFractionSimplifiee}`)
+      return etapes
+    } else {
+      return etapes
+    }
+  }
+}
+export function produitDeDeuxFractions(
+  f1: FractionEtendue,
+  f2: FractionEtendue,
+  simplifier: boolean,
+): string[] {
+  const etapes: string[] = []
+  const produit = f1.produitFraction(f2)
+
+  etapes.push(`${f1.texFraction}\\times ${f2.texFraction}`)
+  if (f1.num === 0 || f2.num === 0) {
+    etapes.push(`0`)
+    return etapes
+  }
+  if (f1.num === f1.den) {
+    etapes.push(`${f2.texFraction}`)
+  } else if (f2.num === f2.den) {
+    etapes.push(`${f1.texFraction}`)
+  } else {
+    if (f1.estEntiere || f2.estEntiere) {
+      etapes.push(`\\dfrac{${f1.num}\\times ${f2.num}}{${f1.den * f2.den}}`)
+    } else {
+      etapes.push(
+        `\\dfrac{${f1.num}\\times ${ecritureParentheseSiNegatif(f2.num)}}{${f1.den}\\times ${ecritureParentheseSiNegatif(f2.den)}}`,
+      )
+    }
+    etapes.push(produit.texFraction)
+  }
+  if (simplifier && !produit.estIrreductible) {
+    etapes.push(`${produit.simplifie().texFraction}`)
+    return etapes
+  } else {
+    return etapes
+  }
+}
+export function quotientDeDeuxFractions(
+  f1: FractionEtendue,
+  f2: FractionEtendue,
+  simplifier: boolean,
+): string[] {
+  const etapes: string[] = []
+  if (f2.isEqual(1)) {
+    etapes.push(`${f1.texFraction}\\div 1`)
+    etapes.push(`${f1.texFraction}`)
+    return etapes
+  }
+  if (f2.isEqual(-1)) {
+    etapes.push(`${f1.texFraction}\\div (-1)`)
+    etapes.push(`${f1.produitFraction(-1).texFraction}`)
+    return etapes
+  }
+  const quotient = f1.diviseFraction(f2)
+  etapes.push(`${f1.texFraction}\\div ${f2.texFraction}`)
+
+  etapes.push(`${f1.texFraction}\\times ${f2.inverse().texFraction}`)
+  if (!f2.inverse().estEntiere) {
+    etapes.push(
+      `\\dfrac{${f1.num}\\times ${ecritureParentheseSiNegatif(f2.den)}}{${f1.den}\\times ${ecritureParentheseSiNegatif(f2.num)}}`,
+    )
+  }
+
+  etapes.push(quotient.texFraction)
+  if (simplifier && !quotient.estIrreductible) {
+    etapes.push(`${quotient.simplifie().texFraction}`)
+    return etapes
+  } else {
+    return etapes
   }
 }
