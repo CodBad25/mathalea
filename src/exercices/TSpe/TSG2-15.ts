@@ -5,6 +5,7 @@ import {
   ecritureAlgebriqueSauf0,
   ecritureAlgebriqueSauf1,
   ecritureParentheseSiNegatif,
+  egalOuApprox,
   rienSi0,
   rienSi1,
 } from '../../lib/outils/ecritures'
@@ -199,7 +200,7 @@ z = ${zD} ${ecritureAlgebriqueSauf1(nz)}t
       const yHFrac = new FractionEtendue(yD * denom - numer * ny, denom)
       const zHFrac = new FractionEtendue(zD * denom - numer * nz, denom)
       const fracTDec = -numer / denom
-      const fracTSimplifie = fracT.simplifie()
+      const fracTSimplifie = fracT.simplifie().texFraction
       const reponse5 =
         lampeMessage({
           titre: 'Méthode :',
@@ -254,18 +255,11 @@ z = ${zD} ${ecritureAlgebriqueSauf1(nz)}t
         `On peut maintenant calculer le volume du tétraèdre :<br>
         $\\begin{aligned}\\mathscr V &= \\dfrac{\\mathscr A_{ABC}\\times DH}{3}\\\\
         & = \\dfrac{\\sqrt{${AB2}}\\times\\sqrt{${AC2}}\\times${fracT.texFractionSimplifiee}\\times\\sqrt{${denom}}}{6} \\\\\\end{aligned}$`
-      const vol10 = Math.round(volumeDec * 10) // arrondi au dixième
-      const estEntierAuDixieme = Number.isInteger(vol10)
-      const vol100 = Math.round(volumeDec * 100) // arrondi au centieme
-      const estEntierAuCentieme = Number.isInteger(vol100)
-      if (Number.isInteger(volumeDec) || estEntierAuDixieme|| estEntierAuCentieme) {
-        reponse7 += `<br>
-          $\\begin{aligned} \\phantom{ \\mathscr V}&= ${texNombre(volumeDec)}.\\end{aligned}$<br>
-          La valeur excate du volume du tétraèdre est $${miseEnEvidence(`${texNombre(volumeDec)}`)}$ `
-      } else {
-        reponse7 += `<br>$\\begin{aligned} \\phantom{ \\mathscr V}&\\approx ${texNombre(volumeDec, 2)}.\\end{aligned}$<br>
-  La valeur approchée du volume du tétraèdre est $${miseEnEvidence(`${texNombre(volumeDec, 4)}`)}. $`
-      }
+      const egalOuPas = egalOuApprox(volumeDec, 3)
+      reponse7 += `<br>
+          $\\begin{aligned} \\phantom{ \\mathscr V}&${egalOuPas} ${texNombre(volumeDec, 3)}.\\end{aligned}$<br>
+          La valeur ${egalOuPas === '=' ? 'exacte' : 'approchée'} du volume du tétraèdre est $${miseEnEvidence(`${texNombre(volumeDec, 3)}`)}$ `
+
       texteCorr = createList({
         items: [
           reponse1,
