@@ -1,14 +1,15 @@
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choice } from '../../../lib/outils/arrayOutils'
-import {
-  texteEnCouleur,
-  miseEnEvidence,
-} from '../../../lib/outils/embellissements'
 import { ecritureParentheseSiNegatif } from '../../../lib/outils/ecritures'
+import {
+  miseEnEvidence,
+  texteEnCouleur,
+} from '../../../lib/outils/embellissements'
 import { arrondi } from '../../../lib/outils/nombres'
 import { creerNomDePolygone } from '../../../lib/outils/outilString'
 import { texNombre } from '../../../lib/outils/texNombre'
-import ExerciceSimple from '../../ExerciceSimple'
 import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer les coordonnées du milieu'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -17,7 +18,7 @@ export const dateDeModifImportante = '29/11/2023'
  * Modèle d'exercice très simple pour la course aux nombres
  * @author Gilles Mora
 
- * Date de publication sptembre 2021
+ * Date de publication septembre 2021
 */
 export const uuid = '8bc88'
 
@@ -31,6 +32,7 @@ export default class CalculCoordonneesMilieu extends ExerciceSimple {
 
     this.typeExercice = 'simple'
     this.nbQuestions = 1
+    this.formatChampTexte = KeyboardType.clavierFullOperations
   }
 
   nouvelleVersion() {
