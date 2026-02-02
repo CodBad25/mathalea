@@ -30,7 +30,7 @@ export const refs = {
 }
 
 function resoudreAxPlusBZeroTex(a: number, b: number): string {
-  let fracMoinsBsurA = new FractionEtendue(-b, a).texFractionSimplifiee
+  const fracMoinsBsurA = new FractionEtendue(-b, a).texFractionSimplifiee
   let texteCorr = ''
   texteCorr += `$${reduireAxPlusB(a, b)}> 0`
   if (b !== 0) {
