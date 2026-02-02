@@ -250,7 +250,11 @@ ${figure1}`,
             ? `Le ${figure} ci-dessus, a une largeur qui est la moitié de sa longueur, il faut donc remplacer $a$ par $${av / 2}$.<br>`
             : `La figure ci-dessus est un ${figure} dont les côtés sont de même mesure, il faut donc remplacer $a$ par $${av}$.<br>`
         }
-         Il faut remplacer $b$  par $2$ car les instructions de la boucle ne construisent que deux côtés.`,
+        ${
+          figure === 'losange'
+            ? `À la fin du premier bloc "répéter", on a effectué un demi-tour. On a donc $60+b=180$, c'est-à-dire $b$ est le supplémentaire de 60. Il faut remplacer $b$ par $120$.<br>`
+            : `Le ${figure} possédant quatre angles droits, il faut remplacer $b$ par $90$.<br>`
+        }`,
         `La figure obtenue en utilisant le bloc «Motif A» est la figure ${this.sup ? 3 : ((2 + permute) % 3) + 1}.<br>
         En effet, la figure ${this.sup ? 1 : ((0 + permute) % 3) + 1} est obtenue en utilisant un angle de $${angle2}^{\\circ}$ et la figure ${this.sup ? 2 : ((1 + permute) % 3) + 1} comporte ${figure === 'rectangle' ? 8 : 6} ${figure}s.`,
         `Voici un script du bloc «Motif B» :<br>
@@ -260,7 +264,7 @@ ${figure1}`,
         \\blockrepeat{répéter \\ovalnum{${rep2}} fois}
         {
            \\blockmoreblocks{${figure}}
-           \\blockmove{avancer de \\ovalnum{${av2}} pas}
+           \\blockmove{avancer de \\ovalnum{${av2}} pas}voulant
         }
          \\end{scratch}\n`)}`,
       ],
