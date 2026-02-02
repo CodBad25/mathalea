@@ -686,33 +686,37 @@ export default class ExprimerCosSinTan extends Exercice {
             texte += `<br>Parmi deux triangles, dans le triangle rectangle le plus grand, $${nomFonctionsTrigonometriques[fonctionsTrigonometriques[ee]]}\\left(\\widehat{${A.nom + B.nom + C.nom}}\\right)=$`
             texte += remplisLesBlancs(
               this,
-              fonctionsTrigonometriques.length * i + 2 * ee,
-              '\\dfrac{%{champ1}}{%{champ2}}',
-              KeyboardType.alphanumeric,
-              '\\ldots',
-            )
-            handleAnswers(this, fonctionsTrigonometriques.length * i + 2 * ee, {
-              champ1: {
-                value: correctionTrigoRLB[fonctionsTrigonometriques[ee]][0],
-                options: { texteAvecCasse: true },
-              },
-              champ2: {
-                value: correctionTrigoRLB[fonctionsTrigonometriques[ee]][1],
-                options: { texteAvecCasse: true },
-              },
-            })
-
-            texte += `<br>Parmi deux triangles, dans le triangle rectangle le plus petit, $${nomFonctionsTrigonometriques[fonctionsTrigonometriques[ee]]}\\left(\\widehat{${A.nom + B.nom + C.nom}}\\right)=$`
-            texte += remplisLesBlancs(
-              this,
-              fonctionsTrigonometriques.length * i + 2 * ee + 1,
+              fonctionsTrigonometriques.length * 2 * i + 2 * ee,
               '\\dfrac{%{champ1}}{%{champ2}}',
               KeyboardType.alphanumeric,
               '\\ldots',
             )
             handleAnswers(
               this,
-              fonctionsTrigonometriques.length * i + 2 * ee + 1,
+              fonctionsTrigonometriques.length * 2 * i + 2 * ee,
+              {
+                champ1: {
+                  value: correctionTrigoRLB[fonctionsTrigonometriques[ee]][0],
+                  options: { texteAvecCasse: true },
+                },
+                champ2: {
+                  value: correctionTrigoRLB[fonctionsTrigonometriques[ee]][1],
+                  options: { texteAvecCasse: true },
+                },
+              },
+            )
+
+            texte += `<br>Parmi deux triangles, dans le triangle rectangle le plus petit, $${nomFonctionsTrigonometriques[fonctionsTrigonometriques[ee]]}\\left(\\widehat{${A.nom + B.nom + C.nom}}\\right)=$`
+            texte += remplisLesBlancs(
+              this,
+              fonctionsTrigonometriques.length * 2 * i + 2 * ee + 1,
+              '\\dfrac{%{champ1}}{%{champ2}}',
+              KeyboardType.alphanumeric,
+              '\\ldots',
+            )
+            handleAnswers(
+              this,
+              fonctionsTrigonometriques.length * 2 * i + 2 * ee + 1,
               {
                 champ1: {
                   value:
