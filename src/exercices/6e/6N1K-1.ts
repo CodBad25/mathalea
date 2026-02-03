@@ -1,6 +1,11 @@
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
+import {
+  combinaisonListes,
+  enleveElement,
+  remplaceDansTableau,
+} from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
 import { context } from '../../modules/context'
@@ -11,13 +16,12 @@ import {
 } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-export const dateDePublication = '28/09/22'
-export const titre = "Trouver une valeur approchée ou un arrondi d'un décimal"
+export const dateDePublication = '28/09/2022'
+export const titre = "Trouver une valeur approchée ou l'arrondi d'un décimal"
 export const interactifReady = true
 export const interactifType = 'mathLive'
 /**
  * * Arrondir_un_decimal_selon_une_precision_donnée
- * * 6N31-6
  * @author Mickael Guironnet
  */
 
@@ -29,9 +33,14 @@ export const refs = {
 export const uuid = 'd2b82'
 
 export default class ArrondirUnDecimal extends Exercice {
+  version: string
   constructor() {
     super()
-    this.sup = 7 // Type de questions
+    this.version = '6eme'
+    this.sup = 7
+    this.sup2 = 3 // Utile pour CM1N3K
+    this.sup3 = '4' // Utile pour CM1N3K
+
     this.nbQuestions = 6
 
     context.isHtml ? (this.spacing = 1.2) : (this.spacing = 1.5)
@@ -53,37 +62,59 @@ export default class ArrondirUnDecimal extends Exercice {
   }
 
   nouvelleVersion() {
-    const listeTypeDeQuestions = gestionnaireFormulaireTexte({
+    const nbDecimales = this.sup2
+    let listeTypeDeQuestions = gestionnaireFormulaireTexte({
       max: 6,
       defaut: 7,
       melange: 7,
       nbQuestions: this.nbQuestions,
       saisie: this.sup,
-    })
+    }).map(Number)
+
+    if (this.version === 'CM1') {
+      enleveElement(listeTypeDeQuestions, 3)
+      enleveElement(listeTypeDeQuestions, 4)
+      enleveElement(listeTypeDeQuestions, 5)
+      enleveElement(listeTypeDeQuestions, 6)
+      listeTypeDeQuestions = remplaceDansTableau(listeTypeDeQuestions, 2, 4)
+      if (listeTypeDeQuestions.length === 0) listeTypeDeQuestions = [1, 4]
+      listeTypeDeQuestions = combinaisonListes(
+        listeTypeDeQuestions,
+        this.nbQuestions,
+      )
+    }
+
+    const puissanceDeDix = gestionnaireFormulaireTexte({
+      max: 4,
+      defaut: 4,
+      melange: 5,
+      nbQuestions: this.nbQuestions,
+      saisie: this.sup3,
+    }).map(Number)
 
     for (
       let i = 0, indexQ = 0, texte, texteCorr, cpt = 0;
       i < this.nbQuestions && cpt < 50;
       cpt++
     ) {
-      const m = randint(1, 9)
-      const c = randint(1, 9)
-      const d = randint(1, 9)
+      let m = randint(1, 9)
+      let c = randint(1, 9)
+      let d = randint(1, 9)
       const u = randint(1, 9)
       const di = randint(1, 9)
-      const ci = randint(1, 9)
-      const mi = randint(1, 9)
+      let ci = randint(1, 9)
+      let mi = randint(1, 9)
 
       if (!this.questionJamaisPosee(i, m, c, u, di, ci, mi)) {
         continue
       }
 
-      const valeurdegaucheoudroite = randint(1, 2)
+      let valeurdegaucheoudroite = randint(1, 2)
 
       switch (listeTypeDeQuestions[i]) {
         case 6: {
           // arrondi au centième
-          texte = `Donner un arrondi au centième de
+          texte = `Donner l'arrondi au centième de
                     $${texNombre(m * 1000 + c * 100 + d * 10 + u * 1 + (di * 0.1 + ci * 0.01 + mi * 0.001))}$ : `
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(
@@ -117,7 +148,7 @@ export default class ArrondirUnDecimal extends Exercice {
                 ).toString(),
               },
             })
-            texteCorr = `Un arrondi au centième de $${nombreStr}$ est $ ${texNombre(m * 1000 + c * 100 + d * 10 + u * 1 + (di * 0.1 + ci * 0.01))}$.`
+            texteCorr = `L'arrondi au centième de $${nombreStr}$ est $${texNombre(m * 1000 + c * 100 + d * 10 + u * 1 + (di * 0.1 + ci * 0.01))}$.`
           } else {
             handleAnswers(this, indexQ, {
               reponse: {
@@ -130,14 +161,14 @@ export default class ArrondirUnDecimal extends Exercice {
                 ).toString(),
               },
             })
-            texteCorr = `Un arrondi au centième de $${nombreStr}$ est $ ${texNombre(m * 1000 + c * 100 + d * 10 + u * 1 + (di * 0.1 + (ci + 1) * 0.01))}$.`
+            texteCorr = `L'arrondi au centième de $${nombreStr}$ est $${texNombre(m * 1000 + c * 100 + d * 10 + u * 1 + (di * 0.1 + (ci + 1) * 0.01))}$.`
           }
           indexQ++
           break
         }
         case 5: {
           // arrondi au dixième
-          texte = `Donner un arrondi au dixième de
+          texte = `Donner l'arrondi au dixième de
                     $${texNombre(m * 1000 + c * 100 + d * 10 + u * 1 + (di * 0.1 + ci * 0.01 + mi * 0.001))}$ : `
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(
@@ -169,7 +200,7 @@ export default class ArrondirUnDecimal extends Exercice {
                 ).toString(),
               },
             })
-            texteCorr = `Un arrondi au dixième de $${nombreStr}$ est $ ${texNombre(m * 1000 + c * 100 + d * 10 + u * 1 + di * 0.1)}$.`
+            texteCorr = `L'arrondi au dixième de $${nombreStr}$ est $${texNombre(m * 1000 + c * 100 + d * 10 + u * 1 + di * 0.1)}$.`
           } else {
             handleAnswers(this, indexQ, {
               reponse: {
@@ -182,15 +213,31 @@ export default class ArrondirUnDecimal extends Exercice {
                 ).toString(),
               },
             })
-            texteCorr = `Un arrondi au dixième de $${nombreStr}$ est $ ${texNombre(m * 1000 + c * 100 + d * 10 + u * 1 + (di + 1) * 0.1)}$.`
+            texteCorr = `L'arrondi au dixième de $${nombreStr}$ est $${texNombre(m * 1000 + c * 100 + d * 10 + u * 1 + (di + 1) * 0.1)}$.`
           }
           indexQ++
           break
         }
         case 4: {
           // arrondi à l'unité
-          texte = `Donner un arrondi à l'unité de
-                    $${texNombre(m * 1000 + c * 100 + d * 10 + u * 1 + (di * 0.1 + ci * 0.01 + mi * 0.001))}$ : `
+          const termeEduscol =
+            this.version === '6eme' ? `à l'unité` : `à l'entier`
+          if (this.version === 'CM1') {
+            if (nbDecimales < 2) ci = 0
+            if (nbDecimales < 3) mi = 0
+            if (puissanceDeDix[i] < 2) d = 0
+            if (puissanceDeDix[i] < 3) c = 0
+            if (puissanceDeDix[i] < 4) m = 0
+          }
+          const nbDecimal =
+            m * 1000 +
+            c * 100 +
+            d * 10 +
+            u * 1 +
+            (di * 0.1 + ci * 0.01 + mi * 0.001)
+
+          texte = `Donner l'arrondi ${termeEduscol} de
+                    $${texNombre(nbDecimal)}$ : `
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(
               this,
@@ -201,30 +248,29 @@ export default class ArrondirUnDecimal extends Exercice {
             texte += '$\\ldots\\ldots\\ldots $'
           }
           const nombreStr = texNombre(
-            m * 1000 +
-              c * 100 +
-              d * 10 +
-              u * 0 +
-              (di * 0 + ci * 0.01 + mi * 0.001),
-            3,
+            nbDecimal -
+              (u + di * 0.1) +
+              (this.version === 'CM1' ? 99 * 0.000001 : 0),
+            nbDecimales,
             true,
           )
             .replace('0', miseEnEvidence(u, 'blue'))
             .replace('0', miseEnEvidence(di))
+            .replace(this.version === 'CM1' ? '99' : '', '')
           if (di < 5) {
             handleAnswers(this, indexQ, {
               reponse: {
                 value: (m * 1000 + c * 100 + d * 10 + u * 1).toString(),
               },
             })
-            texteCorr = `Un arrondi à l'unité de $${nombreStr}$ est $ ${texNombre(m * 1000 + c * 100 + d * 10 + u * 1)}$.`
+            texteCorr = `L'arrondiX ${termeEduscol} de $${nombreStr}$ est $${texNombre(m * 1000 + c * 100 + d * 10 + u * 1)}$.`
           } else {
             handleAnswers(this, indexQ, {
               reponse: {
                 value: (m * 1000 + c * 100 + d * 10 + (u + 1) * 1).toString(),
               },
             })
-            texteCorr = `Un arrondi à l'unité de $${nombreStr}$ est $ ${texNombre(m * 1000 + c * 100 + d * 10 + (u + 1) * 1)}$.`
+            texteCorr = `L'arrondiY ${termeEduscol} de $${nombreStr}$ est $${texNombre(m * 1000 + c * 100 + d * 10 + (u + 1) * 1)}$.`
           }
           indexQ++
           break
@@ -263,7 +309,7 @@ export default class ArrondirUnDecimal extends Exercice {
                 ).toString(),
               },
             })
-            texteCorr = `Une valeur approchée au centième par défaut de $${nombreStr}$ est $ ${texNombre(m * 1000 + c * 100 + d * 10 + u * 1 + (di * 0.1 + ci * 0.01))}$`
+            texteCorr = `Une valeur approchée au centième par défaut de $${nombreStr}$ est $${texNombre(m * 1000 + c * 100 + d * 10 + u * 1 + (di * 0.1 + ci * 0.01))}$.`
           } else {
             handleAnswers(this, indexQ, {
               reponse: {
@@ -276,7 +322,7 @@ export default class ArrondirUnDecimal extends Exercice {
                 ).toString(),
               },
             })
-            texteCorr = `Une valeur approchée au centième par excès de $${nombreStr}$ est $ ${texNombre(m * 1000 + c * 100 + d * 10 + u * 1 + (di * 0.1 + (ci + 1) * 0.01))}$.`
+            texteCorr = `Une valeur approchée au centième par excès de $${nombreStr}$ est $${texNombre(m * 1000 + c * 100 + d * 10 + u * 1 + (di * 0.1 + (ci + 1) * 0.01))}$.`
           }
           indexQ++
           break
@@ -315,7 +361,7 @@ export default class ArrondirUnDecimal extends Exercice {
                 ).toString(),
               },
             })
-            texteCorr = `Une valeur approchée au dixième par défaut de de $${nombreStr}$ est $ ${texNombre(m * 1000 + c * 100 + d * 10 + u * 1 + di * 0.1)}$.`
+            texteCorr = `Une valeur approchée au dixième par défaut de de $${nombreStr}$ est $${texNombre(m * 1000 + c * 100 + d * 10 + u * 1 + di * 0.1)}$.`
           } else {
             handleAnswers(this, indexQ, {
               reponse: {
@@ -328,7 +374,7 @@ export default class ArrondirUnDecimal extends Exercice {
                 ).toString(),
               },
             })
-            texteCorr = `Une valeur approchée au dixième par excès de $${nombreStr}$ est $ ${texNombre(m * 1000 + c * 100 + d * 10 + u * 1 + (di + 1) * 0.1)}$`
+            texteCorr = `Une valeur approchée au dixième par excès de $${nombreStr}$ est $${texNombre(m * 1000 + c * 100 + d * 10 + u * 1 + (di + 1) * 0.1)}$`
           }
           indexQ++
           break
@@ -336,8 +382,21 @@ export default class ArrondirUnDecimal extends Exercice {
         case 1:
         default: {
           // encadrement à l'unité
-          texte = `${valeurdegaucheoudroite === 1 ? "Donner une valeur par défaut à l'unité de " : "Donner une valeur par excès à l'unité de "}
-                    $${texNombre(m * 1000 + c * 100 + d * 10 + u * 1 + (di * 0.1 + ci * 0.01 + mi * 0.001))}$ : `
+          if (this.version === 'CM1') valeurdegaucheoudroite = 1
+          texte =
+            this.version === '6eme'
+              ? `${valeurdegaucheoudroite === 1 ? "Donner une valeur par défaut à l'unité de " : "Donner une valeur par excès à l'unité de "}`
+              : `Donner la partie entière de`
+
+          if (this.version === 'CM1') {
+            if (nbDecimales < 2) ci = 0
+            if (nbDecimales < 3) mi = 0
+            if (puissanceDeDix[i] < 2) d = 0
+            if (puissanceDeDix[i] < 3) c = 0
+            if (puissanceDeDix[i] < 4) m = 0
+          }
+
+          texte += ` $${texNombre(m * 1000 + c * 100 + d * 10 + u * 1 + (di * 0.1 + ci * 0.01 + mi * 0.001))}$ : `
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(
               this,
@@ -353,7 +412,7 @@ export default class ArrondirUnDecimal extends Exercice {
               d * 10 +
               u * 0 +
               (di * 0.1 + ci * 0.01 + mi * 0.001),
-            3,
+            nbDecimales,
             true,
           ).replace('0', miseEnEvidence(u, 'blue'))
           if (valeurdegaucheoudroite === 1) {
@@ -362,14 +421,18 @@ export default class ArrondirUnDecimal extends Exercice {
                 value: (m * 1000 + c * 100 + d * 10 + u * 1).toString(),
               },
             })
-            texteCorr = `Une valeur approchée à l'unité par défaut de $${nombreStr}$ est $ ${texNombre(m * 1000 + c * 100 + d * 10 + u * 1)}$.`
+            texteCorr =
+              this.version === '6eme'
+                ? `Une valeur approchée à l'unité par défaut`
+                : `La partie entière`
+            texteCorr += ` de $${nombreStr}$ est $${texNombre(m * 1000 + c * 100 + d * 10 + u * 1)}$.`
           } else {
             handleAnswers(this, indexQ, {
               reponse: {
                 value: (m * 1000 + c * 100 + d * 10 + (u + 1) * 1).toString(),
               },
             })
-            texteCorr = `Une valeur approchée à l'unité par excès de $${nombreStr}$ est $ ${texNombre(m * 1000 + c * 100 + d * 10 + (u + 1) * 1)}$.`
+            texteCorr = `Une valeur approchée à l'unité par excès de $${nombreStr}$ est $${texNombre(m * 1000 + c * 100 + d * 10 + (u + 1) * 1)}$.`
           }
           indexQ++
           break
@@ -377,6 +440,18 @@ export default class ArrondirUnDecimal extends Exercice {
       }
 
       this.listeQuestions.push(texte)
+      // Uniformisation : Mise en place de la réponse attendue en interactif en orange et gras
+      const textCorrSplit = texteCorr.split('est')
+      let aRemplacer = textCorrSplit[textCorrSplit.length - 1]
+      aRemplacer = aRemplacer.replaceAll('$', '')
+
+      texteCorr = ''
+      for (let ee = 0; ee < textCorrSplit.length - 1; ee++) {
+        texteCorr += textCorrSplit[ee] + 'est '
+      }
+      texteCorr += `$${miseEnEvidence(aRemplacer.slice(0, -1))}$` + '.' // Gestion du point final
+      // Fin de cette uniformisation
+
       this.listeCorrections.push(texteCorr)
       i++
     }

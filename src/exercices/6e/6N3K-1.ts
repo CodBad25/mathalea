@@ -17,7 +17,7 @@ import { fractionCliquable } from '../../modules/2dinteractif'
 import { context } from '../../modules/context'
 
 export const titre = 'Effectuer des calculs simples avec des fractions'
-export const dateDePublication = '20/11/21'
+export const dateDePublication = '20/11/2021'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const amcReady = true
@@ -73,7 +73,6 @@ export default class FractionsCalculsSimples extends Exercice {
     for (
       let i = 0, reponseAMC, texte, texteCorr, schema, schemaCorr, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       // Boucle principale où i+1 correspond au numéro de la question
       let c, n, f1, f2, f3
