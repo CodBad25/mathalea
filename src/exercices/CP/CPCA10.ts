@@ -58,7 +58,7 @@ export default class AjouterSimpleNombre extends ExerciceSimple {
       : `Calculer : $${a}+${nombresAAjouter}=$`
     this.correction = alternance
       ? ` $${nombresAAjouter}+${a}=${miseEnEvidence(somme)}$`
-      : (this.canEnonce = this.question)
+      : ` $${a}+${nombresAAjouter}=${miseEnEvidence(somme)}$`
     this.reponse = somme
   }
 }
