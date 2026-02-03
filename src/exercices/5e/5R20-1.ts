@@ -95,7 +95,7 @@ export default class TermeInconnuDeSomme extends Exercice {
             this,
             i,
             `${texNombre(a)}~+~%{champ1}~=~${texNombre(b)}`,
-            KeyboardType.clavierDeBase,
+            KeyboardType.clavierDeBaseAvecFraction,
             '\\ldots',
           )
           texteCorr = `$${texNombre(a)} + ${ecritureParentheseSiMoins(texNombre(b - a))} = ${texNombre(b)}$`
@@ -106,7 +106,7 @@ export default class TermeInconnuDeSomme extends Exercice {
             this,
             i,
             `%{champ1}~+~${texNombre(a)}~=~${texNombre(b)}`,
-            KeyboardType.clavierDeBase,
+            KeyboardType.clavierDeBaseAvecFraction,
             '\\ldots',
           )
           texteCorr = `$${ecritureParentheseSiMoins(texNombre(b - a))} + ${texNombre(a)} = ${texNombre(b)}$`
@@ -117,7 +117,7 @@ export default class TermeInconnuDeSomme extends Exercice {
             this,
             i,
             `${texNombre(b)}~=~%{champ1}~+~${texNombre(a)}`,
-            KeyboardType.clavierDeBase,
+            KeyboardType.clavierDeBaseAvecFraction,
             '\\ldots',
           )
           texteCorr = `$${texNombre(b)}=${ecritureParentheseSiMoins(texNombre(b - a))} + ${texNombre(a)}$`
@@ -129,7 +129,7 @@ export default class TermeInconnuDeSomme extends Exercice {
             this,
             i,
             `${texNombre(b)}~=~${texNombre(a)}~+~%{champ1}`,
-            KeyboardType.clavierDeBase,
+            KeyboardType.clavierDeBaseAvecFraction,
             '\\ldots',
           )
           texteCorr = `$${texNombre(b)}=${texNombre(a)} + ${ecritureParentheseSiMoins(texNombre(b - a))}$`
