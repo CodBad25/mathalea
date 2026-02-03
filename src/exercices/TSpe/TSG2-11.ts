@@ -71,7 +71,7 @@ ortho +=`On calcule les coordonnées du vecteur $\\overrightarrow{MH} \\begin{pm
 ortho +=`<br>Le vecteur $\\overrightarrow{AB}$ est orthogonal au vecteur $\\overrightarrow{MH}$, leur produit scalaire est donc nul.<br>`
 ortho +=`Donc : <br>$\\begin{aligned}\\phantom{\\iff}&\\overrightarrow{MH} \\cdot \\overrightarrow{AB} = 0\\\\
 \\iff &(x ${ecritureAlgebrique(-xM)}) \\times ${ecritureParentheseSiNegatif(ux)} + (y ${ecritureAlgebrique(-yM)}) \\times ${ecritureParentheseSiNegatif(uy)} + (z ${ecritureAlgebrique(-zM)}) \\times ${ecritureParentheseSiNegatif(uz)} = 0\\\\
-\\iff &${rienSi1(ux)}  x + ${rienSi1(uy)} y + ${rienSi1(uz)} z  ${ecritureAlgebrique(-(ux * xM + uy * yM + uz * zM))}=0\\quad(1)\\end{aligned}$ <br>`
+\\iff &${rienSi1(ux)}  x  ${ecritureAlgebriqueSauf1(uy)} y  ${ecritureAlgebriqueSauf1(uz)} z  ${ecritureAlgebrique(-(ux * xM + uy * yM + uz * zM))}=0\\quad(1)\\end{aligned}$ <br>`
 let pointH=''
 pointH=`${texteEnCouleurEtGras('Le point $H$ appartient à la droite $(AB)$.')}<br>`
 pointH +=`Pour utiliser que le point $H$ appartient à la droite $(AB)$ , on détermine une représentation paramétrique de cette droite : <br>`
