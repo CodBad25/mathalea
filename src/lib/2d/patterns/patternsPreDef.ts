@@ -2163,8 +2163,8 @@ const pattern75: PatternRiche3D = {
 const pattern76: PatternRiche = {
   numero: 76,
   fonctionNb: (x: number) => 5 * x + 4,
-  fonctionRatio: (x: number) => new Ratio([x, 4 * x + 4]),
-  fonctionFraction: (x: number) => new FractionEtendue(x, 5 * x + 4),
+  fonctionRatio: (x: number) => new Ratio([1, 4 * x + 4]),
+  fonctionFraction: (x: number) => new FractionEtendue(1, 5 * x + 4),
   formule: '5\\times n + 4',
   type: 'affine',
   shapes: ['licorne', 'dragon'],

@@ -224,7 +224,6 @@ export default class RecourirDecompositionFacteursPremiers extends Exercice {
         c,
         nbADecomposer;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       a = randint(0, puissanceMax)
       b = randint(0, puissanceMax, a)
@@ -353,7 +352,7 @@ export default class RecourirDecompositionFacteursPremiers extends Exercice {
             return {
               isOk: false,
               feedback: '',
-              score: { nbBonnesReponses: 0, nbReponses: 0 },
+              score: { nbBonnesReponses: 0, nbReponses: 1 },
             }
           let expression = mfe.getValue()
           expression = expression
