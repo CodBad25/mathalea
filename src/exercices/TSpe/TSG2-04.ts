@@ -115,7 +115,7 @@ export default class nomExercice extends Exercice {
       texte += `$ A(${xA}~;~${yA}~;~${zA})$ ; $B(${xB}~;~${yB}~;~${zB})$ et `
       texte += `$(\\Delta) : \\begin{cases}x=${x}${a !== 0 ? `${ecritureAlgebriqueSauf1(a)}t` : ''}\\\\y=${y}${b !== 0 ? `${ecritureAlgebriqueSauf1(b)}t` : ''} \\quad (t\\in\\mathbb{R})\\\\z=${z}${c !== 0 ? `${ecritureAlgebriqueSauf1(c)}t` : ''}\\end{cases}$`
       texte +=
-        '<br>Déterminer si les doites $(AB)$ et $\\Delta)$ sont orthogonales.'
+        '<br>Déterminer si les doites $(AB)$ et $(\\Delta)$ sont orthogonales.'
       texteCorr =
         "Pour prouver l'orthogonalité de deux droites, il suffit de vérifier si le produit scalaire de deux de leurs vecteurs directeurs respectifs est nul.<br>"
       texteCorr +=
