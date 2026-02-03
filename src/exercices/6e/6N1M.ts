@@ -14,7 +14,7 @@ import Exercice from '../Exercice'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { setReponse } from '../../lib/interactif/gestionInteractif'
 
-export const dateDePublication = '28/09/22'
+export const dateDePublication = '28/09/2022'
 export const titre = 'Encadrer un décimal'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -22,7 +22,6 @@ export const amcReady = true
 export const amcType = 'AMCHybride'
 /**
  * * Encadrer_un_decimal_selon_une_precision_donnée
- * * 6N31-5
  * @author Mickael Guironnet (rendu AMC par Eric Elter)
  */
 

@@ -1,7 +1,7 @@
 import FractionsCalculsSimples from './6N3K-1'
 
 export const titre = 'Effectuer des multiplications simples avec des fractions'
-export const dateDePublication = '24/06/25'
+export const dateDePublication = '24/06/2025'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const amcReady = true
