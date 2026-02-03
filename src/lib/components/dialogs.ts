@@ -18,6 +18,39 @@ export async function showDialogForLimitedTime(
 }
 
 /**
+ * Affiche un dialog temporaire avec un message
+ */
+export async function showDialogStringMessageForLimitedTime(
+  message: string,
+  duration = 2000,
+) {
+  const dialog = document.createElement('dialog')
+
+  dialog.innerHTML = `
+    <div style="
+      padding:16px;
+      min-width:200px;
+      text-align:center;
+    ">
+      ${message}
+    </div>
+  `
+
+  Object.assign(dialog.style, {
+    border: 'none',
+    borderRadius: '10px',
+    boxShadow: '0 4px 14px rgba(0,0,0,0.4)',
+  })
+
+  document.body.appendChild(dialog)
+
+  dialog.showModal()
+  await sleep(duration)
+  dialog.close()
+  dialog.remove()
+}
+
+/**
  * Faire une pause pendant l'exécution d'un programme
  * {@link https://stackoverflow.com/questions/951021/what-is-the-javascript-version-of-sleep?page=1&tab=scoredesc#tab-top | Source}
  * @param {number} ms nb de millisecondes de la pause
