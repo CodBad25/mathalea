@@ -35,10 +35,10 @@ export const dateDePublication = '05/07/2025'
  * Division d'un nombre décimal dans différentes écritures par 10, 100, 1000
  * @author Eric Elter (sur les bases de 6C30-1)
  */
-export const uuid = 'fkr1b'
+export const uuid = 'fcf1b'
 
 export const refs = {
-  'fr-fr': ['auto6N2D'],
+  'fr-fr': [],
   'fr-2016': ['6C30-1a'],
   'fr-ch': [],
 }
@@ -89,8 +89,7 @@ export function analyserNombre(nombre: number): {
   return { estEntier, doublonUnites }
 }
 
-export default class DiviserDecimauxPar101001000 extends Exercice {
-  version: string
+export default class DiviserDecimauxPar101001000Old extends Exercice {
   constructor() {
     super()
     this.besoinFormulaireTexte = [
@@ -126,7 +125,6 @@ export default class DiviserDecimauxPar101001000 extends Exercice {
     this.sup2 = '3'
     this.sup3 = '3'
     this.sup4 = true
-    this.version = '6eme'
     this.spacing = 2
     this.spacingCorr = 2
     this.nbQuestions = 8
@@ -184,45 +182,33 @@ export default class DiviserDecimauxPar101001000 extends Exercice {
       this.consigne = 'Compléter.'
     }
 
-    const puissances =
-      this.version === '6eme'
-        ? combinaisonListes([1, 2, 3], this.nbQuestions)
-        : combinaisonListes([1], this.nbQuestions)
+    const puissances = combinaisonListes([1, 2, 3], this.nbQuestions)
 
     for (
       let i = 0, texte, cpt = 0, a, b, choixPuissance10, aEntier;
       i < this.nbQuestions && cpt < 50;
     ) {
-      aEntier = choice([
-        randint(11, 99),
-        randint(101, 999),
-        randint(1001, 9999),
-      ])
+      aEntier = choice([randint(11, 99), randint(101, 999)])
       b = puissances[i]
 
       if (typesDeFacteursDisponibles[i] === 1) {
         choixPuissance10 = Math.pow(10, randint(0, 3))
       } else {
-        //  choixPuissance10 = Math.pow(10, randint(-3 + b, Math.min(-3 + b, -1)))
-        choixPuissance10 = Math.pow(10, randint(-3 + b, -1))
+        choixPuissance10 = Math.pow(10, randint(-3 + b, Math.min(-3 + b, -1)))
       }
       a = arrondi(aEntier * choixPuissance10)
 
-      if (typesDeFacteursDisponibles[i] === 1) {
-        if (typesDeResultatsDisponibles[i] === 1 && a / Math.pow(10, b) > 1) {
-          while (a / Math.pow(10, b) > 1) {
-            a = Math.floor(a / 10)
-          }
-        } else if (
-          typesDeResultatsDisponibles[i] === 2 &&
-          a / Math.pow(10, b) < 1
-        ) {
-          while (a / Math.pow(10, b) < 1) {
-            a = arrondi(a * 10)
-          }
+      if (typesDeResultatsDisponibles[i] === 1 && a / Math.pow(10, b) > 1) {
+        while (a / Math.pow(10, b) > 1) {
+          a = Math.floor(a / 10)
         }
-      } else {
-        if (arrondi((a * 10) % 10) === 0) a += 0.1
+      } else if (
+        typesDeResultatsDisponibles[i] === 2 &&
+        a / Math.pow(10, b) < 1
+      ) {
+        while (a / Math.pow(10, b) < 1) {
+          a = arrondi(a * 10)
+        }
       }
 
       if (this.questionJamaisPosee(i, a, b)) {

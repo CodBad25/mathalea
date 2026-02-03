@@ -4,7 +4,11 @@ import { createList } from '../../lib/format/lists'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
-import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
+import {
+  choice,
+  combinaisonListes,
+  enleveElement,
+} from '../../lib/outils/arrayOutils'
 import { texFractionFromString } from '../../lib/outils/deprecatedFractions'
 import {
   coloreUnSeulChiffre,
@@ -103,6 +107,7 @@ function trouverChiffreEtRangDepuisDroite(
 }
 
 export default class MultiplierDecimauxPar101001000V2 extends Exercice {
+  version: string
   constructor() {
     super()
     this.besoinFormulaireTexte = [
@@ -143,6 +148,7 @@ export default class MultiplierDecimauxPar101001000V2 extends Exercice {
     this.sup2 = '1-2'
     this.sup3 = '1-2'
     this.sup4 = true
+    this.version = '6eme'
     this.spacing = 2
     this.spacingCorr = 2
     this.nbQuestions = 8
@@ -174,27 +180,40 @@ export default class MultiplierDecimauxPar101001000V2 extends Exercice {
       this.nbQuestions,
     )
 
-    const typesDeResultatsDisponibles = gestionnaireFormulaireTexte({
+    let typesDeResultatsDisponibles = gestionnaireFormulaireTexte({
       saisie: this.sup2,
       max: 3,
       melange: 4,
       defaut: 4,
       nbQuestions: this.nbQuestions,
-    })
+    }).map(Number)
+
+    if (this.version === 'CM1') {
+      enleveElement(typesDeResultatsDisponibles, 3)
+      if (typesDeResultatsDisponibles.length === 0)
+        typesDeResultatsDisponibles = [1, 2]
+    }
     const typesDeResultats = combinaisonListes(
-      typesDeResultatsDisponibles.map(Number),
+      typesDeResultatsDisponibles,
       this.nbQuestions,
     )
 
-    const typesDeFacteursDisponibles = gestionnaireFormulaireTexte({
+    let typesDeFacteursDisponibles = gestionnaireFormulaireTexte({
       saisie: this.sup3,
       max: 4,
       melange: 5,
       defaut: 5,
       nbQuestions: this.nbQuestions,
-    })
+    }).map(Number)
+
+    if (this.version === 'CM1') {
+      enleveElement(typesDeFacteursDisponibles, 3)
+      enleveElement(typesDeFacteursDisponibles, 4)
+      if (typesDeFacteursDisponibles.length === 0)
+        typesDeFacteursDisponibles = [1, 2]
+    }
     const typesDeFacteurs = combinaisonListes(
-      typesDeFacteursDisponibles.map(Number),
+      typesDeFacteursDisponibles,
       this.nbQuestions,
     )
 
@@ -210,7 +229,10 @@ export default class MultiplierDecimauxPar101001000V2 extends Exercice {
 
     let reponse: number
 
-    const puissances = combinaisonListes([1, 2, 3], this.nbQuestions)
+    const puissances =
+      this.version === '6eme'
+        ? combinaisonListes([1, 2, 3], this.nbQuestions)
+        : combinaisonListes([1], this.nbQuestions)
 
     const multiplesDe10: number[] = []
     for (let i = 10; i <= 90; i += 10) {
@@ -224,7 +246,6 @@ export default class MultiplierDecimauxPar101001000V2 extends Exercice {
     for (
       let i = 0, texte, texteCorr, cpt = 0, a, b;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       texteCorr = ''
 

@@ -1,0 +1,29 @@
+import DiviserDecimauxPar101001000 from '../6e/auto6N2D'
+
+export const dateDePublication = '01/02/2026'
+export const interactifReady = true
+export const interactifType = 'mathLive'
+export const amcReady = true
+export const amcType = 'AMCNum'
+export const titre = 'Diviser un nombre décimal par 10'
+
+/**
+ * @author Eric Elter
+ */
+
+export const uuid = 'nd45c'
+
+export const refs = {
+  'fr-fr': ['CM1C1G'],
+  'fr-ch': [],
+}
+export default class DiviserDecimauxPar10 extends DiviserDecimauxPar101001000 {
+  constructor() {
+    super()
+    this.sup = 1
+    this.sup2 = '2'
+    this.sup3 = '3'
+    this.nbQuestions = 3
+    this.version = 'CM1'
+  }
+}
