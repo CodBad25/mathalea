@@ -32,7 +32,7 @@ export default class EquationsLog extends Exercice {
     super()
     this.nbQuestions = 2
     this.spacingCorr = 3
-    this.comment = "Déterminer une équation cartésienne d'un plan"
+   
     this.correctionDetailleeDisponible = false
   }
 
