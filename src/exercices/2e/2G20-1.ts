@@ -69,7 +69,6 @@ export default class ReconnaitreVecteurs extends Exercice {
     for (
       let i = 0, monQcm, texte, texteCorr, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       let k1 = randint(-5, 5)
       let k2
@@ -328,11 +327,21 @@ export default class ReconnaitreVecteurs extends Exercice {
         }
       }
 
-      if (this.questionJamaisPosee(i, k1)) {
+      if (
+        this.questionJamaisPosee(
+          i,
+          k1,
+          listeTypeDeQuestions[i],
+          choixPtExt.x,
+          choixPtExt.y,
+        )
+      ) {
         // Si la question n'a jamais été posée, on en créé une autre.
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr
         i++ // On passe à la question suivante
+      } else {
+        this.autoCorrection.length -= 1 // On enlève la dernière correction ajoutée car question déjà posée
       }
       cpt++ // Sinon on incrémente le compteur d'essai pour avoir une question nouvelle
     }
