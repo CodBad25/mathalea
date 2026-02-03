@@ -1,3 +1,4 @@
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choice } from '../../../lib/outils/arrayOutils'
 import {
   fraction,
@@ -26,6 +27,7 @@ export default class OpposeDeFraction extends ExerciceSimple {
     super()
     this.typeExercice = 'simple'
     this.nbQuestions = 1
+    this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
   }
 
   nouvelleVersion() {

@@ -1,3 +1,4 @@
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import FractionEtendue from '../../../modules/FractionEtendue'
@@ -25,7 +26,7 @@ export default class CalculMoitieFraction extends ExerciceSimple {
     super()
     this.typeExercice = 'simple'
     this.nbQuestions = 1
-
+this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
     this.optionsDeComparaison = { fractionIrreductible: true }
     this.spacingCorr = 2.5
   }
