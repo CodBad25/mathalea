@@ -24,20 +24,24 @@ export const refs = {
   'fr-ch': [],
 }
 
-export default class NombrePairFois5 extends ExerciceSimple {
+export default class NombreFois5 extends ExerciceSimple {
+  version: string
   constructor() {
     super()
     this.typeExercice = 'simple'
     this.nbQuestions = 1
     this.formatChampTexte = KeyboardType.clavierNumbers
     this.optionsDeComparaison = { nombreDecimalSeulement: true }
+    this.version = 'Pair'
   }
 
   nouvelleVersion() {
-    const a = randint(11, 49, [20, 30, 40, 15, 25, 35, 45]) * 2
+    const a =
+      this.version === 'Pair'
+        ? randint(11, 49, [20, 30, 40, 15, 25, 35, 45]) * 2
+        : randint(1, 9) * 10 + randint(1, 9, 5)
     this.reponse = a * 5
     this.question = `Calculer $${a}\\times 5$.`
-    this.canEnonce = this.question
     this.canEnonce = this.question
     this.canReponseACompleter = ''
     this.correction = `$${a}\\times 5 = ${miseEnEvidence(this.reponse)}$<br>`
