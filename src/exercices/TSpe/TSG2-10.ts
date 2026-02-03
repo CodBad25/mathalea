@@ -1,4 +1,5 @@
 import { createList } from '../../lib/format/lists'
+import { lampeMessage } from '../../lib/format/message'
 import {
   ecritureAlgebrique,
   ecritureAlgebriqueSauf0,
@@ -86,7 +87,8 @@ export default class NomExercice extends Exercice {
     texte += createList({
       items: [
         `Le plan $P$ a pour équation cartésienne : $${equationPlan}$.<br>`,
-        'La droite $(d)$ admet la représentation paramétrique suivante :'
+        `La droite $(d)$ admet la représentation paramétrique suivante : <br>
+        $\\begin{cases}x=${x0}${ecritureAlgebriqueSauf1(ux)}t\\\\y=${y0}${ecritureAlgebriqueSauf1(uy)}t\\\\z=${z0}${ecritureAlgebriqueSauf1(uz)}t\\end{cases}.$<br>`
       ],
      style: 'nombres',
     })
@@ -96,7 +98,7 @@ export default class NomExercice extends Exercice {
         '<br>En cas d’intersection, calculer les coordonnées du point commun.'
 
       // Correction
-      let orthogonalite =`${texteEnCouleurEtGras('Etudier l\'orthogonalité d\'un vecteur directeur de $(d)$ et d\'un vecteur normal à $\\mathcal{P}$ ')}<br>Si un vecteur directeur de la droite $(d)$ est orthogonal au vecteur normal du plan $\\mathcal{P}$, alors la droite $(d)$ est parallèle au plan $\\mathcal{P}$ ou incluse dedans. <br>`
+      let orthogonalite =`${texteEnCouleurEtGras('Etudier l\'orthogonalité d\'un vecteur directeur de $(d)$ et d\'un vecteur normal à $\\mathcal{P}$ ','black')}<br>Si un vecteur directeur de la droite $(d)$ est orthogonal au vecteur normal du plan $\\mathcal{P}$, alors la droite $(d)$ est parallèle au plan $\\mathcal{P}$ ou incluse dedans. <br>`
          orthogonalite +='Dans le cas contraire, la droite $(d)$ est sécante au plan $\\mathcal{P}$.<br>'
        orthogonalite +='On sait qu\'un plan qui a une équation cartesienne du type $ax+by+cz+d=0$ admet  $\\vec n\\begin{pmatrix}' +
         `a\\\\b\\\\c\\end{pmatrix}$ comme vecteur normal. <br>`
@@ -120,7 +122,7 @@ export default class NomExercice extends Exercice {
       else {orthogonalite += '<br>Le produit scalaire est nul, les vecteurs sont donc orthogonaux.  Il reste donc deux possibilités : Soit la droite $(d)$ est strictement parallèle au plan $\\mathcal{P}$ soit elle est incluse dedans.'}
       
       let PointCommun =''
-      PointCommun +=`${texteEnCouleurEtGras('Étude de l\'intersection entre la droite $(d)$ et le plan $\\mathcal{P}$ :')}<br>`
+      PointCommun +=`${texteEnCouleurEtGras('Étude de l\'intersection entre la droite $(d)$ et le plan $\\mathcal{P}$ :','black')}<br>`
       if (produitScalaire===0) {PointCommun +='Pour différencier les deux cas possibles, on va chercher s\'il existe des points d\'intersection entre la droite $(d)$ et le plan $\\mathcal{P}$. On cherche donc les points $M(x;y;z)$ dont les coordonnées vérifient en même temps la représentation paramétrique de $(d)$ et l\'équation cartésienne de $(\\mathcal{P})$. <br>'}
       else{PointCommun +='On  cherche les coordonnées du point $M(x;y;z)$, intersection entre la droite $(d)$ et le plan $\\mathcal{P}$. Ses coordonnées vérifient donc la représentation paramétrique de $(d)$ et l\'équation cartésienne de $(\\mathcal{P})$. <br>'}
 PointCommun +='On cherche donc l\'ensemble des $(x, y, z, t)$ qui vérifient le système : <br>'
@@ -146,10 +148,33 @@ PointCommun +='On cherche donc l\'ensemble des $(x, y, z, t)$ qui vérifient le 
         if (cas === 'incluse') {
           PointCommun +=`Cette équation admet une infinité de solution. Il y a une infinité de points commun à $(d)$ et $\\mathcal P$. <br> ${texteEnCouleurEtGras('On peut conclure que la droite $(d)$ est incluse dans le plan $\\mathcal P$.')}`}
      
-        texteCorr =
-        'Etudier la position relative de la droite $(d)$ et du plan $\\mathcal{P}$, c\'est déterminer si : '
-         texteCorr +=createList({items:['$(d)$ est strictement parallèle à $\\mathcal{P}$', '$(d)$ est incluse dans $\\mathcal{P}$','$(d)$ est sécante à $\\mathcal{P}$'],  style: 'fleches',
-      })
+      texteCorr =    lampeMessage({
+                titre: 'Méthode :',
+                texte:
+                  'Pour étudier la position relative de la droite $(d)$ et du plan $\\mathcal{P}$, il faut étudier le vecteur $\\vec n$ normal à $\\mathcal{P}$ et le vecteur $\\vec u$ directeur de $(d)$ : ' +
+        createList({
+          items: [
+            'On calcule $\\vec n \\cdot \\vec u$' +
+              createList({
+                items: [
+                  'Si $\\vec n \\cdot \\vec u=0$, alors $\\vec n$ est orthogonal à $\\vec u$, donc $(d)$ est parallèle à $\\mathcal{P}$ ou incluse dans $\\mathcal{P}$',
+                  'Sinon, $(d)$ est sécante à $\\mathcal{P}$'
+                ],
+                style: 'fleches'
+              }),
+            'On cherche ensuite les éventuels points communs en résolvant le système formé par l\'équation du plan et la représentation paramétrique de la droite.'+ createList({
+                items: [
+                  'Dans le cas où le produit scalaire est nul, s\'il existe au moins un point commun, alors  $(d)$ est incluse dans $\\mathcal{P}$. <br>Sinon, $(d)$ est strictement parallèle à $\\mathcal{P}$.',
+                  'Si $(d)$ est sécante à $\\mathcal{P}$, on calcule les coordonnées du point d\'intersection en remplaçant la valeur du paramètre $t$ trouvée dans la représentation paramétrique de $(d)$ .'
+                ],
+                style: 'fleches'
+              }) 
+          ],
+          style: 'fleches',
+        }),
+    })
+
+       
         texteCorr +='<br>Nous allons pour cela procéder en deux étapes : <br>'+createList({items:[orthogonalite, PointCommun], style: 'nombres',
       })
             
