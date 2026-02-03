@@ -45,7 +45,7 @@ export const titre =
   'Liste des patterns stockés dans MathALÉA avec leurs numéros de référence'
 
 export const refs = {
-  'fr-fr': ['P023-old'],
+  'fr-fr': [],
   'fr-ch': [],
 }
 export const uuid = '4c9ca'
