@@ -57,7 +57,7 @@ class Decomp1 extends Exercice {
   nouvelleVersion() {
     this.consigne =
       this.nbQuestions === 1
-        ? "Compléter cette décomposition d'entier."
+        ? "Compléter cette décomposition d'entier.<br>"
         : "Compléter chaque décomposition d'entier."
     if (this.interactif)
       this.consigne +=
