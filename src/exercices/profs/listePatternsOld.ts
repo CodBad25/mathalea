@@ -133,7 +133,10 @@ L'expression donnée entre crochets est la formule qui permet de calculer le nom
     if (!context.isHtml) {
       texte += `${listeShapes.map((shape) => listeShapes2DInfos[shape].shapeDef.tikz()).join('\n')}\n`
     }
-    if (listePatterns == null || listePatterns.length === 0) return
+    if (listePatterns == null || listePatterns.length === 0) {
+      this.listeQuestions = ['Aucun pattern disponible pour cette référence.']
+      return
+    }
     for (let i = 0; i < listePatterns.length; i++) {
       const pat = listePatterns[i]
       if (pat == null) {

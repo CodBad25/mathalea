@@ -140,6 +140,7 @@
     headerProps.indiceLastExercice = exercicesNumber
     headerProps.isSettingsVisible = isSettingsVisible
     headerProps = headerProps
+    isCorrectionVisible = isCorrectionVisible // MGU pour déclencher le reactive
   }
 
   let numberOfAnswerFields: number = 0
