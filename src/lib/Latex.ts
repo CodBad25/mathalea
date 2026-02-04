@@ -399,8 +399,8 @@ class Latex {
           }
         }
 
-        content += writeIntroduction(exercice.introduction)
-        content += '\n' + format(exercice.consigne)
+        content += writeIntroduction(exercice.introduction) + '\n'
+        content += format(exercice.consigne) + '\n'
         content += buildContent(
           exercice.listeQuestions,
           exercice.spacing,
