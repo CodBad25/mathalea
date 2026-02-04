@@ -14,6 +14,7 @@ import { projectionOrtho, rotation } from '../../lib/2d/transformations'
 import { longueur } from '../../lib/2d/utilitairesGeometriques'
 import { pointIntersectionDD } from '../../lib/2d/utilitairesPoint'
 import { centreGraviteTriangle } from '../../lib/2d/utilitairesTriangle'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteFeedback } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
@@ -70,7 +71,7 @@ const figureCarre = (cote: number, exercice: IExercice, question: number) => {
         content: '%{champ1}\\text{ cm}^2',
         x: c / 2,
         y: c / 2,
-        classe: '',
+        classe: KeyboardType.clavierNumbers,
         blanc: '\\ldots ',
         opacity: 1,
         index: 0,

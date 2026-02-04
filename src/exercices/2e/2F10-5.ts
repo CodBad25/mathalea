@@ -5,6 +5,7 @@ import { point } from '../../lib/2d/PointAbstrait'
 import { repere } from '../../lib/2d/reperes'
 import { labelPoint, texteParPosition } from '../../lib/2d/textes'
 import { tracePoint } from '../../lib/2d/TracePoint'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteFeedback } from '../../lib/interactif/questionMathLive'
 import {
@@ -206,7 +207,7 @@ ${a !== 1 ? `x& ${a < 0 ? `${miseEnEvidence(`${sp(1.5)}\\boldsymbol{<}${sp(1.5)}
                   x: 12.2,
                   y: -1.5,
                   content: '%{champ1}',
-                  classe: '',
+                  classe: KeyboardType.clavierDeBaseAvecFraction,
                   blanc: '\\ldots',
                   opacity: 1,
                   index: 0,
@@ -215,7 +216,7 @@ ${a !== 1 ? `x& ${a < 0 ? `${miseEnEvidence(`${sp(1.5)}\\boldsymbol{<}${sp(1.5)}
                   x: 10,
                   y: -4,
                   content: '%{champ1}',
-                  classe: '',
+                  classe: KeyboardType.clavierDeBaseAvecFraction,
                   blanc: '\\ldots',
                   opacity: 1,
                   index: 1,
@@ -224,7 +225,7 @@ ${a !== 1 ? `x& ${a < 0 ? `${miseEnEvidence(`${sp(1.5)}\\boldsymbol{<}${sp(1.5)}
                   x: 14.4,
                   y: -4,
                   content: '%{champ1}',
-                  classe: '',
+                  classe: KeyboardType.clavierDeBaseAvecFraction,
                   blanc: '\\ldots',
                   opacity: 1,
                   index: 2,

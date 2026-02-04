@@ -12,16 +12,19 @@ import { MetaInteractif2d } from '../../lib/2d/interactif2d'
 import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { carre } from '../../lib/2d/polygonesParticuliers'
 import { latex2d } from '../../lib/2d/textes'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import {
   ajouteChampTexteMathLive,
   ajouteFeedback,
 } from '../../lib/interactif/questionMathLive'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { sp } from '../../lib/outils/outilString'
 import type { IExercice } from '../../lib/types'
 import { mathalea2d } from '../../modules/mathalea2d'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
 export const titre =
   "Déterminer la racine carrée d'un carré parfait (calcul mental)"
+export const dateDeModifImportante = '04/02/2026'
 export const amcReady = true
 export const amcType = 'AMCNum'
 export const interactifType = 'MetaInteractif2d'
@@ -30,8 +33,6 @@ export const interactifReady = true
 /**
  * Déterminer la racine carrée d'un carré parfait compris entre 1 et 256
  * @author Stéphane Guyon et Guillaume Valmont
-
- * Mis à jour le 08/08/2021
  */
 export const uuid = 'f5cbd'
 
@@ -67,7 +68,7 @@ const figureCarre = (aire: number, exercice: IExercice, question: number) => {
         x: 4 + c + 2,
         y: 2 + c / 2,
         content: `%{champ1} \\text{ cm}`,
-        classe: '',
+        classe: KeyboardType.clavierNumbers,
         blanc: '\\ldots ',
         opacity: 1,
         index: 0,
@@ -148,9 +149,13 @@ export default class RacineCareeDeCarresParfaits extends Exercice {
       c = a * a
       if (!this.sup3) {
         if (listeQuestions[i] === 1) {
-          texte =
-            `Calculer de tête $\\sqrt{${c}}=$` +
-            ajouteChampTexteMathLive(this, i)
+          texte = `Calculer de tête $\\sqrt{${c}}$`
+          texte += this.interactif
+            ? ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers, {
+                texteAvant: sp() + ' = ',
+                texteApres: '.',
+              })
+            : '.'
         } else {
           texte =
             `Quel est le nombre positif dont le carré est $${c}$ ?` +
