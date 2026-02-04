@@ -31,29 +31,27 @@ export default class ExerciceLabyrintheMultiplesDe3 extends ExerciceLabyrinthe {
       '1 : Par 2\n2 : Par 3\n3 : Par 5\n4 : Par 9\n5 : Au hasard',
     ]
   }
-  
+
   nouvelleVersion(): void {
-      super.nouvelleVersion()
-      switch (this.sup) {
-        case 1:
-          this.k = 2
-          break
-        case 2:
-          this.k = 3
-          break
-        case 3:
-          this.k = 5
-          break
-        case 4:
-          this.k = 9
-          break
-        default:
-          this.k = choice([2, 3, 5, 9])
-      }
-      this.consigne = `Trouver le chemin qui passe par des multiples de ${this.k}.`
-      this.consigne += this.consigneDeplacement
-      this.generateGoodAnswers()
-      this.generateBadAnswers()
+    switch (this.sup) {
+      case 1:
+        this.k = 2
+        break
+      case 2:
+        this.k = 3
+        break
+      case 3:
+        this.k = 5
+        break
+      case 4:
+        this.k = 9
+        break
+      default:
+        this.k = choice([2, 3, 5, 9])
+    }
+    super.nouvelleVersion()
+    this.consigne = `Trouver le chemin qui passe par des multiples de ${this.k}.`
+    this.consigne += this.consigneDeplacement
   }
 
   generateGoodAnswers() {

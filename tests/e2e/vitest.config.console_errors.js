@@ -16,7 +16,7 @@ export default mergeConfig(
     },
     test: {
       include: ['./tests/console_errors/*.test.{js,ts}'],
-      exclude: [],
+      exclude: ['./tests/console_errors/*.debug.test.{js,ts}'],
       // on veut laisser le navigateur ouvert sur un plantage (3min)
       hookTimeout: 120_000,
       testTimeout: 1000_000,
