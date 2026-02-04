@@ -287,6 +287,9 @@
   "2mGeomVect": {
     "titre": "Géométrie vectorielle"
   },
+  "2mRecComp": {
+    "titre": "Réciproque et composition de fonctions"
+  },
   "2mLogExp": {
     "titre": "Logarithmes et exponentielles"
   },

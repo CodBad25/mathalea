@@ -1,3 +1,6 @@
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import MonomePlusieursVariables from '../../lib/mathFonctions/MonomePlusieursVariables'
 import {
   choice,
@@ -10,6 +13,8 @@ import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 export const titre = 'Multiplier des monômes'
 export const dateDePublication = '19/08/2024'
+export const interactifReady = true
+export const interactifType = 'mathLive'
 
 /**
  * Réduire une expression littérale
@@ -73,6 +78,7 @@ export default class nomExercice extends Exercice {
       const variablesSelect = getRandomSubarray(variables, this.sup4)
       const typeCoeffListe = ['entier', 'fractionnaire']
       let typeofCoeff = []
+      let p: MonomePlusieursVariables
       switch (listeTypeDeQuestions[i]) {
         case 1:
           {
@@ -107,7 +113,7 @@ export default class nomExercice extends Exercice {
               listMonome.push(q3)
             }
             // Multplier les éléments de la liste ensemble en utilisant la méthode produit
-            let p = listMonome[0]
+            p = listMonome[0]
             for (let i = 1; i < listMonome.length; i++) {
               p = p.produit(listMonome[i])
             }
@@ -119,10 +125,16 @@ export default class nomExercice extends Exercice {
                 t += ' \\times '
               }
             }
-            texte = `$${lettreDepuisChiffre(i + 1)}=${t}$`
+            texte =
+              `$${lettreDepuisChiffre(i + 1)}=${t}$` +
+              ajouteChampTexteMathLive(this, i, KeyboardType.lyceeClassique, {
+                texteAvant: '$=$',
+              })
             texteCorr = `$${lettreDepuisChiffre(i + 1)}=${miseEnEvidence(p.toString())}$`
           }
           if (this.questionJamaisPosee(i, texteCorr)) {
+            handleAnswers(this, i, { reponse: { value: p.toString() } })
+
             this.listeQuestions[i] = texte
             this.listeCorrections[i] = texteCorr
             i++
