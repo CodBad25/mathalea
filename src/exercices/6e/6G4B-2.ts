@@ -69,7 +69,6 @@ export default class MesureAnglesParticuliers extends Exercice {
       let i = 0, typeAngle, cpt = 0;
       i < Math.min(this.nbQuestions, typeQuestionsDisponibles.length) &&
       cpt < 50;
-
     ) {
       if (this.questionJamaisPosee(i, typeQuestionsDisponibles[i])) {
         let reponse1 = 0
@@ -148,7 +147,8 @@ export default class MesureAnglesParticuliers extends Exercice {
               ? remplisLesBlancs(
                   this,
                   i,
-                  '%{champ1}^\\circ\\text{ }et\\text{ }%{champ2}^\\circ.',
+                  '%{champ1}^\\circ\\text{ et }%{champ2}^\\circ.',
+                  KeyboardType.clavierNumbers,
                 )
               : '\\ldots\\ldots\\ldots $^\\circ$ et \\ldots\\ldots\\ldots $^\\circ$.'
             handleAnswers(
