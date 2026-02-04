@@ -366,6 +366,17 @@ export function sendToCapytaleSaveStudentAssignment({
           )
           return
         }
+        if (
+          err instanceof Error &&
+          err.message &&
+          err.message.includes('Copie verrouillée')
+        ) {
+          showDialogStringMessageForLimitedTime(
+            'Impossible de sauvegarder vos réponses car votre copie est verrouillée.',
+            5000,
+          )
+          return
+        }
 
         console.error('Problème avec la sauvegarde', err)
         // Indiquer à l'élève qu'il y a un soucis réseau
