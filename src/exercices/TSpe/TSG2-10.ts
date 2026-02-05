@@ -77,46 +77,43 @@ export default class NomExercice extends Exercice {
       }
       const equationPlan = `${rienSi1(a)}x${ecritureAlgebriqueSauf1(b)}y${ecritureAlgebriqueSauf1(c)}z${ecritureAlgebriqueSauf0(d)}=0`
       const produitScalaire = a * ux + b * uy + c * uz
-
-      // Sécurité : pour le cas « sécant », on veut absolument un produit scalaire non nul
-      if (cas === 'secant' && produitScalaire === 0) {
-        cpt++
-        continue
-      }
-      let solution: FractionEtendue | null = null
-      let abscisseM: FractionEtendue | null = null
-      let ordonneeM: FractionEtendue | null = null
-      let coteM: FractionEtendue | null = null
-
-      if (produitScalaire !== 0) {
-        solution = new FractionEtendue(
-          -a * x0 - b * y0 - c * z0 - d,
-          produitScalaire,
-        )
-        abscisseM = new FractionEtendue(
-          x0 * produitScalaire + ux * (-a * x0 - b * y0 - c * z0 - d),
-          produitScalaire,
-        )
-        ordonneeM = new FractionEtendue(
-          y0 * produitScalaire + uy * (-a * x0 - b * y0 - c * z0 - d),
-          produitScalaire,
-        )
-        coteM = new FractionEtendue(
-          z0 * produitScalaire + uz * (-a * x0 - b * y0 - c * z0 - d),
-          produitScalaire,
-        )
-      }
-
-      texte =
-        "Dans l'espace muni d'un repère orthonormé, on considère un plan $\\mathcal{P}$ et une droite $(d)$ :<br>"
-      texte += createList({
-        items: [
-          `Le plan $P$ a pour équation cartésienne : $${equationPlan}$.<br>`,
-          `La droite $(d)$ admet la représentation paramétrique suivante : <br>
-        $\\begin{cases}x=${reduireAxPlusB(ux, x0, 't', { ordreInverse: true })}\\\\y=${reduireAxPlusB(uy, y0, 't', { ordreInverse: true })}\\\\z=${reduireAxPlusB(uz, z0, 't', { ordreInverse: true })}\\end{cases}.$<br>`,
-        ],
-        style: 'nombres',
-      })
+      // Les fractions suivantes ne sont utiles que dans le cas sécant.
+      // Si le produit scalaire est nul, on évite un dénominateur nul.
+      const solution =
+        produitScalaire !== 0
+          ? new FractionEtendue(-a * x0 - b * y0 - c * z0 - d, produitScalaire)
+          : null
+      const abscisseM =
+        produitScalaire !== 0
+          ? new FractionEtendue(
+              x0 * produitScalaire + ux * (-a * x0 - b * y0 - c * z0 - d),
+              produitScalaire,
+            )
+          : null
+      const ordonneeM =
+        produitScalaire !== 0
+          ? new FractionEtendue(
+              y0 * produitScalaire + uy * (-a * x0 - b * y0 - c * z0 - d),
+              produitScalaire,
+            )
+          : null
+      const coteM =
+        produitScalaire !== 0
+          ? new FractionEtendue(
+              z0 * produitScalaire + uz * (-a * x0 - b * y0 - c * z0 - d),
+              produitScalaire,
+            )
+          : null
+  texte =
+        'Dans l\'espace muni d\'un repère orthonormé, on considère un plan $\\mathcal{P}$ et une droite $(d)$ :<br>'
+    texte += createList({
+      items: [
+        `Le plan $P$ a pour équation cartésienne : $${equationPlan}$.<br>`,
+        `La droite $(d)$ admet la représentation paramétrique suivante : <br>
+        $\\begin{cases}x=${x0}${ecritureAlgebriqueSauf1(ux)}t\\\\y=${y0}${ecritureAlgebriqueSauf1(uy)}t\\\\z=${z0}${ecritureAlgebriqueSauf1(uz)}t\\end{cases}.$<br>`
+      ],
+     style: 'nombres',
+    })
       texte +=
         '<br>Déterminer la position relative de $(d)$ et $\\mathcal{P}$ .'
       texte +=
@@ -171,8 +168,7 @@ export default class NomExercice extends Exercice {
      ${produitScalaire} t&=${-(a * x0 + b * y0 + c * z0 + d)}
        \\end{aligned}.$<br>`
       // Cas sécant
-      if (cas === 'secant' && solution && abscisseM && ordonneeM && coteM) {
-        PointCommun += `$\\begin{aligned}\\phantom {${a * x0}${ecritureAlgebriqueSauf1(ux * a)}t${a * x0}${ecritureAlgebriqueSauf1(ux * a)}t${ecritureAlgebrique(b * y0)}${ecritureAlgebriqueSauf1(uy * b)}t${ecritureAlgebrique(c * z0)}${ecritureAlgebriqueSauf1(uz * c)}}t&=${solution.texFractionSimplifiee}\\\\
+       if (cas === 'secant' && solution && abscisseM && ordonneeM && coteM) {   PointCommun +=`$\\begin{aligned}\\phantom {${a*x0}${ecritureAlgebriqueSauf1(ux*a)}t${a*x0}${ecritureAlgebriqueSauf1(ux*a)}t${ecritureAlgebrique(b*y0)}${ecritureAlgebriqueSauf1(uy*b)}t${ecritureAlgebrique(c*z0)}${ecritureAlgebriqueSauf1(uz*c)}}t&=${solution.texFractionSimplifiee}\\\\
      \\end{aligned}.$<br>`
         PointCommun +=
           "On remplace cette valeur de $t$ dans la représentation paramétrique de la droite pour obtenir les coordonnées du point d'intersection : <br>"
