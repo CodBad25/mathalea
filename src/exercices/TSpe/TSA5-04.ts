@@ -108,7 +108,7 @@ export default class EquationsLog extends Exercice {
           ajouteChampTexteMathLive(
             this,
             2 * i,
-            ` ${KeyboardType.lycee} ${KeyboardType.clavierEnsemble}`,
+            ` ${KeyboardType.equationsTerminale}`,
             { texteAvant: '$\\mathcal{D}_f=$' },
           )
         texte +=
@@ -116,7 +116,7 @@ export default class EquationsLog extends Exercice {
           ajouteChampTexteMathLive(
             this,
             2 * i + 1,
-            ` ${KeyboardType.lycee} ${KeyboardType.clavierEnsemble}`,
+            ` ${KeyboardType.equationsTerminale}`,
             { texteAvant: '$\\mathcal{S}=$' },
           )
 
@@ -169,7 +169,7 @@ export default class EquationsLog extends Exercice {
           ajouteChampTexteMathLive(
             this,
             2 * i,
-            ` ${KeyboardType.lycee} ${KeyboardType.clavierEnsemble}`,
+            ` ${KeyboardType.equationsTerminale}`,
             { texteAvant: '$\\mathcal{D}_f=$' },
           )
         texte +=
@@ -177,7 +177,7 @@ export default class EquationsLog extends Exercice {
           ajouteChampTexteMathLive(
             this,
             2 * i + 1,
-            ` ${KeyboardType.lycee} ${KeyboardType.clavierEnsemble}`,
+            ` ${KeyboardType.equationsTerminale}`,
             { texteAvant: '$\\mathcal{S}=$' },
           )
         texteCorr = `${numAlpha(0)} Tout d'abord, la fonction $${logString}$ est définie sur $\\R_+^*$, donc $${reduireAxPlusB(a, b)}$ et $${reduireAxPlusB(c, d)}$ doivent être strictement positifs.<br>`
