@@ -39,6 +39,32 @@ export class BezierPath extends ObjetMathalea2D {
     this.xStart = xStart
     this.yStart = yStart
     this.listeOfTriplets = listeOfTriplets
+    let xMin = 1000
+    let xMax = -1000
+    let yMin = 1000
+    let yMax = -1000
+    // Calcul des bordures
+    let x0 = xStart
+    let y0 = yStart
+    for (const triplet of listeOfTriplets) {
+      const x3 = x0 + triplet[2][0]
+      const y3 = y0 + triplet[2][1]
+      const pointsToConsider = [
+        [x0, y0],
+        [x0 + triplet[0][0], y0 + triplet[0][1]],
+        [x3 + triplet[1][0], y3 + triplet[1][1]],
+        [x3, y3],
+      ]
+      for (const point of pointsToConsider) {
+        if (point[0] < xMin) xMin = point[0]
+        if (point[0] > xMax) xMax = point[0]
+        if (point[1] < yMin) yMin = point[1]
+        if (point[1] > yMax) yMax = point[1]
+      }
+      x0 = x3
+      y0 = y3
+    }
+    this.bordures = [xMin, yMin, xMax, yMax]
   }
 
   svg(coeff: number) {
