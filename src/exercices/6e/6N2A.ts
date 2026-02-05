@@ -1,3 +1,4 @@
+import { orangeMathalea } from 'apigeom/src/elements/defaultValues'
 import { grille, seyes } from '../../lib/2d/Grille'
 import { vide2d } from '../../lib/2d/Vide2d'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
@@ -255,6 +256,10 @@ export default class AdditionnerSoustrairesDecimaux extends Exercice {
             operande2: b,
             type: 'soustraction',
             style: 'display: inline-block',
+            options: {
+              colore: orangeMathalea,
+              solution: true,
+            },
           })
         texteCorr +=
           sp(10) +
@@ -265,6 +270,10 @@ export default class AdditionnerSoustrairesDecimaux extends Exercice {
             type: 'soustraction',
             style: 'display: inline-block',
             methodeParCompensation: false,
+            options: {
+              colore: orangeMathalea,
+              solution: true,
+            },
           })
       } else {
         texte = `$${texNombre(a)}+${texNombre(b)}$`
@@ -274,6 +283,10 @@ export default class AdditionnerSoustrairesDecimaux extends Exercice {
           operande2: b,
           type: 'addition',
           style: 'display: inline-block',
+          options: {
+            colore: orangeMathalea,
+            solution: true,
+          },
         })
       }
       texte += grilletxt
