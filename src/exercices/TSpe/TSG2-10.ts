@@ -38,82 +38,86 @@ export default class NomExercice extends Exercice {
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
       let texte = ''
       let texteCorr = ''
-
-      // Plan : équation ax + by + cz + d = 0 avec (a,b,c) non nul
-      const a = randint(-4, 4, 0)
-      const b = randint(-4, 4, 0)
-      let c: number
-      const d = randint(-4, 4, 0)
-
-      // Choix du cas : secant plus fréquent
-      const tirageCas = randint(1, 6)
-      const cas =
-        tirageCas <= 3 ? 'secant' : tirageCas <= 5 ? 'parallele' : 'incluse'
-
-      // Fonction pour obtenir un vecteur directeur orthogonal à (a,b,c)
-      const ux = randint(-5, 5, 0)
-      const uy = randint(-5, 5, 0)
-      let uz: number
-
-      // Données de la droite
-      const x0 = randint(-5, 5, 0)
-      const y0 = randint(-5, 5, 0)
+      let produitScalaire: number = 0
+      let a = 0
+      let b = 0
+      let c = 0
+      let d = 0
+      let ux = 0
+      let uy = 0
+      let uz = 0
+      let x0 = 0
+      let y0 = 0
       let z0 = 0
+      let cas = ''
+      let compteurBoucle = 0
+      do {
+        // Plan : équation ax + by + cz + d = 0 avec (a,b,c) non nul
+        a = randint(-4, 4, 0)
+        b = randint(-4, 4, 0)
+        c = randint(-4, 4, 0)
+        d = randint(-4, 4, 0)
 
-      // On gère le cas le plus simple : droite incluse dans le plan
-      z0 = -a * x0 - b * y0 - d // Point du plan On fixe c=1 pour ne pas s'emmerder
-      c = 1
-      uz = -(a * ux + b * uy) // vecteur u orthogonal à n
+        // Choix du cas : secant plus fréquent
+        const tirageCas = randint(1, 6)
+        cas =
+          tirageCas <= 3 ? 'secant' : tirageCas <= 5 ? 'parallele' : 'incluse'
 
-      if (cas === 'parallele') {
-        // Direction dans le plan mais point extérieur
+        // Fonction pour obtenir un vecteur directeur orthogonal à (a,b,c)
+        ux = randint(-5, 5, 0)
+        uy = randint(-5, 5, 0)
 
-        z0 = z0 + randint(-5, 5, 0) // On ajuste la cote du point pour que le point ne soit pas dans le plan
-      }
-      if (cas === 'secant') {
-        // Cas sécant : vecteur non orthogonal au normal
-        uz = uz + randint(-4, 4, 0)
-        c = randint(-4, 4, [0, 1])
-      }
-      const equationPlan = `${rienSi1(a)}x${ecritureAlgebriqueSauf1(b)}y${ecritureAlgebriqueSauf1(c)}z${ecritureAlgebriqueSauf0(d)}=0`
-      const produitScalaire = a * ux + b * uy + c * uz
+        // Données de la droite
+        x0 = randint(-5, 5, 0)
+        y0 = randint(-5, 5, 0)
 
-      // Sécurité : pour le cas « sécant », on veut absolument un produit scalaire non nul
-      if (cas === 'secant' && produitScalaire === 0) {
-        cpt++
+        // On gère le cas le plus simple : droite incluse dans le plan
+        z0 = -a * x0 - b * y0 - d // Point du plan On fixe c=1 pour ne pas s'emmerder
+        c = 1
+        uz = -(a * ux + b * uy) // vecteur u orthogonal à n
+
+        if (cas === 'parallele') {
+          // Direction dans le plan mais point extérieur
+
+          z0 = z0 + randint(-5, 5, 0) // On ajuste la cote du point pour que le point ne soit pas dans le plan
+        }
+        if (cas === 'secant') {
+          // Cas sécant : vecteur non orthogonal au normal
+          uz = uz + randint(-4, 4, 0)
+          c = randint(-4, 4, [0, 1])
+        }
+        produitScalaire = a * ux + b * uy + c * uz
+        compteurBoucle++
+      } while (produitScalaire === 0 && compteurBoucle < 100) // Le produit scalaire ne doit pas être nul car c'est le dénominateur dans le calcul de l'abscisse du point d'intersection
+      if (compteurBoucle >= 100) {
+        // Sécurité anti-bouclage infini
         continue
       }
-      let solution: FractionEtendue | null = null
-      let abscisseM: FractionEtendue | null = null
-      let ordonneeM: FractionEtendue | null = null
-      let coteM: FractionEtendue | null = null
+      const equationPlan = `${rienSi1(a)}x${ecritureAlgebriqueSauf1(b)}y${ecritureAlgebriqueSauf1(c)}z${ecritureAlgebriqueSauf0(d)}=0`
 
-      if (produitScalaire !== 0) {
-        solution = new FractionEtendue(
-          -a * x0 - b * y0 - c * z0 - d,
-          produitScalaire,
-        )
-        abscisseM = new FractionEtendue(
-          x0 * produitScalaire + ux * (-a * x0 - b * y0 - c * z0 - d),
-          produitScalaire,
-        )
-        ordonneeM = new FractionEtendue(
-          y0 * produitScalaire + uy * (-a * x0 - b * y0 - c * z0 - d),
-          produitScalaire,
-        )
-        coteM = new FractionEtendue(
-          z0 * produitScalaire + uz * (-a * x0 - b * y0 - c * z0 - d),
-          produitScalaire,
-        )
-      }
-
+      const solution = new FractionEtendue(
+        -a * x0 - b * y0 - c * z0 - d,
+        produitScalaire,
+      )
+      const solutionsimplifiee = solution.simplifie()
+      const abscisseM = new FractionEtendue(
+        x0 * produitScalaire + ux * (-a * x0 - b * y0 - c * z0 - d),
+        produitScalaire,
+      )
+      const ordonneeM = new FractionEtendue(
+        y0 * produitScalaire + uy * (-a * x0 - b * y0 - c * z0 - d),
+        produitScalaire,
+      )
+      const coteM = new FractionEtendue(
+        z0 * produitScalaire + uz * (-a * x0 - b * y0 - c * z0 - d),
+        produitScalaire,
+      )
       texte =
         "Dans l'espace muni d'un repère orthonormé, on considère un plan $\\mathcal{P}$ et une droite $(d)$ :<br>"
       texte += createList({
         items: [
           `Le plan $P$ a pour équation cartésienne : $${equationPlan}$.<br>`,
-          `La droite $(d)$ admet la représentation paramétrique suivante : <br>
-        $\\begin{cases}x=${reduireAxPlusB(ux, x0, 't', { ordreInverse: true })}\\\\y=${reduireAxPlusB(uy, y0, 't', { ordreInverse: true })}\\\\z=${reduireAxPlusB(uz, z0, 't', { ordreInverse: true })}\\end{cases}.$<br>`,
+          `La droite $(d)$ admet la représentation paramétrique suivante : $\\begin{cases}x=${x0}${ecritureAlgebriqueSauf1(ux)}t\\\\y=${y0}${ecritureAlgebriqueSauf1(uy)}t\\\\z=${z0 === 0 ? `${uz}t` : `${z0}${ecritureAlgebriqueSauf1(uz)}t`}\\end{cases}\\quad (t\\in\\mathbb{R})$`,
         ],
         style: 'nombres',
       })
@@ -123,7 +127,7 @@ export default class NomExercice extends Exercice {
         '<br>En cas d’intersection, calculer les coordonnées du point commun.'
 
       // Correction
-      let orthogonalite = `${texteEnCouleurEtGras("Etudier l'orthogonalité d'un vecteur directeur de $(d)$ et d'un vecteur normal à $\\mathcal{P}$ ", 'black')}<br>Si un vecteur directeur de la droite $(d)$ est orthogonal au vecteur normal du plan $\\mathcal{P}$, alors la droite $(d)$ est parallèle au plan $\\mathcal{P}$ ou incluse dedans. <br>`
+      let orthogonalite = `${texteEnCouleurEtGras("Étudier l'orthogonalité d'un vecteur directeur de $(d)$ et d'un vecteur normal à $\\mathcal{P}$ ")}<br>Si un vecteur directeur de la droite $(d)$ est orthogonal à un vecteur normal du plan $\\mathcal{P}$, alors la droite $(d)$ est strictement parallèle au plan $\\mathcal{P}$ ou incluse dans ce plan. <br>`
       orthogonalite +=
         'Dans le cas contraire, la droite $(d)$ est sécante au plan $\\mathcal{P}$.<br>'
       orthogonalite +=
@@ -133,10 +137,10 @@ export default class NomExercice extends Exercice {
         'On en déduit que le vecteur $\\vec n\\begin{pmatrix}' +
         `${a}\\\\${b}\\\\${c}\\end{pmatrix}$ est un vecteur normal au  plan $(\\mathcal{P})$. <br>`
       orthogonalite +=
-        "On sait qu' une droite qui admet une représentation paramétrique de la forme $(d) \\begin{cases}x=x_0+at\\\\y=y_0+bt\\quad (t\\in\\mathbb{R})\\\\z=z_0+ct\\end{cases}$"
+        "On sait qu'une droite qui admet une représentation paramétrique de la forme $\\begin{cases}x=x_0+\\alpha t\\\\y=y_0+\\beta t\\quad (t\\in\\mathbb{R})\\\\z=z_0+\\gamma t\\end{cases}$"
       orthogonalite +=
         '$\\quad$ admet comme vecteur directeur $\\vec u\\begin{pmatrix}' +
-        `a\\\\b\\\\c\\end{pmatrix}$. <br>`
+        `\\alpha\\\\\\beta\\\\\\gamma\\end{pmatrix}$. <br>`
       orthogonalite +=
         "On en déduit qu'un vecteur directeur de la droite $(d)$ est $\\vec u\\begin{pmatrix}" +
         `${ux}\\\\${uy}\\\\${uz}\\end{pmatrix}$. <br>`
@@ -149,11 +153,11 @@ export default class NomExercice extends Exercice {
           '<br>Le produit scalaire est non nul, les vecteurs ne sont donc pas orthogonaux.  La droite $(d)$ est sécante au plan $\\mathcal{P}$.'
       } else {
         orthogonalite +=
-          '<br>Le produit scalaire est nul, les vecteurs sont donc orthogonaux.  Il reste donc deux possibilités : Soit la droite $(d)$ est strictement parallèle au plan $\\mathcal{P}$ soit elle est incluse dedans.'
+          '<br>Le produit scalaire est nul, les vecteurs sont donc orthogonaux.  Il reste donc deux possibilités : soit la droite $(d)$ est strictement parallèle au plan $\\mathcal{P}$ soit elle est incluse dans ce plan.'
       }
 
       let PointCommun = ''
-      PointCommun += `${texteEnCouleurEtGras("Étude de l'intersection entre la droite $(d)$ et le plan $\\mathcal{P}$ :", 'black')}<br>`
+      PointCommun += `${texteEnCouleurEtGras("Étude de l'intersection entre la droite $(d)$ et le plan $\\mathcal{P}$ :")}<br>`
       if (produitScalaire === 0) {
         PointCommun +=
           "Pour différencier les deux cas possibles, on va chercher s'il existe des points d'intersection entre la droite $(d)$ et le plan $\\mathcal{P}$. On cherche donc les points $M(x;y;z)$ dont les coordonnées vérifient en même temps la représentation paramétrique de $(d)$ et l'équation cartésienne de $(\\mathcal{P})$. <br>"
@@ -163,7 +167,7 @@ export default class NomExercice extends Exercice {
       }
       PointCommun +=
         "On cherche donc l'ensemble des $(x, y, z, t)$ qui vérifient le système : <br>"
-      PointCommun += `$\\begin{cases}x=${reduireAxPlusB(ux, x0, 't', { ordreInverse: true })}\\\\y=${reduireAxPlusB(uy, y0, 't', { ordreInverse: true })}\\\\z=${reduireAxPlusB(uz, z0, 't', { ordreInverse: true })}\\\\ ${equationPlan}\\end{cases}.$<br>`
+      PointCommun += `$\\begin{cases}x=${x0}${ecritureAlgebriqueSauf1(ux)}t\\\\y=${y0}${ecritureAlgebriqueSauf1(uy)}t\\\\z=${z0}${ecritureAlgebriqueSauf1(uz)}t\\\\ ${equationPlan}\\end{cases}.$<br>`
       PointCommun +=
         "En remplaçant les expressions de $x$, $y$ et $z$ issues de la représentation paramétrique de la droite dans l'équation du plan, on obtient cette équation en $t$ :<br>"
       PointCommun += `$\\begin{aligned}${rienSi1(a)}\\big(${x0}${ecritureAlgebriqueSauf1(ux)}t\\big)${ecritureAlgebriqueSauf1(b)}\\big(${y0}${ecritureAlgebriqueSauf1(uy)}t\\big)${ecritureAlgebriqueSauf1(c)}\\big(${z0}${ecritureAlgebriqueSauf1(uz)}t\\big)${ecritureAlgebriqueSauf0(d)}&=0\\\\
@@ -171,12 +175,12 @@ export default class NomExercice extends Exercice {
      ${produitScalaire} t&=${-(a * x0 + b * y0 + c * z0 + d)}
        \\end{aligned}.$<br>`
       // Cas sécant
-      if (cas === 'secant' && solution && abscisseM && ordonneeM && coteM) {
+      if (cas === 'secant') {
         PointCommun += `$\\begin{aligned}\\phantom {${a * x0}${ecritureAlgebriqueSauf1(ux * a)}t${a * x0}${ecritureAlgebriqueSauf1(ux * a)}t${ecritureAlgebrique(b * y0)}${ecritureAlgebriqueSauf1(uy * b)}t${ecritureAlgebrique(c * z0)}${ecritureAlgebriqueSauf1(uz * c)}}t&=${solution.texFractionSimplifiee}\\\\
      \\end{aligned}.$<br>`
         PointCommun +=
           "On remplace cette valeur de $t$ dans la représentation paramétrique de la droite pour obtenir les coordonnées du point d'intersection : <br>"
-        PointCommun += `$\\begin{cases}x=${x0}${ecritureAlgebrique(ux)}\\times ${solution.texFractionSimplifiee}\\\\\\\\y=${y0}${ecritureAlgebrique(uy)}\\times ${solution.texFractionSimplifiee}\\\\\\\\z=${z0}${ecritureAlgebrique(uz)}\\times ${solution.texFractionSimplifiee}\\end{cases}\\quad$ d'où 
+        PointCommun += `$\\begin{cases}x=${x0}${ecritureAlgebrique(ux)}\\times ${ecritureParentheseSiNegatif(solutionsimplifiee)}\\\\\\\\y=${y0}${ecritureAlgebrique(uy)}\\times ${ecritureParentheseSiNegatif(solutionsimplifiee)}\\\\\\\\z=${z0}${ecritureAlgebrique(uz)}\\times ${ecritureParentheseSiNegatif(solutionsimplifiee)}\\end{cases}\\quad$ d'où 
        $\\begin{cases}x=${abscisseM.texFractionSimplifiee}\\\\\\\\y=${ordonneeM.texFractionSimplifiee}\\\\\\\\z=${coteM.texFractionSimplifiee}\\end{cases}.$`
         PointCommun += `<br>${texteEnCouleurEtGras(`La droite $(d)$ et le plan $\\mathcal{P}$ sont donc sécants en $M\\left(${abscisseM.texFractionSimplifiee};${ordonneeM.texFractionSimplifiee};${coteM.texFractionSimplifiee}\\right)$.`)}<br>`
       }
@@ -189,33 +193,16 @@ export default class NomExercice extends Exercice {
         PointCommun += `Cette équation admet une infinité de solution. Il y a une infinité de points commun à $(d)$ et $\\mathcal P$. <br> ${texteEnCouleurEtGras('On peut conclure que la droite $(d)$ est incluse dans le plan $\\mathcal P$.')}`
       }
 
-      texteCorr = lampeMessage({
-        titre: 'Méthode :',
-        texte:
-          'Pour étudier la position relative de la droite $(d)$ et du plan $\\mathcal{P}$, il faut étudier le vecteur $\\vec n$ normal à $\\mathcal{P}$ et le vecteur $\\vec u$ directeur de $(d)$ : ' +
-          createList({
-            items: [
-              'On calcule $\\vec n \\cdot \\vec u$' +
-                createList({
-                  items: [
-                    'Si $\\vec n \\cdot \\vec u=0$, alors $\\vec n$ est orthogonal à $\\vec u$, donc $(d)$ est parallèle à $\\mathcal{P}$ ou incluse dans $\\mathcal{P}$',
-                    'Sinon, $(d)$ est sécante à $\\mathcal{P}$',
-                  ],
-                  style: 'fleches',
-                }),
-              "On cherche ensuite les éventuels points communs en résolvant le système formé par l'équation du plan et la représentation paramétrique de la droite." +
-                createList({
-                  items: [
-                    "Dans le cas où le produit scalaire est nul, s'il existe au moins un point commun, alors  $(d)$ est incluse dans $\\mathcal{P}$. <br>Sinon, $(d)$ est strictement parallèle à $\\mathcal{P}$.",
-                    "Si $(d)$ est sécante à $\\mathcal{P}$, on calcule les coordonnées du point d'intersection en remplaçant la valeur du paramètre $t$ trouvée dans la représentation paramétrique de $(d)$ .",
-                  ],
-                  style: 'fleches',
-                }),
-            ],
-            style: 'fleches',
-          }),
+      texteCorr =
+        "Etudier la position relative de la droite $(d)$ et du plan $\\mathcal{P}$, c'est déterminer si : "
+      texteCorr += createList({
+        items: [
+          '$(d)$ est strictement parallèle à $\\mathcal{P}$',
+          '$(d)$ est incluse dans $\\mathcal{P}$',
+          '$(d)$ est sécante à $\\mathcal{P}$',
+        ],
+        style: 'fleches',
       })
-
       texteCorr +=
         '<br>Nous allons pour cela procéder en deux étapes : <br>' +
         createList({ items: [orthogonalite, PointCommun], style: 'nombres' })
