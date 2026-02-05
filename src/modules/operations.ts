@@ -1,8 +1,8 @@
 import Decimal from 'decimal.js'
 import { fixeBordures } from '../lib/2d/fixeBordures'
 import { segment } from '../lib/2d/segmentsVecteurs'
-import { texteParPosition } from '../lib/2d/textes'
-import { bleuMathalea, orangeMathalea } from '../lib/colors'
+import { latex2d } from '../lib/2d/textes'
+import { bleuMathalea } from '../lib/colors'
 import { base10VersBaseN } from '../lib/mathFonctions/baseConversions'
 import {
   nombreDeChiffresDansLaPartieEntiere,
@@ -38,7 +38,9 @@ function soustractionPosee(
   methodeParCompensation = true,
   calculer = true,
   style: string,
+  colore: string,
 ) {
+  const isColored = colore !== ''
   operande1 = new Decimal(operande1)
   operande2 = new Decimal(operande2)
   if (operande1.lessThan(operande2)) {
@@ -114,68 +116,52 @@ function soustractionPosee(
     for (let i = 0; i < longueuroperandes + 1; i++) {
       if (retenues[i] !== '0' && retenuesOn && calculer)
         objets.push(
-          texteParPosition(
+          latex2d(
             retenues[i],
             i * espacement - 0.25 + espacement * offsetCarry,
             4 * coefEntreChiffres,
-            0,
-            'red',
-            0.8,
-            'milieu',
-            false,
+            {
+              color: 'red',
+              letterSize: 'tiny',
+              gras: false,
+            },
           ),
         )
       if (sop1[i] !== ' ')
         objets.push(
-          texteParPosition(
-            sop1[i],
-            i * espacement,
-            4 * coefEntreChiffres,
-            0,
-            'black',
-            1.2,
-            'milieu',
-            false,
-          ),
+          latex2d(sop1[i], i * espacement, 4 * coefEntreChiffres, {
+            color: 'black',
+            letterSize: 'normalsize',
+          }),
         )
+
       if (sop2[i] !== ' ')
         objets.push(
-          texteParPosition(
-            sop2[i],
-            i * espacement,
-            3 * coefEntreChiffres,
-            0,
-            'black',
-            1.2,
-            'milieu',
-            false,
-          ),
+          latex2d(sop2[i], i * espacement, 3 * coefEntreChiffres, {
+            color: 'black',
+            letterSize: 'normalsize',
+          }),
         )
       if (retenues[i] !== '0' && retenuesOn && calculer)
         objets.push(
-          texteParPosition(
+          latex2d(
             `+${retenues[i]}`,
             (i + offsetCarry - 1) * espacement,
             2.5 * coefEntreChiffres,
-            0,
-            'blue',
-            0.6,
-            'milieu',
-            false,
+            {
+              color: 'blue',
+              letterSize: 'tiny',
+              gras: false,
+            },
           ),
         )
       if (sresultat[i] !== ' ' && calculer)
         objets.push(
-          texteParPosition(
-            sresultat[i],
-            i * espacement,
-            2 * coefEntreChiffres,
-            0,
-            'black',
-            1.2,
-            'milieu',
-            false,
-          ),
+          latex2d(sresultat[i], i * espacement, 2 * coefEntreChiffres, {
+            color: isColored ? colore : 'black',
+            gras: isColored,
+            letterSize: 'normalsize',
+          }),
         )
     }
   } else {
@@ -194,16 +180,10 @@ function soustractionPosee(
       )
       if (ArrsOp1[i] !== ' ')
         objets.push(
-          texteParPosition(
-            ArrsOp1[i],
-            i * espacement,
-            4 * coefEntreChiffres,
-            0,
-            'black',
-            1.2,
-            'milieu',
-            false,
-          ),
+          latex2d(ArrsOp1[i], i * espacement, 4 * coefEntreChiffres, {
+            color: 'black',
+            letterSize: 'normalsize',
+          }),
         )
       if (
         retenuesOn &&
@@ -237,29 +217,29 @@ function soustractionPosee(
               ArrsOp1[i] = '9'
               // On ajoute une retenue car on passe de 10 à 9
               objets.push(
-                texteParPosition(
+                latex2d(
                   '1',
                   i * espacement - 0.3,
                   (4 + hauteur[i]) * coefEntreChiffres,
-                  0,
-                  bleuMathalea,
-                  0.8,
-                  'milieu',
-                  false,
+                  {
+                    color: bleuMathalea,
+                    letterSize: 'tiny',
+                    gras: false,
+                  },
                 ),
               )
             }
             hauteur[i]++
             objets.push(
-              texteParPosition(
+              latex2d(
                 ArrsOp1[i],
                 i * espacement,
                 (4 + hauteur[i]) * coefEntreChiffres,
-                0,
-                'black',
-                1.2,
-                'milieu',
-                false,
+                {
+                  color: 'black',
+                  letterSize: 'normalsize',
+                  gras: false,
+                },
               ),
             )
           } else if (
@@ -269,15 +249,11 @@ function soustractionPosee(
             // addition >= 10 & unités différentes donc il faut mettre une retenue
             // addition >= 10 & et les unités sont les mêmes donc il faut mettre une retenue
             objets.push(
-              texteParPosition(
+              latex2d(
                 '1',
                 i * espacement - 0.3,
                 (4 + hauteur[i]) * coefEntreChiffres,
-                0,
-                bleuMathalea,
-                0.8,
-                'milieu',
-                false,
+                { color: bleuMathalea, letterSize: 'tiny', gras: false },
               ),
             )
             break
@@ -286,29 +262,19 @@ function soustractionPosee(
       }
       if (sop2[i] !== ' ')
         objets.push(
-          texteParPosition(
-            sop2[i],
-            i * espacement,
-            3 * coefEntreChiffres,
-            0,
-            'black',
-            1.2,
-            'milieu',
-            false,
-          ),
+          latex2d(sop2[i], i * espacement, 3 * coefEntreChiffres, {
+            color: 'black',
+            letterSize: 'normalsize',
+            gras: false,
+          }),
         )
       if (sresultat[i] !== ' ')
         objets.push(
-          texteParPosition(
-            sresultat[i],
-            i * espacement,
-            2 * coefEntreChiffres,
-            0,
-            orangeMathalea,
-            1.2,
-            'milieu',
-            false,
-          ),
+          latex2d(sresultat[i], i * espacement, 2 * coefEntreChiffres, {
+            color: isColored ? colore : 'black',
+            gras: isColored,
+            letterSize: 'normalsize',
+          }),
         )
     }
   }
@@ -324,40 +290,38 @@ function soustractionPosee(
 
   if (decalage !== 0) {
     objets.push(
-      texteParPosition(
+      latex2d(
         ',',
         0.3 + espacement * (longueuroperandes - decalage),
         (4 + (context.vue === 'latex' ? -0.2 : 0)) * coefEntreChiffres,
-        0,
-        'black',
-        1.2,
-        'milieu',
-        false,
+        {
+          color: 'black',
+          letterSize: 'normalsize',
+        },
       ),
     )
     objets.push(
-      texteParPosition(
+      latex2d(
         ',',
         0.3 + espacement * (longueuroperandes - decalage),
         (3 + (context.vue === 'latex' ? -0.2 : 0)) * coefEntreChiffres,
-        0,
-        'black',
-        1.2,
-        'milieu',
-        false,
+        {
+          color: 'black',
+          letterSize: 'normalsize',
+        },
       ),
     )
     if (calculer)
       objets.push(
-        texteParPosition(
+        latex2d(
           ',',
           0.3 + espacement * (longueuroperandes - decalage),
           (2 + (context.vue === 'latex' ? -0.2 : 0)) * coefEntreChiffres,
-          0,
-          orangeMathalea,
-          1.2,
-          'milieu',
-          false,
+          {
+            color: isColored ? colore : 'black',
+            gras: isColored,
+            letterSize: 'normalsize',
+          },
         ),
       )
   }
@@ -383,7 +347,9 @@ function divisionPosee(
   precision = 0,
   calculer = true,
   style: string,
+  colore: string,
 ) {
+  const isColored = colore !== ''
   divid = new Decimal(divid)
   divis = new Decimal(divis)
   if (divis.equals(0)) {
@@ -415,29 +381,19 @@ function divisionPosee(
   divid = divid.mul(10 ** dec2) // math.format(divid * 10 ** dec2, { notation: 'auto', lowerExp: -12, upperExp: 12, precision: 12 })
   const ecriresoustraction = function (upos: number, P: string) {
     objets.push(
-      texteParPosition(
-        '-',
-        (upos - P.length - 0.5) * espacement,
-        10 - i * 2,
-        0,
-        'black',
-        1.2,
-        'milieu',
-        false,
-      ),
+      latex2d('-', (upos - P.length - 0.5) * espacement, 10 - i * 2, {
+        color: 'black',
+        letterSize: 'normalsize',
+        gras: false,
+      }),
     )
     for (let k = 0; k < P.length; k++) {
       objets.push(
-        texteParPosition(
-          P[P.length - k - 1],
-          (upos - k - 1) * espacement,
-          10 - i * 2,
-          0,
-          'black',
-          1.2,
-          'milieu',
-          false,
-        ),
+        latex2d(P[P.length - k - 1], (upos - k - 1) * espacement, 10 - i * 2, {
+          color: 'black',
+          letterSize: 'normalsize',
+          gras: false,
+        }),
       )
     }
     objets.push(
@@ -449,34 +405,29 @@ function divisionPosee(
       ),
     )
   }
-  const ecrirereste = function (upos: number, R: string) {
+  const ecrirereste = function (
+    upos: number,
+    R: string,
+    resteFinal: boolean = false,
+  ) {
     for (let k = 0; k < R.length; k++) {
       objets.push(
-        texteParPosition(
-          R[R.length - k - 1],
-          (upos - k - 1) * espacement,
-          9 - i * 2,
-          0,
-          'black',
-          1.2,
-          'milieu',
-          false,
-        ),
+        latex2d(R[R.length - k - 1], (upos - k - 1) * espacement, 9 - i * 2, {
+          color: resteFinal && isColored ? colore : 'black',
+          letterSize: 'normalsize',
+          gras: resteFinal && isColored,
+        }),
       )
     }
   }
+
   const ecrirequotient = function (x: number, Q: string) {
     objets.push(
-      texteParPosition(
-        Q,
-        (n + 1.5 + x) * espacement,
-        10,
-        0,
-        'black',
-        1.2,
-        'milieu',
-        false,
-      ),
+      latex2d(Q, (n + 1.5 + x) * espacement, 10, {
+        color: isColored ? colore : 'black',
+        letterSize: 'normalsize',
+        gras: isColored,
+      }),
     )
   }
 
@@ -495,45 +446,30 @@ function divisionPosee(
   for (let i = 0; i < n; i++) {
     // on écrit le dividende
     objets.push(
-      texteParPosition(
-        dividende[i],
-        i * espacement,
-        11,
-        0,
-        'black',
-        1.2,
-        'milieu',
-        false,
-      ),
+      latex2d(dividende[i], i * espacement, 11, {
+        color: 'black',
+        letterSize: 'normalsize',
+        gras: false,
+      }),
     )
   }
   for (let i = 0; i < m; i++) {
     // on écrit le diviseur
     objets.push(
-      texteParPosition(
-        diviseur[i],
-        (i + n + 1.5) * espacement,
-        11,
-        0,
-        'black',
-        1.2,
-        'milieu',
-        false,
-      ),
+      latex2d(diviseur[i], (i + n + 1.5) * espacement, 11, {
+        color: 'black',
+        letterSize: 'normalsize',
+        gras: false,
+      }),
     )
   }
   if (dec1 + dec2 !== 0) {
     objets.push(
-      texteParPosition(
-        ',',
-        (n - dec1 - dec2 - 1 + 0.5) * espacement,
-        11,
-        0,
-        'black',
-        1.2,
-        'milieu',
-        false,
-      ),
+      latex2d(',', (n - dec1 - dec2 - 1 + 0.5) * espacement, 11, {
+        color: 'black',
+        letterSize: 'normalsize',
+        gras: false,
+      }),
     )
   }
   const longueurPotence = nombreDeChiffresDansLaPartieEntiere(
@@ -582,7 +518,7 @@ function divisionPosee(
         R[i] += dividende.substr(upos, 1)
         ecrirereste(upos + 1, R[i])
       } else {
-        ecrirereste(upos, R[i])
+        ecrirereste(upos, R[i], true)
       }
       divd.push(R[i])
       upos++
@@ -591,16 +527,11 @@ function divisionPosee(
     }
     if (precision > 0 && periode === 0) {
       objets.push(
-        texteParPosition(
-          ',',
-          (n + 1 + i - dec2 - dec1) * espacement,
-          10,
-          0,
-          'black',
-          1.2,
-          'milieu',
-          false,
-        ),
+        latex2d(',', (n + 1 + i - dec2 - dec1) * espacement, 10, {
+          color: 'black',
+          letterSize: 'normalsize',
+          gras: false,
+        }),
       )
     }
     /* else if (periode !== 0) {
@@ -626,7 +557,9 @@ function additionPosee(
   retenuesOn: boolean,
   calculer = true,
   style: string,
+  colore: string,
 ) {
+  const isColored = colore !== ''
   operande1 = new Decimal(operande1)
   operande2 = new Decimal(operande2)
   if (operande1.equals(0) || operande2.equals(0)) {
@@ -728,95 +661,60 @@ function additionPosee(
   for (let i = 0; i < longueuroperandes + 1; i++) {
     if (sop1[i] !== ' ')
       objets.push(
-        texteParPosition(
-          sop1[i],
-          i * espacement,
-          4,
-          0,
-          'black',
-          1.2,
-          'milieu',
-          false,
-        ),
+        latex2d(sop1[i], i * espacement, 4, {
+          color: 'black',
+          letterSize: 'normalsize',
+          gras: false,
+        }),
       )
     if (sop2[i] !== ' ')
       objets.push(
-        texteParPosition(
-          sop2[i],
-          i * espacement,
-          3,
-          0,
-          'black',
-          1.2,
-          'milieu',
-          false,
-        ),
+        latex2d(sop2[i], i * espacement, 3, {
+          color: 'black',
+          letterSize: 'normalsize',
+          gras: false,
+        }),
       )
     objets.push(segment(0, 2, (longueuroperandes + 1) * espacement, 2))
     if (retenues[i] !== ' ' && retenuesOn && calculer)
       objets.push(
-        texteParPosition(
-          retenues[i],
-          i * espacement,
-          4.5,
-          0,
-          'red',
-          0.8,
-          'milieu',
-          false,
-        ),
+        latex2d(retenues[i], i * espacement, 4.5, {
+          color: 'red',
+          letterSize: 'tiny',
+          gras: false,
+        }),
       )
     if (sresultat[i] !== ' ' && calculer)
       objets.push(
-        texteParPosition(
-          sresultat[i],
-          i * espacement,
-          1,
-          0,
-          'black',
-          1.2,
-          'milieu',
-          false,
-        ),
+        latex2d(sresultat[i], i * espacement, 1, {
+          color: isColored ? colore : 'black',
+          letterSize: 'normalsize',
+          gras: isColored,
+        }),
       )
   }
   if (decalage !== 0) {
     objets.push(
-      texteParPosition(
-        ',',
-        0.3 + espacement * (longueuroperandes - decalage),
-        4,
-        0,
-        'black',
-        1.2,
-        'milieu',
-        false,
-      ),
+      latex2d(',', 0.3 + espacement * (longueuroperandes - decalage), 4, {
+        color: 'black',
+        letterSize: 'normalsize',
+        gras: false,
+      }),
     )
     objets.push(
-      texteParPosition(
-        ',',
-        0.3 + espacement * (longueuroperandes - decalage),
-        3,
-        0,
-        'black',
-        1.2,
-        'milieu',
-        false,
-      ),
+      latex2d(',', 0.3 + espacement * (longueuroperandes - decalage), 3, {
+        color: 'black',
+        letterSize: 'normalsize',
+        gras: false,
+      }),
     )
     if (calculer)
       objets.push(
-        texteParPosition(
-          ',',
-          0.3 + espacement * (longueuroperandes - decalage),
-          1,
-          0,
-          'black',
-          1.2,
-          'milieu',
-          false,
-        ),
+        latex2d(',', 0.3 + espacement * (longueuroperandes - decalage), 1, {
+          color: isColored ? colore : 'black',
+          letterSize: 'normalsize',
+          gras: isColored,
+        }),
       )
   }
   code += mathalea2d(
@@ -833,13 +731,16 @@ export function additionMultiplePosee(
     retenuesOn = false,
     calculer = false,
     style = 'display: block',
+    colore = '',
   }: {
     base?: number
     retenuesOn?: boolean
     calculer?: boolean
     style?: string
+    colore?: string
   },
 ) {
+  const isColored = colore !== ''
   if (context.isHtml) {
     let code = ''
     const operandesDecimal = operandes.map(
@@ -932,74 +833,51 @@ export function additionMultiplePosee(
       for (let k = 0; k < stringOperandes.length; k++) {
         if (stringOperandes[k][i] !== ' ')
           objets.push(
-            texteParPosition(
+            latex2d(
               stringOperandes[k][i],
               i * espacement,
               operandesDecimal.length + 1 - k,
-              0,
-              'black',
-              1.2,
-              'milieu',
-              false,
+              { color: 'black', letterSize: 'normalsize', gras: false },
             ),
           )
       }
       objets.push(segment(0, 1.4, (longueurOperandes + 1) * espacement, 1.4))
       if (retenues[i] !== ' ' && retenuesOn && calculer)
         objets.push(
-          texteParPosition(
-            retenues[i],
-            i * espacement,
-            operandesDecimal.length + 1.5,
-            0,
-            'red',
-            0.8,
-            'milieu',
-            false,
-          ),
+          latex2d(retenues[i], i * espacement, operandesDecimal.length + 1.5, {
+            color: 'red',
+            letterSize: 'tiny',
+            gras: false,
+          }),
         )
       if (sresultat[i] !== ' ' && calculer && i < sresultat.length)
         objets.push(
-          texteParPosition(
-            sresultat[i],
-            i * espacement,
-            1,
-            0,
-            'black',
-            1.2,
-            'milieu',
-            false,
-          ),
+          latex2d(sresultat[i], i * espacement, 1, {
+            color: isColored ? colore : 'black',
+            letterSize: 'normalsize',
+            gras: isColored,
+          }),
         )
     }
     if (maxDec !== 0) {
       for (let i = 0; i < operandesDecimal.length; i++) {
         objets.push(
-          texteParPosition(
+          latex2d(
             ',',
             0.3 + espacement * (longueurOperandes - maxDec),
             operandesDecimal.length + 1 - i * 1,
-            0,
-            'black',
-            1.2,
-            'milieu',
-            false,
+            { color: 'black', letterSize: 'normalsize', gras: false },
           ),
         )
       }
 
       if (calculer)
         objets.push(
-          texteParPosition(
-            ',',
-            0.3 + espacement * (longueurOperandes - maxDec),
-            1,
-            0,
-            'black',
-            1.2,
-            'milieu',
-            false,
-          ),
+          latex2d(',', 0.3 + espacement * (longueurOperandes - maxDec), 1, {
+            color: isColored ? colore : 'black',
+            letterSize: 'normalsize',
+            gras: isColored,
+          }),
         )
     }
     code += mathalea2d(
@@ -1027,7 +905,9 @@ function multiplicationPosee(
   base: number,
   calculer = true,
   style: string,
+  colore: string,
 ) {
+  const isColored = colore !== ''
   operande1 = new Decimal(operande1)
   operande2 = new Decimal(operande2)
   if (operande1.equals(0) || operande2.equals(0)) {
@@ -1176,58 +1056,38 @@ function multiplicationPosee(
     // d'abord les opérandes
     if (sop1[i] !== ' ')
       objets.push(
-        texteParPosition(
-          sop1[i],
-          i * espacement,
-          7,
-          0,
-          'black',
-          1.2,
-          'milieu',
-          false,
-        ),
+        latex2d(sop1[i], i * espacement, 7, {
+          color: 'black',
+          letterSize: 'normalsize',
+          gras: false,
+        }),
       )
     if (sop2[i] !== ' ')
       objets.push(
-        texteParPosition(
-          sop2[i],
-          i * espacement,
-          6,
-          0,
-          'black',
-          1.2,
-          'milieu',
-          false,
-        ),
+        latex2d(sop2[i], i * espacement, 6, {
+          color: 'black',
+          letterSize: 'normalsize',
+          gras: false,
+        }),
       )
   }
   // Les virgules éventuelles
   if (dec1 !== 0) {
     objets.push(
-      texteParPosition(
-        ',',
-        0.3 + (longueurtotale - dec1) * espacement,
-        7,
-        0,
-        'black',
-        1.2,
-        'milieu',
-        false,
-      ),
+      latex2d(',', 0.3 + (longueurtotale - dec1) * espacement, 7, {
+        color: 'black',
+        letterSize: 'normalsize',
+        gras: false,
+      }),
     )
   }
   if (dec2 !== 0) {
     objets.push(
-      texteParPosition(
-        ',',
-        0.3 + (longueurtotale - dec2) * espacement,
-        6,
-        0,
-        'black',
-        1.2,
-        'milieu',
-        false,
-      ),
+      latex2d(',', 0.3 + (longueurtotale - dec2) * espacement, 6, {
+        color: 'black',
+        letterSize: 'normalsize',
+        gras: false,
+      }),
     )
   }
   // Les produits partiels
@@ -1237,16 +1097,11 @@ function multiplicationPosee(
         for (let i = 0; i <= longueurtotale; i++) {
           if (produits[j][i] !== ' ' && produits[j][i] !== '°')
             objets.push(
-              texteParPosition(
-                produits[j][i],
-                i * espacement,
-                5 - j + lignesinutiles,
-                0,
-                'black',
-                1.2,
-                'milieu',
-                false,
-              ),
+              latex2d(produits[j][i], i * espacement, 5 - j + lignesinutiles, {
+                color: 'black',
+                letterSize: 'normalsize',
+                gras: false,
+              }),
             )
           // if (retenues[j][i] !== '0' && retenuesOn) objets.push(texteParPosition(`(${retenues[j][i]})`, i * espacement, 5.5 - j + lignesinutiles, 0, 'blue', 0.7, 'milieu', false))
         }
@@ -1260,16 +1115,11 @@ function multiplicationPosee(
         // on n'affiche pas la retenue si il n'y a pas autre chose dans la dernière colonne
         if (retenues[lop2][i] !== '0')
           objets.push(
-            texteParPosition(
-              retenues[lop2][i],
-              i * espacement,
-              5.5,
-              0,
-              'red',
-              0.7,
-              'milieu',
-              false,
-            ),
+            latex2d(retenues[lop2][i], i * espacement, 5.5, {
+              color: 'red',
+              letterSize: 'tiny',
+              gras: false,
+            }),
           )
       }
     }
@@ -1290,44 +1140,40 @@ function multiplicationPosee(
     for (let i = 0; i <= longueurtotale; i++) {
       if (sresultat[i] !== ' ')
         objets.push(
-          texteParPosition(
+          latex2d(
             sresultat[i],
             i * espacement,
             4.5 - (lop2 === 1 ? 0 : lop2) + lignesinutiles,
-            0,
-            'black',
-            1.2,
-            'milieu',
-            false,
+            {
+              color: isColored ? colore : 'black',
+              letterSize: 'normalsize',
+              gras: isColored,
+            },
           ),
         )
     }
     if (dec1 + dec2 !== 0) {
       objets.push(
-        texteParPosition(
+        latex2d(
           ',',
           0.3 + (longueurtotale - dec2 - dec1) * espacement,
           4.5 - (lop2 === 1 ? 0 : lop2) + lignesinutiles,
-          0,
-          'black',
-          1.2,
-          'milieu',
-          false,
+          {
+            color: isColored ? colore : 'black',
+            letterSize: 'normalsize',
+            gras: isColored,
+          },
         ),
       )
     }
+
     for (let j = 1; j < lop2 - lignesinutiles; j++) {
       objets.push(
-        texteParPosition(
-          '+',
-          0,
-          5 + j - lop2 + lignesinutiles,
-          0,
-          'black',
-          1.2,
-          'milieu',
-          false,
-        ),
+        latex2d('+', 0, 5 + j - lop2 + lignesinutiles, {
+          color: 'black',
+          letterSize: 'normalsize',
+          gras: false,
+        }),
       )
     }
   }
@@ -1376,16 +1222,31 @@ export default function operation({
           methodeParCompensation,
           calculer,
           style,
+          colore,
         )
         break
       case 'multiplication':
-        Code = multiplicationPosee(operande1, operande2, base, calculer, style)
+        Code = multiplicationPosee(
+          operande1,
+          operande2,
+          base,
+          calculer,
+          style,
+          colore,
+        )
         break
       case 'division':
-        Code = divisionPosee(operande1, operande2, precision, calculer, style)
+        Code = divisionPosee(
+          operande1,
+          operande2,
+          precision,
+          calculer,
+          style,
+          colore,
+        )
         break
       case 'divisionE':
-        Code = divisionPosee(operande1, operande2, 0, calculer, style)
+        Code = divisionPosee(operande1, operande2, 0, calculer, style, colore)
         break
       case 'addition':
       default:
@@ -1396,6 +1257,7 @@ export default function operation({
           retenuesOn,
           calculer,
           style,
+          colore,
         )
         break
     }
@@ -1411,6 +1273,7 @@ export default function operation({
             methodeParCompensation,
             calculer,
             style,
+            colore,
           )
         } else {
           Code = options.colore

@@ -2,6 +2,7 @@
  * ⚠️ Cet exercice est utilisé dans le test : tests/e2e/tests/interactivity/mathLive.calcul.test.ts ⚠️
  */
 
+import { orangeMathalea } from 'apigeom/src/elements/defaultValues'
 import { grille, seyes } from '../../lib/2d/Grille'
 import { vide2d } from '../../lib/2d/Vide2d'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
@@ -68,7 +69,6 @@ export default class AdditionsSoustractionsMultiplicationsPosees extends Exercic
       "Opérations posées dans l'énoncé",
       false,
     ]
-    // this.besoinFormulaire4CaseACocher = ['Couleurs pour élève dys', false]
     this.sup = '6'
     this.sup2 = 3
     this.sup3 = false
@@ -93,7 +93,7 @@ export default class AdditionsSoustractionsMultiplicationsPosees extends Exercic
         : this.sup3
           ? "Effectuer l'opération suivante."
           : 'Poser et effectuer le calcul suivant.'
-    const colore = this.sup4 ? 'Colore' : ''
+    const colore = orangeMathalea
 
     const listeTypeDeQuestions = gestionnaireFormulaireTexte({
       max: 5,
