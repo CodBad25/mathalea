@@ -550,6 +550,45 @@ const ensembleDefiniCaps: CompleteKeysList = {
   ],
 }
 
+const equationsTerminaleCaps: CompleteKeysList = {
+  inline: [
+    'ADD',
+    'SUB',
+    'MULT',
+    'INFTY',
+    '[',
+    ']',
+    'SEMICOLON',
+    'EMPTY',
+    'BRACES',
+    'PARENTHESES',
+    'FRAC',
+    'POW',
+    'SQRT',
+    'e^',
+    'LOG',
+    'LN',
+  ],
+  block: [
+    'ADD',
+    'SUB',
+    'MULT',
+    'INFTY',
+    '[',
+    ']',
+    'SEMICOLON',
+    'EMPTY',
+    'BRACES',
+    'PARENTHESES',
+    'FRAC',
+    'SQRT',
+    'POW',
+    'e^',
+    'LOG',
+    'LN',
+  ],
+}
+
 const suiteCaps: CompleteKeysList = {
   inline: [
     'U_INDICE_N',
@@ -958,6 +997,13 @@ export const ensembleDefini: KeyboardBlock = {
   isUnits: false,
 }
 
+export const equationsTerminale: KeyboardBlock = {
+  keycaps: equationsTerminaleCaps,
+  cols: 4,
+  title: 'Équations Terminale',
+  isUnits: false,
+}
+
 export const suite: KeyboardBlock = {
   keycaps: suiteCaps,
   cols: 2,
@@ -1044,6 +1090,7 @@ export const keyboardBlocks: {
   degreCelsius,
   ensemble,
   ensembleDefini,
+  equationsTerminale,
   suite,
   greek,
   fullOperations,

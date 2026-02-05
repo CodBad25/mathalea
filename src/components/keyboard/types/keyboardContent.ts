@@ -17,6 +17,7 @@ export type BlockForKeyboard =
   | 'complexes'
   | 'degre'
   | 'degreCelsius'
+  | 'equationsTerminale'
   | 'ensemble'
   | 'ensembleDefini'
   | 'fullOperations'
