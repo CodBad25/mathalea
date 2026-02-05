@@ -93,7 +93,10 @@ export function rationnalise(x: number | FractionEtendue | Decimal | null) {
 function normalizeFraction(n: number | Decimal, d: number): [number, number] {
   let num: number
   let den: number
-
+  if (d === 0) {
+    window.notify('normalizeFraction : dénominateur nul !', { n, d })
+    return [NaN, NaN]
+  }
   if (d == null) {
     // Un seul argument : convertir en fraction
     const decimal = n instanceof Decimal ? n : new Decimal(n)
