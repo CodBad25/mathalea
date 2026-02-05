@@ -1077,6 +1077,17 @@ export function mathaleaHandleExerciceSimple(
             )
             exercice.listeQuestions.push(exercice.question ?? '')
           }
+        } else if (exercice.formatInteractif === 'svgSelection') {
+          const n = exercice.numeroExercice
+          exercice.question = exercice.question?.replace(
+            `id="svgSelectionEx${n}Q0"`,
+            `id="svgSelectionEx${n}Q${i}"`,
+          )
+          exercice.question = exercice.question?.replace(
+            `checkSvgSelectionEx${n}Q0"`,
+            `checkSvgSelectionEx${n}Q${i}"`,
+          )
+          exercice.listeQuestions.push(exercice.question ?? '')
         } else {
           exercice.listeQuestions.push(
             exercice.question +

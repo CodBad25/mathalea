@@ -26,6 +26,7 @@ import { verifDragAndDrop } from './DragAndDrop'
 import { toutPourUnPoint, verifQuestionMathLive } from './mathLive'
 import { verifQuestionQcm } from './qcm'
 import { verifQuestionListeDeroulante } from './questionListeDeroulante'
+import { verifQuestionSvgSelection } from './questionSvgSelection/questionSvgSelection'
 
 /**
  * Puisque tous les attributs de Valeur sont facultatifs, on vérifie juste si c'est un objet (et ce type est assez inutile du coup car quasiment identique à un unknown)
@@ -138,6 +139,19 @@ export function exerciceInteractif(
     const format = exercice.autoCorrection[i]?.reponse?.param?.formatInteractif
     let resultat: string
     switch (format) {
+      case 'svgSelection':
+        {
+          const result = verifQuestionSvgSelection(exercice, i)
+          if (result == null) {
+            window.notify('erreur dans la correction de la question', {
+              exercice,
+              i,
+            })
+          } else {
+            result === 'OK' ? nbQuestionsValidees++ : nbQuestionsNonValidees++
+          }
+        }
+        break
       case 'MetaInteractif2d':
         {
           const result = verifQuestionMetaInteractif2d(exercice, i)
