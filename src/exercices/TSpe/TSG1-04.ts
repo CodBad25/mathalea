@@ -37,9 +37,10 @@ export default class nomExercice extends Exercice {
   }
 
   nouvelleVersion() {
-     const n = randint(7, 10) // nombre de lettres
-    const con = randint(3, n - 3) // nombre de consonnes dans le jeu
-    const voy = n - con // nombre de voyelles dans le jeu
+    const n = randint(7, 10) // nombre de lettres
+    // On limite à 6 voyelles (a, e, i, o, u, y) et on garde au moins 3 consonnes
+    const voy = randint(3, Math.min(6, n - 3)) // nombre de voyelles dans le jeu
+    const con = n - voy // nombre de consonnes dans le jeu
     const tirage = 2 // nombre de lettres à tirer
   
     const factorielleN = factorielle(n)

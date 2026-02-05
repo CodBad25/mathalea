@@ -67,60 +67,52 @@ export default class NomExercice extends Exercice {
         ux = randint(-5, 5, 0)
         uy = randint(-5, 5, 0)
 
-        // Données de la droite
-        x0 = randint(-5, 5, 0)
-        y0 = randint(-5, 5, 0)
-
-        // On gère le cas le plus simple : droite incluse dans le plan
-        z0 = -a * x0 - b * y0 - d // Point du plan On fixe c=1 pour ne pas s'emmerder
-        c = 1
-        uz = -(a * ux + b * uy) // vecteur u orthogonal à n
-
-        if (cas === 'parallele') {
-          // Direction dans le plan mais point extérieur
-
-          z0 = z0 + randint(-5, 5, 0) // On ajuste la cote du point pour que le point ne soit pas dans le plan
-        }
-        if (cas === 'secant') {
-          // Cas sécant : vecteur non orthogonal au normal
-          uz = uz + randint(-4, 4, 0)
-          c = randint(-4, 4, [0, 1])
-        }
-        produitScalaire = a * ux + b * uy + c * uz
-        compteurBoucle++
-      } while (produitScalaire === 0 && compteurBoucle < 100) // Le produit scalaire ne doit pas être nul car c'est le dénominateur dans le calcul de l'abscisse du point d'intersection
-      if (compteurBoucle >= 100) {
-        // Sécurité anti-bouclage infini
-        continue
+        z0 = z0 + randint(-5, 5, 0) // On ajuste la cote du point pour que le point ne soit pas dans le plan
+      }
+      if (cas === 'secant') {
+        // Cas sécant : vecteur non orthogonal au normal
+        uz = uz + randint(-4, 4, 0)
+        c = randint(-4, 4, [0, 1])
       }
       const equationPlan = `${rienSi1(a)}x${ecritureAlgebriqueSauf1(b)}y${ecritureAlgebriqueSauf1(c)}z${ecritureAlgebriqueSauf0(d)}=0`
-
-      const solution = new FractionEtendue(
-        -a * x0 - b * y0 - c * z0 - d,
-        produitScalaire,
-      )
-      const solutionsimplifiee = solution.simplifie()
-      const abscisseM = new FractionEtendue(
-        x0 * produitScalaire + ux * (-a * x0 - b * y0 - c * z0 - d),
-        produitScalaire,
-      )
-      const ordonneeM = new FractionEtendue(
-        y0 * produitScalaire + uy * (-a * x0 - b * y0 - c * z0 - d),
-        produitScalaire,
-      )
-      const coteM = new FractionEtendue(
-        z0 * produitScalaire + uz * (-a * x0 - b * y0 - c * z0 - d),
-        produitScalaire,
-      )
-      texte =
-        "Dans l'espace muni d'un repère orthonormé, on considère un plan $\\mathcal{P}$ et une droite $(d)$ :<br>"
-      texte += createList({
-        items: [
-          `Le plan $P$ a pour équation cartésienne : $${equationPlan}$.<br>`,
-          `La droite $(d)$ admet la représentation paramétrique suivante : $\\begin{cases}x=${x0}${ecritureAlgebriqueSauf1(ux)}t\\\\y=${y0}${ecritureAlgebriqueSauf1(uy)}t\\\\z=${z0 === 0 ? `${uz}t` : `${z0}${ecritureAlgebriqueSauf1(uz)}t`}\\end{cases}\\quad (t\\in\\mathbb{R})$`,
-        ],
-        style: 'nombres',
-      })
+      const produitScalaire = a * ux + b * uy + c * uz
+      // Les fractions suivantes ne sont utiles que dans le cas sécant.
+      // Si le produit scalaire est nul, on évite un dénominateur nul.
+      const solution =
+        produitScalaire !== 0
+          ? new FractionEtendue(-a * x0 - b * y0 - c * z0 - d, produitScalaire)
+          : null
+      const abscisseM =
+        produitScalaire !== 0
+          ? new FractionEtendue(
+              x0 * produitScalaire + ux * (-a * x0 - b * y0 - c * z0 - d),
+              produitScalaire,
+            )
+          : null
+      const ordonneeM =
+        produitScalaire !== 0
+          ? new FractionEtendue(
+              y0 * produitScalaire + uy * (-a * x0 - b * y0 - c * z0 - d),
+              produitScalaire,
+            )
+          : null
+      const coteM =
+        produitScalaire !== 0
+          ? new FractionEtendue(
+              z0 * produitScalaire + uz * (-a * x0 - b * y0 - c * z0 - d),
+              produitScalaire,
+            )
+          : null
+  texte =
+        'Dans l\'espace muni d\'un repère orthonormé, on considère un plan $\\mathcal{P}$ et une droite $(d)$ :<br>'
+    texte += createList({
+      items: [
+        `Le plan $P$ a pour équation cartésienne : $${equationPlan}$.<br>`,
+        `La droite $(d)$ admet la représentation paramétrique suivante : <br>
+        $\\begin{cases}x=${x0}${ecritureAlgebriqueSauf1(ux)}t\\\\y=${y0}${ecritureAlgebriqueSauf1(uy)}t\\\\z=${z0}${ecritureAlgebriqueSauf1(uz)}t\\end{cases}.$<br>`
+      ],
+     style: 'nombres',
+    })
       texte +=
         '<br>Déterminer la position relative de $(d)$ et $\\mathcal{P}$ .'
       texte +=
@@ -175,8 +167,7 @@ export default class NomExercice extends Exercice {
      ${produitScalaire} t&=${-(a * x0 + b * y0 + c * z0 + d)}
        \\end{aligned}.$<br>`
       // Cas sécant
-      if (cas === 'secant') {
-        PointCommun += `$\\begin{aligned}\\phantom {${a * x0}${ecritureAlgebriqueSauf1(ux * a)}t${a * x0}${ecritureAlgebriqueSauf1(ux * a)}t${ecritureAlgebrique(b * y0)}${ecritureAlgebriqueSauf1(uy * b)}t${ecritureAlgebrique(c * z0)}${ecritureAlgebriqueSauf1(uz * c)}}t&=${solution.texFractionSimplifiee}\\\\
+       if (cas === 'secant' && solution && abscisseM && ordonneeM && coteM) {   PointCommun +=`$\\begin{aligned}\\phantom {${a*x0}${ecritureAlgebriqueSauf1(ux*a)}t${a*x0}${ecritureAlgebriqueSauf1(ux*a)}t${ecritureAlgebrique(b*y0)}${ecritureAlgebriqueSauf1(uy*b)}t${ecritureAlgebrique(c*z0)}${ecritureAlgebriqueSauf1(uz*c)}}t&=${solution.texFractionSimplifiee}\\\\
      \\end{aligned}.$<br>`
         PointCommun +=
           "On remplace cette valeur de $t$ dans la représentation paramétrique de la droite pour obtenir les coordonnées du point d'intersection : <br>"

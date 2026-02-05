@@ -195,8 +195,10 @@ export default class NomExercice extends Exercice {
       const resultat2 = den2 !== 0
         ? new FractionEtendue(num2, den2)
         : new FractionEtendue(num2, 1) // valeur factice si dénominateur nul (cas parallèle)
-      const quotient1 = new FractionEtendue(ux * uy, vx * uy - vy * ux) // Pour la dernière ligne de calcul du quotient de la colinéarité
-      const quotient2 = new FractionEtendue(ux * uz, vx * uz - vz * ux) // Pour la dernière ligne de calcul du quotient de la colinéarité
+      // Quotients utilisés uniquement dans les cas non parallèles.
+      // On évite la création d'une fraction à dénominateur nul lorsque les droites sont parallèles.
+      let quotient1: FractionEtendue
+      let quotient2: FractionEtendue
       const bloc1 = ` <br>$\\begin{cases}
             ${reduireAxPlusB(ux, xA, 't', { ordreInverse: true })} = ${reduireAxPlusB(vx, xB, 's', { ordreInverse: true })} \\\\
             ${reduireAxPlusB(uy, yA, 't', { ordreInverse: true })} = ${reduireAxPlusB(vy, yB, 's', { ordreInverse: true })} \\\\
@@ -227,6 +229,8 @@ export default class NomExercice extends Exercice {
         //* ****************************************************************************
         // */
         case 'nonCoplanaires': // Droites non-coplanaires
+          quotient1 = new FractionEtendue(ux * uy, vx * uy - vy * ux)
+          quotient2 = new FractionEtendue(ux * uz, vx * uz - vz * ux)
           texte += ` $(d):\\begin{cases}x=${reduireAxPlusB(ux, xA, 't', { ordreInverse: true })} \\\\y= ${rienSi0(yA)}  ${ecritureAlgebriqueSauf1(uy)}t\\quad(t\\in\\mathbb{R})\\\\z= ${rienSi0(zA)} ${ecritureAlgebriqueSauf1(uz)}t\\end{cases}$`
           texte += `$\\quad\\quad(d'):\\begin{cases}x=${rienSi0(xB)}${ecritureAlgebriqueSauf1(vx)}s\\\\y= ${rienSi0(yB)}  ${ecritureAlgebriqueSauf1(vy)}s\\quad(s\\in\\mathbb{R})\\\\z= ${rienSi0(zB)} ${ecritureAlgebriqueSauf1(vz)}s\\end{cases}$`
           // On écrit les représentations paramétriques des droites (d) et (d')
@@ -297,6 +301,8 @@ export default class NomExercice extends Exercice {
         //* ****************************************************************************
         // */
         case 'secantes': // Droites sécantes
+          quotient1 = new FractionEtendue(ux * uy, vx * uy - vy * ux)
+          quotient2 = new FractionEtendue(ux * uz, vx * uz - vz * ux)
           texte += `$(d):\\begin{cases}x=${reduireAxPlusB(ux, xA, 't', { ordreInverse: true })} \\\\y= ${rienSi0(yA)}  ${ecritureAlgebriqueSauf1(uy)}t\\quad(t\\in\\mathbb{R})\\\\z= ${rienSi0(zA)} ${ecritureAlgebriqueSauf1(uz)}t\\end{cases}$`
           texte += `$\\quad\\quad(d'):\\begin{cases}x=${rienSi0(xB)}${ecritureAlgebriqueSauf1(vx)}s\\\\y= ${rienSi0(yB)}  ${ecritureAlgebriqueSauf1(vy)}s\\quad(s\\in\\mathbb{R})\\\\z= ${rienSi0(zB)} ${ecritureAlgebriqueSauf1(vz)}s\\end{cases}$`
           // On écrit les représentations paramétriques des droites (d) et (d')
