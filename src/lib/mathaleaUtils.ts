@@ -102,7 +102,28 @@ export function mathaleaWriteStudentPreviousAnswers(answers?: {
   const promiseAnswers: Promise<Boolean>[] = []
   const starttime = window.performance.now()
   for (const answer in answers) {
-    if (answer.includes('MetaInteractif2d')) {
+    if (answer.includes('svgSelection')) {
+      const p = new Promise<Boolean>((resolve) => {
+        waitForElement(`[id$='${answer}']`)
+          .then((eles) => {
+            eles.forEach((ele) => {
+              if (ele.tagName === 'SVG-SELECTION') {
+                // La réponse correspond à un svgSelection
+                ;(ele as any).value = Number(answers[answer])
+                const time = window.performance.now()
+                log(`duration ${answer}: ${time - starttime}`)
+                resolve(true)
+              }
+            })
+          })
+          .catch((reason) => {
+            console.error(reason)
+            window.notify(`Erreur dans la réponse ${answer} : ${reason}`, {})
+            resolve(true)
+          })
+      })
+      promiseAnswers.push(p)
+    } else if (answer.includes('MetaInteractif2d')) {
       const p = new Promise<Boolean>((resolve) => {
         const saisies = JSON.parse(answers[answer])
         const selectors = Object.keys(saisies).map((field) => `#${field}`)

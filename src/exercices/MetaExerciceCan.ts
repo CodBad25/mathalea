@@ -199,6 +199,33 @@ export default class MetaExercice extends Exercice {
                 formatInteractif: 'MetaInteractif2d',
               })
               this.listeQuestions[indexQuestion] = consigne + Question.question
+            } else if (Question.formatInteractif === 'svgSelection') {
+              const n = Question.numeroExercice
+              if (Question.question != null) {
+                const svgSelection = Question.question.match(
+                  /id="svgSelectionEx\d+Q\d+"/g,
+                )
+                if (svgSelection != null) {
+                  Question.question = Question.question.replace(
+                    `svgSelectionEx${n}Q0`,
+                    `svgSelectionEx${n}Q${indexQuestion}`,
+                  )
+                  Question.question = Question.question.replace(
+                    `resultatCheckEx${n}Q0`,
+                    `resultatCheckEx${n}Q${indexQuestion}`,
+                  )
+                  handleAnswers(
+                    this,
+                    indexQuestion,
+                    Question.reponse as Valeur,
+                    { formatInteractif: 'svgSelection' },
+                  )
+                } else {
+                  throw new Error(
+                    `Erreur avec cette question de type svgSelection qui ne contient pas d'id de svgSelection: ${Question.question}`,
+                  )
+                }
+              }
             } else {
               // * ***************** Question MathLive *****************//
               if (Question.compare == null) {
