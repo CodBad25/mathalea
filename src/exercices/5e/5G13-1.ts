@@ -20,6 +20,7 @@ import { triangle2points2longueurs } from '../../lib/2d/triangles'
 import { angle, longueur } from '../../lib/2d/utilitairesGeometriques'
 import { pointAdistance } from '../../lib/2d/utilitairesPoint'
 import { vecteur } from '../../lib/2d/Vecteur'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteFeedback } from '../../lib/interactif/questionMathLive'
 import { choisitLettresDifferentes } from '../../lib/outils/aleatoires'
@@ -299,7 +300,7 @@ export default class ConservationTransformation extends Exercice {
               content: '%{champ1}^\\circ',
               x: latex.x,
               y: latex.y,
-              classe: '',
+              classe: KeyboardType.clavierNumbers,
               blanc: '\\ldots ',
               opacity: 1,
               index: 0,
@@ -308,7 +309,7 @@ export default class ConservationTransformation extends Exercice {
               content: '%{champ1}\\text{ cm}',
               x: placeLongueur.x,
               y: placeLongueur.y,
-              classe: '',
+              classe: KeyboardType.clavierNumbers,
               blanc: '\\ldots ',
               opacity: 1,
               index: 1,

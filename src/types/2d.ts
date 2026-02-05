@@ -1,4 +1,5 @@
 import type { ObjetMathalea2D } from '../lib/2d/ObjetMathalea2D'
+import type { PartialKbType } from '../lib/interactif/claviers/keyboard'
 import type { IExercice } from '../lib/types'
 
 // Types purs pour la couche 2D — ce fichier doit rester sans import runtime
@@ -19,7 +20,7 @@ export type MetaInteractif2dInputs = {
   x: number
   y: number
   content: string
-  classe: string
+  classe?: string | PartialKbType
   blanc: string
   opacity: number
   index?: number
