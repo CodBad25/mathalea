@@ -276,6 +276,7 @@ export function loadPackagesFromContent(contents: contentsType) {
   contents.preamble += '\n% loadPackagesFromContent'
   loadProfCollegeIfNeed(contents)
   loadNoteBasExercices(contents)
+  testIfLoaded(['\\contour'], '\\usepackage{contour}', contents)
   testIfLoaded(['\\twemoji'], '\\usepackage{twemojis}', contents)
   testIfLoaded(['ifthenelse'], '\\usepackage{ifthen}', contents)
   testIfLoaded(
