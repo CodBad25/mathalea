@@ -30,9 +30,7 @@ const situationAleatoire = function (choix: number) {
   let zB = zA + deltaZ // On s'arrange pour que zB-zA = -2, -1, 1 ou 2.
   const k = randint(-2, 2, [0]) // ce qui donne (xAB/zAB = k)
   let xB = xA + k * (zB - zA)
-  const xAB = xB - xA
-  const yAB = yB - yA
-  const zAB = zB - zA
+  
   // on doit trouver a, b et c tels que a*xAB+b*yAB+c*zAB=0
   // on prend b=0
   // on trouve c=-a*x/z=-a*k
@@ -46,7 +44,7 @@ const situationAleatoire = function (choix: number) {
     else if (choix === 2) b++
     else c++
   }
-  const t = randint(-4, 4, [0, 1])
+ 
 
   const x = randint(-10, 10, [0, xA, xB])
   const y = randint(-10, 10, [0, yA, yB])
@@ -65,11 +63,14 @@ const situationAleatoire = function (choix: number) {
   xB = tab3[0]
   yB = tab3[1]
   zB = tab3[2]
-
+const xAB = xB - xA
+  const yAB = yB - yA
+  const zAB = zB - zA
   if ((xAB * a + yAB * b + zAB * c === 0) !== ortho)
     return situationAleatoire(choix) // Si le produit scalaire n'est pas en accord avec ortho, on recommence.
-  return { xA, yA, xB, yB, zA, zB, xAB, yAB, zAB, a, b, c, x, y, z, t }
+  return { xA, yA, xB, yB, zA, zB, xAB, yAB, zAB, a, b, c, x, y, z }
 }
+
 /**
  *
  * @author Stéphane Guyon
@@ -98,7 +99,7 @@ export default class nomExercice extends Exercice {
       // Modifier a, b ou c pour que le produit scalaire soit non nul (et donc que les droites ne soient pas orthogonales)
       // On doit trouver un vecteur directeur de la droite (AB) qui soit non orthogonal à (Delta)
       const produitScalaire = randint(0, 3)
-      const { xA, yA, xB, yB, zA, zB, xAB, yAB, zAB, a, b, c, x, y, z, t } =
+      const { xA, yA, xB, yB, zA, zB, a, b, c, x, y, z } =
         situationAleatoire(produitScalaire)
       // Il n'y a pas besoin de switch... on peut directement écrire le texte
       switch (
@@ -127,8 +128,8 @@ export default class nomExercice extends Exercice {
       texteCorr += `On en déduit que dans notre situation, un vecteur directeur de la droite $(\\Delta)$ est $\\overrightarrow{u}\\begin{pmatrix} ${a}\\\\${b}\\\\${c}\\end{pmatrix}$<br>`
       texteCorr +=
         'On calcule les coordonnées du vecteur $\\overrightarrow{AB}$ vecteur directeur de la droite $(AB)$ :<br>'
-      texteCorr += `$\\overrightarrow{AB}\\begin{pmatrix} ${xB}${ecritureAlgebrique(xA)}\\\\${yB}${ecritureAlgebrique(yA)}\\\\${zB}${ecritureAlgebrique(zA)}\\end{pmatrix}$`
-      texteCorr += `$\\iff\\overrightarrow{AB}\\begin{pmatrix} ${xAB}\\\\${yAB}\\\\${zAB}\\end{pmatrix}$<br>`
+      texteCorr += `$\\overrightarrow{AB}\\begin{pmatrix} ${xB}${ecritureAlgebrique(-xA)}\\\\${yB}${ecritureAlgebrique(-yA)}\\\\${zB}${ecritureAlgebrique(-zA)}\\end{pmatrix}$`
+      texteCorr += `$\\iff\\overrightarrow{AB}\\begin{pmatrix} ${xB-xA}\\\\${yB - yA}\\\\${zB - zA}\\end{pmatrix}$<br>`
       texteCorr += 'On calcule le produit scalaire de ces deux vecteurs : <br>'
       texteCorr += `$\\overrightarrow{u}\\cdot\\overrightarrow{AB} = ${a}\\times ${ecritureParentheseSiNegatif(xB - xA)}+${ecritureParentheseSiNegatif(b)}\\times ${ecritureParentheseSiNegatif(yB - yA)}+${ecritureParentheseSiNegatif(c)}\\times ${ecritureParentheseSiNegatif(zB - zA)}=${a * (xB - xA) + b * (yB - yA) + c * (zB - zA)}$<br>`
       texteCorr += 'Le produit scalaire des deux vecteurs directeurs étant'
@@ -142,30 +143,12 @@ export default class nomExercice extends Exercice {
           'Les droites $(\\Delta)$ et $(AB)$ ne sont donc pas orthogonales.'
       }
 
-      if (
-        this.questionJamaisPosee(
-          i,
-          a,
-          b,
-          c,
-          xA,
-          yA,
-          zA,
-          xB,
-          yB,
-          zB,
-          x,
-          y,
-          z,
-          t,
-          texte,
-        )
-      ) {
+     
         // <- laisser le i et ajouter toutes les variables qui rendent les exercices différents (par exemple a, b, c et d)
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr
         i++
-      }
+      
       cpt++
     }
     listeQuestionsToContenu(this) // On envoie l'exercice à la fonction de mise en page
