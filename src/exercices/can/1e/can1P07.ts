@@ -26,7 +26,7 @@ export const uuid = '1b057'
 
 export const refs = {
   'fr-fr': ['can1P07'],
-  'fr-ch': ['3mP1-12'],
+  'fr-ch': ['4mProbStat-12'],
 }
 export default class CalculProbaTableauEff extends Exercice {
   constructor() {

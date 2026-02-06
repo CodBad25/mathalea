@@ -1,5 +1,5 @@
-import Exercice from '../Exercice'
-import { listeQuestionsToContenu, randint } from '../../modules/outils'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { remplisLesBlancs } from '../../lib/interactif/questionMathLive'
 import {
   ecritureAlgebrique,
   ecritureAlgebriqueSauf1,
@@ -7,9 +7,9 @@ import {
   rienSi1,
 } from '../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
-import { remplisLesBlancs } from '../../lib/interactif/questionMathLive'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ppcm } from '../../lib/outils/primalite'
+import { listeQuestionsToContenu, randint } from '../../modules/outils'
+import Exercice from '../Exercice'
 
 export const titre = 'Déterminer un vecteur normal à deux autre vecteurs'
 export const interactifReady = true
@@ -20,7 +20,7 @@ export const dateDePublication = '02/02/2025'
 export const uuid = '24d3a'
 export const refs = {
   'fr-fr': ['TSG2-06'],
-  'fr-ch': ['2mGeomVect-6'],
+  'fr-ch': ['3mGeomVect-6'],
 }
 
 /**

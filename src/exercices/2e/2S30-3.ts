@@ -1,20 +1,20 @@
-import Exercice from '../Exercice'
-import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
-import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
+import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
+import Exercice from '../Exercice'
 
-import { stringNombre, texNombre } from '../../lib/outils/texNombre'
 import Decimal from 'decimal.js'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { sp } from '../../lib/outils/outilString'
+import { cribleEratostheneN, pgcd } from '../../lib/outils/primalite'
+import { stringNombre, texNombre } from '../../lib/outils/texNombre'
+import FractionEtendue from '../../modules/FractionEtendue'
 import {
   gestionnaireFormulaireTexte,
   listeQuestionsToContenu,
   randint,
 } from '../../modules/outils'
-import { miseEnEvidence } from '../../lib/outils/embellissements'
-import { sp } from '../../lib/outils/outilString'
-import { cribleEratostheneN, pgcd } from '../../lib/outils/primalite'
-import FractionEtendue from '../../modules/FractionEtendue'
 export const titre = 'Calculer des probabilités dans des cas simples'
 export const dateDeModifImportante = '02/06/2024'
 export const interactifReady = true
@@ -28,7 +28,7 @@ export const uuid = '0cf54'
 
 export const refs = {
   'fr-fr': ['2S30-3', 'BP2FLUC2'],
-  'fr-ch': ['3mP1-5'],
+  'fr-ch': ['4mProbStat-5'],
 }
 export default class ProbaUnionInter extends Exercice {
   constructor() {

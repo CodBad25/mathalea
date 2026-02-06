@@ -24,7 +24,7 @@ export const uuid = '0e166'
 
 export const refs = {
   'fr-fr': ['1P10-5'],
-  'fr-ch': ['3mP1-6'],
+  'fr-ch': ['4mProbStat-6'],
 }
 export default class ProlemesE3CProbabiltesCond extends Exercice {
   constructor() {
@@ -105,7 +105,6 @@ export default class ProlemesE3CProbabiltesCond extends Exercice {
         textePAsachantBb,
         textePAinterB;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       listeEV =
         listeTypeDeQuestions[i] === 1

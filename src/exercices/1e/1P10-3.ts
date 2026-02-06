@@ -29,7 +29,7 @@ export const uuid = '233ef'
 
 export const refs = {
   'fr-fr': ['1P10-3'],
-  'fr-ch': ['3mP1-14'],
+  'fr-ch': ['4mProbStat-14'],
 }
 export default class CalculerProbaArbre extends Exercice {
   constructor() {
@@ -97,7 +97,6 @@ export default class CalculerProbaArbre extends Exercice {
         texteProbaTotaleB,
         texteProbaTotaleBb;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       listeEV = [
         ['A', 'B'],

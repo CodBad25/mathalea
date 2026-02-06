@@ -1,17 +1,17 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { randint } from '../../../modules/outils'
-import FractionEtendue from '../../../modules/FractionEtendue'
 import { tableauColonneLigne } from '../../../lib/2d/tableau'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choice } from '../../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import FractionEtendue from '../../../modules/FractionEtendue'
+import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer une espérance'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const uuid = '01965'
 export const refs = {
   'fr-fr': [],
-  'fr-ch': ['3mP1-4'],
+  'fr-ch': ['4mProbStat-4'],
 }
 /**
  * Modèle d'exercice très simple pour la course aux nombres

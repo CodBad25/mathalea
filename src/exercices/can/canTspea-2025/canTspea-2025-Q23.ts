@@ -1,16 +1,16 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { randint } from '../../../modules/outils'
 import { choice } from '../../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
+import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer un coefficcient binomial'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const uuid = '1216d'
 export const refs = {
   'fr-fr': [],
-  'fr-ch': ['3mP1-8'],
+  'fr-ch': ['4mProbStat-8'],
 }
 /**
  * Modèle d'exercice très simple pour la course aux nombres

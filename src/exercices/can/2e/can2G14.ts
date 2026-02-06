@@ -1,8 +1,8 @@
 import { ecritureParentheseSiNegatif } from '../../../lib/outils/ecritures'
-import { sp } from '../../../lib/outils/outilString'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import ExerciceSimple from '../../ExerciceSimple'
+import { sp } from '../../../lib/outils/outilString'
 import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre =
   "Déterminer les coordonnées d'un point avec une translation"
@@ -21,7 +21,7 @@ export const uuid = '0dfad'
 
 export const refs = {
   'fr-fr': ['can2G14'],
-  'fr-ch': ['2mGeomVect-3'],
+  'fr-ch': ['3mGeomVect-3'],
 }
 export default class TranslationVecteur extends ExerciceSimple {
   constructor() {

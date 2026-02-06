@@ -1,13 +1,13 @@
-import { fraction } from '../../../modules/fractions'
+import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { fraction } from '../../../modules/fractions'
 import { nombreElementsDifferents } from '../../ExerciceQcm'
 import ExerciceQcmA from '../../ExerciceQcmA'
-import { choice } from '../../../lib/outils/arrayOutils'
 
 export const uuid = '28e39'
 export const refs = {
   'fr-fr': ['3S2QCM-2', 'BP2FLUC3'],
-  'fr-ch': ['3mP1-17'],
+  'fr-ch': ['4mProbStat-17'],
 }
 export const interactifReady = true
 export const interactifType = 'qcm'

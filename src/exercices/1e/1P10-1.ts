@@ -1,14 +1,14 @@
-import Exercice from '../Exercice'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { choice } from '../../lib/outils/arrayOutils'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import Exercice from '../Exercice'
 
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
-import { texNombre } from '../../lib/outils/texNombre'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { texNombre } from '../../lib/outils/texNombre'
 
-import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { createList } from '../../lib/format/lists'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { sp } from '../../lib/outils/outilString'
 export const titre = 'Écrire ou reconnaitre une probabilité dans un énoncé'
 export const interactifReady = true
@@ -24,7 +24,7 @@ export const uuid = '227f0'
 
 export const refs = {
   'fr-fr': ['1P10-1'],
-  'fr-ch': ['3mP1-13'],
+  'fr-ch': ['4mProbStat-13'],
 }
 export default class EcritureProbabilite extends Exercice {
   constructor() {
