@@ -76,7 +76,12 @@ export default class MetropoleJuin24Exo4Q2 extends ExerciceQcmA {
 
       const pc = randint(12, 18) // nombre d'élèves en PC à choisir
       const ses = randint(6, nn - pc - 3) // nombre d'élèves en SES à choisir
-      const p = randint(2, k - 2) // effectif du groupe à choisir
+      const pMin = Math.max(2, k - (nn - ses))
+      const pMax = Math.min(k - 2, ses)
+      if (pMin > pMax) {
+        continue
+      }
+      const p = randint(pMin, pMax) // effectif du groupe à choisir
       this.appliquerLesValeurs(nn, k, p, pc, ses)
     } while (nombreElementsDifferents(this.reponses) < n)
   }
