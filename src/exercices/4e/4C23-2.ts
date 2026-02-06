@@ -161,7 +161,7 @@ export default class ExerciceCalculFractionnairesAvecParenthèses extends Exerci
                     )
               texteCorr += `${fraction1.texFraction} \\times \\left(${etapes[0]}\\right)`
               for (const etape of etapes.slice(1, -1)) {
-                texteCorr += `= ${fraction1.texFraction}${(etape?.match(/\\dfrac/) ?? []).length > 1 ? '\\left(' : '\\times '}${etape}${(etape?.match(/\\dfrac/) ?? []).length > 1 ? '\\right)' : ''} `
+                texteCorr += `= ${fraction1.texFraction}${(etape?.match(/\\dfrac/g) ?? []).length > 1 ? '\\left(' : '\\times '}${etape}${(etape?.match(/\\dfrac/g) ?? []).length > 1 ? '\\right)' : ''} `
               }
               if (choixOperation === '+') {
                 if (fraction2.sommeFraction(fraction3).estEntiere) {
@@ -758,15 +758,9 @@ export default class ExerciceCalculFractionnairesAvecParenthèses extends Exerci
             break
         }
       } while (reponse.denIrred > 100 && compteur++ < 50)
-      texteCorr = miseEnFormeCorrection(texteCorr, this.sup3)
       if (
         this.questionJamaisPosee(i, choixOperation, fractions, typesDeQuestions)
       ) {
-        texte += ajouteChampTexteMathLive(
-          this,
-          i,
-          KeyboardType.clavierDeBaseAvecFraction,
-        )
         handleAnswers(this, i, {
           reponse: {
             value: this.sup2
@@ -775,8 +769,15 @@ export default class ExerciceCalculFractionnairesAvecParenthèses extends Exerci
             options: { fractionIrreductible: this.sup2 },
           },
         })
-        this.listeQuestions[i] = `$${texte}$`
-        this.listeCorrections[i] = texteCorr
+        this.listeQuestions[i] =
+          `$${texte}$` +
+          ajouteChampTexteMathLive(
+            this,
+            i,
+            KeyboardType.clavierDeBaseAvecFraction,
+            { texteAvant: ' = ' },
+          )
+        this.listeCorrections[i] = miseEnFormeCorrection(texteCorr, this.sup3)
         i++
       }
       cpt++
