@@ -129,7 +129,7 @@ export default class Signefonctionaffine extends Exercice {
             const o = texteParPosition('O', -0.3, -0.3, 0, 'black', 1)
             const a = randint(1, 5) * choice([-1, 1])
             const zero = new FractionEtendue(-b, a).simplifie()
-            texte = `Dresser le tableau de signes de la fonction $f$ définie sur $\\mathbb R$ par $f(x)=${reduireAxPlusB(a, b)}$.`
+            texte = `${context.isHtml ? 'Compléter' : 'Dresser'} le tableau de signes de la fonction $f$ définie sur $\\mathbb R$ par $f(x)=${reduireAxPlusB(a, b)}$.`
             if (context.isHtml) {
               texteCorr = `${texteEnCouleurEtGras('Dans cet exercice, deux corrections différentes sont proposées.')}<br>`
             } else {
@@ -249,16 +249,17 @@ ${a !== 1 ? `x& ${a < 0 ? `${miseEnEvidence(`${sp(1.5)}\\boldsymbol{<}${sp(1.5)}
               { formatInteractif: 'MetaInteractif2d' },
             )
             // On ajoute le tableau, le span pour le résultat et le div pour le feedback
-            texte +=
-              mathalea2d(
-                Object.assign({}, fixeBordures(objetsTableau)),
-                objetsTableau,
-              ) +
-              (this.interactif
-                ? `<span id="resultatCheckEx${this.numeroExercice}Q${i}"></span>` +
-                  ajouteFeedback(this, i)
-                : '')
-
+            if (context.isHtml) {
+              texte +=
+                mathalea2d(
+                  Object.assign({}, fixeBordures(objetsTableau)),
+                  objetsTableau,
+                ) +
+                (this.interactif
+                  ? `<span id="resultatCheckEx${this.numeroExercice}Q${i}"></span>` +
+                    ajouteFeedback(this, i)
+                  : '')
+            }
             const f = (x: number) => a * x + b
             const monRepere = repere({
               xMin: -8,
@@ -314,7 +315,7 @@ ${a !== 1 ? `x& ${a < 0 ? `${miseEnEvidence(`${sp(1.5)}\\boldsymbol{<}${sp(1.5)}
             const a = new FractionEtendue(ns, ds).simplifie()
             const aInverse = new FractionEtendue(ns, ds).simplifie().inverse()
             const zero = new FractionEtendue(-b * ds, ns).simplifie()
-            texte = `Dresser le tableau de signes de la fonction $f$ définie sur $\\mathbb R$ par ${b === 0 ? `$f(x)=${a.texFSD}x$` : `$f(x)=${a.texFSD}x${ecritureAlgebrique(b)}$`}. <br>`
+            texte = `${context.isHtml ? 'Compléter' : 'Dresser'} le tableau de signes de la fonction $f$ définie sur $\\mathbb R$ par ${b === 0 ? `$f(x)=${a.texFSD}x$` : `$f(x)=${a.texFSD}x${ecritureAlgebrique(b)}$`}. <br>`
             if (context.isHtml) {
               texteCorr = `${texteEnCouleurEtGras('Dans cet exercice, deux corrections différentes sont proposées.')}<br>`
             } else {
@@ -439,15 +440,17 @@ ${a !== 1 ? `x& ${a < 0 ? `${miseEnEvidence(`${sp(1.5)}\\boldsymbol{<}${sp(1.5)}
               { formatInteractif: 'MetaInteractif2d' },
             )
             // On ajoute le tableau, le span pour le résultat et le div pour le feedback
-            texte +=
-              mathalea2d(
-                Object.assign({}, fixeBordures(objetsTableau)),
-                objetsTableau,
-              ) +
-              (this.interactif
-                ? `<span id="resultatCheckEx${this.numeroExercice}Q${i}"></span>` +
-                  ajouteFeedback(this, i)
-                : '')
+            if (context.isHtml) {
+              texte +=
+                mathalea2d(
+                  Object.assign({}, fixeBordures(objetsTableau)),
+                  objetsTableau,
+                ) +
+                (this.interactif
+                  ? `<span id="resultatCheckEx${this.numeroExercice}Q${i}"></span>` +
+                    ajouteFeedback(this, i)
+                  : '')
+            }
             const f = (x: number) => a.valeurDecimale * x + b
             const monRepere = repere({
               xMin: -8,
