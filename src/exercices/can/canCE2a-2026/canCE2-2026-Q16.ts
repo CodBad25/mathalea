@@ -63,7 +63,26 @@ export default class Can2026CE2Q16 extends ExerciceCan {
     }
 
     const figure = mathalea2d(
-      Object.assign({ pixelsParCm: 30, scale: 0.7 }, fixeBordures(objets)),
+      Object.assign(
+        { pixelsParCm: 30, scale: 0.7 },
+        fixeBordures(
+          (
+            objets
+              .map((obj) => {
+                if (Array.isArray(obj)) {
+                  return obj[0]
+                } else return null
+              })
+              .filter((o) => o !== null) as NestedObjetMathalea2dArray
+          ).flat(),
+          {
+            rxmin: 0,
+            rxmax: 0,
+            rymin: 0,
+            rymax: 0,
+          },
+        ),
+      ),
       objets,
     )
     this.canReponseACompleter = figure
@@ -74,7 +93,23 @@ export default class Can2026CE2Q16 extends ExerciceCan {
         return mathalea2d(
           Object.assign(
             { pixelsParCm: 30, scale: 1, style: 'display: inline-block' },
-            fixeBordures(piece, { rxmin: 0, rxmax: 0, rymin: 0, rymax: 0 }),
+            fixeBordures(
+              (
+                piece
+                  .map((obj) => {
+                    if (Array.isArray(obj)) {
+                      return obj[0]
+                    } else return null
+                  })
+                  .filter((o) => o !== null) as NestedObjetMathalea2dArray
+              ).flat(),
+              {
+                rxmin: 0,
+                rxmax: 0,
+                rymin: 0,
+                rymax: 0,
+              },
+            ),
           ),
           piece,
         )

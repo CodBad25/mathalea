@@ -68,7 +68,6 @@ export function selectionSvg(
   exercice: IExercice,
   i: number,
   svgs: string[],
-  correctValue: number | number[],
   style?: string,
 ) {
   if (!exercice.interactif || !context.isHtml) return ''
@@ -94,38 +93,5 @@ export function selectionSvg(
   result += `<span id="resultatCheckEx${exercice.numeroExercice}Q${i}"></span>`
 
   // Stocker la réponse correcte
-  return setReponseSelection(exercice, i, correctValue, result)
-}
-
-/**
- * Enregistre la réponse correcte pour une question de sélection SVG
- * @param exercice l'exercice
- * @param i le numéro de la question
- * @param correctValue la valeur correcte en base n
- * @param htmlCode le code HTML généré
- * @returns le code HTML
- */
-function setReponseSelection(
-  exercice: IExercice,
-  i: number,
-  correctValue: number | number[],
-  htmlCode: string,
-): string {
-  if (exercice.autoCorrection[i] === undefined) {
-    exercice.autoCorrection[i] = {}
-  }
-  if (exercice.autoCorrection[i].reponse === undefined) {
-    exercice.autoCorrection[i].reponse = {}
-  }
-  const rep = exercice.autoCorrection[i].reponse
-  if (rep != null) {
-    rep.valeur = {
-      reponse: {
-        value: Array.isArray(correctValue)
-          ? correctValue.map(String)
-          : String(correctValue), // Stocker en string pour conformité au type
-      },
-    }
-  }
-  return htmlCode
+  return result
 }

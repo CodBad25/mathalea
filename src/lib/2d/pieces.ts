@@ -47,7 +47,7 @@ export class PieceBuilder {
         tex.couleurDeRemplissage = ['none', 'yellow!50']
         texEuro.contour = true
         texEuro.couleurDeRemplissage = ['none', 'yellow!50']
-        return [disqueExt, disqueInt, tex, texEuro]
+        return [[disqueExt], disqueInt, tex, texEuro]
       }
       case 0.5: {
         const disqueExt = new Plot(x, y, {
@@ -76,7 +76,7 @@ export class PieceBuilder {
           pointAbstrait((x - 0.12) * scale, (y - 0.26) * scale),
           0,
           'black',
-          (context.isHtml ? 0.45 : 0.45) * scale,
+          (context.isHtml ? 0.45 : 0.32) * scale,
           'milieu',
           true,
         )
@@ -85,7 +85,7 @@ export class PieceBuilder {
           pointAbstrait((x + 0.1) * scale, (y - 0.27) * scale),
           0,
           'black',
-          (context.isHtml ? 0.35 : 0.35) * scale,
+          (context.isHtml ? 0.35 : 0.25) * scale,
           'milieu',
           true,
         )
@@ -95,7 +95,7 @@ export class PieceBuilder {
         tex.couleurDeRemplissage = ['none', 'yellow!50']
         texEnt.contour = true
         texEnt.couleurDeRemplissage = ['none', 'yellow!50']
-        return [disqueExt, disqueInt, tex, texC, texEnt]
+        return [[disqueExt], disqueInt, tex, texC, texEnt]
       }
       case 1:
       default: {
@@ -133,7 +133,7 @@ export class PieceBuilder {
         tex.couleurDeRemplissage = ['none', 'gray!10']
         texEuro.contour = true
         texEuro.couleurDeRemplissage = ['none', 'gray!10']
-        return [disqueExt, disqueInt, tex, texEuro]
+        return [[disqueExt], disqueInt, tex, texEuro]
       }
     }
   }
