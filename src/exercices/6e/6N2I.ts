@@ -113,7 +113,7 @@ export default class DivisionDecimale extends Exercice {
           const produit = choice([
             ['éponge', 'éponges'],
             ['cahier', 'cahiers'],
-            ['trousse', 'troussses'],
+            ['trousse', 'trousses'],
           ])
           texte = `$${b}$ ${produit[1]} coûtent $${texPrix(a)}$ €. Combien coûte $1$ ${produit[0]} ?`
           texte += ajouteChampTexteMathLive(
