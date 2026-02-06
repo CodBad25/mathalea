@@ -1,18 +1,18 @@
 import { createList } from '../../lib/format/lists'
-import { choice } from '../../lib/outils/arrayOutils'
-import { texteItalique } from '../../lib/outils/embellissements'
-import ExerciceBrevetA from '../ExerciceBrevetA'
-import { estPremier } from '../../lib/outils/primalite'
-import { randint } from '../../modules/outils'
-import FractionEtendue from '../../modules/FractionEtendue'
 import { choisitNombresEntreMetN } from '../../lib/outils/aleatoires'
+import { choice } from '../../lib/outils/arrayOutils'
 import { egalOuApprox } from '../../lib/outils/ecritures'
+import { texteItalique } from '../../lib/outils/embellissements'
+import { estPremier } from '../../lib/outils/primalite'
 import { texNombre } from '../../lib/outils/texNombre'
+import FractionEtendue from '../../modules/FractionEtendue'
+import { randint } from '../../modules/outils'
+import ExerciceBrevetA from '../ExerciceBrevetA'
 
 export const uuid = 'bc6ae'
 export const refs = {
   'fr-fr': ['3Z1DNB-23'],
-  'fr-ch': ['3mP1-20'],
+  'fr-ch': ['4mProbStat-20'],
 }
 export const titre =
   'Préparation DNB : Statistiques, pourcentages, trigonométrie'

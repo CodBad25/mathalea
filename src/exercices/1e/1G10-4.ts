@@ -35,7 +35,7 @@ export const uuid = '23033'
 
 export const refs = {
   'fr-fr': ['1G10-4'],
-  'fr-ch': ['2mGeomVect-5'],
+  'fr-ch': ['3mGeomVect-5'],
 }
 
 export default class CalculProduitScalaireProjection extends Exercice {
@@ -76,7 +76,6 @@ export default class CalculProduitScalaireProjection extends Exercice {
     for (
       let i = 0, texte, texteCorr, reponse, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       switch (
         listeTypeDeQuestions[i] // listeTypeDeQuestions[i]

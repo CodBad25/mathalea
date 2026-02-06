@@ -10,7 +10,7 @@ export const uuid = '24438'
 // Author Stéphane Guyon
 export const refs = {
   'fr-fr': ['1A-P05-3'],
-  'fr-ch': ['3mP1-2'],
+  'fr-ch': ['4mProbStat-2'],
 }
 export const interactifReady = true
 export const interactifType = 'qcm'

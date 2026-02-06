@@ -11,7 +11,7 @@ export const uuid = '28dfd'
 
 export const refs = {
   'fr-fr': ['2S30-2', 'BP2FLUC1'],
-  'fr-ch': ['3mP1-16'],
+  'fr-ch': ['4mProbStat-16'],
 }
 export default class FonctionsProbabilite12nde extends FonctionsProbabilite1 {
   constructor() {

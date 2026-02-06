@@ -1,11 +1,11 @@
-import { listeQuestionsToContenu, randint } from '../../../modules/outils'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { remplisLesBlancs } from '../../../lib/interactif/questionMathLive'
-import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
-import Exercice from '../../Exercice'
-import { ecritureAlgebriqueSauf1, rienSi1 } from '../../../lib/outils/ecritures'
 import type { MathfieldElement } from 'mathlive'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
+import { remplisLesBlancs } from '../../../lib/interactif/questionMathLive'
+import { ecritureAlgebriqueSauf1, rienSi1 } from '../../../lib/outils/ecritures'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { listeQuestionsToContenu, randint } from '../../../modules/outils'
+import Exercice from '../../Exercice'
 
 export const titre = 'Déterminer un vecteur normal à un plan.'
 export const dateDePublication = '28/01/2025'
@@ -20,7 +20,7 @@ export const interactifType = 'mathLive'
 export const uuid = '0cd98'
 export const refs = {
   'fr-fr': ['canTSpeE05'],
-  'fr-ch': ['2mGeomVect-2'],
+  'fr-ch': ['3mGeomVect-2'],
 }
 
 export default class MilieuSegment extends Exercice {

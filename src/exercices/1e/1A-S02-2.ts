@@ -9,7 +9,7 @@ import ExerciceQcmA from '../ExerciceQcmA'
 export const uuid = '12ba0'
 export const refs = {
   'fr-fr': ['1A-S02-2'],
-  'fr-ch': ['4mProbStat-1'],
+  'fr-ch': ['4mProbStat-21'],
 }
 export const interactifReady = true
 export const interactifType = 'qcm'
@@ -33,17 +33,17 @@ export default class QuartileQCM extends ExerciceQcmA {
     quartile: number,
   ): void {
     const serieClassee = [...valeurs].sort((a, b) => a - b)
-   let rangQ1 :number
-   let rangQ3 :number
-    if (effectif % 4===0) {
+    let rangQ1: number
+    let rangQ3: number
+    if (effectif % 4 === 0) {
       rangQ1 = 0.25 * effectif
       rangQ3 = 0.75 * effectif
     } else {
-      rangQ1 = Math.floor(0.25 * effectif)+1
-      rangQ3 = Math.floor(0.75 * effectif)+1
+      rangQ1 = Math.floor(0.25 * effectif) + 1
+      rangQ3 = Math.floor(0.75 * effectif) + 1
     }
-      const Q1 = serieClassee[rangQ1 -1]
-    const Q3 = serieClassee[rangQ3 -1]
+    const Q1 = serieClassee[rangQ1 - 1]
+    const Q3 = serieClassee[rangQ3 - 1]
 
     let distracteur1Q1: number
     if (rangQ1 - 2 >= 0) {

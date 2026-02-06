@@ -100,7 +100,6 @@
     "2mFctRat": {},
     "2mIneq": {},
     "2mQCM": {},
-    "2mGeomVect": {},
     "2mLogExp": {},
     "2mRecComp": {},
     "2mTrigo": {}
@@ -109,7 +108,8 @@
     "3mA1": {},
     "3mA2": {},
     "3mA3": {},
-    "3mP1": {},
+    "3mComb": {},
+    "3mGeomVect": {},
     "3mQCM": {},
     "3mNC": {},
     "3mAlgLin": {}

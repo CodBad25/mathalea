@@ -284,12 +284,6 @@
   "2mIneq": {
     "titre": "Inéquations"
   },
-  "2mGeomVect": {
-    "titre": "Géométrie vectorielle"
-  },
-  "2mRecComp": {
-    "titre": "Réciproque et composition de fonctions"
-  },
   "2mLogExp": {
     "titre": "Logarithmes et exponentielles"
   },
@@ -305,8 +299,11 @@
   "3mA3": {
     "titre": "Étude de fonctions"
   },
-  "3mP1": {
-    "titre": "Probabilités"
+  "3mComb": {
+    "titre": "Combinatoire"
+  },
+  "3mGeomVect": {
+    "titre": "Géométrie vectorielle"
   },
   "3mNC": {
     "titre": "Nombres complexes"

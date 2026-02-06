@@ -1,12 +1,12 @@
-import { choice } from '../../../lib/outils/arrayOutils'
-import { texNombre } from '../../../lib/outils/texNombre'
-import Exercice from '../../Exercice'
-import { listeQuestionsToContenu, randint } from '../../../modules/outils'
 import Decimal from 'decimal.js'
 import { ajouteChampTexteMathLive } from '../../../lib/interactif/questionMathLive'
+import { choice } from '../../../lib/outils/arrayOutils'
+import { texNombre } from '../../../lib/outils/texNombre'
+import { listeQuestionsToContenu, randint } from '../../../modules/outils'
+import Exercice from '../../Exercice'
 
-import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
 
 export const titre = 'Écrire une probabilité avec les notations'
 export const dateDePublication = '21/07/2022'
@@ -24,7 +24,7 @@ export const uuid = '15f6d'
 
 export const refs = {
   'fr-fr': ['can1P01'],
-  'fr-ch': ['3mP1-10'],
+  'fr-ch': ['4mProbStat-10'],
 }
 export default class ProbabilitesNotation extends Exercice {
   constructor() {
@@ -49,7 +49,6 @@ export default class ProbabilitesNotation extends Exercice {
     for (
       let i = 0, cpt = 0, p1, p2, p3, p4, p5, p6, texte, texteCorr, choix;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       // switch (choice([1, 2, 3])) { //, 2, 3
       switch (

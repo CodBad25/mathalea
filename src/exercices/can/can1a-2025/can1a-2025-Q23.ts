@@ -1,16 +1,16 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { tableauColonneLigne } from '../../../lib/2d/tableau'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choice } from '../../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import FractionEtendue from '../../../modules/FractionEtendue'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer une probabilité dans un tableau'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const uuid = '155bb'
 export const refs = {
   'fr-fr': [],
-  'fr-ch': ['3mP1-9'],
+  'fr-ch': ['4mProbStat-9'],
 }
 /**
  * Modèle d'exercice très simple pour la course aux nombres

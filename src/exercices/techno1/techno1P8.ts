@@ -19,7 +19,7 @@ export const uuid = '1aad3'
 
 export const refs = {
   'fr-fr': ['techno1P8'],
-  'fr-ch': ['3mP1-11'],
+  'fr-ch': ['4mProbStat-11'],
 }
 export default class nomExercice extends Exercice {
   constructor() {
@@ -47,7 +47,6 @@ export default class nomExercice extends Exercice {
         texteCorr,
         cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       // Boucle principale où i+1 correspond au numéro de la question
       do {

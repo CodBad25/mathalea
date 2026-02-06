@@ -1,8 +1,8 @@
-import Exercice from '../Exercice'
-import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { remplisLesBlancs } from '../../lib/interactif/questionMathLive'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { listeQuestionsToContenu, randint } from '../../modules/outils'
+import Exercice from '../Exercice'
 
 export const titre = 'Connaître la relation de Newton.'
 
@@ -14,7 +14,7 @@ export const dateDePublication = '25/4/2025'
 export const uuid = '300a4'
 export const refs = {
   'fr-fr': ['TSG1-08'],
-  'fr-ch': ['3mP1-18'],
+  'fr-ch': ['4mProbStat-18'],
 }
 /**
  * Modèle d'exercice très simple pour la course aux nombres

@@ -10,7 +10,7 @@ export const dateDePublication = '20/4/2025'
 export const uuid = '20106'
 export const refs = {
   'fr-fr': ['TSG1-05'],
-  'fr-ch': ['3mP1-1'],
+  'fr-ch': ['4mProbStat-1'],
 }
 
 /**
