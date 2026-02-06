@@ -1,8 +1,8 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { randint } from '../../../modules/outils'
-import { complex, add, conj } from 'mathjs'
+import { complex, conj } from 'mathjs'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
-export const titre = 'Déterminer le conjugué d\'un nombre complexe'
+import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
+export const titre = "Déterminer le conjugué d'un nombre complexe"
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const amcReady = true
@@ -31,77 +31,79 @@ export default class Conjugue extends ExerciceSimple {
   nouvelleVersion() {
     const ReZ = randint(-5, 5)
     const ImZ = randint(-5, 5)
-    const z1 = complex(ReZ, ImZ)
-    const z2 = complex(-ReZ, -ImZ)
-    const z3 = complex(-ImZ, ReZ)
-     const z4 = complex(ReZ, -ImZ)
-      const z5 = complex(ImZ, ReZ)
-       const z6 = complex(ImZ, -ReZ)
+    const z = complex(ReZ, ImZ)
+    const moinsZ = complex(-ReZ, -ImZ)
+    const iZ = complex(-ImZ, ReZ)
+    const conjZ = complex(ReZ, -ImZ)
+    const conjIz = complex(ImZ, ReZ)
+    const moinsIz = complex(ImZ, -ReZ)
     const scenario = randint(0, 4)
-    this.question = `On donne le nombre complexe $z = ${z1.toString()}$.<br>`
-    this.correction = 'Par définition, le conjugué d\'un nombre complexe qui s\'écrit sous la forme $z=a+ib$, avec $a$ et $b$ deux réels, est $\\overline{z} =a-ib$.<br>'
+    this.question = `On donne le nombre complexe $z = ${z.toString()}$.<br>`
+    this.correction =
+      "Par définition, le conjugué d'un nombre complexe qui s'écrit sous la forme $z=a+ib$, avec $a$ et $b$ deux réels, est $\\overline{z} =a-ib$.<br>"
     switch (scenario) {
-      case 0 :
-          this.question +='Déterminer le conjugué de $z$.'
-    this.correction += `On a donc ici : $\\overline{z} = ${miseEnEvidence(`${conj(z1).toString()}`)}$.`
+      case 0:
+        this.question += 'Déterminer le conjugué de $z$.'
+        this.correction += `On a donc ici : $\\overline{z} = ${miseEnEvidence(`${conjZ.toString()}`)}$.`
 
-    this.reponse = `${ReZ}+${-ImZ}i`
-      break;
-      case 1 :
-          this.question +='Déterminer $\\overline{z}$.'
-    this.correction+= `On a donc ici : $\\overline{z} = ${miseEnEvidence(`${conj(z1).toString()}`)}$.`
+        this.reponse = `${conjZ.toString()}`
+        break
+      case 1:
+        this.question += 'Déterminer $\\overline{z}$.'
+        this.correction += `On a donc ici : $\\overline{z} = ${miseEnEvidence(`${conjZ.toString()}`)}$.`
 
-    this.reponse = `${ReZ}+${-ImZ}i`
-      break;
-       case 2 :
-           this.question +='Déterminer la forme algébrique de $Z=\\overline{-z}$.'
-    this.correction += `
+        this.reponse = `${conjZ.toString()}`
+        break
+      case 2:
+        this.question += 'Déterminer la forme algébrique de $Z=\\overline{-z}$.'
+        this.correction += `
     $\\begin{aligned}
     Z&=\\overline{-z}\\\\
-     &= \\overline{${z2.toString()}}\\\\
-    &=${miseEnEvidence(`${conj(z2).toString()}`)}.
+     &= \\overline{${moinsZ.toString()}}\\\\
+    &=${miseEnEvidence(`${conj(moinsZ).toString()}`)}.
     \\end{aligned}$`
 
-    this.reponse = `${-ReZ}+${ImZ}i`
-      break;
-       case 3 :
-           this.question +='Déterminer la forme algébrique de $Z=\\overline{iz}$.'
-    this.correction += `
+        this.reponse = `${conj(moinsZ).toString()}`
+        break
+      case 3:
+        this.question += 'Déterminer la forme algébrique de $Z=\\overline{iz}$.'
+        this.correction += `
     $\\begin{aligned}
     Z&=\\overline{iz}\\\\
-      &= \\overline{i\\left(${z1.toString()}\\right)}\\\\
-      &= \\overline{${z3.toString()}}\\\\
-    &=${miseEnEvidence(`${conj(z3).toString()}`)}.
+      &= \\overline{i\\left(${z.toString()}\\right)}\\\\
+      &= \\overline{${iZ.toString()}}\\\\
+    &=${miseEnEvidence(`${conjIz.toString()}`)}.
     \\end{aligned}$<br>
     On aurait pu aussi utiliser la propriété  des produits des conjugués :<br>
      $\\begin{aligned}
     Z&=\\overline{iz}\\\\
-      &= \\overline{i} \\times \\overline{${z1.toString()}}\\\\
-       &= -i \\left({${z4.toString()}}\\right)\\\\
-       &=${miseEnEvidence(`${conj(z3).toString()}`)}.
+      &= \\overline{i} \\times \\overline{${z.toString()}}\\\\
+       &= -i \\left({${conjZ.toString()}}\\right)\\\\
+       &=${miseEnEvidence(`${conjIz.toString()}`)}.
     \\end{aligned}$<br>`
 
-    this.reponse = `${-ReZ}+${-ImZ}i`
-      break;
-       case 4 :
-           this.question +='Déterminer la forme algébrique de $Z=\\overline{-iz}$.'
-    this.correction += `
+        this.reponse = `${conjIz.toString()}`
+        break
+      case 4:
+        this.question +=
+          'Déterminer la forme algébrique de $Z=\\overline{-iz}$.'
+        this.correction += `
     $\\begin{aligned}
     Z&=\\overline{-iz}\\\\
-      &= \\overline{-i\\left(${z1.toString()}\\right)}\\\\
-      &= \\overline{${z6.toString()}}\\\\
-    &=${miseEnEvidence(`${z5.toString()}`)}.
+      &= \\overline{-i\\left(${z.toString()}\\right)}\\\\
+      &= \\overline{${moinsIz.toString()}}\\\\
+    &=${miseEnEvidence(`${conj(moinsIz).toString()}`)}.
     \\end{aligned}$<br>
     On aurait pu aussi utiliser la propriété  des produits des conjugués :<br>
      $\\begin{aligned}
     Z&=\\overline{-iz}\\\\
-      &= \\overline{-i} \\times \\left(\\overline{${z1.toString()}}\\right)\\\\
-       &= i \\left({${conj(z1).toString()}}\\right)\\\\
-      &=${miseEnEvidence(`${z5.toString()}`)}.
+      &= \\overline{-i} \\times \\left(\\overline{${z.toString()} }\\right)\\\\
+       &= i \\left({${conjZ.toString()}}\\right)\\\\
+      &=${miseEnEvidence(`${conj(moinsIz).toString()}`)}.
     \\end{aligned}$<br>`
 
-    this.reponse = `${-ImZ}+${-ReZ}i`
-      break;
+        this.reponse = `${conj(moinsIz).toString()}`
+        break
+    }
   }
-
-}}
+}
