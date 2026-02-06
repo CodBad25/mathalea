@@ -1,4 +1,5 @@
 import { add, complex } from 'mathjs'
+import { context } from '../../../modules/context'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Somme de nombres complexes'
@@ -33,36 +34,37 @@ export default class SommeDeComplexes extends ExerciceSimple {
     this.question = `On donne $~~a = ${z1.toString()}~~$ et $~~b = ${z2.toString()}$.<br>Calcule $a + b$.`
     this.correction = `$${z1.toString()} + ${z2.toString()} = ${add(z1, z2).toString()}$`
     this.reponse = add(z1, z2).toString()
-    this.autoCorrection[0] = {
-      enonce: this.question,
-      propositions: [
-        {
-          type: 'AMCNum',
-          propositions: {
-            texte: this.correction,
+    if (context.isAmc)
+      this.autoCorrection[0] = {
+        enonce: this.question,
+        propositions: [
+          {
+            type: 'AMCNum',
+            propositions: {
+              texte: this.correction,
+            },
+            reponse: {
+              valeur: add(z1, z2).re,
+              digits: 2,
+              deciams: 0,
+              signe: true,
+              approx: 0,
+            },
           },
-          reponse: {
-            valeur: add(z1, z2).re,
-            digits: 2,
-            deciams: 0,
-            signe: true,
-            approx: 0,
+          {
+            type: 'AMCNum',
+            propositions: {
+              texte: '',
+            },
+            reponse: {
+              valeur: add(z1, z2).im,
+              digits: 2,
+              deciams: 0,
+              signe: true,
+              approx: 0,
+            },
           },
-        },
-        {
-          type: 'AMCNum',
-          propositions: {
-            texte: '',
-          },
-          reponse: {
-            valeur: add(z1, z2).im,
-            digits: 2,
-            deciams: 0,
-            signe: true,
-            approx: 0,
-          },
-        },
-      ],
-    }
+        ],
+      }
   }
 }

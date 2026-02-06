@@ -1,6 +1,7 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { randint } from '../../../modules/outils'
 import { complex, multiply, type Complex } from 'mathjs'
+import { context } from '../../../modules/context'
+import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'produit de nombres complexes'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -34,36 +35,37 @@ export default class SommeDeComplexes extends ExerciceSimple {
     this.question = `On donne $~~a = ${z1.toString()}~~$ et $~~b = ${z2.toString()}$.<br>Calcule $a \\times b$.`
     this.correction = `$(${z1.toString()}) \\times (${z2.toString()}) = ${z.toString()}$`
     this.reponse = multiply(z1, z2).toString()
-    this.autoCorrection[0] = {
-      enonce: this.question,
-      propositions: [
-        {
-          type: 'AMCNum',
-          propositions: {
-            texte: this.correction,
+    if (context.isAmc)
+      this.autoCorrection[0] = {
+        enonce: this.question,
+        propositions: [
+          {
+            type: 'AMCNum',
+            propositions: {
+              texte: this.correction,
+            },
+            reponse: {
+              valeur: z.re,
+              digits: 2,
+              decimals: 0,
+              signe: true,
+              approx: 0,
+            },
           },
-          reponse: {
-            valeur: z.re,
-            digits: 2,
-            decimals: 0,
-            signe: true,
-            approx: 0,
+          {
+            type: 'AMCNum',
+            propositions: {
+              texte: '',
+            },
+            reponse: {
+              valeur: z.im,
+              digits: 2,
+              decimals: 0,
+              signe: true,
+              approx: 0,
+            },
           },
-        },
-        {
-          type: 'AMCNum',
-          propositions: {
-            texte: '',
-          },
-          reponse: {
-            valeur: z.im,
-            digits: 2,
-            decimals: 0,
-            signe: true,
-            approx: 0,
-          },
-        },
-      ],
-    }
+        ],
+      }
   }
 }

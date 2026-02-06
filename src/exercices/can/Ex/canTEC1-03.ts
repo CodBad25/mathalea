@@ -1,8 +1,9 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { randint } from '../../../modules/outils'
-import { complex, add } from 'mathjs'
+import { complex } from 'mathjs'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
-export const titre = 'Déterminer la partie réelle ou imaginaire d\'un nombre complexe'
+import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
+export const titre =
+  "Déterminer la partie réelle ou imaginaire d'un nombre complexe"
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const amcReady = true
@@ -36,30 +37,31 @@ export default class PartieReelle extends ExerciceSimple {
     const moinsiz2 = complex(ImZ, -ReZ)
     const scenario = randint(0, 2)
     this.question = `On donne le nombre complexe $~~z = ${z1.toString()}$.<br>`
-    
-    switch (scenario) { 
-      case 0 :
-          this.question +='Déterminer la partie imaginaire de $z$.'
-    this.correction = `Par définition, la partie imaginaire est le réel facteur du nombre imaginaire $i$<br>$\\mathcal{Im}(z) = ${miseEnEvidence(ImZ)}.$`
 
-    this.reponse = ImZ
-      break;
-      case 1 :
-          this.question +='Déterminer la partie imaginaire de $iz$.'
-   this.correction = `On écrit $iz$ sous forme algébrique puis on identifie la partie imaginaire.<br>
+    switch (scenario) {
+      case 0:
+        this.question += 'Déterminer la partie imaginaire de $z$.'
+        this.correction = `Par définition, la partie imaginaire est le réel facteur du nombre imaginaire $i$<br>$\\mathcal{Im}(z) = ${miseEnEvidence(ImZ)}.$`
+
+        this.reponse = ImZ
+        break
+      case 1:
+        this.question += 'Déterminer la partie imaginaire de $iz$.'
+        this.correction = `On écrit $iz$ sous forme algébrique puis on identifie la partie imaginaire.<br>
    $iz=i\\left( ${z1.toString()}\\right) =${z2.toString()}$<br>
 
    $\\mathcal{Im}(iz) = ${miseEnEvidence(ReZ)}.$`
-    this.reponse = ReZ
-      break;
-       case 2 :
-          this.question +='Déterminer la partie imaginaire de $-iz$.'
-   this.correction = `On écrit $-iz$ sous forme algébrique puis on identifie la partie imaginaire.<br>
+        this.reponse = ReZ
+        break
+      case 2:
+      default:
+        this.question += 'Déterminer la partie imaginaire de $-iz$.'
+        this.correction = `On écrit $-iz$ sous forme algébrique puis on identifie la partie imaginaire.<br>
    $-iz=-i\\left( ${z1.toString()}\\right) =${moinsiz2.toString()}$<br>
 
    $\\mathcal{Im}(-iz) = ${miseEnEvidence(-ReZ)}.$`
-    this.reponse = ReZ
-      break;
+        this.reponse = -ReZ
+        break
+    }
   }
-
-}}
+}
