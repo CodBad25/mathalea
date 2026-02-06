@@ -1,3 +1,4 @@
+import { orangeMathalea } from 'apigeom/src/elements/defaultValues'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -101,6 +102,7 @@ export default class DivisionDecimale extends Exercice {
             operande2: b,
             type: 'division',
             precision: 4,
+            options: { solution: true, colore: 'blue' },
           })
           texteCorr += `<br>$${texNombre(a)}\\div${b}=${texNombre(q)}$`
           texteCorr += `<br>Chaque verre va contenir $${texNombre(q)}$ L de jus ${fruits}, soit $${miseEnEvidence(texNombre(arrondi(q * 100)))}$ cL.`
@@ -131,6 +133,7 @@ export default class DivisionDecimale extends Exercice {
             operande2: b,
             type: 'division',
             precision: 4,
+            options: { solution: true, colore: orangeMathalea },
           })
           texteCorr += `<br>$${texNombre(a)}\\div${b}=${texNombre(q)}$`
           texteCorr += `<br>$1$ ${produit[0]} coûte $${miseEnEvidence(texNombre(q))}$ €.`
@@ -159,6 +162,7 @@ export default class DivisionDecimale extends Exercice {
             operande2: b,
             type: 'division',
             precision: 4,
+            options: { solution: true, colore: orangeMathalea },
           })
           texteCorr += `<br>$${texNombre(a)}\\div${b}=${texNombre(q)}$`
           texteCorr += `<br>${truc} devra verser $${miseEnEvidence(texNombre(q))}$ litres d'eau sur chaque plante.`
@@ -195,6 +199,7 @@ export default class DivisionDecimale extends Exercice {
             operande2: b,
             type: 'division',
             precision: 4,
+            options: { solution: true, colore: 'blue' },
           })
           texteCorr += `<br>$${texNombre(a)}\\div${b}=${texNombre(q)}$`
           texteCorr += `<br>Chaque morceau mesurera $${texNombre(q)}\\text{ m}$ ${matiere}, soit $${miseEnEvidence(texNombre(arrondi(q * 100)))}\\text{ cm}$.`
@@ -231,6 +236,7 @@ export default class DivisionDecimale extends Exercice {
             operande2: b,
             type: 'division',
             precision: 4,
+            options: { solution: true, colore: 'blue' },
           })
           texteCorr += `<br>$${texNombre(a)}\\div${b}=${texNombre(q)}$`
           texteCorr += `<br>Chaque portion contiendra $${texNombre(q)}$ kg ${aliment}, soit $${miseEnEvidence(texNombre(arrondi(q * 1000)))}$ g.`
@@ -258,6 +264,7 @@ export default class DivisionDecimale extends Exercice {
             operande2: b,
             type: 'division',
             precision: 4,
+            options: { solution: true, colore: orangeMathalea },
           })
           texteCorr += `<br>$${texNombre(a)}\\div${b}=${texNombre(q)}$`
           texteCorr += `<br>${bidule} parcourt $${miseEnEvidence(texNombre(q))}\\text{ km}$ chaque jour.`
@@ -286,6 +293,7 @@ export default class DivisionDecimale extends Exercice {
             operande2: b,
             type: 'division',
             precision: 4,
+            options: { solution: true, colore: orangeMathalea },
           })
           texteCorr += `<br>$${texNombre(a)}\\div${b}=${texNombre(q)}$`
           texteCorr += `<br>${bidule} a téléchargé en moyenne $${miseEnEvidence(texNombre(q))}$ Go par jour d'activité.`

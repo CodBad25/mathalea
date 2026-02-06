@@ -100,6 +100,7 @@ export default class QuestionsDivisionsEuclidiennes extends Exercice {
               operande1: dividende,
               operande2: diviseur,
               type: 'divisionE',
+              options: { solution: true, colore: 'blue' },
             }) +
             `$${miseEnEvidence(`${texNombre(dividende)}=(${diviseur}\\times${texNombre(quotient)})+ ${texNombre(reste)}`, 'blue')}$`
           texteCorr += `<br>Le paysagiste peut faire ${texteEnCouleurEtGras(String(quotient))} bouquets et il lui reste ${texteEnCouleurEtGras(String(reste), 'blue')} fleurs.`
@@ -139,6 +140,7 @@ export default class QuestionsDivisionsEuclidiennes extends Exercice {
               operande1: dividende,
               operande2: diviseur,
               type: 'divisionE',
+              options: { solution: true, colore: 'blue' },
             }) +
             `$${miseEnEvidence(`${texNombre(dividende)}=(${diviseur}\\times${texNombre(quotient)})+ ${texNombre(reste)}`, 'blue')}$`
           texteCorr += `<br>Il lui faudra ${texteEnCouleurEtGras(String(quotient))} boîtes et il restera ${texteEnCouleurEtGras(String(reste), 'blue')} oeufs.`
@@ -178,6 +180,7 @@ export default class QuestionsDivisionsEuclidiennes extends Exercice {
               operande1: dividende,
               operande2: diviseur,
               type: 'divisionE',
+              options: { solution: true, colore: 'blue' },
             }) +
             `$${miseEnEvidence(`${texNombre(dividende)}=(${diviseur}\\times${texNombre(quotient)})+ ${texNombre(reste)}`, 'blue')}$`
           texteCorr += `<br>Chaque pirate aura ${texteEnCouleurEtGras(String(quotient))} pièces.`
@@ -218,6 +221,7 @@ export default class QuestionsDivisionsEuclidiennes extends Exercice {
             operande1: prixHotelTotal,
             operande2: prixForfaitTotal,
             type: 'addition',
+            options: { solution: true, colore: 'blue' },
           })
           texteCorr += `<br>Ces ${nbAmis} amis ont dépensé au total $${miseEnEvidence(texNombre(prixHotelTotal + prixForfaitTotal))}$ €.<br>`
           texteCorr += `<br>${numAlpha(1)} Posons la division euclidienne de $${texNombre(prixHotelTotal + prixForfaitTotal)}$ par $${nbAmis}$. <br>`
@@ -226,6 +230,7 @@ export default class QuestionsDivisionsEuclidiennes extends Exercice {
               operande1: prixHotelTotal + prixForfaitTotal,
               operande2: nbAmis,
               type: 'divisionE',
+              options: { solution: true, colore: 'blue' },
             }) +
             `$${miseEnEvidence(`${texNombre(prixHotelTotal + prixForfaitTotal)}=${nbAmis}\\times${texNombre((prixHotel + prixForfait) * nbJour)}`, 'blue')}$`
           texteCorr += `<br>Chaque personne a dépensé  $${miseEnEvidence(texNombre((prixHotel + prixForfait) * nbJour))}$ €.`
@@ -272,6 +277,7 @@ export default class QuestionsDivisionsEuclidiennes extends Exercice {
                 nbGrandeSalles * nb * nbPlacesPetiteSalles,
               operande2: nbGrandeSalles * nb + nbPetiteSalles,
               type: 'divisionE',
+              options: { solution: true, colore: 'blue' },
             }) +
             `$${miseEnEvidence(`${texNombre(nbPlacesPetiteSalles * nbPetiteSalles + nbGrandeSalles * nb * nbPlacesPetiteSalles)}=${nbGrandeSalles * nb + nbPetiteSalles}\\times${texNombre(nbPlacesPetiteSalles)}`, 'blue')}$`
           texteCorr += `<br>Il y a ${texteEnCouleurEtGras(String(nbPlacesPetiteSalles))} places dans une petite salle.`
@@ -313,6 +319,7 @@ export default class QuestionsDivisionsEuclidiennes extends Exercice {
               operande1: nbTimbres,
               operande2: nbTimbresParPage,
               type: 'divisionE',
+              options: { solution: true, colore: 'blue' },
             }) +
             `$${miseEnEvidence(`${texNombre(nbTimbres)}=(${nbTimbresParPage}\\times${texNombre(nbPages)})${nbTimbres - nbTimbresParPage * nbPages === 0 ? '' : `+ ${nbTimbres - nbTimbresParPage * nbPages}`}`, 'blue')}$`
           texteCorr += `<br>Il y aura $${miseEnEvidence(texNombre(nbPages), 'blue')}$ pages remplies et une page avec $${miseEnEvidence(texNombre(reste), 'blue')}$ timbres. Donc au total, il faudra $${miseEnEvidence(texNombre(nbPages + 1))}$ pages.`
@@ -353,6 +360,7 @@ export default class QuestionsDivisionsEuclidiennes extends Exercice {
               operande1: dividende,
               operande2: diviseur,
               type: 'divisionE',
+              options: { solution: true, colore: 'blue' },
             }) +
             `$${miseEnEvidence(`${texNombre(dividende)}=(${diviseur}\\times${texNombre(nbPiecesParPirate)}) +  ${reste}`, 'blue')}$`
           texteCorr += `<br>Chaque pirate aura $${miseEnEvidence(texNombre(nbPiecesParPirate))}$ pièces.`
@@ -412,6 +420,7 @@ export default class QuestionsDivisionsEuclidiennes extends Exercice {
               operande1: nbPersonnes,
               operande2: nbPlaces1ParRangée,
               type: 'divisionE',
+              options: { solution: true, colore: 'blue' },
             }) +
             `$${miseEnEvidence(`${texNombre(nbPersonnes)}=(${nbPlaces1ParRangée}\\times${texNombre(nbRangée1)}) +  ${reste1}`, 'blue')}$`
           texteCorr += `<br> Avec ${nbPlaces1ParRangée} places par rangée, il y aura ${nbRangée1} rangées remplies et une dernière avec ${reste1} places occupées et ${texteEnCouleurEtGras(String(nbPlaces1ParRangée - reste1), 'blue')} places libres.`
@@ -421,6 +430,7 @@ export default class QuestionsDivisionsEuclidiennes extends Exercice {
               operande1: nbPersonnes,
               operande2: nbPlaces2ParRangée,
               type: 'divisionE',
+              options: { solution: true, colore: 'blue' },
             }) +
             `$${miseEnEvidence(`${texNombre(nbPersonnes)}=(${nbPlaces2ParRangée}\\times${texNombre(nbRangée2)}) +  ${reste2}`, 'blue')}$`
           texteCorr += `<br> Avec ${nbPlaces2ParRangée} places par rangée, il y aura ${nbRangée2} rangées remplies et une dernière avec ${reste2} places occupées et ${texteEnCouleurEtGras(String(nbPlaces2ParRangée - reste2), 'blue')} places libres.`

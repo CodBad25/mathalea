@@ -1,3 +1,4 @@
+import { orangeMathalea } from 'apigeom/src/elements/defaultValues'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import {
   handleAnswers,
@@ -141,7 +142,6 @@ export default class DivisionsEuclidiennesEgaliteFondamentale extends Exercice {
               operande1: a,
               operande2: b,
               type: 'divisionE',
-              // options: { solution: false, colore: '' },
             }),
           )
         : `La division euclidienne de $${texNombre(a)}$ par $${b}$.`
@@ -152,6 +152,7 @@ export default class DivisionsEuclidiennesEgaliteFondamentale extends Exercice {
               operande1: a,
               operande2: b,
               type: 'divisionE',
+              options: { solution: true, colore: orangeMathalea },
             }),
           ) +
           `$${miseEnEvidence(`${texNombre(a)}=${b}\\times${texNombre(q)}`)}$`
@@ -180,6 +181,7 @@ export default class DivisionsEuclidiennesEgaliteFondamentale extends Exercice {
               operande1: a,
               operande2: b,
               type: 'divisionE',
+              options: { solution: true, colore: orangeMathalea },
             }),
           ) +
           (this.classe !== 6

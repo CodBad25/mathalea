@@ -1,3 +1,4 @@
+import { orangeMathalea } from 'apigeom/src/elements/defaultValues'
 import { deuxColonnesResp } from '../../lib/format/miseEnPage'
 import { ajouteQuestionMathlive } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
@@ -102,7 +103,7 @@ export default class ExerciceProbleme006 extends Exercice {
                   : ''
               }`
               correction = `${this.correctionDetaillee ? `Nombre de billes de ${prenom1} : ` : ''}
-          ${this.sup3 ? operation({ operande1: nb1, operande2: nb2, type: 'addition' }) : `$${nb1} + ${nb2} = ${nb1 + nb2}$<br>`}
+          ${this.sup3 ? operation({ operande1: nb1, operande2: nb2, type: 'addition', options: { solution: true, colore: orangeMathalea } }) : `$${nb1} + ${nb2} = ${nb1 + nb2}$<br>`}
           ${prenom1} a maintenant $${miseEnEvidence(String(nb1 + nb2))}$ billes.`
               break
             case 2:
@@ -125,7 +126,7 @@ export default class ExerciceProbleme006 extends Exercice {
                   : ''
               }`
               correction = `${this.correctionDetaillee ? `Nombre de billes de ${prenom1} : ` : ''}
-          ${this.sup3 ? operation({ operande1: nb1, operande2: nb2, type: 'soustraction' }) : `$${nb1} - ${nb2} = ${nb1 - nb2}$<br>`}
+          ${this.sup3 ? operation({ operande1: nb1, operande2: nb2, type: 'soustraction', options: { solution: true, colore: orangeMathalea } }) : `$${nb1} - ${nb2} = ${nb1 - nb2}$<br>`}
           ${prenom1} a maintenant $${miseEnEvidence(String(nb1 - nb2))}$ billes.`
               break
             default:
@@ -149,7 +150,7 @@ export default class ExerciceProbleme006 extends Exercice {
               }`
 
               correction = `${this.correctionDetaillee ? `Nombres de billes qu'avait ${prenom1} avant : ` : ''}
-          ${this.sup3 ? operation({ operande1: nb1 - nb2, operande2: nb2, type: 'addition' }) : ` $${nb1 - nb2} + ${nb2} = ${nb1}$<br>`}
+          ${this.sup3 ? operation({ operande1: nb1 - nb2, operande2: nb2, type: 'addition', options: { solution: true, colore: orangeMathalea } }) : ` $${nb1 - nb2} + ${nb2} = ${nb1}$<br>`}
          ${prenom1} avait $${miseEnEvidence(String(nb1))}$ billes.`
               break
           }
@@ -177,7 +178,7 @@ export default class ExerciceProbleme006 extends Exercice {
                   : ''
               }`
               correction = `${this.correctionDetaillee ? `On ajoute le nombre de billes de ${prenom1} et de ${prenom2} : ` : ''}
-        ${this.sup3 ? operation({ operande1: nb1, operande2: nb2, type: 'addition' }) : ` $${nb1} + ${nb2} = ${nb1 + nb2}$<br>`}
+        ${this.sup3 ? operation({ operande1: nb1, operande2: nb2, type: 'addition', options: { solution: true, colore: orangeMathalea } }) : ` $${nb1} + ${nb2} = ${nb1 + nb2}$<br>`}
        Ensemble ${prenom1} et ${prenom2} ont $${miseEnEvidence(String(nb1 + nb2))}$ billes.`
               break
             case 2:
@@ -200,7 +201,7 @@ export default class ExerciceProbleme006 extends Exercice {
                   : ''
               }`
               correction = `${this.correctionDetaillee ? `Nombre de billes de ${prenom1} : ` : ''}
-        ${this.sup3 ? operation({ operande1: nb1, operande2: nb2, type: 'soustraction' }) : `$${nb1} - ${nb2} = ${nb1 - nb2}$<br>`}
+        ${this.sup3 ? operation({ operande1: nb1, operande2: nb2, type: 'soustraction', options: { solution: true, colore: orangeMathalea } }) : `$${nb1} - ${nb2} = ${nb1 - nb2}$<br>`}
         ${prenom1} a $${miseEnEvidence(String(nb1 - nb2))}$ billes.`
               break
             default:
@@ -234,6 +235,7 @@ export default class ExerciceProbleme006 extends Exercice {
                       operande1: nb1 - nb2,
                       operande2: nb2,
                       type: 'addition',
+                      options: { solution: true, colore: 'blue' },
                     }),
                   ),
                 (this.correctionDetaillee
@@ -244,6 +246,7 @@ export default class ExerciceProbleme006 extends Exercice {
                       operande1: nb1,
                       operande2: nb2,
                       type: 'addition',
+                      options: { solution: true, colore: orangeMathalea },
                     }).toString(),
                   ),
                 {
@@ -283,7 +286,7 @@ export default class ExerciceProbleme006 extends Exercice {
                   : ''
               }`
               correction = `${this.correctionDetaillee ? `Nombre de billes de ${prenom2} : ` : ''}
-        ${this.sup3 ? operation({ operande1: nb2 - nb1, operande2: nb1, type: 'addition' }) : `$${nb2 - nb1} + ${nb1} = ${nb2}$<br>`}
+        ${this.sup3 ? operation({ operande1: nb2 - nb1, operande2: nb1, type: 'addition', options: { solution: true, colore: orangeMathalea } }) : `$${nb2 - nb1} + ${nb1} = ${nb2}$<br>`}
         ${prenom2} a $${miseEnEvidence(String(nb2))}$ billes.`
               break
             case 2:
@@ -306,7 +309,7 @@ export default class ExerciceProbleme006 extends Exercice {
                   : ''
               }`
               correction = `${this.correctionDetaillee ? `Nombre de billes de ${prenom1} : ` : ''}
-        ${this.sup3 ? operation({ operande1: nb1, operande2: nb2, type: 'addition' }) : `$${nb1} + ${nb2} = ${nb1}$<br>`}
+        ${this.sup3 ? operation({ operande1: nb1, operande2: nb2, type: 'addition', options: { solution: true, colore: orangeMathalea } }) : `$${nb1} + ${nb2} = ${nb1}$<br>`}
         ${prenom1} a $${miseEnEvidence(String(nb1))}$ billes.`
 
               break
@@ -341,6 +344,7 @@ export default class ExerciceProbleme006 extends Exercice {
                       operande1: nb1 - nb2,
                       operande2: nb2,
                       type: 'addition',
+                      options: { solution: true, colore: 'blue' },
                     }),
                   ),
                 (this.correctionDetaillee
@@ -351,6 +355,7 @@ export default class ExerciceProbleme006 extends Exercice {
                       operande1: nb1,
                       operande2: nb2,
                       type: 'addition',
+                      options: { solution: true, colore: orangeMathalea },
                     }),
                   ),
                 {
@@ -394,7 +399,7 @@ export default class ExerciceProbleme006 extends Exercice {
                     : ''
                 }`
                 correction = `${this.correctionDetaillee ? `Nombre de billes de ${prenom2} : ` : ''}
-                      ${this.sup3 ? operation({ operande1: nb1, operande2: nbFois, type: 'multiplication' }) : `$${nb1}\\times ${nbFois} = ${nb1 * nbFois}$<br>`}
+                      ${this.sup3 ? operation({ operande1: nb1, operande2: nbFois, type: 'multiplication', options: { solution: true, colore: orangeMathalea } }) : `$${nb1}\\times ${nbFois} = ${nb1 * nbFois}$<br>`}
       ${prenom2} a $${miseEnEvidence(String(nb1 * nbFois))}$ billes.`
                 break
               case 2:
@@ -417,7 +422,7 @@ export default class ExerciceProbleme006 extends Exercice {
                     : ''
                 }`
                 correction = `${this.correctionDetaillee ? `Nombre de billes de ${prenom1} : ` : ''}
-      ${this.sup3 ? operation({ operande1: nb2, operande2: nbFois, type: 'division' }) : `$${nb2} \\div ${nbFois} = ${nb1}$<br>`}
+      ${this.sup3 ? operation({ operande1: nb2, operande2: nbFois, type: 'division', options: { solution: true, colore: orangeMathalea } }) : `$${nb2} \\div ${nbFois} = ${nb1}$<br>`}
       ${prenom1} a $${miseEnEvidence(String(nb1))}$ billes.`
                 break
               default:
@@ -450,6 +455,7 @@ export default class ExerciceProbleme006 extends Exercice {
                     operande1: nb1,
                     operande2: nbFois,
                     type: 'multiplication',
+                    options: { solution: true, colore: 'blue' },
                   }),
                 ),
               (this.correctionDetaillee
@@ -460,6 +466,7 @@ export default class ExerciceProbleme006 extends Exercice {
                     operande1: nb1 * nbFois,
                     operande2: nb1,
                     type: 'soustraction',
+                    options: { solution: true, colore: orangeMathalea },
                   }),
                 ),
               {

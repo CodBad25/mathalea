@@ -1,3 +1,4 @@
+import { orangeMathalea } from 'apigeom/src/elements/defaultValues'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -164,6 +165,7 @@ export default class DivisionDecimale extends Exercice {
           operande2: b,
           type: 'division',
           precision: 3,
+          options: { solution: true, colore: orangeMathalea },
         })
         texteCorr += `<br>$${texNombre(a)}\\div${b}=${miseEnEvidence(texNombre(q))}$`
         texte += this.interactif ? '=$' : '$'
@@ -173,6 +175,7 @@ export default class DivisionDecimale extends Exercice {
           operande2: b,
           type: 'division',
           precision: 4,
+          options: { solution: true, colore: orangeMathalea },
         })
         texteCorr += `<br>$${texNombre(a)}\\div${b}\\approx${miseEnEvidence(texNombre(q))}$`
         texte += this.interactif ? '\\approx$' : '$'

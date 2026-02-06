@@ -1,3 +1,4 @@
+import { orangeMathalea } from 'apigeom/src/elements/defaultValues'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import {
   handleAnswers,
@@ -111,7 +112,7 @@ export default class MultiplierDecimauxParametres extends Exercice {
         operande2: b,
         type: 'multiplication',
         style: 'display: inline',
-        options: { solution: true, colore: 'red' },
+        options: { solution: true, colore: orangeMathalea },
       })
       if (this.version === '6eme')
         texteCorr +=
@@ -121,6 +122,7 @@ export default class MultiplierDecimauxParametres extends Exercice {
             operande2: a,
             type: 'multiplication',
             style: 'display: inline',
+            options: { solution: true, colore: orangeMathalea },
           })
       if (context.isHtml && this.interactif) {
         texte +=

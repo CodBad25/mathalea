@@ -1,3 +1,4 @@
+import { orangeMathalea } from 'apigeom/src/elements/defaultValues'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { setReponse } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -154,6 +155,7 @@ export default class DivisionFraction extends Exercice {
           operande2: b,
           type: 'division',
           precision: 3,
+          options: { solution: true, colore: orangeMathalea },
         })
         texteCorr += `<br>$${texFraction(texNombre(a), texNombre(b))}=${miseEnEvidence(texNombre(q))}$`
       } else {
@@ -162,6 +164,7 @@ export default class DivisionFraction extends Exercice {
           operande2: b,
           type: 'division',
           precision: 3,
+          options: { solution: true, colore: orangeMathalea },
         })
         texteCorr += `<br>$${texFraction(texNombre(a), texNombre(b))}\\approx${miseEnEvidence(texNombre(q, 2))}$`
       }

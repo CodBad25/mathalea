@@ -1,3 +1,4 @@
+import { orangeMathalea } from 'apigeom/src/elements/defaultValues'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -119,6 +120,7 @@ export default class DivisionsEuclidiennes extends Exercice {
             operande1: a,
             operande2: b,
             type: 'divisionE',
+            options: { solution: true, colore: orangeMathalea },
           }) + `$${texNombre(a)}=${b}\\times${texNombre(q)}$`
       } else {
         texteCorr =
@@ -126,6 +128,7 @@ export default class DivisionsEuclidiennes extends Exercice {
             operande1: a,
             operande2: b,
             type: 'divisionE',
+            options: { solution: true, colore: orangeMathalea },
           }) +
           (this.classe !== 6
             ? `$${texNombre(a)}=${b}\\times${miseEnEvidence(texNombre(q))}+${miseEnEvidence(String(r))}$`

@@ -94,6 +94,7 @@ export default class QuestionsDivisionsEuclidiennes extends Exercice {
               operande1: nbPerlesJauneTotal,
               operande2: nbPerlesJaune,
               type: 'divisionE',
+              options: { solution: true, colore: 'blue' },
             }) +
             `$${miseEnEvidence(`${texNombre(nbPerlesJauneTotal)}=${nbPerlesJauneTotal - nbPerlesJaune * nbColliersJaune === 0 ? `${nbPerlesJaune}\\times${texNombre(nbColliersJaune)}` : `(${nbPerlesJaune}\\times${texNombre(nbColliersJaune)})+ ${nbPerlesJauneTotal - nbPerlesJaune * nbColliersJaune}`}`, 'blue')}$`
           texteCorr += `<br>Il peut faire $${miseEnEvidence(texNombre(nbColliersJaune), 'blue')}$ colliers avec les perles jaunes.`
@@ -103,6 +104,7 @@ export default class QuestionsDivisionsEuclidiennes extends Exercice {
               operande1: nbPerlesRougeTotal,
               operande2: nbPerlesRouge,
               type: 'divisionE',
+              options: { solution: true, colore: 'blue' },
             }) +
             `$${miseEnEvidence(`${texNombre(nbPerlesRougeTotal)}=${nbPerlesRougeTotal - nbPerlesRouge * nbColliersRouge === 0 ? `${nbPerlesRouge}\\times${texNombre(nbColliersRouge)}` : `(${nbPerlesRouge}\\times${texNombre(nbColliersRouge)})+ ${nbPerlesRougeTotal - nbPerlesRouge * nbColliersRouge}`}`, 'blue')}$`
           texteCorr += `<br>Il peut faire $${miseEnEvidence(texNombre(nbColliersRouge), 'blue')}$ colliers avec les perles rouges.`
