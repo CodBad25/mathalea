@@ -330,22 +330,29 @@ export function ecritureParentheseSiNegatif(
 export function ecritureParentheseSiMoins(
   expr: string | number | IFractionEtendue,
 ) {
-  if (typeof expr === 'string' && expr[0] === '-') return `(${expr})`
+  let result = ''
+  if (typeof expr === 'string' && expr[0] === '-') result = `(${expr})`
   else if (typeof expr === 'string') {
-    return expr
+    result = expr
     // Il faut sortir si c'est un string, il n'y a rien à faire de plus !
   } else if (typeof expr === 'number' && expr < 0) {
-    return `(${stringNombre(expr, 7)})`
+    result = `(${stringNombre(expr, 7)})`
   } else if (typeof expr === 'number') return stringNombre(expr, 7)
   else if (isFractionEtendue(expr) && expr.s === -1) {
-    return `(${expr.texFSD})`
+    return `\\left(${expr.texFSD}\\right)`
   } else {
     // avant on passait ici quand c'était un string sans signe - devant... c'était une mauvaise idée !
     window.notify(
       "ecritureParentheseSiMoins() n'accepte pas ce type d'argument.",
       { argument: expr },
     )
-    return String(expr)
+    if (
+      result.includes('dfrac') &&
+      result.startsWith('(') &&
+      result.endsWith(')')
+    ) {
+      return `\\left${result.slice(1, -1)}\\right)`
+    } else return result
   }
 }
 
