@@ -97,8 +97,8 @@ export default class AdditionsSoustractionsMultiplicationsPosees extends Exercic
 
     const listeTypeDeQuestions = gestionnaireFormulaireTexte({
       max: 5,
-      defaut: randint(1, 5),
-      nbQuestions: 5,
+      defaut: 6,
+      nbQuestions: this.nbQuestions,
       melange: 6,
       saisie: this.sup,
     }).map(Number)
