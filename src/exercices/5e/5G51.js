@@ -32,7 +32,7 @@ export default class RepresenterUnSolide5e extends Exercice {
     // Héritage de la classe Exercice ()
     this.besoinFormulaireNumerique = [
       'Type de solides',
-      5,
+      7,
       ' 1 : Cubes\n 2 : Pavés droits\n 3 : Mélange cubes et pavés\n 4 : Prismes\n 5 : Mélange',
     ]
 
@@ -257,7 +257,6 @@ export default class RepresenterUnSolide5e extends Exercice {
         EF.pointilles = 5
         HE.pointilles = 5
         IE.pointilles = 5
-        FH.pointilles = 5
         AE.color = colorToLatexOrHTML('gray')
         EF.color = colorToLatexOrHTML('gray')
         HE.color = colorToLatexOrHTML('gray')
