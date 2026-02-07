@@ -30,7 +30,7 @@ function log(message: string) {
  * @param {number} timeout - durée max en ms
  * @param {number} interval - fréquence de vérification en ms
  */
-function waitFor(
+export function waitFor(
   conditionFn: () => boolean,
   timeout = 2000,
   interval = 50,
@@ -251,6 +251,12 @@ export function mathaleaWriteStudentPreviousAnswers(answers?: {
             window.notify(`Erreur dans la réponse ${answer} : ${reason}`, {})
             resolve(true)
           })
+      })
+      promiseAnswers.push(p)
+    } else if (answer.includes('texteDND')) {
+      // on ignore ce champ, il est juste pour le debug et il ne sert pas!
+      const p = new Promise<Boolean>((resolve) => {
+        resolve(true)
       })
       promiseAnswers.push(p)
     } else if (answer.includes('rectangleDND')) {
