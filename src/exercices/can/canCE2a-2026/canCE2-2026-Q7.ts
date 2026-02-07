@@ -5,6 +5,7 @@ import { MetaInteractif2d } from '../../../lib/2d/interactif2d'
 import { segment } from '../../../lib/2d/segmentsVecteurs'
 import { latex2d } from '../../../lib/2d/textes'
 import { bleuMathalea } from '../../../lib/colors'
+import { ajouteFeedback } from '../../../lib/interactif/questionMathLive'
 import { choice } from '../../../lib/outils/arrayOutils'
 import {
   miseEnEvidence,
@@ -118,7 +119,11 @@ export default class Can2026CE2Q7 extends ExerciceCan {
     )
     this.canReponseACompleter = figure
     if (context.isHtml) {
-      this.question += this.canReponseACompleter
+      this.question +=
+        this.canReponseACompleter +
+        (context.isHtml
+          ? `<span id="resultatCheckEx${this.numeroExercice}Q${0}"></span>${ajouteFeedback(this, 0)}`
+          : '')
     }
     this.correction =
       `La première case contient : $${start}+${step1 === 1 ? String(saut) : `${step1}\\times ${saut}`}=${miseEnEvidence(start + saut * step1)}$ et la deuxième case contient : $${start}+${step2}\\times ${saut}=${miseEnEvidence(start + saut * step2)}$.<br>
