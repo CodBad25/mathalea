@@ -2,6 +2,8 @@ import { context } from '../../../modules/context'
 import type { IExercice } from '../../types'
 import '../svgSelection/SvgSelectionElement'
 
+type SvgWithValue = { svg: string; value: number }
+
 /**
  * Vérifie la réponse à une question avec sélection d'SVG
  * @param {object} exercice l'exercice appelant pour pouvoir atteindre ses propriétés.
@@ -59,18 +61,20 @@ export function verifQuestionSvgSelection(exercice: IExercice, i: number) {
  * Fonction pour créer une sélection d'SVG dans un exercice interactif.
  * @param {Exercice} exercice l'exercice appelant pour pouvoir atteindre ses propriétés.
  * @param {number} i le numéro de la question
- * @param {string[]} svgs les SVG à sélectionner
- * @param {number} correctValue la valeur correcte (nombre en base n)
+ * @param {SvgWithValue[][] | string[][] | string[]} svgs les SVG à sélectionner.
+ *   - SvgWithValue[][] : format natif avec valeurs personnalisées {svg: string, value: number}
+ *   - string[][] : sera converti avec value = index global
+ *   - string[] : sera converti en array 2D avec value = index
  * @param {string} [style] le style à appliquer au conteneur
  * @returns {string} le code HTML du conteneur de sélection SVG
  */
 export function selectionSvg(
   exercice: IExercice,
   i: number,
-  svgs: string[],
+  svgs: SvgWithValue[][] | SvgWithValue[],
   style?: string,
 ) {
-  if (!exercice.interactif || !context.isHtml) return ''
+  if (!context.isHtml) return ''
 
   style = style ? ` style="${style}"` : ''
   if (
