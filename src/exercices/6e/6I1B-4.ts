@@ -6,7 +6,6 @@ import { latex2d } from '../../lib/2d/textes'
 import { choice, shuffle } from '../../lib/outils/arrayOutils'
 import { range1 } from '../../lib/outils/nombres'
 import { listeDesDiviseurs } from '../../lib/outils/primalite'
-import { texNombre } from '../../lib/outils/texNombre'
 import { MySpreadsheetElement } from '../../lib/tableur/MySpreadSheet'
 import { addSheet } from '../../lib/tableur/outilsTableur'
 import { context } from '../../modules/context'
@@ -138,31 +137,34 @@ export default class ExerciceTableur extends Exercice {
 
       // compare les résultats
       for (let i = 1; i < nbSteps + 1; i++) {
-        if (typeof resultats[i - 1] !== 'number' || isNaN(resultats[i - 1])) {
+        if (testSheet.getCellFormula(i, 0) === '') {
+          messages[n].push(
+            `La cellule ${String.fromCharCode(65 + i)}1 est vide.<br>`,
+          )
+        } else if (!testSheet.getCellFormula(i, 0).startsWith('=')) {
+          messages[n].push(
+            `La cellule ${String.fromCharCode(65 + i)}1 ne contient pas une formule valide.<br>`,
+          )
+        } else if (
+          typeof resultats[i - 1] !== 'number' ||
+          isNaN(resultats[i - 1])
+        ) {
           messages[n].push(
             `La cellule ${String.fromCharCode(65 + i)}1 ne contient pas un nombre valide.<br>`,
           )
         }
       }
-      for (let i = 1; i < nbSteps + 1; i++) {
-        if (
-          typeof testSheet.getCellFormula(i, 0) !== 'string' ||
-          !testSheet.getCellFormula(i, 0).startsWith('=')
-        ) {
-          messages[n].push(
-            `La cellule ${String.fromCharCode(65 + i)}1 ne contient pas une formule valide.<br>`,
-          )
-        }
-      }
       let result = a1
-      for (let i = 1; i < nbSteps + 1; i++) {
-        const steps = this.listeSteps[q]
-        result = evaluate(result, steps[i - 1].op, steps[i - 1].val)
-        const computed = parseFloat(testSheet.getCellValue(i, 0))
-        if (Math.abs(computed - result) > 1e-9) {
-          messages[n].push(
-            `Pour un nombre de départ égal à ${a1}, la cellule ${String.fromCharCode(65 + i)}1 devrait contenir $${texNombre(result, 2)}$ mais elle contient $${texNombre(computed, 2)}$.<br>`,
-          )
+      if (messages[n].length === 0) {
+        for (let i = 1; i < nbSteps + 1; i++) {
+          const steps = this.listeSteps[q]
+          result = evaluate(result, steps[i - 1].op, steps[i - 1].val)
+          const computed = parseFloat(testSheet.getCellValue(i, 0))
+          if (Math.abs(computed - result) > 1e-9) {
+            messages[n].push(
+              `Mauvaise formule dans la cellule ${String.fromCharCode(65 + i)}1.<br>`,
+            )
+          }
         }
       }
     }
