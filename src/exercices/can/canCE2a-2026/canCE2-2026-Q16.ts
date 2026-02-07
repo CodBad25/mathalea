@@ -23,38 +23,38 @@ export const refs = {
  */
 export default class Can2026CE2Q16 extends ExerciceCan {
   /**
-   * Calcule toutes les valeurs codées possibles pour atteindre la somme cible.
+   * Trouve une solution pour la somme cible en utilisant les pièces disponibles
+   * @param pieces - Liste des valeurs des pièces disponibles
+   * @param targetSum - Somme cible à atteindre
+   * @returns Liste d'indices des pièces sélectionnées pour atteindre la somme cible
    */
-  private calculateCorrectValues(
-    pieces: number[],
-    targetSum: number,
-  ): number[] {
+  private findSolution(pieces: number[], targetSum: number): number[] {
     const n = pieces.length
-    const results: number[] = []
-    const epsilon = 1e-9
+    const results: number[][] = []
 
-    const recurse = (index: number, sum: number, value: number) => {
-      if (index === n) {
-        if (Math.abs(sum - targetSum) <= epsilon) {
-          results.push(value)
+    // Générer toutes les combinaisons possibles de pièces
+    for (let i = 0; i < 1 << n; i++) {
+      const combination: number[] = []
+      let sum = 0
+
+      for (let j = 0; j < n; j++) {
+        if (i & (1 << j)) {
+          combination.push(j)
+          sum += pieces[j]
         }
-        return
       }
 
-      // Ne pas sélectionner cette pièce
-      recurse(index + 1, sum, value)
-
-      // Sélectionner cette pièce
-      recurse(index + 1, sum + pieces[index], value + Math.pow(n, index))
+      if (sum === targetSum) {
+        results.push(combination)
+      }
     }
 
-    recurse(0, 0, 0)
-    return results.sort((a, b) => a - b)
+    // Retourner la première combinaison trouvée ou une liste vide si aucune solution n'est trouvée
+    return results.length > 0 ? results[0] : []
   }
 
   enonce(pieces: number[], somme: number) {
     const objets: NestedObjetMathalea2dArray = []
-    const correctValues = this.calculateCorrectValues(pieces, somme)
 
     this.question = `Tu dois $${texPrix(somme)}$€ à ton frère.<br>${context.isHtml ? 'Sélectionne ce que tu lui donnes' : 'Entoure ce que tu lui donnes'}.<br>`
     for (let i = 0; i < pieces.length; i++) {
@@ -90,36 +90,55 @@ export default class Can2026CE2Q16 extends ExerciceCan {
     if (context.isHtml) {
       const svgItems = pieces.map((valeur) => {
         const piece = new PieceBuilder(valeur).make(0, 0, 2)
-        return mathalea2d(
-          Object.assign(
-            { pixelsParCm: 30, scale: 1, style: 'display: inline-block' },
-            fixeBordures(
-              (
-                piece
-                  .map((obj) => {
-                    if (Array.isArray(obj)) {
-                      return obj[0]
-                    } else return null
-                  })
-                  .filter((o) => o !== null) as NestedObjetMathalea2dArray
-              ).flat(),
-              {
-                rxmin: 0,
-                rxmax: 0,
-                rymin: 0,
-                rymax: 0,
-              },
+        return Object.assign(
+          {},
+          {
+            svg: mathalea2d(
+              Object.assign(
+                { pixelsParCm: 30, scale: 1, style: 'display: inline-block' },
+                fixeBordures(
+                  (
+                    piece
+                      .map((obj) => {
+                        if (Array.isArray(obj)) {
+                          return obj[0]
+                        } else return null
+                      })
+                      .filter((o) => o !== null) as NestedObjetMathalea2dArray
+                  ).flat(),
+                  {
+                    rxmin: 0,
+                    rxmax: 0,
+                    rymin: 0,
+                    rymax: 0,
+                  },
+                ),
+              ),
+              piece,
             ),
-          ),
-          piece,
+            value: valeur,
+          },
         )
       })
+      /*  On peut passer les SVG dans un format 2D (array de array) pour faire plusieurs lignes, ou dans un format 1D (array simple) pour faire une ligne. Ici on fait 2 lignes pour l'exemple, mais on va garder une ligne pour les 5 pièces.
+     const svgItemsGrid = [
+        [svgItems[0], svgItems[1], svgItems[2]],
+        [svgItems[3], svgItems[4]],
+      ]
+        */
+
       this.question += selectionSvg(this, 0, svgItems)
     } else {
       this.question = this.question + figure
     }
-    this.reponse = correctValues.map(String)
-    this.correction = ``
+    this.reponse = String(somme)
+    const solutionIndices = this.findSolution(pieces, somme)
+    this.correction = `Voici les pièces qu'il faut donner : ${solutionIndices
+      .slice(0, -1)
+      .map((index) => `$${texPrix(pieces[index])}$€`)
+      .join(
+        ' ; ',
+      )} et $${texPrix(pieces[solutionIndices[solutionIndices.length - 1]])}$€.`
   }
 
   nouvelleVersion() {
