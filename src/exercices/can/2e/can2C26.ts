@@ -40,16 +40,16 @@ export default class CalculAvecRacineDefphrase extends ExerciceSimple {
         choix = choice([true, false])
         this.question = `Donner le nombre ${choix ? 'positif' : 'négatif'} dont le carré est $${a}$.`
         if (a === 4) {
-          this.correction = `Par définition, le nombre positif dont le carré est $${a}$ est $\\sqrt{${a}}=2$.<br>`
-          this.correction += `${choix ? '' : `Ainsi, le nombre négatif dont le carré est $${a}$ est $-\\sqrt{${a}}=${miseEnEvidence(-2)}$.`}`
+          this.correction = `Par définition, le nombre positif dont le carré est $${a}$ est`
+          this.correction += `${choix ?  `$\\sqrt{${a}}=${miseEnEvidence(2)}$.<br>` : ` $\\sqrt{${a}}$.<br>Ainsi, le nombre négatif dont le carré est $${a}$ est $-\\sqrt{${a}}=${miseEnEvidence(-2)}$.`}`
         }
         if (a === 9) {
-          this.correction = `Par définition, le nombre positif dont le carré est $${a}$ est $\\sqrt{${a}}=3$.<br>`
-          this.correction += `${choix ? '' : `Ainsi, le nombre négatif dont le carré est $${a}$ est $-\\sqrt{${a}}=${miseEnEvidence(-3)}$.`}`
+          this.correction = `Par définition, le nombre positif dont le carré est $${a}$ est`
+          this.correction += `${choix ? `$\\sqrt{${a}}=${miseEnEvidence(3)}$.<br>` : ` $\\sqrt{${a}}$.<br>Ainsi, le nombre négatif dont le carré est $${a}$ est $-\\sqrt{${a}}=${miseEnEvidence(-3)}$.`}`
         }
         if (a !== 4 && a !== 9) {
-          this.correction = `Par définition, le nombre positif dont le carré est $${a}$ est $\\sqrt{${a}}$.<br>`
-          this.correction += `${choix ? '' : `Ainsi, le nombre négatif dont le carré est $${a}$ est $${miseEnEvidence('-')} ${miseEnEvidence(`\\sqrt{${a}}`)}$.`}`
+          this.correction = `Par définition, le nombre positif dont le carré est $${a}$ est `
+          this.correction += `${choix ? `$${miseEnEvidence(`\\sqrt{${a}}`)}$.<br>` : `$\\sqrt{${a}}$.<br>Ainsi, le nombre négatif dont le carré est $${a}$ est $${miseEnEvidence('-')} ${miseEnEvidence(`\\sqrt{${a}}`)}$.`}`
         }
         this.reponse = choix
           ? [`\\sqrt{${a}}`, `${Math.sqrt(a)}`]
@@ -68,16 +68,16 @@ export default class CalculAvecRacineDefphrase extends ExerciceSimple {
         }
 
         if (a === 4) {
-          this.correction = `Par définition, le nombre positif dont le carré est $${a}$ est $\\sqrt{${a}}=2$.<br>`
-          this.correction += `${choix ? '' : `Ainsi, le nombre négatif dont le carré est $${a}$ est $-\\sqrt{${a}}=${miseEnEvidence(-2)}$.`}`
+          this.correction = `Par définition, le nombre positif dont le carré est $${a}$ est `
+          this.correction += `${choix ? `$\\sqrt{${a}}=${miseEnEvidence(2)}$.` : `$\\sqrt{${a}}$.<br>Ainsi, le nombre négatif dont le carré est $${a}$ est $-\\sqrt{${a}}=${miseEnEvidence(-2)}$.`}`
         }
         if (a === 9) {
-          this.correction = `Par définition, le nombre positif dont le carré est $${a}$ est $\\sqrt{${a}}=3$.<br>`
-          this.correction += `${choix ? '' : `Ainsi, le nombre négatif dont le carré est $${a}$ est $-\\sqrt{${a}}=${miseEnEvidence(-3)}$.`}`
+          this.correction = `Par définition, le nombre positif dont le carré est $${a}$ est `
+          this.correction += `${choix ? `$\\sqrt{${a}}=${miseEnEvidence(3)}$.` : `$\\sqrt{${a}}$.<br>Ainsi, le nombre négatif dont le carré est $${a}$ est $-\\sqrt{${a}}=${miseEnEvidence(-3)}$.`}`
         }
         if (a !== 4 && a !== 9) {
-          this.correction = `Par définition, le nombre positif dont le carré est $${a}$ est $\\sqrt{${a}}$.<br>`
-          this.correction += `${choix ? '' : `Ainsi, le nombre négatif dont le carré est $${a}$ est $${miseEnEvidence('-')} ${miseEnEvidence(`\\sqrt{${a}}`)}$.`}`
+          this.correction = `Par définition, le nombre positif dont le carré est $${a}$ est `
+          this.correction += `${choix ? `$${miseEnEvidence(`\\sqrt{${a}}`)}$.` : `$\\sqrt{${a}}$.<br>Ainsi, le nombre négatif dont le carré est $${a}$ est $${miseEnEvidence('-')} ${miseEnEvidence(`\\sqrt{${a}}`)}$.`}`
         }
         this.reponse = choix
           ? [`\\sqrt{${a}}`, `${Math.sqrt(a)}`]
@@ -89,7 +89,7 @@ export default class CalculAvecRacineDefphrase extends ExerciceSimple {
         a = randint(1, 12)
         this.question = `Quel est le nombre dont la racine carrée vaut $${a}$ ?`
         this.correction = `Comme $\\sqrt{${a ** 2}}=${a}$, le nombre dont la racine carrée est $${a}$ est $${miseEnEvidence(`${a ** 2}`)}$.`
-        this.optionsDeComparaison = { texteSansCasse: true }
+       
         this.reponse = a * a
         break
     }
