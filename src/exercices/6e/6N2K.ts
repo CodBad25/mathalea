@@ -92,6 +92,7 @@ export default class QuestionsDivisionsEuclidiennes extends Exercice {
               operande1: dividende,
               operande2: diviseur,
               type: 'divisionE',
+              options: { solution: true, colore: 'blue' },
             }) +
             `$${miseEnEvidence(`${texNombre(dividende)}=(${diviseur}\\times${texNombre(quotient)})+ ${texNombre(reste)}`, 'blue')}$`
           texteCorr += `<br>Il se sera écoulé ${texteEnCouleurEtGras(String(quotient), 'blue')} semaines complètes et ${texteEnCouleurEtGras(String(reste), 'blue')} jours.`

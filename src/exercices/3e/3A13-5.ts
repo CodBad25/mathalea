@@ -1,3 +1,4 @@
+import { orangeMathalea } from 'apigeom/src/elements/defaultValues'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { setReponse } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -122,6 +123,7 @@ export default class DivisionEuclidienneEtAjout extends Exercice {
             operande1: dividende,
             operande2: diviseur,
             type: 'divisionE',
+            options: { solution: true, colore: orangeMathalea },
           }) +
           `$${texNombre(dividende)}=${diviseur}\\times${quotient}+${reste}$`
         texteCorr += '<br><br>' + numAlpha(1)

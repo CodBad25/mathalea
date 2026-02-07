@@ -1,3 +1,4 @@
+import { orangeMathalea } from 'apigeom/src/elements/defaultValues'
 import { createList } from '../../lib/format/lists'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 
@@ -91,22 +92,22 @@ export default class ExerciceProbleme003 extends Exercice {
       const nbFoisPlus = choice([2, 3, 4])
 
       const correction1 = `${this.correctionDetaillee ? `Comme il parcourt ${distanceBase} kilomètres en ${dureeBase} minutes, il parcourra $1$ kilomètre en ${distanceBase} fois moins de temps.<br>` : ''}
-    ${this.sup3 ? operation({ operande1: dureeBase, operande2: distanceBase, type: 'division' }) : ''}
+    ${this.sup3 ? operation({ operande1: dureeBase, operande2: distanceBase, type: 'division', options: { solution: true, colore: orangeMathalea } }) : ''}
       $${dureeBase}\\text{ min }\\div ${distanceBase} = ${texNombre(dureeKilometre, 0)}\\text{ min}$.<br>
       Ce ${sportif.nom} mettra ${dureeKilometre} minutes pour parcourir 1 kilomètre à la même vitesse.`
 
       const correction2 = `${this.correctionDetaillee ? `Comme il parcourt ${distanceBase} kilomètres en ${dureeBase} minutes, il parcourra ${nbFoisPlus} fois ${distanceBase} kilomètres en ${nbFoisPlus} fois ${dureeBase} minutes.<br>` : ''}
-     ${this.sup3 ? operation({ operande1: dureeKilometre * distanceBase, operande2: nbFoisPlus, type: 'multiplication' }) : ''}
+     ${this.sup3 ? operation({ operande1: dureeKilometre * distanceBase, operande2: nbFoisPlus, type: 'multiplication', options: { solution: true, colore: orangeMathalea } }) : ''}
       $${texNombre(dureeKilometre * distanceBase, 0)}\\times ${String(nbFoisPlus)}= ${texNombre(dureeBase * nbFoisPlus, 0)}$ minutes<br>
      Pour parcourir $${distanceBase * nbFoisPlus}\\text{ km}$ en continuant ${sportif.verbe} à la même vitesse, il mettra ${dureeBase * nbFoisPlus} minutes.`
 
       const correction3 = `${this.correctionDetaillee ? `Comme il parcourt ${distanceBase * nbFoisPlus} kilomètres en ${dureeBase * nbFoisPlus} minutes, il parcourra ${nbFoisPlus * distanceBase} $\\text{km}$ plus 1 $\\text{km}$ en ${nbFoisPlus * dureeBase} minutes plus ${dureeKilometre} minutes.<br>` : ''}
-     ${this.sup3 ? operation({ operande1: dureeBase * nbFoisPlus, operande2: dureeKilometre, type: 'addition' }) : ''}
+     ${this.sup3 ? operation({ operande1: dureeBase * nbFoisPlus, operande2: dureeKilometre, type: 'addition', options: { solution: true, colore: orangeMathalea } }) : ''}
       $${dureeBase * nbFoisPlus}+${dureeKilometre}=${dureeBase * nbFoisPlus + dureeKilometre}$ minutes<br>
      Pour parcourir $${distanceBase * nbFoisPlus + 1}\\text{ km}$ en continuant à ${sportif.verbe} à la même vitesse, il mettra ${dureeBase * nbFoisPlus + dureeKilometre} minutes.`
 
       const correction4 = `${this.correctionDetaillee ? `Comme il parcourt 1 kilomètre en ${dureeKilometre} minutes, il parcourra ${nbFoisPlus * distanceBase + 1} $\\text{km}$ en ${nbFoisPlus * distanceBase + 1} fois ${dureeKilometre} minutes.<br>` : ''}
-${this.sup3 ? operation({ operande1: distanceBase * nbFoisPlus + 1, operande2: dureeKilometre, type: 'multiplication' }) : ''}
+${this.sup3 ? operation({ operande1: distanceBase * nbFoisPlus + 1, operande2: dureeKilometre, type: 'multiplication', options: { solution: true, colore: orangeMathalea } }) : ''}
 $${nbFoisPlus * distanceBase + 1}\\times ${dureeKilometre} = ${dureeBase * nbFoisPlus + dureeKilometre}$ minutes<br>
 Pour parcourir $${distanceBase * nbFoisPlus + 1}\\text{ km}$ en continuant à ${sportif.verbe} à la même vitesse, il mettra ${dureeBase * nbFoisPlus + dureeKilometre} minutes.`
       const dureeAvances = new Hms({
@@ -120,11 +121,11 @@ Pour parcourir $${distanceBase * nbFoisPlus + 1}\\text{ km}$ en continuant à ${
         (dureeBase * nbFoisPlus + dureeKilometre) % 60 > 1 ? 's' : ''
       const correction5 = `Calculons d'abord son allure en minutes par kilomètre :<br>
     ${this.correctionDetaillee ? `Comme il parcourt ${distanceBase} kilomètres en ${dureeBase} minutes, il parcourt 1 kilomètre en ${dureeBase} minutes divisé par ${distanceBase}.<br>` : ''}
-     ${this.sup3 ? operation({ operande1: dureeBase, operande2: distanceBase, type: 'division' }) : ''}
+     ${this.sup3 ? operation({ operande1: dureeBase, operande2: distanceBase, type: 'division', options: { solution: true, colore: orangeMathalea } }) : ''}
     $${dureeBase}\\div ${distanceBase} = ${dureeKilometre}$ minutes par kilomètre.<br>
       Ensuite, la durée totale :<br>
       ${this.correctionDetaillee ? `Comme il parcourt 1 kilomètre en ${dureeKilometre} minutes, il parcourra ${nbFoisPlus * distanceBase + 1} $\\text{km}$ en ${nbFoisPlus * distanceBase + 1} fois ${dureeKilometre} minutes.<br>` : ''}
-${this.sup3 ? operation({ operande1: distanceBase * nbFoisPlus + 1, operande2: dureeKilometre, type: 'multiplication' }) : ''}
+${this.sup3 ? operation({ operande1: distanceBase * nbFoisPlus + 1, operande2: dureeKilometre, type: 'multiplication', options: { solution: true, colore: orangeMathalea } }) : ''}
       $${nbFoisPlus * distanceBase + 1}\\times ${dureeKilometre} = ${dureeBase * nbFoisPlus + dureeKilometre}$ minutes<br><br>
 Pour parcourir $${distanceBase * nbFoisPlus + 1}\\text{ km}$ en continuant à ${sportif.verbe} à la même vitesse, il mettra ${dureeBase * nbFoisPlus + dureeKilometre} minutes, soit ${dureeAvances.replace('h', `heure${plurielHeure}`).replace('min', `minute${plurielMinute}`)}.`
       if (this.sup === 1) {

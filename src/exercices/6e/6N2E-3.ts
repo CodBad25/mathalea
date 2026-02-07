@@ -1,3 +1,4 @@
+import { orangeMathalea } from 'apigeom/src/elements/defaultValues'
 import Decimal from 'decimal.js'
 import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
@@ -78,7 +79,7 @@ export default class ProduitEtSommeOuDifferenceDeDecimaux extends Exercice {
           operande2: B.toNumber(),
           type: 'multiplication',
           style: 'display: inline',
-          options: { solution: true, colore: '' },
+          options: { solution: true, colore: orangeMathalea },
         }) + '<br>'
       let indice = 0
       const afficherIndice = couples.length > 1
@@ -131,6 +132,7 @@ export default class ProduitEtSommeOuDifferenceDeDecimaux extends Exercice {
           type: addition ? 'addition' : 'soustraction',
           style: 'display: inline',
           methodeParCompensation: addition,
+          options: { solution: true, colore: orangeMathalea },
         })
         handleAnswers(this, 2 * (i * this.sup + indice), {
           reponse: {

@@ -1,3 +1,4 @@
+import { orangeMathalea } from 'apigeom/src/elements/defaultValues'
 import { context } from '../../modules/context'
 import operation from '../../modules/operations'
 import Exercice from '../Exercice'
@@ -67,6 +68,7 @@ export default class OperationsPosees extends Exercice {
           operande1: a,
           operande2: b,
           type: 'addition',
+          options: { solution: true, colore: orangeMathalea },
         })
         break
       case 2: // soustraction
@@ -74,6 +76,7 @@ export default class OperationsPosees extends Exercice {
           operande1: a,
           operande2: b,
           type: 'soustraction',
+          options: { solution: true, colore: orangeMathalea },
         })
         break
       case 3: // multiplication
@@ -81,6 +84,7 @@ export default class OperationsPosees extends Exercice {
           operande1: a,
           operande2: b,
           type: 'multiplication',
+          options: { solution: true, colore: orangeMathalea },
         })
         break
       case 4: // division euclidienne
@@ -89,6 +93,7 @@ export default class OperationsPosees extends Exercice {
           operande2: b,
           type: 'divisionE',
           precision: 0,
+          options: { solution: true, colore: orangeMathalea },
         })
         break
       case 5: // division
@@ -98,6 +103,7 @@ export default class OperationsPosees extends Exercice {
           operande2: b,
           type: 'division',
           precision: this.sup3,
+          options: { solution: true, colore: orangeMathalea },
         })
         break
     }

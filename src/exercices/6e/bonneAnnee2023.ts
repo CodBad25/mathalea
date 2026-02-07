@@ -1,3 +1,4 @@
+import { orangeMathalea } from 'apigeom/src/elements/defaultValues'
 import { cercle } from '../../lib/2d/cercle'
 import { courbe } from '../../lib/2d/Courbe'
 import { droite } from '../../lib/2d/droites'
@@ -169,6 +170,7 @@ export default class Questions2023 extends Exercice {
             operande1: 2023,
             operande2: 7,
             type: 'divisionE',
+            options: { solution: true, colore: 'blue' },
           })
           texteCorr += `<br>Le reste de la division euclidienne de $${texNombre(2023)}$ par $7$ est $0$ donc $${texNombre(2023)}$ est bien ${texteEnCouleurEtGras('divisible')} par la somme de ses chiffres.<br>`
           break
@@ -255,6 +257,7 @@ export default class Questions2023 extends Exercice {
             operande1: 2023,
             operande2: 7,
             type: 'divisionE',
+            options: { solution: true, colore: 'blue' },
           })
           texteCorr += `<br>Le reste de la division euclidienne de $${texNombre(2023)}$ par $7$ est $0$ donc $${texNombre(2023)}$ est bien ${texteEnCouleurEtGras('divisible')} par la somme de ses chiffres.<br>`
           break
@@ -487,6 +490,7 @@ export default class Questions2023 extends Exercice {
             operande1: 823543,
             operande2: 5040,
             type: 'divisionE',
+            options: { solution: true, colore: orangeMathalea },
           })
           texteCorr += `<br>Le reste de la division euclidienne de $\\text{7}^\\text{7}$ par $\\text{7!}$ est $${miseEnEvidence(texNombre(2023))}$.<br>`
           break

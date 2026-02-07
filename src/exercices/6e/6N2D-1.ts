@@ -1,3 +1,4 @@
+import { orangeMathalea } from 'apigeom/src/elements/defaultValues'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -168,7 +169,7 @@ export default class ProduitDeDecimauxAPartirProduitConnu extends Exercice {
             operande1: op1,
             operande2: op2,
             type: 'multiplication',
-            options: { solution: true, colore: '' },
+            options: { solution: true, colore: orangeMathalea },
           }),
         )
         texteCorr += `$${nb1}\\times ${nb2} = ${miseEnEvidence(texNombre(reponse[0]))}$.<br>`

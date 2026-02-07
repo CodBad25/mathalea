@@ -1,3 +1,4 @@
+import { orangeMathalea } from 'apigeom/src/elements/defaultValues'
 import Decimal from 'decimal.js'
 import { grille, seyes } from '../../lib/2d/Grille'
 import { vide2d } from '../../lib/2d/Vide2d'
@@ -125,6 +126,7 @@ export default class MultiplierDecimaux extends Exercice {
         operande2: b.toNumber(),
         type: 'multiplication',
         style: 'display: inline',
+        options: { solution: true, colore: orangeMathalea },
       })
       texteCorr += context.isHtml ? '' : '\\hspace*{30mm}'
       texteCorr += operation({
@@ -132,6 +134,7 @@ export default class MultiplierDecimaux extends Exercice {
         operande2: a.toNumber(),
         type: 'multiplication',
         style: 'display: inline',
+        options: { solution: true, colore: orangeMathalea },
       })
       texte += ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers, {
         texteAvant: '$~=$',

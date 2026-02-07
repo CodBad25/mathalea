@@ -1,3 +1,4 @@
+import { orangeMathalea } from 'apigeom/src/elements/defaultValues'
 import { base10VersBaseN } from '../../lib/mathFonctions/baseConversions'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import { context } from '../../modules/context'
@@ -85,7 +86,13 @@ export default class AdditionSoustractionBaseN extends Exercice {
         texte = `$(${mb})_{${base}} + (${nb})_{${base}}$`
         texteCorr =
           `En base ${base} :<br>` +
-          operation({ operande1: m, operande2: n, type: 'addition', base })
+          operation({
+            operande1: m,
+            operande2: n,
+            type: 'addition',
+            base,
+            options: { solution: true, colore: orangeMathalea },
+          })
         const retenue = []
         for (let rang = 0; rang < Math.max(mb.length, nb.length); rang++) {
           const somme: number =
@@ -118,7 +125,13 @@ export default class AdditionSoustractionBaseN extends Exercice {
         texte = `$(${mb})_{${base}} - (${nb})_{${base}}$`
         texteCorr =
           `En base ${base} :<br>` +
-          operation({ operande1: m, operande2: n, type: 'soustraction', base })
+          operation({
+            operande1: m,
+            operande2: n,
+            type: 'soustraction',
+            base,
+            options: { solution: true, colore: orangeMathalea },
+          })
         const retenue = []
         for (let rang = 0; rang < Math.max(mb.length, nb.length); rang++) {
           let difference =

@@ -1,3 +1,4 @@
+import { orangeMathalea } from 'apigeom/src/elements/defaultValues'
 import { createList } from '../../lib/format/lists'
 import { ajouteQuestionMathlive } from '../../lib/interactif/questionMathLive'
 import SchemaEnBoite from '../../lib/outils/SchemaEnBoite'
@@ -306,12 +307,12 @@ Le contenu de son panier pèse $${texNombre(masseTotale, 3, true)}$ kg.`
         listeCorrections = [
           `${this.correctionDetaillee ? `Pour exprimer la masse totale du panier en grammes, on multiplie la masse totale en kg par $${texNombre(1000, 0)}$.<br>` : ''}
           $${texNombre(masseTotale, 3, true)}\\times ${texNombre(1000, 0)} = ${texNombre(masseTotale * 1000, 0)}$ g<br>
-          ${this.sup3 ? operation({ operande1: masseTotale, operande2: 1000, type: 'multiplication', precision: 0 }) : ''}
+          ${this.sup3 ? operation({ operande1: masseTotale, operande2: 1000, type: 'multiplication', precision: 0, options: { solution: true, colore: orangeMathalea } }) : ''}
              ${this.sup3 ? '<br><br>' : ''}
     La masse totale de fruits dans le panier est de $${miseEnEvidence(texNombre(masseTotale * 1000, 0))}$ g.`,
           `${this.correctionDetaillee ? `Pour exprimer la masse des ${fruit2.nomPluriel} en grammes, on multiplie la masse en kg par $${texNombre(1000, 0)}$.<br>` : ''}
           $${texNombre(masseFruit2 / 1000, 3, true)}\\times ${texNombre(1000, 0)}=${texNombre(masseFruit2, 0)}\\text{ g}$<br>
-          ${this.sup3 ? operation({ operande1: masseFruit2 / 1000, operande2: 1000, type: 'multiplication', precision: 0 }) : ''}
+          ${this.sup3 ? operation({ operande1: masseFruit2 / 1000, operande2: 1000, type: 'multiplication', precision: 0, options: { solution: true, colore: orangeMathalea } }) : ''}
              ${this.sup3 ? '<br><br>' : ''}
     La masse des ${fruit2.nomPluriel} est de $${miseEnEvidence(texNombre(masseFruit2, 0))}$ g.`,
           `${this.correctionDetaillee ? `Pour exprimer la masse totale ${fruit1.pluriel} et ${fruit2.pluriel} ${fruit1.nomSingulier.includes('une') && fruit2.nomSingulier.includes('une') ? 'achetées' : 'achetés'}, on additionne les masses.<br>` : ''}
@@ -359,7 +360,7 @@ Le contenu de son panier pèse $${texNombre(masseTotale, 3, true)}$ kg.`
              : ''
          }
          $${texNombre(masseFruit1, 0)}$ g + $${texNombre(masseFruit2, 0)}$ g = $${texNombre(masseFruit1 + masseFruit2, 0)}$ g<br>
-          ${this.sup3 ? operation({ operande1: masseFruit1, operande2: masseFruit2, type: 'addition', precision: 0 }) : ''}
+          ${this.sup3 ? operation({ operande1: masseFruit1, operande2: masseFruit2, type: 'addition', precision: 0, options: { solution: true, colore: orangeMathalea } }) : ''}
              ${this.sup3 ? '<br><br>' : ''}
     La masse totale ${fruit1.pluriel} et ${fruit2.pluriel} ${fruit1.nomSingulier.includes('une') && fruit2.nomSingulier.includes('une') ? 'achetées' : 'achetés'} est de $${miseEnEvidence(texNombre(masseFruit1 + masseFruit2, 0))}$ g.`,
           `${this.correctionDetaillee ? `Pour exprimer la masse des ${fruit3.nomPluriel} en grammes, on calcule la différence entre la masse du panier et la masse totale ${fruit1.pluriel} et ${fruit2.pluriel} calculée à la question précédente.<br>` : ''}
@@ -408,7 +409,7 @@ Le contenu de son panier pèse $${texNombre(masseTotale, 3, true)}$ kg.`
          }
 
           $${texNombre(masseTotale * 1000, 0)}-${texNombre(masseFruit1 + masseFruit2, 0)}= ${texNombre(masseFruit3, 0)}$ g<br>
-          ${this.sup3 ? operation({ operande1: masseTotale * 1000, operande2: masseFruit1 + masseFruit2, type: 'soustraction', precision: 0 }) : ''}
+          ${this.sup3 ? operation({ operande1: masseTotale * 1000, operande2: masseFruit1 + masseFruit2, type: 'soustraction', precision: 0, options: { solution: true, colore: orangeMathalea } }) : ''}
              ${this.sup3 ? '<br><br>' : ''}
     ${prenom} a acheté $${miseEnEvidence(texNombre(masseFruit3, 0))}$ g ${fruit3.pluriel}.`,
         ]
@@ -444,18 +445,18 @@ Le contenu de son panier pèse $${texNombre(masseTotale, 3, true)}$ kg.`
         listeCorrections = [
           `${this.correctionDetaillee ? `Pour exprimer la masse totale du panier en grammes, on multiplie la masse totale par $${texNombre(1000, 0)}$.<br>` : ''}
           $${texNombre(masseTotale, 3)}\\times ${texNombre(1000, 0)}$ kg = $${texNombre(masseTotale * 1000, 0)}$ g<br>
-          ${this.sup3 ? operation({ operande1: masseTotale, operande2: 1000, type: 'multiplication', precision: 0 }) : ''}
+          ${this.sup3 ? operation({ operande1: masseTotale, operande2: 1000, type: 'multiplication', precision: 0, options: { solution: true, colore: orangeMathalea } }) : ''}
          ${this.sup3 ? '<br><br>' : ''}
      La masse totale de fruits dans le panier est de $${miseEnEvidence(texNombre(masseTotale * 1000, 0))}$ g.`,
           `${this.correctionDetaillee ? `Pour exprimer la masse des ${fruit2.nomPluriel} en grammes, on multiplie la masse par $${texNombre(1000, 0)}$.<br>` : ''}
           $${texNombre(masseFruit2 / 1000, 3, true)}\\text{ kg }\\times ${texNombre(1000, 0)}=${texNombre(masseFruit2, 0)}\\text{ g}$<br>
-        ${this.sup3 ? operation({ operande1: masseFruit2 / 1000, operande2: 1000, type: 'multiplication', precision: 0 }) : ''}
+        ${this.sup3 ? operation({ operande1: masseFruit2 / 1000, operande2: 1000, type: 'multiplication', precision: 0, options: { solution: true, colore: orangeMathalea } }) : ''}
              ${this.sup3 ? '<br><br>' : ''}
      La masse des ${fruit2.nomPluriel} est de $${miseEnEvidence(texNombre(masseFruit2, 0))}$ g.`,
           `${this.correctionDetaillee ? `Pour exprimer la masse des ${fruit3.nomPluriel} en grammes, on calcule la différence entre la masse du panier et la somme des masses de ${fruit1.nomPluriel} et de ${fruit2.nomPluriel}.<br>` : ''}
           $${texNombre(masseTotale * 1000, 0)}-(${texNombre(masseFruit1, 0)} + ${texNombre(masseFruit2, 0)})=${texNombre(masseTotale * 1000, 0)}-${texNombre(masseFruit1 + masseFruit2, 0)}= ${texNombre(masseFruit3, 0)}$ g<br>
-            ${this.sup3 ? operation({ operande1: masseFruit1, operande2: masseFruit2, type: 'addition', precision: 0, style: 'display: inline-block' }) : ''}
-          ${this.sup3 ? operation({ operande1: masseTotale * 1000, operande2: masseFruit1 + masseFruit2, type: 'soustraction', precision: 0, style: 'display: inline-block' }) : ''}
+            ${this.sup3 ? operation({ operande1: masseFruit1, operande2: masseFruit2, type: 'addition', precision: 0, style: 'display: inline-block', options: { solution: true, colore: orangeMathalea } }) : ''}
+          ${this.sup3 ? operation({ operande1: masseTotale * 1000, operande2: masseFruit1 + masseFruit2, type: 'soustraction', precision: 0, style: 'display: inline-block', options: { solution: true, colore: orangeMathalea } }) : ''}
            ${this.sup3 ? '<br><br>' : ''}
    ${prenom} a acheté $${miseEnEvidence(texNombre(masseFruit3, 0))}$ g ${fruit3.pluriel}.`,
         ]
@@ -472,9 +473,9 @@ Le contenu de son panier pèse $${texNombre(masseTotale, 3, true)}$ kg.`
         ]
         listeCorrections = [
           `${this.correctionDetaillee ? `Pour exprimer la masse des ${fruit3.nomPluriel} en grammes, on retire la masse totale ${fruit1.pluriel} et ${fruit2.pluriel} ${fruit1.nomSingulier.includes('une') && fruit2.nomSingulier.includes('une') ? 'achetées' : 'achetés'} de la masse du panier après conversion de toutes les donnnées en grammes.<br>` : ''}
-            ${this.sup3 ? operation({ operande1: masseTotale, operande2: 1000, type: 'multiplication', precision: 0, style: 'display: inline-block' }) : ''}
-         ${this.sup3 ? operation({ operande1: masseFruit2 / 1000, operande2: 1000, type: 'multiplication', precision: 0, style: 'display: inline-block' }) : ''}
-          ${this.sup3 ? operation({ operande1: masseTotale * 1000, operande2: masseFruit1 + masseFruit2, type: 'soustraction', precision: 0, style: 'display: inline-block' }) : ''}
+            ${this.sup3 ? operation({ operande1: masseTotale, operande2: 1000, type: 'multiplication', precision: 0, style: 'display: inline-block', options: { solution: true, colore: orangeMathalea } }) : ''}
+         ${this.sup3 ? operation({ operande1: masseFruit2 / 1000, operande2: 1000, type: 'multiplication', precision: 0, style: 'display: inline-block', options: { solution: true, colore: orangeMathalea } }) : ''}
+          ${this.sup3 ? operation({ operande1: masseTotale * 1000, operande2: masseFruit1 + masseFruit2, type: 'soustraction', precision: 0, style: 'display: inline-block', options: { solution: true, colore: orangeMathalea } }) : ''}
           ${this.sup3 ? '<br><br>' : ''}
      - Masse du panier en grammes : $${texNombre(masseTotale, 3, true)}\\times ${texNombre(1000, 0)}\\text{ g }=${texNombre(masseTotale * 1000, 0)}$ g.<br>
           - Masse totale ${fruit1.pluriel} et ${fruit2.pluriel} ${fruit1.nomSingulier.includes('une') && fruit2.nomSingulier.includes('une') ? 'achetées' : 'achetés'} : $${texNombre(masseFruit1, 0)}\\text{ g }+${texNombre(masseFruit2, 0)}\\text{ g }=${texNombre(masseFruit1 + masseFruit2, 0)}$ g.<br>

@@ -1,3 +1,4 @@
+import { orangeMathalea } from 'apigeom/src/elements/defaultValues'
 import {
   base10VersBaseN,
   baseNVersBase10,
@@ -77,6 +78,7 @@ export default class MultiplicationsBaseN extends Exercice {
           operande2: n,
           type: 'multiplication',
           base,
+          options: { solution: true, colore: orangeMathalea },
         }) +
         '<br>'
       for (let ligne = nb.length - 1; ligne > -1; ligne--) {
