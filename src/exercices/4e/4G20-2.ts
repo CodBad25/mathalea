@@ -1,4 +1,7 @@
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import {
+  handleAnswers,
+  setReponse,
+} from '../../lib/interactif/gestionInteractif'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import { context } from '../../modules/context'
 import { listeQuestionsToContenu } from '../../modules/outils'
@@ -171,20 +174,23 @@ export default class RacineCareeDeCarresParfaits extends Exercice {
       }
 
       texteCorr = `$\\sqrt{${c}}${this.sup3 ? '\\text{ cm}' : ''}=${miseEnEvidence(a.toString())}${this.sup3 ? '\\text{ cm}' : ''}$`
-      if (this.sup3) {
-        handleAnswers(
-          this,
-          i,
-          {
-            field0: { value: a, options: { noFeedback: true } },
-          },
-          { formatInteractif: 'MetaInteractif2d' },
-        )
-      } else {
-        handleAnswers(this, i, { reponse: { value: a.toString() } })
+      if (!context.isAmc) {
+        if (this.sup3) {
+          handleAnswers(
+            this,
+            i,
+            {
+              field0: { value: a, options: { noFeedback: true } },
+            },
+            { formatInteractif: 'MetaInteractif2d' },
+          )
+        } else {
+          handleAnswers(this, i, { reponse: { value: a.toString() } })
+        }
       }
       if (this.questionJamaisPosee(i, a)) {
         if (context.isAmc) {
+          setReponse(this, i, a)
           if (listeQuestions[i] === 1) {
             this.autoCorrection[i].enonce = `$\\sqrt{${c}}=\\dots$`
             this.autoCorrection[i].propositions = [
