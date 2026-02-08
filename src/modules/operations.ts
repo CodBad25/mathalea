@@ -2,7 +2,7 @@ import Decimal from 'decimal.js'
 import { fixeBordures } from '../lib/2d/fixeBordures'
 import { segment } from '../lib/2d/segmentsVecteurs'
 import { latex2d } from '../lib/2d/textes'
-import { bleuMathalea } from '../lib/colors'
+import { bleuMathalea, orangeMathalea } from '../lib/colors'
 import { base10VersBaseN } from '../lib/mathFonctions/baseConversions'
 import {
   nombreDeChiffresDansLaPartieEntiere,
@@ -1210,7 +1210,7 @@ export default function operation({
 
   let colore = ''
   if (options.colore != null) colore = options.colore
-  const solution = options.solution ? 'Solution' : ''
+  // const solution = options.solution ? 'Solution' : ''
   if (context.isHtml) {
     switch (type) {
       case 'soustraction':
@@ -1276,41 +1276,31 @@ export default function operation({
             colore,
           )
         } else {
-          Code = options.colore
-            ? `Addition${colore}[${solution}]{${operande1}}{${operande2}}`
-            : options.solution
-              ? `\\opsub[lineheight=\\baselineskip,columnwidth=3ex,carrysub,lastcarry,decimalsepsymbol={,},voperator=bottom,voperation=top]{${operande1}}{${operande2}}`
-              : `\\opsub[lineheight=\\baselineskip,columnwidth=3ex,displayshiftintermediary=none,resultstyle=\\white,intermediarystyle=\\white,remainderstyle=\\white,decimalsepsymbol={,},voperator=bottom,voperation=top]{${operande1}}{${operande2}}`
-        } // { Code = `\\opsub[carrysub,lastcarry,decimalsepsymbol={,},voperator=bottom,voperation=top]{${operande1}}{${operande2}}` }
+          Code = options.solution
+            ? `\\opsub[resultstyle={\\color[HTML]{${orangeMathalea.slice(1)}}},lineheight=\\baselineskip,columnwidth=3ex,carrysub,lastcarry,decimalsepsymbol={,},voperator=bottom,voperation=top]{${operande1}}{${operande2}}`
+            : `\\opsub[lineheight=\\baselineskip,columnwidth=3ex,displayshiftintermediary=none,resultstyle=\\white,intermediarystyle=\\white,remainderstyle=\\white,decimalsepsymbol={,},voperator=bottom,voperation=top]{${operande1}}{${operande2}}`
+        }
         break
       case 'multiplication':
-        Code = options.colore
-          ? `\\Multiplication${colore}[${solution}]{${operande1}}{${operande2}}`
-          : options.solution
-            ? `\\opmul[lineheight=\\baselineskip,columnwidth=2ex,displayshiftintermediary=all,decimalsepsymbol={,},voperator=bottom,voperation=top]{${operande1}}{${operande2}}`
-            : `\\opmul[lineheight=\\baselineskip,columnwidth=2ex,displayshiftintermediary=none,resultstyle=\\white,intermediarystyle=\\white,remainderstyle=\\white,decimalsepsymbol={,},voperator=bottom,voperation=top]{${operande1}}{${operande2}}`
+        Code = options.solution
+          ? `\\opmul[resultstyle={\\color[HTML]{${orangeMathalea.slice(1)}}},lineheight=\\baselineskip,columnwidth=2ex,displayshiftintermediary=all,decimalsepsymbol={,},voperator=bottom,voperation=top]{${operande1}}{${operande2}}`
+          : `\\opmul[lineheight=\\baselineskip,columnwidth=2ex,displayshiftintermediary=none,resultstyle=\\white,intermediarystyle=\\white,remainderstyle=\\white,decimalsepsymbol={,},voperator=bottom,voperation=top]{${operande1}}{${operande2}}`
         break
       case 'division':
-        Code = options.colore
-          ? `\\Division${colore}[${solution}]{${operande1}}{${operande2}}`
-          : options.solution
-            ? `\\opdiv[lineheight=\\baselineskip,columnwidth=2ex,displayintermediary=all,voperation=top,period,decimalsepsymbol={,},shiftdecimalsep=none]{${operande1}}{${operande2}}`
-            : `\\opdiv[lineheight=\\baselineskip,columnwidth=2ex,displayshiftintermediary=none,resultstyle=\\white,intermediarystyle=\\white,remainderstyle=\\white,voperation=top,period,decimalsepsymbol={,},shiftdecimalsep=none]{${operande1}}{${operande2}}`
+        Code = options.solution
+          ? `\\opdiv[resultstyle={\\color[HTML]{${orangeMathalea.slice(1)}}},lineheight=\\baselineskip,columnwidth=2ex,displayintermediary=all,voperation=top,period,decimalsepsymbol={,},shiftdecimalsep=none]{${operande1}}{${operande2}}`
+          : `\\opdiv[lineheight=\\baselineskip,columnwidth=2ex,displayshiftintermediary=none,resultstyle=\\white,intermediarystyle=\\white,remainderstyle=\\white,voperation=top,period,decimalsepsymbol={,},shiftdecimalsep=none]{${operande1}}{${operande2}}`
         break
       case 'divisionE':
-        Code = options.colore
-          ? `\\Division${colore}{${operande1}}{${operande2}}`
-          : options.solution
-            ? `\\opidiv[lineheight=\\baselineskip,columnwidth=2ex,voperation=top]{${operande1}}{${operande2}}`
-            : `\\opidiv[lineheight=\\baselineskip,columnwidth=2ex,displayshiftintermediary=none,resultstyle=\\white,intermediarystyle=\\white,remainderstyle=\\white,voperation=top]{${operande1}}{${operande2}}`
+        Code = options.solution
+          ? `\\opidiv[resultstyle={\\color[HTML]{${orangeMathalea.slice(1)}}},lineheight=\\baselineskip,columnwidth=2ex,voperation=top]{${operande1}}{${operande2}}`
+          : `\\opidiv[lineheight=\\baselineskip,columnwidth=2ex,displayshiftintermediary=none,resultstyle=\\white,intermediarystyle=\\white,remainderstyle=\\white,voperation=top]{${operande1}}{${operande2}}`
         break
       case 'addition':
       default:
-        Code = options.colore
-          ? `\\Addition${colore}[${solution}]{${operande1}}{${operande2}}`
-          : options.solution
-            ? `\\opadd[lineheight=\\baselineskip,columnwidth=2ex,decimalsepsymbol={,},voperator=bottom,voperation=top]{${operande1}}{${operande2}}`
-            : `\\opadd[lineheight=\\baselineskip,columnwidth=2ex,displayshiftintermediary=none,resultstyle=\\white,intermediarystyle=\\white,remainderstyle=\\whitedecimalsepsymbol={,},voperator=bottom,voperation=top]{${operande1}}{${operande2}}`
+        Code = options.solution
+          ? `\\opadd[resultstyle={\\color[HTML]{${orangeMathalea.slice(1)}}},lineheight=\\baselineskip,columnwidth=2ex,decimalsepsymbol={,},voperator=bottom,voperation=top]{${operande1}}{${operande2}}`
+          : `\\opadd[lineheight=\\baselineskip,columnwidth=2ex,displayshiftintermediary=none,resultstyle=\\white,intermediarystyle=\\white,remainderstyle=\\whitedecimalsepsymbol={,},voperator=bottom,voperation=top]{${operande1}}{${operande2}}`
         break
     }
   }
