@@ -10,7 +10,7 @@ import {
 import Exercice from '../Exercice'
 
 export const titre = 'Saisir une formule simple sur tableur'
-export const dateDePublication = '30/01/2026'
+export const dateDePublication = '07/02/2026'
 
 export const interactifReady = true
 export const interactifType = 'custom'
@@ -18,13 +18,14 @@ export const interactifType = 'custom'
 /**
  * Programmer des calculs sur tableur : New programme de 6eme 2025
  *  @author Olivier Mimeau
- * revister le vocabulaire moitié double .... cf 5C12-7
+ * revisiter le vocabulaire moitié double .... cf 5C12-7
+ * tableur d'après exercice 6I1B-4
  */
 
 export const uuid = '46bae'
 
 export const refs = {
-  'fr-fr': [],
+  'fr-fr': ['6I1B-5'],
   'fr-ch': [],
 }
 
@@ -32,7 +33,6 @@ export const refs = {
 
 export default class ExerciceTableur extends Exercice {
   destroyers: (() => void)[] = []
-  listeSteps: Steps[] = []
 
   constructor() {
     super()
@@ -64,7 +64,7 @@ export default class ExerciceTableur extends Exercice {
   }
 
   destroy() {
-    // MGu quan l'exercice est supprimé par svelte : bouton supprimé
+    // MGu quand l'exercice est supprimé par svelte : bouton supprimé
     this.destroyers.forEach((destroy) => destroy())
     this.destroyers.length = 0
   }
@@ -109,10 +109,11 @@ export default class ExerciceTableur extends Exercice {
     q: number,
     userSheet: MySpreadsheetElement,
     corrections: MotsQR[],
+    nbLignes: number[],
   ): { isOk: boolean; messages: string } {
     // 1. Récupère les données de l'utilisateur
     const userData = userSheet.getData()
-    const nbSteps = corrections.length
+    const nbSteps = nbLignes[q]
     const testSheet = MySpreadsheetElement.create({
       data: userData,
       minDimensions: userSheet.getMinDimensions(),
@@ -137,63 +138,70 @@ export default class ExerciceTableur extends Exercice {
     correctionSheet.style.left = '-8999px'
     document.body.appendChild(correctionSheet)
     let cell = { col: 0, lig: 0 }
-    for (let i = 0; i < corrections.length; i++) {
-      cell = toRefCellule(corrections[i].ref)
+    for (let i = 0; i < nbSteps; i++) {
+      const index = i + q * nbSteps
+      cell = toRefCellule(corrections[index].ref)
       correctionSheet.setCellValue(
         cell.col,
         cell.lig,
-        corrections[i].txtFormule,
+        corrections[index].txtFormule,
       )
     }
 
     const messages: string[][] = []
-    for (let n = 0; n < nbSteps; n++) {
-      messages[n] = []
-      const a1 = randint(1, 10)
-      testSheet.setCellValue(1, 0, a1) // B1
-      correctionSheet.setCellValue(1, 0, a1)
-      const resultats: number[] = []
-      for (let i = 0; i < corrections.length; i++) {
-        cell = toRefCellule(corrections[i].ref)
-        resultats.push(parseFloat(testSheet.getCellValue(cell.col, cell.lig)))
-      }
-      // Recupere les données B1, C1, D1 ... pour les comparer aux résultats attendus
-      const correctionResultats: number[] = []
-      for (let i = 0; i < corrections.length; i++) {
-        cell = toRefCellule(corrections[i].ref)
-        correctionResultats.push(
-          parseFloat(correctionSheet.getCellValue(cell.col, cell.lig)),
+    // for (let n = 0; n < nbSteps; n++) {
+    messages[q] = []
+    const a1 = randint(1, 10)
+    testSheet.setCellValue(1, 0, a1) // B1
+    correctionSheet.setCellValue(1, 0, a1)
+    const resultats: number[] = []
+    for (let i = 0; i < nbSteps; i++) {
+      const index = i + q * nbSteps
+      cell = toRefCellule(corrections[index].ref)
+      resultats.push(parseFloat(testSheet.getCellValue(cell.col, cell.lig)))
+    }
+    // Recupere les données B1, C1, D1 ... pour les comparer aux résultats attendus
+    const correctionResultats: number[] = []
+    for (let i = 0; i < nbSteps; i++) {
+      const index = i + q * nbSteps
+      cell = toRefCellule(corrections[index].ref)
+      correctionResultats.push(
+        parseFloat(correctionSheet.getCellValue(cell.col, cell.lig)),
+      )
+    }
+
+    // analyse les réponses de l'utilisateur
+    for (let i = 0; i < nbSteps; i++) {
+      const index = i + q * nbSteps
+      if (typeof resultats[i] !== 'number' || isNaN(resultats[i])) {
+        messages[q].push(
+          `La cellule ${corrections[index].ref} ne contient pas un nombre valide.<br>`,
         )
       }
-
-      // analyse les réponses de l'utilisateur
-      for (let i = 0; i < corrections.length; i++) {
-        if (typeof resultats[i] !== 'number' || isNaN(resultats[i])) {
-          messages[n].push(
-            `La cellule ${corrections[i].ref} ne contient pas un nombre valide.<br>`,
-          )
-        }
-      }
-      for (let i = 0; i < corrections.length; i++) {
-        cell = toRefCellule(corrections[i].ref)
-        if (
-          typeof testSheet.getCellFormula(cell.col, cell.lig) !== 'string' ||
-          !testSheet.getCellFormula(cell.col, cell.lig).startsWith('=')
-        ) {
-          messages[n].push(
-            `La cellule ${corrections[i].ref} ne contient pas une formule valide.<br>`,
-          )
-        }
-      }
-      // compare les résultats de l'utilisateur avec les réponses attendues
-      for (let i = 0; i < corrections.length; i++) {
-        if (Math.abs(correctionResultats[i] - resultats[i]) > 1e-6) {
-          messages[n].push(
-            `Pour un nombre de départ égal à ${a1}, la cellule ${corrections[i].ref} devrait contenir $${correctionResultats[i]}$ mais elle contient $${resultats[i]}$.<br>`,
-          )
-        }
+    }
+    for (let i = 0; i < nbSteps; i++) {
+      const index = i + q * nbSteps
+      cell = toRefCellule(corrections[index].ref)
+      if (
+        typeof testSheet.getCellFormula(cell.col, cell.lig) !== 'string' ||
+        !testSheet.getCellFormula(cell.col, cell.lig).startsWith('=')
+      ) {
+        messages[q].push(
+          `La cellule ${corrections[index].ref} ne contient pas une formule valide.<br>`,
+        )
       }
     }
+    // compare les résultats de l'utilisateur avec les réponses attendues
+    for (let i = 0; i < nbSteps; i++) {
+      const index = i + q * nbSteps
+      if (Math.abs(correctionResultats[i] - resultats[i]) > 1e-6) {
+        messages[q].push(
+          `Pour un nombre de départ égal à ${a1}, la cellule ${corrections[index].ref} devrait contenir ${correctionResultats[i]} mais elle contient ${resultats[i]}.<br>`,
+        )
+      }
+    }
+    // }
+
     const maxMessages = messages.reduce(
       (max, arr) => (arr.length > max.length ? arr : max),
       [],
@@ -229,6 +237,7 @@ export default class ExerciceTableur extends Exercice {
         Number(q),
         sheetElt,
         corrections,
+        listeNbLignes,
       )
       const messagesDiv = sheetElt.querySelector(
         '#message-faux',
@@ -245,7 +254,8 @@ export default class ExerciceTableur extends Exercice {
     this.destroyers.forEach((destroy) => destroy())
     this.destroyers.length = 0
     listeMotsQR = []
-    const nbLignes = this.sup2
+    listeNbLignes = []
+    nbLignes = this.sup2
     const nbElements = this.nbQuestions * this.sup2
     /*     const nbOperations =
       this.sup === 1 ? randint(2, 5) : Math.min(Math.max(2, this.sup), 5)
@@ -375,216 +385,199 @@ export default class ExerciceTableur extends Exercice {
       },
     ]
     // const colorsArr = Object.entries(ExerciceTableur.colors)
+    for (let q = 0, cpt = 0; q < this.nbQuestions && cpt < 50; cpt++) {
+      // const q = 0
+      let texte = ''
+      let texteCorr = ''
+      listeNbLignes.push(nbLignes)
+      const nbColTableur = 2
+      const nbDepart = randint(15, 40)
+      const cellDatas: any[][] = [[]]
 
-    const q = 0
-    let texte = ''
-    let texteCorr = ''
-    const nbColTableur = 2
-    const nbDepart = randint(15, 40)
-    // const operStr = transformationsOper(steps)
-    /*     const cellDatas: any = {
-      0: {
-        0: { v: 'Nombre de départ', s: '', t: 2 },
-      },
-      1: {
-        0: { v: 'x' + steps[0].oldn, s: 'style_id_orange', t: 2 },
-      },
-    } */
-    const cellDatas: any[][] = [[]]
-
-    cellDatas[0][0] = {
-      v: 'Nombre de départ',
-      s: '', // 'style_id_orange',
-      t: 2,
-    }
-    cellDatas[0][1] = {
-      v: `${nbDepart}`,
-      s: '', // 'style_id_orange',
-      t: 2,
-    }
-    let enonce: string = ''
-    let formule: string = ''
-
-    for (let i = 0; i < nbLignes; i++) {
-      const lOperation = Number(listeTypeQuestions[i])
-      enonce = listeMots[lOperation - 1].txtEnonce
-      formule = listeMots[lOperation - 1].txtFormule
-      const nb2 = randint(15, 40, [nbDepart])
-      switch (lOperation) {
-        case 10: // somme
-          enonce = enonce
-            .replace('de number1', 'du nombre de départ')
-            .replace('number2', `${nb2}`)
-          formule = formule.replace('B2', `${nb2}`)
-          break
-        case 11: // différence
-          if (nb2 < nbDepart) {
-            enonce = enonce.replace(
-              'entre number1 et number2',
-              `entre ${nbDepart} et ${nb2}`,
-            )
-            formule = formule.replace('B2', `${nb2}`)
-          } else {
-            enonce = enonce.replace(
-              'entre number1 et number2',
-              `entre ${nb2} et ${nbDepart}`,
-            )
-            formule = formule.replace('B1-B2', `${nb2}-B1`)
-          }
-          break
-        case 12: // produit
-          enonce = enonce
-            .replace('de number1', 'du nombre de départ')
-            .replace('number2', `${nb2}`)
-          formule = formule.replace('B2', `${nb2}`)
-          break
-        case 13: // quotient
-          if (nb2 < nbDepart) {
-            enonce = enonce.replace(
-              'de number1 par number2',
-              `de ${nbDepart} par ${nb2}`,
-            )
-            formule = formule.replace('B2', `${nb2}`)
-          } else {
-            enonce = enonce.replace(
-              'de number1 par number2',
-              `de ${nb2} par ${nbDepart}`,
-            )
-            formule = formule.replace('B1/B2', `${nb2}/B1`)
-          }
-          break
-      }
-      listeMotsQR.push({
-        ref: `B${i + 2}`,
-        txtQuestion: enonce,
-        txtFormule: formule,
-      })
-    }
-
-    for (let i = 0; i < listeMotsQR.length; i++) {
-      cellDatas.push([]) // creer une ligne par question
-      cellDatas[i + 1][0] = {
-        v: `${listeMotsQR[i].txtQuestion}`,
-        s: 'text-align: left',
+      cellDatas[0][0] = {
+        v: 'Nombre de départ',
+        s: '', // 'style_id_orange',
         t: 2,
       }
-    }
-
-    // data et style pour le tableur interactif
-    const data: (number | string)[][] = [[]]
-    data[0][0] = cellDatas[0][0].v
-    data[0][1] = cellDatas[0][1].v
-    /*     for (let i = 0; i < steps.length; i++) {
-      data[0][i + 1] = cellDatas[0][i + 1].v
-    } */
-    for (let i = 0; i < listeMotsQR.length; i++) {
-      data.push([]) // creer une ligne par question
-      data[i + 1][0] = cellDatas[i + 1][0].v
-    }
-    data.push([]) // ligne vide en plus
-    const style: Record<string, string> = {}
-    for (let i = 0; i < listeMotsQR.length + 2; i++) {
-      const key = `A${i}`
-      style[key] = 'text-align: left' // 'background: #eca2a2'
-    }
-
-    // sert pour le diagramme, mais pas pour le tableur interactif, à voir si on garde ou pas
-    /* const rect: Record<string, { bg?: string; v?: string }> = {
-      0: { v: steps[0].oldn.toString(), bg: colorsArr[0][1] },
-    }
-    for (let i = 0, k = 1; i < steps.length; i++, k += 2) {
-      rect[`${k}`] = { v: operStr[i] }
-      rect[`${k + 1}`] = { bg: colorsArr[(i + 1) % colorsArr.length][1] }
-    } */
-
-    // texte += 'On a créé le programme de calculs suivant :<br>'
-    //     texte += createDigramm(Object.keys(rect).length, rect) + '<br>'
-    const mot =
-      listeMotsQR[0].txtQuestion.charAt(0).toLowerCase() +
-      listeMotsQR[0].txtQuestion.slice(1)
-    texte += `On choisit un nombre de départ, ici ${nbDepart} <br>
-      Par exemple, la cellule B2 doit contenir la formule pour calculer ${mot}.<br>`
-    texte +=
-      listeMotsQR.length === 1
-        ? ''
-        : 'Faire de même pour les autres cellules.<br>'
-    texte += 'Attention, '
-    texte +=
-      listeMotsQR.length === 1 ? 'la formule doit' : 'les formules doivent'
-    texte += ' fonctionner même si le nombre de départ change (Cellule B1).<br>'
-    /*     const style = buildStyleFromColos(
-      [], // Object.values(ExerciceTableur.colors),
-      steps.length,
-    ) */
-
-    if (context.isHtml) {
-      texte += addSheet({
-        numeroExercice: this.numeroExercice ?? 0,
-        question: q,
-        data,
-        minDimensions: [nbColTableur, 2], // listeMotsQR.length + 1],
-        style,
-        columns: [{ width: 180 }, { width: 90 }, { width: 90 }, { width: 90 }],
-        interactif: this.interactif,
-        showVerifyButton: true,
-      })
-    } else {
-      const options: {
-        formule?: boolean
-        formuleTexte?: string
-        formuleCellule?: string
-        firstColHeaderWidth?: string
-      } = {}
-      options.formule = true
-      options.formuleTexte = '=?'
-      options.formuleCellule = 'B1'
-
-      texte += createTableurLatex(
-        listeMotsQR.length + 1,
-        4,
-        cellDatas,
-        ExerciceTableur.styles,
-        options,
-      )
-    }
-
-    texteCorr = 'Voici les formules à saisir dans le tableur :<br>'
-    for (let i = 0; i < listeMotsQR.length; i++) {
-      const lOperation = Number(listeTypeQuestions[i])
-      texteCorr += `Pour calculer ${listeMots[lOperation - 1].txtCorrection}${nbDepart}, la formule  à saisir dans la cellule ${listeMotsQR[i].ref} est : ${listeMotsQR[i].txtFormule}.<br>`
-    }
-
-    const listener = () => {
-      const sheets = Array.from(
-        document.querySelectorAll('my-spreadsheet'),
-      ) as MySpreadsheetElement[]
-      for (const sheet of sheets) {
-        const q = sheet.id.match(/Q(\d+)$/)?.[1]
-
-        const eventName =
-          q !== undefined && this.numeroExercice !== undefined
-            ? `checkEx${this.numeroExercice}Q${q}`
-            : undefined
-        if (sheet && eventName) {
-          const listener = (event: Event) => {
-            this.checkSolution(event as CustomEvent, listeMotsQR)
-          }
-          sheet.addListener(eventName, listener)
-        } else {
-          console.error(
-            `SheetElement not found or eventName invalid for question ${q} in exercice ${this.numeroExercice}`,
-          )
+      cellDatas[0][1] = {
+        v: `${nbDepart}`,
+        s: '', // 'style_id_orange',
+        t: 2,
+      }
+      let enonce: string = ''
+      let formule: string = ''
+      for (let i = q * nbLignes; i < (q + 1) * nbLignes; i++) {
+        const lOperation = Number(listeTypeQuestions[i])
+        enonce = listeMots[lOperation - 1].txtEnonce
+        formule = listeMots[lOperation - 1].txtFormule
+        const nb2 = randint(15, 40, [nbDepart])
+        switch (lOperation) {
+          case 10: // somme
+            enonce = enonce
+              .replace('de number1', 'du nombre de départ')
+              .replace('number2', `de ${nb2}`)
+            formule = formule.replace('B2', `${nb2}`)
+            break
+          case 11: // différence
+            if (nb2 < nbDepart) {
+              enonce = enonce.replace(
+                'entre number1 et number2',
+                `entre le nombre de départ et ${nb2}`,
+              )
+              formule = formule.replace('B2', `${nb2}`)
+            } else {
+              enonce = enonce.replace(
+                'entre number1 et number2',
+                `entre ${nb2} et le nombre de départ`,
+              )
+              formule = formule.replace('B1-B2', `${nb2}-B1`)
+            }
+            break
+          case 12: // produit
+            enonce = enonce
+              .replace('de number1', 'du nombre de départ')
+              .replace('number2', `${nb2}`)
+            formule = formule.replace('B2', `${nb2}`)
+            break
+          case 13: // quotient
+            if (nb2 < nbDepart) {
+              enonce = enonce.replace(
+                'de number1 par number2',
+                `du nombre de départ par ${nb2}`,
+              )
+              formule = formule.replace('B2', `${nb2}`)
+            } else {
+              enonce = enonce.replace(
+                'de number1 par number2',
+                `de ${nb2} par le nombre de départ`,
+              )
+              formule = formule.replace('B1/B2', `${nb2}/B1`)
+            }
+            break
+        }
+        listeMotsQR.push({
+          ref: `B${i - q * nbLignes + 2}`,
+          txtQuestion: enonce,
+          txtFormule: formule,
+        })
+      }
+      for (let i = q * nbLignes; i < (q + 1) * nbLignes; i++) {
+        cellDatas.push([]) // creer une ligne par question
+        cellDatas[i - q * nbLignes + 1][0] = {
+          v: `${listeMotsQR[i].txtQuestion}`,
+          s: 'text-align: left',
+          t: 2,
         }
       }
-      document.removeEventListener('exercicesAffiches', listener)
+
+      // data et style pour le tableur interactif
+      const data: (number | string)[][] = [[]]
+      data[0][0] = cellDatas[0][0].v
+      data[0][1] = cellDatas[0][1].v
+      /*     for (let i = 0; i < steps.length; i++) {
+      data[0][i + 1] = cellDatas[0][i + 1].v
+    } */
+      for (let i = 0; i < nbLignes; i++) {
+        data.push([]) // creer une ligne par question
+        data[i + 1][0] = cellDatas[i + 1][0].v
+      }
+
+      data.push([]) // ligne vide en plus
+      const style: Record<string, string> = {}
+      for (let i = 0; i < nbLignes + 2; i++) {
+        const key = `A${i}`
+        style[key] = 'text-align: left' // 'background: #eca2a2'
+      }
+
+      const mot =
+        listeMotsQR[q * nbLignes].txtQuestion.charAt(0).toLowerCase() +
+        listeMotsQR[q * nbLignes].txtQuestion.slice(1)
+      texte += `On choisit un nombre de départ, ici ${nbDepart} <br>
+      Par exemple, la cellule B2 doit contenir la formule pour calculer ${mot}.<br>`
+      texte +=
+        nbLignes === 1 ? '' : 'Faire de même pour les autres cellules.<br>'
+      texte += 'Attention, '
+      texte += nbLignes === 1 ? 'la formule doit' : 'les formules doivent'
+      texte +=
+        ' fonctionner même si le nombre de départ change (Cellule B1).<br>'
+
+      if (context.isHtml) {
+        texte += addSheet({
+          numeroExercice: this.numeroExercice ?? 0,
+          question: q,
+          data,
+          minDimensions: [nbColTableur, 2], // listeMotsQR.length + 1],
+          style,
+          columns: [
+            { width: 180 },
+            { width: 90 },
+            { width: 90 },
+            { width: 90 },
+          ],
+          interactif: this.interactif,
+          showVerifyButton: true,
+        })
+      } else {
+        const options: {
+          formule?: boolean
+          formuleTexte?: string
+          formuleCellule?: string
+          firstColHeaderWidth?: string
+        } = {}
+        options.formule = true
+        options.formuleTexte = '=?'
+        options.formuleCellule = 'B1'
+
+        texte += createTableurLatex(
+          listeMotsQR.length + 1,
+          4,
+          cellDatas,
+          ExerciceTableur.styles,
+          options,
+        )
+      }
+
+      texteCorr = 'Voici les formules à saisir dans le tableur :<br>'
+      for (let i = 0; i < nbLignes; i++) {
+        const index = i + q * nbLignes
+        const lOperation = Number(listeTypeQuestions[index])
+        texteCorr += `Pour calculer ${listeMots[lOperation - 1].txtCorrection}${nbDepart}, la formule  à saisir dans la cellule ${listeMotsQR[index].ref} est : ${listeMotsQR[index].txtFormule}.<br>`
+      }
+
+      const listener = () => {
+        const sheets = Array.from(
+          document.querySelectorAll('my-spreadsheet'),
+        ) as MySpreadsheetElement[]
+        for (const sheet of sheets) {
+          const q = sheet.id.match(/Q(\d+)$/)?.[1]
+
+          const eventName =
+            q !== undefined && this.numeroExercice !== undefined
+              ? `checkEx${this.numeroExercice}Q${q}`
+              : undefined
+          if (sheet && eventName) {
+            const listener = (event: Event) => {
+              this.checkSolution(event as CustomEvent, listeMotsQR)
+            }
+            sheet.addListener(eventName, listener)
+          } else {
+            console.error(
+              `SheetElement not found or eventName invalid for question ${q} in exercice ${this.numeroExercice}`,
+            )
+          }
+        }
+        document.removeEventListener('exercicesAffiches', listener)
+      }
+      document.addEventListener('exercicesAffiches', listener, { once: true })
+
+      /****************************************************/
+      if (this.questionJamaisPosee(q, texte)) {
+        this.listeQuestions[q] = texte
+        this.listeCorrections[q] = texteCorr
+        q++
+      }
+      listeQuestionsToContenu(this)
     }
-    document.addEventListener('exercicesAffiches', listener, { once: true })
-
-    /****************************************************/
-    this.listeQuestions[q] = texte
-    this.listeCorrections[q] = texteCorr
-
-    listeQuestionsToContenu(this)
   }
 
   correctionInteractive = (i: number) => {
@@ -613,6 +606,7 @@ export default class ExerciceTableur extends Exercice {
         i,
         sheetElement,
         listeMotsQR,
+        listeNbLignes,
       )
       if (messages.length > 0 && spanResultat && divFeedback) {
         divFeedback.innerHTML = messages
@@ -629,6 +623,8 @@ export default class ExerciceTableur extends Exercice {
 }
 
 let listeMotsQR: MotsQR[] = []
+let listeNbLignes: number[] = []
+let nbLignes = 0
 
 const LETTERS = ['A', 'B', 'C', 'D', 'E', 'F'] // A1..F1 max
 
@@ -653,186 +649,6 @@ export function buildStyleFromColos(
   }
   return style
 }
-
-// function transformationsOper(
-//   steps: {
-//     oldn: number
-//     op: number
-//     val: number
-//     result: number
-//   }[],
-// ) {
-//   function stepsToSymbols(
-//     steps: {
-//       oldn: number
-//       op: number
-//       val: number
-//       result: number
-//     }[],
-//   ) {
-//     const mapOps: Record<number, string> = {
-//       1: '+',
-//       2: '−', // tiret long pour la soustraction
-//       3: '\\times',
-//       4: '\\div',
-//     }
-//     return steps.map((step) => (mapOps[step.op] || '?') + step.val)
-//   }
-//   return stepsToSymbols(steps)
-// }
-
-/* function evaluate(a: number, op: number, b: number) {
-  if (op === 1) return a + b
-  if (op === 2) return a - b
-  if (op === 3) return a * b
-  if (op === 4) return a / b
-  return NaN
-} */
-
-/**
- * Génère une suite d'opérations arithmétiques (+, −, ×, ÷) appliquées à un nombre de départ,
- * en s’assurant que chaque opération est valide et que le résultat reste dans des limites acceptables.
- *
- * La fonction mélange aléatoirement l’ordre des opérations et choisit les opérandes de façon à ce que
- * chaque étape soit faisable (par exemple : pas de résultats négatifs, division donnant un entier, etc.).
- * Elle essaie jusqu’à 20 fois de trouver une suite valide.
- *
- * @param operations - Un tableau de nombres représentant les opérations à effectuer :
- *   1 pour addition (+), 2 pour soustraction (−), 3 pour multiplication (×), 4 pour division (÷).
- *   Par défaut : [1, 2, 3, 4].
- *
- * @returns Un objet contenant :
- *   - `ops` : L’ordre final des opérations utilisées.
- *   - `steps` : Un tableau d’objets représentant chaque étape, avec :
- *       - `oldn` : Le nombre avant l’opération.
- *       - `op` : L’opération effectuée.
- *       - `val` : L’opérande utilisée.
- *       - `result` : Le résultat après l’opération.
- *   - `final` : Le résultat final après toutes les opérations, ou `null` si échec.
- * @example
- *
- * const resultat = programmeCalcul([1, 2, 3, 4]);
- *
- *
- * {
- *   ops: [3, 1, 4, 2], // ordre : × puis + puis ÷ puis −
- *   steps: [
- *     { oldn: 5, op: 3, val: 4, result: 20 }, // 5 × 4 = 20
- *     { oldn: 20, op: 1, val: 3, result: 23 }, // 20 + 3 = 23
- *     { oldn: 23, op: 4, val: 1, result: 23 }, // 23 ÷ 1 = 23
- *     { oldn: 23, op: 2, val: 5, result: 18 }  // 23 − 5 = 18
- *   ],
- *   final: 18
- * }
- */
-
-type Step = {
-  oldn: number
-  op: number
-  val: number
-  result: number
-}
-type Steps = Step[]
-/* type ProgrammeCalculResult = {
-  ops: number[]
-  steps: Steps
-  final: number | null
-} */
-/* function programmeCalcul(
-  operations: number[] = [1, 2, 3, 4],
-): ProgrammeCalculResult {
-  let steps: {
-    oldn: number
-    op: number
-    val: number
-    result: number
-  }[] = []
-  let final = null
-  let ops: number[] = operations
-
-  let k = 0
-  let success = false
-  while (!success && k < 20) {
-    ops = shuffle(ops) // ordre aléatoire des opérations
-    let n = randint(5, 20) // nombre de départ
-    steps = [] // les étapes de calcul
-    success = true
-    for (let ind = 0, tt = 0; ind < ops.length && tt < 4; ) {
-      if (tt > 0) {
-        // tt : le nombre de tentatives
-        // on change l'ordre des opérations si ça bloque
-        const firstPart = ops.slice(0, ind)
-        const shuffledPart = shuffle(ops.slice(ind))
-        ops = [...firstPart, ...shuffledPart]
-      }
-      const op = ops[ind]
-      const oldn = n
-      let val: number = 1
-      const oldval: number = ind > 0 ? steps[ind - 1].val : 1
-      if (op === 1) {
-        // +
-        if (50 - n < 2 || (50 - n === 2 && oldval === 2)) {
-          tt++
-          continue
-        } else {
-          val = randint(2, 50 - n, [oldval])
-          n += val
-          ind++
-          tt = 0
-        }
-      } else if (op === 2) {
-        // -
-        if (n < 2 || (n === 2 && oldval === 2)) {
-          tt++
-          continue
-        } else {
-          val = randint(2, n, [oldval])
-          n -= val
-          ind++
-          tt = 0
-        }
-      } else if (op === 3) {
-        // ×
-        const maxMult = n < 1 ? 5 : Math.floor(50 / n)
-        if (maxMult < 2 || (maxMult === 2 && oldval === 2)) {
-          tt++
-          continue
-        } else {
-          val = randint(2, maxMult, [oldval])
-          n *= val
-          ind++
-          tt = 0
-        }
-      } else if (op === 4) {
-        // ÷
-        const divs = listeDesDiviseurs(n).filter((d) => d > 1 && d < n)
-        if (divs.length === 0 || (divs.length === 1 && divs[0] === oldval)) {
-          tt++
-          continue
-        } else {
-          val = choice<number>(divs, [oldval])
-          n /= val
-          ind++
-          tt = 0
-        }
-      }
-
-      // sécurité bornes
-      if (n < 0 || n > 50 || !Number.isInteger(n)) {
-        tt += 10 // on devrait jamais être ici! donc on sort
-        continue
-      }
-      steps.push({ oldn, op, val, result: n })
-    }
-    if (steps.length !== ops.length) {
-      success = false
-    }
-    if (success) final = n
-    k++
-  }
-
-  return { ops, steps, final }
-} */
 
 function createTableurLatex(
   rowNbr: number,
