@@ -119,13 +119,11 @@ export default class TablesDeMultiplications extends Exercice {
           } else {
             texte =
               this.interactif && context.isHtml
-                ? '$' +
-                  ajouteChampTexteMathLive(
+                ? ajouteChampTexteMathLive(
                     this,
                     i,
                     KeyboardType.clavierNumbers,
-                  ) +
-                  '$'
+                  )
                 : '$\\ldots\\ldots$'
             texte += `$ = ${texNombre(b, 0)}\\times ${texNombre(a, 0)}$`
             texteCorr = `$ ${miseEnEvidence(texNombre(reponse, 0))} = ${texNombre(b, 0)}\\times ${texNombre(a, 0)}$`
