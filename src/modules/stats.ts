@@ -17,17 +17,20 @@ let activeStats = document.location.hostname !== 'localhost'
 
 if (activeStats) {
   const _paq = (window._paq = window._paq || [])
-  _paq.push(['trackPageView'])
+  const privateUrl = '//ynh.coopmaths.fr/matomo/'
+  const forgeUrl = 'https://wa.phm.education.gouv.fr/snp/'
+  _paq.push(['setTrackerUrl', privateUrl + 'matomo.php'])
+  _paq.push(['setSiteId', '1'])
+  _paq.push(['addTracker', forgeUrl + 'matomo.php', '17'])
   _paq.push(['disableCookies'])
+  _paq.push(['trackPageView'])
+  _paq.push(['enableLinkTracking'])
   ;(function () {
-    const u = '//ynh.coopmaths.fr/matomo/'
-    _paq.push(['setTrackerUrl', u + 'matomo.php'])
-    _paq.push(['setSiteId', '1'])
     const d = document
     const g = d.createElement('script')
     const s = d.getElementsByTagName('script')[0]
     g.async = true
-    g.src = u + 'matomo.js'
+    g.src = privateUrl + 'matomo.js'
     if (s.parentNode) {
       s.parentNode.insertBefore(g, s)
     }
