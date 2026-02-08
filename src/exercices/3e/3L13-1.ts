@@ -118,7 +118,7 @@ export default class ExerciceEquation1Tiret2 extends Exercice {
             : listeTypeDeQuestions[i] === 'k-(ax+b)=cx+d'
               ? randint(-9, 9, [0, -a]) // sinon on arrive à une division par 0
               : Math.abs(k * a) < 10
-                ? randint(-9, 9, [0, -k * a])
+                ? randint(-9, 9, [0, k * a])
                 : randint(-9, 9, 0)
 
         d = randint(-9, 9, 0)
