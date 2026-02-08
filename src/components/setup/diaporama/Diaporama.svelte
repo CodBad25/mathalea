@@ -31,6 +31,24 @@
   import SlideshowPlay from './slideshowPlay/SlideshowPlay.svelte'
   import SlideshowSettings from './slideshowSettings/SlideshowSettings.svelte'
   import type { Slide, Slideshow } from './types'
+  type SlideshowHistoryOptions = {
+    nbVues: number
+    flow: 0 | 1 | 2
+    screenBetweenSlides: boolean
+    sound: number
+    shuffle: boolean
+    manualMode: boolean
+    pauseAfterEachQuestion: boolean
+    isImagesOnSides: boolean
+    select?: number[]
+    order?: number[]
+    durationGlobal?: number
+  }
+
+  type SlideshowHistoryItem = {
+    options: SlideshowHistoryOptions
+    exercicesParams: InterfaceParams[]
+  }
 
   const transitionSounds = {
     0: new Audio('assets/sounds/transition_sound_01.mp3'),
@@ -274,6 +292,33 @@
     slideshow.currentQuestion = 0
   }
 
+  function applyHistoryOptions(options: SlideshowHistoryOptions) {
+    $globalOptions.nbVues = options.nbVues
+    $globalOptions.flow = options.flow
+    $globalOptions.screenBetweenSlides = options.screenBetweenSlides
+    $globalOptions.sound = options.sound
+    $globalOptions.shuffle = options.shuffle
+    $globalOptions.manualMode = options.manualMode
+    $globalOptions.pauseAfterEachQuestion = options.pauseAfterEachQuestion
+    $globalOptions.isImagesOnSides = options.isImagesOnSides
+    $globalOptions.select = options.select
+    $globalOptions.order = options.order
+    $globalOptions.durationGlobal = options.durationGlobal
+  }
+
+  async function applySlideshowFromHistory(
+    item: SlideshowHistoryItem,
+    autoStart: boolean,
+  ) {
+    exercicesParams.set(item.exercicesParams.map((param) => ({ ...param })))
+    exercises = await getExercisesFromExercicesParams()
+    applyHistoryOptions(item.options)
+    $globalOptions.v = 'diaporama'
+    updateExercises(true)
+    slideshow.currentQuestion = -1
+    if (autoStart) startSlideshow()
+  }
+
   function backToSettings() {
     $globalOptions.v = 'diaporama'
     slideshow.currentQuestion = -1
@@ -323,6 +368,7 @@
           {updateExercises}
           {transitionSounds}
           {startSlideshow}
+          applySlideshowFromHistory={applySlideshowFromHistory}
           {goToOverview}
           {goToHome}
         />
