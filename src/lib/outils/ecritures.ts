@@ -354,6 +354,7 @@ export function ecritureParentheseSiMoins(
       return `\\left${result.slice(1, -1)}\\right)`
     } else return result
   }
+  return result
 }
 
 /**
