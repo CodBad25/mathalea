@@ -346,10 +346,10 @@ export default class Proportions extends Exercice {
               texte = `Dans un entreprise, il y a  $${texNombre(sous)}$ cadres. Ils  représentent $${taux}\\,\\%$ du nombre total de salariés. <br>Quel est le nombre total de salariés dans cette entreprise ?`
               texteCorr = `Soit $n$ le nombre total de salariés dans l'entreprise. <br> Comme $${taux}\\,\\%$ de $n$ est égal à $${texNombre(sous)}$, on a :`
               texteCorr += `<br>$\\begin{aligned}
-                \\dfrac{${taux}}{100} \\times n &= ${sous} \\\\\\
-                ${texNombre(p, 2)} \\times n &= ${sous} \\\\
-                x &= \\dfrac{${texNombre(sous, 2)}}{${texNombre(p, 2)}} \\\\
-                x &= ${texNombre(totale, 2)}
+                \\dfrac{${taux}}{100} \\times n &= ${texNombre(sous)} \\\\\\
+                ${texNombre(p, 2)} \\times n &= ${texNombre(sous)} \\\\
+                n &= \\dfrac{${texNombre(sous, 2)}}{${texNombre(p, 2)}} \\\\
+                n &= ${texNombre(totale, 2)}
                 \\end{aligned}$`
               texteCorr += `<br>Le nombre total de salariés dans l'entreprise est $${miseEnEvidence(texNombre(totale))}$.`
               reponse = arrondi(totale)
