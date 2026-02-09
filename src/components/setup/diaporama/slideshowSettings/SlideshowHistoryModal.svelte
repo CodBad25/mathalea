@@ -345,6 +345,11 @@
       expandedHistoryIds.add(itemId)
     }
     expandedHistoryIds = new Set(expandedHistoryIds)
+    tick().then(() => {
+      if (historyListContainer) {
+        mathaleaRenderDiv(historyListContainer)
+      }
+    })
   }
 
   function computeSignatureFromItem(item: SlideshowHistoryItem) {
