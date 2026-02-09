@@ -2,13 +2,21 @@ import { context } from '../../../modules/context'
 import type { IExercice } from '../../types'
 import '../svgSelection/SvgSelectionElement'
 
-type SvgWithValue = { svg: string; value: number }
+export type SvgWithValue = { svg: string; value: number }
+
+export type SvgSelectionOptions = {
+  gapX?: string
+  gapY?: string
+  itemPadding?: string
+  style?: string
+}
 
 /**
  * Vérifie la réponse à une question avec sélection d'SVG
  * @param {object} exercice l'exercice appelant pour pouvoir atteindre ses propriétés.
  * @param {number} i le numéro de la question
  * @returns {string} 'OK' si la réponse est correcte, 'KO' sinon
+ * @author Jean-Claude Lhote
  */
 export function verifQuestionSvgSelection(exercice: IExercice, i: number) {
   const spanReponseLigne = document.querySelector(
@@ -65,18 +73,28 @@ export function verifQuestionSvgSelection(exercice: IExercice, i: number) {
  *   - SvgWithValue[][] : format natif avec valeurs personnalisées {svg: string, value: number}
  *   - string[][] : sera converti avec value = index global
  *   - string[] : sera converti en array 2D avec value = index
- * @param {string} [style] le style à appliquer au conteneur
+ * @param {SvgSelectionOptions} [options] options de configuration
+ *   - gapX?: écart horizontal entre les éléments (ex: '0rem', '0.5rem')
+ *   - gapY?: écart vertical entre les éléments (ex: '0rem', '0.5rem')
+ *   - itemPadding?: espacement interne des boutons (ex: '0px', '2px')
+ *   - style?: style CSS personnalisé pour le conteneur
  * @returns {string} le code HTML du conteneur de sélection SVG
+ * @author Jean-Claude Lhote
  */
 export function selectionSvg(
   exercice: IExercice,
   i: number,
   svgs: SvgWithValue[][] | SvgWithValue[],
-  style?: string,
+  options?: SvgSelectionOptions,
 ) {
   if (!context.isHtml) return ''
 
-  style = style ? ` style="${style}"` : ''
+  const { gapX, gapY, itemPadding, style } = options || {}
+  const styleStr = style ? ` style="${style}"` : ''
+  let gapAttrs = ''
+  if (gapX) gapAttrs += ` gap-x="${gapX}"`
+  if (gapY) gapAttrs += ` gap-y="${gapY}"`
+  if (itemPadding) gapAttrs += ` item-padding="${itemPadding}"`
   if (
     context.isHtml &&
     exercice?.autoCorrection[i]?.reponse?.param?.formatInteractif !==
@@ -91,7 +109,7 @@ export function selectionSvg(
     exercice.autoCorrection[i].reponse.param.formatInteractif = 'svgSelection'
   }
   let result =
-    `<svg-selection class="mx-2 svgSelection" id="svgSelectionEx${exercice.numeroExercice}Q${i}"${style} svgs="` +
+    `<svg-selection class="mx-2 svgSelection" id="svgSelectionEx${exercice.numeroExercice}Q${i}"${styleStr}${gapAttrs} svgs="` +
     encodeURIComponent(JSON.stringify(svgs)) +
     `"></svg-selection>`
   result += `<span id="resultatCheckEx${exercice.numeroExercice}Q${i}"></span>`

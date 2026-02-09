@@ -1,9 +1,21 @@
 type SvgWithValue = { svg: string; value: number }
-
+/**
+ * Composant de sélection d'éléments SVG avec valeurs associées
+ * Permet de sélectionner une ou plusieurs options représentées par des SVG
+ * Chaque SVG a une valeur numérique associée, et la sélection encode la somme de ces valeurs
+ * Les options peuvent être organisées en lignes et colonnes avec des espacements personnalisables
+ * La sélection est gérée via un attribut "value" qui encode la somme des valeurs des SVG sélectionnés
+ * L'utilisateur peut cliquer sur les SVG pour les sélectionner/désélectionner, et le composant émet un événement "change" avec la nouvelle valeur
+ * Le composant est accessible et réactif aux changements d'attributs
+ * @author Jean-Claude Lhote
+ */
 class SvgSelectionElement extends HTMLElement {
   private _svgsWithValue: SvgWithValue[][] = []
   private _selectedIndices: Set<number> = new Set()
   private _updatingValueAttr = false
+  private _gapX = '0.2rem'
+  private _gapY = '0.2rem'
+  private _itemPadding = '2px'
 
   constructor() {
     super()
@@ -11,7 +23,7 @@ class SvgSelectionElement extends HTMLElement {
   }
 
   static get observedAttributes() {
-    return ['svgs', 'value', 'disabled']
+    return ['svgs', 'value', 'disabled', 'gap-x', 'gap-y', 'item-padding']
   }
 
   attributeChangedCallback(name: string, oldValue: string, newValue: string) {
@@ -28,12 +40,57 @@ class SvgSelectionElement extends HTMLElement {
     }
     if (name === 'disabled') {
       this.updateDisabledState()
+      return
+    }
+    if (name === 'gap-x') {
+      this._gapX = newValue || '0.2rem'
+      this.updateGapStyles()
+      return
+    }
+    if (name === 'gap-y') {
+      this._gapY = newValue || '0.2rem'
+      this.updateGapStyles()
+      return
+    }
+    if (name === 'item-padding') {
+      this._itemPadding = newValue || '2px'
+      this.updateItemPaddingStyles()
     }
   }
 
   connectedCallback() {
     this.hydrateFromAttributes()
     this.render()
+  }
+
+  get gapX(): string {
+    return this._gapX
+  }
+
+  set gapX(val: string) {
+    this._gapX = val || '0.2rem'
+    this.setAttribute('gap-x', this._gapX)
+    this.updateGapStyles()
+  }
+
+  get gapY(): string {
+    return this._gapY
+  }
+
+  set gapY(val: string) {
+    this._gapY = val || '0.2rem'
+    this.setAttribute('gap-y', this._gapY)
+    this.updateGapStyles()
+  }
+
+  get itemPadding(): string {
+    return this._itemPadding
+  }
+
+  set itemPadding(val: string) {
+    this._itemPadding = val || '2px'
+    this.setAttribute('item-padding', this._itemPadding)
+    this.updateItemPaddingStyles()
   }
 
   set svgs(val: SvgWithValue[][] | string[][] | string[]) {
@@ -91,6 +148,15 @@ class SvgSelectionElement extends HTMLElement {
       if (Number.isFinite(val)) {
         this._selectedIndices = this.decodeValue(val)
       }
+    }
+    if (this.hasAttribute('gap-x')) {
+      this._gapX = this.getAttribute('gap-x') || '0.2rem'
+    }
+    if (this.hasAttribute('gap-y')) {
+      this._gapY = this.getAttribute('gap-y') || '0.2rem'
+    }
+    if (this.hasAttribute('item-padding')) {
+      this._itemPadding = this.getAttribute('item-padding') || '2px'
     }
   }
 
@@ -251,6 +317,31 @@ class SvgSelectionElement extends HTMLElement {
     }
   }
 
+  private updateGapStyles() {
+    if (!this.shadowRoot) return
+    const container =
+      this.shadowRoot.querySelector<HTMLDivElement>('.svg-selection')
+    if (container) {
+      container.style.gap = `${this._gapY} ${this._gapX}`
+    }
+  }
+
+  private updateItemPaddingStyles() {
+    if (!this.shadowRoot) return
+    const style = this.shadowRoot.querySelector('style')
+    if (style) {
+      // Mettre à jour la feuille de style existante
+      const oldText = style.textContent || ''
+      const newText = oldText.replace(
+        /\.svg-selection__item\s*\{[^}]*padding:[^;]*;/,
+        `.svg-selection__item { padding: ${this._itemPadding};`,
+      )
+      if (newText !== oldText) {
+        style.textContent = newText
+      }
+    }
+  }
+
   private handleToggle = (event: Event) => {
     const target = event.currentTarget as HTMLButtonElement | null
     if (!target || this.hasAttribute('disabled')) return
@@ -284,21 +375,19 @@ class SvgSelectionElement extends HTMLElement {
 }
 .svg-selection {
   display: grid;
-  gap: 0.5rem;
+  gap: 0.2rem;
   align-items: center;
 }
 .svg-selection__item {
   background: transparent;
-  border: 2px solid transparent;
-  border-radius: 10px;
-  padding: 4px;
+  border: none;
+  padding: 0px;
   cursor: pointer;
   line-height: 0;
-  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  transition: filter 0.15s ease;
 }
 .svg-selection__item.is-selected {
-  border-color: #2563eb;
-  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+  filter: brightness(0.8);
 }
 .svg-selection__item:focus-visible {
   outline: 2px solid #2563eb;
@@ -316,6 +405,7 @@ class SvgSelectionElement extends HTMLElement {
 
     const container = document.createElement('div')
     container.className = 'svg-selection'
+    container.style.gap = `${this._gapY} ${this._gapX}`
 
     // Calculer le nombre de colonnes (max des longueurs de lignes)
     const maxCols = Math.max(...this._svgsWithValue.map((row) => row.length), 0)
