@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { onMount } from 'svelte'
   import Latex from '../../../lib/Latex'
   import { type LatexFileInfos } from '../../../lib/LatexTypes'
   import InputNumber from './InputNumber.svelte'
@@ -6,6 +7,8 @@
 
   export let latexFileInfos: LatexFileInfos
   export let latex: Latex
+
+  let locallatexFileInfos: LatexFileInfos
 
   const labelsOptions = [
     { label: '(aucune)', value: '' },
@@ -15,12 +18,30 @@
     { label: '\\Roman* : I, II, III, ...', value: '\\Roman*)' },
     { label: '\\arabic* : 1, 2, 3, ...', value: '\\arabic*)' },
   ]
+
+  /* -----------------------------
+     Init
+  ----------------------------- */
+  onMount(() => {
+    locallatexFileInfos = structuredClone(latexFileInfos)
+  })
+  function applyChanges() {
+    latexFileInfos = locallatexFileInfos
+  }
 </script>
 
 <section class="mb-6 border rounded-lg p-4 bg-gray-50 mx-auto">
   <h3 class="text-lg font-semibold mb-3">
     Configuration individuelle des exercices
   </h3>
+  <div class="flex gap-2 mt-3">
+    <button
+      class="px-3 py-1 rounded bg-green-600 text-white hover:bg-green-500"
+      on:click={applyChanges}
+    >
+      Appliquer les changements
+    </button>
+  </div>
   {#each latex.getExercices() as exo}
     <fieldset
       style="margin-top:1rem; border-radius:0.5rem; padding:0.5rem; border:1px solid #ccc;"
@@ -42,14 +63,14 @@
         Numération des questions
         <SelectUnique
           id="individual-config-labels-{exo.index}"
-          value={latexFileInfos.exos?.[exo.index]?.labels ?? ''}
+          value={locallatexFileInfos?.exos?.[exo.index]?.labels ?? ''}
           options={labelsOptions}
           classAddenda="w-40"
           on:change={(e) => {
-            latexFileInfos.exos = latexFileInfos.exos || {}
-            latexFileInfos.exos[exo.index] =
-              latexFileInfos.exos[exo.index] || {}
-            latexFileInfos.exos[exo.index].labels = e.detail || undefined
+            locallatexFileInfos.exos = locallatexFileInfos?.exos || {}
+            locallatexFileInfos.exos[exo.index] =
+              locallatexFileInfos.exos[exo.index] || {}
+            locallatexFileInfos.exos[exo.index].labels = e.detail || undefined
           }}
         />
       </label>
@@ -61,15 +82,15 @@
           id="individual-config-itemsep-{exo.index}"
           min={0}
           max={50}
-          value={latexFileInfos.exos?.[exo.index]?.itemsep ?? undefined}
+          value={locallatexFileInfos?.exos?.[exo.index]?.itemsep ?? undefined}
           on:change={(e) => {
-            latexFileInfos.exos = latexFileInfos.exos || {}
-            latexFileInfos.exos[exo.index] =
-              latexFileInfos.exos[exo.index] || {}
-            if (e.detail === undefined) {
-              delete latexFileInfos.exos[exo.index].itemsep
+            locallatexFileInfos.exos = locallatexFileInfos?.exos || {}
+            locallatexFileInfos.exos[exo.index] =
+              locallatexFileInfos.exos[exo.index] || {}
+            if (e.detail === undefined || e.detail === null) {
+              delete locallatexFileInfos.exos[exo.index].itemsep
             } else {
-              latexFileInfos.exos[exo.index].itemsep = e.detail
+              locallatexFileInfos.exos[exo.index].itemsep = e.detail
             }
           }}
         />
@@ -82,15 +103,15 @@
           id="individual-config-cols-{exo.index}"
           min={1}
           max={5}
-          value={latexFileInfos.exos?.[exo.index]?.cols}
+          value={locallatexFileInfos?.exos?.[exo.index]?.cols}
           on:change={(e) => {
-            latexFileInfos.exos = latexFileInfos.exos || {}
-            latexFileInfos.exos[exo.index] =
-              latexFileInfos.exos[exo.index] || {}
-            if (e.detail === undefined) {
-              delete latexFileInfos.exos[exo.index].cols
+            locallatexFileInfos.exos = locallatexFileInfos?.exos || {}
+            locallatexFileInfos.exos[exo.index] =
+              locallatexFileInfos.exos[exo.index] || {}
+            if (e.detail === undefined || e.detail === null) {
+              delete locallatexFileInfos.exos[exo.index].cols
             } else {
-              latexFileInfos.exos[exo.index].cols = e.detail
+              locallatexFileInfos.exos[exo.index].cols = e.detail
             }
           }}
         />
@@ -103,15 +124,15 @@
           id="individual-config-cols-corr-{exo.index}"
           min={1}
           max={5}
-          value={latexFileInfos.exos?.[exo.index]?.cols_corr}
+          value={locallatexFileInfos?.exos?.[exo.index]?.cols_corr}
           on:change={(e) => {
-            latexFileInfos.exos = latexFileInfos.exos || {}
-            latexFileInfos.exos[exo.index] =
-              latexFileInfos.exos[exo.index] || {}
-            if (e.detail === undefined) {
-              delete latexFileInfos.exos[exo.index].cols_corr
+            locallatexFileInfos.exos = locallatexFileInfos?.exos || {}
+            locallatexFileInfos.exos[exo.index] =
+              locallatexFileInfos.exos[exo.index] || {}
+            if (e.detail === undefined || e.detail === null) {
+              delete locallatexFileInfos.exos[exo.index].cols_corr
             } else {
-              latexFileInfos.exos[exo.index].cols_corr = e.detail
+              locallatexFileInfos.exos[exo.index].cols_corr = e.detail
             }
           }}
         />
@@ -126,20 +147,20 @@
             id="individual-config-blocrep-nbligs-{exo.index}"
             min={1}
             max={20}
-            value={latexFileInfos.exos?.[exo.index]?.blocrep?.nbligs}
+            value={locallatexFileInfos?.exos?.[exo.index]?.blocrep?.nbligs}
             on:change={(e) => {
-              latexFileInfos.exos = latexFileInfos.exos || {}
-              latexFileInfos.exos[exo.index] =
-                latexFileInfos.exos[exo.index] || {}
-              if (e.detail === undefined) {
-                delete latexFileInfos.exos[exo.index].blocrep
+              locallatexFileInfos.exos = locallatexFileInfos?.exos || {}
+              locallatexFileInfos.exos[exo.index] =
+                locallatexFileInfos.exos[exo.index] || {}
+              if (e.detail === undefined || e.detail === null) {
+                delete locallatexFileInfos.exos[exo.index].blocrep
               } else {
-                const blocrep = latexFileInfos.exos[exo.index].blocrep || {
+                const blocrep = locallatexFileInfos.exos[exo.index].blocrep || {
                   nbligs: 1,
                   nbcols: 1,
                 }
                 blocrep.nbligs = e.detail
-                latexFileInfos.exos[exo.index].blocrep = blocrep
+                locallatexFileInfos.exos[exo.index].blocrep = blocrep
               }
             }}
           />
@@ -152,20 +173,20 @@
             id="individual-config-blocrep-nbcols-{exo.index}"
             min={1}
             max={20}
-            value={latexFileInfos.exos?.[exo.index]?.blocrep?.nbcols}
+            value={locallatexFileInfos?.exos?.[exo.index]?.blocrep?.nbcols}
             on:change={(e) => {
-              latexFileInfos.exos = latexFileInfos.exos || {}
-              latexFileInfos.exos[exo.index] =
-                latexFileInfos.exos[exo.index] || {}
-              if (e.detail === undefined) {
-                delete latexFileInfos.exos[exo.index].blocrep
+              locallatexFileInfos.exos = locallatexFileInfos?.exos || {}
+              locallatexFileInfos.exos[exo.index] =
+                locallatexFileInfos.exos[exo.index] || {}
+              if (e.detail === undefined || e.detail === null) {
+                delete locallatexFileInfos.exos[exo.index].blocrep
               } else {
-                const blocrep = latexFileInfos.exos[exo.index].blocrep || {
+                const blocrep = locallatexFileInfos.exos[exo.index].blocrep || {
                   nbligs: 1,
                   nbcols: 1,
                 }
                 blocrep.nbcols = e.detail
-                latexFileInfos.exos[exo.index].blocrep = blocrep
+                locallatexFileInfos.exos[exo.index].blocrep = blocrep
               }
             }}
           />
@@ -179,7 +200,7 @@
     <h2 class="text-lg font-bold mb-3">Aperçu JSON</h2>
     <pre
       class="bg-gray-900 text-green-200 p-3 text-left rounded-lg text-sm overflow-x-auto max-h-80">{JSON.stringify(
-        latexFileInfos.exos || {},
+        locallatexFileInfos || {},
         null,
         2,
       )}

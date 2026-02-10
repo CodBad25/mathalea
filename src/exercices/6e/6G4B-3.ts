@@ -91,6 +91,14 @@ export default class MesurerUnAngle extends Exercice {
         } else {
           xdroite = randint(Math.ceil(-x / unite), 60) * 0.1 * unite
         }
+
+        /* console.log(
+          'xdroite:' + xdroite + ':' + xdroite / unite,
+          'x:' + x + ':' + x / unite,
+          'y:' + y + ':' + y / unite,
+          'A:' + (xdroite + x) / unite,
+          'B:' + (xdroite + x + 5) / unite,
+        ) */
       } while (
         (xdroite + x + 5 > 6 * unite || xdroite + x < 0 * unite) &&
         k < 30

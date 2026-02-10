@@ -42,6 +42,7 @@ export interface LatexFileInfos {
       blocrep?: { nbligs: number; nbcols: number }
     }
   }
+  exosGrouping?: string
   signal?: AbortSignal | undefined
 }
 
