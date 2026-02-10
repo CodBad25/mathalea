@@ -219,8 +219,8 @@ On peut dire que lorsque le prix payé pour la location est $${texNombre(prix, 2
             const b = randint(30, 80)
             const v = new Decimal(randint(70, 100)) //
 
-            texte = `  Sur toute sèche, la distance de freinage en mètres, d'une voiture est modélisée de la façon suivante : <br>
-          En notant $v$ la vitesse du véhicule (en $\\text{km/h}$), sa distance de freinage $d(v)$  (en $\\text{m}) est donnée par le carré de sa vitesse divisée par $${texNombre(a, 1)}$.`
+            texte = `  Sur route sèche, la distance de freinage en mètres, d'une voiture est modélisée de la façon suivante : <br>
+          en notant $v$ la vitesse du véhicule (en $\\text{km/h}$), sa distance de freinage $d(v)$  (en $\\text{m}$) est donnée par le carré de sa vitesse divisée par $${texNombre(a, 1)}$.`
 
             texte += createList({
               items: [
