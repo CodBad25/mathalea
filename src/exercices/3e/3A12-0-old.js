@@ -28,10 +28,10 @@ export const dateDeModifImportante = '17/01/2024'
  * @author Jean-Claude Lhote et Mickael Guironnet (pour la possibilité d'avoir plusieurs questions)
  * Résoudre des problèmes de ppcm avec les engrenages.
  */
-export const uuid = '6b370'
+export const uuid = '6b37f'
 
 export const refs = {
-  'fr-fr': ['3A12-0'],
+  'fr-fr': [],
   'fr-ch': [],
 }
 
@@ -154,9 +154,10 @@ export default class EngrenagesAnimes extends Exercice {
       }
     }
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; cpt++) {
+    for (let i = 0, cpt = 0, k = 0; i < this.nbQuestions && cpt < 50; cpt++) {
       const objetsEnonce = []
       const objetsCorrection = []
+      let kk = k
       let nbDentsRoueA, nbDentsRoueB, nbDentsRoueC
       let nbToursA, nbToursB, nbToursC, nbToursAbc
       let texte = '' // Nous utilisons souvent cette variable pour construire le texte de la question.
@@ -181,7 +182,7 @@ export default class EngrenagesAnimes extends Exercice {
             '.<br>'
           texte += `Quand elle effectue $${nbToursA}$ tours, la roue de droite effectue $${nbToursB}$ tours.<br>`
           texte += 'Combien la roue de droite possède-t-elle de dents ?'
-          texte += ajouteChampTexteMathLive(this, i, '')
+          texte += ajouteChampTexteMathLive(this, kk, '')
           texte += '<br>'
           texteCorr +=
             'Le nombre de dents multiplié par le nombre de tours de chaque roue doit donner le même résultat.<br>'
@@ -189,7 +190,8 @@ export default class EngrenagesAnimes extends Exercice {
           texteCorr += `Soit $n$ le nombre de dents de la roue de droite qui effectue $${nbToursB}$ tours, on a alors : $n\\times${nbToursB} = ${nbDentsRoueA}\\times ${nbToursA} = ${nbDentsRoueA * nbToursA}$.<br>`
           texteCorr += `On en déduit que $n=\\dfrac{${nbDentsRoueA * nbToursA}}{${nbToursB}}=${nbDentsRoueB}$.<br>`
           texteCorr += `La roue de droite a donc $${miseEnEvidence(nbDentsRoueB)}$ dents.<br>`
-          setReponse(this, i, nbDentsRoueB)
+          setReponse(this, kk, nbDentsRoueB)
+          kk++
           roues = engrenages(
             { dureeTourBase: 0, module: 0.4 },
             nbDentsRoueA,
@@ -222,9 +224,10 @@ export default class EngrenagesAnimes extends Exercice {
             '.<br>'
           texte += `Elle tourne de $${nbToursA * nbDentsRoueA}$ dents. Pendant ce temps, la roue de droite fait $${nbToursB}$ tour${nbToursB > 1 ? 's' : ''}.<br>`
           texte += 'Combien la roue de droite possède-t-elle de dents ?'
-          texte += ajouteChampTexteMathLive(this, i, '')
+          texte += ajouteChampTexteMathLive(this, kk, '')
           texte += '<br>'
-          setReponse(this, i, nbDentsRoueB)
+          setReponse(this, kk, nbDentsRoueB)
+          kk++
           texteCorr +=
             'Le nombre de dents multiplié par le nombre de tours de chaque roue doit donner le même résultat.<br>'
           texteCorr += `La roue de gauche tourne de $${nbToursA * nbDentsRoueA}$ dents en $${nbToursA}$ tours.<br>`
@@ -260,9 +263,10 @@ export default class EngrenagesAnimes extends Exercice {
           texte += `La roue dentée de gauche possède $${nbDentsRoueA}$ dents et celle de droite possède $${nbDentsRoueB}$ dents.<br>`
           texte += `${numAlpha(0)} Au bout de combien de tours pour la roue de gauche les deux roues retrouveront leur position initiale ?<br>`
           texte += `${numAlpha(1)} Combien de tours aura alors effectués la roue de droite ?`
-          texte += ajouteChampTexteMathLive(this, i, '')
+          texte += ajouteChampTexteMathLive(this, kk, '')
           texte += '<br>'
-          setReponse(this, i, nbToursB)
+          setReponse(this, kk, nbToursB)
+          kk++
           texteCorr += `Lorsque la roue de gauche effectue $n$ tours, cela fait $${nbDentsRoueA}n$ dents.<br>`
           texteCorr += `Lorsque la roue de droite effectue $m$ tours, cela fait $${nbDentsRoueB}m$ dents.<br>`
           texteCorr += `Nous cherchons donc le plus petit multiple commun à $${nbDentsRoueA}$ et à $${nbDentsRoueB}$.<br>`
@@ -301,9 +305,10 @@ export default class EngrenagesAnimes extends Exercice {
             (context.isHtml ? "(le dessin n'est pas représentatif)" : '') +
             '.<br>'
           texte += `La roue de gauche tourne de $${nbToursA * nbDentsRoueA}$ dents.<br>Pendant ce temps, combien la roue de droite effectue-t-elle de tours ?`
-          texte += ajouteChampTexteMathLive(this, i, '')
+          texte += ajouteChampTexteMathLive(this, kk, '')
           texte += '<br>'
-          setReponse(this, i, nbToursB)
+          setReponse(this, kk, nbToursB)
+          kk++
           texteCorr +=
             'Le nombre de dents multiplié par le nombre de tours de chaque roue doit donner le même résultat.<br>'
           texteCorr += `La roue de gauche tourne de $${nbToursA * nbDentsRoueA}$ dents.<br>`
@@ -362,16 +367,23 @@ export default class EngrenagesAnimes extends Exercice {
           )
           texte += `La roue de gauche possède $${nbDentsRoueA}$ dents, celle du milieu en a $${nbDentsRoueB}$ et celle de droite en a $${nbDentsRoueC}$.<br>`
           texte += `${numAlpha(0)}Combien de tours doit effectuer la roue de gauche avant que son repère et celui de la roue du milieu soient à nouveau comme dans la position initiale ?`
+          texte += ajouteChampTexteMathLive(this, kk, '')
           texte += '<br>'
+          setReponse(this, kk, nbToursA)
+          kk++
           texte += `${numAlpha(1)}Combien de tours doit effectuer la roue de gauche avant que son repère et celui de la roue de droite soient à nouveau comme dans la position initiale ?`
+          texte += ajouteChampTexteMathLive(this, kk, '')
           texte += '<br>'
+          setReponse(this, kk, nbToursB)
+          kk++
           texte += `${numAlpha(2)}`
           texte += this.interactif
             ? `Dans la situation ${numAlpha(1, true)}, la roue du milieu n'étant pas dans sa position initiale, combien de tours la roue de gauche doit-elle effectuer pour que les trois roues retrouvent leur position initiale ?`
             : `Dans la situation ${numAlpha(1, true)}, la roue du milieu est-elle dans sa position initiale ? Sinon, combien de tours la roue de gauche doit-elle effectuer pour que les trois roues retrouvent leur position initiale ?`
-          texte += ajouteChampTexteMathLive(this, i, '')
+          texte += ajouteChampTexteMathLive(this, kk, '')
           texte += '<br>'
-          setReponse(this, i, nbToursAbc)
+          setReponse(this, kk, nbToursAbc)
+          kk++
           texteCorr += `${numAlpha(0)}Le nombre de dents multiplié par le nombre de tours de chaque roue doit donner le même résultat.<br>`
           texteCorr += `Nous cherchons donc le plus petit multiple commun à $${nbDentsRoueA}$ et à $${nbDentsRoueB}$.<br>`
           texteCorr += listePremiersMultiples(nbDentsRoueA, nbDentsRoueB)
@@ -503,6 +515,7 @@ export default class EngrenagesAnimes extends Exercice {
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr
         i++
+        k = kk // pour interactif
       }
     }
     listeQuestionsToContenu(this)

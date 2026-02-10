@@ -5,10 +5,7 @@ import { polyline } from '../../lib/2d/Polyline'
 import { repere } from '../../lib/2d/reperes'
 import { texteParPosition } from '../../lib/2d/textes'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import {
-  ajouteChampTexteMathLive,
-  ajouteQuestionMathlive,
-} from '../../lib/interactif/questionMathLive'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
 import { prenomF } from '../../lib/outils/Personne'
 import { texNombre } from '../../lib/outils/texNombre'
@@ -21,10 +18,8 @@ import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { grille } from '../../lib/2d/Grille'
 import { vide2d } from '../../lib/2d/Vide2d'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { toutPourUnPoint } from '../../lib/interactif/mathLive'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { sp } from '../../lib/outils/outilString'
-import Grandeur from '../../modules/Grandeur'
 
 export const titre =
   "Résoudre un problème s'appuyant sur la lecture d'une représentation graphique"
@@ -32,17 +27,17 @@ export const interactifType = 'mathLive'
 export const interactifReady = true
 export const amcReady = true
 export const amcType = 'AMCHybride'
-export const dateDeModifImportante = '28/12/2024' // Changements pour homogénéiser l'interactif le 10/02/2026
+export const dateDeModifImportante = '28/12/2024'
 
 /**
  * Problème avec lecture de représentation graphique d'une fonction
  * @author Rémi Angot
  */
-export const uuid = 'b428f'
+export const uuid = 'b428e'
 
 export const refs = {
-  'fr-fr': ['4F12', '3AutoP09-1'],
-  'fr-ch': ['10FA5-2'],
+  'fr-fr': [],
+  'fr-ch': [],
 }
 export default class ExploiterRepresentationGraphique extends Exercice {
   constructor() {
@@ -50,7 +45,7 @@ export default class ExploiterRepresentationGraphique extends Exercice {
     this.besoinFormulaireNumerique = [
       'Choix des problèmes',
       4,
-      '1 : Projectile\n2 : Trajet à vélo\n3 : Température\n4 : Au hasard',
+      '1 : Projectile\n2 : Trajet à vélo (non disponible en interactif)\n3 : Température\n4 : Au hasard',
     ]
 
     this.nbQuestions = 1
@@ -79,16 +74,15 @@ export default class ExploiterRepresentationGraphique extends Exercice {
     if (this.sup === 1) {
       typeDeProbleme = choice(['projectile', 'projectile2'])
     } else if (this.sup === 2) {
-      typeDeProbleme = 'velo'
+      if (this.interactif)
+        typeDeProbleme = choice(['projectile', 'projectile2', 'temperature'])
+      else typeDeProbleme = 'velo'
     } else if (this.sup === 3) {
       typeDeProbleme = 'temperature'
     } else {
-      typeDeProbleme = choice([
-        'temperature',
-        'projectile',
-        'projectile2',
-        'velo',
-      ])
+      typeDeProbleme = this.interactif
+        ? choice(['temperature', 'projectile', 'projectile2'])
+        : choice(['temperature', 'projectile', 'projectile2', 'velo'])
     }
     let f, t1, l, g1, r, graphique
     let indiceQuestion = 0
@@ -472,38 +466,14 @@ export default class ExploiterRepresentationGraphique extends Exercice {
           )
 
           this.listeQuestions.push(
-            `Pendant combien de temps, ${fille}, a-t-elle fait réellement du vélo ?` +
-              ajouteQuestionMathlive({
-                exercice: this,
-                question: indiceQuestion++,
-                objetReponse: {
-                  reponse: {
-                    value: new Grandeur(30, 'min'),
-                    options: { HMS: true },
-                  },
-                },
-                typeInteractivite: 'mathlive',
-                classe: KeyboardType.clavierHms,
-              }),
+            `Pendant combien de temps, ${fille}, a-t-elle fait réellement du vélo ?`,
           )
           this.listeCorrections.push(
             `${fille} est partie 40 min et a fait une pause de 10 min donc elle a fait réellement du vélo pendant $${miseEnEvidence(texNombre(30) + sp() + '\\text{min}')}$.`,
           )
 
           this.listeQuestions.push(
-            'Quelle distance a-t-elle parcourue au total ?' +
-              ajouteQuestionMathlive({
-                exercice: this,
-                question: indiceQuestion++,
-                objetReponse: {
-                  reponse: {
-                    value: new Grandeur(2 * v3, 'km'),
-                    options: { unite: true },
-                  },
-                },
-                typeInteractivite: 'mathlive',
-                classe: KeyboardType.longueur,
-              }),
+            'Quelle distance a-t-elle parcourue au total ?',
           )
           this.listeCorrections.push(
             `Le point le plus loin de sa maison est à ${v3} $\\text{km}$ et ensuite elle revient chez elle, donc la distance totale est de $${miseEnEvidence(texNombre(2 * v3) + sp() + '\\text{km}')}$.`,
@@ -637,79 +607,78 @@ export default class ExploiterRepresentationGraphique extends Exercice {
           this.introduction +=
             '<br><br>' +
             "À l'aide de ce graphique, répondre aux questions suivantes :"
-          if (this.interactif && context.isHtml) {
-            this.listeQuestions.push(
-              'Quelle est la température la plus froide de la journée ? ' +
-                ajouteQuestionMathlive({
-                  exercice: this,
-                  question: indiceQuestion++,
-                  objetReponse: {
-                    champ1: {
-                      value: new Grandeur(tmin, '°C'),
-                      options: { unite: true, precisionUnite: 0 },
-                    },
-                    champ2: {
-                      value: new Grandeur(tmax, '°C'),
-                      options: { unite: true, precisionUnite: 0 },
-                    },
-                    bareme: toutPourUnPoint,
-                  },
-                  typeInteractivite: 'fillInTheBlank',
-                  classe: KeyboardType.nombresEtDegreCelsius,
-                  content: `%{champ1} \\text{ et la plus chaude ? }%{champ2}`,
-                }),
-            )
-            this.listeCorrections.push(
-              `La température la plus basse est $${miseEnEvidence(`${tmin}^\\circ\\text{C}`)}$ et la plus élevée est $${miseEnEvidence(`${tmax}^\\circ\\text{C}`)}$.`,
-            )
-          } else {
-            this.listeQuestions.push(
-              'Quelle est la température la plus froide de la journée ?',
-            )
-            this.listeQuestions.push(
-              'Quelle est la température la plus chaude de la journée ?',
-            )
-            this.listeCorrections.push(
-              `La température la plus basse est $${miseEnEvidence(`${tmin}^\\circ\\text{C}`)}$.`,
-              `La température la plus élevée est $${miseEnEvidence(`${tmax}^\\circ\\text{C}`)}$.`,
-            )
-          }
 
-          if (this.interactif && context.isHtml) {
-            this.listeQuestions.push(
-              'À quelle heure fait-il le plus chaud ?' +
-                ajouteQuestionMathlive({
-                  exercice: this,
-                  question: indiceQuestion++,
-                  objetReponse: {
-                    champ1: {
-                      value: new Grandeur(hmax, 'h'),
-                      options: { HMS: true },
-                    },
-                    champ2: {
-                      value: new Grandeur(hmin, 'h'),
-                      options: { HMS: true },
-                    },
-                    bareme: toutPourUnPoint,
-                  },
-                  typeInteractivite: 'fillInTheBlank',
-                  classe: KeyboardType.clavierHms,
-                  content: `\\text{À quelle heure fait-il le plus chaud ? }%{champ1} \\text{ et à quelle heure fait-il le plus froid ? }%{champ2}`,
-                }),
-            )
-            this.listeCorrections.push(
-              `Il fait le plus chaud à $${miseEnEvidence(hmax + sp() + '\\text{h}')}$ et le plus froid à $${miseEnEvidence(hmin + sp() + '\\text{h}')}$, car ce sont les abscisses des points les plus hauts et les plus bas de la courbe.`,
-            )
-          } else {
-            this.listeQuestions.push('À quelle heure fait-il le plus chaud ?')
-            this.listeCorrections.push(
-              `C'est à $${miseEnEvidence(hmax + sp() + '\\text{h}')}$ qu'il fait le plus chaud.`,
-            )
-            this.listeQuestions.push('À quelle heure fait-il le plus froid ?')
-            this.listeCorrections.push(
-              `C'est à $${miseEnEvidence(hmin + sp() + '\\text{h}')}$ qu'il fait le plus froid.`,
-            )
-          }
+          this.listeQuestions.push(
+            'Quelle est la température la plus froide de la journée ?' +
+              ajouteChampTexteMathLive(
+                this,
+                indiceQuestion,
+                KeyboardType.nombresEtDegreCelsius,
+              ),
+          )
+          handleAnswers(this, indiceQuestion, {
+            reponse: {
+              value: `${tmin}°C`,
+              options: { unite: true, precisionUnite: 0 },
+            },
+          })
+          indiceQuestion++
+
+          this.listeCorrections.push(
+            `La température la plus basse est $${miseEnEvidence(`${tmin}^\\circ\\text{C}`)}$.`,
+          )
+
+          this.listeQuestions.push(
+            'Quelle est la température la plus chaude de la journée ?' +
+              ajouteChampTexteMathLive(
+                this,
+                indiceQuestion,
+                KeyboardType.nombresEtDegreCelsius,
+              ),
+          )
+          handleAnswers(this, indiceQuestion, {
+            reponse: {
+              value: `${tmax}°C`,
+              options: { unite: true, precisionUnite: 0 },
+            },
+          })
+          indiceQuestion++
+
+          this.listeCorrections.push(
+            `La température la plus élevée de la journée est $${miseEnEvidence(`${tmax}^\\circ\\text{C}`)}$.`,
+          )
+          this.listeQuestions.push(
+            'À quelle heure fait-il le plus chaud ?' +
+              ajouteChampTexteMathLive(
+                this,
+                indiceQuestion,
+                KeyboardType.clavierHms,
+              ),
+          )
+          handleAnswers(this, indiceQuestion, {
+            reponse: { value: String(hmax) + ' h', options: { HMS: true } },
+          })
+          indiceQuestion++
+
+          this.listeCorrections.push(
+            `C'est à $${miseEnEvidence(hmax + sp() + '\\text{h}')}$ qu'il fait le plus chaud.`,
+          )
+          this.listeQuestions.push(
+            'À quelle heure fait-il le plus froid ?' +
+              ajouteChampTexteMathLive(
+                this,
+                indiceQuestion,
+                KeyboardType.clavierHms,
+              ),
+          )
+          handleAnswers(this, indiceQuestion, {
+            reponse: { value: String(hmin) + ' h', options: { HMS: true } },
+          })
+          indiceQuestion++
+
+          this.listeCorrections.push(
+            `C'est à $${miseEnEvidence(hmin + sp() + '\\text{h}')}$ qu'il fait le plus froid.`,
+          )
           if (context.isAmc) {
             enonceAMC = this.introduction
             for (let i = 0; i < this.listeQuestions.length; i++) {
