@@ -246,7 +246,7 @@ export default class ExerciceProba extends Exercice {
               texteEnCouleurEtGras('contraires') +
               '.<br>'
           }
-          bonneReponse = 'non contraires'
+          bonneReponse = 'contraires'
           break
         case 'type10':
           if (k === 2) {
