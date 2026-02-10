@@ -229,7 +229,9 @@ export function verifQuestionMathLive(
             if (result.feedback === 'saisieVide') result.feedback = null
             else {
               const fieldNumber =
-                variables.length > 1 ? ` Champ ${key.charAt(key.length - 1)} : ` : ''
+                variables.length > 1
+                  ? ` Champ ${key.charAt(key.length - 1)} : `
+                  : ''
               if (!result.feedback) {
                 // On n'écrase le feedback que s'il n'y en a pas déjà un spécifique
                 result = {
@@ -239,7 +241,9 @@ export function verifQuestionMathLive(
               } else {
                 // On ajoute le numéro du champ avant le feedback existant
                 const firstChar = result.feedback.charAt(0)
-                const lowerFirst = /[a-zA-Z]/.test(firstChar) ? firstChar.toLowerCase() : firstChar
+                const lowerFirst = /[a-zA-Z]/.test(firstChar)
+                  ? firstChar.toLowerCase()
+                  : firstChar
                 result.feedback = `${fieldNumber}${lowerFirst + result.feedback.slice(1)}<br>`
               }
             }
@@ -408,6 +412,8 @@ export function verifQuestionMathLive(
       } // ce code n'est jamais exécuté vu que writeResult est toujours true
     }
   } catch (error) {
+    console.error('Erreur dans verifQuestionMathLive', error)
+
     window.notify(
       `Erreur dans verif QuestionMathLive : ${error}\n Avec les métadonnées : `,
       {
@@ -417,6 +423,8 @@ export function verifQuestionMathLive(
         autoCorrection: exercice?.autoCorrection[i],
         formatInteractif,
         spanReponseLigne,
+        errorMessage: error instanceof Error ? error.message : '',
+        errorStack: error instanceof Error ? error.stack : '',
       },
     )
     return {
