@@ -85,8 +85,8 @@ export default class EquationReduiteDeDroites extends Exercice {
         // case 'A et B':
         xA = randint(-7, 7)
         yA = randint(-7, 7)
-        xB = randint(-7, 7)
-        yB = randint(-7, 7)
+        xB = randint(-7, 7, xA)
+        yB = randint(-7, 7, yA)
         xu = xB - xA
         yu = yB - yA
         n = yB - yA
