@@ -62,12 +62,8 @@ export default class ExerciceFactorisePoly extends Exercice {
       ).simplifie()
       const b = new FractionEtendue(randint(-10, 10, 0), 1)
       const c = new FractionEtendue(randint(-10, 10, 0), 1)
-      const mono = choice([-1, 1])
       let solA = ''
       let solB = ''
-      const monoT = mono === 1 ? 'croissante' : 'décroissante'
-      const sens = a.signe > 0 ? 'convexe' : 'concave'
-      const sensN = a.signe > 0 ? 1 : -1
       let bCompletion = b
         .produitFraction(a.inverse())
         .simplifie()
@@ -97,6 +93,10 @@ export default class ExerciceFactorisePoly extends Exercice {
         bCompletion.isEqual(b) ||
         (listeTypeDeQuestions[i] === 'fractionnaire' && a.den === 1)
       )
+      const mono = choice([-1, 1])
+      const monoT = mono === 1 ? 'croissante' : 'décroissante'
+      const sens = a.signe > 0 ? 'convexe' : 'concave'
+      const sensN = a.signe > 0 ? 1 : -1
       const f = new Trinome(a, b, c)
       const sommetX = f.alpha.simplifie()
       const sommetY = f.beta.simplifie()
