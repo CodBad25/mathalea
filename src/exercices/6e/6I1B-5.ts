@@ -1,5 +1,5 @@
 import { MySpreadsheetElement } from '../../lib/tableur/MySpreadSheet'
-import { addSheet } from '../../lib/tableur/outilsTableur'
+import { addSheet, createTableurLatex } from '../../lib/tableur/outilsTableur'
 import { context } from '../../modules/context'
 
 import {
@@ -33,7 +33,7 @@ export const refs = {
 
 export default class ExerciceTableur extends Exercice {
   destroyers: (() => void)[] = []
-
+  niveau: number = 6
   constructor() {
     super()
     this.nbQuestions = 3
@@ -61,6 +61,8 @@ export default class ExerciceTableur extends Exercice {
     this.besoinFormulaire2Numerique = ['Nombre de lignes', 1, '1\n2\n3\n4\n5']
     this.sup = 0
     this.sup2 = 3
+
+    this.niveau = 6
   }
 
   destroy() {
@@ -260,8 +262,12 @@ export default class ExerciceTableur extends Exercice {
     /*     const nbOperations =
       this.sup === 1 ? randint(2, 5) : Math.min(Math.max(2, this.sup), 5)
  */
+    let choixThisSup = this.sup
+    if (this.niveau === 6 && choixThisSup === 0) {
+      choixThisSup = '1-2-3-4-5-10-11-12-13'
+    }
     const listeTypeQuestions = gestionnaireFormulaireTexte({
-      saisie: this.sup,
+      saisie: choixThisSup,
       min: 1,
       max: 13,
       defaut: 1,
@@ -323,7 +329,7 @@ export default class ExerciceTableur extends Exercice {
         num: 6,
         txtEnonce: 'Son carré',
         txtCorrection: 'le carré de ',
-        txtFormule: '=B1^2',
+        txtFormule: `=B1^2`,
         enchainement: `$number1^2 = number1 \\times number1 = $`,
         fct: (x: number, y: number) => x * x,
       },
@@ -338,7 +344,7 @@ export default class ExerciceTableur extends Exercice {
       {
         num: 8,
         txtEnonce: 'Son opposé',
-        txtCorrection: "l'opposé de ",
+        txtCorrection: `l'opposé de `,
         txtFormule: '=-B1',
         enchainement: ``,
         fct: (x: number, y: number) => -x,
@@ -346,7 +352,7 @@ export default class ExerciceTableur extends Exercice {
       {
         num: 9,
         txtEnonce: 'Son inverse',
-        txtCorrection: "l'inverse de ",
+        txtCorrection: `l'inverse de `,
         txtFormule: '=1/B1',
         enchainement: `$\\dfrac{1}{number1}$`,
         fct: (x: number, y: number) => (x !== 0 ? 1 / x : NaN),
@@ -476,7 +482,7 @@ export default class ExerciceTableur extends Exercice {
       data[0][1] = cellDatas[0][1].v
       /*     for (let i = 0; i < steps.length; i++) {
       data[0][i + 1] = cellDatas[0][i + 1].v
-    } */
+     } */
       for (let i = 0; i < nbLignes; i++) {
         data.push([]) // creer une ligne par question
         data[i + 1][0] = cellDatas[i + 1][0].v
@@ -529,7 +535,7 @@ export default class ExerciceTableur extends Exercice {
         options.formuleCellule = 'B1'
 
         texte += createTableurLatex(
-          listeMotsQR.length + 1,
+          listeNbLignes[q] + 1,
           4,
           cellDatas,
           ExerciceTableur.styles,
@@ -541,9 +547,12 @@ export default class ExerciceTableur extends Exercice {
       for (let i = 0; i < nbLignes; i++) {
         const index = i + q * nbLignes
         const lOperation = Number(listeTypeQuestions[index])
-        texteCorr += `Pour calculer ${listeMots[lOperation - 1].txtCorrection}${nbDepart}, la formule  à saisir dans la cellule ${listeMotsQR[index].ref} est : ${listeMotsQR[index].txtFormule}.<br>`
+        let formule = listeMotsQR[index].txtFormule
+        if (!context.isHtml && formule.includes('^')) {
+          formule = formule.replace(/\^/g, `\\^{}`)
+        }
+        texteCorr += `Pour calculer ${listeMots[lOperation - 1].txtCorrection}${nbDepart}, la formule  à saisir dans la cellule ${listeMotsQR[index].ref} est : ${formule}.<br>`
       }
-
       const listener = () => {
         const sheets = Array.from(
           document.querySelectorAll('my-spreadsheet'),
@@ -648,66 +657,6 @@ export function buildStyleFromColos(
     style[key] = color
   }
   return style
-}
-
-function createTableurLatex(
-  rowNbr: number,
-  colNbr: number,
-  data: any,
-  styles: any,
-  options: {
-    formule?: boolean
-    formuleTexte?: string
-    formuleCellule?: string
-    firstColHeaderWidth?: string
-  } = {},
-) {
-  let output = `\\begin{tabularx}{0.9\\linewidth}
-  {|>{\\cellcolor{lightgray}}c|
-  ${options.firstColHeaderWidth ? `>{\\centering \\arraybackslash}p{${options.firstColHeaderWidth}}|` : '>{\\centering \\arraybackslash}X|'}
-  *{${colNbr - 1}}{>{\\centering \\arraybackslash}X|}}\\hline\n`
-
-  if (options.formule) {
-    output += `\\multicolumn{1}{|l}{${options.formuleCellule}}&\\multicolumn{1}{r|}{▼}&\\multicolumn{${colNbr - 1}}{l|}{${options.formuleTexte}}\\\\ \\hline\n`
-  }
-  // en-tête
-  output += '\\rowcolor{lightgray} &'
-  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-  for (let colIndex = 0; colIndex < colNbr - 1; colIndex++) {
-    output += `\\textbf{\\sffamily ${alphabet[colIndex]}}  & `
-  }
-  output += `\\textbf{\\sffamily ${alphabet[colNbr - 1]}} \\\\ \\hline\n`
-
-  for (let rowIndex = 0; rowIndex < rowNbr; rowIndex++) {
-    const rowData = data[rowIndex] || {}
-    output += `\\textbf{\\sffamily ${rowIndex + 1}} &`
-    for (let colIndex = 0; colIndex < colNbr; colIndex++) {
-      const cell = rowData[colIndex] || {}
-      const styleCell = styles[cell.s ?? ''] || {}
-      let color = ''
-      if (styleCell.bg?.startsWith('#')) {
-        color = `\\cellcolor[HTML]{${styleCell.bg.replace('#', '')}}`
-      } else if (styleCell.bg) {
-        color = `\\cellcolor{${styleCell.bg}}`
-      }
-      if (cell?.t === 1) {
-        // texte
-        output += `\\raggedright ${color} ${cell.v || ''}  &`
-      } else if (cell?.t === 2) {
-        // number
-        output += `\\raggedleft ${color} ${cell.v || ''}  &`
-      } else if (cell?.t === 3) {
-        // boolean
-        output += `\\centering ${color} ${cell.v ? 'VRAI' : 'FAUX'}  &`
-      } else {
-        output += `${color} ${cell.v || ''}  &`
-      }
-    }
-    output = output.slice(0, -1) // enlever le dernier &
-    output += '\\\\ \\hline\n'
-  }
-  output += '\\end{tabularx}\n'
-  return output
 }
 
 type MotsQR = {
