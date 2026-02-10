@@ -67,8 +67,9 @@ export default class SommeOuProduitFractions extends Exercice {
   nouvelleVersion() {
     this.consigne =
       this.nbQuestions > 1
-        ? 'Effectuer les calculs suivants.'
-        : 'Effectuer le calcul suivant.'
+        ? 'Effectuer les calculs suivants'
+        : 'Effectuer le calcul suivant'
+    this.consigne += " en donnant le résultat sous forme d'une fraction."
     let typeQuestionsDisponibles = []
     const typeQuestionsPossibles = [
       ['sommeMult', 'sommeAvecEntier'],
