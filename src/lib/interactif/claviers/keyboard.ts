@@ -43,6 +43,31 @@ const KEYBOARD_CATEGORIES = [
 export type KeyboardCategory = (typeof KEYBOARD_CATEGORIES)[number] // on crée le type à partir du tableau de strings comme un union type de toutes les strings
 
 /**
+ * Convertit une valeur de classe en chaîne de caractères pour l'attribut class
+ *
+ * Cette fonction gère trois types d'entrées :
+ * - `undefined` : retourne une chaîne vide
+ * - `string` : retourne la chaîne telle quelle
+ * - `PartialKbType` (objet) : extrait toutes les valeurs de l'objet et les joint avec des espaces
+ *
+ * @param {string | PartialKbType | undefined} classe - La classe à convertir
+ * @returns {string} La chaîne de caractères représentant la classe
+ *
+ * @example
+ * convertClasseToString('clavierDeBase') // => 'clavierDeBase'
+ * convertClasseToString(undefined) // => ''
+ * convertClasseToString({ lycee: 'lycee', complexes: 'complexes' }) // => 'lycee complexes'
+ */
+export const convertClasseToString = (
+  classe: string | PartialKbType | undefined,
+): string => {
+  if (classe === undefined) return ''
+  if (typeof classe === 'string') return classe
+  // Si c'est un objet PartialKbType, extraire les valeurs et les joindre
+  return Object.values(classe).join(' ')
+}
+
+/**
  * Détermine si un type de clavier passé en paramètre est bien connu
  * @param category type de clavier à vérifier
  * @returns `true` si le type de clavier est dans la liste
