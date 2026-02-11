@@ -374,6 +374,7 @@ export function addSheet({
   showVerifyButton,
   nbLignesCachees,
   nbColonnesCachees,
+  readOnlyCells,
 }: {
   numeroExercice: number
   question: number
@@ -385,6 +386,7 @@ export function addSheet({
   showVerifyButton: boolean
   nbLignesCachees?: number
   nbColonnesCachees?: number
+  readOnlyCells?: string[]
 }): string {
   return (
     `<my-spreadsheet
@@ -397,6 +399,7 @@ export function addSheet({
     ${showVerifyButton !== undefined ? `show-verify-button='${showVerifyButton}'` : ''}
     ${nbLignesCachees !== undefined ? `nb-lignes-cachees='${nbLignesCachees}'` : ''}
     ${nbColonnesCachees !== undefined ? `nb-colonnes-cachees='${nbColonnesCachees}'` : ''}
+    ${readOnlyCells && readOnlyCells.length > 0 ? `readonly-cells='${JSON.stringify(readOnlyCells)}'` : ''}
 >` +
     (interactif
       ? `<div class="ml-2 py-2" id="resultatCheckEx${numeroExercice}Q${question}"></div>

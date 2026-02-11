@@ -31,6 +31,7 @@ export class MySpreadsheetElement extends HTMLElement {
     columns = [],
     interactif = false,
     showVerifyButton = true,
+    readOnlyCells = [],
   }: {
     id?: string
     data?: (string | number)[][]
@@ -39,6 +40,7 @@ export class MySpreadsheetElement extends HTMLElement {
     columns?: any[]
     interactif?: boolean
     showVerifyButton?: boolean
+    readOnlyCells?: string[]
   } = {}) {
     const elt = new MySpreadsheetElement()
     if (id) elt.id = id
@@ -47,6 +49,9 @@ export class MySpreadsheetElement extends HTMLElement {
     elt.setAttribute('style', JSON.stringify(style))
     elt.setAttribute('columns', JSON.stringify(columns))
     elt.setAttribute('interactif', interactif ? 'true' : 'false')
+    if (readOnlyCells.length > 0) {
+      elt.setAttribute('readonly-cells', JSON.stringify(readOnlyCells))
+    }
     if (showVerifyButton !== undefined) {
       elt.setAttribute(
         'show-verify-button',
@@ -67,6 +72,7 @@ export class MySpreadsheetElement extends HTMLElement {
     let columns = []
     let nbLignesCachees = 0
     let nbColonnesCachees = 0
+    let readOnlyCells: string[] = []
     try {
       if (this.getAttribute('data'))
         data = JSON.parse(this.getAttribute('data') ?? '') as (
@@ -96,6 +102,58 @@ export class MySpreadsheetElement extends HTMLElement {
           this.getAttribute('nb-colonnes-cachees') ?? '0',
         )
     } catch {}
+    try {
+      if (this.getAttribute('readonly-cells'))
+        readOnlyCells = JSON.parse(this.getAttribute('readonly-cells') ?? '[]')
+    } catch {}
+    const expandReadOnlyCells = (cells: string[]) => {
+      const toIndex = (letters: string) => {
+        let index = 0
+        for (const char of letters.toUpperCase()) {
+          index = index * 26 + (char.charCodeAt(0) - 64)
+        }
+        return index - 1
+      }
+      const toLetters = (index: number) => {
+        let n = index + 1
+        let letters = ''
+        while (n > 0) {
+          const rem = (n - 1) % 26
+          letters = String.fromCharCode(65 + rem) + letters
+          n = Math.floor((n - 1) / 26)
+        }
+        return letters
+      }
+      const parseRef = (ref: string) => {
+        const match = ref.toUpperCase().match(/^([A-Z]+)(\d+)$/)
+        if (!match) return null
+        return { col: toIndex(match[1]), row: Number(match[2]) - 1 }
+      }
+      const expanded: string[] = []
+      cells.forEach((cellRef) => {
+        const trimmed = cellRef.trim()
+        if (!trimmed) return
+        if (!trimmed.includes(':')) {
+          const parsed = parseRef(trimmed)
+          if (parsed) expanded.push(trimmed.toUpperCase())
+          return
+        }
+        const [startRef, endRef] = trimmed.split(':')
+        const start = parseRef(startRef)
+        const end = parseRef(endRef)
+        if (!start || !end) return
+        const colStart = Math.min(start.col, end.col)
+        const colEnd = Math.max(start.col, end.col)
+        const rowStart = Math.min(start.row, end.row)
+        const rowEnd = Math.max(start.row, end.row)
+        for (let row = rowStart; row <= rowEnd; row++) {
+          for (let col = colStart; col <= colEnd; col++) {
+            expanded.push(`${toLetters(col)}${row + 1}`)
+          }
+        }
+      })
+      return expanded
+    }
     this._spreadsheet = jspreadsheet(container, {
       tabs: false,
       toolbar: false,
@@ -110,6 +168,11 @@ export class MySpreadsheetElement extends HTMLElement {
         } as any,
       ],
     })[0]
+    if (readOnlyCells.length > 0) {
+      expandReadOnlyCells(readOnlyCells).forEach((cellRef) => {
+        this._spreadsheet.setReadOnly(cellRef, true)
+      })
+    }
     for (let i = 0; i < nbLignesCachees; i++) {
       this.hideRow(i)
     }
