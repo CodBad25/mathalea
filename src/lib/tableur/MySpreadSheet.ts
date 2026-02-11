@@ -1,5 +1,5 @@
 import jspreadsheet from 'jspreadsheet-ce'
-import 'jspreadsheet-ce/dist/jspreadsheet.css'
+import 'jspreadsheet-ce/src/jspreadsheet.css'
 
 export class MySpreadsheetElement extends HTMLElement {
   private _spreadsheet: any = null
@@ -168,6 +168,10 @@ export class MySpreadsheetElement extends HTMLElement {
         } as any,
       ],
     })[0]
+    container.addEventListener('contextmenu', (e) => {
+      e.preventDefault()
+      e.stopPropagation()
+    })
     if (readOnlyCells.length > 0) {
       expandReadOnlyCells(readOnlyCells).forEach((cellRef) => {
         this._spreadsheet.setReadOnly(cellRef, true)
