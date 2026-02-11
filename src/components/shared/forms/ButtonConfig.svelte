@@ -63,7 +63,7 @@
     <FormConfigGlobal bind:latexFileInfos {latex} />
 
     <!-- Config individuelle -->
-    <FormConfigIndividual bind:locallatexFileInfos={latexFileInfos} {latex} />
+    <FormConfigIndividual bind:latexFileInfos {latex} />
 
     <!-- Card JSON -->
     <div class="w-full mt-6 p-4 border rounded-2xl shadow bg-gray-50">
