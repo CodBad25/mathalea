@@ -117,12 +117,15 @@ export default class Pourcentages extends ExerciceQcmA {
       `$\\dfrac{${texNombre(nombre)}}{${pourcentage} \\times 100}$`, // Division au lieu de multiplication
       `$\\dfrac{${texNombre(nombre)} \\times 100}{${pourcentage}}$`, // Formule inversée
       `$${pourcentage} \\times ${texNombre(nombre)} \\times 0,1$`, // Multiplication par 0,1 au lieu de division par 100
-      `$${texNombre(pourcentage,2)} \\times ${texNombre(nombre)}\\times 100$`, // Multiplication par 0,01 (confusion avec décimal)
-      `$\\dfrac{${texNombre(nombre)}}{${pourcentage}}$`, // Oubli du facteur 100
+      `$${texNombre(pourcentage, 2)} \\times ${texNombre(nombre)}\\times 100$`, // Multiplication par 0,01 (confusion avec décimal)
       `$${texNombre(nombre)} \\times ${texNombre(pourcentage / 1000)}$`, // Confusion avec les millièmes
       `$\\dfrac{${pourcentage}}{${texNombre(nombre)}} \\times 100$`, // Ordre inversé
       `$${texNombre(nombre)} \\times ${pourcentage} \\times 0,001$`, // Facteur complètement faux
     ]
+    if (pourcentage !== 10) {
+      // Cas particulier à éviter : 10% = 1/10 !
+      mauvaisesReponses.push(`$\\dfrac{${texNombre(nombre)}}{${pourcentage}}$`)
+    }
 
     // Sélection d'une bonne réponse
     const bonneReponse = choice(bonnesReponses)
@@ -147,16 +150,16 @@ export default class Pourcentages extends ExerciceQcmA {
     }
 
     const calculDeBase = `${texNombre(pourcentage / 100, 2)} \\times ${texNombre(nombre)}`
-const bonneReponseSansSymboles = bonneReponse.replace(/\$/g, '')
+    const bonneReponseSansSymboles = bonneReponse.replace(/\$/g, '')
 
-// Vérifier si la bonne réponse est différente du calcul de base
-if (bonneReponseSansSymboles === calculDeBase) {
-  // Si c'est la même chose, pas besoin de "soit encore"
-  this.correction = `Pour calculer $${pourcentage}\\,\\%$ de $${texNombre(nombre)}$, on effectue le calcul $${miseEnEvidence(calculDeBase)}$.`
-} else {
-  // Si c'est différent, alors on peut dire "soit encore"
-  this.correction = `Pour calculer $${pourcentage}\\,\\%$ de $${texNombre(nombre)}$, on effectue le calcul $${texNombre(pourcentage / 100, 2)} \\times ${texNombre(nombre)}$, soit encore $${miseEnEvidence(bonneReponseSansSymboles)}$.`
-}
+    // Vérifier si la bonne réponse est différente du calcul de base
+    if (bonneReponseSansSymboles === calculDeBase) {
+      // Si c'est la même chose, pas besoin de "soit encore"
+      this.correction = `Pour calculer $${pourcentage}\\,\\%$ de $${texNombre(nombre)}$, on effectue le calcul $${miseEnEvidence(calculDeBase)}$.`
+    } else {
+      // Si c'est différent, alors on peut dire "soit encore"
+      this.correction = `Pour calculer $${pourcentage}\\,\\%$ de $${texNombre(nombre)}$, on effectue le calcul $${texNombre(pourcentage / 100, 2)} \\times ${texNombre(nombre)}$, soit encore $${miseEnEvidence(bonneReponseSansSymboles)}$.`
+    }
     // Construction du tableau final avec exactement 4 réponses
     this.reponses = [bonneReponse, ...troisMauvaisesReponses]
   }
