@@ -1,6 +1,7 @@
 import { propositionsQcm } from '../../../lib/interactif/qcm'
 import { enleveElement, shuffle } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { texNombre } from '../../../lib/outils/texNombre'
 import { context } from '../../../modules/context'
 import { listeQuestionsToContenu, randint } from '../../../modules/outils'
 import Exercice from '../../Exercice'
@@ -31,13 +32,13 @@ export default class LaBonneUnite extends Exercice {
 
   nouvelleVersion() {
     const hauteurs = [
-      ['chaise', 75, 115, 'cm'],
-      ['grue de chantier', 20, 60, 'm'],
-      ['gratte-ciel', 50, 180, 'm'],
-      ['girafe', 40, 50, 'dm'],
-      ['colline', 75, 150, 'm'],
-      ['maison', 30, 90, 'dm'],
-      ['poule', 15, 50, 'cm'],
+      ["d'une chaise", 75, 115, 'cm'],
+      ["d'une grue de chantier", 20, 60, 'm'],
+      ["d'un gratte-ciel", 50, 180, 'm'],
+      ["d'une girafe", 40, 50, 'dm'],
+      ["d'une colline", 75, 150, 'm'],
+      ["d'une maison", 30, 90, 'dm'],
+      ["d'une poule", 15, 50, 'cm'],
     ]
 
     const longueurs = [
@@ -57,7 +58,7 @@ export default class LaBonneUnite extends Exercice {
       let typeObjet: string
       if (choixType === 0) {
         liste = hauteurs.slice(0) as [string, number, number, string][]
-        typeObjet = "hauteur d'une"
+        typeObjet = "hauteur "
       } else {
         liste = longueurs.slice(0) as [string, number, number, string][]
         typeObjet = "longueur d'un"
@@ -73,19 +74,19 @@ export default class LaBonneUnite extends Exercice {
         enonce: texte,
         propositions: [
           {
-            texte: `$${b}\\,\\text{${liste[a][3]}}$`,
+            texte: `$${texNombre(b)}\\,\\text{${liste[a][3]}}$`,
             statut: true,
           },
           {
-            texte: `$${b}\\,\\text{${unites[0]}}$`,
+            texte: `$${texNombre(b)}\\,\\text{${unites[0]}}$`,
             statut: false,
           },
           {
-            texte: `$${b}\\,\\text{${unites[1]}}$`,
+            texte: `$${texNombre(b)}\\,\\text{${unites[1]}}$`,
             statut: false,
           },
           {
-            texte: `$${b}\\,\\text{${unites[2]}}$`,
+            texte: `$${texNombre(b)}\\,\\text{${unites[2]}}$`,
             statut: false,
           },
         ],
@@ -94,7 +95,7 @@ export default class LaBonneUnite extends Exercice {
       if (!context.isAmc) {
         texte += monQcm.texte
       }
-      const texteCorr = `La ${typeObjet} ${liste[a][0]} est $${miseEnEvidence(`${b}\\,\\text{${liste[a][3]}}`)}$.`
+      const texteCorr = `La ${typeObjet} ${liste[a][0]} est $${miseEnEvidence(`${texNombre(b)}\\,\\text{${liste[a][3]}}`)}$.`
       if (this.questionJamaisPosee(i, a, b, choixType)) {
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr
