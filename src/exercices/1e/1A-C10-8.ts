@@ -57,7 +57,7 @@ export default class Auto1C11 extends ExerciceQcmA {
     // Génération des coefficients
     const a = randint(-9, 9, 0)
     const b = randint(-9, 9, 0)
-    c = randint(-9, 9, 0)
+    c = randint(-9, 9, a)
     const d = randint(-9, 9, 0)
     const k = randint(2, 9, b)
 
