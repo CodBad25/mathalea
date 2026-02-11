@@ -58,7 +58,7 @@ $${texPrix(prixDepart)}\\div ${facteur}=${miseEnEvidence(texPrix(reponse))}$ €
     this.canReponseACompleter = '$\\ldots$ €'
     
     if (this.interactif) {
-      this.optionsChampTexte = { texteAvant: '<br>', texteApres: '€.' }
+      this.optionsChampTexte = { texteAvant: '<br>', texteApres: '€' }
     }
   }
 
