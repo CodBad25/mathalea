@@ -58,7 +58,8 @@ export default class ConversionEnTousSens extends ExerciceSimple {
             this.question += ' $\\ldots\\text{ g}$'
           }
 
-          this.optionsChampTexte = { texteApres: '*\\text{ g}$' }
+          this.optionsChampTexte = {
+            texteApres: '$\\text{ g }$' }
           this.canEnonce = 'Compléter.'
           this.canReponseACompleter = `$${texNombre(a)}\\text{ kg}$ $= \\dots\\text{ g}$`
           this.correction = `$${texNombre(a)}\\text{ kg}$ $=${miseEnEvidence(texNombre(a * 1000))}\\text{ g}$`
