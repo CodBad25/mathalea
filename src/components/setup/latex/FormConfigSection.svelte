@@ -10,6 +10,13 @@
   export let latex: Latex
   export let promise: Promise<any> | null = null
 
+  const modeleOptions = [
+    { label: '(aucune)', value: '' },
+    { label: 'Brevet', value: 'Brevet' },
+    { label: 'Bac', value: 'Bac' },
+    { label: 'DS', value: 'DS' },
+  ]
+
   const isExerciceStaticInTheList = latex.isExerciceStaticInTheList()
 </script>
 

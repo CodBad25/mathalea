@@ -1,3 +1,6 @@
+import type { ExerciceConfig } from './LatexTypes'
+import type { IExercice } from './types'
+
 /**
  * Décode une chaîne de regroupement d'exercices
  *
@@ -75,4 +78,39 @@ export function findExoPosition(
     }
   }
   return null
+}
+
+export function getPoints(exercice: IExercice) {
+  let points = 0
+  for (let i = 0; i < exercice.listeQuestions.length; i++) {
+    points++
+  }
+  return points ?? 1
+}
+
+export function buildExamExercices(
+  exercices: IExercice[],
+  latexFileInfos?: { exosGrouping?: string },
+): ExerciceConfig[] {
+  const grouping = latexFileInfos?.exosGrouping
+
+  if (!grouping) {
+    // Pas de grouping → 1 exercice = 1 entrée
+    return exercices.map((e) => ({ points: getPoints(e) }))
+  }
+
+  const groups = decodeExosGrouping(grouping, exercices.length)
+
+  return groups.map((group) => {
+    const indices = group
+
+    const totalPoints = indices.reduce((sum, i) => {
+      if (i >= 0 && i < exercices.length) {
+        return sum + getPoints(exercices[i])
+      }
+      return sum
+    }, 0)
+
+    return { points: totalPoints }
+  })
 }

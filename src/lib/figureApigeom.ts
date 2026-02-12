@@ -101,6 +101,9 @@ export default function figureApigeom({
   }
   document.addEventListener('zoomChanged', updateZoom)
 
+  let retryTimeout: number | null = null
+  let retryCount = 0
+  const MAX_RETRY = 3
   function updateAffichage(): void {
     if (!figure.options) {
       // figure effacée, donc on annule la mise à jour...
@@ -110,18 +113,36 @@ export default function figureApigeom({
     if (!context.isHtml) {
       return
     }
+
+    const eles = document.querySelectorAll(`#${idApigeom}`)
+    if (eles.length > 1) {
+      if (retryCount < MAX_RETRY) {
+        retryCount++
+        // MGu ca arrive quand on duplique un exercice,
+        //  le temps que l'autre soit modifié,
+        // où se retrouve avec 2 éléments avec le même id dans la page
+        window.notify(
+          `Plusieurs éléments avec le même id ${idApigeom} dans la page.`,
+          { exercice, figure, eles },
+        )
+
+        // 🔥 retry dans 300 millisecondes
+        if (retryTimeout === null) {
+          retryTimeout = window.setTimeout(() => {
+            retryTimeout = null
+            updateAffichage()
+          }, 300)
+        }
+
+        return
+      }
+    }
+    // ✅ reset si tout est OK
+    retryCount = 0
     const container = document.querySelector(`#${idApigeom}`) as HTMLDivElement
     // console.log('container:' + figure.id + ':' + container)
     if (container == null) {
       return
-    }
-    const eles = document.querySelectorAll(`#${idApigeom}`)
-    if (eles.length > 1) {
-      // MGU on devrait jamais être ici mais ça arrive parfois avec les composants Svelte
-      window.notify(
-        `Plusieurs éléments avec le même id ${idApigeom} dans la page.`,
-        { exercice, figure },
-      )
     }
 
     container.innerHTML = ''

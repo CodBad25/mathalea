@@ -1,4 +1,5 @@
 import seedrandom from 'seedrandom'
+import { ExamTemplateEngine } from '../components/setup/latex/LatexConfig'
 import Exercice from '../exercices/Exercice'
 import genericPreamble from '../lib/latex/preambule.tex?raw'
 import {
@@ -19,6 +20,7 @@ import type {
 } from './LatexTypes'
 import { mathaleaHandleExerciceSimple } from './mathalea.js'
 import { getLang } from './stores/languagesStore'
+
 function testIfLoaded(
   values: string[],
   valuetoSearch: string,
@@ -591,7 +593,26 @@ class Latex {
         )
       }
       this.loadPreambuleFromContents(contents, latexFileInfos)
-      contents.intro += '\n\\begin{document}'
+      if (
+        latexFileInfos.modele !== undefined &&
+        latexFileInfos.modele !== 'aucun' &&
+        latexFileInfos.examConfig !== undefined
+      ) {
+        const engine = new ExamTemplateEngine(latexFileInfos.examConfig)
+        const tabularx = testIfLoaded([contents.preamble], 'tabularx', '1')
+        if (tabularx !== '1') {
+          contents.preamble += '\n\\usepackage{tabularx}'
+        }
+        const lastpage = testIfLoaded([contents.preamble], 'lastpage', '1')
+        if (lastpage !== '1') {
+          contents.preamble += '\n\\usepackage{lastpage}'
+        }
+        contents.intro += engine.generateTikzFiche()
+        contents.intro += '\n\\begin{document}'
+        contents.intro += `\n${engine.render()}\n`
+      } else {
+        contents.intro += '\n\\begin{document}'
+      }
     } else {
       for (let i = 1; i < latexFileInfos.nbVersions + 1; i++) {
         if (latexFileInfos.signal?.aborted) {
