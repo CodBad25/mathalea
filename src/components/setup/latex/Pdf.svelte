@@ -18,6 +18,7 @@
   import NavBar from '../../shared/header/NavBar.svelte'
   import ImageCarousel from '../../shared/ui/ImageCarousel.svelte'
   import SimpleCard from '../../shared/ui/SimpleCard.svelte'
+  import ExamTemplateConfig from './ExamTemplateConfig.svelte'
   import ExosGroupingDragDrop from './ExosGroupingDragDrop.svelte'
   import FormConfigSection from './FormConfigSection.svelte'
   import { decodeBase64, encodeBase64 } from './LatexConfig'
@@ -50,6 +51,7 @@
     nbVersions: 1,
     exos: {}, // tu peux garder vide par défaut
     exosGrouping: '', // tu peux garder vide par défaut
+    modele: undefined, // tu peux garder undefined par défaut
     ...decoded, // ⚡ écrase les valeurs par défaut si présente
   }
 
@@ -79,7 +81,8 @@
   let exercices: IExercice[]
   let isExerciceStaticInTheList = false
   let promise: Promise<void>
-  let activeTab: 'general' | 'advanced' | 'global' | 'grouped' = 'general'
+  let activeTab: 'general' | 'advanced' | 'global' | 'grouped' | 'model' =
+    'general'
 
   const latex = new Latex()
 
@@ -325,6 +328,18 @@
               >
                 Groupe
               </button>
+
+              <button
+                class="pb-2 px-2 -mb-px text-sm font-medium transition-colors duration-200"
+                class:text-blue-500={activeTab === 'model'}
+                class:border-b-2={activeTab === 'model'}
+                class:border-blue-500={activeTab === 'model'}
+                class:text-gray-400={activeTab !== 'model'}
+                class:hover:text-gray-200={activeTab !== 'model'}
+                on:click={() => (activeTab = 'model')}
+              >
+                Modèle
+              </button>
             {/if}
           </div>
 
@@ -369,10 +384,6 @@
                   bind:value={latexFileInfos.subtitle}
                   showTitle={false}
                 />
-              </SimpleCard>
-
-              <SimpleCard title="Assemblage des exercices" class="mb-4">
-                <ExosGroupingDragDrop {exercices} bind:latexFileInfos />
               </SimpleCard>
 
               <SimpleCard
@@ -447,6 +458,22 @@
               >
                 <SimpleCard title="Assemblage des exercices" class="mb-4">
                   <ExosGroupingDragDrop {exercices} bind:latexFileInfos />
+                </SimpleCard>
+              </div>
+            </div>
+          {/if}
+          {#if activeTab === 'model' && latexFileInfos.style === 'ProfMaquette'}
+            <div
+              class="flex flex-col md:flex-row w-full justify-between rounded-lg
+                    bg-coopmaths-canvas-dark shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),
+                    0_10px_20px_-2px_rgba(0,0,0,0.04)]
+                    dark:bg-coopmathsdark-canvas-dark"
+            >
+              <div
+                class="mb-6 border rounded-lg p-4 bg-gray-50 mx-auto h-[70vh] overflow-y-auto"
+              >
+                <SimpleCard title="Modèle" class="mb-4">
+                  <ExamTemplateConfig {exercices} bind:latexFileInfos />
                 </SimpleCard>
               </div>
             </div>

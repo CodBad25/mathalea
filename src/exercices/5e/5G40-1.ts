@@ -1,10 +1,10 @@
+import { propositionsQcm } from '../../lib/interactif/qcm'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
-import Exercice from '../Exercice'
-import { listeQuestionsToContenu } from '../../modules/outils'
-import { context } from '../../modules/context'
-import { propositionsQcm } from '../../lib/interactif/qcm'
 import { range1 } from '../../lib/outils/nombres'
+import { context } from '../../modules/context'
+import { listeQuestionsToContenu } from '../../modules/outils'
+import Exercice from '../Exercice'
 
 export const titre =
   "Compléter une phrase par la définition ou une propriété d'un parallélogramme"
@@ -66,7 +66,6 @@ export default class ProprietesDesParallelogrammes extends Exercice {
     for (
       let i = 0, texte, texteCorr, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       this.introduction = 'Dans cet exercice, on supposera que'
       this.introduction +=
@@ -347,5 +346,7 @@ export default class ProprietesDesParallelogrammes extends Exercice {
       cpt++
     }
     listeQuestionsToContenu(this)
+    this.nbQuestions = this.listeQuestions.length // MGu ici car parfois pas assez de questions différentes...
+    this.autoCorrection = this.autoCorrection.slice(0, this.nbQuestions)
   }
 }

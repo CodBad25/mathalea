@@ -375,7 +375,11 @@
     }
     seedrandom(exercise.seed, { global: true })
     if (exercise.typeExercice === 'simple' && withNewVersion) {
-      mathaleaHandleExerciceSimple(exercise, Boolean(isInteractif))
+      mathaleaHandleExerciceSimple(
+        exercise,
+        Boolean(isInteractif),
+        exerciseIndex,
+      )
     }
     exercise.interactif = isInteractif
     if (interfaceParams.alea !== exercise.seed && exercise.seed !== undefined) {

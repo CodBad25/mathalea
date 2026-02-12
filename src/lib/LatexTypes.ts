@@ -14,6 +14,20 @@ export interface picFile {
   format: string
 }
 
+export type ExerciceConfig = {
+  points: number
+}
+
+export type ExamConfig = {
+  type: string
+  titre: string
+  session: string
+  matiere: string
+  duree: string
+  autorisation: string
+  exercices?: ExerciceConfig[]
+}
+
 export interface LatexFileInfos {
   title: string
   reference: string
@@ -28,6 +42,7 @@ export interface LatexFileInfos {
     | 'ProfMaquette'
     | 'ProfMaquetteQrcode'
     | 'Can'
+  modele?: 'Brevet' | 'Bac' | 'DS' | 'aucun'
   nbVersions: number
   fontOption: 'StandardFont' | 'DysFont'
   correctionOption: 'AvecCorrection' | 'SansCorrection'
@@ -43,6 +58,7 @@ export interface LatexFileInfos {
     }
   }
   exosGrouping?: string
+  examConfig?: ExamConfig
   signal?: AbortSignal | undefined
 }
 
