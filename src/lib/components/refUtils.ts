@@ -227,14 +227,17 @@ export function buildReferentiel(
 export function mergeReferentielObjects(
   ...objects: JSONReferentielObject[]
 ): JSONReferentielObject {
-  const isObject = (obj: unknown) => obj && typeof obj === 'object'
+  const isJSONReferentielObject = (
+    obj: unknown,
+  ): obj is JSONReferentielObject =>
+    obj !== null && typeof obj === 'object' && !Array.isArray(obj)
   return objects.reduce((prev, obj) => {
     Object.keys(obj).forEach((key) => {
       const pVal = prev[key]
       const oVal = obj[key]
       if (Array.isArray(pVal) && Array.isArray(oVal)) {
         prev[key] = pVal.concat(...oVal)
-      } else if (isObject(pVal) && isObject(oVal)) {
+      } else if (isJSONReferentielObject(pVal) && isJSONReferentielObject(oVal)) {
         prev[key] = mergeReferentielObjects(pVal, oVal)
       } else {
         prev[key] = oVal
