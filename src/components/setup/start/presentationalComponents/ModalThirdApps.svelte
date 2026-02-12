@@ -4,7 +4,7 @@
   import appsTierce from '../../../../json/referentielAppsTierce.json'
   import type { AppTierceGroup } from '../../../../lib/types/referentiels'
 
-  export let thirdAppsChoiceModal: BasicClassicModal
+  export let thirdAppsChoiceModal: BasicClassicModal | undefined = undefined
   export let showThirdAppsChoiceDialog: boolean
   export let appsTierceInExercisesList: string[]
 

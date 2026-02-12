@@ -263,18 +263,12 @@ export function apparitionAnimee(
  * @author Rémi Angot
  */
 export class TranslationAnimee extends ObjetMathalea2D {
-  liste:
-    | (PointAbstrait | Droite | Segment | DemiDroite | Polygone)[]
-    | PointAbstrait
-    | Droite
-    | Segment
-    | DemiDroite
-    | Polygone
+  liste: ObjetMathalea2D | ObjetMathalea2D[]
 
   v: Vecteur
   animation: string
   constructor(
-    liste: (PointAbstrait | Droite | Segment | DemiDroite | Polygone)[],
+    liste: ObjetMathalea2D | ObjetMathalea2D[],
     v: Vecteur,
     animation = 'begin="0s" dur="2s" repeatCount="indefinite"',
   ) {
@@ -284,15 +278,7 @@ export class TranslationAnimee extends ObjetMathalea2D {
     this.animation = animation
     const liste2 = this.liste.map((el) => translation(el, v as IVecteur))
     const bordures = fixeBordures(
-      this.liste.concat(
-        liste2 as
-          | (PointAbstrait | Droite | Segment | DemiDroite | Polygone)[]
-          | PointAbstrait
-          | Droite
-          | Segment
-          | DemiDroite
-          | Polygone,
-      ),
+      this.liste.concat(liste2 as ObjetMathalea2D[]),
     )
     this.bordures = [bordures.xmin, bordures.ymin, bordures.xmax, bordures.ymax]
   }
@@ -325,7 +311,7 @@ export class TranslationAnimee extends ObjetMathalea2D {
   }
 }
 export function translationAnimee(
-  liste: (PointAbstrait | Droite | Segment | DemiDroite | Polygone)[],
+  liste: ObjetMathalea2D | ObjetMathalea2D[],
   v: Vecteur,
   animation = 'begin="0s" dur="2s" repeatCount="indefinite"',
 ) {
