@@ -1,6 +1,6 @@
 <script lang="ts">
-  import type { Serie } from '../../../types'
   import { mathaleaFormatExercice } from '../../../../../../lib/mathalea'
+  import type { Serie } from '../../../types'
 
   export let isQuestionsVisible: boolean | undefined
   export let isCorrectionVisible: boolean | undefined
@@ -26,7 +26,7 @@
   class="mt-2
   mx-2 lg:mx-6"
 >
-  {#each order as i, index}
+  {#each order as i, index (series[seriesIndex].questions[i])}
     <div class="flex flex-row my-4">
       <div class="pr-2">
         <span
