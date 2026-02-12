@@ -66,7 +66,7 @@
   let innerWidth = 0
   let isBackToTopButtonVisible = false
   let selectedThirdApps: string[]
-  let thirdAppsChoiceModal: BasicClassicModal
+  let thirdAppsChoiceModal: BasicClassicModal | undefined
   let showThirdAppsChoiceDialog = false
   let isMd: boolean
   let localeValue: Language = get(referentielLocale)
