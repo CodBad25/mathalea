@@ -77,9 +77,6 @@ export default class auto1AP3b extends ExerciceQcmA {
     omega.setTailles() // On calcule les tailles des arbres.
     objets = omega.represente(0, 6, 0, 3, true, 1, 8)
 
-  
- 
-
     this.enonce = "On donne l'arbre de probabilités ci-dessous :<br>"
     this.enonce += mathalea2d(
       Object.assign({ style: 'inline' }, fixeBordures(objets)),
@@ -115,14 +112,14 @@ export default class auto1AP3b extends ExerciceQcmA {
     const rationnel = true
     const NumA = randint(1, 9)
     const DenA = 10
-    const NumAC = randint(1, 9, NumA)
+    const NumAC = randint(1, 9, [5, NumA])
     const DenAC = 10
-    const NumBC = randint(2, 8)
+    const NumBC = randint(1, 9, [NumAC, 10 - NumAC])
     const DenBC = 10
     const pA = new FractionEtendue(NumA, DenA)
     const pAC = new FractionEtendue(NumAC, DenAC)
     const pBC = new FractionEtendue(NumBC, DenBC)
-    const distracteurNum = randint(1, 9, 10 - NumAC)
+    const distracteurNum = randint(1, 9, [10 - NumAC, NumAC, NumBC])
 
     const distracteur = new FractionEtendue(distracteurNum, 10)
 
@@ -145,13 +142,13 @@ export default class auto1AP3b extends ExerciceQcmA {
               rationnel,
               nom: 'C',
               visible: false,
-            alter: '\\ldots',
+              alter: '',
             }),
             new Arbre({
               rationnel,
               nom: '\\overline C',
-             visible: false,
-            alter: ' ',
+              visible: false,
+              alter: '\\ldots',
             }),
           ],
         }),
@@ -222,4 +219,3 @@ export default class auto1AP3b extends ExerciceQcmA {
     this.versionAleatoire()
   }
 }
-
