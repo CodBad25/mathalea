@@ -1,27 +1,13 @@
 <script lang="ts">
   import { onMount, tick } from 'svelte'
-  import { exercicesParams } from '../../../../lib/stores/generalStore'
-  import type Exercice from '../../../../exercices/Exercice'
   import { mathaleaRenderDiv } from '../../../../lib/mathalea'
+  import { exercicesParams } from '../../../../lib/stores/generalStore'
   import { globalOptions } from '../../../../lib/stores/globalOptions'
   import { isLocalStorageAvailable } from '../../../../lib/stores/storage'
-  import type { InterfaceParams } from '../../../../lib/types'
+  import type { IExercice, InterfaceParams } from '../../../../lib/types'
   import ButtonIconTooltip from '../../../shared/forms/ButtonIconTooltip.svelte'
   import BasicClassicModal from '../../../shared/modal/BasicClassicModal.svelte'
-
-  type SlideshowHistoryOptions = {
-    nbVues: number
-    flow: 0 | 1 | 2
-    screenBetweenSlides: boolean
-    sound: number
-    shuffle: boolean
-    manualMode: boolean
-    pauseAfterEachQuestion: boolean
-    isImagesOnSides: boolean
-    select?: number[]
-    order?: number[]
-    durationGlobal?: number
-  }
+  import type { SlideshowHistoryOptions } from '../types'
 
   type SlideshowHistoryItem = {
     id: string
@@ -39,7 +25,7 @@
     }
   }
 
-  export let exercises: Exercice[]
+  export let exercises: IExercice[]
   export let isOpen: boolean
   export let startSlideshow: () => void
   export let applySlideshowFromHistory: (
@@ -161,10 +147,7 @@
   function writeHistory(items: SlideshowHistoryItem[]) {
     const normalized = normalizeHistory(items)
     historyItems = normalized
-    window.localStorage.setItem(
-      HISTORY_STORAGE_KEY,
-      JSON.stringify(normalized),
-    )
+    window.localStorage.setItem(HISTORY_STORAGE_KEY, JSON.stringify(normalized))
   }
 
   function normalizeHistory(items: SlideshowHistoryItem[]) {
@@ -212,7 +195,7 @@
   }
 
   function buildExercisesSummary(
-    selectedExercises: Exercice[],
+    selectedExercises: IExercice[],
     totalQuestions: number,
   ) {
     const titles = selectedExercises
@@ -438,7 +421,9 @@
     const reader = new FileReader()
     reader.onload = () => {
       try {
-        const parsed = JSON.parse(String(reader.result)) as SlideshowHistoryItem[]
+        const parsed = JSON.parse(
+          String(reader.result),
+        ) as SlideshowHistoryItem[]
         if (!Array.isArray(parsed)) return
         historyItems = mergeHistory(historyItems, parsed)
         writeHistory(historyItems)
@@ -471,12 +456,16 @@
               bg-coopmaths-canvas dark:bg-coopmathsdark-canvas p-3"
           >
             <div class="flex flex-col gap-2">
-              <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-3">
+              <div
+                class="flex flex-col md:flex-row md:items-start md:justify-between gap-3"
+              >
                 <div class="flex-1">
                   <div class="text-lg font-semibold">{item.title}</div>
                   <div class="text-xs opacity-70">
                     <div>Créé le {formatDate(item.createdAt)}</div>
-                    <div>Dernière utilisation {formatDate(item.lastUsedAt)}</div>
+                    <div>
+                      Dernière utilisation {formatDate(item.lastUsedAt)}
+                    </div>
                   </div>
                 </div>
                 <div class="flex flex-wrap gap-2 justify-start md:justify-end">

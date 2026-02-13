@@ -1,24 +1,28 @@
 <script lang="ts">
   import { tick } from 'svelte'
-  import type Exercice from '../../../../exercices/Exercice'
   import { mathaleaRenderDiv } from '../../../../lib/mathalea'
   import { listOfRandomIndexes } from '../../../../lib/outils/arrayOutils'
   import { globalOptions } from '../../../../lib/stores/globalOptions'
   import { referentielLocale } from '../../../../lib/stores/languagesStore'
-  import { type NumberRange } from '../../../../lib/types'
+  import {
+    type IExercice,
+    type InterfaceParams,
+    type NumberRange,
+  } from '../../../../lib/types'
   import { isIntegerInRange0to4 } from '../../../../lib/types/integerInRange'
   import NavBar from '../../../shared/header/NavBar.svelte'
+  import type { SlideshowHistoryOptions } from '../types'
   import DisplaySettings from './presentationalComponents/DisplaySettings.svelte'
   import ExercisesSettings from './presentationalComponents/ExercisesSettings.svelte'
   import GlobalDurationSettings from './presentationalComponents/GlobalDurationSettings.svelte'
   import LinksSettings from './presentationalComponents/LinksSettings.svelte'
   import OrderSettings from './presentationalComponents/OrderSettings.svelte'
   import SelectedExercisesSettings from './presentationalComponents/SelectedExercisesSettings.svelte'
-  import SlideshowHistoryModal from './SlideshowHistoryModal.svelte'
   import TransitionSettings from './presentationalComponents/TransitionSettings.svelte'
   import ViewSettings from './presentationalComponents/ViewSettings.svelte'
+  import SlideshowHistoryModal from './SlideshowHistoryModal.svelte'
 
-  export let exercises: Exercice[]
+  export let exercises: IExercice[]
   export let updateExercises: (updateSlidesContent?: boolean) => void
   export let transitionSounds: {
     0: HTMLAudioElement
@@ -28,7 +32,10 @@
   }
   export let startSlideshow: () => void
   export let applySlideshowFromHistory: (
-    item: { options: unknown; exercicesParams: unknown[] },
+    item: {
+      options: SlideshowHistoryOptions
+      exercicesParams: InterfaceParams[]
+    },
     autoStart: boolean,
   ) => Promise<void>
   export let goToOverview: () => void
@@ -118,7 +125,6 @@
     updateExercises()
     exercises = exercises // to refresh ExercisesSettings component
   }
-
 </script>
 
 <div
