@@ -98,7 +98,6 @@ export default class ExerciceAdditionnerSoustraireFractions5ebis extends Exercic
     for (
       let i = 0, a, b, c, d, k, s, ordreDesFractions, texte, texteCorr;
       i < this.nbQuestions;
-
     ) {
       this.autoCorrection[i] = {}
       texte = ''
@@ -261,8 +260,8 @@ export default class ExerciceAdditionnerSoustraireFractions5ebis extends Exercic
             },
             {
               texte: this.sup3
-                ? `$${new FractionEtendue(a - c, Math.abs(b - d)).texFractionSimplifiee}$`
-                : `$${new FractionEtendue(a - c, Math.abs(b - d)).texFraction}$`,
+                ? `$${new FractionEtendue(a - c, b + d).texFractionSimplifiee}$`
+                : `$${new FractionEtendue(a - c, b + d).texFraction}$`,
               statut: false,
             },
             {
