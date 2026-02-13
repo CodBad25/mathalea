@@ -74,7 +74,7 @@ $${miseEnEvidence(`(u_n)`)}$  ${texteEnCouleur(`est donc une suite géométrique
         `$(u_n)$ n'est ni une suite arithmétique, ni une suite géométrique`,
       ]
     } else if (cas === 3) {
-      const a = randint(-5, 5, [0, 1])
+      const a = randint(-5, 5, [0, 1, -1])
       const b = randint(-5, 5, [-1, 0, 1, a, -a])
       const fraction1 = new FractionEtendue(a + b, a + 1)
       const fraction2 = new FractionEtendue(a + b * b, a + b)

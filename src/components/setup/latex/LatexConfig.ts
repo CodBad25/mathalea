@@ -123,7 +123,7 @@ ${this.renderCoverPage()}
 \\pasentetefichetrue  % ou false selon le comportement désiré
 \\ifpasentetefiche
     \\RenewDocumentCommand\\TikzFiche{}{}%
-    \\ReNewDocumentCommand\\TikzIE{}{}%
+    \\RenewDocumentCommand\\TikzIE{}{}%
 \\fi
 `
   }
