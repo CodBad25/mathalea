@@ -1,9 +1,9 @@
 <script lang="ts">
-  import type Exercice from '../../../../../exercices/Exercice'
+  import type { IExercice } from '../../../../../lib/types'
   import CheckboxWithLabel from '../../../../shared/forms/CheckboxWithLabel.svelte'
   import NumberInput from '../../../../shared/forms/InputNumber.svelte'
 
-  export let exercises: Exercice[]
+  export let exercises: IExercice[]
   export let isManualModeActive: boolean
   export let updateManualMode: (isManualModeActive: boolean) => void
   export let durationGlobal: number | undefined

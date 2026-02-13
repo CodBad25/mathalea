@@ -1,4 +1,4 @@
-import type Exercice from '../../../exercices/Exercice'
+import type { IExercice, InterfaceParams } from '../../../lib/types'
 
 export type Vue = {
   consigne: string
@@ -13,7 +13,7 @@ export type Vue = {
 }
 
 export type Slide = {
-  exercise: Exercice
+  exercise: IExercice
   isSelected: boolean
   vues: Vue[]
 }
@@ -28,4 +28,23 @@ export type Serie = {
   consignes: string[]
   questions: string[]
   corrections: string[]
+}
+
+export type SlideshowHistoryOptions = {
+  nbVues: 1 | 2 | 3 | 4
+  flow: 0 | 1 | 2
+  screenBetweenSlides: boolean
+  sound: 0 | 2 | 1 | 3 | 4 | undefined
+  shuffle: boolean
+  manualMode: boolean
+  pauseAfterEachQuestion: boolean
+  isImagesOnSides: boolean
+  select?: number[]
+  order?: number[]
+  durationGlobal?: number
+}
+
+export type SlideshowHistoryItem = {
+  options: SlideshowHistoryOptions
+  exercicesParams: InterfaceParams[]
 }

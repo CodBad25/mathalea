@@ -3,7 +3,6 @@
   import { onDestroy, onMount } from 'svelte'
   import { get } from 'svelte/store'
   import { notify } from '../../../bugsnag'
-  import type Exercice from '../../../exercices/Exercice'
   import {
     getExercisesFromExercicesParams,
     mathaleaFormatExercice,
@@ -30,25 +29,12 @@
   import SlideshowOverview from './slideshowOverview/SlideshowOverview.svelte'
   import SlideshowPlay from './slideshowPlay/SlideshowPlay.svelte'
   import SlideshowSettings from './slideshowSettings/SlideshowSettings.svelte'
-  import type { Slide, Slideshow } from './types'
-  type SlideshowHistoryOptions = {
-    nbVues: number
-    flow: 0 | 1 | 2
-    screenBetweenSlides: boolean
-    sound: number
-    shuffle: boolean
-    manualMode: boolean
-    pauseAfterEachQuestion: boolean
-    isImagesOnSides: boolean
-    select?: number[]
-    order?: number[]
-    durationGlobal?: number
-  }
-
-  type SlideshowHistoryItem = {
-    options: SlideshowHistoryOptions
-    exercicesParams: InterfaceParams[]
-  }
+  import type {
+    Slide,
+    Slideshow,
+    SlideshowHistoryItem,
+    SlideshowHistoryOptions,
+  } from './types'
 
   const transitionSounds = {
     0: new Audio('assets/sounds/transition_sound_01.mp3'),
@@ -58,7 +44,7 @@
   }
 
   let state: CanState = 'end'
-  let exercises: Exercice[] = []
+  let exercises: IExercice[] = []
   let slideshow: Slideshow = {
     slides: [],
     currentQuestion: -1,
@@ -97,7 +83,7 @@
     mathaleaUpdateUrlFromExercicesParams($exercicesParams)
   }
 
-  function setSlidesContent(newExercises: Exercice[]) {
+  function setSlidesContent(newExercises: IExercice[]) {
     const slides = []
     const nbOfVues = $globalOptions.nbVues || 1
     let selectedQuestionsNumber = 0
@@ -251,7 +237,7 @@
     return indexes
   }
 
-  function updateExerciseParams(newExercises: Exercice[]) {
+  function updateExerciseParams(newExercises: IExercice[]) {
     if (newExercises.length === get(exercicesParams).length) {
       // Update si nécessaire
       exercicesParams.update((params: InterfaceParams[]) => {
@@ -368,7 +354,7 @@
           {updateExercises}
           {transitionSounds}
           {startSlideshow}
-          applySlideshowFromHistory={applySlideshowFromHistory}
+          {applySlideshowFromHistory}
           {goToOverview}
           {goToHome}
         />
