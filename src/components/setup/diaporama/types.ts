@@ -10,6 +10,7 @@ export type Vue = {
   consigneText: string
   questionText: string
   correctionText: string
+  key: string
 }
 
 export type Slide = {
@@ -28,6 +29,7 @@ export type Serie = {
   consignes: string[]
   questions: string[]
   corrections: string[]
+  keys: string[]
 }
 
 export type SlideshowHistoryOptions = {

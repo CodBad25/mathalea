@@ -118,6 +118,7 @@
             splitSvgFromText(consigne)
           const { svgs: correctionSvgs, text: correctionText } =
             splitSvgFromText(correction)
+          const key = exercise.key
           slide.vues.push({
             consigne,
             question,
@@ -128,6 +129,7 @@
             questionText,
             correctionSvgs,
             correctionText,
+            key,
           })
         }
         slides.push(slide)

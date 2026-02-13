@@ -26,7 +26,7 @@
   class="mt-2
   mx-2 lg:mx-6"
 >
-  {#each order as i, index (series[seriesIndex].questions[i])}
+  {#each order as i, index (series[seriesIndex].keys[i] + '-' + i)}
     <div class="flex flex-row my-4">
       <div class="pr-2">
         <span
@@ -54,7 +54,7 @@
               {@html mathaleaFormatExercice(series[seriesIndex].corrections[i])}
             </div>
             <div
-              class="absolute -left-[3px] -top-[15px] py-[1.5px] px-3 rounded-t-md
+              class="absolute -left-0.75 -top-3.75 py-[1.5px] px-3 rounded-t-md
                 font-semibold text-xs
                 bg-coopmaths-struct dark:bg-coopmathsdark-struct
                 text-coopmaths-canvas dark:text-coopmathsdark-canvas"

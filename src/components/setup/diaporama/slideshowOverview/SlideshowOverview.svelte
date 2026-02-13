@@ -57,11 +57,13 @@
         consignes: [],
         questions: [],
         corrections: [],
+        keys: [],
       }
       for (const slide of slideshow.slides) {
         serie.consignes.push(slide.vues[i].consigne)
         serie.questions.push(slide.vues[i].question)
         serie.corrections.push(slide.vues[i].correction)
+        serie.keys.push(slide.vues[i].key)
       }
       series.push(serie)
     }
