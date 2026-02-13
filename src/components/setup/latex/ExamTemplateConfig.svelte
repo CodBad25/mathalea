@@ -1,6 +1,10 @@
 <script lang="ts">
   import { buildExamExercices } from '../../../lib/LatexGroup'
-  import type { LatexFileInfos } from '../../../lib/LatexTypes'
+  import type {
+    ExamConfig,
+    ExerciceConfig,
+    LatexFileInfos,
+  } from '../../../lib/LatexTypes'
   import type { IExercice } from '../../../lib/types'
   import SelectUnique from '../../shared/forms/SelectUnique.svelte'
 
@@ -13,8 +17,25 @@
     latexFileInfos: LatexFileInfos
   } = $props()
 
-  let modele: 'aucun' | 'Brevet' | 'Bac' | 'DS' | undefined = $state(
+  let modele: 'aucun' | 'Brevet' | 'Bac' | 'DS' = $state(
     latexFileInfos?.modele ?? 'Brevet',
+  )
+
+  // svelte-ignore state_referenced_locally
+  const snapshotExercices = buildExamExercices(exercices, latexFileInfos)
+
+  let examConfig: ExamConfig = $state(
+    cloneExamConfig(
+      latexFileInfos?.examConfig ?? {
+        type: '',
+        titre: '',
+        session: '',
+        matiere: '',
+        duree: '',
+        autorisation: '',
+        exercices: snapshotExercices,
+      },
+    ),
   )
   const modeleOptions = [
     { label: '(aucune)', value: '' },
@@ -26,23 +47,18 @@
   // -----------------------------
   // State - Rendre l'objet entier réactif avec $state
   // -----------------------------
-  let examConfig = $state(
-    structuredClone(latexFileInfos.examConfig) ?? {
-      type: '',
-      titre: '',
-      session: '',
-      matiere: '',
-      duree: '',
-      autorisation: '',
-      // svelte-ignore state_referenced_locally
-      exercices: buildExamExercices(exercices, latexFileInfos),
-    },
-  )
-
-  if (!latexFileInfos.examConfig) {
-    // svelte-ignore state_referenced_locally
-    handleModeleChange(modele)
+  // Fonction pour cloner l'examConfig de manière profonde et supprimer le proxy svelte5
+  function cloneExamConfig(config: any) {
+    return {
+      ...config,
+      exercices: (config.exercices ?? []).map((e: ExerciceConfig) => ({
+        ...e,
+      })),
+    }
   }
+
+  handleModeleChange()
+
   // -----------------------------
   // Functions
   // -----------------------------
@@ -57,17 +73,14 @@
 
   function removeExercice(index: number) {
     examConfig.exercices = (examConfig.exercices ?? []).filter(
-      (_, i) => i !== index,
+      (_: ExerciceConfig, i: number) => i !== index,
     )
     update()
   }
 
   function submit() {
-    latexFileInfos.examConfig = {
-      ...examConfig,
-      exercices: [...(examConfig.exercices ?? [])],
-    }
-    latexFileInfos.modele = modele || 'aucun'
+    latexFileInfos.examConfig = cloneExamConfig(examConfig)
+    latexFileInfos.modele = modele
   }
 
   // Fonction pour générer la date courante au format "Mois Année"
@@ -81,7 +94,7 @@
   }
 
   // Fonction pour gérer le changement de modèle
-  function handleModeleChange(newModele: string) {
+  function handleModeleChange(newModele: string = modele) {
     modele = newModele as typeof modele
 
     // Mettre à jour d'autres variables selon le modèle choisi
@@ -114,16 +127,13 @@
 
   function reinit() {
     modele = 'aucun'
-    examConfig = {
-      type: '',
-      titre: '',
-      session: '',
-      matiere: '',
-      duree: '',
-      autorisation: '',
-      // svelte-ignore state_referenced_locally
-      exercices: buildExamExercices(exercices, latexFileInfos),
-    }
+    examConfig.type = ''
+    examConfig.titre = ''
+    examConfig.session = ''
+    examConfig.matiere = ''
+    examConfig.duree = ''
+    examConfig.autorisation = ''
+    examConfig.exercices = snapshotExercices
   }
 </script>
 
