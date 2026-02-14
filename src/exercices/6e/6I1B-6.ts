@@ -14,7 +14,7 @@ export const titre = 'Trouver le bon programme'
 export const uuid = 'e9cad'
 
 export const refs = {
-  'fr-fr': ['6I1B-6'],
+  'fr-fr': [],
   'fr-2016': [],
   'fr-ch': [],
 }
