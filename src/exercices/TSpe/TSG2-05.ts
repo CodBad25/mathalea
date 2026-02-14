@@ -1,145 +1,112 @@
-import Exercice from '../Exercice'
-import { combinaisonListes } from '../../lib/outils/arrayOutils'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { remplisLesBlancs } from '../../lib/interactif/questionMathLive'
+import { ecritureAlgebrique } from '../../lib/outils/ecritures'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
-import {
-  ecritureAlgebrique,
-  ecritureParentheseSiMoins,
-  ecritureParentheseSiNegatif,
-} from '../../lib/outils/ecritures'
-import { texNombre } from '../../lib/outils/texNombre'
-export const titre = 'Déterminer si un vecteur est normal à un plan.'
+import Exercice from '../Exercice'
 
-export const dateDePublication = '26/01/2025' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
+export const titre =
+  'Calculer les coordonnées d’un point défini par une combinaison de vecteurs'
+export const interactifReady = true
+export const interactifType = 'mathLive'
+export const dateDePublication = '23/11/2024'
+export const dateDeModifImportante = '24/12/2025'
+export const uuid = '8e145'
 
-export const uuid = 'd5253'
 export const refs = {
   'fr-fr': ['TSG2-05'],
   'fr-ch': [],
 }
 
-/**
- *
- * @author Stéphane Guyon
-
-*/
-export default class nomExercice extends Exercice {
+export default class ExercicePointParCombinaison extends Exercice {
   constructor() {
     super()
     this.nbQuestions = 1
-    this.consigne = ''
   }
 
   nouvelleVersion() {
-    const typeQuestionsDisponibles = ['type1', 'type2'] // On créé 3 types de questions
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+      const xA = randint(-4, 4)
+      const yA = randint(-4, 4)
+      const zA = randint(-4, 4)
 
-    const listeTypeQuestions = combinaisonListes(
-      typeQuestionsDisponibles,
-      this.nbQuestions,
-    ) // Tous les types de questions sont posés mais l'ordre diffère à chaque "cycle"
-    for (
-      let i = 0, texte, texteCorr, cpt = 0;
-      i < this.nbQuestions && cpt < 50;
+      // vecteur AB non nul
+      const uAB = randint(-4, 4, 0)
+      const vAB = randint(-4, 4, 0)
+      const wAB = randint(-4, 4, 0)
 
-    ) {
-      // Boucle principale où i+1 correspond au numéro de la question
-      let a1 = randint(-5, 5, 0) // coord du vecteur AB
-      let b1 = randint(-5, 5, 0) // coord du vecteur AB
-      let c1 = 0 // coord du vecteur AB
-      let a2 = randint(-5, 5, [0, a1]) // coord du vecteur AC
-      let b2 = randint(-5, 5, [0, b1]) // coord du vecteur AC
-      let c2 = 0 // coord du vecteur AC
-      const a = randint(-5, 5, 0) // coord du vecteur normal
-      const b = randint(-5, 5, 0) // coord du vecteur normal
-      const c = randint(-5, 5, 0) // coord du vecteur normal
-      const xA = randint(-5, 5, 0) // coord de A
-      const yA = randint(-5, 5, 0) // coord de A
-      const zA = randint(-5, 5, 0) // coord de A
-      let xB = 0
-      let yB = 0
-      let zB = 0
-      let xC = 0
-      let yC = 0
-      let zC = 0
+      const xB = xA + uAB
+      const yB = yA + vAB
+      const zB = zA + wAB
 
-      switch (
-        listeTypeQuestions[i] // Suivant le type de question, le contenu sera différent
-      ) {
-        case 'type1': // Normal
-          c1 = -(a * a1 + b * b1) // On calcule c1 pour annuler le pdt scla
-          a1 = a1 * c // on adapte les coord du vect AB pour avoir des coord entières
-          b1 = b1 * c // on adapte les coord du vect AB pour avoir des coord entières
-          c2 = -(a * a2 + b * b2) // idem pour c2
-          a2 = a2 * c // et vecteur AC
-          b2 = b2 * c
-          xB = xA + a1 // on déduit les coord de B
-          yB = yA + b1
-          zB = zA + c1
-          xC = xA + a2 // et celles de C
-          yC = yA + b2
-          zC = zA + c2
-          texte = `Dans un repère orthonormé de l'espace, déterminer si le vecteur $\\vec{n}\\begin{pmatrix}${a}\\\\${b}\\\\${c}\\end{pmatrix}$ est normal au plan $\\mathcal{ABC}$ engendré par les points :<br>`
-          texte += `$A(${xA}~;${yA}~;${zA})\\quad B(${xB}~;${yB}~;${zB})\\quad\\text{et}~~C(${xC}~;${yC}~;${zC})$`
-          texteCorr =
-            'On calcule les coordonnées des vecteurs $\\overrightarrow{AB}$ et $\\overrightarrow{AC}$ :<br> '
-          texteCorr += `$\\overrightarrow{AB}\\begin{pmatrix}${xB}-${ecritureParentheseSiNegatif(xA)}\\\\${yB}-${ecritureParentheseSiNegatif(yA)}\\\\${zB}-${ecritureParentheseSiNegatif(zA)}\\\\\\end{pmatrix}$ `
-          texteCorr += `$\\iff\\overrightarrow{AB}\\begin{pmatrix}${xB - xA}\\\\${yB - yA}\\\\${zB - zA}\\\\\\end{pmatrix}$<br> `
-          texteCorr += `$\\overrightarrow{AC}\\begin{pmatrix}${xC}-${ecritureParentheseSiNegatif(xA)}\\\\${yC}-${ecritureParentheseSiNegatif(yA)}\\\\${zC}-${ecritureParentheseSiNegatif(zA)}\\\\\\end{pmatrix}$ `
-          texteCorr += `$\\iff\\overrightarrow{AC}\\begin{pmatrix}${xC - xA}\\\\${yC - yA}\\\\${zC - zA}\\\\\\end{pmatrix}$<br> `
-          texteCorr += `On vérifie trivialement qu'ils ne sont pas colinéaires : $\\dfrac{x_B-x_A}{x_C-x_A}=\\dfrac{${texNombre(xB - xA)}}{${texNombre(xC - xA)}}\\neq\\dfrac{y_B-y_A}{y_C-y_A}=\\dfrac{${texNombre(yB - yA)}}{${texNombre(yC - yA)}}$`
-          texteCorr +=
-            '<br>$\\overrightarrow{AB}$ et $\\overrightarrow{AC}$ forment donc une base du plan $\\mathcal{ABC}$.'
-          texteCorr +=
-            '<br>Pour vérifier si $\\vec n$ est normal au plan $\\mathcal{ABC}$, il suffit de vérifier que le vecteur $\\vec n$ est orthogonal aux deux vecteurs de sa base, donc à $\\overrightarrow{AB}$ et $\\overrightarrow{AC}$.'
-          texteCorr += '<br>On calcule alors les deux produits scalaires :'
-          texteCorr += `<br>$\\begin{aligned}\\overrightarrow{AB}\\cdot\\vec{n}&=${a1}\\times ${ecritureParentheseSiMoins(a)}${ecritureAlgebrique(b1)}\\times ${ecritureParentheseSiMoins(b)}${ecritureAlgebrique(c1)}\\times ${ecritureParentheseSiMoins(c)}\\\\&=${a1 * a + b1 * b + c1 * c}\\end{aligned}$`
-          texteCorr += `<br>$\\begin{aligned}\\overrightarrow{AC}\\cdot\\vec{n}&=${a2}\\times ${ecritureParentheseSiMoins(a)}${ecritureAlgebrique(b2)}\\times ${ecritureParentheseSiMoins(b)}${ecritureAlgebrique(c2)}\\times ${ecritureParentheseSiMoins(c)}\\\\&=${a2 * a + b2 * b + c2 * c}\\end{aligned}$`
-          texteCorr +=
-            '<br>On en déduit que $\\vec n$ est orthogonal aux vecteurs $\\overrightarrow{AB}$ et $\\overrightarrow{AC}$, il est donc normal au plan $\\mathcal{ABC}$'
-          break
-        case 'type2': // pas Normal
-        default:
-          c1 = -(a * a1 + b * b1) // On calcule c1 ne pas annuler le pdt scal
-          a1 = a1 * c // on adapte les coord du vect AB pour avoir des coord entières
-          b1 = b1 * c // on adapte les coord du vect AB pour avoir des coord entières
-          c2 = -(a * a2 + b * b2) + 1 // idem pour c2
-          a2 = a2 * c // et vecteur AC
-          b2 = b2 * c
-          xB = xA + a1 // on déduit les coord de B
-          yB = yA + b1
-          zB = zA + c1
-          xC = xA + a2 // et celles de C
-          yC = yA + b2
-          zC = zA + c2
-          texte = `Dans un repère orthonormé de l'espace, déterminer si le vecteur $\\vec{n}\\begin{pmatrix}${a}\\\\${b}\\\\${c}\\end{pmatrix}$ est normal au plan $\\mathcal{ABC}$ engendré par les points :<br>`
-          texte += `$A(${xA}~;${yA}~;${zA})\\quad B(${xB}~;${yB}~;${zB})\\quad\\text{et}~~C(${xC}~;${yC}~;${zC})$`
-          texteCorr =
-            'On calcule les coordonnées des vecteurs $\\overrightarrow{AB}$ et $\\overrightarrow{AC}$ :<br> '
-          texteCorr += `$\\overrightarrow{AB}\\begin{cases}x_B-x_A&=${xB}-${ecritureParentheseSiNegatif(xA)}\\\\y_B-y_A&=${yB}-${ecritureParentheseSiNegatif(yA)}\\\\z_B-z_A&=${zB}-${ecritureParentheseSiNegatif(zA)}\\\\\\end{cases}$ `
-          texteCorr += ` et $\\quad\\overrightarrow{AC}\\begin{cases}x_C-x_A=${xC}-${ecritureParentheseSiNegatif(xA)}\\\\y_C-yA=${yC}-${ecritureParentheseSiNegatif(yA)}\\\\z_C-z_A=${zC}-${ecritureParentheseSiNegatif(zA)}\\\\\\end{cases}$ `
-          texteCorr += `<br><br>Ce qui donne après simplification : $\\overrightarrow{AB}\\begin{pmatrix}${xB - xA}\\\\${yB - yA}\\\\${zB - zA}\\\\\\end{pmatrix}$ `
-          texteCorr += `et $\\quad\\overrightarrow{AC}\\begin{pmatrix}${xC - xA}\\\\${yC - yA}\\\\${zC - zA}\\\\\\end{pmatrix}$<br> `
-          texteCorr += `On vérifie trivialement qu'ils ne sont pas colinéaires : $\\dfrac{x_B-x_A}{x_C-x_A}=\\dfrac{${texNombre(xB - xA)}}{${texNombre(xC - xA)}}\\neq\\dfrac{y_B-y_A}{y_C-y_A}=\\dfrac{${texNombre(yB - yA)}}{${texNombre(yC - yA)}}$`
-          texteCorr +=
-            '<br><br>$\\overrightarrow{AB}$ et $\\overrightarrow{AC}$ forment donc une base du plan $\\mathcal{ABC}$.'
-          texteCorr +=
-            '<br>Pour vérifier si $\\vec n$ est normal au plan $\\mathcal{ABC}$, il suffit de vérifier que le vecteur $\\vec n$ est orthogonal aux deux vecteurs de sa base, donc à $\\overrightarrow{AB}$ et $\\overrightarrow{AC}$.'
-          texteCorr += '<br>On calcule alors les deux produits scalaires :'
-          texteCorr += `<br>$\\begin{aligned}\\overrightarrow{AB}\\cdot\\vec{n}&=${a1}\\times ${ecritureParentheseSiMoins(a)}${ecritureAlgebrique(b1)}\\times ${ecritureParentheseSiMoins(b)}${ecritureAlgebrique(c1)}\\times ${ecritureParentheseSiMoins(c)}\\\\&=${a1 * a + b1 * b + c1 * c}\\end{aligned}$`
-          texteCorr += `<br>$\\begin{aligned}\\overrightarrow{AC}\\cdot\\vec{n}&=${a2}\\times ${ecritureParentheseSiMoins(a)}${ecritureAlgebrique(b2)}\\times ${ecritureParentheseSiMoins(b)}${ecritureAlgebrique(c2)}\\times ${ecritureParentheseSiMoins(c)}\\\\&=${a2 * a + b2 * b + c2 * c}\\end{aligned}$`
-          texteCorr +=
-            "<br>On en déduit que $\\vec n$ n'est pas orthogonal aux vecteurs $\\overrightarrow{AB}$ et $\\overrightarrow{AC}$, il n'est donc pas normal au plan $\\mathcal{ABC}$"
+      // vecteur AC non nul
+      let uAC = randint(-3, 3, 0)
+      const vAC = randint(-3, 3, 0)
+      const wAC = randint(-3, 3, 0)
+      if (uAC === 0 && vAC === 0 && wAC === 0) {
+        uAC = -1
+      }
+      const xC = xA + uAC
+      const yC = yA + vAC
+      const zC = zA + wAC
 
-          break
+      // coefficients de combinaison (pas simultanément nuls)
+      let k = randint(-5, 5, [-1, 0, 1])
+      const z = randint(-5, 5, [-1, 0, 1])
+      if (k === 0 && z === 0) {
+        k = 1
       }
 
-      if (this.questionJamaisPosee(i, a, b, c, a2, b2, c2, texte)) {
-        // <- laisser le i et ajouter toutes les variables qui rendent les exercices différents (par exemple a, b, c et d)
+      if (
+        this.questionJamaisPosee(i, xA, yA, zA, xB, yB, zB, xC, yC, zC, k, z)
+      ) {
+        const uAM = k * uAB + z * uAC
+        const vAM = k * vAB + z * vAC
+        const wAM = k * wAB + z * wAC
+
+        const xM = xA + uAM
+        const yM = yA + vAM
+        const zM = zA + wAM
+
+        let texte = `Dans l’espace muni d’un repère orthonormé, on considère les points
+$A(${xA}~;~${yA}~;~${zA})$, $B(${xB}~;~${yB}~;~${zB})$ et $C(${xC}~;~${yC}~;~${zC})$.
+<br>Déterminer les coordonnées du point $M$ tel que $\\overrightarrow{AM} = ${k}\\,\\overrightarrow{AB} ${ecritureAlgebrique(z)}\\,\\overrightarrow{AC}$.`
+
+        let texteCorr = `On calcule d’abord $\\overrightarrow{AB}$ et $\\overrightarrow{AC}$ :<br>
+On sait que $\\overrightarrow{AB}\\begin{pmatrix}x_B-x_A\\\\y_B-y_A\\\\z_B-z_A\\end{pmatrix}$ d'où  $\\overrightarrow{AB}\\begin{pmatrix}${xB}${ecritureAlgebrique(-xA)}\\\\${yB}${ecritureAlgebrique(-yA)}\\\\${zB}${ecritureAlgebrique(-zA)}\\end{pmatrix}$ et $\\overrightarrow{AB}\\begin{pmatrix}${uAB}\\\\${vAB}\\\\${wAB}\\end{pmatrix}$  puis  $${k}\\overrightarrow{AB}\\begin{pmatrix}${k * uAB}\\\\${k * vAB}\\\\${k * wAB}\\end{pmatrix}$.<br>
+De même : $\\overrightarrow{AC}\\begin{pmatrix}${uAC}\\\\${vAC}\\\\${wAC}\\end{pmatrix}$  donc  $${z}\\overrightarrow{AC}\\begin{pmatrix}${z * uAC}\\\\${z * vAC}\\\\${z * wAC}\\end{pmatrix}$.<br>
+On en déduit alors  $${k}\\,\\overrightarrow{AB} ${ecritureAlgebrique(z)}\\,\\overrightarrow{AC}\\begin{pmatrix} ${k * uAB + z * uAC}\\\\${k * vAB + z * vAC}\\\\${k * wAB + z * wAC}\\end{pmatrix}$.<br>
+ Soit $M(x;y;z)$ le point cherché. On a alors $\\overrightarrow{AM}\\begin{pmatrix}x - x_A\\\\y - y_A\\\\z - z_A\\end{pmatrix}$ d'où $\\overrightarrow{AM}\\begin{pmatrix}x${ecritureAlgebrique(-xA)}\\\\y${ecritureAlgebrique(-yA)}\\\\z${ecritureAlgebrique(-zA)}\\end{pmatrix}$ .<br>`
+        texteCorr += ` $\\overrightarrow{AM} = ${k}\\,\\overrightarrow{AB} ${ecritureAlgebrique(z)}\\,\\overrightarrow{AC}
+\\iff \\begin{cases}x${ecritureAlgebrique(-xA)}=${k * uAB + z * uAC}\\\\y${ecritureAlgebrique(-yA)}=${k * vAB + z * vAC}\\\\z${ecritureAlgebrique(-zA)}=${k * wAB + z * wAC}\\end{cases}
+\\iff\\begin{cases}x=${xM}\\\\y=${yM}\\\\z=${zM}\\end{cases}$.<br>`
+        texteCorr += `Le point $M$ a donc pour coordonnées :`
+        texteCorr += `$M\\left(${miseEnEvidence(xM)}\\,;\\,${miseEnEvidence(yM)}\\,;\\,${miseEnEvidence(zM)}\\right)$.`
+
+        if (this.interactif) {
+          texte +=
+            '<br><br>Coordonnées de $M$  ' +
+            remplisLesBlancs(
+              this,
+              i,
+              '\\left(%{champ1}~;~%{champ2}~;~%{champ3}\\right)',
+              KeyboardType.clavierDeBase,
+            )
+          handleAnswers(this, i, {
+            champ1: { value: xM },
+            champ2: { value: yM },
+            champ3: { value: zM },
+          })
+        }
+
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr
         i++
       }
       cpt++
     }
-    listeQuestionsToContenu(this) // On envoie l'exercice à la fonction de mise en page
+
+    listeQuestionsToContenu(this)
   }
 }

@@ -1,159 +1,248 @@
-import Exercice from '../Exercice'
-import { combinaisonListes } from '../../lib/outils/arrayOutils'
+import { fixeBordures } from '../../lib/2d/fixeBordures'
+import { point } from '../../lib/2d/PointAbstrait'
+import { polygone } from '../../lib/2d/polygones'
+import { segment } from '../../lib/2d/segmentsVecteurs'
+import { labelPoint } from '../../lib/2d/textes'
+import { mathalea2d } from '../../modules/mathalea2d'
+
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
-import {
-  ecritureAlgebriqueSauf1,
-  ecritureParentheseSiNegatif,
-  rienSi1,
-} from '../../lib/outils/ecritures'
-import FractionEtendue from '../../modules/FractionEtendue'
+import Exercice from '../Exercice'
 
-export const titre = 'Déterminer si des points sont ou non coplanaires'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif' // fonction qui va préparer l'analyse de la saisie
+import { remplisLesBlancs } from '../../lib/interactif/questionMathLive' // fonctions de mise en place des éléments interactifs
+import { choice } from '../../lib/outils/arrayOutils'
+import { texNombre } from '../../lib/outils/texNombre'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 
-export const dateDePublication = '11/01/2025' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
+export const titre =
+  'Déterminer des coordonnées de points dans un repère défini à partir d’un cube'
 
-export const uuid = '14e60'
+export const dateDePublication = '07/02/2026'
+
+export const uuid = 'b4e86'
+
 export const refs = {
   'fr-fr': ['TSG2-01'],
-  'fr-ch': ['3mAlgLin-5'],
+  'fr-ch': [],
 }
+export const interactifReady = true // pour définir qu'exercice peut s'afficher en mode interactif.
+export const interactifType = 'mathLive'
 
 /**
+ * Exercice dans un cube, calculs de coordonnées,
  *
  * @author Stéphane Guyon
-
-*/
-export default class nomExercice extends Exercice {
+ */
+export default class NomExercice extends Exercice {
   constructor() {
     super()
-    this.consigne = ''
-    this.nbQuestions = 2
-    this.spacingCorr = 2
+    this.nbQuestions = 1
+    this.formatChampTexte = KeyboardType.clavierDeBase
   }
 
   nouvelleVersion() {
-    const typeQuestionsDisponibles = ['coplanaires', 'non-coplanaires']
-
-    const listeTypeQuestions = combinaisonListes(
-      typeQuestionsDisponibles,
-      this.nbQuestions,
-    )
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 20; ) {
       let texte = ''
       let texteCorr = ''
-      let finCorrection = ''
-      const xA = randint(-6, 6, 0)
-      const yA = randint(-6, 6, [0, xA])
-      const zA = randint(-6, 6, 0)
-      const xB = randint(-6, 6, [0, xA])
-      const yB = randint(-6, 6, [0, yA, xB])
-      const zB = randint(-6, 6, [0, zA])
-      const xC = randint(-6, 6, [0, xA])
-      const yC = randint(-6, 6, [0, yB, yA])
-      const zC = randint(-6, 6, [0, yB, zA])
-      const lambda1 = randint(-2, 2, 0) // coefficient de vect AB dans la combinaison linéaire
-      const lambda2 = randint(-2, 2, [0, lambda1]) // coefficient de vect AC dans la combinaison linéaire
-      const lambda3 = randint(-2, 2, [0, lambda1, lambda2]) // coefficient qui perturbe la coplanarité dans cas n°2
-      const xD = lambda1 * xB + lambda2 * xC + (1 - lambda1 - lambda2) * xA // Abscisse de D avec vect AD = lambda1 vec AB + lambda 2 vect AC
-      const yD = lambda1 * yB + lambda2 * yC + (1 - lambda1 - lambda2) * yA // Ordonnée de D avec vect AD = lambda1 vec AB + lambda 2 vect AC
-      let zD: number
-      switch (listeTypeQuestions[i]) {
-        case 'coplanaires':
-          zD = lambda1 * zB + lambda2 * zC + (1 - lambda1 - lambda2) * zA // Cote de D avec vect AD = lambda1 vec AB + lambda 2 vect AC
-          finCorrection += `<br><br>$\\iff \\begin{cases}
-           \\lambda_1&= ${lambda1}\\\\  
-            \\lambda_2&= ${lambda2}\\\\  
-            \\end{cases}$<br>`
-          finCorrection += `Le système admet donc un couple solution : $S=\\{\\left(${lambda1};${lambda2}\\right)\\}$.<br>`
-          finCorrection += `On vient donc de montrer que $\\overrightarrow{AD}=${rienSi1(lambda1)} \\overrightarrow{AB} ${ecritureAlgebriqueSauf1(lambda2)} \\overrightarrow{AC}$.`
-          finCorrection += '<br>Les points A, B, C et D sont coplanaires.'
-          break
-        default: {
-          // case 'non-coplanaires':
-          zD = lambda1 * zB + lambda3 * zC + (1 - lambda1 - lambda3) * zA // Cote de D avec vect AD = lambda1 vec AB + lambda 2 vect AC
-          const lambda2Fraction = new FractionEtendue(
-            (yD - yA) * (xC - xA) - (yB - yA) * (xC - xA) * lambda1,
-            (yC - yA) * (xC - xA),
-          )
-          finCorrection += `$\\iff \\begin{cases}
-           \\lambda_1&= ${lambda1}\\\\  
-            \\lambda_2&= ${lambda2Fraction.texFractionSimplifiee}\\\\  
-            \\lambda_2&= ${lambda3}\\\\  
-            \\end{cases}$<br>`
-          finCorrection +=
-            "Il n'existe pas un unique couple $(\\lambda_1;\\lambda_2)$ vérifiant $(1)$.<br>"
-          finCorrection +=
-            "Le système n'admet donc pas de solution,  $~~S=\\emptyset$.<br>"
-          finCorrection +=
-            "Il reste à vérifier que les vecteurs $\\overrightarrow{AB}$ et $\\overrightarrow{AC}$ forment une base d'un plan, c'est-à-dire qu'ils ne sont pas colinéaires.<br>"
-          finCorrection +=
-            "En effet, s'ils l'étaient,  $\\overrightarrow{AD}$ serait nécessairement coplanaires avec $\\overrightarrow{AB}$ et $\\overrightarrow{AC}$.<br>"
-          finCorrection +=
-            "On sait que $\\overrightarrow{AB}$ et $\\overrightarrow{AC}$ sont colinéaires si et seulement s'il existe un réel $\\lambda$ vérifiant $\\overrightarrow{AB}=\\lambda\\overrightarrow{AC}$.<br>"
-          finCorrection += `Ce qui est équivalent à résoudre : $\\begin{cases}
-           ${xB - xA}&= ${rienSi1(xD - xA)}\\lambda\\\\  
-           ${yB - yA}&= ${rienSi1(yD - yA)}\\lambda\\\\  
-           ${zB - zA}&= ${rienSi1(zD - zA)}\\lambda\\\\  
-            \\end{cases}$<br>`
-          finCorrection +=
-            "On observe trivialement que ce système n'admet pas de solution. Les vecteurs $\\overrightarrow{AB}$ et $\\overrightarrow{AC}$ ne sont donc pas colinéaires."
-          finCorrection +=
-            "<br>On vient donc de montrer que les vecteurs $\\overrightarrow{AB}$ et $\\overrightarrow{AC}$ forment une base d'un plan et que le vecteur $\\overrightarrow{AD}$ n'est pas une combinaison linéaire de ces vecteurs."
-          finCorrection +=
-            '<br>Les trois vecteurs ne sont donc pas coplanaires.<br> Les points A, B, C et D ne sont pas coplanaires.'
-          break
+
+      // Points pour la figure
+      const A = point(0, 0, 'A', 'below left')
+      const B = point(4, 0, 'B', 'below')
+      const C = point(6, 1.6, 'C', 'below')
+      const D = point(2, 1.6, 'D', 'above left')
+
+      const E = point(A.x, A.y + 4, 'E', 'above left')
+      const F = point(B.x, B.y + 4, 'F', 'above')
+      const G = point(C.x, C.y + 4, 'G', 'above')
+      const H = point(D.x, D.y + 4, 'H', 'above left')
+
+      const facesVisibles = [
+        polygone([A, E, H, G, F, E], 'black'),
+        polygone([B, C, G, F, E, A], 'black'),
+        segment(B, F, 'black'),
+      ]
+
+      const aretesCachees = [segment(A, D), segment(C, D), segment(D, H)]
+      aretesCachees.forEach((s) => (s.pointilles = 3))
+
+      const objets = [
+        ...facesVisibles,
+        ...aretesCachees,
+        labelPoint(A, B, C, D, E, F, G, H),
+      ]
+      const k = randint(1, 4) // pour faire varier le repère choisi
+      let rep = ''
+
+      let Point1 = ''
+      let Point2 = ''
+      let Point3 = ''
+      let Point4 = ''
+      // Coordonnées des points du cube dans repère (A, AB, AD, AE)
+      const coordCan = {
+        A: [0, 0, 0],
+        B: [1, 0, 0],
+        C: [1, 1, 0],
+        D: [0, 1, 0],
+        E: [0, 0, 1],
+        F: [1, 0, 1],
+        G: [1, 1, 1],
+        H: [0, 1, 1],
+      }
+
+      // Retourne les coordonnées d'un point dans le repère choisi (k)
+      const coordsDansRep = (nomPoint: keyof typeof coordCan) => {
+        const [x, y, z] = coordCan[nomPoint]
+        switch (k) {
+          case 1:
+            // Repère (A, AB, AD, AE)
+            return [x, y, z]
+          case 2:
+            // Repère (B, BC, BA, BF)
+            return [y, 1 - x, z]
+          case 3:
+            // Repère (H, HE, HG, HD)
+            return [1 - y, x, 1 - z]
+          default:
+            // Repère (E, EA, EF, EH)
+            return [1 - z, x, y]
         }
       }
-      texte =
-        "On donne, dans un repère orthonormé de l'espace $\\big(O~;\\vec{\\imath}~;\\vec{\\jmath}~;\\vec{k}\\big)$,<br>"
-      texte += 'les coordonnées des points suivants :<br>'
-      texte += `$A(${xA}\\,;${yA}\\,;${zA}), ~~ B(${xB}\\,;${yB}\\,;${zB}), ~~ C(${xC}\\,;${yC}\\,;${zC}), ~~ D(${xD}\\,;${yD}\\,;${zD}).$<br> `
-      texte +=
-        'Déterminer si les points $A\\,,B\\,,C\\,\\text{et} \\, D$ sont ou non coplanaires.<br> '
-      texteCorr =
-        "Les quatre points sont coplanaires s'il existe deux réels $\\lambda_1$ et $\\lambda_2$ tels que <br>"
-      texteCorr +=
-        "$\\overrightarrow{AD}=\\lambda_1 \\overrightarrow{AB}+\\lambda_2 \\overrightarrow{AC}\\quad(1)$,<br> c'est-à-dire si "
-      texteCorr +=
-        '$\\overrightarrow{AD}$ est une combinaison linéaire des vecteurs $\\overrightarrow{AB}$ et $ \\overrightarrow{AC}$.<br>'
-      texteCorr += 'On calcule les coordonnées des trois vecteurs : <br>'
-      texteCorr += `$\\overrightarrow{AD}\\begin{pmatrix}${xD} -${ecritureParentheseSiNegatif(xA)}\\\\ ${yD} -${ecritureParentheseSiNegatif(yA)}\\\\${zD}- ${ecritureParentheseSiNegatif(zA)}\\end{pmatrix}\\iff\\overrightarrow{AD}\\begin{pmatrix}${xD - xA} \\\\ ${yD - yA} \\\\${zD - zA}\\end{pmatrix}$<br><br>`
-      texteCorr += `$\\overrightarrow{AB}\\begin{pmatrix}${xB} -${ecritureParentheseSiNegatif(xA)}\\\\ ${yB} -${ecritureParentheseSiNegatif(yA)}\\\\${zB}- ${ecritureParentheseSiNegatif(zA)}\\end{pmatrix}\\iff\\overrightarrow{AB}\\begin{pmatrix}${xB - xA} \\\\ ${yB - yA} \\\\${zB - zA}\\end{pmatrix}$<br><br>`
-      texteCorr += `$\\overrightarrow{AC}\\begin{pmatrix}${xC} -${ecritureParentheseSiNegatif(xA)}\\\\ ${yC} -${ecritureParentheseSiNegatif(yA)}\\\\${zC}- ${ecritureParentheseSiNegatif(zA)}\\end{pmatrix}\\iff\\overrightarrow{AC}\\begin{pmatrix}${xC - xA} \\\\ ${yC - yA} \\\\${zC - zA}\\end{pmatrix}$<br>`
-      texteCorr +=
-        'On cherche  des réels $\\lambda_1$ et $\\lambda_2$ qui vérifient $(1)$,<br> ce qui est équivalent à résoudre le système :'
-      texteCorr += `<br><br>$\\begin{cases}${xD - xA}&= ${rienSi1(xB - xA)} \\lambda_1 ${ecritureAlgebriqueSauf1(xC - xA)} \\lambda_2\\quad\\quad \\left(L_1\\right)\\\\  
-            ${yD - yA} &=${rienSi1(yB - yA)}\\lambda_1 ${ecritureAlgebriqueSauf1(yC - yA)}\\lambda_2\\quad\\quad \\left(L_2\\right)\\\\
-            ${zD - zA}&=${rienSi1(zB - zA)}\\lambda_1 ${ecritureAlgebriqueSauf1(zC - zA)}\\lambda_2
-            \\end{cases}\\iff$`
-      texteCorr += `$\\begin{cases}${(xD - xA) * (yC - yA)}&= ${rienSi1((xB - xA) * (yC - yA))}\\lambda_1 ${ecritureAlgebriqueSauf1((xC - xA) * (yC - yA))} \\lambda_2\\quad\\quad \\left(${yC - yA}\\times L_1\\rightarrow L_1\\right)\\\\  
-            ${(yD - yA) * (xC - xA)} &=${rienSi1((yB - yA) * (xC - xA))}\\lambda_1 ${ecritureAlgebriqueSauf1((yC - yA) * (xC - xA))}\\lambda_2\\quad\\quad \\left(${xC - xA}\\times L_2\\rightarrow L_2\\right)\\\\
-            ${zD - zA}&=${rienSi1(zB - zA)}\\lambda_1 ${ecritureAlgebriqueSauf1(zC - zA)}\\lambda_2
-            \\end{cases}$<br><br>`
-      texteCorr += `$\\iff \\begin{cases}
-            ${(xD - xA) * (yC - yA) - (yD - yA) * (xC - xA)}&= ${(xB - xA) * (yC - yA) - (yB - yA) * (xC - xA)} \\lambda_1\\quad\\quad \\left(L_1-L_2\\rightarrow L_1\\right)\\\\  
-            ${(yD - yA) * (xC - xA)} &=${(yB - yA) * (xC - xA)}\\lambda_1  ${ecritureAlgebriqueSauf1((yC - yA) * (xC - xA))}\\lambda_2\\quad\\quad \\left(L_2\\right)\\\\  
-            ${zD - zA}&=${rienSi1(zB - zA)}\\lambda_1 ${ecritureAlgebriqueSauf1(zC - zA)}\\lambda_2
-              \\end{cases}\\iff 
-              \\begin{cases}
-           \\lambda_1&= ${lambda1}\\\\  
-             ${(yD - yA) * (xC - xA)} &=${(yB - yA) * (xC - xA) * lambda1}  ${ecritureAlgebriqueSauf1((yC - yA) * (xC - xA))}\\lambda_2\\\\  
-            ${zD - zA}&=${rienSi1((zB - zA) * lambda1)} ${ecritureAlgebriqueSauf1(zC - zA)}\\lambda_2
-              \\end{cases}$<br><br>`
-      texteCorr += `$\\iff\\begin{cases}
-       \\lambda_1&= ${lambda1}\\\\  
-       ${rienSi1((yC - yA) * (xC - xA))}\\lambda_2&=${(yD - yA) * (xC - xA) - (yB - yA) * (xC - xA) * lambda1} \\\\  
-        ${rienSi1(zC - zA)}\\lambda_2&= ${zD - zA + (zA - zB) * lambda1}
-              \\end{cases}$`
-      texteCorr += finCorrection
-      if (this.questionJamaisPosee(i, texte)) {
-        // <- laisser le i et ajouter toutes les variables qui rendent les exercices différents (par exemple a, b, c et d)
-        this.listeQuestions[i] = texte
-        this.listeCorrections[i] = texteCorr
-        i++
+      if (k === 1) {
+        // Repère (A, AB, AD, AE)
+        rep =
+          '$(A,\\overrightarrow{AB},\\overrightarrow{AD},\\overrightarrow{AE})$'
+        Point1 = choice(['B', 'C', 'D', 'E', 'F', 'G', 'H'])
+        Point2 = choice(['B', 'C', 'D', 'E', 'F', 'G', 'H'], [`${Point1}`])
+        Point3 = choice(
+          ['B', 'C', 'D', 'E', 'F', 'G', 'H'],
+          [`${Point1}`, `${Point2}`],
+        )
+        Point4 = choice(
+          ['B', 'C', 'D', 'E', 'F', 'G', 'H'],
+          [`${Point1}`, `${Point2}`, `${Point3}`],
+        )
+      } else if (k === 2) {
+        // Repère (B, BC, BA, BF)
+        rep =
+          '$(B,\\overrightarrow{BC},\\overrightarrow{BA},\\overrightarrow{BF})$'
+        Point1 = choice(['A', 'C', 'D', 'E', 'F', 'G', 'H'])
+        Point2 = choice(['A', 'C', 'D', 'E', 'F', 'G', 'H'], [`${Point1}`])
+        Point3 = choice(
+          ['A', 'C', 'D', 'E', 'F', 'G', 'H'],
+          [`${Point1}`, `${Point2}`],
+        )
+        Point4 = choice(
+          ['A', 'C', 'D', 'E', 'F', 'G', 'H'],
+          [`${Point1}`, `${Point2}`, `${Point3}`],
+        )
+      } else if (k === 3) {
+        // Repère (H, HE, HG, HD)
+        rep =
+          '$(H,\\overrightarrow{HE},\\overrightarrow{HG},\\overrightarrow{HD})$'
+        Point1 = choice(['A', 'B', 'C', 'D', 'E', 'F', 'G'])
+        Point2 = choice(['A', 'B', 'C', 'D', 'E', 'F', 'G'], [`${Point1}`])
+        Point3 = choice(
+          ['A', 'B', 'C', 'D', 'E', 'F', 'G'],
+          [`${Point1}`, `${Point2}`],
+        )
+        Point4 = choice(
+          ['A', 'B', 'C', 'D', 'E', 'F', 'G'],
+          [`${Point1}`, `${Point2}`, `${Point3}`],
+        )
+      } else {
+        // Repère (E, EA, EF, EH)
+        rep =
+          '$(E,\\overrightarrow{EA},\\overrightarrow{EF},\\overrightarrow{EH})$'
+        Point1 = choice(['A', 'B', 'C', 'D', 'F', 'G', 'H'])
+        Point2 = choice(['A', 'B', 'C', 'D', 'F', 'G', 'H'], [`${Point1}`])
+        Point3 = choice(
+          ['A', 'B', 'C', 'D', 'F', 'G', 'H'],
+          [`${Point1}`, `${Point2}`],
+        )
+        Point4 = choice(
+          ['A', 'B', 'C', 'D', 'F', 'G', 'H'],
+          [`${Point1}`, `${Point2}`, `${Point3}`],
+        )
       }
+      const pointsChoisis = [Point1, Point2, Point3, Point4]
+      const coordsChoisies = pointsChoisis.map((p) =>
+        coordsDansRep(p as keyof typeof coordCan),
+      ) // Calcule les coord dans nouveau repère pour les points choisis
+      const [p1, p2, p3, p4] = coordsChoisies
+      const [x1, y1, z1] = p1 // Coordonnées du point 1 dans le repère choisi
+      const [x2, y2, z2] = p2 // Coordonnées du point 2 dans le repère choisi
+      const [x3, y3, z3] = p3 // Coordonnées du point 3 dans le repère choisi
+      const [x4, y4, z4] = p4 // Coordonnées du point 4 dans le repère choisi
+
+      texte =
+        `On considère un cube $ABCDEFGH$.` +
+        '<br>' +
+        mathalea2d(
+          Object.assign({ scale: 0.6, style: 'inline' }, fixeBordures(objets)),
+          objets,
+        ) +
+        '<br>' +
+        `Donner les coordonnées des points $${Point1}$, $${Point2}$, $${Point3}$ et $${Point4}$ dans le repère ${rep}`
+
+      if (this.interactif) {
+        texte +=
+          ' <br>' +
+          remplisLesBlancs(
+            this,
+            4 * i,
+            `${Point1}(%{champ1}~;~%{champ2}~;~%{champ3}),`,
+          ) +
+          remplisLesBlancs(
+            this,
+            4 * i + 1,
+            `${Point2}(%{champ1}~;~%{champ2}~;~%{champ3}),`,
+          ) +
+          remplisLesBlancs(
+            this,
+            4 * i + 2,
+            `${Point3}(%{champ1}~;~%{champ2}~;~%{champ3}),`,
+          ) +
+          remplisLesBlancs(
+            this,
+            4 * i + 3,
+            `${Point4}(%{champ1}~;~%{champ2}~;~%{champ3}),`,
+          )
+        handleAnswers(this, 4 * i, {
+          champ1: { value: texNombre(x1) },
+          champ2: { value: texNombre(y1) },
+          champ3: { value: texNombre(z1) },
+        })
+        handleAnswers(this, 4 * i + 1, {
+          champ1: { value: texNombre(x2) },
+          champ2: { value: texNombre(y2) },
+          champ3: { value: texNombre(z2) },
+        })
+        handleAnswers(this, 4 * i + 2, {
+          champ1: { value: texNombre(x3) },
+          champ2: { value: texNombre(y3) },
+          champ3: { value: texNombre(z3) },
+        })
+        handleAnswers(this, 4 * i + 3, {
+          champ1: { value: texNombre(x4) },
+          champ2: { value: texNombre(y4) },
+          champ3: { value: texNombre(z4) },
+        })
+      } else texte += '.'
+
+      texteCorr =
+        `Les coordonnées dans le repère ${rep} sont :<br>` +
+        ` $${Point1}(${miseEnEvidence(`${texNombre(x1)}~`)};~${miseEnEvidence(`${texNombre(y1)}~`)};~${miseEnEvidence(`${texNombre(z1)}`)})$, ` +
+        ` $${Point2}(${miseEnEvidence(`${texNombre(x2)}~`)};~${miseEnEvidence(`${texNombre(y2)}~`)};~${miseEnEvidence(`${texNombre(z2)}`)})$, ` +
+        ` $${Point3}(${miseEnEvidence(`${texNombre(x3)}~`)};~${miseEnEvidence(`${texNombre(y3)}~`)};~${miseEnEvidence(`${texNombre(z3)}`)})$, ` +
+        ` $${Point4}(${miseEnEvidence(`${texNombre(x4)}~`)};~${miseEnEvidence(`${texNombre(y4)}~`)};~${miseEnEvidence(`${texNombre(z4)}`)})$.`
+
+      this.listeQuestions[i] = texte
+      this.listeCorrections[i] = texteCorr
+      i++
       cpt++
     }
+
     listeQuestionsToContenu(this)
   }
 }
