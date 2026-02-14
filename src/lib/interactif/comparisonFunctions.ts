@@ -652,6 +652,9 @@ engine.latexDictionary = [
     parse: (parser: Parser, lhs: Expression, terminator: ParseLatexOptions) => {
       // Reculer d'un jeton : nous allons analyser le '-' comme faisant partie du rhs afin de
       // pouvoir conserver l'expression en tant que 'Add'.
+      const tocken = parser.nextToken()
+      parser.index-- // On recule parce que nextTocken() fait avancer de un jeton.
+      if (tocken == null) return lhs
       parser.index -= 1
       const rhs = parser.parseExpression({ ...terminator, minPrec: 275 + 3 })
       return ['Add', lhs, rhs]
