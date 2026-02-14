@@ -4,7 +4,7 @@
   import { mathaleaGetExercicesFromParams } from '../../../lib/mathalea'
   import { darkMode } from '../../../lib/stores/generalStore'
   import { referentielLocale } from '../../../lib/stores/languagesStore'
-  import type { IExercice } from '../../../lib/types'
+  import type { IExercice, IExerciceStatique } from '../../../lib/types'
   import Footer from '../../Footer.svelte'
   import ButtonActionInfo from '../../shared/forms/ButtonActionInfo.svelte'
   import ButtonTextAction from '../../shared/forms/ButtonTextAction.svelte'
@@ -13,7 +13,9 @@
   const userInput = writable('')
   const latexOutput = writable('')
 
-  const itemsWithExercises: { [key: string]: IExercice[] } = {}
+  const itemsWithExercises: {
+    [key: string]: (IExercice | IExerciceStatique)[]
+  } = {}
 
   function formatUserInput() {
     try {
@@ -43,14 +45,6 @@
     }
     const content = generateLatex(userSettings, itemsWithExercises)
     latexOutput.set(content)
-    navigator.clipboard
-      .writeText(content)
-      .then(() => {
-        alert('Code LaTeX copié dans le presse-papiers')
-      })
-      .catch((err) => {
-        console.error('Erreur lors de la copie dans le presse-papiers: ', err)
-      })
   }
 
   function handleKeyDownUserInput(event: KeyboardEvent) {
