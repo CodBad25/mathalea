@@ -4,13 +4,14 @@ import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { context } from '../../../modules/context'
 import ExerciceSimple from '../../ExerciceSimple'
-export const titre = 'Exprimer une variable en fonction des autres (formules avec carrés/racines carrées)'
+export const titre =
+  'Exprimer une variable en fonction des autres (formules avec carrés/racines carrées)'
 export const interactifReady = true
 export const interactifType = 'qcm'
 
 // Les exports suivants sont optionnels mais au moins la date de publication semble essentielle
 export const dateDePublication = '13/01/2026' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
-
+export const dateDeModifImportante = '14/02/2026'
 /**
  * Modèle d'exercice très simple pour la course aux nombres
  * @author Gilles Mora
@@ -37,7 +38,9 @@ export default class ExprimerEnFonctionRac extends ExerciceSimple {
     const choixQ = choice([true, false])
 
     if (context.isAmc) this.versionQcm = false
-    switch (choice([1, 2, 3, 4, 5])) {//
+    switch (
+      choice([1, 2, 3, 4, 5, 6]) //
+    ) {
       case 1:
         this.question = `Lorsqu'un point mobile suit une trajectoire circulaire de rayon $R$, 
   en mètre ($\\text{m}$), son accélération centripète $a$ (en $\\text{m/s}^2$) 
@@ -165,8 +168,18 @@ En isolant $t$, on obtient : $${miseEnEvidence('t = \\sqrt{C} - 1')}$.`
             ? `Donner l'expression permettant, à partir de cette formule, d'exprimer la hauteur $h$.`
             : `Donner l'expression permettant, à partir de cette formule, d'exprimer le rayon $r$.`
           this.reponse = choixQ
-            ? ['$\\dfrac{V}{\\pi\\times r^2}$', '$\\dfrac{V}{\\pi r^2}$', '$\\dfrac{V}{r^2\\pi}$','$\\dfrac{V}{r^2\\times \\pi}$']
-            : ['$\\sqrt{\\dfrac{V}{\\pi\\times h}}$', '$\\sqrt{\\dfrac{V}{\\pi h}}$', '$\\sqrt{\\dfrac{V}{h\\pi}}$', '$\\sqrt{\\dfrac{V}{h\\times \\pi}}$']
+            ? [
+                '$\\dfrac{V}{\\pi\\times r^2}$',
+                '$\\dfrac{V}{\\pi r^2}$',
+                '$\\dfrac{V}{r^2\\pi}$',
+                '$\\dfrac{V}{r^2\\times \\pi}$',
+              ]
+            : [
+                '$\\sqrt{\\dfrac{V}{\\pi\\times h}}$',
+                '$\\sqrt{\\dfrac{V}{\\pi h}}$',
+                '$\\sqrt{\\dfrac{V}{h\\pi}}$',
+                '$\\sqrt{\\dfrac{V}{h\\times \\pi}}$',
+              ]
         }
         if (this.versionQcm) {
           this.distracteurs = choixQ
@@ -202,7 +215,6 @@ Comme $r \\geqslant 0$, en prenant la racine carrée, on obtient : $${miseEnEvid
         break
 
       case 5:
-      default:
         this.question = `Le volume $V$ d'un cône de hauteur $h$ et de rayon $r$ est $V=\\dfrac{1}{3}\\pi r^2h$. <br>
 On cherche à isoler $h$. On a :`
         if (this.versionQcm) {
@@ -221,8 +233,18 @@ On cherche à isoler $h$. On a :`
             ? `Donner l'expression permettant, à partir de cette formule, d'exprimer la hauteur $h$.`
             : `Donner l'expression permettant, à partir de cette formule, d'exprimer le rayon $r$.`
           this.reponse = choixQ
-            ? ['$\\dfrac{3V}{\\pi r^2}$', '$\\dfrac{3V}{\\pi\\times r^2}$','$\\dfrac{3V}{r^2\\times \\pi}$', '$\\dfrac{3V}{r^2\\pi}$']
-            : ['$\\sqrt{\\dfrac{3V}{\\pi h}}$', '$\\sqrt{\\dfrac{3V}{\\pi\\times h}}$','$\\sqrt{\\dfrac{3V}{h\\pi}}$','$\\sqrt{\\dfrac{3V}{h\\times\\pi}}$']
+            ? [
+                '$\\dfrac{3V}{\\pi r^2}$',
+                '$\\dfrac{3V}{\\pi\\times r^2}$',
+                '$\\dfrac{3V}{r^2\\times \\pi}$',
+                '$\\dfrac{3V}{r^2\\pi}$',
+              ]
+            : [
+                '$\\sqrt{\\dfrac{3V}{\\pi h}}$',
+                '$\\sqrt{\\dfrac{3V}{\\pi\\times h}}$',
+                '$\\sqrt{\\dfrac{3V}{h\\pi}}$',
+                '$\\sqrt{\\dfrac{3V}{h\\times\\pi}}$',
+              ]
         }
         if (this.versionQcm) {
           this.distracteurs = choixQ
@@ -258,8 +280,59 @@ En isolant $r^2$, on obtient : $r^2 = \\dfrac{3V}{\\pi h}$.<br>
 Comme $r \\geqslant 0$, en prenant la racine carrée, on obtient : $${miseEnEvidence('r = \\sqrt{\\dfrac{3V}{\\pi h}}')}$.`
         }
         break
+      case 6:
+      default:
+        this.question = `L'énergie cinétique $E$ (en joules) d'un objet de masse $m$ (en kg) et de vitesse $v$ (en m/s) est donnée par :<br>`
+        this.question += texteCentre('$E=\\dfrac{1}{2}mv^2$')
+        if (this.versionQcm) {
+          this.question += choixQ
+            ? `L'expression permettant, à partir de cette formule, d'exprimer la masse $m$ est : `
+            : `L'expression permettant, à partir de cette formule, d'exprimer la vitesse $v$ est : `
+          this.reponse = choixQ
+            ? '$m=\\dfrac{2E}{v^2}$'
+            : '$v=\\sqrt{\\dfrac{2E}{m}}$'
+        } else {
+          this.question += choixQ
+            ? `Donner l'expression permettant, à partir de cette formule, d'exprimer la masse $m$.`
+            : `Donner l'expression permettant, à partir de cette formule, d'exprimer la vitesse $v$.`
+          this.reponse = choixQ
+            ? ['$\\dfrac{2E}{v^2}$', '$\\dfrac{2E}{v^{2}}$']
+            : ['$\\sqrt{\\dfrac{2E}{m}}$', '$\\sqrt{\\dfrac{2\\times E}{m}}$']
+        }
+        if (this.versionQcm) {
+          this.distracteurs = choixQ
+            ? [
+                '$m=\\dfrac{E}{2v^2}$',
+                '$m=\\dfrac{v^2}{2E}$',
+                '$m=\\sqrt{\\dfrac{2E}{v}}$',
+              ]
+            : [
+                '$v=\\dfrac{2E}{m}$',
+                '$v=\\dfrac{\\sqrt{2E}}{m}$',
+                '$v=\\sqrt{\\dfrac{E}{2m}}$',
+              ]
+        }
+        choixQ
+          ? (this.optionsChampTexte = {
+              texteAvant: '<br> $m=$',
+              texteApres: ' ',
+            })
+          : (this.optionsChampTexte = {
+              texteAvant: '<br> $v=$',
+              texteApres: ' ',
+            })
 
-      
+        if (choixQ) {
+          this.correction = `On part de la formule : $E = \\dfrac{1}{2}mv^2$.<br>
+En multipliant les deux membres par $2$, on obtient : $2E = mv^2$.<br>
+En isolant $m$, on obtient : $${miseEnEvidence('m = \\dfrac{2E}{v^2}')}$.`
+        } else {
+          this.correction = `On part de la formule : $E = \\dfrac{1}{2}mv^2$.<br>
+En multipliant les deux membres par $2$, on obtient : $2E = mv^2$.<br>
+En isolant $v^2$, on obtient : $v^2 = \\dfrac{2E}{m}$.<br>
+Comme $v \\geqslant 0$, en prenant la racine carrée, on obtient : $${miseEnEvidence('v = \\sqrt{\\dfrac{2E}{m}}')}$.`
+        }
+        break
     }
     this.canEnonce = this.question
     this.canReponseACompleter = ''
