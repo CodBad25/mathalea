@@ -19,7 +19,7 @@ export const uuid = '00a7a'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const refs = {
-  'fr-fr': ['TSA5-00'],
+  'fr-fr': [],// déréférencé de Tspé et à cloner en Terminale techno
   'fr-ch': [],
 }
 
@@ -31,7 +31,7 @@ export const refs = {
 export default class InequationsLog extends Exercice {
   constructor() {
     super()
-    this.nbQuestions = 5
+    this.nbQuestions = 2
     if (this.nbQuestions === 1) {
       this.consigne =
         "Résoudre dans $\\R$ l'inéquation suivante. La solution devra être écrite sous la forme d'un intervalle."
@@ -45,8 +45,7 @@ export default class InequationsLog extends Exercice {
       'Type de question ',
       'Nombres séparés par des tirets  :\n : Borne rationnelle\n2 : Borne entière\n3 : Borne irrationnelle\n4 : Mélange',
     ]
-    this.comment =
-      "Exercice de résolution d'inéquation avec le logarithme de base 10"
+   
     this.correctionDetailleeDisponible = true
   }
 
@@ -87,7 +86,7 @@ export default class InequationsLog extends Exercice {
   }
 
   nouvelleVersion() {
-    const logString = this.comment?.includes('10') ? '\\log' : '\\ln'
+    const logString = this.titre.includes('log') ? '\\log' : '\\ln'
     const typeQuestionsDisponibles = ['>=', '>', '<=', '<']
     const listeCouples = [
       [0.03125, 2],
@@ -279,11 +278,11 @@ export default class InequationsLog extends Exercice {
           if (Math.log(a) > 0) {
             signe1 = '\\geq'
             signe2 = '>'
-            answer = `[${resultat};+\\infty[`
+            answer = `\\left[${resultat};+\\infty\\right[`
           } else {
             signe1 = '\\leq'
             signe2 = '<'
-            answer = `]-\\infty;${resultat}]`
+            answer = `\\left]-\\infty;${resultat}\\right]`
           }
           break
         case '>':
@@ -291,11 +290,11 @@ export default class InequationsLog extends Exercice {
           if (Math.log(a) > 0) {
             signe1 = '>'
             signe2 = '>'
-            answer = `]${resultat};+\\infty[`
+            answer = `\\left]${resultat};+\\infty\\right[`
           } else {
             signe1 = '<'
             signe2 = '<'
-            answer = `]-\\infty;${resultat}[`
+            answer = `\\left]-\\infty;${resultat}\\right[`
           }
           break
         case '<=':
@@ -303,11 +302,11 @@ export default class InequationsLog extends Exercice {
           if (Math.log(a) > 0) {
             signe1 = '\\leq'
             signe2 = '>'
-            answer = `]-\\infty;${resultat}]`
+            answer = `\\left]-\\infty;${resultat}\\right]`
           } else {
             signe1 = '\\geq'
             signe2 = '<'
-            answer = `[${resultat};+\\infty[`
+            answer = `\\left[${resultat};+\\infty\\right[`
           }
           break
         case '<':
@@ -316,20 +315,23 @@ export default class InequationsLog extends Exercice {
           if (Math.log(a) > 0) {
             signe1 = '<'
             signe2 = '>'
-            answer = `]-\\infty;${resultat}[`
+            answer = `\\left]-\\infty;${resultat}\\right[`
           } else {
             signe1 = '>'
             signe2 = '<'
-            answer = `]${resultat};+\\infty[`
+            answer = `\\left]${resultat};+\\infty\\right[`
           }
           break
       }
       texte = `$${texNombre(a, 5)}^x ${signe0} ${stringB}$`
-      texteCorr = `On sait que pour tous réels $a$ et $b$ strictement positifs $a ${signe0} b$ si, et seulement si, $${logString}(a) ${signe0} ${logString}(b)$. D'où :`
-      texteCorr += `<br>$${texNombre(a, 5)}^x ${signe0} ${stringB}$`
-      texteCorr += `<br>$ \\iff ${logString}{(${stringA}^x)} ${signe0} ${logString}{(${stringB})}$`
-      texteCorr += `<br>$ \\iff x${logString}{(${stringA})} ${signe0} ${logString}{(${stringB})}$`
-      texteCorr += `<br>$ \\iff x ${signe1} \\dfrac{${logString}(${stringB})}{${logString}(${stringA})}$ car $${logString}(${stringA}) ${signe2}0$`
+      texteCorr = `On sait que pour tous réels $a$ et $b$ strictement positifs :<br>$a ${signe0} b$ si et seulement si $${logString}(a) ${signe0} ${logString}(b)$. D'où :`
+      texteCorr += `<br>$\\begin{aligned}\\phantom{\\iff}&${texNombre(a, 5)}^x ${signe0} ${stringB}\\\\
+       \\iff &${logString}{(${stringA}^x)} ${signe0} ${logString}{(${stringB})}\\\\
+       \\iff &x${logString}{(${stringA})} ${signe0} ${logString}{(${stringB})}\\\\
+       \\iff &x${logString}{(${stringA})} ${signe0} ${logString}{(${stringB})}\\\\
+       \\iff &x ${signe1} \\dfrac{${logString}(${stringB})}{${logString}(${stringA})}\\quad \\text{car} ${logString}(${stringA}) ${signe2}0
+       \\end{aligned}$`
+      
       if (quotient !== null && base !== null) {
         texteCorr += this.correctionDetaillee
           ? typeof quotient === 'number'
