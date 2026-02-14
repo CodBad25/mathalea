@@ -2818,6 +2818,26 @@
   "TSG2": {
     "titre": "Géométrie dans l'espace"
   },
+  "TSG2-0": {
+    "titre": "Points, vecteurs et repères"
+  },
+ 
+   "TSG2-1": {
+    "titre": "Droites dans l'espace"
+  },
+    "TSG2-2": {
+      "titre": "Plans dans l'espace"
+    },
+    "TSG2-3": {
+      "titre": "Positions relatives"
+    },
+    "TSG2-4": {
+      "titre": "Orthogonalité, produit scalaire et distance"
+    },
+     "TSG2-5": {
+      "titre": "Sujets type bac"
+    },
+  
   "TEC1": {
     "titre": "Nombres complexes : algèbre",
     "sousThemes": {}

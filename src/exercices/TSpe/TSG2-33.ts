@@ -15,7 +15,7 @@ export const dateDePublication = '29/01/2025' // La date de publication initiale
 
 export const uuid = '34648'
 export const refs = {
-  'fr-fr': ['TSG2-04'],
+  'fr-fr': ['TSG2-33'],
   'fr-ch': [],
 }
 
