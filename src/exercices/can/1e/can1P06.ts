@@ -76,7 +76,7 @@ export default class CalculProbaTableau extends Exercice {
         ],
       )
       texte =
-        'Ce tableau est un tableau de probabilités avec deux événements $A$ et $B$  d’une expérience aléatoire.<br>'
+        'Ce tableau est un tableau de probabilités avec deux événements $A$ et $B$ d’une expérience aléatoire.<br>'
       this.canEnonce = texte
       switch (
         choice([1, 2, 3, 4, 5, 6, 7, 8, 9]) //
