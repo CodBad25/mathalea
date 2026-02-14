@@ -1,13 +1,13 @@
-import InequationsLog from './TSA5-00'
-
-export const titre = "Résoudre des inéquations du type $a^x \\leq b$"
+// import InequationsLog from './TSA5-00'
+import InequationsLog from '../TSpe/TSA5-00'
+export const titre = "Résoudre des inéquations du type $a^x \\leq b$ avec le $\\log$"
 export const dateDePublication = '4/5/2024'
 export const dateDeModifImportante = '18/07/2024'
-export const uuid = 'e7929'
+export const uuid = 'e7928'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const refs = {
-  'fr-fr': ['TSA5-01'],
+  'fr-fr': ['TTE-3'],
   'fr-ch': [],
 }
 
