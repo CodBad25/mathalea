@@ -1,13 +1,14 @@
-import Exercice from '../Exercice'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import {
   gestionnaireFormulaireTexte,
   listeQuestionsToContenu,
   randint,
 } from '../../modules/outils'
-import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { miseEnEvidence } from '../../lib/outils/embellissements'
+import Exercice from '../Exercice'
 
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import {
   ecritureAlgebrique,
   ecritureAlgebriqueSauf1,
@@ -17,9 +18,8 @@ import {
 } from '../../lib/outils/ecritures'
 import { numAlpha, sp } from '../../lib/outils/outilString'
 import FractionEtendue from '../../modules/FractionEtendue'
-import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 
-export const titre = 'Équations avec la fonction logarithme'
+export const titre = 'Résoudre une équation simple avec le logarithme'
 export const dateDePublication = '22/7/2024'
 export const uuid = 'f1f9d'
 export const interactifReady = true
@@ -45,31 +45,30 @@ function resoudreAxPlusBZeroTex(a: number, b: number): string {
 
 /**
  *
- * @author  Jean-Claude Lhote
+ * @author  Jean-Claude Lhote - QQes aménagements Stéphane Guyon
  */
 export default class EquationsLog extends Exercice {
   version: string
   constructor() {
     super()
     this.version = 'ln'
-    this.nbQuestions = 5
+    this.nbQuestions = 2
     this.spacing = 1.5
     this.spacingCorr = 3
     this.sup = '1'
+    this.sup2 = false
     this.besoinFormulaireTexte = [
       'Type de question ',
-      'Nombres séparés par des tirets  :\n1 : log(ax+b)=n\n2 : log(ax+b)=log(cx+d)\n3 : Mélange',
+      'Nombres séparés par des tirets  :\n1 : $\\ln(ax+b)=n$\n2 : $\\ln(ax+b)=\\ln(cx+d)$\n3 : Mélange',
     ]
-    this.besoinFormulaire2CaseACocher = ['Type de logarithme', false]
-    this.comment = "Exercice de résolution d'équations avec logarithme"
+    this.besoinFormulaire2CaseACocher = ['Type de logarithme', true]
   }
 
   nouvelleVersion() {
-    if (this.sup2) this.version = 'ln'
+    if (this.sup2 === false) this.version = 'ln'
     else this.version = 'log'
     const logString = this.version !== 'ln' ? '\\log' : '\\ln'
     const base = this.version !== 'ln' ? '10' : 'e'
-
     const listeTypeQuestions = gestionnaireFormulaireTexte({
       saisie: this.sup,
       min: 1,
@@ -127,20 +126,22 @@ export default class EquationsLog extends Exercice {
         }
         const f1 = new FractionEtendue(-b, a)
         const fracMoinsBsurA = f1.texFractionSimplifiee
-        texteCorr = `${numAlpha(0)} Tout d'abord, la fonction $${logString}$ est définie sur $\\R_+^*$, donc $${reduireAxPlusB(a, b)}$ doit être strictement positif.<br>`
+        texteCorr = `${numAlpha(0)} La fonction $${logString}$ est définie sur $\\R_+^*$, donc il faut vérifier que :<br>`
         texteCorr += resoudreAxPlusBZeroTex(a, b)
         if (a <= 0) {
           texteCorr += ` (On inverse le signe car on divise chaque membre par $${a}$ qui est négatif)`
         }
         texteCorr += `.<br>Ainsi, ${sp()} $ \\mathcal{D}_f=${miseEnEvidence(a > 0 ? `\\left]${fracMoinsBsurA};+\\infty\\right[` : `\\left]-\\infty;${fracMoinsBsurA}\\right[`)}$.<br>`
-        texteCorr += `${numAlpha(1)} Ensuite,  on sait que pour tout $a$ et $b$ appartenant à $\\R_+^*, ${sp()}$ $a=b \\iff ${logString} (a) = ${logString} (b)$. D'où : <br>`
+        texteCorr += `${numAlpha(1)} On sait que pour tout $a$ et $b$ appartenant à $\\R_+^*$ :  $a=b \\iff ${logString} (a) = ${logString} (b)$.<br> D'où pour tout $x\\in \\mathcal{D}_f$<br> `
         texteCorr += `
         $\\begin{aligned}
-        ${logString}(${reduireAxPlusB(a, b)})= ${n} &\\iff ${logString}(${reduireAxPlusB(a, b)})= ${logString}(${base}^{${n}})\\\\
+        &\\phantom{\\iff}${logString}(${reduireAxPlusB(a, b)})= ${n}\\\\ &\\iff ${logString}(${reduireAxPlusB(a, b)})= ${logString}(${base}^{${n}})\\\\
          &\\iff ${reduireAxPlusB(a, b)}=${base}^{${n}}\\\\
          ${b !== 0 ? `&\\iff ${rienSi1(a)}x=${base}^{${n}}${ecritureAlgebrique(-b)}\\\\` : ''}
-         &\\iff x=${solution}
-         \\end{aligned}$`
+        \\end{aligned}$`
+        if (a !== 1) {
+          texteCorr += `<br>$\\begin{aligned}&\\iff x=${solution.replace('\\dfrac', '\\frac')}\\end{aligned}$`
+        }
         domaine =
           a > 0
             ? `\\left]${fracMoinsBsurA};+\\infty\\right[`
@@ -155,10 +156,10 @@ export default class EquationsLog extends Exercice {
           intervalle[1].valeurDecimale > valeurSolution &&
           intervalle[0].valeurDecimale < valeurSolution
         ) {
-          texteCorr += `<br>$${solution}\\in ${domaine}$ donc l'équation admet $${miseEnEvidence(solution)}$ comme solution unique.`
+          texteCorr += `<br>On vérifie que  $${solution}\\in ${domaine}$ donc $S=\\left\\{${solution}\\right\\}$.<br> L'équation admet $${miseEnEvidence(solution)}$ comme solution unique.`
           solution = `{${solution}}`
         } else {
-          texteCorr += `<br>$${solution}\\notin ${domaine}$ donc l'équation n'admet aucune solution.`
+          texteCorr += `<br>On vérifie que $${solution}\\notin ${domaine}$ donc $S=\\emptyset$.<br> L'équation n'admet aucune solution.`
           solution = '\\emptyset'
         }
       } else {
@@ -180,7 +181,7 @@ export default class EquationsLog extends Exercice {
             ` ${KeyboardType.equationsTerminale}`,
             { texteAvant: '$\\mathcal{S}=$' },
           )
-        texteCorr = `${numAlpha(0)} Tout d'abord, la fonction $${logString}$ est définie sur $\\R_+^*$, donc $${reduireAxPlusB(a, b)}$ et $${reduireAxPlusB(c, d)}$ doivent être strictement positifs.<br>`
+        texteCorr = `${numAlpha(0)} La fonction $${logString}$ est définie sur $\\R_+^*$, il faut donc vérifier que :<br>`
         const f2 = new FractionEtendue(-b, a)
         const f3 = new FractionEtendue(-d, c)
         const fracMoinsBsurA = f2.texFractionSimplifiee
@@ -274,10 +275,10 @@ export default class EquationsLog extends Exercice {
           }
         }
         if (domaine !== '\\emptyset') {
-          texteCorr += `<br>${numAlpha(1)} Ensuite, la fonction $${logString}$ étant une fonction strictement croissante de $\\R_+^*$ dans $\\R$, donc pour tout $a$ et $b$ appartenant à $\\R_+^*$, $a=b \\iff ${logString} a = ${logString} b$.<br>`
-          texteCorr += `Ainsi, en mettant à la puissance de $${base}$ :<br>$
+          texteCorr += `<br>${numAlpha(1)} La fonction $${logString}$ étant une fonction strictement croissante sur $\\R_+^*$, <br> pour tout $a$ et $b$ appartenant à $\\R_+^*$, $a=b \\iff ${logString} a = ${logString} b$.<br>`
+          texteCorr += `D'où pour tout $x\\in\\mathcal{D}_f$:<br>$
           \\begin{aligned} 
-          ${logString}(${reduireAxPlusB(a, b)})=${logString}(${reduireAxPlusB(c, d)})&\\iff ${reduireAxPlusB(a, b)}=${reduireAxPlusB(c, d)}\\\\`
+          &\\phantom{\\iff}${logString}(${reduireAxPlusB(a, b)})=${logString}(${reduireAxPlusB(c, d)})\\\\&\\iff ${reduireAxPlusB(a, b)}=${reduireAxPlusB(c, d)}\\\\`
           const fracSolution = new FractionEtendue(d - b, a - c).simplifie()
           if (a > c) {
             // a>c : on ramène dans le premier membre.
@@ -297,17 +298,17 @@ export default class EquationsLog extends Exercice {
             fracSolution.superieurstrict(intervalle[0]) &&
             fracSolution.inferieurstrict(intervalle[1])
           ) {
-            texteCorr += `<br>$${fracSolution.texFSD}\\in ${domaine}$ donc l'équation admet $${fracSolution.texFSD}$ comme solution unique.`
+            texteCorr += `<br>On vérifie que $${fracSolution.texFSD}\\in ${domaine}$ donc  `
             solution = `{${fracSolution.texFSD}}`
           } else {
-            texteCorr += `<br>$${fracSolution.texFSD}\\notin ${domaine}$ donc l'équation n'admet aucune solution.`
+            texteCorr += `<br>On vérifie que $${fracSolution.texFSD}\\notin ${domaine}$ donc `
             solution = '\\emptyset'
           }
         } else {
           texteCorr += `<br>${numAlpha(1)} Le domaine de définition de l'équation étant l'ensemble vide, il en est de même pour l'ensemble de solutions de l'équation.<br>`
           solution = '\\emptyset'
         }
-        texteCorr += `<br>$\\mathcal{S}=${miseEnEvidence(solution.startsWith('{') ? `\\left\\{${solution.slice(1, -1)}\\right\\}` : solution)}$`
+        texteCorr += `$\\mathcal{S}=${miseEnEvidence(solution.startsWith('{') ? `\\left\\{${solution.slice(1, -1)}\\right\\}` : solution)}$`
       }
       if (this.questionJamaisPosee(i, a, b, n, listeTypeQuestions[i])) {
         if (this.interactif) {
