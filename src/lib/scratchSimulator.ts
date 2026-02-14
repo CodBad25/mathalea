@@ -27,6 +27,7 @@ export class ScratchInterpreter {
   }> = []
 
   private messages: string[] = []
+  private onUpdate?: () => void | Promise<void>
 
   constructor(startX = 0, startY = 0, startAngle = 0) {
     this.x = startX
@@ -46,6 +47,44 @@ export class ScratchInterpreter {
     // Parser LaTeX Scratch et exécution
     this.parseAndExecute(codeWithoutDefinitions)
 
+    return {
+      traces: this.traces,
+      finalX: this.x,
+      finalY: this.y,
+      finalAngle: this.angle,
+      variables: this.variables,
+      messages: this.messages,
+    }
+  }
+
+  async executeAnimated(
+    scratchCode: string,
+    onUpdate: () => void | Promise<void>,
+    delayMs: number = 500,
+  ): Promise<ExecutionResult> {
+    this.traces = []
+    this.messages = []
+    this.variables = {}
+    this.customBlocks = {}
+    this.onUpdate = onUpdate
+
+    const codeWithoutDefinitions = this.parseCustomBlockDefinitions(scratchCode)
+
+    await this.parseAndExecuteAnimated(codeWithoutDefinitions, delayMs)
+
+    this.onUpdate = undefined
+
+    return {
+      traces: this.traces,
+      finalX: this.x,
+      finalY: this.y,
+      finalAngle: this.angle,
+      variables: this.variables,
+      messages: this.messages,
+    }
+  }
+
+  getCurrentState(): ExecutionResult {
     return {
       traces: this.traces,
       finalX: this.x,
@@ -160,6 +199,71 @@ export class ScratchInterpreter {
     }
   }
 
+  private async parseAndExecuteAnimated(
+    code: string,
+    delayMs: number,
+  ): Promise<void> {
+    let index = 0
+
+    while (index < code.length) {
+      const repeatStart = code.indexOf('\\blockrepeat{', index)
+
+      if (repeatStart === -1) {
+        if (index < code.length) {
+          await this.parseNonRepeatBlocksAnimated(
+            code.substring(index),
+            delayMs,
+          )
+        }
+        break
+      }
+
+      if (repeatStart > index) {
+        await this.parseNonRepeatBlocksAnimated(
+          code.substring(index, repeatStart),
+          delayMs,
+        )
+      }
+
+      const foisEnd = code.indexOf('fois}', repeatStart)
+      if (foisEnd === -1) break
+
+      const contentStart = code.indexOf('{', foisEnd + 5)
+      if (contentStart === -1) break
+
+      const repeatParamStart = repeatStart + 13
+      const repeatParamEnd = foisEnd + 4
+      const repeatContent = code.substring(repeatParamStart, repeatParamEnd)
+      const times = this.extractNumber(repeatContent)
+
+      let braceCount = 1
+      let pos = contentStart + 1
+      let innerCodeEnd = -1
+
+      while (pos < code.length && braceCount > 0) {
+        if (code[pos] === '{' && code[pos - 1] !== '\\\\') {
+          braceCount++
+        } else if (code[pos] === '}' && code[pos - 1] !== '\\\\') {
+          braceCount--
+          if (braceCount === 0) {
+            innerCodeEnd = pos
+          }
+        }
+        pos++
+      }
+
+      if (innerCodeEnd === -1) break
+
+      const innerCode = code.substring(contentStart + 1, innerCodeEnd).trim()
+
+      for (let i = 0; i < times; i++) {
+        await this.parseAndExecuteAnimated(innerCode, delayMs)
+      }
+
+      index = innerCodeEnd + 1
+    }
+  }
+
   private parseNonRepeatBlocks(code: string): void {
     // Identifier les zones des blockrepeat à ignorer
     const ignoreRanges: Array<{ start: number; end: number }> = []
@@ -192,6 +296,53 @@ export class ScratchInterpreter {
 
       if (!isInRepeatZone && blockType !== 'repeat') {
         this.executeBlock(blockType, content)
+      }
+
+      blockMatch = blockRegex.exec(code)
+    }
+  }
+
+  private async parseNonRepeatBlocksAnimated(
+    code: string,
+    delayMs: number,
+  ): Promise<void> {
+    // Identifier les zones des blockrepeat à ignorer
+    const ignoreRanges: Array<{ start: number; end: number }> = []
+
+    const repeatRegex = /\\blockrepeat\{([^}]+)\}\s*\{\s*([\s\S]*?)\n\s*\}/g
+    let repeatMatch = repeatRegex.exec(code)
+    while (repeatMatch !== null) {
+      ignoreRanges.push({
+        start: repeatMatch.index,
+        end: repeatMatch.index + repeatMatch[0].length,
+      })
+      repeatMatch = repeatRegex.exec(code)
+    }
+
+    // Parser les blocs, en ignorant ceux qui sont dans les zones de blockrepeat
+    const blockRegex = /\\block(\w+)\{([^{}]*(?:\{[^{}]*\}[^{}]*)*)\}/g
+    let blockMatch = blockRegex.exec(code)
+
+    while (blockMatch !== null) {
+      const blockType = blockMatch[1].toLowerCase()
+      const content = blockMatch[2]
+
+      // Vérifier que ce bloc n'est pas à l'intérieur d'un blockrepeat
+      const isInRepeatZone = ignoreRanges.some(
+        (range) =>
+          blockMatch !== null &&
+          blockMatch.index >= range.start &&
+          blockMatch.index + blockMatch[0].length <= range.end,
+      )
+
+      if (!isInRepeatZone && blockType !== 'repeat') {
+        this.executeBlock(blockType, content)
+
+        // Attendre le délai et appeler le callback
+        await new Promise((resolve) => setTimeout(resolve, delayMs))
+        if (this.onUpdate) {
+          await Promise.resolve(this.onUpdate())
+        }
       }
 
       blockMatch = blockRegex.exec(code)
@@ -352,8 +503,31 @@ export class ScratchSimulator extends HTMLElement {
     if (!this.canvas) return
 
     this.interpreter = new ScratchInterpreter(240, 240, 0)
-    const result = this.interpreter.execute(this.scratchCode)
 
+    // Lancer l'exécution animée
+    this.runAnimatedSimulation()
+  }
+
+  private async runAnimatedSimulation(): Promise<void> {
+    if (!this.interpreter || !this.canvas) return
+
+    const code = this.getAttribute('code') || ''
+
+    // Lire le délai depuis l'attribut (valeur par défaut: 500ms)
+    const delayMs = parseInt(this.getAttribute('delay') || '500', 10)
+
+    // Exécuter avec animation
+    await this.interpreter.executeAnimated(
+      code,
+      () => {
+        this.drawSimulation(this.interpreter!.getCurrentState())
+        this.displayInfo(this.interpreter!.getCurrentState())
+      },
+      delayMs,
+    )
+
+    // Affichage final
+    const result = this.interpreter.getCurrentState()
     this.drawSimulation(result)
     this.displayInfo(result)
   }

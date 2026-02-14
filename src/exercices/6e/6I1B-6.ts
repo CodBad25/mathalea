@@ -33,6 +33,12 @@ export default class TrouverLeBonProgramme extends Exercice {
       'Nombres séparés par des tirets\n1 : Avancer *\n2 : Tourner *\n3 : Ajouter\n4 : Polygone *\n5 : Carré *\n6 : Rebours\n7 : Escalier *\n0 : Mélange',
     ]
     this.sup2 = '0'
+    this.besoinFormulaire3Numerique = [
+      'Délai entre chaque étape du programme (en ms)',
+      3,
+      '1 : 1/10e de seconde\n2 : 1/2 seconde\n3 : 1 seconde',
+    ]
+    this.sup3 = 2
   }
 
   nouvelleVersion(): void {
@@ -44,6 +50,7 @@ export default class TrouverLeBonProgramme extends Exercice {
       defaut: 0,
       nbQuestions: this.nbQuestions,
     }).map(Number)
+    const delai = this.sup3 === 1 ? 100 : this.sup3 === 2 ? 500 : 1000
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
       const listeDeProgrammes = [
         getProgrammesAvancer,
@@ -123,7 +130,7 @@ export default class TrouverLeBonProgramme extends Exercice {
             .replace(/'/g, '&#39;')
           if (this.sup && cas !== 5 && cas !== 2) {
             texte += `<td style="border: 1px solid #ddd; padding: 10px; text-align: center;">
-            <scratch-simulator code="${simulatorCode}">${programme}</scratch-simulator>
+            <scratch-simulator delay="${String(delai)}" code="${simulatorCode}">${programme}</scratch-simulator>
           </td>`
           } else {
             texte += `<td style="border: 1px solid #ddd; padding: 10px; text-align: center;">${programme}</td>`
