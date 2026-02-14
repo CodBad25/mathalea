@@ -1,7 +1,8 @@
 import { propositionsQcm } from '../../lib/interactif/qcm'
-import { choice, shuffle, shuffle2tableaux } from '../../lib/outils/arrayOutils'
+import { choice, shuffle, shuffle3tableaux } from '../../lib/outils/arrayOutils'
+import '../../lib/scratchSimulator' // Web Component pour simuler et exécuter les programmes Scratch
 import { context } from '../../modules/context'
-import { randint } from '../../modules/outils'
+import { gestionnaireFormulaireTexte, randint } from '../../modules/outils'
 import { scratchblock } from '../../modules/scratchblock'
 import Exercice from '../Exercice'
 // Ici ce sont les fonctions de la librairie maison 2d.js qui gèrent tout ce qui est graphique (SVG/tikz) et en particulier ce qui est lié à l'objet lutin
@@ -21,10 +22,28 @@ export const refs = {
 export default class TrouverLeBonProgramme extends Exercice {
   constructor() {
     super()
-    this.nbQuestions = 1
+    this.nbQuestions = 7
+    this.besoinFormulaireCaseACocher = [
+      "Avec simulateur (programmes suivis d'un *)",
+      false,
+    ]
+    this.sup = false
+    this.besoinFormulaire2Texte = [
+      'Types de programmes',
+      'Nombres séparés par des tirets\n1 : Avancer *\n2 : Tourner *\n3 : Ajouter\n4 : Polygone *\n5 : Carré *\n6 : Rebours\n7 : Escalier *\n0 : Mélange',
+    ]
+    this.sup2 = '0'
   }
 
   nouvelleVersion(): void {
+    const listeTypeDeProgrammes = gestionnaireFormulaireTexte({
+      saisie: this.sup2,
+      min: 1,
+      max: 7,
+      melange: 0,
+      defaut: 0,
+      nbQuestions: this.nbQuestions,
+    }).map(Number)
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
       const listeDeProgrammes = [
         getProgrammesAvancer,
@@ -35,32 +54,32 @@ export default class TrouverLeBonProgramme extends Exercice {
         getProgrammesRebours,
         getProgrammesEscalier,
       ]
-      const cas = i % listeDeProgrammes.length
+      const cas = listeTypeDeProgrammes[i] - 1
       const getProgrammes = listeDeProgrammes[cas]
       let nbPas: number
       switch (cas) {
-        case 0:
+        case 0: // avancer
           nbPas = randint(3, 8)
           break
-        case 1:
+        case 1: // tourner
           nbPas = 10 * randint(4, 7)
           break
-        case 2:
+        case 2: // ajouter
           nbPas = randint(4, 7)
           break
-        case 3:
+        case 3: // polygone
           nbPas = choice([3, 4, 6])
           break
-        case 4:
+        case 4: // carré
           nbPas = 40 * randint(3, 8)
           break
-        case 5:
+        case 5: // rebours
           nbPas = randint(5, 10)
           break
-        case 6:
+        case 6: // escalier
           nbPas = randint(4, 8)
           break
-        default:
+        default: // par défaut, on fait avancer
           nbPas = randint(3, 8)
       }
       const nbFalse = randint(2, 4)
@@ -79,8 +98,14 @@ export default class TrouverLeBonProgramme extends Exercice {
         'Programme 4',
         'Programme 5',
       ]
-      shuffle2tableaux(vraisOuFaux, programmes.programmesListe)
+      shuffle3tableaux(
+        vraisOuFaux,
+        programmes.programmesCodeBrut,
+        programmes.programmesListe,
+      )
       const ligne2 = programmes.programmesListe
+      const ligne2Brut =
+        programmes.programmesCodeBrut || programmes.programmesListe
       if (context.isHtml) {
         texte +=
           '<table border="1" cellpadding="10" cellspacing="0" style="border-collapse: collapse; margin: 20px 0;">'
@@ -90,8 +115,19 @@ export default class TrouverLeBonProgramme extends Exercice {
         }
         texte += '</tr></thead>'
         texte += '<tbody><tr>'
-        for (const programme of ligne2) {
-          texte += `<td style="border: 1px solid #ddd; padding: 10px; text-align: center;">${programme}</td>`
+        for (let j = 0; j < ligne2.length; j++) {
+          const programme = ligne2[j]
+          const codeBrut = ligne2Brut[j]
+          const simulatorCode = (codeBrut || '')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;')
+          if (this.sup && cas !== 5 && cas !== 2) {
+            texte += `<td style="border: 1px solid #ddd; padding: 10px; text-align: center;">
+            <scratch-simulator code="${simulatorCode}">${programme}</scratch-simulator>
+          </td>`
+          } else {
+            texte += `<td style="border: 1px solid #ddd; padding: 10px; text-align: center;">${programme}</td>`
+          }
         }
         texte += '</tr></tbody>'
         texte += '</table>'
@@ -105,9 +141,9 @@ export default class TrouverLeBonProgramme extends Exercice {
         }
         texte += ' \\\\\n'
         texte += '\\hline\n'
-        for (const programme of ligne2) {
+        for (const programme of ligne2Brut) {
           texte += programme
-          if (programme !== ligne2[ligne2.length - 1]) texte += ' & '
+          if (programme !== ligne2Brut[ligne2Brut.length - 1]) texte += ' & '
         }
         texte += ' \\\\\n'
         texte += '\\hline\n'
@@ -146,55 +182,61 @@ export default class TrouverLeBonProgramme extends Exercice {
   }
 }
 function programmeAvancerType1(nbPas: number, vraiOuFaux: boolean) {
-  let codeScratch = `\\begin{scratch}[blocks]\n`
+  let codeScratch = `\\begin{scratch}[blocks]
+  \\blockpen{stylo en position d'écriture}
+  `
   for (
     let i = 0;
     i < (vraiOuFaux ? nbPas : choice([nbPas - 1, nbPas + 1]));
     i++
   ) {
-    codeScratch += '\\blockmove{Avancer de \\ovalnum{10} pas}\n'
+    codeScratch += '\\blockmove{avancer de \\ovalnum{30} pas}\n'
   }
   codeScratch += `\\end{scratch}`
   return codeScratch
 }
 
 function programmeAvancerType2(nbPas: number, vraiOuFaux: boolean) {
-  const codeScratch = `\\begin{scratch}[blocks]\n
-\\blockmove{Avancer de \\ovalnum{10} pas}
+  const codeScratch = `\\begin{scratch}[blocks]
+  \\blockpen{stylo en position d'écriture}
+\\blockmove{avancer de \\ovalnum{30} pas}
 \\blockrepeat{répéter \\ovalnum{${vraiOuFaux ? nbPas - 1 : nbPas}} fois}{
-\\blockmove{Avancer de \\ovalnum{10} pas}
+\\blockmove{avancer de \\ovalnum{30} pas}
 }
 \\end{scratch}\n`
   return codeScratch
 }
 
 function programmeAvancerType3(nbPas: number, vraiOuFaux: boolean) {
-  const codeScratch = `\\begin{scratch}[blocks]\n
+  const codeScratch = `\\begin{scratch}[blocks]
+  \\blockpen{stylo en position d'écriture}
 \\blockrepeat{répéter \\ovalnum{${vraiOuFaux ? nbPas - 1 : nbPas}} fois}{
-\\blockmove{Avancer de \\ovalnum{10} pas}
+\\blockmove{avancer de \\ovalnum{30} pas}
 }
-\\blockmove{Avancer de \\ovalnum{10} pas}
+\\blockmove{avancer de \\ovalnum{30} pas}
 \\end{scratch}\n`
   return codeScratch
 }
 
 function programmeAvancerType4(nbPas: number, vraiOuFaux: boolean) {
-  const codeScratch = `\\begin{scratch}[blocks]\n
+  const codeScratch = `\\begin{scratch}[blocks]
+  \\blockpen{stylo en position d'écriture}
 \\blockrepeat{répéter \\ovalnum{${Math.floor(nbPas / 2)}} fois}{
-\\blockmove{Avancer de \\ovalnum{10} pas}
-\\blockmove{Avancer de \\ovalnum{10} pas}
+\\blockmove{avancer de \\ovalnum{30} pas}
+\\blockmove{avancer de \\ovalnum{30} pas}
 }
-${(nbPas % 2 === 1 && vraiOuFaux) || (nbPas % 2 === 0 && !vraiOuFaux) ? '\\blockmove{Avancer de \\ovalnum{10} pas}' : ''}
+${(nbPas % 2 === 1 && vraiOuFaux) || (nbPas % 2 === 0 && !vraiOuFaux) ? '\\blockmove{avancer de \\ovalnum{30} pas}' : ''}
 \\end{scratch}\n`
   return codeScratch
 }
 
 function programmeAvancerType5(nbPas: number, vraiOuFaux: boolean) {
-  const codeScratch = `\\begin{scratch}[blocks]\n
+  const codeScratch = `\\begin{scratch}[blocks]
+  \\blockpen{stylo en position d'écriture}
 \\blockrepeat{répéter \\ovalnum{${(nbPas - 1) * 2}} fois}{
-\\blockmove{Avancer de \\ovalnum{5} pas}
+\\blockmove{avancer de \\ovalnum{15} pas}
 }
-${vraiOuFaux ? '\\blockmove{Avancer de \\ovalnum{10} pas}' : '\\blockmove{Avancer de \\ovalnum{5} pas}'}
+${vraiOuFaux ? '\\blockmove{avancer de \\ovalnum{30} pas}' : '\\blockmove{avancer de \\ovalnum{15} pas}'}
 \\end{scratch}\n`
   return codeScratch
 }
@@ -202,17 +244,21 @@ ${vraiOuFaux ? '\\blockmove{Avancer de \\ovalnum{10} pas}' : '\\blockmove{Avance
 function getProgrammesAvancer(
   nbPas: number,
   vraisOuFaux: boolean[],
-): { programmesListe: string[]; enonce: string } {
-  const programmesListe = [
-    String(scratchblock(programmeAvancerType1(nbPas, vraisOuFaux[0]))),
-    String(scratchblock(programmeAvancerType2(nbPas, vraisOuFaux[1]))),
-    String(scratchblock(programmeAvancerType3(nbPas, vraisOuFaux[2]))),
-    String(scratchblock(programmeAvancerType4(nbPas, vraisOuFaux[3]))),
-    String(scratchblock(programmeAvancerType5(nbPas, vraisOuFaux[4]))),
+): { programmesListe: string[]; programmesCodeBrut: string[]; enonce: string } {
+  const programmesCodeBrut = [
+    programmeAvancerType1(nbPas, vraisOuFaux[0]),
+    programmeAvancerType2(nbPas, vraisOuFaux[1]),
+    programmeAvancerType3(nbPas, vraisOuFaux[2]),
+    programmeAvancerType4(nbPas, vraisOuFaux[3]),
+    programmeAvancerType5(nbPas, vraisOuFaux[4]),
   ]
+  const programmesListe = programmesCodeBrut.map((code) =>
+    String(scratchblock(code)),
+  )
   return {
     programmesListe,
-    enonce: `On souhaite faire avancer le lutin de ${nbPas * 10} pas.<br>Donner le numéro du (ou des) programme(s) correct(s)<br>`,
+    programmesCodeBrut,
+    enonce: `On souhaite faire avancer le lutin de ${nbPas * 30} pas.<br>Donner le numéro du (ou des) programme(s) correct(s)<br>`,
   }
 }
 
@@ -286,16 +332,20 @@ ${vraiOuFaux ? '\\blockmove{tourner \\turnleft{} de \\ovalnum{10} degrés}' : '\
 function getProgrammesTourner(
   angle: number,
   vraisOuFaux: boolean[],
-): { programmesListe: string[]; enonce: string } {
-  const programmesListe = [
-    String(scratchblock(programmeTournerType1(angle, vraisOuFaux[0]))),
-    String(scratchblock(programmeTournerType2(angle, vraisOuFaux[1]))),
-    String(scratchblock(programmeTournerType3(angle, vraisOuFaux[2]))),
-    String(scratchblock(programmeTournerType4(angle, vraisOuFaux[3]))),
-    String(scratchblock(programmeTournerType5(angle, vraisOuFaux[4]))),
+): { programmesListe: string[]; programmesCodeBrut: string[]; enonce: string } {
+  const programmesCodeBrut = [
+    programmeTournerType1(angle, vraisOuFaux[0]),
+    programmeTournerType2(angle, vraisOuFaux[1]),
+    programmeTournerType3(angle, vraisOuFaux[2]),
+    programmeTournerType4(angle, vraisOuFaux[3]),
+    programmeTournerType5(angle, vraisOuFaux[4]),
   ]
+  const programmesListe = programmesCodeBrut.map((code) =>
+    String(scratchblock(code)),
+  )
   return {
     programmesListe,
+    programmesCodeBrut,
     enonce: `On souhaite faire tourner le lutin de ${angle} degrés dans le sens des aiguilles d'une montre.<br>Donner le numéro du (ou des) programme(s) correct(s)<br>`,
   }
 }
@@ -362,16 +412,20 @@ function programmeAjouterType5(nb: number, vraiOuFaux: boolean) {
 function getProgrammesAjouter(
   nb: number,
   vraisOuFaux: boolean[],
-): { programmesListe: string[]; enonce: string } {
-  const programmesListe = [
-    String(scratchblock(programmeAjouterType1(nb, vraisOuFaux[0]))),
-    String(scratchblock(programmeAjouterType2(nb, vraisOuFaux[1]))),
-    String(scratchblock(programmeAjouterType3(nb, vraisOuFaux[2]))),
-    String(scratchblock(programmeAjouterType4(nb, vraisOuFaux[3]))),
-    String(scratchblock(programmeAjouterType5(nb, vraisOuFaux[4]))),
+): { programmesListe: string[]; programmesCodeBrut: string[]; enonce: string } {
+  const programmesCodeBrut = [
+    programmeAjouterType1(nb, vraisOuFaux[0]),
+    programmeAjouterType2(nb, vraisOuFaux[1]),
+    programmeAjouterType3(nb, vraisOuFaux[2]),
+    programmeAjouterType4(nb, vraisOuFaux[3]),
+    programmeAjouterType5(nb, vraisOuFaux[4]),
   ]
+  const programmesListe = programmesCodeBrut.map((code) =>
+    String(scratchblock(code)),
+  )
   return {
     programmesListe,
+    programmesCodeBrut,
     enonce: `On souhaite faire afficher le nombre ${nb}.<br>Donner le numéro du (ou des) programme(s) correct(s)<br>`,
   }
 }
@@ -382,7 +436,7 @@ function programmePolygoneType1(nbCotes: number, vraiOuFaux: boolean) {
   \\blockpen{stylo en position d'écriture}
   `
   for (let i = 0; i < (vraiOuFaux ? nbCotes : nbCotes - 1); i++) {
-    codeScratch += `\\blockmove{avancer de \\ovalnum{10} pas}
+    codeScratch += `\\blockmove{avancer de \\ovalnum{30} pas}
     \\blockmove{tourner \\turnright{} de \\ovalnum{${Math.round(360 / nbCotes)}} degrés}
     `
   }
@@ -395,7 +449,7 @@ function programmePolygoneType2(nbCotes: number, vraiOuFaux: boolean) {
   \\blockmove{aller à x:\\ovalnum{0} y:\\ovalnum{0}}
   \\blockpen{stylo en position d'écriture}
   \\blockrepeat{répéter \\ovalnum{${vraiOuFaux ? nbCotes : nbCotes - 1}} fois}{
-  \\blockmove{avancer de \\ovalnum{10} pas}
+  \\blockmove{avancer de \\ovalnum{30} pas}
     \\blockmove{tourner \\turnright{} de \\ovalnum{${Math.round(360 / nbCotes)}} degrés}
   }
 \\end{scratch}`
@@ -407,10 +461,10 @@ function programmePolygoneType3(nbCotes: number, vraiOuFaux: boolean) {
   \\blockmove{aller à x:\\ovalnum{0} y:\\ovalnum{0}}
   \\blockpen{stylo en position d'écriture}
   \\blockrepeat{répéter \\ovalnum{${vraiOuFaux ? nbCotes - 1 : nbCotes - 2}} fois}{
-    \\blockmove{avancer de \\ovalnum{10} pas}
+    \\blockmove{avancer de \\ovalnum{30} pas}
     \\blockmove{tourner \\turnright{} de \\ovalnum{${Math.round(360 / nbCotes)}} degrés}
   }
-  \\blockmove{avancer de \\ovalnum{10} pas}
+  \\blockmove{avancer de \\ovalnum{30} pas}
   \\blockmove{tourner \\turnright{} de \\ovalnum{${Math.round(360 / nbCotes)}} degrés}
 \\end{scratch}`
   return codeScratch
@@ -421,9 +475,9 @@ function programmePolygoneType4(nbCotes: number, vraiOuFaux: boolean) {
   \\blockmove{aller à x:\\ovalnum{0} y:\\ovalnum{0}}
   \\blockpen{stylo en position d'écriture}
   \\blockrepeat{répéter \\ovalnum{${vraiOuFaux ? nbCotes / 2 : nbCotes}} fois}{
-  \\blockmove{avancer de \\ovalnum{10} pas}
+  \\blockmove{avancer de \\ovalnum{30} pas}
   \\blockmove{tourner \\turnright{} de \\ovalnum{${Math.round(360 / nbCotes)}} degrés}
-  \\blockmove{avancer de \\ovalnum{10} pas}
+  \\blockmove{avancer de \\ovalnum{30} pas}
   ${vraiOuFaux ? `\\blockmove{tourner \\turnright{} de \\ovalnum{${Math.round(360 / nbCotes)}} degrés}\n` : ''}
 }
 \\end{scratch}`
@@ -437,9 +491,9 @@ function programmePolygoneType5(nbCotes: number, vraiOuFaux: boolean) {
   \\blockpen{stylo en position d'écriture}
   \\blockrepeat{répéter \\ovalnum{${nbCotes - 1}} fois}{
     \\blockmove{tourner \\turnright{} de \\ovalnum{${vraiOuFaux ? Math.round(360 / nbCotes) : choice([120, 90, 60], Math.round(360 / nbCotes))}} degrés}
-    \\blockmove{avancer de \\ovalnum{10} pas}
+    \\blockmove{avancer de \\ovalnum{30} pas}
   }
-  ${vraiOuFaux ? `\\blockmove{tourner \\turnright{} de \\ovalnum{${Math.round(360 / nbCotes)}} degrés}\n\\blockmove{avancer de \\ovalnum{10} pas}\n` : `\\blockmove{avancer de \\ovalnum{10} pas}\n\\blockmove{tourner \\turnright{} de \\ovalnum{${Math.round(360 / nbCotes)}} degrés}\n`}
+  ${vraiOuFaux ? `\\blockmove{tourner \\turnright{} de \\ovalnum{${Math.round(360 / nbCotes)}} degrés}\n\\blockmove{avancer de \\ovalnum{30} pas}\n` : `\\blockmove{avancer de \\ovalnum{30} pas}\n\\blockmove{tourner \\turnright{} de \\ovalnum{${Math.round(360 / nbCotes)}} degrés}\n`}
 \\end{scratch}`
   return codeScratch
 }
@@ -447,16 +501,20 @@ function programmePolygoneType5(nbCotes: number, vraiOuFaux: boolean) {
 function getProgrammesPolygone(
   nbCotes: number,
   vraisOuFaux: boolean[],
-): { programmesListe: string[]; enonce: string } {
-  const programmesListe = [
-    String(scratchblock(programmePolygoneType1(nbCotes, vraisOuFaux[0]))),
-    String(scratchblock(programmePolygoneType2(nbCotes, vraisOuFaux[1]))),
-    String(scratchblock(programmePolygoneType3(nbCotes, vraisOuFaux[2]))),
-    String(scratchblock(programmePolygoneType4(nbCotes, vraisOuFaux[3]))),
-    String(scratchblock(programmePolygoneType5(nbCotes, vraisOuFaux[4]))),
+): { programmesListe: string[]; programmesCodeBrut: string[]; enonce: string } {
+  const programmesCodeBrut = [
+    programmePolygoneType1(nbCotes, vraisOuFaux[0]),
+    programmePolygoneType2(nbCotes, vraisOuFaux[1]),
+    programmePolygoneType3(nbCotes, vraisOuFaux[2]),
+    programmePolygoneType4(nbCotes, vraisOuFaux[3]),
+    programmePolygoneType5(nbCotes, vraisOuFaux[4]),
   ]
+  const programmesListe = programmesCodeBrut.map((code) =>
+    String(scratchblock(code)),
+  )
   return {
     programmesListe,
+    programmesCodeBrut,
     enonce: `On souhaite faire dessiner un polygone régulier à ${nbCotes} côtés.<br>Donner le numéro du (ou des) programme(s) correct(s)<br>`,
   }
 }
@@ -525,7 +583,7 @@ function programmeCarreType5(perimetre: number, vraiOuFaux: boolean) {
   const codeScratch = `\\begin{scratch}[blocks]
   \\blockmove{aller à x:\\ovalnum{0} y:\\ovalnum{0}}
   \\blockpen{stylo en position d'écriture}
-  \\blockrepeat{répéter \\ovalnum{${vraiOuFaux ? 4 : choice([3, 5])}} fois}{
+  \\blockrepeat{répéter \\ovalnum{${vraiOuFaux ? 4 : 3}} fois}{
     \\blockmove{avancer de \\ovalnum{${cote / 2}} pas}
     \\blockmove{tourner \\turnright{} de \\ovalnum{90} degrés}
     \\blockmove{avancer de \\ovalnum{${cote / 2}} pas}
@@ -537,16 +595,20 @@ function programmeCarreType5(perimetre: number, vraiOuFaux: boolean) {
 function getProgrammesCarre(
   perimetre: number,
   vraisOuFaux: boolean[],
-): { programmesListe: string[]; enonce: string } {
-  const programmesListe = [
-    String(scratchblock(programmeCarreType1(perimetre, vraisOuFaux[0]))),
-    String(scratchblock(programmeCarreType2(perimetre, vraisOuFaux[1]))),
-    String(scratchblock(programmeCarreType3(perimetre, vraisOuFaux[2]))),
-    String(scratchblock(programmeCarreType4(perimetre, vraisOuFaux[3]))),
-    String(scratchblock(programmeCarreType5(perimetre, vraisOuFaux[4]))),
+): { programmesListe: string[]; programmesCodeBrut: string[]; enonce: string } {
+  const programmesCodeBrut = [
+    programmeCarreType1(perimetre, vraisOuFaux[0]),
+    programmeCarreType2(perimetre, vraisOuFaux[1]),
+    programmeCarreType3(perimetre, vraisOuFaux[2]),
+    programmeCarreType4(perimetre, vraisOuFaux[3]),
+    programmeCarreType5(perimetre, vraisOuFaux[4]),
   ]
+  const programmesListe = programmesCodeBrut.map((code) =>
+    String(scratchblock(code)),
+  )
   return {
     programmesListe,
+    programmesCodeBrut,
     enonce: `On souhaite faire dessiner un carré de périmètre ${perimetre} pas.<br>Donner le numéro du (ou des) programme(s) correct(s)<br>`,
   }
 }
@@ -614,16 +676,20 @@ function programmeReboursType5(nbDepart: number, vraiOuFaux: boolean) {
 function getProgrammesRebours(
   nbDepart: number,
   vraisOuFaux: boolean[],
-): { programmesListe: string[]; enonce: string } {
-  const programmesListe = [
-    String(scratchblock(programmeReboursType1(nbDepart, vraisOuFaux[0]))),
-    String(scratchblock(programmeReboursType2(nbDepart, vraisOuFaux[1]))),
-    String(scratchblock(programmeReboursType3(nbDepart, vraisOuFaux[2]))),
-    String(scratchblock(programmeReboursType4(nbDepart, vraisOuFaux[3]))),
-    String(scratchblock(programmeReboursType5(nbDepart, vraisOuFaux[4]))),
+): { programmesListe: string[]; programmesCodeBrut: string[]; enonce: string } {
+  const programmesCodeBrut = [
+    programmeReboursType1(nbDepart, vraisOuFaux[0]),
+    programmeReboursType2(nbDepart, vraisOuFaux[1]),
+    programmeReboursType3(nbDepart, vraisOuFaux[2]),
+    programmeReboursType4(nbDepart, vraisOuFaux[3]),
+    programmeReboursType5(nbDepart, vraisOuFaux[4]),
   ]
+  const programmesListe = programmesCodeBrut.map((code) =>
+    String(scratchblock(code)),
+  )
   return {
     programmesListe,
+    programmesCodeBrut,
     enonce: `On souhaite faire afficher le nombre 0 en partant de ${nbDepart} et en faisant un compte à rebours.<br>Donner le numéro du (ou des) programme(s) correct(s)<br>`,
   }
 }
@@ -712,16 +778,20 @@ function programmeEscalierType5(nbMarches: number, vraiOuFaux: boolean) {
 function getProgrammesEscalier(
   nbMarches: number,
   vraisOuFaux: boolean[],
-): { programmesListe: string[]; enonce: string } {
-  const programmesListe = [
-    String(scratchblock(programmeEscalierType1(nbMarches, vraisOuFaux[0]))),
-    String(scratchblock(programmeEscalierType2(nbMarches, vraisOuFaux[1]))),
-    String(scratchblock(programmeEscalierType3(nbMarches, vraisOuFaux[2]))),
-    String(scratchblock(programmeEscalierType4(nbMarches, vraisOuFaux[3]))),
-    String(scratchblock(programmeEscalierType5(nbMarches, vraisOuFaux[4]))),
+): { programmesListe: string[]; programmesCodeBrut: string[]; enonce: string } {
+  const programmesCodeBrut = [
+    programmeEscalierType1(nbMarches, vraisOuFaux[0]),
+    programmeEscalierType2(nbMarches, vraisOuFaux[1]),
+    programmeEscalierType3(nbMarches, vraisOuFaux[2]),
+    programmeEscalierType4(nbMarches, vraisOuFaux[3]),
+    programmeEscalierType5(nbMarches, vraisOuFaux[4]),
   ]
+  const programmesListe = programmesCodeBrut.map((code) =>
+    String(scratchblock(code)),
+  )
   return {
     programmesListe,
+    programmesCodeBrut,
     enonce: `On souhaite faire dessiner un escalier de ${nbMarches} marche(s).<br>Donner le numéro du (ou des) programme(s) correct(s)<br>`,
   }
 }
