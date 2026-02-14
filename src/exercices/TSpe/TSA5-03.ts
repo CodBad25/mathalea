@@ -11,7 +11,7 @@ import {
 } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-export const titre = 'Calculs utilisant les propriétés des logarithmes'
+export const titre = 'Calculer en utilisant les propriétés des logarithmes'
 export const dateDePublication = '27/07/2024'
 export const uuid = '3e6bf'
 export const interactifReady = true
@@ -25,20 +25,20 @@ export const refs = {
  * @author Jean-Claude Lhote et modifié par Claire Rousset
 
 */
-export default class ExerciceCalculsProprietesLog extends Exercice {
+export default class ExerciceCalculsProprietesLn extends Exercice {
   version: string
   constructor() {
     super()
     this.version = 'ln'
-    this.nbQuestions = 5
+    this.nbQuestions = 2
     this.spacingCorr = 3
     this.sup = '3'
     this.besoinFormulaireTexte = [
       'Type de question',
-      ' Nombres séparés par des tirets :\n1 : Avec log(a^n*b^m)\n2 : Avec log(a^n/b^m)\n3 : Mélange',
+      ' Nombres séparés par des tirets :\n1 : Avec $\\ln(a^n*b^m)$\n2 : Avec $\\ln(a^n/b^m)$\n3 : Mélange',
     ]
-    this.besoinFormulaire2CaseACocher = ['Type de logarithme', false]
-    this.sup2 = false
+    // this.besoinFormulaire2CaseACocher = ['Type de logarithme', false]
+    this.sup2 = true
     this.besoinFormulaire3CaseACocher = [
       'Données exprimées avec des puissances',
       true,
