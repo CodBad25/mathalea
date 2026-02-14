@@ -97,7 +97,7 @@ export default class FractionsCalculsSimples extends Exercice {
             { texteAvant: '=' },
           )
           texteCorr = `$${f1.texFraction} + ${f2.texFraction} = ${f3.texFraction} ${f3.estEntiere ? `=${f3.texFractionSimplifiee}` : ''}$`
-          schema = fractionCliquable(0, 0, 4, b, {})
+          schema = fractionCliquable(0, 0, 4, b, { couleur: 'none' })
           if (this.sup)
             texte +=
               '<br>' +
@@ -136,7 +136,7 @@ export default class FractionsCalculsSimples extends Exercice {
             { texteAvant: '=' },
           )
           texteCorr = `$${n} + ${f1.texFraction} = ${f2.texFraction} + ${f1.texFraction} = ${f3.texFraction} ${f3.estEntiere ? `=${f3.texFractionSimplifiee}` : ''}$`
-          schema = fractionCliquable(0, 0, 4, b, {})
+          schema = fractionCliquable(0, 0, 4, b, { couleur: 'none' })
           schemaCorr = fractionCliquable(
             0,
             0,
@@ -194,7 +194,7 @@ export default class FractionsCalculsSimples extends Exercice {
               couleur2: context.isHtml ? '#f15929' : 'gray',
             },
           )
-          schema = fractionCliquable(0, 0, 4, b, {})
+          schema = fractionCliquable(0, 0, 4, b, { couleur: 'none' })
           if (this.correctionDetaillee) {
             texteCorr +=
               '<br>' +
@@ -255,7 +255,7 @@ export default class FractionsCalculsSimples extends Exercice {
               schemaCorr,
             )
           }
-          schema = fractionCliquable(0, 0, 4, b, {})
+          schema = fractionCliquable(0, 0, 4, b, { couleur: 'none' })
           if (this.sup) {
             texte +=
               '<br>' +
