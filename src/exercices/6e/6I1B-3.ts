@@ -19,6 +19,7 @@ import {
 import Exercice from '../Exercice'
 // Ici ce sont les fonctions de la librairie maison 2d.js qui gèrent tout ce qui est graphique (SVG/tikz) et en particulier ce qui est lié à l'objet lutin
 import { grille } from '../../lib/2d/Grille'
+import { setCliqueFigure } from '../../lib/interactif/gestionInteractif'
 import { ajouteFeedback } from '../../lib/interactif/questionMathLive'
 import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import {
@@ -34,13 +35,8 @@ import {
 } from '../../modules/2dLutin'
 import { scratchblock } from '../../modules/scratchblock'
 
-interface Fig extends HTMLOrSVGElement {
-  etat: boolean
-}
-
 export const interactifReady = true
-// il y avait un fonctionnement avec amcType cf commit 3ae7c43
-export const interactifType = 'custom'
+export const interactifType = 'cliqueFigure'
 export const amcReady = true
 export const amcType = 'qcmMono'
 
@@ -70,6 +66,9 @@ export default class AlgoTortue extends Exercice {
   }
 
   nouvelleVersion(numeroExercice: number) {
+    // la méthode qui crée une nouvelle version de l'exercice
+    this.figures = []
+    this.autoCorrection[0] = {}
     const nbInstructions = gestionnaireFormulaireTexte({
       saisie: this.sup,
       min: 5,
@@ -377,7 +376,7 @@ export default class AlgoTortue extends Exercice {
         scale: 2.5 / largeur,
         zoom: 1,
         style: 'display:inline-block; margin-right:0.5em;',
-        id: `figure${i}exo${numeroExercice}`,
+        id: `cliquefigure${i}Ex${numeroExercice}Q0`,
       }
       paramsCorrection = {
         xmin: -0.5,
@@ -395,10 +394,7 @@ export default class AlgoTortue extends Exercice {
         texteParPoint('10 pas', point(0.5, hauteur + 0.2), 0, 'black', 1),
         texteParPoint(
           `figure ${i + 1}`,
-          point(
-            (lutins[ordreLutins[i]].xMax - lutins[ordreLutins[i]].xMin) / 2,
-            -0.8,
-          ),
+          point((largeur - 0.5) / 2, -0.8),
           0,
           'black',
           1,
@@ -418,37 +414,62 @@ export default class AlgoTortue extends Exercice {
     if (this.interactif) {
       texte += ajouteFeedback(this, 0)
     }
-    if (context.isAmc) {
-      this.autoCorrection[0] = {
-        enonce: texte,
-        propositions: [
-          {
-            texte: 'figure 1',
-            statut: false,
-          },
-          {
-            texte: 'figure 2',
-            statut: false,
-          },
-          {
-            texte: 'figure 3',
-            statut: false,
-          },
-          {
-            texte: 'figure 4',
-            statut: false,
-          },
-          {
-            texte: 'figure 5',
-            statut: false,
-          },
-        ],
-        options: { ordered: true },
-      }
-      // @ts-expect-error
-      this.autoCorrection[0].propositions[ordreLutins.indexOf(0)].statut = true
-    }
+
     this.indiceBonneFigure = ordreLutins.indexOf(0)
+    this.autoCorrection[0] = {
+      enonce: texte,
+      propositions: [
+        {
+          texte: 'figure 1',
+          statut: false,
+        },
+        {
+          texte: 'figure 2',
+          statut: false,
+        },
+        {
+          texte: 'figure 3',
+          statut: false,
+        },
+        {
+          texte: 'figure 4',
+          statut: false,
+        },
+        {
+          texte: 'figure 5',
+          statut: false,
+        },
+      ],
+      options: { ordered: true },
+    }
+    if (this.autoCorrection[0]?.propositions?.[this.indiceBonneFigure]) {
+      this.autoCorrection[0].propositions[this.indiceBonneFigure].statut = true
+    }
+    setCliqueFigure(this.autoCorrection[0])
+
+    this.figures[0] = [
+      {
+        id: `cliquefigure0Ex${this.numeroExercice}Q0`,
+        solution: ordreLutins.indexOf(0) === 0,
+      },
+      {
+        id: `cliquefigure1Ex${numeroExercice}Q0`,
+        solution: ordreLutins.indexOf(0) === 1,
+      },
+      {
+        id: `cliquefigure2Ex${numeroExercice}Q0`,
+        solution: ordreLutins.indexOf(0) === 2,
+      },
+      {
+        id: `cliquefigure3Ex${numeroExercice}Q0`,
+        solution: ordreLutins.indexOf(0) === 3,
+      },
+      {
+        id: `cliquefigure4Ex${numeroExercice}Q0`,
+        solution: ordreLutins.indexOf(0) === 4,
+      },
+    ]
+
     // Ici, la figure contient la grille, le point de départ et le lutin qui s'anime sur sa trace...
     texteCorr += `La bonne figure est la figure ${texteEnCouleurEtGras(this.indiceBonneFigure + 1)}.<br>`
 
@@ -457,106 +478,5 @@ export default class AlgoTortue extends Exercice {
     this.listeCorrections.push(texteCorr) // et la liste des corrections
 
     listeQuestionsToContenuSansNumero(this) // on envoie tout à la fonction qui va mettre en forme.
-
-    // Gestion de la souris
-    // ToFix si on passe de interactif à non interactif il y a toujours l'effet au survol
-
-    document.addEventListener('exercicesAffiches', () => {
-      // Dès que l'exercice est affiché, on rajoute des listenners sur chaque Svg.
-      for (let i = 0; i < 5; i++) {
-        const figSvg = document.getElementById(
-          `figure${i}exo${this.numeroExercice}`,
-        )
-        if (figSvg) {
-          const fig = figSvg as unknown as Fig
-          if (this.interactif) {
-            figSvg.addEventListener('mouseover', mouseOverSvgEffect)
-            figSvg.addEventListener('mouseout', mouseOutSvgEffect)
-            figSvg.addEventListener('click', mouseSvgClick)
-            fig.etat = false
-          } else {
-            figSvg.removeEventListener('mouseover', mouseOverSvgEffect)
-            figSvg.removeEventListener('mouseout', mouseOutSvgEffect)
-            figSvg.removeEventListener('click', mouseSvgClick)
-            fig.etat = true
-          }
-        }
-      }
-    })
-  }
-
-  // Pour pouvoir récupérer this dans la correction interactive
-  // Pour distinguer les deux types de codage de recuperation des résultats
-
-  // Gestion de la correction
-  correctionInteractive = (i: number) => {
-    let nbFiguresCliquees = 0
-    const spanResultat = document.querySelector(
-      `#resultatCheckEx${this.numeroExercice}Q${0}`,
-    ) as HTMLSpanElement
-    const divFeedback = document.querySelector(
-      `#feedbackEx${this.numeroExercice}Q${0}`,
-    ) as HTMLDivElement
-
-    const figures = []
-    for (let i = 0; i < 5; i++) {
-      const figure = document.getElementById(
-        `figure${i}exo${this.numeroExercice}`,
-      )
-      if (figure != null) {
-        const fig = figure as unknown as Fig
-        figures.push(figure)
-        figure.removeEventListener('mouseover', mouseOverSvgEffect)
-        figure.removeEventListener('mouseout', mouseOutSvgEffect)
-        figure.removeEventListener('click', mouseSvgClick)
-        if (fig.etat) nbFiguresCliquees++
-      }
-    }
-    if (nbFiguresCliquees > 1) {
-      divFeedback.innerHTML = "Vous ne pouvez choisir qu'une seule figure."
-      divFeedback.style.display = 'block'
-    }
-    if (nbFiguresCliquees < 1) {
-      divFeedback.innerHTML = 'Vous devez choisir une figure.'
-      divFeedback.style.display = 'block'
-    }
-    if (
-      nbFiguresCliquees === 1 &&
-      (figures[this.indiceBonneFigure] as unknown as Fig).etat
-    ) {
-      spanResultat.innerHTML = '😎'
-      // nbBonnesReponses++
-      return 'OK'
-    } else {
-      spanResultat.innerHTML = '☹️'
-      // nbMauvaisesReponses++
-      return 'KO'
-    }
-    //    afficheScore(this, nbBonnesReponses, nbMauvaisesReponses)
-  }
-}
-
-function mouseOverSvgEffect(this: any) {
-  this.style.border = 'inset'
-}
-
-function mouseOutSvgEffect(this: any) {
-  this.style.border = 'none'
-}
-
-function mouseSvgClick(this: any) {
-  if (this.etat) {
-    // Déja choisi, donc on le réinitialise
-    this.style.border = 'none'
-    this.addEventListener('mouseover', mouseOverSvgEffect)
-    this.addEventListener('mouseout', mouseOutSvgEffect)
-    this.addEventListener('click', mouseSvgClick)
-    this.etat = false
-  } else {
-    // Passe à l'état choisi donc on désactive les listenners pour over et pour out
-    this.removeEventListener('mouseover', mouseOverSvgEffect)
-    this.removeEventListener('mouseout', mouseOutSvgEffect)
-    this.style.border = 'solid #f15929'
-    this.etat = true
   }
 }

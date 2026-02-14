@@ -1,4 +1,9 @@
-import type { IExercice, InterfaceParams } from '../lib/types'
+import type {
+  IExercice,
+  IExerciceStatique,
+  InterfaceParams,
+} from '../lib/types'
+import Latex from './Latex'
 
 interface Items {
   [key: string]: string
@@ -16,7 +21,7 @@ export interface UserSettings {
 }
 
 export interface itemsWithExercises {
-  [key: string]: IExercice[]
+  [key: string]: (IExercice | IExerciceStatique)[]
 }
 
 export function handleUrl(url: URL) {
@@ -82,10 +87,37 @@ export function generateLatex(
       for (const item of document.items) {
         if (itemsWithExercises[item]) {
           for (const exercise of itemsWithExercises[item]) {
-            exercise.reinit()
-            exercise.nouvelleVersion()
-            output += '\n\n\\exercice{}\n' + exercise.contenu
-            outputCorr += '\n\n\\exercice{}\n' + exercise.contenuCorrection
+            if (exercise.typeExercice === 'statique') continue
+            const latex = new Latex()
+            latex.addExercices([exercise as IExercice])
+            const contents = latex.getContentsForAVersion(
+              {
+                title: '',
+                reference: '',
+                subtitle: '',
+                style: 'Classique',
+                fontOption: 'StandardFont',
+                tailleFontOption: 12,
+                dysTailleFontOption: 14,
+                correctionOption: 'AvecCorrection',
+                qrcodeOption: 'SansQrcode',
+                typeFiche: 'Fiche',
+                durationCanOption: '9 min',
+                titleOption: 'SansTitre',
+                nbVersions: 1,
+              },
+              1,
+            )
+            output +=
+              '\n\n' +
+              contents.content
+                .replace('\\begin{EXO}', '\\exercice')
+                .replace('\\end{EXO}', '')
+            outputCorr +=
+              '\n\n' +
+              contents.contentCorr
+                .replace('\\begin{EXO}', '\\exercice')
+                .replace('\\end{EXO}', '')
           }
         }
       }
@@ -121,6 +153,7 @@ const preambuleLight = `
 \\usepackage{colortbl}
 \\usepackage{xcolor}
 \\usepackage{qrcode}
+\\usepackage{etoolbox}
 \\usepackage{pgf,tikz}
 
 \\setlength{\\parindent}{0mm}
@@ -132,9 +165,19 @@ const preambuleLight = `
 
 \\newcounter{numexercice}
 \\setcounter{numexercice}{0}
-\\newcommand{\\exercice}{
-  \\stepcounter{numexercice}
-  \\subsection*{Exercice \\thenumexercice}
+\\newcommand{\\exercice}[2]{%
+  \\stepcounter{numexercice}%
+  \\subsection*{%
+    \\makebox[\\textwidth]{%
+      Exercice \\thenumexercice%
+      \\ifstrempty{#2}
+        {}
+        {\\hfill\\textit{#2}}%
+    }%
+      \\ifstrempty{#1}
+       {}
+       \\textnormal{ #1}%
+  }%
 }
 
 \\fancyhead[C]{Évaluation à la carte}
