@@ -69,6 +69,9 @@ export default class LireAbscissesFractionnairesComplexes extends Exercice {
   nouvelleVersion() {
     //    let typeDeQuestions: number[]
 
+    // Pour éviter les erreurs lorsqu'on manipule un this.sup2 undefined
+    if (typeof this.sup2 !== 'string') this.sup2 = '1-2-4-6'
+
     if (this.sup3 === true) {
       this.sup2 += '-2'
     }
