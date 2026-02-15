@@ -1,8 +1,10 @@
 /**
  * Web Component pour simuler et exécuter des programmes Scratch
  * S'active automatiquement quand les éléments <scratch-simulator> sont ajoutés au DOM
+ * @author Jean-Claude Lhote
  */
 
+import { context } from '../modules/context'
 import { scratchblock } from '../modules/scratchblock'
 import { renderScratchDiv } from './renderScratch'
 
@@ -15,6 +17,7 @@ export interface ExecutionResult {
   messages: string[]
   currentInstruction?: string
   currentInstructionScratchHtml?: string
+  repeatContexts?: string[]
 }
 
 export class ScratchInterpreter {
@@ -34,6 +37,7 @@ export class ScratchInterpreter {
   private messages: string[] = []
   private currentInstruction: string = ''
   private currentInstructionScratchHtml: string = ''
+  private repeatContextStack: string[] = []
   private onUpdate?: () => void | Promise<void>
 
   constructor(startX = 0, startY = 0, startAngle = 0) {
@@ -63,6 +67,7 @@ export class ScratchInterpreter {
       messages: this.messages,
       currentInstruction: this.currentInstruction,
       currentInstructionScratchHtml: this.currentInstructionScratchHtml,
+      repeatContexts: [...this.repeatContextStack],
     }
   }
 
@@ -92,6 +97,7 @@ export class ScratchInterpreter {
       messages: this.messages,
       currentInstruction: this.currentInstruction,
       currentInstructionScratchHtml: this.currentInstructionScratchHtml,
+      repeatContexts: [...this.repeatContextStack],
     }
   }
 
@@ -105,6 +111,7 @@ export class ScratchInterpreter {
       messages: this.messages,
       currentInstruction: this.currentInstruction,
       currentInstructionScratchHtml: this.currentInstructionScratchHtml,
+      repeatContexts: [...this.repeatContextStack],
     }
   }
 
@@ -270,7 +277,11 @@ export class ScratchInterpreter {
       const innerCode = code.substring(contentStart + 1, innerCodeEnd).trim()
 
       for (let i = 0; i < times; i++) {
+        this.repeatContextStack.push(
+          `Répéter ${times} fois (itération ${i + 1}/${times})`,
+        )
         await this.parseAndExecuteAnimated(innerCode, delayMs)
+        this.repeatContextStack.pop()
       }
 
       index = innerCodeEnd + 1
@@ -349,12 +360,23 @@ export class ScratchInterpreter {
       )
 
       if (!isInRepeatZone && blockType !== 'repeat') {
-        this.executeBlock(blockType, content, blockMatch[0])
+        // Pour les blocs personnalisés, les exécuter de manière animée
+        if (blockType === 'moreblocks') {
+          const blockName = content.trim()
+          if (this.customBlocks[blockName]) {
+            await this.parseAndExecuteAnimated(
+              this.customBlocks[blockName],
+              delayMs,
+            )
+          }
+        } else {
+          this.executeBlock(blockType, content, blockMatch[0])
 
-        // Attendre le délai et appeler le callback
-        await new Promise((resolve) => setTimeout(resolve, delayMs))
-        if (this.onUpdate) {
-          await Promise.resolve(this.onUpdate())
+          // Attendre le délai et appeler le callback
+          await new Promise((resolve) => setTimeout(resolve, delayMs))
+          if (this.onUpdate) {
+            await Promise.resolve(this.onUpdate())
+          }
         }
       }
 
@@ -516,6 +538,7 @@ export class ScratchSimulator extends HTMLElement {
   private canvas: HTMLCanvasElement | null = null
   private stepDiv: HTMLDivElement | null = null
   private infoDiv: HTMLDivElement | null = null
+  private repeatDiv: HTMLDivElement | null = null
 
   connectedCallback(): void {
     this.scratchCode = this.getAttribute('code') || ''
@@ -568,6 +591,11 @@ export class ScratchSimulator extends HTMLElement {
     this.stepDiv.id = 'execution-step'
     this.stepDiv.textContent = 'Instruction: -'
 
+    this.repeatDiv = document.createElement('div')
+    this.repeatDiv.className = 'text-xs text-gray-500 mb-3'
+    this.repeatDiv.id = 'execution-repeat'
+    this.repeatDiv.textContent = ''
+
     this.canvas = document.createElement('canvas')
     this.canvas.width = 500
     this.canvas.height = 500
@@ -580,6 +608,7 @@ export class ScratchSimulator extends HTMLElement {
     box.appendChild(closeButton)
     box.appendChild(title)
     box.appendChild(this.stepDiv)
+    box.appendChild(this.repeatDiv)
     box.appendChild(this.canvas)
     box.appendChild(this.infoDiv)
 
@@ -613,6 +642,7 @@ export class ScratchSimulator extends HTMLElement {
           this.drawSimulation(state)
           this.displayInfo(state)
           this.displayInstruction(state)
+          this.displayRepeatContext(state)
         })
       },
       delayMs,
@@ -624,6 +654,7 @@ export class ScratchSimulator extends HTMLElement {
       this.drawSimulation(result)
       this.displayInfo(result)
       this.displayInstruction(result)
+      this.displayRepeatContext(result)
     })
   }
 
@@ -763,6 +794,18 @@ export class ScratchSimulator extends HTMLElement {
       this.stepDiv.textContent = 'Instruction: -'
     }
   }
+
+  private displayRepeatContext(result: ExecutionResult): void {
+    if (!this.repeatDiv) return
+    if (result.repeatContexts && result.repeatContexts.length > 0) {
+      const contexts = result.repeatContexts
+        .map((ctx, idx) => `${'  '.repeat(idx)}🔄 ${ctx}`)
+        .join('\n')
+      this.repeatDiv.textContent = contexts
+    } else {
+      this.repeatDiv.textContent = ''
+    }
+  }
 }
 
 // Enregistrer le Web Component (uniquement si pas déjà défini)
@@ -771,4 +814,13 @@ if (
   !customElements.get('scratch-simulator')
 ) {
   customElements.define('scratch-simulator', ScratchSimulator)
+}
+
+export function createScratchSimulatorElement(
+  code: string,
+  delayMs: number = 500,
+): string {
+  if (!context.isHtml) return ''
+  return `<scratch-simulator delay="${String(delayMs)}" code="${code}">${scratchblock(code)}</scratch-simulator>
+     `
 }
