@@ -3,10 +3,7 @@ import { texFractionReduite } from '../../../lib/outils/deprecatedFractions'
 import { sp } from '../../../lib/outils/outilString'
 import { texNombre } from '../../../lib/outils/texNombre'
 
-import {
-  handleAnswers,
-  setReponse,
-} from '../../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../../lib/interactif/questionMathLive'
 import Hms from '../../../modules/Hms'
 import { listeQuestionsToContenu, randint } from '../../../modules/outils'
@@ -39,10 +36,7 @@ export default class ConversionHeuresDecimalesMinutes extends Exercice {
 
   nouvelleVersion() {
     let a, b, d, texte, texteCorr
-    for (
-      let i = 0, index = 0, nbChamps = 0, cpt = 0;
-      i < this.nbQuestions && cpt < 50;
-    ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
       switch (
         choice([1, 2]) //, 'b'
       ) {
@@ -63,7 +57,6 @@ export default class ConversionHeuresDecimalesMinutes extends Exercice {
               },
             })
             texteCorr = `$${texNombre(a + b)}$ h $ = ${a}$ h $ +$ $ ${texNombre(b)} \\times 60$ min $  = ${a}$ h $${d}$ min`
-            nbChamps = 2
           }
           this.canEnonce = 'Compléter.'
           this.canReponseACompleter = `$${texNombre(a + b)}$ h = $\\ldots$ h $\\ldots$ min`
@@ -82,7 +75,7 @@ export default class ConversionHeuresDecimalesMinutes extends Exercice {
             texte = `Compléter par un nombre décimal : <br>$${texNombre(a)}$ h $${texNombre(b * 60)}$ min  $=$`
             texte += ajouteChampTexteMathLive(
               this,
-              index,
+              i,
               KeyboardType.clavierNumbers,
               {
                 texteApres: sp(5) + 'h',
@@ -90,8 +83,12 @@ export default class ConversionHeuresDecimalesMinutes extends Exercice {
             )
             texteCorr = `$${texNombre(b * 60)}$ min  $=   \\dfrac{${texNombre(b * 60)}}{60}$ h $=${texFractionReduite(b * 60, 60)}$ h $=   ${texNombre(b)}$ h. <br>
           Ainsi, $${texNombre(a)}$ h $${texNombre(b * 60)}$ min  $=$ $${texNombre(a + b)}$ h.`
-            setReponse(this, index, a + b)
-            nbChamps = 1
+
+            handleAnswers(this, i, {
+              reponse: {
+                value: a + b,
+              },
+            })
           }
           this.canEnonce = 'Compléter par un nombre décimal.'
           this.canReponseACompleter = `$${texNombre(a)}$ h $${texNombre(b * 60)}$ min  $= \\ldots\\ldots$ h`
@@ -104,7 +101,6 @@ export default class ConversionHeuresDecimalesMinutes extends Exercice {
         this.listeCanEnonces.push(this.canEnonce)
         this.listeCanReponsesACompleter.push(this.canReponseACompleter)
         i++
-        index += nbChamps
       }
       cpt++
     }
