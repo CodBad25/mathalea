@@ -196,8 +196,7 @@
           ></i>
         </button>
         <button
-          class="mx-2 tooltip tooltip-left tooltip-neutral {$globalOptions.isInteractiveFree &&
-          interactifReady
+          class="mx-2 tooltip tooltip-left tooltip-neutral {interactifReady
             ? ''
             : 'hidden'}"
           data-tip={isInteractif
