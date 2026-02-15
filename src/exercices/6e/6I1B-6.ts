@@ -1,6 +1,6 @@
 import { propositionsQcm } from '../../lib/interactif/qcm'
 import { choice, shuffle, shuffle3tableaux } from '../../lib/outils/arrayOutils'
-import '../../lib/scratchSimulator' // Web Component pour simuler et exécuter les programmes Scratch
+import { createScratchSimulatorElement } from '../../lib/scratchSimulator'
 import { context } from '../../modules/context'
 import { gestionnaireFormulaireTexte, randint } from '../../modules/outils'
 import { scratchblock } from '../../modules/scratchblock'
@@ -14,11 +14,13 @@ export const titre = 'Trouver le bon programme'
 export const uuid = 'e9cad'
 
 export const refs = {
-  'fr-fr': [],
+  'fr-fr': ['6I1B-6'],
   'fr-2016': [],
   'fr-ch': [],
 }
-
+/**
+ * @author Jean-Claude Lhote
+ */
 export default class TrouverLeBonProgramme extends Exercice {
   constructor() {
     super()
@@ -130,7 +132,7 @@ export default class TrouverLeBonProgramme extends Exercice {
             .replace(/'/g, '&#39;')
           if (this.sup && cas !== 5 && cas !== 2) {
             texte += `<td style="border: 1px solid #ddd; padding: 10px; text-align: center;">
-            <scratch-simulator delay="${String(delai)}" code="${simulatorCode}">${programme}</scratch-simulator>
+          ${createScratchSimulatorElement(simulatorCode, delai)}
           </td>`
           } else {
             texte += `<td style="border: 1px solid #ddd; padding: 10px; text-align: center;">${programme}</td>`
