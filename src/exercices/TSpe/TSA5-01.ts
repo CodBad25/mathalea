@@ -1,4 +1,4 @@
-import InequationsLog from './TSA5-00'
+import InequationsLog from '../TT/TTE-3'
 
 export const titre = "Résoudre des inéquations du type $a^x \\leq b$"
 export const dateDePublication = '4/5/2024'
