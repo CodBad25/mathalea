@@ -341,6 +341,7 @@
             ...options,
             recorder: tempRecorder,
             presMode: 'un_exo_par_page',
+            title: '',
           }
         })
       } else {
