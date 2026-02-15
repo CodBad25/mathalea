@@ -92,8 +92,14 @@ async function toolSetActivityParams({
   globalOptions.update((l) => {
     Object.assign(l, newGlobalOptions)
     l.presMode = 'un_exo_par_page'
-    l.isDataRandom = true
-    l.isTitleDisplayed = true
+    // On conserve la valeur de isDataRandom si elle a été définie par l'enseignant
+    if (newGlobalOptions.isDataRandom === undefined) {
+      l.isDataRandom = true
+    }
+    // On conserve la valeur de isTitleDisplayed si elle a été définie par l'enseignant
+    if (newGlobalOptions.isTitleDisplayed === undefined) {
+      l.isTitleDisplayed = true
+    }
     if (l.v === 'eleve') {
       l.isInteractiveFree = false
     }
