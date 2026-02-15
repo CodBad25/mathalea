@@ -1131,7 +1131,7 @@ export function handleAnswers(
   }
 }
 
-function verifQuestionMetaInteractif2d(
+export function verifQuestionMetaInteractif2d(
   exercice: IExercice,
   i: number,
 ): {

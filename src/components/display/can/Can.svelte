@@ -18,9 +18,11 @@
     verifQuestionCliqueFigure,
   } from '../../../lib/interactif/cliqueFigure'
   import { verifDragAndDrop } from '../../../lib/interactif/DragAndDrop'
+  import { verifQuestionMetaInteractif2d } from '../../../lib/interactif/gestionInteractif'
   import { verifQuestionMathLive } from '../../../lib/interactif/mathLive'
   import { verifQuestionQcm } from '../../../lib/interactif/qcm'
   import { verifQuestionListeDeroulante } from '../../../lib/interactif/questionListeDeroulante'
+  import { verifQuestionSvgSelection } from '../../../lib/interactif/questionSvgSelection/questionSvgSelection'
   import { mathaleaUpdateUrlFromExercicesParams } from '../../../lib/mathalea'
   import { canOptions } from '../../../lib/stores/canStore'
   import {
@@ -134,6 +136,8 @@
       | 'listeDeroulante'
       | 'custom'
       | 'cliqueFigure'
+      | 'svgSelection'
+      | 'MetaInteractif2d'
       | 'unknown'
     index: number
     answers?: { [key: string]: string }
@@ -345,6 +349,48 @@
         answers[i] = answersType[i].answerTxt.includes('apiGeomVersion')
           ? 'Voir figure'
           : answersType[i].answerTxt
+      } else if (type === 'svgSelection') {
+        resultsByQuestion[i] = Boolean(
+          verifQuestionSvgSelection(exercice, indiceQuestionInExercice[i]) ===
+          'OK',
+        )
+        // récupération de la réponse
+        answersType[i] = {
+          type,
+          index: i,
+          answers: {
+            [`Ex${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`]:
+              exercice.answers![
+                `svgSelectionEx${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`
+              ],
+          },
+          answerTxt:
+            exercice.answers![
+              `svgSelectionEx${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`
+            ],
+        }
+        answers[i] = answersType[i].answerTxt
+      } else if (type === 'MetaInteractif2d') {
+        resultsByQuestion[i] = Boolean(
+          verifQuestionMetaInteractif2d(exercice, indiceQuestionInExercice[i])
+            .isOk,
+        )
+        // récupération de la réponse
+        answersType[i] = {
+          type,
+          index: i,
+          answers: {
+            [`Ex${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`]:
+              exercice.answers![
+                `MetaInteractif2dEx${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`
+              ],
+          },
+          answerTxt:
+            exercice.answers![
+              `MetaInteractif2dEx${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`
+            ],
+        }
+        answers[i] = answersType[i].answerTxt
       } else {
         answersType[i] = {
           type: 'unknown',

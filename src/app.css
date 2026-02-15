@@ -250,7 +250,7 @@ math-field::part(virtual-keyboard-toggle) {
   display: none;
 }
 
-math-field:not(.fillInTheBlanks) {
+math-field:not(.fillInTheBlanks):not(.metaInteractif2d) {
   font-size: '1em';
   margin-left: 5px;
   display: inline-block;
@@ -271,6 +271,18 @@ math-field.fillInTheBlanks {
   background-color: transparent;
 }
 math-field.fillInTheBlanks::part(prompt) {
+  min-height: 1.1em;
+}
+
+math-field.metaInteractif2d {
+  border: 'none';
+  box-shadow: 'none';
+  font-size: '1em';
+  margin-top: '1px';
+  padding: '2px';
+  background-color: transparent;
+}
+math-field.metaInteractif2d::part(prompt) {
   min-height: 1.1em;
 }
 math-field.schemaEnBoite {
