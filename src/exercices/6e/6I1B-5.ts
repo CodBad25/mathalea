@@ -1,5 +1,7 @@
-import { MySpreadsheetElement } from '../../lib/tableur/MySpreadSheet'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import { addSheet, createTableurLatex } from '../../lib/tableur/outilsTableur'
+import type { GoodAnswersFormulas } from '../../lib/types'
 import { context } from '../../modules/context'
 
 import {
@@ -13,7 +15,7 @@ export const titre = 'Saisir une formule simple sur tableur'
 export const dateDePublication = '07/02/2026'
 
 export const interactifReady = true
-export const interactifType = 'custom'
+export const interactifType = 'tableur'
 
 /**
  * Programmer des calculs sur tableur : New programme de 6eme 2025
@@ -22,7 +24,7 @@ export const interactifType = 'custom'
  * tableur d'après exercice 6I1B-4
  */
 
-export const uuid = '46bae'
+export const uuid = '4662d' // '46bae'
 
 export const refs = {
   'fr-fr': ['6I1B-5'],
@@ -31,12 +33,12 @@ export const refs = {
 
 // const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
-export default class ExerciceTableur extends Exercice {
+export default class ExerciceTableurVocabulaire extends Exercice {
   destroyers: (() => void)[] = []
   niveau: number = 6
   constructor() {
     super()
-    this.nbQuestions = 3
+    this.nbQuestions = 2
 
     this.besoinFormulaireTexte = [
       'Types de formules',
@@ -58,10 +60,11 @@ export default class ExerciceTableur extends Exercice {
         '13 : Quotient de deux nombres',
       ].join('\n'),
     ]
+    this.comment = `L'exercice étant de niveau 6eme, le choix 0 écarte la possibilité d'obtenir carré, cube, opposé ou inverse. Si on souhaite les obtenir, il faut effectuer une liste explicite du type 1-2-3-4-5-6-7-8-9-10-11-12-13`
+
     this.besoinFormulaire2Numerique = ['Nombre de lignes', 1, '1\n2\n3\n4\n5']
     this.sup = 0
     this.sup2 = 3
-
     this.niveau = 6
   }
 
@@ -83,181 +86,36 @@ export default class ExerciceTableur extends Exercice {
   static readonly styles = {
     style_id_rouge: {
       fs: 12,
-      bg: ExerciceTableur.colors.rouge,
+      bg: ExerciceTableurVocabulaire.colors.rouge,
     },
     style_id_bleu: {
       fs: 12,
-      bg: ExerciceTableur.colors.bleu,
+      bg: ExerciceTableurVocabulaire.colors.bleu,
     },
     style_id_orange: {
       fs: 12,
-      bg: ExerciceTableur.colors.orange,
+      bg: ExerciceTableurVocabulaire.colors.orange,
     },
     style_id_violet: {
       fs: 12,
-      bg: ExerciceTableur.colors.violet,
+      bg: ExerciceTableurVocabulaire.colors.violet,
     },
     style_id_vert: {
       fs: 12,
-      bg: ExerciceTableur.colors.vert,
+      bg: ExerciceTableurVocabulaire.colors.vert,
     },
     style_id_jaune: {
       fs: 12,
-      bg: ExerciceTableur.colors.jaune,
+      bg: ExerciceTableurVocabulaire.colors.jaune,
     },
-  }
-
-  validateFormulas(
-    q: number,
-    userSheet: MySpreadsheetElement,
-    corrections: MotsQR[],
-    nbLignes: number[],
-  ): { isOk: boolean; messages: string } {
-    // 1. Récupère les données de l'utilisateur
-    const userData = userSheet.getData()
-    const nbSteps = nbLignes[q]
-    const testSheet = MySpreadsheetElement.create({
-      data: userData,
-      minDimensions: userSheet.getMinDimensions(),
-      style: userSheet.getStyle(),
-      columns: userSheet.getColumns(),
-      interactif: false,
-      id: 'testSheet',
-    })
-    testSheet.style.position = 'absolute'
-    testSheet.style.left = '-9999px'
-    document.body.appendChild(testSheet)
-
-    const correctionSheet = MySpreadsheetElement.create({
-      data: userData,
-      minDimensions: userSheet.getMinDimensions(),
-      style: userSheet.getStyle(),
-      columns: userSheet.getColumns(),
-      interactif: false,
-      id: 'correctionSheet',
-    })
-    correctionSheet.style.position = 'absolute'
-    correctionSheet.style.left = '-8999px'
-    document.body.appendChild(correctionSheet)
-    let cell = { col: 0, lig: 0 }
-    for (let i = 0; i < nbSteps; i++) {
-      const index = i + q * nbSteps
-      cell = toRefCellule(corrections[index].ref)
-      correctionSheet.setCellValue(
-        cell.col,
-        cell.lig,
-        corrections[index].txtFormule,
-      )
-    }
-
-    const messages: string[][] = []
-    // for (let n = 0; n < nbSteps; n++) {
-    messages[q] = []
-    const a1 = randint(1, 10)
-    testSheet.setCellValue(1, 0, a1) // B1
-    correctionSheet.setCellValue(1, 0, a1)
-    const resultats: number[] = []
-    for (let i = 0; i < nbSteps; i++) {
-      const index = i + q * nbSteps
-      cell = toRefCellule(corrections[index].ref)
-      resultats.push(parseFloat(testSheet.getCellValue(cell.col, cell.lig)))
-    }
-    // Recupere les données B1, C1, D1 ... pour les comparer aux résultats attendus
-    const correctionResultats: number[] = []
-    for (let i = 0; i < nbSteps; i++) {
-      const index = i + q * nbSteps
-      cell = toRefCellule(corrections[index].ref)
-      correctionResultats.push(
-        parseFloat(correctionSheet.getCellValue(cell.col, cell.lig)),
-      )
-    }
-
-    // analyse les réponses de l'utilisateur
-    for (let i = 0; i < nbSteps; i++) {
-      const index = i + q * nbSteps
-      if (typeof resultats[i] !== 'number' || isNaN(resultats[i])) {
-        messages[q].push(
-          `La cellule ${corrections[index].ref} ne contient pas un nombre valide.<br>`,
-        )
-      }
-    }
-    for (let i = 0; i < nbSteps; i++) {
-      const index = i + q * nbSteps
-      cell = toRefCellule(corrections[index].ref)
-      if (
-        typeof testSheet.getCellFormula(cell.col, cell.lig) !== 'string' ||
-        !testSheet.getCellFormula(cell.col, cell.lig).startsWith('=')
-      ) {
-        messages[q].push(
-          `La cellule ${corrections[index].ref} ne contient pas une formule valide.<br>`,
-        )
-      }
-    }
-    // compare les résultats de l'utilisateur avec les réponses attendues
-    for (let i = 0; i < nbSteps; i++) {
-      const index = i + q * nbSteps
-      if (Math.abs(correctionResultats[i] - resultats[i]) > 1e-6) {
-        messages[q].push(
-          `Pour un nombre de départ égal à ${a1}, la cellule ${corrections[index].ref} devrait contenir ${correctionResultats[i]} mais elle contient ${resultats[i]}.<br>`,
-        )
-      }
-    }
-    // }
-
-    const maxMessages = messages.reduce(
-      (max, arr) => (arr.length > max.length ? arr : max),
-      [],
-    )
-
-    document.body.removeChild(testSheet)
-    document.body.removeChild(correctionSheet)
-    const feedback =
-      maxMessages.length === 0
-        ? '✅ Toutes les formules sont correctes !'
-        : '❌ Des erreurs ont été détéctées.'
-    return {
-      isOk: maxMessages.length === 0,
-      messages: maxMessages.join('') + feedback,
-    }
-  }
-
-  checkSolution(event?: CustomEvent, corrections: MotsQR[] = []): void {
-    // Récupère le nom de l’event
-    const eventName = event?.type
-    const q = eventName?.match(/Q(\d+)/)?.[1]
-    if (!q) {
-      console.error('Question number not found in event name:', eventName)
-      return
-    }
-    const id = eventName?.replace('check', 'sheet-') || ''
-    const sheetElt = document.getElementById(id) as MySpreadsheetElement
-    // Tu peux aussi récupérer le bouton via event.target ou event.detail
-    // Exemple :
-    // const bouton = event?.detail?.sheet?.querySelector('#runCode')
-    if (sheetElt && sheetElt.isMounted()) {
-      const { messages } = this.validateFormulas(
-        Number(q),
-        sheetElt,
-        corrections,
-        listeNbLignes,
-      )
-      const messagesDiv = sheetElt.querySelector(
-        '#message-faux',
-      ) as HTMLDivElement
-      if (messages && messagesDiv) {
-        messagesDiv.style.color = 'green'
-        messagesDiv.innerHTML = messages
-      }
-    }
   }
 
   nouvelleVersion(): void {
     // MGu quand l'exercice est modifié, on détruit les anciens listeners
     this.destroyers.forEach((destroy) => destroy())
     this.destroyers.length = 0
-    listeMotsQR = []
-    listeNbLignes = []
-    nbLignes = this.sup2
+
+    const nbLignes = this.sup2
     const nbElements = this.nbQuestions * this.sup2
     /*     const nbOperations =
       this.sup === 1 ? randint(2, 5) : Math.min(Math.max(2, this.sup), 5)
@@ -266,23 +124,25 @@ export default class ExerciceTableur extends Exercice {
     if (this.niveau === 6 && choixThisSup === 0) {
       choixThisSup = '1-2-3-4-5-10-11-12-13'
     }
-    const listeTypeQuestions = gestionnaireFormulaireTexte({
+    const listeTypeQuestionsBase = gestionnaireFormulaireTexte({
       saisie: choixThisSup,
       min: 1,
       max: 13,
       defaut: 1,
       melange: 0,
       // shuffle: false, //true bien pour les tests
-      nbQuestions: nbElements,
+      nbQuestions: Math.min(nbElements, 50),
     })
+    const listeTypeQuestions = combinaisonListes(
+      listeTypeQuestionsBase,
+      nbElements,
+    )
 
     type MotVocabulaire = {
       num: number
       txtEnonce: string
       txtCorrection: string
       txtFormule: string
-      enchainement: string
-      fct: (x: number, y: number) => number
     }
     const listeMots: MotVocabulaire[] = [
       {
@@ -290,128 +150,103 @@ export default class ExerciceTableur extends Exercice {
         txtEnonce: 'Son double',
         txtCorrection: 'le double de ',
         txtFormule: '=B1*2',
-        enchainement: `$number1 \\times 2 = $`,
-        fct: (x: number, y: number) => 2 * x,
       },
       {
         num: 2,
         txtEnonce: 'Son triple',
         txtCorrection: 'le triple de ',
         txtFormule: '=B1*3',
-        enchainement: `$number1 \\times 3 = $`,
-        fct: (x: number, y: number) => 3 * x,
       },
       {
         num: 3,
         txtEnonce: 'Sa moitié',
         txtCorrection: 'la moitié de ',
         txtFormule: '=B1/2',
-        enchainement: `$number1 \\div 2 = $`,
-        fct: (x: number, y: number) => x / 2,
       },
       {
         num: 4,
         txtEnonce: 'Son quart',
         txtCorrection: 'le quart de ',
         txtFormule: '=B1/4',
-        enchainement: `$number1 \\div 4 = $`,
-        fct: (x: number, y: number) => x / 4,
       },
       {
         num: 5,
         txtEnonce: 'Son dixième',
         txtCorrection: 'le dixième de ',
         txtFormule: '=B1/10',
-        enchainement: `$number1 \\div 10 = $`,
-        fct: (x: number, y: number) => x / 10,
       },
       {
         num: 6,
         txtEnonce: 'Son carré',
         txtCorrection: 'le carré de ',
         txtFormule: `=B1^2`,
-        enchainement: `$number1^2 = number1 \\times number1 = $`,
-        fct: (x: number, y: number) => x * x,
       },
       {
         num: 7,
         txtEnonce: 'Son cube',
         txtCorrection: 'le cube de ',
         txtFormule: '=B1^3',
-        enchainement: `$number1^3 = number1 \\times number1 \\times number1 = $`,
-        fct: (x: number, y: number) => x * x * x,
       },
       {
         num: 8,
         txtEnonce: 'Son opposé',
         txtCorrection: `l'opposé de `,
         txtFormule: '=-B1',
-        enchainement: ``,
-        fct: (x: number, y: number) => -x,
       },
       {
         num: 9,
         txtEnonce: 'Son inverse',
         txtCorrection: `l'inverse de `,
         txtFormule: '=1/B1',
-        enchainement: `$\\dfrac{1}{number1}$`,
-        fct: (x: number, y: number) => (x !== 0 ? 1 / x : NaN),
       },
       {
         num: 10,
         txtEnonce: 'La somme de number1 et number2',
         txtCorrection: 'la somme de ',
         txtFormule: '=B1+B2',
-        enchainement: `$number1 + number2 = $`,
-        fct: (x: number, y: number) => x + y,
       },
       {
         num: 11,
         txtEnonce: 'La différence entre number1 et number2',
         txtCorrection: 'la différence entre ',
         txtFormule: '=B1-B2',
-        enchainement: `$number1 - number2 = $`,
-        fct: (x: number, y: number) => x - y,
       },
       {
         num: 12,
         txtEnonce: 'Le produit de number1 par number2',
         txtCorrection: 'le produit de ',
         txtFormule: '=B1*B2',
-        enchainement: `$number1 \\times number2 = $`,
-        fct: (x: number, y: number) => x * y,
       },
       {
         num: 13,
         txtEnonce: 'Le quotient de number1 par number2',
         txtCorrection: 'le quotient de ',
         txtFormule: '=B1/B2',
-        enchainement: `$number1 \\div number2 = $`,
-        fct: (x: number, y: number) => (y !== 0 ? x / y : NaN),
       },
     ]
-    // const colorsArr = Object.entries(ExerciceTableur.colors)
+    // const colorsArr = Object.entries(ExerciceTableurVocabulaire.colors)
     for (let q = 0, cpt = 0; q < this.nbQuestions && cpt < 50; cpt++) {
       // const q = 0
       let texte = ''
       let texteCorr = ''
-      listeNbLignes.push(nbLignes)
+      const listeMotsEnonce: string[] = []
       const nbColTableur = 2
       const nbDepart = randint(15, 40)
       const cellDatas: any[][] = [[]]
-
+      const lesBonnesFormules: GoodAnswersFormulas = []
       cellDatas[0][0] = {
         v: 'Nombre de départ',
-        s: '', // 'style_id_orange',
-        t: 2,
+        s: '', // 'style_id_orange', // couleur uniquement apriori ?
+        t: 1, //  1:raggedright, 2:raggedleft, 3:center
       }
       cellDatas[0][1] = {
         v: `${nbDepart}`,
-        s: '', // 'style_id_orange',
-        t: 2,
+        s: '', // 'style_id_orange', // couleur uniquement apriori ?
+        t: 3, // 1:raggedright, 2:raggedleft, 3:center
       }
       let enonce: string = ''
       let formule: string = ''
+
       for (let i = q * nbLignes; i < (q + 1) * nbLignes; i++) {
         const lOperation = Number(listeTypeQuestions[i])
         enonce = listeMots[lOperation - 1].txtEnonce
@@ -461,18 +296,20 @@ export default class ExerciceTableur extends Exercice {
             }
             break
         }
-        listeMotsQR.push({
+        listeMotsEnonce.push(enonce)
+        lesBonnesFormules.push({
           ref: `B${i - q * nbLignes + 2}`,
-          txtQuestion: enonce,
-          txtFormule: formule,
+          formula: formule,
         })
       }
-      for (let i = q * nbLignes; i < (q + 1) * nbLignes; i++) {
+
+      // GoodAnswersFormulas
+      for (let i = 0; i < nbLignes; i++) {
         cellDatas.push([]) // creer une ligne par question
-        cellDatas[i - q * nbLignes + 1][0] = {
-          v: `${listeMotsQR[i].txtQuestion}`,
-          s: 'text-align: left',
-          t: 2,
+        cellDatas[i + 1][0] = {
+          v: `${listeMotsEnonce[i]}`,
+          s: '',
+          t: 1,
         }
       }
 
@@ -480,9 +317,7 @@ export default class ExerciceTableur extends Exercice {
       const data: (number | string)[][] = [[]]
       data[0][0] = cellDatas[0][0].v
       data[0][1] = cellDatas[0][1].v
-      /*     for (let i = 0; i < steps.length; i++) {
-      data[0][i + 1] = cellDatas[0][i + 1].v
-     } */
+
       for (let i = 0; i < nbLignes; i++) {
         data.push([]) // creer une ligne par question
         data[i + 1][0] = cellDatas[i + 1][0].v
@@ -496,8 +331,7 @@ export default class ExerciceTableur extends Exercice {
       }
 
       const mot =
-        listeMotsQR[q * nbLignes].txtQuestion.charAt(0).toLowerCase() +
-        listeMotsQR[q * nbLignes].txtQuestion.slice(1)
+        listeMotsEnonce[0].charAt(0).toLowerCase() + listeMotsEnonce[0].slice(1)
       texte += `On choisit un nombre de départ, ici ${nbDepart} <br>
       Par exemple, la cellule B2 doit contenir la formule pour calculer ${mot}.<br>`
       texte +=
@@ -512,7 +346,7 @@ export default class ExerciceTableur extends Exercice {
           numeroExercice: this.numeroExercice ?? 0,
           question: q,
           data,
-          minDimensions: [nbColTableur, 2], // listeMotsQR.length + 1],
+          minDimensions: [nbColTableur, 2], // listeMotsEnonce.length + 1],
           style,
           columns: [
             { width: 180 },
@@ -521,8 +355,25 @@ export default class ExerciceTableur extends Exercice {
             { width: 90 },
           ],
           interactif: this.interactif,
-          showVerifyButton: true,
+          showVerifyButton: false,
+          readOnlyCells: [`A1:A${nbLignes + 1}`],
         })
+        handleAnswers(
+          this,
+          q,
+          {
+            sheetAnswer: {
+              goodAnswerFormulas: lesBonnesFormules,
+              sheetTestDatas: [
+                {
+                  ref: `B1`,
+                  rangeValues: [1, 10],
+                },
+              ],
+            },
+          },
+          { formatInteractif: 'tableur' },
+        )
       } else {
         const options: {
           formule?: boolean
@@ -535,10 +386,10 @@ export default class ExerciceTableur extends Exercice {
         options.formuleCellule = 'B1'
 
         texte += createTableurLatex(
-          listeNbLignes[q] + 1,
+          nbLignes + 1,
           4,
           cellDatas,
-          ExerciceTableur.styles,
+          ExerciceTableurVocabulaire.styles,
           options,
         )
       }
@@ -547,40 +398,15 @@ export default class ExerciceTableur extends Exercice {
       for (let i = 0; i < nbLignes; i++) {
         const index = i + q * nbLignes
         const lOperation = Number(listeTypeQuestions[index])
-        let formule = listeMotsQR[index].txtFormule
-        if (!context.isHtml && formule.includes('^')) {
-          formule = formule.replace(/\^/g, `\\^{}`)
-        }
-        texteCorr += `Pour calculer ${listeMots[lOperation - 1].txtCorrection}${nbDepart}, la formule  à saisir dans la cellule ${listeMotsQR[index].ref} est : ${formule}.<br>`
-      }
-      const listener = () => {
-        const sheets = Array.from(
-          document.querySelectorAll('my-spreadsheet'),
-        ) as MySpreadsheetElement[]
-        for (const sheet of sheets) {
-          const q = sheet.id.match(/Q(\d+)$/)?.[1]
-
-          const eventName =
-            q !== undefined && this.numeroExercice !== undefined
-              ? `checkEx${this.numeroExercice}Q${q}`
-              : undefined
-          if (sheet && eventName) {
-            const listener = (event: Event) => {
-              this.checkSolution(event as CustomEvent, listeMotsQR)
-            }
-            sheet.addListener(eventName, listener)
-          } else {
-            console.error(
-              `SheetElement not found or eventName invalid for question ${q} in exercice ${this.numeroExercice}`,
-            )
+        let formule = lesBonnesFormules[i].formula
+        if (typeof formule === 'string')
+          if (!context.isHtml && formule.includes('^')) {
+            formule = formule.replace(/\^/g, `\\^{}`)
           }
-        }
-        document.removeEventListener('exercicesAffiches', listener)
+        texteCorr += `Pour calculer ${listeMots[lOperation - 1].txtCorrection}${nbDepart}, la formule  à saisir dans la cellule ${lesBonnesFormules[i].ref} est : ${formule}.<br>`
       }
-      document.addEventListener('exercicesAffiches', listener, { once: true })
-
       /****************************************************/
-      if (this.questionJamaisPosee(q, texte)) {
+      if (this.questionJamaisPosee(q, nbDepart, listeMotsEnonce[0])) {
         this.listeQuestions[q] = texte
         this.listeCorrections[q] = texteCorr
         q++
@@ -588,52 +414,7 @@ export default class ExerciceTableur extends Exercice {
       listeQuestionsToContenu(this)
     }
   }
-
-  correctionInteractive = (i: number) => {
-    if (i === undefined) return ''
-    if (this.answers === undefined) this.answers = {}
-    let result = 'KO'
-    const sheetElement = document.getElementById(
-      `sheet-Ex${this.numeroExercice}Q${i}`,
-    ) as MySpreadsheetElement
-    if (!sheetElement) {
-      console.error(`sheet-Ex${this.numeroExercice}Q${i} not found`)
-      return result
-    }
-    if (sheetElement && sheetElement.isMounted()) {
-      this.answers[`sheet-Ex${this.numeroExercice}Q${i}`] = JSON.stringify(
-        sheetElement.getData(),
-      )
-      const spanResultat = document.querySelector(
-        `#resultatCheckEx${this.numeroExercice}Q${i}`,
-      )
-      const divFeedback = document.querySelector<HTMLElement>(
-        `#feedbackEx${this.numeroExercice}Q${i}`,
-      )
-
-      const { isOk, messages } = this.validateFormulas(
-        i,
-        sheetElement,
-        listeMotsQR,
-        listeNbLignes,
-      )
-      if (messages.length > 0 && spanResultat && divFeedback) {
-        divFeedback.innerHTML = messages
-        if (!isOk) {
-          if (spanResultat) spanResultat.innerHTML = '☹️'
-        } else {
-          if (spanResultat) spanResultat.innerHTML = '😎'
-          result = 'OK'
-        }
-      }
-    }
-    return result
-  }
 }
-
-let listeMotsQR: MotsQR[] = []
-let listeNbLignes: number[] = []
-let nbLignes = 0
 
 const LETTERS = ['A', 'B', 'C', 'D', 'E', 'F'] // A1..F1 max
 
@@ -657,21 +438,4 @@ export function buildStyleFromColos(
     style[key] = color
   }
   return style
-}
-
-type MotsQR = {
-  ref: string
-  txtQuestion: string
-  txtFormule: string
-}
-
-function toRefCellule(ref: string): { col: number; lig: number } {
-  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-  const match = ref.match(/^([A-Z])(\d+)$/)
-  if (!match) {
-    throw new Error(`Invalid cell reference: ${ref}`)
-  }
-  const col = alphabet.indexOf(match[1])
-  const lig = parseInt(match[2]) - 1
-  return { col, lig }
 }
