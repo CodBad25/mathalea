@@ -10,9 +10,18 @@ import type { VueType } from './VueType'
 
 export function mathaleaGoToView(destinationView: '' | VueType) {
   const originView = get(globalOptions).v ?? ''
-  previousView.set(originView)
+  const prevView = get(previousView)
+
+  // Si on retourne à l'accueil et qu'on venait d'une vue spécifique, on y retourne
+  if (destinationView === '' && prevView) {
+    destinationView = prevView as '' | VueType
+    previousView.set(undefined)
+  } else {
+    previousView.set(originView)
+  }
+
   if (destinationView !== get(globalOptions).v) {
-    // on met à jour que si ncécessaire
+    // on met à jour que si nécessaire
     globalOptions.update((l) => {
       l.v = destinationView
       return l
