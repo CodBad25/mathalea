@@ -15,7 +15,7 @@ export const dateDeModifImportante = '24/12/2025'
 export const uuid = '8e145'
 
 export const refs = {
-  'fr-fr': ['TSG2-05'],
+  'fr-fr': ['TSG2-14'],
   'fr-ch': [],
 }
 

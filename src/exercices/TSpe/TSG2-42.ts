@@ -1,143 +1,145 @@
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { remplisLesBlancs } from '../../lib/interactif/questionMathLive'
+import Exercice from '../Exercice'
+import { combinaisonListes } from '../../lib/outils/arrayOutils'
+import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import {
   ecritureAlgebrique,
-  ecritureAlgebriqueSauf1,
+  ecritureParentheseSiMoins,
   ecritureParentheseSiNegatif,
-  rienSi1,
 } from '../../lib/outils/ecritures'
-import { miseEnEvidence } from '../../lib/outils/embellissements'
-import { ppcm } from '../../lib/outils/primalite'
-import { listeQuestionsToContenu, randint } from '../../modules/outils'
-import Exercice from '../Exercice'
+import { texNombre } from '../../lib/outils/texNombre'
+export const titre = 'Déterminer si un vecteur est orthogonal à un plan.'
 
-export const titre = 'Déterminer un vecteur normal à deux autre vecteurs'
-export const interactifReady = true
-export const interactifType = 'mathLive'
+export const dateDePublication = '26/01/2025' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
 
-export const dateDePublication = '02/02/2025'
-
-export const uuid = '24d3a'
+export const uuid = 'd5253'
 export const refs = {
   'fr-fr': ['TSG2-42'],
-  'fr-ch': ['3mGeomVect-6'],
+  'fr-ch': [],
 }
 
 /**
+ *
  * @author Stéphane Guyon
 
 */
-export default class VecteurNormalADeuxAutresVecteurs extends Exercice {
+export default class nomExercice extends Exercice {
   constructor() {
     super()
-    this.nbQuestions = 2
+    this.nbQuestions = 1
+    this.consigne = ''
   }
 
   nouvelleVersion() {
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
-      let texte = ''
-      let texteCorr = ''
-      const u1 = randint(-5, 5, 0) // Composante x de u
-      const u2 = randint(-5, 5, 0) // Composante y de u
-      const u3 = randint(-5, 5, 0) // Composante z de u
+    const typeQuestionsDisponibles = ['type1', 'type2'] // On créé 3 types de questions
 
-      const v1 = randint(-5, 5, [0, u1]) // Composante x de v
-      const v2 = randint(-5, 5, [0, u2]) // Composante y de v
-      const v3 = randint(-5, 5, [0, u3]) // Composante z de v
-      const k = randint(1, 3) // Pour simplifier les calculs, on impose une composante nulle au vecteur u.
-      // if (k === 1) { u1 = 0 }// Pour varier les situations, on alterne cette qui s'annule.
-      // if (k === 2) { u2 = 0 }// On alterne aléatoirement une des 3 composantes de u
-      // if (k === 3) { u3 = 0 }
-      const n1 = u2 * v3 - u3 * v2 // On calcule les 3 composantes du vecteur normal n, qui vérifient les l'égalité
-      const n2 = u3 * v1 - u1 * v3
-      const n3 = u1 * v2 - u2 * v1
-      texte =
-        "L'espace est muni d'un repère orthonormé $(O ; \\vec{\\imath}, \\vec{\\jmath}, \\vec{k})$.<br> Déterminer les réels $a$ et $b$, tels que "
-      if (k === 1) {
-        texte += `$\\overrightarrow{n}\\begin{pmatrix}${n1}\\\\a\\\\b\\end{pmatrix}$`
-      }
-      if (k === 2) {
-        texte += `$\\overrightarrow{n}\\begin{pmatrix}a\\\\${n2}\\\\b\\end{pmatrix}$`
-      }
-      if (k === 3) {
-        texte += `$\\overrightarrow{n}\\begin{pmatrix}a\\\\b\\\\${n3}\\end{pmatrix}$`
-      }
-      texte += ' soit un vecteur normal au plan engendré par les vecteurs <br>'
-      texte += `$\\vec{u} \\begin{pmatrix}${u1}\\\\${u2}\\\\${u3}\\end{pmatrix}~$ et $~\\vec{v} \\begin{pmatrix}${v1}\\\\${v2}\\\\${v3}\\end{pmatrix}$ `
-      if (this.interactif) {
-        texte +=
-          '<br><br> $\\overrightarrow{n}$ ' +
-          remplisLesBlancs(
-            this,
-            i,
-            '\\begin{pmatrix}%{champ1}\\\\%{champ2}\\\\%{champ3}\\end{pmatrix}.',
-          )
-      } else {
-        texte += '.'
-      }
-      handleAnswers(this, i, {
-        champ1: { value: n1 },
-        champ2: { value: n2 },
-        champ3: { value: n3 },
-      })
+    const listeTypeQuestions = combinaisonListes(
+      typeQuestionsDisponibles,
+      this.nbQuestions,
+    ) // Tous les types de questions sont posés mais l'ordre diffère à chaque "cycle"
+    for (
+      let i = 0, texte, texteCorr, cpt = 0;
+      i < this.nbQuestions && cpt < 50;
 
-      texteCorr = 'On sait que '
-      if (k === 1) {
-        texteCorr += `$\\overrightarrow{n}\\begin{pmatrix}${n1}\\\\a\\\\b\\end{pmatrix}$`
-      }
-      if (k === 2) {
-        texteCorr += `$\\overrightarrow{n}\\begin{pmatrix}a\\\\${n2}\\\\b\\end{pmatrix}$`
-      }
-      if (k === 3) {
-        texteCorr += `$\\overrightarrow{n}\\begin{pmatrix}a\\\\b\\\\${n3}\\end{pmatrix}$`
-      }
-      texteCorr +=
-        'est un vecteur normal au plan engendré par $\\vec{u}$ et $\\vec{v}$. <br>'
-      texteCorr +=
-        '$\\vec n$ est donc orthogonal à tout vecteur de ce plan, ce qui implique que $\\vec n$ est orthogonal à $\\vec u$ et à $\\vec v$.<br>'
-      texteCorr +=
-        'Ainsi, on a necessairement : $\\vec{n} \\cdot \\vec{u} = 0 \\quad (L_1)\\quad\\quad\\text{et} \\quad \\vec{n} \\cdot \\vec{v} = 0\\quad(L_2)$.'
-      texteCorr +=
-        "<br>Traduisons ces conditions dans un système de 2 équations à 2 inconnues, que l'on résout ici par combinaisons linéaires (d'autres méthodes sont possibles) :<br>"
-      if (k === 1) {
-        texteCorr += `$ \\phantom{\\iff}\\begin{cases}${u1}\\times ${ecritureParentheseSiNegatif(n1)}${ecritureAlgebrique(u2)}\\times a  ${ecritureAlgebrique(u3)}\\times b &= 0 \\quad (L_1)\\\\${v1}\\times${ecritureParentheseSiNegatif(n1)}  ${ecritureAlgebrique(v2)}\\times a ${ecritureAlgebrique(v3)}\\times b &= 0  \\quad (L_2)\\end{cases}$`
-        texteCorr += `<br><br>$\\iff \\begin{cases}${rienSi1(u2)}a  ${ecritureAlgebriqueSauf1(u3)}b &= ${-u1 * n1} \\quad (L_1)\\\\  ${rienSi1(v2)}a ${ecritureAlgebriqueSauf1(v3)}b &= ${-v1 * n1} \\quad (L_2)\\end{cases}$`
-      }
-      if (k === 2) {
-        texteCorr += `<br>$ \\begin{cases}${u1}\\times a ${ecritureAlgebrique(u2)}\\times ${ecritureParentheseSiNegatif(n2)} ${ecritureAlgebrique(u3)}\\times b &= 0 \\\\${v1}\\times a  ${ecritureAlgebrique(v2)}\\times ${ecritureParentheseSiNegatif(n2)} ${ecritureAlgebrique(v3)}\\times b &= 0 \\end{cases}$<br>$\\iff\\begin{cases}${rienSi1(u1)}a  ${ecritureAlgebriqueSauf1(u3)}b &= ${-u2 * n2} \\quad (L_1)\\\\${rienSi1(v1)} a   ${ecritureAlgebriqueSauf1(v3)}b &= ${-v2 * n2} \\quad (L_2)\\end{cases}$`
-      }
-      if (k === 3) {
-        texteCorr += `<br>$ \\begin{cases}${u1}\\times a  ${ecritureAlgebrique(u2)}\\times b ${ecritureAlgebrique(u3)}\\times ${ecritureParentheseSiNegatif(n3)}&= 0 \\\\${v1}\\times a  ${ecritureAlgebriqueSauf1(v2)}b ${ecritureAlgebrique(v3)}\\times${ecritureParentheseSiNegatif(n3)} &= 0  \\end{cases}$<br>$\\iff \\begin{cases}${rienSi1(u1)}a  ${ecritureAlgebriqueSauf1(u2)}b &= ${-u3 * n3} \\quad (L_1)\\\\${rienSi1(v1)} a  ${ecritureAlgebriqueSauf1(v2)}b  &= ${-v3 * n3} \\quad (L_2)\\end{cases}$`
-      }
-      if (k === 1) {
-        texteCorr += `<br><br>$ \\iff \\begin{cases}${rienSi1(ppcm(u2, v2))}a   ${ecritureAlgebriqueSauf1((u3 * ppcm(u2, v2)) / u2)}b &= ${(-u1 * n1 * ppcm(u2, v2)) / u2} \\quad (${rienSi1(ppcm(u2, v2) / u2)}L_1)\\\\  ${rienSi1((v2 * ppcm(u2, v2)) / v2)}a ${ecritureAlgebriqueSauf1((v3 * ppcm(u2, v2)) / v2)}b &= ${(-v1 * n1 * ppcm(u2, v2)) / v2} \\quad (${rienSi1(ppcm(u2, v2) / v2)}L_2)\\end{cases}$`
-        texteCorr += `<br><br>$ \\iff \\begin{cases}${rienSi1(ppcm(u2, v2))}a   ${ecritureAlgebriqueSauf1((u3 * ppcm(u2, v2)) / u2)}b &= ${(-u1 * n1 * ppcm(u2, v2)) / u2} \\quad (L_1)\\\\   ${rienSi1((v3 * ppcm(u2, v2)) / v2 - (u3 * ppcm(u2, v2)) / u2)}b &= ${(-v1 * n1 * ppcm(u2, v2)) / v2 - (-u1 * n1 * ppcm(u2, v2)) / u2} \\quad (L_2-L_1)\\end{cases}$`
-        texteCorr += `<br><br>$ \\iff \\begin{cases}${rienSi1(ppcm(u2, v2))}a   ${ecritureAlgebriqueSauf1((u3 * ppcm(u2, v2) * n3) / u2)} &= ${(-u1 * n1 * ppcm(u2, v2)) / u2} \\quad (L_1)\\\\  b &= ${n3}\\quad (L_2)\\end{cases}$`
-        texteCorr += `<br><br>$\\iff \\begin{cases}a    &= ${n2} \\quad (L_1)\\\\  b &= ${n3}\\quad (L_2)\\end{cases}$`
-      }
-      if (k === 2) {
-        texteCorr += `<br><br>$ \\iff \\begin{cases}${rienSi1(ppcm(u1, v1))}a   ${ecritureAlgebriqueSauf1((u3 * ppcm(u1, v1)) / u1)}b &= ${(-u2 * n2 * ppcm(u1, v1)) / u1} \\quad (${rienSi1(ppcm(u1, v1) / u1)}L_1)\\\\  ${rienSi1((v1 * ppcm(u1, v1)) / v1)}a ${ecritureAlgebriqueSauf1((v3 * ppcm(u1, v1)) / v1)}b &= ${(-v2 * n2 * ppcm(u1, v1)) / v1} \\quad (${rienSi1(ppcm(u1, v1) / v1)}L_2)\\end{cases}$`
-        texteCorr += `<br><br>$ \\iff \\begin{cases}${rienSi1(ppcm(u1, v1))}a   ${ecritureAlgebriqueSauf1((u3 * ppcm(u1, v1)) / u1)}b &= ${(-u2 * n2 * ppcm(u1, v1)) / u1} \\quad (L_1)\\\\   ${rienSi1((v3 * ppcm(u1, v1)) / v1 - (u3 * ppcm(u1, v1)) / u1)}b &= ${(-v2 * n2 * ppcm(u1, v1)) / v1 - (-u2 * n2 * ppcm(u1, v1)) / u1} \\quad (L_2-L_1)\\end{cases}$`
-        texteCorr += `<br><br>$ \\iff \\begin{cases}${rienSi1(ppcm(u1, v1))}a   ${ecritureAlgebriqueSauf1((u3 * ppcm(u1, v1) * n3) / u1)} &= ${(-u2 * n2 * ppcm(u1, v1)) / u1} \\quad (L_1)\\\\  b &= ${n3}\\quad (L_2)\\end{cases}$`
-        texteCorr += `<br><br>$\\iff \\begin{cases}a    &= ${n1} \\quad (L_1)\\\\  b &= ${n3}\\quad (L_2)\\end{cases}$`
-      }
-      if (k === 3) {
-        texteCorr += `<br><br>$ \\iff \\begin{cases}${rienSi1(ppcm(u1, v1))}a   ${ecritureAlgebriqueSauf1((u2 * ppcm(u1, v1)) / u1)}b &= ${(-u3 * n3 * ppcm(u1, v1)) / u1} \\quad (${rienSi1(ppcm(u1, v1) / u1)}L_1)\\\\  ${rienSi1((v1 * ppcm(u1, v1)) / v1)}a ${ecritureAlgebriqueSauf1((v2 * ppcm(u1, v1)) / v1)}b &= ${(-v3 * n3 * ppcm(u1, v1)) / v1} \\quad (${rienSi1(ppcm(u1, v1) / v1)}L_2)\\end{cases}$`
-        texteCorr += `<br><br>$ \\iff \\begin{cases}${rienSi1(ppcm(u1, v1))}a   ${ecritureAlgebriqueSauf1((u2 * ppcm(u1, v1)) / u1)}b &= ${(-u3 * n3 * ppcm(u1, v1)) / u1} \\quad (L_1)\\\\   ${rienSi1((v2 * ppcm(u1, v1)) / v1 - (u2 * ppcm(u1, v1)) / u1)}b &= ${(-v3 * n3 * ppcm(u1, v1)) / v1 - (-u3 * n3 * ppcm(u1, v1)) / u1} \\quad (L_2-L_1)\\end{cases}$`
-        texteCorr += `<br><br>$ \\iff \\begin{cases}${rienSi1(ppcm(u1, v1))}a   ${ecritureAlgebriqueSauf1((u2 * ppcm(u1, v1) * n2) / u1)} &= ${(-u3 * n3 * ppcm(u1, v1)) / u1} \\quad (L_1)\\\\  b &= ${n2}\\quad (L_2)\\end{cases}$`
-        texteCorr += `<br><br>$\\iff \\begin{cases}a    &= ${n1} \\quad (L_1)\\\\  b &= ${n2}\\quad (L_2)\\end{cases}$`
+    ) {
+      // Boucle principale où i+1 correspond au numéro de la question
+      let a1 = randint(-5, 5, 0) // coord du vecteur AB
+      let b1 = randint(-5, 5, 0) // coord du vecteur AB
+      let c1 = 0 // coord du vecteur AB
+      let a2 = randint(-5, 5, [0, a1]) // coord du vecteur AC
+      let b2 = randint(-5, 5, [0, b1]) // coord du vecteur AC
+      let c2 = 0 // coord du vecteur AC
+      const a = randint(-5, 5, 0) // coord du vecteur normal
+      const b = randint(-5, 5, 0) // coord du vecteur normal
+      const c = randint(-5, 5, 0) // coord du vecteur normal
+      const xA = randint(-5, 5, 0) // coord de A
+      const yA = randint(-5, 5, 0) // coord de A
+      const zA = randint(-5, 5, 0) // coord de A
+      let xB = 0
+      let yB = 0
+      let zB = 0
+      let xC = 0
+      let yC = 0
+      let zC = 0
+
+      switch (
+        listeTypeQuestions[i] // Suivant le type de question, le contenu sera différent
+      ) {
+        case 'type1': // Normal
+          c1 = -(a * a1 + b * b1) // On calcule c1 pour annuler le pdt scla
+          a1 = a1 * c // on adapte les coord du vect AB pour avoir des coord entières
+          b1 = b1 * c // on adapte les coord du vect AB pour avoir des coord entières
+          c2 = -(a * a2 + b * b2) // idem pour c2
+          a2 = a2 * c // et vecteur AC
+          b2 = b2 * c
+          xB = xA + a1 // on déduit les coord de B
+          yB = yA + b1
+          zB = zA + c1
+          xC = xA + a2 // et celles de C
+          yC = yA + b2
+          zC = zA + c2
+          texte = `Dans un repère orthonormé de l'espace, déterminer si le vecteur $\\vec{n}\\begin{pmatrix}${a}\\\\${b}\\\\${c}\\end{pmatrix}$ est normal au plan $\\mathcal{ABC}$ engendré par les points :<br>`
+          texte += `$A(${xA}~;${yA}~;${zA})\\quad B(${xB}~;${yB}~;${zB})\\quad\\text{et}~~C(${xC}~;${yC}~;${zC})$`
+          texteCorr =
+            'On calcule les coordonnées des vecteurs $\\overrightarrow{AB}$ et $\\overrightarrow{AC}$ :<br> '
+          texteCorr += `$\\overrightarrow{AB}\\begin{pmatrix}${xB}-${ecritureParentheseSiNegatif(xA)}\\\\${yB}-${ecritureParentheseSiNegatif(yA)}\\\\${zB}-${ecritureParentheseSiNegatif(zA)}\\\\\\end{pmatrix}$ `
+          texteCorr += `$\\iff\\overrightarrow{AB}\\begin{pmatrix}${xB - xA}\\\\${yB - yA}\\\\${zB - zA}\\\\\\end{pmatrix}$<br> `
+          texteCorr += `$\\overrightarrow{AC}\\begin{pmatrix}${xC}-${ecritureParentheseSiNegatif(xA)}\\\\${yC}-${ecritureParentheseSiNegatif(yA)}\\\\${zC}-${ecritureParentheseSiNegatif(zA)}\\\\\\end{pmatrix}$ `
+          texteCorr += `$\\iff\\overrightarrow{AC}\\begin{pmatrix}${xC - xA}\\\\${yC - yA}\\\\${zC - zA}\\\\\\end{pmatrix}$<br> `
+          texteCorr += `On vérifie trivialement qu'ils ne sont pas colinéaires : $\\dfrac{x_B-x_A}{x_C-x_A}=\\dfrac{${texNombre(xB - xA)}}{${texNombre(xC - xA)}}\\neq\\dfrac{y_B-y_A}{y_C-y_A}=\\dfrac{${texNombre(yB - yA)}}{${texNombre(yC - yA)}}$`
+          texteCorr +=
+            '<br>$\\overrightarrow{AB}$ et $\\overrightarrow{AC}$ forment donc une base du plan $\\mathcal{ABC}$.'
+          texteCorr +=
+            '<br>Pour vérifier si $\\vec n$ est normal au plan $\\mathcal{ABC}$, il suffit de vérifier que le vecteur $\\vec n$ est orthogonal aux deux vecteurs de sa base, donc à $\\overrightarrow{AB}$ et $\\overrightarrow{AC}$.'
+          texteCorr += '<br>On calcule alors les deux produits scalaires :'
+          texteCorr += `<br>$\\begin{aligned}\\overrightarrow{AB}\\cdot\\vec{n}&=${a1}\\times ${ecritureParentheseSiMoins(a)}${ecritureAlgebrique(b1)}\\times ${ecritureParentheseSiMoins(b)}${ecritureAlgebrique(c1)}\\times ${ecritureParentheseSiMoins(c)}\\\\&=${a1 * a + b1 * b + c1 * c}\\end{aligned}$`
+          texteCorr += `<br>$\\begin{aligned}\\overrightarrow{AC}\\cdot\\vec{n}&=${a2}\\times ${ecritureParentheseSiMoins(a)}${ecritureAlgebrique(b2)}\\times ${ecritureParentheseSiMoins(b)}${ecritureAlgebrique(c2)}\\times ${ecritureParentheseSiMoins(c)}\\\\&=${a2 * a + b2 * b + c2 * c}\\end{aligned}$`
+          texteCorr +=
+            '<br>On en déduit que $\\vec n$ est orthogonal aux vecteurs $\\overrightarrow{AB}$ et $\\overrightarrow{AC}$, il est donc normal au plan $\\mathcal{ABC}$'
+          break
+        case 'type2': // pas Normal
+        default:
+          c1 = -(a * a1 + b * b1) // On calcule c1 ne pas annuler le pdt scal
+          a1 = a1 * c // on adapte les coord du vect AB pour avoir des coord entières
+          b1 = b1 * c // on adapte les coord du vect AB pour avoir des coord entières
+          c2 = -(a * a2 + b * b2) + 1 // idem pour c2
+          a2 = a2 * c // et vecteur AC
+          b2 = b2 * c
+          xB = xA + a1 // on déduit les coord de B
+          yB = yA + b1
+          zB = zA + c1
+          xC = xA + a2 // et celles de C
+          yC = yA + b2
+          zC = zA + c2
+          texte = `Dans un repère orthonormé de l'espace, déterminer si le vecteur $\\vec{n}\\begin{pmatrix}${a}\\\\${b}\\\\${c}\\end{pmatrix}$ est normal au plan $\\mathcal{ABC}$ engendré par les points :<br>`
+          texte += `$A(${xA}~;${yA}~;${zA})\\quad B(${xB}~;${yB}~;${zB})\\quad\\text{et}~~C(${xC}~;${yC}~;${zC})$`
+          texteCorr =
+            'On calcule les coordonnées des vecteurs $\\overrightarrow{AB}$ et $\\overrightarrow{AC}$ :<br> '
+          texteCorr += `$\\overrightarrow{AB}\\begin{cases}x_B-x_A&=${xB}-${ecritureParentheseSiNegatif(xA)}\\\\y_B-y_A&=${yB}-${ecritureParentheseSiNegatif(yA)}\\\\z_B-z_A&=${zB}-${ecritureParentheseSiNegatif(zA)}\\\\\\end{cases}$ `
+          texteCorr += ` et $\\quad\\overrightarrow{AC}\\begin{cases}x_C-x_A=${xC}-${ecritureParentheseSiNegatif(xA)}\\\\y_C-yA=${yC}-${ecritureParentheseSiNegatif(yA)}\\\\z_C-z_A=${zC}-${ecritureParentheseSiNegatif(zA)}\\\\\\end{cases}$ `
+          texteCorr += `<br><br>Ce qui donne après simplification : $\\overrightarrow{AB}\\begin{pmatrix}${xB - xA}\\\\${yB - yA}\\\\${zB - zA}\\\\\\end{pmatrix}$ `
+          texteCorr += `et $\\quad\\overrightarrow{AC}\\begin{pmatrix}${xC - xA}\\\\${yC - yA}\\\\${zC - zA}\\\\\\end{pmatrix}$<br> `
+          texteCorr += `On vérifie trivialement qu'ils ne sont pas colinéaires : $\\dfrac{x_B-x_A}{x_C-x_A}=\\dfrac{${texNombre(xB - xA)}}{${texNombre(xC - xA)}}\\neq\\dfrac{y_B-y_A}{y_C-y_A}=\\dfrac{${texNombre(yB - yA)}}{${texNombre(yC - yA)}}$`
+          texteCorr +=
+            '<br><br>$\\overrightarrow{AB}$ et $\\overrightarrow{AC}$ forment donc une base du plan $\\mathcal{ABC}$.'
+          texteCorr +=
+            '<br>Pour vérifier si $\\vec n$ est normal au plan $\\mathcal{ABC}$, il suffit de vérifier que le vecteur $\\vec n$ est orthogonal aux deux vecteurs de sa base, donc à $\\overrightarrow{AB}$ et $\\overrightarrow{AC}$.'
+          texteCorr += '<br>On calcule alors les deux produits scalaires :'
+          texteCorr += `<br>$\\begin{aligned}\\overrightarrow{AB}\\cdot\\vec{n}&=${a1}\\times ${ecritureParentheseSiMoins(a)}${ecritureAlgebrique(b1)}\\times ${ecritureParentheseSiMoins(b)}${ecritureAlgebrique(c1)}\\times ${ecritureParentheseSiMoins(c)}\\\\&=${a1 * a + b1 * b + c1 * c}\\end{aligned}$`
+          texteCorr += `<br>$\\begin{aligned}\\overrightarrow{AC}\\cdot\\vec{n}&=${a2}\\times ${ecritureParentheseSiMoins(a)}${ecritureAlgebrique(b2)}\\times ${ecritureParentheseSiMoins(b)}${ecritureAlgebrique(c2)}\\times ${ecritureParentheseSiMoins(c)}\\\\&=${a2 * a + b2 * b + c2 * c}\\end{aligned}$`
+          texteCorr +=
+            "<br>On en déduit que $\\vec n$ n'est pas orthogonal aux vecteurs $\\overrightarrow{AB}$ et $\\overrightarrow{AC}$, il n'est donc pas normal au plan $\\mathcal{ABC}$"
+
+          break
       }
 
-      texteCorr += `<br>Un vecteur normal aux deux vecteurs de l'énoncé est : $\\vec{n} \\begin{pmatrix} ${miseEnEvidence(n1)} \\\\ ${miseEnEvidence(n2)} \\\\ ${miseEnEvidence(n3)} \\end{pmatrix}$.`
-      texteCorr +=
-        '<br>Remarque : Tout vecteur non nul et colinéaire à ce vecteur sera aussi normal au plan.'
-      if (this.questionJamaisPosee(i, u1, u2, u3, v1, v2, v3)) {
+      if (this.questionJamaisPosee(i, a, b, c, a2, b2, c2, texte)) {
+        // <- laisser le i et ajouter toutes les variables qui rendent les exercices différents (par exemple a, b, c et d)
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr
         i++
       }
       cpt++
     }
-    listeQuestionsToContenu(this)
+    listeQuestionsToContenu(this) // On envoie l'exercice à la fonction de mise en page
   }
 }

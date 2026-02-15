@@ -23,7 +23,7 @@ export const dateDePublication = '07/02/2026'
 export const uuid = 'b4e86'
 
 export const refs = {
-  'fr-fr': ['TSG2-01'],
+  'fr-fr': ['TSG2-10'],
   'fr-ch': [],
 }
 export const interactifReady = true // pour définir qu'exercice peut s'afficher en mode interactif.
