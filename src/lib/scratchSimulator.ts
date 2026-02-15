@@ -3,6 +3,9 @@
  * S'active automatiquement quand les éléments <scratch-simulator> sont ajoutés au DOM
  */
 
+import { scratchblock } from '../modules/scratchblock'
+import { renderScratchDiv } from './renderScratch'
+
 export interface ExecutionResult {
   traces: Array<{ startX: number; startY: number; endX: number; endY: number }>
   finalX: number
@@ -10,6 +13,8 @@ export interface ExecutionResult {
   finalAngle: number
   variables: Record<string, number>
   messages: string[]
+  currentInstruction?: string
+  currentInstructionScratchHtml?: string
 }
 
 export class ScratchInterpreter {
@@ -27,6 +32,8 @@ export class ScratchInterpreter {
   }> = []
 
   private messages: string[] = []
+  private currentInstruction: string = ''
+  private currentInstructionScratchHtml: string = ''
   private onUpdate?: () => void | Promise<void>
 
   constructor(startX = 0, startY = 0, startAngle = 0) {
@@ -54,6 +61,8 @@ export class ScratchInterpreter {
       finalAngle: this.angle,
       variables: this.variables,
       messages: this.messages,
+      currentInstruction: this.currentInstruction,
+      currentInstructionScratchHtml: this.currentInstructionScratchHtml,
     }
   }
 
@@ -81,6 +90,8 @@ export class ScratchInterpreter {
       finalAngle: this.angle,
       variables: this.variables,
       messages: this.messages,
+      currentInstruction: this.currentInstruction,
+      currentInstructionScratchHtml: this.currentInstructionScratchHtml,
     }
   }
 
@@ -92,6 +103,8 @@ export class ScratchInterpreter {
       finalAngle: this.angle,
       variables: this.variables,
       messages: this.messages,
+      currentInstruction: this.currentInstruction,
+      currentInstructionScratchHtml: this.currentInstructionScratchHtml,
     }
   }
 
@@ -295,7 +308,7 @@ export class ScratchInterpreter {
       )
 
       if (!isInRepeatZone && blockType !== 'repeat') {
-        this.executeBlock(blockType, content)
+        this.executeBlock(blockType, content, blockMatch[0])
       }
 
       blockMatch = blockRegex.exec(code)
@@ -336,7 +349,7 @@ export class ScratchInterpreter {
       )
 
       if (!isInRepeatZone && blockType !== 'repeat') {
-        this.executeBlock(blockType, content)
+        this.executeBlock(blockType, content, blockMatch[0])
 
         // Attendre le délai et appeler le callback
         await new Promise((resolve) => setTimeout(resolve, delayMs))
@@ -349,7 +362,13 @@ export class ScratchInterpreter {
     }
   }
 
-  private executeBlock(type: string, content: string): void {
+  private executeBlock(type: string, content: string, rawBlock?: string): void {
+    this.currentInstruction = this.humanizeInstruction(type, content)
+    this.currentInstructionScratchHtml = this.renderScratchBlock(
+      type,
+      content,
+      rawBlock,
+    )
     if (type === 'move' && content.includes('avancer')) {
       const steps = this.extractNumber(content)
       this.moveForward(steps)
@@ -394,6 +413,67 @@ export class ScratchInterpreter {
     }
   }
 
+  private humanizeInstruction(type: string, content: string): string {
+    if (type === 'move' && content.includes('avancer')) {
+      return `Avancer de ${this.extractNumber(content)} pas`
+    }
+
+    if (type === 'move' && content.includes('tourner')) {
+      const angle = this.extractNumber(content)
+      const direction = content.includes('turnright') ? 'droite' : 'gauche'
+      return `Tourner a ${direction} de ${angle} degres`
+    }
+
+    if (type === 'moreblocks') {
+      const blockName = content.trim()
+      return `Bloc ${blockName}`
+    }
+
+    if (type === 'variable') {
+      const num = this.extractNumber(content)
+      const varMatch = content.match(/\\selectmenu\{(\w+)\}/)
+      const varName = varMatch ? varMatch[1] : 'compteur'
+      return `Mettre ${varName} a ${num}`
+    }
+
+    if (type === 'change') {
+      const num = this.extractNumber(content)
+      const varMatch = content.match(/\\ovalvariable\{(\w+)\}/)
+      const varName = varMatch ? varMatch[1] : 'compteur'
+      return `Ajouter ${num} a ${varName}`
+    }
+
+    if (type === 'look') {
+      const num = this.extractNumber(content)
+      const varMatch = content.match(/\\ovalvariable\{(\w+)\}/)
+      const varName = varMatch ? varMatch[1] : ''
+      return varName ? `Dire ${varName}` : `Dire ${num}`
+    }
+
+    return 'Instruction en cours'
+  }
+
+  private renderScratchBlock(
+    type: string,
+    content: string,
+    rawBlock?: string,
+  ): string {
+    const candidates = [
+      rawBlock,
+      `\\begin{scratch}[blocks]\n\\block${type}{${content}}\n\\end{scratch}`,
+      `\\block${type}{${content}}`,
+    ].filter((value): value is string => Boolean(value))
+
+    for (const candidate of candidates) {
+      const rendered = scratchblock(candidate)
+      if (rendered !== false) {
+        return rendered
+      }
+    }
+
+    return ''
+  }
+
   private extractNumber(str: string): number {
     const match = str.match(/\\ovalnum\{(\d+)\}/)
     if (match) return parseInt(match[1], 10)
@@ -434,6 +514,8 @@ export class ScratchSimulator extends HTMLElement {
   private scratchCode: string = ''
   private modal: HTMLDialogElement | null = null
   private canvas: HTMLCanvasElement | null = null
+  private stepDiv: HTMLDivElement | null = null
+  private infoDiv: HTMLDivElement | null = null
 
   connectedCallback(): void {
     this.scratchCode = this.getAttribute('code') || ''
@@ -478,22 +560,28 @@ export class ScratchSimulator extends HTMLElement {
     })
 
     const title = document.createElement('h3')
-    title.className = 'font-bold text-lg'
+    title.className = 'font-bold text-lg mb-3'
     title.textContent = 'Simulation Scratch'
+
+    this.stepDiv = document.createElement('div')
+    this.stepDiv.className = 'text-sm text-gray-600 mb-2'
+    this.stepDiv.id = 'execution-step'
+    this.stepDiv.textContent = 'Instruction: -'
 
     this.canvas = document.createElement('canvas')
     this.canvas.width = 500
     this.canvas.height = 500
     this.canvas.className = 'border-2 border-gray-300 bg-white my-4 w-full'
 
-    const infoDiv = document.createElement('div')
-    infoDiv.className = 'text-sm text-gray-600'
-    infoDiv.id = 'execution-info'
+    this.infoDiv = document.createElement('div')
+    this.infoDiv.className = 'text-sm text-gray-600'
+    this.infoDiv.id = 'execution-info'
 
     box.appendChild(closeButton)
     box.appendChild(title)
+    box.appendChild(this.stepDiv)
     box.appendChild(this.canvas)
-    box.appendChild(infoDiv)
+    box.appendChild(this.infoDiv)
 
     this.modal.appendChild(box)
     document.body.appendChild(this.modal)
@@ -520,16 +608,23 @@ export class ScratchSimulator extends HTMLElement {
     await this.interpreter.executeAnimated(
       code,
       () => {
-        this.drawSimulation(this.interpreter!.getCurrentState())
-        this.displayInfo(this.interpreter!.getCurrentState())
+        const state = this.interpreter!.getCurrentState()
+        requestAnimationFrame(() => {
+          this.drawSimulation(state)
+          this.displayInfo(state)
+          this.displayInstruction(state)
+        })
       },
       delayMs,
     )
 
     // Affichage final
     const result = this.interpreter.getCurrentState()
-    this.drawSimulation(result)
-    this.displayInfo(result)
+    requestAnimationFrame(() => {
+      this.drawSimulation(result)
+      this.displayInfo(result)
+      this.displayInstruction(result)
+    })
   }
 
   private drawSimulation(result: ExecutionResult): void {
@@ -581,22 +676,54 @@ export class ScratchSimulator extends HTMLElement {
       ctx.stroke()
     })
 
-    // Lutin (carré avec flèche)
+    // Lutin (tortue verte)
     ctx.save()
     ctx.translate(result.finalX, result.finalY)
     ctx.rotate((result.finalAngle * Math.PI) / 180)
 
-    // Carré rouge
-    ctx.fillStyle = '#ff6b6b'
-    ctx.fillRect(-7, -7, 14, 14)
+    const shellRadiusX = 10
+    const shellRadiusY = 8
+    const shellColor = '#2ecc71'
+    const shellEdge = '#1f8f4a'
+    const limbColor = '#27ae60'
 
-    // Flèche direction
-    ctx.strokeStyle = '#ff6b6b'
+    // Carapace
+    ctx.fillStyle = shellColor
+    ctx.strokeStyle = shellEdge
     ctx.lineWidth = 2
     ctx.beginPath()
-    ctx.moveTo(7, 0)
-    ctx.lineTo(15, -3)
-    ctx.lineTo(15, 3)
+    ctx.ellipse(0, 0, shellRadiusX, shellRadiusY, 0, 0, Math.PI * 2)
+    ctx.fill()
+    ctx.stroke()
+
+    // Tete
+    ctx.fillStyle = limbColor
+    ctx.beginPath()
+    ctx.arc(shellRadiusX + 4, 0, 3, 0, Math.PI * 2)
+    ctx.fill()
+
+    // Pattes
+    ctx.beginPath()
+    ctx.arc(-4, -8, 3, 0, Math.PI * 2)
+    ctx.arc(4, -8, 3, 0, Math.PI * 2)
+    ctx.arc(-4, 8, 3, 0, Math.PI * 2)
+    ctx.arc(4, 8, 3, 0, Math.PI * 2)
+    ctx.fill()
+
+    // Queue
+    ctx.beginPath()
+    ctx.moveTo(-shellRadiusX - 4, 0)
+    ctx.lineTo(-shellRadiusX - 9, -2)
+    ctx.lineTo(-shellRadiusX - 9, 2)
+    ctx.closePath()
+    ctx.fill()
+
+    // Repere direction (petite fleche)
+    ctx.fillStyle = shellEdge
+    ctx.beginPath()
+    ctx.moveTo(shellRadiusX + 10, 0)
+    ctx.lineTo(shellRadiusX + 16, -3)
+    ctx.lineTo(shellRadiusX + 16, 3)
     ctx.closePath()
     ctx.fill()
 
@@ -604,8 +731,7 @@ export class ScratchSimulator extends HTMLElement {
   }
 
   private displayInfo(result: ExecutionResult): void {
-    const infoDiv = document.getElementById('execution-info')
-    if (!infoDiv) return
+    if (!this.infoDiv) return
 
     let html = `<div class="space-y-2"><p><strong>Position:</strong> x=${Math.round(result.finalX - 240)}, y=${Math.round(result.finalY - 240)}</p>`
     html += `<p><strong>Angle:</strong> ${Math.round(result.finalAngle)}°</p><p><strong>Traces:</strong> ${result.traces.length} ligne(s)</p>`
@@ -623,7 +749,19 @@ export class ScratchSimulator extends HTMLElement {
     }
 
     html += '</div>'
-    infoDiv.innerHTML = html
+    this.infoDiv.innerHTML = html
+  }
+
+  private displayInstruction(result: ExecutionResult): void {
+    if (!this.stepDiv) return
+    if (result.currentInstructionScratchHtml) {
+      this.stepDiv.innerHTML =
+        '<span class="font-semibold">Instruction :</span> ' +
+        result.currentInstructionScratchHtml
+      renderScratchDiv(this.stepDiv)
+    } else {
+      this.stepDiv.textContent = 'Instruction: -'
+    }
   }
 }
 
