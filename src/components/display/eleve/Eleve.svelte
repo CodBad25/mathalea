@@ -1,9 +1,6 @@
 <script lang="ts">
   import { afterUpdate, beforeUpdate, onDestroy, onMount, tick } from 'svelte'
-  import {
-    buildExercisesList,
-    splitExercisesIntoQuestions,
-  } from '../../../lib/components/exercisesUtils'
+
   import {
     getCanvasFont,
     getTextWidth,
@@ -11,16 +8,9 @@
   } from '../../../lib/components/measures'
   import { resizeContent } from '../../../lib/components/sizeTools'
   import { handleFlowmath } from '../../../lib/handleFlowmath'
-  import { verifQuestionCliqueFigure } from '../../../lib/interactif/cliqueFigure'
-  import { prepareExerciceCliqueFigure } from '../../../lib/interactif/gestionInteractif'
-  import { verifQuestionMathLive } from '../../../lib/interactif/mathLive'
-  import { verifQuestionQcm } from '../../../lib/interactif/qcm'
-  import { verifQuestionListeDeroulante } from '../../../lib/interactif/questionListeDeroulante'
   import {
     mathaleaFormatExercice,
-    mathaleaRenderDiv,
     mathaleaUpdateExercicesParamsFromUrl,
-    mathaleaUpdateUrlFromExercicesParams,
   } from '../../../lib/mathalea'
   import {
     darkMode,
@@ -31,38 +21,26 @@
   } from '../../../lib/stores/generalStore'
   import { globalOptions } from '../../../lib/stores/globalOptions'
   import { vendor } from '../../../lib/stores/vendorStore'
-  import {
-    isInteractivityType,
-    isOldFormatInteractifType,
-    type IExercice,
-    type InteractivityType,
-    type OldFormatInteractifType,
-  } from '../../../lib/types'
-  import { loadMathLive } from '../../../modules/loaders'
+  import { type IExercice } from '../../../lib/types'
+
   import Keyboard from '../../keyboard/Keyboard.svelte'
   import { keyboardState } from '../../keyboard/stores/keyboardStore'
   import Exercice from '../../shared/exercice/Exercice.svelte'
-  import ButtonTextAction from '../../shared/forms/ButtonTextAction.svelte'
-  import ButtonToggle from '../../shared/forms/ButtonToggle.svelte'
   import BtnZoom from '../../shared/ui/btnZoom.svelte'
   import Banner from '../../shared/vendors/Banner.svelte'
   import FlipCard from './FlipCard.svelte'
   import Footer2 from './Footer2.svelte'
+  import QuestionParPage from './QuestionParPage.svelte'
 
   let currentIndex: number = 0
-  let exercices: IExercice[] = []
   let questions: (string | IExercice)[] = []
   let consignes: string[] = []
   let corrections: string[] = []
-  let consignesCorrections: string[] = []
-  let indiceExercice: number[] = []
-  let indiceQuestionInExercice: number[] = []
-  const resultsByQuestion: boolean[] = []
-  const isDisabledButton: boolean[] = []
+  let resultsByQuestion: boolean[] = []
   let isCorrectionVisible: boolean[] = []
-  const divsCorrection: HTMLDivElement[] = []
   let currentWindowWidth: number = document.body.clientWidth
   let eleveSection: HTMLElement
+  let questionParPageRef: QuestionParPage
   const brandImagePath = $vendor.brand.logoPath
   const productImagePath = $vendor.product.logoPath
 
@@ -172,7 +150,8 @@
     }
   }
 
-  $: questionTitle = buildQuestionTitle(currentWindowWidth, questions.length)
+  $: questionsCount = questions.length
+  $: questionTitle = buildQuestionTitle(currentWindowWidth, questionsCount)
 
   let debug = false
   function log(str: string, level: number = 3) {
@@ -247,18 +226,6 @@
       }
     }
 
-    if ($globalOptions.presMode === 'une_question_par_page') {
-      /** Charge les exercices
-       * MGU : pas besoin de charger les exos si ce n'est pas des questions,
-       * car c'est le composant qui affiche l'exo qui le charge
-       * DONC UNIQUEMENT SI ON EST EN MODE UNE QUESTION PAR PAGE!
-       */
-      exercices = await Promise.all(buildExercisesList())
-
-      // construit les questions
-      buildQuestions()
-    }
-
     if (
       $globalOptions.recorder === 'capytale' ||
       $globalOptions.recorder === 'moodle' ||
@@ -294,135 +261,9 @@
     if (resizeObserver) resizeObserver.disconnect()
   })
 
-  async function buildQuestions() {
-    const splitResults = splitExercisesIntoQuestions(exercices)
-    questions = [...splitResults.questions]
-    consignes = [...splitResults.consignes]
-    corrections = [...splitResults.corrections]
-    consignesCorrections = [...splitResults.consignesCorrections]
-    isCorrectionVisible = [...splitResults.isCorrectionVisible]
-    indiceExercice = [...splitResults.indiceExercice]
-    indiceQuestionInExercice = [...splitResults.indiceQuestionInExercice]
-    if ($globalOptions.presMode === 'une_question_par_page') {
-      // Pour les autres mode de présentation, cela est géré par ExerciceMathaleaVueProf
-      mathaleaUpdateUrlFromExercicesParams($exercicesParams)
-      await tick()
-      const body = document.querySelector<HTMLElement>('body')
-      if (body) {
-        mathaleaRenderDiv(body)
-      }
-      loadMathLive()
-    }
-    const section = document.querySelector('section') as HTMLElement
-    const hauteurExercice = section.scrollHeight
-    const url = new URL(window.location.href)
-    const iframe = url.searchParams.get('iframe')
-    window.parent.postMessage(
-      {
-        hauteurExercice,
-        exercicesParams: $exercicesParams,
-        action: 'mathalea:init',
-        iframe,
-      },
-      '*',
-    )
-  }
-
-  async function checkQuestion(i: number) {
-    // ToFix exercices custom avec pointsCliquable
-    const exercice = exercices[indiceExercice[i]]
-    let type: InteractivityType | OldFormatInteractifType | undefined =
-      exercice.autoCorrection[indiceQuestionInExercice[i]]?.reponse?.param
-        ?.formatInteractif
-    if (type === undefined || type === null) {
-      const interactifType = exercice.interactifType
-      if (
-        isInteractivityType(interactifType) ||
-        isOldFormatInteractifType(interactifType)
-      ) {
-        type = interactifType
-      }
-    }
-    if (type == null) {
-      // @fixme on ne devrait jamais arriver ici pour un exercice non interactif !
-      window.notify(
-        'checkQuestion a été appelé pour un exercice non interactif',
-        {
-          exercice: exercice.uuid,
-        },
-      )
-      resultsByQuestion[i] = false
-      return
-    }
-    if (type.toLowerCase() === 'mathlive') {
-      const resu = verifQuestionMathLive(
-        exercices[indiceExercice[i]],
-        indiceQuestionInExercice[i],
-      )
-      resultsByQuestion[i] =
-        resu !== undefined && (resu.isOk === 'Ok' || resu.isOk === true)
-    } else if (type === 'qcm') {
-      resultsByQuestion[i] =
-        verifQuestionQcm(
-          exercices[indiceExercice[i]],
-          indiceQuestionInExercice[i],
-        ) === 'OK'
-    } else if (type === 'listeDeroulante') {
-      resultsByQuestion[i] =
-        verifQuestionListeDeroulante(
-          exercices[indiceExercice[i]],
-          indiceQuestionInExercice[i],
-        ) === 'OK'
-    } else if (type === 'cliqueFigure') {
-      resultsByQuestion[i] =
-        verifQuestionCliqueFigure(
-          exercices[indiceExercice[i]],
-          indiceQuestionInExercice[i],
-        ) === 'OK'
-    } else if (type === 'custom') {
-      // si le typ est `custom` on est sûr que `correctionInteractive` existe
-      // d'où le ! après `correctionInteractive`
-      resultsByQuestion[i] =
-        exercices[indiceExercice[i]].correctionInteractive!(
-          indiceQuestionInExercice[i],
-        ) === 'OK'
-    }
-    isDisabledButton[i] = true
-    isCorrectionVisible[i] = true
-    await tick()
-    const feedback = document.querySelector<HTMLElement>(
-      `#feedbackEx${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`,
-    )
-    // nécessaire pour le feedback
-    if (feedback !== null && feedback !== undefined) mathaleaRenderDiv(feedback)
-    mathaleaRenderDiv(divsCorrection[i])
-  }
-
-  async function switchCorrectionVisible(i: number) {
-    isCorrectionVisible[i] = !isCorrectionVisible[i]
-    if (isCorrectionVisible[i]) {
-      await tick()
-      mathaleaRenderDiv(divsCorrection[i])
-    }
-  }
-
   async function handleIndexChange(exoNum: number) {
     currentIndex = exoNum
-    if ($globalOptions.presMode === 'une_question_par_page') {
-      await tick() // MGU attendre que le div soit affiché avant de mettre à jour la question
-      const exo = exercices[indiceExercice[exoNum]]
-      const questionEvent = new CustomEvent('questionDisplay', {
-        detail: {
-          uuid: exo.uuid,
-          exoNumber: indiceExercice[exoNum],
-          questionNumber: exoNum,
-        },
-      })
-      document.dispatchEvent(questionEvent)
-      if (exo && exo.interactifType === 'cliqueFigure' && exo.interactif) {
-        prepareExerciceCliqueFigure(exo)
-      }
-    } else if ($globalOptions.presMode === 'un_exo_par_page') {
+    if ($globalOptions.presMode === 'un_exo_par_page') {
       await tick() // MGU attendre que le div soit affiché avant de mettre à jour la question
       const exo = $exercicesParams[exoNum]
       const questionEvent = new CustomEvent('questionDisplay', {
@@ -551,7 +392,7 @@
                   ? 'border-b-4'
                   : 'border-b-0'} border-coopmaths-struct dark:border-coopmathsdark-struct text-coopmaths-action hover:text-coopmaths-lightest dark:text-coopmathsdark-action dark:hover:text-coopmathsdark-lightest"
                 disabled={currentIndex === i}
-                on:click={() => handleIndexChange(i)}
+                on:click={() => questionParPageRef.handleIndexChange(i)}
               >
                 <div
                   id="questionTitleID{i}"
@@ -559,16 +400,14 @@
                 >
                   {questionTitle}
                   {i + 1}
-                  {#if $resultsByExercice[i] !== undefined}
-                    <div
-                      class="absolute left-0 right-0 mx-auto bottom-1 h-2 w-2 rounded-full bg-coopmaths-warn
-                      {resultsByQuestion[i] === true ? '' : 'invisible'}"
-                    ></div>
-                    <div
-                      class="absolute left-0 right-0 mx-auto bottom-1 h-2 w-2 rounded-full bg-red-600
-                      {resultsByQuestion[i] === false ? '' : 'invisible'}"
-                    ></div>
-                  {/if}
+                  <span
+                    class="ml-1 text-sm"
+                    class:hidden={resultsByQuestion[i] !== true}>😎</span
+                  >
+                  <span
+                    class="ml-1 text-sm"
+                    class:hidden={resultsByQuestion[i] !== false}>☹️</span
+                  >
                 </div>
                 <span
                   class="absolute -bottom-1 left-1/2 w-0 h-1 bg-coopmaths-struct group-hover:w-1/2 group-hover:transition-all duration-300 ease-out group-hover:ease-in group-hover:duration-300"
@@ -664,147 +503,12 @@
           {/each}
         </div>
       {:else if $globalOptions.presMode === 'une_question_par_page'}
-        <div>
-          {#each questions as question, k (k + '_' + question)}
-            <div class="flex flex-col">
-              <div class={$isMenuNeededForQuestions ? '' : 'hidden'}>
-                <button
-                  class="group w-full {currentIndex === k
-                    ? 'bg-coopmaths-canvas-darkest'
-                    : 'bg-coopmaths-canvas-dark'} hover:bg-coopmaths-canvas-darkest text-coopmaths-action hover:text-coopmaths-lightest dark:text-coopmathsdark-action dark:hover:text-coopmathsdark-lightest"
-                  disabled={currentIndex === k}
-                  on:click={() => handleIndexChange(k)}
-                >
-                  <div
-                    id="questionTitleID2{k}"
-                    class="flex flex-row items-center justify-center py-3 px-2 text-xl font-bold"
-                  >
-                    Question {k + 1}
-                    <div
-                      class="relative ml-2 h-2 w-2 rounded-full {currentIndex ===
-                      k
-                        ? 'bg-coopmaths-canvas-darkest'
-                        : 'bg-coopmaths-canvas-dark'} group-hover:bg-coopmaths-canvas-darkest"
-                    >
-                      {#if $resultsByExercice[k] !== undefined}
-                        <div
-                          class="absolute h-2 w-2 rounded-full bg-coopmaths-warn {resultsByQuestion[
-                            k
-                          ] === true
-                            ? ''
-                            : 'hidden'}"
-                        ></div>
-                        <div
-                          class="absolute h-2 w-2 rounded-full bg-red-600 {resultsByQuestion[
-                            k
-                          ] === false
-                            ? ''
-                            : 'hidden'}"
-                        ></div>
-                      {/if}
-                    </div>
-                  </div>
-                </button>
-              </div>
-              <div
-                class={currentIndex === k ? '' : 'hidden'}
-                id={`exercice${indiceExercice[k]}Q${k}`}
-              >
-                <div
-                  class="pb-4 flex flex-col items-start justify-start relative {isMenuNeededForQuestions
-                    ? 'lg:mt-2'
-                    : ''}"
-                >
-                  {#if typeof questions[k] !== 'string'}
-                    {''}
-                    <Exercice
-                      paramsExercice={$exercicesParams[indiceExercice[k]]}
-                      indiceExercice={indiceExercice[k]}
-                      indiceLastExercice={$exercicesParams.length - 1}
-                      isCorrectionVisible={isCorrectionVisible[
-                        indiceExercice[k]
-                      ]}
-                      toggleSidenav={() => {}}
-                    />
-                  {:else}
-                    <div
-                      class="container grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-10"
-                      style="font-size: {($globalOptions.z || 1).toString()}rem"
-                    >
-                      <div class="flex flex-col my-2 py-2">
-                        <div class="text-coopmaths-corpus pl-2">
-                          <!-- eslint-disable-next-line svelte/no-at-html-tags -->
-                          {@html consignes[k]}
-                        </div>
-                        <div class="text-coopmaths-corpus pl-2">
-                          <!-- eslint-disable-next-line svelte/no-at-html-tags -->
-                          {@html question}
-                        </div>
-                      </div>
-                      {#if isCorrectionVisible[k]}
-                        <div
-                          class="relative border-l-coopmaths-struct dark:border-l-coopmathsdark-struct border-l-[3px] text-coopmaths-corpus dark:text-coopmathsdark-corpus mt-2 lg:{$isMenuNeededForQuestions
-                            ? 'mt-6'
-                            : 'mt-2'} mb-6 py-2 pl-4"
-                          style="break-inside:avoid"
-                          bind:this={divsCorrection[k]}
-                        >
-                          {#if consignesCorrections[k].length !== 0}
-                            <div
-                              class="container bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark px-4 py-2 mr-2 ml-6 mb-2 font-light relative w-2/3"
-                            >
-                              <div class="container absolute top-4 -left-4">
-                                <i
-                                  class="bx bx-bulb scale-200 text-coopmaths-warn-dark dark:text-coopmathsdark-warn-dark"
-                                ></i>
-                              </div>
-                              <div class="">
-                                <!-- eslint-disable-next-line svelte/no-at-html-tags -->
-                                {@html consignesCorrections[k]}
-                              </div>
-                            </div>
-                          {/if}
-                          <div
-                            class="container overflow-x-auto overflow-y-hidden md:overflow-x-auto"
-                            style="break-inside:avoid"
-                          >
-                            <!-- eslint-disable-next-line svelte/no-at-html-tags -->
-                            {@html mathaleaFormatExercice(corrections[k])}
-                          </div>
-                          <!-- <div class="absolute border-coopmaths-struct dark:border-coopmathsdark-struct top-0 left-0 border-b-[3px] w-10" /> -->
-                          <div
-                            class="absolute flex flex-row py-[1.5px] px-3 rounded-t-md justify-center items-center -left-0.75 -top-3.75 bg-coopmaths-struct dark:bg-coopmathsdark-struct font-semibold text-xs text-coopmaths-canvas dark:text-coopmathsdark-canvas"
-                          >
-                            Correction
-                          </div>
-                          <div
-                            class="absolute border-coopmaths-struct dark:border-coopmathsdark-struct bottom-0 left-0 border-b-[3px] w-4"
-                          ></div>
-                        </div>
-                      {/if}
-                    </div>
-                  {/if}
-                  {#if exercices[indiceExercice[k]].interactif && exercices[indiceExercice[k]].interactifReady}
-                    <div class="pb-4 mt-10">
-                      <ButtonTextAction
-                        text="Vérifier"
-                        on:click={() => checkQuestion(k)}
-                        disabled={isDisabledButton[k]}
-                      />
-                    </div>
-                  {:else if $globalOptions.isSolutionAccessible && corrections[k]}
-                    <div class={$isMenuNeededForExercises ? 'ml-4' : ''}>
-                      <ButtonToggle
-                        titles={['Voir la correction', 'Masquer la correction']}
-                        on:toggle={() => switchCorrectionVisible(k)}
-                      />
-                    </div>
-                  {/if}
-                </div>
-              </div>
-            </div>
-          {/each}
-        </div>
+        <QuestionParPage
+          bind:this={questionParPageRef}
+          bind:currentIndex
+          bind:questions
+          bind:resultsByQuestion
+        />
       {:else if $globalOptions.presMode === 'cartes'}
         <div
           class="grid grid-flow-row gri-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 auto-rows-auto gap-6"
