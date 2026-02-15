@@ -19,11 +19,16 @@ import Exercice from '../Exercice'
 export const titre = 'Représenter une fraction avec une plaque de chocolat'
 export const interactifReady = true
 export const interactifType = 'svgSelection'
+export const dateDePublication = '10/02/2026'
 export const uuid = '1574a'
 export const refs = {
   'fr-fr': ['CM2N2A-4'],
   'fr-ch': [],
 }
+/**
+ *
+ * @author Jean-claude Lhote
+ */
 const carre = function (
   x: number,
   y: number,
