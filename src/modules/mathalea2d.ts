@@ -1,10 +1,7 @@
 import katex from 'katex'
 import { ObjetMathalea2D } from '../lib/2d/ObjetMathalea2D'
 import { normaliseOrientation } from '../lib/2d/utilitairesGeometriques'
-import {
-  buildDataKeyboardFromStyle,
-  convertClasseToString,
-} from '../lib/interactif/claviers/keyboard'
+import { buildDataKeyboardFromStyle } from '../lib/interactif/claviers/keyboard'
 import type {
   MetaInteractif2dData,
   NestedObjetMathalea2dArray,
@@ -146,10 +143,8 @@ export function mathalea2d(
                   for (const input of inputs) {
                     const xSvgInput = (input.x - xmin) * pixelsParCm * zoom
                     const ySvgInput = -(input.y - ymax) * pixelsParCm * zoom
-                    const dataKeyboard = buildDataKeyboardString(
-                      convertClasseToString(input.classe),
-                    )
-                    const divOuterHtml = `<div class="divLatex" style="position: absolute; top: ${ySvgInput}px; left: ${xSvgInput}px; transform: translate(-50%,-50%); opacity: ${input.opacity};" data-top=${ySvgInput} data-left=${xSvgInput}>${isInteractif ? `<math-field data-keyboard="${dataKeyboard}" virtual-keyboard-mode=manual readonly class="${input.classe} fillInTheBlanks" id="MetaInteractif2dEx${code.exercice.numeroExercice}Q${code.question}field${input.index}">${input.content.replace('%{champ1}', '\\placeholder[champ1]{}')}</math-field>` : katex.renderToString(input.content.replace('%{champ1}', input.blanc))}</div>`
+                    const dataKeyboard = buildDataKeyboardString(input.classe)
+                    const divOuterHtml = `<div class="divLatex" style="position: absolute; top: ${ySvgInput}px; left: ${xSvgInput}px; transform: translate(-50%,-50%); opacity: ${input.opacity};" data-top=${ySvgInput} data-left=${xSvgInput}>${isInteractif ? `<math-field data-keyboard="${dataKeyboard}" virtual-keyboard-mode=manual readonly class="${input.classe} metaInteractif2d" id="MetaInteractif2dEx${code.exercice.numeroExercice}Q${code.question}field${input.index}">${input.content.replace('%{champ1}', '\\placeholder[champ1]{}')}</math-field>` : katex.renderToString(input.content.replace('%{champ1}', input.blanc))}</div>`
                     divsLatex.push(divOuterHtml)
                   }
                 }

@@ -8,7 +8,11 @@ import {
 } from '../lib/interactif/questionMathLive'
 import { combinaisonListes, shuffle } from '../lib/outils/arrayOutils'
 import { range1 } from '../lib/outils/nombres'
-import type { OptionsComparaisonType, Valeur } from '../lib/types'
+import type {
+  AnswerValueType,
+  OptionsComparaisonType,
+  Valeur,
+} from '../lib/types'
 import FractionEtendue from '../modules/FractionEtendue'
 import Grandeur from '../modules/Grandeur'
 import { gestionnaireFormulaireTexte } from '../modules/outils'
@@ -193,7 +197,6 @@ export default class MetaExercice extends Exercice {
                   `id="feedbackEx${n}Q0"`,
                   `id="feedbackEx${n}Q${indexQuestion}"`,
                 )
-                Question.listeQuestions.push(Question.question ?? '')
               }
               handleAnswers(this, indexQuestion, Question.reponse as Valeur, {
                 formatInteractif: 'MetaInteractif2d',
@@ -214,12 +217,16 @@ export default class MetaExercice extends Exercice {
                     `resultatCheckEx${n}Q0`,
                     `resultatCheckEx${n}Q${indexQuestion}`,
                   )
+                  const reponse = Question.reponse as AnswerValueType
+
                   handleAnswers(
                     this,
                     indexQuestion,
-                    Question.reponse as Valeur,
+                    { reponse: { value: reponse } },
                     { formatInteractif: 'svgSelection' },
                   )
+                  this.listeQuestions[indexQuestion] =
+                    consigne + Question.question
                 } else {
                   throw new Error(
                     `Erreur avec cette question de type svgSelection qui ne contient pas d'id de svgSelection: ${Question.question}`,
