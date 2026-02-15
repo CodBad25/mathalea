@@ -2,16 +2,14 @@
   "slides": [
     {
       "background": "carousel05.jpg",
-      "title": "Course aux nombres 2026",
-      "message": "Pour clore 2025 en beauté ou démarrer la nouvelle année sur les chapeaux de roues, une Course aux Nombres spéciale vous attend !",
-      "image": "CAN_2026.png",
-      "link": "https://coopmaths.fr/www/blog/2025-12-15-can2026/",
-      "buttonTitle":""
+      "title": "Géométrie dynamique",
+      "message": "Avez-vous essayé les exercices auto-corrigés de géométrie dynamique ?",
+      "image": "apigeom.png"
     },
     {
       "background": "carousel05.jpg",
-      "title": "Fluence.mathalea.fr",
-      "message": "Nouveau site pour travailler les automatismes en calcul mental.",
+      "title": "fluence.mathalea.fr",
+      "message": "Tout le programme de cycle 2 et de cycle 3 pour travailler les automatismes en calcul mental (diaporama, parcours personnalisés, suivi local des scores...).",
       "image": "fluence.png",
       "link": "https://fluence.mathalea.fr/",
       "buttonTitle": "fluence.mathalea.fr"

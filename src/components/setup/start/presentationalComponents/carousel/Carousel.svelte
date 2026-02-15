@@ -7,6 +7,7 @@
   let currentSlideIndex = 0
   let intervalId: number | null = null
   let isPaused = false
+  let carouselContainer: HTMLDivElement
 
   // let carouselContent = $globalOptions.recorder === 'capytale' ? carouselContentForCapytale : legacyCarouselContent
   let carouselContent = legacyCarouselContent
@@ -29,12 +30,11 @@
   }
 
   function scrollToSlide(index: number): void {
-    const slideElement = document.getElementById(`carousel-item${index}`)
-    if (slideElement) {
-      slideElement.scrollIntoView({
+    if (carouselContainer) {
+      const slideWidth = carouselContainer.offsetWidth
+      carouselContainer.scrollTo({
+        left: index * slideWidth,
         behavior: 'smooth',
-        block: 'nearest',
-        inline: 'start',
       })
     }
   }
@@ -94,7 +94,9 @@
 {#if carouselContent.slides && carouselContent.slides.length !== 0}
   <div class="h-[90%]">
     <div
-      class="carousel w-full h-full cursor-pause-circle flex flex-row flex-nowrap overflow-x-hidden snap-x snap-mandatory"
+      bind:this={carouselContainer}
+      class="carousel w-full h-full cursor-pause flex flex-row flex-nowrap overflow-x-scroll snap-x snap-mandatory scroll-smooth scrollbar-hide"
+      style="-ms-overflow-style: none; scrollbar-width: none;"
       on:mouseenter={handleMouseEnter}
       on:mouseleave={handleMouseLeave}
       role="region"
@@ -114,11 +116,18 @@
             <div
               class="relative w-full h-full
             {slide.message && slide.message.length !== 0
-                ? (slide.background && slide.background.length !== 0 ? 'bg-coopmaths-canvas/80 dark:bg-coopmathsdark-canvas/80' : 'bg-coopmaths-struct/80 dark:bg-coopmathsdark-struct/80')
+                ? slide.background && slide.background.length !== 0
+                  ? 'bg-coopmaths-canvas/80 dark:bg-coopmathsdark-canvas/80'
+                  : 'bg-coopmaths-struct/80 dark:bg-coopmathsdark-struct/80'
                 : ''}
-            {slide.message && slide.message.length === 0 && slide.background && slide.background.length !== 0
+            {slide.message &&
+              slide.message.length === 0 &&
+              slide.background &&
+              slide.background.length !== 0
                 ? 'bg-coopmaths-canvas dark:bg-coopmathsdark-canvas'
-                : (slide.message && slide.message.length === 0 ? 'bg-coopmaths-struct dark:bg-coopmathsdark-struct' : '')}"
+                : slide.message && slide.message.length === 0
+                  ? 'bg-coopmaths-struct dark:bg-coopmathsdark-struct'
+                  : ''}"
             >
               <div
                 class="w-full h-full xl:p-20 lg:p-10 md:p-6 sm:p-4 p-3 flex flex-col justify-between items-start"
@@ -152,22 +161,24 @@
                         class="hidden lg:flex lg:w-1/2 flex-1 justify-center items-center"
                       >
                         <!-- Support for both images and videos -->
-                        {#if slide.image.endsWith('.mp4')}
-                          <video
-                            class="flex items-center justify-center w-full h-full object-scale-down"
-                            src="images/carousel/{slide.image}"
-                            autoplay
-                            loop
-                            muted
-                            playsinline
-                          ></video>
-                        {:else}
-                          <img
-                            class="flex items-center justify-center w-full h-full object-scale-down"
-                            src="images/carousel/{slide.image}"
-                            alt="Image:{slide.image}"
-                          />
-                        {/if}
+                        <div class="carousel-media-wrapper">
+                          {#if slide.image.endsWith('.mp4')}
+                            <video
+                              class="carousel-media"
+                              src="images/carousel/{slide.image}"
+                              autoplay
+                              loop
+                              muted
+                              playsinline
+                            ></video>
+                          {:else}
+                            <img
+                              class="carousel-media"
+                              src="images/carousel/{slide.image}"
+                              alt="Image:{slide.image}"
+                            />
+                          {/if}
+                        </div>
                       </div>
                     </div>
                   {:else}
@@ -225,3 +236,62 @@
     </div>
   </div>
 {/if}
+
+<style>
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  .cursor-pause {
+    cursor:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='%23374151'%3E%3Crect x='6' y='4' width='4' height='16' rx='1'/%3E%3Crect x='14' y='4' width='4' height='16' rx='1'/%3E%3C/svg%3E")
+        12 12,
+      pointer;
+  }
+
+  .carousel-media-wrapper {
+    position: relative;
+    display: inline-block;
+    max-width: 100%;
+    max-height: 100%;
+  }
+
+  .carousel-media-wrapper::after {
+    content: '';
+    position: absolute;
+    top: 3%;
+    left: 3%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      135deg,
+      rgba(0, 0, 0, 0.25) 0%,
+      rgba(0, 0, 0, 0.1) 100%
+    );
+    border-radius: 0.5rem;
+    z-index: -1;
+  }
+
+  .carousel-media {
+    display: block;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: scale-down;
+    border-radius: 0.5rem;
+    border: 2px solid rgba(0, 0, 0, 0.1);
+    background: white;
+  }
+
+  :global(.dark) .carousel-media-wrapper::after {
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.15) 0%,
+      rgba(255, 255, 255, 0.05) 100%
+    );
+  }
+
+  :global(.dark) .carousel-media {
+    border-color: rgba(255, 255, 255, 0.1);
+    background: #1f2937;
+  }
+</style>
