@@ -360,23 +360,24 @@ export class ScratchInterpreter {
       )
 
       if (!isInRepeatZone && blockType !== 'repeat') {
-        // Pour les blocs personnalisés, les exécuter de manière animée
-        if (blockType === 'moreblocks') {
-          const blockName = content.trim()
-          if (this.customBlocks[blockName]) {
-            await this.parseAndExecuteAnimated(
-              this.customBlocks[blockName],
-              delayMs,
-            )
-          }
-        } else {
-          this.executeBlock(blockType, content, blockMatch[0])
+        // Afficher l'instruction
+        this.prepareBlockDisplay(blockType, content, blockMatch[0])
+        if (this.onUpdate) {
+          await Promise.resolve(this.onUpdate())
+        }
 
-          // Attendre le délai et appeler le callback
-          await new Promise((resolve) => setTimeout(resolve, delayMs))
-          if (this.onUpdate) {
-            await Promise.resolve(this.onUpdate())
-          }
+        // Attendre le délai
+        await new Promise((resolve) => setTimeout(resolve, (2 * delayMs) / 3))
+
+        // Exécuter l'action
+        await this.executeBlockAction(blockType, content, delayMs)
+
+        // Attendre le délai
+        await new Promise((resolve) => setTimeout(resolve, delayMs / 3))
+
+        // Afficher les infos mises à jour
+        if (this.onUpdate) {
+          await Promise.resolve(this.onUpdate())
         }
       }
 
@@ -384,13 +385,24 @@ export class ScratchInterpreter {
     }
   }
 
-  private executeBlock(type: string, content: string, rawBlock?: string): void {
+  private prepareBlockDisplay(
+    type: string,
+    content: string,
+    rawBlock?: string,
+  ): void {
     this.currentInstruction = this.humanizeInstruction(type, content)
     this.currentInstructionScratchHtml = this.renderScratchBlock(
       type,
       content,
       rawBlock,
     )
+  }
+
+  private async executeBlockAction(
+    type: string,
+    content: string,
+    delayMs: number = 0,
+  ): Promise<void> {
     if (type === 'move' && content.includes('avancer')) {
       const steps = this.extractNumber(content)
       this.moveForward(steps)
@@ -402,7 +414,55 @@ export class ScratchInterpreter {
         this.turn(-angle)
       }
     } else if (type === 'moreblocks') {
-      // Exécuter un bloc personnalisé
+      const blockName = content.trim()
+      if (this.customBlocks[blockName]) {
+        await this.parseAndExecuteAnimated(
+          this.customBlocks[blockName],
+          delayMs,
+        )
+      }
+    } else if (type === 'variable') {
+      const num = this.extractNumber(content)
+      const varMatch = content.match(/\\selectmenu\{(\w+)\}/)
+      const varName = varMatch ? varMatch[1] : 'compteur'
+      this.variables[varName] = num
+    } else if (type === 'change') {
+      const num = this.extractNumber(content)
+      const varMatch = content.match(/\\ovalvariable\{(\w+)\}/)
+      const varName = varMatch ? varMatch[1] : 'compteur'
+      this.variables[varName] = (this.variables[varName] || 0) + num
+    } else if (type === 'look') {
+      const num = this.extractNumber(content)
+      const varMatch = content.match(/\\ovalvariable\{(\w+)\}/)
+      if (varMatch) {
+        const varName = varMatch[1]
+        this.messages.push(
+          String(
+            this.variables[varName] !== undefined
+              ? this.variables[varName]
+              : num,
+          ),
+        )
+      } else {
+        this.messages.push(String(num))
+      }
+    }
+  }
+
+  private executeBlock(type: string, content: string, rawBlock?: string): void {
+    this.prepareBlockDisplay(type, content, rawBlock)
+    // Exécuter synchronement (pour parseNonRepeatBlocks non-animé)
+    if (type === 'move' && content.includes('avancer')) {
+      const steps = this.extractNumber(content)
+      this.moveForward(steps)
+    } else if (type === 'move' && content.includes('tourner')) {
+      const angle = this.extractNumber(content)
+      if (content.includes('turnright')) {
+        this.turn(angle)
+      } else if (content.includes('turnleft')) {
+        this.turn(-angle)
+      }
+    } else if (type === 'moreblocks') {
       const blockName = content.trim()
       if (this.customBlocks[blockName]) {
         this.parseAndExecute(this.customBlocks[blockName])
