@@ -110,7 +110,7 @@ def newEntry(file:str,dicoType:str)->list:
                 numeroInitial = filename.split('_')[4]
             lieu = locationName(filename.split('_')[3])
             annee = filename.split('_')[1]
-            mois = filename.split('_')[2]
+            mois = monthName(filename.split('_')[2])
             if ('sti2d' in filename) : 
                 dicoType = 'sti2d'
             else :
@@ -128,7 +128,7 @@ def newEntry(file:str,dicoType:str)->list:
             print(filename.split('_'))
             numeroInitial = filename.split('_')[5]
             annee = filename.split('_')[2]
-            mois = filename.split('_')[3]
+            mois = monthName(filename.split('_')[3])
             filiere = filename.split('_')[1]
             prefix_map = {
                 'specialite': 'Spécialité ',
