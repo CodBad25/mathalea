@@ -2,7 +2,7 @@ export const dictionnaireEAM = {
   eam_specialite_2025_06_sujet0v1_1: {
     annee: '2025',
     lieu: 'Spécialité sujet0v1',
-    mois: '06',
+    mois: 'Juin',
     numeroInitial: '1',
     typeExercice: 'eam',
     filiere: 'Specialite',
@@ -11,7 +11,7 @@ export const dictionnaireEAM = {
   eam_specialite_2025_06_sujet0v1_2: {
     annee: '2025',
     lieu: 'Spécialité sujet0v1',
-    mois: '06',
+    mois: 'Juin',
     numeroInitial: '2',
     typeExercice: 'eam',
     filiere: 'Specialite',
@@ -20,7 +20,7 @@ export const dictionnaireEAM = {
   eam_specialite_2025_06_sujet0v1_3: {
     annee: '2025',
     lieu: 'Spécialité sujet0v1',
-    mois: '06',
+    mois: 'Juin',
     numeroInitial: '3',
     typeExercice: 'eam',
     filiere: 'Specialite',
@@ -29,7 +29,7 @@ export const dictionnaireEAM = {
   eam_specialite_2025_06_sujet0v2_1: {
     annee: '2025',
     lieu: 'Spécialité sujet0v2',
-    mois: '06',
+    mois: 'Juin',
     numeroInitial: '1',
     typeExercice: 'eam',
     filiere: 'Specialite',
@@ -38,7 +38,7 @@ export const dictionnaireEAM = {
   eam_specialite_2025_06_sujet0v2_2: {
     annee: '2025',
     lieu: 'Spécialité sujet0v2',
-    mois: '06',
+    mois: 'Juin',
     numeroInitial: '2',
     typeExercice: 'eam',
     filiere: 'Specialite',
@@ -47,7 +47,7 @@ export const dictionnaireEAM = {
   eam_specialite_2025_06_sujet0v2_3: {
     annee: '2025',
     lieu: 'Spécialité sujet0v2',
-    mois: '06',
+    mois: 'Juin',
     numeroInitial: '3',
     typeExercice: 'eam',
     filiere: 'Specialite',
@@ -56,7 +56,7 @@ export const dictionnaireEAM = {
   eam_specifique_2025_06_sujet0v1_1: {
     annee: '2025',
     lieu: 'Tronc commun sujet0v1',
-    mois: '06',
+    mois: 'Juin',
     numeroInitial: '1',
     typeExercice: 'eam',
     filiere: 'Specifique',
@@ -65,7 +65,7 @@ export const dictionnaireEAM = {
   eam_specifique_2025_06_sujet0v1_2: {
     annee: '2025',
     lieu: 'Tronc commun sujet0v1',
-    mois: '06',
+    mois: 'Juin',
     numeroInitial: '2',
     typeExercice: 'eam',
     filiere: 'Specifique',
@@ -74,7 +74,7 @@ export const dictionnaireEAM = {
   eam_specifique_2025_06_sujet0v1_3: {
     annee: '2025',
     lieu: 'Tronc commun sujet0v1',
-    mois: '06',
+    mois: 'Juin',
     numeroInitial: '3',
     typeExercice: 'eam',
     filiere: 'Specifique',
@@ -83,7 +83,7 @@ export const dictionnaireEAM = {
   eam_specifique_2025_06_sujet0v1_4: {
     annee: '2025',
     lieu: 'Tronc commun sujet0v1',
-    mois: '06',
+    mois: 'Juin',
     numeroInitial: '4',
     typeExercice: 'eam',
     filiere: 'Specifique',
@@ -92,7 +92,7 @@ export const dictionnaireEAM = {
   eam_specifique_2025_06_sujet0v2_1: {
     annee: '2025',
     lieu: 'Tronc commun sujet0v2',
-    mois: '06',
+    mois: 'Juin',
     numeroInitial: '1',
     typeExercice: 'eam',
     filiere: 'Specifique',
@@ -101,7 +101,7 @@ export const dictionnaireEAM = {
   eam_specifique_2025_06_sujet0v2_2: {
     annee: '2025',
     lieu: 'Tronc commun sujet0v2',
-    mois: '06',
+    mois: 'Juin',
     numeroInitial: '2',
     typeExercice: 'eam',
     filiere: 'Specifique',
@@ -110,7 +110,7 @@ export const dictionnaireEAM = {
   eam_specifique_2025_06_sujet0v2_3: {
     annee: '2025',
     lieu: 'Tronc commun sujet0v2',
-    mois: '06',
+    mois: 'Juin',
     numeroInitial: '3',
     typeExercice: 'eam',
     filiere: 'Specifique',
@@ -119,7 +119,7 @@ export const dictionnaireEAM = {
   eam_specifique_2025_06_sujet0v3_1: {
     annee: '2025',
     lieu: 'Tronc commun sujet0v3',
-    mois: '06',
+    mois: 'Juin',
     numeroInitial: '1',
     typeExercice: 'eam',
     filiere: 'Specifique',
@@ -128,7 +128,7 @@ export const dictionnaireEAM = {
   eam_specifique_2025_06_sujet0v3_2: {
     annee: '2025',
     lieu: 'Tronc commun sujet0v3',
-    mois: '06',
+    mois: 'Juin',
     numeroInitial: '2',
     typeExercice: 'eam',
     filiere: 'Specifique',
@@ -137,7 +137,7 @@ export const dictionnaireEAM = {
   eam_specifique_2025_06_sujet0v3_3: {
     annee: '2025',
     lieu: 'Tronc commun sujet0v3',
-    mois: '06',
+    mois: 'Juin',
     numeroInitial: '3',
     typeExercice: 'eam',
     filiere: 'Specifique',
@@ -146,7 +146,7 @@ export const dictionnaireEAM = {
   eam_specifique_2025_06_sujet0v3_4: {
     annee: '2025',
     lieu: 'Tronc commun sujet0v3',
-    mois: '06',
+    mois: 'Juin',
     numeroInitial: '4',
     typeExercice: 'eam',
     filiere: 'Specifique',
@@ -155,7 +155,7 @@ export const dictionnaireEAM = {
   eam_technologique_2025_06_sujet0v1_1: {
     annee: '2025',
     lieu: 'Technologique sujet0v1',
-    mois: '06',
+    mois: 'Juin',
     numeroInitial: '1',
     typeExercice: 'eam',
     filiere: 'Technologique',
@@ -164,7 +164,7 @@ export const dictionnaireEAM = {
   eam_technologique_2025_06_sujet0v1_2: {
     annee: '2025',
     lieu: 'Technologique sujet0v1',
-    mois: '06',
+    mois: 'Juin',
     numeroInitial: '2',
     typeExercice: 'eam',
     filiere: 'Technologique',
@@ -173,7 +173,7 @@ export const dictionnaireEAM = {
   eam_technologique_2025_06_sujet0v1_3: {
     annee: '2025',
     lieu: 'Technologique sujet0v1',
-    mois: '06',
+    mois: 'Juin',
     numeroInitial: '3',
     typeExercice: 'eam',
     filiere: 'Technologique',
@@ -182,7 +182,7 @@ export const dictionnaireEAM = {
   eam_technologique_2025_06_sujet0v1_4: {
     annee: '2025',
     lieu: 'Technologique sujet0v1',
-    mois: '06',
+    mois: 'Juin',
     numeroInitial: '4',
     typeExercice: 'eam',
     filiere: 'Technologique',
@@ -191,7 +191,7 @@ export const dictionnaireEAM = {
   eam_technologique_2025_06_sujet0v2_1: {
     annee: '2025',
     lieu: 'Technologique sujet0v2',
-    mois: '06',
+    mois: 'Juin',
     numeroInitial: '1',
     typeExercice: 'eam',
     filiere: 'Technologique',
@@ -200,7 +200,7 @@ export const dictionnaireEAM = {
   eam_technologique_2025_06_sujet0v2_2: {
     annee: '2025',
     lieu: 'Technologique sujet0v2',
-    mois: '06',
+    mois: 'Juin',
     numeroInitial: '2',
     typeExercice: 'eam',
     filiere: 'Technologique',
@@ -209,7 +209,7 @@ export const dictionnaireEAM = {
   eam_technologique_2025_06_sujet0v2_3: {
     annee: '2025',
     lieu: 'Technologique sujet0v2',
-    mois: '06',
+    mois: 'Juin',
     numeroInitial: '3',
     typeExercice: 'eam',
     filiere: 'Technologique',
@@ -218,7 +218,7 @@ export const dictionnaireEAM = {
   eam_technologique_2025_06_sujet0v2_4: {
     annee: '2025',
     lieu: 'Technologique sujet0v2',
-    mois: '06',
+    mois: 'Juin',
     numeroInitial: '4',
     typeExercice: 'eam',
     filiere: 'Technologique',
