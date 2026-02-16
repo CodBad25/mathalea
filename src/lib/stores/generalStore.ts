@@ -130,6 +130,7 @@ export function updateGlobalOptionsInURL(url: URL) {
       es += options.oneShot ? '1' : '0'
       es += options.twoColumns ? '1' : '0'
       es += options.isTitleDisplayed ? '1' : '0'
+      es += options.isReferenceDisplayed ? '1' : '0'
       url.searchParams.append('es', es)
     }
     if (options.done) {

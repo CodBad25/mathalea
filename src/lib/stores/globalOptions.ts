@@ -28,6 +28,7 @@ export const globalOptions = writable<InterfaceGlobalOptions>({
   isSolutionAccessible: true,
   isInteractiveFree: true,
   isTitleDisplayed: true,
+  isReferenceDisplayed: true,
   oneShot: false,
   twoColumns: false,
   beta: false,

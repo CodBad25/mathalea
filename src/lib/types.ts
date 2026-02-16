@@ -42,6 +42,7 @@ export interface InterfaceGlobalOptions {
   setInteractive?: string
   isSolutionAccessible?: boolean
   isTitleDisplayed?: boolean
+  isReferenceDisplayed?: boolean
   isInteractiveFree?: boolean
   oneShot?: boolean
   recorder?: 'capytale' | 'labomep' | 'moodle' | 'anki' | 'flowmath'

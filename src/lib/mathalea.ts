@@ -652,6 +652,7 @@ export function mathaleaUpdateExercicesParamsFromUrl(
   let oneShot = false
   let twoColumns = false
   let isTitleDisplayed = true
+  let isReferenceDisplayed = true
   let beta = false
   let url: URL
   let canDuration = 540
@@ -830,8 +831,8 @@ export function mathaleaUpdateExercicesParamsFromUrl(
 
   /**
    * es permet de résumer les réglages de la vue élève
-   * Il est de la forme 210110
-   * Avec un caractère par réglage presMode|setInteractive|isSolutionAccessible|isInteractiveFree|oneShot|twoColumns|isTitleDisplayed
+   * Il est de la forme 21011010
+   * Avec un caractère par réglage presMode|setInteractive|isSolutionAccessible|isInteractiveFree|oneShot|twoColumns|isTitleDisplayed|isReferenceDisplayed
    */
   if (es && es.length === 6) {
     presMode = presModeId[parseInt(es.charAt(0))]
@@ -848,6 +849,15 @@ export function mathaleaUpdateExercicesParamsFromUrl(
     oneShot = es.charAt(4) === '1'
     twoColumns = es.charAt(5) === '1'
     isTitleDisplayed = es.charAt(6) === '1'
+  } else if (es && es.length === 8) {
+    presMode = presModeId[parseInt(es.charAt(0))]
+    setInteractive = es.charAt(1)
+    isSolutionAccessible = es.charAt(2) === '1'
+    isInteractiveFree = es.charAt(3) === '1'
+    oneShot = es.charAt(4) === '1'
+    twoColumns = es.charAt(5) === '1'
+    isTitleDisplayed = es.charAt(6) === '1'
+    isReferenceDisplayed = es.charAt(7) === '1'
   }
   v = v ?? ''
   return {
@@ -873,6 +883,7 @@ export function mathaleaUpdateExercicesParamsFromUrl(
     oneShot,
     twoColumns,
     isTitleDisplayed,
+    isReferenceDisplayed,
     recorder,
     done,
     beta,

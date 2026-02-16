@@ -100,6 +100,10 @@ async function toolSetActivityParams({
     if (newGlobalOptions.isTitleDisplayed === undefined) {
       l.isTitleDisplayed = true
     }
+    // On conserve la valeur de isReferenceDisplayed si elle a été définie par l'enseignant
+    if (newGlobalOptions.isReferenceDisplayed === undefined) {
+      l.isReferenceDisplayed = true
+    }
     if (l.v === 'eleve') {
       l.isInteractiveFree = false
     }
