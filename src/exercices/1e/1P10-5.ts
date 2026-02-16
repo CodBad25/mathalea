@@ -106,111 +106,105 @@ export default class ProlemesE3CProbabiltesCond extends Exercice {
         textePAinterB;
       i < this.nbQuestions && cpt < 50;
     ) {
-      listeEV =
-        listeTypeDeQuestions[i] === 1
-          ? [
-              ['M', 'T'],
-              ['A', 'S'],
-              ['M', 'S'],
-              ['A', 'T'],
-            ]
-          : listeTypeDeQuestions[i] === 2
-            ? [
-                ['S', 'D'],
-                ['S', 'R'],
-                ['A', 'T'],
-                ['K', 'L'],
-              ]
-            : listeTypeDeQuestions[i] === 3
-              ? [
-                  ['C', 'G'],
-                  ['F', 'G'],
-                  ['E', 'G'],
-                ]
-              : listeTypeDeQuestions[i] === 4
-                ? [
-                    ['F', 'A'],
-                    ['L', 'A'],
-                    ['F', 'C'],
-                  ]
-                : listeTypeDeQuestions[i] === 5
-                  ? [
-                      ['A', 'V'],
-                      ['A', 'G'],
-                      ['I', 'G'],
-                    ]
-                  : listeTypeDeQuestions[i] === 6
-                    ? [
-                        ['C', 'E'],
-                        ['C', 'F'],
-                        ['S', 'E'],
-                      ]
-                    : listeTypeDeQuestions[i] === 7
-                      ? [
-                          ['M', 'S'],
-                          ['T', 'S'],
-                          ['L', 'S'],
-                        ]
-                      : [
-                          ['C', 'G'],
-                          ['F', 'G'],
-                          ['E', 'G'],
-                        ]
-      ev = choice(listeEV)
       P = prenomM()
       u1 = randint(3, 7)
       u2 = randint(1, 9, u1)
       a = randint(1, 8)
-      pA =
-        listeTypeDeQuestions[i] === 1
-          ? randint(3, 9) / 1000
-          : listeTypeDeQuestions[i] === 2
-            ? randint(60, 85) / 100
-            : listeTypeDeQuestions[i] === 3
-              ? randint(20, 40) / 100
-              : listeTypeDeQuestions[i] === 4
-                ? randint(51, 65) / 100
-                : listeTypeDeQuestions[i] === 5
-                  ? randint(2, 4) / 10
-                  : listeTypeDeQuestions[i] === 6
-                    ? randint(2, 4) / 10
-                    : listeTypeDeQuestions[i] === 7
-                      ? a / 500
-                      : randint(2, 4) / 10
+
+      // Initialisation des paramètres selon le type de question
+      switch (listeTypeDeQuestions[i]) {
+        case 1: {
+          // Maladie/Vaccin
+          listeEV = [
+            ['M', 'T'],
+            ['A', 'S'],
+            ['M', 'S'],
+            ['A', 'T'],
+          ]
+          pA = randint(3, 9) / 1000
+          pBsachantA = randint(91, 95) / 100
+          pBsachantAb = randint(1, 4) / 100
+          break
+        }
+        case 2: {
+          // Sandwich/dessert
+          listeEV = [
+            ['S', 'D'],
+            ['S', 'R'],
+            ['A', 'T'],
+            ['K', 'L'],
+          ]
+          pA = randint(60, 85) / 100
+          pBsachantA = randint(20, 35) / 100
+          pBsachantAb = randint(52, 65) / 100
+          break
+        }
+        case 3: {
+          // Jeu de fléchettes
+          listeEV = [
+            ['C', 'G'],
+            ['F', 'G'],
+            ['E', 'G'],
+          ]
+          pA = randint(20, 40) / 100
+          pBsachantA = u1 / 10
+          pBsachantAb = u2 / 10
+          break
+        }
+        case 4: {
+          // Vacances au camping
+          listeEV = [
+            ['F', 'A'],
+            ['L', 'A'],
+            ['F', 'C'],
+          ]
+          pA = randint(51, 65) / 100
+          pBsachantA = randint(36, 45) / 100
+          pBsachantAb = randint(25, 35) / 100
+          break
+        }
+        case 5: {
+          // L'agence de voyage
+          listeEV = [
+            ['A', 'V'],
+            ['A', 'G'],
+            ['I', 'G'],
+          ]
+          pA = randint(2, 4) / 10
+          pBsachantA = randint(36, 45) / 100
+          pBsachantAb = randint(60, 70) / 100
+          break
+        }
+        case 6: {
+          // Le salon de coiffure
+          listeEV = [
+            ['C', 'E'],
+            ['C', 'F'],
+            ['S', 'E'],
+          ]
+          pA = randint(2, 4) / 10
+          pBsachantA = randint(40, 60) / 100
+          pBsachantAb = randint(23, 45) / 100
+          break
+        }
+        case 7:
+        default: {
+          // Le portique de sécurité
+          listeEV = [
+            ['M', 'S'],
+            ['T', 'S'],
+            ['L', 'S'],
+          ]
+          pA = a / 500
+          pBsachantA = randint(95, 99) / 100
+          pBsachantAb = randint(6, 10) / 100
+          break
+        }
+      }
+
+      ev = choice(listeEV)
       pAb = 1 - pA
-      pBsachantA =
-        listeTypeDeQuestions[i] === 1
-          ? randint(91, 95) / 100
-          : listeTypeDeQuestions[i] === 2
-            ? randint(20, 35) / 100
-            : listeTypeDeQuestions[i] === 3
-              ? u1 / 10
-              : listeTypeDeQuestions[i] === 4
-                ? randint(36, 45) / 100
-                : listeTypeDeQuestions[i] === 5
-                  ? randint(36, 45) / 100
-                  : listeTypeDeQuestions[i] === 6
-                    ? randint(40, 60) / 100
-                    : listeTypeDeQuestions[i] === 7
-                      ? randint(95, 99) / 100
-                      : randint(2, 4) / 10
       pBbsachantA = 1 - pBsachantA
-      pBsachantAb =
-        listeTypeDeQuestions[i] === 1
-          ? randint(1, 4) / 100
-          : listeTypeDeQuestions[i] === 2
-            ? randint(52, 65) / 100
-            : listeTypeDeQuestions[i] === 3
-              ? u2 / 10
-              : listeTypeDeQuestions[i] === 4
-                ? randint(25, 35) / 100
-                : listeTypeDeQuestions[i] === 5
-                  ? randint(60, 70) / 100
-                  : listeTypeDeQuestions[i] === 6
-                    ? randint(23, 45) / 100
-                    : listeTypeDeQuestions[i] === 7
-                      ? randint(6, 10) / 100
-                      : randint(2, 4) / 10
       pBbsachantAb = 1 - pBsachantAb
       pAinterB = pA * pBsachantA
       pAinterBb = pA * pBbsachantA
