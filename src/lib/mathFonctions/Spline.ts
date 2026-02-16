@@ -768,15 +768,41 @@ export class Spline {
   get splineDerivee() {
     const noeudsDerivee /** Array<{x: number, y:number, deriveeGauche:number, deriveeDroit:number, isVisible:boolean}> */ =
       []
-    for (const noeud of this.noeuds) {
-      noeudsDerivee.push({
-        x: noeud.x,
-        y: noeud.deriveeGauche,
-        deriveeGauche: 0,
-        deriveeDroit: 0,
-        isVisible: noeud.isVisible,
-      })
+    const derivees = this.derivees
+    const deriveesSecondes = derivees.map((derivee) => derivee.derivee())
+    console.log('derivees secondes : ', deriveesSecondes)
+
+    for (let i = 0; i < this.noeuds.length - 1; i++) {
+      const noeud = this.noeuds[i]
+      if (i > 0 && i < this.noeuds.length - 2) {
+        noeudsDerivee.push({
+          x: noeud.x,
+          y: noeud.deriveeGauche ?? noeud.deriveeDroit, // on prend la dérivée gauche si elle existe, sinon la dérivée droite
+          deriveeGauche: deriveesSecondes[i - 1].image(noeud.x),
+          deriveeDroit: deriveesSecondes[i].image(noeud.x),
+          isVisible: noeud.isVisible,
+        })
+      } else {
+        noeudsDerivee.push({
+          x: noeud.x,
+          y: noeud.deriveeDroit,
+          deriveeGauche: deriveesSecondes[i].image(noeud.x),
+          deriveeDroit: deriveesSecondes[i].image(noeud.x),
+          isVisible: noeud.isVisible,
+        })
+      }
     }
+    noeudsDerivee.push({
+      x: this.noeuds[this.noeuds.length - 1].x,
+      y: this.noeuds[this.noeuds.length - 1].deriveeGauche,
+      deriveeGauche: deriveesSecondes[deriveesSecondes.length - 1].image(
+        this.noeuds[this.noeuds.length - 1].x,
+      ),
+      deriveeDroit: deriveesSecondes[deriveesSecondes.length - 1].image(
+        this.noeuds[this.noeuds.length - 1].x,
+      ),
+      isVisible: this.noeuds[this.noeuds.length - 1].isVisible,
+    })
     return new Spline(noeudsDerivee)
   }
 

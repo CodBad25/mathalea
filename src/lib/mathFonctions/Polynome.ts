@@ -137,13 +137,39 @@ export function chercheMinMaxLocal({
     }
   } else if (derivee.deg === 1) {
     // derivée affine, monotone croissante ou décroissante selon le signe de derivee[i].monomes[1]
-    const a = derivee.monomes[1]
-    if (Number(a) > 0) {
-      maxLocal = yD
-      minLocal = yG
+    // Il y a un max ou un min si la dérivée s'annule dans l'intervalle
+    const a = Number(derivee.monomes[1])
+    if (a > 0) {
+      if (Number(derivee.monomes[0]) + a * xG > 0) {
+        // la dérivée s'annule à gauche de x[i], la fonction est croissante sur l'intervalle
+        maxLocal = yD
+        minLocal = yG
+      } else if (Number(derivee.monomes[0]) + a * xD < 0) {
+        // la dérivée s'annule à droite de x[i+1], la fonction est décroissante sur l'intervalle
+        maxLocal = yG
+        minLocal = yD
+      } else {
+        // la dérivée s'annule dans l'intervalle, il y a un extremum local
+        // On est dans le cas d'une dérivée négative en xG et positive en xD, donc un minimum local
+        maxLocal = Math.max(yG, yD)
+        minLocal = poly.image(-Number(derivee.monomes[0]) / a)
+      }
     } else {
-      maxLocal = yG
-      minLocal = yD
+      // a<0
+      if (Number(derivee.monomes[0]) + a * xG < 0) {
+        // la dérivée s'annule à gauche de x[i], la fonction est décroissante sur l'intervalle
+        maxLocal = yG
+        minLocal = yD
+      } else if (Number(derivee.monomes[0]) + a * xD > 0) {
+        // la dérivée s'annule à droite de x[i+1], la fonction est croissante sur l'intervalle
+        maxLocal = yD
+        minLocal = yG
+      } else {
+        // la dérivée s'annule dans l'intervalle, il y a un extremum local
+        // On est dans le cas d'une dérivée positive en xG et négative en xD, donc un maximum local
+        maxLocal = poly.image(-Number(derivee.monomes[0]) / a)
+        minLocal = Math.min(yG, yD)
+      }
     }
   } else {
     // constante !
