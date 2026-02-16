@@ -183,7 +183,7 @@ async function testEleveView(page: Page) {
   await page.locator('#presentation0').click()
   await page.locator('#Interactif1').first().click()
   const page1Promise = page.waitForEvent('popup')
-  page.getByRole('button', { name: 'Visualiser' }).click()
+  await page.getByRole('button', { name: 'Visualiser' }).click()
   const page1 = await page1Promise
   log('#champTexteEx0Q0')
   await page1.waitForSelector('#champTexteEx0Q0', { timeout: 50000 })
