@@ -5,6 +5,7 @@
   import { fixeBordures } from '../lib/2d/fixeBordures'
   import { repere } from '../lib/2d/reperes'
   import { spline, trieNoeuds } from '../lib/mathFonctions/Spline'
+  import { context } from '../modules/context'
   import { mathalea2d } from '../modules/mathalea2d'
 
   export const titre = 'Interpolation par splines (avec formulaire)'
@@ -39,9 +40,35 @@
       const f = spline(noeuds)
       const { xMin, xMax, yMin, yMax } = f.trouveMaxes()
       const r = repere({ xMin, xMax, yMin, yMax })
-      const c = f.courbe({ repere: r, ajouteNoeuds: true })
+      const c = f.courbe({
+        repere: r,
+        ajouteNoeuds: true,
+        color: 'blue',
+        epaisseur: 2,
+      })
       const objets = [r, c]
-      contenu = mathalea2d(Object.assign({}, fixeBordures(objets)), objets)
+      const fPrime = f.splineDerivee
+      const { xMin: xMinPrime, xMax: xMaxPrime } = fPrime.trouveMaxes()
+      const { yMin: yMinPrime, yMax: yMaxPrime } = fPrime.amplitude()
+      const rPrime = repere({
+        xMin: xMinPrime,
+        xMax: xMaxPrime,
+        yMin: yMinPrime,
+        yMax: yMaxPrime,
+      })
+      const cPrime = fPrime.courbe({
+        repere: rPrime,
+        color: 'red',
+        epaisseur: 2,
+      })
+      const objetsPrime = [rPrime, cPrime]
+
+      contenu =
+        'Fonction<br>' +
+        mathalea2d(Object.assign({}, fixeBordures(objets)), objets)
+      contenu +=
+        'Dérivée<br>' +
+        mathalea2d(Object.assign({}, fixeBordures(objetsPrime)), objetsPrime)
     }
   }
 
@@ -68,6 +95,46 @@
     noeuds = noeuds
     navigator.clipboard.writeText(JSON.stringify(noeuds))
     alert('Noeuds copiés dans le presse-papier')
+  }
+
+  function exportLatex() {
+    context.isHtml = false
+    if (trieNoeuds(noeuds)) {
+      const f = spline(noeuds)
+      const { xMin, xMax, yMin, yMax } = f.trouveMaxes()
+      const r = repere({ xMin, xMax, yMin, yMax })
+      const c = f.courbe({
+        repere: r,
+        ajouteNoeuds: true,
+        color: 'blue',
+        epaisseur: 2,
+      })
+      const objets = [r, c]
+      const fPrime = f.splineDerivee
+      const { xMin: xMinPrime, xMax: xMaxPrime } = fPrime.trouveMaxes()
+      const { yMin: yMinPrime, yMax: yMaxPrime } = fPrime.amplitude()
+      console.log(yMin, yMax)
+      const rPrime = repere({
+        xMin: xMinPrime,
+        xMax: xMaxPrime,
+        yMin: yMinPrime,
+        yMax: yMaxPrime,
+      })
+      const cPrime = fPrime.courbe({
+        repere: rPrime,
+        color: 'red',
+        epaisseur: 2,
+      })
+      const objetsPrime = [rPrime, cPrime]
+      contenu = mathalea2d(Object.assign({}, fixeBordures(objets)), objets)
+      contenu += mathalea2d(
+        Object.assign({}, fixeBordures(objetsPrime)),
+        objetsPrime,
+      )
+    }
+    navigator.clipboard.writeText(contenu)
+    alert('LAtex collé dans le presse-papier')
+    context.isHtml = true
   }
 
   async function paste() {
@@ -101,6 +168,12 @@
       <div>
         <!-- eslint-disable-next-line svelte/no-at-html-tags -->
         {@html contenu}
+        <button
+          on:click={exportLatex}
+          class="mt-4 px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg border-2 border-blue-600 hover:bg-blue-600 hover:border-blue-700 transition-colors duration-200 shadow-md"
+        >
+          Export latex
+        </button>
       </div>
       <div class="my-10 grid grid-cols-5 gap-4 text-center">
         <div>x</div>
