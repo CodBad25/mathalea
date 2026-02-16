@@ -249,8 +249,8 @@ function cleanLatex(str: string): string {
 }
 
 function cleanMultiplyByOne(str: string): string {
-  if (!str.match(/(?<!\d)1([a-z])/)) return str // à priori, rien à nettoyer ici
-  return str.replace(/(?<!\d)1([a-z])/g, '$1')
+  if (!str.match(/(^|[^\d])1([a-z])/)) return str
+  return str.replace(/(^|[^\d])1([a-z])/g, '$1$2')
 }
 
 export function generateCleaner(
