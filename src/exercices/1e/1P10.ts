@@ -41,10 +41,10 @@ export const refs = {
  * @returns la chaine latex pour écrire la proba.
  * version arrondie au millième
  */
-function texProba(proba: number, rationnel: boolean) {
+function texProba(proba: number, rationnel: boolean, precision = 3) {
   return rationnel
-    ? fraction(arrondi(proba, 3)).toLatex().replace('frac', 'dfrac')
-    : number(arrondi(proba, 3)).toString().replace('.', '{,}')
+    ? fraction(arrondi(proba, precision)).toLatex().replace('frac', 'dfrac')
+    : number(arrondi(proba, precision)).toString().replace('.', '{,}')
 }
 export default class ProbabilitesConditionnelles extends Exercice {
   constructor() {
@@ -102,7 +102,6 @@ export default class ProbabilitesConditionnelles extends Exercice {
         texteCorr,
         cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       // Boucle principale où i+1 correspond au numéro de la question
       objets = []
@@ -111,9 +110,9 @@ export default class ProbabilitesConditionnelles extends Exercice {
       ) {
         case 'sujetE3C1':
           a = randint(30, 70) // p(A)
-          v = randint(30, 70) // P_T(V)
+          v = randint(30, 70, [a]) // P_T(V)
 
-          av = randint(20, a - 5) // P(A \cap V)
+          av = randint(20, a - 5, [a, v]) // P(A \cap V)
           // ici on économise des variables qui ne servent qu'une fois en les stockant dans un tableau. (Jean-Claude Lhote)
           O = point(0.6, 2.3)
           A = point(5, 5)
@@ -289,7 +288,7 @@ export default class ProbabilitesConditionnelles extends Exercice {
           texteCorr += `<br>et d'après la question $1: P_{A}(\\bar{V})=1-P_{A}(V)=1-${texFractionFromString(av, a)}=${texFractionFromString(a - av, a)}$.`
           k1 = (a - av) / a
           k2 = 1 - (av / 100 + ((1 - a / 100) * v) / 100)
-          texteCorr += `<br>Donc $P_{\\bar{V}}(A)=\\dfrac{${texProba(a / 100, this.sup)} \\times ${texFractionFromString(a - av, a)}}{${texProba(k2, this.sup)}} ${egalOuApprox(((a / 100) * k1) / k2, 3)}${texProba(((a / 100) * k1) / k2, false)}$.`
+          texteCorr += `<br>Donc $P_{\\bar{V}}(A)=\\dfrac{${texProba(a / 100, this.sup)} \\times ${texFractionFromString(a - av, a)}}{${texProba(k2, this.sup)}} ${egalOuApprox(((a / 100) * k1) / k2, 2)}${texProba(((a / 100) * k1) / k2, false, 2)}$.`
           texteCorr += `<br><br>${texteGras('4.')} On a vu que $P(\\bar{V})=1-${texProba(1 - k2, this.sup)}=${texProba(k2, this.sup)}$.`
           texteCorr +=
             '<br>Comme les deux événements sont indépendants, en les appelant $\\bar {V_1}$ et $\\bar{V_2}$, on a : $P(\\bar{V_1}\\cap\\bar{V_2})=P(\\bar{V_1})\\times P(\\bar{V_2})$'
