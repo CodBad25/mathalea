@@ -224,7 +224,8 @@ Enfin, ils estiment que $${texNombre(Pev2 * 100, 1)}\\,\\%$ des animaux contract
       texte = intro
       texte += liste
       texte += texte1
-      if (this.sup === 1) {
+      const choix = this.sup === 3 ? randint(1, 2) : this.sup
+      if (choix === 1) {
         calc1 = this.interactif
           ? ajouteChampTexteMathLive(
               this,
