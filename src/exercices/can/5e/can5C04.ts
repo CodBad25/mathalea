@@ -30,7 +30,7 @@ export default class TripleEtMoitie extends ExerciceSimple {
   nouvelleVersion() {
     const a = randint(3, 20)
     this.question = `Le triple d'un nombre vaut $${3 * a}$, combien vaut sa moitié ?`
-    this.correction = `Le nombre est $${a}$, sa moitié est ${texNombre(a / 2)}.`
+    this.correction = `Le nombre est $${a}$, sa moitié est $${texNombre(a / 2)}$.`
     this.correction += texteEnCouleur(`
     <br> Mentalement : <br>
     Si le triple du nombre est $${3 * a}$, ce nombre est : $${3 * a}\\div 3=${a}$.<br>
