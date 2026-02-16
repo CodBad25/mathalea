@@ -125,13 +125,17 @@ def newEntry(file:str,dicoType:str)->list:
             }},\n'''
         
         elif ('eam' in filename): # EE : Ici, on considère que c'est les EAM
-            print('toto',filename)
             print(filename.split('_'))
             numeroInitial = filename.split('_')[5]
-            lieu = locationName(filename.split('_')[4])
             annee = filename.split('_')[2]
             mois = filename.split('_')[3]
             filiere = filename.split('_')[1]
+            prefix_map = {
+                'specialite': 'Spécialité ',
+                'specifique': 'Spécifique '
+            }
+            prefix = prefix_map.get(filiere, '')
+            lieu = prefix + locationName(filename.split('_')[4])
             dicoType = 'eam'
             newLines = f'''  {filename}: {{                
                 annee: '{annee}',                
