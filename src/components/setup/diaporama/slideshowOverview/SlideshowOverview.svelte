@@ -43,23 +43,10 @@
   $: {
     const questionsNb =
       slideshow.selectedQuestionsNumber || slideshow.slides.length
-    const slidesCount = slideshow.slides.length
-    const rawOrder =
+    order =
       $globalOptions.order === undefined || $globalOptions.order.length === 0
         ? [...Array(questionsNb).keys()]
         : $globalOptions.order
-    // sanitized : supprimer les indices hors limites et les doublons pour éviter
-    // le rendu de la même correction plusieurs fois (ordre obsolète provenant de
-    // l'URL, de l'historique ou des cas limites de adjustQuestionsOrder).
-    const seen = new Set<number>()
-    const sanitized: number[] = []
-    for (const idx of rawOrder) {
-      if (idx >= 0 && idx < slidesCount && !seen.has(idx)) {
-        seen.add(idx)
-        sanitized.push(idx)
-      }
-    }
-    order = sanitized.length > 0 ? sanitized : [...Array(questionsNb).keys()]
   }
 
   let series: Serie[] = []
