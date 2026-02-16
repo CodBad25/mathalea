@@ -27,7 +27,7 @@ export const refs = {
   'fr-ch': [],
 }
 
-export default class nomExercice extends Exercice {
+export default class RepresentationParametrique extends Exercice {
   constructor() {
     super()
 
@@ -59,7 +59,7 @@ export default class nomExercice extends Exercice {
           i,
           '\\begin{cases}x=%{champ1} \\\\y= %{champ2}\\\\z= %{champ3}\\end{cases}',
         )
-      else texte += '.'
+      // else texte += '.'
       handleAnswers(this, i, {
         champ1: { value: `${rienSi1(xV)}t${ecritureAlgebrique(xA)}` },
         champ2: { value: `${rienSi1(yV)}t${ecritureAlgebrique(yA)}` },
