@@ -81,12 +81,17 @@
   let boutonInteractiviteUrlFlag = true
 
   let title: string
-  if ($globalOptions.isTitleDisplayed) {
-    title = exercise.id
-      ? `${exercise.id.replace('.js', '').replace('.ts', '')} - ${exercise.titre}`
-      : exercise.titre
+  const ref = exercise.id
+    ? exercise.id.replace('.js', '').replace('.ts', '')
+    : ''
+  if ($globalOptions.isTitleDisplayed && $globalOptions.isReferenceDisplayed) {
+    title = ref ? `${ref} - ${exercise.titre}` : exercise.titre
+  } else if ($globalOptions.isTitleDisplayed) {
+    title = exercise.titre
+  } else if ($globalOptions.isReferenceDisplayed) {
+    title = ref
   } else {
-    title = exercise.id || ''
+    title = ''
   }
   // Evènement indispensable pour pointCliquable par exemple
   const exercicesAffiches = new window.Event('exercicesAffiches', {

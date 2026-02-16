@@ -396,24 +396,6 @@
           <div
             class="pl-2 pb-2 font-bold text-coopmaths-struct-light dark:text-coopmathsdark-struct-light"
           >
-            Données
-          </div>
-          <div class="flex flex-row justify-start items-center px-4">
-            <ButtonToggleAlt
-              title={'Données différentes'}
-              bind:value={isDataRandom}
-              id={'config-eleve-donnes-differentes-toggle'}
-              explanations={[
-                "Chaque élève aura des pages avec des données différentes d'un autre élève.",
-                'Tous les élèves auront des pages identiques.',
-              ]}
-            />
-          </div>
-        </div>
-        <div class="pb-2">
-          <div
-            class="pl-2 pb-2 font-bold text-coopmaths-struct-light dark:text-coopmathsdark-struct-light"
-          >
             Affichage du titre de l'exercice
           </div>
           <div class="flex flex-row justify-start items-center px-4">
@@ -426,6 +408,43 @@
                 'Les titres sont masqués.',
               ]}
               on:toggle={handleSeed}
+            />
+          </div>
+        </div>
+        <div class="pb-2">
+          <div
+            class="pl-2 pb-2 font-bold text-coopmaths-struct-light dark:text-coopmathsdark-struct-light"
+          >
+            Affichage de la référence de l'exercice
+          </div>
+          <div class="flex flex-row justify-start items-center px-4">
+            <ButtonToggleAlt
+              title={"Référence de l'exercice"}
+              bind:value={$globalOptions.isReferenceDisplayed}
+              id={'config-eleve-reference-displayed-toggle'}
+              explanations={[
+                'Les références sont affichées',
+                'Les références sont masquées.',
+              ]}
+              on:toggle={handleSeed}
+            />
+          </div>
+        </div>
+        <div class="pb-2">
+          <div
+            class="pl-2 pb-2 font-bold text-coopmaths-struct-light dark:text-coopmathsdark-struct-light"
+          >
+            Données
+          </div>
+          <div class="flex flex-row justify-start items-center px-4">
+            <ButtonToggleAlt
+              title={'Données différentes'}
+              bind:value={isDataRandom}
+              id={'config-eleve-donnes-differentes-toggle'}
+              explanations={[
+                "Chaque élève aura des pages avec des données différentes d'un autre élève.",
+                'Tous les élèves auront des pages identiques.',
+              ]}
             />
           </div>
         </div>

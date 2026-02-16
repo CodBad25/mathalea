@@ -329,7 +329,7 @@
       $canOptions.isChoosen = true
     }
     url = url.replace('&v=can', '&recorder=' + $globalOptions.recorder)
-    // presMode|setInteractive|isSolutionAccessible|isInteractiveFree|oneShot|twoColumns|isTitleDisplayed
+    // presMode|setInteractive|isSolutionAccessible|isInteractiveFree|oneShot|twoColumns|isTitleDisplayed|isReferenceDisplayed
     if (url.includes('coopmaths.fr/alea') || url.includes('/mathalea.fr/')) {
       const options = mathaleaUpdateExercicesParamsFromUrl(url)
       if (options !== null) {

@@ -299,33 +299,48 @@ async function testEleveViewPre2(page: Page) {
   await page.getByRole('button', { name: 'Visualiser' }).click()
   const page1 = await page1Promise
   await inputAnswerById(page1, '0Q0', '10')
-  await page1.locator('#exercice0Q0 > div > div:last-child > button').click()
+  await page1
+    .locator('#exercice0Q0')
+    .getByRole('button', { name: 'Vérifier' })
+    .click()
   await page1
     .locator('#questionTitleID20 > div > .bg-coopmaths-warn')
     .isVisible()
   await page1.locator('#questionTitleID21').click()
   await page1.locator('#champTexteEx0Q1').focus()
   await page1.locator('.key--0').click()
-  await page1.locator('#exercice0Q1 > div > div:last-child > button').click()
+  await page1
+    .locator('#exercice0Q1')
+    .getByRole('button', { name: 'Vérifier' })
+    .click()
   await page1
     .locator('#questionTitleID21 > div > .bg-coopmaths-warn')
     .isVisible()
   await page1.locator('#questionTitleID22').click()
   await inputAnswerById(page1, '0Q2', 'x^2+11x+28')
-  await page1.locator('#exercice0Q2 > div > div:last-child > button').click()
+  await page1
+    .locator('#exercice0Q2')
+    .getByRole('button', { name: 'Vérifier' })
+    .click()
   await page1
     .locator('#questionTitleID22> div > .bg-coopmaths-warn')
     .isVisible()
   await page1.locator('#questionTitleID23').click()
   await inputAnswerById(page1, '0Q3', '22/7')
-  await page1.locator('#exercice0Q3 > div > div:last-child > button').click()
+  await page1
+    .locator('#exercice0Q3')
+    .getByRole('button', { name: 'Vérifier' })
+    .click()
   await page1
     .locator('#questionTitleID23 > div > .bg-coopmaths-warn')
     .isVisible()
   await page1.locator('#questionTitleID24').click()
   await page1.locator('#champTexteEx0Q4').focus()
   await page1.locator('.key--6').click()
-  await page1.locator('#exercice0Q4 > div > div:last-child > button').click()
+  await page1
+    .locator('#exercice0Q4')
+    .getByRole('button', { name: 'Vérifier' })
+    .click()
   await page1
     .locator('#questionTitleID24 > div > .bg-coopmaths-warn')
     .isVisible()
@@ -335,7 +350,10 @@ async function testEleveViewPre2(page: Page) {
   await page1.locator('.key--COMMA').click()
   await page1.locator('.key--0').click()
   await page1.locator('.key--6').click()
-  await page1.locator('#exercice0Q5 > div > div:last-child > button').click()
+  await page1
+    .locator('#exercice0Q5')
+    .getByRole('button', { name: 'Vérifier' })
+    .click()
   await page1
     .locator('#questionTitleID25 > div > .bg-coopmaths-warn')
     .isVisible()
@@ -343,7 +361,10 @@ async function testEleveViewPre2(page: Page) {
   await page1.locator('#champTexteEx0Q6').focus()
   await page1.locator('.key--1').click()
   await page1.locator('.key--2').click()
-  await page1.locator('#exercice0Q6 > div > div:last-child > button').click()
+  await page1
+    .locator('#exercice0Q6')
+    .getByRole('button', { name: 'Vérifier' })
+    .click()
   await page1
     .locator('#questionTitleID26 > div > .bg-coopmaths-warn')
     .isVisible()
@@ -351,14 +372,20 @@ async function testEleveViewPre2(page: Page) {
   await page1.locator('#champTexteEx0Q7').focus()
   await page1.locator('.key--1').click()
   await page1.locator('.key--0').click()
-  await page1.locator('#exercice0Q7 > div > div:last-child > button').click()
+  await page1
+    .locator('#exercice0Q7')
+    .getByRole('button', { name: 'Vérifier' })
+    .click()
   await page1
     .locator('#questionTitleID27 > div > .bg-coopmaths-warn')
     .isVisible()
   await page1.locator('#questionTitleID28').click()
   await page1.locator('#champTexteEx0Q8').focus()
   await page1.locator('.key--6').click()
-  await page1.locator('#exercice0Q8 > div > div:last-child > button').click()
+  await page1
+    .locator('#exercice0Q8')
+    .getByRole('button', { name: 'Vérifier' })
+    .click()
   await page1
     .locator('#questionTitleID28 > div > .bg-coopmaths-warn')
     .isVisible()
@@ -366,14 +393,20 @@ async function testEleveViewPre2(page: Page) {
   await page1.locator('#champTexteEx0Q9').focus()
   await page1.locator('.key--3').click()
   await page1.locator('.key--6').click()
-  await page1.locator('#exercice0Q9 > div > div:last-child > button').click()
+  await page1
+    .locator('#exercice0Q9')
+    .getByRole('button', { name: 'Vérifier' })
+    .click()
   await page1
     .locator('#questionTitleID29 > div > .bg-coopmaths-warn')
     .isVisible()
   await page1.locator('#questionTitleID210').click()
   await page1.locator('#champTexteEx0Q10').focus()
   await inputAnswerById(page1, '0Q10', '17/3')
-  await page1.locator('#exercice0Q10 > div > div:last-child > button').click()
+  await page1
+    .locator('#exercice0Q10')
+    .getByRole('button', { name: 'Vérifier' })
+    .click()
   await page1
     .locator('#questionTitleID210 > div > .bg-coopmaths-warn')
     .isVisible()
@@ -382,14 +415,20 @@ async function testEleveViewPre2(page: Page) {
   await page1.locator('.key--2').click()
   await page1.locator('.key--COMMA').click()
   await page1.locator('.key--6').click()
-  await page1.locator('#exercice0Q11 > div > div:last-child > button').click()
+  await page1
+    .locator('#exercice0Q11')
+    .getByRole('button', { name: 'Vérifier' })
+    .click()
   await page1
     .locator('#questionTitleID211 > div > .bg-coopmaths-warn')
     .isVisible()
   await page1.locator('#questionTitleID212').click()
   await page1.locator('#champTexteEx0Q12').focus()
   await page1.locator('.key--6').click()
-  await page1.locator('#exercice0Q12 > div > div:last-child > button').click()
+  await page1
+    .locator('#exercice0Q12')
+    .getByRole('button', { name: 'Vérifier' })
+    .click()
   await page1
     .locator('#questionTitleID212 > div > .bg-coopmaths-warn')
     .isVisible()
@@ -401,7 +440,10 @@ async function testEleveViewPre2(page: Page) {
   } else {
     await page1.locator('#checkEx0Q13R1').click()
   }
-  await page1.locator('#exercice0Q13 > div > div:last-child > button').click()
+  await page1
+    .locator('#exercice0Q13')
+    .getByRole('button', { name: 'Vérifier' })
+    .click()
   await page1
     .locator('#questionTitleID213 > div > .bg-coopmaths-warn')
     .isVisible()
@@ -412,28 +454,40 @@ async function testEleveViewPre2(page: Page) {
   await page1.locator('.key--0').click()
   await page1.locator('.key--COMMA').click()
   await page1.locator('.key--1').click()
-  await page1.locator('#exercice0Q14 > div > div:last-child > button').click()
+  await page1
+    .locator('#exercice0Q14')
+    .getByRole('button', { name: 'Vérifier' })
+    .click()
   await page1
     .locator('#questionTitleID214 > div > .bg-coopmaths-warn')
     .isVisible()
   await page1.locator('#questionTitleID215').click()
   await page1.locator('#champTexteEx0Q15').focus()
   await page1.locator('.key--4').click()
-  await page1.locator('#exercice0Q15 > div > div:last-child > button').click()
+  await page1
+    .locator('#exercice0Q15')
+    .getByRole('button', { name: 'Vérifier' })
+    .click()
   await page1
     .locator('#questionTitleID215 > div > .bg-coopmaths-warn')
     .isVisible()
   await page1.locator('#questionTitleID216').click()
   await page1.locator('#champTexteEx0Q16').focus()
   await inputAnswerById(page1, '0Q16', '3/4')
-  await page1.locator('#exercice0Q16 > div > div:last-child > button').click()
+  await page1
+    .locator('#exercice0Q16')
+    .getByRole('button', { name: 'Vérifier' })
+    .click()
   await page1
     .locator('#questionTitleID216 > div > .bg-coopmaths-warn')
     .isVisible()
   await page1.locator('#questionTitleID217').click()
   await page1.locator('#champTexteEx0Q17').focus()
   await inputAnswerById(page1, '0Q17', '5,4 * 10^4')
-  await page1.locator('#exercice0Q17 > div > div:last-child > button').click()
+  await page1
+    .locator('#exercice0Q17')
+    .getByRole('button', { name: 'Vérifier' })
+    .click()
   await page1
     .locator('#questionTitleID217 > div > .bg-coopmaths-warn')
     .isVisible()
@@ -441,83 +495,119 @@ async function testEleveViewPre2(page: Page) {
   await page1.locator('#champTexteEx0Q18').focus()
   await page1.locator('.key--1').click()
   await page1.locator('.key--2').click()
-  await page1.locator('#exercice0Q18 > div > div:last-child > button').click()
+  await page1
+    .locator('#exercice0Q18')
+    .getByRole('button', { name: 'Vérifier' })
+    .click()
   await page1
     .locator('#questionTitleID218 > div > .bg-coopmaths-warn')
     .isVisible()
   await page1.locator('#questionTitleID219').click()
   await page1.locator('#champTexteEx0Q19').focus()
   await inputAnswerById(page1, '0Q19', '-16')
-  await page1.locator('#exercice0Q19 > div > div:last-child > button').click()
+  await page1
+    .locator('#exercice0Q19')
+    .getByRole('button', { name: 'Vérifier' })
+    .click()
   await page1
     .locator('#questionTitleID219 > div > .bg-coopmaths-warn')
     .isVisible()
   await page1.locator('#questionTitleID220').click()
   await page1.locator('#champTexteEx0Q20').focus()
   await inputAnswerById(page1, '0Q20', '5/2')
-  await page1.locator('#exercice0Q20 > div > div:last-child > button').click()
+  await page1
+    .locator('#exercice0Q20')
+    .getByRole('button', { name: 'Vérifier' })
+    .click()
   await page1
     .locator('#questionTitleID220 > div > .bg-coopmaths-warn')
     .isVisible()
   await page1.locator('#questionTitleID221').click()
   await page1.locator('#champTexteEx0Q21').focus()
   await inputAnswerById(page1, '0Q21', '1/2')
-  await page1.locator('#exercice0Q21 > div > div:last-child > button').click()
+  await page1
+    .locator('#exercice0Q21')
+    .getByRole('button', { name: 'Vérifier' })
+    .click()
   await page1
     .locator('#questionTitleID221 > div > .bg-coopmaths-warn')
     .isVisible()
   await page1.locator('#questionTitleID222').click()
   await page1.locator('#champTexteEx0Q22').focus()
   await inputAnswerById(page1, '0Q22', '-2')
-  await page1.locator('#exercice0Q22 > div > div:last-child > button').click()
+  await page1
+    .locator('#exercice0Q22')
+    .getByRole('button', { name: 'Vérifier' })
+    .click()
   await page1
     .locator('#questionTitleID222 > div > .bg-coopmaths-warn')
     .isVisible()
   await page1.locator('#questionTitleID223').click()
   await page1.locator('#champTexteEx0Q23').focus()
   await inputAnswerById(page1, '0Q23', '5;15')
-  await page1.locator('#exercice0Q23 > div > div:last-child > button').click()
+  await page1
+    .locator('#exercice0Q23')
+    .getByRole('button', { name: 'Vérifier' })
+    .click()
   await page1
     .locator('#questionTitleID223 > div > .bg-coopmaths-warn')
     .isVisible()
   await page1.locator('#questionTitleID224').click()
   await page1.locator('#champTexteEx0Q24').focus()
   await inputAnswerById(page1, '0Q24', 'x^2-8x+16')
-  await page1.locator('#exercice0Q24 > div > div:last-child > button').click()
+  await page1
+    .locator('#exercice0Q24')
+    .getByRole('button', { name: 'Vérifier' })
+    .click()
   await page1
     .locator('#questionTitleID224 > div > .bg-coopmaths-warn')
     .isVisible()
   await page1.locator('#questionTitleID225').click()
   await page1.locator('#champTexteEx0Q25').focus()
   await inputAnswerById(page1, '0Q25', '(x-5)(x+5)')
-  await page1.locator('#exercice0Q25 > div > div:last-child > button').click()
+  await page1
+    .locator('#exercice0Q25')
+    .getByRole('button', { name: 'Vérifier' })
+    .click()
   await page1
     .locator('#questionTitleID225 > div > .bg-coopmaths-warn')
     .isVisible()
   await page1.locator('#questionTitleID226').click()
   await inputAnswerById(page1, '0Q26', '19/31')
-  await page1.locator('#exercice0Q26 > div > div:last-child > button').click()
+  await page1
+    .locator('#exercice0Q26')
+    .getByRole('button', { name: 'Vérifier' })
+    .click()
   await page1
     .locator('#questionTitleID226 > div > .bg-coopmaths-warn')
     .isVisible()
   await page1.locator('#questionTitleID227').click()
   await page1.locator('#champTexteEx0Q27').focus()
   await page1.locator('.key--2').click()
-  await page1.locator('#exercice0Q27 > div > div:last-child > button').click()
+  await page1
+    .locator('#exercice0Q27')
+    .getByRole('button', { name: 'Vérifier' })
+    .click()
   await page1
     .locator('#questionTitleID227 > div > .bg-coopmaths-warn')
     .isVisible()
   await page1.locator('#questionTitleID228').click()
   await page1.locator('#champTexteEx0Q28').focus()
   await page1.locator('.key--3').click()
-  await page1.locator('#exercice0Q28 > div > div:last-child > button').click()
+  await page1
+    .locator('#exercice0Q28')
+    .getByRole('button', { name: 'Vérifier' })
+    .click()
   await page1
     .locator('#questionTitleID228 > div > .bg-coopmaths-warn')
     .isVisible()
   await page1.locator('#questionTitleID229').click()
   await page1.locator('#champTexteEx0Q29').focus()
   await inputAnswerById(page1, '0Q29', '[-5;2]')
-  await page1.locator('#exercice0Q29 > div > div:last-child > button').click()
+  await page1
+    .locator('#exercice0Q29')
+    .getByRole('button', { name: 'Vérifier' })
+    .click()
   await page1
     .locator('#questionTitleID229 > div > .bg-coopmaths-warn')
     .isVisible()
