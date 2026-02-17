@@ -522,6 +522,18 @@ describe('fonctionComparaison', () => {
       exclusifFactorisation: true,
     })
     expect(result.isOk).toBe(false)
+    result = fonctionComparaison('3(x+3)(x+2)', '(3x+9)(x+2)', {
+      exclusifFactorisation: true,
+    })
+    expect(result.isOk).toBe(false)
+    result = fonctionComparaison('3(x^2+3)', '(3x^2+9)', {
+      exclusifFactorisation: true,
+    })
+    expect(result.isOk).toBe(false)
+    result = fonctionComparaison('9(x^2-2)', '(9-\\sqrt{18}x)(9+\\sqrt{18}x)', {
+      exclusifFactorisation: true,
+    })
+    expect(result.isOk).toBe(false)
   })
 
   it("Vérifie le fonctionnement de l'option nbFacteursIdentiquesFactorisation.", () => {
