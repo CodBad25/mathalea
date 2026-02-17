@@ -16,10 +16,14 @@ export const uuid = '2cb9a'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const dateDePublication = '20/02/2025'
+export const dateDeModificationImportante = '15/02/2026' // Ajout d'une option pour les quotients
 export const refs = {
   'fr-fr': ['2N41-9', 'BP2AutoI2'],
   'fr-ch': ['1mCN-13'],
 }
+
+const ecritureQuotient = (num: string, den: string, fractionnaire: boolean) =>
+  fractionnaire ? `\\dfrac{${num}}{${den}}` : `${num}\\div ${den}`
 export default class CalculFractionLitteral extends Exercice {
   constructor() {
     super()
@@ -38,6 +42,11 @@ export default class CalculFractionLitteral extends Exercice {
         '5 : Mélange',
       ].join('\n'),
     ]
+    this.besoinFormulaire2CaseACocher = [
+      'Écriture fractionnaire des quotients',
+      false,
+    ]
+    this.sup2 = false
   }
 
   nouvelleVersion() {
@@ -261,9 +270,9 @@ ${choix ? `\\dfrac{${v1}}{${a}}\\times \\dfrac{${v1}}{${b}}` : `\\dfrac{${v1}}{$
 
             if (Question === 1) {
               const a = randint(2, 10)
-              texte = `${choix ? `$${v1}\\div \\dfrac{${v2}}{${a}}$` : `$ \\dfrac{${v2}}{${a}} \\div ${v1}$`}`
+              texte = `${choix ? `$${ecritureQuotient(v1, `\\dfrac{${v2}}{${a}}`, this.sup2)}$` : `$${ecritureQuotient(`\\dfrac{${v2}}{${a}}`, v1, this.sup2)}$`}`
               texteCorr += `$\\begin{aligned}
-            ${choix ? `${v1}\\div \\dfrac{${v2}}{${a}}` : ` \\dfrac{${v2}}{${a}} \\div ${v1}`}&= ${choix ? `${v1}\\times \\dfrac{${a}}{${v2}}` : ` \\dfrac{${v2}}{${a}} \\times \\dfrac{1}{${v1}}`}\\\\
+            ${choix ? `${ecritureQuotient(v1, `\\dfrac{${v2}}{${a}}`, this.sup2)}` : `${ecritureQuotient(`\\dfrac{${v2}}{${a}}`, v1, this.sup2)}`}&= ${choix ? `${v1}\\times \\dfrac{${a}}{${v2}}` : ` \\dfrac{${v2}}{${a}} \\times \\dfrac{1}{${v1}}`}\\\\
           &=${choix ? `${miseEnEvidence(` \\dfrac{${a}${v1}}{${v2}}`)}` : `${miseEnEvidence(` \\dfrac{${v2}}{${a}${v1}}`)}`}
 \\end{aligned}$ `
               handleAnswers(this, i, {
@@ -281,9 +290,9 @@ ${choix ? `\\dfrac{${v1}}{${a}}\\times \\dfrac{${v1}}{${b}}` : `\\dfrac{${v1}}{$
                 a = randint(2, 10)
                 b = randint(1, 10)
               }
-              texte = `${choix ? `$\\dfrac{${v1}}{${a}}\\div\\dfrac{${b}}{${v2}}$` : `$\\dfrac{${v1}}{${a}}\\div\\dfrac{${v2}}{${b}}$`}`
+              texte = `${choix ? `$${ecritureQuotient(`\\dfrac{${v1}}{${a}}`, `\\dfrac{${b}}{${v2}}`, this.sup2)}$` : `$${ecritureQuotient(`\\dfrac{${v1}}{${a}}`, `\\dfrac{${v2}}{${b}}`, this.sup2)}$`}`
               texteCorr += `$\\begin{aligned}
-          ${choix ? `\\dfrac{${v1}}{${a}}\\div\\dfrac{${b}}{${v2}}` : `\\dfrac{${v1}}{${a}}\\div\\dfrac{${v2}}{${b}}`}&=${choix ? `\\dfrac{${v1}}{${a}}\\times \\dfrac{${v2}}{${b}}` : `\\dfrac{${v1}}{${a}}\\times \\dfrac{${b}}{${v2}}`}\\\\
+          ${choix ? `${ecritureQuotient(`\\dfrac{${v1}}{${a}}`, `\\dfrac{${b}}{${v2}}`, this.sup2)}` : `${ecritureQuotient(`\\dfrac{${v1}}{${a}}`, `\\dfrac{${v2}}{${b}}`, this.sup2)}`}&=${choix ? `\\dfrac{${v1}}{${a}}\\times \\dfrac{${v2}}{${b}}` : `\\dfrac{${v1}}{${a}}\\times \\dfrac{${b}}{${v2}}`}\\\\
             &=${choix ? `${miseEnEvidence(`\\dfrac{${v1}${v2}}{${a * b}}`)}` : `${miseEnEvidence(`\\dfrac{${b}${v1}}{${a}${v2}}`)}`}
             \\end{aligned}$ `
               handleAnswers(this, i, {
