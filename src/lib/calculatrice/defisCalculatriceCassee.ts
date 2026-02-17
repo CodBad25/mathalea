@@ -48,10 +48,10 @@ const situation1 = () => {
       'x²',
     ]
     result = {
-      question: `Produire un calcul donnant ${somme} en utilisant les touches de la calculatrice.<br>
+      question: `Produire un calcul donnant $${somme}$ en utilisant les touches de la calculatrice.<br>
     Certaines touches sont cassées.`,
       reponse: String(somme),
-      solution: `Une solution est de faire $${x} + ${y}$ EXE.`,
+      solution: `Une solution pour obtenir $${somme}$ est de faire $${x} + ${y}$ EXE.`,
       listeTouchesCassees,
     }
   } while (solutions.length < 1)
@@ -70,10 +70,10 @@ const situation2 = () => {
     .concat(['×', '+', '÷', 'x²'])
 
   return {
-    question: `Produire un calcul donnant ${reponse} en utilisant les touches de la calculatrice.<br>
+    question: `Produire un calcul donnant $${reponse}$ en utilisant les touches de la calculatrice.<br>
     Certaines touches sont cassées.`,
     reponse,
-    solution: `Une solution est de faire $${a}${b} - ${c}$ EXE.`,
+    solution: `Une solution pour obtenir $${reponse}$ est de faire $${a}${b} - ${c}$ EXE.`,
     listeTouchesCassees,
   }
 }
