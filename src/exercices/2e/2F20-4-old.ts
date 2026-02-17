@@ -10,6 +10,7 @@ import { texNombre } from '../../lib/outils/texNombre'
 import { randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
+import Figure from 'apigeom'
 import { courbe } from '../../lib/2d/Courbe'
 import { point } from '../../lib/2d/PointAbstrait'
 import RepereBuilder from '../../lib/2d/RepereBuilder'
@@ -31,11 +32,11 @@ export const interactifType = 'mathLive'
  * @author Jean-Claude Lhote
  */
 
-export const uuid = '28998'
+export const uuid = '28997'
 
 export const refs = {
-  'fr-fr': ['2F20-4'],
-  'fr-ch': ['2mIneq-1'],
+  'fr-fr': [],
+  'fr-ch': [],
 }
 type TypesDeFonction = 'constante' | 'affine' | 'poly2' | 'poly3'
 
@@ -181,6 +182,7 @@ export function chercheIntervalles(
 
 class resolutionEquationInequationGraphique extends Exercice {
   // On déclare des propriétés supplémentaires pour cet exercice afin de pouvoir les réutiliser dans la correction
+  figureApiGeom!: Figure
 
   constructor() {
     super()
@@ -232,9 +234,9 @@ class resolutionEquationInequationGraphique extends Exercice {
     const xbase = randint(-2, 2)
     const x0 = -4 + xbase
     const x1 = randint(-2, -1) + xbase
-    const x2 = randint(0, 1) + xbase
-    const x3 = 2 + xbase
-    const decalAxe = randint(0, 1)
+    const x2 = randint(1, 2) + xbase
+    const x3 = 4 + xbase
+    const decalAxe = randint(0, 2)
     const xMin = x0 - decalAxe - 1
     const xMax = xMin + 10
     let yMin
@@ -497,10 +499,10 @@ class resolutionEquationInequationGraphique extends Exercice {
           f1Type = 'poly2'
           f2Type = 'poly2'
           {
-            const indexPI = choice([0, 3])
-            const indexPI1 = randint(0, 3, [indexPI, 2])
+            const indexPI = randint(0, 3)
+            const indexPI1 = randint(0, 3, indexPI)
             const indexPNC1 = randint(0, 3, [indexPI, indexPI1])
-            const indexPNC2 = randint(0, 3, [indexPI, indexPNC1, indexPI1])
+            const indexPNC2 = randint(0, 3, [indexPI, indexPNC1, indexPNC1])
             const noeudsFonction1 = noeudsPassants1.filter(
               (el, i) => i === indexPI || i === indexPI1 || i === indexPNC1,
             )
@@ -519,9 +521,9 @@ class resolutionEquationInequationGraphique extends Exercice {
           {
             const indexPI1 = randint(0, 3)
             const indexPI2 = randint(0, 3, indexPI1)
-            const indexPI3 = randint(0, 3, [indexPI1, indexPI2])
+            const indexPNC1 = randint(0, 3, [indexPI1, indexPI2])
             const noeudsFonction1 = noeudsPassants1.filter(
-              (el, i) => i === indexPI1 || i === indexPI3 || i === indexPI2,
+              (el, i) => i === indexPI1 || i === indexPNC1 || i === indexPI2,
             )
             const poly1 = interpolationDeLagrange(noeudsFonction1)
             fonction1 = renseigneFonction(poly1) // la parabole
@@ -529,28 +531,22 @@ class resolutionEquationInequationGraphique extends Exercice {
             fonction2 = renseigneFonction(poly2) // la fonction degré 3
           }
           break
-        case 9:
-          // degré3 et degré3
-
+        case 9: // degré3 et degré3
           f1Type = 'poly3'
           f2Type = 'poly3'
           {
             const poly1 = interpolationDeLagrange(noeudsPassants1) // une fonction de degré 3
             fonction1 = renseigneFonction(poly1)
             // on modifie la valeur y de l'un des points passants qui devient non passant pour la fonction1
-            const indexPNC1 = randint(1, 2)
-            // const ordonnees = noeudsPassants1.map((el) => el.y)
-            /* let newY: number
+            const indexPNC1 = randint(0, 3)
+            const ordonnees = noeudsPassants1.map((el) => el.y)
+            let newY: number
             do {
               newY =
                 (noeudsPassants1[indexPNC1].y > 0 ? -1 : 1) *
                 randint(-4, 4, ordonnees)
             } while (Math.abs(newY - noeudsPassants1[indexPNC1].y) > 5)
-             */
-            noeudsPassants2[indexPNC1].y =
-              noeudsPassants1[indexPNC1].y !== 0
-                ? -noeudsPassants1[indexPNC1].y
-                : 2
+            noeudsPassants2[indexPNC1].y = newY
             const poly2 = interpolationDeLagrange(noeudsPassants2)
             fonction2 = renseigneFonction(poly2) // une fonction de degré 3
           }
@@ -580,7 +576,7 @@ class resolutionEquationInequationGraphique extends Exercice {
       // on calcule la différence des polys, on intègre entre -5 et 0 et entre 0 et 5
       const poly = fonction1.poly
       if (poly == null) {
-        // normalement, ça ne doit pas arriver car la seule à ne pas avoir la propriété poly est la spline qui est éliminée
+        // noremalement, ça ne doit pas arriver car la seule à ne pas avoir la propriété poly est la spline qui est éliminée
         // d'ailleurs typescript le sait puisque dans le test, si on met f1Type !== 'spline' il nous fait remarquer que c'est pas la peine !
         // donc ce test est là juste pour que typescript ne me dise pas que fonctions[0].poly peut être undefined
         throw Error("la fonction 1 n'a pas de polynôme alors qu'elle devrait")
@@ -600,12 +596,101 @@ class resolutionEquationInequationGraphique extends Exercice {
           ),
           -1,
         ) - 0.3
-    } while (integraleDiff < 0.5 && cpt < 100)
+    } while (integraleDiff < 0.2 && cpt < 50)
+    const yMax = yMin + 12
     const polyDiff = fonction1.poly.add(fonction2.poly.multiply(-1))
+    this.figureApiGeom = new Figure({
+      xMin: xMin - 0.5,
+      yMin,
+      width: 378,
+      height: 378,
+      isDynamic: true,
+    })
+    this.figureApiGeom.options.automaticUserMessage = false
+    this.figureApiGeom.userMessage =
+      'Cliquer sur le point $M$ pour le déplacer.'
+    this.figureApiGeom.create('Grid')
 
     // on s'occupe de la fonction 1 et du point mobile dessus on trace tout ça.
     // Maintenant, la fonction1 n'est jamais une spline !
-
+    let courbeF
+    let M
+    if (f1Type === 'constante' || f1Type === 'affine') {
+      const a = fonction1.poly.monomes[1] as number
+      const b = fonction1.poly.monomes[0] as number
+      const B = this.figureApiGeom.create('Point', {
+        x: xMin - 0.5,
+        y: (xMin - 0.5) * a + b,
+        isVisible: false,
+      })
+      const A = this.figureApiGeom.create('Point', {
+        x: xMax + 2.5,
+        y: (xMax + 2.5) * a + b,
+        isVisible: false,
+      })
+      const d = this.figureApiGeom.create('Segment', { point1: B, point2: A })
+      d.color = 'blue'
+      d.thickness = 2
+      d.isDashed = false
+      if (this.interactif) {
+        M = this.figureApiGeom.create('PointOnLine', { line: d })
+        M.shape = 'o'
+        M.color = 'blue'
+      }
+    } else {
+      courbeF = this.figureApiGeom.create('Graph', {
+        expression: fonction1.expr as string,
+        color: 'blue',
+        thickness: 2,
+        fillOpacity: 0.5,
+        xMin,
+        xMax,
+        isDashed: false,
+      })
+      if (this.interactif) {
+        M = this.figureApiGeom.create('PointOnGraph', { graph: courbeF })
+        M.shape = 'o'
+        M.color = 'blue'
+        M!.label = 'M'
+      }
+    }
+    if (this.interactif) {
+      M!.createSegmentToAxeX()
+      M!.createSegmentToAxeY()
+      // const textX = this.figureApiGeom.create('DynamicX', { point: M! })
+      //  const textY = this.figureApiGeom.create('DynamicY', { point: M! })
+      //  textX.dynamicText.maximumFractionDigits = 1
+      // textY.dynamicText.maximumFractionDigits = 1
+    }
+    /* if (f2Type === 'affine') {
+      const a = fonction2.poly.monomes[1] as number
+      const b = fonction2.poly.monomes[0] as number
+      const B = this.figureApiGeom.create('Point', { x: xMin - 0.5, y: a * (xMin - 0.5) + b, isVisible: false })
+      const A = this.figureApiGeom.create('Point', { x: xMax + 2.5, y: a * (xMax + 2.5) + b, isVisible: false })
+      const d = this.figureApiGeom.create('Segment', { point1: B, point2: A })
+      d.color = 'red'
+      d.thickness = 2
+      d.isDashed = false
+    } else {
+      this.figureApiGeom.create('Graph', {
+        expression: fonction2.expr as string,
+        color: 'red',
+        thickness: 2,
+        fillOpacity: 0.5,
+        xMin: xMin - 0.5,
+        xMax: xMax + 2.5
+      })
+    }
+    this.figureApiGeom.create('TextByPosition', { x: xMin + 0.5, y: yMax - 1, text: `$\\mathscr{C_${f1}}$`, color: 'blue' })
+    this.figureApiGeom.create('TextByPosition', { x: xMin + 0.5, y: yMax - 2, text: `$\\mathscr{C_${f2}}$`, color: 'red' })
+    const p1A = this.figureApiGeom.create('Point', { x: xMin + 1, y: yMax - 1, isVisible: false })
+    const p1B = this.figureApiGeom.create('Point', { x: xMin + 2, y: yMax - 1, isVisible: false })
+    const p2A = this.figureApiGeom.create('Point', { x: xMin + 1, y: yMax - 2, isVisible: false })
+    const p2B = this.figureApiGeom.create('Point', { x: xMin + 2, y: yMax - 2, isVisible: false })
+    this.figureApiGeom.create('Segment', { point1: p1A, point2: p1B, color: 'blue', thickness: 2 })
+    this.figureApiGeom.create('Segment', { point1: p2A, point2: p2B, color: 'red', thickness: 2 })
+*/
+    // De -6.3 à 6.3 donc width = 12.6 * 30 = 378
     let enonce = `On considère les fonctions $${f1}$ et $${f2}$ définies sur $\\R$ et dont on a représenté ci-dessous une partie de leurs courbes respectives.<br><br>`
     // let diff
     let soluces: number[]
@@ -688,55 +773,70 @@ class resolutionEquationInequationGraphique extends Exercice {
       texteCorr += `Pour trouver l'ensemble des solutions de l'inéquation $${f1}(x)${inferieur ? miseEnEvidence('\\leqslant', 'black') : miseEnEvidence('~\\geqslant~', 'black')}${f2}(x)$ sur $[${xMin};${xMax}]$ , on regarde les portions où la courbe $${miseEnEvidence('\\mathscr{C}_' + f1, 'blue')}$ est située ${inferieur ? 'en dessous' : 'au-dessus'} de la  courbe $${miseEnEvidence('\\mathscr{C}_' + f2, 'red')}$.<br>`
       texteCorr += `On lit les intervalles correspondants sur l'axe des abscisses : $${soluces2}$`
     }
+    /*  this.figureApiGeom.setToolbar({ tools: ['DRAG'], position: 'top' })
+    this.figureApiGeom.isDynamic = true
+    // Il est impératif de choisir les boutons avant d'utiliser figureApigeom
 
+    this.figureApiGeom.divButtons.style.display = 'flex'
+    this.figureApiGeom.ui.send({ type: 'DRAG'})
+    if (context.isHtml) {
+      if (this.interactif) {
+        this.listeQuestions = [enonce + figureApigeom({ exercice: this, i: 0, figure: this.figureApiGeom, isDynamic: true })]
+      } else {
+        this.listeQuestions = [enonce + wrapperApigeomToMathalea(this.figureApiGeom)]
+      }
+    } else {
+      this.listeQuestions = [enonce + this.figureApiGeom.tikz()]
+    }
+*/
     const repere = new RepereBuilder({
-      xMin: -8,
-      yMin: -8,
-      xMax: 8,
-      yMax: 8,
+      xMin: xMin - 0.2,
+      yMin: yMin - 0.2,
+      xMax: xMax + 2.5,
+      yMax: yMax + 0.2,
     })
       .setGrille({
         grilleX: {
           dx: 1,
-          xMin: -8,
-          xMax: 8,
+          xMin,
+          xMax: xMax + 2.5,
         },
         grilleY: {
           dy: 1,
-          yMin: -8,
-          yMax: 8,
+          yMin,
+          yMax,
         },
       })
       .setGrilleSecondaire({
         grilleX: {
           dx: 0.2,
-          xMin: -8,
-          xMax: 8,
+          xMin,
+          xMax: xMax + 2.5,
         },
-        grilleY: { dy: 0.2, yMin: -8, yMax: 8 },
+        grilleY: { dy: 0.2, yMin, yMax: yMin + 12 },
       })
-      .setThickX({ xMin: -8, xMax: 8, dx: 1 })
-      .setThickY({ yMin: -8, yMax: 8, dy: 1 })
+      .setThickX({ xMin, xMax: xMax + 2.5, dx: 1 })
+      .setThickY({ yMin, yMax, dy: 1 })
       .buildCustom()
 
     let courbe1, courbe2
     if (f1Type === 'constante' || f1Type === 'affine') {
-      courbe1 = segment(-8, fonction1.func(-8), 8, fonction1.func(8), 'blue')
+      courbe1 = segment(
+        xMin,
+        fonction1.func(xMin),
+        xMax,
+        fonction1.func(xMax),
+        'blue',
+      )
     } else {
-      courbe1 = courbe(fonction1.func, {
-        repere,
-        xMin: -8,
-        xMax: 8,
-        color: 'blue',
-        epaisseur: 1,
-      })
+      courbe1 = courbe(fonction1.func, { repere, xMin, xMax, color: 'blue' })
     }
-    const nomCourbe1 = latex2d(`\\mathscr{C}_${f1}`, -7.5, 7, {
+    const nomCourbe1 = latex2d(`\\mathscr{C}_${f1}`, xMin + 0.5, yMax - 1, {
       color: 'blue',
       letterSize: 'normalsize',
       backgroundColor: '',
     })
-    const nomCourbe2 = latex2d(`\\mathscr{C}_${f2}`, -7.5, 6, {
+    const nomCourbe2 = latex2d(`\\mathscr{C}_${f2}`, xMin + 0.5, yMax - 2, {
       color: 'red',
       letterSize: 'normalsize',
       backgroundColor: '',
@@ -744,29 +844,26 @@ class resolutionEquationInequationGraphique extends Exercice {
 
     courbe1.color = colorToLatexOrHTML('blue')
 
-    courbe1.epaisseur = 1
+    courbe1.epaisseur = 2
     if (f2Type === 'affine') {
-      courbe2 = segment(-8, fonction2.func(-8), 8, fonction2.func(8), 'red')
+      courbe2 = segment(
+        xMin,
+        fonction2.func(xMin),
+        xMax,
+        fonction2.func(xMax),
+        'red',
+      )
     } else {
-      courbe2 = courbe(fonction2.func, {
-        repere,
-        xMin: -8,
-        xMax: 8,
-        color: 'red',
-        epaisseur: 1,
-      })
+      courbe2 = courbe(fonction2.func, { repere, xMin, xMax, color: 'red' })
     }
-    courbe2.color = colorToLatexOrHTML('red')
-
-    courbe2.epaisseur = 1
-    const p1A = point(-7, 7)
-    const p1B = point(-6, 7)
-    const p2A = point(-7, 6)
-    const p2B = point(-6, 6)
+    const p1A = point(xMin + 1, yMax - 1)
+    const p1B = point(xMin + 2, yMax - 1)
+    const p2A = point(xMin + 1, yMax - 2)
+    const p2B = point(xMin + 2, yMax - 2)
     const trait1 = segment(p1A, p1B, 'blue')
     const trait2 = segment(p2A, p2B, 'red')
-    trait1.epaisseur = 1
-    trait2.epaisseur = 1
+    trait1.epaisseur = 2
+    trait2.epaisseur = 2
     const courbes = [courbe1, courbe2, trait1, trait2, nomCourbe1, nomCourbe2]
     this.listeQuestions = [
       enonce +
