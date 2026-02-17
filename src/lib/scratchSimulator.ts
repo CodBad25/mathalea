@@ -17,7 +17,14 @@ export interface ExecutionResult {
   messages: string[]
   currentInstruction?: string
   currentInstructionScratchHtml?: string
+  currentInstructionIndex?: number
   repeatContexts?: string[]
+}
+
+type CodeBlockNode = {
+  element: SVGGElement
+  text: string
+  children: CodeBlockNode[]
 }
 
 export class ScratchInterpreter {
@@ -37,6 +44,7 @@ export class ScratchInterpreter {
   private messages: string[] = []
   private currentInstruction: string = ''
   private currentInstructionScratchHtml: string = ''
+  private currentInstructionIndex: number = -1
   private repeatContextStack: string[] = []
   private onUpdate?: () => void | Promise<void>
 
@@ -51,6 +59,7 @@ export class ScratchInterpreter {
     this.messages = []
     this.variables = {}
     this.customBlocks = {}
+    this.currentInstructionIndex = -1
 
     // D'abord, extraire les définitions de blocs personnalisés
     const codeWithoutDefinitions = this.parseCustomBlockDefinitions(scratchCode)
@@ -67,6 +76,7 @@ export class ScratchInterpreter {
       messages: this.messages,
       currentInstruction: this.currentInstruction,
       currentInstructionScratchHtml: this.currentInstructionScratchHtml,
+      currentInstructionIndex: this.currentInstructionIndex,
       repeatContexts: [...this.repeatContextStack],
     }
   }
@@ -81,6 +91,7 @@ export class ScratchInterpreter {
     this.variables = {}
     this.customBlocks = {}
     this.onUpdate = onUpdate
+    this.currentInstructionIndex = -1
 
     const codeWithoutDefinitions = this.parseCustomBlockDefinitions(scratchCode)
 
@@ -97,6 +108,7 @@ export class ScratchInterpreter {
       messages: this.messages,
       currentInstruction: this.currentInstruction,
       currentInstructionScratchHtml: this.currentInstructionScratchHtml,
+      currentInstructionIndex: this.currentInstructionIndex,
       repeatContexts: [...this.repeatContextStack],
     }
   }
@@ -111,6 +123,7 @@ export class ScratchInterpreter {
       messages: this.messages,
       currentInstruction: this.currentInstruction,
       currentInstructionScratchHtml: this.currentInstructionScratchHtml,
+      currentInstructionIndex: this.currentInstructionIndex,
       repeatContexts: [...this.repeatContextStack],
     }
   }
@@ -367,18 +380,16 @@ export class ScratchInterpreter {
         }
 
         // Attendre le délai
-        await new Promise((resolve) => setTimeout(resolve, (2 * delayMs) / 3))
+        await new Promise((resolve) => setTimeout(resolve, delayMs / 2))
 
         // Exécuter l'action
         await this.executeBlockAction(blockType, content, delayMs)
-
-        // Attendre le délai
-        await new Promise((resolve) => setTimeout(resolve, delayMs / 3))
-
         // Afficher les infos mises à jour
         if (this.onUpdate) {
           await Promise.resolve(this.onUpdate())
         }
+        // Attendre le délai
+        await new Promise((resolve) => setTimeout(resolve, delayMs / 2))
       }
 
       blockMatch = blockRegex.exec(code)
@@ -390,6 +401,7 @@ export class ScratchInterpreter {
     content: string,
     rawBlock?: string,
   ): void {
+    this.currentInstructionIndex += 1
     this.currentInstruction = this.humanizeInstruction(type, content)
     this.currentInstructionScratchHtml = this.renderScratchBlock(
       type,
@@ -599,7 +611,13 @@ export class ScratchSimulator extends HTMLElement {
   private stepDiv: HTMLDivElement | null = null
   private infoDiv: HTMLDivElement | null = null
   private repeatDiv: HTMLDivElement | null = null
-  private delayMs: number = 500
+  private codeDiv: HTMLDivElement | null = null
+  private codeBlocks: CodeBlockNode[] = []
+  private executionBlocks: CodeBlockNode[] = []
+  private customBlockDefinitions: Record<string, CodeBlockNode[]> = {}
+  private customDefinitionGroups: Set<SVGGElement> = new Set()
+  private blockCacheAttempts: number = 0
+  private delayMs: number = 2000
 
   connectedCallback(): void {
     this.scratchCode = this.getAttribute('code') || ''
@@ -632,7 +650,7 @@ export class ScratchSimulator extends HTMLElement {
     this.modal.className = 'modal'
 
     const box = document.createElement('div')
-    box.className = 'modal-box max-w-2xl'
+    box.className = 'modal-box max-w-6xl'
 
     const closeButton = document.createElement('button')
     closeButton.className =
@@ -648,42 +666,466 @@ export class ScratchSimulator extends HTMLElement {
     title.className = 'font-bold text-lg mb-3'
     title.textContent = 'Simulation Scratch'
 
-    this.stepDiv = document.createElement('div')
-    this.stepDiv.className = 'text-sm text-gray-600 mb-2'
-    this.stepDiv.id = 'execution-step'
-    this.stepDiv.textContent = 'Instruction: -'
+    const highlightStyle = document.createElement('style')
+    highlightStyle.textContent = `
+      .scratch-current-block {
+        filter: drop-shadow(0 0 8px rgba(250, 204, 21, 0.95))
+          drop-shadow(0 0 3px rgba(250, 204, 21, 0.9));
+      }
+      .scratch-current-block path,
+      .scratch-current-block rect,
+      .scratch-current-block polygon {
+        stroke: #fae015;
+        stroke-width: 5;
+      }
+    `
 
     this.repeatDiv = document.createElement('div')
     this.repeatDiv.className = 'text-xs text-gray-500 mb-3'
     this.repeatDiv.id = 'execution-repeat'
     this.repeatDiv.textContent = ''
 
+    // Conteneur pour canvas et code côte à côte
+    const contentWrapper = document.createElement('div')
+    contentWrapper.className = 'grid grid-cols-2 gap-4 mb-4'
+
+    // Colonne gauche: canvas
+    const canvasWrapper = document.createElement('div')
     this.canvas = document.createElement('canvas')
-    this.canvas.width = 500
-    this.canvas.height = 500
-    this.canvas.className = 'border-2 border-gray-300 bg-white my-4 w-full'
+    this.canvas.width = 400
+    this.canvas.height = 400
+    this.canvas.className = 'border-2 border-gray-300 bg-white w-full'
+    canvasWrapper.appendChild(this.canvas)
+
+    // Colonne droite: code + contexte
+    const rightColumn = document.createElement('div')
+    rightColumn.className = 'flex flex-col gap-4'
+
+    this.codeDiv = document.createElement('div')
+    this.codeDiv.className =
+      'border-2 border-gray-300 bg-white p-3 overflow-y-auto max-h-96 font-mono text-sm'
+    this.codeDiv.id = 'code-display'
+
+    rightColumn.appendChild(this.codeDiv)
+
+    contentWrapper.appendChild(canvasWrapper)
+    contentWrapper.appendChild(rightColumn)
+
+    // Parser le code scratchblock complet
+    this.parseAndDisplayCode()
+
+    this.stepDiv = document.createElement('div')
+    this.stepDiv.className = 'text-sm text-gray-600 mb-2'
+    this.stepDiv.id = 'execution-step'
+    this.stepDiv.textContent = 'Instruction: -'
 
     this.infoDiv = document.createElement('div')
     this.infoDiv.className = 'text-sm text-gray-600 flex-1'
     this.infoDiv.id = 'execution-info'
 
-    const instructionContainer = document.createElement('div')
-    instructionContainer.className = 'flex-1 pl-4'
-    instructionContainer.appendChild(this.stepDiv)
-    instructionContainer.appendChild(this.repeatDiv)
+    const contextDiv = document.createElement('div')
+    contextDiv.className = 'grid grid-cols-1 md:grid-cols-2 gap-4'
+    contextDiv.id = 'contextDiv'
+    contextDiv.appendChild(this.stepDiv)
+    contextDiv.appendChild(this.infoDiv)
 
-    const bottomContainer = document.createElement('div')
-    bottomContainer.className = 'flex gap-4'
-    bottomContainer.appendChild(instructionContainer)
-    bottomContainer.appendChild(this.infoDiv)
+    rightColumn.appendChild(contextDiv)
 
     box.appendChild(closeButton)
     box.appendChild(title)
-    box.appendChild(this.canvas)
-    box.appendChild(bottomContainer)
+    box.appendChild(highlightStyle)
+    box.appendChild(this.repeatDiv)
+    box.appendChild(contentWrapper)
 
     this.modal.appendChild(box)
     document.body.appendChild(this.modal)
+
+    if (this.codeDiv) {
+      renderScratchDiv(this.codeDiv)
+      this.cacheRenderedBlocks()
+    }
+  }
+
+  private parseAndDisplayCode(): void {
+    if (!this.codeDiv) return
+
+    this.codeBlocks = []
+    this.codeDiv.innerHTML = ''
+
+    const scratchblockHtml = scratchblock(this.scratchCode)
+    if (scratchblockHtml !== false) {
+      this.codeDiv.innerHTML = scratchblockHtml
+    } else {
+      const pre = document.createElement('pre')
+      pre.classList.add('blocks')
+      pre.textContent = this.scratchCode
+      this.codeDiv.appendChild(pre)
+    }
+  }
+
+  private highlightCurrentInstruction(
+    currentInstructionHtml: string,
+    currentInstructionIndex?: number,
+  ): void {
+    if (this.codeBlocks.length === 0) {
+      this.cacheRenderedBlocks()
+    }
+
+    this.clearBlockHighlights(this.codeBlocks)
+
+    if (
+      currentInstructionIndex !== undefined &&
+      this.executionBlocks.length > 0
+    ) {
+      const index = Math.max(0, currentInstructionIndex)
+      const block =
+        this.executionBlocks[Math.min(index, this.executionBlocks.length - 1)]
+      if (block) {
+        block.element.classList.add('scratch-current-block')
+        block.element.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center',
+        })
+        return
+      }
+    }
+
+    if (!currentInstructionHtml) return
+
+    const tempDiv = document.createElement('div')
+    tempDiv.innerHTML = currentInstructionHtml
+    const instructionText = this.normalizeText(tempDiv.textContent || '')
+    if (!instructionText) return
+
+    const matchingBlock = this.findBlockByText(this.codeBlocks, instructionText)
+
+    if (matchingBlock) {
+      matchingBlock.element.classList.add('scratch-current-block')
+      matchingBlock.element.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center',
+      })
+    }
+  }
+
+  private cacheRenderedBlocks(): void {
+    if (!this.codeDiv) return
+
+    const svg = this.codeDiv.querySelector('svg')
+    if (!svg) {
+      this.retryCacheRenderedBlocks()
+      return
+    }
+
+    const groups = Array.from(svg.querySelectorAll<SVGGElement>('g')).filter(
+      (group) => this.isBlockGroup(group),
+    )
+
+    if (groups.length === 0) {
+      this.retryCacheRenderedBlocks()
+      return
+    }
+
+    const topLevelGroups = groups.filter(
+      (group) => !this.getNearestBlockAncestor(group, svg),
+    )
+
+    if (topLevelGroups.length === 0) {
+      this.retryCacheRenderedBlocks()
+      return
+    }
+
+    this.codeBlocks = topLevelGroups.map((group) => this.buildBlockTree(group))
+    const customDefinitions = this.extractCustomBlockDefinitions(svg)
+    this.customBlockDefinitions = customDefinitions.definitions
+    this.customDefinitionGroups = customDefinitions.definitionGroups
+    this.executionBlocks = this.buildExecutionBlocks(this.codeBlocks)
+    this.blockCacheAttempts = 0
+  }
+
+  private buildBlockTree(group: SVGGElement): CodeBlockNode {
+    const node: CodeBlockNode = {
+      element: group,
+      text: this.getBlockOwnText(group),
+      children: [],
+    }
+
+    const nestedGroups = this.extractNestedBlockGroups(group)
+    if (nestedGroups.length > 0) {
+      node.children = nestedGroups.map((child) => this.buildBlockTree(child))
+    }
+
+    return node
+  }
+
+  private isBlockGroup(group: Element): group is SVGGElement {
+    const firstChild = group.firstElementChild
+    if (!firstChild || firstChild.tagName.toLowerCase() !== 'path') {
+      return false
+    }
+    const className = firstChild.getAttribute('class') || ''
+    return className.startsWith('sb3-')
+  }
+
+  private isCustomBlockGroup(group: Element): group is SVGGElement {
+    const firstChild = group.firstElementChild
+    if (!firstChild || firstChild.tagName.toLowerCase() !== 'path') {
+      return false
+    }
+    const className = firstChild.getAttribute('class') || ''
+    return className.startsWith('sb3-custom')
+  }
+
+  private isDefinitionBlockGroup(group: SVGGElement): boolean {
+    const text = this.normalizeText(this.getBlockOwnText(group))
+    return text.includes('définir') || text.includes('definir')
+  }
+
+  private extractCustomBlockDefinitions(root: SVGElement): {
+    definitions: Record<string, CodeBlockNode[]>
+    definitionGroups: Set<SVGGElement>
+  } {
+    const definitions: Record<string, CodeBlockNode[]> = {}
+    const definitionGroups = new Set<SVGGElement>()
+
+    const allCustomGroups = Array.from(
+      root.querySelectorAll<SVGGElement>('g'),
+    ).filter((group) => this.isCustomBlockGroup(group))
+
+    const containers = new Set<SVGGElement>()
+    allCustomGroups.forEach((group) => {
+      const parent = group.parentElement
+      if (parent && parent.tagName.toLowerCase() === 'g') {
+        containers.add(parent as unknown as SVGGElement)
+      }
+    })
+
+    containers.forEach((container) => {
+      const childGroups = Array.from(container.children).filter(
+        (child): child is SVGGElement => child.tagName.toLowerCase() === 'g',
+      )
+
+      const headerIndex = childGroups.findIndex((child) =>
+        this.isCustomBlockGroup(child),
+      )
+
+      if (headerIndex === -1) return
+
+      const headerGroup = childGroups[headerIndex]
+      if (!this.isDefinitionBlockGroup(headerGroup)) return
+      const customName = this.getCustomDefinitionName(headerGroup)
+      if (!customName) return
+
+      const bodyGroups = childGroups
+        .slice(headerIndex + 1)
+        .filter((group) => this.isBlockGroup(group))
+      const bodyNodes = bodyGroups.map((group) => this.buildBlockTree(group))
+
+      definitions[customName] = bodyNodes
+      definitionGroups.add(headerGroup)
+      bodyGroups.forEach((group) => definitionGroups.add(group))
+    })
+
+    return { definitions, definitionGroups }
+  }
+
+  private getCustomDefinitionName(group: SVGGElement): string {
+    const raw = this.getBlockOwnText(group)
+    const normalized = this.normalizeText(raw)
+    const withoutPrefix = normalized
+      .replace(/^définir\s+/, '')
+      .replace(/^definir\s+/, '')
+    return withoutPrefix.trim()
+  }
+
+  private extractNestedBlockGroups(group: SVGGElement): SVGGElement[] {
+    const children = Array.from(group.children)
+    const loopArrowIndex = children.findIndex((child) => {
+      if (child.tagName.toLowerCase() !== 'use') return false
+      const href =
+        child.getAttribute('href') || child.getAttribute('xlink:href') || ''
+      return href.includes('#sb3-loopArrow')
+    })
+
+    if (loopArrowIndex === -1) return []
+
+    const container = children
+      .slice(loopArrowIndex + 1)
+      .find(
+        (child): child is SVGGElement => child.tagName.toLowerCase() === 'g',
+      )
+
+    if (!container) return []
+
+    const rowGroups = Array.from(container.children).filter(
+      (child): child is SVGGElement => child.tagName.toLowerCase() === 'g',
+    )
+
+    const nested = rowGroups
+      .map((rowGroup) => ({
+        rowGroup,
+        blockGroup: this.findFirstBlockGroup(rowGroup),
+      }))
+      .filter(
+        (
+          entry,
+        ): entry is {
+          rowGroup: SVGGElement
+          blockGroup: SVGGElement
+        } => Boolean(entry.blockGroup),
+      )
+
+    nested.sort(
+      (a, b) => this.getTranslateY(a.rowGroup) - this.getTranslateY(b.rowGroup),
+    )
+
+    return nested.map((entry) => entry.blockGroup)
+  }
+
+  private getBlockOwnText(group: SVGGElement): string {
+    const children = Array.from(group.children)
+    const loopArrowIndex = children.findIndex((child) => {
+      if (child.tagName.toLowerCase() !== 'use') return false
+      const href =
+        child.getAttribute('href') || child.getAttribute('xlink:href') || ''
+      return href.includes('#sb3-loopArrow')
+    })
+
+    const relevantChildren =
+      loopArrowIndex === -1 ? children : children.slice(0, loopArrowIndex)
+
+    const parts: string[] = []
+    relevantChildren.forEach((child) => {
+      if (child.tagName.toLowerCase() === 'text') {
+        parts.push(child.textContent || '')
+        return
+      }
+
+      const texts = Array.from(child.querySelectorAll('text'))
+      texts.forEach((textEl) => parts.push(textEl.textContent || ''))
+    })
+
+    const raw = parts.join(' ').trim()
+    return this.normalizeText(raw || group.textContent || '')
+  }
+
+  private getNearestBlockAncestor(
+    group: SVGGElement,
+    root: SVGElement,
+  ): SVGGElement | null {
+    let parent: Element | null = group.parentElement
+    while (parent && parent !== root) {
+      if (this.isBlockGroup(parent)) {
+        return parent
+      }
+      parent = parent.parentElement
+    }
+    return null
+  }
+
+  private findFirstBlockGroup(root: Element): SVGGElement | null {
+    if (this.isBlockGroup(root)) return root
+    const groups = Array.from(root.querySelectorAll<SVGGElement>('g')).filter(
+      (group) => this.isBlockGroup(group),
+    )
+    return groups.length > 0 ? groups[0] : null
+  }
+
+  private getTranslateY(group: SVGGElement): number {
+    const transform = group.getAttribute('transform') || ''
+    const match = transform.match(/translate\(([-\d.]+)(?:[ ,]([-\d.]+))?\)/)
+    if (!match) return 0
+    const y = match[2] ? parseFloat(match[2]) : 0
+    return Number.isNaN(y) ? 0 : y
+  }
+
+  private clearBlockHighlights(blocks: CodeBlockNode[]): void {
+    blocks.forEach((block) => {
+      block.element.classList.remove('scratch-current-block')
+      if (block.children.length > 0) {
+        this.clearBlockHighlights(block.children)
+      }
+    })
+  }
+
+  private findBlockByText(
+    blocks: CodeBlockNode[],
+    instructionText: string,
+  ): CodeBlockNode | null {
+    for (const block of blocks) {
+      if (block.text.includes(instructionText)) {
+        return block
+      }
+
+      const childMatch = this.findBlockByText(block.children, instructionText)
+      if (childMatch) {
+        return childMatch
+      }
+    }
+
+    return null
+  }
+
+  private buildExecutionBlocks(
+    nodes: CodeBlockNode[],
+    includeDefinitionNodes: boolean = false,
+  ): CodeBlockNode[] {
+    const ordered: CodeBlockNode[] = []
+
+    nodes.forEach((node) => {
+      if (
+        !includeDefinitionNodes &&
+        this.customDefinitionGroups.has(node.element)
+      ) {
+        return
+      }
+
+      const customDefinition = this.customBlockDefinitions[node.text]
+      if (customDefinition) {
+        // Afficher le bloc personnalisé puis dérouler son contenu
+        ordered.push(node)
+        const expanded = this.buildExecutionBlocks(customDefinition, true)
+        ordered.push(...expanded)
+        return
+      }
+
+      if (this.isRepeatBlock(node)) {
+        const times = this.extractRepeatCount(node.text)
+        const children = this.buildExecutionBlocks(
+          node.children,
+          includeDefinitionNodes,
+        )
+        const iterations = Math.max(0, times)
+        for (let i = 0; i < iterations; i += 1) {
+          ordered.push(...children)
+        }
+      } else {
+        ordered.push(node)
+      }
+    })
+
+    return ordered
+  }
+
+  private isRepeatBlock(node: CodeBlockNode): boolean {
+    return node.text.includes('répéter')
+  }
+
+  private extractRepeatCount(text: string): number {
+    const match = text.match(/\b(\d+)\b/)
+    if (!match) return 1
+    const count = parseInt(match[1], 10)
+    return Number.isNaN(count) ? 0 : count
+  }
+
+  private retryCacheRenderedBlocks(): void {
+    if (this.blockCacheAttempts >= 6) return
+    this.blockCacheAttempts += 1
+    requestAnimationFrame(() => this.cacheRenderedBlocks())
+  }
+
+  private normalizeText(text: string): string {
+    return text.replace(/\s+/g, ' ').trim().toLowerCase()
   }
 
   private runSimulation(): void {
@@ -698,35 +1140,37 @@ export class ScratchSimulator extends HTMLElement {
   private async runAnimatedSimulation(): Promise<void> {
     if (!this.interpreter || !this.canvas) return
 
-    const code = this.getAttribute('code') || ''
-
     // Exécuter avec animation
     await this.interpreter.executeAnimated(
-      code,
+      this.scratchCode,
       () => {
         const state = this.interpreter!.getCurrentState()
-        if (state.currentInstructionScratchHtml !== '') {
-          requestAnimationFrame(() => {
-            this.drawSimulation(state)
-            this.displayInfo(state)
-            this.displayInstruction(state)
-            this.displayRepeatContext(state)
-          })
-        }
+        requestAnimationFrame(() => {
+          this.drawSimulation(state)
+          this.displayInfo(state)
+          this.displayInstruction(state)
+          this.displayRepeatContext(state)
+          this.highlightCurrentInstruction(
+            state.currentInstructionScratchHtml || '',
+            state.currentInstructionIndex,
+          )
+        })
       },
       this.delayMs,
     )
 
     // Affichage final
     const result = this.interpreter.getCurrentState()
-    if (result.currentInstructionScratchHtml !== '') {
-      requestAnimationFrame(() => {
-        this.drawSimulation(result)
-        this.displayInfo(result)
-        this.displayInstruction(result)
-        this.displayRepeatContext(result)
-      })
-    }
+    requestAnimationFrame(() => {
+      this.drawSimulation(result)
+      this.displayInfo(result)
+      this.displayInstruction(result)
+      this.displayRepeatContext(result)
+      this.highlightCurrentInstruction(
+        result.currentInstructionScratchHtml || '',
+        result.currentInstructionIndex,
+      )
+    })
   }
 
   private drawSimulation(result: ExecutionResult): void {
@@ -835,8 +1279,8 @@ export class ScratchSimulator extends HTMLElement {
   private displayInfo(result: ExecutionResult): void {
     if (!this.infoDiv) return
 
-    let html = `<div class="space-y-2"><p><strong>Position:</strong> x=${Math.round(result.finalX - 240)}, y=${Math.round(result.finalY - 240)}</p>`
-    html += `<p><strong>Angle:</strong> ${Math.round(result.finalAngle)}°</p><p><strong>Traces:</strong> ${result.traces.length} ligne(s)</p>`
+    let html = `<div class="space-y-2"><p><strong>Position:</strong> x=${Math.round(result.finalX - 240)}, y=${Math.round(result.finalY - 240)}.</p>`
+    html += `<p><strong>Angle:</strong> ${Math.round(result.finalAngle)}°.</p><p><strong>Traces:</strong> ${result.traces.length} ligne(s).</p>`
 
     if (Object.keys(result.variables).length > 0) {
       html += '<p><strong>Variables:</strong><br/>'
@@ -857,8 +1301,13 @@ export class ScratchSimulator extends HTMLElement {
   private displayInstruction(result: ExecutionResult): void {
     if (!this.stepDiv) return
     if (result.currentInstructionScratchHtml) {
+      const indexLabel =
+        typeof result.currentInstructionIndex === 'number'
+          ? ` <span class="text-xs text-gray-500">(#${result.currentInstructionIndex})</span>`
+          : ''
       this.stepDiv.innerHTML =
-        '<span class="font-semibold">Instruction :</span> ' +
+        '<span class="font-semibold">Instruction :</span>' +
+        indexLabel +
         result.currentInstructionScratchHtml
       renderScratchDiv(this.stepDiv)
     } else {
