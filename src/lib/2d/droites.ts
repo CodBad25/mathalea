@@ -2,6 +2,7 @@ import { context } from '../../modules/context'
 import { egal } from '../../modules/outils'
 import { arrondi } from '../outils/nombres'
 import { colorToLatexOrHTML } from './colorToLatexOrHtml'
+import type { IDroite } from './Interfaces'
 import { ObjetMathalea2D } from './ObjetMathalea2D'
 import { PointAbstrait, pointAbstrait } from './PointAbstrait'
 import { segment } from './segmentsVecteurs'
@@ -1490,13 +1491,13 @@ export function droiteParPointEtPente(
 
 /**  Donne la distance entre le point A et la droite d
  * @param {PointAbstrait} A
- * @param {Droite} d
+ * @param {IDroite} d
  * @example distancePointDroite (M, d1) // Retourne la distance entre le point M et la droite d1
  * @author Jean-Claude Lhote
  * @return {number}
  */
 // JSDOC Validee par EE Aout 2022
-export function distancePointDroite(A: PointAbstrait, d: Droite) {
+export function distancePointDroite(A: PointAbstrait, d: IDroite) {
   // Formule: |a*xA + b*yA + c| / ||(a,b)||
   const denom = norme(vecteur(d.a, d.b))
   if (denom < 1e-12) return 0
