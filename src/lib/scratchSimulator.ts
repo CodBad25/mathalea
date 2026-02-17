@@ -599,9 +599,11 @@ export class ScratchSimulator extends HTMLElement {
   private stepDiv: HTMLDivElement | null = null
   private infoDiv: HTMLDivElement | null = null
   private repeatDiv: HTMLDivElement | null = null
+  private delayMs: number = 500
 
   connectedCallback(): void {
     this.scratchCode = this.getAttribute('code') || ''
+    this.delayMs = parseInt(this.getAttribute('delay') || '500', 10)
 
     const button = document.createElement('button')
     button.textContent = '▶ Exécuter'
@@ -662,15 +664,23 @@ export class ScratchSimulator extends HTMLElement {
     this.canvas.className = 'border-2 border-gray-300 bg-white my-4 w-full'
 
     this.infoDiv = document.createElement('div')
-    this.infoDiv.className = 'text-sm text-gray-600'
+    this.infoDiv.className = 'text-sm text-gray-600 flex-1'
     this.infoDiv.id = 'execution-info'
+
+    const instructionContainer = document.createElement('div')
+    instructionContainer.className = 'flex-1 pl-4'
+    instructionContainer.appendChild(this.stepDiv)
+    instructionContainer.appendChild(this.repeatDiv)
+
+    const bottomContainer = document.createElement('div')
+    bottomContainer.className = 'flex gap-4'
+    bottomContainer.appendChild(instructionContainer)
+    bottomContainer.appendChild(this.infoDiv)
 
     box.appendChild(closeButton)
     box.appendChild(title)
-    box.appendChild(this.stepDiv)
-    box.appendChild(this.repeatDiv)
     box.appendChild(this.canvas)
-    box.appendChild(this.infoDiv)
+    box.appendChild(bottomContainer)
 
     this.modal.appendChild(box)
     document.body.appendChild(this.modal)
@@ -690,32 +700,33 @@ export class ScratchSimulator extends HTMLElement {
 
     const code = this.getAttribute('code') || ''
 
-    // Lire le délai depuis l'attribut (valeur par défaut: 500ms)
-    const delayMs = parseInt(this.getAttribute('delay') || '500', 10)
-
     // Exécuter avec animation
     await this.interpreter.executeAnimated(
       code,
       () => {
         const state = this.interpreter!.getCurrentState()
-        requestAnimationFrame(() => {
-          this.drawSimulation(state)
-          this.displayInfo(state)
-          this.displayInstruction(state)
-          this.displayRepeatContext(state)
-        })
+        if (state.currentInstructionScratchHtml !== '') {
+          requestAnimationFrame(() => {
+            this.drawSimulation(state)
+            this.displayInfo(state)
+            this.displayInstruction(state)
+            this.displayRepeatContext(state)
+          })
+        }
       },
-      delayMs,
+      this.delayMs,
     )
 
     // Affichage final
     const result = this.interpreter.getCurrentState()
-    requestAnimationFrame(() => {
-      this.drawSimulation(result)
-      this.displayInfo(result)
-      this.displayInstruction(result)
-      this.displayRepeatContext(result)
-    })
+    if (result.currentInstructionScratchHtml !== '') {
+      requestAnimationFrame(() => {
+        this.drawSimulation(result)
+        this.displayInfo(result)
+        this.displayInstruction(result)
+        this.displayRepeatContext(result)
+      })
+    }
   }
 
   private drawSimulation(result: ExecutionResult): void {

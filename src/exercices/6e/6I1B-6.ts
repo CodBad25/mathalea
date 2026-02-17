@@ -25,34 +25,34 @@ export default class TrouverLeBonProgramme extends Exercice {
   constructor() {
     super()
     this.nbQuestions = 7
-    this.besoinFormulaireCaseACocher = [
+    this.besoinFormulaire2CaseACocher = [
       "Avec simulateur (programmes suivis d'un *)",
       false,
     ]
     this.sup = false
-    this.besoinFormulaire2Texte = [
+    this.besoinFormulaireTexte = [
       'Types de programmes',
       'Nombres séparés par des tirets\n1 : Avancer *\n2 : Tourner *\n3 : Ajouter\n4 : Polygone *\n5 : Carré *\n6 : Rebours\n7 : Escalier *\n0 : Mélange',
     ]
     this.sup2 = '0'
     this.besoinFormulaire3Numerique = [
-      'Délai entre chaque étape du programme (en ms)',
+      'Pause entre chaque étape du programme',
       3,
-      '1 : 1/10e de seconde\n2 : 1/2 seconde\n3 : 1 seconde',
+      '1 : Pas de pause\n2 : 1 seconde\n3 : 2 secondes',
     ]
     this.sup3 = 2
   }
 
   nouvelleVersion(): void {
     const listeTypeDeProgrammes = gestionnaireFormulaireTexte({
-      saisie: this.sup2,
+      saisie: this.sup,
       min: 1,
       max: 7,
       melange: 0,
       defaut: 0,
       nbQuestions: this.nbQuestions,
     }).map(Number)
-    const delai = this.sup3 === 1 ? 100 : this.sup3 === 2 ? 500 : 1000
+    const delai = this.sup3 === 1 ? 0 : this.sup3 === 2 ? 1000 : 2000
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
       const listeDeProgrammes = [
         getProgrammesAvancer,
@@ -117,29 +117,24 @@ export default class TrouverLeBonProgramme extends Exercice {
         programmes.programmesCodeBrut || programmes.programmesListe
       if (context.isHtml) {
         texte +=
-          '<table border="1" cellpadding="10" cellspacing="0" style="border-collapse: collapse; margin: 20px 0;">'
-        texte += '<thead><tr style="background-color: #f0f0f0;">'
-        for (const titre of ligne1) {
-          texte += `<th style="border: 1px solid #ddd; padding: 10px; text-align: center;">${titre}</th>`
-        }
-        texte += '</tr></thead>'
-        texte += '<tbody><tr>'
+          '<div style="margin: 20px 0; display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); width: 100%; align-self: stretch;">'
         for (let j = 0; j < ligne2.length; j++) {
           const programme = ligne2[j]
           const codeBrut = ligne2Brut[j]
           const simulatorCode = (codeBrut || '')
             .replace(/"/g, '&quot;')
             .replace(/'/g, '&#39;')
-          if (this.sup && cas !== 5 && cas !== 2) {
-            texte += `<td style="border: 1px solid #ddd; padding: 10px; text-align: center;">
-          ${createScratchSimulatorElement(simulatorCode, delai)}
-          </td>`
+          const titre = ligne1[j]
+          texte += '<div style="border: 1px solid #ddd; padding: 10px;">'
+          texte += `<div style="font-weight: 600; margin-bottom: 8px;">${titre}</div>`
+          if (this.sup2 && cas !== 5 && cas !== 2) {
+            texte += createScratchSimulatorElement(simulatorCode, delai)
           } else {
-            texte += `<td style="border: 1px solid #ddd; padding: 10px; text-align: center;">${programme}</td>`
+            texte += programme
           }
+          texte += '</div>'
         }
-        texte += '</tr></tbody>'
-        texte += '</table>'
+        texte += '</div>'
       } else {
         texte += '\\begin{center}\n'
         texte += '\\begin{tabular}{|c|c|c|c|c|}\n'
