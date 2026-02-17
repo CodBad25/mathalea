@@ -30,10 +30,13 @@ export default class CalculatriceCassee extends Exercice {
         defisCalculatriceCassee.filter((defi) => defi.niveau === 0),
       )
       const situation = défi.situation()
-      let question = situation.question
-      question += context.isHtml
-        ? `<my-calculator id="CalculatriceEx${this.numeroExercice}Q${i}" broken-keys="${situation.listeTouchesCassees.join(',')}" />`
-        : latexCalculator(situation.listeTouchesCassees)
+      const question = `${situation.question}<br>
+      
+      ${
+        context.isHtml
+          ? `<my-calculator id="CalculatriceEx${this.numeroExercice}Q${i}" broken-keys="${situation.listeTouchesCassees.join(',')}" />`
+          : latexCalculator(situation.listeTouchesCassees)
+      }`
       const reponse = situation.reponse
       const correction = situation.solution
       if (
