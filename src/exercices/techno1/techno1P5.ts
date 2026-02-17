@@ -2,7 +2,7 @@ import { choice } from '../../lib/outils/arrayOutils'
 import { arrondi } from '../../lib/outils/nombres'
 import ExerciceSimple from '../ExerciceSimple'
 import { randint } from '../../modules/outils'
-import { texNombre } from '../../lib/outils/texNombre'
+
 export const titre = "Déterminer un effectif à partir d'une proportion"
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -47,7 +47,7 @@ export default class Effectif extends ExerciceSimple {
         Avec un produit en croix, on en déduit que : $${b}\\times N= 100\\times ${c}$.<br>
         On en déduit que $N=\\dfrac{100\\times ${c}}{${b}}\\approx ${arrondi((100 * c) / b, 0)}$.<br>
       Il y a  $${arrondi((100 * c) / b, 0)}$ adhérents dans ce club.`
-        this.reponse = texNombre((b * c) / 100, 0)
+        this.reponse = arrondi((100 * c) / b, 0)
         break
       case 'lycée':
         b = randint(25, 35) /* Pourcentage */
@@ -66,7 +66,7 @@ export default class Effectif extends ExerciceSimple {
             Avec un produit en croix, on en déduit que : $${b}\\times N= 100\\times ${c}$.<br>
             On en déduit que $N=\\dfrac{100\\times ${c}}{${b}}\\approx ${arrondi((100 * c) / b, 0)}$.<br>
           Il y a  $${arrondi((100 * c) / b, 0)}$ élèves dans ce lycée.`
-        this.reponse = texNombre((b * c) / 100, 0)
+        this.reponse = arrondi((100 * c) / b, 0)
         break
       case 'election':
         b = randint(20, 40) /* Pourcentage */
@@ -84,7 +84,7 @@ export default class Effectif extends ExerciceSimple {
             Avec un produit en croix, on en déduit que : $${b}\\times N= 100\\times ${c}$.<br>
             On en déduit que $N=\\dfrac{100\\times ${c}}{${b}}\\approx ${arrondi((100 * c) / b, 0)}$.<br>
           Il y a eu $${arrondi((100 * c) / b, 0)}$ suffrages exprimés lors de cette élection.`
-        this.reponse = texNombre((b * c) / 100, 0)
+        this.reponse = arrondi((100 * c) / b, 0)
         break
     }
   }
