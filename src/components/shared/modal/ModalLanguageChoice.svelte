@@ -27,11 +27,9 @@
             }}
           >
             <div class="flex flex-row items-center">
-              <i
-                class="bx bx-check pr-2 {loc.localeCompare(locale) === 0
-                  ? ''
-                  : 'hidden'}"
-              ></i>
+              {#if loc === locale}
+                <i class="bx bx-check pr-2"></i>
+              {/if}
               <span>Référentiel {lang.long}</span>
             </div>
             <div>

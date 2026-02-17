@@ -120,9 +120,9 @@
         </div>
       {/if}
       <ButtonToggleDarkMode />
-      {#if $globalOptions.v !== ''}
+      {#if $globalOptions.v !== '' && subtitleType !== 'design'}
         <ButtonIcon
-          icon="bx-x {subtitleType === 'design' ? 'hidden' : ''}"
+          icon="bx-x"
           class="text-3xl"
           on:click={() => {
             mathaleaGoToView('')

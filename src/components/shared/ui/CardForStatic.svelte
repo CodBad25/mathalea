@@ -67,20 +67,18 @@
       <i class="bx bx-sm {selected ? 'bx-minus' : 'bx-plus'}"></i>
     </div>
   </div>
-  <div class="absolute top-3 right-3 rotate-frac">
-    <div class="relative">
-      <StarIcon
-        class="{selected
-          ? 'container'
-          : 'hidden'} top-0 left-0 h-12 w-12 text-coopmaths-warn-800 dark:text-coopmathsdark-warn"
-      />
-      <i
-        class="{selected
-          ? 'container'
-          : 'hidden'} absolute top-1 left-[0.1rem] bx bx-check bx-md text-coopmaths-canvas dark:text-coopmathsdark-canvas"
-      ></i>
+  {#if selected}
+    <div class="absolute top-3 right-3 rotate-frac">
+      <div class="relative">
+        <StarIcon
+          class="container top-0 left-0 h-12 w-12 text-coopmaths-warn-800 dark:text-coopmathsdark-warn"
+        />
+        <i
+          class="container absolute top-1 left-[0.1rem] bx bx-check bx-md text-coopmaths-canvas dark:text-coopmathsdark-canvas"
+        ></i>
+      </div>
     </div>
-  </div>
+  {/if}
 </button>
 
 <style>
