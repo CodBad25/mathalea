@@ -7,14 +7,14 @@ import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { listeQuestionsToContenu, randint } from '../../../modules/outils'
 import Exercice from '../../Exercice'
 
-export const titre = 'Déterminer un vecteur normal à un plan.'
+export const titre = 'Déterminer un vecteur normal à un plan donné par une équation cartésienne'
 export const dateDePublication = '28/01/2025'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 
 /**
  *
- * @author
+ * @author Stéphane Guyon
  */
 
 export const uuid = '0cd98'
@@ -23,7 +23,7 @@ export const refs = {
   'fr-ch': ['3mGeomVect-2'],
 }
 
-export default class MilieuSegment extends Exercice {
+export default class VecteurNormalPlan extends Exercice {
   constructor() {
     super()
 

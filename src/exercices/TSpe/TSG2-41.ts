@@ -15,7 +15,7 @@ import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
 export const titre =
-  'Déterminer une équation cartésienne d’un plan à partir de trois points.'
+  'Déterminer une équation cartésienne d’un plan à partir de trois points'
 
 export const dateDePublication = '28/01/2026'
 
