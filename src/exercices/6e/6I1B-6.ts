@@ -24,23 +24,22 @@ export const refs = {
 export default class TrouverLeBonProgramme extends Exercice {
   constructor() {
     super()
+    this.comment = `En correction, on peut exécuter les programmes avec tracés.<br>
+    On peut ajuster le délai entre chaque étape du programme pour que ce soit plus facile à suivre ou pour accélérer.<br>
+    La simulation n'est pas disponibles sur les programmes sans tracé.`
     this.nbQuestions = 7
-    this.besoinFormulaire2CaseACocher = [
-      "Avec simulateur (programmes suivis d'un *)",
-      false,
-    ]
-    this.sup = false
+
+    this.sup = '0'
     this.besoinFormulaireTexte = [
       'Types de programmes',
       'Nombres séparés par des tirets\n1 : Avancer *\n2 : Tourner *\n3 : Ajouter\n4 : Polygone *\n5 : Carré *\n6 : Rebours\n7 : Escalier *\n0 : Mélange',
     ]
-    this.sup2 = '0'
-    this.besoinFormulaire3Numerique = [
-      'Pause entre chaque étape du programme',
-      3,
-      '1 : Pas de pause\n2 : 1 seconde\n3 : 2 secondes',
+    this.besoinFormulaire2Numerique = [
+      'Pause entre chaque étape du programme pour le simulateur',
+      4,
+      '1 : Pas de pause\n2 : 1 seconde\n3 : 2 secondes\n4 : 4 secondes',
     ]
-    this.sup3 = 2
+    this.sup2 = 3
   }
 
   nouvelleVersion(): void {
@@ -52,7 +51,14 @@ export default class TrouverLeBonProgramme extends Exercice {
       defaut: 0,
       nbQuestions: this.nbQuestions,
     }).map(Number)
-    const delai = this.sup3 === 1 ? 0 : this.sup3 === 2 ? 1000 : 2000
+    const delai =
+      this.sup2 === 1
+        ? 0
+        : this.sup2 === 2
+          ? 1000
+          : this.sup2 === 3
+            ? 2000
+            : 4000
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
       const listeDeProgrammes = [
         getProgrammesAvancer,
@@ -115,23 +121,21 @@ export default class TrouverLeBonProgramme extends Exercice {
       const ligne2 = programmes.programmesListe
       const ligne2Brut =
         programmes.programmesCodeBrut || programmes.programmesListe
+      const simulateurs = ligne2Brut.map((code) =>
+        createScratchSimulatorElement(
+          code.replace(/"/g, '&quot;').replace(/'/g, '&#39;'),
+          delai,
+        ),
+      )
       if (context.isHtml) {
         texte +=
           '<div style="margin: 20px 0; display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); width: 100%; align-self: stretch;">'
         for (let j = 0; j < ligne2.length; j++) {
           const programme = ligne2[j]
-          const codeBrut = ligne2Brut[j]
-          const simulatorCode = (codeBrut || '')
-            .replace(/"/g, '&quot;')
-            .replace(/'/g, '&#39;')
           const titre = ligne1[j]
           texte += '<div style="border: 1px solid #ddd; padding: 10px;">'
           texte += `<div style="font-weight: 600; margin-bottom: 8px;">${titre}</div>`
-          if (this.sup2 && cas !== 5 && cas !== 2) {
-            texte += createScratchSimulatorElement(simulatorCode, delai)
-          } else {
-            texte += programme
-          }
+          texte += programme // createScratchSimulatorElement(simulatorCode, delai)
           texte += '</div>'
         }
         texte += '</div>'
@@ -177,7 +181,13 @@ export default class TrouverLeBonProgramme extends Exercice {
           `Les programmes qui conviennent sont les programmes ${vraisOuFaux
             .map((v, i) => (v ? i + 1 : ''))
             .filter((n) => n !== '')
-            .join(' et ')} `,
+            .join(' et ')}.<br>
+            ${
+              context.isHtml && cas !== 2 && cas !== 5
+                ? `<div style="margin: 20px 0; display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); width: 100%; align-self: stretch;">
+     ${simulateurs.map((s, i) => `<div style="border: 1px solid #ddd; padding: 10px;"><div style="font-weight: 600; margin-bottom: 8px;">Programme ${i + 1}</div>${s}</div>`).join('')}</div>`
+                : ''
+            }`,
         )
         i++
       }
