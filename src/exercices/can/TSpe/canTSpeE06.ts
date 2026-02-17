@@ -20,7 +20,7 @@ export const refs = {
   'fr-fr': ['canTSpeE06'],
   'fr-ch': [],
 }
-export default class ProduitScalaireCoordonnees extends ExerciceSimple {
+export default class NormeVecteur extends ExerciceSimple {
   constructor() {
     super()
 
