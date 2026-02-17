@@ -22,7 +22,7 @@ export const titre = 'Factoriser avec $a^2-b^2$'
 export const uuid = '47f20'
 export const interactifReady = true
 export const interactifType = 'mathLive'
-export const dateDeModifImportante = '05/01/2025'
+export const dateDeModifImportante = '17/02/2026'
 export const refs = {
   'fr-fr': ['2N41-2'],
   'fr-ch': [],
@@ -30,7 +30,6 @@ export const refs = {
 export default class factorisationDifferenceCarres extends Exercice {
   constructor() {
     super()
-    // this.consigne = 'Calculer '
     this.sup = 11
     this.nbQuestions = 1
     this.spacingCorr = 2
@@ -53,6 +52,8 @@ export default class factorisationDifferenceCarres extends Exercice {
         '11 : Mélange',
       ].join('\n'),
     ]
+    this.comment =
+      "Une factorisation sera acceptée si chaque facteur est de degré inférieur au degré de l'expression initiale."
   }
 
   nouvelleVersion() {
@@ -113,7 +114,7 @@ export default class factorisationDifferenceCarres extends Exercice {
                 value: choix
                   ? `(${reduireAxPlusB(1, -a)})(${reduireAxPlusB(1, a)})`
                   : `(${reduireAxPlusB(1, a)})(${reduireAxPlusB(-1, a)})`,
-                options: { factorisation: true },
+                options: { exclusifFactorisation: true },
               },
             })
           }
@@ -152,7 +153,7 @@ export default class factorisationDifferenceCarres extends Exercice {
                 value: choix
                   ? `(x-\\sqrt{${a}})(x+\\sqrt{${a}})`
                   : `(\\sqrt{${a}}-x)(\\sqrt{${a}}+x)`,
-                options: { factorisation: true },
+                options: { unSeulFacteurLitteral: true },
               },
             })
           }
@@ -191,7 +192,7 @@ export default class factorisationDifferenceCarres extends Exercice {
                 value: choix
                   ? `(${reduireAxPlusB(a, b)})(${reduireAxPlusB(a, -b)})`
                   : `(${reduireAxPlusB(a, b)})(${reduireAxPlusB(-a, b)})`,
-                options: { factorisation: true },
+                options: { unSeulFacteurLitteral: true },
               },
             })
           }
@@ -231,7 +232,7 @@ export default class factorisationDifferenceCarres extends Exercice {
                 value: choix
                   ? `(\\sqrt{${a}}x-${b})(\\sqrt{${a}}x+${b})`
                   : `(${b}-\\sqrt{${a}}x)(${b}+\\sqrt{${a}}x)`,
-                options: { factorisation: true },
+                options: { unSeulFacteurLitteral: true },
               },
             })
           }
@@ -271,7 +272,7 @@ export default class factorisationDifferenceCarres extends Exercice {
                 value: choix
                   ? `(\\dfrac{x}{${a}}-${b})(\\dfrac{x}{${a}}+${b})`
                   : `(${b}-\\dfrac{x}{${a}})(${b}+\\dfrac{x}{${a}})`,
-                options: { factorisation: true },
+                options: { unSeulFacteurLitteral: true },
               },
             })
           }
@@ -348,7 +349,7 @@ export default class factorisationDifferenceCarres extends Exercice {
                 value: choix
                   ? `(${reduireAxPlusB(dfrac, b)})(${reduireAxPlusB(dfrac, -b)})`
                   : `(${reduireAxPlusB(dfrac, b)})(${reduireAxPlusB(-dfrac, b)})`,
-                options: { factorisation: true },
+                options: { unSeulFacteurLitteral: true },
               },
             })
           }
@@ -388,7 +389,7 @@ export default class factorisationDifferenceCarres extends Exercice {
             handleAnswers(this, i, {
               reponse: {
                 value: `(${facteur1})(${facteur2})`,
-                options: { factorisation: true },
+                options: { unSeulFacteurLitteral: true },
               },
             })
           }
@@ -430,7 +431,7 @@ export default class factorisationDifferenceCarres extends Exercice {
                 value: choix
                   ? `${c === b ? `${reduireAxPlusB(a, b - c)}(${reduireAxPlusB(a, b + c)})` : `${c === -b ? `${reduireAxPlusB(a, b + c)}(${reduireAxPlusB(a, b - c)})` : `(${reduireAxPlusB(a, b - c)})(${reduireAxPlusB(a, b + c)})`}`}`
                   : `(${reduireAxPlusB(-a, c - b)})(${reduireAxPlusB(a, c + b)})`,
-                options: { factorisation: true },
+                options: { unSeulFacteurLitteral: true },
               },
             })
           }
@@ -486,7 +487,7 @@ export default class factorisationDifferenceCarres extends Exercice {
             handleAnswers(this, i, {
               reponse: {
                 value: `(${facteur1})(${facteur2})`,
-                options: { factorisation: true },
+                options: { unSeulFacteurLitteral: true },
               },
             })
           }
@@ -535,7 +536,7 @@ export default class factorisationDifferenceCarres extends Exercice {
             handleAnswers(this, i, {
               reponse: {
                 value: `(${facteur1})(${facteur2})`,
-                options: { factorisation: true },
+                options: { unSeulFacteurLitteral: true },
               },
             })
           }
