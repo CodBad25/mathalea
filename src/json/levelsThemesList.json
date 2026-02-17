@@ -2794,6 +2794,15 @@
   "TSA5": {
     "titre": "Fonction logarithme népérien"
   },
+  "TSA5-1": {
+    "titre": "Utiliser les propriétés algébriques du logarithme népérien"
+  },
+   "TSA5-2": {
+    "titre": "Résoudre des équations ou inéquations faisant intervenir le logarithme népérien"
+  },
+   "TSA5-3": {
+    "titre": "Etudier la fonction logarithme népérien"
+  },
   "TSA6": {
     "titre": "Primitives et équations différentielles"
   },
