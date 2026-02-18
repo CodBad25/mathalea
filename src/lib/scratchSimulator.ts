@@ -2469,7 +2469,7 @@ export class ScratchSimulator extends HTMLElement {
     if (result.currentInstructionScratchHtml) {
       const indexLabel =
         typeof result.currentInstructionIndex === 'number'
-          ? ` <span class="text-xs text-gray-500">(#${result.currentInstructionIndex})</span>`
+          ? ` <span class="text-xs text-gray-500">(#${result.currentInstructionIndex < 0 ? '0' : String(result.currentInstructionIndex + 1)})</span>`
           : ''
       this.stepDiv.innerHTML =
         '<span class="font-semibold">Instruction :</span>' +
