@@ -30,8 +30,8 @@ type CodeBlockNode = {
 export class ScratchInterpreter {
   private x: number
   private y: number
-  private angle: number // en degrés, 0° = vers la droite
-  private penDown: boolean = true
+  private angle: number // en degrés Scratch, 0° = vers le haut, 90° = vers la droite
+  private penDown: boolean = false
   private variables: Record<string, number> = {}
   private customBlocks: Record<string, string> = {} // Blocs personnalisés
   private traces: Array<{
@@ -415,7 +415,15 @@ export class ScratchInterpreter {
     content: string,
     delayMs: number = 0,
   ): Promise<void> {
-    if (type === 'move' && content.includes('avancer')) {
+    if (type === 'move' && this.isGoToInstruction(content)) {
+      const target = this.extractGoToCoordinates(content)
+      if (target) {
+        this.goTo(target.x, target.y)
+      }
+    } else if (type === 'move' && content.includes('orienter')) {
+      const angle = this.extractNumber(content)
+      this.setOrientation(angle)
+    } else if (type === 'move' && content.includes('avancer')) {
       const steps = this.extractNumber(content)
       this.moveForward(steps)
     } else if (type === 'move' && content.includes('tourner')) {
@@ -458,13 +466,27 @@ export class ScratchInterpreter {
       } else {
         this.messages.push(String(num))
       }
+    } else if (type === 'pen') {
+      if (content.includes('position') || content.includes('écriture')) {
+        this.penDown = true
+      } else if (content.includes('relever')) {
+        this.penDown = false
+      }
     }
   }
 
   private executeBlock(type: string, content: string, rawBlock?: string): void {
     this.prepareBlockDisplay(type, content, rawBlock)
     // Exécuter synchronement (pour parseNonRepeatBlocks non-animé)
-    if (type === 'move' && content.includes('avancer')) {
+    if (type === 'move' && this.isGoToInstruction(content)) {
+      const target = this.extractGoToCoordinates(content)
+      if (target) {
+        this.goTo(target.x, target.y)
+      }
+    } else if (type === 'move' && content.includes('orienter')) {
+      const angle = this.extractNumber(content)
+      this.setOrientation(angle)
+    } else if (type === 'move' && content.includes('avancer')) {
       const steps = this.extractNumber(content)
       this.moveForward(steps)
     } else if (type === 'move' && content.includes('tourner')) {
@@ -504,10 +526,28 @@ export class ScratchInterpreter {
       } else {
         this.messages.push(String(num))
       }
+    } else if (type === 'pen') {
+      if (content.includes('position') || content.includes('écriture')) {
+        this.penDown = true
+      } else if (content.includes('relever')) {
+        this.penDown = false
+      }
     }
   }
 
   private humanizeInstruction(type: string, content: string): string {
+    if (type === 'move' && this.isGoToInstruction(content)) {
+      const target = this.extractGoToCoordinates(content)
+      if (target) {
+        return `Aller a x:${target.x} y:${target.y}`
+      }
+      return 'Aller a x:? y:?'
+    }
+
+    if (type === 'move' && content.includes('orienter')) {
+      return `S'orienter a ${this.extractNumber(content)} degres`
+    }
+
     if (type === 'move' && content.includes('avancer')) {
       return `Avancer de ${this.extractNumber(content)} pas`
     }
@@ -544,6 +584,14 @@ export class ScratchInterpreter {
       return varName ? `Dire ${varName}` : `Dire ${num}`
     }
 
+    if (type === 'pen') {
+      if (content.includes('position') || content.includes('écriture')) {
+        return "Stylo en position d'ecriture"
+      } else if (content.includes('relever')) {
+        return 'Relever le stylo'
+      }
+    }
+
     return 'Instruction en cours'
   }
 
@@ -569,17 +617,76 @@ export class ScratchInterpreter {
   }
 
   private extractNumber(str: string): number {
-    const match = str.match(/\\ovalnum\{(\d+)\}/)
+    const match = str.match(/\\ovalnum\{(-?\d+)\}/)
     if (match) return parseInt(match[1], 10)
 
-    const numMatch = str.match(/\d+/)
+    const numMatch = str.match(/-?\d+/)
     return numMatch ? parseInt(numMatch[0], 10) : 0
+  }
+
+  private isGoToInstruction(content: string): boolean {
+    const result =
+      /aller\s+[àa]\s*x\s*:/i.test(content) && /y\s*:/i.test(content)
+    return result
+  }
+
+  private extractGoToCoordinates(
+    content: string,
+  ): { x: number; y: number } | null {
+    const ovalMatch = content.match(
+      /x\s*:\s*\\ovalnum\{(-?\d+)\}[\s\S]*?y\s*:\s*\\ovalnum\{(-?\d+)\}/i,
+    )
+    if (ovalMatch) {
+      return {
+        x: parseInt(ovalMatch[1], 10),
+        y: parseInt(ovalMatch[2], 10),
+      }
+    }
+
+    const plainMatch = content.match(/x\s*:\s*(-?\d+)[\s\S]*?y\s*:\s*(-?\d+)/i)
+    if (plainMatch) {
+      return {
+        x: parseInt(plainMatch[1], 10),
+        y: parseInt(plainMatch[2], 10),
+      }
+    }
+
+    const allNumbers = [...content.matchAll(/-?\d+/g)]
+    if (allNumbers.length >= 2) {
+      return {
+        x: parseInt(allNumbers[0][0], 10),
+        y: parseInt(allNumbers[1][0], 10),
+      }
+    }
+
+    return null
+  }
+
+  private setOrientation(angle: number): void {
+    this.angle = angle
   }
 
   private moveForward(steps: number): void {
     const rad = (this.angle * Math.PI) / 180
-    const newX = this.x + steps * Math.cos(rad)
-    const newY = this.y + steps * Math.sin(rad)
+    const newX = this.x + steps * Math.sin(rad)
+    const newY = this.y - steps * Math.cos(rad)
+
+    if (this.penDown) {
+      this.traces.push({
+        startX: this.x,
+        startY: this.y,
+        endX: newX,
+        endY: newY,
+      })
+    }
+
+    this.x = newX
+    this.y = newY
+  }
+
+  private goTo(targetX: number, targetY: number): void {
+    const newX = 200 + targetX
+    const newY = 200 - targetY
 
     if (this.penDown) {
       this.traces.push({
@@ -595,8 +702,7 @@ export class ScratchInterpreter {
   }
 
   private turn(degrees: number): void {
-    this.angle = (this.angle + degrees) % 360
-    if (this.angle < 0) this.angle += 360
+    this.angle += degrees
   }
 }
 
@@ -1131,7 +1237,7 @@ export class ScratchSimulator extends HTMLElement {
   private runSimulation(): void {
     if (!this.canvas) return
 
-    this.interpreter = new ScratchInterpreter(240, 240, 0)
+    this.interpreter = new ScratchInterpreter(200, 200, 90)
 
     // Lancer l'exécution animée
     this.runAnimatedSimulation()
@@ -1204,12 +1310,12 @@ export class ScratchSimulator extends HTMLElement {
     ctx.strokeStyle = '#999999'
     ctx.lineWidth = 2
     ctx.beginPath()
-    ctx.moveTo(0, 240)
-    ctx.lineTo(this.canvas.width, 240)
+    ctx.moveTo(0, 200)
+    ctx.lineTo(this.canvas.width, 200)
     ctx.stroke()
     ctx.beginPath()
-    ctx.moveTo(240, 0)
-    ctx.lineTo(240, this.canvas.height)
+    ctx.moveTo(200, 0)
+    ctx.lineTo(200, this.canvas.height)
     ctx.stroke()
 
     // Traces
@@ -1225,7 +1331,7 @@ export class ScratchSimulator extends HTMLElement {
     // Lutin (tortue verte)
     ctx.save()
     ctx.translate(result.finalX, result.finalY)
-    ctx.rotate((result.finalAngle * Math.PI) / 180)
+    ctx.rotate(((result.finalAngle - 90) * Math.PI) / 180)
 
     const shellRadiusX = 10
     const shellRadiusY = 8
@@ -1279,7 +1385,7 @@ export class ScratchSimulator extends HTMLElement {
   private displayInfo(result: ExecutionResult): void {
     if (!this.infoDiv) return
 
-    let html = `<div class="space-y-2"><p><strong>Position:</strong> x=${Math.round(result.finalX - 240)}, y=${Math.round(result.finalY - 240)}.</p>`
+    let html = `<div class="space-y-2"><p><strong>Position:</strong> x=${Math.round(result.finalX - 200)}, y=${Math.round(200 - result.finalY)}.</p>`
     html += `<p><strong>Angle:</strong> ${Math.round(result.finalAngle)}°.</p><p><strong>Traces:</strong> ${result.traces.length} ligne(s).</p>`
 
     if (Object.keys(result.variables).length > 0) {

@@ -200,6 +200,8 @@ export default class TrouverLeBonProgramme extends Exercice {
 }
 function programmeAvancerType1(nbPas: number, vraiOuFaux: boolean) {
   let codeScratch = `\\begin{scratch}[blocks]
+   \\blockmove{s'orienter à \\ovalnum{90}}
+  \\blockmove{aller à x:\\ovalnum{${randint(-5, 5) * 5}} y:\\ovalnum{${randint(-5, 5) * 5}}}
   \\blockpen{stylo en position d'écriture}
   `
   for (
@@ -215,10 +217,12 @@ function programmeAvancerType1(nbPas: number, vraiOuFaux: boolean) {
 
 function programmeAvancerType2(nbPas: number, vraiOuFaux: boolean) {
   const codeScratch = `\\begin{scratch}[blocks]
-  \\blockpen{stylo en position d'écriture}
-\\blockmove{avancer de \\ovalnum{30} pas}
+  \\blockmove{s'orienter à \\ovalnum{90}}
+ \\blockmove{aller à x:\\ovalnum{${randint(-5, 5) * 5}} y:\\ovalnum{${randint(-5, 5) * 5}}}
+   \\blockpen{stylo en position d'écriture}
+\\blockmove{avancer de \\ovalnum{20} pas}
 \\blockrepeat{répéter \\ovalnum{${vraiOuFaux ? nbPas - 1 : nbPas}} fois}{
-\\blockmove{avancer de \\ovalnum{30} pas}
+\\blockmove{avancer de \\ovalnum{20} pas}
 }
 \\end{scratch}\n`
   return codeScratch
@@ -226,34 +230,40 @@ function programmeAvancerType2(nbPas: number, vraiOuFaux: boolean) {
 
 function programmeAvancerType3(nbPas: number, vraiOuFaux: boolean) {
   const codeScratch = `\\begin{scratch}[blocks]
-  \\blockpen{stylo en position d'écriture}
+   \\blockmove{s'orienter à \\ovalnum{90}}
+  \\blockmove{aller à x:\\ovalnum{${randint(-5, 5) * 5}} y:\\ovalnum{${randint(-5, 5) * 5}}}
+ \\blockpen{stylo en position d'écriture}
 \\blockrepeat{répéter \\ovalnum{${vraiOuFaux ? nbPas - 1 : nbPas}} fois}{
-\\blockmove{avancer de \\ovalnum{30} pas}
+\\blockmove{avancer de \\ovalnum{20} pas}
 }
-\\blockmove{avancer de \\ovalnum{30} pas}
+\\blockmove{avancer de \\ovalnum{20} pas}
 \\end{scratch}\n`
   return codeScratch
 }
 
 function programmeAvancerType4(nbPas: number, vraiOuFaux: boolean) {
   const codeScratch = `\\begin{scratch}[blocks]
-  \\blockpen{stylo en position d'écriture}
+  \\blockmove{s'orienter à \\ovalnum{90}}
+   \\blockmove{aller à x:\\ovalnum{${randint(-5, 5) * 5}} y:\\ovalnum{${randint(-5, 5) * 5}}}
+ \\blockpen{stylo en position d'écriture}
 \\blockrepeat{répéter \\ovalnum{${Math.floor(nbPas / 2)}} fois}{
-\\blockmove{avancer de \\ovalnum{30} pas}
-\\blockmove{avancer de \\ovalnum{30} pas}
+\\blockmove{avancer de \\ovalnum{20} pas}
+\\blockmove{avancer de \\ovalnum{20} pas}
 }
-${(nbPas % 2 === 1 && vraiOuFaux) || (nbPas % 2 === 0 && !vraiOuFaux) ? '\\blockmove{avancer de \\ovalnum{30} pas}' : ''}
+${(nbPas % 2 === 1 && vraiOuFaux) || (nbPas % 2 === 0 && !vraiOuFaux) ? '\\blockmove{avancer de \\ovalnum{20} pas}' : ''}
 \\end{scratch}\n`
   return codeScratch
 }
 
 function programmeAvancerType5(nbPas: number, vraiOuFaux: boolean) {
   const codeScratch = `\\begin{scratch}[blocks]
-  \\blockpen{stylo en position d'écriture}
+  \\blockmove{s'orienter à \\ovalnum{0}}
+ \\blockmove{aller à x:\\ovalnum{${randint(-5, 5) * 5}} y:\\ovalnum{${randint(-5, 5) * 5}}}
+   \\blockpen{stylo en position d'écriture}
 \\blockrepeat{répéter \\ovalnum{${(nbPas - 1) * 2}} fois}{
-\\blockmove{avancer de \\ovalnum{15} pas}
+\\blockmove{avancer de \\ovalnum{10} pas}
 }
-${vraiOuFaux ? '\\blockmove{avancer de \\ovalnum{30} pas}' : '\\blockmove{avancer de \\ovalnum{15} pas}'}
+${vraiOuFaux ? '\\blockmove{avancer de \\ovalnum{20} pas}' : '\\blockmove{avancer de \\ovalnum{10} pas}'}
 \\end{scratch}\n`
   return codeScratch
 }
@@ -275,7 +285,7 @@ function getProgrammesAvancer(
   return {
     programmesListe,
     programmesCodeBrut,
-    enonce: `On souhaite faire avancer le lutin de ${nbPas * 30} pas.<br>Cocher le (ou les) programme(s) correct(s).<br>`,
+    enonce: `On souhaite faire avancer le lutin de ${nbPas * 20} pas.<br>Cocher le (ou les) programme(s) correct(s).<br>`,
   }
 }
 
@@ -449,7 +459,7 @@ function getProgrammesAjouter(
 
 function programmePolygoneType1(nbCotes: number, vraiOuFaux: boolean) {
   let codeScratch = `\\begin{scratch}[blocks]
-  \\blockmove{aller à x:\\ovalnum{0} y:\\ovalnum{0}}
+  \\blockmove{aller à x:\\ovalnum{${randint(-5, 5) * 5}} y:\\ovalnum{${randint(-5, 5) * 5}}}
   \\blockpen{stylo en position d'écriture}
   `
   for (let i = 0; i < (vraiOuFaux ? nbCotes : nbCotes - 1); i++) {
@@ -463,7 +473,7 @@ function programmePolygoneType1(nbCotes: number, vraiOuFaux: boolean) {
 
 function programmePolygoneType2(nbCotes: number, vraiOuFaux: boolean) {
   const codeScratch = `\\begin{scratch}[blocks]
-  \\blockmove{aller à x:\\ovalnum{0} y:\\ovalnum{0}}
+  \\blockmove{aller à x:\\ovalnum{${randint(-5, 5) * 5}} y:\\ovalnum{${randint(-5, 5) * 5}}}
   \\blockpen{stylo en position d'écriture}
   \\blockrepeat{répéter \\ovalnum{${vraiOuFaux ? nbCotes : nbCotes - 1}} fois}{
   \\blockmove{avancer de \\ovalnum{30} pas}
@@ -475,7 +485,7 @@ function programmePolygoneType2(nbCotes: number, vraiOuFaux: boolean) {
 
 function programmePolygoneType3(nbCotes: number, vraiOuFaux: boolean) {
   const codeScratch = `\\begin{scratch}[blocks]
-  \\blockmove{aller à x:\\ovalnum{0} y:\\ovalnum{0}}
+  \\blockmove{aller à x:\\ovalnum{${randint(-5, 5) * 5}} y:\\ovalnum{${randint(-5, 5) * 5}}}
   \\blockpen{stylo en position d'écriture}
   \\blockrepeat{répéter \\ovalnum{${vraiOuFaux ? nbCotes - 1 : nbCotes - 2}} fois}{
     \\blockmove{avancer de \\ovalnum{30} pas}
@@ -489,7 +499,7 @@ function programmePolygoneType3(nbCotes: number, vraiOuFaux: boolean) {
 
 function programmePolygoneType4(nbCotes: number, vraiOuFaux: boolean) {
   const codeScratch = `\\begin{scratch}[blocks]
-  \\blockmove{aller à x:\\ovalnum{0} y:\\ovalnum{0}}
+  \\blockmove{aller à x:\\ovalnum{${randint(-5, 5) * 5}} y:\\ovalnum{${randint(-5, 5) * 5}}}
   \\blockpen{stylo en position d'écriture}
   \\blockrepeat{répéter \\ovalnum{${vraiOuFaux ? nbCotes / 2 : nbCotes}} fois}{
   \\blockmove{avancer de \\ovalnum{30} pas}
@@ -504,7 +514,7 @@ function programmePolygoneType4(nbCotes: number, vraiOuFaux: boolean) {
 // à refaire, on ne peut pas faire un polygone à 2n côtés.
 function programmePolygoneType5(nbCotes: number, vraiOuFaux: boolean) {
   const codeScratch = `\\begin{scratch}[blocks]
-  \\blockmove{aller à x:\\ovalnum{0} y:\\ovalnum{0}}
+  \\blockmove{aller à x:\\ovalnum{${randint(-5, 5) * 5}} y:\\ovalnum{${randint(-5, 5) * 5}}}
   \\blockpen{stylo en position d'écriture}
   \\blockrepeat{répéter \\ovalnum{${nbCotes - 1}} fois}{
     \\blockmove{tourner \\turnright{} de \\ovalnum{${vraiOuFaux ? Math.round(360 / nbCotes) : choice([120, 90, 60], Math.round(360 / nbCotes))}} degrés}
@@ -539,7 +549,7 @@ function getProgrammesPolygone(
 function programmeCarreType1(perimetre: number, vraiOuFaux: boolean) {
   const cote = perimetre / 4
   let codeScratch = `\\begin{scratch}[blocks]
-  \\blockmove{aller à x:\\ovalnum{0} y:\\ovalnum{0}}
+  \\blockmove{aller à x:\\ovalnum{${randint(-5, 5) * 5}} y:\\ovalnum{${randint(-5, 5) * 5}}}
   \\blockpen{stylo en position d'écriture}
   `
   for (let i = 0; i < (vraiOuFaux ? 4 : 3); i++) {
@@ -554,7 +564,7 @@ function programmeCarreType1(perimetre: number, vraiOuFaux: boolean) {
 function programmeCarreType2(perimetre: number, vraiOuFaux: boolean) {
   const cote = perimetre / 4
   const codeScratch = `\\begin{scratch}[blocks]
-  \\blockmove{aller à x:\\ovalnum{0} y:\\ovalnum{0}}
+  \\blockmove{aller à x:\\ovalnum{${randint(-5, 5) * 5}} y:\\ovalnum{${randint(-5, 5) * 5}}}
   \\blockpen{stylo en position d'écriture}
   \\blockrepeat{répéter \\ovalnum{${vraiOuFaux ? 4 : choice([3, 5])}} fois}{
   \\blockmove{avancer de \\ovalnum{${cote}} pas}
@@ -567,7 +577,7 @@ function programmeCarreType2(perimetre: number, vraiOuFaux: boolean) {
 function programmeCarreType3(perimetre: number, vraiOuFaux: boolean) {
   const cote = perimetre / 4
   const codeScratch = `\\begin{scratch}[blocks]
-  \\blockmove{aller à x:\\ovalnum{0} y:\\ovalnum{0}}
+  \\blockmove{aller à x:\\ovalnum{${randint(-5, 5) * 5}} y:\\ovalnum{${randint(-5, 5) * 5}}}
   \\blockpen{stylo en position d'écriture}
   \\blockrepeat{répéter \\ovalnum{${vraiOuFaux ? 3 : 2}} fois}{
     \\blockmove{avancer de \\ovalnum{${cote}} pas}
@@ -582,7 +592,7 @@ function programmeCarreType3(perimetre: number, vraiOuFaux: boolean) {
 function programmeCarreType4(perimetre: number, vraiOuFaux: boolean) {
   const cote = perimetre / 4
   const codeScratch = `\\begin{scratch}[blocks]
-  \\blockmove{aller à x:\\ovalnum{0} y:\\ovalnum{0}}
+  \\blockmove{aller à x:\\ovalnum{${randint(-5, 5) * 5}} y:\\ovalnum{${randint(-5, 5) * 5}}}
   \\blockpen{stylo en position d'écriture}
   \\blockrepeat{répéter \\ovalnum{2} fois}{
   \\blockmove{avancer de \\ovalnum{${cote}} pas}
@@ -598,7 +608,7 @@ ${!vraiOuFaux ? '\\blockmove{avancer de \\ovalnum{' + cote + '} pas}\n\\blockmov
 function programmeCarreType5(perimetre: number, vraiOuFaux: boolean) {
   const cote = perimetre / 4
   const codeScratch = `\\begin{scratch}[blocks]
-  \\blockmove{aller à x:\\ovalnum{0} y:\\ovalnum{0}}
+  \\blockmove{aller à x:\\ovalnum{${randint(-5, 5) * 5}} y:\\ovalnum{${randint(-5, 5) * 5}}}
   \\blockpen{stylo en position d'écriture}
   \\blockrepeat{répéter \\ovalnum{${vraiOuFaux ? 4 : 3}} fois}{
     \\blockmove{avancer de \\ovalnum{${cote / 2}} pas}
@@ -719,7 +729,7 @@ function programmeEscalierType1(nbMarches: number, vraiOuFaux: boolean) {
     \\blockmove{avancer de \\ovalnum{20} pas}
     \\blockmove{tourner ${vraiOuFaux ? '\\turnleft{}' : '\\turnright{}'} de \\ovalnum{90} degrés}
 
-  \\blockmove{aller à x:\\ovalnum{0} y:\\ovalnum{0}}
+  \\blockmove{aller à x:\\ovalnum{${randint(-5, 5) * 5}} y:\\ovalnum{${randint(-5, 5) * 5}}}
   \\blockpen{stylo en position d'écriture}
   \\blockrepeat{répéter \\ovalnum{${nbMarches}} fois}{
     \\blockmoreblocks{escalier}
@@ -730,7 +740,7 @@ function programmeEscalierType1(nbMarches: number, vraiOuFaux: boolean) {
 
 function programmeEscalierType2(nbMarches: number, vraiOuFaux: boolean) {
   const codeScratch = `\\begin{scratch}[blocks]
-  \\blockmove{aller à x:\\ovalnum{0} y:\\ovalnum{0}}
+  \\blockmove{aller à x:\\ovalnum{${randint(-5, 5) * 5}} y:\\ovalnum{${randint(-5, 5) * 5}}}
   \\blockpen{stylo en position d'écriture}
   \\blockrepeat{répéter \\ovalnum{${vraiOuFaux ? nbMarches : choice([nbMarches - 1, nbMarches + 1])}} fois}{
   \\blockmove{avancer de \\ovalnum{20} pas}
@@ -744,7 +754,7 @@ function programmeEscalierType2(nbMarches: number, vraiOuFaux: boolean) {
 
 function programmeEscalierType3(nbMarches: number, vraiOuFaux: boolean) {
   const codeScratch = `\\begin{scratch}[blocks]
-  \\blockmove{aller à x:\\ovalnum{0} y:\\ovalnum{0}}
+  \\blockmove{aller à x:\\ovalnum{${randint(-5, 5) * 5}} y:\\ovalnum{${randint(-5, 5) * 5}}}
   \\blockpen{stylo en position d'écriture}
   \\blockrepeat{répéter \\ovalnum{${vraiOuFaux ? nbMarches - 1 : nbMarches - 2}} fois}{
     \\blockmove{avancer de \\ovalnum{20} pas}
@@ -762,7 +772,7 @@ function programmeEscalierType3(nbMarches: number, vraiOuFaux: boolean) {
 
 function programmeEscalierType4(nbMarches: number, vraiOuFaux: boolean) {
   const codeScratch = `\\begin{scratch}[blocks]
-  \\blockmove{aller à x:\\ovalnum{0} y:\\ovalnum{0}}
+  \\blockmove{aller à x:\\ovalnum{${randint(-5, 5) * 5}} y:\\ovalnum{${randint(-5, 5) * 5}}}
   \\blockpen{stylo en position d'écriture}
   \\blockmove{avancer de \\ovalnum{20} pas}
   \\blockmove{tourner \\turnright{} de \\ovalnum{90} degrés}
@@ -780,7 +790,7 @@ function programmeEscalierType4(nbMarches: number, vraiOuFaux: boolean) {
 
 function programmeEscalierType5(nbMarches: number, vraiOuFaux: boolean) {
   const codeScratch = `\\begin{scratch}[blocks]
-  \\blockmove{aller à x:\\ovalnum{0} y:\\ovalnum{0}}
+  \\blockmove{aller à x:\\ovalnum{${randint(-5, 5) * 5}} y:\\ovalnum{${randint(-5, 5) * 5}}}
   \\blockpen{stylo en position d'écriture}
   \\blockrepeat{répéter \\ovalnum{${vraiOuFaux ? nbMarches : nbMarches + 1}} fois}{
     \\blockmove{tourner \\turnright{} de \\ovalnum{90} degrés}
