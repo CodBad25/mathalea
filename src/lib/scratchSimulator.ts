@@ -18,7 +18,6 @@ export interface ExecutionResult {
   currentInstruction?: string
   currentInstructionScratchHtml?: string
   currentInstructionIndex?: number
-  repeatContexts?: string[]
 }
 
 type CodeBlockNode = {
@@ -45,7 +44,6 @@ export class ScratchInterpreter {
   private currentInstruction: string = ''
   private currentInstructionScratchHtml: string = ''
   private currentInstructionIndex: number = -1
-  private repeatContextStack: string[] = []
   private onUpdate?: () => void | Promise<void>
 
   constructor(startX = 0, startY = 0, startAngle = 0) {
@@ -77,7 +75,6 @@ export class ScratchInterpreter {
       currentInstruction: this.currentInstruction,
       currentInstructionScratchHtml: this.currentInstructionScratchHtml,
       currentInstructionIndex: this.currentInstructionIndex,
-      repeatContexts: [...this.repeatContextStack],
     }
   }
 
@@ -109,7 +106,6 @@ export class ScratchInterpreter {
       currentInstruction: this.currentInstruction,
       currentInstructionScratchHtml: this.currentInstructionScratchHtml,
       currentInstructionIndex: this.currentInstructionIndex,
-      repeatContexts: [...this.repeatContextStack],
     }
   }
 
@@ -124,7 +120,6 @@ export class ScratchInterpreter {
       currentInstruction: this.currentInstruction,
       currentInstructionScratchHtml: this.currentInstructionScratchHtml,
       currentInstructionIndex: this.currentInstructionIndex,
-      repeatContexts: [...this.repeatContextStack],
     }
   }
 
@@ -290,11 +285,7 @@ export class ScratchInterpreter {
       const innerCode = code.substring(contentStart + 1, innerCodeEnd).trim()
 
       for (let i = 0; i < times; i++) {
-        this.repeatContextStack.push(
-          `Répéter ${times} fois (itération ${i + 1}/${times})`,
-        )
         await this.parseAndExecuteAnimated(innerCode, delayMs)
-        this.repeatContextStack.pop()
       }
 
       index = innerCodeEnd + 1
@@ -895,7 +886,6 @@ export class ScratchSimulator extends HTMLElement {
   private canvas: HTMLCanvasElement | null = null
   private stepDiv: HTMLDivElement | null = null
   private infoDiv: HTMLDivElement | null = null
-  private repeatDiv: HTMLDivElement | null = null
   private codeDiv: HTMLDivElement | null = null
   private codeBlocks: CodeBlockNode[] = []
   private executionBlocks: CodeBlockNode[] = []
@@ -987,11 +977,6 @@ export class ScratchSimulator extends HTMLElement {
       }
     `
 
-    this.repeatDiv = document.createElement('div')
-    this.repeatDiv.className = 'text-xs text-gray-500 mb-3'
-    this.repeatDiv.id = 'execution-repeat'
-    this.repeatDiv.textContent = ''
-
     // Conteneur pour canvas et code côte à côte
     const contentWrapper = document.createElement('div')
     contentWrapper.className = 'grid grid-cols-2 gap-4 mb-4'
@@ -1049,7 +1034,6 @@ export class ScratchSimulator extends HTMLElement {
     box.appendChild(closeButton)
     box.appendChild(title)
     box.appendChild(highlightStyle)
-    box.appendChild(this.repeatDiv)
     box.appendChild(contentWrapper)
 
     this.modal.appendChild(box)
@@ -1503,7 +1487,6 @@ export class ScratchSimulator extends HTMLElement {
           this.drawSimulation(state)
           this.displayInfo(state)
           this.displayInstruction(state)
-          this.displayRepeatContext(state)
           this.highlightCurrentInstruction(
             state.currentInstructionScratchHtml || '',
             state.currentInstructionIndex,
@@ -1525,7 +1508,6 @@ export class ScratchSimulator extends HTMLElement {
       this.drawSimulation(result)
       this.displayInfo(result)
       this.displayInstruction(finalDisplayState)
-      this.displayRepeatContext(result)
       this.highlightCurrentInstruction('', -1)
     })
 
@@ -1673,18 +1655,6 @@ export class ScratchSimulator extends HTMLElement {
       renderScratchDiv(this.stepDiv)
     } else {
       this.stepDiv.textContent = 'Instruction : -'
-    }
-  }
-
-  private displayRepeatContext(result: ExecutionResult): void {
-    if (!this.repeatDiv) return
-    if (result.repeatContexts && result.repeatContexts.length > 0) {
-      const contexts = result.repeatContexts
-        .map((ctx, idx) => `${'  '.repeat(idx)}🔄 ${ctx}`)
-        .join('\n')
-      this.repeatDiv.textContent = contexts
-    } else {
-      this.repeatDiv.textContent = ''
     }
   }
 
