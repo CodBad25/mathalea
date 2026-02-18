@@ -1035,8 +1035,8 @@ export class ScratchSimulator extends HTMLElement {
 
     const stepAndControlDiv = document.createElement('div')
     stepAndControlDiv.className = 'flex items-end gap-3 mb-4'
-    stepAndControlDiv.appendChild(this.stepDiv)
     stepAndControlDiv.appendChild(this.controlButton)
+    stepAndControlDiv.appendChild(this.stepDiv)
 
     rightColumn.appendChild(stepAndControlDiv)
 
