@@ -464,6 +464,12 @@ export class ScratchInterpreter {
         return true
       }
 
+      if (this.isChangeXInstruction(content)) {
+        const deltaX = this.extractNumericValue(content)
+        this.changeXBy(deltaX)
+        return true
+      }
+
       if (content.includes('orienter')) {
         const angle = this.extractNumber(content)
         this.setOrientation(angle)
@@ -527,6 +533,10 @@ export class ScratchInterpreter {
           return `Aller a x:${target.x} y:${target.y}`
         }
         return 'Aller a x:? y:?'
+      }
+
+      if (this.isChangeXInstruction(content)) {
+        return `Ajouter ${this.extractNumericValue(content)} a x`
       }
 
       if (content.includes('orienter')) {
@@ -875,6 +885,10 @@ export class ScratchInterpreter {
     return /aller\s+[àa]\s*x\s*:/i.test(content) && /y\s*:/i.test(content)
   }
 
+  private isChangeXInstruction(content: string): boolean {
+    return /ajouter/i.test(content) && /[àa]\s*x\b/i.test(content)
+  }
+
   private extractGoToCoordinates(
     content: string,
   ): { x: number; y: number } | null {
@@ -927,6 +941,21 @@ export class ScratchInterpreter {
 
     this.x = newX
     this.y = newY
+  }
+
+  private changeXBy(deltaX: number): void {
+    const newX = this.x + deltaX
+
+    if (this.penDown) {
+      this.traces.push({
+        startX: this.x,
+        startY: this.y,
+        endX: newX,
+        endY: this.y,
+      })
+    }
+
+    this.x = newX
   }
 
   private goTo(targetX: number, targetY: number): void {

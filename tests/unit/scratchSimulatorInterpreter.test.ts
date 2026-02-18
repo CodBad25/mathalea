@@ -74,4 +74,16 @@ describe('ScratchInterpreter', () => {
 
     expect(result.messages).toEqual(['7'])
   })
+
+  it("gere blockmove 'ajouter ... a x'", () => {
+    const interpreter = new ScratchInterpreter(200, 200, 90)
+    const code = `\\begin{scratch}[blocks]
+\\blockmove{ajouter \\ovalnum{5} à x}
+\\end{scratch}`
+
+    const result = interpreter.execute(code)
+
+    expect(result.finalX).toBe(205)
+    expect(result.finalY).toBe(200)
+  })
 })
