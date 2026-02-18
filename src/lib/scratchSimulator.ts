@@ -398,6 +398,23 @@ export class ScratchInterpreter {
     content: string,
     delayMs: number = 0,
   ): Promise<void> {
+    if (type === 'look') {
+      const sayInstruction = this.parseSayInstruction(content)
+      if (!sayInstruction) {
+        return
+      }
+
+      this.messages.push(sayInstruction.spokenValue)
+
+      if (sayInstruction.durationSeconds !== null) {
+        const durationMs = Math.max(0, sayInstruction.durationSeconds * 1000)
+        if (durationMs > 0) {
+          await new Promise((resolve) => setTimeout(resolve, durationMs))
+        }
+      }
+      return
+    }
+
     if (this.executeStandardBlockAction(type, content)) {
       return
     }
@@ -415,6 +432,14 @@ export class ScratchInterpreter {
 
   private executeBlock(type: string, content: string, rawBlock?: string): void {
     this.prepareBlockDisplay(type, content, rawBlock)
+
+    if (type === 'look') {
+      const sayInstruction = this.parseSayInstruction(content)
+      if (sayInstruction) {
+        this.messages.push(sayInstruction.spokenValue)
+      }
+      return
+    }
 
     if (this.executeStandardBlockAction(type, content)) {
       return
@@ -479,16 +504,6 @@ export class ScratchInterpreter {
       const value = this.extractNumericValue(content)
       const varName = this.extractVariableName(content)
       this.addToVariable(varName, value)
-      return true
-    }
-
-    if (type === 'look') {
-      const sayInstruction = this.parseSayInstruction(content)
-      if (!sayInstruction) {
-        return false
-      }
-
-      this.messages.push(sayInstruction.spokenValue)
       return true
     }
 
