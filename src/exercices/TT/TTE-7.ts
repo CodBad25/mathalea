@@ -25,7 +25,7 @@ export const uuid = 'f1f9d'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const refs = {
-  'fr-fr': ['TSA5-04'],
+  'fr-fr': ['TTE-7'],
   'fr-ch': [],
 }
 
@@ -56,7 +56,7 @@ export default class EquationsLog extends Exercice {
     this.spacing = 1.5
     this.spacingCorr = 3
     this.sup = '1'
-    this.sup2 = false
+    this.sup2 = true
     this.besoinFormulaireTexte = [
       'Type de question ',
       'Nombres séparés par des tirets  :\n1 : $\\ln(ax+b)=n$\n2 : $\\ln(ax+b)=\\ln(cx+d)$\n3 : Mélange',
