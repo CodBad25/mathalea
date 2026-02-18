@@ -161,7 +161,7 @@ export class ScratchInterpreter {
     let index = 0
 
     while (index < code.length) {
-      // Chercher le premier blockrepeat
+      // Chercher le premier blockrepeat (soit "répéter X fois" soit "répéter jusqu'à ce que")
       const repeatStart = code.indexOf('\\blockrepeat{', index)
 
       if (repeatStart === -1) {
@@ -177,53 +177,116 @@ export class ScratchInterpreter {
         this.parseNonRepeatBlocks(code.substring(index, repeatStart))
       }
 
-      // Trouver la fin de "répéter X fois}" pour localiser le début du bloc de contenu
-      const foisEnd = code.indexOf('fois}', repeatStart)
-      if (foisEnd === -1) break // Malformed
+      // Détecter le type de blockrepeat
+      const isRepeatUntil = code
+        .substring(repeatStart, repeatStart + 100)
+        .includes("jusqu'à ce que")
 
-      // Le bloc de contenu commence juste après "fois}{"
-      const contentStart = code.indexOf('{', foisEnd + 5)
-      if (contentStart === -1) break // Malformed
-
-      // Extraire le nombre de répétitions (entre \blockrepeat{ et fois})
-      const repeatParamStart = repeatStart + 13 // Après "\blockrepeat{"
-      const repeatParamEnd = foisEnd + 4 // Position de "}" dans "fois}"
-      const repeatContent = code.substring(repeatParamStart, repeatParamEnd)
-      const times = this.extractNumber(repeatContent)
-
-      // Trouver la vraie fin du bloc (en comptant les accolades)
-      let braceCount = 1
-      let pos = contentStart + 1
-      let innerCodeEnd = -1
-
-      while (pos < code.length && braceCount > 0) {
-        if (code[pos] === '{' && code[pos - 1] !== '\\') {
-          braceCount++
-        } else if (code[pos] === '}' && code[pos - 1] !== '\\') {
-          braceCount--
-          if (braceCount === 0) {
-            innerCodeEnd = pos
+      if (isRepeatUntil) {
+        // Cas "répéter jusqu'à ce que \booloperator{...}"
+        // Trouver la fin de l'en-tête (premier } après \blockrepeat{)
+        let headerEnd = repeatStart + 13
+        let headerBraceCount = 1
+        while (headerEnd < code.length && headerBraceCount > 0) {
+          if (code[headerEnd] === '{' && code[headerEnd - 1] !== '\\\\') {
+            headerBraceCount++
+          } else if (
+            code[headerEnd] === '}' &&
+            code[headerEnd - 1] !== '\\\\'
+          ) {
+            headerBraceCount--
           }
+          headerEnd++
         }
-        pos++
+
+        if (headerBraceCount !== 0) break // En-tête mal formé
+
+        // Extraire le contenu de l'en-tête
+        const repeatHeader = code.substring(repeatStart + 13, headerEnd - 1)
+        const boolCondition = repeatHeader.trim()
+
+        // Trouver le bloc de contenu après l'en-tête
+        const bodyStart = code.indexOf('{', headerEnd - 1)
+        if (bodyStart === -1) break
+
+        let braceCount = 1
+        let pos = bodyStart + 1
+        let innerCodeEnd = -1
+
+        while (pos < code.length && braceCount > 0) {
+          if (code[pos] === '{' && code[pos - 1] !== '\\\\') {
+            braceCount++
+          } else if (code[pos] === '}' && code[pos - 1] !== '\\\\') {
+            braceCount--
+            if (braceCount === 0) {
+              innerCodeEnd = pos
+            }
+          }
+          pos++
+        }
+
+        if (innerCodeEnd === -1) break
+
+        const innerCode = code.substring(bodyStart + 1, innerCodeEnd).trim()
+
+        // Exécuter jusqu'à ce que la condition soit vraie
+        let iterationCount = 0
+        const maxIterations = 10000 // Sécurité contre boucles infinies
+
+        while (iterationCount < maxIterations) {
+          const conditionMet = this.evaluateBoolOperator(boolCondition)
+          if (conditionMet === true) {
+            break
+          }
+          this.parseAndExecute(innerCode)
+          iterationCount++
+        }
+
+        index = innerCodeEnd + 1
+      } else {
+        // Cas "répéter X fois"
+        const foisEnd = code.indexOf('fois}', repeatStart)
+        if (foisEnd === -1) break
+
+        const contentStart = code.indexOf('{', foisEnd + 5)
+        if (contentStart === -1) break
+
+        const repeatParamStart = repeatStart + 13
+        const repeatParamEnd = foisEnd + 4
+        const repeatContent = code.substring(repeatParamStart, repeatParamEnd)
+        const times = this.extractNumber(repeatContent)
+
+        let braceCount = 1
+        let pos = contentStart + 1
+        let innerCodeEnd = -1
+
+        while (pos < code.length && braceCount > 0) {
+          if (code[pos] === '{' && code[pos - 1] !== '\\') {
+            braceCount++
+          } else if (code[pos] === '}' && code[pos - 1] !== '\\') {
+            braceCount--
+            if (braceCount === 0) {
+              innerCodeEnd = pos
+            }
+          }
+          pos++
+        }
+
+        if (innerCodeEnd === -1) {
+          window.notify('Erreur de syntaxe : bloc repeat mal formé', {
+            code: code.slice(repeatStart, pos),
+          })
+          break
+        }
+
+        const innerCode = code.substring(contentStart + 1, innerCodeEnd).trim()
+
+        for (let i = 0; i < times; i++) {
+          this.parseAndExecute(innerCode)
+        }
+
+        index = innerCodeEnd + 1
       }
-
-      if (innerCodeEnd === -1) {
-        window.notify('Erreur de syntaxe : bloc repeat mal formé', {
-          code: code.slice(repeatStart, pos),
-        })
-        break
-      }
-
-      // Extraire le code intérieur (entre { et })
-      const innerCode = code.substring(contentStart + 1, innerCodeEnd).trim()
-
-      // Exécuter le bloc repeat
-      for (let i = 0; i < times; i++) {
-        this.parseAndExecute(innerCode)
-      }
-
-      index = innerCodeEnd + 1
     }
   }
 
@@ -253,42 +316,110 @@ export class ScratchInterpreter {
         )
       }
 
-      const foisEnd = code.indexOf('fois}', repeatStart)
-      if (foisEnd === -1) break
+      // Détecter le type de blockrepeat
+      const isRepeatUntil = code
+        .substring(repeatStart, repeatStart + 100)
+        .includes("jusqu'à ce que")
 
-      const contentStart = code.indexOf('{', foisEnd + 5)
-      if (contentStart === -1) break
-
-      const repeatParamStart = repeatStart + 13
-      const repeatParamEnd = foisEnd + 4
-      const repeatContent = code.substring(repeatParamStart, repeatParamEnd)
-      const times = this.extractNumber(repeatContent)
-
-      let braceCount = 1
-      let pos = contentStart + 1
-      let innerCodeEnd = -1
-
-      while (pos < code.length && braceCount > 0) {
-        if (code[pos] === '{' && code[pos - 1] !== '\\\\') {
-          braceCount++
-        } else if (code[pos] === '}' && code[pos - 1] !== '\\\\') {
-          braceCount--
-          if (braceCount === 0) {
-            innerCodeEnd = pos
+      if (isRepeatUntil) {
+        // Cas "répéter jusqu'à ce que \booloperator{...}"
+        // Trouver la fin de l'en-tête (premier } après \blockrepeat{)
+        let headerEnd = repeatStart + 13
+        let headerBraceCount = 1
+        while (headerEnd < code.length && headerBraceCount > 0) {
+          if (code[headerEnd] === '{' && code[headerEnd - 1] !== '\\\\') {
+            headerBraceCount++
+          } else if (
+            code[headerEnd] === '}' &&
+            code[headerEnd - 1] !== '\\\\'
+          ) {
+            headerBraceCount--
           }
+          headerEnd++
         }
-        pos++
+
+        if (headerBraceCount !== 0) break // En-tête mal formé
+
+        // Extraire le contenu de l'en-tête
+        const repeatHeader = code.substring(repeatStart + 13, headerEnd - 1)
+        const boolCondition = repeatHeader.trim()
+
+        // Trouver le bloc de contenu après l'en-tête
+        const bodyStart = code.indexOf('{', headerEnd - 1)
+        if (bodyStart === -1) break
+
+        let braceCount = 1
+        let pos = bodyStart + 1
+        let innerCodeEnd = -1
+
+        while (pos < code.length && braceCount > 0) {
+          if (code[pos] === '{' && code[pos - 1] !== '\\\\') {
+            braceCount++
+          } else if (code[pos] === '}' && code[pos - 1] !== '\\\\') {
+            braceCount--
+            if (braceCount === 0) {
+              innerCodeEnd = pos
+            }
+          }
+          pos++
+        }
+
+        if (innerCodeEnd === -1) break
+
+        const innerCode = code.substring(bodyStart + 1, innerCodeEnd).trim()
+
+        let iterationCount = 0
+        const maxIterations = 10000
+
+        while (iterationCount < maxIterations) {
+          const conditionMet = this.evaluateBoolOperator(boolCondition)
+          if (conditionMet === true) {
+            break
+          }
+          await this.parseAndExecuteAnimated(innerCode, delayMs)
+          iterationCount++
+        }
+
+        index = innerCodeEnd + 1
+      } else {
+        // Cas "répéter X fois"
+        const foisEnd = code.indexOf('fois}', repeatStart)
+        if (foisEnd === -1) break
+
+        const contentStart = code.indexOf('{', foisEnd + 5)
+        if (contentStart === -1) break
+
+        const repeatParamStart = repeatStart + 13
+        const repeatParamEnd = foisEnd + 4
+        const repeatContent = code.substring(repeatParamStart, repeatParamEnd)
+        const times = this.extractNumber(repeatContent)
+
+        let braceCount = 1
+        let pos = contentStart + 1
+        let innerCodeEnd = -1
+
+        while (pos < code.length && braceCount > 0) {
+          if (code[pos] === '{' && code[pos - 1] !== '\\\\') {
+            braceCount++
+          } else if (code[pos] === '}' && code[pos - 1] !== '\\\\') {
+            braceCount--
+            if (braceCount === 0) {
+              innerCodeEnd = pos
+            }
+          }
+          pos++
+        }
+
+        if (innerCodeEnd === -1) break
+
+        const innerCode = code.substring(contentStart + 1, innerCodeEnd).trim()
+
+        for (let i = 0; i < times; i++) {
+          await this.parseAndExecuteAnimated(innerCode, delayMs)
+        }
+
+        index = innerCodeEnd + 1
       }
-
-      if (innerCodeEnd === -1) break
-
-      const innerCode = code.substring(contentStart + 1, innerCodeEnd).trim()
-
-      for (let i = 0; i < times; i++) {
-        await this.parseAndExecuteAnimated(innerCode, delayMs)
-      }
-
-      index = innerCodeEnd + 1
     }
   }
 
@@ -861,6 +992,46 @@ export class ScratchInterpreter {
     const expression = this.extractCommandContent(content, '\\ovaloperator')
     if (!expression) return null
     return this.evaluateArithmeticExpression(expression)
+  }
+
+  private evaluateBoolOperator(content: string): boolean | null {
+    const expression = this.extractCommandContent(content, '\\booloperator')
+    if (!expression) return null
+    return this.evaluateBooleanExpression(expression)
+  }
+
+  private evaluateBooleanExpression(expression: string): boolean | null {
+    const sanitized = this.materializeExpression(expression)
+    if (!sanitized) return null
+
+    const operators = [
+      { pattern: /<=/, fn: (a: number, b: number) => a <= b },
+      { pattern: />=/, fn: (a: number, b: number) => a >= b },
+      { pattern: /</, fn: (a: number, b: number) => a < b },
+      { pattern: />/, fn: (a: number, b: number) => a > b },
+      { pattern: /=/, fn: (a: number, b: number) => a === b },
+    ]
+
+    for (const op of operators) {
+      const match = sanitized.match(op.pattern)
+      if (match) {
+        const leftExpr = sanitized.slice(0, match.index).trim()
+        const rightExpr = sanitized
+          .slice((match.index ?? 0) + match[0].length)
+          .trim()
+
+        const leftValue = this.evaluateArithmeticExpression(leftExpr)
+        const rightValue = this.evaluateArithmeticExpression(rightExpr)
+
+        if (leftValue === null || rightValue === null) {
+          return null
+        }
+
+        return op.fn(leftValue, rightValue)
+      }
+    }
+
+    return null
   }
 
   private evaluateArithmeticExpression(expression: string): number | null {

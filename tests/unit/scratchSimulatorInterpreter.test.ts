@@ -156,4 +156,72 @@ describe('ScratchInterpreter', () => {
     expect(result.finalY).toBe(198)
     expect(result.finalAngle).toBe(100)
   })
+
+  it("gere blockrepeat jusqu'à ce que avec booloperator <", () => {
+    const interpreter = new ScratchInterpreter(200, 200, 90)
+    const code = `\\begin{scratch}[blocks]
+\\blockvariable{mettre \\selectmenu{compteur} à \\ovalnum{0}}
+\\blockrepeat{répéter jusqu'à ce que \\booloperator{\\ovalvariable{compteur} > 5}}{
+\\blockvariable{Ajouter \\ovalnum{1} à \\ovalvariable{compteur}}
+}
+\\end{scratch}`
+
+    const result = interpreter.execute(code)
+
+    expect(result.variables.compteur).toBe(6)
+  })
+
+  it("gere blockrepeat jusqu'à ce que avec booloperator <=", () => {
+    const interpreter = new ScratchInterpreter(200, 200, 90)
+    const code = `\\begin{scratch}[blocks]
+\\blockvariable{mettre \\selectmenu{x} à \\ovalnum{1}}
+\\blockrepeat{répéter jusqu'à ce que \\booloperator{\\ovalvariable{x} >= 10}}{
+\\blockvariable{Ajouter \\ovalnum{2} à \\ovalvariable{x}}
+}
+\\end{scratch}`
+
+    const result = interpreter.execute(code)
+
+    expect(result.variables.x).toBe(11)
+  })
+
+  it("gere blockrepeat jusqu'à ce que avec booloperator =", () => {
+    const interpreter = new ScratchInterpreter(200, 200, 90)
+    const code = `\\begin{scratch}[blocks]
+\\blockvariable{mettre \\selectmenu{compteur} à \\ovalnum{0}}
+\\blockrepeat{répéter jusqu'à ce que \\booloperator{\\ovalvariable{compteur} = 3}}{
+\\blockvariable{Ajouter \\ovalnum{1} à \\ovalvariable{compteur}}
+}
+\\end{scratch}`
+
+    const result = interpreter.execute(code)
+
+    expect(result.variables.compteur).toBe(3)
+  })
+
+  it("gere blockrepeat jusqu'à ce que en mode anime", async () => {
+    const interpreter = new ScratchInterpreter(200, 200, 90)
+    const code = `\\begin{scratch}[blocks]
+\\blockvariable{mettre \\selectmenu{compteur} à \\ovalnum{0}}
+\\blockrepeat{répéter jusqu'à ce que \\booloperator{\\ovalvariable{compteur} > 3}}{
+\\blockvariable{Ajouter \\ovalnum{1} à \\ovalvariable{compteur}}
+}
+\\end{scratch}`
+
+    const snapshots: number[] = []
+
+    const result = await interpreter.executeAnimated(
+      code,
+      () => {
+        snapshots.push(interpreter.getCurrentState().variables.compteur ?? 0)
+      },
+      0,
+    )
+
+    expect(result.variables.compteur).toBe(4)
+    expect(snapshots).toContain(1)
+    expect(snapshots).toContain(2)
+    expect(snapshots).toContain(3)
+    expect(snapshots).toContain(4)
+  })
 })
