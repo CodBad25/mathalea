@@ -11,6 +11,7 @@ import Exercice from '../Exercice'
 
 export const interactifReady = true
 export const interactifType = 'qcm'
+export const dateDePublication = '18/02/2026'
 
 export const titre = 'Trouver le bon programme Scratch'
 export const uuid = 'e9cad'
@@ -39,7 +40,7 @@ export default class TrouverLeBonProgramme extends Exercice {
     this.besoinFormulaire2Numerique = [
       'Pause entre chaque étape du programme pour le simulateur',
       4,
-      '1 : Pas de pause\n2 : 1 seconde\n3 : 2 secondes\n4 : 4 secondes',
+      '1 : 1/2 seconde\n2 : 1 seconde\n3 : 2 secondes\n4 : 4 secondes',
     ]
     this.sup2 = 3
   }
@@ -55,7 +56,7 @@ export default class TrouverLeBonProgramme extends Exercice {
     }).map(Number)
     const delai =
       this.sup2 === 1
-        ? 0
+        ? 500
         : this.sup2 === 2
           ? 1000
           : this.sup2 === 3
