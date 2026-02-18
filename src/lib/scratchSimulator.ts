@@ -1380,34 +1380,42 @@ export class ScratchInterpreter {
   }
 
   private evaluateBooleanExpression(expression: string): boolean | null {
-    const sanitized = this.materializeExpression(expression)
-    if (!sanitized) return null
+    const rawExpression = expression.trim()
+    if (!rawExpression) return null
 
-    const operators = [
-      { pattern: /<=/, fn: (a: number, b: number) => a <= b },
-      { pattern: />=/, fn: (a: number, b: number) => a >= b },
-      { pattern: /</, fn: (a: number, b: number) => a < b },
-      { pattern: />/, fn: (a: number, b: number) => a > b },
-      { pattern: /=/, fn: (a: number, b: number) => a === b },
-    ]
+    const comparisonMatch = rawExpression.match(/(<=|>=|=|<|>)/)
+    if (!comparisonMatch || comparisonMatch.index === undefined) {
+      return null
+    }
 
-    for (const op of operators) {
-      const match = sanitized.match(op.pattern)
-      if (match) {
-        const leftExpr = sanitized.slice(0, match.index).trim()
-        const rightExpr = sanitized
-          .slice((match.index ?? 0) + match[0].length)
-          .trim()
+    const operator = comparisonMatch[0]
+    const leftExpr = rawExpression.slice(0, comparisonMatch.index).trim()
+    const rightExpr = rawExpression
+      .slice(comparisonMatch.index + operator.length)
+      .trim()
 
-        const leftValue = this.evaluateArithmeticExpression(leftExpr)
-        const rightValue = this.evaluateArithmeticExpression(rightExpr)
+    const leftValue = this.evaluateArithmeticExpression(leftExpr)
+    const rightValue = this.evaluateArithmeticExpression(rightExpr)
 
-        if (leftValue === null || rightValue === null) {
-          return null
-        }
-
-        return op.fn(leftValue, rightValue)
+    if (leftValue !== null && rightValue !== null) {
+      switch (operator) {
+        case '<=':
+          return leftValue <= rightValue
+        case '>=':
+          return leftValue >= rightValue
+        case '<':
+          return leftValue < rightValue
+        case '>':
+          return leftValue > rightValue
+        case '=':
+          return leftValue === rightValue
       }
+    }
+
+    if (operator === '=') {
+      const leftText = this.materializeExpressionForString(leftExpr).trim()
+      const rightText = this.materializeExpressionForString(rightExpr).trim()
+      return leftText === rightText
     }
 
     return null

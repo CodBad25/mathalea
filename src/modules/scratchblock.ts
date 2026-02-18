@@ -37,6 +37,18 @@ export function scratchblock(
     index: number,
     compteAccolades: number,
   ): [string, number, number] {
+    const LOOP_GUARD_LIMIT = Math.max(chaine.length * 2, 200)
+
+    if (index < 0) {
+      return ['', 0, Math.max(0, compteAccolades)]
+    }
+    if (index >= chaine.length) {
+      return ['', chaine.length, Math.max(0, compteAccolades)]
+    }
+    if (compteAccolades < 0) {
+      compteAccolades = 0
+    }
+
     let resultat = []
     let texte = []
     let texte2 = []
@@ -45,6 +57,7 @@ export function scratchblock(
     let string
     let fleche
     let compteur, debut // pour les boucles et les if
+    let guard = 0
     const souschaine = chaine.substring(index)
     const commande = litcommande(souschaine)
     switch (commande.substring(0, 5)) {
@@ -105,11 +118,17 @@ export function scratchblock(
             debut = chaine.substring(resultat[1]).indexOf('{') + resultat[1]
             resultat[1] = debut + 1
             resultat[0] += '\n'
-            while (compteur > compteAccolades) {
+            guard = 0
+            while (compteur > compteAccolades && guard < LOOP_GUARD_LIMIT) {
+              const previousIndex = resultat[1]
               texte = translatex(chaine, resultat[1], compteur)
               resultat[0] += ' ' + texte[0]
               resultat[1] = texte[1]
               compteur = texte[2]
+              if (resultat[1] <= previousIndex) {
+                break
+              }
+              guard++
             }
             resultat[0] += ' fin'
             break
@@ -128,22 +147,34 @@ export function scratchblock(
             debut = chaine.substring(resultat[1]).indexOf('{') + resultat[1]
             resultat[1] = debut + 1
             resultat[0] += '\n'
-            while (compteur > compteAccolades) {
+            guard = 0
+            while (compteur > compteAccolades && guard < LOOP_GUARD_LIMIT) {
+              const previousIndex = resultat[1]
               texte = translatex(chaine, resultat[1], compteur)
               resultat[0] += ' ' + texte[0]
               resultat[1] = texte[1]
               compteur = texte[2]
+              if (resultat[1] <= previousIndex) {
+                break
+              }
+              guard++
             }
             resultat[0] += ' sinon'
             compteur = compteAccolades + 1
             debut = chaine.substring(resultat[1]).indexOf('{') + resultat[1]
             resultat[1] = debut + 1
             resultat[0] += '\n'
-            while (compteur > compteAccolades) {
+            guard = 0
+            while (compteur > compteAccolades && guard < LOOP_GUARD_LIMIT) {
+              const previousIndex = resultat[1]
               texte = translatex(chaine, resultat[1], compteur)
               resultat[0] += ' ' + texte[0]
               resultat[1] = texte[1]
               compteur = texte[2]
+              if (resultat[1] <= previousIndex) {
+                break
+              }
+              guard++
             }
             resultat[0] += ' fin'
             break
@@ -180,11 +211,17 @@ export function scratchblock(
             debut = chaine.substring(resultat[1]).indexOf('{') + resultat[1]
             resultat[1] = debut + 1
             resultat[0] += '\n'
-            while (compteur > compteAccolades) {
+            guard = 0
+            while (compteur > compteAccolades && guard < LOOP_GUARD_LIMIT) {
+              const previousIndex = resultat[1]
               texte = translatex(chaine, resultat[1], compteur)
               resultat[0] += ' ' + texte[0]
               resultat[1] = texte[1]
               compteur = texte[2]
+              if (resultat[1] <= previousIndex) {
+                break
+              }
+              guard++
             }
             resultat[0] += ' fin'
             break
@@ -264,9 +301,18 @@ export function scratchblock(
             texte = translatex(chaine, index + taille + 1, compteAccolades)
             texte2 = translatex(chaine, texte[1], texte[2])
             resultat = [`(${texte[0]} ${texte2[0]}`, texte2[1], texte2[2]]
-            while (chaine.charAt(texte2[1]) !== '}') {
+            guard = 0
+            while (
+              chaine.charAt(texte2[1]) !== '}' &&
+              guard < LOOP_GUARD_LIMIT
+            ) {
+              const previousIndex = texte2[1]
               texte2 = translatex(chaine, texte2[1], texte2[2])
               resultat[0] += ' ' + texte2[0]
+              if (texte2[1] <= previousIndex) {
+                break
+              }
+              guard++
             }
             resultat[0] += ')'
             resultat[1] = texte2[1] + 1
@@ -294,9 +340,18 @@ export function scratchblock(
             texte = translatex(chaine, index + taille + 1, compteAccolades)
             texte2 = translatex(chaine, texte[1], texte[2])
             resultat = [`<${texte[0]} ${texte2[0]}`, texte2[1], texte2[2]]
-            while (chaine.charAt(texte2[1]) !== '}') {
+            guard = 0
+            while (
+              chaine.charAt(texte2[1]) !== '}' &&
+              guard < LOOP_GUARD_LIMIT
+            ) {
+              const previousIndex = texte2[1]
               texte2 = translatex(chaine, texte2[1], texte2[2])
               resultat[0] += ' ' + texte2[0]
+              if (texte2[1] <= previousIndex) {
+                break
+              }
+              guard++
             }
             resultat[0] += ' :: operators boolean>'
             resultat[1] = texte2[1] + 1
@@ -314,9 +369,18 @@ export function scratchblock(
             texte = translatex(chaine, index + taille + 1, compteAccolades)
             texte2 = translatex(chaine, texte[1], texte[2])
             resultat = [`<${texte[0]} ${texte2[0]}`, texte2[1], texte2[2]]
-            while (chaine.charAt(texte2[1]) !== '}') {
+            guard = 0
+            while (
+              chaine.charAt(texte2[1]) !== '}' &&
+              guard < LOOP_GUARD_LIMIT
+            ) {
+              const previousIndex = texte2[1]
               texte2 = translatex(chaine, texte2[1], texte2[2])
               resultat[0] += ' ' + texte2[0]
+              if (texte2[1] <= previousIndex) {
+                break
+              }
+              guard++
             }
             resultat[0] += ' :: sensing>'
             resultat[1] = texte2[1] + 1
@@ -327,9 +391,18 @@ export function scratchblock(
             texte = translatex(chaine, index + taille + 1, compteAccolades)
             texte2 = translatex(chaine, texte[1], texte[2])
             resultat = [`<${texte[0]} ${texte2[0]}`, texte2[1], texte2[2]]
-            while (chaine.charAt(texte2[1]) !== '}') {
+            guard = 0
+            while (
+              chaine.charAt(texte2[1]) !== '}' &&
+              guard < LOOP_GUARD_LIMIT
+            ) {
+              const previousIndex = texte2[1]
               texte2 = translatex(chaine, texte2[1], texte2[2])
               resultat[0] += ' ' + texte2[0]
+              if (texte2[1] <= previousIndex) {
+                break
+              }
+              guard++
             }
             resultat[0] += ' :: list>'
             resultat[1] = texte2[1] + 1
@@ -356,9 +429,15 @@ export function scratchblock(
         texte = translatex(chaine, index + taille + 1, compteAccolades)
         texte2 = translatex(chaine, texte[1], texte[2])
         resultat = [`${texte[0]} ${texte2[0]}`, texte2[1], texte2[2]]
-        while (chaine.charAt(texte2[1]) !== '}') {
+        guard = 0
+        while (chaine.charAt(texte2[1]) !== '}' && guard < LOOP_GUARD_LIMIT) {
+          const previousIndex = texte2[1]
           texte2 = translatex(chaine, texte2[1], texte2[2])
           resultat[0] += ' ' + texte2[0]
+          if (texte2[1] <= previousIndex) {
+            break
+          }
+          guard++
         }
         resultat[1] = texte2[1] + 1
         resultat[2] = texte2[2] - 1

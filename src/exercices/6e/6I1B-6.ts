@@ -11,7 +11,7 @@ import Exercice from '../Exercice'
 
 export const interactifReady = true
 export const interactifType = 'qcm'
-export const dateDePublication = '18/02/2026'
+export const dateDePublication = '14/02/2026'
 
 export const titre = 'Trouver le bon programme Scratch'
 export const uuid = 'e9cad'
@@ -41,10 +41,10 @@ export default class TrouverLeBonProgramme extends Exercice {
     La simulation n'est pas disponible sur les programmes sans tracé.`
     this.nbQuestions = 7
 
-    this.sup = '0'
+    this.sup = '1'
     this.besoinFormulaireTexte = [
       'Types de programmes',
-      'Nombres séparés par des tirets\n1 : Avancer *\n2 : Tourner *\n3 : Ajouter\n4 : Polygone *\n5 : Carré *\n6 : Rebours\n7 : Escalier *\n0 : Mélange',
+      'Nombres séparés par des tirets\n1 : Avancer\n2 : Tourner\n3 : Ajouter\n4 : Polygone\n5 : Carré\n6 : Rebours\n7 : Escalier\n0 : Mélange',
     ]
     this.besoinFormulaire2Numerique = [
       'Pause entre chaque étape du programme pour le simulateur',
@@ -60,7 +60,7 @@ export default class TrouverLeBonProgramme extends Exercice {
       min: 1,
       max: 7,
       melange: 0,
-      defaut: 0,
+      defaut: 1,
       nbQuestions: this.nbQuestions,
     }).map(Number)
     const delai =
@@ -80,6 +80,7 @@ export default class TrouverLeBonProgramme extends Exercice {
         getProgrammesCarre,
         getProgrammesRebours,
         getProgrammesEscalier,
+        getProgrammesCondition,
       ]
       const cas = listeTypeDeProgrammes[i] - 1
       const getProgrammes = listeDeProgrammes[cas]
@@ -105,6 +106,9 @@ export default class TrouverLeBonProgramme extends Exercice {
           break
         case 6: // escalier
           nbPas = randint(4, 8)
+          break
+        case 7: // conditionnelle
+          nbPas = 30 + randint(1, 15)
           break
         default: // par défaut, on fait avancer
           nbPas = randint(3, 8)
@@ -836,5 +840,128 @@ function getProgrammesEscalier(
     programmesListe,
     programmesCodeBrut,
     enonce: `On souhaite faire dessiner un escalier de ${nbMarches} marche(s).<br>Cocher le (ou les) programme(s) correct(s).<br>`,
+  }
+}
+
+function programmeConditionType1(resultat: number, vraiOuFaux: boolean) {
+  const nombreDeDepart = randint(5, 15)
+  const nbAddition = Math.floor((resultat - nombreDeDepart) / 4)
+  const codeScratch = `\\begin{scratch}[blocks]
+  \\blockvariable{mettre  \\selectmenu{a} à \\ovalnum{${nombreDeDepart}}}
+  \\blockrepeat{répéter \\ovalnum{${nbAddition}} fois}{
+    \\blockvariable{ajouter \\ovalnum{4} à \\ovalvariable{a}}
+    \\blockifelse{si \\booloperator{\\ovalvariable{a} > \\ovalnum{${resultat}}} alors}
+    {
+     \\blocklook{dire \\ovalvariable{a}}
+      \\blockcontrol{stop \\selectmenu{tout}}
+    }
+    {
+      \\blockvariable{ajouter \\ovalnum{1} à \\ovalvariable{résultat}}
+    }
+  }${vraiOuFaux ? `\n\\blockvariable{ajouter \\ovalnum{${(resultat - nombreDeDepart) % 4}} à \\ovalvariable{a}}` : `\n\\blockvariable{ajouter \\ovalnum{${((nombreDeDepart - resultat) % 4) + 1}} à \\ovalvariable{a}}`}
+  \\blocklook{dire \\ovalvariable{a}}
+ \\end{scratch}`
+  return codeScratch
+}
+function programmeConditionType2(resultat: number, vraiOuFaux: boolean) {
+  const nombreDeDepart = randint(5, 15)
+  const parité = (resultat - nombreDeDepart) % 2 === 0
+  const nbAddition = Math.round((resultat - nombreDeDepart) / 2)
+  const codeScratch = `\\begin{scratch}[blocks]
+  \\blockvariable{mettre  \\selectmenu{a} à \\ovalnum{${vraiOuFaux ? nombreDeDepart + 1 : nombreDeDepart}}}
+  \\blockrepeat{répéter \\ovalnum{${nbAddition}} fois}{
+  \\blockifelse{si \\booloperator{\\ovalvariable{a} > \\ovalnum{${nombreDeDepart}}} alors}
+    {
+  \\blockvariable{ajouter \\ovalnum{2} à \\ovalvariable{a}}
+  }
+  {
+  \\blockcontrol{stop \\selectmenu{tout}}
+  }
+}
+ ${(parité && vraiOuFaux) || (!parité && !vraiOuFaux) ? '\\blockvariable{ajouter \\ovalnum{-1} à \\ovalvariable{a}}\n' : ''}\\end{scratch}`
+  return codeScratch
+}
+
+function programmeConditionType3(resultat: number, vraiOuFaux: boolean) {
+  const nombreDeDepart = vraiOuFaux ? randint(2, 5) * 2 + 1 : randint(1, 5) * 2
+  const nbFois = Math.ceil((resultat - nombreDeDepart) / 2)
+  const codeScratch = `\\begin{scratch}[blocks]
+  \\blockvariable{mettre  \\selectmenu{a} à \\ovalnum{${nombreDeDepart}}}
+  \\blockrepeat{répéter \\ovalnum{${nbFois}} fois}{
+  \\blockifelse{si \\booloperator{\\ovalvariable{a} >  \\ovalnum{${resultat - 1}}} alors}
+  {
+  \\blocklook{dire \\ovalvariable{a}}
+  \\blockcontrol{stop \\selectmenu{tout}}
+  }
+  {
+  \\blockvariable{ajouter \\ovalnum{2} à \\ovalvariable{a}}
+  }
+}
+  \\blocklook{dire \\ovalvariable{a}}
+  \\end{scratch}`
+  return codeScratch
+}
+function programmeConditionType4(resultat: number, vraiOuFaux: boolean) {
+  const nombreDeDepart = randint(2, 5) * 2 + 1
+  const nbFois = vraiOuFaux
+    ? Math.ceil((resultat - nombreDeDepart) / 2)
+    : choice([
+        Math.ceil((resultat - nombreDeDepart) / 2) - 2,
+        Math.ceil((resultat - nombreDeDepart) / 2) + 1,
+      ])
+  const codeScratch = `\\begin{scratch}[blocks]
+  \\blockvariable{mettre  \\selectmenu{a} à \\ovalnum{${nombreDeDepart}}}
+  \\blockrepeat{répéter \\ovalnum{${nbFois}} fois}{
+  \\blockifelse{si \\booloperator{\\ovalvariable{a} > \\ovalnum{${resultat - 1}}} alors}
+  {
+  \\blocklook{dire \\ovalvariable{a}}
+  \\blockcontrol{stop \\selectmenu{tout}}
+  }
+  {
+  \\blockvariable{ajouter \\ovalnum{2} à \\ovalvariable{a}}
+  }
+}
+  \\blocklook{dire \\ovalvariable{a}}
+  \\end{scratch}`
+  return codeScratch
+}
+
+function programmeConditionType5(resultat: number, vraiOuFaux: boolean) {
+  const nombreDeDepart = vraiOuFaux
+    ? resultat - randint(3, 5) * 3
+    : resultat + 1 - randint(1, 5) * 3
+  const nbFois = Math.floor((resultat - nombreDeDepart) / 3)
+  const codeScratch = `\\begin{scratch}[blocks]
+  \\blockvariable{mettre  \\selectmenu{a} à \\ovalnum{${nombreDeDepart}}}
+  \\blockrepeat{répéter \\ovalnum{${nbFois}} fois}{
+  \\blockvariable{ajouter \\ovalnum{3} à \\ovalvariable{a}}
+  \\blockif{si \\booloperator{\\ovalvariable{a} = \\ovalnum{${resultat - 1}}} alors}
+  {
+  \\blockvariable{ajouter \\ovalnum{1} à \\ovalvariable{a}}
+  }
+}
+  \\blocklook{dire \\ovalvariable{a}}
+  \\end{scratch}`
+  return codeScratch
+}
+
+function getProgrammesCondition(
+  resultat: number,
+  vraisOuFaux: boolean[],
+): { programmesListe: string[]; programmesCodeBrut: string[]; enonce: string } {
+  const programmesCodeBrut = [
+    programmeConditionType1(resultat, vraisOuFaux[0]),
+    programmeConditionType2(resultat, vraisOuFaux[1]),
+    programmeConditionType3(resultat, vraisOuFaux[2]),
+    programmeConditionType4(resultat, vraisOuFaux[3]),
+    programmeConditionType5(resultat, vraisOuFaux[4]),
+  ]
+  const programmesListe = programmesCodeBrut.map((code) =>
+    String(scratchblock(code)),
+  )
+  return {
+    programmesListe,
+    programmesCodeBrut,
+    enonce: `On souhaite faire afficher le nombre $${resultat}$.<br>Cocher le (ou les) programme(s) correct(s).<br>`,
   }
 }

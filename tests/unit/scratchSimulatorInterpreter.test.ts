@@ -242,6 +242,39 @@ describe('ScratchInterpreter', () => {
     expect(result.variables.resultat).toBe(1)
   })
 
+  it('ne gere pas booloperator ==', () => {
+    const interpreter = new ScratchInterpreter(200, 200, 90)
+    const code = `\\begin{scratch}[blocks]
+\\blockvariable{mettre \\selectmenu{a} à \\ovalnum{4}}
+\\blockifelse{si \\booloperator{\\ovalvariable{a} == \\ovalnum{4}} alors}{
+\\blockvariable{mettre \\selectmenu{resultat} à \\ovalnum{1}}
+}{
+\\blockvariable{mettre \\selectmenu{resultat} à \\ovalnum{0}}
+}
+\\end{scratch}`
+
+    const result = interpreter.execute(code)
+
+    expect(result.variables.resultat).toBe(0)
+  })
+
+  it('gere booloperator = avec valeurs textuelles', async () => {
+    const interpreter = new ScratchInterpreter(200, 200, 90)
+    const code = `\\begin{scratch}[blocks]
+\\blocksensing{demander \\ovalnum{Ton nom} et attendre}
+\\blockifelse{si \\booloperator{\\ovalsensing{réponse} = \\ovalnum{Alice}} alors}{
+\\blockvariable{mettre \\selectmenu{ok} à \\ovalnum{1}}
+}{
+\\blockvariable{mettre \\selectmenu{ok} à \\ovalnum{0}}
+}
+\\end{scratch}`
+
+    interpreter.onAskInput = async () => 'Alice'
+    const result = await interpreter.executeAnimated(code, () => {}, 0)
+
+    expect(result.variables.ok).toBe(1)
+  })
+
   it('gere blockifelse avec condition fausse', () => {
     const interpreter = new ScratchInterpreter(200, 200, 90)
     const code = `\\begin{scratch}[blocks]
