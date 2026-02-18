@@ -905,6 +905,10 @@ export class ScratchSimulator extends HTMLElement {
   private customDefinitionGroups: Set<SVGGElement> = new Set()
   private blockCacheAttempts: number = 0
   private delayMs: number = 2000
+  private isRunning: boolean = false
+  private isPaused: boolean = false
+  private pauseResolvers: Array<() => void> = []
+  private controlButton: HTMLButtonElement | null = null
 
   connectedCallback(): void {
     this.scratchCode = this.getAttribute('code') || ''
@@ -992,7 +996,7 @@ export class ScratchSimulator extends HTMLElement {
     const contentWrapper = document.createElement('div')
     contentWrapper.className = 'grid grid-cols-2 gap-4 mb-4'
 
-    // Colonne gauche: canvas
+    // Colonne gauche: canvas avec bouton de contrôle
     const canvasWrapper = document.createElement('div')
     this.canvas = document.createElement('canvas')
     this.canvas.width = 400
@@ -1022,17 +1026,25 @@ export class ScratchSimulator extends HTMLElement {
     this.stepDiv.id = 'execution-step'
     this.stepDiv.textContent = 'Instruction: -'
 
+    // Bouton de contrôle play/pause
+    this.controlButton = document.createElement('button')
+    this.controlButton.className =
+      'btn btn-circle btn-lg bg-blue-500 hover:bg-blue-600 text-white text-2xl w-16 h-16 flex items-center justify-center'
+    this.controlButton.textContent = '▶'
+    this.controlButton.addEventListener('click', () => this.togglePlayPause())
+
+    const stepAndControlDiv = document.createElement('div')
+    stepAndControlDiv.className = 'flex items-end gap-3 mb-4'
+    stepAndControlDiv.appendChild(this.stepDiv)
+    stepAndControlDiv.appendChild(this.controlButton)
+
+    rightColumn.appendChild(stepAndControlDiv)
+
     this.infoDiv = document.createElement('div')
     this.infoDiv.className = 'text-sm text-gray-600 flex-1'
     this.infoDiv.id = 'execution-info'
 
-    const contextDiv = document.createElement('div')
-    contextDiv.className = 'grid grid-cols-1 md:grid-cols-2 gap-4'
-    contextDiv.id = 'contextDiv'
-    contextDiv.appendChild(this.stepDiv)
-    contextDiv.appendChild(this.infoDiv)
-
-    rightColumn.appendChild(contextDiv)
+    rightColumn.appendChild(this.infoDiv)
 
     box.appendChild(closeButton)
     box.appendChild(title)
@@ -1066,6 +1078,12 @@ export class ScratchSimulator extends HTMLElement {
       pre.textContent = this.scratchCode
       this.codeDiv.appendChild(pre)
     }
+
+    // Rendre le scratchblock et mettre en cache les blocs
+    requestAnimationFrame(() => {
+      renderScratchDiv(this.codeDiv!)
+      this.cacheRenderedBlocks()
+    })
   }
 
   private highlightCurrentInstruction(
@@ -1456,18 +1474,30 @@ export class ScratchSimulator extends HTMLElement {
     if (!this.canvas) return
 
     this.interpreter = new ScratchInterpreter(200, 200, 90)
-
-    // Lancer l'exécution animée
-    this.runAnimatedSimulation()
+    this.isRunning = false
+    this.isPaused = false
+    this.parseAndDisplayCode()
+    this.updateControlButton()
   }
 
   private async runAnimatedSimulation(): Promise<void> {
     if (!this.interpreter || !this.canvas) return
 
+    this.isRunning = true
+    this.isPaused = false
+    this.updateControlButton()
+
     // Exécuter avec animation
     await this.interpreter.executeAnimated(
       this.scratchCode,
-      () => {
+      async () => {
+        // Attendre si en pause
+        while (this.isPaused) {
+          await new Promise<void>((resolve) => {
+            this.pauseResolvers.push(resolve)
+          })
+        }
+
         const state = this.interpreter!.getCurrentState()
         requestAnimationFrame(() => {
           this.drawSimulation(state)
@@ -1498,6 +1528,10 @@ export class ScratchSimulator extends HTMLElement {
       this.displayRepeatContext(result)
       this.highlightCurrentInstruction('', -1)
     })
+
+    this.isRunning = false
+    this.isPaused = false
+    this.updateControlButton()
   }
 
   private drawSimulation(result: ExecutionResult): void {
@@ -1651,6 +1685,48 @@ export class ScratchSimulator extends HTMLElement {
       this.repeatDiv.textContent = contexts
     } else {
       this.repeatDiv.textContent = ''
+    }
+  }
+
+  private togglePlayPause(): void {
+    if (!this.isRunning) {
+      // Si pas en cours, relancer depuis le début
+      this.isRunning = true
+      this.isPaused = false
+      this.interpreter = new ScratchInterpreter(200, 200, 90)
+      this.parseAndDisplayCode()
+      this.runAnimatedSimulation()
+    } else if (this.isPaused) {
+      // Si en pause, reprendre
+      this.isPaused = false
+      const resolvers = this.pauseResolvers
+      this.pauseResolvers = []
+      resolvers.forEach((resolve) => resolve())
+    } else {
+      // Si en cours, mettre en pause
+      this.isPaused = true
+    }
+    this.updateControlButton()
+  }
+
+  private updateControlButton(): void {
+    if (!this.controlButton) return
+
+    const baseClasses =
+      'btn btn-circle btn-lg text-white text-2xl w-16 h-16 flex items-center justify-center'
+
+    if (this.isRunning && !this.isPaused) {
+      // En cours d'exécution: afficher stop (⏹)
+      this.controlButton.textContent = '⏹'
+      this.controlButton.className = `${baseClasses} bg-red-500 hover:bg-red-600`
+    } else if (this.isPaused) {
+      // En pause: afficher play (▶)
+      this.controlButton.textContent = '▶'
+      this.controlButton.className = `${baseClasses} bg-green-500 hover:bg-green-600`
+    } else {
+      // Pas en cours: afficher play (▶)
+      this.controlButton.textContent = '▶'
+      this.controlButton.className = `${baseClasses} bg-blue-500 hover:bg-blue-600`
     }
   }
 }
