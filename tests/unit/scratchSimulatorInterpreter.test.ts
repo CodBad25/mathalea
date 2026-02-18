@@ -224,4 +224,74 @@ describe('ScratchInterpreter', () => {
     expect(snapshots).toContain(3)
     expect(snapshots).toContain(4)
   })
+
+  it('gere blockifelse avec condition vraie', () => {
+    const interpreter = new ScratchInterpreter(200, 200, 90)
+    const code = `\\begin{scratch}[blocks]
+\\blockvariable{mettre \\selectmenu{x} à \\ovalnum{10}}
+\\blockifelse{si \\booloperator{\\ovalvariable{x} > 5} alors}{
+\\blockvariable{mettre \\selectmenu{resultat} à \\ovalnum{1}}
+}{
+\\blockvariable{mettre \\selectmenu{resultat} à \\ovalnum{0}}
+}
+\\end{scratch}`
+
+    const result = interpreter.execute(code)
+
+    expect(result.variables.x).toBe(10)
+    expect(result.variables.resultat).toBe(1)
+  })
+
+  it('gere blockifelse avec condition fausse', () => {
+    const interpreter = new ScratchInterpreter(200, 200, 90)
+    const code = `\\begin{scratch}[blocks]
+\\blockvariable{mettre \\selectmenu{x} à \\ovalnum{3}}
+\\blockifelse{si \\booloperator{\\ovalvariable{x} > 5} alors}{
+\\blockvariable{mettre \\selectmenu{resultat} à \\ovalnum{1}}
+}{
+\\blockvariable{mettre \\selectmenu{resultat} à \\ovalnum{0}}
+}
+\\end{scratch}`
+
+    const result = interpreter.execute(code)
+
+    expect(result.variables.x).toBe(3)
+    expect(result.variables.resultat).toBe(0)
+  })
+
+  it('gere blockifelse avec operateurs comparaison', () => {
+    const interpreter = new ScratchInterpreter(200, 200, 90)
+    const code = `\\begin{scratch}[blocks]
+\\blockvariable{mettre \\selectmenu{a} à \\ovalnum{5}}
+\\blockvariable{mettre \\selectmenu{b} à \\ovalnum{5}}
+\\blockifelse{si \\booloperator{\\ovalvariable{a} = \\ovalvariable{b}} alors}{
+\\blockvariable{mettre \\selectmenu{egal} à \\ovalnum{1}}
+}{
+\\blockvariable{mettre \\selectmenu{egal} à \\ovalnum{0}}
+}
+\\end{scratch}`
+
+    const result = interpreter.execute(code)
+
+    expect(result.variables.a).toBe(5)
+    expect(result.variables.b).toBe(5)
+    expect(result.variables.egal).toBe(1)
+  })
+
+  it('gere blockifelse en mode anime', async () => {
+    const interpreter = new ScratchInterpreter(200, 200, 90)
+    const code = `\\begin{scratch}[blocks]
+\\blockvariable{mettre \\selectmenu{x} à \\ovalnum{7}}
+\\blockifelse{si \\booloperator{\\ovalvariable{x} >= 6} alors}{
+\\blockvariable{mettre \\selectmenu{resultat} à \\ovalnum{100}}
+}{
+\\blockvariable{mettre \\selectmenu{resultat} à \\ovalnum{50}}
+}
+\\end{scratch}`
+
+    const result = await interpreter.executeAnimated(code, () => {}, 0)
+
+    expect(result.variables.x).toBe(7)
+    expect(result.variables.resultat).toBe(100)
+  })
 })

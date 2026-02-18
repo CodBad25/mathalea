@@ -161,21 +161,118 @@ export class ScratchInterpreter {
     let index = 0
 
     while (index < code.length) {
-      // Chercher le premier blockrepeat (soit "répéter X fois" soit "répéter jusqu'à ce que")
+      // Chercher blockrepeat et blockifelse
       const repeatStart = code.indexOf('\\blockrepeat{', index)
+      const ifelseStart = code.indexOf('\\blockifelse{', index)
 
-      if (repeatStart === -1) {
-        // Pas de repeat trouvé, exécuter le reste
+      // Déterminer lequel vient en premier (-1 signifie non trouvé)
+      let nextBlockStart = -1
+      let isIfElseBlock = false
+
+      if (repeatStart === -1 && ifelseStart === -1) {
+        // Aucun bloc structurel trouvé, exécuter le reste
         if (index < code.length) {
           this.parseNonRepeatBlocks(code.substring(index))
         }
         break
+      } else if (repeatStart === -1) {
+        nextBlockStart = ifelseStart
+        isIfElseBlock = true
+      } else if (ifelseStart === -1) {
+        nextBlockStart = repeatStart
+        isIfElseBlock = false
+      } else {
+        nextBlockStart = Math.min(repeatStart, ifelseStart)
+        isIfElseBlock = ifelseStart < repeatStart
       }
 
-      // Exécuter ce qui précède le repeat
-      if (repeatStart > index) {
-        this.parseNonRepeatBlocks(code.substring(index, repeatStart))
+      // Exécuter ce qui précède le bloc structurel
+      if (nextBlockStart > index) {
+        this.parseNonRepeatBlocks(code.substring(index, nextBlockStart))
       }
+
+      if (isIfElseBlock) {
+        // Traiter blockifelse{si \booloperator{...} alors}{bloc then}{bloc else}
+        // Trouver la fin de l'en-tête
+        let headerEnd = ifelseStart + 13
+        let headerBraceCount = 1
+        while (headerEnd < code.length && headerBraceCount > 0) {
+          if (code[headerEnd] === '{' && code[headerEnd - 1] !== '\\\\') {
+            headerBraceCount++
+          } else if (
+            code[headerEnd] === '}' &&
+            code[headerEnd - 1] !== '\\\\'
+          ) {
+            headerBraceCount--
+          }
+          headerEnd++
+        }
+
+        if (headerBraceCount !== 0) break
+
+        const conditionHeader = code.substring(ifelseStart + 13, headerEnd - 1)
+
+        // Extraire le bloc then
+        const thenStart = code.indexOf('{', headerEnd - 1)
+        if (thenStart === -1) break
+
+        let braceCount = 1
+        let pos = thenStart + 1
+        let thenEnd = -1
+
+        while (pos < code.length && braceCount > 0) {
+          if (code[pos] === '{' && code[pos - 1] !== '\\\\') {
+            braceCount++
+          } else if (code[pos] === '}' && code[pos - 1] !== '\\\\') {
+            braceCount--
+            if (braceCount === 0) {
+              thenEnd = pos
+            }
+          }
+          pos++
+        }
+
+        if (thenEnd === -1) break
+
+        const thenCode = code.substring(thenStart + 1, thenEnd).trim()
+
+        // Extraire le bloc else
+        const elseStart = code.indexOf('{', thenEnd)
+        if (elseStart === -1) break
+
+        braceCount = 1
+        pos = elseStart + 1
+        let elseEnd = -1
+
+        while (pos < code.length && braceCount > 0) {
+          if (code[pos] === '{' && code[pos - 1] !== '\\\\') {
+            braceCount++
+          } else if (code[pos] === '}' && code[pos - 1] !== '\\\\') {
+            braceCount--
+            if (braceCount === 0) {
+              elseEnd = pos
+            }
+          }
+          pos++
+        }
+
+        if (elseEnd === -1) break
+
+        const elseCode = code.substring(elseStart + 1, elseEnd).trim()
+
+        // Évaluer la condition et exécuter le bon bloc
+        const conditionMet = this.evaluateBoolOperator(conditionHeader)
+        if (conditionMet === true) {
+          this.parseAndExecute(thenCode)
+        } else {
+          this.parseAndExecute(elseCode)
+        }
+
+        index = elseEnd + 1
+        continue
+      }
+
+      // Traiter blockrepeat (code existant)
 
       // Détecter le type de blockrepeat
       const isRepeatUntil = code
@@ -297,9 +394,15 @@ export class ScratchInterpreter {
     let index = 0
 
     while (index < code.length) {
+      // Chercher blockrepeat et blockifelse
       const repeatStart = code.indexOf('\\blockrepeat{', index)
+      const ifelseStart = code.indexOf('\\blockifelse{', index)
 
-      if (repeatStart === -1) {
+      // Déterminer lequel vient en premier
+      let nextBlockStart = -1
+      let isIfElseBlock = false
+
+      if (repeatStart === -1 && ifelseStart === -1) {
         if (index < code.length) {
           await this.parseNonRepeatBlocksAnimated(
             code.substring(index),
@@ -307,14 +410,106 @@ export class ScratchInterpreter {
           )
         }
         break
+      } else if (repeatStart === -1) {
+        nextBlockStart = ifelseStart
+        isIfElseBlock = true
+      } else if (ifelseStart === -1) {
+        nextBlockStart = repeatStart
+        isIfElseBlock = false
+      } else {
+        nextBlockStart = Math.min(repeatStart, ifelseStart)
+        isIfElseBlock = ifelseStart < repeatStart
       }
 
-      if (repeatStart > index) {
+      if (nextBlockStart > index) {
         await this.parseNonRepeatBlocksAnimated(
-          code.substring(index, repeatStart),
+          code.substring(index, nextBlockStart),
           delayMs,
         )
       }
+
+      if (isIfElseBlock) {
+        // Traiter blockifelse{si \booloperator{...} alors}{bloc then}{bloc else}
+        // Trouver la fin de l'en-tête
+        let headerEnd = ifelseStart + 13
+        let headerBraceCount = 1
+        while (headerEnd < code.length && headerBraceCount > 0) {
+          if (code[headerEnd] === '{' && code[headerEnd - 1] !== '\\\\') {
+            headerBraceCount++
+          } else if (
+            code[headerEnd] === '}' &&
+            code[headerEnd - 1] !== '\\\\'
+          ) {
+            headerBraceCount--
+          }
+          headerEnd++
+        }
+
+        if (headerBraceCount !== 0) break
+
+        const conditionHeader = code.substring(ifelseStart + 13, headerEnd - 1)
+
+        // Extraire le bloc then
+        const thenStart = code.indexOf('{', headerEnd - 1)
+        if (thenStart === -1) break
+
+        let braceCount = 1
+        let pos = thenStart + 1
+        let thenEnd = -1
+
+        while (pos < code.length && braceCount > 0) {
+          if (code[pos] === '{' && code[pos - 1] !== '\\\\') {
+            braceCount++
+          } else if (code[pos] === '}' && code[pos - 1] !== '\\\\') {
+            braceCount--
+            if (braceCount === 0) {
+              thenEnd = pos
+            }
+          }
+          pos++
+        }
+
+        if (thenEnd === -1) break
+
+        const thenCode = code.substring(thenStart + 1, thenEnd).trim()
+
+        // Extraire le bloc else
+        const elseStart = code.indexOf('{', thenEnd)
+        if (elseStart === -1) break
+
+        braceCount = 1
+        pos = elseStart + 1
+        let elseEnd = -1
+
+        while (pos < code.length && braceCount > 0) {
+          if (code[pos] === '{' && code[pos - 1] !== '\\\\') {
+            braceCount++
+          } else if (code[pos] === '}' && code[pos - 1] !== '\\\\') {
+            braceCount--
+            if (braceCount === 0) {
+              elseEnd = pos
+            }
+          }
+          pos++
+        }
+
+        if (elseEnd === -1) break
+
+        const elseCode = code.substring(elseStart + 1, elseEnd).trim()
+
+        // Évaluer la condition et exécuter le bon bloc
+        const conditionMet = this.evaluateBoolOperator(conditionHeader)
+        if (conditionMet === true) {
+          await this.parseAndExecuteAnimated(thenCode, delayMs)
+        } else {
+          await this.parseAndExecuteAnimated(elseCode, delayMs)
+        }
+
+        index = elseEnd + 1
+        continue
+      }
+
+      // Traiter blockrepeat (code existant)
 
       // Détecter le type de blockrepeat
       const isRepeatUntil = code
