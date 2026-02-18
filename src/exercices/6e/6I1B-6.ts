@@ -566,7 +566,7 @@ function programmeCarreType2(perimetre: number, vraiOuFaux: boolean) {
   const codeScratch = `\\begin{scratch}[blocks]
   \\blockmove{aller à x:\\ovalnum{${randint(-5, 5) * 5}} y:\\ovalnum{${randint(-5, 5) * 5}}}
   \\blockpen{stylo en position d'écriture}
-  \\blockrepeat{répéter \\ovalnum{${vraiOuFaux ? 4 : choice([3, 5])}} fois}{
+  \\blockrepeat{répéter \\ovalnum{${vraiOuFaux ? 4 : choice([2, 3])}} fois}{
   \\blockmove{avancer de \\ovalnum{${cote}} pas}
     \\blockmove{tourner \\turnright{} de \\ovalnum{90} degrés}
   }
@@ -600,7 +600,7 @@ function programmeCarreType4(perimetre: number, vraiOuFaux: boolean) {
   \\blockmove{avancer de \\ovalnum{${cote}} pas}
   \\blockmove{tourner \\turnright{} de \\ovalnum{90} degrés}
 }
-${!vraiOuFaux ? '\\blockmove{avancer de \\ovalnum{' + cote + '} pas}\n\\blockmove{tourner \\turnright{} de \\ovalnum{90} degrés}\n' : ''}
+${vraiOuFaux ? '' : '\\blockmove{avancer de \\ovalnum{' + cote + '} pas}\n\\blockmove{tourner \\turnright{} de \\ovalnum{90} degrés}\n'}
 \\end{scratch}`
   return codeScratch
 }
