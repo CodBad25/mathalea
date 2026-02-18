@@ -302,40 +302,11 @@ export class ScratchInterpreter {
   }
 
   private parseNonRepeatBlocks(code: string): void {
-    // Identifier les zones des blockrepeat à ignorer
-    const ignoreRanges: Array<{ start: number; end: number }> = []
-
-    const repeatRegex = /\\blockrepeat\{([^}]+)\}\s*\{\s*([\s\S]*?)\n\s*\}/g
-    let repeatMatch = repeatRegex.exec(code)
-    while (repeatMatch !== null) {
-      ignoreRanges.push({
-        start: repeatMatch.index,
-        end: repeatMatch.index + repeatMatch[0].length,
-      })
-      repeatMatch = repeatRegex.exec(code)
-    }
-
-    // Parser les blocs, en ignorant ceux qui sont dans les zones de blockrepeat
-    const blockRegex = /\\block(\w+)\{([^{}]*(?:\{[^{}]*\}[^{}]*)*)\}/g
-    let blockMatch = blockRegex.exec(code)
-
-    while (blockMatch !== null) {
-      const blockType = blockMatch[1].toLowerCase()
-      const content = blockMatch[2]
-
-      // Vérifier que ce bloc n'est pas à l'intérieur d'un blockrepeat
-      const isInRepeatZone = ignoreRanges.some(
-        (range) =>
-          blockMatch !== null &&
-          blockMatch.index >= range.start &&
-          blockMatch.index + blockMatch[0].length <= range.end,
-      )
-
-      if (!isInRepeatZone && blockType !== 'repeat') {
-        this.executeBlock(blockType, content, blockMatch[0])
+    const blocks = this.extractBlocksWithBalancedBraces(code)
+    for (const block of blocks) {
+      if (block.type !== 'repeat') {
+        this.executeBlock(block.type, block.content, block.raw)
       }
-
-      blockMatch = blockRegex.exec(code)
     }
   }
 
@@ -343,38 +314,12 @@ export class ScratchInterpreter {
     code: string,
     delayMs: number,
   ): Promise<void> {
-    // Identifier les zones des blockrepeat à ignorer
-    const ignoreRanges: Array<{ start: number; end: number }> = []
+    const blocks = this.extractBlocksWithBalancedBraces(code)
 
-    const repeatRegex = /\\blockrepeat\{([^}]+)\}\s*\{\s*([\s\S]*?)\n\s*\}/g
-    let repeatMatch = repeatRegex.exec(code)
-    while (repeatMatch !== null) {
-      ignoreRanges.push({
-        start: repeatMatch.index,
-        end: repeatMatch.index + repeatMatch[0].length,
-      })
-      repeatMatch = repeatRegex.exec(code)
-    }
-
-    // Parser les blocs, en ignorant ceux qui sont dans les zones de blockrepeat
-    const blockRegex = /\\block(\w+)\{([^{}]*(?:\{[^{}]*\}[^{}]*)*)\}/g
-    let blockMatch = blockRegex.exec(code)
-
-    while (blockMatch !== null) {
-      const blockType = blockMatch[1].toLowerCase()
-      const content = blockMatch[2]
-
-      // Vérifier que ce bloc n'est pas à l'intérieur d'un blockrepeat
-      const isInRepeatZone = ignoreRanges.some(
-        (range) =>
-          blockMatch !== null &&
-          blockMatch.index >= range.start &&
-          blockMatch.index + blockMatch[0].length <= range.end,
-      )
-
-      if (!isInRepeatZone && blockType !== 'repeat') {
+    for (const block of blocks) {
+      if (block.type !== 'repeat') {
         // Afficher l'instruction
-        this.prepareBlockDisplay(blockType, content, blockMatch[0])
+        this.prepareBlockDisplay(block.type, block.content, block.raw)
         if (this.onUpdate) {
           await Promise.resolve(this.onUpdate())
         }
@@ -383,7 +328,7 @@ export class ScratchInterpreter {
         await new Promise((resolve) => setTimeout(resolve, delayMs / 2))
 
         // Exécuter l'action
-        await this.executeBlockAction(blockType, content, delayMs)
+        await this.executeBlockAction(block.type, block.content, delayMs)
         // Afficher les infos mises à jour
         if (this.onUpdate) {
           await Promise.resolve(this.onUpdate())
@@ -391,9 +336,56 @@ export class ScratchInterpreter {
         // Attendre le délai
         await new Promise((resolve) => setTimeout(resolve, delayMs / 2))
       }
-
-      blockMatch = blockRegex.exec(code)
     }
+  }
+
+  private extractBlocksWithBalancedBraces(
+    code: string,
+  ): Array<{ type: string; content: string; raw: string }> {
+    const blocks: Array<{ type: string; content: string; raw: string }> = []
+    let index = 0
+
+    while (index < code.length) {
+      const blockStart = code.indexOf('\\block', index)
+      if (blockStart === -1) break
+
+      let typeStart = blockStart + 6
+      while (typeStart < code.length && /\s/.test(code[typeStart])) {
+        typeStart += 1
+      }
+
+      let typeEnd = typeStart
+      while (typeEnd < code.length && /[A-Za-z]/.test(code[typeEnd])) {
+        typeEnd += 1
+      }
+
+      const type = code.slice(typeStart, typeEnd).toLowerCase()
+      const contentStart = code.indexOf('{', typeEnd)
+      if (!type || contentStart === -1) {
+        index = blockStart + 6
+        continue
+      }
+
+      let braceCount = 1
+      let pos = contentStart + 1
+      while (pos < code.length && braceCount > 0) {
+        if (code[pos] === '{' && code[pos - 1] !== '\\') {
+          braceCount += 1
+        } else if (code[pos] === '}' && code[pos - 1] !== '\\') {
+          braceCount -= 1
+        }
+        pos += 1
+      }
+
+      if (braceCount !== 0) break
+
+      const blockRaw = code.slice(blockStart, pos)
+      const content = code.slice(contentStart + 1, pos - 1)
+      blocks.push({ type, content, raw: blockRaw })
+      index = pos
+    }
+
+    return blocks
   }
 
   private prepareBlockDisplay(
@@ -442,29 +434,24 @@ export class ScratchInterpreter {
         )
       }
     } else if (type === 'variable') {
-      const num = this.extractNumber(content)
-      const varMatch = content.match(/\\selectmenu\{(\w+)\}/)
-      const varName = varMatch ? varMatch[1] : 'compteur'
-      this.variables[varName] = num
-    } else if (type === 'change') {
-      const num = this.extractNumber(content)
-      const varMatch = content.match(/\\ovalvariable\{(\w+)\}/)
-      const varName = varMatch ? varMatch[1] : 'compteur'
-      this.variables[varName] = (this.variables[varName] || 0) + num
-    } else if (type === 'look') {
-      const num = this.extractNumber(content)
-      const varMatch = content.match(/\\ovalvariable\{(\w+)\}/)
-      if (varMatch) {
-        const varName = varMatch[1]
-        this.messages.push(
-          String(
-            this.variables[varName] !== undefined
-              ? this.variables[varName]
-              : num,
-          ),
-        )
+      const varName = this.extractVariableName(content)
+      const value = this.extractNumericValue(content)
+      if (content.toLowerCase().includes('ajouter')) {
+        this.addToVariable(varName, value)
       } else {
-        this.messages.push(String(num))
+        this.setVariableValue(varName, value)
+      }
+    } else if (type === 'change') {
+      const value = this.extractNumericValue(content)
+      const varName = this.extractVariableName(content)
+      this.addToVariable(varName, value)
+    } else if (type === 'look') {
+      const value = this.extractNumericValue(content)
+      const varName = this.extractOvalVariableName(content)
+      if (varName) {
+        this.messages.push(String(this.getVariableValue(varName)))
+      } else {
+        this.messages.push(String(value))
       }
     } else if (type === 'pen') {
       if (content.includes('position') || content.includes('écriture')) {
@@ -502,29 +489,24 @@ export class ScratchInterpreter {
         this.parseAndExecute(this.customBlocks[blockName])
       }
     } else if (type === 'variable') {
-      const num = this.extractNumber(content)
-      const varMatch = content.match(/\\selectmenu\{(\w+)\}/)
-      const varName = varMatch ? varMatch[1] : 'compteur'
-      this.variables[varName] = num
-    } else if (type === 'change') {
-      const num = this.extractNumber(content)
-      const varMatch = content.match(/\\ovalvariable\{(\w+)\}/)
-      const varName = varMatch ? varMatch[1] : 'compteur'
-      this.variables[varName] = (this.variables[varName] || 0) + num
-    } else if (type === 'look') {
-      const num = this.extractNumber(content)
-      const varMatch = content.match(/\\ovalvariable\{(\w+)\}/)
-      if (varMatch) {
-        const varName = varMatch[1]
-        this.messages.push(
-          String(
-            this.variables[varName] !== undefined
-              ? this.variables[varName]
-              : num,
-          ),
-        )
+      const varName = this.extractVariableName(content)
+      const value = this.extractNumericValue(content)
+      if (content.toLowerCase().includes('ajouter')) {
+        this.addToVariable(varName, value)
       } else {
-        this.messages.push(String(num))
+        this.setVariableValue(varName, value)
+      }
+    } else if (type === 'change') {
+      const value = this.extractNumericValue(content)
+      const varName = this.extractVariableName(content)
+      this.addToVariable(varName, value)
+    } else if (type === 'look') {
+      const value = this.extractNumericValue(content)
+      const varName = this.extractOvalVariableName(content)
+      if (varName) {
+        this.messages.push(String(this.getVariableValue(varName)))
+      } else {
+        this.messages.push(String(value))
       }
     } else if (type === 'pen') {
       if (content.includes('position') || content.includes('écriture')) {
@@ -564,24 +546,24 @@ export class ScratchInterpreter {
     }
 
     if (type === 'variable') {
-      const num = this.extractNumber(content)
-      const varMatch = content.match(/\\selectmenu\{(\w+)\}/)
-      const varName = varMatch ? varMatch[1] : 'compteur'
-      return `Mettre ${varName} a ${num}`
+      const value = this.extractNumericValue(content)
+      const varName = this.extractVariableName(content)
+      if (content.toLowerCase().includes('ajouter')) {
+        return `Ajouter ${value} a ${varName}`
+      }
+      return `Mettre ${varName} a ${value}`
     }
 
     if (type === 'change') {
-      const num = this.extractNumber(content)
-      const varMatch = content.match(/\\ovalvariable\{(\w+)\}/)
-      const varName = varMatch ? varMatch[1] : 'compteur'
-      return `Ajouter ${num} a ${varName}`
+      const value = this.extractNumericValue(content)
+      const varName = this.extractVariableName(content)
+      return `Ajouter ${value} a ${varName}`
     }
 
     if (type === 'look') {
-      const num = this.extractNumber(content)
-      const varMatch = content.match(/\\ovalvariable\{(\w+)\}/)
-      const varName = varMatch ? varMatch[1] : ''
-      return varName ? `Dire ${varName}` : `Dire ${num}`
+      const value = this.extractNumericValue(content)
+      const varName = this.extractOvalVariableName(content) || ''
+      return varName ? `Dire ${varName}` : `Dire ${value}`
     }
 
     if (type === 'pen') {
@@ -617,11 +599,210 @@ export class ScratchInterpreter {
   }
 
   private extractNumber(str: string): number {
-    const match = str.match(/\\ovalnum\{(-?\d+)\}/)
-    if (match) return parseInt(match[1], 10)
+    const match = str.match(/\\ovalnum\{(-?\d+(?:[.,]\d+)?)\}/)
+    if (match) return Number.parseFloat(match[1].replace(',', '.'))
 
-    const numMatch = str.match(/-?\d+/)
-    return numMatch ? parseInt(numMatch[0], 10) : 0
+    const numMatch = str.match(/-?\d+(?:[.,]\d+)?/)
+    return numMatch ? Number.parseFloat(numMatch[0].replace(',', '.')) : 0
+  }
+
+  private extractSelectMenuVariableName(content: string): string | null {
+    const match = content.match(/\\selectmenu\*?\{([^}]+)\}/)
+    return match ? match[1].trim() : null
+  }
+
+  private extractOvalVariableName(content: string): string | null {
+    const match = content.match(/\\ovalvariabl(?:e)?\{([^}]+)\}/)
+    return match ? match[1].trim() : null
+  }
+
+  private extractVariableName(content: string): string {
+    return (
+      this.extractSelectMenuVariableName(content) ||
+      this.extractOvalVariableName(content) ||
+      'compteur'
+    )
+  }
+
+  private getVariableValue(varName: string): number {
+    return this.variables[varName] ?? 0
+  }
+
+  private setVariableValue(varName: string, value: number): void {
+    this.variables[varName] = value
+  }
+
+  private addToVariable(varName: string, delta: number): void {
+    this.variables[varName] = this.getVariableValue(varName) + delta
+  }
+
+  private extractNumericValue(content: string): number {
+    const operatorValue = this.evaluateOvalOperator(content)
+    if (operatorValue !== null) {
+      return operatorValue
+    }
+
+    const directNumber = this.extractNumber(content)
+    if (/\\ovalnum\{|-?\d+(?:[.,]\d+)?/.test(content)) {
+      return directNumber
+    }
+
+    const varName = this.extractOvalVariableName(content)
+    if (varName) {
+      return this.getVariableValue(varName)
+    }
+
+    return directNumber
+  }
+
+  private extractCommandContent(
+    content: string,
+    command: string,
+  ): string | null {
+    const start = content.indexOf(`${command}{`)
+    if (start === -1) return null
+
+    let braceCount = 1
+    let pos = start + command.length + 1
+    const begin = pos
+
+    while (pos < content.length && braceCount > 0) {
+      if (content[pos] === '{' && content[pos - 1] !== '\\') {
+        braceCount += 1
+      } else if (content[pos] === '}' && content[pos - 1] !== '\\') {
+        braceCount -= 1
+        if (braceCount === 0) {
+          return content.slice(begin, pos)
+        }
+      }
+      pos += 1
+    }
+
+    return null
+  }
+
+  private evaluateOvalOperator(content: string): number | null {
+    const expression = this.extractCommandContent(content, '\\ovaloperator')
+    if (!expression) return null
+    return this.evaluateArithmeticExpression(expression)
+  }
+
+  private evaluateArithmeticExpression(expression: string): number | null {
+    const sanitized = this.materializeExpression(expression)
+    if (!sanitized) return null
+
+    let index = 0
+
+    const skipSpaces = (): void => {
+      while (index < sanitized.length && /\s/.test(sanitized[index])) {
+        index += 1
+      }
+    }
+
+    const parseNumberToken = (): number | null => {
+      skipSpaces()
+      const numberMatch = sanitized.slice(index).match(/^\d+(?:\.\d+)?|^\.\d+/)
+      if (!numberMatch) return null
+      index += numberMatch[0].length
+      return Number.parseFloat(numberMatch[0])
+    }
+
+    const parseFactor = (): number | null => {
+      skipSpaces()
+      if (sanitized[index] === '+') {
+        index += 1
+        return parseFactor()
+      }
+      if (sanitized[index] === '-') {
+        index += 1
+        const value = parseFactor()
+        return value === null ? null : -value
+      }
+      if (sanitized[index] === '(') {
+        index += 1
+        const value = parseExpression()
+        skipSpaces()
+        if (sanitized[index] !== ')') return null
+        index += 1
+        return value
+      }
+      return parseNumberToken()
+    }
+
+    const parseTerm = (): number | null => {
+      let value = parseFactor()
+      if (value === null) return null
+
+      while (true) {
+        skipSpaces()
+        const operator = sanitized[index]
+        if (operator !== '*' && operator !== '/') break
+        index += 1
+        const rhs = parseFactor()
+        if (rhs === null) return null
+        if (operator === '*') {
+          value *= rhs
+        } else {
+          value /= rhs
+        }
+      }
+
+      return value
+    }
+
+    const parseExpression = (): number | null => {
+      let value = parseTerm()
+      if (value === null) return null
+
+      while (true) {
+        skipSpaces()
+        const operator = sanitized[index]
+        if (operator !== '+' && operator !== '-') break
+        index += 1
+        const rhs = parseTerm()
+        if (rhs === null) return null
+        if (operator === '+') {
+          value += rhs
+        } else {
+          value -= rhs
+        }
+      }
+
+      return value
+    }
+
+    const result = parseExpression()
+    skipSpaces()
+    if (result === null || index !== sanitized.length || Number.isNaN(result)) {
+      return null
+    }
+    return result
+  }
+
+  private materializeExpression(expression: string): string {
+    let result = expression
+
+    const replaceNestedOperators = (): void => {
+      while (result.includes('\\ovaloperator{')) {
+        const inner = this.extractCommandContent(result, '\\ovaloperator')
+        if (!inner) break
+        const value = this.evaluateArithmeticExpression(inner)
+        if (value === null) break
+        result = result.replace(`\\ovaloperator{${inner}}`, `(${value})`)
+      }
+    }
+
+    replaceNestedOperators()
+
+    result = result.replace(/\\ovalnum\{(-?\d+(?:[.,]\d+)?)\}/g, (_, num) =>
+      String(Number.parseFloat(String(num).replace(',', '.'))),
+    )
+
+    result = result.replace(/\\ovalvariabl(?:e)?\{([^}]+)\}/g, (_, name) =>
+      String(this.getVariableValue(String(name).trim())),
+    )
+
+    return result
   }
 
   private isGoToInstruction(content: string): boolean {
@@ -1385,19 +1566,19 @@ export class ScratchSimulator extends HTMLElement {
   private displayInfo(result: ExecutionResult): void {
     if (!this.infoDiv) return
 
-    let html = `<div class="space-y-2"><p><strong>Position:</strong> x=${Math.round(result.finalX - 200)}, y=${Math.round(200 - result.finalY)}.</p>`
-    html += `<p><strong>Angle:</strong> ${Math.round(result.finalAngle)}°.</p><p><strong>Traces:</strong> ${result.traces.length} ligne(s).</p>`
+    let html = `<div class="space-y-2"><p><strong>Position&nbsp:</strong> x=${Math.round(result.finalX - 200)}, y=${Math.round(200 - result.finalY)}.</p>`
+    html += `<p><strong>Angle&nbsp:</strong> ${Math.round(result.finalAngle)}°.</p><p><strong>Traces:</strong> ${result.traces.length} ligne(s).</p>`
 
     if (Object.keys(result.variables).length > 0) {
-      html += '<p><strong>Variables:</strong><br/>'
+      html += '<p><strong>Variables&nbsp:</strong><br/>'
       for (const [name, val] of Object.entries(result.variables)) {
-        html += `${name}=${val}, `
+        html += `${name}&nbsp=&nbsp${val}, `
       }
       html = html.slice(0, -2) + '</p>'
     }
 
     if (result.messages.length > 0) {
-      html += `<p><strong>Messages:</strong> ${result.messages.join(', ')}</p>`
+      html += `<p><strong>Messages&nbsp:</strong> ${result.messages.join(', ')}</p>`
     }
 
     html += '</div>'
@@ -1412,12 +1593,12 @@ export class ScratchSimulator extends HTMLElement {
           ? ` <span class="text-xs text-gray-500">(#${result.currentInstructionIndex})</span>`
           : ''
       this.stepDiv.innerHTML =
-        '<span class="font-semibold">Instruction :</span>' +
+        '<span class="font-semibold">Instruction&nbsp:</span>' +
         indexLabel +
         result.currentInstructionScratchHtml
       renderScratchDiv(this.stepDiv)
     } else {
-      this.stepDiv.textContent = 'Instruction: -'
+      this.stepDiv.textContent = 'Instruction&nbsp: -'
     }
   }
 
