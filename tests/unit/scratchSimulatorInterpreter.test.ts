@@ -122,4 +122,38 @@ describe('ScratchInterpreter', () => {
     expect(result.finalX).toBe(200)
     expect(result.finalY).toBe(195)
   })
+
+  it('gere les variables reservees abscisse x, ordonnee y et direction', () => {
+    const interpreter = new ScratchInterpreter(200, 200, 90)
+    const code = `\\begin{scratch}[blocks]
+\\blockvariable{mettre \\selectmenu{abscisse x} à \\ovalnum{12}}
+\\blockvariable{mettre \\selectmenu{ordonnée y} à \\ovalnum{-3}}
+\\blockvariable{mettre \\selectmenu{direction} à \\ovalnum{45}}
+\\blocklook{dire \\ovalvariable{abscisse x}}
+\\blocklook{dire \\ovalvariable{ordonnée y}}
+\\blocklook{dire \\ovalvariable{direction}}
+\\end{scratch}`
+
+    const result = interpreter.execute(code)
+
+    expect(result.finalX).toBe(212)
+    expect(result.finalY).toBe(203)
+    expect(result.finalAngle).toBe(45)
+    expect(result.messages).toEqual(['12', '-3', '45'])
+  })
+
+  it('gere Ajouter sur variables reservees', () => {
+    const interpreter = new ScratchInterpreter(200, 200, 90)
+    const code = `\\begin{scratch}[blocks]
+\\blockvariable{Ajouter \\ovalnum{5} à \\ovalvariable{abscisse x}}
+\\blockvariable{Ajouter \\ovalnum{2} à \\ovalvariable{ordonnée y}}
+\\blockvariable{Ajouter \\ovalnum{10} à \\ovalvariable{direction}}
+\\end{scratch}`
+
+    const result = interpreter.execute(code)
+
+    expect(result.finalX).toBe(205)
+    expect(result.finalY).toBe(198)
+    expect(result.finalAngle).toBe(100)
+  })
 })

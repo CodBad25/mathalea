@@ -730,15 +730,85 @@ export class ScratchInterpreter {
     }
   }
 
+  private getReservedVariableKind(
+    varName: string,
+  ): 'abscisse-x' | 'ordonnee-y' | 'direction' | null {
+    const normalized = varName
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/\s+/g, ' ')
+      .trim()
+      .toLowerCase()
+
+    if (normalized === 'abscisse x') {
+      return 'abscisse-x'
+    }
+
+    if (normalized === 'ordonnee y') {
+      return 'ordonnee-y'
+    }
+
+    if (normalized === 'direction') {
+      return 'direction'
+    }
+
+    return null
+  }
+
   private getVariableValue(varName: string): number {
+    const reservedKind = this.getReservedVariableKind(varName)
+    if (reservedKind === 'abscisse-x') {
+      return this.x - 200
+    }
+
+    if (reservedKind === 'ordonnee-y') {
+      return 200 - this.y
+    }
+
+    if (reservedKind === 'direction') {
+      return this.angle
+    }
+
     return this.variables[varName] ?? 0
   }
 
   private setVariableValue(varName: string, value: number): void {
+    const reservedKind = this.getReservedVariableKind(varName)
+    if (reservedKind === 'abscisse-x') {
+      this.setXTo(value)
+      return
+    }
+
+    if (reservedKind === 'ordonnee-y') {
+      this.setYTo(value)
+      return
+    }
+
+    if (reservedKind === 'direction') {
+      this.setOrientation(value)
+      return
+    }
+
     this.variables[varName] = value
   }
 
   private addToVariable(varName: string, delta: number): void {
+    const reservedKind = this.getReservedVariableKind(varName)
+    if (reservedKind === 'abscisse-x') {
+      this.changeXBy(delta)
+      return
+    }
+
+    if (reservedKind === 'ordonnee-y') {
+      this.changeYBy(delta)
+      return
+    }
+
+    if (reservedKind === 'direction') {
+      this.turn(delta)
+      return
+    }
+
     this.variables[varName] = this.getVariableValue(varName) + delta
   }
 

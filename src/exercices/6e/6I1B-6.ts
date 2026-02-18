@@ -300,7 +300,8 @@ function getProgrammesAvancer(
 }
 
 function programmeTournerType1(angle: number, vraiOuFaux: boolean) {
-  let codeScratch = `\\begin{scratch}[blocks]\n`
+  let codeScratch = `\\begin{scratch}[blocks]\n
+  \\blockvariable{mettre \\ovalvariable{ordonnée y} à \\ovalnum{${randint(-5, 5) * 20}}}\n`
   codeScratch += '\\blockmove{tourner \\turnright{} de \\ovalnum{10} degrés}\n'
   if (angle % 20 === 0) {
     for (let i = 0; i < (vraiOuFaux ? angle / 20 - 1 : angle / 20); i++) {
@@ -325,6 +326,7 @@ function programmeTournerType1(angle: number, vraiOuFaux: boolean) {
 
 function programmeTournerType2(angle: number, vraiOuFaux: boolean) {
   const codeScratch = `\\begin{scratch}[blocks]\n
+\\blockvariable{mettre \\ovalvariable{abscisse x} à \\ovalnum{${randint(-5, 5) * 20}}}
 \\blockmove{tourner \\turnleft{} de \\ovalnum{10} degrés}
 \\blockrepeat{répéter \\ovalnum{${vraiOuFaux ? angle / 10 + 2 : angle / 10 - 2}} fois}{
 \\blockmove{tourner \\turnright{} de \\ovalnum{10} degrés}
@@ -336,6 +338,7 @@ function programmeTournerType2(angle: number, vraiOuFaux: boolean) {
 
 function programmeTournerType3(angle: number, vraiOuFaux: boolean) {
   const codeScratch = `\\begin{scratch}[blocks]\n
+  \\blockmove{ajouter \\ovalnum{${randint(-5, 5) * 20}} à x}
 \\blockrepeat{répéter \\ovalnum{${vraiOuFaux ? angle / 10 - 1 : angle / 10}} fois}{
 \\blockmove{tourner \\turnright{} de \\ovalnum{10} degrés}
 }
@@ -346,6 +349,7 @@ function programmeTournerType3(angle: number, vraiOuFaux: boolean) {
 
 function programmeTournerType4(angle: number, vraiOuFaux: boolean) {
   const codeScratch = `\\begin{scratch}[blocks]\n
+ \\blockmove{ajouter \\ovalnum{${randint(-5, 5) * 20}} à y}
 \\blockrepeat{répéter \\ovalnum{${Math.floor(angle / 20)}} fois}{
 \\blockrepeat{répéter \\ovalnum{2} fois}{
 \\blockmove{tourner \\turnright{} de \\ovalnum{10} degrés}
@@ -358,6 +362,8 @@ ${(angle % 20 === 10 && vraiOuFaux) || (angle % 20 === 0 && !vraiOuFaux) ? '\\bl
 
 function programmeTournerType5(angle: number, vraiOuFaux: boolean) {
   const codeScratch = `\\begin{scratch}[blocks]\n
+ \\blockmove{ajouter \\ovalnum{${randint(-5, 5) * 20}} à x}
+ \\blockmove{ajouter \\ovalnum{${randint(-5, 5) * 20}} à y}
 \\blockrepeat{répéter \\ovalnum{${(angle / 10 + 1) * 2}} fois}{
 \\blockmove{tourner \\turnright{} de \\ovalnum{5} degrés}
 }
