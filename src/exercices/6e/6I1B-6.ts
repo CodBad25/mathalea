@@ -23,6 +23,15 @@ export const refs = {
 }
 /**
  * @author Jean-Claude Lhote
+ * Cet exercice utilise le simulateur Scratch (ScratchSimulator) couplé à l'interpréteur Scratch (ScratchInterpreter) de la librairie maison.
+ * Il propose à l'élève de choisir parmi 5 programmes différents celui ou ceux qui permettent d'obtenir un résultat donné
+ *  - faire avancer le lutin d'une certaine distance
+ *  - faire tourner le lutin d'un certain angle
+ *  - faire afficher un certain nombre
+ *  - faire dessiner un polygone régulier à n côtés
+ *  - faire dessiner un escalier de n marches
+ *  L'exercice génère aléatoirement les programmes et les résultats attendus, ainsi que des programmes faux qui sont proches du programme correct pour rendre l'exercice plus difficile.
+ *  L'élève peut exécuter les programmes dans le simulateur pour vérifier leur fonctionnement.
  */
 export default class TrouverLeBonProgramme extends Exercice {
   constructor() {
