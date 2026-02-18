@@ -430,34 +430,38 @@ export class ScratchInterpreter {
   }
 
   private executeStandardBlockAction(type: string, content: string): boolean {
-    if (type === 'move' && this.isGoToInstruction(content)) {
-      const target = this.extractGoToCoordinates(content)
-      if (target) {
-        this.goTo(target.x, target.y)
+    if (type === 'move') {
+      if (this.isGoToInstruction(content)) {
+        const target = this.extractGoToCoordinates(content)
+        if (target) {
+          this.goTo(target.x, target.y)
+        }
+        return true
       }
-      return true
-    }
 
-    if (type === 'move' && content.includes('orienter')) {
-      const angle = this.extractNumber(content)
-      this.setOrientation(angle)
-      return true
-    }
-
-    if (type === 'move' && content.includes('avancer')) {
-      const steps = this.extractNumber(content)
-      this.moveForward(steps)
-      return true
-    }
-
-    if (type === 'move' && content.includes('tourner')) {
-      const angle = this.extractNumber(content)
-      if (content.includes('turnright')) {
-        this.turn(angle)
-      } else if (content.includes('turnleft')) {
-        this.turn(-angle)
+      if (content.includes('orienter')) {
+        const angle = this.extractNumber(content)
+        this.setOrientation(angle)
+        return true
       }
-      return true
+
+      if (content.includes('avancer')) {
+        const steps = this.extractNumber(content)
+        this.moveForward(steps)
+        return true
+      }
+
+      if (content.includes('tourner')) {
+        const angle = this.extractNumber(content)
+        if (content.includes('turnright')) {
+          this.turn(angle)
+        } else if (content.includes('turnleft')) {
+          this.turn(-angle)
+        }
+        return true
+      }
+
+      return false
     }
 
     if (type === 'variable') {
@@ -502,26 +506,28 @@ export class ScratchInterpreter {
   }
 
   private humanizeInstruction(type: string, content: string): string {
-    if (type === 'move' && this.isGoToInstruction(content)) {
-      const target = this.extractGoToCoordinates(content)
-      if (target) {
-        return `Aller a x:${target.x} y:${target.y}`
+    if (type === 'move') {
+      if (this.isGoToInstruction(content)) {
+        const target = this.extractGoToCoordinates(content)
+        if (target) {
+          return `Aller a x:${target.x} y:${target.y}`
+        }
+        return 'Aller a x:? y:?'
       }
-      return 'Aller a x:? y:?'
-    }
 
-    if (type === 'move' && content.includes('orienter')) {
-      return `S'orienter a ${this.extractNumber(content)} degres`
-    }
+      if (content.includes('orienter')) {
+        return `S'orienter a ${this.extractNumber(content)} degres`
+      }
 
-    if (type === 'move' && content.includes('avancer')) {
-      return `Avancer de ${this.extractNumber(content)} pas`
-    }
+      if (content.includes('avancer')) {
+        return `Avancer de ${this.extractNumber(content)} pas`
+      }
 
-    if (type === 'move' && content.includes('tourner')) {
-      const angle = this.extractNumber(content)
-      const direction = content.includes('turnright') ? 'droite' : 'gauche'
-      return `Tourner a ${direction} de ${angle} degres`
+      if (content.includes('tourner')) {
+        const angle = this.extractNumber(content)
+        const direction = content.includes('turnright') ? 'droite' : 'gauche'
+        return `Tourner a ${direction} de ${angle} degres`
+      }
     }
 
     if (type === 'moreblocks') {
