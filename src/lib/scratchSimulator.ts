@@ -1048,10 +1048,16 @@ export class ScratchInterpreter {
     return match ? match[1].trim() : null
   }
 
+  private extractOvalSensingName(content: string): string | null {
+    const match = content.match(/\\ovalsensing\{([^}]+)\}/)
+    return match ? match[1].trim() : null
+  }
+
   private extractVariableName(content: string): string {
     return (
       this.extractSelectMenuVariableName(content) ||
       this.extractOvalVariableName(content) ||
+      this.extractOvalSensingName(content) ||
       'compteur'
     )
   }
@@ -1068,7 +1074,9 @@ export class ScratchInterpreter {
     const saySegments = content.split(/\bpendant\b/i)
     const payload = saySegments[0].replace(/^.*?\bdire\b/i, '').trim()
 
-    const payloadVariableName = this.extractOvalVariableName(payload)
+    const payloadVariableName =
+      this.extractOvalVariableName(payload) ||
+      this.extractOvalSensingName(payload)
 
     let spokenValue: string
     let displayValue: string
@@ -1214,7 +1222,9 @@ export class ScratchInterpreter {
       return directNumber
     }
 
-    const varName = this.extractOvalVariableName(content)
+    const varName =
+      this.extractOvalVariableName(content) ||
+      this.extractOvalSensingName(content)
     if (varName) {
       return this.getVariableValue(varName)
     }
@@ -1406,6 +1416,10 @@ export class ScratchInterpreter {
     )
 
     result = result.replace(/\\ovalvariabl(?:e)?\{([^}]+)\}/g, (_, name) =>
+      String(this.getVariableValue(String(name).trim())),
+    )
+
+    result = result.replace(/\\ovalsensing\{([^}]+)\}/g, (_, name) =>
       String(this.getVariableValue(String(name).trim())),
     )
 

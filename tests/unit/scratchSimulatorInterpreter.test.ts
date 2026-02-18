@@ -347,7 +347,7 @@ describe('ScratchInterpreter', () => {
     const interpreter = new ScratchInterpreter(200, 200, 90)
     const code = `\\begin{scratch}[blocks]
 \\blocksensing{demander \\ovalnum{Choisissez un nombre} et attendre}
-\\blockvariable{mettre \\selectmenu{x} à \\ovalvariable{réponse}}
+\\blockvariable{mettre \\selectmenu{x} à \\ovalsensing{réponse}}
 \\end{scratch}`
 
     // Simuler la réponse utilisateur
@@ -365,7 +365,7 @@ describe('ScratchInterpreter', () => {
     const interpreter = new ScratchInterpreter(200, 200, 90)
     const code = `\\begin{scratch}[blocks]
 \\blocksensing{demander \\ovalnum{Entrez un nombre} et attendre}
-\\blockvariable{mettre \\selectmenu{resultat} à \\ovaloperator{\\ovalvariable{réponse} * \\ovalnum{2}}}
+\\blockvariable{mettre \\selectmenu{resultat} à \\ovaloperator{\\ovalsensing{réponse} * \\ovalnum{2}}}
 \\end{scratch}`
 
     interpreter.onAskInput = async () => '7'
@@ -379,7 +379,7 @@ describe('ScratchInterpreter', () => {
     const interpreter = new ScratchInterpreter(200, 200, 90)
     const code = `\\begin{scratch}[blocks]
 \\blocksensing{demander \\ovalnum{Test} et attendre}
-\\blockvariable{mettre \\selectmenu{x} à \\ovalvariable{réponse}}
+\\blockvariable{mettre \\selectmenu{x} à \\ovalsensing{réponse}}
 \\end{scratch}`
 
     // Pas de callback défini, devrait utiliser '42' par défaut
