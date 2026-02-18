@@ -32,6 +32,7 @@ export class ScratchInterpreter {
   private angle: number // en degrés Scratch, 0° = vers le haut, 90° = vers la droite
   private penDown: boolean = false
   private stopped: boolean = false // Flag pour arrêter l'exécution
+  private answer: string = '' // Variable réservée "réponse" pour stocker les inputs utilisateur
   private variables: Record<string, number> = {}
   private customBlocks: Record<string, string> = {} // Blocs personnalisés
   private traces: Array<{
@@ -46,6 +47,7 @@ export class ScratchInterpreter {
   private currentInstructionScratchHtml: string = ''
   private currentInstructionIndex: number = -1
   private onUpdate?: () => void | Promise<void>
+  public onAskInput?: (prompt: string) => Promise<string> // Callback pour demander un input utilisateur
 
   constructor(startX = 0, startY = 0, startAngle = 0) {
     this.x = startX
@@ -59,6 +61,7 @@ export class ScratchInterpreter {
     this.variables = {}
     this.customBlocks = {}
     this.stopped = false
+    this.answer = ''
     this.currentInstructionIndex = -1
 
     // D'abord, extraire les définitions de blocs personnalisés
@@ -90,6 +93,7 @@ export class ScratchInterpreter {
     this.variables = {}
     this.customBlocks = {}
     this.stopped = false
+    this.answer = ''
     this.onUpdate = onUpdate
     this.currentInstructionIndex = -1
 
@@ -746,6 +750,20 @@ export class ScratchInterpreter {
       return
     }
 
+    if (type === 'sensing') {
+      // Gérer "demander ... et attendre"
+      if (content.includes('demander') && content.includes('attendre')) {
+        const prompt = this.extractPromptFromSensing(content)
+        if (this.onAskInput) {
+          this.answer = await this.onAskInput(prompt)
+        } else {
+          // Si pas de callback, utiliser une valeur par défaut
+          this.answer = '42'
+        }
+      }
+      return
+    }
+
     if (this.executeStandardBlockAction(type, content)) {
       return
     }
@@ -878,6 +896,12 @@ export class ScratchInterpreter {
       return true
     }
 
+    if (type === 'sensing') {
+      // Le bloc sensing sera géré de manière asynchrone dans executeBlockAction
+      // En mode synchrone, on ne peut pas vraiment attendre l'utilisateur
+      return true
+    }
+
     return false
   }
 
@@ -995,6 +1019,25 @@ export class ScratchInterpreter {
     return numMatch ? Number.parseFloat(numMatch[0].replace(',', '.')) : 0
   }
 
+  private extractPromptFromSensing(content: string): string {
+    // Chercher le texte dans \ovalnum{...}
+    const match = content.match(/\\ovalnum\{([^}]+)\}/)
+    if (match) {
+      return match[1].trim()
+    }
+
+    // Si pas de \ovalnum, extraire le texte brut après "demander"
+    const afterDemander = content.replace(/^.*?demander\s*/i, '').trim()
+    const cleaned = afterDemander
+      .replace(/\\[a-zA-Z*]+(?:\{[^{}]*\})?/g, ' ')
+      .replace(/[{}]/g, ' ')
+      .replace(/et\s+attendre\s*$/i, '')
+      .replace(/\s+/g, ' ')
+      .trim()
+
+    return cleaned || 'Entrez une valeur'
+  }
+
   private extractSelectMenuVariableName(content: string): string | null {
     const match = content.match(/\\selectmenu\*?\{([^}]+)\}/)
     return match ? match[1].trim() : null
@@ -1070,7 +1113,7 @@ export class ScratchInterpreter {
 
   private getReservedVariableKind(
     varName: string,
-  ): 'abscisse-x' | 'ordonnee-y' | 'direction' | null {
+  ): 'abscisse-x' | 'ordonnee-y' | 'direction' | 'reponse' | null {
     const normalized = varName
       .normalize('NFD')
       .replace(/[\u0300-\u036f]/g, '')
@@ -1090,6 +1133,10 @@ export class ScratchInterpreter {
       return 'direction'
     }
 
+    if (normalized === 'reponse') {
+      return 'reponse'
+    }
+
     return null
   }
 
@@ -1105,6 +1152,12 @@ export class ScratchInterpreter {
 
     if (reservedKind === 'direction') {
       return this.angle
+    }
+
+    if (reservedKind === 'reponse') {
+      // Tenter de convertir la réponse en nombre
+      const num = parseFloat(this.answer)
+      return isNaN(num) ? 0 : num
     }
 
     return this.variables[varName] ?? 0

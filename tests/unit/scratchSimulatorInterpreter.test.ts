@@ -342,4 +342,49 @@ describe('ScratchInterpreter', () => {
 
     expect(result.variables.compteur).toBe(5)
   })
+
+  it('gere blocksensing demander et attendre', async () => {
+    const interpreter = new ScratchInterpreter(200, 200, 90)
+    const code = `\\begin{scratch}[blocks]
+\\blocksensing{demander \\ovalnum{Choisissez un nombre} et attendre}
+\\blockvariable{mettre \\selectmenu{x} à \\ovalvariable{réponse}}
+\\end{scratch}`
+
+    // Simuler la réponse utilisateur
+    interpreter.onAskInput = async (prompt: string) => {
+      expect(prompt).toBe('Choisissez un nombre')
+      return '15'
+    }
+
+    const result = await interpreter.executeAnimated(code, () => {}, 0)
+
+    expect(result.variables.x).toBe(15)
+  })
+
+  it('gere blocksensing avec reponse dans calcul', async () => {
+    const interpreter = new ScratchInterpreter(200, 200, 90)
+    const code = `\\begin{scratch}[blocks]
+\\blocksensing{demander \\ovalnum{Entrez un nombre} et attendre}
+\\blockvariable{mettre \\selectmenu{resultat} à \\ovaloperator{\\ovalvariable{réponse} * \\ovalnum{2}}}
+\\end{scratch}`
+
+    interpreter.onAskInput = async () => '7'
+
+    const result = await interpreter.executeAnimated(code, () => {}, 0)
+
+    expect(result.variables.resultat).toBe(14)
+  })
+
+  it('gere blocksensing avec valeur par defaut si pas de callback', async () => {
+    const interpreter = new ScratchInterpreter(200, 200, 90)
+    const code = `\\begin{scratch}[blocks]
+\\blocksensing{demander \\ovalnum{Test} et attendre}
+\\blockvariable{mettre \\selectmenu{x} à \\ovalvariable{réponse}}
+\\end{scratch}`
+
+    // Pas de callback défini, devrait utiliser '42' par défaut
+    const result = await interpreter.executeAnimated(code, () => {}, 0)
+
+    expect(result.variables.x).toBe(42)
+  })
 })
