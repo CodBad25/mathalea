@@ -806,9 +806,7 @@ export class ScratchInterpreter {
   }
 
   private isGoToInstruction(content: string): boolean {
-    const result =
-      /aller\s+[àa]\s*x\s*:/i.test(content) && /y\s*:/i.test(content)
-    return result
+    return /aller\s+[àa]\s*x\s*:/i.test(content) && /y\s*:/i.test(content)
   }
 
   private extractGoToCoordinates(
@@ -901,6 +899,8 @@ export class ScratchSimulator extends HTMLElement {
   private codeDiv: HTMLDivElement | null = null
   private codeBlocks: CodeBlockNode[] = []
   private executionBlocks: CodeBlockNode[] = []
+  private highlightedExecutionIndex: number | null = null
+  private highlightedBlockElement: SVGGElement | null = null
   private customBlockDefinitions: Record<string, CodeBlockNode[]> = {}
   private customDefinitionGroups: Set<SVGGElement> = new Set()
   private blockCacheAttempts: number = 0
@@ -955,15 +955,31 @@ export class ScratchSimulator extends HTMLElement {
 
     const highlightStyle = document.createElement('style')
     highlightStyle.textContent = `
+      @keyframes scratchGlowPulse {
+        0% {
+          filter: drop-shadow(0 0 2px rgba(250, 204, 21, 0.5))
+            drop-shadow(0 0 1px rgba(250, 204, 21, 0.45));
+        }
+        50% {
+          filter: drop-shadow(0 0 10px rgba(250, 204, 21, 1))
+            drop-shadow(0 0 4px rgba(250, 204, 21, 0.95));
+        }
+        100% {
+          filter: drop-shadow(0 0 2px rgba(250, 204, 21, 0.5))
+            drop-shadow(0 0 1px rgba(250, 204, 21, 0.45));
+        }
+      }
+
       .scratch-current-block {
-        filter: drop-shadow(0 0 8px rgba(250, 204, 21, 0.95))
-          drop-shadow(0 0 3px rgba(250, 204, 21, 0.9));
+        animation: scratchGlowPulse ${this.delayMs / 1000}s ease-in-out 1;
+        transition: filter 220ms ease-in-out;
       }
       .scratch-current-block path,
       .scratch-current-block rect,
       .scratch-current-block polygon {
         stroke: #fae015;
         stroke-width: 5;
+        transition: stroke-width 220ms ease-in-out, stroke 220ms ease-in-out;
       }
     `
 
@@ -1037,6 +1053,8 @@ export class ScratchSimulator extends HTMLElement {
     if (!this.codeDiv) return
 
     this.codeBlocks = []
+    this.highlightedExecutionIndex = null
+    this.highlightedBlockElement = null
     this.codeDiv.innerHTML = ''
 
     const scratchblockHtml = scratchblock(this.scratchCode)
@@ -1058,41 +1076,60 @@ export class ScratchSimulator extends HTMLElement {
       this.cacheRenderedBlocks()
     }
 
-    this.clearBlockHighlights(this.codeBlocks)
+    let targetBlock: CodeBlockNode | null = null
+    let executionIndex: number | null = null
 
     if (
       currentInstructionIndex !== undefined &&
+      currentInstructionIndex >= 0 &&
       this.executionBlocks.length > 0
     ) {
-      const index = Math.max(0, currentInstructionIndex)
-      const block =
-        this.executionBlocks[Math.min(index, this.executionBlocks.length - 1)]
-      if (block) {
-        block.element.classList.add('scratch-current-block')
-        block.element.scrollIntoView({
-          behavior: 'smooth',
-          block: 'center',
-        })
-        return
+      executionIndex = currentInstructionIndex
+      const stableIndex = Math.min(
+        currentInstructionIndex,
+        this.executionBlocks.length - 1,
+      )
+      targetBlock = this.executionBlocks[stableIndex] ?? null
+    } else if (currentInstructionHtml) {
+      const tempDiv = document.createElement('div')
+      tempDiv.innerHTML = currentInstructionHtml
+      const instructionText = this.normalizeText(tempDiv.textContent || '')
+      if (instructionText) {
+        targetBlock = this.findBlockByText(this.codeBlocks, instructionText)
       }
     }
 
-    if (!currentInstructionHtml) return
+    if (
+      targetBlock &&
+      this.highlightedBlockElement === targetBlock.element &&
+      this.highlightedExecutionIndex === executionIndex
+    ) {
+      return
+    }
 
-    const tempDiv = document.createElement('div')
-    tempDiv.innerHTML = currentInstructionHtml
-    const instructionText = this.normalizeText(tempDiv.textContent || '')
-    if (!instructionText) return
+    if (!targetBlock && this.highlightedBlockElement === null) {
+      return
+    }
 
-    const matchingBlock = this.findBlockByText(this.codeBlocks, instructionText)
+    this.clearBlockHighlights(this.codeBlocks)
+    this.highlightedExecutionIndex = null
+    this.highlightedBlockElement = null
 
-    if (matchingBlock) {
-      matchingBlock.element.classList.add('scratch-current-block')
-      matchingBlock.element.scrollIntoView({
+    if (targetBlock) {
+      this.replayHighlightAnimation(targetBlock.element)
+      this.highlightedExecutionIndex = executionIndex
+      this.highlightedBlockElement = targetBlock.element
+      targetBlock.element.scrollIntoView({
         behavior: 'smooth',
         block: 'center',
       })
     }
+  }
+
+  private replayHighlightAnimation(blockElement: SVGGElement): void {
+    blockElement.classList.remove('scratch-current-block')
+    blockElement.getBoundingClientRect()
+    blockElement.classList.add('scratch-current-block')
   }
 
   private cacheRenderedBlocks(): void {
@@ -1448,15 +1485,18 @@ export class ScratchSimulator extends HTMLElement {
 
     // Affichage final
     const result = this.interpreter.getCurrentState()
+    const finalDisplayState: ExecutionResult = {
+      ...result,
+      currentInstruction: '',
+      currentInstructionScratchHtml: '',
+      currentInstructionIndex: -1,
+    }
     requestAnimationFrame(() => {
       this.drawSimulation(result)
       this.displayInfo(result)
-      this.displayInstruction(result)
+      this.displayInstruction(finalDisplayState)
       this.displayRepeatContext(result)
-      this.highlightCurrentInstruction(
-        result.currentInstructionScratchHtml || '',
-        result.currentInstructionIndex,
-      )
+      this.highlightCurrentInstruction('', -1)
     })
   }
 
@@ -1567,7 +1607,7 @@ export class ScratchSimulator extends HTMLElement {
     if (!this.infoDiv) return
 
     let html = `<div class="space-y-2"><p><strong>Position&nbsp:</strong> x=${Math.round(result.finalX - 200)}, y=${Math.round(200 - result.finalY)}.</p>`
-    html += `<p><strong>Angle&nbsp:</strong> ${Math.round(result.finalAngle)}°.</p><p><strong>Traces:</strong> ${result.traces.length} ligne(s).</p>`
+    html += `<p><strong>Angle&nbsp:</strong> ${Math.round(result.finalAngle)}°.</p><p><strong>Traces&nbsp:</strong> ${result.traces.length} ligne(s).</p>`
 
     if (Object.keys(result.variables).length > 0) {
       html += '<p><strong>Variables&nbsp:</strong><br/>'
@@ -1593,12 +1633,12 @@ export class ScratchSimulator extends HTMLElement {
           ? ` <span class="text-xs text-gray-500">(#${result.currentInstructionIndex})</span>`
           : ''
       this.stepDiv.innerHTML =
-        '<span class="font-semibold">Instruction&nbsp:</span>' +
+        '<span class="font-semibold">Instruction :</span>' +
         indexLabel +
         result.currentInstructionScratchHtml
       renderScratchDiv(this.stepDiv)
     } else {
-      this.stepDiv.textContent = 'Instruction&nbsp: -'
+      this.stepDiv.textContent = 'Instruction : -'
     }
   }
 
