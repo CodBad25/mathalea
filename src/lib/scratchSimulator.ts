@@ -470,6 +470,24 @@ export class ScratchInterpreter {
         return true
       }
 
+      if (this.isChangeYInstruction(content)) {
+        const deltaY = this.extractNumericValue(content)
+        this.changeYBy(deltaY)
+        return true
+      }
+
+      if (this.isSetXInstruction(content)) {
+        const targetX = this.extractNumericValue(content)
+        this.setXTo(targetX)
+        return true
+      }
+
+      if (this.isSetYInstruction(content)) {
+        const targetY = this.extractNumericValue(content)
+        this.setYTo(targetY)
+        return true
+      }
+
       if (content.includes('orienter')) {
         const angle = this.extractNumber(content)
         this.setOrientation(angle)
@@ -537,6 +555,18 @@ export class ScratchInterpreter {
 
       if (this.isChangeXInstruction(content)) {
         return `Ajouter ${this.extractNumericValue(content)} a x`
+      }
+
+      if (this.isChangeYInstruction(content)) {
+        return `Ajouter ${this.extractNumericValue(content)} a y`
+      }
+
+      if (this.isSetXInstruction(content)) {
+        return `Mettre x a ${this.extractNumericValue(content)}`
+      }
+
+      if (this.isSetYInstruction(content)) {
+        return `Mettre y a ${this.extractNumericValue(content)}`
       }
 
       if (content.includes('orienter')) {
@@ -889,6 +919,18 @@ export class ScratchInterpreter {
     return /ajouter/i.test(content) && /[àa]\s*x\b/i.test(content)
   }
 
+  private isChangeYInstruction(content: string): boolean {
+    return /ajouter/i.test(content) && /[àa]\s*y\b/i.test(content)
+  }
+
+  private isSetXInstruction(content: string): boolean {
+    return /mettre\s*x\s*[àa]/i.test(content)
+  }
+
+  private isSetYInstruction(content: string): boolean {
+    return /mettre\s*y\s*[àa]/i.test(content)
+  }
+
   private extractGoToCoordinates(
     content: string,
   ): { x: number; y: number } | null {
@@ -956,6 +998,51 @@ export class ScratchInterpreter {
     }
 
     this.x = newX
+  }
+
+  private changeYBy(deltaY: number): void {
+    const newY = this.y - deltaY
+
+    if (this.penDown) {
+      this.traces.push({
+        startX: this.x,
+        startY: this.y,
+        endX: this.x,
+        endY: newY,
+      })
+    }
+
+    this.y = newY
+  }
+
+  private setXTo(targetX: number): void {
+    const newX = 200 + targetX
+
+    if (this.penDown) {
+      this.traces.push({
+        startX: this.x,
+        startY: this.y,
+        endX: newX,
+        endY: this.y,
+      })
+    }
+
+    this.x = newX
+  }
+
+  private setYTo(targetY: number): void {
+    const newY = 200 - targetY
+
+    if (this.penDown) {
+      this.traces.push({
+        startX: this.x,
+        startY: this.y,
+        endX: this.x,
+        endY: newY,
+      })
+    }
+
+    this.y = newY
   }
 
   private goTo(targetX: number, targetY: number): void {

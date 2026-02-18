@@ -86,4 +86,40 @@ describe('ScratchInterpreter', () => {
     expect(result.finalX).toBe(205)
     expect(result.finalY).toBe(200)
   })
+
+  it("gere blockmove 'ajouter ... a y'", () => {
+    const interpreter = new ScratchInterpreter(200, 200, 90)
+    const code = `\\begin{scratch}[blocks]
+\\blockmove{ajouter \\ovalnum{5} à y}
+\\end{scratch}`
+
+    const result = interpreter.execute(code)
+
+    expect(result.finalX).toBe(200)
+    expect(result.finalY).toBe(195)
+  })
+
+  it("gere blockmove 'mettre x a ...'", () => {
+    const interpreter = new ScratchInterpreter(200, 200, 90)
+    const code = `\\begin{scratch}[blocks]
+\\blockmove{mettre x à \\ovalnum{5}}
+\\end{scratch}`
+
+    const result = interpreter.execute(code)
+
+    expect(result.finalX).toBe(205)
+    expect(result.finalY).toBe(200)
+  })
+
+  it("gere blockmove 'mettre y a ...'", () => {
+    const interpreter = new ScratchInterpreter(200, 200, 90)
+    const code = `\\begin{scratch}[blocks]
+\\blockmove{mettre y à \\ovalnum{5}}
+\\end{scratch}`
+
+    const result = interpreter.execute(code)
+
+    expect(result.finalX).toBe(200)
+    expect(result.finalY).toBe(195)
+  })
 })
