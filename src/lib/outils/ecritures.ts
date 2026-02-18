@@ -898,3 +898,16 @@ export function formaterReponse(a: AnswerValueType): string {
   })
   return String(a)
 }
+
+export function enumeration(
+  items: string[],
+  separator = ', ',
+  lastSeparator = ' et ',
+): string {
+  if (items.length === 0) return ''
+  if (items.length === 1) return items[0]
+  if (items.length === 2) return items[0] + lastSeparator + items[1]
+  return (
+    items.slice(0, -1).join(separator) + lastSeparator + items[items.length - 1]
+  )
+}

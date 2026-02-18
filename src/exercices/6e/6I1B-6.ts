@@ -1,5 +1,7 @@
 import { propositionsQcm } from '../../lib/interactif/qcm'
 import { choice, shuffle, shuffle3tableaux } from '../../lib/outils/arrayOutils'
+import { enumeration } from '../../lib/outils/ecritures'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { createScratchSimulatorElement } from '../../lib/scratchSimulator'
 import { context } from '../../modules/context'
 import { gestionnaireFormulaireTexte, randint } from '../../modules/outils'
@@ -10,7 +12,7 @@ import Exercice from '../Exercice'
 export const interactifReady = true
 export const interactifType = 'qcm'
 
-export const titre = 'Trouver le bon programme'
+export const titre = 'Trouver le bon programme Scratch'
 export const uuid = 'e9cad'
 
 export const refs = {
@@ -26,7 +28,7 @@ export default class TrouverLeBonProgramme extends Exercice {
     super()
     this.comment = `En correction, on peut exécuter les programmes avec tracés.<br>
     On peut ajuster le délai entre chaque étape du programme pour que ce soit plus facile à suivre ou pour accélérer.<br>
-    La simulation n'est pas disponibles sur les programmes sans tracé.`
+    La simulation n'est pas disponible sur les programmes sans tracé.`
     this.nbQuestions = 7
 
     this.sup = '0'
@@ -178,10 +180,11 @@ export default class TrouverLeBonProgramme extends Exercice {
 
         this.listeQuestions.push(texte + monQcm.texte)
         this.listeCorrections.push(
-          `Les programmes qui conviennent sont les programmes ${vraisOuFaux
-            .map((v, i) => (v ? i + 1 : ''))
-            .filter((n) => n !== '')
-            .join(' et ')}.<br>
+          `${vraisOuFaux.filter((v) => v).length > 1 ? 'Les programmes qui conviennent sont les programmes' : 'Le programme qui convient est le programme'} ${enumeration(
+            vraisOuFaux
+              .map((v, i) => (v ? `$${miseEnEvidence(String(i + 1))}$` : ''))
+              .filter((n) => n !== ''),
+          )}.<br>
             ${
               context.isHtml && cas !== 2 && cas !== 5
                 ? `<div style="margin: 20px 0; display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); width: 100%; align-self: stretch;">
@@ -272,7 +275,7 @@ function getProgrammesAvancer(
   return {
     programmesListe,
     programmesCodeBrut,
-    enonce: `On souhaite faire avancer le lutin de ${nbPas * 30} pas.<br>Donner le numéro du (ou des) programme(s) correct(s)<br>`,
+    enonce: `On souhaite faire avancer le lutin de ${nbPas * 30} pas.<br>Cocher le (ou les) programme(s) correct(s).<br>`,
   }
 }
 
@@ -360,7 +363,7 @@ function getProgrammesTourner(
   return {
     programmesListe,
     programmesCodeBrut,
-    enonce: `On souhaite faire tourner le lutin de ${angle} degrés dans le sens des aiguilles d'une montre.<br>Donner le numéro du (ou des) programme(s) correct(s)<br>`,
+    enonce: `On souhaite faire tourner le lutin de ${angle} degrés dans le sens des aiguilles d'une montre.<br>Cocher le (ou les) programme(s) correct(s)..<br>`,
   }
 }
 
@@ -440,7 +443,7 @@ function getProgrammesAjouter(
   return {
     programmesListe,
     programmesCodeBrut,
-    enonce: `On souhaite faire afficher le nombre ${nb}.<br>Donner le numéro du (ou des) programme(s) correct(s)<br>`,
+    enonce: `On souhaite faire afficher le nombre ${nb}.<br>Cocher le (ou les) programme(s) correct(s).<br>`,
   }
 }
 
@@ -529,7 +532,7 @@ function getProgrammesPolygone(
   return {
     programmesListe,
     programmesCodeBrut,
-    enonce: `On souhaite faire dessiner un polygone régulier à ${nbCotes} côtés.<br>Donner le numéro du (ou des) programme(s) correct(s)<br>`,
+    enonce: `On souhaite faire dessiner un polygone régulier à ${nbCotes} côtés.<br>Cocher le (ou les) programme(s) correct(s).<br>`,
   }
 }
 
@@ -623,7 +626,7 @@ function getProgrammesCarre(
   return {
     programmesListe,
     programmesCodeBrut,
-    enonce: `On souhaite faire dessiner un carré de périmètre ${perimetre} pas.<br>Donner le numéro du (ou des) programme(s) correct(s)<br>`,
+    enonce: `On souhaite faire dessiner un carré de périmètre ${perimetre} pas.<br>Cocher le (ou les) programme(s) correct(s).<br>`,
   }
 }
 
@@ -704,7 +707,7 @@ function getProgrammesRebours(
   return {
     programmesListe,
     programmesCodeBrut,
-    enonce: `On souhaite faire afficher le nombre 0 en partant de ${nbDepart} et en faisant un compte à rebours.<br>Donner le numéro du (ou des) programme(s) correct(s)<br>`,
+    enonce: `On souhaite faire afficher le nombre 0 en partant de ${nbDepart} et en faisant un compte à rebours.<br>Cocher le (ou les) programme(s) correct(s).<br>`,
   }
 }
 
@@ -806,6 +809,6 @@ function getProgrammesEscalier(
   return {
     programmesListe,
     programmesCodeBrut,
-    enonce: `On souhaite faire dessiner un escalier de ${nbMarches} marche(s).<br>Donner le numéro du (ou des) programme(s) correct(s)<br>`,
+    enonce: `On souhaite faire dessiner un escalier de ${nbMarches} marche(s).<br>Cocher le (ou les) programme(s) correct(s).<br>`,
   }
 }
