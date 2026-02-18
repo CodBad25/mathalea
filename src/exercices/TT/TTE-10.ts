@@ -1,16 +1,16 @@
-import Exercice from '../Exercice'
-import { combinaisonListes, choice } from '../../lib/outils/arrayOutils'
-import { listeQuestionsToContenu } from '../../modules/outils'
-import { texNombre } from '../../lib/outils/texNombre'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
+import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import {
   ecritureParentheseSiNegatif,
   rienSi1,
 } from '../../lib/outils/ecritures'
-import { lettreDepuisChiffre, sp } from '../../lib/outils/outilString'
-import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
-import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { lettreDepuisChiffre, sp } from '../../lib/outils/outilString'
+import { texNombre } from '../../lib/outils/texNombre'
+import { listeQuestionsToContenu } from '../../modules/outils'
+import Exercice from '../Exercice'
 
 export const titre = 'Calculer avec le logarithme décimal'
 export const dateDePublication = '4/5/2024'
@@ -18,7 +18,7 @@ export const uuid = '9cd25'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const refs = {
-  'fr-fr': ['TSA5-08'],
+  'fr-fr': ['TTE-10'],
   'fr-ch': [],
 }
 

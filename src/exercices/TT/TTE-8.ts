@@ -1,12 +1,12 @@
-import Exercice from '../Exercice'
-import { combinaisonListes } from '../../lib/outils/arrayOutils'
-import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
+import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
+import Exercice from '../Exercice'
 
-import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import { ecritureAlgebriqueSauf1, rienSi1 } from '../../lib/outils/ecritures'
+import { listeQuestionsToContenu, randint } from '../../modules/outils'
 
 export const titre = 'Exprimer en fonction de log(x)'
 export const dateDePublication = '22/7/2024'
@@ -14,7 +14,7 @@ export const uuid = '2c0b2'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const refs = {
-  'fr-fr': ['TSA5-05'],
+  'fr-fr': ['TTE-8'],
   'fr-ch': ['2mLogExp-3'],
 }
 
@@ -29,12 +29,11 @@ export default class ExpressionsLogX extends Exercice {
   constructor() {
     super()
     this.version = 'ln'
-    this.nbQuestions = 5
+    this.nbQuestions = 2
     this.spacingCorr = 3
     this.sup = '1'
-    this.besoinFormulaire2CaseACocher = ['Type de logarithme', false]
-    this.comment =
-      "Exercice de simplification d'expressions avec des logarithmes"
+    this.besoinFormulaire2CaseACocher = ['Type de logarithme', true]
+  
   }
 
   nouvelleVersion() {

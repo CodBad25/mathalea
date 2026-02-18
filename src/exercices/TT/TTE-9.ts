@@ -1,11 +1,11 @@
-import Exercice from '../Exercice'
-import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { miseEnEvidence } from '../../lib/outils/embellissements'
-import { pgcd } from '../../lib/outils/primalite'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { sp } from '../../lib/outils/outilString'
+import { pgcd } from '../../lib/outils/primalite'
+import { listeQuestionsToContenu, randint } from '../../modules/outils'
+import Exercice from '../Exercice'
 
 export const titre = "Résolution d'équations du type $x^a = b$"
 export const dateDePublication = '28/08/2024'
@@ -14,7 +14,7 @@ export const uuid = '364dd'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const refs = {
-  'fr-fr': ['TSA5-07'],
+  'fr-fr': ['TTE-9'],
   'fr-ch': [],
 }
 

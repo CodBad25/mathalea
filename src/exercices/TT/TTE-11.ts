@@ -25,7 +25,7 @@ export const uuid = '450e7'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const refs = {
-  'fr-fr': ['TSA5-09'],
+  'fr-fr': ['TTE-11'],
   'fr-ch': [],
 }
 
@@ -42,13 +42,13 @@ export default class DomaineDefFnLog extends Exercice {
     this.nbQuestions = 5
     this.spacingCorr = 3
     this.sup = '1'
-    this.sup2 = true
+    this.sup2 = false
     this.besoinFormulaireTexte = [
       'Type de fonction dans le logarithme',
       'Nombres séparés par des tirets :\n1 : Fonction affine\n2 : Fonction homographique\n3 : Polynôme de degré 2\n4 : Mélange',
     ]
     this.besoinFormulaire2CaseACocher = ['Type de logarithme', true]
-    this.comment = 'Domaines de définition de fonctions logarithmes'
+   
   }
 
   nouvelleVersion() {

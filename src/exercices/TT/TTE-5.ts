@@ -1,25 +1,26 @@
-import Exercice from '../Exercice'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { remplisLesBlancs } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { pgcd } from '../../lib/outils/primalite'
+import { texNombre } from '../../lib/outils/texNombre'
+import { fraction } from '../../modules/fractions'
 import {
   gestionnaireFormulaireTexte,
   listeQuestionsToContenu,
 } from '../../modules/outils'
-import { texNombre } from '../../lib/outils/texNombre'
-import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { miseEnEvidence } from '../../lib/outils/embellissements'
-import { pgcd } from '../../lib/outils/primalite'
-import { fraction } from '../../modules/fractions'
-import { remplisLesBlancs } from '../../lib/interactif/questionMathLive'
+import Exercice from '../Exercice'
 
-export const titre = "Résolution d'équations du type $a^x = b$ avec un logaritme"
+export const titre =
+  "Résolution d'équations du type $a^x = b$ avec un logaritme"
 export const dateDePublication = '28/07/2024'
 export const dateDeModifImportante = '28/07/2024'
 export const uuid = '00ec8'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const refs = {
-  'fr-fr': ['TSA5-06'],
+  'fr-fr': ['TTE-5'],
   'fr-ch': ['2mLogExp-2'],
 }
 
