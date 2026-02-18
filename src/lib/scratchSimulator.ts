@@ -4,9 +4,9 @@
  * @author Jean-Claude Lhote
  */
 
-import { context } from '../modules/context'
-import { scratchblock } from '../modules/scratchblock'
-import { renderScratchDiv } from './renderScratch'
+import { context } from '../modules/context';
+import { scratchblock } from '../modules/scratchblock';
+import { renderScratchDiv } from './renderScratch';
 
 export interface ExecutionResult {
   traces: Array<{ startX: number; startY: number; endX: number; endY: number }>
@@ -398,25 +398,11 @@ export class ScratchInterpreter {
     content: string,
     delayMs: number = 0,
   ): Promise<void> {
-    if (type === 'move' && this.isGoToInstruction(content)) {
-      const target = this.extractGoToCoordinates(content)
-      if (target) {
-        this.goTo(target.x, target.y)
-      }
-    } else if (type === 'move' && content.includes('orienter')) {
-      const angle = this.extractNumber(content)
-      this.setOrientation(angle)
-    } else if (type === 'move' && content.includes('avancer')) {
-      const steps = this.extractNumber(content)
-      this.moveForward(steps)
-    } else if (type === 'move' && content.includes('tourner')) {
-      const angle = this.extractNumber(content)
-      if (content.includes('turnright')) {
-        this.turn(angle)
-      } else if (content.includes('turnleft')) {
-        this.turn(-angle)
-      }
-    } else if (type === 'moreblocks') {
+    if (this.executeStandardBlockAction(type, content)) {
+      return
+    }
+
+    if (type === 'moreblocks') {
       const blockName = content.trim()
       if (this.customBlocks[blockName]) {
         await this.parseAndExecuteAnimated(
@@ -424,62 +410,57 @@ export class ScratchInterpreter {
           delayMs,
         )
       }
-    } else if (type === 'variable') {
-      const varName = this.extractVariableName(content)
-      const value = this.extractNumericValue(content)
-      if (content.toLowerCase().includes('ajouter')) {
-        this.addToVariable(varName, value)
-      } else {
-        this.setVariableValue(varName, value)
-      }
-    } else if (type === 'change') {
-      const value = this.extractNumericValue(content)
-      const varName = this.extractVariableName(content)
-      this.addToVariable(varName, value)
-    } else if (type === 'look') {
-      const value = this.extractNumericValue(content)
-      const varName = this.extractOvalVariableName(content)
-      if (varName) {
-        this.messages.push(String(this.getVariableValue(varName)))
-      } else {
-        this.messages.push(String(value))
-      }
-    } else if (type === 'pen') {
-      if (content.includes('position') || content.includes('écriture')) {
-        this.penDown = true
-      } else if (content.includes('relever')) {
-        this.penDown = false
-      }
     }
   }
 
   private executeBlock(type: string, content: string, rawBlock?: string): void {
     this.prepareBlockDisplay(type, content, rawBlock)
+
+    if (this.executeStandardBlockAction(type, content)) {
+      return
+    }
+
     // Exécuter synchronement (pour parseNonRepeatBlocks non-animé)
+    if (type === 'moreblocks') {
+      const blockName = content.trim()
+      if (this.customBlocks[blockName]) {
+        this.parseAndExecute(this.customBlocks[blockName])
+      }
+    }
+  }
+
+  private executeStandardBlockAction(type: string, content: string): boolean {
     if (type === 'move' && this.isGoToInstruction(content)) {
       const target = this.extractGoToCoordinates(content)
       if (target) {
         this.goTo(target.x, target.y)
       }
-    } else if (type === 'move' && content.includes('orienter')) {
+      return true
+    }
+
+    if (type === 'move' && content.includes('orienter')) {
       const angle = this.extractNumber(content)
       this.setOrientation(angle)
-    } else if (type === 'move' && content.includes('avancer')) {
+      return true
+    }
+
+    if (type === 'move' && content.includes('avancer')) {
       const steps = this.extractNumber(content)
       this.moveForward(steps)
-    } else if (type === 'move' && content.includes('tourner')) {
+      return true
+    }
+
+    if (type === 'move' && content.includes('tourner')) {
       const angle = this.extractNumber(content)
       if (content.includes('turnright')) {
         this.turn(angle)
       } else if (content.includes('turnleft')) {
         this.turn(-angle)
       }
-    } else if (type === 'moreblocks') {
-      const blockName = content.trim()
-      if (this.customBlocks[blockName]) {
-        this.parseAndExecute(this.customBlocks[blockName])
-      }
-    } else if (type === 'variable') {
+      return true
+    }
+
+    if (type === 'variable') {
       const varName = this.extractVariableName(content)
       const value = this.extractNumericValue(content)
       if (content.toLowerCase().includes('ajouter')) {
@@ -487,11 +468,17 @@ export class ScratchInterpreter {
       } else {
         this.setVariableValue(varName, value)
       }
-    } else if (type === 'change') {
+      return true
+    }
+
+    if (type === 'change') {
       const value = this.extractNumericValue(content)
       const varName = this.extractVariableName(content)
       this.addToVariable(varName, value)
-    } else if (type === 'look') {
+      return true
+    }
+
+    if (type === 'look') {
       const value = this.extractNumericValue(content)
       const varName = this.extractOvalVariableName(content)
       if (varName) {
@@ -499,13 +486,19 @@ export class ScratchInterpreter {
       } else {
         this.messages.push(String(value))
       }
-    } else if (type === 'pen') {
+      return true
+    }
+
+    if (type === 'pen') {
       if (content.includes('position') || content.includes('écriture')) {
         this.penDown = true
       } else if (content.includes('relever')) {
         this.penDown = false
       }
+      return true
     }
+
+    return false
   }
 
   private humanizeInstruction(type: string, content: string): string {
