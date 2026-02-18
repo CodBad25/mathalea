@@ -392,9 +392,9 @@ function programmeAjouterType1(nb: number, vraiOuFaux: boolean) {
   \\blockvariable{mettre  \\selectmenu{compteur} à \\ovalnum{0}}\n`
   for (let i = 0; i < (vraiOuFaux ? nb : nb - 1); i++) {
     codeScratch +=
-      '\\blockvariable{Ajouter \\ovalnum{1} à \\ovalvariable{compteur}}\n'
+      '\\blockvariable{ajouter \\ovalnum{1} à \\ovalvariable{compteur}}\n'
   }
-  codeScratch += '\\blocklook{Dire \\ovalvariable{compteur}}\n'
+  codeScratch += '\\blocklook{dire \\ovalvariable{compteur}}\n'
   codeScratch += `\\end{scratch}`
   return codeScratch
 }
@@ -403,9 +403,9 @@ function programmeAjouterType2(nb: number, vraiOuFaux: boolean) {
   const codeScratch = `\\begin{scratch}[blocks]\n
   \\blockvariable{mettre  \\selectmenu{compteur} à \\ovalnum{0}}
   \\blockrepeat{répéter \\ovalnum{${vraiOuFaux ? nb : nb - 1}} fois}{
-    \\blockvariable{Ajouter \\ovalnum{1} à \\ovalvariable{compteur}}
+    \\blockvariable{ajouter \\ovalnum{1} à \\ovalvariable{compteur}}
   }
-  \\blocklook{Dire \\ovalvariable{compteur}}
+  \\blocklook{dire \\ovalvariable{compteur}}
 \\end{scratch}`
   return codeScratch
 }
@@ -414,10 +414,10 @@ function programmeAjouterType3(nb: number, vraiOuFaux: boolean) {
   const codeScratch = `\\begin{scratch}[blocks]\n
   \\blockvariable{mettre  \\selectmenu{compteur} à \\ovalnum{0}}
   \\blockrepeat{répéter \\ovalnum{${vraiOuFaux ? nb - 1 : nb}} fois}{
-    \\blockvariable{Ajouter \\ovalnum{1} à \\ovalvariable{compteur}}
+    \\blockvariable{ajouter \\ovalnum{1} à \\ovalvariable{compteur}}
   }
-  \\blockvariable{Ajouter \\ovalnum{1} à \\ovalvariable{compteur}}
-  \\blocklook{Dire \\ovalvariable{compteur}}
+  \\blockvariable{ajouter \\ovalnum{1} à \\ovalvariable{compteur}}
+  \\blocklook{dire \\ovalvariable{compteur}}
 \\end{scratch}`
   return codeScratch
 }
@@ -426,10 +426,10 @@ function programmeAjouterType4(nb: number, vraiOuFaux: boolean) {
   const codeScratch = `\\begin{scratch}[blocks]\n
   \\blockvariable{mettre  \\selectmenu{compteur} à \\ovalnum{0}}
   \\blockrepeat{répéter \\ovalnum{${Math.floor(nb / 2)}} fois}{
-    \\blockvariable{Ajouter \\ovalnum{1} à \\ovalvariable{compteur}}
-    \\blockvariable{Ajouter \\ovalnum{1} à \\ovalvariable{compteur}}
-  }${(nb % 2 === 1 && vraiOuFaux) || (nb % 2 === 0 && !vraiOuFaux) ? '\n\\blockvariable{Ajouter \\ovalnum{1} à \\ovalvariable{compteur}}' : ''}
-  \\blocklook{Dire \\ovalvariable{compteur}}
+    \\blockvariable{ajouter \\ovalnum{1} à \\ovalvariable{compteur}}
+    \\blockvariable{ajouter \\ovalnum{1} à \\ovalvariable{compteur}}
+  }${(nb % 2 === 1 && vraiOuFaux) || (nb % 2 === 0 && !vraiOuFaux) ? '\n\\blockvariable{ajouter \\ovalnum{1} à \\ovalvariable{compteur}}' : ''}
+  \\blocklook{dire \\ovalvariable{compteur}}
 \\end{scratch}`
   return codeScratch
 }
@@ -438,10 +438,10 @@ function programmeAjouterType5(nb: number, vraiOuFaux: boolean) {
   const codeScratch = `\\begin{scratch}[blocks]\n
   \\blockvariable{mettre  \\selectmenu{compteur} à \\ovalnum{0}}
   \\blockrepeat{répéter \\ovalnum{${(nb - 1) * 2}} fois}{
-    \\blockvariable{Ajouter \\ovalnum{0.5} à \\ovalvariable{compteur}}
+    \\blockvariable{ajouter \\ovalnum{0.5} à \\ovalvariable{compteur}}
   }
-  ${vraiOuFaux ? '\\blockvariable{Ajouter \\ovalnum{1} à \\ovalvariable{compteur}}' : '\\blockvariable{Ajouter \\ovalnum{0.5} à \\ovalvariable{compteur}}'}
-  \\blocklook{Dire \\ovalvariable{compteur}}
+  ${vraiOuFaux ? '\\blockvariable{ajouter \\ovalnum{1} à \\ovalvariable{compteur}}' : '\\blockvariable{ajouter \\ovalnum{0.5} à \\ovalvariable{compteur}}'}
+  \\blocklook{dire \\ovalvariable{compteur}}
 \\end{scratch}`
   return codeScratch
 }
@@ -656,9 +656,9 @@ function programmeReboursType1(nbDepart: number, vraiOuFaux: boolean) {
 `
   for (let i = 0; i < (vraiOuFaux ? nbDepart : nbDepart - 1); i++) {
     codeScratch +=
-      '  \\blockvariable{Ajouter \\ovalnum{-1} à \\ovalvariable{compteur}}\n'
+      '  \\blockvariable{ajouter \\ovalnum{-1} à \\ovalvariable{compteur}}\n'
   }
-  codeScratch += '  \\blocklook{Dire \\ovalvariable{compteur}}\n'
+  codeScratch += '  \\blocklook{dire \\ovalvariable{compteur}}\n'
   codeScratch += `\\end{scratch}`
   return codeScratch
 }
@@ -667,9 +667,9 @@ function programmeReboursType2(nbDepart: number, vraiOuFaux: boolean) {
   const codeScratch = `\\begin{scratch}[blocks]
   \\blockvariable{mettre  \\selectmenu{compteur} à \\ovalnum{${nbDepart}}}
   \\blockrepeat{répéter \\ovalnum{${vraiOuFaux ? nbDepart : nbDepart - 1}} fois}{
-    \\blockvariable{Ajouter \\ovalnum{-1} à \\ovalvariable{compteur}}
+    \\blockvariable{ajouter \\ovalnum{-1} à \\ovalvariable{compteur}}
   }
-  \\blocklook{Dire \\ovalvariable{compteur}}
+  \\blocklook{dire \\ovalvariable{compteur}}
 \\end{scratch}`
   return codeScratch
 }
@@ -678,10 +678,10 @@ function programmeReboursType3(nbDepart: number, vraiOuFaux: boolean) {
   const codeScratch = `\\begin{scratch}[blocks]
   \\blockvariable{mettre  \\selectmenu{compteur} à \\ovalnum{${nbDepart}}}
   \\blockrepeat{répéter \\ovalnum{${vraiOuFaux ? nbDepart - 1 : nbDepart - 2}} fois}{
-    \\blockvariable{Ajouter \\ovalnum{-1} à \\ovalvariable{compteur}}
+    \\blockvariable{ajouter \\ovalnum{-1} à \\ovalvariable{compteur}}
   }
-  \\blockvariable{Ajouter \\ovalnum{-1} à \\ovalvariable{compteur}}
-  \\blocklook{Dire \\ovalvariable{compteur}}
+  \\blockvariable{ajouter \\ovalnum{-1} à \\ovalvariable{compteur}}
+  \\blocklook{dire \\ovalvariable{compteur}}
 \\end{scratch}`
   return codeScratch
 }
@@ -691,10 +691,10 @@ function programmeReboursType4(nbDepart: number, vraiOuFaux: boolean) {
   const codeScratch = `\\begin{scratch}[blocks]
   \\blockvariable{mettre  \\selectmenu{compteur} à \\ovalnum{${nbDepart}}}
   \\blockrepeat{répéter \\ovalnum{${moitie}} fois}{
-    \\blockvariable{Ajouter \\ovalnum{-1} à \\ovalvariable{compteur}}
-    \\blockvariable{Ajouter \\ovalnum{-1} à \\ovalvariable{compteur}}
-  }${(nbDepart % 2 === 1 && vraiOuFaux) || (nbDepart % 2 === 0 && !vraiOuFaux) ? '\n  \\blockvariable{Ajouter \\ovalnum{-1} à \\ovalvariable{compteur}}' : ''}
-  \\blocklook{Dire \\ovalvariable{compteur}}
+    \\blockvariable{ajouter \\ovalnum{-1} à \\ovalvariable{compteur}}
+    \\blockvariable{ajouter \\ovalnum{-1} à \\ovalvariable{compteur}}
+  }${(nbDepart % 2 === 1 && vraiOuFaux) || (nbDepart % 2 === 0 && !vraiOuFaux) ? '\n  \\blockvariable{ajouter \\ovalnum{-1} à \\ovalvariable{compteur}}' : ''}
+  \\blocklook{dire \\ovalvariable{compteur}}
 \\end{scratch}`
   return codeScratch
 }
@@ -705,7 +705,7 @@ function programmeReboursType5(nbDepart: number, vraiOuFaux: boolean) {
   \\blockrepeat{répéter \\ovalnum{${nbDepart}} fois}{
     \\blockvariable{mettre \\selectmenu{compteur} à \\ovaloperator{${vraiOuFaux ? '\\ovalvariable{compteur} - \\ovalnum{1}' : '\\ovalnum{1} - \\ovalvariable{compteur}'}}}
   }
-  \\blocklook{Dire \\ovalvariable{compteur}}
+  \\blocklook{dire \\ovalvariable{compteur}}
 \\end{scratch}`
   return codeScratch
 }

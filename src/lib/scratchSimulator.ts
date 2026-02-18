@@ -4,9 +4,9 @@
  * @author Jean-Claude Lhote
  */
 
-import { context } from '../modules/context';
-import { scratchblock } from '../modules/scratchblock';
-import { renderScratchDiv } from './renderScratch';
+import { context } from '../modules/context'
+import { scratchblock } from '../modules/scratchblock'
+import { renderScratchDiv } from './renderScratch'
 
 export interface ExecutionResult {
   traces: Array<{ startX: number; startY: number; endX: number; endY: number }>
@@ -483,13 +483,12 @@ export class ScratchInterpreter {
     }
 
     if (type === 'look') {
-      const value = this.extractNumericValue(content)
-      const varName = this.extractOvalVariableName(content)
-      if (varName) {
-        this.messages.push(String(this.getVariableValue(varName)))
-      } else {
-        this.messages.push(String(value))
+      const sayInstruction = this.parseSayInstruction(content)
+      if (!sayInstruction) {
+        return false
       }
+
+      this.messages.push(sayInstruction.spokenValue)
       return true
     }
 
@@ -551,9 +550,16 @@ export class ScratchInterpreter {
     }
 
     if (type === 'look') {
-      const value = this.extractNumericValue(content)
-      const varName = this.extractOvalVariableName(content) || ''
-      return varName ? `Dire ${varName}` : `Dire ${value}`
+      const sayInstruction = this.parseSayInstruction(content)
+      if (!sayInstruction) {
+        return 'Instruction en cours'
+      }
+
+      if (sayInstruction.durationSeconds !== null) {
+        return `Dire ${sayInstruction.displayValue} pendant ${sayInstruction.durationSeconds} secondes`
+      }
+
+      return `Dire ${sayInstruction.displayValue}`
     }
 
     if (type === 'pen') {
@@ -612,6 +618,61 @@ export class ScratchInterpreter {
       this.extractOvalVariableName(content) ||
       'compteur'
     )
+  }
+
+  private parseSayInstruction(content: string): {
+    spokenValue: string
+    displayValue: string
+    durationSeconds: number | null
+  } | null {
+    if (!/\bdire\b/i.test(content)) {
+      return null
+    }
+
+    const saySegments = content.split(/\bpendant\b/i)
+    const payload = saySegments[0].replace(/^.*?\bdire\b/i, '').trim()
+
+    const payloadVariableName = this.extractOvalVariableName(payload)
+
+    let spokenValue: string
+    let displayValue: string
+
+    if (payloadVariableName) {
+      spokenValue = String(this.getVariableValue(payloadVariableName))
+      displayValue = payloadVariableName
+    } else if (/\\ovalnum\{/.test(payload)) {
+      const value = this.extractNumber(payload)
+      spokenValue = String(value)
+      displayValue = String(value)
+    } else {
+      const plainText = payload
+        .replace(/\\[a-zA-Z*]+(?:\{[^{}]*\})?/g, ' ')
+        .replace(/[{}]/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim()
+
+      if (plainText) {
+        spokenValue = plainText
+        displayValue = plainText
+      } else {
+        const fallbackValue = this.extractNumericValue(payload)
+        spokenValue = String(fallbackValue)
+        displayValue = String(fallbackValue)
+      }
+    }
+
+    let durationSeconds: number | null = null
+    const durationPart =
+      saySegments.length > 1 ? saySegments.slice(1).join(' ') : ''
+    if (/\bseconde/i.test(durationPart) && /\\ovalnum\{/.test(durationPart)) {
+      durationSeconds = this.extractNumber(durationPart)
+    }
+
+    return {
+      spokenValue,
+      displayValue,
+      durationSeconds,
+    }
   }
 
   private getVariableValue(varName: string): number {

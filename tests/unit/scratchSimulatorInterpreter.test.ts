@@ -61,4 +61,17 @@ describe('ScratchInterpreter', () => {
     expect(result.variables.resultat).toBe(20)
     expect(result.messages).toEqual(['20'])
   })
+
+  it('gere blocklook dire variable pendant secondes et ignore look sans dire', () => {
+    const interpreter = new ScratchInterpreter(200, 200, 90)
+    const code = `\\begin{scratch}[blocks]
+\\blockvariable{mettre \\selectmenu{compteur} à \\ovalnum{7}}
+\\blocklook{dire \\ovalvariable{compteur} pendant \\ovalnum{2} secondes}
+\\blocklook{penser \\ovalvariable{compteur}}
+\\end{scratch}`
+
+    const result = interpreter.execute(code)
+
+    expect(result.messages).toEqual(['7'])
+  })
 })
