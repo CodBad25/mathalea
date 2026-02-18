@@ -1,5 +1,4 @@
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { functionCompare } from '../../lib/interactif/comparisonFunctions'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
@@ -76,7 +75,7 @@ export default class TermeDUneSuiteDefinieExplicitement extends Exercice {
           k = randint(0, 20)
           reponse = a * k + b
           handleAnswers(this, i, {
-            reponse: { value: reponse, compare: functionCompare },
+            reponse: { value: reponse },
           })
           texte = `Soit $(u_n)$ une suite définie pour tout entier $n\\in\\mathbb{N}$ par $u_n =${rienSi1(a)}n${ecritureAlgebrique(b)}$. `
 
@@ -97,7 +96,7 @@ u_{${k}}&=${a === 1 ? '' : a === -1 ? '-' : `${a} \\times`} ${k} ${ecritureAlgeb
           k = randint(0, 10)
           reponse = a * k ** 2 + b * k + c
           handleAnswers(this, i, {
-            reponse: { value: reponse, compare: functionCompare },
+            reponse: { value: reponse },
           })
           texte = `Soit $(u_n)$ une suite définie pour tout entier $n\\in\\mathbb{N}$ par 
         ${b === 0 ? `$u_n = ${rienSi1(a)}n^2${ecritureAlgebrique(c)}$` : `$u_n = ${rienSi1(a)}n^2${ecritureAlgebriqueSauf1(b)}n${ecritureAlgebrique(c)}$`}  .`
