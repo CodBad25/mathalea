@@ -31,6 +31,7 @@ export class ScratchInterpreter {
   private y: number
   private angle: number // en degrés Scratch, 0° = vers le haut, 90° = vers la droite
   private penDown: boolean = false
+  private stopped: boolean = false // Flag pour arrêter l'exécution
   private variables: Record<string, number> = {}
   private customBlocks: Record<string, string> = {} // Blocs personnalisés
   private traces: Array<{
@@ -57,6 +58,7 @@ export class ScratchInterpreter {
     this.messages = []
     this.variables = {}
     this.customBlocks = {}
+    this.stopped = false
     this.currentInstructionIndex = -1
 
     // D'abord, extraire les définitions de blocs personnalisés
@@ -87,6 +89,7 @@ export class ScratchInterpreter {
     this.messages = []
     this.variables = {}
     this.customBlocks = {}
+    this.stopped = false
     this.onUpdate = onUpdate
     this.currentInstructionIndex = -1
 
@@ -160,7 +163,7 @@ export class ScratchInterpreter {
   private parseAndExecute(code: string): void {
     let index = 0
 
-    while (index < code.length) {
+    while (index < code.length && !this.stopped) {
       // Chercher blockrepeat et blockifelse
       const repeatStart = code.indexOf('\\blockrepeat{', index)
       const ifelseStart = code.indexOf('\\blockifelse{', index)
@@ -330,7 +333,7 @@ export class ScratchInterpreter {
         let iterationCount = 0
         const maxIterations = 10000 // Sécurité contre boucles infinies
 
-        while (iterationCount < maxIterations) {
+        while (iterationCount < maxIterations && !this.stopped) {
           const conditionMet = this.evaluateBoolOperator(boolCondition)
           if (conditionMet === true) {
             break
@@ -378,7 +381,7 @@ export class ScratchInterpreter {
 
         const innerCode = code.substring(contentStart + 1, innerCodeEnd).trim()
 
-        for (let i = 0; i < times; i++) {
+        for (let i = 0; i < times && !this.stopped; i++) {
           this.parseAndExecute(innerCode)
         }
 
@@ -393,7 +396,7 @@ export class ScratchInterpreter {
   ): Promise<void> {
     let index = 0
 
-    while (index < code.length) {
+    while (index < code.length && !this.stopped) {
       // Chercher blockrepeat et blockifelse
       const repeatStart = code.indexOf('\\blockrepeat{', index)
       const ifelseStart = code.indexOf('\\blockifelse{', index)
@@ -566,7 +569,7 @@ export class ScratchInterpreter {
         let iterationCount = 0
         const maxIterations = 10000
 
-        while (iterationCount < maxIterations) {
+        while (iterationCount < maxIterations && !this.stopped) {
           const conditionMet = this.evaluateBoolOperator(boolCondition)
           if (conditionMet === true) {
             break
@@ -609,7 +612,7 @@ export class ScratchInterpreter {
 
         const innerCode = code.substring(contentStart + 1, innerCodeEnd).trim()
 
-        for (let i = 0; i < times; i++) {
+        for (let i = 0; i < times && !this.stopped; i++) {
           await this.parseAndExecuteAnimated(innerCode, delayMs)
         }
 
@@ -621,6 +624,7 @@ export class ScratchInterpreter {
   private parseNonRepeatBlocks(code: string): void {
     const blocks = this.extractBlocksWithBalancedBraces(code)
     for (const block of blocks) {
+      if (this.stopped) break
       if (block.type !== 'repeat') {
         this.executeBlock(block.type, block.content, block.raw)
       }
@@ -634,6 +638,7 @@ export class ScratchInterpreter {
     const blocks = this.extractBlocksWithBalancedBraces(code)
 
     for (const block of blocks) {
+      if (this.stopped) break
       if (block.type !== 'repeat') {
         // Afficher l'instruction
         this.prepareBlockDisplay(block.type, block.content, block.raw)
@@ -862,6 +867,13 @@ export class ScratchInterpreter {
         this.penDown = true
       } else if (content.includes('relever')) {
         this.penDown = false
+      }
+      return true
+    }
+
+    if (type === 'control') {
+      if (content.includes('stop') && content.includes('tout')) {
+        this.stopped = true
       }
       return true
     }

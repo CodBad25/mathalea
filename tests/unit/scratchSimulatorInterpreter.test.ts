@@ -294,4 +294,52 @@ describe('ScratchInterpreter', () => {
     expect(result.variables.x).toBe(7)
     expect(result.variables.resultat).toBe(100)
   })
+
+  it('gere blockcontrol stop tout', () => {
+    const interpreter = new ScratchInterpreter(200, 200, 90)
+    const code = `\\begin{scratch}[blocks]
+\\blockvariable{mettre \\selectmenu{compteur} à \\ovalnum{0}}
+\\blockvariable{Ajouter \\ovalnum{1} à \\ovalvariable{compteur}}
+\\blockcontrol{stop \\selectmenu{tout}}
+\\blockvariable{Ajouter \\ovalnum{10} à \\ovalvariable{compteur}}
+\\end{scratch}`
+
+    const result = interpreter.execute(code)
+
+    expect(result.variables.compteur).toBe(1)
+  })
+
+  it('gere blockcontrol stop tout dans une boucle repeat', () => {
+    const interpreter = new ScratchInterpreter(200, 200, 90)
+    const code = `\\begin{scratch}[blocks]
+\\blockvariable{mettre \\selectmenu{compteur} à \\ovalnum{0}}
+\\blockrepeat{répéter \\ovalnum{10} fois}{
+\\blockvariable{Ajouter \\ovalnum{1} à \\ovalvariable{compteur}}
+\\blockifelse{si \\booloperator{\\ovalvariable{compteur} = 3} alors}{
+\\blockcontrol{stop \\selectmenu{tout}}
+}{
+}
+}
+\\blockvariable{mettre \\selectmenu{apres} à \\ovalnum{99}}
+\\end{scratch}`
+
+    const result = interpreter.execute(code)
+
+    expect(result.variables.compteur).toBe(3)
+    expect(result.variables.apres).toBeUndefined()
+  })
+
+  it('gere blockcontrol stop tout en mode anime', async () => {
+    const interpreter = new ScratchInterpreter(200, 200, 90)
+    const code = `\\begin{scratch}[blocks]
+\\blockvariable{mettre \\selectmenu{compteur} à \\ovalnum{0}}
+\\blockvariable{Ajouter \\ovalnum{5} à \\ovalvariable{compteur}}
+\\blockcontrol{stop \\selectmenu{tout}}
+\\blockvariable{Ajouter \\ovalnum{20} à \\ovalvariable{compteur}}
+\\end{scratch}`
+
+    const result = await interpreter.executeAnimated(code, () => {}, 0)
+
+    expect(result.variables.compteur).toBe(5)
+  })
 })
