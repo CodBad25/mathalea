@@ -1081,7 +1081,12 @@ export class ScratchInterpreter {
     let spokenValue: string
     let displayValue: string
 
-    if (payloadVariableName) {
+    // Vérifier ovaloperator en premier
+    if (/\\ovaloperator\{/.test(payload)) {
+      const value = this.extractValue(payload)
+      spokenValue = String(value)
+      displayValue = String(value)
+    } else if (payloadVariableName) {
       spokenValue = String(this.getVariableValue(payloadVariableName))
       displayValue = payloadVariableName
     } else if (/\\ovalnum\{/.test(payload)) {
@@ -1099,7 +1104,7 @@ export class ScratchInterpreter {
         spokenValue = plainText
         displayValue = plainText
       } else {
-        const fallbackValue = this.extractNumericValue(payload)
+        const fallbackValue = this.extractValue(payload)
         spokenValue = String(fallbackValue)
         displayValue = String(fallbackValue)
       }
@@ -1232,6 +1237,30 @@ export class ScratchInterpreter {
     return directNumber
   }
 
+  private extractValue(content: string): string | number {
+    // Essayer d'abord d'évaluer comme ovaloperator (peut retourner string ou number)
+    const operatorValue = this.evaluateOvalOperatorOrString(content)
+    if (operatorValue !== null) {
+      return operatorValue
+    }
+
+    // Essayer d'extraire un nombre
+    const directNumber = this.extractNumber(content)
+    if (/\\ovalnum\{|-?\d+(?:[.,]\d+)?/.test(content)) {
+      return directNumber
+    }
+
+    // Essayer d'extraire une variable
+    const varName =
+      this.extractOvalVariableName(content) ||
+      this.extractOvalSensingName(content)
+    if (varName) {
+      return this.getVariableValue(varName)
+    }
+
+    return directNumber
+  }
+
   private extractCommandContent(
     content: string,
     command: string,
@@ -1262,6 +1291,86 @@ export class ScratchInterpreter {
     const expression = this.extractCommandContent(content, '\\ovaloperator')
     if (!expression) return null
     return this.evaluateArithmeticExpression(expression)
+  }
+
+  private evaluateOvalOperatorOrString(
+    content: string,
+  ): string | number | null {
+    const expression = this.extractCommandContent(content, '\\ovaloperator')
+    if (!expression) return null
+
+    // Détecter "regrouper ... et ..." pour concaténation de strings
+    if (/\bregrouper\b/i.test(expression)) {
+      return this.evaluateStringConcatenation(expression)
+    }
+
+    // Sinon, évaluation arithmétique
+    return this.evaluateArithmeticExpression(expression)
+  }
+
+  private evaluateStringConcatenation(expression: string): string {
+    // Traiter récursivement les ovaloperator imbriqués d'abord
+    let result = expression
+
+    while (result.includes('\\ovaloperator{')) {
+      const inner = this.extractCommandContent(result, '\\ovaloperator')
+      if (!inner) break
+      const value = this.evaluateOvalOperatorOrString(
+        `\\ovaloperator{${inner}}`,
+      )
+      if (value === null) break
+      // Remplacer par la valeur évaluée (number ou string)
+      result = result.replace(`\\ovaloperator{${inner}}`, String(value))
+    }
+
+    // Parser "regrouper X et Y"
+    const match = result.match(/regrouper\s+(.+?)\s+et\s+(.+?)$/i)
+    if (!match) {
+      // Si pas de pattern trouvé, retourner l'expression telle quelle
+      return this.materializeExpressionForString(result)
+    }
+
+    const leftPart = match[1].trim()
+    const rightPart = match[2].trim()
+
+    // Matérialiser chaque partie (remplacer \ovalnum, \ovalvariable, etc.)
+    const leftValue = this.materializeExpressionForString(leftPart)
+    const rightValue = this.materializeExpressionForString(rightPart)
+
+    return leftValue + rightValue
+  }
+
+  private materializeExpressionForString(expression: string): string {
+    let result = expression
+
+    // Remplacer \ovalnum par sa valeur
+    result = result.replace(/\\ovalnum\{([^}]+)\}/g, (_, content) => {
+      // Si c'est un nombre, le parser, sinon retourner la string
+      const num = content.match(/^-?\d+(?:[.,]\d+)?$/)
+      if (num) {
+        return String(Number.parseFloat(content.replace(',', '.')))
+      }
+      return content
+    })
+
+    // Remplacer \ovalvariable par sa valeur
+    result = result.replace(/\\ovalvariabl(?:e)?\{([^}]+)\}/g, (_, name) =>
+      String(this.getVariableValue(name.trim())),
+    )
+
+    // Remplacer \ovalsensing par sa valeur
+    result = result.replace(/\\ovalsensing\{([^}]+)\}/g, (_, name) => {
+      const varName = name.trim()
+      if (
+        varName.toLowerCase() === 'réponse' ||
+        varName.toLowerCase() === 'reponse'
+      ) {
+        return this.answer // Retourner la string directement
+      }
+      return String(this.getVariableValue(varName))
+    })
+
+    return result
   }
 
   private evaluateBoolOperator(content: string): boolean | null {
@@ -1403,9 +1512,17 @@ export class ScratchInterpreter {
       while (result.includes('\\ovaloperator{')) {
         const inner = this.extractCommandContent(result, '\\ovaloperator')
         if (!inner) break
-        const value = this.evaluateArithmeticExpression(inner)
+
+        // Détecter si c'est une concaténation de strings ou une opération arithmétique
+        const value = this.evaluateOvalOperatorOrString(
+          `\\ovaloperator{${inner}}`,
+        )
         if (value === null) break
-        result = result.replace(`\\ovaloperator{${inner}}`, `(${value})`)
+
+        // Si c'est un nombre, l'entourer de parenthèses pour les calculs
+        // Si c'est une string, la garder telle quelle
+        const replacement = typeof value === 'number' ? `(${value})` : value
+        result = result.replace(`\\ovaloperator{${inner}}`, replacement)
       }
     }
 

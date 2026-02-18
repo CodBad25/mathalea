@@ -387,4 +387,75 @@ describe('ScratchInterpreter', () => {
 
     expect(result.variables.x).toBe(42)
   })
+
+  it('gere ovaloperator avec regrouper pour concatenation simple', () => {
+    const interpreter = new ScratchInterpreter(200, 200, 90)
+    const code = `\\begin{scratch}[blocks]
+\\blocklook{dire \\ovaloperator{regrouper \\ovalnum{Hello} et \\ovalnum{World}}}
+\\end{scratch}`
+
+    const result = interpreter.execute(code)
+
+    expect(result.messages).toEqual(['HelloWorld'])
+  })
+
+  it('gere ovaloperator avec regrouper et espaces', () => {
+    const interpreter = new ScratchInterpreter(200, 200, 90)
+    const code = `\\begin{scratch}[blocks]
+\\blocklook{dire \\ovaloperator{regrouper \\ovalnum{Hello } et \\ovalnum{World}}}
+\\end{scratch}`
+
+    const result = interpreter.execute(code)
+
+    expect(result.messages).toEqual(['Hello World'])
+  })
+
+  it('gere regrouper avec variables', () => {
+    const interpreter = new ScratchInterpreter(200, 200, 90)
+    const code = `\\begin{scratch}[blocks]
+\\blockvariable{mettre \\selectmenu{a} à \\ovalnum{10}}
+\\blockvariable{mettre \\selectmenu{b} à \\ovalnum{20}}
+\\blocklook{dire \\ovaloperator{regrouper \\ovalvariable{a} et \\ovalvariable{b}}}
+\\end{scratch}`
+
+    const result = interpreter.execute(code)
+
+    expect(result.messages).toEqual(['1020'])
+  })
+
+  it('gere regrouper imbrique', () => {
+    const interpreter = new ScratchInterpreter(200, 200, 90)
+    const code = `\\begin{scratch}[blocks]
+\\blocklook{dire \\ovaloperator{regrouper \\ovalnum{A} et \\ovaloperator{regrouper \\ovalnum{B} et \\ovalnum{C}}}}
+\\end{scratch}`
+
+    const result = interpreter.execute(code)
+
+    expect(result.messages).toEqual(['ABC'])
+  })
+
+  it('gere regrouper avec ovalsensing reponse', async () => {
+    const interpreter = new ScratchInterpreter(200, 200, 90)
+    const code = `\\begin{scratch}[blocks]
+\\blocksensing{demander \\ovalnum{Ton nom} et attendre}
+\\blocklook{dire \\ovaloperator{regrouper \\ovalnum{Bonjour } et \\ovalsensing{réponse}}}
+\\end{scratch}`
+
+    interpreter.onAskInput = async () => 'Alice'
+
+    const result = await interpreter.executeAnimated(code, () => {}, 0)
+
+    expect(result.messages).toEqual(['Bonjour Alice'])
+  })
+
+  it('ovaloperator continue de fonctionner en mode arithmetique', () => {
+    const interpreter = new ScratchInterpreter(200, 200, 90)
+    const code = `\\begin{scratch}[blocks]
+\\blocklook{dire \\ovaloperator{5 + 3 * 2}}
+\\end{scratch}`
+
+    const result = interpreter.execute(code)
+
+    expect(result.messages).toEqual(['11'])
+  })
 })
