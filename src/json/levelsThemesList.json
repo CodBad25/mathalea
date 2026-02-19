@@ -2781,6 +2781,15 @@
   },
   "TSA1": {
     "titre": "Les suites numériques"
+     },
+  "TSA1-1": {
+    "titre": "Limites de suites"
+  },
+   "TSA1-2": {
+    "titre": "Raisonnement par récurrence"
+  },
+  "TSA1-3": {
+    "titre": "Synthèse"
   },
   "TSA2": {
     "titre": "Compléments sur la dérivation"
