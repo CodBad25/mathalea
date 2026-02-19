@@ -1,7 +1,7 @@
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
-import { combinaisonListes } from '../../lib/outils/arrayOutils'
+
 import {
   ecritureAlgebrique,
   ecritureAlgebriqueSauf1,
@@ -13,6 +13,7 @@ import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { lettreDepuisChiffre } from '../../lib/outils/outilString'
 import { context } from '../../modules/context'
 import {
+  gestionnaireFormulaireTexte,
   listeQuestionsToContenuSansNumero,
   randint,
 } from '../../modules/outils'
@@ -38,14 +39,24 @@ export const refs = {
 export default class DistributiviteSimpleDoubleReduction extends Exercice {
   constructor() {
     super()
-
     this.nbQuestions = 5
-
     this.spacing = context.isHtml ? 3 : 2
     this.spacingCorr = context.isHtml ? 3 : 2
-
-    this.comment =
-      "L'expression peut être au hasard de la forme :<br>$cx+e(ax+b)$<br> $ex+(ax+b)(cx+d)$<br> $e+(ax+b)(cx+d)$<br> $e-(ax+b)(cx+d)$<br> $(ax \\times b)(cx+d)$<br> $e(ax+b)-(d+cx)$."
+    this.sup = '1-2-3-4-5-6'
+    this.besoinFormulaireTexte = [
+      "Type d'expressions",
+      [
+        'Nombres séparés par des tirets :',
+        '1 : cx + e(ax + b)',
+        '2 : ex + (ax + b)(cx + d)',
+        '3 : e + (ax + b)(cx + d)',
+        '4 : e - (ax + b)(cx + d)',
+        '5 : (ax × b)(cx + d)',
+        '6 : e(ax + b) - (d + cx)',
+        '7 : k(ax + b)(cx + d)',
+        '0 : Mélange',
+      ].join('\n'),
+    ]
     this.listeAvecNumerotation = false
   }
 
@@ -62,11 +73,17 @@ export default class DistributiviteSimpleDoubleReduction extends Exercice {
       'e-(ax+b)(cx+d)',
       '(ax*b)(cx+d)',
       'e(ax+b)-(d+cx)',
+      'k(ax+b)(cx+d)',
     ]
-    const listeTypeDeQuestions = combinaisonListes(
-      typesDeQuestionsDisponibles,
-      this.nbQuestions,
-    ) // Tous les types de questions sont posées mais l'ordre diffère à chaque "cycle"
+    const listeTypeDeQuestions = gestionnaireFormulaireTexte({
+      saisie: this.sup,
+      min: 1,
+      max: 7,
+      melange: 0,
+      defaut: 0,
+      nbQuestions: this.nbQuestions,
+      listeOfCase: typesDeQuestionsDisponibles,
+    }) as string[]
     for (
       let i = 0,
         texte,
@@ -163,6 +180,24 @@ export default class DistributiviteSimpleDoubleReduction extends Exercice {
           coeffa = a * b * c
           coeffb = a * b * d
           coeffc = 0
+          break
+        case 'k(ax+b)(cx+d)':
+          e = randint(-3, 3, [-1, 0, 1]) // k
+          texte = `$${lettreDepuisChiffre(i + 1)}=${e}(${rienSi1(a)}x${ecritureAlgebrique(b)})(${rienSi1(c)}x${ecritureAlgebrique(d)})$`
+          texteCorr = texte
+          texteCorr += `<br>$\\phantom{${lettreDepuisChiffre(i + 1)}}=${e}(${rienSi1(a * c)}x^2${ecritureAlgebriqueSauf1(a * d)}x${ecritureAlgebriqueSauf1(b * c)}x${ecritureAlgebrique(b * d)})$`
+          texteCorr += `<br>$\\phantom{${lettreDepuisChiffre(i + 1)}}=${e}(${rienSi1(a * c)}x^2${ecritureAlgebriqueSauf1(a * d + b * c)}x${ecritureAlgebrique(b * d)})$`
+          texteCorr += `<br>$\\phantom{${lettreDepuisChiffre(i + 1)}}=${rienSi1(e * a * c)}x^2${ecritureAlgebriqueSauf1(e * (a * d + b * c))}x${ecritureAlgebrique(e * b * d)}$`
+          reponse = reduirePolynomeDegre3(
+            0,
+            e * a * c,
+            e * (a * d + b * c),
+            e * b * d,
+            'x',
+          )
+          coeffa = e * a * c
+          coeffb = e * (a * d + b * c)
+          coeffc = e * b * d
           break
         case 'e(ax+b)-(d+cx)':
           e = randint(-11, 11, [-1, 1, 0])
