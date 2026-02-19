@@ -15,24 +15,23 @@ import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
 export const titre =
-  "Déterminer le point d'intersection de deux droites données graphiquement"
+  "Déterminer les points d'intersection de trois droites données graphiquement"
 export const interactifReady = true
 export const interactifType = 'mathLive'
-export const dateDePublication = '20/04/2024'
-export const dateDeModifImportante = '13/02/2026'
+export const dateDePublication = '13/02/2026'
 
 /**
- * Déterminer le point d'intersection de deux droites données graphiquement
+ * Déterminer les points d'intersection de trois droites données graphiquement
  * @author Nathan Scheinmann
  */
 
-export const uuid = 'a1b2c'
+export const uuid = 'd3e4f'
 export const refs = {
-  'fr-fr': ['2G34-11'],
-  'fr-ch': ['11FA12-11', '1mF2-10', '1mSE-2'],
+  'fr-fr': ['2G34-14'],
+  'fr-ch': [],
 }
 
-export default class IntersectionDeuxDroites extends Exercice {
+export default class IntersectionTroisDroites extends Exercice {
   constructor() {
     super()
 
@@ -40,20 +39,20 @@ export default class IntersectionDeuxDroites extends Exercice {
     this.sup = 1
     this.correctionDetailleeDisponible = true
     this.besoinFormulaireNumerique = [
-      "Position du point d'intersection",
+      "Position des points d'intersection",
       3,
-      '1 : Sur le graphique\n2 : En dehors du graphique\n3 : Mélange',
+      '1 : Tous sur le graphique\n2 : Au moins un en dehors du graphique\n3 : Mélange',
     ]
   }
 
   nouvelleVersion() {
-    let typeDeQuestionsDisponibles: ('deuxDroitesSG' | 'deuxDroitesHG')[]
+    let typeDeQuestionsDisponibles: ('troisDroitesSG' | 'troisDroitesHG')[]
     if (this.sup === 1) {
-      typeDeQuestionsDisponibles = ['deuxDroitesSG']
+      typeDeQuestionsDisponibles = ['troisDroitesSG']
     } else if (this.sup === 2) {
-      typeDeQuestionsDisponibles = ['deuxDroitesHG']
+      typeDeQuestionsDisponibles = ['troisDroitesHG']
     } else {
-      typeDeQuestionsDisponibles = ['deuxDroitesSG', 'deuxDroitesHG']
+      typeDeQuestionsDisponibles = ['troisDroitesSG', 'troisDroitesHG']
     }
 
     const pointIntersectionExactDD = function (
@@ -126,18 +125,25 @@ export default class IntersectionDeuxDroites extends Exercice {
       vari = ['x', 'y', '', 'x', 'y', '']
       let c = new Droite(0, 1, 0, 'black', 'black')
       let c2 = new Droite(0, 1, 0, 'black', 'black')
+      let c3 = new Droite(0, 1, 0, 'black', 'black')
       let a: number = 0
       let b: number = 0
       let d: number = 0
       let a2: number = 0
       let b2: number = 0
       let d2: number = 0
+      let a3: number = 0
+      let b3: number = 0
+      let d3: number = 0
       let aFrac: Array<number> = []
       let a2Frac: Array<number> = []
+      let a3Frac: Array<number> = []
       let pAproxInt12 = new PointAbstrait(0, 0)
+      let pAproxInt13 = new PointAbstrait(0, 0)
+      let pAproxInt23 = new PointAbstrait(0, 0)
 
       switch (listeTypeQuestions[i]) {
-        case 'deuxDroitesSG':
+        case 'troisDroitesSG':
           do {
             do {
               b = randint(-5, 5)
@@ -148,20 +154,42 @@ export default class IntersectionDeuxDroites extends Exercice {
               a2Frac = choice(listeFractions)
               a2 = a2Frac[0] * choice([-1, 1])
               d2 = a2Frac[1]
-            } while (Math.abs(a2 / d2 - a / d) < 0.5)
+              b3 = randint(-5, 5)
+              a3Frac = choice(listeFractions)
+              a3 = a3Frac[0] * choice([-1, 1])
+              d3 = a3Frac[1]
+            } while (
+              Math.abs(a2 / d2 - a / d) < 0.5 ||
+              Math.abs(a3 / d3 - a / d) < 0.5 ||
+              Math.abs(a2 / d2 - a3 / d3) < 0.5
+            )
             c = droite(a / d, -1, b)
             c.color = colorToLatexOrHTML('red')
             c.epaisseur = 1
             c2 = droite(a2 / d2, -1, b2)
             c2.color = colorToLatexOrHTML('red')
             c2.epaisseur = 1
+            c3 = droite(a3 / d3, -1, b3)
+            c3.color = colorToLatexOrHTML('red')
+            c3.epaisseur = 1
             pAproxInt12 = pointIntersectionDD(c, c2)
+            pAproxInt13 = pointIntersectionDD(c, c3)
+            pAproxInt23 = pointIntersectionDD(c2, c3)
           } while (
-            !(Math.abs(a2 / d2 - a / d) < 0.5 || inGraph(pAproxInt12)) ||
-            coordEntieres(pAproxInt12)
+            !(
+              Math.abs(a2 / d2 - a / d) < 0.5 ||
+              Math.abs(a3 / d3 - a / d) < 0.5 ||
+              Math.abs(a2 / d2 - a3 / d3) < 0.5 ||
+              (inGraph(pAproxInt12) &&
+                inGraph(pAproxInt13) &&
+                inGraph(pAproxInt23))
+            ) ||
+            coordEntieres(pAproxInt12) ||
+            coordEntieres(pAproxInt13) ||
+            coordEntieres(pAproxInt23)
           )
           break
-        case 'deuxDroitesHG':
+        case 'troisDroitesHG':
           do {
             aFrac = choice(listeFractions)
             a = aFrac[0] * choice([-1, 1])
@@ -171,32 +199,58 @@ export default class IntersectionDeuxDroites extends Exercice {
             a2 = a2Frac[0] * choice([-1, 1])
             d2 = a2Frac[1]
             b2 = randint(-5, 5)
-            if (Math.abs(a2 / d2 - a / d) < 0.5) continue
+            a3Frac = choice(listeFractions)
+            a3 = a3Frac[0] * choice([-1, 1])
+            d3 = a3Frac[1]
+            b3 = randint(-5, 5)
+            if (
+              Math.abs(a2 / d2 - a / d) < 0.5 ||
+              Math.abs(a3 / d3 - a / d) < 0.5 ||
+              Math.abs(a2 / d2 - a3 / d3) < 0.5
+            )
+              continue
             c = droite(a / d, -1, b)
             c.color = colorToLatexOrHTML('red')
             c.epaisseur = 1
             c2 = droite(a2 / d2, -1, b2)
             c2.color = colorToLatexOrHTML('red')
             c2.epaisseur = 1
+            c3 = droite(a3 / d3, -1, b3)
+            c3.color = colorToLatexOrHTML('red')
+            c3.epaisseur = 1
             pAproxInt12 = pointIntersectionDD(c, c2)
+            pAproxInt13 = pointIntersectionDD(c, c3)
+            pAproxInt23 = pointIntersectionDD(c2, c3)
           } while (
             Math.abs(a2 / d2 - a / d) < 0.5 ||
+            Math.abs(a3 / d3 - a / d) < 0.5 ||
+            Math.abs(a2 / d2 - a3 / d3) < 0.5 ||
             inGraph(pAproxInt12) ||
-            coordEntieres(pAproxInt12)
+            coordEntieres(pAproxInt12) ||
+            coordEntieres(pAproxInt13) ||
+            coordEntieres(pAproxInt23)
           )
           break
       }
 
       const droite1 = droiteAvecNomLatex(c, '(d_1)', 'red')
       const droite2 = droiteAvecNomLatex(c2, '(d_2)', 'green')
+      const droite3 = droiteAvecNomLatex(c3, '(d_3)', 'blue')
       const droiteFrac1 = [new FractionEtendue(a, d), new FractionEtendue(b, 1)]
       const droiteFrac2 = [
         new FractionEtendue(a2, d2),
         new FractionEtendue(b2, 1),
       ]
+      const droiteFrac3 = [
+        new FractionEtendue(a3, d3),
+        new FractionEtendue(b3, 1),
+      ]
       const eqD1ListeString = [0, 1, 0, droiteFrac1[0], 0, droiteFrac1[1]]
       const eqD2ListeString = [0, 1, 0, droiteFrac2[0], 0, droiteFrac2[1]]
+      const eqD3ListeString = [0, 1, 0, droiteFrac3[0], 0, droiteFrac3[1]]
       const pi12 = pointIntersectionExactDD(droiteFrac1, droiteFrac2)
+      const pi13 = pointIntersectionExactDD(droiteFrac1, droiteFrac3)
+      const pi23 = pointIntersectionExactDD(droiteFrac2, droiteFrac3)
 
       const r = repere({
         xMin: -8,
@@ -226,7 +280,7 @@ export default class IntersectionDeuxDroites extends Exercice {
       })
 
       texte =
-        "Déterminer le point d'intersection des droites suivantes.<br><br>"
+        "Déterminer les points d'intersection des droites suivantes.<br><br>"
       texte += mathalea2d(
         {
           xmin: -8,
@@ -239,24 +293,35 @@ export default class IntersectionDeuxDroites extends Exercice {
         r,
         droite1,
         droite2,
+        droite3,
         o,
       )
       texte += '<br>'
 
       if (this.interactif) {
         texte +=
-          "<br> Le point d'intersection des droites $d_1$ et $d_2$ est le point" +
-          remplisLesBlancs(this, i, '(%{champ1};%{champ2})')
+          "<br> Les points d'intersection des droites sont" +
+          remplisLesBlancs(
+            this,
+            i,
+            'I(d_1;d_2)=(%{champ1};%{champ2})\\quad I(d_1;d_3)=(%{champ3};%{champ4})\\quad I(d_2;d_3)=(%{champ5};%{champ6})',
+          )
         handleAnswers(
           this,
           i,
           {
             bareme: (listePoints: number[]) => [
-              Math.min(listePoints[0], listePoints[1]),
-              1,
+              Math.min(listePoints[0], listePoints[1]) +
+                Math.min(listePoints[2], listePoints[3]) +
+                Math.min(listePoints[4], listePoints[5]),
+              3,
             ],
             champ1: { value: pi12[0].texFractionSimplifiee },
             champ2: { value: pi12[1].texFractionSimplifiee },
+            champ3: { value: pi13[0].texFractionSimplifiee },
+            champ4: { value: pi13[1].texFractionSimplifiee },
+            champ5: { value: pi23[0].texFractionSimplifiee },
+            champ6: { value: pi23[1].texFractionSimplifiee },
           },
           { formatInteractif: 'fillInTheBlank' },
         )
@@ -274,6 +339,20 @@ export default class IntersectionDeuxDroites extends Exercice {
       texteCorr =
         texteCorr +
         `e point d'intersection des droites $d_1$ et $d_2$ vaut $${miseEnEvidence(`\\left(${pi12[0].texFractionSimplifiee};${pi12[1].texFractionSimplifiee}\\right)`)}.$<br>`
+
+      if (this.correctionDetaillee) {
+        texteCorr += `L'équation de la droite $d_3$ est donnée par \\[${eqToLatex([0, 0, 1, droiteFrac3[0], 0, droiteFrac3[1]], ['x', 'y', 'd_3(x)', 'x', 'y', ''], false)}\\] <br> Afin de déterminer le point d'intersection des droites $d_1$ et $d_3$, on résout le système d'équations suivant: \\[ ${printSystem(eqToLatex(eqD1ListeString, vari, true), eqToLatex(eqD3ListeString, vari, true))}\\] On obtient que l`
+      } else {
+        texteCorr += '<br>L'
+      }
+      texteCorr += `e point d'intersection des droites $d_1$ et $d_3$ vaut $${miseEnEvidence(`\\left(${pi13[0].texFractionSimplifiee};${pi13[1].texFractionSimplifiee}\\right)`)}$.<br>`
+
+      if (this.correctionDetaillee) {
+        texteCorr += `<br> Afin de déterminer le point d'intersection des droites $d_2$ et $d_3$, on résout le système d'équations suivant: \\[ ${printSystem(eqToLatex(eqD2ListeString, vari, true), eqToLatex(eqD3ListeString, vari, true))}\\] On obtient que l`
+      } else {
+        texteCorr += '<br>L'
+      }
+      texteCorr += `e point d'intersection des droites $d_2$ et $d_3$ vaut $${miseEnEvidence(`\\left(${pi23[0].texFractionSimplifiee};${pi23[1].texFractionSimplifiee}\\right)`)}$.`
 
       if (this.listeQuestions.indexOf(texte) === -1) {
         this.listeQuestions[i] = texte

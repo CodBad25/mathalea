@@ -154,3 +154,20 @@ export function simpExp(b: string | number, e: number) {
       return ' '
   }
 }
+
+/**
+ * Vérifie si n est une puissance entière de base
+ * @param n nombre à tester
+ * @param base base de la puissance
+ * @returns true si n = base^k pour un entier k >= 0
+ * @author Nathan Scheinmann
+ */
+export function estPuissanceDe(n: number, base: number): boolean {
+  if (n <= 0 || base <= 1) return false
+  let temp = n
+  while (temp > 1) {
+    if (temp % base !== 0) return false
+    temp = temp / base
+  }
+  return temp === 1
+}
