@@ -37,14 +37,33 @@
   import ButtonTextAction from '../../shared/forms/ButtonTextAction.svelte'
   import ButtonToggle from '../../shared/forms/ButtonToggle.svelte'
 
-  /** Index de la question courante, synchronisé avec le parent */
-  export let currentIndex: number = 0
+  /** Callback quand les questions sont prêtes */
+  export let onQuestionsReady: (data: {
+    questions: (string | IExercice)[]
+  }) => void = () => {}
 
-  /** Liste des questions (string ou IExercice), lisible par le parent pour la barre de navigation */
-  export let questions: (string | IExercice)[] = []
+  /** Callback quand l'index courant change */
+  export let onIndexChange: (data: { currentIndex: number }) => void = () => {}
 
-  /** Résultats par question, lisible par le parent pour la barre de navigation */
-  export let resultsByQuestion: boolean[] = []
+  /** Callback quand les résultats changent */
+  export let onResultsChange: (data: {
+    resultsByQuestion: boolean[]
+  }) => void = () => {}
+
+  /** Index de la question courante */
+  let currentIndex: number = 0
+
+  /** Liste des questions (string ou IExercice) */
+  let questions: (string | IExercice)[] = []
+
+  /** Résultats par question */
+  let resultsByQuestion: boolean[] = []
+
+  /** Référence vers le conteneur racine du composant */
+  let containerRef: HTMLDivElement
+
+  /** Références vers les conteneurs de chaque question */
+  const questionContainerRefs: HTMLDivElement[] = []
 
   let exercices: IExercice[] = []
   let consignes: string[] = []
@@ -65,26 +84,12 @@
     isCorrectionVisible = [...splitResults.isCorrectionVisible]
     indiceExercice = [...splitResults.indiceExercice]
     indiceQuestionInExercice = [...splitResults.indiceQuestionInExercice]
+    resultsByQuestion = []
     mathaleaUpdateUrlFromExercicesParams($exercicesParams)
     await tick()
-    const body = document.querySelector<HTMLElement>('body')
-    if (body) {
-      mathaleaRenderDiv(body)
-    }
+    mathaleaRenderDiv(containerRef)
     loadMathLive()
-    const section = document.querySelector('section') as HTMLElement
-    const hauteurExercice = section.scrollHeight
-    const url = new URL(window.location.href)
-    const iframe = url.searchParams.get('iframe')
-    window.parent.postMessage(
-      {
-        hauteurExercice,
-        exercicesParams: $exercicesParams,
-        action: 'mathalea:init',
-        iframe,
-      },
-      '*',
-    )
+    onQuestionsReady({ questions })
   }
 
   async function checkQuestion(i: number) {
@@ -148,11 +153,15 @@
     isCorrectionVisible[i] = true
     isCorrectionVisible = [...isCorrectionVisible]
     await tick()
-    const feedback = document.querySelector<HTMLElement>(
-      `#feedbackEx${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`,
-    )
-    if (feedback !== null && feedback !== undefined) mathaleaRenderDiv(feedback)
+    const questionContainer = questionContainerRefs[i]
+    if (questionContainer) {
+      const feedback = questionContainer.querySelector<HTMLElement>(
+        `#feedbackEx${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`,
+      )
+      if (feedback != null) mathaleaRenderDiv(feedback)
+    }
     mathaleaRenderDiv(divsCorrection[i])
+    onResultsChange({ resultsByQuestion })
   }
 
   async function restart(k: number) {
@@ -217,11 +226,12 @@
 
     await tick()
     // Rendre le contenu mathématique uniquement dans le container de la question ciblée
-    const container = document.querySelector(`#exercice${exoIdx}Q${k}`)
+    const container = questionContainerRefs[k]
     if (container instanceof HTMLElement) {
       mathaleaRenderDiv(container)
     }
     loadMathLive()
+    onResultsChange({ resultsByQuestion })
   }
 
   async function switchCorrectionVisible(i: number) {
@@ -234,10 +244,11 @@
 
   /**
    * Gère le changement de question courante.
-   * Appelé par le parent quand l'utilisateur clique sur un onglet de navigation.
+   * Appelé en interne ou par le parent via bind:this.
    */
   export async function handleIndexChange(k: number) {
     currentIndex = k
+    onIndexChange({ currentIndex: k })
     await tick()
     const exo = exercices[indiceExercice[k]]
     const questionEvent = new CustomEvent('questionDisplay', {
@@ -259,7 +270,7 @@
   })
 </script>
 
-<div>
+<div bind:this={containerRef}>
   {#each questions as question, k (k + '_' + question)}
     <div class="flex flex-col">
       <div class={$isMenuNeededForQuestions ? '' : 'hidden'}>
@@ -289,6 +300,7 @@
       <div
         class={currentIndex === k ? '' : 'hidden'}
         id={`exercice${indiceExercice[k]}Q${k}`}
+        bind:this={questionContainerRefs[k]}
       >
         <div
           class="pb-4 flex flex-col items-start justify-start relative {$isMenuNeededForQuestions

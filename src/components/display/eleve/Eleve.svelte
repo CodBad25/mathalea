@@ -276,6 +276,34 @@
       document.dispatchEvent(questionEvent)
     }
   }
+
+  function handleIndexChange_QPP(data: { currentIndex: number }) {
+    currentIndex = data.currentIndex
+  }
+
+  function handleResultsChange(data: { resultsByQuestion: boolean[] }) {
+    resultsByQuestion = data.resultsByQuestion
+  }
+
+  async function handleQuestionsReady(data: {
+    questions: (string | import('../../../lib/types').IExercice)[]
+  }) {
+    questions = data.questions
+    resultsByQuestion = []
+    await tick()
+    const hauteurExercice = eleveSection?.scrollHeight ?? 0
+    const url = new URL(window.location.href)
+    const iframe = url.searchParams.get('iframe')
+    window.parent.postMessage(
+      {
+        hauteurExercice,
+        exercicesParams: $exercicesParams,
+        action: 'mathalea:init',
+        iframe,
+      },
+      '*',
+    )
+  }
 </script>
 
 <svelte:window bind:innerWidth={currentWindowWidth} />
@@ -505,9 +533,9 @@
       {:else if $globalOptions.presMode === 'une_question_par_page'}
         <QuestionParPage
           bind:this={questionParPageRef}
-          bind:currentIndex
-          bind:questions
-          bind:resultsByQuestion
+          onQuestionsReady={handleQuestionsReady}
+          onIndexChange={handleIndexChange_QPP}
+          onResultsChange={handleResultsChange}
         />
       {:else if $globalOptions.presMode === 'cartes'}
         <div
