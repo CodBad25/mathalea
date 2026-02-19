@@ -9,4 +9,9 @@ export const refs = {
   'fr-fr': ['2N40-6'],
   'fr-ch': ['11FA2-7'],
 }
-export default class DistributiviteSimpleDoubleReduction2e extends DistributiviteSimpleDoubleReduction {}
+export default class DistributiviteSimpleDoubleReduction2e extends DistributiviteSimpleDoubleReduction {
+  constructor() {
+    super()
+    this.sup = '1-2-3-4-5-6-7'
+  }
+}
