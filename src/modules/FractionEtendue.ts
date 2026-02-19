@@ -551,9 +551,14 @@ class FractionEtendue {
    * basé sur la méthode toLatex() de mathjs, on remplace \frac par \dfrac plus joli.
    * @return {string} la chaine Latex pour écrire la  FractionMathjs  (signe devant)
    */
-  toLatex(): string {
+  toLatex(dfrac = 'dfrac'): string {
     const text = this.texFSD
-    return text.replace('\\frac', '\\dfrac')
+    if (dfrac === 'frac') {
+      return text.replace('\\dfrac', '\\frac')
+      // ajout, car pour les puissances il faut parfois avoir un exposant fractionnaire plus petit, c.f. https://tex.stackexchange.com/questions/202325/how-to-make-fractions-in-powers-look-good
+    } else if (dfrac === 'sfrac') {
+      return `${this.num}/${this.den}`
+    } else return text.replace('\\frac', '\\dfrac')
   }
 
   /**
