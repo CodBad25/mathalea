@@ -13,7 +13,7 @@ export const interactifReady = true
 export const interactifType = 'mathLive'
 export const uuid = '91bbd'
 export const refs = {
-  'fr-fr': ['TSA8-00'],
+  'fr-fr': ['TEC3-03'],
   'fr-ch': [],
 }
 export const dateDePublication = '18/08/2024'
