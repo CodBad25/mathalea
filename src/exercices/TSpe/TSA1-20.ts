@@ -20,7 +20,7 @@ export const dateDePublication = '25/10/2024'
 
 export const uuid = '7f24e'
 export const refs = {
-  'fr-fr': ['TSA1-01'],
+  'fr-fr': ['TSA1-20'],
   'fr-ch': [],
 }
 

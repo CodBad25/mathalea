@@ -1128,7 +1128,11 @@
   },
   "Terminale": {
     "Terminale Spé": {
-      "TSA1": {},
+      "TSA1": {
+        "TSA1-1": {},
+          "TSA1-2": {},
+          "TSA1-3": {}
+      },
       "TSA2": {},
       "TSA3": {},
       "TSA4": {},
