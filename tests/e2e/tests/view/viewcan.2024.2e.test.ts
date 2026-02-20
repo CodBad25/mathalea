@@ -1,8 +1,8 @@
-import { inputAnswerById, runTest } from '../../helpers/run'
 import type { Page } from 'playwright'
-import { log as lg, getFileLogger } from '../../helpers/log'
 import { expect } from 'vitest'
+import { getFileLogger, log as lg } from '../../helpers/log'
 import prefs from '../../helpers/prefs.js'
+import { inputAnswerById, runTest } from '../../helpers/run'
 
 const logConsole = getFileLogger('viewtest', { append: true })
 
@@ -623,7 +623,7 @@ if (process.env.CI) {
   runTest(testEleveView, import.meta.url, { pauseOnError: false })
   runTest(testEleveViewPre2, import.meta.url, { pauseOnError: false })
 } else {
-  // prefs.headless = true
+  // prefs.headless = false
   runTest(testCanView, import.meta.url, { pauseOnError: true })
   runTest(testEleveView, import.meta.url, { pauseOnError: true })
   runTest(testEleveViewPre2, import.meta.url, { pauseOnError: true })
