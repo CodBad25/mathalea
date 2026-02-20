@@ -8,7 +8,8 @@ import Exercice from './Exercice'
  * @author Rémi Angot
  */
 export default class ExerciceLabyrinthe extends Exercice {
-  consigneDeplacement = '<br>Dans ce labyrinthe, on peut se déplacer horizontalement, verticalement et en diagonale.'
+  consigneDeplacement =
+    '<br>Dans ce labyrinthe, on peut se déplacer horizontalement, verticalement et en diagonale.'
   labyrinthe!: Labyrinthe
   labyrintheElement!: LabyrintheElement
   cols = 6
@@ -68,11 +69,13 @@ export default class ExerciceLabyrinthe extends Exercice {
             })
             this.init()
             if (!customElements.get('labyrinthe-grid')) {
-              const { default: LabyrintheElement } = await import(
-                'labyrinthe/src/LabyrintheElement'
-              )
+              const { default: LabyrintheElement } =
+                await import('labyrinthe/src/LabyrintheElement')
               try {
-                customElements.define('labyrinthe-grid', LabyrintheElement as any)
+                customElements.define(
+                  'labyrinthe-grid',
+                  LabyrintheElement as any,
+                )
               } catch {}
             }
             const el = document.createElement(
@@ -123,20 +126,20 @@ export default class ExerciceLabyrinthe extends Exercice {
               this.badAnswers.push(String(this.generateBadAnswers()))
             }
             this.labyrintheElement.setValues(this.goodAnswers, this.badAnswers)
+            this.labyrintheElement.addEventListener(
+              'labyrinthe:gameend',
+              (e: Event) => {
+                const btnScore = document.querySelector(
+                  `#buttonScoreEx${this.numeroExercice}`,
+                )
+                ;(btnScore as HTMLButtonElement)?.click()
+              },
+            )
           }
           this.labyrintheElement.id = `labyrintheEx${this.numeroExercice}`
           if (!this.interactif) {
             this.labyrintheElement.disabled = true
           }
-          this.labyrintheElement.addEventListener(
-            'labyrinthe:gameend',
-            (e: Event) => {
-              const btnScore = document.querySelector(
-                `#buttonScoreEx${this.numeroExercice}`,
-              )
-              ;(btnScore as HTMLButtonElement)?.click()
-            },
-          )
         }
         if (containerCorrection) {
           containerCorrection.innerHTML = ''
