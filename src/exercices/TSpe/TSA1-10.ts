@@ -14,7 +14,7 @@ import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 
-export const titre = 'Limites de suites'
+export const titre = 'Limites de suites (synthèse opérations avec les limites)'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const uuid = 'ff9d1'
@@ -45,7 +45,7 @@ const questions = [
 export default class LimitesSuites extends Exercice {
   constructor() {
     super()
-    this.nbQuestions = 5
+    this.nbQuestions = 2
     this.comment =
       'Il y a 9 types de questions différentes correspondant aux exercices canTSpeS01 à canTSpeS09.'
   }
