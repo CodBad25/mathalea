@@ -1,20 +1,16 @@
-import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
 import { propositionsQcm } from '../../../lib/interactif/qcm'
-import { ajouteChampTexteMathLive } from '../../../lib/interactif/questionMathLive'
 import {
   combinaisonListesSansChangerOrdre,
   enleveElementBis,
 } from '../../../lib/outils/arrayOutils'
 import { gestionnaireFormulaireTexte } from '../../../modules/outils'
 
-import Decimal from 'decimal.js'
 import seedrandom from 'seedrandom'
 import uuidToUrl from '../../../json/uuidsToUrlFR.json'
-import { isKeyboardCategory } from '../../../lib/interactif/claviers/keyboard'
 import {
-  mathaleaLoadExerciceFromUuid
+  mathaleaHandleExerciceSimple,
+  mathaleaLoadExerciceFromUuid,
 } from '../../../lib/mathalea'
-import FractionEtendue from '../../../modules/FractionEtendue'
 import Exercice from '../../Exercice'
 export const titre = 'Choix aléatoires des questions'
 export const interactifReady = true
@@ -33,7 +29,6 @@ export const refs = {
   'fr-fr': ['can6a-Aléa'],
   'fr-ch': ['NR'],
 }
-
 
 const log = function (str: string) {
   if (window.logDebug > 1) console.info(str)
@@ -69,7 +64,7 @@ export default class can6eAll extends Exercice {
   nouvelleVersion() {
     this.questionJamaisPosee(
       0,
-      this.seed,
+      this.seed ?? 'empty',
       this.sup,
       this.sup2,
       this.sup3,
@@ -323,86 +318,53 @@ export default class can6eAll extends Exercice {
           exercice.interactif ? (q2.interactif = true) : (q2.interactif = false)
           q2.numeroExercice = exercice.numeroExercice
           q2.seed = exercice.seed
-          seedrandom(q2.seed, { global: true })
-          q2.nouvelleVersion()
-          
-          if (q2.listeQuestions.length === 0) {
-            exercice.listeCorrections[k] = q2.correction
-            exercice.listeCanEnonces[k] = q2.canEnonce
-            exercice.listeCanReponsesACompleter[k] = q2.canReponseACompleter
-            let reponse
-            if (
-              !(q2.reponse instanceof FractionEtendue) &&
-              !(q2.reponse instanceof Decimal) &&
-              typeof q2.reponse === 'object'
-            ) {
-              reponse = q2.reponse
-            } else {
-              reponse = {
-                reponse: {
-                  value: q2.reponse,
-                  options: q2.optionsDeComparaison ?? {},
-                },
-              }
-            }
-            handleAnswers(exercice, k, reponse, {
-              formatInteractif: q2.formatInteractif ?? 'mathlive',
-            })
-            exercice.listeQuestions[k] =
-              q2.question +
-              ajouteChampTexteMathLive(
-                exercice,
-                k,
-                isKeyboardCategory(q2.formatChampTexte) ? q2.formatChampTexte : ( typeof q2.formatChampTexte === 'string' ? q2.formatChampTexte : '' ),
-                q2.optionsChampTexte || {},
-              )
+          if (q2?.typeExercice === 'simple') {
+            mathaleaHandleExerciceSimple(
+              q2,
+              q2.interactif,
+              q2.numeroExercice,
+              q2.seed,
+            )
           } else {
-            exercice.listeQuestions[k] = q2.listeQuestions[0]
-            exercice.listeCorrections[k] = q2.listeCorrections[0]
-            exercice.listeCanEnonces[k] = q2.listeCanEnonces[0]
-            exercice.listeCanReponsesACompleter[k] =
-              q2.listeCanReponsesACompleter[0]
-            exercice.autoCorrection[k] = q2.autoCorrection[0]
-            if (q2?.autoCorrection[0]?.propositions === undefined) {
-              // mathlive
-              // update les références HTML
-              exercice.listeQuestions[k] = exercice.listeQuestions[
-                k
-              ].replaceAll(
-                `champTexteEx${exercice.numeroExercice}Q${0}`,
-                `champTexteEx${exercice.numeroExercice}Q${k}`,
-              )
-              exercice.listeQuestions[k] = exercice.listeQuestions[
-                k
-              ].replaceAll(
-                `resultatCheckEx${exercice.numeroExercice}Q${0}`,
-                `resultatCheckEx${exercice.numeroExercice}Q${k}`,
-              )
-              exercice.listeQuestions[k] = exercice.listeQuestions[
-                k
-              ].replaceAll(
-                `tabMathliveEx${exercice.numeroExercice}Q${0}`,
-                `tabMathliveEx${exercice.numeroExercice}Q${k}`,
-              )
-              exercice.listeQuestions[k] = exercice.listeQuestions[
-                k
-              ].replaceAll(
-                `tabMathliveEx${exercice.numeroExercice}Q${0}`,
-                `tabMathliveEx${exercice.numeroExercice}Q${k}`,
-              )
-              exercice.listeQuestions[k] = exercice.listeQuestions[
-                k
-              ].replaceAll(
-                `spanEx${exercice.numeroExercice}Q${0}`,
-                `spanEx${exercice.numeroExercice}Q${k}`,
-              )              
-            } else {
-              // qcm
-              const monQcm = propositionsQcm(exercice, k) // update les références HTML
-              exercice.listeCanReponsesACompleter[k] = monQcm.texte
-              exercice.listeQuestions[k] =
-                exercice.autoCorrection[k].enonce + monQcm.texte
-            }
+            seedrandom(q2.seed, { global: true })
+            q2.nouvelleVersion(q2.numeroExercice)
+          }
+          exercice.listeCorrections[k] = q2.listeCorrections[0]
+          exercice.listeCanEnonces[k] = q2.listeCanEnonces[0]
+          exercice.listeCanReponsesACompleter[k] =
+            q2.listeCanReponsesACompleter[0]
+          exercice.autoCorrection[k] = q2.autoCorrection[0]
+          exercice.listeQuestions[k] = q2.listeQuestions[0]
+
+          if (q2?.autoCorrection[0]?.propositions === undefined) {
+            // mathlive
+            // update les références HTML
+            exercice.listeQuestions[k] = exercice.listeQuestions[k].replaceAll(
+              `champTexteEx${exercice.numeroExercice}Q${0}`,
+              `champTexteEx${exercice.numeroExercice}Q${k}`,
+            )
+            exercice.listeQuestions[k] = exercice.listeQuestions[k].replaceAll(
+              `resultatCheckEx${exercice.numeroExercice}Q${0}`,
+              `resultatCheckEx${exercice.numeroExercice}Q${k}`,
+            )
+            exercice.listeQuestions[k] = exercice.listeQuestions[k].replaceAll(
+              `tabMathliveEx${exercice.numeroExercice}Q${0}`,
+              `tabMathliveEx${exercice.numeroExercice}Q${k}`,
+            )
+            exercice.listeQuestions[k] = exercice.listeQuestions[k].replaceAll(
+              `tabMathliveEx${exercice.numeroExercice}Q${0}`,
+              `tabMathliveEx${exercice.numeroExercice}Q${k}`,
+            )
+            exercice.listeQuestions[k] = exercice.listeQuestions[k].replaceAll(
+              `spanEx${exercice.numeroExercice}Q${0}`,
+              `spanEx${exercice.numeroExercice}Q${k}`,
+            )
+          } else {
+            // qcm
+            const monQcm = propositionsQcm(exercice, k) // update les références HTML
+            exercice.listeCanReponsesACompleter[k] = monQcm.texte
+            exercice.listeQuestions[k] =
+              exercice.autoCorrection[k].enonce + monQcm.texte
           }
           log('Question chargée' + i)
         })
