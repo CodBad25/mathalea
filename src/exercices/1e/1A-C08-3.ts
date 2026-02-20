@@ -109,7 +109,7 @@ $-(${c1}${p}-${c2}${q}) = ${miseEnEvidence(`-${c1}${p}+${c2}${q}`)}$`
         // Simplification de 1/(1/a) (1 lettre)
         const [p] = choice([['a'], ['b'], ['x'], ['y']])
 
-        this.enonce = `Une simplification de $\\dfrac{1}{\\dfrac{1}{${p}}}$ est :`
+        this.enonce = `Une simplification de $\\dfrac{1}{\\dfrac{1}{${p}}}$ avec $${p}\\neq 0$ est :`
         this.correction = `Diviser par une fraction, c'est multiplier par son inverse.<br>
 $\\dfrac{1}{\\dfrac{1}{${p}}} = 1 \\times \\dfrac{${p}}{1} = ${miseEnEvidence(`${p}`)}$`
         this.reponses = [
@@ -125,7 +125,7 @@ $\\dfrac{1}{\\dfrac{1}{${p}}} = 1 \\times \\dfrac{${p}}{1} = ${miseEnEvidence(`$
         // Que vaut (a/b) × (b/c) ? (3 lettres)
         const [p, q, r] = choice([['a', 'b', 'c'], ['x', 'y', 'z'], ['m', 'n', 'p']])
 
-        this.enonce = `Que vaut $\\dfrac{${p}}{${q}} \\times \\dfrac{${q}}{${r}}$ ?`
+        this.enonce = `Que vaut $\\dfrac{${p}}{${q}} \\times \\dfrac{${q}}{${r}}$ avec $${q}\\neq 0$ et $${r}\\neq 0$ ?`
         this.correction = `$\\dfrac{${p}}{${q}} \\times \\dfrac{${q}}{${r}} = \\dfrac{${p} \\times ${q}}{${q} \\times ${r}}$<br>
 On simplifie par $${q}$ au numérateur et au dénominateur : $${miseEnEvidence(`\\dfrac{${p}}{${r}}`)}$`
         this.reponses = [
@@ -141,7 +141,7 @@ On simplifie par $${q}$ au numérateur et au dénominateur : $${miseEnEvidence(`
         //  Quelle expression est équivalente à (a×b)/c ? (3 lettres)
         const [p, q, r] = choice([['a', 'b', 'c'], ['x', 'y', 'z'], ['m', 'n', 'p']])
 const choix = choice([true, false])
-        this.enonce = `Quelle expression est équivalente à $\\dfrac{${p}\\times ${q}}{${r}}$ ?`
+        this.enonce = `Quelle expression est équivalente à $\\dfrac{${p}\\times ${q}}{${r}}$ avec $${r}\\neq 0$ ?`
         this.correction = `$\\dfrac{${p} \\times ${q}}{${r}} = ${miseEnEvidence(`\\dfrac{${p}}{${r}} \\times ${q}`)}$`
         this.reponses = [
           choix ? `$\\dfrac{${p}}{${r}} \\times ${q}$` : `$\\dfrac{${q}}{${r}} \\times ${p}$`,
@@ -158,7 +158,7 @@ const choix = choice([true, false])
         //  Que vaut (a/b) ÷ (c/d) ? (4 lettres)
         const [p, q, r, s] = choice([['a', 'b', 'c', 'd'], ['x', 'y', 'z', 't'], ['e', 'f', 'g', 'h']])
 
-        this.enonce = `Que vaut $\\dfrac{${p}}{${q}} \\div \\dfrac{${r}}{${s}}$ ?`
+        this.enonce = `Que vaut $\\dfrac{${p}}{${q}} \\div \\dfrac{${r}}{${s}}$ avec $${q}\\neq 0$ et $${s}\\neq 0$ ?`
         this.correction = `Diviser par une fraction, c'est multiplier par son inverse.<br>
 $\\dfrac{${p}}{${q}} \\div \\dfrac{${r}}{${s}} = \\dfrac{${p}}{${q}} \\times \\dfrac{${s}}{${r}} = ${miseEnEvidence(`\\dfrac{${p}${s}}{${q}${r}}`)}$`
         this.reponses = [
@@ -236,7 +236,7 @@ $${p} \\times 1 = ${miseEnEvidence(`${p}`)}$`
         // Simplification de a × a (1 lettre)
         const [p] = choice([['a'], ['b'], ['x'], ['y']])
 
-        this.enonce = `Une simplification de $${p} \\times ${p}$ est :`
+        this.enonce = `Une simplification de $${p} \\times ${p}$ (avec $${p}\\neq 0$) est :`
         this.correction = `Le produit d'un nombre par lui-même est son carré.<br>
 $${p} \\times ${p} = ${miseEnEvidence(`${p}^2`)}$`
         this.reponses = [
@@ -252,7 +252,7 @@ $${p} \\times ${p} = ${miseEnEvidence(`${p}^2`)}$`
         // Simplification de a/a (1 lettre)
         const [p] = choice([['a'], ['b'], ['x'], ['y']])
 
-        this.enonce = `Une simplification de $\\dfrac{${p}}{${p}}$  est :`
+        this.enonce = `Une simplification de $\\dfrac{${p}}{${p}}$  (avec $${p}\\neq 0$) est :`
         this.correction = `Tout nombre non nul divisé par lui-même est égal à $1$.<br>
 $\\dfrac{${p}}{${p}} = ${miseEnEvidence('1')}$`
         this.reponses = [
@@ -268,7 +268,7 @@ $\\dfrac{${p}}{${p}} = ${miseEnEvidence('1')}$`
         // Simplification de 0/a (1 lettre)
         const [p] = choice([['a'], ['b'], ['x'], ['y']])
 
-        this.enonce = `Une simplification de $\\dfrac{0}{${p}}$ est :`
+        this.enonce = `Une simplification de $\\dfrac{0}{${p}}$ (avec $${p}\\neq 0$) est :`
         this.correction = `$0$ divisé par n'importe quel nombre non nul est égal à $0$.<br>
 $\\dfrac{0}{${p}} = ${miseEnEvidence('0')}$`
         this.reponses = [
@@ -285,7 +285,7 @@ $\\dfrac{0}{${p}} = ${miseEnEvidence('0')}$`
         // Que vaut (a+b)/c ? (3 lettres)
         const [p, q, r] = choice([['a', 'b', 'c'], ['x', 'y', 'z'], ['m', 'n', 'p']])
 
-        this.enonce = `Quelle est l'écriture correcte de $\\dfrac{${p}+${q}}{${r}}$ ?`
+        this.enonce = `Quelle est l'écriture correcte de $\\dfrac{${p}+${q}}{${r}}$ avec $${r}\\neq 0$ ?`
         this.correction = `On peut séparer le numérateur d'une somme sur un même dénominateur :<br>
 $\\dfrac{${p}+${q}}{${r}} = ${miseEnEvidence(`\\dfrac{${p}}{${r}}+\\dfrac{${q}}{${r}}`)}$`
         this.reponses = [
