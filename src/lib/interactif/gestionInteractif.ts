@@ -381,8 +381,8 @@ export function prepareExerciceCliqueFigure(exercice: IExercice) {
         if (figSvg != null) {
           const fig = figSvg as MathaleaSVG
           if (!fig.hasMathaleaListener) {
-            fig.addEventListener('mouseover', mouseOverSvgEffect)
-            fig.addEventListener('mouseout', mouseOutSvgEffect)
+            fig.addEventListener('mouseenter', mouseOverSvgEffect)
+            fig.addEventListener('mouseleave', mouseOutSvgEffect)
             fig.addEventListener('click', mouseSvgClick)
             if (fig.etat === true) {
               // MGu : si l'état est true, c'est que ca a été coché par capytale
@@ -444,8 +444,8 @@ function verifQuestionCliqueFigure(
       if (eltFigure != null) {
         figures.push(eltFigure)
         const fig = eltFigure as MathaleaSVG
-        fig.removeEventListener('mouseover', mouseOverSvgEffect)
-        fig.removeEventListener('mouseout', mouseOutSvgEffect)
+        fig.removeEventListener('mouseenter', mouseOverSvgEffect)
+        fig.removeEventListener('mouseleave', mouseOutSvgEffect)
         fig.removeEventListener('click', mouseSvgClick)
         fig.hasMathaleaListener = false
         if (fig.etat) {
@@ -467,28 +467,28 @@ function verifQuestionCliqueFigure(
 }
 
 function mouseOverSvgEffect(event: MouseEvent) {
-  const elt = event.target as MathaleaSVG
+  const elt = event.currentTarget as MathaleaSVG
   elt.style.border = '3px solid #1DA962'
 }
 
 function mouseOutSvgEffect(event: MouseEvent) {
-  const elt = event.target as MathaleaSVG
+  const elt = event.currentTarget as MathaleaSVG
   elt.style.border = '3px solid transparent'
 }
 
 function mouseSvgClick(event: MouseEvent) {
-  const elt = event.target as MathaleaSVG
+  const elt = event.currentTarget as MathaleaSVG
   if (elt.etat) {
     // Déja choisi, donc on le réinitialise
     elt.style.border = '3px solid transparent'
-    elt.addEventListener('mouseover', mouseOverSvgEffect)
-    elt.addEventListener('mouseout', mouseOutSvgEffect)
+    elt.addEventListener('mouseenter', mouseOverSvgEffect)
+    elt.addEventListener('mouseleave', mouseOutSvgEffect)
     elt.addEventListener('click', mouseSvgClick)
     elt.etat = false
   } else {
     // Passe à l'état choisi donc on désactive les listenners pour over et pour out
-    elt.removeEventListener('mouseover', mouseOverSvgEffect)
-    elt.removeEventListener('mouseout', mouseOutSvgEffect)
+    elt.removeEventListener('mouseenter', mouseOverSvgEffect)
+    elt.removeEventListener('mouseleave', mouseOutSvgEffect)
     elt.style.border = '3px solid #f15929'
     elt.etat = true
   }

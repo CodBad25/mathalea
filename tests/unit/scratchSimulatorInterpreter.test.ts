@@ -225,6 +225,50 @@ describe('ScratchInterpreter', () => {
     expect(snapshots).toContain(4)
   })
 
+  it('expose les compteurs d iterations pour les boucles repeat imbriquees', async () => {
+    const interpreter = new ScratchInterpreter(200, 200, 90)
+    const code = `\\begin{scratch}[blocks]
+\\blockvariable{mettre \\selectmenu{c} à \\ovalnum{0}}
+\\blockrepeat{répéter \\ovalnum{2} fois}{
+\\blockrepeat{répéter \\ovalnum{3} fois}{
+\\blockvariable{Ajouter \\ovalnum{1} à \\ovalvariable{c}}
+}
+}
+\\end{scratch}`
+
+    const iterationSnapshots: Array<string> = []
+
+    const result = await interpreter.executeAnimated(
+      code,
+      () => {
+        const iterations = interpreter.getCurrentState().repeatIterations ?? []
+        if (iterations.length > 0) {
+          iterationSnapshots.push(
+            iterations
+              .map(
+                (it) =>
+                  `${it.level}:${it.current}/${it.total === null ? '?' : it.total}`,
+              )
+              .join('|'),
+          )
+        }
+      },
+      0,
+    )
+
+    expect(result.variables.c).toBe(6)
+    expect(iterationSnapshots.some((entry) => entry.includes('1:1/2'))).toBe(
+      true,
+    )
+    expect(iterationSnapshots.some((entry) => entry.includes('2:1/3'))).toBe(
+      true,
+    )
+    expect(iterationSnapshots.some((entry) => entry.includes('2:3/3'))).toBe(
+      true,
+    )
+    expect(result.repeatIterations).toEqual([])
+  })
+
   it('gere blockifelse avec condition vraie', () => {
     const interpreter = new ScratchInterpreter(200, 200, 90)
     const code = `\\begin{scratch}[blocks]
