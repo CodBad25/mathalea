@@ -3,7 +3,6 @@ import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
 
 import { randint } from '../../modules/outils'
-// import ExerciceQcmA from '../../ExerciceQcmA'
 import ExerciceQcmA from '../ExerciceQcmA'
 
 export const uuid = 'c091a'
@@ -17,7 +16,6 @@ export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = "Calculer le double ou le triple d'un nombre écrit avec une puissance"
 export const dateDePublication = '14/02/2026'
-// Ceci est un exemple de QCM avec version originale et version aléatoire
 /**
  *
  * @author Gilles Mora
@@ -26,12 +24,12 @@ export const dateDePublication = '14/02/2026'
 export default class Auto1AC3j extends ExerciceQcmA {
   private appliquerLesValeurs(a: number, n: number, choix: string): void {
     this.enonce = `Le ${choix} de  $${texNombre(a*a, 0)}^{${n}}$ est égal à :`
-
+    const k = choix === 'double' ? 2 : 3
     this.correction = `On a $${a*a}=${a}^{2}$ donc :<br>
     $\\begin{aligned}
-    \\text{${choix==='double' ? `Le double de ` : `Le triple de `} } ${texNombre(a*a, 0)}^{${n}} & = 2 \\times ${texNombre(a*a, 0)}^{${n}} \\\\
-    & = 2\\times ${choix==='double' ? ` \\left(2^{2}\\right)^{${n}}` : `\\left(3^{2}\\right)^{${n}}`} \\\\
-    &=2\\times ${choix==='double' ? ` 2^{${2*n}}` : `3^{${2*n}}`} \\\\
+    \\text{${choix==='double' ? `Le double de ` : `Le triple de `} } ${texNombre(a*a, 0)}^{${n}} & = ${k} \\times ${texNombre(a*a, 0)}^{${n}} \\\\
+    & = ${k}\\times ${choix==='double' ? ` \\left(2^{2}\\right)^{${n}}` : `\\left(3^{2}\\right)^{${n}}`} \\\\
+    &=${k}\\times ${choix==='double' ? ` 2^{${2*n}}` : `3^{${2*n}}`} \\\\
     &=${choix==='double' ? `${miseEnEvidence(`2^{${2*n+1}}`)}` : `${miseEnEvidence(`3^{${2*n+1}}`)}`} \\\\
     \\end{aligned}$
     `
