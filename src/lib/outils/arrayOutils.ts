@@ -474,6 +474,38 @@ export function shuffle3tableaux<T, U, V>(
 }
 
 /**
+ * Mélange les items de trois tableaux de la même manière
+ *
+ *
+ */
+export function shuffle4tableaux<T, U, V, W>(
+  obj1: T[],
+  obj2: U[],
+  obj3: V[],
+  obj4: W[],
+): void {
+  let index = obj1.length
+  let rnd, tmp1, tmp2, tmp3, tmp4
+
+  while (index) {
+    rnd = Math.floor(Math.random() * index)
+    index -= 1
+    tmp1 = obj1[index]
+    tmp2 = obj2[index]
+    tmp3 = obj3[index]
+    tmp4 = obj4[index]
+    obj1[index] = obj1[rnd]
+    obj2[index] = obj2[rnd]
+    obj3[index] = obj3[rnd]
+    obj4[index] = obj4[rnd]
+    obj1[rnd] = tmp1
+    obj2[rnd] = tmp2
+    obj3[rnd] = tmp3
+    obj4[rnd] = tmp4
+  }
+}
+
+/**
  * Concatène liste à elle-même en changeant l'ordre à chaque cycle
  * @param {Array | ReadonlyArray} liste - Un tableau
  * @param {number} tailleMinimale - La taille minimale du tableau de sortie

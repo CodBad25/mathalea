@@ -18,6 +18,12 @@ export interface ExecutionResult {
   currentInstruction?: string
   currentInstructionScratchHtml?: string
   currentInstructionIndex?: number
+  repeatIterations?: Array<{
+    level: number
+    current: number
+    total: number | null
+    mode: 'times' | 'until'
+  }>
 }
 
 type CodeBlockNode = {
@@ -46,6 +52,12 @@ export class ScratchInterpreter {
   private currentInstruction: string = ''
   private currentInstructionScratchHtml: string = ''
   private currentInstructionIndex: number = -1
+  private repeatIterations: Array<{
+    mode: 'times' | 'until'
+    current: number
+    total: number | null
+  }> = []
+
   private onUpdate?: () => void | Promise<void>
   public onAskInput?: (prompt: string) => Promise<string> // Callback pour demander un input utilisateur
 
@@ -63,6 +75,7 @@ export class ScratchInterpreter {
     this.stopped = false
     this.answer = ''
     this.currentInstructionIndex = -1
+    this.repeatIterations = []
 
     // D'abord, extraire les définitions de blocs personnalisés
     const codeWithoutDefinitions = this.parseCustomBlockDefinitions(scratchCode)
@@ -80,6 +93,7 @@ export class ScratchInterpreter {
       currentInstruction: this.currentInstruction,
       currentInstructionScratchHtml: this.currentInstructionScratchHtml,
       currentInstructionIndex: this.currentInstructionIndex,
+      repeatIterations: this.getRepeatIterationsState(),
     }
   }
 
@@ -96,6 +110,7 @@ export class ScratchInterpreter {
     this.answer = ''
     this.onUpdate = onUpdate
     this.currentInstructionIndex = -1
+    this.repeatIterations = []
 
     const codeWithoutDefinitions = this.parseCustomBlockDefinitions(scratchCode)
 
@@ -113,6 +128,7 @@ export class ScratchInterpreter {
       currentInstruction: this.currentInstruction,
       currentInstructionScratchHtml: this.currentInstructionScratchHtml,
       currentInstructionIndex: this.currentInstructionIndex,
+      repeatIterations: this.getRepeatIterationsState(),
     }
   }
 
@@ -127,7 +143,22 @@ export class ScratchInterpreter {
       currentInstruction: this.currentInstruction,
       currentInstructionScratchHtml: this.currentInstructionScratchHtml,
       currentInstructionIndex: this.currentInstructionIndex,
+      repeatIterations: this.getRepeatIterationsState(),
     }
+  }
+
+  private getRepeatIterationsState(): Array<{
+    level: number
+    current: number
+    total: number | null
+    mode: 'times' | 'until'
+  }> {
+    return this.repeatIterations.map((entry, index) => ({
+      level: index + 1,
+      current: entry.current,
+      total: entry.total,
+      mode: entry.mode,
+    }))
   }
 
   private parseCustomBlockDefinitions(code: string): string {
@@ -337,14 +368,26 @@ export class ScratchInterpreter {
         let iterationCount = 0
         const maxIterations = 10000 // Sécurité contre boucles infinies
 
+        this.repeatIterations.push({
+          mode: 'until',
+          current: 0,
+          total: null,
+        })
+
         while (iterationCount < maxIterations && !this.stopped) {
           const conditionMet = this.evaluateBoolOperator(boolCondition)
           if (conditionMet === true) {
             break
           }
+          const loopLevel = this.repeatIterations.length - 1
+          if (loopLevel >= 0) {
+            this.repeatIterations[loopLevel].current = iterationCount + 1
+          }
           this.parseAndExecute(innerCode)
           iterationCount++
         }
+
+        this.repeatIterations.pop()
 
         index = innerCodeEnd + 1
       } else {
@@ -385,9 +428,21 @@ export class ScratchInterpreter {
 
         const innerCode = code.substring(contentStart + 1, innerCodeEnd).trim()
 
+        this.repeatIterations.push({
+          mode: 'times',
+          current: 0,
+          total: times,
+        })
+
         for (let i = 0; i < times && !this.stopped; i++) {
+          const loopLevel = this.repeatIterations.length - 1
+          if (loopLevel >= 0) {
+            this.repeatIterations[loopLevel].current = i + 1
+          }
           this.parseAndExecute(innerCode)
         }
+
+        this.repeatIterations.pop()
 
         index = innerCodeEnd + 1
       }
@@ -573,14 +628,26 @@ export class ScratchInterpreter {
         let iterationCount = 0
         const maxIterations = 10000
 
+        this.repeatIterations.push({
+          mode: 'until',
+          current: 0,
+          total: null,
+        })
+
         while (iterationCount < maxIterations && !this.stopped) {
           const conditionMet = this.evaluateBoolOperator(boolCondition)
           if (conditionMet === true) {
             break
           }
+          const loopLevel = this.repeatIterations.length - 1
+          if (loopLevel >= 0) {
+            this.repeatIterations[loopLevel].current = iterationCount + 1
+          }
           await this.parseAndExecuteAnimated(innerCode, delayMs)
           iterationCount++
         }
+
+        this.repeatIterations.pop()
 
         index = innerCodeEnd + 1
       } else {
@@ -616,9 +683,21 @@ export class ScratchInterpreter {
 
         const innerCode = code.substring(contentStart + 1, innerCodeEnd).trim()
 
+        this.repeatIterations.push({
+          mode: 'times',
+          current: 0,
+          total: times,
+        })
+
         for (let i = 0; i < times && !this.stopped; i++) {
+          const loopLevel = this.repeatIterations.length - 1
+          if (loopLevel >= 0) {
+            this.repeatIterations[loopLevel].current = i + 1
+          }
           await this.parseAndExecuteAnimated(innerCode, delayMs)
         }
+
+        this.repeatIterations.pop()
 
         index = innerCodeEnd + 1
       }
@@ -1840,7 +1919,7 @@ export class ScratchSimulator extends HTMLElement {
     this.stepDiv = document.createElement('div')
     this.stepDiv.className = 'text-sm text-gray-600 mb-2'
     this.stepDiv.id = 'execution-step'
-    this.stepDiv.textContent = 'Instruction: -'
+    this.stepDiv.textContent = 'Prêt à exécuter (cliquez sur ▶)'
 
     // Bouton de contrôle play/pause
     this.controlButton = document.createElement('button')
@@ -2453,8 +2532,8 @@ export class ScratchSimulator extends HTMLElement {
   private displayInfo(result: ExecutionResult): void {
     if (!this.infoDiv) return
 
-    let html = `<div class="space-y-2"><p><strong>Position&nbsp:</strong> x=${Math.round(result.finalX - 200)}, y=${Math.round(200 - result.finalY)}.</p>`
-    html += `<p><strong>Angle&nbsp:</strong> ${Math.round(result.finalAngle)}°.</p><p><strong>Traces&nbsp:</strong> ${result.traces.length} ligne(s).</p>`
+    let html = `<div class="space-y-2"><p><strong>Position&nbsp:</strong> x=${Math.round(result.finalX - 200)}, y=${Math.round(200 - result.finalY)}</p>`
+    html += `<p><strong>Angle&nbsp:</strong> ${Math.round(result.finalAngle)}°</p><p><strong>Traces&nbsp:</strong> ${result.traces.length} ligne${result.traces.length > 1 ? 's' : ''}</p>`
 
     if (Object.keys(result.variables).length > 0) {
       html += '<p><strong>Variables&nbsp:</strong><br/>'
@@ -2466,6 +2545,22 @@ export class ScratchSimulator extends HTMLElement {
 
     if (result.messages.length > 0) {
       html += `<p><strong>Messages&nbsp:</strong> ${result.messages.join(', ')}</p>`
+    }
+
+    const iterations = result.repeatIterations ?? []
+    if (iterations.length > 0) {
+      const columns = Math.min(Math.max(iterations.length, 1), 4)
+      html += '<div><strong>Itérations&nbsp;:</strong>'
+      html += `<div style="display:grid;grid-template-columns:repeat(${columns}, minmax(0, 1fr));gap:0.35rem;margin-top:0.25rem;">`
+      iterations.forEach((iteration) => {
+        const label =
+          iteration.mode === 'times'
+            ? `${iteration.current}/${iteration.total ?? '?'}`
+            : `${iteration.current}`
+        const modeLabel = iteration.mode === 'times' ? 'fois' : "jusqu'à"
+        html += `<div style="border:1px solid #d1d5db;border-radius:0.25rem;padding:0.25rem 0.4rem;"><span style="font-weight:600;">B${iteration.level}</span> : ${label} <span style="color:#6b7280;">(${modeLabel})</span></div>`
+      })
+      html += '</div></div>'
     }
 
     html += '</div>'
@@ -2485,7 +2580,7 @@ export class ScratchSimulator extends HTMLElement {
         result.currentInstructionScratchHtml
       renderScratchDiv(this.stepDiv)
     } else {
-      this.stepDiv.textContent = 'Instruction : -'
+      this.stepDiv.textContent = '' // 'Instruction : -'
     }
   }
 
