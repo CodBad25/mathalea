@@ -56,7 +56,7 @@
     get(exercicesParams)[exerciseIndex]
   let columnsCount = interfaceParams?.cols || 1
 
-  let debug = false
+  let debug = new URL(window.location.href).searchParams.get('log') === '6'
   function log(str: string, level: number = 3) {
     if (debug || window.logDebug >= level) {
       console.info(str)
@@ -105,7 +105,6 @@
   async function forceUpdate() {
     if (exercise == null) return
     exercise.numeroExercice = exerciseIndex
-    await adjustMathalea2dFiguresWidth()
   }
 
   function updateAnswers() {
@@ -164,23 +163,44 @@
     document.addEventListener('setAllInteractif', setAllInteractif)
     document.addEventListener('removeAllInteractif', removeAllInteractif)
     document.addEventListener('updateAsyncEx', forceUpdate)
-    updateDisplay()
-    if ($globalOptions.setInteractive === '1') {
+
+    if (
+      $globalOptions.setInteractive === '1' &&
+      isInteractif === false &&
+      exercise?.interactifReady
+    ) {
       setAllInteractif()
-    } else if ($globalOptions.setInteractive === '0') {
+    } else if (
+      $globalOptions.setInteractive === '0' &&
+      isInteractif === true &&
+      exercise?.interactifReady
+    ) {
       removeAllInteractif()
+    } else {
+      updateInterfaceParamsAndReLoadExerciseIfNeed()
     }
     log('End onMount:' + exercise.id + ', v:' + $globalOptions.v)
   })
 
   beforeUpdate(async () => {
     log('beforeUpdate:' + exercise.id + ', v:' + $globalOptions.v)
-    const count = countMathField(exercise)
-    if (count !== numberOfAnswerFields) {
-      numberOfAnswerFields = count
-      log('numberOfAnswerFields:' + numberOfAnswerFields)
-    }
   })
+
+  function generateFreshSeed(): string {
+    if (!exercise?.id || !isLocalStorageAvailable())
+      return mathaleaGenerateSeed()
+
+    let seed
+    let safety = 0
+    do {
+      seed = mathaleaGenerateSeed()
+      safety++
+    } while (
+      window.localStorage.getItem(`${exercise.id}|${seed}`) !== null &&
+      safety < 20
+    )
+    return seed
+  }
 
   afterUpdate(async () => {
     log('afterUpdate:' + exercise.id + ', v:' + $globalOptions.v)
@@ -201,48 +221,12 @@
         if (exercise.interactifType === 'cliqueFigure' && !isCorrectVisible) {
           prepareExerciceCliqueFigure(exercise)
         }
-
-        // Ne pas être noté sur un exercice dont on a déjà vu la correction
-        try {
-          if (
-            isLocalStorageAvailable() &&
-            exercise.id !== undefined &&
-            exercise.seed !== undefined &&
-            window.localStorage.getItem(`${exercise.id}|${exercise.seed}`) !=
-              null
-          ) {
-            newData()
-          }
-        } catch (e) {
-          console.error(e)
-        }
         time = window.performance.now()
-        log('localStorage:' + exerciseIndex + ':' + (time - starttime))
+        log('duration prepareExerciceCliqueFigure:' + (time - starttime))
       }
       updateAnswers()
       time = window.performance.now()
       log('duration updateAnswers:' + (time - starttime))
-    }
-    // affectation du zoom pour les figures scratch
-    const scratchDivs = divExercice.getElementsByClassName('scratchblocks')
-    for (const scratchDiv of scratchDivs) {
-      const svgDivs = scratchDiv.getElementsByTagName('svg')
-      for (const svg of svgDivs) {
-        if (svg.hasAttribute('data-width') === false) {
-          const originalWidth = svg.getAttribute('width')
-          svg.dataset.width = originalWidth ?? ''
-        }
-        if (svg.hasAttribute('data-height') === false) {
-          const originalHeight = svg.getAttribute('height')
-          svg.dataset.height = originalHeight ?? ''
-        }
-        const w =
-          Number(svg.getAttribute('data-width')) * Number($globalOptions.z)
-        const h =
-          Number(svg.getAttribute('data-height')) * Number($globalOptions.z)
-        svg.setAttribute('width', w.toString())
-        svg.setAttribute('height', h.toString())
-      }
     }
     document.dispatchEvent(exercicesAffiches)
     if (isCorrectVisible) {
@@ -262,10 +246,10 @@
   })
 
   async function newData() {
+    log('newData:' + exercise.id + ', v:' + $globalOptions.v)
     exercise.isDone = false
     if (isCorrectVisible) switchCorrectionVisible(false)
-    const seed = mathaleaGenerateSeed()
-    exercise.seed = seed
+    exercise.seed = generateFreshSeed()
     if (buttonScore?.dataset?.capytaleLoadAnswers === '1') {
       // si les données ont été chargées par Capytale, on remet à 0
       buttonScore.dataset.capytaleLoadAnswers = '0'
@@ -280,31 +264,51 @@
         'pointer-events-none',
       )
     }
-    updateDisplay()
+    updateInterfaceParamsAndReLoadExerciseIfNeed()
   }
 
   async function setAllInteractif() {
     if (exercise?.interactifReady && !isInteractif) {
       isInteractif = true
-      updateDisplay()
+      if (
+        isLocalStorageAvailable() &&
+        exercise.id &&
+        exercise.seed &&
+        window.localStorage.getItem(`${exercise.id}|${exercise.seed}`)
+      ) {
+        newData()
+      } else {
+        updateInterfaceParamsAndReLoadExerciseIfNeed()
+      }
     }
   }
   async function removeAllInteractif() {
     if (exercise?.interactifReady && isInteractif) {
       isInteractif = false
-      updateDisplay()
+      updateInterfaceParamsAndReLoadExerciseIfNeed()
     }
   }
 
-  async function updateDisplay() {
-    log('updateDisplay:' + exercise.id + ', v:' + $globalOptions.v)
+  async function updateInterfaceParamsAndReLoadExerciseIfNeed() {
+    log(
+      'updateInterfaceParamsAndReLoadExercisesIfNeed:' +
+        exercise.id +
+        ', v:' +
+        $globalOptions.v,
+    )
     if (exercise.typeExercice === 'simple') {
-      if (exercise.seed === undefined) exercise.seed = mathaleaGenerateSeed()
+      if (exercise.seed === undefined) exercise.seed = generateFreshSeed()
       seedrandom(exercise.seed, { global: true })
       mathaleaHandleExerciceSimple(exercise, !!isInteractif, exerciseIndex)
     }
     exercise.interactif = isInteractif
     if (interfaceParams) {
+      log(
+        'updateDisplay: before interfaceParams for index ' +
+          exerciseIndex +
+          ': ' +
+          JSON.stringify(interfaceParams),
+      )
       let changed = false
 
       if (interfaceParams.alea !== exercise.seed) {
@@ -331,7 +335,7 @@
       }
       if (changed) {
         log(
-          'updateDisplay: updating exercicesParams for index ' +
+          'updateDisplay: updating interfaceParams for index ' +
             exerciseIndex +
             ': ' +
             JSON.stringify(interfaceParams),
@@ -352,7 +356,7 @@
       exercise.typeExercice !== 'simple' &&
       typeof exercise.nouvelleVersionWrapper === 'function'
     ) {
-      if (exercise.seed === undefined) exercise.seed = mathaleaGenerateSeed()
+      if (exercise.seed === undefined) exercise.seed = generateFreshSeed()
       log('nouvelleVersionWrapper:' + exercise.id + ', v:' + $globalOptions.v)
       seedrandom(exercise.seed, { global: true })
       exercise.nouvelleVersionWrapper(exerciseIndex)
@@ -360,7 +364,6 @@
     numberOfAnswerFields = countMathField(exercise)
     log('numberOfAnswerFields:' + numberOfAnswerFields)
     mathaleaUpdateUrlFromExercicesParams()
-    await adjustMathalea2dFiguresWidth()
   }
 
   async function verifExerciceVueEleve() {
@@ -480,12 +483,9 @@
   /**
    * Recherche toutes les figures ayant la classe `mathalea2d` et réduit leur largeur à 95% de la valeur
    * maximale du div reperé par l'ID `consigne<X>-0` où `X` est l'indice de l'exercice
-   * @param {boolean} initialDimensionsAreNeeded si `true`, les valeurs initiales sont rechargées ()`false` par défaut)
    * @author sylvain
    */
-  async function adjustMathalea2dFiguresWidth(
-    initialDimensionsAreNeeded: boolean = false,
-  ) {
+  function adjustMathalea2dFiguresWidth() {
     const mathalea2dFigures: NodeListOf<SVGElement> | undefined =
       divExercice?.querySelectorAll<SVGElement>('.mathalea2d')
     if (!mathalea2dFigures || mathalea2dFigures.length === 0) return
@@ -494,44 +494,6 @@
     log('zoom:' + zoom)
     if (mathalea2dFigures.length !== 0) {
       for (let k = 0; k < mathalea2dFigures.length; k++) {
-        if (initialDimensionsAreNeeded) {
-          // réinitialisation
-          const initialWidth = mathalea2dFigures[k].getAttribute(
-            'data-width-initiale',
-          )
-          const initialHeight = mathalea2dFigures[k].getAttribute(
-            'data-height-initiale',
-          )
-          mathalea2dFigures[k].setAttribute(
-            'width',
-            (Number(initialWidth) * zoom).toString(),
-          )
-          mathalea2dFigures[k].setAttribute(
-            'height',
-            (Number(initialHeight) * zoom).toString(),
-          )
-          // les éléments Katex des figures SVG
-          if (
-            mathalea2dFigures[k] != null &&
-            mathalea2dFigures[k].parentElement != null
-          ) {
-            const eltsInFigures =
-              mathalea2dFigures[k].parentElement?.querySelectorAll<HTMLElement>(
-                'div.divLatex',
-              ) || []
-            for (const elt of eltsInFigures) {
-              const e = elt
-              e.style.setProperty(
-                'top',
-                (Number(e.dataset.top) * zoom).toString() + 'px',
-              )
-              e.style.setProperty(
-                'left',
-                (Number(e.dataset.left) * zoom).toString() + 'px',
-              )
-            }
-          }
-        }
         /* Mickael:
           Ne surtout pas mettre la référence de l'exercice dans la requête suivante,
           car dans svelte, la référence est liée au dernier exercice chargé, ce qui bug!
@@ -545,7 +507,7 @@
         ) {
           const coef =
             (consigneDiv.clientWidth * 0.95) / mathalea2dFigures[k].clientWidth
-          // console.log('coef:' + coef )
+
           const width = mathalea2dFigures[k].getAttribute('width')
           const height = mathalea2dFigures[k].getAttribute('height')
           if (!mathalea2dFigures[k].dataset.widthInitiale && width != null)
@@ -598,7 +560,7 @@
 
   // pour recalculer les tailles lors d'un changement de dimension de la fenêtre
   window.onresize = () => {
-    adjustMathalea2dFiguresWidth(true)
+    adjustMathalea2dFiguresWidth()
   }
 
   function switchCorrectionVisible(newdata: boolean = true) {
@@ -619,20 +581,29 @@
     ) {
       newData()
     }
-    if (newdata) adjustMathalea2dFiguresWidth()
   }
 
   function switchInteractif() {
     if (isCorrectVisible) switchCorrectionVisible()
     isInteractif = !isInteractif
     exercise.interactif = isInteractif
-    updateDisplay()
+    if (
+      isInteractif &&
+      isLocalStorageAvailable() &&
+      exercise.id &&
+      exercise.seed &&
+      window.localStorage.getItem(`${exercise.id}|${exercise.seed}`)
+    ) {
+      newData()
+    } else {
+      updateInterfaceParamsAndReLoadExerciseIfNeed()
+    }
   }
 
   function columnsCountUpdate(plusMinus: '+' | '-') {
     if (plusMinus === '+') columnsCount++
     if (plusMinus === '-') columnsCount--
-    updateDisplay()
+    updateInterfaceParamsAndReLoadExerciseIfNeed()
   }
 </script>
 
@@ -651,7 +622,7 @@
 
   <div class="flex flex-col-reverse lg:flex-row">
     <div
-      class="flex flex-col justify-start items-start"
+      class="flex flex-col justify-start items-start w-full"
       id="exercice{exerciseIndex}"
     >
       <ExerciceVueEleveButtons
