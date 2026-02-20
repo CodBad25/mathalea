@@ -901,6 +901,7 @@ export function mathaleaHandleExerciceSimple(
   exercice: IExercice,
   isInteractif: boolean,
   numeroExercice?: number,
+  seed?: string,
 ) {
   if (numeroExercice !== undefined) exercice.numeroExercice = numeroExercice
   exercice.reinit()
@@ -909,7 +910,7 @@ export function mathaleaHandleExerciceSimple(
     let i = 0, cptSecours = 0;
     i < exercice.nbQuestions && cptSecours < 50;
   ) {
-    seedrandom(String(exercice.seed) + i + cptSecours, { global: true })
+    seedrandom(seed ?? String(exercice.seed) + i + cptSecours, { global: true })
     if (
       exercice.nouvelleVersion &&
       typeof exercice.nouvelleVersion === 'function'

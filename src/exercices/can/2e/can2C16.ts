@@ -151,7 +151,7 @@ export default class ProgrammeCalcul2 extends ExerciceSimple {
 
       case 5: // 1/x+1/y
         a = randint(-10, 10, 0)
-        b = randint(-4, 4, 0) * a
+        b = randint(-4, 4, [-1, 0]) * a // b + a ne doit pas être nul
         f1 = new FractionEtendue(1, a)
         f2 = new FractionEtendue(1, b)
         reponse = f1.sommeFraction(f2).simplifie()
