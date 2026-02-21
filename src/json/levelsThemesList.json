@@ -2781,24 +2781,55 @@
   },
   "TSA1": {
     "titre": "Les suites numériques"
-     },
+  },
   "TSA1-1": {
     "titre": "Limites de suites"
   },
-   "TSA1-2": {
+  "TSA1-2": {
     "titre": "Raisonnement par récurrence"
   },
   "TSA1-3": {
     "titre": "Synthèse"
   },
   "TSA2": {
-    "titre": "Compléments sur la dérivation"
-  },
-  "TSA3": {
     "titre": "Limites de fonctions"
   },
+  "TSA2-1": {
+    "titre": "Limites finies, infinies. Asymptotes"
+  },
+  "TSA2-2": {
+    "titre": "Limites de fonctions de référence"
+  },
+  "TSA2-3": {
+    "titre": "Opérations sur les limites"
+  },
+  "TSA2-4": {
+    "titre": "Limites et comparaisons"
+  },
+  "TSA3": {
+    "titre": "Complément sur la dérivation"
+  },
+  "TSA3-1": {
+    "titre": "Composée de deux fonctions, dérivée d'une composée"
+  },
+  "TSA3-2": {
+    "titre": "Convexité"
+  },
+
   "TSA4": {
     "titre": "Continuité des fonctions"
+  },
+  "TSA4-1": {
+    "titre": "Définition de la continuité"
+  },
+  "TSA4-2": {
+    "titre": "Image d'une suite convergente par une fonction continue"
+  },
+  "TSA4-3": {
+    "titre": "Théorème des valeurs intermédiaires"
+  },
+  "TSA4-4": {
+    "titre": "Synthèse"
   },
   "TSA5": {
     "titre": "Fonction logarithme népérien"
@@ -2806,21 +2837,49 @@
   "TSA5-1": {
     "titre": "Utiliser les propriétés algébriques du logarithme népérien"
   },
-   "TSA5-2": {
+  "TSA5-2": {
     "titre": "Résoudre des équations ou inéquations faisant intervenir le logarithme népérien"
   },
-   "TSA5-3": {
+  "TSA5-3": {
     "titre": "Etudier la fonction logarithme népérien"
   },
+  "TSA5-4": {
+    "titre": "Synthèse"
+  },
   "TSA6": {
-    "titre": "Primitives et équations différentielles"
-  },
-  "TSA7": {
-    "titre": "Intégration"
-  },
-  "TSA8": {
     "titre": "Fonction sinus et cosinus"
   },
+  "TSA6-1": {
+    "titre": "Equations et inéquations trigonométriques"
+  },
+  "TSA6-2": {
+    "titre": "Etude de la fonction sinus et cosinus"
+  },
+  "TSA7": {
+    "titre": "Primitives et équations différentielles"
+  },
+  "TSA7-1": {
+    "titre": "Primitives d'une fonction"
+  },
+  "TSA7-2": {
+    "titre": "Équations différentielles"
+  },
+  "TSA8": {
+    "titre": "Intégration"
+  },
+  "TSA8-1": {
+    "titre": "Définition - Notations"
+  },
+  "TSA8-2": {
+    "titre": "Calculm intégral et primitives"
+  },
+  "TSA8-3": {
+    "titre": "Propriétés des intégrales, inégalités, Chasles et moyenne"
+  },
+  "TSA8-4": {
+    "titre": "Intégration par parties"
+  },
+
   "TSP1": {
     "titre": "Variables aléatoires discrètes finies"
   },
@@ -2839,20 +2898,20 @@
   "TSG2-1": {
     "titre": "Manipuler vecteurs et repères de l'espace"
   },
- 
-   "TSG2-2": {
+
+  "TSG2-2": {
     "titre": "Orthogonalité et distance dans l'espace"
   },
-    "TSG2-3": {
-      "titre": "Représentation paramétrique de droite dans l'espace"
-    },
-    "TSG2-4": {
-      "titre": "Equation cartesienne de plan dans l'espace"
-    },
-    "TSG2-5": {
-      "titre": "Synthèse"
-    },
-  
+  "TSG2-3": {
+    "titre": "Représentation paramétrique de droite dans l'espace"
+  },
+  "TSG2-4": {
+    "titre": "Equation cartesienne de plan dans l'espace"
+  },
+  "TSG2-5": {
+    "titre": "Synthèse"
+  },
+
   "TEC1": {
     "titre": "Nombres complexes : algèbre",
     "sousThemes": {}

@@ -22,7 +22,7 @@ export const titre = 'Résoudre un problème avec le théorème du point fixe'
 export const uuid = '5d294'
 
 export const refs = {
-  'fr-fr': ['TSA4-03'],
+  'fr-fr': ['TSA4-41'],
   'fr-ch': [],
 }
 export default class ProblemePointFixe extends ExerciceSimple {

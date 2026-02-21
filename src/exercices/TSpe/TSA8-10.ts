@@ -2,7 +2,7 @@ import ExerciceVraiFaux from '../ExerciceVraiFaux'
 
 export const uuid = 'd4595'
 export const refs = {
-  'fr-fr': ['TSA6-8'],
+  'fr-fr': ['TSA8-10'],
   'fr-ch': [],
 }
 
