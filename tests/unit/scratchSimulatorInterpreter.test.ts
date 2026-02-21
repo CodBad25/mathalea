@@ -99,6 +99,31 @@ describe('ScratchInterpreter', () => {
     expect(result.finalY).toBe(195)
   })
 
+  it("trace avec stylo lors des blockmove 'ajouter ... a x/y'", () => {
+    const interpreter = new ScratchInterpreter(200, 200, 90)
+    const code = `\\begin{scratch}[blocks]
+\\blockpen{stylo en position d'écriture}
+\\blockmove{ajouter \\ovalnum{15} à x}
+\\blockmove{ajouter \\ovalnum{15} à y}
+\\end{scratch}`
+
+    const result = interpreter.execute(code)
+
+    expect(result.traces.length).toBe(2)
+    expect(result.traces[0]).toEqual({
+      startX: 200,
+      startY: 200,
+      endX: 215,
+      endY: 200,
+    })
+    expect(result.traces[1]).toEqual({
+      startX: 215,
+      startY: 200,
+      endX: 215,
+      endY: 185,
+    })
+  })
+
   it("gere blockmove 'mettre x a ...'", () => {
     const interpreter = new ScratchInterpreter(200, 200, 90)
     const code = `\\begin{scratch}[blocks]
@@ -336,6 +361,55 @@ describe('ScratchInterpreter', () => {
     expect(result.variables.resultat).toBe(0)
   })
 
+  it('gere blockif simple avec condition fausse (sync)', () => {
+    const interpreter = new ScratchInterpreter(200, 200, 90)
+    const code = `\\begin{scratch}[blocks]
+\\blockvariable{mettre \\selectmenu{x} à \\ovalnum{0}}
+\\blockif{si \\booloperator{\\ovalvariable{x} > 5} alors}{
+\\blockmove{ajouter \\ovalnum{15} à y}
+}
+\\blockmove{ajouter \\ovalnum{15} à x}
+\\end{scratch}`
+
+    const result = interpreter.execute(code)
+
+    expect(result.finalX).toBe(215)
+    expect(result.finalY).toBe(200)
+  })
+
+  it('gere blockif simple avec condition fausse (anime)', async () => {
+    const interpreter = new ScratchInterpreter(200, 200, 90)
+    const code = `\\begin{scratch}[blocks]
+\\blockvariable{mettre \\selectmenu{x} à \\ovalnum{0}}
+\\blockif{si \\booloperator{\\ovalvariable{x} > 5} alors}{
+\\blockmove{ajouter \\ovalnum{15} à y}
+}
+\\blockmove{ajouter \\ovalnum{15} à x}
+\\end{scratch}`
+
+    const instructions: string[] = []
+
+    const result = await interpreter.executeAnimated(
+      code,
+      () => {
+        const state = interpreter.getCurrentState()
+        if (state.currentInstruction) {
+          instructions.push(state.currentInstruction)
+        }
+      },
+      0,
+    )
+
+    expect(result.finalX).toBe(215)
+    expect(result.finalY).toBe(200)
+    expect(instructions.some((item) => item.includes('Ajouter 15 a y'))).toBe(
+      false,
+    )
+    expect(instructions.some((item) => item.includes('Ajouter 15 a x'))).toBe(
+      true,
+    )
+  })
+
   it('gere blockifelse avec operateurs comparaison', () => {
     const interpreter = new ScratchInterpreter(200, 200, 90)
     const code = `\\begin{scratch}[blocks]
@@ -355,6 +429,59 @@ describe('ScratchInterpreter', () => {
     expect(result.variables.egal).toBe(1)
   })
 
+  it('gere booloperator avec ovalmove abscisse x dans une condition ifelse', () => {
+    const interpreter = new ScratchInterpreter(200, 200, 90)
+    const code = `\\begin{scratch}[blocks]
+\\blockmove{aller à x:\\ovalnum{0} y:\\ovalnum{0}}
+\\blockrepeat{répéter \\ovalnum{4} fois}{
+\\blockifelse{si \\booloperator{\\ovalmove{abscisse x} < \\ovalnum{-30}} alors}{
+\\blockmove{ajouter \\ovalnum{15} à y}
+}{
+\\blockmove{ajouter \\ovalnum{-15} à x}
+}
+}
+\\end{scratch}`
+
+    const result = interpreter.execute(code)
+
+    expect(result.finalX).toBe(155)
+    expect(result.finalY).toBe(185)
+  })
+
+  it('gere booloperator avec ovalmove ordonnee y dans une condition ifelse', () => {
+    const interpreter = new ScratchInterpreter(200, 200, 90)
+    const code = `\\begin{scratch}[blocks]
+\\blockmove{aller à x:\\ovalnum{0} y:\\ovalnum{0}}
+\\blockifelse{si \\booloperator{\\ovalmove{ordonnée y} = \\ovalnum{0}} alors}{
+\\blockmove{ajouter \\ovalnum{15} à y}
+}{
+\\blockmove{ajouter \\ovalnum{15} à x}
+}
+\\end{scratch}`
+
+    const result = interpreter.execute(code)
+
+    expect(result.finalX).toBe(200)
+    expect(result.finalY).toBe(185)
+  })
+
+  it('gere booloperator avec ovalmove direction dans une condition ifelse', () => {
+    const interpreter = new ScratchInterpreter(200, 200, 90)
+    const code = `\\begin{scratch}[blocks]
+\\blockmove{s'orienter à \\ovalnum{-90}}
+\\blockifelse{si \\booloperator{\\ovalmove{direction} = \\ovalnum{-90}} alors}{
+\\blockmove{ajouter \\ovalnum{15} à x}
+}{
+\\blockmove{ajouter \\ovalnum{15} à y}
+}
+\\end{scratch}`
+
+    const result = interpreter.execute(code)
+
+    expect(result.finalX).toBe(215)
+    expect(result.finalY).toBe(200)
+  })
+
   it('gere blockifelse en mode anime', async () => {
     const interpreter = new ScratchInterpreter(200, 200, 90)
     const code = `\\begin{scratch}[blocks]
@@ -370,6 +497,141 @@ describe('ScratchInterpreter', () => {
 
     expect(result.variables.x).toBe(7)
     expect(result.variables.resultat).toBe(100)
+  })
+
+  describe('ifelse en mode anime', () => {
+    it('suit uniquement la branche active des ifelse imbriques', async () => {
+      const interpreter = new ScratchInterpreter(200, 200, 90)
+      const code = `\\begin{scratch}[blocks]
+\\blockvariable{mettre \\selectmenu{x} à \\ovalnum{2}}
+\\blockifelse{si \\booloperator{\\ovalvariable{x} > 5} alors}{
+\\blockvariable{mettre \\selectmenu{resultat} à \\ovalnum{1}}
+}{
+\\blockifelse{si \\booloperator{\\ovalvariable{x} = 2} alors}{
+\\blockvariable{mettre \\selectmenu{resultat} à \\ovalnum{42}}
+}{
+\\blockvariable{mettre \\selectmenu{resultat} à \\ovalnum{0}}
+}
+}
+\\blockmove{avancer de \\ovalnum{10} pas}
+\\end{scratch}`
+
+      const instructions: string[] = []
+      const indexes: number[] = []
+
+      const result = await interpreter.executeAnimated(
+        code,
+        () => {
+          const state = interpreter.getCurrentState()
+          if (state.currentInstruction) {
+            instructions.push(state.currentInstruction)
+          }
+          if (typeof state.currentInstructionIndex === 'number') {
+            indexes.push(state.currentInstructionIndex)
+          }
+        },
+        0,
+      )
+
+      expect(result.variables.resultat).toBe(42)
+      expect(result.finalX).toBe(210)
+      expect(
+        instructions.some((item) => item.includes('Mettre resultat a 42')),
+      ).toBe(true)
+      expect(
+        instructions.some((item) => item.includes('Mettre resultat a 1')),
+      ).toBe(false)
+      expect(
+        instructions.some((item) => item.includes('Mettre resultat a 0')),
+      ).toBe(false)
+      expect(Math.max(...indexes)).toBe(4)
+    })
+
+    it('suit uniquement la branche then quand la condition est vraie', async () => {
+      const interpreter = new ScratchInterpreter(200, 200, 90)
+      const code = `\\begin{scratch}[blocks]
+\\blockvariable{mettre \\selectmenu{x} à \\ovalnum{9}}
+\\blockifelse{si \\booloperator{\\ovalvariable{x} > 5} alors}{
+\\blockvariable{mettre \\selectmenu{resultat} à \\ovalnum{100}}
+}{
+\\blockifelse{si \\booloperator{\\ovalvariable{x} = 9} alors}{
+\\blockvariable{mettre \\selectmenu{resultat} à \\ovalnum{42}}
+}{
+\\blockvariable{mettre \\selectmenu{resultat} à \\ovalnum{0}}
+}
+}
+\\blockmove{avancer de \\ovalnum{5} pas}
+\\end{scratch}`
+
+      const instructions: string[] = []
+      const indexes: number[] = []
+
+      const result = await interpreter.executeAnimated(
+        code,
+        () => {
+          const state = interpreter.getCurrentState()
+          if (state.currentInstruction) {
+            instructions.push(state.currentInstruction)
+          }
+          if (typeof state.currentInstructionIndex === 'number') {
+            indexes.push(state.currentInstructionIndex)
+          }
+        },
+        0,
+      )
+
+      expect(result.variables.resultat).toBe(100)
+      expect(result.finalX).toBe(205)
+      expect(
+        instructions.some((item) => item.includes('Mettre resultat a 100')),
+      ).toBe(true)
+      expect(
+        instructions.some((item) => item.includes('Mettre resultat a 42')),
+      ).toBe(false)
+      expect(
+        instructions.some((item) => item.includes('Mettre resultat a 0')),
+      ).toBe(false)
+      expect(Math.max(...indexes)).toBe(3)
+    })
+
+    it('dans un repeat, suit les instructions enfants ifelse sans surligner le conteneur', async () => {
+      const interpreter = new ScratchInterpreter(200, 200, 90)
+      const code = `\\begin{scratch}[blocks]
+\\blockvariable{mettre \\selectmenu{compteur} à \\ovalnum{0}}
+\\blockrepeat{répéter \\ovalnum{3} fois}{
+\\blockifelse{si \\booloperator{\\ovalvariable{compteur} < 2} alors}{
+\\blockvariable{Ajouter \\ovalnum{1} à \\ovalvariable{compteur}}
+}{
+\\blockvariable{mettre \\selectmenu{resultat} à \\ovalnum{99}}
+}
+}
+\\end{scratch}`
+
+      const instructions: string[] = []
+
+      const result = await interpreter.executeAnimated(
+        code,
+        () => {
+          const state = interpreter.getCurrentState()
+          if (state.currentInstruction) {
+            instructions.push(state.currentInstruction)
+          }
+        },
+        0,
+      )
+
+      expect(result.variables.compteur).toBe(2)
+      expect(result.variables.resultat).toBe(99)
+      // Vérifier que les instructions atomiques apparaissent
+      expect(
+        instructions.some((item) => item.includes('Ajouter 1 a compteur')),
+      ).toBe(true)
+      expect(
+        instructions.some((item) => item.includes('Mettre resultat a 99')),
+      ).toBe(true)
+      // Le conteneur ifelse "si ... alors" devrait apparaître pendant l'évaluation de la condition
+      expect(instructions.some((item) => item.includes('si '))).toBe(true)
+    })
   })
 
   it('gere blockcontrol stop tout', () => {
@@ -534,5 +796,38 @@ describe('ScratchInterpreter', () => {
     const result = interpreter.execute(code)
 
     expect(result.messages).toEqual(['11'])
+  })
+
+  it('gere l operateur modulo avec %', () => {
+    const interpreter = new ScratchInterpreter(200, 200, 90)
+    const code = `\\begin{scratch}[blocks]
+\\blocklook{dire \\ovaloperator{17 % 5}}
+\\end{scratch}`
+
+    const result = interpreter.execute(code)
+
+    expect(result.messages).toEqual(['2'])
+  })
+
+  it('gere l operateur modulo avec mod', () => {
+    const interpreter = new ScratchInterpreter(200, 200, 90)
+    const code = `\\begin{scratch}[blocks]
+\\blocklook{dire \\ovaloperator{17 mod 5}}
+\\end{scratch}`
+
+    const result = interpreter.execute(code)
+
+    expect(result.messages).toEqual(['2'])
+  })
+
+  it('gere l operateur modulo avec modulo', () => {
+    const interpreter = new ScratchInterpreter(200, 200, 90)
+    const code = `\\begin{scratch}[blocks]
+\\blocklook{dire \\ovaloperator{17 modulo 5}}
+\\end{scratch}`
+
+    const result = interpreter.execute(code)
+
+    expect(result.messages).toEqual(['2'])
   })
 })

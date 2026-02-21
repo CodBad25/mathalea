@@ -52,6 +52,7 @@ export class ScratchInterpreter {
   private currentInstruction: string = ''
   private currentInstructionScratchHtml: string = ''
   private currentInstructionIndex: number = -1
+  private currentRawBlock: string = ''
   private repeatIterations: Array<{
     mode: 'times' | 'until'
     current: number
@@ -199,29 +200,35 @@ export class ScratchInterpreter {
     let index = 0
 
     while (index < code.length && !this.stopped) {
-      // Chercher blockrepeat et blockifelse
+      // Chercher blockrepeat, blockifelse et blockif
       const repeatStart = code.indexOf('\\blockrepeat{', index)
       const ifelseStart = code.indexOf('\\blockifelse{', index)
+      const ifStart = code.indexOf('\\blockif{', index)
 
       // Déterminer lequel vient en premier (-1 signifie non trouvé)
       let nextBlockStart = -1
-      let isIfElseBlock = false
+      let nextBlockType: 'repeat' | 'ifelse' | 'if' | null = null
 
-      if (repeatStart === -1 && ifelseStart === -1) {
+      if (repeatStart === -1 && ifelseStart === -1 && ifStart === -1) {
         // Aucun bloc structurel trouvé, exécuter le reste
         if (index < code.length) {
           this.parseNonRepeatBlocks(code.substring(index))
         }
         break
-      } else if (repeatStart === -1) {
-        nextBlockStart = ifelseStart
-        isIfElseBlock = true
-      } else if (ifelseStart === -1) {
-        nextBlockStart = repeatStart
-        isIfElseBlock = false
       } else {
-        nextBlockStart = Math.min(repeatStart, ifelseStart)
-        isIfElseBlock = ifelseStart < repeatStart
+        const candidates = [
+          { type: 'repeat' as const, start: repeatStart },
+          { type: 'ifelse' as const, start: ifelseStart },
+          { type: 'if' as const, start: ifStart },
+        ].filter((candidate) => candidate.start !== -1)
+
+        if (candidates.length === 0) {
+          break
+        }
+
+        candidates.sort((a, b) => a.start - b.start)
+        nextBlockStart = candidates[0].start
+        nextBlockType = candidates[0].type
       }
 
       // Exécuter ce qui précède le bloc structurel
@@ -229,18 +236,15 @@ export class ScratchInterpreter {
         this.parseNonRepeatBlocks(code.substring(index, nextBlockStart))
       }
 
-      if (isIfElseBlock) {
+      if (nextBlockType === 'ifelse') {
         // Traiter blockifelse{si \booloperator{...} alors}{bloc then}{bloc else}
         // Trouver la fin de l'en-tête
         let headerEnd = ifelseStart + 13
         let headerBraceCount = 1
         while (headerEnd < code.length && headerBraceCount > 0) {
-          if (code[headerEnd] === '{' && code[headerEnd - 1] !== '\\\\') {
+          if (code[headerEnd] === '{' && code[headerEnd - 1] !== '\\') {
             headerBraceCount++
-          } else if (
-            code[headerEnd] === '}' &&
-            code[headerEnd - 1] !== '\\\\'
-          ) {
+          } else if (code[headerEnd] === '}' && code[headerEnd - 1] !== '\\') {
             headerBraceCount--
           }
           headerEnd++
@@ -259,9 +263,9 @@ export class ScratchInterpreter {
         let thenEnd = -1
 
         while (pos < code.length && braceCount > 0) {
-          if (code[pos] === '{' && code[pos - 1] !== '\\\\') {
+          if (code[pos] === '{' && code[pos - 1] !== '\\') {
             braceCount++
-          } else if (code[pos] === '}' && code[pos - 1] !== '\\\\') {
+          } else if (code[pos] === '}' && code[pos - 1] !== '\\') {
             braceCount--
             if (braceCount === 0) {
               thenEnd = pos
@@ -283,9 +287,9 @@ export class ScratchInterpreter {
         let elseEnd = -1
 
         while (pos < code.length && braceCount > 0) {
-          if (code[pos] === '{' && code[pos - 1] !== '\\\\') {
+          if (code[pos] === '{' && code[pos - 1] !== '\\') {
             braceCount++
-          } else if (code[pos] === '}' && code[pos - 1] !== '\\\\') {
+          } else if (code[pos] === '}' && code[pos - 1] !== '\\') {
             braceCount--
             if (braceCount === 0) {
               elseEnd = pos
@@ -310,6 +314,55 @@ export class ScratchInterpreter {
         continue
       }
 
+      if (nextBlockType === 'if') {
+        // Traiter blockif{si \booloperator{...} alors}{bloc then}
+        let headerEnd = ifStart + 9
+        let headerBraceCount = 1
+        while (headerEnd < code.length && headerBraceCount > 0) {
+          if (code[headerEnd] === '{' && code[headerEnd - 1] !== '\\') {
+            headerBraceCount++
+          } else if (code[headerEnd] === '}' && code[headerEnd - 1] !== '\\') {
+            headerBraceCount--
+          }
+          headerEnd++
+        }
+
+        if (headerBraceCount !== 0) break
+
+        const conditionHeader = code.substring(ifStart + 9, headerEnd - 1)
+
+        const thenStart = code.indexOf('{', headerEnd - 1)
+        if (thenStart === -1) break
+
+        let braceCount = 1
+        let pos = thenStart + 1
+        let thenEnd = -1
+
+        while (pos < code.length && braceCount > 0) {
+          if (code[pos] === '{' && code[pos - 1] !== '\\') {
+            braceCount++
+          } else if (code[pos] === '}' && code[pos - 1] !== '\\') {
+            braceCount--
+            if (braceCount === 0) {
+              thenEnd = pos
+            }
+          }
+          pos++
+        }
+
+        if (thenEnd === -1) break
+
+        const thenCode = code.substring(thenStart + 1, thenEnd).trim()
+
+        const conditionMet = this.evaluateBoolOperator(conditionHeader)
+        if (conditionMet === true) {
+          this.parseAndExecute(thenCode)
+        }
+
+        index = thenEnd + 1
+        continue
+      }
+
       // Traiter blockrepeat (code existant)
 
       // Détecter le type de blockrepeat
@@ -323,12 +376,9 @@ export class ScratchInterpreter {
         let headerEnd = repeatStart + 13
         let headerBraceCount = 1
         while (headerEnd < code.length && headerBraceCount > 0) {
-          if (code[headerEnd] === '{' && code[headerEnd - 1] !== '\\\\') {
+          if (code[headerEnd] === '{' && code[headerEnd - 1] !== '\\') {
             headerBraceCount++
-          } else if (
-            code[headerEnd] === '}' &&
-            code[headerEnd - 1] !== '\\\\'
-          ) {
+          } else if (code[headerEnd] === '}' && code[headerEnd - 1] !== '\\') {
             headerBraceCount--
           }
           headerEnd++
@@ -349,9 +399,9 @@ export class ScratchInterpreter {
         let innerCodeEnd = -1
 
         while (pos < code.length && braceCount > 0) {
-          if (code[pos] === '{' && code[pos - 1] !== '\\\\') {
+          if (code[pos] === '{' && code[pos - 1] !== '\\') {
             braceCount++
-          } else if (code[pos] === '}' && code[pos - 1] !== '\\\\') {
+          } else if (code[pos] === '}' && code[pos - 1] !== '\\') {
             braceCount--
             if (braceCount === 0) {
               innerCodeEnd = pos
@@ -456,15 +506,16 @@ export class ScratchInterpreter {
     let index = 0
 
     while (index < code.length && !this.stopped) {
-      // Chercher blockrepeat et blockifelse
+      // Chercher blockrepeat, blockifelse et blockif
       const repeatStart = code.indexOf('\\blockrepeat{', index)
       const ifelseStart = code.indexOf('\\blockifelse{', index)
+      const ifStart = code.indexOf('\\blockif{', index)
 
       // Déterminer lequel vient en premier
       let nextBlockStart = -1
-      let isIfElseBlock = false
+      let nextBlockType: 'repeat' | 'ifelse' | 'if' | null = null
 
-      if (repeatStart === -1 && ifelseStart === -1) {
+      if (repeatStart === -1 && ifelseStart === -1 && ifStart === -1) {
         if (index < code.length) {
           await this.parseNonRepeatBlocksAnimated(
             code.substring(index),
@@ -472,15 +523,20 @@ export class ScratchInterpreter {
           )
         }
         break
-      } else if (repeatStart === -1) {
-        nextBlockStart = ifelseStart
-        isIfElseBlock = true
-      } else if (ifelseStart === -1) {
-        nextBlockStart = repeatStart
-        isIfElseBlock = false
       } else {
-        nextBlockStart = Math.min(repeatStart, ifelseStart)
-        isIfElseBlock = ifelseStart < repeatStart
+        const candidates = [
+          { type: 'repeat' as const, start: repeatStart },
+          { type: 'ifelse' as const, start: ifelseStart },
+          { type: 'if' as const, start: ifStart },
+        ].filter((candidate) => candidate.start !== -1)
+
+        if (candidates.length === 0) {
+          break
+        }
+
+        candidates.sort((a, b) => a.start - b.start)
+        nextBlockStart = candidates[0].start
+        nextBlockType = candidates[0].type
       }
 
       if (nextBlockStart > index) {
@@ -490,18 +546,15 @@ export class ScratchInterpreter {
         )
       }
 
-      if (isIfElseBlock) {
+      if (nextBlockType === 'ifelse') {
         // Traiter blockifelse{si \booloperator{...} alors}{bloc then}{bloc else}
         // Trouver la fin de l'en-tête
         let headerEnd = ifelseStart + 13
         let headerBraceCount = 1
         while (headerEnd < code.length && headerBraceCount > 0) {
-          if (code[headerEnd] === '{' && code[headerEnd - 1] !== '\\\\') {
+          if (code[headerEnd] === '{' && code[headerEnd - 1] !== '\\') {
             headerBraceCount++
-          } else if (
-            code[headerEnd] === '}' &&
-            code[headerEnd - 1] !== '\\\\'
-          ) {
+          } else if (code[headerEnd] === '}' && code[headerEnd - 1] !== '\\') {
             headerBraceCount--
           }
           headerEnd++
@@ -520,9 +573,9 @@ export class ScratchInterpreter {
         let thenEnd = -1
 
         while (pos < code.length && braceCount > 0) {
-          if (code[pos] === '{' && code[pos - 1] !== '\\\\') {
+          if (code[pos] === '{' && code[pos - 1] !== '\\') {
             braceCount++
-          } else if (code[pos] === '}' && code[pos - 1] !== '\\\\') {
+          } else if (code[pos] === '}' && code[pos - 1] !== '\\') {
             braceCount--
             if (braceCount === 0) {
               thenEnd = pos
@@ -544,9 +597,9 @@ export class ScratchInterpreter {
         let elseEnd = -1
 
         while (pos < code.length && braceCount > 0) {
-          if (code[pos] === '{' && code[pos - 1] !== '\\\\') {
+          if (code[pos] === '{' && code[pos - 1] !== '\\') {
             braceCount++
-          } else if (code[pos] === '}' && code[pos - 1] !== '\\\\') {
+          } else if (code[pos] === '}' && code[pos - 1] !== '\\') {
             braceCount--
             if (braceCount === 0) {
               elseEnd = pos
@@ -559,6 +612,14 @@ export class ScratchInterpreter {
 
         const elseCode = code.substring(elseStart + 1, elseEnd).trim()
 
+        // Afficher le bloc ifelse pendant l'évaluation de la condition
+        const ifelseBlock = code.substring(ifelseStart, elseEnd + 1)
+        this.prepareBlockDisplay('ifelse', conditionHeader, ifelseBlock)
+        if (this.onUpdate) {
+          await Promise.resolve(this.onUpdate())
+        }
+        await new Promise((resolve) => setTimeout(resolve, delayMs / 2))
+
         // Évaluer la condition et exécuter le bon bloc
         const conditionMet = this.evaluateBoolOperator(conditionHeader)
         if (conditionMet === true) {
@@ -568,6 +629,62 @@ export class ScratchInterpreter {
         }
 
         index = elseEnd + 1
+        continue
+      }
+
+      if (nextBlockType === 'if') {
+        // Traiter blockif{si \booloperator{...} alors}{bloc then}
+        let headerEnd = ifStart + 9
+        let headerBraceCount = 1
+        while (headerEnd < code.length && headerBraceCount > 0) {
+          if (code[headerEnd] === '{' && code[headerEnd - 1] !== '\\') {
+            headerBraceCount++
+          } else if (code[headerEnd] === '}' && code[headerEnd - 1] !== '\\') {
+            headerBraceCount--
+          }
+          headerEnd++
+        }
+
+        if (headerBraceCount !== 0) break
+
+        const conditionHeader = code.substring(ifStart + 9, headerEnd - 1)
+
+        const thenStart = code.indexOf('{', headerEnd - 1)
+        if (thenStart === -1) break
+
+        let braceCount = 1
+        let pos = thenStart + 1
+        let thenEnd = -1
+
+        while (pos < code.length && braceCount > 0) {
+          if (code[pos] === '{' && code[pos - 1] !== '\\') {
+            braceCount++
+          } else if (code[pos] === '}' && code[pos - 1] !== '\\') {
+            braceCount--
+            if (braceCount === 0) {
+              thenEnd = pos
+            }
+          }
+          pos++
+        }
+
+        if (thenEnd === -1) break
+
+        const thenCode = code.substring(thenStart + 1, thenEnd).trim()
+
+        const ifBlock = code.substring(ifStart, thenEnd + 1)
+        this.prepareBlockDisplay('if', conditionHeader, ifBlock)
+        if (this.onUpdate) {
+          await Promise.resolve(this.onUpdate())
+        }
+        await new Promise((resolve) => setTimeout(resolve, delayMs / 2))
+
+        const conditionMet = this.evaluateBoolOperator(conditionHeader)
+        if (conditionMet === true) {
+          await this.parseAndExecuteAnimated(thenCode, delayMs)
+        }
+
+        index = thenEnd + 1
         continue
       }
 
@@ -584,12 +701,9 @@ export class ScratchInterpreter {
         let headerEnd = repeatStart + 13
         let headerBraceCount = 1
         while (headerEnd < code.length && headerBraceCount > 0) {
-          if (code[headerEnd] === '{' && code[headerEnd - 1] !== '\\\\') {
+          if (code[headerEnd] === '{' && code[headerEnd - 1] !== '\\') {
             headerBraceCount++
-          } else if (
-            code[headerEnd] === '}' &&
-            code[headerEnd - 1] !== '\\\\'
-          ) {
+          } else if (code[headerEnd] === '}' && code[headerEnd - 1] !== '\\') {
             headerBraceCount--
           }
           headerEnd++
@@ -610,9 +724,9 @@ export class ScratchInterpreter {
         let innerCodeEnd = -1
 
         while (pos < code.length && braceCount > 0) {
-          if (code[pos] === '{' && code[pos - 1] !== '\\\\') {
+          if (code[pos] === '{' && code[pos - 1] !== '\\') {
             braceCount++
-          } else if (code[pos] === '}' && code[pos - 1] !== '\\\\') {
+          } else if (code[pos] === '}' && code[pos - 1] !== '\\') {
             braceCount--
             if (braceCount === 0) {
               innerCodeEnd = pos
@@ -668,9 +782,9 @@ export class ScratchInterpreter {
         let innerCodeEnd = -1
 
         while (pos < code.length && braceCount > 0) {
-          if (code[pos] === '{' && code[pos - 1] !== '\\\\') {
+          if (code[pos] === '{' && code[pos - 1] !== '\\') {
             braceCount++
-          } else if (code[pos] === '}' && code[pos - 1] !== '\\\\') {
+          } else if (code[pos] === '}' && code[pos - 1] !== '\\') {
             braceCount--
             if (braceCount === 0) {
               innerCodeEnd = pos
@@ -805,6 +919,7 @@ export class ScratchInterpreter {
       content,
       rawBlock,
     )
+    this.currentRawBlock = rawBlock || ''
   }
 
   private async executeBlockAction(
@@ -960,9 +1075,14 @@ export class ScratchInterpreter {
     }
 
     if (type === 'pen') {
-      if (content.includes('position') || content.includes('écriture')) {
+      const normalized = content
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+
+      if (normalized.includes('position') || normalized.includes('ecriture')) {
         this.penDown = true
-      } else if (content.includes('relever')) {
+      } else if (normalized.includes('relever')) {
         this.penDown = false
       }
       return true
@@ -1066,6 +1186,23 @@ export class ScratchInterpreter {
       }
     }
 
+    if (type === 'ifelse') {
+      // Extraire juste le début de la condition pour l'affichage
+      const conditionMatch = content.match(/si\s+.*?\s+alors/i)
+      if (conditionMatch) {
+        return `Evaluation condition: ${conditionMatch[0]}`
+      }
+      return 'Si ... alors'
+    }
+
+    if (type === 'if') {
+      const conditionMatch = content.match(/si\s+.*?\s+alors/i)
+      if (conditionMatch) {
+        return `Evaluation condition: ${conditionMatch[0]}`
+      }
+      return 'Si ... alors'
+    }
+
     return 'Instruction en cours'
   }
 
@@ -1132,11 +1269,17 @@ export class ScratchInterpreter {
     return match ? match[1].trim() : null
   }
 
+  private extractOvalMoveName(content: string): string | null {
+    const match = content.match(/\\ovalmove\{([^}]+)\}/)
+    return match ? match[1].trim() : null
+  }
+
   private extractVariableName(content: string): string {
     return (
       this.extractSelectMenuVariableName(content) ||
       this.extractOvalVariableName(content) ||
       this.extractOvalSensingName(content) ||
+      this.extractOvalMoveName(content) ||
       'compteur'
     )
   }
@@ -1155,7 +1298,8 @@ export class ScratchInterpreter {
 
     const payloadVariableName =
       this.extractOvalVariableName(payload) ||
-      this.extractOvalSensingName(payload)
+      this.extractOvalSensingName(payload) ||
+      this.extractOvalMoveName(payload)
 
     let spokenValue: string
     let displayValue: string
@@ -1308,7 +1452,8 @@ export class ScratchInterpreter {
 
     const varName =
       this.extractOvalVariableName(content) ||
-      this.extractOvalSensingName(content)
+      this.extractOvalSensingName(content) ||
+      this.extractOvalMoveName(content)
     if (varName) {
       return this.getVariableValue(varName)
     }
@@ -1332,7 +1477,8 @@ export class ScratchInterpreter {
     // Essayer d'extraire une variable
     const varName =
       this.extractOvalVariableName(content) ||
-      this.extractOvalSensingName(content)
+      this.extractOvalSensingName(content) ||
+      this.extractOvalMoveName(content)
     if (varName) {
       return this.getVariableValue(varName)
     }
@@ -1449,6 +1595,10 @@ export class ScratchInterpreter {
       return String(this.getVariableValue(varName))
     })
 
+    result = result.replace(/\\ovalmove\{([^}]+)\}/g, (_, name) =>
+      String(this.getVariableValue(name.trim())),
+    )
+
     return result
   }
 
@@ -1501,7 +1651,10 @@ export class ScratchInterpreter {
   }
 
   private evaluateArithmeticExpression(expression: string): number | null {
-    const sanitized = this.materializeExpression(expression)
+    const sanitized = this.materializeExpression(expression).replace(
+      /\bmod(?:ulo)?\b/gi,
+      '%',
+    )
     if (!sanitized) return null
 
     let index = 0
@@ -1549,14 +1702,16 @@ export class ScratchInterpreter {
       while (true) {
         skipSpaces()
         const operator = sanitized[index]
-        if (operator !== '*' && operator !== '/') break
+        if (operator !== '*' && operator !== '/' && operator !== '%') break
         index += 1
         const rhs = parseFactor()
         if (rhs === null) return null
         if (operator === '*') {
           value *= rhs
-        } else {
+        } else if (operator === '/') {
           value /= rhs
+        } else {
+          value %= rhs
         }
       }
 
@@ -1627,6 +1782,10 @@ export class ScratchInterpreter {
       String(this.getVariableValue(String(name).trim())),
     )
 
+    result = result.replace(/\\ovalmove\{([^}]+)\}/g, (_, name) =>
+      String(this.getVariableValue(String(name).trim())),
+    )
+
     return result
   }
 
@@ -1635,19 +1794,63 @@ export class ScratchInterpreter {
   }
 
   private isChangeXInstruction(content: string): boolean {
-    return /ajouter/i.test(content) && /[àa]\s*x\b/i.test(content)
+    const normalized = content
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+
+    if (!normalized.includes('ajouter')) return false
+
+    return (
+      /\\selectmenu\{\s*x\s*\}/i.test(normalized) ||
+      /\\ovalvariable\{\s*x\s*\}/i.test(normalized) ||
+      /\\ovalmove\{\s*abscisse x\s*\}/i.test(normalized) ||
+      /a\s*x\b/i.test(normalized)
+    )
   }
 
   private isChangeYInstruction(content: string): boolean {
-    return /ajouter/i.test(content) && /[àa]\s*y\b/i.test(content)
+    const normalized = content
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+
+    if (!normalized.includes('ajouter')) return false
+
+    return (
+      /\\selectmenu\{\s*y\s*\}/i.test(normalized) ||
+      /\\ovalvariable\{\s*y\s*\}/i.test(normalized) ||
+      /\\ovalmove\{\s*ordonnee y\s*\}/i.test(normalized) ||
+      /a\s*y\b/i.test(normalized)
+    )
   }
 
   private isSetXInstruction(content: string): boolean {
-    return /mettre\s*x\s*[àa]/i.test(content)
+    const normalized = content
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+
+    return (
+      /mettre\s*x\s*a/i.test(normalized) ||
+      /mettre\s*\\selectmenu\{\s*x\s*\}\s*a/i.test(normalized) ||
+      /mettre\s*\\ovalvariable\{\s*x\s*\}\s*a/i.test(normalized) ||
+      /mettre\s*\\ovalmove\{\s*abscisse x\s*\}\s*a/i.test(normalized)
+    )
   }
 
   private isSetYInstruction(content: string): boolean {
-    return /mettre\s*y\s*[àa]/i.test(content)
+    const normalized = content
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+
+    return (
+      /mettre\s*y\s*a/i.test(normalized) ||
+      /mettre\s*\\selectmenu\{\s*y\s*\}\s*a/i.test(normalized) ||
+      /mettre\s*\\ovalvariable\{\s*y\s*\}\s*a/i.test(normalized) ||
+      /mettre\s*\\ovalmove\{\s*ordonnee y\s*\}\s*a/i.test(normalized)
+    )
   }
 
   private extractGoToCoordinates(
@@ -1798,12 +2001,15 @@ export class ScratchSimulator extends HTMLElement {
   private infoDiv: HTMLDivElement | null = null
   private codeDiv: HTMLDivElement | null = null
   private codeBlocks: CodeBlockNode[] = []
+  private allRenderedBlocks: CodeBlockNode[] = []
   private executionBlocks: CodeBlockNode[] = []
+  private atomicBlocks: CodeBlockNode[] = [] // Blocs atomiques uniquement (sans children structures)
   private highlightedExecutionIndex: number | null = null
   private highlightedBlockElement: SVGGElement | null = null
   private customBlockDefinitions: Record<string, CodeBlockNode[]> = {}
   private customDefinitionGroups: Set<SVGGElement> = new Set()
   private blockCacheAttempts: number = 0
+  private executionIndexToHtml: Map<number, string> = new Map() // Map: currentInstructionIndex -> currentInstructionHtml
   private delayMs: number = 2000
   private isRunning: boolean = false
   private isPaused: boolean = false
@@ -1838,10 +2044,10 @@ export class ScratchSimulator extends HTMLElement {
 
   private createModal(): void {
     this.modal = document.createElement('dialog')
-    this.modal.className = 'modal'
+    this.modal.className = 'modal modal-top'
 
     const box = document.createElement('div')
-    box.className = 'modal-box max-w-6xl'
+    box.className = 'modal-box max-w-6xl mt-4 ml-4 pb-5'
 
     const closeButton = document.createElement('button')
     closeButton.className =
@@ -1889,7 +2095,7 @@ export class ScratchSimulator extends HTMLElement {
 
     // Conteneur pour canvas et code côte à côte
     const contentWrapper = document.createElement('div')
-    contentWrapper.className = 'grid grid-cols-2 gap-4 mb-4'
+    contentWrapper.className = 'grid grid-cols-1 gap-4 mb-4 md:grid-cols-2'
 
     // Colonne gauche: canvas avec bouton de contrôle
     const canvasWrapper = document.createElement('div')
@@ -1905,7 +2111,7 @@ export class ScratchSimulator extends HTMLElement {
 
     this.codeDiv = document.createElement('div')
     this.codeDiv.className =
-      'border-2 border-gray-300 bg-white p-3 overflow-y-auto max-h-96 font-mono text-sm'
+      'border-2 border-gray-300 bg-white p-3 overflow-y-auto max-h-60 md:max-h-96 font-mono text-sm scroll-smooth'
     this.codeDiv.id = 'code-display'
 
     rightColumn.appendChild(this.codeDiv)
@@ -1915,9 +2121,9 @@ export class ScratchSimulator extends HTMLElement {
 
     // Parser le code scratchblock complet
     this.parseAndDisplayCode()
-
     this.stepDiv = document.createElement('div')
-    this.stepDiv.className = 'text-sm text-gray-600 mb-2'
+    this.stepDiv.className =
+      'items-start text-sm text-gray-600 mb-2 ml-1 h-60 overflow-hidden'
     this.stepDiv.id = 'execution-step'
     this.stepDiv.textContent = 'Prêt à exécuter (cliquez sur ▶)'
 
@@ -1927,19 +2133,20 @@ export class ScratchSimulator extends HTMLElement {
       'btn btn-circle btn-lg bg-blue-500 hover:bg-blue-600 text-white text-2xl w-16 h-16 flex items-center justify-center'
     this.controlButton.textContent = '▶'
     this.controlButton.addEventListener('click', () => this.togglePlayPause())
-
-    const stepAndControlDiv = document.createElement('div')
-    stepAndControlDiv.className = 'flex items-end gap-3 mb-4'
-    stepAndControlDiv.appendChild(this.controlButton)
-    stepAndControlDiv.appendChild(this.stepDiv)
-
-    rightColumn.appendChild(stepAndControlDiv)
-
+    const buttonInstructionAndInfoDiv = document.createElement('div')
+    buttonInstructionAndInfoDiv.className = 'items-start gap-6 mb-4'
     this.infoDiv = document.createElement('div')
-    this.infoDiv.className = 'text-sm text-gray-600 flex-1'
+    this.infoDiv.className = 'text-sm text-gray-600'
     this.infoDiv.id = 'execution-info'
+    const controlAndInfosDiv = document.createElement('div')
+    controlAndInfosDiv.className = 'items-start gap-3 mb-4 min-w-max'
+    controlAndInfosDiv.appendChild(this.controlButton)
+    controlAndInfosDiv.appendChild(this.infoDiv)
 
-    rightColumn.appendChild(this.infoDiv)
+    buttonInstructionAndInfoDiv.appendChild(controlAndInfosDiv)
+    buttonInstructionAndInfoDiv.appendChild(this.stepDiv)
+
+    rightColumn.appendChild(buttonInstructionAndInfoDiv)
 
     box.appendChild(closeButton)
     box.appendChild(title)
@@ -1959,6 +2166,7 @@ export class ScratchSimulator extends HTMLElement {
     if (!this.codeDiv) return
 
     this.codeBlocks = []
+    this.allRenderedBlocks = []
     this.highlightedExecutionIndex = null
     this.highlightedBlockElement = null
     this.codeDiv.innerHTML = ''
@@ -1991,23 +2199,62 @@ export class ScratchSimulator extends HTMLElement {
     let targetBlock: CodeBlockNode | null = null
     let executionIndex: number | null = null
 
+    // PRIORITÉ 0 : Vérifier le mapping dynamique enregistré pendant l'exécution
+    // Cela est crucial pour les blocs conditionnels (ifelse/blockif) où le HTML passé peut être
+    // celui d'une instruction enfant et non du bloc conteneur lui-même
     if (
       currentInstructionIndex !== undefined &&
       currentInstructionIndex >= 0 &&
-      this.executionBlocks.length > 0
+      this.executionIndexToHtml.has(currentInstructionIndex)
+    ) {
+      const mappedHtml = this.executionIndexToHtml.get(currentInstructionIndex)
+      if (mappedHtml) {
+        currentInstructionHtml = mappedHtml
+      }
+    }
+
+    // PRIORITÉ 1 : Utiliser l'index d'exécution directement si disponible et valide
+    // Cela garantit une correspondance 1:1 avec la position d'exécution et évite les ambiguïtés
+    // dues aux instructions dupliquées
+    if (
+      currentInstructionIndex !== undefined &&
+      currentInstructionIndex >= 0 &&
+      this.executionBlocks.length > 0 &&
+      currentInstructionIndex < this.executionBlocks.length
     ) {
       executionIndex = currentInstructionIndex
-      const stableIndex = Math.min(
-        currentInstructionIndex,
-        this.executionBlocks.length - 1,
-      )
-      targetBlock = this.executionBlocks[stableIndex] ?? null
-    } else if (currentInstructionHtml) {
+      targetBlock = this.executionBlocks[currentInstructionIndex] ?? null
+    }
+
+    // PRIORITÉ 2 : Fallback sur recherche par texte si pas de bloc trouvé et si on a du HTML
+    // Ceci est un fallback pour les cas où currentInstructionIndex n'est pas disponible
+    if (!targetBlock && currentInstructionHtml) {
       const tempDiv = document.createElement('div')
       tempDiv.innerHTML = currentInstructionHtml
       const instructionText = this.normalizeText(tempDiv.textContent || '')
       if (instructionText) {
-        targetBlock = this.findBlockByText(this.codeBlocks, instructionText)
+        // Chercher d'abord une correspondance exacte dans les blocs atomiques
+        targetBlock = this.findBlockByText(
+          this.atomicBlocks,
+          instructionText,
+          true,
+        )
+        // Si pas trouvé, chercher une correspondance partielle dans les atomiques
+        if (!targetBlock) {
+          targetBlock = this.findBlockByText(
+            this.atomicBlocks,
+            instructionText,
+            false,
+          )
+        }
+        // En dernier recours, chercher dans tous les blocs (pour les conteneurs comme ifelse)
+        if (!targetBlock) {
+          targetBlock = this.findBlockByText(
+            this.allRenderedBlocks,
+            instructionText,
+            true,
+          )
+        }
       }
     }
 
@@ -2023,7 +2270,10 @@ export class ScratchSimulator extends HTMLElement {
       return
     }
 
-    this.clearBlockHighlights(this.codeBlocks)
+    // Nettoyer TOUS les highlights existants (y compris les blocs parents)
+    if (this.codeBlocks.length > 0) {
+      this.clearBlockHighlights(this.codeBlocks)
+    }
     this.highlightedExecutionIndex = null
     this.highlightedBlockElement = null
 
@@ -2075,7 +2325,15 @@ export class ScratchSimulator extends HTMLElement {
     const customDefinitions = this.extractCustomBlockDefinitions(svg)
     this.customBlockDefinitions = customDefinitions.definitions
     this.customDefinitionGroups = customDefinitions.definitionGroups
+    this.allRenderedBlocks = groups
+      .filter((group) => !this.customDefinitionGroups.has(group))
+      .map((group) => ({
+        element: group,
+        text: this.getBlockOwnText(group),
+        children: [],
+      }))
     this.executionBlocks = this.buildExecutionBlocks(this.codeBlocks)
+    this.atomicBlocks = this.extractAtomicBlocks(this.codeBlocks)
     this.blockCacheAttempts = 0
   }
 
@@ -2183,7 +2441,46 @@ export class ScratchSimulator extends HTMLElement {
       return href.includes('#sb3-loopArrow')
     })
 
-    if (loopArrowIndex === -1) return []
+    if (loopArrowIndex === -1) {
+      // Pas de loopArrow : peut-être un ifelse avec branches then/else
+      // Un ifelse a typiquement des groupes 'g' directs qui contiennent les blocs
+      const directGroupChildren = children.filter(
+        (child): child is SVGGElement => child.tagName.toLowerCase() === 'g',
+      )
+
+      if (directGroupChildren.length === 0) return []
+
+      // Chercher les blocs dans chaque groupe direct
+      const allBlocks: SVGGElement[] = []
+      directGroupChildren.forEach((containerGroup) => {
+        const rowGroups = Array.from(containerGroup.children).filter(
+          (child): child is SVGGElement => child.tagName.toLowerCase() === 'g',
+        )
+
+        const nested = rowGroups
+          .map((rowGroup) => ({
+            rowGroup,
+            blockGroup: this.findFirstBlockGroup(rowGroup),
+          }))
+          .filter(
+            (
+              entry,
+            ): entry is {
+              rowGroup: SVGGElement
+              blockGroup: SVGGElement
+            } => Boolean(entry.blockGroup),
+          )
+
+        nested.sort(
+          (a, b) =>
+            this.getTranslateY(a.rowGroup) - this.getTranslateY(b.rowGroup),
+        )
+
+        allBlocks.push(...nested.map((entry) => entry.blockGroup))
+      })
+
+      return allBlocks
+    }
 
     const container = children
       .slice(loopArrowIndex + 1)
@@ -2287,13 +2584,22 @@ export class ScratchSimulator extends HTMLElement {
   private findBlockByText(
     blocks: CodeBlockNode[],
     instructionText: string,
+    exactMatch: boolean = false,
   ): CodeBlockNode | null {
     for (const block of blocks) {
-      if (block.text.includes(instructionText)) {
+      const matches = exactMatch
+        ? block.text === instructionText
+        : block.text.includes(instructionText)
+
+      if (matches) {
         return block
       }
 
-      const childMatch = this.findBlockByText(block.children, instructionText)
+      const childMatch = this.findBlockByText(
+        block.children,
+        instructionText,
+        exactMatch,
+      )
       if (childMatch) {
         return childMatch
       }
@@ -2325,6 +2631,13 @@ export class ScratchSimulator extends HTMLElement {
         return
       }
 
+      if (this.isIfElseBlock(node)) {
+        // Ajouter le nœud ifelse pour que les repeat sachent quoi répéter,
+        // mais il ne sera jamais surligné (filtré lors du surlignage)
+        ordered.push(node)
+        return
+      }
+
       if (this.isRepeatBlock(node)) {
         const times = this.extractRepeatCount(node.text)
         const children = this.buildExecutionBlocks(
@@ -2343,8 +2656,33 @@ export class ScratchSimulator extends HTMLElement {
     return ordered
   }
 
+  private extractAtomicBlocks(nodes: CodeBlockNode[]): CodeBlockNode[] {
+    const atomic: CodeBlockNode[] = []
+
+    nodes.forEach((node) => {
+      if (this.isRepeatBlock(node) || this.isIfElseBlock(node)) {
+        // Pour les conteneurs, extraire récursivement les enfants atomiques
+        atomic.push(...this.extractAtomicBlocks(node.children))
+      } else if (this.customBlockDefinitions[node.text]) {
+        // Pour les blocs customs, on veut le bloc lui-même ET ses enfants
+        atomic.push(node)
+        const definition = this.customBlockDefinitions[node.text]
+        atomic.push(...this.extractAtomicBlocks(definition))
+      } else {
+        // Bloc atomique standard
+        atomic.push(node)
+      }
+    })
+
+    return atomic
+  }
+
   private isRepeatBlock(node: CodeBlockNode): boolean {
     return node.text.includes('répéter')
+  }
+
+  private isIfElseBlock(node: CodeBlockNode): boolean {
+    return node.text.includes('si ') && node.text.includes(' alors')
   }
 
   private extractRepeatCount(text: string): number {
@@ -2361,7 +2699,12 @@ export class ScratchSimulator extends HTMLElement {
   }
 
   private normalizeText(text: string): string {
-    return text.replace(/\s+/g, ' ').trim().toLowerCase()
+    return text
+      .replace(/\[(\d+)\]/g, '$1') // Retirer les crochets autour des nombres [15] -> 15
+      .replace(/\[([^\]]+)\]/g, '$1') // Retirer les autres crochets [xxx] -> xxx
+      .replace(/\s+/g, ' ')
+      .trim()
+      .toLowerCase()
   }
 
   private runSimulation(): void {
@@ -2381,6 +2724,9 @@ export class ScratchSimulator extends HTMLElement {
     this.isPaused = false
     this.updateControlButton()
 
+    // Réinitialiser le mapping des index vers HTML
+    this.executionIndexToHtml.clear()
+
     // Exécuter avec animation
     await this.interpreter.executeAnimated(
       this.scratchCode,
@@ -2393,6 +2739,17 @@ export class ScratchSimulator extends HTMLElement {
         }
 
         const state = this.interpreter!.getCurrentState()
+        // Enregistrer le mapping : index -> HTML pour ce bloc
+        if (
+          state.currentInstructionIndex !== undefined &&
+          state.currentInstructionIndex >= 0 &&
+          state.currentInstructionScratchHtml
+        ) {
+          this.executionIndexToHtml.set(
+            state.currentInstructionIndex,
+            state.currentInstructionScratchHtml,
+          )
+        }
         requestAnimationFrame(() => {
           this.drawSimulation(state)
           this.displayInfo(state)
