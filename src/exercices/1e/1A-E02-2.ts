@@ -29,7 +29,7 @@ export default class BaissePrix extends ExerciceQcmA {
     const coefficientTexte = texNombre(coefficientMultiplicateur, 2)
 
     this.enonce = `Un sac coûte $${texNombre(prixInitial)}$ euros. Le prix baisse de $${pourcentage}\\,\\%$. <br>
-    Le nouveau prix en euros est :`
+    Le nouveau prix en euros est donné par le calcul :`
 
     // Bonne réponse (plusieurs formes possibles)
     const bonnesReponses = [
