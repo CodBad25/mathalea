@@ -1,4 +1,3 @@
-import { abs } from 'mathjs'
 import { colorToLatexOrHTML } from '../../lib/2d/colorToLatexOrHtml'
 import { Courbe } from '../../lib/2d/Courbe'
 import {
@@ -99,11 +98,11 @@ export default class ExerciceTangenteCourbe extends Exercice {
       let valLimG = -0.5
       do {
         valLimG = valLimG + 0.05
-      } while (abs(f(xInterdit + valLimG)) < 10)
+      } while (Math.abs(f(xInterdit + valLimG)) < 10)
       let valLimD = 0.5
       do {
         valLimD = valLimD - 0.05
-      } while (abs(f(xInterdit + valLimD)) < 10)
+      } while (Math.abs(f(xInterdit + valLimD)) < 10)
       const r = repere({
         xMin: -8,
         xMax: 8,

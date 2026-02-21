@@ -13,7 +13,6 @@ import Exercice from '../Exercice'
 import { context } from '../../modules/context'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
-import { pow } from 'mathjs'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { sp } from '../../lib/outils/outilString'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
@@ -417,7 +416,7 @@ export default class ChiffreNombreDe extends Exercice {
             param: {
               aussiCorrect:
                 reponses[listeTypeDeQuestions[i]] *
-                pow(10, nbDigitsSupplementaires),
+                Math.pow(10, nbDigitsSupplementaires),
               digits:
                 nbDigitsSupplementaires +
                 nombreDeChiffresDansLaPartieEntiere(

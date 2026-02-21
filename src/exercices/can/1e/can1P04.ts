@@ -1,4 +1,3 @@
-import { number } from 'mathjs'
 import { fixeBordures } from '../../../lib/2d/fixeBordures'
 import { Arbre, texProba } from '../../../modules/arbres'
 import { mathalea2d } from '../../../modules/mathalea2d'
@@ -49,10 +48,10 @@ export default class CalculProbaArbre2e extends Exercice {
     ) {
       objets = []
       // On choisit les probas de l'arbre
-      pA = number(randint(2, 8) / 10)
-      pB = number(1 - pA)
-      pAC = number(randint(2, 8) / 10)
-      pBC = number(randint(2, 8) / 10)
+      pA = Number(randint(2, 8) / 10)
+      pB = Number(1 - pA)
+      pAC = Number(randint(2, 8) / 10)
+      pBC = Number(randint(2, 8) / 10)
       // On définit l'arbre complet
       omega = new Arbre({
         racine: true,
@@ -75,14 +74,14 @@ export default class CalculProbaArbre2e extends Exercice {
               new Arbre({
                 rationnel,
                 nom: '\\bar C',
-                proba: number(1 - pAC),
+                proba: Number(1 - pAC),
               }),
             ],
           }),
           new Arbre({
             rationnel,
             nom: '\\bar A',
-            proba: number(1 - pA),
+            proba: Number(1 - pA),
             enfants: [
               new Arbre({
                 rationnel,
@@ -94,7 +93,7 @@ export default class CalculProbaArbre2e extends Exercice {
               new Arbre({
                 rationnel,
                 nom: '\\bar C',
-                proba: number(1 - pBC),
+                proba: Number(1 - pBC),
                 visible: false,
                 alter: '',
               }),

@@ -1,4 +1,3 @@
-import { max, min, mod } from 'mathjs'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { setReponse } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -152,7 +151,7 @@ export default class VocabulaireDivisionEuclidienne extends Exercice {
           break
         case 2:
           Nbutilises[2] = randint(5, 99, [Nbutilises[1]])
-          Nbutilises[3] = randint(4, min(Nbutilises[2], Nbutilises[1]) - 1)
+          Nbutilises[3] = randint(4, Math.min(Nbutilises[2], Nbutilises[1]) - 1)
           break
         default:
           if (randint(0, 1) === 0) {
@@ -160,11 +159,11 @@ export default class VocabulaireDivisionEuclidienne extends Exercice {
             Nbutilises[3] = randint(Nbutilises[2] + 1, Nbutilises[1] - 1)
           } else {
             Nbutilises[2] = randint(5, 99, [Nbutilises[1]])
-            Nbutilises[3] = randint(4, min(Nbutilises[2], Nbutilises[1]) - 1)
+            Nbutilises[3] = randint(4, Math.min(Nbutilises[2], Nbutilises[1]) - 1)
           }
           Nbutilises[2] = randint(5, 99, [Nbutilises[1]])
-          Nbutilises[3] = randint(4, max(Nbutilises[2], Nbutilises[1]) - 1, [
-            min(Nbutilises[2], Nbutilises[1]),
+          Nbutilises[3] = randint(4, Math.max(Nbutilises[2], Nbutilises[1]) - 1, [
+            Math.min(Nbutilises[2], Nbutilises[1]),
           ])
           break
       }
@@ -239,7 +238,7 @@ export default class VocabulaireDivisionEuclidienne extends Exercice {
               ? mettreDernierMotEnCouleurEtGras(TabCorrection[3])
               : TabCorrection[3]
           texteCorr += '.<br>'
-          if (mod(ChoixQuestions[i], 3) === 0) {
+          if ((ChoixQuestions[i] % 3) === 0) {
             ReponsesCorrectes = [ChoixReponses[ChoixQuestions[i]]]
           } else {
             ReponsesCorrectes = ['diviseur', 'quotient']

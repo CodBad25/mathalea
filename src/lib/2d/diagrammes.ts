@@ -1,4 +1,3 @@
-import { max } from 'mathjs'
 import { texcolors } from '../format/style'
 import { combinaisonListesSansChangerOrdre } from '../outils/arrayOutils'
 import { numberFormat, texNombre } from '../outils/texNombre'
@@ -433,7 +432,7 @@ export class DiagrammeBarres extends ObjetMathalea2D {
     for (let j = 0; j < hauteursBarres.length; j++) {
       const abscisseBarre = j * coeff
       const hauteurBarre =
-        (hauteursBarres[j] * hauteurDiagramme) / max(hauteursBarres)
+        (hauteursBarres[j] * hauteurDiagramme) / Math.max(...hauteursBarres)
       this.objets.push(
         traceBarre(abscisseBarre, hauteurBarre, etiquettes[j], {
           couleurDeRemplissage,
@@ -461,13 +460,13 @@ export class DiagrammeBarres extends ObjetMathalea2D {
       let istep = 1
       let step = 1
       let ytick = 1
-      while (max(hauteursBarres) / step > 5 && istep < 5) {
+      while (Math.max(...hauteursBarres) / step > 5 && istep < 5) {
         istep += 1
         step = steps[istep - 1]
         ytick = yticks[istep - 1]
       }
       if (istep === 5) istep = 2
-      while (max(hauteursBarres) / step > 5) {
+      while (Math.max(...hauteursBarres) / step > 5) {
         istep = istep + 1
         step = istep * 10
         ytick = 5
@@ -477,7 +476,7 @@ export class DiagrammeBarres extends ObjetMathalea2D {
         this.objets.push(
           labelY(
             0,
-            max(hauteursBarres),
+            Math.max(...hauteursBarres),
             (step * hauteurDiagramme) / Math.max(...hauteursBarres),
             'black',
             -3,

@@ -1,4 +1,3 @@
-import { abs } from 'mathjs'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { functionCompare } from '../../lib/interactif/comparisonFunctions'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
@@ -197,7 +196,7 @@ class DerivationFonctionsUsuellesEtendue extends Exercice {
               const frac = choice(listFrac).multiplieEntier(choice([-1, 1]))
               laFonction = `${frac.texFractionSimplifiee}\\sqrt{x}`
               const fracDerivee = new FractionEtendue(frac.num, frac.den * 2)
-              laDerivee = `${fracDerivee.num < 0 ? '-' : ''}\\dfrac{${abs(fracDerivee.num)}}{${fracDerivee.den}\\sqrt{x}}`
+              laDerivee = `${fracDerivee.num < 0 ? '-' : ''}\\dfrac{${Math.abs(fracDerivee.num)}}{${fracDerivee.den}\\sqrt{x}}`
               correctionDetaillee = `La dérivée d'une fonction d'expression $f(x)=a\\sqrt{x}$ avec $a\\in\\mathbb{R}$ et $x\\in \\mathbb{R}^*_+$ est $f'(x)=\\dfrac{a}{2\\sqrt{x}}$.<br>`
             }
           }

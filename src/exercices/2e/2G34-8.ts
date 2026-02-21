@@ -6,12 +6,12 @@ import {
   ecritureAlgebriqueSauf1,
   rienSi1,
 } from '../../lib/outils/ecritures'
-import { lcm } from 'mathjs'
 import { texNombre } from '../../lib/outils/texNombre'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { choixDeroulant } from '../../lib/interactif/questionListeDeroulante'
 
 import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
+import { ppcm } from '../../lib/outils/primalite'
 export const titre =
   "Déterminer la nature des solutions d'un système linéaire de deux équations à deux inconnues"
 export const interactifReady = true
@@ -256,8 +256,8 @@ export default class systemeEquationsPremDeg extends Exercice {
       const eqFinale2 = eqInt2Droite.concat(eqInt2Gauche)
       const nomVal1 = nomVal12.concat(nomVal11)
       const nomVal2 = nomVal22.concat(nomVal21)
-      const mX = lcm(Math.abs(eqSimpl1[0]), Math.abs(eqSimpl2[0]))
-      const mY = lcm(Math.abs(eqSimpl1[1]), Math.abs(eqSimpl2[1]))
+      const mX = ppcm(Math.abs(eqSimpl1[0]), Math.abs(eqSimpl2[0]))
+      const mY = ppcm(Math.abs(eqSimpl1[1]), Math.abs(eqSimpl2[1]))
       let varElim = ''
       let coeffElim = 0
       let coeffEq = []

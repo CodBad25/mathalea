@@ -1,4 +1,3 @@
-import { floor } from 'mathjs'
 import { randint } from '../../modules/outils'
 import { cercle } from './cercle'
 import { CodageAngleDroit, codageAngleDroit } from './CodageAngleDroit'
@@ -36,7 +35,7 @@ export function triangle2points1hauteur(
   color = 'black',
 ) {
   if (d === undefined) {
-    d = randint(0, floor(longueur(A, B)))
+    d = randint(0, Math.floor(longueur(A, B)))
   }
   const H = pointSurSegment(A, B, d)
   const C = similitude(A, H, 90 * (3 - n * 2), h / longueur(A, H))

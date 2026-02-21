@@ -1,4 +1,3 @@
-import { max } from 'mathjs'
 import PolynomePlusieursVariables from '../../lib/mathFonctions/PolynomePlusieursVariables'
 import {
   choice,
@@ -90,7 +89,7 @@ export default class nomExercice extends Exercice {
 
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
       let texte, texteCorr: string
-      const degMax = max(this.sup3, 1)
+      const degMax = Math.max(this.sup3, 1)
       const variables = ['x', 'y', 'z', 'r', 's', 't']
       const variablesSelect = getRandomSubarray(variables, this.sup4)
       const typeCoeffListe = ['entier', 'fractionnaire']
