@@ -29,13 +29,13 @@ export default class EffectifProportion extends ExerciceQcmA {
     const bonneReponse = total * proportion
     
     this.enonce = 
-      `Une boîte contient $${total}$ billes. Dans cette boîte la proportion de billes vertes est égale à $${proportion}$. ` +
+      `Une boîte contient $${total}$ billes. <br>Dans cette boîte la proportion de billes vertes est égale à $${proportion}$.<br> ` +
       `Le nombre de billes vertes dans la boîte est égal à :`
     
     this.correction = 
       `Pour trouver le nombre de billes vertes, on multiplie le nombre total de billes par la proportion de billes vertes :<br>` +
-      `$${total} \\times ${proportion} = ${miseEnEvidence(bonneReponse.toString())}$<br>` +
-      `Il y a donc ${miseEnEvidence(bonneReponse.toString())} billes vertes dans la boîte.`
+      `$${total} \\times ${texNombre(proportion,2)} = ${texNombre(total/10,0)} \\times \\underbrace{10 \\times ${texNombre(proportion,2)}}_{${texNombre(proportion*10,0)}} = ${miseEnEvidence(bonneReponse.toString())}$<br>` +
+      `Il y a donc $${miseEnEvidence(bonneReponse.toString())}$ billes vertes dans la boîte.`
     
     this.reponses = [
       `$${bonneReponse}$`,
@@ -144,7 +144,7 @@ export default class EffectifProportion extends ExerciceQcmA {
     
     this.correction = 
       `Pour trouver le nombre de ${contexte.pluriel} ${contexte.attribut}, on multiplie le nombre total de ${contexte.pluriel} par la proportion de ${contexte.pluriel} ${contexte.attribut} :<br>` +
-      `$${total} \\times ${texNombre(proportion, 1)} = ${bonneReponse.toString()}$<br>` +
+      `$${total} \\times ${texNombre(proportion, 1)} =${texNombre(total/10,0)} \\times \\underbrace{10 \\times ${texNombre(proportion,2)}}_{${texNombre(proportion*10,0)}} = ${bonneReponse.toString()}$<br>` +
       `Il y a donc $${miseEnEvidence(bonneReponse.toString())}$ ${contexte.pluriel} ${contexte.attribut} ${contexte.dans}.`
     
     // Générer 3 distracteurs différents de la bonne réponse

@@ -43,7 +43,7 @@ export default class ProbabiliteTableauIdentifier extends ExerciceQcmA {
     this.enonce = this.genererEnonce(valeurs, 400)
     
     // Version originale : 7/17 correspond à P_{A_3}(S)
-    this.enonce += '$\\dfrac{7}{17}$ correspond à la valeur de :'
+    this.enonce += '$\\dfrac{7}{17}$ est :'
     this.correction = 
       `On cherche quelle probabilité vaut $\\dfrac{7}{17}$.<br>` +
       `La probabilité conditionnelle $P_{A_3}(S)$ se calcule parmi les personnes de la catégorie « Plus de 45 ans ».<br>` +
@@ -87,7 +87,7 @@ export default class ProbabiliteTableauIdentifier extends ExerciceQcmA {
 
         case 2:
           // 3/8 correspond à P(A_2)
-          this.enonce += '$\\dfrac{3}{8}$ correspond à la valeur de :'
+          this.enonce += '$\\dfrac{3}{8}$ est :'
           this.correction = 
             `On cherche quelle probabilité vaut $\\dfrac{3}{8}$.<br>` +
             `L'événement $A_2$ correspond à la ligne « Entre 25 et 45 ans ».<br>` +
@@ -104,7 +104,7 @@ export default class ProbabiliteTableauIdentifier extends ExerciceQcmA {
 
         case 3:
           // 17/40 correspond à P(A_3)
-          this.enonce += '$\\dfrac{17}{40}$ correspond à la valeur de :'
+          this.enonce += '$\\dfrac{17}{40}$ est :'
           this.correction = 
             `On cherche quelle probabilité vaut $\\dfrac{17}{40}$.<br>` +
             `L'événement $A_3$ correspond à la ligne « Plus de 45 ans ».<br>` +
@@ -121,7 +121,7 @@ export default class ProbabiliteTableauIdentifier extends ExerciceQcmA {
 
         case 4:
           // 1/8 correspond à P(S ∩ A_1)
-          this.enonce += '$\\dfrac{1}{8}$ correspond à la valeur de :'
+          this.enonce += '$\\dfrac{1}{8}$ est :'
           this.correction = 
             `On cherche quelle probabilité vaut $\\dfrac{1}{8}$.<br>` +
             `L'événement $S \\cap A_1$ correspond à l'intersection de la colonne « Pratique un sport » et de la ligne « Moins de 25 ans ».<br>` +
@@ -137,7 +137,7 @@ export default class ProbabiliteTableauIdentifier extends ExerciceQcmA {
 
         case 5:
           // 9/40 correspond à P(S ∩ A_2)
-          this.enonce += '$\\dfrac{9}{40}$ correspond à la valeur de :'
+          this.enonce += '$\\dfrac{9}{40}$ est :'
           this.correction = 
             `On cherche quelle probabilité vaut $\\dfrac{9}{40}$.<br>` +
             `L'événement $S \\cap A_2$ correspond à l'intersection de la colonne « Pratique un sport » et de la ligne « Entre 25 et 45 ans ».<br>` +
@@ -153,7 +153,7 @@ export default class ProbabiliteTableauIdentifier extends ExerciceQcmA {
 
         case 6:
           // 5/8 correspond à P_{A_1}(S)
-          this.enonce += '$\\dfrac{5}{8}$ correspond à la valeur de :'
+          this.enonce += '$\\dfrac{5}{8}$ est :'
           this.correction = 
             `On cherche quelle probabilité vaut $\\dfrac{5}{8}$.<br>` +
             `La probabilité conditionnelle $P_{A_1}(S)$ se calcule parmi les personnes de la catégorie « Moins de 25 ans ».<br>` +
@@ -169,7 +169,7 @@ export default class ProbabiliteTableauIdentifier extends ExerciceQcmA {
 
         case 7:
           // 3/5 correspond à P_{A_2}(S)
-          this.enonce += '$\\dfrac{3}{5}$ correspond à la valeur de :'
+          this.enonce += '$\\dfrac{3}{5}$ est :'
           this.correction = 
             `On cherche quelle probabilité vaut $\\dfrac{3}{5}$.<br>` +
             `La probabilité conditionnelle $P_{A_2}(S)$ se calcule parmi les personnes de la catégorie « Entre 25 et 45 ans ».<br>` +
@@ -185,7 +185,7 @@ export default class ProbabiliteTableauIdentifier extends ExerciceQcmA {
 
         case 8:
           // 2/5 correspond à P_{A_2}(\bar{S})
-          this.enonce += '$\\dfrac{2}{5}$ correspond à la valeur de :'
+          this.enonce += '$\\dfrac{2}{5}$ est :'
           this.correction = 
             `On cherche quelle probabilité vaut $\\dfrac{2}{5}$.<br>` +
             `La probabilité conditionnelle $P_{A_2}(\\overline{S})$ se calcule parmi les personnes de la catégorie « Entre 25 et 45 ans ».<br>` +
@@ -210,7 +210,7 @@ export default class ProbabiliteTableauIdentifier extends ExerciceQcmA {
       switch (typeQuestion) {
         case 1:
           // 5/11 correspond à P_{A_3}(S)
-          this.enonce += '$\\dfrac{5}{11}$ correspond à la valeur de :'
+          this.enonce += '$\\dfrac{5}{11}$ est :'
           this.correction = 
             `On cherche quelle probabilité vaut $\\dfrac{5}{11}$.<br>` +
             `La probabilité conditionnelle $P_{A_3}(S)$ se calcule parmi les personnes de la catégorie « Plus de 45 ans ».<br>` +
@@ -226,7 +226,7 @@ export default class ProbabiliteTableauIdentifier extends ExerciceQcmA {
 
         case 2:
           // 6/25 correspond à P(A_1)
-          this.enonce += '$\\dfrac{6}{25}$ correspond à la valeur de :'
+          this.enonce += '$\\dfrac{6}{25}$ est :'
           this.correction = 
             `On cherche quelle probabilité vaut $\\dfrac{6}{25}$.<br>` +
             `L'événement $A_1$ correspond à la ligne « Moins de 25 ans ».<br>` +
@@ -243,7 +243,7 @@ export default class ProbabiliteTableauIdentifier extends ExerciceQcmA {
 
         case 3:
           // 11/25 correspond à P(A_3)
-          this.enonce += '$\\dfrac{11}{25}$ correspond à la valeur de :'
+          this.enonce += '$\\dfrac{11}{25}$ est :'
           this.correction = 
             `On cherche quelle probabilité vaut $\\dfrac{11}{25}$.<br>` +
             `L'événement $A_3$ correspond à la ligne « Plus de 45 ans ».<br>` +
@@ -260,7 +260,7 @@ export default class ProbabiliteTableauIdentifier extends ExerciceQcmA {
 
         case 4:
           // 4/25 correspond à P(S ∩ A_1)
-          this.enonce += '$\\dfrac{4}{25}$ correspond à la valeur de :'
+          this.enonce += '$\\dfrac{4}{25}$ est :'
           this.correction = 
             `On cherche quelle probabilité vaut $\\dfrac{4}{25}$.<br>` +
             `L'événement $S \\cap A_1$ correspond à l'intersection de la colonne « Pratique un sport » et de la ligne « Moins de 25 ans ».<br>` +
@@ -277,7 +277,7 @@ export default class ProbabiliteTableauIdentifier extends ExerciceQcmA {
 
         case 5:
           // 9/50 correspond à P(S ∩ A_2)
-          this.enonce += '$\\dfrac{9}{50}$ correspond à la valeur de :'
+          this.enonce += '$\\dfrac{9}{50}$ est :'
           this.correction = 
             `On cherche quelle probabilité vaut $\\dfrac{9}{50}$.<br>` +
             `L'événement $S \\cap A_2$ correspond à l'intersection de la colonne « Pratique un sport » et de la ligne « Entre 25 et 45 ans ».<br>` +
@@ -293,7 +293,7 @@ export default class ProbabiliteTableauIdentifier extends ExerciceQcmA {
 
         case 6:
           // 2/3 correspond à P_{A_1}(S)
-          this.enonce += '$\\dfrac{2}{3}$ correspond à la valeur de :'
+          this.enonce += '$\\dfrac{2}{3}$ est :'
           this.correction = 
             `On cherche quelle probabilité vaut $\\dfrac{2}{3}$.<br>` +
             `La probabilité conditionnelle $P_{A_1}(S)$ se calcule parmi les personnes de la catégorie « Moins de 25 ans ».<br>` +
@@ -310,7 +310,7 @@ export default class ProbabiliteTableauIdentifier extends ExerciceQcmA {
 
         case 7:
           // 9/16 correspond à P_{A_2}(S)
-          this.enonce += '$\\dfrac{9}{16}$ correspond à la valeur de :'
+          this.enonce += '$\\dfrac{9}{16}$ est :'
           this.correction = 
             `On cherche quelle probabilité vaut $\\dfrac{9}{16}$.<br>` +
             `La probabilité conditionnelle $P_{A_2}(S)$ se calcule parmi les personnes de la catégorie « Entre 25 et 45 ans ».<br>` +
@@ -327,7 +327,7 @@ export default class ProbabiliteTableauIdentifier extends ExerciceQcmA {
 
         case 8:
           // 7/16 correspond à P_{A_2}(\bar{S})
-          this.enonce += '$\\dfrac{7}{16}$ correspond à la valeur de :'
+          this.enonce += '$\\dfrac{7}{16}$ est :'
           this.correction = 
             `On cherche quelle probabilité vaut $\\dfrac{7}{16}$.<br>` +
             `La probabilité conditionnelle $P_{A_2}(\\overline{S})$ se calcule parmi les personnes de la catégorie « Entre 25 et 45 ans ».<br>` +
