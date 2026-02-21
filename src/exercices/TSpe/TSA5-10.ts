@@ -14,7 +14,7 @@ export const interactifType = 'mathLive'
 export const uuid = '00ec6'
 
 export const refs = {
-  'fr-fr': ['TSA5-10'],
+  'fr-fr': ['TSA5-11'],
   'fr-ch': [],
 }
 export default class ExerciceCalculsPropLn extends ExerciceCalculsProprietesLn {

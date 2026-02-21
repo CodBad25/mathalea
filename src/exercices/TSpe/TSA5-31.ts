@@ -8,13 +8,13 @@ import FractionEtendue from '../../modules/FractionEtendue'
 import { gestionnaireFormulaireTexte, randint } from '../../modules/outils'
 import Trinome from '../../modules/Trinome'
 import Exercice from '../Exercice'
-export const titre = 'Dérivation de fonction composées V2'
+export const titre = 'Dérivation de $\\ln(u)$'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 
 export const uuid = '25135'
 export const refs = {
-  'fr-fr': ['TSA2-00'],
+  'fr-fr': ['TSA5-31'],
   'fr-ch': ['4mAna-1'],
 }
 
