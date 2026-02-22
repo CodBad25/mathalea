@@ -1,11 +1,11 @@
-import { combinaisonListes } from '../../lib/outils/arrayOutils'
-import { texNombre } from '../../lib/outils/texNombre'
-import Exercice from '../Exercice'
-import { listeQuestionsToContenu, randint } from '../../modules/outils'
-import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
+import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import { arrondi } from '../../lib/outils/nombres'
+import { texNombre } from '../../lib/outils/texNombre'
+import { listeQuestionsToContenu, randint } from '../../modules/outils'
+import Exercice from '../Exercice'
 export const titre = "Proportion d'une sous-population"
 
 export const interactifReady = true
@@ -21,7 +21,7 @@ export const dateDeModifImportante = '' // Une date de modification importante a
 export const uuid = '86f71'
 
 export const refs = {
-  'fr-fr': ['techno1P2-2'],
+  'fr-fr': ['1T-A1-4'],
   'fr-ch': [],
 }
 export default class nomExercice extends Exercice {
@@ -45,9 +45,7 @@ export default class nomExercice extends Exercice {
       let n: number
       let texte = ''
       let texteCorr = ''
-      switch (
-        listeTypeQuestions[i]
-      ) {
+      switch (listeTypeQuestions[i]) {
         case 'Basket':
           N = randint(200, 1500) * 2
           n = randint(50, N / 2)

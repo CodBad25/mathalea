@@ -1,7 +1,7 @@
 import { choice } from '../../lib/outils/arrayOutils'
 import { texNombre } from '../../lib/outils/texNombre'
-import ExerciceSimple from '../ExerciceSimple'
 import { randint } from '../../modules/outils'
+import ExerciceSimple from '../ExerciceSimple'
 export const titre = 'Proportions de proportions'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -17,7 +17,7 @@ export const dateDeModifImportante = '09/05/2023'
 export const uuid = 'f0c23'
 
 export const refs = {
-  'fr-fr': ['techno1P4'],
+  'fr-fr': ['1T-A1-6'],
   'fr-ch': [],
 }
 export default class ProportiondeProportion extends ExerciceSimple {

@@ -1,6 +1,6 @@
 import { texNombre } from '../../lib/outils/texNombre'
-import ExerciceSimple from '../ExerciceSimple'
 import { randint } from '../../modules/outils'
+import ExerciceSimple from '../ExerciceSimple'
 export const titre = 'Appliquer un pourcentage'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -13,7 +13,7 @@ export const amcType = 'AMCNum'
 export const uuid = 'a66ad'
 
 export const refs = {
-  'fr-fr': ['techno1P2-1', 'BP2SP11'],
+  'fr-fr': ['1T-A1-3', 'BP2SP11'],
   'fr-ch': [],
 }
 export default class Proportion extends ExerciceSimple {
