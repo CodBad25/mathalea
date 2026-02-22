@@ -1,7 +1,7 @@
 import { choice } from '../../lib/outils/arrayOutils'
 import { arrondi } from '../../lib/outils/nombres'
-import ExerciceSimple from '../ExerciceSimple'
 import { randint } from '../../modules/outils'
+import ExerciceSimple from '../ExerciceSimple'
 
 export const titre = "Déterminer un effectif à partir d'une proportion"
 export const interactifReady = true
@@ -16,7 +16,7 @@ export const amcType = 'AMCNum'
 export const uuid = '5b5c0'
 
 export const refs = {
-  'fr-fr': ['techno1P5'],
+  'fr-fr': ['1T-A1-7'],
   'fr-ch': [],
 }
 export default class Effectif extends ExerciceSimple {

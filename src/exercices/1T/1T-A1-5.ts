@@ -1,7 +1,7 @@
 import { choice } from '../../lib/outils/arrayOutils'
 import { texNombre } from '../../lib/outils/texNombre'
-import ExerciceSimple from '../ExerciceSimple'
 import { randint } from '../../modules/outils'
+import ExerciceSimple from '../ExerciceSimple'
 export const titre = 'Proportions'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -16,7 +16,7 @@ export const amcType = 'AMCNum'
 export const uuid = 'c7270'
 
 export const refs = {
-  'fr-fr': ['techno1P3'],
+  'fr-fr': ['1T-A1-5'],
   'fr-ch': [],
 }
 export default class Proportion extends ExerciceSimple {
