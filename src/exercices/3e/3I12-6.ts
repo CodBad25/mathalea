@@ -72,8 +72,8 @@ export default class TrouverLeBonProgrammeConditionnelles extends Exercice {
       let vraisOuFaux: boolean[] = []
       const directionX = choice([-1, 1])
       const cible = {
-        x: randint(3, 5) * 15 * directionX,
-        y: randint(3, 5) * 15,
+        x: randint(3, 5) * 20 * directionX,
+        y: randint(3, 5) * 20,
       }
       const listeProgrammes = []
       const simulateurs = []
@@ -96,14 +96,14 @@ export default class TrouverLeBonProgrammeConditionnelles extends Exercice {
             }
             this.autoCorrection[q].enonce = texte
             for (let i = 0; i < 5; i++) {
-              const startX1 = randint(-3, 3, 0) * 15
-              const startY1 = randint(-3, 3, 0) * 15
+              const startX1 = randint(-2, 2) * 20
+              const startY1 = randint(-2, 2) * 20
               const distances = {
                 x: (cible.x - startX1) * directionX,
                 y: cible.y - startY1,
               }
-              const nbRepetitionsX = Math.round(distances.x / 15)
-              const nbRepetitionsY = Math.round(distances.y / 15)
+              const nbRepetitionsX = Math.round(distances.x / 20)
+              const nbRepetitionsY = Math.round(distances.y / 20)
               const codeScratch1 = programmeConditionnelle1(
                 nbRepetitionsX,
                 nbRepetitionsY,
@@ -287,10 +287,10 @@ function programmeConditionnelle1(
   directionX: number,
 ): string {
   const operateur = directionX === 1 ? '>' : '<'
-  const cibleX = start.x + 15 * nbRepetitionsX * directionX
+  const cibleX = start.x + 20 * nbRepetitionsX * directionX
   let décalementX = 0
   if (!vraiOuFaux) {
-    décalementX = randint(1, 2) * 5 * directionX
+    décalementX = randint(1, 2) * 20 * directionX
   }
   const codeScratch = `\\begin{scratch}[blocks, scale=0.6]
 \\blockmove{aller à x: \\ovalnum{${start.x}} y: \\ovalnum{${start.y}}}
@@ -298,10 +298,10 @@ function programmeConditionnelle1(
 \\blockpen{stylo en position d'écriture}
 \\blockrepeat{répéter \\ovalnum{${nbRepetitionsX + nbRepetitionsY}} fois}{
     \\blockifelse{si \\booloperator{\\ovalmove{abscisse x} ${operateur} \\ovalnum{${cibleX + décalementX - directionX}}} alors}{
-        \\blockmove{ajouter \\ovalnum{15} à y}
+        \\blockmove{ajouter \\ovalnum{20} à y}
     }
     {
-        \\blockmove{ajouter \\ovalnum{${15 * directionX}} à x}
+        \\blockmove{ajouter \\ovalnum{${20 * directionX}} à x}
     }
 }
 \\blocklook{dire \\ovaloperator{regrouper \\ovalnum{x : } et \\ovalmove{abscisse x}}}
