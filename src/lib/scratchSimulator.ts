@@ -621,21 +621,17 @@ export class ScratchInterpreter {
 
         const elseCode = code.substring(elseStart + 1, elseEnd).trim()
 
-        // Afficher le bloc ifelse pendant l'évaluation de la condition
+        // Évaluer la condition d'abord
+        const conditionMet = this.evaluateBoolOperator(conditionHeader)
+        this.currentConditionResult = conditionMet
+
+        // Afficher le bloc ifelse avec le résultat de la condition
         const ifelseBlock = code.substring(ifelseStart, elseEnd + 1)
         this.prepareBlockDisplay('ifelse', conditionHeader, ifelseBlock)
         if (this.onUpdate) {
           await Promise.resolve(this.onUpdate())
         }
         await new Promise((resolve) => setTimeout(resolve, delayMs / 2))
-
-        // Évaluer la condition et exécuter le bon bloc
-        const conditionMet = this.evaluateBoolOperator(conditionHeader)
-        this.currentConditionResult = conditionMet
-        if (this.onUpdate) {
-          await Promise.resolve(this.onUpdate())
-        }
-        await new Promise((resolve) => setTimeout(resolve, delayMs / 4))
         if (conditionMet === true) {
           await this.parseAndExecuteAnimated(thenCode, delayMs)
         } else {
@@ -686,19 +682,16 @@ export class ScratchInterpreter {
 
         const thenCode = code.substring(thenStart + 1, thenEnd).trim()
 
+        // Évaluer la condition d'abord
+        const conditionMet = this.evaluateBoolOperator(conditionHeader)
+        this.currentConditionResult = conditionMet
+
         const ifBlock = code.substring(ifStart, thenEnd + 1)
         this.prepareBlockDisplay('if', conditionHeader, ifBlock)
         if (this.onUpdate) {
           await Promise.resolve(this.onUpdate())
         }
         await new Promise((resolve) => setTimeout(resolve, delayMs / 2))
-
-        const conditionMet = this.evaluateBoolOperator(conditionHeader)
-        this.currentConditionResult = conditionMet
-        if (this.onUpdate) {
-          await Promise.resolve(this.onUpdate())
-        }
-        await new Promise((resolve) => setTimeout(resolve, delayMs / 4))
         if (conditionMet === true) {
           await this.parseAndExecuteAnimated(thenCode, delayMs)
         }
@@ -940,7 +933,8 @@ export class ScratchInterpreter {
     )
     if (type === 'if' || type === 'ifelse') {
       this.currentConditionText = this.normalizeConditionText(content)
-      this.currentConditionResult = null
+      // Ne pas réinitialiser currentConditionResult si elle est déjà définie
+      // (elle a été évaluée juste avant l'appel à prepareBlockDisplay)
     } else {
       this.currentConditionText = ''
       this.currentConditionResult = null
@@ -3078,13 +3072,13 @@ export class ScratchSimulator extends HTMLElement {
           ? ` | Resultat : ${result.currentConditionResult ? 'vrai' : 'faux'}`
           : ''
       const conditionHtml = conditionLabel
-        ? `<div class="mt-1 text-xs text-gray-500">${conditionLabel}${conditionResult}</div>`
+        ? ` <span class="font-semibold">${conditionLabel}${conditionResult}</span>`
         : ''
       this.stepDiv.innerHTML =
         '<span class="font-semibold">Instruction :</span>' +
         indexLabel +
-        result.currentInstructionScratchHtml +
-        conditionHtml
+        conditionHtml +
+        result.currentInstructionScratchHtml
       renderScratchDiv(this.stepDiv)
     } else {
       this.stepDiv.textContent = '' // 'Instruction : -'
