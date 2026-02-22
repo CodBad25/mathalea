@@ -18,6 +18,8 @@ export interface ExecutionResult {
   currentInstruction?: string
   currentInstructionScratchHtml?: string
   currentInstructionIndex?: number
+  currentConditionText?: string
+  currentConditionResult?: boolean | null
   repeatIterations?: Array<{
     level: number
     current: number
@@ -52,7 +54,8 @@ export class ScratchInterpreter {
   private currentInstruction: string = ''
   private currentInstructionScratchHtml: string = ''
   private currentInstructionIndex: number = -1
-  private currentRawBlock: string = ''
+  private currentConditionText: string = ''
+  private currentConditionResult: boolean | null = null
   private repeatIterations: Array<{
     mode: 'times' | 'until'
     current: number
@@ -66,36 +69,6 @@ export class ScratchInterpreter {
     this.x = startX
     this.y = startY
     this.angle = startAngle
-  }
-
-  execute(scratchCode: string): ExecutionResult {
-    this.traces = []
-    this.messages = []
-    this.variables = {}
-    this.customBlocks = {}
-    this.stopped = false
-    this.answer = ''
-    this.currentInstructionIndex = -1
-    this.repeatIterations = []
-
-    // D'abord, extraire les définitions de blocs personnalisés
-    const codeWithoutDefinitions = this.parseCustomBlockDefinitions(scratchCode)
-
-    // Parser LaTeX Scratch et exécution
-    this.parseAndExecute(codeWithoutDefinitions)
-
-    return {
-      traces: this.traces,
-      finalX: this.x,
-      finalY: this.y,
-      finalAngle: this.angle,
-      variables: this.variables,
-      messages: this.messages,
-      currentInstruction: this.currentInstruction,
-      currentInstructionScratchHtml: this.currentInstructionScratchHtml,
-      currentInstructionIndex: this.currentInstructionIndex,
-      repeatIterations: this.getRepeatIterationsState(),
-    }
   }
 
   async executeAnimated(
@@ -129,6 +102,8 @@ export class ScratchInterpreter {
       currentInstruction: this.currentInstruction,
       currentInstructionScratchHtml: this.currentInstructionScratchHtml,
       currentInstructionIndex: this.currentInstructionIndex,
+      currentConditionText: this.currentConditionText,
+      currentConditionResult: this.currentConditionResult,
       repeatIterations: this.getRepeatIterationsState(),
     }
   }
@@ -144,6 +119,8 @@ export class ScratchInterpreter {
       currentInstruction: this.currentInstruction,
       currentInstructionScratchHtml: this.currentInstructionScratchHtml,
       currentInstructionIndex: this.currentInstructionIndex,
+      currentConditionText: this.currentConditionText,
+      currentConditionResult: this.currentConditionResult,
       repeatIterations: this.getRepeatIterationsState(),
     }
   }
@@ -612,16 +589,17 @@ export class ScratchInterpreter {
 
         const elseCode = code.substring(elseStart + 1, elseEnd).trim()
 
-        // Afficher le bloc ifelse pendant l'évaluation de la condition
+        // Évaluer la condition d'abord
+        const conditionMet = this.evaluateBoolOperator(conditionHeader)
+        this.currentConditionResult = conditionMet
+
+        // Afficher le bloc ifelse avec le résultat de la condition
         const ifelseBlock = code.substring(ifelseStart, elseEnd + 1)
         this.prepareBlockDisplay('ifelse', conditionHeader, ifelseBlock)
         if (this.onUpdate) {
           await Promise.resolve(this.onUpdate())
         }
         await new Promise((resolve) => setTimeout(resolve, delayMs / 2))
-
-        // Évaluer la condition et exécuter le bon bloc
-        const conditionMet = this.evaluateBoolOperator(conditionHeader)
         if (conditionMet === true) {
           await this.parseAndExecuteAnimated(thenCode, delayMs)
         } else {
@@ -672,14 +650,16 @@ export class ScratchInterpreter {
 
         const thenCode = code.substring(thenStart + 1, thenEnd).trim()
 
+        // Évaluer la condition d'abord
+        const conditionMet = this.evaluateBoolOperator(conditionHeader)
+        this.currentConditionResult = conditionMet
+
         const ifBlock = code.substring(ifStart, thenEnd + 1)
         this.prepareBlockDisplay('if', conditionHeader, ifBlock)
         if (this.onUpdate) {
           await Promise.resolve(this.onUpdate())
         }
         await new Promise((resolve) => setTimeout(resolve, delayMs / 2))
-
-        const conditionMet = this.evaluateBoolOperator(conditionHeader)
         if (conditionMet === true) {
           await this.parseAndExecuteAnimated(thenCode, delayMs)
         }
@@ -919,7 +899,31 @@ export class ScratchInterpreter {
       content,
       rawBlock,
     )
-    this.currentRawBlock = rawBlock || ''
+    if (type === 'if' || type === 'ifelse') {
+      this.currentConditionText = this.normalizeConditionText(content)
+      // Ne pas réinitialiser currentConditionResult si elle est déjà définie
+      // (elle a été évaluée juste avant l'appel à prepareBlockDisplay)
+    } else {
+      this.currentConditionText = ''
+      this.currentConditionResult = null
+    }
+  }
+
+  private normalizeConditionText(content: string): string {
+    const normalized = content
+      .replace(/\\booloperator\{([^}]+)\}/g, '$1')
+      .replace(/\\ovaloperator\{([^}]+)\}/g, '$1')
+      .replace(/\\ovalnum\{([^}]+)\}/g, '$1')
+      .replace(/\\ovalvariabl(?:e)?\{([^}]+)\}/g, '$1')
+      .replace(/\\ovalsensing\{([^}]+)\}/g, '$1')
+      .replace(/\\ovalmove\{([^}]+)\}/g, '$1')
+      .replace(/\\selectmenu\*?\{([^}]+)\}/g, '$1')
+      .replace(/\\[a-zA-Z*]+(?:\{[^{}]*\})?/g, ' ')
+      .replace(/[{}]/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim()
+
+    return normalized || content
   }
 
   private async executeBlockAction(
@@ -1997,19 +2001,20 @@ export class ScratchSimulator extends HTMLElement {
   private scratchCode: string = ''
   private modal: HTMLDialogElement | null = null
   private canvas: HTMLCanvasElement | null = null
+  private canvasWrapper: HTMLDivElement | null = null
+  private hasCanvasRelevantBlocks: boolean = false
   private stepDiv: HTMLDivElement | null = null
   private infoDiv: HTMLDivElement | null = null
   private codeDiv: HTMLDivElement | null = null
   private codeBlocks: CodeBlockNode[] = []
   private allRenderedBlocks: CodeBlockNode[] = []
-  private executionBlocks: CodeBlockNode[] = []
-  private atomicBlocks: CodeBlockNode[] = [] // Blocs atomiques uniquement (sans children structures)
   private highlightedExecutionIndex: number | null = null
   private highlightedBlockElement: SVGGElement | null = null
   private customBlockDefinitions: Record<string, CodeBlockNode[]> = {}
   private customDefinitionGroups: Set<SVGGElement> = new Set()
+  private conditionBlockElements: Set<SVGGElement> = new Set()
   private blockCacheAttempts: number = 0
-  private executionIndexToHtml: Map<number, string> = new Map() // Map: currentInstructionIndex -> currentInstructionHtml
+  private executionIndexToBlockId: Map<number, string> = new Map() // Map: currentInstructionIndex -> id du bloc SVG
   private delayMs: number = 2000
   private isRunning: boolean = false
   private isPaused: boolean = false
@@ -2033,6 +2038,12 @@ export class ScratchSimulator extends HTMLElement {
       this.createModal()
     }
     if (this.modal) {
+      this.hasCanvasRelevantBlocks = this.codeHasCanvasBlocks(this.scratchCode)
+      if (this.canvasWrapper) {
+        this.canvasWrapper.style.display = this.hasCanvasRelevantBlocks
+          ? 'block'
+          : 'none'
+      }
       this.runSimulation()
       if (this.modal.showModal) {
         this.modal.showModal()
@@ -2099,6 +2110,10 @@ export class ScratchSimulator extends HTMLElement {
 
     // Colonne gauche: canvas avec bouton de contrôle
     const canvasWrapper = document.createElement('div')
+    this.canvasWrapper = canvasWrapper
+    canvasWrapper.style.display = this.hasCanvasRelevantBlocks
+      ? 'block'
+      : 'none'
     this.canvas = document.createElement('canvas')
     this.canvas.width = 400
     this.canvas.height = 400
@@ -2188,6 +2203,10 @@ export class ScratchSimulator extends HTMLElement {
     })
   }
 
+  private codeHasCanvasBlocks(code: string): boolean {
+    return /\\block(?:move|pen)\b/.test(code)
+  }
+
   private highlightCurrentInstruction(
     currentInstructionHtml: string,
     currentInstructionIndex?: number,
@@ -2198,66 +2217,27 @@ export class ScratchSimulator extends HTMLElement {
 
     let targetBlock: CodeBlockNode | null = null
     let executionIndex: number | null = null
-
-    // PRIORITÉ 0 : Vérifier le mapping dynamique enregistré pendant l'exécution
-    // Cela est crucial pour les blocs conditionnels (ifelse/blockif) où le HTML passé peut être
-    // celui d'une instruction enfant et non du bloc conteneur lui-même
+    let matchedElement: SVGGElement | null = null
+    // PRIORITÉ 0 : mapping déterministe index d'exécution -> sélecteur CSS complet
     if (
       currentInstructionIndex !== undefined &&
       currentInstructionIndex >= 0 &&
-      this.executionIndexToHtml.has(currentInstructionIndex)
+      this.executionIndexToBlockId.has(currentInstructionIndex)
     ) {
-      const mappedHtml = this.executionIndexToHtml.get(currentInstructionIndex)
-      if (mappedHtml) {
-        currentInstructionHtml = mappedHtml
-      }
-    }
-
-    // PRIORITÉ 1 : Utiliser l'index d'exécution directement si disponible et valide
-    // Cela garantit une correspondance 1:1 avec la position d'exécution et évite les ambiguïtés
-    // dues aux instructions dupliquées
-    if (
-      currentInstructionIndex !== undefined &&
-      currentInstructionIndex >= 0 &&
-      this.executionBlocks.length > 0 &&
-      currentInstructionIndex < this.executionBlocks.length
-    ) {
-      executionIndex = currentInstructionIndex
-      targetBlock = this.executionBlocks[currentInstructionIndex] ?? null
-    }
-
-    // PRIORITÉ 2 : Fallback sur recherche par texte si pas de bloc trouvé et si on a du HTML
-    // Ceci est un fallback pour les cas où currentInstructionIndex n'est pas disponible
-    if (!targetBlock && currentInstructionHtml) {
-      const tempDiv = document.createElement('div')
-      tempDiv.innerHTML = currentInstructionHtml
-      const instructionText = this.normalizeText(tempDiv.textContent || '')
-      if (instructionText) {
-        // Chercher d'abord une correspondance exacte dans les blocs atomiques
-        targetBlock = this.findBlockByText(
-          this.atomicBlocks,
-          instructionText,
-          true,
-        )
-        // Si pas trouvé, chercher une correspondance partielle dans les atomiques
-        if (!targetBlock) {
-          targetBlock = this.findBlockByText(
-            this.atomicBlocks,
-            instructionText,
-            false,
-          )
-        }
-        // En dernier recours, chercher dans tous les blocs (pour les conteneurs comme ifelse)
-        if (!targetBlock) {
-          targetBlock = this.findBlockByText(
-            this.allRenderedBlocks,
-            instructionText,
-            true,
-          )
+      const blockId = this.executionIndexToBlockId.get(currentInstructionIndex)
+      const selector = blockId ? this.getSelectorFromBlockId(blockId) : null
+      if (selector && this.codeDiv) {
+        matchedElement = this.codeDiv.querySelector<SVGGElement>(selector)
+        if (matchedElement) {
+          targetBlock = {
+            element: matchedElement,
+            text: this.getBlockOwnText(matchedElement),
+            children: [],
+          }
+          executionIndex = currentInstructionIndex
         }
       }
     }
-
     if (
       targetBlock &&
       this.highlightedBlockElement === targetBlock.element &&
@@ -2312,44 +2292,134 @@ export class ScratchSimulator extends HTMLElement {
       return
     }
 
-    const topLevelGroups = groups.filter(
-      (group) => !this.getNearestBlockAncestor(group, svg),
-    )
+    const topLevelGroups = groups
+      .filter((group) => !this.getNearestBlockAncestor(group, svg))
+      .sort((a, b) => this.compareBlockPosition(a, b))
 
     if (topLevelGroups.length === 0) {
       this.retryCacheRenderedBlocks()
       return
     }
 
+    this.assignIdsToRenderedBlocks(groups)
+
     this.codeBlocks = topLevelGroups.map((group) => this.buildBlockTree(group))
+    this.stripConditionBlocks(this.codeBlocks)
+
     const customDefinitions = this.extractCustomBlockDefinitions(svg)
     this.customBlockDefinitions = customDefinitions.definitions
     this.customDefinitionGroups = customDefinitions.definitionGroups
     this.allRenderedBlocks = groups
-      .filter((group) => !this.customDefinitionGroups.has(group))
+      .filter(
+        (group) =>
+          !this.customDefinitionGroups.has(group) &&
+          !this.conditionBlockElements.has(group),
+      )
       .map((group) => ({
         element: group,
         text: this.getBlockOwnText(group),
         children: [],
       }))
-    this.executionBlocks = this.buildExecutionBlocks(this.codeBlocks)
-    this.atomicBlocks = this.extractAtomicBlocks(this.codeBlocks)
     this.blockCacheAttempts = 0
   }
 
   private buildBlockTree(group: SVGGElement): CodeBlockNode {
-    const node: CodeBlockNode = {
+    const scopedGroups = [
+      group,
+      ...Array.from(group.querySelectorAll<SVGGElement>('g')).filter((child) =>
+        this.isBlockGroup(child),
+      ),
+    ]
+
+    const scopedSet = new Set<SVGGElement>(scopedGroups)
+    const nodeMap = new Map<SVGGElement, CodeBlockNode>()
+
+    scopedGroups.forEach((entry) => {
+      nodeMap.set(entry, {
+        element: entry,
+        text: this.getBlockOwnText(entry),
+        children: [],
+      })
+    })
+
+    scopedGroups.forEach((entry) => {
+      if (entry === group) {
+        return
+      }
+
+      const parent = this.getNearestBlockAncestorInSet(entry, scopedSet)
+      if (!parent) {
+        return
+      }
+
+      const parentNode = nodeMap.get(parent)
+      const childNode = nodeMap.get(entry)
+      if (parentNode && childNode) {
+        parentNode.children.push(childNode)
+      }
+    })
+
+    const sortTree = (node: CodeBlockNode): void => {
+      node.children.sort((a, b) =>
+        this.compareBlockPosition(a.element, b.element),
+      )
+      node.children.forEach((child) => sortTree(child))
+    }
+
+    const rootNode = nodeMap.get(group) || {
       element: group,
       text: this.getBlockOwnText(group),
       children: [],
     }
+    sortTree(rootNode)
+    return rootNode
+  }
 
-    const nestedGroups = this.extractNestedBlockGroups(group)
-    if (nestedGroups.length > 0) {
-      node.children = nestedGroups.map((child) => this.buildBlockTree(child))
+  private stripConditionBlocks(nodes: CodeBlockNode[]): void {
+    this.conditionBlockElements.clear()
+
+    const walk = (node: CodeBlockNode): void => {
+      if (this.isIfElseBlock(node) && node.children.length > 0) {
+        const conditionCandidates = node.children.filter((child) =>
+          this.isConditionBlockNode(child),
+        )
+        const orderedCandidates = conditionCandidates.sort((a, b) =>
+          this.compareBlockPosition(a.element, b.element),
+        )
+        const fallbackOrdered = node.children
+          .slice()
+          .sort((a, b) => this.compareBlockPosition(a.element, b.element))
+        const conditionChild =
+          orderedCandidates[0] || fallbackOrdered[0] || node.children[0]
+
+        if (conditionChild) {
+          this.conditionBlockElements.add(conditionChild.element)
+          node.children = node.children.filter(
+            (child) => child.element !== conditionChild.element,
+          )
+        }
+      }
+
+      node.children.forEach((child) => walk(child))
     }
 
-    return node
+    nodes.forEach((node) => walk(node))
+  }
+
+  private getNearestBlockAncestorInSet(
+    group: SVGGElement,
+    candidates: Set<SVGGElement>,
+  ): SVGGElement | null {
+    let parent: Element | null = group.parentElement
+
+    while (parent) {
+      if (candidates.has(parent as SVGGElement)) {
+        return parent as SVGGElement
+      }
+      parent = parent.parentElement
+    }
+
+    return null
   }
 
   private isBlockGroup(group: Element): group is SVGGElement {
@@ -2432,114 +2502,32 @@ export class ScratchSimulator extends HTMLElement {
     return withoutPrefix.trim()
   }
 
-  private extractNestedBlockGroups(group: SVGGElement): SVGGElement[] {
-    const children = Array.from(group.children)
-    const loopArrowIndex = children.findIndex((child) => {
-      if (child.tagName.toLowerCase() !== 'use') return false
-      const href =
-        child.getAttribute('href') || child.getAttribute('xlink:href') || ''
-      return href.includes('#sb3-loopArrow')
-    })
-
-    if (loopArrowIndex === -1) {
-      // Pas de loopArrow : peut-être un ifelse avec branches then/else
-      // Un ifelse a typiquement des groupes 'g' directs qui contiennent les blocs
-      const directGroupChildren = children.filter(
-        (child): child is SVGGElement => child.tagName.toLowerCase() === 'g',
-      )
-
-      if (directGroupChildren.length === 0) return []
-
-      // Chercher les blocs dans chaque groupe direct
-      const allBlocks: SVGGElement[] = []
-      directGroupChildren.forEach((containerGroup) => {
-        const rowGroups = Array.from(containerGroup.children).filter(
-          (child): child is SVGGElement => child.tagName.toLowerCase() === 'g',
-        )
-
-        const nested = rowGroups
-          .map((rowGroup) => ({
-            rowGroup,
-            blockGroup: this.findFirstBlockGroup(rowGroup),
-          }))
-          .filter(
-            (
-              entry,
-            ): entry is {
-              rowGroup: SVGGElement
-              blockGroup: SVGGElement
-            } => Boolean(entry.blockGroup),
-          )
-
-        nested.sort(
-          (a, b) =>
-            this.getTranslateY(a.rowGroup) - this.getTranslateY(b.rowGroup),
-        )
-
-        allBlocks.push(...nested.map((entry) => entry.blockGroup))
-      })
-
-      return allBlocks
-    }
-
-    const container = children
-      .slice(loopArrowIndex + 1)
-      .find(
-        (child): child is SVGGElement => child.tagName.toLowerCase() === 'g',
-      )
-
-    if (!container) return []
-
-    const rowGroups = Array.from(container.children).filter(
-      (child): child is SVGGElement => child.tagName.toLowerCase() === 'g',
-    )
-
-    const nested = rowGroups
-      .map((rowGroup) => ({
-        rowGroup,
-        blockGroup: this.findFirstBlockGroup(rowGroup),
-      }))
-      .filter(
-        (
-          entry,
-        ): entry is {
-          rowGroup: SVGGElement
-          blockGroup: SVGGElement
-        } => Boolean(entry.blockGroup),
-      )
-
-    nested.sort(
-      (a, b) => this.getTranslateY(a.rowGroup) - this.getTranslateY(b.rowGroup),
-    )
-
-    return nested.map((entry) => entry.blockGroup)
-  }
-
   private getBlockOwnText(group: SVGGElement): string {
-    const children = Array.from(group.children)
-    const loopArrowIndex = children.findIndex((child) => {
-      if (child.tagName.toLowerCase() !== 'use') return false
-      const href =
-        child.getAttribute('href') || child.getAttribute('xlink:href') || ''
-      return href.includes('#sb3-loopArrow')
-    })
-
-    const relevantChildren =
-      loopArrowIndex === -1 ? children : children.slice(0, loopArrowIndex)
-
     const parts: string[] = []
-    relevantChildren.forEach((child) => {
-      if (child.tagName.toLowerCase() === 'text') {
-        parts.push(child.textContent || '')
-        return
-      }
+    const textNodes = Array.from(group.querySelectorAll('text'))
 
-      const texts = Array.from(child.querySelectorAll('text'))
-      texts.forEach((textEl) => parts.push(textEl.textContent || ''))
+    textNodes.forEach((textNode) => {
+      const ownerBlock = this.getNearestBlockAncestorForNode(textNode)
+      if (ownerBlock === group) {
+        parts.push(textNode.textContent || '')
+      }
     })
 
     const raw = parts.join(' ').trim()
     return this.normalizeText(raw || group.textContent || '')
+  }
+
+  private getNearestBlockAncestorForNode(node: Element): SVGGElement | null {
+    let current: Element | null = node.parentElement
+
+    while (current) {
+      if (this.isBlockGroup(current)) {
+        return current
+      }
+      current = current.parentElement
+    }
+
+    return null
   }
 
   private getNearestBlockAncestor(
@@ -2556,20 +2544,42 @@ export class ScratchSimulator extends HTMLElement {
     return null
   }
 
-  private findFirstBlockGroup(root: Element): SVGGElement | null {
-    if (this.isBlockGroup(root)) return root
-    const groups = Array.from(root.querySelectorAll<SVGGElement>('g')).filter(
-      (group) => this.isBlockGroup(group),
-    )
-    return groups.length > 0 ? groups[0] : null
-  }
-
   private getTranslateY(group: SVGGElement): number {
     const transform = group.getAttribute('transform') || ''
     const match = transform.match(/translate\(([-\d.]+)(?:[ ,]([-\d.]+))?\)/)
     if (!match) return 0
     const y = match[2] ? parseFloat(match[2]) : 0
     return Number.isNaN(y) ? 0 : y
+  }
+
+  private getTranslateX(group: SVGGElement): number {
+    const transform = group.getAttribute('transform') || ''
+    const match = transform.match(/translate\(([-\d.]+)(?:[ ,]([-\d.]+))?\)/)
+    if (!match) return 0
+    const x = match[1] ? parseFloat(match[1]) : 0
+    return Number.isNaN(x) ? 0 : x
+  }
+
+  private compareBlockPosition(a: SVGGElement, b: SVGGElement): number {
+    const rectA = a.getBoundingClientRect()
+    const rectB = b.getBoundingClientRect()
+    const yDiff = rectA.top - rectB.top
+    if (Math.abs(yDiff) > 0.5) {
+      return yDiff
+    }
+    const xDiff = rectA.left - rectB.left
+    if (Math.abs(xDiff) > 0.5) {
+      return xDiff
+    }
+    const fallbackY = this.getTranslateY(a) - this.getTranslateY(b)
+    if (Math.abs(fallbackY) > 0.001) {
+      return fallbackY
+    }
+    return this.getTranslateX(a) - this.getTranslateX(b)
+  }
+
+  private isConditionBlockNode(node: CodeBlockNode): boolean {
+    return /<=|>=|<|>|=/.test(node.text)
   }
 
   private clearBlockHighlights(blocks: CodeBlockNode[]): void {
@@ -2581,115 +2591,8 @@ export class ScratchSimulator extends HTMLElement {
     })
   }
 
-  private findBlockByText(
-    blocks: CodeBlockNode[],
-    instructionText: string,
-    exactMatch: boolean = false,
-  ): CodeBlockNode | null {
-    for (const block of blocks) {
-      const matches = exactMatch
-        ? block.text === instructionText
-        : block.text.includes(instructionText)
-
-      if (matches) {
-        return block
-      }
-
-      const childMatch = this.findBlockByText(
-        block.children,
-        instructionText,
-        exactMatch,
-      )
-      if (childMatch) {
-        return childMatch
-      }
-    }
-
-    return null
-  }
-
-  private buildExecutionBlocks(
-    nodes: CodeBlockNode[],
-    includeDefinitionNodes: boolean = false,
-  ): CodeBlockNode[] {
-    const ordered: CodeBlockNode[] = []
-
-    nodes.forEach((node) => {
-      if (
-        !includeDefinitionNodes &&
-        this.customDefinitionGroups.has(node.element)
-      ) {
-        return
-      }
-
-      const customDefinition = this.customBlockDefinitions[node.text]
-      if (customDefinition) {
-        // Afficher le bloc personnalisé puis dérouler son contenu
-        ordered.push(node)
-        const expanded = this.buildExecutionBlocks(customDefinition, true)
-        ordered.push(...expanded)
-        return
-      }
-
-      if (this.isIfElseBlock(node)) {
-        // Ajouter le nœud ifelse pour que les repeat sachent quoi répéter,
-        // mais il ne sera jamais surligné (filtré lors du surlignage)
-        ordered.push(node)
-        return
-      }
-
-      if (this.isRepeatBlock(node)) {
-        const times = this.extractRepeatCount(node.text)
-        const children = this.buildExecutionBlocks(
-          node.children,
-          includeDefinitionNodes,
-        )
-        const iterations = Math.max(0, times)
-        for (let i = 0; i < iterations; i += 1) {
-          ordered.push(...children)
-        }
-      } else {
-        ordered.push(node)
-      }
-    })
-
-    return ordered
-  }
-
-  private extractAtomicBlocks(nodes: CodeBlockNode[]): CodeBlockNode[] {
-    const atomic: CodeBlockNode[] = []
-
-    nodes.forEach((node) => {
-      if (this.isRepeatBlock(node) || this.isIfElseBlock(node)) {
-        // Pour les conteneurs, extraire récursivement les enfants atomiques
-        atomic.push(...this.extractAtomicBlocks(node.children))
-      } else if (this.customBlockDefinitions[node.text]) {
-        // Pour les blocs customs, on veut le bloc lui-même ET ses enfants
-        atomic.push(node)
-        const definition = this.customBlockDefinitions[node.text]
-        atomic.push(...this.extractAtomicBlocks(definition))
-      } else {
-        // Bloc atomique standard
-        atomic.push(node)
-      }
-    })
-
-    return atomic
-  }
-
-  private isRepeatBlock(node: CodeBlockNode): boolean {
-    return node.text.includes('répéter')
-  }
-
   private isIfElseBlock(node: CodeBlockNode): boolean {
     return node.text.includes('si ') && node.text.includes(' alors')
-  }
-
-  private extractRepeatCount(text: string): number {
-    const match = text.match(/\b(\d+)\b/)
-    if (!match) return 1
-    const count = parseInt(match[1], 10)
-    return Number.isNaN(count) ? 0 : count
   }
 
   private retryCacheRenderedBlocks(): void {
@@ -2702,9 +2605,234 @@ export class ScratchSimulator extends HTMLElement {
     return text
       .replace(/\[(\d+)\]/g, '$1') // Retirer les crochets autour des nombres [15] -> 15
       .replace(/\[([^\]]+)\]/g, '$1') // Retirer les autres crochets [xxx] -> xxx
+      .replace(/[()]/g, '') // Retirer les parenthèses
       .replace(/\s+/g, ' ')
       .trim()
       .toLowerCase()
+  }
+
+  private isIfElseBlockText(text: string): boolean {
+    return text.includes('si') && text.includes('alors')
+  }
+
+  private generateBlockId(): string {
+    if (
+      typeof crypto !== 'undefined' &&
+      typeof crypto.randomUUID === 'function'
+    ) {
+      return `scratch-block-${crypto.randomUUID()}`
+    }
+    return `scratch-block-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`
+  }
+
+  private assignIdsToRenderedBlocks(groups: SVGGElement[]): void {
+    groups.forEach((group) => {
+      if (!group.id) {
+        group.id = this.generateBlockId()
+      }
+      group.setAttribute('data-scratch-block-id', group.id)
+    })
+  }
+
+  private escapeCssIdentifier(value: string): string {
+    if (typeof CSS !== 'undefined' && typeof CSS.escape === 'function') {
+      return CSS.escape(value)
+    }
+    return value.replace(/([^a-zA-Z0-9_-])/g, '\\$1')
+  }
+
+  private getSelectorFromBlockId(blockId: string): string {
+    return `#${this.escapeCssIdentifier(blockId)}`
+  }
+
+  private chooseNearestOrder(
+    candidates: number[],
+    lastOrder: number,
+    maxOrder: number,
+  ): number | null {
+    if (candidates.length === 0) return null
+
+    let best: number | null = null
+    let bestDelta = Number.POSITIVE_INFINITY
+
+    for (const order of candidates) {
+      const delta =
+        order >= lastOrder ? order - lastOrder : order + maxOrder - lastOrder
+      if (delta < bestDelta) {
+        bestDelta = delta
+        best = order
+      }
+    }
+
+    return best
+  }
+
+  private getNextOrderAfter(current: number, total: number): number {
+    if (total <= 0) return 0
+    const next = current + 1
+    return next >= total ? 0 : next
+  }
+
+  private extractInstructionTextFromHtml(html: string): string {
+    if (!html) return ''
+    const tempDiv = document.createElement('div')
+    tempDiv.innerHTML = html
+    return this.normalizeText(tempDiv.textContent || '')
+  }
+
+  private async waitForRenderedBlocks(maxFrames: number = 12): Promise<void> {
+    for (let attempt = 0; attempt < maxFrames; attempt += 1) {
+      if (this.codeBlocks.length > 0 && this.allRenderedBlocks.length > 0) {
+        return
+      }
+      this.cacheRenderedBlocks()
+      await new Promise<void>((resolve) =>
+        requestAnimationFrame(() => resolve()),
+      )
+    }
+  }
+
+  private async buildExecutionIndexToSelectorMap(): Promise<void> {
+    this.executionIndexToBlockId.clear()
+    await this.waitForRenderedBlocks()
+
+    if (!this.codeDiv || this.allRenderedBlocks.length === 0) {
+      return
+    }
+
+    const candidateBlocks = this.allRenderedBlocks.filter(
+      (block) =>
+        !this.customDefinitionGroups.has(block.element) &&
+        !this.conditionBlockElements.has(block.element),
+    )
+
+    if (candidateBlocks.length === 0) {
+      return
+    }
+
+    const idsByOrder = new Map<number, string>()
+    const exactOrdersByText = new Map<string, number[]>()
+    const allTexts: Array<{ order: number; text: string }> = []
+
+    candidateBlocks.forEach((block, order) => {
+      const blockId = block.element.id || this.generateBlockId()
+      if (!block.element.id) {
+        block.element.id = blockId
+        block.element.setAttribute('data-scratch-block-id', blockId)
+      }
+      idsByOrder.set(order, blockId)
+
+      const normalizedText = this.normalizeText(block.text)
+      allTexts.push({ order, text: normalizedText })
+
+      const bucket = exactOrdersByText.get(normalizedText) || []
+      bucket.push(order)
+      exactOrdersByText.set(normalizedText, bucket)
+    })
+
+    const dryInterpreter = new ScratchInterpreter(200, 200, 90)
+    const seenInstructionIndexes = new Set<number>()
+    let lastOrder = -1
+
+    await dryInterpreter.executeAnimated(
+      this.scratchCode,
+      async () => {
+        const state = dryInterpreter.getCurrentState()
+        const index = state.currentInstructionIndex
+        if (
+          typeof index !== 'number' ||
+          index < 0 ||
+          seenInstructionIndexes.has(index)
+        ) {
+          return
+        }
+
+        seenInstructionIndexes.add(index)
+        const instructionText = this.extractInstructionTextFromHtml(
+          state.currentInstructionScratchHtml || '',
+        )
+        const isConditionStep = Boolean(state.currentConditionText)
+
+        let candidateOrders: number[] = []
+
+        if (isConditionStep) {
+          candidateOrders = allTexts
+            .filter(({ text }) => this.isIfElseBlockText(text))
+            .map(({ order }) => order)
+        } else if (instructionText) {
+          candidateOrders = exactOrdersByText.get(instructionText) || []
+
+          // Fallback : si pas de correspondance exacte, essayer une super-normalisation
+          if (candidateOrders.length === 0) {
+            const superNormalized = instructionText
+              .replace(/\s+/g, '')
+              .toLowerCase()
+            for (const [key, orders] of exactOrdersByText.entries()) {
+              const keyNormalized = key.replace(/\s+/g, '').toLowerCase()
+              if (keyNormalized === superNormalized) {
+                candidateOrders = orders
+                break
+              }
+            }
+          }
+        }
+
+        if (
+          candidateOrders.length === 0 &&
+          instructionText &&
+          !isConditionStep
+        ) {
+          // Super-normalisation : supprimer tous les espaces pour la comparaison
+          const superNormalizedInstruction = instructionText
+            .replace(/\s+/g, '')
+            .toLowerCase()
+
+          candidateOrders = allTexts
+            .filter(({ text }) => {
+              const superNormalizedText = text.replace(/\s+/g, '').toLowerCase()
+              return (
+                text.includes(instructionText) ||
+                instructionText.includes(text) ||
+                superNormalizedText.includes(superNormalizedInstruction) ||
+                superNormalizedInstruction.includes(superNormalizedText)
+              )
+            })
+            .map(({ order }) => order)
+        }
+
+        if (candidateOrders.length === 0) {
+          const fallbackOrder = this.getNextOrderAfter(
+            lastOrder,
+            candidateBlocks.length,
+          )
+          const fallbackId = idsByOrder.get(fallbackOrder)
+          if (fallbackId) {
+            this.executionIndexToBlockId.set(index, fallbackId)
+            lastOrder = fallbackOrder
+          }
+          return
+        }
+
+        const chosenOrder = this.chooseNearestOrder(
+          candidateOrders,
+          lastOrder,
+          candidateBlocks.length,
+        )
+
+        if (chosenOrder === null) {
+          return
+        }
+
+        const blockId = idsByOrder.get(chosenOrder)
+        if (!blockId) {
+          return
+        }
+
+        this.executionIndexToBlockId.set(index, blockId)
+        lastOrder = chosenOrder
+      },
+      0,
+    )
   }
 
   private runSimulation(): void {
@@ -2724,8 +2852,8 @@ export class ScratchSimulator extends HTMLElement {
     this.isPaused = false
     this.updateControlButton()
 
-    // Réinitialiser le mapping des index vers HTML
-    this.executionIndexToHtml.clear()
+    // Construire le mapping linéaire index d'exécution -> sélecteur SVG
+    await this.buildExecutionIndexToSelectorMap()
 
     // Exécuter avec animation
     await this.interpreter.executeAnimated(
@@ -2739,17 +2867,6 @@ export class ScratchSimulator extends HTMLElement {
         }
 
         const state = this.interpreter!.getCurrentState()
-        // Enregistrer le mapping : index -> HTML pour ce bloc
-        if (
-          state.currentInstructionIndex !== undefined &&
-          state.currentInstructionIndex >= 0 &&
-          state.currentInstructionScratchHtml
-        ) {
-          this.executionIndexToHtml.set(
-            state.currentInstructionIndex,
-            state.currentInstructionScratchHtml,
-          )
-        }
         requestAnimationFrame(() => {
           this.drawSimulation(state)
           this.displayInfo(state)
@@ -2785,6 +2902,13 @@ export class ScratchSimulator extends HTMLElement {
 
   private drawSimulation(result: ExecutionResult): void {
     if (!this.canvas) return
+
+    const shouldShowCanvas =
+      result.traces.length > 0 || this.hasCanvasRelevantBlocks
+    if (this.canvasWrapper) {
+      this.canvasWrapper.style.display = shouldShowCanvas ? 'block' : 'none'
+    }
+    if (!shouldShowCanvas) return
 
     const ctx = this.canvas.getContext('2d')
     if (!ctx) return
@@ -2931,9 +3055,20 @@ export class ScratchSimulator extends HTMLElement {
         typeof result.currentInstructionIndex === 'number'
           ? ` <span class="text-xs text-gray-500">(#${result.currentInstructionIndex < 0 ? '0' : String(result.currentInstructionIndex + 1)})</span>`
           : ''
+      const conditionLabel = result.currentConditionText
+        ? `Condition : ${result.currentConditionText}`
+        : ''
+      const conditionResult =
+        result.currentConditionText && result.currentConditionResult !== null
+          ? ` | Resultat : ${result.currentConditionResult ? 'vrai' : 'faux'}`
+          : ''
+      const conditionHtml = conditionLabel
+        ? ` <span class="font-semibold">${conditionLabel}${conditionResult}</span>`
+        : ''
       this.stepDiv.innerHTML =
         '<span class="font-semibold">Instruction :</span>' +
         indexLabel +
+        conditionHtml +
         result.currentInstructionScratchHtml
       renderScratchDiv(this.stepDiv)
     } else {

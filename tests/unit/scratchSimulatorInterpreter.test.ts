@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest'
 import { ScratchInterpreter } from '../../src/lib/scratchSimulator'
 
 describe('ScratchInterpreter', () => {
-  it('met a jour les variables avec blockvariable + repeat', () => {
+  it('met a jour les variables avec blockvariable + repeat', async () => {
     const interpreter = new ScratchInterpreter(200, 200, 90)
     const code = `\\begin{scratch}[blocks]
 \\blockvariable{mettre  \\selectmenu{compteur} à \\ovalnum{0}}
@@ -13,7 +13,7 @@ describe('ScratchInterpreter', () => {
 \\blocklook{Dire \\ovalvariable{compteur}}
 \\end{scratch}`
 
-    const result = interpreter.execute(code)
+    const result = await interpreter.executeAnimated(code, () => {}, 0)
 
     expect(result.variables.compteur).toBe(3)
     expect(result.messages).toEqual(['3'])
@@ -46,7 +46,7 @@ describe('ScratchInterpreter', () => {
     expect(snapshots).toContain(3)
   })
 
-  it('evalue les ovaloperator imbriques avec variables', () => {
+  it('evalue les ovaloperator imbriques avec variables', async () => {
     const interpreter = new ScratchInterpreter(200, 200, 90)
     const code = `\\begin{scratch}[blocks]
 \\blockvariable{mettre \\selectmenu{compteur} à \\ovalnum{5}}
@@ -55,14 +55,14 @@ describe('ScratchInterpreter', () => {
 \\blocklook{Dire \\ovalvariable{resultat}}
 \\end{scratch}`
 
-    const result = interpreter.execute(code)
+    const result = await interpreter.executeAnimated(code, () => {}, 0)
 
     expect(result.variables.compteur).toBe(4)
     expect(result.variables.resultat).toBe(20)
     expect(result.messages).toEqual(['20'])
   })
 
-  it('gere blocklook dire variable pendant secondes et ignore look sans dire', () => {
+  it('gere blocklook dire variable pendant secondes et ignore look sans dire', async () => {
     const interpreter = new ScratchInterpreter(200, 200, 90)
     const code = `\\begin{scratch}[blocks]
 \\blockvariable{mettre \\selectmenu{compteur} à \\ovalnum{7}}
@@ -70,36 +70,36 @@ describe('ScratchInterpreter', () => {
 \\blocklook{penser \\ovalvariable{compteur}}
 \\end{scratch}`
 
-    const result = interpreter.execute(code)
+    const result = await interpreter.executeAnimated(code, () => {}, 0)
 
     expect(result.messages).toEqual(['7'])
   })
 
-  it("gere blockmove 'ajouter ... a x'", () => {
+  it("gere blockmove 'ajouter ... a x'", async () => {
     const interpreter = new ScratchInterpreter(200, 200, 90)
     const code = `\\begin{scratch}[blocks]
 \\blockmove{ajouter \\ovalnum{5} à x}
 \\end{scratch}`
 
-    const result = interpreter.execute(code)
+    const result = await interpreter.executeAnimated(code, () => {}, 0)
 
     expect(result.finalX).toBe(205)
     expect(result.finalY).toBe(200)
   })
 
-  it("gere blockmove 'ajouter ... a y'", () => {
+  it("gere blockmove 'ajouter ... a y'", async () => {
     const interpreter = new ScratchInterpreter(200, 200, 90)
     const code = `\\begin{scratch}[blocks]
 \\blockmove{ajouter \\ovalnum{5} à y}
 \\end{scratch}`
 
-    const result = interpreter.execute(code)
+    const result = await interpreter.executeAnimated(code, () => {}, 0)
 
     expect(result.finalX).toBe(200)
     expect(result.finalY).toBe(195)
   })
 
-  it("trace avec stylo lors des blockmove 'ajouter ... a x/y'", () => {
+  it("trace avec stylo lors des blockmove 'ajouter ... a x/y'", async () => {
     const interpreter = new ScratchInterpreter(200, 200, 90)
     const code = `\\begin{scratch}[blocks]
 \\blockpen{stylo en position d'écriture}
@@ -107,7 +107,7 @@ describe('ScratchInterpreter', () => {
 \\blockmove{ajouter \\ovalnum{15} à y}
 \\end{scratch}`
 
-    const result = interpreter.execute(code)
+    const result = await interpreter.executeAnimated(code, () => {}, 0)
 
     expect(result.traces.length).toBe(2)
     expect(result.traces[0]).toEqual({
@@ -124,31 +124,31 @@ describe('ScratchInterpreter', () => {
     })
   })
 
-  it("gere blockmove 'mettre x a ...'", () => {
+  it("gere blockmove 'mettre x a ...'", async () => {
     const interpreter = new ScratchInterpreter(200, 200, 90)
     const code = `\\begin{scratch}[blocks]
 \\blockmove{mettre x à \\ovalnum{5}}
 \\end{scratch}`
 
-    const result = interpreter.execute(code)
+    const result = await interpreter.executeAnimated(code, () => {}, 0)
 
     expect(result.finalX).toBe(205)
     expect(result.finalY).toBe(200)
   })
 
-  it("gere blockmove 'mettre y a ...'", () => {
+  it("gere blockmove 'mettre y a ...'", async () => {
     const interpreter = new ScratchInterpreter(200, 200, 90)
     const code = `\\begin{scratch}[blocks]
 \\blockmove{mettre y à \\ovalnum{5}}
 \\end{scratch}`
 
-    const result = interpreter.execute(code)
+    const result = await interpreter.executeAnimated(code, () => {}, 0)
 
     expect(result.finalX).toBe(200)
     expect(result.finalY).toBe(195)
   })
 
-  it('gere les variables reservees abscisse x, ordonnee y et direction', () => {
+  it('gere les variables reservees abscisse x, ordonnee y et direction', async () => {
     const interpreter = new ScratchInterpreter(200, 200, 90)
     const code = `\\begin{scratch}[blocks]
 \\blockvariable{mettre \\selectmenu{abscisse x} à \\ovalnum{12}}
@@ -159,7 +159,7 @@ describe('ScratchInterpreter', () => {
 \\blocklook{dire \\ovalvariable{direction}}
 \\end{scratch}`
 
-    const result = interpreter.execute(code)
+    const result = await interpreter.executeAnimated(code, () => {}, 0)
 
     expect(result.finalX).toBe(212)
     expect(result.finalY).toBe(203)
@@ -167,7 +167,7 @@ describe('ScratchInterpreter', () => {
     expect(result.messages).toEqual(['12', '-3', '45'])
   })
 
-  it('gere Ajouter sur variables reservees', () => {
+  it('gere Ajouter sur variables reservees', async () => {
     const interpreter = new ScratchInterpreter(200, 200, 90)
     const code = `\\begin{scratch}[blocks]
 \\blockvariable{Ajouter \\ovalnum{5} à \\ovalvariable{abscisse x}}
@@ -175,14 +175,14 @@ describe('ScratchInterpreter', () => {
 \\blockvariable{Ajouter \\ovalnum{10} à \\ovalvariable{direction}}
 \\end{scratch}`
 
-    const result = interpreter.execute(code)
+    const result = await interpreter.executeAnimated(code, () => {}, 0)
 
     expect(result.finalX).toBe(205)
     expect(result.finalY).toBe(198)
     expect(result.finalAngle).toBe(100)
   })
 
-  it("gere blockrepeat jusqu'à ce que avec booloperator <", () => {
+  it("gere blockrepeat jusqu'à ce que avec booloperator <", async () => {
     const interpreter = new ScratchInterpreter(200, 200, 90)
     const code = `\\begin{scratch}[blocks]
 \\blockvariable{mettre \\selectmenu{compteur} à \\ovalnum{0}}
@@ -191,12 +191,12 @@ describe('ScratchInterpreter', () => {
 }
 \\end{scratch}`
 
-    const result = interpreter.execute(code)
+    const result = await interpreter.executeAnimated(code, () => {}, 0)
 
     expect(result.variables.compteur).toBe(6)
   })
 
-  it("gere blockrepeat jusqu'à ce que avec booloperator <=", () => {
+  it("gere blockrepeat jusqu'à ce que avec booloperator <=", async () => {
     const interpreter = new ScratchInterpreter(200, 200, 90)
     const code = `\\begin{scratch}[blocks]
 \\blockvariable{mettre \\selectmenu{x} à \\ovalnum{1}}
@@ -205,12 +205,12 @@ describe('ScratchInterpreter', () => {
 }
 \\end{scratch}`
 
-    const result = interpreter.execute(code)
+    const result = await interpreter.executeAnimated(code, () => {}, 0)
 
     expect(result.variables.x).toBe(11)
   })
 
-  it("gere blockrepeat jusqu'à ce que avec booloperator =", () => {
+  it("gere blockrepeat jusqu'à ce que avec booloperator =", async () => {
     const interpreter = new ScratchInterpreter(200, 200, 90)
     const code = `\\begin{scratch}[blocks]
 \\blockvariable{mettre \\selectmenu{compteur} à \\ovalnum{0}}
@@ -219,7 +219,7 @@ describe('ScratchInterpreter', () => {
 }
 \\end{scratch}`
 
-    const result = interpreter.execute(code)
+    const result = await interpreter.executeAnimated(code, () => {}, 0)
 
     expect(result.variables.compteur).toBe(3)
   })
@@ -294,7 +294,7 @@ describe('ScratchInterpreter', () => {
     expect(result.repeatIterations).toEqual([])
   })
 
-  it('gere blockifelse avec condition vraie', () => {
+  it('gere blockifelse avec condition vraie', async () => {
     const interpreter = new ScratchInterpreter(200, 200, 90)
     const code = `\\begin{scratch}[blocks]
 \\blockvariable{mettre \\selectmenu{x} à \\ovalnum{10}}
@@ -305,13 +305,13 @@ describe('ScratchInterpreter', () => {
 }
 \\end{scratch}`
 
-    const result = interpreter.execute(code)
+    const result = await interpreter.executeAnimated(code, () => {}, 0)
 
     expect(result.variables.x).toBe(10)
     expect(result.variables.resultat).toBe(1)
   })
 
-  it('ne gere pas booloperator ==', () => {
+  it('ne gere pas booloperator ==', async () => {
     const interpreter = new ScratchInterpreter(200, 200, 90)
     const code = `\\begin{scratch}[blocks]
 \\blockvariable{mettre \\selectmenu{a} à \\ovalnum{4}}
@@ -322,7 +322,7 @@ describe('ScratchInterpreter', () => {
 }
 \\end{scratch}`
 
-    const result = interpreter.execute(code)
+    const result = await interpreter.executeAnimated(code, () => {}, 0)
 
     expect(result.variables.resultat).toBe(0)
   })
@@ -344,7 +344,7 @@ describe('ScratchInterpreter', () => {
     expect(result.variables.ok).toBe(1)
   })
 
-  it('gere blockifelse avec condition fausse', () => {
+  it('gere blockifelse avec condition fausse', async () => {
     const interpreter = new ScratchInterpreter(200, 200, 90)
     const code = `\\begin{scratch}[blocks]
 \\blockvariable{mettre \\selectmenu{x} à \\ovalnum{3}}
@@ -355,13 +355,13 @@ describe('ScratchInterpreter', () => {
 }
 \\end{scratch}`
 
-    const result = interpreter.execute(code)
+    const result = await interpreter.executeAnimated(code, () => {}, 0)
 
     expect(result.variables.x).toBe(3)
     expect(result.variables.resultat).toBe(0)
   })
 
-  it('gere blockif simple avec condition fausse (sync)', () => {
+  it('gere blockif simple avec condition fausse (sync)', async () => {
     const interpreter = new ScratchInterpreter(200, 200, 90)
     const code = `\\begin{scratch}[blocks]
 \\blockvariable{mettre \\selectmenu{x} à \\ovalnum{0}}
@@ -371,7 +371,7 @@ describe('ScratchInterpreter', () => {
 \\blockmove{ajouter \\ovalnum{15} à x}
 \\end{scratch}`
 
-    const result = interpreter.execute(code)
+    const result = await interpreter.executeAnimated(code, () => {}, 0)
 
     expect(result.finalX).toBe(215)
     expect(result.finalY).toBe(200)
@@ -410,7 +410,7 @@ describe('ScratchInterpreter', () => {
     )
   })
 
-  it('gere blockifelse avec operateurs comparaison', () => {
+  it('gere blockifelse avec operateurs comparaison', async () => {
     const interpreter = new ScratchInterpreter(200, 200, 90)
     const code = `\\begin{scratch}[blocks]
 \\blockvariable{mettre \\selectmenu{a} à \\ovalnum{5}}
@@ -422,14 +422,14 @@ describe('ScratchInterpreter', () => {
 }
 \\end{scratch}`
 
-    const result = interpreter.execute(code)
+    const result = await interpreter.executeAnimated(code, () => {}, 0)
 
     expect(result.variables.a).toBe(5)
     expect(result.variables.b).toBe(5)
     expect(result.variables.egal).toBe(1)
   })
 
-  it('gere booloperator avec ovalmove abscisse x dans une condition ifelse', () => {
+  it('gere booloperator avec ovalmove abscisse x dans une condition ifelse', async () => {
     const interpreter = new ScratchInterpreter(200, 200, 90)
     const code = `\\begin{scratch}[blocks]
 \\blockmove{aller à x:\\ovalnum{0} y:\\ovalnum{0}}
@@ -442,13 +442,13 @@ describe('ScratchInterpreter', () => {
 }
 \\end{scratch}`
 
-    const result = interpreter.execute(code)
+    const result = await interpreter.executeAnimated(code, () => {}, 0)
 
     expect(result.finalX).toBe(155)
     expect(result.finalY).toBe(185)
   })
 
-  it('gere booloperator avec ovalmove ordonnee y dans une condition ifelse', () => {
+  it('gere booloperator avec ovalmove ordonnee y dans une condition ifelse', async () => {
     const interpreter = new ScratchInterpreter(200, 200, 90)
     const code = `\\begin{scratch}[blocks]
 \\blockmove{aller à x:\\ovalnum{0} y:\\ovalnum{0}}
@@ -459,13 +459,13 @@ describe('ScratchInterpreter', () => {
 }
 \\end{scratch}`
 
-    const result = interpreter.execute(code)
+    const result = await interpreter.executeAnimated(code, () => {}, 0)
 
     expect(result.finalX).toBe(200)
     expect(result.finalY).toBe(185)
   })
 
-  it('gere booloperator avec ovalmove direction dans une condition ifelse', () => {
+  it('gere booloperator avec ovalmove direction dans une condition ifelse', async () => {
     const interpreter = new ScratchInterpreter(200, 200, 90)
     const code = `\\begin{scratch}[blocks]
 \\blockmove{s'orienter à \\ovalnum{-90}}
@@ -476,7 +476,7 @@ describe('ScratchInterpreter', () => {
 }
 \\end{scratch}`
 
-    const result = interpreter.execute(code)
+    const result = await interpreter.executeAnimated(code, () => {}, 0)
 
     expect(result.finalX).toBe(215)
     expect(result.finalY).toBe(200)
@@ -634,7 +634,7 @@ describe('ScratchInterpreter', () => {
     })
   })
 
-  it('gere blockcontrol stop tout', () => {
+  it('gere blockcontrol stop tout', async () => {
     const interpreter = new ScratchInterpreter(200, 200, 90)
     const code = `\\begin{scratch}[blocks]
 \\blockvariable{mettre \\selectmenu{compteur} à \\ovalnum{0}}
@@ -643,12 +643,12 @@ describe('ScratchInterpreter', () => {
 \\blockvariable{Ajouter \\ovalnum{10} à \\ovalvariable{compteur}}
 \\end{scratch}`
 
-    const result = interpreter.execute(code)
+    const result = await interpreter.executeAnimated(code, () => {}, 0)
 
     expect(result.variables.compteur).toBe(1)
   })
 
-  it('gere blockcontrol stop tout dans une boucle repeat', () => {
+  it('gere blockcontrol stop tout dans une boucle repeat', async () => {
     const interpreter = new ScratchInterpreter(200, 200, 90)
     const code = `\\begin{scratch}[blocks]
 \\blockvariable{mettre \\selectmenu{compteur} à \\ovalnum{0}}
@@ -662,7 +662,7 @@ describe('ScratchInterpreter', () => {
 \\blockvariable{mettre \\selectmenu{apres} à \\ovalnum{99}}
 \\end{scratch}`
 
-    const result = interpreter.execute(code)
+    const result = await interpreter.executeAnimated(code, () => {}, 0)
 
     expect(result.variables.compteur).toBe(3)
     expect(result.variables.apres).toBeUndefined()
@@ -727,29 +727,29 @@ describe('ScratchInterpreter', () => {
     expect(result.variables.x).toBe(42)
   })
 
-  it('gere ovaloperator avec regrouper pour concatenation simple', () => {
+  it('gere ovaloperator avec regrouper pour concatenation simple', async () => {
     const interpreter = new ScratchInterpreter(200, 200, 90)
     const code = `\\begin{scratch}[blocks]
 \\blocklook{dire \\ovaloperator{regrouper \\ovalnum{Hello} et \\ovalnum{World}}}
 \\end{scratch}`
 
-    const result = interpreter.execute(code)
+    const result = await interpreter.executeAnimated(code, () => {}, 0)
 
     expect(result.messages).toEqual(['HelloWorld'])
   })
 
-  it('gere ovaloperator avec regrouper et espaces', () => {
+  it('gere ovaloperator avec regrouper et espaces', async () => {
     const interpreter = new ScratchInterpreter(200, 200, 90)
     const code = `\\begin{scratch}[blocks]
 \\blocklook{dire \\ovaloperator{regrouper \\ovalnum{Hello } et \\ovalnum{World}}}
 \\end{scratch}`
 
-    const result = interpreter.execute(code)
+    const result = await interpreter.executeAnimated(code, () => {}, 0)
 
     expect(result.messages).toEqual(['Hello World'])
   })
 
-  it('gere regrouper avec variables', () => {
+  it('gere regrouper avec variables', async () => {
     const interpreter = new ScratchInterpreter(200, 200, 90)
     const code = `\\begin{scratch}[blocks]
 \\blockvariable{mettre \\selectmenu{a} à \\ovalnum{10}}
@@ -757,18 +757,18 @@ describe('ScratchInterpreter', () => {
 \\blocklook{dire \\ovaloperator{regrouper \\ovalvariable{a} et \\ovalvariable{b}}}
 \\end{scratch}`
 
-    const result = interpreter.execute(code)
+    const result = await interpreter.executeAnimated(code, () => {}, 0)
 
     expect(result.messages).toEqual(['1020'])
   })
 
-  it('gere regrouper imbrique', () => {
+  it('gere regrouper imbrique', async () => {
     const interpreter = new ScratchInterpreter(200, 200, 90)
     const code = `\\begin{scratch}[blocks]
 \\blocklook{dire \\ovaloperator{regrouper \\ovalnum{A} et \\ovaloperator{regrouper \\ovalnum{B} et \\ovalnum{C}}}}
 \\end{scratch}`
 
-    const result = interpreter.execute(code)
+    const result = await interpreter.executeAnimated(code, () => {}, 0)
 
     expect(result.messages).toEqual(['ABC'])
   })
@@ -787,46 +787,46 @@ describe('ScratchInterpreter', () => {
     expect(result.messages).toEqual(['Bonjour Alice'])
   })
 
-  it('ovaloperator continue de fonctionner en mode arithmetique', () => {
+  it('ovaloperator continue de fonctionner en mode arithmetique', async () => {
     const interpreter = new ScratchInterpreter(200, 200, 90)
     const code = `\\begin{scratch}[blocks]
 \\blocklook{dire \\ovaloperator{5 + 3 * 2}}
 \\end{scratch}`
 
-    const result = interpreter.execute(code)
+    const result = await interpreter.executeAnimated(code, () => {}, 0)
 
     expect(result.messages).toEqual(['11'])
   })
 
-  it('gere l operateur modulo avec %', () => {
+  it('gere l operateur modulo avec %', async () => {
     const interpreter = new ScratchInterpreter(200, 200, 90)
     const code = `\\begin{scratch}[blocks]
 \\blocklook{dire \\ovaloperator{17 % 5}}
 \\end{scratch}`
 
-    const result = interpreter.execute(code)
+    const result = await interpreter.executeAnimated(code, () => {}, 0)
 
     expect(result.messages).toEqual(['2'])
   })
 
-  it('gere l operateur modulo avec mod', () => {
+  it('gere l operateur modulo avec mod', async () => {
     const interpreter = new ScratchInterpreter(200, 200, 90)
     const code = `\\begin{scratch}[blocks]
 \\blocklook{dire \\ovaloperator{17 mod 5}}
 \\end{scratch}`
 
-    const result = interpreter.execute(code)
+    const result = await interpreter.executeAnimated(code, () => {}, 0)
 
     expect(result.messages).toEqual(['2'])
   })
 
-  it('gere l operateur modulo avec modulo', () => {
+  it('gere l operateur modulo avec modulo', async () => {
     const interpreter = new ScratchInterpreter(200, 200, 90)
     const code = `\\begin{scratch}[blocks]
 \\blocklook{dire \\ovaloperator{17 modulo 5}}
 \\end{scratch}`
 
-    const result = interpreter.execute(code)
+    const result = await interpreter.executeAnimated(code, () => {}, 0)
 
     expect(result.messages).toEqual(['2'])
   })

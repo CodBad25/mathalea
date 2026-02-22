@@ -116,7 +116,7 @@ export default class TrouverLeBonProgrammeConditionnelles extends Exercice {
                 simulateurs.push(
                   createScratchSimulatorElement(
                     codeScratch1.replace(/"/g, '&quot;').replace(/'/g, '&#39;'),
-                    500,
+                    2000,
                   ),
                 )
               } else {
@@ -175,7 +175,7 @@ export default class TrouverLeBonProgrammeConditionnelles extends Exercice {
                 simulateurs.push(
                   createScratchSimulatorElement(
                     codeScratch2.replace(/"/g, '&quot;').replace(/'/g, '&#39;'),
-                    5000,
+                    2000,
                   ),
                 )
               } else {
@@ -293,7 +293,7 @@ function programmeConditionnelle1(
     décalementX = randint(1, 2) * 5 * directionX
   }
   const codeScratch = `\\begin{scratch}[blocks, scale=0.6]
-\\blockmove{aller à x:\\ovalnum{${start.x}} y:\\ovalnum{${start.y}}}
+\\blockmove{aller à x: \\ovalnum{${start.x}} y: \\ovalnum{${start.y}}}
 \\blockmove{s'orienter à \\ovalnum{${directionX === 1 ? 90 : -90}}}
 \\blockpen{stylo en position d'écriture}
 \\blockrepeat{répéter \\ovalnum{${nbRepetitionsX + nbRepetitionsY}} fois}{
