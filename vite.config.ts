@@ -14,7 +14,6 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: (id) => {
-          console.log('id', id)
           // Pour les dépendances pnpm
           if (id.includes('.pnpm')) {
             // Extraire le vrai nom du package
@@ -23,9 +22,7 @@ export default defineConfig({
             // const match = id.match(/.pnpm\/(.*?)@/) // MGu : @cortex-js/compute-engine non géré ici!!!
             if (match && match[1]) {
               // Nettoyer le nom du package
-              const pkgName = match[1]
-                .replace(/@/g, '')
-                .replace(/\//g, '-')
+              const pkgName = match[1].replace(/@/g, '').replace(/\//g, '-')
               return `vendors/${pkgName}`
             }
           }
@@ -41,33 +38,52 @@ export default defineConfig({
             const jsonName = id.split('/').pop().replace('.json', '')
             return `json/${jsonName}`
           }
-        }
-      }
-    }
+        },
+      },
+    },
   },
-  server: (process.env.CI ? { port: 80, watch: null } : { port: 5173 }),
+  server: process.env.CI ? { port: 80, watch: null } : { port: 5173 },
   define: {
     APP_VERSION: JSON.stringify(process.env.npm_package_version),
     // Injecte dans le bundle final
-    __REACT_DEVTOOLS_GLOBAL_HOOK__: JSON.stringify({ isDisabled: true })
+    __REACT_DEVTOOLS_GLOBAL_HOOK__: JSON.stringify({ isDisabled: true }),
   },
   plugins: [
+    // Exclut les fichiers de test du bundle de production
+    // (évite que vitest et ses dépendances se retrouvent dans le build)
+    {
+      name: 'exclude-test-files',
+      apply: 'build',
+      enforce: 'pre',
+      resolveId(id: string) {
+        if (/\.test\.(ts|js|svelte)$/.test(id)) {
+          return '\0empty-test-module'
+        }
+      },
+      load(id: string) {
+        if (id === '\0empty-test-module') {
+          return ''
+        }
+      },
+    },
     tailwindcss(),
     svelte({
       compilerOptions: {
-        dev: process.env.NODE_ENV !== 'production'
-      }
+        dev: process.env.NODE_ENV !== 'production',
+      },
     }),
     visualizer({
       emitFile: true,
       filename: 'stats.html',
     }),
-    generateFile([{
-      type: 'json',
-      output: './version.txt',
-      data: {
-        version: '3.0.20230508.' + Date.now()
-      }
-    }])
-  ]
+    generateFile([
+      {
+        type: 'json',
+        output: './version.txt',
+        data: {
+          version: '3.0.20230508.' + Date.now(),
+        },
+      },
+    ]),
+  ],
 })
