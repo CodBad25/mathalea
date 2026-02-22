@@ -116,7 +116,7 @@ export default class TrouverLeBonProgrammeConditionnelles extends Exercice {
                 simulateurs.push(
                   createScratchSimulatorElement(
                     codeScratch1.replace(/"/g, '&quot;').replace(/'/g, '&#39;'),
-                    1000,
+                    2000,
                   ),
                 )
               } else {
@@ -175,7 +175,7 @@ export default class TrouverLeBonProgrammeConditionnelles extends Exercice {
                 simulateurs.push(
                   createScratchSimulatorElement(
                     codeScratch2.replace(/"/g, '&quot;').replace(/'/g, '&#39;'),
-                    1000,
+                    2000,
                   ),
                 )
               } else {
