@@ -1,4 +1,3 @@
-import { round } from 'mathjs'
 import { colorToLatexOrHTML } from '../../lib/2d/colorToLatexOrHtml'
 import { Courbe } from '../../lib/2d/Courbe'
 import { repere } from '../../lib/2d/reperes'
@@ -86,7 +85,7 @@ export default class ExerciceFactorisePoly extends Exercice {
       let sommeMult = 0
 
       // Déterminer combien de racines distinctes (entre 1 et deg)
-      const nbRacines = randint(round(deg / 2), Math.min(deg, 3))
+      const nbRacines = randint(Math.round(deg / 2), Math.min(deg, 3))
 
       lMult = Array(nbRacines).fill(1)
       sommeMult = nbRacines

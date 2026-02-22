@@ -1,4 +1,3 @@
-import { max } from 'mathjs'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -74,7 +73,7 @@ export default class NomExercice extends Exercice {
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
       let texte, texteCorr: string
       const degMin = this.sup2 - 1
-      const degMax = max(this.sup3, this.sup2 - 1)
+      const degMax = Math.max(this.sup3, this.sup2 - 1)
       // const variables = ['x', 'y', 'z', 'r', 's', 't']
       const variables = ['x', 'y', 'z', 'a', 'b', 'c', 'k']
       const variablesSelect = getRandomSubarray(variables, this.sup4)

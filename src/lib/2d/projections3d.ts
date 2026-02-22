@@ -1,4 +1,3 @@
-import { abs, random, round } from 'mathjs'
 import { afficheCoteSegment } from './AfficheCoteSegment'
 import { arc } from './Arc'
 import { cercle, Cercle } from './cercle'
@@ -236,8 +235,8 @@ export class Ellipse extends ObjetMathalea2D {
     let code = `<path d="M ${this.centre.xSVG(coeff) + this.rx * coeff} ${this.centre.ySVG(coeff)} C ${this.centre.xSVG(coeff) + this.rx * coeff} ${this.centre.ySVG(coeff)}, `
     let compteur = 1
     for (let k = 1, variation; k < 181; k++) {
-      variation = ((random(0, 2) - 1) * amp) / 10
-      code += `${this.centre.xSVG(coeff) + round((this.rx + variation) * Math.cos((2 * k * Math.PI) / 180) * coeff, 2)} ${this.centre.ySVG(coeff) + round((this.ry + variation) * Math.sin((2 * k * Math.PI) / 180) * coeff, 2)}, `
+      variation = ((Math.random() * 2 - 1) * amp) / 10
+      code += `${this.centre.xSVG(coeff) + Math.round((this.rx + variation) * Math.cos((2 * k * Math.PI) / 180) * coeff, 2)} ${this.centre.ySVG(coeff) + Math.round((this.ry + variation) * Math.sin((2 * k * Math.PI) / 180) * coeff, 2)}, `
       compteur++
     }
     if (compteur % 2 === 0)
@@ -571,16 +570,16 @@ export class SemiEllipse extends ObjetMathalea2D {
     const r = longueur(this.centre, this.M)
     for (
       let k = 0, variation;
-      abs(k) <= abs(this.angle) - 2;
+      Math.abs(k) <= Math.abs(this.angle) - 2;
       k += this.angle < 0 ? -2 : 2
     ) {
-      variation = (((random(0, 2) - 1) / r) * amp) / 10
+      variation = (((Math.random() * 2 - 1) / r) * amp) / 10
       P = rotation(
         homothetie(this.M, this.centre, 1 + variation),
         this.centre,
         k,
       )
-      code += `${round(P.xSVG(coeff), 2)} ${round(P.ySVG(coeff), 2)}, `
+      code += `${round(P.xSVG(coeff), 2)} ${Math.round(P.ySVG(coeff), 2)}, `
       compteur++
     }
     P = rotation(this.M, this.centre, this.angle)

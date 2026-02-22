@@ -5,7 +5,6 @@
  * @author Rémi Angot
  */
 import Decimal from 'decimal.js'
-import { round } from 'mathjs'
 import { enleveElement } from './arrayOutils'
 
 export function signe(a: number) {
@@ -66,7 +65,7 @@ export function arrondi(nombre: number, precision = 6) {
     })
     return NaN
   } else {
-    return round(nombre, precision)
+    return Math.round(nombre * 10 ** precision) / 10 ** precision
   }
 }
 

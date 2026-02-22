@@ -5,7 +5,6 @@ import {
 import Exercice from '../Exercice'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import { ecritureParentheseSiNegatif } from '../../lib/outils/ecritures'
-import { lcm } from 'mathjs'
 import { texNombre } from '../../lib/outils/texNombre'
 import { remplisLesBlancs } from '../../lib/interactif/questionMathLive'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
@@ -18,6 +17,7 @@ import {
   timesIfNotUn,
 } from '../../lib/outils/systemeEquations'
 import FractionEtendue from '../../modules/FractionEtendue'
+import { ppcm } from '../../lib/outils/primalite'
 export const titre =
   'Résoudre un système linéaire de deux équations à deux inconnues par combinaison linéaire'
 export const interactifReady = true
@@ -193,8 +193,8 @@ export default class systemeEquationsPremDeg extends Exercice {
       const eqFinale2 = eqInt2Droite.concat(eqInt2Gauche)
       const nomVal1 = nomVal12.concat(nomVal11)
       const nomVal2 = nomVal22.concat(nomVal21)
-      const mX = lcm(Math.abs(eqSimpl1[0]), Math.abs(eqSimpl2[0]))
-      const mY = lcm(Math.abs(eqSimpl1[1]), Math.abs(eqSimpl2[1]))
+      const mX = ppcm(Math.abs(eqSimpl1[0]), Math.abs(eqSimpl2[0]))
+      const mY = ppcm(Math.abs(eqSimpl1[1]), Math.abs(eqSimpl2[1]))
       let varElim = ''
       let coeffElim = 0
       let coeffEq: Array<number> = []

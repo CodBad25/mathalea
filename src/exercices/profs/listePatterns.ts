@@ -1,5 +1,4 @@
 import Decimal from 'decimal.js'
-import { isNumber } from 'mathjs'
 import {
   cubeDef,
   faceLeft,
@@ -110,7 +109,7 @@ export default class ListePatternsTousLesExos extends Exercice {
         continue
       }
 
-      if ('nbMotifMin' in pat && isNumber(pat.nbMotifMin)) {
+      if ('nbMotifMin' in pat && typeof pat.nbMotifMin === 'number') {
         // On est en présence d'un motif répétitif
         const objets: NestedObjetMathalea2dArray = []
         if ('shapes' in pat) {

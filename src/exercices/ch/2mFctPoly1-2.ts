@@ -1,4 +1,3 @@
-import { min } from 'mathjs'
 import MonomePlusieursVariables from '../../lib/mathFonctions/MonomePlusieursVariables'
 import PolynomePlusieursVariables from '../../lib/mathFonctions/PolynomePlusieursVariables'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
@@ -86,14 +85,14 @@ export default class ExerciceFactorisePoly extends Exercice {
       let diviseur: PolynomePlusieursVariables
       let dividende: PolynomePlusieursVariables
       const degreDividende = listeTypeDeQuestions[i] as number
-      const degreDiviseur = min(
+      const degreDiviseur = Math.min(
         listeTypeDeQuestions2[i] as number,
         degreDividende,
       )
       diviseur = PolynomePlusieursVariables.createRandomPolynome(
         degreDiviseur,
         degreDiviseur,
-        randint(min(2, degreDiviseur + 1), degreDiviseur + 1),
+        randint(Math.min(2, degreDiviseur + 1), degreDiviseur + 1),
         'entier',
         ['x'],
         [],
@@ -103,7 +102,7 @@ export default class ExerciceFactorisePoly extends Exercice {
         degreDividende - diviseur.degre,
         degreDividende - diviseur.degre,
         randint(
-          min(2, degreDividende - diviseur.degre + 1),
+          Math.min(2, degreDividende - diviseur.degre + 1),
           degreDividende - diviseur.degre + 1,
         ),
         'entier',
