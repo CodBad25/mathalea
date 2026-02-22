@@ -71,38 +71,6 @@ export class ScratchInterpreter {
     this.angle = startAngle
   }
 
-  execute(scratchCode: string): ExecutionResult {
-    this.traces = []
-    this.messages = []
-    this.variables = {}
-    this.customBlocks = {}
-    this.stopped = false
-    this.answer = ''
-    this.currentInstructionIndex = -1
-    this.repeatIterations = []
-
-    // D'abord, extraire les définitions de blocs personnalisés
-    const codeWithoutDefinitions = this.parseCustomBlockDefinitions(scratchCode)
-
-    // Parser LaTeX Scratch et exécution
-    this.parseAndExecute(codeWithoutDefinitions)
-
-    return {
-      traces: this.traces,
-      finalX: this.x,
-      finalY: this.y,
-      finalAngle: this.angle,
-      variables: this.variables,
-      messages: this.messages,
-      currentInstruction: this.currentInstruction,
-      currentInstructionScratchHtml: this.currentInstructionScratchHtml,
-      currentInstructionIndex: this.currentInstructionIndex,
-      currentConditionText: this.currentConditionText,
-      currentConditionResult: this.currentConditionResult,
-      repeatIterations: this.getRepeatIterationsState(),
-    }
-  }
-
   async executeAnimated(
     scratchCode: string,
     onUpdate: () => void | Promise<void>,
