@@ -2613,19 +2613,8 @@ export class ScratchSimulator extends HTMLElement {
     })
   }
 
-  private isRepeatBlock(node: CodeBlockNode): boolean {
-    return node.text.includes('répéter')
-  }
-
   private isIfElseBlock(node: CodeBlockNode): boolean {
     return node.text.includes('si ') && node.text.includes(' alors')
-  }
-
-  private extractRepeatCount(text: string): number {
-    const match = text.match(/\b(\d+)\b/)
-    if (!match) return 1
-    const count = parseInt(match[1], 10)
-    return Number.isNaN(count) ? 0 : count
   }
 
   private retryCacheRenderedBlocks(): void {
@@ -2638,6 +2627,7 @@ export class ScratchSimulator extends HTMLElement {
     return text
       .replace(/\[(\d+)\]/g, '$1') // Retirer les crochets autour des nombres [15] -> 15
       .replace(/\[([^\]]+)\]/g, '$1') // Retirer les autres crochets [xxx] -> xxx
+      .replace(/[()]/g, '') // Retirer les parenthèses
       .replace(/\s+/g, ' ')
       .trim()
       .toLowerCase()
@@ -2785,19 +2775,6 @@ export class ScratchSimulator extends HTMLElement {
         )
         const isConditionStep = Boolean(state.currentConditionText)
 
-        if (!instructionText && !isConditionStep) {
-          const fallbackOrder = this.getNextOrderAfter(
-            lastOrder,
-            candidateBlocks.length,
-          )
-          const fallbackId = idsByOrder.get(fallbackOrder)
-          if (fallbackId) {
-            this.executionIndexToBlockId.set(index, fallbackId)
-            lastOrder = fallbackOrder
-          }
-          return
-        }
-
         let candidateOrders: number[] = []
 
         if (isConditionStep) {
@@ -2806,6 +2783,20 @@ export class ScratchSimulator extends HTMLElement {
             .map(({ order }) => order)
         } else if (instructionText) {
           candidateOrders = exactOrdersByText.get(instructionText) || []
+
+          // Fallback : si pas de correspondance exacte, essayer une super-normalisation
+          if (candidateOrders.length === 0) {
+            const superNormalized = instructionText
+              .replace(/\s+/g, '')
+              .toLowerCase()
+            for (const [key, orders] of exactOrdersByText.entries()) {
+              const keyNormalized = key.replace(/\s+/g, '').toLowerCase()
+              if (keyNormalized === superNormalized) {
+                candidateOrders = orders
+                break
+              }
+            }
+          }
         }
 
         if (
@@ -2813,12 +2804,21 @@ export class ScratchSimulator extends HTMLElement {
           instructionText &&
           !isConditionStep
         ) {
+          // Super-normalisation : supprimer tous les espaces pour la comparaison
+          const superNormalizedInstruction = instructionText
+            .replace(/\s+/g, '')
+            .toLowerCase()
+
           candidateOrders = allTexts
-            .filter(
-              ({ text }) =>
+            .filter(({ text }) => {
+              const superNormalizedText = text.replace(/\s+/g, '').toLowerCase()
+              return (
                 text.includes(instructionText) ||
-                instructionText.includes(text),
-            )
+                instructionText.includes(text) ||
+                superNormalizedText.includes(superNormalizedInstruction) ||
+                superNormalizedInstruction.includes(superNormalizedText)
+              )
+            })
             .map(({ order }) => order)
         }
 
