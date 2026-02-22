@@ -1,88 +1,72 @@
 import Stat from '../../lib/mathFonctions/Stat'
 import { choice } from '../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
+import { randint } from '../../modules/outils'
 import { creerSerieDeMoyenneEtEtendue } from '../../modules/outilsStat'
 import { nombreElementsDifferents } from '../ExerciceQcm'
 import ExerciceQcmA from '../ExerciceQcmA'
 
-export const uuid = '4ba2a'
+export const uuid = '3ba7a'
 export const refs = {
-  'fr-fr': ['1A-S02-13'],
+  'fr-fr': ['1A-S04-1'],
   'fr-ch': [],
 }
 export const interactifReady = true
 export const interactifType = 'qcm'
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
-export const titre = "Calculer le pourcentage d'élèves obtenant la moyenne"
+export const titre = "Calculer un effectif total à partir d'un diagramme"
 export const dateDePublication = '31/12/2025'
 /**
  * @author Jean-claude Lhote
  */
 
-export default class CalculPourcentageEtMoyenneQCM extends ExerciceQcmA {
+export default class CalculEffectifQCM extends ExerciceQcmA {
   // Ceci est la fonction qui s'occupe d'écrire l'énoncé, la correction et les réponses
   // Elle factorise le code qui serait dupliqué dans versionAleatoire et versionOriginale
   private appliquerLesValeurs(
     serie: [number, number][] | number[],
     noteMax: number,
   ): void {
-    const valeurCible = noteMax / 2
     const maSerie = new Stat(serie)
     const histogramme = maSerie.diagramme({
       cumul: false,
       barres: true,
       valuesOn: true,
     })
-    const effectifCible = maSerie.serieTableau
-      .filter(([note]) => Number(note) >= valeurCible)
-      .reduce((acc, [, effectif]) => acc + effectif, 0)
-    const n = maSerie.serie.length
 
-    const pourCent = Math.round((effectifCible / n) * 100)
-    const distracteur1 = choice(
-      [pourCent - 10, pourCent + 10, pourCent - 15, pourCent + 15].filter(
-        (v) => v > 0 && v < 100,
-      ),
-      pourCent,
-    )
-    const distracteur2 = choice(
-      [pourCent - 5, pourCent + 5, pourCent - 20, pourCent + 20].filter(
-        (v) => v > 0 && v < 100,
-      ),
-      [pourCent, distracteur1],
-    )
-    const distracteur3 = choice(
-      [
-        pourCent - 10,
-        pourCent + 10,
-        pourCent - 15,
-        pourCent + 15,
-        pourCent - 5,
-        pourCent + 5,
-        pourCent - 20,
-        pourCent + 20,
-      ].filter((v) => v > 0 && v < 100),
-      [pourCent, distracteur1, distracteur2],
-    )
+    const n = maSerie.serie.length
+    const listeTableau = maSerie.serieTableau
+
+    const distracteur1 =
+      Math.round(maSerie.serie.length / 4) * 4 !== n
+        ? Math.round(maSerie.serie.length / 4) * 4
+        : Math.round(maSerie.serie.length / 5) * 5 !== n
+          ? Math.round(maSerie.serie.length / 5) * 5
+          : n - 1
+    const distracteur2 = listeTableau.length
+    const distracteur3 = listeTableau
+      .map(([note, effectif]) => Number(note))
+      .reduce((a, b) => a + b)
 
     this.reponses = [
-      `${texNombre(pourCent, 0)}~\\%`,
-      `${texNombre(distracteur1, 0)}~\\%`,
-      `${texNombre(distracteur2, 0)}~\\%`,
-      `${texNombre(distracteur3, 0)}~\\%`,
+      `${texNombre(n, 0)}`,
+      `${texNombre(distracteur1, 0)}`,
+      `${texNombre(distracteur2, 0)}`,
+      `${texNombre(distracteur3, 0)}`,
     ].map((r) => `$${r}$`)
     this.enonce = `Voici la répartition des notes sur ${noteMax} d'une classe de première.<br>
       ${histogramme}<br><br>
-      Quel est le pourcentage d'élèves ayant obtenu la moyenne ?`
+      Quel est l'effectif total de cette classe ?`
 
     // Correction : explication simple, claire
-    this.correction = `Le pourcentage d'élèves ayant obtenu la moyenne est calculé en divisant l'effectif des élèves ayant obtenu une note supérieure ou égale à la moyenne par l'effectif total, puis en multipliant par 100.<br>
-      L'effectif total est le nombre de notes représentées dans l'histogramme.<br>
-      Ici, on trouve un effectif total de $${n}$ élèves.<br>
-      L'effectif des élèves ayant obtenu une note supérieure ou égale à la moyenne est de $${effectifCible}$.<br>
-      $\\dfrac{${effectifCible}}{${n}} \\times 100 = ${pourCent}$.<br>
-      Donc le pourcentage est de $${pourCent}~\\%$.`
+    this.correction = `L'effectif total est le nombre de notes représentées dans l'histogramme.<br>
+      On peut le calculer en additionnant les effectifs de chaque barre.<br>
+      Les effectifs sont : ${maSerie.serieTableau
+        .map(([note, effectif]) => `$${effectif}$ pour la note $${note}$`)
+        .join('<br>')}.<br>
+      Ici, on trouve un effectif total de $${miseEnEvidence(n)}$ élèves.`
   }
 
   versionOriginale: () => void = () => {
@@ -103,7 +87,7 @@ export default class CalculPourcentageEtMoyenneQCM extends ExerciceQcmA {
       const maSerie = creerSerieDeMoyenneEtEtendue({
         mean: noteMax / 2,
         range: noteMax / 2,
-        n: choice([20, 25, 10]),
+        n: randint(24, 30),
         isInteger: true,
         gaussian: true,
       })
