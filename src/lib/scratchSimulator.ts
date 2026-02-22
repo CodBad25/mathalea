@@ -6,6 +6,7 @@
 
 import { context } from '../modules/context'
 import { scratchblock } from '../modules/scratchblock'
+import { orangeMathalea } from './colors'
 import { renderScratchDiv } from './renderScratch'
 
 export interface ExecutionResult {
@@ -669,7 +670,6 @@ export class ScratchInterpreter {
       }
 
       // Traiter blockrepeat (code existant)
-
       // Détecter le type de blockrepeat
       const isRepeatUntil = code
         .substring(repeatStart, repeatStart + 100)
@@ -2044,7 +2044,6 @@ export class ScratchSimulator extends HTMLElement {
           ? 'block'
           : 'none'
       }
-      this.runSimulation()
       if (this.modal.showModal) {
         this.modal.showModal()
       } else {
@@ -2135,7 +2134,7 @@ export class ScratchSimulator extends HTMLElement {
     contentWrapper.appendChild(rightColumn)
 
     // Parser le code scratchblock complet
-    this.parseAndDisplayCode()
+    this.onlyDisplayCode()
     this.stepDiv = document.createElement('div')
     this.stepDiv.className =
       'items-start text-sm text-gray-600 mb-2 ml-1 h-60 overflow-hidden'
@@ -2177,9 +2176,29 @@ export class ScratchSimulator extends HTMLElement {
     }
   }
 
+  // Affiche simplement le code dans codeDiv utilisé à l'installation de la modale
+  private onlyDisplayCode(): void {
+    if (!this.codeDiv) return
+    this.codeBlocks = []
+    this.allRenderedBlocks = []
+    this.highlightedExecutionIndex = null
+    this.highlightedBlockElement = null
+    this.codeDiv.innerHTML = ''
+
+    const scratchblockHtml = scratchblock(this.scratchCode)
+    if (scratchblockHtml !== false) {
+      this.codeDiv.innerHTML = scratchblockHtml
+    } else {
+      const pre = document.createElement('pre')
+      pre.classList.add('blocks')
+      pre.textContent = this.scratchCode
+      this.codeDiv.appendChild(pre)
+    }
+  }
+
+  // refait le display dans le codeDiv et lance l'exécution animée.
   private parseAndDisplayCode(): void {
     if (!this.codeDiv) return
-
     this.codeBlocks = []
     this.allRenderedBlocks = []
     this.highlightedExecutionIndex = null
@@ -2605,14 +2624,24 @@ export class ScratchSimulator extends HTMLElement {
     return text
       .replace(/\[(\d+)\]/g, '$1') // Retirer les crochets autour des nombres [15] -> 15
       .replace(/\[([^\]]+)\]/g, '$1') // Retirer les autres crochets [xxx] -> xxx
+      .replace(/[▾▼]/g, ' ')
+      .replace(/\bmettre\s+(\S+)\s+v\s+à\b/gi, 'mettre $1 à')
       .replace(/[()]/g, '') // Retirer les parenthèses
       .replace(/\s+/g, ' ')
       .trim()
       .toLowerCase()
   }
 
+  private isIfBlockText(text: string): boolean {
+    return (
+      text.includes('si') && text.includes('alors') && !text.includes('sinon')
+    )
+  }
+
   private isIfElseBlockText(text: string): boolean {
-    return text.includes('si') && text.includes('alors')
+    return (
+      text.includes('si') && text.includes('alors') && text.includes('sinon')
+    )
   }
 
   private generateBlockId(): string {
@@ -2756,9 +2785,21 @@ export class ScratchSimulator extends HTMLElement {
         let candidateOrders: number[] = []
 
         if (isConditionStep) {
+          const wantsIfElse = this.isIfElseBlockText(instructionText)
+          const matcher = wantsIfElse
+            ? (text: string) => this.isIfElseBlockText(text)
+            : (text: string) => this.isIfBlockText(text)
           candidateOrders = allTexts
-            .filter(({ text }) => this.isIfElseBlockText(text))
+            .filter(({ text }) => matcher(text))
             .map(({ order }) => order)
+          if (candidateOrders.length === 0) {
+            candidateOrders = allTexts
+              .filter(
+                ({ text }) =>
+                  this.isIfBlockText(text) || this.isIfElseBlockText(text),
+              )
+              .map(({ order }) => order)
+          }
         } else if (instructionText) {
           candidateOrders = exactOrdersByText.get(instructionText) || []
 
@@ -2801,6 +2842,9 @@ export class ScratchSimulator extends HTMLElement {
         }
 
         if (candidateOrders.length === 0) {
+          if (isConditionStep) {
+            return
+          }
           const fallbackOrder = this.getNextOrderAfter(
             lastOrder,
             candidateBlocks.length,
@@ -2833,16 +2877,6 @@ export class ScratchSimulator extends HTMLElement {
       },
       0,
     )
-  }
-
-  private runSimulation(): void {
-    if (!this.canvas) return
-
-    this.interpreter = new ScratchInterpreter(200, 200, 90)
-    this.isRunning = false
-    this.isPaused = false
-    this.parseAndDisplayCode()
-    this.updateControlButton()
   }
 
   private async runAnimatedSimulation(): Promise<void> {
@@ -3030,16 +3064,18 @@ export class ScratchSimulator extends HTMLElement {
 
     const iterations = result.repeatIterations ?? []
     if (iterations.length > 0) {
-      const columns = Math.min(Math.max(iterations.length, 1), 4)
       html += '<div><strong>Itérations&nbsp;:</strong>'
-      html += `<div style="display:grid;grid-template-columns:repeat(${columns}, minmax(0, 1fr));gap:0.35rem;margin-top:0.25rem;">`
+      html += '<div style="margin-top:0.25rem;">'
       iterations.forEach((iteration) => {
         const label =
           iteration.mode === 'times'
             ? `${iteration.current}/${iteration.total ?? '?'}`
             : `${iteration.current}`
-        const modeLabel = iteration.mode === 'times' ? 'fois' : "jusqu'à"
-        html += `<div style="border:1px solid #d1d5db;border-radius:0.25rem;padding:0.25rem 0.4rem;"><span style="font-weight:600;">B${iteration.level}</span> : ${label} <span style="color:#6b7280;">(${modeLabel})</span></div>`
+        const indentation = '&nbsp;'.repeat(
+          Math.max(0, iteration.level - 1) * 3,
+        )
+        const nestedPrefix = iteration.level > 1 ? '↳ ' : ''
+        html += `<div>${indentation}${nestedPrefix}<span style="font-weight:600;">boucle ${iteration.level}</span> : ${label}</div>`
       })
       html += '</div></div>'
     }
@@ -3056,14 +3092,14 @@ export class ScratchSimulator extends HTMLElement {
           ? ` <span class="text-xs text-gray-500">(#${result.currentInstructionIndex < 0 ? '0' : String(result.currentInstructionIndex + 1)})</span>`
           : ''
       const conditionLabel = result.currentConditionText
-        ? `Condition : ${result.currentConditionText}`
+        ? `{${result.currentConditionText}}`
         : ''
       const conditionResult =
         result.currentConditionText && result.currentConditionResult !== null
-          ? ` | Resultat : ${result.currentConditionResult ? 'vrai' : 'faux'}`
+          ? ` <span style="font-weight:700;color:${orangeMathalea};">${result.currentConditionResult ? 'vrai' : 'faux'}</span>`
           : ''
       const conditionHtml = conditionLabel
-        ? ` <span class="font-semibold">${conditionLabel}${conditionResult}</span>`
+        ? ` <span class="font-semibold">${conditionLabel}${conditionResult ? ` &nbsp;&rArr;&nbsp;${conditionResult}` : ''}</span>`
         : ''
       this.stepDiv.innerHTML =
         '<span class="font-semibold">Instruction :</span>' +
