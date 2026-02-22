@@ -2001,6 +2001,8 @@ export class ScratchSimulator extends HTMLElement {
   private scratchCode: string = ''
   private modal: HTMLDialogElement | null = null
   private canvas: HTMLCanvasElement | null = null
+  private canvasWrapper: HTMLDivElement | null = null
+  private hasCanvasRelevantBlocks: boolean = false
   private stepDiv: HTMLDivElement | null = null
   private infoDiv: HTMLDivElement | null = null
   private codeDiv: HTMLDivElement | null = null
@@ -2036,6 +2038,12 @@ export class ScratchSimulator extends HTMLElement {
       this.createModal()
     }
     if (this.modal) {
+      this.hasCanvasRelevantBlocks = this.codeHasCanvasBlocks(this.scratchCode)
+      if (this.canvasWrapper) {
+        this.canvasWrapper.style.display = this.hasCanvasRelevantBlocks
+          ? 'block'
+          : 'none'
+      }
       this.runSimulation()
       if (this.modal.showModal) {
         this.modal.showModal()
@@ -2102,6 +2110,10 @@ export class ScratchSimulator extends HTMLElement {
 
     // Colonne gauche: canvas avec bouton de contrôle
     const canvasWrapper = document.createElement('div')
+    this.canvasWrapper = canvasWrapper
+    canvasWrapper.style.display = this.hasCanvasRelevantBlocks
+      ? 'block'
+      : 'none'
     this.canvas = document.createElement('canvas')
     this.canvas.width = 400
     this.canvas.height = 400
@@ -2189,6 +2201,10 @@ export class ScratchSimulator extends HTMLElement {
       renderScratchDiv(this.codeDiv!)
       this.cacheRenderedBlocks()
     })
+  }
+
+  private codeHasCanvasBlocks(code: string): boolean {
+    return /\\block(?:move|pen)\b/.test(code)
   }
 
   private highlightCurrentInstruction(
@@ -2886,6 +2902,13 @@ export class ScratchSimulator extends HTMLElement {
 
   private drawSimulation(result: ExecutionResult): void {
     if (!this.canvas) return
+
+    const shouldShowCanvas =
+      result.traces.length > 0 || this.hasCanvasRelevantBlocks
+    if (this.canvasWrapper) {
+      this.canvasWrapper.style.display = shouldShowCanvas ? 'block' : 'none'
+    }
+    if (!shouldShowCanvas) return
 
     const ctx = this.canvas.getContext('2d')
     if (!ctx) return
