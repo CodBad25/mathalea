@@ -1,6 +1,7 @@
 import { courbe } from '../../../lib/2d/Courbe'
 import { droiteParPointEtPente } from '../../../lib/2d/droites'
-import { point } from '../../../lib/2d/PointAbstrait'
+import { crochetD, crochetG } from '../../../lib/2d/intervalles'
+import {  pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { repere } from '../../../lib/2d/reperes'
 import { segment } from '../../../lib/2d/segmentsVecteurs'
 import { latex2d } from '../../../lib/2d/textes'
@@ -59,13 +60,15 @@ export default class EquationsRacCarree extends ExerciceSimple {
       letterSize: 'scriptsize',
       backgroundColor: '',
     })
-    const A = point(2.25, 1.5)
-    const Ax = point(A.x, 0)
+      const choix = choice([true, false])
+    const A = pointAbstrait(2.25, 1.5)
+    const Ax = pointAbstrait(A.x, 0)
     const sAAx = segment(A, Ax)
-    const O = point(0, 0)
+    const O = pointAbstrait(0, 0)
     const sAxBx = segment(O, Ax, 'red')
+   
     const f = (x: number) => Math.sqrt(x)
-    const Cg = droiteParPointEtPente(point(0, 1.5), 0, '', 'green')
+    const Cg = droiteParPointEtPente(pointAbstrait(0, 1.5), 0, '', 'green')
     const r1 = repere({
       xMin: -1,
       yMin: -1,
@@ -82,15 +85,18 @@ export default class EquationsRacCarree extends ExerciceSimple {
       xLabelListe: [-6],
       yLabelListe: [-6],
     })
-    switch (choice([1, 2])) {
+    switch (choice([2])) {
       case 1: // sqrt(x)<k
         {
-          const choix = choice([true, false])
+            const c1 = choix ? crochetD(Ax, 'red') : crochetG(Ax, 'red')
+     const c0 = crochetD(O, 'red')
+        
           sAAx.epaisseur = 2
           sAAx.pointilles = 5
           sAxBx.epaisseur = 2
-          sAxBx.tailleExtremites = 6
-          sAxBx.styleExtremites = choix ? '[-[' : '[-]'
+          sAxBx.tailleExtremites = 4
+
+      
 
           Cg.epaisseur = 2
           const graphiqueC = mathalea2d(
@@ -106,12 +112,15 @@ export default class EquationsRacCarree extends ExerciceSimple {
               repere: r1,
               color: 'blue',
               epaisseur: 2,
+              xMin: 0,
             }),
             Cg,
             r1,
             sAAx,
             o,
             sAxBx,
+            c0,
+            c1,
             Texte1,
             Texte2,
             Texte3,
@@ -130,14 +139,17 @@ export default class EquationsRacCarree extends ExerciceSimple {
         break
       case 2: // sqrt(x)>k
         {
-          const choix = choice([true, false])
+           
+        
           sAAx.epaisseur = 2
           sAAx.pointilles = 5
-          const AxI = point(4, 0)
+          const AxI = pointAbstrait(5, 0)
           const sAxAxI = segment(Ax, AxI, 'red')
+           const c1 = choix ? crochetG(Ax, 'red') : crochetD(Ax, 'red')
+     
           sAxAxI.epaisseur = 2
-          sAxAxI.styleExtremites = choix ? ']-' : '[-'
-          sAxAxI.tailleExtremites = 6
+        
+          sAxAxI.tailleExtremites = 4
           Cg.epaisseur = 2
           const graphiqueC = mathalea2d(
             {
@@ -152,10 +164,12 @@ export default class EquationsRacCarree extends ExerciceSimple {
               repere: r1,
               color: 'blue',
               epaisseur: 2,
+              xMin: 0,
             }),
             Cg,
             r1,
             o,
+            c1,
             sAAx,
             sAxAxI,
             Texte1,

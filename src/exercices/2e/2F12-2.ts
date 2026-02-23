@@ -1,6 +1,6 @@
 import { courbe } from '../../lib/2d/Courbe'
 import { droite, droiteParPointEtPente } from '../../lib/2d/droites'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { repere } from '../../lib/2d/reperes'
 import { segment } from '../../lib/2d/segmentsVecteurs'
 import { latexParCoordonnees } from '../../lib/2d/textes'
@@ -10,6 +10,7 @@ import Exercice from '../Exercice'
 
 import { mathalea2d } from '../../modules/mathalea2d'
 
+import { crochetD, crochetG } from '../../lib/2d/intervalles'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { fonctionComparaison } from '../../lib/interactif/comparisonFunctions'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
@@ -70,7 +71,7 @@ export default class ResoudreGraphFonctionRef extends Exercice {
     //
     // variables communes à tous les cas et sortis des cases et même de la boucle.
     const o = latexParCoordonnees('O', -0.2, -0.3, 'black', 0, 0, '')
-    const O = point(0, 0)
+    const O = pointAbstrait(0, 0)
 
     const listeTypeQuestions = combinaisonListes(
       typeDeQuestionsDisponibles,
@@ -79,7 +80,6 @@ export default class ResoudreGraphFonctionRef extends Exercice {
     for (
       let i = 0, texte, texteCorr, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       // Boucle principale où i+1 correspond au numéro de la question
       const estInegStrict = choice([true, false])
@@ -101,20 +101,20 @@ export default class ResoudreGraphFonctionRef extends Exercice {
           {
             const signeInegalité = estInegStrict ? '<' : ' \\leqslant '
             const a = randint(1, 30)
-            const A = point(1.73, 3)
-            const Ax = point(A.x, 0)
+            const A = pointAbstrait(1.73, 3)
+            const Ax = pointAbstrait(A.x, 0)
             const sAAx = segment(A, Ax)
             sAAx.epaisseur = 2
             sAAx.pointilles = 5
-            const B = point(-1.73, 3)
-            const Bx = point(B.x, 0)
+            const B = pointAbstrait(-1.73, 3)
+            const Bx = pointAbstrait(B.x, 0)
             const sBBx = segment(B, Bx)
             sBBx.epaisseur = 2
             sBBx.pointilles = 5
             const sAxBx = segment(Bx, Ax, 'red')
             sAxBx.epaisseur = 2
-            sAxBx.styleExtremites = estInegStrict ? ']-[' : '[-]'
-            sAxBx.tailleExtremites = 6
+            const c1 = estInegStrict ? crochetG(Bx, 'red') : crochetD(Bx, 'red')
+            const c2 = estInegStrict ? crochetD(Ax, 'red') : crochetG(Ax, 'red')
             const Texte1 = latexParCoordonnees(
               `y=${a}`,
               4,
@@ -168,7 +168,12 @@ export default class ResoudreGraphFonctionRef extends Exercice {
               yLabelListe: [-6],
             })
             const f = (x: number) => Number(x) ** 2
-            const Cg = droite(point(-3, 3), point(3, 3), '', 'green')
+            const Cg = droite(
+              pointAbstrait(-3, 3),
+              pointAbstrait(3, 3),
+              '',
+              'green',
+            )
             Cg.epaisseur = 2
             const graphique = mathalea2d(
               {
@@ -202,6 +207,8 @@ export default class ResoudreGraphFonctionRef extends Exercice {
               sAAx,
               sBBx,
               sAxBx,
+              c1,
+              c2,
               Texte1,
               Texte2,
               Texte3,
@@ -245,26 +252,24 @@ export default class ResoudreGraphFonctionRef extends Exercice {
           {
             const signeInegalité = estInegStrict ? '>' : ' \\geqslant '
             const a = randint(1, 30)
-            const A = point(1.73, 3)
-            const Ax = point(A.x, 0)
+            const A = pointAbstrait(1.73, 3)
+            const Ax = pointAbstrait(A.x, 0)
             const sAAx = segment(A, Ax)
             sAAx.epaisseur = 2
             sAAx.pointilles = 5
-            const B = point(-1.73, 3)
-            const Bx = point(B.x, 0)
+            const B = pointAbstrait(-1.73, 3)
+            const Bx = pointAbstrait(B.x, 0)
             const sBBx = segment(B, Bx)
             sBBx.epaisseur = 2
             sBBx.pointilles = 5
-            const BxI = point(-4, 0)
+            const BxI = pointAbstrait(-4, 0)
             const sBxBxI = segment(BxI, Bx, 'red')
             sBxBxI.epaisseur = 2
-            sBxBxI.styleExtremites = estInegStrict ? '-[' : '-]'
-            sBxBxI.tailleExtremites = 6
-            const AxI = point(4, 0)
+            const c1 = estInegStrict ? crochetD(Bx, 'red') : crochetG(Bx, 'red')
+            const AxI = pointAbstrait(4, 0)
             const sAxAxI = segment(Ax, AxI, 'red')
             sAxAxI.epaisseur = 2
-            sAxAxI.styleExtremites = '[-'
-            sAxAxI.tailleExtremites = 6
+            const c2 = estInegStrict ? crochetG(Ax, 'red') : crochetD(Ax, 'red')
             const Texte1 = latexParCoordonnees(
               `y=${a}`,
               4,
@@ -318,7 +323,12 @@ export default class ResoudreGraphFonctionRef extends Exercice {
               yLabelListe: [-6],
             })
             const f = (x: number) => Number(x) ** 2
-            const Cg = droite(point(-6, 3), point(6, 3), '', 'green')
+            const Cg = droite(
+              pointAbstrait(-6, 3),
+              pointAbstrait(6, 3),
+              '',
+              'green',
+            )
             Cg.epaisseur = 2
             const graphique = mathalea2d(
               {
@@ -353,6 +363,8 @@ export default class ResoudreGraphFonctionRef extends Exercice {
               sBBx,
               sAxAxI,
               sBxBxI,
+              c1,
+              c2,
               Texte1,
               Texte2,
               Texte3,
@@ -391,34 +403,38 @@ export default class ResoudreGraphFonctionRef extends Exercice {
           {
             const a = randint(-9, 9, [-1, 0, 1])
 
-            const A = point(0.5, 2)
-            const A2 = point(-1, -1)
-            const Ax = point(A.x, 0)
-            const A2x = point(A2.x, 0)
+            const A = pointAbstrait(0.5, 2)
+            const A2 = pointAbstrait(-1, -1)
+            const Ax = pointAbstrait(A.x, 0)
+            const A2x = pointAbstrait(A2.x, 0)
             const sAAx = segment(A, Ax)
             const sA2A2x = segment(A2, A2x)
             sAAx.epaisseur = 2
             sAAx.pointilles = 5
             sA2A2x.epaisseur = 2
             sA2A2x.pointilles = 5
-            const AxI = point(-4, 0)
+            const AxI = pointAbstrait(-4, 0)
             const sAxIAx = segment(AxI, Ax, 'red')
             sAxIAx.epaisseur = 2
-            sAxIAx.tailleExtremites = 6
-            sAxIAx.styleExtremites = estInegStrict ? ']-' : '[-'
+            // graphiqueC2 (a<0) : intervalle ]A2x ; 0[
+            // A2x est borne gauche, on veut ] si strict, [ si large
             const sA2xO = segment(A2x, O, 'red')
             sA2xO.epaisseur = 2
-            sA2xO.tailleExtremites = 6
-            sA2xO.styleExtremites = estInegStrict ? ']-[' : '[-['
+            const cC2A2x = estInegStrict
+              ? crochetG(A2x, 'red')
+              : crochetD(A2x, 'red')
+            const cC2O = crochetD(O, 'red')
+            // graphiqueC1 (a>0) : ]-∞;0[ ∪ [1/a;+∞[ si large, ]-∞;0[ ∪ ]1/a;+∞[ si strict
             const sAxIO = segment(AxI, O, 'red')
             sAxIO.epaisseur = 2
-            sAxIO.styleExtremites = '-['
-            sAxIO.tailleExtremites = 6
-            const AxI2 = point(4, 0)
+            const cC1O = crochetD(O, 'red')
+            const AxI2 = pointAbstrait(4, 0)
             const sAxI2Ax = segment(Ax, AxI2, 'red')
             sAxI2Ax.epaisseur = 2
-            sAxI2Ax.tailleExtremites = 6
-            sAxI2Ax.styleExtremites = estInegStrict ? ']-' : '[-'
+            // Ax est borne gauche de [1/a;+∞[, on veut [ si large (crochetD), ] si strict (crochetG)
+            const cC1Ax = estInegStrict
+              ? crochetG(Ax, 'red')
+              : crochetD(Ax, 'red')
             const Texte1 = latexParCoordonnees(
               `y = ${a} `,
               4,
@@ -482,9 +498,19 @@ export default class ResoudreGraphFonctionRef extends Exercice {
               yLabelListe: [-6],
             })
             const f = (x: number) => 1 / Number(x)
-            const Cg1 = droiteParPointEtPente(point(0, 2), 0, '', 'green')
+            const Cg1 = droiteParPointEtPente(
+              pointAbstrait(0, 2),
+              0,
+              '',
+              'green',
+            )
             Cg1.epaisseur = 2
-            const Cg2 = droiteParPointEtPente(point(0, -1), 0, '', 'green')
+            const Cg2 = droiteParPointEtPente(
+              pointAbstrait(0, -1),
+              0,
+              '',
+              'green',
+            )
             Cg2.epaisseur = 2
             const graphique = mathalea2d(
               {
@@ -519,7 +545,9 @@ export default class ResoudreGraphFonctionRef extends Exercice {
               o,
               sAAx,
               sAxIO,
+              cC1O,
               sAxI2Ax,
+              cC1Ax,
               Texte1,
               Texte2,
               Texte3,
@@ -545,6 +573,8 @@ export default class ResoudreGraphFonctionRef extends Exercice {
               o,
               sA2A2x,
               sA2xO,
+              cC2A2x,
+              cC2O,
               Texte1B,
               Texte2,
               Texte3B,
@@ -581,38 +611,42 @@ export default class ResoudreGraphFonctionRef extends Exercice {
           {
             const a = randint(-9, 9, [-1, 0, 1])
 
-            const A = point(0.5, 2)
-            const A2 = point(-1, -1)
-            const Ax = point(A.x, 0)
-            const A2x = point(A2.x, 0)
+            const A = pointAbstrait(0.5, 2)
+            const A2 = pointAbstrait(-1, -1)
+            const Ax = pointAbstrait(A.x, 0)
+            const A2x = pointAbstrait(A2.x, 0)
             const sAAx = segment(A, Ax)
             const sA2A2x = segment(A2, A2x)
             sAAx.epaisseur = 2
             sAAx.pointilles = 5
             sA2A2x.epaisseur = 2
             sA2A2x.pointilles = 5
-            const AxI = point(-4, 0)
+            const AxI = pointAbstrait(-4, 0)
             const sAxIAx = segment(Ax, AxI, 'red')
             sAxIAx.epaisseur = 2
-            sAxIAx.tailleExtremites = 6
-            sAxIAx.styleExtremites = estInegStrict ? ']-' : '[-'
-            const AxIP = point(4, 0)
+            const AxIP = pointAbstrait(4, 0)
             const sAxIPAx = segment(AxIP, O, 'red')
             sAxIPAx.epaisseur = 2
-            sAxIPAx.tailleExtremites = 6
-            sAxIPAx.styleExtremites = '-['
             const sAxIA2x = segment(AxI, A2x, 'red')
             sAxIA2x.epaisseur = 2
-            sAxIA2x.tailleExtremites = 2
-            sAxIA2x.styleExtremites = estInegStrict ? '-[' : '-]'
             const sA2xO = segment(A2x, O, 'red')
             sA2xO.epaisseur = 2
-            sA2xO.tailleExtremites = 6
-            sA2xO.styleExtremites = estInegStrict ? ']-[' : '[-['
             const sAxO = segment(Ax, O, 'red')
             sAxO.epaisseur = 2
-            sAxO.tailleExtremites = 6
-            sAxO.styleExtremites = estInegStrict ? ']-[' : '[-['
+            // graphiqueC1 (a>0) : ]0 ; 1/a] si large, ]0 ; 1/a[ si strict
+            // Ax borne droite : fermé=crochetG, ouvert=crochetD
+            // O borne gauche exclue : crochetD
+            const cC1AxR = estInegStrict
+              ? crochetD(Ax, 'red')
+              : crochetG(Ax, 'red')
+            const cC1OR = crochetG(O, 'red')
+            // graphiqueC2 (a<0) : ]-∞;A2x] ∪ ]0;+∞[ si large, ]-∞;A2x[ ∪ ]0;+∞[ si strict
+            // A2x borne droite : fermé=crochetG, ouvert=crochetD
+            // O borne gauche exclue : crochetD
+            const cC2A2x = estInegStrict
+              ? crochetD(A2x, 'red')
+              : crochetG(A2x, 'red')
+            const cC2OP = crochetG(O, 'red')
             const Texte1 = latexParCoordonnees(
               `y=${a}`,
               4,
@@ -675,9 +709,19 @@ export default class ResoudreGraphFonctionRef extends Exercice {
               yLabelListe: [-6],
             })
             const f = (x: number) => 1 / Number(x)
-            const Cg1 = droiteParPointEtPente(point(0, 2), 0, '', 'green')
+            const Cg1 = droiteParPointEtPente(
+              pointAbstrait(0, 2),
+              0,
+              '',
+              'green',
+            )
             Cg1.epaisseur = 2
-            const Cg2 = droiteParPointEtPente(point(0, -1), 0, '', 'green')
+            const Cg2 = droiteParPointEtPente(
+              pointAbstrait(0, -1),
+              0,
+              '',
+              'green',
+            )
             Cg2.epaisseur = 2
             const graphique = mathalea2d(
               {
@@ -712,6 +756,8 @@ export default class ResoudreGraphFonctionRef extends Exercice {
               o,
               sAAx,
               sAxO,
+              cC1AxR,
+              cC1OR,
               Texte1,
               Texte2,
               Texte3,
@@ -737,7 +783,9 @@ export default class ResoudreGraphFonctionRef extends Exercice {
               o,
               sA2A2x,
               sAxIA2x,
+              cC2A2x,
               sAxIPAx,
+              cC2OP,
               Texte1B,
               Texte2,
               Texte3B,
@@ -768,19 +816,20 @@ export default class ResoudreGraphFonctionRef extends Exercice {
           }
 
           break
-
         case 'typeE5': // sqrt(x)<k
           {
             const a = randint(1, 12)
-            const A = point(2.25, 1.5)
-            const Ax = point(A.x, 0)
+            const A = pointAbstrait(2.25, 1.5)
+            const Ax = pointAbstrait(A.x, 0)
             const sAAx = segment(A, Ax)
             sAAx.epaisseur = 2
             sAAx.pointilles = 5
             const sAxBx = segment(O, Ax, 'red')
             sAxBx.epaisseur = 2
-            sAxBx.tailleExtremites = 6
-            sAxBx.styleExtremites = estInegStrict ? '[-[' : '[-]'
+            const c5O = crochetD(O, 'red')
+            const c5Ax = estInegStrict
+              ? crochetD(Ax, 'red')
+              : crochetG(Ax, 'red')
             const Texte1 = latexParCoordonnees(
               `y=${a}`,
               4,
@@ -825,7 +874,12 @@ export default class ResoudreGraphFonctionRef extends Exercice {
               yLabelListe: [-6],
             })
             const f = (x: number) => Math.sqrt(Number(x))
-            const Cg = droiteParPointEtPente(point(0, 1.5), 0, '', 'green')
+            const Cg = droiteParPointEtPente(
+              pointAbstrait(0, 1.5),
+              0,
+              '',
+              'green',
+            )
             Cg.epaisseur = 2
             const graphique = mathalea2d(
               {
@@ -852,12 +906,15 @@ export default class ResoudreGraphFonctionRef extends Exercice {
                 repere: r1,
                 color: 'blue',
                 epaisseur: 2,
+                xMin: 0,
               }),
               Cg,
               r1,
               o,
               sAAx,
               sAxBx,
+              c5O,
+              c5Ax,
               Texte1,
               Texte2,
               Texte3,
@@ -882,20 +939,19 @@ export default class ResoudreGraphFonctionRef extends Exercice {
         default:
           {
             const a = randint(1, 12)
-            const A = point(2.25, 1.5)
-            const AInf = point(5, 0)
-            const Ax = point(A.x, 0)
+            const A = pointAbstrait(2.25, 1.5)
+            const AInf = pointAbstrait(5, 0)
+            const Ax = pointAbstrait(A.x, 0)
             const sAAx = segment(A, Ax)
             sAAx.epaisseur = 2
             sAAx.pointilles = 5
             const sAxBx = segment(Ax, O, 'red')
             sAxBx.epaisseur = 2
-            sAxBx.tailleExtremites = 6
-            sAxBx.styleExtremites = estInegStrict ? ']-[' : '[-['
             const sAxAInf = segment(Ax, AInf, 'red')
             sAxAInf.epaisseur = 2
-            sAxAInf.tailleExtremites = 6
-            sAxAInf.styleExtremites = estInegStrict ? ']-' : '[-'
+            const c6Ax2 = estInegStrict
+              ? crochetG(Ax, 'red')
+              : crochetD(Ax, 'red')
             const Texte1 = latexParCoordonnees(
               `y=${a}`,
               4,
@@ -940,7 +996,12 @@ export default class ResoudreGraphFonctionRef extends Exercice {
               yLabelListe: [-6],
             })
             const f = (x: number) => Math.sqrt(x)
-            const Cg = droiteParPointEtPente(point(0, 1.5), 0, '', 'green')
+            const Cg = droiteParPointEtPente(
+              pointAbstrait(0, 1.5),
+              0,
+              '',
+              'green',
+            )
             Cg.epaisseur = 2
             const graphique = mathalea2d(
               {
@@ -967,12 +1028,14 @@ export default class ResoudreGraphFonctionRef extends Exercice {
                 repere: r1,
                 color: 'blue',
                 epaisseur: 2,
+                xMin: 0,
               }),
               Cg,
               r1,
               o,
               sAAx,
               sAxAInf,
+              c6Ax2,
               Texte1,
               Texte2,
               Texte3,
