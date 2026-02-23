@@ -28,7 +28,7 @@ export const dateDePublication = '05/01/2025'
  */
 export const uuid = '33e54'
 export const refs = {
-  'fr-fr': ['1AL12-4'],
+  'fr-fr': ['1AL13-1'],
   'fr-ch': ['NR'],
 }
 export default class ProblemesAvecSuitesE3C extends Exercice {
