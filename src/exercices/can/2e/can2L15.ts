@@ -1,6 +1,7 @@
 import { courbe } from '../../../lib/2d/Courbe'
 import { droite } from '../../../lib/2d/droites'
-import { point } from '../../../lib/2d/PointAbstrait'
+import { crochetD, crochetG } from '../../../lib/2d/intervalles'
+import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { repere } from '../../../lib/2d/reperes'
 import { segment } from '../../../lib/2d/segmentsVecteurs'
 import { latex2d } from '../../../lib/2d/textes'
@@ -33,7 +34,7 @@ export default class EquationsCarree extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    let reponse
+   let reponse = ''
     const a = randint(1, 12)
     const o = latex2d('\\text{O}', -0.2, -0.3, {
       color: 'black',
@@ -60,14 +61,14 @@ export default class EquationsCarree extends ExerciceSimple {
       letterSize: 'scriptsize',
       backgroundColor: '',
     })
-    const A = point(1.73, 3)
-    const Ax = point(A.x, 0)
+    const A = pointAbstrait(1.73, 3)
+    const Ax = pointAbstrait(A.x, 0)
     const sAAx = segment(A, Ax)
-    const B = point(-1.73, 3)
-    const Bx = point(B.x, 0)
+    const B = pointAbstrait(-1.73, 3)
+    const Bx = pointAbstrait(B.x, 0)
     const sBBx = segment(B, Bx)
     const f = (x: number): number => x ** 2
-    const Cg = droite(point(-6, 3), point(6, 3), '', 'green')
+    const Cg = droite(pointAbstrait(-6, 3), pointAbstrait(6, 3), '', 'green')
     switch (choice([1, 2])) {
       case 1: // x^2<k
         {
@@ -78,8 +79,8 @@ export default class EquationsCarree extends ExerciceSimple {
           sBBx.pointilles = 5
           const sAxBx = segment(Bx, Ax, 'red')
           sAxBx.epaisseur = 2
-          sAxBx.styleExtremites = choix ? ']-[' : '[-]'
-          sAxBx.tailleExtremites = 6
+          const c1 = choix ? crochetG(Bx, 'red') : crochetD(Bx, 'red')
+          const c2 = choix ? crochetD(Ax, 'red') : crochetG(Ax, 'red')
           const r1 = repere({
             xMin: -4,
             yMin: -1,
@@ -117,6 +118,8 @@ export default class EquationsCarree extends ExerciceSimple {
             sAAx,
             sBBx,
             sAxBx,
+            c1,
+            c2,
             Texte1,
             Texte2,
             Texte3,
@@ -138,16 +141,14 @@ export default class EquationsCarree extends ExerciceSimple {
           sAAx.pointilles = 5
           sBBx.epaisseur = 2
           sBBx.pointilles = 5
-          const BxI = point(-4, 0)
+          const BxI = pointAbstrait(-4, 0)
           const sBxBxI = segment(BxI, Bx, 'red')
           sBxBxI.epaisseur = 2
-          sBxBxI.styleExtremites = choix ? '-[' : '-]'
-          sBxBxI.tailleExtremites = 6
-          const AxI = point(4, 0)
+          const c1 = choix ? crochetD(Bx, 'red') : crochetG(Bx, 'red')
+          const AxI = pointAbstrait(4, 0)
           const sAxAxI = segment(Ax, AxI, 'red')
           sAxAxI.epaisseur = 2
-          sAxAxI.styleExtremites = choix ? ']-' : '[-'
-          sAxAxI.tailleExtremites = 6
+          const c2 = choix ? crochetG(Ax, 'red') : crochetD(Ax, 'red')
           const r1 = repere({
             xMin: -4,
             yMin: -1,
@@ -187,6 +188,8 @@ export default class EquationsCarree extends ExerciceSimple {
             sBBx,
             sAxAxI,
             sBxBxI,
+            c1,
+            c2,
             Texte1,
             Texte2,
             Texte3,
