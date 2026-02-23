@@ -277,8 +277,8 @@ export function propositionsQcm(
         texteCorr += '\\qquad '
       }
     }
-    texte += nbCols === 1 ? '' : '\\end{multicols}'
-    texteCorr += nbCols === 1 ? '' : '\\end{multicols}'
+    texte += nbCols === 1 ? '\\\\\n' : '\\end{multicols}'
+    texteCorr += nbCols === 1 ? '\\\\\n' : '\\end{multicols}'
   }
   if (context.isHtml) {
     const isRadio = exercice.autoCorrection[i].options?.radio ?? false

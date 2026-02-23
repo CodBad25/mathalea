@@ -114,7 +114,13 @@ export default class QuestionBissectrice extends Exercice {
       const objets = [dd1, dd2, labels, trace1, trace2, mesureAngle]
       const objetsCorr = [dd1, dd2, dd3, labels, labelI, trace1, trace2, trace3]
       texte += mathalea2d(
-        Object.assign({}, fixeBordures(objets, { rymin: -2, rymax: 2 })),
+        Object.assign(
+          {
+            scale: 0.5,
+            optionsTikz: ['baseline=(current bounding box.north)'],
+          },
+          fixeBordures(objets, { rymin: -2, rymax: 2 }),
+        ),
         objets,
       )
       texte += `Construire la bissectrice $\\left[${B}${I}\\right)$ de l'angle $\\widehat{${A}${B}${C}}$.<br>`
@@ -123,7 +129,16 @@ export default class QuestionBissectrice extends Exercice {
         `La demi-droite $\\left[${B}${I}\\right)$ est la bissectrice de l'angle $\\widehat{${A}${B}${C}}$.<br>
         Par définition de la bissectrice, elle partage cet angle en deux angles de même mesure.<br>
         Donc : $\\widehat{${A}${B}${I}} = \\dfrac{${alpha}^\\circ}{2} = ${miseEnEvidence(`${texNombre(alpha / 2, 1)}^\\circ`)}$.<br>` +
-        mathalea2d(Object.assign({}, fixeBordures(objetsCorr)), objetsCorr)
+        mathalea2d(
+          Object.assign(
+            {
+              scale: 0.5,
+              optionsTikz: ['baseline=(current bounding box.north)'],
+            },
+            fixeBordures(objetsCorr),
+          ),
+          objetsCorr,
+        )
 
       if (this.questionJamaisPosee(i, alpha)) {
         this.listeQuestions.push(texte)

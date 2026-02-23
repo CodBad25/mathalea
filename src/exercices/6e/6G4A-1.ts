@@ -61,7 +61,6 @@ export default class VocabulaireDeBaseDesAngles extends Exercice {
     for (
       let i = 0, texte, texteCorr, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       texte = ''
       texteCorr = ''
@@ -148,7 +147,6 @@ export default class VocabulaireDeBaseDesAngles extends Exercice {
       for (
         let ee = 0, texteQuestion, texteCorrQuestion;
         ee < listeTypeQuestions.length;
-
       ) {
         texteQuestion = ''
         texteCorrQuestion = ''
@@ -278,9 +276,9 @@ export default class VocabulaireDeBaseDesAngles extends Exercice {
             this,
             ee + i * listeTypeQuestions.length,
           )
-          texteQuestion += questionReponse.question + '<br>'
+          texteQuestion += questionReponse.question
           texteQuestion += monQcm.texte
-          texteCorrQuestion += questionReponse.question + '<br>'
+          texteCorrQuestion += questionReponse.question
           texteCorrQuestion += monQcm.texteCorr
           texteCorrQuestion += this.correctionDetaillee
             ? '<br>' + questionReponse.explications + '<br><br>'
