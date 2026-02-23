@@ -1,4 +1,4 @@
-import ProportiondeProportion from '../techno1/techno1P4'
+import ProportiondeProportion from "../1T/1T-A1-6"
 export const titre =
   'Travailler sur des situations mettant en jeu des pourcentages de pourcentages'
 export const interactifReady = true
