@@ -25,7 +25,7 @@ export const dateDeModifImportante = '9/10/2024'
 
 /**
  *
- * @author Rémi Angot et Stéphane Guyon
+ * @author Rémi Angot et Stéphane Guyon..
  */
 export const uuid = 'a8e1b'
 
