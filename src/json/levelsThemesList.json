@@ -2768,7 +2768,7 @@
     "titre": "Fonction exponentielle"
   },
   "1AN4": {
-    "titre": "Fonction trigonométriques"
+    "titre": "Fonctions trigonométriques"
   },
   "1G1": {
     "titre": "Produit scalaire"
@@ -2782,15 +2782,6 @@
   "1P2": {
     "titre": "Variables aléatoires réelles"
   },
-  "1T-A": {
-    "titre": "Automatismes"
-  },
-  "1T-A1": {
-    "titre": "Proportions et pourcentages"
-  },
-  "1T-A2": {
-    "titre": "Évolutions et variations"
-  },
   "1TC-A1": {
     "titre": "Suites numériques"
   },
@@ -2799,6 +2790,15 @@
   },
   "1TC-A11": {
     "titre": "Suites arithmétiques et géométriques"
+  },
+  "1T-A": {
+    "titre": "Automatismes"
+  },
+  "1T-A1": {
+    "titre": "Proportions et pourcentages"
+  },
+  "1T-A2": {
+    "titre": "Évolutions et variations"
   },
   "PEA1": {
     "titre": "Numération et bases"
