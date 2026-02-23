@@ -119,7 +119,7 @@ export default class ExerciceLabyrintheDivisibilite1 extends Exercice {
         xmax: 5 + 3 * nbC,
         ymax: 2 + 3 * nbL,
         pixelsParCm: 20,
-        scale: 0.7,
+        scale: 0.5,
       }
       texte += mathalea2d(params, laby.murs2d, laby.nombres2d)
       texte += ajouteChampTexteMathLive(
