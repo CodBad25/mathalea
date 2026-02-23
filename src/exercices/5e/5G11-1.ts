@@ -19,6 +19,6 @@ export default class SymetrieCentralePoint extends ConstruireParSymetrie {
     this.figure = false
     this.version = 5
     this.besoinFormulaireNumerique = false
-    this.besoinFormulaire3Numerique = false
+    this.besoinFormulaire3Texte = false
   }
 }
