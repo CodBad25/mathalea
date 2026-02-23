@@ -244,7 +244,7 @@ export default class ResoudreUneEquationProduitNul extends Exercice {
           do {
             c = randint(2, 6, [a])
             d = randint(1, 5) * c
-          } while (-b * c === -d)
+          } while (-b * c === -d || a * d === b * c)
           texte = `$(${a}x+${b})(${c}x+${d})=0$`
           texteCorr =
             "Un produit est nul si l'un au moins de ses facteurs est nul."
@@ -283,8 +283,10 @@ export default class ResoudreUneEquationProduitNul extends Exercice {
           // (ax+b)(cx-d)=0  avec b/a et d/c entiers.
           a = randint(2, 6)
           b = Math.round(randint(1, 5) * a)
-          c = randint(2, 6, [a])
-          d = Math.round(randint(1, 5) * c)
+          do {
+            c = randint(2, 6, [a])
+            d = Math.round(randint(1, 5) * c)
+          } while (-a * d === b * c)
           const choix = choice([0, 1])
           texte = [
             `$(${a}x+${b})(${c}x-${d})=0$`,
