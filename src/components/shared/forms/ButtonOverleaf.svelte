@@ -11,7 +11,7 @@
   import type { IExercice } from '../../../lib/types'
 
   export let disabled: boolean
-  export let exercices: IExercice[]
+  export let exercices: (IExercice | IExerciceStatique)[]
   export let latexFile: latexFileType
 
   let textForOverleafInput: HTMLInputElement
@@ -61,7 +61,7 @@
  -->
 
 <form
-  class="{`${$$props.class || 'flex flex-col md:flex-row mx-4 pb-4 md:pb-8 md:space-x-4 space-y-3 justify-center md:justify-start items-center'}`}"
+  class={`${$$props.class || 'flex flex-col md:flex-row mx-4 pb-4 md:pb-8 md:space-x-4 space-y-3 justify-center md:justify-start items-center'}`}
   method="POST"
   action="https://www.overleaf.com/docs"
   target="_blank"
@@ -70,13 +70,13 @@
     <input
       type="hidden"
       name="snip_uri[]"
-      value="{imageUrl}"
+      value={imageUrl}
       autocomplete="off"
     />
     <input
       type="hidden"
       name="snip_name[]"
-      value="{imageUrl.split('/')[imageUrl.split('/').length - 1]}"
+      value={imageUrl.split('/')[imageUrl.split('/').length - 1]}
       autocomplete="off"
     />
   {/each}
@@ -84,7 +84,7 @@
     <input
       type="hidden"
       name="snip_uri[]"
-      value="{textForProfMaquette}"
+      value={textForProfMaquette}
       autocomplete="off"
     />
     <input
@@ -97,7 +97,7 @@
   <input
     type="hidden"
     name="snip_uri[]"
-    bind:this="{textForOverleafInput}"
+    bind:this={textForOverleafInput}
     autocomplete="off"
   />
   <input
@@ -111,10 +111,10 @@
     id="btn_overleaf"
     type="submit"
     {disabled}
-    on:click="{copyDocumentToOverleaf}"
-    class="{disabled
+    on:click={copyDocumentToOverleaf}
+    class={disabled
       ? 'px-2 py-1 rounded-md text-coopmaths-canvas dark:text-coopmathsdark-canvas bg-coopmaths-action-lightest  dark:bg-coopmathsdark-action-lightest '
-      : 'px-2 py-1 rounded-md text-coopmaths-canvas dark:text-coopmathsdark-canvas bg-coopmaths-action hover:bg-coopmaths-action-lightest dark:bg-coopmathsdark-action dark:hover:bg-coopmathsdark-action-lightest'}"
+      : 'px-2 py-1 rounded-md text-coopmaths-canvas dark:text-coopmathsdark-canvas bg-coopmaths-action hover:bg-coopmaths-action-lightest dark:bg-coopmathsdark-action dark:hover:bg-coopmathsdark-action-lightest'}
   >
     Aller sur Overleaf
   </button>

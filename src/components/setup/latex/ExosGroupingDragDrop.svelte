@@ -1,7 +1,9 @@
 <script lang="ts">
   import { onMount } from 'svelte'
+  import { decodeExosGrouping } from '../../../lib/LatexGroup'
+  import type { IExercice, IExerciceStatique } from '../../../lib/types'
 
-  export let exercices: { id?: string }[] = []
+  export let exercices: (IExercice | IExerciceStatique)[] = []
   export let latexFileInfos: {
     exosGrouping?: string
   }
@@ -11,45 +13,6 @@
   let exoGroups: ExoGroup[] = []
 
   let draggedExo: number | null = null
-
-  /* -----------------------------
-     Parsing string (1-based) -> groupes (0-based)
-     - → séparation forte (nouveau bloc PDF)
-     ; → association volontaire
-     : → intervalle naturel “jusqu’à”
-     ex: "1;3-4:7" -> [[0,2],[3,4,5,6]]
-  ----------------------------- */
-  function parseGrouping(value: string, max: number): number[][] {
-    if (!value?.trim()) return []
-
-    return value
-      .split(';')
-      .map((group) => {
-        const set = new Set<number>()
-
-        group.split(':').forEach((part) => {
-          if (part.includes('-')) {
-            const [a, b] = part.split('-').map(Number)
-            if (!Number.isFinite(a) || !Number.isFinite(b)) return
-
-            const start = Math.max(1, Math.min(a, b))
-            const end = Math.min(max, Math.max(a, b))
-
-            for (let i = start; i <= end; i++) {
-              set.add(i - 1) // ⬅️ 1-based -> 0-based
-            }
-          } else {
-            const n = Number(part)
-            if (Number.isFinite(n) && n >= 1 && n <= max) {
-              set.add(n - 1) // ⬅️ 1-based -> 0-based
-            }
-          }
-        })
-
-        return Array.from(set).sort((a, b) => a - b)
-      })
-      .filter((g) => g.length > 0)
-  }
 
   /* -----------------------------
    Groupes (0-based) -> string imprimante (1-based)
@@ -98,6 +61,7 @@
      Drag & Drop
   ----------------------------- */
   function onDragStart(exoIndex: number) {
+    if (exercices[exoIndex].typeExercice === 'statique') return
     draggedExo = exoIndex
   }
 
@@ -139,8 +103,14 @@
      Init
   ----------------------------- */
   onMount(() => {
+    for (let i = 0; i < exercices.length; i++) {
+      console.log('exo', i, exercices[i].typeExercice)
+    }
     if (latexFileInfos.exosGrouping) {
-      exoGroups = parseGrouping(latexFileInfos.exosGrouping, exercices.length)
+      exoGroups = decodeExosGrouping(
+        latexFileInfos.exosGrouping,
+        exercices.length,
+      )
     }
 
     if (exoGroups.length === 0) {
@@ -183,6 +153,9 @@
           class="cursor-move px-2 py-1 mb-1 bg-white border rounded shadow-sm text-xs"
         >
           Exercice {exoIndex + 1}
+          {exercices[exoIndex].typeExercice
+            ? ' -- ' + exercices[exoIndex].typeExercice
+            : ''}
         </div>
       {/each}
 
