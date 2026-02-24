@@ -1,7 +1,11 @@
 <script lang="ts">
   import { onMount } from 'svelte'
   import type { LatexFileInfos } from '../../../lib/LatexTypes'
-  import type { IExercice } from '../../../lib/types'
+  import {
+    isIExercice,
+    type IExercice,
+    type IExerciceStatique,
+  } from '../../../lib/types'
 
   import Latex from '../../../lib/Latex'
   import { mathaleaGetExercicesFromParams } from '../../../lib/mathalea'
@@ -38,7 +42,7 @@
     exos: {}, // tu peux garder vide par défaut
   }
 
-  let exercice: IExercice | undefined
+  let exercice: IExercice | IExerciceStatique | undefined
 
   const latex = new Latex()
   let ready = false
@@ -49,11 +53,13 @@
     const exercices = await mathaleaGetExercicesFromParams([exoParam])
     if (!exercices || exercices.length === 0) return
     exercice = exercices[0]
-    exercice.seed = exoParam.alea
+    if (isIExercice(exercice)) {
+      exercice.seed = exoParam.alea
+      exercice.interactif = false
+    }
     latex.addExercices([exercice])
     ready = true
     context.isHtml = false
-    exercice.interactif = false
     dialog.showModal()
   })
 

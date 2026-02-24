@@ -1008,3 +1008,9 @@ export interface IExerciceQcmA extends IExerciceQcm {
   versionAleatoire: () => void
   aleatoire: () => void
 }
+
+export function isIExercice(
+  ex: IExercice | IExerciceStatique,
+): ex is IExercice {
+  return ex.typeExercice !== 'statique'
+}

@@ -7,7 +7,7 @@
   import { mathaleaGoToView } from '../../../lib/mathaleaUtils'
   import { darkMode, exercicesParams } from '../../../lib/stores/generalStore'
   import { referentielLocale } from '../../../lib/stores/languagesStore'
-  import { type IExercice } from '../../../lib/types'
+  import { type IExercice, type IExerciceStatique } from '../../../lib/types'
   import Footer from '../../Footer.svelte'
   import ButtonCompileLatexToPdf from '../../shared/forms/ButtonCompileLatexToPDF.svelte'
   import ButtonTextAction from '../../shared/forms/ButtonTextAction.svelte'
@@ -78,7 +78,7 @@
     },
   ]
 
-  let exercices: IExercice[]
+  let exercices: (IExercice | IExerciceStatique)[]
   let isExerciceStaticInTheList = false
   let promise: Promise<void>
   let activeTab: 'general' | 'advanced' | 'global' | 'grouped' | 'model' =

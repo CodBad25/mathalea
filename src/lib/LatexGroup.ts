@@ -1,5 +1,5 @@
 import type { ExerciceConfig } from './LatexTypes'
-import type { IExercice } from './types'
+import { isIExercice, type IExercice, type IExerciceStatique } from './types'
 
 /**
  * Décode une chaîne de regroupement d'exercices
@@ -34,8 +34,10 @@ export function decodeExosGrouping(value: string, maxExos: number): number[][] {
       const set = new Set<number>()
 
       groupStr.split(';').forEach((part) => {
+        console.log('part', part)
         if (part.includes(':')) {
           const [a, b] = part.split(':').map(Number)
+          console.log('a', a, 'b', b)
           if (!Number.isFinite(a) || !Number.isFinite(b)) return
 
           const start = Math.max(1, a)
@@ -51,7 +53,7 @@ export function decodeExosGrouping(value: string, maxExos: number): number[][] {
           }
         }
       })
-
+      console.log('set', set)
       return Array.from(set).sort((a, b) => a - b)
     })
     .filter((group) => group.length > 0)
@@ -80,16 +82,20 @@ export function findExoPosition(
   return null
 }
 
-export function getPoints(exercice: IExercice) {
+export function getPoints(exercice: IExercice | IExerciceStatique) {
   let points = 0
-  for (let i = 0; i < exercice.listeQuestions.length; i++) {
-    points++
+  if (isIExercice(exercice)) {
+    for (let i = 0; i < exercice.listeQuestions.length; i++) {
+      points++
+    }
+  } else {
+    points = 1
   }
-  return points ?? 1
+  return points
 }
 
 export function buildExamExercices(
-  exercices: IExercice[],
+  exercices: (IExercice | IExerciceStatique)[],
   latexFileInfos?: { exosGrouping?: string },
 ): ExerciceConfig[] {
   const grouping = latexFileInfos?.exosGrouping

@@ -22,7 +22,7 @@
   import { mathaleaGoToView } from '../../../lib/mathaleaUtils'
   import { darkMode, exercicesParams } from '../../../lib/stores/generalStore'
   import { referentielLocale } from '../../../lib/stores/languagesStore'
-  import type { IExercice } from '../../../lib/types'
+  import type { IExercice, IExerciceStatique } from '../../../lib/types'
   import Footer from '../../Footer.svelte'
   import ButtonActionInfo from '../../shared/forms/ButtonActionInfo.svelte'
   import ButtonCompileLatexToPDF from '../../shared/forms/ButtonCompileLatexToPDF.svelte'
@@ -84,7 +84,7 @@
   ]
 
   let dialogLua: HTMLDialogElement
-  let exercices: IExercice[]
+  let exercices: (IExercice | IExerciceStatique)[]
   let latexFile: latexFileType = {
     contents: { preamble: '', intro: '', content: '', contentCorr: '' },
     latexWithoutPreamble: '',

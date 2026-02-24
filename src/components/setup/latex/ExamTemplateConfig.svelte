@@ -5,7 +5,7 @@
     ExerciceConfig,
     LatexFileInfos,
   } from '../../../lib/LatexTypes'
-  import type { IExercice } from '../../../lib/types'
+  import type { IExercice, IExerciceStatique } from '../../../lib/types'
   import SelectUnique from '../../shared/forms/SelectUnique.svelte'
 
   // Props
@@ -13,7 +13,7 @@
     exercices = [],
     latexFileInfos = $bindable(),
   }: {
-    exercices?: IExercice[]
+    exercices?: (IExercice | IExerciceStatique)[]
     latexFileInfos: LatexFileInfos
   } = $props()
 
