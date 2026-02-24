@@ -161,6 +161,7 @@
       if (feedback != null) mathaleaRenderDiv(feedback)
     }
     mathaleaRenderDiv(divsCorrection[i])
+    document.dispatchEvent(new CustomEvent('exercicesAffiches'))
     onResultsChange({ resultsByQuestion })
   }
 
@@ -239,6 +240,7 @@
     if (isCorrectionVisible[i]) {
       await tick()
       mathaleaRenderDiv(divsCorrection[i])
+      document.dispatchEvent(new CustomEvent('exercicesAffiches'))
     }
   }
 
