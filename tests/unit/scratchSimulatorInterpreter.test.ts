@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { ScratchInterpreter } from '../../src/lib/scratchSimulator'
+import { ScratchInterpreter } from '../../src/lib/ScratchInterpreter'
 
 describe('ScratchInterpreter', () => {
   it('met a jour les variables avec blockvariable + repeat', async () => {
@@ -73,6 +73,74 @@ describe('ScratchInterpreter', () => {
     const result = await interpreter.executeAnimated(code, () => {}, 0)
 
     expect(result.messages).toEqual(['7'])
+  })
+
+  it('gere blocklook dire avec ovalnum textuel sans convertir en 0', async () => {
+    const interpreter = new ScratchInterpreter(200, 200, 90)
+    const code = `\\begin{scratch}[blocks]
+\\blocklook{dire \\ovalnum{Bonjour}}
+\\end{scratch}`
+
+    const result = await interpreter.executeAnimated(code, () => {}, 0)
+
+    expect(result.messages).toEqual(['Bonjour'])
+  })
+
+  it('gere blocklook cacher puis montrer via la propriete visible', async () => {
+    const interpreter = new ScratchInterpreter(200, 200, 90)
+    const codeHideOnly = `\\begin{scratch}[blocks]
+\\blocklook{cacher}
+\\end{scratch}`
+
+    const hideOnlyResult = await interpreter.executeAnimated(
+      codeHideOnly,
+      () => {},
+      0,
+    )
+
+    expect(hideOnlyResult.visible).toBe(false)
+
+    const codeHideThenShow = `\\begin{scratch}[blocks]
+\\blocklook{cacher}
+\\blocklook{montrer}
+\\end{scratch}`
+
+    const hideThenShowResult = await interpreter.executeAnimated(
+      codeHideThenShow,
+      () => {},
+      0,
+    )
+
+    expect(hideThenShowResult.visible).toBe(true)
+  })
+
+  it('mode dry saute les attentes des blocs dire pendant', async () => {
+    const code = `\\begin{scratch}[blocks]
+\\blocklook{dire Bonjour pendant \\ovalnum{0.2} secondes}
+\\blocklook{dire Salut pendant \\ovalnum{0.2} secondes}
+\\blocklook{dire Coucou pendant \\ovalnum{0.2} secondes}
+\\end{scratch}`
+
+    const normalInterpreter = new ScratchInterpreter(200, 200, 90)
+    const normalStart = Date.now()
+    const normalResult = await normalInterpreter.executeAnimated(
+      code,
+      () => {},
+      0,
+    )
+    const normalDurationMs = Date.now() - normalStart
+
+    const dryInterpreter = new ScratchInterpreter(200, 200, 90)
+    const dryStart = Date.now()
+    const dryResult = await dryInterpreter.executeAnimated(code, () => {}, 0, {
+      skipWaitBlocks: true,
+    })
+    const dryDurationMs = Date.now() - dryStart
+
+    expect(normalResult.messages).toEqual(['Bonjour', 'Salut', 'Coucou'])
+    expect(dryResult.messages).toEqual(['Bonjour', 'Salut', 'Coucou'])
+    expect(normalDurationMs).toBeGreaterThanOrEqual(450)
+    expect(dryDurationMs).toBeLessThan(normalDurationMs / 2)
   })
 
   it("gere blockmove 'ajouter ... a x'", async () => {
@@ -497,6 +565,43 @@ describe('ScratchInterpreter', () => {
 
     expect(result.variables.x).toBe(7)
     expect(result.variables.resultat).toBe(100)
+  })
+
+  it('conserve le texte complet de condition imbriquee dans currentConditionText', async () => {
+    const interpreter = new ScratchInterpreter(200, 200, 90)
+    const code = `\\begin{scratch}[blocks]
+\\blockvariable{mettre \\selectmenu{x} à \\ovalnum{3}}
+\\blockvariable{mettre \\selectmenu{y} à \\ovalnum{4}}
+\\blockvariable{mettre \\selectmenu{z} à \\ovalnum{7}}
+\\blockifelse{si \\booloperator{\\ovaloperator{\\ovalvariable{x}+\\ovalvariable{y}} = \\ovalvariable{z}} alors}{
+\\blockvariable{mettre \\selectmenu{resultat} à \\ovalnum{1}}
+}{
+\\blockvariable{mettre \\selectmenu{resultat} à \\ovalnum{0}}
+}
+\\end{scratch}`
+
+    const conditionSnapshots: string[] = []
+
+    const result = await interpreter.executeAnimated(
+      code,
+      () => {
+        const state = interpreter.getCurrentState()
+        if (state.currentConditionText) {
+          conditionSnapshots.push(state.currentConditionText)
+        }
+      },
+      0,
+    )
+
+    expect(result.variables.z).toBe(7)
+    expect(result.variables.resultat).toBe(1)
+    expect(conditionSnapshots.length).toBeGreaterThan(0)
+    const merged = conditionSnapshots.join(' | ')
+    expect(merged).toContain('si')
+    expect(merged).toContain('x')
+    expect(merged).toContain('y')
+    expect(merged).toContain('z')
+    expect(merged).toContain('=')
   })
 
   describe('ifelse en mode anime', () => {
