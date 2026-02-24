@@ -98,6 +98,11 @@ export default class ConstruireUnAngle extends Exercice {
         k < 30
       )
 
+      if (xdroite + x + 5 > 6 * unite || xdroite + x < 0 * unite) {
+        // nouveau tirage
+        continue
+      }
+
       // on fait une symétrie axiale par rapport à l'axe verticale x = 3
       const sens = i % 2 === 0 ? -1 : 1 // -1 = gauche, 1 = droite
       const A = pointAbstrait(
@@ -110,9 +115,19 @@ export default class ConstruireUnAngle extends Exercice {
         sens === -1 ? 6 * unite - (xdroite + x + 5) : xdroite + x + 5,
         -y,
       )
-      const C = rotation(B, A, anglerot, 'x', 'below')
-      const D = pointAbstrait(xdroite, 0, 'y', 'below left')
-      const DD = pointAbstrait(xdroite, 0.5, 'y', 'above')
+      const C = rotation(B, A, sens * anglerot, 'x', 'below')
+      const D = pointAbstrait(
+        sens === -1 ? 6 * unite - xdroite : xdroite,
+        0,
+        'y',
+        'below left',
+      )
+      const DD = pointAbstrait(
+        sens === -1 ? 6 * unite - xdroite : xdroite,
+        0.5,
+        'y',
+        'above',
+      )
       const seg1 = segment(A, C)
       const seg2 = segment(A, D, 'red')
       const droite = droiteGraduee({
