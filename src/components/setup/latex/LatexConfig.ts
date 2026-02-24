@@ -51,7 +51,7 @@ export class ExamTemplateEngine {
 \\pagestyle{fancy}
 \\lhead{}
 \\chead{}
-\\rhead{\\textbf{${escapeLatex(this.config.titre)}}$\\ $ page \\thepage / \\pageref{LastPage}}
+\\rhead{${this.config.titre ? `\\textbf{${escapeLatex(this.config.titre)}}$\\ $` : ''} page \\thepage / \\pageref{LastPage}}
 \\lfoot{} \\cfoot{}\\rfoot{}
 \\rule{0pt}{1.5cm}
 `
@@ -82,19 +82,19 @@ ${rows}
 
     return `
 \\begin{center}
-\\fbox{{\\Huge ${escapeLatex(this.config.titre)}}}\\\\
+${this.config.titre ? `\\fbox{{\\Huge ${escapeLatex(this.config.titre)}}}\\\\` : ''}
 \\vspace{1cm}
-${escapeLatex(this.config.session)}\\\\
+${this.config.session ? escapeLatex(this.config.session) + '\\\\' : ''}
 \\vspace{1.5cm}
 
-{\\LARGE {\\bf ${escapeLatex(this.config.matiere)}}}\\\\
+${this.config.matiere ? `\\LARGE {\\bf ${escapeLatex(this.config.matiere)}}\\\\` : ''}
 \\rule{7cm}{1pt}\\\\
 \\vspace{1cm}
 
-DURÉE DE L'ÉPREUVE: {\\bf ${escapeLatex(this.config.duree)}} \\\\
+${this.config.duree ? `\\textbf{Durée de l'épreuve : ${escapeLatex(this.config.duree)}}\\\\` : ''}
 \\vspace{1cm}
 
-{\\it ${escapeLatex(this.config.autorisation ?? '')}}\\\\
+${this.config.autorisation ? `\\textit{${escapeLatex(this.config.autorisation)}}\\\\` : ''}
 \\vspace{2cm}
 
 ${this.renderExercisesTable()}
