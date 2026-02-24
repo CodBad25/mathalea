@@ -236,23 +236,43 @@ export default class ExerciceTangenteCourbe extends Exercice {
         cor2 += `Ainsi, $${miseEnEvidence(`\\left\\{\\left(${new FractionEtendue(-b, a).texFractionSimplifiee}\\,;\\,0\\right)\\right\\}`)}$ et $${miseEnEvidence(`\\left\\{\\left(0\\,;\\,${new FractionEtendue(b, d).texFractionSimplifiee}\\right)\\right\\}`)}$ sont, respectivement, les points d'intersection de la courbe représentative de $f$ avec les axes des abscisses et des ordonées. <br>`
       }
       const cor3 = `L'asymptote verticale a pour équation $${miseEnEvidence(`x=${new FractionEtendue(-d, c).texFractionSimplifiee}`)}$, la valeur exclue du domaine de définition.<br> L'asymptote horizontale a pour équation $y=\\dfrac{a}{c}$ où $a$ et $c$ sont les coefficient dans l'expression générale d'une fonction homographique $\\dfrac{ax+b}{cx+d}$. Dans notre cas, $${miseEnEvidence(`y=${new FractionEtendue(a, c).texFractionSimplifiee}`)}$.<br>`
-      const tableHtml = tableauSignesFacteurs(
-        [
-          {
-            nom: `$${numString}$`,
-            fonction: (x) => a * x + b,
-            zero: { valeur: new FractionEtendue(-b, a), interdit: false },
-          },
-          {
-            nom: `$${denString}$`,
-            fonction: (x) => ((c * x) as any) + d,
-            zero: { valeur: xInterditFrac, interdit: true },
-          },
-        ],
-        -15,
-        15,
-        { nomFonction: '$f(x)$', fractionTex: true },
-      )
+      let tableHtml = ''
+      if (this.sup2) {
+        tableHtml = tableauSignesFacteurs(
+          [
+            {
+              nom: `$${numString}$`,
+              fonction: (x) => b,
+            },
+            {
+              nom: `$${denString}$`,
+              fonction: (x) => ((c * x) as any) + d,
+              zero: { valeur: xInterditFrac, interdit: true },
+            },
+          ],
+          -15,
+          15,
+          { nomFonction: '$f(x)$', fractionTex: true },
+        )
+      } else {
+        tableHtml = tableauSignesFacteurs(
+          [
+            {
+              nom: `$${numString}$`,
+              fonction: (x) => a * x + b,
+              zero: { valeur: new FractionEtendue(-b, a), interdit: false },
+            },
+            {
+              nom: `$${denString}$`,
+              fonction: (x) => ((c * x) as any) + d,
+              zero: { valeur: xInterditFrac, interdit: true },
+            },
+          ],
+          -15,
+          15,
+          { nomFonction: '$f(x)$', fractionTex: true },
+        )
+      }
       const cor4 = `Le tableau de signes de la fonction $f$ est donné par :<br>${tableHtml}.`
       let listeCor = [cor1, cor2, cor3, cor4]
       const objetsGraphiques = [
