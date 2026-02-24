@@ -1,7 +1,7 @@
-import ConstruireParSymetrie from './_Construire_par_symetrie'
+import ConstruireParSymetrie from './_Construire_par_symetrie-old'
 export const titre =
   "Construire le symétrique d'une figure par rapport à une droite (cas simples)"
-export const dateDeModifImportante = '23/02/2026'
+export const dateDeModifImportante = '14/11/2021'
 export const interactifReady = false
 export const amcReady = true
 export const amcType = 'AMCOpen'
@@ -10,12 +10,12 @@ export const amcType = 'AMCOpen'
 
  * @author Jean-Claude Lhote   (Ajout AMC par Eric Elter)
  */
-export const uuid = 'adfb6'
+export const uuid = 'adfb5'
 
 export const refs = {
-  'fr-fr': ['6G7B-2'],
-  'fr-2016': ['6G24-2'],
-  'fr-ch': ['9ES6-13'],
+  'fr-fr': [],
+  'fr-2016': [],
+  'fr-ch': [],
 }
 export default class SymetrieAxialeFigure6e extends ConstruireParSymetrie {
   constructor() {

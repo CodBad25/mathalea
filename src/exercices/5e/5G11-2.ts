@@ -21,6 +21,6 @@ export default class ConstruireParSymetrieCentraleFigure extends ConstruireParSy
     this.version = 5
     this.figure = true
     this.besoinFormulaireNumerique = false
-    this.besoinFormulaire3Numerique = false
+    this.besoinFormulaire3Texte = false
   }
 }
