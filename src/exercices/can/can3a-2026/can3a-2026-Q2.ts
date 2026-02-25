@@ -25,10 +25,8 @@ enonce(numerateur?: number, denominateur?: number, minutes?: number) {
       [1, 3, 20],
       [2, 3, 40],
       [1, 6, 10],
-      [5, 6, 50],
       [1, 10, 6],
       [3, 10, 18],
-      [7, 10, 42],
       [1, 4, 15],
     ]
     
