@@ -91,7 +91,7 @@ export default class Can2a2026Q14 extends ExerciceCan {
       
        this.question = 'Courbe d\'une fonction $f$ sur $[-2\\,;\\,3]$<br><br>'
     this.question += graphique
-    this.question += '<br>Solution de $f(x)=2$'
+    this.question += '<br>Solution(s) de $f(x)=2$'
     
     this.correction = `Les solutions de l'équation sont les abscisses des points de $\\mathscr{C}_f$ qui ont pour ordonnée $2$.<br>
     On lit que la courbe coupe la droite horizontale d'équation $y=2$ en deux points d'abscisses $-2$ et $1$.<br>
@@ -101,9 +101,9 @@ export default class Can2a2026Q14 extends ExerciceCan {
     this.canReponseACompleter = 'Solution de $f(x)=2$<br>$S=\\ldots$'
         this.canNumeroLie = 14
       this.canLiee = [13]
-      if (this.interactif) {
-        this.question += '<br>'
-      }
+ this.optionsChampTexte = { texteAvant: " <br>" , texteApres: '(Séparer les solutions éventuelles par un point-virgule.)' }
+
+  
     }
    
     nouvelleVersion(): void {

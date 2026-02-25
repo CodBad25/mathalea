@@ -10,6 +10,7 @@ import { milieu } from '../../../lib/2d/utilitairesPoint'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { context } from '../../../modules/context'
 import FractionEtendue from '../../../modules/FractionEtendue'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { randint } from '../../../modules/outils'
@@ -42,7 +43,7 @@ const creerQuestionLigneBrisee = () => {
   const segmentUnite = segment(G, H)
   segmentUnite.epaisseur = 2
   segmentUnite.styleExtremites = '<->'
-  segmentUnite.tailleExtremites = 8
+  segmentUnite.tailleExtremites = context.isHtml ?   6 : 2
 
   // Générer aléatoirement une ligne brisée
   // La ligne brisée aura entre longueurUnite et 3*longueurUnite carreaux de longueur
@@ -92,7 +93,7 @@ const creerQuestionLigneBrisee = () => {
   // Assembler les objets
   const objets = []
   objets.push(
-    latex2d('1 u.\\ell.', milieu(G, H).x, milieu(G, H).y + 0.5, {
+    latex2d('1 u.\\ell.', milieu(G, H).x, milieu(G, H).y + 0.6, {
       letterSize: 'normalsize',
     }),
     grilleObj,
@@ -129,10 +130,10 @@ export default class Can2a2026Q30 extends ExerciceCan {
       const segmentUnite = segmentAvecExtremites(G, H)
       segmentUnite.epaisseur = 2
       segmentUnite.styleExtremites = '<->'
-      segmentUnite.tailleExtremites = 8
+      segmentUnite.tailleExtremites = context.isHtml ?   6 : 2
       objets.push(segmentUnite)
       objets.push(
-        latex2d('1 u.\\ell.', milieu(G, H).x, milieu(G, H).y + 0.5, {
+        latex2d('1 u.\\ell.', milieu(G, H).x, milieu(G, H).y + 0.6, {
           letterSize: 'normalsize',
         }),
       )

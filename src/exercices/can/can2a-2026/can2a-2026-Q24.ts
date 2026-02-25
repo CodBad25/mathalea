@@ -21,7 +21,7 @@ export default class Can2a2026Q24 extends ExerciceCan {
       a = randint(2, 4)
       b = randint(1, 4, a)
     }
-
+    this.optionsDeComparaison = { developpementEgal: true }
     this.formatChampTexte = KeyboardType.clavierDeBaseAvecVariable
 
     // (ax - b)² = a²x² - 2abx + b²

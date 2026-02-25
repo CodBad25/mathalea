@@ -36,9 +36,9 @@ export default class Can2a2026Q28 extends ExerciceCan {
     this.reponse =  [`0;${sol2.texFSD}`, `${sol2.texFSD};0`, `0;${sol2.valeurDecimale}`, `${sol2.valeurDecimale};0`]
 
     
-    const equationTexte = signe === '+' ? `${a}x^2+x=0` : `${a}x^2-x=0`
-    const factorisationTexte = signe === '+' ? `x(${a}x+1)=0` : `x(${a}x-1)=0`
-    const equation2Texte = signe === '+' ? `${a}x+1=0` : `${a}x-1=0`
+    const equationTexte = signe === '+' ? `${rienSi1(a)}x^2+x=0` : `${rienSi1(a)}x^2-x=0`
+    const factorisationTexte = signe === '+' ? `x(${rienSi1(a)}x+1)=0` : `x(${rienSi1(a)}x-1)=0`
+    const equation2Texte = signe === '+' ? `${rienSi1(a)}x+1=0` : `${rienSi1(a)}x-1=0`
     const valeurSol2 = signe === '+' ? `-1` : `1`
     
     this.question = `Résoudre dans $\\mathbb{R}$ l'équation : $${rienSi1(a)}x^2 ${signe} x=0$.`
