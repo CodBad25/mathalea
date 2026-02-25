@@ -22,6 +22,9 @@ _private/
 tests/e2e/logs
 updatefile
 .madgerc
+# CLAUDE.md and GEMINI.md sont des liens symboliques vers AGENTS.md
+CLAUDE.md
+GEMINI.md
 # Dictionnaires générés
 src/json/referentielStaticFR.json
 src/json/referentielStaticCH.json
