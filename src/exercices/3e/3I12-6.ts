@@ -1,5 +1,6 @@
 import { ajouteQuestionMathlive } from '../../lib/interactif/questionMathLive'
 import { choice, shuffle } from '../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { rangeMinMax } from '../../lib/outils/nombres'
 import { listeDesDiviseurs, pgcd } from '../../lib/outils/primalite'
 import { texNombre } from '../../lib/outils/texNombre'
@@ -128,10 +129,11 @@ export default class TrouverLeBonProgrammeConditionnelles extends Exercice {
                 ? createScratchSimulatorElement(
                     codeScratch.replace(/"/g, '&quot;').replace(/'/g, '&#39;'),
                     500,
+                    false,
                   ) + '<br>'
                 : ''
             }
-              Pour que le programme dise que le triangle est rectangle en $B$, il faut saisir la valeur $${triplet[0]}$ pour la longueur $AB$.<br>
+              Pour que le programme dise que le triangle est rectangle en $B$, il faut saisir la valeur $${miseEnEvidence(triplet[0])}$ pour la longueur $AB$.<br>
                 En effet, le programme vérifie si $AB^2 + BC^2 = CA^2$.<br>
                 Or $${triplet[0]}^2 + ${triplet[1]}^2 = ${triplet[0] ** 2 + triplet[1] ** 2}$ et $${triplet[2]}^2 = ${triplet[2] ** 2}$.`
           }
@@ -164,11 +166,12 @@ export default class TrouverLeBonProgrammeConditionnelles extends Exercice {
               context.isHtml
                 ? createScratchSimulatorElement(
                     codeScratch.replace(/"/g, '&quot;').replace(/'/g, '&#39;'),
-                    2000,
+                    1000,
+                    false,
                   ) + '<br>'
                 : ''
             }
-              La variable compteur finira avec la valeur $${nbBoucles}$, car le programme va afficher successivement les nombres :<br>
+              La variable compteur finira avec la valeur $${miseEnEvidence(nbBoucles)}$, car le programme va afficher successivement les nombres :<br>
               ${suiteSyracuse
                 .map((n, i) => {
                   if (i === suiteSyracuse.length - 1) {
@@ -206,11 +209,7 @@ export default class TrouverLeBonProgrammeConditionnelles extends Exercice {
             if (context.isHtml) {
               texte += scratchblock(codeScratch)
             } else {
-              texte += codeScratch
-                .replaceAll('r²', '$r^2$')
-                .replaceAll('A', `$${A}$`)
-                .replaceAll('b', '$b$')
-                .replaceAll('c', '$c$')
+              texte += codeScratch.replaceAll('r²', '$r^2$')
             }
 
             this.listeCorrections[q] = `${
@@ -218,10 +217,11 @@ export default class TrouverLeBonProgrammeConditionnelles extends Exercice {
                 ? createScratchSimulatorElement(
                     codeScratch.replace(/"/g, '&quot;').replace(/'/g, '&#39;'),
                     500,
+                    false,
                   ) + '<br>'
                 : ''
             }
-              Pour que le programme s'arrête lorsque $c-b < ${texNombre(precision, 3)}$, il faut que le programme exécute ${nbRepetitions} répétitions. En effet, à chaque répétition, l'intervalle $[b,c]$ est divisé par 2, donc après $${nbRepetitions}$ répétitions, on a $c-b = \\dfrac{10}{2^{${nbRepetitions}}}=${texNombre(10 / 2 ** nbRepetitions, 5)}$.`
+              Pour que le programme s'arrête lorsque $c-b < ${texNombre(precision, 3)}$, il faut que le programme exécute ${miseEnEvidence(nbRepetitions)} répétitions. En effet, à chaque répétition, l'intervalle $[b,c]$ est divisé par 2, donc après $${nbRepetitions}$ répétitions, on a $c-b = \\dfrac{10}{2^{${nbRepetitions}}}=${texNombre(10 / 2 ** nbRepetitions, 5)}$.`
           }
           break
         case 4:
@@ -243,10 +243,6 @@ export default class TrouverLeBonProgrammeConditionnelles extends Exercice {
               texte += scratchblock(codeScratch)
             } else {
               texte += codeScratch
-                .replaceAll('a', `$a$`)
-                .replaceAll('b', `$b$`)
-                .replaceAll('c', `$c$`)
-                .replaceAll('x', '$x$')
             }
 
             this.listeCorrections[q] = `${
@@ -254,10 +250,11 @@ export default class TrouverLeBonProgrammeConditionnelles extends Exercice {
                 ? createScratchSimulatorElement(
                     codeScratch.replace(/"/g, '&quot;').replace(/'/g, '&#39;'),
                     500,
+                    false,
                   ) + '<br>'
                 : ''
             }
-              Pour que le programme dise que les nombres sont proportionnels, il faut saisir la valeur $${d}$ pour $x$.<br>
+              Pour que le programme dise que les nombres sont proportionnels, il faut saisir la valeur $${miseEnEvidence(d)}$ pour $x$.<br>
               En effet, le programme vérifie l'égalité des produits en croix c'est à dire si $a \\times c = b \\times x$. Or $a \\times c = ${a} \\times ${c} = ${produit}$ et $b \\times d = ${b} \\times ${d} = ${produit}$.`
           }
           break
@@ -298,10 +295,11 @@ export default class TrouverLeBonProgrammeConditionnelles extends Exercice {
                 ? createScratchSimulatorElement(
                     codeScratch.replace(/"/g, '&quot;').replace(/'/g, '&#39;'),
                     500,
+                    false,
                   ) + '<br>'
                 : ''
             }
-            Pour que le programme dise que les droites $(BC)$ et $(DE)$ sont parallèles, il faut saisir la valeur $${AE}$ pour la longueur $AE$.<br>
+            Pour que le programme dise que les droites $(BC)$ et $(DE)$ sont parallèles, il faut saisir la valeur $${miseEnEvidence(AE)}$ pour la longueur $AE$.<br>
             En effet, le programme vérifie si $\\dfrac{AB}{AD} = \\dfrac{AC}{AE}$.<br>
             Or $\\dfrac{AB}{AD} = \\dfrac{${AB}}{${AD}}${pgcd(AB, AD) !== 1 ? `=${fraction(AB, AD).texFractionSimplifiee}` : ''}$<br>
             et $\\dfrac{AC}{AE} = \\dfrac{${AC}}{${AE}}${pgcd(AC, AE) !== 1 ? `=${fraction(AC, AE).texFractionSimplifiee}` : ''}$.`
@@ -332,20 +330,17 @@ export default class TrouverLeBonProgrammeConditionnelles extends Exercice {
               texte += scratchblock(codeScratch)
             } else {
               texte += codeScratch
-                .replaceAll('a', `$a$`)
-                .replaceAll('b', `$b$`)
-                .replaceAll('c', `$c$`)
-                .replaceAll('d', `$d$`)
             }
             this.listeCorrections[q] = `${
               context.isHtml
                 ? createScratchSimulatorElement(
                     codeScratch.replace(/"/g, '&quot;').replace(/'/g, '&#39;'),
                     500,
+                    false,
                   ) + '<br>'
                 : ''
             }
-                Pour que le programme dise que l'équation est vérifiée, il faut saisir la valeur $${(d - b) / (a - c)}$ pour $x$.<br>
+                Pour que le programme dise que l'équation est vérifiée, il faut saisir la valeur $${miseEnEvidence((d - b) / (a - c))}$ pour $x$.<br>
                 En effet, le programme vérifie si $${a}x + ${b} = ${c}x + ${d}$.<br>
                 En réarrangeant cette équation, on trouve que $${a - c}x = ${d} - ${b}$.
                 Et donc $x = \\dfrac{${d - b}}{${a - c}} = ${(d - b) / (a - c)}$.`
@@ -372,17 +367,18 @@ export default class TrouverLeBonProgrammeConditionnelles extends Exercice {
             if (context.isHtml) {
               texte += scratchblock(codeScratch)
             } else {
-              texte += codeScratch.replaceAll('a', `$a$`).replaceAll('b', `$b$`)
+              texte += codeScratch
             }
             this.listeCorrections[q] = `${
               context.isHtml
                 ? createScratchSimulatorElement(
                     codeScratch.replace(/"/g, '&quot;').replace(/'/g, '&#39;'),
                     500,
+                    false,
                   ) + '<br>'
                 : ''
             }
-              Pour que le programme dise que le produit est nul, il faut saisir la valeur $${a}$ ou $${-b}$.<br>
+              Pour que le programme dise que le produit est nul, il faut saisir la valeur $${miseEnEvidence(a)}$ ou $${miseEnEvidence(-b)}$.<br>
               En effet, le programme calcule le produit de $(nombre - ${a})$ et $(nombre + ${b})$.<br>
               Ce produit est nul si $nombre - ${a} = 0$ ou $nombre + ${b} = 0$, c'est à dire si $nombre = ${a}$ ou $nombre = ${-b}$.`
           }
@@ -408,9 +404,9 @@ function programmeReciproquePythagore(triplet: number[]): string {
 \\blockvariable{mettre \\selectmenu{BC²} à \\ovaloperator{\\ovalvariable{BC} * \\ovalvariable{BC}}}
 \\blockvariable{mettre \\selectmenu{CA²} à \\ovaloperator{\\ovalvariable{CA} * \\ovalvariable{CA}}}
 \\blockifelse{si \\booloperator{\\ovaloperator{\\ovalvariable{AB²} + \\ovalvariable{BC²}} = \\ovalvariable{CA²}} alors}{
-    \\blocklook{dire \\ovalnum{Le triangle est rectangle en B}}
+    \\blocklook{dire \\ovalnum{Le triangle est rectangle en B.}}
 }{
-    \\blocklook{dire \\ovalnum{Le triangle n'est pas rectangle en B}}
+    \\blocklook{dire \\ovalnum{Le triangle n'est pas rectangle en B.}}
 }
 \\end{scratch}`
   return codeScratch
@@ -442,18 +438,17 @@ function programmeSiracuse(n: number): string {
         \\blockvariable{ajouter \\ovalnum{1} à \\selectmenu{compteur}}
         \\blocklook{dire \\ovalvariable{n}}
         \\blockif{si \\booloperator{\\ovalmove{n} = \\ovalnum{1}} alors}{
-            \\blocklook{dire \\ovalvariable{compteur}}
+          \\blocklook{dire \\ovaloperator{regrouper \\ovalnum{compteur est à } et \\ovaloperator{regrouper \\ovalvariable{compteur} et \\ovalnum{.} }}}
             \\blockcontrol{stop \\selectmenu{tout}}
         }
         \\blockifelse{si \\booloperator{\\ovalmove{n} modulo \\ovalnum{2} = 0} alors}{
             \\blockvariable{mettre \\selectmenu{n} à \\ovaloperator{\\ovalmove{n} / \\ovalnum{2}}}
         }
         {
-            \\blockvariable{mettre \\selectmenu{n} à \\ovaloperator{\\ovalnum{3} * \\ovalvariable{n}}}
             \\blockvariable{ajouter \\ovalnum{1} à \\selectmenu{n}}
         }
     }
-         \\blocklook{dire \\ovalvariable{compteur}}
+         \\blocklook{dire \\ovaloperator{regrouper \\ovalnum{compteur est à } et \\ovaloperator{regrouper \\ovalvariable{compteur} et \\ovalnum{.} }}}
 \\end{scratch}`
   return codeScratch
 }
@@ -473,7 +468,7 @@ function programmeDichotomie(A: number, precision: number): string {
     \\blockvariable{mettre \\ovalvariable{c} à \\ovalvariable{r}}
 }
 }
-\\blocklook{dire \\ovaloperator{regrouper \\ovalnum{écart entre b et c : } et \\ovaloperator{\\ovalvariable{c} - \\ovalvariable{b}}}}
+\\blocklook{dire \\ovaloperator{regrouper \\ovalnum{écart entre b et c : } et \\ovaloperator{regrouper \\ovaloperator{\\ovalvariable{c} - \\ovalvariable{b}} et \\ovalnum{.}}}}
 \\end{scratch}`
   return codeScratch
 }
@@ -488,9 +483,9 @@ function programme4eProportionnelle(a: number, b: number, c: number): string {
   \\blockvariable{mettre \\selectmenu{ac} à \\ovaloperator{\\ovalvariable{a} * \\ovalvariable{c}}}
   \\blockvariable{mettre \\selectmenu{bx} à \\ovaloperator{\\ovalvariable{b} * \\ovalvariable{x}}}
   \\blockifelse{si \\booloperator{\\ovalvariable{ac} = \\ovalvariable{bx}} alors}{
-    \\blocklook{dire \\ovalnum{Proportionnel}}
+    \\blocklook{dire \\ovalnum{Proportionnel.}}
 }{  
-  \\blocklook{dire \\ovalnum{Non proportionnel}}
+  \\blocklook{dire \\ovalnum{Non proportionnel.}}
 }
 \\end{scratch}`
   return codeScratch
@@ -507,9 +502,9 @@ function programmeReciproqueThales(AB: number, AC: number, AD: number): string {
   \\blocksensing{demander \\ovalnum{longueur AE} et attendre}
   \\blockvariable{mettre \\selectmenu{AE} à \\ovalsensing{réponse}}
   \\blockifelse{si \\booloperator{\\ovaloperator{\\ovalvariable{AB} / \\ovalvariable{AD}} = \\ovaloperator{\\ovalvariable{AC} / \\ovalvariable{AE}}} alors}{
-    \\blocklook{dire \\ovalnum{Les droites (BC) et (DE) sont parallèles}}
+    \\blocklook{dire \\ovalnum{Les droites (BC) et (DE) sont parallèles.}}
 }{
-    \\blocklook{dire \\ovalnum{Les droites (BC) et (DE) ne sont pas parallèles}}
+    \\blocklook{dire \\ovalnum{Les droites (BC) et (DE) ne sont pas parallèles.}}
 }
 \\end{scratch}`
   return codeScratch
@@ -527,9 +522,9 @@ function programmeTestEquation(
   \\blockvariable{mettre \\selectmenu{gauche} à \\ovaloperator{\\ovaloperator{\\ovalnum{${a}} * \\ovalvariable{x}} + \\ovalnum{${b}}}}
   \\blockvariable{mettre \\selectmenu{droite} à \\ovaloperator{\\ovaloperator{\\ovalnum{${c}} * \\ovalvariable{x}} + \\ovalnum{${d}}}}
   \\blockifelse{si \\booloperator{\\ovalvariable{gauche} = \\ovalvariable{droite}} alors}{
-    \\blocklook{dire \\ovalnum{L'équation est vérifiée}}
+    \\blocklook{dire \\ovalnum{L'équation est vérifiée.}}
 }{
-    \\blocklook{dire \\ovalnum{L'équation n'est pas vérifiée}}
+    \\blocklook{dire \\ovalnum{L'équation n'est pas vérifiée.}}
 }
 \\end{scratch}`
   return codeScratch
@@ -543,9 +538,9 @@ function programmeProduitNul(a: number, b: number): string {
   \\blockvariable{mettre \\selectmenu{nombre 2} à \\ovaloperator{\\ovalvariable{nombre de départ} + \\ovalnum{${b}}}}
   \\blockvariable{mettre \\selectmenu{produit} à \\ovaloperator{\\ovalvariable{nombre 1} * \\ovalvariable{nombre 2}}}
   \\blockifelse{si \\booloperator{\\ovalvariable{produit} = 0} alors}{
-    \\blocklook{dire \\ovalnum{Le produit est nul}}
+    \\blocklook{dire \\ovalnum{Le produit est nul.}}
 }{
-    \\blocklook{dire \\ovalnum{Le produit n'est pas nul}}
+    \\blocklook{dire \\ovalnum{Le produit n'est pas nul.}}
 }
 \\end{scratch}`
   return codeScratch

@@ -15,6 +15,7 @@ import {
 import Exercice from '../Exercice'
 // Ici ce sont les fonctions de la librairie maison 2d.js qui gèrent tout ce qui est graphique (SVG/tikz) et en particulier ce qui est lié à l'objet lutin
 import { setCliqueFigure } from '../../lib/interactif/gestionInteractif'
+import { createScratchSimulatorElement } from '../../lib/ScratchSimulator'
 import {
   allerA,
   angleScratchTo2d,
@@ -57,6 +58,12 @@ export default class AlgoTortue extends Exercice {
       '1 : Polygone régulier\n2 : Spirale\n3 : Rosace\n4 : Roue dentée\n5 : Frise\n6 : Au hasard',
     ]
     this.sup = 6
+    this.besoinFormulaire2Numerique = [
+      "Délai de l'animation (en ms)",
+      4,
+      '1 : 0ms\n2 : 200ms\n3 : 1000ms\n4 : 2000ms',
+    ]
+    this.sup2 = 2
     this.typeExercice = 'Scratch'
     this.interactif = true
     this.listeAvecNumerotation = false
@@ -75,6 +82,14 @@ export default class AlgoTortue extends Exercice {
       'roueDentee',
       'frise1',
     ]
+    const delay =
+      this.sup2 === 1
+        ? 0
+        : this.sup2 === 2
+          ? 200
+          : this.sup2 === 3
+            ? 1000
+            : 2000
     const choix =
       this.sup < 6
         ? figuresDisponibles[this.sup - 1]
@@ -563,7 +578,7 @@ export default class AlgoTortue extends Exercice {
       ymin: -1.5,
       xmax: largeur,
       ymax: hauteur + 1,
-      pixelsParCm: Math.round(400 / largeur),
+      pixelsParCm: Math.round(200 / largeur),
       scale: 4 / largeur,
       style: 'display: inline-block',
     }
@@ -572,7 +587,7 @@ export default class AlgoTortue extends Exercice {
       ymin: -1.5,
       xmax: largeur,
       ymax: hauteur + 1,
-      pixelsParCm: Math.round(400 / largeur),
+      pixelsParCm: Math.round(200 / largeur),
       scale: 4 / largeur,
       style: 'display: inline-block',
     }
@@ -633,7 +648,12 @@ export default class AlgoTortue extends Exercice {
     setCliqueFigure(this.autoCorrection[0])
     this.indiceBonneFigure = ordreLutins.indexOf(bonneReponse)
     // Ici, la figure contient la grille, le point de départ et le lutin qui s'anime sur sa trace...
-    texteCorr += `La bonne figure est la figure ${this.indiceBonneFigure + 1}`
+    texteCorr += `La bonne figure est la figure ${this.indiceBonneFigure + 1}<br>
+    ${
+      context.isHtml
+        ? createScratchSimulatorElement(lutins[0].codeScratch, delay, false)
+        : ''
+    }`
     if (this.interactif && context.isHtml) {
       texte += `<span id="resultatCheckEx${this.numeroExercice}Q0"></span>`
     }

@@ -4,12 +4,14 @@ import { setCliqueFigure } from '../../lib/interactif/gestionInteractif'
 import { combinaisonListes, shuffle } from '../../lib/outils/arrayOutils'
 import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import { range } from '../../lib/outils/nombres'
+import { createScratchSimulatorElement } from '../../lib/ScratchSimulator'
 import {
   avance,
   baisseCrayon,
   creerLutin,
   tournerD,
 } from '../../modules/2dLutin'
+import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu } from '../../modules/outils'
 import { scratchblock } from '../../modules/scratchblock'
@@ -69,35 +71,35 @@ export default class TracerAvecScratch extends Exercice {
         switch (n) {
           case 2:
             sortie.name = 'segment'
-            sortie.nbPas = 400
+            sortie.nbPas = 40
             break
           case 3:
             sortie.name = 'triangle équilatéral'
-            sortie.nbPas = 400
+            sortie.nbPas = 40
             break
           case 4:
             sortie.name = 'carré'
-            sortie.nbPas = 400
+            sortie.nbPas = 40
             break
           case 5:
             sortie.name = 'pentagone régulier'
-            sortie.nbPas = 300
+            sortie.nbPas = 30
             break
           case 6:
             sortie.name = 'hexagone régulier'
-            sortie.nbPas = 250
+            sortie.nbPas = 25
             break
           case 7:
             sortie.name = 'heptagone régulier'
-            sortie.nbPas = 200
+            sortie.nbPas = 20
             break
           case 8:
             sortie.name = 'octogone régulier'
-            sortie.nbPas = 200
+            sortie.nbPas = 20
             break
           case 9:
             sortie.name = 'ennéagone régulier'
-            sortie.nbPas = 200
+            sortie.nbPas = 20
             break
         }
         return sortie
@@ -136,7 +138,7 @@ export default class TracerAvecScratch extends Exercice {
           baisseCrayon(lutinEnonce[indiceLutin])
           for (let k = 1; k < tabNbCote[indiceLutin] + 1; k++) {
             avance(
-              myPolyName(tabNbCote[indiceLutin]).nbPas / 6,
+              myPolyName(tabNbCote[indiceLutin]).nbPas * 3,
               lutinEnonce[indiceLutin],
             )
             tournerD(
@@ -209,6 +211,7 @@ export default class TracerAvecScratch extends Exercice {
           <br><br>
           ${situations[0].fig_corr}
           `,
+          scratchCorrection: situations[0].codeScratch,
         })
 
         return enonces
@@ -237,7 +240,13 @@ export default class TracerAvecScratch extends Exercice {
 
       if (this.questionJamaisPosee(i, texte)) {
         this.listeQuestions[i] = texte
-        this.listeCorrections[i] = texteCorr
+        this.listeCorrections[i] =
+          texteCorr + context.isHtml
+            ? createScratchSimulatorElement(
+                enonces[listeTypeDeQuestions[i] - 1].scratchCorrection,
+                500,
+              )
+            : ''
         i++
       }
       cpt++

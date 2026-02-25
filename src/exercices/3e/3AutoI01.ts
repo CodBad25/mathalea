@@ -3,6 +3,7 @@ import { ajouteQuestionMathlive } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
+import { createScratchSimulatorElement } from '../../lib/ScratchSimulator'
 import { context } from '../../modules/context'
 import { scratchblock } from '../../modules/scratchblock'
 import Exercice from '../Exercice'
@@ -64,6 +65,22 @@ export default class BlocPersonnaliseScratch extends Exercice {
 }
 \\end{scratch}`
     }
+    const blockCompleted = (figure: {
+      nom: string
+      nbCotes: number
+      longueurCote: number
+      angle: number
+    }) => {
+      return `\\begin{scratch}[num blocks]\n
+\\initmoreblocks{définir \\namemoreblocks{${figure.nom}}}
+\\blockpen{stylo en position d'écriture}
+\\blockrepeat{répéter \\ovalnum{${figure.nbCotes}} fois}
+{
+\\blockmove{avancer de \\ovalnum{${longueurCote}} pas}
+\\blockmove{tourner \\turnright{} de \\ovalnum{${figure.angle}} degrés}
+}
+\\end{scratch}`
+    }
 
     const nbCotes = this.sup ? 4 : choice([3, 4, 6, 8])
     const nom = myPolyName(nbCotes)
@@ -116,6 +133,28 @@ pour obtenir un ${nom} ?`,
         content:
           '\\text{Ligne 3 : }%{champ1}\\quad \\text{Ligne 5 : }%{champ2}',
       })
-    this.listeCorrections[0] = `Pour obtenir un ${nom}, il faut répéter $${miseEnEvidence(nbCotes.toString())}$ fois et tourner de $\\dfrac{360}{${nbCotes}}=${miseEnEvidence(texNombre(360 / nbCotes, 0))}$ degrés.`
+    this.listeCorrections[0] = `Pour obtenir un ${nom}, il faut répéter $${miseEnEvidence(nbCotes.toString())}$ fois et tourner de $\\dfrac{360}{${nbCotes}}=${miseEnEvidence(texNombre(360 / nbCotes, 0))}$ degrés.
+    ${
+      context.isHtml
+        ? '<br>' +
+          createScratchSimulatorElement(
+            blockCompleted({
+              nom,
+              nbCotes,
+              longueurCote,
+              angle: 360 / nbCotes,
+            })
+              .replace(/"/g, '&quot;')
+              .replace(/'/g, '&#39;'),
+            500,
+            false,
+          )
+        : blockCompleted({
+            nom,
+            nbCotes,
+            longueurCote,
+            angle: 360 / nbCotes,
+          })
+    }`
   }
 }

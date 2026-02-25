@@ -41,12 +41,21 @@ export class ScratchSimulator extends HTMLElement {
   private delayMs: number = 2000
   private isRunning: boolean = false
   private isPaused: boolean = false
+  private isHardStopped: boolean = false
+  private initialDelayMs: number = 500
   private pauseResolvers: Array<() => void> = []
-  private controlButton: HTMLButtonElement | null = null
+  private playPauseButton: HTMLButtonElement | null = null
+  private resetButton: HTMLButtonElement | null = null
+  private runToEndButton: HTMLButtonElement | null = null
+  private speedUpButton: HTMLButtonElement | null = null
+  private slowDownButton: HTMLButtonElement | null = null
+  private stopButton: HTMLButtonElement | null = null
+  private simulationRunId: number = 0
 
   connectedCallback(): void {
     this.scratchCode = this.getAttribute('code') || ''
-    this.delayMs = parseInt(this.getAttribute('delay') || '500', 10)
+    this.initialDelayMs = parseInt(this.getAttribute('delay') || '500', 10)
+    this.delayMs = this.initialDelayMs
 
     const button = document.createElement('button')
     button.textContent = '▶ Exécuter'
@@ -68,6 +77,7 @@ export class ScratchSimulator extends HTMLElement {
           ? 'block'
           : 'none'
       }
+      this.resetModalContent()
       if (this.modal.showModal) {
         this.modal.showModal()
       } else {
@@ -165,23 +175,62 @@ export class ScratchSimulator extends HTMLElement {
     this.stepDiv.id = 'execution-step'
     this.stepDiv.textContent = 'Prêt à exécuter (cliquez sur ▶)'
 
-    // Bouton de contrôle play/pause
-    this.controlButton = document.createElement('button')
-    this.controlButton.className =
-      'btn btn-circle btn-lg bg-blue-500 hover:bg-blue-600 text-white text-2xl w-16 h-16 flex items-center justify-center'
-    this.controlButton.textContent = '▶'
-    this.controlButton.addEventListener('click', () => this.togglePlayPause())
+    // Boutons de contrôle d'exécution
+    this.resetButton = document.createElement('button')
+    this.resetButton.className = 'btn btn-sm btn-outline'
+    this.resetButton.textContent = '|<<'
+    this.resetButton.title = 'Réinitialiser le programme'
+    this.resetButton.addEventListener('click', () => this.resetProgramToStart())
+
+    this.runToEndButton = document.createElement('button')
+    this.runToEndButton.className = 'btn btn-sm btn-outline'
+    this.runToEndButton.textContent = '>>|'
+    this.runToEndButton.title = "Exécuter jusqu'au bout sans délai"
+    this.runToEndButton.addEventListener('click', () => this.runProgramToEnd())
+
+    this.playPauseButton = document.createElement('button')
+    this.playPauseButton.className = 'btn btn-sm btn-outline'
+    this.playPauseButton.textContent = '▶'
+    this.playPauseButton.title = 'Lancer ou mettre en pause'
+    this.playPauseButton.addEventListener('click', () => this.togglePlayPause())
+
+    this.speedUpButton = document.createElement('button')
+    this.speedUpButton.className = 'btn btn-sm btn-outline'
+    this.speedUpButton.textContent = 'x2'
+    this.speedUpButton.title = 'Diviser le délai par 2'
+    this.speedUpButton.addEventListener('click', () => this.speedUpExecution())
+
+    this.slowDownButton = document.createElement('button')
+    this.slowDownButton.className = 'btn btn-sm btn-outline'
+    this.slowDownButton.textContent = '/2'
+    this.slowDownButton.title = 'Multiplier le délai par 2'
+    this.slowDownButton.addEventListener('click', () =>
+      this.slowDownExecution(),
+    )
+
+    this.stopButton = document.createElement('button')
+    this.stopButton.className = 'btn btn-sm btn-outline btn-error'
+    this.stopButton.textContent = '■'
+    this.stopButton.title = "Stopper définitivement (jusqu'à réinitialisation)"
+    this.stopButton.addEventListener('click', () => this.hardStopExecution())
+
     const buttonInstructionAndInfoDiv = document.createElement('div')
     buttonInstructionAndInfoDiv.className = 'items-start gap-6 mb-4'
     this.infoDiv = document.createElement('div')
-    this.infoDiv.className = 'text-sm text-gray-600'
+    this.infoDiv.className = 'text-sm text-gray-600 mt-2'
     this.infoDiv.id = 'execution-info'
-    const controlAndInfosDiv = document.createElement('div')
-    controlAndInfosDiv.className = 'items-start gap-3 mb-4 min-w-max'
-    controlAndInfosDiv.appendChild(this.controlButton)
-    controlAndInfosDiv.appendChild(this.infoDiv)
+    const controlsBarDiv = document.createElement('div')
+    controlsBarDiv.className =
+      'inline-flex flex-nowrap items-center gap-2 mb-2 w-fit max-w-full overflow-x-auto border border-base-300 rounded-lg bg-base-200 p-2 shadow-inner'
+    controlsBarDiv.appendChild(this.resetButton)
+    controlsBarDiv.appendChild(this.runToEndButton)
+    controlsBarDiv.appendChild(this.playPauseButton)
+    controlsBarDiv.appendChild(this.speedUpButton)
+    controlsBarDiv.appendChild(this.slowDownButton)
+    controlsBarDiv.appendChild(this.stopButton)
 
-    buttonInstructionAndInfoDiv.appendChild(controlAndInfosDiv)
+    buttonInstructionAndInfoDiv.appendChild(controlsBarDiv)
+    buttonInstructionAndInfoDiv.appendChild(this.infoDiv)
     buttonInstructionAndInfoDiv.appendChild(this.stepDiv)
 
     rightColumn.appendChild(buttonInstructionAndInfoDiv)
@@ -1111,9 +1160,12 @@ export class ScratchSimulator extends HTMLElement {
   private async runAnimatedSimulation(): Promise<void> {
     if (!this.interpreter || !this.canvas) return
 
+    const runId = ++this.simulationRunId
+
     this.isRunning = true
     this.isPaused = false
-    this.updateControlButton()
+    this.isHardStopped = false
+    this.updateControls()
 
     // Assigner le callback de saisie utilisateur
     this.interpreter.onAskInput = async (prompt: string) => {
@@ -1125,15 +1177,26 @@ export class ScratchSimulator extends HTMLElement {
 
     // Exécuter avec animation (callback extrait pour conserver le contexte this en debug)
     const onUpdateCallback = async (): Promise<void> => {
+      if (runId !== this.simulationRunId) {
+        return
+      }
+
       // Attendre si en pause
-      while (this.isPaused) {
+      while (this.isPaused && runId === this.simulationRunId) {
         await new Promise<void>((resolve) => {
           this.pauseResolvers.push(resolve)
         })
       }
 
+      if (runId !== this.simulationRunId) {
+        return
+      }
+
       const state = this.interpreter!.getCurrentState()
       requestAnimationFrame(() => {
+        if (runId !== this.simulationRunId) {
+          return
+        }
         this.drawSimulation(state)
         this.displayInfo(state)
         this.displayInstruction(state)
@@ -1151,6 +1214,10 @@ export class ScratchSimulator extends HTMLElement {
       this.delayMs,
     )
 
+    if (runId !== this.simulationRunId) {
+      return
+    }
+
     // Affichage final
     const result = this.interpreter.getCurrentState()
     const finalDisplayState: ExecutionResult = {
@@ -1160,6 +1227,9 @@ export class ScratchSimulator extends HTMLElement {
       currentInstructionIndex: -1,
     }
     requestAnimationFrame(() => {
+      if (runId !== this.simulationRunId) {
+        return
+      }
       this.drawSimulation(result)
       this.displayInfo(result)
       this.displayInstruction(finalDisplayState)
@@ -1168,7 +1238,60 @@ export class ScratchSimulator extends HTMLElement {
 
     this.isRunning = false
     this.isPaused = false
-    this.updateControlButton()
+    this.updateControls()
+  }
+
+  private getInitialExecutionState(): ExecutionResult {
+    return {
+      traces: [],
+      finalX: 200,
+      finalY: 200,
+      finalAngle: 90,
+      visible: true,
+      variables: {},
+      messages: [],
+      currentInstruction: '',
+      currentInstructionScratchHtml: '',
+      currentInstructionIndex: -1,
+      currentConditionText: '',
+      currentConditionResult: null,
+      repeatIterations: [],
+    }
+  }
+
+  private resetModalContent(): void {
+    this.simulationRunId += 1
+    this.isRunning = false
+    this.isPaused = false
+    this.isHardStopped = false
+    this.delayMs = this.initialDelayMs
+    const resolvers = this.pauseResolvers
+    this.pauseResolvers = []
+    resolvers.forEach((resolve) => resolve())
+    this.interpreter = null
+    this.executionIndexToBlockId.clear()
+
+    if (this.codeBlocks.length > 0) {
+      this.clearBlockHighlights(this.codeBlocks)
+    }
+    this.highlightedExecutionIndex = null
+    this.highlightedBlockElement = null
+
+    this.onlyDisplayCode()
+    if (this.codeDiv) {
+      renderScratchDiv(this.codeDiv)
+      this.cacheRenderedBlocks()
+    }
+
+    if (this.stepDiv) {
+      this.stepDiv.textContent = 'Prêt à exécuter (cliquez sur ▶)'
+    }
+    if (this.infoDiv) {
+      this.infoDiv.innerHTML = ''
+    }
+
+    this.drawSimulation(this.getInitialExecutionState())
+    this.updateControls()
   }
 
   private drawSimulation(result: ExecutionResult): void {
@@ -1357,30 +1480,40 @@ export class ScratchSimulator extends HTMLElement {
     const tailBaseCenterX = isBubbleOnRight
       ? bubbleX + Math.min(18, bubbleWidth / 2)
       : bubbleX + bubbleWidth - Math.min(18, bubbleWidth / 2)
-    const tailBaseLeftX = tailBaseCenterX - tailWidth / 2
-    const tailBaseRightX = tailBaseCenterX + tailWidth / 2
+    const cornerRadius = 10
+    const minTailBaseX = bubbleX + cornerRadius + 2
+    const maxTailBaseX = bubbleX + bubbleWidth - cornerRadius - 2
+    const clampedTailBaseCenterX = Math.max(
+      minTailBaseX + tailWidth / 2,
+      Math.min(tailBaseCenterX, maxTailBaseX - tailWidth / 2),
+    )
+    const tailBaseLeftX = clampedTailBaseCenterX - tailWidth / 2
+    const tailBaseRightX = clampedTailBaseCenterX + tailWidth / 2
 
     ctx.fillStyle = '#ffffff'
     ctx.strokeStyle = '#111827'
     ctx.lineWidth = 1.5
 
     ctx.beginPath()
-    this.drawRoundedRectPath(
-      ctx,
-      bubbleX,
-      bubbleY,
-      bubbleWidth,
-      bubbleHeight,
-      10,
-    )
-    ctx.fill()
-    ctx.stroke()
+    const right = bubbleX + bubbleWidth
+    const bottom = bubbleY + bubbleHeight
+    const left = bubbleX
+    const top = bubbleY
 
-    ctx.beginPath()
-    ctx.moveTo(tailBaseLeftX, bubbleY + bubbleHeight)
-    ctx.lineTo(tailBaseRightX, bubbleY + bubbleHeight)
+    ctx.moveTo(left + cornerRadius, top)
+    ctx.lineTo(right - cornerRadius, top)
+    ctx.arcTo(right, top, right, top + cornerRadius, cornerRadius)
+    ctx.lineTo(right, bottom - cornerRadius)
+    ctx.arcTo(right, bottom, right - cornerRadius, bottom, cornerRadius)
+    ctx.lineTo(tailBaseRightX, bottom)
     ctx.lineTo(tailTipX, tailTipY)
+    ctx.lineTo(tailBaseLeftX, bottom)
+    ctx.lineTo(left + cornerRadius, bottom)
+    ctx.arcTo(left, bottom, left, bottom - cornerRadius, cornerRadius)
+    ctx.lineTo(left, top + cornerRadius)
+    ctx.arcTo(left, top, left + cornerRadius, top, cornerRadius)
     ctx.closePath()
+
     ctx.fill()
     ctx.stroke()
 
@@ -1540,45 +1673,136 @@ export class ScratchSimulator extends HTMLElement {
     }
   }
 
-  private togglePlayPause(): void {
-    if (!this.isRunning) {
-      // Si pas en cours, relancer depuis le début
-      this.isRunning = true
+  private startProgram(): void {
+    if (this.isHardStopped || this.isRunning) {
+      return
+    }
+    this.interpreter = new ScratchInterpreter(200, 200, 90)
+    this.interpreter.setExecutionDelay(this.delayMs)
+    this.parseAndDisplayCode()
+    this.runAnimatedSimulation().catch(() => {
+      this.isRunning = false
       this.isPaused = false
-      this.interpreter = new ScratchInterpreter(200, 200, 90)
-      this.parseAndDisplayCode()
-      this.runAnimatedSimulation()
+      this.updateControls()
+    })
+  }
+
+  private togglePlayPause(): void {
+    if (this.isHardStopped) {
+      return
+    }
+
+    if (!this.isRunning) {
+      this.startProgram()
     } else if (this.isPaused) {
-      // Si en pause, reprendre
       this.isPaused = false
       const resolvers = this.pauseResolvers
       this.pauseResolvers = []
       resolvers.forEach((resolve) => resolve())
     } else {
-      // Si en cours, mettre en pause
       this.isPaused = true
     }
-    this.updateControlButton()
+    this.updateControls()
   }
 
-  private updateControlButton(): void {
-    if (!this.controlButton) return
+  private resetProgramToStart(): void {
+    this.resetModalContent()
+  }
 
-    const baseClasses =
-      'btn btn-circle btn-lg text-white text-2xl w-16 h-16 flex items-center justify-center'
+  private runProgramToEnd(): void {
+    if (this.isHardStopped) {
+      return
+    }
+
+    this.delayMs = 0
+    if (this.interpreter) {
+      this.interpreter.setExecutionDelay(0)
+    }
+
+    if (!this.isRunning) {
+      this.startProgram()
+      return
+    }
+
+    if (this.isPaused) {
+      this.isPaused = false
+      const resolvers = this.pauseResolvers
+      this.pauseResolvers = []
+      resolvers.forEach((resolve) => resolve())
+    }
+
+    this.updateControls()
+  }
+
+  private speedUpExecution(): void {
+    if (this.delayMs <= 0) {
+      return
+    }
+    this.delayMs = Math.max(1, Math.floor(this.delayMs / 2))
+    if (this.interpreter) {
+      this.interpreter.setExecutionDelay(this.delayMs)
+    }
+    this.updateControls()
+  }
+
+  private slowDownExecution(): void {
+    this.delayMs = Math.min(32000, this.delayMs * 2)
+    if (this.interpreter) {
+      this.interpreter.setExecutionDelay(this.delayMs)
+    }
+    this.updateControls()
+  }
+
+  private hardStopExecution(): void {
+    if (!this.isRunning && this.isHardStopped) {
+      return
+    }
+
+    this.simulationRunId += 1
+    this.isRunning = false
+    this.isPaused = false
+    this.isHardStopped = true
+    const resolvers = this.pauseResolvers
+    this.pauseResolvers = []
+    resolvers.forEach((resolve) => resolve())
+    if (this.interpreter) {
+      this.interpreter.stopExecution()
+    }
+    this.interpreter = null
+
+    if (this.stepDiv) {
+      this.stepDiv.textContent =
+        'Exécution stoppée. Cliquez sur |<< pour réinitialiser.'
+    }
+
+    this.updateControls()
+  }
+
+  private updateControls(): void {
+    if (!this.playPauseButton) return
 
     if (this.isRunning && !this.isPaused) {
-      // En cours d'exécution: afficher stop (⏹)
-      this.controlButton.textContent = '⏹'
-      this.controlButton.className = `${baseClasses} bg-red-500 hover:bg-red-600`
+      this.playPauseButton.textContent = '||'
+      this.playPauseButton.className = 'btn btn-sm btn-outline btn-warning'
     } else if (this.isPaused) {
-      // En pause: afficher play (▶)
-      this.controlButton.textContent = '▶'
-      this.controlButton.className = `${baseClasses} bg-green-500 hover:bg-green-600`
+      this.playPauseButton.textContent = '▶'
+      this.playPauseButton.className = 'btn btn-sm btn-outline btn-success'
     } else {
-      // Pas en cours: afficher play (▶)
-      this.controlButton.textContent = '▶'
-      this.controlButton.className = `${baseClasses} bg-blue-500 hover:bg-blue-600`
+      this.playPauseButton.textContent = '▶'
+      this.playPauseButton.className = 'btn btn-sm btn-outline'
+    }
+
+    if (this.playPauseButton) {
+      this.playPauseButton.disabled = this.isHardStopped
+    }
+    if (this.runToEndButton) {
+      this.runToEndButton.disabled = this.isHardStopped
+    }
+    if (this.speedUpButton) {
+      this.speedUpButton.disabled = this.isHardStopped || this.delayMs <= 0
+    }
+    if (this.slowDownButton) {
+      this.slowDownButton.disabled = this.isHardStopped
     }
   }
 
@@ -1721,8 +1945,9 @@ if (
 export function createScratchSimulatorElement(
   code: string,
   delayMs: number = 500,
+  insertProgramme: boolean = true,
 ): string {
   if (!context.isHtml) return ''
-  return `<scratch-simulator delay="${String(delayMs)}" code="${code}">${scratchblock(code)}</scratch-simulator>
+  return `<scratch-simulator delay="${String(delayMs)}" code="${code}">${insertProgramme ? scratchblock(code) : ''}</scratch-simulator>
      `
 }

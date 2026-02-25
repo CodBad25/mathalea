@@ -1,6 +1,7 @@
 import { ajouteQuestionMathlive } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { createScratchSimulatorElement } from '../../lib/ScratchSimulator'
 import { context } from '../../modules/context'
 import { randint } from '../../modules/outils'
 import { scratchblock } from '../../modules/scratchblock'
@@ -88,6 +89,22 @@ ${codeScratch3}<br>
    Ensuite, ${codeResultat} prend la valeur $${a} \\times ${x}=${a * x}$.<br>
    Puis, ${codeResultat} prend la valeur $${a * x} + ${b}=${a * x + b}$.<br>
    Enfin, ${codeResultat} prend la valeur $\\dfrac{${a * x + b}}{${c}}=${(x * a + b) / c}$.<br>
-    On obtient donc comme résultat final : $${miseEnEvidence((x * a + b) / c)}$.`
+    On obtient donc comme résultat final : $${miseEnEvidence((x * a + b) / c)}$.<br>
+    ${
+      context.isHtml
+        ? '<br>' +
+          createScratchSimulatorElement(
+            codeScratch
+              .replace(
+                '\\blocksensing{demander \\ovalnum{ Choisir un nombre } et attendre}\n',
+                '',
+              )
+              .replace('\\ovalsensing{réponse}', `\\ovalnum{${x}}`),
+            500,
+            false,
+          )
+        : ''
+    }
+     `
   }
 }

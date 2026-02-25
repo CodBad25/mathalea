@@ -61,6 +61,7 @@ export class ScratchInterpreter {
 
   private onUpdate?: () => void | Promise<void>
   private skipWaitBlocks: boolean = false
+  private executionDelayMs: number = 500
   public onAskInput?: (prompt: string) => Promise<string> // Callback pour demander un input utilisateur
 
   constructor(startX = 0, startY = 0, startAngle = 0) {
@@ -83,6 +84,7 @@ export class ScratchInterpreter {
     this.answer = ''
     this.onUpdate = onUpdate
     this.skipWaitBlocks = options.skipWaitBlocks === true
+    this.executionDelayMs = Math.max(0, delayMs)
     this.currentInstructionIndex = -1
     this.repeatIterations = []
 
@@ -97,10 +99,23 @@ export class ScratchInterpreter {
   }
 
   private async wait(delayMs: number): Promise<void> {
-    if (this.skipWaitBlocks || delayMs <= 0) {
+    const effectiveDelay = Math.max(0, delayMs)
+    if (this.skipWaitBlocks || effectiveDelay <= 0) {
       return
     }
-    await new Promise((resolve) => setTimeout(resolve, delayMs))
+    await new Promise((resolve) => setTimeout(resolve, effectiveDelay))
+  }
+
+  private async waitStepDelay(): Promise<void> {
+    await this.wait(this.executionDelayMs / 2)
+  }
+
+  public setExecutionDelay(delayMs: number): void {
+    this.executionDelayMs = Math.max(0, delayMs)
+  }
+
+  public stopExecution(): void {
+    this.stopped = true
   }
 
   getCurrentState(): ExecutionResult {
@@ -292,7 +307,7 @@ export class ScratchInterpreter {
         if (this.onUpdate) {
           await Promise.resolve(this.onUpdate())
         }
-        await this.wait(delayMs / 2)
+        await this.waitStepDelay()
         if (conditionMet === true) {
           await this.parseAndExecuteAnimated(thenCode, delayMs)
         } else {
@@ -352,7 +367,7 @@ export class ScratchInterpreter {
         if (this.onUpdate) {
           await Promise.resolve(this.onUpdate())
         }
-        await this.wait(delayMs / 2)
+        await this.waitStepDelay()
         if (conditionMet === true) {
           await this.parseAndExecuteAnimated(thenCode, delayMs)
         }
@@ -506,7 +521,7 @@ export class ScratchInterpreter {
         }
 
         // Attendre le délai
-        await this.wait(delayMs / 2)
+        await this.waitStepDelay()
 
         // Exécuter l'action
         await this.executeBlockAction(block.type, block.content, delayMs)
@@ -515,7 +530,7 @@ export class ScratchInterpreter {
           await Promise.resolve(this.onUpdate())
         }
         // Attendre le délai
-        await this.wait(delayMs / 2)
+        await this.waitStepDelay()
       }
     }
   }
@@ -769,19 +784,19 @@ export class ScratchInterpreter {
       }
 
       if (content.includes('orienter')) {
-        const angle = this.extractNumber(content)
+        const angle = this.extractNumericValue(content)
         this.setOrientation(angle)
         return true
       }
 
       if (content.includes('avancer')) {
-        const steps = this.extractNumber(content)
+        const steps = this.extractNumericValue(content)
         this.moveForward(steps)
         return true
       }
 
       if (content.includes('tourner')) {
-        const angle = this.extractNumber(content)
+        const angle = this.extractNumericValue(content)
         if (content.includes('turnright')) {
           this.turn(angle)
         } else if (content.includes('turnleft')) {

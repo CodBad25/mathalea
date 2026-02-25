@@ -5,6 +5,7 @@ import {
   ecritureAlgebriqueSauf1,
 } from '../../lib/outils/ecritures'
 import { texteEnBoite, texteItalique } from '../../lib/outils/embellissements'
+import { createScratchSimulatorElement } from '../../lib/ScratchSimulator'
 import { context } from '../../modules/context'
 import { randint } from '../../modules/outils'
 import { scratchblock } from '../../modules/scratchblock'
@@ -69,19 +70,15 @@ export default class Exercice3L14DNB0 extends ExerciceBrevetA {
       }),
     )
     let correction = enonce
-    let texteScratch = `\\begin{scratch}[${context.isHtml ? 'print,' : ''}fill,blocks,scale=0.8]\n`
-    texteScratch += '\\blockinit{quand \\greenflag est cliqué}\n'
-    texteScratch +=
-      '\\blockmove{demander \\ovalnum{Choisir un nombre} et attendre}\n'
-    texteScratch +=
-      '\\blockvariable{mettre \\selectmenu{x} à \\ovalmove{réponse}}\n'
-    texteScratch +=
-      '\\blockvariable{mettre \\selectmenu{y} à \\ovaloperator{\\ovalnum{...}*\\ovalnum{...}}}\n'
-    texteScratch += `\\blockvariable{mettre \\selectmenu{z} à \\ovaloperator{\\ovalnum{${facteur}}*\\ovalnum{x}}}\n`
-    texteScratch += `\\blockvariable{mettre \\selectmenu{Résultat} à \\ovaloperator{\\ovaloperator{\\ovalnum{...}-\\ovalnum{...}} -\\ovalnum{${retrait}} }}\n`
-    texteScratch +=
-      '\\blocklook{dire \\ovalnum{Résultat } pendant \\ovalnum{5}secondes}\n'
-    texteScratch += '\\end{scratch}\n'
+    const texteScratch = `\\begin{scratch}[${context.isHtml ? 'print,' : ''}fill,blocks,scale=0.8]
+  \\blockinit{quand \\greenflag est cliqué}
+  \\blocksensing{demander \\ovalnum{Choisir un nombre} et attendre}
+  \\blockvariable{mettre \\selectmenu{x} à \\ovalsensing{réponse}}
+  \\blockvariable{mettre \\selectmenu{y} à \\ovaloperator{\\ovalvariable{...}*\\ovalvariable{...}}}
+  \\blockvariable{mettre \\selectmenu{z} à \\ovaloperator{\\ovalnum{${facteur}}*\\ovalvariable{x}}}
+  \\blockvariable{mettre \\selectmenu{Résultat} à \\ovaloperator{\\ovaloperator{\\ovalvariable{...}-\\ovalvariable{...}} -\\ovalnum{${retrait}} }}
+  \\blocklook{dire \\ovalnum{Résultat } pendant \\ovalnum{5}secondes}
+  \\end{scratch}`
 
     const listeQuestions = createList({
       items: [
@@ -124,7 +121,26 @@ export default class Exercice3L14DNB0 extends ExerciceBrevetA {
               x&=& ${b}
               \\end{array}\\right.$.`,
         `Juliette doit compléter en ligne 4 et 6 :<br>
-              ${scratchblock(texteScratch2)}`,
+              ${scratchblock(texteScratch2)}
+              ${
+                context.isHtml
+                  ? createScratchSimulatorElement(
+                      texteScratch
+                        .replace(
+                          '\\selectmenu{y} à \\ovaloperator{\\ovalvariable{...}*\\ovalvariable{...}',
+                          '\\selectmenu{y} à \\ovaloperator{\\ovalvariable{x}*\\ovalvariable{x}',
+                        )
+                        .replace(
+                          '\\ovaloperator{\\ovaloperator{\\ovalvariable{...}-\\ovalvariable{...}}',
+                          '\\ovaloperator{\\ovaloperator{\\ovalvariable{y}-\\ovalvariable{z}}',
+                        )
+                        .replace(/"/g, '&quot;')
+                        .replace(/'/g, '&#39;'),
+                      500,
+                      false,
+                    ) + '<br>'
+                  : ''
+              }`,
       ],
       style: 'nombres',
     })
