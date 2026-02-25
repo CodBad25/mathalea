@@ -45,7 +45,7 @@ export default class TrouverLeSym extends Exercice {
     this.nbQuestions = 1
     this.besoinFormulaireTexte = [
       'Axes de symétrie',
-      'Nombres séparé par des tirets :\n1 : Vertical\n2 : Horizontal\n3 : Oblique 1\n4 : Oblique 2\n:Mélange',
+      'Nombres séparé par des tirets :\n1 : Vertical\n2 : Horizontal\n3 : Oblique 1\n4 : Oblique 2\n5 : Mélange',
     ]
     this.sup = '1'
     this.besoinFormulaire2Numerique = ['Nombre de points à afficher', 3]
