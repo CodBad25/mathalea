@@ -447,7 +447,7 @@ export class ScratchInterpreter {
         const repeatParamStart = repeatStart + 13
         const repeatParamEnd = foisEnd + 4
         const repeatContent = code.substring(repeatParamStart, repeatParamEnd)
-        const times = this.extractNumber(repeatContent)
+        const times = this.extractNumericValue(repeatContent)
 
         let braceCount = 1
         let pos = contentStart + 1
@@ -1193,21 +1193,56 @@ export class ScratchInterpreter {
     this.variables[varName] = this.getVariableValue(varName) + delta
   }
 
+  private extractNumericPayload(content: string): string {
+    const trimmed = content.trim()
+
+    const ajouterMatch = content.match(/\bajouter\b/i)
+    if (ajouterMatch && ajouterMatch.index !== undefined) {
+      const afterAjouter = content
+        .slice(ajouterMatch.index + ajouterMatch[0].length)
+        .trim()
+      const separatorMatch = afterAjouter.match(/\s+[àa]\s+/i)
+      if (separatorMatch && separatorMatch.index !== undefined) {
+        const payload = afterAjouter.slice(0, separatorMatch.index).trim()
+        if (payload) return payload
+      }
+    }
+
+    const mettreMatch = content.match(/\bmettre\b/i)
+    if (mettreMatch && mettreMatch.index !== undefined) {
+      const afterMettre = content
+        .slice(mettreMatch.index + mettreMatch[0].length)
+        .trim()
+      const separatorMatch = afterMettre.match(/\s+[àa]\s+/i)
+      if (separatorMatch && separatorMatch.index !== undefined) {
+        const payload = afterMettre
+          .slice(separatorMatch.index + separatorMatch[0].length)
+          .trim()
+        if (payload) return payload
+      }
+    }
+
+    return trimmed
+  }
+
   private extractNumericValue(content: string): number {
-    const operatorValue = this.evaluateOvalOperator(content)
+    const payload = this.extractNumericPayload(content)
+
+    const operatorValue = this.evaluateOvalOperator(payload)
     if (operatorValue !== null) {
       return operatorValue
     }
 
-    const directNumber = this.extractNumber(content)
-    if (/\\ovalnum\{|-?\d+(?:[.,]\d+)?/.test(content)) {
+    const directNumber = this.extractNumber(payload)
+    if (/\\ovalnum\{|-?\d+(?:[.,]\d+)?/.test(payload)) {
       return directNumber
     }
 
+    // Chercher ensuite les variables, sensing et move
     const varName =
-      this.extractOvalVariableName(content) ||
-      this.extractOvalSensingName(content) ||
-      this.extractOvalMoveName(content)
+      this.extractOvalVariableName(payload) ||
+      this.extractOvalSensingName(payload) ||
+      this.extractOvalMoveName(payload)
     if (varName) {
       return this.getVariableValue(varName)
     }
@@ -1302,21 +1337,102 @@ export class ScratchInterpreter {
       result = result.replace(`\\ovaloperator{${inner}}`, String(value))
     }
 
-    // Parser "regrouper X et Y"
-    const match = result.match(/regrouper\s+(.+?)\s+et\s+(.+?)$/i)
-    if (!match) {
-      // Si pas de pattern trouvé, retourner l'expression telle quelle
+    // Parser "regrouper X et Y" respectant les accolades
+    const regroupMatch = result.match(/regrouper\s+/i)
+    if (!regroupMatch) {
       return this.materializeExpressionForString(result)
     }
 
-    const leftPart = match[1].trim()
-    const rightPart = match[2].trim()
+    const afterRegrouper = result.slice(
+      regroupMatch.index! + regroupMatch[0].length,
+    )
+    const parts = this.splitRegroupArgs(afterRegrouper)
+
+    if (parts.length !== 2) {
+      return this.materializeExpressionForString(result)
+    }
 
     // Matérialiser chaque partie (remplacer \ovalnum, \ovalvariable, etc.)
-    const leftValue = this.materializeExpressionForString(leftPart)
-    const rightValue = this.materializeExpressionForString(rightPart)
+    const leftValue = this.materializeExpressionForString(parts[0].trim())
+    const rightValue = this.materializeExpressionForString(parts[1].trim())
 
     return leftValue + rightValue
+  }
+
+  private splitRegroupArgs(content: string): string[] {
+    let braceDepth = 0
+    let currentPart = ''
+    const parts: string[] = []
+    let i = 0
+
+    while (i < content.length) {
+      const char = content[i]
+
+      // Vérifier si on a un backslash (début de commande LaTeX)
+      if (char === '\\' && i + 1 < content.length) {
+        currentPart += char
+        i++
+
+        // Lire le nom de la commande (lettres)
+        while (i < content.length && /[A-Za-z*]/.test(content[i])) {
+          currentPart += content[i]
+          i++
+        }
+
+        // Si la commande est suivie de `{`, gérer l'équilibre des accolades
+        if (content[i] === '{') {
+          let cmdBraceDepth = 1
+          currentPart += content[i]
+          i++
+
+          while (i < content.length && cmdBraceDepth > 0) {
+            if (content[i] === '\\') {
+              currentPart += content[i]
+              if (i + 1 < content.length) {
+                i++
+                currentPart += content[i]
+              }
+            } else if (content[i] === '{') {
+              cmdBraceDepth++
+              currentPart += content[i]
+            } else if (content[i] === '}') {
+              cmdBraceDepth--
+              currentPart += content[i]
+            } else {
+              currentPart += content[i]
+            }
+            i++
+          }
+        }
+      } else if (char === '{' || (char === '}' && braceDepth > 0)) {
+        // Gérer les accolades non-LaTeX
+        if (char === '{') {
+          braceDepth++
+        } else if (char === '}') {
+          braceDepth--
+        }
+        currentPart += char
+        i++
+      } else if (
+        braceDepth === 0 &&
+        i + 4 <= content.length &&
+        content.slice(i, i + 4).toLowerCase() === ' et '
+      ) {
+        // On a trouvé " et " au niveau de profondeur 0
+        parts.push(currentPart)
+        currentPart = ''
+        i += 4
+      } else {
+        currentPart += char
+        i++
+      }
+    }
+
+    if (currentPart) {
+      parts.push(currentPart)
+    }
+
+    return parts
   }
 
   private materializeExpressionForString(expression: string): string {
