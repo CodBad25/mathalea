@@ -22,6 +22,7 @@ import { grille } from '../../lib/2d/Grille'
 import { setCliqueFigure } from '../../lib/interactif/gestionInteractif'
 import { ajouteFeedback } from '../../lib/interactif/questionMathLive'
 import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
+import { createScratchSimulatorElement } from '../../lib/ScratchSimulator'
 import {
   allerA,
   angleScratchTo2d,
@@ -250,7 +251,7 @@ export default class AlgoTortue extends Exercice {
       lutins[i].color = colorToLatexOrHTML('green') // la couleur de la trace
       lutins[i].epaisseur = 3 // son epaisseur
     }
-    context.unitesLutinParCm = 10 // avancer de 10 pour le lutin lui fait parcourir 1cm (en fait 0,5cm car j'ai ajouté un scale=0.5 pour la sortie latex)
+    context.unitesLutinParCm = 40 // avancer de 10 pour le lutin lui fait parcourir 1cm (en fait 0,5cm car j'ai ajouté un scale=0.5 pour la sortie latex)
     context.pixelsParCm = 20 // 20 pixels d'écran représentent 1cm (enfin ça dépend du zoom, donc c'est juste un réglage par défaut)
 
     let texte = '' // la chaine qui va contenir l'énoncé
@@ -270,19 +271,19 @@ export default class AlgoTortue extends Exercice {
       // On va parcourir la listes des commandes de déplacement mais certains lutins font des erreurs
       switch (commandes[i]) {
         case 'avancer':
-          val[i] = randint(1, 4) * 5 // La longueur du déplacement est 10, 20, 30 ou 40
+          val[i] = randint(1, 4) * 20 // La longueur du déplacement est 10, 20, 30 ou 40
           lutins[0].codeScratch += `\\blockmove{avancer de \\ovalnum{${val[i]}} pas}\n`
           avance(val[i], lutins[0])
           avance(val[i], lutins[1])
           avance(val[i], lutins[2])
           avance(val[i], lutins[3])
-          avance(val[i] + 5 * erreursDeDeplacement[i], lutins[4]) // avance trop
+          avance(val[i] + 20 * erreursDeDeplacement[i], lutins[4]) // avance trop
           break
         case 'tournerD': // On peut difficilement choisir autre chose que de tourner de 90°...
           lutins[0].codeScratch +=
             '\\blockmove{tourner \\turnright{} de \\ovalnum{90} degrés}\n'
           tournerD(90, lutins[0])
-          tournerD(90, lutins[2])
+          tournerD(180, lutins[2])
           orienter(90, lutins[4])
           tournerG(90, lutins[1]) // tournent dans le mauvais sens
           tournerG(90, lutins[3])
@@ -391,7 +392,7 @@ export default class AlgoTortue extends Exercice {
         lutins[ordreLutins[i]],
         depart[ordreLutins[i]],
         grille(-0.5, -0.5, largeur, hauteur + 1, 'gray', 0.5, 0.5),
-        texteParPoint('10 pas', point(0.5, hauteur + 0.2), 0, 'black', 1),
+        texteParPoint('40 pas', point(0.5, hauteur + 0.2), 0, 'black', 1),
         texteParPoint(
           `figure ${i + 1}`,
           point((largeur - 0.5) / 2, -0.8),
@@ -471,7 +472,8 @@ export default class AlgoTortue extends Exercice {
     ]
 
     // Ici, la figure contient la grille, le point de départ et le lutin qui s'anime sur sa trace...
-    texteCorr += `La bonne figure est la figure ${texteEnCouleurEtGras(this.indiceBonneFigure + 1)}.<br>`
+    texteCorr += `La bonne figure est la figure ${texteEnCouleurEtGras(this.indiceBonneFigure + 1)}.<br>
+    ${context.isHtml ? createScratchSimulatorElement(lutins[0].codeScratch, 1000, false) : ''}`
 
     texteCorr += mathalea2d(paramsCorrection, objetsCorrection)
     this.listeQuestions.push(texte) // on met à jour la liste des questions

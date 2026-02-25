@@ -1,11 +1,12 @@
-import Exercice from '../Exercice'
-import { context } from '../../modules/context'
-import { listeQuestionsToContenu, randint } from '../../modules/outils'
-import { remplisLesBlancs } from '../../lib/interactif/questionMathLive'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { remplisLesBlancs } from '../../lib/interactif/questionMathLive'
 import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
+import { createScratchSimulatorElement } from '../../lib/ScratchSimulator'
+import { context } from '../../modules/context'
+import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import { scratchblock } from '../../modules/scratchblock'
+import Exercice from '../Exercice'
 
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -110,6 +111,9 @@ export default class InstructionConditionnelle extends Exercice {
       }
     }
     texteCorr += ` La position finale est donc : (${texteEnCouleurEtGras(xLutin)} ; ${texteEnCouleurEtGras(yLutin)}).`
+    texteCorr += context.isHtml
+      ? '<br>' + createScratchSimulatorElement(codeTikz, 2000, false)
+      : ''
     if (this.interactif) {
       texte +=
         '<br>La position finale du lutin est : ' +

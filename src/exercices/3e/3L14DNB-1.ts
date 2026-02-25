@@ -13,6 +13,7 @@ import {
   texteEnCouleurEtGras,
   texteItalique,
 } from '../../lib/outils/embellissements'
+import { createScratchSimulatorElement } from '../../lib/ScratchSimulator'
 import { context } from '../../modules/context'
 import { randint } from '../../modules/outils'
 import { scratchblock } from '../../modules/scratchblock'
@@ -71,11 +72,11 @@ export default class Exercice3L14DNB1 extends ExerciceBrevetA {
     })
     let texteScratch = `\\begin{scratch}[${context.isHtml ? 'print,' : ''}fill,blocks,scale=0.8]\n`
     texteScratch += `\\blockinit{quand \\greenflag est cliqué}
-\\blockmove{demander \\ovalnum{Choisir un nombre} et attendre}
+\\blocksensing{demander \\ovalnum{Choisir un nombre} et attendre}
 \\blockvariable{mettre \\selectmenu{nombre choisi} à \\ovalsensing{réponse}}
-\\blockvariable{mettre \\selectmenu{Résultat 1} à \\ovaloperator{\\ovalvariable{Nombre choisi} + \\ovalnum{${x1}} }}
-\\blockvariable{mettre \\selectmenu{Résultat 2} à \\ovaloperator{\\ovalvariable{Nombre choisi} - \\ovalnum{${x2}} }}
-\\blocklook{dire \\ovaloperator{regrouper \\ovalnum{Le résultat est} et \\ovaloperator{\\ovalvariable{Résultat 1} * \\ovalvariable{Résultat 2} }}}`
+\\blockvariable{mettre \\selectmenu{Résultat 1} à \\ovaloperator{\\ovalvariable{nombre choisi} + \\ovalnum{${x1}} }}
+\\blockvariable{mettre \\selectmenu{Résultat 2} à \\ovaloperator{\\ovalvariable{nombre choisi} - \\ovalnum{${x2}} }}
+\\blocklook{dire \\ovaloperator{regrouper \\ovalnum{Le résultat est } et \\ovaloperator{\\ovalvariable{Résultat 1} * \\ovalvariable{Résultat 2} }}}`
     texteScratch += '\\end{scratch}\n'
     const programmeB = scratchblock(texteScratch)
     const fA = (x: number) => 2 * x ** 2 + 2 * b * x - 2 * c // a(x^2 + x - 2)
@@ -98,7 +99,16 @@ export default class Exercice3L14DNB1 extends ExerciceBrevetA {
             `En résultat final : $${departB + x1} \\times  ${ecritureParentheseSiNegatif(departB - x2)} = ${miseEnEvidence(String(fB(departB)))}$`,
           ],
           style: 'fleches',
-        })}`,
+        })}
+        ${
+          context.isHtml
+            ? createScratchSimulatorElement(
+                texteScratch.replace(/"/g, '&quot;').replace(/'/g, '&#39;'),
+                1000,
+                false,
+              )
+            : ''
+        }`,
       ],
       style: 'alpha',
     })

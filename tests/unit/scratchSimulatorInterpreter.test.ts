@@ -901,6 +901,20 @@ describe('ScratchInterpreter', () => {
     expect(result.messages).toEqual(['ABC'])
   })
 
+  it('gere regrouper imbrique avec variable et texte', async () => {
+    const interpreter = new ScratchInterpreter(200, 200, 90)
+    const code = `\\begin{scratch}[blocks]
+\\blockvariable{mettre \\selectmenu{compteur} à \\ovalnum{5}}
+\\blocklook{dire \\ovaloperator{regrouper \\ovalnum{Le nombre de terme de la suite est à } et \\ovaloperator{regrouper \\ovalvariable{compteur} et \\ovalnum{ toto }}}}
+\\end{scratch}`
+
+    const result = await interpreter.executeAnimated(code, () => {}, 0)
+
+    expect(result.messages).toEqual([
+      'Le nombre de terme de la suite est à 5 toto',
+    ])
+  })
+
   it('gere regrouper avec ovalsensing reponse', async () => {
     const interpreter = new ScratchInterpreter(200, 200, 90)
     const code = `\\begin{scratch}[blocks]
