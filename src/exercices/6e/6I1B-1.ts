@@ -5,7 +5,6 @@ import { polygone } from '../../lib/2d/polygones'
 import { segment } from '../../lib/2d/segmentsVecteurs'
 import { texteParPosition } from '../../lib/2d/textes'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { texteSansCasseCompare } from '../../lib/interactif/comparisonFunctions'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
@@ -410,7 +409,7 @@ export default class ColorierDeplacement extends Exercice {
       handleAnswers(this, 0, {
         reponse: {
           value: positionApresPremierDeplacement,
-          compare: texteSansCasseCompare,
+          options: { texteSansCasse: true },
         },
       })
       texte += `<br>
@@ -418,7 +417,7 @@ export default class ColorierDeplacement extends Exercice {
       handleAnswers(this, 1, {
         reponse: {
           value: positionApresDernierDeplacement,
-          compare: texteSansCasseCompare,
+          options: { texteSansCasse: true },
         },
       })
       texteCorr += `<br>
