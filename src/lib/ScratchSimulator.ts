@@ -1320,7 +1320,7 @@ export class ScratchSimulator extends HTMLElement {
     const tailHeight = 15
     const tailWidth = 12
     const lineHeight = 16
-    const maxBubbleWidth = 220
+    const maxBubbleWidth = 300
 
     ctx.save()
     ctx.font = '14px sans-serif'

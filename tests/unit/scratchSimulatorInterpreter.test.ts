@@ -832,6 +832,29 @@ describe('ScratchInterpreter', () => {
     expect(result.variables.x).toBe(42)
   })
 
+  it('met a jour une variable depuis ovalvariable, ovalsensing et ovalmove', async () => {
+    const interpreter = new ScratchInterpreter(200, 200, 90)
+    const code = `\\begin{scratch}[blocks]
+\\blockvariable{mettre \\selectmenu{r} à \\ovalnum{12}}
+\\blockvariable{mettre \\selectmenu{b} à \\ovalvariable{r}}
+\\blocksensing{demander \\ovalnum{Entrez une valeur} et attendre}
+\\blockvariable{mettre \\selectmenu{s} à \\ovalsensing{réponse}}
+\\blockvariable{mettre \\selectmenu{mx} à \\ovalmove{abscisse x}}
+\\blockvariable{mettre \\selectmenu{my} à \\ovalmove{ordonnée y}}
+\\blockvariable{mettre \\selectmenu{md} à \\ovalmove{direction}}
+\\end{scratch}`
+
+    interpreter.onAskInput = async () => '17'
+
+    const result = await interpreter.executeAnimated(code, () => {}, 0)
+
+    expect(result.variables.b).toBe(12)
+    expect(result.variables.s).toBe(17)
+    expect(result.variables.mx).toBe(0)
+    expect(result.variables.my).toBe(0)
+    expect(result.variables.md).toBe(90)
+  })
+
   it('gere ovaloperator avec regrouper pour concatenation simple', async () => {
     const interpreter = new ScratchInterpreter(200, 200, 90)
     const code = `\\begin{scratch}[blocks]
