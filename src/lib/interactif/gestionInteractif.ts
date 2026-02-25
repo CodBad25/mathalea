@@ -860,7 +860,6 @@ export function setReponse(
               value: Array.isArray(reponses)
                 ? reponses.map((el) => String(el).toLowerCase())
                 : String(reponses).toLowerCase(),
-              // compare: texteSansCasseCompare
               compare: fonctionComparaison,
               options: { texteSansCasse: true },
             },
