@@ -19,8 +19,8 @@ export function lettreA(options?: {
   const fillStyle = options?.fillStyle || 'black'
   const strokeStyle = options?.strokeStyle || 'black'
   const lineWidth = options?.lineWidth || 6
-  const largeur = options?.largeur || 3 // en cm
-  const hauteur = options?.hauteur || 4 // en cm
+  const largeur = options?.largeur || 1.5 // en cm
+  const hauteur = options?.hauteur || 2 // en cm
   const opacite = options?.opacite || 1
 
   // Conversion des dimensions en pixels (20 pixels par cm)
@@ -90,8 +90,8 @@ export function lettreB(options?: {
   // const fillStyle = options?.fillStyle || 'black'
   const strokeStyle = options?.strokeStyle || 'black'
   const lineWidth = options?.lineWidth || 8
-  const largeur = options?.largeur || 3 // en cm
-  const hauteur = options?.hauteur || 3.6 // en cm
+  const largeur = options?.largeur || 1.5 // en cm
+  const hauteur = options?.hauteur || 1.8 // en cm
   const opacite = options?.opacite || 1
 
   // Conversion des dimensions en pixels (20 pixels par cm)
@@ -156,8 +156,8 @@ export function lettreC(options?: {
   // Options par défaut
   const strokeStyle = options?.strokeStyle || 'black'
   const lineWidth = options?.lineWidth || 8
-  const largeur = options?.largeur || 2.8 // en cm
-  const hauteur = options?.hauteur || 3.6 // en cm
+  const largeur = options?.largeur || 1.4 // en cm
+  const hauteur = options?.hauteur || 1.8 // en cm
   const opacite = options?.opacite || 1
 
   // Conversion des dimensions en pixels (20 pixels par cm)
@@ -215,8 +215,8 @@ export function lettreD(options?: {
   // Options par défaut
   const strokeStyle = options?.strokeStyle || 'black'
   const lineWidth = options?.lineWidth || 8
-  const largeur = options?.largeur || 2.5 // en cm
-  const hauteur = options?.hauteur || 3.6 // en cm
+  const largeur = options?.largeur || 1.25 // en cm
+  const hauteur = options?.hauteur || 1.8 // en cm
   const opacite = options?.opacite || 1
 
   // Conversion des dimensions en pixels (20 pixels par cm)
@@ -274,8 +274,8 @@ export function lettreE(options?: {
   // Options par défaut
   const strokeStyle = options?.strokeStyle || 'black'
   const lineWidth = options?.lineWidth || 8
-  const largeur = options?.largeur || 2.5 // en cm
-  const hauteur = options?.hauteur || 3.6 // en cm
+  const largeur = options?.largeur || 1.25 // en cm
+  const hauteur = options?.hauteur || 1.8 // en cm
   const opacite = options?.opacite || 1
 
   // Conversion des dimensions en pixels (20 pixels par cm)
@@ -333,8 +333,8 @@ export function lettreF(options?: {
   // Options par défaut
   const strokeStyle = options?.strokeStyle || 'black'
   const lineWidth = options?.lineWidth || 8
-  const largeur = options?.largeur || 2.5 // en cm
-  const hauteur = options?.hauteur || 3.8 // en cm
+  const largeur = options?.largeur || 1.25 // en cm
+  const hauteur = options?.hauteur || 1.9 // en cm
   const opacite = options?.opacite || 1
 
   // Conversion des dimensions en pixels (20 pixels par cm)
@@ -387,8 +387,8 @@ export function lettreG(options?: {
   // Options par défaut
   const strokeStyle = options?.strokeStyle || 'black'
   const lineWidth = options?.lineWidth || 8
-  const largeur = options?.largeur || 2.5 // en cm
-  const hauteur = options?.hauteur || 4 // en cm
+  const largeur = options?.largeur || 1.25 // en cm
+  const hauteur = options?.hauteur || 2 // en cm
   const opacite = options?.opacite || 1
 
   // Conversion des dimensions en pixels (20 pixels par cm)
@@ -441,8 +441,8 @@ export function lettreH(options?: {
   // Options par défaut
   const strokeStyle = options?.strokeStyle || 'black'
   const lineWidth = options?.lineWidth || 8
-  const largeur = options?.largeur || 3 // en cm
-  const hauteur = options?.hauteur || 4 // en cm
+  const largeur = options?.largeur || 1.5 // en cm
+  const hauteur = options?.hauteur || 2 // en cm
   const opacite = options?.opacite || 1
 
   // Conversion des dimensions en pixels (20 pixels par cm)
@@ -503,8 +503,8 @@ export function lettreI(options?: {
   // Options par défaut
   const strokeStyle = options?.strokeStyle || 'black'
   const lineWidth = options?.lineWidth || 8
-  const largeur = options?.largeur || 1 // en cm
-  const hauteur = options?.hauteur || 3.4 // en cm
+  const largeur = options?.largeur || 0.5 // en cm
+  const hauteur = options?.hauteur || 1.7 // en cm
   const opacite = options?.opacite || 1
 
   // Conversion des dimensions en pixels (20 pixels par cm)
@@ -565,8 +565,8 @@ export function lettreJ(options?: {
   // Options par défaut
   const strokeStyle = options?.strokeStyle || 'black'
   const lineWidth = options?.lineWidth || 8
-  const largeur = options?.largeur || 2 // en cm
-  const hauteur = options?.hauteur || 3.6 // en cm
+  const largeur = options?.largeur || 1 // en cm
+  const hauteur = options?.hauteur || 1.8 // en cm
   const opacite = options?.opacite || 1
 
   // Conversion des dimensions en pixels (20 pixels par cm)
@@ -617,8 +617,8 @@ export function lettreK(options?: {
   // Options par défaut
   const strokeStyle = options?.strokeStyle || 'black'
   const lineWidth = options?.lineWidth || 8
-  const largeur = options?.largeur || 2.5 // en cm
-  const hauteur = options?.hauteur || 3.6 // en cm
+  const largeur = options?.largeur || 1.25 // en cm
+  const hauteur = options?.hauteur || 1.8 // en cm
   const opacite = options?.opacite || 1
 
   // Conversion des dimensions en pixels (20 pixels par cm)
@@ -677,8 +677,8 @@ export function lettreL(options?: {
   // Options par défaut
   const strokeStyle = options?.strokeStyle || 'black'
   const lineWidth = options?.lineWidth || 8
-  const largeur = options?.largeur || 2.5 // en cm
-  const hauteur = options?.hauteur || 3.6 // en cm
+  const largeur = options?.largeur || 1.25 // en cm
+  const hauteur = options?.hauteur || 1.8 // en cm
   const opacite = options?.opacite || 1
 
   // Conversion des dimensions en pixels (20 pixels par cm)
@@ -727,8 +727,8 @@ export function lettreM(options?: {
   // Options par défaut
   const strokeStyle = options?.strokeStyle || 'black'
   const lineWidth = options?.lineWidth || 8
-  const largeur = options?.largeur || 3 // en cm
-  const hauteur = options?.hauteur || 4 // en cm
+  const largeur = options?.largeur || 1.5 // en cm
+  const hauteur = options?.hauteur || 2 // en cm
   const opacite = options?.opacite || 1
 
   // Conversion des dimensions en pixels (20 pixels par cm)
@@ -784,8 +784,8 @@ export function lettreN(options?: {
   // Options par défaut
   const strokeStyle = options?.strokeStyle || 'black'
   const lineWidth = options?.lineWidth || 8
-  const largeur = options?.largeur || 3 // en cm
-  const hauteur = options?.hauteur || 4 // en cm
+  const largeur = options?.largeur || 1.5 // en cm
+  const hauteur = options?.hauteur || 2 // en cm
   const opacite = options?.opacite || 1
 
   // Conversion des dimensions en pixels (20 pixels par cm)
@@ -837,8 +837,8 @@ export function lettreO(options?: {
   // Options par défaut
   const strokeStyle = options?.strokeStyle || 'black'
   const lineWidth = options?.lineWidth || 8
-  const largeur = options?.largeur || 3 // en cm
-  const hauteur = options?.hauteur || 4 // en cm
+  const largeur = options?.largeur || 1.5 // en cm
+  const hauteur = options?.hauteur || 2 // en cm
   const opacite = options?.opacite || 1
 
   // Conversion des dimensions en pixels (20 pixels par cm)
@@ -896,8 +896,8 @@ export function lettreP(options?: {
   // Options par défaut
   const strokeStyle = options?.strokeStyle || 'black'
   const lineWidth = options?.lineWidth || 8
-  const largeur = options?.largeur || 3 // en cm
-  const hauteur = options?.hauteur || 3.8 // en cm
+  const largeur = options?.largeur || 1.5 // en cm
+  const hauteur = options?.hauteur || 1.9 // en cm
   const opacite = options?.opacite || 1
 
   // Conversion des dimensions en pixels (20 pixels par cm)
@@ -952,8 +952,8 @@ export function lettreQ(options?: {
   // Options par défaut
   const strokeStyle = options?.strokeStyle || 'black'
   const lineWidth = options?.lineWidth || 8
-  const largeur = options?.largeur || 3 // en cm
-  const hauteur = options?.hauteur || 3.6 // en cm
+  const largeur = options?.largeur || 1.5 // en cm
+  const hauteur = options?.hauteur || 1.8 // en cm
   const opacite = options?.opacite || 1
 
   // Conversion des dimensions en pixels (20 pixels par cm)
@@ -1016,8 +1016,8 @@ export function lettreR(options?: {
   // Options par défaut
   const strokeStyle = options?.strokeStyle || 'black'
   const lineWidth = options?.lineWidth || 8
-  const largeur = options?.largeur || 3 // en cm
-  const hauteur = options?.hauteur || 4 // en cm
+  const largeur = options?.largeur || 1.5 // en cm
+  const hauteur = options?.hauteur || 2 // en cm
   const opacite = options?.opacite || 1
 
   // Conversion des dimensions en pixels (20 pixels par cm)
@@ -1075,8 +1075,8 @@ export function lettreT(options?: {
   // Options par défaut
   const strokeStyle = options?.strokeStyle || 'black'
   const lineWidth = options?.lineWidth || 8
-  const largeur = options?.largeur || 3 // en cm
-  const hauteur = options?.hauteur || 3.6 // en cm
+  const largeur = options?.largeur || 1.5 // en cm
+  const hauteur = options?.hauteur || 1.8 // en cm
   const opacite = options?.opacite || 1
 
   // Conversion des dimensions en pixels (20 pixels par cm)
@@ -1131,8 +1131,8 @@ export function lettreU(options?: {
   // Options par défaut
   const strokeStyle = options?.strokeStyle || 'black'
   const lineWidth = options?.lineWidth || 8
-  const largeur = options?.largeur || 3 // en cm
-  const hauteur = options?.hauteur || 3.6 // en cm
+  const largeur = options?.largeur || 1.5 // en cm
+  const hauteur = options?.hauteur || 1.8 // en cm
   const opacite = options?.opacite || 1
 
   // Conversion des dimensions en pixels (20 pixels par cm)
@@ -1188,8 +1188,8 @@ export function lettreV(options?: {
   // Options par défaut
   const strokeStyle = options?.strokeStyle || 'black'
   const lineWidth = options?.lineWidth || 8
-  const largeur = options?.largeur || 3 // en cm
-  const hauteur = options?.hauteur || 3.6 // en cm
+  const largeur = options?.largeur || 1.5 // en cm
+  const hauteur = options?.hauteur || 1.8 // en cm
   const opacite = options?.opacite || 1
 
   // Conversion des dimensions en pixels (20 pixels par cm)
@@ -1241,8 +1241,8 @@ export function lettreW(options?: {
   // Options par défaut
   const strokeStyle = options?.strokeStyle || 'black'
   const lineWidth = options?.lineWidth || 8
-  const largeur = options?.largeur || 3 // en cm
-  const hauteur = options?.hauteur || 4 // en cm
+  const largeur = options?.largeur || 1.5 // en cm
+  const hauteur = options?.hauteur || 2 // en cm
   const opacite = options?.opacite || 1
 
   // Conversion des dimensions en pixels (20 pixels par cm)
@@ -1298,8 +1298,8 @@ export function lettreX(options?: {
   // Options par défaut
   const strokeStyle = options?.strokeStyle || 'black'
   const lineWidth = options?.lineWidth || 8
-  const largeur = options?.largeur || 3 // en cm
-  const hauteur = options?.hauteur || 4 // en cm
+  const largeur = options?.largeur || 1.5 // en cm
+  const hauteur = options?.hauteur || 2 // en cm
   const opacite = options?.opacite || 1
 
   // Conversion des dimensions en pixels (20 pixels par cm)
@@ -1356,8 +1356,8 @@ export function lettreY(options?: {
   // Options par défaut
   const strokeStyle = options?.strokeStyle || 'black'
   const lineWidth = options?.lineWidth || 8
-  const largeur = options?.largeur || 3 // en cm
-  const hauteur = options?.hauteur || 3.8 // en cm
+  const largeur = options?.largeur || 1.5 // en cm
+  const hauteur = options?.hauteur || 1.9 // en cm
   const opacite = options?.opacite || 1
 
   // Conversion des dimensions en pixels (20 pixels par cm)
@@ -1413,8 +1413,8 @@ export function lettreZ(options?: {
   // Options par défaut
   const strokeStyle = options?.strokeStyle || 'black'
   const lineWidth = options?.lineWidth || 8
-  const largeur = options?.largeur || 3 // en cm
-  const hauteur = options?.hauteur || 3.6 // en cm
+  const largeur = options?.largeur || 1.5 // en cm
+  const hauteur = options?.hauteur || 1.8 // en cm
   const opacite = options?.opacite || 1
 
   // Conversion des dimensions en pixels (20 pixels par cm)
@@ -1465,8 +1465,8 @@ export function lettreS(options?: {
   // Options par défaut
   const strokeStyle = options?.strokeStyle || 'black'
   const lineWidth = options?.lineWidth || 8
-  const largeur = options?.largeur || 3 // en cm
-  const hauteur = options?.hauteur || 4 // en cm
+  const largeur = options?.largeur || 1.5 // en cm
+  const hauteur = options?.hauteur || 2 // en cm
   const opacite = options?.opacite || 1
 
   // Conversion des dimensions en pixels (20 pixels par cm)

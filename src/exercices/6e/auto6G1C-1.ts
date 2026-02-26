@@ -54,7 +54,7 @@ export default class NbAxesDeSymetrie extends Exercice {
   }
 
   nouvelleVersion(): void {
-    const factor = this.sup4 ? 2 : 1
+    const factor = this.sup4 ? 1.2 : 0.75
     const numerosChoisis: number[] = []
     const typeAxe = gestionnaireFormulaireTexte({
       saisie: this.sup,

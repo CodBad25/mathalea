@@ -1,4 +1,3 @@
-import { randint } from '../../../modules/outils'
 import type { Figure2D } from '../Figures2D'
 import {
   chiffreDigital,
@@ -379,7 +378,7 @@ export const listeFigures2d: Forme[] = [
     name: 'pentagone régulier',
     type: 'geometrique',
     figure2d: pentagoneRegulier,
-    options: { rayon: 2, opacite: 0.7 },
+    options: { rayon: 1.5, opacite: 0.7 },
   },
   {
     numero: 42,
@@ -394,8 +393,8 @@ export const listeFigures2d: Forme[] = [
     type: 'geometrique',
     figure2d: cerfVolant,
     options: {
-      largeur: randint(2, 5) / 2,
-      hauteur: randint(32, 40) / 10,
+      largeur: 1,
+      hauteur: 2,
       opacite: 0.8,
     },
   },
@@ -404,35 +403,35 @@ export const listeFigures2d: Forme[] = [
     name: 'aile delta',
     type: 'geometrique',
     figure2d: aileDelta,
-    options: { base: 4, hauteur: 2 },
+    options: { base: 2, hauteur: 1.2 },
   },
   {
     numero: 45,
     name: 'trapèze isocèle',
     type: 'geometrique',
     figure2d: trapezeIsocele,
-    options: { baseInferieure: 4, baseSuperieure: 2, hauteur: 2.5 },
+    options: { baseInferieure: 2, baseSuperieure: 1, hauteur: 1.25 },
   },
   {
     numero: 46,
     name: 'hexagone non régulier',
     type: 'geometrique',
     figure2d: hexagoneNonRegulier,
-    options: { rayonHorizontal: 2, rayonVertical: 1 },
+    options: { rayonHorizontal: 1.5, rayonVertical: 1 },
   },
   {
     numero: 47,
     name: 'croissant de lune 1',
     type: 'geometrique',
     figure2d: croissantDeLune,
-    options: { rayonExterieur: 3, rayonInterieur: 4 },
+    options: { rayonExterieur: 1.5, rayonInterieur: 2 },
   },
   {
     numero: 48,
     name: 'croissant de lune 2',
     type: 'geometrique',
     figure2d: croissantDeLune,
-    options: { rayonExterieur: 3, rayonInterieur: 5.5, angle: 90 }, // lune avec le rayon intérieur plus grand
+    options: { rayonExterieur: 1.5, rayonInterieur: 2.25, angle: 90 }, // lune avec le rayon intérieur plus grand
   },
   {
     numero: 49,
@@ -451,42 +450,42 @@ export const listeFigures2d: Forme[] = [
     name: 'fer à cheval',
     type: 'geometrique',
     figure2d: ferACheval,
-    options: { rayonInterieur: 1.5, rayonExterieur: 2 },
+    options: { rayonInterieur: 1, rayonExterieur: 1.5 },
   },
   {
     numero: 52,
     name: 'parallélogramme 1',
     type: 'geometrique',
     figure2d: parallelogramme,
-    options: { base: 4, hauteur: 2, angle: 60 },
+    options: { base: 2, hauteur: 1, angle: 60 },
   },
   {
     numero: 53,
     name: 'parallélogramme 2',
     type: 'geometrique',
     figure2d: parallelogramme,
-    options: { base: 4, hauteur: 3, angle: 80 },
+    options: { base: 2, hauteur: 1.2, angle: 70 },
   },
   {
     numero: 54,
     name: 'croissant de lune 4',
     type: 'geometrique',
     figure2d: croissantDeLune,
-    options: { rayonExterieur: 3.5, rayonInterieur: 3, angle: 45 }, // lune avec le rayon extérieur plus grand
+    options: { rayonExterieur: 1.75, rayonInterieur: 1.5, angle: 45 }, // lune avec le rayon extérieur plus grand
   },
   {
     numero: 55,
     name: 'coeur',
     type: 'geometrique',
     figure2d: coeur,
-    options: { base: 3 },
+    options: { base: 1.5 },
   },
   {
     numero: 56,
     name: 'ogive',
     type: 'geometrique',
     figure2d: ogive,
-    options: { hauteur: 2, opacite: 0.5 },
+    options: { hauteur: 1.5, opacite: 0.5 },
   },
   {
     numero: 57,
@@ -529,8 +528,8 @@ export const listeFigures2d: Forme[] = [
     options: {
       angle: -20,
       coinsArrondis: true,
-      largeur: 3,
-      hauteur: 2,
+      largeur: 2,
+      hauteur: 1.5,
       fillStyle: 'blue',
       opacite: 0.5,
     },
@@ -549,7 +548,7 @@ export const listeFigures2d: Forme[] = [
     options: {
       angle: 20,
       hauteur: 1,
-      largeur: 4,
+      largeur: 3,
       fillStyle: 'yellow',
       opacite: 0.9,
     },
@@ -569,9 +568,8 @@ export const listeFigures2d: Forme[] = [
     options: {
       fillStyle: 'magenta',
       coinsArrondis: true,
-      hauteur: 3,
-      largeur: 5,
-      angle: 45,
+      hauteur: 1.4,
+      largeur: 3,
       opacite: 0.5,
     },
   },
@@ -667,7 +665,7 @@ export const listeFigures2d: Forme[] = [
     name: 'lettre J',
     type: 'lettre',
     figure2d: lettreJ,
-    options: { base: 4, fillStyle: 'red' },
+    options: { fillStyle: 'red' },
   },
   {
     numero: 81,
@@ -722,7 +720,7 @@ export const listeFigures2d: Forme[] = [
     name: 'lettre S',
     type: 'lettre',
     figure2d: lettreS,
-    options: { base: 4, fillStyle: 'red' },
+    options: { fillStyle: 'red' },
   },
   {
     numero: 90,
