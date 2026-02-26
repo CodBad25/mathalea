@@ -275,7 +275,7 @@ export default class LireAbscisseDecimaleTroisFormes extends Exercice {
           },
         })
         handleAnswers(this, i * 3 + 2, {
-          reponse: { value: x3, options: { fractionDecimale: true } },
+          reponse: { value: new FractionEtendue(multiple * x3, multiple), options: { fractionDecimale: true } },
         })
       } else {
         this.autoCorrection[i] = {
