@@ -236,7 +236,7 @@ export default class MetaExercice extends Exercice {
             } else {
               // * ***************** Question MathLive *****************//
               if (Question.compare == null) {
-                const reponse = Question.reponse as Valeur
+                const reponse = Question.reponse
                 const options =
                   Question.optionsDeComparaison == null
                     ? {}
@@ -260,12 +260,7 @@ export default class MetaExercice extends Exercice {
                   handleAnswers(this, indexQuestion, {
                     reponse: { value: reponse, options },
                   })
-                } else if (
-                  reponse != null &&
-                  reponse.reponse instanceof Object &&
-                  reponse.reponse.value != null &&
-                  typeof reponse.reponse.value === 'string'
-                ) {
+                } else if (isValeur(reponse)) {
                   handleAnswers(
                     this,
                     indexQuestion,
@@ -391,7 +386,7 @@ export default class MetaExercice extends Exercice {
             } else if (formatInteractif === 'qcm') {
               this.autoCorrection[indexQuestion] = Question.autoCorrection[0]
             } else {
-              const reponse = Question.autoCorrection[0]?.reponse
+              const reponse = Question.autoCorrection[0]?.reponse?.valeur
               if (reponse != null)
                 handleAnswers(this, indexQuestion, reponse as Valeur)
             }
@@ -446,4 +441,50 @@ export default class MetaExercice extends Exercice {
   En choisissant un nombre de questions inférieur à 30, on fabrique une « mini » Course Aux Nombres qui respecte la proportion de nombre de questions élémentaires par rapport aux autres.
   Par exemple, en choisissant 20 questions, la course aux nombres sera composée de 7 ou 8 questions élémentaires choisies aléatoirement dans les 10 premières questions du sujet officiel puis de 12 ou 13 autres questions choisies aléatoirement parmi les 20 autres questions du sujet officiel.`
   }
+}
+
+function isValeur(x: unknown): x is Valeur {
+  const answerTypes = [
+    'reponse',
+    'champ1',
+    'champ2',
+    'champ3',
+    'champ4',
+    'champ5',
+    'champ6',
+    'field1',
+    'field2',
+    'field3',
+    'field4',
+    'field5',
+    'field6',
+    'field7',
+    'field8',
+    'rectangle1',
+    'rectangle2',
+    'rectangle3',
+    'rectangle4',
+    'rectangle5',
+    'rectangle6',
+    'rectangle7',
+    'rectangle8',
+    'L1C1',
+    'L1C2',
+    'L1C3',
+    'L1C4',
+    'L1C5',
+    'L2C1',
+    'L2C2',
+    'L2C3',
+    'L2C4',
+    'L2C5',
+    'L3C1',
+    'L3C2',
+    'L3C3',
+    'L3C4',
+    'L3C5',
+  ]
+  return (
+    typeof x === 'object' && x !== null && answerTypes.some((type) => type in x)
+  )
 }

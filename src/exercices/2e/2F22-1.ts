@@ -3,7 +3,7 @@ import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { lectureAntecedent } from '../../lib/2d/LectureAntecedent'
 import { point } from '../../lib/2d/PointAbstrait'
 import { repere } from '../../lib/2d/reperes'
-import { texteParPosition } from '../../lib/2d/textes'
+import { latex2d, texteParPosition } from '../../lib/2d/textes'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import {
@@ -204,24 +204,21 @@ export default class LecturesGraphiquesSurSplines extends Exercice {
         point(0, Number(y1)),
         0,
         '',
-        'green',
+        '#009900',
       )
-      const horizontale2 = droiteParPointEtPente(point(0, y2), 0, '', 'green')
-      const nomD1 = texteParPosition(
-        `$y=${y1}$`,
-        bornes.xMax + 1.5,
-        Number(y1) + 0.3,
-        0,
-        'green',
-        1.5,
-      )
-      const nomD2 = texteParPosition(
-        `$y=${texNombre(y2, 1)}$`,
-        bornes.xMax + 1.5,
-        y2 + 0.3,
-        0,
-        'green',
-        1.5,
+      const horizontale2 = droiteParPointEtPente(point(0, y2), 0, '', '#009900')
+      const nomD1 = latex2d(`y=${y1}`, bornes.xMin - 0.5, Number(y1) + 0.4, {
+        color: '#009900',
+        letterSize: 'small',
+      })
+      const nomD2 = latex2d(
+        `y=${texNombre(y2, 1)}`,
+        bornes.xMin - 0.5,
+        y2 + 0.4,
+        {
+          color: '#009900',
+          letterSize: 'small',
+        },
       )
       horizontale1.epaisseur = 2
       horizontale1.pointilles = 2
