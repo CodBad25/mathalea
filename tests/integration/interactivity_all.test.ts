@@ -154,8 +154,7 @@ for (const [dir, entries] of grouped) {
 
           // Strategy 2: full DOM verification (for mathlive, qcm, listeDeroulante)
           // DOM-only failures (where comparison passed or was skipped) are often
-          // caused by mock limitations (no real MathLive element). We only report
-          // DOM failures when comparison also flagged an issue for the same question.
+          // caused by mock limitations (no real MathLive element).
           const domResults = verifyAllQuestions(exercice)
           for (const r of domResults) {
             if (r.skipped) continue
