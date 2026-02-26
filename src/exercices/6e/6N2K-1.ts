@@ -81,7 +81,7 @@ export default class QuestionsDivisionsEuclidiennes extends Exercice {
           quotient = randint(25, 36)
           reste = randint(2, 6)
           dividende = diviseur * quotient + reste
-          texte = `Un paysagiste dispose de ${dividende} fleurs et souhaite réaliser des bouquets avec ${diviseur}.`
+          texte = `Un paysagiste dispose de ${dividende} fleurs et souhaite réaliser des bouquets avec ${diviseur} fleurs.`
           texte += `<br> ${numAlpha(0)} Combien de bouquets peut-il confectionner ?`
           texte += ajouteChampTexteMathLive(
             this,
