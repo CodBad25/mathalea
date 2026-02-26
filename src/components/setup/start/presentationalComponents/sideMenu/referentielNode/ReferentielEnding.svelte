@@ -20,6 +20,7 @@
   import { isLessThan1Month } from '../../../../../../lib/types/dates'
   import NoInteractivityIcon from '../../../../../shared/icons/NoInteractivityIcon.svelte'
   import QcmCamIcon from '../../../../../shared/icons/QcmCamIcon.svelte'
+  import SelectedIndicator from '../../../../../shared/forms/SelectedIndicator.svelte'
 
   export let ending: JSONReferentielEnding
   export let nestedLevelCount: number
@@ -232,37 +233,6 @@
 
     <!-- Bouton en début de ligne pour visualiser si l'exo est sélectionné,
         combien de fois et pour éventuellement le retirer de la sélection -->
-    {#if selectedCount >= 1}
-      <button
-        type="button"
-        class="absolute -left-4 top-1/2 transform -translate-y-1/2 group"
-        on:click={removeFromList}
-        on:keydown={removeFromList}
-        aria-label="Retirer de la sélection"
-      >
-        <div class="relative">
-          <i
-            class="text-base bx bxs-message-alt -rotate-90
-            text-coopmaths-action-light dark:text-coopmathsdark-action-light
-            opacity-100 group-hover:opacity-0 transition-opacity"
-          ></i>
-          <i
-            class="text-base bx bx-trash
-            absolute top-0 -left-0.5
-            text-coopmaths-action-light dark:text-coopmathsdark-action-light
-            opacity-0 group-hover:opacity-100 transition-opacity"
-          ></i>
-        </div>
-        {#if selectedCount >= 2}
-          <div
-            class="absolute left-1 top-0.5 text-[0.6rem] font-bold
-            text-coopmaths-canvas dark:text-coopmathsdark-canvas-dark
-            group-hover:hidden"
-          >
-            {selectedCount}
-          </div>
-        {/if}
-      </button>
-    {/if}
+    <SelectedIndicator {selectedCount} on:remove={removeFromList} />
   </div>
 </div>
