@@ -26,6 +26,7 @@ export function discoverExercises(filter?: string): ExerciseEntry[] {
       const lower = filePath.toLowerCase()
       if (lower.includes('test') || lower.includes('beta')) return false
       if (filePath.startsWith('modèlesExos/')) return false
+      if (filePath.endsWith('.svelte')) return false
       if (filter && !filePath.startsWith(filter)) return false
       return true
     })
