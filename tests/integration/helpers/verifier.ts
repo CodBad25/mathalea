@@ -2,6 +2,7 @@ import { verifQuestionMathLive } from '../../../src/lib/interactif/mathLive'
 import { verifQuestionQcm } from '../../../src/lib/interactif/qcm'
 import { verifQuestionListeDeroulante } from '../../../src/lib/interactif/questionListeDeroulante'
 import type { IExercice } from '../../../src/lib/types'
+import Grandeur from '../../../src/modules/Grandeur'
 import {
   injectFillInTheBlankDOM,
   injectListeDeroulanteDOM,
@@ -326,8 +327,28 @@ export function verifyComparisonOnly(
         ? String(answer.value[0])
         : String(answer.value)
       const options = answer.options ?? {}
+      let compareValue = value
+      if (options.unite) {
+        const cleaned = value.replace(/[\u202f\u00a0]/g, '')
+        const g = Grandeur.fromString(cleaned)
+        if (g.unite === '°C' || g.unite === '°') {
+          compareValue = `${String(g.mesure).replace('.', ',')}${g.unite}`
+        } else {
+          compareValue = `${String(g.mesure).replace('.', ',')}\\operatorname{${g.unite}}`
+        }
+      }
+      if (options.estDansIntervalle) {
+        const match = value.match(/[[\]](.+);(.+)[[\]]/)
+        if (match) {
+          const lo = parseFloat(match[1].replace(',', '.'))
+          const hi = parseFloat(match[2].replace(',', '.'))
+          if (!isNaN(lo) && !isNaN(hi)) {
+            compareValue = String((lo + hi) / 2)
+          }
+        }
+      }
       try {
-        const result = answer.compare(value, value, options)
+        const result = answer.compare(compareValue, value, options)
         if (!result.isOk) {
           allOk = false
           failedField = key
