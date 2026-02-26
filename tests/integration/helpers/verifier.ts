@@ -24,6 +24,19 @@ function grandeurStringToLatex(value: string): string {
   return `${String(g.mesure).replace('.', ',')}\\operatorname{${g.unite}}`
 }
 
+/**
+ * Converts scientific notation "1,5e3" or "1.5e-3" to LaTeX "1,5\\times10^{3}"
+ * Handles both comma (French) and dot decimal separators.
+ * Returns the original string if it's not in e-notation.
+ */
+function eNotationToLatex(value: string): string {
+  const match = value.match(/^(-?\d+(?:[.,]\d+)?)e([+-]?\d+)$/)
+  if (!match) return value
+  const mantissa = match[1].replace('.', ',')
+  const exponent = match[2].replace(/^\+/, '')
+  return `${mantissa}\\times10^{${exponent}}`
+}
+
 export interface VerificationResult {
   questionIndex: number
   format: string
@@ -83,9 +96,12 @@ export function verifyAllQuestions(exercice: IExercice): VerificationResult[] {
             ? String(answer[0])
             : String(answer)
           const options = valeur?.reponse?.options ?? {}
-          const answerStr = options.unite
-            ? grandeurStringToLatex(rawAnswer)
-            : rawAnswer
+          let answerStr = rawAnswer
+          if (options.unite) {
+            answerStr = grandeurStringToLatex(rawAnswer)
+          } else if (options.ecritureScientifique) {
+            answerStr = eNotationToLatex(rawAnswer)
+          }
           injectMathLiveDOM(exIdx, i, answerStr)
           const result = verifQuestionMathLive(exercice, i)
           results.push({
