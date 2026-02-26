@@ -7,6 +7,8 @@ import { setReponse } from '../../../lib/interactif/gestionInteractif'
 import { propositionsQcm } from '../../../lib/interactif/qcm'
 import { ajouteChampTexteMathLive } from '../../../lib/interactif/questionMathLive'
 import { arrondi } from '../../../lib/outils/nombres'
+import { createScratchSimulatorElement } from '../../../lib/ScratchSimulator'
+import { context } from '../../../modules/context'
 import {
   listeQuestionsToContenuSansNumero,
   randint,
@@ -53,6 +55,7 @@ export default class RepetitionScratch extends Exercice {
     ])
     const angleRot = b[0] as number
     const nbRep = arrondi(360 / angleRot)
+    let substitut: string
     switch (randint(1, 3)) {
       case 1: // trouver l'angle de rotation
         this.interactifType = 'mathLive'
@@ -62,6 +65,7 @@ export default class RepetitionScratch extends Exercice {
         prog += '\\blockmove{tourner \\turnright{} de \\ovalnum{...} degrés}\n'
         prog += '} \n'
         prog += '\\end{scratch}'
+        substitut = String(angleRot)
         setReponse(this, 0, angleRot)
         this.listeQuestions[0] =
           `${scratchblock(prog)}<br>Quel nombre doit-on écrire à la place des pointillés pour tracer un ${b[1]} ?` +
@@ -80,6 +84,7 @@ export default class RepetitionScratch extends Exercice {
         prog += '} \n'
         prog += '\\end{scratch}'
         setReponse(this, 0, nbRep)
+        substitut = String(nbRep)
         this.listeQuestions[0] =
           `${scratchblock(prog)}<br>Quel nombre doit-on écrire à la place des pointillés pour tracer un ${b[1]} ?` +
           ajouteChampTexteMathLive(this, 0, KeyboardType.clavierNumbers)
@@ -88,7 +93,8 @@ export default class RepetitionScratch extends Exercice {
           `Mentalement, on divise $360$ par $${angleRot}$ : $\\dfrac{360}{${angleRot}}=${nbRep}$.`,
         )
         break
-      case 3: //
+      case 3:
+      default: //
         this.interactifType = 'qcm'
         this.amcType = 'qcmMono'
         this.autoCorrection[0] = {
@@ -137,8 +143,17 @@ export default class RepetitionScratch extends Exercice {
         this.listeCorrections[0] += texteEnCouleur(
           `Mentalement, on divise $360$ par $${angleRot}$ : $\\dfrac{360}{${angleRot}}=${nbRep}$.`,
         )
+        substitut = ''
         break
     }
+    if (context.isHtml)
+      this.listeCorrections[0] +=
+        '<br>' +
+        createScratchSimulatorElement(
+          prog.replace('...', substitut),
+          1000,
+          false,
+        )
     listeQuestionsToContenuSansNumero(this)
   }
 }

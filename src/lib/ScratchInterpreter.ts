@@ -5,6 +5,13 @@
 
 import { scratchblock } from '../modules/scratchblock'
 
+export type ScratchLookMessageType = 'say' | 'think'
+
+export interface ScratchLookMessage {
+  text: string
+  type: ScratchLookMessageType
+}
+
 export interface ExecutionResult {
   traces: Array<{ startX: number; startY: number; endX: number; endY: number }>
   finalX: number
@@ -13,6 +20,7 @@ export interface ExecutionResult {
   visible: boolean
   variables: Record<string, number>
   messages: string[]
+  currentLookMessage?: ScratchLookMessage | null
   currentInstruction?: string
   currentInstructionScratchHtml?: string
   currentInstructionIndex?: number
@@ -48,6 +56,7 @@ export class ScratchInterpreter {
   }> = []
 
   private messages: string[] = []
+  private currentLookMessage: ScratchLookMessage | null = null
   private currentInstruction: string = ''
   private currentInstructionScratchHtml: string = ''
   private currentInstructionIndex: number = -1
@@ -62,6 +71,9 @@ export class ScratchInterpreter {
   private onUpdate?: () => void | Promise<void>
   private skipWaitBlocks: boolean = false
   private executionDelayMs: number = 500
+  private greenFlagClicked: boolean = false
+  private pressedEventKeys: Set<string> = new Set()
+  private eventWaitResolvers: Array<() => void> = []
   public onAskInput?: (prompt: string) => Promise<string> // Callback pour demander un input utilisateur
 
   constructor(startX = 0, startY = 0, startAngle = 0) {
@@ -87,6 +99,10 @@ export class ScratchInterpreter {
     this.executionDelayMs = Math.max(0, delayMs)
     this.currentInstructionIndex = -1
     this.repeatIterations = []
+    this.currentLookMessage = null
+    this.greenFlagClicked = false
+    this.pressedEventKeys.clear()
+    this.eventWaitResolvers = []
 
     const codeWithoutDefinitions = this.parseCustomBlockDefinitions(scratchCode)
 
@@ -116,6 +132,22 @@ export class ScratchInterpreter {
 
   public stopExecution(): void {
     this.stopped = true
+    this.resolveEventWaiters()
+  }
+
+  public triggerGreenFlagClick(): void {
+    this.greenFlagClicked = true
+    this.resolveEventWaiters()
+  }
+
+  public triggerKeyPress(rawKey: string): void {
+    const normalizedKey = this.normalizeEventKey(rawKey)
+    if (!normalizedKey) {
+      return
+    }
+
+    this.pressedEventKeys.add(normalizedKey)
+    this.resolveEventWaiters()
   }
 
   getCurrentState(): ExecutionResult {
@@ -127,6 +159,7 @@ export class ScratchInterpreter {
       variables: this.variables,
       visible: this.visible,
       messages: this.messages,
+      currentLookMessage: this.currentLookMessage,
       currentInstruction: this.currentInstruction,
       currentInstructionScratchHtml: this.currentInstructionScratchHtml,
       currentInstructionIndex: this.currentInstructionIndex,
@@ -692,6 +725,11 @@ export class ScratchInterpreter {
     content: string,
     delayMs: number = 0,
   ): Promise<void> {
+    if (type === 'event') {
+      await this.handleEventBlock(content)
+      return
+    }
+
     if (type === 'look') {
       if (this.isDireInstruction(content)) {
         const sayInstruction = this.parseSayInstruction(content)
@@ -699,14 +737,67 @@ export class ScratchInterpreter {
           return
         }
 
-        this.messages.push(sayInstruction.spokenValue)
+        const lookMessage: ScratchLookMessage = {
+          text: sayInstruction.spokenValue,
+          type: 'say',
+        }
+        this.messages.push(lookMessage.text)
+        this.currentLookMessage = lookMessage
+        if (this.onUpdate) {
+          await Promise.resolve(this.onUpdate())
+        }
 
         if (sayInstruction.durationSeconds !== null) {
           const durationMs = Math.max(0, sayInstruction.durationSeconds * 1000)
           if (durationMs > 0) {
             await this.wait(durationMs)
           }
+
+          const latestMessage = this.messages[this.messages.length - 1]
+          if (latestMessage === lookMessage.text) {
+            this.currentLookMessage = null
+            if (this.onUpdate) {
+              await Promise.resolve(this.onUpdate())
+            }
+          }
         }
+        return
+      }
+
+      if (this.isPenserInstruction(content)) {
+        const thinkInstruction = this.parseThinkInstruction(content)
+        if (!thinkInstruction) {
+          return
+        }
+
+        const lookMessage: ScratchLookMessage = {
+          text: thinkInstruction.spokenValue,
+          type: 'think',
+        }
+        this.messages.push(lookMessage.text)
+        this.currentLookMessage = lookMessage
+        if (this.onUpdate) {
+          await Promise.resolve(this.onUpdate())
+        }
+
+        if (thinkInstruction.durationSeconds !== null) {
+          const durationMs = Math.max(
+            0,
+            thinkInstruction.durationSeconds * 1000,
+          )
+          if (durationMs > 0) {
+            await this.wait(durationMs)
+          }
+
+          const latestMessage = this.messages[this.messages.length - 1]
+          if (latestMessage === lookMessage.text) {
+            this.currentLookMessage = null
+            if (this.onUpdate) {
+              await Promise.resolve(this.onUpdate())
+            }
+          }
+        }
+        return
       }
       if (this.isCacherInstruction(content)) {
         this.visible = false
@@ -856,6 +947,98 @@ export class ScratchInterpreter {
     return false
   }
 
+  private async handleEventBlock(content: string): Promise<void> {
+    if (this.skipWaitBlocks) {
+      return
+    }
+
+    if (this.isGreenFlagEvent(content)) {
+      await this.waitForEventCondition(() => this.greenFlagClicked)
+      return
+    }
+
+    const expectedKey = this.extractEventKey(content)
+    if (expectedKey) {
+      await this.waitForEventCondition(() =>
+        this.consumePressedEventKey(expectedKey),
+      )
+    }
+  }
+
+  private async waitForEventCondition(condition: () => boolean): Promise<void> {
+    while (!this.stopped && !condition()) {
+      await new Promise<void>((resolve) => {
+        this.eventWaitResolvers.push(resolve)
+      })
+    }
+  }
+
+  private resolveEventWaiters(): void {
+    if (this.eventWaitResolvers.length === 0) {
+      return
+    }
+
+    const resolvers = this.eventWaitResolvers
+    this.eventWaitResolvers = []
+    resolvers.forEach((resolve) => resolve())
+  }
+
+  private normalizeEventKey(rawKey: string): string {
+    if (rawKey === ' ') {
+      return 'espace'
+    }
+
+    const normalized = rawKey
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/\s+/g, ' ')
+      .trim()
+      .toLowerCase()
+
+    if (!normalized) {
+      return ''
+    }
+
+    if (normalized === 'space' || normalized === 'spacebar') {
+      return 'espace'
+    }
+
+    if (normalized === 'arrowup') return 'fleche haut'
+    if (normalized === 'arrowdown') return 'fleche bas'
+    if (normalized === 'arrowleft') return 'fleche gauche'
+    if (normalized === 'arrowright') return 'fleche droite'
+    if (normalized === 'enter') return 'entree'
+
+    return normalized
+  }
+
+  private isGreenFlagEvent(content: string): boolean {
+    return /\\greenflag|drapeau|greenflag/i.test(content)
+  }
+
+  private extractEventKey(content: string): string | null {
+    const menuMatch = content.match(/\\selectmenu\*?\{([^}]+)\}/i)
+    if (menuMatch) {
+      return this.normalizeEventKey(menuMatch[1])
+    }
+
+    const textMatch = content.match(/touche\s+([^{}]+?)\s+est/i)
+    if (textMatch) {
+      return this.normalizeEventKey(textMatch[1])
+    }
+
+    return null
+  }
+
+  private consumePressedEventKey(expectedKey: string): boolean {
+    if (!this.pressedEventKeys.has(expectedKey)) {
+      return false
+    }
+
+    this.pressedEventKeys.delete(expectedKey)
+    return true
+  }
+
   private humanizeInstruction(type: string, content: string): string {
     if (type === 'move') {
       if (this.isGoToInstruction(content)) {
@@ -919,15 +1102,37 @@ export class ScratchInterpreter {
 
     if (type === 'look') {
       const sayInstruction = this.parseSayInstruction(content)
-      if (!sayInstruction) {
-        return 'Instruction en cours'
+      if (sayInstruction) {
+        if (sayInstruction.durationSeconds !== null) {
+          return `Dire ${sayInstruction.displayValue} pendant ${sayInstruction.durationSeconds} secondes`
+        }
+
+        return `Dire ${sayInstruction.displayValue}`
       }
 
-      if (sayInstruction.durationSeconds !== null) {
-        return `Dire ${sayInstruction.displayValue} pendant ${sayInstruction.durationSeconds} secondes`
+      const thinkInstruction = this.parseThinkInstruction(content)
+      if (thinkInstruction) {
+        if (thinkInstruction.durationSeconds !== null) {
+          return `Penser à ${thinkInstruction.displayValue} pendant ${thinkInstruction.durationSeconds} secondes`
+        }
+
+        return `Penser à ${thinkInstruction.displayValue}`
       }
 
-      return `Dire ${sayInstruction.displayValue}`
+      return 'Instruction en cours'
+    }
+
+    if (type === 'event') {
+      if (this.isGreenFlagEvent(content)) {
+        return 'Attente du clic sur le drapeau vert'
+      }
+
+      const expectedKey = this.extractEventKey(content)
+      if (expectedKey) {
+        return `Attente de la touche ${expectedKey}`
+      }
+
+      return "Attente d'un événement"
     }
 
     if (type === 'pen') {
@@ -1058,12 +1263,36 @@ export class ScratchInterpreter {
     displayValue: string
     durationSeconds: number | null
   } | null {
-    if (!/\bdire\b/i.test(content)) {
+    return this.parseLookInstruction(content, /\bdire\b/i, /^.*?\bdire\b/i)
+  }
+
+  private parseThinkInstruction(content: string): {
+    spokenValue: string
+    displayValue: string
+    durationSeconds: number | null
+  } | null {
+    return this.parseLookInstruction(
+      content,
+      /\bpenser\b/i,
+      /^.*?\bpenser(?:\s+[àa])?\b/i,
+    )
+  }
+
+  private parseLookInstruction(
+    content: string,
+    instructionRegex: RegExp,
+    payloadPrefixRegex: RegExp,
+  ): {
+    spokenValue: string
+    displayValue: string
+    durationSeconds: number | null
+  } | null {
+    if (!instructionRegex.test(content)) {
       return null
     }
 
     const saySegments = content.split(/\bpendant\b/i)
-    const payload = saySegments[0].replace(/^.*?\bdire\b/i, '').trim()
+    const payload = saySegments[0].replace(payloadPrefixRegex, '').trim()
 
     const payloadVariableName =
       this.extractOvalVariableName(payload) ||
@@ -1317,9 +1546,8 @@ export class ScratchInterpreter {
   }
 
   private evaluateOvalOperator(content: string): number | null {
-    const expression = this.extractCommandContent(content, '\\ovaloperator')
-    if (!expression) return null
-    return this.evaluateArithmeticExpression(expression)
+    const operatorValue = this.evaluateOvalOperatorOrString(content)
+    return typeof operatorValue === 'number' ? operatorValue : null
   }
 
   private evaluateOvalOperatorOrString(
@@ -1328,6 +1556,11 @@ export class ScratchInterpreter {
     const expression = this.extractCommandContent(content, '\\ovaloperator')
     if (!expression) return null
 
+    const randomValue = this.evaluateRandomBetweenOperator(expression)
+    if (randomValue !== null) {
+      return randomValue
+    }
+
     // Détecter "regrouper ... et ..." pour concaténation de strings
     if (/\bregrouper\b/i.test(expression)) {
       return this.evaluateStringConcatenation(expression)
@@ -1335,6 +1568,48 @@ export class ScratchInterpreter {
 
     // Sinon, évaluation arithmétique
     return this.evaluateArithmeticExpression(expression)
+  }
+
+  private evaluateRandomBetweenOperator(expression: string): number | null {
+    const normalized = expression
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+
+    const randomPattern =
+      /\bnombre\s+aleatoire\s+entre\b|\bpick\s+random\s+between\b/
+    if (!randomPattern.test(normalized)) {
+      return null
+    }
+
+    const entreMatch = expression.match(/\bentre\b/i)
+    if (!entreMatch || entreMatch.index === undefined) {
+      return null
+    }
+
+    const afterEntre = expression
+      .slice(entreMatch.index + entreMatch[0].length)
+      .trim()
+    const bounds = this.splitArgsByEtAtRoot(afterEntre)
+    if (bounds.length !== 2) {
+      return null
+    }
+
+    const leftBound = this.evaluateArithmeticExpression(bounds[0].trim())
+    const rightBound = this.evaluateArithmeticExpression(bounds[1].trim())
+    if (leftBound === null || rightBound === null) {
+      return null
+    }
+
+    const minBound = Math.min(leftBound, rightBound)
+    const maxBound = Math.max(leftBound, rightBound)
+
+    if (Number.isInteger(leftBound) && Number.isInteger(rightBound)) {
+      const span = maxBound - minBound + 1
+      return minBound + Math.floor(Math.random() * span)
+    }
+
+    return minBound + Math.random() * (maxBound - minBound)
   }
 
   private evaluateStringConcatenation(expression: string): string {
@@ -1361,7 +1636,7 @@ export class ScratchInterpreter {
     const afterRegrouper = result.slice(
       regroupMatch.index! + regroupMatch[0].length,
     )
-    const parts = this.splitRegroupArgs(afterRegrouper)
+    const parts = this.splitArgsByEtAtRoot(afterRegrouper)
 
     if (parts.length !== 2) {
       return this.materializeExpressionForString(result)
@@ -1374,11 +1649,23 @@ export class ScratchInterpreter {
     return leftValue + rightValue
   }
 
-  private splitRegroupArgs(content: string): string[] {
+  private splitArgsByEtAtRoot(content: string): string[] {
+    return this.splitArgsBySeparatorAtRoot(content, 'et')
+  }
+
+  private splitArgsByOuAtRoot(content: string): string[] {
+    return this.splitArgsBySeparatorAtRoot(content, 'ou')
+  }
+
+  private splitArgsBySeparatorAtRoot(
+    content: string,
+    separator: 'et' | 'ou',
+  ): string[] {
     let braceDepth = 0
     let currentPart = ''
     const parts: string[] = []
     let i = 0
+    const separatorToken = ` ${separator} `
 
     while (i < content.length) {
       const char = content[i]
@@ -1430,13 +1717,14 @@ export class ScratchInterpreter {
         i++
       } else if (
         braceDepth === 0 &&
-        i + 4 <= content.length &&
-        content.slice(i, i + 4).toLowerCase() === ' et '
+        i + separatorToken.length <= content.length &&
+        content.slice(i, i + separatorToken.length).toLowerCase() ===
+          separatorToken
       ) {
-        // On a trouvé " et " au niveau de profondeur 0
+        // On a trouvé le séparateur booléen au niveau de profondeur 0
         parts.push(currentPart)
         currentPart = ''
-        i += 4
+        i += separatorToken.length
       } else {
         currentPart += char
         i++
@@ -1497,6 +1785,43 @@ export class ScratchInterpreter {
     const rawExpression = expression.trim()
     if (!rawExpression) return null
 
+    const notMatch = rawExpression.match(/^non\b/i)
+    if (notMatch) {
+      const operand = rawExpression.slice(notMatch[0].length).trim()
+      const operandValue = this.evaluateBooleanOperand(operand)
+      return operandValue === null ? null : !operandValue
+    }
+
+    const orParts = this.splitArgsByOuAtRoot(rawExpression)
+    if (orParts.length > 1) {
+      let hasNull = false
+      for (const part of orParts) {
+        const value = this.evaluateBooleanOperand(part.trim())
+        if (value === true) {
+          return true
+        }
+        if (value === null) {
+          hasNull = true
+        }
+      }
+      return hasNull ? null : false
+    }
+
+    const andParts = this.splitArgsByEtAtRoot(rawExpression)
+    if (andParts.length > 1) {
+      let hasNull = false
+      for (const part of andParts) {
+        const value = this.evaluateBooleanOperand(part.trim())
+        if (value === false) {
+          return false
+        }
+        if (value === null) {
+          hasNull = true
+        }
+      }
+      return hasNull ? null : true
+    }
+
     const comparisonMatch = rawExpression.match(/(<=|>=|=|<|>)/)
     if (!comparisonMatch || comparisonMatch.index === undefined) {
       return null
@@ -1533,6 +1858,18 @@ export class ScratchInterpreter {
     }
 
     return null
+  }
+
+  private evaluateBooleanOperand(operand: string): boolean | null {
+    if (!operand) {
+      return null
+    }
+
+    if (operand.includes('\\booloperator{')) {
+      return this.evaluateBoolOperator(operand)
+    }
+
+    return this.evaluateBooleanExpression(operand)
   }
 
   private evaluateArithmeticExpression(expression: string): number | null {
@@ -1740,6 +2077,10 @@ export class ScratchInterpreter {
 
   private isDireInstruction(content: string): boolean {
     return /\bdire\b/i.test(content)
+  }
+
+  private isPenserInstruction(content: string): boolean {
+    return /\bpenser\b/i.test(content)
   }
 
   private isCacherInstruction(content: string): boolean {
