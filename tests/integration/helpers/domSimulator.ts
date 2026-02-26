@@ -35,9 +35,10 @@ export function injectMathLiveDOM(
   document.getElementById(resultId)?.remove()
   document.getElementById(feedbackId)?.remove()
 
-  const input = document.createElement('input')
+  const input = document.createElement('input') as HTMLInputElement & { getValue: () => string }
   input.id = inputId
   input.value = answer
+  input.getValue = () => answer
   Object.defineProperty(input, 'readOnly', { value: false, writable: true })
   document.body.appendChild(input)
 
@@ -159,7 +160,19 @@ export function injectQcmDOM(
     const label = document.createElement('label')
     label.id = labelId
     document.body.appendChild(label)
+
+    const feedbackId = `feedbackEx${exerciceIndex}Q${questionIndex}R${r}`
+    document.getElementById(feedbackId)?.remove()
+    const feedbackDiv = document.createElement('div')
+    feedbackDiv.id = feedbackId
+    document.body.appendChild(feedbackDiv)
   }
+
+  const globalFeedbackId = `feedbackEx${exerciceIndex}Q${questionIndex}`
+  document.getElementById(globalFeedbackId)?.remove()
+  const globalFeedback = document.createElement('div')
+  globalFeedback.id = globalFeedbackId
+  document.body.appendChild(globalFeedback)
 
   const resultSpan = document.createElement('span')
   resultSpan.id = resultId

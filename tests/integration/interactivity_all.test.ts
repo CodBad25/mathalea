@@ -4,7 +4,6 @@ import { clearDOM } from './helpers/domSimulator'
 import { discoverExercises, loadExercise } from './helpers/exerciseLoader'
 import { verifyAllQuestions, verifyComparisonOnly } from './helpers/verifier'
 
-// Required mocks (same as existing unit tests)
 vi.mock('../../src/lib/renderScratch', () => ({
   renderScratch: vi.fn(() => 'mocked value'),
 }))
@@ -13,10 +12,75 @@ vi.mock('../../src/lib/components/version', () => ({
   checkForServerUpdate: vi.fn(() => 'mocked value'),
 }))
 
-// Mock window.notify (used by gestionInteractif.ts, comparisonFunctions.ts, etc.)
 beforeAll(() => {
   window.notify = vi.fn()
   window.notifyLocal = vi.fn()
+  window.matchMedia = vi.fn().mockImplementation((query: string) => ({
+    matches: false,
+    media: query,
+    onchange: null,
+    addListener: vi.fn(),
+    removeListener: vi.fn(),
+    addEventListener: vi.fn(),
+    removeEventListener: vi.fn(),
+    dispatchEvent: vi.fn(),
+  }))
+
+  const mockContext: Partial<CanvasRenderingContext2D> = {
+    fillStyle: '',
+    strokeStyle: '',
+    lineWidth: 1,
+    font: '',
+    textAlign: 'start',
+    textBaseline: 'alphabetic',
+    globalAlpha: 1,
+    globalCompositeOperation: 'source-over',
+    fillRect: vi.fn(),
+    clearRect: vi.fn(),
+    strokeRect: vi.fn(),
+    beginPath: vi.fn(),
+    closePath: vi.fn(),
+    moveTo: vi.fn(),
+    lineTo: vi.fn(),
+    arc: vi.fn(),
+    arcTo: vi.fn(),
+    bezierCurveTo: vi.fn(),
+    quadraticCurveTo: vi.fn(),
+    fill: vi.fn(),
+    stroke: vi.fn(),
+    clip: vi.fn(),
+    rect: vi.fn(),
+    save: vi.fn(),
+    restore: vi.fn(),
+    translate: vi.fn(),
+    rotate: vi.fn(),
+    scale: vi.fn(),
+    setTransform: vi.fn(),
+    transform: vi.fn(),
+    drawImage: vi.fn(),
+    createLinearGradient: vi.fn(() => ({ addColorStop: vi.fn() })),
+    createRadialGradient: vi.fn(() => ({ addColorStop: vi.fn() })),
+    createPattern: vi.fn(),
+    measureText: vi.fn(() => ({ width: 0 }) as TextMetrics),
+    getImageData: vi.fn(
+      () =>
+        ({
+          data: new Uint8ClampedArray(0),
+          colorSpace: 'srgb',
+          height: 0,
+          width: 0,
+        }) as ImageData,
+    ),
+    putImageData: vi.fn(),
+    setLineDash: vi.fn(),
+    getLineDash: vi.fn(() => []),
+    canvas: { width: 300, height: 150 } as HTMLCanvasElement,
+  }
+  Object.defineProperty(HTMLCanvasElement.prototype, 'getContext', {
+    value: vi.fn(() => mockContext),
+    writable: true,
+    configurable: true,
+  })
 })
 
 afterEach(() => {
@@ -73,6 +137,10 @@ for (const [dir, entries] of grouped) {
           }
 
           // Strategy 1: comparison-only (fast, no DOM)
+          // Note: this only works reliably for formats where the stored answer
+          // string matches what compare() expects. Exercises using `unite` option
+          // store plain-text Grandeur strings but compare() expects LaTeX input
+          // from MathLive, so comparison-only may give false negatives.
           const compResults = verifyComparisonOnly(exercice)
           for (const r of compResults) {
             if (r.skipped) continue
@@ -85,6 +153,9 @@ for (const [dir, entries] of grouped) {
           }
 
           // Strategy 2: full DOM verification (for mathlive, qcm, listeDeroulante)
+          // DOM-only failures (where comparison passed or was skipped) are often
+          // caused by mock limitations (no real MathLive element). We only report
+          // DOM failures when comparison also flagged an issue for the same question.
           const domResults = verifyAllQuestions(exercice)
           for (const r of domResults) {
             if (r.skipped) continue
