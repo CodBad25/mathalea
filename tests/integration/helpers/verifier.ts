@@ -11,6 +11,19 @@ import {
   injectTableauMathliveDOM,
 } from './domSimulator'
 
+/**
+ * Converts a Grandeur string like "7,5\u202fcm^2" to the LaTeX format
+ * that unitsCompare/inputToGrandeur expects: "7,5\\operatorname{cm^2}"
+ */
+function grandeurStringToLatex(value: string): string {
+  const cleaned = value.replace(/[\u202f\u00a0]/g, '')
+  const g = Grandeur.fromString(cleaned)
+  if (g.unite === '°C' || g.unite === '°') {
+    return `${String(g.mesure).replace('.', ',')}${g.unite}`
+  }
+  return `${String(g.mesure).replace('.', ',')}\\operatorname{${g.unite}}`
+}
+
 export interface VerificationResult {
   questionIndex: number
   format: string
@@ -66,9 +79,13 @@ export function verifyAllQuestions(exercice: IExercice): VerificationResult[] {
             })
             break
           }
-          const answerStr = Array.isArray(answer)
+          const rawAnswer = Array.isArray(answer)
             ? String(answer[0])
             : String(answer)
+          const options = valeur?.reponse?.options ?? {}
+          const answerStr = options.unite
+            ? grandeurStringToLatex(rawAnswer)
+            : rawAnswer
           injectMathLiveDOM(exIdx, i, answerStr)
           const result = verifQuestionMathLive(exercice, i)
           results.push({
@@ -97,9 +114,9 @@ export function verifyAllQuestions(exercice: IExercice): VerificationResult[] {
           for (const [key, answer] of Object.entries(valeur)) {
             if (key.startsWith('champ') && answer?.value != null) {
               const val = answer.value
-              champValues[key] = Array.isArray(val)
-                ? String(val[0])
-                : String(val)
+              const raw = Array.isArray(val) ? String(val[0]) : String(val)
+              const opts = answer.options ?? {}
+              champValues[key] = opts.unite ? grandeurStringToLatex(raw) : raw
             }
           }
           if (Object.keys(champValues).length === 0) {
@@ -141,9 +158,9 @@ export function verifyAllQuestions(exercice: IExercice): VerificationResult[] {
           for (const [key, answer] of Object.entries(valeur)) {
             if (key.match(/^L\d+C\d+$/) && answer?.value != null) {
               const val = answer.value
-              cellValues[key] = Array.isArray(val)
-                ? String(val[0])
-                : String(val)
+              const raw = Array.isArray(val) ? String(val[0]) : String(val)
+              const opts = answer.options ?? {}
+              cellValues[key] = opts.unite ? grandeurStringToLatex(raw) : raw
             }
           }
           if (Object.keys(cellValues).length === 0) {
