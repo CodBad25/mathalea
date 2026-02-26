@@ -124,7 +124,7 @@ for (const [dir, entries] of grouped) {
           seedrandom(seed, { global: true })
 
           try {
-            exercice.nouvelleVersion()
+            exercice.nouvelleVersion(exercice.numeroExercice)
           } catch (e) {
             failures.push(
               `seed=${seed}: nouvelleVersion() threw: ${e instanceof Error ? e.message : e}`,

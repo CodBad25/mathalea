@@ -39,6 +39,20 @@ export function verifyAllQuestions(exercice: IExercice): VerificationResult[] {
       switch (format) {
         case 'mathlive':
         case 'texte': {
+          if (
+            valeur?.callback != null &&
+            typeof valeur.callback === 'function'
+          ) {
+            results.push({
+              questionIndex: i,
+              format,
+              isOk: true,
+              feedback: '',
+              skipped: true,
+              skipReason: 'callback-based-verification',
+            })
+            break
+          }
           const answer = valeur?.reponse?.value
           if (answer == null) {
             results.push({

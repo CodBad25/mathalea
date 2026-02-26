@@ -1,4 +1,4 @@
-import { MathfieldElement } from 'mathlive'
+import type { MathfieldElement } from 'mathlive'
 import ListeDeroulanteElement from '../../../src/lib/interactif/listeDeroulante/ListeDeroulanteElement'
 
 function createFakeMfe(
@@ -35,7 +35,9 @@ export function injectMathLiveDOM(
   document.getElementById(resultId)?.remove()
   document.getElementById(feedbackId)?.remove()
 
-  const input = document.createElement('input') as HTMLInputElement & { getValue: () => string }
+  const input = document.createElement('input') as HTMLInputElement & {
+    getValue: () => string
+  }
   input.id = inputId
   input.value = answer
   input.getValue = () => answer
@@ -106,8 +108,9 @@ export function injectTableauMathliveDOM(
     const cellId = `champTexteEx${exerciceIndex}Q${questionIndex}${key}`
     document.getElementById(cellId)?.remove()
 
-    // Create a fake math-field element
-    const input = new MathfieldElement()
+    const input = document.createElement(
+      'math-field',
+    ) as unknown as MathfieldElement & HTMLElement
     input.id = cellId
     input.value = value
     input.getValue = () => value
