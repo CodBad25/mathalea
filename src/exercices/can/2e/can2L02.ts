@@ -3,6 +3,7 @@ import {
   reduireAxPlusB,
 } from '../../../lib/outils/ecritures'
 import { texNombre } from '../../../lib/outils/texNombre'
+import { context } from '../../../modules/context'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer les coordonnées d’un point sur une droite'
@@ -34,9 +35,10 @@ export default class CoordonneesPointDroite extends ExerciceSimple {
     const c = randint(-10, 10, 0)
 
     this.reponse = `${c};${a * c + b}`
-    this.question = ` Déterminer les coordonnées du point de la droite
-        d'équation $y=${reduireAxPlusB(a, b)}$ dont l'abscisse est $${c}$.
+    this.question = ` Déterminer les coordonnées du point ${context.isDiaporama ? '<br>' : ''} de la   droite 
+        d'équation $y=${reduireAxPlusB(a, b)}$ ${context.isDiaporama ? '<br>' : ''}dont l'abscisse est $${c}$.
        `
+       
     if (this.interactif) {
       this.optionsChampTexte = { texteApres: '$)$' }
       this.question += '<br>$($'

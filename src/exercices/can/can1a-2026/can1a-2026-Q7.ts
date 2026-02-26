@@ -63,7 +63,8 @@ export default class Can1a2026Q7 extends ExerciceCan {
      Comme  $${ecritureParentheseSiNegatif(a)}^{${puiss}}$ est  ${!estPositif ? "négatif (puissance impaire d'un nombre négatif)" : a > 0 ? 'positif (puissance d\'un nombre positif)' : "positif (puissance paire d'un nombre négatif)"}, on en déduit que  $\\dfrac{1}{${ecritureParentheseSiNegatif(a)}^{${puiss}}}$ est ${!estPositif ? 'négatif' : 'positif'}.<br>
     Ainsi, $${ecritureParentheseSiNegatif(a)}^{-${puiss}}$ est ${!estPositif ? `${texteEnCouleurEtGras('négatif')}` : `${texteEnCouleurEtGras('positif')}`}.`
     this.canEnonce = question
-    this.canReponseACompleter = qcm.texte
+    this.canReponseACompleter = 'Entourer la réponse : POSITIF / NÉGATIF'
+
   }
 
   nouvelleVersion() {
