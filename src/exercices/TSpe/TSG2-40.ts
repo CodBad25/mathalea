@@ -1,17 +1,16 @@
-import Exercice from '../Exercice'
-import { listeQuestionsToContenu, randint } from '../../modules/outils.js'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard.js'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif.js'
-import { miseEnEvidence } from '../../lib/outils/embellissements.js'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import {
   ecritureAlgebrique,
   ecritureAlgebriqueSauf1,
-  rienSi1,
   ecritureParentheseSiNegatif,
+  rienSi1,
 } from '../../lib/outils/ecritures.js'
-import { fonctionComparaison } from '../../lib/interactif/comparisonFunctions'
+import { miseEnEvidence } from '../../lib/outils/embellissements.js'
 import { sp } from '../../lib/outils/outilString'
+import { listeQuestionsToContenu, randint } from '../../modules/outils.js'
+import Exercice from '../Exercice'
 
 export const titre = "Déterminer une équation cartésienne d'un plan"
 export const dateDePublication = '06/12/2024'
@@ -32,7 +31,7 @@ export default class EquationsLog extends Exercice {
     super()
     this.nbQuestions = 2
     this.spacingCorr = 3
-   
+
     this.correctionDetailleeDisponible = false
   }
 
@@ -90,7 +89,6 @@ export default class EquationsLog extends Exercice {
         handleAnswers(this, i, {
           reponse: {
             value: resultat,
-            compare: fonctionComparaison,
             options: { egaliteExpression: true },
           },
         })

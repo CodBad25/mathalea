@@ -1,8 +1,5 @@
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import {
-  expressionDeveloppeeEtNonReduiteCompare,
-  fonctionComparaison,
-} from '../../lib/interactif/comparisonFunctions'
+import { expressionDeveloppeeEtNonReduiteCompare } from '../../lib/interactif/comparisonFunctions'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
@@ -245,7 +242,7 @@ export default class ExerciceDevelopperEnJS extends Exercice {
         })
       } else {
         handleAnswers(this, i, {
-          reponse: { value: reponse, compare: fonctionComparaison },
+          reponse: { value: reponse },
         })
       }
       if (!context.isAmc) {

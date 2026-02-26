@@ -1,4 +1,3 @@
-import { fonctionComparaison } from '../../lib/interactif/comparisonFunctions'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { remplisLesBlancs } from '../../lib/interactif/questionMathLive'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
@@ -102,12 +101,10 @@ export default class ValeurApprocheeDePourcentages extends Exercice {
             bareme: (listePoints) => [listePoints[0] + listePoints[1], 2],
             champ1: {
               value: reponseTab1,
-              compare: fonctionComparaison,
               options: { nombreDecimalSeulement: true },
             },
             champ2: {
               value: reponseTab2,
-              compare: fonctionComparaison,
               options: { nombreDecimalSeulement: true },
             },
           },
@@ -129,12 +126,10 @@ export default class ValeurApprocheeDePourcentages extends Exercice {
             bareme: (listePoints) => [listePoints[0] + listePoints[1], 2],
             champ1: {
               value: reponseTab1,
-              compare: fonctionComparaison,
               options: { nombreDecimalSeulement: true },
             },
             champ2: {
               value: reponseTab2,
-              compare: fonctionComparaison,
               options: { nombreDecimalSeulement: true },
             },
           },

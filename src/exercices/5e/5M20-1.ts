@@ -4,7 +4,6 @@
 
 import Decimal from 'decimal.js'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { fonctionComparaison } from '../../lib/interactif/comparisonFunctions'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { propositionsQcm } from '../../lib/interactif/qcm'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -585,7 +584,6 @@ export default class CalculDeVolumes extends Exercice {
           {
             reponse: {
               value: new Grandeur(resultat, listeUnites[j][2]).toString(),
-              compare: fonctionComparaison,
               options: { unite: true, precisionUnite: 0 },
             },
           },

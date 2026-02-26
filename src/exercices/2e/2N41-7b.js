@@ -1,5 +1,4 @@
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { fonctionComparaison } from '../../lib/interactif/comparisonFunctions'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
@@ -77,7 +76,6 @@ export default class FactoriserIdentitesremarquables2 extends Exercice {
           handleAnswers(this, i, {
             reponse: {
               value: `(${reduireAxPlusB(a, b - c)})(${reduireAxPlusB(a, b + c)})`,
-              compare: fonctionComparaison,
               options: { factorisation: true },
             },
           })
@@ -94,7 +92,6 @@ export default class FactoriserIdentitesremarquables2 extends Exercice {
           handleAnswers(this, i, {
             reponse: {
               value: `(${reduireAxPlusB(-a, c - b)})(${reduireAxPlusB(a, b + c)})`,
-              compare: fonctionComparaison,
               options: { factorisation: true },
             },
           })
@@ -131,7 +128,6 @@ export default class FactoriserIdentitesremarquables2 extends Exercice {
             handleAnswers(this, i, {
               reponse: {
                 value: `(${facteur1})(${facteur2})`,
-                compare: fonctionComparaison,
                 options: { factorisation: true },
               },
             })
@@ -164,7 +160,6 @@ $${e ** 2}(${a}x${ecritureAlgebrique(b)})^2-${f ** 2}(${c}x${ecritureAlgebrique(
             handleAnswers(this, i, {
               reponse: {
                 value: `(${facteur1})(${facteur2})`,
-                compare: fonctionComparaison,
                 options: { factorisation: true },
               },
             })

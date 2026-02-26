@@ -12,7 +12,6 @@ import { mathalea2d } from '../../modules/mathalea2d'
 
 import { crochetD, crochetG } from '../../lib/2d/intervalles'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { fonctionComparaison } from '../../lib/interactif/comparisonFunctions'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
@@ -1075,7 +1074,6 @@ export default class ResoudreGraphFonctionRef extends Exercice {
         {
           reponse: {
             value: ensembleSolutions,
-            compare: fonctionComparaison,
             options: { intervalle: true },
           },
         },
