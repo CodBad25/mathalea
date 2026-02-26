@@ -190,8 +190,8 @@
       class=""
       {latex}
       {latexFileInfos}
-      callback={() => {
-        latexFileInfos = { ...latexFileInfos } // force la réactivité
+      callback={(tex) => {
+        latexFileInfos = tex // force la réactivité
       }}
     />
   {/await}

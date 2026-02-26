@@ -37,7 +37,7 @@
   import FormConfigSection from './FormConfigSection.svelte'
   import { decodeBase64, encodeBase64 } from './LatexConfig'
 
-  const url = new URL(window.location.href)
+  let url = new URL(window.location.href)
   const decoded = decodeBase64(
     url.searchParams.get('pdfParam') || '',
   ) as Partial<LatexFileInfos>
@@ -114,6 +114,7 @@
     latexFile.contents = await latex.getContents(latexFileInfos)
     picsWanted = doesLatexNeedsPics(latexFile.contents)
     messageForCopyPasteModal = buildMessageForCopyPaste(picsWanted)
+    url = new URL(window.location.href)
   }
 
   async function updateLatexWithAbortController() {

@@ -2,6 +2,7 @@
   import { onMount } from 'svelte'
   import Latex from '../../../lib/Latex'
   import { type LatexFileInfos } from '../../../lib/LatexTypes'
+  import { renderKatex } from '../../../lib/outils/outilKatex'
   import InputNumber from './InputNumber.svelte'
   import SelectUnique from './SelectUnique.svelte'
 
@@ -52,7 +53,7 @@
       <div class="mt-2 mb-3 space-y-1">
         <div class="text-sm text-gray-600">
           <span class="font-medium text-gray-800">Titre :</span>
-          {exo.titre}
+          {@html renderKatex(exo.titre)}
         </div>
         <div class="text-sm text-gray-500 truncate">
           <span class="font-medium text-gray-700">UUID :</span>
