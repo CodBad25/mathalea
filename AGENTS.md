@@ -6,7 +6,7 @@
 
 ## Tech Stack
 
-- Svelte 5+, TypeScript, Vite, Tailwind CSS
+- Svelte 5+, Vite 7+, Vitest 4+, Tailwind CSS 4+
 
 ## Commands
 
