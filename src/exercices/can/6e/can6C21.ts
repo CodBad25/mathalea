@@ -9,6 +9,7 @@ import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 
 import { bleuMathalea } from '../../../lib/colors'
 import ExerciceSimple from '../../ExerciceSimple'
+import { arrondi } from '../../../lib/outils/nombres'
 export const titre = 'Trouver le complément à 1*'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -45,7 +46,7 @@ export default class ComplementAUn extends ExerciceSimple {
     Ainsi, $1-${texNombre(a)}=${texNombre(1 - a)}$.  `,
       bleuMathalea,
     )
-    this.reponse = 1 - a
+    this.reponse = arrondi(1 - a)
     this.canEnonce = this.question
     this.canReponseACompleter = ''
   }
