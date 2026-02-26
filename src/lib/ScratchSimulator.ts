@@ -8,7 +8,11 @@ import { context } from '../modules/context'
 import { scratchblock } from '../modules/scratchblock'
 import { orangeMathalea } from './colors'
 import { renderScratchDiv } from './renderScratch'
-import { ScratchInterpreter, type ExecutionResult } from './ScratchInterpreter'
+import {
+  ScratchInterpreter,
+  type ExecutionResult,
+  type ScratchLookMessageType,
+} from './ScratchInterpreter'
 
 type CodeBlockNode = {
   element: SVGGElement
@@ -45,24 +49,63 @@ export class ScratchSimulator extends HTMLElement {
   private initialDelayMs: number = 500
   private pauseResolvers: Array<() => void> = []
   private playPauseButton: HTMLButtonElement | null = null
+  private greenFlagButton: HTMLButtonElement | null = null
   private resetButton: HTMLButtonElement | null = null
   private runToEndButton: HTMLButtonElement | null = null
   private speedUpButton: HTMLButtonElement | null = null
   private slowDownButton: HTMLButtonElement | null = null
   private stopButton: HTMLButtonElement | null = null
   private simulationRunId: number = 0
+  private handleModalKeydown = (event: KeyboardEvent): void => {
+    if (!this.modal?.open || !this.interpreter || !this.isRunning) {
+      return
+    }
+
+    const target = event.target as HTMLElement | null
+    if (
+      target &&
+      (target.tagName === 'INPUT' ||
+        target.tagName === 'TEXTAREA' ||
+        target.tagName === 'SELECT' ||
+        target.isContentEditable)
+    ) {
+      return
+    }
+
+    const keyActivatesButton = event.key === ' ' || event.key === 'Enter'
+    if (keyActivatesButton) {
+      event.preventDefault()
+      event.stopPropagation()
+    }
+
+    this.interpreter.triggerKeyPress(event.key)
+  }
+
+  private makePointerOnlyButton(button: HTMLButtonElement): void {
+    button.tabIndex = -1
+    button.addEventListener('keydown', (event) => {
+      event.preventDefault()
+      event.stopPropagation()
+    })
+  }
 
   connectedCallback(): void {
     this.scratchCode = this.getAttribute('code') || ''
     this.initialDelayMs = parseInt(this.getAttribute('delay') || '500', 10)
     this.delayMs = this.initialDelayMs
+    document.addEventListener('keydown', this.handleModalKeydown)
 
     const button = document.createElement('button')
     button.textContent = '▶ Exécuter'
     button.className = 'btn btn-sm btn-primary mt-2'
+    this.makePointerOnlyButton(button)
     button.addEventListener('click', () => this.openModal())
 
     this.appendChild(button)
+  }
+
+  disconnectedCallback(): void {
+    document.removeEventListener('keydown', this.handleModalKeydown)
   }
 
   // gestion du modal et de son contenu
@@ -97,6 +140,7 @@ export class ScratchSimulator extends HTMLElement {
     closeButton.className =
       'btn btn-sm btn-circle btn-ghost absolute right-2 top-2'
     closeButton.textContent = '✕'
+    this.makePointerOnlyButton(closeButton)
     closeButton.addEventListener('click', () => {
       if (this.modal && 'close' in this.modal) {
         ;(this.modal as any).close()
@@ -180,30 +224,46 @@ export class ScratchSimulator extends HTMLElement {
     this.resetButton.className = 'btn btn-sm btn-outline'
     this.resetButton.textContent = '|<<'
     this.resetButton.title = 'Réinitialiser le programme'
+    this.makePointerOnlyButton(this.resetButton)
     this.resetButton.addEventListener('click', () => this.resetProgramToStart())
+
+    this.greenFlagButton = document.createElement('button')
+    this.greenFlagButton.className = 'btn btn-sm btn-outline btn-success'
+    this.greenFlagButton.textContent = '⚑'
+    this.greenFlagButton.style.fontSize = '2em'
+    this.greenFlagButton.style.lineHeight = '1'
+    this.greenFlagButton.title = 'Déclencher le drapeau vert'
+    this.makePointerOnlyButton(this.greenFlagButton)
+    this.greenFlagButton.addEventListener('click', () => {
+      this.interpreter?.triggerGreenFlagClick()
+    })
 
     this.runToEndButton = document.createElement('button')
     this.runToEndButton.className = 'btn btn-sm btn-outline'
     this.runToEndButton.textContent = '>>|'
     this.runToEndButton.title = "Exécuter jusqu'au bout sans délai"
+    this.makePointerOnlyButton(this.runToEndButton)
     this.runToEndButton.addEventListener('click', () => this.runProgramToEnd())
 
     this.playPauseButton = document.createElement('button')
     this.playPauseButton.className = 'btn btn-sm btn-outline'
     this.playPauseButton.textContent = '▶'
     this.playPauseButton.title = 'Lancer ou mettre en pause'
+    this.makePointerOnlyButton(this.playPauseButton)
     this.playPauseButton.addEventListener('click', () => this.togglePlayPause())
 
     this.speedUpButton = document.createElement('button')
     this.speedUpButton.className = 'btn btn-sm btn-outline'
     this.speedUpButton.textContent = 'x2'
     this.speedUpButton.title = 'Diviser le délai par 2'
+    this.makePointerOnlyButton(this.speedUpButton)
     this.speedUpButton.addEventListener('click', () => this.speedUpExecution())
 
     this.slowDownButton = document.createElement('button')
     this.slowDownButton.className = 'btn btn-sm btn-outline'
     this.slowDownButton.textContent = '/2'
     this.slowDownButton.title = 'Multiplier le délai par 2'
+    this.makePointerOnlyButton(this.slowDownButton)
     this.slowDownButton.addEventListener('click', () =>
       this.slowDownExecution(),
     )
@@ -212,6 +272,7 @@ export class ScratchSimulator extends HTMLElement {
     this.stopButton.className = 'btn btn-sm btn-outline btn-error'
     this.stopButton.textContent = '■'
     this.stopButton.title = "Stopper définitivement (jusqu'à réinitialisation)"
+    this.makePointerOnlyButton(this.stopButton)
     this.stopButton.addEventListener('click', () => this.hardStopExecution())
 
     const buttonInstructionAndInfoDiv = document.createElement('div')
@@ -223,6 +284,7 @@ export class ScratchSimulator extends HTMLElement {
     controlsBarDiv.className =
       'inline-flex flex-nowrap items-center gap-2 mb-2 w-fit max-w-full overflow-x-auto border border-base-300 rounded-lg bg-base-200 p-2 shadow-inner'
     controlsBarDiv.appendChild(this.resetButton)
+    controlsBarDiv.appendChild(this.greenFlagButton)
     controlsBarDiv.appendChild(this.runToEndButton)
     controlsBarDiv.appendChild(this.playPauseButton)
     controlsBarDiv.appendChild(this.speedUpButton)
@@ -1250,6 +1312,7 @@ export class ScratchSimulator extends HTMLElement {
       visible: true,
       variables: {},
       messages: [],
+      currentLookMessage: null,
       currentInstruction: '',
       currentInstructionScratchHtml: '',
       currentInstructionIndex: -1,
@@ -1404,14 +1467,15 @@ export class ScratchSimulator extends HTMLElement {
 
       ctx.restore()
 
-      const latestMessage = result.messages[result.messages.length - 1]
-      if (latestMessage) {
+      const currentLookMessage = result.currentLookMessage
+      if (currentLookMessage?.text) {
         this.drawSpeechBubble(
           ctx,
           result.finalX,
           result.finalY,
           result.finalAngle,
-          latestMessage,
+          currentLookMessage.text,
+          currentLookMessage.type,
         )
       }
     }
@@ -1428,19 +1492,13 @@ export class ScratchSimulator extends HTMLElement {
     turtleY: number,
     turtleAngle: number,
     message: string,
+    bubbleType: ScratchLookMessageType = 'say',
   ): void {
     const text = String(message).trim()
     if (!text) return
 
-    const maxTextLength = 80
-    const bubbleText =
-      text.length > maxTextLength
-        ? `${text.slice(0, maxTextLength - 1)}…`
-        : text
-
     const paddingX = 10
     const paddingY = 8
-    const tailHeight = 15
     const tailWidth = 12
     const lineHeight = 16
     const maxBubbleWidth = 300
@@ -1448,12 +1506,81 @@ export class ScratchSimulator extends HTMLElement {
     ctx.save()
     ctx.font = '14px sans-serif'
 
-    const textWidth = Math.min(
-      ctx.measureText(bubbleText).width,
-      maxBubbleWidth,
+    const maxTextWidth = maxBubbleWidth - paddingX * 2
+    const wrapSegment = (segment: string): string[] => {
+      if (!segment) {
+        return ['']
+      }
+
+      const words = segment.split(/\s+/).filter((word) => word.length > 0)
+      if (words.length === 0) {
+        return ['']
+      }
+
+      const lines: string[] = []
+      let currentLine = ''
+
+      const pushLongWordParts = (word: string): void => {
+        let remaining = word
+        while (remaining.length > 0) {
+          let cut = remaining.length
+          while (
+            cut > 1 &&
+            ctx.measureText(remaining.slice(0, cut)).width > maxTextWidth
+          ) {
+            cut -= 1
+          }
+          lines.push(remaining.slice(0, cut))
+          remaining = remaining.slice(cut)
+        }
+      }
+
+      words.forEach((word) => {
+        if (!currentLine) {
+          if (ctx.measureText(word).width <= maxTextWidth) {
+            currentLine = word
+          } else {
+            pushLongWordParts(word)
+          }
+          return
+        }
+
+        const candidate = `${currentLine} ${word}`
+        if (ctx.measureText(candidate).width <= maxTextWidth) {
+          currentLine = candidate
+          return
+        }
+
+        lines.push(currentLine)
+        if (ctx.measureText(word).width <= maxTextWidth) {
+          currentLine = word
+        } else {
+          currentLine = ''
+          pushLongWordParts(word)
+        }
+      })
+
+      if (currentLine) {
+        lines.push(currentLine)
+      }
+
+      return lines.length > 0 ? lines : ['']
+    }
+
+    const paragraphs = text.replace(/\r\n/g, '\n').split('\n')
+    const bubbleLines = paragraphs.flatMap((paragraph) =>
+      wrapSegment(paragraph),
+    )
+    const textLines = bubbleLines.length > 0 ? bubbleLines : ['']
+
+    const textWidth = textLines.reduce(
+      (max, line) =>
+        Math.max(max, Math.min(ctx.measureText(line).width, maxTextWidth)),
+      0,
     )
     const bubbleWidth = textWidth + paddingX * 2
-    const bubbleHeight = lineHeight + paddingY * 2
+    const bubbleHeight = textLines.length * lineHeight + paddingY * 2
+    const tailHeight = bubbleType === 'think' ? 0 : 15
 
     const turtleAngleRad = (turtleAngle * Math.PI) / 180
     const verticalOffset = -Math.cos(turtleAngleRad) * 15
@@ -1480,7 +1607,7 @@ export class ScratchSimulator extends HTMLElement {
     const tailBaseCenterX = isBubbleOnRight
       ? bubbleX + Math.min(18, bubbleWidth / 2)
       : bubbleX + bubbleWidth - Math.min(18, bubbleWidth / 2)
-    const cornerRadius = 10
+    const cornerRadius = bubbleType === 'think' ? 18 : 10
     const minTailBaseX = bubbleX + cornerRadius + 2
     const maxTailBaseX = bubbleX + bubbleWidth - cornerRadius - 2
     const clampedTailBaseCenterX = Math.max(
@@ -1489,6 +1616,10 @@ export class ScratchSimulator extends HTMLElement {
     )
     const tailBaseLeftX = clampedTailBaseCenterX - tailWidth / 2
     const tailBaseRightX = clampedTailBaseCenterX + tailWidth / 2
+    const thoughtAnchorX = isBubbleOnRight
+      ? bubbleX + Math.min(18, bubbleWidth / 2)
+      : bubbleX + bubbleWidth - Math.min(18, bubbleWidth / 2)
+    const thoughtAnchorY = bubbleY + bubbleHeight - 2
 
     ctx.fillStyle = '#ffffff'
     ctx.strokeStyle = '#111827'
@@ -1505,9 +1636,11 @@ export class ScratchSimulator extends HTMLElement {
     ctx.arcTo(right, top, right, top + cornerRadius, cornerRadius)
     ctx.lineTo(right, bottom - cornerRadius)
     ctx.arcTo(right, bottom, right - cornerRadius, bottom, cornerRadius)
-    ctx.lineTo(tailBaseRightX, bottom)
-    ctx.lineTo(tailTipX, tailTipY)
-    ctx.lineTo(tailBaseLeftX, bottom)
+    if (bubbleType === 'say') {
+      ctx.lineTo(tailBaseRightX, bottom)
+      ctx.lineTo(tailTipX, tailTipY)
+      ctx.lineTo(tailBaseLeftX, bottom)
+    }
     ctx.lineTo(left + cornerRadius, bottom)
     ctx.arcTo(left, bottom, left, bottom - cornerRadius, cornerRadius)
     ctx.lineTo(left, top + cornerRadius)
@@ -1517,9 +1650,31 @@ export class ScratchSimulator extends HTMLElement {
     ctx.fill()
     ctx.stroke()
 
+    if (bubbleType === 'think') {
+      const circles = [
+        { ratio: 0.35, radius: 2.5 },
+        { ratio: 0.62, radius: 3.5 },
+      ]
+
+      circles.forEach(({ ratio, radius }) => {
+        const circleX = tailTipX + (thoughtAnchorX - tailTipX) * ratio
+        const circleY = tailTipY + (thoughtAnchorY - tailTipY) * ratio
+        ctx.beginPath()
+        ctx.arc(circleX, circleY, radius, 0, Math.PI * 2)
+        ctx.fill()
+        ctx.stroke()
+      })
+    }
+
     ctx.fillStyle = '#111827'
-    ctx.textBaseline = 'middle'
-    ctx.fillText(bubbleText, bubbleX + paddingX, bubbleY + bubbleHeight / 2)
+    ctx.textBaseline = 'top'
+    textLines.forEach((line, index) => {
+      ctx.fillText(
+        line,
+        bubbleX + paddingX,
+        bubbleY + paddingY + index * lineHeight,
+      )
+    })
     ctx.restore()
   }
 
@@ -1677,6 +1832,7 @@ export class ScratchSimulator extends HTMLElement {
     if (this.isHardStopped || this.isRunning) {
       return
     }
+    this.playPauseButton?.blur()
     this.interpreter = new ScratchInterpreter(200, 200, 90)
     this.interpreter.setExecutionDelay(this.delayMs)
     this.parseAndDisplayCode()
@@ -1794,6 +1950,9 @@ export class ScratchSimulator extends HTMLElement {
 
     if (this.playPauseButton) {
       this.playPauseButton.disabled = this.isHardStopped
+    }
+    if (this.greenFlagButton) {
+      this.greenFlagButton.disabled = this.isHardStopped
     }
     if (this.runToEndButton) {
       this.runToEndButton.disabled = this.isHardStopped

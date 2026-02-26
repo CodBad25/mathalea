@@ -517,6 +517,7 @@ function programmeTestEquation(
   d: number,
 ): string {
   const codeScratch = `\\begin{scratch}[blocks, scale=0.6]
+  \\blockevent{quand \\greenflag est cliqué}
   \\blocksensing{demander \\ovalnum{Nombre x ?} et attendre}
   \\blockvariable{mettre \\selectmenu{x} à \\ovalsensing{réponse}}
   \\blockvariable{mettre \\selectmenu{gauche} à \\ovaloperator{\\ovaloperator{\\ovalnum{${a}} * \\ovalvariable{x}} + \\ovalnum{${b}}}}
@@ -532,15 +533,16 @@ function programmeTestEquation(
 
 function programmeProduitNul(a: number, b: number): string {
   const codeScratch = `\\begin{scratch}[blocks, scale=0.6]
+  \\blockevent{quand la touche \\selectmenu{espace} est pressée}
   \\blocksensing{demander \\ovalnum{Nombre ?} et attendre}
   \\blockvariable{mettre \\selectmenu{nombre de départ} à \\ovalsensing{réponse}}
   \\blockvariable{mettre \\selectmenu{nombre 1} à \\ovaloperator{\\ovalvariable{nombre de départ} - \\ovalnum{${a}}}}
   \\blockvariable{mettre \\selectmenu{nombre 2} à \\ovaloperator{\\ovalvariable{nombre de départ} + \\ovalnum{${b}}}}
   \\blockvariable{mettre \\selectmenu{produit} à \\ovaloperator{\\ovalvariable{nombre 1} * \\ovalvariable{nombre 2}}}
   \\blockifelse{si \\booloperator{\\ovalvariable{produit} = 0} alors}{
-    \\blocklook{dire \\ovalnum{Le produit est nul.}}
+    \\blocklook{penser à \\ovalnum{Le produit est nul.}}
 }{
-    \\blocklook{dire \\ovalnum{Le produit n'est pas nul.}}
+    \\blocklook{penser à \\ovalnum{Le produit n'est pas nul.} pendant \\ovalnum{2} secondes}
 }
 \\end{scratch}`
   return codeScratch

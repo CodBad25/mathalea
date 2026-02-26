@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 
 import { ScratchInterpreter } from '../../src/lib/ScratchInterpreter'
 
@@ -62,7 +62,7 @@ describe('ScratchInterpreter', () => {
     expect(result.messages).toEqual(['20'])
   })
 
-  it('gere blocklook dire variable pendant secondes et ignore look sans dire', async () => {
+  it('gere blocklook dire et penser avec variable', async () => {
     const interpreter = new ScratchInterpreter(200, 200, 90)
     const code = `\\begin{scratch}[blocks]
 \\blockvariable{mettre \\selectmenu{compteur} à \\ovalnum{7}}
@@ -72,7 +72,7 @@ describe('ScratchInterpreter', () => {
 
     const result = await interpreter.executeAnimated(code, () => {}, 0)
 
-    expect(result.messages).toEqual(['7'])
+    expect(result.messages).toEqual(['7', '7'])
   })
 
   it('gere blocklook dire avec ovalnum textuel sans convertir en 0', async () => {
@@ -497,6 +497,70 @@ describe('ScratchInterpreter', () => {
     expect(result.variables.egal).toBe(1)
   })
 
+  it('gere booloperator imbriques avec non et et ou', async () => {
+    const interpreter = new ScratchInterpreter(200, 200, 90)
+    const code = `\\begin{scratch}[blocks]
+\\blockvariable{mettre \\selectmenu{x} à \\ovalnum{4}}
+\\blockifelse{si \\booloperator{\\booloperator{\\ovalvariable{x} > \\ovalnum{10}} ou \\booloperator{non \\booloperator{\\booloperator{\\ovalvariable{x} = \\ovalnum{4}} et \\booloperator{\\ovalvariable{x} < \\ovalnum{6}}}}} alors}{
+\\blockvariable{mettre \\selectmenu{ok} à \\ovalnum{0}}
+}{
+\\blockvariable{mettre \\selectmenu{ok} à \\ovalnum{1}}
+}
+\\end{scratch}`
+
+    const result = await interpreter.executeAnimated(code, () => {}, 0)
+
+    expect(result.variables.ok).toBe(1)
+  })
+
+  it('gere booloperator et simple', async () => {
+    const interpreter = new ScratchInterpreter(200, 200, 90)
+    const code = `\\begin{scratch}[blocks]
+\\blockvariable{mettre \\selectmenu{x} à \\ovalnum{4}}
+\\blockifelse{si \\booloperator{\\booloperator{\\ovalvariable{x} > \\ovalnum{3}} et \\booloperator{\\ovalvariable{x} < \\ovalnum{5}}} alors}{
+\\blockvariable{mettre \\selectmenu{ok} à \\ovalnum{1}}
+}{
+\\blockvariable{mettre \\selectmenu{ok} à \\ovalnum{0}}
+}
+\\end{scratch}`
+
+    const result = await interpreter.executeAnimated(code, () => {}, 0)
+
+    expect(result.variables.ok).toBe(1)
+  })
+
+  it('gere booloperator ou simple', async () => {
+    const interpreter = new ScratchInterpreter(200, 200, 90)
+    const code = `\\begin{scratch}[blocks]
+\\blockvariable{mettre \\selectmenu{x} à \\ovalnum{4}}
+\\blockifelse{si \\booloperator{\\booloperator{\\ovalvariable{x} > \\ovalnum{10}} ou \\booloperator{\\ovalvariable{x} = \\ovalnum{4}}} alors}{
+\\blockvariable{mettre \\selectmenu{ok} à \\ovalnum{1}}
+}{
+\\blockvariable{mettre \\selectmenu{ok} à \\ovalnum{0}}
+}
+\\end{scratch}`
+
+    const result = await interpreter.executeAnimated(code, () => {}, 0)
+
+    expect(result.variables.ok).toBe(1)
+  })
+
+  it('gere booloperator non simple', async () => {
+    const interpreter = new ScratchInterpreter(200, 200, 90)
+    const code = `\\begin{scratch}[blocks]
+\\blockvariable{mettre \\selectmenu{x} à \\ovalnum{4}}
+\\blockifelse{si \\booloperator{non \\booloperator{\\ovalvariable{x} > \\ovalnum{10}}} alors}{
+\\blockvariable{mettre \\selectmenu{ok} à \\ovalnum{1}}
+}{
+\\blockvariable{mettre \\selectmenu{ok} à \\ovalnum{0}}
+}
+\\end{scratch}`
+
+    const result = await interpreter.executeAnimated(code, () => {}, 0)
+
+    expect(result.variables.ok).toBe(1)
+  })
+
   it('gere booloperator avec ovalmove abscisse x dans une condition ifelse', async () => {
     const interpreter = new ScratchInterpreter(200, 200, 90)
     const code = `\\begin{scratch}[blocks]
@@ -905,13 +969,13 @@ describe('ScratchInterpreter', () => {
     const interpreter = new ScratchInterpreter(200, 200, 90)
     const code = `\\begin{scratch}[blocks]
 \\blockvariable{mettre \\selectmenu{compteur} à \\ovalnum{5}}
-\\blocklook{dire \\ovaloperator{regrouper \\ovalnum{Le nombre de terme de la suite est à } et \\ovaloperator{regrouper \\ovalvariable{compteur} et \\ovalnum{ toto }}}}
+\\blocklook{dire \\ovaloperator{regrouper \\ovalnum{Le nombre de terme de la suite est à } et \\ovaloperator{regrouper \\ovalvariable{compteur} et \\ovalnum{ .}}}}
 \\end{scratch}`
 
     const result = await interpreter.executeAnimated(code, () => {}, 0)
 
     expect(result.messages).toEqual([
-      'Le nombre de terme de la suite est à 5 toto',
+      'Le nombre de terme de la suite est à 5 .',
     ])
   })
 
@@ -971,5 +1035,29 @@ describe('ScratchInterpreter', () => {
     const result = await interpreter.executeAnimated(code, () => {}, 0)
 
     expect(result.messages).toEqual(['2'])
+  })
+
+  it("gere l'operateur nombre aleatoire entre deux bornes", async () => {
+    const randomSpy = vi.spyOn(Math, 'random').mockReturnValue(0.5)
+    const interpreter = new ScratchInterpreter(200, 200, 90)
+    const code = `\\begin{scratch}[blocks]
+\\blocklook{dire \\ovaloperator{nombre aléatoire entre \\ovalnum{1} et \\ovalnum{3}}}
+\\end{scratch}`
+
+    try {
+      const result = await interpreter.executeAnimated(code, () => {}, 0)
+      const lastMessage = result.messages[result.messages.length - 1] as
+        | string
+        | { text?: string }
+        | undefined
+      const lastMessageText =
+        typeof lastMessage === 'string'
+          ? lastMessage
+          : (lastMessage?.text ?? '')
+
+      expect(lastMessageText).toBe('2')
+    } finally {
+      randomSpy.mockRestore()
+    }
   })
 })
