@@ -21,7 +21,6 @@ import {
 } from '../../lib/2d/utilitairesPoint'
 import { texTexte } from '../../lib/format/texTexte'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { fonctionComparaison } from '../../lib/interactif/comparisonFunctions'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
@@ -1360,7 +1359,6 @@ export default class PerimetreOuAireDeFiguresComposees extends Exercice {
                 new Grandeur(perimetreReponses[0], 'cm'),
                 new Grandeur(perimetreReponses[1], 'cm'),
               ],
-              compare: fonctionComparaison,
               options: { unite: true, precisionUnite: this.sup3 - 1 },
             },
           })

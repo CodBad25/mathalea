@@ -2,7 +2,6 @@ import { fixeBordures } from '../../../lib/2d/fixeBordures'
 import { latex2d } from '../../../lib/2d/textes'
 import { point3d } from '../../../lib/3d/3dProjectionMathalea2d/elementsEtTransformations3d'
 import { pave3d } from '../../../lib/3d/3dProjectionMathalea2d/PaveEtPaveLPH3dPerspectiveCavaliere'
-import { fonctionComparaison } from '../../../lib/interactif/comparisonFunctions'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
@@ -54,7 +53,6 @@ export default class Can2025N5Q30 extends ExerciceCan {
     donc $?=${v}\\div${a * b}=${miseEnEvidence(c)}\\text{ m}$.`
     this.canEnonce = this.question
     this.canReponseACompleter = '$?=\\ldots\\text{ m}$'
-    this.compare = fonctionComparaison
     this.optionsChampTexte = { texteApres: '$\\text{ m}$' }
     if (this.interactif) {
       this.question += '$?=$'

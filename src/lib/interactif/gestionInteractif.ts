@@ -735,8 +735,6 @@ export function setReponse(
           {
             reponse: {
               value: String((reponse as FractionEtendue).num),
-              //  compare: numberCompare
-              compare: fonctionComparaison,
             },
           },
           params,
@@ -755,8 +753,6 @@ export function setReponse(
           {
             reponse: {
               value: String((reponse as FractionEtendue).den),
-              //  compare: numberCompare
-              compare: fonctionComparaison,
             },
           },
           params,
@@ -788,7 +784,6 @@ export function setReponse(
             {
               reponse: {
                 value: laReponseDemandee,
-                compare: fonctionComparaison,
               },
             },
             params,
@@ -815,12 +810,7 @@ export function setReponse(
           value.push(laReponseDemandee as string)
         }
 
-        return handleAnswers(
-          exercice,
-          i,
-          { reponse: { value, compare: fonctionComparaison } },
-          params,
-        )
+        return handleAnswers(exercice, i, { reponse: { value } }, params)
       }
 
       case 'texte':
@@ -838,7 +828,6 @@ export function setReponse(
               value: Array.isArray(reponses)
                 ? reponses.map(String)
                 : String(reponses),
-              compare: fonctionComparaison,
               options: { texteAvecCasse: true },
             },
           },
@@ -860,7 +849,6 @@ export function setReponse(
               value: Array.isArray(reponses)
                 ? reponses.map((el) => String(el).toLowerCase())
                 : String(reponses).toLowerCase(),
-              compare: fonctionComparaison,
               options: { texteSansCasse: true },
             },
           },
@@ -892,7 +880,6 @@ export function setReponse(
             {
               reponse: {
                 value: reponse, // reponse.texFraction.replace('dfrac', 'frac') plus nécessaire : le wrapper de handleAnswers s'en occupe
-                compare: fonctionComparaison,
               },
             },
             params,
@@ -915,7 +902,6 @@ export function setReponse(
             {
               reponse: {
                 value: reponse, // .toString().replace('\u202f', '') plus nécessaire grâce au wrapper de handleAnswers
-                compare: fonctionComparaison,
                 options: {
                   unite: true,
                   precisionUnite:
@@ -944,7 +930,6 @@ export function setReponse(
           {
             reponse: {
               value: `]${reponses[0]};${reponses[1]}[`,
-              compare: fonctionComparaison,
               options: { estDansIntervalle: true },
             },
           },
@@ -967,7 +952,6 @@ export function setReponse(
           {
             reponse: {
               value: `[${reponses[0]};${reponses[1]}]`,
-              compare: fonctionComparaison,
               options: { estDansIntervalle: true },
             },
           },
@@ -986,8 +970,6 @@ export function setReponse(
           {
             reponse: {
               value: String(reponse),
-              // compare: powerCompare
-              compare: fonctionComparaison,
               options: { puissance: true },
             },
           },
