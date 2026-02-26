@@ -84,7 +84,7 @@ export function pentagoneRegulier(options?: {
   const fillStyle = options?.fillStyle || 'blue'
   const strokeStyle = options?.strokeStyle || 'black'
   const lineWidth = options?.lineWidth || 1
-  const rayon = options?.rayon || 3
+  const rayon = options?.rayon || 2
   const opacite = options?.opacite || 1
 
   // Calcul des points du pentagone
@@ -146,8 +146,8 @@ export function cerfVolant(options?: {
   const fillStyle = options?.fillStyle || 'green'
   const strokeStyle = options?.strokeStyle || 'black'
   const lineWidth = options?.lineWidth || 1
-  const largeur = options?.largeur || 2
-  const hauteur = options?.hauteur || 3
+  const largeur = options?.largeur || 1
+  const hauteur = options?.hauteur || 1.5
   const opacite = options?.opacite || 1
 
   // Calcul des points du cerf-volant
@@ -178,7 +178,7 @@ export function cerfVolant(options?: {
   return new Figure2D({
     codeSvg,
     codeTikz,
-    width: largeur,
+    width: largeur * 2,
     height: hauteur,
     axes,
     opacite,
@@ -203,8 +203,8 @@ export function aileDelta(options?: {
   const fillStyle = options?.fillStyle || 'yellow'
   const strokeStyle = options?.strokeStyle || 'black'
   const lineWidth = options?.lineWidth || 1
-  const base = options?.base || 3
-  const hauteur = options?.hauteur || 4
+  const base = options?.base || 1.5
+  const hauteur = options?.hauteur || 2
   const opacite = options?.opacite || 1
 
   // Calcul des points de l'aile delta
@@ -261,9 +261,9 @@ export function trapezeIsocele(options?: {
   const fillStyle = options?.fillStyle || 'pink'
   const strokeStyle = options?.strokeStyle || 'black'
   const lineWidth = options?.lineWidth || 1
-  const baseSuperieure = options?.baseSuperieure || 2
-  const baseInferieure = options?.baseInferieure || 4
-  const hauteur = options?.hauteur || 2.5
+  const baseSuperieure = options?.baseSuperieure || 1
+  const baseInferieure = options?.baseInferieure || 2
+  const hauteur = options?.hauteur || 1.25
   const opacite = options?.opacite || 1
 
   // Calcul des points du trapèze
@@ -383,8 +383,8 @@ export function triangleQuelconque1(options?: {
   const fillStyle = options?.fillStyle || 'teal'
   const strokeStyle = options?.strokeStyle || 'black'
   const lineWidth = options?.lineWidth || 1
-  const base = options?.base || 4
-  const hauteur = options?.hauteur || 4
+  const base = options?.base || 2
+  const hauteur = options?.hauteur || 2
   const opacite = options?.opacite || 1
   // Calcul des points du triangle
   const points = [
@@ -435,8 +435,8 @@ export function croissantDeLune(options?: {
   const fillStyle = options?.fillStyle || 'gray'
   const strokeStyle = options?.strokeStyle || 'black'
   const lineWidth = options?.lineWidth || 1
-  const rayonExterieur = options?.rayonExterieur || 2
-  const rayonInterieur = options?.rayonInterieur || 3
+  const rayonExterieur = options?.rayonExterieur || 1
+  const rayonInterieur = options?.rayonInterieur || 1.5
   const angle = options?.angle || 0
   const rmin = Math.min(rayonExterieur, rayonInterieur)
   const rmax = Math.max(rayonExterieur, rayonInterieur)
@@ -504,8 +504,8 @@ export function pacman(options?: {
   const opacite = options?.opacite || 1
   const svgPath = `
         M 0,0
-        L 40,0
-        A 40,40 0 1,1 0,-40
+        L 20,0
+        A 20,20 0 1,1 0,-20
         Z
     `.trim()
   const codeSvg = `<path d="${svgPath}" fill="${fillStyle}" stroke="${strokeStyle}" stroke-width="${lineWidth}" />`
@@ -518,7 +518,7 @@ export function pacman(options?: {
     % Pacman
         \\draw[fill=${tikzFill}, draw=${tikzStroke}, line width=${tikzLineWidth}] 
         (0,0) -- (0,1) 
-        arc[start angle=90, end angle=360, radius=2cm] -- cycle;
+        arc[start angle=90, end angle=360, radius=1cm] -- cycle;
     `.trim()
   const axes = [segment(-2.2, -2.2, 1, 1)]
   return new Figure2D({ codeSvg, codeTikz, width: 4, height: 4, axes, opacite })
@@ -541,8 +541,8 @@ export function ferACheval(options?: {
   const fillStyle = options?.fillStyle || 'gray'
   const strokeStyle = options?.strokeStyle || 'black'
   const lineWidth = options?.lineWidth || 1
-  const rayonExterieur = options?.rayonExterieur || 2
-  const rayonInterieur = options?.rayonInterieur || 1.5
+  const rayonExterieur = options?.rayonExterieur || 1
+  const rayonInterieur = options?.rayonInterieur || 0.75
   const opacite = options?.opacite || 1
 
   // Génération du code SVG
@@ -607,8 +607,8 @@ export function parallelogramme(options?: {
   const fillStyle = options?.fillStyle || 'cyan'
   const strokeStyle = options?.strokeStyle || 'black'
   const lineWidth = options?.lineWidth || 1
-  const base = options?.base || 4
-  const hauteur = options?.hauteur || 3
+  const base = options?.base || 1.5
+  const hauteur = options?.hauteur || 1
   const angle = options?.angle || 60
   const opacite = options?.opacite || 1
 
@@ -723,9 +723,9 @@ export function ogive(options?: {
   const fillStyle = options?.fillStyle || 'purple'
   const strokeStyle = options?.strokeStyle || 'black'
   const lineWidth = options?.lineWidth || 1
-  const hauteur = options?.hauteur || 3
-  let rayon = options?.rayon || 2
-  const base = options?.base || 3
+  const hauteur = options?.hauteur || 2.25
+  let rayon = options?.rayon || 1.5
+  const base = options?.base || 2.25
   const opacite = options?.opacite || 1
 
   if (rayon < hauteur / 2) {
@@ -952,8 +952,8 @@ export function rectangle(options?: {
   const fillStyle = options?.fillStyle || 'gray'
   const strokeStyle = options?.strokeStyle || 'black'
   const lineWidth = options?.lineWidth || 1
-  const largeur = options?.largeur || 4
-  const hauteur = options?.hauteur || 2
+  const largeur = options?.largeur || 2
+  const hauteur = options?.hauteur || 1
   const coinArrondis = options?.coinsArrondis || false
   const angle = options?.angle || 0
   const opacite = options?.opacite || 1
@@ -1019,8 +1019,8 @@ export function losange(options?: {
   const fillStyle = options?.fillStyle || 'orange'
   const strokeStyle = options?.strokeStyle || 'black'
   const lineWidth = options?.lineWidth || 1
-  const base = options?.base || 4
-  const hauteur = options?.hauteur || 2
+  const base = options?.base || 2
+  const hauteur = options?.hauteur || 1
   const angle = options?.angle || 0
 
   const opacite = options?.opacite || 1
@@ -1086,8 +1086,8 @@ export function triangleIsocele(options?: {
   const fillStyle = options?.fillStyle || 'blue'
   const strokeStyle = options?.strokeStyle || 'black'
   const lineWidth = options?.lineWidth || 1
-  const base = options?.base || 4
-  const hauteur = options?.hauteur || 2
+  const base = options?.base || 2
+  const hauteur = options?.hauteur || 1
   const opacite = options?.opacite || 1
 
   // Calcul des points du triangle
@@ -1143,7 +1143,7 @@ export function triangleEquilateral(options?: {
   const fillStyle = options?.fillStyle || 'blue'
   const strokeStyle = options?.strokeStyle || 'black'
   const lineWidth = options?.lineWidth || 1
-  const base = options?.base || 4
+  const base = options?.base || 2
   const opacite = options?.opacite || 1
 
   // Calcul de la hauteur du triangle équilatéral
@@ -1205,12 +1205,12 @@ export function ovale(options?: {
   opacite?: number // Opacité de l'ovale
 }): Figure2D {
   // Génération du code SVG
-  const ovaleFill = options?.fillStyle || 'maroon'
+  const ovaleFill = options?.fillStyle || 'brown'
   const ovaleStroke = options?.strokeStyle || 'black'
   const ovaleLineWidth = options?.lineWidth || 1
   const opacite = options?.opacite || 0.7
   const codeSvg = `
-    <ellipse cx="0" cy="0" rx="40" ry="20" fill="${ovaleFill}" stroke="${ovaleStroke}" stroke-width="${ovaleLineWidth}" />
+    <ellipse cx="0" cy="0" rx="20" ry="10" fill="${ovaleFill}" stroke="${ovaleStroke}" stroke-width="${ovaleLineWidth}" />
   `.trim()
 
   // Génération du code TikZ
@@ -1218,7 +1218,7 @@ export function ovale(options?: {
   const tikzOvaleStroke = `draw=${ovaleStroke}`
   const tikzOvaleLineWidth = `line width=${ovaleLineWidth}pt`
   const codeTikz = `
-    \\draw[${tikzOvaleFill}, ${tikzOvaleStroke}, ${tikzOvaleLineWidth}] (0,0) ellipse (2cm and 1cm);
+    \\draw[${tikzOvaleFill}, ${tikzOvaleStroke}, ${tikzOvaleLineWidth}] (0,0) ellipse (1cm and 0.5cm);
   `.trim()
 
   return new Figure2D({

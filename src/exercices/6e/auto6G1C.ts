@@ -50,7 +50,7 @@ export default class NbAxesDeSymetrie extends Exercice {
     this.sup = '6'
     this.besoinFormulaire2Numerique = ['Nombre de figures par question', 3]
     this.sup2 = 3
-    this.besoinFormulaire3CaseACocher = ['Avec des rotations aléatoires', false]
+    // this.besoinFormulaire3CaseACocher = ['Avec des rotations aléatoires', false]
     this.sup3 = false
     this.besoinFormulaire4CaseACocher = ['Grandes figures', true]
     this.sup4 = true
@@ -58,7 +58,7 @@ export default class NbAxesDeSymetrie extends Exercice {
 
   nouvelleVersion(): void {
     let nbFigures = this.sup2
-    const factor = this.sup4 ? 2 : 1
+    const factor = this.sup4 ? 1.5 : 0.75
     const typeDeFigures = gestionnaireFormulaireTexte({
       saisie: this.sup,
       min: 1,
@@ -148,7 +148,7 @@ export default class NbAxesDeSymetrie extends Exercice {
             forme.x,
             forme.y,
           )
-          axes = formeCorr.Axes.map((el) =>
+          axes = forme.Axes.map((el) =>
             factor > 1 ? homothetie(el, point(0, 0), factor) : el,
           )
           objetsCorr.push(formeBis, formeCorr, formeTexte)
@@ -207,7 +207,7 @@ export default class NbAxesDeSymetrie extends Exercice {
       }
       texte += mathalea2d(
         Object.assign(
-          { pixelsParCm: 20, scale: factor === 1 ? scale : 0.7 * scale },
+          { pixelsParCm: 20, scale: factor === 0.75 ? scale : 0.7 * scale },
           fixeBordures(objets),
         ),
         objets,
@@ -243,7 +243,7 @@ export default class NbAxesDeSymetrie extends Exercice {
 
       texteCorr += mathalea2d(
         Object.assign(
-          { pixelsParCm: 20, scale: factor === 1 ? scale : 0.7 * scale },
+          { pixelsParCm: 20, scale: factor === 0.75 ? scale : 0.7 * scale },
           fixeBordures(objetsCorr),
         ),
         objetsCorr,

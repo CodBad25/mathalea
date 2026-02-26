@@ -82,7 +82,7 @@ function digitSVGTIKZ(
     { tx: -17.5, ty: 17.5, rot: 90 }, // e
     { tx: -17.5, ty: -17.5, rot: 90 }, // f
     { tx: 0, ty: 0, rot: 0 }, // g
-  ]
+  ].map(({ tx, ty, rot }) => ({ tx: tx / 2, ty: ty / 2, rot }))
 
   const svgPolys: string[] = []
   const tikzPaths: string[] = []
@@ -94,7 +94,7 @@ function digitSVGTIKZ(
     const isOn = !!map[i]
     if (isOn) {
       svgPolys.push(
-        `<polygon points="-15,-2.5 15,-2.5 17.5,0 15,2.5 -15,2.5 -17.5,0" transform="translate(${tx},${ty})${rot ? ` rotate(${rot})` : ''}"/>`,
+        `<polygon points="-7.5,-1.25 7.5,-1.25 8.75,0 7.5,1.25 -7.5,1.25 -8.75,0" transform="translate(${tx},${ty})${rot ? ` rotate(${rot})` : ''}"/>`,
       )
     }
 
@@ -102,12 +102,12 @@ function digitSVGTIKZ(
     if (isOn) {
       // Définition des sommets du polygone (hexagone) en coordonnées SVG
       const polyPoints = [
-        { x: -15, y: -2.5 },
-        { x: 15, y: -2.5 },
-        { x: 17.5, y: 0 },
-        { x: 15, y: 2.5 },
-        { x: -15, y: 2.5 },
-        { x: -17.5, y: 0 },
+        { x: -7.5, y: -1.25 },
+        { x: 7.5, y: -1.25 },
+        { x: 8.75, y: 0 },
+        { x: 7.5, y: 1.25 },
+        { x: -7.5, y: 1.25 },
+        { x: -8.75, y: 0 },
       ]
       // Conversion en cm et application de la rotation et translation
       const angle = (rot * Math.PI) / 180
