@@ -37,6 +37,19 @@ function eNotationToLatex(value: string): string {
   return `${mantissa}\\times10^{${exponent}}`
 }
 
+/**
+ * Converts an interval string like "]1;2[" or "[3,5;4,5]" to a numeric point
+ * inside the interval (midpoint), as expected by interval comparisons.
+ */
+function intervalToMidpoint(value: string): string | null {
+  const match = value.match(/[[\]](.+);(.+)[[\]]/)
+  if (!match) return null
+  const lo = parseFloat(match[1].replace(',', '.'))
+  const hi = parseFloat(match[2].replace(',', '.'))
+  if (isNaN(lo) || isNaN(hi)) return null
+  return String((lo + hi) / 2)
+}
+
 export interface VerificationResult {
   questionIndex: number
   format: string
@@ -99,6 +112,8 @@ export function verifyAllQuestions(exercice: IExercice): VerificationResult[] {
           let answerStr = rawAnswer
           if (options.unite) {
             answerStr = grandeurStringToLatex(rawAnswer)
+          } else if (options.estDansIntervalle) {
+            answerStr = intervalToMidpoint(rawAnswer) ?? rawAnswer
           } else if (options.ecritureScientifique) {
             answerStr = eNotationToLatex(rawAnswer)
           }
