@@ -2,7 +2,7 @@ import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import ExerciceCan from '../../ExerciceCan'
 import { shuffle } from '../../../lib/outils/arrayOutils'
-export const titre = 'Multiplier un entier avec un décimal'
+export const titre = 'Compléter une relation de Chasles'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const uuid = '3195d'
@@ -18,7 +18,6 @@ export const refs = {
 export default class Can2a2026Q29 extends ExerciceCan {
  enonce(lettre1?: string, lettre2?: string, lettre3?: string): void {
     if (lettre1 == null || lettre2 == null || lettre3 == null) {
-      // Choisir 3 lettres différentes aléatoirement
       const lettres = ['A', 'B', 'C', 'D', 'E', 'H', 'I', 'J', 'L', 'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W']
       const lettresChoisies = shuffle(lettres).slice(0, 3)
       lettre1 = lettresChoisies[0]
@@ -27,22 +26,21 @@ export default class Can2a2026Q29 extends ExerciceCan {
     }
 
     this.formatChampTexte = KeyboardType.alphanumeric
-    
-    this.reponse = `\\overrightarrow{${lettre2}${lettre3}}`
-    
-    this.question = `Compléter<br>
-    $\\overrightarrow{${lettre1}${lettre3}}=\\overrightarrow{${lettre1}${lettre2}}+$`
-    
+    this.formatInteractif = 'fillInTheBlank'
+    this.optionsDeComparaison = { texteSansCasse: true } 
+    this.reponse = {
+      champ1: { value: `${lettre2}${lettre3}` },
+    }
+
+    this.consigne = `Compléter : `
+    this.question = `\\overrightarrow{${lettre1}${lettre3}}=\\overrightarrow{${lettre1}${lettre2}}+ \\overrightarrow{%{champ1}}`
+
     this.correction = `D'après la relation de Chasles :<br>
     $\\overrightarrow{${lettre1}${lettre3}}=\\overrightarrow{${lettre1}${lettre2}}+${miseEnEvidence(`\\overrightarrow{${lettre2}${lettre3}}`)}$`
-    
+
     this.canEnonce = `Compléter<br>
     $\\overrightarrow{${lettre1}${lettre3}}=\\overrightarrow{${lettre1}${lettre2}}+\\ldots$`
     this.canReponseACompleter = ''
-    
-    if (this.interactif) {
-      this.question += ''
-    }else{this.question += '$\\ldots$'}
   }
 
   nouvelleVersion(): void {
