@@ -56,6 +56,35 @@ export function injectMathLiveDOM(
 }
 
 /**
+ * Injects a math-field for custom corrections that rely on prompt values.
+ * Used by exercises such as 5N11-3 that query `math-field#champTexteEx...`.
+ */
+export function injectCustomMathPromptDOM(
+  exerciceIndex: number,
+  questionIndex: number,
+  promptValues: Record<string, string>,
+) {
+  const inputId = `champTexteEx${exerciceIndex}Q${questionIndex}`
+  const resultId = `resultatCheckEx${exerciceIndex}Q${questionIndex}`
+  const feedbackId = `feedbackEx${exerciceIndex}Q${questionIndex}`
+
+  document.getElementById(inputId)?.remove()
+  document.getElementById(resultId)?.remove()
+  document.getElementById(feedbackId)?.remove()
+
+  const mf = createFakeMfe(inputId, promptValues)
+  document.body.appendChild(mf)
+
+  const resultSpan = document.createElement('span')
+  resultSpan.id = resultId
+  document.body.appendChild(resultSpan)
+
+  const feedbackDiv = document.createElement('div')
+  feedbackDiv.id = feedbackId
+  document.body.appendChild(feedbackDiv)
+}
+
+/**
  * Injects DOM for a fillInTheBlank question.
  * Creates a fake MathfieldElement with getPromptValue/setPromptState.
  */
@@ -233,6 +262,32 @@ export function injectSvgSelectionDOM(
   const resultSpan = document.createElement('span')
   resultSpan.id = resultId
   document.body.appendChild(resultSpan)
+}
+
+/**
+ * Injects DOM for custom interactive clock questions.
+ * correctionInteractive() expects #clockEx{exIdx}Q{qIdx} with hour/minute attrs.
+ */
+export function injectInteractiveClockDOM(
+  exerciceIndex: number,
+  questionIndex: number,
+  hour: string,
+  minute: string,
+) {
+  const id = `clockEx${exerciceIndex}Q${questionIndex}`
+  document.getElementById(id)?.remove()
+
+  const wrapper = document.createElement('div')
+  const clock = document.createElement('div') as HTMLElement & {
+    isDynamic?: boolean
+  }
+  clock.id = id
+  clock.setAttribute('hour', hour)
+  clock.setAttribute('minute', minute)
+  clock.isDynamic = true
+
+  wrapper.appendChild(clock)
+  document.body.appendChild(wrapper)
 }
 
 /**

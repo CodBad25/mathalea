@@ -17,6 +17,22 @@ vi.mock('../../src/lib/components/version', () => ({
 }))
 
 beforeAll(() => {
+  class ResizeObserverMock {
+    observe() {}
+    unobserve() {}
+    disconnect() {}
+  }
+  Object.defineProperty(window, 'ResizeObserver', {
+    value: ResizeObserverMock,
+    writable: true,
+    configurable: true,
+  })
+  Object.defineProperty(globalThis, 'ResizeObserver', {
+    value: ResizeObserverMock,
+    writable: true,
+    configurable: true,
+  })
+
   window.notify = vi.fn()
   window.notifyLocal = vi.fn()
   window.matchMedia = vi.fn().mockImplementation((query: string) => ({

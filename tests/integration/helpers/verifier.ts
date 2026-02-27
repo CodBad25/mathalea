@@ -6,19 +6,25 @@ import { verifQuestionQcm } from '../../../src/lib/interactif/qcm'
 import { verifQuestionListeDeroulante } from '../../../src/lib/interactif/questionListeDeroulante'
 import { verifQuestionSvgSelection } from '../../../src/lib/interactif/questionSvgSelection/questionSvgSelection'
 import { verifQuestionTableur } from '../../../src/lib/tableur/outilsTableur'
-import type { IDragAndDrop, IExercice } from '../../../src/lib/types'
+import type {
+  AutoCorrection,
+  IDragAndDrop,
+  IExercice,
+} from '../../../src/lib/types'
 import Grandeur from '../../../src/modules/Grandeur'
 import {
   injectCliqueFigureDOM,
+  injectCustomMathPromptDOM,
   injectDndDOM,
   injectFillInTheBlankDOM,
+  injectInteractiveClockDOM,
   injectListeDeroulanteDOM,
   injectMathLiveDOM,
   injectMetaInteractif2dDOM,
   injectQcmDOM,
   injectSvgSelectionDOM,
-  injectTableurDOM,
   injectTableauMathliveDOM,
+  injectTableurDOM,
 } from './domSimulator'
 
 /**
@@ -162,6 +168,118 @@ function ensureDragAndDropQuestion(exercice: IExercice, questionIndex: number) {
     },
   }
   exercice.dragAndDrops[questionIndex] = fallback
+}
+
+function normalizeCustomCorrectionResult(result: string | string[]): boolean {
+  if (Array.isArray(result)) {
+    return result.every((value) => value === 'OK')
+  }
+  return result === 'OK'
+}
+
+function extractPromptValuesForCustom(
+  ac: AutoCorrection | undefined,
+): Record<string, string> {
+  const out: Record<string, string> = {}
+  const valeur = ac?.reponse?.valeur
+  if (!isRecord(valeur)) return out
+  for (const [key, answer] of Object.entries(valeur)) {
+    if (!/^champ\d+$/.test(key)) continue
+    if (!isRecord(answer) || answer.value == null) continue
+    out[key] = Array.isArray(answer.value)
+      ? String(answer.value[0] ?? '')
+      : String(answer.value)
+  }
+  return out
+}
+
+function extractClockValuesForCustom(
+  ac: AutoCorrection | undefined,
+): { hour: string; minute: string } | null {
+  const valeur = ac?.reponse?.valeur
+  if (!isRecord(valeur)) return null
+  const answer = valeur.reponse
+  if (!isRecord(answer)) return null
+  const raw = answer.value
+  const value = Array.isArray(raw) ? String(raw[0] ?? '') : String(raw ?? '')
+  const match = value.match(/^(\d{1,2})h(\d{1,2})$/)
+  if (!match) return null
+  return { hour: match[1], minute: match[2] }
+}
+
+function verifyCustomQuestion(
+  exercice: IExercice,
+  questionIndex: number,
+  ac: AutoCorrection | undefined,
+): VerificationResult {
+  if (typeof exercice.correctionInteractive !== 'function') {
+    return {
+      questionIndex,
+      format: 'custom',
+      isOk: true,
+      feedback: '',
+      skipped: true,
+      skipReason: 'custom-no-correction-interactive',
+    }
+  }
+
+  const exIdx = exercice.numeroExercice ?? 0
+  const promptValues = extractPromptValuesForCustom(ac)
+  if (Object.keys(promptValues).length > 0) {
+    injectCustomMathPromptDOM(exIdx, questionIndex, promptValues)
+    const inputId = `champTexteEx${exIdx}Q${questionIndex}`
+    const expectedSelector = `math-field#${inputId}`
+    const originalQuerySelector = document.querySelector.bind(document)
+    document.querySelector = (selectors: string) => {
+      if (selectors === expectedSelector) {
+        return document.getElementById(inputId)
+      }
+      return originalQuerySelector(selectors)
+    }
+    let result: string | string[]
+    try {
+      result = exercice.correctionInteractive(questionIndex)
+    } finally {
+      document.querySelector = originalQuerySelector
+    }
+    const isOk = normalizeCustomCorrectionResult(result)
+    return {
+      questionIndex,
+      format: 'custom',
+      isOk,
+      feedback: isOk ? '' : 'custom correctionInteractive returned KO',
+      skipped: false,
+    }
+  }
+
+  const clockValues = extractClockValuesForCustom(ac)
+  const questionText = exercice.listeQuestions[questionIndex] ?? ''
+  if (clockValues != null && questionText.includes('clockEx')) {
+    injectInteractiveClockDOM(
+      exIdx,
+      questionIndex,
+      clockValues.hour,
+      clockValues.minute,
+    )
+    const result = exercice.correctionInteractive(questionIndex)
+    const isOk = normalizeCustomCorrectionResult(result)
+    return {
+      questionIndex,
+      format: 'custom',
+      isOk,
+      feedback: isOk ? '' : 'custom correctionInteractive returned KO',
+      skipped: false,
+    }
+  }
+
+  return {
+    questionIndex,
+    format: 'custom',
+    isOk: true,
+    feedback: '',
+    skipped: true,
+    skipReason: 'custom-no-adapter',
+  }
 }
 
 export interface VerificationResult {
@@ -572,14 +690,7 @@ export function verifyAllQuestions(exercice: IExercice): VerificationResult[] {
         }
 
         case 'custom':
-          results.push({
-            questionIndex: i,
-            format,
-            isOk: true,
-            feedback: '',
-            skipped: true,
-            skipReason: `format-${format}-not-supported`,
-          })
+          results.push(verifyCustomQuestion(exercice, i, ac))
           break
 
         default:
