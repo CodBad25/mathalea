@@ -6,6 +6,7 @@ import {
 } from '../../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
+import { context } from '../../../modules/context'
 import FractionEtendue from '../../../modules/FractionEtendue'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
@@ -50,8 +51,8 @@ export default class ProgrammeCalcul2 extends ExerciceSimple {
         this.question = this.versionQcm
           ? `Choisir deux nombres puis calculer la somme de leurs carrés.  <br>
      Le résultat obtenu si on choisit comme nombres $${a}$ et $${b}$ est :`
-          : `Choisir deux nombres puis calculer la somme de leurs carrés.  <br>
-     Quel résultat obtient-on si on choisit comme nombres $${a}$ et $${b}$ ?`
+          : `Choisir deux nombres puis calculer ${context.isDiaporama ? '<br>' : ''} la somme de leurs carrés.  <br>
+     Quel résultat obtient-on si on choisit ${context.isDiaporama ? '<br>' : ''} comme nombres $${a}$ et $${b}$ ?`
         this.reponse = this.versionQcm
           ? `$${texNombre(a ** 2 + b ** 2)}$`
           : a ** 2 + b ** 2
@@ -73,8 +74,8 @@ export default class ProgrammeCalcul2 extends ExerciceSimple {
         this.question = this.versionQcm
           ? `Choisir deux nombres puis calculer le carré de leur somme. <br>
    Le résultat obtenu si on choisit comme nombres $${a}$ et $${b}$ est :`
-          : `Choisir deux nombres puis calculer le carré de leur somme. <br>
-   Quel résultat obtient-on si on choisit comme nombres $${a}$ et $${b}$ ?`
+          : `Choisir deux nombres puis calculer ${context.isDiaporama ? '<br>' : ''} le carré de leur somme. <br>
+   Quel résultat obtient-on si on choisit ${context.isDiaporama ? '<br>' : ''}comme nombres $${a}$ et $${b}$ ?`
 
         this.reponse = this.versionQcm ? `$${texNombre(reponse)}$` : reponse
         this.correction = `$(${a}${ecritureAlgebrique(b)})^2=${miseEnEvidence(`${reponse}`)}$`
@@ -94,8 +95,8 @@ export default class ProgrammeCalcul2 extends ExerciceSimple {
         this.question = this.versionQcm
           ? `Choisir deux nombres puis calculer le double du carré de leur somme. <br>
    Le résultat obtenu si on choisit comme nombres $${a}$ et $${b}$ est :`
-          : `Choisir deux nombres puis calculer le double du carré de leur somme. <br>
-   Quel résultat obtient-on si on choisit comme nombres $${a}$ et $${b}$ ?`
+          : `Choisir deux nombres puis calculer ${context.isDiaporama ? '<br>' : ''} le double du carré de leur somme. <br>
+   Quel résultat obtient-on si on choisit ${context.isDiaporama ? '<br>' : ''}comme nombres $${a}$ et $${b}$ ?`
 
         this.reponse = this.versionQcm ? `$${texNombre(reponse)}$` : reponse
         this.correction = `$2\\times (${a}+${ecritureParentheseSiNegatif(b)})^2=2\\times ${(a + b) ** 2}=${miseEnEvidence(`${reponse}`)}$`
@@ -116,8 +117,8 @@ export default class ProgrammeCalcul2 extends ExerciceSimple {
           this.question = this.versionQcm
             ? `Choisir deux nombres puis calculer le double de leur produit. <br>
      Le résultat obtenu si on choisit comme nombres $${a}$ et $${b}$ est :`
-            : `Choisir deux nombres puis calculer le double de leur produit. <br>
-     Quel résultat obtient-on si on choisit comme nombres $${a}$ et $${b}$ ?`
+            : `Choisir deux nombres puis calculer ${context.isDiaporama ? '<br>' : ''} le double de leur produit. <br>
+     Quel résultat obtient-on si on choisit ${context.isDiaporama ? '<br>' : ''}comme nombres $${a}$ et $${b}$ ?`
 
           this.reponse = this.versionQcm ? `$${texNombre(reponse)}$` : reponse
           this.correction = `$2\\times${ecritureParentheseSiNegatif(a)}\\times ${ecritureParentheseSiNegatif(b)}=${miseEnEvidence(`${reponse}`)}$`
@@ -135,8 +136,8 @@ export default class ProgrammeCalcul2 extends ExerciceSimple {
           this.question = this.versionQcm
             ? `Choisir deux nombres puis calculer le double de leur somme. <br>
        Le résultat obtenu si on choisit comme nombres $${a}$ et $${b}$ est :`
-            : `Choisir deux nombres puis calculer le double de leur somme. <br>
-       Quel résultat obtient-on si on choisit comme nombres $${a}$ et $${b}$ ?`
+            : `Choisir deux nombres puis calculer ${context.isDiaporama ? '<br>' : ''} le double de leur somme. <br>
+       Quel résultat obtient-on si on choisit ${context.isDiaporama ? '<br>' : ''}comme nombres $${a}$ et $${b}$ ?`
 
           this.reponse = this.versionQcm ? `$${texNombre(reponse)}$` : reponse
           this.correction = `$2\\times(${a}+${ecritureParentheseSiNegatif(b)})=${miseEnEvidence(`${reponse}`)}$`
@@ -159,8 +160,8 @@ export default class ProgrammeCalcul2 extends ExerciceSimple {
         this.question = this.versionQcm
           ? `Choisir deux nombres puis calculer la somme de leur inverse. <br>
    Le résultat obtenu si on choisit comme nombres $${a}$ et $${b}$ est :`
-          : `Choisir deux nombres puis calculer la somme de leur inverse. <br>
-   Quel résultat obtient-on si on choisit comme nombres $${a}$ et $${b}$ ?`
+          : `Choisir deux nombres puis calculer ${context.isDiaporama ? '<br>' : ''} la somme de leur inverse. <br>
+   Quel résultat obtient-on si on choisit ${context.isDiaporama ? '<br>' : ''}comme nombres $${a}$ et $${b}$ ?`
 
         this.reponse = this.versionQcm
           ? `$${reponse.texFractionSimplifiee}$`
@@ -187,8 +188,8 @@ export default class ProgrammeCalcul2 extends ExerciceSimple {
         this.question = this.versionQcm
           ? `Choisir deux nombres puis calculer l'inverse de leur somme. <br>
    Le résultat obtenu si on choisit comme nombres $${a}$ et $${b}$ est :`
-          : `Choisir deux nombres puis calculer l'inverse de leur somme. <br>
-   Quel résultat obtient-on si on choisit comme nombres $${a}$ et $${b}$ ?`
+          : `Choisir deux nombres puis calculer ${context.isDiaporama ? '<br>' : ''} l'inverse de leur somme. <br>
+   Quel résultat obtient-on si on choisit ${context.isDiaporama ? '<br>' : ''} comme nombres $${a}$ et $${b}$ ?`
 
         this.reponse = this.versionQcm
           ? `$${reponse.texFractionSimplifiee}$`
@@ -213,8 +214,8 @@ export default class ProgrammeCalcul2 extends ExerciceSimple {
         this.question = this.versionQcm
           ? `Choisir deux nombres puis calculer l'inverse de leur somme. <br>
    Le résultat obtenu si on choisit comme nombres $${f1.texFraction}$ et $${b}$ est :`
-          : `Choisir deux nombres puis calculer l'inverse de leur somme. <br>
-   Quel résultat obtient-on si on choisit comme nombres $${f1.texFraction}$ et $${b}$ ?`
+          : `Choisir deux nombres puis calculer ${context.isDiaporama ? '<br>' : ''} l'inverse de leur somme. <br>
+   Quel résultat obtient-on si on choisit ${context.isDiaporama ? '<br>' : ''} comme nombres $${f1.texFraction}$ et $${b}$ ?`
 
         this.reponse = this.versionQcm
           ? `$${reponse.texFractionSimplifiee}$`
@@ -243,8 +244,8 @@ export default class ProgrammeCalcul2 extends ExerciceSimple {
         this.question = this.versionQcm
           ? `Choisir deux nombres puis calculer l'inverse du carré de leur somme. <br>
    Le résultat obtenu si on choisit comme nombres $${a}$ et $${b}$ est :`
-          : `Choisir deux nombres puis calculer l'inverse du carré de leur somme. <br>
-   Quel résultat obtient-on si on choisit comme nombres $${a}$ et $${b}$ ?`
+          : `Choisir deux nombres puis calculer ${context.isDiaporama ? '<br>' : ''} l'inverse du carré de leur somme. <br>
+   Quel résultat obtient-on si on choisit ${context.isDiaporama ? '<br>' : ''} comme nombres $${a}$ et $${b}$ ?`
 
         this.reponse = this.versionQcm
           ? `$${reponse.texFractionSimplifiee}$`

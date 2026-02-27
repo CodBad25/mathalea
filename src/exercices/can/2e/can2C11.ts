@@ -4,6 +4,7 @@ import { texNombre } from '../../../lib/outils/texNombre'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import ExerciceSimple from '../../ExerciceSimple'
 import { randint } from '../../../modules/outils'
+import { context } from '../../../modules/context'
 export const titre = 'Passer du coefficient multiplicateur au taux d’évolution'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -43,7 +44,7 @@ export default class CoeffTaux extends ExerciceSimple {
           randint(1, 9) * 10 + randint(1, 9),
         ])
         coeff = 1 + taux / 100
-        this.question = `Le taux d'évolution associé à un coefficient multiplicateur de $${texNombre(coeff)}$ est : `
+        this.question = `Le taux d'évolution associé à un ${context.isDiaporama ? '<br>' : ''} coefficient multiplicateur  de  $${texNombre(coeff)}$ est : `
 
         this.optionsChampTexte = { texteApres: ' %' }
         this.correction = `Multiplier par $${texNombre(coeff)}$ revient à multiplier par $1+\\dfrac{${texNombre(taux)}}{100}$. <br>
@@ -69,7 +70,7 @@ export default class CoeffTaux extends ExerciceSimple {
           randint(1, 9) * 10 + randint(1, 9),
         ])
         coeff = 1 - taux / 100
-        this.question = `Le taux d'évolution associé à un coefficient multiplicateur de $${texNombre(coeff)}$ est `
+        this.question = `Le taux d'évolution associé à un ${context.isDiaporama ? '<br>' : ''} coefficient multiplicateur  de  $${texNombre(coeff)}$ est `
 
         this.optionsChampTexte = { texteApres: ' %.' }
         this.correction = `Multiplier par $${texNombre(coeff)}$ revient à multiplier par $1-\\dfrac{${texNombre(taux)}}{100}$. <br>

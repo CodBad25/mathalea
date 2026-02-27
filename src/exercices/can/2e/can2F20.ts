@@ -7,6 +7,7 @@ import { choice } from '../../../lib/outils/arrayOutils'
 import { ecritureAlgebrique } from '../../../lib/outils/ecritures'
 import { abs } from '../../../lib/outils/nombres'
 import { texNombre } from '../../../lib/outils/texNombre'
+import { context } from '../../../modules/context'
 export const titre =
   'Déterminer une image par une fonction affine (non définie explicitement)'
 export const interactifReady = true
@@ -45,7 +46,7 @@ export default class ImageFctAff extends ExerciceSimple {
     const coeff = imx2 - imx1
     const imx2n = imx2 + coeff * n
     const imx1n = imx1 + coeff * n
-    this.question = `$${nomF}$ est une fonction affine vérifiant $${nomF}(${x1})=${imx1}$ et $${nomF}(${x2})=${imx2}$.<br>`
+    this.question = `$${nomF}$ est une fonction affine vérifiant ${context.isDiaporama ? '<br>' : ''} $${nomF}(${x1})=${imx1}$ et $${nomF}(${x2})=${imx2}$.<br>`
     if (this.interactif && !this.versionQcm) {
       this.question += `$${nomF}(${val})=$`
     } else {

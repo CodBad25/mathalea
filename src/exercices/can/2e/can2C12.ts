@@ -4,6 +4,7 @@ import { texNombre } from '../../../lib/outils/texNombre'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import ExerciceSimple from '../../ExerciceSimple'
 import { randint } from '../../../modules/outils'
+import { context } from '../../../modules/context'
 
 export const titre = 'Déterminer un taux global d’évolution'
 export const interactifReady = true
@@ -57,8 +58,8 @@ export default class TauxGlobal extends ExerciceSimple {
         listeCalculs = shuffle(listeCalculs)
         this.question = `  ${listeCalculs[0]}  ${listeCalculs[1]} <br>
  ${listeCalculs[2]}${listeCalculs[3]}<br>
-En utilisant l'un des résultats précédents, déterminer le taux global d'évolution d'un article qui augmente de
-$${a}${sp(1)}\\%$  dans un premier temps, puis qui diminue de $${b}${sp(1)}\\%$ dans un second temps.`
+En utilisant l'un des résultats précédents, ${context.isDiaporama ? '<br>' : ''}déterminer le taux global d'évolution d'un article qui augmente de
+$${a}${sp(1)}\\%$  dans un premier temps, ${context.isDiaporama ? '<br>' : ''} puis qui diminue de $${b}${sp(1)}\\%$ dans un second temps.`
         this.correction = `Augmenter de $${a}${sp(1)}\\%$ revient à multiplier par $${texNombre(1 + a / 100)}$ et diminuer de $${b}${sp(1)}\\%$ revient à multiplier par $${texNombre(1 - b / 100)}$.<br>
 Globalement cela revient donc à multiplier par $${texNombre(1 + a / 100)}\\times ${texNombre(1 - b / 100)}=${texNombre(coeffG)}$.<br>
 Multiplier par $${texNombre(coeffG)}$ revient à multiplier par `
@@ -92,8 +93,8 @@ Multiplier par $${texNombre(coeffG)}$ revient à multiplier par `
         listeCalculs = shuffle(listeCalculs)
         this.question = `  ${listeCalculs[0]}  ${listeCalculs[1]} <br>
    ${listeCalculs[2]}${listeCalculs[3]}<br>
-  En utilisant l'un des résultats précédents, déterminer le taux global d'évolution d'un article qui augmente de
-  $${a}${sp(1)}\\%$  dans un premier temps, puis qui augmente de $${b}${sp(1)}\\%$ dans un second temps. `
+  En utilisant l'un des résultats précédents, ${context.isDiaporama ? '<br>' : ''} déterminer le taux global d'évolution ${context.isDiaporama ? '<br>' : ''} d'un article qui augmente de
+  $${a}${sp(1)}\\%$  dans un premier temps, ${context.isDiaporama ? '<br>' : ''} puis qui augmente de $${b}${sp(1)}\\%$ dans un second temps. `
         this.correction = `Augmenter de $${a}${sp(1)}\\%$ revient à multiplier par $${texNombre(1 + a / 100)}$ et augmenter de $${b}${sp(1)}\\%$ revient à multiplier par $${texNombre(1 + b / 100)}$.<br>
   Globalement cela revient donc à multiplier par $${texNombre(1 + a / 100)}\\times ${texNombre(1 + b / 100)}=${texNombre(coeffG)}$.<br>
   Multiplier par $${texNombre(coeffG)}$ revient à multiplier par
@@ -121,8 +122,8 @@ Multiplier par $${texNombre(coeffG)}$ revient à multiplier par `
         this.question = `  ${listeCalculs[0]}  ${listeCalculs[1]} <br>
    ${listeCalculs[2]}${listeCalculs[3]}<br>
 
-  En utilisant l'un des résultats précédents, déterminer le taux global d'évolution d'un article qui diminue de
-  $${a}${sp(1)}\\%$  dans un premier temps, puis qui diminue de $${b}${sp(1)}\\%$ dans un second temps. `
+  En utilisant l'un des résultats précédents, ${context.isDiaporama ? '<br>' : ''}déterminer le taux global d'évolution ${context.isDiaporama ? '<br>' : ''} d'un article qui diminue de
+  $${a}${sp(1)}\\%$  dans un premier temps, ${context.isDiaporama ? '<br>' : ''} puis qui diminue de $${b}${sp(1)}\\%$ dans un second temps. `
         this.correction = `Diminuer de $${a}${sp(1)}\\%$ revient à multiplier par $${texNombre(1 - a / 100)}$ et diminuer de $${b}${sp(1)}\\%$ revient à multiplier par $${texNombre(1 - b / 100)}$.<br>
   Globalement cela revient donc à multiplier par $${texNombre(1 - a / 100)}\\times ${texNombre(1 - b / 100)}=${texNombre(coeffG)}$.<br>
   Multiplier par $${texNombre(coeffG)}$ revient à multiplier par
@@ -151,8 +152,8 @@ Multiplier par $${texNombre(coeffG)}$ revient à multiplier par `
         this.question = `  ${listeCalculs[0]}  ${listeCalculs[1]} <br>
    ${listeCalculs[2]}${listeCalculs[3]}<br>
    
-  En utilisant l'un des résultats précédents, déterminer le taux global d'évolution d'un article qui diminue de
-  $${a}${sp(1)}\\%$  dans un premier temps, puis qui augmente de $${b}${sp(1)}\\%$ dans un second temps. `
+  En utilisant l'un des résultats précédents, ${context.isDiaporama ? '<br>' : ''}déterminer le taux global d'évolution ${context.isDiaporama ? '<br>' : ''} d'un article qui diminue de
+  $${a}${sp(1)}\\%$  dans un premier temps, ${context.isDiaporama ? '<br>' : ''} puis qui augmente de $${b}${sp(1)}\\%$ dans un second temps. `
         this.correction = `Diminuer de $${a}${sp(1)}\\%$ revient à multiplier par $${texNombre(1 - a / 100)}$ et augmenter de $${b}${sp(1)}\\%$ revient à multiplier par $${texNombre(1 + b / 100)}$.<br>
   Globalement cela revient donc à multiplier par $${texNombre(1 - a / 100)}\\times ${texNombre(1 + b / 100)}=${texNombre(coeffG)}$.<br>
   Multiplier par $${texNombre(coeffG)}$ revient à multiplier par `

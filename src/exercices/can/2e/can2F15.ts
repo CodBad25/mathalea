@@ -10,6 +10,7 @@ import {
   rienSi1,
 } from '../../../lib/outils/ecritures'
 import { abs } from '../../../lib/outils/nombres'
+import { context } from '../../../modules/context'
 import { listeQuestionsToContenu, randint } from '../../../modules/outils'
 import Exercice from '../../Exercice'
 export const titre = 'Donner le sens de variation d’une fonction affine'
@@ -38,7 +39,12 @@ export default class VariationFA extends Exercice {
   }
 
   nouvelleVersion() {
-    let texte, texteCorr, a, b, d, props
+    let texte = ''
+    let texteCorr = ''
+    let a
+    let b
+    let d
+    let props
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
       a = randint(-10, 10, 0) // coefficient a de la fonction affine
       b = randint(-10, 10) // coefficient b de la fonction affine
@@ -52,7 +58,7 @@ export default class VariationFA extends Exercice {
       const nomF = choice(nom)
       switch (choice([1, 1, 2, 2, 3])) {
         case 1:
-          texte = `Donner le sens de variation de la fonction $${nomF}$ définie sur $\\mathbb R$ par : `
+          texte = `Donner le sens de variation ${context.isDiaporama ? '<br>' : ''} de la fonction $${nomF}$ définie sur $\\mathbb R$${context.isDiaporama ? '<br>' : ''}  par : `
           if (choice([true, false])) {
             texte += `$${nomF}(x)=${reduireAxPlusB(a, b)}$.`
           } else {
@@ -112,7 +118,7 @@ export default class VariationFA extends Exercice {
           break
 
         case 2:
-          texte = `Donner le sens de variation de la fonction $${nomF}$ définie sur $\\mathbb R$ par : `
+          texte = `Donner le sens de variation ${context.isDiaporama ? '<br>' : ''} de la fonction $${nomF}$ définie sur $\\mathbb R$ par : `
           if (choice([true, false])) {
             texte += `$${nomF}(x)=\\dfrac{${reduireAxPlusB(a, b)}}{${d}}$.`
           } else {
@@ -171,7 +177,7 @@ export default class VariationFA extends Exercice {
           }
           break
         case 3:
-          texte = `Donner le sens de variation de la fonction $${nomF}$ définie sur $\\mathbb R$ par :
+          texte = `Donner le sens de variation ${context.isDiaporama ? '<br>' : ''} de la fonction $${nomF}$ définie sur $\\mathbb R$ par :
             $${nomF}(x)=${b}$`
 
           this.autoCorrection[i] = {

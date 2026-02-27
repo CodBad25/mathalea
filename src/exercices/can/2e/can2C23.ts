@@ -4,6 +4,7 @@ import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import ExerciceSimple from '../../ExerciceSimple'
 import { randint } from '../../../modules/outils'
 import FractionEtendue from '../../../modules/FractionEtendue'
+import { context } from '../../../modules/context'
 export const titre = 'Calculer le tout connaissant une partie'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -84,7 +85,7 @@ Ainsi,  $N=${multiplicateur}\\times ${partie}$ élèves soit
       `$${texNombre(total - 100, 1)}$`,
     ]
 
-    this.question = `Dans un lycée, $${partie}$ élèves étudient ${matiere}, ce qui représente $${taux}\\,\\%$ du nombre d'élèves inscrits dans ce lycée.<br>
+    this.question = `Dans un lycée, $${partie}$ élèves étudient ${matiere}, ${context.isDiaporama ? '<br>' : ''}ce qui représente $${taux}\\,\\%$ du nombre d'élèves inscrits ${context.isDiaporama ? '<br>' : ''}dans ce lycée.<br>
       Le nombre d'élèves inscrits dans ce lycée est égal à :`
 
     this.correction = correctionCommune

@@ -4,6 +4,7 @@ import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import ExerciceSimple from '../../ExerciceSimple'
 import { randint } from '../../../modules/outils'
 import { arrondi } from '../../../lib/outils/nombres'
+import { context } from '../../../modules/context'
 export const titre = 'Passer du taux d’évolution au coefficient multiplicateur'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -56,7 +57,7 @@ export default class TauxCoeff extends ExerciceSimple {
           randint(1, 9),
           randint(1, 9) * 10 + randint(1, 9),
         ])
-        this.question = `Augmenter une valeur de $${taux}~\\%$ revient à la multiplier par : `
+        this.question = `Augmenter une valeur ${context.isDiaporama ? '<br>' : ''} de $${taux}~\\%$  revient à la multiplier par : `
         this.correction = corrA(taux, 1 + taux / 100)
         this.reponse = this.versionQcm
           ? `$${texNombre(1 + taux / 100, 4)}$`
@@ -76,7 +77,7 @@ export default class TauxCoeff extends ExerciceSimple {
           randint(1, 9),
           randint(1, 9) * 10 + randint(1, 9),
         ])
-        this.question = `Diminuer une valeur de $${taux}~\\%$ revient à la multiplier par :`
+        this.question = `Diminuer une valeur ${context.isDiaporama ? '<br>' : ''} de $${taux}~\\%$  revient à la multiplier par :`
         this.correction = corrD(taux, 1 - taux / 100)
         this.reponse = this.versionQcm
           ? `$${texNombre(1 - taux / 100, 4)}$`
@@ -92,7 +93,7 @@ export default class TauxCoeff extends ExerciceSimple {
 
       case 'c':
         taux = randint(10, 40) * 10
-        this.question = `Augmenter une valeur de $${taux}~\\%$ revient à la multiplier par : `
+        this.question = `Augmenter une valeur ${context.isDiaporama ? '<br>' : ''} de $${taux}~\\%$  revient à la multiplier par : `
         this.correction = corrA(taux, 1 + taux / 100)
         this.reponse = this.versionQcm
           ? `$${texNombre(1 + taux / 100, 4)}$`

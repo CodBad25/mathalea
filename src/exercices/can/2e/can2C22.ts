@@ -2,6 +2,7 @@ import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { ecritureAlgebrique } from '../../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { context } from '../../../modules/context'
 import FractionEtendue from '../../../modules/FractionEtendue'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
@@ -82,7 +83,7 @@ export default class CalculExpAvecValeurs extends ExerciceSimple {
 
           this.question = `
 On considère la relation  $F=a+\\dfrac{b}{cd}$.<br>
-Lorsque $a=${a.texFraction}$, $b=${b}$, $c=${c}$ et $d=${d.texFractionSimplifiee}$, la valeur de $F$ est égale à : `
+Lorsque $a=${a.texFraction}$, $b=${b}$, $c=${c}$ et $d=${d.texFractionSimplifiee}$, ${context.isDiaporama ? '<br>' : ''} la valeur de $F$ est égale à : `
 
           this.correction = `On remplace $a$, $b$, $c$ et $d$ par les valeurs données : <br>
 $\\begin{aligned}
@@ -143,7 +144,7 @@ Calculer $F$ lorsque  $a=${a.texFraction}$, $b=${b}$, $c=${c}$ et $d=${d.texFrac
 
           this.question = `
 On considère la relation $F=\\dfrac{a}{b}+cd$.<br>
-Lorsque $a=${a}$, $b=${b.texFraction}$, $c=${c}$ et $d=${d.texFraction}$, la valeur de $F$ est égale à : `
+Lorsque $a=${a}$, $b=${b.texFraction}$, $c=${c}$ et $d=${d.texFraction}$, ${context.isDiaporama ? '<br>' : ''} la valeur de $F$ est égale à : `
 
           this.correction = `On remplace $a$, $b$, $c$ et $d$ par les valeurs données :<br>
 $\\begin{aligned}

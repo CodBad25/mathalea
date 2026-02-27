@@ -79,7 +79,7 @@ export default class ExtremumsTableau extends Exercice {
         ]
       }
 
-      texte = `Voici le tableau de variations d'une fonction $f$ définie sur $[${x1}\\,;\\,${x4}]$ :<br>
+      texte = `Voici le tableau de variations d'une fonction $f$ ${context.isDiaporama ? '<br>' : ''} définie sur $[${x1}\\,;\\,${x4}]$ :<br>
       `
 
       texte +=

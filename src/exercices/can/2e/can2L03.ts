@@ -5,6 +5,7 @@ import {
 } from '../../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
+import { context } from '../../../modules/context'
 import FractionEtendue from '../../../modules/FractionEtendue'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
@@ -52,8 +53,8 @@ export default class CoordonneesPointIntersectionAxeAbscissesDroite extends Exer
           this.question = this.versionQcm
             ? ` Les coordonnées du point d'intersection
     entre la droite d'équation $y=${reduireAxPlusB(a, b)}$ et l'axe des abscisses sont : `
-            : ` Déterminer les coordonnées du point d'intersection
-    entre la droite d'équation $y=${reduireAxPlusB(a, b)}$ et l'axe des abscisses. `
+            : ` Déterminer les coordonnées du point d'intersection ${context.isDiaporama ? '<br>' : ''}
+    entre la droite d'équation $y=${reduireAxPlusB(a, b)}$ et ${context.isDiaporama ? '<br>' : ''} l'axe des abscisses. `
           if (this.interactif) {
             this.optionsChampTexte = {
               texteAvant: '<br>$($',
@@ -89,7 +90,7 @@ export default class CoordonneesPointIntersectionAxeAbscissesDroite extends Exer
             ? ` Les coordonnées du point d'intersection
     entre la droite d'équation $y=\\dfrac{x}{${a}}${ecritureAlgebrique(b)}$ et l'axe des abscisses sont : `
             : ` Déterminer les coordonnées du point d'intersection
-    entre la droite d'équation $y=\\dfrac{x}{${a}}${ecritureAlgebrique(b)}$ et l'axe des abscisses. 
+   ${context.isDiaporama ? '<br>' : ''} entre la droite d'équation $y=\\dfrac{x}{${a}}${ecritureAlgebrique(b)}$ et ${context.isDiaporama ? '<br>' : ''} l'axe des abscisses. 
        `
           if (this.interactif) {
             this.optionsChampTexte = {
