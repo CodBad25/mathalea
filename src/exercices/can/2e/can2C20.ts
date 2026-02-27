@@ -6,6 +6,7 @@ import FractionEtendue from '../../../modules/FractionEtendue'
 import { prenomF } from '../../../lib/outils/Personne'
 
 import { pgcd } from '../../../lib/outils/primalite'
+import { context } from '../../../modules/context'
 export const titre = 'Résoudre un problème avec des fractions'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -69,7 +70,7 @@ export default class ProblemeFractions extends ExerciceSimple {
       ? `$${frac2.produitFraction(reste).texFractionSimplifiee}$`
       : frac2.produitFraction(reste)
     this.question = `Ce matin, ${prenom} a ouvert une bouteille d’eau.<br>
-     Elle a bu $${frac1.texFraction}$ de la bouteille. Puis à midi, elle a bu $${frac2.texFraction}$ du reste.<br> 
+     Elle a bu $${frac1.texFraction}$ de la bouteille. Puis à midi, ${context.isDiaporama ? '<br>' : ''} elle a bu $${frac2.texFraction}$ du reste.<br> 
 Quelle fraction de la bouteille a-t-elle bu à midi ? `
     if (this.interactif) {
       this.question += '<br>'

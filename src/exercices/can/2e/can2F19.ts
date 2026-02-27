@@ -11,6 +11,7 @@ import {
   ecritureParentheseSiNegatif,
   reduireAxPlusB,
 } from '../../../lib/outils/ecritures'
+import { context } from '../../../modules/context'
 export const titre = 'Déterminer une fonction affine avec deux images'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -51,7 +52,7 @@ export default class FonctionAffAvec2Images extends ExerciceSimple {
               compare: functionCompare,
             },
           }
-          this.question = `$${nomF}$ est une fonction affine vérifiant $${nomF}(0)=${p}$ et $${nomF}(1)=${p + m}$.<br>`
+          this.question = `$${nomF}$ est une fonction affine ${context.isDiaporama ? '<br>' : ''} vérifiant $${nomF}(0)=${p}$ et $${nomF}(1)=${p + m}$.<br>`
           if (this.interactif) {
             this.question += `L'expression algébrique de $${nomF}$ est $${nomF}(x)=$`
           } else {
@@ -89,7 +90,7 @@ soit $${p + m}-${ecritureParentheseSiNegatif(p)}=${m}$.
               compare: functionCompare,
             },
           }
-          this.question = `$${nomF}$ est une fonction affine vérifiant $${nomF}(-1)=${p - m}$ et $${nomF}(0)=${p}$.<br>`
+          this.question = `$${nomF}$ est une fonction affine ${context.isDiaporama ? '<br>' : ''} vérifiant $${nomF}(-1)=${p - m}$ et $${nomF}(0)=${p}$.<br>`
           if (this.interactif) {
             this.question += `L'expression algébrique de $${nomF}$ est $${nomF}(x)=$`
           } else {

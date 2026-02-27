@@ -1,5 +1,6 @@
 import { texFractionReduite } from '../../../lib/outils/deprecatedFractions'
 import { rienSi1 } from '../../../lib/outils/ecritures'
+import { context } from '../../../modules/context'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre =
@@ -36,7 +37,7 @@ export default class CoordonneesPointIntersectionAxeOrdonneesDroite extends Exer
 
     this.reponse = `0;${-c / b}`
     if (c > 0) {
-      this.question = `Déterminer les coordonnées du point d'intersection entre la droite d'équation $${rienSi1(a)}x+${rienSi1(b)}y+${c}=0$ et l'axe des ordonnées.<br>
+      this.question = `Déterminer les coordonnées du point d'intersection ${context.isDiaporama ? '<br>' : ''} entre la droite d'équation $${rienSi1(a)}x+${rienSi1(b)}y+${c}=0$  ${context.isDiaporama ? '<br>' : ''} et l'axe des ordonnées.<br>
        `
       this.correction = `Puisque le point d'intersection se situe sur l'axe des ordonnées, son abscisse est nulle ($x=0$).
     <br>
@@ -46,7 +47,7 @@ export default class CoordonneesPointIntersectionAxeOrdonneesDroite extends Exer
       this.canEnonce = `Déterminer les coordonnées du point d'intersection entre la droite d'équation $${rienSi1(a)}x+${rienSi1(b)}y+${c}=0$ et l'axe des ordonnées.`
       this.canReponseACompleter = ''
     } else {
-      this.question = `Déterminer les coordonnées du point d'intersection entre la droite d'équation $${rienSi1(a)}x+${rienSi1(b)}y${c}=0$ et l'axe des ordonnées.<br>
+      this.question = `Déterminer les coordonnées du point d'intersection ${context.isDiaporama ? '<br>' : ''} entre la droite d'équation $${rienSi1(a)}x+${rienSi1(b)}y${c}=0$ ${context.isDiaporama ? '<br>' : ''} et l'axe des ordonnées.<br>
   `
       this.correction = `Puisque le point d'intersection se situe sur l'axe des ordonnées, son abscisse est nulle ($x=0$).
 <br>

@@ -7,6 +7,7 @@ import {
   miseEnEvidence,
   texteEnCouleur,
 } from '../../../lib/outils/embellissements'
+import { context } from '../../../modules/context'
 import FractionEtendue from '../../../modules/FractionEtendue'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
@@ -54,7 +55,7 @@ export default class CalculImageQuotient extends ExerciceSimple {
     const expression = `\\dfrac{${reduireAxPlusB(a, b)}}{${reduireAxPlusB(c, d)}}`
     const maFraction = new FractionEtendue(e, f)
     this.reponse = new FractionEtendue(a * x + b, c * x + d).simplifie()
-    this.question = `On considère la fonction $f$ définie par $f(x)= ${expression}$. <br>
+    this.question = `On considère la fonction ${context.isDiaporama ? '<br>' : ''} $f$  définie par  $f(x)= ${expression}$. <br>
         Calculer $f(${x})$.`
     if (this.interactif) {
       this.question += '<br>'

@@ -11,6 +11,7 @@ import {
 import { texNombre } from '../../../lib/outils/texNombre'
 import ExerciceSimple from '../../ExerciceSimple'
 import { randint } from '../../../modules/outils'
+import { context } from '../../../modules/context'
 export const titre = 'Calculer une image avec le second degré'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -39,7 +40,7 @@ export default class CalculImageSecondDegre extends ExerciceSimple {
   nouvelleVersion() {
     let x, a, b, c, d, expression
     switch (
-      choice(['a', 'b', 'c', 'd']) 
+      choice(['a', 'b', 'c', 'd']) //
     ) {
       case 'a':
         x = this.versionQcm ? randint(-5, -1) : randint(1, 4)
@@ -48,7 +49,7 @@ export default class CalculImageSecondDegre extends ExerciceSimple {
         c = randint(2, 5)
 
         expression = `${rienSi1(a)}x^2+${rienSi1(b)}x+${c}`
-        this.question = `On considère la fonction $f$ définie par $f(x)= ${expression}$. <br>`
+        this.question = `On considère ${context.isDiaporama ? '<br>' : ''} la  fonction  $f$ définie par ${context.isDiaporama ? '<br>' : ''} $f(x)= ${expression}$. <br>`
         this.question += this.versionQcm
           ? `L'image de $${x}$ par la fonction $f$ est égale à :`
           : `Calculer $f(${x})$.`
@@ -146,7 +147,7 @@ export default class CalculImageSecondDegre extends ExerciceSimple {
         x = this.versionQcm ? randint(-5, -1) : randint(-3, 3, [0])
 
         expression = `(${rienSi1(a)}x${ecritureAlgebrique(b)})(${rienSi1(c)}x${ecritureAlgebrique(d)})`
-        this.question = `On considère la fonction $f$ définie par $f(x)= ${expression}$. <br>`
+        this.question = `On considère ${context.isDiaporama ? '<br>' : ''} la fonction $f$ définie par ${context.isDiaporama ? '<br>' : ''} $f(x)= ${expression}$. <br>`
         this.question += this.versionQcm
           ? `L'image de $${x}$ par la fonction $f$ est égale à :`
           : `Calculer $f(${x})$.`
@@ -238,7 +239,7 @@ export default class CalculImageSecondDegre extends ExerciceSimple {
         x = this.versionQcm ? randint(-5, -1) : randint(-3, 3, [0])
 
         expression = `${a}-${rienSi1(b)}x^2`
-        this.question = `On considère la fonction $f$ définie par $f(x)= ${expression}$. <br>`
+        this.question = `On considère ${context.isDiaporama ? '<br>' : ''} la fonction $f$ définie par ${context.isDiaporama ? '<br>' : ''} $f(x)= ${expression}$. <br>`
         this.question += this.versionQcm
           ? `L'image de $${x}$ par la fonction $f$ est égale à :`
           : `Calculer $f(${x})$.`
@@ -289,7 +290,7 @@ export default class CalculImageSecondDegre extends ExerciceSimple {
         x = this.versionQcm ? randint(-4, -1, [0]) : randint(-2, 2, [0])
 
         expression = `(${a}x${ecritureAlgebrique(b)})^2`
-        this.question = `On considère la fonction $f$ définie par $f(x)= ${expression}$. <br>`
+        this.question = `On considère ${context.isDiaporama ? '<br>' : ''} la fonction $f$ définie par ${context.isDiaporama ? '<br>' : ''} $f(x)= ${expression}$. <br>`
         this.question += this.versionQcm
           ? `L'image de $${x}$ par la fonction $f$ est égale à :`
           : `Calculer $f(${x})$.`

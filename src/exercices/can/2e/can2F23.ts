@@ -9,6 +9,7 @@ import {
 } from '../../../lib/outils/ecritures'
 
 import { texNombre } from '../../../lib/outils/texNombre'
+import { context } from '../../../modules/context'
 export const titre = 'Déterminer la valeur de $p$ dans une fonction affine'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -40,8 +41,8 @@ export default class TrouverpFonctionAffine extends ExerciceSimple {
     const m = randint(-10, 10, 0)
     const p = b - m * a
     this.reponse = texNombre(p, 0)
-    this.question = `$${nomF}$ est  la fonction définie par $${nomF}(x)=${rienSi1(m)}x+p$.<br>
-    Déterminer la valeur de $p$ sachant que $${nomF}(${a})=${b}$.`
+    this.question = `$${nomF}$ est  la fonction définie par ${context.isDiaporama ? '<br>' : ''} $${nomF}(x)=${rienSi1(m)}x+p$.<br>
+    Déterminer la valeur de $p$  sachant que ${context.isDiaporama ? '<br>' : ''} $${nomF}(${a})=${b}$.`
     this.correction = `Comme $${nomF}(${a})=${b}$, alors : <br>
     $\\begin{aligned}
     ${rienSi1(m)}${m === 1 ? '' : '\\times'} ${ecritureParentheseSiNegatif(a)}+p&=${b}\\\\

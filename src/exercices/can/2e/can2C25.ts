@@ -3,6 +3,7 @@ import { texNombre } from '../../../lib/outils/texNombre'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import ExerciceSimple from '../../ExerciceSimple'
 import { randint } from '../../../modules/outils'
+import { context } from '../../../modules/context'
 export const titre = 'Déterminer une évolution globale'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -41,7 +42,7 @@ export default class EvolSuccessives extends ExerciceSimple {
 
     const typeTexte = estAugmentation ? 'augmentations' : 'baisses'
 
-    this.question = `Le prix d’un article connait deux ${typeTexte} successives de $${taux}\\,\\%$. <br>
+    this.question = `Le prix d’un article connait deux ${typeTexte} ${context.isDiaporama ? '<br>' : ''} successives de $${taux}\\,\\%$. <br>
       Le taux d'évolution global associé est :`
 
     this.correction = `Le coefficient multiplicateur associé à une ${estAugmentation ? 'augmentation' : 'baisse'} de $${taux}\\,\\%$ est $${texNombre(CM, 2)}$.<br>

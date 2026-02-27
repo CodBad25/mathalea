@@ -76,7 +76,7 @@ export default class EncadrerTableau extends Exercice {
         ]
       }
       // xmin détermine la marge à gauche, ymin la hauteur réservée pour le tableau, xmax la largeur réservée pour le tableau et ymax la marge au dessus du tableau
-      texte = `Voici le tableau de variations d'une fonction $f$ définie sur $[${x1}\\,;\\,${x4}]$ :<br>`
+      texte = `Voici le tableau de variations d'une fonction $f$ définie ${context.isDiaporama ? '<br>' : ''} sur $[${x1}\\,;\\,${x4}]$ :<br>`
 
       this.canEnonce =
         `Voici le tableau de variations d'une fonction $f$ définie sur $[${x1}\\,;\\,${x4}]$ :
@@ -120,7 +120,7 @@ export default class EncadrerTableau extends Exercice {
       })
       if (choice([true, false])) {
         texte += `  <br>
-      Encadrer le plus précisément possible $f(x)$ lorsque $x\\in[${x1}\\,;\\,${x3}]$.<br>`
+      Encadrer le plus précisément possible $f(x)$ ${context.isDiaporama ? '<br>' : ''} lorsque $x\\in[${x1}\\,;\\,${x3}]$.<br>`
         texte += remplisLesBlancs(
           this,
           i,
@@ -128,7 +128,7 @@ export default class EncadrerTableau extends Exercice {
           KeyboardType.clavierDeBase,
         )
         this.canEnonce += `<br>
-        Encadrer le plus précisément possible $f(x)$  lorsque  $x\\in[${x1};${x3}]$.<br>`
+        Encadrer le plus précisément possible $f(x)$  ${context.isDiaporama ? '<br>' : ''} lorsque  $x\\in[${x1};${x3}]$.<br>`
         this.canReponseACompleter =
           '$\\ldots \\leqslant f(x)\\leqslant \\ldots$'
         if (choix === 1) {
@@ -185,7 +185,7 @@ export default class EncadrerTableau extends Exercice {
           }
         }
       } else {
-        texte += `<br>Encadrer le plus précisément possible $f(x)$ lorsque $x\\in[${x2}\\,;\\,${x4}]$.<br>`
+        texte += `<br>Encadrer le plus précisément possible $f(x)$ ${context.isDiaporama ? '<br>' : ''} lorsque $x\\in[${x2}\\,;\\,${x4}]$.<br>`
         texte += remplisLesBlancs(
           this,
           i,

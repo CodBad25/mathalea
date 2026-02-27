@@ -1,5 +1,6 @@
 import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { context } from '../../../modules/context'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Décomposer un nombre en produit avec un carré'
 export const interactifReady = true
@@ -218,7 +219,7 @@ export default class DecomposerUnNombre extends ExerciceSimple {
       correctionSupp,
     } = choix
 
-    this.question = `Écrire le nombre $${a}$ comme le produit de deux nombres entiers dont l'un est un carré parfait.`
+    this.question = `Écrire le nombre $${a}$ comme le produit ${context.isDiaporama ? '<br>' : ''} de deux nombres entiers dont l'un ${context.isDiaporama ? '<br>' : ''} est un carré parfait.`
 
     // Construction de toutes les réponses acceptées
     const reponsesValides = [

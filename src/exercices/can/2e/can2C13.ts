@@ -4,6 +4,7 @@ import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import ExerciceSimple from '../../ExerciceSimple'
 import { randint } from '../../../modules/outils'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { context } from '../../../modules/context'
 export const titre = 'Calculer avec  des puissances'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -35,7 +36,7 @@ export default class CalculPuissancesOperation extends ExerciceSimple {
   nouvelleVersion() {
     if (!this.versionQcm) {
       this.question =
-        'Écrire sous la forme $a^n$ où $a$ et $n$ sont des entiers relatifs. <br>'
+        `Écrire sous la forme $a^n$ où $a$ et $n$  sont ${context.isDiaporama ? '<br>' : ''} des  entiers relatifs. <br>`
     } else {
       this.question = ''
     }

@@ -6,6 +6,7 @@ import { randint } from '../../../modules/outils'
 import Decimal from 'decimal.js'
 import FractionEtendue from '../../../modules/FractionEtendue'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { context } from '../../../modules/context'
 export const titre = 'Calculer un coefficient multiplicateur'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -48,7 +49,7 @@ export default class CoeffMul extends ExerciceSimple {
           ? new Decimal(choice([0.95, 0.8, 0.9, 0.7, 0.6]))
           : new Decimal(choice([0.75]))
         prix2 = CM.mul(prix1)
-        this.question = `Le prix d’un article a baissé : il est passé de $${texPrix(prix1)}$ euros à $${texPrix(prix2)}$ euros.<br>
+        this.question = `Le prix d’un article a baissé : il est passé ${context.isDiaporama ? '<br>' : ''} de $${texPrix(prix1)}$ euros à $${texPrix(prix2)}$ euros.<br>
           Cela signifie que ce prix a été multiplié par : `
         this.correction = `${texteGras('Correction 1 :')}<br>
 On cherche le nombre $k$ tel que $ k \\times ${texPrix(prix1)}=${texPrix(prix2)} $.<br>
@@ -79,7 +80,7 @@ On obtient $k=\\dfrac{${texPrix(prix2)}}{${texPrix(prix1)}} = ${new FractionEten
           : new Decimal(choice([1.25]))
 
         prix2 = CM.mul(prix1)
-        this.question = `Le prix d’un article a augmenté : il est passé de $${texPrix(prix1)}$ euros à $${texPrix(prix2)}$ euros.<br>
+        this.question = `Le prix d’un article a augmenté : il est passé ${context.isDiaporama ? '<br>' : ''} de $${texPrix(prix1)}$ euros à $${texPrix(prix2)}$ euros.<br>
           Cela signifie que ce prix a été multiplié par : `
         this.correction = `${texteGras('Correction 1 :')}<br>
 On cherche le nombre $k$ tel que $ k \\times ${texPrix(prix1)}=${texPrix(prix2)} $.<br>
