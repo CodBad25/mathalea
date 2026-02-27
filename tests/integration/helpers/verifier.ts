@@ -1,4 +1,5 @@
 import { verifQuestionMathLive } from '../../../src/lib/interactif/mathLive'
+import { verifQuestionMetaInteractif2d } from '../../../src/lib/interactif/gestionInteractif'
 import { verifQuestionQcm } from '../../../src/lib/interactif/qcm'
 import { verifQuestionListeDeroulante } from '../../../src/lib/interactif/questionListeDeroulante'
 import type { IExercice } from '../../../src/lib/types'
@@ -7,6 +8,7 @@ import {
   injectFillInTheBlankDOM,
   injectListeDeroulanteDOM,
   injectMathLiveDOM,
+  injectMetaInteractif2dDOM,
   injectQcmDOM,
   injectTableauMathliveDOM,
 } from './domSimulator'
@@ -312,12 +314,55 @@ export function verifyAllQuestions(exercice: IExercice): VerificationResult[] {
           break
         }
 
+        case 'MetaInteractif2d': {
+          if (!valeur) {
+            results.push({
+              questionIndex: i,
+              format,
+              isOk: false,
+              feedback: 'No valeur',
+              skipped: true,
+              skipReason: 'no-valeur',
+            })
+            break
+          }
+          const fieldValues: Record<string, string> = {}
+          for (const [key, answer] of Object.entries(valeur)) {
+            if (key.match(/^field\d+$/) && answer?.value != null) {
+              const val = answer.value
+              const raw = Array.isArray(val) ? String(val[0]) : String(val)
+              const opts = answer.options ?? {}
+              fieldValues[key] = opts.unite ? grandeurStringToLatex(raw) : raw
+            }
+          }
+          if (Object.keys(fieldValues).length === 0) {
+            results.push({
+              questionIndex: i,
+              format,
+              isOk: false,
+              feedback: 'No field values',
+              skipped: true,
+              skipReason: 'no-field-values',
+            })
+            break
+          }
+          injectMetaInteractif2dDOM(exIdx, i, fieldValues)
+          const result = verifQuestionMetaInteractif2d(exercice, i)
+          results.push({
+            questionIndex: i,
+            format,
+            isOk: result?.isOk === true,
+            feedback: result?.feedback ?? '',
+            skipped: false,
+          })
+          break
+        }
+
         // Formats that require real browser interaction — skip
         case 'cliqueFigure':
         case 'dnd':
         case 'svgSelection':
         case 'tableur':
-        case 'MetaInteractif2d':
         case 'custom':
           results.push({
             questionIndex: i,
@@ -374,6 +419,7 @@ export function verifyComparisonOnly(
         'texte',
         'fillInTheBlank',
         'tableauMathlive',
+        'MetaInteractif2d',
         undefined,
       ].includes(format)
     ) {

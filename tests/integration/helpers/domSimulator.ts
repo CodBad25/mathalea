@@ -209,6 +209,43 @@ export function injectListeDeroulanteDOM(
 }
 
 /**
+ * Injects DOM for MetaInteractif2d questions.
+ * Inputs are individual math-field-like elements:
+ * #MetaInteractif2dEx{exIdx}Q{qIdx}field{n}
+ */
+export function injectMetaInteractif2dDOM(
+  exerciceIndex: number,
+  questionIndex: number,
+  fieldValues: Record<string, string>,
+) {
+  const resultId = `resultatCheckEx${exerciceIndex}Q${questionIndex}`
+  const feedbackId = `feedbackEx${exerciceIndex}Q${questionIndex}`
+
+  document.getElementById(resultId)?.remove()
+  document.getElementById(feedbackId)?.remove()
+
+  for (const [fieldKey, value] of Object.entries(fieldValues)) {
+    const index = fieldKey.replace('field', '')
+    const inputId = `MetaInteractif2dEx${exerciceIndex}Q${questionIndex}field${index}`
+    document.getElementById(inputId)?.remove()
+
+    const input = createFakeMfe(inputId, { champ1: value }) as unknown as
+      | MathfieldElement
+      | HTMLElement
+    input.id = inputId
+    document.body.appendChild(input)
+  }
+
+  const resultSpan = document.createElement('span')
+  resultSpan.id = resultId
+  document.body.appendChild(resultSpan)
+
+  const feedbackDiv = document.createElement('div')
+  feedbackDiv.id = feedbackId
+  document.body.appendChild(feedbackDiv)
+}
+
+/**
  * Clears all injected DOM elements.
  */
 export function clearDOM() {
