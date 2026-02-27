@@ -5,8 +5,7 @@ export const titre = 'Parallélogramme'
 
 class parallelogramme extends ExternalApp {
   constructor() {
-    // Todo : migrer sur l'url de la forge
-    super('https://degrangem.github.io/Parallelogramme/?mathalea')
+    super('https://degrangem.forge.apps.education.fr/Parallelogramme')
   }
 }
 
