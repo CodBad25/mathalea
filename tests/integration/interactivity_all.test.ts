@@ -1,8 +1,20 @@
+import { mkdirSync, writeFileSync } from 'node:fs'
+import { resolve } from 'node:path'
 import seedrandom from 'seedrandom'
-import { afterEach, beforeAll, describe, it, vi } from 'vitest'
+import { afterAll, afterEach, beforeAll, describe, it, vi } from 'vitest'
 import { clearDOM } from './helpers/domSimulator'
 import { discoverExercises, loadExercise } from './helpers/exerciseLoader'
 import { verifyAllQuestions, verifyComparisonOnly } from './helpers/verifier'
+
+type SkippedQuestion = {
+  filePath: string
+  titre: string
+  seed: string
+  strategy: 'comparison-only' | 'full-dom'
+  questionIndex: number
+  format: string
+  skipReason: string
+}
 
 vi.mock('../../src/lib/renderScratch', () => ({
   renderScratch: vi.fn(() => 'mocked value'),
@@ -89,6 +101,24 @@ afterEach(() => {
 
 const SEEDS = ['ePxF1', 'a2b3c', 'z9y8x']
 const filter = process.env.NIV?.replaceAll(' ', '') ?? undefined
+const skippedQuestions: SkippedQuestion[] = []
+const skippedQuestionKeys = new Set<string>()
+
+function recordSkippedQuestion(entry: SkippedQuestion) {
+  const key = [
+    entry.filePath,
+    entry.strategy,
+    entry.format,
+    entry.skipReason,
+  ].join('|')
+  if (skippedQuestionKeys.has(key)) return
+  skippedQuestionKeys.add(key)
+  skippedQuestions.push(entry)
+}
+
+function skippedKeyWithoutStrategy(entry: SkippedQuestion): string {
+  return [entry.filePath, entry.format, entry.skipReason].join('|')
+}
 
 const exercises = discoverExercises(filter)
 
@@ -97,6 +127,118 @@ if (exercises.length === 0) {
     it.skip(`No exercises found for filter '${filter ?? 'none'}'`, () => {})
   })
 }
+
+afterAll(() => {
+  const logsDir = resolve('tests/integration/logs')
+  mkdirSync(logsDir, { recursive: true })
+  const eitherPath = resolve(
+    'tests/integration/logs/interactivity_all_skipped_questions_either_results.json',
+  )
+  const comparisonPath = resolve(
+    'tests/integration/logs/interactivity_all_skipped_questions_comparison_results.json',
+  )
+  const domPath = resolve(
+    'tests/integration/logs/interactivity_all_skipped_questions_dom_results.json',
+  )
+  const bothPath = resolve(
+    'tests/integration/logs/interactivity_all_skipped_questions_both_results.json',
+  )
+
+  const skippedInComparisonOnly = new Set<string>()
+  const skippedInFullDom = new Set<string>()
+  const representativeByKey = new Map<string, Omit<SkippedQuestion, 'strategy'>>()
+  for (const entry of skippedQuestions) {
+    const key = skippedKeyWithoutStrategy(entry)
+    if (!representativeByKey.has(key)) {
+      representativeByKey.set(key, {
+        filePath: entry.filePath,
+        titre: entry.titre,
+        seed: entry.seed,
+        questionIndex: entry.questionIndex,
+        format: entry.format,
+        skipReason: entry.skipReason,
+      })
+    }
+    if (entry.strategy === 'comparison-only') {
+      skippedInComparisonOnly.add(key)
+    } else {
+      skippedInFullDom.add(key)
+    }
+  }
+
+  const skippedInBoth = new Set<string>()
+  for (const key of skippedInComparisonOnly) {
+    if (skippedInFullDom.has(key)) skippedInBoth.add(key)
+  }
+
+  const skippedInEither = new Set<string>([
+    ...skippedInComparisonOnly,
+    ...skippedInFullDom,
+  ])
+
+  const toQuestions = (keys: Set<string>) =>
+    [...keys]
+      .map((key) => representativeByKey.get(key))
+      .filter((q): q is Omit<SkippedQuestion, 'strategy'> => q != null)
+
+  const eitherQuestions = toQuestions(skippedInEither)
+  const comparisonQuestions = toQuestions(skippedInComparisonOnly)
+  const domQuestions = toQuestions(skippedInFullDom)
+  const bothQuestions = toQuestions(skippedInBoth)
+
+  writeFileSync(
+    eitherPath,
+    JSON.stringify(
+      {
+        numUniqueQuestionsSkippedOnlyInComparisonOnly:
+          skippedInComparisonOnly.size - skippedInBoth.size,
+        numUniqueQuestionsSkippedOnlyInFullDom:
+          skippedInFullDom.size - skippedInBoth.size,
+        numUniqueQuestionsSkippedInEither: skippedInEither.size,
+        numUniqueQuestionsSkippedInBoth: skippedInBoth.size,
+        skippedQuestions: eitherQuestions,
+      },
+      null,
+      2,
+    ),
+  )
+
+  writeFileSync(
+    comparisonPath,
+    JSON.stringify(
+      {
+        numUniqueQuestionsSkippedInComparisonOnly: comparisonQuestions.length,
+        skippedQuestions: comparisonQuestions,
+      },
+      null,
+      2,
+    ),
+  )
+
+  writeFileSync(
+    domPath,
+    JSON.stringify(
+      {
+        numUniqueQuestionsSkippedInFullDom: domQuestions.length,
+        skippedQuestions: domQuestions,
+      },
+      null,
+      2,
+    ),
+  )
+
+  writeFileSync(
+    bothPath,
+    JSON.stringify(
+      {
+        numUniqueQuestionsSkippedInBoth: bothQuestions.length,
+        skippedQuestions: bothQuestions,
+      },
+      null,
+      2,
+    ),
+  )
+})
 
 // Group by directory (6e, 5e, etc.) for organized output
 const grouped = new Map<string, typeof exercises>()
@@ -143,7 +285,18 @@ for (const [dir, entries] of grouped) {
           // from MathLive, so comparison-only may give false negatives.
           const compResults = verifyComparisonOnly(exercice)
           for (const r of compResults) {
-            if (r.skipped) continue
+            if (r.skipped) {
+              recordSkippedQuestion({
+                filePath: entry.filePath,
+                titre,
+                seed,
+                strategy: 'comparison-only',
+                questionIndex: r.questionIndex,
+                format: r.format,
+                skipReason: r.skipReason ?? 'unknown',
+              })
+              continue
+            }
             if (!r.isOk) {
               failures.push(
                 `seed=${seed} Q${r.questionIndex + 1} format=${r.format}: ` +
@@ -157,7 +310,18 @@ for (const [dir, entries] of grouped) {
           // caused by mock limitations (no real MathLive element).
           const domResults = verifyAllQuestions(exercice)
           for (const r of domResults) {
-            if (r.skipped) continue
+            if (r.skipped) {
+              recordSkippedQuestion({
+                filePath: entry.filePath,
+                titre,
+                seed,
+                strategy: 'full-dom',
+                questionIndex: r.questionIndex,
+                format: r.format,
+                skipReason: r.skipReason ?? 'unknown',
+              })
+              continue
+            }
             if (!r.isOk) {
               failures.push(
                 `seed=${seed} Q${r.questionIndex + 1} format=${r.format}: ` +

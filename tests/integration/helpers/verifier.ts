@@ -383,7 +383,7 @@ export function verifyComparisonOnly(
         isOk: true,
         feedback: '',
         skipped: true,
-        skipReason: `format-${format}`,
+        skipReason: `format-${format}-not-supported`,
       })
       continue
     }
