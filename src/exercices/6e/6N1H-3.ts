@@ -703,7 +703,7 @@ export default class LireUneAbscisseAvecZoom extends Exercice {
         handleAnswers(this, 3 * i + 1, {
           reponse: {
             value: `${reponse2A}+${reponse2B.toLatex()}`,
-            options: { expressionNumerique: true },
+            options: { additionSeulementEtNonResultat: true },
           },
         })
         handleAnswers(this, 3 * i + 2, {

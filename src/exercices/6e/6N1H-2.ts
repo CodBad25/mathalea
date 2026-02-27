@@ -271,7 +271,7 @@ export default class LireAbscisseDecimaleTroisFormes extends Exercice {
         handleAnswers(this, i * 3 + 1, {
           reponse: {
             value: `${Math.floor(x2)}+${new FractionEtendue(multiple * arrondi(x2 - Math.floor(x2)), multiple).toLatex()}`,
-            options: { expressionNumerique: true },
+            options: { additionSeulementEtNonResultat: true },
           },
         })
         handleAnswers(this, i * 3 + 2, {
