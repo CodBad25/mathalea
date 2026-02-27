@@ -271,6 +271,35 @@ export function injectMetaInteractif2dDOM(
 }
 
 /**
+ * Injects DOM for cliqueFigure questions.
+ * Each clickable figure is represented by an element carrying its `etat`.
+ */
+export function injectCliqueFigureDOM(
+  exerciceIndex: number,
+  questionIndex: number,
+  figures: Array<{ id: string; solution: boolean }>,
+) {
+  const resultId = `resultatCheckEx${exerciceIndex}Q${questionIndex}`
+  document.getElementById(resultId)?.remove()
+
+  for (const figure of figures) {
+    document.getElementById(figure.id)?.remove()
+    const el = document.createElement('div') as HTMLDivElement & {
+      etat?: boolean
+      hasMathaleaListener?: boolean
+    }
+    el.id = figure.id
+    el.etat = figure.solution
+    el.hasMathaleaListener = true
+    document.body.appendChild(el)
+  }
+
+  const resultSpan = document.createElement('span')
+  resultSpan.id = resultId
+  document.body.appendChild(resultSpan)
+}
+
+/**
  * Clears all injected DOM elements.
  */
 export function clearDOM() {

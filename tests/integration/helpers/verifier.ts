@@ -1,11 +1,13 @@
-import { verifQuestionMathLive } from '../../../src/lib/interactif/mathLive'
+import { verifQuestionCliqueFigure } from '../../../src/lib/interactif/cliqueFigure'
 import { verifQuestionMetaInteractif2d } from '../../../src/lib/interactif/gestionInteractif'
+import { verifQuestionMathLive } from '../../../src/lib/interactif/mathLive'
 import { verifQuestionQcm } from '../../../src/lib/interactif/qcm'
 import { verifQuestionListeDeroulante } from '../../../src/lib/interactif/questionListeDeroulante'
 import { verifQuestionSvgSelection } from '../../../src/lib/interactif/questionSvgSelection/questionSvgSelection'
 import type { IExercice } from '../../../src/lib/types'
 import Grandeur from '../../../src/modules/Grandeur'
 import {
+  injectCliqueFigureDOM,
   injectFillInTheBlankDOM,
   injectListeDeroulanteDOM,
   injectMathLiveDOM,
@@ -92,6 +94,16 @@ function intervalToMidpoint(value: string): string | null {
   const hi = parseFloat(match[2].replace(',', '.'))
   if (isNaN(lo) || isNaN(hi)) return null
   return String((lo + hi) / 2)
+}
+
+type CliqueFigureItem = { id: string; solution: boolean }
+
+function isCliqueFigureItem(value: unknown): value is CliqueFigureItem {
+  if (typeof value !== 'object' || value == null) return false
+  const candidate = value as Partial<CliqueFigureItem>
+  return (
+    typeof candidate.id === 'string' && typeof candidate.solution === 'boolean'
+  )
 }
 
 export interface VerificationResult {
@@ -388,8 +400,56 @@ export function verifyAllQuestions(exercice: IExercice): VerificationResult[] {
           break
         }
 
+        case 'cliqueFigure': {
+          if (exercice.figures == null || !Array.isArray(exercice.figures[i])) {
+            results.push({
+              questionIndex: i,
+              format,
+              isOk: false,
+              feedback: 'No cliqueFigure figures',
+              skipped: true,
+              skipReason: 'no-figures',
+            })
+            break
+          }
+
+          const figures: CliqueFigureItem[] = []
+          for (const candidate of exercice.figures[i] as unknown[]) {
+            if (isCliqueFigureItem(candidate)) {
+              figures.push(candidate)
+            }
+          }
+          if (figures.length === 0) {
+            results.push({
+              questionIndex: i,
+              format,
+              isOk: false,
+              feedback: 'No cliqueFigure figures',
+              skipped: true,
+              skipReason: 'no-figures',
+            })
+            break
+          }
+
+          injectCliqueFigureDOM(exIdx, i, figures)
+          if (
+            'callback' in exercice &&
+            typeof exercice.callback === 'function'
+          ) {
+            exercice.callback(exercice, i)
+          }
+          const result = verifQuestionCliqueFigure(exercice, i)
+          results.push({
+            questionIndex: i,
+            format,
+            isOk: result === 'OK',
+            feedback: '',
+            skipped: false,
+          })
+          break
+        }
+
         // Formats that require real browser interaction — skip
-        case 'cliqueFigure':
         case 'dnd':
         case 'tableur':
         case 'custom':
