@@ -1037,6 +1037,52 @@ describe('ScratchInterpreter', () => {
     expect(result.messages).toEqual(['2'])
   })
 
+  it('gere les principales fonctions mathematiques via selectmenu', async () => {
+    const interpreter = new ScratchInterpreter(200, 200, 90)
+    const code = `\\begin{scratch}[blocks]
+\\blockvariable{mettre \\selectmenu{absVal} à \\ovaloperator{\\selectmenu{abs} de \\ovalnum{-4}}}
+\\blockvariable{mettre \\selectmenu{racineVal} à \\ovaloperator{\\selectmenu{racine} de \\ovalnum{9}}}
+\\blockvariable{mettre \\selectmenu{sinVal} à \\ovaloperator{\\selectmenu{sin} de \\ovalnum{30}}}
+\\blockvariable{mettre \\selectmenu{cosVal} à \\ovaloperator{\\selectmenu{cos} de \\ovalnum{60}}}
+\\blockvariable{mettre \\selectmenu{tanVal} à \\ovaloperator{\\selectmenu{tan} de \\ovalnum{45}}}
+\\blockvariable{mettre \\selectmenu{asinVal} à \\ovaloperator{\\selectmenu{asin} de \\ovalnum{0.5}}}
+\\blockvariable{mettre \\selectmenu{acosVal} à \\ovaloperator{\\selectmenu{acos} de \\ovalnum{0.5}}}
+\\blockvariable{mettre \\selectmenu{atanVal} à \\ovaloperator{\\selectmenu{atan} de \\ovalnum{1}}}
+\\blockvariable{mettre \\selectmenu{plancherVal} à \\ovaloperator{\\selectmenu{plancher} de \\ovalnum{3.8}}}
+\\blockvariable{mettre \\selectmenu{plafondVal} à \\ovaloperator{\\selectmenu{plafond} de \\ovalnum{3.2}}}
+\\blockvariable{mettre \\selectmenu{pow10Val} à \\ovaloperator{\\selectmenu{10^} de \\ovalnum{3}}}
+\\blockvariable{mettre \\selectmenu{lnVal} à \\ovaloperator{\\selectmenu{ln} de \\ovalnum{2.718281828459045}}}
+\\blockvariable{mettre \\selectmenu{logVal} à \\ovaloperator{\\selectmenu{log} de \\ovalnum{100}}}
+\\end{scratch}`
+
+    const result = await interpreter.executeAnimated(code, () => {}, 0)
+
+    expect(result.variables.absVal).toBe(4)
+    expect(result.variables.racineVal).toBe(3)
+    expect(result.variables.sinVal).toBeCloseTo(0.5, 10)
+    expect(result.variables.cosVal).toBeCloseTo(0.5, 10)
+    expect(result.variables.tanVal).toBeCloseTo(1, 10)
+    expect(result.variables.asinVal).toBeCloseTo(30, 10)
+    expect(result.variables.acosVal).toBeCloseTo(60, 10)
+    expect(result.variables.atanVal).toBeCloseTo(45, 10)
+    expect(result.variables.plancherVal).toBe(3)
+    expect(result.variables.plafondVal).toBe(4)
+    expect(result.variables.pow10Val).toBe(1000)
+    expect(result.variables.lnVal).toBeCloseTo(1, 10)
+    expect(result.variables.logVal).toBeCloseTo(2, 10)
+  })
+
+  it('gere selectmenu sans antislash dans ovaloperator', async () => {
+    const interpreter = new ScratchInterpreter(200, 200, 90)
+    const code = `\\begin{scratch}[blocks]
+\\blocklook{dire \\ovaloperator{selectmenu{abs} de \\ovalnum{-8}}}
+\\end{scratch}`
+
+    const result = await interpreter.executeAnimated(code, () => {}, 0)
+
+    expect(result.messages).toEqual(['8'])
+  })
+
   it("gere l'operateur nombre aleatoire entre deux bornes", async () => {
     const randomSpy = vi.spyOn(Math, 'random').mockReturnValue(0.5)
     const interpreter = new ScratchInterpreter(200, 200, 90)
@@ -1059,5 +1105,97 @@ describe('ScratchInterpreter', () => {
     } finally {
       randomSpy.mockRestore()
     }
+  })
+
+  it("gere l'operateur lettre ... de ...", async () => {
+    const interpreter = new ScratchInterpreter(200, 200, 90)
+    const code = `\\begin{scratch}[blocks]
+\\blocklook{dire \\ovaloperator{lettre \\ovalnum{1} de \\ovalnum{pomme}}}
+\\end{scratch}`
+
+    const result = await interpreter.executeAnimated(code, () => {}, 0)
+
+    expect(result.messages).toEqual(['p'])
+  })
+
+  it('gere aussi la variante ovaloperaror pour lettre ... de ...', async () => {
+    const interpreter = new ScratchInterpreter(200, 200, 90)
+    const code = `\\begin{scratch}[blocks]
+\\blocklook{dire \\ovaloperaror{lettre \\ovalnum{1} de \\ovalnum{pomme}}}
+\\end{scratch}`
+
+    const result = await interpreter.executeAnimated(code, () => {}, 0)
+
+    expect(result.messages).toEqual(['p'])
+  })
+
+  it("gere l'operateur longueur de ...", async () => {
+    const interpreter = new ScratchInterpreter(200, 200, 90)
+    const code = `\\begin{scratch}[blocks]
+\\blocklook{dire \\ovaloperator{longueur de \\ovalnum{pomme}}}
+\\end{scratch}`
+
+    const result = await interpreter.executeAnimated(code, () => {}, 0)
+
+    expect(result.messages).toEqual(['5'])
+  })
+
+  it("gere l'operateur ... contient ... avec retour booleen", async () => {
+    const interpreter = new ScratchInterpreter(200, 200, 90)
+    const code = `\\begin{scratch}[blocks]
+\\blocklook{dire \\ovaloperator{\\ovalnum{pomme} contient \\ovalnum{p}}}
+\\end{scratch}`
+
+    const result = await interpreter.executeAnimated(code, () => {}, 0)
+
+    expect(result.messages).toEqual(['true'])
+  })
+
+  it("permet d'utiliser ... contient ... directement dans booloperator", async () => {
+    const interpreter = new ScratchInterpreter(200, 200, 90)
+    const code = `\\begin{scratch}[blocks]
+\\blockifelse{si \\booloperator{\\ovaloperator{\\ovalnum{pomme} contient \\ovalnum{p}}} alors}{
+\\blocklook{dire \\ovalnum{oui}}
+}{
+\\blocklook{dire \\ovalnum{non}}
+}
+\\end{scratch}`
+
+    const result = await interpreter.executeAnimated(code, () => {}, 0)
+
+    expect(result.messages).toEqual(['oui'])
+  })
+
+  it("gere l'operateur arrondi de avec ovalnum, ovalvariable, ovalsensing et ovalmove", async () => {
+    const interpreter = new ScratchInterpreter(200, 200, 90)
+    const code = `\\begin{scratch}[blocks]
+\\blockvariable{mettre \\selectmenu{a} à \\ovalnum{3.6}}
+\\blocksensing{demander \\ovalnum{Entrez un decimal} et attendre}
+\\blockmove{mettre x à \\ovalnum{2.6}}
+\\blocklook{dire \\ovaloperator{arrondi de \\ovalnum{4.4}}}
+\\blocklook{dire \\ovaloperator{arrondi de \\ovalvariable{a}}}
+\\blocklook{dire \\ovaloperator{arrondi de \\ovalsensing{réponse}}}
+\\blocklook{dire \\ovaloperator{arrondi de \\ovalmove{abscisse x}}}
+\\end{scratch}`
+
+    interpreter.onAskInput = async () => '7.6'
+
+    const result = await interpreter.executeAnimated(code, () => {}, 0)
+
+    expect(result.messages).toEqual(['4', '4', '8', '3'])
+  })
+
+  it('gere arrondi de ovalsensing reponse non numerique', async () => {
+    const interpreter = new ScratchInterpreter(200, 200, 90)
+    const code = `\\begin{scratch}[blocks]
+\\blocksensing{demander \\ovalnum{Entrez un texte} et attendre}
+\\blocklook{dire \\ovaloperator{arrondi de \\ovalsensing{réponse}}}
+\\end{scratch}`
+
+    interpreter.onAskInput = async () => 'Alice'
+
+    const result = await interpreter.executeAnimated(code, () => {}, 0)
+
+    expect(result.messages).toEqual(['0'])
   })
 })
