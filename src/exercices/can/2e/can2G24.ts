@@ -75,10 +75,11 @@ export default class TrouverpDroite extends ExerciceSimple {
             `$${yB - yA}$`,
           ]
         } else {
+          const denTroisiemeDistracteur = xB + xA === 0 ? xB - xA : xB + xA
           this.distracteurs = [
             `$${new FractionEtendue(xA - xB, yB - yA).texFractionSimplifiee}$`,
             `$${m.inverse().texFractionSimplifiee}$`,
-            `$${new FractionEtendue(yB + yA, xB + xA).texFractionSimplifiee}$`,
+            `$${new FractionEtendue(yB + yA, denTroisiemeDistracteur).texFractionSimplifiee}$`,
           ]
         }
       }

@@ -199,7 +199,7 @@ export default class LecturesGraphiquesSurSplines extends Exercice {
       const reponse1 =
         !solutions1 || solutions1.length === 0
           ? '\\emptyset'
-          : `${solutions1.join(';')}`
+          : `\\{${solutions1.join(';')}\\}`
       const horizontale1 = droiteParPointEtPente(
         point(0, Number(y1)),
         0,

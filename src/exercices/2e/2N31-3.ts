@@ -257,7 +257,7 @@ export default class PuissancesDUnRelatif2 extends Exercice {
         handleAnswers(this, i, {
           reponse: {
             value: reponseInteractive,
-            options: { sansExposantUn: true },
+            options: { sansExposantUn: exposantInteractif !== 1 },
           },
         })
         texte += ajouteChampTexteMathLive(
