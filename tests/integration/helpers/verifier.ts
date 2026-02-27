@@ -37,6 +37,46 @@ function eNotationToLatex(value: string): string {
   return `${mantissa}\\times10^{${exponent}}`
 }
 
+function pgcd(a: number, b: number): number {
+  let x = Math.abs(a)
+  let y = Math.abs(b)
+  while (y !== 0) {
+    const t = y
+    y = x % y
+    x = t
+  }
+  return x
+}
+
+function simplifyFractionLatex(value: string): string {
+  const cleaned = value.replace(/\s+/g, '')
+  let match = cleaned.match(/^\\d?frac{(-?\d+)}{(-?\d+)}$/)
+  if (!match) {
+    match = cleaned.match(/^(-?\d+)\/(-?\d+)$/)
+  }
+  if (!match) return value
+
+  let num = parseInt(match[1], 10)
+  let den = parseInt(match[2], 10)
+  if (!Number.isFinite(num) || !Number.isFinite(den) || den === 0) return value
+  if (den < 0) {
+    num = -num
+    den = -den
+  }
+  const d = pgcd(num, den)
+  if (d <= 1) return value
+  return `\\frac{${num / d}}{${den / d}}`
+}
+
+function scientificPowerToLatex(value: string): string {
+  const cleaned = value.replace(/\s+/g, '')
+  if (cleaned.includes('\\times')) return value
+  const match = cleaned.match(/^(-?)10\^(\{?-?\d+\}?)$/)
+  if (!match) return value
+  const mantissa = match[1] === '-' ? '-1' : '1'
+  return `${mantissa}\\times10^${match[2]}`
+}
+
 /**
  * Converts an interval string like "]1;2[" or "[3,5;4,5]" to a numeric point
  * inside the interval (midpoint), as expected by interval comparisons.
@@ -115,7 +155,9 @@ export function verifyAllQuestions(exercice: IExercice): VerificationResult[] {
           } else if (options.estDansIntervalle) {
             answerStr = intervalToMidpoint(rawAnswer) ?? rawAnswer
           } else if (options.ecritureScientifique) {
-            answerStr = eNotationToLatex(rawAnswer)
+            answerStr = scientificPowerToLatex(eNotationToLatex(rawAnswer))
+          } else if (options.fractionSimplifiee) {
+            answerStr = simplifyFractionLatex(rawAnswer)
           }
           injectMathLiveDOM(exIdx, i, answerStr)
           const result = verifQuestionMathLive(exercice, i)
