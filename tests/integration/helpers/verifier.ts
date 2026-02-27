@@ -2,6 +2,7 @@ import { verifQuestionMathLive } from '../../../src/lib/interactif/mathLive'
 import { verifQuestionMetaInteractif2d } from '../../../src/lib/interactif/gestionInteractif'
 import { verifQuestionQcm } from '../../../src/lib/interactif/qcm'
 import { verifQuestionListeDeroulante } from '../../../src/lib/interactif/questionListeDeroulante'
+import { verifQuestionSvgSelection } from '../../../src/lib/interactif/questionSvgSelection/questionSvgSelection'
 import type { IExercice } from '../../../src/lib/types'
 import Grandeur from '../../../src/modules/Grandeur'
 import {
@@ -10,6 +11,7 @@ import {
   injectMathLiveDOM,
   injectMetaInteractif2dDOM,
   injectQcmDOM,
+  injectSvgSelectionDOM,
   injectTableauMathliveDOM,
 } from './domSimulator'
 
@@ -314,6 +316,34 @@ export function verifyAllQuestions(exercice: IExercice): VerificationResult[] {
           break
         }
 
+        case 'svgSelection': {
+          const selectionValue = valeur?.reponse?.value
+          if (selectionValue == null) {
+            results.push({
+              questionIndex: i,
+              format,
+              isOk: false,
+              feedback: 'No svgSelection value',
+              skipped: true,
+              skipReason: 'no-svgSelection-value',
+            })
+            break
+          }
+          const answerStr = Array.isArray(selectionValue)
+            ? String(selectionValue[0])
+            : String(selectionValue)
+          injectSvgSelectionDOM(exIdx, i, answerStr)
+          const result = verifQuestionSvgSelection(exercice, i)
+          results.push({
+            questionIndex: i,
+            format,
+            isOk: result === 'OK',
+            feedback: '',
+            skipped: false,
+          })
+          break
+        }
+
         case 'MetaInteractif2d': {
           if (!valeur) {
             results.push({
@@ -361,7 +391,6 @@ export function verifyAllQuestions(exercice: IExercice): VerificationResult[] {
         // Formats that require real browser interaction — skip
         case 'cliqueFigure':
         case 'dnd':
-        case 'svgSelection':
         case 'tableur':
         case 'custom':
           results.push({
@@ -420,6 +449,7 @@ export function verifyComparisonOnly(
         'fillInTheBlank',
         'tableauMathlive',
         'MetaInteractif2d',
+        'svgSelection',
         undefined,
       ].includes(format)
     ) {
@@ -443,6 +473,29 @@ export function verifyComparisonOnly(
         skipped: true,
         skipReason: 'no-valeur',
       })
+      continue
+    }
+
+    if (format === 'svgSelection') {
+      const selectionValue = valeur.reponse?.value
+      if (selectionValue == null) {
+        results.push({
+          questionIndex: i,
+          format,
+          isOk: false,
+          feedback: 'No svgSelection value',
+          skipped: true,
+          skipReason: 'no-svgSelection-value',
+        })
+      } else {
+        results.push({
+          questionIndex: i,
+          format,
+          isOk: true,
+          feedback: '',
+          skipped: false,
+        })
+      }
       continue
     }
 

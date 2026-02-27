@@ -209,6 +209,31 @@ export function injectListeDeroulanteDOM(
 }
 
 /**
+ * Injects DOM for svgSelection questions.
+ * verifQuestionSvgSelection() reads #svgSelectionEx{exIdx}Q{qIdx}.value and
+ * writes feedback to #resultatCheckEx{exIdx}Q{qIdx}.
+ */
+export function injectSvgSelectionDOM(
+  exerciceIndex: number,
+  questionIndex: number,
+  selectedValue: string,
+) {
+  const selectId = `svgSelectionEx${exerciceIndex}Q${questionIndex}`
+  const resultId = `resultatCheckEx${exerciceIndex}Q${questionIndex}`
+  document.getElementById(selectId)?.remove()
+  document.getElementById(resultId)?.remove()
+
+  const input = document.createElement('input')
+  input.id = selectId
+  input.value = selectedValue
+  document.body.appendChild(input)
+
+  const resultSpan = document.createElement('span')
+  resultSpan.id = resultId
+  document.body.appendChild(resultSpan)
+}
+
+/**
  * Injects DOM for MetaInteractif2d questions.
  * Inputs are individual math-field-like elements:
  * #MetaInteractif2dEx{exIdx}Q{qIdx}field{n}
