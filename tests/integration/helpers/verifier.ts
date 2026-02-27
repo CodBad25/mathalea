@@ -5,6 +5,7 @@ import { verifQuestionMathLive } from '../../../src/lib/interactif/mathLive'
 import { verifQuestionQcm } from '../../../src/lib/interactif/qcm'
 import { verifQuestionListeDeroulante } from '../../../src/lib/interactif/questionListeDeroulante'
 import { verifQuestionSvgSelection } from '../../../src/lib/interactif/questionSvgSelection/questionSvgSelection'
+import { verifQuestionTableur } from '../../../src/lib/tableur/outilsTableur'
 import type { IDragAndDrop, IExercice } from '../../../src/lib/types'
 import Grandeur from '../../../src/modules/Grandeur'
 import {
@@ -16,6 +17,7 @@ import {
   injectMetaInteractif2dDOM,
   injectQcmDOM,
   injectSvgSelectionDOM,
+  injectTableurDOM,
   injectTableauMathliveDOM,
 } from './domSimulator'
 
@@ -530,8 +532,45 @@ export function verifyAllQuestions(exercice: IExercice): VerificationResult[] {
           break
         }
 
-        // Formats that require real browser interaction — skip
-        case 'tableur':
+        case 'tableur': {
+          const sheetAnswer = valeur?.sheetAnswer
+          if (!sheetAnswer) {
+            results.push({
+              questionIndex: i,
+              format,
+              isOk: false,
+              feedback: 'No sheetAnswer',
+              skipped: true,
+              skipReason: 'no-sheet-answer',
+            })
+            break
+          }
+          const goodAnswers = sheetAnswer.goodAnswerFormulas
+          const testDatas = sheetAnswer.sheetTestDatas
+          if (!Array.isArray(goodAnswers) || !Array.isArray(testDatas)) {
+            results.push({
+              questionIndex: i,
+              format,
+              isOk: false,
+              feedback: 'Invalid tableur test data',
+              skipped: true,
+              skipReason: 'invalid-sheet-answer-data',
+            })
+            break
+          }
+
+          injectTableurDOM(exIdx, i, goodAnswers, testDatas)
+          const result = verifQuestionTableur(exercice, i)
+          results.push({
+            questionIndex: i,
+            format,
+            isOk: result?.isOk === true,
+            feedback: result?.feedback ?? '',
+            skipped: false,
+          })
+          break
+        }
+
         case 'custom':
           results.push({
             questionIndex: i,

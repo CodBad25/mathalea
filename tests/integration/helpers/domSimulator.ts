@@ -1,5 +1,7 @@
 import type { MathfieldElement } from 'mathlive'
 import ListeDeroulanteElement from '../../../src/lib/interactif/listeDeroulante/ListeDeroulanteElement'
+import type { GoodAnswersFormulas, SheetTestDatas } from '../../../src/lib/types'
+import { MySpreadsheetElement } from '../../../src/lib/tableur/MySpreadSheet'
 
 function createFakeMfe(
   id: string,
@@ -366,6 +368,83 @@ export function injectDndDOM(
   const feedbackDiv = document.createElement('div')
   feedbackDiv.id = feedbackId
   document.body.appendChild(feedbackDiv)
+}
+
+function tableurRefToCoords(ref: string): { col: number; row: number } | null {
+  const match = ref.toUpperCase().match(/^([A-Z]+)(\d+)$/)
+  if (!match) return null
+  let col = 0
+  for (const char of match[1]) {
+    col = col * 26 + (char.charCodeAt(0) - 64)
+  }
+  return { col: col - 1, row: Number(match[2]) - 1 }
+}
+
+function extractTableurMaxCoords(
+  goodAnswers: GoodAnswersFormulas,
+  testDatas: SheetTestDatas,
+): { maxCol: number; maxRow: number } {
+  let maxCol = 0
+  let maxRow = 0
+  const update = (ref: string) => {
+    const coords = tableurRefToCoords(ref)
+    if (!coords) return
+    maxCol = Math.max(maxCol, coords.col)
+    maxRow = Math.max(maxRow, coords.row)
+  }
+
+  for (const answer of goodAnswers) update(answer.ref)
+  for (const test of testDatas) {
+    if (test.ref.includes(':')) {
+      const [start, end] = test.ref.split(':')
+      update(start)
+      update(end)
+    } else {
+      update(test.ref)
+    }
+  }
+
+  return { maxCol: Math.max(maxCol, 3), maxRow: Math.max(maxRow, 3) }
+}
+
+/**
+ * Injects a real my-spreadsheet custom element and pre-fills it with expected answers.
+ * This allows verifQuestionTableur() to run as in production.
+ */
+export function injectTableurDOM(
+  exerciceIndex: number,
+  questionIndex: number,
+  goodAnswers: GoodAnswersFormulas,
+  testDatas: SheetTestDatas,
+) {
+  const sheetId = `sheet-Ex${exerciceIndex}Q${questionIndex}`
+  document.getElementById(sheetId)?.remove()
+
+  const { maxCol, maxRow } = extractTableurMaxCoords(goodAnswers, testDatas)
+  const colCount = maxCol + 1
+  const rowCount = maxRow + 1
+  const data = Array.from({ length: rowCount }, () => Array(colCount).fill(''))
+  const columns = Array.from({ length: colCount }, () => ({ width: 90 }))
+
+  const sheet = MySpreadsheetElement.create({
+    id: sheetId,
+    data,
+    minDimensions: [colCount, rowCount],
+    columns,
+    interactif: false,
+    showVerifyButton: false,
+  })
+  document.body.appendChild(sheet)
+
+  for (const answer of goodAnswers) {
+    const coords = tableurRefToCoords(answer.ref)
+    if (!coords) continue
+    if (answer.formula != null) {
+      sheet.setCellFormula(coords.col, coords.row, answer.formula)
+    } else if (answer.value !== undefined) {
+      sheet.setCellValue(coords.col, coords.row, answer.value)
+    }
+  }
 }
 
 /**
