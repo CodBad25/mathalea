@@ -1,20 +1,12 @@
-import { mkdirSync, writeFileSync } from 'node:fs'
-import { resolve } from 'node:path'
 import seedrandom from 'seedrandom'
 import { afterAll, afterEach, beforeAll, describe, it, vi } from 'vitest'
 import { clearDOM } from './helpers/domSimulator'
 import { discoverExercises, loadExercise } from './helpers/exerciseLoader'
+import {
+  type SkippedQuestion,
+  writeSkippedQuestionsLogs,
+} from './helpers/skippedQuestionsLogger'
 import { verifyAllQuestions, verifyComparisonOnly } from './helpers/verifier'
-
-type SkippedQuestion = {
-  filePath: string
-  titre: string
-  seed: string
-  strategy: 'comparison-only' | 'full-dom'
-  questionIndex: number
-  format: string
-  skipReason: string
-}
 
 vi.mock('../../src/lib/renderScratch', () => ({
   renderScratch: vi.fn(() => 'mocked value'),
@@ -116,10 +108,6 @@ function recordSkippedQuestion(entry: SkippedQuestion) {
   skippedQuestions.push(entry)
 }
 
-function skippedKeyWithoutStrategy(entry: SkippedQuestion): string {
-  return [entry.filePath, entry.format, entry.skipReason].join('|')
-}
-
 const exercises = discoverExercises(filter)
 
 if (exercises.length === 0) {
@@ -129,115 +117,7 @@ if (exercises.length === 0) {
 }
 
 afterAll(() => {
-  const logsDir = resolve('tests/integration/logs')
-  mkdirSync(logsDir, { recursive: true })
-  const eitherPath = resolve(
-    'tests/integration/logs/interactivity_all_skipped_questions_either_results.json',
-  )
-  const comparisonPath = resolve(
-    'tests/integration/logs/interactivity_all_skipped_questions_comparison_results.json',
-  )
-  const domPath = resolve(
-    'tests/integration/logs/interactivity_all_skipped_questions_dom_results.json',
-  )
-  const bothPath = resolve(
-    'tests/integration/logs/interactivity_all_skipped_questions_both_results.json',
-  )
-
-  const skippedInComparisonOnly = new Set<string>()
-  const skippedInFullDom = new Set<string>()
-  const representativeByKey = new Map<string, Omit<SkippedQuestion, 'strategy'>>()
-  for (const entry of skippedQuestions) {
-    const key = skippedKeyWithoutStrategy(entry)
-    if (!representativeByKey.has(key)) {
-      representativeByKey.set(key, {
-        filePath: entry.filePath,
-        titre: entry.titre,
-        seed: entry.seed,
-        questionIndex: entry.questionIndex,
-        format: entry.format,
-        skipReason: entry.skipReason,
-      })
-    }
-    if (entry.strategy === 'comparison-only') {
-      skippedInComparisonOnly.add(key)
-    } else {
-      skippedInFullDom.add(key)
-    }
-  }
-
-  const skippedInBoth = new Set<string>()
-  for (const key of skippedInComparisonOnly) {
-    if (skippedInFullDom.has(key)) skippedInBoth.add(key)
-  }
-
-  const skippedInEither = new Set<string>([
-    ...skippedInComparisonOnly,
-    ...skippedInFullDom,
-  ])
-
-  const toQuestions = (keys: Set<string>) =>
-    [...keys]
-      .map((key) => representativeByKey.get(key))
-      .filter((q): q is Omit<SkippedQuestion, 'strategy'> => q != null)
-
-  const eitherQuestions = toQuestions(skippedInEither)
-  const comparisonQuestions = toQuestions(skippedInComparisonOnly)
-  const domQuestions = toQuestions(skippedInFullDom)
-  const bothQuestions = toQuestions(skippedInBoth)
-
-  writeFileSync(
-    eitherPath,
-    JSON.stringify(
-      {
-        numUniqueQuestionsSkippedOnlyInComparisonOnly:
-          skippedInComparisonOnly.size - skippedInBoth.size,
-        numUniqueQuestionsSkippedOnlyInFullDom:
-          skippedInFullDom.size - skippedInBoth.size,
-        numUniqueQuestionsSkippedInEither: skippedInEither.size,
-        numUniqueQuestionsSkippedInBoth: skippedInBoth.size,
-        skippedQuestions: eitherQuestions,
-      },
-      null,
-      2,
-    ),
-  )
-
-  writeFileSync(
-    comparisonPath,
-    JSON.stringify(
-      {
-        numUniqueQuestionsSkippedInComparisonOnly: comparisonQuestions.length,
-        skippedQuestions: comparisonQuestions,
-      },
-      null,
-      2,
-    ),
-  )
-
-  writeFileSync(
-    domPath,
-    JSON.stringify(
-      {
-        numUniqueQuestionsSkippedInFullDom: domQuestions.length,
-        skippedQuestions: domQuestions,
-      },
-      null,
-      2,
-    ),
-  )
-
-  writeFileSync(
-    bothPath,
-    JSON.stringify(
-      {
-        numUniqueQuestionsSkippedInBoth: bothQuestions.length,
-        skippedQuestions: bothQuestions,
-      },
-      null,
-      2,
-    ),
-  )
+  writeSkippedQuestionsLogs(skippedQuestions)
 })
 
 // Group by directory (6e, 5e, etc.) for organized output
