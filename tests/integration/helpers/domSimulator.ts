@@ -110,7 +110,7 @@ export function injectTableauMathliveDOM(
 
     const input = document.createElement(
       'math-field',
-    ) as unknown as MathfieldElement & HTMLElement
+    ) as unknown as MathfieldElement
     input.id = cellId
     input.value = value
     input.getValue = () => value
@@ -198,7 +198,7 @@ export function injectListeDeroulanteDOM(
 
   const fakeDropdown = document.createElement(
     'div',
-  ) as unknown as ListeDeroulanteElement // A real ListeDeroulanteElement would require  a lot of DOM logic (shadow DOM, show(), hide(), focus(), renderMathInElement) which doesn't belong in a unit test simulator. We'd likely run into more JSDOM issues.)
+  ) as unknown as ListeDeroulanteElement // A real ListeDeroulanteElement would require a lot of DOM logic (shadow DOM, show(), hide(), focus(), renderMathInElement) which doesn't belong in a unit test simulator. We'd likely run into more JSDOM issues.)
   fakeDropdown.id = selectId
   document.body.appendChild(fakeDropdown)
   fakeDropdown.value = selectedValue
@@ -254,9 +254,9 @@ export function injectMetaInteractif2dDOM(
     const inputId = `MetaInteractif2dEx${exerciceIndex}Q${questionIndex}field${index}`
     document.getElementById(inputId)?.remove()
 
-    const input = createFakeMfe(inputId, { champ1: value }) as unknown as
-      | MathfieldElement
-      | HTMLElement
+    const input = createFakeMfe(inputId, {
+      champ1: value,
+    }) as unknown as MathfieldElement
     input.id = inputId
     document.body.appendChild(input)
   }
@@ -297,6 +297,75 @@ export function injectCliqueFigureDOM(
   const resultSpan = document.createElement('span')
   resultSpan.id = resultId
   document.body.appendChild(resultSpan)
+}
+
+/**
+ * Injects DOM for dnd questions.
+ * Creates the drop zone and pre-fills each rectangle with the expected label ids.
+ */
+export function injectDndDOM(
+  exerciceIndex: number,
+  questionIndex: number,
+  valeur: Record<
+    string,
+    {
+      value?: string | string[]
+      options?: { multi?: boolean }
+    }
+  >,
+) {
+  const rectanglesId = `rectanglesEx${exerciceIndex}Q${questionIndex}`
+  const resultId = `resultatCheckEx${exerciceIndex}Q${questionIndex}`
+  const feedbackId = `feedbackEx${exerciceIndex}Q${questionIndex}`
+
+  document.getElementById(rectanglesId)?.remove()
+  document.getElementById(resultId)?.remove()
+  document.getElementById(feedbackId)?.remove()
+
+  const rectangles = document.createElement('div')
+  rectangles.id = rectanglesId
+  document.body.appendChild(rectangles)
+
+  const rectangleEntries = Object.entries(valeur)
+    .filter(([key]) => /^rectangle\d+$/.test(key))
+    .sort((a, b) => {
+      const na = Number(a[0].replace('rectangle', ''))
+      const nb = Number(b[0].replace('rectangle', ''))
+      return na - nb
+    })
+
+  for (const [key, answer] of rectangleEntries) {
+    const rectangleNumber = key.replace('rectangle', '')
+    const rectangle = document.createElement('div')
+    rectangle.id = `rectangleEx${exerciceIndex}Q${questionIndex}R${rectangleNumber}`
+    rectangle.classList.add('rectangleDND')
+    rectangles.appendChild(rectangle)
+
+    if (answer?.value == null) continue
+    const expected = Array.isArray(answer.value)
+      ? String(answer.value[0] ?? '')
+      : String(answer.value)
+    if (expected.length === 0) continue
+
+    const ids =
+      answer?.options?.multi === true ? expected.split('|') : [expected]
+    for (const id of ids) {
+      const label = document.createElement('div')
+      label.id = `etiquetteEx${exerciceIndex}Q${questionIndex}I${id}`
+      label.classList.add('etiquette', 'bg-gray-200')
+      label.textContent = id
+      label.innerText = id
+      rectangle.appendChild(label)
+    }
+  }
+
+  const resultSpan = document.createElement('span')
+  resultSpan.id = resultId
+  document.body.appendChild(resultSpan)
+
+  const feedbackDiv = document.createElement('div')
+  feedbackDiv.id = feedbackId
+  document.body.appendChild(feedbackDiv)
 }
 
 /**

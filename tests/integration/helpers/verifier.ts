@@ -1,13 +1,15 @@
 import { verifQuestionCliqueFigure } from '../../../src/lib/interactif/cliqueFigure'
+import { verifDragAndDrop } from '../../../src/lib/interactif/DragAndDrop'
 import { verifQuestionMetaInteractif2d } from '../../../src/lib/interactif/gestionInteractif'
 import { verifQuestionMathLive } from '../../../src/lib/interactif/mathLive'
 import { verifQuestionQcm } from '../../../src/lib/interactif/qcm'
 import { verifQuestionListeDeroulante } from '../../../src/lib/interactif/questionListeDeroulante'
 import { verifQuestionSvgSelection } from '../../../src/lib/interactif/questionSvgSelection/questionSvgSelection'
-import type { IExercice } from '../../../src/lib/types'
+import type { IDragAndDrop, IExercice } from '../../../src/lib/types'
 import Grandeur from '../../../src/modules/Grandeur'
 import {
   injectCliqueFigureDOM,
+  injectDndDOM,
   injectFillInTheBlankDOM,
   injectListeDeroulanteDOM,
   injectMathLiveDOM,
@@ -97,13 +99,67 @@ function intervalToMidpoint(value: string): string | null {
 }
 
 type CliqueFigureItem = { id: string; solution: boolean }
+type DndAnswer = {
+  value?: string | string[]
+  options?: { multi?: boolean }
+}
+type DndValeur = Record<string, DndAnswer>
 
 function isCliqueFigureItem(value: unknown): value is CliqueFigureItem {
   if (typeof value !== 'object' || value == null) return false
-  const candidate = value as Partial<CliqueFigureItem>
+  const candidate: Partial<CliqueFigureItem> = value
   return (
     typeof candidate.id === 'string' && typeof candidate.solution === 'boolean'
   )
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value != null
+}
+
+function toDndValeur(value: unknown): DndValeur {
+  const out: DndValeur = {}
+  if (!isRecord(value)) return out
+  for (const [key, answer] of Object.entries(value)) {
+    if (!/^rectangle\d+$/.test(key)) continue
+    if (!isRecord(answer)) continue
+    const normalized: DndAnswer = {}
+    if (typeof answer.value === 'string' || Array.isArray(answer.value)) {
+      normalized.value = answer.value
+    }
+    if (isRecord(answer.options) && 'multi' in answer.options) {
+      if (typeof answer.options.multi === 'boolean') {
+        normalized.options = { multi: answer.options.multi }
+      }
+    }
+    out[key] = normalized
+  }
+  return out
+}
+
+function ensureDragAndDropQuestion(exercice: IExercice, questionIndex: number) {
+  if (!Array.isArray(exercice.dragAndDrops)) {
+    exercice.dragAndDrops = []
+  }
+  const existing = exercice.dragAndDrops[questionIndex]
+  if (existing != null) {
+    if (!Array.isArray(existing.listeners)) {
+      existing.listeners = []
+    }
+    return
+  }
+  const fallback: IDragAndDrop = {
+    exercice,
+    question: questionIndex,
+    consigne: '',
+    etiquettes: [],
+    enonceATrous: '',
+    listeners: [],
+    ajouteDragAndDrop() {
+      return ''
+    },
+  }
+  exercice.dragAndDrops[questionIndex] = fallback
 }
 
 export interface VerificationResult {
@@ -449,8 +505,32 @@ export function verifyAllQuestions(exercice: IExercice): VerificationResult[] {
           break
         }
 
+        case 'dnd': {
+          if (!valeur) {
+            results.push({
+              questionIndex: i,
+              format,
+              isOk: false,
+              feedback: 'No valeur',
+              skipped: true,
+              skipReason: 'no-valeur',
+            })
+            break
+          }
+          injectDndDOM(exIdx, i, toDndValeur(valeur))
+          ensureDragAndDropQuestion(exercice, i)
+          const result = verifDragAndDrop(exercice, i)
+          results.push({
+            questionIndex: i,
+            format,
+            isOk: result?.isOk === true,
+            feedback: result?.feedback ?? '',
+            skipped: false,
+          })
+          break
+        }
+
         // Formats that require real browser interaction — skip
-        case 'dnd':
         case 'tableur':
         case 'custom':
           results.push({
