@@ -5,7 +5,7 @@ import ExerciceCan from '../../ExerciceCan'
 import { choice } from '../../../lib/outils/arrayOutils'
 import FractionEtendue from '../../../modules/FractionEtendue'
 import { rienSi1 } from '../../../lib/outils/ecritures'
-export const titre = 'Multiplier un entier avec un décimal'
+export const titre = 'Résoudre une équation produit-nul'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const uuid = 'psts5'
