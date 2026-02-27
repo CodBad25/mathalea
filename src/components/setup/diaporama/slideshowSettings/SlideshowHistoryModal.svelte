@@ -156,6 +156,18 @@
         new Date(b.lastUsedAt).getTime() - new Date(a.lastUsedAt).getTime(),
     )
   }
+  
+  function handleClearAllHistory() {
+    const shouldClear = window.confirm(
+      "Effacer tout l'historique des diaporamas ? Cette action est irréversible."
+    )
+    if (!shouldClear) return
+    historyItems = []
+    activeHistoryId = null
+    expandedHistoryIds.clear()
+    writeHistory(historyItems)
+  }
+
 
   function buildSignature(
     options: SlideshowHistoryOptions,
@@ -569,6 +581,12 @@
         icon="bx-folder-open text-2xl"
         tooltip="Charger un historique"
         on:click={() => historyFileInput?.click()}
+      />
+      <ButtonIconTooltip
+        icon="bx-trash text-2xl"
+        tooltip="Effacer tout l'historique"
+        disabled={historyItems.length === 0}
+        on:click={handleClearAllHistory}
       />
       <ButtonIconTooltip
         icon="bx-x text-2xl"
