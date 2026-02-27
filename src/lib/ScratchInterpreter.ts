@@ -104,7 +104,14 @@ export class ScratchInterpreter {
     this.pressedEventKeys.clear()
     this.eventWaitResolvers = []
 
-    const codeWithoutDefinitions = this.parseCustomBlockDefinitions(scratchCode)
+    const normalizedScratchCode = scratchCode.replace(
+      /\\ovaloperaror\{/g,
+      '\\ovaloperator{',
+    )
+
+    const codeWithoutDefinitions = this.parseCustomBlockDefinitions(
+      normalizedScratchCode,
+    )
 
     await this.parseAndExecuteAnimated(codeWithoutDefinitions, delayMs)
 
@@ -1494,8 +1501,8 @@ export class ScratchInterpreter {
     return directNumber
   }
 
-  private extractValue(content: string): string | number {
-    // Essayer d'abord d'évaluer comme ovaloperator (peut retourner string ou number)
+  private extractValue(content: string): string | number | boolean {
+    // Essayer d'abord d'évaluer comme ovaloperator (peut retourner string, number ou boolean)
     const operatorValue = this.evaluateOvalOperatorOrString(content)
     if (operatorValue !== null) {
       return operatorValue
@@ -1552,13 +1559,33 @@ export class ScratchInterpreter {
 
   private evaluateOvalOperatorOrString(
     content: string,
-  ): string | number | null {
-    const expression = this.extractCommandContent(content, '\\ovaloperator')
+  ): string | number | boolean | null {
+    const expression = this.extractOvalOperatorExpression(content)
     if (!expression) return null
+
+    const roundedValue = this.evaluateRoundOperator(expression)
+    if (roundedValue !== null) {
+      return roundedValue
+    }
+
+    const containsValue = this.evaluateContainsOperator(expression)
+    if (containsValue !== null) {
+      return containsValue
+    }
+
+    const lengthValue = this.evaluateLengthOfOperator(expression)
+    if (lengthValue !== null) {
+      return lengthValue
+    }
 
     const randomValue = this.evaluateRandomBetweenOperator(expression)
     if (randomValue !== null) {
       return randomValue
+    }
+
+    const letterValue = this.evaluateLetterOfOperator(expression)
+    if (letterValue !== null) {
+      return letterValue
     }
 
     // Détecter "regrouper ... et ..." pour concaténation de strings
@@ -1568,6 +1595,105 @@ export class ScratchInterpreter {
 
     // Sinon, évaluation arithmétique
     return this.evaluateArithmeticExpression(expression)
+  }
+
+  private evaluateRoundOperator(expression: string): number | null {
+    const roundMatch = expression.match(/^\s*arrondi\s+de\s+/i)
+    if (!roundMatch) {
+      return null
+    }
+
+    const operandExpression = expression.slice(roundMatch[0].length).trim()
+    if (!operandExpression) {
+      return null
+    }
+
+    const operandValue = this.evaluateArithmeticExpression(operandExpression)
+    if (operandValue === null) {
+      return null
+    }
+
+    return Math.round(operandValue)
+  }
+
+  private evaluateLengthOfOperator(expression: string): number | null {
+    const longueurMatch = expression.match(/\blongueur\s+de\b/i)
+    if (!longueurMatch || longueurMatch.index === undefined) {
+      return null
+    }
+
+    const sourceExpression = expression
+      .slice(longueurMatch.index + longueurMatch[0].length)
+      .trim()
+    const sourceText = this.materializeExpressionForString(sourceExpression)
+    return Array.from(sourceText).length
+  }
+
+  private evaluateContainsOperator(expression: string): boolean | null {
+    const normalized = expression
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+
+    const containsMatch = normalized.match(/\bcontient\b|\bcontains\b/)
+    if (!containsMatch || containsMatch.index === undefined) {
+      return null
+    }
+
+    const keyword = containsMatch[0]
+    const leftExpression = expression.slice(0, containsMatch.index).trim()
+    const rightExpression = expression
+      .slice(containsMatch.index + keyword.length)
+      .trim()
+
+    if (!leftExpression || !rightExpression) {
+      return null
+    }
+
+    const sourceText = this.materializeExpressionForString(leftExpression)
+    const searchText = this.materializeExpressionForString(rightExpression)
+
+    return sourceText.includes(searchText)
+  }
+
+  private extractOvalOperatorExpression(content: string): string | null {
+    return (
+      this.extractCommandContent(content, '\\ovaloperator') ||
+      this.extractCommandContent(content, '\\ovaloperaror')
+    )
+  }
+
+  private evaluateLetterOfOperator(expression: string): string | null {
+    const lettreMatch = expression.match(/\blettre\b/i)
+    if (!lettreMatch || lettreMatch.index === undefined) {
+      return null
+    }
+
+    const afterLettre = expression
+      .slice(lettreMatch.index + lettreMatch[0].length)
+      .trim()
+    const parts = afterLettre.split(/\bde\b/i)
+    if (parts.length < 2) {
+      return null
+    }
+
+    const indexExpression = parts[0].trim()
+    const sourceExpression = parts.slice(1).join('de').trim()
+
+    const letterIndex = this.evaluateArithmeticExpression(indexExpression)
+    if (letterIndex === null) {
+      return null
+    }
+
+    const sourceText = this.materializeExpressionForString(sourceExpression)
+    const graphemes = Array.from(sourceText)
+    const zeroBasedIndex = Math.floor(letterIndex) - 1
+
+    if (zeroBasedIndex < 0 || zeroBasedIndex >= graphemes.length) {
+      return ''
+    }
+
+    return graphemes[zeroBasedIndex]
   }
 
   private evaluateRandomBetweenOperator(expression: string): number | null {
@@ -1785,6 +1911,12 @@ export class ScratchInterpreter {
     const rawExpression = expression.trim()
     if (!rawExpression) return null
 
+    const directOvalOperatorValue =
+      this.evaluateOvalOperatorOrString(rawExpression)
+    if (typeof directOvalOperatorValue === 'boolean') {
+      return directOvalOperatorValue
+    }
+
     const notMatch = rawExpression.match(/^non\b/i)
     if (notMatch) {
       const operand = rawExpression.slice(notMatch[0].length).trim()
@@ -1872,6 +2004,100 @@ export class ScratchInterpreter {
     return this.evaluateBooleanExpression(operand)
   }
 
+  private parseScratchMathFunctionAt(
+    expression: string,
+    startIndex: number,
+  ): { functionName: string; nextIndex: number } | null {
+    const slice = expression.slice(startIndex)
+    const selectMenuMatch = slice.match(/^\\?selectmenu\{([^}]+)\}/i)
+    if (selectMenuMatch) {
+      return {
+        functionName: selectMenuMatch[1].trim().toLowerCase(),
+        nextIndex: startIndex + selectMenuMatch[0].length,
+      }
+    }
+
+    const plainMatch = slice.match(
+      /^(10\^|e\^|abs|plancher|plafond|floor|ceil|racine|sqrt|sin|cos|tan|asin|acos|atan|ln|log|arrondi)(?=\s|$|\()/i,
+    )
+    if (!plainMatch) {
+      return null
+    }
+
+    return {
+      functionName: plainMatch[1].trim().toLowerCase(),
+      nextIndex: startIndex + plainMatch[0].length,
+    }
+  }
+
+  private applyScratchMathFunction(
+    functionName: string,
+    operand: number,
+  ): number | null {
+    const normalizedFunctionName = functionName.trim().toLowerCase()
+    let value: number
+
+    switch (normalizedFunctionName) {
+      case 'abs':
+        value = Math.abs(operand)
+        break
+      case 'plancher':
+      case 'floor':
+        value = Math.floor(operand)
+        break
+      case 'plafond':
+      case 'ceil':
+        value = Math.ceil(operand)
+        break
+      case 'racine':
+      case 'sqrt':
+        if (operand < 0) return null
+        value = Math.sqrt(operand)
+        break
+      case 'sin':
+        value = Math.sin((operand * Math.PI) / 180)
+        break
+      case 'cos':
+        value = Math.cos((operand * Math.PI) / 180)
+        break
+      case 'tan':
+        value = Math.tan((operand * Math.PI) / 180)
+        break
+      case 'asin':
+        if (operand < -1 || operand > 1) return null
+        value = (Math.asin(operand) * 180) / Math.PI
+        break
+      case 'acos':
+        if (operand < -1 || operand > 1) return null
+        value = (Math.acos(operand) * 180) / Math.PI
+        break
+      case 'atan':
+        value = (Math.atan(operand) * 180) / Math.PI
+        break
+      case 'ln':
+        if (operand <= 0) return null
+        value = Math.log(operand)
+        break
+      case 'log':
+        if (operand <= 0) return null
+        value = Math.log10(operand)
+        break
+      case 'e^':
+        value = Math.exp(operand)
+        break
+      case '10^':
+        value = 10 ** operand
+        break
+      case 'arrondi':
+        value = Math.round(operand)
+        break
+      default:
+        return null
+    }
+
+    return Number.isFinite(value) ? value : null
+  }
+
   private evaluateArithmeticExpression(expression: string): number | null {
     const sanitized = this.materializeExpression(expression).replace(
       /\bmod(?:ulo)?\b/gi,
@@ -1906,6 +2132,21 @@ export class ScratchInterpreter {
         const value = parseFactor()
         return value === null ? null : -value
       }
+
+      const mathFunction = this.parseScratchMathFunctionAt(sanitized, index)
+      if (mathFunction) {
+        index = mathFunction.nextIndex
+        skipSpaces()
+
+        if (sanitized.slice(index).match(/^de\b/i)) {
+          index += 2
+        }
+
+        const operand = parseFactor()
+        if (operand === null) return null
+        return this.applyScratchMathFunction(mathFunction.functionName, operand)
+      }
+
       if (sanitized[index] === '(') {
         index += 1
         const value = parseExpression()
@@ -1984,8 +2225,9 @@ export class ScratchInterpreter {
         if (value === null) break
 
         // Si c'est un nombre, l'entourer de parenthèses pour les calculs
-        // Si c'est une string, la garder telle quelle
-        const replacement = typeof value === 'number' ? `(${value})` : value
+        // Si c'est une string ou un booléen, convertir en chaîne
+        const replacement =
+          typeof value === 'number' ? `(${value})` : String(value)
         result = result.replace(`\\ovaloperator{${inner}}`, replacement)
       }
     }
