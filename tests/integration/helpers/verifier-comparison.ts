@@ -62,13 +62,13 @@ export function verifyComparisonOnly(
       if (!isAnswerType(answer) || typeof answer.compare !== 'function')
         continue
 
-      const value = Array.isArray(answer.value)
+      const goodAnswer = Array.isArray(answer.value)
         ? String(answer.value[0])
         : String(answer.value)
       const options = answer.options ?? {}
-      const compareValue = toCompareInput(value, options)
+      const simulatedInput = toCompareInput(goodAnswer, options)
       try {
-        const result = answer.compare(compareValue, value, options)
+        const result = answer.compare(simulatedInput, goodAnswer, options)
         comparisonsExecuted += 1
         if (!result.isOk) {
           allOk = false
