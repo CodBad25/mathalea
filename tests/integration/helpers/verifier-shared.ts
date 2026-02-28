@@ -19,12 +19,19 @@ export interface VerificationResult {
   skipReason?: string
 }
 
+function normalizeLatexNumberFormatting(value: string): string {
+  return value.replace(/\{,\}/g, ',').replace(/\{\.\}/g, '.')
+}
+
 /**
  * Converts a Grandeur string like "7,5\u202fcm^2" to the LaTeX format
  * that unitsCompare/inputToGrandeur expects: "7,5\\operatorname{cm^2}"
  */
 export function grandeurStringToLatex(value: string): string {
-  const cleaned = value.replace(/[\u202f\u00a0]/g, '')
+  const cleaned = normalizeLatexNumberFormatting(value).replace(
+    /[\u202f\u00a0]/g,
+    '',
+  )
   const g = Grandeur.fromString(cleaned)
   if (g.unite === '°C' || g.unite === '°') {
     return `${String(g.mesure).replace('.', ',')}${g.unite}`
@@ -98,7 +105,9 @@ function scientificPowerToLatex(value: string): string {
  * Returns the original value if it's already a fraction/expression or not a plain decimal.
  */
 function decimalToFractionLatex(value: string): string {
-  const cleaned = value.replace(/\s+/g, '').replace(',', '.')
+  const cleaned = normalizeLatexNumberFormatting(value)
+    .replace(/\s+/g, '')
+    .replace(',', '.')
   if (
     cleaned.includes('/') ||
     cleaned.includes('\\frac') ||
