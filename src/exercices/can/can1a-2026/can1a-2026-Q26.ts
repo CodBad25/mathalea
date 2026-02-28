@@ -1,17 +1,17 @@
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import Decimal from 'decimal.js'
+import { propositionsQcm } from '../../../lib/interactif/qcm'
 import { choice } from '../../../lib/outils/arrayOutils'
 import {
-  ecritureAlgebriqueSauf1,
-  reduireAxPlusB,
-  rienSi1,
-} from '../../../lib/outils/ecritures'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { randint } from '../../../modules/outils'
+  miseEnEvidence,
+  texteEnCouleurEtGras,
+} from '../../../lib/outils/embellissements'
+import { texNombre } from '../../../lib/outils/texNombre'
+import { context } from '../../../modules/context'
 import ExerciceCan from '../../ExerciceCan'
-export const titre = 'Calculer une fonction dérivée'
+export const titre = "Déterminer la raison d'une suite géométrique"
 export const interactifReady = true
 export const interactifType = 'mathLive'
-export const uuid = '1g19h'
+export const uuid = 'zfkoc'
 export const refs = {
   'fr-fr': [],
   'fr-ch': ['NR'],
@@ -21,29 +21,49 @@ export const refs = {
  * @author Gilles Mora
 
 */
-export default class Can1a2026Q26 extends ExerciceCan {
-  enonce(a?: number, b?: number): void {
-    if (a == null || b == null) {
-      a = randint(2, 9) * choice([-1, 1])
-      b = randint(1, 5) * choice([-1, 1])
+export default class Can1a2026Q27 extends ExerciceCan {
+  enonce(k?: Decimal): void {
+    if (k == null) {
+      k = new Decimal(choice([0.2, 0.5, 0.8, 1.2, 1.5, 2, 2.5, 3]))
     }
 
-    this.formatChampTexte =
-      KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets
-    this.optionsDeComparaison = { calculFormel: true }
-    this.reponse = reduireAxPlusB(2 * b, a)
-    this.question = `Soit $f$ la fonction définie sur $\\mathbb{R}$ par : $f(x)=${rienSi1(a)}x${ecritureAlgebriqueSauf1(b)}x^2$, alors :<br>
-    $f'(x)=$`
-    if (!this.interactif) {
-      this.question += ' $\\ldots$'
+    const raison = k.add(1)
+    const distracteur1 = k
+    const distracteur2 = k.sub(1)
+
+    const enonce = `Soit une suite $(u_n)$, avec $u_0\\neq 0$, qui vérifie pour tout entier naturel $n$, $\\dfrac{u_{n+1}-u_n}{u_n}=${texNombre(k, 1)}$.<br>
+    La suite $(u_n)$ est géométrique :`
+
+    this.formatInteractif = 'qcm'
+    this.autoCorrection[0] = {
+      options: { ordered: true, vertical: !context.isHtml },
+      enonce,
+      propositions: [
+        {
+          texte: `de raison $${texNombre(distracteur2, 1)}$`,
+          statut: false,
+        },
+        {
+          texte: `de raison $${texNombre(distracteur1, 1)}$`,
+          statut: false,
+        },
+        {
+          texte: `de raison $${texNombre(raison, 1)}$`,
+          statut: true,
+        },
+      ],
     }
-    this.correction = `On dérive terme à terme :<br>
-      $f'(x)=${a}${ecritureAlgebriqueSauf1(2 * b)}x=${miseEnEvidence(reduireAxPlusB(2 * b, a))}$`
-    this.canEnonce = `Soit $f$ la fonction définie sur $\\mathbb{R}$ par : $f(x)=${rienSi1(a)}x${ecritureAlgebriqueSauf1(b)}x^2$.`
-    this.canReponseACompleter = "$f'(x)=\\ldots$"
+    const qcm = propositionsQcm(this, 0)
+
+    this.question = enonce + '<br>' + qcm.texte
+    this.correction = `$\\dfrac{u_{n+1}-u_n}{u_n}=${texNombre(k, 1)}$ équivaut à $\\dfrac{u_{n+1}}{u_n}-1=${texNombre(k, 1)}$, soit $\\dfrac{u_{n+1}}{u_n}=${texNombre(k, 1)}+1=${texNombre(raison, 1)}$.<br>
+    La suite $(u_n)$ est donc géométrique ${texteEnCouleurEtGras('de raison')} $${miseEnEvidence(`${texNombre(raison, 1)}`)}$.`
+    this.canEnonce = enonce
+    this.canReponseACompleter = `$\\square\\;$ de raison $${texNombre(distracteur2, 1)}$ <br>
+    $\\square\\;$ de raison $${texNombre(distracteur1, 1)}$ <br> $\\square\\;$ de raison $${texNombre(raison, 1)}$`
   }
 
   nouvelleVersion(): void {
-    this.canOfficielle ? this.enonce(3, -1) : this.enonce()
+    this.canOfficielle ? this.enonce(new Decimal(1.2)) : this.enonce()
   }
 }

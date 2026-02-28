@@ -1,14 +1,12 @@
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { texteEnCouleurEtGras } from '../../../lib/outils/embellissements'
+import { propositionsQcm } from '../../../lib/interactif/qcm'
 import { choice } from '../../../lib/outils/arrayOutils'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { sp } from '../../../lib/outils/outilString'
 import { context } from '../../../modules/context'
-import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
-export const titre = 'Calculer la valeur affichée par un algorithme'
+export const titre = 'Donner la bonne formule de probabilités totales'
 export const interactifReady = true
 export const interactifType = 'mathLive'
-export const uuid = '00ni3'
+export const uuid = 'gii6i'
 export const refs = {
   'fr-fr': [],
   'fr-ch': ['NR'],
@@ -18,69 +16,69 @@ export const refs = {
  * @author Gilles Mora
 
 */
-export default class Can1a2026Q28 extends ExerciceCan {
-  enonce(uInit?: number, borneMax?: number, coeff?: number): void {
-    if (uInit == null || borneMax == null || coeff == null) {
-      uInit = randint(1, 5)
-      borneMax = 2
-      coeff = choice([2, 3, 4, 5, 6])
+export default class Can1a2026Q25 extends ExerciceCan {
+  enonce(cas?: number, lettres?: [string, string]): void {
+    if (cas == null || lettres == null) {
+      cas = choice([1, 2])
+      lettres = choice([
+        ['A', 'B'],
+        ['C', 'D'],
+        ['E', 'F'],
+        ['M', 'N'],
+      ]) as [string, string]
     }
 
-    // Simulation de l'algorithme :
-    // u prend la valeur uInit
-    // Pour k allant de 1 à borneMax :
-    //   u prend la valeur u + coeff * k
-    // Fin Pour
-    let u = uInit
-    let detailCalcul = `Initialisation : $u=${uInit}$.<br>`
-    for (let k = 1; k <= borneMax; k++) {
-      const ancienU = u
-      u = u + coeff * k
-      detailCalcul += `$k=${k}$ : $u=${ancienU}+${coeff}\\times ${k}=${ancienU}+${coeff * k}=${u}$<br>`
+    const e1 = lettres[0]
+    const e2 = lettres[1]
+
+    let enonce: string
+    let estVrai: boolean
+    let explication: string
+
+    switch (cas) {
+      case 1: // Faux : P(B) = P_A(B) + P_Abarre(B)
+        enonce = `$${e1}$ et $${e2}$ sont deux événements d'une expérience aléatoire.<br>
+        On a : $P(${e2})=P_{${e1}}(${e2})+P_{\\overline{${e1}}}(${e2})$.`
+        estVrai = false
+        explication = `La formule des probabilités totales est :<br>
+        $P(${e2})=P(${e1}\\cap ${e2})+P(\\overline{${e1}}\\cap ${e2})=P(${e1})\\times P_{${e1}}(${e2})+P(\\overline{${e1}})\\times P_{\\overline{${e1}}}(${e2})$.<br>
+        La formule proposée est donc fausse : il manque les facteurs $P(${e1})$ et $P(\\overline{${e1}})$.`
+        break
+      case 2: // Vrai : P(B) = P(A∩B) + P(Abarre∩B)
+      default:
+        enonce = `$${e1}$ et $${e2}$ sont deux événements d'une expérience aléatoire.<br>
+        On a : $P(${e2})=P(${e1}\\cap ${e2})+P(\\overline{${e1}}\\cap ${e2})$.`
+        estVrai = true
+        explication = `C'est la formule des probabilités totales :<br>
+        $P(${e2})=P(${e1}\\cap ${e2})+P(\\overline{${e1}}\\cap ${e2})$.<br>
+        En effet, les événements $${e1}$ et $\\overline{${e1}}$ forment une partition de $${e2}$.`
+        break
     }
 
-    this.formatChampTexte = KeyboardType.clavierDeBase
-    this.reponse = String(u)
-    this.question = `Quelle est la valeur de $u$ affichée ?<br>`
-    if (context.isHtml) {
-      this.question += '$\\begin{array}{|l|}\n'
-      this.question += '\\hline\n'
-      this.question += `\\\n \\text{u prend la valeur ${uInit}} \\\\\n `
-      this.question += `\\\n \\text{Pour k allant de 1 à ${borneMax} :}\\\n `
-      this.question += `\\\\\n${sp(9)}  \\text{u prend la valeur u+${coeff}k} \\\\\n`
-      this.question += `\\\n \\text{Fin Pour} \\\\\n `
-      this.question += `\\\n \\text{Afficher u} \\\\\n`
-      this.question += '\\hline\n'
-      this.question += '\\end{array}\n$'
-    } else {
-      this.question += '\\medskip'
-      this.question += '\\hspace*{10mm}\\fbox{'
-      this.question += '\\parbox{0.5\\linewidth}{'
-      this.question += '\\setlength{\\parskip}{.5cm}'
-      this.question += `  u prend la valeur ${uInit}\\newline`
-      this.question += `  Pour $k$ allant de $1$ à $${borneMax}$ :\\newline`
-      this.question += ` \\hspace*{7mm}$u$ prend la valeur $u+${coeff}k$\\newline`
-      this.question += `  Fin Pour\\newline`
-      this.question += `  Afficher $u$`
-      this.question += '}'
-      this.question += '}\\newline'
-      this.question += '\\medskip'
+    this.formatInteractif = 'qcm'
+    this.autoCorrection[0] = {
+      options: { ordered: true, vertical: !context.isHtml },
+      enonce,
+      propositions: [
+        {
+          texte: 'Vrai',
+          statut: estVrai,
+        },
+        {
+          texte: 'Faux',
+          statut: !estVrai,
+        },
+      ],
     }
+    const qcm = propositionsQcm(this, 0)
 
-    if (this.interactif) {
-      this.question += '<br><br>$u=$'
-    } else {
-      this.question += context.isHtml ? '<br><br>$u=\\ldots$' : ''
-    }
-
-    this.correction = `On exécute l'algorithme pas à pas :<br>${detailCalcul}
-    La valeur affichée est $u=${miseEnEvidence(String(u))}$.`
-
-    this.canEnonce = this.question
-    this.canReponseACompleter = '$u=\\ldots$'
+    this.question = enonce + '<br>' + qcm.texte
+    this.correction = `${explication}<br>La réponse est ${estVrai ? texteEnCouleurEtGras('Vrai') : texteEnCouleurEtGras('Faux')}.`
+    this.canEnonce = enonce
+    this.canReponseACompleter =  'Entoure la bonne réponse : <br>VRAI / FAUX'
   }
 
   nouvelleVersion(): void {
-    this.canOfficielle ? this.enonce(1, 2, 4) : this.enonce()
+    this.canOfficielle ? this.enonce(1, ['A', 'B']) : this.enonce()
   }
 }

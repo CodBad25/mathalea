@@ -1,17 +1,17 @@
-import Decimal from 'decimal.js'
-import { propositionsQcm } from '../../../lib/interactif/qcm'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choice } from '../../../lib/outils/arrayOutils'
 import {
-  miseEnEvidence,
-  texteEnCouleurEtGras,
-} from '../../../lib/outils/embellissements'
-import { texNombre } from '../../../lib/outils/texNombre'
-import { context } from '../../../modules/context'
+  ecritureAlgebrique,
+  reduireAxPlusB,
+  rienSi1,
+} from '../../../lib/outils/ecritures'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
-export const titre = "Déterminer la raison d'une suite géométrique"
+export const titre = 'Déterminer les intervalles de croissance ou de décroissance d\'une fonction du second degré'
 export const interactifReady = true
 export const interactifType = 'mathLive'
-export const uuid = 'zfkoc'
+export const uuid = 'gletu'
 export const refs = {
   'fr-fr': [],
   'fr-ch': ['NR'],
@@ -21,48 +21,64 @@ export const refs = {
  * @author Gilles Mora
 
 */
-export default class Can1a2026Q27 extends ExerciceCan {
-  enonce(k?: Decimal): void {
-    if (k == null) {
-      k = new Decimal(choice([0.2, 0.5, 0.8, 1.2, 1.5, 2, 2.5, 3]))
+export default class Can1a2026Q24 extends ExerciceCan {
+  enonce(a?: number, b?: number, c?: number, typeMono?: string): void {
+    if (a == null || b == null || c == null || typeMono == null) {
+      a = randint(-10, 10, 0)
+      b = randint(-5, 5, 0)
+      c = randint(-9, 9, 0)
+      typeMono = choice(['croissante', 'décroissante'])
     }
 
-    const raison = k.add(1)
-    const distracteur1 = k
-    const distracteur2 = k.sub(1)
+    const alpha = -b // sommet en x = -b (car f(x) = a(x+b)² + c = a(x-(-b))² + c)
 
-    const enonce = `Soit une suite $(u_n)$, avec $u_0\\neq 0$, qui vérifie pour tout entier naturel $n$, $\\dfrac{u_{n+1}-u_n}{u_n}=${texNombre(k, 1)}$.<br>
-    La suite $(u_n)$ est géométrique :`
-
-    this.formatInteractif = 'qcm'
-    this.autoCorrection[0] = {
-      options: { ordered: true, vertical: !context.isHtml },
-      enonce,
-      propositions: [
-        {
-          texte: `de raison $${texNombre(distracteur2, 1)}$`,
-          statut: false,
-        },
-        {
-          texte: `de raison $${texNombre(distracteur1, 1)}$`,
-          statut: false,
-        },
-        {
-          texte: `de raison $${texNombre(raison, 1)}$`,
-          statut: true,
-        },
-      ],
+    let texteF: string
+    if (a === 1) {
+      texteF = `(${reduireAxPlusB(1, b)})^2${ecritureAlgebrique(c)}`
+    } else if (a === -1) {
+      texteF = `-(${reduireAxPlusB(1, b)})^2${ecritureAlgebrique(c)}`
+    } else {
+      texteF = `${rienSi1(a)}(${reduireAxPlusB(1, b)})^2${ecritureAlgebrique(c)}`
     }
-    const qcm = propositionsQcm(this, 0)
+    this.optionsDeComparaison = { intervalle: true }
+    this.formatChampTexte = KeyboardType.clavierEnsemble
+    // Déterminer la bonne réponse
+    let bonneReponse: string
+    if (typeMono === 'croissante') {
+      bonneReponse =
+        a > 0 ? `[${alpha}\\,;\\,+\\infty[` : `]-\\infty\\,;\\,${alpha}]`
+    } else {
+      bonneReponse =
+        a > 0 ? `]-\\infty\\,;\\,${alpha}]` : `[${alpha}\\,;\\,+\\infty[`
+    }
 
-    this.question = enonce + '<br>' + qcm.texte
-    this.correction = `$\\dfrac{u_{n+1}-u_n}{u_n}=${texNombre(k, 1)}$ équivaut à $\\dfrac{u_{n+1}}{u_n}-1=${texNombre(k, 1)}$, soit $\\dfrac{u_{n+1}}{u_n}=${texNombre(k, 1)}+1=${texNombre(raison, 1)}$.<br>
-    La suite $(u_n)$ est donc géométrique ${texteEnCouleurEtGras('de raison')} $${miseEnEvidence(`${texNombre(raison, 1)}`)}$.`
-    this.canEnonce = enonce
-    this.canReponseACompleter = qcm.texte
+    this.reponse = bonneReponse
+    this.question = `Pour tout réel $x$, on définit : $f(x)=${texteF}$.<br>Donner le plus grand intervalle $I$ sur lequel $f$ est ${typeMono}.<br>`
+
+    if (this.interactif) {
+      this.question += '$I=$'
+    } else {
+      this.question += '$I=\\ldots$'
+    }
+
+    const sens = a > 0 ? 'positif' : 'négatif'
+    const variation =
+      a > 0 ? 'décroissante puis croissante' : 'croissante puis décroissante'
+    const parabole = a > 0 ? 'tournée vers le haut' : 'tournée vers le bas'
+
+    if (b > 0) {
+      this.correction = `On reconnaît la forme canonique $f(x)=a(x-\\alpha)^2+\\beta$ avec $\\alpha=${alpha}$.<br>`
+    } else {
+      this.correction = `On reconnaît la forme canonique $f(x)=a(x-\\alpha)^2+\\beta$ avec $\\alpha=${alpha}$.<br>`
+    }
+    this.correction += `Le coefficient $${a}$ devant la parenthèse est strictement ${sens}, la fonction est donc d'abord ${variation} (parabole « ${parabole} »).<br>
+    Ainsi, $f$ est ${typeMono} sur $${miseEnEvidence(bonneReponse)}$.`
+
+    this.canEnonce = `Pour tout réel $x$, on définit : $f(x)=${texteF}$.<br>Donner le plus grand intervalle $I$ sur lequel $f$ est ${typeMono}.`
+    this.canReponseACompleter = '$I=\\ldots$'
   }
 
   nouvelleVersion(): void {
-    this.canOfficielle ? this.enonce(new Decimal(1.2)) : this.enonce()
+    this.canOfficielle ? this.enonce(-3, -1, 5, 'croissante') : this.enonce()
   }
 }

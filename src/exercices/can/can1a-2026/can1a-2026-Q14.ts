@@ -1,11 +1,17 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choice } from '../../../lib/outils/arrayOutils'
+import {
+  ecritureParentheseSiNegatif,
+  reduirePolynomeDegre3,
+} from '../../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
-export const titre = 'Trouver un angle à partir de son cosinus et de son sinus'
+export const titre =
+  "Donner le nombre de solutions d'une équation du second degré"
 export const interactifReady = true
 export const interactifType = 'mathLive'
-export const uuid = '81uz0'
+export const uuid = '32mx4'
 export const refs = {
   'fr-fr': [],
   'fr-ch': ['NR'],
@@ -15,69 +21,46 @@ export const refs = {
  * @author Gilles Mora
 
 */
-export default class Can1a2026Q14 extends ExerciceCan {
-  enonce(cas?: number): void {
-    if (cas == null) {
-      cas = choice([1, 2, 3, 4, 5, 6])
+export default class Can1a2026Q13 extends ExerciceCan {
+  enonce(a?: number, b?: number, c?: number): void {
+    if (a == null || b == null || c == null) {
+      a = randint(1, 3) * choice([-1, 1])
+      b = randint(-4, 4, 0)
+      c = randint(-4, 4, 0)
     }
 
-    const intervalle = '[0\\,;\\,2\\pi['
+    const d = b * b - 4 * a * c
 
-    this.formatChampTexte = KeyboardType.grecTrigo
+    this.formatChampTexte = KeyboardType.clavierDeBase
+    this.question = `Donner le nombre de solutions réelles de l'équation $${reduirePolynomeDegre3(0, a, b, c)}=0$.`
 
-    switch (cas) {
-      case 1: // pi/6
-        this.question = `$\\alpha$ est un réel de $${intervalle}$ vérifiant $\\cos(\\alpha)=\\dfrac{\\sqrt{3}}{2}$ et $\\sin(\\alpha)=\\dfrac{1}{2}$.<br>
-        Valeur de $\\alpha$ en radians ?`
-        this.correction = `$\\cos \\dfrac{\\pi}{6}=\\dfrac{\\sqrt{3}}{2}$ et $\\sin \\dfrac{\\pi}{6}=\\dfrac{1}{2}$.<br>
-          $\\dfrac{\\pi}{6}\\in ${intervalle}$, donc $\\alpha=${miseEnEvidence('\\dfrac{\\pi}{6}')}$.`
-        this.reponse = '\\dfrac{\\pi}{6}'
-        break
-      case 2: // pi/3
-        this.question = `$\\alpha$ est un réel de $${intervalle}$ vérifiant $\\cos(\\alpha)=\\dfrac{1}{2}$ et $\\sin(\\alpha)=\\dfrac{\\sqrt{3}}{2}$.<br>
-        Valeur de $\\alpha$ en radians ?`
-        this.correction = `$\\cos \\dfrac{\\pi}{3}=\\dfrac{1}{2}$ et $\\sin \\dfrac{\\pi}{3}=\\dfrac{\\sqrt{3}}{2}$.<br>
-          $\\dfrac{\\pi}{3}\\in ${intervalle}$, donc $\\alpha=${miseEnEvidence('\\dfrac{\\pi}{3}')}$.`
-        this.reponse = '\\dfrac{\\pi}{3}'
-        break
-      case 3: // 2pi/3
-        this.question = `$\\alpha$ est un réel de $${intervalle}$ vérifiant $\\cos(\\alpha)=-\\dfrac{1}{2}$ et $\\sin(\\alpha)=\\dfrac{\\sqrt{3}}{2}$.<br>
-        Valeur de $\\alpha$ en radians ?`
-        this.correction = `$\\cos \\dfrac{2\\pi}{3}=-\\dfrac{1}{2}$ et $\\sin \\dfrac{2\\pi}{3}=\\dfrac{\\sqrt{3}}{2}$.<br>
-          $\\dfrac{2\\pi}{3}\\in ${intervalle}$, donc $\\alpha=${miseEnEvidence('\\dfrac{2\\pi}{3}')}$.`
-        this.reponse = '\\dfrac{2\\pi}{3}'
-        break
-      case 4: // 5pi/6
-        this.question = `$\\alpha$ est un réel de $${intervalle}$ vérifiant $\\cos(\\alpha)=-\\dfrac{\\sqrt{3}}{2}$ et $\\sin(\\alpha)=\\dfrac{1}{2}$.<br>
-        Valeur de $\\alpha$ en radians ?`
-        this.correction = `$\\cos \\dfrac{5\\pi}{6}=-\\dfrac{\\sqrt{3}}{2}$ et $\\sin \\dfrac{5\\pi}{6}=\\dfrac{1}{2}$.<br>
-          $\\dfrac{5\\pi}{6}\\in ${intervalle}$, donc $\\alpha=${miseEnEvidence('\\dfrac{5\\pi}{6}')}$.`
-        this.reponse = '\\dfrac{5\\pi}{6}'
-        break
-
-      case 5: // pi/4
-        this.question = `$\\alpha$ est un réel de $${intervalle}$ vérifiant $\\cos(\\alpha)=\\dfrac{\\sqrt{2}}{2}$ et $\\sin(\\alpha)=\\dfrac{\\sqrt{2}}{2}$.<br>
-        Valeur de $\\alpha$ en radians ?`
-        this.correction = `$\\cos \\dfrac{\\pi}{4}=\\dfrac{\\sqrt{2}}{2}$ et $\\sin \\dfrac{\\pi}{4}=\\dfrac{\\sqrt{2}}{2}$.<br>
-          $\\dfrac{\\pi}{4}\\in ${intervalle}$, donc $\\alpha=${miseEnEvidence('\\dfrac{\\pi}{4}')}$.`
-        this.reponse = '\\dfrac{\\pi}{4}'
-        break
-      case 6: // 3pi/4
-        this.question = `$\\alpha$ est un réel de $${intervalle}$ vérifiant $\\cos(\\alpha)=-\\dfrac{\\sqrt{2}}{2}$ et $\\sin(\\alpha)=\\dfrac{\\sqrt{2}}{2}$.<br>
-        Valeur de $\\alpha$ en radians ?`
-        this.correction = `$\\cos \\dfrac{3\\pi}{4}=-\\dfrac{\\sqrt{2}}{2}$ et $\\sin \\dfrac{3\\pi}{4}=\\dfrac{\\sqrt{2}}{2}$.<br>
-          $\\dfrac{3\\pi}{4}\\in ${intervalle}$, donc $\\alpha=${miseEnEvidence('\\dfrac{3\\pi}{4}')}$.`
-        this.reponse = '\\dfrac{3\\pi}{4}'
-        break
+    if (d < 0) {
+      this.reponse = 0
+      this.correction = `Le nombre de solutions est donné par le signe de $\\Delta$ :<br>
+    $\\Delta =b^2-4ac=${ecritureParentheseSiNegatif(b)}^2 - 4 \\times ${ecritureParentheseSiNegatif(a)} \\times ${ecritureParentheseSiNegatif(c)}=${miseEnEvidence(d)}$.<br>
+    Comme $${d}$ est strictement négatif, le nombre de solutions de l'équation est $${miseEnEvidence('0')}$.`
     }
+    if (d > 0) {
+      this.reponse = 2
+      this.correction = `Le nombre de solutions est donné par le signe de $\\Delta$ :<br>
+    $\\Delta =b^2-4ac=${ecritureParentheseSiNegatif(b)}^2 - 4 \\times ${ecritureParentheseSiNegatif(a)} \\times ${ecritureParentheseSiNegatif(c)}=${miseEnEvidence(d)}$.<br>
+    Comme $${d}$ est strictement positif, le nombre de solutions de l'équation est $${miseEnEvidence('2')}$.`
+    }
+    if (d === 0) {
+      this.reponse = 1
+      this.correction = `Le nombre de solutions est donné par le signe de $\\Delta$ :<br>
+    $\\Delta =b^2-4ac=${ecritureParentheseSiNegatif(b)}^2 - 4 \\times ${ecritureParentheseSiNegatif(a)} \\times ${ecritureParentheseSiNegatif(c)}=${miseEnEvidence(d)}$.<br>
+    Comme $\\Delta$ est nul, le nombre de solutions de l'équation est $${miseEnEvidence('1')}$.`
+    }
+
     if (this.interactif) {
       this.question += '<br>'
     }
     this.canEnonce = this.question
-    this.canReponseACompleter = '$\\alpha=\\ldots$'
+    this.canReponseACompleter = ''
   }
 
   nouvelleVersion(): void {
-    this.canOfficielle ? this.enonce(1) : this.enonce()
+    this.canOfficielle ? this.enonce(3, -1, 4) : this.enonce()
   }
 }
