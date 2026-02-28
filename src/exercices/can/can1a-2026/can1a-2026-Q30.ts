@@ -80,7 +80,7 @@ export default class Can1a2026Q30 extends ExerciceCan {
     this.question = enonce + '<br>' + qcm.texte
     this.correction = `${explication}<br>La réponse est ${estVrai ? texteEnCouleurEtGras('Vrai') :texteEnCouleurEtGras('Faux')}.`
     this.canEnonce = enonce
-    this.canReponseACompleter = qcm.texte
+    this.canReponseACompleter =  'Entoure la bonne réponse : <br>VRAI / FAUX'
   }
 
   nouvelleVersion(): void {

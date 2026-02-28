@@ -1,17 +1,12 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { choice } from '../../../lib/outils/arrayOutils'
-import {
-  ecritureAlgebrique,
-  reduireAxPlusB,
-  rienSi1,
-} from '../../../lib/outils/ecritures'
+import { ecritureParentheseSiNegatif } from '../../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
-export const titre = 'Déterminer les intervalles de croissance ou de décroissance d\'une fonction du second degré'
+export const titre = 'Calculer un produit scalaire'
 export const interactifReady = true
 export const interactifType = 'mathLive'
-export const uuid = 'gletu'
+export const uuid = 'elg20'
 export const refs = {
   'fr-fr': [],
   'fr-ch': ['NR'],
@@ -21,64 +16,33 @@ export const refs = {
  * @author Gilles Mora
 
 */
-export default class Can1a2026Q24 extends ExerciceCan {
-  enonce(a?: number, b?: number, c?: number, typeMono?: string): void {
-    if (a == null || b == null || c == null || typeMono == null) {
-      a = randint(-10, 10, 0)
-      b = randint(-5, 5, 0)
-      c = randint(-9, 9, 0)
-      typeMono = choice(['croissante', 'décroissante'])
+export default class Can1a2026Q10 extends ExerciceCan {
+  enonce(ux?: number, uy?: number, vx?: number, vy?: number): void {
+    if (ux == null || uy == null || vx == null || vy == null) {
+      ux = randint(-5, 5, 0)
+      uy = randint(-9, 9, 0)
+      vx = randint(-5, 5, 0)
+      vy = randint(-5, 5, 0)
     }
 
-    const alpha = -b // sommet en x = -b (car f(x) = a(x+b)² + c = a(x-(-b))² + c)
+    const resultat = ux * vx + uy * vy
 
-    let texteF: string
-    if (a === 1) {
-      texteF = `(${reduireAxPlusB(1, b)})^2${ecritureAlgebrique(c)}`
-    } else if (a === -1) {
-      texteF = `-(${reduireAxPlusB(1, b)})^2${ecritureAlgebrique(c)}`
-    } else {
-      texteF = `${rienSi1(a)}(${reduireAxPlusB(1, b)})^2${ecritureAlgebrique(c)}`
+    this.formatChampTexte = KeyboardType.clavierDeBase
+    this.reponse = resultat
+    this.question = `Dans une base orthonormée $(\\vec{\\imath},\\vec{\\jmath})$, on donne deux vecteurs : $\\vec{u}(${ux}\\,;\\,${uy})$ et  $\\vec{v}(${vx}\\,;\\,${vy})$.<br>
+    $\\vec{u}\\cdot\\vec{v}=$`
+    if (!this.interactif) {
+      this.question += ' $\\ldots$'
     }
-    this.optionsDeComparaison = { intervalle: true }
-    this.formatChampTexte = KeyboardType.clavierEnsemble
-    // Déterminer la bonne réponse
-    let bonneReponse: string
-    if (typeMono === 'croissante') {
-      bonneReponse =
-        a > 0 ? `[${alpha}\\,;\\,+\\infty[` : `]-\\infty\\,;\\,${alpha}]`
-    } else {
-      bonneReponse =
-        a > 0 ? `]-\\infty\\,;\\,${alpha}]` : `[${alpha}\\,;\\,+\\infty[`
-    }
-
-    this.reponse = bonneReponse
-    this.question = `Pour tout réel $x$, on définit : $f(x)=${texteF}$.<br>Donner le plus grand intervalle $I$ sur lequel $f$ est ${typeMono}.<br>`
-
-    if (this.interactif) {
-      this.question += '$I=$'
-    } else {
-      this.question += '$I=\\ldots$'
-    }
-
-    const sens = a > 0 ? 'positif' : 'négatif'
-    const variation =
-      a > 0 ? 'décroissante puis croissante' : 'croissante puis décroissante'
-    const parabole = a > 0 ? 'tournée vers le haut' : 'tournée vers le bas'
-
-    if (b > 0) {
-      this.correction = `On reconnaît la forme canonique $f(x)=a(x-\\alpha)^2+\\beta$ avec $\\alpha=${alpha}$.<br>`
-    } else {
-      this.correction = `On reconnaît la forme canonique $f(x)=a(x-\\alpha)^2+\\beta$ avec $\\alpha=${alpha}$.<br>`
-    }
-    this.correction += `Le coefficient $${a}$ devant la parenthèse est strictement ${sens}, la fonction est donc d'abord ${variation} (parabole « ${parabole} »).<br>
-    Ainsi, $f$ est ${typeMono} sur $${miseEnEvidence(bonneReponse)}$.`
-
-    this.canEnonce = `Pour tout réel $x$, on définit : $f(x)=${texteF}$.<br>Donner le plus grand intervalle $I$ sur lequel $f$ est ${typeMono}.`
-    this.canReponseACompleter = '$I=\\ldots$'
+    this.correction = `$\\begin{aligned}
+        \\vec{u}\\cdot\\vec{v}&=${ux}\\times ${ecritureParentheseSiNegatif(vx)}+${ecritureParentheseSiNegatif(uy)}\\times${ecritureParentheseSiNegatif(vy)}\\\\
+        &=${miseEnEvidence(resultat)}
+        \\end{aligned}$`
+    this.canEnonce = `Dans une base orthonormée $(\\vec{\\imath},\\vec{\\jmath})$, on donne deux vecteurs : $\\vec{u}(${ux}\\,;\\,${uy})$ et  $\\vec{v}(${vx}\\,;\\,${vy})$.<br>`
+    this.canReponseACompleter = '$\\vec{u}\\cdot\\vec{v}=\\ldots$'
   }
 
   nouvelleVersion(): void {
-    this.canOfficielle ? this.enonce(-3, -1, 5, 'croissante') : this.enonce()
+    this.canOfficielle ? this.enonce(0, -4, 2, 1) : this.enonce()
   }
 }

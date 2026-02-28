@@ -88,7 +88,7 @@ export default class Can1a2026Q22 extends ExerciceCan {
 
     if (choix === 'a') {
       const vecteur2 = choixb ? '\\overrightarrow{AD}' : '\\overrightarrow{DA}'
-      this.question = `$ABCD$ est un trapèze rectangle.<br>` + graphique
+      this.question =  graphique
       this.reponse = 0
       if (this.interactif) {
         this.optionsChampTexte = {
@@ -104,7 +104,7 @@ export default class Can1a2026Q22 extends ExerciceCan {
     }
 
     if (choix === 'b') {
-      this.question = `$ABCD$ est un trapèze rectangle.<br>` + graphique
+      this.question =  graphique
       this.reponse = -a * (a - b)
       if (this.interactif) {
         this.optionsChampTexte = {
@@ -124,7 +124,7 @@ export default class Can1a2026Q22 extends ExerciceCan {
 
     if (choix === 'c') {
       const vecteur2 = choixb ? '\\overrightarrow{DC}' : '\\overrightarrow{CD}'
-      this.question = `$ABCD$ est un trapèze rectangle.<br>` + graphique
+      this.question =  graphique
       this.reponse = choixb ? a * b : -a * b
       if (this.interactif) {
         this.optionsChampTexte = {

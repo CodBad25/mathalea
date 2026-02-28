@@ -1,12 +1,17 @@
-import { texteEnCouleurEtGras } from '../../../lib/outils/embellissements'
-import { propositionsQcm } from '../../../lib/interactif/qcm'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choice } from '../../../lib/outils/arrayOutils'
-import { context } from '../../../modules/context'
+import {
+  ecritureAlgebriqueSauf1,
+  reduireAxPlusB,
+  rienSi1,
+} from '../../../lib/outils/ecritures'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
-export const titre = 'Donner la bonne formule de probabilités totales'
+export const titre = 'Calculer une fonction dérivée'
 export const interactifReady = true
 export const interactifType = 'mathLive'
-export const uuid = 'gii6i'
+export const uuid = '1g19h'
 export const refs = {
   'fr-fr': [],
   'fr-ch': ['NR'],
@@ -16,69 +21,29 @@ export const refs = {
  * @author Gilles Mora
 
 */
-export default class Can1a2026Q25 extends ExerciceCan {
-  enonce(cas?: number, lettres?: [string, string]): void {
-    if (cas == null || lettres == null) {
-      cas = choice([1, 2])
-      lettres = choice([
-        ['A', 'B'],
-        ['C', 'D'],
-        ['E', 'F'],
-        ['M', 'N'],
-      ]) as [string, string]
+export default class Can1a2026Q26 extends ExerciceCan {
+  enonce(a?: number, b?: number): void {
+    if (a == null || b == null) {
+      a = randint(2, 9) * choice([-1, 1])
+      b = randint(1, 5) * choice([-1, 1])
     }
 
-    const e1 = lettres[0]
-    const e2 = lettres[1]
-
-    let enonce: string
-    let estVrai: boolean
-    let explication: string
-
-    switch (cas) {
-      case 1: // Faux : P(B) = P_A(B) + P_Abarre(B)
-        enonce = `$${e1}$ et $${e2}$ sont deux événements d'une expérience aléatoire.<br>
-        On a : $P(${e2})=P_{${e1}}(${e2})+P_{\\overline{${e1}}}(${e2})$.`
-        estVrai = false
-        explication = `La formule des probabilités totales est :<br>
-        $P(${e2})=P(${e1}\\cap ${e2})+P(\\overline{${e1}}\\cap ${e2})=P(${e1})\\times P_{${e1}}(${e2})+P(\\overline{${e1}})\\times P_{\\overline{${e1}}}(${e2})$.<br>
-        La formule proposée est donc fausse : il manque les facteurs $P(${e1})$ et $P(\\overline{${e1}})$.`
-        break
-      case 2: // Vrai : P(B) = P(A∩B) + P(Abarre∩B)
-      default:
-        enonce = `$${e1}$ et $${e2}$ sont deux événements d'une expérience aléatoire.<br>
-        On a : $P(${e2})=P(${e1}\\cap ${e2})+P(\\overline{${e1}}\\cap ${e2})$.`
-        estVrai = true
-        explication = `C'est la formule des probabilités totales :<br>
-        $P(${e2})=P(${e1}\\cap ${e2})+P(\\overline{${e1}}\\cap ${e2})$.<br>
-        En effet, les événements $${e1}$ et $\\overline{${e1}}$ forment une partition de $${e2}$.`
-        break
+    this.formatChampTexte =
+      KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets
+    this.optionsDeComparaison = { calculFormel: true }
+    this.reponse = reduireAxPlusB(2 * b, a)
+    this.question = `Soit $f$ la fonction définie sur $\\mathbb{R}$ par : $f(x)=${rienSi1(a)}x${ecritureAlgebriqueSauf1(b)}x^2$, alors :<br>
+    $f'(x)=$`
+    if (!this.interactif) {
+      this.question += ' $\\ldots$'
     }
-
-    this.formatInteractif = 'qcm'
-    this.autoCorrection[0] = {
-      options: { ordered: true, vertical: !context.isHtml },
-      enonce,
-      propositions: [
-        {
-          texte: 'Vrai',
-          statut: estVrai,
-        },
-        {
-          texte: 'Faux',
-          statut: !estVrai,
-        },
-      ],
-    }
-    const qcm = propositionsQcm(this, 0)
-
-    this.question = enonce + '<br>' + qcm.texte
-    this.correction = `${explication}<br>La réponse est ${estVrai ? texteEnCouleurEtGras('Vrai') : texteEnCouleurEtGras('Faux')}.`
-    this.canEnonce = enonce
-    this.canReponseACompleter =  qcm.texte
+    this.correction = `On dérive terme à terme :<br>
+      $f'(x)=${a}${ecritureAlgebriqueSauf1(2 * b)}x=${miseEnEvidence(reduireAxPlusB(2 * b, a))}$`
+    this.canEnonce = `Soit $f$ la fonction définie sur $\\mathbb{R}$ par : $f(x)=${rienSi1(a)}x${ecritureAlgebriqueSauf1(b)}x^2$.`
+    this.canReponseACompleter = "$f'(x)=\\ldots$"
   }
 
   nouvelleVersion(): void {
-    this.canOfficielle ? this.enonce(1, ['A', 'B']) : this.enonce()
+    this.canOfficielle ? this.enonce(3, -1) : this.enonce()
   }
 }

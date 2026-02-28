@@ -34,7 +34,7 @@ export default class Can1a2026Q15 extends ExerciceCan {
       this.question += ' $\\ldots$'
     }
     this.correction = `$f\\left(${frac.texFraction}\\right)=\\left(${frac.texFraction}\\right)^2-${frac.texFraction}=${fracCarre.texFraction}-${frac.texFraction}=${miseEnEvidence(resultat.simplifie().texFSD)}$`
-    this.canEnonce = `$f$ est définie sur $\\mathbb{R}$ par $f(x)=x^2-${frac.texFraction}x$.`
+    this.canEnonce = `$f$ est définie sur $\\mathbb{R}$ par $f(x)=x^2-x$.`
     this.canReponseACompleter = `$f\\left(${frac.texFraction}\\right)=\\ldots$`
   }
 

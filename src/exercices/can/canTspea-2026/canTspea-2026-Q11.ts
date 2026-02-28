@@ -1,15 +1,14 @@
 
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
 import { choice } from '../../../lib/outils/arrayOutils'
-import { context } from '../../../modules/context'
-import { sp } from '../../../lib/outils/outilString'
-export const titre = 'Donner la valeur d\'une variable après exécution d\'un script'
+import { toutPourUnPoint } from '../../../lib/interactif/mathLive'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+export const titre = 'Completer un encadrement à partir d\'un encadrement'
 export const interactifReady = true
 export const interactifType = 'mathLive'
-export const uuid = '31vj3'
+export const uuid = 'gc360'
 export const refs = {
   'fr-fr': [],
   'fr-ch': [],
@@ -18,76 +17,40 @@ export const refs = {
  * Modèle d'exercice très simple pour la course aux nombres
  * @author Gilles Mora
 
-*/export default class Can2026TermQ11 extends ExerciceCan {
-   enonce(a?: number, nInit?: number, k?: number): void {
-    if (a == null || nInit == null || k == null) {
-      k = choice([2, 3])
-      nInit = randint(2, 3)
-      // On choisit a pour que la boucle fasse 2 à 4 tours
-      const nbTours = randint(2, 3)
-      const nFinal = nInit * k ** nbTours
-      a = randint(Math.floor(nFinal / k), nFinal - 1)
+*/export default class Can2026TermQ12 extends ExerciceCan {
+ enonce(a?: number, b?: number, c?: number): void {
+    if (a == null || b == null || c == null) {
+      b = randint(-4, 4)
+      c = b + randint(2, 6)
+      a = randint(1, 8) * choice([-1, 1])
     }
 
-    // Simulation
-    let n = nInit
-    let detail = `Initialisation : $n=${nInit}$.<br>`
-    let tour = 0
-    while (n <= a) {
-      n = n * k
-      tour++
-      detail += `Tour ${tour} : $n=${n}$ ${n <= a ? `($${n}\\leqslant ${a}$ : on continue)` : `($${n}> ${a}$ : on sort)`}<br>`
+    // Si b ≤ x ≤ c alors -c ≤ -x ≤ -b donc a-c ≤ a-x ≤ a-b
+    const borneInf = a - c
+    const borneSup = a - b
+
+    this.formatInteractif = 'fillInTheBlank'
+    this.reponse = {
+       bareme: toutPourUnPoint,
+      champ1: { value: String(borneInf) },
+      champ2: { value: String(borneSup) },
     }
+     
+ this.formatChampTexte = KeyboardType.clavierDeBase
+    this.consigne = `Si $${b}\\leqslant x\\leqslant ${c}$ alors :<br>`
+    this.question = `%{champ1}\\leqslant ${a}-x\\leqslant %{champ2}`
 
-    this.formatChampTexte = KeyboardType.clavierDeBase
-    this.reponse = String(n)
+    this.correction = `$${b}\\leqslant x\\leqslant ${c}$<br>
+     On multiplie par $-1$ (on inverse les inégalités) :<br>
+    $${-c}\\leqslant -x\\leqslant ${-b}$<br>
+   On ajoute $${a}$ :<br>
+    $${miseEnEvidence(String(borneInf))}\\leqslant ${a}-x\\leqslant ${miseEnEvidence(String(borneSup))}$`
 
-    if (context.isHtml) {
-      this.question = 'On considère le script Python :<br>'
-      this.question += `$\\begin{array}{|l|}
-\\hline
-\\ \\texttt{a = ${a}}
-\\\\\\ \\texttt{n = ${nInit}}
-\\\\\\ \\texttt{while n <= a:}
-\\\\\\ ${sp(9)}\\texttt{n = n * ${k}} \\\\
-\\hline
-\\end{array}$<br>`
-      this.question += `Valeur de $n$ après exécution du script :<br>`
-    } else {
-      this.question = 'On considère le script Python :<br>'
-      this.question += `$\\begin{array}{|l|}
-\\hline
-\\\\ \\texttt{a = ${a}}
-\\\\\\\\ \\texttt{n = ${nInit}}
-\\\\\\\\ \\texttt{while n <= a:}
-\\\\\\\\ ${sp(9)}\\texttt{n = n * ${k}} \\\\
-\\hline
-\\end{array}$<br>`
-      this.question += `Valeur de $n$ après exécution du script :<br>`
-    }
-
-    if (!this.interactif) {
-      this.question += '$n=\\ldots$'
-    } else {
-      this.question += '$n=$'
-    }
-
-    this.correction = `On exécute la boucle tant que $n\\leqslant ${a}$ :<br>${detail}
-    La valeur de $n$ après exécution est $n=${miseEnEvidence(String(n))}$.`
-
-    this.canEnonce = 'On considère le script Python :\\newline'
-    this.canEnonce += '\\medskip\\newline'
-    this.canEnonce += '\\hspace*{5mm}\\colorbox{lightgray}{'
-    this.canEnonce += '\\parbox{0.5\\linewidth}{'
-    this.canEnonce += `\\texttt{a = ${a}}\\newline`
-    this.canEnonce += `\\texttt{n = ${nInit}}\\newline`
-    this.canEnonce += `\\texttt{\\textbf{while} n <= a:}\\newline`
-    this.canEnonce += `\\hspace*{7mm}\\texttt{n = n * ${k}}`
-    this.canEnonce += '}}'
-    this.canReponseACompleter = `Valeur de $n$ après exécution du script :\\newline $n=\\ldots$`
+    this.canEnonce = `Si $${b}\\leqslant x\\leqslant ${c}$ alors :`
+    this.canReponseACompleter = `$\\ldots\\leqslant ${a}-x\\leqslant \\ldots$`
   }
 
   nouvelleVersion(): void {
-    this.canOfficielle ? this.enonce(13, 2, 3) : this.enonce()
+    this.canOfficielle ? this.enonce(3, -1, 5) : this.enonce()
   }
 }

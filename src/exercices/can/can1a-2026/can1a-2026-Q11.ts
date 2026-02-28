@@ -1,12 +1,13 @@
-import { propositionsQcm } from '../../../lib/interactif/qcm'
-import { texteEnCouleurEtGras } from '../../../lib/outils/embellissements'
-import { context } from '../../../modules/context'
+
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
-export const titre = 'Déterminer si une égalité est vraie ou fausse'
+import { ecritureAlgebrique } from '../../../lib/outils/ecritures'
+export const titre = 'Calculer un terme d\'une suite définie de façon explicite'
 export const interactifReady = true
 export const interactifType = 'mathLive'
-export const uuid = 'wfqx1'
+export const uuid = '89p50'
 export const refs = {
   'fr-fr': [],
   'fr-ch': ['NR'],
@@ -16,43 +17,30 @@ export const refs = {
  * @author Gilles Mora
 
 */
-export default class Can1a2026Q11 extends ExerciceCan {
-  enonce(a?: number): void {
-    if (a == null) {
+export default class Can1a2026Q12 extends ExerciceCan {
+ enonce(a?: number, b?: number, n?: number): void {
+    if (a == null || b == null || n == null) {
       a = randint(2, 9)
+      b = randint(-9, 9, 0)
+      n = randint(5, 12)
     }
 
-    const aCarré = a * a
-    const question = `Pour tout réel $h$ non nul, $h=\\dfrac{(${a}+h)^2-${aCarré}}{h}$.<br>`
+    const resultat = a * n + b
 
-    this.formatInteractif = 'qcm'
-    this.autoCorrection[0] = {
-      options: { ordered: true, vertical: !context.isHtml },
-      enonce: question,
-      propositions: [
-        {
-          texte: 'Vrai',
-          statut: false,
-        },
-        {
-          texte: 'Faux',
-          statut: true,
-        },
-      ],
+    this.formatChampTexte = KeyboardType.clavierDeBase
+    this.reponse = resultat
+    this.question = `Soit $(u_n)$ une suite définie par : $u_n=${a}n${ecritureAlgebrique(b)}$.<br>
+    Calculer $u_{${n}}$.<br>
+    $u_{${n}}=$`
+    if (!this.interactif) {
+      this.question += ' $\\ldots$'
     }
-    const qcm = propositionsQcm(this, 0)
-
-    this.question = question + qcm.texte
-
-    this.correction = `$(${a}+h)^2-${aCarré}=${aCarré}+${2 * a}h+h^2-${aCarré}=${2 * a}h+h^2$.<br>
-    Ainsi, $\\dfrac{(${a}+h)^2-${aCarré}}{h}=\\dfrac{${2 * a}h+h^2}{h}=\\dfrac{h(${2 * a}+h)}{h}=${2 * a}+h$.<br>
-    Donc $\\dfrac{(${a}+h)^2-${aCarré}}{h}\\neq h$ : la réponse est ${texteEnCouleurEtGras('Faux')}.`
-
-    this.canEnonce = question
-    this.canReponseACompleter = qcm.texte
+    this.correction = `$u_{${n}}=${a}\\times ${n}${ecritureAlgebrique(b)}=${miseEnEvidence(resultat)}$`
+    this.canEnonce = `Soit $(u_n)$ une suite définie par : $u_n=${a}n${ecritureAlgebrique(b)}$.<br>Calculer $u_{${n}}$.`
+    this.canReponseACompleter = `$u_{${n}}=\\ldots$`
   }
 
   nouvelleVersion(): void {
-    this.canOfficielle ? this.enonce(5) : this.enonce()
+    this.canOfficielle ? this.enonce(7, -1, 9) : this.enonce()
   }
 }
