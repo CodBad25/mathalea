@@ -124,10 +124,17 @@ function verifyCustomQuestion(
   const clockValues = extractClockValuesForCustom(ac)
   const questionText = exercice.listeQuestions[questionIndex] ?? ''
   if (clockValues != null && questionText.includes('clockEx')) {
+    const rawHour = Number.parseInt(clockValues.hour, 10)
+    const domHour = Number.isNaN(rawHour)
+      ? clockValues.hour
+      : rawHour > 12
+        ? String(rawHour - 12)
+        : String(rawHour)
+
     injectInteractiveClockDOM(
       exIdx,
       questionIndex,
-      clockValues.hour,
+      domHour,
       clockValues.minute,
     )
     const result = exercice.correctionInteractive(questionIndex)
