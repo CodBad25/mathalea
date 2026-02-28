@@ -237,7 +237,7 @@ function buildFullScenarios(sups: ParamSup[]): ParamScenario[] {
 
     for (let i = 0; i < sups.length; i++) {
       const sup = sups[i]
-      const value = tuple[i]
+      const value = i < tuple.length ? tuple[i] : sup.defaultValue
       if (!Object.is(value, sup.defaultValue)) {
         overrides[sup.key] = value
         labelParts.push(`s${supSuffix(sup.key)}=${toSafeString(value)}`)
