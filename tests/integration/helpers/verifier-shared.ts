@@ -55,7 +55,7 @@ function pgcd(a: number, b: number): number {
 }
 
 function simplifyFractionLatex(value: string): string {
-  const cleaned = value.replace(/\s+/g, '')
+  const cleaned = value.replace(/\s+|\\,/g, '')
   let match = cleaned.match(/^\\d?frac{(-?\d+)}{(-?\d+)}$/)
   if (!match) {
     match = cleaned.match(/^(-?\d+)\/(-?\d+)$/)
@@ -71,7 +71,7 @@ function simplifyFractionLatex(value: string): string {
   }
   const d = pgcd(num, den)
   if (d <= 1) return value
-  return `\\frac{${num / d}}{${den / d}}`
+  return `\\dfrac{${num / d}}{${den / d}}`
 }
 
 function scientificPowerToLatex(value: string): string {
