@@ -271,11 +271,14 @@ export default class LireAbscisseDecimaleTroisFormes extends Exercice {
         handleAnswers(this, i * 3 + 1, {
           reponse: {
             value: `${Math.floor(x2)}+${new FractionEtendue(multiple * arrondi(x2 - Math.floor(x2)), multiple).toLatex()}`,
-            options: { additionSeulementEtNonResultat: true },
+            options: { expressionNumerique: true },
           },
         })
         handleAnswers(this, i * 3 + 2, {
-          reponse: { value: new FractionEtendue(multiple * x3, multiple), options: { fractionDecimale: true } },
+          reponse: {
+            value: new FractionEtendue(multiple * x3, multiple),
+            options: { fractionDecimale: true },
+          },
         })
       } else {
         this.autoCorrection[i] = {

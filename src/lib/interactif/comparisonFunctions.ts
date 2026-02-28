@@ -1860,9 +1860,10 @@ export function expressionNumeriqueCompare(
 ): ResultType {
   const cleaner = generateCleaner(['fractions'])
   const localGoodAnswer = cleaner(goodAnswer)
+  const localInput = cleaner(input)
   const goodAnswerParsed = engine.parse(localGoodAnswer, { canonical: true }) // Important ce canonical à true
-  const inputParsed = engine.parse(input, { canonical: true })
-  // console.log(input, localGoodAnswer, goodAnswerParsed.json)
+  const inputParsed = engine.parse(localInput, { canonical: true })
+  // console.log(localInput, localGoodAnswer, goodAnswerParsed.json)
   if (goodAnswerParsed.isSame(inputParsed)) return { isOk: true }
   if (goodAnswerParsed.isEqual(inputParsed))
     if (inputParsed.isNumber) {

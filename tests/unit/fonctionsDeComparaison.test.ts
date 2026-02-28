@@ -230,6 +230,14 @@ describe('fonctionComparaison', () => {
     expect(result5.feedback).toBe(
       "Ce résultat pourrait être correct mais ce n'est pas ce calcul qui est attendu.",
     )
+    const result6 = fonctionComparaison('5+\\dfrac{8}{10}', '5+\\dfrac{8}{10}', {
+      expressionNumerique: true,
+    })
+    expect(result6.isOk).toBe(true)
+    const result7 = fonctionComparaison('5+\\dfrac{8}{10}', '5+\\frac{8}{10}', {
+      expressionNumerique: true,
+    })
+    expect(result7.isOk).toBe(true)
   })
 
   it("Vérifie le fonctionnement de l'option HMS", () => {
