@@ -1,1 +1,1 @@
-/Users/guillaume/Documents/Code/mathalea/AGENTS.md
+AGENTS.md
