@@ -3,7 +3,7 @@
  * @author Jean-Claude Lhote
  */
 
-import { scratchblock } from '../modules/scratchblock'
+import { scratchblock } from '../../modules/scratchblock'
 
 export type ScratchLookMessageType = 'say' | 'think'
 

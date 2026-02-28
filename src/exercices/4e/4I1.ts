@@ -4,7 +4,7 @@ import { setCliqueFigure } from '../../lib/interactif/gestionInteractif'
 import { combinaisonListes, shuffle } from '../../lib/outils/arrayOutils'
 import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import { range } from '../../lib/outils/nombres'
-import { createScratchSimulatorElement } from '../../lib/ScratchSimulator'
+import { createScratchSimulatorElement } from '../../lib/scratch/ScratchSimulator'
 import {
   avance,
   baisseCrayon,

@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest'
 
-import { ScratchInterpreter } from '../../src/lib/ScratchInterpreter'
+import { ScratchInterpreter } from '../../src/lib/scratch/ScratchInterpreter'
 
 describe('ScratchInterpreter', () => {
   it('met a jour les variables avec blockvariable + repeat', async () => {

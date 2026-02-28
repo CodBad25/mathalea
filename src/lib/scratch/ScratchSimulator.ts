@@ -4,10 +4,10 @@
  * @author Jean-Claude Lhote
  */
 
-import { context } from '../modules/context'
-import { scratchblock } from '../modules/scratchblock'
-import { orangeMathalea } from './colors'
-import { renderScratchDiv } from './renderScratch'
+import { context } from '../../modules/context'
+import { scratchblock } from '../../modules/scratchblock'
+import { orangeMathalea } from '../colors'
+import { renderScratchDiv } from '../renderScratch'
 import {
   ScratchInterpreter,
   type ExecutionResult,
@@ -79,6 +79,44 @@ export class ScratchSimulator extends HTMLElement {
     }
 
     this.interpreter.triggerKeyPress(event.key)
+  }
+
+  static get observedAttributes(): string[] {
+    return ['code', 'delay']
+  }
+
+  attributeChangedCallback(
+    name: string,
+    oldValue: string | null,
+    newValue: string | null,
+  ): void {
+    if (oldValue === newValue) {
+      return
+    }
+
+    if (name === 'code') {
+      this.scratchCode = newValue || ''
+      if (this.modal?.open) {
+        this.hasCanvasRelevantBlocks = this.codeHasCanvasBlocks(
+          this.scratchCode,
+        )
+        if (this.canvasWrapper) {
+          this.canvasWrapper.style.display = this.hasCanvasRelevantBlocks
+            ? 'block'
+            : 'none'
+        }
+        this.resetModalContent()
+      }
+      return
+    }
+
+    if (name === 'delay') {
+      const parsedDelay = parseInt(newValue || '500', 10)
+      if (!Number.isNaN(parsedDelay)) {
+        this.initialDelayMs = parsedDelay
+        this.delayMs = parsedDelay
+      }
+    }
   }
 
   private makePointerOnlyButton(button: HTMLButtonElement): void {

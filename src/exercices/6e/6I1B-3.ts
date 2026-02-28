@@ -22,7 +22,7 @@ import { grille } from '../../lib/2d/Grille'
 import { setCliqueFigure } from '../../lib/interactif/gestionInteractif'
 import { ajouteFeedback } from '../../lib/interactif/questionMathLive'
 import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
-import { createScratchSimulatorElement } from '../../lib/ScratchSimulator'
+import { createScratchSimulatorElement } from '../../lib/scratch/ScratchSimulator'
 import {
   allerA,
   angleScratchTo2d,
