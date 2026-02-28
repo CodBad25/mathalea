@@ -1,4 +1,4 @@
-import ModeliserSuites from './1AL10-1'
+import ModeliserSuites from '../1e/1AL10-1'
 export const titre =
   "Modéliser une situation avec une suite"
 export const dateDePublication = '29/07/2025'
@@ -15,7 +15,7 @@ export const interactifType = 'mathLive'
 export const uuid = '21517'
 
 export const refs = {
-  'fr-fr': ['1TC-A101'],
+  'fr-fr': ['1Gen-A101'],
   'fr-ch': [],
 }
 export default class ModeliserSuites2 extends ModeliserSuites {
