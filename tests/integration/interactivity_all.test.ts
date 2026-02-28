@@ -1,7 +1,20 @@
 import seedrandom from 'seedrandom'
-import { afterAll, afterEach, beforeAll, describe, it, vi } from 'vitest'
+import {
+  afterAll,
+  afterEach,
+  beforeAll,
+  describe,
+  expect,
+  it,
+  vi,
+} from 'vitest'
+import { createURL } from '../../src/lib/createURL'
 import { clearDOM } from './helpers/domSimulator'
 import { discoverExercises, loadExercise } from './helpers/exerciseLoader'
+import {
+  buildParamScenarios,
+  resolveParamTestLevel,
+} from './helpers/parameterScenarios'
 import {
   type SkippedQuestion,
   writeSkippedQuestionsLogs,
@@ -109,12 +122,14 @@ afterEach(() => {
 
 const SEEDS = ['ePxF1', 'a2b3c', 'z9y8x']
 const filter = process.env.NIV?.replaceAll(' ', '') ?? undefined
+const paramLevel = resolveParamTestLevel(process.env.TEST_PARAM)
 const skippedQuestions: SkippedQuestion[] = []
 const skippedQuestionKeys = new Set<string>()
 
 function recordSkippedQuestion(entry: SkippedQuestion) {
   const key = [
     entry.filePath,
+    entry.scenario ?? '',
     entry.strategy,
     entry.format,
     entry.skipReason,
@@ -153,86 +168,88 @@ for (const [dir, entries] of grouped) {
 
         const { ExerciseClass, titre } = loaded
         const failures: string[] = []
+        const scenarioProbe = new ExerciseClass()
+        const scenarios = buildParamScenarios(scenarioProbe, paramLevel)
 
         for (const seed of SEEDS) {
-          const exercice = new ExerciseClass()
-          exercice.seed = seed
-          exercice.numeroExercice = 0
-          exercice.interactif = true
-          seedrandom(seed, { global: true })
+          for (const scenario of scenarios) {
+            const exercice = new ExerciseClass()
+            exercice.seed = seed
+            exercice.numeroExercice = 0
+            exercice.interactif = true
+            Object.assign(exercice, scenario.overrides)
+            seedrandom(seed, { global: true })
+            const baseParams: { uuid: string; seed: string; interactif: '1' } =
+              { uuid: entry.uuid, seed, interactif: '1' }
+            const params = Object.assign(baseParams, scenario.overrides)
+            const url = createURL([params]).href.replace(':3000', ':5173')
 
-          try {
-            exercice.nouvelleVersion(exercice.numeroExercice)
-          } catch (e) {
-            failures.push(
-              `seed=${seed}: nouvelleVersion() threw: ${e instanceof Error ? e.message : e}`,
-            )
-            continue
-          }
-
-          if (exercice.autoCorrection.length === 0) {
-            continue
-          }
-
-          // Strategy 1: comparison-only (fast, no DOM)
-          // Note: this only works reliably for formats where the stored answer
-          // string matches what compare() expects. Exercises using `unite` option
-          // store plain-text Grandeur strings but compare() expects LaTeX input
-          // from MathLive, so comparison-only may give false negatives.
-          const compResults = verifyComparisonOnly(exercice)
-          for (const r of compResults) {
-            if (r.skipped) {
-              recordSkippedQuestion({
-                filePath: entry.filePath,
-                titre,
-                seed,
-                strategy: 'comparison-only',
-                questionIndex: r.questionIndex,
-                format: r.format,
-                skipReason: r.skipReason ?? 'unknown',
-              })
+            try {
+              exercice.nouvelleVersion(exercice.numeroExercice)
+            } catch (e) {
+              failures.push(
+                `${url} : Erreur déclenchée lors d'une nouvelleVersion() : ${e instanceof Error ? e.message : e}`,
+              )
               continue
             }
-            if (!r.isOk) {
-              failures.push(
-                `seed=${seed} Q${r.questionIndex + 1} format=${r.format}: ` +
-                  `comparison rejected own answer. ${r.feedback}`,
-              )
-            }
-          }
 
-          // Strategy 2: full DOM verification (for mathlive, qcm, listeDeroulante)
-          // DOM-only failures (where comparison passed or was skipped) are often
-          // caused by mock limitations (no real MathLive element).
-          const domResults = verifyAllQuestions(exercice)
-          for (const r of domResults) {
-            if (r.skipped) {
-              recordSkippedQuestion({
-                filePath: entry.filePath,
-                titre,
-                seed,
-                strategy: 'full-dom',
-                questionIndex: r.questionIndex,
-                format: r.format,
-                skipReason: r.skipReason ?? 'unknown',
-              })
+            if (exercice.autoCorrection.length === 0) {
               continue
             }
-            if (!r.isOk) {
-              failures.push(
-                `seed=${seed} Q${r.questionIndex + 1} format=${r.format}: ` +
-                  `verifQuestion returned isOk=false. ${r.feedback}`,
-              )
+
+            // Stratégie 1: On passe directement la réponse attendue à la fonction de comparaison (si disponible) sans passer par le DOM.
+            const compResults = verifyComparisonOnly(exercice)
+            for (const result of compResults) {
+              if (result.skipped) {
+                recordSkippedQuestion({
+                  filePath: entry.filePath,
+                  titre,
+                  seed,
+                  scenario: scenario.label,
+                  strategy: 'comparison-only',
+                  questionIndex: result.questionIndex,
+                  format: result.format,
+                  skipReason: result.skipReason ?? 'unknown',
+                })
+                continue
+              }
+              if (!result.isOk) {
+                failures.push(
+                  `${url} : la fonction de comparaison n'accepte pas la réponse attendue par la question ${result.questionIndex + 1} de l'exercice (${result.format}). ${result.feedback}`,
+                )
+              }
             }
+
+            // Stratégie 2 : On crée les éléments attendus par la fonction de vérification (comme verifQuestionMathlive) et on vérifie que la correction accepte ces éléments.
+            const domResults = verifyAllQuestions(exercice)
+            for (const r of domResults) {
+              if (r.skipped) {
+                recordSkippedQuestion({
+                  filePath: entry.filePath,
+                  titre,
+                  seed,
+                  scenario: scenario.label,
+                  strategy: 'full-dom',
+                  questionIndex: r.questionIndex,
+                  format: r.format,
+                  skipReason: r.skipReason ?? 'unknown',
+                })
+                continue
+              }
+              if (!r.isOk) {
+                failures.push(
+                  `${url} : la fonction de vérification renvoie isOk=false pour la question ${r.questionIndex + 1} de l'exercice (${r.format}). ${r.feedback}`,
+                )
+              }
+            }
+            clearDOM()
           }
-          clearDOM()
         }
 
         if (failures.length > 0) {
-          throw new Error(
-            `${titre} (${entry.filePath}):\n` +
-              failures.map((f) => `  - ${f}`).join('\n'),
-          )
+          for (const failure of failures) {
+            expect.soft(false, failure).toBe(true)
+          }
         }
       })
     }

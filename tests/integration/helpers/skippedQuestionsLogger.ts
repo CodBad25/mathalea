@@ -5,6 +5,7 @@ export type SkippedQuestion = {
   filePath: string
   titre: string
   seed: string
+  scenario?: string
   strategy: 'comparison-only' | 'full-dom'
   questionIndex: number
   format: string
@@ -14,7 +15,12 @@ export type SkippedQuestion = {
 type SkippedQuestionWithoutStrategy = Omit<SkippedQuestion, 'strategy'>
 
 function skippedKeyWithoutStrategy(entry: SkippedQuestion): string {
-  return [entry.filePath, entry.format, entry.skipReason].join('|')
+  return [
+    entry.filePath,
+    entry.scenario ?? '',
+    entry.format,
+    entry.skipReason,
+  ].join('|')
 }
 
 function toQuestions(
@@ -54,6 +60,7 @@ export function writeSkippedQuestionsLogs(skippedQuestions: SkippedQuestion[]) {
         filePath: entry.filePath,
         titre: entry.titre,
         seed: entry.seed,
+        scenario: entry.scenario,
         questionIndex: entry.questionIndex,
         format: entry.format,
         skipReason: entry.skipReason,
