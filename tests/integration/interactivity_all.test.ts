@@ -216,7 +216,7 @@ for (const [dir, entries] of grouped) {
               }
               if (!result.isOk) {
                 failures.push(
-                  `${url} : la fonction de comparaison ${result.verificationFunctionName} (${result.format}) n'accepte pas les réponses attendues par la question ${result.questionIndex + 1}. Saisie simulée : ${result.simulatedInput}. Réponse attendue : ${result.goodAnswer}. Feedback : ${result.feedback}`,
+                  `${url} : la fonction de comparaison ${result.verificationFunctionName} (${result.format} - ${JSON.stringify(result.optionsComparaison)}) n'accepte pas les réponses attendues par la question ${result.questionIndex + 1}. Saisie simulée : ${result.simulatedInput}. Réponse attendue : ${result.goodAnswer}. Feedback : ${result.feedback}`,
                 )
               }
             }

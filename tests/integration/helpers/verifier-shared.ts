@@ -10,6 +10,7 @@ export interface VerificationResult {
   questionIndex: number
   format: string
   verificationFunctionName: string
+  optionsComparaison?: OptionsComparaisonType
   simulatedInput: string
   goodAnswer: string
   isOk: boolean

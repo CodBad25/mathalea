@@ -1,4 +1,8 @@
-import { isAnswerType, type IExercice } from '../../../src/lib/types'
+import {
+  isAnswerType,
+  type IExercice,
+  type OptionsComparaisonType,
+} from '../../../src/lib/types'
 import { toCompareInput, type VerificationResult } from './verifier-shared'
 
 /**
@@ -59,6 +63,7 @@ export function verifyComparisonOnly(
     let comparisonsExecuted = 0
     const simulatedInputs: string[] = []
     const goodAnswers: string[] = []
+    let optionsComparaison: OptionsComparaisonType = {}
     const verificationFunctionNames = new Set<string>()
     for (const [key, answer] of Object.entries(valeur)) {
       if (
@@ -76,6 +81,7 @@ export function verifyComparisonOnly(
         ? String(answer.value[0])
         : String(answer.value)
       const options = answer.options ?? {}
+      optionsComparaison = { ...optionsComparaison, ...options }
       const simulatedInput = toCompareInput(goodAnswer, options)
       simulatedInputs.push(`${key}:${simulatedInput}`)
       goodAnswers.push(`${key}:${goodAnswer}`)
@@ -112,10 +118,11 @@ export function verifyComparisonOnly(
       questionIndex: i,
       format,
       verificationFunctionName: Array.from(verificationFunctionNames).join(','),
+      optionsComparaison,
       simulatedInput: simulatedInputs.join(' | '),
       goodAnswer: goodAnswers.join(' | '),
       isOk: allOk,
-      feedback: allOk ? '' : `Failed field: ${failedField}`,
+      feedback: allOk ? '' : `Champ: ${failedField}`,
       skipped: false,
     })
   }
