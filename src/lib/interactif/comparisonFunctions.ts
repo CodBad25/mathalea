@@ -2228,11 +2228,19 @@ function intervalsCompare(input: string, goodAnswer: string) {
     ['ℚ', '\\mathbb{Q}'],
     ['ℝ', '\\mathbb{R}'],
     ['ℂ', '\\mathbb{C}'],
+    ['\\N', '\\mathbb{N}'],
+    ['\\Z', '\\mathbb{Z}'],
+    ['\\D', '\\mathbb{D}'],
+    ['\\Q', '\\mathbb{Q}'],
+    ['\\R', '\\mathbb{R}'],
+    ['\\C', '\\mathbb{C}'],
   ]
-  const localInput = replaceTable.reduce((currentInput, replacement) => {
-    return currentInput.replaceAll(replacement[0], replacement[1])
-  }, clean(input))
-  const localGoodAnswer = clean(goodAnswer)
+  const normalizeSets = (value: string) =>
+    replaceTable.reduce((currentValue, replacement) => {
+      return currentValue.replaceAll(replacement[0], replacement[1])
+    }, clean(value))
+  const localInput = normalizeSets(input)
+  const localGoodAnswer = normalizeSets(goodAnswer)
   if (localGoodAnswer === '\\emptyset') {
     if (localInput === '\\emptyset' || localInput === '\\{\\}')
       return { isOk: true, feedback: '' }
