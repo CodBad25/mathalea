@@ -14,9 +14,14 @@ export async function teardown() {
   const failedSuites = full.testResults
     .map((suite) => ({
       ...suite,
-      assertionResults: suite.assertionResults.filter(
-        (t) => t.status === 'failed',
-      ),
+      assertionResults: suite.assertionResults
+        .filter((t) => t.status === 'failed')
+        .map((t) => ({
+          ...t,
+          failureMessages: t.failureMessages.map((msg) =>
+            msg.replace(/: expected .* \/\/ Object\.is equality[\s\S]*/m, '').replace(/^AssertionError: /, ''),
+          ),
+        })),
     }))
     .filter((suite) => suite.assertionResults.length > 0)
 

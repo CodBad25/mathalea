@@ -42,6 +42,34 @@ function isCliqueFigureItem(value: unknown): value is CliqueFigureItem {
   )
 }
 
+function stringifyRecord(values: Record<string, string>): string {
+  return Object.entries(values)
+    .map(([key, value]) => `${key}:${value}`)
+    .join(' | ')
+}
+
+function stringifyDndValeur(value: ReturnType<typeof toDndValeur>): string {
+  return Object.entries(value)
+    .map(([key, answer]) => {
+      const rawValue = answer.value
+      const normalizedValue = Array.isArray(rawValue)
+        ? rawValue.join(',')
+        : String(rawValue ?? '')
+      const multi = answer.options?.multi === true ? 'multi' : 'single'
+      return `${key}:${normalizedValue}(${multi})`
+    })
+    .join(' | ')
+}
+
+function stringifyQcmSelections(
+  propositions: { statut?: boolean | number | string }[],
+): string {
+  const selected = propositions
+    .map((prop, index) => (prop.statut ? `R${index}` : null))
+    .filter((value): value is string => value != null)
+  return selected.join(',')
+}
+
 function verifyCustomQuestion(
   exercice: IExercice,
   questionIndex: number,
@@ -51,6 +79,9 @@ function verifyCustomQuestion(
     return {
       questionIndex,
       format: 'custom',
+      verificationFunctionName: '',
+      simulatedInput: '',
+      goodAnswer: '',
       isOk: true,
       feedback: '',
       skipped: true,
@@ -81,6 +112,9 @@ function verifyCustomQuestion(
     return {
       questionIndex,
       format: 'custom',
+      verificationFunctionName: 'correctionInteractive',
+      simulatedInput: stringifyRecord(promptValues),
+      goodAnswer: stringifyRecord(promptValues),
       isOk,
       feedback: isOk ? '' : 'custom correctionInteractive returned KO',
       skipped: false,
@@ -98,9 +132,13 @@ function verifyCustomQuestion(
     )
     const result = exercice.correctionInteractive(questionIndex)
     const isOk = normalizeCustomCorrectionResult(result)
+    const clockAnswer = `${clockValues.hour}h${clockValues.minute}`
     return {
       questionIndex,
       format: 'custom',
+      verificationFunctionName: 'correctionInteractive',
+      simulatedInput: clockAnswer,
+      goodAnswer: clockAnswer,
       isOk,
       feedback: isOk ? '' : 'custom correctionInteractive returned KO',
       skipped: false,
@@ -110,6 +148,9 @@ function verifyCustomQuestion(
   return {
     questionIndex,
     format: 'custom',
+    verificationFunctionName: 'correctionInteractive',
+    simulatedInput: '',
+    goodAnswer: '',
     isOk: true,
     feedback: '',
     skipped: true,
@@ -124,7 +165,7 @@ function verifyCustomQuestion(
  * 3. Calling the real verification function
  * 4. Checking the result
  */
-export function verifyAllQuestions(exercice: IExercice): VerificationResult[] {
+export function verifyDom(exercice: IExercice): VerificationResult[] {
   const results: VerificationResult[] = []
 
   for (let i = 0; i < exercice.autoCorrection.length; i++) {
@@ -144,6 +185,9 @@ export function verifyAllQuestions(exercice: IExercice): VerificationResult[] {
             results.push({
               questionIndex: i,
               format,
+              verificationFunctionName: 'verifQuestionMathLive',
+              simulatedInput: '',
+              goodAnswer: '',
               isOk: true,
               feedback: '',
               skipped: true,
@@ -156,6 +200,9 @@ export function verifyAllQuestions(exercice: IExercice): VerificationResult[] {
             results.push({
               questionIndex: i,
               format,
+              verificationFunctionName: 'verifQuestionMathLive',
+              simulatedInput: '',
+              goodAnswer: '',
               isOk: false,
               feedback: 'No answer value found',
               skipped: true,
@@ -173,6 +220,9 @@ export function verifyAllQuestions(exercice: IExercice): VerificationResult[] {
           results.push({
             questionIndex: i,
             format,
+            verificationFunctionName: 'verifQuestionMathLive',
+            simulatedInput: answerStr,
+            goodAnswer: rawAnswer,
             isOk: result?.isOk === true,
             feedback: result?.feedback ?? '',
             skipped: false,
@@ -185,6 +235,9 @@ export function verifyAllQuestions(exercice: IExercice): VerificationResult[] {
             results.push({
               questionIndex: i,
               format,
+              verificationFunctionName: 'verifQuestionMathLive',
+              simulatedInput: '',
+              goodAnswer: '',
               isOk: false,
               feedback: 'No valeur',
               skipped: true,
@@ -205,6 +258,9 @@ export function verifyAllQuestions(exercice: IExercice): VerificationResult[] {
             results.push({
               questionIndex: i,
               format,
+              verificationFunctionName: 'verifQuestionMathLive',
+              simulatedInput: '',
+              goodAnswer: '',
               isOk: false,
               feedback: 'No champ values',
               skipped: true,
@@ -217,6 +273,9 @@ export function verifyAllQuestions(exercice: IExercice): VerificationResult[] {
           results.push({
             questionIndex: i,
             format,
+            verificationFunctionName: 'verifQuestionMathLive',
+            simulatedInput: stringifyRecord(champValues),
+            goodAnswer: stringifyRecord(champValues),
             isOk: result?.isOk === true,
             feedback: result?.feedback ?? '',
             skipped: false,
@@ -229,6 +288,9 @@ export function verifyAllQuestions(exercice: IExercice): VerificationResult[] {
             results.push({
               questionIndex: i,
               format,
+              verificationFunctionName: 'verifQuestionMathLive',
+              simulatedInput: '',
+              goodAnswer: '',
               isOk: false,
               feedback: 'No valeur',
               skipped: true,
@@ -249,6 +311,9 @@ export function verifyAllQuestions(exercice: IExercice): VerificationResult[] {
             results.push({
               questionIndex: i,
               format,
+              verificationFunctionName: 'verifQuestionMathLive',
+              simulatedInput: '',
+              goodAnswer: '',
               isOk: false,
               feedback: 'No cell values',
               skipped: true,
@@ -261,6 +326,9 @@ export function verifyAllQuestions(exercice: IExercice): VerificationResult[] {
           results.push({
             questionIndex: i,
             format,
+            verificationFunctionName: 'verifQuestionMathLive',
+            simulatedInput: stringifyRecord(cellValues),
+            goodAnswer: stringifyRecord(cellValues),
             isOk: result?.isOk === true,
             feedback: result?.feedback ?? '',
             skipped: false,
@@ -274,6 +342,9 @@ export function verifyAllQuestions(exercice: IExercice): VerificationResult[] {
             results.push({
               questionIndex: i,
               format,
+              verificationFunctionName: 'verifQuestionQcm',
+              simulatedInput: '',
+              goodAnswer: '',
               isOk: false,
               feedback: 'No propositions',
               skipped: true,
@@ -283,9 +354,13 @@ export function verifyAllQuestions(exercice: IExercice): VerificationResult[] {
           }
           injectQcmDOM(exIdx, i, propositions)
           const result = verifQuestionQcm(exercice, i)
+          const qcmSelections = stringifyQcmSelections(propositions)
           results.push({
             questionIndex: i,
             format,
+            verificationFunctionName: 'verifQuestionQcm',
+            simulatedInput: qcmSelections,
+            goodAnswer: qcmSelections,
             isOk: result === 'OK',
             feedback: '',
             skipped: false,
@@ -299,6 +374,9 @@ export function verifyAllQuestions(exercice: IExercice): VerificationResult[] {
             results.push({
               questionIndex: i,
               format,
+              verificationFunctionName: 'verifQuestionListeDeroulante',
+              simulatedInput: '',
+              goodAnswer: '',
               isOk: false,
               feedback: 'No dropdown value',
               skipped: true,
@@ -314,6 +392,9 @@ export function verifyAllQuestions(exercice: IExercice): VerificationResult[] {
           results.push({
             questionIndex: i,
             format,
+            verificationFunctionName: 'verifQuestionListeDeroulante',
+            simulatedInput: answerStr,
+            goodAnswer: answerStr,
             isOk: result === 'OK',
             feedback: '',
             skipped: false,
@@ -327,6 +408,9 @@ export function verifyAllQuestions(exercice: IExercice): VerificationResult[] {
             results.push({
               questionIndex: i,
               format,
+              verificationFunctionName: 'verifQuestionSvgSelection',
+              simulatedInput: '',
+              goodAnswer: '',
               isOk: false,
               feedback: 'No svgSelection value',
               skipped: true,
@@ -342,6 +426,9 @@ export function verifyAllQuestions(exercice: IExercice): VerificationResult[] {
           results.push({
             questionIndex: i,
             format,
+            verificationFunctionName: 'verifQuestionSvgSelection',
+            simulatedInput: answerStr,
+            goodAnswer: answerStr,
             isOk: result === 'OK',
             feedback: '',
             skipped: false,
@@ -354,6 +441,9 @@ export function verifyAllQuestions(exercice: IExercice): VerificationResult[] {
             results.push({
               questionIndex: i,
               format,
+              verificationFunctionName: 'verifQuestionMetaInteractif2d',
+              simulatedInput: '',
+              goodAnswer: '',
               isOk: false,
               feedback: 'No valeur',
               skipped: true,
@@ -374,6 +464,9 @@ export function verifyAllQuestions(exercice: IExercice): VerificationResult[] {
             results.push({
               questionIndex: i,
               format,
+              verificationFunctionName: 'verifQuestionMetaInteractif2d',
+              simulatedInput: '',
+              goodAnswer: '',
               isOk: false,
               feedback: 'No field values',
               skipped: true,
@@ -386,6 +479,9 @@ export function verifyAllQuestions(exercice: IExercice): VerificationResult[] {
           results.push({
             questionIndex: i,
             format,
+            verificationFunctionName: 'verifQuestionMetaInteractif2d',
+            simulatedInput: stringifyRecord(fieldValues),
+            goodAnswer: stringifyRecord(fieldValues),
             isOk: result?.isOk === true,
             feedback: result?.feedback ?? '',
             skipped: false,
@@ -398,6 +494,9 @@ export function verifyAllQuestions(exercice: IExercice): VerificationResult[] {
             results.push({
               questionIndex: i,
               format,
+              verificationFunctionName: 'verifQuestionCliqueFigure',
+              simulatedInput: '',
+              goodAnswer: '',
               isOk: false,
               feedback: 'No cliqueFigure figures',
               skipped: true,
@@ -416,6 +515,9 @@ export function verifyAllQuestions(exercice: IExercice): VerificationResult[] {
             results.push({
               questionIndex: i,
               format,
+              verificationFunctionName: 'verifQuestionCliqueFigure',
+              simulatedInput: '',
+              goodAnswer: '',
               isOk: false,
               feedback: 'No cliqueFigure figures',
               skipped: true,
@@ -432,9 +534,15 @@ export function verifyAllQuestions(exercice: IExercice): VerificationResult[] {
             exercice.callback(exercice, i)
           }
           const result = verifQuestionCliqueFigure(exercice, i)
+          const figuresState = figures
+            .map((figure) => `${figure.id}:${String(figure.solution)}`)
+            .join(' | ')
           results.push({
             questionIndex: i,
             format,
+            verificationFunctionName: 'verifQuestionCliqueFigure',
+            simulatedInput: figuresState,
+            goodAnswer: figuresState,
             isOk: result === 'OK',
             feedback: '',
             skipped: false,
@@ -447,6 +555,9 @@ export function verifyAllQuestions(exercice: IExercice): VerificationResult[] {
             results.push({
               questionIndex: i,
               format,
+              verificationFunctionName: 'verifDragAndDrop',
+              simulatedInput: '',
+              goodAnswer: '',
               isOk: false,
               feedback: 'No valeur',
               skipped: true,
@@ -454,12 +565,17 @@ export function verifyAllQuestions(exercice: IExercice): VerificationResult[] {
             })
             break
           }
-          injectDndDOM(exIdx, i, toDndValeur(valeur))
+          const dndValeur = toDndValeur(valeur)
+          injectDndDOM(exIdx, i, dndValeur)
           ensureDragAndDropQuestion(exercice, i)
           const result = verifDragAndDrop(exercice, i)
+          const dndAnswer = stringifyDndValeur(dndValeur)
           results.push({
             questionIndex: i,
             format,
+            verificationFunctionName: 'verifDragAndDrop',
+            simulatedInput: dndAnswer,
+            goodAnswer: dndAnswer,
             isOk: result?.isOk === true,
             feedback: result?.feedback ?? '',
             skipped: false,
@@ -473,6 +589,9 @@ export function verifyAllQuestions(exercice: IExercice): VerificationResult[] {
             results.push({
               questionIndex: i,
               format,
+              verificationFunctionName: 'verifQuestionTableur',
+              simulatedInput: '',
+              goodAnswer: '',
               isOk: false,
               feedback: 'No sheetAnswer',
               skipped: true,
@@ -486,6 +605,9 @@ export function verifyAllQuestions(exercice: IExercice): VerificationResult[] {
             results.push({
               questionIndex: i,
               format,
+              verificationFunctionName: 'verifQuestionTableur',
+              simulatedInput: '',
+              goodAnswer: '',
               isOk: false,
               feedback: 'Invalid tableur test data',
               skipped: true,
@@ -499,6 +621,9 @@ export function verifyAllQuestions(exercice: IExercice): VerificationResult[] {
           results.push({
             questionIndex: i,
             format,
+            verificationFunctionName: 'verifQuestionTableur',
+            simulatedInput: JSON.stringify(goodAnswers),
+            goodAnswer: JSON.stringify(goodAnswers),
             isOk: result?.isOk === true,
             feedback: result?.feedback ?? '',
             skipped: false,
@@ -514,6 +639,9 @@ export function verifyAllQuestions(exercice: IExercice): VerificationResult[] {
           results.push({
             questionIndex: i,
             format: format ?? 'unknown',
+            verificationFunctionName: 'unknown',
+            simulatedInput: '',
+            goodAnswer: '',
             isOk: false,
             feedback: `Unknown format: ${format}`,
             skipped: true,
@@ -524,6 +652,9 @@ export function verifyAllQuestions(exercice: IExercice): VerificationResult[] {
       results.push({
         questionIndex: i,
         format,
+        verificationFunctionName: 'error',
+        simulatedInput: '',
+        goodAnswer: '',
         isOk: false,
         feedback: error instanceof Error ? error.message : String(error),
         skipped: false,

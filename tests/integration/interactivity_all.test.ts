@@ -20,7 +20,7 @@ import {
   writeSkippedQuestionsLogs,
 } from './helpers/skippedQuestionsLogger'
 import { verifyComparisonOnly } from './helpers/verifier-comparison'
-import { verifyAllQuestions } from './helpers/verifier-dom'
+import { verifyDom } from './helpers/verifier-dom'
 
 vi.mock('../../src/lib/renderScratch', () => ({
   renderScratch: vi.fn(() => 'mocked value'),
@@ -163,7 +163,7 @@ for (const ex of exercises) {
 for (const [dir, entries] of grouped) {
   describe(dir, () => {
     for (const entry of entries) {
-      it(`${entry.filePath} — interactivity accepts its own answers`, async () => {
+      it(`${entry.filePath} — l'interactivité accepte les réponses attendues`, async () => {
         const loaded = await loadExercise(entry)
         if (!loaded) return // Not interactive, skip silently
 
@@ -180,8 +180,8 @@ for (const [dir, entries] of grouped) {
             exercice.interactif = true
             Object.assign(exercice, scenario.overrides)
             seedrandom(seed, { global: true })
-            const baseParams: { uuid: string; seed: string; interactif: '1' } =
-              { uuid: entry.uuid, seed, interactif: '1' }
+            const baseParams: { uuid: string; alea: string; interactif: '1' } =
+              { uuid: entry.uuid, alea: seed, interactif: '1' }
             const params = Object.assign(baseParams, scenario.overrides)
             const url = createURL([params]).href.replace(':3000', ':5173')
 
@@ -216,30 +216,30 @@ for (const [dir, entries] of grouped) {
               }
               if (!result.isOk) {
                 failures.push(
-                  `${url} : la fonction de comparaison n'accepte pas la réponse attendue par la question ${result.questionIndex + 1} de l'exercice (${result.format}). ${result.feedback}`,
+                  `${url} : la fonction de comparaison ${result.verificationFunctionName} (${result.format}) n'accepte pas les réponses attendues par la question ${result.questionIndex + 1}. Saisie simulée : ${result.simulatedInput}. Réponse attendue : ${result.goodAnswer}. Feedback : ${result.feedback}`,
                 )
               }
             }
 
             // Stratégie 2 : On crée les éléments attendus par la fonction de vérification (comme verifQuestionMathlive) et on vérifie que la correction accepte ces éléments.
-            const domResults = verifyAllQuestions(exercice)
-            for (const r of domResults) {
-              if (r.skipped) {
+            const domResults = verifyDom(exercice)
+            for (const result of domResults) {
+              if (result.skipped) {
                 recordSkippedQuestion({
                   filePath: entry.filePath,
                   titre,
                   seed,
                   scenario: scenario.label,
                   strategy: 'full-dom',
-                  questionIndex: r.questionIndex,
-                  format: r.format,
-                  skipReason: r.skipReason ?? 'unknown',
+                  questionIndex: result.questionIndex,
+                  format: result.format,
+                  skipReason: result.skipReason ?? 'unknown',
                 })
                 continue
               }
-              if (!r.isOk) {
+              if (!result.isOk) {
                 failures.push(
-                  `${url} : la fonction de vérification renvoie isOk=false pour la question ${r.questionIndex + 1} de l'exercice (${r.format}). ${r.feedback}`,
+                  `${url} : la fonction ${result.verificationFunctionName} (${result.format}) n'accepte pas les réponses attendues par la question ${result.questionIndex + 1}. Saisie simulée : ${result.simulatedInput}. Réponse attendue : ${result.goodAnswer}. Feedback : ${result.feedback}`,
                 )
               }
             }

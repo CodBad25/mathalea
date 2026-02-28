@@ -1,9 +1,16 @@
-import type { AutoCorrection, IDragAndDrop, IExercice } from '../../../src/lib/types'
+import type {
+  AutoCorrection,
+  IDragAndDrop,
+  IExercice,
+} from '../../../src/lib/types'
 import Grandeur from '../../../src/modules/Grandeur'
 
 export interface VerificationResult {
   questionIndex: number
   format: string
+  verificationFunctionName: string
+  simulatedInput: string
+  goodAnswer: string
   isOk: boolean
   feedback: string
   skipped: boolean

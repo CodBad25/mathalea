@@ -28,6 +28,9 @@ export function verifyComparisonOnly(
       results.push({
         questionIndex: i,
         format,
+        verificationFunctionName: '',
+        simulatedInput: '',
+        goodAnswer: '',
         isOk: true,
         feedback: '',
         skipped: true,
@@ -40,6 +43,9 @@ export function verifyComparisonOnly(
       results.push({
         questionIndex: i,
         format,
+        verificationFunctionName: 'not applicable',
+        simulatedInput: '',
+        goodAnswer: '',
         isOk: false,
         feedback: 'No valeur',
         skipped: true,
@@ -51,6 +57,9 @@ export function verifyComparisonOnly(
     let allOk = true
     let failedField = ''
     let comparisonsExecuted = 0
+    const simulatedInputs: string[] = []
+    const goodAnswers: string[] = []
+    const verificationFunctionNames = new Set<string>()
     for (const [key, answer] of Object.entries(valeur)) {
       if (
         key === 'bareme' ||
@@ -61,12 +70,15 @@ export function verifyComparisonOnly(
       }
       if (!isAnswerType(answer) || typeof answer.compare !== 'function')
         continue
+      verificationFunctionNames.add(answer.compare.name || 'anonymous')
 
       const goodAnswer = Array.isArray(answer.value)
         ? String(answer.value[0])
         : String(answer.value)
       const options = answer.options ?? {}
       const simulatedInput = toCompareInput(goodAnswer, options)
+      simulatedInputs.push(`${key}:${simulatedInput}`)
+      goodAnswers.push(`${key}:${goodAnswer}`)
       try {
         const result = answer.compare(simulatedInput, goodAnswer, options)
         comparisonsExecuted += 1
@@ -85,6 +97,9 @@ export function verifyComparisonOnly(
       results.push({
         questionIndex: i,
         format,
+        verificationFunctionName: 'not applicable',
+        simulatedInput: '',
+        goodAnswer: '',
         isOk: false,
         feedback: 'No compare function executed',
         skipped: true,
@@ -96,6 +111,9 @@ export function verifyComparisonOnly(
     results.push({
       questionIndex: i,
       format,
+      verificationFunctionName: Array.from(verificationFunctionNames).join(','),
+      simulatedInput: simulatedInputs.join(' | '),
+      goodAnswer: goodAnswers.join(' | '),
       isOk: allOk,
       feedback: allOk ? '' : `Failed field: ${failedField}`,
       skipped: false,
