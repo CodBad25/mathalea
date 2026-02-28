@@ -189,16 +189,32 @@ export function verifyDom(exercice: IExercice): VerificationResult[] {
             valeur?.callback != null &&
             typeof valeur.callback === 'function'
           ) {
+            const promptValues = extractPromptValuesForCustom(ac)
+            if (Object.keys(promptValues).length === 0) {
+              results.push({
+                questionIndex: i,
+                format,
+                verificationFunctionName: 'verifQuestionMathLive',
+                simulatedInput: '',
+                goodAnswer: '',
+                isOk: true,
+                feedback: '',
+                skipped: true,
+                skipReason: 'callback-no-adapter',
+              })
+              break
+            }
+            injectCustomMathPromptDOM(exIdx, i, promptValues)
+            const result = verifQuestionMathLive(exercice, i)
             results.push({
               questionIndex: i,
               format,
               verificationFunctionName: 'verifQuestionMathLive',
-              simulatedInput: '',
-              goodAnswer: '',
-              isOk: true,
-              feedback: '',
-              skipped: true,
-              skipReason: 'callback-based-verification',
+              simulatedInput: stringifyRecord(promptValues),
+              goodAnswer: stringifyRecord(promptValues),
+              isOk: result?.isOk === true,
+              feedback: result?.feedback ?? '',
+              skipped: false,
             })
             break
           }

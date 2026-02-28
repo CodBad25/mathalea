@@ -1,9 +1,9 @@
+import { fonctionComparaison } from '../../../src/lib/interactif/comparisonFunctions'
 import {
   isAnswerType,
   type IExercice,
   type OptionsComparaisonType,
 } from '../../../src/lib/types'
-import { fonctionComparaison } from '../../../src/lib/interactif/comparisonFunctions'
 import { toCompareInput, type VerificationResult } from './verifier-shared'
 
 /**
@@ -55,6 +55,20 @@ export function verifyComparisonOnly(
         feedback: 'No valeur',
         skipped: true,
         skipReason: 'no-valeur',
+      })
+      continue
+    }
+    if (typeof valeur.callback === 'function') {
+      results.push({
+        questionIndex: i,
+        format,
+        verificationFunctionName: 'not applicable',
+        simulatedInput: '',
+        goodAnswer: '',
+        isOk: true,
+        feedback: '',
+        skipped: true,
+        skipReason: 'callback-based-verification',
       })
       continue
     }

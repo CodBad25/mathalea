@@ -12,6 +12,7 @@ function createFakeMfe(
   el.value = 'filled'
   el.readOnly = false
   el.getValue = () => 'filled'
+  el.getPrompts = () => Object.keys(champValues)
   el.getPromptValue = (key: string) => champValues[key] ?? ''
   el.setPromptState = () => {}
   return el
