@@ -140,6 +140,15 @@ export default class ExerciceInequationQuotient extends Exercice {
       d = randint(-13, 13, [0, a, b, c, (b * c) / a]) // Pour éviter que ax + b et cx + d n'aient la même racine
       e = randint(-13, 13, [0, 1, -1, a, b, c, d])
       f = randint(-13, 13, [0, a, b, c, d, e, (b * e) / a, (d * e) / c]) // Pour éviter que (ax + b et ex + f) ou (cx + d et ex + f) n'aient la même racine
+      // Dans le type 5, (a + e*c) est le coefficient directeur du numérateur mis au même dénominateur.
+      // S'il est nul, la réduction produit une "racine" de la forme n/0.
+      if (
+        listeTypeDeQuestions[i] === '(ax+b)/(cx+d)+e<0' &&
+        a + e * c === 0
+      ) {
+        cpt++
+        continue
+      }
       // Augmente la hauteur des lignes sur la sortie pdf
       if (context.isHtml) {
         ecart = 2
