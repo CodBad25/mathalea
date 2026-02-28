@@ -23,6 +23,7 @@ import {
 } from './domSimulator'
 import {
   ensureDragAndDropQuestion,
+  extractPromptValuesForCallbackQuestion,
   extractClockValuesForCustom,
   extractPromptValuesForCustom,
   grandeurStringToLatex,
@@ -189,7 +190,11 @@ export function verifyDom(exercice: IExercice): VerificationResult[] {
             valeur?.callback != null &&
             typeof valeur.callback === 'function'
           ) {
-            const promptValues = extractPromptValuesForCustom(ac)
+            const promptValues = extractPromptValuesForCallbackQuestion(
+              exercice,
+              i,
+              ac,
+            )
             if (Object.keys(promptValues).length === 0) {
               results.push({
                 questionIndex: i,

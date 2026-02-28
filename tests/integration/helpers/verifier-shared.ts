@@ -245,6 +245,60 @@ export function extractPromptValuesForCustom(
   return out
 }
 
+function extractPromptKeys(ac: AutoCorrection | undefined): string[] {
+  const valeur = ac?.reponse?.valeur
+  if (!isRecord(valeur)) return []
+  return Object.keys(valeur).filter((key) => /^champ\d+$/.test(key))
+}
+
+function extractTargetProduct(text: string): number | null {
+  const match = text.match(/(^|[^0-9])([0-9]{1,4})\s*=/)
+  if (!match) return null
+  const value = Number.parseInt(match[2], 10)
+  return Number.isFinite(value) ? value : null
+}
+
+function findFactorPair(product: number): [number, number] | null {
+  if (!Number.isInteger(product) || product < 4) return null
+  for (let factor = 2; factor <= Math.floor(Math.sqrt(product)); factor++) {
+    if (product % factor === 0) {
+      return [factor, product / factor]
+    }
+  }
+  return null
+}
+
+export function extractPromptValuesForCallbackQuestion(
+  exercice: IExercice,
+  questionIndex: number,
+  ac: AutoCorrection | undefined,
+): Record<string, string> {
+  const promptValues = extractPromptValuesForCustom(ac)
+  const promptKeys = extractPromptKeys(ac)
+  if (promptKeys.length === 0) return promptValues
+
+  const hasNonEmptyPromptValue = promptKeys.some((key) => {
+    const value = promptValues[key]
+    return typeof value === 'string' && value.trim() !== ''
+  })
+  if (hasNonEmptyPromptValue) return promptValues
+
+  if (promptKeys.length !== 2) return {}
+  const questionText = exercice.listeQuestions[questionIndex] ?? ''
+  const correctionText = exercice.listeCorrections[questionIndex] ?? ''
+  const targetProduct =
+    extractTargetProduct(correctionText) ?? extractTargetProduct(questionText)
+  if (targetProduct == null) return {}
+
+  const pair = findFactorPair(targetProduct)
+  if (pair == null) return {}
+
+  return {
+    [promptKeys[0]]: String(pair[0]),
+    [promptKeys[1]]: String(pair[1]),
+  }
+}
+
 export function extractClockValuesForCustom(
   ac: AutoCorrection | undefined,
 ): { hour: string; minute: string } | null {
