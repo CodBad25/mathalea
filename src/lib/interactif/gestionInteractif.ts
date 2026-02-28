@@ -2,7 +2,6 @@ import type Figure from 'apigeom/src/Figure'
 import Decimal from 'decimal.js'
 import type { MathfieldElement } from 'mathlive'
 import type {
-  AnswerValueType,
   AutoCorrection,
   ClickFigures,
   IExercice,
@@ -27,40 +26,6 @@ import { toutPourUnPoint, verifQuestionMathLive } from './mathLive'
 import { verifQuestionQcm } from './qcm'
 import { verifQuestionListeDeroulante } from './questionListeDeroulante'
 import { verifQuestionSvgSelection } from './questionSvgSelection/questionSvgSelection'
-
-/**
- * Puisque tous les attributs de Valeur sont facultatifs, on vérifie juste si c'est un objet (et ce type est assez inutile du coup car quasiment identique à un unknown)
- */
-export function isValeur(value: unknown): value is Valeur {
-  return typeof value === 'object'
-}
-
-export function isAnswerValueType(value: unknown): value is AnswerValueType {
-  return (
-    typeof value === 'string' ||
-    (Array.isArray(value) &&
-      value.every((value) => typeof value === 'string')) ||
-    typeof value === 'number' ||
-    (Array.isArray(value) &&
-      value.every((value) => typeof value === 'number')) ||
-    value instanceof FractionEtendue ||
-    (Array.isArray(value) &&
-      value.every((value) => value instanceof FractionEtendue)) ||
-    value instanceof Decimal ||
-    (Array.isArray(value) &&
-      value.every((value) => value instanceof Decimal)) ||
-    value instanceof Grandeur ||
-    (Array.isArray(value) &&
-      value.every((value) => value instanceof Grandeur)) ||
-    value instanceof Hms ||
-    (Array.isArray(value) && value.every((value) => value instanceof Hms))
-  )
-}
-
-export type ReponseComplexe = AnswerValueType | Valeur
-export function isReponseComplexe(value: unknown): value is ReponseComplexe {
-  return isAnswerValueType(value) || isValeur(value)
-}
 
 export function isClickFiguresArray(
   figures: Figure[] | ClickFigures[],

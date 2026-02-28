@@ -26,7 +26,6 @@ import {
   extractClockValuesForCustom,
   extractPromptValuesForCustom,
   grandeurStringToLatex,
-  isRecord,
   normalizeCustomCorrectionResult,
   toCompareInput,
   toDndValeur,
@@ -138,7 +137,10 @@ export function verifyAllQuestions(exercice: IExercice): VerificationResult[] {
       switch (format) {
         case 'mathlive':
         case 'texte': {
-          if (valeur?.callback != null && typeof valeur.callback === 'function') {
+          if (
+            valeur?.callback != null &&
+            typeof valeur.callback === 'function'
+          ) {
             results.push({
               questionIndex: i,
               format,
@@ -423,7 +425,10 @@ export function verifyAllQuestions(exercice: IExercice): VerificationResult[] {
           }
 
           injectCliqueFigureDOM(exIdx, i, figures)
-          if ('callback' in exercice && typeof exercice.callback === 'function') {
+          if (
+            'callback' in exercice &&
+            typeof exercice.callback === 'function'
+          ) {
             exercice.callback(exercice, i)
           }
           const result = verifQuestionCliqueFigure(exercice, i)

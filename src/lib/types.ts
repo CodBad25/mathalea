@@ -374,6 +374,15 @@ export type AnswerType = {
   options?: OptionsComparaisonType
 }
 
+export function isAnswerType(obj: unknown): obj is AnswerType {
+  return (
+    typeof obj === 'object' &&
+    obj !== null &&
+    'value' in obj &&
+    isAnswerValueType(obj.value)
+  )
+}
+
 export type SheetAnswerType = {
   goodAnswerFormulas: GoodAnswersFormulas
   sheetTestDatas: SheetTestDatas
@@ -626,10 +635,10 @@ export function isAnswerValueType(value: unknown): value is AnswerValueType {
   )
 }
 
-export type ReponseComplexe = Valeur
+export type ReponseComplexe = AnswerValueType | Valeur
 
 export function isReponseComplexe(value: unknown): value is ReponseComplexe {
-  return isValeur(value)
+  return isAnswerValueType(value) || isValeur(value)
 }
 
 // Ajout d'un type dédié pour les choix de QCM

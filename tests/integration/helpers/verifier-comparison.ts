@@ -1,4 +1,4 @@
-import type { IExercice } from '../../../src/lib/types'
+import { isAnswerType, type IExercice } from '../../../src/lib/types'
 import { toCompareInput, type VerificationResult } from './verifier-shared'
 
 /**
@@ -51,16 +51,16 @@ export function verifyComparisonOnly(
     let allOk = true
     let failedField = ''
     let comparisonsExecuted = 0
-    for (const [key, answerObj] of Object.entries(valeur)) {
+    for (const [key, answer] of Object.entries(valeur)) {
       if (
         key === 'bareme' ||
         key === 'feedback' ||
-        typeof answerObj === 'function'
+        typeof answer === 'function'
       ) {
         continue
       }
-      const answer = answerObj
-      if (answer?.value == null || typeof answer.compare !== 'function') continue
+      if (!isAnswerType(answer) || typeof answer.compare !== 'function')
+        continue
 
       const value = Array.isArray(answer.value)
         ? String(answer.value[0])
