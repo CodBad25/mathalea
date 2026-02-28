@@ -19,7 +19,8 @@ import {
   type SkippedQuestion,
   writeSkippedQuestionsLogs,
 } from './helpers/skippedQuestionsLogger'
-import { verifyAllQuestions, verifyComparisonOnly } from './helpers/verifier'
+import { verifyComparisonOnly } from './helpers/verifier-comparison'
+import { verifyAllQuestions } from './helpers/verifier-dom'
 
 vi.mock('../../src/lib/renderScratch', () => ({
   renderScratch: vi.fn(() => 'mocked value'),

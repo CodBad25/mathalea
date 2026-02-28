@@ -6,12 +6,7 @@ import { verifQuestionQcm } from '../../../src/lib/interactif/qcm'
 import { verifQuestionListeDeroulante } from '../../../src/lib/interactif/questionListeDeroulante'
 import { verifQuestionSvgSelection } from '../../../src/lib/interactif/questionSvgSelection/questionSvgSelection'
 import { verifQuestionTableur } from '../../../src/lib/tableur/outilsTableur'
-import type {
-  AutoCorrection,
-  IDragAndDrop,
-  IExercice,
-} from '../../../src/lib/types'
-import Grandeur from '../../../src/modules/Grandeur'
+import type { AutoCorrection, IExercice } from '../../../src/lib/types'
 import {
   injectCliqueFigureDOM,
   injectCustomMathPromptDOM,
@@ -26,92 +21,19 @@ import {
   injectTableauMathliveDOM,
   injectTableurDOM,
 } from './domSimulator'
-
-/**
- * Converts a Grandeur string like "7,5\u202fcm^2" to the LaTeX format
- * that unitsCompare/inputToGrandeur expects: "7,5\\operatorname{cm^2}"
- */
-function grandeurStringToLatex(value: string): string {
-  const cleaned = value.replace(/[\u202f\u00a0]/g, '')
-  const g = Grandeur.fromString(cleaned)
-  if (g.unite === '°C' || g.unite === '°') {
-    return `${String(g.mesure).replace('.', ',')}${g.unite}`
-  }
-  return `${String(g.mesure).replace('.', ',')}\\operatorname{${g.unite}}`
-}
-
-/**
- * Converts scientific notation "1,5e3" or "1.5e-3" to LaTeX "1,5\\times10^{3}"
- * Handles both comma (French) and dot decimal separators.
- * Returns the original string if it's not in e-notation.
- */
-function eNotationToLatex(value: string): string {
-  const match = value.match(/^(-?\d+(?:[.,]\d+)?)e([+-]?\d+)$/)
-  if (!match) return value
-  const mantissa = match[1].replace('.', ',')
-  const exponent = match[2].replace(/^\+/, '')
-  return `${mantissa}\\times10^{${exponent}}`
-}
-
-function pgcd(a: number, b: number): number {
-  let x = Math.abs(a)
-  let y = Math.abs(b)
-  while (y !== 0) {
-    const t = y
-    y = x % y
-    x = t
-  }
-  return x
-}
-
-function simplifyFractionLatex(value: string): string {
-  const cleaned = value.replace(/\s+/g, '')
-  let match = cleaned.match(/^\\d?frac{(-?\d+)}{(-?\d+)}$/)
-  if (!match) {
-    match = cleaned.match(/^(-?\d+)\/(-?\d+)$/)
-  }
-  if (!match) return value
-
-  let num = parseInt(match[1], 10)
-  let den = parseInt(match[2], 10)
-  if (!Number.isFinite(num) || !Number.isFinite(den) || den === 0) return value
-  if (den < 0) {
-    num = -num
-    den = -den
-  }
-  const d = pgcd(num, den)
-  if (d <= 1) return value
-  return `\\frac{${num / d}}{${den / d}}`
-}
-
-function scientificPowerToLatex(value: string): string {
-  const cleaned = value.replace(/\s+/g, '')
-  if (cleaned.includes('\\times')) return value
-  const match = cleaned.match(/^(-?)10\^(\{?-?\d+\}?)$/)
-  if (!match) return value
-  const mantissa = match[1] === '-' ? '-1' : '1'
-  return `${mantissa}\\times10^${match[2]}`
-}
-
-/**
- * Converts an interval string like "]1;2[" or "[3,5;4,5]" to a numeric point
- * inside the interval (midpoint), as expected by interval comparisons.
- */
-function intervalToMidpoint(value: string): string | null {
-  const match = value.match(/[[\]](.+);(.+)[[\]]/)
-  if (!match) return null
-  const lo = parseFloat(match[1].replace(',', '.'))
-  const hi = parseFloat(match[2].replace(',', '.'))
-  if (isNaN(lo) || isNaN(hi)) return null
-  return String((lo + hi) / 2)
-}
+import {
+  ensureDragAndDropQuestion,
+  extractClockValuesForCustom,
+  extractPromptValuesForCustom,
+  grandeurStringToLatex,
+  isRecord,
+  normalizeCustomCorrectionResult,
+  toCompareInput,
+  toDndValeur,
+  type VerificationResult,
+} from './verifier-shared'
 
 type CliqueFigureItem = { id: string; solution: boolean }
-type DndAnswer = {
-  value?: string | string[]
-  options?: { multi?: boolean }
-}
-type DndValeur = Record<string, DndAnswer>
 
 function isCliqueFigureItem(value: unknown): value is CliqueFigureItem {
   if (typeof value !== 'object' || value == null) return false
@@ -119,92 +41,6 @@ function isCliqueFigureItem(value: unknown): value is CliqueFigureItem {
   return (
     typeof candidate.id === 'string' && typeof candidate.solution === 'boolean'
   )
-}
-
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === 'object' && value != null
-}
-
-function toDndValeur(value: unknown): DndValeur {
-  const out: DndValeur = {}
-  if (!isRecord(value)) return out
-  for (const [key, answer] of Object.entries(value)) {
-    if (!/^rectangle\d+$/.test(key)) continue
-    if (!isRecord(answer)) continue
-    const normalized: DndAnswer = {}
-    if (typeof answer.value === 'string' || Array.isArray(answer.value)) {
-      normalized.value = answer.value
-    }
-    if (isRecord(answer.options) && 'multi' in answer.options) {
-      if (typeof answer.options.multi === 'boolean') {
-        normalized.options = { multi: answer.options.multi }
-      }
-    }
-    out[key] = normalized
-  }
-  return out
-}
-
-function ensureDragAndDropQuestion(exercice: IExercice, questionIndex: number) {
-  if (!Array.isArray(exercice.dragAndDrops)) {
-    exercice.dragAndDrops = []
-  }
-  const existing = exercice.dragAndDrops[questionIndex]
-  if (existing != null) {
-    if (!Array.isArray(existing.listeners)) {
-      existing.listeners = []
-    }
-    return
-  }
-  const fallback: IDragAndDrop = {
-    exercice,
-    question: questionIndex,
-    consigne: '',
-    etiquettes: [],
-    enonceATrous: '',
-    listeners: [],
-    ajouteDragAndDrop() {
-      return ''
-    },
-  }
-  exercice.dragAndDrops[questionIndex] = fallback
-}
-
-function normalizeCustomCorrectionResult(result: string | string[]): boolean {
-  if (Array.isArray(result)) {
-    return result.every((value) => value === 'OK')
-  }
-  return result === 'OK'
-}
-
-function extractPromptValuesForCustom(
-  ac: AutoCorrection | undefined,
-): Record<string, string> {
-  const out: Record<string, string> = {}
-  const valeur = ac?.reponse?.valeur
-  if (!isRecord(valeur)) return out
-  for (const [key, answer] of Object.entries(valeur)) {
-    if (!/^champ\d+$/.test(key)) continue
-    if (!isRecord(answer) || answer.value == null) continue
-    out[key] = Array.isArray(answer.value)
-      ? String(answer.value[0] ?? '')
-      : String(answer.value)
-  }
-  return out
-}
-
-function extractClockValuesForCustom(
-  ac: AutoCorrection | undefined,
-): { hour: string; minute: string } | null {
-  const valeur = ac?.reponse?.valeur
-  if (!isRecord(valeur)) return null
-  const answer = valeur.reponse
-  if (!isRecord(answer)) return null
-  const raw = answer.value
-  const value = Array.isArray(raw) ? String(raw[0] ?? '') : String(raw ?? '')
-  const match = value.match(/^(\d{1,2})h(\d{1,2})$/)
-  if (!match) return null
-  return { hour: match[1], minute: match[2] }
 }
 
 function verifyCustomQuestion(
@@ -282,15 +118,6 @@ function verifyCustomQuestion(
   }
 }
 
-export interface VerificationResult {
-  questionIndex: number
-  format: string
-  isOk: boolean
-  feedback: string
-  skipped: boolean
-  skipReason?: string
-}
-
 /**
  * Verifies all questions of an exercise by:
  * 1. Reading autoCorrection to get expected answers
@@ -311,10 +138,7 @@ export function verifyAllQuestions(exercice: IExercice): VerificationResult[] {
       switch (format) {
         case 'mathlive':
         case 'texte': {
-          if (
-            valeur?.callback != null &&
-            typeof valeur.callback === 'function'
-          ) {
+          if (valeur?.callback != null && typeof valeur.callback === 'function') {
             results.push({
               questionIndex: i,
               format,
@@ -341,16 +165,7 @@ export function verifyAllQuestions(exercice: IExercice): VerificationResult[] {
             ? String(answer[0])
             : String(answer)
           const options = valeur?.reponse?.options ?? {}
-          let answerStr = rawAnswer
-          if (options.unite) {
-            answerStr = grandeurStringToLatex(rawAnswer)
-          } else if (options.estDansIntervalle) {
-            answerStr = intervalToMidpoint(rawAnswer) ?? rawAnswer
-          } else if (options.ecritureScientifique) {
-            answerStr = scientificPowerToLatex(eNotationToLatex(rawAnswer))
-          } else if (options.fractionSimplifiee) {
-            answerStr = simplifyFractionLatex(rawAnswer)
-          }
+          const answerStr = toCompareInput(rawAnswer, options)
           injectMathLiveDOM(exIdx, i, answerStr)
           const result = verifQuestionMathLive(exercice, i)
           results.push({
@@ -608,10 +423,7 @@ export function verifyAllQuestions(exercice: IExercice): VerificationResult[] {
           }
 
           injectCliqueFigureDOM(exIdx, i, figures)
-          if (
-            'callback' in exercice &&
-            typeof exercice.callback === 'function'
-          ) {
+          if ('callback' in exercice && typeof exercice.callback === 'function') {
             exercice.callback(exercice, i)
           }
           const result = verifQuestionCliqueFigure(exercice, i)
@@ -712,139 +524,6 @@ export function verifyAllQuestions(exercice: IExercice): VerificationResult[] {
         skipped: false,
       })
     }
-  }
-
-  return results
-}
-
-/**
- * Bypass DOM entirely: directly call the comparison function with the expected answer.
- * Tests that the comparison function accepts the exercise's own answer.
- */
-export function verifyComparisonOnly(
-  exercice: IExercice,
-): VerificationResult[] {
-  const results: VerificationResult[] = []
-
-  for (let i = 0; i < exercice.autoCorrection.length; i++) {
-    const ac = exercice.autoCorrection[i]
-    const format = ac?.reponse?.param?.formatInteractif ?? 'mathlive'
-    const valeur = ac?.reponse?.valeur
-
-    // Only works for mathlive-like formats with a compare function
-    if (
-      ![
-        'mathlive',
-        'texte',
-        'fillInTheBlank',
-        'tableauMathlive',
-        'MetaInteractif2d',
-        'svgSelection',
-        undefined,
-      ].includes(format)
-    ) {
-      results.push({
-        questionIndex: i,
-        format,
-        isOk: true,
-        feedback: '',
-        skipped: true,
-        skipReason: `format-${format}-not-supported`,
-      })
-      continue
-    }
-
-    if (!valeur) {
-      results.push({
-        questionIndex: i,
-        format,
-        isOk: false,
-        feedback: 'No valeur',
-        skipped: true,
-        skipReason: 'no-valeur',
-      })
-      continue
-    }
-
-    if (format === 'svgSelection') {
-      const selectionValue = valeur.reponse?.value
-      if (selectionValue == null) {
-        results.push({
-          questionIndex: i,
-          format,
-          isOk: false,
-          feedback: 'No svgSelection value',
-          skipped: true,
-          skipReason: 'no-svgSelection-value',
-        })
-      } else {
-        results.push({
-          questionIndex: i,
-          format,
-          isOk: true,
-          feedback: '',
-          skipped: false,
-        })
-      }
-      continue
-    }
-
-    let allOk = true
-    let failedField = ''
-    for (const [key, answerObj] of Object.entries(valeur)) {
-      if (
-        key === 'bareme' ||
-        key === 'feedback' ||
-        typeof answerObj === 'function'
-      ) {
-        continue
-      }
-      const answer = answerObj
-      if (!answer?.value || !answer?.compare) continue
-
-      const value = Array.isArray(answer.value)
-        ? String(answer.value[0])
-        : String(answer.value)
-      const options = answer.options ?? {}
-      let compareValue = value
-      if (options.unite) {
-        const cleaned = value.replace(/[\u202f\u00a0]/g, '')
-        const g = Grandeur.fromString(cleaned)
-        if (g.unite === '°C' || g.unite === '°') {
-          compareValue = `${String(g.mesure).replace('.', ',')}${g.unite}`
-        } else {
-          compareValue = `${String(g.mesure).replace('.', ',')}\\operatorname{${g.unite}}`
-        }
-      }
-      if (options.estDansIntervalle) {
-        const match = value.match(/[[\]](.+);(.+)[[\]]/)
-        if (match) {
-          const lo = parseFloat(match[1].replace(',', '.'))
-          const hi = parseFloat(match[2].replace(',', '.'))
-          if (!isNaN(lo) && !isNaN(hi)) {
-            compareValue = String((lo + hi) / 2)
-          }
-        }
-      }
-      try {
-        const result = answer.compare(compareValue, value, options)
-        if (!result.isOk) {
-          allOk = false
-          failedField = key
-        }
-      } catch (e) {
-        allOk = false
-        failedField = `${key}(threw: ${e instanceof Error ? e.message : e})`
-      }
-    }
-
-    results.push({
-      questionIndex: i,
-      format,
-      isOk: allOk,
-      feedback: allOk ? '' : `Failed field: ${failedField}`,
-      skipped: false,
-    })
   }
 
   return results
