@@ -159,5 +159,12 @@
     "titre": "Interpollation par splines (avec formulaires)",
     "typeExercice": "outil",
     "url": "OutilSpline.svelte"
+  },
+  "P024": {
+    "id": "P024",
+    "uuid": "outilScratch",
+    "titre": "Outil Scratch : sb3 vers LaTeX (avec simulateur)",
+    "typeExercice": "outil",
+    "url": "OutilScratch.svelte"
   }
 }

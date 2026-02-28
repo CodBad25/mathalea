@@ -373,6 +373,7 @@ function handleExerciceSvelte(uuidToUrl) {
   uuidToUrl.clavier = 'ClavierTest.svelte'
   uuidToUrl.version = 'Version.svelte'
   uuidToUrl.equation = 'EquationSolve.svelte'
+  uuidToUrl.outilScratch = 'OutilScratch.svelte'
   return uuidToUrl
 }
 
@@ -609,7 +610,7 @@ readInfos(
 function createUuid() {
   let dt = new Date().getTime()
   const uuid = 'xxxxx'.replace(/[xy]/g, (c) => {
-    const r = (dt + Math.random() * 16) % 16 | 0
+    const r = ((dt + Math.random() * 16) % 16) | 0
     dt = Math.floor(dt / 16)
     return (c === 'x' ? r : (r & 0x3) | 0x8).toString(16)
   })

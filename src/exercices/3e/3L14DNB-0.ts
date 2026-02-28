@@ -5,7 +5,7 @@ import {
   ecritureAlgebriqueSauf1,
 } from '../../lib/outils/ecritures'
 import { texteEnBoite, texteItalique } from '../../lib/outils/embellissements'
-import { createScratchSimulatorElement } from '../../lib/ScratchSimulator'
+import { createScratchSimulatorElement } from '../../lib/scratch/ScratchSimulator'
 import { context } from '../../modules/context'
 import { randint } from '../../modules/outils'
 import { scratchblock } from '../../modules/scratchblock'

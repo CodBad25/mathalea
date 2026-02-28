@@ -7,7 +7,7 @@ import { setReponse } from '../../../lib/interactif/gestionInteractif'
 import { propositionsQcm } from '../../../lib/interactif/qcm'
 import { ajouteChampTexteMathLive } from '../../../lib/interactif/questionMathLive'
 import { arrondi } from '../../../lib/outils/nombres'
-import { createScratchSimulatorElement } from '../../../lib/ScratchSimulator'
+import { createScratchSimulatorElement } from '../../../lib/scratch/ScratchSimulator'
 import { context } from '../../../modules/context'
 import {
   listeQuestionsToContenuSansNumero,
