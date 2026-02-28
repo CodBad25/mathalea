@@ -21,7 +21,7 @@ export const interactifReady = true
 export const interactifType = 'qcm'
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
-export const titre = 'Calculer avec les suites arithmétiques et géométriques'
+export const titre = 'Reconnaître une suite arithmétique/géométrique (QCM)'
 export default class Puissances extends ExerciceQcmA {
   versionOriginale: () => void = () => {
     const a = -2
