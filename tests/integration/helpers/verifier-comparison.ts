@@ -3,6 +3,7 @@ import {
   type IExercice,
   type OptionsComparaisonType,
 } from '../../../src/lib/types'
+import { fonctionComparaison } from '../../../src/lib/interactif/comparisonFunctions'
 import { toCompareInput, type VerificationResult } from './verifier-shared'
 
 /**
@@ -73,9 +74,9 @@ export function verifyComparisonOnly(
       ) {
         continue
       }
-      if (!isAnswerType(answer) || typeof answer.compare !== 'function')
-        continue
-      verificationFunctionNames.add(answer.compare.name || 'anonymous')
+      if (!isAnswerType(answer)) continue
+      const compareFunction = answer.compare ?? fonctionComparaison
+      verificationFunctionNames.add(compareFunction.name || 'anonymous')
 
       const goodAnswer = Array.isArray(answer.value)
         ? String(answer.value[0])
@@ -86,7 +87,7 @@ export function verifyComparisonOnly(
       simulatedInputs.push(`${key}:${simulatedInput}`)
       goodAnswers.push(`${key}:${goodAnswer}`)
       try {
-        const result = answer.compare(simulatedInput, goodAnswer, options)
+        const result = compareFunction(simulatedInput, goodAnswer, options)
         comparisonsExecuted += 1
         if (!result.isOk) {
           allOk = false
