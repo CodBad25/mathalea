@@ -93,6 +93,32 @@ function scientificPowerToLatex(value: string): string {
 }
 
 /**
+ * Converts decimal numbers to a decimal-fraction LaTeX string.
+ * Examples: "0.25" -> "\\dfrac{25}{100}", "-3,02" -> "\\dfrac{-302}{100}".
+ * Returns the original value if it's already a fraction/expression or not a plain decimal.
+ */
+function decimalToFractionLatex(value: string): string {
+  const cleaned = value.replace(/\s+/g, '').replace(',', '.')
+  if (
+    cleaned.includes('/') ||
+    cleaned.includes('\\frac') ||
+    cleaned.includes('\\dfrac')
+  ) {
+    return value
+  }
+  const match = cleaned.match(/^([+-]?)(\d+)(?:\.(\d+))?$/)
+  if (!match) return value
+
+  const sign = match[1] === '-' ? -1n : 1n
+  const intPart = match[2]
+  const fracPart = match[3] ?? ''
+  const denominator = 10n ** BigInt(fracPart.length)
+  const numeratorAbs = BigInt(`${intPart}${fracPart}`)
+  const numerator = sign * numeratorAbs
+  return `\\dfrac{${numerator.toString()}}{${denominator.toString()}}`
+}
+
+/**
  * Converts an interval string like "]1;2[" or "[3,5;4,5]" to a numeric point
  * inside the interval (midpoint), as expected by interval comparisons.
  */
@@ -117,6 +143,9 @@ export function toCompareInput(
   }
   if (options.ecritureScientifique) {
     return scientificPowerToLatex(eNotationToLatex(value))
+  }
+  if (options.fractionDecimale) {
+    return decimalToFractionLatex(value)
   }
   if (options.fractionSimplifiee || options.fractionIrreductible) {
     return simplifyFractionLatex(value)
