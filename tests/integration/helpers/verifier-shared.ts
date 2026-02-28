@@ -2,6 +2,7 @@ import type {
   AutoCorrection,
   IDragAndDrop,
   IExercice,
+  OptionsComparaisonType,
 } from '../../../src/lib/types'
 import Grandeur from '../../../src/modules/Grandeur'
 
@@ -56,14 +57,21 @@ function pgcd(a: number, b: number): number {
 
 function simplifyFractionLatex(value: string): string {
   const cleaned = value.replace(/\s+|\\,/g, '')
-  let match = cleaned.match(/^\\d?frac{(-?\d+)}{(-?\d+)}$/)
-  if (!match) {
-    match = cleaned.match(/^(-?\d+)\/(-?\d+)$/)
-  }
-  if (!match) return value
+  const latexMatch = cleaned.match(/^([+-]?)\\d?frac{(-?\d+)}{(-?\d+)}$/)
+  let num: number
+  let den: number
 
-  let num = parseInt(match[1], 10)
-  let den = parseInt(match[2], 10)
+  if (latexMatch) {
+    const sign = latexMatch[1] === '-' ? -1 : 1
+    num = sign * parseInt(latexMatch[2], 10)
+    den = parseInt(latexMatch[3], 10)
+  } else {
+    const slashMatch = cleaned.match(/^(-?\d+)\/(-?\d+)$/)
+    if (!slashMatch) return value
+    num = parseInt(slashMatch[1], 10)
+    den = parseInt(slashMatch[2], 10)
+  }
+
   if (!Number.isFinite(num) || !Number.isFinite(den) || den === 0) return value
   if (den < 0) {
     num = -num
@@ -98,18 +106,18 @@ function intervalToMidpoint(value: string): string | null {
 
 export function toCompareInput(
   value: string,
-  options: Record<string, unknown>,
+  options: OptionsComparaisonType,
 ): string {
-  if (options.unite === true) {
+  if (options.unite) {
     return grandeurStringToLatex(value)
   }
-  if (options.estDansIntervalle === true) {
+  if (options.estDansIntervalle) {
     return intervalToMidpoint(value) ?? value
   }
-  if (options.ecritureScientifique === true) {
+  if (options.ecritureScientifique) {
     return scientificPowerToLatex(eNotationToLatex(value))
   }
-  if (options.fractionSimplifiee === true) {
+  if (options.fractionSimplifiee || options.fractionIrreductible) {
     return simplifyFractionLatex(value)
   }
   return value
