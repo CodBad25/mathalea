@@ -6,6 +6,9 @@ export default defineConfig({
   resolve: {
     conditions: ['browser'],
   },
+  define: {
+    APP_VERSION: JSON.stringify(process.env.npm_package_version ?? '0.0.0'),
+  },
   test: {
     environment: 'jsdom',
     globals: true,

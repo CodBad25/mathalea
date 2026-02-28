@@ -103,7 +103,7 @@ export default class ÉcrireUneExpressionMathador extends Exercice {
         handleAnswers(this, i, {
           reponse: {
             value: [...expression, ...solutionMathador[4]],
-            options: { expressionNumerique: true },
+            options: { calculFormel: true },
           },
         })
       }

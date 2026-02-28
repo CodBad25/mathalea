@@ -169,19 +169,8 @@ export default class PuissancesEncadrementCoefficients extends Exercice {
       const nombreTexte = texNombre(nombre, 4)
 
       // Construire les expressions des bornes
-      const borneInfExpr =
-        encadrement.coeffInf === 1
-          ? `10^{${encadrement.exposant}}`
-          : encadrement.coeffInf === -1
-            ? `-10^{${encadrement.exposant}}`
-            : `${encadrement.coeffInf}\\times10^{${encadrement.exposant}}`
-
-      const borneSupExpr =
-        encadrement.coeffSup === 1
-          ? `10^{${encadrement.exposant}}`
-          : encadrement.coeffSup === -1
-            ? `-10^{${encadrement.exposant}}`
-            : `${encadrement.coeffSup}\\times10^{${encadrement.exposant}}`
+      const borneInfExpr = `${encadrement.coeffInf}\\times10^{${encadrement.exposant}}`
+      const borneSupExpr = `${encadrement.coeffSup}\\times10^{${encadrement.exposant}}`
 
       consigneAMC = `$\\dots\\dots\\dots${sp(1)}\\leqslant ${nombreTexte}\\leqslant${sp(1)}\\dots\\dots\\dots$`
 

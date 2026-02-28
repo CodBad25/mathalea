@@ -1860,9 +1860,10 @@ export function expressionNumeriqueCompare(
 ): ResultType {
   const cleaner = generateCleaner(['fractions'])
   const localGoodAnswer = cleaner(goodAnswer)
+  const localInput = cleaner(input)
   const goodAnswerParsed = engine.parse(localGoodAnswer, { canonical: true }) // Important ce canonical à true
-  const inputParsed = engine.parse(input, { canonical: true })
-  // console.log(input, localGoodAnswer, goodAnswerParsed.json)
+  const inputParsed = engine.parse(localInput, { canonical: true })
+  // console.log(localInput, localGoodAnswer, goodAnswerParsed.json)
   if (goodAnswerParsed.isSame(inputParsed)) return { isOk: true }
   if (goodAnswerParsed.isEqual(inputParsed))
     if (inputParsed.isNumber) {
@@ -2227,11 +2228,19 @@ function intervalsCompare(input: string, goodAnswer: string) {
     ['ℚ', '\\mathbb{Q}'],
     ['ℝ', '\\mathbb{R}'],
     ['ℂ', '\\mathbb{C}'],
+    ['\\N', '\\mathbb{N}'],
+    ['\\Z', '\\mathbb{Z}'],
+    ['\\D', '\\mathbb{D}'],
+    ['\\Q', '\\mathbb{Q}'],
+    ['\\R', '\\mathbb{R}'],
+    ['\\C', '\\mathbb{C}'],
   ]
-  const localInput = replaceTable.reduce((currentInput, replacement) => {
-    return currentInput.replaceAll(replacement[0], replacement[1])
-  }, clean(input))
-  const localGoodAnswer = clean(goodAnswer)
+  const normalizeSets = (value: string) =>
+    replaceTable.reduce((currentValue, replacement) => {
+      return currentValue.replaceAll(replacement[0], replacement[1])
+    }, clean(value))
+  const localInput = normalizeSets(input)
+  const localGoodAnswer = normalizeSets(goodAnswer)
   if (localGoodAnswer === '\\emptyset') {
     if (localInput === '\\emptyset' || localInput === '\\{\\}')
       return { isOk: true, feedback: '' }

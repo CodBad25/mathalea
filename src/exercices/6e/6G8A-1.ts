@@ -134,7 +134,6 @@ export default class DenombrerCubes extends Exercice {
           handleAnswers(this, q, {
             reponse: {
               value: L.length,
-              options: unitesCubes ? {} : { unite: true },
             },
           })
           break
@@ -157,7 +156,6 @@ export default class DenombrerCubes extends Exercice {
           handleAnswers(this, q, {
             reponse: {
               value: longueur * largeur * hauteur - L.length,
-              options: unitesCubes ? {} : { unite: true },
             },
           })
           break

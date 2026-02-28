@@ -80,7 +80,7 @@ export default class ExerciceEuclide extends Exercice {
           })
 
         this.listeCorrections[i] = texteCorr
-        handleAnswers(this, i, { reponse: { value: `${pgcd}` } })
+        handleAnswers(this, i, { reponse: { value: `${PGCD}` } })
         i++
       }
       cpt++

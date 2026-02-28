@@ -84,7 +84,6 @@ export default class ProduitsEtQuotientRelatifs extends Exercice {
     for (
       let i = 0, texte, texteCorr, a, b, c, num1, num2, den1, den2, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       const signes = choice(ponderation)
       switch (listeTypesDeNombre[i]) {
@@ -173,7 +172,7 @@ export default class ProduitsEtQuotientRelatifs extends Exercice {
               handleAnswers(this, i, {
                 reponse: {
                   value: aF.produitFraction(bF).texFraction,
-                  options: { nombreDecimalSeulement: true },
+                  options: { fractionEgale: true },
                 },
               })
             }

@@ -242,10 +242,20 @@ export default class AntecedentEtImageGraphique extends Exercice {
       this.contenuCorrection += `<br>${numAlpha(2)} $${b}$ a pour unique antécédent $${x0 + 4}$, on note $f(${x0 + 4})=${b}$.`
       setReponse(this, 2, x0 + 4)
       this.contenuCorrection += `<br>${numAlpha(3)} $${c}$ a deux antécédents $${x0 + 2}$ et $${x0 + 6}$, on note $f(${x0 + 2})=f(${x0 + 6})=${c}$.`
-      setReponse(this, 3, [`${x0 + 2};${x0 + 6}`, `${x0 + 6};${x0 + 2}`])
+      setReponse(
+        this,
+        3,
+        [`${x0 + 2};${x0 + 6}`, `${x0 + 6};${x0 + 2}`],
+        { formatInteractif: 'texte' },
+      )
     } else {
       this.contenuCorrection += `<br>${numAlpha(2)} $${c}$ a deux antécédents $${x0 + 2}$ et $${x0 + 6}$, on note $f(${x0 + 2})=f(${x0 + 6})=${c}$.`
-      setReponse(this, 2, [`${x0 + 2};${x0 + 6}`, `${x0 + 6};${x0 + 2}`])
+      setReponse(
+        this,
+        2,
+        [`${x0 + 2};${x0 + 6}`, `${x0 + 6};${x0 + 2}`],
+        { formatInteractif: 'texte' },
+      )
       this.contenuCorrection += `<br>${numAlpha(3)} $${b}$ a pour unique antécédent $${x0 + 4}$, on note $f(${x0 + 4})=${b}$.`
       setReponse(this, 3, x0 + 4)
     }

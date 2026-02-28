@@ -244,15 +244,15 @@ export default class LireAbscissesFractionnairesComplexes extends Exercice {
           ],
           champ1: {
             value: reponse1,
-            options: { fractionSimplifiee: motFractionnaire },
+            options: { fractionEgale: motFractionnaire },
           }, // avecFractions
           champ2: {
             value: reponse2,
-            options: { fractionSimplifiee: motFractionnaire },
+            options: { fractionEgale: motFractionnaire },
           },
           champ3: {
             value: reponse3,
-            options: { fractionSimplifiee: motFractionnaire },
+            options: { fractionEgale: motFractionnaire },
           },
         },
         { formatInteractif: 'fillInTheBlank' },

@@ -19,7 +19,7 @@ vitetest.config.ts
 /public/static
 /public/emojis
 _private/
-tests/e2e/logs
+tests/**/logs
 updatefile
 .madgerc
 # Dictionnaires générés
