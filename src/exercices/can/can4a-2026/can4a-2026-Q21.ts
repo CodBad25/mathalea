@@ -1,7 +1,7 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { toutPourUnPoint } from '../../../lib/interactif/mathLive'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { formatMinute } from '../../../lib/outils/texNombre'
-import Hms from '../../../modules/Hms'
 import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
 
@@ -19,9 +19,9 @@ export const refs = {
 
 */
 export default class Can20264emeQ21 extends ExerciceCan {
-   enonce(totalSecondes?: number) {
+    enonce(totalSecondes?: number) {
     if (totalSecondes == null) {
-      const min = randint(1, 9)
+      const min = randint(1,3)
       const sec = randint(1, 59)
       totalSecondes = min * 60 + sec
     }
@@ -30,23 +30,21 @@ export default class Can20264emeQ21 extends ExerciceCan {
     const minutes = Math.floor(totalSecondes / 60)
     const secondes = totalSecondes % 60
 
-    this.optionsDeComparaison = { HMS: true }
-    this.reponse = new Hms({ minute: minutes, second: secondes })
-    this.formatChampTexte = KeyboardType.clavierHms
+    this.formatInteractif = 'fillInTheBlank'
+    this.formatChampTexte = KeyboardType.clavierDeBase
+    this.reponse = {
+      bareme: toutPourUnPoint,
+      champ1: { value: String(minutes) },
+      champ2: { value: String(secondes) },
+    }
     
-    this.question = `$${totalSecondes}$ secondes`
+    this.question = `${totalSecondes} \\text{ secondes} = %{champ1} \\text{ min } %{champ2} \\text{ s}`
 
     this.correction = `$${totalSecondes}$ secondes $= ${minutes} \\times 60 + ${secondes}$<br>
-Donc : $${totalSecondes}$ s $= ${miseEnEvidence(minutes)}$ min $${miseEnEvidence(formatMinute(secondes))}$ s.`
+Donc : $${totalSecondes}$ s $= ${miseEnEvidence(String(minutes))}$ min $${miseEnEvidence(formatMinute(secondes))}$ s.`
 
-    this.canEnonce = this.question
+    this.canEnonce = `Convertir $${totalSecondes}$ secondes en minutes et secondes.`
     this.canReponseACompleter = '$\\ldots$ min $\\ldots$ s'
-    
-    if (this.interactif) {
-      this.question = `Convertir $${totalSecondes}$ secondes en minutes/secondes.<br>`
-    } else {
-      this.question += ' $=\\ldots$ min $\\ldots$ s'
-    }
   }
 
   nouvelleVersion() {

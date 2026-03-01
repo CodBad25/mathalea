@@ -27,7 +27,7 @@ export const refs = {
 
 */
 export default class Can52026Q16 extends ExerciceCan {
-  enonce(nbBlanches?: number, nbNoires?: number) {
+ enonce(nbBlanches?: number, nbNoires?: number) {
     if (nbBlanches == null || nbNoires == null) {
       const listeCas = [
         [3, 5],
@@ -60,9 +60,11 @@ export default class Can52026Q16 extends ExerciceCan {
           feedback: '',
           score: { nbBonnesReponses: 0, nbReponses: 0 },
         }
-      const num = Number(mfe.getPromptValue('champ1') || 0)
-      const den = Number(mfe.getPromptValue('champ2') || 0)
-      const isOk = num * total === nbBlanches * den
+      const numStr = mfe.getPromptValue('champ1') || ''
+      const denStr = mfe.getPromptValue('champ2') || ''
+      const num = Number(numStr)
+      const den = Number(denStr)
+      const isOk = numStr.trim() !== '' && denStr.trim() !== '' && den !== 0 && num * total === nbBlanches! * den
       if (isOk) {
         mfe.setPromptState('champ1', 'correct', true)
         mfe.setPromptState('champ2', 'correct', true)
@@ -131,9 +133,8 @@ export default class Can52026Q16 extends ExerciceCan {
     }
 
     this.consigne =
-      mathalea2d(Object.assign({ scale: 0.5 }, fixeBordures(objets)), objets) +
-      'La proportion de boules blanches dans cette boîte est :'
-    this.question = '\\dfrac{%{champ1}}{%{champ2}}'
+      mathalea2d(Object.assign({ style: 'margin: auto',  scale: 0.5 }, fixeBordures(objets)), objets) 
+    this.question = '\\text{La proportion de boules blanches dans cette boîte est  } \\dfrac{%{champ1}}{%{champ2}}.'
 
     this.correction = `Il y a $${nbBlanches}$ boules blanches sur un total de $${total}$ boules.<br>
 La proportion de boules blanches est donc : ${pgcd(nbBlanches, total)!==1 ? `$\\dfrac{${nbBlanches}}{${total}}=${miseEnEvidence(fractionSimplifiee.texFraction)}$`: `$${miseEnEvidence(`\\dfrac{${nbBlanches}}{${total}}`)}$`}.`
@@ -143,6 +144,7 @@ La proportion de boules blanches est donc : ${pgcd(nbBlanches, total)!==1 ? `$\\
       bareme: toutPourUnPoint,
       callback,
     }
+    this.canEnonce = mathalea2d(Object.assign({ style: 'margin: auto',  scale: 0.5 }, fixeBordures(objets)), objets) + '<br>La proportion de boules blanches dans cette boîte est :'
     this.canReponseACompleter = '$\\dfrac{\\ldots}{\\ldots}$'
   }
 

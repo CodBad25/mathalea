@@ -63,17 +63,18 @@ export default class Can52026Q30 extends ExerciceCan {
     this.question = `Un cycliste parcourt 
 $${distance}$ km à une vitesse
 moyenne de $${vitesse}$ km/h.<br>
-Son trajet a duré :`
+Son trajet a duré `
 
-    this.correction = `On a : $${distance}=${texNombre(dureeEnHeures)}\\times ${vitesse}$.<br>
-Or, $${texNombre(dureeEnHeures)}$ h $=${texNombre(dureeEnHeures)}\\times 60 \\text{ min}=${miseEnEvidence(texNombre(dureeEnMinutes, 0))}\\text{ min}$.`
+    this.correction = `On a : $${distance}\\text{ km }=${texNombre(dureeEnHeures)}\\times ${vitesse}\\text{ km }$.<br>
+Or, $${texNombre(dureeEnHeures)}$ h $=${texNombre(dureeEnHeures)}\\times 60 \\text{ min}=${texNombre(dureeEnMinutes, 0)}\\text{ min}$.<br>
+Le trajet a duré $${miseEnEvidence(texNombre(dureeEnMinutes, 0))}$ min.`
 
     this.reponse = dureeEnMinutes
     this.canEnonce = this.question
     this.canReponseACompleter = '$\\ldots$ min'
  this.formatChampTexte = KeyboardType.clavierDeBase
     if (this.interactif) {
-      this.optionsChampTexte = { texteApres: ' min' }
+      this.optionsChampTexte = { texteApres: ' min.' }
     } else {
       this.question += ' $\\ldots$ min'
     }

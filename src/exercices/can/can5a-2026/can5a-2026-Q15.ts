@@ -1,6 +1,6 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choice } from '../../../lib/outils/arrayOutils'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { miseEnEvidence, texteEnCouleurEtGras } from '../../../lib/outils/embellissements'
 import { formatMinute } from '../../../lib/outils/texNombre'
 import Hms from '../../../modules/Hms'
 import { randint } from '../../../modules/outils'
@@ -41,18 +41,16 @@ export default class Can52026Q15 extends ExerciceCan {
     
     this.question = `${prenom} est arrivée au collège à $${hArrivee}$ h $${formatMinute(minArrivee)}$ min.<br>
 Son trajet a duré $${duree}$ minutes.<br>
-Elle est partie à :`
+Elle est partie à `
 
     this.correction = `Pour trouver l'heure de départ, on soustrait la durée du trajet de l'heure d'arrivée.<br>
-$${hArrivee}$ h $${formatMinute(minArrivee)}$ min $-$ ${duree} min $=$ $${hDepart}$ h $${formatMinute(minDepart)}$ min.<br>
-${prenom} est partie à $${miseEnEvidence(hDepart)}$ h $${miseEnEvidence(formatMinute(minDepart))}$ min.`
+$${hArrivee}$ h $${formatMinute(minArrivee)}$ min $- ${duree}$ min $=$ $${hDepart}$ h $${formatMinute(minDepart)}$ min.<br>
+${prenom} est partie à $${miseEnEvidence(hDepart)}$ ${texteEnCouleurEtGras('h')} $${miseEnEvidence(formatMinute(minDepart))}$ ${texteEnCouleurEtGras('min')}.`
 
     this.canEnonce = `${prenom} est arrivée au collège à $${hArrivee}$ h $${formatMinute(minArrivee)}$ min. Son trajet a duré $${duree}$ minutes. Elle est partie à :`
     this.canReponseACompleter = '$\\ldots$ h $\\ldots$ min'
-    
-    if (this.interactif) {
-      this.question += ''
-    } else {
+      this.optionsChampTexte = { texteApres: '.' }
+    if (!this.interactif) {
       this.question += ' $\\ldots$ h $\\ldots$ min'
     }
   }

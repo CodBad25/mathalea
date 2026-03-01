@@ -83,12 +83,12 @@ export default class Can20264emeQ30 extends ExerciceCan {
     const volume = aireBase * profondeur
 
     this.reponse = texNombre(volume, 1)
-    this.question = 'Le volume de ce prisme droit est :<br>'
-    this.question += mathalea2d(
+    
+    this.question = mathalea2d(
       Object.assign({}, { scale: 0.7 }, fixeBordures(objets)),
       objets,
     )
-
+this.question += 'Le volume de ce prisme droit est '
     this.correction = `L'aire de la base triangulaire est :<br>
 $\\mathcal{B}=\\dfrac{${base}\\times ${hauteurTriangle}}{2}=${aireBase}\\text{ cm}^2$<br>
 Le volume du prisme est :<br>
@@ -97,7 +97,7 @@ $\\mathcal{V}=\\mathcal{B}\\times h=${aireBase}\\times ${profondeur}=${miseEnEvi
     this.canEnonce = this.question
     this.canReponseACompleter = '$\\ldots\\text{ cm}^3$'
 
-    this.optionsChampTexte = { texteApres: '$\\text{ cm}^3$' }
+    this.optionsChampTexte = { texteApres: '$\\text{ cm}^3$.' }
     this.formatChampTexte = KeyboardType.clavierDeBase
   }
 

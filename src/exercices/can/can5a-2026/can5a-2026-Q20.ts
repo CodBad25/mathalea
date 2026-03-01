@@ -20,7 +20,7 @@ export const refs = {
 
 */
 export default class Can52026Q20 extends ExerciceCan {
-   enonce(numerateur?: number, denominateur?: number) {
+    enonce(numerateur?: number, denominateur?: number) {
     if (numerateur == null || denominateur == null) {
       // Choix du dénominateur : 10, 100 ou 1000
       denominateur = choice([10, 100])
@@ -36,7 +36,9 @@ export default class Can52026Q20 extends ExerciceCan {
 
     this.question = `Écriture décimale de $${frac.texFraction}$`
 
-    this.correction = `$${frac.texFraction}=${texNombre(numerateur)}\\div ${texNombre(denominateur)}=${miseEnEvidence(texNombre(resultat))}$`
+    const nomDenominateur = denominateur === 10 ? 'dixièmes' : 'centièmes'
+
+    this.correction = `$${frac.texFraction}=${texNombre(numerateur)}\\times \\dfrac{1}{${texNombre(denominateur)}}$, donc $${texNombre(numerateur)}$ ${nomDenominateur}, soit $${miseEnEvidence(texNombre(resultat))}$.`
  this.formatChampTexte = KeyboardType.clavierDeBase
     this.reponse = resultat
     this.canEnonce = this.question

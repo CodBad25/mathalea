@@ -52,7 +52,7 @@ export default class Can52026Q26 extends ExerciceCan {
       ),
       [pav.c2d, la, lb, lc]
     )}
-Le volume de ce pavé droit est :`
+Le volume de ce pavé droit est `
     
     this.correction = `Le volume d'un pavé droit est : Longueur $\\times$ largeur $\\times$ hauteur.<br>
 On a : $${longueur}\\times ${largeur}\\times ${hauteur}=${miseEnEvidence(texNombre(volume, 0))}\\text{ cm}^3$.`
@@ -60,12 +60,12 @@ On a : $${longueur}\\times ${largeur}\\times ${hauteur}=${miseEnEvidence(texNomb
     this.canEnonce = this.question
     this.canReponseACompleter = '$\\ldots\\text{ cm}^3$'
   
-    this.optionsChampTexte = { texteApres: '$\\text{ cm}^3$' }
+    this.optionsChampTexte = { texteApres: '$\\text{ cm}^3$.' }
     this.formatChampTexte = KeyboardType.clavierDeBase
     if (this.interactif) {
       // Rien à ajouter, le champ sera ajouté automatiquement
     } else if (context.isHtml) {
-      this.question += '<br>$\\ldots\\text{ cm}^3$'
+      this.question += '$\\ldots\\text{ cm}^3$'
     }
   }
 

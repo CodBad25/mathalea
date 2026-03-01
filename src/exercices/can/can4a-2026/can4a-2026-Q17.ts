@@ -30,7 +30,7 @@ export default class Can20264emeQ17 extends ExerciceCan {
        precision = choice(['dixième', 'centième'])
      }
  
-     this.question = `L'arrondi au  ${precision} près de $${texNombre(val, 3)}$ est : `
+     this.question = `L'arrondi au  ${precision} près de $${texNombre(val, 3)}$ est  `
      if (precision === 'dixième') {
        this.correction = `Le chiffre des centièmes est ${b > 5 ? 'supérieur' : 'inférieur'} à $5$, donc l'arrondi au dixième de $${texNombre(val, 3)}$ est $${miseEnEvidence(texNombre(arrondi(val, 1), 1))}$.`
        this.reponse = val.toFixed(1)
@@ -38,6 +38,7 @@ export default class Can20264emeQ17 extends ExerciceCan {
        this.correction = `Le chiffre des millièmes est ${c > 5 ? 'supérieur' : 'inférieur'} à $5$, donc  l'arrondi au centième de $${texNombre(val, 3)}$ est $${miseEnEvidence(texNombre(arrondi(val, 2), 2))}$.`
        this.reponse = val.toFixed(2)
      }
+     this.optionsChampTexte = { texteApres: '.' }
      this.canEnonce = this.question
      this.canReponseACompleter = ''
      if (!this.interactif) {

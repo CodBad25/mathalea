@@ -49,7 +49,7 @@ export default class Can20264emeQ28 extends ExerciceCan {
     })
     
     this.question = `${mathalea2d(Object.assign({ scale: 0.45,pixelsParCm: 15}, fixeBordures(d.objets!)), d.objets!)}
-    Le nombre repéré par le point $A$ est :`
+    Le nombre repéré par le point $A$ est `
     
     this.correction = `Entre $${min}$ et $${max}$, il y a $${nbPas}$ graduations.<br>
     Le point $A$ se trouve à la graduation numéro $${position}$.<br>

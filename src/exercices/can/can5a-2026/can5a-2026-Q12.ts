@@ -34,9 +34,9 @@ export default class Can52026Q12 extends ExerciceCan {
     this.formatChampTexte = KeyboardType.clavierDeBase
     this.question = `$${texNombre(a, 1)} \\times 0,2$`
     
-    this.correction = `Multiplier par $0,2$ revient multiplier par $\\dfrac{1}{5}$, c'est-à-dire à diviser par $5$. <br>
+    this.correction = `Multiplier par $0,2$ revient à multiplier par $\\dfrac{1}{5}$, c'est-à-dire à diviser par $5$. <br>
     En effet, $0,2 = \\dfrac{2}{10} = \\dfrac{1}{5}$.<br>
-    $${texNombre(a, 1)} \\times 0,2 = ${miseEnEvidence(texNombre(resultat.toNumber(), 2))}$.`
+    $${texNombre(a, 1)} \\times 0,2 = ${miseEnEvidence(texNombre(resultat.toNumber(), 2))}$`
     
     this.canEnonce = this.question
     this.canReponseACompleter = ''
