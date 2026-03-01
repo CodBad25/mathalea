@@ -1,7 +1,12 @@
 <script lang="ts">
   import JSZip from 'jszip'
   import HeaderExerciceVueProf from '../components/shared/exercice/shared/headerExerciceVueProf/HeaderExerciceVueProf.svelte'
-  import { sb3ToLatex } from '../lib/scratch/sb32Latex'
+  import {
+    humanizeScratchOpcode,
+    sb3ToLatex,
+    SIMULATOR_PARTIALLY_SUPPORTED_OPCODES,
+    SIMULATOR_UNSUPPORTED_OPCODES,
+  } from '../lib/scratch/sb3ToLatex'
   import '../lib/scratch/ScratchSimulator'
 
   export const titre = 'Outil Scratch : sb3 vers LaTeX (avec simulateur)'
@@ -29,7 +34,51 @@
   let latexHighlighted = ''
   let simulationCode = ''
   let errorMessage = ''
+  let unsupportedOpcodesInFile: string[] = []
+  let partiallySupportedOpcodesInFile: string[] = []
   let simulatorElement: HTMLElement | null = null
+
+  const unsupportedOpcodeSet = new Set<string>(SIMULATOR_UNSUPPORTED_OPCODES)
+  const partiallySupportedOpcodeSet = new Set<string>(
+    SIMULATOR_PARTIALLY_SUPPORTED_OPCODES,
+  )
+
+  function extractOpcodesFromProject(projectJsonRaw: string): string[] {
+    try {
+      const project = JSON.parse(projectJsonRaw)
+      const opcodes = new Set<string>()
+
+      if (!Array.isArray(project?.targets)) {
+        return []
+      }
+
+      for (const target of project.targets) {
+        if (!target || typeof target !== 'object') continue
+        const blocks = target.blocks
+        if (!blocks || typeof blocks !== 'object') continue
+
+        for (const block of Object.values(blocks as Record<string, unknown>)) {
+          const opcode =
+            block && typeof block === 'object'
+              ? (block as { opcode?: unknown }).opcode
+              : undefined
+          if (typeof opcode === 'string' && opcode.length > 0) {
+            opcodes.add(opcode)
+          }
+        }
+      }
+
+      return [...opcodes].sort()
+    } catch {
+      return []
+    }
+  }
+
+  function formatOpcodeList(opcodes: string[]): string {
+    return opcodes
+      .map((opcode) => `${humanizeScratchOpcode(opcode)} (${opcode})`)
+      .join(', ')
+  }
 
   function escapeHtml(value: string): string {
     return value
@@ -75,6 +124,8 @@
   async function processFile(file: File): Promise<void> {
     fileName = file.name
     errorMessage = ''
+    unsupportedOpcodesInFile = []
+    partiallySupportedOpcodesInFile = []
 
     try {
       const lowerName = file.name.toLowerCase()
@@ -94,6 +145,14 @@
       latexCode = latex
       latexHighlighted = highlightLatex(latex)
 
+      const usedOpcodes = extractOpcodesFromProject(projectJsonRaw)
+      unsupportedOpcodesInFile = usedOpcodes.filter((opcode) =>
+        unsupportedOpcodeSet.has(opcode),
+      )
+      partiallySupportedOpcodesInFile = usedOpcodes.filter((opcode) =>
+        partiallySupportedOpcodeSet.has(opcode),
+      )
+
       const programs = extractScratchPrograms(latex)
       simulationCode = programs.join('\n\n')
 
@@ -106,6 +165,8 @@
       latexCode = ''
       latexHighlighted = ''
       simulationCode = ''
+      unsupportedOpcodesInFile = []
+      partiallySupportedOpcodesInFile = []
       errorMessage =
         error instanceof Error
           ? error.message
@@ -207,6 +268,29 @@
 
     {#if latexCode}
       <div class="space-y-3">
+        {#if unsupportedOpcodesInFile.length > 0 || partiallySupportedOpcodesInFile.length > 0}
+          <div class="alert alert-warning text-sm">
+            <div class="space-y-2">
+              <p>
+                Certains blocs de ce programme ne sont pas encore totalement
+                supportés par le simulateur.
+              </p>
+              {#if unsupportedOpcodesInFile.length > 0}
+                <p>
+                  <strong>Non supportés :</strong>
+                  {formatOpcodeList(unsupportedOpcodesInFile)}
+                </p>
+              {/if}
+              {#if partiallySupportedOpcodesInFile.length > 0}
+                <p>
+                  <strong>Partiellement supportés :</strong>
+                  {formatOpcodeList(partiallySupportedOpcodesInFile)}
+                </p>
+              {/if}
+            </div>
+          </div>
+        {/if}
+
         <div class="flex flex-wrap items-center gap-2">
           <button
             class="btn btn-primary btn-sm"

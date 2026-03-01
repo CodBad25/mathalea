@@ -37,7 +37,6 @@ export class ScratchSimulator extends HTMLElement {
   private allRenderedBlocks: CodeBlockNode[] = []
   private highlightedExecutionIndex: number | null = null
   private highlightedBlockElement: SVGGElement | null = null
-  private customBlockDefinitions: Record<string, CodeBlockNode[]> = {}
   private customDefinitionGroups: Set<SVGGElement> = new Set()
   private conditionBlockElements: Set<SVGGElement> = new Set()
   private blockCacheAttempts: number = 0
@@ -572,9 +571,7 @@ export class ScratchSimulator extends HTMLElement {
     this.codeBlocks = topLevelGroups.map((group) => this.buildBlockTree(group))
     this.stripConditionBlocks(this.codeBlocks)
 
-    const customDefinitions = this.extractCustomBlockDefinitions(svg)
-    this.customBlockDefinitions = customDefinitions.definitions
-    this.customDefinitionGroups = customDefinitions.definitionGroups
+    this.customDefinitionGroups = this.extractCustomBlockDefinitions(svg)
     this.allRenderedBlocks = groups
       .filter(
         (group) =>
@@ -681,7 +678,7 @@ export class ScratchSimulator extends HTMLElement {
     nodes.forEach((node) => walk(node))
   }
 
-  // Trouver l'ancêtre bloc le plus proche d'un groupe donné parmi un ensemble de candidats
+  // Renvoyer l'ancêtre bloc le plus proche dans un ensemble donné
   private getNearestBlockAncestorInSet(
     group: SVGGElement,
     candidates: Set<SVGGElement>,
@@ -698,12 +695,8 @@ export class ScratchSimulator extends HTMLElement {
     return null
   }
 
-  // Identifier les définitions de blocs personnalisés dans le SVG rendu, en les associant à leur nom et à leurs blocs enfants pour pouvoir les exécuter lors de l'appel du bloc personnalisé
-  private extractCustomBlockDefinitions(root: SVGElement): {
-    definitions: Record<string, CodeBlockNode[]>
-    definitionGroups: Set<SVGGElement>
-  } {
-    const definitions: Record<string, CodeBlockNode[]> = {}
+  // Repérer les en-têtes de définitions custom à exclure du mapping visuel
+  private extractCustomBlockDefinitions(root: SVGElement): Set<SVGGElement> {
     const definitionGroups = new Set<SVGGElement>()
 
     const allCustomGroups = Array.from(
@@ -731,32 +724,18 @@ export class ScratchSimulator extends HTMLElement {
 
       const headerGroup = childGroups[headerIndex]
       if (!this.isDefinitionBlockGroup(headerGroup)) return
-      const customName = this.getCustomDefinitionName(headerGroup)
-      if (!customName) return
 
       const bodyGroups = childGroups
         .slice(headerIndex + 1)
         .filter((group) => this.isBlockGroup(group))
-      const bodyNodes = bodyGroups.map((group) => this.buildBlockTree(group))
-
-      definitions[customName] = bodyNodes
+      if (bodyGroups.length === 0) return
       definitionGroups.add(headerGroup)
     })
 
-    return { definitions, definitionGroups }
+    return definitionGroups
   }
 
-  // Extraire le nom d'une définition de bloc personnalisé à partir du texte de son groupe d'en-tête, en normalisant le texte pour gérer les variations d'espacement et de casse
-  private getCustomDefinitionName(group: SVGGElement): string {
-    const raw = this.getBlockOwnText(group)
-    const normalized = this.normalizeText(raw)
-    const withoutPrefix = normalized
-      .replace(/^définir\s+/, '')
-      .replace(/^definir\s+/, '')
-    return withoutPrefix.trim()
-  }
-
-  // Extraire le texte d'un groupe de bloc en ne prenant que les éléments textuels qui lui appartiennent directement (en ignorant les textes des blocs imbriqués) pour éviter les confusions dans les mappings exécution <-> affichage
+  // Extraire le texte propre d'un bloc (sans les textes des blocs imbriqués)
   private getBlockOwnText(group: SVGGElement): string {
     const parts: string[] = []
     const textNodes = Array.from(group.querySelectorAll('text'))
@@ -772,7 +751,7 @@ export class ScratchSimulator extends HTMLElement {
     return this.normalizeText(raw || group.textContent || '')
   }
 
-  // Trouver l'ancêtre bloc le plus proche d'un nœud de texte donné pour déterminer à quel bloc appartient un texte et éviter les confusions avec les textes des blocs imbriqués
+  // Trouver le bloc propriétaire d'un nœud de texte
   private getNearestBlockAncestorForNode(node: Element): SVGGElement | null {
     let current: Element | null = node.parentElement
 
@@ -786,7 +765,7 @@ export class ScratchSimulator extends HTMLElement {
     return null
   }
 
-  // Trouver l'ancêtre bloc le plus proche d'un groupe donné en remontant dans la hiérarchie DOM jusqu'à la racine SVG, pour déterminer la structure des blocs imbriqués et faire le lien entre rendu et logique d'exécution
+  // Trouver l'ancêtre bloc direct en remontant jusqu'à la racine SVG
   private getNearestBlockAncestor(
     group: SVGGElement,
     root: SVGElement,
@@ -801,7 +780,7 @@ export class ScratchSimulator extends HTMLElement {
     return null
   }
 
-  // Extraire les valeurs de translation X et Y d'un groupe de bloc pour les utiliser comme critère de fallback dans le tri des blocs lorsque les positions absolues ne sont pas fiables, afin de déterminer l'ordre d'exécution des blocs dans le code
+  // Lire la translation Y (fallback de tri quand le positionnement absolu est instable)
   private getTranslateY(group: SVGGElement): number {
     const transform = group.getAttribute('transform') || ''
     const match = transform.match(/translate\(([-\d.]+)(?:[ ,]([-\d.]+))?\)/)
@@ -819,7 +798,7 @@ export class ScratchSimulator extends HTMLElement {
     return Number.isNaN(x) ? 0 : x
   }
 
-  // Comparer la position de deux blocs pour les trier dans l'ordre d'exécution, en utilisant d'abord les positions absolues à l'écran, puis les translations comme critère de fallback lorsque les positions absolues ne sont pas fiables, afin de gérer les différentes manières dont les blocs peuvent être rendus dans le SVG
+  // Comparer deux blocs selon un ordre visuel stable
   private compareBlockPosition(a: SVGGElement, b: SVGGElement): number {
     const rectA = a.getBoundingClientRect()
     const rectB = b.getBoundingClientRect()
@@ -838,7 +817,7 @@ export class ScratchSimulator extends HTMLElement {
     return this.getTranslateX(a) - this.getTranslateX(b)
   }
 
-  // helpers pour analyser le code et faire le lien entre blocs rendus et instructions à exécuter
+  // Helpers de mapping entre rendu et instructions
   private codeHasCanvasBlocks(code: string): boolean {
     return /\\block(?:move|pen|look)\b/.test(code)
   }
@@ -901,7 +880,7 @@ export class ScratchSimulator extends HTMLElement {
     return /^bloc\s+/.test(normalized)
   }
 
-  // Normaliser le texte d'un bloc pour faciliter les correspondances entre instructions à exécuter et blocs rendus, en gérant les variations d'espacement, de casse, les différentes manières de formuler une même instruction, et en retirant les éléments de texte qui ne sont pas pertinents pour l'identification de l'instruction (comme les crochets autour des nombres ou les parenthèses)
+  // Normaliser le texte des blocs pour fiabiliser les correspondances
   private normalizeText(text: string): string {
     return text
       .replace(/\[(\d+)\]/g, '$1') // Retirer les crochets autour des nombres [15] -> 15
@@ -915,7 +894,7 @@ export class ScratchSimulator extends HTMLElement {
       .toLowerCase()
   }
 
-  // Attribution d'IDs uniques aux groupes de blocs rendus pour pouvoir les sélectionner de manière fiable lors du mapping entre exécution et affichage, en utilisant des UUID lorsque disponibles ou en générant des IDs basés sur le timestamp et un nombre aléatoire comme fallback
+  // Générer un identifiant stable pour cibler un bloc SVG
   private generateBlockId(): string {
     if (
       typeof crypto !== 'undefined' &&
@@ -942,7 +921,7 @@ export class ScratchSimulator extends HTMLElement {
     return value.replace(/([^a-zA-Z0-9_-])/g, '\\$1')
   }
 
-  // Recherche des blocks rendus à partir de l'index d'exécution en utilisant les IDs attribués pour faire le lien entre exécution et affichage de manière fiable, même lorsque les positions ou les textes des blocs ne permettent pas de faire le lien de manière déterministe
+  // Construire un sélecteur CSS fiable à partir de l'ID d'un bloc
   private getSelectorFromBlockId(blockId: string): string {
     return `#${this.escapeCssIdentifier(blockId)}`
   }
@@ -1626,9 +1605,9 @@ export class ScratchSimulator extends HTMLElement {
     ctx.stroke()
 
     // Traces
-    ctx.strokeStyle = '#0066cc'
-    ctx.lineWidth = 3
     result.traces.forEach((trace) => {
+      ctx.strokeStyle = trace.color || '#0066cc'
+      ctx.lineWidth = Math.max(1, trace.width || 3)
       ctx.beginPath()
       ctx.moveTo(trace.startX, trace.startY)
       ctx.lineTo(trace.endX, trace.endY)
@@ -1997,7 +1976,7 @@ export class ScratchSimulator extends HTMLElement {
   private displayInfo(result: ExecutionResult): void {
     if (!this.infoDiv) return
 
-    let html = `<div class="space-y-2"><p><strong>Position&nbsp:</strong> x=${Math.round(result.finalX - 200)}, y=${Math.round(200 - result.finalY)}, <strong>Angle&nbsp:</strong> ${Math.round(result.finalAngle)}°</p>`
+    let html = `<div class="space-y-2"><p><strong>Position&nbsp:</strong> x=${Math.round(result.finalX - 200)}, y=${Math.round(200 - result.finalY)}, <strong>Angle&nbsp:</strong> ${Math.round(result.finalAngle) % 360}°</p>`
     html += `<p><strong>Traces&nbsp:</strong> ${result.traces.length} ligne${result.traces.length > 1 ? 's' : ''}</p>`
 
     const iterations = result.repeatIterations ?? []

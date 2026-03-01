@@ -14,7 +14,9 @@ describe('ScratchInterpreter', () => {
 \\blocklook{Dire \\ovalvariable{compteur}}
 \\end{scratch}`
 
-    const result = await interpreter.executeAnimated(code, () => {}, 0)
+    const result = await interpreter.executeAnimated(code, () => {}, 0, {
+      skipWaitBlocks: true,
+    })
 
     expect(result.variables.compteur).toBe(3)
     expect(result.messages).toEqual(['3'])
@@ -184,13 +186,97 @@ describe('ScratchInterpreter', () => {
       startY: 200,
       endX: 215,
       endY: 200,
+      color: '#0066cc',
+      width: 3,
     })
     expect(result.traces[1]).toEqual({
       startX: 215,
       startY: 200,
       endX: 215,
       endY: 185,
+      color: '#0066cc',
+      width: 3,
     })
+  })
+
+  it('gere la couleur du stylo via pencolor puis trace avec cette couleur', async () => {
+    const interpreter = new ScratchInterpreter(200, 200, 90)
+    const code = `\\begin{scratch}[blocks]
+\\blockpen{mettre la couleur du stylo à \\pencolor{#ff0000}}
+\\blockpen{stylo en position d'écriture}
+\\blockmove{avancer de \\ovalnum{10} pas}
+\\end{scratch}`
+
+    const result = await interpreter.executeAnimated(code, () => {}, 0)
+
+    expect(result.traces).toHaveLength(1)
+    expect(result.traces[0].color).toBe('#ff0000')
+    expect(result.traces[0].width).toBe(3)
+  })
+
+  it('gere la couleur du stylo via pencolor HTML imbrique', async () => {
+    const interpreter = new ScratchInterpreter(200, 200, 90)
+    const code = `\\begin{scratch}[blocks]
+\\blockpen{mettre la couleur du stylo à \\pencolor{[HTML]{CB4AD4}}}
+\\blockpen{stylo en position d'écriture}
+\\blockmove{avancer de \\ovalnum{10} pas}
+\\end{scratch}`
+
+    const result = await interpreter.executeAnimated(code, () => {}, 0)
+
+    expect(result.traces).toHaveLength(1)
+    expect(result.traces[0].color).toBe('#CB4AD4')
+  })
+
+  it('gere la couleur du stylo via ovalnum puis ajout a la couleur', async () => {
+    const interpreter = new ScratchInterpreter(200, 200, 90)
+    const code = `\\begin{scratch}[blocks]
+\\blockpen{mettre la couleur du stylo à \\ovalnum{50}}
+\\blockpen{stylo en position d'écriture}
+\\blockmove{avancer de \\ovalnum{10} pas}
+\\blockpen{ajouter \\ovalnum{10} à la couleur du stylo}
+\\blockmove{avancer de \\ovalnum{10} pas}
+\\end{scratch}`
+
+    const result = await interpreter.executeAnimated(code, () => {}, 0)
+
+    expect(result.traces).toHaveLength(2)
+    expect(result.traces[0].color).toBe('hsla(90, 100%, 50%, 1)')
+    expect(result.traces[1].color).toBe('hsla(108, 100%, 50%, 1)')
+  })
+
+  it('gere la taille du stylo pour la largeur des traces', async () => {
+    const interpreter = new ScratchInterpreter(200, 200, 90)
+    const code = `\\begin{scratch}[blocks]
+\\blockpen{mettre la taille du stylo à \\ovalnum{6}}
+\\blockpen{stylo en position d'écriture}
+\\blockmove{avancer de \\ovalnum{10} pas}
+\\blockpen{ajouter \\ovalnum{2} à la taille du stylo}
+\\blockmove{avancer de \\ovalnum{10} pas}
+\\end{scratch}`
+
+    const result = await interpreter.executeAnimated(code, () => {}, 0)
+
+    expect(result.traces).toHaveLength(2)
+    expect(result.traces[0].width).toBe(6)
+    expect(result.traces[1].width).toBe(8)
+  })
+
+  it('traite selectmenu commente comme parametre couleur du stylo', async () => {
+    const interpreter = new ScratchInterpreter(200, 200, 90)
+    const code = `\\begin{scratch}[blocks]
+\\blockpen{mettre la couleur du stylo à \\ovalnum{50}}
+\\blockpen{stylo en position d'écriture}
+\\blockmove{avancer de \\ovalnum{10} pas}
+\\blockpen{ajouter \\ovalnum{10} à \\selectmenu{% non pris en charge: pen\\_menu\\_colorParam} du stylo}
+\\blockmove{avancer de \\ovalnum{10} pas}
+\\end{scratch}`
+
+    const result = await interpreter.executeAnimated(code, () => {}, 0)
+
+    expect(result.traces).toHaveLength(2)
+    expect(result.traces[0].color).toBe('hsla(90, 100%, 50%, 1)')
+    expect(result.traces[1].color).toBe('hsla(108, 100%, 50%, 1)')
   })
 
   it("gere blockmove 'mettre x a ...'", async () => {
@@ -249,6 +335,36 @@ describe('ScratchInterpreter', () => {
     expect(result.finalX).toBe(205)
     expect(result.finalY).toBe(198)
     expect(result.finalAngle).toBe(100)
+  })
+
+  it('normalise la direction dans les bornes Scratch [-180, 180]', async () => {
+    const interpreter = new ScratchInterpreter(200, 200, 90)
+    const code = `\\begin{scratch}[blocks]
+\\blockvariable{mettre \\selectmenu{direction} à \\ovalnum{181}}
+\\blocklook{dire \\ovalvariable{direction}}
+\\blockvariable{mettre \\selectmenu{direction} à \\ovalnum{-181}}
+\\blocklook{dire \\ovalvariable{direction}}
+\\blockvariable{mettre \\selectmenu{direction} à \\ovalnum{540}}
+\\blocklook{dire \\ovalvariable{direction}}
+\\end{scratch}`
+
+    const result = await interpreter.executeAnimated(code, () => {}, 0)
+
+    expect(result.messages).toEqual(['-179', '179', '180'])
+    expect(result.finalAngle).toBe(180)
+  })
+
+  it('normalise -180 en 180 pour la direction', async () => {
+    const interpreter = new ScratchInterpreter(200, 200, 90)
+    const code = `\\begin{scratch}[blocks]
+\\blockvariable{mettre \\selectmenu{direction} à \\ovalnum{-180}}
+\\blocklook{dire \\ovalvariable{direction}}
+\\end{scratch}`
+
+    const result = await interpreter.executeAnimated(code, () => {}, 0)
+
+    expect(result.messages).toEqual(['180'])
+    expect(result.finalAngle).toBe(180)
   })
 
   it("gere blockrepeat jusqu'à ce que avec booloperator <", async () => {

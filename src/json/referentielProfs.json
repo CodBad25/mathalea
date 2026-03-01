@@ -160,6 +160,13 @@
     "typeExercice": "outil",
     "url": "OutilSpline.svelte"
   },
+  "P023": {
+    "titre": "Convertisseur Scratch -> Latex",
+    "typeExercice": "tierce",
+    "uuid": "scratch2Latex",
+    "id": "scratch2latex",
+    "url": "scratch2Latex.ts"
+  },
   "P024": {
     "id": "P024",
     "uuid": "outilScratch",

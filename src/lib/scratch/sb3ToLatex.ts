@@ -35,7 +35,7 @@ const OPCODE_TO_BLOCK = {
   motion_glidesecstoxy: (b: any, c: any) =>
     `\\blockmove{glisser en ${inputVal(b, 'SECS', c)} s à x: ${inputVal(b, 'X', c)} y: ${inputVal(b, 'Y', c)}}`,
   motion_pointindirection: (b: any, c: any) =>
-    `\\blockmove{s'orienter à ${inputVal(b, 'DIRECTION', c)} degrés}`,
+    `\\blockmove{s'orienter à ${inputVal(b, 'DIRECTION', c)}}`,
   motion_pointtowards: (b: any, c: any) =>
     `\\blockmove{se diriger vers ${inputVal(b, 'TOWARDS', c)}}`,
   motion_changexby: (b: any, c: any) =>
@@ -106,15 +106,15 @@ const OPCODE_TO_BLOCK = {
     `\\blocksound{mettre le volume à ${inputVal(b, 'VOLUME', c)} \\%}`,
   sound_volume: (b: any, c: any) => `\\ovalsound{volume}`,
   pen_clear: (b: any, c: any) => `\\blockpen{effacer tout}`,
-  pen_stamp: (b: any, c: any) => `\\blockpen{tamponner}`,
+  pen_stamp: (b: any, c: any) => `\\blockpen{estampiller}`,
   pen_penDown: (b: any, c: any) => `\\blockpen{stylo en position d'écriture}`,
   pen_penUp: (b: any, c: any) => `\\blockpen{relever le stylo}`,
   pen_setPenColorToColor: (b: any, c: any) =>
     `\\blockpen{mettre la couleur du stylo à ${inputVal(b, 'COLOR', c)}}`,
   pen_changePenColorParamBy: (b: any, c: any) =>
-    `\\blockpen{ajouter ${inputVal(b, 'VALUE', c)} à \\selectmenu{${inputVal(b, 'COLOR_PARAM', c)}} du stylo}`,
+    `\\blockpen{ajouter ${inputVal(b, 'VALUE', c)} à ${inputVal(b, 'COLOR_PARAM', c)} du stylo}`,
   pen_setPenColorParamTo: (b: any, c: any) =>
-    `\\blockpen{mettre \\selectmenu{${inputVal(b, 'COLOR_PARAM', c)}} du stylo à ${inputVal(b, 'VALUE', c)}}`,
+    `\\blockpen{mettre ${inputVal(b, 'COLOR_PARAM', c)} du stylo à ${inputVal(b, 'VALUE', c)}}`,
   pen_changePenSizeBy: (b: any, c: any) =>
     `\\blockpen{ajouter ${inputVal(b, 'SIZE', c)} à la taille du stylo}`,
   pen_setPenSizeTo: (b: any, c: any) =>
@@ -273,9 +273,37 @@ function inputVal(
   if (typeof inner === 'string') {
     const subBlock = ctx.blocks[inner]
     if (!subBlock) return '\\ovalnum{?}'
+
+    if (subBlock.opcode === 'pen_menu_colorParam') {
+      return `\\selectmenu{${extractPenColorParam(subBlock)}}`
+    }
+
     return renderBlock(subBlock, ctx)
   }
   return '\\ovalnum{?}'
+}
+
+function extractPenColorParam(block: { fields?: Record<string, any> }): string {
+  const fields = block.fields ?? {}
+
+  const namedField =
+    fields['colorParam'] ||
+    fields['COLOR_PARAM'] ||
+    fields['PEN_COLOR_PARAM'] ||
+    null
+
+  const rawFromNamed = Array.isArray(namedField) ? namedField[0] : null
+  if (rawFromNamed != null && String(rawFromNamed).trim() !== '') {
+    return escapeTex(String(rawFromNamed))
+  }
+
+  const firstEntry = Object.values(fields)[0]
+  const rawFromFirst = Array.isArray(firstEntry) ? firstEntry[0] : null
+  if (rawFromFirst != null && String(rawFromFirst).trim() !== '') {
+    return escapeTex(String(rawFromFirst))
+  }
+
+  return 'couleur'
 }
 
 // ── Unité d'indentation ──────────────────────────────────────
@@ -296,7 +324,8 @@ function renderBlock(block: { opcode: string }, ctx: any, indent = '') {
   if (op === 'control_repeat_until')
     return renderRepeatUntil(block as any, ctx, indent)
   if (op === 'control_forever') return renderForever(block as any, ctx, indent)
-  if (op === 'procedures_definition') return indent + renderProcDef(block as any, ctx)
+  if (op === 'procedures_definition')
+    return indent + renderProcDef(block as any, ctx)
 
   if (isKnownOpcode(op)) {
     const fn: BlockRenderer = OPCODE_TO_BLOCK[op]
@@ -473,4 +502,167 @@ type KnownOpcode = keyof typeof OPCODE_TO_BLOCK
 
 function isKnownOpcode(op: string): op is KnownOpcode {
   return op in OPCODE_TO_BLOCK
+}
+
+const STRUCTURAL_OPCODES = [
+  'control_if',
+  'control_if_else',
+  'control_repeat',
+  'control_repeat_until',
+  'control_forever',
+  'procedures_definition',
+] as const
+
+const OPCODES_SUPPORTED_BY_SIMULATOR = [
+  'event_whenflagclicked',
+  'event_whenkeypressed',
+  'control_if',
+  'control_if_else',
+  'control_repeat',
+  'control_repeat_until',
+  'procedures_definition',
+  'procedures_call',
+  'motion_movesteps',
+  'motion_turnright',
+  'motion_turnleft',
+  'motion_gotoxy',
+  'motion_pointindirection',
+  'motion_changexby',
+  'motion_setx',
+  'motion_changeyby',
+  'motion_sety',
+  'motion_xposition',
+  'motion_yposition',
+  'motion_direction',
+  'looks_sayforsecs',
+  'looks_say',
+  'looks_thinkforsecs',
+  'looks_think',
+  'looks_show',
+  'looks_hide',
+  'pen_penDown',
+  'pen_penUp',
+  'pen_setPenColorToColor',
+  'pen_changePenColorParamBy',
+  'pen_setPenColorParamTo',
+  'pen_changePenSizeBy',
+  'pen_setPenSizeTo',
+  'data_setvariableto',
+  'data_changevariableby',
+  'data_variable',
+  'sensing_askandwait',
+  'sensing_answer',
+  'operator_add',
+  'operator_subtract',
+  'operator_multiply',
+  'operator_divide',
+  'operator_random',
+  'operator_gt',
+  'operator_lt',
+  'operator_equals',
+  'operator_and',
+  'operator_or',
+  'operator_not',
+  'operator_join',
+  'operator_letter_of',
+  'operator_length',
+  'operator_contains',
+  'operator_mod',
+  'operator_mathop',
+] as const
+
+const OPCODES_PARTIALLY_SUPPORTED_BY_SIMULATOR = [
+  'event_whenthisspriteclicked',
+  'event_whenstageclicked',
+  'event_whenbackdropswitchesto',
+  'event_whengreaterthan',
+  'event_whenbroadcastreceived',
+  'operator_round',
+  'data_showvariable',
+  'data_hidevariable',
+] as const
+
+const allOpcodesRenderedBySb3ToLatex = [
+  ...Object.keys(OPCODE_TO_BLOCK),
+  ...STRUCTURAL_OPCODES,
+]
+
+export const SIMULATOR_SUPPORTED_OPCODES = Object.freeze(
+  [...new Set(OPCODES_SUPPORTED_BY_SIMULATOR)].sort(),
+)
+
+export const SIMULATOR_PARTIALLY_SUPPORTED_OPCODES = Object.freeze(
+  [...new Set(OPCODES_PARTIALLY_SUPPORTED_BY_SIMULATOR)].sort(),
+)
+
+const simulatorSupportedOpcodeSet = new Set<string>(SIMULATOR_SUPPORTED_OPCODES)
+const simulatorPartiallySupportedOpcodeSet = new Set<string>(
+  SIMULATOR_PARTIALLY_SUPPORTED_OPCODES,
+)
+
+export const SIMULATOR_UNSUPPORTED_OPCODES = Object.freeze(
+  [...new Set(allOpcodesRenderedBySb3ToLatex)]
+    .filter(
+      (opcode) =>
+        !simulatorSupportedOpcodeSet.has(opcode) &&
+        !simulatorPartiallySupportedOpcodeSet.has(opcode),
+    )
+    .sort(),
+)
+
+const STRUCTURAL_OPCODE_LABELS: Record<string, string> = {
+  control_if: 'si ... alors',
+  control_if_else: 'si ... alors ... sinon ...',
+  control_repeat: 'répéter ... fois',
+  control_repeat_until: "répéter jusqu'à ...",
+  control_forever: 'répéter indéfiniment',
+  procedures_definition: 'définir un bloc personnalisé',
+}
+
+const opcodeHumanLabelCache = new Map<string, string>()
+
+function normalizeLatexInstructionToFrenchLabel(latex: string): string {
+  return latex
+    .replace(/\\turnright\{\}/g, 'à droite')
+    .replace(/\\turnleft\{\}/g, 'à gauche')
+    .replace(/\\greenflag/g, 'drapeau vert')
+    .replace(/\\%/g, '%')
+    .replace(
+      /\\(?:ovalnum|ovalvariable|ovalsensing|ovalmove|ovallook|ovalsound|ovallist|selectmenu|pencolor)\{[^{}]*\}/g,
+      '...',
+    )
+    .replace(/\\[a-zA-Z@*]+\{/g, '')
+    .replace(/[{}]/g, ' ')
+    .replace(/\?/g, '...')
+    .replace(/\\/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+}
+
+export function humanizeScratchOpcode(opcode: string): string {
+  const cached = opcodeHumanLabelCache.get(opcode)
+  if (cached) {
+    return cached
+  }
+
+  const structuralLabel = STRUCTURAL_OPCODE_LABELS[opcode]
+  if (structuralLabel) {
+    opcodeHumanLabelCache.set(opcode, structuralLabel)
+    return structuralLabel
+  }
+
+  const renderer = (OPCODE_TO_BLOCK as Record<string, BlockRenderer>)[opcode]
+  if (!renderer) {
+    opcodeHumanLabelCache.set(opcode, opcode)
+    return opcode
+  }
+
+  const latex = renderer(
+    { opcode, fields: {}, inputs: {}, mutation: {} },
+    { blocks: {} },
+  )
+  const humanLabel = normalizeLatexInstructionToFrenchLabel(latex ?? '')
+  const result = humanLabel || opcode
+  opcodeHumanLabelCache.set(opcode, result)
+  return result
 }

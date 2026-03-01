@@ -12,8 +12,17 @@ export interface ScratchLookMessage {
   type: ScratchLookMessageType
 }
 
+export interface ScratchTrace {
+  startX: number
+  startY: number
+  endX: number
+  endY: number
+  color: string
+  width: number
+}
+
 export interface ExecutionResult {
-  traces: Array<{ startX: number; startY: number; endX: number; endY: number }>
+  traces: ScratchTrace[]
   finalX: number
   finalY: number
   finalAngle: number
@@ -39,21 +48,25 @@ export interface ExecuteAnimatedOptions {
 }
 
 export class ScratchInterpreter {
+  private static readonly DEFAULT_PEN_COLOR = '#0066cc'
+  private static readonly DEFAULT_PEN_WIDTH = 3
+
   private x: number
   private y: number
   private angle: number // en degrés Scratch, 0° = vers le haut, 90° = vers la droite
   private penDown: boolean = false
+  private penColor: string = ScratchInterpreter.DEFAULT_PEN_COLOR
+  private penWidth: number = ScratchInterpreter.DEFAULT_PEN_WIDTH
+  private penColorValue: number | null = null
+  private penSaturation: number = 100
+  private penLightness: number = 50
+  private penTransparency: number = 0
   private visible: boolean = true
   private stopped: boolean = false // Flag pour arrêter l'exécution
   private answer: string = '' // Variable réservée "réponse" pour stocker les inputs utilisateur
   private variables: Record<string, number> = {}
   private customBlocks: Record<string, string> = {} // Blocs personnalisés
-  private traces: Array<{
-    startX: number
-    startY: number
-    endX: number
-    endY: number
-  }> = []
+  private traces: ScratchTrace[] = []
 
   private messages: string[] = []
   private currentLookMessage: ScratchLookMessage | null = null
@@ -92,6 +105,13 @@ export class ScratchInterpreter {
     this.messages = []
     this.variables = {}
     this.customBlocks = {}
+    this.penDown = false
+    this.penColor = ScratchInterpreter.DEFAULT_PEN_COLOR
+    this.penWidth = ScratchInterpreter.DEFAULT_PEN_WIDTH
+    this.penColorValue = null
+    this.penSaturation = 100
+    this.penLightness = 50
+    this.penTransparency = 0
     this.stopped = false
     this.answer = ''
     this.onUpdate = onUpdate
@@ -816,7 +836,6 @@ export class ScratchInterpreter {
         this.visible = true
         return
       }
-      // TODO: implémenter 'cacher', 'montrer', etc.
       return
     }
 
@@ -936,6 +955,27 @@ export class ScratchInterpreter {
         this.penDown = true
       } else if (normalized.includes('relever')) {
         this.penDown = false
+      } else if (
+        normalized.includes('taille') ||
+        normalized.includes('epaisseur') ||
+        normalized.includes('largeur')
+      ) {
+        const widthValue = this.extractNumericValue(content)
+        if (normalized.includes('ajouter')) {
+          this.penWidth = Math.max(1, this.penWidth + widthValue)
+        } else {
+          this.penWidth = Math.max(1, widthValue)
+        }
+      } else {
+        const penParameter = this.extractPenParameter(content, normalized)
+        if (penParameter) {
+          this.applyPenParameterChange(
+            penParameter,
+            this.extractNumericValue(content),
+            normalized.includes('ajouter'),
+            content,
+          )
+        }
       }
       return true
     }
@@ -948,12 +988,144 @@ export class ScratchInterpreter {
     }
 
     if (type === 'sensing') {
-      // Le bloc sensing sera géré de manière asynchrone dans executeBlockAction
-      // En mode synchrone, on ne peut pas vraiment attendre l'utilisateur
       return true
     }
 
     return false
+  }
+
+  private extractPenParameter(
+    content: string,
+    normalizedContent: string,
+  ): 'couleur' | 'saturation' | 'luminosite' | 'transparence' | null {
+    const menuRaw =
+      this.extractCommandContent(content, '\\selectmenu') ||
+      this.extractCommandContent(content, '\\selectmenu*')
+
+    if (menuRaw) {
+      const normalizedMenu = menuRaw
+        .replace(/\\_/g, '_')
+        .replace(/%.*/g, ' ')
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/[^a-z0-9_ ]+/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim()
+
+      if (!normalizedMenu) {
+        return 'couleur'
+      }
+
+      if (
+        normalizedMenu.includes('transparence') ||
+        normalizedMenu.includes('transparency')
+      ) {
+        return 'transparence'
+      }
+      if (
+        normalizedMenu.includes('luminosite') ||
+        normalizedMenu.includes('brightness')
+      ) {
+        return 'luminosite'
+      }
+      if (normalizedMenu.includes('saturation')) {
+        return 'saturation'
+      }
+      if (
+        normalizedMenu.includes('couleur') ||
+        normalizedMenu.includes('color') ||
+        normalizedMenu.includes('pen_menu_colorparam')
+      ) {
+        return 'couleur'
+      }
+    }
+
+    if (normalizedContent.includes('transparence')) {
+      return 'transparence'
+    }
+    if (normalizedContent.includes('luminosite')) {
+      return 'luminosite'
+    }
+    if (normalizedContent.includes('saturation')) {
+      return 'saturation'
+    }
+    if (normalizedContent.includes('couleur')) {
+      return 'couleur'
+    }
+
+    return null
+  }
+
+  private applyPenParameterChange(
+    parameter: 'couleur' | 'saturation' | 'luminosite' | 'transparence',
+    numericValue: number,
+    isAddOperation: boolean,
+    content: string,
+  ): void {
+    if (parameter === 'couleur') {
+      const selectedColor = this.extractPenColor(content)
+      if (selectedColor) {
+        this.penColor = selectedColor
+        this.penColorValue = null
+        return
+      }
+
+      if (isAddOperation) {
+        this.addToPenColor(numericValue)
+      } else {
+        this.setPenColorFromValue(numericValue)
+      }
+      return
+    }
+
+    this.applyDefaultPenParamsFromCssColorIfNeeded()
+
+    if (parameter === 'saturation') {
+      this.penSaturation = isAddOperation
+        ? this.clampPenPercent(this.penSaturation + numericValue)
+        : this.clampPenPercent(numericValue)
+      this.updatePenColorFromParams()
+      return
+    }
+
+    if (parameter === 'luminosite') {
+      this.penLightness = isAddOperation
+        ? this.clampPenPercent(this.penLightness + numericValue)
+        : this.clampPenPercent(numericValue)
+      this.updatePenColorFromParams()
+      return
+    }
+
+    this.penTransparency = isAddOperation
+      ? this.clampPenPercent(this.penTransparency + numericValue)
+      : this.clampPenPercent(numericValue)
+    this.updatePenColorFromParams()
+  }
+
+  private clampPenPercent(value: number): number {
+    return Math.max(0, Math.min(100, value))
+  }
+
+  private updatePenColorFromParams(): void {
+    const hue = this.penColorValueToHue(this.penColorValue ?? 0)
+    const alpha = Math.max(0, Math.min(1, 1 - this.penTransparency / 100))
+    this.penColor = `hsla(${hue}, ${this.penSaturation}%, ${this.penLightness}%, ${alpha})`
+  }
+
+  private penColorValueToHue(value: number): number {
+    const normalized = this.normalizePenColorValue(value)
+    return Math.round(normalized * 1.8 * 100) / 100
+  }
+
+  private applyDefaultPenParamsFromCssColorIfNeeded(): void {
+    if (this.penColorValue !== null) {
+      return
+    }
+    this.penColorValue = 0
+    this.penSaturation = 100
+    this.penLightness = 50
+    this.penTransparency = 0
   }
 
   private async handleEventBlock(content: string): Promise<void> {
@@ -1008,35 +1180,7 @@ export class ScratchInterpreter {
       return ''
     }
 
-    if (normalized === 'space' || normalized === 'spacebar') {
-      return 'espace'
-    }
-
-    if (normalized === 'arrowup') return 'fleche haut'
-    if (normalized === 'arrowdown') return 'fleche bas'
-    if (normalized === 'arrowleft') return 'fleche gauche'
-    if (normalized === 'arrowright') return 'fleche droite'
-    if (normalized === 'enter') return 'entree'
-
     return normalized
-  }
-
-  private isGreenFlagEvent(content: string): boolean {
-    return /\\greenflag|drapeau|greenflag/i.test(content)
-  }
-
-  private extractEventKey(content: string): string | null {
-    const menuMatch = content.match(/\\selectmenu\*?\{([^}]+)\}/i)
-    if (menuMatch) {
-      return this.normalizeEventKey(menuMatch[1])
-    }
-
-    const textMatch = content.match(/touche\s+([^{}]+?)\s+est/i)
-    if (textMatch) {
-      return this.normalizeEventKey(textMatch[1])
-    }
-
-    return null
   }
 
   private consumePressedEventKey(expectedKey: string): boolean {
@@ -1048,16 +1192,31 @@ export class ScratchInterpreter {
     return true
   }
 
+  private isGreenFlagEvent(content: string): boolean {
+    const normalized = content
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+
+    return normalized.includes('greenflag') || normalized.includes('drapeau')
+  }
+
+  private extractEventKey(content: string): string | null {
+    const normalized = content
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+
+    const keyMatch = normalized.match(/touche\s+([^\s{}\\]+)/i)
+    if (!keyMatch) {
+      return null
+    }
+
+    return keyMatch[1].trim()
+  }
+
   private humanizeInstruction(type: string, content: string): string {
     if (type === 'move') {
-      if (this.isGoToInstruction(content)) {
-        const target = this.extractGoToCoordinates(content)
-        if (target) {
-          return `Aller a x:${target.x} y:${target.y}`
-        }
-        return 'Aller a x:? y:?'
-      }
-
       if (this.isChangeXInstruction(content)) {
         return `Ajouter ${this.extractNumericValue(content)} a x`
       }
@@ -1074,18 +1233,26 @@ export class ScratchInterpreter {
         return `Mettre y a ${this.extractNumericValue(content)}`
       }
 
-      if (content.includes('orienter')) {
-        return `S'orienter a ${this.extractNumber(content)} degres`
-      }
-
       if (content.includes('avancer')) {
-        return `Avancer de ${this.extractNumber(content)} pas`
+        return `Avancer de ${this.extractNumericValue(content)} pas`
       }
 
       if (content.includes('tourner')) {
-        const angle = this.extractNumber(content)
+        const angle = this.extractNumericValue(content)
         const direction = content.includes('turnright') ? 'droite' : 'gauche'
         return `Tourner a ${direction} de ${angle} degres`
+      }
+
+      if (this.isGoToInstruction(content)) {
+        const target = this.extractGoToCoordinates(content)
+        if (target) {
+          return `Aller a x:${target.x} y:${target.y}`
+        }
+        return 'Aller a une position'
+      }
+
+      if (content.includes('orienter')) {
+        return `Orienter a ${this.extractNumericValue(content)} degres`
       }
     }
 
@@ -1153,7 +1320,6 @@ export class ScratchInterpreter {
     }
 
     if (type === 'ifelse') {
-      // Extraire juste le début de la condition pour l'affichage
       const conditionMatch = content.match(/si\s+.*?\s+alors/i)
       if (conditionMatch) {
         return `Evaluation condition: ${conditionMatch[0]}`
@@ -1186,9 +1352,13 @@ export class ScratchInterpreter {
     ].filter((value): value is string => Boolean(value))
 
     for (const candidate of candidates) {
-      const rendered = scratchblock(candidate)
-      if (rendered !== false) {
-        return rendered
+      try {
+        const rendered = scratchblock(candidate)
+        if (rendered !== false) {
+          return rendered
+        }
+      } catch {
+        continue
       }
     }
 
@@ -2368,7 +2538,27 @@ export class ScratchInterpreter {
   }
 
   private setOrientation(angle: number): void {
-    this.angle = angle
+    this.angle = this.normalizeAngle(angle)
+  }
+
+  private normalizeAngle(angle: number): number {
+    const normalized = ((((angle + 180) % 360) + 360) % 360) - 180
+    return normalized === -180 ? 180 : normalized
+  }
+
+  private addTraceSegment(endX: number, endY: number): void {
+    if (!this.penDown) {
+      return
+    }
+
+    this.traces.push({
+      startX: this.x,
+      startY: this.y,
+      endX,
+      endY,
+      color: this.penColor,
+      width: this.penWidth,
+    })
   }
 
   private moveForward(steps: number): void {
@@ -2376,14 +2566,7 @@ export class ScratchInterpreter {
     const newX = this.x + steps * Math.sin(rad)
     const newY = this.y - steps * Math.cos(rad)
 
-    if (this.penDown) {
-      this.traces.push({
-        startX: this.x,
-        startY: this.y,
-        endX: newX,
-        endY: newY,
-      })
-    }
+    this.addTraceSegment(newX, newY)
 
     this.x = newX
     this.y = newY
@@ -2392,14 +2575,7 @@ export class ScratchInterpreter {
   private changeXBy(deltaX: number): void {
     const newX = this.x + deltaX
 
-    if (this.penDown) {
-      this.traces.push({
-        startX: this.x,
-        startY: this.y,
-        endX: newX,
-        endY: this.y,
-      })
-    }
+    this.addTraceSegment(newX, this.y)
 
     this.x = newX
   }
@@ -2407,14 +2583,7 @@ export class ScratchInterpreter {
   private changeYBy(deltaY: number): void {
     const newY = this.y - deltaY
 
-    if (this.penDown) {
-      this.traces.push({
-        startX: this.x,
-        startY: this.y,
-        endX: this.x,
-        endY: newY,
-      })
-    }
+    this.addTraceSegment(this.x, newY)
 
     this.y = newY
   }
@@ -2422,14 +2591,7 @@ export class ScratchInterpreter {
   private setXTo(targetX: number): void {
     const newX = 200 + targetX
 
-    if (this.penDown) {
-      this.traces.push({
-        startX: this.x,
-        startY: this.y,
-        endX: newX,
-        endY: this.y,
-      })
-    }
+    this.addTraceSegment(newX, this.y)
 
     this.x = newX
   }
@@ -2437,14 +2599,7 @@ export class ScratchInterpreter {
   private setYTo(targetY: number): void {
     const newY = 200 - targetY
 
-    if (this.penDown) {
-      this.traces.push({
-        startX: this.x,
-        startY: this.y,
-        endX: this.x,
-        endY: newY,
-      })
-    }
+    this.addTraceSegment(this.x, newY)
 
     this.y = newY
   }
@@ -2453,20 +2608,50 @@ export class ScratchInterpreter {
     const newX = 200 + targetX
     const newY = 200 - targetY
 
-    if (this.penDown) {
-      this.traces.push({
-        startX: this.x,
-        startY: this.y,
-        endX: newX,
-        endY: newY,
-      })
-    }
+    this.addTraceSegment(newX, newY)
 
     this.x = newX
     this.y = newY
   }
 
+  private extractPenColor(content: string): string | null {
+    const rawColor = this.extractCommandContent(content, '\\pencolor')
+    if (!rawColor) {
+      return null
+    }
+
+    const color = rawColor.trim()
+    if (!color) {
+      return null
+    }
+
+    const htmlMatch = color.match(/^\[HTML\]\{([0-9a-fA-F]{6})\}$/)
+    if (htmlMatch) {
+      return `#${htmlMatch[1]}`
+    }
+
+    return color
+  }
+
+  private normalizePenColorValue(value: number): number {
+    const modulo = 200
+    return ((value % modulo) + modulo) % modulo
+  }
+
+  private setPenColorFromValue(value: number): void {
+    this.penColorValue = value
+    this.updatePenColorFromParams()
+  }
+
+  private addToPenColor(delta: number): void {
+    const baseValue = this.penColorValue ?? 0
+    const nextValue = baseValue + delta
+    this.penColorValue = nextValue
+    this.updatePenColorFromParams()
+  }
+
   private turn(degrees: number): void {
     this.angle += degrees
+    this.angle = this.normalizeAngle(this.angle)
   }
 }
