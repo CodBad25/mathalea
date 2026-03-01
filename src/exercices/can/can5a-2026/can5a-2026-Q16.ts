@@ -7,11 +7,11 @@ import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { toutPourUnPoint } from '../../../lib/interactif/mathLive'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { pgcd } from '../../../lib/outils/primalite'
 import type { IExercice } from '../../../lib/types'
 import FractionEtendue from '../../../modules/FractionEtendue'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import ExerciceCan from '../../ExerciceCan'
-import { pgcd } from '../../../lib/outils/primalite'
 
 export const titre = 'Calculer la proportion de boules blanches dans un sac'
 export const interactifReady = true
@@ -27,7 +27,7 @@ export const refs = {
 
 */
 export default class Can52026Q16 extends ExerciceCan {
- enonce(nbBlanches?: number, nbNoires?: number) {
+  enonce(nbBlanches?: number, nbNoires?: number) {
     if (nbBlanches == null || nbNoires == null) {
       const listeCas = [
         [3, 5],
@@ -64,7 +64,12 @@ export default class Can52026Q16 extends ExerciceCan {
       const denStr = mfe.getPromptValue('champ2') || ''
       const num = Number(numStr)
       const den = Number(denStr)
-      const isOk = numStr.trim() !== '' && denStr.trim() !== '' && den !== 0 && num * total === nbBlanches! * den
+      const isOk =
+        num !== 0 &&
+        !isNaN(num) &&
+        den !== 0 &&
+        !isNaN(den) &&
+        num * total === nbBlanches * den
       if (isOk) {
         mfe.setPromptState('champ1', 'correct', true)
         mfe.setPromptState('champ2', 'correct', true)
@@ -132,19 +137,32 @@ export default class Can52026Q16 extends ExerciceCan {
       }
     }
 
-    this.consigne =
-      mathalea2d(Object.assign({ style: 'margin: auto',  scale: 0.5 }, fixeBordures(objets)), objets) 
-    this.question = '\\text{La proportion de boules blanches dans cette boîte est  } \\dfrac{%{champ1}}{%{champ2}}.'
+    this.consigne = mathalea2d(
+      Object.assign(
+        { style: 'margin: auto', scale: 0.5 },
+        fixeBordures(objets),
+      ),
+      objets,
+    )
+    this.question =
+      '\\text{La proportion de boules blanches dans cette boîte est  } \\dfrac{%{champ1}}{%{champ2}}.'
 
     this.correction = `Il y a $${nbBlanches}$ boules blanches sur un total de $${total}$ boules.<br>
-La proportion de boules blanches est donc : ${pgcd(nbBlanches, total)!==1 ? `$\\dfrac{${nbBlanches}}{${total}}=${miseEnEvidence(fractionSimplifiee.texFraction)}$`: `$${miseEnEvidence(`\\dfrac{${nbBlanches}}{${total}}`)}$`}.`
+La proportion de boules blanches est donc : ${pgcd(nbBlanches, total) !== 1 ? `$\\dfrac{${nbBlanches}}{${total}}=${miseEnEvidence(fractionSimplifiee.texFraction)}$` : `$${miseEnEvidence(`\\dfrac{${nbBlanches}}{${total}}`)}$`}.`
     this.formatChampTexte = KeyboardType.clavierDeBase
 
     this.reponse = {
       bareme: toutPourUnPoint,
       callback,
     }
-    this.canEnonce = mathalea2d(Object.assign({ style: 'margin: auto',  scale: 0.5 }, fixeBordures(objets)), objets) + '<br>La proportion de boules blanches dans cette boîte est :'
+    this.canEnonce =
+      mathalea2d(
+        Object.assign(
+          { style: 'margin: auto', scale: 0.5 },
+          fixeBordures(objets),
+        ),
+        objets,
+      ) + '<br>La proportion de boules blanches dans cette boîte est :'
     this.canReponseACompleter = '$\\dfrac{\\ldots}{\\ldots}$'
   }
 
