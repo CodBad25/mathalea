@@ -88,10 +88,29 @@ export function scratchblock(
             texte = translatex(chaine, index + taille + 1, compteAccolades)
             resultat = [texte[0], texte[1], texte[2]]
             break
-          case 'pen':
+          case 'pen': {
             texte = translatex(chaine, index + taille + 1, compteAccolades)
-            resultat = [texte[0] + ' :: pen', texte[1], texte[2]]
+            let penText = texte[0]
+            let penIndex = Number(texte[1])
+            let penDepth = Number(texte[2])
+            guard = 0
+            while (
+              chaine.charAt(penIndex) !== '}' &&
+              guard < LOOP_GUARD_LIMIT
+            ) {
+              const previousIndex = penIndex
+              texte = translatex(chaine, penIndex, penDepth)
+              penText += texte[0]
+              penIndex = Number(texte[1])
+              penDepth = Number(texte[2])
+              if (penIndex <= previousIndex) {
+                break
+              }
+              guard++
+            }
+            resultat = [penText + ' :: pen', penIndex + 1, penDepth - 1]
             break
+          }
           case 'list':
             texte = translatex(chaine, index + taille + 1, compteAccolades)
             resultat = [texte[0] + ' :: list', texte[1], texte[2]]
@@ -485,6 +504,25 @@ export function scratchblock(
             texte = translatex(chaine, 13 + index, compteAccolades)
             resultat = [`[${texte[0]} v] `, texte[1] + 1, texte[2] - 1]
             break
+          case '\\pencolor': {
+            const remaining = chaine.substring(index)
+            const htmlColorMatch = remaining.match(
+              /^\\pencolor\{\[HTML\]\{([0-9a-fA-F]{6})\}\}/,
+            )
+            if (htmlColorMatch) {
+              resultat = [
+                `[#${htmlColorMatch[1].toUpperCase()}]`,
+                index + htmlColorMatch[0].length,
+                compteAccolades,
+              ]
+              break
+            }
+
+            compteAccolades++
+            texte = translatex(chaine, 10 + index, compteAccolades)
+            resultat = [`[${texte[0]}]`, texte[1] + 1, texte[2] - 1]
+            break
+          }
           default:
             string = chaine.substring(index).split(regex1)[0]
             resultat = [string, string.length + index, compteAccolades]
