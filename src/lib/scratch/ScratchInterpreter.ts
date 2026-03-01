@@ -204,14 +204,16 @@ export class ScratchInterpreter {
       const blockName = match[1]
       const defStart = match.index + match[0].length
 
-      // Trouver la fin de la définition : chercher le prochain bloc "principal"
-      // (aller à, blockpen, ou blockrepeat au niveau racine)
-      const mainBlockRegex =
-        /\\blockmove\{aller à|\\blockpen\{|\\blockrepeat\{répéter/g
-      mainBlockRegex.lastIndex = defStart
+      // Trouver la fin de la définition : prochain "hat block"
+      // (nouvelle définition ou événement principal).
+      const nextDefinitionOrEventRegex =
+        /\\initmoreblocks\{|\\blockinit\{|\\blockevent\{/g
+      nextDefinitionOrEventRegex.lastIndex = defStart
 
-      const mainBlockMatch = mainBlockRegex.exec(code)
-      const defEnd = mainBlockMatch ? mainBlockMatch.index : code.length
+      const nextDefinitionOrEventMatch = nextDefinitionOrEventRegex.exec(code)
+      const defEnd = nextDefinitionOrEventMatch
+        ? nextDefinitionOrEventMatch.index
+        : code.length
 
       // Extraire le code de la définition
       const blockCode = code.substring(defStart, defEnd).trim()
@@ -732,7 +734,7 @@ export class ScratchInterpreter {
     content: string,
     delayMs: number = 0,
   ): Promise<void> {
-    if (type === 'event') {
+    if (type === 'event' || type === 'init') {
       await this.handleEventBlock(content)
       return
     }

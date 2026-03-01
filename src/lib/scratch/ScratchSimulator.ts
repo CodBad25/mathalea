@@ -398,6 +398,7 @@ export class ScratchSimulator extends HTMLElement {
   // Highlighting des blocs pendant l'exécution
   private highlightCurrentInstruction(
     currentInstructionHtml: string,
+    currentInstructionText: string = '',
     currentInstructionIndex?: number,
     currentConditionText?: string,
   ): void {
@@ -408,9 +409,9 @@ export class ScratchSimulator extends HTMLElement {
     let targetBlock: CodeBlockNode | null = null
     let executionIndex: number | null = null
     let matchedElement: SVGGElement | null = null
-    const normalizedInstruction = this.extractInstructionTextFromHtml(
-      currentInstructionHtml,
-    )
+    const normalizedInstruction =
+      this.extractInstructionTextFromHtml(currentInstructionHtml) ||
+      this.normalizeText(currentInstructionText)
     const isConditionStep = Boolean(currentConditionText)
 
     const resolveRuntimeMapping = (): void => {
@@ -740,7 +741,6 @@ export class ScratchSimulator extends HTMLElement {
 
       definitions[customName] = bodyNodes
       definitionGroups.add(headerGroup)
-      bodyGroups.forEach((group) => definitionGroups.add(group))
     })
 
     return { definitions, definitionGroups }
@@ -886,6 +886,21 @@ export class ScratchSimulator extends HTMLElement {
     )
   }
 
+  private isHatBlockText(text: string): boolean {
+    const normalized = this.normalizeText(text)
+    return normalized.startsWith('quand ')
+  }
+
+  private isEventInstructionText(text: string): boolean {
+    const normalized = this.normalizeText(text)
+    return /^quand\b/.test(normalized) || /^attente\b/.test(normalized)
+  }
+
+  private isCustomBlockCallInstructionText(text: string): boolean {
+    const normalized = this.normalizeText(text)
+    return /^bloc\s+/.test(normalized)
+  }
+
   // Normaliser le texte d'un bloc pour faciliter les correspondances entre instructions à exécuter et blocs rendus, en gérant les variations d'espacement, de casse, les différentes manières de formuler une même instruction, et en retirant les éléments de texte qui ne sont pas pertinents pour l'identification de l'instruction (comme les crochets autour des nombres ou les parenthèses)
   private normalizeText(text: string): string {
     return text
@@ -960,11 +975,73 @@ export class ScratchSimulator extends HTMLElement {
     return next >= total ? 0 : next
   }
 
+  private getNextAllowedOrderAfter(
+    current: number,
+    total: number,
+    isAllowed: (order: number) => boolean,
+  ): number | null {
+    if (total <= 0) {
+      return null
+    }
+
+    let probe = current
+    for (let attempts = 0; attempts < total; attempts += 1) {
+      probe = this.getNextOrderAfter(probe, total)
+      if (isAllowed(probe)) {
+        return probe
+      }
+    }
+
+    return null
+  }
+
   private extractInstructionTextFromHtml(html: string): string {
     if (!html) return ''
     const tempDiv = document.createElement('div')
     tempDiv.innerHTML = html
     return this.normalizeText(tempDiv.textContent || '')
+  }
+
+  private extractFirstNumber(text: string): number | null {
+    const match = text.match(/-?\d+(?:[.,]\d+)?/)
+    if (!match) {
+      return null
+    }
+    const parsed = Number.parseFloat(match[0].replace(',', '.'))
+    return Number.isNaN(parsed) ? null : parsed
+  }
+
+  private getLooseInstructionKey(text: string): string | null {
+    const normalized = this.normalizeText(text)
+      .replace(/[↻↺]/g, ' ')
+      .replace(/\bdroite\b|\bgauche\b/g, ' ')
+      .replace(/\bdegres?\b/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim()
+
+    if (!normalized) {
+      return null
+    }
+
+    const value = this.extractFirstNumber(normalized)
+
+    if (normalized.includes('tourner')) {
+      return `tourner:${value ?? 'none'}`
+    }
+
+    if (normalized.includes('avancer')) {
+      return `avancer:${value ?? 'none'}`
+    }
+
+    if (normalized.includes('ajouter') && normalized.includes(' x')) {
+      return `ajouter-x:${value ?? 'none'}`
+    }
+
+    if (normalized.includes('ajouter') && normalized.includes(' y')) {
+      return `ajouter-y:${value ?? 'none'}`
+    }
+
+    return null
   }
 
   private resolveBlockIdForInstruction(
@@ -988,6 +1065,10 @@ export class ScratchSimulator extends HTMLElement {
     const idsByOrder = new Map<number, string>()
     const exactOrdersByText = new Map<string, number[]>()
     const allTexts: Array<{ order: number; text: string }> = []
+    const hatOrders = new Set<number>()
+    const isEventInstruction = this.isEventInstructionText(
+      normalizedInstruction,
+    )
 
     candidateBlocks.forEach((block, order) => {
       const blockId = block.element.id || this.generateBlockId()
@@ -999,6 +1080,9 @@ export class ScratchSimulator extends HTMLElement {
 
       const normalizedText = this.normalizeText(block.text)
       allTexts.push({ order, text: normalizedText })
+      if (this.isHatBlockText(normalizedText)) {
+        hatOrders.add(order)
+      }
 
       const bucket = exactOrdersByText.get(normalizedText) || []
       bucket.push(order)
@@ -1034,6 +1118,24 @@ export class ScratchSimulator extends HTMLElement {
           )
         })
         .map(({ order }) => order)
+    }
+
+    if (candidateOrders.length === 0) {
+      const looseInstructionKey = this.getLooseInstructionKey(
+        normalizedInstruction,
+      )
+      if (looseInstructionKey) {
+        candidateOrders = allTexts
+          .filter(
+            ({ text }) =>
+              this.getLooseInstructionKey(text) === looseInstructionKey,
+          )
+          .map(({ order }) => order)
+      }
+    }
+
+    if (!isEventInstruction) {
+      candidateOrders = candidateOrders.filter((order) => !hatOrders.has(order))
     }
 
     if (candidateOrders.length === 0) {
@@ -1119,6 +1221,7 @@ export class ScratchSimulator extends HTMLElement {
     const idsByOrder = new Map<number, string>()
     const exactOrdersByText = new Map<string, number[]>()
     const allTexts: Array<{ order: number; text: string }> = []
+    const hatOrders = new Set<number>()
 
     candidateBlocks.forEach((block, order) => {
       const blockId = block.element.id || this.generateBlockId()
@@ -1130,6 +1233,9 @@ export class ScratchSimulator extends HTMLElement {
 
       const normalizedText = this.normalizeText(block.text)
       allTexts.push({ order, text: normalizedText })
+      if (this.isHatBlockText(normalizedText)) {
+        hatOrders.add(order)
+      }
 
       const bucket = exactOrdersByText.get(normalizedText) || []
       bucket.push(order)
@@ -1139,6 +1245,7 @@ export class ScratchSimulator extends HTMLElement {
     const dryInterpreter = new ScratchInterpreter(200, 200, 90)
     const seenInstructionIndexes = new Set<number>()
     let lastOrder = -1
+    const customBlockReturnOrders: number[] = []
     await dryInterpreter.executeAnimated(
       this.scratchCode,
       async () => {
@@ -1153,10 +1260,16 @@ export class ScratchSimulator extends HTMLElement {
         }
 
         seenInstructionIndexes.add(index)
-        const instructionText = this.extractInstructionTextFromHtml(
+        const instructionTextFromHtml = this.extractInstructionTextFromHtml(
           state.currentInstructionScratchHtml || '',
         )
+        const instructionText =
+          instructionTextFromHtml ||
+          this.normalizeText(state.currentInstruction || '')
         const isConditionStep = Boolean(state.currentConditionText)
+        const isEventInstruction = this.isEventInstructionText(instructionText)
+        const isCustomCallInstruction =
+          this.isCustomBlockCallInstructionText(instructionText)
 
         let candidateOrders: number[] = []
 
@@ -1218,13 +1331,72 @@ export class ScratchSimulator extends HTMLElement {
         }
 
         if (candidateOrders.length === 0) {
+          const looseInstructionKey =
+            this.getLooseInstructionKey(instructionText)
+          if (looseInstructionKey) {
+            candidateOrders = allTexts
+              .filter(
+                ({ text }) =>
+                  this.getLooseInstructionKey(text) === looseInstructionKey,
+              )
+              .map(({ order }) => order)
+          }
+        }
+
+        if (!isConditionStep && !isEventInstruction) {
+          candidateOrders = candidateOrders.filter(
+            (order) => !hatOrders.has(order),
+          )
+        }
+
+        const expectedReturnOrder =
+          customBlockReturnOrders.length > 0
+            ? customBlockReturnOrders[customBlockReturnOrders.length - 1]
+            : null
+
+        if (
+          expectedReturnOrder !== null &&
+          !isConditionStep &&
+          !isCustomCallInstruction &&
+          candidateOrders.includes(expectedReturnOrder)
+        ) {
+          const returnId = idsByOrder.get(expectedReturnOrder)
+          if (returnId) {
+            this.executionIndexToBlockId.set(index, returnId)
+            lastOrder = expectedReturnOrder
+            customBlockReturnOrders.pop()
+            return
+          }
+        }
+
+        if (candidateOrders.length === 0) {
           if (isConditionStep) {
             return
           }
-          const fallbackOrder = this.getNextOrderAfter(
-            lastOrder,
-            candidateBlocks.length,
-          )
+          if (
+            expectedReturnOrder !== null &&
+            !isCustomCallInstruction &&
+            !isEventInstruction
+          ) {
+            const returnId = idsByOrder.get(expectedReturnOrder)
+            if (returnId) {
+              this.executionIndexToBlockId.set(index, returnId)
+              lastOrder = expectedReturnOrder
+              customBlockReturnOrders.pop()
+              return
+            }
+          }
+
+          const fallbackOrder = !isEventInstruction
+            ? this.getNextAllowedOrderAfter(
+                lastOrder,
+                candidateBlocks.length,
+                (order) => !hatOrders.has(order),
+              )
+            : this.getNextOrderAfter(lastOrder, candidateBlocks.length)
+          if (fallbackOrder === null) {
+            return
+          }
           const fallbackId = idsByOrder.get(fallbackOrder)
           if (fallbackId) {
             this.executionIndexToBlockId.set(index, fallbackId)
@@ -1250,6 +1422,17 @@ export class ScratchSimulator extends HTMLElement {
 
         this.executionIndexToBlockId.set(index, blockId)
         lastOrder = chosenOrder
+
+        if (isCustomCallInstruction) {
+          const returnOrder = this.getNextAllowedOrderAfter(
+            chosenOrder,
+            candidateBlocks.length,
+            (order) => !hatOrders.has(order),
+          )
+          if (returnOrder !== null) {
+            customBlockReturnOrders.push(returnOrder)
+          }
+        }
       },
       0,
       { skipWaitBlocks: true },
@@ -1302,6 +1485,7 @@ export class ScratchSimulator extends HTMLElement {
         this.displayInstruction(state)
         this.highlightCurrentInstruction(
           state.currentInstructionScratchHtml || '',
+          state.currentInstruction || '',
           state.currentInstructionIndex,
           state.currentConditionText,
         )
@@ -1333,7 +1517,7 @@ export class ScratchSimulator extends HTMLElement {
       this.drawSimulation(result)
       this.displayInfo(result)
       this.displayInstruction(finalDisplayState)
-      this.highlightCurrentInstruction('', -1)
+      this.highlightCurrentInstruction('', '', -1)
     })
 
     this.isRunning = false
