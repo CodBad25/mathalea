@@ -3,7 +3,6 @@ import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { prenomM } from '../../lib/outils/Personne'
 import { texNombre } from '../../lib/outils/texNombre'
 import { randint } from '../../modules/outils'
-// import ExerciceQcmA from '../../ExerciceQcmA'
 import ExerciceQcmA from '../ExerciceQcmA'
 
 export const uuid = '9823a'
@@ -276,7 +275,7 @@ L'équation qui modélise la situation est $${miseEnEvidence(`${nbCroissants}x-$
 
       case 5: {
         const nbBrioches = randint(3, 6)
-        const nbCroissants = randint(4, 7)
+        const nbCroissants = randint(4, 7, nbBrioches)
         const supplementBrioche = choice([0.3, 0.4, 0.5, 0.6, 0.7])
         const prixCroissant = randint(11, 14) / 10
         const prixBrioche = prixCroissant + supplementBrioche
