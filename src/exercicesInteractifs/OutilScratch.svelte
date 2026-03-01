@@ -178,6 +178,27 @@
       {/if}
     </div>
 
+    <div class="alert alert-warning text-sm">
+      <span>
+        Le simulateur Scratch est encore expérimental et ne couvre pas 100% des
+        programmes Scratch. Si vous rencontrez un script non supporté, vous
+        pouvez l'envoyer à
+        <a
+          class="link link-hover font-semibold"
+          href="mailto:contact@coopmaths.fr">contact@coopmaths.fr</a
+        >
+        ou créer un ticket sur le dépôt du projet en joignant votre fichier
+        <strong>.sb3</strong>
+        :
+        <a
+          class="link link-hover font-semibold"
+          href="https://forge.apps.education.fr/coopmaths/mathalea/-/issues/new"
+          target="_blank"
+          rel="noopener noreferrer">Créer un ticket</a
+        >.
+      </span>
+    </div>
+
     {#if errorMessage}
       <div class="alert alert-error">
         <span>{errorMessage}</span>

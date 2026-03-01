@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from 'vitest'
 
 import { ScratchInterpreter } from '../../src/lib/scratch/ScratchInterpreter'
+import { ScratchSimulator } from '../../src/lib/scratch/ScratchSimulator'
 
 describe('ScratchInterpreter', () => {
   it('met a jour les variables avec blockvariable + repeat', async () => {
@@ -360,6 +361,53 @@ describe('ScratchInterpreter', () => {
       true,
     )
     expect(result.repeatIterations).toEqual([])
+  })
+
+  it('gere initmoreblocks avec repeat sans fuite dans le flux principal', async () => {
+    const interpreter = new ScratchInterpreter(200, 200, 90)
+    const code = `\\begin{scratch}[blocks]
+\\initmoreblocks{définir \\namemoreblocks{Compter4}}
+\\blockrepeat{répéter \\ovalnum{4} fois}{
+\\blockvariable{Ajouter \\ovalnum{1} à \\ovalvariable{compteur}}
+}
+\\blockinit{quand \\greenflag est cliqué}
+\\blockvariable{mettre \\selectmenu{compteur} à \\ovalnum{0}}
+\\blockrepeat{répéter \\ovalnum{2} fois}{
+\\blockmoreblocks{Compter4}
+}
+\\blockvariable{Ajouter \\ovalnum{10} à \\ovalvariable{compteur}}
+\\end{scratch}`
+
+    const result = await interpreter.executeAnimated(code, () => {}, 0, {
+      skipWaitBlocks: true,
+    })
+
+    expect(result.variables.compteur).toBe(18)
+  })
+
+  it('execute completement un bloc personnalise contenant une boucle de dessin', async () => {
+    const interpreter = new ScratchInterpreter(200, 200, 90)
+    const code = `\\begin{scratch}[blocks]
+\\initmoreblocks{définir \\namemoreblocks{Carré}}
+\\blockrepeat{répéter \\ovalnum{4} fois}
+{
+  \\blockmove{avancer de \\ovalnum{50} pas}
+  \\blockmove{tourner \\turnright{} de \\ovalnum{90} degrés}
+}
+\\blockinit{quand \\greenflag est cliqué}
+\\blockpen{stylo en position d'écriture}
+\\blockrepeat{répéter \\ovalnum{10} fois}
+{
+  \\blockmoreblocks{Carré}
+  \\blockmove{tourner \\turnright{} de \\ovalnum{36} degrés}
+}
+\\end{scratch}`
+
+    const result = await interpreter.executeAnimated(code, () => {}, 0, {
+      skipWaitBlocks: true,
+    })
+
+    expect(result.traces.length).toBe(40)
   })
 
   it('gere blockifelse avec condition vraie', async () => {
@@ -1197,5 +1245,211 @@ describe('ScratchInterpreter', () => {
     const result = await interpreter.executeAnimated(code, () => {}, 0)
 
     expect(result.messages).toEqual(['0'])
+  })
+})
+
+describe('ScratchSimulator mapping', () => {
+  it('reprend le surlignage sur le bloc suivant apres blockmoreblocks dans un repeat', async () => {
+    const code = `\\begin{scratch}
+\\initmoreblocks{définir \\namemoreblocks{Carré}}
+\\blockmove{avancer de \\ovalnum{50} pas}
+\\blockmove{tourner \\turnright{} de \\ovalnum{90} degrés}
+\\blockmove{avancer de \\ovalnum{50} pas}
+\\blockmove{tourner \\turnright{} de \\ovalnum{90} degrés}
+\\blockmove{avancer de \\ovalnum{50} pas}
+\\blockmove{tourner \\turnright{} de \\ovalnum{90} degrés}
+\\blockmove{avancer de \\ovalnum{50} pas}
+\\blockmove{tourner \\turnright{} de \\ovalnum{90} degrés}
+
+\\blockinit{quand \\greenflag est cliqué}
+\\blockrepeat{répéter \\ovalnum{10} fois}
+{
+  \\blockpen{stylo en position d'écriture}
+  \\blockmoreblocks{Carré}
+  \\blockpen{relever le stylo}
+  \\blockmove{avancer de \\ovalnum{10} pas}
+}
+\\end{scratch}`
+
+    let firstPenUpInstructionIndex: number | undefined
+    const interpreter = new ScratchInterpreter(200, 200, 90)
+
+    await interpreter.executeAnimated(
+      code,
+      () => {
+        const state = interpreter.getCurrentState()
+        if (
+          firstPenUpInstructionIndex === undefined &&
+          state.currentInstruction === 'Relever le stylo'
+        ) {
+          firstPenUpInstructionIndex = state.currentInstructionIndex
+        }
+      },
+      0,
+      { skipWaitBlocks: true },
+    )
+
+    expect(firstPenUpInstructionIndex).toBeDefined()
+
+    const simulator = Object.create(
+      ScratchSimulator.prototype,
+    ) as ScratchSimulator & {
+      codeDiv: HTMLDivElement
+      codeBlocks: Array<{ element: SVGGElement; text: string; children: any[] }>
+      allRenderedBlocks: Array<{
+        element: SVGGElement
+        text: string
+        children: any[]
+      }>
+      customDefinitionGroups: Set<SVGGElement>
+      conditionBlockElements: Set<SVGGElement>
+      executionIndexToBlockId: Map<number, string>
+      scratchCode: string
+      buildExecutionIndexToSelectorMap: () => Promise<void>
+    }
+
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
+    const mk = (
+      id: string,
+      text: string,
+    ): { element: SVGGElement; text: string; children: any[] } => {
+      const g = document.createElementNS('http://www.w3.org/2000/svg', 'g')
+      g.id = id
+      svg.appendChild(g)
+      return {
+        element: g,
+        text,
+        children: [],
+      }
+    }
+
+    const renderedBlocks = [
+      mk('block-pen-down', "stylo en position d'écriture"),
+      mk('block-call-carre', 'bloc carré'),
+      mk('block-pen-up', 'relever le stylo'),
+      mk('block-forward-10', 'avancer de 10 pas'),
+      mk('block-forward-50', 'avancer de 50 pas'),
+      mk('block-turn-90', 'tourner a droite de 90 degres'),
+    ]
+
+    const codeDiv = document.createElement('div')
+    codeDiv.appendChild(svg)
+
+    simulator.codeDiv = codeDiv
+    simulator.codeBlocks = [renderedBlocks[0]]
+    simulator.allRenderedBlocks = renderedBlocks
+    simulator.customDefinitionGroups = new Set<SVGGElement>()
+    simulator.conditionBlockElements = new Set<SVGGElement>()
+    simulator.executionIndexToBlockId = new Map<number, string>()
+    simulator.scratchCode = code
+
+    await simulator.buildExecutionIndexToSelectorMap()
+
+    const mappedBlockId = simulator.executionIndexToBlockId.get(
+      firstPenUpInstructionIndex!,
+    )
+
+    expect(mappedBlockId).toBe('block-pen-up')
+  })
+
+  it('reprend aussi sur le bloc suivant quand le bloc personnalise contient un repeat', async () => {
+    const code = `\\begin{scratch}
+\\initmoreblocks{définir \\namemoreblocks{Carré}}
+\\blockrepeat{répéter \\ovalnum{4} fois}
+{
+  \\blockmove{avancer de \\ovalnum{50} pas}
+  \\blockmove{tourner \\turnright{} de \\ovalnum{90} degrés}
+}
+
+\\blockinit{quand \\greenflag est cliqué}
+\\blockrepeat{répéter \\ovalnum{10} fois}
+{
+  \\blockpen{stylo en position d'écriture}
+  \\blockmoreblocks{Carré}
+  \\blockpen{relever le stylo}
+  \\blockmove{avancer de \\ovalnum{10} pas}
+}
+\\end{scratch}`
+
+    let firstPenUpInstructionIndex: number | undefined
+    const interpreter = new ScratchInterpreter(200, 200, 90)
+
+    await interpreter.executeAnimated(
+      code,
+      () => {
+        const state = interpreter.getCurrentState()
+        if (
+          firstPenUpInstructionIndex === undefined &&
+          state.currentInstruction === 'Relever le stylo'
+        ) {
+          firstPenUpInstructionIndex = state.currentInstructionIndex
+        }
+      },
+      0,
+      { skipWaitBlocks: true },
+    )
+
+    expect(firstPenUpInstructionIndex).toBeDefined()
+
+    const simulator = Object.create(
+      ScratchSimulator.prototype,
+    ) as ScratchSimulator & {
+      codeDiv: HTMLDivElement
+      codeBlocks: Array<{ element: SVGGElement; text: string; children: any[] }>
+      allRenderedBlocks: Array<{
+        element: SVGGElement
+        text: string
+        children: any[]
+      }>
+      customDefinitionGroups: Set<SVGGElement>
+      conditionBlockElements: Set<SVGGElement>
+      executionIndexToBlockId: Map<number, string>
+      scratchCode: string
+      buildExecutionIndexToSelectorMap: () => Promise<void>
+    }
+
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
+    const mk = (
+      id: string,
+      text: string,
+    ): { element: SVGGElement; text: string; children: any[] } => {
+      const g = document.createElementNS('http://www.w3.org/2000/svg', 'g')
+      g.id = id
+      svg.appendChild(g)
+      return {
+        element: g,
+        text,
+        children: [],
+      }
+    }
+
+    const renderedBlocks = [
+      mk('block-pen-down', "stylo en position d'écriture"),
+      mk('block-call-carre', 'bloc carré'),
+      mk('block-pen-up', 'relever le stylo'),
+      mk('block-forward-10', 'avancer de 10 pas'),
+      mk('block-repeat-4', 'répéter 4 fois'),
+      mk('block-forward-50', 'avancer de 50 pas'),
+      mk('block-turn-90', 'tourner a droite de 90 degres'),
+    ]
+
+    const codeDiv = document.createElement('div')
+    codeDiv.appendChild(svg)
+
+    simulator.codeDiv = codeDiv
+    simulator.codeBlocks = [renderedBlocks[0]]
+    simulator.allRenderedBlocks = renderedBlocks
+    simulator.customDefinitionGroups = new Set<SVGGElement>()
+    simulator.conditionBlockElements = new Set<SVGGElement>()
+    simulator.executionIndexToBlockId = new Map<number, string>()
+    simulator.scratchCode = code
+
+    await simulator.buildExecutionIndexToSelectorMap()
+
+    const mappedBlockId = simulator.executionIndexToBlockId.get(
+      firstPenUpInstructionIndex!,
+    )
+
+    expect(mappedBlockId).toBe('block-pen-up')
   })
 })
