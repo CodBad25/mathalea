@@ -53,7 +53,7 @@ export default class Can32026Q12 extends ExerciceCan {
     this.reponse = vitesse.toFixed(1)
     
     this.question = `${prenom} a couru $${distance}$ km en $${temps}$ min.<br>
-Sa vitesse moyenne est : `
+Sa vitesse moyenne est  `
     
     this.correction = `En $${temps}$ min, ${prenom} a parcouru $${distance}$ km.<br>
 En $60$ min (soit $1$ h), ${prenom} parcourt $${60 / temps}$ fois plus, soit $${distance}\\times ${60 / temps}=${miseEnEvidence(vitesse)}$ km/h.`
@@ -62,9 +62,9 @@ En $60$ min (soit $1$ h), ${prenom} parcourt $${60 / temps}$ fois plus, soit $${
     this.canReponseACompleter = '$\\ldots$ km/h'
     
     if (this.interactif) {
-      this.optionsChampTexte = { texteApres: 'km/h' }
+      this.optionsChampTexte = { texteApres: 'km/h.'  }
     } else {
-      this.question += '$\\ldots$ km/h'
+      this.question += ' $\\ldots$ km/h.'
     }
   }
 

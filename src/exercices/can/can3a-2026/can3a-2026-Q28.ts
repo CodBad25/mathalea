@@ -35,7 +35,7 @@ export default class Can32026Q28 extends ExerciceCan {
 
     this.formatChampTexte = KeyboardType.clavierHms
     this.optionsDeComparaison = { HMS: true }
-    this.optionsChampTexte = { texteAvant: '' }
+    this.optionsChampTexte = { texteAvant: '', texteApres:'.' }
 
     // Calcul de l'heure de début en soustrayant la durée
     let hDebut = hFin
@@ -50,7 +50,7 @@ export default class Can32026Q28 extends ExerciceCan {
     this.reponse = new Hms({ hour: hDebut, minute: minDebut }).toString()
 
     this.question = `Le devoir a duré $${duree}$ minutes et s'est terminé à $${hFin}$ h $${formatMinute(minFin)}$ min.<br>
-Il a débuté à :`
+Il a débuté à `
 
     this.correction = `Pour trouver l'heure de début, on soustrait la durée de l'heure de fin :<br>
 $${hFin}$ h $${formatMinute(minFin)}$ min $-$ $${duree}$ min`
@@ -64,7 +64,8 @@ $= ${miseEnEvidence(hDebut)}$ h $${miseEnEvidence(formatMinute(minDebut))}$ min.
       this.correction += ` $= ${miseEnEvidence(hDebut)}$ h $${miseEnEvidence(formatMinute(minDebut))}$ min.`
     }
 
-    this.canEnonce = this.question
+    this.canEnonce = `Le devoir a duré $${duree}$ minutes et s'est terminé à $${hFin}$ h $${formatMinute(minFin)}$ min.<br>
+Il a débuté à :`
     this.canReponseACompleter = '$\\ldots$ h $\\ldots$ min'
 
     if (!this.interactif) {

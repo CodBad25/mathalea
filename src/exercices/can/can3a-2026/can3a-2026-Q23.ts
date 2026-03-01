@@ -46,7 +46,7 @@ export default class Can32026Q23 extends ExerciceCan {
     }
 
     this.formatChampTexte = KeyboardType.clavierDeBase
-    this.optionsChampTexte = { texteApres: ' cm²' }
+    this.optionsChampTexte = { texteApres: ' cm².' }
 
     // Calcul de l'aire
     const aire = (cote1 * cote2) / 2
@@ -113,7 +113,7 @@ export default class Can32026Q23 extends ExerciceCan {
       objets,
     )
     
-    this.question = `${figure}<br>L'aire du triangle $ABC$ est :`
+    this.question = `${figure}<br>L'aire du triangle $ABC$ est `
     
     this.correction = `L'aire d'un triangle rectangle est égale à : $\\dfrac{\\text{côté}_1\\times \\text{côté}_2}{2}$.<br>
 $\\begin{aligned}
@@ -123,7 +123,7 @@ $\\begin{aligned}
 &=${miseEnEvidence(texNombre(aire))}\\text{ cm}^2
 \\end{aligned}$`
 
-    this.canEnonce = this.question
+    this.canEnonce = `${figure}<br>L'aire du triangle $ABC$ est :`
     this.canReponseACompleter = '$\\ldots$ cm$^2$'
 
     if (!this.interactif) {

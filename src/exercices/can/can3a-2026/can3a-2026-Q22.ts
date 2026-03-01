@@ -26,13 +26,13 @@ export default class Can32026Q22 extends ExerciceCan {
     }
 
     this.formatChampTexte = KeyboardType.clavierDeBase
-    this.optionsChampTexte = { texteApres: '€' }
+    this.optionsChampTexte = { texteApres: '€.' }
 
     const montantReduction = (prix * reduction) / 100
     const nouveauPrix = prix - montantReduction
 
     this.question = `Une console de jeu à $${prix}$ € est vendue avec une réduction de $${reduction}\\,\\%$.<br>
-Son nouveau prix est :`
+Son nouveau prix est `
 
     this.correction = `On calcule d'abord le montant de la réduction.<br>
 Pour calculer $${reduction}\\,\\%$ d'une quantité, on commence par calculer $10\\,\\%$ en divisant par $10$ :<br>
@@ -44,7 +44,8 @@ La réduction est donc de : $${texPrix(montantReduction)}$ €.<br>`
 }Le nouveau prix est de $${prix}-${texNombre(montantReduction)}= ${miseEnEvidence(texPrix(nouveauPrix))}$ €.`
 
     this.reponse = nouveauPrix
-    this.canEnonce = this.question
+    this.canEnonce = `Une console de jeu à $${prix}$ € est vendue avec une réduction de $${reduction}\\,\\%$.<br>
+Son nouveau prix est :`
     this.canReponseACompleter = '$\\ldots$ €'
 
     if (!this.interactif) {
