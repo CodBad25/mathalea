@@ -77,7 +77,7 @@ export default class Can20264emeQ13 extends ExerciceCan {
     )
     
     this.question = `${figure}
-    L'aire de ce carré est :`
+    L'aire de ce carré est `
     this.canEnonce = this.question
 
     this.correction = `L'aire d'un carré de côté $${cote}\\text{ dam}$ est :<br>
@@ -88,7 +88,7 @@ export default class Can20264emeQ13 extends ExerciceCan {
     
     this.reponse = aire
     this.formatChampTexte = KeyboardType.clavierDeBase
-    this.optionsChampTexte = { texteApres: '$\\text{ dam}^2$' }
+    this.optionsChampTexte = { texteApres: ' dam$^2$.' }
     this.canReponseACompleter = " $\\ldots\\text{ dam}^2$"
     
     if (!this.interactif) {

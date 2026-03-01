@@ -40,7 +40,7 @@ export default class Can20264emeQ26 extends ExerciceCan {
     const texte = scratchblock(texteScratch)
 
     this.question = texte || 'Problème de rendu'
-    this.question += '<br>Le périmètre de la figure obtenue est :'
+    this.question += '<br>Le périmètre de la figure obtenue est '
     
     let nomFigure = ''
     if (nb === 4) nomFigure = 'un carré'

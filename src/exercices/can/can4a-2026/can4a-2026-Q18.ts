@@ -79,7 +79,7 @@ export default class Can20264emeQ18 extends ExerciceCan {
     )
      this.optionsDeComparaison = { calculFormel: true }
     this.question = `${figure}
-    Le périmètre de ce rectangle en fonction de $x$ est : `
+    Le périmètre de ce rectangle en fonction de $x$ est  `
     this.canEnonce = this.question
     
     this.correction = `Le périmètre d'un rectangle est donné par la formule :<br>
@@ -91,7 +91,7 @@ export default class Can20264emeQ18 extends ExerciceCan {
     
     this.reponse = `${2 * longueur}+2x`
     this.formatChampTexte = KeyboardType.clavierDeBaseAvecVariable
-    this.optionsChampTexte = { texteApres: '$\\text{ cm}$' }
+    this.optionsChampTexte = { texteApres: '$\\text{ cm}$.' }
     this.canReponseACompleter = ' $\\ldots\\text{ cm}$'
     if (!this.interactif) {
       this.question += ' $\\ldots \\text{ cm}$'

@@ -44,12 +44,12 @@ enonce(numerateur?: number, denominateur?: number, minutes?: number) {
       this.formatChampTexte = KeyboardType.clavierNumbers
       this.reponse = minutes
       this.question = `$${fracHeures.texFraction}$ d'heure $=$ `
-      this.correction = `$\\dfrac{1}{${denominateur}}$ h $=60\\text{ min }\\div ${denominateur}= ${texNombre(minutes / numerateur, 0)}$ min.<br>
-Ainsi, $${fracHeures.texFraction}$ d'heure $=${miseEnEvidence(minutes)}$ min`
+      this.correction = `$\\dfrac{1}{${denominateur}}$ h $=60\\text{ min }\\div ${denominateur}= ${texNombre(minutes / numerateur, 0)}\\text{ min }$.<br>
+Ainsi, $${fracHeures.texFraction}$ d'heure $=${miseEnEvidence(minutes)} \\text{ min }$`
       this.canEnonce = this.question
       this.canReponseACompleter = '$\\ldots$ min'
       if (this.interactif) {
-        this.optionsChampTexte = { texteApres: 'min' }
+        this.optionsChampTexte = { texteApres: '$\\text{ min }$' }
       } else {
         this.question += '$\\ldots$ min'
       }

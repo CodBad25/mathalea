@@ -34,10 +34,8 @@ export default class Can20264emeQ23 extends ExerciceCan {
     const total = r + v + n
     const proba = new FractionEtendue(n, total)
     
-    this.consigne = `Une urne contient ${r} boules rouges, ${v} boules vertes et ${n} boules noires.<br>
-    La probabilité de tirer une boule noire est :`
-    
-    this.question = '\\dfrac{%{champ1}}{%{champ2}}'
+    this.consigne = `Une urne contient ${r} boules rouges, ${v} boules vertes et ${n} boules noires.`
+    this.question = `\\text{La probabilité de tirer une boule noire est }\\dfrac{%{champ1}}{%{champ2}}.`
     
     this.reponse = {
       champ1: { value: proba.num },
@@ -51,7 +49,7 @@ export default class Can20264emeQ23 extends ExerciceCan {
     ${proba.texFractionSimplifiee !== proba.texFraction ?`\\dfrac{${n}}{${total}}=` + miseEnEvidence(proba.texFractionSimplifiee) : ''}$.`
     
     this.formatChampTexte = KeyboardType.clavierDeBase
-    this.canEnonce = this.consigne
+    this.canEnonce = `Une urne contient ${r} boules rouges, ${v} boules vertes et ${n} boules noires.<br>La probabilité de tirer une boule noire est :`
     this.canReponseACompleter = '$\\dfrac{\\ldots}{\\ldots}$'
    
   }

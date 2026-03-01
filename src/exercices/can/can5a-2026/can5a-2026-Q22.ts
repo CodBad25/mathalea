@@ -95,7 +95,7 @@ if (avecLabels) {
 
 reponse = 7
 
-this.canEnonce = mathalea2d(
+ this.question  = mathalea2d(
   {
     xmin: -1,
     ymin: -1,
@@ -106,7 +106,7 @@ this.canEnonce = mathalea2d(
     style: 'margin: auto',
   },
   objets,
-)
+)+ '<br>Nombre de faces de ce solide'
 
 
       this.correction = `Ce solide est un prisme à base pentagonale. Il a $${miseEnEvidence(7)}$ faces : $2$ faces pentagonales (bases) et $5$ faces rectangulaires (faces latérales).`
@@ -133,7 +133,7 @@ this.canEnonce = mathalea2d(
       
       reponse = 4
 
-      this.canEnonce = mathalea2d(
+       this.question  = mathalea2d(
         {
           xmin: -1,
           ymin: -0.5,
@@ -144,7 +144,7 @@ this.canEnonce = mathalea2d(
           style: 'margin: auto',
         },
         objets,
-      )
+      )+ '<br>Nombre de faces de ce solide'
 
       this.correction = `Ce solide est un tétraèdre. Il a $${miseEnEvidence(4)}$ faces triangulaires.`
     } else {
@@ -172,7 +172,7 @@ this.canEnonce = mathalea2d(
       
       reponse = 5
 
-      this.canEnonce = mathalea2d(
+      this.question  = mathalea2d(
         {
           xmin: -1,
           ymin: -1,
@@ -189,7 +189,7 @@ this.canEnonce = mathalea2d(
       this.correction = `Ce solide est une pyramide à base carrée. Il a $${miseEnEvidence(5)}$ faces : $1$ face carrée et $4$ faces triangulaires.`
     }
  this.formatChampTexte = KeyboardType.clavierDeBase
-    this.question = this.canEnonce 
+     this.canEnonce  =this.question
     this.reponse = reponse
     this.canReponseACompleter = ''
 

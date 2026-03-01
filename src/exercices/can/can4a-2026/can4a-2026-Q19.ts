@@ -28,7 +28,7 @@ export default class Can20264emeQ19 extends ExerciceCan {
     const quotient = Math.floor(dividende / diviseur)
     const reste = dividende % diviseur
     
-    this.question = `Le reste de la division euclidienne de $${dividende}$ par $${diviseur}$ est :`
+    this.question = `Le reste de la division euclidienne de $${dividende}$ par $${diviseur}$ est `
     
     this.correction = `Division euclidienne de $${dividende}$ par $${diviseur}$ :<br>
     $${dividende} = ${diviseur} \\times ${quotient} + ${reste}$<br>
@@ -38,7 +38,7 @@ export default class Can20264emeQ19 extends ExerciceCan {
     this.canReponseACompleter = '$\\ldots$'
     this.reponse = reste
     this.formatChampTexte = KeyboardType.clavierDeBase
-    
+    this.optionsChampTexte = { texteApres: '.' }
     if (!this.interactif) {
       this.question += ' $\\ldots$'
     }

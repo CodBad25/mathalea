@@ -48,7 +48,7 @@ this.formatChampTexte = KeyboardType.clavierDeBase
     this.question = `$${a}$ ${sp(2)} ; ${sp(2)} $${b}$ ${sp(2)} ; ${sp(2)} $${c}$ ${sp(2)} ; ${sp(2)} $${d}$<br>
 La moyenne de ces nombres est :`
 
-    this.correction = `La somme des $4$ nombres est : $${a}+${b}+${c}+${d}=${somme}$.<br>
+    this.correction = `La somme des $4$ nombres est  $${a}+${b}+${c}+${d}=${somme}$.<br>
 La moyenne est donc : $\\dfrac{${somme}}{4}=${miseEnEvidence(texNombre(moyenne, 0))}$.`
 
     this.reponse = moyenne
@@ -56,7 +56,7 @@ La moyenne est donc : $\\dfrac{${somme}}{4}=${miseEnEvidence(texNombre(moyenne, 
     this.canReponseACompleter = '$\\ldots$'
     
     if (this.interactif) {
-      this.optionsChampTexte = { texteApres: '' }
+      this.optionsChampTexte = { texteApres: '.' }
     }
   }
 
