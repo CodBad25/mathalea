@@ -46,7 +46,7 @@ window.onload = function () {
     if (exo.includes('&alea=-1')) {
       exo = exo.replaceAll('&alea=-1', '&alea=' + seed)
     } else {
-      exo = exo.replaceAll(/((?:^|&)uuid=[^&]+(?:&id=[^&]+))/g, '$1&alea=' + seed)
+      exo = exo.replaceAll(/((?:^|&)uuid=[^&]+(?:&id=[^&]+)?)/g, '$1&alea=' + seed)
     }
   }
   let src = 'https://coopmaths.fr/alea/?'
