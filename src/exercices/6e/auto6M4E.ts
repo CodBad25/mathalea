@@ -29,6 +29,8 @@ export default class AutoChoisirFractionHeure extends Exercice {
   constructor() {
     super()
     this.nbQuestions = 1
+    this.consigne = `Trouver la fraction d'heure qui convient.`
+    this.comment = `Devant le peu de possibilités, cet exercice est limité à 6 questions maximum.`
   }
 
   nouvelleVersion() {
