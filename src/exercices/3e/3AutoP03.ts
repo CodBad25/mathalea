@@ -33,7 +33,7 @@ export default class AsieJuin21Exo1Q2 extends ExerciceQcmA {
       `$${texNombre(detrompeurs[1], 2)}$`,
       `$${texNombre(detrompeurs[2], 2)}$`,
     ]
-    this.enonce = `Voici une série de 4 notes : $${notes.map((n) => texNombre(n, 2)).join(', ')}$.<br>Quelle est la moyenne de cette série de ?`
+    this.enonce = `Voici une série de 4 notes : $${notes.map((n) => texNombre(n, 2)).join(', ')}$.<br>Quelle est la moyenne de cette série de notes ?`
     this.correction = `La moyenne de cette série de notes est : $\\dfrac{${texNombre(notes[0], 0)}+${texNombre(notes[1], 0)}+${texNombre(notes[2], 0)}+${texNombre(notes[3], 0)}}{4}=\\dfrac{${texNombre(notes[0] + notes[1] + notes[2] + notes[3], 0)}}{4}=${texNombre(moyenne, 2)}$.`
   }
 
