@@ -1,5 +1,5 @@
 import SchemaEnBoite from '../outils/SchemaEnBoite'
-import type { CompareFunction, OptionsComparaisonType } from '../types'
+import type { OptionsComparaisonType } from '../types'
 
 type Donnees = Record<string, string | number | boolean>
 /**
@@ -10,7 +10,6 @@ export default class Probleme {
   private schemaModele: SchemaEnBoite
   reponse: string
   optionsComparaison?: OptionsComparaisonType
-  compare?: CompareFunction
   styleChampTexteMathlive?: string
   optionsChampTexteMathlive?: {
     texteAvant?: string
