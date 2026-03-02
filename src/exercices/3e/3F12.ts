@@ -35,8 +35,6 @@ export default class FonctionsCalculsDImages extends Exercice {
       'Règle à travailler',
       "Nombres séparés par des tirets :\n1 : À partir d'un programme de calcul\n2 : À partir de l'expression algébrique sous forme f(x) = ...\n3 : À partir de l'expression algébrique sous forme f : x --> ...\n4 : À partir d'un diagramme\n5 : Mélange",
     ]
-
-    this.sup = 5
     // pas de différence entre la version html et la version latex pour la consigne
 
     context.isHtml ? (this.spacing = 2) : (this.spacing = 1)
@@ -67,7 +65,7 @@ export default class FonctionsCalculsDImages extends Exercice {
       max: 4,
       melange: 5,
       defaut: 5,
-      nbQuestions: 1,
+      nbQuestions: 50,
     })
     const listeTypeDeQuestions = combinaisonListesSansChangerOrdre(
       typesDeQuestionsDisponibles,
@@ -77,7 +75,6 @@ export default class FonctionsCalculsDImages extends Exercice {
     for (
       let i = 0, a, b, c, texte, texteCorr, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       typesDeQuestions = listeTypeDeQuestions[i]
       texte = ''
