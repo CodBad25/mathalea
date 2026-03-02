@@ -229,6 +229,7 @@
     log('afterUpdate:' + exercise.id)
     if (exercise) {
       await tick()
+      mathaleaRenderDiv(divExercice)
       if (isInteractif) {
         await loadMathLive()
         if (
@@ -249,7 +250,6 @@
           await newData()
         }
       }
-      mathaleaRenderDiv(divExercice)
       if (exerciceHasNoSettings) {
         isSettingsVisible = false
       }
