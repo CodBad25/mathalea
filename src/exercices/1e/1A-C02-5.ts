@@ -16,7 +16,7 @@ export const interactifType = 'qcm'
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = "Trouver l'égalité correcte avec des calculs de fractions"
-export default class auto1AC02_5 extends ExerciceQcmA {
+export default class auto1AC025 extends ExerciceQcmA {
 
  // Fonction helper pour créer une correction de bonne réponse
   correctionBonneReponse(egalite: string, calcul: string): string {
@@ -82,7 +82,7 @@ export default class auto1AC02_5 extends ExerciceQcmA {
         texte: `$\\dfrac{${f1.texFraction}}{${diviseur}}= ${resDiv1.texFractionSimplifiee}$`,
         corr: this.correctionBonneReponse(
           `\\dfrac{${f1.texFraction}}{${diviseur}}= ${resDiv1.texFractionSimplifiee}`,
-          `$\\dfrac{${f1.texFraction}}{${diviseur}}=${f1.texFraction}\\times \\dfrac{1}{${diviseur}}=\\dfrac{${f1.num}}{${f1.den}\\times ${diviseur}}=${resDiv1.texFractionSimplifiee}$<br>`
+          `$\\dfrac{${f1.texFraction}}{${diviseur}}=${f1.texFraction}\\times \\dfrac{1}{${diviseur}}=\\dfrac{${f1.num}}{${f1.den}\\times ${diviseur}}=${resDiv1.texFractionSimplifiee}$`
         )
       },
       {
@@ -157,7 +157,7 @@ export default class auto1AC02_5 extends ExerciceQcmA {
         texte: `$\\dfrac{${f1.num}+${diviseur}}{${f1.den}+${diviseur}}=${f1.texFraction}$`,
         corr: this.correctionMauvaiseReponse(
           `\\dfrac{${f1.num}+${diviseur}}{${f1.den}+${diviseur}}=${f1.texFraction}`,
-          `On ne peut pas simplifier une fraction en ajoutant un même nombre au numérateur et au dénominateur.`
+          `On ne peut pas simplifier une fraction quand celle-ci comporte une somme au numérateur ou au  dénominateur.`
         )
       },
       {
