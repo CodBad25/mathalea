@@ -6,7 +6,7 @@ import operation from '../../modules/operations'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 export const titre =
-  "Déterminer la n-ième décimale d'un nombre irrationnel non décimal"
+  "Déterminer la n-ième décimale d'un nombre rationnel non décimal"
 export const uuid = 'cbd18'
 export const dateDePublication = '1/1/2025'
 export const refs = {
