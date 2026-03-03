@@ -24,12 +24,13 @@ type CodeBlockNode = {
  * Web Component pour afficher et exécuter une simulation Scratch
  */
 export class ScratchSimulator extends HTMLElement {
+  private static readonly MAX_MAPPING_INSTRUCTIONS = 10000
+
   private interpreter: ScratchInterpreter | null = null
   private scratchCode: string = ''
   private modal: HTMLDialogElement | null = null
   private canvas: HTMLCanvasElement | null = null
   private canvasWrapper: HTMLDivElement | null = null
-  private hasCanvasRelevantBlocks: boolean = false
   private stepDiv: HTMLDivElement | null = null
   private infoDiv: HTMLDivElement | null = null
   private codeDiv: HTMLDivElement | null = null
@@ -41,6 +42,7 @@ export class ScratchSimulator extends HTMLElement {
   private customDefinitionEntryIdBySignature: Map<string, string> = new Map()
   private customDefinitionBodyIdsBySignature: Map<string, Set<string>> =
     new Map()
+
   private conditionBlockElements: Set<SVGGElement> = new Set()
   private blockCacheAttempts: number = 0
   private executionIndexToBlockId: Map<number, string> = new Map() // Map: currentInstructionIndex -> id du bloc SVG
@@ -59,6 +61,7 @@ export class ScratchSimulator extends HTMLElement {
   private slowDownButton: HTMLButtonElement | null = null
   private stopButton: HTMLButtonElement | null = null
   private simulationRunId: number = 0
+  private mappingWarningMessage: string | null = null
   private handleModalKeydown = (event: KeyboardEvent): void => {
     if (!this.modal?.open || !this.interpreter || !this.isRunning) {
       return
@@ -81,6 +84,14 @@ export class ScratchSimulator extends HTMLElement {
       event.stopPropagation()
     }
 
+    this.logMappingDebug('event/key-dispatch', {
+      key: event.key,
+      code: event.code,
+      keyActivatesButton,
+      isRunning: this.isRunning,
+      isPaused: this.isPaused,
+    })
+
     this.interpreter.triggerKeyPress(event.key)
   }
 
@@ -100,14 +111,6 @@ export class ScratchSimulator extends HTMLElement {
     if (name === 'code') {
       this.scratchCode = newValue || ''
       if (this.modal?.open) {
-        this.hasCanvasRelevantBlocks = this.codeHasCanvasBlocks(
-          this.scratchCode,
-        )
-        if (this.canvasWrapper) {
-          this.canvasWrapper.style.display = this.hasCanvasRelevantBlocks
-            ? 'block'
-            : 'none'
-        }
         this.resetModalContent()
       }
       return
@@ -138,6 +141,63 @@ export class ScratchSimulator extends HTMLElement {
     console.debug('[ScratchSimulator][mapping]', event, payload)
   }
 
+  private logMappedInstructionsSummary(
+    idsByOrder: Map<number, string>,
+    orderById: Map<string, number>,
+    textByOrder: Map<number, string>,
+    validEventOrders: Set<number>,
+  ): void {
+    if (!this.debugMapping) {
+      return
+    }
+
+    const sortedEntries = Array.from(
+      this.executionIndexToBlockId.entries(),
+    ).sort((a, b) => a[0] - b[0])
+    const previewLimit = 40
+    const preview = sortedEntries.slice(0, previewLimit).map(([index, id]) => {
+      const order = orderById.get(id)
+      const text = order !== undefined ? (textByOrder.get(order) ?? '') : ''
+      const isEvent = order !== undefined ? validEventOrders.has(order) : false
+      return {
+        instructionIndex: index,
+        blockOrder: order ?? null,
+        blockId: id,
+        blockText: text,
+        isEventBlock: isEvent,
+      }
+    })
+
+    const eventBlocks = Array.from(validEventOrders)
+      .sort((a, b) => a - b)
+      .map((order) => ({
+        blockOrder: order,
+        blockId: idsByOrder.get(order) ?? null,
+        blockText: textByOrder.get(order) ?? '',
+      }))
+
+    this.logMappingDebug('build/summary', {
+      totalMappedInstructions: sortedEntries.length,
+      shownMappedInstructions: preview.length,
+      truncated: sortedEntries.length > previewLimit,
+      mappedPreview: preview,
+      validEventBlocks: eventBlocks,
+      firstMappedInstructionIndex:
+        sortedEntries.length > 0 ? sortedEntries[0][0] : null,
+    })
+
+    this.logMappingDebug('build/summary-lite', {
+      totalMappedInstructions: sortedEntries.length,
+      validEventBlocks: eventBlocks.length,
+      firstMappedInstructionIndex:
+        sortedEntries.length > 0 ? sortedEntries[0][0] : null,
+      lastMappedInstructionIndex:
+        sortedEntries.length > 0
+          ? sortedEntries[sortedEntries.length - 1][0]
+          : null,
+    })
+  }
+
   private makePointerOnlyButton(button: HTMLButtonElement): void {
     button.tabIndex = -1
     button.addEventListener('keydown', (event) => {
@@ -154,7 +214,7 @@ export class ScratchSimulator extends HTMLElement {
       this.hasAttribute('debug-mapping') &&
       this.getAttribute('debug-mapping') !== 'false' &&
       this.getAttribute('debug-mapping') !== '0'
-    document.addEventListener('keydown', this.handleModalKeydown)
+    document.addEventListener('keydown', this.handleModalKeydown, true)
 
     const button = document.createElement('button')
     button.textContent = '▶ Exécuter'
@@ -166,7 +226,7 @@ export class ScratchSimulator extends HTMLElement {
   }
 
   disconnectedCallback(): void {
-    document.removeEventListener('keydown', this.handleModalKeydown)
+    document.removeEventListener('keydown', this.handleModalKeydown, true)
   }
 
   // gestion du modal et de son contenu
@@ -175,12 +235,6 @@ export class ScratchSimulator extends HTMLElement {
       this.createModal()
     }
     if (this.modal) {
-      this.hasCanvasRelevantBlocks = this.codeHasCanvasBlocks(this.scratchCode)
-      if (this.canvasWrapper) {
-        this.canvasWrapper.style.display = this.hasCanvasRelevantBlocks
-          ? 'block'
-          : 'none'
-      }
       this.resetModalContent()
       if (this.modal.showModal) {
         this.modal.showModal()
@@ -249,9 +303,7 @@ export class ScratchSimulator extends HTMLElement {
     // Colonne gauche: canvas avec bouton de contrôle
     const canvasWrapper = document.createElement('div')
     this.canvasWrapper = canvasWrapper
-    canvasWrapper.style.display = this.hasCanvasRelevantBlocks
-      ? 'block'
-      : 'none'
+    canvasWrapper.style.display = 'block'
     this.canvas = document.createElement('canvas')
     this.canvas.width = 400
     this.canvas.height = 400
@@ -296,6 +348,12 @@ export class ScratchSimulator extends HTMLElement {
     this.greenFlagButton.title = 'Déclencher le drapeau vert'
     this.makePointerOnlyButton(this.greenFlagButton)
     this.greenFlagButton.addEventListener('click', () => {
+      this.logMappingDebug('event/greenflag-click', {
+        isRunning: this.isRunning,
+        isPaused: this.isPaused,
+        hasInterpreter: Boolean(this.interpreter),
+      })
+
       this.interpreter?.triggerGreenFlagClick()
     })
 
@@ -381,13 +439,14 @@ export class ScratchSimulator extends HTMLElement {
     this.highlightedBlockElement = null
     this.codeDiv.innerHTML = ''
 
-    const scratchblockHtml = scratchblock(this.scratchCode)
+    const simulatorCode = this.getSimulatorScratchCode()
+    const scratchblockHtml = scratchblock(simulatorCode)
     if (scratchblockHtml !== false) {
       this.codeDiv.innerHTML = scratchblockHtml
     } else {
       const pre = document.createElement('pre')
       pre.classList.add('blocks')
-      pre.textContent = this.scratchCode
+      pre.textContent = simulatorCode
       this.codeDiv.appendChild(pre)
     }
   }
@@ -401,13 +460,14 @@ export class ScratchSimulator extends HTMLElement {
     this.highlightedBlockElement = null
     this.codeDiv.innerHTML = ''
 
-    const scratchblockHtml = scratchblock(this.scratchCode)
+    const simulatorCode = this.getSimulatorScratchCode()
+    const scratchblockHtml = scratchblock(simulatorCode)
     if (scratchblockHtml !== false) {
       this.codeDiv.innerHTML = scratchblockHtml
     } else {
       const pre = document.createElement('pre')
       pre.classList.add('blocks')
-      pre.textContent = this.scratchCode
+      pre.textContent = simulatorCode
       this.codeDiv.appendChild(pre)
     }
 
@@ -418,12 +478,17 @@ export class ScratchSimulator extends HTMLElement {
     })
   }
 
+  private getSimulatorScratchCode(): string {
+    return this.scratchCode.replace(/\\blockinit(\s*)\{/g, '\\blockevent$1{')
+  }
+
   // Highlighting des blocs pendant l'exécution
   private highlightCurrentInstruction(
     currentInstructionHtml: string,
     currentInstructionText: string = '',
     currentInstructionIndex?: number,
     currentConditionText?: string,
+    retryAttempt: number = 0,
   ): void {
     if (this.codeBlocks.length === 0) {
       this.cacheRenderedBlocks()
@@ -517,6 +582,37 @@ export class ScratchSimulator extends HTMLElement {
     }
 
     if (!targetBlock && this.highlightedBlockElement === null) {
+      this.logMappingDebug('highlight/no-target', {
+        instructionIndex: currentInstructionIndex ?? null,
+        normalizedInstruction,
+        hasPrecomputedMapping:
+          currentInstructionIndex !== undefined &&
+          currentInstructionIndex >= 0 &&
+          this.executionIndexToBlockId.has(currentInstructionIndex),
+        mappedBlockId:
+          currentInstructionIndex !== undefined && currentInstructionIndex >= 0
+            ? (this.executionIndexToBlockId.get(currentInstructionIndex) ??
+              null)
+            : null,
+        retryAttempt,
+      })
+
+      if (
+        retryAttempt < 6 &&
+        currentInstructionIndex !== undefined &&
+        currentInstructionIndex >= 0
+      ) {
+        this.cacheRenderedBlocks()
+        requestAnimationFrame(() => {
+          this.highlightCurrentInstruction(
+            currentInstructionHtml,
+            currentInstructionText,
+            currentInstructionIndex,
+            currentConditionText,
+            retryAttempt + 1,
+          )
+        })
+      }
       return
     }
 
@@ -1005,11 +1101,6 @@ export class ScratchSimulator extends HTMLElement {
     return this.getTranslateX(a) - this.getTranslateX(b)
   }
 
-  // Helpers de mapping entre rendu et instructions
-  private codeHasCanvasBlocks(code: string): boolean {
-    return /\\block(?:move|pen|look)\b/.test(code)
-  }
-
   private isConditionBlockNode(node: CodeBlockNode): boolean {
     return /<=|>=|<|>|=/.test(node.text)
   }
@@ -1109,7 +1200,21 @@ export class ScratchSimulator extends HTMLElement {
 
   private isHatBlockText(text: string): boolean {
     const normalized = this.normalizeText(text)
-    return normalized.startsWith('quand ')
+    if (/^(quand|lorsque|when)\b/.test(normalized)) {
+      return true
+    }
+
+    if (/\btouche\b[\s\S]*\bpress(?:ee|e|ed)\b/.test(normalized)) {
+      return true
+    }
+
+    if (/\bkey\b[\s\S]*\bpress(?:ed)?\b/.test(normalized)) {
+      return true
+    }
+
+    return /\b(?:greenflag|drapeau)\b[\s\S]*\b(?:clique|clicked)\b/.test(
+      normalized,
+    )
   }
 
   private isEventInstructionText(text: string): boolean {
@@ -1523,7 +1628,6 @@ export class ScratchSimulator extends HTMLElement {
     idsByOrder: Map<number, string>,
   ): number {
     const orderById = new Map<string, number>()
-    const textByOrder = new Map<number, string>()
     idsByOrder.forEach((id, order) => {
       orderById.set(id, order)
     })
@@ -1561,6 +1665,7 @@ export class ScratchSimulator extends HTMLElement {
   }
 
   private async buildExecutionIndexToSelectorMap(): Promise<void> {
+    this.mappingWarningMessage = null
     this.executionIndexToBlockId.clear()
     if (!this.customDefinitionEntryIdBySignature) {
       this.customDefinitionEntryIdBySignature = new Map<string, string>()
@@ -1632,265 +1737,234 @@ export class ScratchSimulator extends HTMLElement {
 
     const dryInterpreter = new ScratchInterpreter(200, 200, 90)
     const seenInstructionIndexes = new Set<number>()
+    let mappingGuardTriggered = false
     let lastOrder = -1
     const customBlockReturnOrders: number[] = []
     const customBlockEntryOrders: number[] = []
     const customBlockBodyOrderStack: Array<Set<number>> = []
-    await dryInterpreter.executeAnimated(
-      this.scratchCode,
-      async () => {
-        const state = dryInterpreter.getCurrentState()
-        const index = state.currentInstructionIndex
-        if (
-          typeof index !== 'number' ||
-          index < 0 ||
-          seenInstructionIndexes.has(index)
-        ) {
-          return
-        }
-
-        seenInstructionIndexes.add(index)
-        const instructionTextFromHtml = this.extractInstructionTextFromHtml(
-          state.currentInstructionScratchHtml || '',
-        )
-        const instructionTextFromLabel = this.normalizeText(
-          state.currentInstruction || '',
-        )
-        const instructionText =
-          instructionTextFromHtml || instructionTextFromLabel
-        const isConditionStep = Boolean(state.currentConditionText)
-        const isEventInstruction = this.isEventInstructionText(instructionText)
-        const isCustomCallInstruction = this.isCustomBlockCallInstructionText(
-          instructionTextFromLabel,
-        )
-        let activeCustomBodyOrders =
-          customBlockBodyOrderStack.length > 0
-            ? customBlockBodyOrderStack[customBlockBodyOrderStack.length - 1]
-            : null
-
-        const runtimeCustomSignature = this.normalizeCustomBlockSignature(
-          state.currentCustomBlockSignature || '',
-        )
-        const isInsideRuntimeCustom = runtimeCustomSignature !== ''
-        if (runtimeCustomSignature) {
-          const runtimeSignatureKey = this.findMatchingCustomSignatureKey(
-            runtimeCustomSignature,
-            customBodyOrdersBySignature,
-          )
-          if (runtimeSignatureKey) {
-            const runtimeScope =
-              customBodyOrdersBySignature.get(runtimeSignatureKey)
-            if (runtimeScope && runtimeScope.size > 0) {
-              activeCustomBodyOrders = runtimeScope
+    const simulatorCode = this.getSimulatorScratchCode()
+    try {
+      await dryInterpreter.executeAnimated(
+        simulatorCode,
+        async () => {
+          if (
+            seenInstructionIndexes.size >=
+            ScratchSimulator.MAX_MAPPING_INSTRUCTIONS
+          ) {
+            if (!mappingGuardTriggered) {
+              mappingGuardTriggered = true
+              this.mappingWarningMessage =
+                'Alerte : le script semble trop récursif (mapping arrêté à 10 000 instructions).'
+              this.logMappingDebug('build/guard-stop', {
+                maxInstructions: ScratchSimulator.MAX_MAPPING_INSTRUCTIONS,
+                message:
+                  "Arrêt du mapping dry-run: trop d'instructions (boucle/récursivité potentielle).",
+              })
             }
-          }
-        }
-
-        this.logMappingDebug('build/index-state', {
-          instructionIndex: index,
-          instructionText,
-          instructionTextFromHtml,
-          instructionTextFromLabel,
-          runtimeCustomSignature,
-          isConditionStep,
-          isEventInstruction,
-          isCustomCallInstruction,
-          activeScopeSize: activeCustomBodyOrders?.size ?? 0,
-          stackDepth: customBlockBodyOrderStack.length,
-        })
-
-        if (
-          customBlockEntryOrders.length > 0 &&
-          !isConditionStep &&
-          !isCustomCallInstruction
-        ) {
-          const forcedEntryOrder = customBlockEntryOrders.pop() ?? null
-          if (forcedEntryOrder !== null) {
-            const forcedId = idsByOrder.get(forcedEntryOrder)
-            if (forcedId) {
-              this.executionIndexToBlockId.set(index, forcedId)
-              lastOrder = forcedEntryOrder
-              return
-            }
-          }
-        }
-
-        let candidateOrders: number[] = []
-
-        if (isConditionStep) {
-          const wantsIfElse = this.isIfElseBlockText(instructionText)
-          const matcher = wantsIfElse
-            ? (text: string) => this.isIfElseBlockText(text)
-            : (text: string) => this.isIfBlockText(text)
-          candidateOrders = allTexts
-            .filter(({ text }) => matcher(text))
-            .map(({ order }) => order)
-          if (candidateOrders.length === 0) {
-            candidateOrders = allTexts
-              .filter(
-                ({ text }) =>
-                  this.isIfBlockText(text) || this.isIfElseBlockText(text),
-              )
-              .map(({ order }) => order)
-          }
-        } else if (instructionText) {
-          candidateOrders = exactOrdersByText.get(instructionText) || []
-
-          // Fallback : si pas de correspondance exacte, essayer une super-normalisation
-          if (candidateOrders.length === 0) {
-            const superNormalized = instructionText
-              .replace(/\s+/g, '')
-              .toLowerCase()
-            for (const [key, orders] of exactOrdersByText.entries()) {
-              const keyNormalized = key.replace(/\s+/g, '').toLowerCase()
-              if (keyNormalized === superNormalized) {
-                candidateOrders = orders
-                break
-              }
-            }
-          }
-        }
-
-        if (
-          candidateOrders.length === 0 &&
-          instructionText &&
-          !isConditionStep
-        ) {
-          // Super-normalisation : supprimer tous les espaces pour la comparaison
-          const superNormalizedInstruction = instructionText
-            .replace(/\s+/g, '')
-            .toLowerCase()
-
-          candidateOrders = allTexts
-            .filter(({ text }) => {
-              const superNormalizedText = text.replace(/\s+/g, '').toLowerCase()
-              return (
-                text.includes(instructionText) ||
-                instructionText.includes(text) ||
-                superNormalizedText.includes(superNormalizedInstruction) ||
-                superNormalizedInstruction.includes(superNormalizedText)
-              )
-            })
-            .map(({ order }) => order)
-        }
-
-        if (candidateOrders.length === 0) {
-          const looseInstructionKey =
-            this.getLooseInstructionKey(instructionText)
-          if (looseInstructionKey) {
-            candidateOrders = allTexts
-              .filter(
-                ({ text }) =>
-                  this.getLooseInstructionKey(text) === looseInstructionKey,
-              )
-              .map(({ order }) => order)
-          }
-        }
-
-        if (isEventInstruction && candidateOrders.length === 0) {
-          candidateOrders = Array.from(validEventOrders)
-        }
-
-        if (isEventInstruction && candidateOrders.length > 1) {
-          const eventHint = this.normalizeText(
-            `${instructionText} ${instructionTextFromLabel}`,
-          )
-
-          if (/greenflag|drapeau/.test(eventHint)) {
-            const narrowed = candidateOrders.filter((order) => {
-              const text = textByOrder.get(order) || ''
-              return /greenflag|drapeau|quand/.test(text)
-            })
-
-            if (narrowed.length > 0) {
-              candidateOrders = narrowed
-            }
-          }
-        }
-
-        if (!isConditionStep && !isEventInstruction) {
-          candidateOrders = candidateOrders.filter(
-            (order) => !hatOrders.has(order),
-          )
-        } else if (isEventInstruction) {
-          candidateOrders = candidateOrders.filter((order) =>
-            validEventOrders.has(order),
-          )
-        }
-
-        if (activeCustomBodyOrders && !isCustomCallInstruction) {
-          candidateOrders = candidateOrders.filter((order) =>
-            activeCustomBodyOrders.has(order),
-          )
-        }
-
-        const expectedReturnOrder =
-          customBlockReturnOrders.length > 0
-            ? customBlockReturnOrders[customBlockReturnOrders.length - 1]
-            : null
-
-        if (
-          expectedReturnOrder !== null &&
-          !isConditionStep &&
-          !isCustomCallInstruction &&
-          !activeCustomBodyOrders &&
-          !isInsideRuntimeCustom &&
-          candidateOrders.includes(expectedReturnOrder)
-        ) {
-          const returnId = idsByOrder.get(expectedReturnOrder)
-          if (returnId) {
-            this.executionIndexToBlockId.set(index, returnId)
-            lastOrder = expectedReturnOrder
-            customBlockReturnOrders.pop()
-            customBlockBodyOrderStack.pop()
-            return
-          }
-        }
-
-        if (candidateOrders.length === 0) {
-          if (isConditionStep) {
+            dryInterpreter.stopExecution()
             return
           }
 
-          if (activeCustomBodyOrders && !isEventInstruction) {
-            const scopedFallbackOrder = this.getNextAllowedOrderAfter(
-              lastOrder,
-              candidateBlocks.length,
-              (order) =>
-                !hatOrders.has(order) && activeCustomBodyOrders.has(order),
+          const state = dryInterpreter.getCurrentState()
+          const index = state.currentInstructionIndex
+          if (
+            typeof index !== 'number' ||
+            index < 0 ||
+            seenInstructionIndexes.has(index)
+          ) {
+            return
+          }
+
+          seenInstructionIndexes.add(index)
+          const instructionTextFromHtml = this.extractInstructionTextFromHtml(
+            state.currentInstructionScratchHtml || '',
+          )
+          const instructionTextFromLabel = this.normalizeText(
+            state.currentInstruction || '',
+          )
+          const instructionText =
+            instructionTextFromHtml || instructionTextFromLabel
+          const isConditionStep = Boolean(state.currentConditionText)
+          const isEventInstruction =
+            this.isEventInstructionText(instructionText)
+          const isCustomCallInstruction = this.isCustomBlockCallInstructionText(
+            instructionTextFromLabel,
+          )
+          let activeCustomBodyOrders =
+            customBlockBodyOrderStack.length > 0
+              ? customBlockBodyOrderStack[customBlockBodyOrderStack.length - 1]
+              : null
+
+          const runtimeCustomSignature = this.normalizeCustomBlockSignature(
+            state.currentCustomBlockSignature || '',
+          )
+          const isInsideRuntimeCustom = runtimeCustomSignature !== ''
+          if (runtimeCustomSignature) {
+            const runtimeSignatureKey = this.findMatchingCustomSignatureKey(
+              runtimeCustomSignature,
+              customBodyOrdersBySignature,
             )
+            if (runtimeSignatureKey) {
+              const runtimeScope =
+                customBodyOrdersBySignature.get(runtimeSignatureKey)
+              if (runtimeScope && runtimeScope.size > 0) {
+                activeCustomBodyOrders = runtimeScope
+              }
+            }
+          }
 
-            if (scopedFallbackOrder !== null) {
-              const scopedFallbackId = idsByOrder.get(scopedFallbackOrder)
-              if (scopedFallbackId) {
-                this.executionIndexToBlockId.set(index, scopedFallbackId)
-                lastOrder = scopedFallbackOrder
+          this.logMappingDebug('build/index-state', {
+            instructionIndex: index,
+            instructionText,
+            instructionTextFromHtml,
+            instructionTextFromLabel,
+            runtimeCustomSignature,
+            isConditionStep,
+            isEventInstruction,
+            isCustomCallInstruction,
+            activeScopeSize: activeCustomBodyOrders?.size ?? 0,
+            stackDepth: customBlockBodyOrderStack.length,
+          })
+
+          if (
+            customBlockEntryOrders.length > 0 &&
+            !isConditionStep &&
+            !isCustomCallInstruction
+          ) {
+            const forcedEntryOrder = customBlockEntryOrders.pop() ?? null
+            if (forcedEntryOrder !== null) {
+              const forcedId = idsByOrder.get(forcedEntryOrder)
+              if (forcedId) {
+                this.executionIndexToBlockId.set(index, forcedId)
+                lastOrder = forcedEntryOrder
                 return
               }
             }
+          }
 
-            if (
-              expectedReturnOrder !== null &&
-              !isCustomCallInstruction &&
-              !isInsideRuntimeCustom
-            ) {
-              const returnId = idsByOrder.get(expectedReturnOrder)
-              if (returnId) {
-                this.executionIndexToBlockId.set(index, returnId)
-                lastOrder = expectedReturnOrder
-                customBlockReturnOrders.pop()
-                customBlockBodyOrderStack.pop()
-                return
+          let candidateOrders: number[] = []
+
+          if (isConditionStep) {
+            const wantsIfElse = this.isIfElseBlockText(instructionText)
+            const matcher = wantsIfElse
+              ? (text: string) => this.isIfElseBlockText(text)
+              : (text: string) => this.isIfBlockText(text)
+            candidateOrders = allTexts
+              .filter(({ text }) => matcher(text))
+              .map(({ order }) => order)
+            if (candidateOrders.length === 0) {
+              candidateOrders = allTexts
+                .filter(
+                  ({ text }) =>
+                    this.isIfBlockText(text) || this.isIfElseBlockText(text),
+                )
+                .map(({ order }) => order)
+            }
+          } else if (instructionText) {
+            candidateOrders = exactOrdersByText.get(instructionText) || []
+
+            // Fallback : si pas de correspondance exacte, essayer une super-normalisation
+            if (candidateOrders.length === 0) {
+              const superNormalized = instructionText
+                .replace(/\s+/g, '')
+                .toLowerCase()
+              for (const [key, orders] of exactOrdersByText.entries()) {
+                const keyNormalized = key.replace(/\s+/g, '').toLowerCase()
+                if (keyNormalized === superNormalized) {
+                  candidateOrders = orders
+                  break
+                }
               }
             }
           }
 
           if (
+            candidateOrders.length === 0 &&
+            instructionText &&
+            !isConditionStep
+          ) {
+            // Super-normalisation : supprimer tous les espaces pour la comparaison
+            const superNormalizedInstruction = instructionText
+              .replace(/\s+/g, '')
+              .toLowerCase()
+
+            candidateOrders = allTexts
+              .filter(({ text }) => {
+                const superNormalizedText = text
+                  .replace(/\s+/g, '')
+                  .toLowerCase()
+                return (
+                  text.includes(instructionText) ||
+                  instructionText.includes(text) ||
+                  superNormalizedText.includes(superNormalizedInstruction) ||
+                  superNormalizedInstruction.includes(superNormalizedText)
+                )
+              })
+              .map(({ order }) => order)
+          }
+
+          if (candidateOrders.length === 0) {
+            const looseInstructionKey =
+              this.getLooseInstructionKey(instructionText)
+            if (looseInstructionKey) {
+              candidateOrders = allTexts
+                .filter(
+                  ({ text }) =>
+                    this.getLooseInstructionKey(text) === looseInstructionKey,
+                )
+                .map(({ order }) => order)
+            }
+          }
+
+          if (isEventInstruction && candidateOrders.length === 0) {
+            candidateOrders = Array.from(validEventOrders)
+          }
+
+          if (isEventInstruction && candidateOrders.length > 1) {
+            const eventHint = this.normalizeText(
+              `${instructionText} ${instructionTextFromLabel}`,
+            )
+
+            if (/greenflag|drapeau/.test(eventHint)) {
+              const narrowed = candidateOrders.filter((order) => {
+                const text = textByOrder.get(order) || ''
+                return /greenflag|drapeau|quand/.test(text)
+              })
+
+              if (narrowed.length > 0) {
+                candidateOrders = narrowed
+              }
+            }
+          }
+
+          if (!isConditionStep && !isEventInstruction) {
+            candidateOrders = candidateOrders.filter(
+              (order) => !hatOrders.has(order),
+            )
+          } else if (isEventInstruction) {
+            candidateOrders = candidateOrders.filter((order) =>
+              validEventOrders.has(order),
+            )
+          }
+
+          if (activeCustomBodyOrders && !isCustomCallInstruction) {
+            candidateOrders = candidateOrders.filter((order) =>
+              activeCustomBodyOrders.has(order),
+            )
+          }
+
+          const expectedReturnOrder =
+            customBlockReturnOrders.length > 0
+              ? customBlockReturnOrders[customBlockReturnOrders.length - 1]
+              : null
+
+          if (
             expectedReturnOrder !== null &&
+            !isConditionStep &&
             !isCustomCallInstruction &&
-            !isEventInstruction &&
             !activeCustomBodyOrders &&
-            !isInsideRuntimeCustom
+            !isInsideRuntimeCustom &&
+            candidateOrders.includes(expectedReturnOrder)
           ) {
             const returnId = idsByOrder.get(expectedReturnOrder)
             if (returnId) {
@@ -1902,116 +1976,179 @@ export class ScratchSimulator extends HTMLElement {
             }
           }
 
-          const fallbackOrder = !isEventInstruction
-            ? this.getNextAllowedOrderAfter(
+          if (candidateOrders.length === 0) {
+            if (isConditionStep) {
+              return
+            }
+
+            if (activeCustomBodyOrders && !isEventInstruction) {
+              const scopedFallbackOrder = this.getNextAllowedOrderAfter(
                 lastOrder,
                 candidateBlocks.length,
-                (order) => {
-                  if (hatOrders.has(order)) return false
-                  if (activeCustomBodyOrders) {
-                    return activeCustomBodyOrders.has(order)
-                  }
-                  return true
-                },
+                (order) =>
+                  !hatOrders.has(order) && activeCustomBodyOrders.has(order),
               )
-            : this.getNextAllowedOrderAfter(
-                lastOrder,
-                candidateBlocks.length,
-                (order) => validEventOrders.has(order),
-              )
-          if (fallbackOrder === null) {
+
+              if (scopedFallbackOrder !== null) {
+                const scopedFallbackId = idsByOrder.get(scopedFallbackOrder)
+                if (scopedFallbackId) {
+                  this.executionIndexToBlockId.set(index, scopedFallbackId)
+                  lastOrder = scopedFallbackOrder
+                  return
+                }
+              }
+
+              if (
+                expectedReturnOrder !== null &&
+                !isCustomCallInstruction &&
+                !isInsideRuntimeCustom
+              ) {
+                const returnId = idsByOrder.get(expectedReturnOrder)
+                if (returnId) {
+                  this.executionIndexToBlockId.set(index, returnId)
+                  lastOrder = expectedReturnOrder
+                  customBlockReturnOrders.pop()
+                  customBlockBodyOrderStack.pop()
+                  return
+                }
+              }
+            }
+
+            if (
+              expectedReturnOrder !== null &&
+              !isCustomCallInstruction &&
+              !isEventInstruction &&
+              !activeCustomBodyOrders &&
+              !isInsideRuntimeCustom
+            ) {
+              const returnId = idsByOrder.get(expectedReturnOrder)
+              if (returnId) {
+                this.executionIndexToBlockId.set(index, returnId)
+                lastOrder = expectedReturnOrder
+                customBlockReturnOrders.pop()
+                customBlockBodyOrderStack.pop()
+                return
+              }
+            }
+
+            const fallbackOrder = !isEventInstruction
+              ? this.getNextAllowedOrderAfter(
+                  lastOrder,
+                  candidateBlocks.length,
+                  (order) => {
+                    if (hatOrders.has(order)) return false
+                    if (activeCustomBodyOrders) {
+                      return activeCustomBodyOrders.has(order)
+                    }
+                    return true
+                  },
+                )
+              : this.getNextAllowedOrderAfter(
+                  lastOrder,
+                  candidateBlocks.length,
+                  (order) => validEventOrders.has(order),
+                )
+            if (fallbackOrder === null) {
+              return
+            }
+            const fallbackId = idsByOrder.get(fallbackOrder)
+            if (fallbackId) {
+              this.executionIndexToBlockId.set(index, fallbackId)
+              lastOrder = fallbackOrder
+              this.logMappingDebug('build/fallback', {
+                instructionIndex: index,
+                chosenOrder: fallbackOrder,
+                chosenText: textByOrder.get(fallbackOrder) || '',
+                chosenId: fallbackId,
+              })
+            }
             return
           }
-          const fallbackId = idsByOrder.get(fallbackOrder)
-          if (fallbackId) {
-            this.executionIndexToBlockId.set(index, fallbackId)
-            lastOrder = fallbackOrder
-            this.logMappingDebug('build/fallback', {
-              instructionIndex: index,
-              chosenOrder: fallbackOrder,
-              chosenText: textByOrder.get(fallbackOrder) || '',
-              chosenId: fallbackId,
-            })
-          }
-          return
-        }
 
-        const chosenOrder = this.chooseNearestOrder(
-          candidateOrders,
-          lastOrder,
-          candidateBlocks.length,
-        )
-
-        if (chosenOrder === null) {
-          return
-        }
-
-        const blockId = idsByOrder.get(chosenOrder)
-        if (!blockId) {
-          return
-        }
-
-        this.executionIndexToBlockId.set(index, blockId)
-        lastOrder = chosenOrder
-        this.logMappingDebug('build/chosen', {
-          instructionIndex: index,
-          chosenOrder,
-          chosenText: textByOrder.get(chosenOrder) || '',
-          chosenId: blockId,
-          candidateOrders,
-          candidateTexts: candidateOrders.map(
-            (order) => textByOrder.get(order) || '',
-          ),
-        })
-
-        if (isCustomCallInstruction) {
-          const callSignatureSource =
-            instructionTextFromLabel || instructionText
-          const callSignature =
-            this.normalizeCustomBlockSignature(callSignatureSource)
-          const signatureKey = this.findMatchingCustomSignatureKey(
-            callSignature,
-            this.customDefinitionEntryIdBySignature,
-          )
-          const entryId = signatureKey
-            ? this.customDefinitionEntryIdBySignature.get(signatureKey)
-            : undefined
-          const entryOrder = entryId ? orderById.get(entryId) : undefined
-          if (entryOrder !== undefined) {
-            customBlockEntryOrders.push(entryOrder)
-          }
-
-          const bodyOrders = signatureKey
-            ? customBodyOrdersBySignature.get(signatureKey)
-            : undefined
-          if (bodyOrders && bodyOrders.size > 0) {
-            customBlockBodyOrderStack.push(bodyOrders)
-            this.logMappingDebug('build/custom-enter', {
-              instructionIndex: index,
-              callSignature,
-              signatureKey,
-              scopeSize: bodyOrders.size,
-            })
-          }
-
-          const returnOrder = this.getNextAllowedOrderAfter(
-            chosenOrder,
+          const chosenOrder = this.chooseNearestOrder(
+            candidateOrders,
+            lastOrder,
             candidateBlocks.length,
-            (order) => !hatOrders.has(order),
           )
-          if (returnOrder !== null) {
-            customBlockReturnOrders.push(returnOrder)
-            this.logMappingDebug('build/custom-return-marker', {
-              instructionIndex: index,
-              returnOrder,
-              returnText: textByOrder.get(returnOrder) || '',
-            })
+
+          if (chosenOrder === null) {
+            return
           }
-        }
-      },
-      0,
-      { skipWaitBlocks: true },
-    )
+
+          const blockId = idsByOrder.get(chosenOrder)
+          if (!blockId) {
+            return
+          }
+
+          this.executionIndexToBlockId.set(index, blockId)
+          lastOrder = chosenOrder
+          this.logMappingDebug('build/chosen', {
+            instructionIndex: index,
+            chosenOrder,
+            chosenText: textByOrder.get(chosenOrder) || '',
+            chosenId: blockId,
+            candidateOrders,
+            candidateTexts: candidateOrders.map(
+              (order) => textByOrder.get(order) || '',
+            ),
+          })
+
+          if (isCustomCallInstruction) {
+            const callSignatureSource =
+              instructionTextFromLabel || instructionText
+            const callSignature =
+              this.normalizeCustomBlockSignature(callSignatureSource)
+            const signatureKey = this.findMatchingCustomSignatureKey(
+              callSignature,
+              this.customDefinitionEntryIdBySignature,
+            )
+            const entryId = signatureKey
+              ? this.customDefinitionEntryIdBySignature.get(signatureKey)
+              : undefined
+            const entryOrder = entryId ? orderById.get(entryId) : undefined
+            if (entryOrder !== undefined) {
+              customBlockEntryOrders.push(entryOrder)
+            }
+
+            const bodyOrders = signatureKey
+              ? customBodyOrdersBySignature.get(signatureKey)
+              : undefined
+            if (bodyOrders && bodyOrders.size > 0) {
+              customBlockBodyOrderStack.push(bodyOrders)
+              this.logMappingDebug('build/custom-enter', {
+                instructionIndex: index,
+                callSignature,
+                signatureKey,
+                scopeSize: bodyOrders.size,
+              })
+            }
+
+            const returnOrder = this.getNextAllowedOrderAfter(
+              chosenOrder,
+              candidateBlocks.length,
+              (order) => !hatOrders.has(order),
+            )
+            if (returnOrder !== null) {
+              customBlockReturnOrders.push(returnOrder)
+              this.logMappingDebug('build/custom-return-marker', {
+                instructionIndex: index,
+                returnOrder,
+                returnText: textByOrder.get(returnOrder) || '',
+              })
+            }
+          }
+        },
+        0,
+        { skipWaitBlocks: true },
+      )
+    } finally {
+      this.logMappedInstructionsSummary(
+        idsByOrder,
+        orderById,
+        textByOrder,
+        validEventOrders,
+      )
+    }
   }
 
   // Gestion de l'exécution animée du code Scratch
@@ -2032,6 +2169,10 @@ export class ScratchSimulator extends HTMLElement {
 
     // Construire le mapping linéaire index d'exécution -> sélecteur SVG
     await this.buildExecutionIndexToSelectorMap()
+
+    if (this.mappingWarningMessage && this.stepDiv) {
+      this.stepDiv.textContent = this.mappingWarningMessage
+    }
 
     if (!this.hasValidStartEventBlock() && this.stepDiv) {
       this.stepDiv.textContent =
@@ -2072,8 +2213,9 @@ export class ScratchSimulator extends HTMLElement {
       })
     }
 
+    const simulatorCode = this.getSimulatorScratchCode()
     await this.interpreter.executeAnimated(
-      this.scratchCode,
+      simulatorCode,
       onUpdateCallback,
       this.delayMs,
     )
@@ -2113,6 +2255,7 @@ export class ScratchSimulator extends HTMLElement {
       finalAngle: 90,
       visible: true,
       variables: {},
+      lists: {},
       messages: [],
       currentLookMessage: null,
       currentInstruction: '',
@@ -2134,6 +2277,7 @@ export class ScratchSimulator extends HTMLElement {
     this.pauseResolvers = []
     resolvers.forEach((resolve) => resolve())
     this.interpreter = null
+    this.mappingWarningMessage = null
     this.executionIndexToBlockId.clear()
     this.customDefinitionEntryIdBySignature.clear()
     this.customDefinitionBodyIdsBySignature.clear()
@@ -2163,13 +2307,9 @@ export class ScratchSimulator extends HTMLElement {
 
   private drawSimulation(result: ExecutionResult): void {
     if (!this.canvas) return
-
-    const shouldShowCanvas =
-      result.traces.length > 0 || this.hasCanvasRelevantBlocks
     if (this.canvasWrapper) {
-      this.canvasWrapper.style.display = shouldShowCanvas ? 'block' : 'none'
+      this.canvasWrapper.style.display = 'block'
     }
-    if (!shouldShowCanvas) return
 
     const ctx = this.canvas.getContext('2d')
     if (!ctx) return
@@ -2284,10 +2424,8 @@ export class ScratchSimulator extends HTMLElement {
       }
     }
 
-    // Variables style Scratch
-    if (Object.keys(result.variables).length > 0) {
-      this.drawVariables(ctx, result.variables)
-    }
+    const variablesColumnWidth = this.drawVariables(ctx, result.variables)
+    this.drawLists(ctx, result.lists ?? {}, 5 + variablesColumnWidth + 8)
   }
 
   private drawSpeechBubble(
@@ -2529,28 +2667,43 @@ export class ScratchSimulator extends HTMLElement {
   private drawVariables(
     ctx: CanvasRenderingContext2D,
     variables: Record<string, number>,
-  ): void {
+  ): number {
     const entries = Object.entries(variables)
-    if (entries.length === 0) return
+    if (entries.length === 0) return 0
 
     ctx.save()
     ctx.font = '10px sans-serif'
 
     const padding = 6
-    const lineHeight = 15
+    const lineHeight = 16
     const borderRadius = 5
+    const chipPaddingX = 6
+    const chipMinWidth = 22
+    const nameValueGap = 6
     const startX = 5
     let currentY = 5
+    let maxBoxWidth = 0
 
     entries.forEach(([name, value]) => {
-      const displayText = `${name} = ${value}`
-      const textWidth = ctx.measureText(displayText).width
-      const boxWidth = textWidth + padding * 2
+      const nameText = String(name)
+      const valueText = String(value)
+      const nameWidth = ctx.measureText(nameText).width
+      const valueWidth = ctx.measureText(valueText).width
+      const valueChipWidth = Math.max(
+        chipMinWidth,
+        valueWidth + chipPaddingX * 2,
+      )
+      const boxWidth = padding * 2 + nameWidth + nameValueGap + valueChipWidth
       const boxHeight = lineHeight
+      maxBoxWidth = Math.max(maxBoxWidth, boxWidth)
 
-      // Fond orange style Scratch
-      ctx.fillStyle = '#ff8c1a'
-      ctx.strokeStyle = '#cf6b0e'
+      const containerColor = '#d2deef'
+      const borderColor = '#9ab0cf'
+      const chipColor = '#ff8c1a'
+      const chipBorderColor = '#cf6b0e'
+
+      ctx.fillStyle = containerColor
+      ctx.strokeStyle = borderColor
       ctx.lineWidth = 1
 
       ctx.beginPath()
@@ -2565,15 +2718,222 @@ export class ScratchSimulator extends HTMLElement {
       ctx.fill()
       ctx.stroke()
 
-      // Texte blanc
-      ctx.fillStyle = '#ffffff'
+      const chipX = startX + padding + nameWidth + nameValueGap
+      const chipHeight = boxHeight - 4
+      const chipY = currentY + (boxHeight - chipHeight) / 2
+
+      ctx.fillStyle = chipColor
+      ctx.strokeStyle = chipBorderColor
+      ctx.beginPath()
+      this.drawRoundedRectPath(ctx, chipX, chipY, valueChipWidth, chipHeight, 2)
+      ctx.fill()
+      ctx.stroke()
+
+      ctx.fillStyle = '#000000'
       ctx.textBaseline = 'middle'
-      ctx.fillText(displayText, startX + padding, currentY + boxHeight / 2)
+      ctx.fillText(nameText, startX + padding, currentY + boxHeight / 2 + 1)
+
+      ctx.fillStyle = '#ffffff'
+      ctx.fillText(
+        valueText,
+        chipX + chipPaddingX,
+        currentY + boxHeight / 2 + 1,
+      )
 
       currentY += boxHeight + 4
     })
 
     ctx.restore()
+    return maxBoxWidth
+  }
+
+  private drawLists(
+    ctx: CanvasRenderingContext2D,
+    lists: Record<string, string[]>,
+    startX: number,
+  ): void {
+    const entries = Object.entries(lists)
+    if (entries.length === 0) return
+
+    ctx.save()
+    ctx.font = '10px sans-serif'
+
+    const padding = 6
+    const borderRadius = 5
+    const headerHeight = 16
+    const rowHeight = 16
+    const footerHeight = 15
+    const listGap = 8
+    const maxWidth = Math.max(
+      80,
+      this.canvas ? this.canvas.width - startX - 5 : 180,
+    )
+    let currentY = 5
+
+    entries.forEach(([name, values]) => {
+      const headerText = this.truncateTextToWidth(
+        ctx,
+        name,
+        Math.max(50, maxWidth - padding * 2),
+      )
+      const rowTexts = values
+      const footerText = `longueur = ${values.length}`
+
+      let maxIndexWidth = 0
+      let maxRowValueWidth = 0
+      rowTexts.forEach((value, index) => {
+        maxIndexWidth = Math.max(
+          maxIndexWidth,
+          ctx.measureText(String(index + 1)).width,
+        )
+        maxRowValueWidth = Math.max(
+          maxRowValueWidth,
+          ctx.measureText(String(value)).width,
+        )
+      })
+
+      const indexGap = rowTexts.length > 0 ? 5 : 0
+      const chipPaddingX = 6
+      const chipMinWidth = 24
+      const bodyContentWidth =
+        rowTexts.length > 0
+          ? maxIndexWidth +
+            indexGap +
+            Math.max(chipMinWidth, maxRowValueWidth + chipPaddingX * 2)
+          : 0
+
+      const idealWidth = Math.max(
+        95,
+        ctx.measureText(headerText).width + padding * 2,
+        bodyContentWidth + padding * 2,
+        ctx.measureText(footerText).width + padding * 2,
+      )
+      const boxWidth = Math.min(maxWidth, idealWidth)
+      const bodyHeight = rowTexts.length * rowHeight
+      const boxHeight = headerHeight + bodyHeight + footerHeight
+
+      const containerColor = '#d2deef'
+      const whiteRowColor = '#ffffff'
+      const borderColor = '#9ab0cf'
+      const chipColor = '#ff661a'
+      const chipBorderColor = '#d24f0f'
+
+      ctx.fillStyle = containerColor
+      ctx.strokeStyle = borderColor
+      ctx.lineWidth = 1
+
+      ctx.beginPath()
+      this.drawRoundedRectPath(
+        ctx,
+        startX,
+        currentY,
+        boxWidth,
+        boxHeight,
+        borderRadius,
+      )
+      ctx.fill()
+      ctx.stroke()
+
+      ctx.fillStyle = whiteRowColor
+      ctx.fillRect(startX + 1, currentY + 1, boxWidth - 2, headerHeight)
+
+      const footerTop = currentY + headerHeight + rowTexts.length * rowHeight
+      ctx.fillRect(startX + 1, footerTop, boxWidth - 2, footerHeight)
+
+      ctx.strokeStyle = borderColor
+      ctx.beginPath()
+      ctx.moveTo(startX + 1, currentY + headerHeight + 1)
+      ctx.lineTo(startX + boxWidth - 1, currentY + headerHeight + 1)
+      ctx.stroke()
+
+      ctx.beginPath()
+      ctx.moveTo(startX + 1, footerTop)
+      ctx.lineTo(startX + boxWidth - 1, footerTop)
+      ctx.stroke()
+
+      ctx.fillStyle = '#000000'
+      ctx.textBaseline = 'middle'
+      ctx.fillText(
+        headerText,
+        startX + padding,
+        currentY + headerHeight / 2 + 1,
+      )
+
+      rowTexts.forEach((value, index) => {
+        const rowTop = currentY + headerHeight + index * rowHeight
+        const indexText = String(index + 1)
+        const rowText = this.truncateTextToWidth(
+          ctx,
+          String(value),
+          Math.max(
+            20,
+            boxWidth -
+              padding * 2 -
+              maxIndexWidth -
+              indexGap -
+              chipPaddingX * 2,
+          ),
+        )
+
+        const indexX = startX + padding
+        const indexY = rowTop + rowHeight / 2 + 1
+        ctx.fillStyle = '#000000'
+        ctx.fillText(indexText, indexX, indexY)
+
+        const chipX = indexX + maxIndexWidth + indexGap
+        const chipAvailableWidth = Math.max(
+          chipMinWidth,
+          boxWidth - padding - (chipX - startX),
+        )
+        const chipTextWidth = ctx.measureText(rowText).width
+        const chipWidth = Math.min(
+          chipAvailableWidth,
+          Math.max(chipMinWidth, chipTextWidth + chipPaddingX * 2),
+        )
+        const chipHeight = rowHeight - 4
+        const chipY = rowTop + (rowHeight - chipHeight) / 2
+
+        ctx.fillStyle = chipColor
+        ctx.strokeStyle = chipBorderColor
+        ctx.lineWidth = 1
+        ctx.beginPath()
+        this.drawRoundedRectPath(ctx, chipX, chipY, chipWidth, chipHeight, 2)
+        ctx.fill()
+        ctx.stroke()
+
+        ctx.fillStyle = '#ffffff'
+        ctx.fillText(rowText, chipX + chipPaddingX, indexY)
+      })
+
+      ctx.fillStyle = '#000000'
+      ctx.fillText(footerText, startX + padding, footerTop + footerHeight / 2)
+
+      currentY += boxHeight + listGap
+    })
+
+    ctx.restore()
+  }
+
+  private truncateTextToWidth(
+    ctx: CanvasRenderingContext2D,
+    text: string,
+    maxWidth: number,
+  ): string {
+    if (ctx.measureText(text).width <= maxWidth) {
+      return text
+    }
+
+    const ellipsis = '…'
+    let truncated = text
+    while (truncated.length > 0) {
+      const candidate = `${truncated}${ellipsis}`
+      if (ctx.measureText(candidate).width <= maxWidth) {
+        return candidate
+      }
+      truncated = truncated.slice(0, -1)
+    }
+
+    return ellipsis
   }
 
   private displayInfo(result: ExecutionResult): void {
@@ -2631,7 +2991,11 @@ export class ScratchSimulator extends HTMLElement {
       const mappedInstructionText = this.getMappedInstructionText(
         result.currentInstructionIndex,
       )
-      this.stepDiv.textContent = mappedInstructionText ?? '' // 'Instruction : -'
+      const fallbackInstruction = result.currentInstruction
+        ? this.normalizeText(result.currentInstruction)
+        : ''
+      const instructionText = fallbackInstruction || mappedInstructionText || ''
+      this.stepDiv.textContent = instructionText
     }
   }
 
@@ -2639,11 +3003,25 @@ export class ScratchSimulator extends HTMLElement {
     if (this.isHardStopped || this.isRunning) {
       return
     }
+    this.logMappingDebug('run/startProgram', {
+      isRunning: this.isRunning,
+      isPaused: this.isPaused,
+      isHardStopped: this.isHardStopped,
+      codeLength: this.scratchCode.length,
+    })
     this.playPauseButton?.blur()
     this.interpreter = new ScratchInterpreter(200, 200, 90)
     this.interpreter.setExecutionDelay(this.delayMs)
     this.parseAndDisplayCode()
-    this.runAnimatedSimulation().catch(() => {
+    this.runAnimatedSimulation().catch((error) => {
+      this.logMappingDebug('run/error', {
+        message: error instanceof Error ? error.message : String(error),
+        name: error instanceof Error ? error.name : 'UnknownError',
+      })
+      if (this.stepDiv) {
+        this.stepDiv.textContent =
+          "Erreur au démarrage de l'exécution. Ouvrir la console pour les détails."
+      }
       this.isRunning = false
       this.isPaused = false
       this.updateControls()

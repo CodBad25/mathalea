@@ -223,4 +223,31 @@ describe('sb3ToLatex', () => {
       '\\blockmove{tourner \\turnright{} de \\ovaloperator{\\ovalnum{360} / \\ovalmoreblocks{number1}} degrés}',
     )
   })
+
+  it("traduit la touche 'space' en 'espace'", () => {
+    const project = {
+      targets: [
+        {
+          name: 'Sprite1',
+          blocks: {
+            root: {
+              opcode: 'event_whenkeypressed',
+              topLevel: true,
+              shadow: false,
+              next: null,
+              fields: {
+                KEY_OPTION: ['space', null],
+              },
+            },
+          },
+        },
+      ],
+    }
+
+    const latex = sb3ToLatex(JSON.stringify(project))
+
+    expect(latex).toContain(
+      '\\blockinit{quand la touche \\selectmenu{espace} est pressée}',
+    )
+  })
 })

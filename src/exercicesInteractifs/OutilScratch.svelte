@@ -314,6 +314,7 @@
             bind:this={simulatorElement}
             delay="600"
             code={simulationCode}
+            debug-mapping="false"
           ></scratch-simulator>
         </div>
       </div>
