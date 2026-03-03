@@ -30,7 +30,7 @@ export const dateDeModifImportante = '26/09/2025'
 export const uuid = '6487c'
 
 export const refs = {
-  'fr-fr': ['1AL10-1'],
+  'fr-fr': ['1AL10-1','1T-AN10-10'],
   'fr-ch': [],
 }
 export default class ModeliserSuites extends Exercice {
