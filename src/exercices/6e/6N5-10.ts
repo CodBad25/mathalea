@@ -1,5 +1,4 @@
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { fonctionComparaison } from '../../lib/interactif/comparisonFunctions'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import {
@@ -293,7 +292,6 @@ export default class ProblemesVaries extends Exercice {
         handleAnswers(this, i, {
           reponse: {
             value: probleme.reponse,
-            compare: probleme.compare ?? fonctionComparaison,
             options: probleme.optionsComparaison ?? {},
           },
         })
