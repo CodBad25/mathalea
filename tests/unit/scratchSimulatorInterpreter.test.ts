@@ -163,6 +163,20 @@ describe('ScratchInterpreter', () => {
     expect(dryDurationMs).toBeLessThan(normalDurationMs / 2)
   })
 
+  it("declenche un script 'quand la touche espace est pressee'", async () => {
+    const interpreter = new ScratchInterpreter(200, 200, 90)
+    const code = `\\begin{scratch}[blocks]
+\\blockinit{quand la touche \\selectmenu{espace} est pressée}
+\\blockvariable{mettre \\selectmenu{ok} à \\ovalnum{1}}
+\\end{scratch}`
+
+    const execution = interpreter.executeAnimated(code, () => {}, 0)
+    interpreter.triggerKeyPress(' ')
+    const result = await execution
+
+    expect(result.variables.ok).toBe(1)
+  })
+
   it("gere blockmove 'ajouter ... a x'", async () => {
     const interpreter = new ScratchInterpreter(200, 200, 90)
     const code = `\\begin{scratch}[blocks]
@@ -216,6 +230,193 @@ describe('ScratchInterpreter', () => {
     })
   })
 
+  it("borne 'aller a x:y' a la scene Scratch et trace jusqu'au bord", async () => {
+    const interpreter = new ScratchInterpreter(200, 200, 90)
+    const code = `\\begin{scratch}[blocks]
+\\blockpen{stylo en position d'écriture}
+\\blockmove{aller à x: \\ovalnum{-180} y: \\ovalnum{-340}}
+\\end{scratch}`
+
+    const result = await interpreter.executeAnimated(code, () => {}, 0)
+
+    expect(result.finalX).toBe(20)
+    expect(result.finalY).toBe(400)
+    expect(result.traces).toHaveLength(1)
+    expect(result.traces[0]).toEqual({
+      startX: 200,
+      startY: 200,
+      endX: 20,
+      endY: 400,
+      color: '#0066cc',
+      width: 3,
+    })
+  })
+
+  it("borne 'mettre x/y a' a la scene Scratch et conserve le trace", async () => {
+    const interpreter = new ScratchInterpreter(200, 200, 90)
+    const code = `\\begin{scratch}[blocks]
+\\blockpen{stylo en position d'écriture}
+\\blockmove{mettre x à \\ovalnum{260}}
+\\blockmove{mettre y à \\ovalnum{-260}}
+\\end{scratch}`
+
+    const result = await interpreter.executeAnimated(code, () => {}, 0)
+
+    expect(result.finalX).toBe(400)
+    expect(result.finalY).toBe(400)
+    expect(result.traces).toHaveLength(2)
+    expect(result.traces[0]).toEqual({
+      startX: 200,
+      startY: 200,
+      endX: 400,
+      endY: 200,
+      color: '#0066cc',
+      width: 3,
+    })
+    expect(result.traces[1]).toEqual({
+      startX: 400,
+      startY: 200,
+      endX: 400,
+      endY: 400,
+      color: '#0066cc',
+      width: 3,
+    })
+  })
+
+  it("borne 'avancer de' a la scene Scratch et trace jusqu'au bord", async () => {
+    const interpreter = new ScratchInterpreter(200, 200, 90)
+    const code = `\\begin{scratch}[blocks]
+\\blockmove{aller à x: \\ovalnum{190} y: \\ovalnum{0}}
+\\blockmove{s'orienter à \\ovalnum{90}}
+\\blockpen{stylo en position d'écriture}
+\\blockmove{avancer de \\ovalnum{30} pas}
+\\end{scratch}`
+
+    const result = await interpreter.executeAnimated(code, () => {}, 0)
+
+    expect(result.finalX).toBe(400)
+    expect(result.finalY).toBe(200)
+    expect(result.traces).toHaveLength(1)
+    expect(result.traces[0]).toEqual({
+      startX: 390,
+      startY: 200,
+      endX: 400,
+      endY: 200,
+      color: '#0066cc',
+      width: 3,
+    })
+  })
+
+  it("evalue ovalvariable dans 'aller a x:y' sans confondre avec les variables reservees", async () => {
+    const interpreter = new ScratchInterpreter(200, 200, 90)
+    const code = `\\begin{scratch}[blocks]
+\\blockvariable{mettre \\selectmenu{x} à \\ovalnum{50}}
+\\blockvariable{mettre \\selectmenu{y} à \\ovalnum{-30}}
+\\blockpen{stylo en position d'écriture}
+\\blockmove{aller à x: \\ovalvariable{x} y: \\ovalvariable{y}}
+\\end{scratch}`
+
+    const result = await interpreter.executeAnimated(code, () => {}, 0)
+
+    expect(result.variables.x).toBe(50)
+    expect(result.variables.y).toBe(-30)
+    expect(result.finalX).toBe(250)
+    expect(result.finalY).toBe(230)
+    expect(result.traces).toHaveLength(1)
+    expect(result.traces[0]).toEqual({
+      startX: 200,
+      startY: 200,
+      endX: 250,
+      endY: 230,
+      color: '#0066cc',
+      width: 3,
+    })
+  })
+
+  it("evalue ovaloperator dans 'aller a x:y'", async () => {
+    const interpreter = new ScratchInterpreter(200, 200, 90)
+    const code = `\\begin{scratch}[blocks]
+\\blockvariable{mettre \\selectmenu{x} à \\ovalnum{50}}
+\\blockvariable{mettre \\selectmenu{y} à \\ovalnum{-30}}
+\\blockpen{stylo en position d'écriture}
+\\blockmove{aller à x: \\ovaloperator{\\ovalvariable{x}+\\ovalnum{10}} y: \\ovaloperator{\\ovalvariable{y}-\\ovalnum{20}}}
+\\end{scratch}`
+
+    const result = await interpreter.executeAnimated(code, () => {}, 0)
+
+    expect(result.finalX).toBe(260)
+    expect(result.finalY).toBe(250)
+    expect(result.traces).toHaveLength(1)
+    expect(result.traces[0]).toEqual({
+      startX: 200,
+      startY: 200,
+      endX: 260,
+      endY: 250,
+      color: '#0066cc',
+      width: 3,
+    })
+  })
+
+  it('gere blocklist ajouter/supprimer et ovallist longueur de liste', async () => {
+    const interpreter = new ScratchInterpreter(200, 200, 90)
+    const code = `\\begin{scratch}[blocks]
+\\blocklist{ajouter \\ovalnum{11} à \\selectmenu{triplets}}
+\\blocklist{ajouter \\ovalnum{22} à \\selectmenu{triplets}}
+\\blockrepeat{répéter jusqu'à ce que \\booloperator{\\ovallist{longueur de \\selectmenu{triplets}} = \\ovalnum{0}}}
+{
+  \\blocklist{supprimer l'élément \\ovallist{longueur de \\selectmenu{triplets}} de \\selectmenu{triplets}}
+}
+\\blockvariable{mettre \\selectmenu{taille} à \\ovallist{longueur de \\selectmenu{triplets}}}
+\\end{scratch}`
+
+    const result = await interpreter.executeAnimated(code, () => {}, 0)
+
+    expect(result.variables.taille).toBe(0)
+  })
+
+  it('gere ovallist element ... de ... avec index 1-based', async () => {
+    const interpreter = new ScratchInterpreter(200, 200, 90)
+    const code = `\\begin{scratch}[blocks]
+\\blocklist{ajouter \\ovalnum{11} à \\selectmenu{triplets}}
+\\blocklist{ajouter \\ovalnum{22} à \\selectmenu{triplets}}
+\\blocklist{ajouter \\ovalnum{33} à \\selectmenu{triplets}}
+\\blockvariable{mettre \\selectmenu{element2} à \\ovallist{élément \\ovalnum{2} de \\selectmenu{triplets}}}
+\\end{scratch}`
+
+    const result = await interpreter.executeAnimated(code, () => {}, 0)
+
+    expect(result.variables.element2).toBe(22)
+  })
+
+  it('gere ovallist numero de ... dans ...', async () => {
+    const interpreter = new ScratchInterpreter(200, 200, 90)
+    const code = `\\begin{scratch}[blocks]
+\\blocklist{ajouter \\ovalnum{11} à \\selectmenu{triplets}}
+\\blocklist{ajouter \\ovalnum{22} à \\selectmenu{triplets}}
+\\blocklist{ajouter \\ovalnum{33} à \\selectmenu{triplets}}
+\\blockvariable{mettre \\selectmenu{rang22} à \\ovallist{numéro de \\ovalnum{22} dans \\selectmenu{triplets}}}
+\\blockvariable{mettre \\selectmenu{rang44} à \\ovallist{numéro de \\ovalnum{44} dans \\selectmenu{triplets}}}
+\\end{scratch}`
+
+    const result = await interpreter.executeAnimated(code, () => {}, 0)
+
+    expect(result.variables.rang22).toBe(2)
+    expect(result.variables.rang44).toBe(0)
+  })
+
+  it('gere blocklook dire avec ovallist nomDeListe', async () => {
+    const interpreter = new ScratchInterpreter(200, 200, 90)
+    const code = `\\begin{scratch}[blocks]
+\\blocklist{ajouter \\ovalnum{11} à \\selectmenu{maListe}}
+\\blocklist{ajouter \\ovalnum{22} à \\selectmenu{maListe}}
+\\blocklook{dire \\ovallist{maListe}}
+\\end{scratch}`
+
+    const result = await interpreter.executeAnimated(code, () => {}, 0)
+
+    expect(result.messages).toEqual(['11 22'])
+  })
+
   it('gere la couleur du stylo via pencolor puis trace avec cette couleur', async () => {
     const interpreter = new ScratchInterpreter(200, 200, 90)
     const code = `\\begin{scratch}[blocks]
@@ -229,6 +430,28 @@ describe('ScratchInterpreter', () => {
     expect(result.traces).toHaveLength(1)
     expect(result.traces[0].color).toBe('#ff0000')
     expect(result.traces[0].width).toBe(3)
+  })
+
+  it("gere blockpen 'effacer tout' en supprimant les traces", async () => {
+    const interpreter = new ScratchInterpreter(200, 200, 90)
+    const code = `\\begin{scratch}[blocks]
+\\blockpen{stylo en position d'écriture}
+\\blockmove{avancer de \\ovalnum{10} pas}
+\\blockpen{effacer tout}
+\\blockmove{avancer de \\ovalnum{10} pas}
+\\end{scratch}`
+
+    const result = await interpreter.executeAnimated(code, () => {}, 0)
+
+    expect(result.traces).toHaveLength(1)
+    expect(result.traces[0]).toEqual({
+      startX: 210,
+      startY: 200,
+      endX: 220,
+      endY: 200,
+      color: '#0066cc',
+      width: 3,
+    })
   })
 
   it('gere la couleur du stylo via pencolor HTML imbrique', async () => {
@@ -562,6 +785,26 @@ describe('ScratchInterpreter', () => {
     })
 
     expect(result.traces.length).toBe(3)
+  })
+
+  it('évalue les arguments de bloc custom à l’appel et évite la récursion auto-référente', async () => {
+    const interpreter = new ScratchInterpreter(200, 200, 90)
+    const code = String.raw`\begin{scratch}[blocks]
+\initmoreblocks{définir \namemoreblocks{branche \ovalmoreblocks{taille}}}
+\blockvariable{Ajouter \ovalnum{1} à \ovalvariable{compteur}}
+\blockif{si \booloperator{\ovalmoreblocks{taille} > \ovalnum{1}} alors}{
+\blockmoreblocks{branche \ovaloperator{\ovalmoreblocks{taille} / \ovalnum{2}}}
+}
+\blockinit{quand \greenflag est cliqué}
+\blockvariable{mettre \selectmenu{compteur} à \ovalnum{0}}
+\blockmoreblocks{branche \ovalnum{8}}
+\end{scratch}`
+
+    const result = await interpreter.executeAnimated(code, () => {}, 0, {
+      skipWaitBlocks: true,
+    })
+
+    expect(result.variables.compteur).toBe(4)
   })
 
   it('gere blockifelse avec condition vraie', async () => {
@@ -1403,6 +1646,18 @@ describe('ScratchInterpreter', () => {
 })
 
 describe('ScratchSimulator mapping', () => {
+  it('normalise blockinit en blockevent pour le simulateur', () => {
+    const simulator = Object.create(ScratchSimulator.prototype) as any
+    simulator.scratchCode = String.raw`\begin{scratch}
+\blockinit{quand la touche \selectmenu{espace} est pressée}
+\end{scratch}`
+
+    const normalized = simulator.getSimulatorScratchCode()
+
+    expect(normalized).toContain('\\blockevent{quand la touche')
+    expect(normalized).not.toContain('\\blockinit{')
+  })
+
   it('reprend le surlignage sur le bloc suivant apres blockmoreblocks dans un repeat', async () => {
     const code = `\\begin{scratch}
 \\initmoreblocks{définir \\namemoreblocks{Carré}}
@@ -1671,5 +1926,129 @@ describe('ScratchSimulator mapping', () => {
     )
 
     expect(mappedBlockId).toBe('block-custom-move-40')
+  })
+
+  it('mappe correctement un evenement touche pour le surlignage de depart', async () => {
+    const code = `\\begin{scratch}[blocks]
+\\blockevent{quand la touche \\selectmenu{espace} est pressée}
+\\blockvariable{mettre \\selectmenu{ok} à \\ovalnum{1}}
+\\end{scratch}`
+
+    let keyEventInstructionIndex: number | undefined
+    const interpreter = new ScratchInterpreter(200, 200, 90)
+
+    await interpreter.executeAnimated(
+      code,
+      () => {
+        const state = interpreter.getCurrentState()
+        if (
+          keyEventInstructionIndex === undefined &&
+          state.currentInstruction?.startsWith('Attente de la touche')
+        ) {
+          keyEventInstructionIndex = state.currentInstructionIndex
+        }
+      },
+      0,
+      { skipWaitBlocks: true },
+    )
+
+    expect(keyEventInstructionIndex).toBeDefined()
+
+    const simulator = Object.create(
+      ScratchSimulator.prototype,
+    ) as unknown as ScratchSimulatorTestHarness
+
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
+    const mk = (
+      id: string,
+      text: string,
+    ): { element: SVGGElement; text: string; children: any[] } => {
+      const g = document.createElementNS('http://www.w3.org/2000/svg', 'g')
+      g.id = id
+      svg.appendChild(g)
+      return {
+        element: g,
+        text,
+        children: [],
+      }
+    }
+
+    const renderedBlocks = [
+      mk('block-event-key-space', 'when space key pressed'),
+      mk('block-var-ok', 'mettre ok a 1'),
+    ]
+
+    const codeDiv = document.createElement('div')
+    codeDiv.appendChild(svg)
+
+    simulator.codeDiv = codeDiv
+    simulator.codeBlocks = [renderedBlocks[0]]
+    simulator.allRenderedBlocks = renderedBlocks
+    simulator.customDefinitionGroups = new Set<SVGGElement>()
+    simulator.conditionBlockElements = new Set<SVGGElement>()
+    simulator.executionIndexToBlockId = new Map<number, string>()
+    simulator.scratchCode = code
+
+    await simulator.buildExecutionIndexToSelectorMap()
+
+    const mappedBlockId = simulator.executionIndexToBlockId.get(
+      keyEventInstructionIndex!,
+    )
+
+    expect(mappedBlockId).toBe('block-event-key-space')
+  })
+
+  it('avec script complet, detecte blockinit touche comme instruction de depart', async () => {
+    const code = String.raw`\begin{scratch}
+\initmoreblocks{définir \namemoreblocks{Initialisation}}
+\blockmove{aller à x: \ovalnum{0} y: \ovalnum{-170}}
+\blockmove{s'orienter à \ovalnum{0}}
+\blockpen{stylo en position d'écriture}
+\blockpen{effacer tout}
+\end{scratch}
+
+\begin{scratch}
+\initmoreblocks{définir \namemoreblocks{branche \ovalmoreblocks{taille}}}
+\blockvariable{mettre \selectmenu{niveau} à \ovaloperator{\ovalvariable{niveau} + \ovalnum{1}}}
+\blockmove{avancer de \ovalmoreblocks{taille} pas}
+\blockmove{tourner \turnleft{} de \ovaloperator{\ovalnum{60} / \ovaloperator{\selectmenu{sqrt} de \ovalvariable{niveau}}} degrés}
+\blockif{si \booloperator{\ovalvariable{niveau} < \ovalnum{7}} alors}
+{
+  \blockmoreblocks{branche \ovaloperator{\ovalmoreblocks{taille} / \ovalnum{1.4}}}
+}
+\blockmove{tourner \turnright{} de \ovaloperator{\ovalnum{120} / \ovaloperator{\selectmenu{sqrt} de \ovalvariable{niveau}}} degrés}
+\blockif{si \booloperator{\ovalvariable{niveau} < \ovalnum{7}} alors}
+{
+  \blockmoreblocks{branche \ovaloperator{\ovalmoreblocks{taille} / \ovalnum{1.4}}}
+}
+\blockmove{tourner \turnleft{} de \ovaloperator{\ovalnum{60} / \ovaloperator{\selectmenu{sqrt} de \ovalvariable{niveau}}} degrés}
+\blockmove{avancer de \ovaloperator{\ovalnum{0} - \ovalmoreblocks{taille}} pas}
+\blockvariable{mettre \selectmenu{niveau} à \ovaloperator{\ovalvariable{niveau} + \ovalnum{-1}}}
+\end{scratch}
+
+\begin{scratch}
+\blockinit{quand la touche \selectmenu{espace} est pressée}
+\blockmoreblocks{Initialisation}
+\blockmoreblocks{branche \ovalnum{100}}
+\blockvariable{mettre \selectmenu{niveau} à \ovalnum{0}}
+\end{scratch}`
+
+    const interpreter = new ScratchInterpreter(200, 200, 90)
+    let firstInstruction = ''
+
+    await interpreter.executeAnimated(
+      code,
+      () => {
+        const state = interpreter.getCurrentState()
+        if (!firstInstruction && state.currentInstruction) {
+          firstInstruction = state.currentInstruction
+          interpreter.stopExecution()
+        }
+      },
+      0,
+      { skipWaitBlocks: true },
+    )
+
+    expect(firstInstruction).toContain('Attente de la touche espace')
   })
 })

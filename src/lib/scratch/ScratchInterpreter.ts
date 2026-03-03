@@ -28,6 +28,7 @@ export interface ExecutionResult {
   finalAngle: number
   visible: boolean
   variables: Record<string, number>
+  lists: Record<string, string[]>
   messages: string[]
   currentLookMessage?: ScratchLookMessage | null
   currentInstruction?: string
@@ -51,6 +52,8 @@ export interface ExecuteAnimatedOptions {
 export class ScratchInterpreter {
   private static readonly DEFAULT_PEN_COLOR = '#0066cc'
   private static readonly DEFAULT_PEN_WIDTH = 3
+  private static readonly STAGE_MIN_COORD = -200
+  private static readonly STAGE_MAX_COORD = 200
 
   private x: number
   private y: number
@@ -66,6 +69,7 @@ export class ScratchInterpreter {
   private stopped: boolean = false // Flag pour arrêter l'exécution
   private answer: string = '' // Variable réservée "réponse" pour stocker les inputs utilisateur
   private variables: Record<string, number> = {}
+  private lists: Record<string, string[]> = {}
   private customBlocks: Record<string, string> = {} // Blocs personnalisés
   private customBlockPatterns: Array<{
     signature: string
@@ -115,6 +119,7 @@ export class ScratchInterpreter {
     this.traces = []
     this.messages = []
     this.variables = {}
+    this.lists = {}
     this.customBlocks = {}
     this.customBlockPatterns = []
     this.penDown = false
@@ -193,12 +198,18 @@ export class ScratchInterpreter {
   }
 
   getCurrentState(): ExecutionResult {
+    const listsSnapshot: Record<string, string[]> = {}
+    Object.entries(this.lists).forEach(([name, values]) => {
+      listsSnapshot[name] = [...values]
+    })
+
     return {
       traces: this.traces,
       finalX: this.x,
       finalY: this.y,
       finalAngle: this.angle,
       variables: this.variables,
+      lists: listsSnapshot,
       visible: this.visible,
       messages: this.messages,
       currentLookMessage: this.currentLookMessage,
@@ -362,7 +373,9 @@ export class ScratchInterpreter {
 
       const args: Record<string, string> = {}
       definition.argNames.forEach((argName, index) => {
-        const argValue = (match[index + 1] ?? '?').trim()
+        const argValue = this.evaluateCustomCallArgument(
+          (match[index + 1] ?? '?').trim(),
+        )
         const rawName = argName.trim()
         const normalizedName = this.normalizeCustomArgName(rawName)
         args[rawName] = argValue
@@ -382,6 +395,12 @@ export class ScratchInterpreter {
     }
 
     return null
+  }
+
+  private evaluateCustomCallArgument(argSource: string): string {
+    const substituted = this.substituteCustomArguments(argSource)
+    const materialized = this.materializeExpressionForString(substituted).trim()
+    return materialized === '' ? substituted.trim() : materialized
   }
 
   private normalizeCustomArgName(argName: string): string {
@@ -1148,13 +1167,22 @@ export class ScratchInterpreter {
       return true
     }
 
+    if (type === 'list') {
+      return this.executeListBlockAction(content)
+    }
+
     if (type === 'pen') {
       const normalized = content
         .toLowerCase()
         .normalize('NFD')
         .replace(/[\u0300-\u036f]/g, '')
 
-      if (normalized.includes('position') || normalized.includes('ecriture')) {
+      if (normalized.includes('effacer') && normalized.includes('tout')) {
+        this.traces = []
+      } else if (
+        normalized.includes('position') ||
+        normalized.includes('ecriture')
+      ) {
         this.penDown = true
       } else if (normalized.includes('relever')) {
         this.penDown = false
@@ -1195,6 +1223,132 @@ export class ScratchInterpreter {
     }
 
     return false
+  }
+
+  private executeListBlockAction(content: string): boolean {
+    const addMatch = content.match(
+      /ajouter\s+([\s\S]*?)\s+[àa]\s+\\selectmenu\*?\{([^}]+)\}/i,
+    )
+    if (addMatch) {
+      const valueToAdd = this.extractValue(addMatch[1].trim())
+      const listName = addMatch[2].trim()
+      this.getListByName(listName).push(String(valueToAdd))
+      return true
+    }
+
+    const deleteMatch = content.match(
+      /supprimer[\s\S]*?élément\s+([\s\S]*)\s+de\s+\\selectmenu\*?\{([^}]+)\}\s*$/i,
+    )
+    if (deleteMatch) {
+      const index = this.extractCoordinateValue(deleteMatch[1].trim())
+      const listName = deleteMatch[2].trim()
+      this.deleteListItem(listName, index)
+      return true
+    }
+
+    const listName = this.extractListName(content)
+    if (listName) {
+      this.getListByName(listName)
+      return true
+    }
+
+    return false
+  }
+
+  private getListByName(listName: string): string[] {
+    if (!this.lists[listName]) {
+      this.lists[listName] = []
+    }
+
+    return this.lists[listName]
+  }
+
+  private extractListName(content: string): string | null {
+    const menuMatch = content.match(/\\selectmenu\*?\{([^}]+)\}/i)
+    if (!menuMatch) {
+      return null
+    }
+
+    return menuMatch[1].trim()
+  }
+
+  private deleteListItem(listName: string, indexValue: number): void {
+    if (!Number.isFinite(indexValue)) {
+      return
+    }
+
+    const index = Math.trunc(indexValue)
+    if (index < 1) {
+      return
+    }
+
+    const list = this.getListByName(listName)
+    if (index > list.length) {
+      return
+    }
+
+    list.splice(index - 1, 1)
+  }
+
+  private evaluateListReporter(content: string): number | string | null {
+    const trimmedContent = content.trim()
+
+    const selectMenuOnlyMatch = trimmedContent.match(
+      /^\\selectmenu\*?\{([^}]+)\}$/i,
+    )
+    if (selectMenuOnlyMatch) {
+      const listName = selectMenuOnlyMatch[1].trim()
+      return this.getListByName(listName).join(' ')
+    }
+
+    if (
+      trimmedContent !== '' &&
+      !trimmedContent.includes('\\') &&
+      !/\b(longueur|[ée]l[ée]ment|num[ée]ro)\b/i.test(trimmedContent)
+    ) {
+      return this.getListByName(trimmedContent).join(' ')
+    }
+
+    const itemNumMatch = trimmedContent.match(
+      /num[ée]ro\s+de\s+([\s\S]*?)\s+dans\s+\\selectmenu\*?\{([^}]+)\}/i,
+    )
+    if (itemNumMatch) {
+      const searchedValue = String(this.extractValue(itemNumMatch[1].trim()))
+      const listName = itemNumMatch[2].trim()
+      const list = this.getListByName(listName)
+      const foundIndex = list.findIndex((item) => item === searchedValue)
+      return foundIndex === -1 ? 0 : foundIndex + 1
+    }
+
+    const itemMatch = trimmedContent.match(
+      /[ée]l[ée]ment\s+([\s\S]*?)\s+de\s+\\selectmenu\*?\{([^}]+)\}/i,
+    )
+    if (itemMatch) {
+      const index = this.extractCoordinateValue(itemMatch[1].trim())
+      const listName = itemMatch[2].trim()
+      const list = this.getListByName(listName)
+
+      if (!Number.isFinite(index)) {
+        return ''
+      }
+
+      const oneBasedIndex = Math.trunc(index)
+      if (oneBasedIndex < 1 || oneBasedIndex > list.length) {
+        return ''
+      }
+
+      return list[oneBasedIndex - 1] ?? ''
+    }
+
+    const lengthMatch = trimmedContent.match(
+      /longueur\s+de\s+\\selectmenu\*?\{([^}]+)\}/i,
+    )
+    if (lengthMatch) {
+      const listName = lengthMatch[1].trim()
+      return this.getListByName(listName).length
+    }
+
+    return null
   }
 
   private extractPenParameter(
@@ -1368,11 +1522,7 @@ export class ScratchInterpreter {
   }
 
   private normalizeEventKey(rawKey: string): string {
-    if (rawKey === ' ') {
-      return 'espace'
-    }
-
-    const normalized = rawKey
+    const normalized = (rawKey === ' ' ? 'espace' : rawKey)
       .normalize('NFD')
       .replace(/[\u0300-\u036f]/g, '')
       .replace(/\s+/g, ' ')
@@ -1383,7 +1533,35 @@ export class ScratchInterpreter {
       return ''
     }
 
-    return normalized
+    return this.normalizeEventKeyLabel(normalized)
+  }
+
+  private normalizeEventKeyLabel(normalizedKey: string): string {
+    if (normalizedKey === 'space' || normalizedKey === 'spacebar') {
+      return 'espace'
+    }
+
+    if (normalizedKey === 'arrowup' || normalizedKey === 'up arrow') {
+      return 'fleche haut'
+    }
+
+    if (normalizedKey === 'arrowdown' || normalizedKey === 'down arrow') {
+      return 'fleche bas'
+    }
+
+    if (normalizedKey === 'arrowleft' || normalizedKey === 'left arrow') {
+      return 'fleche gauche'
+    }
+
+    if (normalizedKey === 'arrowright' || normalizedKey === 'right arrow') {
+      return 'fleche droite'
+    }
+
+    if (normalizedKey === 'enter') {
+      return 'entree'
+    }
+
+    return normalizedKey
   }
 
   private consumePressedEventKey(expectedKey: string): boolean {
@@ -1405,17 +1583,30 @@ export class ScratchInterpreter {
   }
 
   private extractEventKey(content: string): string | null {
+    const keyMenuMatch = content.match(/\\selectmenu\*?\{([^}]+)\}/i)
+    if (keyMenuMatch) {
+      const normalizedMenuKey = keyMenuMatch[1]
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/\s+/g, ' ')
+        .trim()
+        .toLowerCase()
+
+      return this.normalizeEventKeyLabel(normalizedMenuKey)
+    }
+
     const normalized = content
       .toLowerCase()
       .normalize('NFD')
       .replace(/[\u0300-\u036f]/g, '')
 
-    const keyMatch = normalized.match(/touche\s+([^\s{}\\]+)/i)
+    const keyMatch = normalized.match(/touche\s+([\s\S]*?)\s+est\s+pressee/i)
     if (!keyMatch) {
       return null
     }
 
-    return keyMatch[1].trim()
+    const normalizedKey = keyMatch[1].trim().replace(/\s+/g, ' ')
+    return this.normalizeEventKeyLabel(normalizedKey)
   }
 
   private humanizeInstruction(type: string, content: string): string {
@@ -1501,7 +1692,7 @@ export class ScratchInterpreter {
       return 'Instruction en cours'
     }
 
-    if (type === 'event') {
+    if (type === 'event' || type === 'init') {
       if (this.isGreenFlagEvent(content)) {
         return 'Attente du clic sur le drapeau vert'
       }
@@ -1686,6 +1877,10 @@ export class ScratchInterpreter {
 
     // Vérifier ovaloperator en premier
     if (/\\ovaloperator\{/.test(payload)) {
+      const value = this.extractValue(payload)
+      spokenValue = String(value)
+      displayValue = String(value)
+    } else if (/\\ovallist\{/.test(payload)) {
       const value = this.extractValue(payload)
       spokenValue = String(value)
       displayValue = String(value)
@@ -1900,6 +2095,14 @@ export class ScratchInterpreter {
   }
 
   private extractValue(content: string): string | number | boolean {
+    const listContent = this.extractCommandContent(content, '\\ovallist')
+    if (listContent) {
+      const listValue = this.evaluateListReporter(listContent)
+      if (listValue !== null) {
+        return listValue
+      }
+    }
+
     // Essayer d'abord d'évaluer comme ovaloperator (peut retourner string, number ou boolean)
     const operatorValue = this.evaluateOvalOperatorOrString(content)
     if (operatorValue !== null) {
@@ -2264,6 +2467,16 @@ export class ScratchInterpreter {
 
   private materializeExpressionForString(expression: string): string {
     let result = this.substituteCustomArguments(expression)
+
+    while (result.includes('\\ovallist{')) {
+      const inner = this.extractCommandContent(result, '\\ovallist')
+      if (!inner) break
+
+      const value = this.evaluateListReporter(inner)
+      if (value === null) break
+
+      result = result.replace(`\\ovallist{${inner}}`, String(value))
+    }
 
     // Remplacer \ovalnum par sa valeur
     result = result.replace(/\\ovalnum\{([^}]+)\}/g, (_, content) => {
@@ -2633,7 +2846,20 @@ export class ScratchInterpreter {
       }
     }
 
+    const replaceListReporters = (): void => {
+      while (result.includes('\\ovallist{')) {
+        const inner = this.extractCommandContent(result, '\\ovallist')
+        if (!inner) break
+
+        const value = this.evaluateListReporter(inner)
+        if (value === null) break
+
+        result = result.replace(`\\ovallist{${inner}}`, String(value))
+      }
+    }
+
     replaceNestedOperators()
+    replaceListReporters()
 
     result = result.replace(/\\ovalnum\{(-?\d+(?:[.,]\d+)?)\}/g, (_, num) =>
       String(Number.parseFloat(String(num).replace(',', '.'))),
@@ -2737,6 +2963,16 @@ export class ScratchInterpreter {
   private extractGoToCoordinates(
     content: string,
   ): { x: number; y: number } | null {
+    const dynamicMatch = content.match(
+      /x\s*:\s*([\s\S]*?)\s*y\s*:\s*([\s\S]*)$/i,
+    )
+    if (dynamicMatch) {
+      const x = this.extractCoordinateValue(dynamicMatch[1])
+      const y = this.extractCoordinateValue(dynamicMatch[2])
+
+      return { x, y }
+    }
+
     const ovalMatch = content.match(
       /x\s*:\s*\\ovalnum\{(-?\d+)\}[\s\S]*?y\s*:\s*\\ovalnum\{(-?\d+)\}/i,
     )
@@ -2766,6 +3002,22 @@ export class ScratchInterpreter {
     return null
   }
 
+  private extractCoordinateValue(content: string): number {
+    const resolvedContent = this.substituteCustomArguments(content.trim())
+    const rawValue = this.extractValue(resolvedContent)
+
+    if (typeof rawValue === 'number') {
+      return rawValue
+    }
+
+    if (typeof rawValue === 'boolean') {
+      return rawValue ? 1 : 0
+    }
+
+    const parsed = Number.parseFloat(rawValue)
+    return Number.isFinite(parsed) ? parsed : 0
+  }
+
   private setOrientation(angle: number): void {
     this.angle = this.normalizeAngle(angle)
   }
@@ -2792,8 +3044,10 @@ export class ScratchInterpreter {
 
   private moveForward(steps: number): void {
     const rad = (this.angle * Math.PI) / 180
-    const newX = this.x + steps * Math.sin(rad)
-    const newY = this.y - steps * Math.cos(rad)
+    const unclampedX = this.x + steps * Math.sin(rad)
+    const unclampedY = this.y - steps * Math.cos(rad)
+    const newX = this.clampCanvasCoordinate(unclampedX)
+    const newY = this.clampCanvasCoordinate(unclampedY)
 
     this.addTraceSegment(newX, newY)
 
@@ -2818,7 +3072,8 @@ export class ScratchInterpreter {
   }
 
   private setXTo(targetX: number): void {
-    const newX = 200 + targetX
+    const clampedX = this.clampStageCoordinate(targetX)
+    const newX = 200 + clampedX
 
     this.addTraceSegment(newX, this.y)
 
@@ -2826,7 +3081,8 @@ export class ScratchInterpreter {
   }
 
   private setYTo(targetY: number): void {
-    const newY = 200 - targetY
+    const clampedY = this.clampStageCoordinate(targetY)
+    const newY = 200 - clampedY
 
     this.addTraceSegment(this.x, newY)
 
@@ -2834,13 +3090,27 @@ export class ScratchInterpreter {
   }
 
   private goTo(targetX: number, targetY: number): void {
-    const newX = 200 + targetX
-    const newY = 200 - targetY
+    const clampedX = this.clampStageCoordinate(targetX)
+    const clampedY = this.clampStageCoordinate(targetY)
+
+    const newX = 200 + clampedX
+    const newY = 200 - clampedY
 
     this.addTraceSegment(newX, newY)
 
     this.x = newX
     this.y = newY
+  }
+
+  private clampStageCoordinate(value: number): number {
+    return Math.max(
+      ScratchInterpreter.STAGE_MIN_COORD,
+      Math.min(ScratchInterpreter.STAGE_MAX_COORD, value),
+    )
+  }
+
+  private clampCanvasCoordinate(value: number): number {
+    return Math.max(0, Math.min(400, value))
   }
 
   private extractPenColor(content: string): string | null {

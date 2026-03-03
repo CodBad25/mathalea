@@ -76,10 +76,6 @@ export function scratchblock(
             texte = translatex(chaine, index + taille + 1, compteAccolades)
             resultat = [texte[0], texte[1], texte[2]]
             break
-          case 'move':
-            texte = translatex(chaine, index + taille + 1, compteAccolades)
-            resultat = [texte[0], texte[1], texte[2]]
-            break
           case 'variable':
             texte = translatex(chaine, index + taille + 1, compteAccolades)
             resultat = [texte[0], texte[1], texte[2]]
@@ -139,8 +135,28 @@ export function scratchblock(
             break
           }
           case 'list':
-            texte = translatex(chaine, index + taille + 1, compteAccolades)
-            resultat = [texte[0] + ' :: list', texte[1], texte[2]]
+            {
+              texte = translatex(chaine, index + taille + 1, compteAccolades)
+              let listText = texte[0]
+              let listIndex = Number(texte[1])
+              let listDepth = Number(texte[2])
+              guard = 0
+              while (
+                chaine.charAt(listIndex) !== '}' &&
+                guard < LOOP_GUARD_LIMIT
+              ) {
+                const previousIndex = listIndex
+                texte = translatex(chaine, listIndex, listDepth)
+                listText += texte[0]
+                listIndex = Number(texte[1])
+                listDepth = Number(texte[2])
+                if (listIndex <= previousIndex) {
+                  break
+                }
+                guard++
+              }
+              resultat = [listText + ' :: list', listIndex + 1, listDepth - 1]
+            }
             break
           case 'init':
             texte = translatex(chaine, index + taille + 1, compteAccolades)
@@ -348,6 +364,44 @@ export function scratchblock(
                 `(${texte[0]} :: sensing)`,
                 texte[1] + 1,
                 texte[2] - 1,
+              ]
+            }
+            break
+          case 'list':
+            texte = translatex(chaine, index + taille + 1, compteAccolades)
+            texte2 = [texte[0], texte[1], texte[2]]
+            guard = 0
+            while (
+              chaine.charAt(Number(texte2[1])) !== '}' &&
+              guard < LOOP_GUARD_LIMIT
+            ) {
+              const previousIndex = Number(texte2[1])
+              const chunk = translatex(
+                chaine,
+                Number(texte2[1]),
+                Number(texte2[2]),
+              )
+              texte2 = [
+                `${String(texte2[0])}${String(chunk[0])}`,
+                Number(chunk[1]),
+                Number(chunk[2]),
+              ]
+              if (Number(texte2[1]) <= previousIndex) {
+                break
+              }
+              guard++
+            }
+            if (fleche) {
+              resultat = [
+                `(${String(texte2[0])} v :: list)`,
+                Number(texte2[1]) + 1,
+                Number(texte2[2]) - 1,
+              ]
+            } else {
+              resultat = [
+                `(${String(texte2[0])} :: list)`,
+                Number(texte2[1]) + 1,
+                Number(texte2[2]) - 1,
               ]
             }
             break

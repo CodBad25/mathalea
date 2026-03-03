@@ -223,7 +223,7 @@ const OPCODE_TO_BLOCK = {
   operator_mod: (b: any, c: any) =>
     `\\ovaloperator{${inputVal(b, 'NUM1', c)} modulo ${inputVal(b, 'NUM2', c)}}`,
   operator_round: (b: any, c: any) =>
-    `\\ovaloperator{arrondir ${inputVal(b, 'NUM', c)}}`,
+    `\\ovaloperator{arrondi de ${inputVal(b, 'NUM', c)}}`,
   operator_mathop: (b: any, c: any) =>
     `\\ovaloperator{\\selectmenu{${field(b, 'OPERATOR')}} de ${inputVal(b, 'NUM', c)}}`,
   argument_reporter_string_number: (b: any, c: any) =>
@@ -255,10 +255,28 @@ const OPCODE_TO_BLOCK = {
   },
 }
 
+const SCRATCH_KEY_OPTION_TO_FRENCH: Record<string, string> = {
+  space: 'espace',
+  'up arrow': 'flèche haut',
+  'down arrow': 'flèche bas',
+  'left arrow': 'flèche gauche',
+  'right arrow': 'flèche droite',
+  enter: 'entrée',
+}
+
+function localizeScratchKeyOption(value: string): string {
+  const key = value.trim().toLowerCase()
+  return SCRATCH_KEY_OPTION_TO_FRENCH[key] ?? value
+}
+
 function field(block: { fields: { [x: string]: any } }, name: string) {
   const f = block.fields?.[name]
   if (!f) return '?'
-  return escapeTex(String(f[0] ?? '?'))
+  const rawValue = String(f[0] ?? '?')
+  if (name === 'KEY_OPTION') {
+    return escapeTex(localizeScratchKeyOption(rawValue))
+  }
+  return escapeTex(rawValue)
 }
 
 function escapeTex(str: string) {
@@ -290,7 +308,14 @@ function inputVal(
       return `\\pencolor{[HTML]{${String(value).replace('#', '').toUpperCase()}}}`
     if (type === 12) return `\\ovalvariable{${escapeTex(value)}}`
     if (type === 13) return `\\ovallist{${escapeTex(value)}}`
-    if (type === 11) return `\\selectmenu{${escapeTex(value)}}`
+    if (type === 11) {
+      const rawMenuValue = String(value ?? '')
+      const menuValue =
+        inputName === 'KEY_OPTION'
+          ? localizeScratchKeyOption(rawMenuValue)
+          : rawMenuValue
+      return `\\selectmenu{${escapeTex(menuValue)}}`
+    }
     return `\\ovalnum{${escapeTex(String(value ?? ''))}}`
   }
   if (typeof inner === 'string') {
@@ -519,7 +544,7 @@ function renderRepeatUntil(b: any, ctx: any, indent: string): string {
   const cond = inputVal(b, 'CONDITION', ctx)
   const body = renderSubstack(b, 'SUBSTACK', ctx, indent + INDENT)
   return renderStructured(
-    `\\blockrepeat{répéter jusqu'à ${cond}}`,
+    `\\blockrepeat{répéter jusqu'à ce que ${cond}}`,
     [{ content: body }],
     indent,
   )
@@ -633,15 +658,21 @@ const STRUCTURAL_OPCODES = [
   'procedures_definition',
 ] as const
 
-const OPCODES_SUPPORTED_BY_SIMULATOR = [
+const EVENT_OPCODES_SUPPORTED_BY_SIMULATOR = [
   'event_whenflagclicked',
   'event_whenkeypressed',
+] as const
+
+const CONTROL_OPCODES_SUPPORTED_BY_SIMULATOR = [
   'control_if',
   'control_if_else',
   'control_repeat',
   'control_repeat_until',
   'procedures_definition',
   'procedures_call',
+] as const
+
+const MOTION_OPCODES_SUPPORTED_BY_SIMULATOR = [
   'motion_movesteps',
   'motion_turnright',
   'motion_turnleft',
@@ -654,12 +685,19 @@ const OPCODES_SUPPORTED_BY_SIMULATOR = [
   'motion_xposition',
   'motion_yposition',
   'motion_direction',
+] as const
+
+const LOOKS_OPCODES_SUPPORTED_BY_SIMULATOR = [
   'looks_sayforsecs',
   'looks_say',
   'looks_thinkforsecs',
   'looks_think',
   'looks_show',
   'looks_hide',
+] as const
+
+const PEN_OPCODES_SUPPORTED_BY_SIMULATOR = [
+  'pen_clear',
   'pen_penDown',
   'pen_penUp',
   'pen_setPenColorToColor',
@@ -667,11 +705,30 @@ const OPCODES_SUPPORTED_BY_SIMULATOR = [
   'pen_setPenColorParamTo',
   'pen_changePenSizeBy',
   'pen_setPenSizeTo',
+] as const
+
+const DATA_OPCODES_SUPPORTED_BY_SIMULATOR = [
   'data_setvariableto',
   'data_changevariableby',
   'data_variable',
+] as const
+
+const LIST_OPCODES_SUPPORTED_BY_SIMULATOR = [
+  'data_addtolist',
+  'data_deleteoflist',
+  'data_itemoflist',
+  'data_itemnumoflist',
+  'data_lengthoflist',
+  'data_showlist',
+  'data_hidelist',
+] as const
+
+const SENSING_OPCODES_SUPPORTED_BY_SIMULATOR = [
   'sensing_askandwait',
   'sensing_answer',
+] as const
+
+const OPERATOR_OPCODES_SUPPORTED_BY_SIMULATOR = [
   'operator_add',
   'operator_subtract',
   'operator_multiply',
@@ -691,15 +748,45 @@ const OPCODES_SUPPORTED_BY_SIMULATOR = [
   'operator_mathop',
 ] as const
 
-const OPCODES_PARTIALLY_SUPPORTED_BY_SIMULATOR = [
+const CUSTOM_ARG_OPCODES_SUPPORTED_BY_SIMULATOR = [
+  'argument_reporter_string_number',
+  'argument_reporter_boolean',
+] as const
+
+const OPCODES_SUPPORTED_BY_SIMULATOR = [
+  ...EVENT_OPCODES_SUPPORTED_BY_SIMULATOR,
+  ...CONTROL_OPCODES_SUPPORTED_BY_SIMULATOR,
+  ...MOTION_OPCODES_SUPPORTED_BY_SIMULATOR,
+  ...LOOKS_OPCODES_SUPPORTED_BY_SIMULATOR,
+  ...PEN_OPCODES_SUPPORTED_BY_SIMULATOR,
+  ...DATA_OPCODES_SUPPORTED_BY_SIMULATOR,
+  ...LIST_OPCODES_SUPPORTED_BY_SIMULATOR,
+  ...SENSING_OPCODES_SUPPORTED_BY_SIMULATOR,
+  ...OPERATOR_OPCODES_SUPPORTED_BY_SIMULATOR,
+  ...CUSTOM_ARG_OPCODES_SUPPORTED_BY_SIMULATOR,
+] as const
+
+const EVENT_OPCODES_PARTIALLY_SUPPORTED_BY_SIMULATOR = [
   'event_whenthisspriteclicked',
   'event_whenstageclicked',
   'event_whenbackdropswitchesto',
   'event_whengreaterthan',
   'event_whenbroadcastreceived',
-  'operator_round',
+] as const
+
+const DATA_OPCODES_PARTIALLY_SUPPORTED_BY_SIMULATOR = [
   'data_showvariable',
   'data_hidevariable',
+] as const
+
+const OPERATOR_OPCODES_PARTIALLY_SUPPORTED_BY_SIMULATOR = [
+  'operator_round',
+] as const
+
+const OPCODES_PARTIALLY_SUPPORTED_BY_SIMULATOR = [
+  ...EVENT_OPCODES_PARTIALLY_SUPPORTED_BY_SIMULATOR,
+  ...DATA_OPCODES_PARTIALLY_SUPPORTED_BY_SIMULATOR,
+  ...OPERATOR_OPCODES_PARTIALLY_SUPPORTED_BY_SIMULATOR,
 ] as const
 
 const allOpcodesRenderedBySb3ToLatex = [

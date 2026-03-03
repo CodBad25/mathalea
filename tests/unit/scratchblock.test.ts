@@ -47,6 +47,32 @@ describe('scratchblock - garde-fous anti-boucle infinie', () => {
     expect(rendered).toContain('mettre la couleur du stylo à [#CB4AD4] :: pen')
   })
 
+  it('traduit ovallist longueur de liste avec la categorie list', () => {
+    const latex = String.raw`\begin{scratch}[blocks]
+\blockvariable{mettre \selectmenu{taille} à \ovallist{longueur de \selectmenu{triplets}}}
+\end{scratch}`
+
+    const output = scratchblock(latex)
+    expect(typeof output).toBe('string')
+    const rendered = String(output)
+
+    expect(rendered).toContain('(longueur de [triplets v] :: list)')
+  })
+
+  it("traduit blocklist supprimer l'element avec ovallist longueur", () => {
+    const latex = String.raw`\begin{scratch}[blocks]
+\blocklist{supprimer l'élément \ovallist{longueur de \selectmenu{triplets}} de \selectmenu{triplets}}
+\end{scratch}`
+
+    const output = scratchblock(latex)
+    expect(typeof output).toBe('string')
+    const rendered = String(output)
+
+    expect(rendered).toContain("supprimer l'élément")
+    expect(rendered).toContain('(longueur de [triplets v] :: list)')
+    expect(rendered).toContain('de [triplets v] :: list')
+  })
+
   it('traduit correctement un script complet stylo/couleur/taille', () => {
     const latex = String.raw`\begin{scratch}
 \blockinit{quand \greenflag est cliqué}
