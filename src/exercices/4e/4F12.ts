@@ -237,8 +237,8 @@ export default class ExploiterRepresentationGraphique extends Exercice {
           xscale = 52 / t1
           f = (x: number) => Math.max((-10 * x ** 2) / V0 ** 2 + x, 0)
           repeRe = repere({
-            yLegende: 'hauteur (en $\\text{m})',
-            xLegende: 'distance (en $\\text{m})',
+            yLegende: 'Hauteur (en m)',
+            xLegende: 'Distance (en m)',
             xUnite: 0.25 * xscale,
             yUnite: 0.5 * xscale,
             xMin: 0,
