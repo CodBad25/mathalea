@@ -26,7 +26,7 @@ export const dateDeModifImportante = '22/09/2024'
 export const uuid = 'f0c2d'
 
 export const refs = {
-  'fr-fr': ['1AL10-3'],
+  'fr-fr': ['1AL10-3','1T-AN10-11'],
   'fr-ch': [],
 }
 export default class TermeDUneSuiteDefinieExplicitement extends Exercice {
