@@ -219,9 +219,21 @@
   color: #fff;
 }
 
+/* Scratchblocks overrides */
 /* Modifie le style des sb3-comment-label */
 text.sb3-comment-label {
   fill: #000 !important;
+}
+
+/* Garde-fou: arguments de blocs personnalisés Scratch en rose (évite le noir en cas de surcharge CSS) */
+svg.scratchblocks-style-scratch3 .sb3-custom-arg {
+  fill: #ff6680 !important;
+  stroke: #ff3355 !important;
+}
+
+svg.scratchblocks-style-scratch3-high-contrast .sb3-custom-arg {
+  fill: #ff99aa !important;
+  stroke: #e64d00 !important;
 }
 /* Cache le menu toggle de MathLive */
 math-field {

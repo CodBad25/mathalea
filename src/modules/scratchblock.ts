@@ -88,6 +88,33 @@ export function scratchblock(
             texte = translatex(chaine, index + taille + 1, compteAccolades)
             resultat = [texte[0], texte[1], texte[2]]
             break
+          case 'moreblocks': {
+            texte = translatex(chaine, index + taille + 1, compteAccolades)
+            let moreBlocksText = texte[0]
+            let moreBlocksIndex = Number(texte[1])
+            let moreBlocksDepth = Number(texte[2])
+            guard = 0
+            while (
+              chaine.charAt(moreBlocksIndex) !== '}' &&
+              guard < LOOP_GUARD_LIMIT
+            ) {
+              const previousIndex = moreBlocksIndex
+              texte = translatex(chaine, moreBlocksIndex, moreBlocksDepth)
+              moreBlocksText += texte[0]
+              moreBlocksIndex = Number(texte[1])
+              moreBlocksDepth = Number(texte[2])
+              if (moreBlocksIndex <= previousIndex) {
+                break
+              }
+              guard++
+            }
+            resultat = [
+              `${moreBlocksText} :: custom`,
+              moreBlocksIndex + 1,
+              moreBlocksDepth - 1,
+            ]
+            break
+          }
           case 'pen': {
             texte = translatex(chaine, index + taille + 1, compteAccolades)
             let penText = texte[0]
@@ -275,9 +302,17 @@ export function scratchblock(
           case 'moreblocks':
             texte = translatex(chaine, index + taille + 1, compteAccolades)
             if (fleche) {
-              resultat = [`(${texte[0]} v)`, texte[1], texte[2]]
+              resultat = [
+                `(${texte[0]} v :: custom-arg)`,
+                texte[1] + 1,
+                texte[2] - 1,
+              ]
             } else {
-              resultat = [`(${texte[0]})`, texte[1], texte[2]]
+              resultat = [
+                `(${texte[0]} :: custom-arg)`,
+                texte[1] + 1,
+                texte[2] - 1,
+              ]
             }
             break
           case 'variable':
@@ -354,6 +389,15 @@ export function scratchblock(
         taille = string.length
         string = string.substring(5, 9)
         switch (string) {
+          case 'more':
+            compteAccolades++
+            texte = translatex(chaine, index + taille + 1, compteAccolades)
+            resultat = [
+              `<${texte[0]} :: custom-arg>`,
+              texte[1] + 1,
+              texte[2] - 1,
+            ]
+            break
           case 'oper':
             compteAccolades++
             texte = translatex(chaine, index + taille + 1, compteAccolades)
@@ -463,6 +507,9 @@ export function scratchblock(
         break
       default:
         switch (commande) {
+          case '\\_':
+            resultat = ['_', index + 2, compteAccolades]
+            break
           case '}':
             compteAccolades--
             resultat = [' ', 1 + index, compteAccolades]
@@ -524,6 +571,10 @@ export function scratchblock(
             break
           }
           default:
+            if (commande.startsWith('\\_')) {
+              resultat = ['_', index + 2, compteAccolades]
+              break
+            }
             string = chaine.substring(index).split(regex1)[0]
             resultat = [string, string.length + index, compteAccolades]
             break
@@ -572,12 +623,19 @@ export function scratchblock(
     index = 0
     fin = false
     let k = 0
-    while (!fin && k < 300) {
+    const MAIN_LOOP_GUARD_LIMIT = Math.max(stringLatex.length * 2, 600)
+    let previousIndex = -1
+    while (!fin && k < MAIN_LOOP_GUARD_LIMIT) {
       result = translatex(stringLatex, index, compteur)
       codeScratch += result[0]
       index = result[1]
       compteur = result[2]
-      if (compteur === 0) fin = true
+
+      if (index <= previousIndex || index >= stringLatex.length) {
+        fin = true
+      }
+
+      previousIndex = index
       k++ // MGu pour éviter la boucle infinie
     }
     if (!fin)

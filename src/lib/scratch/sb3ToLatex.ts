@@ -226,9 +226,32 @@ const OPCODE_TO_BLOCK = {
     `\\ovaloperator{arrondir ${inputVal(b, 'NUM', c)}}`,
   operator_mathop: (b: any, c: any) =>
     `\\ovaloperator{\\selectmenu{${field(b, 'OPERATOR')}} de ${inputVal(b, 'NUM', c)}}`,
-  procedures_call: (b: { mutation: { proccode: string } }, c: any) => {
-    const p = b.mutation?.proccode || 'mon bloc'
-    return `\\blockmoreblocks{${escapeTex(p)}}`
+  argument_reporter_string_number: (b: any, c: any) =>
+    `\\ovalmoreblocks{${extractArgumentReporterName(b)}}`,
+  argument_reporter_boolean: (b: any, c: any) =>
+    `\\boolmoreblocks{${extractArgumentReporterName(b)}}`,
+  procedures_call: (
+    b: {
+      mutation?: {
+        proccode?: string
+        argumentids?: string[] | string
+        argumentnames?: string[] | string
+      }
+      inputs?: Record<string, any>
+    },
+    c: any,
+  ) => {
+    const proccode = b.mutation?.proccode || 'mon bloc'
+    const argumentIds = parseProcedureMutationArray(b.mutation?.argumentids)
+    const argumentNames = parseProcedureMutationArray(b.mutation?.argumentnames)
+    const argumentValues = argumentIds.map((argumentId) =>
+      inputVal(b as any, argumentId, c),
+    )
+    const signature = formatProcedureSignature(proccode, {
+      argumentNames,
+      argumentValues,
+    })
+    return `\\blockmoreblocks{${signature}}`
   },
 }
 
@@ -304,6 +327,99 @@ function extractPenColorParam(block: { fields?: Record<string, any> }): string {
   }
 
   return 'couleur'
+}
+
+function extractArgumentReporterName(block: { fields?: Record<string, any> }) {
+  const fields = block.fields ?? {}
+  const namedField =
+    fields['VALUE'] || fields['value'] || fields['NAME'] || null
+
+  const rawFromNamed = Array.isArray(namedField) ? namedField[0] : null
+  if (rawFromNamed != null && String(rawFromNamed).trim() !== '') {
+    return escapeTex(String(rawFromNamed))
+  }
+
+  const firstEntry = Object.values(fields)[0]
+  const rawFromFirst = Array.isArray(firstEntry) ? firstEntry[0] : null
+  if (rawFromFirst != null && String(rawFromFirst).trim() !== '') {
+    return escapeTex(String(rawFromFirst))
+  }
+
+  return '?'
+}
+
+function parseProcedureMutationArray(value: unknown): string[] {
+  if (Array.isArray(value)) {
+    return value.map((entry) => String(entry ?? ''))
+  }
+
+  if (typeof value === 'string') {
+    const trimmed = value.trim()
+    if (trimmed === '') return []
+
+    try {
+      const parsed = JSON.parse(trimmed)
+      if (Array.isArray(parsed)) {
+        return parsed.map((entry) => String(entry ?? ''))
+      }
+    } catch {
+      return []
+    }
+  }
+
+  return []
+}
+
+function renderProcedureArgSlot(
+  token: '%s' | '%n' | '%b',
+  label: string,
+  useRawContent = false,
+): string {
+  if (useRawContent) {
+    const trimmed = label.trim()
+    if (trimmed !== '') return trimmed
+  }
+
+  if (token === '%b') {
+    return `\\boolmoreblocks{${escapeTex(label || '?')}}`
+  }
+
+  return `\\ovalmoreblocks{${escapeTex(label || '?')}}`
+}
+
+function formatProcedureSignature(
+  proccode: string,
+  options?: {
+    argumentNames?: string[]
+    argumentValues?: string[]
+  },
+): string {
+  const source = String(proccode || 'mon bloc').replace(/\\+%(?=[snb])/g, '%')
+  const argumentNames = options?.argumentNames ?? []
+  const argumentValues = options?.argumentValues ?? []
+  const placeholderRegex = /%[snb]/g
+
+  let cursor = 0
+  let argIndex = 0
+  let match: RegExpExecArray | null
+  let output = ''
+
+  while ((match = placeholderRegex.exec(source)) !== null) {
+    output += escapeTex(source.slice(cursor, match.index))
+
+    const token = match[0] as '%s' | '%n' | '%b'
+    const argValue = argumentValues[argIndex]
+    const argName = argumentNames[argIndex] ?? `arg${argIndex + 1}`
+    const slotContent = argValue ?? argName
+    const useRawContent = argValue != null
+    output += renderProcedureArgSlot(token, slotContent, useRawContent)
+
+    cursor = match.index + match[0].length
+    argIndex++
+  }
+
+  output += escapeTex(source.slice(cursor))
+  return output.trim()
 }
 
 // ── Unité d'indentation ──────────────────────────────────────
@@ -419,13 +535,17 @@ function renderForever(b: any, ctx: any, indent: string): string {
 }
 
 function renderProcDef(
-  b: { inputs?: { [x: string]: any[] } },
+  b: { inputs?: { [x: string]: any[] }; mutation?: Record<string, unknown> },
   ctx: { blocks: { [x: string]: any } },
 ): string {
   const protoId = b.inputs?.['custom_block']?.[1]
   const proto = protoId ? ctx.blocks[protoId] : null
-  const proccode = proto?.mutation?.proccode ?? 'mon bloc'
-  return `\\initmoreblocks{définir \\namemoreblocks{${escapeTex(proccode)}}}`
+  const mutation = proto?.mutation ?? b.mutation ?? {}
+  const proccode = String(mutation?.proccode ?? 'mon bloc')
+  const argumentNames = parseProcedureMutationArray(mutation?.argumentnames)
+
+  const signature = formatProcedureSignature(proccode, { argumentNames })
+  return `\\initmoreblocks{définir \\namemoreblocks{${signature}}}`
 }
 
 /**
