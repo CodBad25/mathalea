@@ -47,54 +47,67 @@ export default class CourseAuxNombres6e extends Exercice {
     super()
     this.besoinFormulaireTexte = [
       'Choix des questions',
-      ` Nombres séparés par des tirets :\n1 : Moitié et double\n
-2 : Quotient de a par b\n
-3 : Somme astucieuse de 4 nombres entiers\n
-4 : Somme de deux décimaux avec retenue\n
-5 : Double ou triple d'un nombre entier\n
-6 : Double ou triple d'un nombre décimal\n
-7 : Recomposition d'un entier\n
-8 : Tables de multiplication\n
-9 : Soustraire un nombre se finissant par 9\n
-10 :  Le quart ou le tiers d'un nombre.\n
-11 :  Recomposer un nombre à partir d'un nombre de centaines et d'un nombre d'unités\n
-12 :  Recomposer une nombre avec chevauchement\n
-13 :  Conversion heures et minutes\n
-14 :  Reste de la division par 3\n
-15 :  Une division par 9 qui tombe juste\n
-16 :  Ajouter un nombre de la forme 10n+9\n
-17 :  4 × #,## × 25 ou 2 × #,## × 50\n
-18 :  Addition à trou\n
-19 :  Nombre pair de 2 chiffres × 5\n
-20 :  Proportionnalité simple\n
-21 :  Ordre de grandeur\n
-22 :  Conversion cm -> m\n
-23 :  Fraction 1/n d'une quantité de L\n
-24 :  Reste de la division euclidienne\n
-25 :  Ordre de grandeur : hauteurs\n
-26 :  Appliquer un pourcentage\n
-27 :  Calcul de distance à vitesse constante\n
-28 :  Comparaison de périmètre\n
-29 :  Repérage fraction\n
-30 :  Proportionnalité par linéarité\n
+      ` Nombres séparés par des tirets :\n1 : Moitié et double
+2 : Quotient de a par b
+3 : Somme astucieuse de 4 nombres entiers
+4 : Somme de deux décimaux avec retenue
+5 : Double ou triple d'un nombre entier
+6 : Double ou triple d'un nombre décimal
+7 : Recomposition d'un entier
+8 : Tables de multiplication
+9 : Soustraire un nombre se finissant par 9
+10 :  Le quart ou le tiers d'un nombre
+11 :  Recomposer un nombre à partir d'un nombre de centaines et d'un nombre d'unités
+12 :  Recomposer une nombre avec chevauchement
+13 :  Conversion heures et minutes
+14 :  Reste de la division par 3
+15 :  Une division par 9 qui tombe juste
+16 :  Ajouter un nombre de la forme 10n+9
+17 :  Multiplie astucieusment
+18 :  Addition à trou
+19 :  Nombre pair de 2 chiffres par 5
+20 :  Proportionnalité simple
+21 :  Ordre de grandeur
+22 :  Conversion cm -> m
+23 :  Fraction 1/n d'une quantité de L
+24 :  Reste de la division euclidienne
+25 :  Ordre de grandeur : hauteurs
+26 :  Appliquer un pourcentage
+27 :  Calcul de distance à vitesse constante
+28 :  Comparaison de périmètre
+29 :  Repérage fraction
+30 :  Proportionnalité par linéarité
 31 :  Mélange`,
     ]
     this.nbQuestions = 30
     this.nbCols = 2 // Uniquement pour la sortie LaTeX
     this.nbColsCorr = 2 // Uniquement pour la sortie LaTeX
+    this.sup = '31'
   }
 
   nouvelleVersion() {
     let a, b, c, d, resultat, propositions
 
-    const listeIndex = gestionnaireFormulaireTexte({
-      saisie: this.sup,
-      max: 30,
-      melange: 31,
-      defaut: 31,
-      nbQuestions: this.nbQuestions,
-      shuffle: false,
-    }).map((index) => index - 1)
+    let listeIndex
+    // Si la saisie contient des numéros spécifiques (pas 31 = toutes les questions),
+    // chaque question ne doit apparaître qu'une seule fois.
+    const saisie = this.sup || '31'
+    const valeurs = saisie.split('-').map((v) => parseInt(v.trim())).filter((v) => !isNaN(v))
+    if (valeurs.length >= 1 && !valeurs.includes(31)) {
+      // Sélection manuelle : chaque question une seule fois
+      listeIndex = valeurs.filter((v) => v >= 1 && v <= 30).map((v) => v - 1)
+      this.nbQuestions = listeIndex.length
+    } else {
+      // 31 = toutes les questions (comportement par défaut)
+      listeIndex = gestionnaireFormulaireTexte({
+        saisie: this.sup,
+        max: 30,
+        melange: 31,
+        defaut: 31,
+        nbQuestions: this.nbQuestions,
+        shuffle: false,
+      }).map((index) => index - 1)
+    }
     const fruits = [
       ['pêches', 4, 10, 30],
       ['noix', 5, 4, 13],
@@ -129,7 +142,7 @@ export default class CourseAuxNombres6e extends Exercice {
       'q14', // Reste de la division par 3
       'q15', // Une division par 9 qui tombe juste
       'q16', // ajouter un nombre de la forme 10n+9
-      'q17', // 4 × #,## × 25 ou 2 × #,## × 50
+      'q17', // multiplier astucieusement
       'q18', // addition à trou
       'q19', // Nombre pair de 2 chiffres × 2
       'q20', // Proportionnalité simple
