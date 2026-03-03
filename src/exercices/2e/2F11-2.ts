@@ -433,11 +433,11 @@ export default class ComparerAvecFonctionRef extends Exercice {
           (this.interactif
             ? choixDeroulant(this, 3 * i + 1, choixListeDeroulante2)
             : '$\\ldots\\ldots\\ldots\\ldots$') +
-          `  donc  $${nom}(${texNombre(x1, 1)})$` +
+          `  donc  $${nom}(${texNombre(x1, 3)})$` +
           (this.interactif
             ? choixDeroulant(this, 3 * i + 2, choixListeDeroulante3)
             : '$\\ldots\\ldots\\ldots\\ldots$') +
-          ` $${nom}(${texNombre(x2, 1)})$.`
+          ` $${nom}(${texNombre(x2, 3)})$.`
 
         handleAnswers(
           this,
