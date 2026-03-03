@@ -93,12 +93,12 @@ export default class AntecedentGraphique extends Exercice {
         a = (fx2 - fx1) / (x2 - x1)
         b = a * x1 - fx1
         f = (x) => a * x - b
-        texte += `Déterminer par lecture graphique les antécédents de $${fx1}$ et de $${fx2}$ par cette fonction $f$.<br><br>`
+        texte += `Déterminer, par lecture graphique, le (ou les) antécédent(s) de $${fx1}$ et de $${fx2}$ par cette fonction $f$.<br><br>`
         texte += ajouteChampTexteMathLive(this, indexInteractif, '', {
-          texteAvant: `Le ou les antécédents de $${fx1}$ (séparer les nombres avec un point-virgule) :`,
+          texteAvant: `Le (ou les) antécédent(s) de $${fx1}$ (séparer les nombres avec un point-virgule) :`,
         })
         texte += ajouteChampTexteMathLive(this, indexInteractif + 1, '', {
-          texteAvant: `<br>Le ou les antécédents de $${fx2}$ (séparer les nombres avec un point-virgule) :`,
+          texteAvant: `<br>Le (ou les) antécédent(s) de $${fx2}$ (séparer les nombres avec un point-virgule) :`,
         })
         setReponse(this, indexInteractif, x1, { formatInteractif: 'calcul' })
         setReponse(this, indexInteractif + 1, x2, {
@@ -108,34 +108,35 @@ export default class AntecedentGraphique extends Exercice {
         texteCorr = `L'antécédent de $${fx1}$ est $${x1}$, on note $f(${x1})=${fx1}$.<br>`
         texteCorr += `L'antécédent de $${fx2}$ est $${x2}$, on note $f(${x2})=${fx2}$.`
       } else if (choix === 2) {
-        if (randint(1, 4) < 2) {
+        if (randint(1, 4) === 1) {
           // une fois sur 4 il n'y a qu'un seul antécédent
           const x0 = randint(-2, 2)
-          let fx0 = randint(-4, 4)
+          let fx0 = randint(-4, 4, x0)
           if (!context.isHtml) {
-            fx0 = randint(-2, 2)
+            fx0 = randint(-2, 2, x0)
           }
           a = randint(-3, 3, 0)
-          texte += `Déterminer par lecture graphique le (ou les) antécédent(s) de $${fx0}$ par cette fonction $f$.<br><br>`
+          texte += `Déterminer, par lecture graphique, le (ou les) antécédent(s) de $${fx0}$ par cette fonction $f$.<br><br>`
           texte += ajouteChampTexteMathLive(this, indexInteractif, '', {
-            texteAvant: `Le ou les antécédents de ${fx0} (séparer les nombres avec un point-virgule) :`,
+            texteAvant: `Le (ou les) antécédent(s) de ${fx0} (séparer les nombres avec un point-virgule) :`,
           })
           setReponse(this, indexInteractif, x0, { formatInteractif: 'calcul' })
           incrementInteractif = 1
           texteCorr = `$${fx0}$ a un unique antécédent $${x0}$, on note $f(${x0})=${fx0}$.<br>`
           f = (x) => a * (x - x0) ** 2 + fx0
         } else {
-          fx3 = fx1
+          let tentatives = 0
+          /* fx3 = fx1
           ;[a, b] = resolutionSystemeLineaire2x2(x1, x3, fx1, fx3, c)
           // console.info('Initial values:', { x1, x3, fx1, fx3, c, a, b })
-          let tentatives = 0
           while (
             (Number.isNaN(a) || Number.isNaN(b) || a === 0) &&
             tentatives < 50
-          ) {
+          ) */
+          do {
             x1 = randint(-4, -1)
             x3 = randint(1, 4)
-            fx1 = randint(-7, 7)
+            fx1 = randint(-7, 7, [x1, x3])
             fx3 = fx1
             c = randint(-6, 6)
             ;[a, b] = resolutionSystemeLineaire2x2(x1, x3, fx1, fx3, c)
@@ -152,7 +153,11 @@ export default class AntecedentGraphique extends Exercice {
               })
             */
             }
-          }
+          } while (
+            (Number.isNaN(a) || Number.isNaN(b) || a === 0) &&
+            tentatives < 50
+          )
+
           // Si après 50 tentatives on n'a pas trouvé, on force des valeurs valides
           if (a === 0 || Number.isNaN(a) || Number.isNaN(b)) {
             console.warn('Forcing fallback values after 50 attempts')
@@ -177,9 +182,9 @@ export default class AntecedentGraphique extends Exercice {
           x2 = 0
           fx2 = c
           f = (x) => a * x ** 2 + b * x + c
-          texte += `Déterminer par lecture graphique le (ou les) antécédent(s) de $${fx1}$ par cette fonction $f$.<br><br>`
+          texte += `Déterminer, par lecture graphique, le (ou les) antécédent(s) de $${fx1}$ par cette fonction $f$.<br><br>`
           texte += ajouteChampTexteMathLive(this, indexInteractif, '', {
-            texteAvant: `Le ou les antécédents de ${fx1} (séparer les nombres avec un point-virgule) :`,
+            texteAvant: `Le (ou les) antécédent(s) de ${fx1} (séparer les nombres avec un point-virgule) :`,
           })
           setReponse(this, indexInteractif, [`${x1};${x3}`, `${x3};${x1}`], {
             formatInteractif: 'texte',
