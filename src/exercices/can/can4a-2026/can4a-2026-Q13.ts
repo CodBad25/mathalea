@@ -88,7 +88,7 @@ export default class Can20264emeQ13 extends ExerciceCan {
     
     this.reponse = aire
     this.formatChampTexte = KeyboardType.clavierDeBase
-    this.optionsChampTexte = { texteApres: ' dam$^2$.' }
+    this.optionsChampTexte = { texteApres: ' $\\text{ dam}^2$.' }
     this.canReponseACompleter = " $\\ldots\\text{ dam}^2$"
     
     if (!this.interactif) {

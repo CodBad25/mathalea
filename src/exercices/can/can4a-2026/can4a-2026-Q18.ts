@@ -58,7 +58,7 @@ export default class Can20264emeQ18 extends ExerciceCan {
     // Label de la largeur (à gauche du rectangle)
     const labelLargeur = latex2d(
       `x \\text{ cm}`,
-      milieu(A, D).x - 0.8,
+      milieu(A, D).x - 1,
       milieu(A, D).y,
       { color: 'black' }
     )

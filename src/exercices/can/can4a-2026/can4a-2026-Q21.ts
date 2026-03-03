@@ -1,6 +1,7 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { toutPourUnPoint } from '../../../lib/interactif/mathLive'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { sp } from '../../../lib/outils/outilString'
 import { formatMinute } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
@@ -38,7 +39,7 @@ export default class Can20264emeQ21 extends ExerciceCan {
       champ2: { value: String(secondes) },
     }
     
-    this.question = `${totalSecondes} \\text{ secondes} = %{champ1} \\text{ min } %{champ2} \\text{ s}`
+    this.question = `${totalSecondes} \\text{ secondes} =${sp(1)} %{champ1} \\text{ min } %{champ2} \\text{ s}`
 
     this.correction = `$${totalSecondes}$ secondes $= ${minutes} \\times 60 + ${secondes}$<br>
 Donc : $${totalSecondes}$ s $= ${miseEnEvidence(String(minutes))}$ min $${miseEnEvidence(formatMinute(secondes))}$ s.`

@@ -51,7 +51,7 @@ export default class Can20264emeQ28 extends ExerciceCan {
     this.question = `${mathalea2d(Object.assign({ scale: 0.45,pixelsParCm: 15}, fixeBordures(d.objets!)), d.objets!)}
     Le nombre repéré par le point $A$ est `
     
-    this.correction = `Entre $${min}$ et $${max}$, il y a $${nbPas}$ graduations.<br>
+    this.correction = `Entre $${min}$ et $${max}$, il y a $${nbPas}$ intervalles.<br>
     Le point $A$ se trouve à la graduation numéro $${position}$.<br>
     L'abscisse du point $A$ est donc : 
     ${abscisse.texFractionSimplifiee !== abscisse.texFraction ? `$${abscisse.texFraction}=${miseEnEvidence(abscisse.texFractionSimplifiee)}$.`  : `$${miseEnEvidence(abscisse.texFractionSimplifiee)}$.`}`
