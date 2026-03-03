@@ -3,6 +3,23 @@ import { describe, expect, it, vi } from 'vitest'
 import { ScratchInterpreter } from '../../src/lib/scratch/ScratchInterpreter'
 import { ScratchSimulator } from '../../src/lib/scratch/ScratchSimulator'
 
+type ScratchSimulatorTestHarness = {
+  codeDiv: HTMLDivElement
+  codeBlocks: Array<{ element: SVGGElement; text: string; children: any[] }>
+  allRenderedBlocks: Array<{
+    element: SVGGElement
+    text: string
+    children: any[]
+  }>
+  customDefinitionGroups: Set<SVGGElement>
+  conditionBlockElements: Set<SVGGElement>
+  executionIndexToBlockId: Map<number, string>
+  scratchCode: string
+  customDefinitionEntryIdBySignature?: Map<string, string>
+  customDefinitionBodyIdsBySignature?: Map<string, Set<string>>
+  buildExecutionIndexToSelectorMap: () => Promise<void>
+}
+
 describe('ScratchInterpreter', () => {
   it('met a jour les variables avec blockvariable + repeat', async () => {
     const interpreter = new ScratchInterpreter(200, 200, 90)
@@ -524,6 +541,27 @@ describe('ScratchInterpreter', () => {
     })
 
     expect(result.traces.length).toBe(40)
+  })
+
+  it('exécute un bloc personnalisé paramétré (nom avec underscore échappé)', async () => {
+    const interpreter = new ScratchInterpreter(200, 200, 90)
+    const code = `\\begin{scratch}[blocks]
+\\initmoreblocks{définir \\namemoreblocks{polygone\\_régulier \\ovalmoreblocks{number1} \\ovalmoreblocks{number2}}}
+\\blockrepeat{répéter \\ovalmoreblocks{number1} fois}
+{
+  \\blockmove{avancer de \\ovalmoreblocks{number2} pas}
+  \\blockmove{tourner \\turnright{} de \\ovaloperator{\\ovalnum{360} / \\ovalmoreblocks{number1}} degrés}
+}
+\\blockinit{quand \\greenflag est cliqué}
+\\blockpen{stylo en position d'écriture}
+\\blockmoreblocks{polygone\\_régulier \\ovalnum{3} \\ovalnum{40}}
+\\end{scratch}`
+
+    const result = await interpreter.executeAnimated(code, () => {}, 0, {
+      skipWaitBlocks: true,
+    })
+
+    expect(result.traces.length).toBe(3)
   })
 
   it('gere blockifelse avec condition vraie', async () => {
@@ -1409,20 +1447,7 @@ describe('ScratchSimulator mapping', () => {
 
     const simulator = Object.create(
       ScratchSimulator.prototype,
-    ) as ScratchSimulator & {
-      codeDiv: HTMLDivElement
-      codeBlocks: Array<{ element: SVGGElement; text: string; children: any[] }>
-      allRenderedBlocks: Array<{
-        element: SVGGElement
-        text: string
-        children: any[]
-      }>
-      customDefinitionGroups: Set<SVGGElement>
-      conditionBlockElements: Set<SVGGElement>
-      executionIndexToBlockId: Map<number, string>
-      scratchCode: string
-      buildExecutionIndexToSelectorMap: () => Promise<void>
-    }
+    ) as unknown as ScratchSimulatorTestHarness
 
     const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
     const mk = (
@@ -1509,20 +1534,7 @@ describe('ScratchSimulator mapping', () => {
 
     const simulator = Object.create(
       ScratchSimulator.prototype,
-    ) as ScratchSimulator & {
-      codeDiv: HTMLDivElement
-      codeBlocks: Array<{ element: SVGGElement; text: string; children: any[] }>
-      allRenderedBlocks: Array<{
-        element: SVGGElement
-        text: string
-        children: any[]
-      }>
-      customDefinitionGroups: Set<SVGGElement>
-      conditionBlockElements: Set<SVGGElement>
-      executionIndexToBlockId: Map<number, string>
-      scratchCode: string
-      buildExecutionIndexToSelectorMap: () => Promise<void>
-    }
+    ) as unknown as ScratchSimulatorTestHarness
 
     const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
     const mk = (
@@ -1567,5 +1579,97 @@ describe('ScratchSimulator mapping', () => {
     )
 
     expect(mappedBlockId).toBe('block-pen-up')
+  })
+
+  it('privilégie le bloc dans la procédure custom quand le texte est identique dans l’appelant', async () => {
+    const code = `\\begin{scratch}
+\\initmoreblocks{définir \\namemoreblocks{polygone\\_régulier \\ovalmoreblocks{number1} \\ovalmoreblocks{number2}}}
+\\blockrepeat{répéter \\ovalmoreblocks{number1} fois}
+{
+  \\blockmove{avancer de \\ovalmoreblocks{number2} pas}
+}
+
+\\blockinit{quand \\greenflag est cliqué}
+\\blockmoreblocks{polygone\\_régulier \\ovalnum{1} \\ovalnum{40}}
+\\blockmove{avancer de \\ovalnum{40} pas}
+\\end{scratch}`
+
+    let firstMove40InstructionIndex: number | undefined
+    const interpreter = new ScratchInterpreter(200, 200, 90)
+
+    await interpreter.executeAnimated(
+      code,
+      () => {
+        const state = interpreter.getCurrentState()
+        if (
+          firstMove40InstructionIndex === undefined &&
+          state.currentInstruction === 'Avancer de 40 pas'
+        ) {
+          firstMove40InstructionIndex = state.currentInstructionIndex
+        }
+      },
+      0,
+      { skipWaitBlocks: true },
+    )
+
+    expect(interpreter.getCurrentState().finalX).toBe(280)
+
+    expect(firstMove40InstructionIndex).toBeDefined()
+
+    const simulator = Object.create(
+      ScratchSimulator.prototype,
+    ) as unknown as ScratchSimulatorTestHarness
+
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
+    const mk = (
+      id: string,
+      text: string,
+    ): { element: SVGGElement; text: string; children: any[] } => {
+      const g = document.createElementNS('http://www.w3.org/2000/svg', 'g')
+      g.id = id
+      svg.appendChild(g)
+      return {
+        element: g,
+        text,
+        children: [],
+      }
+    }
+
+    const renderedBlocks = [
+      mk('block-call-poly', 'bloc polygone_régulier 1 40'),
+      mk('block-caller-move-40', 'avancer de 40 pas'),
+      mk('block-custom-move-40', 'avancer de 40 pas'),
+    ]
+
+    const codeDiv = document.createElement('div')
+    codeDiv.appendChild(svg)
+
+    simulator.codeDiv = codeDiv
+    simulator.codeBlocks = [renderedBlocks[0]]
+    simulator.allRenderedBlocks = renderedBlocks
+    simulator.customDefinitionGroups = new Set<SVGGElement>()
+    simulator.conditionBlockElements = new Set<SVGGElement>()
+    simulator.executionIndexToBlockId = new Map<number, string>()
+    simulator.customDefinitionEntryIdBySignature = new Map<string, string>([
+      ['polygone_régulier', 'block-custom-move-40'],
+    ])
+    simulator.customDefinitionBodyIdsBySignature = new Map<string, Set<string>>(
+      [['polygone_régulier', new Set(['block-custom-move-40'])]],
+    )
+    simulator.scratchCode = code
+
+    expect(
+      (simulator as any).normalizeCustomBlockSignature(
+        'bloc polygone\\_régulier \\ovalnum{1} \\ovalnum{40}',
+      ),
+    ).toBe('polygone_régulier')
+
+    await simulator.buildExecutionIndexToSelectorMap()
+
+    const mappedBlockId = simulator.executionIndexToBlockId.get(
+      firstMove40InstructionIndex!,
+    )
+
+    expect(mappedBlockId).toBe('block-custom-move-40')
   })
 })

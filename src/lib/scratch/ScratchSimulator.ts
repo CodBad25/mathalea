@@ -38,10 +38,14 @@ export class ScratchSimulator extends HTMLElement {
   private highlightedExecutionIndex: number | null = null
   private highlightedBlockElement: SVGGElement | null = null
   private customDefinitionGroups: Set<SVGGElement> = new Set()
+  private customDefinitionEntryIdBySignature: Map<string, string> = new Map()
+  private customDefinitionBodyIdsBySignature: Map<string, Set<string>> =
+    new Map()
   private conditionBlockElements: Set<SVGGElement> = new Set()
   private blockCacheAttempts: number = 0
   private executionIndexToBlockId: Map<number, string> = new Map() // Map: currentInstructionIndex -> id du bloc SVG
   private delayMs: number = 2000
+  private debugMapping: boolean = false
   private isRunning: boolean = false
   private isPaused: boolean = false
   private isHardStopped: boolean = false
@@ -81,7 +85,7 @@ export class ScratchSimulator extends HTMLElement {
   }
 
   static get observedAttributes(): string[] {
-    return ['code', 'delay']
+    return ['code', 'delay', 'debug-mapping']
   }
 
   attributeChangedCallback(
@@ -115,7 +119,23 @@ export class ScratchSimulator extends HTMLElement {
         this.initialDelayMs = parsedDelay
         this.delayMs = parsedDelay
       }
+      return
     }
+
+    if (name === 'debug-mapping') {
+      this.debugMapping =
+        newValue !== null && newValue !== 'false' && newValue !== '0'
+    }
+  }
+
+  private logMappingDebug(
+    event: string,
+    payload: Record<string, unknown>,
+  ): void {
+    if (!this.debugMapping) {
+      return
+    }
+    console.debug('[ScratchSimulator][mapping]', event, payload)
   }
 
   private makePointerOnlyButton(button: HTMLButtonElement): void {
@@ -130,6 +150,10 @@ export class ScratchSimulator extends HTMLElement {
     this.scratchCode = this.getAttribute('code') || ''
     this.initialDelayMs = parseInt(this.getAttribute('delay') || '500', 10)
     this.delayMs = this.initialDelayMs
+    this.debugMapping =
+      this.hasAttribute('debug-mapping') &&
+      this.getAttribute('debug-mapping') !== 'false' &&
+      this.getAttribute('debug-mapping') !== '0'
     document.addEventListener('keydown', this.handleModalKeydown)
 
     const button = document.createElement('button')
@@ -446,23 +470,14 @@ export class ScratchSimulator extends HTMLElement {
       const selector = blockId ? this.getSelectorFromBlockId(blockId) : null
       if (selector && this.codeDiv) {
         matchedElement = this.codeDiv.querySelector<SVGGElement>(selector)
-        if (matchedElement) {
-          const mappedText = this.getBlockOwnText(matchedElement)
-          if (normalizedInstruction && mappedText !== normalizedInstruction) {
-            resolveRuntimeMapping()
-            const correctedBlockId = this.executionIndexToBlockId.get(
-              currentInstructionIndex,
-            )
-            const correctedSelector = correctedBlockId
-              ? this.getSelectorFromBlockId(correctedBlockId)
-              : null
-            matchedElement = correctedSelector
-              ? this.codeDiv.querySelector<SVGGElement>(correctedSelector)
-              : null
-          }
-        }
 
         if (matchedElement) {
+          this.logMappingDebug('highlight/use-precomputed', {
+            instructionIndex: currentInstructionIndex,
+            blockId,
+            normalizedInstruction,
+            matchedText: this.getBlockOwnText(matchedElement),
+          })
           targetBlock = {
             element: matchedElement,
             text: this.getBlockOwnText(matchedElement),
@@ -572,10 +587,15 @@ export class ScratchSimulator extends HTMLElement {
     this.stripConditionBlocks(this.codeBlocks)
 
     this.customDefinitionGroups = this.extractCustomBlockDefinitions(svg)
+    this.customDefinitionEntryIdBySignature =
+      this.extractCustomDefinitionEntryIdBySignature(svg)
+    this.customDefinitionBodyIdsBySignature =
+      this.extractCustomDefinitionBodyIdsBySignature(svg)
     this.allRenderedBlocks = groups
       .filter(
         (group) =>
           !this.customDefinitionGroups.has(group) &&
+          !this.isDefinitionBlockGroup(group) &&
           !this.conditionBlockElements.has(group),
       )
       .map((group) => ({
@@ -735,6 +755,174 @@ export class ScratchSimulator extends HTMLElement {
     return definitionGroups
   }
 
+  private extractCustomDefinitionEntryIdBySignature(
+    root: SVGElement,
+  ): Map<string, string> {
+    const entryBySignature = new Map<string, string>()
+
+    const allCustomGroups = Array.from(
+      root.querySelectorAll<SVGGElement>('g'),
+    ).filter((group) => this.isCustomBlockGroup(group))
+
+    const containers = new Set<SVGGElement>()
+    allCustomGroups.forEach((group) => {
+      const parent = group.parentElement
+      if (parent && parent.tagName.toLowerCase() === 'g') {
+        containers.add(parent as unknown as SVGGElement)
+      }
+    })
+
+    containers.forEach((container) => {
+      const childGroups = Array.from(
+        container.querySelectorAll<SVGGElement>('g'),
+      )
+        .filter((child) => this.isBlockGroup(child))
+        .sort((a, b) => this.compareBlockPosition(a, b))
+
+      const headerIndex = childGroups.findIndex((child) =>
+        this.isDefinitionBlockGroup(child),
+      )
+      if (headerIndex === -1) {
+        return
+      }
+
+      const header = childGroups[headerIndex]
+      const signature = this.getDefinitionSignatureFromSiblingLine(
+        childGroups,
+        headerIndex,
+      )
+      if (!signature) {
+        return
+      }
+
+      const bodyGroups: SVGGElement[] = []
+      for (
+        let cursor = headerIndex + 1;
+        cursor < childGroups.length;
+        cursor += 1
+      ) {
+        const candidate = childGroups[cursor]
+        if (this.isOnSameVisualLine(header, candidate)) {
+          continue
+        }
+
+        const candidateText = this.normalizeText(
+          this.getBlockOwnText(candidate),
+        )
+        if (
+          this.isHatBlockText(candidateText) ||
+          this.isDefinitionBlockGroup(candidate)
+        ) {
+          break
+        }
+
+        bodyGroups.push(candidate)
+      }
+
+      const bodyEntry = bodyGroups[0]
+      if (!bodyEntry) {
+        return
+      }
+
+      if (!bodyEntry.id) {
+        bodyEntry.id = this.generateBlockId()
+      }
+      bodyEntry.setAttribute('data-scratch-block-id', bodyEntry.id)
+
+      if (!entryBySignature.has(signature)) {
+        entryBySignature.set(signature, bodyEntry.id)
+      }
+    })
+
+    return entryBySignature
+  }
+
+  private extractCustomDefinitionBodyIdsBySignature(
+    root: SVGElement,
+  ): Map<string, Set<string>> {
+    const bodyIdsBySignature = new Map<string, Set<string>>()
+
+    const allCustomGroups = Array.from(
+      root.querySelectorAll<SVGGElement>('g'),
+    ).filter((group) => this.isCustomBlockGroup(group))
+
+    const containers = new Set<SVGGElement>()
+    allCustomGroups.forEach((group) => {
+      const parent = group.parentElement
+      if (parent && parent.tagName.toLowerCase() === 'g') {
+        containers.add(parent as unknown as SVGGElement)
+      }
+    })
+
+    containers.forEach((container) => {
+      const childGroups = Array.from(
+        container.querySelectorAll<SVGGElement>('g'),
+      )
+        .filter((child) => this.isBlockGroup(child))
+        .sort((a, b) => this.compareBlockPosition(a, b))
+
+      const headerIndex = childGroups.findIndex((child) =>
+        this.isDefinitionBlockGroup(child),
+      )
+      if (headerIndex === -1) {
+        return
+      }
+
+      const header = childGroups[headerIndex]
+      const signature = this.getDefinitionSignatureFromSiblingLine(
+        childGroups,
+        headerIndex,
+      )
+      if (!signature) {
+        return
+      }
+
+      const bodyIds = new Set<string>()
+
+      for (
+        let cursor = headerIndex + 1;
+        cursor < childGroups.length;
+        cursor += 1
+      ) {
+        const candidate = childGroups[cursor]
+        if (this.isOnSameVisualLine(header, candidate)) {
+          continue
+        }
+
+        const candidateText = this.normalizeText(
+          this.getBlockOwnText(candidate),
+        )
+        if (
+          this.isHatBlockText(candidateText) ||
+          this.isDefinitionBlockGroup(candidate)
+        ) {
+          break
+        }
+
+        const scopedGroups = [
+          candidate,
+          ...Array.from(candidate.querySelectorAll<SVGGElement>('g')).filter(
+            (child) => this.isBlockGroup(child),
+          ),
+        ]
+
+        scopedGroups.forEach((group) => {
+          if (!group.id) {
+            group.id = this.generateBlockId()
+          }
+          group.setAttribute('data-scratch-block-id', group.id)
+          bodyIds.add(group.id)
+        })
+      }
+
+      if (bodyIds.size > 0 && !bodyIdsBySignature.has(signature)) {
+        bodyIdsBySignature.set(signature, bodyIds)
+      }
+    })
+
+    return bodyIdsBySignature
+  }
+
   // Extraire le texte propre d'un bloc (sans les textes des blocs imbriqués)
   private getBlockOwnText(group: SVGGElement): string {
     const parts: string[] = []
@@ -849,8 +1037,62 @@ export class ScratchSimulator extends HTMLElement {
   }
 
   private isDefinitionBlockGroup(group: SVGGElement): boolean {
-    const text = this.normalizeText(this.getBlockOwnText(group))
-    return text.includes('définir') || text.includes('definir')
+    const ownText = this.normalizeText(this.getBlockOwnText(group))
+    const fullText = this.normalizeText(group.textContent || '')
+    return (
+      ownText.includes('définir') ||
+      ownText.includes('definir') ||
+      fullText.includes('définir') ||
+      fullText.includes('definir')
+    )
+  }
+
+  private getDefinitionSignature(group: SVGGElement): string {
+    const fullText = this.normalizeText(group.textContent || '')
+    const ownText = this.normalizeText(this.getBlockOwnText(group))
+
+    const fromFull = this.normalizeCustomBlockSignature(fullText)
+    if (fromFull) {
+      return fromFull
+    }
+
+    return this.normalizeCustomBlockSignature(ownText)
+  }
+
+  private getDefinitionSignatureFromSiblingLine(
+    siblingGroups: SVGGElement[],
+    headerIndex: number,
+  ): string {
+    const header = siblingGroups[headerIndex]
+    const lineParts: string[] = []
+
+    for (let cursor = headerIndex; cursor < siblingGroups.length; cursor += 1) {
+      const candidate = siblingGroups[cursor]
+      if (cursor > headerIndex && !this.isOnSameVisualLine(header, candidate)) {
+        break
+      }
+
+      const own = this.normalizeText(this.getBlockOwnText(candidate))
+      const full = this.normalizeText(candidate.textContent || '')
+      const part = own || full
+      if (part) {
+        lineParts.push(part)
+      }
+    }
+
+    const mergedLine = lineParts.join(' ')
+    const fromLine = this.normalizeCustomBlockSignature(mergedLine)
+    if (fromLine) {
+      return fromLine
+    }
+
+    return this.getDefinitionSignature(header)
+  }
+
+  private isOnSameVisualLine(a: SVGGElement, b: SVGGElement): boolean {
+    const aTop = a.getBoundingClientRect().top
+    const bTop = b.getBoundingClientRect().top
+    return Math.abs(aTop - bTop) <= 4
   }
 
   private isIfBlockText(text: string): boolean {
@@ -875,9 +1117,100 @@ export class ScratchSimulator extends HTMLElement {
     return /^quand\b/.test(normalized) || /^attente\b/.test(normalized)
   }
 
+  private isValidStartEventBlock(block: CodeBlockNode): boolean {
+    const normalizedText = this.normalizeText(block.text)
+    if (!this.isHatBlockText(normalizedText)) {
+      return false
+    }
+
+    if (
+      this.isDefinitionBlockGroup(block.element) ||
+      this.customDefinitionGroups.has(block.element) ||
+      this.isCustomBlockGroup(block.element)
+    ) {
+      return false
+    }
+
+    return true
+  }
+
+  private hasValidStartEventBlock(): boolean {
+    return this.allRenderedBlocks.some((block) =>
+      this.isValidStartEventBlock(block),
+    )
+  }
+
   private isCustomBlockCallInstructionText(text: string): boolean {
     const normalized = this.normalizeText(text)
     return /^bloc\s+/.test(normalized)
+  }
+
+  private normalizeCustomBlockSignature(text: string): string {
+    const withoutLatexArgs = text
+      .replace(/\\(?:ovalnum|ovalmoreblocks|boolmoreblocks)\{[^{}]*\}/g, ' ')
+      .replace(/\\_/g, '_')
+
+    const normalized = this.normalizeText(withoutLatexArgs)
+      .replace(/\\_/g, '_')
+      .replace(/\s*_\s*/g, '_')
+      .replace(/^(définir|definir|bloc)\s+/, '')
+      .replace(/\s+/g, ' ')
+      .trim()
+
+    if (!normalized) {
+      return ''
+    }
+
+    const simplifiedTokens = normalized
+      .split(' ')
+      .filter((token) => token.trim() !== '')
+      .filter((token) => !/^-?\d+(?:[.,]\d+)?$/.test(token))
+      .filter((token) => !/^number\d*$/i.test(token))
+
+    return simplifiedTokens.join(' ').trim()
+  }
+
+  private canonicalizeCustomSignature(signature: string): string {
+    return signature
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/\\_/g, '_')
+      .replace(/\s*_\s*/g, '_')
+      .replace(/_/g, ' ')
+      .replace(/[^a-z0-9_ ]+/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim()
+  }
+
+  private findMatchingCustomSignatureKey<T>(
+    signature: string,
+    source: Map<string, T>,
+  ): string | null {
+    if (source.has(signature)) {
+      return signature
+    }
+
+    const canonicalTarget = this.canonicalizeCustomSignature(signature)
+    if (!canonicalTarget) {
+      return null
+    }
+
+    for (const key of source.keys()) {
+      const canonicalKey = this.canonicalizeCustomSignature(key)
+      if (canonicalKey === canonicalTarget) {
+        return key
+      }
+
+      if (
+        canonicalKey.startsWith(`${canonicalTarget} `) ||
+        canonicalTarget.startsWith(`${canonicalKey} `)
+      ) {
+        return key
+      }
+    }
+
+    return null
   }
 
   // Normaliser le texte des blocs pour fiabiliser les correspondances
@@ -924,6 +1257,42 @@ export class ScratchSimulator extends HTMLElement {
   // Construire un sélecteur CSS fiable à partir de l'ID d'un bloc
   private getSelectorFromBlockId(blockId: string): string {
     return `#${this.escapeCssIdentifier(blockId)}`
+  }
+
+  private escapeHtml(text: string): string {
+    return text
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;')
+  }
+
+  private getMappedInstructionText(
+    instructionIndex: number | undefined,
+  ): string | null {
+    if (
+      typeof instructionIndex !== 'number' ||
+      instructionIndex < 0 ||
+      !this.executionIndexToBlockId.has(instructionIndex)
+    ) {
+      return null
+    }
+
+    const blockId = this.executionIndexToBlockId.get(instructionIndex)
+    if (!blockId) {
+      return null
+    }
+
+    const block = this.allRenderedBlocks.find(
+      (candidate) => candidate.element.id === blockId,
+    )
+    if (!block) {
+      return null
+    }
+
+    const mappedText = this.normalizeText(block.text)
+    return mappedText || null
   }
 
   private chooseNearestOrder(
@@ -1045,6 +1414,7 @@ export class ScratchSimulator extends HTMLElement {
     const exactOrdersByText = new Map<string, number[]>()
     const allTexts: Array<{ order: number; text: string }> = []
     const hatOrders = new Set<number>()
+    const validEventOrders = new Set<number>()
     const isEventInstruction = this.isEventInstructionText(
       normalizedInstruction,
     )
@@ -1061,6 +1431,9 @@ export class ScratchSimulator extends HTMLElement {
       allTexts.push({ order, text: normalizedText })
       if (this.isHatBlockText(normalizedText)) {
         hatOrders.add(order)
+        if (this.isValidStartEventBlock(block)) {
+          validEventOrders.add(order)
+        }
       }
 
       const bucket = exactOrdersByText.get(normalizedText) || []
@@ -1115,6 +1488,13 @@ export class ScratchSimulator extends HTMLElement {
 
     if (!isEventInstruction) {
       candidateOrders = candidateOrders.filter((order) => !hatOrders.has(order))
+    } else {
+      candidateOrders = candidateOrders.filter((order) =>
+        validEventOrders.has(order),
+      )
+      if (candidateOrders.length === 0) {
+        candidateOrders = Array.from(validEventOrders)
+      }
     }
 
     if (candidateOrders.length === 0) {
@@ -1143,6 +1523,7 @@ export class ScratchSimulator extends HTMLElement {
     idsByOrder: Map<number, string>,
   ): number {
     const orderById = new Map<string, number>()
+    const textByOrder = new Map<number, string>()
     idsByOrder.forEach((id, order) => {
       orderById.set(id, order)
     })
@@ -1181,6 +1562,12 @@ export class ScratchSimulator extends HTMLElement {
 
   private async buildExecutionIndexToSelectorMap(): Promise<void> {
     this.executionIndexToBlockId.clear()
+    if (!this.customDefinitionEntryIdBySignature) {
+      this.customDefinitionEntryIdBySignature = new Map<string, string>()
+    }
+    if (!this.customDefinitionBodyIdsBySignature) {
+      this.customDefinitionBodyIdsBySignature = new Map<string, Set<string>>()
+    }
     await this.waitForRenderedBlocks()
 
     if (!this.codeDiv || this.allRenderedBlocks.length === 0) {
@@ -1198,9 +1585,13 @@ export class ScratchSimulator extends HTMLElement {
     }
 
     const idsByOrder = new Map<number, string>()
+    const orderById = new Map<string, number>()
+    const textByOrder = new Map<number, string>()
+    const customBodyOrdersBySignature = new Map<string, Set<number>>()
     const exactOrdersByText = new Map<string, number[]>()
     const allTexts: Array<{ order: number; text: string }> = []
     const hatOrders = new Set<number>()
+    const validEventOrders = new Set<number>()
 
     candidateBlocks.forEach((block, order) => {
       const blockId = block.element.id || this.generateBlockId()
@@ -1209,11 +1600,16 @@ export class ScratchSimulator extends HTMLElement {
         block.element.setAttribute('data-scratch-block-id', blockId)
       }
       idsByOrder.set(order, blockId)
+      orderById.set(blockId, order)
 
       const normalizedText = this.normalizeText(block.text)
       allTexts.push({ order, text: normalizedText })
+      textByOrder.set(order, normalizedText)
       if (this.isHatBlockText(normalizedText)) {
         hatOrders.add(order)
+        if (this.isValidStartEventBlock(block)) {
+          validEventOrders.add(order)
+        }
       }
 
       const bucket = exactOrdersByText.get(normalizedText) || []
@@ -1221,10 +1617,25 @@ export class ScratchSimulator extends HTMLElement {
       exactOrdersByText.set(normalizedText, bucket)
     })
 
+    this.customDefinitionBodyIdsBySignature.forEach((ids, signature) => {
+      const orders = new Set<number>()
+      ids.forEach((id) => {
+        const order = orderById.get(id)
+        if (order !== undefined) {
+          orders.add(order)
+        }
+      })
+      if (orders.size > 0) {
+        customBodyOrdersBySignature.set(signature, orders)
+      }
+    })
+
     const dryInterpreter = new ScratchInterpreter(200, 200, 90)
     const seenInstructionIndexes = new Set<number>()
     let lastOrder = -1
     const customBlockReturnOrders: number[] = []
+    const customBlockEntryOrders: number[] = []
+    const customBlockBodyOrderStack: Array<Set<number>> = []
     await dryInterpreter.executeAnimated(
       this.scratchCode,
       async () => {
@@ -1242,13 +1653,67 @@ export class ScratchSimulator extends HTMLElement {
         const instructionTextFromHtml = this.extractInstructionTextFromHtml(
           state.currentInstructionScratchHtml || '',
         )
+        const instructionTextFromLabel = this.normalizeText(
+          state.currentInstruction || '',
+        )
         const instructionText =
-          instructionTextFromHtml ||
-          this.normalizeText(state.currentInstruction || '')
+          instructionTextFromHtml || instructionTextFromLabel
         const isConditionStep = Boolean(state.currentConditionText)
         const isEventInstruction = this.isEventInstructionText(instructionText)
-        const isCustomCallInstruction =
-          this.isCustomBlockCallInstructionText(instructionText)
+        const isCustomCallInstruction = this.isCustomBlockCallInstructionText(
+          instructionTextFromLabel,
+        )
+        let activeCustomBodyOrders =
+          customBlockBodyOrderStack.length > 0
+            ? customBlockBodyOrderStack[customBlockBodyOrderStack.length - 1]
+            : null
+
+        const runtimeCustomSignature = this.normalizeCustomBlockSignature(
+          state.currentCustomBlockSignature || '',
+        )
+        const isInsideRuntimeCustom = runtimeCustomSignature !== ''
+        if (runtimeCustomSignature) {
+          const runtimeSignatureKey = this.findMatchingCustomSignatureKey(
+            runtimeCustomSignature,
+            customBodyOrdersBySignature,
+          )
+          if (runtimeSignatureKey) {
+            const runtimeScope =
+              customBodyOrdersBySignature.get(runtimeSignatureKey)
+            if (runtimeScope && runtimeScope.size > 0) {
+              activeCustomBodyOrders = runtimeScope
+            }
+          }
+        }
+
+        this.logMappingDebug('build/index-state', {
+          instructionIndex: index,
+          instructionText,
+          instructionTextFromHtml,
+          instructionTextFromLabel,
+          runtimeCustomSignature,
+          isConditionStep,
+          isEventInstruction,
+          isCustomCallInstruction,
+          activeScopeSize: activeCustomBodyOrders?.size ?? 0,
+          stackDepth: customBlockBodyOrderStack.length,
+        })
+
+        if (
+          customBlockEntryOrders.length > 0 &&
+          !isConditionStep &&
+          !isCustomCallInstruction
+        ) {
+          const forcedEntryOrder = customBlockEntryOrders.pop() ?? null
+          if (forcedEntryOrder !== null) {
+            const forcedId = idsByOrder.get(forcedEntryOrder)
+            if (forcedId) {
+              this.executionIndexToBlockId.set(index, forcedId)
+              lastOrder = forcedEntryOrder
+              return
+            }
+          }
+        }
 
         let candidateOrders: number[] = []
 
@@ -1322,9 +1787,40 @@ export class ScratchSimulator extends HTMLElement {
           }
         }
 
+        if (isEventInstruction && candidateOrders.length === 0) {
+          candidateOrders = Array.from(validEventOrders)
+        }
+
+        if (isEventInstruction && candidateOrders.length > 1) {
+          const eventHint = this.normalizeText(
+            `${instructionText} ${instructionTextFromLabel}`,
+          )
+
+          if (/greenflag|drapeau/.test(eventHint)) {
+            const narrowed = candidateOrders.filter((order) => {
+              const text = textByOrder.get(order) || ''
+              return /greenflag|drapeau|quand/.test(text)
+            })
+
+            if (narrowed.length > 0) {
+              candidateOrders = narrowed
+            }
+          }
+        }
+
         if (!isConditionStep && !isEventInstruction) {
           candidateOrders = candidateOrders.filter(
             (order) => !hatOrders.has(order),
+          )
+        } else if (isEventInstruction) {
+          candidateOrders = candidateOrders.filter((order) =>
+            validEventOrders.has(order),
+          )
+        }
+
+        if (activeCustomBodyOrders && !isCustomCallInstruction) {
+          candidateOrders = candidateOrders.filter((order) =>
+            activeCustomBodyOrders.has(order),
           )
         }
 
@@ -1337,6 +1833,8 @@ export class ScratchSimulator extends HTMLElement {
           expectedReturnOrder !== null &&
           !isConditionStep &&
           !isCustomCallInstruction &&
+          !activeCustomBodyOrders &&
+          !isInsideRuntimeCustom &&
           candidateOrders.includes(expectedReturnOrder)
         ) {
           const returnId = idsByOrder.get(expectedReturnOrder)
@@ -1344,6 +1842,7 @@ export class ScratchSimulator extends HTMLElement {
             this.executionIndexToBlockId.set(index, returnId)
             lastOrder = expectedReturnOrder
             customBlockReturnOrders.pop()
+            customBlockBodyOrderStack.pop()
             return
           }
         }
@@ -1352,16 +1851,53 @@ export class ScratchSimulator extends HTMLElement {
           if (isConditionStep) {
             return
           }
+
+          if (activeCustomBodyOrders && !isEventInstruction) {
+            const scopedFallbackOrder = this.getNextAllowedOrderAfter(
+              lastOrder,
+              candidateBlocks.length,
+              (order) =>
+                !hatOrders.has(order) && activeCustomBodyOrders.has(order),
+            )
+
+            if (scopedFallbackOrder !== null) {
+              const scopedFallbackId = idsByOrder.get(scopedFallbackOrder)
+              if (scopedFallbackId) {
+                this.executionIndexToBlockId.set(index, scopedFallbackId)
+                lastOrder = scopedFallbackOrder
+                return
+              }
+            }
+
+            if (
+              expectedReturnOrder !== null &&
+              !isCustomCallInstruction &&
+              !isInsideRuntimeCustom
+            ) {
+              const returnId = idsByOrder.get(expectedReturnOrder)
+              if (returnId) {
+                this.executionIndexToBlockId.set(index, returnId)
+                lastOrder = expectedReturnOrder
+                customBlockReturnOrders.pop()
+                customBlockBodyOrderStack.pop()
+                return
+              }
+            }
+          }
+
           if (
             expectedReturnOrder !== null &&
             !isCustomCallInstruction &&
-            !isEventInstruction
+            !isEventInstruction &&
+            !activeCustomBodyOrders &&
+            !isInsideRuntimeCustom
           ) {
             const returnId = idsByOrder.get(expectedReturnOrder)
             if (returnId) {
               this.executionIndexToBlockId.set(index, returnId)
               lastOrder = expectedReturnOrder
               customBlockReturnOrders.pop()
+              customBlockBodyOrderStack.pop()
               return
             }
           }
@@ -1370,9 +1906,19 @@ export class ScratchSimulator extends HTMLElement {
             ? this.getNextAllowedOrderAfter(
                 lastOrder,
                 candidateBlocks.length,
-                (order) => !hatOrders.has(order),
+                (order) => {
+                  if (hatOrders.has(order)) return false
+                  if (activeCustomBodyOrders) {
+                    return activeCustomBodyOrders.has(order)
+                  }
+                  return true
+                },
               )
-            : this.getNextOrderAfter(lastOrder, candidateBlocks.length)
+            : this.getNextAllowedOrderAfter(
+                lastOrder,
+                candidateBlocks.length,
+                (order) => validEventOrders.has(order),
+              )
           if (fallbackOrder === null) {
             return
           }
@@ -1380,6 +1926,12 @@ export class ScratchSimulator extends HTMLElement {
           if (fallbackId) {
             this.executionIndexToBlockId.set(index, fallbackId)
             lastOrder = fallbackOrder
+            this.logMappingDebug('build/fallback', {
+              instructionIndex: index,
+              chosenOrder: fallbackOrder,
+              chosenText: textByOrder.get(fallbackOrder) || '',
+              chosenId: fallbackId,
+            })
           }
           return
         }
@@ -1401,8 +1953,47 @@ export class ScratchSimulator extends HTMLElement {
 
         this.executionIndexToBlockId.set(index, blockId)
         lastOrder = chosenOrder
+        this.logMappingDebug('build/chosen', {
+          instructionIndex: index,
+          chosenOrder,
+          chosenText: textByOrder.get(chosenOrder) || '',
+          chosenId: blockId,
+          candidateOrders,
+          candidateTexts: candidateOrders.map(
+            (order) => textByOrder.get(order) || '',
+          ),
+        })
 
         if (isCustomCallInstruction) {
+          const callSignatureSource =
+            instructionTextFromLabel || instructionText
+          const callSignature =
+            this.normalizeCustomBlockSignature(callSignatureSource)
+          const signatureKey = this.findMatchingCustomSignatureKey(
+            callSignature,
+            this.customDefinitionEntryIdBySignature,
+          )
+          const entryId = signatureKey
+            ? this.customDefinitionEntryIdBySignature.get(signatureKey)
+            : undefined
+          const entryOrder = entryId ? orderById.get(entryId) : undefined
+          if (entryOrder !== undefined) {
+            customBlockEntryOrders.push(entryOrder)
+          }
+
+          const bodyOrders = signatureKey
+            ? customBodyOrdersBySignature.get(signatureKey)
+            : undefined
+          if (bodyOrders && bodyOrders.size > 0) {
+            customBlockBodyOrderStack.push(bodyOrders)
+            this.logMappingDebug('build/custom-enter', {
+              instructionIndex: index,
+              callSignature,
+              signatureKey,
+              scopeSize: bodyOrders.size,
+            })
+          }
+
           const returnOrder = this.getNextAllowedOrderAfter(
             chosenOrder,
             candidateBlocks.length,
@@ -1410,6 +2001,11 @@ export class ScratchSimulator extends HTMLElement {
           )
           if (returnOrder !== null) {
             customBlockReturnOrders.push(returnOrder)
+            this.logMappingDebug('build/custom-return-marker', {
+              instructionIndex: index,
+              returnOrder,
+              returnText: textByOrder.get(returnOrder) || '',
+            })
           }
         }
       },
@@ -1436,6 +2032,11 @@ export class ScratchSimulator extends HTMLElement {
 
     // Construire le mapping linéaire index d'exécution -> sélecteur SVG
     await this.buildExecutionIndexToSelectorMap()
+
+    if (!this.hasValidStartEventBlock() && this.stepDiv) {
+      this.stepDiv.textContent =
+        'Alerte : aucun bloc de démarrage détecté (type "quand ...").'
+    }
 
     // Exécuter avec animation (callback extrait pour conserver le contexte this en debug)
     const onUpdateCallback = async (): Promise<void> => {
@@ -1534,6 +2135,8 @@ export class ScratchSimulator extends HTMLElement {
     resolvers.forEach((resolve) => resolve())
     this.interpreter = null
     this.executionIndexToBlockId.clear()
+    this.customDefinitionEntryIdBySignature.clear()
+    this.customDefinitionBodyIdsBySignature.clear()
 
     if (this.codeBlocks.length > 0) {
       this.clearBlockHighlights(this.codeBlocks)
@@ -2025,7 +2628,10 @@ export class ScratchSimulator extends HTMLElement {
         result.currentInstructionScratchHtml
       renderScratchDiv(this.stepDiv)
     } else {
-      this.stepDiv.textContent = '' // 'Instruction : -'
+      const mappedInstructionText = this.getMappedInstructionText(
+        result.currentInstructionIndex,
+      )
+      this.stepDiv.textContent = mappedInstructionText ?? '' // 'Instruction : -'
     }
   }
 

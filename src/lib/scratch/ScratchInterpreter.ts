@@ -33,6 +33,7 @@ export interface ExecutionResult {
   currentInstruction?: string
   currentInstructionScratchHtml?: string
   currentInstructionIndex?: number
+  currentCustomBlockSignature?: string | null
   currentConditionText?: string
   currentConditionResult?: boolean | null
   repeatIterations?: Array<{
@@ -66,6 +67,13 @@ export class ScratchInterpreter {
   private answer: string = '' // Variable réservée "réponse" pour stocker les inputs utilisateur
   private variables: Record<string, number> = {}
   private customBlocks: Record<string, string> = {} // Blocs personnalisés
+  private customBlockPatterns: Array<{
+    signature: string
+    body: string
+    argNames: string[]
+    matcher: RegExp
+  }> = []
+
   private traces: ScratchTrace[] = []
 
   private messages: string[] = []
@@ -73,6 +81,9 @@ export class ScratchInterpreter {
   private currentInstruction: string = ''
   private currentInstructionScratchHtml: string = ''
   private currentInstructionIndex: number = -1
+  private currentCustomBlockSignature: string | null = null
+  private customCallStack: string[] = []
+  private customArgStack: Array<Record<string, string>> = []
   private currentConditionText: string = ''
   private currentConditionResult: boolean | null = null
   private repeatIterations: Array<{
@@ -105,6 +116,7 @@ export class ScratchInterpreter {
     this.messages = []
     this.variables = {}
     this.customBlocks = {}
+    this.customBlockPatterns = []
     this.penDown = false
     this.penColor = ScratchInterpreter.DEFAULT_PEN_COLOR
     this.penWidth = ScratchInterpreter.DEFAULT_PEN_WIDTH
@@ -118,6 +130,9 @@ export class ScratchInterpreter {
     this.skipWaitBlocks = options.skipWaitBlocks === true
     this.executionDelayMs = Math.max(0, delayMs)
     this.currentInstructionIndex = -1
+    this.currentCustomBlockSignature = null
+    this.customCallStack = []
+    this.customArgStack = []
     this.repeatIterations = []
     this.currentLookMessage = null
     this.greenFlagClicked = false
@@ -190,6 +205,7 @@ export class ScratchInterpreter {
       currentInstruction: this.currentInstruction,
       currentInstructionScratchHtml: this.currentInstructionScratchHtml,
       currentInstructionIndex: this.currentInstructionIndex,
+      currentCustomBlockSignature: this.currentCustomBlockSignature,
       currentConditionText: this.currentConditionText,
       currentConditionResult: this.currentConditionResult,
       repeatIterations: this.getRepeatIterationsState(),
@@ -211,21 +227,32 @@ export class ScratchInterpreter {
   }
 
   private parseCustomBlockDefinitions(code: string): string {
-    // Extraire les définitions de blocs personnalisés
-    // Format: \initmoreblocks{définir \namemoreblocks{nom}}
-    // suivi des instructions qui composent ce bloc
+    const cleanedChunks: string[] = []
+    let cursor = 0
 
-    const initRegex =
-      /\\initmoreblocks\{définir\s+\\namemoreblocks\{([^}]+)\}\}/g
-    let match
-    let cleanedCode = code
+    while (cursor < code.length) {
+      const initStart = code.indexOf('\\initmoreblocks{', cursor)
+      if (initStart === -1) {
+        cleanedChunks.push(code.slice(cursor))
+        break
+      }
 
-    while ((match = initRegex.exec(code)) !== null) {
-      const blockName = match[1]
-      const defStart = match.index + match[0].length
+      cleanedChunks.push(code.slice(cursor, initStart))
 
-      // Trouver la fin de la définition : prochain "hat block"
-      // (nouvelle définition ou événement principal).
+      const initOpenBraceIndex = initStart + '\\initmoreblocks'.length
+      const initContent = this.extractBalancedBraceContent(
+        code,
+        initOpenBraceIndex,
+      )
+
+      if (!initContent) {
+        cleanedChunks.push(code.slice(initStart))
+        break
+      }
+
+      const signature = this.extractCustomBlockSignature(initContent.content)
+      const defStart = initContent.nextIndex
+
       const nextDefinitionOrEventRegex =
         /\\initmoreblocks\{|\\blockinit\{|\\blockevent\{/g
       nextDefinitionOrEventRegex.lastIndex = defStart
@@ -235,15 +262,171 @@ export class ScratchInterpreter {
         ? nextDefinitionOrEventMatch.index
         : code.length
 
-      // Extraire le code de la définition
       const blockCode = code.substring(defStart, defEnd).trim()
-      this.customBlocks[blockName] = blockCode
 
-      // Retirer cette définition du code à exécuter
-      cleanedCode = cleanedCode.replace(code.substring(match.index, defEnd), '')
+      if (signature !== '') {
+        this.customBlocks[signature] = blockCode
+        this.customBlockPatterns.push(
+          this.createCustomBlockPattern(signature, blockCode),
+        )
+      }
+
+      cursor = defEnd
     }
 
-    return cleanedCode
+    return cleanedChunks.join('')
+  }
+
+  private extractCustomBlockSignature(initContent: string): string {
+    const nameMacro = '\\namemoreblocks'
+    const nameIndex = initContent.indexOf(nameMacro)
+    if (nameIndex === -1) {
+      return ''
+    }
+
+    const openBraceIndex = initContent.indexOf(
+      '{',
+      nameIndex + nameMacro.length,
+    )
+    if (openBraceIndex === -1) {
+      return ''
+    }
+
+    const nameContent = this.extractBalancedBraceContent(
+      initContent,
+      openBraceIndex,
+    )
+    return nameContent?.content.trim() ?? ''
+  }
+
+  private normalizeCustomBlockText(value: string): string {
+    return value.replace(/\\_/g, '_').replace(/\s+/g, ' ').trim()
+  }
+
+  private createCustomBlockPattern(
+    signature: string,
+    body: string,
+  ): {
+    signature: string
+    body: string
+    argNames: string[]
+    matcher: RegExp
+  } {
+    const normalizedSignature = this.normalizeCustomBlockText(signature)
+    const argNames: string[] = []
+    const markerPrefix = '@@CUSTOM_ARG_'
+
+    const withMarkers = normalizedSignature.replace(
+      /\\(?:oval|bool)moreblocks\{([^{}]+)\}/g,
+      (_, argName: string) => {
+        const index = argNames.length
+        argNames.push(argName.trim())
+        return `${markerPrefix}${index}@@`
+      },
+    )
+
+    let regexSource = withMarkers.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+    for (let index = 0; index < argNames.length; index += 1) {
+      const marker = `${markerPrefix}${index}@@`
+      const escapedMarker = marker.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+      regexSource = regexSource.replace(escapedMarker, '(.+?)')
+    }
+
+    return {
+      signature,
+      body,
+      argNames,
+      matcher: new RegExp(`^${regexSource}$`),
+    }
+  }
+
+  private resolveCustomBlockCall(content: string): {
+    body: string
+    signature: string
+    args: Record<string, string>
+  } | null {
+    const exactName = content.trim()
+    if (this.customBlocks[exactName]) {
+      return {
+        body: this.customBlocks[exactName],
+        signature: exactName,
+        args: {},
+      }
+    }
+
+    const normalizedCall = this.normalizeCustomBlockText(exactName)
+
+    for (const definition of this.customBlockPatterns) {
+      const match = definition.matcher.exec(normalizedCall)
+      if (!match) continue
+
+      const args: Record<string, string> = {}
+      definition.argNames.forEach((argName, index) => {
+        const argValue = (match[index + 1] ?? '?').trim()
+        const rawName = argName.trim()
+        const normalizedName = this.normalizeCustomArgName(rawName)
+        args[rawName] = argValue
+        if (
+          normalizedName &&
+          !Object.prototype.hasOwnProperty.call(args, normalizedName)
+        ) {
+          args[normalizedName] = argValue
+        }
+      })
+
+      return {
+        body: definition.body,
+        signature: definition.signature,
+        args,
+      }
+    }
+
+    return null
+  }
+
+  private normalizeCustomArgName(argName: string): string {
+    return argName
+      .trim()
+      .toLowerCase()
+      .replace(/\\_/g, '_')
+      .replace(/\s+/g, '')
+      .replace(/(?:-arg|_arg)$/i, '')
+  }
+
+  private resolveCurrentCustomArgument(argName: string): string | null {
+    const normalizedName = this.normalizeCustomArgName(argName)
+    if (!normalizedName) {
+      return null
+    }
+
+    for (let index = this.customArgStack.length - 1; index >= 0; index -= 1) {
+      const frame = this.customArgStack[index]
+      if (Object.prototype.hasOwnProperty.call(frame, normalizedName)) {
+        return frame[normalizedName]
+      }
+
+      const rawKey = Object.keys(frame).find(
+        (key) => this.normalizeCustomArgName(key) === normalizedName,
+      )
+      if (rawKey) {
+        return frame[rawKey]
+      }
+    }
+
+    return null
+  }
+
+  private substituteCustomArguments(content: string): string {
+    return content.replace(
+      /\\(?:oval|bool)moreblocks\{([^{}]+)\}/g,
+      (_match, argName: string) => {
+        const resolved = this.resolveCurrentCustomArgument(argName)
+        if (resolved === null) {
+          return _match
+        }
+        return resolved
+      },
+    )
   }
 
   private async parseAndExecuteAnimated(
@@ -858,12 +1041,21 @@ export class ScratchInterpreter {
     }
 
     if (type === 'moreblocks') {
-      const blockName = content.trim()
-      if (this.customBlocks[blockName]) {
-        await this.parseAndExecuteAnimated(
-          this.customBlocks[blockName],
-          delayMs,
+      const resolvedCall = this.resolveCustomBlockCall(content)
+      if (resolvedCall) {
+        const normalizedSignature = this.normalizeCustomBlockText(
+          resolvedCall.signature,
         )
+        this.customCallStack.push(normalizedSignature)
+        this.customArgStack.push(resolvedCall.args)
+        this.currentCustomBlockSignature = normalizedSignature
+        await this.parseAndExecuteAnimated(resolvedCall.body, delayMs)
+        this.customArgStack.pop()
+        this.customCallStack.pop()
+        this.currentCustomBlockSignature =
+          this.customCallStack.length > 0
+            ? this.customCallStack[this.customCallStack.length - 1]
+            : null
       }
     }
   }
@@ -920,6 +1112,17 @@ export class ScratchInterpreter {
           this.turn(angle)
         } else if (content.includes('turnleft')) {
           this.turn(-angle)
+        } else {
+          const normalized = content
+            .toLowerCase()
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+
+          if (normalized.includes('gauche')) {
+            this.turn(-angle)
+          } else {
+            this.turn(angle)
+          }
         }
         return true
       }
@@ -1619,6 +1822,22 @@ export class ScratchInterpreter {
   private extractNumericPayload(content: string): string {
     const trimmed = content.trim()
 
+    const movePatterns = [
+      /\bavancer\b[\s\S]*?\bde\b\s*([\s\S]*?)\s*\bpas\b/i,
+      /\btourner\b[\s\S]*?\bde\b\s*([\s\S]*?)\s*\bd[ée]gr(?:e|é)s?\b/i,
+      /\borienter\b[\s\S]*?(?:\b[àa]\b)?\s*([\s\S]*?)\s*\bd[ée]gr(?:e|é)s?\b/i,
+    ]
+
+    for (const pattern of movePatterns) {
+      const match = content.match(pattern)
+      if (match && match[1]) {
+        const payload = match[1].trim()
+        if (payload) {
+          return payload
+        }
+      }
+    }
+
     const ajouterMatch = content.match(/\bajouter\b/i)
     if (ajouterMatch && ajouterMatch.index !== undefined) {
       const afterAjouter = content
@@ -1649,11 +1868,18 @@ export class ScratchInterpreter {
   }
 
   private extractNumericValue(content: string): number {
-    const payload = this.extractNumericPayload(content)
+    const payload = this.substituteCustomArguments(
+      this.extractNumericPayload(content),
+    )
 
     const operatorValue = this.evaluateOvalOperator(payload)
     if (operatorValue !== null) {
       return operatorValue
+    }
+
+    const arithmeticValue = this.evaluateArithmeticExpression(payload)
+    if (arithmeticValue !== null) {
+      return arithmeticValue
     }
 
     const directNumber = this.extractNumber(payload)
@@ -2037,7 +2263,7 @@ export class ScratchInterpreter {
   }
 
   private materializeExpressionForString(expression: string): string {
-    let result = expression
+    let result = this.substituteCustomArguments(expression)
 
     // Remplacer \ovalnum par sa valeur
     result = result.replace(/\\ovalnum\{([^}]+)\}/g, (_, content) => {
@@ -2074,7 +2300,10 @@ export class ScratchInterpreter {
   }
 
   private evaluateBoolOperator(content: string): boolean | null {
-    const expression = this.extractCommandContent(content, '\\booloperator')
+    const expression = this.extractCommandContent(
+      this.substituteCustomArguments(content),
+      '\\booloperator',
+    )
     if (!expression) return null
     return this.evaluateBooleanExpression(expression)
   }
@@ -2383,7 +2612,7 @@ export class ScratchInterpreter {
   }
 
   private materializeExpression(expression: string): string {
-    let result = expression
+    let result = this.substituteCustomArguments(expression)
 
     const replaceNestedOperators = (): void => {
       while (result.includes('\\ovaloperator{')) {
