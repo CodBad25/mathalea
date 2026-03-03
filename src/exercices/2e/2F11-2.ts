@@ -132,10 +132,10 @@ export default class ComparerAvecFonctionRef extends Exercice {
               `
               if (x1B < x2B) {
                 texteCorr += `Or $${texNombre(x1, 1)}${sp(1)}${miseEnEvidence('\\boldsymbol{<}')}${sp(1)}${texNombre(x2, 1)}$, donc $${nom}(${texNombre(x1, 2)})${sp(1)}${miseEnEvidence('\\boldsymbol{>}')}${sp(1)}${nom}(${texNombre(x2, 1)})$.`
-                reponse = ['decroissante', 'R', '<']
+                reponse = ['decroissante', 'R', '>']
               } else {
                 texteCorr += `Or $${texNombre(x2, 1)}${sp(1)}${miseEnEvidence('\\boldsymbol{<}')}${sp(1)} ${texNombre(x1, 1)}$, donc $${nom}(${texNombre(x2, 2)})${sp(1)} ${miseEnEvidence('\\boldsymbol{>}')}${sp(1)} ${nom}(${texNombre(x1, 1)})$.`
-                reponse = ['decroissante', 'R', '>']
+                reponse = ['decroissante', 'R', '<']
               }
             }
             variables.push(x1, x2)
