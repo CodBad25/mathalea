@@ -153,7 +153,7 @@
       mathaleaHandleExerciceSimple(exercise, false)
     } else {
       seedrandom(exercise.seed, { global: true })
-      exercise.nouvelleVersionWrapper?.()
+      exercise.nouvelleVersionWrapper?.(idVue)
     }
     exercise.seed = originalSeed
     exercise.interactif = interactif
