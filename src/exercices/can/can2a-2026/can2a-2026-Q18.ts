@@ -29,7 +29,7 @@ export default class Can2a2026Q18 extends ExerciceCan {
       const coeff = taux.add(1)
     this.formatChampTexte = KeyboardType.clavierDeBase
     this.reponse = new Decimal(taux).mul(100)
-    this.question = `Multiplier un nombre par $${texNombre(coeff, 3)}$ revient à <br>effectuer une hausse de `
+    this.question = `Multiplier un nombre positif par $${texNombre(coeff, 3)}$ revient à <br>effectuer une hausse de `
     this.correction = `Comme $${texNombre(coeff, 3)}=1+${texNombre(taux, 3)}=1+\\dfrac{${Taux}}{100}$, multiplier par $${texNombre(coeff, 3)}$ revient à effectuer une hausse de $${miseEnEvidence(texNombre(Taux, 2))}\\,\\%$. `
    this.optionsChampTexte = { texteApres: '$\\%$.' }
         if (!this.interactif) {

@@ -1,9 +1,8 @@
-
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { randint } from '../../../modules/outils'
-import ExerciceCan from '../../ExerciceCan'
 import Trinome from '../../../modules/Trinome'
+import ExerciceCan from '../../ExerciceCan'
 export const titre = 'Multiplier un entier avec un décimal'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -18,15 +17,15 @@ export const refs = {
 
 */
 export default class Can2a2026Q7 extends ExerciceCan {
- enonce(b?: number, val?: number): void {
+  enonce(b?: number, val?: number): void {
     if (b == null || val == null) {
       b = randint(-6, -1)
       val = randint(-5, -1)
     }
     const p = new Trinome(1, b, 0)
-    
-    const resultat = val ** 2 + b * val
 
+    const resultat = val ** 2 + b * val
+    this.optionsDeComparaison = { nombreDecimalSeulement: true }
     this.formatChampTexte = KeyboardType.clavierDeBase
     this.reponse = resultat.toString()
     this.question = `$f(x)=${p.tex}$<br>$f(${val})=\\ldots$`
@@ -34,7 +33,7 @@ export default class Can2a2026Q7 extends ExerciceCan {
     On a donc $f(${val})=${miseEnEvidence(resultat)}$.`
     this.canEnonce = `$f(x)=${p.tex}$`
     this.canReponseACompleter = `$f(${val})=\\ldots$`
-    
+
     if (this.interactif) {
       this.question = `$f(x)=${p.tex}$<br>$f(${val})=$`
     }
