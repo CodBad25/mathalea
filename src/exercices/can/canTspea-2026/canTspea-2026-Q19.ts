@@ -1,8 +1,11 @@
+import type { MathfieldElement } from 'mathlive'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { generateCleaner } from '../../../lib/interactif/comparisonFunctions'
 import { toutPourUnPoint } from '../../../lib/interactif/mathLive'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { ecritureAlgebriqueSauf1, rienSi1 } from '../../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import type { IExercice } from '../../../lib/types'
 import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
 export const titre =
@@ -22,6 +25,7 @@ export const refs = {
   enonce(a?: number, b?: number, c?: number, d?: number): void {
     if (a == null || b == null || c == null || d == null) {
       // On génère une équation avec 2 ou 3 termes non nuls
+
       const cas = choice([1, 2, 3])
       switch (cas) {
         case 1: // ax + cz = d (pas de y)
@@ -45,10 +49,75 @@ export const refs = {
           break
       }
     }
+    const callback = (exercice: IExercice, question: number) => {
+      const mfe = document.querySelector(
+        `#champTexteEx${exercice.numeroExercice}Q${question}`,
+      ) as MathfieldElement
+      const cleaner = generateCleaner(['virgules'])
+      if (mfe == null)
+        return {
+          isOk: false,
+          feedback: '',
+          score: { nbBonnesReponses: 0, nbReponses: 0 },
+        }
+      const aSaisi = Number(cleaner(mfe.getPromptValue('champ1')) || 0)
+      const bSaisi = Number(cleaner(mfe.getPromptValue('champ2')) || 0)
+      const cSaisi = Number(cleaner(mfe.getPromptValue('champ3')) || 0)
+      let isOk = false
+      if (
+        isNaN(aSaisi) ||
+        isNaN(bSaisi) ||
+        isNaN(cSaisi) ||
+        (aSaisi === 0 && bSaisi === 0 && cSaisi === 0)
+      ) {
+        isOk = false
+        if (isNaN(aSaisi)) {
+          mfe.setPromptState('champ1', 'incorrect', true)
+        }
+        if (isNaN(bSaisi)) {
+          mfe.setPromptState('champ2', 'incorrect', true)
+        }
+        if (isNaN(cSaisi)) {
+          mfe.setPromptState('champ3', 'incorrect', true)
+        }
+      } else {
+        const a = Number(
+          this.autoCorrection[question].reponse?.valeur?.champ1?.value,
+        )
+        const b = Number(
+          this.autoCorrection[question].reponse?.valeur?.champ2?.value,
+        )
+        const c = Number(
+          this.autoCorrection[question].reponse?.valeur?.champ3?.value,
+        )
+        isOk =
+          a * bSaisi - b * aSaisi === 0 &&
+          a * cSaisi - c * aSaisi === 0 &&
+          b * cSaisi - c * bSaisi === 0
+      }
+
+      if (isOk) {
+        mfe.setPromptState('champ1', 'correct', true)
+        mfe.setPromptState('champ2', 'correct', true)
+        mfe.setPromptState('champ3', 'correct', true)
+      }
+      const spanReponseLigne = document.querySelector(
+        `#resultatCheckEx${exercice.numeroExercice}Q${question}`,
+      )
+      if (spanReponseLigne != null) {
+        spanReponseLigne.innerHTML = isOk ? '😎' : '☹️'
+      }
+      return {
+        isOk,
+        feedback: '',
+        score: { nbBonnesReponses: isOk ? 1 : 0, nbReponses: 1 },
+      }
+    }
 
     this.formatInteractif = 'fillInTheBlank'
     this.reponse = {
       bareme: toutPourUnPoint,
+      callback,
       champ1: { value: String(a) },
       champ2: { value: String(b) },
       champ3: { value: String(c) },
@@ -74,7 +143,8 @@ export const refs = {
     this.question = `\\vec{n}(%{champ1}\\,;\\,%{champ2}\\,;\\,%{champ3})`
 
     this.correction = `Pour un plan d'équation $ax+by+cz=d$, un vecteur normal est $\\vec{n}(a\\,;\\,b\\,;\\,c)$.<br>
-    Ici, $${equation}$, donc $\\vec{n}(${miseEnEvidence(String(a))}\\,;\\,${miseEnEvidence(String(b))}\\,;\\,${miseEnEvidence(String(c))})$.`
+    Ici, $${equation}$, donc $\\vec{n}(${miseEnEvidence(String(a))}\\,;\\,${miseEnEvidence(String(b))}\\,;\\,${miseEnEvidence(String(c))})$.<br>
+    Remarque : tout vecteur de la forme $\\vec{n}(ka\\,;\\,kb\\,;\\,kc)$ avec $k\\neq 0$ est aussi un vecteur normal au plan.`
     this.formatChampTexte = KeyboardType.clavierDeBase
     this.canEnonce = `Coordonnées d'un vecteur normal $\\vec{n}$ au plan d'équation $${equation}$.`
     this.canReponseACompleter =
