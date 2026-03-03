@@ -56,7 +56,7 @@ export default class Can20264emeQ26 extends ExerciceCan {
     
     this.formatChampTexte = KeyboardType.clavierDeBase
     this.optionsChampTexte = {
-      texteApres: ' pas',
+      texteApres: ' pas.',
     }
     
     if (!this.interactif) {

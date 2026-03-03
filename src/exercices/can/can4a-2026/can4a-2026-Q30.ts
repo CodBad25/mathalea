@@ -90,9 +90,9 @@ export default class Can20264emeQ30 extends ExerciceCan {
     )
 this.question += 'Le volume de ce prisme droit est '
     this.correction = `L'aire de la base triangulaire est :<br>
-$\\mathcal{B}=\\dfrac{${base}\\times ${hauteurTriangle}}{2}=${aireBase}\\text{ cm}^2$<br>
+$\\mathcal{B}=\\dfrac{${base}\\times ${hauteurTriangle}}{2}=${aireBase}\\text{ cm}^2$.<br>
 Le volume du prisme est :<br>
-$\\mathcal{V}=\\mathcal{B}\\times h=${aireBase}\\times ${profondeur}=${miseEnEvidence(volume)}\\text{ cm}^3$`
+$\\mathcal{V}=\\mathcal{B}\\times h=${aireBase}\\times ${profondeur}=${miseEnEvidence(volume)}\\text{ cm}^3$.`
 
     this.canEnonce = this.question
     this.canReponseACompleter = '$\\ldots\\text{ cm}^3$'

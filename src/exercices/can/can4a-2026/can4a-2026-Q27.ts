@@ -56,8 +56,9 @@ export default class Can20264emeQ27 extends ExerciceCan {
     const somme = a + b + c + d
     const moyenne = somme / 4
     
-    this.question = `La moyenne de cette série est :<br>
-    $${a}~;~${b}~;~${c}~;~${d}$`
+    this.question = `$${a}~;~${b}~;~${c}~;~${d}$<br>
+    La moyenne de cette série est : 
+    `
     
     this.correction = `La moyenne est : $\\dfrac{${a}+${b}+${c}+${d}}{4}=\\dfrac{${somme}}{4}=${miseEnEvidence(texNombre(moyenne))}$.`
     
@@ -66,9 +67,7 @@ export default class Can20264emeQ27 extends ExerciceCan {
     this.reponse = moyenne
     this.formatChampTexte = KeyboardType.clavierDeBase
     
-    if (this.interactif) {
-      this.question += '<br>'
-    }
+    this.optionsChampTexte = { texteAvant: '', texteApres: '.' }
   }
 
   nouvelleVersion() {

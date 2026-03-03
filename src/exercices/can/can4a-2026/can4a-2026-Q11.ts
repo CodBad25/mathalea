@@ -31,7 +31,7 @@ export default class Can20264emeQ11 extends ExerciceCan {
     this.question = `$${n}-${fraction.texFraction}$`
     this.correction = `$\\begin{aligned}${n}-${fraction.texFraction}&=\\dfrac{${n * b}}{${b}}-${fraction.texFraction}\\\\
     &=\\dfrac{${n * b}-${a}}{${b}}\\\\
-    &=${miseEnEvidence(`\\dfrac{${n * b - a}}{${b}}`)}${!reponse.estIrreductible ? `\\\\&=${miseEnEvidence(reponse.texFractionSimplifiee)}` : ''}\\end{aligned}$`
+    &=${miseEnEvidence(`\\dfrac{${n * b - a}}{${b}}`)}${!reponse.estIrreductible ? `\\\\&=${miseEnEvidence(reponse.texFSD)}` : ''}\\end{aligned}$`
     this.canEnonce = this.question
     this.canReponseACompleter = ''
     this.reponse = reponse.texFraction

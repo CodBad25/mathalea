@@ -1,6 +1,7 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { texNombre } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
 
@@ -48,12 +49,12 @@ export default class Can20264emeQ12 extends ExerciceCan {
       ? `$\\begin{aligned}
     ${a}\\times ${c}+${b}\\times ${c}&=(${a}+${b})\\times ${c}\\\\
     &=${facteur}\\times ${c}\\\\
-    &=${miseEnEvidence(reponse)}
+    &=${miseEnEvidence(texNombre(reponse,1))}
     \\end{aligned}$`
       : `$\\begin{aligned}
     ${a}\\times ${c}-${b}\\times ${c}&=(${a}-${b})\\times ${c}\\\\
     &=${facteur}\\times ${c}\\\\
-    &=${miseEnEvidence(reponse)}
+    &=${miseEnEvidence(texNombre(reponse,1))}
     \\end{aligned}$`
      if (this.interactif) {
       this.question += ' $=$'

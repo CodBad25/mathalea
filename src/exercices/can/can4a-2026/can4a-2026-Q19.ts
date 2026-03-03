@@ -17,22 +17,24 @@ export const refs = {
 
 */
 export default class Can20264emeQ19 extends ExerciceCan {
- enonce(dividende?: number, diviseur?: number) {
+  enonce(dividende?: number, diviseur?: number) {
     if (dividende == null || diviseur == null) {
-      diviseur = randint(3, 5)
+      diviseur = 5
       const quotient = randint(15, 29)
-      const reste = randint(1, diviseur - 1)
+      const reste = randint(1, 4)
       dividende = quotient * diviseur + reste
     }
     
     const quotient = Math.floor(dividende / diviseur)
     const reste = dividende % diviseur
+    const plusGrandMultiple = quotient * diviseur
+    const terminaison = plusGrandMultiple % 10 === 0 ? '0' : '5'
     
     this.question = `Le reste de la division euclidienne de $${dividende}$ par $${diviseur}$ est `
     
-    this.correction = `Division euclidienne de $${dividende}$ par $${diviseur}$ :<br>
-    $${dividende} = ${diviseur} \\times ${quotient} + ${reste}$<br>
-    Le reste de la division euclidienne est $${miseEnEvidence(reste)}$.`
+    this.correction = `Les multiples de $${diviseur}$ se terminent par $0$ ou $5$.<br>
+    Le plus grand multiple de $${diviseur}$ inférieur ou égal à $${dividende}$ est $${plusGrandMultiple}$ (il se termine par $${terminaison}$).<br>
+    Le reste de la division euclidienne est donc $${miseEnEvidence(reste)}$.`
     
     this.canEnonce = this.question
     this.canReponseACompleter = '$\\ldots$'
