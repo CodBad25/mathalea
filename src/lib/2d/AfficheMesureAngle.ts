@@ -2,7 +2,7 @@ import { context } from '../../modules/context'
 import { arc } from './Arc'
 import { ObjetMathalea2D } from './ObjetMathalea2D'
 import type { PointAbstrait } from './PointAbstrait'
-import { latexParCoordonnees } from './textes'
+import { latex2d } from './textes'
 import { rotation } from './transformations'
 import { angleOriente } from './utilitairesGeometriques'
 import { pointSurSegment } from './utilitairesPoint'
@@ -93,16 +93,10 @@ export class AfficheMesureAngle extends ObjetMathalea2D {
       mesureAngleString =
         Math.round(Math.abs(mesureAngle)).toString() + '^\\circ'
     }
-    const mesure = latexParCoordonnees(
-      mesureAngleString,
-      N.x,
-      N.y,
+    const mesure = latex2d(mesureAngleString, N.x, N.y, {
       color,
-      0,
-      0,
-      '',
-      8,
-    )
+      letterSize: 'scriptsize',
+    })
     const marque = arc(
       M,
       B,
