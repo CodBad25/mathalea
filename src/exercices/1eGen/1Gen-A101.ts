@@ -15,7 +15,7 @@ export const interactifType = 'mathLive'
 export const uuid = '21517'
 
 export const refs = {
-  'fr-fr': ['1Gen-A101'],
+  'fr-fr': ['1Gen-A100'],
   'fr-ch': [],
 }
 export default class ModeliserSuites2 extends ModeliserSuites {
