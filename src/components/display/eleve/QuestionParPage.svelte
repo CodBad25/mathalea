@@ -116,7 +116,10 @@
       resultsByQuestion[i] = false
       return
     }
-    if (type.toLowerCase() === 'mathlive') {
+    if (
+      type.toLowerCase() === 'mathlive' ||
+      type === 'fillInTheBlank'
+    ) {
       const resu = verifQuestionMathLive(
         exercices[indiceExercice[i]],
         indiceQuestionInExercice[i],
