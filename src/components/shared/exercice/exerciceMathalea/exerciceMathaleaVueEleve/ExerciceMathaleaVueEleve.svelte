@@ -607,7 +607,7 @@
   }
 </script>
 
-<div class="z-0 flex-1 w-full mb-10 lg:mb-20" bind:this={divExercice}>
+<div class="z-0 flex-1 w-full mb-4 lg:mb-6" bind:this={divExercice}>
   {#if $globalOptions.presMode !== 'recto' && $globalOptions.presMode !== 'verso'}
     <HeaderExerciceVueEleve
       {...headerExerciceProps}
