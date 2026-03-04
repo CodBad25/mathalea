@@ -1,7 +1,17 @@
+import { afficheCoteSegment } from '../../../lib/2d/AfficheCoteSegment'
+import { cercle } from '../../../lib/2d/cercle'
+import { codageSegments } from '../../../lib/2d/CodageSegment'
+import { fixeBordures } from '../../../lib/2d/fixeBordures'
+import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
+import { polygone } from '../../../lib/2d/polygones'
+import { segment } from '../../../lib/2d/segmentsVecteurs'
+import { pointIntersectionCC } from '../../../lib/2d/utilitairesPoint'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { choice } from '../../../lib/outils/arrayOutils'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { texNombre } from '../../../lib/outils/texNombre'
+import {
+  miseEnEvidence,
+  texteEnCouleurEtGras,
+} from '../../../lib/outils/embellissements'
+import { mathalea2d } from '../../../modules/mathalea2d'
 import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
 
@@ -19,41 +29,80 @@ export const refs = {
 
 */
 export default class Can20266Q20 extends ExerciceCan {
-  enonce(a?: number, b?: number) {
-    let millier: number, centaines: number
+  constructor() {
+    super()
+    this.optionsChampTexte = {
+      texteAvant: '$? =$ ',
+      texteApres: '$\\text{ cm}$',
+    }
+  }
 
-    if (a == null || b == null) {
-      const m = randint(1, 9)
-      const c = randint(1, 6)
-      const d = randint(1, 9)
-      const u = randint(1, 9)
-      const centainesAjoutees = choice(
-        [3, 4, 6, 7, 8, 9].filter((x) => x + c < 10),
-      )
-      millier = m * 1000 + c * 100 + d * 10 + u
-      centaines = centainesAjoutees * 100
-    } else {
-      millier = a
-      centaines = b
+  enonce(base?: number, cote?: number) {
+    if (base == null || cote == null) {
+      base = randint(6, 12)
+      cote = randint(Math.floor(base / 2) + 1, base - 1)
     }
 
-    const somme = millier + centaines
+    const perimetre = base + 2 * cote
+    const A = pointAbstrait(0, 0)
+    const B = pointAbstrait(4, 1.5)
+    const C1 = cercle(A, 3)
+    const C2 = cercle(B, 3)
+    const C = pointIntersectionCC(C1, C2, '', 1)
+    const AB = segment(B, A)
+    const triangle = polygone(A, B, C)
+    triangle.epaisseur = 2
+    const marques = codageSegments('||', 'black', A, C, C, B)
+    const legendeBase = afficheCoteSegment(
+      AB,
+      `${base} \\text{ cm}`,
+      0.25,
+      'black',
+      1,
+      0.25,
+      'black',
+    )
+    const legendeCote = afficheCoteSegment(
+      segment(C, B),
+      this.interactif ? `\\text{? cm}` : `\\ldots \\text{ cm}`,
+      0.25,
+      'black',
+      1,
+      0.25,
+      'black',
+    )
+    const objets = [triangle, legendeBase, legendeCote, marques]
+    const figure = mathalea2d(
+      Object.assign(
+        { pixelsParCm: 30, scale: 0.9 },
+        fixeBordures(objets, { rxmin: 0, rxmax: 0, rymin: 0, rymax: 0 }),
+      ),
+      objets,
+    )
 
-    this.reponse = String(somme)
+    this.reponse = String(cote)
     if (this.interactif) {
-      this.question = `$${texNombre(millier)}+${centaines}=$`
+      this.question =
+        `Le périmètre de ce triangle est $${perimetre}\\text{ cm}$.<br>
+      Quelle est la longueur manquante ?` + figure
     } else {
-      this.question = `$${texNombre(millier)}+${centaines}=\\ldots$`
+      this.question =
+        `Le périmètre de ce triangle est $${perimetre}\\text{ cm}$.<br>
+      ${texteEnCouleurEtGras('Complète', 'black')}.` + figure
+      this.canReponseACompleter = figure
     }
 
-    this.correction = `$${texNombre(millier)}+${centaines}=${miseEnEvidence(texNombre(somme))}$`
+    this.correction = `Le périmètre d'un triangle est égal à la somme de la longueur de ses côtés.<br>
+      Ici, le périmètre est égal à $${base} + 2\\times \\text{?} = ${perimetre}\\text{ cm}$.<br>
+      Donc, $2\\times \\text{?} = ${perimetre} - ${base} = ${perimetre - base}\\text{ cm}$.<br>
+      Donc, la longueur manquante est $${miseEnEvidence(cote)}\\text{ cm}$.`
 
     this.formatChampTexte = KeyboardType.clavierDeBase
-    this.canEnonce = 'Calcule.'
-    this.canReponseACompleter = `$${texNombre(millier)}+${centaines}=\\ldots$`
+    this.canEnonce = `Le périmètre de ce triangle est $${perimetre}\\text{ cm}$.<br>
+      ${texteEnCouleurEtGras('Complète', 'black')}.`
   }
 
   nouvelleVersion() {
-    this.canOfficielle ? this.enonce(1462, 300) : this.enonce()
+    this.canOfficielle || this.sup ? this.enonce(7, 5) : this.enonce()
   }
 }
