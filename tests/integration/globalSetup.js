@@ -8,8 +8,17 @@ export async function teardown() {
   const failedPath = resolve(
     'tests/integration/logs/interactivity_all_failed_results.json',
   )
+  const summaryPath = resolve(
+    'tests/integration/logs/interactivity_all_questions_counts.json',
+  )
 
-  const full = JSON.parse(readFileSync(fullPath, 'utf-8'))
+  let full = JSON.parse(readFileSync(fullPath, 'utf-8'))
+
+  try {
+    const summary = JSON.parse(readFileSync(summaryPath, 'utf-8'))
+    full = { ...summary, ...full }
+    writeFileSync(fullPath, JSON.stringify(full, null, 2))
+  } catch {}
 
   const failedSuites = full.testResults
     .map((suite) => ({
@@ -19,7 +28,9 @@ export async function teardown() {
         .map((t) => ({
           ...t,
           failureMessages: t.failureMessages.map((msg) =>
-            msg.replace(/: expected .* \/\/ Object\.is equality[\s\S]*/m, '').replace(/^AssertionError: /, ''),
+            msg
+              .replace(/: expected .* \/\/ Object\.is equality[\s\S]*/m, '')
+              .replace(/^AssertionError: /, ''),
           ),
         })),
     }))

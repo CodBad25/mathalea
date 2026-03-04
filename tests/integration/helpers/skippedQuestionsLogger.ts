@@ -1,6 +1,21 @@
 import { mkdirSync, writeFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 
+export function writeQuestionsSummary(counts: {
+  comparisonTestedQuestionsCount: number
+  comparisonSkippedQuestionsCount: number
+  domTestedQuestionsCount: number
+  domSkippedQuestionsCount: number
+  eitherTestedQuestionsCount: number
+}) {
+  const logsDir = resolve('tests/integration/logs')
+  mkdirSync(logsDir, { recursive: true })
+  writeFileSync(
+    resolve('tests/integration/logs/interactivity_all_questions_counts.json'),
+    JSON.stringify(counts, null, 2),
+  )
+}
+
 export type SkippedQuestion = {
   filePath: string
   titre: string
