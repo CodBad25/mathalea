@@ -17,6 +17,7 @@ import {
 } from './helpers/parameterScenarios'
 import {
   type SkippedQuestion,
+  writeQuestionsSummary,
   writeSkippedQuestionsLogs,
 } from './helpers/skippedQuestionsLogger'
 import { verifyComparisonOnly } from './helpers/verifier-comparison'
@@ -126,6 +127,15 @@ const filter = process.env.NIV?.replaceAll(' ', '') ?? undefined
 const paramLevel = resolveParamTestLevel(process.env.TEST_PARAM)
 const skippedQuestions: SkippedQuestion[] = []
 const skippedQuestionKeys = new Set<string>()
+let comparisonTestedQuestionsCount = 0
+let comparisonSkippedQuestionsCount = 0
+let domTestedQuestionsCount = 0
+let domSkippedQuestionsCount = 0
+const eitherTestedQuestionKeys = new Set<string>()
+
+function questionKey(filePath: string, seed: string, scenarioLabel: string | undefined, questionIndex: number) {
+  return `${filePath}|${seed}|${scenarioLabel ?? ''}|${questionIndex}`
+}
 
 function recordSkippedQuestion(entry: SkippedQuestion) {
   const key = [
@@ -150,6 +160,13 @@ if (exercises.length === 0) {
 
 afterAll(() => {
   writeSkippedQuestionsLogs(skippedQuestions)
+  writeQuestionsSummary({
+    comparisonTestedQuestionsCount,
+    comparisonSkippedQuestionsCount,
+    domTestedQuestionsCount,
+    domSkippedQuestionsCount,
+    eitherTestedQuestionsCount: eitherTestedQuestionKeys.size,
+  })
 })
 
 // Group by directory (6e, 5e, etc.) for organized output
@@ -202,6 +219,7 @@ for (const [dir, entries] of grouped) {
             const compResults = verifyComparisonOnly(exercice)
             for (const result of compResults) {
               if (result.skipped) {
+                comparisonSkippedQuestionsCount++
                 recordSkippedQuestion({
                   filePath: entry.filePath,
                   titre,
@@ -214,6 +232,8 @@ for (const [dir, entries] of grouped) {
                 })
                 continue
               }
+              comparisonTestedQuestionsCount++
+              eitherTestedQuestionKeys.add(questionKey(entry.filePath, seed, scenario.label, result.questionIndex))
               if (!result.isOk) {
                 failures.push(
                   `${url} : la fonction de comparaison ${result.verificationFunctionName} (${result.format} - ${JSON.stringify(result.optionsComparaison)}) n'accepte pas les réponses attendues par la question ${result.questionIndex + 1}. Saisie simulée : ${result.simulatedInput}. Réponse attendue : ${result.goodAnswer}. Feedback : ${result.feedback}`,
@@ -225,6 +245,7 @@ for (const [dir, entries] of grouped) {
             const domResults = verifyDom(exercice)
             for (const result of domResults) {
               if (result.skipped) {
+                domSkippedQuestionsCount++
                 recordSkippedQuestion({
                   filePath: entry.filePath,
                   titre,
@@ -237,6 +258,8 @@ for (const [dir, entries] of grouped) {
                 })
                 continue
               }
+              domTestedQuestionsCount++
+              eitherTestedQuestionKeys.add(questionKey(entry.filePath, seed, scenario.label, result.questionIndex))
               if (!result.isOk) {
                 failures.push(
                   `${url} : la fonction ${result.verificationFunctionName} (${result.format}) n'accepte pas les réponses attendues par la question ${result.questionIndex + 1}. Saisie simulée : ${result.simulatedInput}. Réponse attendue : ${result.goodAnswer}. Feedback : ${result.feedback}`,
