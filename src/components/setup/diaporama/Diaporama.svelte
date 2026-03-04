@@ -34,6 +34,7 @@
     Slideshow,
     SlideshowHistoryItem,
     SlideshowHistoryOptions,
+    Vue,
   } from './types'
 
   const transitionSounds = {
@@ -99,38 +100,50 @@
         }
         for (let idVue = 0; idVue < nbOfVues; idVue++) {
           if (isIntegerInRange0to3(idVue)) {
-            reroll(exercise, idVue)
+            /**
+             * Nombre de tentatives pour générer une question différente pour une même vue.
+             */
+            let attempt = 0
+            let vue!: Vue
+            do {
+              reroll(exercise, idVue, attempt++)
+              const consigne = mathaleaFormatExercice(
+                exercise.consigne + exercise.introduction
+                  ? '\n' + exercise.consigne + exercise.introduction
+                  : '',
+              )
+              const question = mathaleaFormatExercice(
+                exercise.listeQuestions[i],
+              )
+              const correction = mathaleaFormatExercice(
+                exercise.listeCorrections[i],
+              )
+              const { svgs: questionSvgs, text: questionText } =
+                splitSvgFromText(question)
+              const { svgs: consigneSvgs, text: consigneText } =
+                splitSvgFromText(consigne)
+              const { svgs: correctionSvgs, text: correctionText } =
+                splitSvgFromText(correction)
+              vue = {
+                consigne,
+                question,
+                correction,
+                consigneSvgs,
+                consigneText,
+                questionSvgs,
+                questionText,
+                correctionSvgs,
+                correctionText,
+                key: exercise.key,
+              }
+            } while (
+              attempt < 10 &&
+              slide.vues.some((v) => v.questionText === vue.questionText)
+            )
+            slide.vues.push(vue)
           } else {
             notify(`idVue ${idVue} is not an integer in range 0 to 3`, {})
           }
-          const consigne = mathaleaFormatExercice(
-            exercise.consigne + exercise.introduction
-              ? '\n' + exercise.consigne + exercise.introduction
-              : '',
-          )
-          const question = mathaleaFormatExercice(exercise.listeQuestions[i])
-          const correction = mathaleaFormatExercice(
-            exercise.listeCorrections[i],
-          )
-          const { svgs: questionSvgs, text: questionText } =
-            splitSvgFromText(question)
-          const { svgs: consigneSvgs, text: consigneText } =
-            splitSvgFromText(consigne)
-          const { svgs: correctionSvgs, text: correctionText } =
-            splitSvgFromText(correction)
-          const key = exercise.key
-          slide.vues.push({
-            consigne,
-            question,
-            correction,
-            consigneSvgs,
-            consigneText,
-            questionSvgs,
-            questionText,
-            correctionSvgs,
-            correctionText,
-            key,
-          })
         }
         slides.push(slide)
       }
@@ -142,13 +155,14 @@
     }
   }
 
-  function reroll(exercise: IExercice, idVue?: 0 | 1 | 2 | 3) {
+  function reroll(exercise: IExercice, idVue?: 0 | 1 | 2 | 3, attempt = 0) {
     const interactif = exercise.interactif
     exercise.interactif = false
     if (exercise.seed === undefined) exercise.seed = mathaleaGenerateSeed()
     const originalSeed = exercise.seed
     if (idVue !== undefined && idVue > 0)
       exercise.seed = exercise.seed + String(idVue)
+    if (attempt > 0) exercise.seed = exercise.seed + '_a' + String(attempt)
     if (exercise.typeExercice === 'simple') {
       mathaleaHandleExerciceSimple(exercise, false)
     } else {
