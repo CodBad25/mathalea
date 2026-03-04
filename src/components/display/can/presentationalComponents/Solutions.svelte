@@ -46,7 +46,11 @@
 
   function formatAnswer(question: string, answer: string) {
     if (!answer) return 'aucune'
-    if (question.includes('checkbox')) return answer // Pour les QCM
+    if (question.includes('checkbox') || (question.includes('<input') && question.includes('checkEx'))) {
+      return answer.includes('\\') && !answer.includes('$')
+        ? '$' + answer + '$'
+        : answer
+    }  // Pour les QCM
     if (question.includes('<liste-deroulante')) return answer // Pour les listeDeroulante
     if (question.includes('interactive-clock'))
       return `$${answer.split('h')[0]}$ h $${answer.split('h')[1]}$` // Pour les horloges interactives
