@@ -89,6 +89,6 @@ export default class PerimetreParComptageCan extends ExerciceSimple {
     ${fig1}`
     this.optionsChampTexte = { texteApres: ' u.l' }
     this.reponse = tetris.poly.perimetre
-    this.correction = `L'aire de cette figure est : $${miseEnEvidence(String(this.reponse))}$ u.l.`
+    this.correction = `Le périmètre de cette figure est : $${miseEnEvidence(String(this.reponse))}$ u.l.`
   }
 }
