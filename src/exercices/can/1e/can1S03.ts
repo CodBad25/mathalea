@@ -26,7 +26,7 @@ export const dateDePublication = '15/02/2022' // La date de publication initiale
 export const uuid = 'fccb4'
 
 export const refs = {
-  'fr-fr': ['can1S03'],
+  'fr-fr': ['can1S03','1T-AN10-12-2','1Gen-A106'],
   'fr-ch': [],
 }
 export default class CalculTermeSuiteRec2 extends ExerciceSimple {

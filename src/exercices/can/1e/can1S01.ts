@@ -26,7 +26,7 @@ export const dateDeModifImportante = '04/02/2025' // Une date de modification im
 export const uuid = '44c30'
 
 export const refs = {
-  'fr-fr': ['can1S01'],
+  'fr-fr': ['can1S01', '1Gen-A101','1T-AN10-11'],
   'fr-ch': [],
 }
 export default class CalculTermeSuiteExp extends ExerciceSimple {

@@ -16,7 +16,7 @@ import {
 } from '../../modules/outils'
 import Exercice from '../Exercice'
 export const titre =
-  "Déterminer les termes d'une suite définie de façon explicite"
+  "Calculer un terme d'une suite définie de façon explicite"
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const dateDeModifImportante = '22/09/2024'

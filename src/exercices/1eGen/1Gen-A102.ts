@@ -1,5 +1,5 @@
 import TermeDUneSuiteDefinieExplicitement from '../1e/1AL10-3'
-export const titre = "Déterminer les termes d'une suite définie de façon explicite"
+export const titre = "Calculer un terme d'une suite définie de façon explicite"
 export const dateDePublication = '29/07/2025'
 export const amcReady = true
 export const amcType = 'AMCNum'
@@ -14,7 +14,7 @@ export const interactifType = 'mathLive'
 export const uuid = '21518'
 
 export const refs = {
-  'fr-fr': ['1Gen-A102'],
+  'fr-fr': ['1Gen-A102','1T-AN10-11-1'],
   'fr-ch': [],
 }
 export default class TermeDUneSuiteDefinieExplicitement2 extends TermeDUneSuiteDefinieExplicitement {
