@@ -21,7 +21,7 @@
   class="flex flex-row justify-start items-center {indiceLastExercice > 1 &&
   globalOptions.presMode !== 'un_exo_par_page'
     ? 'ml-2 lg:ml-6'
-    : 'ml-2'} mb-2 lg:mb-6 {globalOptions.presMode === 'recto' ||
+    : 'ml-2'} mb-1 lg:mb-2 {globalOptions.presMode === 'recto' ||
   globalOptions.presMode === 'verso'
     ? 'hidden'
     : 'flex'}"
@@ -91,7 +91,11 @@
         ></i>
       </button>
       <i class="bx ml-1 bx-xs bx-columns"></i>
-      <button type="button" aria-label="Augmenter le nombre de colonnes" on:click={() => columnsCountUpdate('+')}>
+      <button
+        type="button"
+        aria-label="Augmenter le nombre de colonnes"
+        on:click={() => columnsCountUpdate('+')}
+      >
         <i
           class="text-coopmaths-action hover:text-coopmaths-action-darkest dark:text-coopmathsdark-action dark:hover:text-coopmathsdark-action-darkest bx ml-1 bx-xs bx-plus"
         ></i>
