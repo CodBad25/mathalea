@@ -19,7 +19,7 @@ export const dateDePublication = '18/02/2022' // La date de publication initiale
 export const uuid = 'baa9f'
 
 export const refs = {
-  'fr-fr': ['can1S08'],
+  'fr-fr': ['can1S16'],
   'fr-ch': [],
 }
 export default class CalculRaison2 extends ExerciceSimple {

@@ -25,7 +25,7 @@ export const dateDePublication = '19/02/2022' // La date de publication initiale
 export const uuid = 'd1261'
 
 export const refs = {
-  'fr-fr': ['can1S10'],
+  'fr-fr': ['can1S17'],
   'fr-ch': [],
 }
 export default class SensVariationSuite extends Exercice {

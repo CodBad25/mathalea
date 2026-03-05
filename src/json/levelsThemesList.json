@@ -164,6 +164,12 @@
   "can1S": {
     "titre": "Suites"
   },
+   "can1S0": {
+    "titre": "Généralités avec les suites"
+  },
+  "can1S1": {
+    "titre": "Suites arithmétiques et géométriques"
+  },
   "canTEC1": {
     "titre": "Nombres complexes algèbre"
   },

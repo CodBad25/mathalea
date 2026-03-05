@@ -1,202 +1,189 @@
-import { propositionsQcm } from '../../../lib/interactif/qcm'
 import { choice } from '../../../lib/outils/arrayOutils'
-import { ecritureAlgebrique } from '../../../lib/outils/ecritures'
+import { texFractionFromString } from '../../../lib/outils/deprecatedFractions'
+import { sp } from '../../../lib/outils/outilString'
+import { texNombre } from '../../../lib/outils/texNombre'
 import { listeQuestionsToContenu, randint } from '../../../modules/outils'
 import Exercice from '../../Exercice'
-export const titre = 'Donner la nature d’une suite (formule de récurrence)'
+
+import { remplisLesBlancs } from '../../../lib/interactif/questionMathLive'
+import { arrondi } from '../../../lib/outils/nombres'
+import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
+
+export const titre = 'Déterminer une relation de récurrence'
 export const interactifReady = true
-export const interactifType = 'qcm'
+export const interactifType = 'mathLive'
 
 // Les exports suivants sont optionnels mais au moins la date de publication semble essentielle
-export const dateDePublication = '16/02/2022' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
+export const dateDePublication = '18/02/2022' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
 
 /**
  * Modèle d'exercice très simple pour la course aux nombres
  * @author Gilles Mora
 
-*/
-export const uuid = 'b119b'
+ */
+export const uuid = '1eb6e'
 
 export const refs = {
   'fr-fr': ['can1S04'],
-  'fr-ch': [],
+  'fr-ch': ['autres-12'],
 }
-export default class NatureSuiteRec extends Exercice {
+export default class RelationRec extends Exercice {
   constructor() {
     super()
 
     this.nbQuestions = 1
-
-    this.spacing = 1.5
   }
 
   nouvelleVersion() {
-    let texte, texteCorr, a, b, u, props
     const nomSuite = ['u', 'v', 'w']
     const s = choice(nomSuite)
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (
+      let i = 0, texte, texteCorr, a, b, c, T, proportion, cpt = 0;
+      i < this.nbQuestions && cpt < 50;
+
+    ) {
       switch (
-        choice([1, 2, 3]) //
+        choice([1, 1, 2, 3, 4]) //
       ) {
-        case 1: // suite arithmétique simple
-          a = randint(1, 10) * choice([-1, 1])
-          u = randint(1, 10) * choice([-1, 1])
+        case 1: // magazine arithmetico-geo
+          a = randint(1, 30)
+          b = randint(1, 10) * 100
+          c = randint(5, 20) * 1000
+          texte = `Chaque année, un magazine perd $${a}${sp(1)}\\%$  de ses abonnés mais en gagne $${b}$ nouveaux.<br>
+          En $2020$, ce magazine compte $${texNombre(c)}$ abonnés.
 
-          texte = `Soit $(${s}_n)$ une suite définie par $${s}_0=${u}$ et pour tout  $n\\in\\mathbb{N}$ par $${s}_{n+1} = ${s}_n ${ecritureAlgebrique(a)}$.<br>
-          Alors, $(${s}_n)$ est une suite ...`
-          this.autoCorrection[i] = {
-            enonce: texte,
-
-            propositions: [
-              {
-                texte: `arithmétique de raison $${a}$`,
-                statut: true,
-              },
-              {
-                texte: `arithmétique de raison $${u}$`,
-                statut: false,
-              },
-              {
-                texte: `géométrique de raison $${a}$`,
-                statut: false,
-              },
-            ],
-          }
-          props = propositionsQcm(this, i)
-          if (this.interactif) texte += props.texte
-          else {
-            texte = `Soit $(${s}_n)$ une suite définie par $${s}_0=${u}$ et pour tout  $n\\in\\mathbb{N}$ par $${s}_{n+1} = ${s}_n ${ecritureAlgebrique(a)}$.<br>
-          
-            Quelle est la nature de cette suite ? <br>
-            
-            Donner sa raison.`
-          }
-
-          texteCorr = `La formule de récurrence est de la forme $${s}_{n+1}=${s}_n+r$ avec $r=${a}$.<br>
-        On en déduit que $(${s}_n)$ est une suite arithmétique de raison $${a}$ et de premier terme $${s}_0=${u}$.`
-
-          break
-
-        case 2: // suite géo simple
-          a = randint(2, 10) * choice([-1, 1])
-          u = randint(1, 10) * choice([-1, 1])
-
-          texte = `Soit $(${s}_n)$ une suite définie par $${s}_0=${u}$ et pour tout  $n\\in\\mathbb{N}$ par $${s}_{n+1} = ${a}${s}_n $.<br>
-          Alors, $(${s}_n)$ est une suite ...`
-          this.autoCorrection[i] = {
-            enonce: texte,
-
-            propositions: [
-              {
-                texte: `géométrique de raison $${a}$`,
-                statut: true,
-              },
-              {
-                texte: `géométrique de raison $${u}$`,
-                statut: false,
-              },
-              {
-                texte: `arithmétique de raison $${a}$`,
-                statut: false,
-              },
-            ],
-          }
-          props = propositionsQcm(this, i)
-          if (this.interactif) texte += props.texte
-          else {
-            texte = `Soit $(${s}_n)$ une suite définie par $${s}_0=${u}$ et pour tout  $n\\in\\mathbb{N}$ par $${s}_{n+1} = ${a}${s}_n $.<br>
-          
-            Quelle est la nature de cette suite ? <br>
-            
-            Donner sa raison.`
-          }
-
-          texteCorr = `La formule de récurrence est de la forme $${s}_{n+1}=q\\times ${s}_n$ avec $q=${a}$.<br>
-        On en déduit que $(${s}_n)$ est une suite géométrique de raison $${a}$ et de premier terme $${s}_0=${u}$.`
-
-          break
-
-        case 3: // suite géo u_n/a
-          a = randint(2, 10)
-          u = randint(1, 10) * choice([-1, 1])
-          b = choice([-1, 1])
-          if (b < 0) {
-            texte = `Soit $(${s}_n)$ une suite définie par $${s}_0=${u}$ et pour tout  $n\\in\\mathbb{N}$ par $${s}_{n+1} = -\\dfrac{${s}_{n}}{${a}}$.<br>
-          Alors, $(${s}_n)$ est une suite ...`
-            this.autoCorrection[i] = {
-              enonce: texte,
-
-              propositions: [
-                {
-                  texte: `géométrique de raison $-\\dfrac{1}{${a}}$`,
-                  statut: true,
-                },
-                {
-                  texte: `géométrique de raison $-${a}$`,
-                  statut: false,
-                },
-                {
-                  texte: `arithmétique de raison $-${a}$`,
-                  statut: false,
-                },
-              ],
-            }
-            props = propositionsQcm(this, i)
-            if (this.interactif) texte += props.texte
-            else {
-              texte = `Soit $(${s}_n)$ une suite définie par $${s}_0=${u}$ et pour tout  $n\\in\\mathbb{N}$ par $${s}_{n+1} =- \\dfrac{${s}_{n}}{${a}}$.<br>
-              
-              Quelle est la nature de cette suite ? <br>
-              
-              Donner sa raison.`
-            }
-            texteCorr = `La formule de récurrence est de la forme $${s}_{n+1}=q\\times ${s}_n$ avec $q=-\\dfrac{1}{${a}}$.<br>
-        On en déduit que $(${s}_n)$ est une suite géométrique de raison $-\\dfrac{1}{${a}}$ et de premier terme $${s}_0=${u}$.`
+          On note, pour tout $n\\in\\mathbb{N}$, $${s}_{n}$ le nombre d'abonnés en $2020+n$.<br>`
+          if (this.interactif) {
+            texte += `On a alors  : $${s}_{n+1} = a~${s}_{n} + b$<br>avec `
+            texte += remplisLesBlancs(this, i, `a~=~%{champ1}~\\text{ et }~b~=~%{champ2}`)
           } else {
-            texte = `Soit $(${s}_n)$ une suite définie par $${s}_0=${u}$ et pour tout  $n\\in\\mathbb{N}$ par $${s}_{n+1} = \\dfrac{${s}_{n}}{${a}}$.<br>
-          Alors, $(${s}_n)$ est une suite ...`
-            this.autoCorrection[i] = {
-              enonce: texte,
-
-              propositions: [
-                {
-                  texte: `géométrique de raison $\\dfrac{1}{${a}}$`,
-                  statut: true,
-                },
-                {
-                  texte: `géométrique de raison $${a}$`,
-                  statut: false,
-                },
-                {
-                  texte: `arithmétique de raison $${a}$`,
-                  statut: false,
-                },
-              ],
-            }
-            props = propositionsQcm(this, i)
-            if (this.interactif) texte += props.texte
-            else {
-              texte = `Soit $(${s}_n)$ une suite définie par $${s}_0=${u}$ et pour tout  $n\\in\\mathbb{N}$ par $${s}_{n+1} = \\dfrac{${s}_{n}}{${a}}$.<br>
-            
-              Quelle est la nature de cette suite ? <br>
-              
-              Donner sa raison.`
-            }
-            texteCorr = `La formule de récurrence est de la forme $${s}_{n+1}=q\\times ${s}_n$ avec $q=\\dfrac{1}{${a}}$.<br>
-        On en déduit que $(${s}_n)$ est une suite géométrique de raison $\\dfrac{1}{${a}}$ et de premier terme $${s}_0=${u}$.`
+            texte += ` Donner le premier terme de cette suite et l'expression de $${s}_{n+1}$ en fonction de $${s}_{n}$.  `
           }
+          texteCorr = `On a $${s}_{n+1}=\\underbrace{${s}_{n}-${texNombre(a / 100)}${s}_{n}}_{\\text{Perte de } ${a}${sp(1)}\\%} +${b}=${texNombre(1 - a / 100)}${s}_{n}+${b}$.<br>
+
+
+          Le premier terme de la suite est $${s}_{0}=${texNombre(c)}$ et  $${s}_{n+1}=${texNombre(1 - a / 100)}${s}_{n}+${b}$.<br>`
+          handleAnswers(this, i, { bareme: (listePoints: number[]) => [Math.min(listePoints[0], listePoints[1]), 1], champ1: { value: arrondi(1 - a / 100) }, champ2: { value: b }})
+          this.canEnonce = texte
+          this.canReponseACompleter = ''
+          break
+
+        case 2: // magazine geo
+          a = randint(1, 15)
+          b = randint(1, 10) * 100
+          c = randint(5, 20) * 1000
+
+          texte = `Chaque année, un magazine perd $${a}${sp()} \\%$  de ses abonnés.<br>
+          En $2020$, ce magazine compte $${texNombre(c)}$ abonnés.
+          On note, pour tout $n\\in\\mathbb{N}$, $${s}_{n}$ le nombre d'abonnés en $2020+n$.<br>`
+          if (this.interactif) {
+           texte += `On a alors  : $${s}_{n+1} = a~${s}_{n} + b$<br>avec `
+           texte += remplisLesBlancs(this, i, `a~=~%{champ1}~\\text{ et }~b~=~%{champ2}`)
+          } else {
+            texte += ` Donner le premier terme de cette suite et l'expression de $${s}_{n+1}$ en fonction de $${s}_{n}$.  `
+          }
+
+          texteCorr = `On a $${s}_{n+1}=\\underbrace{${s}_{n}-${texNombre(a / 100)}${s}_{n}}_{\\text{Perte de } ${a}${sp(1)}\\%} =${texNombre(1 - a / 100)}${s}_{n}$.<br>
+
+
+          Le premier terme de la suite est $${s}_{0}=${texNombre(c)}$ et  $${s}_{n+1}=${texNombre(1 - a / 100)}${s}_{n}$.<br>`
+          handleAnswers(this, i, { bareme: (listePoints: number[]) => [Math.min(listePoints[0], listePoints[1]), 1], champ1: { value: arrondi(1 - a / 100) }, champ2: { value: 0 }})
+
+          this.canEnonce = texte
+          this.canReponseACompleter = ''
+          break
+
+        case 3: // magazine arith
+          a = randint(1, 15) * 100
+          b = randint(1, 10) * 100
+          c = randint(5, 20) * 1000
+          texte = `Chaque année, un magazine perd $${a}$ abonnés.<br>
+          En $2020$, ce magazine compte $${texNombre(c)}$ abonnés.
+          On note, pour tout $n\\in\\mathbb{N}$, $${s}_{n}$ le nombre d'abonnés en $2020+n$.<br>`
+          if (this.interactif) {
+           texte += `On a alors  : $${s}_{n+1} = a~${s}_{n} + b$<br>avec `
+           texte += remplisLesBlancs(this, i, `a~=~%{champ1}~\\text{ et }~b~=~%{champ2}`)
+          } else {
+            texte += ` Donner le premier terme de cette suite et l'expression de $${s}_{n+1}$ en fonction de $${s}_{n}$.  `
+          }
+
+          texteCorr = `On a $${s}_{n+1}=${s}_{n}-${a}$.<br>
+          Le premier terme de la suite est $${s}_{0}=${texNombre(c)}$ et  $${s}_{n+1}=${s}_{n}-${a}$.<br>`
+          handleAnswers(this, i, { bareme: (listePoints: number[]) => [Math.min(listePoints[0], listePoints[1]), 1], champ1: { value: 1 }, champ2: { value: -a }})
+
+          this.canEnonce = texte
+          this.canReponseACompleter = ''
+          break
+        case 4:
+        default: // magazine arith/geo avec tiers....
+          proportion = [
+            'le quart',
+            'le tiers',
+            'le dixième',
+            'le cinquième',
+            'la moitié',
+          ] //
+          a = randint(1, 15) * 100
+          b = randint(1, 10) * 100
+          c = randint(5, 20) * 1000
+          T = choice(proportion)
+          texte = `Chaque année, un magazine perd ${T}  de ses abonnés mais en gagne $${b}$ nouveaux.<br>
+          En $2020$, ce magazine compte $${texNombre(c)}$ abonnés.
+          On note, pour tout $n\\in\\mathbb{N}$, $${s}_{n}$ le nombre d'abonnés en $2020+n$.<br>`
+          if (this.interactif) {
+           texte += `On a alors  : $${s}_{n+1} = a~${s}_{n} + b$<br>avec `
+           texte += remplisLesBlancs(this, i, `a~=~%{champ1}~\\text{ et }~b~=~%{champ2}`)
+          } else {
+            texte += ` Donner le premier terme de cette suite et l'expression de $${s}_{n+1}$ en fonction de $${s}_{n}$.  `
+          }
+          if (T === 'le quart') {
+            texteCorr = `On a $${s}_{n+1}=\\underbrace{${s}_{n}-\\dfrac{1}{4}${s}_{n}}_{\\text{Perte du quart }} +${b}=0,75${s}_{n}+${b}$.<br>
+
+          Le premier terme de la suite est $${s}_{0}=${c}$ et  $${s}_{n+1}=0,75${s}_{n}+${b}$.<br>`
+          } else if (T === 'le tiers') {
+            texteCorr = `On a $${s}_{n+1}=\\underbrace{${s}_{n}-\\dfrac{1}{3}${s}_{n}}_{\\text{Perte du tiers }} +${b}=\\dfrac{2}{3}${s}_{n}+${b}$.<br>
+
+          Le premier terme de la suite est $${s}_{0}=${c}$ et  $${s}_{n+1}=\\dfrac{2}{3}${s}_{n}+${b}$.<br>`
+          } else if (T === 'le cinquième') {
+            texteCorr = `On a $${s}_{n+1}=\\underbrace{${s}_{n}-\\dfrac{1}{5}${s}_{n}}_{\\text{Perte du cinquième }} +${b}=0,8${s}_{n}+${b}$.<br>
+
+          Le premier terme de la suite est $${s}_{0}=${c}$ et  $${s}_{n+1}=0,8${s}_{n}+${b}$.<br>`
+          } else if (T === 'le dixième') {
+            texteCorr = `On a $${s}_{n+1}=\\underbrace{${s}_{n}-\\dfrac{1}{10}${s}_{n}}_{\\text{Perte du dixième }} +${b}=0,9${s}_{n}+${b}$.<br>
+
+          Le premier terme de la suite est $${s}_{0}=${c}$ et  $${s}_{n+1}=0,9${s}_{n}+${b}$.<br>`
+          } else {
+            texteCorr = `On a $${s}_{n+1}=\\underbrace{${s}_{n}-\\dfrac{1}{2}${s}_{n}}_{\\text{Perte de la moitié }} +${b}=0,5${s}_{n}+${b}$.<br>
+
+          Le premier terme de la suite est $${s}_{0}=${c}$ et  $${s}_{n+1}=0,5${s}_{n}+${b}$.<br>`
+          }
+
+          if (T === 'la moitié') {
+            handleAnswers(this, i, { bareme: (listePoints: number[]) => [Math.min(listePoints[0], listePoints[1]), 1], champ1: { value: ['0,5', `${texFractionFromString(1, 2)}`] }, champ2: { value: b }})
+          }
+
+          if (T === 'le quart') {
+            handleAnswers(this, i, { bareme: (listePoints: number[]) => [Math.min(listePoints[0], listePoints[1]), 1], champ1: { value: ['0,75', `${texFractionFromString(3, 4)}`] }, champ2: { value: b }})
+
+          }
+          if (T === 'le tiers') {
+            handleAnswers(this, i, { bareme: (listePoints: number[]) => [Math.min(listePoints[0], listePoints[1]), 1], champ1: { value: [`${texFractionFromString(2, 3)}`] }, champ2: { value: b }})
+          }
+          if (T === 'le cinquième') {
+            handleAnswers(this, i, { bareme: (listePoints: number[]) => [Math.min(listePoints[0], listePoints[1]), 1], champ1: { value: ['0,8', `${texFractionFromString(4, 5)}`] }, champ2: { value: b }})
+          }
+          if (T === 'le dixième') {
+            handleAnswers(this, i, { bareme: (listePoints: number[]) => [Math.min(listePoints[0], listePoints[1]), 1], champ1: { value: ['0,9', `${texFractionFromString(9, 10)}`] }, champ2: { value: b }})
+          }
+
+          this.canEnonce = texte
+          this.canReponseACompleter = ''
           break
       }
 
-      if (this.questionJamaisPosee(i, u, a)) {
+      if (this.questionJamaisPosee(i, a, b)) {
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr
-
-        this.canEnonce = texte
-        this.canReponseACompleter = `Nature de la suite : $\\ldots$\\\\
-         Raison $=\\ldots$`
-        this.listeCanEnonces.push(this.canEnonce)
-        this.listeCanReponsesACompleter.push(this.canReponseACompleter)
         i++
       }
       cpt++
