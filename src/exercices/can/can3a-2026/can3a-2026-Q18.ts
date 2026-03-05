@@ -34,7 +34,7 @@ export default class Can32026Q18 extends ExerciceCan {
     this.question = `Développe et réduis $${expression}$.<br>`
     
     this.correction = `$\\begin{aligned}
-${expression}&=${a}x${ecritureAlgebrique(a)}\\times(${b})\\\\
+${expression}&=${a}\\times x${ecritureAlgebrique(a)}\\times(${b})\\\\
 &=${a}x${ecritureAlgebrique(a * b)}\\\\
 &=${miseEnEvidence(reduireAxPlusB(a, a * b))}
 \\end{aligned}$`

@@ -57,7 +57,7 @@ $${hFin}$ h $${formatMinute(minFin)}$ min $-$ $${duree}$ min`
     
     if (minFin < duree) {
       // Cas avec retenue (passage à l'heure précédente)
-      this.correction += ` $= ${hFin - 1}$ h $${formatMinute(minFin + 60)}$ min $-$ $${duree}$ min<br>
+      this.correction += ` $= ${hFin - 1}$ h $${formatMinute(minFin + 60)}$ min $-$ $${duree}$ min
 $= ${miseEnEvidence(hDebut)}$ h $${miseEnEvidence(formatMinute(minDebut))}$ min.`
     } else {
       // Cas simple sans retenue

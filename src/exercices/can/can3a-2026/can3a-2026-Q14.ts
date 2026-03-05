@@ -18,7 +18,7 @@ export const refs = {
 
 */
 export default class Can32026Q14 extends ExerciceCan {
-  enonce(valeurs?: number[]) {
+   enonce(valeurs?: number[]) {
     if (valeurs == null) {
       // Tableau de 8 cas prédéfinis : [val1, val2, val3, val4, val5]
       // Sommes facilement divisibles par 5
@@ -37,25 +37,62 @@ export default class Can32026Q14 extends ExerciceCan {
     }
 
     this.formatChampTexte = KeyboardType.clavierDeBase
-    this.optionsChampTexte = { texteApres: '.' }
+    this.optionsChampTexte = { texteApres: '' }
 
     const somme = valeurs.reduce((acc, val) => acc + val, 0)
     const moyenne = somme / valeurs.length
     this.reponse = moyenne
 
-    this.question = `Moyenne de : <br>$${valeurs[0]}$ ${sp(2)} ; ${sp(2)} $${valeurs[1]}$ ${sp(2)} ; ${sp(2)} $${valeurs[2]}$ ${sp(2)} ; ${sp(2)} $${valeurs[3]}$ ${sp(2)} ; ${sp(2)} $${valeurs[4]}$<br>
+    this.question = `Moyenne de <br>$${valeurs[0]}$ ${sp(2)} ; ${sp(2)} $${valeurs[1]}$ ${sp(2)} ; ${sp(2)} $${valeurs[2]}$ ${sp(2)} ; ${sp(2)} $${valeurs[3]}$ ${sp(2)} ; ${sp(2)} $${valeurs[4]}$<br>
  `
 
-    this.correction = `La somme des $5$ valeurs est : $${valeurs.join('+')}=${somme}$.<br>
+    // Construction de la correction avec underbrace pour les paires dont la somme est un multiple de 100
+    const correctionSomme = this.construireSommeAvecUnderbrace(valeurs)
+
+    this.correction = `La somme des $5$ valeurs est :
+$${correctionSomme}=${somme}$.<br>
 La moyenne est donc $\\dfrac{${somme}}{5}=${miseEnEvidence(moyenne)}$.`
 
     this.canEnonce = this.question
     this.canReponseACompleter = '$\\ldots$'
-    
-   
+  }
+
+  /**
+   * Regroupe les paires dont la somme est un multiple de 100 avec \underbrace,
+   * et place les termes restants à la fin.
+   */
+  private construireSommeAvecUnderbrace(valeurs: number[]): string {
+    const restants = [...valeurs]
+    const parties: string[] = []
+
+    // Chercher des paires dont la somme est un multiple de 50
+    const utilises = new Array(restants.length).fill(false)
+
+    for (let i = 0; i < restants.length; i++) {
+      if (utilises[i]) continue
+      for (let j = i + 1; j < restants.length; j++) {
+        if (utilises[j]) continue
+        const s = restants[i] + restants[j]
+        if (s % 50 === 0) {
+          parties.push(`\\underbrace{${restants[i]}+${restants[j]}}_{${s}}`)
+          utilises[i] = true
+          utilises[j] = true
+          break
+        }
+      }
+    }
+
+    // Ajouter les termes non regroupés
+    for (let i = 0; i < restants.length; i++) {
+      if (!utilises[i]) {
+        parties.push(`${restants[i]}`)
+      }
+    }
+
+    return parties.join('+')
   }
 
   nouvelleVersion() {
-    this.canOfficielle ? this.enonce([25, 125, 75, 100, 175]) : this.enonce()
+    this.canOfficielle ? this.enonce([25, 175, 125, 75, 100]) : this.enonce()
   }
 }

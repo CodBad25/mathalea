@@ -48,8 +48,8 @@ export default class Can32026Q27 extends ExerciceCan {
       
       question = `$${texNombre(valeur)}\\text{ m}^3=$`
       
-      correction = `$1\\text{ m}^3 = 1000\\text{ dm}^3$.<br>
-$${texNombre(valeur)}\\text{ m}^3 = ${texNombre(valeur)}\\times 1000\\text{ dm}^3=${miseEnEvidence(texNombre(reponse))}\\text{ dm}^3$.`
+      correction = `$1\\text{ m}^3 = ${texNombre(1000)}\\text{ dm}^3$.<br>
+$${texNombre(valeur)}\\text{ m}^3 = ${texNombre(valeur)}\\times ${texNombre(1000)}\\text{ dm}^3=${miseEnEvidence(texNombre(reponse))}\\text{ dm}^3$.`
     } else {
       // Conversion dm³ → m³ (÷1000)
       const valeurDecimal = new Decimal(valeur)
