@@ -14,8 +14,8 @@ import {
 } from '../../modules/outils'
 import Exercice from '../Exercice'
 // Ici ce sont les fonctions de la librairie maison 2d.js qui gèrent tout ce qui est graphique (SVG/tikz) et en particulier ce qui est lié à l'objet lutin
+import { createScratchSimulatorElement } from '@scratch2latex/scratch-core/ScratchSimulator'
 import { setCliqueFigure } from '../../lib/interactif/gestionInteractif'
-import { createScratchSimulatorElement } from '../../lib/scratch/ScratchSimulator'
 import {
   allerA,
   angleScratchTo2d,
@@ -364,22 +364,22 @@ export default class AlgoTortue extends Exercice {
         if (bonneReponse < 5) {
           lutins[0].codeScratch += `\\blockrepeat{répéter \\ovalnum{${n}} fois}
                                   {
-                                  \\blockmove{avancer de \\ovalvariable{${val1}} pas}\n`
+                                  \\blockmove{avancer de \\ovalnum{${val1}} pas}\n`
           if (bonneReponse < 2) {
             lutins[0].codeScratch += `\\blockmove{tourner \\${sens}{} de \\ovalnum{${val3}} degrés}\n`
           } else {
             lutins[0].codeScratch += `\\blockmove{tourner \\${sensOppose}{} de \\ovalnum{${val3}} degrés}\n`
           }
-          lutins[0].codeScratch += `\\blockmove{avancer de \\ovalvariable{${val1 * 2}} pas}\n`
+          lutins[0].codeScratch += `\\blockmove{avancer de \\ovalnum{${val1 * 2}} pas}\n`
           if (bonneReponse === 0) {
             lutins[0].codeScratch += `\\blockmove{tourner \\${sens}{} de \\ovalnum{${val2}} degrés}\n`
           } else {
             lutins[0].codeScratch += `\\blockmove{tourner \\${sensOppose}{} de \\ovalnum{${val2}} degrés}\n`
           }
           if (bonneReponse < 3) {
-            lutins[0].codeScratch += `\\blockmove{avancer de \\ovalvariable{${val1 * 2}} pas}\n`
+            lutins[0].codeScratch += `\\blockmove{avancer de \\ovalnum{${val1 * 2}} pas}\n`
           } else {
-            lutins[0].codeScratch += `\\blockmove{avancer de \\ovalvariable{${val1}} pas}\n`
+            lutins[0].codeScratch += `\\blockmove{avancer de \\ovalnum{${val1}} pas}\n`
           }
           if (bonneReponse > 0) {
             lutins[0].codeScratch += `\\blockmove{tourner \\${sens}{} de \\ovalnum{${val2}} degrés}\n`
@@ -444,37 +444,37 @@ export default class AlgoTortue extends Exercice {
         val2 = randint(1, 3) * 5
         val3 = randint(2, 4) * 5
         sequenceFrise1 = [
-          [`\\blockmove{avancer de \\ovalvariable{${val2}} pas}\n`, val2],
+          [`\\blockmove{avancer de \\ovalnum{${val2}} pas}\n`, val2],
           [
             `\\blockmove{tourner \\${sens}{} de \\ovalnum{${n2}} degrés}\n`,
             sens,
             n2,
           ],
-          [`\\blockmove{avancer de \\ovalvariable{${val1}} pas}\n`, val1],
+          [`\\blockmove{avancer de \\ovalnum{${val1}} pas}\n`, val1],
           [
             `\\blockmove{tourner \\${sens}{} de \\ovalnum{${n2}} degrés}\n`,
             sens,
             n2,
           ],
-          [`\\blockmove{avancer de \\ovalvariable{${val1}} pas}\n`, val1],
+          [`\\blockmove{avancer de \\ovalnum{${val1}} pas}\n`, val1],
           [
             `\\blockmove{tourner \\${sensOppose}{} de \\ovalnum{${n2}} degrés}\n`,
             sensOppose,
             n2,
           ],
-          [`\\blockmove{avancer de \\ovalvariable{${val1}} pas}\n`, val1],
+          [`\\blockmove{avancer de \\ovalnum{${val1}} pas}\n`, val1],
           [
             `\\blockmove{tourner \\${sensOppose}{} de \\ovalnum{${n2}} degrés}\n`,
             sensOppose,
             n2,
           ],
-          [`\\blockmove{avancer de \\ovalvariable{${val3}} pas}\n`, val3],
+          [`\\blockmove{avancer de \\ovalnum{${val3}} pas}\n`, val3],
           [
             `\\blockmove{tourner \\${sensOppose}{} de \\ovalnum{${n2}} degrés}\n`,
             sensOppose,
             n2,
           ],
-          [`\\blockmove{avancer de \\ovalvariable{${val2}} pas}\n`, val2],
+          [`\\blockmove{avancer de \\ovalnum{${val2}} pas}\n`, val2],
           [
             `\\blockmove{tourner \\${sens}{} de \\ovalnum{${n2}} degrés}\n`,
             sens,

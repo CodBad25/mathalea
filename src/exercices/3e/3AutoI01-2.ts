@@ -1,7 +1,7 @@
+import { createScratchSimulatorElement } from '@scratch2latex/scratch-core/ScratchSimulator'
 import { ajouteQuestionMathlive } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
-import { createScratchSimulatorElement } from '../../lib/scratch/ScratchSimulator'
 import { context } from '../../modules/context'
 import { randint } from '../../modules/outils'
 import { scratchblock } from '../../modules/scratchblock'

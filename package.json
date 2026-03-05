@@ -115,6 +115,7 @@
     "node-fetch": "^3.3.2",
     "qrcode": "^1.5.4",
     "roughjs": "^4.6.6",
+    "@scratch2latex/scratch-core": "git+https://forge.apps.education.fr/coopmaths/scratch-core.git#main",
     "scratchblocks": "^3.6.4",
     "seedrandom": "^3.0.5",
     "sortablejs": "^1.15.7",
