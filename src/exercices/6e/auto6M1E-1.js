@@ -11,12 +11,10 @@ import {
 } from '../../lib/2d/utilitairesPoint'
 import { vecteur } from '../../lib/2d/Vecteur'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import {
-  handleAnswers,
-  setReponse,
-} from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { creerNomDePolygone } from '../../lib/outils/outilString'
+import { texNombre } from '../../lib/outils/texNombre'
 import { context } from '../../modules/context'
 import Grandeur from '../../modules/Grandeur'
 import { mathalea2d } from '../../modules/mathalea2d'
@@ -191,8 +189,11 @@ export default class AireCarresRectanglesTrianglesSL extends Exercice {
         case 2:
           texte = 'Calculer le périmètre du triangle en cm.'
           texteCorr += `$\\mathcal{P}_{${nom[8] + nom[9] + nom[10]}}=${a}\\text{ cm} + ${b}\\text{ cm} + ${d}\\text{ cm} =${a + b + d}\\text{ cm}$`
-          setReponse(this, i, new Grandeur(a + b + d, 'cm'), {
-            formatInteractif: 'unites',
+          handleAnswers(this, i, {
+            reponse: {
+              value: texNombre(a + b + d),
+              options: { nombreDecimalSeulement: true },
+            },
           })
           if (context.isAmc) {
             this.autoCorrection[i] = {
@@ -220,7 +221,4 @@ export default class AireCarresRectanglesTrianglesSL extends Exercice {
     }
     listeQuestionsToContenu(this)
   }
-
-  // this.besoinFormulaireNumerique = ['Niveau de difficulté',3,"1 : Périmètres\n\
-  // 2 : Aires\n3 : Périmètres et aires"];
 }
