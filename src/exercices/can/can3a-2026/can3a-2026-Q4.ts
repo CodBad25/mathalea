@@ -21,19 +21,25 @@ export const refs = {
 
 */
 export default class Can3026Q4 extends ExerciceCan {
-   enonce(valeur?: number, uniteDepart?: string, uniteArrivee?: string) {
+    enonce(valeur?: number, uniteDepart?: string, uniteArrivee?: string) {
     if (valeur == null || uniteDepart == null || uniteArrivee == null) {
       // Version aléatoire
-      if (choice([true, false])) {
+      const cas = choice(['dm_m', 'm_dm', 'm_mm'])
+      if (cas === 'dm_m') {
         // dm vers m
         valeur = randint(3, 15)
         uniteDepart = 'dm'
         uniteArrivee = 'm'
-      } else {
+      } else if (cas === 'm_dm') {
         // m vers dm
         valeur = randint(15, 60)
         uniteDepart = 'm'
         uniteArrivee = 'dm'
+      } else {
+        // m vers mm
+        valeur = randint(2, 9) / 10
+        uniteDepart = 'm'
+        uniteArrivee = 'mm'
       }
     }
 
@@ -62,23 +68,23 @@ Comme $${texNombre(valeur, 1)}\\times 10 =${texNombre(valeur * 10, 0)}$, alors $
       this.canEnonce = 'Complète.'
       this.canReponseACompleter = `$${texNombre(valeur, 0)}\\text{ m}$ $= \\ldots\\text{ dm}$`
       if (this.interactif) {
-        this.optionsChampTexte = { texteApres: ' $\\text{ dm}$' }
+        this.optionsChampTexte = { texteApres: ' $\\text{dm}$' }
       } else {
-        this.question += `${context.isHtml ? ' $\\ldots\\text{ dm}$' : ''}`
+        this.question += `${context.isHtml ? ' $\\ldots\\text{dm}$' : ''}`
       }
     } else if (uniteDepart === 'm' && uniteArrivee === 'mm') {
-      // m vers mm (version officielle)
+      // m vers mm
       this.formatChampTexte = KeyboardType.clavierNumbers
       this.reponse = valeur * 1000
       this.question = `Complète : <br>$${texNombre(valeur, 1)}\\text{ m}$ $=$`
-      this.correction = `Comme $1\\text{ m}$ $=1000\\text{ mm}$, pour passer des $\\text{m}$ au $\\text{mm}$, on multiplie par $1000$.<br>
-Comme $${texNombre(valeur, 1)}\\times 1000 =${texNombre(valeur * 1000, 0)}$, alors $${texNombre(valeur, 1)}\\text{ m}=${miseEnEvidence(texNombre(valeur * 1000, 0))}\\text{ mm}$.`
+      this.correction = `Comme $1\\text{ m}$ $=${texNombre(1000)}\\text{ mm}$, pour passer des $\\text{m}$ au $\\text{mm}$, on multiplie par $${texNombre(1000)}$.<br>
+Comme $${texNombre(valeur, 1)}\\times ${texNombre(1000)} =${texNombre(valeur * 1000, 0)}$, alors $${texNombre(valeur, 1)}\\text{ m}=${miseEnEvidence(texNombre(valeur * 1000, 0))}\\text{ mm}$.`
       this.canEnonce = 'Complète.'
       this.canReponseACompleter = `$${texNombre(valeur, 1)}\\text{ m}$ $= \\ldots\\text{ mm}$`
       if (this.interactif) {
-        this.optionsChampTexte = { texteApres: ' $\\text{ mm}$' }
+        this.optionsChampTexte = { texteApres: ' $\\text{mm}$' }
       } else {
-        this.question += `${context.isHtml ? ' $\\ldots\\text{ mm}$' : ''}`
+        this.question += `${context.isHtml ? ' $\\ldots\\text{mm}$' : ''}`
       }
     }
   }

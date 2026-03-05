@@ -43,7 +43,7 @@ enonce(numerateur?: number, denominateur?: number, minutes?: number) {
       // Fraction d'heure vers minutes
       this.formatChampTexte = KeyboardType.clavierNumbers
       this.reponse = minutes
-      this.question = `$${fracHeures.texFraction}$ d'heure $=$ `
+      this.question = `$${fracHeures.texFraction}$ d'heure $=$`
       this.correction = `$\\dfrac{1}{${denominateur}}$ h $=60\\text{ min }\\div ${denominateur}= ${texNombre(minutes / numerateur, 0)}\\text{ min }$<br>
 Ainsi, $${fracHeures.texFraction}$ d'heure $=${miseEnEvidence(minutes)} \\text{ min }$.`
       this.canEnonce = this.question

@@ -46,7 +46,7 @@ export default class Can32026Q23 extends ExerciceCan {
     }
 
     this.formatChampTexte = KeyboardType.clavierDeBase
-    this.optionsChampTexte = { texteApres: ' cm².' }
+    this.optionsChampTexte = { texteApres: ' $\\text{cm}^2$.' }
 
     // Calcul de l'aire
     const aire = (cote1 * cote2) / 2
@@ -82,13 +82,13 @@ export default class Can32026Q23 extends ExerciceCan {
       ),
       latex2d(
         `${texNombre(cote2)} \\text{ cm}`,
-        milieu(A, B).x + 0.8,
+        milieu(A, B).x + 1.2,
         milieu(A, B).y - 0.5,
         { color: 'black' },
       ),
       latex2d(
         `${texNombre(cote1)} \\text{ cm}`,
-        milieu(A, C).x - 1,
+        milieu(A, C).x - 1.4,
         milieu(A, C).y,
         { color: 'black' },
       ),
@@ -127,7 +127,7 @@ $\\begin{aligned}
     this.canReponseACompleter = '$\\ldots$ cm$^2$'
 
     if (!this.interactif) {
-      this.question += ' $\\ldots$ cm$^2$.'
+      this.question += ' $\\ldots\\text{ cm}^2$.'
     }
   }
 
