@@ -15,7 +15,7 @@ export default defineConfig({
     testTimeout: 300000,
     server: {
       deps: {
-        inline: ['@cortex-js/compute-engine'],
+        inline: ['@cortex-js/compute-engine', '@scratch2latex/scratch-core'],
       },
     },
   },

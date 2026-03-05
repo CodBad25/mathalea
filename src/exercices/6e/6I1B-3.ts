@@ -18,11 +18,11 @@ import {
 } from '../../modules/outils'
 import Exercice from '../Exercice'
 // Ici ce sont les fonctions de la librairie maison 2d.js qui gèrent tout ce qui est graphique (SVG/tikz) et en particulier ce qui est lié à l'objet lutin
+import { createScratchSimulatorElement } from '@scratch2latex/scratch-core/ScratchSimulator'
 import { grille } from '../../lib/2d/Grille'
 import { setCliqueFigure } from '../../lib/interactif/gestionInteractif'
 import { ajouteFeedback } from '../../lib/interactif/questionMathLive'
 import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
-import { createScratchSimulatorElement } from '../../lib/scratch/ScratchSimulator'
 import {
   allerA,
   angleScratchTo2d,

@@ -1,3 +1,4 @@
+import { createScratchSimulatorElement } from '@scratch2latex/scratch-core/ScratchSimulator'
 import { createList } from '../../lib/format/lists'
 import { combinaisonListesSansChangerOrdre } from '../../lib/outils/arrayOutils'
 import {
@@ -5,7 +6,6 @@ import {
   ecritureAlgebriqueSauf1,
 } from '../../lib/outils/ecritures'
 import { texteEnBoite, texteItalique } from '../../lib/outils/embellissements'
-import { createScratchSimulatorElement } from '../../lib/scratch/ScratchSimulator'
 import { context } from '../../modules/context'
 import { randint } from '../../modules/outils'
 import { scratchblock } from '../../modules/scratchblock'
@@ -77,7 +77,7 @@ export default class Exercice3L14DNB0 extends ExerciceBrevetA {
   \\blockvariable{mettre \\selectmenu{y} à \\ovaloperator{\\ovalvariable{...}*\\ovalvariable{...}}}
   \\blockvariable{mettre \\selectmenu{z} à \\ovaloperator{\\ovalnum{${facteur}}*\\ovalvariable{x}}}
   \\blockvariable{mettre \\selectmenu{Résultat} à \\ovaloperator{\\ovaloperator{\\ovalvariable{...}-\\ovalvariable{...}} -\\ovalnum{${retrait}} }}
-  \\blocklook{dire \\ovalnum{Résultat } pendant \\ovalnum{5}secondes}
+  \\blocklook{dire \\ovalvariable{Résultat} pendant \\ovalnum{5}secondes}
   \\end{scratch}`
 
     const listeQuestions = createList({

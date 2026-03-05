@@ -1,7 +1,6 @@
+import ScratchInterpreter from '@scratch2latex/scratch-core/ScratchInterpreter'
+import { ScratchSimulator } from '@scratch2latex/scratch-core/ScratchSimulator'
 import { describe, expect, it, vi } from 'vitest'
-
-import { ScratchInterpreter } from '../../src/lib/scratch/ScratchInterpreter'
-import { ScratchSimulator } from '../../src/lib/scratch/ScratchSimulator'
 
 type ScratchSimulatorTestHarness = {
   codeDiv: HTMLDivElement

@@ -219,6 +219,7 @@
   color: #fff;
 }
 
+/* scratchblocks-overrides:start */
 /* Scratchblocks overrides */
 /* Modifie le style des sb3-comment-label */
 text.sb3-comment-label {
@@ -235,6 +236,25 @@ svg.scratchblocks-style-scratch3-high-contrast .sb3-custom-arg {
   fill: #ff99aa !important;
   stroke: #e64d00 !important;
 }
+/* scratchblocks-overrides:end */
+
+/* scratch-simulator-only:start */
+/* Fallback modal Scratch simulator (quand les styles DaisyUI de modal ne sont pas appliqués) */
+/* Ciblage via #code-display pour ne pas impacter les autres dialogs */
+dialog.modal.modal-top:has(#code-display) {
+  border: none;
+  padding: 0;
+}
+
+dialog.modal.modal-top:has(#code-display)::backdrop {
+  background: rgb(0 0 0 / 45%);
+}
+
+dialog.modal.modal-top:has(#code-display) > .modal-box {
+  @apply bg-base-100 text-base-content shadow-xl;
+}
+/* scratch-simulator-only:end */
+
 /* Cache le menu toggle de MathLive */
 math-field {
   @apply bg-coopmaths-canvas dark:bg-coopmathsdark-canvas

@@ -1,9 +1,9 @@
+import { createScratchSimulatorElement } from '@scratch2latex/scratch-core/ScratchSimulator'
 import { deuxColonnesResp } from '../../lib/format/miseEnPage'
 import { ajouteQuestionMathlive } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
-import { createScratchSimulatorElement } from '../../lib/scratch/ScratchSimulator'
 import { context } from '../../modules/context'
 import { scratchblock } from '../../modules/scratchblock'
 import Exercice from '../Exercice'
@@ -79,6 +79,9 @@ export default class BlocPersonnaliseScratch extends Exercice {
 \\blockmove{avancer de \\ovalnum{${longueurCote}} pas}
 \\blockmove{tourner \\turnright{} de \\ovalnum{${figure.angle}} degrés}
 }
+
+\\blockevent{quand \\greenflag est cliqué}
+\\blockmoreblocks{${figure.nom}}
 \\end{scratch}`
     }
 
