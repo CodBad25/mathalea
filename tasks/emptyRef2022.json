@@ -61,7 +61,10 @@
       "can1G": {},
       "can1L": {},
       "can1P": {},
-      "can1S": {}
+      "can1S": {
+        "can1S0": {},
+        "can1S1": {}
+      }
     },
     "Terminale": {
       "TSpe": {
