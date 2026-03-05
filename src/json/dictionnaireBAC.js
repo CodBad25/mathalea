@@ -2882,7 +2882,6 @@ export const dictionnaireBAC = {
       'Probabilités conditionnelles',
       'Loi binomiale',
       'Variables aléatoires',
-      'Bienaymé-Tchebychev',
     ],
   },
   bac_2025_05_sujet2_ameriquenord_secours_4: {
