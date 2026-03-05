@@ -82,13 +82,13 @@ export const refs = {
         }
       } else {
         const a = Number(
-          this.autoCorrection[question].reponse?.valeur?.champ1?.value,
+          exercice.autoCorrection[question].reponse?.valeur?.champ1?.value,
         )
         const b = Number(
-          this.autoCorrection[question].reponse?.valeur?.champ2?.value,
+          exercice.autoCorrection[question].reponse?.valeur?.champ2?.value,
         )
         const c = Number(
-          this.autoCorrection[question].reponse?.valeur?.champ3?.value,
+          exercice.autoCorrection[question].reponse?.valeur?.champ3?.value,
         )
         isOk =
           a * bSaisi - b * aSaisi === 0 &&
@@ -152,6 +152,6 @@ export const refs = {
   }
 
   nouvelleVersion(): void {
-    this.canOfficielle ? this.enonce(1, 0, -3, 0) : this.enonce()
+    this.canOfficielle || this.sup ? this.enonce(1, 0, -3, 0) : this.enonce()
   }
 }
