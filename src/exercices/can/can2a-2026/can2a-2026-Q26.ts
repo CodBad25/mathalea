@@ -40,7 +40,7 @@ export default class Can2a2026Q26 extends ExerciceCan {
     this.reponse = proba
     
     this.question = `On lance un dé équilibré à six faces.<br>
-    Probabilité d'obtenir un diviseur de $${nombre}$.`
+    Probabilité d'obtenir un diviseur de $${nombre}$`
     
     let listeDiviseurs = ''
     if (nbDiviseurs === 1) {
@@ -56,7 +56,7 @@ export default class Can2a2026Q26 extends ExerciceCan {
     
     this.correction = `Les diviseurs de $${nombre}$ parmi les faces du dé sont : ${listeDiviseurs}.<br>
     Il y a $${nbDiviseurs}$ cas favorables sur $6$ issues possibles équiprobables.<br>
-    La probabilité est : ${pgcd(nbDiviseurs,6)===1 ? `$${miseEnEvidence(proba.texFractionSimplifiee)}$` : `$\\dfrac{${nbDiviseurs}}{6}=${miseEnEvidence(proba.texFractionSimplifiee)}$`}`
+    La probabilité est : ${pgcd(nbDiviseurs,6)===1 ? `$${miseEnEvidence(proba.texFractionSimplifiee)}$` : `$\\dfrac{${nbDiviseurs}}{6}=${miseEnEvidence(proba.texFractionSimplifiee)}$`}.`
     
     this.canEnonce = `On lance un dé équilibré à six faces.<br>
     Probabilité d'obtenir un diviseur de $${nombre}$`
