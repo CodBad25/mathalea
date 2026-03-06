@@ -1,3 +1,4 @@
+import { tableauColonneLigne } from '../../../lib/2d/tableau'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
@@ -19,41 +20,53 @@ export const refs = {
 
 */
 export default class Can20266Q12 extends ExerciceCan {
-  enonce(a?: number, b?: number) {
-    let millier: number, centaines: number
-
-    if (a == null || b == null) {
-      const m = randint(1, 9)
-      const c = randint(1, 6)
-      const d = randint(1, 9)
-      const u = randint(1, 9)
-      const centainesAjoutees = choice(
-        [3, 4, 6, 7, 8, 9].filter((x) => x + c < 10),
-      )
-      millier = m * 1000 + c * 100 + d * 10 + u
-      centaines = centainesAjoutees * 100
-    } else {
-      millier = a
-      centaines = b
+ enonce(ouiF?: number, nonF?: number, ouiG?: number, nonG?: number, cas?: number) {
+    if (ouiF == null || nonF == null || ouiG == null || nonG == null || cas == null) {
+      ouiF = randint(2, 6) * 5
+      nonF = randint(6, 12) * 5
+      ouiG = randint(2, 5) * 5
+      nonG = randint(10, 16) * 5
+      cas = choice([1, 2])
     }
-
-    const somme = millier + centaines
-
-    this.reponse = String(somme)
-    if (this.interactif) {
-      this.question = `$${texNombre(millier)}+${centaines}=$`
-    } else {
-      this.question = `$${texNombre(millier)}+${centaines}=\\ldots$`
-    }
-
-    this.correction = `$${texNombre(millier)}+${centaines}=${miseEnEvidence(texNombre(somme))}$`
 
     this.formatChampTexte = KeyboardType.clavierDeBase
-    this.canEnonce = 'Calcule.'
-    this.canReponseACompleter = `$${texNombre(millier)}+${centaines}=\\ldots$`
+
+    const tableau = tableauColonneLigne(
+      ['', '\\text{Oui}', '\\text{Non}'],
+      ['\\text{Filles}', '\\text{Garçons}'],
+      [ouiF, nonF, ouiG, nonG]
+    )
+
+    if (cas === 1) {
+      const result = nonF + nonG
+      this.reponse = texNombre(result, 0)
+
+      this.question = `Viens-tu à vélo ? <br>${tableau}<br>$\\ldots$ élèves ne sont pas venus à vélo.`
+      if (this.interactif) {
+        this.question = `Viens-tu à vélo ? <br>${tableau}<br>`
+        this.optionsChampTexte = { texteApres: ' élèves ne sont pas venus à vélo.' }
+      }
+
+      this.correction = `Le nombre d'élèves qui ne sont pas venus à vélo est $${nonF} + ${nonG} = ${miseEnEvidence(texNombre(result, 0))}$.`
+      this.canEnonce = `Viens-tu à vélo ? <br>${tableau}`
+      this.canReponseACompleter = `$\\ldots$ élèves ne sont pas venus à vélo.`
+    } else {
+      const result = ouiF + ouiG
+      this.reponse = texNombre(result, 0)
+
+      this.question = `Viens-tu à vélo ? <br>${tableau}<br>$\\ldots$ élèves sont venus à vélo.`
+      if (this.interactif) {
+        this.question = `Viens-tu à vélo ? <br>${tableau}<br>`
+        this.optionsChampTexte = { texteApres: ' élèves sont venus à vélo.' }
+      }
+
+      this.correction = `Le nombre d'élèves qui sont venus à vélo est $${ouiF} + ${ouiG} = ${miseEnEvidence(texNombre(result, 0))}$.`
+      this.canEnonce = `Viens-tu à vélo ? <br>${tableau}`
+      this.canReponseACompleter = `$\\ldots$ élèves sont venus à vélo.`
+    }
   }
 
   nouvelleVersion() {
-    this.canOfficielle ? this.enonce(1462, 300) : this.enonce()
+    this.canOfficielle ? this.enonce(25, 45, 15, 70, 1) : this.enonce()
   }
 }

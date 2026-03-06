@@ -48,7 +48,7 @@ export default class Can20266Q4 extends ExerciceCan {
     const flecheBas = segment(pointAbstrait(0, -0.5), pointAbstrait(1, -0.5))
     flecheBas.styleExtremites = '<->'
     flecheBas.epaisseur = context.isHtml ? 1.5 : 1
-    const longCherche = latex2d(this.interactif ? '?':'\\ldots', 0.5, -1.5, {
+    const longCherche = latex2d(this.interactif ? '?':'\\ldots', 0.5, -1, {
       letterSize: 'normalsize',
     })
 

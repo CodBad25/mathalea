@@ -5,7 +5,7 @@ import { texNombre } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
 
-export const titre = 'Q11'
+export const titre = 'Compléter une égalité'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const uuid = 'pb769'
@@ -19,41 +19,36 @@ export const refs = {
 
 */
 export default class Can20266Q11 extends ExerciceCan {
-  enonce(a?: number, b?: number) {
-    let millier: number, centaines: number
-
-    if (a == null || b == null) {
-      const m = randint(1, 9)
-      const c = randint(1, 6)
-      const d = randint(1, 9)
-      const u = randint(1, 9)
-      const centainesAjoutees = choice(
-        [3, 4, 6, 7, 8, 9].filter((x) => x + c < 10),
-      )
-      millier = m * 1000 + c * 100 + d * 10 + u
-      centaines = centainesAjoutees * 100
-    } else {
-      millier = a
-      centaines = b
+    enonce(a?: number, b?: number, c?: number) {
+    if (a == null || b == null || c == null) {
+      b = choice([5, 50, 25])
+      c = b === 5 ? 10 : b === 50 ? 100 : 50
+      a = randint(12, 18) * (c / b)
     }
-
-    const somme = millier + centaines
-
-    this.reponse = String(somme)
-    if (this.interactif) {
-      this.question = `$${texNombre(millier)}+${centaines}=$`
-    } else {
-      this.question = `$${texNombre(millier)}+${centaines}=\\ldots$`
-    }
-
-    this.correction = `$${texNombre(millier)}+${centaines}=${miseEnEvidence(texNombre(somme))}$`
+    const result = a * b / c
 
     this.formatChampTexte = KeyboardType.clavierDeBase
-    this.canEnonce = 'Calcule.'
-    this.canReponseACompleter = `$${texNombre(millier)}+${centaines}=\\ldots$`
+    this.formatInteractif = 'fillInTheBlank'
+    this.consigne = 'Complète.'
+
+    this.reponse = {
+      champ1: { value: result },
+    }
+
+    this.question = `${a}\\times ${b} = %{champ1} \\times ${c}`
+
+    const facteur = c / b
+    this.correction = `$\\begin{aligned}
+    ${a}\\times ${b} &= \\ldots \\times ${c}\\\\
+    &= \\underbrace{\\ldots \\times ${facteur}}_{${a}}\\times ${b}\\\\
+    &=${miseEnEvidence(texNombre(result, 0))}\\times ${facteur}\\times ${b}
+    \\end{aligned}$`
+
+    this.canEnonce = 'Complète.'
+    this.canReponseACompleter = `$${a}\\times ${b} = \\ldots \\times ${c}$`
   }
 
   nouvelleVersion() {
-    this.canOfficielle ? this.enonce(1462, 300) : this.enonce()
+    this.canOfficielle ? this.enonce(12, 5, 10) : this.enonce()
   }
 }
