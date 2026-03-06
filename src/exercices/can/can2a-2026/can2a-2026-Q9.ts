@@ -33,7 +33,6 @@ export default class Can2a2026Q9 extends ExerciceCan {
     this.question = `Développer et réduire $(x-${a})^2$.`
     this.correction = `On utilise l'identité remarquable $(a-b)^2=a^2-2ab+b^2$ avec $a=x$ et $b=${a}$.<br>
 $\\begin{aligned}(x-${a})^2&=x^2-2\\times x\\times ${a}+${a}^2\\\\
-&=x^2-${2 * a}x+${a * a}\\\\
 &=${miseEnEvidence(`x^2-${2 * a}x+${a * a}`)}\\end{aligned}$`
 
     this.canEnonce = this.question

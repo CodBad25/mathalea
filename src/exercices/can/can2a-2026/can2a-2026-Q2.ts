@@ -39,7 +39,7 @@ export default class Can2a2026Q2 extends ExerciceCan {
     this.formatChampTexte = KeyboardType.clavierDeBase
     this.reponse = texNombre(a.mul(Math.pow(10, puissance)), 3)
     this.question = `$${facteurs10} \\times ${texNombre(a, 3)}$`
-    this.correction = `$${facteurs10} \\times ${texNombre(a, 3)} = ${miseEnEvidence(this.reponse)}$`
+    this.correction = `$\\underbrace{${facteurs10}}_{${texNombre(10**puissance)}}\\times ${texNombre(a, 3)} = ${miseEnEvidence(this.reponse)}$`
     this.canEnonce = this.question
     this.canReponseACompleter = ''
     

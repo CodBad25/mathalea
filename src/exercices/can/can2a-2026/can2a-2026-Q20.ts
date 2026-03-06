@@ -41,6 +41,7 @@ export default class Can2a2026Q20 extends ExerciceCan {
 
     this.correction = `$\\begin{aligned}
 ${fraction.d}\\times \\left(${b}-${fraction.texFraction}\\right)&=${fraction.d}\\times \\left(${bFraction.texFractionSimplifiee}-${fraction.texFraction}\\right)\\\\
+&=${fraction.d}\\times \\left(\\dfrac{${b*fraction.d}}{${fraction.d}}-${fraction.texFraction}\\right)\\\\
 &=${fraction.d}\\times ${difference.texFractionSimplifiee}\\\\
 &=${miseEnEvidence(texNombre(resultatSimplifie.valeurDecimale, 2))}
 \\end{aligned}$`

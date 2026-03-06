@@ -31,12 +31,12 @@ this.optionsDeComparaison = { exclusifFactorisation: true }
       this.reponse = `x(${a}x-1)`
       this.question = `Factoriser $${rienSi1(a)}x^2-x$`
       this.correction = `$\\begin{aligned}${rienSi1(a)}x^2-x&=x\\times ${rienSi1(a)}x-x\\times 1\\\\
-      &=${miseEnEvidence(`x(${a}x-1)`)}\\end{aligned}$`
+      &=${miseEnEvidence(`x(${rienSi1(a)}x-1)`)}\\end{aligned}$`
     } else {
       this.reponse = `x(${a}x+1)`
       this.question = `Factoriser $${rienSi1(a)}x^2+x$`
       this.correction = `$\\begin{aligned}${rienSi1(a)}x^2+x&=x\\times ${rienSi1(a)}x+x\\times 1\\\\
-      &=${miseEnEvidence(`x(${a}x+1)`)}\\end{aligned}$`
+      &=${miseEnEvidence(`x(${rienSi1(a)}x+1)`)}\\end{aligned}$`
     }
     
     this.canEnonce = this.question

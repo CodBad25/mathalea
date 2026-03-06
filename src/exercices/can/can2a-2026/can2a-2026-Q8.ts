@@ -51,7 +51,7 @@ Combien ${nbArrivee === 1 ? 'coûte' : 'coûtent'} $${nbArrivee}$ ${nbArrivee ==
     this.correction = `On a le prix de $${nbDepart}$ gommes.<br>
 On veut le prix de $${texNombre(facteur)}$ fois moins de gommes.<br>
 On divise donc le prix de $${nbDepart}$ gommes par $${texNombre(facteur)}$.<br>
-$${texPrix(prixDepart)}\\div ${texNombre(facteur)}=${miseEnEvidence(texPrix(reponse))}$ €.`
+$${texPrix(prixDepart)}\\div ${texNombre(facteur)}=${miseEnEvidence(texPrix(reponse))}$ €`
     
     this.canEnonce = this.question
     this.canReponseACompleter = '$\\ldots$ €'

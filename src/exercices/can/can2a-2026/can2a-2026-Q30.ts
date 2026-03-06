@@ -119,7 +119,7 @@ const creerQuestionLigneBrisee = () => {
 export default class Can2a2026Q30 extends ExerciceCan {
   enonce(): void {
     this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
-    this.optionsChampTexte = { texteAvant: ' ', texteApres: 'u.$\\ell$' }
+    this.optionsChampTexte = { texteAvant: ' ', texteApres: '$u.\\ell$' }
     let questionData
     // Fonction pour créer aléatoirement une question de ligne brisée sur grille
     if (this.canOfficielle || this.sup) {
@@ -166,7 +166,7 @@ export default class Can2a2026Q30 extends ExerciceCan {
 
     this.reponse = new FractionEtendue(longueurCarreaux, b)
 
-    this.question = 'Longueur de la ligne brisée en u.$\\ell$.<br>'
+    this.question = 'Longueur de la ligne brisée en $u.\\ell$.<br>'
     this.question +=
       mathalea2d(
         {
@@ -184,7 +184,7 @@ export default class Can2a2026Q30 extends ExerciceCan {
     this.correction = `Une unité correspond à $${b}$ carreaux, la ligne brisée mesure $${longueurCarreaux}$ carreaux, soit $${miseEnEvidence(this.reponse.texFraction)}$ u.l. `
 
     this.canEnonce = this.question
-    this.canReponseACompleter = '$\\ldots$ u.$\\ell$.'
+    this.canReponseACompleter = '$\\ldots$ $u.\\ell$.'
   }
 
   nouvelleVersion(): void {

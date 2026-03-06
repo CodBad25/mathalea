@@ -93,7 +93,7 @@ export default class Can2a2026Q14 extends ExerciceCan {
     this.question += graphique
     this.question += '<br>Solution(s) de $f(x)=2$'
     
-    this.correction = `Les solutions de l'équation sont les abscisses des points de $\\mathscr{C}_f$ qui ont pour ordonnée $2$.<br>
+    this.correction = `Les solutions de l'équation sont les abscisses respectives des points de $\\mathscr{C}_f$ qui ont pour ordonnée $2$.<br>
     On lit que la courbe coupe la droite horizontale d'équation $y=2$ en deux points d'abscisses $-2$ et $1$.<br>
     $S=${miseEnEvidence('\\{-2\\,;\\,1\\}')}$`
     

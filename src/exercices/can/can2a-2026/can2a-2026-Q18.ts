@@ -30,10 +30,10 @@ export default class Can2a2026Q18 extends ExerciceCan {
     this.formatChampTexte = KeyboardType.clavierDeBase
     this.reponse = new Decimal(taux).mul(100)
     this.question = `Multiplier un nombre positif par $${texNombre(coeff, 3)}$ revient à <br>effectuer une hausse de `
-    this.correction = `Comme $${texNombre(coeff, 3)}=1+${texNombre(taux, 3)}=1+\\dfrac{${Taux}}{100}$, multiplier par $${texNombre(coeff, 3)}$ revient à effectuer une hausse de $${miseEnEvidence(texNombre(Taux, 2))}\\,\\%$. `
+    this.correction = `Comme $${texNombre(coeff, 3)}=1+${texNombre(taux, 3)}=1+\\dfrac{${texNombre(Taux)}}{100}$, multiplier par $${texNombre(coeff, 3)}$ revient à effectuer une hausse de $${miseEnEvidence(texNombre(Taux, 2))}\\,\\%$. `
    this.optionsChampTexte = { texteApres: '$\\%$.' }
         if (!this.interactif) {
-          this.question += '$\\ldots\\,\\%$'
+          this.question += '$\\ldots\\,\\%$.'
         }
     this.canEnonce = this.question
     this.canReponseACompleter = '$\\ldots\\,\\%$'

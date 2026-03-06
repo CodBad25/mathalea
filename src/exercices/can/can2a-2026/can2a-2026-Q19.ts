@@ -34,20 +34,21 @@ export default class Can2a2026Q19 extends ExerciceCan {
     
     this.question = `Deux baisses successives de $${taux}~\\%$ correspondent à une baisse globale de`
     
-    this.correction = `Le coefficiecient multiplicateur associé  à une baisse de $${taux}~\\%$ est $1-${texNombre(taux/100,2)}=${texNombre(1 - taux/100, 2)}$.<br>
-     Ainsi, le coefficicient multiplicateur global après deux baisses successives de $${taux}~\\%$ est : 
-    $${texNombre(1 - taux/100, 2)}\\times ${texNombre(1 - taux/100, 2)}=${texNombre(coefficientGlobal, 4)}$.<br>
-    Le taux d'évolution associé à ce coefficient multiplicateur est : $${texNombre(coefficientGlobal, 4)}-1=${texNombre(coefficientGlobal-1, 4)}$.<br><br>
+    this.correction = `Le coefficient multiplicateur associé  à une baisse de $${taux}~\\%$ est : <br>
+    $CM=1-${texNombre(taux/100,2)}=${texNombre(1 - taux/100, 2)}$.<br>
+     Ainsi, le coefficient multiplicateur global après deux baisses successives de $${taux}~\\%$ est : <br>
+    $CM_G=CM\\times CM=${texNombre(1 - taux/100, 2)}\\times ${texNombre(1 - taux/100, 2)}=${texNombre(coefficientGlobal, 4)}$.<br>
+    Le taux d'évolution associé à ce coefficient multiplicateur est : <br>$CM_G-1=${texNombre(coefficientGlobal, 4)}-1=${texNombre(coefficientGlobal-1, 4)}$.<br><br>
     
     La baisse globale est donc de $${miseEnEvidence(texNombre(baisseGlobale, 2))}~\\%$.`
     
     this.canEnonce = this.question
     this.canReponseACompleter = '$\\ldots~\\%$'
-    this.optionsChampTexte = { texteApres: ' $\\%$' }
+    this.optionsChampTexte = { texteApres: ' $\\%$.' }
     
     if (this.interactif) {
       this.question += ''
-    }else{this.question += ' $\\ldots~\\%$'}
+    }else{this.question += ' $\\ldots~\\%$.'}
   }
 
   nouvelleVersion(): void {

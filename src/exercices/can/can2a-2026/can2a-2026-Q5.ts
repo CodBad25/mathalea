@@ -5,7 +5,6 @@ import { texNombre } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
 import { choice, shuffle } from '../../../lib/outils/arrayOutils'
-import { sum } from 'mathjs'
 export const titre = 'Calculer la moyenne d’une série de nombres'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -35,7 +34,7 @@ export default class Can2a2026Q5 extends ExerciceCan {
       
       valeurs.push(a1, a2, b1, b2)
       
-      const somme = sum(valeurs)
+      const somme = a1 + a2 + b1 + b2
       
       // Le 5e nombre est calculé pour atteindre la somme cible
       const dernierNombre = sommeTarget - somme
@@ -52,7 +51,7 @@ export default class Can2a2026Q5 extends ExerciceCan {
       valeurs = shuffle(valeurs)
     }
 
-    const somme = sum(valeurs)
+    const somme = valeurs[0] + valeurs[1] + valeurs[2] + valeurs[3] + valeurs[4]
     const moyenne = somme / 5
 
     this.formatChampTexte = KeyboardType.clavierDeBase

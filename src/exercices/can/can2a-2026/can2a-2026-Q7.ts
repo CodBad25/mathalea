@@ -1,4 +1,5 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { ecritureAlgebrique, ecritureParentheseSiNegatif } from '../../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { randint } from '../../../modules/outils'
 import Trinome from '../../../modules/Trinome'
@@ -29,7 +30,8 @@ export default class Can2a2026Q7 extends ExerciceCan {
     this.formatChampTexte = KeyboardType.clavierDeBase
     this.reponse = resultat.toString()
     this.question = `$f(x)=${p.tex}$<br>$f(${val})=\\ldots$`
-    this.correction = `$f(${val})=${p.texCalculImage(val)}$<br>
+    this.correction = `$f(${val})=${ecritureParentheseSiNegatif(val)}^2${ecritureAlgebrique(b)}\\times ${ecritureParentheseSiNegatif(val)}=
+    ${val**2}${ecritureAlgebrique(b*val)}=${resultat}$<br>
     On a donc $f(${val})=${miseEnEvidence(resultat)}$.`
     this.canEnonce = `$f(x)=${p.tex}$`
     this.canReponseACompleter = `$f(${val})=\\ldots$`
