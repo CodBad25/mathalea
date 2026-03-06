@@ -1,5 +1,4 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
@@ -19,41 +18,31 @@ export const refs = {
 
 */
 export default class Can20266Q13 extends ExerciceCan {
-  enonce(a?: number, b?: number) {
-    let millier: number, centaines: number
+  constructor() {
+    super()
+    this.enonce()
+    this.optionsChampTexte = { texteApres: '$\\text{ kg}$' }
+  }
 
-    if (a == null || b == null) {
-      const m = randint(1, 9)
-      const c = randint(1, 6)
-      const d = randint(1, 9)
-      const u = randint(1, 9)
-      const centainesAjoutees = choice(
-        [3, 4, 6, 7, 8, 9].filter((x) => x + c < 10),
-      )
-      millier = m * 1000 + c * 100 + d * 10 + u
-      centaines = centainesAjoutees * 100
-    } else {
-      millier = a
-      centaines = b
+  enonce(nbKilos?: number, nbGrammes?: number) {
+    if (nbKilos == null || nbGrammes == null) {
+      nbKilos = randint(21, 59, [30, 40, 50]) / 10
+      nbGrammes = randint(2, 9) * 100
     }
 
-    const somme = millier + centaines
+    this.reponse = texNombre(nbKilos + nbGrammes / 1000, 1)
 
-    this.reponse = String(somme)
-    if (this.interactif) {
-      this.question = `$${texNombre(millier)}+${centaines}=$`
-    } else {
-      this.question = `$${texNombre(millier)}+${centaines}=\\ldots$`
-    }
+    this.question = `$${texNombre(nbKilos, 1)}\\text{ kg}+${texNombre(nbGrammes, 0)}\\text{ g}=$`
 
-    this.correction = `$${texNombre(millier)}+${centaines}=${miseEnEvidence(texNombre(somme))}$`
+    this.correction = `$${texNombre(nbGrammes, 0)}\\text{ g}=${texNombre(nbGrammes / 1000, 1)}\\text{ kg}$.<br>
+    Donc $${texNombre(nbKilos, 1)}+${texNombre(nbGrammes / 1000, 1)}=${miseEnEvidence(texNombre(nbKilos + nbGrammes / 1000, 1))}\\text{ kg}$`
 
     this.formatChampTexte = KeyboardType.clavierDeBase
-    this.canEnonce = 'Calcule.'
-    this.canReponseACompleter = `$${texNombre(millier)}+${centaines}=\\ldots$`
+    this.canEnonce = 'Complète.'
+    this.canReponseACompleter = `$${texNombre(nbKilos, 1)}\\text{ kg}+${texNombre(nbGrammes, 0)}\\text{ g}= \\ldots \\text{ kg}$`
   }
 
   nouvelleVersion() {
-    this.canOfficielle ? this.enonce(1462, 300) : this.enonce()
+    this.canOfficielle || this.sup ? this.enonce(3.2, 300) : this.enonce()
   }
 }
