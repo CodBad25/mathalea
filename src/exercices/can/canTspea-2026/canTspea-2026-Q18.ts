@@ -33,6 +33,7 @@ export const refs = {
 this.optionsDeComparaison = {  intervalle: true }
     this.formatChampTexte = KeyboardType.clavierEnsemble
     this.reponse = choix ? `]-\\infty ; ${petit}] \\cup [${grand} ; +\\infty[` : `[${petit};${grand}]`
+this.optionsChampTexte = { texteAvant: '<br>',texteApres: '(Tous les nombres dans un intervalle ou une suite de nombres doivent être séparés exclusivement par un point-virgule.)' }
 
     this.question = `L'ensemble des  solutions sur $\\mathbb{R}$ de l'inéquation $${a}(${reduireAxPlusB(1, -x1)})(${x2}-x)${choix ? '\\geqslant' : '\\leqslant'} 0$ est : `
     if (!this.interactif) {
