@@ -34,7 +34,7 @@ this.optionsDeComparaison = {  calculFormel: true }
     Exprimer $${var2}$ en fonction de $${var1}$.`
 
     this.correction = `De la relation $${rienSi1(a)}${var1}${ecritureAlgebriqueSauf1(b)}${var2}=${c}$, on déduit en ajoutant $${rienSi1(-a)}${var1}$ dans chaque membre :
-      $${rienSi1(b)}${var2}=${c}${ecritureAlgebriqueSauf1(-a)}${var1}$`
+      $${rienSi1(b)}${var2}=${c}${ecritureAlgebriqueSauf1(-a)}${var1}$.`
 
     if (Math.abs(b) !== 1) {
       this.correction += `<br>Puis, en divisant par $${b}$, on obtient : $${var2}=${miseEnEvidence(`\\dfrac{${reduireAxPlusB(-a, c, var1)}}{${b}}`)}$.`

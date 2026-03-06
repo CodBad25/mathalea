@@ -29,28 +29,28 @@ export default class Can1a2026Q14 extends ExerciceCan {
       case 1: // pi/6
         this.question = `$\\alpha$ est un réel de $${intervalle}$ vérifiant $\\cos(\\alpha)=\\dfrac{\\sqrt{3}}{2}$ et $\\sin(\\alpha)=\\dfrac{1}{2}$.<br>
         Valeur de $\\alpha$ en radians ?`
-        this.correction = `$\\cos \\dfrac{\\pi}{6}=\\dfrac{\\sqrt{3}}{2}$ et $\\sin \\dfrac{\\pi}{6}=\\dfrac{1}{2}$.<br>
+        this.correction = `$\\cos \\left(\\dfrac{\\pi}{6}\\right)=\\dfrac{\\sqrt{3}}{2}$ et $\\sin \\left(\\dfrac{\\pi}{6}\\right)=\\dfrac{1}{2}$.<br><br>
           $\\dfrac{\\pi}{6}\\in ${intervalle}$, donc $\\alpha=${miseEnEvidence('\\dfrac{\\pi}{6}')}$.`
         this.reponse = '\\dfrac{\\pi}{6}'
         break
       case 2: // pi/3
         this.question = `$\\alpha$ est un réel de $${intervalle}$ vérifiant $\\cos(\\alpha)=\\dfrac{1}{2}$ et $\\sin(\\alpha)=\\dfrac{\\sqrt{3}}{2}$.<br>
         Valeur de $\\alpha$ en radians ?`
-        this.correction = `$\\cos \\dfrac{\\pi}{3}=\\dfrac{1}{2}$ et $\\sin \\dfrac{\\pi}{3}=\\dfrac{\\sqrt{3}}{2}$.<br>
+        this.correction = `$\\cos \\left(\\dfrac{\\pi}{3}\\right)=\\dfrac{1}{2}$ et $\\sin \\left(\\dfrac{\\pi}{3}\\right)=\\dfrac{\\sqrt{3}}{2}$.<br><br>
           $\\dfrac{\\pi}{3}\\in ${intervalle}$, donc $\\alpha=${miseEnEvidence('\\dfrac{\\pi}{3}')}$.`
         this.reponse = '\\dfrac{\\pi}{3}'
         break
       case 3: // 2pi/3
         this.question = `$\\alpha$ est un réel de $${intervalle}$ vérifiant $\\cos(\\alpha)=-\\dfrac{1}{2}$ et $\\sin(\\alpha)=\\dfrac{\\sqrt{3}}{2}$.<br>
         Valeur de $\\alpha$ en radians ?`
-        this.correction = `$\\cos \\dfrac{2\\pi}{3}=-\\dfrac{1}{2}$ et $\\sin \\dfrac{2\\pi}{3}=\\dfrac{\\sqrt{3}}{2}$.<br>
+        this.correction = `$\\cos \\left(\\dfrac{2\\pi}{3}\\right)=-\\dfrac{1}{2}$ et $\\sin \\left(\\dfrac{2\\pi}{3}\\right)=\\dfrac{\\sqrt{3}}{2}$.<br><br>
           $\\dfrac{2\\pi}{3}\\in ${intervalle}$, donc $\\alpha=${miseEnEvidence('\\dfrac{2\\pi}{3}')}$.`
         this.reponse = '\\dfrac{2\\pi}{3}'
         break
       case 4: // 5pi/6
         this.question = `$\\alpha$ est un réel de $${intervalle}$ vérifiant $\\cos(\\alpha)=-\\dfrac{\\sqrt{3}}{2}$ et $\\sin(\\alpha)=\\dfrac{1}{2}$.<br>
         Valeur de $\\alpha$ en radians ?`
-        this.correction = `$\\cos \\dfrac{5\\pi}{6}=-\\dfrac{\\sqrt{3}}{2}$ et $\\sin \\dfrac{5\\pi}{6}=\\dfrac{1}{2}$.<br>
+        this.correction = `$\\cos \\left(\\dfrac{5\\pi}{6}\\right)=-\\dfrac{\\sqrt{3}}{2}$ et $\\sin \\left(\\dfrac{5\\pi}{6}\\right)=\\dfrac{1}{2}$.<br><br>
           $\\dfrac{5\\pi}{6}\\in ${intervalle}$, donc $\\alpha=${miseEnEvidence('\\dfrac{5\\pi}{6}')}$.`
         this.reponse = '\\dfrac{5\\pi}{6}'
         break
@@ -58,14 +58,14 @@ export default class Can1a2026Q14 extends ExerciceCan {
       case 5: // pi/4
         this.question = `$\\alpha$ est un réel de $${intervalle}$ vérifiant $\\cos(\\alpha)=\\dfrac{\\sqrt{2}}{2}$ et $\\sin(\\alpha)=\\dfrac{\\sqrt{2}}{2}$.<br>
         Valeur de $\\alpha$ en radians ?`
-        this.correction = `$\\cos \\dfrac{\\pi}{4}=\\dfrac{\\sqrt{2}}{2}$ et $\\sin \\dfrac{\\pi}{4}=\\dfrac{\\sqrt{2}}{2}$.<br>
+        this.correction = `$\\cos \\left(\\dfrac{\\pi}{4}\\right)=\\dfrac{\\sqrt{2}}{2}$ et $\\sin \\left(\\dfrac{\\pi}{4}\\right)=\\dfrac{\\sqrt{2}}{2}$.<br><br>
           $\\dfrac{\\pi}{4}\\in ${intervalle}$, donc $\\alpha=${miseEnEvidence('\\dfrac{\\pi}{4}')}$.`
         this.reponse = '\\dfrac{\\pi}{4}'
         break
       case 6: // 3pi/4
         this.question = `$\\alpha$ est un réel de $${intervalle}$ vérifiant $\\cos(\\alpha)=-\\dfrac{\\sqrt{2}}{2}$ et $\\sin(\\alpha)=\\dfrac{\\sqrt{2}}{2}$.<br>
         Valeur de $\\alpha$ en radians ?`
-        this.correction = `$\\cos \\dfrac{3\\pi}{4}=-\\dfrac{\\sqrt{2}}{2}$ et $\\sin \\dfrac{3\\pi}{4}=\\dfrac{\\sqrt{2}}{2}$.<br>
+        this.correction = `$\\cos \\left(\\dfrac{3\\pi}{4}\\right)=-\\dfrac{\\sqrt{2}}{2}$ et $\\sin \\left(\\dfrac{3\\pi}{4}\\right)=\\dfrac{\\sqrt{2}}{2}$.<br><br>
           $\\dfrac{3\\pi}{4}\\in ${intervalle}$, donc $\\alpha=${miseEnEvidence('\\dfrac{3\\pi}{4}')}$.`
         this.reponse = '\\dfrac{3\\pi}{4}'
         break
