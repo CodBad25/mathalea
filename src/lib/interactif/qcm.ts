@@ -277,7 +277,7 @@ export function propositionsQcm(
         texteCorr += '\\qquad '
       }
     }
-    texte += nbCols === 1 ? '\\\\\n' : '\\end{multicols}'
+    texte += nbCols === 1 ? (vertical ? '\n' : '\\\\\n') : '\\end{multicols}'
     texteCorr += nbCols === 1 ? '\\\\\n' : '\\end{multicols}'
   }
   if (context.isHtml) {
