@@ -1,5 +1,5 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { ecritureAlgebrique, ecritureAlgebriqueSauf1, ecritureParentheseSiNegatif, reduirePolynomeDegre3, rienSi1 } from '../../../lib/outils/ecritures'
+import { ecritureAlgebrique, ecritureParentheseSiNegatif, reduirePolynomeDegre3, rienSi1 } from '../../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
@@ -34,7 +34,12 @@ export default class Can2a2025CQ18 extends ExerciceCan {
     Quelle est l'image de $${x0}$ par $f$ ?<br>`
   
 
-    this.correction = `$f(${x0})=${rienSi1(a)}\\times ${ecritureParentheseSiNegatif(x0)}^2${ecritureAlgebriqueSauf1(b)}\\times ${ecritureParentheseSiNegatif(x0)}${ecritureAlgebrique(c)}=${a * x0 * x0}${ecritureAlgebrique(b * x0)}${ecritureAlgebrique(c)}=${miseEnEvidence(String(resultat))}$`
+    this.correction = `On remplace $x$ par $${x0}$ dans l'expression de $f$ :<br>
+    $\\begin{aligned}
+    f(${x0})&=${rienSi1(a)}\\times ${ecritureParentheseSiNegatif(x0)}^2${b === 1 ? `+${ecritureParentheseSiNegatif(x0)}` : b === -1 ? `-${ecritureParentheseSiNegatif(x0)}` : `${ecritureAlgebrique(b)}\\times ${ecritureParentheseSiNegatif(x0)}`}${ecritureAlgebrique(c)}\\\\
+    &=${a * x0 * x0}${ecritureAlgebrique(b * x0)}${ecritureAlgebrique(c)}\\\\
+    &=${miseEnEvidence(String(resultat))}
+    \\end{aligned}$`
 
     this.canEnonce = `Soit la fonction $f$ définie par $f(x)=${reduirePolynomeDegre3(0, a, b, c)}$.<br>
     Quelle est l'image de $${x0}$ par $f$ ?`
