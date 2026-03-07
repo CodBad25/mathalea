@@ -1,33 +1,36 @@
 import { courbe } from '../../../lib/2d/Courbe'
+import { point } from '../../../lib/2d/PointAbstrait'
 import { repere } from '../../../lib/2d/reperes'
 import { texteParPosition } from '../../../lib/2d/textes'
+import { tracePoint } from '../../../lib/2d/TracePoint'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
-import { remplisLesBlancs } from '../../../lib/interactif/questionMathLive'
+import { setReponse } from '../../../lib/interactif/gestionInteractif'
+import { ajouteChampTexteMathLive } from '../../../lib/interactif/questionMathLive'
 import { choice } from '../../../lib/outils/arrayOutils'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { rienSi1 } from '../../../lib/outils/ecritures'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../../modules/outils'
 import Exercice from '../../Exercice'
-
-export const titre = 'Lire graphiquement le signe de $a$ et de $\\Delta$'
+export const titre =
+  'Déterminer graphiquement la valeur de $b$ avec une parabole'
 export const interactifReady = true
 export const interactifType = 'mathLive'
-export const dateDePublication = '08/06/2022' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
-export const dateDeModifImportante = '12/10/2024'
-// Les exports suivants sont optionnels mais au moins la date de publication semble essentielle
 
+// Les exports suivants sont optionnels mais au moins la date de publication semble essentielle
+export const dateDePublication = '08/06/2022' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
+export const dateDeModifImportante = '11/10/2023' // j'ai enlevé c. J'ai ajoute a=-1
 /**
  *
  * @author Gilles Mora
+
  */
-export const uuid = 'a8936'
+export const uuid = '053d7'
 
 export const refs = {
   'fr-fr': ['can1F03'],
-  'fr-ch': [],
+  'fr-ch': ['1mF3-17'],
 }
-export default class LectureGraphiqueParabole extends Exercice {
+export default class LectureGraphiqueParabolebEtc extends Exercice {
   constructor() {
     super()
 
@@ -35,399 +38,75 @@ export default class LectureGraphiqueParabole extends Exercice {
   }
 
   nouvelleVersion() {
-    let texte,
-      texteCorr,
-      a: number,
-      alpha: number,
-      beta: number,
-      r,
-      F,
-      o,
-      texteIntro,
-      texteNI,
-      texteI
-
+    let texte, texteCorr, r, o, f, A, traceA
+    let alpha: number
+    let beta: number
+    let a: number
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
-      texteNI = 'Donner le signe de $a$ et de $\\Delta$.<br>'
-      texteIntro =
-        'La courbe représente une fonction $f$ définie par $f(x)=ax^2+bx+c$ .<br>'
-      texteI =
-        'Donner le signe de $a$ et de $\\Delta$ (compléter avec $>$, $<$ ou $=$) :<br>'
-      switch (
-        choice([1, 2, 3, 4, 5, 6]) //
-      ) {
-        case 1: // cas parabole a>0 et delta<0
-          a = randint(0, 1) + randint(5, 9) / 10
-          alpha = randint(-2, 1) + randint(1, 9) / 10
-          beta = randint(0, 2) + randint(4, 9) / 10
-          o = texteParPosition('O', -0.3, -0.3, 0, 'black', 1)
-          texte = `${texteIntro}`
-          if (!this.interactif) {
-            texte += `${texteNI}`
-          } else {
-            texte += `${texteI}`
-            texte += remplisLesBlancs(
-              this,
-              i,
-              'a \\,%{champ1} \\, 0 \\text{ et  } \\Delta \\, %{champ2}\\, 0',
-              KeyboardType.clavierCompare,
-            )
-          }
-          handleAnswers(this, i, {
-            bareme: (listePoints) => [
-              Math.min(listePoints[0], listePoints[1]),
-              1,
-            ],
-            champ1: { value: '>', options: { texteSansCasse: true } },
-            champ2: { value: '<', options: { texteSansCasse: true } },
-          })
-          // $${delta}$ et $${a}(x-${alpha})^2+${beta}$
-          r = repere({
-            xMin: -5,
-            yMin: -1,
-            yMax: 6,
-            xMax: 5,
-            thickHauteur: 0.1,
-            xLabelMin: -4,
-            xLabelMax: 4,
-            yLabelMax: 5,
-            axeXStyle: '->',
-            axeYStyle: '->',
-          })
+      alpha = randint(-3, 3)
+      beta = randint(-2, 2)
+      a = choice([-1, 1])
+      o = texteParPosition('O', -0.3, -0.3, 0, 'black', 1, 'milieu')
+      A = point(alpha, beta)
 
-          F = (x: number) => a * (x - alpha) ** 2 + beta
-          texte += mathalea2d(
-            {
-              xmin: -5,
-              xmax: 5,
-              ymin: -1.5,
-              ymax: 6,
-              pixelsParCm: 25,
-              scale: 0.65,
-              style: 'margin: auto',
-            },
-            r,
-            o,
-            courbe(F, { repere: r, color: 'blue', epaisseur: 2 }),
-          )
+      traceA = tracePoint(A, 'blue') // Variable qui trace les points avec une croix
+      f = (x: number): number => a * (x - alpha) ** 2 + beta
+      r = repere({
+        yUnite: 1,
+        xMin: -5,
+        yMin: -4,
+        yMax: 4,
+        xMax: 5,
+        thickHauteur: 0.1,
+        xLabelMin: -4,
+        xLabelMax: 4,
+        yLabelMax: 3,
+        yLabelMin: -3,
+        // yLabelMin: -9,
+        // yLabelListe:[-8,-6,-4,-2,2,4,6,8],
+        axeXStyle: '->',
+        axeYStyle: '->',
+      })
 
-          texteCorr = `La parabole a "les bras" tournés vers le haut, on en déduit que $a${miseEnEvidence('>')}0$. <br>
-      De plus, elle ne coupe pas l'axe des abscisses, donc $f$ n'a pas de racines et par suite $\\Delta${miseEnEvidence('<')}0$.`
-          break
+      texte = `La courbe représente une fonction $f$ définie par $f(x)=${rienSi1(a)}x^2+bx+c$.<br>
+      Déterminer la valeur de $b$.<br>`
+      texte += mathalea2d(
+        {
+          xmin: -5,
+          xmax: 5.05,
+          ymin: -4,
+          ymax: 4, // Math.max(3, f(0) + 1),
+          pixelsParCm: 25,
+          scale: 0.6,
+          style: 'margin: auto',
+        },
+        r,
+        o,
+        traceA,
+        courbe(f, { repere: r, color: 'blue', epaisseur: 2 }),
+      )
 
-        case 2: // cas parabole a>0 et delta>0
-          a = randint(0, 1) + randint(5, 9) / 10
-          alpha = randint(-2, 1) + randint(1, 9) / 10
-          beta = randint(-2, 0) - randint(4, 9) / 10
-          o = texteParPosition('O', -0.3, -0.3, 0, 'black', 1)
-          texte = `${texteIntro}`
-          if (!this.interactif) {
-            texte += `${texteNI}`
-          } else {
-            texte += `${texteI}`
-            texte += remplisLesBlancs(
-              this,
-              i,
-              'a \\, %{champ1} \\, 0 \\text{ et  } \\Delta \\, %{champ2}\\, 0',
-              KeyboardType.clavierCompare,
-            )
-          }
-          handleAnswers(this, i, {
-            bareme: (listePoints) => [
-              Math.min(listePoints[0], listePoints[1]),
-              1,
-            ],
-            champ1: { value: '>', options: { texteSansCasse: true } },
-            champ2: { value: '>', options: { texteSansCasse: true } },
-          })
-          // $${delta}$ et $${a}(x-${alpha})^2+${beta}$
+      if (this.interactif) {
+        texte += ajouteChampTexteMathLive(
+          this,
+          i,
+          KeyboardType.clavierNumbers,
+          { texteAvant: '$b=$' },
+        )
 
-          r = repere({
-            xMin: -5,
-            yMin: -4,
-            yMax: 5,
-            xMax: 5,
-            thickHauteur: 0.1,
-            xLabelMin: -4,
-            xLabelMax: 4,
-            yLabelMax: 4,
-            yLabelMin: -3,
-            axeXStyle: '->',
-            axeYStyle: '->',
-          })
-
-          F = (x: number) => a * (x - alpha) ** 2 + beta
-          texte += mathalea2d(
-            {
-              xmin: -5,
-              xmax: 5,
-              ymin: -4.5,
-              ymax: 5,
-              pixelsParCm: 25,
-              scale: 0.65,
-              style: 'margin: auto',
-            },
-            r,
-            o,
-            courbe(F, { repere: r, color: 'blue', epaisseur: 2 }),
-          )
-          texteCorr = `La parabole a "les bras" tournés vers le haut, on en déduit que $a${miseEnEvidence('>')}0$. <br>
-    De plus, elle  coupe  l'axe des abscisses en deux points, donc $f$ a deux racines et par suite $\\Delta${miseEnEvidence('>')}0$.`
-          break
-
-        case 3: // cas parabole a>0 et delta=0
-          a = randint(0, 1) + randint(5, 9) / 10
-          alpha = randint(-2, 1) + randint(1, 9) / 10
-          beta = 0
-          o = texteParPosition('O', -0.3, -0.3, 0, 'black', 1)
-          texte = `${texteIntro}`
-          if (!this.interactif) {
-            texte += `${texteNI}`
-          } else {
-            texte += `${texteI}`
-            texte += remplisLesBlancs(
-              this,
-              i,
-              'a \\, %{champ1} \\, 0 \\text{ et  } \\Delta \\, %{champ2}\\, 0',
-              KeyboardType.clavierCompare,
-            )
-          }
-          handleAnswers(this, i, {
-            bareme: (listePoints) => [
-              Math.min(listePoints[0], listePoints[1]),
-              1,
-            ],
-            champ1: { value: '>', options: { texteSansCasse: true } },
-            champ2: { value: '=', options: { texteSansCasse: true } },
-          })
-          // $${delta}$ et $${a}(x-${alpha})^2+${beta}$
-          r = repere({
-            xMin: -5,
-            yMin: -2,
-            yMax: 5,
-            xMax: 5,
-            thickHauteur: 0.1,
-            xLabelMin: -4,
-            xLabelMax: 4,
-            yLabelMax: 4,
-            axeXStyle: '->',
-            yLabelMin: -1,
-            axeYStyle: '->',
-          })
-
-          F = (x: number) => a * (x - alpha) ** 2 + beta
-          texte += mathalea2d(
-            {
-              xmin: -5,
-              xmax: 5,
-              ymin: -2.5,
-              ymax: 5,
-              pixelsParCm: 25,
-              scale: 0.65,
-              style: 'margin: auto',
-            },
-            r,
-            o,
-            courbe(F, { repere: r, color: 'blue', epaisseur: 2 }),
-          )
-
-          texteCorr = `La parabole a "les bras" tournés vers le haut, on en déduit que $a${miseEnEvidence('>')}0$. <br>
- De plus, elle  coupe  l'axe des abscisses en un point, donc $f$ a une seule racine et par suite $\\Delta${miseEnEvidence('=')}0$.`
-          break
-
-        case 4: // cas parabole a<0 et delta=0
-          a = randint(-1, 0) - randint(5, 9) / 10
-          alpha = randint(-2, 1) + randint(1, 9) / 10
-          beta = 0
-          o = texteParPosition('O', -0.3, -0.3, 0, 'black', 1)
-          texte = `${texteIntro}`
-          if (!this.interactif) {
-            texte += `${texteNI}`
-          } else {
-            texte += `${texteI}`
-            texte += remplisLesBlancs(
-              this,
-              i,
-              'a \\, %{champ1} \\, 0 \\text{ et  } \\Delta \\, %{champ2}\\, 0',
-              KeyboardType.clavierCompare,
-            )
-          }
-          handleAnswers(this, i, {
-            bareme: (listePoints) => [
-              Math.min(listePoints[0], listePoints[1]),
-              1,
-            ],
-            champ1: { value: '<', options: { texteSansCasse: true } },
-            champ2: { value: '=', options: { texteSansCasse: true } },
-          })
-          // $${delta}$ et $${a}(x-${alpha})^2+${beta}$
-
-          r = repere({
-            xMin: -5,
-            yMin: -5,
-            yMax: 2,
-            xMax: 5,
-            thickHauteur: 0.1,
-            xLabelMin: -4,
-            xLabelMax: 4,
-            yLabelMax: 1,
-            axeXStyle: '->',
-            yLabelMin: -4,
-            axeYStyle: '->',
-          })
-
-          F = (x: number) => a * (x - alpha) ** 2 + beta
-          texte += mathalea2d(
-            {
-              xmin: -5,
-              xmax: 5,
-              ymin: -5.5,
-              ymax: 2,
-              pixelsParCm: 25,
-              scale: 0.65,
-              style: 'margin: auto',
-            },
-            r,
-            o,
-            courbe(F, { repere: r, color: 'blue', epaisseur: 2 }),
-          )
-
-          texteCorr = `La parabole a "les bras" tournés vers le bas, on en déduit que $a${miseEnEvidence('<')}0$. <br>
- De plus, elle  coupe  l'axe des abscisses en un point, donc $f$ a une seule racine et par suite $\\Delta${miseEnEvidence('=')}0$.`
-          break
-
-        case 5: // cas parabole a<0 et delta>0
-          a = randint(-1, 0) - randint(5, 9) / 10
-          alpha = randint(-2, 1) + randint(1, 9) / 10
-          beta = randint(1, 3) + randint(4, 9) / 10
-          o = texteParPosition('O', -0.3, -0.3, 0, 'black', 1)
-          texte = `${texteIntro}`
-          if (!this.interactif) {
-            texte += `${texteNI}`
-          } else {
-            texte += `${texteI}`
-            texte += remplisLesBlancs(
-              this,
-              i,
-              'a \\, %{champ1} \\, 0 \\text{ et  } \\Delta \\, %{champ2}\\, 0',
-              KeyboardType.clavierCompare,
-            )
-          }
-          handleAnswers(this, i, {
-            bareme: (listePoints) => [
-              Math.min(listePoints[0], listePoints[1]),
-              1,
-            ],
-            champ1: { value: '<', options: { texteSansCasse: true } },
-            champ2: { value: '>', options: { texteSansCasse: true } },
-          })
-          // $${delta}$ et $${a}(x-${alpha})^2+${beta}$
-
-          r = repere({
-            xMin: -5,
-            yMin: -2,
-            yMax: 5,
-            xMax: 5,
-            thickHauteur: 0.1,
-            xLabelMin: -4,
-            yLabelMin: -1,
-            xLabelMax: 3,
-            yLabelMax: 4,
-            axeXStyle: '->',
-            axeYStyle: '->',
-          })
-
-          F = (x: number) => a * (x - alpha) ** 2 + beta
-          texte += mathalea2d(
-            {
-              xmin: -5,
-              xmax: 5,
-              ymin: -2.5,
-              ymax: 5,
-              pixelsParCm: 25,
-              scale: 0.65,
-              style: 'margin: auto',
-            },
-            r,
-            o,
-            courbe(F, { repere: r, color: 'blue', epaisseur: 2 }),
-          )
-
-          texteCorr = `La parabole a "les bras" tournés vers le bas, on en déduit que $a${miseEnEvidence('<')}0$. <br>
- De plus, elle  coupe  l'axe des abscisses en deux points, donc $f$ a deux racines  et par suite $\\Delta${miseEnEvidence('>')}0$.`
-          break
-
-        case 6: // cas parabole a<0 et delta<0
-        default:
-          a = randint(-1, 0) - randint(3, 7) / 10
-          alpha = randint(-2, 1) + randint(1, 9) / 10
-          beta = randint(-1, 0) - randint(4, 9) / 10
-          o = texteParPosition('O', -0.3, -0.3, 0, 'black', 1)
-          texte = `${texteIntro}`
-          if (!this.interactif) {
-            texte += `${texteNI}`
-          } else {
-            texte += `${texteI}`
-            texte += remplisLesBlancs(
-              this,
-              i,
-              'a \\, %{champ1} \\, 0 \\text{ et  } \\Delta \\, %{champ2}\\, 0',
-              KeyboardType.clavierCompare,
-            )
-          }
-          handleAnswers(this, i, {
-            bareme: (listePoints) => [
-              Math.min(listePoints[0], listePoints[1]),
-              1,
-            ],
-            champ1: { value: '<', options: { texteSansCasse: true } },
-            champ2: { value: '<', options: { texteSansCasse: true } },
-          })
-          // $${delta}$ et $${a}(x-${alpha})^2+${beta}$
-
-          r = repere({
-            xMin: -5,
-            yMin: -5,
-            yMax: 2,
-            xMax: 5,
-            thickHauteur: 0.1,
-            xLabelMin: -4,
-            yLabelMin: -4,
-            xLabelMax: 4,
-            yLabelMax: 1,
-            axeXStyle: '->',
-            axeYStyle: '->',
-          })
-
-          F = (x: number) => a * (x - alpha) ** 2 + beta
-          texte += mathalea2d(
-            {
-              xmin: -5,
-              xmax: 5,
-              ymin: -5.5,
-              ymax: 2,
-              pixelsParCm: 25,
-              scale: 0.65,
-              style: 'margin: auto',
-            },
-            r,
-            o,
-            courbe(F, { repere: r, color: 'blue', epaisseur: 2 }),
-          )
-
-          texteCorr = `La parabole a "les bras" tournés vers le bas, on en déduit que $a${miseEnEvidence('<')}0$. <br>
- De plus, elle ne coupe pas l'axe des abscisses, donc $f$ n'a pas de racines et par suite $\\Delta${miseEnEvidence('<')}0$.`
-          break
+        setReponse(this, i, -2 * a * alpha)
       }
 
-      if (this.questionJamaisPosee(i, a, alpha, beta)) {
+      texteCorr = `L'abscisse du sommet de la parabole est $${alpha}$.<br>
+          Comme l'abscisse du sommet est  donné par $-\\dfrac{b}{2a}$, alors $-\\dfrac{b}{2a}=${alpha}$.<br>
+          L'énoncé indique que $a=${a}$, on en déduit $-\\dfrac{b}{${2 * a}}=${alpha}$, soit $b=${a * alpha * -2}$.`
+
+      if (this.questionJamaisPosee(i, alpha, beta)) {
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr
 
-        this.canEnonce = texte
-        this.canReponseACompleter = '$a\\ldots 0$ et $\\Delta \\ldots 0$'
-        this.listeCanEnonces.push(this.canEnonce)
-        this.listeCanReponsesACompleter.push(this.canReponseACompleter)
+        this.listeCanEnonces.push(texte)
+        this.listeCanReponsesACompleter.push('$b=\\ldots$')
         i++
       }
       cpt++

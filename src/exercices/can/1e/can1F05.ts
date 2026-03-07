@@ -1,116 +1,151 @@
-import { courbe } from '../../../lib/2d/Courbe'
-import { point } from '../../../lib/2d/PointAbstrait'
-import { repere } from '../../../lib/2d/reperes'
-import { texteParPosition } from '../../../lib/2d/textes'
-import { tracePoint } from '../../../lib/2d/TracePoint'
+import Decimal from 'decimal.js'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../../lib/interactif/gestionInteractif'
-import { ajouteChampTexteMathLive } from '../../../lib/interactif/questionMathLive'
 import { choice } from '../../../lib/outils/arrayOutils'
-import { rienSi1 } from '../../../lib/outils/ecritures'
-import { mathalea2d } from '../../../modules/mathalea2d'
-import { listeQuestionsToContenu, randint } from '../../../modules/outils'
-import Exercice from '../../Exercice'
+import {
+  ecritureAlgebrique,
+  ecritureParentheseSiNegatif,
+  reduireAxPlusB,
+  reduirePolynomeDegre3,
+  rienSi1,
+} from '../../../lib/outils/ecritures'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { texNombre } from '../../../lib/outils/texNombre'
+import FractionEtendue from '../../../modules/FractionEtendue'
+import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre =
-  'Déterminer graphiquement la valeur de $b$ avec une parabole'
+  'Déterminer une équation de l’axe de symétrie d’une parabole'
 export const interactifReady = true
 export const interactifType = 'mathLive'
-
-// Les exports suivants sont optionnels mais au moins la date de publication semble essentielle
-export const dateDePublication = '08/06/2022' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
-export const dateDeModifImportante = '11/10/2023' // j'ai enlevé c. J'ai ajoute a=-1
+export const dateDePublication = '15/06/2022'
+export const dateDeModifImportante = '30/09/2025' // j'ai ajouté miseEnEvidence et ajouter le cas alpha=0 avec FC et passage à fractionEtendue
 /**
  *
  * @author Gilles Mora
 
- */
-export const uuid = '053d7'
+*/
+export const uuid = '5b203'
 
 export const refs = {
   'fr-fr': ['can1F05'],
-  'fr-ch': ['1mF3-17'],
+  'fr-ch': [],
 }
-export default class LectureGraphiqueParabolebEtc extends Exercice {
+export default class AxeSymetrieParabole extends ExerciceSimple {
   constructor() {
     super()
 
+    this.typeExercice = 'simple'
     this.nbQuestions = 1
+    this.formatChampTexte = KeyboardType.clavierFullOperations
+    this.optionsChampTexte = {
+      texteAvant: '<br> ',
+    }
   }
 
   nouvelleVersion() {
-    let texte, texteCorr, r, o, f, A, traceA
-    let alpha: number
-    let beta: number
-    let a: number
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
-      alpha = randint(-3, 3)
-      beta = randint(-2, 2)
-      a = choice([-1, 1])
-      o = texteParPosition('O', -0.3, -0.3, 0, 'black', 1, 'milieu')
-      A = point(alpha, beta)
+    let a, x1, x2, somme, moinsb, b, c, maFraction, alpha, beta
+    switch (choice([1, 2, 3])) {
+      case 1: // forme factorisée
+        a = randint(-9, 9, 0)
+        x1 = randint(-9, 9)
+        x2 = randint(-9, 9, [0, x1])
+        somme = new Decimal(x1 + x2)
+        if (x1 === 0) {
+          this.question = `Soit $f$ la fonction définie sur $\\mathbb{R}$ par :
+      $f(x)=${rienSi1(a)}x(${reduireAxPlusB(1, -x2)})$. <br>
+      
+      `
+        } else {
+          this.question = `Soit $f$ la fonction définie sur $\\mathbb{R}$ par :
+      $f(x)=${rienSi1(a)}(${reduireAxPlusB(1, -x1)})(${reduireAxPlusB(1, -x2)})$. <br>
+      
+      `
+        }
 
-      traceA = tracePoint(A, 'blue') // Variable qui trace les points avec une croix
-      f = (x: number): number => a * (x - alpha) ** 2 + beta
-      r = repere({
-        yUnite: 1,
-        xMin: -5,
-        yMin: -4,
-        yMax: 4,
-        xMax: 5,
-        thickHauteur: 0.1,
-        xLabelMin: -4,
-        xLabelMax: 4,
-        yLabelMax: 3,
-        yLabelMin: -3,
-        // yLabelMin: -9,
-        // yLabelListe:[-8,-6,-4,-2,2,4,6,8],
-        axeXStyle: '->',
-        axeYStyle: '->',
-      })
+        this.question +=
+          "Donner une équation de l'axe de symétrie de la parabole représentant $f$."
 
-      texte = `La courbe représente une fonction $f$ définie par $f(x)=${rienSi1(a)}x^2+bx+c$.<br>
-      Déterminer la valeur de $b$.<br>`
-      texte += mathalea2d(
-        {
-          xmin: -5,
-          xmax: 5.05,
-          ymin: -4,
-          ymax: 4, // Math.max(3, f(0) + 1),
-          pixelsParCm: 25,
-          scale: 0.6,
-          style: 'margin: auto',
-        },
-        r,
-        o,
-        traceA,
-        courbe(f, { repere: r, color: 'blue', epaisseur: 2 }),
-      )
+        this.correction = `$f$ est une fonction polynôme du second degré écrite sous forme factorisée $a(x-x_1)(x-x_2)$.<br>
+    Les racines sont donc $x_1=${x1}$ et $x_2=${x2}$.<br>
+    L'axe de symétrie a pour équation $x=\\dfrac{x_1+x_2}{2}$. <br>
+    On obtient alors  $x=\\dfrac{${x1}+${ecritureParentheseSiNegatif(x2)}}{2}$, soit $x=\\dfrac{${x1 + x2}}{2}$ ou encore $${miseEnEvidence('x=' + texNombre((x1 + x2) / 2, 1))}$. `
+        if (x1 + x2 < 0) {
+          this.reponse = [
+            `x=${somme.div(2)}`,
+            `x=\\dfrac{${somme}}{2}`,
+            `x+\\dfrac{${-somme}}{2}=0`,
+            `x+${-somme.div(2)}=0`,
+          ]
+        } else {
+          this.reponse = [
+            `x=${somme.div(2)}`,
+            `x=\\dfrac{${somme}}{2}`,
+            `x-\\dfrac{${somme}}{2}=0`,
+            `x-${somme.div(2)}=0`,
+          ]
+        }
+        break
 
-      if (this.interactif) {
-        texte += ajouteChampTexteMathLive(
-          this,
-          i,
-          KeyboardType.clavierNumbers,
-          { texteAvant: '$b=$' },
-        )
+      case 2: // forme développée
+        a = randint(-3, 3, 0)
+        b = randint(-9, 9)
+        c = randint(-10, 10)
+        moinsb = new Decimal(-b)
+        maFraction = new FractionEtendue(-b, 2 * a)
+        this.question = `Soit $f$ la fonction définie sur $\\mathbb{R}$ par :
+      $f(x)=${reduirePolynomeDegre3(0, a, b, c)}$. <br>
+      
+      `
 
-        setReponse(this, i, -2 * a * alpha)
-      }
+        this.question +=
+          "Donner une équation de l'axe de symétrie de la parabole représentant $f$."
 
-      texteCorr = `L'abscisse du sommet de la parabole est $${alpha}$.<br>
-          Comme l'abscisse du sommet est  donné par $-\\dfrac{b}{2a}$, alors $-\\dfrac{b}{2a}=${alpha}$.<br>
-          L'énoncé indique que $a=${a}$, on en déduit $-\\dfrac{b}{${2 * a}}=${alpha}$, soit $b=${a * alpha * -2}$.`
+        this.correction = `$f$ est une fonction polynôme du second degré écrite sous forme développée $ax^2+bx+c$.<br>
+    Le sommet de la parabole a pour abscisse $-\\dfrac{b}{2a}$.<br>
+        L'axe de symétrie a donc pour équation $x=-\\dfrac{b}{2a}$. <br>
+    On obtient alors  $x=-\\dfrac{${b}}{2\\times ${ecritureParentheseSiNegatif(a)}}$, soit $${miseEnEvidence('x=' + maFraction.simplifie().texFSD)}$. `
+        if (-b / (2 * a) < 0) {
+          this.reponse = [
+            `x=${moinsb.div(2 * a)}`,
+            `x=\\dfrac{${moinsb}}{${2 * a}}`,
+            `x+${moinsb.div(-2 * a)}=0`,
+            `x+\\dfrac{${moinsb}}{${-2 * a}}=0`,
+            `x=${maFraction.texFraction}`,
+            `x+${maFraction.multiplieEntier(-1).texFraction}=0`,
+          ]
+        } else {
+          this.reponse = [
+            `x=${moinsb.div(2 * a)}`,
+            `x=\\dfrac{${moinsb}}{${2 * a}}`,
+            `x-\\dfrac{${moinsb}}{${2 * a}}=0`,
+            `x-${moinsb.div(2 * a)}=0`,
+            `x=${maFraction.texFraction}`,
+            `x-${maFraction.texFraction}=0`,
+          ]
+        }
+        break
 
-      if (this.questionJamaisPosee(i, alpha, beta)) {
-        this.listeQuestions[i] = texte
-        this.listeCorrections[i] = texteCorr
+      case 3: // forme canonique
+        a = randint(-9, 9, 0)
+        alpha = randint(-1, 0)
+        beta = randint(-10, 10)
 
-        this.listeCanEnonces.push(texte)
-        this.listeCanReponsesACompleter.push('$b=\\ldots$')
-        i++
-      }
-      cpt++
+        this.question = `Soit $f$ la fonction définie sur $\\mathbb{R}$ par :
+      $f(x)=${rienSi1(a)}${alpha === 0 ? 'x^2' : `(x${ecritureAlgebrique(-alpha)})^2`}${ecritureAlgebrique(beta)}$. <br>
+      
+      `
+
+        this.question +=
+          "Donner une équation de l'axe de symétrie de la parabole représentant $f$."
+
+        this.correction = `$f$ est une fonction polynôme du second degré écrite sous forme canonique $a(x-\\alpha)^2+\\beta$.<br>
+        L'axe de symétrie a pour équation $x=\\alpha$. <br>
+    On obtient alors  $${miseEnEvidence('x=' + alpha)}$. `
+
+        this.reponse = [`x=${alpha}`, `x${ecritureAlgebrique(-alpha)}=0`]
+        break
     }
-    listeQuestionsToContenu(this)
+    this.canEnonce = this.question
+    this.canReponseACompleter = ''
   }
 }

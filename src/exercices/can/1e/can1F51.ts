@@ -13,7 +13,7 @@ export const dateDePublication = '05/08/2024' // La date de publication initiale
 export const uuid = 'ce463'
 
 export const refs = {
-  'fr-fr': ['can1F26'],
+  'fr-fr': ['can1F51'],
   'fr-ch': [],
 }
 class ExpCAN extends SimplifierExponentielles {

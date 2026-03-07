@@ -25,7 +25,7 @@ export const dateDePublication = '24/06/2022' // La date de publication initiale
 export const uuid = 'c7f8e'
 
 export const refs = {
-  'fr-fr': ['can1F19'],
+  'fr-fr': ['can1F44'],
   'fr-ch': [],
 }
 export default class CalculFonctionDeriveeQuotient extends ExerciceSimple {

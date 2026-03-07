@@ -26,7 +26,7 @@ export const dateDeModifImportante = '01/02/2025' // Une date de modification im
 export const uuid = '12089'
 
 export const refs = {
-  'fr-fr': ['can1F17'],
+  'fr-fr': ['can1F42'],
   'fr-ch': ['3mA2-4'],
 }
 export default class CalculFonctionDeriveeUnsurU extends ExerciceSimple {

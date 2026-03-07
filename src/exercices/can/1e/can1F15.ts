@@ -1,423 +1,497 @@
-import { courbe } from '../../../lib/2d/Courbe'
-import { repere } from '../../../lib/2d/reperes'
-import { texteParPosition } from '../../../lib/2d/textes'
 import { choice } from '../../../lib/outils/arrayOutils'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import FractionEtendue from '../../../modules/FractionEtendue'
-import { mathalea2d } from '../../../modules/mathalea2d'
-import { randint } from '../../../modules/outils'
-import ExerciceSimple from '../../ExerciceSimple'
-export const titre = 'Lire graphiquement un nombre dérivé'
+import {
+  ecritureAlgebrique,
+  ecritureParentheseSiNegatif,
+  reduireAxPlusB,
+  reduirePolynomeDegre3,
+} from '../../../lib/outils/ecritures'
+import { sp } from '../../../lib/outils/outilString'
+import Exercice from '../../Exercice'
+import { fraction } from '../../../modules/fractions'
+import { randint, listeQuestionsToContenu } from '../../../modules/outils'
+import { propositionsQcm } from '../../../lib/interactif/qcm'
+export const titre =
+  'Déterminer le sens de variation d’un pôlynome du second degré'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+export const interactifType = 'qcm'
 
 // Les exports suivants sont optionnels mais au moins la date de publication semble essentielle
-export const dateDePublication = '21/06/2022' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
-// export const dateDeModifImportante = '14/02/2022' // Une date de modification importante au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
+export const dateDePublication = '1/11/2021' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
+export const dateDeModifImportante = '10/06/2022' // Une date de modification importante au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
 
 /**
- * Modèle d'exercice très simple pour la course aux nombres
+ * étude de variation d'une fonction du 2nd degré.
  * @author Gilles Mora
 
 */
-export const uuid = '0e984'
+export const uuid = 'cc460'
 
 export const refs = {
   'fr-fr': ['can1F15'],
-  'fr-ch': ['NR'],
+  'fr-ch': [],
 }
-export default class LectureGraphiqueNombreDerivee extends ExerciceSimple {
+export default class SecondDegreVariations extends Exercice {
   constructor() {
     super()
 
-    this.typeExercice = 'simple'
     this.nbQuestions = 1
   }
 
   nouvelleVersion() {
-    const listeFractions = [
-      [1, 1],
-      [1, 2],
-      [1, 3],
-      [1, 4],
-      [2, 1],
-      [2, 3],
-      [3, 4],
-      [3, 2],
-      [4, 3],
-      [5, 3],
-      [5, 4],
-    ]
-    let b: number
-    let f: (x: number) => number
-    let r
-    let alpha: number
-    let beta: number
-    let a: number
-    let F: (x: number) => number
-    let o
-    let nbre: number
-    let tang
-    let frac: FractionEtendue
-    let valueFrac: number
-    let fraction = []
-    switch (choice([1, 2, 3, 4, 5])) {
-      case 1:
-        a = randint(1, 2)
-        nbre = randint(-1, 1)
-        alpha = randint(-1, 1)
-        beta = randint(-2, 2)
-        o = texteParPosition('O', -0.3, -0.3, 0, 'black', 1)
-        f = function (x: number) {
-          return 2 * a * x - 2 * a * alpha
-        }
-        F = function (x: number) {
-          return a * (x - alpha) ** 2 + beta
-        }
-        r = repere({
-          xMin: -4,
-          xMax: 4,
-          xUnite: 2,
-          yMin: -3,
-          yMax: 10,
-          thickHauteur: 0.2,
-          xLabelMin: -3,
-          xLabelMax: 3,
-          yLabelMax: 9,
-          yLabelMin: -1,
-          axeXStyle: '->',
-          axeYStyle: '->',
-          yLabelDistance: 2,
-          yLabelEcart: 0.8,
-          grilleSecondaire: true,
-          grilleSecondaireYDistance: 1,
-          grilleSecondaireXDistance: 1,
-          grilleSecondaireYMin: -3,
-          grilleSecondaireYMax: 10,
-          grilleSecondaireXMin: -4,
-          grilleSecondaireXMax: 4,
-        })
-        tang = (x: number) => f(nbre) * (x - nbre) + F(nbre)
-        F = (x) => a * (x - alpha) ** 2 + beta
-        this.question = `La courbe représente une fonction $f$ et la droite est la tangente au point d'abscisse $${nbre}$.<br>
-        
-        Déterminer $f'(${nbre})$.`
-        this.question +=
-          '<br>' +
-          mathalea2d(
-            {
-              xmin: -8,
-              xmax: 8,
-              ymin: -3,
-              ymax: 10,
-              pixelsParCm: 14,
-              scale: 0.5,
-              style: 'margin: auto',
-            },
-            r,
-            o,
-            courbe(F, { repere: r, color: 'blue', epaisseur: 2 }),
-            courbe(tang, { repere: r, color: 'red', epaisseur: 2 }),
-          )
-        this.correction = `$f'(${nbre})$ est donné par le coefficient directeur de la tangente à la courbe au point d'abscisse $${nbre}$, soit $${f(nbre)}$.`
+    let texte, texteCorr, a, b, maFraction, c, maFractionN, props
+    for (let i = 0; i < this.nbQuestions; i++) {
+      switch (
+        choice([1, 2, 3, 4, 5, 6]) //
+      ) {
+        case 1: // croissante forme développée
+          a = randint(-5, 5, 0)
+          b = randint(-9, 9)
+          c = randint(-9, 9, 0)
+          maFraction = fraction(-b, 2 * a)
+          maFractionN = fraction(b, 2 * a)
+          texte = `Soit $f$ la fonction définie sur $\\mathbb{R}$ par  $f(x)=${reduirePolynomeDegre3(0, a, b, c)}$.<br>
+  
+              Donner le plus grand intervalle sur lequel la fonction $f$ est croissante.`
+          if (b === 0) {
+            this.autoCorrection[i] = {
+              enonce: texte,
+              options: { vertical: false },
+              propositions: [
+                {
+                  texte: `$\\bigg[${maFraction.texFractionSimplifiee}${sp(1)} ;${sp(1)} +\\infty\\bigg[$ `,
+                  statut: a > 0,
+                },
+                {
+                  texte: `$\\bigg]-\\infty${sp(1)} ;${sp(1)}${maFraction.texFractionSimplifiee} \\bigg]$ `,
+                  statut: a < 0,
+                },
+                {
+                  texte: `$\\bigg[${a}${sp(1)} ;${sp(1)} +\\infty\\bigg[$ `,
+                  statut: a === 0,
+                },
+                {
+                  texte: `$\\bigg]-\\infty ${sp(1)} ;${sp(1)} ${a} \\bigg]$ `,
+                  statut: a === 0,
+                },
+              ],
+            }
+          } else {
+            this.autoCorrection[i] = {
+              enonce: texte,
+              options: { vertical: false },
+              propositions: [
+                {
+                  texte: `$\\bigg[${maFraction.texFractionSimplifiee}${sp(1)} ;${sp(1)} +\\infty\\bigg[$ `,
+                  statut: a > 0,
+                },
+                {
+                  texte: `$\\bigg]-\\infty${sp(1)} ;${sp(1)}${maFraction.texFractionSimplifiee} \\bigg]$ `,
+                  statut: a < 0,
+                },
+                {
+                  texte: `$\\bigg[${maFractionN.texFractionSimplifiee}${sp(1)} ;${sp(1)} +\\infty\\bigg[$ `,
+                  statut: a === 0,
+                },
+                {
+                  texte: `$\\bigg]-\\infty ${sp(1)} ;${sp(1)} ${maFractionN.texFractionSimplifiee} \\bigg]$ `,
+                  statut: a === 0,
+                },
+              ],
+            }
+          }
+          props = propositionsQcm(this, i)
+          if (this.interactif) texte += props.texte
+          if (a > 0) {
+            texteCorr = `Comme le coefficient $${a}$ devant $x^2$ est strictement positif, la fonction est d'abord décroissante puis croissante (la parabole est "tournée vers le haut").
+            <br> $-\\dfrac{b}{2a}=-\\dfrac{${b}}{2\\times ${ecritureParentheseSiNegatif(a)}}=${maFraction.texFractionSimplifiee}$.
+            <br>Ainsi, $f$ est croissante sur $\\bigg[${maFraction.texFractionSimplifiee}${sp(1)} ;${sp(1)} +\\infty\\bigg[$.    `
+          } else {
+            texteCorr = `Comme le coefficient $${a}$ devant $x^2$ est strictement négatif, la fonction est d'abord croissante puis décroissante (la parabole est "tournée vers le bas").
+            <br>$-\\dfrac{b}{2a}=-\\dfrac{${b}}{2\\times ${ecritureParentheseSiNegatif(a)}}=${maFraction.texFractionSimplifiee}$.
+            <br>Ainsi, $f$ est croissante sur $\\bigg]-\\infty${sp(1)} ;${sp(1)}${maFraction.texFractionSimplifiee} \\bigg]$.    `
+          }
+          break
 
-        this.reponse = f(nbre)
+        case 2: // croissante forme canonique
+          a = randint(-10, 10, 0)
+          b = randint(-5, 5, 0)
+          c = randint(-9, 9, 0)
 
-        this.canEnonce = this.question
-        this.canReponseACompleter = `$f'(${nbre})=\\ldots$`
-        break
+          if (a === 1) {
+            texte = `Soit $f$ la fonction définie sur $\\mathbb{R}$ par  $f(x)=(${reduireAxPlusB(1, b)})^2${ecritureAlgebrique(c)}$.
+            <br>
+            
+            Donner le plus grand intervalle sur lequel la fonction $f$ est croissante.`
+          } else {
+            if (a === -1) {
+              texte = `Soit $f$ la fonction définie sur $\\mathbb{R}$ par  $f(x)=-(${reduireAxPlusB(1, b)})^2${ecritureAlgebrique(c)}$.
+              <br>   Le plus grand intervalle sur lequel la fonction $f$ est croissante est :`
+            } else {
+              texte = `Soit $f$ la fonction définie sur $\\mathbb{R}$ par  $f(x)=${reduireAxPlusB(0, a)}(${reduireAxPlusB(1, b)})^2${ecritureAlgebrique(c)}$.
+              <br>
+              
+              Donner le plus grand intervalle sur lequel la fonction $f$ est croissante.`
+            }
+          }
+          this.autoCorrection[i] = {
+            enonce: texte,
+            options: { vertical: false },
+            propositions: [
+              {
+                texte: `$\\bigg[${-b}${sp(1)} ;${sp(1)} +\\infty\\bigg[$ `,
+                statut: a > 0,
+              },
+              {
+                texte: `$\\bigg]-\\infty${sp(1)} ;${sp(1)}${-b} \\bigg]$ `,
+                statut: a < 0,
+              },
+              {
+                texte: `$\\bigg[${b}${sp(1)} ;${sp(1)} +\\infty\\bigg[$ `,
+                statut: a === 0,
+              },
+              {
+                texte: `$\\bigg]-\\infty ${sp(1)} ;${sp(1)} ${b} \\bigg]$ `,
+                statut: a === 0,
+              },
+            ],
+          }
 
-      case 2:
-        a = randint(-2, -1)
-        nbre = randint(-1, 1)
-        alpha = randint(-1, 1)
-        beta = randint(-2, 2)
-        o = texteParPosition('O', -0.3, -0.3, 0, 'black', 1)
-        f = function (x: number) {
-          return 2 * a * x - 2 * a * alpha
-        }
-        F = function (x: number) {
-          return a * (x - alpha) ** 2 + beta
-        }
-        r = repere({
-          xMin: -4,
-          xMax: 4,
-          xUnite: 2,
-          yMin: -10,
-          yMax: 3,
-          thickHauteur: 0.2,
-          xLabelMin: -3,
-          xLabelMax: 3,
-          yLabelMax: 2,
-          yLabelMin: -9,
-          yLabelEcart: 0.8,
-          axeXStyle: '->',
-          axeYStyle: '->',
-          yLabelDistance: 2,
-          grilleSecondaire: true,
-          grilleSecondaireYDistance: 1,
-          grilleSecondaireXDistance: 1,
-          grilleSecondaireYMin: -10,
-          grilleSecondaireYMax: 3,
-          grilleSecondaireXMin: -4,
-          grilleSecondaireXMax: 4,
-        })
-        tang = (x: number) => f(nbre) * (x - nbre) + F(nbre)
-        F = (x) => a * (x - alpha) ** 2 + beta
-        this.question = `La courbe représente une fonction $f$ et la droite est la tangente au point d'abscisse $${nbre}$.<br>
-        Déterminer $f'(${nbre})$.`
-        this.question +=
-          '<br>' +
-          mathalea2d(
-            {
-              xmin: -8,
-              xmax: 8,
-              ymin: -10,
-              ymax: 3,
-              pixelsParCm: 14,
-              scale: 0.5,
-              style: 'margin: auto',
-            },
-            r,
-            o,
-            courbe(F, { repere: r, color: 'blue', epaisseur: 2 }),
-            courbe(tang, { repere: r, color: 'red', epaisseur: 2 }),
-          )
-        this.correction = `$f'(${nbre})$ est donné par le coefficient directeur de la tangente à la courbe au point d'abscisse $${nbre}$, soit $${f(nbre)}$.`
+          props = propositionsQcm(this, i)
+          if (this.interactif) texte += props.texte
+          if (a > 0) {
+            if (b > 0) {
+              texteCorr = `On reconnaît la forme canonique d'une fonction polynôme du second degré :
+              <br>  $f(x)=a(x-\\alpha)^2+\\beta$
+          <br>    Comme $\\alpha=-\\dfrac{b}{2a}$, le changement de variation de la fonction $f$ se fait en $\\alpha$.
+          <br>  Ici,  $f(x)=${reduireAxPlusB(0, a)}(${reduireAxPlusB(1, b)})^2${ecritureAlgebrique(c)}=
+         ${reduireAxPlusB(0, a)}(x-(\\underbrace{-${b}}_{\\alpha}))^2${ecritureAlgebrique(c)}$, d'où $\\alpha=-${b}$.
+         <br> Le coefficient $${a}$ devant la parenthèse est strictement positif, la fonction est donc
+         d'abord décroissante puis croissante (la parabole est "tournée vers le haut").
+         <br>  Ainsi, $f$ est croissante sur $\\bigg[-${b} ${sp(1)} ;${sp(1)} +\\infty\\bigg[$.    `
+            } else {
+              texteCorr = `On reconnaît la forme canonique d'une fonction polynôme du second degré :
+              <br>$f(x)=a(x-\\alpha)^2+\\beta$
+           <br> Comme $\\alpha=-\\dfrac{b}{2a}$, le changement de variation de la fonction $f$ se fait en $\\alpha$.
+           <br>
+           Ici,  $f(x)=${reduireAxPlusB(0, a)}(${reduireAxPlusB(1, b)})^2${ecritureAlgebrique(c)}$, d'où $\\alpha=${-b}$.
+           <br>  Le coefficient $${a}$ devant la parenthèse est strictement positif, la fonction est donc
+          d'abord décroissante puis croissante (la parabole est "tournée vers le haut").
+          <br>  Ainsi, $f$ est croissante sur $\\bigg[${-b} ${sp(1)} ;${sp(1)} +\\infty\\bigg[$.    `
+            }
+          }
+          if (a < 0) {
+            if (b > 0) {
+              texteCorr = `On reconnaît la forme canonique d'une fonction polynôme du second degré :
+              <br>$f(x)=a(x-\\alpha)^2+\\beta$<br>
+          Comme $\\alpha=-\\dfrac{b}{2a}$, le changement de variation de la fonction $f$ se fait en $\\alpha$.
+          <br> Ici,  $f(x)=${reduireAxPlusB(0, a)}(${reduireAxPlusB(1, b)})^2${ecritureAlgebrique(c)}=
+         ${reduireAxPlusB(0, a)}(x-(\\underbrace{-${b}}_{\\alpha}))^2${ecritureAlgebrique(c)}$, d'où $\\alpha=-${b}$.
+         <br> Comme le coefficient $${a}$ devant la parenthèse est strictement négatif, la fonction est d'abord croissante puis décroissante (la parabole est "tournée vers le bas").
+         <br>    Ainsi, $f$ est croissante sur $\\bigg]-\\infty ${sp(1)} ;${sp(1)} -${b}  \\bigg]$.    `
+            } else {
+              texteCorr = `On reconnaît la forme canonique d'une fonction polynôme du second degré :
+              <br>  $f(x)=a(x-\\alpha)^2+\\beta$
+              <br> Comme $\\alpha=-\\dfrac{b}{2a}$, le changement de variation de la fonction $f$ se fait en $\\alpha$.
+           <br> Ici,  $f(x)=${reduireAxPlusB(0, a)}(${reduireAxPlusB(1, b)})^2${ecritureAlgebrique(c)}$, d'où $\\alpha=${-b}$.
+           <br> Comme le coefficient $${a}$ devant la parenthèse est strictement négatif, la fonction est d'abord croissante puis décroissante (la parabole est "tournée vers le bas").
+           Ainsi, $f$ est croissante sur $\\bigg]-\\infty ${sp(1)} ;${sp(1)} ${-b}  \\bigg]$.    `
+            }
+          }
+          break
+        case 3: // croissante forme factorisée
+          a = randint(-5, 5, 0)
+          b = randint(-9, 9)
+          c = randint(-9, 9, 0)
+          maFractionN = fraction(b + c, 2)
+          maFraction = fraction(-(b + c), 2)
+          if (a === 1) {
+            texte = `Soit $f$ la fonction définie sur $\\mathbb{R}$ par  $f(x)=(${reduireAxPlusB(1, b)})(${reduireAxPlusB(1, c)})$.
+            <br>
+            
+            Donner le plus grand intervalle sur lequel la fonction $f$ est croissante.`
+          } else {
+            if (a === -1) {
+              texte =
+                texte = `Soit $f$ la fonction définie sur $\\mathbb{R}$ par  $f(x)=-(${reduireAxPlusB(1, b)})(${reduireAxPlusB(1, c)})$.
+              <br>
+              
+              Donner le plus grand intervalle sur lequel la fonction $f$ est croissante.`
+            } else {
+              texte =
+                texte = `Soit $f$ la fonction définie sur $\\mathbb{R}$ par  $f(x)=${a}(${reduireAxPlusB(1, b)})(${reduireAxPlusB(1, c)})$.
+              <br>
+              
+              Donner le plus grand intervalle sur lequel la fonction $f$ est croissante.`
+            }
+          }
+          this.autoCorrection[i] = {
+            enonce: texte,
+            options: { vertical: false },
+            propositions: [
+              {
+                texte: `$\\bigg[${maFraction.texFractionSimplifiee} ${sp(1)} ;${sp(1)} +\\infty\\bigg[$ `,
+                statut: a > 0,
+              },
+              {
+                texte: `$\\bigg]-\\infty ${sp(1)} ;${sp(1)} ${maFraction.texFractionSimplifiee} \\bigg]$ `,
+                statut: a < 0,
+              },
+              {
+                texte: `$\\bigg[${maFractionN.texFractionSimplifiee} ${sp(1)} ;${sp(1)} +\\infty\\bigg[$ `,
+                statut: a === 0,
+              },
+              {
+                texte: `$\\bigg]-\\infty ${sp(1)} ;${sp(1)} ${maFractionN.texFractionSimplifiee} \\bigg]$ `,
+                statut: a === 0,
+              },
+            ],
+          }
 
-        this.reponse = f(nbre)
-        this.canEnonce = this.question
-        this.canReponseACompleter = `$f'(${nbre})=\\ldots$`
-        break
+          props = propositionsQcm(this, i)
+          if (this.interactif) texte += props.texte
+          if (a < 0) {
+            texteCorr = `On reconnaît une forme factorisée d'une fonction polynôme du second degré :
+            <br>       $f(x)=a(x-x_1)(x-x_2)$ où $x_1$ et $x_2$ sont les racines du polynôme.
+            <br>         L'abscisse du sommet de la parabole est donné par la moyenne des racines soit par : $\\dfrac{x_1+x_2}{2}=\\dfrac{${-b}+${ecritureParentheseSiNegatif(-c)}}{2}= ${maFraction.texFractionSimplifiee}$.
+            <br>           Comme le coefficient $${a}$ devant les parenthèses est strictement négatif, la fonction est d'abord croissante puis décroissante (la parabole est "tournée vers le bas").
+                <br>           Ainsi, $f$ est croissante sur $\\bigg]-\\infty ${sp(1)} ;${sp(1)} ${maFraction.texFractionSimplifiee}  \\bigg]$.    `
+          } else {
+            texteCorr = `On reconnaît une forme factorisée d'une fonction polynôme du second degré :
+            <br>      $f(x)=a(x-x_1)(x-x_2)$ où $x_1$ et $x_2$ sont les racines du polynôme.
+            <br>    L'abscisse du sommet de la parabole est donné par la moyenne des racines soit par : $\\dfrac{x_1+x_2}{2}=\\dfrac{${-b}+${ecritureParentheseSiNegatif(-c)}}{2}= ${maFraction.texFractionSimplifiee}$.
+            <br>            Comme le coefficient $${a}$ devant les parenthèses est strictement positif, la fonction est d'abord décroissante puis croissante (la parabole est "tournée vers le haut").
+              <br>     Ainsi, $f$ est croissante sur $\\bigg[${maFraction.texFractionSimplifiee} ${sp(1)} ;${sp(1)} +\\infty\\bigg[$.    `
+          }
+          break
 
-      case 3: // a/x+b
-        a = randint(1, 2)
-        nbre = randint(1, 2)
-        b = randint(0, 3)
-        frac = new FractionEtendue(-a, nbre * nbre)
-        o = texteParPosition('O', -0.3, -0.3, 0, 'black', 1)
-        f = function (x: number) {
-          return -a / (x * x)
-        }
-        F = function (x: number) {
-          return a / x + b
-        }
-        this.question = `La courbe représente une fonction $f$ et la droite est la tangente au point d'abscisse $${nbre}$.<br>
-        Déterminer $f'(${nbre})$.`
-        r = repere({
-          xMin: -1,
-          xMax: 7,
-          xUnite: 2,
-          yUnite: 2,
-          yMin: -1,
-          yMax: 6,
-          thickHauteur: 0.2,
-          xLabelMin: 0,
-          xLabelMax: 5,
-          yLabelMax: 5,
-          yLabelMin: 0,
-          axeXStyle: '->',
-          axeYStyle: '->',
-          grilleSecondaire: true,
-          grilleSecondaireYDistance: 0.5,
-          grilleSecondaireYMin: -1,
-          grilleSecondaireYMax: 6,
-          grilleSecondaireXMin: -1,
-          grilleSecondaireXMax: 7,
-        })
-        tang = (x: number) => f(nbre) * (x - nbre) + F(nbre)
-        F = (x) => a / x + b
+        case 4: // décroissante forme développée
+          a = randint(-5, 5, 0)
+          b = randint(-9, 9)
+          c = randint(-9, 9, 0)
+          maFraction = fraction(-b, 2 * a)
+          maFractionN = fraction(b, 2 * a)
+          texte = `Soit $f$ la fonction définie sur $\\mathbb{R}$ par  $f(x)=${reduirePolynomeDegre3(0, a, b, c)}$.
+          <br>
+          
+          Donner le plus grand intervalle sur lequel la fonction $f$ est décroissante.`
+          if (b === 0) {
+            this.autoCorrection[i] = {
+              enonce: texte,
+              options: { vertical: false },
+              propositions: [
+                {
+                  texte: `$\\bigg[${maFraction.texFractionSimplifiee}${sp(1)} ;${sp(1)} +\\infty\\bigg[$ `,
+                  statut: a < 0,
+                },
+                {
+                  texte: `$\\bigg]-\\infty${sp(1)} ;${sp(1)}${maFraction.texFractionSimplifiee} \\bigg]$ `,
+                  statut: a > 0,
+                },
+                {
+                  texte: `$\\bigg[${a}${sp(1)} ;${sp(1)} +\\infty\\bigg[$ `,
+                  statut: a === 0,
+                },
+                {
+                  texte: `$\\bigg]-\\infty ${sp(1)} ;${sp(1)} ${a} \\bigg]$ `,
+                  statut: a === 0,
+                },
+              ],
+            }
+          } else {
+            this.autoCorrection[i] = {
+              enonce: texte,
+              options: { vertical: false },
+              propositions: [
+                {
+                  texte: `$\\bigg[${maFraction.texFractionSimplifiee}${sp(1)} ;${sp(1)} +\\infty\\bigg[$ `,
+                  statut: a < 0,
+                },
+                {
+                  texte: `$\\bigg]-\\infty${sp(1)} ;${sp(1)}${maFraction.texFractionSimplifiee} \\bigg]$ `,
+                  statut: a > 0,
+                },
+                {
+                  texte: `$\\bigg[${maFractionN.texFractionSimplifiee}${sp(1)} ;${sp(1)} +\\infty\\bigg[$ `,
+                  statut: a === 0,
+                },
+                {
+                  texte: `$\\bigg]-\\infty ${sp(1)} ;${sp(1)} ${maFractionN.texFractionSimplifiee} \\bigg]$ `,
+                  statut: a === 0,
+                },
+              ],
+            }
+          }
 
-        this.question +=
-          '<br>' +
-          mathalea2d(
-            {
-              xmin: -2,
-              xmax: 14,
-              ymin: -2,
-              ymax: 12,
-              pixelsParCm: 14,
-              scale: 0.5,
-              style: 'margin: auto',
-            },
-            r,
-            o,
-            courbe(F, {
-              repere: r,
-              xMin: 0.1,
-              xMax: 7,
-              color: 'blue',
-              epaisseur: 2,
-            }),
-            courbe(tang, { repere: r, color: 'red', epaisseur: 2 }),
-          )
+          props = propositionsQcm(this, i)
+          if (this.interactif) texte += props.texte
+          if (a > 0) {
+            texteCorr = `Comme le coefficient $${a}$ devant $x^2$ est strictement positif, la fonction est d'abord décroissante puis croissante (la parabole est "tournée vers le haut").
+            <br>         $-\\dfrac{b}{2a}=-\\dfrac{${b}}{2\\times ${ecritureParentheseSiNegatif(a)}}=${maFraction.texFractionSimplifiee}$.
+           <br>          Ainsi, $f$ est décroissante sur $\\bigg]-\\infty${sp(1)} ;${sp(1)}${maFraction.texFractionSimplifiee} \\bigg]$.    `
+          } else {
+            texteCorr = `Comme le coefficient $${a}$ devant $x^2$ est strictement négatif, la fonction est d'abord croissante puis décroissante (la parabole est "tournée vers le bas").
+            <br>  $-\\dfrac{b}{2a}=-\\dfrac{${b}}{2\\times ${ecritureParentheseSiNegatif(a)}}=${maFraction.texFractionSimplifiee}$.
+    <br>   Ainsi, $f$ est décroissante sur $\\bigg[${maFraction.texFractionSimplifiee}${sp(1)} ;${sp(1)} +\\infty\\bigg[$.    `
+          }
+          break
 
-        this.correction = `$f'(${nbre})$ est donné par le coefficient directeur de la tangente à la courbe au point d'abscisse $${nbre}$, soit $${frac.texFraction}${frac.estEntiere ? '' : frac.texSimplificationAvecEtapes()}$.`
-        this.reponse = frac
-        this.canEnonce = this.question
-        this.canReponseACompleter = `$f'(${nbre})=\\ldots$`
-        break
+        case 5: // décroissante forme canonique
+          a = randint(-10, 10, 0)
+          b = randint(-5, 5, 0)
+          c = randint(-9, 9, 0)
 
-      case 4: // exp(ax) avec a>0
-        fraction = choice(listeFractions)
-        frac = new FractionEtendue(fraction[0], fraction[1])
-        nbre = 0
-        o = texteParPosition('O', -0.3, -0.3, 0, 'black', 1)
-        valueFrac = frac.valueOf()
-        f = function (x: number) {
-          return valueFrac * Math.exp(valueFrac * x)
-        }
-        F = function (x: number) {
-          return Math.exp(valueFrac * x)
-        }
-        this.question = `La courbe représente une fonction $f$ et la droite est la tangente au point d'abscisse $0$.<br>
-        Déterminer $f'(0)$.`
-        r = repere({
-          xMin: -2,
-          xMax: 6,
-          xUnite: 2,
-          yUnite: 2,
-          yMin: -1,
-          yMax: 6,
-          thickHauteur: 0.2,
-          xLabelMin: 0,
-          xLabelMax: 5,
-          yLabelMax: 5,
-          yLabelMin: 0,
-          axeXStyle: '->',
-          axeYStyle: '->',
-          grilleSecondaire: true,
-          grilleSecondaireYDistance: 1,
-          grilleSecondaireXDistance: 1,
-          grilleSecondaireYMin: -1,
-          grilleSecondaireYMax: 6,
-          grilleSecondaireXMin: -2,
-          grilleSecondaireXMax: 6,
-        })
-        tang = (x: number) => f(0) * x + F(0)
-        F = (x) => Math.exp(valueFrac * x)
-        this.question +=
-          '<br>' +
-          mathalea2d(
-            {
-              xmin: -4,
-              xmax: 12,
-              ymin: -2,
-              ymax: 12,
-              pixelsParCm: 14,
-              scale: 0.5,
-              style: 'margin: auto',
-            },
-            r,
-            o,
-            courbe(F, {
-              repere: r,
-              xMin: -2,
-              xMax: 5,
-              color: 'blue',
-              epaisseur: 2,
-            }),
-            courbe(tang, { repere: r, color: 'red', epaisseur: 2 }),
-          )
-        this.correction = `$f'(0)$ est donné par le coefficient directeur de la tangente à la courbe au point d'abscisse $0$, soit $${frac.texFraction}${frac.estEntiere ? '' : frac.texSimplificationAvecEtapes()}$.`
-        this.reponse = frac
-        this.canEnonce = this.question
-        this.canReponseACompleter = "$f'(0)=\\ldots$"
-        break
+          if (a === 1) {
+            texte = `Soit $f$ la fonction définie sur $\\mathbb{R}$ par  $f(x)=(${reduireAxPlusB(1, b)})^2${ecritureAlgebrique(c)}$.
+            <br>
+  
+            Donner le plus grand intervalle sur lequel la fonction $f$ est décroissante.`
+          } else {
+            if (a === -1) {
+              texte = `Soit $f$ la fonction définie sur $\\mathbb{R}$ par  $f(x)=-(${reduireAxPlusB(1, b)})^2${ecritureAlgebrique(c)}$.
+              <br>
+  
+          Donner le plus grand intervalle sur lequel la fonction $f$ est décroissante.`
+            } else {
+              texte = `Soit $f$ la fonction définie sur $\\mathbb{R}$ par  $f(x)=${reduireAxPlusB(0, a)}(${reduireAxPlusB(1, b)})^2${ecritureAlgebrique(c)}$.
+              <br>
+  
+          Donner le plus grand intervalle sur lequel la fonction $f$ est décroissante.`
+            }
+          }
+          this.autoCorrection[i] = {
+            enonce: texte,
+            options: { vertical: false },
+            propositions: [
+              {
+                texte: `$\\bigg[${-b}${sp(1)} ;${sp(1)} +\\infty\\bigg[$ `,
+                statut: a < 0,
+              },
+              {
+                texte: `$\\bigg]-\\infty${sp(1)} ;${sp(1)}${-b} \\bigg]$ `,
+                statut: a > 0,
+              },
+              {
+                texte: `$\\bigg[${b}${sp(1)} ;${sp(1)} +\\infty\\bigg[$ `,
+                statut: a === 0,
+              },
+              {
+                texte: `$\\bigg]-\\infty ${sp(1)} ;${sp(1)} ${b} \\bigg]$ `,
+                statut: a === 0,
+              },
+            ],
+          }
 
-      case 5: // exp(ax) avec a<0
-      default:
-        fraction = choice(listeFractions)
-        frac = new FractionEtendue(fraction[0] * -1, fraction[1])
-        valueFrac = frac.valueOf()
-        o = texteParPosition('O', -0.3, -0.3, 0, 'black', 1)
-        nbre = 0
-        f = function (x: number) {
-          return valueFrac * Math.exp(valueFrac * x)
-        }
-        F = function (x: number) {
-          return Math.exp(valueFrac * x)
-        }
-        this.question = `La courbe représente une fonction $f$ et la droite est la tangente au point d'abscisse $0$.<br>
-        Déterminer $f'(0)$.`
-        r = repere({
-          xMin: -5,
-          xMax: 2,
-          xUnite: 2,
-          yUnite: 2,
-          yMin: -1,
-          yMax: 6,
-          thickHauteur: 0.2,
-          xLabelMin: -4,
-          xLabelMax: 1,
-          yLabelMax: 5,
-          yLabelMin: 0,
-          axeXStyle: '->',
-          axeYStyle: '->',
-          grilleSecondaire: true,
-          grilleSecondaireYDistance: 1,
-          grilleSecondaireXDistance: 1,
-          grilleSecondaireYMin: -1,
-          grilleSecondaireYMax: 6,
-          grilleSecondaireXMin: -5,
-          grilleSecondaireXMax: 2,
-        })
-        tang = (x: number) => f(0) * x + F(0)
-        F = (x) => Math.exp(valueFrac * x)
+          props = propositionsQcm(this, i)
+          if (this.interactif) texte += props.texte
+          if (a > 0) {
+            if (b > 0) {
+              texteCorr = `On reconnaît la forme canonique d'une fonction polynôme du second degré :
+              <br>        $f(x)=a(x-\\alpha)^2+\\beta$<br>
+          Comme $\\alpha=-\\dfrac{b}{2a}$, le changement de variation de la fonction $f$ se fait en $\\alpha$.
+          <br>       Ici,  $f(x)=${reduireAxPlusB(0, a)}(${reduireAxPlusB(1, b)})^2${ecritureAlgebrique(c)}=
+         ${reduireAxPlusB(0, a)}(x-(\\underbrace{-${b}}_{\\alpha}))^2${ecritureAlgebrique(c)}$, d'où $\\alpha=-${b}$.
+         <br>       Le coefficient $${a}$ devant la parenthèse est strictement positif, la fonction est donc
+         d'abord décroissante puis croissante (la parabole est "tournée vers le haut").
+         <br>    Ainsi, $f$ est décroissante sur $\\bigg]-\\infty${sp(1)} ;${sp(1)}${-b} \\bigg]$.    `
+            } else {
+              texteCorr = `On reconnaît la forme canonique d'une fonction polynôme du second degré :
+              <br>         $f(x)=a(x-\\alpha)^2+\\beta$
+              <br>         Comme $\\alpha=-\\dfrac{b}{2a}$, le changement de variation de la fonction $f$ se fait en $\\alpha$.
+              <br>         Ici,  $f(x)=${reduireAxPlusB(0, a)}(${reduireAxPlusB(1, b)})^2${ecritureAlgebrique(c)}$, d'où $\\alpha=${-b}$.
+              <br>        Le coefficient $${a}$ devant la parenthèse est strictement positif, la fonction est donc
+          d'abord décroissante puis croissante (la parabole est "tournée vers le haut").
+          <br>           Ainsi, $f$ est décroissante sur $\\bigg]-\\infty${sp(1)} ;${sp(1)}${-b} \\bigg]$.    `
+            }
+          }
+          if (a < 0) {
+            if (b > 0) {
+              texteCorr = `On reconnaît la forme canonique d'une fonction polynôme du second degré :
+              <br>        $f(x)=a(x-\\alpha)^2+\\beta$
+          <br>        Comme $\\alpha=-\\dfrac{b}{2a}$, le changement de variation de la fonction $f$ se fait en $\\alpha$.
+          <br>       Ici,  $f(x)=${reduireAxPlusB(0, a)}(${reduireAxPlusB(1, b)})^2${ecritureAlgebrique(c)}=
+         ${reduireAxPlusB(0, a)}(x-(\\underbrace{-${b}}_{\\alpha}))^2${ecritureAlgebrique(c)}$, d'où $\\alpha=-${b}$.
+         <br>       Comme le coefficient $${a}$ devant la parenthèse est strictement négatif, la fonction est d'abord croissante puis décroissante (la parabole est "tournée vers le bas").
+         <br>         Ainsi, $f$ est décroissante sur $\\bigg[${-b}${sp(1)} ;${sp(1)} +\\infty\\bigg[$.    `
+            } else {
+              texteCorr = `On reconnaît la forme canonique d'une fonction polynôme du second degré :
+              <br>         $f(x)=a(x-\\alpha)^2+\\beta$
+           <br>         Comme $\\alpha=-\\dfrac{b}{2a}$, le changement de variation de la fonction $f$ se fait en $\\alpha$.
+           <br>         Ici,  $f(x)=${reduireAxPlusB(0, a)}(${reduireAxPlusB(1, b)})^2${ecritureAlgebrique(c)}$, d'où $\\alpha=${-b}$.
+           <br>         Comme le coefficient $${a}$ devant la parenthèse est strictement négatif, la fonction est d'abord croissante puis décroissante (la parabole est "tournée vers le bas").
+           <br>         Ainsi, $f$ est décroissante sur $\\bigg[${-b}${sp(1)} ;${sp(1)} +\\infty\\bigg[$.    `
+            }
+          }
+          break
 
-        this.question +=
-          '<br>' +
-          mathalea2d(
-            {
-              xmin: -10,
-              xmax: 4,
-              ymin: -2,
-              ymax: 12,
-              pixelsParCm: 14,
-              scale: 0.5,
-              style: 'margin: auto',
-            },
-            r,
-            o,
-            courbe(F, {
-              repere: r,
-              xMin: -5,
-              xMax: 2,
-              color: 'blue',
-              epaisseur: 2,
-            }),
-            courbe(tang, { repere: r, color: 'red', epaisseur: 2 }),
-          )
+        case 6: // décroissante forme factorisée
+          a = randint(-5, 5, 0)
+          b = randint(-9, 9)
+          c = randint(-9, 9, 0)
+          maFractionN = fraction(b + c, 2)
+          maFraction = fraction(-(b + c), 2)
+          if (a === 1) {
+            texte = `Soit $f$ la fonction définie sur $\\mathbb{R}$ par  $f(x)=(${reduireAxPlusB(1, b)})(${reduireAxPlusB(1, c)})$.
+            <br>
+  
+          Donner le plus grand intervalle sur lequel la fonction $f$ est décroissante.`
+          } else {
+            if (a === -1) {
+              texte =
+                texte = `Soit $f$ la fonction définie sur $\\mathbb{R}$ par $f(x)=-(${reduireAxPlusB(1, b)})(${reduireAxPlusB(1, c)})$.
+              <br>                           Le plus grand intervalle sur lequel la fonction $f$ est décroissante est :`
+            } else {
+              texte =
+                texte = `Soit $f$ la fonction définie sur $\\mathbb{R}$ par : $f(x)=${a}(${reduireAxPlusB(1, b)})(${reduireAxPlusB(1, c)})$.
+              <br>
+              
+          Donner le plus grand intervalle sur lequel la fonction $f$ est décroissante.`
+            }
+          }
+          this.autoCorrection[i] = {
+            enonce: texte,
+            options: { vertical: false },
+            propositions: [
+              {
+                texte: `$\\bigg[${maFraction.texFractionSimplifiee} ${sp(1)} ;${sp(1)} +\\infty\\bigg[$ `,
+                statut: a < 0,
+              },
+              {
+                texte: `$\\bigg]-\\infty ${sp(1)} ;${sp(1)} ${maFraction.texFractionSimplifiee} \\bigg]$ `,
+                statut: a > 0,
+              },
+              {
+                texte: `$\\bigg[${maFractionN.texFractionSimplifiee} ${sp(1)} ;${sp(1)} +\\infty\\bigg[$ `,
+                statut: a === 0,
+              },
+              {
+                texte: `$\\bigg]-\\infty ${sp(1)} ;${sp(1)} ${maFractionN.texFractionSimplifiee} \\bigg]$ `,
+                statut: a === 0,
+              },
+            ],
+          }
 
-        this.correction = `$f'(0)$ est donné par le coefficient directeur de la tangente à la courbe au point d'abscisse $0$, soit $${frac.texFraction}${frac.estEntiere ? '' : frac.texSimplificationAvecEtapes()}$.`
-
-        this.reponse = frac
-        this.canEnonce = this.question
-        this.canReponseACompleter = "$f'(0)=\\ldots$"
-        break
-    }
-    if (this.correction.includes('=')) {
-      const textCorrSplit = this.correction.split('=')
-      let aRemplacer = textCorrSplit[textCorrSplit.length - 1]
-      aRemplacer = aRemplacer.replaceAll('$', '')
-
-      this.correction = ''
-      for (let ee = 0; ee < textCorrSplit.length - 1; ee++) {
-        this.correction += textCorrSplit[ee] + '='
+          props = propositionsQcm(this, i)
+          if (this.interactif) texte += props.texte
+          if (a < 0) {
+            texteCorr = `On reconnaît une forme factorisée d'une fonction polynôme du second degré :
+            <br>              $f(x)=a(x-x_1)(x-x_2)$ où $x_1$ et $x_2$ sont les racines du polynôme.
+            <br>              L'abscisse du sommet de la parabole est donné par la moyenne des racines soit par : $\\dfrac{x_1+x_2}{2}=\\dfrac{${-b}+${ecritureParentheseSiNegatif(-c)}}{2}= ${maFraction.texFractionSimplifiee}$.
+                <br>              Comme le coefficient $${a}$ devant les parenthèses est strictement négatif, la fonction est d'abord croissante puis décroissante (la parabole est "tournée vers le bas").
+                <br>              Ainsi, $f$ est décroissante sur $\\bigg[${maFraction.texFractionSimplifiee} ${sp(1)} ;${sp(1)} +\\infty\\bigg[$.    `
+          } else {
+            texteCorr = `On reconnaît une forme factorisée d'une fonction polynôme du second degré :
+            <br>            $f(x)=a(x-x_1)(x-x_2)$ où $x_1$ et $x_2$ sont les racines du polynôme.
+            <br> L'abscisse du sommet de la parabole est donné par la moyenne des racines soit par : $\\dfrac{x_1+x_2}{2}=\\dfrac{${-b}+${ecritureParentheseSiNegatif(-c)}}{2}= ${maFraction.texFractionSimplifiee}$.
+              <br>            Comme le coefficient $${a}$ devant les parenthèses est strictement positif, la fonction est d'abord décroissante puis croissante (la parabole est "tournée vers le haut").
+              <br> Ainsi, $f$ est croissante sur $\\bigg]-\\infty ${sp(1)} ;${sp(1)} ${maFraction.texFractionSimplifiee} \\bigg]$.    `
+          }
+          break
       }
-      this.correction += ` ${miseEnEvidence(aRemplacer.slice(0, -1))}$.`
-    } else {
-      const textCorrSplit = this.correction.split('soit')
-
-      let aRemplacer = textCorrSplit[1]
-      aRemplacer = aRemplacer.replaceAll('$', '')
-      this.correction =
-        textCorrSplit[0] +
-        'soit ' +
-        `$${miseEnEvidence(aRemplacer.slice(0, -1))}$.`
-    }
-    if (this.interactif) {
-      this.question += '<br>' + `$f'(${nbre})=$`
+      this.listeQuestions.push(texte)
+      this.listeCorrections.push(texteCorr)
+      listeQuestionsToContenu(this)
+      this.canEnonce = texte
+      this.canReponseACompleter = ''
     }
   }
 }
