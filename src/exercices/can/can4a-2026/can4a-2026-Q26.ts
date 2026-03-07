@@ -20,18 +20,27 @@ export const refs = {
 
 */
 export default class Can20264emeQ26 extends ExerciceCan {
+  constructor() {
+    super()
+    this.optionsDeComparaison = { nombreDecimalSeulement: true }
+    this.formatChampTexte = KeyboardType.clavierNumbers
+    this.optionsChampTexte = {
+      texteApres: ' pas.',
+    }
+  }
+
   enonce(nb?: number, longueur?: number, angle?: number) {
     if (nb == null || longueur == null || angle == null) {
       nb = choice([4, 6, 8]) // Carré, hexagone, octogone
       longueur = randint(5, 15) * 5 // Multiple de 5
       angle = 360 / nb // Angle de rotation
     }
-    
+
     const perimetre = nb * longueur
-    
+
     let texteScratch = `\\begin{scratch}[${context.isHtml ? 'print,' : ''}fill,blocks,scale=0.8]\n`
     texteScratch += '\\blockinit{quand \\greenflag est cliqué}\n'
-    texteScratch += '\\blockmove{stylo en position d\'écriture}\n'
+    texteScratch += "\\blockmove{stylo en position d'écriture}\n"
     texteScratch += `\\blockrepeat{répéter \\ovalnum{${String(nb)}} fois}{\n`
     texteScratch += `\\blockmove{avancer de \\ovalnum{${String(longueur)}} pas}\n`
     texteScratch += `\\blockmove{tourner \\turnright{} de \\ovalnum{${String(angle)}} degrés}\n`
@@ -41,24 +50,19 @@ export default class Can20264emeQ26 extends ExerciceCan {
 
     this.question = texte || 'Problème de rendu'
     this.question += '<br>Le périmètre de la figure obtenue est '
-    
+
     let nomFigure = ''
     if (nb === 4) nomFigure = 'un carré'
     else if (nb === 6) nomFigure = 'un hexagone'
     else if (nb === 8) nomFigure = 'un octogone'
-    
+
     this.correction = `Ce programme trace ${nomFigure} régulier de côté $${longueur}$ pas.<br>
     Le périmètre est : $${nb}\\times ${longueur}=${miseEnEvidence(perimetre)}$ pas.`
-    
+
     this.canEnonce = this.question
     this.canReponseACompleter = '$\\ldots$ pas'
     this.reponse = perimetre
-    
-    this.formatChampTexte = KeyboardType.clavierDeBase
-    this.optionsChampTexte = {
-      texteApres: ' pas.',
-    }
-    
+
     if (!this.interactif) {
       this.question += '<br>$\\ldots$ pas'
     }

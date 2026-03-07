@@ -33,6 +33,14 @@ export const refs = {
 
 */
 export default class Can20264emeQ30 extends ExerciceCan {
+  constructor() {
+    super()
+    this.optionsDeComparaison = {
+      nombreDecimalSeulement: true,
+    }
+    this.formatChampTexte = KeyboardType.clavierNumbers
+  }
+
   enonce(base?: number, hauteurTriangle?: number, profondeur?: number) {
     if (base == null || hauteurTriangle == null || profondeur == null) {
       base = randint(4, 8)
@@ -83,12 +91,12 @@ export default class Can20264emeQ30 extends ExerciceCan {
     const volume = aireBase * profondeur
 
     this.reponse = texNombre(volume, 1)
-    
+
     this.question = mathalea2d(
       Object.assign({}, { scale: 0.7 }, fixeBordures(objets)),
       objets,
     )
-this.question += 'Le volume de ce prisme droit est '
+    this.question += 'Le volume de ce prisme droit est '
     this.correction = `L'aire de la base triangulaire est :<br>
 $\\mathcal{B}=\\dfrac{${base}\\times ${hauteurTriangle}}{2}=${aireBase}\\text{ cm}^2$.<br>
 Le volume du prisme est :<br>

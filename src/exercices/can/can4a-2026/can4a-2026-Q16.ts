@@ -17,17 +17,23 @@ export const refs = {
 
 */
 export default class Can20264emeQ16 extends ExerciceCan {
-enonce(a?: number, b?: number, x?: number) {
+  constructor() {
+    super()
+    this.formatChampTexte = KeyboardType.clavierDeBase
+    this.optionsDeComparaison = { nombreDecimalSeulement: true }
+  }
+
+  enonce(a?: number, b?: number, x?: number) {
     if (a == null || b == null || x == null) {
       a = randint(2, 3)
       b = 1
       x = randint(2, 10) * 10 // Multiple de 10
     }
-    
+
     const c = a * x - b
-    
+
     this.question = `$${a}\\times ?-${b}=${c}$`
-    
+
     this.correction = `$\\begin{aligned}
     ${a}\\times ?-${b}&=${c}\\\\
     ${a}\\times ?&=${c}+${b}\\\\
@@ -35,12 +41,11 @@ enonce(a?: number, b?: number, x?: number) {
     ?&=\\dfrac{${c + b}}{${a}}\\\\
     ?&=${miseEnEvidence(x)}
     \\end{aligned}$`
-    
+
     this.canEnonce = this.question
     this.canReponseACompleter = '$?=\\ldots$'
     this.reponse = x
-    this.formatChampTexte = KeyboardType.clavierDeBase
-    
+
     if (this.interactif) {
       this.question += '<br>$?=$'
     }
