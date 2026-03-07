@@ -5,7 +5,7 @@ import { texNombre } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
 
-export const titre = 'Q30'
+export const titre = 'Trouver un nombre de boîtes'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const uuid = '142nn'
@@ -15,45 +15,56 @@ export const refs = {
 }
 
 /**
- * @author Gilles Mora
+ * @author Eric Elter
 
 */
+
+type TypeDeQuestion = {
+  fabricant: string
+  produit: string
+}
+
 export default class Can20266Q30 extends ExerciceCan {
-  enonce(a?: number, b?: number) {
-    let millier: number, centaines: number
+  constructor() {
+    super()
+    this.formatChampTexte = KeyboardType.clavierNumbers
+    this.optionsDeComparaison = { nombreDecimalSeulement: true }
+    this.optionsChampTexte = {
+      texteAvant: '<br>',
+    }
+  }
 
-    if (a == null || b == null) {
-      const m = randint(1, 9)
-      const c = randint(1, 6)
-      const d = randint(1, 9)
-      const u = randint(1, 9)
-      const centainesAjoutees = choice(
-        [3, 4, 6, 7, 8, 9].filter((x) => x + c < 10),
-      )
-      millier = m * 1000 + c * 100 + d * 10 + u
-      centaines = centainesAjoutees * 100
-    } else {
-      millier = a
-      centaines = b
+  typesDeQuestions: TypeDeQuestion[] = [
+    { fabricant: 'usine', produit: 'stylos' },
+    { fabricant: 'confiserie', produit: 'bonbons' },
+    { fabricant: 'boulangerie', produit: 'biscuits' },
+    { fabricant: 'chocolaterie', produit: 'chocolats' },
+    { fabricant: 'fabrique', produit: 'balles de tennis' },
+    { fabricant: 'cirière', produit: 'bougies' },
+    { fabricant: 'imprimerie', produit: 'carnets' },
+    { fabricant: 'savonnerie', produit: 'savons' },
+    { fabricant: 'usine', produit: 'brosses à dents' },
+    { fabricant: 'fabrique', produit: 'jouets' },
+  ]
+
+  enonce(choixQuestion?: TypeDeQuestion, Nombre?: number) {
+    if (Nombre == null) {
+      choixQuestion = choice(this.typesDeQuestions)
+      Nombre = randint(2, 4) * 100 + randint(2, 7) * 10 + randint(4, 9)
     }
 
-    const somme = millier + centaines
-
-    this.reponse = String(somme)
-    if (this.interactif) {
-      this.question = `$${texNombre(millier)}+${centaines}=$`
-    } else {
-      this.question = `$${texNombre(millier)}+${centaines}=\\ldots$`
-    }
-
-    this.correction = `$${texNombre(millier)}+${centaines}=${miseEnEvidence(texNombre(somme))}$`
-
-    this.formatChampTexte = KeyboardType.clavierDeBase
-    this.canEnonce = 'Calcule.'
-    this.canReponseACompleter = `$${texNombre(millier)}+${centaines}=\\ldots$`
+    this.question = `Une ${choixQuestion!.fabricant} a produit $${Nombre}$ ${choixQuestion!.produit}.
+Elle les emballe par boîte de $10$.<br>
+Combien de boîtes faut-il ?`
+    this.reponse = Math.ceil(Nombre / 10)
+    this.correction = `Il faut partager $${Nombre}$ en $10$ pour trouver le nombre de boîtes pleines et mettre ce qui reste dans une autre boîte.<br>`
+    this.correction += `Or, $${Nombre}=(${Math.floor(Nombre / 10)} \\times 10) + ${Nombre % 10}$.<br>`
+    this.correction += `Il y aura donc $${Math.floor(Nombre / 10)}$ boîtes pleines et une autre boîte pour les $${Nombre % 10}$ ${choixQuestion!.produit} qui restent, soit $${miseEnEvidence(texNombre(this.reponse))}$ boîtes.`
   }
 
   nouvelleVersion() {
-    this.canOfficielle ? this.enonce(1462, 300) : this.enonce()
+    this.canOfficielle
+      ? this.enonce(this.typesDeQuestions[3], 325)
+      : this.enonce()
   }
 }
