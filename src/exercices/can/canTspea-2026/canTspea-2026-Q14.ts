@@ -17,6 +17,12 @@ export const refs = {
  * @author Gilles Mora
 
 */ export default class Can2026TermQ14 extends ExerciceCan {
+  constructor() {
+    super()
+   
+     this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
+  }
+
   enonce(a?: number, b?: number, c?: number): void {
     if (a == null || b == null || c == null) {
       a = randint(1, 9)
@@ -26,7 +32,7 @@ export const refs = {
 
     const resultat = new FractionEtendue(a * c, b).simplifie()
 
-    this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
+    
     this.reponse = resultat.texFraction
 
     this.question = `$\\dfrac{${a}}{x}=\\dfrac{${b}}{${c}}$<br><br>`

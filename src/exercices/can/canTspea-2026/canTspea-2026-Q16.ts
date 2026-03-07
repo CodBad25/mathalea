@@ -17,6 +17,12 @@ export const refs = {
  * @author Gilles Mora
 
 */export default class Can2026TermQ16 extends ExerciceCan {
+   constructor() {
+    super()
+   this.optionsDeComparaison = { nombreDecimalSeulement: true }
+    this.formatChampTexte = KeyboardType.clavierDeBase
+  }
+
  enonce(u0?: number, k?: number, rang?: number): void {
     if (u0 == null || k == null || rang == null) {
       u0 = randint(1, 5)
@@ -35,7 +41,7 @@ export const refs = {
     this.formatChampTexte = KeyboardType.clavierDeBase
     this.reponse = String(u)
 
-    this.question = `Soit la suite $(u_n)$ définie par $u_0=${u0}$ et pour tout entier naturel $n$ par $u_{n+1}=${k}\\times u_n$.<br>`
+    this.question = `Soit la suite $(u_n)$ définie par $u_0=${u0}$ et pour tout entier naturel $n$ : $u_{n+1}=${k}\\times u_n$.<br>`
     if (this.interactif) {
       this.question += `$u_{${rang}}=$`
     } else {
@@ -45,7 +51,7 @@ export const refs = {
     this.correction = `On calcule les termes successifs :<br>${detail}
     Ainsi, $u_{${rang}}=${miseEnEvidence(String(u))}$.`
 
-    this.canEnonce = `Soit la suite $(u_n)$ définie par $u_0=${u0}$ et pour tout entier naturel $n$ par $u_{n+1}=${k}\\times u_n$.`
+    this.canEnonce = `Soit la suite $(u_n)$ définie par $u_0=${u0}$ et pour tout entier naturel $n$ : $u_{n+1}=${k}\\times u_n$.`
     this.canReponseACompleter = `$u_{${rang}}=\\ldots$`
   }
 

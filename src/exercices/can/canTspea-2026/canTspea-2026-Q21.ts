@@ -16,6 +16,12 @@ export const refs = {
  * @author Gilles Mora
 
 */ export default class Can2026TermQ21 extends ExerciceCan {
+  constructor() {
+    super()
+   this.optionsDeComparaison = {  nombreDecimalSeulement: true }
+   this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
+  }
+
   enonce(
     n1?: number,
     n2?: number,
@@ -51,7 +57,7 @@ export const refs = {
     const totalCoeff = c1 + c2 + c3
     const x = (10 * totalCoeff - n1 * c1 - n2 * c2) / c3
 
-    this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
+    
     this.reponse = texNombre(x, 2)
 
     this.question = `Donner la valeur de $x$ pour que la moyenne soit égale à $10$.<br>
