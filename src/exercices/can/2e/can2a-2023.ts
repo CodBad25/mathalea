@@ -1341,7 +1341,6 @@ export default class SujetCAN2023Seconde extends Exercice {
             handleAnswers(this, index, {
               reponse: {
                 value: reponse.texFraction,
-                options: { fractionEgale: true },
               },
             })
             if (this.interactif) {
