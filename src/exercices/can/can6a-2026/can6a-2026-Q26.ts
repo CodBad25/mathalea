@@ -1,9 +1,14 @@
 import Figure from 'apigeom'
 import Segment from 'apigeom/src/elements/lines/Segment'
+import { fixeBordures } from '../../../lib/2d/fixeBordures'
+import { grille } from '../../../lib/2d/Grille'
+import { segment } from '../../../lib/2d/segmentsVecteurs'
+import { latex2d } from '../../../lib/2d/textes'
 import figureApigeom from '../../../lib/figureApigeom'
 import { ajouteFeedback } from '../../../lib/interactif/questionMathLive'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { context } from '../../../modules/context'
+import { mathalea2d } from '../../../modules/mathalea2d'
 import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Segment de longueur fractionnaire'
@@ -52,7 +57,7 @@ export default class Can2026Q26 extends ExerciceCan {
     this.question = `Tracer un segment de longueur $\\dfrac{${num}}{${den}}~\\text{u.l}$. `
     this.correction = `L'unité a une longueur de $${den}~\\text{carreaux}$ donc $\\dfrac{1}{${den}}~\\text{u.l}=1~\\text{carreau}$.`
     this.correction += `<br><br>Il suffit donc de tracer un segment de longueur $${num}~\\text{carreaux}$.`
-    this.canEnonce = this.question
+    this.canEnonce = ''
     this.canReponseACompleter = ''
     const figure = new Figure({
       xMin: 0,
@@ -156,9 +161,21 @@ export default class Can2026Q26 extends ExerciceCan {
         this.question += figure.getStaticHtml()
       }
     } else {
-      this.question += figure.tikz()
-      figure.scale = 0.35
-      this.canReponseACompleter = figure.tikz()
+      const g = grille(0, 0, this.den + 2, 5, 'gray', 0.5, 1)
+      const s = segment(1, 5, this.den + 1, 5, 'blue')
+      s.epaisseur = 2
+      s.styleExtremites = '|-|'
+      s.tailleExtremites = 2
+      const ul = latex2d(`1~\\text{u.l}`, this.den / 2 + 1, 4.5, {
+        letterSize: 'scriptsize',
+      })
+      const objets = [g, s, ul]
+      const fig = mathalea2d(
+        Object.assign({ scale: 0.35 }, fixeBordures(objets)),
+        objets,
+      )
+      this.canEnonce = this.question
+      this.canReponseACompleter = fig
     }
     this.correction += '\n\n<br><br>\n'
     if (context.isHtml) {
@@ -169,7 +186,7 @@ export default class Can2026Q26 extends ExerciceCan {
   }
 
   nouvelleVersion() {
-    this.sup ? this.enonce(4, 10) : this.enonce()
+    this.canOfficielle || this.sup ? this.enonce(4, 10) : this.enonce()
   }
 
   correctionInteractive = (i: number) => {
