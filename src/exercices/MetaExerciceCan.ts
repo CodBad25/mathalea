@@ -234,7 +234,43 @@ export default class MetaExercice extends Exercice {
                 }
               }
             } else {
-              // * ***************** Question MathLive *****************//
+              if (Question.formatInteractif === 'custom') {
+                this.correctionInteractives[indexQuestion] =
+                  Question.correctionInteractive!
+                this.listeQuestions[indexQuestion] =
+                  consigne + Question.question
+                this.listeQuestions[indexQuestion] = this.listeQuestions[
+                  indexQuestion
+                ]
+                  .replaceAll(
+                    `feedbackEx${this.numeroExercice}Q0`,
+                    `feedbackEx${this.numeroExercice}Q${indexQuestion}`,
+                  )
+                  .replaceAll(
+                    `resultatCheckEx${this.numeroExercice}Q0`,
+                    `resultatCheckEx${this.numeroExercice}Q${indexQuestion}`,
+                  )
+                  .replaceAll(
+                    `clockEx${this.numeroExercice}Q0`,
+                    `clockEx${this.numeroExercice}Q${indexQuestion}`,
+                  )
+                  .replaceAll(
+                    `apigeomEx${this.numeroExercice}F0`,
+                    `apigeomEx${this.numeroExercice}F${indexQuestion}`,
+                  )
+              } else {
+                // * ***************** Question MathLive *****************//
+
+                this.listeQuestions[indexQuestion] =
+                  consigne +
+                  Question.question +
+                  ajouteChampTexteMathLive(
+                    this,
+                    indexQuestion,
+                    formatChampTexte,
+                    optionsChampTexte,
+                  )
+              }
               if (Question.compare == null) {
                 const reponse = Question.reponse
                 const options =
@@ -242,24 +278,44 @@ export default class MetaExercice extends Exercice {
                     ? {}
                     : (Question.optionsDeComparaison as OptionsComparaisonType)
                 if (reponse instanceof FractionEtendue) {
-                  handleAnswers(this, indexQuestion, {
-                    reponse: {
-                      value: reponse.texFraction,
-                      options,
+                  handleAnswers(
+                    this,
+                    indexQuestion,
+                    {
+                      reponse: {
+                        value: reponse.texFraction,
+                        options,
+                      },
                     },
-                  })
+                    { formatInteractif: Question.formatInteractif },
+                  )
                 } else if (reponse instanceof Decimal) {
-                  handleAnswers(this, indexQuestion, {
-                    reponse: { value: reponse.toString(), options },
-                  })
+                  handleAnswers(
+                    this,
+                    indexQuestion,
+                    {
+                      reponse: { value: reponse.toString(), options },
+                    },
+                    { formatInteractif: Question.formatInteractif },
+                  )
                 } else if (reponse instanceof Grandeur) {
-                  handleAnswers(this, indexQuestion, {
-                    reponse: { value: reponse.toString(), options },
-                  })
+                  handleAnswers(
+                    this,
+                    indexQuestion,
+                    {
+                      reponse: { value: reponse.toString(), options },
+                    },
+                    { formatInteractif: Question.formatInteractif },
+                  )
                 } else if (Array.isArray(reponse)) {
-                  handleAnswers(this, indexQuestion, {
-                    reponse: { value: reponse, options },
-                  })
+                  handleAnswers(
+                    this,
+                    indexQuestion,
+                    {
+                      reponse: { value: reponse, options },
+                    },
+                    { formatInteractif: Question.formatInteractif },
+                  )
                 } else if (isValeur(reponse)) {
                   handleAnswers(
                     this,
@@ -268,9 +324,14 @@ export default class MetaExercice extends Exercice {
                     { reponse: { value: reponse.reponse!.value, options } },
                   )
                 } else {
-                  handleAnswers(this, indexQuestion, {
-                    reponse: { value: String(Question.reponse), options },
-                  })
+                  handleAnswers(
+                    this,
+                    indexQuestion,
+                    {
+                      reponse: { value: String(Question.reponse), options },
+                    },
+                    { formatInteractif: Question.formatInteractif },
+                  )
                 }
               } else {
                 const compare = Question.compare
@@ -283,44 +344,74 @@ export default class MetaExercice extends Exercice {
                   typeof Question.reponse === 'number'
                 ) {
                   const reponse = String(Question.reponse)
-                  handleAnswers(this, indexQuestion, {
-                    reponse: {
-                      value: reponse,
-                      compare,
-                      options,
+                  handleAnswers(
+                    this,
+                    indexQuestion,
+                    {
+                      reponse: {
+                        value: reponse,
+                        compare,
+                        options,
+                      },
                     },
-                  })
+                    { formatInteractif: Question.formatInteractif },
+                  )
                 } else if (typeof Question.reponse === 'object') {
                   const reponse = Question.reponse
                   if (reponse instanceof FractionEtendue) {
-                    handleAnswers(this, indexQuestion, {
-                      reponse: {
-                        value: reponse.texFraction,
-                        compare,
-                        options,
+                    handleAnswers(
+                      this,
+                      indexQuestion,
+                      {
+                        reponse: {
+                          value: reponse.texFraction,
+                          compare,
+                          options,
+                        },
                       },
-                    })
+                      { formatInteractif: Question.formatInteractif },
+                    )
                   } else if (reponse instanceof Decimal) {
-                    handleAnswers(this, indexQuestion, {
-                      reponse: {
-                        value: reponse.toString(),
-                        compare,
-                        options,
+                    handleAnswers(
+                      this,
+                      indexQuestion,
+                      {
+                        reponse: {
+                          value: reponse.toString(),
+                          compare,
+                          options,
+                        },
                       },
-                    })
+                      { formatInteractif: Question.formatInteractif },
+                    )
                   } else if (reponse instanceof Grandeur) {
-                    handleAnswers(this, indexQuestion, {
-                      reponse: { value: reponse.toString(), compare, options },
-                    })
+                    handleAnswers(
+                      this,
+                      indexQuestion,
+                      {
+                        reponse: {
+                          value: reponse.toString(),
+                          compare,
+                          options,
+                        },
+                      },
+                      { formatInteractif: Question.formatInteractif },
+                    )
                   } else if (Array.isArray(reponse)) {
-                    handleAnswers(this, indexQuestion, {
-                      reponse: { value: reponse, compare, options },
-                    })
+                    handleAnswers(
+                      this,
+                      indexQuestion,
+                      {
+                        reponse: { value: reponse, compare, options },
+                      },
+                      { formatInteractif: Question.formatInteractif },
+                    )
                   } else {
                     handleAnswers(
                       this,
                       indexQuestion,
                       Object.assign(reponse as Valeur, { compare, options }),
+                      { formatInteractif: Question.formatInteractif },
                     )
                   }
                 } else {
@@ -330,15 +421,6 @@ export default class MetaExercice extends Exercice {
                   )
                 }
               }
-              this.listeQuestions[indexQuestion] =
-                consigne +
-                Question.question +
-                ajouteChampTexteMathLive(
-                  this,
-                  indexQuestion,
-                  formatChampTexte,
-                  optionsChampTexte,
-                )
             }
           } else {
             //* ***************** Question Exo classique *****************//
@@ -389,7 +471,9 @@ export default class MetaExercice extends Exercice {
             } else {
               const reponse = Question.autoCorrection[0]?.reponse?.valeur
               if (reponse != null)
-                handleAnswers(this, indexQuestion, reponse as Valeur)
+                handleAnswers(this, indexQuestion, reponse as Valeur, {
+                  formatInteractif,
+                })
             }
           }
           if (Question?.autoCorrection[0]?.propositions != null) {
