@@ -50,29 +50,23 @@ export default class Can20266Q8 extends ExerciceCan {
       thickSec: false,
       thickSecDist: 1,
       labelsPrincipaux: false,
-
-      labelListe: [
-        [label1, texNombre(label1 * pas, 0)],
-        [label2, texNombre(label2 * pas, 0)],
-      ],
-      labelCustomDistance: 2.5,
     })
-    const origine = latex2d('0', 0, -1, { letterSize: 'normalsize' })
-    const fleche = segment(position, -2, position, -0.5)
-    const flecheMin = segment(label1, -2, label1, -0.5)
-    const flecheMax = segment(label2, -2, label2, -0.5)
-    flecheMax.styleExtremites = '->'
-    flecheMin.styleExtremites = '->'
+    const origine = latex2d('0', 0, -0.7, { letterSize: 'normalsize' })
+    const lab1 = latex2d(texNombre(label1 * pas, 0), label1, -0.7, {
+      letterSize: 'normalsize',
+    })
+    const lab2 = latex2d(texNombre(label2 * pas, 0), label2, -0.7, {
+      letterSize: 'normalsize',
+    })
+    const fleche = segment(position, -1.5, position, -0.5)
     fleche.styleExtremites = '->'
     fleche.tailleExtremites = context.isHtml ? 6 : 1.5
-    flecheMax.tailleExtremites = context.isHtml ? 6 : 1.5
-    flecheMin.tailleExtremites = context.isHtml ? 6 : 1.5
 
     const input = new MetaInteractif2d(
       [
         {
           x: position,
-          y: -3,
+          y: -2,
           content: '%{champ1}',
           classe: KeyboardType.clavierDeBase,
           blanc: '\\ldots',
@@ -82,7 +76,7 @@ export default class Can20266Q8 extends ExerciceCan {
       ],
       { exercice: this, question: 0 },
     )
-    const objets = [drGrad, fleche, input, flecheMin, flecheMax, origine]
+    const objets = [drGrad, fleche, input, lab1, lab2, origine]
 
     const graphique = mathalea2d(
       Object.assign({ pixelsParCm: 25, scale: 0.6 }, fixeBordures(objets)),

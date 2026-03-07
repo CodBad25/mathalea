@@ -156,7 +156,9 @@ export default class MetaExercice extends Exercice {
                   champ1: {
                     value: Question.reponse,
                     compare: Question.compare ?? fonctionComparaison,
-                    options: optionsChampTexte,
+                    options:
+                      Question.optionsDeComparaison ??
+                      ({} as OptionsComparaisonType),
                   },
                 })
               } else if (typeof Question.reponse !== 'object') {
@@ -164,7 +166,12 @@ export default class MetaExercice extends Exercice {
                   `Erreur avec cette question de type fillInTheBlank qui contient une reponse au format inconnu: ${JSON.stringify(Question.reponse)}`,
                 )
               } else {
-                handleAnswers(this, indexQuestion, Question.reponse as Valeur)
+                handleAnswers(
+                  this,
+                  indexQuestion,
+                  Question.reponse as Valeur,
+                  optionsChampTexte,
+                )
               }
             } else if (Question.formatInteractif === 'qcm') {
               Question?.question?.replaceAll(

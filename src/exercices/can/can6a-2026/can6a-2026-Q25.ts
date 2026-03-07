@@ -1,6 +1,7 @@
 import { propositionsQcm } from '../../../lib/interactif/qcm'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { texteEnCouleurEtGras } from '../../../lib/outils/embellissements'
+import { context } from '../../../modules/context'
 import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Q25'
@@ -36,9 +37,9 @@ export default class Can20266Q25 extends ExerciceCan {
     }
 
     this.question = vf
-      ? `Vrai - Faux ?<br>
+      ? `${context.isHtml ? '<u>Vrai ou Faux</u><br>' : '\\underline{Vrai ou Faux}<br>'}
      Tous les ${a} sont ${b}.`
-      : `Vrai - Faux ?<br>
+      : `${context.isHtml ? '<u>Vrai ou Faux</u><br>' : '\\underline{Vrai ou Faux}<br>'}
      Tous les ${b.replace('des ', '')} sont des ${a}.`
     this.autoCorrection[0] = {
       enonce: this.question,
@@ -61,8 +62,12 @@ export default class Can20266Q25 extends ExerciceCan {
       ? `Oui, tous les ${a} sont ${b}.`
       : `Non, ce n'est pas vrai.`
 
-    this.canEnonce = `Vrai ou Faux ?<br>
+    this.canEnonce = vf
+      ? `\\underline{Vrai ou Faux}<br>
     Tous les ${a} sont ${b}.<br>
+    ${texteEnCouleurEtGras('Entoure la bonne réponse', 'black')}`
+      : `\\underline{Vrai ou Faux}<br>
+    Tous les ${b.replace('des ', '')} sont des ${a}.<br>
     ${texteEnCouleurEtGras('Entoure la bonne réponse', 'black')}`
     this.canReponseACompleter = `Vrai \\quad Faux`
   }

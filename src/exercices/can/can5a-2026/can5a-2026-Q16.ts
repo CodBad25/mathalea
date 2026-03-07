@@ -31,7 +31,6 @@ export default class Can52026Q16 extends ExerciceCan {
     super()
     this.formatInteractif = 'fillInTheBlank'
     this.formatChampTexte = KeyboardType.clavierNumbers
-    this.optionsDeComparaison = { nombreDecimalSeulement: true }
   }
 
   enonce(nbBlanches?: number, nbNoires?: number) {
@@ -156,9 +155,10 @@ export default class Can52026Q16 extends ExerciceCan {
 
     this.correction = `Il y a $${nbBlanches}$ boules blanches sur un total de $${total}$ boules.<br>
 La proportion de boules blanches est donc : ${pgcd(nbBlanches, total) !== 1 ? `$\\dfrac{${nbBlanches}}{${total}}=${miseEnEvidence(fractionSimplifiee.texFraction)}$` : `$${miseEnEvidence(`\\dfrac{${nbBlanches}}{${total}}`)}$`}.`
-    this.formatChampTexte = KeyboardType.clavierDeBase
 
     this.reponse = {
+      champ1: { value: nbBlanches.toString() },
+      champ2: { value: total.toString() },
       bareme: toutPourUnPoint,
       callback,
     }

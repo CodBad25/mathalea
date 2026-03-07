@@ -29,7 +29,6 @@ export default class Can32026Q13 extends ExerciceCan {
   constructor() {
     super()
     this.formatChampTexte = KeyboardType.clavierNumbers
-    this.optionsDeComparaison = { nombreDecimalSeulement: true }
     this.formatInteractif = 'fillInTheBlank'
   }
 
@@ -37,6 +36,15 @@ export default class Can32026Q13 extends ExerciceCan {
     if (cote == null || hypotenuse == null) {
       // Version aléatoire - couples [côté, hypoténuse] donnant des résultats non entiers
       const listeCas = [
+        [4, 7], // √(49-16) = √33
+        [5, 8], // √(64-25) = √39
+        [3, 6], // √(36-9) = √27
+        [4, 6], // √(36-16) = √20
+        [5, 7], // √(49-25) = √24
+        [3, 7], // √(49-9) = √40
+        [6, 8], // √(64-36) = √28
+        [4, 8], // √(64-16) = √48
+        [5, 9], // √(81-25) = √56
         [4, 7], // √(49-16) = √33
         [5, 8], // √(64-25) = √39
         [3, 6], // √(36-9) = √27
@@ -55,7 +63,9 @@ export default class Can32026Q13 extends ExerciceCan {
 
     const c2 = hypotenuse ** 2 - cote ** 2
 
-    this.reponse = { champ1: { value: c2 } }
+    this.reponse = {
+      champ1: { value: c2, options: { nombreDecimalSeulement: true } },
+    }
 
     // Construction unique du triangle pour les deux versions
     // Angle aléatoire pour varier l'orientation
@@ -147,9 +157,11 @@ BC^2&=AC^2-AB^2\\\\
 BC^2&=${hypotenuse}^2-${cote}^2\\\\
 BC^2&=${hypotenuse ** 2}-${cote ** 2}\\\\
 BC^2&=${c2}\\\\
-BC&=\\sqrt{${miseEnEvidence(`${c2}`)}}
+BC&=\\sqrt{${miseEnEvidence(`${c2}`)}}\\text{ cm}
 \\end{aligned}$`
 
+    this.canReponseACompleter =
+      '$BC=\\sqrt{\\rule{0pt}{3ex}\\ldots}\\text{ cm}$'
     this.canReponseACompleter =
       '$BC=\\sqrt{\\rule{0pt}{3ex}\\ldots}\\text{ cm}$'
   }
