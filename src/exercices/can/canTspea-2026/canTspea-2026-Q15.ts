@@ -17,12 +17,16 @@ export const refs = {
  * @author Gilles Mora
 
 */export default class Can2026TermQ15 extends ExerciceCan {
+ constructor() {
+    super()
+   this.optionsDeComparaison = { calculFormel: true }
+    this.formatChampTexte = KeyboardType.alphanumeric
+  }
+  
   enonce(cas?: number): void {
     if (cas == null) {
       cas = choice([1, 2, 3])
     }
-this.optionsDeComparaison = { calculFormel: true }
-    this.formatChampTexte = KeyboardType.alphanumeric
 
     switch (cas) {
       case 1: // Ec = 1/2 m v² → m = 2Ec/v²

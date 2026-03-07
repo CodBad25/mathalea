@@ -16,6 +16,12 @@ export const refs = {
  * @author Gilles Mora
 
 */ export default class Can2026TermQ13 extends ExerciceCan {
+   constructor() {
+    super()
+   this.optionsDeComparaison = { texteSansCasse: true }
+    this.formatChampTexte = KeyboardType.clavierEnsemble
+  }
+
   enonce(a?: number, b?: number): void {
     if (a == null || b == null) {
       a = randint(-5, 5, 0)
@@ -27,16 +33,16 @@ export const refs = {
     const petit = Math.min(x1, x2)
     const grand = Math.max(x1, x2)
 
-    this.formatChampTexte = KeyboardType.clavierDeBase
+    
     this.reponse = [
       `${petit};${grand}`,
       `${grand};${petit}`,
       `\\{${petit};${grand}\\}`,
       `\\{${grand};${petit}\\}`,
     ]
-    this.optionsChampTexte = {
+    this.optionsChampTexte = {texteAvant: '$\\{$',
       texteApres:
-        "(S'il y a plusieurs solutions, les écrire séparées d'un point-virgule)",
+        "$\\}$ <br>(S'il y a plusieurs solutions, les écrire séparées d'un point-virgule)",
     }
 
     this.question = `Solution(s) de l'équation $|x${ecritureAlgebrique(-a)}|=${b}$.<br>`

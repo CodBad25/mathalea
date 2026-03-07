@@ -16,12 +16,18 @@ export const refs = {
  * @author Gilles Mora
 
 */ export default class Can2026TermQ17 extends ExerciceCan {
+   constructor() {
+    super()
+   this.optionsDeComparaison = {  nombreDecimalSeulement: true }
+     this.formatChampTexte = KeyboardType.clavierDeBase
+  }
+
   enonce(a?: number): void {
     if (a == null) {
       a = randint(-9, 9, 0)
     }
 
-    this.formatChampTexte = KeyboardType.clavierDeBase
+    
     this.reponse = String(-a)
 
     this.question = `$\\text{e}^{x${ecritureAlgebrique(a)}}=1$<br>`

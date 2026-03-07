@@ -18,6 +18,12 @@ export const refs = {
  * @author Gilles Mora
 
 */ export default class Can2026TermQ18 extends ExerciceCan {
+   constructor() {
+    super()
+   this.optionsDeComparaison = {  intervalle: true }
+    this.formatChampTexte = KeyboardType.clavierEnsemble
+  }
+
   enonce(a?: number, x1?: number, x2?: number, choix?: boolean): void {
     if (a == null || x1 == null || x2 == null) {
       a = randint(-5, -2)
@@ -30,10 +36,9 @@ export const refs = {
     const grand = Math.max(x1, x2)
 
    
-this.optionsDeComparaison = {  intervalle: true }
-    this.formatChampTexte = KeyboardType.clavierEnsemble
+
     this.reponse = choix ? `]-\\infty ; ${petit}] \\cup [${grand} ; +\\infty[` : `[${petit};${grand}]`
-this.optionsChampTexte = { texteAvant: '<br>',texteApres: '(Tous les nombres dans un intervalle ou une suite de nombres doivent être séparés exclusivement par un point-virgule.)' }
+this.optionsChampTexte = { texteAvant: '<br>',texteApres: '<br>(Tous les nombres dans un intervalle ou une suite de nombres doivent être séparés exclusivement par un point-virgule.)' }
 
     this.question = `L'ensemble des  solutions sur $\\mathbb{R}$ de l'inéquation $${a}(${reduireAxPlusB(1, -x1)})(${x2}-x)${choix ? '\\geqslant' : '\\leqslant'} 0$ est : `
     if (!this.interactif) {
@@ -44,7 +49,7 @@ this.optionsChampTexte = { texteAvant: '<br>',texteApres: '(Tous les nombres dan
     $${a}(${reduireAxPlusB(1, -x1)})(${x2}-x)= ${a}(${reduireAxPlusB(1, -x1)})(x-${x2})\\times(-1)= ${-a}(${reduireAxPlusB(1, -x1)})(x-${x2})$.<br>
     Les racines sont : $${x1}$ et $${x2}$.<br>
     Un polynome du second degré est du signe de $a$ sauf entre ses racines. Ici $a>0$, donc le polynôme est  négatif entre les racines, et  positif à l'extérieur. <br>
-    L'ensemble des solutions est ${choix ? `$${miseEnEvidence(`]-\\infty\\,;\\,${petit}] \\cup [${grand}\\,;\\infty[`)}$` : `$${miseEnEvidence(`[${petit}\\,;\\,${grand}]`)}$`}.`
+    L'ensemble des solutions est ${choix ? `$${miseEnEvidence(`]-\\infty\\,;\\,${petit}] \\cup [${grand}\\,;+\\infty[`)}$` : `$${miseEnEvidence(`[${petit}\\,;\\,${grand}]`)}$`}.`
 
     this.canEnonce = `L'ensemble des solutions sur $\\mathbb{R}$ de l'inéquation $${a}(${reduireAxPlusB(1, -x1)})(${x2}-x)${choix ? '\\geqslant' : '\\leqslant'} 0$ est :`
     this.canReponseACompleter = '$\\ldots$'

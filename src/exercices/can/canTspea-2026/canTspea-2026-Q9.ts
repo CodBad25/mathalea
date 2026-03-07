@@ -18,6 +18,12 @@ export const refs = {
  * @author Gilles Mora
 
 */export default class Can2026TermQ9 extends ExerciceCan {
+  constructor() {
+    super()
+   this.optionsDeComparaison = {  nombreDecimalSeulement: true }
+     this.formatChampTexte = KeyboardType.clavierDeBase
+  }
+
   enonce(nombre?: Decimal, puissance?: number): void {
     if (nombre == null || puissance == null) {
       const nbChiffresAvant = choice([1, 2])
@@ -41,7 +47,7 @@ export const refs = {
 
     const resultat = nombre.mul(new Decimal(10).pow(puissance))
  this.optionsChampTexte = { texteAvant: " <br>" }
-    this.formatChampTexte = KeyboardType.clavierDeBase
+   
     this.reponse = texNombre(resultat, 10)
     this.question = `Écriture décimale de $${texNombre(nombre, 2)}\\times 10^{${puissance}}$.`
     

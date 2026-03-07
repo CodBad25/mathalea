@@ -19,6 +19,12 @@ export const refs = {
  * @author Gilles Mora
 
 */export default class Can2026TermQ11 extends ExerciceCan {
+  constructor() {
+    super()
+   this.optionsDeComparaison = {  nombreDecimalSeulement: true }
+     this.formatChampTexte = KeyboardType.clavierDeBase
+  }
+
    enonce(a?: number, nInit?: number, k?: number): void {
     if (a == null || nInit == null || k == null) {
       k = choice([2, 3])
@@ -39,7 +45,6 @@ export const refs = {
       detail += `Tour ${tour} : $n=${n}$ ${n <= a ? `($${n}\\leqslant ${a}$ : on continue)` : `($${n}> ${a}$ : on sort)`}<br>`
     }
 
-    this.formatChampTexte = KeyboardType.clavierDeBase
     this.reponse = String(n)
 
     if (context.isHtml) {

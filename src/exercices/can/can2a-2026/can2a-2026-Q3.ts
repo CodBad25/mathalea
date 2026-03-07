@@ -19,13 +19,18 @@ export const refs = {
 
 */
 export default class Can2a2026Q3 extends ExerciceCan {
+  constructor() {
+    super()
+   this.optionsDeComparaison = { exclusifFactorisation: true }
+    this.formatChampTexte = KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets
+  }
+
    enonce(a?: number, signe?: string) {
     if (a == null || signe == null) {
       a = randint(2, 5)
       signe = choice(['+', '-'])
     }
-this.optionsDeComparaison = { exclusifFactorisation: true }
-    this.formatChampTexte = KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets
+
     
     if (signe === '-') {
       this.reponse = `x(${a}x-1)`

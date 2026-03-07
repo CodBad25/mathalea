@@ -18,6 +18,13 @@ export const refs = {
  * @author Gilles Mora
 
 */export default class Can2026TermQ12 extends ExerciceCan {
+   constructor() {
+    super()
+     this.formatInteractif = 'fillInTheBlank'
+   this.optionsDeComparaison = { nombreDecimalSeulement: true }
+    this.formatChampTexte = KeyboardType.clavierDeBase
+  }
+
  enonce(a?: number, b?: number, c?: number): void {
     if (a == null || b == null || c == null) {
       b = randint(-4, 4)
@@ -29,7 +36,7 @@ export const refs = {
     const borneInf = a - c
     const borneSup = a - b
 
-    this.formatInteractif = 'fillInTheBlank'
+   
     this.reponse = {
        bareme: toutPourUnPoint,
       champ1: { value: String(borneInf) },
@@ -38,7 +45,7 @@ export const refs = {
      
  this.formatChampTexte = KeyboardType.clavierDeBase
     this.consigne = `Si $${b}\\leqslant x\\leqslant ${c}$ alors :<br>`
-    this.question = `%{champ1}\\leqslant ${a}-x\\leqslant %{champ2}`
+    this.question = `%{champ1}~\\leqslant ${a}-x\\leqslant ~%{champ2}`
 
     this.correction = `$${b}\\leqslant x\\leqslant ${c}$<br>
      On multiplie par $-1$ (on inverse les inégalités) :<br>
