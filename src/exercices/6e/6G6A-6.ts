@@ -201,7 +201,7 @@ export default class TracerTriangle2Angles extends Exercice {
         texteCorr += '<br><br>'
       }
       if (!this.sup) {
-        texteCorr += `$${p[0] + p[2]}\\approx${texNombre(longueur(A3, C, 2))}\\text{ cm}$, $${p[1] + p[2]}\\approx${texNombre(longueur(B3, C, 2))}\\text{ cm}$`
+        texteCorr += `$${p[0] + p[2]}\\approx${texNombre(longueur(A3, C, 1))}\\text{ cm}$, $${p[1] + p[2]}\\approx${texNombre(longueur(B3, C, 1))}\\text{ cm}$`
         texteCorr += ` et $\\widehat{${
           p[1] + p[2] + p[0]
         }}=${180 - angle1 - angle2}^\\circ$.`
