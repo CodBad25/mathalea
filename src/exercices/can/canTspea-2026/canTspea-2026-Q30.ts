@@ -100,7 +100,9 @@ enonce(choix?: { x: number; pente: number }): void {
     }
 
     // 7. Correction simplifiée avec mise en évidence
-    this.correction = `Le nombre dérivé $f'(${xString})$ est égal au coefficient directeur de la droite contenant le segment de la courbe sur lequel se trouve le point d'abscisse $${xString}$.<br>`
+    this.correction = `Le nombre dérivé $f'(${xString})$ est égal au coefficient directeur de la tangente à la courbe au point d'abscisse $${xString}$.<br>
+    En ce point, la courbe est confondue avec sa tangente.<br>
+    $f'(${xString})$ est donc égal au coefficient directeur de la droite contenant le segment de la courbe sur lequel se trouve le point d'abscisse $${xString}$.<br>`
     this.correction += `Par lecture graphique, ce coefficient directeur est égal à $${choix.pente}$.<br>`
     this.correction += `On en déduit que $f'(${xString}) = ${miseEnEvidence(choix.pente.toString())}$.`
  this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
