@@ -33,14 +33,15 @@ export default class Can2a2026Q29 extends ExerciceCan {
     }
 
     this.consigne = `Compléter à l'aide de la relation de Chasles : `
-    this.question = `\\overrightarrow{${lettre1}${lettre3}}=\\overrightarrow{${lettre1}${lettre2}}+ \\overrightarrow{%{champ1}}`
-
+   
+if(this.interactif){ this.question = `\\overrightarrow{${lettre1}${lettre3}}=\\overrightarrow{${lettre1}${lettre2}}+ \\overrightarrow{%{champ1}}`}
+else{this.question = `\\overrightarrow{${lettre1}${lettre3}}=\\overrightarrow{${lettre1}${lettre2}}+ \\ldots`}
     this.correction = `D'après la relation de Chasles :<br>
     $\\overrightarrow{${lettre1}${lettre3}}=\\overrightarrow{${lettre1}${lettre2}}+${miseEnEvidence(`\\overrightarrow{${lettre2}${lettre3}}`)}$`
 
-    this.canEnonce = `Compléter à l'aide de la relation de Chasles :<br>
-    $\\overrightarrow{${lettre1}${lettre3}}=\\overrightarrow{${lettre1}${lettre2}}+\\ldots$`
-    this.canReponseACompleter = ''
+    this.canEnonce = `Compléter à l'aide de la relation de Chasles.
+    `
+    this.canReponseACompleter = `$\\overrightarrow{${lettre1}${lettre3}}=\\overrightarrow{${lettre1}${lettre2}}+\\ldots$`
   }
 
   nouvelleVersion(): void {
