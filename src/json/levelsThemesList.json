@@ -203,6 +203,15 @@
   "canTSpeAN": {
     "titre": "Analyse"
   },
+   "canTSpeAN1": {
+    "titre": "Logarithme"
+  },
+   "canTSpeAN2": {
+    "titre": "Trigonométrie"
+  },
+   "canTSpeAN3": {
+    "titre": "Calcul intégral et primitives"
+  },
   "canTSpeS": {
     "titre": "Suites"
   },
@@ -2916,7 +2925,7 @@
     "titre": "Définition - Notations"
   },
   "TSA8-2": {
-    "titre": "Calculm intégral et primitives"
+    "titre": "Calcul intégral et primitives"
   },
   "TSA8-3": {
     "titre": "Propriétés des intégrales, inégalités, Chasles et moyenne"

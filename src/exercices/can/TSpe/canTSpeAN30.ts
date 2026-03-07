@@ -1,14 +1,9 @@
 import {
-  ecritureAlgebriqueSauf1,
-  ecritureParentheseSiNegatif,
   reduireAxPlusB,
   rienSi1,
 } from '../../../lib/outils/ecritures'
 import ExerciceSimple from '../../ExerciceSimple'
 import { randint } from '../../../modules/outils'
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import FractionEtendue from '../../../modules/FractionEtendue'
-import { texNombre } from '../../../lib/outils/texNombre'
 import { choice } from '../../../lib/outils/arrayOutils'
 
 export const titre = 'Dérivée cosinus et sinus'
@@ -19,7 +14,7 @@ export const dateDePublication = '13/5/2025'
 
 export const uuid = 'f6ac7'
 export const refs = {
-  'fr-fr': ['canTSpeAN08'],
+  'fr-fr': ['canTSpeAN30'],
   'fr-ch': [],
 }
 
