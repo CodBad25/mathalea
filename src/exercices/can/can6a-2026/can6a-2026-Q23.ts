@@ -1,7 +1,7 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
+import { context } from '../../../modules/context'
 import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
 
@@ -15,45 +15,37 @@ export const refs = {
 }
 
 /**
- * @author Gilles Mora
-
-*/
+ * @author Jean-Claude Lhote
+ */
 export default class Can20266Q23 extends ExerciceCan {
-  enonce(a?: number, b?: number) {
-    let millier: number, centaines: number
+  constructor() {
+    super()
+    this.formatInteractif = 'fillInTheBlank'
+  }
 
-    if (a == null || b == null) {
-      const m = randint(1, 9)
-      const c = randint(1, 6)
-      const d = randint(1, 9)
-      const u = randint(1, 9)
-      const centainesAjoutees = choice(
-        [3, 4, 6, 7, 8, 9].filter((x) => x + c < 10),
-      )
-      millier = m * 1000 + c * 100 + d * 10 + u
-      centaines = centainesAjoutees * 100
+  enonce(minutes?: number, secondes?: number) {
+    if (secondes == null || minutes == null) {
+      minutes = randint(1, 5)
+      secondes = randint(0, 5) * 10
+    }
+    if (context.isHtml) {
+      this.consigne = 'Complète.'
+      this.question = `${minutes}\\text{ min et }${secondes}\\text{ s} = %{champ1} \\text{ s}`
     } else {
-      millier = a
-      centaines = b
+      this.question = `Complète.<br>
+  $${minutes}\\text{ min et }${secondes}\\text{ s} = \\ldots \\text{ s}$`
     }
 
-    const somme = millier + centaines
+    this.reponse = { champ1: { value: (minutes * 60 + secondes).toString() } }
 
-    this.reponse = String(somme)
-    if (this.interactif) {
-      this.question = `$${texNombre(millier)}+${centaines}=$`
-    } else {
-      this.question = `$${texNombre(millier)}+${centaines}=\\ldots$`
-    }
-
-    this.correction = `$${texNombre(millier)}+${centaines}=${miseEnEvidence(texNombre(somme))}$`
+    this.correction = `$${minutes}\\text{ min et }${secondes}\\text{ s} = ${minutes}\\times 60\\text{ s}+${secondes}\\text{ s} = ${miseEnEvidence(texNombre(minutes * 60 + secondes, 0))} \\text{ s}$`
 
     this.formatChampTexte = KeyboardType.clavierDeBase
-    this.canEnonce = 'Calcule.'
-    this.canReponseACompleter = `$${texNombre(millier)}+${centaines}=\\ldots$`
+    this.canEnonce = 'Complète.'
+    this.canReponseACompleter = `$${minutes}\\text{ min et }${secondes}\\text{ s} = \\ldots \\text{ s}$`
   }
 
   nouvelleVersion() {
-    this.canOfficielle ? this.enonce(1462, 300) : this.enonce()
+    this.canOfficielle || this.sup ? this.enonce(2, 10) : this.enonce()
   }
 }

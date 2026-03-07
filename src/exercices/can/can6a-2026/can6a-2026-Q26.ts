@@ -1,9 +1,10 @@
-import { choice } from '../../../lib/outils/arrayOutils'
-import ExerciceCan from '../../ExerciceCan'
-import figureApigeom from '../../../lib/figureApigeom'
 import Figure from 'apigeom'
 import Segment from 'apigeom/src/elements/lines/Segment'
+import figureApigeom from '../../../lib/figureApigeom'
+import { ajouteFeedback } from '../../../lib/interactif/questionMathLive'
+import { choice } from '../../../lib/outils/arrayOutils'
 import { context } from '../../../modules/context'
+import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Segment de longueur fractionnaire'
 export const interactifReady = true
@@ -20,16 +21,17 @@ export const refs = {
 */
 export default class Can2026Q26 extends ExerciceCan {
   figure!: Figure
-  nums: number[] = []
-  dens: number[] = []
+  num: number = 0
+  den: number = 0
 
   constructor() {
     super()
     this.formatChampTexte = 'none' // Pas de champ texte pour cet exercice simple de géométrie dynamique
     this.nbQuestionsModifiable = false
+    this.formatInteractif = 'custom'
   }
 
-  enonce(i: number, a?: number, b?: number) {
+  enonce(a?: number, b?: number) {
     let num: number
     let den: number
     if (a == null || b == null) {
@@ -44,12 +46,12 @@ export default class Can2026Q26 extends ExerciceCan {
     } else {
       ;[num, den] = [a, b]
     }
-    this.nums[i] = num
-    this.dens[i] = den
+    this.num = num
+    this.den = den
     this.reponse = num
     this.question = `Tracer un segment de longueur $\\dfrac{${num}}{${den}}~\\text{u.l}$. `
-    this.correction = `Le segment a une longueur de $${den}~\\text{u.l}$ donc $\\dfrac{1}{${den}}~\\text{u.l}=1~\\text{u.l}$.`
-    this.correction += `<br><br>Il suffit donc de tracer un segment de longueur $${num}~\\text{u.l}$.`
+    this.correction = `L'unité a une longueur de $${den}~\\text{carreaux}$ donc $\\dfrac{1}{${den}}~\\text{u.l}=1~\\text{carreau}$.`
+    this.correction += `<br><br>Il suffit donc de tracer un segment de longueur $${num}~\\text{carreaux}$.`
     this.canEnonce = this.question
     this.canReponseACompleter = ''
     const figure = new Figure({
@@ -63,14 +65,19 @@ export default class Can2026Q26 extends ExerciceCan {
       tools: ['SEGMENT', 'REMOVE'],
       position: 'top',
     })
-    figure.create('Grid', { axeX: false, axeY: false,labelX: false, labelY: false })
+    figure.create('Grid', {
+      axeX: false,
+      axeY: false,
+      labelX: false,
+      labelY: false,
+    })
     figure.options.color = 'blue'
     figure.options.gridWithTwoPointsOnSamePosition = false
     figure.options.thickness = 2
     figure.snapGrid = true
     const ptA = figure.create('Point', { x: 1, y: 5, isVisible: false })
     const ptB = figure.create('Point', {
-      x: this.dens[i],
+      x: this.den + 1,
       y: 5,
       isVisible: false,
     })
@@ -82,7 +89,7 @@ export default class Can2026Q26 extends ExerciceCan {
       isSelectable: false,
     })
     figure.create('TextByPosition', {
-      x: this.dens[i] / 2,
+      x: this.den / 2 + 1,
       y: 4.5,
       text: '$1~\\text{u.l}$',
       isDeletable: false,
@@ -95,10 +102,15 @@ export default class Can2026Q26 extends ExerciceCan {
     })
     figureCorr.options.color = 'blue'
     figureCorr.options.thickness = 2
-    figureCorr.create('Grid', { axeX: false, axeY: false, labelX: false, labelY: false})
+    figureCorr.create('Grid', {
+      axeX: false,
+      axeY: false,
+      labelX: false,
+      labelY: false,
+    })
     const ptACorr = figure.create('Point', { x: 1, y: 5, isVisible: false })
     const ptBCorr = figure.create('Point', {
-      x: this.dens[i],
+      x: this.den + 1,
       y: 5,
       isVisible: false,
     })
@@ -110,7 +122,7 @@ export default class Can2026Q26 extends ExerciceCan {
     })
     const ptCCorr = figureCorr.create('Point', { x: 1, y: 3, isVisible: false })
     const ptDCorr = figureCorr.create('Point', {
-      x: this.nums[i],
+      x: this.num + 1,
       y: 3,
       isVisible: false,
     })
@@ -121,25 +133,25 @@ export default class Can2026Q26 extends ExerciceCan {
       thickness: 3,
     })
     figureCorr.create('TextByPosition', {
-      x: this.dens[i] / 2,
+      x: this.den / 2 + 1,
       y: 4.5,
       text: '$1~\\text{u.l}$',
     })
     figureCorr.create('TextByPosition', {
-      x: this.nums[i] / 2,
+      x: this.num / 2,
       y: 2,
-      text: `$\\dfrac{${this.nums[i]}}{${this.dens[i]}}~\\text{u.l}$`,
+      text: `$\\dfrac{${this.num}}{${this.den}}~\\text{u.l}$`,
     })
 
     const emplacementPourFigure = figureApigeom({
       exercice: this,
-      i,
+      i: 25, // On est obligé de mettre le Numéro de la question qui sera dans le MetaExercice sinon le listener ne trouve pas le div !
       figure,
       defaultAction: 'SEGMENT',
     })
     if (context.isHtml) {
       if (this.interactif) {
-        this.question += emplacementPourFigure
+        this.question += emplacementPourFigure + ajouteFeedback(this, 0)
       } else {
         this.question += figure.getStaticHtml()
       }
@@ -156,8 +168,8 @@ export default class Can2026Q26 extends ExerciceCan {
     }
   }
 
-  nouvelleVersion(i: number) {
-    this.sup ? this.enonce(i, 4, 10) : this.enonce(i)
+  nouvelleVersion() {
+    this.sup ? this.enonce(4, 10) : this.enonce()
   }
 
   correctionInteractive = (i: number) => {

@@ -21,6 +21,7 @@ import Question22 from '../can6a-2026/can6a-2026-Q22'
 import Question23 from '../can6a-2026/can6a-2026-Q23'
 import Question24 from '../can6a-2026/can6a-2026-Q24'
 import Question25 from '../can6a-2026/can6a-2026-Q25'
+import Question26 from '../can6a-2026/can6a-2026-Q26'
 import Question27 from '../can6a-2026/can6a-2026-Q27'
 import Question28 from '../can6a-2026/can6a-2026-Q28'
 import Question29 from '../can6a-2026/can6a-2026-Q29'
@@ -74,6 +75,7 @@ const questions = [
   Question23,
   Question24,
   Question25,
+  Question26,
   Question27,
   Question28,
   Question29,
