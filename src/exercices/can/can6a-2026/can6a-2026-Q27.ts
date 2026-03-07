@@ -1,11 +1,12 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { texNombre } from '../../../lib/outils/texNombre'
+import { arrondi } from '../../../lib/outils/nombres'
+import { texPrix } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
 
-export const titre = 'Q27'
+export const titre = 'Déterminer un prix'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const uuid = '81q3f'
@@ -15,45 +16,58 @@ export const refs = {
 }
 
 /**
- * @author Gilles Mora
+ * @author Eric Elter
 
 */
 export default class Can20266Q27 extends ExerciceCan {
-  enonce(a?: number, b?: number) {
-    let millier: number, centaines: number
+  constructor() {
+    super()
+    this.formatChampTexte = KeyboardType.clavierNumbers
+    this.optionsDeComparaison = { nombreDecimalSeulement: true }
+    this.optionsChampTexte = {
+      texteAvant: '<br>On me rend ',
+      texteApres: ' €.',
+    }
+  }
 
-    if (a == null || b == null) {
-      const m = randint(1, 9)
-      const c = randint(1, 6)
-      const d = randint(1, 9)
-      const u = randint(1, 9)
-      const centainesAjoutees = choice(
-        [3, 4, 6, 7, 8, 9].filter((x) => x + c < 10),
-      )
-      millier = m * 1000 + c * 100 + d * 10 + u
-      centaines = centainesAjoutees * 100
-    } else {
-      millier = a
-      centaines = b
+  listeviennoiserie = [
+    ['croissants'],
+    ['pains au chocolat'],
+    ['chocolatines'],
+    ['pains aux raisins'],
+    ['cookies'],
+    ['brioches'],
+  ]
+
+  enonce(
+    PrixUneViennoiserie?: number,
+    PrixBillet?: number,
+    NomViennoiserie?: string[],
+  ) {
+    if (PrixUneViennoiserie == null) {
+      PrixUneViennoiserie = arrondi(1 + randint(1, 9, [5]) / 10)
+      PrixBillet = choice([4, 5, 10, 20])
+      NomViennoiserie = choice(this.listeviennoiserie)
     }
 
-    const somme = millier + centaines
-
-    this.reponse = String(somme)
+    this.reponse = PrixBillet! - 2 * PrixUneViennoiserie
+    this.question = `J'achète deux ${NomViennoiserie} à $${texPrix(PrixUneViennoiserie)}$ €. <br>
+           Je donne $${PrixBillet!}$  €.`
+    this.correction = `Deux ${NomViennoiserie} coûtent $2\\times${texPrix(PrixUneViennoiserie)}~€=${texPrix(2 * PrixUneViennoiserie)}~€$.<br>`
+    this.correction += `On doit me rendre $${PrixBillet!}~€ -${texPrix(2 * PrixUneViennoiserie)}~€=${miseEnEvidence(texPrix(this.reponse))}$ €.`
     if (this.interactif) {
-      this.question = `$${texNombre(millier)}+${centaines}=$`
-    } else {
-      this.question = `$${texNombre(millier)}+${centaines}=\\ldots$`
+      this.optionsChampTexte = {
+        texteAvant: '<br>On me rend ',
+        texteApres: ' €.',
+      }
     }
-
-    this.correction = `$${texNombre(millier)}+${centaines}=${miseEnEvidence(texNombre(somme))}$`
-
-    this.formatChampTexte = KeyboardType.clavierDeBase
-    this.canEnonce = 'Calcule.'
-    this.canReponseACompleter = `$${texNombre(millier)}+${centaines}=\\ldots$`
+    // this.canEnonce = this.question
+    this.canReponseACompleter = 'On me rend $\\dots$ €.'
   }
 
   nouvelleVersion() {
-    this.canOfficielle ? this.enonce(1462, 300) : this.enonce()
+    this.canOfficielle
+      ? this.enonce(1.2, 10, this.listeviennoiserie[0])
+      : this.enonce()
   }
 }
