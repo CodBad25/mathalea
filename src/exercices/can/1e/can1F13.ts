@@ -1,127 +1,501 @@
 import { choice } from '../../../lib/outils/arrayOutils'
-import { ecritureParentheseSiNegatif } from '../../../lib/outils/ecritures'
-import ExerciceSimple from '../../ExerciceSimple'
-import { randint } from '../../../modules/outils'
-import FractionEtendue from '../../../modules/FractionEtendue'
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-export const titre =
-  'Déterminer le coefficient directeur d’une tangente (fonctions de référence)'
+import {
+  ecritureAlgebrique,
+  ecritureAlgebriqueSauf1,
+  reduirePolynomeDegre3,
+  rienSi1,
+} from '../../../lib/outils/ecritures'
+import { abs } from '../../../lib/outils/nombres'
+import Exercice from '../../Exercice'
+import { randint, listeQuestionsToContenu } from '../../../modules/outils'
+import { propositionsQcm } from '../../../lib/interactif/qcm'
+export const titre = 'Reconnaitre une fonction polynôme du second degré (V/F)'
 export const interactifReady = true
-export const interactifType = 'mathLive'
-
-// Les exports suivants sont optionnels mais au moins la date de publication semble essentielle
-export const dateDePublication = '21/06/2022' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
-// export const dateDeModifImportante = '14/02/2022' // Une date de modification importante au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
-
+export const interactifType = 'qcm'
+export const dateDePublication = '24/09/2022'
 /**
-     * Modèle d'exercice très simple pour la course aux nombres
-     * @author Gilles Mora
+ *
+ * @author Gilles Mora
 
-    */
-export const uuid = '3c690'
+ *
+*/
+
+export const uuid = '6e9df'
 
 export const refs = {
   'fr-fr': ['can1F13'],
   'fr-ch': [],
 }
-export default class CalculCoeffDir extends ExerciceSimple {
+export default class ReconnaitreFonctionDegre2 extends Exercice {
   constructor() {
     super()
-    this.formatChampTexte = KeyboardType.clavierFullOperations
-    this.typeExercice = 'simple'
+
     this.nbQuestions = 1
   }
 
   nouvelleVersion() {
-    let a
-    let f
-    switch (
-      choice([1, 1, 2, 2, 3, 3, 4]) //
-    ) {
-      case 1: // x^2
-        a = randint(2, 15) * choice([-1, 1])
+    const nomF = [['f'], ['g'], ['h'], ['u'], ['v'], ['w'], ['r']]
+    let nom, choix
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+      let texte = ''
+      let texteCorr = ''
+      let monQcm = { texte: '', texteCorr: '' }
+      this.canEnonce = ''
+      let a = 0
+      let b = 0
+      let c = 0
+      let d = 0
+      let x1 = 0
+      let x2 = 0
+      let alpha = 0
+      let beta = 0
+      let r1, r2
+      switch (
+        choice([1, 2, 3, 4, 5, 6]) //
+      ) {
+        case 1: // forme developpee ok
+          a = randint(-3, 3, 0)
+          b = randint(-9, 9, 0)
+          c = randint(-9, 9, 0)
+          d = choice([5, 7, 10])
+          r1 = choice([2, 3, 5, 6, 7, 10])
+          nom = choice(nomF)
+          choix = choice(['a', 'b', 'c', 'd', 'e', 'f', 'g']) //
+          if (choix === 'a') {
+            texte = `Soit $${nom}$ la fonction définie  par :<br>
+            $${nom}(x)=${reduirePolynomeDegre3(0, a, b, c)}$. <br>
+            $${nom}$ est une fonction polynôme du second degré.`
+            this.canEnonce = texte
+          } else if (choix === 'b') {
+            texte = `Soit $${nom}$ la fonction définie  par :<br>
+            $${nom}(x)=${reduirePolynomeDegre3(0, a, 0, c)}$. <br>
+            $${nom}$ est une fonction polynôme du second degré.`
+            this.canEnonce = texte
+          } else if (choix === 'c') {
+            texte = `Soit $${nom}$ la fonction définie  par :<br>
+            $${nom}(x)=${reduirePolynomeDegre3(0, a, b, 0)}$. <br>
+            $${nom}$ est une fonction polynôme du second degré.`
+            this.canEnonce = texte
+          } else if (choix === 'd') {
+            texte = `Soit $${nom}$ la fonction définie  par :<br>
+            $${nom}(x)=${rienSi1(b)}x${ecritureAlgebrique(c)}${ecritureAlgebriqueSauf1(a)}x^2$. <br>
+            $${nom}$ est une fonction polynôme du second degré.`
+            this.canEnonce = texte
+          } else if (choix === 'e') {
+            texte = `Soit $${nom}$ la fonction définie  par :<br>
+            $${nom}(x)=${rienSi1(b)}x${ecritureAlgebriqueSauf1(a)}x^2${ecritureAlgebrique(c)}$. <br>
+            $${nom}$ est une fonction polynôme du second degré.`
+            this.canEnonce = texte
+          } else if (choix === 'f') {
+            texte = `Soit $${nom}$ la fonction définie  par :<br>
+            $${nom}(x)=\\dfrac{${reduirePolynomeDegre3(0, a, 0, c)}}{${d}}$. <br>
+            $${nom}$ est une fonction polynôme du second degré.`
+            this.canEnonce = texte
+          } else {
+            texte = `Soit $${nom}$ la fonction définie  par :<br>
+            $${nom}(x)=${rienSi1(a)}x^2+\\sqrt{${r1}}x${ecritureAlgebrique(c)}$. <br>
+            $${nom}$ est une fonction polynôme du second degré.`
+            this.canEnonce = texte
+          }
+          this.autoCorrection[i] = {
+            enonce: texte,
+            propositions: [
+              {
+                texte: 'Vrai',
+                statut: a < 10,
+              },
+              {
+                texte: 'Faux',
+                statut: a > 10,
+              },
+            ],
+            options: { ordered: true, radio: true },
+          }
+          monQcm = propositionsQcm(this, i)
+          texte += monQcm.texte
 
-        this.question = `Déterminer le coefficient directeur de la tangente à la courbe représentative de la fonction carré au point d'abscisse $${a}$.    `
+          if (choix === 'a') {
+            texteCorr =
+              monQcm.texteCorr +
+              `La fonction $${nom}$ est une fonction polynôme du second degré. <br>
+            $${nom}(x)$ est de la forme $ax^2+bx+c$ avec $a=${a}$, $b=${b}$ et $c=${c}$.<br>
+             $a$, $b$ et $c$ sont bien des constantes et $a\\neq 0$.   `
+          } else if (choix === 'b') {
+            texteCorr =
+              monQcm.texteCorr +
+              `La fonction $${nom}$ est une fonction polynôme du second degré. <br>
+            $${nom}(x)$ est de la forme $ax^2+bx+c$ avec $a=${a}$, $b=0$ et $c=${c}$.<br>
+            $a$, $b$ et $c$ sont bien des constantes et $a\\neq 0$.   `
+          } else if (choix === 'c') {
+            texteCorr =
+              monQcm.texteCorr +
+              `La fonction $${nom}$ est une fonction polynôme du second degré. <br>
+            $${nom}(x)$ est de la forme $ax^2+bx+c$ avec $a=${a}$, $b=${b}$ et $c=0$.<br>
+            $a$, $b$ et $c$ sont bien des constantes et $a\\neq 0$.   `
+          } else if (choix === 'd') {
+            texteCorr =
+              monQcm.texteCorr +
+              `La fonction $${nom}$ est une fonction polynôme du second degré. <br>
+            $${nom}(x)$ est de la forme $ax^2+bx+c$ avec $a=${a}$, $b=${b}$ et $c=${c}$.<br>
+            $a$, $b$ et $c$ sont bien des constantes et $a\\neq 0$.   `
+          } else if (choix === 'e') {
+            texteCorr =
+              monQcm.texteCorr +
+              `La fonction $${nom}$ est une fonction polynôme du second degré. <br>
+            $${nom}(x)$ est de la forme $ax^2+bx+c$ avec $a=${a}$, $b=${b}$ et $c=${c}$.<br>
+            $a$, $b$ et $c$ sont bien des constantes et $a\\neq 0$.   `
+          } else if (choix === 'f') {
+            texteCorr =
+              monQcm.texteCorr +
+              `La fonction $${nom}$ est une fonction polynôme du second degré. <br>
+            $${nom}(x)$ est de la forme $ax^2+bx+c$ avec $a=\\dfrac{${a}}{${d}}$, $b=0$ et $c=\\dfrac{${c}}{${d}}$.<br>
+            $a$, $b$ et $c$ sont bien des constantes et $a\\neq 0$.   `
+          } else {
+            texteCorr =
+              monQcm.texteCorr +
+              `La fonction $${nom}$ est une fonction polynôme du second degré. <br>
+                $${nom}(x)$ est de la forme $ax^2+bx+c$ avec $a=${a}$, $b=\\sqrt{${r1}}$ et $c=${c}$.<br>
+                $a$, $b$ et $c$ sont bien des constantes et $a\\neq 0$.   `
+          }
+          break
 
-        this.correction = `Le coefficient directeur de la tangente au point d'abscisse $a$ est donné par le nombre dérivé $f'(a)$.<br>
-        La fonction $f$ définie par $f(x)=x^2$ a pour fonction dérivée la fonction $f'$ définie par $f'(x)=2x$.<br>
-        Comme $f'(${a})=2\\times ${ecritureParentheseSiNegatif(a)}=${2 * a}$, le coefficient directeur de la tangente au point d'abscisse $${a}$ est : $${2 * a}$. `
+        case 2: // forme factorisee ok
+          a = randint(-3, 3, 0)
+          x1 = randint(-9, 9, 0)
+          x2 = randint(-9, 9, [0, x1])
+          nom = choice(nomF)
+          r1 = choice([2, 3, 5, 6, 7, 10])
+          r2 = choice([2, 3, 5, 6, 7, 10])
+          choix = choice(['a', 'b', 'c', 'd', 'e', 'f']) //
+          if (choix === 'a') {
+            texte = `Soit $${nom}$ la fonction définie  par :<br>
+              $${nom}(x)=${rienSi1(a)}(x${ecritureAlgebrique(x1)})(x${ecritureAlgebrique(x2)})$. <br>
+              $${nom}$ est une fonction polynôme du second degré.`
+            this.canEnonce = texte
+          } else if (choix === 'b') {
+            texte = `Soit $${nom}$ la fonction définie  par :<br>
+              $${nom}(x)=${rienSi1(a)}x(x${ecritureAlgebrique(x2)})$. <br>
+              $${nom}$ est une fonction polynôme du second degré.`
+            this.canEnonce = texte
+          } else if (choix === 'c') {
+            texte = `Soit $${nom}$ la fonction définie  par :<br>
+              $${nom}(x)=x(x${ecritureAlgebrique(x2)})$. <br>
+              $${nom}$ est une fonction polynôme du second degré.`
+            this.canEnonce = texte
+          } else if (choix === 'd') {
+            texte = `Soit $${nom}$ la fonction définie  par :<br>
+                $${nom}(x)=(${x1}-x)(x${ecritureAlgebrique(x2)})$. <br>
+                $${nom}$ est une fonction polynôme du second degré.`
+            this.canEnonce = texte
+          } else if (choix === 'e') {
+            texte = `Soit $${nom}$ la fonction définie  par :<br>
+              $${nom}(x)=${rienSi1(a)}(x+\\sqrt{${r1}})(x-\\sqrt{${r2}})$. <br>
+              $${nom}$ est une fonction polynôme du second degré.`
+            this.canEnonce = texte
+          } else {
+            texte = `Soit $${nom}$ la fonction définie  par :<br>
+              $${nom}(x)=\\sqrt{${r1}}(x${ecritureAlgebrique(x1)})(x${ecritureAlgebrique(x2)})$. <br>
+              $${nom}$ est une fonction polynôme du second degré.`
+            this.canEnonce = texte
+          }
+          this.autoCorrection[i] = {
+            enonce: texte,
+            propositions: [
+              {
+                texte: 'Vrai',
+                statut: a < 10,
+              },
+              {
+                texte: 'Faux',
+                statut: a > 10,
+              },
+            ],
+            options: { ordered: true },
+          }
+          monQcm = propositionsQcm(this, i)
+          texte += monQcm.texte
 
-        this.reponse = 2 * a
+          if (choix === 'a') {
+            texteCorr =
+              monQcm.texteCorr +
+              `La fonction $${nom}$ est une fonction polynôme du second degré. <br>
+              $${nom}(x)$ est de la forme $a(x-x_1)(x-x_2)$ avec $a=${a}$, $x_1=${-x1}$ et $x_2=${-x2}$.<br>  Il s'agit de la forme factorisée d'une fonction polynôme du second degré. `
+          } else if (choix === 'b') {
+            texteCorr =
+              monQcm.texteCorr +
+              `La fonction $${nom}$ est une fonction polynôme du second degré. <br>
+              $${nom}(x)$ est de la forme $a(x-x_1)(x-x_2)$ avec $a=${a}$, $x_1=0$ et $x_2=${-x2}$.<br> Il s'agit de la forme factorisée d'une fonction polynôme du second degré.   `
+          } else if (choix === 'c') {
+            texteCorr =
+              monQcm.texteCorr +
+              `La fonction $${nom}$ est une fonction polynôme du second degré. <br>
+              $${nom}(x)$ est de la forme $a(x-x_1)(x-x_2)$ avec $a=1$, $x_1=0$ et $x_2=${-x2}$.<br> Il s'agit de la forme factorisée d'une fonction polynôme du second degré.   `
+          } else if (choix === 'd') {
+            texteCorr =
+              monQcm.texteCorr +
+              `La fonction $${nom}$ est une fonction polynôme du second degré. <br>
+                $${nom}(x)=(${x1}-x)(x${ecritureAlgebrique(x2)})=-(x${ecritureAlgebrique(-x1)})(x${ecritureAlgebrique(x2)})$.<br>
+                $${nom}(x)$ est de la forme $a(x-x_1)(x-x_2)$ avec $a=1$, $x_1=0$ et $x_2=${-x2}$.<br> Il s'agit de la forme factorisée d'une fonction polynôme du second degré.   `
+          } else if (choix === 'e') {
+            texteCorr =
+              monQcm.texteCorr +
+              `La fonction $${nom}$ est une fonction polynôme du second degré. <br>
+              $${nom}(x)$ est de la forme $a(x-x_1)(x-x_2)$ avec $a=${a}$, $x_1=-\\sqrt{${r1}}$ et $x_2=\\sqrt{${r2}}$.<br>  Il s'agit de la forme factorisée d'une fonction polynôme du second degré. `
+          } else {
+            texteCorr =
+              monQcm.texteCorr +
+              `La fonction $${nom}$ est une fonction polynôme du second degré. <br>
+              $${nom}(x)$ est de la forme $a(x-x_1)(x-x_2)$ avec $a=\\sqrt{${r1}}$, $x_1=${-x1}$ et $x_2=${-x2}$.<br>  Il s'agit de la forme factorisée d'une fonction polynôme du second degré. `
+          }
+          break
 
-        break
-      case 2: // sqrt(x)
-        a = randint(1, 25)
+        case 3: // forme canonique ok
+          a = randint(-5, 5, 0)
+          x1 = randint(-9, 9, 0)
+          x2 = randint(-9, 9, [0, x1])
+          alpha = randint(-9, 9, 0)
+          beta = randint(-9, 9, 0)
+          nom = choice(nomF)
+          choix = choice(['a', 'b', 'c']) //
+          if (choix === 'a') {
+            texte = `Soit $${nom}$ la fonction définie  par :<br>
+                  $${nom}(x)=${rienSi1(a)}(x${ecritureAlgebrique(alpha)})^2${ecritureAlgebrique(beta)}$. <br>         
+                  $${nom}$ est une fonction polynôme du second degré.`
+            this.canEnonce = texte
+          } else if (choix === 'b') {
+            texte = `Soit $${nom}$ la fonction définie  par :<br>
+                  $${nom}(x)=${rienSi1(a)}(x${ecritureAlgebrique(alpha)})^2$. <br>
+                  $${nom}$ est une fonction polynôme du second degré.`
+            this.canEnonce = texte
+          } else {
+            texte = `Soit $${nom}$ la fonction définie  par :<br>
+                  $${nom}(x)=(x${ecritureAlgebrique(alpha)})^2$. <br>
+                  $${nom}$ est une fonction polynôme du second degré.`
+            this.canEnonce = texte
+          }
+          this.autoCorrection[i] = {
+            enonce: texte,
+            propositions: [
+              {
+                texte: 'Vrai',
+                statut: a < 10,
+              },
+              {
+                texte: 'Faux',
+                statut: a > 10,
+              },
+            ],
+            options: { ordered: true },
+          }
+          monQcm = propositionsQcm(this, i)
+          texte += monQcm.texte
+          if (choix === 'a') {
+            texteCorr =
+              monQcm.texteCorr +
+              `La fonction $${nom}$ est une fonction polynôme du second degré. <br>
+                  $${nom}(x)$ est de la forme $a(x-\\alpha)^2+\\beta$ avec $a=${a}$, $\\alpha=${-alpha}$ et $\\beta=${beta}$. <br> Il s'agit de la forme canonique d'une fonction polynôme du second degré. `
+          } else if (choix === 'b') {
+            texteCorr =
+              monQcm.texteCorr +
+              `La fonction $${nom}$ est une fonction polynôme du second degré. <br>
+                  $${nom}(x)$ est de la forme $a(x-\\alpha)^2+\\beta$ avec $a=${a}$, $\\alpha=${-alpha}$ et $\\beta=0$. <br> Il s'agit de la forme canonique d'une fonction polynôme du second degré. `
+          } else {
+            texteCorr =
+              monQcm.texteCorr +
+              `La fonction $${nom}$ est une fonction polynôme du second degré. <br>
+                    $${nom}(x)$ est de la forme $a(x-\\alpha)^2+\\beta$ avec $a=1$, $\\alpha=${-alpha}$ et $\\beta=0$. <br> Il s'agit de la forme canonique d'une fonction polynôme du second degré. `
+          }
+          break
 
-        this.question = `Déterminer le coefficient directeur de la tangente à la courbe représentative de la fonction racine carrée au point d'abscisse $${a}$.
-         `
+        case 4: // forme developpe pas ok
+          a = randint(-3, 3, 0)
+          b = randint(-9, 9, 0)
+          c = randint(-9, 9, 0)
+          d = choice([5, 7])
+          nom = choice(nomF)
+          choix = choice(['a', 'b', 'c', 'd'])
+          if (choix === 'a') {
+            texte = `Soit $${nom}$ la fonction définie  par :<br>
+              $${nom}(x)=${reduirePolynomeDegre3(a, b, c, 0)}$. <br>
+              $${nom}$ est une fonction polynôme du second degré.`
+            this.canEnonce = texte
+          } else if (choix === 'b') {
+            texte = `Soit $${nom}$ la fonction définie  par :<br>
+              $${nom}(x)=${b}${ecritureAlgebriqueSauf1(c)}x^3$. <br>
+              $${nom}$ est une fonction polynôme du second degré.`
+            this.canEnonce = texte
+          } else if (choix === 'c') {
+            texte = `Soit $${nom}$ la fonction définie  par :<br>
+              $${nom}(x)=${rienSi1(a)}x^2${ecritureAlgebriqueSauf1(b)}x+\\dfrac{${abs(c)}}{x}$. <br>
+              $${nom}$ est une fonction polynôme du second degré.`
+            this.canEnonce = texte
+          } else {
+            texte = `Soit $${nom}$ la fonction définie  par :<br>
+              $${nom}(x)=${rienSi1(a)}x^2${ecritureAlgebriqueSauf1(b)}\\sqrt{x}${ecritureAlgebrique(c)}$. <br>          
+              $${nom}$ est une fonction polynôme du second degré.`
+            this.canEnonce = texte
+          }
 
-        this.correction = `Le coefficient directeur de la tangente au point d'abscisse $a$ est donné par le nombre dérivé $f'(a)$.<br>
-        La fonction $f$ définie par $f(x)=\\sqrt{x}$ a pour fonction dérivée la fonction $f'$ définie par $f'(x)=\\dfrac{1}{2\\sqrt{x}}$.<br>
+          this.autoCorrection[i] = {
+            enonce: texte,
+            propositions: [
+              {
+                texte: 'Vrai',
+                statut: a > 10,
+              },
+              {
+                texte: 'Faux',
+                statut: a < 10,
+              },
+            ],
+            options: { ordered: true },
+          }
+          monQcm = propositionsQcm(this, i)
+          texte += monQcm.texte
 
-`
-        if (a === 1 || a === 4 || a === 9 || a === 16 || a === 25) {
-          f = new FractionEtendue(1, Math.sqrt(a))
-          this.correction += `Comme $f'(${a})=\\dfrac{1}{2\\sqrt{${a}}}=\\dfrac{1}{${2 * Math.sqrt(a)}}$, le coefficient directeur de la tangente au point d'abscisse $${a}$ est : $\\dfrac{1}{${2 * Math.sqrt(a)}}$.`
-          this.reponse = [
-            `\\dfrac{1}{2\\sqrt{${a}}}`,
-            f.texFraction,
-            1 / (2 * Math.sqrt(a)),
-          ]
-        } else {
-          this.correction += `Comme $f'(${a})=\\dfrac{1}{2\\sqrt{${a}}}$, le coefficient directeur de la tangente au point d'abscisse $${a}$ est : $\\dfrac{1}{2\\sqrt{${a}}}$.`
-          this.reponse = [
-            `\\dfrac{1}{2\\sqrt{${a}}}`,
-            `\\dfrac{0,5}{\\sqrt{${a}}}`,
-          ]
-        }
-        break
-      case 3: // 1/x
-        a = randint(1, 10) * choice([-1, 1])
-        f = new FractionEtendue(-1, a * a)
-        this.question = `Déterminer le coefficient directeur de la tangente à la courbe représentative de la fonction inverse au point d'abscisse $${a}$.
-                 `
+          if (choix === 'a') {
+            texteCorr =
+              monQcm.texteCorr +
+              `La fonction $${nom}$ n'est pas une fonction polynôme du second degré. <br>
+              $${nom}(x)$ est une fonction polynôme du troisième degré.   `
+          } else if (choix === 'b') {
+            texteCorr =
+              monQcm.texteCorr +
+              `La fonction $${nom}$ n'est pas une fonction polynôme du second degré. <br>
+              $${nom}(x)$ est une fonction polynôme du troisième degré.   `
+          } else if (choix === 'c') {
+            texteCorr =
+              monQcm.texteCorr +
+              `La fonction $${nom}$ n'est pas une fonction polynôme du second degré. <br>
+             L'expression  $${nom}(x)$ contient une division par $x$.  `
+          } else {
+            texteCorr =
+              monQcm.texteCorr +
+              `La fonction $${nom}$ est une fonction polynôme du second. <br>
+              L'expression  $${nom}(x)$ contient une racine carrée de $x$.   `
+          }
+          break
 
-        this.correction = `Le coefficient directeur de la tangente au point d'abscisse $a$ est donné par le nombre dérivé $f'(a)$.<br>
-        La fonction $f$ définie par $f(x)=\\dfrac{1}{x}$ a pour fonction dérivée la fonction $f'$ définie par $f'(x)=-\\dfrac{1}{x^2}$.<br>
-Comme $f'(${a})=-\\dfrac{1}{${ecritureParentheseSiNegatif(a)}^2}=-\\dfrac{1}{${a * a}}$, le coefficient directeur de la tangente au point d'abscisse $${a}$ est : $-\\dfrac{1}{${a * a}}$`
+        case 5: // forme factorisee pas ok
+          a = randint(-3, 3, 0)
+          x1 = randint(-9, 9, 0)
+          x2 = randint(-9, 9, [0, x1])
+          nom = choice(nomF)
+          choix = choice(['a', 'b']) //, 'b', 'c', 'd'
+          if (choix === 'a') {
+            texte = `Soit $${nom}$ la fonction définie  par :<br>
+                    $${nom}(x)=${rienSi1(a)}x(x${ecritureAlgebrique(x1)})(x${ecritureAlgebrique(x2)})$. <br>          
+                    $${nom}$ est une fonction polynôme du second degré.`
+            this.canEnonce = texte
+          } else {
+            texte = `Soit $${nom}$ la fonction définie  par :<br>
+                  $${nom}(x)=${rienSi1(a)}x(\\sqrt{x}${ecritureAlgebrique(x1)})(x${ecritureAlgebrique(x2)})$. <br>            
+                  $${nom}$ est une fonction polynôme du second degré.`
+            this.canEnonce = texte
+          }
 
-        if (a === 1 || a === -1) {
-          this.correction += '$=-1$.'
+          this.autoCorrection[i] = {
+            enonce: texte,
+            propositions: [
+              {
+                texte: 'Vrai',
+                statut: a > 10,
+              },
+              {
+                texte: 'Faux',
+                statut: a < 10,
+              },
+            ],
+            options: { ordered: true },
+          }
+          monQcm = propositionsQcm(this, i)
+          texte += monQcm.texte
 
-          this.reponse = [
-            `\\dfrac{-1}{${a * a}}`,
-            `-\\dfrac{1}{${a * a}}`,
-            f,
-            -1,
-          ]
-        } else {
-          this.correction += '.'
-          this.reponse = [
-            `\\dfrac{-1}{${a * a}}`,
-            `-\\dfrac{1}{${a * a}}`,
-            f,
-            -1,
-          ]
-        }
+          if (choix === 'a') {
+            texteCorr =
+              monQcm.texteCorr +
+              `La fonction $${nom}$ n'est pas une fonction polynôme du second degré. <br>
+                   En développant l'expression, on obtient une fonction polynôme du troisième degré. `
+          } else {
+            texteCorr =
+              monQcm.texteCorr +
+              `La fonction $${nom}$ n'est pas une fonction polynôme du second degré. <br>
+                  L'expression $${nom}(x)$ contient une racine carrée de $x$. `
+          }
 
-        break
+          break
 
-      case 4: // x^3
-        a = randint(1, 5) * choice([-1, 1])
+        case 6: // "forme canonique" pas ok
+          a = randint(-5, 5, 0)
+          alpha = randint(-9, 9, 0)
+          beta = randint(-9, 9, 0)
+          nom = choice(nomF)
+          choix = choice(['a', 'b', 'c']) //, 'b', 'c'
+          if (choix === 'a') {
+            texte = `Soit $${nom}$ la fonction définie  par :<br>
+                            $${nom}(x)=${rienSi1(a)}x(x${ecritureAlgebrique(alpha)})^2${ecritureAlgebrique(beta)}$. <br>                
+                            $${nom}$ est une fonction polynôme du second degré.`
+            this.canEnonce = texte
+          } else if (choix === 'b') {
+            texte = `Soit $${nom}$ la fonction définie  par :<br>
+                            $${nom}(x)=${rienSi1(a)}(x${ecritureAlgebrique(alpha)})^2+\\sqrt{x}$. <br>
+                            $${nom}$ est une fonction polynôme du second degré.`
+            this.canEnonce = texte
+          } else {
+            texte = `Soit $${nom}$ la fonction définie  par :<br>
+                              $${nom}(x)=${rienSi1(a)}(\\sqrt{x}${ecritureAlgebrique(alpha)})^2${ecritureAlgebrique(beta)}$. <br>         
+                              $${nom}$ est une fonction polynôme du second degré.`
+            this.canEnonce = texte
+          }
 
-        this.question = `Déterminer le coefficient directeur de la tangente à la courbe représentative de la fonction cube au point d'abscisse $${a}$.
-                        `
+          this.autoCorrection[i] = {
+            enonce: texte,
+            propositions: [
+              {
+                texte: 'Vrai',
+                statut: a > 10,
+              },
+              {
+                texte: 'Faux',
+                statut: a < 10,
+              },
+            ],
+            options: { ordered: true },
+          }
+          monQcm = propositionsQcm(this, i)
+          texte += monQcm.texte
 
-        this.correction = `Le coefficient directeur de la tangente au point d'abscisse $a$ est donné par le nombre dérivé $f'(a)$.<br>
-        La fonction $f$ définie par $f(x)=x^3$ a pour fonction dérivée la fonction $f'$ définie par $f'(x)=3x^2$.<br>
-        Comme $f'(${a})=3\\times ${ecritureParentheseSiNegatif(a)}^2=${3 * a * a}$, le coefficient directeur de la tangente au point d'abscisse $${a}$ est : $${3 * a * a}$. `
+          if (choix === 'a') {
+            texteCorr =
+              monQcm.texteCorr +
+              `La fonction $${nom}$ n'est pas une fonction polynôme du second degré. <br>
+                      En développant l'expression, on obtient une fonction polynôme du troisième degré. `
+          } else if (choix === 'b') {
+            texteCorr =
+              monQcm.texteCorr +
+              `La fonction $${nom}$ n'est pas une fonction polynôme du second degré. <br>
+                      L'expression $${nom}(x)$ contient une racine carrée de $x$. `
+          } else {
+            texteCorr =
+              monQcm.texteCorr +
+              `La fonction $${nom}$ n'est pas une fonction polynôme du second degré. <br>
+                        L'expression $${nom}(x)$ contient une racine carrée de $x$. `
+          }
 
-        this.reponse = 3 * a * a
+          break
+      }
 
-        break
+      if (this.questionJamaisPosee(i, a, x1, x2, b, c, alpha, beta)) {
+        this.listeQuestions[i] = texte
+        this.listeCorrections[i] = texteCorr
+
+        this.canReponseACompleter = monQcm.texte
+        this.listeCanEnonces.push(this.canEnonce)
+        this.listeCanReponsesACompleter.push(this.canReponseACompleter)
+        i++
+      }
+      cpt++
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
+    listeQuestionsToContenu(this)
   }
 }

@@ -1,96 +1,125 @@
 import { choice } from '../../../lib/outils/arrayOutils'
-import {
-  ecritureAlgebrique,
-  ecritureParentheseSiNegatif,
-  reduirePolynomeDegre3,
-} from '../../../lib/outils/ecritures'
-import FractionEtendue from '../../../modules/FractionEtendue'
-import { randint } from '../../../modules/outils'
+import { ecritureParentheseSiNegatif } from '../../../lib/outils/ecritures'
 import ExerciceSimple from '../../ExerciceSimple'
+import { randint } from '../../../modules/outils'
+import FractionEtendue from '../../../modules/FractionEtendue'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 export const titre =
-  'Déterminer l’abscisse ou l’ordonnée du sommet d’une parabole'
+  'Déterminer le coefficient directeur d’une tangente (fonctions de référence)'
 export const interactifReady = true
 export const interactifType = 'mathLive'
-export const amcReady = true
-export const amcType = 'AMCNum'
-export const dateDePublication = '21/09/2022'
+
+// Les exports suivants sont optionnels mais au moins la date de publication semble essentielle
+export const dateDePublication = '21/06/2022' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
+// export const dateDeModifImportante = '14/02/2022' // Une date de modification importante au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
 
 /**
- * @author Gilles Mora
- */
+     * Modèle d'exercice très simple pour la course aux nombres
+     * @author Gilles Mora
 
-export const uuid = '2d459'
+    */
+export const uuid = '3c690'
 
 export const refs = {
   'fr-fr': ['can1F21'],
-  'fr-ch': ['1mF3-21'],
+  'fr-ch': [],
 }
-export default class EcondDegreAbscisseOrdonneeSommet extends ExerciceSimple {
+export default class CalculCoeffDir extends ExerciceSimple {
   constructor() {
     super()
-
+    this.formatChampTexte = KeyboardType.clavierFullOperations
     this.typeExercice = 'simple'
     this.nbQuestions = 1
   }
 
   nouvelleVersion() {
-    const nomF = [['f'], ['g'], ['h'], ['u'], ['v']]
-    let a, b, c, r, alpha, nom
-    if (choice([true, false])) {
-      a = randint(-3, 3, 0)
-      b = randint(-9, 9)
-      c = randint(-9, 9)
-      nom = choice(nomF)
-      r = new FractionEtendue(-b, 2 * a)
-      this.question = `Soit $${nom}$ la fonction définie sur $\\mathbb{R}$ par :<br>
+    let a
+    let f
+    switch (
+      choice([1, 1, 2, 2, 3, 3, 4]) //
+    ) {
+      case 1: // x^2
+        a = randint(2, 15) * choice([-1, 1])
 
-      $${nom}(x)=${reduirePolynomeDegre3(0, a, b, c)}$. <br>
-      Quelle est l'abscisse du sommet de la parabole représentant $${nom}$ ?`
+        this.question = `Déterminer le coefficient directeur de la tangente à la courbe représentative de la fonction carré au point d'abscisse $${a}$.    `
 
-      this.correction = `$${nom}$ est une fonction polynôme du second degré écrite sous forme développée $ax^2+bx+c$.<br>
-      Le sommet de la parabole a pour abscisse $-\\dfrac{b}{2a}$.<br>
-          L'abscisse du sommet est donc : $-\\dfrac{${b}}{2\\times${ecritureParentheseSiNegatif(a)} }= ${r.texFraction}${r.texSimplificationAvecEtapes()}$.`
-      this.reponse = r
-    } else {
-      // this.formatInteractif = 'mathLive'
-      a = randint(-3, 3, 0)
-      b = randint(-2, 2) * 2 * a
-      c = randint(-9, 9)
-      alpha = -b / (2 * a)
-      nom = choice(nomF)
-      r = a * alpha ** 2 + b * alpha + c
-      this.question = `Soit $${nom}$ la fonction définie sur $\\mathbb{R}$ par :<br>
+        this.correction = `Le coefficient directeur de la tangente au point d'abscisse $a$ est donné par le nombre dérivé $f'(a)$.<br>
+        La fonction $f$ définie par $f(x)=x^2$ a pour fonction dérivée la fonction $f'$ définie par $f'(x)=2x$.<br>
+        Comme $f'(${a})=2\\times ${ecritureParentheseSiNegatif(a)}=${2 * a}$, le coefficient directeur de la tangente au point d'abscisse $${a}$ est : $${2 * a}$. `
 
-          $${nom}(x)=${reduirePolynomeDegre3(0, a, b, c)}$. <br>
+        this.reponse = 2 * a
 
-          Quelle est l'ordonnée du sommet de la parabole représentant $${nom}$ ?`
+        break
+      case 2: // sqrt(x)
+        a = randint(1, 25)
 
-      this.correction = `$${nom}$ est une fonction polynôme du second degré écrite sous forme développée $ax^2+bx+c$.<br>
-          Le sommet de la parabole a pour abscisse $-\\dfrac{b}{2a}=-\\dfrac{${b}}{2\\times${ecritureParentheseSiNegatif(a)} }= ${alpha}$.<br>
-          L'ordonnée du sommet est donnée par l'image de l'abscisse, soit `
+        this.question = `Déterminer le coefficient directeur de la tangente à la courbe représentative de la fonction racine carrée au point d'abscisse $${a}$.
+         `
 
-      if (a === 1) {
-        if (b === 0) {
-          if (c === 0) {
-            this.correction += `$ ${ecritureParentheseSiNegatif(alpha)}^2=${r}$.`
-          } else {
-            this.correction += `$${ecritureParentheseSiNegatif(alpha)}^2${ecritureAlgebrique(c)}=${r}$.`
-          }
+        this.correction = `Le coefficient directeur de la tangente au point d'abscisse $a$ est donné par le nombre dérivé $f'(a)$.<br>
+        La fonction $f$ définie par $f(x)=\\sqrt{x}$ a pour fonction dérivée la fonction $f'$ définie par $f'(x)=\\dfrac{1}{2\\sqrt{x}}$.<br>
+
+`
+        if (a === 1 || a === 4 || a === 9 || a === 16 || a === 25) {
+          f = new FractionEtendue(1, Math.sqrt(a))
+          this.correction += `Comme $f'(${a})=\\dfrac{1}{2\\sqrt{${a}}}=\\dfrac{1}{${2 * Math.sqrt(a)}}$, le coefficient directeur de la tangente au point d'abscisse $${a}$ est : $\\dfrac{1}{${2 * Math.sqrt(a)}}$.`
+          this.reponse = [
+            `\\dfrac{1}{2\\sqrt{${a}}}`,
+            f.texFraction,
+            1 / (2 * Math.sqrt(a)),
+          ]
         } else {
-          this.correction += `$${ecritureParentheseSiNegatif(alpha)}^2${ecritureAlgebrique(b)}\\times ${ecritureParentheseSiNegatif(alpha)}${ecritureAlgebrique(c)}=${r}$.`
+          this.correction += `Comme $f'(${a})=\\dfrac{1}{2\\sqrt{${a}}}$, le coefficient directeur de la tangente au point d'abscisse $${a}$ est : $\\dfrac{1}{2\\sqrt{${a}}}$.`
+          this.reponse = [
+            `\\dfrac{1}{2\\sqrt{${a}}}`,
+            `\\dfrac{0,5}{\\sqrt{${a}}}`,
+          ]
         }
-      } else {
-        if (b === 0) {
-          if (c === 0) {
-            this.correction += `$${a}\\times ${ecritureParentheseSiNegatif(alpha)}^2=${r}$.`
-          } else {
-            this.correction += `$${a}\\times ${ecritureParentheseSiNegatif(alpha)}^2${ecritureAlgebrique(c)}=${r}$.`
-          }
+        break
+      case 3: // 1/x
+        a = randint(1, 10) * choice([-1, 1])
+        f = new FractionEtendue(-1, a * a)
+        this.question = `Déterminer le coefficient directeur de la tangente à la courbe représentative de la fonction inverse au point d'abscisse $${a}$.
+                 `
+
+        this.correction = `Le coefficient directeur de la tangente au point d'abscisse $a$ est donné par le nombre dérivé $f'(a)$.<br>
+        La fonction $f$ définie par $f(x)=\\dfrac{1}{x}$ a pour fonction dérivée la fonction $f'$ définie par $f'(x)=-\\dfrac{1}{x^2}$.<br>
+Comme $f'(${a})=-\\dfrac{1}{${ecritureParentheseSiNegatif(a)}^2}=-\\dfrac{1}{${a * a}}$, le coefficient directeur de la tangente au point d'abscisse $${a}$ est : $-\\dfrac{1}{${a * a}}$`
+
+        if (a === 1 || a === -1) {
+          this.correction += '$=-1$.'
+
+          this.reponse = [
+            `\\dfrac{-1}{${a * a}}`,
+            `-\\dfrac{1}{${a * a}}`,
+            f,
+            -1,
+          ]
         } else {
-          this.correction += `$${a}\\times ${ecritureParentheseSiNegatif(alpha)}^2${ecritureAlgebrique(b)}\\times ${ecritureParentheseSiNegatif(alpha)}${ecritureAlgebrique(c)}=${r}$.`
+          this.correction += '.'
+          this.reponse = [
+            `\\dfrac{-1}{${a * a}}`,
+            `-\\dfrac{1}{${a * a}}`,
+            f,
+            -1,
+          ]
         }
-      }
-      this.reponse = r
+
+        break
+
+      case 4: // x^3
+        a = randint(1, 5) * choice([-1, 1])
+
+        this.question = `Déterminer le coefficient directeur de la tangente à la courbe représentative de la fonction cube au point d'abscisse $${a}$.
+                        `
+
+        this.correction = `Le coefficient directeur de la tangente au point d'abscisse $a$ est donné par le nombre dérivé $f'(a)$.<br>
+        La fonction $f$ définie par $f(x)=x^3$ a pour fonction dérivée la fonction $f'$ définie par $f'(x)=3x^2$.<br>
+        Comme $f'(${a})=3\\times ${ecritureParentheseSiNegatif(a)}^2=${3 * a * a}$, le coefficient directeur de la tangente au point d'abscisse $${a}$ est : $${3 * a * a}$. `
+
+        this.reponse = 3 * a * a
+
+        break
     }
     this.canEnonce = this.question
     this.canReponseACompleter = ''

@@ -25,7 +25,7 @@ export const dateDePublication = '20/06/2022' // La date de publication initiale
 export const uuid = '45511'
 
 export const refs = {
-  'fr-fr': ['can1F08'],
+  'fr-fr': ['can1F31'],
   'fr-ch': ['3mA2-6'],
 }
 export default class CalculFonctionDeriveeAffine extends ExerciceSimple {

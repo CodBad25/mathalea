@@ -1,30 +1,34 @@
 import { courbe } from '../../../lib/2d/Courbe'
 import { repere } from '../../../lib/2d/reperes'
 import { texteParPosition } from '../../../lib/2d/textes'
-import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
-import { remplisLesBlancs } from '../../../lib/interactif/questionMathLive'
+import { ajouteChampTexteMathLive } from '../../../lib/interactif/questionMathLive'
 import { choice } from '../../../lib/outils/arrayOutils'
+import { ecritureAlgebrique, rienSi1 } from '../../../lib/outils/ecritures'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../../modules/outils'
 import Exercice from '../../Exercice'
 
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { setReponse } from '../../../lib/interactif/gestionInteractif'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
-export const titre = 'Lire graphiquement le signe de $b$ dans $ax^2+bx+c$'
+
+export const titre = 'Lire graphiquement la valeur  $b$ dans $ax^2+b$'
 export const interactifReady = true
 export const interactifType = 'mathLive'
+
 // Les exports suivants sont optionnels mais au moins la date de publication semble essentielle
-export const dateDePublication = '09/06/2022' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
-export const dateDeModifImportante = '23/10/2024'
+export const dateDePublication = '17/06/2022' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
+
 /**
  *
  * @author Gilles Mora
 
  */
-export const uuid = '0f0de'
+export const uuid = '26b38'
 
 export const refs = {
   'fr-fr': ['can1F04'],
-  'fr-ch': ['1mF3-18'],
+  'fr-ch': ['NR'],
 }
 export default class LectureGraphiqueParaboleB extends Exercice {
   constructor() {
@@ -34,416 +38,243 @@ export default class LectureGraphiqueParaboleB extends Exercice {
   }
 
   nouvelleVersion() {
-    let texte, texteCorr, a, alpha, beta, r, F, o
+    let texte = ''
+    let texteCorr = ''
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
-      switch (
-        choice([1, 2, 3, 4, 5, 6]) //
-      ) {
-        case 1: // cas parabole a>0 et alpha <0 et b>0
-          a = randint(0, 1) + randint(5, 9) / 10
-          alpha = randint(-4, -2) + randint(4, 9) / 10
-          if (choice([true, true, true, false])) {
-            beta = randint(-3, 1) + randint(2, 7) / 10
-          } else {
-            beta = 0
-          }
+      let a = 0
+      let b = 0
+      let o
+      let f
+      let r
+      switch (choice([1, 2])) {
+        case 1: // cas parabole a>0
+          a = randint(1, 4)
+          b = randint(-3, 3, 0)
           o = texteParPosition('O', -0.3, -0.3, 0, 'black', 1)
-          texte =
-            'La courbe représente une fonction $f$ définie par $f(x)=ax^2+bx+c$ .<br>'
-          if (!this.interactif) {
-            texte += 'Donner le signe de $b$.<br>'
-          } else {
-            texte +=
-              'Donner le signe de $b$ (compléter avec $>$, $<$ ou $=$) :<br>'
-            texte += remplisLesBlancs(
-              this,
-              i,
-              'b\\, %{champ1}\\, 0',
-              'clavierCompare',
-            )
-            handleAnswers(
-              this,
-              i,
-              { champ1: { value: '>', options: { texteSansCasse: true } } },
-              { formatInteractif: 'fillInTheBlank' },
-            )
+
+          f = function (x: number) {
+            return a * x ** 2 + b
           }
-          // $${delta}$ et $${a}(x-${alpha})^2+${beta}$
-          r = repere({
-            xMin: -6,
-            xMax: 3,
-            yMin: -4,
-            yMax: 4,
-            thickHauteur: 0.1,
-            xLabelMin: -5,
-            xLabelMax: 2,
-            yLabelMax: 3,
-            yLabelMin: -3,
-            axeXStyle: '->',
-            axeYStyle: '->',
-          })
+          if (b > 0) {
+            r = repere({
+              yUnite: 1,
+              xUnite: 2,
+              xMin: -3,
+              yMin: -1,
+              yMax: 8,
+              xMax: 3,
+              thickHauteur: 0.1,
+              xLabelMin: -2,
+              xLabelMax: 2,
+              yLabelMax: 7,
+              yLabelMin: 0,
+              // yLabelMin: -9,
+              // yLabelListe:[-8,-6,-4,-2,2,4,6,8],
+              axeXStyle: '->',
+              axeYStyle: '->',
+            })
 
-          F = (x) => a * (x - alpha) ** 2 + beta
-          texte +=
-            mathalea2d(
+            f = (x: number) => a * x ** 2 + b
+
+            texte = ` $f$ est définie par $f(x)=${rienSi1(a)}x^2+b$ .<br>
+                        `
+            texte +=
+              `Déterminer la valeur de  $b$.<br>
+            
+            ` +
+              mathalea2d(
+                {
+                  xmin: -6,
+                  xmax: 6,
+                  ymin: -1.5,
+                  ymax: 8,
+                  pixelsParCm: 25,
+                  scale: 0.6,
+                  style: 'margin: auto',
+                },
+                r,
+                o,
+                courbe(f, { repere: r, color: 'blue', epaisseur: 2 }),
+              )
+          } else {
+            r = repere({
+              yUnite: 1,
+              xUnite: 2,
+              xMin: -3,
+              yMin: -4,
+              yMax: 4,
+              xMax: 3,
+              thickHauteur: 0.1,
+              xLabelMin: -2,
+              xLabelMax: 2,
+              yLabelMax: 3,
+              yLabelMin: -3,
+              // yLabelMin: -9,
+              // yLabelListe:[-8,-6,-4,-2,2,4,6,8],
+              axeXStyle: '->',
+              axeYStyle: '->',
+            })
+
+            f = (x: number) => a * x ** 2 + b
+
+            texte = `$f$ est définie par $f(x)=${rienSi1(a)}x^2+b$ .<br>
+            `
+            texte +=
+              `Déterminer la valeur de $b$.<br>
+            
+            ` +
+              mathalea2d(
+                {
+                  xmin: -6,
+                  xmax: 6,
+                  ymin: -4.5,
+                  ymax: 4,
+                  pixelsParCm: 25,
+                  scale: 0.6,
+                  style: 'margin: auto',
+                },
+                r,
+                o,
+                courbe(f, { repere: r, color: 'blue', epaisseur: 2 }),
+              )
+          }
+          if (this.interactif) {
+            texte += ajouteChampTexteMathLive(
+              this,
+              i,
+              KeyboardType.clavierNumbers,
               {
-                xmin: -6,
-                xmax: 3,
-                ymin: -4,
-                ymax: 4,
-                pixelsParCm: 25,
-                scale: 0.6,
-                style: 'margin: auto',
+                texteAvant: '$b=$',
               },
-              r,
-              o,
-              courbe(F, { repere: r, color: 'blue', epaisseur: 2 }),
-            ) + '<br>'
+            )
+            setReponse(this, i, b)
+          }
 
-          texteCorr = `L'abscisse du sommet de la parabole est négatif. Celui-ci est donné par : $-\\dfrac{b}{2a}$.<br>
-          On en déduit que $\\dfrac{-b}{2a}<0$. <br>
-          La parabole a "les bras" tournés vers le haut, donc $a>0$. <br>
-      On a donc $-b<0$ soit $b${miseEnEvidence('\\, >\\, ')}0$.`
+          texteCorr = `La valeur de $b$ est donnée par l'image de $0$ par la fonction $f$.<br>
+          On lit $f(0)=${b}$. D'où, $b=${miseEnEvidence(b)}$.<br>
+           On obtient alors $f(x)=${rienSi1(a)}x^2${ecritureAlgebrique(b)}$.<br>
+          `
           break
 
-        case 2: // cas parabole a<0 et alpha <0 et b<0
-          a = randint(-1, 0) - randint(5, 9) / 10
-          alpha = randint(-4, -2) + randint(4, 9) / 10
-          if (choice([true, true, true, false])) {
-            beta = randint(-1, 4) - randint(1, 5) / 10
-          } else {
-            beta = 0
-          }
+        case 2: // cas parabole a<0
+          a = randint(-4, -1)
+          b = randint(-3, 3, 0)
           o = texteParPosition('O', -0.3, -0.3, 0, 'black', 1)
-          texte =
-            'La courbe représente une fonction $f$ définie par $f(x)=ax^2+bx+c$ .<br>'
-          if (!this.interactif) {
-            texte += 'Donner le signe de $b$.<br>'
-          } else {
+
+          f = function (x: number) {
+            return a * x ** 2 + b
+          }
+          if (b > 0) {
+            r = repere({
+              yUnite: 1,
+              xUnite: 2,
+              xMin: -3,
+              yMin: -4,
+              yMax: 4,
+              xMax: 3,
+              thickHauteur: 0.1,
+              xLabelMin: -2,
+              xLabelMax: 2,
+              yLabelMax: 3,
+              yLabelMin: -3,
+              // yLabelMin: -9,
+              // yLabelListe:[-8,-6,-4,-2,2,4,6,8],
+              axeXStyle: '->',
+              axeYStyle: '->',
+            })
+
+            f = (x: number) => a * x ** 2 + b
+
+            texte = `$f$ est définie par $f(x)=${rienSi1(a)}x^2+b$ .<br>
+            `
             texte +=
-              'Donner le signe de $b$ (compléter avec $>$, $<$ ou $=$) :<br>'
-            texte += remplisLesBlancs(
-              this,
-              i,
-              'b\\, %{champ1}\\, 0',
-              'clavierCompare',
-            )
-            handleAnswers(
-              this,
-              i,
-              { champ1: { value: '<', options: { texteSansCasse: true } } },
-              { formatInteractif: 'fillInTheBlank' },
-            )
-          }
-          // $${delta}$ et $${a}(x-${alpha})^2+${beta}$
-          r = repere({
-            xMin: -6,
-            xMax: 3,
-            yMin: -4,
-            yMax: 4,
-            thickHauteur: 0.1,
-            xLabelMin: -4,
-            xLabelMax: 2,
-            yLabelMax: 3,
-            yLabelMin: -4,
-            axeXStyle: '->',
-            axeYStyle: '->',
-          })
-
-          F = (x) => a * (x - alpha) ** 2 + beta
-          texte +=
-            mathalea2d(
-              {
-                xmin: -6,
-                xmax: 3,
-                ymin: -4,
-                ymax: 4,
-                pixelsParCm: 25,
-                scale: 0.6,
-                style: 'margin: auto',
-              },
-              r,
-              o,
-              courbe(F, { repere: r, color: 'blue', epaisseur: 2 }),
-            ) + '<br>'
-
-          texteCorr = `L'abscisse du sommet de la parabole est négatif. Celui-ci est donné par : $-\\dfrac{b}{2a}$.<br>
-        On en déduit que $\\dfrac{-b}{2a}<0$. <br>
-        La parabole a "les bras" tournés vers le bas, donc $a<0$. <br>
-    On a donc $-b>0$ soit $b${miseEnEvidence('\\,<\\, ')}0$.`
-          break
-
-        case 3: // cas parabole a>0 et alpha >0 et b<0
-          a = randint(0, 1) + randint(5, 9) / 10
-          alpha = randint(1, 3) + randint(4, 9) / 10
-          if (choice([true, true, false])) {
-            beta = randint(-3, 1) + randint(2, 7) / 10
+              `Déterminer la valeur de $b$.<br>
+            
+            ` +
+              mathalea2d(
+                {
+                  xmin: -6,
+                  xmax: 6,
+                  ymin: -4.5,
+                  ymax: 4,
+                  pixelsParCm: 25,
+                  scale: 0.6,
+                  style: 'margin: auto',
+                },
+                r,
+                o,
+                courbe(f, { repere: r, color: 'blue', epaisseur: 2 }),
+              )
           } else {
-            beta = 0
-          }
-          o = texteParPosition('O', -0.3, -0.3, 0, 'black', 1)
-          texte =
-            'La courbe représente une fonction $f$ définie par $f(x)=ax^2+bx+c$ .<br>'
-          if (!this.interactif) {
-            texte += 'Donner le signe de $b$.<br>'
-          } else {
+            r = repere({
+              yUnite: 1,
+              xUnite: 2,
+              xMin: -3,
+              yMin: -7,
+              yMax: 1,
+              xMax: 3,
+              thickHauteur: 0.1,
+              xLabelMin: -2,
+              xLabelMax: 2,
+              yLabelMax: 0,
+              yLabelMin: -6,
+              // yLabelMin: -9,
+              // yLabelListe:[-8,-6,-4,-2,2,4,6,8],
+              axeXStyle: '->',
+              axeYStyle: '->',
+            })
+
+            f = (x: number) => a * x ** 2 + b
+
+            texte = `$f$ est définie par $f(x)=${rienSi1(a)}x^2+b$ .<br>
+            `
             texte +=
-              'Donner le signe de $b$ (compléter avec $>$, $<$ ou $=$) :<br>'
-            texte += remplisLesBlancs(
-              this,
-              i,
-              'b\\, %{champ1}\\, 0',
-              'clavierCompare',
-            )
-            handleAnswers(
-              this,
-              i,
-              { champ1: { value: '<', options: { texteSansCasse: true } } },
-              { formatInteractif: 'fillInTheBlank' },
-            )
+              `Déterminer la valeur de $b$.<br>
+            
+            ` +
+              mathalea2d(
+                {
+                  xmin: -6,
+                  xmax: 6,
+                  ymin: -7.1,
+                  ymax: 1,
+                  pixelsParCm: 25,
+                  scale: 0.6,
+                  style: 'margin: auto',
+                },
+                r,
+                o,
+                courbe(f, { repere: r, color: 'blue', epaisseur: 2 }),
+              )
           }
-          // $${delta}$ et $${a}(x-${alpha})^2+${beta}$
-          r = repere({
-            xMin: -3,
-            xMax: 6,
-            yMin: -4,
-            yMax: 4,
-            thickHauteur: 0.1,
-            xLabelMin: -2,
-            xLabelMax: 5,
-            yLabelMax: 3,
-            yLabelMin: -3,
-            axeXStyle: '->',
-            axeYStyle: '->',
-          })
-
-          F = (x) => a * (x - alpha) ** 2 + beta
-          texte +=
-            mathalea2d(
+          if (this.interactif) {
+            texte += ajouteChampTexteMathLive(
+              this,
+              i,
+              KeyboardType.clavierDeBase,
               {
-                xmin: -3,
-                xmax: 6,
-                ymin: -4,
-                ymax: 4,
-                pixelsParCm: 25,
-                scale: 0.6,
-                style: 'margin: auto',
+                texteAvant: '$b=$',
               },
-              r,
-              o,
-              courbe(F, { repere: r, color: 'blue', epaisseur: 2 }),
-            ) + '<br>'
-
-          texteCorr = `L'abscisse du sommet de la parabole est positif. Celui-ci est donné par : $-\\dfrac{b}{2a}$.<br>
-        On en déduit que $\\dfrac{-b}{2a}>0$. <br>
-        La parabole a "les bras" tournés vers le haut, donc $a>0$. <br>
-    On a donc $-b>0$ soit $b${miseEnEvidence('\\,<\\, ')}0$.`
-          break
-
-        case 4: //  cas parabole a<0 et alpha >0 et b>0
-          a = randint(-1, 0) - randint(5, 9) / 10
-          alpha = randint(1, 3) + randint(4, 9) / 10
-          if (choice([true, true, true, false])) {
-            beta = randint(-1, 4) - randint(1, 5) / 10
-          } else {
-            beta = 0
+            )
+            setReponse(this, i, b)
           }
-          o = texteParPosition('O', -0.3, -0.3, 0, 'black', 1)
-          texte =
-            'La courbe représente une fonction $f$ définie par $f(x)=ax^2+bx+c$ .<br>'
-          if (!this.interactif) {
-            texte += 'Donner le signe de $b$.<br>'
-          } else {
-            texte +=
-              'Donner le signe de $b$ (compléter avec $>$, $<$ ou $=$) :<br>'
-            texte += remplisLesBlancs(
-              this,
-              i,
-              'b\\, %{champ1}\\, 0',
-              'clavierCompare',
-            )
-            handleAnswers(
-              this,
-              i,
-              { champ1: { value: '>', options: { texteSansCasse: true } } },
-              { formatInteractif: 'fillInTheBlank' },
-            )
-          }
-          // $${delta}$ et $${a}(x-${alpha})^2+${beta}$
-          r = repere({
-            xMin: -3,
-            xMax: 6,
-            yMin: -4,
-            yMax: 4,
-            thickHauteur: 0.1,
-            xLabelMin: -2,
-            xLabelMax: 5,
-            yLabelMax: 3,
-            yLabelMin: -3,
-            axeXStyle: '->',
-            axeYStyle: '->',
-          })
 
-          F = (x) => a * (x - alpha) ** 2 + beta
-          texte +=
-            mathalea2d(
-              {
-                xmin: -3,
-                xmax: 6,
-                ymin: -4,
-                ymax: 4,
-                pixelsParCm: 25,
-                scale: 0.6,
-                style: 'margin: auto',
-              },
-              r,
-              o,
-              courbe(F, { repere: r, color: 'blue', epaisseur: 2 }),
-            ) + '<br>'
-
-          texteCorr = `L'abscisse du sommet de la parabole est positif. Celui-ci est donné par : $-\\dfrac{b}{2a}$.<br>
-        On en déduit que $\\dfrac{-b}{2a}>0$. <br>
-        La parabole a "les bras" tournés vers le bas, donc $a<0$. <br>
-    On a donc $-b<0$ soit $b${miseEnEvidence('\\,>\\, ')}0$.`
-          break
-
-        case 5: // cas parabole a>0 et b=0
-          a = randint(0, 1) + randint(5, 9) / 10
-          alpha = 0
-          beta = randint(-3, 2) - randint(1, 5) / 10
-          o = texteParPosition('O', -0.3, -0.3, 0, 'black', 1)
-          texte =
-            'La courbe représente une fonction $f$ définie par $f(x)=ax^2+bx+c$ .<br>'
-          if (!this.interactif) {
-            texte += 'Donner le signe de $b$.<br>'
-          } else {
-            texte +=
-              'Donner le signe de $b$ (compléter avec $>$, $<$ ou $=$) :<br>'
-            texte += remplisLesBlancs(
-              this,
-              i,
-              'b\\, %{champ1}\\, 0',
-              'clavierCompare',
-            )
-            handleAnswers(
-              this,
-              i,
-              { champ1: { value: '=', options: { texteSansCasse: true } } },
-              { formatInteractif: 'fillInTheBlank' },
-            )
-          }
-          // $${delta}$ et $${a}(x-${alpha})^2+${beta}$
-
-          r = repere({
-            xMin: -4,
-            xMax: 4,
-            yMin: -4,
-            yMax: 4,
-            thickHauteur: 0.1,
-            xLabelMin: -3,
-            xLabelMax: 3,
-            yLabelMax: 3,
-            yLabelMin: -3,
-            axeXStyle: '->',
-            axeYStyle: '->',
-          })
-
-          F = (x) => a * (x - alpha) ** 2 + beta
-          texte +=
-            mathalea2d(
-              {
-                xmin: -4,
-                xmax: 4,
-                ymin: -4,
-                ymax: 4,
-                pixelsParCm: 25,
-                scale: 0.6,
-                style: 'margin: auto',
-              },
-              r,
-              o,
-              courbe(F, { repere: r, color: 'blue', epaisseur: 2 }),
-            ) + '<br>'
-
-          texteCorr = `L'abscisse du sommet de la parabole est nul. Celui-ci est donné par : $-\\dfrac{b}{2a}$.<br>
-      On en déduit que $\\dfrac{-b}{2a}=0$ soit $b${miseEnEvidence('\\,=\\, ')}0$. `
-          break
-
-        case 6: // cas parabole a<0 et b=0
-          a = randint(-1, 0) - randint(5, 9) / 10
-          alpha = 0
-          beta = randint(1, 3) + randint(1, 5) / 10
-          o = texteParPosition('O', -0.3, -0.3, 0, 'black', 1)
-          texte =
-            'La courbe représente une fonction $f$ définie par $f(x)=ax^2+bx+c$ .<br>'
-          if (!this.interactif) {
-            texte += 'Donner le signe de $b$.<br>'
-          } else {
-            texte +=
-              'Donner le signe de $b$ (compléter avec $>$, $<$ ou $=$) :<br>'
-            texte += remplisLesBlancs(
-              this,
-              i,
-              'b\\, %{champ1}\\, 0',
-              'clavierCompare',
-            )
-            handleAnswers(
-              this,
-              i,
-              { champ1: { value: '=', options: { texteSansCasse: true } } },
-              { formatInteractif: 'fillInTheBlank' },
-            )
-          }
-          // $${delta}$ et $${a}(x-${alpha})^2+${beta}$
-          r = repere({
-            xMin: -4,
-            xMax: 4,
-            yMin: -4,
-            yMax: 4,
-            thickHauteur: 0.1,
-            xLabelMin: -3,
-            xLabelMax: 3,
-            yLabelMax: 3,
-            yLabelMin: -3,
-            axeXStyle: '->',
-            axeYStyle: '->',
-          })
-
-          F = (x) => a * (x - alpha) ** 2 + beta
-          texte +=
-            mathalea2d(
-              {
-                xmin: -4,
-                xmax: 4,
-                ymin: -4,
-                ymax: 4,
-                pixelsParCm: 25,
-                scale: 0.6,
-                style: 'margin: auto',
-              },
-              r,
-              o,
-              courbe(F, { repere: r, color: 'blue', epaisseur: 2 }),
-            ) + '<br>'
-
-          texteCorr = `L'abscisse du sommet de la parabole est nul. Celui-ci est donné par : $-\\dfrac{b}{2a}$.<br>
-      On en déduit que $\\dfrac{-b}{2a}=0$ soit $b${miseEnEvidence('\\,=\\, ')}0$. `
-
+          texteCorr = `La valeur de $b$ est donnée par l'image de $0$ par la fonction $f$.<br>
+          On lit $f(0)=${b}$. D'où, $b=${miseEnEvidence(b)}$. <br>
+          On obtient alors $f(x)=${rienSi1(a)}x^2${ecritureAlgebrique(b)}$.<br>
+          `
           break
       }
 
-      if (this.questionJamaisPosee(i, a, alpha, beta)) {
+      if (this.questionJamaisPosee(i, a, b)) {
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr
-
-        this.canEnonce = texte
-        this.canReponseACompleter = '$b\\ldots 0$'
-        this.listeCanEnonces.push(this.canEnonce)
-        this.listeCanReponsesACompleter.push(this.canReponseACompleter)
         i++
       }
       cpt++
     }
     listeQuestionsToContenu(this)
+    this.listeCanEnonces.push(texte)
+    this.listeCanReponsesACompleter.push('$b=\\ldots$')
   }
 }

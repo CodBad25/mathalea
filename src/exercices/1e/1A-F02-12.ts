@@ -1,4 +1,4 @@
-import LectureGraphiqueParaboleA from '../can/1e/can1F24'
+import LectureGraphiqueParaboleA from '../can/1e/can1F06'
 export const titre =
   'Lire graphiquement les valeurs de $a$ et de $b$ dans $ax^2+b$'
 export const dateDePublication = '01/08/2025'
