@@ -20,7 +20,7 @@ export const refs = {
 export default class Can32026Q15 extends ExerciceCan {
   constructor() {
     super()
-    this.formatChampTexte = KeyboardType.clavierNumbers
+    this.formatChampTexte = KeyboardType.clavierDeBaseAvecVariable
     this.optionsDeComparaison = { nombreDecimalSeulement: true }
   }
 

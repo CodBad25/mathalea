@@ -30,6 +30,13 @@ export const refs = {
 
 */
 export default class Can32026Q1 extends ExerciceCan {
+  constructor() {
+    super()
+    this.formatChampTexte = KeyboardType.clavierNumbers
+    this.optionsDeComparaison = { nombreDecimalSeulement: true }
+    this.optionsChampTexte = { texteApres: '$\\text{ cm}^3$' }
+  }
+
   enonce(b?: number, h?: number) {
     if (b == null || h == null) {
       b = choice([3, 4, 5, 6, 8])
@@ -63,16 +70,16 @@ export default class Can32026Q1 extends ExerciceCan {
     context.anglePerspective = 30
     this.reponse = texNombre((b * b * h) / 3, 1)
     this.question = 'Volume de cette pyramide à base carrée<br>'
-    this.question += mathalea2d(Object.assign({}, {scale: 0.7}, fixeBordures(objets)), objets)
+    this.question += mathalea2d(
+      Object.assign({}, { scale: 0.7 }, fixeBordures(objets)),
+      objets,
+    )
     this.correction = `$\\mathcal{V}=\\dfrac{1}{3}\\times\\mathcal{B}\\times h=\\dfrac{1}{3}\\times ${b * b}\\times ${texNombre(h, 1)}=${miseEnEvidence(this.reponse)}\\text{ cm}^3$`
     this.canEnonce = this.question
     this.canReponseACompleter = '$\\ldots\\text{ cm}^3$'
-   
   }
 
   nouvelleVersion() {
     this.canOfficielle || this.sup ? this.enonce(5, 3) : this.enonce()
-    this.optionsChampTexte = { texteApres: '$\\text{ cm}^3$' }
-    this.formatChampTexte = KeyboardType.clavierDeBase
   }
 }

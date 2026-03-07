@@ -21,8 +21,11 @@ export const refs = {
 export default class Can32026Q16 extends ExerciceCan {
   constructor() {
     super()
-    this.formatChampTexte = KeyboardType.clavierNumbers
-    this.optionsDeComparaison = { nombreDecimalSeulement: true }
+    this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
+    this.optionsDeComparaison = {
+      nombreDecimalSeulement: true,
+      fractionEgale: true,
+    }
   }
 
   enonce(a?: number, b?: number, c?: number, d?: number) {

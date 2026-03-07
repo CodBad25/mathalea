@@ -19,10 +19,19 @@ export const refs = {
 
 */
 export default class Can20264emeQ29 extends ExerciceCan {
+  constructor() {
+    super()
+    this.optionsDeComparaison = {
+      nombreDecimalSeulement: true,
+      fractionEgale: true,
+    }
+    this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
+  }
+
   enonce(a?: number, b?: number, c?: number, d?: number) {
     if (a == null || b == null || c == null || d == null) {
       // Cas simples avec coefficient multiplicateur entier ou décimal simple
-       const listeCas = [
+      const listeCas = [
         [4, 15, 10, 6], // 4×15÷10 = 6
         [3, 20, 10, 6], // 3×20÷10 = 6
         [5, 12, 10, 6], // 5×12÷10 = 6

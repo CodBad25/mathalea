@@ -17,6 +17,12 @@ export const refs = {
 
 */
 export default class Can32026Q25 extends ExerciceCan {
+  constructor() {
+    super()
+    this.formatChampTexte = KeyboardType.clavierNumbers
+    this.optionsDeComparaison = { nombreDecimalSeulement: true }
+  }
+
   enonce(n?: number, ecartMin?: number, ecartMax?: number) {
     if (n == null || ecartMin == null || ecartMax == null) {
       // Version aléatoire : n entre 3 et 12
@@ -37,7 +43,6 @@ export default class Can32026Q25 extends ExerciceCan {
 $\\sqrt{${borne1}} < $`
 
     this.optionsChampTexte = {
-      texteAvant: ``,
       texteApres: `$< \\sqrt{${borne2}}$`,
     }
 

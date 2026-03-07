@@ -17,29 +17,30 @@ export const refs = {
 
 */
 export default class Can20264emeQ22 extends ExerciceCan {
- enonce(a?: number, b?: number) {
+  constructor() {
+    super()
+    this.optionsDeComparaison = { expressionsForcementReduites: true }
+    this.formatChampTexte = KeyboardType.clavierDeBaseAvecVariable
+    this.optionsChampTexte = { texteAvant: '<br>' }
+  }
+
+  enonce(a?: number, b?: number) {
     if (a == null || b == null) {
       a = randint(2, 9)
       b = randint(2, 9)
     }
-    
+
     const resultat = a * b
-    
+
     this.question = `Simplifier $${a}\\times b\\times ${b}$.`
-    
+
     this.correction = `$\\begin{aligned}
     ${a}\\times b\\times ${b}&=${a}\\times ${b}\\times b\\\\
     &=${miseEnEvidence(`${resultat}b`)}
     \\end{aligned}$`
-     this.optionsDeComparaison = { calculFormel: true }
     this.canEnonce = this.question
     this.canReponseACompleter = '$\\ldots$'
     this.reponse = `${resultat}b`
-       this.formatChampTexte = KeyboardType.clavierDeBaseAvecVariable
-    
-    if (this.interactif) {
-      this.question += '<br>'
-    }
   }
 
   nouvelleVersion() {
