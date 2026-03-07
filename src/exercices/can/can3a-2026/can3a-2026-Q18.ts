@@ -21,15 +21,18 @@ export const refs = {
 
 */
 export default class Can32026Q18 extends ExerciceCan {
+  constructor() {
+    super()
+    this.formatChampTexte = KeyboardType.clavierDeBaseAvecX
+    this.optionsDeComparaison = { expressionsForcementReduites: true }
+  }
+
   enonce(a?: number, b?: number) {
     if (a == null || b == null) {
       // Version aléatoire avec valeurs négatives
       a = randint(-9, -2)
       b = randint(-9, -2, [a])
     }
-
-    this.formatChampTexte = KeyboardType.clavierDeBaseAvecX
-    this.optionsDeComparaison = { expressionsForcementReduites: true }
 
     // Expression : a(x+b)
     const expression = `${a}(x${ecritureAlgebrique(b)})`

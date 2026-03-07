@@ -20,7 +20,14 @@ export const refs = {
 
 */
 export default class Can32026Q20 extends ExerciceCan {
-   enonce(n1?: number, n2?: number, choix?: boolean) {
+  constructor() {
+    super()
+    this.formatChampTexte = KeyboardType.clavierNumbers
+    this.optionsDeComparaison = { nombreDecimalSeulement: true }
+    this.optionsChampTexte = { texteAvant: ' $=$' }
+  }
+
+  enonce(n1?: number, n2?: number, choix?: boolean) {
     if (n1 == null || n2 == null) {
       // Version aléatoire
       n1 = randint(2, 4)
@@ -28,19 +35,18 @@ export default class Can32026Q20 extends ExerciceCan {
       choix = choice([true, false])
     }
 
-    this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
-    this.optionsChampTexte = { texteAvant: ' $=$' }
-
     this.reponse = arrondi(10 ** n1 + 10 ** n2, 3)
 
-    this.question = choix 
-      ? `$10^{${n1}}+10^{${n2}}$` 
+    this.question = choix
+      ? `$10^{${n1}}+10^{${n2}}$`
       : `$10^{${n2}}+10^{${n1}}$`
 
     this.correction = `$\\begin{aligned}
-${choix 
-  ? `10^{${n1}}+10^{${n2}}&=${texNombre(10 ** n1, 0)} +${texNombre(10 ** n2, 3)}` 
-  : `10^{${n2}}+10^{${n1}}&=${texNombre(10 ** n2, 3)} +${texNombre(10 ** n1, 0)}`}\\\\
+${
+  choix
+    ? `10^{${n1}}+10^{${n2}}&=${texNombre(10 ** n1, 0)} +${texNombre(10 ** n2, 3)}`
+    : `10^{${n2}}+10^{${n1}}&=${texNombre(10 ** n2, 3)} +${texNombre(10 ** n1, 0)}`
+}\\\\
 &=${miseEnEvidence(texNombre(this.reponse, 3))}
 \\end{aligned}$`
 

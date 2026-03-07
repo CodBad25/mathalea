@@ -20,27 +20,29 @@ export const refs = {
 
 */
 export default class Can32026Q28 extends ExerciceCan {
+  constructor() {
+    super()
+    this.formatChampTexte = KeyboardType.clavierHms
+    this.optionsDeComparaison = { HMS: true }
+  }
+
   enonce(hFin?: number, minFin?: number, duree?: number) {
     if (hFin == null || minFin == null || duree == null) {
       // Version aléatoire
       // Durée entre 15 et 55 minutes (multiples de 5)
       duree = choice([15, 20, 25, 30, 35, 40, 45, 50, 55])
-      
+
       // Heure de fin entre 10h et 20h
       hFin = randint(10, 20)
-      
+
       // Minutes de fin : 00, 05, 10, 15, 20, 25 (pour avoir des calculs simples)
       minFin = choice([0, 5, 10, 15, 20, 25])
     }
 
-    this.formatChampTexte = KeyboardType.clavierHms
-    this.optionsDeComparaison = { HMS: true }
-    this.optionsChampTexte = { texteAvant: '', texteApres:'.' }
-
     // Calcul de l'heure de début en soustrayant la durée
     let hDebut = hFin
     let minDebut = minFin - duree
-    
+
     // Si les minutes deviennent négatives, on retire 1 heure et on ajoute 60 min
     if (minDebut < 0) {
       hDebut--
@@ -54,7 +56,7 @@ Il a débuté à `
 
     this.correction = `Pour trouver l'heure de début, on soustrait la durée de l'heure de fin :<br>
 $${hFin}$ h $${formatMinute(minFin)}$ min $-$ $${duree}$ min`
-    
+
     if (minFin < duree) {
       // Cas avec retenue (passage à l'heure précédente)
       this.correction += ` $= ${hFin - 1}$ h $${formatMinute(minFin + 60)}$ min $-$ $${duree}$ min

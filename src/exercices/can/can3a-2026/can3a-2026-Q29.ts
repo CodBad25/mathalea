@@ -19,6 +19,13 @@ export const refs = {
 
 */
 export default class Can32026Q29 extends ExerciceCan {
+  constructor() {
+    super()
+    this.optionsDeComparaison = { ecritureScientifique: true }
+    this.formatChampTexte = KeyboardType.clavierFullOperations
+    this.optionsChampTexte = { texteAvant: '<br>' }
+  }
+
   enonce(nombre?: number) {
     if (nombre == null) {
       // Version aléatoire : nombre entre 10 000 et 999 999
@@ -27,11 +34,6 @@ export default class Can32026Q29 extends ExerciceCan {
       const puiss = randint(2, 6)
       nombre = new Decimal(10).pow(puiss).mul(a).toNumber()
     }
-    this.optionsDeComparaison = { ecritureScientifique: true }
-
-    this.formatChampTexte = KeyboardType.clavierFullOperations
-    this.optionsChampTexte = { texteAvant: '<br>' }
-
     // Calculer la puissance
     let puissance: number
     let coefficient: Decimal

@@ -18,15 +18,19 @@ export const refs = {
 
 */
 export default class Can32026Q22 extends ExerciceCan {
+  constructor() {
+    super()
+    this.formatChampTexte = KeyboardType.clavierNumbers
+    this.optionsDeComparaison = { nombreDecimalSeulement: true }
+    this.optionsChampTexte = { texteApres: '€.' }
+  }
+
   enonce(prix?: number, reduction?: number) {
     if (prix == null || reduction == null) {
       // Version aléatoire
       prix = choice([300, 350, 400, 450, 500])
       reduction = choice([10, 20])
     }
-
-    this.formatChampTexte = KeyboardType.clavierDeBase
-    this.optionsChampTexte = { texteApres: '€.' }
 
     const montantReduction = (prix * reduction) / 100
     const nouveauPrix = prix - montantReduction
@@ -37,9 +41,10 @@ Son nouveau prix est `
     this.correction = `On calcule d'abord le montant de la réduction.<br>
 Pour calculer $${reduction}\\,\\%$ d'une quantité, on commence par calculer $10\\,\\%$ en divisant par $10$ :<br>
 $10\\,\\%$ de $${prix}$ est égal à $${prix}\\div 10=${texNombre(prix / 10, 0)}$.<br>
-${reduction === 10 
-  ? `La réduction est donc de : $${texPrix(montantReduction)}$ €.<br>`
-  : `$${reduction}\\,\\%$ de $${prix}$ est donc égal à $${texNombre(prix / 10, 0)}\\times ${texNombre(reduction / 10, 0)}=${texNombre(montantReduction, 2)}$.<br>
+${
+  reduction === 10
+    ? `La réduction est donc de : $${texPrix(montantReduction)}$ €.<br>`
+    : `$${reduction}\\,\\%$ de $${prix}$ est donc égal à $${texNombre(prix / 10, 0)}\\times ${texNombre(reduction / 10, 0)}=${texNombre(montantReduction, 2)}$.<br>
 La réduction est donc de : $${texPrix(montantReduction)}$ €.<br>`
 }Le nouveau prix est de $${prix}-${texNombre(montantReduction)}= ${miseEnEvidence(texPrix(nouveauPrix))}$ €.`
 
@@ -57,4 +62,3 @@ Son nouveau prix est :`
     this.canOfficielle ? this.enonce(450, 10) : this.enonce()
   }
 }
-

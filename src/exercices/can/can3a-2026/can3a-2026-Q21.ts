@@ -22,7 +22,14 @@ export const refs = {
 
 */
 export default class Can32026Q21 extends ExerciceCan {
-   enonce(n1?: number, d1?: number, n2?: number, d2?: number) {
+  constructor() {
+    super()
+    this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
+    this.optionsDeComparaison = { fractionEgale: true }
+    this.optionsChampTexte = { texteAvant: ' $=$' }
+  }
+
+  enonce(n1?: number, d1?: number, n2?: number, d2?: number) {
     this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
     this.optionsDeComparaison = { fractionEgale: true }
 
@@ -59,17 +66,15 @@ export default class Can32026Q21 extends ExerciceCan {
       // Version avec paramètres explicites
       frac1 = new FractionEtendue(n1, d1)
       frac2 = new FractionEtendue(n2, d2)
-      
+
       p = ppcm(d1, d2)
       const num1Adapte = n1 * (p / d1)
       const num2Adapte = n2 * (p / d2)
-      
+
       resultat = new FractionEtendue(num1Adapte + num2Adapte, p)
     }
 
-    this.question = this.interactif
-      ? `$${frac1.texFraction} + ${frac2.texFraction} = $`
-      : `$${frac1.texFraction} + ${frac2.texFraction}$`
+    this.question = `$${frac1.texFraction} + ${frac2.texFraction}$`
 
     this.correction = `On cherche un dénominateur commun (ici $${p}$), puis on additionne les numérateurs :<br>
 $\\begin{aligned}
