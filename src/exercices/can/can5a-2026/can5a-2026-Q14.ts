@@ -20,6 +20,12 @@ export const refs = {
 
 */
 export default class Can52026Q14 extends ExerciceCan {
+  constructor() {
+    super()
+    this.formatChampTexte = KeyboardType.clavierNumbers
+    this.optionsDeComparaison = { nombreDecimalSeulement: true }
+  }
+
   enonce(a?: number, b?: number, c?: number) {
     let question = 'num'
     let coeff = 5
@@ -34,7 +40,6 @@ export default class Can52026Q14 extends ExerciceCan {
 
     this.reponse = question === 'num' ? (c * a) / b : (c * b) / a
     this.question = `$\\dfrac{${a}}{${b}}=${question === 'num' ? `\\dfrac{?}{${c}}` : `\\dfrac{${c}}{?}`}$`
-    this.formatChampTexte = KeyboardType.clavierDeBase
     this.correction =
       question === 'num'
         ? `On remarque que $${c}=${coeff}\\times ${b}$, donc $?=${coeff}\\times ${a}=${coeff * a}$.<br>`
@@ -46,7 +51,7 @@ export default class Can52026Q14 extends ExerciceCan {
     this.canReponseACompleter = '$\\text{? }=\\ldots$'
 
     if (this.interactif) {
-      this.question += '<br>$\\text{? }=$'
+      this.question += '<br><br>$\\text{? }=$' // Double saut de ligne volontaire
     } else {
       this.question += '<br>$\\text{? }=\\ldots$'
     }

@@ -24,6 +24,13 @@ export const refs = {
 
 */
 export default class Can52026Q19 extends ExerciceCan {
+  constructor() {
+    super()
+    this.formatChampTexte = KeyboardType.clavierNumbers
+    this.optionsDeComparaison = { nombreDecimalSeulement: true }
+    this.optionsChampTexte = { texteApres: '$^\\circ$' }
+  }
+
   enonce(angleD?: number, angleF?: number) {
     if (angleD == null || angleF == null) {
       // Configurations [angleD, angleF] avec somme < 180°
@@ -89,7 +96,6 @@ export default class Can52026Q19 extends ExerciceCan {
     // Affichage de l'angle cherché en E
     const affAngleE = afficheMesureAngle(D, E, F, 'black', 0.5, '?')
 
-    this.formatChampTexte = KeyboardType.clavierDeBase
     this.reponse = angleE
 
     const xmin = Math.min(D.x, F.x, E.x) - 1
@@ -122,8 +128,6 @@ $${angleD + angleF}^\\circ+\\widehat{FED}=180^\\circ$<br>
 $\\widehat{FED}=180^\\circ-${angleD + angleF}^\\circ=${miseEnEvidence(angleE + '^\\circ')}$`
 
     this.canReponseACompleter = '$?=\\ldots^\\circ$'
-    this.optionsChampTexte = { texteApres: '$^\\circ$' }
-    this.formatChampTexte = KeyboardType.clavierDeBase
     if (this.interactif) {
       this.question += '<br>$?=$'
     } else if (context.isHtml) {

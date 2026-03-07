@@ -1,5 +1,5 @@
 import { codageAngleDroit } from '../../../lib/2d/CodageAngleDroit'
-import {  pointAbstrait } from '../../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { polygoneAvecNom } from '../../../lib/2d/polygones'
 import { segment } from '../../../lib/2d/segmentsVecteurs'
 import { latex2d } from '../../../lib/2d/textes'
@@ -11,7 +11,8 @@ import { texNombre } from '../../../lib/outils/texNombre'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import ExerciceCan from '../../ExerciceCan'
 
-export const titre = 'Calculer l\'aire d\'un triangle à partir de la base et de la hauteur'
+export const titre =
+  "Calculer l'aire d'un triangle à partir de la base et de la hauteur"
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const uuid = '3hsdf'
@@ -25,7 +26,13 @@ export const refs = {
 
 */
 export default class Can52026Q17 extends ExerciceCan {
- enonce(AB?: number, CH?: number, AH?: number, AC?: number, BC?: number) {
+  constructor() {
+    super()
+    this.formatChampTexte = KeyboardType.clavierNumbers
+    this.optionsDeComparaison = { nombreDecimalSeulement: true }
+  }
+
+  enonce(AB?: number, CH?: number, AH?: number, AC?: number, BC?: number) {
     if (AB == null || CH == null || AH == null || AC == null || BC == null) {
       const listeCas = [
         [10, 4, 3, 5, 8],
@@ -62,10 +69,7 @@ export default class Can52026Q17 extends ExerciceCan {
     objets.push(pol[0], pol[1])
 
     // Hauteur [CH]
-    objets.push(
-      segment(C, H, 'gray'),
-      codageAngleDroit(B, H, C)
-    )
+    objets.push(segment(C, H, 'gray'), codageAngleDroit(B, H, C))
 
     // Cotations des longueurs AC, BC, CH
     objets.push(
@@ -73,20 +77,18 @@ export default class Can52026Q17 extends ExerciceCan {
         `${texNombre(AC)} \\text{ cm}`,
         milieu(A, C).x - 2,
         milieu(A, C).y,
-        { color: 'black' }
+        { color: 'black' },
       ),
       latex2d(
         `${texNombre(BC)} \\text{ cm}`,
         milieu(B, C).x + 2,
         milieu(B, C).y,
-        { color: 'black' }
+        { color: 'black' },
       ),
-      latex2d(
-        `${CH} \\text{ cm}`,
-        milieu(C, H).x + 0.5,
-        milieu(C, H).y,
-        { color: 'black', orientation: 90 }
-      )
+      latex2d(`${CH} \\text{ cm}`, milieu(C, H).x + 0.5, milieu(C, H).y, {
+        color: 'black',
+        orientation: 90,
+      }),
     )
 
     // Cotation AB avec double flèche
@@ -94,18 +96,11 @@ export default class Can52026Q17 extends ExerciceCan {
     segCotation.styleExtremites = '<->'
     objets.push(
       segCotation,
-      latex2d(
-        `${AB} \\text{ cm}`,
-        milieu(A, B).x,
-        -1.8,
-        { color: 'black' }
-      )
+      latex2d(`${AB} \\text{ cm}`, milieu(A, B).x, -1.8, { color: 'black' }),
     )
 
     // Label H
-    objets.push(
-      latex2d('H', H.x - 0.5, H.y + 0.5, { color: 'black' })
-    )
+    objets.push(latex2d('H', H.x - 0.5, H.y + 0.5, { color: 'black' }))
 
     const graphique = mathalea2d(
       {
@@ -121,10 +116,9 @@ export default class Can52026Q17 extends ExerciceCan {
       objets,
     )
 
-    this.canEnonce = 'L\'aire du triangle $ABC$ est égale à : ' + graphique
-    this.question = 'L\'aire du triangle ABC est égale à :' + graphique
+    this.canEnonce = "L'aire du triangle $ABC$ est égale à : " + graphique
+    this.question = "L'aire du triangle ABC est égale à :" + graphique
 
-    this.formatChampTexte = KeyboardType.clavierDeBase
     this.correction = `L'aire du triangle $ABC$ est égale à :<br>
 $\\mathcal{A}=\\dfrac{AB \\times CH}{2}=\\dfrac{${AB} \\times ${CH}}{2}=\\dfrac{${AB * CH}}{2}=${miseEnEvidence(aire)}\\text{ cm}^2$`
 

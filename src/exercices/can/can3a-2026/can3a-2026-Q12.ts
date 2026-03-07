@@ -18,12 +18,18 @@ export const refs = {
 
 */
 export default class Can32026Q12 extends ExerciceCan {
+  constructor() {
+    super()
+    this.formatChampTexte = KeyboardType.clavierNumbers
+    this.optionsDeComparaison = { nombreDecimalSeulement: true }
+  }
+
   enonce(prenom?: string, distance?: number, temps?: number) {
     if (prenom == null || distance == null || temps == null) {
       // Version aléatoire
       const P = personne()
       prenom = P.prenom
-      
+
       // Liste des cas : [distance en km, temps en min]
       const listeCas = [
         // 20 minutes
@@ -40,29 +46,29 @@ export default class Can32026Q12 extends ExerciceCan {
         [2, 10],
         [3, 10],
       ]
-      
+
       const cas = choice(listeCas)
       distance = cas[0]
       temps = cas[1]
     }
 
     this.formatChampTexte = KeyboardType.clavierDeBase
-    
+
     // Calcul de la vitesse moyenne en km/h
     const vitesse = (distance / temps) * 60
     this.reponse = vitesse.toFixed(1)
-    
+
     this.question = `${prenom} a couru $${distance}$ km en $${temps}$ min.<br>
 Sa vitesse moyenne est  `
-    
+
     this.correction = `En $${temps}$ min, ${prenom} a parcouru $${distance}$ km.<br>
 En $60$ min (soit $1$ h), ${prenom} parcourt $${60 / temps}$ fois plus, soit $${distance}\\times ${60 / temps}=${miseEnEvidence(vitesse)}$ km/h.`
-    
+
     this.canEnonce = this.question
     this.canReponseACompleter = '$\\ldots$ km/h'
-    
+
     if (this.interactif) {
-      this.optionsChampTexte = { texteApres: 'km/h.'  }
+      this.optionsChampTexte = { texteApres: 'km/h.' }
     } else {
       this.question += ' $\\ldots$ km/h.'
     }

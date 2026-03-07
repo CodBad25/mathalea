@@ -18,12 +18,18 @@ export const refs = {
 
 */
 export default class Can32026Q3 extends ExerciceCan {
-enonce(a?: number, b?: number) {
+  constructor() {
+    super()
+    this.formatChampTexte = KeyboardType.clavierNumbers
+    this.optionsDeComparaison = { nombreDecimalSeulement: true }
+  }
+
+  enonce(a?: number, b?: number) {
     if (a == null || b == null) {
       a = randint(2, 5) * 0.1 + randint(1, 9) * 0.01
       b = randint(1, 4) * 0.1
     }
-    this.formatChampTexte = KeyboardType.clavierNumbers
+
     this.reponse = (a + b).toFixed(2)
     this.question = `$${texNombre(a, 2)} + ${texNombre(b, 2)}$ `
     this.correction = `$${texNombre(a, 2)} + ${texNombre(b, 2)}=${miseEnEvidence(texNombre(a + b, 2))}$`

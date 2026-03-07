@@ -20,15 +20,22 @@ export const refs = {
 
 */
 export default class Can52026Q20 extends ExerciceCan {
-    enonce(numerateur?: number, denominateur?: number) {
+  constructor() {
+    super()
+    this.formatChampTexte = KeyboardType.clavierNumbers
+    this.optionsDeComparaison = { nombreDecimalSeulement: true }
+    this.optionsChampTexte = { texteAvant: '<br>' }
+  }
+
+  enonce(numerateur?: number, denominateur?: number) {
     if (numerateur == null || denominateur == null) {
       // Choix du dénominateur : 10, 100 ou 1000
       denominateur = choice([10, 100])
-      
-      
-        numerateur = choice([randint(1, 9) * 100 +  randint(1, 9), randint(1, 9) * 1000   + randint(1, 9)
-         ])
-      
+
+      numerateur = choice([
+        randint(1, 9) * 100 + randint(1, 9),
+        randint(1, 9) * 1000 + randint(1, 9),
+      ])
     }
 
     const frac = new FractionEtendue(numerateur, denominateur)
@@ -39,14 +46,9 @@ export default class Can52026Q20 extends ExerciceCan {
     const nomDenominateur = denominateur === 10 ? 'dixièmes' : 'centièmes'
 
     this.correction = `$${frac.texFraction}=${texNombre(numerateur)}\\times \\dfrac{1}{${texNombre(denominateur)}}$, donc $${texNombre(numerateur)}$ ${nomDenominateur}, soit $${miseEnEvidence(texNombre(resultat))}$.`
- this.formatChampTexte = KeyboardType.clavierDeBase
     this.reponse = resultat
     this.canEnonce = this.question
     this.canReponseACompleter = ''
-    
-    if (this.interactif) {
-      this.optionsChampTexte = { texteAvant: '<br>' }
-    }
   }
 
   nouvelleVersion() {
