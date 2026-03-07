@@ -35,11 +35,15 @@ export default class Can1a2026Q17 extends ExerciceCan {
     const somme = x1.sommeFraction(x2).simplifie()
 
     this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
+     this.optionsDeComparaison = { nombreDecimalSeulement: true }
     this.reponse = somme.texFraction
     this.question = `Somme $S$ des racines de : $f(x)=(${reduireAxPlusB(a1, b1)})(${reduireAxPlusB(a2, b2)})$ ?<br>`
     this.correction = `Les racines de $f$ sont les solutions de $(${reduireAxPlusB(a1, b1)})(${reduireAxPlusB(a2, b2)})=0$.<br>
-    $${reduireAxPlusB(a1, b1)}=0 \\iff x=${x1.simplifie().texFraction}$ et $${reduireAxPlusB(a2, b2)}=0 \\iff x=${texNombre(x2.valeurDecimale, 0)}$<br>
-    $S=${x1.simplifie().texFraction}+${x2.valeurDecimale < 0 ? '(' : ''}${texNombre(x2.valeurDecimale, 0)}${x2.valeurDecimale < 0 ? ')' : ''}=${miseEnEvidence(somme.texFraction)}$`
+    On reconnaît une équation produit-nul.<br> 
+    $${reduireAxPlusB(a1, b1)}=0$  ou $${reduireAxPlusB(a2, b2)}=0$<br>
+     $x=${x1.simplifie().texFraction}$ ou $x=${texNombre(x2.valeurDecimale, 0)}$<br>
+    
+    Ainsi, la somme est $S=${x1.simplifie().texFraction}+${x2.valeurDecimale < 0 ? '(' : ''}${texNombre(x2.valeurDecimale, 0)}${x2.valeurDecimale < 0 ? ')' : ''}=${miseEnEvidence(somme.texFraction)}$`
     if (this.interactif) {
       this.question += '$S=$'
     } else {
