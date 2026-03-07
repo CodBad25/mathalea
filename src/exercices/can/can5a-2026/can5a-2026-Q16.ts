@@ -27,6 +27,13 @@ export const refs = {
 
 */
 export default class Can52026Q16 extends ExerciceCan {
+  constructor() {
+    super()
+    this.formatInteractif = 'fillInTheBlank'
+    this.formatChampTexte = KeyboardType.clavierNumbers
+    this.optionsDeComparaison = { nombreDecimalSeulement: true }
+  }
+
   enonce(nbBlanches?: number, nbNoires?: number) {
     if (nbBlanches == null || nbNoires == null) {
       const listeCas = [
@@ -167,7 +174,6 @@ La proportion de boules blanches est donc : ${pgcd(nbBlanches, total) !== 1 ? `$
   }
 
   nouvelleVersion() {
-    this.formatInteractif = 'fillInTheBlank'
     this.canOfficielle ? this.enonce(3, 4) : this.enonce()
   }
 }

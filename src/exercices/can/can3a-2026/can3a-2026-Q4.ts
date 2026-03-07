@@ -1,13 +1,13 @@
-import { context } from '../../../modules/context'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
-import ExerciceCan from '../../ExerciceCan'
-import { randint } from '../../../modules/outils'
+import { context } from '../../../modules/context'
 import FractionEtendue from '../../../modules/FractionEtendue'
+import { randint } from '../../../modules/outils'
+import ExerciceCan from '../../ExerciceCan'
 
-export const titre = 'Effectuer une conversion d\'unités'
+export const titre = "Effectuer une conversion d'unités"
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const uuid = 'ssrbd'
@@ -21,7 +21,13 @@ export const refs = {
 
 */
 export default class Can3026Q4 extends ExerciceCan {
-    enonce(valeur?: number, uniteDepart?: string, uniteArrivee?: string) {
+  constructor() {
+    super()
+    this.formatChampTexte = KeyboardType.clavierNumbers
+    this.optionsDeComparaison = { nombreDecimalSeulement: true }
+  }
+
+  enonce(valeur?: number, uniteDepart?: string, uniteArrivee?: string) {
     if (valeur == null || uniteDepart == null || uniteArrivee == null) {
       // Version aléatoire
       const cas = choice(['dm_m', 'm_dm', 'm_mm'])

@@ -19,15 +19,20 @@ export const refs = {
 
 */
 export default class Can32026Q5 extends ExerciceCan {
- enonce(nombre?: number, multiplicateur?: number) {
+  constructor() {
+    super()
+    this.formatChampTexte = KeyboardType.clavierNumbers
+    this.optionsDeComparaison = { nombreDecimalSeulement: true }
+  }
+
+  enonce(nombre?: number, multiplicateur?: number) {
     if (nombre == null || multiplicateur == null) {
       const b = randint(0, 2) / 100
       const e = randint(1, 9) / 1000
-      nombre = randint(1, 9) +b + e
+      nombre = randint(1, 9) + b + e
       multiplicateur = choice([10, 100, 1000])
     }
 
-    this.formatChampTexte = KeyboardType.clavierDeBase
     const reponse = nombre * multiplicateur
     this.reponse = reponse.toFixed(3)
     this.question = `$${texNombre(nombre, 4)}\\times ${texNombre(multiplicateur, 0)} ${this.interactif ? '=' : ''}$`

@@ -19,6 +19,13 @@ export const refs = {
 
 */
 export default class Can52026Q29 extends ExerciceCan {
+  constructor() {
+    super()
+    this.formatChampTexte = KeyboardType.clavierNumbers
+    this.formatInteractif = 'fillInTheBlank'
+    this.optionsDeComparaison = { fractionIrreductible: true }
+  }
+
   enonce(k?: number, numIrred?: number, denIrred?: number) {
     if (k == null || numIrred == null || denIrred == null) {
       // Génération aléatoire : on part d'une fraction irréductible et on la multiplie par k
@@ -64,11 +71,9 @@ export default class Can52026Q29 extends ExerciceCan {
     this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
     this.canEnonce = this.consigne
     this.canReponseACompleter = '$\\dfrac{\\ldots}{\\ldots}$'
-    this.optionsDeComparaison = { fractionIrreductible: true }
   }
 
   nouvelleVersion() {
-    this.formatInteractif = 'fillInTheBlank'
     this.canOfficielle ? this.enonce(7, 6, 5) : this.enonce()
   }
 }

@@ -28,9 +28,16 @@ export const refs = {
 
 */
 export default class Can52026Q28 extends ExerciceCan {
- enonce(angleConnu?: number) {
+  constructor() {
+    super()
+    this.formatChampTexte = KeyboardType.clavierNumbers
+    this.optionsDeComparaison = { nombreDecimalSeulement: true }
+    this.optionsChampTexte = { texteApres: '$^\\circ$' }
+  }
+
+  enonce(angleConnu?: number) {
     if (angleConnu == null) {
-      angleConnu = randint(31,75,[40,50,60,70])
+      angleConnu = randint(31, 75, [40, 50, 60, 70])
     }
 
     // Construction initiale
@@ -39,18 +46,17 @@ export default class Can52026Q28 extends ExerciceCan {
     const F0 = pointAbstrait(2, 0, 'F', 'below')
     const G0 = rotation(F0, K0, angleConnu)
     const H0 = rotation(F0, K0, 90)
-    
-   
+
     const angleRotationGlobale = -25
     const K = rotation(K0, origine, angleRotationGlobale)
     const F = rotation(F0, origine, angleRotationGlobale)
     const G = rotation(G0, origine, angleRotationGlobale)
     const H = rotation(H0, origine, angleRotationGlobale)
-    
+
     const demiDroiteKH = demiDroite(K, H)
     const demiDroiteKG = demiDroite(K, G)
     const demiDroiteKF = demiDroite(K, F)
-    
+
     const traceK = tracePoint(K)
     traceK.taille = context.isHtml ? 2 : 1
 
@@ -77,15 +83,12 @@ export default class Can52026Q28 extends ExerciceCan {
       codageAngleDroit(H, K, F),
       codageAngle(F, K, G, 0.8),
       latex2d('H', H.x - 0.2, H.y + 0.3, { letterSize: 'scriptsize' }),
-      latex2d('G', G.x , G.y + 0.3, { letterSize: 'scriptsize' }),
-      latex2d('F', F.x , F.y - 0.3, { letterSize: 'scriptsize' }),
+      latex2d('G', G.x, G.y + 0.3, { letterSize: 'scriptsize' }),
+      latex2d('F', F.x, F.y - 0.3, { letterSize: 'scriptsize' }),
       latex2d('K', K.x - 0.4, K.y - 0.3, { letterSize: 'scriptsize' }),
-      latex2d(
-        `${stringNombre(angleConnu)}^\\circ`,
-        K.x + 1.2,
-        K.y ,
-        { letterSize: 'scriptsize' }
-      ),
+      latex2d(`${stringNombre(angleConnu)}^\\circ`, K.x + 1.2, K.y, {
+        letterSize: 'scriptsize',
+      }),
     )
 
     this.canEnonce = mathalea2d(
@@ -111,10 +114,8 @@ Ainsi, $\\widehat{\\text{HKG}}=90-${angleConnu}=${miseEnEvidence(angleReponse)}^
 
     this.reponse = angleReponse
     this.canReponseACompleter = '$\\widehat{\\text{HKG}}=\\ldots^\\circ$'
- this.formatChampTexte = KeyboardType.clavierDeBase
-    if (this.interactif) {
-      this.optionsChampTexte = { texteApres: '$^\\circ$' }
-    } else if (context.isHtml) {
+
+    if (!this.interactif && context.isHtml) {
       this.question += ' $\\ldots^\\circ$'
     }
   }

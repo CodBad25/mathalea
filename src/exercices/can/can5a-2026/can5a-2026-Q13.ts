@@ -6,7 +6,7 @@ import { texNombre } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
 
-export const titre = "Effectuer des conversions entre grammes et kilogrammes"
+export const titre = 'Effectuer des conversions entre grammes et kilogrammes'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const uuid = 's5og8'
@@ -20,8 +20,13 @@ export const refs = {
 
 */
 export default class Can52026Q13 extends ExerciceCan {
+  constructor() {
+    super()
+    this.formatChampTexte = KeyboardType.clavierNumbers
+    this.optionsDeComparaison = { nombreDecimalSeulement: true }
+  }
+
   enonce(sens?: string, valeur?: number) {
-      
     if (sens == null) {
       sens = choice(['g_vers_kg', 'kg_vers_g'])
     }

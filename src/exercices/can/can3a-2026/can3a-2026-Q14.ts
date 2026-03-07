@@ -18,26 +18,29 @@ export const refs = {
 
 */
 export default class Can32026Q14 extends ExerciceCan {
-   enonce(valeurs?: number[]) {
+  constructor() {
+    super()
+    this.formatChampTexte = KeyboardType.clavierNumbers
+    this.optionsDeComparaison = { nombreDecimalSeulement: true }
+  }
+
+  enonce(valeurs?: number[]) {
     if (valeurs == null) {
       // Tableau de 8 cas prédéfinis : [val1, val2, val3, val4, val5]
       // Sommes facilement divisibles par 5
       const listeCas = [
-        [25, 75, 100, 100, 150],   // Somme = 450, Moyenne = 90
-        [50, 75, 100, 125, 150],   // Somme = 500, Moyenne = 100
-        [25, 50, 75, 125, 175],    // Somme = 450, Moyenne = 90
-        [50, 50, 75, 100, 125],    // Somme = 400, Moyenne = 80
-        [25, 75, 100, 150, 150],   // Somme = 500, Moyenne = 100
-        [50, 100, 125, 150, 175],  // Somme = 600, Moyenne = 120
-        [25, 25, 50, 75, 125],     // Somme = 300, Moyenne = 60
-        [50, 75, 125, 125, 175],   // Somme = 550, Moyenne = 110
+        [25, 75, 100, 100, 150], // Somme = 450, Moyenne = 90
+        [50, 75, 100, 125, 150], // Somme = 500, Moyenne = 100
+        [25, 50, 75, 125, 175], // Somme = 450, Moyenne = 90
+        [50, 50, 75, 100, 125], // Somme = 400, Moyenne = 80
+        [25, 75, 100, 150, 150], // Somme = 500, Moyenne = 100
+        [50, 100, 125, 150, 175], // Somme = 600, Moyenne = 120
+        [25, 25, 50, 75, 125], // Somme = 300, Moyenne = 60
+        [50, 75, 125, 125, 175], // Somme = 550, Moyenne = 110
       ]
-      
+
       valeurs = choice(listeCas)
     }
-
-    this.formatChampTexte = KeyboardType.clavierDeBase
-    this.optionsChampTexte = { texteApres: '' }
 
     const somme = valeurs.reduce((acc, val) => acc + val, 0)
     const moyenne = somme / valeurs.length

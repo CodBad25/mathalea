@@ -18,25 +18,28 @@ export const refs = {
 
 */
 export default class Can32026Q6 extends ExerciceCan {
-   enonce(a?: number, b?: number) {
-      if (a == null||b==null) {
-       a=randint(41, 59,50)
-         b = randint(7, 9) * 10 
+  constructor() {
+    super()
+    this.formatChampTexte = KeyboardType.clavierNumbers
+    this.optionsDeComparaison = { nombreDecimalSeulement: true }
+  }
 
-      }
-      this.formatChampTexte = KeyboardType.clavierNumbers
-      this.reponse = b - a
-      this.question = `$${a} + \\text{?} = ${b}$`
-      this.correction = `Pour trouver le nombre manquant, on peut calculer $${b}-${a}=${miseEnEvidence(texNombre(b - a, 0))}$.`
-      this.canEnonce = this.question
-      this.canReponseACompleter = `? $= \\ldots$`
-      if (this.interactif) {
-        this.question += '<br> ? $=$'
-      }
+  enonce(a?: number, b?: number) {
+    if (a == null || b == null) {
+      a = randint(41, 59, 50)
+      b = randint(7, 9) * 10
     }
-  
-    nouvelleVersion() {
-      this.canOfficielle ? this.enonce(54,80) : this.enonce()
+    this.reponse = b - a
+    this.question = `$${a} + \\text{?} = ${b}$`
+    this.correction = `Pour trouver le nombre manquant, on peut calculer $${b}-${a}=${miseEnEvidence(texNombre(b - a, 0))}$.`
+    this.canEnonce = this.question
+    this.canReponseACompleter = `? $= \\ldots$`
+    if (this.interactif) {
+      this.question += '<br> ? $=$'
     }
   }
-  
+
+  nouvelleVersion() {
+    this.canOfficielle ? this.enonce(54, 80) : this.enonce()
+  }
+}

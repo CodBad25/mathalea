@@ -19,10 +19,18 @@ export const refs = {
 
 */
 export default class Can52026Q23 extends ExerciceCan {
- enonce(premier?: number, raison?: number) {
+  constructor() {
+    super()
+    this.formatChampTexte = KeyboardType.clavierNumbers
+    this.optionsDeComparaison = { nombreDecimalSeulement: true }
+  }
+
+  enonce(premier?: number, raison?: number) {
     if (premier == null || raison == null) {
       // Génération aléatoire
-      premier = choice([ 13, 14, 15, 16, 17, 18, 19, 22, 23, 24, 25, 26, 27, 28, 29])
+      premier = choice([
+        13, 14, 15, 16, 17, 18, 19, 22, 23, 24, 25, 26, 27, 28, 29,
+      ])
       raison = randint(7, 9)
     }
 
@@ -35,7 +43,7 @@ $${premier}$ ${sp(2)} ; ${sp(2)} $${terme2}$ ${sp(2)} ; ${sp(2)} $${terme3}$ ${s
 
     this.correction = `On obtient un terme de cette suite en ajoutant $${raison}$ au terme précédent.<br>
 Ainsi, ? $=${miseEnEvidence(reponse)}$.`
- this.formatChampTexte = KeyboardType.clavierDeBase
+
     this.reponse = reponse
     this.canEnonce = this.question
     this.canReponseACompleter = '? $=\\ldots$'

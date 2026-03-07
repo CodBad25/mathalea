@@ -8,7 +8,7 @@ import { mathalea2d } from '../../../modules/mathalea2d'
 import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
 
-export const titre = 'Déterminer l\'abscisse d\'un point dans un repère'
+export const titre = "Déterminer l'abscisse d'un point dans un repère"
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const uuid = 'pl5rm'
@@ -22,6 +22,13 @@ export const refs = {
 
 */
 export default class Can52026Q25 extends ExerciceCan {
+  constructor() {
+    super()
+    this.formatChampTexte = KeyboardType.clavierDeBase
+    this.optionsDeComparaison = { nombreDecimalSeulement: true }
+    this.optionsChampTexte = { texteApres: '.' }
+  }
+
   enonce(a?: number, b?: number) {
     if (a == null || b == null) {
       // Abscisse négative uniquement
@@ -29,8 +36,6 @@ export default class Can52026Q25 extends ExerciceCan {
       b = randint(-1, 2, [a, 0])
     }
 
-    this.formatChampTexte = KeyboardType.clavierDeBase
-    this.optionsChampTexte = { texteApres: '.' }
     this.reponse = a
 
     const r = repere({
@@ -81,16 +86,15 @@ export default class Can52026Q25 extends ExerciceCan {
 
     this.question = this.canEnonce
     this.question += "<br>L'abscisse du point $M$ est "
-    
+
     if (!this.interactif) {
       this.question += '$\\ldots$'
     }
-    
+
     this.correction = `L'abscisse du point se lit sur l'axe horizontal.<br>
 On lit : $${miseEnEvidence(this.reponse)}$.`
 
     this.canReponseACompleter = "L'abscisse du point $M$ est $\\ldots$"
-    this.formatChampTexte = KeyboardType.clavierDeBase
   }
 
   nouvelleVersion() {
