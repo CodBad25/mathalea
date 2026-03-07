@@ -45,7 +45,7 @@ export default class Can2a2026Q28 extends ExerciceCan {
     this.canEnonce = `Résoudre dans $\\mathbb{R}$ l'équation : $${equationTexte}$`
     this.canReponseACompleter = '$S=\\ldots$'
     this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
-    this.optionsChampTexte = { texteAvant: ' $S=\\{$', texteApres: '$\\}$' }
+    this.optionsChampTexte = { texteAvant: ' $S=\\{$', texteApres: '$\\}$<br>(S\'il y a plusieurs solutions, les écrire séparées d\'un point-virgule)' }
 
     if (this.interactif) {
       this.question += '<br>'
