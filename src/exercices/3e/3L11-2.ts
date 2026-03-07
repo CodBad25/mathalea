@@ -3,7 +3,7 @@
  */
 
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import {
   ecritureAlgebrique,
@@ -101,7 +101,6 @@ export default class ReductionSiPossible extends Exercice {
     for (
       let i = 0, reponse, coeffa, constb, a, b, c, d, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       let texte = ''
       let texteCorr = ''
@@ -253,7 +252,12 @@ export default class ReductionSiPossible extends Exercice {
       }
 
       if (!context.isAmc) {
-        setReponse(this, i, reponse)
+        handleAnswers(this, i, {
+          reponse: {
+            value: reponse,
+            options: { expressionsForcementReduites: true },
+          },
+        })
         texte += this.interactif
           ? `<br>$${lettreDepuisChiffre(i + 1)} = $` +
             ajouteChampTexteMathLive(

@@ -1,12 +1,11 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { randint } from '../../../modules/outils'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import {
   ecritureAlgebrique,
   ecritureAlgebriqueSauf1,
 } from '../../../lib/outils/ecritures'
-import { expressionDeveloppeeEtNonReduiteCompare } from '../../../lib/interactif/comparisonFunctions'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer une fonction dérivée'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -24,8 +23,7 @@ export default class deriveeSecondDegre extends ExerciceSimple {
     this.nbQuestions = 1
     this.formatChampTexte =
       KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets
-
-    this.compare = expressionDeveloppeeEtNonReduiteCompare
+    this.optionsDeComparaison = { calculFormel: true }
   }
 
   nouvelleVersion() {

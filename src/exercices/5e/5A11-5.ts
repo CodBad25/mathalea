@@ -205,7 +205,9 @@ export default class TrouverNombre extends Exercice {
           break
       }
       texte += ajouteChampTexteMathLive(this, i, KeyboardType.clavierEnsemble)
-      handleAnswers(this, i, { reponse: { value: reponse } })
+      handleAnswers(this, i, {
+        reponse: { value: reponse, options: { suiteDeNombres: true } },
+      })
       if (this.questionJamaisPosee(i, listeTypeQuestions[i], unite)) {
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr

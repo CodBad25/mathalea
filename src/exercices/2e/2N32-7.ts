@@ -1,5 +1,4 @@
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { equalFractionCompareSansRadical } from '../../lib/interactif/comparisonFunctions'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { texFractionFromString } from '../../lib/outils/deprecatedFractions'
@@ -70,7 +69,7 @@ export default class Rendreentier extends Exercice {
 
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
       const a = randint(2, 11)
-      const b = randint(2, 11, [4, 8, 9])
+      const b = randint(2, 11, [a, 4, 8, 9])
       const c = randint(2, 9)
       const d = randint(-7, 7, [-1, 0, 1])
       let n = 0
@@ -196,7 +195,10 @@ export default class Rendreentier extends Exercice {
         },
       )
       handleAnswers(this, i, {
-        reponse: { value: reponse, compare: equalFractionCompareSansRadical },
+        reponse: {
+          value: reponse,
+          options: { fractionSansRacineCarree: true },
+        },
       })
 
       if (this.questionJamaisPosee(i, a, b, c, d)) {

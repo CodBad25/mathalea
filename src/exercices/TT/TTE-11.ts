@@ -48,7 +48,6 @@ export default class DomaineDefFnLog extends Exercice {
       'Nombres séparés par des tirets :\n1 : Fonction affine\n2 : Fonction homographique\n3 : Polynôme de degré 2\n4 : Mélange',
     ]
     this.besoinFormulaire2CaseACocher = ['Type de logarithme', true]
-   
   }
 
   nouvelleVersion() {
@@ -425,7 +424,7 @@ export default class DomaineDefFnLog extends Exercice {
               correction += `Le discriminant est null, donc $${fonction}$ s'annule en $${frac1.texFractionSimplifiee}$ et est du signe de son coefficient de dégré $2$, soit ${a > 0 ? 'positif' : 'négatif'}.<br>`
               answer =
                 a > 0
-                  ? `\\R\\backslash{\\{${frac1.texFractionSimplifiee}\\}}`
+                  ? `\\mathbb{R}\\backslash{\\{${frac1.texFractionSimplifiee}\\}}`
                   : '\\emptyset'
             }
           } else {
@@ -458,12 +457,12 @@ export default class DomaineDefFnLog extends Exercice {
               lgt: 8, // taille de la première colonne en cm
               hauteurLignes: [12, 15],
             })
-            answer = a > 0 ? '\\R' : '\\emptyset'
+            answer = a > 0 ? '\\mathbb{R}' : '\\emptyset'
           }
         }
       }
       texte += `${logString}\\left(${fonction}\\right)$<br>`
-      texteCorr = `La fonction $${logString}$ est défine sur $\\R_+^*$, donc $x$ doit vérifier $${fonction}>0$<br>`
+      texteCorr = `La fonction $${logString}$ est défine sur $\\mathbb{R}_+^*$, donc $x$ doit vérifier $${fonction}>0$<br>`
       correction += `Donc $\\mathcal{D}_{f_${i}}=${miseEnEvidence(answer)}$`
       texteCorr += correction
       if (this.questionJamaisPosee(i, a, b, c, d)) {

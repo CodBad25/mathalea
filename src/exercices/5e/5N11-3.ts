@@ -1,6 +1,6 @@
-import { ComputeEngine } from '@cortex-js/compute-engine'
 import type { MathfieldElement } from 'mathlive'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import ce from '../../lib/interactif/comparisonFunctions'
 import {
   handleAnswers,
   setReponse,
@@ -23,7 +23,6 @@ export const amcType = 'AMCNum'
 export const amcReady = true
 export const dateDePublication = '06/02/2021'
 export const dateDeModifImportante = '03/04/2024'
-const ce = new ComputeEngine()
 
 /**
  * Une fraction étant donnée, il faut l'écrire avec 100 au dénominateur puis donner son écriture sous forme de pourcentage.
@@ -165,13 +164,11 @@ export default class FractionVersPourcentage extends Exercice {
             ? ce
                 .parse(
                   `\\frac{${Number(num1.split('\\times')[0]) * (Number(num1.split('\\times')[1]) ?? 1)}}{${Number(den1.split('\\times')[0]) * (Number(den1.split('\\times')[1]) ?? 1)}}`,
-                  { canonical: true },
                 )
                 .isEqual(ce.parse(`\\frac{${reponseAttendue}}{100}`))
             : ce
                 .parse(
                   `\\frac{${Number(num1.split('\\div')[0]) * (Number(num1.split('\\div')[1]) ?? 1)}}{${Number(den1.split('\\div')[0]) * (Number(den1.split('\\div')[1]) ?? 1)}}`,
-                  { canonical: true },
                 )
                 .isEqual(ce.parse(`\\frac{${reponseAttendue}}{100}`))) ?? false
         test1Bis = ce.parse(den1).isEqual(ce.parse('100')) ?? false

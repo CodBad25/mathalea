@@ -17,7 +17,6 @@ import Exercice from '../Exercice'
 
 import Figure from 'apigeom'
 import { lectureImage } from '../../lib/2d/LectureImage'
-import { approximatelyCompare } from '../../lib/interactif/comparisonFunctions'
 
 export const titre = "Lire graphiquement l'image d'un nombre par une fonction"
 export const dateDePublication = '29/10/2023'
@@ -320,8 +319,7 @@ class LireImageParApiGeom extends Exercice {
           `L1C${i + 1}`,
           {
             value: this.Y[i],
-            compare: approximatelyCompare,
-            options: { tolerance: 0.11 },
+            options: { approximatelyCompare: true, tolerance: 0.11 },
           },
         ])
       }

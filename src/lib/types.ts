@@ -251,6 +251,7 @@ export type OptionsComparaisonType = {
   fractionDecimale?: boolean
   fractionEgale?: boolean
   fractionIdentique?: boolean
+  fractionSansRacineCarree?: boolean
   nombreDecimalSeulement?: boolean
   expressionNumerique?: boolean
   additionSeulementEtNonResultat?: boolean
@@ -290,6 +291,8 @@ export type OptionsComparaisonType = {
   variable?: string
   entier?: boolean
   domaine?: [number, number]
+  approximatelyCompare?: boolean
+  entiersConsecutifs?: boolean
 }
 export type CompareFunction = (
   input: string,
@@ -313,6 +316,7 @@ export type CleaningOperation =
   | 'mathrm'
   | 'operatorName'
   | 'imaginaires'
+  | 'accolades'
 
 export type InteractivityType =
   | 'qcm'

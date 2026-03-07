@@ -1,5 +1,8 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { ecritureAlgebrique, reduireAxPlusB } from '../../../lib/outils/ecritures'
+import {
+  ecritureAlgebrique,
+  reduireAxPlusB,
+} from '../../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
@@ -30,9 +33,9 @@ export default class Can32026Q18 extends ExerciceCan {
 
     // Expression : a(x+b)
     const expression = `${a}(x${ecritureAlgebrique(b)})`
-    
+
     this.question = `Développe et réduis $${expression}$.<br>`
-    
+
     this.correction = `$\\begin{aligned}
 ${expression}&=${a}\\times x${ecritureAlgebrique(a)}\\times(${b})\\\\
 &=${a}x${ecritureAlgebrique(a * b)}\\\\
@@ -42,7 +45,6 @@ ${expression}&=${a}\\times x${ecritureAlgebrique(a)}\\times(${b})\\\\
     this.reponse = {
       reponse: { value: reduireAxPlusB(a, a * b) },
     }
-    
     this.canEnonce = this.question
     this.canReponseACompleter = ''
   }

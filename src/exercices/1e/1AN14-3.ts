@@ -1,8 +1,6 @@
-import type { BoxedExpression } from '@cortex-js/compute-engine'
+import type { Expression } from '@cortex-js/compute-engine'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import engine, {
-  functionCompare,
-} from '../../lib/interactif/comparisonFunctions'
+import ce from '../../lib/interactif/comparisonFunctions'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { Polynome, type CoeffType } from '../../lib/mathFonctions/Polynome'
@@ -198,7 +196,7 @@ export default class DeriveePoly extends Exercice {
         'd',
         'e',
       ][i % 16]
-      const fExpr = engine.parse(expression) as unknown as BoxedExpression
+      const fExpr = ce.parse(expression) as Expression
       texte = `$${nameF}(x)=${fExpr != null ? fExpr.latex.replaceAll('.', '{,}') : 'Erreur dans la fonction'}$<br>`
       // Correction
       texteCorr = `$${nameF}$ est dérivable sur $\\R$.<br>`
@@ -230,7 +228,7 @@ export default class DeriveePoly extends Exercice {
           el.startsWith('+') ? el.substring(1) : el,
         )
         if (termes.length > 1) {
-          const fExpr = engine.parse(expression) as unknown as BoxedExpression
+          const fExpr = ce.parse(expression) as Expression
           texteCorr = `La fonction $${nameF}(x)=${fExpr.latex.replaceAll('.', '{,}')}$ est une somme de $${termes.length}$ termes.<br>${useFraction ? '<br>' : ''}`
           texteCorr +=
             'On rappelle que $(u+v)^\\prime=u^\\prime+v^\\prime$.<br>'
@@ -238,7 +236,7 @@ export default class DeriveePoly extends Exercice {
             texteCorr += `$${termNames[n]}(x)=${termes[n]},\\ ${termNames[n]}^\\prime(x)=${termesD[n]}$.<br>${useFraction ? '<br>' : ''}`
           }
         } else {
-          const fExpr = engine.parse(expression) as unknown as BoxedExpression
+          const fExpr = ce.parse(expression) as Expression
           texteCorr = `La fonction $${nameF}(x)=${fExpr.latex.replaceAll('.', '{,}')}$ est une fonction constante, sa dérivée est la fonction constante nulle.<br>`
         }
       } else {
@@ -262,7 +260,10 @@ export default class DeriveePoly extends Exercice {
           '<br>'
       }
       handleAnswers(this, i, {
-        reponse: { value: poly.derivee().toLatex(), compare: functionCompare },
+        reponse: {
+          value: poly.derivee().toLatex(),
+          options: { fonction: true },
+        },
       })
 
       if (listeValeurs.indexOf(expression) === -1) {

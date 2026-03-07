@@ -130,7 +130,6 @@ export default class DevelopperIdentitesRemarquables6 extends Exercice {
     for (
       let i = 0, texte = '', texteCorr, cpt = 0, a, b, c, d;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       b = randint(2, 9)
       a = randint(1, 9, [b])
@@ -349,7 +348,7 @@ export default class DevelopperIdentitesRemarquables6 extends Exercice {
           handleAnswers(this, i, {
             reponse: {
               value: `${reponse}`,
-              options: { developpementEgal: true },
+              options: { expressionsForcementReduites: true },
             },
           })
           texte +=

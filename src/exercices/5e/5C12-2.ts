@@ -11,7 +11,7 @@ import {
 import Exercice from '../Exercice'
 
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import engine from '../../lib/interactif/comparisonFunctions'
+import ce from '../../lib/interactif/comparisonFunctions'
 import {
   parseExpression,
   type Expression,
@@ -117,13 +117,13 @@ export default class ExpressionsDepuisCalculs extends Exercice {
         left: nombres[0],
         right: nombres[1],
       }
-      const resultat1 = engine.parse(calcul1).simplify().latex
+      const resultat1 = ce.parse(calcul1).simplify().latex
       const calcul2 = `${resultat1} ${signes[1]} ${nombres[2]}`
-      const resultat2 = engine.parse(calcul2).simplify().latex
+      const resultat2 = ce.parse(calcul2).simplify().latex
       const calcul3 = `${resultat2} ${signes[2]} ${nombres[3]}`
-      const resultat3 = engine.parse(calcul3).simplify().latex
+      const resultat3 = ce.parse(calcul3).simplify().latex
       const calcul4 = `${resultat3} ${signes[3]} ${nombres[4]}`
-      const resultat4 = engine.parse(calcul4).simplify().latex
+      const resultat4 = ce.parse(calcul4).simplify().latex
 
       let calculRedaction: Expression = ''
       let nombreCible: string

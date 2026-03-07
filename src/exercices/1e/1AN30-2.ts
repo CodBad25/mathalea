@@ -701,7 +701,13 @@ export default class SimplifierExponentielles extends Exercice {
           },
         )
         handleAnswers(this, i, {
-          reponse: { value: answer, options: { expressionNumerique: true } },
+          reponse: {
+            value: answer,
+            options: {
+              expressionNumerique: true,
+              nombreDecimalSeulement: true,
+            },
+          },
         })
       }
 

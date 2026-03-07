@@ -5,7 +5,6 @@ import { listeQuestionsToContenu } from '../../modules/outils'
 import Exercice from '../Exercice'
 
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { functionCompare } from '../../lib/interactif/comparisonFunctions'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 
 export const titre = 'cos et sin associés à un réel $x$'
@@ -113,8 +112,7 @@ export default class MesurePrincipale extends Exercice {
       handleAnswers(this, i, {
         reponse: {
           value: listeTypeQuestions[i].reponse,
-          options: { variable: 'x', domaine: [0, 7] },
-          compare: functionCompare,
+          options: { fonction: true, variable: 'x', domaine: [0, 7] },
         },
       })
       texte += ajouteChampTexteMathLive(this, i, KeyboardType.grecTrigo) // n'ajoute rien si on n'est pas en interactif

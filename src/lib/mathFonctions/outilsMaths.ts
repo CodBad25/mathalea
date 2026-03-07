@@ -1,6 +1,10 @@
-import type { BoxedExpression } from '@cortex-js/compute-engine'
+import {
+  isFunction,
+  isSymbol,
+  type Expression,
+} from '@cortex-js/compute-engine'
 import { randint } from '../../modules/outils'
-import engine, { generateCleaner } from '../interactif/comparisonFunctions'
+import ce, { generateCleaner } from '../interactif/comparisonFunctions'
 import { ecritureAlgebrique } from '../outils/ecritures'
 import { miseEnEvidence } from '../outils/embellissements'
 import { Matrice, matrice } from './Matrice'
@@ -212,40 +216,31 @@ export function resolutionSystemeLineaire3x3(
  */
 const miseEnForme = (str: string, color: string, isColored: boolean) =>
   isColored ? miseEnEvidence(str, color) : str
-function neg(expr: BoxedExpression): BoxedExpression {
+function neg(expr: Expression): Expression {
   if (expr.operator !== 'Add')
-    return engine.function('Multiply', [expr, engine.parse('-1')])
-  const ops = expr.ops ?? []
-  if (ops.length === 0)
-    return engine.function('Multiply', [expr, engine.parse('-1')])
-  else
-    return engine.function('Add', ops.map(neg), {
-      canonical: false,
-      structural: false,
-    })
+    return ce.function('Multiply', [expr, ce.parse('-1')])
+  const ops = isFunction(expr) ? expr.ops : []
+  if (ops.length === 0) return ce.function('Multiply', [expr, ce.parse('-1')])
+  else return ce.function('Add', ops.map(neg), { form: 'raw' })
 }
 
 /**
  * Une fonction pour supprimer les parenthèses et aplatir l'expression (un Add avec une série de termes)
  * @author Jean-Claude Lhote
  * @param expr
- * @return {*|BoxedExpression}
+ * @return {*|Expression}
  */
-function flattenAdd(expr: BoxedExpression): BoxedExpression {
+function flattenAdd(expr: Expression): Expression {
+  if (!isFunction(expr)) return expr
+
   if (expr.operator === 'Negate') {
     const oppose = neg(expr.op1)
-    const newExpr = engine.function('Add', [oppose], {
-      canonical: false,
-      structural: false,
-    })
+    const newExpr = ce.function('Add', [oppose], { form: 'raw' })
     return newExpr
   }
   if (expr.operator === 'Subtract') {
     const oppose = neg(expr.op2)
-    const newExpr = engine.function('Add', [expr.op1, oppose], {
-      canonical: false,
-      structural: false,
-    })
+    const newExpr = ce.function('Add', [expr.op1, oppose], { form: 'raw' })
     return flattenAdd(newExpr)
   }
 
@@ -255,10 +250,10 @@ function flattenAdd(expr: BoxedExpression): BoxedExpression {
   for (let op of expr.ops ?? []) {
     op = flattenAdd(op)
     if (op.operator === 'Add' || op.operator === 'Delimiter')
-      ops.push(...(op.ops ?? []).map(flattenAdd))
+      ops.push(...(isFunction(op) ? op.ops : []).map(flattenAdd))
     else ops.push(op)
   }
-  return engine.function('Add', ops, { canonical: false, structural: false })
+  return ce.function('Add', ops, { form: 'raw' })
 }
 
 /**
@@ -289,9 +284,9 @@ export function suppressionParentheses(
     'fractions',
   ])
   exp = clean(exp)
-  const arbre = engine.parse(exp, { canonical: false })
+  const arbre = ce.parse(exp, { form: 'raw' })
   const sp = flattenAdd(flattenAdd(arbre))
-  const parts = sp.ops ?? []
+  const parts = isFunction(sp) ? sp.ops : []
   let expressionFinale = ''
   for (let index = 0; index < parts.length; index++) {
     const latex = parts[index].latex.startsWith('-')
@@ -301,17 +296,19 @@ export function suppressionParentheses(
         : `+${parts[index].latex}`
     const hereIsPower = parts[index].getSubexpressions('Power')[0]
     let deg = 0
-    if (hereIsPower != null) {
+    if (isFunction(hereIsPower)) {
       deg = Number(hereIsPower.op2.value)
     } else {
       if (parts[index].operator === 'Square') {
         deg = 2
       } else if (parts[index].operator === 'Negate') {
-        if (parts[index].op1.isConstant) {
-          deg = 0
-        } else {
-          deg = 1
-        }
+        const partsIndex = parts[index]
+        if (isFunction(partsIndex))
+          if (partsIndex.op1.isConstant) {
+            deg = 0
+          } else {
+            deg = 1
+          }
       } else if (parts[index].isConstant) {
         deg = 0
       } else {
@@ -356,18 +353,20 @@ export function regroupeTermesMemeDegre(
   ])
   exp = clean(exp)
   if (exp.length === 0) return ''
-  const arbre = engine.parse(exp, { canonical: false })
-  const parts = flattenAdd(arbre).ops ?? []
+  const arbre = ce.parse(exp, { form: 'raw' })
+  const flattenAddArbre = flattenAdd(arbre)
+  const parts = isFunction(flattenAddArbre) ? flattenAddArbre.ops : []
   const allTheTerms: string[][] = []
   for (let index = 0; index < parts.length; index++) {
     let deg = 0
     const terme = parts[index]
-    if (terme.getSubexpressions('Power')[0] != null) {
-      deg = Number(terme.getSubexpressions('Power')[0].op2.numericValue)
+    const subExpression = terme.getSubexpressions('Power')[0]
+    if (isFunction(subExpression)) {
+      deg = subExpression.op2.re
     } else if (terme.operator === 'Square') {
       deg = 2
     } else if (terme.operator === 'Negate') {
-      if (terme.op1.isConstant) {
+      if (isFunction(terme) && terme.op1.isConstant) {
         deg = 0
       } else {
         deg = 1
@@ -403,9 +402,15 @@ export function regroupeTermesMemeDegre(
   return expressionFinale.join('+')
 }
 
-const isNumeric = (node: BoxedExpression) => node.isNumberLiteral
-const isSingleSymbol = (node: BoxedExpression) =>
-  node.symbol && node.symbol.length === 1 && node.latex.length === 1
+// const isNumeric = (node: Expression) => node.isNumberLiteral
+const isNumeric = (node: Expression) => node.isNumber
+// const isNumeric = (node: Expression) =>
+//  node.isNumber && isFunction(node) && node.ops.length === 0
+const isSingleSymbol = (node: Expression) =>
+  isSymbol(node) &&
+  node.symbol &&
+  node.symbol.length === 1 &&
+  node.latex.length === 1
 
 /**
  * @author Jean-Claude Lhote
@@ -437,19 +442,23 @@ export function developpe(
     'black',
   ]
   expr = clean(expr)
-  const arbre = engine.parse(expr)
+  const arbre = ce.parse(expr)
   if (!['Square', 'Multiply', 'Power'].includes(arbre.operator)) {
     // On ne développe que les produits où les carrés ici
     return expr.replaceAll('\\frac', '\\dfrac')
   }
-  if (arbre.operator === 'Square' || arbre.operator === 'Power') {
-    // on est sans doute en présence d'une égalité remarquable ?
-    if (arbre.op2.numericValue !== 2)
+  if (
+    isFunction(arbre) &&
+    (arbre.operator === 'Square' || arbre.operator === 'Power')
+  ) {
+    if (arbre.operator === 'Square' && arbre.op2?.re !== 2) {
       return expr.replaceAll('\\frac', '\\dfrac')
+    }
+    // on est sans doute en présence d'une égalité remarquable ?
     const interior = arbre.op1
     const somme = interior.operator === 'Add'
-    const terme1 = interior.op1
-    const terme2 = interior.op2
+    const terme1 = isFunction(interior) ? interior.op1 : ce.parse('')
+    const terme2 = isFunction(interior) ? interior.op2 : ce.parse('')
     const carre1 = isNumeric(terme1)
       ? terme1.latex.startsWith('-')
         ? `\\left( ${terme1.latex}\\right) ^2`
@@ -487,104 +496,121 @@ export function developpe(
         '\\dfrac',
       )
     } else {
-      const dp = engine.parse(dbleProd).simplify().latex
-      const c1 = engine.box(['Multiply', terme1, terme1]).evaluate().latex
-      const c2 = engine.box(['Multiply', terme2, terme2]).evaluate().latex
+      const dp = ce.parse(dbleProd).simplify().latex
+      const c1 = ce.box(['Multiply', terme1, terme1]).evaluate().latex
+      const c2 = ce.box(['Multiply', terme2, terme2]).evaluate().latex
       return `${miseEnForme(c1, couleurs[colorOffset], isColored)}${somme ? '+' : '-'}${miseEnForme(dp, couleurs[colorOffset + 1], isColored)}+${miseEnForme(c2, couleurs[colorOffset + 2], isColored)}`.replaceAll(
         '\\frac',
         '\\dfrac',
       )
     }
   } else {
-    // Ici c'est un produit classique.
-    const facteur1 = arbre.op1
-    const facteur2 = arbre.op2
-    const terme1 = facteur1.op1
-    const terme2 = facteur1.op2
-    const somme1 = facteur1.operator === 'Add'
-    const terme3 = facteur2.op1
-    const terme4 = facteur2.op2
-    const somme2 = facteur2.operator === 'Add'
-    const t1 = terme1.latex.startsWith('-')
-      ? `\\left( ${terme1.latex}\\right) `
-      : terme1.latex
-    const t2 = terme2.latex.startsWith('-')
-      ? `\\left( ${terme2.latex}\\right) `
-      : terme2.latex
+    if (isFunction(arbre)) {
+      const [facteur1, facteur2] = arbre.ops
 
-    const t3 = terme3.latex.startsWith('-')
-      ? `\\left( ${terme3.latex}\\right) `
-      : terme3.latex
-    const t4 = terme4.latex.startsWith('-')
-      ? `\\left( ${terme4.latex}\\right) `
-      : terme4.latex
-    if (level === 2) {
-      return `${miseEnForme(t1, couleurs[colorOffset], isColored)}\\times ${miseEnForme(t3, couleurs[colorOffset], isColored)}
+      if (isFunction(facteur1) && isFunction(facteur2)) {
+        const [terme1, terme2] = facteur1.ops
+        const [terme3, terme4] = facteur2.ops
+
+        // Ici c'est un produit classique.
+        // const facteur1 = arbre.op1
+        // const facteur2 = arbre.op2
+        // const terme1 = facteur1.op1
+        // const terme2 = facteur1.op2
+        const somme1 = facteur1.operator === 'Add'
+        // const terme3 = facteur2.op1
+        // const terme4 = facteur2.op2
+        const somme2 = facteur2.operator === 'Add'
+        const t1 = terme1.latex.startsWith('-')
+          ? `\\left( ${terme1.latex}\\right) `
+          : terme1.latex
+        const t2 = terme2.latex.startsWith('-')
+          ? `\\left( ${terme2.latex}\\right) `
+          : terme2.latex
+
+        const t3 = terme3.latex.startsWith('-')
+          ? `\\left( ${terme3.latex}\\right) `
+          : terme3.latex
+        const t4 = terme4.latex.startsWith('-')
+          ? `\\left( ${terme4.latex}\\right) `
+          : terme4.latex
+        if (level === 2) {
+          return `${miseEnForme(t1, couleurs[colorOffset], isColored)}\\times ${miseEnForme(t3, couleurs[colorOffset], isColored)}
     ${somme2 ? '+' : '-'}${miseEnForme(t1, couleurs[colorOffset + 1], isColored)}\\times ${miseEnForme(t4, couleurs[colorOffset + 1], isColored)}
     ${somme1 ? '+' : '-'}${miseEnForme(t2, couleurs[colorOffset + 1], isColored)}\\times ${miseEnForme(t3, couleurs[colorOffset + 1], isColored)}
     ${somme1 === somme2 ? '+' : '-'}${miseEnForme(t2, couleurs[colorOffset + 2], isColored)}\\times ${miseEnForme(t4, couleurs[colorOffset + 2], isColored)}`.replaceAll(
-        '\\frac',
-        '\\dfrac',
-      )
-    } else {
-      const prod1 = engine
-        .box(['Multiply', terme1, terme3])
-        .evaluate()
-        .simplify().latex
-      const prod2 = engine
-        .box(['Multiply', terme1, terme4])
-        .evaluate()
-        .simplify().latex
-      const prod3 = engine
-        .box(['Multiply', terme2, terme3])
-        .evaluate()
-        .simplify().latex
-      const prod4 = engine
-        .box(['Multiply', terme2, terme4])
-        .evaluate()
-        .simplify().latex
-      if (level === 1) {
-        const p2 = prod2.startsWith('-') ? `\\left( ${prod2}\\right)` : prod2
-        const p3 = prod3.startsWith('-') ? `\\left( ${prod3}\\right)` : prod3
-        const p4 = prod4.startsWith('-') ? `\\left( ${prod4}\\right)` : prod4
-        return `${miseEnForme(prod1, couleurs[colorOffset], isColored)}
+            '\\frac',
+            '\\dfrac',
+          )
+        } else {
+          const prod1 = ce
+            .box(['Multiply', terme1, terme3])
+            .evaluate()
+            .simplify().latex
+          const prod2 = ce
+            .box(['Multiply', terme1, terme4])
+            .evaluate()
+            .simplify().latex
+          const prod3 = ce
+            .box(['Multiply', terme2, terme3])
+            .evaluate()
+            .simplify().latex
+          const prod4 = ce
+            .box(['Multiply', terme2, terme4])
+            .evaluate()
+            .simplify().latex
+          if (level === 1) {
+            const p2 = prod2.startsWith('-')
+              ? `\\left( ${prod2}\\right)`
+              : prod2
+            const p3 = prod3.startsWith('-')
+              ? `\\left( ${prod3}\\right)`
+              : prod3
+            const p4 = prod4.startsWith('-')
+              ? `\\left( ${prod4}\\right)`
+              : prod4
+            return `${miseEnForme(prod1, couleurs[colorOffset], isColored)}
         ${somme2 ? '+' : '-'}${miseEnForme(p2, couleurs[colorOffset + 1], isColored)}
         ${somme1 ? '+' : '-'}${miseEnForme(p3, couleurs[colorOffset + 1], isColored)}
         ${somme1 === somme2 ? '+' : '-'}${miseEnForme(p4, couleurs[colorOffset + 1], isColored)}`.replaceAll(
-          '\\frac',
-          '\\dfrac',
-        )
-      } else {
-        const p2 = prod2.startsWith('-')
-          ? somme2
-            ? prod2
-            : `+${prod2.substring(1)}`
-          : somme2
-            ? `+${prod2}`
-            : `-${prod2}`
-        const p3 = prod3.startsWith('-')
-          ? somme1
-            ? prod3
-            : `+${prod3.substring(1)}`
-          : somme1
-            ? `+${prod3}`
-            : `-${prod3}`
-        const p4 = prod4.startsWith('-')
-          ? somme1 === somme2
-            ? prod4
-            : `+${prod4.substring(1)}`
-          : somme1 === somme2
-            ? `+${prod4}`
-            : `-${prod4}`
+              '\\frac',
+              '\\dfrac',
+            )
+          } else {
+            const p2 = prod2.startsWith('-')
+              ? somme2
+                ? prod2
+                : `+${prod2.substring(1)}`
+              : somme2
+                ? `+${prod2}`
+                : `-${prod2}`
+            const p3 = prod3.startsWith('-')
+              ? somme1
+                ? prod3
+                : `+${prod3.substring(1)}`
+              : somme1
+                ? `+${prod3}`
+                : `-${prod3}`
+            const p4 = prod4.startsWith('-')
+              ? somme1 === somme2
+                ? prod4
+                : `+${prod4.substring(1)}`
+              : somme1 === somme2
+                ? `+${prod4}`
+                : `-${prod4}`
 
-        return `${miseEnForme(prod1, couleurs[colorOffset], isColored)}
+            return `${miseEnForme(prod1, couleurs[colorOffset], isColored)}
         ${miseEnForme(p2, couleurs[colorOffset + 1], isColored)}
         ${miseEnForme(p3, couleurs[colorOffset + 2], isColored)}
         ${miseEnForme(p4, couleurs[colorOffset + 3], isColored)}`.replaceAll(
-          '\\frac',
-          '\\dfrac',
-        )
+              '\\frac',
+              '\\dfrac',
+            )
+          }
+        }
       }
+      return '' // retour impossible. C'est juste pour le ESLint
     }
+    return '' // retour impossible. C'est juste pour le ESLint
   }
 }

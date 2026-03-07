@@ -141,7 +141,6 @@ export default class DevelopperIdentitesRemarquables5 extends Exercice {
     for (
       let i = 0, texte = '', texteCorr, cpt = 0, a, b, c, typesDeQuestions;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       typesDeQuestions = listeTypeDeQuestions[i]
       b = this.sup === 1 ? 1 : randint(2, 9)
@@ -352,7 +351,7 @@ export default class DevelopperIdentitesRemarquables5 extends Exercice {
           handleAnswers(this, i, {
             reponse: {
               value: `${reduireAxPlusByPlusC(coefFinaux[0], coefFinaux[1], coefFinaux[2], 'x^2', 'x')}`,
-              options: { developpementEgal: true },
+              options: { expressionsForcementReduites: true },
             },
           })
           texte +=

@@ -1,5 +1,5 @@
-import { ComputeEngine } from '@cortex-js/compute-engine'
 import type { MathfieldElement } from 'mathlive'
+import ce from '../../lib/interactif/comparisonFunctions'
 import { remplisLesBlancs } from '../../lib/interactif/questionMathLive'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
@@ -14,7 +14,6 @@ export const interactifReady = true
 export const interactifType = 'custom'
 export const amcReady = true
 export const amcType = 'AMCHybride'
-const ce = new ComputeEngine()
 export const dateDePublication = '26/11/2022'
 export const dateDeModifImportante = '18/11/2023'
 // Modif EE : Passage en interactif donc passage en TS

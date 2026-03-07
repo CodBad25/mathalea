@@ -27,7 +27,7 @@ export default class ResoudreGraphiquementEquation extends ExerciceSimple {
     this.typeExercice = 'simple'
     this.nbQuestions = 1
     this.formatChampTexte = KeyboardType.clavierEnsemble
-    this.optionsDeComparaison = { ensembleDeNombres: true }
+    this.optionsDeComparaison = { intervalle: true }
     this.optionsChampTexte = { texteAvant: ' $S=$' }
   }
 

@@ -8,7 +8,6 @@ import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { polygone } from '../../lib/2d/polygones'
 import { repere } from '../../lib/2d/reperes'
 import { labelPoint } from '../../lib/2d/textes'
-import { approximatelyCompare } from '../../lib/interactif/comparisonFunctions'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
@@ -39,7 +38,7 @@ export default class LongueurEtAire extends ExerciceSimple {
     super()
     this.nbQuestions = 1
     this.interactif = true
-    this.compare = approximatelyCompare
+    this.optionsDeComparaison = { approximatelyCompare: true }
   }
 
   nouvelleVersion(): void {

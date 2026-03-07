@@ -1,9 +1,9 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { ecritureAlgebrique } from '../../../lib/outils/ecritures'
 import { choice } from '../../../lib/outils/arrayOutils'
+import { ecritureAlgebrique } from '../../../lib/outils/ecritures'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Résoudre une inéquation du second degré'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -25,6 +25,7 @@ export default class Can2025N5Q25 extends ExerciceSimple {
     this.nbQuestions = 1
     this.formatChampTexte = KeyboardType.clavierEnsemble
     this.canOfficielle = true
+    this.optionsDeComparaison = { intervalle: true }
   }
 
   nouvelleVersion() {
@@ -46,7 +47,7 @@ export default class Can2025N5Q25 extends ExerciceSimple {
     }
     if ((inégalité === '>' && a > 0) || (inégalité === '<' && a < 0)) {
       solution1 = [
-        `$\\mathbb{R}\\\\{${b}\\}$`,
+        `\\mathbb{R}\\\\{${b}\\}`,
         `]-\\infty;${a}[ \\cup ]${a};+\\infty[`,
       ]
       this.correction += ` $${miseEnEvidence(`\\mathbb{R}\\smallsetminus\\{${texNombre(b)}\\}`)}$.`
@@ -54,16 +55,16 @@ export default class Can2025N5Q25 extends ExerciceSimple {
       (inégalité === '\\geqslant' && a > 0) ||
       (inégalité === '\\leqslant' && a < 0)
     ) {
-      solution1 = ['$\\mathbb{R}$', ']-\\infty;+\\infty[']
+      solution1 = ['\\mathbb{R}', ']-\\infty;+\\infty[']
       this.correction += ` $${miseEnEvidence('\\mathbb{R}')}$.`
     } else if ((inégalité === '<' && a > 0) || (inégalité === '>' && a < 0)) {
-      solution1 = '$\\emptyset$'
+      solution1 = '\\emptyset'
       this.correction += ` $${miseEnEvidence('\\emptyset')}$.`
     } else if (
       (inégalité === '\\leqslant' && a > 0) ||
       (inégalité === '\\geqslant' && a < 0)
     ) {
-      solution1 = `$\\left\\lbrace${b}\\right\\rbrace$`
+      solution1 = `\\left\\lbrace${b}\\right\\rbrace`
       this.correction += ` $${miseEnEvidence(`\\{${texNombre(b)}\\}`)}$.`
     }
     this.reponse = solution1

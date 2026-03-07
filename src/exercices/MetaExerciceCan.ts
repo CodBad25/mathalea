@@ -264,7 +264,8 @@ export default class MetaExercice extends Exercice {
                   handleAnswers(
                     this,
                     indexQuestion,
-                    Object.assign(reponse, { options }),
+                    // Object.assign(reponse, { options }),
+                    { reponse: { value: reponse.reponse!.value, options } },
                   )
                 } else {
                   handleAnswers(this, indexQuestion, {

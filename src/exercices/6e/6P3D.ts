@@ -3,7 +3,10 @@ import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { tableau } from '../../lib/2d/tableau'
 import { texMasse, texPrix } from '../../lib/format/style'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import {
+  handleAnswers,
+  setReponse,
+} from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import { sp } from '../../lib/outils/outilString'
@@ -110,7 +113,6 @@ export default class ProportionnaliteParLineariteTableau extends Exercice {
     for (
       let i = 0, texte, texteCorr, texteApres, monTableau, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       a = choice([1, 2, 3])
       // Boucle principale où i+1 correspond au numéro de la question
@@ -168,7 +170,11 @@ export default class ProportionnaliteParLineariteTableau extends Exercice {
                 ],
               ],
             })
-            setReponse(this, i, pg)
+            if (context.isAmc) setReponse(this, i, pg)
+            else
+              handleAnswers(this, i, {
+                reponse: { value: pg, options: { texteSansCasse: true } },
+              })
             texteApres = '€'
           } else if (a === 2) {
             index = randint(0, 7)
@@ -222,7 +228,11 @@ export default class ProportionnaliteParLineariteTableau extends Exercice {
                 ],
               ],
             })
-            setReponse(this, i, pg)
+            if (context.isAmc) setReponse(this, i, pg)
+            else
+              handleAnswers(this, i, {
+                reponse: { value: pg, options: { texteSansCasse: true } },
+              })
             texteApres = 'kg'
           } else {
             index = randint(0, 7)
@@ -275,7 +285,11 @@ export default class ProportionnaliteParLineariteTableau extends Exercice {
                 ],
               ],
             })
-            setReponse(this, i, pg)
+            if (context.isAmc) setReponse(this, i, pg)
+            else
+              handleAnswers(this, i, {
+                reponse: { value: pg, options: { texteSansCasse: true } },
+              })
             texteApres = 'cm$^3$'
           }
           break
@@ -326,7 +340,11 @@ export default class ProportionnaliteParLineariteTableau extends Exercice {
                 ],
               ],
             })
-            setReponse(this, i, pp)
+            if (context.isAmc) setReponse(this, i, pp)
+            else
+              handleAnswers(this, i, {
+                reponse: { value: pp, options: { texteSansCasse: true } },
+              })
             texteApres = '€'
           } else if (a === 2) {
             np = randint(1, 10)
@@ -378,7 +396,11 @@ export default class ProportionnaliteParLineariteTableau extends Exercice {
                 ],
               ],
             })
-            setReponse(this, i, pp)
+            if (context.isAmc) setReponse(this, i, pp)
+            else
+              handleAnswers(this, i, {
+                reponse: { value: pp, options: { texteSansCasse: true } },
+              })
             texteApres = 'm$^2$'
           } else {
             index = randint(0, 7)
@@ -432,7 +454,11 @@ export default class ProportionnaliteParLineariteTableau extends Exercice {
                 ],
               ],
             })
-            setReponse(this, i, pp)
+            if (context.isAmc) setReponse(this, i, pp)
+            else
+              handleAnswers(this, i, {
+                reponse: { value: pp, options: { texteSansCasse: true } },
+              })
             texteApres = 'kg'
           }
           break
@@ -516,7 +542,11 @@ export default class ProportionnaliteParLineariteTableau extends Exercice {
                 ],
               ],
             })
-            setReponse(this, i, pg)
+            if (context.isAmc) setReponse(this, i, pg)
+            else
+              handleAnswers(this, i, {
+                reponse: { value: pg, options: { texteSansCasse: true } },
+              })
             texteApres = '€'
           } else if (a === 2) {
             pu = randint(40, 60)
@@ -597,7 +627,11 @@ export default class ProportionnaliteParLineariteTableau extends Exercice {
                 ],
               ],
             })
-            setReponse(this, i, pg)
+            if (context.isAmc) setReponse(this, i, pg)
+            else
+              handleAnswers(this, i, {
+                reponse: { value: pg, options: { texteSansCasse: true } },
+              })
             texteApres = 'm$^2$'
           } else {
             index = randint(0, 7)
@@ -680,7 +714,11 @@ export default class ProportionnaliteParLineariteTableau extends Exercice {
                 ],
               ],
             })
-            setReponse(this, i, pg)
+            if (context.isAmc) setReponse(this, i, pg)
+            else
+              handleAnswers(this, i, {
+                reponse: { value: pg, options: { texteSansCasse: true } },
+              })
             texteApres = 'kg'
           }
           break
@@ -715,7 +753,14 @@ export default class ProportionnaliteParLineariteTableau extends Exercice {
               "On ne peut pas savoir car la pointure n'est pas proportionnelle à l'âge."
             texteApres = ''
           }
-          setReponse(this, i, ['\\text{N}', 'n', 'N'])
+          if (context.isAmc) setReponse(this, i, ['\\text{N}', 'N'])
+          else
+            handleAnswers(this, i, {
+              reponse: {
+                value: ['\\text{N}', 'N'],
+                options: { texteSansCasse: true },
+              },
+            })
           break
       }
       if (listeTypeQuestions[i] !== 4 && monTableau != null) {

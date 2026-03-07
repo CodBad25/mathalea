@@ -1,4 +1,4 @@
-import engine from '../interactif/comparisonFunctions'
+import ce from '../interactif/comparisonFunctions'
 
 /**
  * Calculatrice Web Component autonome
@@ -502,7 +502,7 @@ class CalculatorElement extends HTMLElement {
         .replace(/\s+/g, '')
 
       // Utiliser le ComputeEngine du projet pour évaluer l'expression
-      const parsed = engine.parse(evalExpr)
+      const parsed = ce.parse(evalExpr)
       const evaluated = parsed.evaluate()
 
       // Convertir le résultat en nombre

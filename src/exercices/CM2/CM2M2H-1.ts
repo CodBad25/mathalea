@@ -1,5 +1,4 @@
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { equalFractionCompareSansRadical } from '../../lib/interactif/comparisonFunctions'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
@@ -86,7 +85,7 @@ class CalculsFractionsSimples extends Exercice {
         )
         if (this.interactif)
           handleAnswers(this, i, {
-            reponse: { value, compare: equalFractionCompareSansRadical },
+            reponse: { value, options: { fractionEgale: true } },
           })
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr

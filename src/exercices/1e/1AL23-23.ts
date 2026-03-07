@@ -1,7 +1,8 @@
+import { expand } from '@cortex-js/compute-engine'
 import { createList } from '../../lib/format/lists'
 import { texteGras } from '../../lib/format/style'
-import engine from '../../lib/interactif/comparisonFunctions'
 
+import ce from '../../lib/interactif/comparisonFunctions'
 import {
   ecritureAlgebrique,
   ecritureAlgebriqueSauf1,
@@ -179,7 +180,7 @@ export default class EquationDuSecondDegreAvecUnParametre extends Exercice {
     const deltaExpr = `(${coefficients.b})^2-4\\times ${parenthesesSiSommeOuDifference(coefficients.a)}\\times ${parenthesesSiSommeOuDifference(coefficients.c)}`
     texteCorr += `Le discriminant vaut $\\Delta=b^2-4\\times a\\times c = ${deltaExpr}$.<br>`
 
-    const delta2 = engine.parse(deltaExpr).expand().simplify().latex
+    const delta2 = expand(deltaExpr).simplify().latex
     texteCorr += `Ou encore, sous forme développée : $\\Delta = ${delta2}$<br>`
 
     // Cas où le discriminant est du premier degré
@@ -430,7 +431,7 @@ export default class EquationDuSecondDegreAvecUnParametre extends Exercice {
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
       const { equation, coefficients, coeffsDiscriminant, params } =
         this.genererCoefficients(typesDeQuestions[i])
-      const expr0 = engine.parse(equation).simplify().latex
+      const expr0 = ce.parse(equation).simplify().latex
       const texte = `$${expr0}=0$`
 
       // Cas particuliers avant la correction générale

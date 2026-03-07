@@ -384,6 +384,7 @@ export default class AssocierGraphiqueSysteme extends Exercice {
             i,
             '1\\rightarrow %{champ1} \\quad 2\\rightarrow %{champ2} \\quad 3\\rightarrow %{champ3}',
           )
+        const letters = ['A', 'B', 'C']
         handleAnswers(
           this,
           i,
@@ -393,19 +394,16 @@ export default class AssocierGraphiqueSysteme extends Exercice {
               1,
             ],
             champ1: {
-              value: ['$A$', '$B$', '$C$'][
-                lass.findIndex((item) => item === '1')
-              ],
+              value: `${letters[lass.findIndex((item) => item === '1')]}`,
+              options: { texteSansCasse: true },
             },
             champ2: {
-              value: ['$A$', '$B$', '$C$'][
-                lass.findIndex((item) => item === '2')
-              ],
+              value: `${letters[lass.findIndex((item) => item === '2')]}`,
+              options: { texteSansCasse: true },
             },
             champ3: {
-              value: ['$A$', '$B$', '$C$'][
-                lass.findIndex((item) => item === '3')
-              ],
+              value: `${letters[lass.findIndex((item) => item === '3')]}`,
+              options: { texteSansCasse: true },
             },
           },
           { formatInteractif: 'fillInTheBlank' },

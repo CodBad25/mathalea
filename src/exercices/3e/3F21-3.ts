@@ -7,7 +7,6 @@ import { segment } from '../../lib/2d/segmentsVecteurs'
 import { texteParPoint } from '../../lib/2d/textes'
 import { milieu } from '../../lib/2d/utilitairesPoint'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { functionCompare } from '../../lib/interactif/comparisonFunctions'
 import {
   handleAnswers,
   setReponse,
@@ -241,8 +240,7 @@ export default class PenteEtOrdonneeOrigineDroite extends Exercice {
         {
           reponse: {
             value: `\\frac{${num}}{${den}}x+${b}`,
-            options: { variable: 'x' },
-            compare: functionCompare,
+            options: { fonction: true, variable: 'x' },
           },
         },
       )

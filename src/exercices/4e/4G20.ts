@@ -20,10 +20,11 @@ import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 import { RedactionPythagore } from './_pythagore'
 
+import { isFunction } from '@cortex-js/compute-engine'
 import type { MathfieldElement } from 'mathlive'
 import { bleuMathalea, orangeMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import engine from '../../lib/interactif/comparisonFunctions'
+import ce from '../../lib/interactif/comparisonFunctions'
 import { ordreAlphabetique } from '../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
@@ -42,128 +43,181 @@ export const interactifType = 'mathLive'
  */
 export function pythagoreCompare(input: string, goodAnswer: string) {
   input = input.replaceAll(/([A-Z]{2})/g, '\\mathrm{$1}')
-  const parsedInput = engine.parse(input)
-  const parsedAnswer = engine.parse(goodAnswer)
-  if (parsedAnswer.operator === 'Equal') {
-    if (parsedInput.operator !== 'Equal')
-      return {
-        isOk: false,
-        feedback: 'Il faut saisir une égalité de Pythagore.',
-      }
-    // on a deux égalités. c'est le cas écrire l'égalité
-    const inputOps = parsedInput.ops
-    const answerOps = parsedAnswer.ops
-    if (inputOps != null && answerOps != null) {
-      const inputM1 = inputOps[0]
-      const inputM2 = inputOps[1]
-      const answerSum = answerOps[0]
-      const answerHypo = answerOps[1]
-      if (inputM1 && inputM2) {
-        const inputHypo = ['Power', 'Square'].includes(inputM1.operator)
-          ? inputM1
-          : inputM2
-        const inputSum = ['Power', 'Square'].includes(inputM1.operator)
-          ? inputM2
-          : inputM1
-        const inputT1 = inputSum.ops![0] // un ['Square','BC'] par exemple
-        const inputT2 = inputSum.ops![1]
-        const answerT1 = answerSum.ops![0]
-        const answerT2 = answerSum.ops![1]
-        for (const term of [inputT1, inputT2]) {
-          // On ne vérifie pas la réponse, c'est nous qui l'avons écrite
-          if (!['Square', 'Power'].includes(term.operator)) {
-            return { isOk: false, feedback: 'Il manque au moins un carré.' }
+  const parsedInput = ce.parse(input)
+  const parsedAnswer = ce.parse(goodAnswer)
+  if (isFunction(parsedInput) && isFunction(parsedAnswer)) {
+    if (parsedAnswer.operator === 'Equal') {
+      if (parsedInput.operator !== 'Equal')
+        return {
+          isOk: false,
+          feedback: 'Il faut saisir une égalité de Pythagore.',
+        }
+      // on a deux égalités. c'est le cas écrire l'égalité
+      const inputOps = parsedInput.ops
+      const answerOps = parsedAnswer.ops
+      if (inputOps != null && answerOps != null) {
+        const inputM1 = inputOps[0]
+        const inputM2 = inputOps[1]
+        const answerSum = answerOps[0]
+        const answerHypo = answerOps[1]
+        if (inputM1 && inputM2) {
+          const inputHypo = ['Power', 'Square'].includes(inputM1.operator)
+            ? inputM1
+            : inputM2
+          const inputSum = ['Power', 'Square'].includes(inputM1.operator)
+            ? inputM2
+            : inputM1
+          if (
+            isFunction(inputHypo) &&
+            isFunction(inputSum) &&
+            isFunction(answerSum) &&
+            isFunction(answerHypo)
+          ) {
+            const inputT1 = inputSum.ops![0] // un ['Square','BC'] par exemple
+            const inputT2 = inputSum.ops![1]
+            const answerT1 = answerSum.ops![0]
+            const answerT2 = answerSum.ops![1]
+            for (const term of [inputT1, inputT2]) {
+              // On ne vérifie pas la réponse, c'est nous qui l'avons écrite
+              if (!['Square', 'Power'].includes(term.operator)) {
+                return { isOk: false, feedback: 'Il manque au moins un carré.' }
+              }
+            }
+
+            // c'est la même longueur pour l'hypoténuse ?
+            if (
+              ordreAlphabetique(inputHypo.ops![0].toString()) !==
+              ordreAlphabetique(answerHypo.ops![0].toString())
+            )
+              return {
+                isOk: false,
+                feedback: "L'hypoténuse est mal identifiée.",
+              }
+            // l'élève a-t-il bien mis l'hypoténuse au carré ?
+            if (inputHypo.ops![1].toString() !== '2')
+              return {
+                isOk: false,
+                feedback: "L'hypoténuse doit être mise au carré.",
+              }
+            if (inputSum.operator !== 'Add')
+              return {
+                isOk: false,
+                feedback:
+                  "Le carré de l'hypoténuse est égal à la $somme$ des carrés des deux autres côtés.",
+              }
+            // le premier terme de la saisie est-il un carré ?
+            if (
+              isFunction(inputT1) &&
+              isFunction(inputT2) &&
+              isFunction(answerT1) &&
+              isFunction(answerT2)
+            ) {
+              if (!['Square', 'Power'].includes(inputT1.operator))
+                return { isOk: false, feedback: 'Il manque au moins un carré.' }
+              const L1 = ordreAlphabetique(inputT1.ops![0].toString()) // on met la longueur saisie dans l'ordre alphabétique
+              // le deuxième terme de la saisie est-il un carré ?
+              if (!['Square', 'Power'].includes(inputT2.operator))
+                return { isOk: false, feedback: 'Il manque au moins un carré.' }
+              const L2 = ordreAlphabetique(inputT2.ops![0].toString()) // on met la longueur saisie dans l'ordre alphabétique
+              const LL1 = ordreAlphabetique(answerT1.ops![0].toString()) // Ces longueurs sont déjà dans l'ordre alphabétique
+              const LL2 = ordreAlphabetique(answerT2.ops![0].toString())
+              // on teste les deux possibilités identiques ou croisées
+              if ((LL1 === L1 && LL2 === L2) || (LL1 === L2 && LL2 === L1))
+                return { isOk: true }
+              // else return { isOk: false, feedback: 'Regarde bien la correction.' }
+            }
+            return { isOk: false }
           }
+          return { isOk: false }
+        }
+      }
+    } else {
+      // on a une réponse sans égalité, il faut un input sans égalité
+      // EE : computeEngine 0.47.0
+      // L'usage de mathrm rend le parse problématique alphabétiquement avec un negate d'où les 4 nouvelles lignes
+      // et la suppression de l'ordre alphabétique qui n'a plus d'intérêt.
+      /* input = input.replace(/\\mathrm\{([^}]+)\}/g, '{$1}')
+    goodAnswer = goodAnswer.replace(/\\mathrm\{([^}]+)\}/g, '{$1}')
+    parsedInput = ce.parse(input)
+    parsedAnswer = ce.parse(goodAnswer) */
+
+      if (
+        !(isFunction(parsedInput) && isFunction(parsedAnswer)) ||
+        parsedInput.operator !== 'Add'
+      ) {
+        return {
+          isOk: false,
+          feedback:
+            'Il faut saisir une somme ou une différence de deux carrés.',
+        }
+      }
+
+      const isSubX = parsedAnswer.ops![0]
+      const isSub = isSubX.operator === 'Negate'
+      const inputOp = parsedInput.ops![0].operator
+
+      if (isSub && inputOp !== 'Negate')
+        return {
+          isOk: false,
+          feedback: 'Il fallait saisir une différence de deux carrés.',
         }
 
-        // c'est la même longueur pour l'hypoténuse ?
-        if (
-          ordreAlphabetique(inputHypo.ops![0].toString()) !==
-          ordreAlphabetique(answerHypo.ops![0].toString())
+      if (!isSub && inputOp === 'Negate')
+        return {
+          isOk: false,
+          feedback: 'Il fallait saisir une somme de deux carrés.',
+        }
+
+      if (parsedAnswer.operator !== parsedInput.operator)
+        return {
+          isOk: false,
+          feedback: "L'opération n'est pas une somme ou une différence.",
+        }
+
+      const inputT1 = parsedInput.ops![1]
+      const answerT1 = parsedAnswer.ops![1]
+
+      /**
+       * Retire le Negate si présent, sinon retourne le terme tel quel
+       */
+
+      let inputT2 = parsedInput.ops![0]
+      if (isSub && isFunction(parsedInput.ops![0]))
+        inputT2 = parsedInput.ops![0].ops![0]
+
+      let answerT2 = parsedAnswer.ops![0]
+      if (isSub && isFunction(parsedAnswer.ops![0]))
+        answerT2 = parsedAnswer.ops![0].ops![0]
+
+      for (const term of [inputT1, inputT2]) {
+        if (!['Square', 'Power'].includes(term.operator)) {
+          return { isOk: false, feedback: 'Il manque au moins un carré.' }
+        }
+      }
+
+      if (
+        isFunction(inputT1) &&
+        isFunction(inputT2) &&
+        isFunction(answerT1) &&
+        isFunction(answerT2)
+      ) {
+        const L1 = ordreAlphabetique(inputT1.ops![0].toString()).replaceAll(
+          '"',
+          '',
         )
-          return { isOk: false, feedback: "L'hypoténuse est mal identifiée." }
-        // l'élève a-t-il bien mis l'hypoténuse au carré ?
-        if (inputHypo.ops![1].toString() !== '2')
-          return {
-            isOk: false,
-            feedback: "L'hypoténuse doit être mise au carré.",
-          }
-        if (inputSum.operator !== 'Add')
-          return {
-            isOk: false,
-            feedback:
-              "Le carré de l'hypoténuse est égal à la $somme$ des carrés des deux autres côtés.",
-          }
-        // le premier terme de la saisie est-il un carré ?
-        if (!['Square', 'Power'].includes(inputT1.operator))
-          return { isOk: false, feedback: 'Il manque au moins un carré.' }
-        const L1 = ordreAlphabetique(inputT1.ops![0].toString()) // on met la longueur saisie dans l'ordre alphabétique
-        // le deuxième terme de la saisie est-il un carré ?
-        if (!['Square', 'Power'].includes(inputT2.operator))
-          return { isOk: false, feedback: 'Il manque au moins un carré.' }
-        const L2 = ordreAlphabetique(inputT2.ops![0].toString()) // on met la longueur saisie dans l'ordre alphabétique
-        const LL1 = ordreAlphabetique(answerT1.ops![0].toString()) // Ces longueurs sont déjà dans l'ordre alphabétique
-        const LL2 = ordreAlphabetique(answerT2.ops![0].toString())
-        // on teste les deux possibilités identiques ou croisées
-        if ((LL1 === L1 && LL2 === L2) || (LL1 === L2 && LL2 === L1))
+        const L2 = ordreAlphabetique(inputT2.ops![0].toString()).replaceAll(
+          '"',
+          '',
+        )
+        const LL1 = answerT1.ops![0].toString().replaceAll('"', '')
+        const LL2 = answerT2.ops![0].toString().replaceAll('"', '')
+
+        if ((LL1 === L1 && LL2 === L2) || (LL1 === L2 && LL2 === L1 && !isSub))
           return { isOk: true }
-        // else return { isOk: false, feedback: 'Regarde bien la correction.' }
       }
+
+      return { isOk: false }
     }
-  } else {
-    // on a une réponse sans égalité, il faut un input sans égalité
-    // EE : computeEngine 0.47.0
-    // L'usage de mathrm rend le parse problématique alphabétiquement avec un negate d'où les 4 nouvelles lignes
-    // et la suppression de l'ordre alphabétique qui n'a plus d'intérêt.
-    /* input = input.replace(/\\mathrm\{([^}]+)\}/g, '{$1}')
-    goodAnswer = goodAnswer.replace(/\\mathrm\{([^}]+)\}/g, '{$1}')
-    parsedInput = engine.parse(input)
-    parsedAnswer = engine.parse(goodAnswer) */
-
-    if (parsedInput.operator !== 'Add')
-      return {
-        isOk: false,
-        feedback: 'Il faut saisir une somme ou une différence de deux carrés.',
-      }
-    const isSub = parsedAnswer.ops![0].operator === 'Negate'
-    const inputOp = parsedInput.ops![0].operator
-    if (isSub && inputOp !== 'Negate')
-      return {
-        isOk: false,
-        feedback: 'Il fallait saisir une différence de deux carrés.',
-      }
-    if (!isSub && inputOp === 'Negate')
-      return {
-        isOk: false,
-        feedback: 'Il fallait saisir une somme de deux carrés.',
-      }
-    if (parsedAnswer.operator !== parsedInput.operator)
-      return {
-        isOk: false,
-        feedback: "L'opération n'est pas une somme ou une différence.",
-      }
-
-    const inputT1 = parsedInput.ops![1] // un ['Square','BC'] par exemple
-    const inputT2 = isSub ? parsedInput.ops![0].ops![0] : parsedInput.ops![0]
-    const answerT1 = parsedAnswer.ops![1]
-    const answerT2 = isSub ? parsedAnswer.ops![0].ops![0] : parsedAnswer.ops![0]
-    for (const term of [inputT1, inputT2]) {
-      // On vérifie qu'il y a bien des carrés (on ne vérifie pas la réponse, c'est nous qui l'avons écrite)
-      if (!['Square', 'Power'].includes(term.operator)) {
-        return { isOk: false, feedback: 'Il manque au moins un carré.' }
-      }
-    }
-
-    const L1 = ordreAlphabetique(inputT1.ops![0].toString()).replaceAll('"', '') // on met la longueur saisie dans l'ordre alphabétique
-    const L2 = ordreAlphabetique(inputT2.ops![0].toString()).replaceAll('"', '') // on met la longueur saisie dans l'ordre alphabétique
-    // const L1 = inputT1.ops![0].toString().replaceAll('"', '') // on met la longueur saisie dans l'ordre alphabétique
-    // const L2 = inputT2.ops![0].toString().replaceAll('"', '') // on met la longueur saisie dans l'ordre alphabétique
-    const LL1 = answerT1.ops![0].toString().replaceAll('"', '') // Ces longueurs sont déjà dans l'ordre alphabétique
-    const LL2 = answerT2.ops![0].toString().replaceAll('"', '')
-
-    if ((LL1 === L1 && LL2 === L2) || (LL1 === L2 && LL2 === L1 && !isSub))
-      return { isOk: true }
-    // else return { isOk: false, feedback: 'Regarde bien la correction.' }
   }
   // return { isOk: parsedInput.isEqual(parsedAnswer), feedback: '' }
   return { isOk: false, feedback: 'Regarde bien la correction.' }

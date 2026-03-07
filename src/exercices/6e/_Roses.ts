@@ -1,8 +1,8 @@
-import type { BoxedExpression } from '@cortex-js/compute-engine'
+import type { Expression } from '@cortex-js/compute-engine'
 import type { MathfieldElement } from 'mathlive'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import engine from '../../lib/interactif/comparisonFunctions'
+import ce from '../../lib/interactif/comparisonFunctions'
 import {
   ajouteChampTexteMathLive,
   remplisLesBlancs,
@@ -275,10 +275,10 @@ export default class ExoRose extends Exercice {
           : this.roses[question].resultats[
               this.indexInconnue[question]
             ].toString()
-      const resultParsed = engine.parse(stringResultat)
+      const resultParsed = ce.parse(stringResultat)
       return resultParsed === null
         ? false
-        : (resultParsed as BoxedExpression).isSame(engine.parse(stringSaisie))
+        : (resultParsed as Expression).isSame(ce.parse(stringSaisie))
     } else if (this.type === 'can1') {
       stringSaisie = saisies[0]
       stringResultat =
@@ -291,7 +291,7 @@ export default class ExoRose extends Exercice {
               .toLatex()
               .replace('dfrac', 'frac')
           : this.roses[question].values[this.indexInconnue[question]].toString()
-      return engine.parse(stringSaisie).isSame(engine.parse(stringResultat))
+      return ce.parse(stringSaisie).isSame(ce.parse(stringResultat))
     } else {
       for (let i = 0; i < taille; i++) {
         stringSaisie = saisies[i]
@@ -313,14 +313,14 @@ export default class ExoRose extends Exercice {
                   saisies[(i + 1) % this.nombreDeValeurs],
                 )
         }
-        const saisieParsed = engine.parse(stringSaisie.replace('dfrac', 'frac'))
+        const saisieParsed = ce.parse(stringSaisie.replace('dfrac', 'frac'))
 
         resultatOK = Boolean(
           resultatOK &&
           (saisieParsed == null
             ? false
             : saisieParsed.isEqual(
-                engine.parse(stringResultat) ?? engine.parse('NaN'),
+                ce.parse(stringResultat) ?? ce.parse('NaN'),
               )),
         )
       }

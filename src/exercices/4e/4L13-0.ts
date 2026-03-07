@@ -6,7 +6,6 @@ import { nommePolygone } from '../../lib/2d/polygones'
 import { polygoneRegulierParCentreEtRayon } from '../../lib/2d/polygonesParticuliers'
 import { segment } from '../../lib/2d/segmentsVecteurs'
 import { vide2d } from '../../lib/2d/Vide2d'
-import { egaliteCompare } from '../../lib/interactif/comparisonFunctions'
 import { ajouteQuestionMathlive } from '../../lib/interactif/questionMathLive'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { creerNomDePolygone } from '../../lib/outils/outilString'
@@ -195,7 +194,7 @@ export default class MettreEnEquationSansResoudre extends Exercice {
             objetReponse: {
               reponse: {
                 value: equation,
-                compare: egaliteCompare,
+                options: { egaliteExpression: true },
               },
             },
           })

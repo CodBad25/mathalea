@@ -1,5 +1,4 @@
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { functionCompare } from '../../lib/interactif/comparisonFunctions'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { Polynome } from '../../lib/mathFonctions/Polynome'
@@ -11,8 +10,7 @@ import { obtenirListeFractionsIrreductibles } from '../../modules/fractions'
 import { gestionnaireFormulaireTexte, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-export const titre =
-  'Dériver une fonction du type $\\lambda u$'
+export const titre = 'Dériver une fonction du type $\\lambda u$'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const uuid = 'ebd8a'
@@ -230,8 +228,7 @@ class DerivationFonctionsUsuellesEtendue extends Exercice {
         handleAnswers(this, i, {
           reponse: {
             value: reponse,
-            options: { variable: 'x', domaine: [-10, 10] },
-            compare: functionCompare,
+            options: { fonction: true, variable: 'x', domaine: [-10, 10] },
           },
         })
         i++

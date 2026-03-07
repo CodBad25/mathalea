@@ -3,7 +3,6 @@ import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { lectureAntecedent } from '../../lib/2d/LectureAntecedent'
 import { lectureImage } from '../../lib/2d/LectureImage'
 import { repere } from '../../lib/2d/reperes'
-import { approximatelyCompare } from '../../lib/interactif/comparisonFunctions'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { arrondi } from '../../lib/outils/nombres'
@@ -43,7 +42,7 @@ export default class ProblemeDePrix extends ExerciceSimple {
     super()
     this.nbQuestions = 1
     this.interactif = true
-    this.compare = approximatelyCompare
+    this.optionsDeComparaison = { approximatelyCompare: true }
   }
 
   nouvelleVersion(): void {

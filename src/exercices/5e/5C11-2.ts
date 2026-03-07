@@ -1,6 +1,6 @@
 import type { MathfieldElement } from 'mathlive'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { checkLeCompteEstBon } from '../../lib/interactif/comparisonFunctions'
+import { handleLeCompteEstBon } from '../../lib/interactif/comparisonFunctions'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
@@ -54,7 +54,6 @@ export default class ÉcrireUneExpressionMathador extends Exercice {
     for (
       let i = 0, texte, texteCorr, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       // traduire un calcul mathador
       solutionMathador = TrouverSolutionMathador(30, 90)
@@ -103,7 +102,7 @@ export default class ÉcrireUneExpressionMathador extends Exercice {
         handleAnswers(this, i, {
           reponse: {
             value: [...expression, ...solutionMathador[4]],
-            options: { calculFormel: true },
+            options: { expressionNumerique: true },
           },
         })
       }
@@ -153,7 +152,7 @@ export default class ÉcrireUneExpressionMathador extends Exercice {
     const input = mf.value
 
     // Partie test de la saisie de l'utilisateur
-    const { isOk, feedback } = checkLeCompteEstBon(
+    const { isOk, feedback } = handleLeCompteEstBon(
       input,
       this.tirage[i],
       this.cible[i],

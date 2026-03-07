@@ -954,6 +954,7 @@ fois $${miseEnEvidence(texNombre(liste[alea1].qtt_surface[alea3]), bleuMathalea)
       rapport[alea5] * liste[alea1].qtt_surface[alea3] > surfaceFinale2
         ? 'O'
         : 'N',
+      { formatInteractif: 'ignorerCasse' },
     )
   } else {
     exo.autoCorrection[i] = {

@@ -4,7 +4,6 @@ import { segment } from '../../../lib/2d/segmentsVecteurs'
 import { labelPoint, texteParPosition } from '../../../lib/2d/textes'
 import { milieu } from '../../../lib/2d/utilitairesPoint'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { functionCompare } from '../../../lib/interactif/comparisonFunctions'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { reduireAxPlusB, rienSi1 } from '../../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
@@ -32,8 +31,6 @@ export default class EnFonctionDeAire extends ExerciceSimple {
     this.typeExercice = 'simple'
     this.nbQuestions = 1
     this.formatChampTexte = KeyboardType.clavierDeBaseAvecVariable
-
-    this.compare = functionCompare
   }
 
   nouvelleVersion() {
@@ -106,8 +103,7 @@ export default class EnFonctionDeAire extends ExerciceSimple {
             this.reponse = {
               reponse: {
                 value: reduireAxPlusB(b1, 0),
-                options: { variable: 'x' },
-                compare: functionCompare,
+                options: { fonction: true, variable: 'x' },
               },
             }
             this.question +=
@@ -117,8 +113,7 @@ export default class EnFonctionDeAire extends ExerciceSimple {
             this.reponse = {
               reponse: {
                 value: reduireAxPlusB(-b1, c * b),
-                options: { variable: 'x' },
-                compare: functionCompare,
+                options: { fonction: true, variable: 'x' },
               },
             }
             this.question +=
@@ -209,8 +204,7 @@ export default class EnFonctionDeAire extends ExerciceSimple {
             this.reponse = {
               reponse: {
                 value: reduireAxPlusB(-b, b ** 2),
-                options: { variable: 'x' },
-                compare: functionCompare,
+                options: { fonction: true, variable: 'x' },
               },
             }
             this.question +=
@@ -222,8 +216,7 @@ export default class EnFonctionDeAire extends ExerciceSimple {
             this.reponse = {
               reponse: {
                 value: reduireAxPlusB(b, a ** 2),
-                options: { variable: 'x' },
-                compare: functionCompare,
+                options: { fonction: true, variable: 'x' },
               },
             }
             this.question +=

@@ -22,6 +22,7 @@ export const dateDeModifImportante = '13/08/2024'
 
 // Modification la 1/11/23 par Rémi Angot
 // computeEngine a un problème avec l'ensemble N qui n'est pas isSame avec lui même donc je suis passé par un format texte
+// Eric : 28/02/2025 Version 0.54.1 : le pb ci-dessus n'est plus d'actualité.
 
 /**
  * @author Stéphane Guyon (Exportable AMC et autres modifs par Eric Elter)

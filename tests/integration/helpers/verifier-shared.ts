@@ -39,7 +39,37 @@ export function grandeurStringToLatex(value: string): string {
   return `${String(g.mesure).replace('.', ',')}\\operatorname{${g.unite}}`
 }
 
-/**
+export function transformeEnOperations(
+  value: string,
+  options: OptionsComparaisonType = {},
+): string {
+  const trimmed = value.trim()
+  const n = Number(trimmed)
+
+  if (Number.isNaN(n) || !Number.isFinite(n)) {
+    return value
+  }
+
+  // On applique l’option active
+  if (options.additionSeulementEtNonResultat) {
+    return `${n - 1}+1`
+  }
+
+  if (options.soustractionSeulementEtNonResultat) {
+    return `${n + 1}-1`
+  }
+
+  if (options.multiplicationSeulementEtNonResultat) {
+    return `${n / 2}*2`
+  }
+
+  if (options.divisionSeulementEtNonResultat) {
+    return `${n * 2}/2`
+  }
+
+  // Si aucune option activée → on ne change rien
+  return value
+} /**
  * Converts scientific notation "1,5e3" or "1.5e-3" to LaTeX "1,5\\times10^{3}"
  * Handles both comma (French) and dot decimal separators.
  * Returns the original string if it's not in e-notation.
@@ -156,8 +186,27 @@ export function toCompareInput(
   if (options.fractionDecimale) {
     return decimalToFractionLatex(value)
   }
-  if (options.fractionSimplifiee || options.fractionIrreductible) {
+  if (
+    options.fractionSimplifiee ||
+    options.fractionReduite ||
+    options.fractionIrreductible
+  ) {
     return simplifyFractionLatex(value)
+  }
+  if (
+    options.additionSeulementEtNonResultat ||
+    options.soustractionSeulementEtNonResultat ||
+    options.multiplicationSeulementEtNonResultat ||
+    options.divisionSeulementEtNonResultat
+  ) {
+    return transformeEnOperations(value, {
+      additionSeulementEtNonResultat: options.additionSeulementEtNonResultat,
+      soustractionSeulementEtNonResultat:
+        options.soustractionSeulementEtNonResultat,
+      multiplicationSeulementEtNonResultat:
+        options.multiplicationSeulementEtNonResultat,
+      divisionSeulementEtNonResultat: options.divisionSeulementEtNonResultat,
+    })
   }
   return value
 }

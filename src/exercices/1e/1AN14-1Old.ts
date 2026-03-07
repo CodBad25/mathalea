@@ -1,6 +1,5 @@
 import Decimal from 'decimal.js'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { functionCompare } from '../../lib/interactif/comparisonFunctions'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
@@ -269,8 +268,7 @@ class DerivationFonctionsUsuelles extends Exercice {
         handleAnswers(this, i, {
           reponse: {
             value: reponse,
-            options: { variable: 'x', domaine: [-10, 10] },
-            compare: functionCompare,
+            options: { fonction: true, variable: 'x', domaine: [-10, 10] },
           },
         })
         i++

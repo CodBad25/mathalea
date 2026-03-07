@@ -16,7 +16,7 @@ import {
 import Exercice from '../Exercice'
 
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import engine from '../../lib/interactif/comparisonFunctions'
+import ce from '../../lib/interactif/comparisonFunctions'
 import {
   developpe,
   regroupeTermesMemeDegre,
@@ -193,15 +193,15 @@ export default class DevelopperReduireExprComplexe extends Exercice {
         colorOffset: 4,
         level,
       })
-      const devExpr1 = engine.parse(
+      const devExpr1 = ce.parse(
         developpe(expression1, {
           isColored: false,
           colorOffset: 0,
           level: 0,
         }).replaceAll('\\dfrac', '\\frac'),
       ).latex
-      // const devExpr1 = engine.box(['ExpandAll', engine.parse(expression1.replaceAll('\\dfrac', '\\frac'))]).evaluate().latex
-      const devExpr2 = engine.parse(
+      // const devExpr1 = ce.box(['ExpandAll', ce.parse(expression1.replaceAll('\\dfrac', '\\frac'))]).evaluate().latex
+      const devExpr2 = ce.parse(
         developpe(expression2, {
           isColored: false,
           colorOffset: 0,

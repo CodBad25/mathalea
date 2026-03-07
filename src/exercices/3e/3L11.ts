@@ -231,13 +231,17 @@ export default class ExerciceDevelopper extends Exercice {
         handleAnswers(this, i, {
           reponse: {
             value: reponseDev,
-            options: { expressionsForcementReduites: false },
-            // compare: expressionDeveloppeeEtNonReduiteCompare,
+            options: { developpementEgal: true },
           },
         })
       } else {
         texteCorr += "<br>En réduisant l'expression, on obtient : <br>"
-        handleAnswers(this, i, { reponse: { value: reponse } })
+        handleAnswers(this, i, {
+          reponse: {
+            value: reponse,
+            options: { expressionsForcementReduites: true },
+          },
+        })
       }
 
       texteCorr += ` $${lettreDepuisChiffre(i + 1)}=${reponseRed}$`

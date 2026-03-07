@@ -2,7 +2,7 @@ import { droite, Droite } from '../../lib/2d/droites'
 import { PointAbstrait } from '../../lib/2d/PointAbstrait'
 import { milieu } from '../../lib/2d/utilitairesPoint'
 import { Vecteur } from '../../lib/2d/Vecteur'
-import engine from '../../lib/interactif/comparisonFunctions'
+import ce from '../../lib/interactif/comparisonFunctions'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
@@ -62,9 +62,9 @@ function construireDroite(
   }
   if (n != null && n instanceof Vecteur) {
     const c = -(Number(A.x) * Number(n.x) + Number(A.y) * Number(n.y))
-    const partial = engine.parse(`${n.x}x + ${n.y}y + c = 0`).simplify()
-    const Aind = engine.parse(`${n.x}*(${A.x}) + ${n.y}* (${A.y}) + c = 0`)
-    const equa = engine.parse(`${n.x}x + ${n.y}y + ${c} = 0`).simplify()
+    const partial = ce.parse(`${n.x}x + ${n.y}y + c = 0`).simplify()
+    const Aind = ce.parse(`${n.x}*(${A.x}) + ${n.y}* (${A.y}) + c = 0`)
+    const equa = ce.parse(`${n.x}x + ${n.y}y + ${c} = 0`).simplify()
     return [
       droite(n.x, n.y, c),
       `La droite de vecteur normal $${vecteurVersTex(n)}$ admet pour équation cartésienne $${partial.latex}$, pour un certain nombre réel $c$. Comme $${A.nom}$ appartient à la droite, $${Aind.latex}$. Ainsi, $c = ${c}$, l'équation cartésienne de la droite est donc $${miseEnEvidence(equa.latex)}$.`,

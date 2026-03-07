@@ -81,7 +81,12 @@ export default class Reductionaxbx extends Exercice {
           break
       }
 
-      handleAnswers(this, i, { reponse: { value: reponse } })
+      handleAnswers(this, i, {
+        reponse: {
+          value: reponse,
+          options: { expressionsForcementReduites: true },
+        },
+      })
       texte += ajouteChampTexteMathLive(this, i, KeyboardType.lyceeClassique, {
         texteAvant: ' $=$',
       })

@@ -7,7 +7,6 @@ import { repere } from '../../lib/2d/reperes'
 import { latexParPoint } from '../../lib/2d/textes'
 import { Vide2d } from '../../lib/2d/Vide2d'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { functionCompare } from '../../lib/interactif/comparisonFunctions'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { ecritureAlgebrique, reduireAxPlusB } from '../../lib/outils/ecritures'
@@ -175,8 +174,7 @@ export default class LectureExpressionFonctionsAffines extends Exercice {
         handleAnswers(this, i, {
           reponse: {
             value: reduireAxPlusB(listeDroites[i][1], 0, 'x'),
-            options: { variable: 'x' },
-            compare: functionCompare,
+            options: { fonction: true, variable: 'x' },
           },
         })
       } else {
@@ -187,8 +185,7 @@ export default class LectureExpressionFonctionsAffines extends Exercice {
         handleAnswers(this, i, {
           reponse: {
             value: reduireAxPlusB(listeDroites[i][1], listeDroites[i][0], 'x'),
-            options: { variable: 'x' },
-            compare: functionCompare,
+            options: { fonction: true, variable: 'x' },
           },
         })
       }

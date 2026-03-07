@@ -5,7 +5,6 @@ import { segment } from '../../../lib/2d/segmentsVecteurs'
 import { latex2d } from '../../../lib/2d/textes'
 import { milieu } from '../../../lib/2d/utilitairesPoint'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { functionCompare } from '../../../lib/interactif/comparisonFunctions'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { stringNombre } from '../../../lib/outils/texNombre'
@@ -34,7 +33,6 @@ export default class longueursRectPerimetre extends ExerciceSimple {
     this.formatChampTexte = KeyboardType.clavierDeBase
 
     this.spacingCorr = 1.5
-    this.compare = functionCompare
   }
 
   nouvelleVersion() {
@@ -88,7 +86,10 @@ export default class longueursRectPerimetre extends ExerciceSimple {
     )
 
     this.reponse = {
-      reponse: { value: 2 * choix[0] + 2 * choix[1], compare: functionCompare },
+      reponse: {
+        value: 2 * choix[0] + 2 * choix[1],
+        options: { fonction: true },
+      },
     }
     this.correction = `L'aire du rectangle est  $${aire}\\text{ cm}^2$. Elle est égale au produit de la longueur par la largeur du rectangle.<br>
            $${aire}\\div ${choix[0]}=${choix[1]}$<br>

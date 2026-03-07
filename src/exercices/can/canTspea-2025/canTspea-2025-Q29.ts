@@ -1,5 +1,4 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { functionCompare } from '../../../lib/interactif/comparisonFunctions'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
@@ -31,8 +30,7 @@ export default class Can2025TQ29 extends ExerciceSimple {
     this.reponse = {
       reponse: {
         value: `${a1}\\times b+ ${a2}`,
-        compare: functionCompare,
-        options: { variable: 'b' },
+        options: { fonction: true, variable: 'b' },
       },
     }
     this.question = `On considère l'expression littérale $\\dfrac{1}{b}=\\dfrac{${a1}}{c-${a2}}$.<br>
