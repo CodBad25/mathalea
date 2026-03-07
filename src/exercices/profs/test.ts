@@ -3,7 +3,6 @@ import Exercice from '../Exercice'
 
 import { ComputeEngine, expand } from '@cortex-js/compute-engine'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { handleExpressionsForcementReduites } from '../../lib/interactif/comparisonFunctions'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 
@@ -20,10 +19,6 @@ export const uuid = 'testEEE'
 
 const ce = new ComputeEngine({ tolerance: 1e-21 })
 // handleExpressionsForcementReduites('\\dfrac23 x', '\\dfrac23 x')
-handleExpressionsForcementReduites(
-  '-\\dfrac{54}{7}x+\\dfrac{30}{56}',
-  '-\\dfrac{54}{7}x+\\dfrac{30}{56}',
-)
 
 console.log('+++++++++++++++++++')
 console.log(expand('3x+12').latex)
