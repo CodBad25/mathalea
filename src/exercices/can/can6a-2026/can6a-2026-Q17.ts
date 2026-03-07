@@ -15,45 +15,36 @@ export const refs = {
 }
 
 /**
- * @author Gilles Mora
-
-*/
+ * @author Jean-Claude Lhote
+ */
+const fruit = choice(['pommes', 'poires', 'pêches'])
 export default class Can20266Q17 extends ExerciceCan {
-  enonce(a?: number, b?: number) {
-    let millier: number, centaines: number
+  constructor() {
+    super()
+    this.optionsChampTexte = { texteApres: ' €' }
+  }
 
-    if (a == null || b == null) {
-      const m = randint(1, 9)
-      const c = randint(1, 6)
-      const d = randint(1, 9)
-      const u = randint(1, 9)
-      const centainesAjoutees = choice(
-        [3, 4, 6, 7, 8, 9].filter((x) => x + c < 10),
-      )
-      millier = m * 1000 + c * 100 + d * 10 + u
-      centaines = centainesAjoutees * 100
-    } else {
-      millier = a
-      centaines = b
+  enonce(nbKilos?: number, prixUnitaire?: number, coeff?: number) {
+    if (nbKilos == null || prixUnitaire == null || coeff == null) {
+      nbKilos = randint(1, 3) * 2
+      prixUnitaire = choice([1.5, 2.5])
+      coeff = choice([1.5, 2.5])
     }
 
-    const somme = millier + centaines
+    this.reponse = texNombre(nbKilos * coeff * prixUnitaire)
+    this.question = `$${texNombre(nbKilos, 1)}\\text{ kg}$ de ${fruit} coûtent $${texNombre(nbKilos * prixUnitaire, 1)}$ €.<br>
+    Combien coûtent $${texNombre(nbKilos * coeff, 2)}\\text{ kg}$ de ${fruit} ?`
 
-    this.reponse = String(somme)
-    if (this.interactif) {
-      this.question = `$${texNombre(millier)}+${centaines}=$`
-    } else {
-      this.question = `$${texNombre(millier)}+${centaines}=\\ldots$`
-    }
-
-    this.correction = `$${texNombre(millier)}+${centaines}=${miseEnEvidence(texNombre(somme))}$`
+    this.correction = `On peut calculer le prix d'un $\\text{kg}$ de ${fruit} en divisant le prix total par le nombre de $\\text{kg}$ :<br>
+    $${texNombre(nbKilos * prixUnitaire, 1)}\\div${texNombre(nbKilos, 1)}=${texNombre(prixUnitaire, 1)}$ € par $\\text{kg}$.<br>
+    Ainsi, $${texNombre(nbKilos * coeff, 2)}\\text{ kg}$ de ${fruit} coûtent $${texNombre(nbKilos * coeff, 2)}\\times${texNombre(prixUnitaire, 1)}=${miseEnEvidence(texNombre(nbKilos * coeff * prixUnitaire, 1))}$ €.`
 
     this.formatChampTexte = KeyboardType.clavierDeBase
-    this.canEnonce = 'Calcule.'
-    this.canReponseACompleter = `$${texNombre(millier)}+${centaines}=\\ldots$`
+    this.canEnonce = ''
+    this.canReponseACompleter = ''
   }
 
   nouvelleVersion() {
-    this.canOfficielle ? this.enonce(1462, 300) : this.enonce()
+    this.canOfficielle || this.sup ? this.enonce(2, 2.5, 1.5) : this.enonce()
   }
 }

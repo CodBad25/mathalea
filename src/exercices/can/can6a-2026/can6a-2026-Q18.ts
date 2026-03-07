@@ -1,5 +1,4 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
@@ -15,45 +14,34 @@ export const refs = {
 }
 
 /**
- * @author Gilles Mora
+ * @author Jean-Claude Lhote
 
 */
 export default class Can20266Q18 extends ExerciceCan {
-  enonce(a?: number, b?: number) {
-    let millier: number, centaines: number
+  constructor() {
+    super()
+    this.optionsChampTexte = { texteApres: ' unités.' }
+  }
 
-    if (a == null || b == null) {
-      const m = randint(1, 9)
-      const c = randint(1, 6)
-      const d = randint(1, 9)
-      const u = randint(1, 9)
-      const centainesAjoutees = choice(
-        [3, 4, 6, 7, 8, 9].filter((x) => x + c < 10),
-      )
-      millier = m * 1000 + c * 100 + d * 10 + u
-      centaines = centainesAjoutees * 100
-    } else {
-      millier = a
-      centaines = b
+  enonce(nbDixièmes?: number) {
+    if (nbDixièmes == null) {
+      nbDixièmes = (randint(2, 15) * 2 + 1) * 4
     }
 
-    const somme = millier + centaines
+    this.reponse = texNombre(nbDixièmes / 20, 1)
+    this.question =
+      `La moitié de $${texNombre(nbDixièmes, 0)}$ dixièmes.` +
+      (this.interactif ? '' : '<br>$\\ldots$ unités.')
 
-    this.reponse = String(somme)
-    if (this.interactif) {
-      this.question = `$${texNombre(millier)}+${centaines}=$`
-    } else {
-      this.question = `$${texNombre(millier)}+${centaines}=\\ldots$`
-    }
-
-    this.correction = `$${texNombre(millier)}+${centaines}=${miseEnEvidence(texNombre(somme))}$`
+    this.correction = `La moitié de $${texNombre(nbDixièmes, 0)}$ dixièmes est $${texNombre(nbDixièmes / 2, 1)}$.<br>
+    Ainsi, la moitié de $${texNombre(nbDixièmes, 0)}$ est $${miseEnEvidence(texNombre(nbDixièmes / 20, 1))}$ unités.`
 
     this.formatChampTexte = KeyboardType.clavierDeBase
-    this.canEnonce = 'Calcule.'
-    this.canReponseACompleter = `$${texNombre(millier)}+${centaines}=\\ldots$`
+    this.canEnonce = `La moitié de $${texNombre(nbDixièmes, 0)}$ dixièmes.`
+    this.canReponseACompleter = `$\\ldots$ unités.`
   }
 
   nouvelleVersion() {
-    this.canOfficielle ? this.enonce(1462, 300) : this.enonce()
+    this.canOfficielle || this.sup ? this.enonce(30) : this.enonce()
   }
 }
