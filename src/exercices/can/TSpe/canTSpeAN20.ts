@@ -21,7 +21,7 @@ export const dateDePublication = '05/04/2025'
 export const uuid = 'e8f84'
 
 export const refs = {
-  'fr-fr': ['canTSpeAN07'],
+  'fr-fr': ['canTSpeAN20'],
   'fr-ch': [],
 }
 export default class IntegraleAffine extends ExerciceSimple {

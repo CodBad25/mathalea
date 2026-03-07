@@ -1,98 +1,206 @@
+import { propositionsQcm } from '../../../lib/interactif/qcm'
 import { choice } from '../../../lib/outils/arrayOutils'
-import { ecritureAlgebrique, ecritureParentheseSiNegatif } from '../../../lib/outils/ecritures'
-import { randint } from '../../../modules/outils'
-import ExerciceSimple from '../../ExerciceSimple'
-export const titre = 'Appliquer la définition d’une suite arithmétique/géométrique'
+import { ecritureAlgebrique } from '../../../lib/outils/ecritures'
+import { listeQuestionsToContenu, randint } from '../../../modules/outils'
+import Exercice from '../../Exercice'
+export const titre = 'Donner la nature d’une suite (formule de récurrence)'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+export const interactifType = 'qcm'
 
 // Les exports suivants sont optionnels mais au moins la date de publication semble essentielle
-export const dateDePublication = '18/02/2026' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
-// export const dateDeModifImportante = '14/02/2022' // Une date de modification importante au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
+export const dateDePublication = '16/02/2022' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
 
 /**
  * Modèle d'exercice très simple pour la course aux nombres
- * @author Stéphane
+ * @author Gilles Mora
 
 */
-export const uuid = 'cd45f'
+export const uuid = 'b119b'
 
 export const refs = {
   'fr-fr': ['can1S13'],
   'fr-ch': [],
 }
-export default class CalculTerme extends ExerciceSimple {
+export default class NatureSuiteRec extends Exercice {
   constructor() {
     super()
 
-    this.typeExercice = 'simple'
     this.nbQuestions = 1
+
+    this.spacing = 1.5
   }
 
   nouvelleVersion() {
-    let u, i, r, q
+    let texte, texteCorr, a, b, u, props
     const nomSuite = ['u', 'v', 'w']
     const s = choice(nomSuite)
-    switch (
-      choice(['a', 'b']) // 'c', 'd'
-    ) {
-      case 'a': { // suite arithmétique
-        u = randint(-10, 10, 0)
-        r = randint(-5, 5, 0)
-        
-        i = randint(2, 3)
-        
-        this.question = `Soit $(${s}_n)$ une suite arithmétique de premier terme $${s}_0=${u}$ et de raison $r=${r}$.<br>
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+      switch (
+        choice([1, 2, 3]) //
+      ) {
+        case 1: // suite arithmétique simple
+          a = randint(1, 10) * choice([-1, 1])
+          u = randint(1, 10) * choice([-1, 1])
 
-Calculer le terme $${s}_{${i}}$.`
-        if (!this.interactif) {
-          this.question += ''
-        } else {
-          this.question += `<br> $${s}_{${i}}=.....$`
-        }
-        this.correction = `Comme la suite $(${s}_n)$ est arithmétique  de premier terme $${s}_0=${u}$ et de raison $r=${r}$, <br>pour tout entier $n$, $${s}_{n+1} = ${s}_n  ${ecritureAlgebrique(r)}$.<br>
-       Donc `
-        let current = u
-       for (let k = 0; k < i; k++) {
-         this.correction += `$${s}_{${k+1}} = ${s}_${k} ${ecritureAlgebrique(r)} = ${current + r}$. <br>`;
-         current += r;
-       }
-this.correction +=` On aurait pu aussi directement utiliser la forme explicite d'une suite arithmétique : $${s}_n = ${s}_0 + n \\times r$.<br>`
-this.correction +=` Ce qui donne le même résultat :  $${s}_{${i}} = ${u} + ${i} \\times ${ecritureParentheseSiNegatif(r)} = ${u + i * r}$.<br>`
-        this.reponse = u + i * r
-        this.canEnonce = this.question
-        this.canReponseACompleter = `$${s}_{${i}}=\\ldots$`
-        break
+          texte = `Soit $(${s}_n)$ une suite définie par $${s}_0=${u}$ et pour tout  $n\\in\\mathbb{N}$ par $${s}_{n+1} = ${s}_n ${ecritureAlgebrique(a)}$.<br>
+          Alors, $(${s}_n)$ est une suite ...`
+          this.autoCorrection[i] = {
+            enonce: texte,
+
+            propositions: [
+              {
+                texte: `arithmétique de raison $${a}$`,
+                statut: true,
+              },
+              {
+                texte: `arithmétique de raison $${u}$`,
+                statut: false,
+              },
+              {
+                texte: `géométrique de raison $${a}$`,
+                statut: false,
+              },
+            ],
+          }
+          props = propositionsQcm(this, i)
+          if (this.interactif) texte += props.texte
+          else {
+            texte = `Soit $(${s}_n)$ une suite définie par $${s}_0=${u}$ et pour tout  $n\\in\\mathbb{N}$ par $${s}_{n+1} = ${s}_n ${ecritureAlgebrique(a)}$.<br>
+          
+            Quelle est la nature de cette suite ? <br>
+            
+            Donner sa raison.`
+          }
+
+          texteCorr = `La formule de récurrence est de la forme $${s}_{n+1}=${s}_n+r$ avec $r=${a}$.<br>
+        On en déduit que $(${s}_n)$ est une suite arithmétique de raison $${a}$ et de premier terme $${s}_0=${u}$.`
+
+          break
+
+        case 2: // suite géo simple
+          a = randint(2, 10) * choice([-1, 1])
+          u = randint(1, 10) * choice([-1, 1])
+
+          texte = `Soit $(${s}_n)$ une suite définie par $${s}_0=${u}$ et pour tout  $n\\in\\mathbb{N}$ par $${s}_{n+1} = ${a}${s}_n $.<br>
+          Alors, $(${s}_n)$ est une suite ...`
+          this.autoCorrection[i] = {
+            enonce: texte,
+
+            propositions: [
+              {
+                texte: `géométrique de raison $${a}$`,
+                statut: true,
+              },
+              {
+                texte: `géométrique de raison $${u}$`,
+                statut: false,
+              },
+              {
+                texte: `arithmétique de raison $${a}$`,
+                statut: false,
+              },
+            ],
+          }
+          props = propositionsQcm(this, i)
+          if (this.interactif) texte += props.texte
+          else {
+            texte = `Soit $(${s}_n)$ une suite définie par $${s}_0=${u}$ et pour tout  $n\\in\\mathbb{N}$ par $${s}_{n+1} = ${a}${s}_n $.<br>
+          
+            Quelle est la nature de cette suite ? <br>
+            
+            Donner sa raison.`
+          }
+
+          texteCorr = `La formule de récurrence est de la forme $${s}_{n+1}=q\\times ${s}_n$ avec $q=${a}$.<br>
+        On en déduit que $(${s}_n)$ est une suite géométrique de raison $${a}$ et de premier terme $${s}_0=${u}$.`
+
+          break
+
+        case 3: // suite géo u_n/a
+          a = randint(2, 10)
+          u = randint(1, 10) * choice([-1, 1])
+          b = choice([-1, 1])
+          if (b < 0) {
+            texte = `Soit $(${s}_n)$ une suite définie par $${s}_0=${u}$ et pour tout  $n\\in\\mathbb{N}$ par $${s}_{n+1} = -\\dfrac{${s}_{n}}{${a}}$.<br>
+          Alors, $(${s}_n)$ est une suite ...`
+            this.autoCorrection[i] = {
+              enonce: texte,
+
+              propositions: [
+                {
+                  texte: `géométrique de raison $-\\dfrac{1}{${a}}$`,
+                  statut: true,
+                },
+                {
+                  texte: `géométrique de raison $-${a}$`,
+                  statut: false,
+                },
+                {
+                  texte: `arithmétique de raison $-${a}$`,
+                  statut: false,
+                },
+              ],
+            }
+            props = propositionsQcm(this, i)
+            if (this.interactif) texte += props.texte
+            else {
+              texte = `Soit $(${s}_n)$ une suite définie par $${s}_0=${u}$ et pour tout  $n\\in\\mathbb{N}$ par $${s}_{n+1} =- \\dfrac{${s}_{n}}{${a}}$.<br>
+              
+              Quelle est la nature de cette suite ? <br>
+              
+              Donner sa raison.`
+            }
+            texteCorr = `La formule de récurrence est de la forme $${s}_{n+1}=q\\times ${s}_n$ avec $q=-\\dfrac{1}{${a}}$.<br>
+        On en déduit que $(${s}_n)$ est une suite géométrique de raison $-\\dfrac{1}{${a}}$ et de premier terme $${s}_0=${u}$.`
+          } else {
+            texte = `Soit $(${s}_n)$ une suite définie par $${s}_0=${u}$ et pour tout  $n\\in\\mathbb{N}$ par $${s}_{n+1} = \\dfrac{${s}_{n}}{${a}}$.<br>
+          Alors, $(${s}_n)$ est une suite ...`
+            this.autoCorrection[i] = {
+              enonce: texte,
+
+              propositions: [
+                {
+                  texte: `géométrique de raison $\\dfrac{1}{${a}}$`,
+                  statut: true,
+                },
+                {
+                  texte: `géométrique de raison $${a}$`,
+                  statut: false,
+                },
+                {
+                  texte: `arithmétique de raison $${a}$`,
+                  statut: false,
+                },
+              ],
+            }
+            props = propositionsQcm(this, i)
+            if (this.interactif) texte += props.texte
+            else {
+              texte = `Soit $(${s}_n)$ une suite définie par $${s}_0=${u}$ et pour tout  $n\\in\\mathbb{N}$ par $${s}_{n+1} = \\dfrac{${s}_{n}}{${a}}$.<br>
+            
+              Quelle est la nature de cette suite ? <br>
+              
+              Donner sa raison.`
+            }
+            texteCorr = `La formule de récurrence est de la forme $${s}_{n+1}=q\\times ${s}_n$ avec $q=\\dfrac{1}{${a}}$.<br>
+        On en déduit que $(${s}_n)$ est une suite géométrique de raison $\\dfrac{1}{${a}}$ et de premier terme $${s}_0=${u}$.`
+          }
+          break
       }
-      case 'b': { // suite géométrique
-        u = randint(-3, 3, 0)
-        q = randint(2, 4)
-       
-        i = randint(2, 5)
-        this.question = `Soit $(${s}_n)$ une suite géométrique de premier terme $${s}_0=${u}$ et de raison $q=${q}$.<br>
 
-Calculer le terme $${s}_{${i}}$.`
-        if (!this.interactif) {
-          this.question += ''
-        } else {
-          this.question += `<br> $${s}_{${i}}=.....$`
-        }
-        this.correction = `Comme la suite $(${s}_n)$ est géométrique  de premier terme $${s}_0=${u}$ et de raison $q=${q}$,<br>
-       pour tout entier $n$, $${s}_{n+1} =  ${q}${s}_n$.<br>
-       Donc `
-        let current = u
-        for (let k = 0; k < i; k++) {
-          this.correction += `$${s}_{${k + 1}} =  ${q} \\times ${ecritureParentheseSiNegatif(current)} = ${current * q}$. <br>`
-          current *= q
-        }
-        this.correction += `On aurait pu aussi directement utiliser la forme explicite d'une suite géométrique : $${s}_n = ${s}_0 \\times q^n$.<br>`
-        this.correction += `Ce qui donne le même résultat :  $${s}_{${i}} = ${u} \\times ${q}^{${i}} = ${u * Math.pow(q, i)}$.<br>`
+      if (this.questionJamaisPosee(i,u, a)) {
+        this.listeQuestions[i] = texte
+        this.listeCorrections[i] = texteCorr
 
-        this.reponse = u * Math.pow(q, i)
-        this.canEnonce = this.question
-        this.canReponseACompleter = `$${s}_{${i}}=\\ldots$`
-        break
+        this.canEnonce = texte
+        this.canReponseACompleter = `Nature de la suite : $\\ldots$\\\\
+         Raison $=\\ldots$`
+        this.listeCanEnonces.push(this.canEnonce)
+        this.listeCanReponsesACompleter.push(this.canReponseACompleter)
+        i++
       }
+      cpt++
     }
+    listeQuestionsToContenu(this)
   }
 }

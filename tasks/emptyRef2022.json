@@ -69,7 +69,12 @@
     "Terminale": {
       "TSpe": {
         "canTSpea": {},
-        "canTSpeAN": {},
+        "canTSpeAN": {
+          "canTSpeAN1": {},
+          "canTSpeAN2": {},
+          "canTSpeAN3": {},
+          "canTSpeAN4": {}
+        },
         "canTSpeS": {},
         "canTSpeE": {}
       },

@@ -1,136 +1,226 @@
 import { choice } from '../../../lib/outils/arrayOutils'
-import { ecritureAlgebrique } from '../../../lib/outils/ecritures'
-import { sp } from '../../../lib/outils/outilString'
-import ExerciceSimple from '../../ExerciceSimple'
-import { randint } from '../../../modules/outils'
-export const titre = 'Donner le résultat d’un programme Python'
+import { texFractionReduite } from '../../../lib/outils/deprecatedFractions'
+import {
+  ecritureAlgebrique,
+  ecritureParentheseSiNegatif,
+  rienSi1,
+} from '../../../lib/outils/ecritures'
+import { texNombre } from '../../../lib/outils/texNombre'
+import Exercice from '../../Exercice'
+import { listeQuestionsToContenu, randint } from '../../../modules/outils'
+import { propositionsQcm } from '../../../lib/interactif/qcm'
+import {
+  miseEnEvidence,
+  texteEnCouleurEtGras,
+} from '../../../lib/outils/embellissements'
+export const titre = 'Donner la nature d’une suite (formule explicite)'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+export const interactifType = 'qcm'
 
 // Les exports suivants sont optionnels mais au moins la date de publication semble essentielle
-export const dateDePublication = '21/02/2022' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
-// export const dateDeModifImportante = '14/02/2022' // Une date de modification importante au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
+export const dateDePublication = '16/02/2022' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
 
 /**
  * Modèle d'exercice très simple pour la course aux nombres
  * @author Gilles Mora
 
 */
-export const uuid = '0f014'
+export const uuid = '88acd'
 
 export const refs = {
-  'fr-fr': ['can1S11'],
-  'fr-ch': ['autres-7'],
+  'fr-fr': ['can1S13'],
+  'fr-ch': [],
 }
-export default class CalculSuitePython extends ExerciceSimple {
+export default class NatureSuiteEx extends Exercice {
   constructor() {
     super()
 
-    this.typeExercice = 'simple'
     this.nbQuestions = 1
+
+    this.spacing = 2
   }
 
   nouvelleVersion() {
-    let a, b, k, u, r, q
-    let n = 0
-    switch (
-    choice(['a', 'b', 'c']) //
-    ) {
-      case 'a': // u=u+r
-        a = randint(2, 5)
-        u = randint(1, 8) * choice([-1, 1])
-        r = randint(1, 9) * choice([-1, 1])
-        k = a
-        this.question = `Que renvoie l'instruction $\\texttt{suite(${a})}$ ?<br>
-        
-        $\\begin{array}{|l|}\n`
-        this.question += '\\hline\n'
-        this.question += '\\\n \\texttt{def suite(n) :}  \\\n '
-        this.question += `\\\\\n ${sp(6)} \\texttt{u = ${u}}\\\n `
-        this.question += `\\\\\n ${sp(6)} \\texttt{for i in range(n) :}\\\n `
-        this.question += `\\\\\n ${sp(12)} \\texttt{u = u${ecritureAlgebrique(r)}}\\\n `
-        this.question += `\\\\\n ${sp(6)} \\texttt{return u}\\\\\n `
-        this.question += '\\hline\n'
-        this.question += '\\end{array}\n$'
-        this.question += `
-        
-        `
-        this.correction = ` L'instruction $\\texttt{for i in range(n)}$ signifie : pour i allant de $0$ à $${a - 1}$.<br>
-      On calcule les valeurs successives de la variable u :
-           `
+    let texte = ''
+    let texteCorr = ''
+    let a: number
+    let b: number
+    let d: number
+    let props: { texte: string; texteCorr: string }
+    const nomSuite = ['u', 'v', 'w']
+    const s = choice(nomSuite)
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+      switch (
+        choice([1, 2, 3, 4]) //
+      ) {
+        case 1: // suite arithmétique simple
+          a = randint(1, 10) * choice([-1, 1])
+          b = randint(1, 10) * choice([-1, 1])
 
-        for (let indice = 0; indice < k; indice++) {
-          this.correction += `<br>Pour i=${indice},  u = $${u} ${ecritureAlgebrique(r)} = ${u + r}$`
-          u = u + r
-        }
-        this.reponse = u
-        break
+          texte = `Soit $(${s}_n)$ une suite définie  pour tout  $n\\in\\mathbb{N}$ par $${s}_{n} =${rienSi1(a)}n${ecritureAlgebrique(b)} $.<br>
+          Alors, $(${s}_n)$ est une suite ...`
+          this.autoCorrection[i] = {
+            enonce: texte,
+            options: { vertical: false },
+            propositions: [
+              {
+                texte: `arithmétique de raison $${a}$`,
+                statut: true,
+              },
+              {
+                texte: `arithmétique de raison $${b}$`,
+                statut: false,
+              },
+              {
+                texte: `géométrique de raison $${a}$`,
+                statut: false,
+              },
+            ],
+          }
+          props = propositionsQcm(this, i)
+          if (this.interactif) texte += props.texte
+          else {
+            texte = `Soit $(${s}_n)$ une suite définie  pour tout  $n\\in\\mathbb{N}$ par $${s}_{n} =${a}n${ecritureAlgebrique(b)} $.<br>
+          Quelle est la nature de cette suite ?<br>
+          Donner sa raison et son premier terme.`
+          }
 
-      case 'b': // suite u=u+i
-        a = randint(3, 4)
-        u = randint(1, 8) * choice([-1, 1])
-        k = a
-        this.question = `Que renvoie l'instruction $\\texttt{suite(${a})}$ ?<br>
-        
-        $\\begin{array}{|l|}\n`
-        this.question += '\\hline\n'
-        this.question += '\\\n \\texttt{def suite(n) :}  \\\n '
-        this.question += `\\\\\n ${sp(6)} \\texttt{u = ${u}}\\\n `
-        this.question += `\\\\\n ${sp(6)} \\texttt{for i in range(1,n) :}\\\n `
-        this.question += `\\\\\n ${sp(12)} \\texttt{u = u+i}\\\n `
-        this.question += `\\\\\n ${sp(6)} \\texttt{return u}\\\\\n `
-        this.question += '\\hline\n'
-        this.question += '\\end{array}\n$'
-        this.question += `
-        
-        `
-        this.correction = ` L'instruction $\\texttt{for i in range(1,n)}$ signifie : pour i allant de 1 à $${a - 1}$.<br>
-        
-        On calcule les valeurs successives de la variable u :`
+          texteCorr = `L'expression est de la forme $${s}_n=${s}_0+nr$ avec $${s}_0=${b}$ et $r=${a}$.<br>
+        On en déduit que $(${s}_n)$ est une ${texteEnCouleurEtGras('suite arithmétique de raison')} $${miseEnEvidence(a)}$ et de premier terme $${s}_0=${b}$.`
 
-        for (let indice = 1; indice < k; indice++) {
-          this.correction += `<br>Pour i=${indice}, u = $${u} +${indice} = ${u + indice}$`
-          u = u + indice
-        }
-        this.reponse = u
-        break
+          break
+        case 2: // suite arithmétique avec fraction
+          b = randint(1, 10) * choice([-1, 1])
+          d = randint(2, 10)
+          a = d * randint(1, 10) * choice([-1, 1])
+          texte = `Soit $(${s}_n)$ une suite définie  pour tout  $n\\in\\mathbb{N}$ par $${s}_{n} =\\dfrac{${a}n${ecritureAlgebrique(b)}}{${d}}$.<br>
+          Alors, $(${s}_n)$ est une suite ...`
+          this.autoCorrection[i] = {
+            enonce: texte,
+            options: { vertical: false },
+            propositions: [
+              {
+                texte: `arithmétique de raison $${texNombre(a / d)}$`,
+                statut: true,
+              },
+              {
+                texte: `arithmétique de raison $${a}$`,
+                statut: false,
+              },
+              {
+                texte: `géométrique de raison $${texNombre(a / d)}$`,
+                statut: false,
+              },
+            ],
+          }
+          props = propositionsQcm(this, i)
+          if (this.interactif) texte += props.texte
+          else {
+            texte = `Soit $(${s}_n)$ une suite définie  pour tout  $n\\in\\mathbb{N}$ par $${s}_{n} =\\dfrac{${a}n${ecritureAlgebrique(b)}}{${d}}$.<br>
+            Quelle est la nature de cette suite ?<br>
+            Donner sa raison et son premier terme.`
+          }
+          if (b < 0) {
+            texteCorr = `$${s}_{n} =\\dfrac{${a}n${ecritureAlgebrique(b)}}{${d}}=${texFractionReduite(a, d)}n${texFractionReduite(b, d)}$.<br> `
+          } else {
+            texteCorr = `$${s}_{n} =\\dfrac{${a}n${ecritureAlgebrique(b)}}{${d}}=${texFractionReduite(a, d)}n+${texFractionReduite(b, d)}$.<br> `
+          }
+          texteCorr += `Cette dernière expression est de la forme $${s}_n=${s}_0+nr$ avec $${s}_0=${texFractionReduite(b, d)}$ et $r=${texFractionReduite(a, d)}$.<br>
+        On en déduit que $(${s}_n)$ est une ${texteEnCouleurEtGras('suite arithmétique de raison')} $${miseEnEvidence(`${texFractionReduite(a, d)}`)}$ et de premier terme $${s}_0=${texFractionReduite(b, d)}$.`
 
-      case 'c': // suite u=u+i
-        a = randint(1, 5)
-        b = randint(6, 80)
-        q = randint(2, 3)
-        k = a
-        this.question = `Que renvoie l'instruction $\\texttt{suite(${a})}$ ?<br>
-        
-        $\\begin{array}{|l|}\n`
-        this.question += '\\hline\n'
-        this.question += '\\\n \\texttt{def suite(u) :}  \\\n '
-        this.question += `\\\\\n ${sp(6)} \\texttt{u=${a}}\\\n `
-        this.question += `\\\\\n ${sp(6)} \\texttt{n=0}\\\n `
-        this.question += `\\\\\n ${sp(6)} \\texttt{while u<${b}:}\\\n `
-        this.question += `\\\\\n ${sp(12)} \\texttt{u = u*${q}}\\\n `
-        this.question += `\\\\\n ${sp(12)} \\texttt{n = n+1}\\\n `
-        this.question += `\\\\\n ${sp(6)} \\texttt{return n}\\\\\n `
-        this.question += '\\hline\n'
-        this.question += '\\end{array}\n$'
-        this.question += `
-        
-        `
-        this.correction = ` L'instruction $\\texttt{while u<${b}}$ signifie : tant que u<${b}.<br>
+          break
+        case 3: // suite geométrique simple
+          a = randint(-10, 10, [-1, 0])
+          b = randint(-10, 10, [-1, 0, 1, a])
+          texte = `Soit $(${s}_n)$ une suite définie  pour tout  $n\\in\\mathbb{N}$ par $${s}_{n} =
+          ${a === 1 ? `${ecritureParentheseSiNegatif(b)}^n$` : `${a}\\times${ecritureParentheseSiNegatif(b)}^n$`}
+<br>Alors, $(${s}_n)$ est une suite ...`
+          this.autoCorrection[i] = {
+            enonce: texte,
+            options: { vertical: false },
+            propositions: [
+              {
+                texte: `géométrique de raison $${b}$`,
+                statut: true,
+              },
+              {
+                texte: `arithmétique de raison $${b}$`,
+                statut: false,
+              },
+              {
+                texte: `géométrique de raison $${a}$`,
+                statut: false,
+              },
+            ],
+          }
+          props = propositionsQcm(this, i)
+          if (this.interactif) {
+            texte += props.texte
+          } else {
+            texte = `Soit $(${s}_n)$ une suite définie  pour tout  $n\\in\\mathbb{N}$ par $${s}_{n} =
+          ${a === 1 ? `${ecritureParentheseSiNegatif(b)}^n$` : `${a}\\times${ecritureParentheseSiNegatif(b)}^n$`}
+<br>       Quelle est la nature de cette suite ?<br> 
+            Donner sa raison et son premier terme.`
+          }
+          if (a === 1) {
+            texteCorr = `$${s}_{n+1} = ${ecritureParentheseSiNegatif(b)}^{n+1}=${ecritureParentheseSiNegatif(b)}\\times \\underbrace{ ${ecritureParentheseSiNegatif(b)}^{n}}_{${s}_{n}}=${ecritureParentheseSiNegatif(b)}\\times ${s}_{n}$.
+         `
+          } else {
+            texteCorr = `$${s}_{n+1} =${a}\\times ${ecritureParentheseSiNegatif(b)}^{n+1}=${ecritureParentheseSiNegatif(b)}\\times \\underbrace{${ecritureParentheseSiNegatif(a)}\\times ${ecritureParentheseSiNegatif(b)}^{n}}_{${s}_{n}}=${ecritureParentheseSiNegatif(b)}\\times ${s}_{n}$.
+         `
+          }
+          texteCorr += `  <br>
+        On en déduit que $(${s}_n)$ est une ${texteEnCouleurEtGras('suite géométrique de raison')} $${miseEnEvidence(b)}$ et de premier terme $${s}_0=${a}\\times ${ecritureParentheseSiNegatif(b)}^0=${a}$.`
 
-        On calcule les valeurs successives des  variables u et n. On s'arrête dès que u dépasse ${b} :<br>
-        On a au départ, u=${a} et n=0, puis, <br>`
+          break
 
-        while (a < b) {
-          this.correction += `<br>n=${n + 1} et u=${a}$\\times$ ${q} = ${a * q} `
-          n = n + 1
-          a = q * a
-        }
-        this.correction += `$> ${b}$. Donc l'algorithme retourne $${n}$.`
-        this.reponse = n
-        break
+        case 4: // suite geométrique avec quotient
+          a = randint(-10, 10, [-1, 0])
+          b = randint(2, 10, a)
+          texte = `Soit $(${s}_n)$ une suite définie  pour tout  $n\\in\\mathbb{N}$ par $${s}_{n} =\\dfrac{${a}}{${b}^n}$.
+         <br>Alors, $(${s}_n)$ est une suite ...`
+          this.autoCorrection[i] = {
+            enonce: texte,
+            options: { vertical: false },
+            propositions: [
+              {
+                texte: `géométrique de raison $\\dfrac{1}{${b}}$`,
+                statut: true,
+              },
+              {
+                texte: `arithmétique de raison $${b}$`,
+                statut: false,
+              },
+              {
+                texte: `géométrique de raison $${a}$`,
+                statut: false,
+              },
+            ],
+          }
+          props = propositionsQcm(this, i)
+          if (this.interactif) texte += props.texte
+          else {
+            texte = `Soit $(${s}_n)$ une suite définie  pour tout  $n\\in\\mathbb{N}$ par $${s}_{n} =\\dfrac{${a}}{${b}^n}$.<br>
+            Quelle est la nature de cette suite ?<br> 
+            Donner sa raison et son premier terme.`
+          }
+          texteCorr = `$${s}_{n+1} =\\dfrac{${a}}{${b}^{n+1}}=\\dfrac{1}{${b}}\\times \\underbrace{\\dfrac{${a}}{${b}^n}}_{${s}_{n}}=\\dfrac{1}{${b}}\\times ${s}_n$`
+          texteCorr += `  <br>
+        On en déduit que $(${s}_n)$ est une ${texteEnCouleurEtGras('suite géométrique de raison')} $${miseEnEvidence(`\\dfrac{1}{${b}}`)}$ et de premier terme $${s}_{0} =\\dfrac{${a}}{${b}^0}=${a}$.`
+          break
+      }
+
+      if (this.questionJamaisPosee(i, texteCorr)) {
+        this.listeQuestions[i] = texte
+        this.listeCorrections[i] = texteCorr
+        i++
+      }
+      cpt++
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
+    listeQuestionsToContenu(this)
+    this.canEnonce = texte
+    this.canReponseACompleter = `Nature de la suite : $\\ldots$\\\\
+     Raison $=\\ldots$\\\\
+     Premier terme $=\\ldots$`
   }
 }

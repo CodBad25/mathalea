@@ -19,7 +19,7 @@ export const uuid = 'ce764'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const refs = {
-  'fr-fr': ['canTSpeAN03'],
+  'fr-fr': ['canTSpeAN12'],
   'fr-ch': [],
 }
 /**
