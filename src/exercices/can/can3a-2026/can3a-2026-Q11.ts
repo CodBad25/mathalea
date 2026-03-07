@@ -5,6 +5,7 @@ import { tracePoint } from '../../../lib/2d/TracePoint'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { context } from '../../../modules/context'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
@@ -59,6 +60,7 @@ export default class Can32026Q11 extends ExerciceCan {
       axeXStyle: '->',
       axeYStyle: '->',
       grilleSecondaire: false,
+      grilleOpacite: context.isHtml ? 0.1 : 0.5,
     })
 
     const A = pointAbstrait(a, b, 'A', 'below')

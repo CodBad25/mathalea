@@ -36,7 +36,7 @@ export default class Can2026Q26 extends ExerciceCan {
     let den: number
     if (a == null || b == null) {
       ;[num, den] = choice([
-        [7, 10],
+        [7, 8],
         [5, 8],
         [3, 4],
         [5, 6],
