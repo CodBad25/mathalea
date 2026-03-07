@@ -1,5 +1,4 @@
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { functionCompare } from '../../lib/interactif/comparisonFunctions'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { Polynome } from '../../lib/mathFonctions/Polynome'
@@ -39,11 +38,13 @@ class DerivationSommesSimples extends Exercice {
   nouvelleVersion() {
     // Consigne adaptative
     if (this.nbQuestions > 1) {
-      this.consigne = 'Dans chacun des cas suivants, on admet que la fonction est définie et dérivable sur un intervalle $I$. <br>Déterminer une expression de la fonction dérivée sur $I$.'
+      this.consigne =
+        'Dans chacun des cas suivants, on admet que la fonction est définie et dérivable sur un intervalle $I$. <br>Déterminer une expression de la fonction dérivée sur $I$.'
     } else {
-      this.consigne = 'On admet que la fonction est définie et dérivable sur un intervalle $I$. <br>Déterminer une expression de la fonction dérivée sur $I$.'
+      this.consigne =
+        'On admet que la fonction est définie et dérivable sur un intervalle $I$. <br>Déterminer une expression de la fonction dérivée sur $I$.'
     }
-    
+
     const listeTypeDeQuestion = gestionnaireFormulaireTexte({
       saisie: this.sup,
       min: 1,
@@ -64,7 +65,7 @@ class DerivationSommesSimples extends Exercice {
           randint(-5, 5, [-1, 0, 1]),
         ],
       ])
-      
+
       switch (Number(listeTypeDeQuestion[i])) {
         case 2:
           {
@@ -73,7 +74,7 @@ class DerivationSommesSimples extends Exercice {
               deg: 2,
               coeffs: [a, b, c],
             })
-            const k = choice([1,3,5,7,-1,-3,-5,-7])
+            const k = choice([1, 3, 5, 7, -1, -3, -5, -7])
             lesFonctions.push(
               {
                 fonction: laFonction1.toLatex(),
@@ -89,7 +90,7 @@ class DerivationSommesSimples extends Exercice {
         case 3:
           {
             const k = randint(-5, 5, 0)
-            const k2 = choice([1,3,5,7,-1,-3,-5,-7])
+            const k2 = choice([1, 3, 5, 7, -1, -3, -5, -7])
             lesFonctions.push(
               {
                 fonction: `${k < 0 ? '-' : ''}\\dfrac{${String(Math.abs(k))}}{x}`,
@@ -179,7 +180,10 @@ class DerivationSommesSimples extends Exercice {
           if (j < fonctionsMelangees.length - 1) texteCorr += '\\\\'
         }
         texteCorr += '\\end{aligned}\\]'
-        texteCorr += `On utilise la formule : $(${nomsFonctions.slice(0, fonctionsMelangees.length).join('+')})^\\prime=${nomsFonctions.slice(0, fonctionsMelangees.length).map(n => n + "^\\prime").join('+')}$.<br>`
+        texteCorr += `On utilise la formule : $(${nomsFonctions.slice(0, fonctionsMelangees.length).join('+')})^\\prime=${nomsFonctions
+          .slice(0, fonctionsMelangees.length)
+          .map((n) => n + '^\\prime')
+          .join('+')}$.<br>`
         texteCorr += 'On obtient : '
       } else {
         texteCorr += `L'expression de la dérivée de la fonction $f$ définie par $f(x)=${laFonction}$ est :<br>`
@@ -193,8 +197,7 @@ class DerivationSommesSimples extends Exercice {
         handleAnswers(this, i, {
           reponse: {
             value: laDerivee,
-            options: { variable: 'x' },
-            compare: functionCompare,
+            options: { fonction: true, variable: 'x' },
           },
         })
         i++

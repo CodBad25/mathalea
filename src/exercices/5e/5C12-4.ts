@@ -1,7 +1,6 @@
-// import { choice } from '../../lib/outils/arrayOutils'
 import { evaluate, type Fraction } from 'mathjs'
 import type { MathfieldElement } from 'mathlive'
-import engine from '../../lib/interactif/comparisonFunctions'
+import ce from '../../lib/interactif/comparisonFunctions'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { remplisLesBlancs } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
@@ -335,7 +334,7 @@ class MettreDesParentheses extends Exercice {
         const mfe = document.querySelector(
           `#champTexteEx${exercice.numeroExercice}Q${question}`,
         ) as MathfieldElement
-        const goodAnswer = engine.parse(String(resultat))
+        const goodAnswer = ce.parse(String(resultat))
 
         const prompts = mfe.getPrompts()
         const saisies = prompts.map((pr) =>
@@ -356,7 +355,7 @@ class MettreDesParentheses extends Exercice {
           }
         }
         const expSaisie = assignVariables(laSaisie, valeurs)
-        const saisieParsed = engine.parse(expSaisie)
+        const saisieParsed = ce.parse(expSaisie)
         const isOk1 = goodAnswer.isEqual(saisieParsed) ?? false // L'expression saisie et la bonne réponse donne le même résultat, c'est trés bon signe.
         // cependant, il peut y avoir des parenthèses inutiles.
         let isOk2 = true
@@ -369,7 +368,7 @@ class MettreDesParentheses extends Exercice {
           feedback =
             "L'égalité est respectée, mais il y a des parenthèses inutiles."
         } else if (!isOk1) {
-          feedback = `L'égalité n'est pas respectée : en effet, $${expSaisie.replace('*', '\\times ')}=${saisieParsed.evaluate().numericValue}$`
+          feedback = `L'égalité n'est pas respectée : en effet, $${expSaisie.replace('*', '\\times ')}=${saisieParsed.evaluate().re}$`
         } else {
           feedback = 'L`égalité est respectée.'
         }

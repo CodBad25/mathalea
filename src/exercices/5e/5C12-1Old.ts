@@ -1,6 +1,5 @@
-import { ComputeEngine } from '@cortex-js/compute-engine'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import engine, { exprCompare } from '../../lib/interactif/comparisonFunctions'
+import ce from '../../lib/interactif/comparisonFunctions'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif' // fonction qui va préparer l'analyse de la saisie
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive' // fonctions de mise en place des éléments interactifs
 import { combinaisonListes, shuffle } from '../../lib/outils/arrayOutils'
@@ -55,7 +54,6 @@ export default class OrganiserDesCalculsEnUneSeuleLigne extends Exercice {
   }
 
   nouvelleVersion() {
-    const computeEngine = new ComputeEngine()
     const avecDivision = !!this.sup
     const nombreDeCalculs = gestionnaireFormulaireTexte({
       shuffle: false,
@@ -66,7 +64,6 @@ export default class OrganiserDesCalculsEnUneSeuleLigne extends Exercice {
       defaut: 4,
       melange: 5,
     }).map(Number)
-    const noUselessParen = false // Pour l'instant, on ne peu pas se permettre de ne pas les accepter car elles figurent dans la correction.
     const typeQuestionsDisponibles = [
       'Enchaînement simple',
       '1 -> 3',
@@ -113,7 +110,7 @@ export default class OrganiserDesCalculsEnUneSeuleLigne extends Exercice {
                 left: nombres[1],
                 right: nombres[2],
               }
-              resultat1 = computeEngine.parse(calcul1).simplify().latex
+              resultat1 = ce.parse(calcul1).simplify().latex
               calcul2 =
                 signes[1] === '+' || signes[1] === '\\times'
                   ? `${resultat1} ${signes[1]} ${nombres[0]}`
@@ -130,7 +127,7 @@ export default class OrganiserDesCalculsEnUneSeuleLigne extends Exercice {
                       left: nombres[0],
                       right: calcul1EN,
                     }
-              resultat2 = computeEngine.parse(calcul2).simplify().latex
+              resultat2 = ce.parse(calcul2).simplify().latex
               nombreCible = resultat2
               if (
                 !checkValue(
@@ -152,7 +149,7 @@ $${miseEnCouleur(`${nombres[0]} ${signes[1]}${miseEnCouleur(`\\overset{${calcul1
             }
             default: {
               calcul1 = `${nombres[0]} ${signes[0]} ${nombres[1]}`
-              resultat1 = computeEngine.parse(calcul1).simplify().latex
+              resultat1 = ce.parse(calcul1).simplify().latex
               const calcul1EN: Expression = {
                 operator: signes[0] as Operator,
                 left: nombres[0],
@@ -164,7 +161,7 @@ $${miseEnCouleur(`${nombres[0]} ${signes[1]}${miseEnCouleur(`\\overset{${calcul1
                 left: calcul1EN,
                 right: nombres[2],
               }
-              resultat2 = computeEngine.parse(calcul2).simplify().latex
+              resultat2 = ce.parse(calcul2).simplify().latex
               nombreCible = resultat2
               if (
                 !checkValue(
@@ -197,21 +194,21 @@ $${miseEnCouleur(`${miseEnCouleur(`\\overset{${calcul1}}{${resultat1}}`, 'red')}
                 left: nombres[0],
                 right: nombres[1],
               }
-              resultat1 = computeEngine.parse(calcul1).simplify().latex
+              resultat1 = ce.parse(calcul1).simplify().latex
               calcul2 = `${nombres[2]} ${signes[1]} ${nombres[3]}`
               const calcul2EN: Expression = {
                 operator: signes[1] as Operator,
                 left: nombres[2],
                 right: nombres[3],
               }
-              resultat2 = computeEngine.parse(calcul2).simplify().latex
+              resultat2 = ce.parse(calcul2).simplify().latex
               calcul3 = `${resultat1} ${signes[2]} ${resultat2}`
               const calcul3EN: Expression = {
                 operator: signes[2] as Operator,
                 left: calcul1EN,
                 right: calcul2EN,
               }
-              resultat3 = computeEngine.parse(calcul3).simplify().latex
+              resultat3 = ce.parse(calcul3).simplify().latex
               nombreCible = resultat3
               redaction = rediger(calcul1, signes[2], calcul2)
               if (
@@ -238,16 +235,16 @@ $${miseEnCouleur(`(${calcul1})`, 'red')} ${signes[2]} ${miseEnCouleur(`${miseEnC
                 left: nombres[0],
                 right: nombres[1],
               }
-              resultat1 = computeEngine.parse(calcul1).simplify().latex
+              resultat1 = ce.parse(calcul1).simplify().latex
               calcul2 = `${resultat1} ${signes[1]} ${nombres[2]}`
               const calcul2EN: Expression = {
                 operator: signes[1] as Operator,
                 left: calcul1EN,
                 right: nombres[2],
               }
-              resultat2 = computeEngine.parse(calcul2).simplify().latex
+              resultat2 = ce.parse(calcul2).simplify().latex
               calcul3 = `${resultat2} ${signes[2]} ${nombres[3]}`
-              resultat3 = computeEngine.parse(calcul3).simplify().latex
+              resultat3 = ce.parse(calcul3).simplify().latex
               nombreCible = resultat3
               const calcul3EN: Expression = {
                 operator: signes[2] as Operator,
@@ -297,28 +294,28 @@ $${miseEnCouleur(`${miseEnCouleur(`\\overset{${miseEnCouleur(`(${calcul1})`, 're
                 right: nombres[1],
               }
               calcul1 = `${nombres[0]} ${signes[0]} ${nombres[1]}`
-              resultat1 = computeEngine.parse(calcul1).simplify().latex
+              resultat1 = ce.parse(calcul1).simplify().latex
               calcul2 = `${nombres[2]} ${signes[1]} ${nombres[3]}`
               const calcul2EN: Expression = {
                 operator: signes[1] as Operator,
                 left: nombres[2],
                 right: nombres[3],
               }
-              resultat2 = computeEngine.parse(calcul2).simplify().latex
+              resultat2 = ce.parse(calcul2).simplify().latex
               calcul3 = `${resultat1} ${signes[2]} ${nombres[4]}`
               const calcul3EN: Expression = {
                 operator: signes[2] as Operator,
                 left: calcul1EN,
                 right: nombres[4],
               }
-              resultat3 = computeEngine.parse(calcul3).simplify().latex
+              resultat3 = ce.parse(calcul3).simplify().latex
               calcul4 = `${resultat2} ${signes[3]} ${resultat3}`
               const calcul4EN: Expression = {
                 operator: signes[3] as Operator,
                 left: calcul2EN,
                 right: calcul3EN,
               }
-              nombreCible = computeEngine.parse(calcul4).simplify().latex
+              nombreCible = ce.parse(calcul4).simplify().latex
               if (
                 !checkValue(
                   Number(nombreCible),
@@ -352,28 +349,28 @@ $${miseEnCouleur(`(${calcul2})`, 'blue')} ${signes[3]} ${miseEnCouleur(`(${miseE
                 left: nombres[0],
                 right: nombres[1],
               }
-              resultat1 = computeEngine.parse(calcul1).simplify().latex
+              resultat1 = ce.parse(calcul1).simplify().latex
               calcul2 = `${nombres[2]} ${signes[1]} ${nombres[3]}`
               const calcul2EN: Expression = {
                 operator: signes[1] as Operator,
                 left: nombres[2],
                 right: nombres[3],
               }
-              resultat2 = computeEngine.parse(calcul2).simplify().latex
+              resultat2 = ce.parse(calcul2).simplify().latex
               calcul3 = `${resultat2} ${signes[2]} ${nombres[4]}`
               const calcul3EN: Expression = {
                 operator: signes[2] as Operator,
                 left: calcul2EN,
                 right: nombres[4],
               }
-              resultat3 = computeEngine.parse(calcul3).simplify().latex
+              resultat3 = ce.parse(calcul3).simplify().latex
               calcul4 = `${resultat1} ${signes[3]} ${resultat3}`
               const calcul4EN: Expression = {
                 operator: signes[3] as Operator,
                 left: calcul1EN,
                 right: calcul3EN,
               }
-              nombreCible = computeEngine.parse(calcul4).simplify().latex
+              nombreCible = ce.parse(calcul4).simplify().latex
               if (
                 !checkValue(
                   Number(nombreCible),
@@ -407,28 +404,28 @@ $${miseEnCouleur(`(${calcul1})`, 'red')} ${signes[3]} ${miseEnCouleur(`(${miseEn
                 left: nombres[0],
                 right: nombres[1],
               }
-              resultat1 = computeEngine.parse(calcul1).simplify().latex
+              resultat1 = ce.parse(calcul1).simplify().latex
               calcul2 = `${resultat1} ${signes[1]} ${nombres[2]}`
               const calcul2EN: Expression = {
                 operator: signes[1] as Operator,
                 left: calcul1EN,
                 right: nombres[2],
               }
-              resultat2 = computeEngine.parse(calcul2).simplify().latex
+              resultat2 = ce.parse(calcul2).simplify().latex
               calcul3 = `${nombres[3]} ${signes[2]} ${nombres[4]}`
               const calcul3EN: Expression = {
                 operator: signes[2] as Operator,
                 left: nombres[3],
                 right: nombres[4],
               }
-              resultat3 = computeEngine.parse(calcul3).simplify().latex
+              resultat3 = ce.parse(calcul3).simplify().latex
               calcul4 = `${resultat2} ${signes[3]} ${resultat3}`
               const calcul4EN: Expression = {
                 operator: signes[3] as Operator,
                 left: calcul2EN,
                 right: calcul3EN,
               }
-              nombreCible = computeEngine.parse(calcul4).simplify().latex
+              nombreCible = ce.parse(calcul4).simplify().latex
               if (
                 !checkValue(
                   Number(nombreCible),
@@ -462,28 +459,28 @@ $${miseEnCouleur(`(${miseEnCouleur(`(${calcul1})`, 'red')} ${signes[1]} ${nombre
                 left: nombres[0],
                 right: nombres[1],
               }
-              resultat1 = computeEngine.parse(calcul1).simplify().latex
+              resultat1 = ce.parse(calcul1).simplify().latex
               calcul2 = `${resultat1} ${signes[1]} ${nombres[2]}`
               const calcul2EN: Expression = {
                 operator: signes[1] as Operator,
                 left: calcul1EN,
                 right: nombres[2],
               }
-              resultat2 = computeEngine.parse(calcul2).simplify().latex
+              resultat2 = ce.parse(calcul2).simplify().latex
               calcul3 = `${resultat2} ${signes[2]} ${nombres[3]}`
               const calcul3EN: Expression = {
                 operator: signes[2] as Operator,
                 left: calcul2EN,
                 right: nombres[3],
               }
-              resultat3 = computeEngine.parse(calcul3).simplify().latex
+              resultat3 = ce.parse(calcul3).simplify().latex
               calcul4 = `${resultat3} ${signes[3]} ${nombres[4]}`
               const calcul4EN: Expression = {
                 operator: signes[3] as Operator,
                 left: calcul3EN,
                 right: nombres[4],
               }
-              nombreCible = computeEngine.parse(calcul4).simplify().latex
+              nombreCible = ce.parse(calcul4).simplify().latex
               if (
                 !checkValue(
                   Number(nombreCible),
@@ -529,14 +526,14 @@ $${miseEnCouleur(`${miseEnCouleur(`\\overset{${calcul1}}{${resultat1}}`, 'red')}
 Voici ses calculs :<br>
 ${calculs}
 Les écrire en une seule ligne. ${ajouteChampTexteMathLive(this, i, KeyboardType.clavierDeBase)}`
-      const expressionReduite = engine.parse(redaction, {
-        canonical: true,
+
+      const expressionReduite = ce.parse(redaction, {
+        form: 'canonical',
       }).latex
       handleAnswers(this, i, {
         reponse: {
           value: [expressionReduite, redaction],
-          compare: exprCompare,
-          options: { noUselessParen },
+          options: { calculFormel: true },
         },
       })
       if (!this.correctionDetaillee) texteCorr = ''

@@ -1,5 +1,4 @@
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { functionCompare } from '../../lib/interactif/comparisonFunctions'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
@@ -39,11 +38,13 @@ class DerivationQuotientParticulier extends Exercice {
   nouvelleVersion() {
     // Consigne adaptative
     if (this.nbQuestions > 1) {
-      this.consigne = 'Dans chacun des cas suivants, on admet que la fonction $f$ est définie et dérivable sur un intervalle $I$. <br>Déterminer une expression de la fonction dérivée $f\'$ sur $I$.'
+      this.consigne =
+        "Dans chacun des cas suivants, on admet que la fonction $f$ est définie et dérivable sur un intervalle $I$. <br>Déterminer une expression de la fonction dérivée $f'$ sur $I$."
     } else {
-      this.consigne = 'On admet que la fonction $f$ est définie et dérivable sur un intervalle $I$. <br>Déterminer une expression de la fonction dérivée $f\'$ sur $I$.'
+      this.consigne =
+        "On admet que la fonction $f$ est définie et dérivable sur un intervalle $I$. <br>Déterminer une expression de la fonction dérivée $f'$ sur $I$."
     }
-    
+
     this.listeQuestions = []
     this.listeCorrections = []
     this.autoCorrection = []
@@ -178,7 +179,7 @@ class DerivationQuotientParticulier extends Exercice {
       let texteCorr = ''
 
       if (this.correctionDetaillee) {
-        texteCorr += `${a === 1 ? `La fonction $f$ est de la forme $\\dfrac{1}{u}$ avec $u(x)=${uExpression}$.<br>`: `La fonction $f$ est de la forme $a\\times \\dfrac{1}{u}$ avec $a=${a}$  et $u(x)=${uExpression}$.<br>`}`
+        texteCorr += `${a === 1 ? `La fonction $f$ est de la forme $\\dfrac{1}{u}$ avec $u(x)=${uExpression}$.<br>` : `La fonction $f$ est de la forme $a\\times \\dfrac{1}{u}$ avec $a=${a}$  et $u(x)=${uExpression}$.<br>`}`
         texteCorr += ` ${a === 1 ? `On utilise la formule : $\\left(\\dfrac{1}{u}\\right)'=\\dfrac{-u'}{u^{2}}$` : `On sait que $\\left(\\dfrac{1}{u}\\right)'=\\dfrac{-u'}{u^{2}}$, donc $f'=${a}\\times \\dfrac{-u'}{u^{2}}$`}.<br>`
         texteCorr += `Puisque $u'(x)=${uprime}$, on obtient : `
 
@@ -200,8 +201,7 @@ class DerivationQuotientParticulier extends Exercice {
         handleAnswers(this, i, {
           reponse: {
             value: laDerivee,
-            options: { variable: 'x' },
-            compare: functionCompare,
+            options: { fonction: true, variable: 'x' },
           },
         })
         i++

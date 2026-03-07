@@ -196,7 +196,7 @@ export default class ExerciceComparerQuatreFractions extends Exercice {
       }
 
       handleAnswers(this, i, {
-        bareme: (listePoints) => [
+        bareme: (listePoints: number[]) => [
           listePoints[0] +
             listePoints[1] +
             listePoints[2] +

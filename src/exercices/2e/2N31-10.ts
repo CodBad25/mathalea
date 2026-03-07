@@ -22,7 +22,6 @@ export const amcType = 'AMCNum'
  * * Travailler des résultats automatisés
  * * mais aussi d'utiliser les propriétés du produit de puissance, du quotient de puissances et des puissances de puissances
  * @author Jean-Léon Henry
- * 2N31-3 initialement
  */
 export const uuid = 'fc2e8'
 

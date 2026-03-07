@@ -16,9 +16,9 @@ import {
 } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-import type { BoxedExpression } from '@cortex-js/compute-engine'
+import type { Expression } from '@cortex-js/compute-engine'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import engine from '../../lib/interactif/comparisonFunctions'
+import ce from '../../lib/interactif/comparisonFunctions'
 import {
   developpe,
   regroupeTermesMemeDegre,
@@ -193,7 +193,7 @@ export default class DevelopperReduireExprComplexe extends Exercice {
         colorOffset: 4,
         level,
       })
-      const parsedExp1: BoxedExpression = engine.parse(
+      const parsedExp1: Expression = ce.parse(
         developpe(expression1, {
           isColored: false,
           colorOffset: 0,
@@ -206,7 +206,7 @@ export default class DevelopperReduireExprComplexe extends Exercice {
           expression1,
         })
       }
-      const parsedExp2 = engine.parse(
+      const parsedExp2 = ce.parse(
         developpe(expression2, {
           isColored: false,
           colorOffset: 0,

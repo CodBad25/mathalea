@@ -1,6 +1,6 @@
+import { compile } from '@cortex-js/compute-engine'
 import type { MathfieldElement } from 'mathlive'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import engine from '../../lib/interactif/comparisonFunctions'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
@@ -231,13 +231,16 @@ class EqCartDroite extends Exercice {
             score: { nbBonnesReponses: 0, nbReponses: 1 },
           }
         } else {
-          const fxy = engine
+          /* const fxy = ce
             .box([
               'Divide',
-              engine.parse(equation[0]).json,
-              engine.parse(reduireAxPlusByPlusC(xn, yn, constante)).json,
+              ce.parse(equation[0]).json,
+              ce.parse(reduireAxPlusByPlusC(xn, yn, constante)).json,
             ])
-            .compile()
+            .compile() */
+          const fxy = compile(
+            `(${equation[0]})\\div(${reduireAxPlusByPlusC(xn, yn, constante)})`,
+          )
           if (fxy == null) {
             resultat = {
               isOk: false,
@@ -255,7 +258,8 @@ class EqCartDroite extends Exercice {
                   ['x', x],
                   ['y', y],
                 ])
-                results.push(Number(fxy(vars)))
+                //  results.push(Number(fxy(vars)))
+                results.push(Number(fxy.run(vars)))
               }
             }
             let isOk = true

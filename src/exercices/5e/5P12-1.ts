@@ -1,5 +1,4 @@
 import type { MathfieldElement } from 'mathlive'
-import { approximatelyCompare } from '../../lib/interactif/comparisonFunctions'
 import { toutAUnPoint } from '../../lib/interactif/mathLive'
 import { ajouteQuestionMathlive } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
@@ -137,7 +136,6 @@ export default class ProblemeDeRatio extends Exercice {
         k,
         cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       index = randint(0, 10)
       index2 = randint(0, 10)
@@ -359,8 +357,7 @@ export default class ProblemeDeRatio extends Exercice {
                   objetReponse: {
                     reponse: {
                       value: p1,
-                      compare: approximatelyCompare,
-                      options: { tolerance: 0.5 },
+                      options: { approximatelyCompare: true, tolerance: 0.5 },
                     },
                   },
                   texteApres: '%',
@@ -407,13 +404,11 @@ export default class ProblemeDeRatio extends Exercice {
                   objetReponse: {
                     champ2: {
                       value: Math.round((100 * x) / (x + y)),
-                      compare: approximatelyCompare,
-                      options: { tolerance: 0.5 },
+                      options: { approximatelyCompare: true, tolerance: 0.5 },
                     },
                     champ1: {
                       value: Math.round((100 * x) / (x + z)),
-                      compare: approximatelyCompare,
-                      options: { tolerance: 0.5 },
+                      options: { approximatelyCompare: true, tolerance: 0.5 },
                     },
                     bareme: toutAUnPoint,
                   },

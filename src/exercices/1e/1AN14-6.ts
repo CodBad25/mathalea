@@ -1,7 +1,5 @@
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import engine, {
-  functionCompare,
-} from '../../lib/interactif/comparisonFunctions'
+import ce from '../../lib/interactif/comparisonFunctions'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { Polynome } from '../../lib/mathFonctions/Polynome'
@@ -51,7 +49,7 @@ type TypeDeFonction =
   | 'exp'
 
 export default class DeriveeQuotient extends Exercice {
- constructor() {
+  constructor() {
     super()
     this.besoinFormulaireTexte = [
       'Types de fonctions : ',
@@ -72,11 +70,13 @@ export default class DeriveeQuotient extends Exercice {
   nouvelleVersion() {
     // Consigne adaptée selon le mode
     if (this.sup2) {
-      this.consigne = 'Dans chacun des cas suivants, on admet que la fonction est définie et dérivable sur un intervalle $I$.'
+      this.consigne =
+        'Dans chacun des cas suivants, on admet que la fonction est définie et dérivable sur un intervalle $I$.'
     } else {
-      this.consigne = 'Dans chacun des cas suivants, on admet que la fonction est définie et dérivable sur un intervalle $I$.<br> Déterminer une expression de la fonction dérivée sur $I$.'
+      this.consigne =
+        'Dans chacun des cas suivants, on admet que la fonction est définie et dérivable sur un intervalle $I$.<br> Déterminer une expression de la fonction dérivée sur $I$.'
     }
-    
+
     const listeValeurs: string[] = [] // Les questions sont différentes du fait du nom de la fonction, donc on stocke les valeurs
     if (this.sup2) {
       this.interactifReady = false
@@ -130,12 +130,12 @@ export default class DeriveeQuotient extends Exercice {
       // Extraction des fonctions
       const fNum = dictFonctions[typeNum]
       const fDen = dictFonctions[typeDen]
-      const termeNum = engine.parse(
+      const termeNum = ce.parse(
         ['pol', 'mon'].includes(typeNum.substr(0, 3))
           ? (fNum as Polynome).toMathExpr()
           : (fNum as string),
       )
-      const termeDen = engine.parse(
+      const termeDen = ce.parse(
         ['pol', 'mon'].includes(typeDen.substr(0, 3))
           ? (fDen as Polynome).toMathExpr()
           : (fDen as string),
@@ -162,10 +162,10 @@ export default class DeriveeQuotient extends Exercice {
         'e',
       ][i % 16]
       texte = ''
-      texte += `$${nameF}(x)=${engine.parse(expression).simplify().latex}$`
+      texte += `$${nameF}(x)=${ce.parse(expression).simplify().latex}$`
       // Correction
-      const derNum = engine.box(['D', termeNum, 'x']).evaluate()
-      const derDen = engine.box(['D', termeDen, 'x']).evaluate()
+      const derNum = ce.box(['D', termeNum, 'x']).evaluate()
+      const derDen = ce.box(['D', termeDen, 'x']).evaluate()
       texteCorr = ''
       texteCorr +=
         "On rappelle le cours : si $u,v$ sont  deux fonctions dérivables sur un même intervalle $I$, et que $v$ ne s'annule pas sur $I$ alors leur quotient est dérivable sur $I$ et on a la formule : "
@@ -173,14 +173,14 @@ export default class DeriveeQuotient extends Exercice {
         "\\[\\left(\\frac{u}{v}\\right)'=\\frac{u'\\times v-u\\times v'}{v^2}.\\]"
       texteCorr += `Ici $${nameF}=\\frac{u}{v}$ avec : `
       texteCorr += `\\[\\begin{aligned}u(x)&=${termeNum.latex},\\ u'(x)=${derNum.latex}\\\\ v(x)&=${termeDen.latex},\\ v'(x)=${derDen.latex}.\\end{aligned}\\]`
-      
+
       switch (listeTypeDeQuestions[i]) {
         case 'poly1a/poly1':
         case 'poly/poly1': {
           // fDen = cx+d
           const c = (fDen as Polynome).monomes[1]
           const d = (fDen as Polynome).monomes[0]
-          
+
           texteCorr += 'On obtient alors : '
           if (Number((fNum as Polynome).deg) === 1) {
             // fNum = ax+b
@@ -211,7 +211,7 @@ export default class DeriveeQuotient extends Exercice {
         case 'mon/poly2centre':
           {
             const fDenDer = (fDen as Polynome).derivee().toLatex()
-            
+
             texteCorr += 'On obtient alors : '
             texteCorr += `\\[${nameF}'(x)=\\frac{${(fNum as Polynome).derivee()}(${fDen})-${fNum}\\times${fDenDer.startsWith('-') ? `(${fDenDer})` : `${fDenDer}`}}{(${termeDen.latex})^2}.\\]`
             texteCorr += "D'où, en développant le numérateur : "
@@ -232,7 +232,7 @@ export default class DeriveeQuotient extends Exercice {
         case 'mon/poly1': {
           // fDen = cx+d
           const c = (fDen as Polynome).monomes[1]
-          
+
           texteCorr += 'On obtient alors : '
           texteCorr += `\\[${nameF}'(x)=\\frac{${(fNum as Polynome).derivee()}(${fDen})-${fNum}\\times${Number(c) < 0 ? `(${c})` : c}}{(${termeDen.latex})^2}.\\]`
           texteCorr += "D'où, en développant le numérateur : "
@@ -250,7 +250,7 @@ export default class DeriveeQuotient extends Exercice {
           // fDen = cx+d
           const c = (fDen as Polynome).monomes[1]
           const d = (fDen as Polynome).monomes[0]
-          
+
           texteCorr += 'On obtient alors : '
           texteCorr += `\\[${nameF}'(x)=\\frac{${fNum}(${fDen})-${fNum}\\times${Number(c) < 0 ? `(${c})` : c}}{(${termeDen.latex})^2}.\\]`
           texteCorr += 'On factorise par $e^x$, et on obtient : '
@@ -282,7 +282,7 @@ export default class DeriveeQuotient extends Exercice {
         this.listeCorrections[i] = texteCorr
 
         handleAnswers(this, i, {
-          reponse: { value: maReponse, compare: functionCompare },
+          reponse: { value: maReponse, options: { fonction: true } },
         })
         i++
       }

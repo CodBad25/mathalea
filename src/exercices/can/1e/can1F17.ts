@@ -1,5 +1,4 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { functionCompare } from '../../../lib/interactif/comparisonFunctions'
 import { choice } from '../../../lib/outils/arrayOutils'
 import {
   ecritureAlgebriqueSauf1,
@@ -65,8 +64,7 @@ export default class CalculFonctionDeriveeUnsurU extends ExerciceSimple {
         this.reponse = {
           reponse: {
             value: `\\dfrac{${-m}}{(${m}x+${p})^2}`,
-            compare: functionCompare,
-            options: { variable: 'x' },
+            options: { fonction: true, variable: 'x' },
           },
         }
         break
@@ -92,8 +90,7 @@ export default class CalculFonctionDeriveeUnsurU extends ExerciceSimple {
         this.reponse = {
           reponse: {
             value: `\\dfrac{${-m}}{(${m}x+${p})^2}`,
-            compare: functionCompare,
-            options: { variable: 'x' },
+            options: { fonction: true, variable: 'x' },
           },
         }
         break
@@ -118,8 +115,7 @@ export default class CalculFonctionDeriveeUnsurU extends ExerciceSimple {
         this.reponse = {
           reponse: {
             value: `\\dfrac{${-2 * m}x}{(${reduirePolynomeDegre3(0, m, 0, p)})^2}`,
-            compare: functionCompare,
-            options: { variable: 'x' },
+            options: { fonction: true, variable: 'x' },
           },
         }
         //  this.reponse = [`\\dfrac{${-2 * m}x}{(${reduirePolynomeDegre3(0, m, 0, p)})^2}`, `\\dfrac{${-2 * m}x}{(${reduirePolynomeDegre3(0, -m, 0, -p)})^2}`]

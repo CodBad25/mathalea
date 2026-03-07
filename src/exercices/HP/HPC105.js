@@ -1,3 +1,4 @@
+import ce from '../../lib/interactif/comparisonFunctions'
 import { Matrice } from '../../lib/mathFonctions/Matrice'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import {
@@ -5,7 +6,6 @@ import {
   lettreMinusculeDepuisChiffre,
 } from '../../lib/outils/outilString'
 import { listeQuestionsToContenu } from '../../modules/outils'
-import { ComputeEngine } from '@cortex-js/compute-engine'
 import Exercice from '../Exercice'
 
 export const titre = "Matrice d'une application linéaire"
@@ -46,8 +46,6 @@ export default class nomExercice extends Exercice {
   }
 
   nouvelleVersion() {
-    const computeEngine = new ComputeEngine()
-
     let listeTypeDeQuestionsDisponibles
     if (this.sup === 1) {
       // On ajuste la difficulté selon le paramètre.
@@ -64,7 +62,6 @@ export default class nomExercice extends Exercice {
     for (
       let i = 0, coefficients, texte, texteCorr, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       coefficients = [
         -9, -8, -7, -6, -5, -4, -3, -3, -2, -2, -2, -1, -1, -1, -1, 0, 0, 0, 0,
@@ -91,7 +88,7 @@ export default class nomExercice extends Exercice {
           }
           const matrice = new Matrice(table)
           if (n === 1) {
-            expression1 = computeEngine
+            expression1 = ce
               .parse(`${table[0][0]} x + ${table[0][1]} y`)
               .simplify().latex // On calcule l'expression de la première ligne
             texte = `On donne l'application linéaire : \\[ ${nomfonction} : \\begin{array}{rcl} \\mathbb{R}^2 & \\longrightarrow & \\mathbb{R} \\\\ (x,y) & \\longmapsto & ${expression1} \\end{array}.\\] <br> Déterminer la matrice de l'application linéaire $f$ dans la base canonique.`
@@ -100,10 +97,10 @@ export default class nomExercice extends Exercice {
             <br><br> On calcule : $${nomfonction}(1,0) = ${table[0][0]}$ et $${nomfonction}(0,1) = ${table[0][1]}$.
             <br><br> On en déduit que  la matrice de $${nomfonction}$ dans la base canonique est : $${nommatrice} = ${matrice.toTex()}$.`
           } else if (n === 2) {
-            expression1 = computeEngine
+            expression1 = ce
               .parse(`${table[0][0]} x + ${table[0][1]} y`)
               .simplify().latex // On calcule l'expression de la première ligne
-            expression2 = computeEngine
+            expression2 = ce
               .parse(`${table[1][0]} x + ${table[1][1]} y`)
               .simplify().latex // On calcule l'expression de la deuxième ligne
             texte = `On donne l'application linéaire : \\[ ${nomfonction} : \\begin{array}{rcl} \\mathbb{R}^2 & \\longrightarrow & \\mathbb{R}^2 \\\\ (x,y) & \\longmapsto & \\left( ${expression1} \\, , \\, ${expression2} \\right) \\end{array}.\\] <br> Déterminer la matrice de l'application linéaire $f$ dans la base canonique.`
@@ -112,13 +109,13 @@ export default class nomExercice extends Exercice {
               <br><br> On calcule : $${nomfonction}(1,0) = (${table[0][0]},${table[1][0]})$ et $${nomfonction}(0,1) = (${table[0][1]},${table[1][1]})$.
               <br><br> On en déduit que la matrice de $${nomfonction}$ dans la base canonique est : $${nommatrice} = ${matrice.toTex()}$.`
           } else if (n === 3) {
-            expression1 = computeEngine
+            expression1 = ce
               .parse(`${table[0][0]} x + ${table[0][1]} y`)
               .simplify().latex // On calcule l'expression de la première ligne
-            expression2 = computeEngine
+            expression2 = ce
               .parse(`${table[1][0]} x + ${table[1][1]} y`)
               .simplify().latex // On calcule l'expression de la deuxième ligne
-            expression3 = computeEngine
+            expression3 = ce
               .parse(`${table[2][0]} x + ${table[2][1]} y`)
               .simplify().latex // On calcule l'expression de la troisième ligne
             texte = `On donne l'application linéaire : \\[ ${nomfonction} : \\begin{array}{rcl} \\mathbb{R}^2 & \\longrightarrow & \\mathbb{R}^3 \\\\ (x,y) & \\longmapsto & \\left( ${expression1} \\, , \\, ${expression2} \\, , \\, ${expression3} \\right) \\end{array}.\\] <br> Déterminer la matrice de l'application linéaire $f$ dans la base canonique.`
@@ -149,7 +146,7 @@ export default class nomExercice extends Exercice {
           }
           const matrice = new Matrice(table)
           if (n === 1) {
-            expression1 = computeEngine
+            expression1 = ce
               .parse(`${table[0][0]} x + ${table[0][1]} y + ${table[0][2]} z`)
               .simplify().latex // On calcule l'expression de la première ligne
             texte = `On donne l'application linéaire : \\[ ${nomfonction} : \\begin{array}{rcl} \\mathbb{R}^3 & \\longrightarrow & \\mathbb{R} \\\\ (x,y,z) & \\longmapsto & ${expression1} \\end{array}.\\] <br> Déterminer la matrice de l'application linéaire $f$ dans la base canonique.`
@@ -158,10 +155,10 @@ export default class nomExercice extends Exercice {
             <br><br> On calcule : $${nomfonction}(1,0,0) = ${table[0][0]}$, $${nomfonction}(0,1,0) = ${table[0][1]}$ et $${nomfonction}(0,0,1) = ${table[0][2]}$.
             <br><br> On en déduit que la matrice de $${nomfonction}$ dans la base canonique est : $${nommatrice} = ${matrice.toTex()}$.`
           } else if (n === 2) {
-            expression1 = computeEngine
+            expression1 = ce
               .parse(`${table[0][0]} x + ${table[0][1]} y + ${table[0][2]} z`)
               .simplify().latex // On calcule l'expression de la première ligne
-            expression2 = computeEngine
+            expression2 = ce
               .parse(`${table[1][0]} x + ${table[1][1]} y + ${table[1][2]} z`)
               .simplify().latex // On calcule l'expression de la deuxième ligne
             texte = `On donne l'application linéaire : \\[ ${nomfonction} : \\begin{array}{rcl} \\mathbb{R}^3 & \\longrightarrow & \\mathbb{R}^2 \\\\ (x,y,z) & \\longmapsto & \\left( ${expression1} \\, , \\, ${expression2} \\right) \\end{array}.\\] <br> Déterminer la matrice de l'application linéaire $f$ dans la base canonique.`
@@ -170,13 +167,13 @@ export default class nomExercice extends Exercice {
               <br><br> On calcule : $${nomfonction}(1,0,0) = (${table[0][0]},${table[1][0]})$, $${nomfonction}(0,1,0) = (${table[0][1]},${table[1][1]})$ et $${nomfonction}(0,0,1) = (${table[0][2]},${table[1][2]})$.
               <br><br> On en déduit que la matrice de $${nomfonction}$ dans la base canonique est : $${nommatrice} = ${matrice.toTex()}$.`
           } else if (n === 3) {
-            expression1 = computeEngine
+            expression1 = ce
               .parse(`${table[0][0]} x + ${table[0][1]} y + ${table[0][2]} z`)
               .simplify().latex // On calcule l'expression de la première ligne
-            expression2 = computeEngine
+            expression2 = ce
               .parse(`${table[1][0]} x + ${table[1][1]} y + ${table[1][2]} z`)
               .simplify().latex // On calcule l'expression de la deuxième ligne
-            expression3 = computeEngine
+            expression3 = ce
               .parse(`${table[2][0]} x + ${table[2][1]} y + ${table[2][2]} z`)
               .simplify().latex // On calcule l'expression de la troisième ligne
             texte = `On donne l'application linéaire : \\[ ${nomfonction} : \\begin{array}{rcl} \\mathbb{R}^3 & \\longrightarrow & \\mathbb{R}^3 \\\\ (x,y,z) & \\longmapsto & \\left( ${expression1} \\, , \\, ${expression2} \\, , \\, ${expression3} \\right) \\end{array}.\\] <br> Déterminer la matrice de l'application linéaire $f$ dans la base canonique.`

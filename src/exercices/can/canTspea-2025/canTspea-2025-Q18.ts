@@ -1,5 +1,4 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { functionCompare } from '../../../lib/interactif/comparisonFunctions'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
@@ -23,8 +22,7 @@ export default class Can2025TQ18 extends ExerciceSimple {
     this.typeExercice = 'simple'
     this.nbQuestions = 1
     this.formatChampTexte = KeyboardType.lycee
-    this.compare = functionCompare
-    this.optionsDeComparaison = { variable: 'x' }
+    this.optionsDeComparaison = { fonction: true, variable: 'x' }
     this.canOfficielle = true
     this.optionsChampTexte = { texteAvant: " <br>$f'(x)=$" }
   }

@@ -8,13 +8,13 @@ import type {
   AnswerValueType,
   AutoCorrection,
   ClickFigures,
+  CompareFunction,
   IDragAndDrop,
   IExercice,
   IExerciceSimple,
   InteractivityType,
   OldFormatInteractifType,
   OptionsComparaisonType,
-  CompareFunction,
   Valeur,
 } from '../lib/types'
 import type { IFractionEtendue } from '../modules/FractionEtendue.type'

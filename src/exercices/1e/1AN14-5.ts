@@ -1,7 +1,5 @@
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import engine, {
-  functionCompare,
-} from '../../lib/interactif/comparisonFunctions'
+import ce from '../../lib/interactif/comparisonFunctions'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { Polynome } from '../../lib/mathFonctions/Polynome'
@@ -58,7 +56,7 @@ export default class DeriveeProduit extends Exercice {
       'Types de fonctions :',
       'Nombres séparés par des tirets :\n1 Monôme2 et affine\n2 : Inverse et affine\n3 : Racine et polynôme\n4 : Racine et polynôme degré 2 sans degré 1\n5 : Monôme2 et racine\n6 : Mélange',
     ]
-this.spacing= 1.5
+    this.spacing = 1.5
     this.nbQuestions = 3
     // Sortie LaTeX
     this.nbCols = 2 // Nombre de colonnes
@@ -73,12 +71,14 @@ this.spacing= 1.5
   }
 
   nouvelleVersion() {
-     if (this.nbQuestions > 1) {
-      this.consigne = 'Dans chacun des cas suivants, on admet que la fonction est définie et dérivable sur un intervalle $I$. <br>Déterminer une expression de la fonction dérivée sur $I$.'
+    if (this.nbQuestions > 1) {
+      this.consigne =
+        'Dans chacun des cas suivants, on admet que la fonction est définie et dérivable sur un intervalle $I$. <br>Déterminer une expression de la fonction dérivée sur $I$.'
     } else {
-      this.consigne = 'On admet que la fonction est définie et dérivable sur un intervalle $I$. <br>Déterminer une expression de la fonction dérivée sur $I$.'
+      this.consigne =
+        'On admet que la fonction est définie et dérivable sur un intervalle $I$. <br>Déterminer une expression de la fonction dérivée sur $I$.'
     }
-     const listeValeurs = [] // Les questions sont différentes du fait du nom de la fonction, donc on stocke les valeurs
+    const listeValeurs = [] // Les questions sont différentes du fait du nom de la fonction, donc on stocke les valeurs
 
     // Types d'énoncés
     // const listeTypeDeQuestionsDisponibles = ['monome2/poly1', 'inv/poly1']
@@ -165,7 +165,7 @@ this.spacing= 1.5
       terme2 = parenth(exprf2, typef2)
       // Expression finale de la fonction
       expression = `${terme1}*${terme2}`
-      
+
       // Pour le cas monome2/poly1, on crée l'affichage directement en LaTeX
       let affichageFonction = ''
       if (listeTypeDeQuestions[i] === 'monome2/poly1') {
@@ -176,7 +176,7 @@ this.spacing= 1.5
         const coeffStr = coeff === 1 ? '' : coeff === -1 ? '-' : `${coeff}`
         affichageFonction = `${coeffStr}x^{2}(${poly1.toLatex()})`
       } else {
-        affichageFonction = engine.parse(expression).latex
+        affichageFonction = ce.parse(expression).latex
       }
 
       // Enoncé
@@ -215,7 +215,7 @@ this.spacing= 1.5
         'On rappelle le cours : si $u,v$ sont  deux fonctions dérivables sur un même intervalle $I$ alors leur produit est dérivable sur $I$ et on a la formule : '
       texteCorr += "\\[(u\\times v)'=u'\\times v+u\\times v'.\\]"
       texteCorr += `Ici $${namef}=u\\times v$ avec : `
-      texteCorr += `\\[\\begin{aligned}u(x)&=${engine.parse(exprf1).latex}\\\\ v(x)&=${engine.parse(exprf2).latex}.\\end{aligned}\\]`
+      texteCorr += `\\[\\begin{aligned}u(x)&=${ce.parse(exprf1).latex}\\\\ v(x)&=${ce.parse(exprf2).latex}.\\end{aligned}\\]`
       switch (listeTypeDeQuestions[i]) {
         case 'inv/poly1': {
           const b = (dictFonctions[typef2] as Polynome).monomes[0] // coeffs du poly1
@@ -223,22 +223,22 @@ this.spacing= 1.5
           const f2 = dictFonctions[typef2] as Polynome
           // Début correction
           texteCorr += 'On utilise la formule rappelée plus haut et on a : '
-          texteCorr += `\\[${namef}'(x)=\\underbrace{-\\frac{1}{x^2}}_{u'(x)}\\times${engine.parse(terme2).latex}+\\frac{1}{x}\\times\\underbrace{${Number(a) > 0 ? a : `(${a})`}}_{v'(x)}.\\]`
+          texteCorr += `\\[${namef}'(x)=\\underbrace{-\\frac{1}{x^2}}_{u'(x)}\\times${ce.parse(terme2).latex}+\\frac{1}{x}\\times\\underbrace{${Number(a) > 0 ? a : `(${a})`}}_{v'(x)}.\\]`
           texteCorr += `Ce qui donne, en simplifiant : \\[${namef}'(x)=\\frac{${f2.multiply(-1)}}{x^2}+\\frac{${a}}{x}.\\]`
           texteCorr += 'On additionne les deux fractions pour obtenir : '
           texteCorr += `\\[${namef}'(x)=\\frac{${f2.multiply(-1)}}{x^2}+\\frac{${Polynome.print([0, Number(a)])}}{x^2}=\\frac{${f2.multiply(-1)}${Polynome.print([0, Number(a)], true)}}{x^2}.\\]`
           texteCorr += 'Des termes se simplifient au numérateur et on a : '
           texteCorr += `\\[${namef}'(x)=${miseEnEvidence(`\\frac{${Polynome.print([-b])}}{x^2}`)}.\\]`
           // Remarque sur la méthode alternative
-          const fExpand = engine.parse(`${a}${ecritureAlgebrique(b)}/x`).latex
+          const fExpand = ce.parse(`${a}${ecritureAlgebrique(b)}/x`).latex
           texteCorr += `Remarque : on pourrait bien entendu développer avant de dériver.<br>Dans ce cas, $${namef}(x)=${fExpand}$.<br>`
-          const maReponse = engine
-            .box(['D', engine.parse(fExpand), 'x'])
+          const maReponse = ce
+            .box(['D', ce.parse(fExpand), 'x'])
             .evaluate().latex
           texteCorr += `Et donc $${namef}'(x)=${miseEnEvidence(maReponse)}$. Ce qui est bien cohérent avec le résultat trouvé plus haut.`
           // Sans le replace { x} est mal interprété par le parser de mathLive
           handleAnswers(this, i, {
-            reponse: { value: maReponse, compare: functionCompare },
+            reponse: { value: maReponse, options: { fonction: true } },
           })
           break
         }
@@ -257,7 +257,7 @@ this.spacing= 1.5
           handleAnswers(this, i, {
             reponse: {
               value: polExpand.derivee().toString(),
-              compare: functionCompare,
+              options: { fonction: true },
             },
           })
           break
@@ -274,7 +274,7 @@ this.spacing= 1.5
             handleAnswers(this, i, {
               reponse: {
                 value: `${rienSi1(2 * m)}x\\sqrt{x}${signe(m)}\\frac{${rienSi1(Math.abs(m))}x^2}{2\\sqrt{x}}`,
-                compare: functionCompare,
+                options: { fonction: true },
               },
             })
             // Réponse réduite à ajouter
@@ -283,7 +283,7 @@ this.spacing= 1.5
             handleAnswers(this, i, {
               reponse: {
                 value: `${rienSi1(2 * m)}x\\sqrt{x}${signe(m)}\\frac{${Polynome.print([0, 0, Math.abs(m / 2)])}}{\\sqrt{x}}`,
-                compare: functionCompare,
+                options: { fonction: true },
               },
             })
             // Réponse réduite à ajouter
@@ -323,7 +323,7 @@ this.spacing= 1.5
             "L'énoncé ne demandant rien de plus, on se contente de simplifier l'expression :"
           texteCorr += `\\[${namef}'(x)=${miseEnEvidence(`${interm2}`)}.\\]`
           handleAnswers(this, i, {
-            reponse: { value: interm2, compare: functionCompare },
+            reponse: { value: interm2, options: { fonction: true } },
           })
           break
         }
@@ -352,7 +352,7 @@ this.spacing= 1.5
             handleAnswers(this, i, {
               reponse: {
                 value: `${termeGauche}${termeDroite}`,
-                compare: functionCompare,
+                options: { fonction: true },
               },
             })
             // 3e étape : Simplification si nécessaire
@@ -372,7 +372,7 @@ this.spacing= 1.5
               handleAnswers(this, i, {
                 reponse: {
                   value: `${termeGauche2}${termeDroite2}`,
-                  compare: functionCompare,
+                  options: { fonction: true },
                 },
               })
             }

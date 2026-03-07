@@ -97,7 +97,6 @@ export default class FonctionsProbabilite2 extends Exercice {
     for (
       let i = 0, cpt = 0, iInteractif = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       let quidame = prenomF()
       let quidam = prenomM()
@@ -226,17 +225,6 @@ export default class FonctionsProbabilite2 extends Exercice {
           texteCorr += `La probabilité de cet événement est donc : $1-${probaMemeSaveur.texFraction}=${fraction(den, den).texFraction}-${probaMemeSaveur.texFraction}=${fraction(den - num, den).texFraction}${probaContraire.texSimplificationAvecEtapes()}$.`
           // question a
           handleAnswers(this, iInteractif, { reponse: { value: 9 } })
-          /* handleAnswers(this, iInteractif + 1, {
-            reponse: {
-              value: 9,
-              compare: (input, _goodAnswer) => {
-                const clean = generateCleaner(['latex', 'espaces', 'parentheses', 'virgules'])
-                const inputCleaned = clean(input).toUpperCase().replace('.', ',') // le cleaner virgules remplace la virgule latex par un point simple
-                const isOk = issues.split(' ').includes(inputCleaned) || issues.split(' ').includes(inputCleaned.split('').reverse().join(''))
-                return { isOk }
-              }
-            }
-          }) */
           handleAnswers(this, iInteractif + 1, {
             reponse: {
               value: issues.split(' '),

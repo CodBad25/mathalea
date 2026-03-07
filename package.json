@@ -82,7 +82,7 @@
   },
   "dependencies": {
     "@bugsnag/js": "^8.8.1",
-    "@cortex-js/compute-engine": "^0.30.2",
+    "@cortex-js/compute-engine": "^0.54.1",
     "@mixer/postmessage-rpc": "^1.1.4",
     "@svgdotjs/svg.js": "^3.2.5",
     "@types/crypto-js": "^4.2.2",

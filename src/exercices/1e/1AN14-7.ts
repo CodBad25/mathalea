@@ -182,7 +182,9 @@ export default class DeriveeComposee extends Exercice {
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr
 
-        handleAnswers(this, i, { reponse: { value } })
+        handleAnswers(this, i, {
+          reponse: { value, options: { calculFormel: true } },
+        })
         i++
       }
       cpt++

@@ -1,9 +1,8 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { randint } from '../../../modules/outils'
 import { rienSi1 } from '../../../lib/outils/ecritures'
-import { functionCompare } from '../../../lib/interactif/comparisonFunctions'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer une dérivée'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -33,8 +32,7 @@ export default class Can2025N5Q17 extends ExerciceSimple {
     this.reponse = {
       reponse: {
         value: `\\dfrac{-${a}x^{${a - 1}}}{x^{${2 * a}}}`,
-        compare: functionCompare,
-        options: { variable: 'x' },
+        options: { fonction: true, variable: 'x' },
       },
     }
     this.question = `Soit $f$ : $x\\longmapsto \\dfrac{1}{x^${a}}$<br>`

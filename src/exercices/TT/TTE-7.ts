@@ -108,7 +108,7 @@ export default class EquationsLog extends Exercice {
             this,
             2 * i,
             ` ${KeyboardType.equationsTerminale}`,
-            { texteAvant: '$\\mathcal{D}_f=$' },
+            { texteAvant: '<br>$\\mathcal{D}_f=$' },
           )
         texte +=
           `<br>${numAlpha(1)} Donner la solution de cette équation.` +
@@ -116,13 +116,13 @@ export default class EquationsLog extends Exercice {
             this,
             2 * i + 1,
             ` ${KeyboardType.equationsTerminale}`,
-            { texteAvant: '$\\mathcal{S}=$' },
+            { texteAvant: '<br>$\\mathcal{S}=$' },
           )
 
         if (b !== 0) {
-          solution = `${a > 0 ? '' : '-'}${Math.abs(a) !== 1 ? `\\dfrac{${base}^{${n}}${ecritureAlgebrique(-b)}}{${Math.abs(a)}}` : `${base}^{${n}}${ecritureAlgebrique(a === 1 ? -b : b)}`}`
+          solution = `{${a > 0 ? '' : '-'}${Math.abs(a) !== 1 ? `\\dfrac{${base}^{${n}}${ecritureAlgebrique(-b)}}{${Math.abs(a)}}` : `${base}^{${n}}${ecritureAlgebrique(a === 1 ? -b : b)}`}`
         } else {
-          solution = `${a > 0 ? '' : '-'}${Math.abs(a) !== 1 ? `\\dfrac{${base}^{${n}}}{${Math.abs(a)}}` : `${base}^{${n}}`}`
+          solution = `{${a > 0 ? '' : '-'}${Math.abs(a) !== 1 ? `\\dfrac{${base}^{${n}}}{${Math.abs(a)}}` : `${base}^{${n}}`}`
         }
         const f1 = new FractionEtendue(-b, a)
         const fracMoinsBsurA = f1.texFractionSimplifiee
@@ -157,7 +157,7 @@ export default class EquationsLog extends Exercice {
           intervalle[0].valeurDecimale < valeurSolution
         ) {
           texteCorr += `<br>On vérifie que  $${solution}\\in ${domaine}$ donc $S=\\left\\{${solution}\\right\\}$.<br> L'équation admet $${miseEnEvidence(solution)}$ comme solution unique.`
-          solution = `{${solution}}`
+          solution = `\\{${solution}\\}`
         } else {
           texteCorr += `<br>On vérifie que $${solution}\\notin ${domaine}$ donc $S=\\emptyset$.<br> L'équation n'admet aucune solution.`
           solution = '\\emptyset'
@@ -171,7 +171,7 @@ export default class EquationsLog extends Exercice {
             this,
             2 * i,
             ` ${KeyboardType.equationsTerminale}`,
-            { texteAvant: '$\\mathcal{D}_f=$' },
+            { texteAvant: '$\\mathcal{D}_f=$', texteApres: '<br>' },
           )
         texte +=
           `${numAlpha(1)} Donner la solution de cette équation.<br>` +
@@ -299,7 +299,7 @@ export default class EquationsLog extends Exercice {
             fracSolution.inferieurstrict(intervalle[1])
           ) {
             texteCorr += `<br>On vérifie que $${fracSolution.texFSD}\\in ${domaine}$ donc  `
-            solution = `{${fracSolution.texFSD}}`
+            solution = `\\{${fracSolution.texFSD}\\}`
           } else {
             texteCorr += `<br>On vérifie que $${fracSolution.texFSD}\\notin ${domaine}$ donc `
             solution = '\\emptyset'
@@ -315,7 +315,9 @@ export default class EquationsLog extends Exercice {
           handleAnswers(this, 2 * i, {
             reponse: { value: domaine, options: { intervalle: true } },
           })
-          handleAnswers(this, 2 * i + 1, { reponse: { value: solution } })
+          handleAnswers(this, 2 * i + 1, {
+            reponse: { value: solution, options: { intervalle: true } },
+          })
         }
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr

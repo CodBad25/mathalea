@@ -133,7 +133,12 @@ export default class nomExercice extends Exercice {
             texteCorr = `$${lettreDepuisChiffre(i + 1)}=${miseEnEvidence(p.toString())}$`
           }
           if (this.questionJamaisPosee(i, texteCorr)) {
-            handleAnswers(this, i, { reponse: { value: p.toString() } })
+            handleAnswers(this, i, {
+              reponse: {
+                value: p.toString(),
+                options: { expressionsForcementReduites: true },
+              },
+            })
 
             this.listeQuestions[i] = texte
             this.listeCorrections[i] = texteCorr

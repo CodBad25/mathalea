@@ -92,7 +92,10 @@ export default class CourseAuxNombres6e extends Exercice {
     // Si la saisie contient des numéros spécifiques (pas 31 = toutes les questions),
     // chaque question ne doit apparaître qu'une seule fois.
     const saisie = this.sup || '31'
-    const valeurs = saisie.split('-').map((v) => parseInt(v.trim())).filter((v) => !isNaN(v))
+    const valeurs = saisie
+      .split('-')
+      .map((v) => parseInt(v.trim()))
+      .filter((v) => !isNaN(v))
     if (valeurs.length >= 1 && !valeurs.includes(31)) {
       // Sélection manuelle : chaque question une seule fois
       listeIndex = valeurs.filter((v) => v >= 1 && v <= 30).map((v) => v - 1)
@@ -160,7 +163,6 @@ export default class CourseAuxNombres6e extends Exercice {
     for (
       let i = 0, q = 0, texte, texteCorr, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       // Boucle principale où i+1 correspond au numéro de la question
       switch (
@@ -516,10 +518,10 @@ export default class CourseAuxNombres6e extends Exercice {
           texte = `Est-il vrai qu'un carré de côté ${a} cm a le même périmètre qu'un rectangle de largeur ${a - b} cm et de longueur ${a + 1} cm ? (V ou F)`
           if (b === 0) {
             texteCorr = `Faux car $4\\times ${a}\\text{ cm}$ $\\neq 2\\times ${a}\\text{ cm}$ $+ 2\\times ${a + 1}\\text{ cm}$.`
-            setReponse(this, q, 'F')
+            setReponse(this, q, 'F', { formatInteractif: 'ignorerCasse' })
           } else {
             texteCorr = `Vrai car $4\\times ${a}\\text{ cm}$ $= 2\\times ${a - 1}\\text{ cm}$ $+ 2\\times ${a + 1}\\text{ cm}$ $= ${4 * a}\\text{ cm}$.`
-            setReponse(this, q, 'V')
+            setReponse(this, q, 'V', { formatInteractif: 'ignorerCasse' })
           }
           texte += ajouteChampTexteMathLive(
             this,

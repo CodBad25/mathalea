@@ -1,5 +1,4 @@
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { functionCompare } from '../../lib/interactif/comparisonFunctions'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { reduireAxPlusB } from '../../lib/outils/ecritures'
@@ -53,13 +52,13 @@ class DerivationLnU extends Exercice {
       let formeGenerale: string
       let fPrime: string
       let fPrimeDetaillee: string
-      let domaine // la variable domaine pour la fonction de comparaison
       let a = randint(-10, 10, 0)
       let b = randint(-5, 5, 0)
       let c = randint(-10, 10)
       let u: string
       let uPrime: string
       let valeurInterdite: string
+      let domaine: [number, number] = [1, 10] // la variable domaine pour la fonction de comparaison
       if (listeTypeDeQuestion[i] === 1) {
         u = reduireAxPlusB(a, b)
         uPrime = String(a)
@@ -133,13 +132,10 @@ class DerivationLnU extends Exercice {
       if (this.questionJamaisPosee(i, laFonctionFEnLatex, fPrime)) {
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr
-
-        // @ts-expect-error problème de typage handleAnswers
         handleAnswers(this, i, {
           reponse: {
             value: fPrime,
-            options: { variable: 'x', domaine },
-            compare: functionCompare,
+            options: { fonction: true, variable: 'x', domaine },
           },
         })
         i++

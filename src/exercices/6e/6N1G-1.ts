@@ -6,7 +6,6 @@ import { type Segment, segment } from '../../lib/2d/segmentsVecteurs'
 import { labelPoint, latex2d } from '../../lib/2d/textes'
 import { tracePoint } from '../../lib/2d/TracePoint'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { numberWithSpaceCompare } from '../../lib/interactif/comparisonFunctions'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
@@ -379,7 +378,7 @@ class ReperageEntiersOuDecimaux extends Exercice {
           handleAnswers(this, i, {
             reponse: {
               value: texNombre(nombreATrouver, nbDecimales),
-              compare: numberWithSpaceCompare,
+              options: { nombreAvecEspace: true },
             },
           })
         }

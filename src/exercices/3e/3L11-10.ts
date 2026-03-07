@@ -1,5 +1,4 @@
 import { tableauColonneLigne } from '../../lib/2d/tableau'
-import { functionCompare } from '../../lib/interactif/comparisonFunctions'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { toutPourUnPoint } from '../../lib/interactif/mathLive'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -184,13 +183,13 @@ export default class TableDoubleDistributivite extends Exercice {
 
       handleAnswers(this, 3 * i, {
         bareme: toutPourUnPoint,
-        L1C1: { value: tableau.L1C1txt, compare: functionCompare },
-        L1C2: { value: tableau.L1C2txt, compare: functionCompare },
-        L2C1: { value: tableau.L2C1txt, compare: functionCompare },
-        L2C2: { value: tableau.L2C2nbr, compare: functionCompare },
+        L1C1: { value: tableau.L1C1txt, options: { fonction: true } },
+        L1C2: { value: tableau.L1C2txt, options: { fonction: true } },
+        L2C1: { value: tableau.L2C1txt, options: { fonction: true } },
+        L2C2: { value: tableau.L2C2nbr, options: { fonction: true } },
       })
       handleAnswers(this, 3 * i + 1, {
-        reponse: { value: developpements.eclate, compare: functionCompare },
+        reponse: { value: developpements.eclate, options: { fonction: true } },
       })
       const reponse = developpements.reduit
       handleAnswers(this, 3 * i + 2, { reponse: { value: reponse } })

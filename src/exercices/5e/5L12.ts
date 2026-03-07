@@ -141,7 +141,12 @@ export default class ReduireUneExpressionLitterale extends Exercice {
       texte += ajouteChampTexteMathLive(this, i, KeyboardType.lyceeClassique, {
         texteAvant: `$${sp()} = $`,
       })
-      handleAnswers(this, i, { reponse: { value: reponse } })
+      handleAnswers(this, i, {
+        reponse: {
+          value: reponse,
+          options: { expressionsForcementReduites: true },
+        },
+      })
       if (this.questionJamaisPosee(i, a, b, c, d)) {
         // <- laisser le i et ajouter toutes les variables qui rendent les exercices différents (par exemple a, b, c et d)
         this.listeQuestions[i] = texte

@@ -2,7 +2,7 @@
  * ⚠️ Cet exercice est utilisé dans le test : tests/e2e/tests/interactivity/mathLive.fillInTheBlanks.test.ts ⚠️
  */
 
-import { consecutiveCompare } from '../../lib/interactif/comparisonFunctions'
+import { handleEntiersConsecutifs } from '../../lib/interactif/comparisonFunctions'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { remplisLesBlancs } from '../../lib/interactif/questionMathLive'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
@@ -86,16 +86,17 @@ export default class nomExercice extends Exercice {
             Math.min(listePoints[0], listePoints[1]),
             1,
           ],
-          feedback: (saisies: { champ1: string; champ2: string }) => {
+          // feedback: (saisies: { champ1: string; champ2: string }) => {
+          feedback: (saisies: Record<string, string>) => {
             const rep1 = saisies.champ1
             const rep2 = saisies.champ2
             // on teste consecutifsCompare pour le feedback seulement, comme c'est un fillInTheBlank, la comparaison se fait sur les valeurs exactes des bornes entières.
             // consecutifsCompare peut être utilisée pour évaluer des saisies complètes d'encadrements avec les signes < ou >
-            const { feedback } = consecutiveCompare(
+            const { feedback } = handleEntiersConsecutifs(
               `${rep1}<${(num / den).toFixed(4)}<${rep2}`,
               `${a}<${(a + b) / 2}<${b}`,
             )
-            return feedback
+            return feedback ?? ''
           },
           champ1: { value: String(a) },
           champ2: { value: String(b) },

@@ -24,6 +24,7 @@ export default class inequationAResoudre extends ExerciceSimple {
     this.typeExercice = 'simple' // Cette ligne est très importante pour faire un exercice simple !
     this.nbQuestions = 1
     this.formatChampTexte = KeyboardType.clavierEnsemble
+    this.optionsDeComparaison = { intervalle: true }
   }
 
   nouvelleVersion() {
@@ -46,7 +47,7 @@ export default class inequationAResoudre extends ExerciceSimple {
     }
     if ((inégalité === '>' && a > 0) || (inégalité === '<' && a < 0)) {
       solution1 = [
-        `$\\mathbb{R}\\\\{${b}\\}$`,
+        `\\mathbb{R}\\\\{${b}\\}`,
         `]-\\infty;${a}[ \\cup ]${a};+\\infty[`,
       ]
       this.correction += ` $${miseEnEvidence(`\\mathbb{R}\\smallsetminus\\{${texNombre(b)}\\}`)}$.`
@@ -54,16 +55,16 @@ export default class inequationAResoudre extends ExerciceSimple {
       (inégalité === '\\geqslant' && a > 0) ||
       (inégalité === '\\leqslant' && a < 0)
     ) {
-      solution1 = ['$\\mathbb{R}$', ']-\\infty;+\\infty[']
+      solution1 = ['\\mathbb{R}', ']-\\infty;+\\infty[']
       this.correction += ` $${miseEnEvidence('\\mathbb{R}')}$.`
     } else if ((inégalité === '<' && a > 0) || (inégalité === '>' && a < 0)) {
-      solution1 = '$\\emptyset$'
+      solution1 = '\\emptyset'
       this.correction += ` $${miseEnEvidence('\\emptyset')}$.`
     } else if (
       (inégalité === '\\leqslant' && a > 0) ||
       (inégalité === '\\geqslant' && a < 0)
     ) {
-      solution1 = `$\\left\\lbrace${b}\\right\\rbrace$`
+      solution1 = `\\left\\lbrace${b}\\right\\rbrace`
       this.correction += ` $${miseEnEvidence(`\\{${texNombre(b)}\\}`)}$.`
     }
     this.reponse = solution1

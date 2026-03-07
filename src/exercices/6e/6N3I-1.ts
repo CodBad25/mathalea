@@ -13,7 +13,7 @@ import Exercice from '../Exercice'
 import Figure from 'apigeom/src/Figure'
 import handleApigeomFigureElement from '../../lib/apigeom/apigeom-figure'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { consecutiveCompare } from '../../lib/interactif/comparisonFunctions'
+import { handleEntiersConsecutifs } from '../../lib/interactif/comparisonFunctions'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { remplisLesBlancs } from '../../lib/interactif/questionMathLive'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
@@ -201,9 +201,9 @@ export default class EncadrerFractionEntre2Entiers extends Exercice {
               feedback: (saisies /** {champ1: string, champ2:string} */) => {
                 const rep1 = saisies.champ1
                 const rep2 = saisies.champ2
-                // on teste consecutiveCompare pour le feedback seulement, comme c'est un fillInTheBlank, la comparaison se fait sur les valeurs exactes des bornes entières.
-                // consecutiveCompare peut être utilisée pour évaluer des saisies complètes d'encadrements avec les signes < ou >
-                const { feedback } = consecutiveCompare(
+                // on teste handleEntiersConsecutifs pour le feedback seulement, comme c'est un fillInTheBlank, la comparaison se fait sur les valeurs exactes des bornes entières.
+                // handleEntiersConsecutifs peut être utilisée pour évaluer des saisies complètes d'encadrements avec les signes < ou >
+                const { feedback } = handleEntiersConsecutifs(
                   `${rep1}<${(n / d).toFixed(4)}<${rep2}`,
                   `${k}<${(2 * k + 1) / 2}<${k + 1}`,
                 )

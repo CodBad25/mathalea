@@ -1,3 +1,4 @@
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choice } from '../../../lib/outils/arrayOutils'
 import {
   ecritureAlgebriqueSauf1,
@@ -5,11 +6,9 @@ import {
   reduireAxPlusB,
   reduirePolynomeDegre3,
 } from '../../../lib/outils/ecritures'
-import ExerciceSimple from '../../ExerciceSimple'
-import { randint } from '../../../modules/outils'
-import { functionCompare } from '../../../lib/interactif/comparisonFunctions'
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Déterminer la fonction dérivée d’une fonction $a/u(x)$'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -60,8 +59,7 @@ export default class CalculFonctionDeriveeAsurU extends ExerciceSimple {
         this.reponse = {
           reponse: {
             value: `\\dfrac{${-a * m}}{(${reduireAxPlusB(m, p)})^2}`,
-            compare: functionCompare,
-            options: { variable: 'x' },
+            options: { fonction: true, variable: 'x' },
           },
         }
         this.canEnonce = `Soit $f$ la fonction définie  par  $f(x)=\\dfrac{${a}}{${reduireAxPlusB(m, p)}}$. `
@@ -83,8 +81,7 @@ export default class CalculFonctionDeriveeAsurU extends ExerciceSimple {
         this.reponse = {
           reponse: {
             value: `\\dfrac{${-a * m}}{(${-m}x+${-p})^2}`,
-            compare: functionCompare,
-            options: { variable: 'x' },
+            options: { fonction: true, variable: 'x' },
           },
         }
         this.canEnonce = `Soit $f$ la fonction définie  par  $f(x)=\\dfrac{${a}}{${p}${ecritureAlgebriqueSauf1(m)}x}$.`
@@ -108,8 +105,7 @@ export default class CalculFonctionDeriveeAsurU extends ExerciceSimple {
         this.reponse = {
           reponse: {
             value: `\\dfrac{${-2 * a * m}x}{(${reduirePolynomeDegre3(0, m, 0, p)})^2}`,
-            compare: functionCompare,
-            options: { variable: 'x' },
+            options: { fonction: true, variable: 'x' },
           },
         }
         this.canEnonce = `Soit $f$ la fonction définie  par : $f(x)=\\dfrac{${a}}{${reduirePolynomeDegre3(0, m, 0, p)}}$. `

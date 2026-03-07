@@ -7,7 +7,6 @@ import RepereBuilder from '../../lib/2d/RepereBuilder'
 import { segment } from '../../lib/2d/segmentsVecteurs'
 import { texteSurSegment } from '../../lib/2d/texteSurSegment'
 import { pointIntersectionDD } from '../../lib/2d/utilitairesPoint'
-import { approximatelyCompare } from '../../lib/interactif/comparisonFunctions'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
@@ -293,22 +292,19 @@ export default class Quartiles extends Exercice {
       handleAnswers(this, 3 * i, {
         reponse: {
           value: String(q1),
-          compare: approximatelyCompare,
-          options: { tolerance },
+          options: { approximatelyCompare: true },
         },
       })
       handleAnswers(this, 3 * i + 1, {
         reponse: {
           value: String(q3),
-          compare: approximatelyCompare,
-          options: { tolerance },
+          options: { approximatelyCompare: true },
         },
       })
       handleAnswers(this, 3 * i + 2, {
         reponse: {
           value: String(q3 - q1),
-          compare: approximatelyCompare,
-          options: { tolerance },
+          options: { approximatelyCompare: true },
         },
       })
 

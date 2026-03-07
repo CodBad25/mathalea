@@ -1,5 +1,4 @@
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { functionCompare } from '../../lib/interactif/comparisonFunctions'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
@@ -110,7 +109,7 @@ export default class CalculerProbaCond extends Exercice {
           if (choice([true, false])) {
             reponse = texNombre(pA * pBsachantA, 3)
             handleAnswers(this, i, {
-              reponse: { value: reponse, compare: functionCompare },
+              reponse: { value: reponse, options: { fonction: true } },
             })
             texte = `On considère deux événements $${ev[0]}$ et  $${ev[1]}$ tels que : <br>
           $P(${ev[0]})=${texNombre(pA, 1)}$ et $P_{${ev[0]}}(${ev[1]})=${texNombre(pBsachantA, 2)}$.<br>
@@ -130,7 +129,7 @@ export default class CalculerProbaCond extends Exercice {
           } else {
             reponse = texNombre(pBsachantA, 2)
             handleAnswers(this, i, {
-              reponse: { value: reponse, compare: functionCompare },
+              reponse: { value: reponse, options: { fonction: true } },
             })
             texte = `On considère deux événements $${ev[0]}$ et  $${ev[1]}$ tels que : <br>
           $P(${ev[0]})=${texNombre(pA, 1)}$ et $P(${ev[0]}\\cap ${ev[1]})=${texNombre(pAinterB, 3)}$.<br>

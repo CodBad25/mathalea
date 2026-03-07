@@ -1,17 +1,16 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import {
-  miseEnEvidence,
-  texteEnCouleur,
-} from '../../../lib/outils/embellissements'
-import { randint } from '../../../modules/outils'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { functionCompare } from '../../../lib/interactif/comparisonFunctions'
 import { choice } from '../../../lib/outils/arrayOutils'
 import {
   ecritureParentheseSiNegatif,
   reduireAxPlusB,
 } from '../../../lib/outils/ecritures'
+import {
+  miseEnEvidence,
+  texteEnCouleur,
+} from '../../../lib/outils/embellissements'
 import { context } from '../../../modules/context'
+import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Déterminer une fonction affine avec deux images'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -33,8 +32,6 @@ export default class FonctionAffAvec2Images extends ExerciceSimple {
     this.typeExercice = 'simple'
     this.nbQuestions = 1
     this.formatChampTexte = KeyboardType.clavierDeBaseAvecVariable
-
-    this.compare = functionCompare
   }
 
   nouvelleVersion() {
@@ -48,8 +45,7 @@ export default class FonctionAffAvec2Images extends ExerciceSimple {
           this.reponse = {
             reponse: {
               value: reduireAxPlusB(m, p),
-              options: { variable: 'x', domaine: [-100, 100] },
-              compare: functionCompare,
+              options: { fonction: true, variable: 'x', domaine: [-100, 100] },
             },
           }
           this.question = `$${nomF}$ est une fonction affine ${context.isDiaporama ? '<br>' : ''} vérifiant $${nomF}(0)=${p}$ et $${nomF}(1)=${p + m}$.<br>`
@@ -86,8 +82,7 @@ soit $${p + m}-${ecritureParentheseSiNegatif(p)}=${m}$.
           this.reponse = {
             reponse: {
               value: reduireAxPlusB(m, p),
-              options: { variable: 'x', domaine: [-100, 100] },
-              compare: functionCompare,
+              options: { fonction: true, variable: 'x', domaine: [-100, 100] },
             },
           }
           this.question = `$${nomF}$ est une fonction affine ${context.isDiaporama ? '<br>' : ''} vérifiant $${nomF}(-1)=${p - m}$ et $${nomF}(0)=${p}$.<br>`

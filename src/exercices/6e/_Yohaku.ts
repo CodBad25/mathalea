@@ -1,14 +1,14 @@
+import type { MathfieldElement } from 'mathlive'
+import ce from '../../lib/interactif/comparisonFunctions'
+import { Yohaku } from '../../lib/outils/Yohaku'
+import { saveAnswersFromTable } from '../../lib/saveAnswers'
+import { context } from '../../modules/context'
 import {
   contraindreValeur,
   listeQuestionsToContenu,
   randint,
 } from '../../modules/outils'
-import { Yohaku } from '../../lib/outils/Yohaku'
-import { ComputeEngine } from '@cortex-js/compute-engine'
-import { context } from '../../modules/context'
-import { saveAnswersFromTable } from '../../lib/saveAnswers'
 import Exercice from '../Exercice'
-import type { MathfieldElement } from 'mathlive'
 
 export const titre = 'Générateur de Yohaku'
 export const interactifReady = true
@@ -66,7 +66,6 @@ export default class FabriqueAYohaku extends Exercice {
     for (
       let i = 0, cpt = 0, texte, texteCorr;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       const donnees: string[] = []
       const taille = contraindreValeur(2, 5, this.sup3, 3)
@@ -230,11 +229,10 @@ export default class FabriqueAYohaku extends Exercice {
     taille: number,
     question: number,
   ): Record<string, string> {
-    const engine = new ComputeEngine()
     const test = function (yohaku: Yohaku[], i: number, valeurs: string[]) {
       let resultatOK
-      const resultVal = engine.parse(String(yohaku[question].operate(valeurs)))
-      const resultatAttendu = engine.parse(yohaku[question].resultats[i])
+      const resultVal = ce.parse(String(yohaku[question].operate(valeurs)))
+      const resultatAttendu = ce.parse(yohaku[question].resultats[i])
       if (yohaku[question].type === 'littéraux') {
         resultatOK = resultVal.isSame(resultatAttendu)
       } else {

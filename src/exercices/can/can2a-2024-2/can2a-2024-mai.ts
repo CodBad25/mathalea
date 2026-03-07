@@ -8,7 +8,6 @@ import {
 import { texteParPosition } from '../../../lib/2d/textes'
 import { milieu } from '../../../lib/2d/utilitairesPoint'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { functionCompare } from '../../../lib/interactif/comparisonFunctions'
 import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
 import { propositionsQcm } from '../../../lib/interactif/qcm'
 import {
@@ -228,7 +227,7 @@ export default class nomExercice extends Exercice {
     this.listeCorrections[i] =
       `$AB = \\sqrt{{x_{\\overrightarrow{AB}}}^2 + {y_{\\overrightarrow{AB}}}^2}=\\sqrt{2^2 + 6^2} =   ${miseEnEvidence('\\sqrt{40}')}$`
     handleAnswers(this, i, {
-      reponse: { value: '\\sqrt{40}', compare: functionCompare },
+      reponse: { value: '\\sqrt{40}', options: { fonction: true } },
     })
 
     i = 17

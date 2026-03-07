@@ -92,7 +92,6 @@ export default class EcrireUneExpressionNumerique extends Exercice {
       let i = 0, val1, val2, cpt = 0;
       // i < Math.min(this.nbQuestions, 4 * new Set(listeTypeDeQuestions).size) &&
       i < this.nbQuestions && cpt < 50;
-
     ) {
       let texte: string
       let texteCorr: string
@@ -412,7 +411,7 @@ export default class EcrireUneExpressionNumerique extends Exercice {
               reponse: {
                 value: reponse,
                 options: {
-                  expressionNumerique: !this.litteral,
+                  expressionNumerique: this.litteral,
                 },
               },
             })

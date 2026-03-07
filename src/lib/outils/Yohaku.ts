@@ -1,16 +1,14 @@
-import { randint } from '../../modules/outils'
-import { fraction } from '../../modules/fractions'
-import { choice } from './arrayOutils'
 import { context } from '../../modules/context'
-import { AddTabDbleEntryMathlive } from '../interactif/tableaux/AjouteTableauMathlive'
-import { tableauColonneLigne } from '../2d/tableau'
-import { ComputeEngine } from '@cortex-js/compute-engine'
-import { reduireAxPlusB } from './ecritures'
-import { KeyboardType } from '../interactif/claviers/keyboard'
 import FractionEtendue from '../../modules/FractionEtendue'
+import { fraction } from '../../modules/fractions'
+import { randint } from '../../modules/outils'
+import { tableauColonneLigne } from '../2d/tableau'
 import { orangeMathalea } from '../colors'
-
-const engine = new ComputeEngine()
+import { KeyboardType } from '../interactif/claviers/keyboard'
+import ce from '../interactif/comparisonFunctions'
+import { AddTabDbleEntryMathlive } from '../interactif/tableaux/AjouteTableauMathlive'
+import { choice } from './arrayOutils'
+import { reduireAxPlusB } from './ecritures'
 
 /**
  * @class
@@ -204,9 +202,9 @@ export class Yohaku {
               break
             case 'fractions dénominateurs multiples':
               {
-                const cellulePrecedente = engine.parse(this.cellules[i - 1])
-                if (Array.isArray(cellulePrecedente.numericValue)) {
-                  const [, den] = cellulePrecedente.numericValue
+                const cellulePrecedente = ce.parse(this.cellules[i - 1])
+                if (Array.isArray(cellulePrecedente.re)) {
+                  const [, den] = cellulePrecedente.re
                   this.cellules.push(
                     fraction(
                       randint(1, valeurMax),
@@ -275,7 +273,7 @@ export class Yohaku {
     switch (this.operation) {
       case 'addition':
         initialValue = '0'
-        return engine
+        return ce
           .parse(
             valeurs.reduce(
               (previous, current) => `${previous}+${current}`,
@@ -285,7 +283,7 @@ export class Yohaku {
           .simplify().latex
       case 'multiplication':
         initialValue = '1'
-        return engine
+        return ce
           .parse(
             valeurs.reduce(
               (previous, current) => `(${previous})\\times (${current})`,

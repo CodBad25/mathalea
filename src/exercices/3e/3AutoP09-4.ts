@@ -3,7 +3,6 @@ import { pointAbstrait, type PointAbstrait } from '../../lib/2d/PointAbstrait'
 import { polyline } from '../../lib/2d/Polyline'
 import { repere } from '../../lib/2d/reperes'
 import { segment } from '../../lib/2d/segmentsVecteurs'
-import { approximatelyCompare } from '../../lib/interactif/comparisonFunctions'
 import { texNombre } from '../../lib/outils/texNombre'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { randint } from '../../modules/outils'
@@ -32,8 +31,7 @@ export default class HauteurValve extends ExerciceSimple {
     super()
     this.nbQuestions = 1
     this.interactif = true
-    this.compare = approximatelyCompare
-    this.optionsDeComparaison = { tolerance: 2 }
+    this.optionsDeComparaison = { approximatelyCompare: true, tolerance: 2 }
     this.optionsChampTexte = { texteApres: '$\\text{ cm}$' }
   }
 

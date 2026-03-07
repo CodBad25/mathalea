@@ -331,25 +331,25 @@ export default class SommeFractionsDecimales extends Exercice {
               propositions: [
                 {
                   texte: '', // Si vide, le texte est la correction de l'exercice.
+
+                  reponse: {
+                    valeur: [reponseAMC], // obligatoire (la réponse numérique à comparer à celle de l'élève), NE PAS METTRE DE STRING à virgule ! 4.9 et non pas 4,9. Cette valeur doit être passée dans un tableau d'où la nécessité des crochets.
+                    param: {
+                      digits:
+                        nombreDeChiffresDe(reponseAMC) +
+                        randint(choixDigit, choixDigit + 1),
+                      decimals:
+                        nombreDeChiffresDansLaPartieDecimale(reponseAMC) +
+                        choixDigit,
+                      signe: false,
+                    },
+                  },
                 },
               ],
-              reponse: {
-                // @ts-expect-error
-                valeur: [reponseAMC], // obligatoire (la réponse numérique à comparer à celle de l'élève), NE PAS METTRE DE STRING à virgule ! 4.9 et non pas 4,9. Cette valeur doit être passée dans un tableau d'où la nécessité des crochets.
-                param: {
-                  digits:
-                    nombreDeChiffresDe(reponseAMC) +
-                    randint(choixDigit, choixDigit + 1),
-                  decimals:
-                    nombreDeChiffresDansLaPartieDecimale(reponseAMC) +
-                    choixDigit,
-                  signe: false,
-                },
-              },
             }
           } else {
             handleAnswers(this, i, {
-              bareme: (listePoints) => [listePoints[0], 1],
+              bareme: (listePoints: number[]) => [listePoints[0], 1],
               champ1: {
                 value: stringNombre(reponseAMC, 3),
                 options: { nombreDecimalSeulement: true },
@@ -365,21 +365,20 @@ export default class SommeFractionsDecimales extends Exercice {
               propositions: [
                 {
                   texte: '', // Si vide, le texte est la correction de l'exercice.
+                  reponse: {
+                    valeur: [new FractionEtendue(numAMC, denAMC).texFraction], // obligatoire (la réponse numérique à comparer à celle de l'élève), NE PAS METTRE DE STRING à virgule ! 4.9 et non pas 4,9. Cette valeur doit être passée dans un tableau d'où la nécessité des crochets.
+                    param: {
+                      digitsNum: nombreDeChiffresDe(numAMC),
+                      digitsDen: nombreDeChiffresDe(denAMC) + 1,
+                      signe: false,
+                    },
+                  },
                 },
               ],
-              reponse: {
-                // @ts-expect-error
-                valeur: [new FractionEtendue(numAMC, denAMC)], // obligatoire (la réponse numérique à comparer à celle de l'élève), NE PAS METTRE DE STRING à virgule ! 4.9 et non pas 4,9. Cette valeur doit être passée dans un tableau d'où la nécessité des crochets.
-                param: {
-                  digitsNum: nombreDeChiffresDe(numAMC),
-                  digitsDen: nombreDeChiffresDe(denAMC) + 1,
-                  signe: false,
-                },
-              },
             }
           } else {
             handleAnswers(this, i, {
-              bareme: (listePoints) => [listePoints[0], 1],
+              bareme: (listePoints: number[]) => [listePoints[0], 1],
               champ1: {
                 value: fractionResultat,
                 options: { fractionDecimale: true },
@@ -394,23 +393,22 @@ export default class SommeFractionsDecimales extends Exercice {
               propositions: [
                 {
                   texte: '', // Si vide, le texte est la correction de l'exercice.
+                  reponse: {
+                    valeur: [pourcentage], // obligatoire (la réponse numérique à comparer à celle de l'élève), NE PAS METTRE DE STRING à virgule ! 4.9 et non pas 4,9. Cette valeur doit être passée dans un tableau d'où la nécessité des crochets.
+                    param: {
+                      digits: nombreDeChiffresDe(pourcentage) + randint(0, 1),
+                      decimals:
+                        nombreDeChiffresDansLaPartieDecimale(pourcentage) +
+                        randint(0, 1),
+                      signe: false,
+                    },
+                  },
                 },
               ],
-              reponse: {
-                // @ts-expect-error
-                valeur: [pourcentage], // obligatoire (la réponse numérique à comparer à celle de l'élève), NE PAS METTRE DE STRING à virgule ! 4.9 et non pas 4,9. Cette valeur doit être passée dans un tableau d'où la nécessité des crochets.
-                param: {
-                  digits: nombreDeChiffresDe(pourcentage) + randint(0, 1),
-                  decimals:
-                    nombreDeChiffresDansLaPartieDecimale(pourcentage) +
-                    randint(0, 1),
-                  signe: false,
-                },
-              },
             }
           } else {
             handleAnswers(this, i, {
-              bareme: (listePoints) => [listePoints[0], 1],
+              bareme: (listePoints: number[]) => [listePoints[0], 1],
               champ1: {
                 value: stringNombre(pourcentage, 3),
                 options: { nombreDecimalSeulement: true },
@@ -427,17 +425,16 @@ export default class SommeFractionsDecimales extends Exercice {
                 propositions: [
                   {
                     texte: '', // Si vide, le texte est la correction de l'exercice.
+                    reponse: {
+                      valeur: [new FractionEtendue(numAMC, denAMC)], // obligatoire (la réponse numérique à comparer à celle de l'élève), NE PAS METTRE DE STRING à virgule ! 4.9 et non pas 4,9. Cette valeur doit être passée dans un tableau d'où la nécessité des crochets.
+                      param: {
+                        digitsNum: nombreDeChiffresDe(numAMC),
+                        digitsDen: nombreDeChiffresDe(denAMC) + 1,
+                        signe: false,
+                      },
+                    },
                   },
                 ],
-                reponse: {
-                  // @ts-expect-error
-                  valeur: [new FractionEtendue(numAMC, denAMC)], // obligatoire (la réponse numérique à comparer à celle de l'élève), NE PAS METTRE DE STRING à virgule ! 4.9 et non pas 4,9. Cette valeur doit être passée dans un tableau d'où la nécessité des crochets.
-                  param: {
-                    digitsNum: nombreDeChiffresDe(numAMC),
-                    digitsDen: nombreDeChiffresDe(denAMC) + 1,
-                    signe: false,
-                  },
-                },
               }
             } else {
               this.autoCorrection[i] = {
@@ -445,26 +442,28 @@ export default class SommeFractionsDecimales extends Exercice {
                 propositions: [
                   {
                     texte: '', // Si vide, le texte est la correction de l'exercice.
+                    reponse: {
+                      valeur: [reponseAMC], // obligatoire (la réponse numérique à comparer à celle de l'élève), NE PAS METTRE DE STRING à virgule ! 4.9 et non pas 4,9. Cette valeur doit être passée dans un tableau d'où la nécessité des crochets.
+                      param: {
+                        digits:
+                          nombreDeChiffresDe(reponseAMC) +
+                          randint(choixDigit, choixDigit + 1),
+                        decimals:
+                          nombreDeChiffresDansLaPartieDecimale(reponseAMC) +
+                          choixDigit,
+                        signe: false,
+                      },
+                    },
                   },
                 ],
-                reponse: {
-                  // @ts-expect-error
-                  valeur: [reponseAMC], // obligatoire (la réponse numérique à comparer à celle de l'élève), NE PAS METTRE DE STRING à virgule ! 4.9 et non pas 4,9. Cette valeur doit être passée dans un tableau d'où la nécessité des crochets.
-                  param: {
-                    digits:
-                      nombreDeChiffresDe(reponseAMC) +
-                      randint(choixDigit, choixDigit + 1),
-                    decimals:
-                      nombreDeChiffresDansLaPartieDecimale(reponseAMC) +
-                      choixDigit,
-                    signe: false,
-                  },
-                },
               }
             }
           } else {
             handleAnswers(this, i, {
-              bareme: (listePoints) => [listePoints[0] + listePoints[1], 2],
+              bareme: (listePoints: number[]) => [
+                listePoints[0] + listePoints[1],
+                2,
+              ],
               champ1: {
                 value: fractionResultat,
                 options: { fractionDecimale: true },
@@ -484,21 +483,20 @@ export default class SommeFractionsDecimales extends Exercice {
                 propositions: [
                   {
                     texte: '', // Si vide, le texte est la correction de l'exercice.
+                    reponse: {
+                      valeur: [reponseAMC], // obligatoire (la réponse numérique à comparer à celle de l'élève), NE PAS METTRE DE STRING à virgule ! 4.9 et non pas 4,9. Cette valeur doit être passée dans un tableau d'où la nécessité des crochets.
+                      param: {
+                        digits:
+                          nombreDeChiffresDe(reponseAMC) +
+                          randint(choixDigit, choixDigit + 1),
+                        decimals:
+                          nombreDeChiffresDansLaPartieDecimale(reponseAMC) +
+                          choixDigit,
+                        signe: false,
+                      },
+                    },
                   },
                 ],
-                reponse: {
-                  // @ts-expect-error
-                  valeur: [reponseAMC], // obligatoire (la réponse numérique à comparer à celle de l'élève), NE PAS METTRE DE STRING à virgule ! 4.9 et non pas 4,9. Cette valeur doit être passée dans un tableau d'où la nécessité des crochets.
-                  param: {
-                    digits:
-                      nombreDeChiffresDe(reponseAMC) +
-                      randint(choixDigit, choixDigit + 1),
-                    decimals:
-                      nombreDeChiffresDansLaPartieDecimale(reponseAMC) +
-                      choixDigit,
-                    signe: false,
-                  },
-                },
               }
             } else {
               this.autoCorrection[i] = {
@@ -506,24 +504,26 @@ export default class SommeFractionsDecimales extends Exercice {
                 propositions: [
                   {
                     texte: '', // Si vide, le texte est la correction de l'exercice.
+                    reponse: {
+                      valeur: [pourcentage], // obligatoire (la réponse numérique à comparer à celle de l'élève), NE PAS METTRE DE STRING à virgule ! 4.9 et non pas 4,9. Cette valeur doit être passée dans un tableau d'où la nécessité des crochets.
+                      param: {
+                        digits: nombreDeChiffresDe(pourcentage) + randint(0, 1),
+                        decimals:
+                          nombreDeChiffresDansLaPartieDecimale(pourcentage) +
+                          randint(0, 1),
+                        signe: false,
+                      },
+                    },
                   },
                 ],
-                reponse: {
-                  // @ts-expect-error
-                  valeur: [pourcentage], // obligatoire (la réponse numérique à comparer à celle de l'élève), NE PAS METTRE DE STRING à virgule ! 4.9 et non pas 4,9. Cette valeur doit être passée dans un tableau d'où la nécessité des crochets.
-                  param: {
-                    digits: nombreDeChiffresDe(pourcentage) + randint(0, 1),
-                    decimals:
-                      nombreDeChiffresDansLaPartieDecimale(pourcentage) +
-                      randint(0, 1),
-                    signe: false,
-                  },
-                },
               }
             }
           } else {
             handleAnswers(this, i, {
-              bareme: (listePoints) => [listePoints[0] + listePoints[1], 2],
+              bareme: (listePoints: number[]) => [
+                listePoints[0] + listePoints[1],
+                2,
+              ],
               champ1: {
                 value: stringNombre(reponseAMC, 3),
                 options: { nombreDecimalSeulement: true },
@@ -543,17 +543,16 @@ export default class SommeFractionsDecimales extends Exercice {
                 propositions: [
                   {
                     texte: '', // Si vide, le texte est la correction de l'exercice.
+                    reponse: {
+                      valeur: [new FractionEtendue(numAMC, denAMC)], // obligatoire (la réponse numérique à comparer à celle de l'élève), NE PAS METTRE DE STRING à virgule ! 4.9 et non pas 4,9. Cette valeur doit être passée dans un tableau d'où la nécessité des crochets.
+                      param: {
+                        digitsNum: nombreDeChiffresDe(numAMC),
+                        digitsDen: nombreDeChiffresDe(denAMC) + 1,
+                        signe: false,
+                      },
+                    },
                   },
                 ],
-                reponse: {
-                  // @ts-expect-error
-                  valeur: [new FractionEtendue(numAMC, denAMC)], // obligatoire (la réponse numérique à comparer à celle de l'élève), NE PAS METTRE DE STRING à virgule ! 4.9 et non pas 4,9. Cette valeur doit être passée dans un tableau d'où la nécessité des crochets.
-                  param: {
-                    digitsNum: nombreDeChiffresDe(numAMC),
-                    digitsDen: nombreDeChiffresDe(denAMC) + 1,
-                    signe: false,
-                  },
-                },
               }
             } else {
               this.autoCorrection[i] = {
@@ -561,24 +560,26 @@ export default class SommeFractionsDecimales extends Exercice {
                 propositions: [
                   {
                     texte: '', // Si vide, le texte est la correction de l'exercice.
+                    reponse: {
+                      valeur: [pourcentage], // obligatoire (la réponse numérique à comparer à celle de l'élève), NE PAS METTRE DE STRING à virgule ! 4.9 et non pas 4,9. Cette valeur doit être passée dans un tableau d'où la nécessité des crochets.
+                      param: {
+                        digits: nombreDeChiffresDe(pourcentage) + randint(0, 1),
+                        decimals:
+                          nombreDeChiffresDansLaPartieDecimale(pourcentage) +
+                          randint(0, 1),
+                        signe: false,
+                      },
+                    },
                   },
                 ],
-                reponse: {
-                  // @ts-expect-error
-                  valeur: [pourcentage], // obligatoire (la réponse numérique à comparer à celle de l'élève), NE PAS METTRE DE STRING à virgule ! 4.9 et non pas 4,9. Cette valeur doit être passée dans un tableau d'où la nécessité des crochets.
-                  param: {
-                    digits: nombreDeChiffresDe(pourcentage) + randint(0, 1),
-                    decimals:
-                      nombreDeChiffresDansLaPartieDecimale(pourcentage) +
-                      randint(0, 1),
-                    signe: false,
-                  },
-                },
               }
             }
           } else {
             handleAnswers(this, i, {
-              bareme: (listePoints) => [listePoints[0] + listePoints[1], 2],
+              bareme: (listePoints: number[]) => [
+                listePoints[0] + listePoints[1],
+                2,
+              ],
               champ1: {
                 value: fractionResultat,
                 options: { fractionDecimale: true },
@@ -599,17 +600,16 @@ export default class SommeFractionsDecimales extends Exercice {
                 propositions: [
                   {
                     texte: '', // Si vide, le texte est la correction de l'exercice.
+                    reponse: {
+                      valeur: [new FractionEtendue(numAMC, denAMC)], // obligatoire (la réponse numérique à comparer à celle de l'élève), NE PAS METTRE DE STRING à virgule ! 4.9 et non pas 4,9. Cette valeur doit être passée dans un tableau d'où la nécessité des crochets.
+                      param: {
+                        digitsNum: nombreDeChiffresDe(numAMC),
+                        digitsDen: nombreDeChiffresDe(denAMC) + 1,
+                        signe: false,
+                      },
+                    },
                   },
                 ],
-                reponse: {
-                  // @ts-expect-error
-                  valeur: [new FractionEtendue(numAMC, denAMC)], // obligatoire (la réponse numérique à comparer à celle de l'élève), NE PAS METTRE DE STRING à virgule ! 4.9 et non pas 4,9. Cette valeur doit être passée dans un tableau d'où la nécessité des crochets.
-                  param: {
-                    digitsNum: nombreDeChiffresDe(numAMC),
-                    digitsDen: nombreDeChiffresDe(denAMC) + 1,
-                    signe: false,
-                  },
-                },
               }
             } else if (choix === 1) {
               this.autoCorrection[i] = {
@@ -617,19 +617,18 @@ export default class SommeFractionsDecimales extends Exercice {
                 propositions: [
                   {
                     texte: '', // Si vide, le texte est la correction de l'exercice.
+                    reponse: {
+                      valeur: [pourcentage], // obligatoire (la réponse numérique à comparer à celle de l'élève), NE PAS METTRE DE STRING à virgule ! 4.9 et non pas 4,9. Cette valeur doit être passée dans un tableau d'où la nécessité des crochets.
+                      param: {
+                        digits: nombreDeChiffresDe(pourcentage) + randint(0, 1),
+                        decimals:
+                          nombreDeChiffresDansLaPartieDecimale(pourcentage) +
+                          randint(0, 1),
+                        signe: false,
+                      },
+                    },
                   },
                 ],
-                reponse: {
-                  // @ts-expect-error
-                  valeur: [pourcentage], // obligatoire (la réponse numérique à comparer à celle de l'élève), NE PAS METTRE DE STRING à virgule ! 4.9 et non pas 4,9. Cette valeur doit être passée dans un tableau d'où la nécessité des crochets.
-                  param: {
-                    digits: nombreDeChiffresDe(pourcentage) + randint(0, 1),
-                    decimals:
-                      nombreDeChiffresDansLaPartieDecimale(pourcentage) +
-                      randint(0, 1),
-                    signe: false,
-                  },
-                },
               }
             } else {
               this.autoCorrection[i] = {
@@ -637,26 +636,25 @@ export default class SommeFractionsDecimales extends Exercice {
                 propositions: [
                   {
                     texte: '', // Si vide, le texte est la correction de l'exercice.
+                    reponse: {
+                      valeur: [reponseAMC], // obligatoire (la réponse numérique à comparer à celle de l'élève), NE PAS METTRE DE STRING à virgule ! 4.9 et non pas 4,9. Cette valeur doit être passée dans un tableau d'où la nécessité des crochets.
+                      param: {
+                        digits:
+                          nombreDeChiffresDe(reponseAMC) +
+                          randint(choixDigit, choixDigit + 1),
+                        decimals:
+                          nombreDeChiffresDansLaPartieDecimale(reponseAMC) +
+                          choixDigit,
+                        signe: false,
+                      },
+                    },
                   },
                 ],
-                reponse: {
-                  // @ts-expect-error
-                  valeur: [reponseAMC], // obligatoire (la réponse numérique à comparer à celle de l'élève), NE PAS METTRE DE STRING à virgule ! 4.9 et non pas 4,9. Cette valeur doit être passée dans un tableau d'où la nécessité des crochets.
-                  param: {
-                    digits:
-                      nombreDeChiffresDe(reponseAMC) +
-                      randint(choixDigit, choixDigit + 1),
-                    decimals:
-                      nombreDeChiffresDansLaPartieDecimale(reponseAMC) +
-                      choixDigit,
-                    signe: false,
-                  },
-                },
               }
             }
           } else {
             handleAnswers(this, i, {
-              bareme: (listePoints) => [
+              bareme: (listePoints: number[]) => [
                 listePoints[0] + listePoints[1] + listePoints[2],
                 3,
               ],

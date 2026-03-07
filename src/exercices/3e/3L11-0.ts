@@ -94,7 +94,7 @@ export default class SimpleDistributivite extends Exercice {
       typesDeQuestionsDisponibles,
       this.nbQuestions,
     )
-    
+
     let signesa: (-1 | 1)[] = []
     if (this.sup2 === 1) {
       signesa = Array.from({ length: this.nbQuestions }, () => 1)
@@ -119,11 +119,10 @@ export default class SimpleDistributivite extends Exercice {
     } else {
       signesc = combinaisonListes([-1, 1], this.nbQuestions)
     }
-    
+
     for (
       let i = 0, reponse, cpt = 0, a, b, c;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       a = randint(1, 9) * signesa[i]
       b = randint(1, 9) * signesb[i]
