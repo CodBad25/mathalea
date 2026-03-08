@@ -18,6 +18,12 @@ export const refs = {
 
 */
 export default class Can1a2026Q12 extends ExerciceCan {
+  constructor() {
+    super()
+     this.formatChampTexte = KeyboardType.clavierDeBase
+    this.optionsDeComparaison = { nombreDecimalSeulement: true }
+  }
+
  enonce(a?: number, b?: number, n?: number): void {
     if (a == null || b == null || n == null) {
       a = randint(2, 9)
@@ -27,7 +33,7 @@ export default class Can1a2026Q12 extends ExerciceCan {
 
     const resultat = a * n + b
 
-    this.formatChampTexte = KeyboardType.clavierDeBase
+    
     this.reponse = resultat
     this.question = `Soit $(u_n)$ une suite définie par : $u_n=${a}n${ecritureAlgebrique(b)}$.<br>
     Calculer $u_{${n}}$.<br>

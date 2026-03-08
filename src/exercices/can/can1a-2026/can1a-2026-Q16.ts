@@ -22,7 +22,14 @@ export const refs = {
 
 */
 export default class Can1a2026Q16 extends ExerciceCan {
+  constructor() {
+    super()
+     this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
+    this.optionsDeComparaison = { nombreDecimalSeulement: true }
+  }
+
   enonce(m?: number, a?: number, b?: number, nomP?: string): void {
+    
     if (m == null || a == null || b == null || nomP == null) {
       m = randint(-6, -2)
       a = randint(4, 9)
@@ -32,7 +39,7 @@ export default class Can1a2026Q16 extends ExerciceCan {
 
     const p = b - m * a
 
-    this.formatChampTexte = KeyboardType.clavierDeBase
+   
     this.reponse = texNombre(p, 0)
     this.question = `$d$ est la droite qui a pour équation $y=${rienSi1(m)}x+p$ et passant par le point $${nomP}(${a}\\,;\\,${b})$.<br>`
     this.correction = `Comme $${nomP}(\\underbrace{${a}}_{x}\\,;\\,\\underbrace{${b}}_{y})$ est sur la droite, ses coordonnées vérifient l'équation de la droite :<br>

@@ -19,6 +19,12 @@ export const refs = {
 
 */
 export default class Can1a2026Q18 extends ExerciceCan {
+   constructor() {
+    super()
+     this.optionsDeComparaison = {  calculFormel: true }
+    this.formatChampTexte = KeyboardType.clavierDeBaseAvecVariable
+  }
+
  enonce(a?: number, b?: number, c?: number, var1?: string, var2?: string): void {
     if (a == null || b == null || c == null || var1 == null || var2 == null) {
       a = randint(-9, 9, [0, 1, -1])
@@ -27,8 +33,7 @@ export default class Can1a2026Q18 extends ExerciceCan {
       var1 = choice(['x', 'z', 'a'])
       var2 = choice(['b', 'c', 'y'])
     }
-this.optionsDeComparaison = {  calculFormel: true }
-    this.formatChampTexte = KeyboardType.clavierDeBaseAvecVariable
+
 
     this.question = `On donne la relation : $${rienSi1(a)}${var1}${ecritureAlgebriqueSauf1(b)}${var2}=${c}$.<br>
     Exprimer $${var2}$ en fonction de $${var1}$.`

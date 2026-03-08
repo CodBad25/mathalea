@@ -16,6 +16,11 @@ export const refs = {
 
 */
 export default class Can1a2026Q14 extends ExerciceCan {
+  constructor() {
+    super()
+     this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
+  }
+
   enonce(cas?: number): void {
     if (cas == null) {
       cas = choice([1, 2, 3, 4, 5, 6])
@@ -23,7 +28,7 @@ export default class Can1a2026Q14 extends ExerciceCan {
 
     const intervalle = '[0\\,;\\,2\\pi['
 
-    this.formatChampTexte = KeyboardType.grecTrigo
+    
 
     switch (cas) {
       case 1: // pi/6

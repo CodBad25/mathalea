@@ -18,6 +18,12 @@ export const refs = {
 
 */
 export default class Can1a2026Q29 extends ExerciceCan {
+  constructor() {
+    super()
+      this.optionsDeComparaison = { nombreDecimalSeulement: true }
+   this.formatChampTexte = KeyboardType.clavierDeBase
+  }
+
   enonce(u?: number, r?: number, i?: number, n?: number, s?: string): void {
     if (u == null || r == null || i == null || n == null || s == null) {
       u = randint(1, 12)
@@ -29,7 +35,7 @@ export default class Can1a2026Q29 extends ExerciceCan {
 
     const v = u + n * r
 
-    this.formatChampTexte = KeyboardType.clavierDeBase
+    
     this.reponse = String(r)
 
     this.question = `$(${s}_n)$ est une suite arithmétique avec $${s}_{${i}}=${u}$ et $${s}_{${i + n}}=${v}$.<br>`

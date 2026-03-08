@@ -22,15 +22,21 @@ export const refs = {
 
 */
 export default class Can1a2026Q26 extends ExerciceCan {
+
+  constructor() {
+    super()
+    this.formatChampTexte =
+      KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets
+    this.optionsDeComparaison = { calculFormel: true }
+  }
+
   enonce(a?: number, b?: number): void {
     if (a == null || b == null) {
       a = randint(2, 9) * choice([-1, 1])
       b = randint(1, 5) * choice([-1, 1])
     }
 
-    this.formatChampTexte =
-      KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets
-    this.optionsDeComparaison = { calculFormel: true }
+   
     this.reponse = reduireAxPlusB(2 * b, a)
     this.question = `Soit $f$ la fonction définie sur $\\mathbb{R}$ par : $f(x)=${rienSi1(a)}x${ecritureAlgebriqueSauf1(b)}x^2$, alors :<br>
     $f'(x)=$`

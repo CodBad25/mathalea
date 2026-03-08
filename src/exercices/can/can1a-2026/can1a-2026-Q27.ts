@@ -22,6 +22,12 @@ export const refs = {
 
 */
 export default class Can1a2026Q24 extends ExerciceCan {
+  constructor() {
+    super()
+      this.optionsDeComparaison = { intervalle: true }
+    this.formatChampTexte = KeyboardType.clavierEnsemble
+  }
+
   enonce(a?: number, b?: number, c?: number, typeMono?: string): void {
     if (a == null || b == null || c == null || typeMono == null) {
       a = randint(-10, 10, 0)
@@ -40,8 +46,7 @@ export default class Can1a2026Q24 extends ExerciceCan {
     } else {
       texteF = `${rienSi1(a)}(${reduireAxPlusB(1, b)})^2${ecritureAlgebrique(c)}`
     }
-    this.optionsDeComparaison = { intervalle: true }
-    this.formatChampTexte = KeyboardType.clavierEnsemble
+ 
     // Déterminer la bonne réponse
     let bonneReponse: string
     if (typeMono === 'croissante') {
