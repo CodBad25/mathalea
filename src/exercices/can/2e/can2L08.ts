@@ -3,9 +3,10 @@ import {
   ecritureAlgebrique,
   ecritureParentheseSiNegatif,
 } from '../../../lib/outils/ecritures'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { abs } from '../../../lib/outils/nombres'
-import ExerciceSimple from '../../ExerciceSimple'
 import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Résoudre une équation du type $\\dfrac{x+a}{b}=c$'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -57,7 +58,7 @@ export default class ResoudreEquationAvecQuotient extends ExerciceSimple {
          $x= ${c * b}+${abs(a)}$,`
         }
         this.correction += ` soit $x=${b * c - a}$. <br><br>
-   L'équation a pour solution : $${b * c - a}$.`
+   L'équation a pour solution : $${miseEnEvidence(b * c - a)}$.`
         this.reponse = b * c - a
         break
     }
