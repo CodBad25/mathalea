@@ -26,7 +26,7 @@ export default class Can2a2026Q14 extends ExerciceCan {
   constructor() {
     super()
     this.formatChampTexte = KeyboardType.clavierDeBase
-    this.optionsDeComparaison = { nombreDecimalSeulement: true }
+    this.optionsDeComparaison = { suiteDeNombres: true }
     this.optionsChampTexte = {
       texteAvant: ' <br>',
       texteApres: '(Séparer les solutions éventuelles par un point-virgule)',
@@ -111,6 +111,10 @@ export default class Can2a2026Q14 extends ExerciceCan {
     this.canReponseACompleter = 'Solution de $f(x)=2$<br>$S=\\ldots$'
     this.canNumeroLie = 14
     this.canLiee = [13]
+    this.optionsChampTexte = {
+      texteAvant: ' <br>',
+      texteApres: '(Séparer les solutions éventuelles par un point-virgule)',
+    }
   }
 
   nouvelleVersion(): void {
