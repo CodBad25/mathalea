@@ -28,8 +28,8 @@ import {
 } from '../../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../../lib/interactif/questionMathLive'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import type { NestedObjetMathalea2dArray } from '../../../types/2d'
 import { arrondi } from '../../../lib/outils/nombres'
+import type { NestedObjetMathalea2dArray } from '../../../types/2d'
 
 export const titre = 'CAN seconde sujet 2022'
 export const interactifReady = true
@@ -256,6 +256,7 @@ export default class SujetCAN2022Seconde extends Exercice {
               this,
               index,
               KeyboardType.clavierDeBaseAvecFraction,
+              { texteAvant: '<br>$x=$' },
             )
           }
           nbChamps = 1
