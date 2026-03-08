@@ -15,7 +15,6 @@ import { isInteger, number } from 'mathjs'
 import Grandeur from '../../modules/Grandeur'
 import Hms from '../../modules/Hms'
 import { pgcd } from '../outils/primalite'
-import { texNombre } from '../outils/texNombre'
 import type { CleaningOperation } from '../types'
 
 const ce = new ComputeEngine()
@@ -1431,7 +1430,8 @@ function handleUnite(
         return ok()
       } else {
         return fail(
-          `Incorrect car la réponse n'est pas arrondie à $${texNombre(precision)}$ ${goodAnswerGrandeur.uniteDeReference} près.`,
+          //  `Incorrect car la réponse n'est pas arrondie comme il faut.`,
+          `Incorrect car la réponse n'est pas arrondie comme il faut.`,
         )
       }
       return fail()
@@ -2385,7 +2385,7 @@ function handleExpressionsForcementReduites(
   */
 
   if (!mathEqual(s, a))
-    fail(
+    return fail(
       "Incorrect car cette expression n'est pas assez égale à celle attendue.",
     )
 
@@ -2739,7 +2739,7 @@ function handleDeveloppementEgal(saisie: string, answer: string): ResultType {
   const parsedAnswer = ce.parse(localGoodAnswer)
 
   if (!mathEqual(parsedSaisie, parsedAnswer))
-    fail(
+    return fail(
       "Incorrect car cette expression n'est pas assez égale à celle attendue.",
     )
 

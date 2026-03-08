@@ -397,7 +397,7 @@ export default class Pythagore2D extends Exercice {
         handleAnswers(this, i, {
           reponse: {
             value: new Grandeur(reponse, 'cm'),
-            options: { precisionUnite: 0.1, unite: true },
+            options: { precisionUnite: 0, unite: true },
           },
         })
 

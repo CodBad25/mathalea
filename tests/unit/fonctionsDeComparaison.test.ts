@@ -1735,7 +1735,7 @@ describe('fonctionComparaison', () => {
     })
     expect(result.isOk).toBe(false)
     expect(result.feedback).toBe(
-      "Incorrect car la réponse n'est pas arrondie à $0{,}05$ m près.",
+      `Incorrect car la réponse n'est pas arrondie comme il faut.`,
     )
   })
 
@@ -2495,8 +2495,7 @@ describe('fonctionComparaison', () => {
         developpementEgal: true,
       },
     )
-    expect(result.isOk).toBe(true) // if this one is too complicate, we forget it be because contradicts the last two false cases
-    // In each square, only one term and no calculatiion, that's the reason why I want to accept ip
+    expect(result.isOk).toBe(true)
 
     result = fonctionComparaison('25x^2-40x+16', '4*4+5x*5x-2*20x', {
       developpementEgal: true,
@@ -2521,6 +2520,11 @@ describe('fonctionComparaison', () => {
       developpementEgal: true,
     })
     expect(result.isOk).toBe(true)
+
+    result = fonctionComparaison('3x', '(3x-2)^2', {
+      developpementEgal: true,
+    })
+    expect(result.isOk).toBe(false)
 
     result = fonctionComparaison('(5x-4)^2', '(5x-4)^2', {
       developpementEgal: true,
