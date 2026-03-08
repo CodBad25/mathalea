@@ -10,7 +10,7 @@ import { Arbre } from '../../modules/arbres'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { randint } from '../../modules/outils'
 import ExerciceSimple from '../ExerciceSimple'
-export const titre = "Calculer la variance d'une somme de variables aléatoires."
+export const titre = "Calculer la variance d'une somme de variables aléatoires"
 export const interactifReady = false
 export const dateDePublication = '26/12/2025'
 /**
