@@ -1,7 +1,11 @@
+import type { MathfieldElement } from 'mathlive'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import type { IExercice } from '../../../lib/types'
 import ExerciceCan from '../../ExerciceCan'
+import { generateCleaner } from '../../../lib/interactif/comparisonFunctions'
+import { toutPourUnPoint } from '../../../lib/interactif/mathLive'
 
 export const titre = "Déterminer les facteurs d'un carré parfait"
 export const interactifReady = true
@@ -28,13 +32,41 @@ export default class Can20266Q1 extends ExerciceCan {
 
     const racine = Math.sqrt(carre)
 
+    this.formatInteractif = 'fillInTheBlank'
+    const callback = (exercice: IExercice, question: number) => {
+      const mfe = document.querySelector(
+        `#champTexteEx${exercice.numeroExercice}Q${question}`,
+      ) as MathfieldElement
+      const cleaner = generateCleaner(['virgules'])
+      if (mfe == null)
+        return {
+          isOk: false,
+          feedback: '',
+          score: { nbBonnesReponses: 0, nbReponses: 0 },
+        }
+      const a = Number(cleaner(mfe.getPromptValue('champ1')) || 0)
+      const b = Number(cleaner(mfe.getPromptValue('champ2')) || 0)
+      const isOk = a * b === carre
+      if (isOk) {
+        mfe.setPromptState('champ1', 'correct', true)
+        mfe.setPromptState('champ2', 'correct', true)
+      }
+      const spanReponseLigne = document.querySelector(
+        `#resultatCheckEx${exercice.numeroExercice}Q${question}`,
+      )
+      if (spanReponseLigne != null) {
+        spanReponseLigne.innerHTML = isOk ? '😎' : '☹️'
+      }
+      return {
+        isOk,
+        feedback: '',
+        score: { nbBonnesReponses: isOk ? 1 : 0, nbReponses: 1 },
+      }
+    }
+    this.reponse = { bareme: toutPourUnPoint, callback }
+
     this.consigne = 'Complète.'
     this.question = `${carre}=%{champ1}\\times%{champ2}`
-
-    this.reponse = {
-      champ1: { value: racine },
-      champ2: { value: racine },
-    }
 
     this.correction = `$${carre}=${miseEnEvidence(racine)}\\times${miseEnEvidence(racine)}$`
 
@@ -44,7 +76,6 @@ export default class Can20266Q1 extends ExerciceCan {
   }
 
   nouvelleVersion() {
-    this.formatInteractif = 'fillInTheBlank'
     this.canOfficielle ? this.enonce(36) : this.enonce()
   }
 }
