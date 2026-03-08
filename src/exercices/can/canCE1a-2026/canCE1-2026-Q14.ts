@@ -4,7 +4,8 @@ import { texNombre } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
 
-export const titre = "Trouver un nombre connaissant le nombre de dizaines et les unités"
+export const titre =
+  'Trouver un nombre connaissant le nombre de dizaines et les unités'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const uuid = '3224b'
@@ -18,7 +19,7 @@ export const refs = {
 
 */
 export default class Can2026CE1Q14 extends ExerciceCan {
-   enonce(dizaines?: number, unites?: number) {
+  enonce(dizaines?: number, unites?: number) {
     if (dizaines == null || unites == null) {
       dizaines = randint(10, 15)
       unites = randint(0, 9)
@@ -33,7 +34,6 @@ export default class Can2026CE1Q14 extends ExerciceCan {
     this.canEnonce = `Mon nombre de dizaines est $12$.<br>
     Mon chiffre des unités est $0$.<br>
     Qui suis-je ?`
-    this.canReponseACompleter = '$\\ldots$'
 
     if (this.interactif) {
       this.optionsChampTexte = { texteAvant: '<br>' }

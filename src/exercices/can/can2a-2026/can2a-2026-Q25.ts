@@ -1,11 +1,10 @@
-
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { ecritureParentheseSiNegatif } from '../../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import FractionEtendue from '../../../modules/FractionEtendue'
 import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
-import { ecritureParentheseSiNegatif } from '../../../lib/outils/ecritures'
-import FractionEtendue from '../../../modules/FractionEtendue'
-export const titre = 'Déterminer le coefficient directeur d\'une droite (calcul)'
+export const titre = "Déterminer le coefficient directeur d'une droite (calcul)"
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const uuid = 'czskl'
@@ -19,7 +18,17 @@ export const refs = {
 
 */
 export default class Can2a2026Q25 extends ExerciceCan {
-   enonce(xP?: number, yP?: number, xQ?: number, yQ?: number): void {
+  constructor() {
+    super()
+    this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
+    this.optionsDeComparaison = {
+      fractionEgale: true,
+      nombreDecimalSeulement: true,
+    }
+    this.optionsChampTexte = { texteAvant: '<br>' }
+  }
+
+  enonce(xP?: number, yP?: number, xQ?: number, yQ?: number): void {
     if (xP == null || yP == null || xQ == null || yQ == null) {
       xP = randint(1, 9)
       yP = randint(1, 9)
@@ -27,15 +36,12 @@ export default class Can2a2026Q25 extends ExerciceCan {
       yQ = randint(1, 9, yP)
     }
 
-    this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
-    this.optionsDeComparaison = { fractionEgale: true , nombreDecimalSeulement:true}
-    
     const m = new FractionEtendue(yQ - yP, xQ - xP)
-    
+
     this.reponse = m
-    
+
     this.question = `Coefficient directeur de la droite $(PQ)$ avec $P(${xP}\\,;\\,${yP})$ et $Q(${xQ}\\,;\\,${yQ})$`
-    
+
     if (yQ === yP) {
       this.correction = `Comme $y_P=y_Q$, la droite $(PQ)$ est horizontale, son coefficient directeur est nul.<br>
       Ainsi, $m=${miseEnEvidence('0')}$`
@@ -47,13 +53,8 @@ export default class Can2a2026Q25 extends ExerciceCan {
       &=${miseEnEvidence(m.texFractionSimplifiee)}
       \\end{aligned}$`
     }
-    
-    this.canEnonce = this.question
+
     this.canReponseACompleter = '$m=\\ldots$'
-    
-    if (this.interactif) {
-      this.question += '<br>'
-    } 
   }
 
   nouvelleVersion(): void {

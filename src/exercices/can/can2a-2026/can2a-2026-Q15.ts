@@ -1,9 +1,9 @@
-
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
-export const titre = 'Calculer une puissance en utilisant les propriétés des exposants'
+export const titre =
+  'Calculer une puissance en utilisant les propriétés des exposants'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const uuid = 'idi01'
@@ -17,29 +17,30 @@ export const refs = {
 
 */
 export default class Can2a2026Q15 extends ExerciceCan {
- enonce(a?: number, exposant1?: number, exposant2?: number): void {
-    if (a == null||exposant1==null||exposant2==null) {
+  constructor() {
+    super()
+    this.formatInteractif = 'fillInTheBlank'
+    this.formatChampTexte = KeyboardType.clavierDeBase
+    this.optionsDeComparaison = { nombreDecimalSeulement: true }
+  }
+
+  enonce(a?: number, exposant1?: number, exposant2?: number): void {
+    if (a == null || exposant1 == null || exposant2 == null) {
       a = randint(2, 9)
-   exposant1 = randint(2,4)
-     exposant2 = randint(5,9)
+      exposant1 = randint(2, 4)
+      exposant2 = randint(5, 9)
     }
 
-    this.formatChampTexte = KeyboardType.clavierDeBase
-    this.formatInteractif = 'fillInTheBlank'
-    
-    
-    this.reponse = { champ1: { value: exposant1-exposant2 } }
+    this.reponse = { champ1: { value: exposant1 - exposant2 } }
 
     this.question = `\\dfrac{${a}^${exposant1}}{${a}^${exposant2}} = ${a}^{%{champ1}}`
 
-    this.correction = `$\\dfrac{${a}^${exposant1}}{${a}^${exposant2}}=${a}^{${exposant1}-${exposant2}}=${a}^{${miseEnEvidence(exposant1-exposant2)}}$`
+    this.correction = `$\\dfrac{${a}^${exposant1}}{${a}^${exposant2}}=${a}^{${exposant1}-${exposant2}}=${a}^{${miseEnEvidence(exposant1 - exposant2)}}$`
     this.canEnonce = `$\\dfrac{${a}^${exposant1}}{${a}^${exposant2}}$`
     this.canReponseACompleter = `$${a}^{\\ldots}$`
-   
-    
   }
 
   nouvelleVersion(): void {
-    this.canOfficielle ? this.enonce(5,3,6) : this.enonce()
+    this.canOfficielle ? this.enonce(5, 3, 6) : this.enonce()
   }
 }

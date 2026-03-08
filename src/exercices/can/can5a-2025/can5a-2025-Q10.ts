@@ -1,7 +1,7 @@
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import ExerciceCan from '../../ExerciceCan'
-import { randint } from '../../../modules/outils'
 import { choice } from '../../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { randint } from '../../../modules/outils'
+import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Répartition'
 export const interactifReady = true
@@ -30,7 +30,7 @@ export default class Can2025N5Q10 extends ExerciceCan {
     this.correction = `$${a}\\div ${b} = ${miseEnEvidence(String(c))}$<br>
     Donc, chaque groupe contient $${c}$ élèves.`
     this.canEnonce = this.question
-    this.canReponseACompleter = '$\\ldots$'
+
     if (!this.interactif) {
       this.question += ' $\\ldots$'
     }

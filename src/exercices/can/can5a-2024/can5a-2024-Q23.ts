@@ -80,7 +80,7 @@ export default class NomExercice extends ExerciceSimple {
         `=${this.reponse}$`
     }
     this.canEnonce = this.question
-    this.canReponseACompleter = '$\\ldots$'
+
     if (!this.interactif) {
       this.question += ' $\\ldots$'
     }

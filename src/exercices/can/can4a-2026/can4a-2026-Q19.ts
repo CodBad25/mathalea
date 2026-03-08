@@ -44,7 +44,7 @@ export default class Can20264emeQ19 extends ExerciceCan {
     Le reste de la division euclidienne est donc $${miseEnEvidence(reste)}$.`
 
     this.canEnonce = this.question
-    this.canReponseACompleter = '$\\ldots$'
+
     this.reponse = reste
 
     if (!this.interactif) {

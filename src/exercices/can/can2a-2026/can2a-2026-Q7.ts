@@ -1,5 +1,8 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { ecritureAlgebrique, ecritureParentheseSiNegatif } from '../../../lib/outils/ecritures'
+import {
+  ecritureAlgebrique,
+  ecritureParentheseSiNegatif,
+} from '../../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { randint } from '../../../modules/outils'
 import Trinome from '../../../modules/Trinome'
@@ -18,6 +21,12 @@ export const refs = {
 
 */
 export default class Can2a2026Q7 extends ExerciceCan {
+  constructor() {
+    super()
+    this.formatChampTexte = KeyboardType.clavierDeBaseAvecX
+    this.optionsDeComparaison = { nombreDecimalSeulement: true }
+  }
+
   enonce(b?: number, val?: number): void {
     if (b == null || val == null) {
       b = randint(-6, -1)
@@ -31,7 +40,7 @@ export default class Can2a2026Q7 extends ExerciceCan {
     this.reponse = resultat.toString()
     this.question = `$f(x)=${p.tex}$<br>$f(${val})=\\ldots$`
     this.correction = `$f(${val})=${ecritureParentheseSiNegatif(val)}^2${ecritureAlgebrique(b)}\\times ${ecritureParentheseSiNegatif(val)}=
-    ${val**2}${ecritureAlgebrique(b*val)}=${resultat}$<br>
+    ${val ** 2}${ecritureAlgebrique(b * val)}=${resultat}$<br>
     On a donc $f(${val})=${miseEnEvidence(resultat)}$.`
     this.canEnonce = `$f(x)=${p.tex}$`
     this.canReponseACompleter = `$f(${val})=\\ldots$`

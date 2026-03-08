@@ -4,7 +4,7 @@ import { texNombre } from '../../../lib/outils/texNombre'
 
 import ExerciceCan from '../../ExerciceCan'
 
-export const titre = 'Calculer une limite avec l\'infini'
+export const titre = "Calculer une limite avec l'infini"
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const uuid = 'agjju'
@@ -35,7 +35,6 @@ export const refs = {
     }
 
     this.canEnonce = `$\\displaystyle\\lim_{x\\to ${texNombre(2026)}} \\dfrac{x^{${texNombre(2026)}}}{(${texNombre(2026)}-x)^2}=$`
-    this.canReponseACompleter = '$\\ldots$'
   }
 
   nouvelleVersion(): void {

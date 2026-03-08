@@ -1,10 +1,10 @@
 import Decimal from 'decimal.js'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
-import { choice } from '../../../lib/outils/arrayOutils'
 export const titre = 'Multiplier un entier avec un décimal'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -19,6 +19,13 @@ export const refs = {
 
 */
 export default class Can2a2026Q10 extends ExerciceCan {
+  constructor() {
+    super()
+    this.formatChampTexte = KeyboardType.clavierNumbers
+    this.optionsDeComparaison = { nombreDecimalSeulement: true }
+    this.optionsChampTexte = { texteAvant: '$=$' }
+  }
+
   enonce(taux?: number, nombre?: number): void {
     if (taux == null || nombre == null) {
       taux = choice([20, 30, 40, 60, 70])
@@ -27,16 +34,9 @@ export default class Can2a2026Q10 extends ExerciceCan {
 
     const resultat = new Decimal(nombre).mul(taux).div(100)
 
-    this.formatChampTexte = KeyboardType.clavierDeBase
     this.reponse = texNombre(resultat, 2)
     this.question = `$${taux}\\,\\%$ de $${nombre}$`
-    this.correction = `$${taux}\\,\\%$ de $${nombre}=${texNombre(taux/100,1)}\\times ${nombre}=${miseEnEvidence(texNombre(resultat, 2))}$`
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
-    
-    if (this.interactif) {
-      this.question += ' $=$'
-    }
+    this.correction = `$${taux}\\,\\%$ de $${nombre}=${texNombre(taux / 100, 1)}\\times ${nombre}=${miseEnEvidence(texNombre(resultat, 2))}$`
   }
 
   nouvelleVersion(): void {

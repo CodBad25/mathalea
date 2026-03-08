@@ -4,7 +4,7 @@ import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { stringNombre, texNombre } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
-export const titre = 'Déterminer l\'écriture scientifique d\'un nombre décimal'
+export const titre = "Déterminer l'écriture scientifique d'un nombre décimal"
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const uuid = '2yrmx'
@@ -18,7 +18,14 @@ export const refs = {
 
 */
 export default class Can2a2026Q21 extends ExerciceCan {
-   enonce(mantisse?: Decimal, puissance?: number): void {
+  constructor() {
+    super()
+    this.formatChampTexte = KeyboardType.clavierFullOperations
+    this.optionsDeComparaison = { ecritureScientifique: true }
+    this.optionsChampTexte = { texteAvant: '<br>' }
+  }
+
+  enonce(mantisse?: Decimal, puissance?: number): void {
     if (mantisse == null || puissance == null) {
       // Générer un nombre avec deux chiffres significatifs différents de 0
       const chiffre1 = randint(1, 9)
@@ -27,28 +34,19 @@ export default class Can2a2026Q21 extends ExerciceCan {
       puissance = -randint(3, 5)
     }
 
-    this.formatChampTexte = KeyboardType.clavierFullOperations
-    
     const nombre = mantisse.mul(new Decimal(10).pow(puissance))
-    
+
     this.reponse = {
       reponse: {
         value: `${stringNombre(mantisse)}\\times 10^{${puissance}}`,
         options: { ecritureScientifique: true },
       },
     }
-    
+
     this.question = `Écriture scientifique de $${texNombre(nombre, 6)}$`
-    
+
     this.correction = `La notation scientifique est de la forme $a\\times 10^{n}$ avec $1\\leqslant a <10$ et $n$ un entier relatif.<br>
     Ici : $${texNombre(nombre, 6)}=\\underbrace{${miseEnEvidence(texNombre(mantisse, 2))}}_{1\\leqslant ${texNombre(mantisse, 2)} <10}${miseEnEvidence('\\times')} ${miseEnEvidence(`10^{${puissance}}`)}$.`
-    
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
-    
-    if (this.interactif) {
-      this.question += '<br>'
-    }
   }
 
   nouvelleVersion(): void {

@@ -18,23 +18,27 @@ export const refs = {
 
 */
 export default class Can2a2026Q18 extends ExerciceCan {
+  constructor() {
+    super()
+    this.formatChampTexte = KeyboardType.clavierNumbers
+    this.optionsDeComparaison = { nombreDecimalSeulement: true }
+    this.optionsChampTexte = { texteApres: '$\\%$.' }
+  }
+
   enonce(taux?: Decimal) {
     if (taux == null) {
       taux = new Decimal(randint(11, 99, [20, 30, 40, 50, 60, 70, 80, 90])).div(
         1000,
       )
-     
     }
- const Taux = taux.mul(100)
-      const coeff = taux.add(1)
-    this.formatChampTexte = KeyboardType.clavierDeBase
+    const Taux = taux.mul(100)
+    const coeff = taux.add(1)
     this.reponse = new Decimal(taux).mul(100)
     this.question = `Multiplier un nombre positif par $${texNombre(coeff, 3)}$ revient à <br>effectuer une hausse de `
     this.correction = `Comme $${texNombre(coeff, 3)}=1+${texNombre(taux, 3)}=1+\\dfrac{${texNombre(Taux)}}{100}$, multiplier par $${texNombre(coeff, 3)}$ revient à effectuer une hausse de $${miseEnEvidence(texNombre(Taux, 2))}\\,\\%$. `
-   this.optionsChampTexte = { texteApres: '$\\%$.' }
-        if (!this.interactif) {
-          this.question += '$\\ldots\\,\\%$.'
-        }
+    if (!this.interactif) {
+      this.question += '$\\ldots\\,\\%$.'
+    }
     this.canEnonce = this.question
     this.canReponseACompleter = '$\\ldots\\,\\%$'
   }

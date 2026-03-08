@@ -1,9 +1,9 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import ExerciceCan from '../../ExerciceCan'
-import FractionEtendue from '../../../modules/FractionEtendue'
 import { choice } from '../../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { pgcd } from '../../../lib/outils/primalite'
+import FractionEtendue from '../../../modules/FractionEtendue'
+import ExerciceCan from '../../ExerciceCan'
 export const titre = 'Calculer une probabilité sur un dé'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -18,14 +18,21 @@ export const refs = {
 
 */
 export default class Can2a2026Q26 extends ExerciceCan {
- enonce(nombre?: number): void {
+  constructor() {
+    super()
+    this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
+    this.optionsDeComparaison = {
+      fractionEgale: true,
+      nombreDecimalSeulement: true,
+    }
+    this.optionsChampTexte = { texteAvant: '<br>' }
+  }
+
+  enonce(nombre?: number): void {
     if (nombre == null) {
       nombre = choice([4, 8, 9, 10, 12, 14])
     }
 
-    this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
-    this.optionsDeComparaison = { fractionEgale: true }
-    
     // Trouver les diviseurs de 'nombre' parmi {1, 2, 3, 4, 5, 6}
     const diviseurs: number[] = []
     for (let i = 1; i <= 6; i++) {
@@ -33,15 +40,15 @@ export default class Can2a2026Q26 extends ExerciceCan {
         diviseurs.push(i)
       }
     }
-    
+
     const nbDiviseurs = diviseurs.length
     const proba = new FractionEtendue(nbDiviseurs, 6)
-    
+
     this.reponse = proba
-    
+
     this.question = `On lance un dé équilibré à six faces.<br>
     Probabilité d'obtenir un diviseur de $${nombre}$`
-    
+
     let listeDiviseurs = ''
     if (nbDiviseurs === 1) {
       listeDiviseurs = `$${diviseurs[0]}$`
@@ -53,18 +60,13 @@ export default class Can2a2026Q26 extends ExerciceCan {
       }
       listeDiviseurs += `et $${diviseurs[nbDiviseurs - 1]}$`
     }
-    
+
     this.correction = `Les diviseurs de $${nombre}$ parmi les faces du dé sont : ${listeDiviseurs}.<br>
     Il y a $${nbDiviseurs}$ cas favorables sur $6$ issues possibles équiprobables.<br>
-    La probabilité est : ${pgcd(nbDiviseurs,6)===1 ? `$${miseEnEvidence(proba.texFractionSimplifiee)}$` : `$\\dfrac{${nbDiviseurs}}{6}=${miseEnEvidence(proba.texFractionSimplifiee)}$`}.`
-    
+    La probabilité est : ${pgcd(nbDiviseurs, 6) === 1 ? `$${miseEnEvidence(proba.texFractionSimplifiee)}$` : `$\\dfrac{${nbDiviseurs}}{6}=${miseEnEvidence(proba.texFractionSimplifiee)}$`}.`
+
     this.canEnonce = `On lance un dé équilibré à six faces.<br>
     Probabilité d'obtenir un diviseur de $${nombre}$`
-    this.canReponseACompleter = '$\\ldots$'
-    
-    if (this.interactif) {
-      this.question += '<br>'
-    }
   }
 
   nouvelleVersion(): void {

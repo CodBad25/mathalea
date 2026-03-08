@@ -1,9 +1,9 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { randint } from '../../../modules/outils'
-import { choice, shuffle } from '../../../lib/outils/arrayOutils'
-import { texNombre } from '../../../lib/outils/texNombre'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { choice, shuffle } from '../../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { texNombre } from '../../../lib/outils/texNombre'
+import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Calculer un produit astucieusement'
 export const interactifReady = true
@@ -48,6 +48,5 @@ export default class NomExercice extends ExerciceSimple {
       \\end{aligned}$`
     }
     this.canEnonce = this.question
-    this.canReponseACompleter = '$\\ldots$'
   }
 }

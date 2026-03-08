@@ -1,10 +1,9 @@
-
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import ExerciceCan from '../../ExerciceCan'
-import FractionEtendue from '../../../modules/FractionEtendue'
 import { choice } from '../../../lib/outils/arrayOutils'
-export const titre = 'Calculer la probabilité d\'un événement contraire'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import FractionEtendue from '../../../modules/FractionEtendue'
+import ExerciceCan from '../../ExerciceCan'
+export const titre = "Calculer la probabilité d'un événement contraire"
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const uuid = 'e59ik'
@@ -18,7 +17,16 @@ export const refs = {
 
 */
 export default class Can2a2026Q22 extends ExerciceCan {
- enonce(n?: number, d?: number): void {
+  constructor() {
+    super()
+    this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
+    this.optionsDeComparaison = {
+      fractionEgale: true,
+      nombreDecimalSeulement: true,
+    }
+  }
+
+  enonce(n?: number, d?: number): void {
     if (n == null || d == null) {
       const listeFractions: [number, number][] = [
         [1, 2],
@@ -58,22 +66,19 @@ export default class Can2a2026Q22 extends ExerciceCan {
       d = fraction[1]
     }
 
-    this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
-    this.optionsDeComparaison = { fractionEgale: true , nombreDecimalSeulement:true}
-    
     const nSurD = new FractionEtendue(n, d)
     const dMoinsNSurD = new FractionEtendue(d - n, d)
-    
+
     this.reponse = new FractionEtendue(d - n, d).toLatex()
-    
+
     this.question = `Un événement $B$ a pour probabilité $P(B)=${nSurD.texFraction}$.`
-    
+
     this.correction = `La relation entre la probabilité d'un événement $B$ et celle de son contraire $\\overline{B}$ est : $P(\\overline{B})=1-P(B)$.<br>
     Ainsi : $P(\\overline{B})=1-\\dfrac{${n}}{${d}}=${miseEnEvidence(dMoinsNSurD.texFraction)}$.`
-    
+
     this.canEnonce = `Un événement $B$ a pour probabilité $P(B)=${nSurD.texFraction}$.`
     this.canReponseACompleter = '$P(\\overline{B})=\\ldots$'
-    
+
     if (this.interactif) {
       this.question += '<br>$P(\\overline{B})=$'
     } else {

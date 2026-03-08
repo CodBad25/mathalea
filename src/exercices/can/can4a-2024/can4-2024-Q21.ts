@@ -1,9 +1,9 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { scratchblock } from '../../../modules/scratchblock'
-import { choice } from '../../../lib/outils/arrayOutils'
-import { randint } from '../../../modules/outils'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { choice } from '../../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { randint } from '../../../modules/outils'
+import { scratchblock } from '../../../modules/scratchblock'
+import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Comprendre un programme scratch'
 export const interactifReady = true
@@ -92,7 +92,6 @@ export default class NomExercice extends ExerciceSimple {
 
         this.correction = `Un carré a des angles droits, il faut donc écrire  $${miseEnEvidence(90)}$.`
         this.canEnonce = this.question
-        this.canReponseACompleter = '$\\ldots$'
       }
       if (choix === 'b') {
         this.reponse = 120
@@ -105,7 +104,6 @@ export default class NomExercice extends ExerciceSimple {
      Le lutin doit tourner de $180-60=120°$ après avoir tracé un côté. <br>
      Ainsi, à la place des pointillés il faut écrire  $${miseEnEvidence(120)}$.`
         this.canEnonce = this.question
-        this.canReponseACompleter = '$\\ldots$'
       }
       if (choix === 'c') {
         this.reponse = 2
@@ -118,7 +116,6 @@ export default class NomExercice extends ExerciceSimple {
       La boucle contient le tracé d'une longueur et d'une largeur du rectangle. <br>
       Ainsi, à la place des pointillés il faut écrire  $${miseEnEvidence(2)}$.`
         this.canEnonce = this.question
-        this.canReponseACompleter = '$\\ldots$'
       }
       if (choix === 'd') {
         this.reponse = a * n

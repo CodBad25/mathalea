@@ -60,7 +60,6 @@ export default class NomExercice extends ExerciceSimple {
         }
         this.reponse = coeff
         this.canEnonce = `Augmenter de $${texNombre(taux * 100, 0)}\\,\\%$ revient à multiplier par : `
-        this.canReponseACompleter = '$\\ldots$'
       }
     }
   }

@@ -26,6 +26,16 @@ export const refs = {
 
 */
 export default class Can2a2026Q23 extends ExerciceCan {
+  constructor() {
+    super()
+    this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
+    this.optionsDeComparaison = {
+      fractionEgale: true,
+      nombreDecimalSeulement: true,
+    }
+    this.optionsChampTexte = { texteAvant: '<br>' }
+  }
+
   enonce(xA?: number, yA?: number, deltaX?: number, deltaY?: number): void {
     if (xA == null || yA == null || deltaX == null || deltaY == null) {
       // Cas prédéfinis pour l'aléatoire
