@@ -57,7 +57,6 @@ $${correctionSomme}=${somme}$.<br>
 La moyenne est donc $\\dfrac{${somme}}{5}=${miseEnEvidence(moyenne)}$.`
 
     this.canEnonce = this.question
-    this.canReponseACompleter = '$\\ldots$'
   }
 
   /**

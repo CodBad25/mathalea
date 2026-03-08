@@ -45,7 +45,7 @@ export default class Can20264emeQ20 extends ExerciceCan {
     \\end{aligned}$`
 
     this.canEnonce = this.question
-    this.canReponseACompleter = '$\\ldots$'
+
     this.reponse = reponse
   }
 

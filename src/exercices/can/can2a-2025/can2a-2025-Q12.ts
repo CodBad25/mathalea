@@ -1,10 +1,10 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { randint } from '../../../modules/outils'
-import { context } from '../../../modules/context'
-import { choice } from '../../../lib/outils/arrayOutils'
-import { sp } from '../../../lib/outils/outilString'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { choice } from '../../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { sp } from '../../../lib/outils/outilString'
+import { context } from '../../../modules/context'
+import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = "Trouver le résultat d'un programme Python"
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -97,7 +97,6 @@ export default class PythonCalcul extends ExerciceSimple {
       this.canEnonce += '}'
       this.canEnonce += '}'
       this.canEnonce += `<br>Que renvoie  $\\texttt{mystere(${a})}$ ?`
-      this.canReponseACompleter = '$\\ldots$'
     }
     if (this.interactif) {
       this.question += '<br>'

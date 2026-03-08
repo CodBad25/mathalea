@@ -1,11 +1,10 @@
-
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 
-import ExerciceCan from '../../ExerciceCan'
-import FractionEtendue from '../../../modules/FractionEtendue'
 import { choice } from '../../../lib/outils/arrayOutils'
+import FractionEtendue from '../../../modules/FractionEtendue'
+import ExerciceCan from '../../ExerciceCan'
 export const titre = 'Calculer la somme d’une fraction et d’un nombre décimal'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -20,6 +19,13 @@ export const refs = {
 
 */
 export default class Can2a2026Q6 extends ExerciceCan {
+  constructor() {
+    super()
+    this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
+    this.optionsDeComparaison = { nombreDecimalSeulement: true }
+    this.optionsChampTexte = { texteAvant: '<br>' }
+  }
+
   enonce(denominateur?: number, decimal?: number): void {
     if (denominateur == null || decimal == null) {
       denominateur = choice([4, 5])
@@ -30,16 +36,9 @@ export default class Can2a2026Q6 extends ExerciceCan {
     const decimalFraction = fraction.valeurDecimale
     const resultat = decimalFraction + decimal
 
-    this.formatChampTexte = KeyboardType.clavierDeBase
     this.reponse = texNombre(resultat, 2)
     this.question = `Écriture décimale de : $${fraction.texFraction}+${texNombre(decimal, 2)}$`
     this.correction = `$${fraction.texFraction}+${texNombre(decimal, 2)}=${texNombre(decimalFraction, 2)}+${texNombre(decimal, 2)}=${miseEnEvidence(texNombre(resultat, 2))}$`
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
-    
-    if (this.interactif) {
-      this.question += '<br>'
-    }
   }
 
   nouvelleVersion(): void {

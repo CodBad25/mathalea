@@ -1,4 +1,3 @@
-
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 
@@ -8,10 +7,7 @@ import { latex2d } from '../../../lib/2d/textes'
 import { mathalea2d } from '../../../modules/mathalea2d'
 
 import { repere } from '../../../lib/2d/reperes'
-import {
-  spline,
-  type NoeudSpline,
-} from '../../../lib/mathFonctions/Spline'
+import { spline, type NoeudSpline } from '../../../lib/mathFonctions/Spline'
 import { choice } from '../../../lib/outils/arrayOutils'
 export const titre = 'Déterminer une image graphiquement '
 export const interactifReady = true
@@ -27,7 +23,14 @@ export const refs = {
 
 */
 
-  export default class Can2a2026Q13 extends ExerciceCan {
+export default class Can2a2026Q13 extends ExerciceCan {
+  constructor() {
+    super()
+    this.formatChampTexte = KeyboardType.clavierDeBase
+    this.optionsDeComparaison = { nombreDecimalSeulement: true }
+    this.optionsChampTexte = { texteAvant: '<br>' }
+  }
+
   enonce(antecedent?: number): void {
     if (antecedent == null) {
       antecedent = choice([-1, 0, 1])
@@ -43,7 +46,7 @@ export const refs = {
 
     const o = latex2d('O', -0.3, -0.3, { letterSize: 'scriptsize' })
     const theSpline = spline(noeuds)
-    
+
     const repere1 = repere({
       xMin: -3,
       xMax: 4,
@@ -53,7 +56,7 @@ export const refs = {
       grilleY: false,
       yLabelEcart: 0.3,
       xThickMax: 4,
-       yThickMax: 4,
+      yThickMax: 4,
       grilleSecondaire: true,
       grilleSecondaireYDistance: 1,
       grilleSecondaireXDistance: 1,
@@ -62,16 +65,19 @@ export const refs = {
       grilleSecondaireXMin: -3,
       grilleSecondaireXMax: 4.05,
     })
-    
+
     const courbe1 = theSpline.courbe({
       epaisseur: 1.5,
       ajouteNoeuds: false,
       color: 'blue',
     })
 
-    const labelCourbe = latex2d('(C)', -1.7, 2.3, { color:'blue', letterSize: 'scriptsize' })
+    const labelCourbe = latex2d('(C)', -1.7, 2.3, {
+      color: 'blue',
+      letterSize: 'scriptsize',
+    })
     const objetsEnonce = [repere1, courbe1, labelCourbe, o]
-    
+
     const graphique = mathalea2d(
       {
         pixelsParCm: 40,
@@ -95,25 +101,22 @@ export const refs = {
 
     this.formatChampTexte = KeyboardType.clavierDeBase
     this.reponse = String(image)
-    
-    this.question = 'Courbe d\'une fonction $f$ sur $[-2\\,;\\,3]$<br><br>'
+
+    this.question = "Courbe d'une fonction $f$ sur $[-2\\,;\\,3]$<br><br>"
     this.question += graphique
     this.question += `<br>Image de $${antecedent}$ par $f$`
-    
+
     this.correction = `L'image de $${antecedent}$ se lit sur l'axe des ordonnées.<br>
     On lit $f(${antecedent})=${miseEnEvidence(image)}$.`
-    
-    this.canEnonce = 'Courbe d\'une fonction $f$ sur $[-2\\,;\\,3]$<br>' + graphique
+
+    this.canEnonce =
+      "Courbe d'une fonction $f$ sur $[-2\\,;\\,3]$<br>" + graphique
     this.canReponseACompleter = `Image de $${antecedent}$ par $f$ : $\\ldots$`
-       this.canNumeroLie = 13
+    this.canNumeroLie = 13
     this.canLiee = [14]
-    if (this.interactif) {
-      this.question += '<br>'
-    }
   }
- 
+
   nouvelleVersion(): void {
     this.canOfficielle ? this.enonce(-1) : this.enonce()
- 
   }
 }

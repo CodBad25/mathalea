@@ -1,10 +1,9 @@
-
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { sp } from '../../../lib/outils/outilString'
+import { context } from '../../../modules/context'
 import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
-import { context } from '../../../modules/context'
-import { sp } from '../../../lib/outils/outilString'
 export const titre = 'Calcul retourné par un algorithme'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -19,6 +18,13 @@ export const refs = {
 
 */
 export default class Can2a2026Q12 extends ExerciceCan {
+  constructor() {
+    super()
+    this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
+    this.optionsDeComparaison = { nombreDecimalSeulement: true }
+    this.optionsChampTexte = { texteAvant: '<br>' }
+  }
+
   enonce(a?: number, coeff?: number): void {
     if (a == null || coeff == null) {
       a = randint(5, 9)
@@ -28,7 +34,6 @@ export default class Can2a2026Q12 extends ExerciceCan {
     // b = a*a - coeff, return 2*b
     const resultat = 2 * (a * a - coeff)
 
-    this.formatChampTexte = KeyboardType.clavierDeBase
     this.reponse = resultat.toString()
 
     if (context.isHtml) {
@@ -66,11 +71,6 @@ export default class Can2a2026Q12 extends ExerciceCan {
     this.canEnonce += '}'
     this.canEnonce += '}'
     this.canEnonce += `<br>Que renvoie $\\texttt{mystere(${a})}$ ?`
-    this.canReponseACompleter = '$\\ldots$'
-
-    if (this.interactif) {
-      this.question += '<br>'
-    }
   }
 
   nouvelleVersion(): void {

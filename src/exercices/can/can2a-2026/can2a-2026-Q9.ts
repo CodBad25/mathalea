@@ -16,12 +16,17 @@ export const refs = {
 
 */
 export default class Can2a2026Q9 extends ExerciceCan {
+  constructor() {
+    super()
+    this.formatChampTexte = KeyboardType.clavierDeBaseAvecX
+    this.optionsDeComparaison = { expressionsForcementReduites: true }
+    this.optionsChampTexte = { texteAvant: '<br>' }
+  }
+
   enonce(a?: number): void {
     if (a == null) {
       a = randint(2, 9)
     }
-    this.optionsDeComparaison = { texteSansCasse: true }
-    this.formatChampTexte = KeyboardType.clavierDeBaseAvecVariable
     this.reponse = [
       `x^2-${2 * a}x+${a * a}`,
       `${a * a}+x^2-${2 * a}x`,
@@ -34,13 +39,6 @@ export default class Can2a2026Q9 extends ExerciceCan {
     this.correction = `On utilise l'identité remarquable $(a-b)^2=a^2-2ab+b^2$ avec $a=x$ et $b=${a}$.<br>
 $\\begin{aligned}(x-${a})^2&=x^2-2\\times x\\times ${a}+${a}^2\\\\
 &=${miseEnEvidence(`x^2-${2 * a}x+${a * a}`)}\\end{aligned}$`
-
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
-
-    if (this.interactif) {
-      this.question += '<br>'
-    }
   }
 
   nouvelleVersion(): void {

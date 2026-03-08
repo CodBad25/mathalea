@@ -18,21 +18,22 @@ export const refs = {
 
 */
 export default class Can2a2026Q1 extends ExerciceCan {
+  constructor() {
+    super()
+    this.formatChampTexte = KeyboardType.clavierNumbers
+    this.optionsDeComparaison = { nombreDecimalSeulement: true }
+    this.optionsChampTexte = { texteAvant: '$=$' }
+  }
+
   enonce(a?: Decimal, b?: number) {
     if (a == null || b == null) {
       a = new Decimal(randint(2, 9)).div(10)
       b = randint(5, 9)
     }
 
-    this.formatChampTexte = KeyboardType.clavierDeBase
     this.reponse = texNombre(a.mul(b), 1)
     this.question = `$${texNombre(a, 1)} \\times ${b}$ `
     this.correction = `$${texNombre(a, 1)} \\times ${b}=${miseEnEvidence(this.reponse)}$`
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
-    if (this.interactif) {
-      this.question += '$=$'
-    }
   }
 
   nouvelleVersion() {

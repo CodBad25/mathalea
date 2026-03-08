@@ -83,7 +83,6 @@ export default class Can1a2026Q28 extends ExerciceCan {
     this.canEnonce += ' \\hspace*{7mm}\\texttt{return u}'
     this.canEnonce += '}}'
     this.canEnonce += `\\newline Que renvoie $\\texttt{mystere(${uInit})}$ ?`
-    this.canReponseACompleter = '$\\ldots$'
 
     if (this.interactif) {
       this.question += '<br>'

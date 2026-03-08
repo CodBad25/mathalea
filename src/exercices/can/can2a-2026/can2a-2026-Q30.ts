@@ -43,7 +43,7 @@ const creerQuestionLigneBrisee = () => {
   const segmentUnite = segment(G, H)
   segmentUnite.epaisseur = 2
   segmentUnite.styleExtremites = '<->'
-  segmentUnite.tailleExtremites = context.isHtml ?   6 : 2
+  segmentUnite.tailleExtremites = context.isHtml ? 6 : 2
 
   // Générer aléatoirement une ligne brisée
   // La ligne brisée aura entre longueurUnite et 3*longueurUnite carreaux de longueur
@@ -117,9 +117,17 @@ const creerQuestionLigneBrisee = () => {
 
 */
 export default class Can2a2026Q30 extends ExerciceCan {
-  enonce(): void {
+  constructor() {
+    super()
     this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
+    this.optionsDeComparaison = {
+      fractionEgale: true,
+      nombreDecimalSeulement: true,
+    }
     this.optionsChampTexte = { texteAvant: ' ', texteApres: '$u.\\ell$' }
+  }
+
+  enonce(): void {
     let questionData
     // Fonction pour créer aléatoirement une question de ligne brisée sur grille
     if (this.canOfficielle || this.sup) {
@@ -130,7 +138,7 @@ export default class Can2a2026Q30 extends ExerciceCan {
       const segmentUnite = segmentAvecExtremites(G, H)
       segmentUnite.epaisseur = 2
       segmentUnite.styleExtremites = '<->'
-      segmentUnite.tailleExtremites = context.isHtml ?   6 : 2
+      segmentUnite.tailleExtremites = context.isHtml ? 6 : 2
       objets.push(segmentUnite)
       objets.push(
         latex2d('1 u.\\ell.', milieu(G, H).x, milieu(G, H).y + 0.6, {

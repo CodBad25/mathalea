@@ -58,7 +58,7 @@ Le double du produit de $${a}$ par $${b}$ est donc égal à : $2\\times ${calcul
 
     this.reponse = reponse
     this.canEnonce = this.question
-    this.canReponseACompleter = '$\\ldots$'
+
     this.question += '<br>'
 
     if (!this.interactif) {

@@ -61,7 +61,6 @@ export default class TauxCoeff extends ExerciceSimple {
         }
         this.reponse = coeff
         this.canEnonce = `Diminuer une quantité de $${texNombre(taux.mul(100), 0)}\\,\\%$ revient à la multiplier par : `
-        this.canReponseACompleter = '$\\ldots$'
       }
     }
   }

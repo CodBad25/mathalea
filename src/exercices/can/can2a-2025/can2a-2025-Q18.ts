@@ -62,7 +62,6 @@ export default class CoeffMultiplicateur extends ExerciceSimple {
         }
         this.reponse = coeff
         this.canEnonce = `Augmenter de $${texNombre(Taux, 0)}\\,\\%$ revient à multiplier par `
-        this.canReponseACompleter = '$\\ldots$'
       }
     }
   }

@@ -1,8 +1,8 @@
-import { texNombre } from '../../../lib/outils/texNombre'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import ExerciceCan from '../../ExerciceCan'
-import { randint } from '../../../modules/outils'
 import { choice } from '../../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { texNombre } from '../../../lib/outils/texNombre'
+import { randint } from '../../../modules/outils'
+import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Numération'
 export const interactifReady = true
@@ -36,7 +36,7 @@ export default class Can2025N5Q19 extends ExerciceCan {
     this.question = `Le chiffre des ${b} dans le nombre $${texNombre(a, 3)}$ est `
     this.correction = `Le chiffre des ${b} dans le nombre $${texNombre(a, 3)}$ est $${miseEnEvidence(`${nbStr[index]}`)}$.`
     this.canEnonce = this.question
-    this.canReponseACompleter = '$\\ldots$'
+
     if (!this.interactif) {
       this.question += '$\\ldots$'
     }

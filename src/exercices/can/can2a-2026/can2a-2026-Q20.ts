@@ -19,6 +19,13 @@ export const refs = {
 
 */
 export default class Can2a2026Q20 extends ExerciceCan {
+  constructor() {
+    super()
+    this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
+    this.optionsDeComparaison = { nombreDecimalSeulement: true }
+    this.optionsChampTexte = { texteAvant: ' $=$' }
+  }
+
   enonce(b?: number, fraction?: FractionEtendue): void {
     if (b == null || fraction == null) {
       b = randint(3, 7)
@@ -41,17 +48,12 @@ export default class Can2a2026Q20 extends ExerciceCan {
 
     this.correction = `$\\begin{aligned}
 ${fraction.d}\\times \\left(${b}-${fraction.texFraction}\\right)&=${fraction.d}\\times \\left(${bFraction.texFractionSimplifiee}-${fraction.texFraction}\\right)\\\\
-&=${fraction.d}\\times \\left(\\dfrac{${b*fraction.d}}{${fraction.d}}-${fraction.texFraction}\\right)\\\\
+&=${fraction.d}\\times \\left(\\dfrac{${b * fraction.d}}{${fraction.d}}-${fraction.texFraction}\\right)\\\\
 &=${fraction.d}\\times ${difference.texFractionSimplifiee}\\\\
 &=${miseEnEvidence(texNombre(resultatSimplifie.valeurDecimale, 2))}
 \\end{aligned}$`
 
     this.canEnonce = this.question
-    this.canReponseACompleter = '$\\ldots$'
-
-    if (this.interactif) {
-      this.question += ' $=$'
-    }
   }
 
   nouvelleVersion(): void {
