@@ -55,7 +55,7 @@ export default class Can20264emeQ14 extends ExerciceCan {
     } else {
       // Suite décroissante : denom³, denom², denom, 1, ?
       const terme1 = denom ** 3
-      const terme5 = `1/${denom}`
+      const terme5 = `\\dfrac{1}{${denom}}`
 
       this.question = `Compléter la suite logique :<br>
       $${terme1}~;~${denom ** 2}~;~${denom}~;~1~;~?$`
