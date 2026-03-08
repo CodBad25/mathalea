@@ -12,7 +12,7 @@ export const interactifType = 'mathLive'
 export const uuid = 'e38d8'
 
 export const refs = {
-  'fr-fr': ['1T-A2-1'],
+  'fr-fr': ['1Tec-A2-1'],
   'fr-ch': [],
 }
 export default class AssocierCoefficient1T extends AssocierCoefficient {

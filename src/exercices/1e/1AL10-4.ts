@@ -31,7 +31,7 @@ export const dateDeModifImportante = '11/10/2024'
 export const uuid = 'b8c14'
 
 export const refs = {
-  'fr-fr': ['1AL10-4', '1Gen-A103','1T-AN10-12'],
+  'fr-fr': ['1AL10-4', '1Gen-A103', '1Tec-AN10-12'],
   'fr-ch': [],
 }
 export default class TermeDUneSuiteDefinieParRecurrence extends Exercice {

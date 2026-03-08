@@ -15,8 +15,7 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
-export const titre =
-  "Calculer un terme d'une suite définie de façon explicite"
+export const titre = "Calculer un terme d'une suite définie de façon explicite"
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const dateDeModifImportante = '22/09/2024'
@@ -26,7 +25,7 @@ export const dateDeModifImportante = '22/09/2024'
 export const uuid = 'f0c2d'
 
 export const refs = {
-  'fr-fr': ['1AL10-3','1T-AN10-11'],
+  'fr-fr': ['1AL10-3', '1Tec-AN10-11'],
   'fr-ch': [],
 }
 export default class TermeDUneSuiteDefinieExplicitement extends Exercice {

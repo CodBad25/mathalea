@@ -182,7 +182,7 @@
   "can1S": {
     "titre": "Suites"
   },
-   "can1S0": {
+  "can1S0": {
     "titre": "Généralités avec les suites"
   },
   "can1S1": {
@@ -221,13 +221,13 @@
   "canTSpeAN": {
     "titre": "Analyse"
   },
-   "canTSpeAN1": {
+  "canTSpeAN1": {
     "titre": "Logarithme"
   },
-   "canTSpeAN2": {
+  "canTSpeAN2": {
     "titre": "Trigonométrie"
   },
-   "canTSpeAN3": {
+  "canTSpeAN3": {
     "titre": "Calcul intégral et primitives"
   },
   "canTSpeS": {
@@ -2824,22 +2824,22 @@
   "1Gen-A20": {
     "titre": "Suites arithmétiques et géométriques"
   },
-  "1T-A": {
+  "1Tec-A": {
     "titre": "Automatismes"
   },
-  "1T-A1": {
+  "1Tec-A1": {
     "titre": "Proportions et pourcentages"
   },
-  "1T-A2": {
+  "1Tec-A2": {
     "titre": "Évolutions et variations"
   },
-   "1T-AN1": {
+  "1Tec-AN1": {
     "titre": "Suites numériques"
   },
-   "1T-AN10": {
+  "1Tec-AN10": {
     "titre": "Généralités sur les suites"
   },
-   "1T-AN11": {
+  "1Tec-AN11": {
     "titre": "Suites arithmétiques et géométriques"
   },
   "PEA1": {

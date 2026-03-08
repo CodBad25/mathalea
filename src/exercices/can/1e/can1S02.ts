@@ -1,12 +1,12 @@
+import { arcenciel } from '../../../lib/format/style'
 import { choice } from '../../../lib/outils/arrayOutils'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texFractionFromString } from '../../../lib/outils/deprecatedFractions'
 import { ecritureAlgebrique } from '../../../lib/outils/ecritures'
-import { arcenciel } from '../../../lib/format/style'
-import { texNombre } from '../../../lib/outils/texNombre'
-import ExerciceSimple from '../../ExerciceSimple'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { signe } from '../../../lib/outils/nombres'
+import { texNombre } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer un terme d’une suite récurrente'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -23,7 +23,7 @@ export const dateDePublication = '14/02/2022' // La date de publication initiale
 export const uuid = '3f032'
 
 export const refs = {
-  'fr-fr': ['can1S02','1T-AN10-12-1','1Gen-A105'],
+  'fr-fr': ['can1S02', '1Tec-AN10-12-1', '1Gen-A105'],
   'fr-ch': [],
 }
 export default class CalculTermeSuiteRec extends ExerciceSimple {
