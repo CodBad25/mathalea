@@ -70,6 +70,7 @@ export default class Can2026Q26 extends ExerciceCan {
       tools: ['SEGMENT', 'REMOVE'],
       position: 'top',
     })
+    figure.divUserMessage.style.display = 'none'
     figure.create('Grid', {
       axeX: false,
       axeY: false,
@@ -95,7 +96,7 @@ export default class Can2026Q26 extends ExerciceCan {
     })
     figure.create('TextByPosition', {
       x: this.den / 2 + 1,
-      y: 4.5,
+      y: 4,
       text: '$1~\\text{u.l}$',
       isDeletable: false,
     })
