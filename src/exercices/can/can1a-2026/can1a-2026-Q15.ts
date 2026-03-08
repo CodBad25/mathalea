@@ -3,7 +3,7 @@ import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import FractionEtendue from '../../../modules/FractionEtendue'
 import ExerciceCan from '../../ExerciceCan'
-export const titre = 'Calculer l\'image d\'une fraction par une fonction polynôme'
+export const titre = "Calculer l'image d'une fraction par une fonction polynôme"
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const uuid = '6tfja'
@@ -17,10 +17,13 @@ export const refs = {
 
 */
 export default class Can1a2026Q15 extends ExerciceCan {
-   constructor() {
+  constructor() {
     super()
     this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
-    this.optionsDeComparaison = { nombreDecimalSeulement: true }
+    this.optionsDeComparaison = {
+      fractionEgale: true,
+      nombreDecimalSeulement: true,
+    }
   }
 
   enonce(n?: number, signe?: number): void {
@@ -32,7 +35,6 @@ export default class Can1a2026Q15 extends ExerciceCan {
     const fracCarre = new FractionEtendue(1, n * n)
     const resultat = new FractionEtendue(1 - n, n * n)
 
-   
     this.reponse = resultat.simplifie().texFraction
     this.question = `$f$ est définie sur $\\mathbb{R}$ par $f(x)=x^2-x$.<br>
     $f\\left(${frac.texFraction}\\right)=$`
