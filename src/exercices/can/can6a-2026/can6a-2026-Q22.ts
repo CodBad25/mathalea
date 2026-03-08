@@ -20,8 +20,12 @@ export const refs = {
 export default class Can20266Q22 extends ExerciceCan {
   enonce(a: number, b: number) {
     this.reponse = (a * b * 4).toString()
-
-    this.question = `$${a * 4}\\times${b}$`
+if (this.interactif) {
+     this.question = `$${a * 4}\\times${b}=$`
+    } else {
+      this.question = `$${a * 4}\\times${b}=\\ldots$`
+    }
+   
 
     this.correction = `$${a * 4}\\times${b} =${miseEnEvidence(texNombre(a * b * 4, 0))}$`
 
