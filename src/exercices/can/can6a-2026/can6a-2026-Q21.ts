@@ -31,8 +31,12 @@ export default class Can20266Q21 extends ExerciceCan {
     bQ21 = b
 
     this.reponse = (a * b).toString()
-
-    this.question = `$${a}\\times${b}$`
+if (this.interactif) {
+     this.question = `$${a}\\times${b}=$`
+    } else {
+      this.question = `$${a}\\times${b}=\\ldots$`
+    }
+    
 
     this.correction = `$${a}\\times${b} =${miseEnEvidence(texNombre(a * b, 0))}$`
 

@@ -42,7 +42,7 @@ export default class Can20266Q19 extends ExerciceCan {
     this.question = `Quel est le plus grand nombre ?<br>`
     this.autoCorrection[0] = {
       options: { ordered: false },
-      enonce: '',
+      enonce: `Quel est le plus grand nombre ?<br>`,
       propositions: [
         {
           texte: `$${a.texFraction}$`,

@@ -20,7 +20,7 @@ export const refs = {
 export default class Can20266Q18 extends ExerciceCan {
   constructor() {
     super()
-    this.optionsChampTexte = { texteApres: ' unités.' }
+    this.optionsChampTexte = { texteApres: ' unité(s)' }
   }
 
   enonce(nbDixièmes?: number) {
@@ -31,14 +31,14 @@ export default class Can20266Q18 extends ExerciceCan {
     this.reponse = texNombre(nbDixièmes / 20, 1)
     this.question =
       `La moitié de $${texNombre(nbDixièmes, 0)}$ dixièmes.` +
-      (this.interactif ? '' : '<br>$\\ldots$ unités.')
+      (this.interactif ? '<br>' : '<br>$\\ldots$ unité(s)')
 
     this.correction = `La moitié de $${texNombre(nbDixièmes, 0)}$ dixièmes est $${texNombre(nbDixièmes / 2, 1)}$.<br>
     Ainsi, la moitié de $${texNombre(nbDixièmes, 0)}$ est $${miseEnEvidence(texNombre(nbDixièmes / 20, 1))}$ unités.`
 
     this.formatChampTexte = KeyboardType.clavierDeBase
     this.canEnonce = `La moitié de $${texNombre(nbDixièmes, 0)}$ dixièmes.`
-    this.canReponseACompleter = `$\\ldots$ unités.`
+    this.canReponseACompleter = `$\\ldots$ unité(s)`
   }
 
   nouvelleVersion() {
