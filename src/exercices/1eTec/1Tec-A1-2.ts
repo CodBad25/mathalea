@@ -14,7 +14,7 @@ export const interactifType = 'mathLive'
 export const uuid = 'eb1e8'
 
 export const refs = {
-  'fr-fr': ['1T-A1-2', 'BP2SP10'],
+  'fr-fr': ['1Tec-A1-2', 'BP2SP10'],
   'fr-ch': [],
 }
 export default class AppliquerPourcentage1 extends AppliquerPourcentage {

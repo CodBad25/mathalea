@@ -24,7 +24,7 @@ export const dateDePublication = '23/11/2024'
 export const uuid = '42983'
 
 export const refs = {
-  'fr-fr': ['1AL11-1','1Gen-A201','1T-AN11-1'],
+  'fr-fr': ['1AL11-1', '1Gen-A201', '1Tec-AN11-1'],
   'fr-ch': ['autres-2'],
 }
 export default class ReconnaitreSuites extends Exercice {
@@ -49,7 +49,6 @@ export default class ReconnaitreSuites extends Exercice {
     for (
       let i = 0, a, b, r, q, u0, q1, monQcm, texte, texteCorr, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       typeDeQuestion = listeTypeDeQuestions[i]
       if (this.questionJamaisPosee(i, typeDeQuestion)) {

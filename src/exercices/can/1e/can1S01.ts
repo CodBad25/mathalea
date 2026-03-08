@@ -1,15 +1,15 @@
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choice } from '../../../lib/outils/arrayOutils'
 import {
   ecritureAlgebrique,
   reduireAxPlusB,
   reduirePolynomeDegre3,
 } from '../../../lib/outils/ecritures'
-import { texNombre } from '../../../lib/outils/texNombre'
-import ExerciceSimple from '../../ExerciceSimple'
-import { randint } from '../../../modules/outils'
-import FractionEtendue from '../../../modules/FractionEtendue'
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { texNombre } from '../../../lib/outils/texNombre'
+import FractionEtendue from '../../../modules/FractionEtendue'
+import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer un terme d’une suite explicite'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -26,7 +26,7 @@ export const dateDeModifImportante = '04/02/2025' // Une date de modification im
 export const uuid = '44c30'
 
 export const refs = {
-  'fr-fr': ['can1S01', '1Gen-A101','1T-AN10-11'],
+  'fr-fr': ['can1S01', '1Gen-A101', '1Tec-AN10-11'],
   'fr-ch': [],
 }
 export default class CalculTermeSuiteExp extends ExerciceSimple {
