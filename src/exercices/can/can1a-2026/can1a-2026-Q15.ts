@@ -17,6 +17,12 @@ export const refs = {
 
 */
 export default class Can1a2026Q15 extends ExerciceCan {
+   constructor() {
+    super()
+    this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
+    this.optionsDeComparaison = { nombreDecimalSeulement: true }
+  }
+
   enonce(n?: number, signe?: number): void {
     if (n == null || signe == null) {
       n = choice([2, 3, 4, 5, 6])
@@ -26,7 +32,7 @@ export default class Can1a2026Q15 extends ExerciceCan {
     const fracCarre = new FractionEtendue(1, n * n)
     const resultat = new FractionEtendue(1 - n, n * n)
 
-    this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
+   
     this.reponse = resultat.simplifie().texFraction
     this.question = `$f$ est définie sur $\\mathbb{R}$ par $f(x)=x^2-x$.<br>
     $f\\left(${frac.texFraction}\\right)=$`

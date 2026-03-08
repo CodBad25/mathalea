@@ -18,6 +18,12 @@ export const refs = {
 
 */
 export default class Can1a2026Q19 extends ExerciceCan {
+  constructor() {
+    super()
+     this.formatChampTexte = KeyboardType.clavierDeBase
+    this.optionsDeComparaison = { nombreDecimalSeulement: true }
+  }
+
   enonce(pA?: Decimal, pB?: Decimal): void {
     if (pA == null || pB == null) {
       pA = new Decimal(randint(1, 9)).div(10)
@@ -26,7 +32,7 @@ export default class Can1a2026Q19 extends ExerciceCan {
 
     const pAinterB = pA.mul(pB)
 
-    this.formatChampTexte = KeyboardType.clavierDeBase
+
     this.reponse = texNombre(pA, 2)
     this.question = `Si $P(A\\cap B)=${texNombre(pAinterB, 2)}$ et $P(B)=${texNombre(pB, 1)}$ avec $A$ et $B$ deux événements indépendants, alors :<br>`
 

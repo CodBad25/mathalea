@@ -22,6 +22,12 @@ export const refs = {
 
 */
 export default class Can1a2026Q13 extends ExerciceCan {
+  constructor() {
+    super()
+     this.formatChampTexte = KeyboardType.clavierDeBase
+    this.optionsDeComparaison = { nombreDecimalSeulement: true }
+  }
+
   enonce(a?: number, b?: number, c?: number): void {
     if (a == null || b == null || c == null) {
       a = randint(1, 3) * choice([-1, 1])
@@ -31,7 +37,7 @@ export default class Can1a2026Q13 extends ExerciceCan {
 
     const d = b * b - 4 * a * c
 const introCorr =`Le nombre de solutions est donné par le signe du discriminant $\\Delta$ :<br>`
-    this.formatChampTexte = KeyboardType.clavierDeBase
+  
     this.question = `Donner le nombre de solutions réelles de l'équation $${reduirePolynomeDegre3(0, a, b, c)}=0$.`
 
     if (d < 0) {

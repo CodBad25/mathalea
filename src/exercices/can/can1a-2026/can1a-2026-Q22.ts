@@ -24,6 +24,12 @@ export const refs = {
 
 */
 export default class Can1a2026Q22 extends ExerciceCan {
+  constructor() {
+    super()
+     this.formatChampTexte = KeyboardType.clavierDeBase
+    this.optionsDeComparaison = { nombreDecimalSeulement: true }
+  }
+
   enonce(
     a?: number,
     b?: number,
@@ -84,7 +90,6 @@ export default class Can1a2026Q22 extends ExerciceCan {
       objets,
     )
 
-    this.formatChampTexte = KeyboardType.clavierDeBase
 
     if (choix === 'a') {
       const vecteur2 = choixb ? '\\overrightarrow{AD}' : '\\overrightarrow{DA}'

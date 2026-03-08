@@ -17,6 +17,12 @@ export const refs = {
 
 */
 export default class Can1a2026Q10 extends ExerciceCan {
+  constructor() {
+    super()
+     this.formatChampTexte = KeyboardType.clavierDeBase
+    this.optionsDeComparaison = { nombreDecimalSeulement: true }
+  }
+
   enonce(ux?: number, uy?: number, vx?: number, vy?: number): void {
     if (ux == null || uy == null || vx == null || vy == null) {
       ux = randint(-5, 5, 0)
@@ -27,7 +33,7 @@ export default class Can1a2026Q10 extends ExerciceCan {
 
     const resultat = ux * vx + uy * vy
 
-    this.formatChampTexte = KeyboardType.clavierDeBase
+
     this.reponse = resultat
     this.question = `Dans une base orthonormée $(\\vec{\\imath},\\vec{\\jmath})$, on donne deux vecteurs : $\\vec{u}(${ux}\\,;\\,${uy})$ et  $\\vec{v}(${vx}\\,;\\,${vy})$.<br>
     $\\vec{u}\\cdot\\vec{v}=$`

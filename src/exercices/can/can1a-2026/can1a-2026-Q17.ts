@@ -21,6 +21,12 @@ export const refs = {
 
 */
 export default class Can1a2026Q17 extends ExerciceCan {
+  constructor() {
+    super()
+     this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
+     this.optionsDeComparaison = { nombreDecimalSeulement: true }
+  }
+
   enonce(a1?: number, b1?: number, a2?: number, b2?: number): void {
     if (a1 == null || b1 == null || a2 == null || b2 == null) {
       a1 = choice([2, 3])
@@ -34,8 +40,7 @@ export default class Can1a2026Q17 extends ExerciceCan {
     const x2 = new FractionEtendue(-b2, a2)
     const somme = x1.sommeFraction(x2).simplifie()
 
-    this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
-     this.optionsDeComparaison = { nombreDecimalSeulement: true }
+  
     this.reponse = somme.texFraction
     this.question = `Somme $S$ des racines de : $f(x)=(${reduireAxPlusB(a1, b1)})(${reduireAxPlusB(a2, b2)})$ ?<br>`
     this.correction = `Les racines de $f$ sont les solutions de $(${reduireAxPlusB(a1, b1)})(${reduireAxPlusB(a2, b2)})=0$.<br>

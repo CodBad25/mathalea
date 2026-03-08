@@ -20,6 +20,12 @@ export const refs = {
 
 */
 export default class Can1a2026Q23 extends ExerciceCan {
+  constructor() {
+    super()
+     this.formatChampTexte = KeyboardType.clavierDeBase
+    this.optionsDeComparaison = { nombreDecimalSeulement: true }
+  }
+
   enonce(
     pA?: number,
     pBbarreSachantA?: number,
@@ -35,8 +41,6 @@ export default class Can1a2026Q23 extends ExerciceCan {
     const pBsachantA = 1 - pBbarreSachantA
     const pBbarreSachantAbarre = 1 - pBsachantAbarre
     const resultat = pA * pBbarreSachantA
-
-    this.formatChampTexte = KeyboardType.clavierDeBase
     this.reponse = texNombre(resultat, 2)
 
     const omega = new Arbre({

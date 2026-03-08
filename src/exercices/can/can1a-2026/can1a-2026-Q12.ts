@@ -19,7 +19,14 @@ export const refs = {
 
 */
 export default class Can1a2026Q28 extends ExerciceCan {
+  constructor() {
+    super()
+     this.formatChampTexte = KeyboardType.clavierDeBase
+    this.optionsDeComparaison = { nombreDecimalSeulement: true }
+  }
+
    enonce(uInit?: number, coeff?: number, nbTours?: number): void {
+    
     if (uInit == null || coeff == null || nbTours == null) {
       nbTours = 2
       coeff = randint(1, 7)
@@ -36,7 +43,7 @@ export default class Can1a2026Q28 extends ExerciceCan {
       detail += `$k=${k}$ : $u=${ancien}\\times ${ecritureParentheseSiNegatif(ancien)}-${coeff}=${ancien * ancien}-${coeff}=${u}$<br>`
     }
 
-    this.formatChampTexte = KeyboardType.clavierDeBase
+  
     this.reponse = String(u)
 
     if (context.isHtml) {

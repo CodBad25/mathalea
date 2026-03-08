@@ -25,6 +25,14 @@ export const refs = {
 
 */
 export default class Can1a2026Q21 extends ExerciceCan {
+
+  constructor() {
+    super()
+     this.formatChampTexte = KeyboardType.clavierDeBase
+    this.optionsDeComparaison = { nombreDecimalSeulement: true }
+  }
+
+
       maSpline!: Spline
 
   enonce(noeudsChoisis?: Array<{ x: number, y: number, deriveeGauche: number, deriveeDroit: number, isVisible: boolean }>): void {
@@ -123,7 +131,7 @@ export default class Can1a2026Q21 extends ExerciceCan {
       o,
     )
 
-    this.formatChampTexte = KeyboardType.clavierDeBase
+
     this.optionsChampTexte = {texteAvant : '<br>',texteApres: '' }
 
     const extrema = nuage.filter((el) => el.deriveeGauche === 0)
