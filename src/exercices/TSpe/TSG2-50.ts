@@ -16,7 +16,7 @@ import FractionEtendue from '../../modules/FractionEtendue'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-export const titre = "Calculer le volume d'un tétraèdre."
+export const titre = "Calculer le volume d'un tétraèdre"
 
 export const dateDePublication = '28/01/2026'
 

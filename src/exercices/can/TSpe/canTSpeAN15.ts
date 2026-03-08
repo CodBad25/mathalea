@@ -3,7 +3,7 @@ import { reduireAxPlusB } from '../../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
-export const titre = "Calculer la dérivée d'une fonction logarithme népérien."
+export const titre = "Calculer la dérivée d'une fonction logarithme népérien"
 export const interactifReady = true
 export const interactifType = 'mathLive'
 
