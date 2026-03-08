@@ -21,7 +21,10 @@ export default class Can20264emeQ14 extends ExerciceCan {
   constructor() {
     super()
     this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
-    this.optionsDeComparaison = { nombreDecimalSeulement: true }
+    this.optionsDeComparaison = {
+      fractionEgale: true,
+      nombreDecimalSeulement: true,
+    }
   }
 
   enonce(denom?: number, forceSens?: boolean) {

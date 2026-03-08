@@ -22,7 +22,10 @@ export default class Can2a2026Q4 extends ExerciceCan {
   constructor() {
     super()
     this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
-    this.optionsDeComparaison = { nombreDecimalSeulement: true }
+    this.optionsDeComparaison = {
+      fractionEgale: true,
+      nombreDecimalSeulement: true,
+    }
     this.optionsChampTexte = { texteAvant: '$=$' }
   }
 
@@ -59,6 +62,12 @@ export default class Can2a2026Q4 extends ExerciceCan {
     this.correction = `$\\begin{aligned}${f1.texFraction}${signe}${f2.texFraction}&=\\dfrac{${numerateur1}}{${denominateur}}${signe}\\dfrac{${numerateur2}}{${denominateur}}\\\\
 
     &=${miseEnEvidence(resultat.texFraction)}\\end{aligned}$`
+    this.canEnonce = this.question
+    this.canReponseACompleter = ''
+
+    if (this.interactif) {
+      this.question += ' $=$'
+    }
   }
 
   nouvelleVersion() {
