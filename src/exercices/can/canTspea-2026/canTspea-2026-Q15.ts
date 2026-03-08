@@ -20,7 +20,7 @@ export const refs = {
  constructor() {
     super()
    this.optionsDeComparaison = { calculFormel: true }
-    this.formatChampTexte = KeyboardType.alphanumeric
+    this.formatChampTexte = KeyboardType.clavierEmvx
   }
   
   enonce(cas?: number): void {

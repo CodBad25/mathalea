@@ -18,7 +18,7 @@ export const refs = {
 export default class Can2a2026Q29 extends ExerciceCan {
   constructor() {
     super()
-    this.formatChampTexte = KeyboardType.alphanumeric
+    this.formatChampTexte = KeyboardType.clavierMajuscules
     this.formatInteractif = 'fillInTheBlank'
     this.optionsDeComparaison = { texteSansCasse: true }
   }

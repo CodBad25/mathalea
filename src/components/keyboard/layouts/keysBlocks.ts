@@ -655,6 +655,11 @@ const degreCelsiusCaps: CompleteKeysList = {
   block: ['DEGCELSIUS'],
 }
 
+const emvxBlockCaps: CompleteKeysList = {
+  inline: ['E', 'm', 'v', 'xMath'],
+  block: ['E', 'm', 'v', 'xMath'],
+}
+
 const trigoCaps: CompleteKeysList = {
   inline: ['COS', 'SIN', 'TAN', 'ANG'],
   block: ['COS', 'SIN', 'TAN', 'ANG'],
@@ -740,6 +745,65 @@ const vFONCaps: CompleteKeysList = {
 const eosnCaps: CompleteKeysList = {
   inline: ['O', 'E', 'S', 'N', 'DEG', 'SEMICOLON'],
   block: ['O', 'E', 'S', 'N', 'DEG', 'SEMICOLON'],
+}
+
+const majusculesCaps: CompleteKeysList = {
+  inline: [
+    'A',
+    'B',
+    'C',
+    'D',
+    'E',
+    'F',
+    'G',
+    'H',
+    'I',
+    'J',
+    'K',
+    'L',
+    'M',
+    'N',
+    'O',
+    'P',
+    'Q',
+    'R',
+    'S',
+    'T',
+    'U',
+    'V',
+    'W',
+    'X',
+    'Y',
+    'Z',
+  ],
+  block: [
+    'A',
+    'B',
+    'C',
+    'D',
+    'E',
+    'F',
+    'G',
+    'H',
+    'I',
+    'J',
+    'K',
+    'L',
+    'M',
+    'N',
+    'O',
+    'P',
+    'Q',
+    'R',
+    'S',
+    'T',
+    'U',
+    'V',
+    'W',
+    'X',
+    'Y',
+    'Z',
+  ],
 }
 
 const lengthUnitsKeys = Object.keys(keys)
@@ -956,6 +1020,13 @@ export const degreCelsius: KeyboardBlock = {
   isUnits: true,
 }
 
+export const emvxBlock: KeyboardBlock = {
+  keycaps: emvxBlockCaps,
+  cols: 1,
+  title: 'Variables E, m, v, x',
+  isUnits: false,
+}
+
 export const trigo: KeyboardBlock = {
   keycaps: trigoCaps,
   cols: 1,
@@ -1032,6 +1103,13 @@ export const masses: KeyboardBlock = {
   isUnits: true,
 }
 
+export const majuscules: KeyboardBlock = {
+  keycaps: majusculesCaps,
+  cols: 7,
+  title: 'Majuscules',
+  isUnits: false,
+}
+
 export const angles: KeyboardBlock = {
   keycaps: anglesCaps,
   cols: 1,
@@ -1088,6 +1166,7 @@ export const keyboardBlocks: {
   complexes,
   degre,
   degreCelsius,
+  emvxBlock,
   ensemble,
   ensembleDefini,
   equationsTerminale,
@@ -1097,6 +1176,7 @@ export const keyboardBlocks: {
   hms,
   lengths,
   clavierFonctionsTerminales,
+  majuscules,
   masses,
   numbers,
   numbersSpace,
