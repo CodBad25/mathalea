@@ -854,7 +854,7 @@ export default class ProblemesEnEquation extends Exercice {
     this.spacingCorr = 1.5
     this.besoinFormulaireTexte = [
       'Choix des problèmes',
-      'Nombres séparés par des tirets :\n1 : basket\n2 : basket2\n3 : achats\n4 : polygone\n5 : programmes (produit vs produit,\n ... solution entière positive)\n6 : programmes (produit vs produit,\n ... solution entière négative)\n7 : tarifs\n8 : spectacle\n9 : isocèle\n10 : Thalès\n11 : Thalès2\n14 : Mélange',
+      'Nombres séparés par des tirets :\n1 : basket\n2 : basket2\n3 : achats\n4 : polygone\n5 : programmes (produit vs produit,\n ... solution entière positive)\n6 : programmes (produit vs produit,\n ... solution entière négative)\n7 : tarifs\n8 : spectacle\n9 : isocèle\n10 : Thalès\n11 : Thalès2\n12 : Mélange',
     ]
     this.sup = '12'
     this.besoinFormulaire2CaseACocher = ['Uniquement des nombres entiers']
