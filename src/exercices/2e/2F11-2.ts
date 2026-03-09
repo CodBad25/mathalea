@@ -79,7 +79,6 @@ export default class ComparerAvecFonctionRef extends Exercice {
     for (
       let i = 0, texte, texteCorr, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       // Boucle principale où i+1 correspond au numéro de la question
       const nomF = [['f'], ['g'], ['h'], ['u'], ['v'], ['w']]
@@ -180,9 +179,9 @@ export default class ComparerAvecFonctionRef extends Exercice {
               } else {
                 texteCorr += '.'
               }
+              reponse = ['croissante', 'R+', '>']
             }
             variables.push(x1, x2)
-            reponse = ['croissante', 'R+', '>']
           }
           break
 
