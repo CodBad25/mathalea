@@ -57,13 +57,19 @@
     },
     "1e": {
       "can1a": {},
-      "can1F": {
-        "can1F0": {},
-        "can1F1": {},
-        "can1F2": {},
-        "can1F3": {},
-        "can1F4": {},
-        "can1F5": {}
+      "can1D": {
+        "can1D0": {},
+        "can1D1": {},
+        "can1D2": {}       
+      },
+      "can1SD": {
+        "can1SD0": {},
+        "can1SD1": {},
+        "can1SD2": {}       
+      },
+      "can1E": {
+        "can1E1": {},
+          "can1E2": {}
       },
       "can1G": {},
       "can1L": {},
