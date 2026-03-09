@@ -33,6 +33,8 @@ export default class MoyenneEtMediane extends Exercice {
       2,
       '1 : Impair\n2 : Pair',
     ]
+    this.besoinFormulaire2CaseACocher = ['Demander l\'interprétation pour la médiane']
+    this.sup2 = false
   }
 
   nouvelleVersion() {
@@ -65,11 +67,19 @@ export default class MoyenneEtMediane extends Exercice {
     let question2 = ''
     let correction2 = ''
     if (this.onlyMoyenne === false) {
-      question2 += 'Quelle est la température médiane de cette série ?'
+      question2 += 'Calculer la température médiane de cette série'
+      if (this.sup2) {
+        question2 += ' et interpréter le résultat.'
+      } else {
+        question2 += '.'
+      }
       correction2 = `On réordonne les températures par ordre croissant : ${sortedStringList(temperatures)}.<br>`
       const mediane = getMedianne(temperatures)
       correction2 +=
         stringCalculMediane(temperatures) + `$${texNombre(mediane)}$°C.`
+      if (this.sup2) {
+        correction2 += `<br>Cela signifie que la moitié au moins des températures est supérieure ou égale à $${texNombre(mediane)}$°C.`
+      }
       if (this.interactif) {
         question2 +=
           '<br>' +
@@ -105,7 +115,7 @@ export default class MoyenneEtMediane extends Exercice {
         }
       }
     }
-
+    
     if (this.onlyMoyenne) {
       this.listeQuestions = [question1]
       this.listeCorrections = [correction1]
