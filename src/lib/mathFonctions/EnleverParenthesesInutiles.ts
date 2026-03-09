@@ -8,11 +8,11 @@ export function deparenthise(latexIn: string): string {
   // (+x) -> x
   s = s.replace(/\(\+([^)]+)\)/g, '$1')
 
-  // (-x) -> -x
-  s = s.replace(/\(-([^)]+)\)/g, '-$1')
+  // (-x) -> -x sauf après \times ou \div
+  s = s.replace(/(?<!\\times\s)(?<!\\div\s)\(-([^)]+)\)/g, '-$1')
 
-  // parenthèses autour d’un nombre
-  s = s.replace(/\(([-+]?\d+)\)/g, '$1')
+  // parenthèses autour d’un nombre (sauf après \times ou \div)
+  s = s.replace(/(?<!\\times\s)(?<!\\div\s)\(([-+]?\d+)\)/g, '$1')
 
   // produit négatif
   s = s.replace(/\\times-([0-9]+)/g, '\\times(-$1)')
@@ -34,7 +34,6 @@ export function deparenthise(latexIn: string): string {
 
   return s
 }
-
 /* Ancienne version mais qui ne fonctionne plus depuis le passage à la version 0.54.1 de ComputeEngine
 export function deparenthise(latexIn: string): string {
   // Comptage des \frac et \dfrac
