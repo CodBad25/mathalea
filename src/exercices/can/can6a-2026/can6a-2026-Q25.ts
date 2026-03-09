@@ -59,8 +59,30 @@ export default class Can20266Q25 extends ExerciceCan {
     this.question += monQcm.texte
 
     this.correction = vf
-      ? `Oui, tous les ${a} sont ${b}.`
+      ? `Oui, tous les ${a} sont ${b} particuliers.`
       : `Non, ce n'est pas vrai.`
+    if (!vf) {
+      switch (a) {
+        case 'triangles équilatéraux':
+          this.correction += ` Par exemple, un triangle isocèle qui a $2$ côtés de $5\\text{ cm}$ et un côté de $3\\text{ cm}$, n'est pas équilatéral.`
+          break
+        case 'carrés':
+          if (b === 'des rectangles') {
+            this.correction += ` Par exemple, un rectangle qui a une largeur de $5\\text{ cm}$ et une longueur de $7\\text{ cm}$, n'est pas carré.`
+          } else if (b === 'des losanges') {
+            this.correction += ` Par exemple, un losange qui a une diagonale de $5\\text{ cm}$ et une diagonale de $7\\text{ cm}$, n'est pas carré.`
+          } else {
+            this.correction += ` Par exemple, un parallélogramme qui a un côté de $5\\text{ cm}$ et un autre de $7\\text{ cm}$, n'est pas carré.`
+          }
+          break
+        case 'losanges':
+          this.correction += ` Par exemple, un parallélogramme qui a un côtés de $5\\text{ cm}$ et un côté de $3\\text{ cm}$, n'est pas losange.`
+          break
+        case 'rectangles':
+          this.correction += ` Par exemple, un parallélogramme qui a un angle de $40^\\circ$, n'est pas rectangle.`
+          break
+      }
+    }
 
     this.canEnonce = vf
       ? `\\underline{Vrai ou Faux}<br>
