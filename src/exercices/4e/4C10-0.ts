@@ -96,7 +96,6 @@ export default class SigneProduitQuotientRelatifs extends Exercice {
     for (
       let i = 0, texte, texteCorr, reponse, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       this.autoCorrection[i] = {}
       // on ne choisit que des nombres compris entre 1 et 20
@@ -346,7 +345,7 @@ export default class SigneProduitQuotientRelatifs extends Exercice {
           },
         ],
       }
-      if (this.sup2) texte = '$' + deparenthise(texte) + '$'
+      if (this.sup2) texte = deparenthise(texte)
 
       texte += '<br>' + propositionsQcm(this, i).texte
       if (
