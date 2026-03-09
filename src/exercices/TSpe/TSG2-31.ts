@@ -23,10 +23,11 @@ export const refs = {
  * @author Stéphane Guyon
 
 */
-export default class nomExercice extends Exercice {
+export default class PointAppartientDroite extends Exercice {
   constructor() {
     super()
     this.consigne = ''
+    this.nbQuestions=1
   }
 
   nouvelleVersion() {
