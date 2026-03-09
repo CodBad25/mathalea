@@ -53,6 +53,7 @@ export interface InterfaceGlobalOptions {
   beta?: boolean
   isDataRandom?: boolean
   canD?: string
+  canTi?: string
   canT?: string
   canSA?: boolean
   canSM?: CanSolutionsMode
