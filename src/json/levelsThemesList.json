@@ -149,26 +149,36 @@
   "can2P": {
     "titre": "Probabilités"
   },
-  "can1F": {
-    "titre": "Fonctions"
+  "can1SD": {
+    "titre": "Second degré"
   },
-  "can1F0": {
+ "can1SD0": {
     "titre": "Paraboles"
   },
-  "can1F1": {
-    "titre": "Second degré - Discriminant"
+  "can1SD1": {
+    "titre": "Equations - Inéquations"
   },
-  "can1F2": {
+   "can1SD2": {
+    "titre": "Polynômes - Variations"
+  },
+  "can1D": {
+    "titre": "Dérivation"
+  },
+ 
+  "can1D0": {
     "titre": "Tangentes - Nombre dérivé"
   },
-  "can1F3": {
+  "can1D1": {
     "titre": "Dérivées de polynômes"
   },
-  "can1F4": {
+  "can1D2": {
     "titre": "Dérivées"
   },
-  "can1F5": {
+  "can1E": {
     "titre": "Exponentielle"
+  },
+   "can1E1": {
+    "titre": "Propriétés"
   },
   "can1G": {
     "titre": "Géométrie"
