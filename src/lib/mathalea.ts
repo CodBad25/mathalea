@@ -656,6 +656,7 @@ export function mathaleaUpdateExercicesParamsFromUrl(
   let beta = false
   let url: URL
   let canDuration = 540
+  let canMainTitle = 'Course aux Nombres'
   let canTitle = ''
   let canSolAccess = true
   let canSolMode = 'gathered'
@@ -758,6 +759,8 @@ export function mathaleaUpdateExercicesParamsFromUrl(
         beta = true
       } else if (entry[0] === 'canD') {
         canDuration = parseInt(entry[1])
+      } else if (entry[0] === 'canTi') {
+        canMainTitle = entry[1]
       } else if (entry[0] === 'canT') {
         canTitle = entry[1]
       } else if (entry[0] === 'canSA') {
@@ -806,6 +809,7 @@ export function mathaleaUpdateExercicesParamsFromUrl(
   if (v === 'can' || get(globalOptions).recorder === 'capytale') {
     canOptions.update((e) => {
       e.durationInMinutes = canDuration
+      e.title = canMainTitle
       e.isInteractive = canIsInteractive
       e.solutionsAccess = canSolAccess
       if (canSolMode === 'gathered') e.solutionsMode = 'gathered'

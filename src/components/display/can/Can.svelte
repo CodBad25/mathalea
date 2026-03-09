@@ -542,7 +542,7 @@
     : ''} relative w-full h-screen bg-coopmaths-canvas dark:bg-coopmathsdark-canvas"
 >
   {#if state === 'start' || state === 'canHomeScreen'}
-    <KickOff subTitle={$canOptions.subTitle} bind:state />
+    <KickOff title={$canOptions.title} subTitle={$canOptions.subTitle} bind:state />
   {/if}
   {#if state === 'countdown'}
     <CountDown bind:state />

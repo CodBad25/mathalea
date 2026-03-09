@@ -160,22 +160,22 @@
               >
                 Présentation
               </div>
-              <div
-                class="pl-4 pb-4 w-full flex flex-row justify-start items-center space-x-2"
-              >
-                <div
-                  class="text-sm font-light w-1/4 text-coopmaths-corpus/70 dark:text-coopmathsdark-corpus/70"
-                >
-                  Titre :
+              <div class="pl-4 pb-4 w-full flex flex-col">
+                <div class="flex flex-row items-center">
+                  <div
+                    class="shrink-0 whitespace-nowrap text-sm font-light text-coopmaths-corpus/70 dark:text-coopmathsdark-corpus/70"
+                  >
+                    Titre&nbsp;:
+                  </div>
+                  <InputText
+                    inputID="config-eleve-titre-input"
+                    bind:value={$globalOptions.title}
+                    showTitle={false}
+                    classAddenda="font-light m-2"
+                  />
                 </div>
-                <InputText
-                  inputID="config-eleve-titre-input"
-                  bind:value={$globalOptions.title}
-                  showTitle={false}
-                  classAddenda="w-1/2 font-light"
-                />
                 <div
-                  class="mt-1 text-coopmaths-corpus font-light italic text-xs {$globalOptions.title &&
+                  class="mt-1 text-coopmaths-corpus font-light italic text-xs {!$globalOptions.title ||
                   $globalOptions.title.length === 0
                     ? ''
                     : 'invisible'}"
@@ -301,49 +301,65 @@
               >
                 Présentation
               </div>
-              <div
-                class="flex flex-col items-start justify-start space-y-2 px-4"
-              >
-                <div class="flex justify-start flex-row items-center space-x-2">
+              <div class="flex flex-col items-stretch space-y-2 px-4">
+                <div class="flex flex-row items-center">
                   <div
-                    class="text-sm font-light {$canOptions.isChoosen
+                    class="w-24 shrink-0 whitespace-nowrap text-sm font-light {$canOptions.isChoosen
                       ? 'text-coopmaths-corpus-light dark:text-coopmathsdark-corpus'
                       : 'text-coopmaths-corpus-light/10 dark:text-coopmathsdark-corpus/10'}"
                   >
                     Durée&nbsp;:
                   </div>
-                  <InputNumber
-                    id="config-eleve-can-duration-input"
-                    min={1}
-                    max={60}
-                    bind:value={$canOptions.durationInMinutes}
-                    isDisabled={!$canOptions.isChoosen}
-                  />
-                  <div
-                    class="text-sm font-light {$canOptions.isChoosen
-                      ? 'text-coopmaths-corpus-light dark:text-coopmathsdark-corpus'
-                      : 'text-coopmaths-corpus-light/10 dark:text-coopmathsdark-corpus/10'}"
-                  >
-                    minute{$canOptions.durationInMinutes !== undefined &&
-                    $canOptions.durationInMinutes > 1
-                      ? 's'
-                      : ''}.
+                  <div class="flex flex-row items-center space-x-2">
+                    <InputNumber
+                      id="config-eleve-can-duration-input"
+                      min={1}
+                      max={60}
+                      bind:value={$canOptions.durationInMinutes}
+                      isDisabled={!$canOptions.isChoosen}
+                    />
+                    <div
+                      class="text-sm font-light {$canOptions.isChoosen
+                        ? 'text-coopmaths-corpus-light dark:text-coopmathsdark-corpus'
+                        : 'text-coopmaths-corpus-light/10 dark:text-coopmathsdark-corpus/10'}"
+                    >
+                      minute{$canOptions.durationInMinutes !== undefined &&
+                      $canOptions.durationInMinutes > 1
+                        ? 's'
+                        : ''}.
+                    </div>
                   </div>
                 </div>
-                <div class="flex justify-start flex-row items-center space-x-2">
+                <div class="flex flex-row items-center">
                   <div
-                    class="text-sm font-light {$canOptions.isChoosen
+                    class="w-24 shrink-0 whitespace-nowrap text-sm font-light {$canOptions.isChoosen
                       ? 'text-coopmaths-corpus-light dark:text-coopmathsdark-corpus'
                       : 'text-coopmaths-corpus-light/10 dark:text-coopmathsdark-corpus/10'}"
                   >
-                    Sous-titre :
+                    Titre&nbsp;:
+                  </div>
+                  <InputText
+                    inputID="config-eleve-can-title-input"
+                    bind:value={$canOptions.title}
+                    isDisabled={!$canOptions.isChoosen}
+                    showTitle={false}
+                    classAddenda="font-light"
+                  />
+                </div>
+                <div class="flex flex-row items-center">
+                  <div
+                    class="w-24 shrink-0 whitespace-nowrap text-sm font-light {$canOptions.isChoosen
+                      ? 'text-coopmaths-corpus-light dark:text-coopmathsdark-corpus'
+                      : 'text-coopmaths-corpus-light/10 dark:text-coopmathsdark-corpus/10'}"
+                  >
+                    Sous-titre&nbsp;:
                   </div>
                   <InputText
                     inputID="config-eleve-can-subtitle-input"
                     bind:value={$canOptions.subTitle}
                     isDisabled={!$canOptions.isChoosen}
                     showTitle={false}
-                    classAddenda="w-1/2 font-light"
+                    classAddenda="font-light"
                   />
                 </div>
               </div>

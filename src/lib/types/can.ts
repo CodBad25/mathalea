@@ -8,6 +8,7 @@ export type CanState =
 export type CanSolutionsMode = 'gathered' | 'split'
 export type CanOptions = {
   durationInMinutes: number
+  title: string
   subTitle: string
   isChoosen: boolean
   solutionsAccess: boolean

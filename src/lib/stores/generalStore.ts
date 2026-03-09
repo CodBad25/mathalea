@@ -149,6 +149,7 @@ export function updateGlobalOptionsInURL(url: URL) {
   if (options.v === 'can') {
     if (canStore) {
       url.searchParams.append('canD', canStore.durationInMinutes.toString())
+      url.searchParams.append('canTi', canStore.title)
       url.searchParams.append('canT', canStore.subTitle)
       url.searchParams.append('canSA', canStore.solutionsAccess ? '1' : '0')
       url.searchParams.append('canSM', canStore.solutionsMode)
