@@ -19,6 +19,15 @@ export const refs = {
 
 */
 export default class Can20266Q7 extends ExerciceCan {
+   constructor() {
+    super()
+    this.formatChampTexte = KeyboardType.clavierDeBase
+    this.optionsDeComparaison = {
+      nombreDecimalSeulement: true,
+    }
+      this.optionsChampTexte = { texteApres: ' €.' }
+  }
+
    enonce(n1?: number, n2?: number, p1?: number, p2?: number) {
     if (n1 == null || n2 == null || p1 == null || p2 == null) {
       const prixUnitaire = choice([1.5, 2.5, 3.5])
@@ -30,14 +39,13 @@ export default class Can20266Q7 extends ExerciceCan {
     const nTotal = n1 + n2
     const pTotal = p1 + p2
 
-    this.formatChampTexte = KeyboardType.clavierDeBase
-    this.optionsChampTexte = { texteApres: ' €' }
+  
     this.reponse = pTotal
     this.question = `Les glaces sont toutes au même prix.<br>Pour $${n1}$ glaces, Malo a payé $${texNombre(p1, 0)}$ €.<br>Pour $${n2}$ glaces, Lisa a payé $${texNombre(p2, 0)}$ €.<br>Pour $${nTotal}$ glaces, Nour a payé `
     if (!this.interactif) {
       this.question += '$\\ldots$ €.'
     }
-    this.correction = `$${nTotal}$ glaces $= ${n1}$ glaces $+ ${n2}$ glaces, donc le prix est $${texNombre(p1, 0)} + ${texNombre(p2, 0)} = ${miseEnEvidence(texNombre(pTotal, 0))}$ €.`
+    this.correction = `$${nTotal}$ glaces $= ${n1}$ glaces $+$ $${n2}$ glaces, donc le prix est $${texNombre(p1, 0)} + ${texNombre(p2, 0)} = ${miseEnEvidence(texNombre(pTotal, 0))}$ €.`
     this.canEnonce = `Les glaces sont toutes au même prix.<br>Pour $${n1}$ glaces, Malo a payé $${texNombre(p1, 0)}$ €.<br>Pour $${n2}$ glaces, Lisa a payé $${texNombre(p2, 0)}$ €.`
     this.canReponseACompleter = `Pour $${nTotal}$ glaces, Nour a payé $\\ldots$ €.`
   }

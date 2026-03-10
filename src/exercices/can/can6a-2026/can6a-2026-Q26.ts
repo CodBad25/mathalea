@@ -11,7 +11,7 @@ import { context } from '../../../modules/context'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import ExerciceCan from '../../ExerciceCan'
 
-export const titre = 'Segment de longueur fractionnaire'
+export const titre = 'Tracer un segment de longueur fractionnaire'
 export const interactifReady = true
 export const interactifType = 'custom'
 export const uuid = '73885'

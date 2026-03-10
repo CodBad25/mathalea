@@ -20,6 +20,14 @@ export const refs = {
 
 */
 export default class Can20266Q6 extends ExerciceCan {
+   constructor() {
+    super()
+    this.formatChampTexte = KeyboardType.clavierDeBase
+    this.optionsDeComparaison = {
+      nombreDecimalSeulement: true,
+    }
+  }
+
    enonce(a?: number, b?:number) {
     if (a == null||b==null) {
       a = randint(15, 19)
@@ -36,7 +44,6 @@ this.question+=`$${a}\\times \\ldots = ${texNombre(a*b)}$`
  
     this.correction = ` $${a}\\times ${miseEnEvidence(texNombre(b))} = ${texNombre(a*b)}$.`
 
-    this.formatChampTexte = KeyboardType.clavierDeBase
     this.canEnonce = `Complète.`
     this.canReponseACompleter = `$${a}\\times ~\\ldots ~= ${texNombre(a*b)}$`
   }

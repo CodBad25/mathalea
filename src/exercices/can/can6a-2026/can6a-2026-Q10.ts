@@ -36,7 +36,7 @@ export default class Can20266Q10 extends ExerciceCan {
 
       this.question = `\\dfrac{${num}}{100}=\\dfrac{%{champ1}}{10}`
 
-      this.correction = `$\\dfrac{${num}}{100}=\\dfrac{${miseEnEvidence(result)}}{10}$ (en divisant par $10$ le numérateur et le dénominateur).`
+      this.correction = `$\\dfrac{${num}}{100}=\\dfrac{${miseEnEvidence(result)}}{10}$ (en divisant par $10$ le numérateur et le dénominateur de la première fraction).`
 
       this.canEnonce = 'Complète.'
       this.canReponseACompleter = `$\\dfrac{${num}}{100}=\\dfrac{\\ldots}{10}$`
@@ -48,7 +48,7 @@ export default class Can20266Q10 extends ExerciceCan {
 
       this.question = `\\dfrac{${num}}{100}=\\dfrac{${result}}{%{champ1}}`
 
-      this.correction = `$\\dfrac{${num}}{100}=\\dfrac{${result}}{${miseEnEvidence(10)}}$ (en divisant par $10$ le numérateur et le dénominateur).`
+      this.correction = `$\\dfrac{${num}}{100}=\\dfrac{${result}}{${miseEnEvidence(10)}}$ (en divisant par $10$ le numérateur et le dénominateur de la première fraction).`
 
       this.canEnonce = 'Complète.'
       this.canReponseACompleter = `$\\dfrac{${num}}{100}=\\dfrac{${result}}{\\ldots}$`

@@ -4,7 +4,7 @@ import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import ExerciceCan from '../../ExerciceCan'
 
-export const titre = 'Q21'
+export const titre = 'Calculer un produit'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const uuid = 'o93lm'
@@ -21,6 +21,14 @@ export let bQ21 = 15
 
 */
 export default class Can20266Q21 extends ExerciceCan {
+   constructor() {
+    super()
+    this.formatChampTexte = KeyboardType.clavierDeBase
+    this.optionsDeComparaison = {
+      nombreDecimalSeulement: true,
+    }
+  }
+
   enonce(a?: number, b?: number) {
     if (a == null || b == null) {
       a = choice([2, 4, 8])
@@ -39,7 +47,7 @@ export default class Can20266Q21 extends ExerciceCan {
 
     this.correction = `$${a}\\times${b} =${miseEnEvidence(texNombre(a * b, 0))}$`
 
-    this.formatChampTexte = KeyboardType.clavierDeBase
+   
     this.canEnonce = ''
   }
 

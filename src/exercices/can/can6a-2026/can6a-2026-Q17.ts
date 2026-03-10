@@ -5,7 +5,7 @@ import { texNombre } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
 
-export const titre = 'Q17'
+export const titre = 'Calculer un prix avec une proportionnalité'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const uuid = 'zacxo'
@@ -21,7 +21,11 @@ const fruit = choice(['pommes', 'poires', 'pêches'])
 export default class Can20266Q17 extends ExerciceCan {
   constructor() {
     super()
-    this.optionsChampTexte = { texteApres: ' €' }
+    this.formatChampTexte = KeyboardType.clavierDeBase
+    this.optionsChampTexte = { texteAvant: '<br>', texteApres: ' €' }
+    this.optionsDeComparaison = {
+      nombreDecimalSeulement: true,
+    }
   }
 
   enonce(nbKilos?: number, prixUnitaire?: number, coeff?: number) {
@@ -34,14 +38,12 @@ export default class Can20266Q17 extends ExerciceCan {
     this.reponse = texNombre(nbKilos * coeff * prixUnitaire)
     this.question = `$${texNombre(nbKilos, 1)}\\text{ kg}$ de ${fruit} coûtent $${texNombre(nbKilos * prixUnitaire, 1)}$ €.<br>
     Combien coûtent $${texNombre(nbKilos * coeff, 2)}\\text{ kg}$ de ${fruit} ?`
-if (this.interactif) {
-      this.optionsChampTexte = { texteAvant: '<br>', texteApres: ' €' }
-    } 
+
     this.correction = `On peut calculer le prix d'un $\\text{kg}$ de ${fruit} en divisant le prix total par le nombre de $\\text{kg}$ :<br>
     $${texNombre(nbKilos * prixUnitaire, 1)}\\div${texNombre(nbKilos, 1)}=${texNombre(prixUnitaire, 1)}$ € par $\\text{kg}$.<br>
     Ainsi, $${texNombre(nbKilos * coeff, 2)}\\text{ kg}$ de ${fruit} coûtent $${texNombre(nbKilos * coeff, 2)}\\times${texNombre(prixUnitaire, 1)}=${miseEnEvidence(texNombre(nbKilos * coeff * prixUnitaire, 1))}$ €.`
 
-    this.formatChampTexte = KeyboardType.clavierDeBase
+    
     this.canEnonce = ''
     this.canReponseACompleter = '$\\ldots$ €'
   }

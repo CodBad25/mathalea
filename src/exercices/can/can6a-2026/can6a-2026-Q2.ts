@@ -19,6 +19,14 @@ export const refs = {
 
 */
 export default class Can20266Q2 extends ExerciceCan {
+  constructor() {
+    super()
+    this.formatChampTexte = KeyboardType.clavierDeBase
+    this.optionsDeComparaison = {
+      nombreDecimalSeulement: true,
+    }
+  }
+
   enonce(a?: number, b?: number) {
     let millier: number, centaines: number
 
@@ -48,7 +56,6 @@ export default class Can20266Q2 extends ExerciceCan {
 
     this.correction = `$${texNombre(millier)}+${centaines}=${miseEnEvidence(texNombre(somme))}$`
 
-    this.formatChampTexte = KeyboardType.clavierDeBase
     this.canEnonce = 'Calcule.'
     this.canReponseACompleter = `$${texNombre(millier)}+${centaines}=\\ldots$`
   }
