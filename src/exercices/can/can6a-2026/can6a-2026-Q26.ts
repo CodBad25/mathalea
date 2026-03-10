@@ -62,7 +62,7 @@ export default class Can2026Q26 extends ExerciceCan {
     const figure = new Figure({
       xMin: 0,
       yMin: 0,
-      width: 300,
+      width: 360,
       height: 160,
     })
     this.figure = figure
@@ -103,7 +103,7 @@ export default class Can2026Q26 extends ExerciceCan {
     const figureCorr = new Figure({
       xMin: 0,
       yMin: 0,
-      width: 300,
+      width: 360,
       height: 160,
     })
     figureCorr.options.color = 'blue'
