@@ -41,7 +41,7 @@ export default class Can2a2025CQ20 extends ExerciceCan {
     this.reponse = String(age1)
 
     this.question = `${prenom1} est $${ecart}$ ans plus jeune que ${prenom2}.<br>
-    Si on additionne leurs âges, on obtient $${somme}$<br>
+    Si on additionne leurs âges, on obtient $${somme}$.<br>
     Quel est l'âge de ${prenom1} ?<br>`
     if (this.interactif) {
       this.optionsChampTexte = { texteApres: ' ans' }
