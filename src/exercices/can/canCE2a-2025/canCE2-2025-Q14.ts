@@ -1,8 +1,8 @@
-import ExerciceCan from '../../ExerciceCan'
-import { randint } from '../../../modules/outils'
-import { premierMultipleSuperieur } from '../../../lib/outils/primalite'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { choice } from '../../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { premierMultipleSuperieur } from '../../../lib/outils/primalite'
+import { randint } from '../../../modules/outils'
+import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Numeration et intervalle'
 export const interactifReady = true
@@ -36,7 +36,7 @@ export default class Can2025CE2Q14 extends ExerciceCan {
     this.question = `Quel nombre suis-je ?<br>
     Je suis un nombre compris entre ${a} et ${b} et mon chiffre des dizaines est ${c}.`
     this.reponse = a + 1
-    this.canEnonce = this.question
+
     this.correction = `Le nombre compris entre $${a}$ et $${b}$ dont le chiffre des dizaines est $${c}$ est $${miseEnEvidence(a + 1)}$.`
   }
 

@@ -107,7 +107,6 @@ export default class NomExercice extends ExerciceSimple {
 
     this.correction = `Chaque graduation mesure $10^\\circ$. On en déduit que l'angle $\\widehat{BCA}$ a une mesure de $${miseEnEvidence(a * 10)}^\\circ$. `
 
-    this.canEnonce = this.question
     this.canReponseACompleter = '? $= \\ldots ^\\circ$'
   }
 }

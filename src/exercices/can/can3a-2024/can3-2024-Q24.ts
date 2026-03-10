@@ -1,12 +1,12 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { randint } from '../../../modules/outils'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import {
   ecritureAlgebrique,
   ecritureParentheseSiNegatif,
   reduireAxPlusB,
 } from '../../../lib/outils/ecritures'
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Calculer une expression pour une valeur particulière'
 export const interactifReady = true
@@ -52,7 +52,5 @@ export default class NomExercice extends ExerciceSimple {
      \\end{aligned}$
       `
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

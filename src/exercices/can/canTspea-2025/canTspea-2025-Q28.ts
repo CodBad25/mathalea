@@ -1,10 +1,10 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { choice } from '../../../lib/outils/arrayOutils'
+import { ecritureAlgebrique } from '../../../lib/outils/ecritures'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
-import { ecritureAlgebrique } from '../../../lib/outils/ecritures'
-import { choice } from '../../../lib/outils/arrayOutils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Résoudre une inéquation du second degré'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -44,7 +44,7 @@ export default class Can2025TQ28 extends ExerciceSimple {
             ` [${-b / a};+\\infty[\\cup]-\\infty;${-c}]`,
           ]
     this.question = `Résoudre $(${a}x${ecritureAlgebrique(b)})(x+${c})${inegalite} 0$`
-    this.canEnonce = this.question
+
     if (!this.interactif) {
       this.question += '<br> $x\\in \\ldots$'
     }

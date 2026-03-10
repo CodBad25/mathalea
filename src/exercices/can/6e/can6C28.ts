@@ -97,7 +97,5 @@ export default class PetitsProblemeDeFraction extends ExerciceSimple {
         break
     }
     this.reponse = this.reponse.toString()
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

@@ -1,13 +1,13 @@
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import {
   ecritureAlgebriqueSauf1,
   ecritureParentheseSiNegatif,
   reduireAxPlusB,
   rienSi1,
 } from '../../../lib/outils/ecritures'
-import ExerciceSimple from '../../ExerciceSimple'
-import { randint } from '../../../modules/outils'
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import FractionEtendue from '../../../modules/FractionEtendue'
+import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = "Calculer l'intégrale d'une fonction affine"
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -49,7 +49,5 @@ export default class IntegraleAffine extends ExerciceSimple {
     &=${fraction.texFractionSimplifiee}\\times${ecritureParentheseSiNegatif(b)}^2 ${ecritureAlgebriqueSauf1(d)}\\times ${ecritureParentheseSiNegatif(b)} - ${fraction.texFractionSimplifiee}\\times${ecritureParentheseSiNegatif(a)}^2 ${ecritureAlgebriqueSauf1(d)}\\times ${ecritureParentheseSiNegatif(a)}\\\\
     =&${(b ** 2 * c) / 2 + b * d - (a ** 2 * c) / 2 - a * d}\\end{aligned}$`
     this.reponse = (b ** 2 * c) / 2 + b * d - (a ** 2 * c) / 2 - a * d
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

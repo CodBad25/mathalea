@@ -1,11 +1,11 @@
+import { texteCentre } from '../../../lib/format/miseEnPage'
+import { remplisLesBlancs } from '../../../lib/interactif/questionMathLive'
 import {
   ecritureAlgebrique,
   reduireAxPlusB,
 } from '../../../lib/outils/ecritures'
-import { texteCentre } from '../../../lib/format/miseEnPage'
-import Exercice from '../../Exercice'
 import { listeQuestionsToContenu, randint } from '../../../modules/outils'
-import { remplisLesBlancs } from '../../../lib/interactif/questionMathLive'
+import Exercice from '../../Exercice'
 
 import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
 
@@ -68,7 +68,6 @@ export default class CoordonneesSommetParabole extends Exercice {
         this.canEnonce = `Déterminer les coordonnées du sommet de la parabole représentant
         la fonction $f$ définie sur $\\mathbb{R}$
         par $f(x)=${reduireAxPlusB(0, a)}(${reduireAxPlusB(1, b)})^2$.`
-        this.canReponseACompleter = ''
       } else {
         texte = `Les coordonnées du sommet de la parabole représentant
     la fonction $f$ définie sur $\\mathbb{R}$
@@ -91,7 +90,6 @@ export default class CoordonneesSommetParabole extends Exercice {
         this.canEnonce = `Déterminer les coordonnées du sommet de la parabole représentant
         la fonction $f$ définie sur $\\mathbb{R}$
         par  $f(x)=${reduireAxPlusB(0, a)}(${reduireAxPlusB(1, b)})^2${ecritureAlgebrique(c)}$.`
-        this.canReponseACompleter = ''
       }
       handleAnswers(this, i, {
         champ1: { value: String(-b) },

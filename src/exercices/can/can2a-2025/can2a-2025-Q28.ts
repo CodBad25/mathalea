@@ -1,7 +1,7 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { choice } from '../../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Résoudre une équation'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -46,7 +46,5 @@ export default class ResoudreUneEquation extends ExerciceSimple {
       this.question +=
         "<br>S'il y a des solutions, les écrire entre accolades séparées par un point-virgule, sinon écrire $\\emptyset$.<br>"
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

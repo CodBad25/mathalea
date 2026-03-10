@@ -1,8 +1,8 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { texNombre } from '../../../lib/outils/texNombre'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { randint } from '../../../modules/outils'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { texNombre } from '../../../lib/outils/texNombre'
+import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = "Calculer le produit d'un entier avec un décimal"
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -32,8 +32,5 @@ export default class Can2025N6Q28 extends ExerciceSimple {
     this.question = `$${a}\\times ${texNombre(b, 1)}$ `
 
     this.correction = ` $${a}\\times ${texNombre(b, 1)}=${miseEnEvidence(texNombre(a * b, 1))}$`
-
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

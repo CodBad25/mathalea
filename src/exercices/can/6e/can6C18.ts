@@ -71,8 +71,5 @@ export default class ResteDivisionEuclidienne1 extends ExerciceSimple {
         bleuMathalea,
       )
     }
-
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

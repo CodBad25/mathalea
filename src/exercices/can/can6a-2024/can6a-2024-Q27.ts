@@ -101,8 +101,7 @@ export default class FractionDeRectangle extends ExerciceSimple {
       Object.assign({ scale: 0.5 }, fixeBordures(objets)),
       objets,
     )
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
+
     this.reponse = `\\dfrac{1}{${nbCase * factor}}`
     this.correction = `La fraction de l'aire du rectangle qui est grisée est $${miseEnEvidence(`\\dfrac{1}{${nbCase * factor}}`)}$.<br>`
     this.correction += `En effet, il y a ${nbCase} carrés dans le rectangle et la zone grisée couvre ${factor === 2 ? "la moitié d'un carré" : "le quart d'un carré"}.<br>Il y a donc  $${nbCase}\\times ${factor === 2 ? 2 : 4} = ${nbCase * factor}$ fois l'aire grisée dans le rectangle.<br> On en déduit que l'aire grisée est égale à $\\dfrac{1}{${nbCase * factor}}$ de l'aire du rectangle.`

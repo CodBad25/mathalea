@@ -1,7 +1,4 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { randint } from '../../../modules/outils'
 import {
   ecritureAlgebrique,
   ecritureAlgebriqueSauf1,
@@ -9,6 +6,9 @@ import {
   rienSi1,
   simpleDeveloppement,
 } from '../../../lib/outils/ecritures'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Développer et réduire'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -48,7 +48,5 @@ export default class DevelopperEtReduire extends ExerciceSimple {
     this.reponse = {
       reponse: { value: reduireAxPlusB(fac1 * a + fac2, fac1 * b) },
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

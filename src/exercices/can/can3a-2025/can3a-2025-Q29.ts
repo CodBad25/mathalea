@@ -1,9 +1,9 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { randint } from '../../../modules/outils'
-import { texNombre, texPrix } from '../../../lib/outils/texNombre'
 import { choice } from '../../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { texNombre, texPrix } from '../../../lib/outils/texNombre'
+import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer un prix après une réduction'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -47,7 +47,7 @@ export default class PrixApresReduction extends ExerciceSimple {
              Le nouveau prix est de  $${a}-${texNombre((b * a) / 100)}= ${miseEnEvidence(texPrix(a - (b * a) / 100))}$  €.`
 
     this.reponse = a - (b * a) / 100
-    this.canEnonce = this.question
+
     this.canReponseACompleter = '$\\ldots$ euros'
     if (!this.interactif) {
       this.question += ' $\\ldots$ euros.'

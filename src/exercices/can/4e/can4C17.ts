@@ -1,9 +1,8 @@
-import { choice } from '../../../lib/outils/arrayOutils'
-import { randint } from '../../../modules/outils'
-import FractionEtendue from '../../../modules/FractionEtendue'
-import ExerciceSimple from '../../ExerciceSimple'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Simplifier des fractions (cas simples)'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -27,8 +26,8 @@ export default class SimplifierFractionSimple extends ExerciceSimple {
     this.typeExercice = 'simple'
     this.nbQuestions = 1
     this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
-          this.optionsChampTexte = { texteAvant: '<br>' }
-            this.optionsDeComparaison = {nombreDecimalSeulement:true}
+    this.optionsChampTexte = { texteAvant: '<br>' }
+    this.optionsDeComparaison = { nombreDecimalSeulement: true }
   }
 
   nouvelleVersion() {
@@ -39,22 +38,18 @@ export default class SimplifierFractionSimple extends ExerciceSimple {
         {
           const n = randint(-10, 10, 0)
           const d = choice([-1, 1])
-          this.reponse = n*d
+          this.reponse = n * d
           this.question = `Écrire le plus simplement possible : $\\dfrac{${n}}{${d}}$.`
           this.correction = `$\\dfrac{${n}}{${d}}=${miseEnEvidence(this.reponse)}$`
-          this.canEnonce = this.question
-          this.canReponseACompleter = ''
         }
         break
       case 2:
         {
           const n = randint(-10, 10, 0)
           const d = n * choice([-1, 1])
-          this.reponse = n/d
+          this.reponse = n / d
           this.question = `Écrire le plus simplement possible : $\\dfrac{${n}}{${d}}$.`
           this.correction = `$\\dfrac{${n}}{${d}}=${miseEnEvidence(this.reponse)}$`
-          this.canEnonce = this.question
-          this.canReponseACompleter = ''
         }
         break
 
@@ -62,11 +57,9 @@ export default class SimplifierFractionSimple extends ExerciceSimple {
         {
           const d = randint(-10, 10, [-1, 0, 1])
           const n = d * choice([-10, 10])
-          this.reponse = n/d
+          this.reponse = n / d
           this.question = `Écrire le plus simplement possible : $\\dfrac{${n}}{${d}}$.`
           this.correction = `$\\dfrac{${n}}{${d}}=${miseEnEvidence(this.reponse)}$`
-          this.canEnonce = this.question
-          this.canReponseACompleter = ''
         }
         break
     }

@@ -32,7 +32,5 @@ export default class SommePuissancesDeDix extends ExerciceSimple {
     ${texNombre(10 ** a[0])}+${texNombre(10 ** a[1])}+${texNombre(10 ** a[2])}
     =${texNombre(10 ** a[0] + 10 ** a[1] + 10 ** a[2])}$`
     this.reponse = 10 ** a[0] + 10 ** a[1] + 10 ** a[2]
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

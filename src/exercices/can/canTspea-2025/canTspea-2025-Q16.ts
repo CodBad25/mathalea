@@ -1,7 +1,7 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choice } from '../../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Résoudre une équation trigonométrique'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -77,7 +77,6 @@ export default class Can2025TQ16 extends ExerciceSimple {
       this.correction = ` $S=\\{${miseEnEvidence('-\\dfrac{3\\pi}{4};\\dfrac{3\\pi}{4}')}\\}$`
     }
 
-    this.canEnonce = this.question
     this.canReponseACompleter = '$S=\\{\\ldots\\ldots \\}$'
   }
 }

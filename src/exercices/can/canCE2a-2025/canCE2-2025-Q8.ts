@@ -1,7 +1,7 @@
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import ExerciceCan from '../../ExerciceCan'
-import { randint } from '../../../modules/outils'
 import { choice } from '../../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { randint } from '../../../modules/outils'
+import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Combien de fois ?'
 export const interactifReady = true
@@ -25,7 +25,6 @@ export default class Can2025CE2Q8 extends ExerciceCan {
     this.reponse = Math.round(b / a)
     this.question = `Dans $${b}$, combien de fois $${a}$ ?`
     this.correction = `$${b}=${miseEnEvidence(Math.round(b / a))}\\times ${a}$`
-    this.canEnonce = this.question
   }
 
   nouvelleVersion() {

@@ -194,7 +194,6 @@ export default class EcrirePetitsNombresEntiers extends Exercice {
     for (
       let i = 0, texte, texteCorr, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       let NombreAEcrire // Comme la valeur sera modifiée, on la déclare avec let
       switch (listeOptions[i]) {
@@ -380,7 +379,6 @@ export default class EcrirePetitsNombresEntiers extends Exercice {
   
               ${nombreEnLettres(NombreAEcrire)}`
         this.correction = this.listeCorrections[0]
-        this.canReponseACompleter = ''
       }
       // Fin canEnonce
       if (typeDeConsigne[i] === 1) {

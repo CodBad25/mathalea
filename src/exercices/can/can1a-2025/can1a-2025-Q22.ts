@@ -1,7 +1,7 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = "Donner le nombre d'antécédent(s) par la fonction carré"
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -33,7 +33,5 @@ export default class Can2025N5Q22 extends ExerciceSimple {
     this.question = `Donner le nombre d'antécédent(s) de $${a}$ par la fonction carré. `
     this.correction = `Comme $${a > 0 ? `${a} > 0` : `${a} < 0`}$, l'équation $x^2=${a}$  ${a > 0 ? ' a deux solutions ' : "n'a aucune solution"}. <br>
     Ainsi, $${a}$ a ${a > 0 ? `$${miseEnEvidence(2)}$ antécédents` : `$${miseEnEvidence(0)}$ antécédent`} par la fonction carré.`
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

@@ -1,8 +1,8 @@
-import ExerciceSimple from '../../ExerciceSimple'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
-import { choice } from '../../../lib/outils/arrayOutils'
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Trouver un nombre'
 export const interactifReady = true
@@ -56,7 +56,5 @@ export default class nombreATrouver2026 extends ExerciceSimple {
     if (this.interactif) {
       this.question += '<br>'
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

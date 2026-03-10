@@ -1,7 +1,7 @@
 import { codageSegments } from '../../../lib/2d/CodageSegment'
 import { fixeBordures } from '../../../lib/2d/fixeBordures'
 import { placeLatexSurSegment } from '../../../lib/2d/placeLatexSurSegment'
-import {  pointAbstrait } from '../../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { segment } from '../../../lib/2d/segmentsVecteurs'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
@@ -23,16 +23,15 @@ export const refs = {
 
 */
 export default class Can2a2025CQ30 extends ExerciceCan {
- enonce(c1?: number, c2?: number, p?: number) {
+  enonce(c1?: number, c2?: number, p?: number) {
     if (c1 == null || c2 == null || p == null) {
       p = randint(5, 6) // Profondeur
-      c1 = p-1 // Côté du grand carré
+      c1 = p - 1 // Côté du grand carré
       c2 = randint(2, c1 - 2) // Côté du petit carré évidé
-      
     }
-    
+
     // --- COORDONNÉES 2D FIXES POUR LE DESSIN ---
-    // On dessine une belle perspective figée qui ne bougera pas, 
+    // On dessine une belle perspective figée qui ne bougera pas,
     // quelles que soient les valeurs de c1, c2 et p.
 
     // Face avant (Grand carré)
@@ -95,8 +94,19 @@ export default class Can2a2025CQ30 extends ExerciceCan {
     sBpCp.epaisseur = 1.5
 
     const solidEdges = [
-      sAB, sBC, sCD, sDA, sEF, sFG, sGH, sHE, 
-      sBBp, sCCp, sDDp, sCpDp, sBpCp
+      sAB,
+      sBC,
+      sCD,
+      sDA,
+      sEF,
+      sFG,
+      sGH,
+      sHE,
+      sBBp,
+      sCCp,
+      sDDp,
+      sCpDp,
+      sBpCp,
     ]
 
     // --- SEGMENTS CACHÉS (Pointillés) ---
@@ -127,11 +137,21 @@ export default class Can2a2025CQ30 extends ExerciceCan {
     sHpEp.epaisseur = 1.5
 
     const dashedEdges = [
-      sAAp, sApBp, sApDp, 
-      sEEp, sFFp, sGGp, sHHp, 
-      sEpFp, sFpGp, sGpHp, sHpEp
+      sAAp,
+      sApBp,
+      sApDp,
+      sEEp,
+      sFFp,
+      sGGp,
+      sHHp,
+      sEpFp,
+      sFpGp,
+      sGpHp,
+      sHpEp,
     ]
-    dashedEdges.forEach(s => { s.pointilles = 5 })
+    dashedEdges.forEach((s) => {
+      s.pointilles = 5
+    })
 
     // --- CODAGES ET ÉTIQUETTES ---
     // Codages (traits sur les segments)
@@ -140,11 +160,31 @@ export default class Can2a2025CQ30 extends ExerciceCan {
     const ticks3 = codageSegments('|||', 'black', sBBp, sCCp, sDDp)
 
     // Étiquettes dynamiques (on inverse les sommets pour écrire "en dessous" ou "au-dessus")
-    const labelC1 = placeLatexSurSegment(`${c1}\\text{ cm}`, B, A, { color: 'black', letterSize: 'small'  })
-    const labelC2 = placeLatexSurSegment(`${c2}\\text{ cm}`, G, H, { distance:0.4, color: 'black', letterSize: 'small'  })
-    const labelP = placeLatexSurSegment(`${p}\\text{ cm}`, Dp, D, { distance:-0.5, color: 'black', letterSize: 'small' })
+    const labelC1 = placeLatexSurSegment(`${c1}\\text{ cm}`, B, A, {
+      color: 'black',
+      letterSize: 'small',
+    })
+    const labelC2 = placeLatexSurSegment(`${c2}\\text{ cm}`, G, H, {
+      distance: 0.4,
+      color: 'black',
+      letterSize: 'small',
+    })
+    const labelP = placeLatexSurSegment(`${p}\\text{ cm}`, Dp, D, {
+      distance: -0.5,
+      color: 'black',
+      letterSize: 'small',
+    })
 
-    const objets = [...solidEdges, ...dashedEdges, ticks1, ticks2, ticks3, labelP, labelC1, labelC2]
+    const objets = [
+      ...solidEdges,
+      ...dashedEdges,
+      ticks1,
+      ticks2,
+      ticks3,
+      labelP,
+      labelC1,
+      labelC2,
+    ]
 
     // --- CALCULS DU VOLUME ---
     const volGrandPave = c1 * c1 * p
@@ -166,7 +206,6 @@ $\\mathcal{V}_{\\text{petit}} = ${c2} \\times ${c2} \\times ${p} = ${volPetitPav
 $\\bullet$ Volume total :<br>
 $\\mathcal{V} = \\mathcal{V}_{\\text{grand}} - \\mathcal{V}_{\\text{petit}} = ${volGrandPave} - ${volPetitPave} = ${miseEnEvidence(texNombre(volume, 0))}\\text{ cm}^3$`
 
-    this.canEnonce = this.question
     this.canReponseACompleter = '$\\ldots\\text{ cm}^3$'
 
     this.optionsChampTexte = { texteApres: '$\\text{ cm}^3$' }

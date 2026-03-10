@@ -1,7 +1,7 @@
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import ExerciceCan from '../../ExerciceCan'
-import { randint } from '../../../modules/outils'
 import { choice } from '../../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { randint } from '../../../modules/outils'
+import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Multiple simple'
 export const interactifReady = true
@@ -29,7 +29,7 @@ export default class Can2025CE2Q5 extends ExerciceCan {
     this.reponse = a * b
     this.question = `Le ${terme} de $${b}$`
     this.correction = `Le ${terme} de $${b}$, c'est : $${a}\\times ${b}=${miseEnEvidence(a * b)}$.`
-    this.canEnonce = this.question
+
     if (this.interactif) {
       this.question += ' est  : '
     }

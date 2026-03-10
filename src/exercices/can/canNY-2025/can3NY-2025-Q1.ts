@@ -54,7 +54,5 @@ export default class calcAvecChiffresPrio extends ExerciceSimple {
       this.correction = `$(20+2)\\times 5=22 \\times 5=${miseEnEvidence(texNombre(110, 0))}$`
       this.reponse = 110
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

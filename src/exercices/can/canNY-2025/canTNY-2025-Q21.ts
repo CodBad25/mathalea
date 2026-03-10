@@ -1,15 +1,15 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { texNombre } from '../../../lib/outils/texNombre'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { randint } from '../../../modules/outils'
+import { choice } from '../../../lib/outils/arrayOutils'
 import {
   ecritureAlgebrique,
   ecritureParentheseSiNegatif,
   reduirePolynomeDegre3,
   rienSi1,
 } from '../../../lib/outils/ecritures'
-import { choice } from '../../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { texNombre } from '../../../lib/outils/texNombre'
+import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Calculer une dérivée'
 export const interactifReady = true
@@ -67,7 +67,7 @@ export default class calcDerivee extends ExerciceSimple {
     if (this.interactif) {
       this.question += "<br> $f'(x)=$"
     }
-    this.canEnonce = this.question
+
     this.canReponseACompleter = "$f'(x)=\\ldots$"
   }
 }

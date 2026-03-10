@@ -41,7 +41,5 @@ export default class CalculMoitieDecimal extends ExerciceSimple {
     this.question = `Calculer la moitié de $${texNombre(a, 1)}$.`
     this.correction = `$${texNombre(a, 1)}\\div 2=${miseEnEvidence(texNombre(Number(this.reponse), 2))}$
           `
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

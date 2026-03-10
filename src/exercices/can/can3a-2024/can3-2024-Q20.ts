@@ -1,13 +1,13 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { randint } from '../../../modules/outils'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { choice } from '../../../lib/outils/arrayOutils'
 import {
   ecritureAlgebrique,
-  reduireAxPlusB,
   ecritureParentheseSiNegatif,
+  reduireAxPlusB,
 } from '../../../lib/outils/ecritures'
-import { choice } from '../../../lib/outils/arrayOutils'
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Calculer une image'
 export const interactifReady = true
@@ -57,7 +57,5 @@ export default class NomExercice extends ExerciceSimple {
      \\end{aligned}$<br>
     `
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

@@ -1,10 +1,10 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { ecritureParentheseSiNegatif } from '../../../lib/outils/ecritures'
-import { randint } from '../../../modules/outils'
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import FractionEtendue from '../../../modules/FractionEtendue'
+import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Déterminer un coefficient directeur'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -53,7 +53,5 @@ export default class CoeffDirecteur extends ExerciceSimple {
     if (this.interactif) {
       this.question += '<br>'
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

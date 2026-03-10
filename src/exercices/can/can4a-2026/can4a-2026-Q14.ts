@@ -49,7 +49,6 @@ export default class Can20264emeQ14 extends ExerciceCan {
       ${denom ** 2}\\times ${denom}&=${miseEnEvidence(terme5)}
       \\end{aligned}$`
 
-      this.canEnonce = this.question
       this.canReponseACompleter = `$?=\\ldots$`
       this.reponse = terme5
     } else {
@@ -68,7 +67,6 @@ export default class Can20264emeQ14 extends ExerciceCan {
       1\\div ${denom}&=${miseEnEvidence(`\\dfrac{1}{${denom}}`)}
       \\end{aligned}$`
 
-      this.canEnonce = this.question
       this.canReponseACompleter = `$?=\\ldots$`
       this.reponse = terme5
     }

@@ -56,9 +56,6 @@ Ici : $${texNombre(nombre)}=\\underbrace{${miseEnEvidence(texNombre(coefficient)
 
     this.reponse = `${stringNombre(coefficient)}\\times 10^{${puissance}}`
 
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
-
     if (!this.interactif) {
       this.question += '<br>$\\ldots$'
     }

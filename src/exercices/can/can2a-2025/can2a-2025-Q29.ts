@@ -1,8 +1,8 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { randint } from '../../../modules/outils'
 import { reduirePolynomeDegre3 } from '../../../lib/outils/ecritures'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Développer avec une identité remarquable'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -56,8 +56,5 @@ export default class NomExercice extends ExerciceSimple {
 
       this.reponse = reduirePolynomeDegre3(0, b ** 2, -2 * a * b, a ** 2, 'x')
     }
-
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

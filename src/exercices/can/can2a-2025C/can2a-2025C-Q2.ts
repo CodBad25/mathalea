@@ -17,7 +17,7 @@ export const refs = {
 
 */
 export default class Can2a2025CQ2 extends ExerciceCan {
-     enonce(a?: number, b?: number, c?: number, d?: number): void {
+  enonce(a?: number, b?: number, c?: number, d?: number): void {
     if (a == null || b == null || c == null || d == null) {
       // a + c = cible1 (nombre rond), b + d = cible2 (nombre rond)
       // Aucun des 4 nombres ne doit être multiple de 10
@@ -48,11 +48,12 @@ export default class Can2a2025CQ2 extends ExerciceCan {
     this.formatChampTexte = KeyboardType.clavierDeBase
     this.reponse = String(resultat)
     this.question = `$${a}+${b}+${c}+${d}=$`
-    if (!this.interactif) { this.question += ' $\\ldots$' }
+    if (!this.interactif) {
+      this.question += ' $\\ldots$'
+    }
     this.correction = `On regroupe astucieusement :<br>
     $\\underbrace{${a}+${c}}_{${sommeAC}}+\\underbrace{${b}+${d}}_{${sommeBD}}=${sommeAC}+${sommeBD}=${miseEnEvidence(String(resultat))}$`
     this.canEnonce = `$${a}+${b}+${c}+${d}=$`
-    this.canReponseACompleter = ''
   }
 
   nouvelleVersion(): void {

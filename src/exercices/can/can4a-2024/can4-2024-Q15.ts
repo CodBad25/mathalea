@@ -1,10 +1,10 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import FractionEtendue from '../../../modules/FractionEtendue'
-import { choice } from '../../../lib/outils/arrayOutils'
-import { obtenirListeFractionsIrreductibles } from '../../../modules/fractions'
-import { pgcd } from '../../../lib/outils/primalite'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { choice } from '../../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { pgcd } from '../../../lib/outils/primalite'
+import FractionEtendue from '../../../modules/FractionEtendue'
+import { obtenirListeFractionsIrreductibles } from '../../../modules/fractions'
+import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Additionner deux fractions de dénominateurs comptatibles'
 export const interactifReady = true
@@ -52,8 +52,7 @@ export default class NomExercice extends ExerciceSimple {
      &=${miseEnEvidence(`\\dfrac{${a.n * c + b.n}}{${b.d}}`)}
      ${pgcd(a.n * c + b.n, b.d) === 1 ? '\\end{aligned}$' : `\\\\&${a.sommeFraction(b).texSimplificationAvecEtapes()}\\end{aligned}$`}`
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
+
     if (this.interactif) {
       this.question += '$=$'
     }

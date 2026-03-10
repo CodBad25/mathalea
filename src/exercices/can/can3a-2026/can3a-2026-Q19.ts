@@ -103,9 +103,6 @@ export default class Can32026Q19 extends ExerciceCan {
       this.question = `Décompose $${nombre}$ en produit de facteurs premiers.`
       this.correction = `$${nombre}=${decompositionComplete}=${miseEnEvidence(decompositionFactorisee)}$`
     }
-
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 
   nouvelleVersion() {
@@ -129,8 +126,6 @@ export default class Can32026Q19 extends ExerciceCan {
 
       this.question = `Décompose $${nombre}$ en produit de facteurs premiers.`
       this.correction = `$${nombre}=${decompositionComplete}=${miseEnEvidence(decompositionCarres)}$`
-      this.canEnonce = this.question
-      this.canReponseACompleter = ''
     } else {
       this.enonce()
     }

@@ -53,7 +53,5 @@ export default class CalculImageParFonctionLineaire extends ExerciceSimple {
         this.reponse = m * x
         break
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

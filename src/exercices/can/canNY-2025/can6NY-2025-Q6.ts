@@ -1,9 +1,9 @@
-import ExerciceSimple from '../../ExerciceSimple'
+import Decimal from 'decimal.js'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
-import Decimal from 'decimal.js'
 import { randint } from '../../../modules/outils'
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Soustraire un décimal'
 export const interactifReady = true
@@ -33,8 +33,5 @@ export default class soustraireDecimal extends ExerciceSimple {
     this.reponse = annee.sub(a).toFixed(1)
     this.question = `$${texNombre(2025, 0)}-${texNombre(a, 1)}$`
     this.correction = `$${texNombre(2025, 0)}-${texNombre(a, 1)}=${miseEnEvidence(texNombre(annee.sub(a), 1))}$`
-
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

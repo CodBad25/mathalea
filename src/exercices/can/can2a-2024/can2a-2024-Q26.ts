@@ -2,10 +2,10 @@
  * ⚠️ Cet exercice est utilisé dans le test : tests/e2e/tests/view/viewcan.2024.2e.test.ts ⚠️
  */
 
-import ExerciceSimple from '../../ExerciceSimple'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { randint } from '../../../modules/outils'
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Factoriser avec une identité remarquable'
 export const interactifReady = true
@@ -42,7 +42,5 @@ export default class NomExercice extends ExerciceSimple {
       $\\begin{aligned}x^2-${a * a}&=x^2-${a}^2\\\\
       &=${miseEnEvidence(`(x-${a})(x+${a})`)}\\end{aligned}$`
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

@@ -94,7 +94,5 @@ export default class AgrandissementReductionGFraction extends ExerciceSimple {
     <br>`
         break
     }
-    this.canEnonce = this.question // 'Compléter'
-    this.canReponseACompleter = ''
   }
 }

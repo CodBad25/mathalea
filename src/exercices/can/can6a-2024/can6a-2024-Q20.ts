@@ -37,7 +37,7 @@ export default class AbscisseEnDemis extends ExerciceSimple {
     const distance = Math.round(duree * vitesse)
     const h = Math.floor(duree)
     this.question = `Une voiture roule à $${vitesse} \\text{ km/h}$.<br>`
-    this.canEnonce = this.question
+
     this.question += `En $${String(h)}$ h $30$ min elle parcourt `
     if (!this.interactif) {
       this.question += '$\\ldots\\ldots\\text{ km}$'

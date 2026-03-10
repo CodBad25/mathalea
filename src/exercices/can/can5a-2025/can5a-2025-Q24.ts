@@ -88,7 +88,7 @@ export default class Can2025N5Q18 extends ExerciceCan {
       &=${miseEnEvidence(texNombre((a * c) / b, 1))} \\text{ cm}
       \\end{aligned}$`
     }
-    this.canEnonce = this.question
+
     this.canReponseACompleter = '$AB=\\ldots\\text{ cm}$'
     this.optionsChampTexte = { texteApres: ' $\\text{cm}$' }
     if (this.interactif) {

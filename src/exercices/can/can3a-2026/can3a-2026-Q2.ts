@@ -51,7 +51,7 @@ export default class Can32026Q2 extends ExerciceCan {
     this.question = `$${fracHeures.texFraction}$ d'heure $=$`
     this.correction = `$\\dfrac{1}{${denominateur}}$ h $=60\\text{ min }\\div ${denominateur}= ${texNombre(minutes / numerateur, 0)}\\text{ min }$<br>
 Ainsi, $${fracHeures.texFraction}$ d'heure $=${miseEnEvidence(minutes)} \\text{ min}$.`
-    this.canEnonce = this.question
+
     this.canReponseACompleter = '$\\ldots\\text{ min}$'
     if (!this.interactif) {
       this.question += '$\\ldots\\text{ min}$'

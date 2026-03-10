@@ -145,7 +145,5 @@ export default class AxeSymetrieParabole extends ExerciceSimple {
         this.reponse = [`x=${alpha}`, `x${ecritureAlgebrique(-alpha)}=0`]
         break
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

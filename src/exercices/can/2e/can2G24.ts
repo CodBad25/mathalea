@@ -85,7 +85,6 @@ export default class TrouverpDroite extends ExerciceSimple {
       }
     }
 
-    this.canEnonce = this.question
     this.canReponseACompleter = '$m=\\ldots$'
     if (!this.interactif && !this.versionQcm) {
       this.question += ' $\\ldots$'

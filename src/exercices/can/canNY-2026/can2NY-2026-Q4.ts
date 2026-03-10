@@ -29,7 +29,6 @@ export default class NombreAajouter extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    
     const abs0 = 2026
     const abs1 = abs0 + 1
     const abs2 = abs0 + 2
@@ -78,7 +77,5 @@ export default class NombreAajouter extends ExerciceSimple {
         latex2d('A', x1B * 5, 0.5, { color: 'blue' }),
         d,
       )
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

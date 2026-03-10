@@ -56,7 +56,7 @@ export default class RecherchePrix extends ExerciceSimple {
     ses ${p} lui ont coûté : $${t}-${texNombre(t - a * pu)}=${texPrix(a * pu)}$ euros.<br>
     Le prix d'${s} est donc donné par :  $${texNombre(a * pu)}\\div ${a}=${miseEnEvidence(texPrix(pu))}$ euros. `
     this.reponse = pu
-    this.canEnonce = this.question
+
     this.canReponseACompleter = '$\\dots$ €'
   }
 }

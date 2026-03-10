@@ -1,3 +1,4 @@
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choice } from '../../../lib/outils/arrayOutils'
 import {
   ecritureAlgebrique,
@@ -6,10 +7,9 @@ import {
   rienSi1,
 } from '../../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import ExerciceSimple from '../../ExerciceSimple'
-import { randint } from '../../../modules/outils'
 import FractionEtendue from '../../../modules/FractionEtendue'
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre =
   "Déterminer le coefficient directeur d'une droite à partir de son équation réduite"
 export const interactifReady = true
@@ -165,8 +165,5 @@ export default class CoeffDirecteurDroite extends ExerciceSimple {
         }
         break
     }
-
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

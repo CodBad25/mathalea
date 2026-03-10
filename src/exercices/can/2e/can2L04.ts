@@ -45,7 +45,6 @@ export default class CoordonneesPointIntersectionAxeOrdonneesDroite extends Exer
   <br>Les coordonnées de ce   point sont donc : $(0; ${texFractionReduite(-c, b)})$.`
 
       this.canEnonce = `Déterminer les coordonnées du point d'intersection entre la droite d'équation $${rienSi1(a)}x+${rienSi1(b)}y+${c}=0$ et l'axe des ordonnées.`
-      this.canReponseACompleter = ''
     } else {
       this.question = `Déterminer les coordonnées du point d'intersection ${context.isDiaporama ? '<br>' : ''} entre la droite d'équation $${rienSi1(a)}x+${rienSi1(b)}y${c}=0$ ${context.isDiaporama ? '<br>' : ''} et l'axe des ordonnées.<br>
   `
@@ -55,7 +54,6 @@ Son ordonnée est donc la solution de l'équation : $${rienSi1(b)}y${c}=0$, c'es
 <br>Les coordonnées de ce   point sont donc : $(0;${texFractionReduite(-c, b)})$.`
 
       this.canEnonce = `Déterminer les coordonnées du point d'intersection entre la droite d'équation $${rienSi1(a)}x+${rienSi1(b)}y${c}=0$ et l'axe des ordonnées.`
-      this.canReponseACompleter = ''
     }
     if (this.interactif) {
       this.optionsChampTexte = { texteApres: '$)$' }

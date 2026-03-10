@@ -1,10 +1,10 @@
 import { choice } from '../../../lib/outils/arrayOutils'
-import { texteEnCouleur } from '../../../lib/outils/embellissements'
 import { texFractionReduite } from '../../../lib/outils/deprecatedFractions'
+import { texteEnCouleur } from '../../../lib/outils/embellissements'
 import { sp } from '../../../lib/outils/outilString'
 import { texNombre } from '../../../lib/outils/texNombre'
-import ExerciceSimple from '../../ExerciceSimple'
 import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer une moyenne'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -166,7 +166,5 @@ export default class MoyenneStat extends ExerciceSimple {
         }
         break
     }
-    this.canEnonce = this.question // 'Compléter'
-    this.canReponseACompleter = ''
   }
 }

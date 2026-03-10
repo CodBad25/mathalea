@@ -8,8 +8,8 @@ import { randint } from '../../../modules/outils'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 
 import { bleuMathalea } from '../../../lib/colors'
-import ExerciceSimple from '../../ExerciceSimple'
 import { arrondi } from '../../../lib/outils/nombres'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Trouver le complément à 1*'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -47,7 +47,5 @@ export default class ComplementAUn extends ExerciceSimple {
       bleuMathalea,
     )
     this.reponse = arrondi(1 - a)
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

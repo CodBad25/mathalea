@@ -1,8 +1,8 @@
-import ExerciceSimple from '../../ExerciceSimple'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = "Trouver un nombre à partir d'un programme"
 export const interactifReady = true
@@ -35,7 +35,5 @@ export default class programmeCalcul extends ExerciceSimple {
     if (this.interactif) {
       this.question += '<br><br>'
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

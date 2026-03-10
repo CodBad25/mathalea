@@ -85,7 +85,7 @@ export default class AireTrapezeRectangle extends ExerciceSimple {
       Object.assign({ scale: 0.5 }, fixeBordures(objets)),
       objets,
     )
-    this.canEnonce = this.question
+
     this.canReponseACompleter = '$\\ldots$ ua'
     this.reponse = (((petiteBase + grandeBase) * hauteur) / 2).toFixed(0)
     this.correction = `On commence par compter le nombre de carreaux entier, puis on ajoute les carreaux qui se complètent. <br>

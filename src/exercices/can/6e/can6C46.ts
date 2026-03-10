@@ -107,8 +107,6 @@ export default class ProblemeResteFraction extends ExerciceSimple {
           { scale: 0.5, xmin: -0.2, xmax: 20, ymin: -1, ymax: 2 },
           schemaCorr,
         )
-      this.canEnonce = this.question
-      this.canReponseACompleter = ''
     } else {
       this.question = `${p1} et ${p2} participent à une course à pied en relais. <br>
     ${p1} a déjà parcouru $${f1.texFraction}$ de la distance. ${p2} réalise le reste de la distance. <br>
@@ -120,8 +118,6 @@ export default class ProblemeResteFraction extends ExerciceSimple {
           { scale: 0.5, xmin: -0.2, xmax: 20, ymin: -1, ymax: 2 },
           schemaCorr,
         )
-      this.canEnonce = this.question
-      this.canReponseACompleter = ''
     }
   }
 }

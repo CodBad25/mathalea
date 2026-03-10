@@ -133,8 +133,5 @@ export default class CalculsProbabilite2 extends ExerciceSimple {
       // formatage pour QCM : mettre entre $...$
       this.distracteurs = picked.map((n) => `$${n}$`)
     }
-
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

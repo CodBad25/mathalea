@@ -124,8 +124,5 @@ export default class FractionDecimaleEcritureDecimale1 extends ExerciceSimple {
         }
         break
     }
-
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

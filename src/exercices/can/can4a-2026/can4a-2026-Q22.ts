@@ -38,7 +38,6 @@ export default class Can20264emeQ22 extends ExerciceCan {
     ${a}\\times b\\times ${b}&=${a}\\times ${b}\\times b\\\\
     &=${miseEnEvidence(`${resultat}b`)}
     \\end{aligned}$`
-    this.canEnonce = this.question
 
     this.reponse = `${resultat}b`
   }

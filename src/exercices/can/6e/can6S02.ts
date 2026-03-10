@@ -40,6 +40,5 @@ export default class ChancesSurEtProbabilites extends ExerciceSimple {
     }
     this.correction = `S'il y a $${nbChances}$ chance${nbChances === 1 ? '' : 's'} sur $${nbTotal}$ qu'un événement se produise, alors la probabilité
     que cet événement se réalise est de $${miseEnEvidence(this.reponse)}$.`
-    this.canEnonce = this.question
   }
 }

@@ -1,9 +1,9 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { randint } from '../../../modules/outils'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { texPrix } from '../../../lib/format/style'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { choice } from '../../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Calculer un prix dans une situation de proportionnalité'
 export const interactifReady = true
@@ -42,7 +42,6 @@ export default class Proportionnalite extends ExerciceSimple {
           $${a / 2}$ ${a / 2 === 1 ? 'stylo coûte' : 'stylos coûtent'}  $${texPrix(b / 2)}$ €.<br>
           Ainsi,   $${nbreStylos}$ stylos coûtent ${k1 === 2.5 ? `$2\\times ${b}+ ${texPrix(b / 2)} =${miseEnEvidence(texPrix(this.reponse))}$ €.` : `$${b}+ ${texPrix(b / 2)} =${miseEnEvidence(texPrix(this.reponse))}$ €.`}`
 
-    this.canEnonce = this.question
     this.canReponseACompleter = '$\\ldots$ €'
     if (this.interactif) {
       this.question += '<br>'

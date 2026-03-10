@@ -1,10 +1,10 @@
-import ExerciceSimple from '../ExerciceSimple'
-import { randint } from '../../modules/outils'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { choice } from '../../lib/outils/arrayOutils'
-import { texNombre } from '../../lib/outils/texNombre'
 import { ecritureParentheseSiNegatif } from '../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { texNombre } from '../../lib/outils/texNombre'
+import { randint } from '../../modules/outils'
+import ExerciceSimple from '../ExerciceSimple'
 export const titre = 'Déterminer un sinus ou un cosinus associé à un réel $x$'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -40,7 +40,8 @@ export default class IntegraleAffine extends ExerciceSimple {
       '\\left[\\dfrac{\\pi}{2};\\dfrac{3\\pi}{2}\\right[',
     ]) // Intervalle pour le cosinus
 
-    const signeCos: 1|-1 = ISin === '\\left[-\\dfrac{\\pi}{2};\\dfrac{\\pi}{2}\\right[' ? 1 : -1
+    const signeCos: 1 | -1 =
+      ISin === '\\left[-\\dfrac{\\pi}{2};\\dfrac{\\pi}{2}\\right[' ? 1 : -1
     const signeSin: 1 | -1 = ICos === '\\left[-\\pi;0\\right[' ? -1 : 1
 
     this.formatChampTexte = KeyboardType.clavierFullOperations
@@ -90,8 +91,5 @@ export default class IntegraleAffine extends ExerciceSimple {
         this.reponse = `\\sqrt{${solution}}`
       }
     }
-    
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

@@ -40,7 +40,5 @@ export default class ResteDivision5e extends ExerciceSimple {
     Comme $${d}=${a * c}+${b}$, on en déduit que le reste de la division euclidienne de $${d}$ par $${a}$ est  $${b}$.
      `)
     this.reponse = b
-    this.canEnonce = this.question // 'Compléter'
-    this.canReponseACompleter = ''
   }
 }

@@ -1,8 +1,8 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { randint } from '../../../modules/outils'
 import { ecritureAlgebrique } from '../../../lib/outils/ecritures'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Résoudre une équation'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -47,7 +47,7 @@ export default class ResoudreEquation extends ExerciceSimple {
          \\end{aligned}$<br>
          La solution de l'équation est : $${miseEnEvidence(reponse)}$.
          `
-    this.canEnonce = this.question
+
     this.canReponseACompleter = '$x=\\ldots$'
   }
 }

@@ -45,7 +45,5 @@ export default class EquationAXPlusBEgalC extends ExerciceSimple {
     \\end{aligned}$<br>
     La solution de l'équation est : $${this.reponse}$.
     `
-    this.canEnonce = this.question // 'Compléter'
-    this.canReponseACompleter = ''
   }
 }

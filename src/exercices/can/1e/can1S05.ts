@@ -1,8 +1,8 @@
 import { choice } from '../../../lib/outils/arrayOutils'
 import { ecritureAlgebrique } from '../../../lib/outils/ecritures'
 import { sp } from '../../../lib/outils/outilString'
-import ExerciceSimple from '../../ExerciceSimple'
 import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Donner le résultat d’un programme Python'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -34,7 +34,7 @@ export default class CalculSuitePython extends ExerciceSimple {
     let a, b, k, u, r, q
     let n = 0
     switch (
-    choice(['a', 'b', 'c']) //
+      choice(['a', 'b', 'c']) //
     ) {
       case 'a': // u=u+r
         a = randint(2, 5)
@@ -130,7 +130,5 @@ export default class CalculSuitePython extends ExerciceSimple {
         this.reponse = n
         break
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

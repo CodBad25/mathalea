@@ -1,12 +1,12 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { choice } from '../../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import ExerciceSimple from '../../ExerciceSimple'
 
 import Decimal from 'decimal.js'
+import { sp } from '../../../lib/outils/outilString'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
-import { sp } from '../../../lib/outils/outilString'
 export const titre = 'Calculer une valeur connaissant la moyenne'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -46,8 +46,7 @@ export default class EnFonctionDe extends ExerciceSimple {
           // this.question += mathalea2d(Object.assign({ scale: 0.45, style: 'margin: auto' }, fixeBordures(objets)), objets)
           this.correction = `Comme la moyenne des deux valeurs est $${texNombre(moy, 1)}$, la somme des deux valeurs doit être égale à $2\\times ${texNombre(moy, 1)}=${texNombre(somme, 0)}$.<br>
           On en déduit que $${val1}+a=${texNombre(somme, 0)}$, soit $a=${miseEnEvidence(texNombre(val2, 0))}$.`
-          this.canEnonce = this.question
-          this.canReponseACompleter = ''
+
           if (!this.interactif) {
             this.question += 'Quelle est la valeur de $a$ ?'
           }
@@ -69,8 +68,7 @@ export default class EnFonctionDe extends ExerciceSimple {
           // this.question += mathalea2d(Object.assign({ scale: 0.45, style: 'margin: auto' }, fixeBordures(objets)), objets)
           this.correction = `Comme la moyenne des trois valeurs est $${texNombre(moy, 1)}$, la somme des trois  valeurs doit être égale à $3\\times ${texNombre(moy, 1)}=${texNombre(somme, 0)}$.<br>
           On en déduit que $${val1}+${val2}+a=${texNombre(somme, 0)}$, soit $a=${miseEnEvidence(texNombre(val3, 0))}$.`
-          this.canEnonce = this.question
-          this.canReponseACompleter = ''
+
           if (!this.interactif) {
             this.question += 'Quelle est la valeur de $a$ ?'
           }

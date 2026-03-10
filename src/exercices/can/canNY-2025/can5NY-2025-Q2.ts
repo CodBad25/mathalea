@@ -1,9 +1,9 @@
-import ExerciceSimple from '../../ExerciceSimple'
+import Decimal from 'decimal.js'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
-import { choice } from '../../../lib/outils/arrayOutils'
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import Decimal from 'decimal.js'
+import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Calculer avec des décimaux'
 export const interactifReady = true
@@ -35,7 +35,5 @@ export default class calcAvecDecimaux extends ExerciceSimple {
     this.reponse = texNombre(new Decimal(2025).add(a), 5)
     this.question = `$${texNombre(2025)}+${texNombre(a, 4)}$`
     this.correction = `$${texNombre(2025)}+${texNombre(a, 4)}=${miseEnEvidence(this.reponse)}$`
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

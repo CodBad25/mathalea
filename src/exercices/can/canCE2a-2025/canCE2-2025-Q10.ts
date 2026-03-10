@@ -1,7 +1,7 @@
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import ExerciceCan from '../../ExerciceCan'
-import { randint } from '../../../modules/outils'
 import { shuffle } from '../../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { randint } from '../../../modules/outils'
+import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Numeration et ordre'
 export const interactifReady = true
@@ -36,7 +36,6 @@ export default class Can2025CE2Q10 extends ExerciceCan {
     this.question = `Quel est le plus grand nombre que je peux former avec  les chiffres  : $${shuffle([a, b, c]).join(' ; ')}$ en ne les utilisant qu'une fois ?`
     this.correction = `Pour former le plus grand nombre de trois chiffres avec tous ces chiffres, il faut placer le chiffre le plus grand en premier, puis le deuxième plus grand, et enfin le plus petit.<br>
     Soit : $${miseEnEvidence(nombresOrd.join(''))}$.`
-    this.canEnonce = this.question
   }
 
   nouvelleVersion() {

@@ -1,9 +1,9 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { texNombre } from '../../../lib/outils/texNombre'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { randint } from '../../../modules/outils'
 import { choice } from '../../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { texNombre } from '../../../lib/outils/texNombre'
+import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer une somme astucieusment'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -35,8 +35,5 @@ export default class Can2025N6Q14 extends ExerciceSimple {
     this.reponse = texNombre(a + b + c, 1)
     this.question = `$${texNombre(a, 1)}+${texNombre(b, 1)}+${texNombre(c, 1)}$  `
     this.correction = `$${texNombre(a, 1)}+${texNombre(b, 1)}+${texNombre(c, 1)}=\\underbrace{${texNombre(a, 1)}+${texNombre(c, 1)}}_{=${texNombre(c + a, 0)}}+${texNombre(b, 1)}=${miseEnEvidence(texNombre(a + b + c, 1))}$`
-
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

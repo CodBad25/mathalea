@@ -394,7 +394,7 @@ export default class ProblemesDeLongueursEtPerimetre extends ExerciceSimple {
         }
         break
     }
-    this.canEnonce = this.question
+
     this.canReponseACompleter = '$\\dots\\text{ cm}$'
   }
 }

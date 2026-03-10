@@ -163,7 +163,7 @@ export default class CalculProbaFormuleProbaTotale extends Exercice {
       `
           setReponse(this, i, reponse1)
           this.canEnonce = texte
-          this.canReponseACompleter = ''
+
           break
         case 2:
           // On définit l'arbre complet
@@ -254,7 +254,7 @@ export default class CalculProbaFormuleProbaTotale extends Exercice {
         `
           setReponse(this, i, reponse2)
           this.canEnonce = texte
-          this.canReponseACompleter = ''
+
           break
       }
       if (this.questionJamaisPosee(i, pA, pBsachantA, pBsachantAbarre)) {

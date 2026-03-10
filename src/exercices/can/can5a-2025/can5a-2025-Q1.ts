@@ -1,6 +1,6 @@
-import { texNombre } from '../../../lib/outils/texNombre'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { choice } from '../../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { texNombre } from '../../../lib/outils/texNombre'
 import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Tables de multiplication'
@@ -25,8 +25,7 @@ export default class Can2025N5Q1 extends ExerciceCan {
     this.reponse = a * b
     this.question = `$${a} \\times ${b}$ `
     this.correction = `$${a}\\times${b}=${miseEnEvidence(texNombre(this.reponse, 0))}$`
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
+
     if (this.interactif) {
       this.question += '$=$'
     }

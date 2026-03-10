@@ -2,8 +2,8 @@ import { choice } from '../../../lib/outils/arrayOutils'
 import { texteEnCouleur } from '../../../lib/outils/embellissements'
 import { prenom } from '../../../lib/outils/Personne'
 import { texNombre } from '../../../lib/outils/texNombre'
-import ExerciceSimple from '../../ExerciceSimple'
 import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Résoudre un problème avec la proportionnalité'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -104,7 +104,5 @@ export default class ProportionnaliteNotes extends ExerciceSimple {
         Pour obtenir la note sur $20$, on divise la note sur $100$ par $5$. `)
       this.reponse = n / 5
     }
-    this.canEnonce = this.question // 'Compléter'
-    this.canReponseACompleter = ''
   }
 }

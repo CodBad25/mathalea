@@ -78,7 +78,5 @@ export default class EntierPlusFractionVersDecimal extends ExerciceSimple {
         this.reponse = resultat
         break
     }
-    this.canEnonce = this.question // 'Compléter'
-    this.canReponseACompleter = ''
   }
 }

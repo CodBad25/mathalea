@@ -33,7 +33,7 @@ export default class NomExercice extends ExerciceSimple {
       Ainsi, la longueur $c$ d'un de ses côtés est :   $c=\\sqrt{36}=${miseEnEvidence(texNombre(this.reponse, 0))}\\text{ cm}$.
      `
       this.optionsChampTexte = { texteApres: '$\\text{ cm}$' }
-      this.canEnonce = this.question
+
       this.canReponseACompleter = '$\\ldots\\text{ cm}$'
       if (!this.interactif) {
         this.question += '$\\ldots\\text{ cm}$'
@@ -48,7 +48,7 @@ export default class NomExercice extends ExerciceSimple {
       Ainsi, la longueur $c$ d'un de ses côtés est : $c=\\sqrt{${a ** 2}}=${miseEnEvidence(texNombre(this.reponse, 0))}\\text{ cm}$.
      `
         this.optionsChampTexte = { texteApres: '$\\text{ cm}$' }
-        this.canEnonce = this.question
+
         this.canReponseACompleter = '$\\ldots\\text{ cm}$'
         if (!this.interactif) {
           this.question += '$\\ldots\\text{ cm}$'
@@ -63,7 +63,7 @@ export default class NomExercice extends ExerciceSimple {
       Ainsi, son aire est : $${a}^2=${miseEnEvidence(texNombre(this.reponse, 0))}\\text{ cm}^2$.
      `
         this.optionsChampTexte = { texteApres: '$\\text{cm}^2$' }
-        this.canEnonce = this.question
+
         this.canReponseACompleter = '$\\ldots\\text{ cm}^2$'
         if (!this.interactif) {
           this.question += '$\\ldots\\text{ cm}^2$'

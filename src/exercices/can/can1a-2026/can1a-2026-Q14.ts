@@ -24,7 +24,7 @@ export const refs = {
 export default class Can1a2026Q13 extends ExerciceCan {
   constructor() {
     super()
-     this.formatChampTexte = KeyboardType.clavierDeBase
+    this.formatChampTexte = KeyboardType.clavierDeBase
     this.optionsDeComparaison = { nombreDecimalSeulement: true }
   }
 
@@ -36,25 +36,31 @@ export default class Can1a2026Q13 extends ExerciceCan {
     }
 
     const d = b * b - 4 * a * c
-const introCorr =`Le nombre de solutions est donné par le signe du discriminant $\\Delta$ :<br>`
-  
+    const introCorr = `Le nombre de solutions est donné par le signe du discriminant $\\Delta$ :<br>`
+
     this.question = `Donner le nombre de solutions réelles de l'équation $${reduirePolynomeDegre3(0, a, b, c)}=0$.`
 
     if (d < 0) {
       this.reponse = 0
-      this.correction = introCorr + `
+      this.correction =
+        introCorr +
+        `
     $\\Delta =b^2-4ac=${ecritureParentheseSiNegatif(b)}^2 - 4 \\times ${ecritureParentheseSiNegatif(a)} \\times ${ecritureParentheseSiNegatif(c)}=${miseEnEvidence(d)}$.<br>
     Comme $${d}$ est strictement négatif, le nombre de solutions de l'équation est $${miseEnEvidence('0')}$.`
     }
     if (d > 0) {
       this.reponse = 2
-      this.correction = introCorr + `
+      this.correction =
+        introCorr +
+        `
     $\\Delta =b^2-4ac=${ecritureParentheseSiNegatif(b)}^2 - 4 \\times ${ecritureParentheseSiNegatif(a)} \\times ${ecritureParentheseSiNegatif(c)}=${miseEnEvidence(d)}$.<br>
     Comme $${d}$ est strictement positif, le nombre de solutions de l'équation est $${miseEnEvidence('2')}$.`
     }
     if (d === 0) {
       this.reponse = 1
-      this.correction = introCorr + `
+      this.correction =
+        introCorr +
+        `
     $\\Delta =b^2-4ac=${ecritureParentheseSiNegatif(b)}^2 - 4 \\times ${ecritureParentheseSiNegatif(a)} \\times ${ecritureParentheseSiNegatif(c)}=${miseEnEvidence(d)}$.<br>
     Comme $\\Delta$ est nul, le nombre de solutions de l'équation est $${miseEnEvidence('1')}$.`
     }
@@ -62,8 +68,6 @@ const introCorr =`Le nombre de solutions est donné par le signe du discriminant
     if (this.interactif) {
       this.question += '<br>'
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 
   nouvelleVersion(): void {

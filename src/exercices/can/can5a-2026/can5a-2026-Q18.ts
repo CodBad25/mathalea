@@ -59,7 +59,6 @@ La moyenne de ces nombres est :`
 La moyenne est donc : $\\dfrac{${somme}}{4}=${miseEnEvidence(texNombre(moyenne, 0))}$.`
 
     this.reponse = moyenne
-    this.canEnonce = this.question
   }
 
   nouvelleVersion() {

@@ -40,7 +40,5 @@ export default class SimplifierFractionEntier extends ExerciceSimple {
     this.question = `Écrire la fraction $\\dfrac{${n}}{${d}}$ le plus simplement possible.`
     this.correction = `Le numérateur est un multiple du dénominateur, on peut donc simplifier la fraction sous la forme d'un nombre entier.<br>
           $\\dfrac{${n}}{${d}}=${n}\\div ${d} =${miseEnEvidence(this.reponse)}$`
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

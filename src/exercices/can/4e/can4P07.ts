@@ -63,7 +63,6 @@ export default class PourcentageARetrouver extends ExerciceSimple {
       this.question += ' On a :'
     }
 
-    this.canEnonce = this.question
     this.canReponseACompleter = '$p=\\ldots$'
     this.correction =
       "Prendre $10\\,\\%$ d'une quantité revient à la diviser par $10$.<br>"

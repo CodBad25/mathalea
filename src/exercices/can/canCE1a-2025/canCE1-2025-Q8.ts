@@ -1,8 +1,8 @@
+import { propositionsQcm } from '../../../lib/interactif/qcm'
+import { choice } from '../../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import ExerciceCan from '../../ExerciceCan'
-import { choice } from '../../../lib/outils/arrayOutils'
-import { propositionsQcm } from '../../../lib/interactif/qcm'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
 
 export const titre = 'Ordre de grandeur'
 export const interactifReady = true
@@ -53,7 +53,7 @@ export default class Can2025CE1Q8 extends ExerciceCan {
     this.formatInteractif = 'qcm'
 
     const monQcm = propositionsQcm(this, 0)
-    this.canEnonce = this.question
+
     this.question += `${monQcm.texte}`
     this.correction =
       monQcm.texteCorr +

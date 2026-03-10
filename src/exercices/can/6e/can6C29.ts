@@ -66,7 +66,7 @@ export default class Partage extends ExerciceSimple {
      soit $${prix - n * 20}\\div ${n}=${(prix - n * 20) / n}$ € qui sont à rajouter aux $20$ €. `,
       bleuMathalea,
     )
-    this.canEnonce = this.question
+
     this.canReponseACompleter = '$\\ldots$ €'
   }
 }

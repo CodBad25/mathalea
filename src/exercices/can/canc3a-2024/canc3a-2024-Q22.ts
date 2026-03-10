@@ -58,8 +58,7 @@ export default class AbscisseEnDemiBisCM2 extends ExerciceSimple {
       Object.assign({ scale: 0.5 }, fixeBordures(objets)),
       objets,
     )
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
+
     this.correction = `Le nombre qui repère le point A est : $${miseEnEvidence(texNombre(x, 1))}$.`
   }
 }

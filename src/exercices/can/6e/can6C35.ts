@@ -72,7 +72,7 @@ export default class PlusOuMoins6ieme extends ExerciceSimple {
                 Combien ${prenom2} a-t-elle payé son déjeuner ? `
           this.correction = `${prenom2} a payé son déjeuner $${texPrix(b)}$ € ${choix1 ? 'de plus' : ' de moins '} que celui de ${prenom1}.<br>
         Elle l'a donc payé  (${choix1 ? `$${texPrix(a)}+${texPrix(b)}$` : `$${texPrix(a)}-${texPrix(b)}$`}) €, soit ${choix1 ? `$${miseEnEvidence(texPrix(reponse1))}$` : `$${miseEnEvidence(texPrix(reponse2))}$`} €.`
-          this.canEnonce = this.question
+
           this.canReponseACompleter = '$\\dots$ €'
         } else if (choix === 'b') {
           reponse2 = new Decimal(a).add(b)
@@ -84,7 +84,7 @@ export default class PlusOuMoins6ieme extends ExerciceSimple {
                       Combien ${prenom2} a-t-elle payé son déjeuner ? `
           this.correction = `${prenom1} a payé son déjeuner $${texPrix(b)}$ € ${choix1 ? 'de plus' : ' de moins '} que celui de ${prenom2}.<br>
               ${prenom2} a donc payé son déjeuner $${texPrix(b)}$ € ${choix1 ? 'de moins' : ' de plus '}.  Elle l'a donc payé  (${choix1 ? `$${texPrix(a)}-${texPrix(b)}$` : `$${texPrix(a)}+${texPrix(b)}$`}) €, soit ${choix1 ? `$${miseEnEvidence(texPrix(reponse1))}$` : `$${miseEnEvidence(texPrix(reponse2))}$`} €.`
-          this.canEnonce = this.question
+
           this.canReponseACompleter = '$\\dots$ €'
         } else if (choix === 'c') {
           prix1 = new Decimal(a).add(b)
@@ -104,7 +104,7 @@ export default class PlusOuMoins6ieme extends ExerciceSimple {
               soit ${choix1 ? `$${texPrix(prix2)}$` : `$${texPrix(prix1)}$`} €.<br>
               Ensemble, elles ont donc payé : (${choix1 ? `$${texPrix(a)}+${texPrix(prix2)}$` : `$${texPrix(a)}+${texPrix(prix1)}$`}) €,
               soit ${choix1 ? `$${texPrix(reponse1)}$` : `$${miseEnEvidence(texPrix(reponse2))}$`} €. `
-          this.canEnonce = this.question
+
           this.canReponseACompleter = '$\\dots$ €'
         } else {
           prix1 = new Decimal(a).add(b)
@@ -120,7 +120,7 @@ export default class PlusOuMoins6ieme extends ExerciceSimple {
           Elle l'a donc payé  (${choix1 ? `$${texPrix(a)}+${texPrix(b)}$` : `$${texPrix(a)}-${texPrix(b)}$`}) €, soit ${choix1 ? `$${texPrix(prix1)}$` : `$${texPrix(prix2)}$`} €. <br>
               Ensemble, elles ont donc payé : (${choix1 ? `$${texPrix(a)}+${texPrix(prix1)}$` : `$${texPrix(a)}+${texPrix(prix2)}$`}) €,
               soit ${choix1 ? `$${texPrix(reponse2)}$` : `$${texPrix(reponse1)}$`} €. `
-          this.canEnonce = this.question
+
           this.canReponseACompleter = '$\\dots$ €'
         }
 
@@ -150,7 +150,7 @@ export default class PlusOuMoins6ieme extends ExerciceSimple {
               Quelle est la taille de ${prenom2} ?`
           this.correction = `${prenom1} mesure $${b}\\text{ cm}$ ${choix1 ? 'de plus' : ' de moins '} que ${prenom2} donc ${prenom2} mesure $${b}\\text{ cm}$ ${choix1 ? 'de moins' : ' de plus '} que ${prenom1}.<br>
               Il mesure donc  (${choix1 ? `$${texNombre(a, 2, true)}-${texNombre(c, 2, true)}$` : `$${texNombre(a, 2, true)}+${texNombre(c, 2, true)}$`}) $\\text{m}$, soit  ${choix1 ? `$${texNombre(reponse2, 2, true)}$` : `$${miseEnEvidence(texNombre(reponse1, 2, true))}$`} $\\text{m}$. `
-          this.canEnonce = this.question
+
           this.canReponseACompleter = '$\\dots\\text{ m}$'
         } else {
           reponse1 = new Decimal(a).add(c)
@@ -160,7 +160,7 @@ export default class PlusOuMoins6ieme extends ExerciceSimple {
                     que ${prenom1}. <br>
                     Quelle est la taille de ${prenom2} ?`
           this.correction = `${prenom2} mesure $${b}\\text{ cm}$ ${choix1 ? 'de plus' : ' de moins '} que ${prenom1} donc ${prenom2} mesure (${choix1 ? `$${texNombre(a, 2, true)}+${texNombre(c, 2, true)}$` : `$${texNombre(a, 2, true)}-${texNombre(c, 2, true)}$`}) $\\text{m}$, soit  ${choix1 ? `$${texNombre(reponse1, 2, true)}$` : `$${miseEnEvidence(texNombre(reponse2, 2, true))}$`} $\\text{m}$. `
-          this.canEnonce = this.question
+
           this.canReponseACompleter = '$\\dots\\text{ m}$'
         }
         if (this.interactif) {
@@ -193,7 +193,7 @@ export default class PlusOuMoins6ieme extends ExerciceSimple {
             Or $${b}$ g $=${texNombre(c, 1)}$ kg. <br>
             ${prenom2} a donc acheté $(${choix1 ? `${texNombre(a, 1)}-${texNombre(c, 1)}` : `${texNombre(a, 1)}+${texNombre(c, 1)}`})$ kg
             soit $${choix1 ? `${miseEnEvidence(texNombre(reponse2, 1))}` : `${miseEnEvidence(texNombre(reponse1, 1))}`}$ kg de ${choix2 ? 'fruits' : ' légumes '}.`
-          this.canEnonce = this.question
+
           this.canReponseACompleter = '$\\dots$ kg'
         } else if (choix === 'b') {
           reponse1 = new Decimal(a).add(c)
@@ -207,7 +207,7 @@ export default class PlusOuMoins6ieme extends ExerciceSimple {
           ${prenom2} a acheté $${texNombre(c, 1)}$ kg de ${choix2 ? 'fruits' : ' légumes '}  ${choix1 ? 'de plus' : ' de moins '} que ${prenom1},
           donc ${prenom2} en a acheté  $(${choix1 ? `${texNombre(a, 1)}+${texNombre(c, 1)}` : `${texNombre(a, 1)}-${texNombre(c, 1)}`})$ kg
             soit $${choix1 ? `${miseEnEvidence(texNombre(reponse1, 1))}` : `${miseEnEvidence(texNombre(reponse2, 1))}`}$ kg de ${choix2 ? 'fruits' : ' légumes '}.`
-          this.canEnonce = this.question
+
           this.canReponseACompleter = '$\\dots$ kg'
         } else if (choix === 'c') {
           m1 = new Decimal(a).add(c)
@@ -225,7 +225,7 @@ export default class PlusOuMoins6ieme extends ExerciceSimple {
             soit $${choix1 ? `${texNombre(m1, 1)}` : `${texNombre(m2, 1)}`}$ kg de ${choix2 ? 'fruits' : ' légumes '}.<br>
             Ensemble, ils ont donc acheté :  $(${choix1 ? `${texNombre(a, 1)}+${texNombre(m1, 1)}` : `${texNombre(a, 1)}+${texNombre(m2, 1)}`})$ kg
             soit $${choix1 ? `${miseEnEvidence(texNombre(reponse1, 1))}` : `${miseEnEvidence(texNombre(reponse2, 1))}`}$ kg de ${choix2 ? 'fruits' : ' légumes '}.`
-          this.canEnonce = this.question
+
           this.canReponseACompleter = '$\\dots$ kg'
         } else {
           m1 = new Decimal(a).add(c)
@@ -243,7 +243,7 @@ export default class PlusOuMoins6ieme extends ExerciceSimple {
             soit $${choix1 ? `${texNombre(m2, 1)}` : `${texNombre(m1, 1)}`}$ kg de ${choix2 ? 'fruits' : ' légumes '}.<br>
             Ensemble, ils ont donc acheté :  $(${choix1 ? `${texNombre(a, 1)}+${texNombre(m2, 1)}` : `${texNombre(a, 1)}+${texNombre(m1, 1)}`})$ kg
             soit $${choix1 ? `${miseEnEvidence(texNombre(reponse2, 1))}` : `${miseEnEvidence(texNombre(reponse1, 1))}`}$ kg de ${choix2 ? 'fruits' : ' légumes '}.`
-          this.canEnonce = this.question
+
           this.canReponseACompleter = '$\\dots$ kg'
         }
 

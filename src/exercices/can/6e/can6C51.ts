@@ -48,8 +48,5 @@ export default class MultiplieFractionDPar10Par100Par1000 extends ExerciceSimple
                 )} & = ${miseEnEvidence(texNombre((a / den) * b, 3))}
                 \\end{aligned}$`
     this.reponse = resultat
-
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

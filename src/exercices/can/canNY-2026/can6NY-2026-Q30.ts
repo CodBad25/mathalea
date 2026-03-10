@@ -1,9 +1,9 @@
-import ExerciceSimple from '../../ExerciceSimple'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
+import ExerciceSimple from '../../ExerciceSimple'
 
-import { randint } from '../../../modules/outils'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { randint } from '../../../modules/outils'
 export const titre = ''
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -29,7 +29,7 @@ export default class CalculDivers extends ExerciceSimple {
   nouvelleVersion() {
     // Paramètre modifiable : l'année
     const annee = 2026
-    
+
     let a
     let b
     switch (this.canOfficielle ? 1 : randint(1, 2)) {
@@ -60,7 +60,5 @@ export default class CalculDivers extends ExerciceSimple {
     if (this.interactif) {
       this.question += '<br>'
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

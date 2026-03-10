@@ -1,11 +1,11 @@
-import ExerciceSimple from '../../ExerciceSimple'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { randint } from '../../../modules/outils'
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import ExerciceSimple from '../../ExerciceSimple'
 
+import Decimal from 'decimal.js'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { texNombre } from '../../../lib/outils/texNombre'
-import Decimal from 'decimal.js'
 export const titre = "Calculer la fraction d'un décimal"
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -74,7 +74,5 @@ export default class fractionsDecimaux extends ExerciceSimple {
         }
         break
     }
-    this.canEnonce = this.question // 'Compléter'
-    this.canReponseACompleter = ''
   }
 }

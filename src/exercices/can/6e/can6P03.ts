@@ -48,7 +48,7 @@ export default class QuestionDeVitesse extends ExerciceSimple {
     Au total, elle a parcouru $${a * b}+${a / 2} $, soit $${a * (b + 0.5)}\\text{ km}$. `,
       bleuMathalea,
     )
-    this.canEnonce = this.question
+
     this.canReponseACompleter = '$\\dots\\text{ km}$'
   }
 }

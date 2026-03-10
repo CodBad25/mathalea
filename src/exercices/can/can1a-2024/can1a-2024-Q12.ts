@@ -1,7 +1,7 @@
-import ExerciceSimple from '../../ExerciceSimple'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { randint } from '../../../modules/outils'
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import ExerciceSimple from '../../ExerciceSimple'
 
 import { choice } from '../../../lib/outils/arrayOutils'
 import {
@@ -60,7 +60,5 @@ export default class Fatorisation1 extends ExerciceSimple {
       }\\\\
       &=${miseEnEvidence(`(${reduireAxPlusB(a, b)})(${a}x${ecritureAlgebrique(b + c)})`)}\\end{aligned}$`
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

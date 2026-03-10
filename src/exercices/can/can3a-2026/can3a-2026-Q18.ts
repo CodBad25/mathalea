@@ -48,8 +48,6 @@ ${expression}&=${a}\\times x${ecritureAlgebrique(a)}\\times(${b})\\\\
     this.reponse = {
       reponse: { value: reduireAxPlusB(a, a * b) },
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 
   nouvelleVersion() {

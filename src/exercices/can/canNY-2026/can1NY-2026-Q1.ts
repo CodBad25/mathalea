@@ -45,7 +45,5 @@ export default class calcAvecChiffres2026 extends ExerciceSimple {
       this.correction = `$2\\times ${texNombre((annee % 100) / 100, 2)}=${miseEnEvidence(texNombre(2 * ((annee % 100) / 100), 2))}$`
       this.reponse = 2 * ((annee % 100) / 100)
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

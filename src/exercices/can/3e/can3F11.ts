@@ -1,8 +1,8 @@
 import { choice } from '../../../lib/outils/arrayOutils'
-import ExerciceSimple from '../../ExerciceSimple'
 import { sp } from '../../../lib/outils/outilString'
-import { randint } from '../../../modules/outils'
 import { context } from '../../../modules/context'
+import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Utiliser le vocabulaire image/antécédent'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -89,7 +89,5 @@ export default class VocabulaireImageAntecedent extends ExerciceSimple {
         }
         break
     }
-    this.canEnonce = this.question // 'Compléter'
-    this.canReponseACompleter = ''
   }
 }

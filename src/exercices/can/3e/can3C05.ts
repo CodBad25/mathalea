@@ -1,8 +1,8 @@
 import { rienSi1 } from '../../../lib/outils/ecritures'
-import { texNombre } from '../../../lib/outils/texNombre'
-import ExerciceSimple from '../../ExerciceSimple'
-import { randint } from '../../../modules/outils'
 import { arrondi } from '../../../lib/outils/nombres'
+import { texNombre } from '../../../lib/outils/texNombre'
+import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer avec une puissance de 10'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -38,7 +38,5 @@ export default class CalculPuissance10 extends ExerciceSimple {
     this.question = `Calculer sous forme décimale $B=${texNombre(n)}\\times 10^{${rienSi1(c)}}+${texNombre(N)}\\times 10^{${rienSi1(d)}}$.`
     this.correction = `$B=${texNombre(n)}\\times 10^{${rienSi1(c)}}+${texNombre(N)}\\times 10^{${rienSi1(d)}}=${texNombre(n * 10 ** c)}+${texNombre(N * 10 ** d)}=${texNombre(n * 10 ** c + N * 10 ** d)}$.`
     this.reponse = arrondi(n * 10 ** c + N * 10 ** d)
-    this.canEnonce = this.question // 'Compléter'
-    this.canReponseACompleter = ''
   }
 }

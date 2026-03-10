@@ -1,10 +1,10 @@
-import ExerciceSimple from '../../ExerciceSimple'
+import Decimal from 'decimal.js'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
-import { choice } from '../../../lib/outils/arrayOutils'
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import Decimal from 'decimal.js'
 import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = ''
 export const interactifReady = true
@@ -30,7 +30,9 @@ export default class calcAvecChiffresPrio2026 extends ExerciceSimple {
     const annee = 2026
     const choix = this.canOfficielle ? true : choice([true, false])
     const a = this.canOfficielle ? 3 : randint(1, 4)
-    const val = this.canOfficielle ? new Decimal(annee).div(1) : new Decimal(annee).div(choice([1, 10, 100, 1000]))
+    const val = this.canOfficielle
+      ? new Decimal(annee).div(1)
+      : new Decimal(annee).div(choice([1, 10, 100, 1000]))
     if (a === 1) {
       this.question = `Calculer $${choix ? `4 \\times ${texNombre(val, 3)}\\times 25` : `25 \\times ${texNombre(val, 3)}\\times 4`}$.`
       this.reponse = texNombre(new Decimal(val).mul(100), 3)
@@ -51,7 +53,5 @@ export default class calcAvecChiffresPrio2026 extends ExerciceSimple {
     if (this.interactif) {
       this.question += '<br>'
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

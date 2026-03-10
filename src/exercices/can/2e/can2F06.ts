@@ -263,7 +263,7 @@ export default class TableauSignes extends Exercice {
         this.listeCorrections[i] = texteCorr
 
         this.canEnonce = `Dresser le tableau de signes de la fonction $f$ définie sur  $\\mathbb R$ par $f(x)=${reduireAxPlusB(a, b)}$. `
-        this.canReponseACompleter = ''
+
         this.listeCanEnonces.push(this.canEnonce)
         this.listeCanReponsesACompleter.push(this.canReponseACompleter)
         i++

@@ -68,7 +68,7 @@ Combien va-t-on lui rendre ?`
 La monnaie à rendre est : $${billet}-${texPrix(prixTotal)}=${miseEnEvidence(texPrix(monnaie))}$ €.`
 
     this.reponse = monnaie.toNumber()
-    this.canEnonce = this.question
+
     this.canReponseACompleter = '$\\ldots$ €'
     if (!this.interactif) {
       this.question += '<br>$\\ldots$ €'

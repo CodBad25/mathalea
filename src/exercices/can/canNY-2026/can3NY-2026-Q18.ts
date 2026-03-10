@@ -1,16 +1,16 @@
-import ExerciceSimple from '../../ExerciceSimple'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
-import { choice } from '../../../lib/outils/arrayOutils'
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import ExerciceSimple from '../../ExerciceSimple'
 
 import {
   ecritureAlgebrique,
   reduireAxPlusB,
   reduirePolynomeDegre3,
 } from '../../../lib/outils/ecritures'
-import { randint } from '../../../modules/outils'
 import { abs, signe } from '../../../lib/outils/nombres'
+import { randint } from '../../../modules/outils'
 export const titre = 'Développer une expression'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -35,7 +35,7 @@ export default class developper2026 extends ExerciceSimple {
     const annee = 2026
     const choix = this.canOfficielle ? 1 : choice([1, 2, 3])
     const a = this.canOfficielle ? 1 : randint(-2, 2, 0)
-    const b = this.canOfficielle ?2 : randint(-5, 5, 0)
+    const b = this.canOfficielle ? 2 : randint(-5, 5, 0)
     let reponse1 = ''
     this.question = 'Développer '
     if (choix === 1) {
@@ -69,7 +69,5 @@ export default class developper2026 extends ExerciceSimple {
     if (this.interactif) {
       this.question += '<br>$A=$'
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

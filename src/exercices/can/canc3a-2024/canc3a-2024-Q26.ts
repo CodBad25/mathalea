@@ -1,6 +1,6 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { randint } from '../../../modules/outils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 
 import Decimal from 'decimal.js'
 import { texNombre } from '../../../lib/outils/texNombre'
@@ -38,8 +38,7 @@ export default class AjouteDecimauxPieges extends ExerciceSimple {
     this.question = `$${texNombre(a, 2)}+${texNombre(b, 1)}`
     if (this.interactif) this.question += '=$'
     else this.question += '$'
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
+
     this.reponse = texNombre(a.add(b), 2)
     this.correction = `On peut calculer ainsi : <br>
     $\\begin{aligned}

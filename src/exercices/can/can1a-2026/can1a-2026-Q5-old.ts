@@ -39,8 +39,6 @@ export default class Can1a2026Q5 extends ExerciceCan {
     this.question += `$${valeurs[0]}$${sp(1)};${sp(1)}$${valeurs[1]}$${sp(1)};${sp(1)}$${valeurs[2]}$${sp(1)};${sp(1)}$${valeurs[3]}$${sp(1)};${sp(1)}$${valeurs[4]}$${sp(1)};${sp(1)}$${valeurs[5]}$`
     this.correction = `La plus grande valeur de la série est $${max}$ et la plus petite est $${min}$.<br>
       L'étendue de la série est $${max}-${min}=${miseEnEvidence(etendue)}$.`
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
 
     if (this.interactif) {
       this.question += '<br>'

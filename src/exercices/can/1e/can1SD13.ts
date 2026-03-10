@@ -1,11 +1,11 @@
-import ExerciceSimple from '../../ExerciceSimple'
+import { tableauSignesFonction } from '../../../lib/mathFonctions/etudeFonction'
+import { reduireAxPlusB, rienSi1 } from '../../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { randint } from '../../../modules/outils'
-import { tableauSignesFonction } from '../../../lib/mathFonctions/etudeFonction'
-import { rienSi1, reduireAxPlusB } from '../../../lib/outils/ecritures'
+import ExerciceSimple from '../../ExerciceSimple'
 
-import { abs } from '../../../lib/outils/nombres'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { abs } from '../../../lib/outils/nombres'
 import type FractionEtendue from '../../../modules/FractionEtendue'
 export const titre =
   'Retrouver un polynôme du second degré à partir de son tableau de signes'
@@ -78,7 +78,7 @@ export default class PolyTableauSignes extends ExerciceSimple {
     if (this.interactif) {
       this.question += '<br>$f(x)=$'
     }
-    this.canEnonce = this.question
+
     this.canReponseACompleter = '$f(x)=\\ldots$'
   }
 }

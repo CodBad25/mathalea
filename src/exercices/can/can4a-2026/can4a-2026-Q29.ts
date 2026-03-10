@@ -70,7 +70,6 @@ $${a * b} = \\text{?}\\times ${c}$<br>
 $\\text{?} = ${a * b}\\div ${c}$<br>
 $\\text{?} = ${miseEnEvidence(texNombre(d, 2))}$`
 
-    this.canEnonce = this.question
     this.canReponseACompleter = '$?=\\ldots$'
 
     this.question += `$\\text{ ? }=$ ${!this.interactif ? ' $\\ldots$' : ''}`

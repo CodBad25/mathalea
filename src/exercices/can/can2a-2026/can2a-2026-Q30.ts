@@ -191,7 +191,6 @@ export default class Can2a2026Q30 extends ExerciceCan {
 
     this.correction = `Une unité correspond à $${b}$ carreaux, la ligne brisée mesure $${longueurCarreaux}$ carreaux, soit $${miseEnEvidence(this.reponse.texFraction)}$ u.l. `
 
-    this.canEnonce = this.question
     this.canReponseACompleter = '$\\ldots$ $u.\\ell$.'
   }
 

@@ -45,7 +45,7 @@ $${premier}$ ${sp(2)} ; ${sp(2)} $${terme2}$ ${sp(2)} ; ${sp(2)} $${terme3}$ ${s
 Ainsi, ? $=${miseEnEvidence(reponse)}$.`
 
     this.reponse = reponse
-    this.canEnonce = this.question
+
     this.canReponseACompleter = '? $=\\ldots$'
 
     if (!this.interactif) {

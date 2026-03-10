@@ -40,7 +40,7 @@ export default class ExprimerEnFonction extends ExerciceSimple {
 
     if (context.isAmc) this.versionQcm = false
     switch (
-      choice([ 1, 2, 3, 4, 5]) //
+      choice([1, 2, 3, 4, 5]) //
     ) {
       case 1:
         this.question = `Le degré Fahrenheit $F$ est une unité de mesure de la température utilisée aux États-Unis. <br>Il est lié au degré Celsius $C$ par la formule suivante : <br>`
@@ -290,7 +290,5 @@ En divisant les deux membres par $\\dfrac{T}{100}$, on obtient : $${miseEnEviden
         }
         break
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

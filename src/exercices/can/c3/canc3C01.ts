@@ -1,6 +1,6 @@
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choice } from '../../../lib/outils/arrayOutils'
 import ExerciceSimple from '../../ExerciceSimple'
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 export const titre = 'Déterminer un nombre à partir d’une phrase'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -52,7 +52,5 @@ export default class CalculsAutomatiques extends ExerciceSimple {
       this.reponse = a >> 1
       this.correction = `$${a}\\div 2 = ${a >> 1}$`
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

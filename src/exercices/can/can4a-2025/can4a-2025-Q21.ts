@@ -1,6 +1,6 @@
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import ExerciceCan from '../../ExerciceCan'
 import { randint } from '../../../modules/outils'
+import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Somme de nombre relatifs'
 export const interactifReady = true
@@ -23,8 +23,7 @@ export default class Can2025N4Q21 extends ExerciceCan {
     }
     this.question = `$${a} + ${b}$`
     this.correction = `$${a} + ${b}=${miseEnEvidence(a + b)}$`
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
+
     this.reponse = String(a + b)
     this.question += this.interactif ? ' $=$' : ''
   }

@@ -63,7 +63,5 @@ export default class QuartOuTiers extends ExerciceSimple {
         bleuMathalea,
       )
     }
-    this.canEnonce = this.question // 'Compléter'
-    this.canReponseACompleter = ''
   }
 }

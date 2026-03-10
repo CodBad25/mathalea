@@ -1,8 +1,8 @@
-import ExerciceSimple from '../../ExerciceSimple'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import FractionEtendue from '../../../modules/FractionEtendue'
-import { choice } from '../../../lib/outils/arrayOutils'
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Diviser des fractions'
 export const interactifReady = true
@@ -66,7 +66,5 @@ export default class NomExercice extends ExerciceSimple {
       `
     }
     this.reponse = reponse.texFraction
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

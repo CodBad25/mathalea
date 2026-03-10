@@ -202,7 +202,5 @@ export default class EquationsGSplineNombre extends ExerciceSimple {
 
     this.correction = `Le nombre de solutions de  l'équation $f(x)=${y1}$ est le nombre d'antécédents de  $${y1}$ par la fonction $f$.<br>
     Puisque la droite d'équation $y = ${y1}$ (droite hrizontale) coupe ${solutions1.length === 0 ? 'aucune' : `$${solutions1.length}$`} fois la courbe, on en déduit que l'équation  $f(x)=${y1}$ admet $${miseEnEvidence(solutions1.length)}$ ${solutions1.length === 0 || solutions1.length === 1 ? `${texteEnCouleurEtGras('solution')}.` : `${texteEnCouleurEtGras('solutions')}`}.`
-    this.canEnonce = this.question // 'Compléter'
-    this.canReponseACompleter = ''
   }
 }

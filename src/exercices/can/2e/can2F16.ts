@@ -181,7 +181,5 @@ export default class EquationsGSpline extends ExerciceSimple {
 
     this.correction = `Résoudre l'équation $f(x)=${y1}$ graphiquement revient à lire les abscisses des points d'intersection entre $\\mathscr{C}_f$ et ${y1 === 0 ? "l'axe des abscisses." : `la droite  d'équation $y = ${y1}$ (parallèle à l'axe des abscisses).`}<br>
     On en déduit : ${solutions1.length === 0 ? `$S=${miseEnEvidence('\\emptyset')}$.` : `$S=${miseEnEvidence(`\\{ ${solutions1.join('\\,;\\,')} \\}`)}$.`}<br>`
-    this.canEnonce = this.question // 'Compléter'
-    this.canReponseACompleter = ''
   }
 }

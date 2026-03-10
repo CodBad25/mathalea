@@ -1,7 +1,7 @@
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import ExerciceCan from '../../ExerciceCan'
-import { randint } from '../../../modules/outils'
 import { choice } from '../../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { randint } from '../../../modules/outils'
+import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Suite de nombres'
 export const interactifReady = true
@@ -30,7 +30,7 @@ export default class Can2025N5Q14 extends ExerciceCan {
     const liste = [a, b, c, '$\\ldots$'].map((el) => `$${el}$`).join(' ; ')
     this.reponse = c + b - a
     this.question = 'Complète cette suite logique de nombres : '
-    this.canEnonce = this.question
+
     this.question += liste
     this.correction = `On passe d'un nombre au suivant en ajoutant $${b - a}$.<br>
     Ainsi, ? $=${c} + ${b - a}=${miseEnEvidence(c + b - a)}$.`

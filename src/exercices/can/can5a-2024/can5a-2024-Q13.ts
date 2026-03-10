@@ -39,7 +39,6 @@ export default class NomExercice extends ExerciceSimple {
       this.correction = `la somme de $${b}$ et de $${c}$ est égal à : $${b}+${c}=${b + c}$.<br>
       Le produit de $${a}$ par la somme de $${b}$ et de $${c}$ est donc égal à : $${a}\\times ${b + c}=${miseEnEvidence(this.reponse)}$`
     }
-    this.canEnonce = this.question
 
     if (!this.interactif) {
       this.question += '$\\ldots$'

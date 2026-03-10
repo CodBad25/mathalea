@@ -78,7 +78,5 @@ Quelle est la probabilité de son événement contraire ?
       `$-${new FractionEtendue(n, d).texFraction}$`,
       `$${new FractionEtendue(n, d).texFraction}$`,
     ]
-    this.canEnonce = this.question // 'Compléter'
-    this.canReponseACompleter = ''
   }
 }

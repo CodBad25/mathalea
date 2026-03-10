@@ -1,6 +1,4 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { randint } from '../../../modules/outils'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import {
   ecritureAlgebrique,
   ecritureAlgebriqueSauf1,
@@ -9,7 +7,9 @@ import {
   reduirePolynomeDegre3,
   rienSi1,
 } from '../../../lib/outils/ecritures'
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Développer une expression'
 export const interactifReady = true
@@ -73,8 +73,5 @@ export default class Developper extends ExerciceSimple {
         this.question += `<br>$(${reduireAxPlusB(a, b)})(${reduireAxPlusB(c, d)})=$`
       }
     }
-
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

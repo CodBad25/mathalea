@@ -43,8 +43,5 @@ export default class additionFraction2026 extends ExerciceSimple {
       this.question += `$\\dfrac{${a}}{${texNombre(annee, 0)}} -\\dfrac{1}{${texNombre(2 * annee)}}$`
       this.correction = ` $\\dfrac{${a}}{${texNombre(annee, 0)}} -\\dfrac{1}{${texNombre(2 * annee, 0)}}=\\dfrac{${2 * a}}{${texNombre(2 * annee, 0)}} -\\dfrac{1}{${texNombre(2 * annee, 0)}}=${miseEnEvidence(`\\dfrac{${2 * a - 1}}{${texNombre(2 * annee, 0)}}`)}$`
     }
-
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

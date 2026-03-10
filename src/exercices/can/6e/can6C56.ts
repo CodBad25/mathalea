@@ -29,7 +29,7 @@ export default class SommeDiffFractionsMemeDen extends ExerciceSimple {
     super()
     this.typeExercice = 'simple'
     this.nbQuestions = 1
-  this.optionsDeComparaison = { fractionEgale: true }
+    this.optionsDeComparaison = { fractionEgale: true }
     this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
   }
 
@@ -80,7 +80,5 @@ $${frac1.texFraction} - ${frac2.texFraction} = ${miseEnEvidence(resultat.texFrac
         break
     }
     this.reponse = resultat
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

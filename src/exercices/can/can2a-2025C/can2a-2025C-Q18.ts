@@ -1,9 +1,16 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { ecritureAlgebrique, ecritureParentheseSiNegatif, reduirePolynomeDegre3, rienSi1 } from '../../../lib/outils/ecritures'
+import {
+  ecritureAlgebrique,
+  ecritureAlgebriqueSauf1,
+  ecritureParentheseSiNegatif,
+  reduirePolynomeDegre3,
+  rienSi1,
+} from '../../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
-export const titre = 'Calculer l\'image d\'un nombre par une fonction polynôme du second degré'
+export const titre =
+  "Calculer l'image d'un nombre par une fonction polynôme du second degré"
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const uuid = 'qaqh1'
@@ -19,7 +26,7 @@ export const refs = {
 export default class Can2a2025CQ18 extends ExerciceCan {
   enonce(a?: number, b?: number, c?: number, x0?: number): void {
     if (a == null || b == null || c == null || x0 == null) {
-      a = randint(2, 3) 
+      a = randint(2, 3)
       b = randint(-5, 5, [0])
       c = randint(-5, 5)
       x0 = randint(-3, -1)
@@ -32,7 +39,6 @@ export default class Can2a2025CQ18 extends ExerciceCan {
 
     this.question = `Soit la fonction $f$ définie par $f(x)=${reduirePolynomeDegre3(0, a, b, c)}$.<br>
     Quelle est l'image de $${x0}$ par $f$ ?<br>`
-  
 
     this.correction = `On remplace $x$ par $${x0}$ dans l'expression de $f$ :<br>
     $\\begin{aligned}
@@ -43,7 +49,6 @@ export default class Can2a2025CQ18 extends ExerciceCan {
 
     this.canEnonce = `Soit la fonction $f$ définie par $f(x)=${reduirePolynomeDegre3(0, a, b, c)}$.<br>
     Quelle est l'image de $${x0}$ par $f$ ?`
-    this.canReponseACompleter = ''
   }
 
   nouvelleVersion(): void {

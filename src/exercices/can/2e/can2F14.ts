@@ -6,8 +6,8 @@ import {
   reduirePolynomeDegre3,
 } from '../../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import ExerciceSimple from '../../ExerciceSimple'
 import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer une ordonnée à partir de l’abscisse d’un point'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -85,7 +85,5 @@ export default class CalculOrdonneePoint extends ExerciceSimple {
 
         break
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

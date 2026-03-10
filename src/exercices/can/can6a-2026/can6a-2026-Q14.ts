@@ -36,8 +36,6 @@ export default class Can20266Q14 extends ExerciceCan {
     this.correction = `$${texNombre(a, 2)}+${texNombre(b, 1)}=${texNombre(a, 2)}+${texNombre(b, 2, true)}=${miseEnEvidence(texNombre(a + b, 2))}$`
 
     this.formatChampTexte = KeyboardType.clavierDeBase
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 
   nouvelleVersion() {

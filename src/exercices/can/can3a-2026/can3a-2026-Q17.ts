@@ -98,7 +98,7 @@ $\\widehat{CAB}+${angleBase}^\\circ+${angleBase}^\\circ=180^\\circ$<br>
 $\\widehat{CAB}=180^\\circ-${angleBase}^\\circ-${angleBase}^\\circ=180^\\circ-${2 * angleBase}^\\circ=${miseEnEvidence(angleSommet + '^\\circ')}$`
 
     this.formatChampTexte = KeyboardType.clavierDeBase
-    this.canEnonce = this.question
+
     this.canReponseACompleter = '$?=\\ldots^\\circ$'
 
     if (this.interactif) {

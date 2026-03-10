@@ -49,9 +49,6 @@ ${
 }\\\\
 &=${miseEnEvidence(texNombre(this.reponse, 3))}
 \\end{aligned}$`
-
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 
   nouvelleVersion() {

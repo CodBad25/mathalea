@@ -1,3 +1,4 @@
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
@@ -11,7 +12,6 @@ export const interactifType = 'mathLive'
  * Modèle d'exercice très simple pour la course aux nombres
  * @author Gilles Mora
 
- * Date de publication
 */
 export const uuid = 'd5c88'
 
@@ -24,7 +24,8 @@ export default class PerimetreCarreRectangle extends ExerciceSimple {
     super()
     this.typeExercice = 'simple'
     this.nbQuestions = 1
-
+    this.optionsDeComparaison = { nombreDecimalSeulement: true }
+    this.formatChampTexte = KeyboardType.clavierNumbers
     this.optionsChampTexte = { texteApres: ' $\\text{cm}$' }
   }
 
@@ -34,7 +35,7 @@ export default class PerimetreCarreRectangle extends ExerciceSimple {
       case 'a':
         a = randint(5, 10) * 2
         this.question = `Le périmètre d'un carré est $${a}\\text{ cm}$.<br>
-         Quelle est la longueur du côté du carré ? <br>(valeur décimale ou entière) `
+         Quelle est la longueur du côté du carré ? `
         this.correction = `On calcule le périmètre d'un carré
         en multipliant par $4$ la longueur de son côté. <br>
         On obtient donc la longueur du côté en divisant par $4$ son périmètre : $${a}\\div 4=${miseEnEvidence(texNombre(a / 4))}\\text{ cm}$.`
@@ -50,7 +51,7 @@ export default class PerimetreCarreRectangle extends ExerciceSimple {
         this.reponse = a
         break
     }
-    this.canEnonce = this.question
+
     this.canReponseACompleter = '$\\dots\\text{ cm}$'
   }
 }

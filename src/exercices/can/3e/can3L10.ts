@@ -1,7 +1,7 @@
-import ExerciceSimple from '../../ExerciceSimple'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { randint } from '../../../modules/outils'
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import ExerciceSimple from '../../ExerciceSimple'
 
 import { choice } from '../../../lib/outils/arrayOutils'
 import {
@@ -52,8 +52,5 @@ export default class ReduireAvecParentheses2 extends ExerciceSimple {
           ${choix ? `${rienSi1(a)}${variable}` : `${a}`}${ecritureAlgebrique(k)}(${reduireAxPlusB(c, d, variable)})&=${choix ? `${rienSi1(a)}${variable}` : `${a}`}${ecritureAlgebrique(k * c)}${variable}${ecritureAlgebrique(k * d)}\\\\
           &=${miseEnEvidence(`${choix ? reduireAxPlusB(a + k * c, k * d, variable) : reduireAxPlusB(k * c, k * d + a, variable)}`)}
           \\end{aligned}$`
-
-    this.canEnonce = this.question // 'Compléter'
-    this.canReponseACompleter = ''
   }
 }

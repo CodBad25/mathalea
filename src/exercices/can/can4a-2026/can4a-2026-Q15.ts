@@ -92,7 +92,6 @@ $\\widehat{BCA}+\\widehat{CAB}+90^\\circ=180^\\circ$<br>
 $\\widehat{BCA}+${angleConnu}^\\circ+90^\\circ=180^\\circ$<br>
 $\\widehat{BCA}=180^\\circ-${angleConnu}^\\circ-90^\\circ=${miseEnEvidence(angleInconnu + '^\\circ')}$`
 
-    this.canEnonce = this.question
     this.canReponseACompleter = '$?=\\ldots^\\circ$'
 
     if (this.interactif) {

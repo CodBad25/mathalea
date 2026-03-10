@@ -124,7 +124,5 @@ export default class AbscisseDroiteDecimaux extends ExerciceSimple {
       this.correction = `Entre $${texNombre(abs0)}$ et $${texNombre(abs1)}$, il y a $4$ intervalles. Une graduation correspond donc à $${texNombre(0.0025)}$. <br>
       Ainsi, l'abscisse du point $A$ est $${miseEnEvidence(texNombre(Number(this.reponse), 4))}$.`
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

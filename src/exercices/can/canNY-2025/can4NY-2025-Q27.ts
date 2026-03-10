@@ -68,7 +68,5 @@ export default class Convertir extends ExerciceSimple {
 
         break
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

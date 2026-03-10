@@ -147,7 +147,7 @@ export default class ComparerAvecFctRef extends Exercice {
             }
           }
           this.canEnonce = `Comparer $\\dfrac{1}{${texNombre(a)}}$ et $\\dfrac{1}{${texNombre(b)}}$.`
-          this.canReponseACompleter = ''
+
           break
         case 2:
           a = randint(-10, 10) + (randint(-9, 9, 0) / 10) * choice([-1, 1])
@@ -201,7 +201,7 @@ export default class ComparerAvecFctRef extends Exercice {
             texteCorr += `Comme $${texNombre(b)}${miseEnEvidence('\\boldsymbol{<}', 'blue')}${texNombre(a)}$, alors $${ecritureParentheseSiNegatif(b)}^3${miseEnEvidence('\\boldsymbol{<}', 'blue')}${ecritureParentheseSiNegatif(a)}^3$.`
           }
           this.canEnonce = `Comparer $${ecritureParentheseSiNegatif(a)}^3$ et $${ecritureParentheseSiNegatif(b)}^3$.`
-          this.canReponseACompleter = ''
+
           break
         case 3:
           a = randint(0, 10) + randint(6, 9) / 10
@@ -259,7 +259,7 @@ export default class ComparerAvecFctRef extends Exercice {
                 alors $\\sqrt{${texNombre(b)}}${miseEnEvidence('\\boldsymbol{<}', 'blue')}\\sqrt{${texNombre(a)}}$.`
           }
           this.canEnonce = `Comparer $\\sqrt{${texNombre(a)}}$  et $\\sqrt{${texNombre(b)}}$.`
-          this.canReponseACompleter = ''
+
           break
       }
       if (this.questionJamaisPosee(i, N, a, b)) {

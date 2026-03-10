@@ -73,8 +73,5 @@ export default class CalculImageQuotient extends ExerciceSimple {
     `,
       'blue',
     )
-
-    this.canEnonce = this.question // 'Compléter'
-    this.canReponseACompleter = ''
   }
 }

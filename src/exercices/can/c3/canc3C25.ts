@@ -28,7 +28,7 @@ export default class SoustraireDizainesCentaines extends Exercice {
 
   nouvelleVersion() {
     switch (
-      choice([1,2,3]) //
+      choice([1, 2, 3]) //
     ) {
       case 1:
         {
@@ -68,8 +68,5 @@ export default class SoustraireDizainesCentaines extends Exercice {
         }
         break
     }
-
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

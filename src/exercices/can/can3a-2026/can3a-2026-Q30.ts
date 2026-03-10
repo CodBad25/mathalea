@@ -75,7 +75,7 @@ export default class Can32026Q1 extends ExerciceCan {
       objets,
     )
     this.correction = `$\\mathcal{V}=\\dfrac{1}{3}\\times\\mathcal{B}\\times h=\\dfrac{1}{3}\\times ${b * b}\\times ${texNombre(h, 1)}=${miseEnEvidence(this.reponse)}\\text{ cm}^3$`
-    this.canEnonce = this.question
+
     this.canReponseACompleter = '$\\ldots\\text{ cm}^3$'
   }
 

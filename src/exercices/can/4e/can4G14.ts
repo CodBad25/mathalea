@@ -23,17 +23,16 @@ export default class QuestionsAiresEtPerimetres3 extends ExerciceSimple {
     super()
     this.typeExercice = 'simple'
     this.nbQuestions = 1
-    this.optionsChampTexte = {texteAvant : '<br>', texteApres: '$\\text{cm}$' }
+    this.optionsChampTexte = { texteAvant: '<br>', texteApres: '$\\text{cm}$' }
   }
 
   nouvelleVersion() {
-  const a1 = randint(5, 20)
-          const a = a1 * 4
-          this.reponse = a1
-    this.question =`Le périmètre d'un carré est $${a}\\text{ cm}$. <br>Quelle est la longueur du côté du carré ? `
+    const a1 = randint(5, 20)
+    const a = a1 * 4
+    this.reponse = a1
+    this.question = `Le périmètre d'un carré est $${a}\\text{ cm}$. <br>Quelle est la longueur du côté du carré ? `
     this.correction = `Le côté du carré est : $${a}\\div 4=${miseEnEvidence(a1)}\\text{ cm}$.`
 
-    this.canEnonce = this.question
     this.canReponseACompleter = '$\\ldots\\text{ cm}$'
     this.listeCanEnonces.push(this.canEnonce)
     this.listeCanReponsesACompleter.push(this.canReponseACompleter)

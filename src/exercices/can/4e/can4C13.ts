@@ -45,7 +45,5 @@ export default class CalculFractionDecimal extends ExerciceSimple {
       this.correction = ` $\\dfrac{${n}}{${texNombre(d, 1)}}=\\dfrac{${n}\\times 10}{${texNombre(d, 1)}\\times 10}=\\dfrac{${n * 10}}{${texNombre(d * 10, 0)}}=${f.texFraction}=${texNombre(reponse, 2)}$
           `
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

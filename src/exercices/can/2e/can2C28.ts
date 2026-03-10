@@ -1,11 +1,10 @@
-
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { texNombre } from '../../../lib/outils/texNombre'
+import { context } from '../../../modules/context'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { context } from '../../../modules/context'
-import { texNombre } from '../../../lib/outils/texNombre'
 export const titre = 'Calculer $\\dfrac{1}{a}$ à la puissance $-1$ ou $-2$'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -28,32 +27,31 @@ export default class calculPuissancesNegativeFraction extends ExerciceSimple {
   constructor() {
     super()
     this.nbQuestions = 1
-this.optionsChampTexte = { texteAvant:'<br>' }
+    this.optionsChampTexte = { texteAvant: '<br>' }
     this.typeExercice = 'simple'
-    this.spacingCorr=1.5
-     this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
-      this.optionsDeComparaison = { nombreDecimalSeulement: true }
-      this.versionQcmDisponible = true
+    this.spacingCorr = 1.5
+    this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
+    this.optionsDeComparaison = { nombreDecimalSeulement: true }
+    this.versionQcmDisponible = true
   }
 
   nouvelleVersion() {
-      if (context.isAmc) this.versionQcm = false
-    const a = randint(2,12)
-    const puissance =choice([-2,-1])
-   
+    if (context.isAmc) this.versionQcm = false
+    const a = randint(2, 12)
+    const puissance = choice([-2, -1])
 
     this.question = `Calculer $\\left(\\dfrac{1}{${a}}\\right)^{${puissance}}$.`
-    this.correction = `$\\left(\\dfrac{1}{${a}}\\right)^{${puissance}}=${a}^{${-puissance}}=${miseEnEvidence(a**(-puissance))}$`
-    this.reponse = a**(-puissance)
+    this.correction = `$\\left(\\dfrac{1}{${a}}\\right)^{${puissance}}=${a}^{${-puissance}}=${miseEnEvidence(a ** -puissance)}$`
+    this.reponse = a ** -puissance
 
-    this.canEnonce = this.question
     this.canReponseACompleter = ``
-     if (this.versionQcm) {
-        this.question= `$\\left(\\dfrac{1}{${a}}\\right)^{${puissance}}$ est égal à : `
-    this.distracteurs = [
-          `$-\\dfrac{1}{${a**(-puissance)}}$`,
-          `$${texNombre(a**(-puissance)*(-1))}$`,
-           `$\\dfrac{1}{${a**(-puissance)}}$`,
-        ]}
+    if (this.versionQcm) {
+      this.question = `$\\left(\\dfrac{1}{${a}}\\right)^{${puissance}}$ est égal à : `
+      this.distracteurs = [
+        `$-\\dfrac{1}{${a ** -puissance}}$`,
+        `$${texNombre(a ** -puissance * -1)}$`,
+        `$\\dfrac{1}{${a ** -puissance}}$`,
+      ]
+    }
   }
 }

@@ -1,17 +1,18 @@
+import { warnMessage } from '../../lib/format/message'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { choice } from '../../lib/outils/arrayOutils'
-import FractionEtendue from '../../modules/FractionEtendue'
 import {
   ecritureAlgebrique,
   ecritureParentheseSiNegatif,
   rienSi1,
 } from '../../lib/outils/ecritures'
-import { abs } from '../../lib/outils/nombres'
-import ExerciceSimple from '../ExerciceSimple'
-import { randint } from '../../modules/outils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
-import { warnMessage } from '../../lib/format/message'
-import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-export const titre = 'Résoudre une équation du type $\\dfrac{ax+b}{c}=\\dfrac{d}{e}$'
+import { abs } from '../../lib/outils/nombres'
+import FractionEtendue from '../../modules/FractionEtendue'
+import { randint } from '../../modules/outils'
+import ExerciceSimple from '../ExerciceSimple'
+export const titre =
+  'Résoudre une équation du type $\\dfrac{ax+b}{c}=\\dfrac{d}{e}$'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const dateDePublication = '10/09/2025'
@@ -19,7 +20,7 @@ export const dateDePublication = '10/09/2025'
 /**
  *
  * @author Jean-Léon Henry
-*/
+ */
 export const uuid = '550cf'
 
 export const refs = {
@@ -49,7 +50,9 @@ export default class ResoudreEquationAvecQuotient extends ExerciceSimple {
 
     // Variables de calculs intermédiaires
     const membre2 = new FractionEtendue(d, e)
-    const equation = (align = false) => { return `\\dfrac{${rienSi1(a)}x${ecritureAlgebrique(b)}}{${c}}${align ? '&=' : '='}${membre2.texFraction}` }
+    const equation = (align = false) => {
+      return `\\dfrac{${rienSi1(a)}x${ecritureAlgebrique(b)}}{${c}}${align ? '&=' : '='}${membre2.texFraction}`
+    }
     const resultatFinal = new FractionEtendue(c * d - b * e, e * a)
 
     switch (choice([1])) {
@@ -59,7 +62,11 @@ export default class ResoudreEquationAvecQuotient extends ExerciceSimple {
         } else {
           this.question = ` Donner la solution de l'équation $${equation()}$.`
         }
-        this.correction = warnMessage(`Pour tout réels $a$, $b$, $c$, $d$ tels que $b$ et $d$ soient non nuls : $\\dfrac{a}{b}=\\dfrac{c}{d}$ si et seulement si $ad=bc$.`, 'nombres', 'Rappel')
+        this.correction = warnMessage(
+          `Pour tout réels $a$, $b$, $c$, $d$ tels que $b$ et $d$ soient non nuls : $\\dfrac{a}{b}=\\dfrac{c}{d}$ si et seulement si $ad=bc$.`,
+          'nombres',
+          'Rappel',
+        )
         this.correction += `\\[
 \\begin{aligned}
 ${equation(true)}\\\\
@@ -81,7 +88,5 @@ ${rienSi1(e * a)}x&=${c * d - b * e}`
         this.reponse = resultatFinal.simplifie()
         break
     }
-    this.canEnonce = this.question // 'Compléter'
-    this.canReponseACompleter = ''
   }
 }

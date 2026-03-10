@@ -141,7 +141,6 @@ Par exemple, en choisissant 20 questions, la course aux nombres sera composée d
         fleurs,
         cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       switch (typeQuestionsDisponibles[i]) {
         case 1:
@@ -157,7 +156,7 @@ Par exemple, en choisissant 20 questions, la course aux nombres sera composée d
             texte += '$\\ldots$'
           }
           this.canEnonce = `$${a} \\times ${b}$`
-          this.canReponseACompleter = ''
+
           this.listeCanEnonces.push(this.canEnonce)
           this.listeCanReponsesACompleter.push(this.canReponseACompleter)
           nbChamps = 1
@@ -180,7 +179,7 @@ Par exemple, en choisissant 20 questions, la course aux nombres sera composée d
           }
 
           this.canEnonce = `$${a} + ${b}$`
-          this.canReponseACompleter = ''
+
           this.listeCanEnonces.push(this.canEnonce)
           this.listeCanReponsesACompleter.push(this.canReponseACompleter)
           nbChamps = 1
@@ -218,7 +217,7 @@ Par exemple, en choisissant 20 questions, la course aux nombres sera composée d
             texte += ajouteChampTexteMathLive(this, index, ' ')
           }
           this.canEnonce = texte
-          this.canReponseACompleter = ''
+
           this.listeCanEnonces.push(this.canEnonce)
           this.listeCanReponsesACompleter.push(this.canReponseACompleter)
           nbChamps = 1
@@ -238,7 +237,7 @@ Par exemple, en choisissant 20 questions, la course aux nombres sera composée d
             texte += '$\\ldots$'
           }
           this.canEnonce = `$${a}-${b}$ `
-          this.canReponseACompleter = ''
+
           this.listeCanEnonces.push(this.canEnonce)
           this.listeCanReponsesACompleter.push(this.canReponseACompleter)
           nbChamps = 1
@@ -289,7 +288,7 @@ Par exemple, en choisissant 20 questions, la course aux nombres sera composée d
             },
           })
           this.canEnonce = texte
-          this.canReponseACompleter = ''
+
           this.listeCanEnonces.push(this.canEnonce)
           this.listeCanReponsesACompleter.push(this.canReponseACompleter)
           nbChamps = 1
@@ -363,7 +362,7 @@ Par exemple, en choisissant 20 questions, la course aux nombres sera composée d
             texte += ajouteChampTexteMathLive(this, index, ' ')
           }
           this.canEnonce = texte
-          this.canReponseACompleter = ''
+
           this.listeCanEnonces.push(this.canEnonce)
           this.listeCanReponsesACompleter.push(this.canReponseACompleter)
           nbChamps = 1
@@ -413,7 +412,7 @@ Par exemple, en choisissant 20 questions, la course aux nombres sera composée d
           }
 
           this.canEnonce = `$${a}\\div ${k}$`
-          this.canReponseACompleter = ''
+
           this.listeCanEnonces.push(this.canEnonce)
           this.listeCanReponsesACompleter.push(this.canReponseACompleter)
           nbChamps = 1
@@ -430,7 +429,7 @@ Par exemple, en choisissant 20 questions, la course aux nombres sera composée d
           }
 
           this.canEnonce = texte
-          this.canReponseACompleter = ''
+
           this.listeCanEnonces.push(this.canEnonce)
           this.listeCanReponsesACompleter.push(this.canReponseACompleter)
           nbChamps = 1
@@ -451,7 +450,7 @@ Par exemple, en choisissant 20 questions, la course aux nombres sera composée d
           }
 
           this.canEnonce = `$${a}$ dizaines $${b}$ unités`
-          this.canReponseACompleter = ''
+
           this.listeCanEnonces.push(this.canEnonce)
           this.listeCanReponsesACompleter.push(this.canReponseACompleter)
           nbChamps = 1
@@ -505,7 +504,7 @@ Par exemple, en choisissant 20 questions, la course aux nombres sera composée d
           }
 
           this.canEnonce = texte
-          this.canReponseACompleter = ''
+
           this.listeCanEnonces.push(this.canEnonce)
           this.listeCanReponsesACompleter.push(this.canReponseACompleter)
           nbChamps = 1
@@ -531,7 +530,7 @@ Par exemple, en choisissant 20 questions, la course aux nombres sera composée d
             texte += '$\\ldots$'
           }
           this.canEnonce = `$${a}\\times ${texNombre(b)}$ `
-          this.canReponseACompleter = ''
+
           this.listeCanEnonces.push(this.canEnonce)
           this.listeCanReponsesACompleter.push(this.canReponseACompleter)
           nbChamps = 1
@@ -554,7 +553,7 @@ Par exemple, en choisissant 20 questions, la course aux nombres sera composée d
             texte += ajouteChampTexteMathLive(this, index, '')
           }
           this.canEnonce = texte
-          this.canReponseACompleter = ''
+
           this.listeCanEnonces.push(this.canEnonce)
           this.listeCanReponsesACompleter.push(this.canReponseACompleter)
           nbChamps = 1
@@ -591,7 +590,7 @@ Par exemple, en choisissant 20 questions, la course aux nombres sera composée d
             texte += '$\\ldots$'
           }
           this.canEnonce = `Écriture décimale ${a} de $1$ `
-          this.canReponseACompleter = ''
+
           this.listeCanEnonces.push(this.canEnonce)
           this.listeCanReponsesACompleter.push(this.canReponseACompleter)
           nbChamps = 1
@@ -617,7 +616,7 @@ Par exemple, en choisissant 20 questions, la course aux nombres sera composée d
             texte += ajouteChampTexteMathLive(this, index, '')
           }
           this.canEnonce = texte
-          this.canReponseACompleter = ''
+
           this.listeCanEnonces.push(this.canEnonce)
           this.listeCanReponsesACompleter.push(this.canReponseACompleter)
           nbChamps = 1
@@ -705,7 +704,7 @@ Par exemple, en choisissant 20 questions, la course aux nombres sera composée d
             texte += '$\\ldots$'
           }
           this.canEnonce = `Le double de $${texNombre(a)}$ `
-          this.canReponseACompleter = ''
+
           this.listeCanEnonces.push(this.canEnonce)
           this.listeCanReponsesACompleter.push(this.canReponseACompleter)
           nbChamps = 1
@@ -854,7 +853,7 @@ Par exemple, en choisissant 20 questions, la course aux nombres sera composée d
             }
           }
           this.canEnonce = texte
-          this.canReponseACompleter = ''
+
           this.listeCanEnonces.push(this.canEnonce)
           this.listeCanReponsesACompleter.push(this.canReponseACompleter)
           nbChamps = 1
@@ -977,7 +976,7 @@ Par exemple, en choisissant 20 questions, la course aux nombres sera composée d
             texte += '$\\ldots$'
           }
           this.canEnonce = `$${texNombre(a + b, 1)}$ milliers`
-          this.canReponseACompleter = ''
+
           this.listeCanEnonces.push(this.canEnonce)
           this.listeCanReponsesACompleter.push(this.canReponseACompleter)
           nbChamps = 1
@@ -998,7 +997,7 @@ Par exemple, en choisissant 20 questions, la course aux nombres sera composée d
             texte += ajouteChampTexteMathLive(this, index, '')
           }
           this.canEnonce = texte
-          this.canReponseACompleter = ''
+
           this.listeCanEnonces.push(this.canEnonce)
           this.listeCanReponsesACompleter.push(this.canReponseACompleter)
           nbChamps = 1
@@ -1047,7 +1046,7 @@ Par exemple, en choisissant 20 questions, la course aux nombres sera composée d
             texte += ajouteChampTexteMathLive(this, index, '')
           }
           this.canEnonce = texte
-          this.canReponseACompleter = ''
+
           this.listeCanEnonces.push(this.canEnonce)
           this.listeCanReponsesACompleter.push(this.canReponseACompleter)
           nbChamps = 1
@@ -1066,7 +1065,7 @@ Par exemple, en choisissant 20 questions, la course aux nombres sera composée d
             texte += ajouteChampTexteMathLive(this, index, '')
           }
           this.canEnonce = texte
-          this.canReponseACompleter = ''
+
           this.listeCanEnonces.push(this.canEnonce)
           this.listeCanReponsesACompleter.push(this.canReponseACompleter)
           nbChamps = 1

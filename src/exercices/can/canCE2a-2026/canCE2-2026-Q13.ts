@@ -35,7 +35,6 @@ export default class Can2026CE2Q13 extends ExerciceCan {
     this.correction = `J'ai donné: $${nbBillets}\\times ${texNombre(valeurBillet)}=${texNombre(montantDonne)}$ €<br>
    On doit me rendre : $${texNombre(montantDonne)}-${texNombre(prixArticle)}=${miseEnEvidence(texNombre(this.reponse))}$ €`
 
-    this.canEnonce = this.question
     this.canReponseACompleter = '$\\ldots$ €'
 
     if (this.interactif) {

@@ -37,7 +37,7 @@ export default class DivisionAvecDecimaux extends ExerciceSimple {
     let b: number
     if (context.isAmc) this.versionQcm = false
     switch (
-      choice(['a', 'b', 'c', 'd', 'e']) // 
+      choice(['a', 'b', 'c', 'd', 'e']) //
     ) {
       case 'a':
         a = randint(3, 9, 5) / 10
@@ -116,7 +116,6 @@ export default class DivisionAvecDecimaux extends ExerciceSimple {
           ? ` $\\dfrac{${texNombre(a * b)}}{${texNombre(a * 10)}}$ est égal à :`
           : `Calculer sous forme décimale  $\\dfrac{${texNombre(a * b)}}{${texNombre(a * 10)}}$.`
 
-       
         this.correction = `
         $\\bullet$ On multiplie par $10$ le numérateur et le dénominateur pour avoir des nombres entiers.<br>
         $\\dfrac{${texNombre(a * b)}}{${texNombre(a * 10)}}=\\dfrac{${texNombre(a * b)}\\times 10}{${texNombre(a * 10)}\\times 10}=\\dfrac{${texNombre(a * b * 10)}}{${texNombre(a * 100)}}$
@@ -152,12 +151,10 @@ export default class DivisionAvecDecimaux extends ExerciceSimple {
           this.distracteurs = [
             `$${texNombre(b / 10, 3)}$`,
             `$${texNombre(b * 10, 3)}$`,
-            `$${texNombre(b/100, 3)}$`,
+            `$${texNombre(b / 100, 3)}$`,
           ]
         }
         break
     }
-    this.canEnonce = this.question // 'Compléter'
-    this.canReponseACompleter = ''
   }
 }

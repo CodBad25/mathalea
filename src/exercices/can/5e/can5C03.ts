@@ -42,7 +42,5 @@ export default class DifferenceEntiers5e extends ExerciceSimple {
     \\end{aligned}$<br>
        Cela donne :  $${a} - ${b}=${a - b}$.
       `)
-    this.canEnonce = this.question // 'Compléter'
-    this.canReponseACompleter = ''
   }
 }

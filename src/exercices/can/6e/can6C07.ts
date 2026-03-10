@@ -66,7 +66,5 @@ export default class ResteDivisionPar3 extends ExerciceSimple {
      Ainsi, le reste de la division de $${a}$ par $3$ est donc $2$.
          `)
     }
-    this.canEnonce = this.question // 'Compléter'
-    this.canReponseACompleter = ''
   }
 }

@@ -1,9 +1,9 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import FractionEtendue from '../../../modules/FractionEtendue'
+import { choice } from '../../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { prenomF } from '../../../lib/outils/Personne'
+import FractionEtendue from '../../../modules/FractionEtendue'
+import ExerciceSimple from '../../ExerciceSimple'
 
 import { pgcd } from '../../../lib/outils/primalite'
 import { context } from '../../../modules/context'
@@ -75,8 +75,7 @@ Quelle fraction de la bouteille a-t-elle bu à midi ? `
     if (this.interactif) {
       this.question += '<br>'
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
+
     this.correction = `Le matin, ${prenom} a bu $${frac1.texFraction}$ de la bouteille. Il reste alors $${reste.texFraction}$ de la bouteille.<br>
     À midi, elle a bu $${frac2.texFraction}$ du reste.<br>
      Comme $${frac2.texFraction}\\times ${reste.texFraction}=${reponse.texFraction}$, elle a bu $${miseEnEvidence(reponse.texFraction)}$ 

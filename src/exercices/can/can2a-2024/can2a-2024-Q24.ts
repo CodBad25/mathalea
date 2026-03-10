@@ -50,7 +50,5 @@ export default class NomExercice extends ExerciceSimple {
       $x_M=\\dfrac{${xa}+${xb}}{2}=${miseEnEvidence(texNombre(xm, 0))}$ et $y_M=\\dfrac{${ya}+${yb}}{2}=${miseEnEvidence(texNombre(ym, 0))}$.<br>
       Ainsi,  $M(${miseEnEvidence(`${xm}\\,;\\,${ym}`)})$.`
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

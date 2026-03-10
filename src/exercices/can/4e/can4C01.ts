@@ -53,7 +53,5 @@ export default class PrioriteOperatoireEtRelatifs extends ExerciceSimple {
       Ainsi, $${a}${ecritureAlgebrique(c)}\\times ${ecritureParentheseSiNegatif(b)}=${a}${ecritureAlgebrique(b * c)}=${a + b * c}$`
     }
     this.reponse = a + b * c
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

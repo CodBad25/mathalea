@@ -110,8 +110,5 @@ export default class MultiplierAstucieusement extends ExerciceSimple {
       `)
         break
     }
-
-    this.canEnonce = this.question // 'Compléter'
-    this.canReponseACompleter = ''
   }
 }

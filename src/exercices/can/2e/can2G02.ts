@@ -93,7 +93,7 @@ export default class CalculCotePythagore extends ExerciceSimple {
        <br>
        Ainsi, $a=${miseEnEvidence(b ** 2 - a ** 2)}$.`
     this.reponse = b ** 2 - a ** 2
-    this.canEnonce = this.question // 'Compléter'
+
     this.canReponseACompleter = '$a=\\ldots$'
   }
 }

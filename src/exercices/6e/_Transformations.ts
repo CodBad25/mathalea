@@ -1288,7 +1288,6 @@ export default class Transformations extends Exercice {
         if (!context.isHtml) {
           this.canEnonce = this.listeQuestions[0]
           this.correction = this.listeCorrections[0]
-          this.canReponseACompleter = ''
         }
         indiceQuestion++
       }

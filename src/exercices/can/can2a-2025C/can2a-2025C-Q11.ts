@@ -30,11 +30,12 @@ export default class Can2a2025CQ11 extends ExerciceCan {
     this.formatChampTexte = KeyboardType.clavierDeBase
     this.reponse = texNombre(resultat, 4)
     this.question = `$${a}\\div ${texNombre(diviseur, 2)}=$`
-    if (!this.interactif) { this.question += ' $\\ldots$' }
+    if (!this.interactif) {
+      this.question += ' $\\ldots$'
+    }
     this.correction = `Diviser par $${texNombre(diviseur, 2)}$, c'est multiplier par $${texNombre(new Decimal(1).div(diviseur), 0)}$.<br>
     $${a}\\div ${texNombre(diviseur, 2)}=${a}\\times ${texNombre(new Decimal(1).div(diviseur), 0)}=${miseEnEvidence(texNombre(resultat, 4))}$`
     this.canEnonce = `$${a}\\div ${texNombre(diviseur, 2)}=$`
-    this.canReponseACompleter = ''
   }
 
   nouvelleVersion(): void {

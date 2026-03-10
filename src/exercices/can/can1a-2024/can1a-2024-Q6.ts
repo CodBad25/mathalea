@@ -1,10 +1,10 @@
-import ExerciceSimple from '../../ExerciceSimple'
+import Decimal from 'decimal.js'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { texNombre } from '../../../lib/outils/texNombre'
-import Decimal from 'decimal.js'
 import FractionEtendue from '../../../modules/FractionEtendue'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = "Donner l'écriture décimale d'une fraction"
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -50,7 +50,5 @@ export default class ValeurDec extends ExerciceSimple {
         this.correction = `$${maFraction.texFraction}=${miseEnEvidence(texNombre(this.reponse, 2))}$`
       }
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

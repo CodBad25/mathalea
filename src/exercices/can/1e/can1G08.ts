@@ -77,7 +77,6 @@ export default class VecteurNormEqCart extends Exercice {
     }
     listeQuestionsToContenu(this)
     this.canEnonce = texte
-    this.canReponseACompleter = ''
   }
 
   correctionInteractive = (i: number) => {

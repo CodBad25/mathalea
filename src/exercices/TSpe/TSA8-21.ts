@@ -69,7 +69,5 @@ export default class IntegraleAffine extends ExerciceSimple {
     }
     this.correction += `On a donc $I=${miseEnEvidence(`\\ln\\left(${resultat.texFractionSimplifiee} \\right)`)}.$`
     this.reponse = `\\ln(${resultat.texFractionSimplifiee})`
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

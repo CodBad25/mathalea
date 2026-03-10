@@ -1,8 +1,8 @@
-import { randint } from '../../../modules/outils'
-import { Yohaku } from '../../../lib/outils/Yohaku'
-import Exercice from '../../Exercice'
 import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { Yohaku } from '../../../lib/outils/Yohaku'
+import { randint } from '../../../modules/outils'
+import Exercice from '../../Exercice'
 
 export const titre = 'Trouver une valeur dans un Yohaku (additif)'
 export const interactifReady = true
@@ -68,6 +68,5 @@ export default class YohakuCan6a extends Exercice {
       classes: 'college6e',
     })
     this.canEnonce = this.listeQuestions[0]
-    this.canReponseACompleter = ''
   }
 }

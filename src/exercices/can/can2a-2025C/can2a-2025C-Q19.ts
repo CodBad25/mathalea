@@ -19,9 +19,8 @@ export const refs = {
 
 */
 export default class Can2a2025CQ19 extends ExerciceCan {
-    enonce(a?: number, b?: number, y0?: number): void {
+  enonce(a?: number, b?: number, y0?: number): void {
     if (a == null || b == null || y0 == null) {
-      
       // y0 - b doit être non nul, on choisit parmi ±1, ±2, ±3, ±5
       const denominateurs = [-5, -3, -2, -1, 1, 2, 3, 5]
       const den = choice(denominateurs)
@@ -39,7 +38,6 @@ export default class Can2a2025CQ19 extends ExerciceCan {
 
     this.question = `Soit la fonction $f$ définie par $f(x)=\\dfrac{${a}}{x}${ecritureAlgebrique(b)}$.<br>
     Quel est l'antécédent de $${y0}$ par $f$ ?<br>`
-  
 
     this.correction = `On cherche $x$ tel que $f(x)=${y0}$.<br>
     $\\begin{aligned}
@@ -50,7 +48,6 @@ export default class Can2a2025CQ19 extends ExerciceCan {
 
     this.canEnonce = `Soit la fonction $f$ définie par $f(x)=\\dfrac{${a}}{x}${ecritureAlgebrique(b)}$.<br>
     Quel est l'antécédent de $${y0}$ par $f$ ?`
-    this.canReponseACompleter = ''
   }
 
   nouvelleVersion(): void {

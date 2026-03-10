@@ -27,7 +27,7 @@ export default class ComparerFractions extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const annee= 2026
+    const annee = 2026
     const oliveK = this.canOfficielle ? 100 : choice([100, 200])
     const nbreBouteilles = this.canOfficielle ? 20 : choice([20, 25, 10])
     const oliveParBouteille = new Decimal(oliveK).div(nbreBouteilles)
@@ -39,16 +39,16 @@ export default class ComparerFractions extends ExerciceSimple {
     if (new Decimal(annee).modulo(oliveParBouteille).equals(0)) {
       this.correction += `On a  : <br>
       $\\begin{aligned}
-      ${texNombre(annee, 0)}&=${texNombre(2000)}+${texNombre(annee%100)}\\\\
-      &=${texNombre(new Decimal(2000).div(oliveParBouteille))}\\times ${oliveParBouteille}+${texNombre(new Decimal(annee%100).div(oliveParBouteille).floor())}\\times ${oliveParBouteille}\\\\
+      ${texNombre(annee, 0)}&=${texNombre(2000)}+${texNombre(annee % 100)}\\\\
+      &=${texNombre(new Decimal(2000).div(oliveParBouteille))}\\times ${oliveParBouteille}+${texNombre(new Decimal(annee % 100).div(oliveParBouteille).floor())}\\times ${oliveParBouteille}\\\\
       &=${reponse}\\times ${oliveParBouteille}
       \\end{aligned}$<br>
       Il peut remplir $${miseEnEvidence(reponse)}$ bouteilles d'huile d'olive.`
     } else {
       this.correction += `On a :<br> 
       $\\begin{aligned}
-      ${texNombre(annee)}&=${texNombre(2000)}+${texNombre(annee%100)}\\\\
-      &=${texNombre(new Decimal(2000).div(oliveParBouteille))}\\times ${oliveParBouteille}+${texNombre(new Decimal(annee%100).div(oliveParBouteille).floor())}\\times ${oliveParBouteille}+${texNombre(new Decimal(annee%100).modulo(oliveParBouteille))}\\\\
+      ${texNombre(annee)}&=${texNombre(2000)}+${texNombre(annee % 100)}\\\\
+      &=${texNombre(new Decimal(2000).div(oliveParBouteille))}\\times ${oliveParBouteille}+${texNombre(new Decimal(annee % 100).div(oliveParBouteille).floor())}\\times ${oliveParBouteille}+${texNombre(new Decimal(annee % 100).modulo(oliveParBouteille))}\\\\
       &=${reponse}\\times ${oliveParBouteille}+${texNombre(new Decimal(annee).modulo(oliveParBouteille))}
       \\end{aligned}$<br>
       Il peut remplir $${miseEnEvidence(reponse)}$ bouteilles d'huile d'olive.`
@@ -56,7 +56,7 @@ export default class ComparerFractions extends ExerciceSimple {
     if (this.interactif) {
       this.question += '<br>'
     }
-    this.canEnonce = this.question
+
     this.canReponseACompleter = '$\\ldots$ bouteilles'
   }
 }

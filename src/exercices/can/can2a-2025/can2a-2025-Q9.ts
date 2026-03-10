@@ -1,12 +1,12 @@
-import ExerciceSimple from '../../ExerciceSimple'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { choice } from '../../../lib/outils/arrayOutils'
+import { reduireAxPlusB } from '../../../lib/outils/ecritures'
 import {
   miseEnCouleur,
   miseEnEvidence,
 } from '../../../lib/outils/embellissements'
 import { randint } from '../../../modules/outils'
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { choice } from '../../../lib/outils/arrayOutils'
-import { reduireAxPlusB } from '../../../lib/outils/ecritures'
+import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Factoriser avec une identité remarquable'
 export const interactifReady = true
@@ -69,7 +69,5 @@ export default class FactoriserA2MoinsB2 extends ExerciceSimple {
     Une expression factorisée de $${a * a}-x^2$ est $${miseEnEvidence(`(${a}-x)(${a}+x)`)}$.`
       }
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

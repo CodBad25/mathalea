@@ -146,6 +146,5 @@ export default class LectureGraphiqueVecteurRepere extends Exercice {
     }
     listeQuestionsToContenu(this)
     this.canEnonce = texte // 'Compléter'
-    this.canReponseACompleter = ''
   }
 }

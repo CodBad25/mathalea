@@ -125,7 +125,7 @@ export default class Proportionnalite2 extends ExerciceSimple {
           
            `
         }
-        this.canEnonce = this.question // 'Compléter'
+
         this.canReponseACompleter = '$\\ldots$ €'
         break
       case 2: // proportionnalité avec nombre de pastèques / melons
@@ -164,7 +164,7 @@ export default class Proportionnalite2 extends ExerciceSimple {
         On en déduit que $${a}$ ${fruits2[0]} ont une masse de $\\dfrac{${a}\\times${poids1}}{4}=\\dfrac{${a * poids1}}{4}${frac.texSimplificationAvecEtapes()}$ kg.
     `
         }
-        this.canEnonce = this.question // 'Compléter'
+
         this.canReponseACompleter = '$\\ldots$ kg'
         break
     }

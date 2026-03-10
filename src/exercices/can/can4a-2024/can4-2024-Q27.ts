@@ -1,9 +1,9 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choice } from '../../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import FractionEtendue from '../../../modules/FractionEtendue'
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = "Donner l'écriture décimale d'une fraction"
 export const interactifReady = true
@@ -53,7 +53,5 @@ export default class NomExercice extends ExerciceSimple {
       }
     }
     this.reponse = reponse.toFixed(2)
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

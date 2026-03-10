@@ -1,8 +1,8 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { texNombre } from '../../../lib/outils/texNombre'
 import Decimal from 'decimal.js'
 import { choice } from '../../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { texNombre } from '../../../lib/outils/texNombre'
+import ExerciceSimple from '../../ExerciceSimple'
 
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 export const titre = 'Décomposer un nombre'
@@ -28,16 +28,12 @@ export default class SommeDeProduitsCompleter2026 extends ExerciceSimple {
 
   nouvelleVersion() {
     const annee = 2026
-    const den = this.canOfficielle
-      ? 10 : choice([10, 100, 1000]) 
+    const den = this.canOfficielle ? 10 : choice([10, 100, 1000])
     const a = new Decimal(annee).div(den)
     this.reponse = texNombre(a, 3)
     this.question = 'Écrire, sous forme décimale, la fraction suivante.'
     this.question += `<br><br>
             $\\dfrac{${texNombre(annee, 0)}}{${texNombre(den, 0)}}$`
     this.correction = `$\\dfrac{${texNombre(annee, 0)}}{${texNombre(den, 0)}}=${miseEnEvidence(texNombre(a, 3))}$`
-
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

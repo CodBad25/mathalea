@@ -1,9 +1,9 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { texNombre } from '../../../lib/outils/texNombre'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { randint } from '../../../modules/outils'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { choice } from '../../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { texNombre } from '../../../lib/outils/texNombre'
+import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = "Calculer deux tiers d'une quantité"
 export const interactifReady = true
@@ -33,7 +33,7 @@ export default class Can2025N6Q20 extends ExerciceSimple {
       : choice([randint(1, 9) * 30, randint(2, 9) * 3])
     this.reponse = texNombre((2 * a) / 3, 0)
     this.question = `Deux tiers de  $${a}$ g est égal à   `
-    this.canEnonce = this.question
+
     if (!this.interactif) {
       this.question += '$\\ldots$ g.'
     }

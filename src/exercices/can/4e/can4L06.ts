@@ -59,7 +59,5 @@ export default class CalculSubstitution extends ExerciceSimple {
         this.correction = `$(${a})^2+${a}-${d}=${a ** 2 + a - d}$.`
         break
     }
-    this.canEnonce = this.question // 'Compléter'
-    this.canReponseACompleter = ''
   }
 }

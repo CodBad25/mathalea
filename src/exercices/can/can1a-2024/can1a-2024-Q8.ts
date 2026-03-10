@@ -1,9 +1,9 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { texNombre } from '../../../lib/outils/texNombre'
 import Decimal from 'decimal.js'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { texNombre } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = "Déterminer la raison d'une suite géométrique"
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -44,7 +44,7 @@ export default class raisonSuiteG extends ExerciceSimple {
     if (!this.interactif) {
       this.question += ' $\\ldots$'
     }
-    this.canEnonce = this.question
+
     this.canReponseACompleter = 'La raison de cette suite est $\\ldots$'
   }
 }

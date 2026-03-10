@@ -1,10 +1,10 @@
 import Decimal from 'decimal.js'
+import { ecritureParentheseSiNegatif } from '../../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { abs } from '../../../lib/outils/nombres'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
-import { ecritureParentheseSiNegatif } from '../../../lib/outils/ecritures'
-import { abs } from '../../../lib/outils/nombres'
 export const titre = 'Résoudre une équation du type $1+\\dfrac{p}{100}=c$'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -44,7 +44,7 @@ export default class ResoudreEquationCM extends ExerciceSimple {
     this.question = `Donner la solution de l'équation : $1+\\dfrac{p}{100}=${kTexte}$.`
 
     this.correction = `On remarque que l'expression $1+\\dfrac{p}{100}$ est égal au coefficient multiplicateur associé à une évolution de $p\\,\\%$.<br>
-    Le coeffcient multiplicateur $${kTexte}$ est associé à une ${k.toNumber()  > 1 ? 'hausse' : 'baisse'} de  $${abs(p)}\\,\\%$. 
+    Le coeffcient multiplicateur $${kTexte}$ est associé à une ${k.toNumber() > 1 ? 'hausse' : 'baisse'} de  $${abs(p)}\\,\\%$. 
     Ainsi,  $p=${miseEnEvidence(pTexte)}$.<br><br>
     
     On peut aussi résoudre l'équation :<br>
@@ -58,7 +58,6 @@ export default class ResoudreEquationCM extends ExerciceSimple {
 
     this.reponse = pTexte
 
-    this.canEnonce = this.question
     this.canReponseACompleter = ``
   }
 }

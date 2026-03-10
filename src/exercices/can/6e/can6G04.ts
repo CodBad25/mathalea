@@ -96,7 +96,5 @@ export default class ProblemesDeLongueurs extends ExerciceSimple {
       )
     this.reponse = abc
     this.correction = `Comme $AB=${b}\\times DE$ et $DE=${a}\\times FE$, alors $AB=${b}\\times${a}\\times ${c} \\text{ cm} =${this.reponse}\\text{ cm}$.`
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

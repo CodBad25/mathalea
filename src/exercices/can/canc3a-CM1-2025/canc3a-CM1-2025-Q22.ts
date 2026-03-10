@@ -37,8 +37,5 @@ export default class Can2025CM2Q22 extends ExerciceSimple {
     &=${texNombre(a / 2, 0)}\\times 100\\\\
     &=${miseEnEvidence(a * 50)}
     \\end{aligned}$`
-
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

@@ -1,8 +1,8 @@
 import { choice } from '../../../lib/outils/arrayOutils'
 import { arrondi } from '../../../lib/outils/nombres'
 import { texNombre } from '../../../lib/outils/texNombre'
-import ExerciceSimple from '../../ExerciceSimple'
 import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer des sommes contenant des puissances de 10'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -58,7 +58,5 @@ export default class CalculPuissance10B extends ExerciceSimple {
         break
     }
     this.reponse = reponse
-    this.canEnonce = this.question // 'Compléter'
-    this.canReponseACompleter = ''
   }
 }

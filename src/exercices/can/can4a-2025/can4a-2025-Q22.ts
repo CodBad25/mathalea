@@ -1,7 +1,6 @@
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import ExerciceCan from '../../ExerciceCan'
 import { randint } from '../../../modules/outils'
-import { sp } from '../../../lib/outils/outilString'
+import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Somme de nombre relatifs'
 export const interactifReady = true
@@ -24,8 +23,7 @@ export default class Can2025N4Q22 extends ExerciceCan {
     }
     this.question = `$${a}$ ; $${b}$ ; $${b}$<br>La moyenne de ces trois nombres est : `
     this.correction = `On calcule la moyenne en divisant la somme des $3$ nombres par $3$ :<br>$\\dfrac{${a}+${b}+${b}}{3}=${miseEnEvidence((a + b * 2) / 3)}$`
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
+
     this.reponse = Math.round((a + b * 2) / 3)
     this.question += this.interactif ? '' : ' $\\ldots$'
   }

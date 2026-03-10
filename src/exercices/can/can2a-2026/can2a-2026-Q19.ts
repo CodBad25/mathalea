@@ -50,7 +50,6 @@ export default class Can2a2026Q19 extends ExerciceCan {
     
     La baisse globale est donc de $${miseEnEvidence(texNombre(baisseGlobale, 2))}~\\%$.`
 
-    this.canEnonce = this.question
     this.canReponseACompleter = '$\\ldots~\\%$'
 
     if (!this.interactif) {

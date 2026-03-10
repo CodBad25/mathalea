@@ -46,7 +46,5 @@ export default class DoubleEtMoitie extends ExerciceSimple {
       bleuMathalea,
     )
     this.reponse = a
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

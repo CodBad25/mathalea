@@ -5,14 +5,14 @@ import { Polygone, polygone } from '../../../lib/2d/polygones'
 import { segment } from '../../../lib/2d/segmentsVecteurs'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { context } from '../../../modules/context'
 import { pgcd } from '../../../lib/outils/primalite'
+import { context } from '../../../modules/context'
 import FractionEtendue from '../../../modules/FractionEtendue'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
 
-export const titre = 'Trouver une fraction à partir d\'un dessin'
+export const titre = "Trouver une fraction à partir d'un dessin"
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const uuid = 'a3bc7'
@@ -28,7 +28,7 @@ export const refs = {
 export default class Can2026CE2Q14 extends ExerciceCan {
   enonce(nbColonnes?: number, nbCasesColorees?: number) {
     const nbLignes = 2 // Toujours 2 lignes
-    
+
     if (nbColonnes == null || nbCasesColorees == null) {
       nbColonnes = randint(2, 4) // 2, 3 ou 4 colonnes (4, 6 ou 8 cases max)
       const nbCasesTotales = nbColonnes * nbLignes
@@ -37,7 +37,7 @@ export default class Can2026CE2Q14 extends ExerciceCan {
 
     const taille = 2
     const nbCasesTotales = nbColonnes * nbLignes
-    
+
     // Créer le rectangle principal
     const A = point(0, 0)
     const B = point(nbColonnes * taille, 0)
@@ -48,7 +48,7 @@ export default class Can2026CE2Q14 extends ExerciceCan {
 
     // Créer les segments de séparation
     const segments = []
-    
+
     // Lignes verticales
     for (let i = 1; i < nbColonnes; i++) {
       const s = segment(
@@ -58,18 +58,15 @@ export default class Can2026CE2Q14 extends ExerciceCan {
       s.epaisseur = 1
       segments.push(s)
     }
-    
+
     // Ligne horizontale (une seule car 2 lignes)
-    const s = segment(
-      point(0, taille),
-      point(nbColonnes * taille, taille),
-    )
+    const s = segment(point(0, taille), point(nbColonnes * taille, taille))
     s.epaisseur = 1
     segments.push(s)
 
     // Choisir les cases à colorier
     const casesColorees: number[] = []
-    
+
     if (this.canOfficielle) {
       // Version officielle : rectangle 3x2
       // Numérotation (de bas en haut, de gauche à droite):
@@ -81,34 +78,39 @@ export default class Can2026CE2Q14 extends ExerciceCan {
       // Choisir une case de départ aléatoire
       const caseDepart = randint(0, nbCasesTotales - 1)
       casesColorees.push(caseDepart)
-      
+
       // Ajouter des cases adjacentes
       const casesDisponibles = []
       for (let i = 0; i < nbCasesTotales; i++) {
         if (i !== caseDepart) casesDisponibles.push(i)
       }
-      
-      while (casesColorees.length < nbCasesColorees && casesDisponibles.length > 0) {
+
+      while (
+        casesColorees.length < nbCasesColorees &&
+        casesDisponibles.length > 0
+      ) {
         // Trouver les cases adjacentes aux cases déjà coloriées
         const adjacentes: number[] = []
         for (const caseNum of casesDisponibles) {
           const col = caseNum % nbColonnes
           const lig = Math.floor(caseNum / nbColonnes)
-          
+
           for (const caseColoree of casesColorees) {
             const colC = caseColoree % nbColonnes
             const ligC = Math.floor(caseColoree / nbColonnes)
-            
+
             // Vérifier si adjacente (horizontalement ou verticalement)
-            if ((Math.abs(col - colC) === 1 && lig === ligC) || 
-                (Math.abs(lig - ligC) === 1 && col === colC)) {
+            if (
+              (Math.abs(col - colC) === 1 && lig === ligC) ||
+              (Math.abs(lig - ligC) === 1 && col === colC)
+            ) {
               if (!adjacentes.includes(caseNum)) {
                 adjacentes.push(caseNum)
               }
             }
           }
         }
-        
+
         // Si on a des cases adjacentes, en choisir une
         if (adjacentes.length > 0) {
           const choix = adjacentes[randint(0, adjacentes.length - 1)]
@@ -116,7 +118,8 @@ export default class Can2026CE2Q14 extends ExerciceCan {
           casesDisponibles.splice(casesDisponibles.indexOf(choix), 1)
         } else {
           // Sinon prendre n'importe quelle case disponible
-          const choix = casesDisponibles[randint(0, casesDisponibles.length - 1)]
+          const choix =
+            casesDisponibles[randint(0, casesDisponibles.length - 1)]
           casesColorees.push(choix)
           casesDisponibles.splice(casesDisponibles.indexOf(choix), 1)
         }
@@ -140,7 +143,7 @@ export default class Can2026CE2Q14 extends ExerciceCan {
     }
 
     const objets = [...carresColores, rectangle, ...segments]
-    
+
     const fraction = new FractionEtendue(nbCasesColorees, nbCasesTotales)
     const diviseur = pgcd(nbCasesColorees, nbCasesTotales)
     const numSimp = nbCasesColorees / diviseur
@@ -152,11 +155,8 @@ export default class Can2026CE2Q14 extends ExerciceCan {
     )
     this.question += 'Quelle part est coloriée ?'
 
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
-
     this.reponse = fraction.texFractionSimplifiee
-    
+
     if (context.isHtml) {
       this.correction = `Il y a $${nbCasesTotales}$ cases au total et $${nbCasesColorees}$ ${nbCasesColorees > 1 ? 'cases coloriées' : 'case coloriée'}.<br>`
       this.correction += `La fraction coloriée est donc $${miseEnEvidence(`\\dfrac{${nbCasesColorees}}{${nbCasesTotales}}`)}$`
@@ -178,7 +178,7 @@ export default class Can2026CE2Q14 extends ExerciceCan {
         this.correction += '.'
       }
     }
-this.optionsChampTexte = { texteAvant: '<br>', texteApres: '' }
+    this.optionsChampTexte = { texteAvant: '<br>', texteApres: '' }
     this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
   }
 

@@ -127,7 +127,7 @@ export default class CalculTermeSuiteExp extends ExerciceSimple {
     if (this.interactif) {
       this.question += `<br>$u_{${k}}=$`
     }
-    this.canEnonce = this.question
+
     this.canReponseACompleter = `$u_{${k}}=\\ldots$`
   }
 }

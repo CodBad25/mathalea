@@ -1,8 +1,8 @@
-import ExerciceSimple from '../../ExerciceSimple'
+import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
-import { choice } from '../../../lib/outils/arrayOutils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Multiplier astucieusement'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -46,8 +46,7 @@ export default class SoustractionDecimauxCM2 extends ExerciceSimple {
     }
     this.reponse = (a * b * c).toFixed(0)
     this.question = `$${texNombre(a, 0)}\\times ${texNombre(b, 1)}\\times ${texNombre(c, 0)}$`
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
+
     this.correction = `On  commence par calculer $${texNombre(a, 0)}\\times ${texNombre(c, 0)}=${texNombre(a * c, 0)}$, puis `
     this.correction += `on effectue $${texNombre(a * c, 0)}\\times ${texNombre(b, 1)}= ${miseEnEvidence(this.reponse)}$.`
   }

@@ -1,10 +1,10 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
-import { choice } from '../../../lib/outils/arrayOutils'
-export const titre = 'Calculer 20 % d\'un nombre'
+export const titre = "Calculer 20 % d'un nombre"
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const uuid = 'edyz7'
@@ -18,23 +18,20 @@ export const refs = {
 
 */
 export default class Can1a2026Q4 extends ExerciceCan {
- enonce(a?: number) {
+  enonce(a?: number) {
     if (a == null) {
-      a = choice([randint(1, 4) * 100+50, randint(1, 8) * 10])
+      a = choice([randint(1, 4) * 100 + 50, randint(1, 8) * 10])
     }
- const dixPourcent = a / 10
+    const dixPourcent = a / 10
     const resultat = dixPourcent * 2
-  
 
     this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
     this.reponse = texNombre(resultat)
     this.question = `$20\\,\\%$ de $${a}$`
-   this.correction = `$20\\,\\%$ de $${a} = ${miseEnEvidence(texNombre(resultat))}$`
+    this.correction = `$20\\,\\%$ de $${a} = ${miseEnEvidence(texNombre(resultat))}$`
     this.correction += `<br>$10\\,\\%$ de $${a}$ est égal à $${a}\\div 10 =${texNombre(dixPourcent)}$.<br>
       Ainsi, $20\\,\\%$ de $${a}$ est égal à $${texNombre(dixPourcent)}\\times 2 =${texNombre(resultat)}$.
    `
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
 
     if (this.interactif) {
       this.question += ' $=$'

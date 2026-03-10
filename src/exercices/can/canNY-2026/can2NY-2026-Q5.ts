@@ -26,7 +26,7 @@ export default class CalculDivers extends ExerciceSimple {
 
   nouvelleVersion() {
     const annee = 2026
-    switch (this.canOfficielle ? 1 : randint(1,7)) {
+    switch (this.canOfficielle ? 1 : randint(1, 7)) {
       case 1:
         this.question = `Combien vaut $${texNombre(annee)} + 20 + ${annee % 10}$ ?`
         this.reponse = annee + 20 + (annee % 10)
@@ -39,34 +39,32 @@ export default class CalculDivers extends ExerciceSimple {
         break
       case 3:
         this.question = `Combien vaut $${texNombre(annee)} - 20 - ${annee % 10}$ ?`
-        this.reponse = annee-20-(annee%10)
-        this.correction = `$${texNombre(annee)} - 20 - ${annee % 10}=${texNombre(annee-20)} -${annee % 10}=${miseEnEvidence(texNombre(this.reponse, 4))}$`
+        this.reponse = annee - 20 - (annee % 10)
+        this.correction = `$${texNombre(annee)} - 20 - ${annee % 10}=${texNombre(annee - 20)} -${annee % 10}=${miseEnEvidence(texNombre(this.reponse, 4))}$`
         break
       case 4:
         this.question = `Combien vaut $${texNombre(annee)} - 20 + ${annee % 10}$ ?`
-        this.reponse = annee-20+annee % 10
-        this.correction = `$${texNombre(annee)} - 20 + ${annee % 10}=${texNombre(annee-20)} + ${annee % 10}=${miseEnEvidence(texNombre(this.reponse, 4))}$`
+        this.reponse = annee - 20 + (annee % 10)
+        this.correction = `$${texNombre(annee)} - 20 + ${annee % 10}=${texNombre(annee - 20)} + ${annee % 10}=${miseEnEvidence(texNombre(this.reponse, 4))}$`
         break
       case 5:
         this.question = `Combien vaut $${texNombre(annee)} - (20 + ${annee % 10})$ ?`
         this.reponse = annee - (20 + (annee % 10))
-        this.correction = `$${texNombre(annee)} - (20 + ${annee % 10})=${texNombre(annee)} - ${20+ annee % 10}=${miseEnEvidence(texNombre(this.reponse, 4))}$`
+        this.correction = `$${texNombre(annee)} - (20 + ${annee % 10})=${texNombre(annee)} - ${20 + (annee % 10)}=${miseEnEvidence(texNombre(this.reponse, 4))}$`
         break
       case 6:
         this.question = `Combien vaut $${texNombre(annee)} - (20 \\times ${annee % 10})$ ?`
-        this.reponse = annee - (20 * (annee % 10))
-        this.correction = `$${texNombre(annee)} - (20 \\times ${annee % 10})=${texNombre(annee)} - ${20*(annee % 10)}=${miseEnEvidence(texNombre(this.reponse, 4))}$`
+        this.reponse = annee - 20 * (annee % 10)
+        this.correction = `$${texNombre(annee)} - (20 \\times ${annee % 10})=${texNombre(annee)} - ${20 * (annee % 10)}=${miseEnEvidence(texNombre(this.reponse, 4))}$`
         break
       case 7:
         this.question = `Combien vaut $${texNombre(annee)} + (20 \\times ${annee % 10})$ ?`
-        this.reponse = annee+20*(annee%10)
-        this.correction = `$${texNombre(annee)} + (20 \\times ${annee%10})=${texNombre(annee)} +${20*(annee%10)}=${miseEnEvidence(texNombre(this.reponse, 4))}$`
+        this.reponse = annee + 20 * (annee % 10)
+        this.correction = `$${texNombre(annee)} + (20 \\times ${annee % 10})=${texNombre(annee)} +${20 * (annee % 10)}=${miseEnEvidence(texNombre(this.reponse, 4))}$`
         break
     }
     if (this.interactif) {
       this.question += '<br>'
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

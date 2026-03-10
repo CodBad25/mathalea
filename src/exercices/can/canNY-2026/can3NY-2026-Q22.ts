@@ -38,7 +38,5 @@ export default class programmeCalcul2026 extends ExerciceSimple {
     if (this.interactif) {
       this.question += '<br><br>'
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

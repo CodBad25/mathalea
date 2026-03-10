@@ -2,8 +2,8 @@ import { listeDeNotes } from '../../../lib/outils/aleatoires'
 import { sp } from '../../../lib/outils/outilString'
 import { prenom } from '../../../lib/outils/Personne'
 import { texNombre } from '../../../lib/outils/texNombre'
-import ExerciceSimple from '../../ExerciceSimple'
 import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer une étendue'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -54,7 +54,5 @@ export default class Etendue extends ExerciceSimple {
       "Donc l'étendue de cette série est : " +
       `$${texNombre(max)}-${texNombre(min)}=${texNombre(max - min)}$`
     this.reponse = max - min
-    this.canEnonce = this.question // 'Compléter'
-    this.canReponseACompleter = ''
   }
 }

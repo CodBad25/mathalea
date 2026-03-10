@@ -141,7 +141,7 @@ export default class NomExercice extends ExerciceSimple {
       On en déduit que l'aire du polygone grisé est : $${b * c}\\text{ cm}^2-${texNombre(f, 1)}\\text{ cm}^2=${miseEnEvidence(texNombre(reponse, 1))}\\text{ cm}^2$.`
     }
     this.reponse = reponse.toFixed(1)
-    this.canEnonce = this.question
+
     this.canReponseACompleter = '$\\ldots\\text{ cm}^2$'
     if (this.interactif) {
       this.optionsChampTexte = { texteApres: '$\\text{cm}^2$' }

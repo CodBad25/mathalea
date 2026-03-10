@@ -1,6 +1,6 @@
-import ExerciceSimple from '../../ExerciceSimple'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
+import ExerciceSimple from '../../ExerciceSimple'
 
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choice } from '../../../lib/outils/arrayOutils'
@@ -26,18 +26,20 @@ export default class SommeDeProduitsCompleter2026 extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const choixPG = this.canOfficielle ? [[2,2032]] : [
-      [0, 2030],
-      [1, 2031],
-      [2, 2032],
-      [3, 2033],
-      [4, 2034],
-      [5, 2035],
-      [6, 2036],
-      [7, 2027],
-      [8, 2028],
-      [9, 2029],
-    ]
+    const choixPG = this.canOfficielle
+      ? [[2, 2032]]
+      : [
+          [0, 2030],
+          [1, 2031],
+          [2, 2032],
+          [3, 2033],
+          [4, 2034],
+          [5, 2035],
+          [6, 2036],
+          [7, 2027],
+          [8, 2028],
+          [9, 2029],
+        ]
     const choixPP = [
       [0, 2020],
       [1, 2021],
@@ -50,10 +52,12 @@ export default class SommeDeProduitsCompleter2026 extends ExerciceSimple {
       [8, 2018],
       [9, 2019],
     ]
-    const annee=2026
-    const PlusGrand =  choice(choixPG)
+    const annee = 2026
+    const PlusGrand = choice(choixPG)
     const PlusPetit = choice(choixPP)
-    const PGouPP = this.canOfficielle ? PlusGrand : choice([PlusGrand, PlusPetit])
+    const PGouPP = this.canOfficielle
+      ? PlusGrand
+      : choice([PlusGrand, PlusPetit])
     this.question = `Quel est le plus ${PGouPP === PlusGrand ? 'petit nombre entier strictement supérieur' : 'grand nombre entier strictement inférieur'} à $${texNombre(annee, 0)}$  dont le chiffre des unités est $${PGouPP[0]}$ ?`
     this.correction = '$'
     if (PGouPP === PlusGrand) {
@@ -71,7 +75,5 @@ export default class SommeDeProduitsCompleter2026 extends ExerciceSimple {
     if (this.interactif) {
       this.question += '<br>'
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

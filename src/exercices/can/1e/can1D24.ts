@@ -1,13 +1,13 @@
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choice } from '../../../lib/outils/arrayOutils'
 import {
   ecritureAlgebrique,
   reduireAxPlusB,
   reduirePolynomeDegre3,
 } from '../../../lib/outils/ecritures'
-import ExerciceSimple from '../../ExerciceSimple'
-import { randint } from '../../../modules/outils'
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre =
   'Calculer une dérivée et écrire le résultat sous la forme d’un quotient'
 export const interactifReady = true
@@ -163,7 +163,5 @@ export default class CalculFonctionDeriveeQuotient extends ExerciceSimple {
         this.reponse = `\\dfrac{${2 * m}x^3+${a}}{x^2}`
         break
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

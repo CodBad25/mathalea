@@ -1,6 +1,6 @@
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import ExerciceCan from '../../ExerciceCan'
 import { randint } from '../../../modules/outils'
+import ExerciceCan from '../../ExerciceCan'
 export const titre = 'Trouver un nombre'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -28,7 +28,6 @@ export default class Can2025CE1Q7 extends ExerciceCan {
     this.correction = `Puisque le chiffre des dizaines est $${b}$ et celui des unités est $${c}$, le nombre cherché se termine par $${b}${c}$.<br>
     Le nombre doit être supérieur à $${a}$, c'est donc $${miseEnEvidence((chiffreC + 1) * 100 + b * 10 + c)}$.`
 
-    this.canEnonce = this.question
     if (this.interactif) {
       this.question += ' <br> '
     }

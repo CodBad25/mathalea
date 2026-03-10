@@ -53,7 +53,7 @@ export default class CoefficientFonctionAffine extends ExerciceSimple {
 
       this.reponse = (d - b) / c
     }
-    this.canEnonce = this.question // 'Compléter'
+
     this.canReponseACompleter = '$a=\\ldots$'
   }
 }

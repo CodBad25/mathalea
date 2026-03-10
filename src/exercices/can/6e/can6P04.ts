@@ -166,7 +166,5 @@ export default class AppliquerUnPourcentage extends ExerciceSimple {
         }
         break
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

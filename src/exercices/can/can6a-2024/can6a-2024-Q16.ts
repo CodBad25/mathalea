@@ -22,7 +22,7 @@ export default class PourcentageFacile extends ExerciceSimple {
     this.canOfficielle = false
   }
 
-   nouvelleVersion() {
+  nouvelleVersion() {
     let p: number
     let distance: number
     let unite: string
@@ -45,7 +45,7 @@ export default class PourcentageFacile extends ExerciceSimple {
     const den = ratios[p][1]
     this.reponse = ((p * distance) / 100).toFixed(0)
     this.question = `$${texNombre(p, 0)}\\,\\%$ de $${texNombre(distance, 0)}\\text{ ${unite}}$`
-    this.canEnonce = this.question
+
     this.canReponseACompleter = `$\\ldots\\text{ ${unite}}$`
     this.correction = `On a $\\dfrac{${num}}{${den}}=${String(p)}\\,\\%$.<br>
    

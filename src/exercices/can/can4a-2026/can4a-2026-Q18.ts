@@ -96,7 +96,6 @@ export default class Can20264emeQ18 extends ExerciceCan {
     this.optionsDeComparaison = { calculFormel: true }
     this.question = `${figure}
     Le périmètre de ce rectangle en fonction de $x$ est  `
-    this.canEnonce = this.question
 
     this.correction = `Le périmètre d'un rectangle est donné par la formule :<br>
     $\\mathcal{P}=2\\times\\text{longueur}+2\\times\\text{largeur}$<br>

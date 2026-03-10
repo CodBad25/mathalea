@@ -1,4 +1,3 @@
-
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
@@ -20,9 +19,8 @@ export const refs = {
 export default class Can1a2026Q2 extends ExerciceCan {
   enonce(a?: number, b?: number, c?: number) {
     if (a == null || b == null || c == null) {
-     
       b = randint(2, 6)
-       a = b+10
+      a = b + 10
       c = randint(2, 7)
     }
 
@@ -32,8 +30,6 @@ export default class Can1a2026Q2 extends ExerciceCan {
     this.reponse = texNombre(resultat, 0)
     this.question = `$${a}-${b}\\times ${c}$`
     this.correction = `La multiplication est prioritaire : <br>$${a}-${b}\\times ${c}=${a}-${b * c}=${miseEnEvidence(texNombre(resultat, 0))}$.`
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
 
     if (this.interactif) {
       this.question += ' $=$'

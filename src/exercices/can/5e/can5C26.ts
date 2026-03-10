@@ -1,8 +1,8 @@
 import { choice } from '../../../lib/outils/arrayOutils'
 import { ecritureAlgebrique } from '../../../lib/outils/ecritures'
-import ExerciceSimple from '../../ExerciceSimple'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const interactifType = 'mathLive'
 export const interactifReady = true
 export const titre = 'Additionner des entiers relatifs (écriture simplifiée)'
@@ -44,7 +44,5 @@ export default class AdditionRelatifBisCAN extends ExerciceSimple {
 
     this.correction = `$ ${a}${ecritureAlgebrique(b)} = ${a + b} $`
     this.reponse = a + b
-    this.canEnonce = this.question // 'Compléter'
-    this.canReponseACompleter = ''
   }
 }

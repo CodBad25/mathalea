@@ -28,7 +28,7 @@ export default class CalculDivers2026 extends ExerciceSimple {
 
   nouvelleVersion() {
     const annee = 2026
-   
+
     const choixM = prenomM()
     const pm = this.canOfficielle
       ? 200 + (annee % 100)
@@ -56,7 +56,5 @@ export default class CalculDivers2026 extends ExerciceSimple {
     if (this.interactif) {
       this.question += '<br>'
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

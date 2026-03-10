@@ -1,9 +1,9 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { texNombre } from '../../../lib/outils/texNombre'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { randint } from '../../../modules/outils'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { choice } from '../../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { texNombre } from '../../../lib/outils/texNombre'
+import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Multiplier par $10$ ou $100$ ou ...'
 export const interactifReady = true
@@ -39,11 +39,7 @@ export default class NomExercice extends ExerciceSimple {
       reponse = a * k
       this.question = `$${texNombre(a, 3)}\\times ${texNombre(k, 0)} ${this.interactif ? '=' : ''}$`
       this.correction = `$${texNombre(a, 3)}\\times ${k}=${miseEnEvidence(texNombre(a * k, 2))}$ `
-      this.canEnonce = this.question
-      this.canReponseACompleter = ''
     }
     this.reponse = reponse.toFixed(2)
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

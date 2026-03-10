@@ -96,7 +96,7 @@ export default class Can2025N5Q12 extends ExerciceCan {
     ${mathalea2d(Object.assign({ scale: 0.35 }, fixeBordures([triangle1, labelD, triangle2, nom, sd])), [triangle1, sd, l1, l2, l3, labelD, triangle2, nom])}`
     this.correction = `La symétrie axiale conserve les longueurs.<br>
     Le segment symétrique du segment $[CD]$ est celui qui mesure $${texNombre(c, 1)}$ $\\text{cm}$, donc $CD=${miseEnEvidence(`${texNombre(c, 1)}`)}$ $\\text{cm}$.`
-    this.canEnonce = this.question
+
     this.canReponseACompleter = '$CD=\\ldots$ $\\text{cm}$'
     this.optionsChampTexte = { texteApres: ' $\\text{cm}$' }
     if (this.interactif) {

@@ -110,7 +110,5 @@ export default class CalculImageParFonctionAffine extends ExerciceSimple {
         ]
         break
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

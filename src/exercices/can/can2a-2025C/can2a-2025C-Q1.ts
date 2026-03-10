@@ -26,8 +26,7 @@ export default class Can2a2025CQ1 extends ExerciceCan {
     this.reponse = a * b
     this.question = `$${a} \\times ${b}$ `
     this.correction = `$${a}\\times${b}=${miseEnEvidence(texNombre(this.reponse, 0))}$`
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
+
     if (this.interactif) {
       this.question += '$=$'
     }

@@ -1,8 +1,8 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { randint } from '../../../modules/outils'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { reduireAxPlusB } from '../../../lib/outils/ecritures'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 
 import { choice } from '../../../lib/outils/arrayOutils'
 
@@ -62,7 +62,5 @@ export default class solutionInequation extends ExerciceSimple {
         options: { intervalle: true },
       },
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

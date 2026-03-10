@@ -1,6 +1,6 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Effetuer une multiplication avec $50$'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -27,7 +27,5 @@ export default class Can2025CM1Q21 extends ExerciceSimple {
     this.reponse = 100
     this.question = '$2\\times 50$ '
     this.correction = `$2\\times 50 = ${miseEnEvidence(100)}$`
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

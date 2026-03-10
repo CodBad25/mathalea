@@ -82,7 +82,5 @@ export default class OpposeDeFraction extends ExerciceSimple {
         this.reponse = e.oppose()
         break
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

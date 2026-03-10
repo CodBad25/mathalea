@@ -35,8 +35,6 @@ export default class SuitesEv extends ExerciceSimple {
           this.reponse = String(2 * n)
           this.question = `Dans la suite évolutive « $2$, $4$, $6$, $8$, $\\ldots$ », quel est le $${choix}^{\\mathrm{e}}$ nombre ?`
 
-          this.canEnonce = this.question
-          this.canReponseACompleter = ''
           this.correction = `Un terme de la suite peut s'exprimer sous la forme $2\\times n$ avec $n$ le rang du terme. <br>
           Par exemple, le $4^{\\mathrm{e}}$ terme est $2\\times 4=8$.<br>
           Le $${choix}^{\\mathrm{e}}$ nombre est donc $2\\times ${choix}=${miseEnEvidence(String(2 * n))}$.  `
@@ -49,8 +47,6 @@ export default class SuitesEv extends ExerciceSimple {
           this.reponse = String(2 * n - 1)
           this.question = `Dans la suite évolutive « $1$, $3$, $5$, $7$, $\\ldots$ », quel est le $${choix}^{\\mathrm{e}}$ nombre ?`
 
-          this.canEnonce = this.question
-          this.canReponseACompleter = ''
           this.correction = `Un terme de la suite peut s'exprimer sous la forme $2\\times n-1$ avec $n$ le rang du terme. <br>
             Par exemple, le $4^{\\mathrm{e}}$ terme est $2\\times 4-1=7$.<br>
             Le $${choix}^{\\mathrm{e}}$ nombre est donc $2\\times ${choix}-1=${miseEnEvidence(String(2 * n - 1))}$.  `

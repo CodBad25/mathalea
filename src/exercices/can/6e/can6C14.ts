@@ -48,7 +48,5 @@ On change l'ordre des termes pour simplifier le calcul  :<br>
 \\underbrace{${d + b}+${d - b}}_{${2 * d}}=${2 * c}+${2 * d}=${2 * c + 2 * d}$. `,
       bleuMathalea,
     )
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

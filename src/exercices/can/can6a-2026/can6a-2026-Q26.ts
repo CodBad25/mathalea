@@ -58,7 +58,7 @@ export default class Can2026Q26 extends ExerciceCan {
     this.correction = `L'unité a une longueur de $${den}~\\text{carreaux}$ donc $\\dfrac{1}{${den}}~\\text{u.l}=1~\\text{carreau}$.`
     this.correction += `<br><br>Il suffit donc de tracer un segment de longueur $${num}~\\text{carreaux}$.`
     this.canEnonce = ''
-    this.canReponseACompleter = ''
+
     const figure = new Figure({
       xMin: 0,
       yMin: 0,
@@ -175,7 +175,7 @@ export default class Can2026Q26 extends ExerciceCan {
         Object.assign({ scale: 0.35 }, fixeBordures(objets)),
         objets,
       )
-      this.canEnonce = this.question
+
       this.canReponseACompleter = fig
     }
     this.correction += '\n\n<br><br>\n'

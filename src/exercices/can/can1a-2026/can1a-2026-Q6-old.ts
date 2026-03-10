@@ -48,7 +48,6 @@ export default class Can1a2026Q6 extends ExerciceCan {
     this.question = `Écrire sous forme d'une fraction irréductible $${f1.texFraction}\\times ${f2.texFraction}$.`
     this.correction = `$${f1.texFraction}\\times ${f2.texFraction}=\\dfrac{${n1}\\times ${ecritureParentheseSiNegatif(n2)}}{${d1} \\times ${ecritureParentheseSiNegatif(d2)}}${produit.texSimplificationAvecEtapes(true, '#f15929')}$`
     this.canEnonce = `Écrire sous forme d'une fraction irréductible <br> \\vspace{0.2cm} $${f1.texFraction}\\times ${f2.texFraction}$.`
-    this.canReponseACompleter = ''
 
     if (this.interactif) {
       this.question += '<br>'

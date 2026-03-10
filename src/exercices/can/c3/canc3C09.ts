@@ -129,8 +129,8 @@ export default class FoisPlusFoisMoins extends ExerciceSimple {
             facteur,
           ).display()
         }
-         this.canEnonce = this.question
-    this.canReponseACompleter = `$\\ldots$ ${objet}`
+
+        this.canReponseACompleter = `$\\ldots$ ${objet}`
         break
       case 2:
         this.reponse = plusOuMoins === 'plus' ? quantité1 : quantité2
@@ -149,8 +149,8 @@ export default class FoisPlusFoisMoins extends ExerciceSimple {
             facteur,
           ).display()
         }
-         this.canEnonce = this.question
-    this.canReponseACompleter = `$\\ldots$ ${objet}`
+
+        this.canReponseACompleter = `$\\ldots$ ${objet}`
         break
 
       case 3:
@@ -174,10 +174,9 @@ export default class FoisPlusFoisMoins extends ExerciceSimple {
         }
         // On écrase les options par défaut
         this.optionsChampTexte = { texteAvant: `<br>`, texteApres: ` ${sexe2}` }
- this.canEnonce = this.question
-    this.canReponseACompleter = `$\\ldots$ ${sexe2}`
+
+        this.canReponseACompleter = `$\\ldots$ ${sexe2}`
         break
     }
-   
   }
 }

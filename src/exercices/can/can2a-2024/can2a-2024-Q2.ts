@@ -2,12 +2,12 @@
  * ⚠️ Cet exercice est utilisé dans le test : tests/e2e/tests/view/viewcan.2024.2e.test.ts ⚠️
  */
 
-import ExerciceSimple from '../../ExerciceSimple'
-import { choice } from '../../../lib/outils/arrayOutils'
-import { texNombre } from '../../../lib/outils/texNombre'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { randint } from '../../../modules/outils'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { choice } from '../../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { texNombre } from '../../../lib/outils/texNombre'
+import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Additionner des relatifs'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -41,10 +41,6 @@ export default class NomExercice extends ExerciceSimple {
       this.reponse = a - b + c
       this.question = ` $${a}-${b}+${c}$`
       this.correction = `$${a}-${b}+${c}=${miseEnEvidence(texNombre(this.reponse, 0))}$`
-      this.canEnonce = this.question
-      this.canReponseACompleter = ''
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

@@ -1,9 +1,9 @@
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import ExerciceCan from '../../ExerciceCan'
-import { randint } from '../../../modules/outils'
 import { choice } from '../../../lib/outils/arrayOutils'
-import { texPrix } from '../../../lib/outils/texNombre'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { prenomM } from '../../../lib/outils/Personne'
+import { texPrix } from '../../../lib/outils/texNombre'
+import { randint } from '../../../modules/outils'
+import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Calculer une somme'
 export const interactifReady = true
@@ -44,7 +44,7 @@ export default class Can2025N5Q27 extends ExerciceCan {
     Il doit payer`
     this.correction = `Les $${b}$ ${patisserie2} coûtent : $${b}\\times ${c} = ${b * c}$ centimes, soit $${texPrix((b * c) / 100)}$ euros.<br>
     En tout, ${p} devra donc payer : $${texPrix((b * c) / 100)}+${a}=${miseEnEvidence(texPrix(a + (b * c) / 100))}$ euros.`
-    this.canEnonce = this.question
+
     this.optionsChampTexte = { texteApres: ' euros.' }
     this.canReponseACompleter = '$\\ldots $ euros'
     if (!this.interactif) {

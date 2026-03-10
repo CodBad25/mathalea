@@ -70,7 +70,5 @@ export default class SoustraireEntierDecimal extends ExerciceSimple {
         )
         break
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

@@ -45,7 +45,5 @@ export default class SimplificationsRacinesCarrees extends ExerciceSimple {
       `${reduction[0]}\\times\\sqrt${reduction[1]}`,
       `\\sqrt${reduction[1]}\\times${reduction[0]}`,
     ]
-    this.canEnonce = this.question // 'Compléter'
-    this.canReponseACompleter = ''
   }
 }

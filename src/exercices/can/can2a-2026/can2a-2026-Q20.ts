@@ -52,8 +52,6 @@ ${fraction.d}\\times \\left(${b}-${fraction.texFraction}\\right)&=${fraction.d}\
 &=${fraction.d}\\times ${difference.texFractionSimplifiee}\\\\
 &=${miseEnEvidence(texNombre(resultatSimplifie.valeurDecimale, 2))}
 \\end{aligned}$`
-
-    this.canEnonce = this.question
   }
 
   nouvelleVersion(): void {

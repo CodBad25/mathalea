@@ -1,8 +1,8 @@
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import ExerciceCan from '../../ExerciceCan'
-import { randint } from '../../../modules/outils'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { reduireAxPlusB } from '../../../lib/outils/ecritures'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { randint } from '../../../modules/outils'
+import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Réduire une expression'
 export const interactifReady = true
@@ -24,8 +24,7 @@ export default class Can2025N4Q23 extends ExerciceCan {
     }
     this.question = `Réduire $${a}x+x$.`
     this.correction = `$${a}x+x=x(${a}+1)=${miseEnEvidence(`${a + 1}x`)}$`
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
+
     this.reponse = `${reduireAxPlusB(a + 1, 0, 'x')}` // ${String(a + 1)}x`
     this.optionsDeComparaison = { expressionsForcementReduites: true }
 

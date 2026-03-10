@@ -34,7 +34,7 @@ export const refs = {
 export default class CoeffDirDroite extends ExerciceSimple {
   constructor() {
     super()
-  this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
+    this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
     this.typeExercice = 'simple'
     this.nbQuestions = 1
   }
@@ -327,7 +327,7 @@ export default class CoeffDirDroite extends ExerciceSimple {
         }
         break
     }
-    this.canEnonce = this.question
+
     this.canReponseACompleter = '$m=\\ldots$'
     this.reponse = m
   }

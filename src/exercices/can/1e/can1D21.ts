@@ -1,9 +1,9 @@
+import Decimal from 'decimal.js'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { texNombre } from '../../../lib/outils/texNombre'
-import ExerciceSimple from '../../ExerciceSimple'
-import Decimal from 'decimal.js'
 import { randint } from '../../../modules/outils'
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre =
   'Déterminer la fonction dérivée d’une fonction $k/x$ ou $k\\sqrt{x}$'
 export const interactifReady = true
@@ -83,7 +83,5 @@ export default class CalculFonctionDeriveeFctRef extends ExerciceSimple {
 
         break
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

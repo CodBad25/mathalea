@@ -67,7 +67,5 @@ export default class AgrandissementReduction extends ExerciceSimple {
     `
         break
     }
-    this.canEnonce = this.question // 'Compléter'
-    this.canReponseACompleter = ''
   }
 }

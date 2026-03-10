@@ -47,7 +47,6 @@ export default class QuestionsAiresEtPerimetres5 extends ExerciceSimple {
 
       this.reponse = a * c * c
 
-      this.canEnonce = this.question // 'Compléter'
       this.canReponseACompleter = '$\\ldots\\text{ cm}^2$'
       this.listeCanEnonces.push(this.canEnonce)
       this.listeCanReponsesACompleter.push(this.canReponseACompleter)
@@ -63,8 +62,6 @@ export default class QuestionsAiresEtPerimetres5 extends ExerciceSimple {
           Ainsi, l'aire a été multipliée par : $\\left(${maFraction.texFraction}\\right)^2=${miseEnEvidence(this.reponse)}$.
       <br>`
 
-      this.canEnonce = this.question // 'Compléter'
-      this.canReponseACompleter = ''
       this.listeCanEnonces.push(this.canEnonce)
       this.listeCanReponsesACompleter.push(this.canReponseACompleter)
     } else {
@@ -82,8 +79,6 @@ export default class QuestionsAiresEtPerimetres5 extends ExerciceSimple {
           Ainsi, les longueurs ont été multipliées par : $\\sqrt{${maFractionAuCarre}}=${miseEnEvidence(this.reponse)}$.
       <br>`
 
-      this.canEnonce = this.question // 'Compléter'
-      this.canReponseACompleter = ''
       this.listeCanEnonces.push(this.canEnonce)
       this.listeCanReponsesACompleter.push(this.canReponseACompleter)
     }

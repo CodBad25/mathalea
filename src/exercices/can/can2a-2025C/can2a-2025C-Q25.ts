@@ -2,7 +2,7 @@ import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import ExerciceCan from '../../ExerciceCan'
-export const titre = 'Calculer la diagonale d\'un carré connaissant son aire'
+export const titre = "Calculer la diagonale d'un carré connaissant son aire"
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const uuid = 'sueni'
@@ -16,7 +16,7 @@ export const refs = {
 
 */
 export default class Can2a2025CQ25 extends ExerciceCan {
-   enonce(aire?: number): void {
+  enonce(aire?: number): void {
     if (aire == null) {
       // aire = c², on choisit c² parmi des carrés parfaits
       aire = choice([4, 9, 16, 25, 36, 49, 64])
@@ -46,7 +46,6 @@ export default class Can2a2025CQ25 extends ExerciceCan {
      d&=${miseEnEvidence(`\\sqrt{${deuxAire}}`)}
      \\end{aligned}$`
 
-    this.canEnonce = this.question
     this.canReponseACompleter = '$\\ldots$ cm'
   }
 

@@ -51,7 +51,5 @@ export default class ProblemesDeRobinets extends ExerciceSimple {
     $${c}$ L, soit $${a}\\times ${c}=${a * c}$ s.`,
       bleuMathalea,
     )
-    this.canEnonce = this.question // 'Compléter'
-    this.canReponseACompleter = ''
   }
 }

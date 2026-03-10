@@ -34,7 +34,7 @@ export default class EquationsCarree extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-   let reponse = ''
+    let reponse = ''
     const a = randint(1, 12)
     const o = latex2d('\\text{O}', -0.2, -0.3, {
       color: 'black',
@@ -218,7 +218,7 @@ export default class EquationsCarree extends ExerciceSimple {
       this.question += `<br>
   $S=$`
     }
-    this.canEnonce = this.question // 'Compléter'
+
     this.canReponseACompleter = '\\hspace{-2.5cm}$S=\\ldots$'
   }
 }

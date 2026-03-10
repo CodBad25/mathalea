@@ -1,3 +1,4 @@
+import { propositionsQcm } from '../../../lib/interactif/qcm'
 import { choice } from '../../../lib/outils/arrayOutils'
 import {
   ecritureAlgebrique,
@@ -6,10 +7,9 @@ import {
   reduirePolynomeDegre3,
 } from '../../../lib/outils/ecritures'
 import { sp } from '../../../lib/outils/outilString'
-import Exercice from '../../Exercice'
 import { fraction } from '../../../modules/fractions'
-import { randint, listeQuestionsToContenu } from '../../../modules/outils'
-import { propositionsQcm } from '../../../lib/interactif/qcm'
+import { listeQuestionsToContenu, randint } from '../../../modules/outils'
+import Exercice from '../../Exercice'
 export const titre =
   'Déterminer le sens de variation d’un pôlynome du second degré'
 export const interactifReady = true
@@ -491,7 +491,6 @@ export default class SecondDegreVariations extends Exercice {
       this.listeCorrections.push(texteCorr)
       listeQuestionsToContenu(this)
       this.canEnonce = texte
-      this.canReponseACompleter = ''
     }
   }
 }

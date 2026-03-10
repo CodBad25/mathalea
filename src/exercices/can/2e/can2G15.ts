@@ -1,8 +1,8 @@
 import { ecritureParentheseSiNegatif } from '../../../lib/outils/ecritures'
-import { sp } from '../../../lib/outils/outilString'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import ExerciceSimple from '../../ExerciceSimple'
+import { sp } from '../../../lib/outils/outilString'
 import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Déterminer le déterminant de deux vecteurs'
 export const interactifReady = true
@@ -49,8 +49,5 @@ export default class DeterminantVecteur extends ExerciceSimple {
       En appliquant à l'énoncé :<br><br>
       $det\\left(\\vec{u}\\,;\\,\\vec{v}\\right)=\\begin{vmatrix}${ux}&${vx}\\\\${uy}&${vy}\\end{vmatrix}=${ux}\\times ${ecritureParentheseSiNegatif(vy)}-${ecritureParentheseSiNegatif(vx)}\\times${ecritureParentheseSiNegatif(uy)}=${miseEnEvidence(`${ux * vy - vx * uy}`)}$.<br>`
     this.reponse = `${det}`
-
-    this.canEnonce = this.question // 'Compléter'
-    this.canReponseACompleter = ''
   }
 }

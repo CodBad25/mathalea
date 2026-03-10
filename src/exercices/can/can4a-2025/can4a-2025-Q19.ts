@@ -1,7 +1,7 @@
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import ExerciceCan from '../../ExerciceCan'
-import { randint } from '../../../modules/outils'
 import { createList } from '../../../lib/format/lists'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { randint } from '../../../modules/outils'
+import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Programme de calcul'
 export const interactifReady = true
@@ -36,8 +36,7 @@ export default class Can2025N4Q19 extends ExerciceCan {
     this.correction = `
     On multiplie le nombre choisi par $${a}$, on obtient : $${a} \\times (${c}) = ${a * c}$.<br>
     On ajoute $${b}$ au résultat précédent : $${a * c}+ ${b} = ${miseEnEvidence(a * c + b)}$.`
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
+
     this.reponse = String(a * c + b)
     if (this.interactif) {
       this.question += '<br>'

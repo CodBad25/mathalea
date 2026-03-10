@@ -1,7 +1,7 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Ajouter un nombre se finissant par 9'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -35,7 +35,5 @@ export default class NomExercice extends ExerciceSimple {
     this.reponse = String(a + b)
     this.question = `$${a}+${b}$`
     this.correction = `$${a}+${b}=${a}+(${b + 1}-1)=(${a}+${b + 1})-1=${a + b + 1}-1=${miseEnEvidence(this.reponse)}$`
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

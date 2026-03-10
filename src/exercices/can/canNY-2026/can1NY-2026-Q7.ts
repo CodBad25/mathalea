@@ -1,7 +1,7 @@
-import ExerciceSimple from '../../ExerciceSimple'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import ExerciceSimple from '../../ExerciceSimple'
 
 import Decimal from 'decimal.js'
 import { randint } from '../../../modules/outils'
@@ -27,17 +27,14 @@ export default class ecritureScien2026 extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const annee=2026
+    const annee = 2026
     const exposant = this.canOfficielle ? 0 : randint(0, 2)
     const a = new Decimal(annee).div(new Decimal(10).pow(exposant))
     this.question = `Donner l'écriture scientifique de $${texNombre(a)}$.`
-    this.reponse = `${texNombre(annee/1000,3)}\\times10^${3 - exposant}`
+    this.reponse = `${texNombre(annee / 1000, 3)}\\times10^${3 - exposant}`
     this.correction = `L'écriture scientifique de $${texNombre(a)}$ est $${miseEnEvidence(`${this.reponse}`)}$.`
     if (this.interactif) {
       this.question += `<br>$${texNombre(a)}=$`
     }
-
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

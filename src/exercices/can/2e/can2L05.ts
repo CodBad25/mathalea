@@ -109,7 +109,5 @@ $<br>`
     if (this.versionQcm) {
       this.reponse = `$${this.reponse}$`
     }
-    this.canEnonce = this.question // 'Compléter'
-    this.canReponseACompleter = ''
   }
 }

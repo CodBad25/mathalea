@@ -1,8 +1,8 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { ecritureAlgebrique, rienSi1 } from '../../../lib/outils/ecritures'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = "Trouver l'extremum à partir d'une forme canonique"
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -37,7 +37,5 @@ export default class Can2025N5Q18 extends ExerciceSimple {
     }
     this.correction = `On reconnaît la forme canonique d'une fonction polynôme du second degré :\\[f(x)=a(x-\\alpha)^2+\\beta\\] où $\\beta$ est l'extremum.<br>
     L'extremum de $f$ est $${miseEnEvidence(beta)}$.`
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

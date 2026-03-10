@@ -3,8 +3,8 @@ import {
   ecritureNombreRelatif,
   ecritureNombreRelatifc,
 } from '../../../lib/outils/ecritures'
-import ExerciceSimple from '../../ExerciceSimple'
 import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const interactifType = 'mathLive'
 export const interactifReady = true
 export const titre = 'Additionner des entiers relatifs (avec parenthèses)'
@@ -63,7 +63,5 @@ export default class AdditionRelatifCAN extends ExerciceSimple {
       ecritureNombreRelatifc(a + b) +
       ' $'
     this.reponse = a + b
-    this.canEnonce = this.question // 'Compléter'
-    this.canReponseACompleter = ''
   }
 }

@@ -240,8 +240,5 @@ $m=\\dfrac{${miseEnEvidence(deltaY, 'blue')}}{${miseEnEvidence(deltaX, 'red')}}$
         }
       }
     }
-
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

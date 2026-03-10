@@ -1,9 +1,9 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { randint } from '../../../modules/outils'
-import { sp } from '../../../lib/outils/outilString'
-import { shuffle } from '../../../lib/outils/arrayOutils'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { shuffle } from '../../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { sp } from '../../../lib/outils/outilString'
+import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Déterminer une médiane'
 export const interactifReady = true
@@ -47,8 +47,7 @@ export default class Mediane extends ExerciceSimple {
       this.correction = `On ordonne la série :  $${val1}$${sp(1)};${sp(1)}$${val2}$${sp(1)};${sp(1)}$${med}$${sp(1)};${sp(1)}$${val3}$${sp(1)};${sp(1)}$${val4}$.<br>
       La série comporte $5$ valeurs donc la médiane est la troisième valeur : $${miseEnEvidence(this.reponse)}$.`
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
+
     if (this.interactif) {
       this.question += '<br>'
     }

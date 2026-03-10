@@ -1,5 +1,5 @@
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { choice, shuffle } from '../../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Sommes de nombres entiers'
@@ -35,8 +35,7 @@ export default class Can2025N6Q1 extends ExerciceCan {
     this.reponse = String(a + b)
     this.question = `$${a}+${b}$ `
     this.correction = `$${a}+${b}=${miseEnEvidence(this.reponse)}$`
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
+
     if (this.interactif) {
       this.question += '$=$'
     }

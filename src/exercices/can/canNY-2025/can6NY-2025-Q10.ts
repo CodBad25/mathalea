@@ -1,8 +1,8 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { texNombre } from '../../../lib/outils/texNombre'
 import Decimal from 'decimal.js'
 import { choice } from '../../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { texNombre } from '../../../lib/outils/texNombre'
+import ExerciceSimple from '../../ExerciceSimple'
 
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 export const titre = 'Décomposer un nombre'
@@ -34,8 +34,5 @@ export default class SommeDeProduitsCompleter extends ExerciceSimple {
     this.question += `<br><br>
             $\\dfrac{${texNombre(2025, 0)}}{${texNombre(den, 0)}}$`
     this.correction = `$\\dfrac{${texNombre(2025, 0)}}{${texNombre(den, 0)}}=${miseEnEvidence(texNombre(a, 3))}$`
-
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

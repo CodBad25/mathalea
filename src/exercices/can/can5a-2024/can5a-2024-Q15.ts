@@ -1,9 +1,9 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { randint } from '../../../modules/outils'
 import { tableauColonneLigne } from '../../../lib/2d/tableau'
-import { context } from '../../../modules/context'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { context } from '../../../modules/context'
+import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre =
   'Calculer une quatrième proportionnelle dans un tableau de proportionnalité'
@@ -49,7 +49,7 @@ export default class NomExercice extends ExerciceSimple {
           Ainsi, on obtient la quatrième proportionnelle en multipliant $${c}$ par $${k}$.<br>
           La valeur cherchée est donc $${c}\\times ${k}=${miseEnEvidence(k * c)}$.`
     }
-    this.canEnonce = this.question
+
     this.canReponseACompleter = '? $=\\ldots$'
     if (!this.interactif) {
       this.question += '? $=\\ldots$'

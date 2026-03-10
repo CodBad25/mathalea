@@ -46,7 +46,5 @@ export default class ProblemesDeVitesse extends ExerciceSimple {
     ${c / a}\\text{ km}$.`,
       'blue',
     )
-    this.canEnonce = this.question // 'Compléter'
-    this.canReponseACompleter = ''
   }
 }

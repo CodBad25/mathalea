@@ -43,8 +43,5 @@ export default class additionFraction extends ExerciceSimple {
     $\\dfrac{${a}}{${texNombre(2025, 0)}} -\\dfrac{1}{${texNombre(4050)}}$`
       this.correction = ` $\\dfrac{${a}}{${texNombre(2025, 0)}} -\\dfrac{1}{${texNombre(4050, 0)}}=\\dfrac{${2 * a}}{${texNombre(4050, 0)}} -\\dfrac{1}{${texNombre(4050, 0)}}=${miseEnEvidence(`\\dfrac{${2 * a - 1}}{${texNombre(4050, 0)}}`)}$`
     }
-
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

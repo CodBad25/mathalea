@@ -55,8 +55,7 @@ export default class AbscisseEnDemis extends ExerciceSimple {
       Object.assign({ scale: 0.5 }, fixeBordures(objets)),
       objets,
     )
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
+
     this.correction = `L'abscisse du point A est $${miseEnEvidence(texNombre(x, 1))}$.`
   }
 }

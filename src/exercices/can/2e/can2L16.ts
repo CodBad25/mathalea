@@ -1,7 +1,7 @@
 import { courbe } from '../../../lib/2d/Courbe'
 import { droiteParPointEtPente } from '../../../lib/2d/droites'
 import { crochetD, crochetG } from '../../../lib/2d/intervalles'
-import {  pointAbstrait } from '../../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { repere } from '../../../lib/2d/reperes'
 import { segment } from '../../../lib/2d/segmentsVecteurs'
 import { latex2d } from '../../../lib/2d/textes'
@@ -60,13 +60,13 @@ export default class EquationsRacCarree extends ExerciceSimple {
       letterSize: 'scriptsize',
       backgroundColor: '',
     })
-      const choix = choice([true, false])
+    const choix = choice([true, false])
     const A = pointAbstrait(2.25, 1.5)
     const Ax = pointAbstrait(A.x, 0)
     const sAAx = segment(A, Ax)
     const O = pointAbstrait(0, 0)
     const sAxBx = segment(O, Ax, 'red')
-   
+
     const f = (x: number) => Math.sqrt(x)
     const Cg = droiteParPointEtPente(pointAbstrait(0, 1.5), 0, '', 'green')
     const r1 = repere({
@@ -88,15 +88,13 @@ export default class EquationsRacCarree extends ExerciceSimple {
     switch (choice([2])) {
       case 1: // sqrt(x)<k
         {
-            const c1 = choix ? crochetD(Ax, 'red') : crochetG(Ax, 'red')
-     const c0 = crochetD(O, 'red')
-        
+          const c1 = choix ? crochetD(Ax, 'red') : crochetG(Ax, 'red')
+          const c0 = crochetD(O, 'red')
+
           sAAx.epaisseur = 2
           sAAx.pointilles = 5
           sAxBx.epaisseur = 2
           sAxBx.tailleExtremites = 4
-
-      
 
           Cg.epaisseur = 2
           const graphiqueC = mathalea2d(
@@ -139,16 +137,14 @@ export default class EquationsRacCarree extends ExerciceSimple {
         break
       case 2: // sqrt(x)>k
         {
-           
-        
           sAAx.epaisseur = 2
           sAAx.pointilles = 5
           const AxI = pointAbstrait(5, 0)
           const sAxAxI = segment(Ax, AxI, 'red')
-           const c1 = choix ? crochetG(Ax, 'red') : crochetD(Ax, 'red')
-     
+          const c1 = choix ? crochetG(Ax, 'red') : crochetD(Ax, 'red')
+
           sAxAxI.epaisseur = 2
-        
+
           sAxAxI.tailleExtremites = 4
           Cg.epaisseur = 2
           const graphiqueC = mathalea2d(
@@ -194,7 +190,7 @@ export default class EquationsRacCarree extends ExerciceSimple {
       this.question += `<br>
   $S=$`
     }
-    this.canEnonce = this.question // 'Compléter'
+
     this.canReponseACompleter = '\\hspace{-2.5cm}$S=\\ldots$'
   }
 }

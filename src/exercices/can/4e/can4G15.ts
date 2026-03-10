@@ -92,7 +92,6 @@ export default class QuestionsAiresEtPerimetres4 extends ExerciceSimple {
     this.correction = ` Le périmètre est donné par : $${texNombre(a)}+${texNombre(b)}+${texNombre(c)}+${texNombre(d)}=${miseEnEvidence(a + b + c + d)}\\text{ m}$.<br>`
     this.reponse = a + b + c + d
 
-    this.canEnonce = this.question // 'Compléter'
     this.canReponseACompleter = '$\\ldots\\text{ m}$'
     this.listeCanEnonces.push(this.canEnonce)
     this.listeCanReponsesACompleter.push(this.canReponseACompleter)

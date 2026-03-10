@@ -24,7 +24,7 @@ export const refs = {
 export default class PlusOuMoins extends ExerciceSimple {
   constructor() {
     super()
-this.spacing=1.5
+    this.spacing = 1.5
     this.typeExercice = 'simple'
     this.nbQuestions = 1
 
@@ -107,7 +107,10 @@ this.spacing=1.5
             this.correction = `${prenom1} a $${b}$ ans ${choix1 ? 'de plus' : ' de moins '} que ${prenom2}.
            Il a donc  (${choix1 ? `$${a}+${b}$` : `$${a}-${b}$`}) ans, soit  ${choix1 ? `$${miseEnEvidence(a + b)}$` : `$${miseEnEvidence(a - b)}$`} ans. `
             if (this.interactif) {
-              this.optionsChampTexte = {texteAvant:'<br>', texteApres: ' ans' }
+              this.optionsChampTexte = {
+                texteAvant: '<br>',
+                texteApres: ' ans',
+              }
             }
           }
         }
@@ -151,13 +154,12 @@ this.spacing=1.5
             this.correction = `${prenom1} a $${a}$ ans et sa sœur  a $${b}$ ans de ${choix1 ? 'de plus' : ' de moins '}.<br>
                             Elle a donc  (${choix1 ? `$${a}+${b}$` : `$${a}-${b}$`}) ans, soit  ${choix1 ? `$${miseEnEvidence(a + b)}$` : `$${miseEnEvidence(a - b)}$`} ans. `
           }
-         
         }
-         if (this.interactif) {
-            this.optionsChampTexte = { texteAvant:'<br>',texteApres: ' ans' }
-          }
-  this.canEnonce = this.question
-    this.canReponseACompleter = `$\\ldots$ ans`
+        if (this.interactif) {
+          this.optionsChampTexte = { texteAvant: '<br>', texteApres: ' ans' }
+        }
+
+        this.canReponseACompleter = `$\\ldots$ ans`
         break
 
       case 2:
@@ -230,10 +232,13 @@ this.spacing=1.5
           }
         }
         if (this.interactif) {
-          this.optionsChampTexte = { texteAvant:'<br>',texteApres: ` ${objets}` }
+          this.optionsChampTexte = {
+            texteAvant: '<br>',
+            texteApres: ` ${objets}`,
+          }
         }
-          this.canEnonce = this.question
-    this.canReponseACompleter = `$\\ldots$ ${objets}`
+
+        this.canReponseACompleter = `$\\ldots$ ${objets}`
         break
 
       case 3:
@@ -262,12 +267,12 @@ this.spacing=1.5
                       Il y a donc  (${choix1 ? `$${a}+${b}$` : `$${a}-${b}$`}) ${choix2 ? ' filles' : ' garçons'}, soit  ${choix1 ? `$${miseEnEvidence(a + b)}$` : `$${miseEnEvidence(a - b)}$`} ${choix2 ? ' filles ' : ' garçons'}. `
           if (this.interactif) {
             this.optionsChampTexte = {
-             texteAvant:'<br>', texteApres: ` ${choix2 ? ' filles' : ' garçons'}`,
+              texteAvant: '<br>',
+              texteApres: ` ${choix2 ? ' filles' : ' garçons'}`,
             }
           }
-          this.canEnonce = this.question
-    this.canReponseACompleter = `$\\ldots$ ${choix2 ? ' filles' : ' garçons'}`
 
+          this.canReponseACompleter = `$\\ldots$ ${choix2 ? ' filles' : ' garçons'}`
         }
         if (choix === 'b') {
           choix1 = choice([true, false])
@@ -293,15 +298,15 @@ this.spacing=1.5
      `
           if (this.interactif) {
             this.optionsChampTexte = {
-             texteAvant:'<br>', texteApres: ` ${choix2 ? ' garçons' : ' filles'}`,
+              texteAvant: '<br>',
+              texteApres: ` ${choix2 ? ' garçons' : ' filles'}`,
             }
           }
-        this.canEnonce = this.question
-    this.canReponseACompleter = `$\\ldots$ ${choix2 ? ' garçons' : ' filles'}`
+
+          this.canReponseACompleter = `$\\ldots$ ${choix2 ? ' garçons' : ' filles'}`
         }
-  
+
         break
     }
-    
   }
 }

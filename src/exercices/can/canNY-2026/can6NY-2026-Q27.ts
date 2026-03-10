@@ -36,14 +36,12 @@ export default class CalculDivers2026 extends ExerciceSimple {
     const Resultat = shuffle(listeResultat)
     this.question = `Recopier le résultat du calcul $${texNombre(annee)}\\times ${a}$ parmi les trois propositions suivantes : <br>
       $${texNombre(Resultat[0])}$${sp(2)} ; ${sp(2)} $${texNombre(Resultat[1])}$ ${sp(2)} ; ${sp(2)}$${texNombre(Resultat[2])}$.`
-    this.correction = `Le chiffre des unités de ce produit est donné par le chiffre des unités de $${annee % 10}\\times ${u}$, soit $${(annee % 1000 * u) % 10}$.<br>
+    this.correction = `Le chiffre des unités de ce produit est donné par le chiffre des unités de $${annee % 10}\\times ${u}$, soit $${((annee % 1000) * u) % 10}$.<br>
       Ainsi,  $${texNombre(annee)}\\times ${a}=${miseEnEvidence(`${texNombre(annee * a)}`)}$.
            `
     this.reponse = `${annee * a}`
     if (this.interactif) {
       this.question += '<br>'
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

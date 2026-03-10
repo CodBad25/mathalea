@@ -133,7 +133,7 @@ export default class LireHeure extends ExerciceSimple {
         },
       ]
     }
-    this.canEnonce = this.question
+
     this.canReponseACompleter = '$\\ldots$ h $\\ldots$ min'
   }
 }

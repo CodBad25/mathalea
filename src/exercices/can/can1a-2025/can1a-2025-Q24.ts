@@ -1,8 +1,8 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { randint } from '../../../modules/outils'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
+import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer une différence de deux carrés'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -38,7 +38,5 @@ export default class Can2025N5Q24 extends ExerciceSimple {
     &=${texNombre(a + b, 0)}\\times 1\\\\
     &=${miseEnEvidence(this.reponse)}
     \\end{aligned}$`
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

@@ -34,7 +34,5 @@ export default class ResteEnMinutes extends ExerciceSimple {
     Quelle est la valeur de $b$ sachant que $a$ est le plus grand possible?`
     this.correction = `$${d} = ${a} \\times 60 + ${b}$ donc $${d}$ minutes = $${a}h ${b}$ min, donc $b=${miseEnEvidence(b)}$.`
     this.reponse = b
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

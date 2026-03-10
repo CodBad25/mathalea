@@ -166,7 +166,7 @@ export default class NomExercice extends ExerciceSimple {
         this.correction = `Le demi-périmètre est $${2 * L + 2 * l}\\div 2 = ${L + l}\\text{ cm}$, la longueur du rectangle est donc égale à  $${L + l}-${l}=${miseEnEvidence(this.reponse)}\\text{ cm}$.`
       }
     }
-    this.canEnonce = this.question
+
     this.canReponseACompleter = '? $=\\ldots\\text{ cm}$'
     if (!this.interactif) {
       this.question += '? $=\\ldots\\text{ cm}$'

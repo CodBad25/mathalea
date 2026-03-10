@@ -47,7 +47,6 @@ export default class NomExercice extends ExerciceSimple {
         this.correction = `Un cube a $${miseEnEvidence(12)}$ arêtes.`
       }
     }
-    this.canEnonce = this.question
 
     if (!this.interactif) {
       this.question += '$\\ldots$'

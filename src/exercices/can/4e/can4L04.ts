@@ -38,7 +38,5 @@ export default class SubstitutionRelatif extends ExerciceSimple {
        Puis, on calcule  $${b}${ecritureAlgebrique(c * a)}=${b + c * a}$.  `)
 
     this.reponse = b + c * a
-    this.canEnonce = this.question // 'Compléter'
-    this.canReponseACompleter = ''
   }
 }

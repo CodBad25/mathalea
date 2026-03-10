@@ -64,7 +64,6 @@ Le volume de ce pavé droit est `
     this.correction = `Le volume d'un pavé droit est : Longueur $\\times$ largeur $\\times$ hauteur.<br>
 On a : $${longueur}\\times ${largeur}\\times ${hauteur}=${miseEnEvidence(texNombre(volume, 0))}\\text{ cm}^3$.`
 
-    this.canEnonce = this.question
     this.canReponseACompleter = '$\\ldots\\text{ cm}^3$'
 
     this.formatChampTexte = KeyboardType.clavierDeBase

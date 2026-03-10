@@ -1,7 +1,7 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { choice } from '../../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Calculer un pourcentage'
 export const interactifReady = true
@@ -56,7 +56,7 @@ export default class NomExercice extends ExerciceSimple {
       On en déduit que le pourcentage de tulipes est $${miseEnEvidence(this.reponse)}\\,\\%$.
      `
     }
-    this.canEnonce = this.question
+
     this.canReponseACompleter = '$\\ldots\\,\\%$'
   }
 }

@@ -18,7 +18,7 @@ export const refs = {
 export default class Can2a2025CQ5 extends ExerciceCan {
   enonce(a?: number): void {
     if (a == null) {
-      a = randint(52, 99, [ 60, 70, 80, 90])
+      a = randint(52, 99, [60, 70, 80, 90])
     }
 
     const resultat = a * 11
@@ -26,10 +26,11 @@ export default class Can2a2025CQ5 extends ExerciceCan {
     this.formatChampTexte = KeyboardType.clavierDeBase
     this.reponse = String(resultat)
     this.question = `$${a}\\times 11=$`
-    if (!this.interactif) { this.question += ' $\\ldots$' }
+    if (!this.interactif) {
+      this.question += ' $\\ldots$'
+    }
     this.correction = `$${a}\\times 11=${a}\\times 10+${a}=${a * 10}+${a}=${miseEnEvidence(String(resultat))}$`
     this.canEnonce = `$${a}\\times 11=$`
-    this.canReponseACompleter = ''
   }
 
   nouvelleVersion(): void {

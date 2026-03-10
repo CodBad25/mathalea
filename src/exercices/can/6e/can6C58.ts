@@ -31,9 +31,8 @@ export default class SommeDiffFractionsCompatibles extends ExerciceSimple {
     this.typeExercice = 'simple'
     this.nbQuestions = 1
     this.spacingCorr = 1.5
-  this.optionsDeComparaison = { fractionEgale: true }
+    this.optionsDeComparaison = { fractionEgale: true }
     this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
- 
   }
 
   nouvelleVersion() {
@@ -129,7 +128,5 @@ ${frac1.texFraction} - ${frac2.texFraction} &= \\dfrac{${frac1.num}\\times ${tex
     }
 
     this.reponse = resultat
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

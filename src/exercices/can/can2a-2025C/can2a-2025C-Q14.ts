@@ -32,11 +32,12 @@ export default class Can2a2025CQ14 extends ExerciceCan {
     this.formatChampTexte = KeyboardType.clavierDeBase
     this.reponse = String(resultat)
     this.question = `$${a}+\\dfrac{${num}}{\\dfrac{1}{${den}}}=$`
-    if (!this.interactif) { this.question += ' $\\ldots$' }
+    if (!this.interactif) {
+      this.question += ' $\\ldots$'
+    }
     this.correction = `$\\dfrac{${num}}{\\dfrac{1}{${den}}}=${num}\\times ${den}=${quotient}$.<br>
     Donc $${a}+\\dfrac{${num}}{\\dfrac{1}{${den}}}=${a}${ecritureAlgebrique(quotient)}=${miseEnEvidence(String(resultat))}$.`
     this.canEnonce = `$${a}+\\dfrac{${num}}{\\dfrac{1}{${den}}}=$`
-    this.canReponseACompleter = ''
   }
 
   nouvelleVersion(): void {

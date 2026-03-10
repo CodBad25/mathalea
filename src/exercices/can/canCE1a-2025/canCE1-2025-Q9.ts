@@ -1,7 +1,7 @@
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import ExerciceCan from '../../ExerciceCan'
-import { randint } from '../../../modules/outils'
 import { context } from '../../../modules/context'
+import { randint } from '../../../modules/outils'
+import ExerciceCan from '../../ExerciceCan'
 export const titre = 'Trouver un nombre'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -62,9 +62,6 @@ export default class Can2025CE1Q9 extends ExerciceCan {
     this.correction = ` ${context.isHtml ? `<i>cent-${chiffre[a][0]}-${chiffre2[b][0]} </i>` : `\\textit{cent-${chiffre[a][0]}-${chiffre2[b][0]}} `} $=
                              ${miseEnEvidence(100 + chiffre[a][1] + chiffre2[b][1])}$ `
 
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
-    this.canEnonce = this.question
     if (this.interactif) {
       this.question += ' <br> '
     }

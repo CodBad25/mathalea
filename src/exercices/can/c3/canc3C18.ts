@@ -42,7 +42,7 @@ Combien de balles ne sont pas rouges ?`
           this.correction = `Le carton contient $${a}$ balles en tout et $${b}$ sont rouges.<br>
            $${a} -${b}=${this.reponse}$<br>
           Dans le carton, $${miseEnEvidence(this.reponse)}$ balles ne sont pas rouges.`
-          this.canEnonce = this.question
+
           this.canReponseACompleter = '$\\ldots$ balles'
           this.optionsChampTexte = { texteApres: 'balles' }
         }
@@ -59,7 +59,7 @@ Combien lui reste-t-il de $\\text{ km}$ à parcourir ?`
           this.correction = `Le cycliste doit parcourir $${a}\\text{ km}$ et il a déjà parcouru $${b}\\text{ km}$.<br>
            $${a} -${b}=${this.reponse}$ <br>
           Le cycliste doit encore parcourir $${miseEnEvidence(this.reponse)}\\text{ km}$.`
-          this.canEnonce = this.question
+
           this.canReponseACompleter = '$\\ldots\\text{ km}$'
           this.optionsChampTexte = { texteApres: '$\\text{ km}$' }
         }
@@ -76,7 +76,7 @@ Combien lui manque-t-il ?`
           this.correction = `${prenom} veut acheter un jeu qui coûte $${a}$ euros mais a seulement  $${b}$ euros.<br>
           $${a} -${b}=${this.reponse}$<br>
           Il manque $${miseEnEvidence(this.reponse)}$ € à  ${prenom} pour acheter son jeu.`
-          this.canEnonce = this.question
+
           this.canReponseACompleter = '$\\ldots$ €'
           this.optionsChampTexte = { texteApres: '€' }
         }
@@ -94,7 +94,7 @@ Combien lui manque-t-il ?`
           this.correction = `${prenom} a acheté un pantalon à $${b}$ € et une chemise pour un total de $${a}$ €.<br>
           $${a} -${b}=${this.reponse}$<br>
           La chemise coûte $${miseEnEvidence(this.reponse)}$ €.`
-          this.canEnonce = this.question
+
           this.canReponseACompleter = '$\\ldots$ €'
           this.optionsChampTexte = { texteApres: '€' }
         }
@@ -111,7 +111,7 @@ Combien de places sont inoccupées ? `
           this.correction = `Au total, il y a  $${texNombre(a, 0)}$ places et seulement $${texNombre(b, 0)}$ places sont occupées.<br>
           $${texNombre(a, 0)} -${texNombre(b, 0)}=${this.reponse}$<br>
           Ainsi, $${miseEnEvidence(this.reponse)}$ places sont inoccupées.`
-          this.canEnonce = this.question
+
           this.canReponseACompleter = '$\\ldots$ places'
           this.optionsChampTexte = { texteApres: 'places' }
         }
@@ -129,7 +129,7 @@ Combien de places sont inoccupées ? `
           this.correction = `Mon salaire mensuel est de $${texNombre(a, 0)}$ € après une augmentation de $${b}$ €.<br>
           $${texNombre(a, 0)} -${b}=${this.reponse}$<br>          
           Mon salaire était de  $${miseEnEvidence(this.reponse)}$ €.`
-          this.canEnonce = this.question
+
           this.canReponseACompleter = '$\\ldots$ €'
           this.optionsChampTexte = { texteApres: '€' }
         }
@@ -146,7 +146,7 @@ Combien de places sont inoccupées ? `
           this.correction = `Le prix d'une voiture est  $${texNombre(a, 0)}$ € avec l'option.<br>
           $${texNombre(a, 0)} -${b}=${this.reponse}$<br>
           Sans l'option confort, le prix de la voiture est $${miseEnEvidence(this.reponse)}$ €.`
-          this.canEnonce = this.question
+
           this.canReponseACompleter = '$\\ldots$ €'
           this.optionsChampTexte = { texteApres: '€' }
         }

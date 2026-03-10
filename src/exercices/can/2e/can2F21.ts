@@ -1,6 +1,3 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { randint } from '../../../modules/outils'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choice } from '../../../lib/outils/arrayOutils'
 import {
@@ -8,7 +5,10 @@ import {
   reduireAxPlusB,
   rienSi1,
 } from '../../../lib/outils/ecritures'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { context } from '../../../modules/context'
+import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Déterminer un seuil avec une fonction affine'
 export const interactifReady = true
@@ -161,7 +161,5 @@ export default class seuilFctAff extends ExerciceSimple {
         }
         break
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

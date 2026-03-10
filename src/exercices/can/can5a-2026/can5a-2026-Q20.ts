@@ -47,8 +47,6 @@ export default class Can52026Q20 extends ExerciceCan {
 
     this.correction = `$${frac.texFraction}=${texNombre(numerateur)}\\times \\dfrac{1}{${texNombre(denominateur)}}$, donc $${texNombre(numerateur)}$ ${nomDenominateur}, soit $${miseEnEvidence(texNombre(resultat))}$.`
     this.reponse = resultat
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 
   nouvelleVersion() {

@@ -33,8 +33,5 @@ export default class Can2025CM1Q28 extends ExerciceSimple {
 
     this.correction = `$${b}$  dizaines $= ${texNombre(b * 10, 0)}$<br>
      $${a}\\times ${b}$  dizaines $=${a}\\times ${texNombre(b * 10, 0)}=${miseEnEvidence(texNombre(a * b * 10, 0))}$`
-
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

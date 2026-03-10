@@ -111,7 +111,5 @@ soit $${p}-${ecritureParentheseSiNegatif(p - m)}=${m}$.
         }
         break
     }
-    this.canEnonce = this.question // 'Compléter'
-    this.canReponseACompleter = ''
   }
 }

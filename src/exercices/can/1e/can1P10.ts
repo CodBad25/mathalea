@@ -1,9 +1,9 @@
-import ExerciceSimple from '../../ExerciceSimple'
+import Decimal from 'decimal.js'
+import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
-import Decimal from 'decimal.js'
-import { choice } from '../../../lib/outils/arrayOutils'
+import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Calculer une probabilité avec des événements indépendants'
 export const interactifReady = true
@@ -48,7 +48,6 @@ export default class esperance extends ExerciceSimple {
     \\end{aligned}$
       `
 
-        this.canEnonce = this.question
         this.canReponseACompleter = '$P(A\\cap B)=\\ldots$'
         if (!this.interactif) {
           this.question += '<br> Calculer $P(A\\cap B)$.'
@@ -68,7 +67,6 @@ export default class esperance extends ExerciceSimple {
     Comme $${texNombre(a, 1)}\\times ${texNombre(b, 1)}=${texNombre(pAinterB, 2)}$, on en déduit que $P(B)=${miseEnEvidence(this.reponse)}$.
       `
 
-        this.canEnonce = this.question
         this.canReponseACompleter = '$P(B)=\\ldots$'
         if (!this.interactif) {
           this.question += '<br> Calculer $P(B)$.'

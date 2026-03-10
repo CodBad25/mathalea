@@ -2,10 +2,10 @@ import {
   ecritureAlgebrique,
   ecritureParentheseSiNegatif,
 } from '../../../lib/outils/ecritures'
-import { sp } from '../../../lib/outils/outilString'
-import ExerciceSimple from '../../ExerciceSimple'
-import { randint } from '../../../modules/outils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { sp } from '../../../lib/outils/outilString'
+import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Déterminer un produit scalaire avec les coordonnées'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -52,7 +52,5 @@ export default class ProduitScalaireCoordonnees extends ExerciceSimple {
     &=${miseEnEvidence(ux * vx + uy * vy + uz * vz)}
     \\end{aligned}$`
     this.reponse = ux * vx + uy * vy
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

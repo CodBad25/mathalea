@@ -1,7 +1,7 @@
-import ExerciceSimple from '../../ExerciceSimple'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import ExerciceSimple from '../../ExerciceSimple'
 
 import { randint } from '../../../modules/outils'
 export const titre = 'Calculer une différence de deux carrés'
@@ -28,7 +28,7 @@ export default class diffDeDeuxCarres extends ExerciceSimple {
     const annee = 2026
     const choix = this.canOfficielle ? 1 : randint(1, 3)
     const a = randint(1, 2)
-    
+
     if (choix === 1) {
       // Cas 1 : 2026² - 2025²
       this.question = `Calculer $${texNombre(annee, 0)}^2-${texNombre(annee - 1, 0)}^2$.`
@@ -64,8 +64,5 @@ export default class diffDeDeuxCarres extends ExerciceSimple {
         this.question += `<br>$${texNombre(c, 0)}^2-${texNombre(annee, 0)}^2=$`
       }
     }
-    
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

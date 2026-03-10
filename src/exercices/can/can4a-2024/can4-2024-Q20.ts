@@ -1,7 +1,7 @@
-import ExerciceSimple from '../../ExerciceSimple'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { randint } from '../../../modules/outils'
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Calculer une somme avec des relatifs'
 export const interactifReady = true
@@ -37,7 +37,5 @@ export default class NomExercice extends ExerciceSimple {
       this.question = `$${a}-${b}+${c}$`
       this.correction = `$\\underbrace{${a}-${b}}_{=${a - b}}+${c}=${a - b}+${c}=${miseEnEvidence(this.reponse)}$`
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

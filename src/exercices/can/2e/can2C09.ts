@@ -134,7 +134,5 @@ export default class MilieuEntre1EtFraction extends ExerciceSimple {
         On calcule d'abord $1+${bonneFraction.texFraction}$ en n'oubliant pas que $1=${un.texFraction}$, puis on multiplie le résultat par $${half.texFraction}$.`)
 
     this.reponse = resultat.simplifie()
-    this.canEnonce = this.question // 'Compléter'
-    this.canReponseACompleter = ''
   }
 }

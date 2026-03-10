@@ -125,7 +125,5 @@ export default class ÉcrireUnQuotient extends ExerciceSimple {
         }
         break
     }
-    this.canEnonce = this.question // 'Compléter'
-    this.canReponseACompleter = ''
   }
 }

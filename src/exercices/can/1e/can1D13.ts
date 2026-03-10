@@ -250,7 +250,5 @@ export default class DeriveePoly3 extends ExerciceSimple {
 
         break
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

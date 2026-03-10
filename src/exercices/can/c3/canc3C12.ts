@@ -40,7 +40,5 @@ export default class ProgrammeCalculInverse extends ExerciceSimple {
     this.correction = `Le nombre qui, divisé par $${b}$ donne $${res}$ est $${res}\\times ${b}=${res * b}$.<br>
       Le nombre qui, augmenté de $${a}$ donne $${res * b}$ est $${res * b}-${a}=${this.reponse}$.<br>
       Le nombre cherché est donc $${this.reponse}$.`
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

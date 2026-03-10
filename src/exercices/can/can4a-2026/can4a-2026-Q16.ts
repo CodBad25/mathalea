@@ -42,7 +42,6 @@ export default class Can20264emeQ16 extends ExerciceCan {
     ?&=${miseEnEvidence(x)}
     \\end{aligned}$`
 
-    this.canEnonce = this.question
     this.canReponseACompleter = '$?=\\ldots$'
     this.reponse = x
 

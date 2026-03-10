@@ -35,7 +35,5 @@ export default class ProduitEntiers5e extends ExerciceSimple {
     On décompose le calcul $${a} \\times ${b}$ en  $(10+${a - 10})\\times ${b}=10\\times ${b} +${a - 10}\\times ${b}$.<br>
        Cela donne :  $${10 * b}+${(a - 10) * b}=${this.reponse}$.
       `)
-    this.canEnonce = this.question // 'Compléter'
-    this.canReponseACompleter = ''
   }
 }

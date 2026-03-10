@@ -35,7 +35,7 @@ export default class Can2025CM1Q11 extends ExerciceSimple {
     this.reponse =
       b === 'dizaines' ? texNombre(a * 10, 1) : texNombre(a * 100, 2)
     this.question = `Le nombre $${texNombre(a, 0)}$ ${b} est égal à `
-    this.canEnonce = this.question
+
     if (!this.interactif) {
       this.question += '$\\ldots$ unités.'
     }

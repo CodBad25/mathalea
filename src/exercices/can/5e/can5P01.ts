@@ -4,8 +4,8 @@ import {
   texteEnCouleur,
 } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
-import ExerciceSimple from '../../ExerciceSimple'
 import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer un prix après une évolution en pourcentage'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -303,7 +303,7 @@ export default class PoucentageE extends ExerciceSimple {
         }
         break
     }
-    this.canEnonce = this.question // 'Compléter'
+
     this.canReponseACompleter = '$\\ldots$ €'
   }
 }

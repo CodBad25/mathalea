@@ -164,7 +164,5 @@ export default class ImageSpline extends ExerciceSimple {
     }
     this.correction = `Pour lire l'image de $${theSpline.x[antecedent]}$, on place la valeur de $${theSpline.x[antecedent]}$ sur l'axe des abscisses (axe de lecture  des antécédents) et on lit
     son image  sur l'axe des ordonnées (axe de lecture des images). On obtient :  $f(${theSpline.x[antecedent]})=${miseEnEvidence(theSpline.y[antecedent])}$`
-    this.canEnonce = this.question // 'Compléter'
-    this.canReponseACompleter = ''
   }
 }

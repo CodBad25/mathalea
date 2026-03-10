@@ -38,7 +38,5 @@ export default class calcAvecDecimaux extends ExerciceSimple {
     this.reponse = texNombre(new Decimal(annee).add(a), 5)
     this.question = `$${texNombre(annee)}+${texNombre(a, 4)}$`
     this.correction = `$${texNombre(annee)}+${texNombre(a, 4)}=${miseEnEvidence(this.reponse)}$`
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

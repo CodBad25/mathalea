@@ -30,8 +30,6 @@ export default class Can2026CE2Q5 extends ExerciceCan {
 
     this.correction = `La moitié de $${nombre}$ est : $${nombre}\\div 2=${miseEnEvidence(texNombre(moitie, 0))}$.`
 
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
     this.reponse = moitie
     this.formatChampTexte = KeyboardType.clavierDeBase
 

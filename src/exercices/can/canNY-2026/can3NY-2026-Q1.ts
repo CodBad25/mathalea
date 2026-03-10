@@ -54,7 +54,5 @@ export default class calcAvecChiffresPrio extends ExerciceSimple {
       this.correction = `$(20+2)\\times ${annee % 10}=22 \\times ${annee % 10}=${miseEnEvidence(texNombre(22 * (annee % 10), 0))}$`
       this.reponse = 22 * (annee % 10)
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

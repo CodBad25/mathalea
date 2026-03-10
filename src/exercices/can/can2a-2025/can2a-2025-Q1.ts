@@ -34,7 +34,6 @@ export default class MultiplierEntierDecimal extends ExerciceSimple {
       this.question = '$0,7\\times 8$ '
       this.correction = `$0,7\\times 8=${miseEnEvidence(this.reponse)}$`
       this.canEnonce = '$0,7\\times 8$'
-      this.canReponseACompleter = ''
     } else {
       const a = new Decimal(randint(6, 9)).div(10)
       const b = randint(5, 9)
@@ -42,7 +41,6 @@ export default class MultiplierEntierDecimal extends ExerciceSimple {
       this.question = `$${texNombre(a, 1)} \\times ${b}$ `
       this.correction = `$${texNombre(a, 1)} \\times ${b}=${miseEnEvidence(this.reponse)}$`
       this.canEnonce = `$${texNombre(a, 1)} \\times ${b}$`
-      this.canReponseACompleter = ''
     }
   }
 }

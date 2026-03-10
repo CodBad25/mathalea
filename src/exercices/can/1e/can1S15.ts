@@ -1,7 +1,7 @@
 import { choice } from '../../../lib/outils/arrayOutils'
 import { ecritureParentheseSiNegatif } from '../../../lib/outils/ecritures'
-import ExerciceSimple from '../../ExerciceSimple'
 import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer la raison d’une suite arithmétique/géométrique'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -54,7 +54,7 @@ Donner la raison $r$ de cette suite.`
         $r=${s}_{${i + 1}}-${s}_{${i}}=${v}-${ecritureParentheseSiNegatif(u)}=${v - u}$.`
 
         this.reponse = r
-        this.canEnonce = this.question
+
         this.canReponseACompleter = '$r=\\ldots$'
         break
       case 'b': // suite géométrique
@@ -75,7 +75,7 @@ Donner la raison $q$ de cette suite.`
         $q=\\dfrac{${s}_{${i + 1}}}{${s}_{${i}}}=\\dfrac{${v}}{${u}}=${v / u}$.`
 
         this.reponse = q
-        this.canEnonce = this.question
+
         this.canReponseACompleter = '$q=\\ldots$'
         break
     }

@@ -55,8 +55,6 @@ export default class Can32026Q14 extends ExerciceCan {
     this.correction = `La somme des $5$ valeurs est :
 $${correctionSomme}=${somme}$.<br>
 La moyenne est donc $\\dfrac{${somme}}{5}=${miseEnEvidence(moyenne)}$.`
-
-    this.canEnonce = this.question
   }
 
   /**

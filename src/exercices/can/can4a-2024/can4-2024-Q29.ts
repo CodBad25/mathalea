@@ -1,8 +1,8 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { choice } from '../../../lib/outils/arrayOutils'
-import { texNombre } from '../../../lib/outils/texNombre'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { choice } from '../../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { texNombre } from '../../../lib/outils/texNombre'
+import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Calculer un produit astucieusement'
 export const interactifReady = true
@@ -52,7 +52,5 @@ export default class NomExercice extends ExerciceSimple {
       \\underbrace{${couple[2]}\\times ${couple[0]}}_{=${couple[2] * couple[0]}}+\\underbrace{0,5 \\times ${couple[0]}}_{=${texNombre(couple[0] / 2, 0)}}=${miseEnEvidence(texNombre(reponse, 1))}$`
     }
     this.reponse = reponse.toFixed(1)
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

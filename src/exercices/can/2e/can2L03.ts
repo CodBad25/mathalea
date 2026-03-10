@@ -71,8 +71,6 @@ export default class CoordonneesPointIntersectionAxeAbscissesDroite extends Exer
             `$(${texNombre(b / a, 1)}\\,;\\,0)$`,
             `$(${a}\\,;\\,0)$`,
           ]
-          this.canEnonce = this.question
-          this.canReponseACompleter = ''
         }
         break
 
@@ -108,8 +106,6 @@ export default class CoordonneesPointIntersectionAxeAbscissesDroite extends Exer
             `$(${texNombre(b * a, 1)}\\,;\\,0)$`,
             `$(${a}\\,;\\,0)$`,
           ]
-          this.canEnonce = this.question
-          this.canReponseACompleter = ''
         }
         break
     }

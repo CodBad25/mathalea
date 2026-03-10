@@ -526,7 +526,5 @@ export default class PointSurCercleTrigo extends ExerciceSimple {
 
         break
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

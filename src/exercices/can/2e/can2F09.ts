@@ -171,7 +171,7 @@ export default class ResoudreEquationsFonctionDeReference extends Exercice {
             }
           }
           this.canEnonce = `Résoudre dans $\\mathbb{R}$ l'équation $x^2=${k}$.`
-          this.canReponseACompleter = ''
+
           break
         case 2:
           k = randint(-5, 10)
@@ -307,7 +307,7 @@ export default class ResoudreEquationsFonctionDeReference extends Exercice {
             `
           }
           this.canEnonce = `Résoudre dans $[0${sp(1)};${sp(1)}+\\infty[$ l'équation $\\sqrt{x}=${k}$.`
-          this.canReponseACompleter = ''
+
           break
 
         case 3:
@@ -399,7 +399,7 @@ export default class ResoudreEquationsFonctionDeReference extends Exercice {
             `
           }
           this.canEnonce = `Résoudre dans $\\mathbb{R}^*$ l'équation $\\dfrac{1}{x}=${k}$.`
-          this.canReponseACompleter = ''
+
           break
       }
       if (this.questionJamaisPosee(i, a, b, k, c)) {

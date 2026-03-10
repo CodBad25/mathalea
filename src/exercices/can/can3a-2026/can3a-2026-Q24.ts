@@ -60,9 +60,6 @@ export default class Can32026Q24 extends ExerciceCan {
   x&=${miseEnEvidence(reponse)}
   \\end{aligned}$<br>
   La solution de l'équation est : $${miseEnEvidence(reponse)}$.`
-
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 
   nouvelleVersion() {

@@ -10,7 +10,8 @@ import { texNombre } from '../../../lib/outils/texNombre'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
-export const titre = 'Calculer une longueur avec le théorème de Thalès (agrandissement/réduction)'
+export const titre =
+  'Calculer une longueur avec le théorème de Thalès (agrandissement/réduction)'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 
@@ -31,7 +32,7 @@ export default class CalculLongueurThales2 extends ExerciceSimple {
     super()
 
     this.typeExercice = 'simple'
-this.spacingCorr=1.5
+    this.spacingCorr = 1.5
     this.nbQuestions = 1
   }
 
@@ -151,6 +152,5 @@ this.spacingCorr=1.5
       ),
       objets,
     )
-    this.canEnonce = this.question // 'Compléter'
   }
 }

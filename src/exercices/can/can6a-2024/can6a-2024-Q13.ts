@@ -1,10 +1,10 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { stringNombre, texPrix } from '../../../lib/outils/texNombre'
-import { randint } from '../../../modules/outils'
 import Decimal from 'decimal.js'
 import { prenomM } from '../../../lib/outils/Personne'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { sp } from '../../../lib/outils/outilString'
+import { stringNombre, texPrix } from '../../../lib/outils/texNombre'
+import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer un coût'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -45,7 +45,7 @@ export default class CoutBDEtRomans extends ExerciceSimple {
     this.reponse = coutUnitaire.mul(10).toFixed(0)
     this.question = `${quidam} achète $${stringNombre(nbBds, 0)}$ BD à 
     $${stringNombre(coutUnitaire, 2, true)}$ € ${sp(0.5)} l'unité et $${stringNombre(nbRomans, 0)}$ romans à $${stringNombre(coutUnitaire, 2, true)}$ €${sp(0.5)} l'unité.`
-    this.canEnonce = this.question
+
     this.question += '<br> Il paye : '
     if (!this.interactif) {
       this.question += '$\\ldots$ €'

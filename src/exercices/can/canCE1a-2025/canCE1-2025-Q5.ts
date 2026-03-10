@@ -1,6 +1,6 @@
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import ExerciceCan from '../../ExerciceCan'
 import { randint } from '../../../modules/outils'
+import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Chercher un nombre'
 export const interactifReady = true
@@ -37,7 +37,6 @@ export default class Can2025CE1Q5 extends ExerciceCan {
       this.correction += `$${miseEnEvidence(b * 100 + a * 10 + i)}$ ; `
     }
     this.correction += `$${miseEnEvidence(b * 100 + a * 10 + 9)}$. `
-    this.canEnonce = this.question
   }
 
   nouvelleVersion() {

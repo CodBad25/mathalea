@@ -1,9 +1,9 @@
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import ExerciceCan from '../../ExerciceCan'
-import { randint } from '../../../modules/outils'
 import { prenomF } from '../../../lib/outils/Personne'
 import { choice } from '../../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
+import { randint } from '../../../modules/outils'
+import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Fraction restante'
 export const interactifReady = true
@@ -35,7 +35,7 @@ export default class Can2025N4Q24 extends ExerciceCan {
     Elle utilise donc $${texNombre(c / parts, 0)}$ L.<br>
 $${c}-${texNombre(c / parts, 0)}=${texNombre(c - c / parts, 0)}$<br>
     Il reste $${miseEnEvidence((reste * c) / parts)}$ L.`
-    this.canEnonce = this.question
+
     this.canReponseACompleter = '$\\ldots\\text{ L}$'
     this.reponse = `${Math.round((reste * c) / parts)}`
     this.optionsChampTexte = { texteApres: ' L' }

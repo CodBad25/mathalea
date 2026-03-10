@@ -2,12 +2,12 @@
  * ⚠️ Cet exercice est utilisé dans le test : tests/e2e/tests/view/viewcan.2024.2e.test.ts ⚠️
  */
 
-import ExerciceSimple from '../../ExerciceSimple'
-import { choice } from '../../../lib/outils/arrayOutils'
 import Decimal from 'decimal.js'
-import { texNombre } from '../../../lib/outils/texNombre'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { choice } from '../../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { texNombre } from '../../../lib/outils/texNombre'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Multiplier par 1,5 ou 2,5 ou ...'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -35,7 +35,6 @@ export default class NomExercice extends ExerciceSimple {
       this.question = '$4\\times 2,5$ '
       this.correction = `$4\\times 2,5=${miseEnEvidence(10)}$`
       this.canEnonce = '$4\\times 2,5$'
-      this.canReponseACompleter = ''
     } else {
       const couple = choice([
         [4, 25],
@@ -53,7 +52,6 @@ export default class NomExercice extends ExerciceSimple {
       this.question = `$${a} \\times ${texNombre(b, 1)}$ `
       this.correction = `$${a} \\times ${texNombre(b, 1)}=${miseEnEvidence(texNombre(a * b, 1))}$`
       this.canEnonce = `$${a} \\times ${texNombre(b, 1)}$`
-      this.canReponseACompleter = ''
     }
   }
 }

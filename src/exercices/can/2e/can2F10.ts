@@ -1,17 +1,16 @@
-import { choice } from '../../../lib/outils/arrayOutils'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { propositionsQcm } from '../../../lib/interactif/qcm'
 import { extraireRacineCarree } from '../../../lib/outils/calculs'
 import { texFractionReduite } from '../../../lib/outils/deprecatedFractions'
 import {
   ecritureAlgebrique,
   ecritureParentheseSiNegatif,
 } from '../../../lib/outils/ecritures'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { arrondi } from '../../../lib/outils/nombres'
 import { sp } from '../../../lib/outils/outilString'
 import { texNombre } from '../../../lib/outils/texNombre'
-import Exercice from '../../Exercice'
 import { listeQuestionsToContenu, randint } from '../../../modules/outils'
-import { propositionsQcm } from '../../../lib/interactif/qcm'
-import { arrondi } from '../../../lib/outils/nombres'
+import Exercice from '../../Exercice'
 export const titre = 'Résoudre une équation avec une fonction de référence*'
 export const interactifReady = true
 export const interactifType = 'qcm'
@@ -42,11 +41,11 @@ export default class ResoudreEquationsFonctionDeReference2 extends Exercice {
   nouvelleVersion() {
     let texte, texteCorr, k, b, c, props
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
-      switch (choice([1, 2, 3, 4, 5, 6])) {
+      switch (randint(1, 6)) {
         case 1:
           b = randint(-5, 5, 0)
           c = randint(-5, 5, 0)
-          k = arrondi(c - b)
+          k = c - b
           texte = `L'ensemble des solutions $S$ de l'équation $x^2${ecritureAlgebrique(b)}=${c}$ est :
                  `
           if (k > 0) {
@@ -70,26 +69,26 @@ export default class ResoudreEquationsFonctionDeReference2 extends Exercice {
                 ],
               }
             } else {
-              if (extraireRacineCarree(k)[1] === k) {
-                this.autoCorrection[i] = {
-                  enonce: texte,
+              // if (extraireRacineCarree(k)[1] === k) {
+              this.autoCorrection[i] = {
+                enonce: texte,
 
-                  propositions: [
-                    {
-                      texte: `$S=\\{-\\sqrt{${c - b}}${sp(1)};${sp(1)}\\sqrt{${c - b}}\\}$`,
-                      statut: true,
-                    },
-                    {
-                      texte: '$S=\\emptyset$',
-                      statut: false,
-                    },
-                    {
-                      texte: `$S=\\{\\sqrt{${c - b}}\\}$`,
-                      statut: false,
-                    },
-                  ],
-                }
-              } else {
+                propositions: [
+                  {
+                    texte: `$S=\\{-\\sqrt{${k}}${sp(1)};${sp(1)}\\sqrt{${k}}\\}$`,
+                    statut: true,
+                  },
+                  {
+                    texte: '$S=\\emptyset$',
+                    statut: false,
+                  },
+                  {
+                    texte: `$S=\\{\\sqrt{${k}}\\}$`,
+                    statut: false,
+                  },
+                ],
+              }
+              /*   } else {
                 this.autoCorrection[i] = {
                   enonce: texte,
 
@@ -108,7 +107,7 @@ export default class ResoudreEquationsFonctionDeReference2 extends Exercice {
                     },
                   ],
                 }
-              }
+              } */
             }
           }
 
@@ -122,7 +121,7 @@ export default class ResoudreEquationsFonctionDeReference2 extends Exercice {
                   statut: true,
                 },
                 {
-                  texte: '$S=\\{1}\\}$',
+                  texte: '$S=\\{1\\}$',
                   statut: false,
                 },
                 {
@@ -229,7 +228,7 @@ export default class ResoudreEquationsFonctionDeReference2 extends Exercice {
               <br>Ainsi, $S=\\emptyset$. `
           }
           this.canEnonce = `Résoudre dans $\\mathbb{R}$ l'équation $x^2${ecritureAlgebrique(b)}=${c}$.`
-          this.canReponseACompleter = ''
+
           break
         case 2:
           b = randint(-5, 5, 0)
@@ -310,7 +309,7 @@ export default class ResoudreEquationsFonctionDeReference2 extends Exercice {
                   statut: true,
                 },
                 {
-                  texte: '$S=\\{1}\\}$',
+                  texte: '$S=\\{1\\}$',
                   statut: false,
                 },
                 {
@@ -421,7 +420,7 @@ export default class ResoudreEquationsFonctionDeReference2 extends Exercice {
         <br>Ainsi, $S=\\emptyset$. `
           }
           this.canEnonce = `Résoudre dans $\\mathbb{R}$ l'équation $-x^2${ecritureAlgebrique(b)}=${c}$.`
-          this.canReponseACompleter = ''
+
           break
 
         case 3:
@@ -552,7 +551,7 @@ export default class ResoudreEquationsFonctionDeReference2 extends Exercice {
   `
           }
           this.canEnonce = `Résoudre dans $[0${sp(1)};${sp(1)}+\\infty[$ l'équation $\\sqrt{x}${ecritureAlgebrique(b)}=${c}$.`
-          this.canReponseACompleter = ''
+
           break
         case 4:
           b = randint(-5, 5, 0)
@@ -699,7 +698,7 @@ export default class ResoudreEquationsFonctionDeReference2 extends Exercice {
     `
           }
           this.canEnonce = `Résoudre dans $[0${sp(1)};${sp(1)}+\\infty[$ l'équation $-\\sqrt{x}${ecritureAlgebrique(b)}=${c}$.`
-          this.canReponseACompleter = ''
+
           break
         case 5:
           b = randint(-10, 10, 0)
@@ -780,11 +779,11 @@ export default class ResoudreEquationsFonctionDeReference2 extends Exercice {
                   statut: true,
                 },
                 {
-                  texte: '$S=\\left\\{0\\right\\}$',
+                  texte: '$S=\\{0\\}$',
                   statut: false,
                 },
                 {
-                  texte: '$S=\\left\\{-1\\right\\}$',
+                  texte: '$S=\\{-1\\}$',
                   statut: false,
                 },
               ],
@@ -818,7 +817,7 @@ export default class ResoudreEquationsFonctionDeReference2 extends Exercice {
   `
           }
           this.canEnonce = `Résoudre dans $\\mathbb{R}^*$ l'équation $\\dfrac{1}{x}${ecritureAlgebrique(b)}=${c}$.`
-          this.canReponseACompleter = ''
+
           break
         case 6:
         default:
@@ -900,11 +899,11 @@ export default class ResoudreEquationsFonctionDeReference2 extends Exercice {
                   statut: true,
                 },
                 {
-                  texte: '$S=\\left\\{0\\right\\}$',
+                  texte: '$S=\\{0\\}$',
                   statut: false,
                 },
                 {
-                  texte: '$S=\\left\\{-1\\right\\}$',
+                  texte: '$S=\\{1\\}$',
                   statut: false,
                 },
               ],
@@ -938,7 +937,7 @@ export default class ResoudreEquationsFonctionDeReference2 extends Exercice {
       `
           }
           this.canEnonce = `Résoudre dans $\\mathbb{R}^*$ l'équation $${b}-\\dfrac{1}{x}=${c}$.`
-          this.canReponseACompleter = ''
+
           break
       }
       if (this.questionJamaisPosee(i, k, b, c)) {

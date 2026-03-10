@@ -45,8 +45,7 @@ export default class Can20264emeQ17 extends ExerciceCan {
       this.correction = `Le chiffre des millièmes est ${c > 5 ? 'supérieur' : 'inférieur'} à $5$, donc  l'arrondi au centième de $${texNombre(val, 3)}$ est $${miseEnEvidence(texNombre(arrondi(val, 2), 2))}$.`
       this.reponse = val.toFixed(2)
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
+
     if (!this.interactif) {
       this.question += ' $\\ldots$'
     }

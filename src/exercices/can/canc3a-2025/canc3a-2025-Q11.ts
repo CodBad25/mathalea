@@ -1,10 +1,10 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 
-import { texNombre } from '../../../lib/outils/texNombre'
 import { choice } from '../../../lib/outils/arrayOutils'
+import { texNombre } from '../../../lib/outils/texNombre'
 export const titre = 'Calculer avec des dixèmes/centièmes'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -37,7 +37,7 @@ export default class Can2025CM2Q11 extends ExerciceSimple {
         ? [`${texNombre(a / 10, 1)}`, `${Math.floor(a / 10)}`]
         : [`${texNombre(a / 100, 2)}`, `${Math.floor(a / 100)}`]
     this.question = `Le nombre $${texNombre(a, 0)}$ ${b} est égal à `
-    this.canEnonce = this.question
+
     if (!this.interactif) {
       this.question += '$\\ldots$ unités.'
     }

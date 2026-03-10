@@ -1,8 +1,8 @@
-import ExerciceSimple from '../../ExerciceSimple'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { randint } from '../../../modules/outils'
-import { choice } from '../../../lib/outils/arrayOutils'
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Appliquer un pourcentage'
 export const interactifReady = true
@@ -48,7 +48,7 @@ export default class NomExercice extends ExerciceSimple {
         $\\dfrac{1}{10}\\times ${val}=${val}\\div 10=${miseEnEvidence(this.reponse)}$ €`
       }
     }
-    this.canEnonce = this.question
+
     this.canReponseACompleter = '$\\ldots$ €'
     if (!this.interactif) {
       this.question += '$\\ldots$ €'

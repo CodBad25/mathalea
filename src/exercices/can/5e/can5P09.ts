@@ -1,9 +1,9 @@
+import { texPrix } from '../../../lib/format/style'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { texteEnCouleur } from '../../../lib/outils/embellissements'
-import { texPrix } from '../../../lib/format/style'
 import { texNombre } from '../../../lib/outils/texNombre'
-import ExerciceSimple from '../../ExerciceSimple'
 import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = "Calculer un prix à partir d'un prix au kg"
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -165,7 +165,7 @@ export default class CalculPrix extends ExerciceSimple {
         break
     }
     this.reponse = this.reponse.toFixed(2)
-    this.canEnonce = this.question // 'Compléter'
+
     this.canReponseACompleter = '$\\ldots$ €'
   }
 }

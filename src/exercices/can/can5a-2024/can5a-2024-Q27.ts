@@ -106,7 +106,7 @@ export default class NomExercice extends ExerciceSimple {
       )
       this.correction = `$BC=${texNombre(a, 0)}-${texNombre(b, 1)}=${miseEnEvidence(texNombre(a - b, 1))}$`
     }
-    this.canEnonce = this.question
+
     this.reponse = reponse.toFixed(1)
     this.canReponseACompleter = 'BC $=\\ldots$'
     if (!this.interactif) {

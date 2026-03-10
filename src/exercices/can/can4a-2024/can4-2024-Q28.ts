@@ -1,11 +1,11 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { randint } from '../../../modules/outils'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choice } from '../../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import Hms from '../../../modules/Hms'
 import { context } from '../../../modules/context'
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Transformer une heure décimale en heures/minutes'
 export const interactifReady = true
@@ -48,7 +48,7 @@ export default class NomExercice extends ExerciceSimple {
       }
       this.correction = `$${texNombre(a + b)}$ h $ = ${a}$ h $ +$ $ ${texNombre(b)} \\times 60$ min $  = ${miseEnEvidence(a)}$ h $${miseEnEvidence(d)}$ min`
     }
-    this.canEnonce = this.question
+
     this.canReponseACompleter = '$\\ldots$ h $\\ldots$ min'
   }
 }

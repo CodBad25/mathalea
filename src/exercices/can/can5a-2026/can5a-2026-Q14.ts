@@ -47,7 +47,6 @@ export default class Can52026Q14 extends ExerciceCan {
 
     this.correction += `Ainsi, $\\dfrac{${a}}{${b}}=${question === 'num' ? `\\dfrac{${miseEnEvidence(coeff * a)}}{${c}}` : `\\dfrac{${c}}{${miseEnEvidence(coeff * b)}}`}$.`
 
-    this.canEnonce = this.question
     this.canReponseACompleter = '$\\text{? }=\\ldots$'
 
     if (this.interactif) {

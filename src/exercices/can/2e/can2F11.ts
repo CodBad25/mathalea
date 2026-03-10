@@ -1,10 +1,10 @@
+import { propositionsQcm } from '../../../lib/interactif/qcm'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { abs } from '../../../lib/outils/nombres'
 import { texNombre } from '../../../lib/outils/texNombre'
-import Exercice from '../../Exercice'
 import { listeQuestionsToContenu, randint } from '../../../modules/outils'
-import { propositionsQcm } from '../../../lib/interactif/qcm'
+import Exercice from '../../Exercice'
 export const titre = 'Utiliser la fonction carré pour comparer deux images'
 export const interactifReady = true
 export const interactifType = 'qcm'
@@ -94,7 +94,7 @@ export default class ComparerAvecFctCarre extends Exercice {
           alors  $${texNombre(b)}^2${miseEnEvidence('\\boldsymbol{<}', 'blue')}${texNombre(a)}^2$.`
           }
           this.canEnonce = `Comparer $${texNombre(a)}^2$ et $${texNombre(b)}^2$.`
-          this.canReponseACompleter = ''
+
           break
         case 2:
           a =
@@ -153,7 +153,7 @@ export default class ComparerAvecFctCarre extends Exercice {
         alors  $(${texNombre(b)})^2${miseEnEvidence('\\boldsymbol{>}', 'blue')}(${texNombre(a)})^2$.`
           }
           this.canEnonce = `Comparer $(${texNombre(a)})^2$ et $(${texNombre(b)})^2$.`
-          this.canReponseACompleter = ''
+
           break
         case 3:
         default:
@@ -200,12 +200,10 @@ export default class ComparerAvecFctCarre extends Exercice {
             if (choice([true, false])) {
               texte = `Comparer $${texNombre(a)}^2$ et $(${texNombre(b)})^2$.`
               this.canEnonce = `Comparer $${texNombre(a)}^2$ et $(${texNombre(b)})^2$.`
-              this.canReponseACompleter = ''
             } else {
               texte = `Comparer  $(${texNombre(b)})^2$ et $${texNombre(a)}^2$.`
             }
             this.canEnonce = `Comparer  $(${texNombre(b)})^2$ et $${texNombre(a)}^2$.`
-            this.canReponseACompleter = ''
           }
 
           texteCorr = ` Le nombre $${texNombre(b)}$ est négatif, alors que le nombre $${texNombre(a)}$ est positif.

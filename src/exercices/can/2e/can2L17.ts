@@ -97,7 +97,7 @@ export default class InequationTableau extends ExerciceSimple {
         this.correction = `Les solutions sont  les antécédents ($x$) dont les images ($f(x)$) sont 
         ${signe === '>' || signe === '<' ? 'strictement' : ''} ${signe === '>' || signe === '\\geqslant' ? 'positives (signe $+$ dans le tableau de signes)' : 'négatives (signe $-$ dans le tableau de signes)'}.<br>
             Ainsi,   $S=${miseEnEvidence(`${this.reponse}`)}$`
-        this.canEnonce = this.question
+
         this.canReponseACompleter = '$S=\\ldots$'
         if (this.interactif) {
           this.question += '<br>$S=$'
@@ -154,7 +154,7 @@ export default class InequationTableau extends ExerciceSimple {
         this.correction = `Les solutions sont  les antécédents ($x$) dont les images ($f(x)$) sont ${signe === '>' || signe === '<' ? 'strictement' : ''} 
       ${signe === '>' || signe === '\\geqslant' ? 'positives (signe $+$ dans le tableau de signes)' : 'négatives (signe $-$ dans le tableau de signes)'}.<br>
           Ainsi,   $S=${miseEnEvidence(`${this.reponse}`)}$`
-        this.canEnonce = this.question
+
         this.canReponseACompleter = '$S=\\ldots$'
         if (this.interactif) {
           this.question += '<br>$S=$'

@@ -1,9 +1,9 @@
-import ExerciceSimple from '../../ExerciceSimple'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
+import ExerciceSimple from '../../ExerciceSimple'
 
-import { randint } from '../../../modules/outils'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { randint } from '../../../modules/outils'
 export const titre = 'Rechercher un nombre'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -26,7 +26,7 @@ export default class rechercherUnNombre2026 extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const annee=2026
+    const annee = 2026
     const a = this.canOfficielle ? 6 : randint(5, 20)
     this.reponse = texNombre(a, 0)
 
@@ -38,7 +38,5 @@ export default class rechercherUnNombre2026 extends ExerciceSimple {
     if (this.interactif) {
       this.question += '<br>'
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

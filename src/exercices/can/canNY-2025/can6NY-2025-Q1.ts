@@ -54,7 +54,5 @@ export default class calcAvecChiffres extends ExerciceSimple {
       this.correction = `$(2+0)\\times (2+5)=2 \\times 7=${miseEnEvidence(texNombre(14, 0))}$`
       this.reponse = 14
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

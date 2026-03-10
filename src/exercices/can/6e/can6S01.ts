@@ -87,7 +87,5 @@ export default class LectureDiagrammeBarre extends ExerciceSimple {
     )
     this.question += ` Combien y a-t-il de ${valeurs[n][0]} en tout ?`
     this.correction = `Il y a $${a}+${b}+${c} = ${this.reponse}$ ${valeurs[n][0]} en tout.`
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

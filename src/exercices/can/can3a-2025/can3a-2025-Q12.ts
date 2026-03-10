@@ -1,7 +1,7 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Soustraire 19, 29, ...., 99 à un entier'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -32,8 +32,6 @@ export default class AdditionnerEntier extends ExerciceSimple {
     this.question = `$${a}-${b}$ `
     this.correction = `$${a}-${b}=${a}-${b + 1}+1=${miseEnEvidence(a - b)}$`
 
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
     if (this.interactif) {
       this.question += ' $=$'
     }

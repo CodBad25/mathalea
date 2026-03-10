@@ -196,7 +196,5 @@ export default class CalculTermeSuiteRec2 extends ExerciceSimple {
         this.reponse = u
         break
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

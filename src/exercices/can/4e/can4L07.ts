@@ -175,7 +175,5 @@ export default class ReduireExp extends ExerciceSimple {
         break
     }
     this.reponse = reponse
-    this.canEnonce = this.question // 'Compléter'
-    this.canReponseACompleter = ''
   }
 }

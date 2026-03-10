@@ -56,7 +56,7 @@ export default class ProportionnaliteCompliquee extends ExerciceSimple {
     Ainsi, le prix est alors donné par la différence des deux prix. <br>
       On a  $${d}$ kg $= ${c + d}$ kg $-$ $${c}$ kg, donc les $${d}$ kg de ${fruits[a][0]} coûteront $${texPrix((c + d) * b)}$ € $ - ${texPrix(c * b)}$ € $ =${miseEnEvidence(texPrix(this.reponse))}$ €.`
     this.reponse = this.reponse.toFixed(2)
-    this.canEnonce = this.question
+
     this.canReponseACompleter = '$\\dots$ €'
   }
 }

@@ -21,7 +21,13 @@ export default class Can2a2025CQ21 extends ExerciceCan {
       // On génère 5 nombres dont la somme est divisible par 5
       let somme: number
       do {
-        valeurs = [randint(8, 20), randint(8, 20), randint(8, 20), randint(8, 20), randint(8, 20)]
+        valeurs = [
+          randint(8, 20),
+          randint(8, 20),
+          randint(8, 20),
+          randint(8, 20),
+          randint(8, 20),
+        ]
         somme = valeurs.reduce((s, v) => s + v, 0)
       } while (somme % 5 !== 0)
     }
@@ -32,10 +38,11 @@ export default class Can2a2025CQ21 extends ExerciceCan {
     this.formatChampTexte = KeyboardType.clavierDeBase
     this.reponse = String(moyenne)
     this.question = `Calculer la moyenne de :<br>$${valeurs.join(' ; ')}$<br>`
-    if (!this.interactif) { this.question += '$\\ldots$' }
+    if (!this.interactif) {
+      this.question += '$\\ldots$'
+    }
     this.correction = `Moyenne $=\\dfrac{${valeurs.join('+')}}{5}=\\dfrac{${somme}}{5}=${miseEnEvidence(String(moyenne))}$`
     this.canEnonce = `Calculer la moyenne de : $${valeurs.join(' - ')}$`
-    this.canReponseACompleter = ''
   }
 
   nouvelleVersion(): void {

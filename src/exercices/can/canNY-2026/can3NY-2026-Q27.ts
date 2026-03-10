@@ -1,7 +1,7 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 
 import { ecritureAlgebrique } from '../../../lib/outils/ecritures'
 import { texNombre } from '../../../lib/outils/texNombre'
@@ -26,7 +26,7 @@ export default class ComparerFractions extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const annee= 2026
+    const annee = 2026
     const a = this.canOfficielle ? 3 : randint(-5, 5, [0, -1, 1])
     this.reponse = this.canOfficielle ? 5 : randint(-9, 9, [-1, 0, 1])
     const b = -a * this.reponse + annee
@@ -47,7 +47,5 @@ export default class ComparerFractions extends ExerciceSimple {
     if (this.interactif) {
       this.question += '<br>'
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

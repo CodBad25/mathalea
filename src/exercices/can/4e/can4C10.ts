@@ -1,10 +1,10 @@
-import { choice } from '../../../lib/outils/arrayOutils'
-import { texteEnCouleur } from '../../../lib/outils/embellissements'
-import { simplificationDeFractionAvecEtapes } from '../../../lib/outils/deprecatedFractions'
-import ExerciceSimple from '../../ExerciceSimple'
-import { randint } from '../../../modules/outils'
-import { fraction } from '../../../modules/fractions'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { choice } from '../../../lib/outils/arrayOutils'
+import { simplificationDeFractionAvecEtapes } from '../../../lib/outils/deprecatedFractions'
+import { texteEnCouleur } from '../../../lib/outils/embellissements'
+import { fraction } from '../../../modules/fractions'
+import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Calculer une somme/différence de fractions égyptiennes'
 export const interactifReady = true
@@ -30,7 +30,7 @@ export default class SommeDifferenceFractionsEgyptiennes extends ExerciceSimple 
 
     this.optionsDeComparaison = { fractionIrreductible: true }
     this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
-          this.optionsChampTexte = { texteAvant: '<br>' }
+    this.optionsChampTexte = { texteAvant: '<br>' }
   }
 
   nouvelleVersion() {
@@ -59,7 +59,5 @@ export default class SommeDifferenceFractionsEgyptiennes extends ExerciceSimple 
       On en déduit : $\\dfrac{1}{${a}}-\\dfrac{1}{${b}}=\\dfrac{${b}-${a}}{${a * b}}=\\dfrac{${b - a}}{${a * b}}${simplificationDeFractionAvecEtapes(b - a, a * b)}$.
           `)
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

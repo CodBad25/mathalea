@@ -1,6 +1,6 @@
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import ExerciceCan from '../../ExerciceCan'
 import { randint } from '../../../modules/outils'
+import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Calculer un produit astucieusement'
 export const interactifReady = true
@@ -26,8 +26,7 @@ export default class Can2025N5Q29 extends ExerciceCan {
     this.reponse = 0
     this.question = `$(${n}\\times${a}+${b})\\times(${c}-${c})$`
     this.correction = `Étant donné que $${c}-${c}=0$, le résultat est $${miseEnEvidence(0)}$ quelle que soit la valeur du premier facteur.`
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
+
     if (this.interactif) this.question += ' $=$'
   }
 

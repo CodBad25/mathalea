@@ -1,9 +1,9 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { texNombre } from '../../../lib/outils/texNombre'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { randint } from '../../../modules/outils'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { choice } from '../../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { texNombre } from '../../../lib/outils/texNombre'
+import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Convertir  cL <-> L'
 export const interactifReady = true
@@ -45,7 +45,7 @@ export default class NomExercice extends ExerciceSimple {
         this.question = `$${texNombre(a, 1)}\\text{ L }=$ `
         this.correction = `Comme $1$ L $=100$ cL, pour passer des "L" au "cL", on multiplie par $100$.<br>
       Ainsi $${texNombre(a, 1)}\\text{ L }=${miseEnEvidence(texNombre(a * 100, 1))}$ cL`
-        this.canEnonce = this.question
+
         this.canReponseACompleter = '$\\ldots$ cL'
         if (!this.interactif) {
           this.question += '$\\ldots$ cL'
@@ -58,7 +58,7 @@ export default class NomExercice extends ExerciceSimple {
         this.question = `$${texNombre(a, 1)}\\text{ cL }=$ `
         this.correction = `Comme $1$ cL $=0,01$ L, pour passer des "cL" au "L", on divise par $100$.<br>
       Ainsi $${texNombre(a, 1)}\\text{ cL }=${miseEnEvidence(texNombre(a / 100, 1))}$ L`
-        this.canEnonce = this.question
+
         this.canReponseACompleter = '$\\ldots$ L'
         if (!this.interactif) {
           this.question += '$\\ldots$ L'

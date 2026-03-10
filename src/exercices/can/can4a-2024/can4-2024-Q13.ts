@@ -1,8 +1,8 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { randint } from '../../../modules/outils'
-import FractionEtendue from '../../../modules/FractionEtendue'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import FractionEtendue from '../../../modules/FractionEtendue'
+import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Calculer une probabilité'
 export const interactifReady = true
@@ -40,7 +40,5 @@ export default class NomExercice extends ExerciceSimple {
       this.correction = `Il y a $${a}$ boules rouges sur un total de $${a + b}$ boules. <br>
       La probabilité de tirer une boule rouge est donc  $${miseEnEvidence(this.reponse)}${new FractionEtendue(a, a + b).texSimplificationAvecEtapes()}$.`
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

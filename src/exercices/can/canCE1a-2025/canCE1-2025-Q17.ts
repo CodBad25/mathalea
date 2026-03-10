@@ -1,6 +1,6 @@
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import ExerciceCan from '../../ExerciceCan'
 import { randint } from '../../../modules/outils'
+import ExerciceCan from '../../ExerciceCan'
 export const titre = "Trouver la moitié d'un nombre"
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -27,7 +27,6 @@ export default class Can2025CE1Q17 extends ExerciceCan {
     $${a}\\times 4=${4 * a}$<br>
     Il y a donc $${miseEnEvidence(4 * a)}$ pattes.`
 
-    this.canEnonce = this.question
     this.canReponseACompleter = ' $\\ldots$  pattes'
     if (this.interactif) {
       this.question += '<br>'

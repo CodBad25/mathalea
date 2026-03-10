@@ -135,7 +135,5 @@ export default class NomExercice extends ExerciceSimple {
         this.correction = `L'abscisse du point $A$ est $\\dfrac{${a}}{${5}}=${miseEnEvidence(texNombre(fracResultat.valeurDecimale, 1))}$.`
       }
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

@@ -65,7 +65,7 @@ export default class PoucentageP2 extends ExerciceSimple {
         if (this.interactif) {
           this.optionsChampTexte = { texteApres: '€' }
         }
-        this.canEnonce = this.question // 'Compléter'
+
         this.canReponseACompleter = '$\\ldots$ €'
         break
 
@@ -80,7 +80,7 @@ export default class PoucentageP2 extends ExerciceSimple {
         if (this.interactif) {
           this.optionsChampTexte = { texteApres: 'min' }
         }
-        this.canEnonce = this.question // 'Compléter'
+
         this.canReponseACompleter = '$\\ldots$ min'
         break
 
@@ -96,7 +96,7 @@ export default class PoucentageP2 extends ExerciceSimple {
         if (this.interactif) {
           this.optionsChampTexte = { texteApres: '€' }
         }
-        this.canEnonce = this.question // 'Compléter'
+
         this.canReponseACompleter = '$\\ldots$ €'
         break
 
@@ -143,8 +143,7 @@ export default class PoucentageP2 extends ExerciceSimple {
          \\end{array}$`
           this.correction = `La valeur cherchée est donnée par la somme $${a}+${b}=${a + b}$.`
         }
-        this.canEnonce = this.question // 'Compléter'
-        this.canReponseACompleter = ''
+
         break
 
       case 5: // proportionnalité 6iemJC

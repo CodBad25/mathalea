@@ -1,10 +1,10 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { randint } from '../../../modules/outils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 
 import Decimal from 'decimal.js'
-import { texNombre } from '../../../lib/outils/texNombre'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { texNombre } from '../../../lib/outils/texNombre'
 export const titre = 'Multiplier des décimaux'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -39,8 +39,7 @@ export default class MultiplierDecimaux1 extends ExerciceSimple {
     this.question = `$${texNombre(a, 1)}\\times${texNombre(b, 0)}`
     if (this.interactif) this.question += '=$'
     else this.question += '$'
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
+
     this.reponse = texNombre(a.mul(b), 2)
     this.correction = `On peut calculer ainsi : <br>
     $\\begin{aligned}

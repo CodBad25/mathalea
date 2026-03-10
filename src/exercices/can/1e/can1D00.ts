@@ -37,7 +37,5 @@ export default class SimplifierTauxVariations extends ExerciceSimple {
     \\dfrac{${2 * a}h+h^2}{h}=\\dfrac{h(${2 * a}+h)}{h}=${miseEnEvidence(`${2 * a}+h`)}$`
 
     this.reponse = [`h+2\\times ${a}`]
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

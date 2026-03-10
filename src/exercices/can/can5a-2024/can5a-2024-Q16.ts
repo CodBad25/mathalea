@@ -1,8 +1,8 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { texNombre } from '../../../lib/outils/texNombre'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { randint } from '../../../modules/outils'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { texNombre } from '../../../lib/outils/texNombre'
+import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Effectuer un calcul'
 export const interactifReady = true
@@ -38,8 +38,7 @@ export default class NomExercice extends ExerciceSimple {
       this.correction = `La multiplication est prioritaire :<br> 
       $${a} +${b}\\times ${c}=${a}+${b * c}=${miseEnEvidence(texNombre(this.reponse, 0))}$`
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
+
     if (this.interactif) {
       this.question += '$=$'
     }

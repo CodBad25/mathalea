@@ -4,8 +4,8 @@ import {
   ecritureNombreRelatifc,
   ecritureParentheseSiNegatif,
 } from '../../../lib/outils/ecritures'
-import ExerciceSimple from '../../ExerciceSimple'
 import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const interactifType = 'mathLive'
 export const interactifReady = true
 export const titre = 'Multiplier des entiers relatifs'
@@ -92,7 +92,5 @@ export default class MultiplicationRelatifCAN extends ExerciceSimple {
     }
 
     this.reponse = a * b
-    this.canEnonce = this.question // 'Compléter'
-    this.canReponseACompleter = ''
   }
 }

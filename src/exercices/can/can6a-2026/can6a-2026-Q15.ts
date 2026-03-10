@@ -35,12 +35,11 @@ export default class Can20266Q15 extends ExerciceCan {
     this.question = `Combien de fois $${a.texFraction}$ dans $${b.texFraction}$ ?`
 
     this.correction = `$${b.texFraction}=${b.reduire(facteur).texFraction}$ donc il y a $${miseEnEvidence(this.reponse)}$ fois $${a.texFraction}$ dans $${b.texFraction}$.`
-if (this.interactif) {
+    if (this.interactif) {
       this.optionsChampTexte = { texteAvant: '<br>', texteApres: '' }
-    } 
+    }
     this.formatChampTexte = KeyboardType.clavierDeBase
     this.canEnonce = ''
-    this.canReponseACompleter = ''
   }
 
   nouvelleVersion() {

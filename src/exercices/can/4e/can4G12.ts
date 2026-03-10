@@ -23,7 +23,10 @@ export default class QuestionsAiresEtPerimetres1 extends ExerciceSimple {
     super()
     this.typeExercice = 'simple'
     this.nbQuestions = 1
-    this.optionsChampTexte = {texteAvant : '<br>', texteApres: '$\\text{cm}^2$' }
+    this.optionsChampTexte = {
+      texteAvant: '<br>',
+      texteApres: '$\\text{cm}^2$',
+    }
   }
 
   nouvelleVersion() {
@@ -33,7 +36,6 @@ export default class QuestionsAiresEtPerimetres1 extends ExerciceSimple {
     this.correction = `Le côté du carré est : $${4 * a}\\div 4=${a}$ cm.<br>
      Son aire est donc : $${a}\\times ${a}=${miseEnEvidence(a ** 2)}\\text{ cm}^2$.`
 
-    this.canEnonce = this.question
     this.canReponseACompleter = '$\\ldots\\text{ cm}^2$'
     this.listeCanEnonces.push(this.canEnonce)
     this.listeCanReponsesACompleter.push(this.canReponseACompleter)

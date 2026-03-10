@@ -100,7 +100,7 @@ export default class CalculHypotenusePythagore extends ExerciceSimple {
        <br>
        Ainsi, $a=${miseEnEvidence(a ** 2 + b ** 2)}$.`
         this.reponse = a ** 2 + b ** 2
-        this.canEnonce = this.question // 'Compléter'
+
         this.canReponseACompleter = '$a=\\ldots$'
         break
       case 'b':
@@ -139,7 +139,7 @@ export default class CalculHypotenusePythagore extends ExerciceSimple {
                <br>`
           this.reponse = `\\sqrt{${a ** 2 + b}}`
         }
-        this.canEnonce = this.question // 'Compléter'
+
         this.canReponseACompleter = `$${nom[1]}${nom[2]}=\\ldots$`
         break
     }

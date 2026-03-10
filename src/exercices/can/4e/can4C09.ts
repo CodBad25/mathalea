@@ -1,7 +1,7 @@
 import { choice } from '../../../lib/outils/arrayOutils'
 import { ecritureParentheseSiNegatif } from '../../../lib/outils/ecritures'
-import ExerciceSimple from '../../ExerciceSimple'
 import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer des puissances de +/-2, 3, 4 ou 5'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -83,7 +83,5 @@ export default class PuissancesDe2345 extends ExerciceSimple {
       }
     }
     this.reponse = a ** b
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

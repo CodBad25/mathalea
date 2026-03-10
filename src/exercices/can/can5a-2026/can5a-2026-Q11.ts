@@ -38,7 +38,6 @@ Son périmètre est égal à `
     this.correction = `Le périmètre d'un rectangle de longueur $${longueur}\\text{ cm}$ et de largeur $${largeur}\\text{ cm}$ est :<br>
 $2\\times (${longueur}+${largeur})=2\\times ${longueur + largeur}=${miseEnEvidence(texNombre((longueur + largeur) * 2, 0))}\\text{ cm}$.`
 
-    this.canEnonce = this.question
     this.canReponseACompleter = '$\\ldots\\text{ cm}$'
     this.optionsChampTexte = { texteApres: ' $\\text{cm}$.' }
 

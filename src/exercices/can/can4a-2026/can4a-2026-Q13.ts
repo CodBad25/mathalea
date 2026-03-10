@@ -85,7 +85,6 @@ export default class Can20264emeQ13 extends ExerciceCan {
 
     this.question = `${figure}
     L'aire de ce carré est `
-    this.canEnonce = this.question
 
     this.correction = `L'aire d'un carré de côté $${cote}\\text{ dam}$ est :<br>
     $\\begin{aligned}

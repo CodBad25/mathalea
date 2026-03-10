@@ -1,9 +1,9 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { randint } from '../../../modules/outils'
-import { sp } from '../../../lib/outils/outilString'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { choice } from '../../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { sp } from '../../../lib/outils/outilString'
+import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Compléter une suite logique'
 export const interactifReady = true
@@ -41,7 +41,7 @@ export default class NomExercice extends ExerciceSimple {
       this.correction = `On obtient un terme de cette suite en ajoutant $${k}$ au terme précédent.<br>
       Ainsi, ? $=${miseEnEvidence(a + 4 * k)}$.`
     }
-    this.canEnonce = this.question
+
     this.canReponseACompleter = '? $=\\ldots$'
     if (!this.interactif) {
       this.question += '<br>? $=\\ldots$'

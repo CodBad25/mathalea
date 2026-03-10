@@ -1,8 +1,7 @@
-
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import ExerciceCan from '../../ExerciceCan'
 import { choice } from '../../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import ExerciceCan from '../../ExerciceCan'
 export const titre = 'Question 22'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -15,8 +14,8 @@ export const refs = {
  * Modèle d'exercice très simple pour la course aux nombres
  * @author Gilles Mora
 
-*/export default class Can2026TermQ22 extends ExerciceCan {
-   enonce(nbLettres?: number, nbTirages?: number, lettres?: string[]): void {
+*/ export default class Can2026TermQ22 extends ExerciceCan {
+  enonce(nbLettres?: number, nbTirages?: number, lettres?: string[]): void {
     if (nbLettres == null || nbTirages == null || lettres == null) {
       nbTirages = 3
       nbLettres = choice([4, 5, 6])
@@ -28,7 +27,7 @@ export const refs = {
     let resultat = 1
     const facteurs: string[] = []
     for (let i = 0; i < nbTirages; i++) {
-      resultat *= (nbLettres - i)
+      resultat *= nbLettres - i
       facteurs.push(String(nbLettres - i))
     }
 
@@ -40,13 +39,8 @@ export const refs = {
     this.question = `On tire successivement ${nbTirages === 3 ? 'trois' : 'deux'} lettres au hasard et sans remise parmi $${listeNoms}$.<br>
     Combien de « mots » différents peut-on former ?<br>`
 
-   
-
     this.correction = `Il s'agit d'un arrangement de $${nbTirages}$ éléments parmi $${nbLettres}$ (l'ordre compte et sans remise).<br>
     Le nombre de mots est $${facteurs.join('\\times ')}=${miseEnEvidence(String(resultat))}$.`
-
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 
   nouvelleVersion(): void {

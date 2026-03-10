@@ -245,7 +245,5 @@ export default class CalculFonctionDeriveeAffine2 extends ExerciceSimple {
 
         break
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

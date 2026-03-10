@@ -47,7 +47,7 @@ export default class DistanceEtVitesse extends ExerciceSimple {
       ${texNombre(choix[0] * choix[2], 0)}\\text{ m}$.<br>
       Sa vitesse est donc $${miseEnEvidence(texNombre(choix[3], 1))}\\text{ km/h}$.`
     }
-    this.canEnonce = this.question
+
     this.canReponseACompleter = ' $\\ldots\\text{ km/h}$'
   }
 }

@@ -46,8 +46,6 @@ export default class Can1a2026Q3 extends ExerciceCan {
     this.correction += `<br>Le terme en $x^2$ vient de $${rienSi1(a)}x\\times ${rienSi1(c)}x=${rienSi1(a * c)}x^2$.`
     this.correction += `<br>Le terme en $x$ vient de la somme de $${rienSi1(a)}x \\times ${ecritureParentheseSiNegatif(d)}$ et de $${b} \\times ${rienSi1(c)}x$.`
     this.correction += `<br>Le terme constant vient de $${b}\\times ${ecritureParentheseSiNegatif(d)}=${b * d}$.`
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
 
     if (this.interactif) {
       this.question += `<br>$(${reduireAxPlusB(a, b)})(${reduireAxPlusB(c, d)})=$`

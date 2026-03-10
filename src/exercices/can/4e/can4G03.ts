@@ -130,7 +130,7 @@ La valeur cherchée est donc : $\\sqrt{${c2}}$.
           `${Math.sqrt(c2)}`,
           texRacineCarree(c2),
         ]
-        this.canEnonce = this.question // 'Compléter'
+
         this.canReponseACompleter = `$${nom[0]}${nom[2]}=\\ldots$`
         break
 
@@ -185,7 +185,7 @@ La valeur cherchée est donc : $\\sqrt{${c2}}${reductible ? '=' + texRacineCarre
           texRacineCarree(c2),
           `${Math.sqrt(c2)}`,
         ]
-        this.canEnonce = this.question // 'Compléter'
+
         this.canReponseACompleter = `$${nom[1]}${nom[2]}=\\ldots$`
         break
     }

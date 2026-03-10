@@ -27,7 +27,7 @@ export default class calcAvecChiffres2026 extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const choix = this.canOfficielle  ? 1 : choice([1, 2, 3, 4, 5, 6])
+    const choix = this.canOfficielle ? 1 : choice([1, 2, 3, 4, 5, 6])
 
     if (choix === 1) {
       this.question = '$2+0+2+6$'
@@ -54,7 +54,5 @@ export default class calcAvecChiffres2026 extends ExerciceSimple {
       this.correction = `$(2+0)\\times (2+6)=2 \\times 8=${miseEnEvidence(texNombre(16, 0))}$`
       this.reponse = 16
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

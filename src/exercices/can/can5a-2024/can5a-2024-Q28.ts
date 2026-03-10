@@ -57,7 +57,7 @@ export default class NomExercice extends ExerciceSimple {
       this.correction = `$${frac1.texFraction}=\\dfrac{${a[0] - a[3]}}{${a[1]}}+\\dfrac{${a[3]}}{${a[4]}}=${a[2]}+${miseEnEvidence(reponse.texFraction)}$`
     }
     this.reponse = reponse.texFraction
-    this.canEnonce = this.question
+
     this.canReponseACompleter = '? $=\\dfrac{\\ldots}{\\ldots}$'
     if (!this.interactif) {
       this.question += '<br> ? $=\\dfrac{\\ldots}{\\ldots}$'

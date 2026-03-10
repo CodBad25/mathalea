@@ -65,7 +65,7 @@ export default class PetitsProblemePartage2 extends ExerciceSimple {
         if (this.interactif) {
           this.optionsChampTexte = { texteAvant: '<br>', texteApres: ' verres' }
         }
-        this.canEnonce = this.question
+
         this.canReponseACompleter = '$\\dots$ verres'
         break
       case 2:
@@ -104,7 +104,7 @@ export default class PetitsProblemePartage2 extends ExerciceSimple {
         if (this.interactif) {
           this.optionsChampTexte = { texteAvant: '<br>', texteApres: ' billes' }
         }
-        this.canEnonce = this.question
+
         this.canReponseACompleter = '$\\dots$ billes'
         break
     }

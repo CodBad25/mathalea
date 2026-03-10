@@ -1,8 +1,8 @@
 import { choice } from '../../../lib/outils/arrayOutils'
 import { ecritureParentheseSiNegatif } from '../../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import ExerciceSimple from '../../ExerciceSimple'
 import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Déterminer les coordonnées d’un vecteur (bis)'
 export const interactifReady = true
@@ -48,8 +48,5 @@ export default class CoordonneesVecteur2 extends ExerciceSimple {
       Les coordonnées du vecteur $\\vec{u}$ sont donc $${miseEnEvidence('(')} ${miseEnEvidence(`${a * b}`)}\\,${miseEnEvidence(';')}\\,${miseEnEvidence(`${a}`)} ${miseEnEvidence(')')}$.`
       this.reponse = `(${a * b};${a})`
     }
-
-    this.canEnonce = this.question // 'Compléter'
-    this.canReponseACompleter = ''
   }
 }

@@ -95,7 +95,5 @@ ${entier} - ${frac.texFraction} &= \\dfrac{${entier * frac.den}}{${frac.den}} - 
     }
 
     this.reponse = resultat
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

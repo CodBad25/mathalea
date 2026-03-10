@@ -83,7 +83,6 @@ export default class QuestionsAiresEtPerimetres6 extends ExerciceSimple {
       <br>`
     this.reponse = (2 * b) / a
 
-    this.canEnonce = this.question // 'Compléter'
     this.canReponseACompleter = '$\\ldots\\text{ m}$'
     this.listeCanEnonces.push(this.canEnonce)
     this.listeCanReponsesACompleter.push(this.canReponseACompleter)

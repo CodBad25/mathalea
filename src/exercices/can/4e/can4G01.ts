@@ -82,7 +82,7 @@ export default class LongueurPythagore extends ExerciceSimple {
           ) + '<br>'
         this.correction = ` $${nom[0]}${nom[1]}=${b}\\text{ cm}$.`
         this.reponse = b
-        this.canEnonce = this.question // 'Compléter'
+
         this.canReponseACompleter = ` $${nom[0]}${nom[1]}=\\ldots\\text{ cm}$.`
         break
       case 1: // calcul du côté vertical de l'angle droit
@@ -106,7 +106,7 @@ export default class LongueurPythagore extends ExerciceSimple {
           ) + '<br>'
         this.correction = ` $${nom[1]}${nom[2]}=${a}\\text{ cm}$.`
         this.reponse = a
-        this.canEnonce = this.question // 'Compléter'
+
         this.canReponseACompleter = ` $${nom[1]}${nom[2]}=\\ldots\\text{ cm}$.`
         break
       case 2: // calcul de l'hypoténuse.
@@ -131,7 +131,7 @@ export default class LongueurPythagore extends ExerciceSimple {
 
         this.correction = ` $${nom[0]}${nom[2]}=${c}\\text{ cm}$.`
         this.reponse = c
-        this.canEnonce = this.question // 'Compléter'
+
         this.canReponseACompleter = ` $${nom[0]}${nom[2]}=\\ldots\\text{ cm}$.`
         break
     }

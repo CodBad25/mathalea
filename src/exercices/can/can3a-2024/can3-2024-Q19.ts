@@ -1,9 +1,9 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { choice } from '../../../lib/outils/arrayOutils'
-import { obtenirListeFractionsIrreductibles } from '../../../modules/fractions'
-import { texNombre } from '../../../lib/outils/texNombre'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { choice } from '../../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { texNombre } from '../../../lib/outils/texNombre'
+import { obtenirListeFractionsIrreductibles } from '../../../modules/fractions'
+import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = "Calculer une fraction d'un entier"
 export const interactifReady = true
@@ -51,7 +51,5 @@ export default class NomExercice extends ExerciceSimple {
       \\end{aligned}$<br>
      `
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

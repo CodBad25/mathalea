@@ -1,8 +1,8 @@
-import ExerciceSimple from '../../ExerciceSimple'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
-import { choice } from '../../../lib/outils/arrayOutils'
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Résoudre un problème de reste'
 export const interactifReady = true
@@ -50,7 +50,6 @@ export default class NomExercice extends ExerciceSimple {
       }
     }
 
-    this.canEnonce = this.question
     this.canReponseACompleter = '$\\ldots$ L'
   }
 }

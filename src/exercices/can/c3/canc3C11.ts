@@ -37,7 +37,5 @@ export default class CalculMoitieImpair extends ExerciceSimple {
     this.question = `Calculer la moitié de $${a}$. `
     this.correction = `$${a}\\div 2=${miseEnEvidence(texNombre(this.reponse))}$
          `
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

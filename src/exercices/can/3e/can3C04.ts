@@ -1,9 +1,9 @@
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { obtenirListeFractionsIrreductibles } from '../../../lib/outils/deprecatedFractions'
+import FractionEtendue from '../../../modules/FractionEtendue'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
-import FractionEtendue from '../../../modules/FractionEtendue'
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 
 export const titre = 'Calculer une somme entre fraction et entier'
 export const interactifReady = true
@@ -41,7 +41,5 @@ export default class SommeEntierEtFractionIrred extends ExerciceSimple {
     this.reponse = d
     this.question = `Calculer sous la forme d'une fraction irréductible :  $${a}+${bSurC.texFraction}$.`
     this.correction = `$${a}+${bSurC.texFraction} = \\dfrac{${a} \\times ${c}}{${c}} + ${bSurC.texFraction} = \\dfrac{${a * c}}{${c}} + ${bSurC.texFraction}  =${d.texFraction}$`
-    this.canEnonce = this.question // 'Compléter'
-    this.canReponseACompleter = ''
   }
 }

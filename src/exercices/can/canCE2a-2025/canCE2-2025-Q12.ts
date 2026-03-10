@@ -1,9 +1,9 @@
-import { texNombre } from '../../../lib/outils/texNombre'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import ExerciceCan from '../../ExerciceCan'
-import { randint } from '../../../modules/outils'
 import { choice } from '../../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { sp } from '../../../lib/outils/outilString'
+import { texNombre } from '../../../lib/outils/texNombre'
+import { randint } from '../../../modules/outils'
+import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Mulitiplier des mutiples de dix'
 export const interactifReady = true
@@ -29,7 +29,7 @@ export default class Can2025CE2Q12 extends ExerciceCan {
     this.reponse = a * b
     this.question = 'Calcule : '
     this.correction = `$${a}\\times ${b}=${Math.round(a / puissance)}\\times ${b}\\times${puissance}=${Math.round((a * b) / puissance)}\\times ${puissance}=${miseEnEvidence(texNombre(a * b, 0))}$.`
-    this.canEnonce = this.question
+
     this.question += `$${a}\\times ${b}$`
     if (this.interactif) {
       this.question += `$${sp()} = $`

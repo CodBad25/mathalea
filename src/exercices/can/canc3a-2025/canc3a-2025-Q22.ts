@@ -1,8 +1,8 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { texNombre } from '../../../lib/outils/texNombre'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { randint } from '../../../modules/outils'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { texNombre } from '../../../lib/outils/texNombre'
+import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Effetuer une multiplication avec $25$'
 export const interactifReady = true
@@ -37,8 +37,5 @@ export default class Can2025CM2Q22 extends ExerciceSimple {
     &=${texNombre(a / 4, 0)}\\times 100\\\\
     &=${miseEnEvidence(a * 25)}
     \\end{aligned}$`
-
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

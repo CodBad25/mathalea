@@ -58,7 +58,5 @@ export default class NombreFois4Ou8 extends ExerciceSimple {
         bleuMathalea,
       )
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

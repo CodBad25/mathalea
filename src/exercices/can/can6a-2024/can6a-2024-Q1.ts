@@ -1,8 +1,8 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { texNombre } from '../../../lib/outils/texNombre'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { texNombre } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer avec les tables de multiplication'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -36,7 +36,5 @@ export default class NomExercice extends ExerciceSimple {
       this.question = `$${a} \\times ${b}$ `
       this.correction = `$${a} \\times ${b}=${miseEnEvidence(texNombre(this.reponse, 0))}$`
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

@@ -211,7 +211,7 @@ export default class mesureAngleCosSin extends ExerciceSimple {
 
         break
     }
-    this.canEnonce = this.question
+
     this.canReponseACompleter = '$\\alpha=\\ldots$'
   }
 }

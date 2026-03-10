@@ -44,7 +44,7 @@ export default class Can2025N5Q18 extends ExerciceCan {
     this.question = `${mathalea2d(Object.assign({ scale: 0.7 }, fixeBordures([triangle1, ad, am1, am2], { rymin: 0 })), [triangle1, ad, am1, am2])}`
     this.correction = `La somme des angles d'un triangle est égale à $180$°, donc $90^\\circ+${a}^\\circ+\\text{ ? } =180^\\circ$<br>
     Soit $?=180^\\circ-90^\\circ-${a > 45 ? `${90 - a}` : `${a}`}^\\circ=90^\\circ-${a > 45 ? `${90 - a}` : `${a}`}^\\circ=${miseEnEvidence(`${a > 45 ? `${a}` : `${90 - a}`}`)}^\\circ$.`
-    this.canEnonce = this.question
+
     this.canReponseACompleter = '$?=\\ldots^\\circ$'
     this.optionsChampTexte = { texteApres: '$^\\circ$' }
     if (this.interactif) {

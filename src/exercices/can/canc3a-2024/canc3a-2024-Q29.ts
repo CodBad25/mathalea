@@ -1,7 +1,7 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { randint } from '../../../modules/outils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
+import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Diviser par 5'
 export const interactifReady = true
@@ -36,8 +36,7 @@ export default class DivisionParQuatreCM2 extends ExerciceSimple {
     this.question = `$${texNombre(dividende, 0)}\\div ${texNombre(diviseur, 0)}`
     if (this.interactif) this.question += '=$'
     else this.question += '$'
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
+
     this.reponse = texNombre(dividende / diviseur, 0)
     this.correction =
       'Pour diviser par $4$, on peut diviser par $2$ puis diviser le résultat par $2$ :<br>'

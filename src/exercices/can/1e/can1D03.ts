@@ -123,7 +123,6 @@ export default class LectureGraphiqueNombreDerivee extends ExerciceSimple {
 
         this.reponse = f(nbre)
 
-        this.canEnonce = this.question
         this.canReponseACompleter = `$f'(${nbre})=\\ldots$`
         break
 
@@ -186,7 +185,7 @@ export default class LectureGraphiqueNombreDerivee extends ExerciceSimple {
         this.correction = `$f'(${nbre})$ est donné par le coefficient directeur de la tangente à la courbe au point d'abscisse $${nbre}$, soit $${f(nbre)}$.`
 
         this.reponse = f(nbre)
-        this.canEnonce = this.question
+
         this.canReponseACompleter = `$f'(${nbre})=\\ldots$`
         break
 
@@ -254,7 +253,7 @@ export default class LectureGraphiqueNombreDerivee extends ExerciceSimple {
 
         this.correction = `$f'(${nbre})$ est donné par le coefficient directeur de la tangente à la courbe au point d'abscisse $${nbre}$, soit $${frac.texFraction}${frac.estEntiere ? '' : frac.texSimplificationAvecEtapes()}$.`
         this.reponse = frac
-        this.canEnonce = this.question
+
         this.canReponseACompleter = `$f'(${nbre})=\\ldots$`
         break
 
@@ -321,7 +320,7 @@ export default class LectureGraphiqueNombreDerivee extends ExerciceSimple {
           )
         this.correction = `$f'(0)$ est donné par le coefficient directeur de la tangente à la courbe au point d'abscisse $0$, soit $${frac.texFraction}${frac.estEntiere ? '' : frac.texSimplificationAvecEtapes()}$.`
         this.reponse = frac
-        this.canEnonce = this.question
+
         this.canReponseACompleter = "$f'(0)=\\ldots$"
         break
 
@@ -392,7 +391,7 @@ export default class LectureGraphiqueNombreDerivee extends ExerciceSimple {
         this.correction = `$f'(0)$ est donné par le coefficient directeur de la tangente à la courbe au point d'abscisse $0$, soit $${frac.texFraction}${frac.estEntiere ? '' : frac.texSimplificationAvecEtapes()}$.`
 
         this.reponse = frac
-        this.canEnonce = this.question
+
         this.canReponseACompleter = "$f'(0)=\\ldots$"
         break
     }

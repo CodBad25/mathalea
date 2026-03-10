@@ -1,8 +1,8 @@
-import ExerciceSimple from '../../ExerciceSimple'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { ecritureAlgebrique } from '../../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { randint } from '../../../modules/outils'
-import { ecritureAlgebrique } from '../../../lib/outils/ecritures'
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Résoudre une équation'
 export const interactifReady = true
@@ -66,7 +66,7 @@ export default class NomExercice extends ExerciceSimple {
       La solution de l'équation est : $${miseEnEvidence(this.reponse)}$.
       `
     }
-    this.canEnonce = this.question
+
     this.canReponseACompleter = '$x=\\ldots$'
     if (!this.interactif) {
       this.question += '<br> $x=\\ldots$'

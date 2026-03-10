@@ -39,7 +39,7 @@ export default class Can2a2026Q18 extends ExerciceCan {
     if (!this.interactif) {
       this.question += '$\\ldots\\,\\%$.'
     }
-    this.canEnonce = this.question
+
     this.canReponseACompleter = '$\\ldots\\,\\%$'
   }
 

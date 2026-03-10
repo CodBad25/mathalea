@@ -1,9 +1,9 @@
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import ExerciceCan from '../../ExerciceCan'
-import { randint } from '../../../modules/outils'
 import { choice } from '../../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { premiereLettreEnMajuscule } from '../../../lib/outils/outilString'
 import { prenomF, prenomM } from '../../../lib/outils/Personne'
+import { randint } from '../../../modules/outils'
+import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Multiple simple'
 export const interactifReady = true
@@ -78,7 +78,6 @@ export default class Can2025CE2Q6 extends ExerciceCan {
     Combien de ${objet.plur} peut-${sexe === 'M' ? 'il' : 'elle'} acheter ?`
     this.correction = ` $${b}\\div ${a}=${Math.round(b / a)}$.<br>
     ${quidam} peut acheter $${miseEnEvidence(Math.round(b / a))}$ ${objet.plur}.`
-    this.canEnonce = this.question
   }
 
   nouvelleVersion() {

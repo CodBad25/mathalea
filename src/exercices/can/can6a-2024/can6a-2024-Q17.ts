@@ -1,9 +1,9 @@
-import ExerciceSimple from '../../ExerciceSimple'
+import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { personnes } from '../../../lib/outils/Personne'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
-import { choice } from '../../../lib/outils/arrayOutils'
-import { personnes } from '../../../lib/outils/Personne'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer un nombre de billes'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -46,7 +46,7 @@ export default class BillesMultiplieesCM2 extends ExerciceSimple {
     }
     this.reponse = texNombre(coeff * nbBilles, 0)
     this.question = `${quidams[0]} a ${texNombre(nbBilles, 0)} billes.<br>${pronom} en a ${coeff} fois moins que ${quidams[1]}.<br>`
-    this.canEnonce = this.question
+
     this.question +=
       `${quidams[1]} a ` + (this.interactif ? '' : '$\\ldots$ billes.')
     this.canReponseACompleter = `${quidams[1]} a $\\ldots$ billes.`

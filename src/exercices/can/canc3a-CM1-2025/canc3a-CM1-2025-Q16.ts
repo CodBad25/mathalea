@@ -58,7 +58,7 @@ export default class Can2025CM1Q16 extends ExerciceSimple {
       ),
       objets,
     )
-    /* this.canEnonce = this.question
+    /* 
          this.canReponseACompleter = 'Figure $\\ldots$'
          */
     this.reponse = u * a

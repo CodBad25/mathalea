@@ -45,7 +45,5 @@ export default class MultiplierAstuce extends ExerciceSimple {
           & =${texNombre(Val1 * Val3, 0)}\\times ${texNombre(Val2, 2)}\\\\     
           &=${miseEnEvidence(`${texNombre(reponse, 2)}`)}
           \\end{aligned}$`
-
-    this.canEnonce = this.question
   }
 }

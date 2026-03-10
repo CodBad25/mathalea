@@ -34,7 +34,6 @@ export default class PerimetreCercle extends ExerciceSimple {
     this.correction = `Le périmètre d'un cercle de rayon $r$ est $2\\times \\pi\\times r$. <br>  
          Comme $r=${r}$, la valeur  exacte du périmètre est : $${miseEnEvidence(reponse)}\\text{ cm}$.`
 
-    this.canEnonce = this.question
     this.canReponseACompleter = '$\\ldots\\text{ cm}$'
     if (!this.interactif) {
       this.question += ' $\\ldots\\text{ cm}$.'

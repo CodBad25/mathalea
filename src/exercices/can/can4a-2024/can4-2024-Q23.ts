@@ -47,6 +47,5 @@ export default class NomExercice extends ExerciceSimple {
       &=${miseEnEvidence(texNombre(Val1 * Val2 * Val3 * Val4, 1))}
       \\end{aligned}$`
     }
-    this.canEnonce = this.question
   }
 }
