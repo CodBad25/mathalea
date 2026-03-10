@@ -1,10 +1,10 @@
+import { texPrix } from '../../../lib/format/style'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choice } from '../../../lib/outils/arrayOutils'
-import { prenomF, prenomM } from '../../../lib/outils/Personne'
-import { texPrix } from '../../../lib/format/style'
-import ExerciceSimple from '../../ExerciceSimple'
-import { randint } from '../../../modules/outils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { prenomF, prenomM } from '../../../lib/outils/Personne'
+import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Résoudre un problème avec "de plus", "de moins"*'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -103,7 +103,7 @@ export default class PlusOuMoins2 extends ExerciceSimple {
           this.correction += `<br>$${texPrix(r)}+${texPrix(m)}= ${texPrix(somme)}$`
           this.correction += `<br>Les deux filles possèdent en tout : $${miseEnEvidence(texPrix(somme))}$ €.`
           if (this.interactif) {
-            this.optionsChampTexte = {  texteAvant: '<br>',texteApres: ' €' }
+            this.optionsChampTexte = { texteAvant: '<br>', texteApres: ' €' }
           }
         }
         if (choix === 'b') {
@@ -211,11 +211,11 @@ export default class PlusOuMoins2 extends ExerciceSimple {
           this.correction += `<br>$${texPrix(r)}+${texPrix(m)}= ${texPrix(somme)}$`
           this.correction += `<br>Les deux filles possèdent en tout : $${miseEnEvidence(texPrix(somme))}$ €.`
           if (this.interactif) {
-            this.optionsChampTexte = {  texteAvant: '<br>',texteApres: ' €' }
+            this.optionsChampTexte = { texteAvant: '<br>', texteApres: ' €' }
           }
         }
-this.canEnonce = this.question
-    this.canReponseACompleter = '$\\ldots$ €'
+
+        this.canReponseACompleter = '$\\ldots$ €'
         break
       case 2: // ensemble, objets
         choix = choice(['a', 'b'])
@@ -291,10 +291,13 @@ this.canEnonce = this.question
           }
         }
         if (this.interactif) {
-          this.optionsChampTexte = {  texteAvant: '<br>',texteApres: ` ${objets}` }
+          this.optionsChampTexte = {
+            texteAvant: '<br>',
+            texteApres: ` ${objets}`,
+          }
         }
-        this.canEnonce = this.question
-    this.canReponseACompleter = `$\\ldots$ ${objets}`
+
+        this.canReponseACompleter = `$\\ldots$ ${objets}`
         break
 
       case 3:
@@ -323,7 +326,10 @@ this.canEnonce = this.question
                       Il y a donc  (${choix1 ? `$${a}+${b}$` : `$${a}-${b}$`}) ${choix2 ? ' filles' : ' garçons'}, soit  ${choix1 ? `$${a + b}$` : `$${a - b}$`} ${choix2 ? ' filles ' : ' garçons'}. <br>
                       Dans ce club, il y a donc au total (${choix1 ? `$${a + b}+${a}$` : `$${a - b}+${a}$`}) soit ${choix1 ? `$${miseEnEvidence(reponse1)}$` : `$${miseEnEvidence(reponse2)}$`} adhérents.`
           if (this.interactif) {
-            this.optionsChampTexte = {  texteAvant: '<br>',texteApres: ' adhérents' }
+            this.optionsChampTexte = {
+              texteAvant: '<br>',
+              texteApres: ' adhérents',
+            }
           }
         }
         if (choix === 'b') {
@@ -349,13 +355,15 @@ this.canEnonce = this.question
                      Il y a (${choix1 ? `$${a}-${b}$` : `$${a}+${b}$`}) ${choix2 ? ' garçons' : ' filles'}, soit  ${choix1 ? `$${a - b}$` : `$${a + b}$`} ${choix2 ? ' garçons' : ' filles'} dans ce club.
                      <br>Dans ce club, il y a donc au total (${choix1 ? `$${a - b}+${a}$` : `$${a + b}+${a}$`}) soit ${choix1 ? `$${miseEnEvidence(reponse2)}$` : `$${miseEnEvidence(reponse1)}$`} adhérents.`
           if (this.interactif) {
-            this.optionsChampTexte = { texteAvant: '<br>', texteApres: ' adhérents' }
+            this.optionsChampTexte = {
+              texteAvant: '<br>',
+              texteApres: ' adhérents',
+            }
           }
         }
- this.canEnonce = this.question
-    this.canReponseACompleter = '$\\ldots$ adhérents'
+
+        this.canReponseACompleter = '$\\ldots$ adhérents'
         break
     }
-   
   }
 }

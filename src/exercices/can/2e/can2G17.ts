@@ -4,8 +4,8 @@ import {
   rienSi1,
 } from '../../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import ExerciceSimple from '../../ExerciceSimple'
 import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre =
   'Déterminer un vecteur directeur avec une équation cartésienne'
@@ -48,8 +48,5 @@ export default class VecteurDirEqCart extends ExerciceSimple {
       Tout vecteur colinéaire à $\\vec{u}$ est aussi un vecteur directeur de $d$.<br>
       On en déduit que les coordonnées de $\\vec{u}$ sont $${miseEnEvidence('(')} ${miseEnEvidence(`${-b}`)}\\,${miseEnEvidence(';')}\\,${miseEnEvidence(`${a}`)} ${miseEnEvidence(')')}$.`
     this.reponse = `(${-b};${a})`
-
-    this.canEnonce = this.question // 'Compléter'
-    this.canReponseACompleter = ''
   }
 }

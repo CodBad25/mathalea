@@ -17,7 +17,7 @@ export const refs = {
 
 */
 export default class Can2a2025CQ13 extends ExerciceCan {
-enonce(a?: number, b?: number): void {
+  enonce(a?: number, b?: number): void {
     if (a == null || b == null) {
       a = randint(2, 9)
       b = choice([2, 3, 5, 6, 7])
@@ -28,10 +28,11 @@ enonce(a?: number, b?: number): void {
     this.formatChampTexte = KeyboardType.clavierDeBase
     this.reponse = String(resultat)
     this.question = `Écrire sous la forme d'un nombre entier $\\left(${a}\\sqrt{${b}}\\right)^2$.<br>`
-    if (!this.interactif) { this.question += '$\\ldots$' }
+    if (!this.interactif) {
+      this.question += '$\\ldots$'
+    }
     this.correction = `$\\left(${a}\\sqrt{${b}}\\right)^2=${a}^2\\times \\left(\\sqrt{${b}}\\right)^2=${a * a}\\times ${b}=${miseEnEvidence(String(resultat))}$`
     this.canEnonce = `Écrire sous la forme d'un nombre entier $\\left(${a}\\sqrt{${b}}\\right)^2$.`
-    this.canReponseACompleter = ''
   }
 
   nouvelleVersion(): void {

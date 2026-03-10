@@ -121,7 +121,5 @@ export default class CalculFonctionDeriveeUnsurU extends ExerciceSimple {
         //  this.reponse = [`\\dfrac{${-2 * m}x}{(${reduirePolynomeDegre3(0, m, 0, p)})^2}`, `\\dfrac{${-2 * m}x}{(${reduirePolynomeDegre3(0, -m, 0, -p)})^2}`]
         break
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

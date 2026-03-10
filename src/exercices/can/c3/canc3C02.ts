@@ -50,7 +50,5 @@ export default class CompositionDeNombreEntier extends ExerciceSimple {
         this.correction = `$(${a}\\times ${texNombre(1000)}) + (${b}\\times 100) + (${c}\\times 10)=${texNombre(a * 1000)}+${b * 100}+${c * 10}=${texNombre(a * 1000 + b * 100 + c * 10)}$`
         break
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

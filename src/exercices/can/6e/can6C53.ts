@@ -49,7 +49,7 @@ export default class ComprendreDivisionEuclidienne extends ExerciceSimple {
             texteAvant: '<br>',
             texteApres: `${choix ? 'bouquet(s)' : 'fleur(s)'}`,
           }
-          this.canEnonce = this.question
+
           this.canReponseACompleter = `$\\ldots$ ${choix ? 'bouquet(s)' : 'fleur(s)'}`
         }
         break
@@ -77,7 +77,6 @@ et qu’il restera ${choix ? `$${texNombre(reste)}$` : `$${miseEnEvidence(texNom
             texteApres: `${choix ? 'rangée(s)' : 'élève(s)'}`,
           }
 
-          this.canEnonce = this.question
           this.canReponseACompleter = `$\\ldots$ ${choix ? 'rangée(s)' : 'élève(s)'}`
         }
         break
@@ -105,7 +104,6 @@ et qu’il lui restera ${choix ? `$${texNombre(reste)}$` : `$${miseEnEvidence(te
             texteApres: `${choix ? 'cartons' : 'livres'}`,
           }
 
-          this.canEnonce = this.question
           this.canReponseACompleter = `$\\ldots$ ${choix ? 'carton(s)' : 'livre(s)'}`
         }
         break

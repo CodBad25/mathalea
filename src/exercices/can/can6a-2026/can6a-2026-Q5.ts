@@ -30,7 +30,7 @@ export default class Can20266Q5 extends ExerciceCan {
     this.correction = `Le double de $${a}$ est $2\\times ${a}=${miseEnEvidence(2 * a)}$.`
 
     this.formatChampTexte = KeyboardType.clavierDeBase
-    this.canEnonce = this.question
+
     this.canReponseACompleter = ``
   }
 

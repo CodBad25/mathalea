@@ -1,6 +1,7 @@
 import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { tableauColonneLigne } from '../../lib/2d/tableau'
 import { createList } from '../../lib/format/lists'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import {
   texteEnCouleurEtGras,
   texteItalique,
@@ -30,6 +31,8 @@ export default class VarianceVariablesAleatoires extends ExerciceSimple {
     super()
 
     this.typeExercice = 'simple'
+    this.formatChampTexte = KeyboardType.clavierFullOperations
+    this.optionsChampTexte = { texteAvant: '<br>$I=$ ' }
 
     this.nbQuestions = 1
   }
@@ -281,17 +284,10 @@ $Q_2.$`,
       ],
       style: 'alpha',
     })
-
+    this.reponse = this.canEnonce = this.question
     this.correction += createList({
       items: [correction4, correction5],
       style: 'nombres',
     })
-
-    if (this.interactif) {
-      this.question += '<br>$I=$ '
-    }
-
-    this.reponse = this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

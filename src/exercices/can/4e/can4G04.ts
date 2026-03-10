@@ -82,7 +82,7 @@ export default class CalculCotePythagore extends ExerciceSimple {
       'blue',
     )
     this.reponse = [`\\sqrt{${c2}}`, `${Math.sqrt(c2)}`, texRacineCarree(c2)]
-    this.canEnonce = this.question
+
     this.canReponseACompleter = `$${nom[1]}${nom[2]}=\\ldots$`
   }
 }

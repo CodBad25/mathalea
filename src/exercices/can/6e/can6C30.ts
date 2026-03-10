@@ -106,7 +106,5 @@ export default class MultiplierDeuxDecimaux extends ExerciceSimple {
         )
         break
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

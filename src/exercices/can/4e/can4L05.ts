@@ -102,7 +102,7 @@ export default class DeveloppementNiveau1 extends ExerciceSimple {
         ]
         break
     }
-    this.canEnonce = this.question // 'Compléter'
+
     this.canReponseACompleter = '\\hspace*{-1.5cm}$A=\\ldots$'
   }
 }

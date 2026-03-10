@@ -233,7 +233,5 @@ export default class IntersectionIntervalles extends ExerciceSimple {
         }
         break
     }
-    this.canEnonce = this.question // 'Compléter'
-    this.canReponseACompleter = ''
   }
 }

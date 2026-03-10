@@ -114,7 +114,5 @@ export default class LireAbscisseDecimaleDeFraction extends ExerciceSimple {
 
         break
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

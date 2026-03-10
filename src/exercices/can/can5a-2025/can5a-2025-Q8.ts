@@ -1,8 +1,8 @@
-import { texNombre } from '../../../lib/outils/texNombre'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import ExerciceCan from '../../ExerciceCan'
-import { randint } from '../../../modules/outils'
 import { choice } from '../../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { texNombre } from '../../../lib/outils/texNombre'
+import { randint } from '../../../modules/outils'
+import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Multiplication par 100 de nombres décimaux'
 export const interactifReady = true
@@ -30,7 +30,7 @@ export default class Can2025N5Q8 extends ExerciceCan {
     this.question = `$${texNombre(a, 3)}\\times ${texNombre(b, 0)}$`
     this.correction = `Le nombre d'unités est rendu ${b === 100 ? 'cent fois' : 'mille fois'} plus grand, donc :<br>
     $${texNombre(a, 4)}\\times ${texNombre(b, 0)} = ${miseEnEvidence(texNombre(a * b, 2))}$`
-    this.canEnonce = this.question
+
     if (this.interactif) {
       this.question += ' $=$'
     }

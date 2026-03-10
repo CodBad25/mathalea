@@ -100,7 +100,7 @@ export default class DiagonaleCarre extends ExerciceSimple {
         }
         break
     }
-    this.canEnonce = this.question
+
     this.canReponseACompleter = '$d=\\ldots$'
   }
 }

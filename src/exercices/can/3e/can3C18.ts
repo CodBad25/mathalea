@@ -1,12 +1,12 @@
-import ExerciceSimple from '../../ExerciceSimple'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { randint } from '../../../modules/outils'
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import ExerciceSimple from '../../ExerciceSimple'
 
 import { choice } from '../../../lib/outils/arrayOutils'
-import { obtenirListeFractionsIrreductibles } from '../../../modules/fractions'
-import FractionEtendue from '../../../modules/FractionEtendue'
 import { pgcd } from '../../../lib/outils/primalite'
+import FractionEtendue from '../../../modules/FractionEtendue'
+import { obtenirListeFractionsIrreductibles } from '../../../modules/fractions'
 export const titre = 'Calculer une valeur dans une égalité de quotients'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -77,7 +77,6 @@ export default class calculDansQuotient extends ExerciceSimple {
     this.correction += `
          `
 
-    this.canEnonce = this.question // 'Compléter'
     this.canReponseACompleter = `$${inconnue}=\\ldots$`
   }
 }

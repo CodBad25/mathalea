@@ -48,7 +48,6 @@ export default class DeltaSecondDegre extends ExerciceSimple {
       \\Delta&=${ecritureParentheseSiNegatif(b)}^2-4\\times ${ecritureParentheseSiNegatif(a)}\\times ${ecritureParentheseSiNegatif(c)} \\\\
       &=${miseEnEvidence(this.reponse)} 
       \\end{aligned}$`
-    this.canEnonce = this.question
 
     if (!this.interactif) {
       this.question += ' $\\ldots$'

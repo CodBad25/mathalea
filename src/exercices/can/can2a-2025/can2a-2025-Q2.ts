@@ -1,8 +1,8 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { texNombre } from '../../../lib/outils/texNombre'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { randint } from '../../../modules/outils'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { texNombre } from '../../../lib/outils/texNombre'
+import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Utiliser la priorité de la multiplication'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -39,10 +39,6 @@ export default class PrioriteMultiplication extends ExerciceSimple {
       this.reponse = a - b * c
       this.question = ` $${a}-${b}\\times${c}$`
       this.correction = `$${a}-${b}\\times${c}=${miseEnEvidence(texNombre(this.reponse, 0))}$`
-      this.canEnonce = this.question
-      this.canReponseACompleter = ''
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

@@ -1,10 +1,10 @@
 import { choice, shuffle } from '../../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { sp } from '../../../lib/outils/outilString'
 import { texNombre } from '../../../lib/outils/texNombre'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import ExerciceSimple from '../../ExerciceSimple'
-import { randint } from '../../../modules/outils'
 import { context } from '../../../modules/context'
+import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Déterminer un taux global d’évolution'
 export const interactifReady = true
@@ -176,7 +176,6 @@ Multiplier par $${texNombre(coeffG)}$ revient à multiplier par `
       ? `$${texNombre((coeffG - 1) * 100, 2)}\\,\\%$`
       : `${texNombre((coeffG - 1) * 100, 2)}`
 
-    this.canEnonce = this.question
     this.canReponseACompleter = '$\\ldots \\%$'
   }
 }

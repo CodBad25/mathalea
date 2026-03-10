@@ -1,7 +1,7 @@
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import ExerciceCan from '../../ExerciceCan'
-import { randint } from '../../../modules/outils'
 import { choice } from '../../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { randint } from '../../../modules/outils'
+import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Égalité de fractions'
 export const interactifReady = true
@@ -35,7 +35,7 @@ export default class Can2025N5Q26 extends ExerciceCan {
         : `On remarque que $${c}=${coeff}\\times ${a}$, donc $?=${coeff}\\times ${b}=${coeff * b}$.<br>`
 
     this.correction += `Ainsi, $\\dfrac{${a}}{${b}}=${question === 'num' ? `\\dfrac{${miseEnEvidence(coeff * a)}}{${c}}$` : `\\dfrac{${c}}{${miseEnEvidence(coeff * b)}}$`}`
-    this.canEnonce = this.question
+
     this.canReponseACompleter = '$\\text{? }=\\ldots$'
     if (this.interactif) {
       this.question += '<br>$\\text{? }=$'

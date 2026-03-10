@@ -1,10 +1,10 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { randint } from '../../../modules/outils'
-import { choice } from '../../../lib/outils/arrayOutils'
-import { texNombre } from '../../../lib/outils/texNombre'
-import { rienSi1 } from '../../../lib/outils/ecritures'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { choice } from '../../../lib/outils/arrayOutils'
+import { rienSi1 } from '../../../lib/outils/ecritures'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { texNombre } from '../../../lib/outils/texNombre'
+import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Simplifier des puissances de 10'
 export const interactifReady = true
@@ -50,7 +50,5 @@ export default class NomExercice extends ExerciceSimple {
         this.correction = `$\\dfrac{10^${a}}{10^${b}}=\\dfrac{1}{10^{${rienSi1(b - a)}}}=${miseEnEvidence(texNombre(10 ** -k, 5))}$`
       }
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

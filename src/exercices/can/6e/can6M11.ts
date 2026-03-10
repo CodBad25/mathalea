@@ -93,7 +93,7 @@ export default class VolumePaveCubes extends ExerciceSimple {
     }
     this.reponse = L * l * h
     this.correction = `Le volume de ce pavé droit est : $${L}\\times ${l}\\times ${h}=${miseEnEvidence(this.reponse)}$ cubes`
-    this.canEnonce = this.question
+
     this.canReponseACompleter = '$\\dots$ unités'
     this.optionsChampTexte = { texteApres: ' unités' }
   }

@@ -35,7 +35,7 @@ export default class problemeEconomie extends ExerciceSimple {
     this.reponse = eco.mul(nbreL).div(100).toFixed(2)
     this.question = `Dans la station A, le prix du litre d'essence est $${eco}$ centimes moins cher que dans la station B.<br>
     Quelle économie réalise-t-on en se servant dans la station A si on prend $${nbreL}$ litres ?`
-    this.canEnonce = this.question
+
     this.canReponseACompleter = '$\\ldots$ €'
     this.correction = `On  calcule l'économie par le produit du nombre de litres achetés par l'économie par litre réalisée. <br>
      Comme $${eco}$ centimes est égal à $${texNombre(ecoEuro, 2)}$ €, on obtient :<br> $${texNombre(ecoEuro, 2)}\\times ${nbreL}=${miseEnEvidence(texNombre(eco.mul(nbreL).div(100), 2))}$ €.

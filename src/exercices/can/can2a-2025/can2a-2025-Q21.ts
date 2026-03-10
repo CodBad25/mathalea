@@ -1,7 +1,7 @@
-import ExerciceSimple from '../../ExerciceSimple'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { randint } from '../../../modules/outils'
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer une moyenne'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -45,7 +45,5 @@ Quelle est sa moyenne ?`
     }
     this.correction = `On calcule la moyenne $m$ en faisant le quotient de la somme des notes coefficientées par la somme des coefficients. <br>
         $m=\\dfrac{${a}+${b}+${coeff2}\\times ${c}}{1+1+${coeff2}}=\\dfrac{${a + b + coeff2 * c}}{${coeff2 + 2}}=${miseEnEvidence(this.reponse)}$`
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

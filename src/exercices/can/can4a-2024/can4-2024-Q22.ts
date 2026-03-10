@@ -45,7 +45,6 @@ export default class NomExercice extends ExerciceSimple {
       this.correction = `La somme des $3$ valeurs est : $${a}+${b}+${c} =${d}$.<br>
                 La moyenne est donc $\\dfrac{${d}}{3}=${miseEnEvidence(this.reponse)}$.`
     }
-    this.canEnonce = this.question
 
     if (!this.interactif) {
       this.question += ' $\\ldots$'

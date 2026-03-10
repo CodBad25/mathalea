@@ -194,7 +194,5 @@ export default class ProduitScalaireNormesAngles extends ExerciceSimple {
         `${f1.oppose().texFraction}\\times\\sqrt{3}`,
       ]
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

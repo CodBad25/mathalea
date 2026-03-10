@@ -1,8 +1,8 @@
-import ExerciceSimple from '../../ExerciceSimple'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
-import { choice } from '../../../lib/outils/arrayOutils'
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import ExerciceSimple from '../../ExerciceSimple'
 
 import Decimal from 'decimal.js'
 import { randint } from '../../../modules/outils'
@@ -79,6 +79,5 @@ export default class calcRenduMonnaie extends ExerciceSimple {
       this.question += '<br>'
     }
     this.canReponseACompleter = '$\\ldots$ €'
-    this.canEnonce = this.question
   }
 }

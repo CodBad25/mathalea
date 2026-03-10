@@ -1,8 +1,8 @@
 import { choice } from '../../../lib/outils/arrayOutils'
 import { ecritureParentheseSiNegatif } from '../../../lib/outils/ecritures'
 import { texNombre } from '../../../lib/outils/texNombre'
-import ExerciceSimple from '../../ExerciceSimple'
 import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer la raison d’une suite arithmétique/géométrique*'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -57,7 +57,7 @@ Donner la raison $r$ de cette suite.`
        On en déduit :  $r=\\dfrac{${s}_{${i + n}}-${s}_{${i}}}{${n}}=\\dfrac{${v}-${ecritureParentheseSiNegatif(u)}}{${n}}=${r}$.`
 
         this.reponse = r
-        this.canEnonce = this.question
+
         this.canReponseACompleter = '$r=\\ldots$'
         break
       case 'b': // suite géométrique
@@ -84,7 +84,7 @@ Donner la raison $q$ de cette suite.`
        Puisque $q$ est un nombre positif, on obtient : $q=${texNombre(q)}$.`
 
           this.reponse = q
-          this.canEnonce = this.question
+
           this.canReponseACompleter = '$q=\\ldots$'
         }
         if (choix === 2) {
@@ -109,7 +109,7 @@ Donner la raison $q$ de cette suite.`
            Puisque $q$ est un nombre négatif, on obtient : $q=${-q}$.`
 
           this.reponse = -q
-          this.canEnonce = this.question
+
           this.canReponseACompleter = '$q=\\ldots$'
         }
         if (choix === 3) {
@@ -133,7 +133,7 @@ Donner la raison $q$ de cette suite.`
          On obtient : $q=${q}$.`
 
           this.reponse = q
-          this.canEnonce = this.question
+
           this.canReponseACompleter = '$q=\\ldots$'
         }
     }

@@ -1,10 +1,10 @@
-import ExerciceSimple from '../../ExerciceSimple'
 import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 
-import { choice } from '../../../lib/outils/arrayOutils'
-import { texNombre } from '../../../lib/outils/texNombre'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import Decimal from 'decimal.js'
+import { choice } from '../../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { texNombre } from '../../../lib/outils/texNombre'
 
 export const titre = 'Placer la virgule dans un produit'
 export const interactifReady = true
@@ -40,9 +40,9 @@ export default class PlaceVirguleProduit extends ExerciceSimple {
       facteur2 = randint(3, 9)
     }
     const resultatEntier = facteur1 * facteur2
-    this.question = `Sachant que $${texNombre(facteur1, 0)}\\times ${texNombre(facteur2, 0)}=${texNombre(resultatEntier, 0)}$,<br>complète`
-
-    this.canEnonce = this.question + '.'
+    this.question =
+      `Sachant que $${texNombre(facteur1, 0)}\\times ${texNombre(facteur2, 0)}=${texNombre(resultatEntier, 0)}$,<br>complète` +
+      '.'
     this.question += ` : $${texNombre(facteur1 / coeff, 3)}\\times ${texNombre(facteur2, 0)}=$`
     if (!this.interactif) {
       this.question += ' $\\ldots$'

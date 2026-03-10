@@ -53,7 +53,5 @@ export default class CompositionDeNombreDecimalC3 extends ExerciceSimple {
         this.correction = `$${a} + ${texNombre(b / 10 + c / 1000, 3)}=${texNombre(this.reponse, 3)}$`
         break
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

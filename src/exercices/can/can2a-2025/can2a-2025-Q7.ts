@@ -1,8 +1,8 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { choice } from '../../../lib/outils/arrayOutils'
-import { texteEnCouleurEtGras } from '../../../lib/outils/embellissements'
 import { propositionsQcm } from '../../../lib/interactif/qcm'
+import { choice } from '../../../lib/outils/arrayOutils'
 import { ecritureParentheseSiNegatif } from '../../../lib/outils/ecritures'
+import { texteEnCouleurEtGras } from '../../../lib/outils/embellissements'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer un prix après des évolutions successives'
 export const interactifReady = true
 export const interactifType = 'qcm'
@@ -66,6 +66,5 @@ export default class SignePuissance extends ExerciceSimple {
      Comme  $${ecritureParentheseSiNegatif(valeurs[0])}^{${puiss}}$ est  ${valeurs[0] < 0 && valeurs[1] % 2 !== 0 ? "négatif (puissance impaire d'un nombnre négatif)" : "positif (puissance paire d'un nombre négatif)"}, on en déduit que  $\\dfrac{1}{${ecritureParentheseSiNegatif(valeurs[0])}^{${puiss}}}$ est ${valeurs[0] < 0 && valeurs[1] % 2 !== 0 ? 'négatif' : 'positif'}.<br>
     Ainsi, $${ecritureParentheseSiNegatif(valeurs[0])}^{-${puiss}}$ est ${valeurs[0] < 0 && valeurs[1] % 2 !== 0 ? `${texteEnCouleurEtGras('négatif')}` : `${texteEnCouleurEtGras('positif')}`}.`
     this.canEnonce = `Signe de  $${ecritureParentheseSiNegatif(valeurs[0])}^{-${puiss}}$`
-    this.canReponseACompleter = ''
   }
 }

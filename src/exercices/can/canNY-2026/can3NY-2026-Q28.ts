@@ -1,7 +1,7 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { choice } from '../../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import ExerciceSimple from '../../ExerciceSimple'
 
 import { texNombre } from '../../../lib/outils/texNombre'
 export const titre = 'Trouver un inverse ou un opposé'
@@ -25,7 +25,7 @@ export default class InverseOppose2026 extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const annee =2026
+    const annee = 2026
     const nbre = this.canOfficielle ? annee : choice([-annee, annee])
     if (this.canOfficielle ? true : choice([true, false])) {
       this.question = `Quel est l'opposé de  $${texNombre(nbre)}$ ? `
@@ -43,7 +43,5 @@ export default class InverseOppose2026 extends ExerciceSimple {
     if (this.interactif) {
       this.question += '<br>'
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

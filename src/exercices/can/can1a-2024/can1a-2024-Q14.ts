@@ -125,7 +125,5 @@ export default class EquationReduite extends ExerciceSimple {
         : `$${miseEnEvidence(`y=${coeffDir.texFractionSimplifiee}x`)}$.`
     }
 `
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

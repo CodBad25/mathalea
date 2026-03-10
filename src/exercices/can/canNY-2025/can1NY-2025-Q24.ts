@@ -68,7 +68,5 @@ export default class inequationAResoudre extends ExerciceSimple {
     if (this.interactif) {
       this.question += '<br>$S=$'
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

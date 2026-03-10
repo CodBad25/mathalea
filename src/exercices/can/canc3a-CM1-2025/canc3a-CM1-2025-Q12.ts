@@ -1,7 +1,7 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer une somme'
 export const uuid = 'cdd97'
 export const refs = {
@@ -37,7 +37,5 @@ export default class Can2025CM1Q12 extends ExerciceSimple {
       this.correction += `+${a}`
     }
     this.correction += `=${a}\\times ${b}=${miseEnEvidence(a * b)}$`
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

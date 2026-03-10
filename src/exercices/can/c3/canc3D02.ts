@@ -113,7 +113,7 @@ export default class LireUneDuree extends ExerciceSimple {
     } else {
       this.correction += `La petite aiguille a avancé d'une heure, donc il s'est écoulé ${texteEnCouleurEtGras(`une heure et ${formatMinute(m2 - m1)} minutes`)}.`
     }
-    this.canEnonce = this.question
+
     this.canReponseACompleter = '$\\ldots$ h $\\ldots$ min'
   }
 }

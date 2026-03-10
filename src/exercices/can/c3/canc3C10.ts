@@ -96,10 +96,13 @@ export default class FoisPlusFoisMoins2 extends ExerciceSimple {
        `
         }
         if (this.interactif) {
-          this.optionsChampTexte = {texteAvant: '<br>', texteApres: ` ${objets}` }
+          this.optionsChampTexte = {
+            texteAvant: '<br>',
+            texteApres: ` ${objets}`,
+          }
         }
- this.canEnonce = this.question
-    this.canReponseACompleter = `$\\ldots$ ${objets}`
+
+        this.canReponseACompleter = `$\\ldots$ ${objets}`
         break
       case 2:
         choix1 = choice([true, false])
@@ -132,10 +135,13 @@ export default class FoisPlusFoisMoins2 extends ExerciceSimple {
               Ensemble, ils en ont donc : ${choix1 ? `$${a}+${b}$` : ` $${b}+${a}$ `} soit $${miseEnEvidence(a + b)}$.`
         }
         if (this.interactif) {
-          this.optionsChampTexte = {texteAvant: '<br>', texteApres: ` ${objets}` }
+          this.optionsChampTexte = {
+            texteAvant: '<br>',
+            texteApres: ` ${objets}`,
+          }
         }
-         this.canEnonce = this.question
-    this.canReponseACompleter = `$\\ldots$ ${objets}`
+
+        this.canReponseACompleter = `$\\ldots$ ${objets}`
         break
       case 3:
         choix1 = choice([true, false])
@@ -169,12 +175,14 @@ export default class FoisPlusFoisMoins2 extends ExerciceSimple {
                   Le nombre total d'adhérents dans ce club est donc ${choix1 ? `$${k * a}+${a}$` : ` $${a}+${b}$ `} soit ${choix1 ? `$${miseEnEvidence(a + b)}$` : ` $${miseEnEvidence(a + b)}$`}.`
         }
         if (this.interactif) {
-          this.optionsChampTexte = {texteAvant: '<br>', texteApres: ' adhérents' }
+          this.optionsChampTexte = {
+            texteAvant: '<br>',
+            texteApres: ' adhérents',
+          }
         }
- this.canEnonce = this.question
-    this.canReponseACompleter = '$\\ldots$ adhérents'
+
+        this.canReponseACompleter = '$\\ldots$ adhérents'
         break
     }
-   
   }
 }

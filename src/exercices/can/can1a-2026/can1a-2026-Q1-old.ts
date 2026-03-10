@@ -28,14 +28,15 @@ export default class Can1a2026Q1 extends ExerciceCan {
     this.reponse = texNombre(a.mul(b), 3)
     this.question = `$${texNombre(a, 1)} \\times ${texNombre(b, 1)}$ `
     this.correction = `$${texNombre(a, 1)} \\times${texNombre(b, 1)}=${miseEnEvidence(this.reponse)}$`
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
+
     if (this.interactif) {
       this.question += '$=$'
     }
   }
 
   nouvelleVersion() {
-    this.canOfficielle ? this.enonce(new Decimal(0.3), new Decimal(0.4)) : this.enonce()
+    this.canOfficielle
+      ? this.enonce(new Decimal(0.3), new Decimal(0.4))
+      : this.enonce()
   }
 }

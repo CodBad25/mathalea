@@ -88,8 +88,6 @@ ${frac1.texFraction} + ${frac2.texFraction} &= \\dfrac{${frac1.num}\\times ${tex
 \\end{aligned}$`
 
     this.reponse = resultat
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 
   nouvelleVersion() {

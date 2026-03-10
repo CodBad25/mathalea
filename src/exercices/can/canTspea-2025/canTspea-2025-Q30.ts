@@ -1,14 +1,14 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { randint } from '../../../modules/outils'
 import { choice } from '../../../lib/outils/arrayOutils'
 import {
   ecritureAlgebriqueSauf1,
   reduireAxPlusB,
   rienSi1,
 } from '../../../lib/outils/ecritures'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import FractionEtendue from '../../../modules/FractionEtendue'
+import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer une limite'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -43,7 +43,5 @@ export default class Can2025TQ30 extends ExerciceSimple {
     this.question = `$\\displaystyle\\lim_{x\\to +\\infty} \\dfrac{${choix1 ? `${reduireAxPlusB(a, b)}` : `${b}${ecritureAlgebriqueSauf1(a)}x`}}{${choix2 ? `${reduireAxPlusB(c, d)}` : `${d}${ecritureAlgebriqueSauf1(c)}x`}}$`
     this.correction = `$\\displaystyle\\lim_{x\\to +\\infty} \\dfrac{${choix1 ? `${reduireAxPlusB(a, b)}` : `${b}${ecritureAlgebriqueSauf1(a)}x`}}{${choix2 ? `${reduireAxPlusB(c, d)}` : `${d}${ecritureAlgebriqueSauf1(c)}x`}}
     =\\displaystyle\\lim_{x\\to +\\infty} \\dfrac{${rienSi1(a)}x}{${rienSi1(c)}x}=${miseEnEvidence(new FractionEtendue(a, c).texFractionSimplifiee)}$.`
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

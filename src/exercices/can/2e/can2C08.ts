@@ -63,7 +63,6 @@ export default class CalculAvecRacineCarree3 extends ExerciceSimple {
     \\end{aligned}$
   `
           this.canEnonce = `Calculer le carré de $\\sqrt{${a}}+\\sqrt{${b}}$.`
-          this.canReponseACompleter = ''
         } else {
           this.question = `Le carré de $\\sqrt{${b}}+\\sqrt{${a}}$ est égal à : `
           this.correction = `On simpifie $\\sqrt{${b}}$ en $${reduction[0]}\\sqrt{${reduction[1]}}$, car
@@ -81,7 +80,6 @@ export default class CalculAvecRacineCarree3 extends ExerciceSimple {
   \\end{aligned}$
 `
           this.canEnonce = `Calculer le carré de $\\sqrt{${b}}+\\sqrt{${a}}$.`
-          this.canReponseACompleter = ''
         }
         this.reponse = a + b + 2 * Math.sqrt(a * b)
 
@@ -109,7 +107,6 @@ export default class CalculAvecRacineCarree3 extends ExerciceSimple {
     \\end{aligned}$
   `
           this.canEnonce = `Calculer le carré de $\\sqrt{${a}}-\\sqrt{${b}}$.`
-          this.canReponseACompleter = ''
         } else {
           this.question = `Le carré de $\\sqrt{${b}}-\\sqrt{${a}}$ est égal à : `
           this.correction = `On simpifie $\\sqrt{${b}}$ en $${reduction[0]}\\sqrt{${reduction[1]}}$, car
@@ -127,7 +124,6 @@ export default class CalculAvecRacineCarree3 extends ExerciceSimple {
   \\end{aligned}$
 `
           this.canEnonce = `Calculer le carré de $\\sqrt{${b}}-\\sqrt{${a}}$.`
-          this.canReponseACompleter = ''
         }
         this.reponse = a + b - 2 * Math.sqrt(a * b)
         break

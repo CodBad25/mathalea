@@ -30,7 +30,7 @@ export default class NomExercice extends ExerciceSimple {
       this.question = "$\\dfrac{3}{4}$ d'heure $=$ "
       this.correction = `$\\dfrac{1}{4}$ d'heure $=60\\text{ min }\\div4=15$ min.<br><br>
     Ainsi,  $\\dfrac{3}{4}$ d'heure $=${miseEnEvidence(45)}$ min`
-      this.canEnonce = this.question
+
       this.canReponseACompleter = '$\\ldots$ min'
       if (!this.interactif) {
         this.question += '$\\ldots$ min'
@@ -56,7 +56,7 @@ export default class NomExercice extends ExerciceSimple {
         this.question = `$${fracHeures.texFraction}$ d'heure $=$ `
         this.correction = `$\\dfrac{1}{${a[1]}}$ h $=60\\text{ min }\\div ${a[1]}= ${texNombre(a[2] / a[0], 0)}$ min.<br>
         Ainsi, $${fracHeures.texFraction}$ d'heure $=${miseEnEvidence(a[2])}$ min`
-        this.canEnonce = this.question
+
         this.canReponseACompleter = '$\\ldots$ min'
         if (!this.interactif) {
           this.question += '$\\ldots$ min'
@@ -68,7 +68,7 @@ export default class NomExercice extends ExerciceSimple {
         this.question = `$${a[2]}$ min $=$ `
         this.correction = `$\\dfrac{1}{${a[1]}}$ h $=60\\text{ min } \\div ${a[1]} = ${texNombre(a[2] / a[0], 0)}$ min.<br>
         Ainsi, $${a[2]}$ min $=${miseEnEvidence(fracHeures.texFraction)}$ h`
-        this.canEnonce = this.question
+
         this.canReponseACompleter = '$\\ldots$ h'
         if (!this.interactif) {
           this.question += '$\\ldots$ h'

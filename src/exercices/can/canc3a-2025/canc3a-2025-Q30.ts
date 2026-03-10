@@ -1,7 +1,7 @@
-import ExerciceSimple from '../../ExerciceSimple'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { randint } from '../../../modules/outils'
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = "Calculer le résultat d'une division par 5"
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -31,7 +31,5 @@ export default class Can2025CM2Q30 extends ExerciceSimple {
     this.correction = `$${b * 5} \\div 5 =${miseEnEvidence(b)}$.`
 
     this.reponse = b
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

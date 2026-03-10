@@ -59,7 +59,6 @@ export default class Can20264emeQ26 extends ExerciceCan {
     this.correction = `Ce programme trace ${nomFigure} régulier de côté $${longueur}$ pas.<br>
     Le périmètre est : $${nb}\\times ${longueur}=${miseEnEvidence(perimetre)}$ pas.`
 
-    this.canEnonce = this.question
     this.canReponseACompleter = '$\\ldots$ pas'
     this.reponse = perimetre
 

@@ -34,7 +34,5 @@ export default class EquationAXEgalB extends ExerciceSimple {
     this.question = `Donner la solution de l'équation :<br> $${a}x=${b}$`
     this.correction = `On cherche le nombre qui multiplié par $${a}$ donne $${b}$.<br>
     Il s'agit de  $x=${texFractionFromString(b, a)}=${this.reponse}$`
-    this.canEnonce = this.question // 'Compléter'
-    this.canReponseACompleter = ''
   }
 }

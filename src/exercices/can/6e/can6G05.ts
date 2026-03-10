@@ -96,7 +96,5 @@ export default class ProblemesDeLongueursInverse extends ExerciceSimple {
       )
     this.reponse = c
     this.correction = `Comme $CB=\\dfrac{AB}{${b}}$, alors $CB=\\dfrac{${abc}\\text{ cm}}{${b}}=${ac}\\text{ cm}$.<br><br>Comme $DE=CB=${ac}\\text{ cm}$ et $FE=\\dfrac{DE}{${a}}$, alors $FE=\\dfrac{${ac}\\text{ cm}}{${a}}=${c}\\text{ cm}$.`
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

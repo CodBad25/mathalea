@@ -75,7 +75,5 @@ export default class NombreAajouter extends ExerciceSimple {
       latex2d('A', x1B * 4, 0.5, { color: 'blue' }),
       d,
     )
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

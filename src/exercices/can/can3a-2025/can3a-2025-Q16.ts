@@ -1,8 +1,8 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { randint } from '../../../modules/outils'
 import Trinome from '../../../modules/Trinome'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer avec une valeur particulière'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -38,8 +38,5 @@ export default class CalculValeurParticuliere extends ExerciceSimple {
     }
     this.correction = `Pour $x=${val}$, on obtient : $${p.texCalculImage(val)}$<br>
      Pour $x=${val}$, $${p.tex}$ prend la valeur $${miseEnEvidence(this.reponse)}$.`
-
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

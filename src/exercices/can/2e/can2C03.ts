@@ -46,8 +46,7 @@ export default class CalculPuissance1 extends ExerciceSimple {
         $4^{${b}}\\times ${texNombre(a)}^{${b}}=(4\\times ${texNombre(a)})^{${b}}=
         ${4 * a}^${texNombre(b)}=${miseEnEvidence(texNombre(4 ** b * a ** b))} $`
         this.reponse = 4 ** b * a ** b
-        this.canEnonce = this.question // 'Compléter'
-        this.canReponseACompleter = ''
+
         break
       case 'b':
         a = choice([0.2, 0.4])
@@ -58,8 +57,7 @@ export default class CalculPuissance1 extends ExerciceSimple {
        $5^{${b}}\\times ${texNombre(a)}^{${b}}=(5\\times ${texNombre(a)})^{${b}}=
        ${5 * a}^${texNombre(b)}=${miseEnEvidence(texNombre(5 ** b * a ** b))} $`
         this.reponse = 5 ** b * a ** b
-        this.canEnonce = this.question // 'Compléter'
-        this.canReponseACompleter = ''
+
         break
 
       case 'c':
@@ -70,8 +68,7 @@ export default class CalculPuissance1 extends ExerciceSimple {
         
         $2^{${a}}\\times 8=\\dfrac{1}{${2 ** abs(a)}}\\times 8=${miseEnEvidence(texNombre((8 * 1) / 2 ** -a))} $`
         this.reponse = 2 ** a * 8
-        this.canEnonce = this.question // 'Compléter'
-        this.canReponseACompleter = ''
+
         break
       case 'd':
         a = randint(-4, -1)
@@ -81,8 +78,7 @@ export default class CalculPuissance1 extends ExerciceSimple {
         
         $2^{${a}}\\times 16=\\dfrac{1}{${2 ** abs(a)}}\\times 16=${miseEnEvidence(texNombre((16 * 1) / 2 ** -a))} $`
         this.reponse = 2 ** a * 16
-        this.canEnonce = this.question // 'Compléter'
-        this.canReponseACompleter = ''
+
         break
       case 'e':
         a = randint(-5, -1)
@@ -92,8 +88,7 @@ export default class CalculPuissance1 extends ExerciceSimple {
         
         $2^{${a}}\\times 32=\\dfrac{1}{${2 ** abs(a)}}\\times 32=${miseEnEvidence(texNombre((32 * 1) / 2 ** -a))} $`
         this.reponse = 2 ** a * 32
-        this.canEnonce = this.question // 'Compléter'
-        this.canReponseACompleter = ''
+
         break
     }
   }

@@ -5,8 +5,8 @@ import {
   ecritureParentheseSiNegatif,
   rienSi1,
 } from '../../../lib/outils/ecritures'
-import { listeQuestionsToContenu, randint } from '../../../modules/outils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { listeQuestionsToContenu, randint } from '../../../modules/outils'
 import Exercice from '../../Exercice'
 
 export const titre =
@@ -233,7 +233,7 @@ Il est donc négatif entre ses racines. On en déduit que l'ensemble des solutio
         this.listeCorrections[i] = texteCorr
 
         this.canEnonce = texte
-        this.canReponseACompleter = ''
+
         this.listeCanEnonces.push(this.canEnonce)
         this.listeCanReponsesACompleter.push(this.canReponseACompleter)
         i++

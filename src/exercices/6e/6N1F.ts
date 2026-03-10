@@ -175,7 +175,6 @@ export default class SommeFractionsDecimales extends Exercice {
             if (!context.isHtml) {
               this.canEnonce = `Calculer $${fracB.texFraction}+${fracC.texFraction}$ sous forme d'une fraction décimale.`
               this.correction = this.listeCorrections[0]
-              this.canReponseACompleter = ''
             }
             texteCorrFrac = `${fracBPlusC.texFraction}`
           }
@@ -193,7 +192,6 @@ export default class SommeFractionsDecimales extends Exercice {
             if (!context.isHtml) {
               this.canEnonce = `Calculer $${fracB.texFraction}-${fracC.texFraction}$ sous forme d'une fraction décimale.`
               this.correction = this.listeCorrections[0]
-              this.canReponseACompleter = ''
             }
             texteCorrFrac = `${fracBMoinsC.texFraction}`
           }
@@ -217,7 +215,6 @@ export default class SommeFractionsDecimales extends Exercice {
             if (!context.isHtml) {
               this.canEnonce = `Calculer $${a}+${fracB.texFraction}+${fracC.texFraction}$ sous forme décimale.`
               this.correction = this.listeCorrections[0]
-              this.canReponseACompleter = ''
             }
             texteCorrFrac = `${a}+${fracBPlusC.texFraction}=${fracA.texFraction}+${fracBPlusC.texFraction}=${fracNumAMC.texFraction}`
           }
@@ -241,7 +238,6 @@ export default class SommeFractionsDecimales extends Exercice {
             if (!context.isHtml) {
               this.canEnonce = `Calculer $${a}+${fracB.texFraction}-${fracC.texFraction}$ sous forme décimale.`
               this.correction = this.listeCorrections[0]
-              this.canReponseACompleter = ''
             }
             texteCorrFrac = `${a}+${fracBMoinsC.texFraction}=${fracA.texFraction}+${fracBMoinsC.texFraction}=${fracNumAMC.texFraction}`
           }
@@ -265,7 +261,6 @@ export default class SommeFractionsDecimales extends Exercice {
             if (!context.isHtml) {
               this.canEnonce = `Calculer $${a}+${fracB.texFraction}+${fracC.texFraction}$ sous forme décimale.`
               this.correction = this.listeCorrections[0]
-              this.canReponseACompleter = ''
             }
             texteCorrFrac = `${a}+${fracBPlusC.texFraction}=${fracA.texFraction}+${fracBPlusC.texFraction}=${fracNumAMC.texFraction}`
           }
@@ -287,7 +282,6 @@ export default class SommeFractionsDecimales extends Exercice {
             if (!context.isHtml) {
               this.canEnonce = `Calculer $${a}+${fracB.texFraction}-${fracC.texFraction}$ sous forme décimale.`
               this.correction = this.listeCorrections[0]
-              this.canReponseACompleter = ''
             }
             texteCorrFrac = `${a}+${fracBMoinsC.texFraction}=${fracA.texFraction}+${fracBMoinsC.texFraction}=${fracNumAMC.texFraction}`
           }

@@ -1,10 +1,10 @@
-import { reduireAxPlusB, rienSi1 } from '../../../lib/outils/ecritures'
-import Exercice from '../../Exercice'
-import { listeQuestionsToContenu, randint } from '../../../modules/outils'
 import { ajouteChampTexteMathLive } from '../../../lib/interactif/questionMathLive'
+import { reduireAxPlusB, rienSi1 } from '../../../lib/outils/ecritures'
+import { listeQuestionsToContenu, randint } from '../../../modules/outils'
+import Exercice from '../../Exercice'
 
-import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 
 export const titre = 'Trouver les racines à partir d’une forme factorisée'
@@ -72,6 +72,5 @@ export default class RacinesPoly extends Exercice {
     }
     listeQuestionsToContenu(this)
     this.canEnonce = texte
-    this.canReponseACompleter = ''
   }
 }

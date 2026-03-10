@@ -1,7 +1,7 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { randint } from '../../../modules/outils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
+import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Diviser par 5'
 export const interactifReady = true
@@ -33,8 +33,7 @@ export default class DivisionParCinq extends ExerciceSimple {
     this.question = `$${texNombre(dividende, 0)}\\div 5`
     if (this.interactif) this.question += '=$'
     else this.question += '$'
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
+
     this.reponse = texNombre(dividende / 5, 0)
     this.correction =
       'Pour diviser par $5$, on peut diviser par $10$ puis multiplier le résultat par $2$ :<br>'

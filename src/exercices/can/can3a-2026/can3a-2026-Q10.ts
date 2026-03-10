@@ -40,7 +40,7 @@ export default class Can32026Q10 extends ExerciceCan {
           : `<br>
       Donc $${a}\\,\\%$ de $${b}$ est égal à $${texNombre(a / 10, 0)}\\times ${texNombre(b / 10, 0)}=${miseEnEvidence(texNombre((a * b) / 100, 2))}$.`
       }`
-    this.canEnonce = this.question
+
     if (this.interactif) {
       this.question += ' est égal à '
     }

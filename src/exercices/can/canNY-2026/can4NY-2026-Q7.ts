@@ -1,8 +1,8 @@
-import ExerciceSimple from '../../ExerciceSimple'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
-import { choice } from '../../../lib/outils/arrayOutils'
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import ExerciceSimple from '../../ExerciceSimple'
 
 import { randint } from '../../../modules/outils'
 export const titre = 'Calculer avec des entiers relatifs'
@@ -41,8 +41,5 @@ export default class CalculsEntiersRelatifs2026 extends ExerciceSimple {
       this.question = `$(${a})-${texNombre(annee, 0)}$`
       this.correction = `$(${a})-${texNombre(annee, 0)}=(${a})+(-${texNombre(annee, 0)})=${miseEnEvidence(texNombre(this.reponse, 0))}$`
     }
-
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

@@ -90,7 +90,5 @@ export default class FractionCommeFacteurManquant extends ExerciceSimple {
         ],
       }
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

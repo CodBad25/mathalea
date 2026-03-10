@@ -61,8 +61,7 @@ export default class NomExercice extends ExerciceSimple {
         this.reponse = new Decimal(u).add(partieDec2).add(partieDec3)
       }
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
+
     if (this.interactif) {
       this.question += ' $=$'
     }

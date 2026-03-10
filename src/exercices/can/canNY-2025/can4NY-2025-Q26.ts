@@ -32,8 +32,5 @@ export default class CalculsPourcentages extends ExerciceSimple {
     this.question = `$10\\,\\%$ de $${texNombre(a, 4)}$`
     this.correction = `Prendre $10\\,\\%$ d'une quantité revient à la diviser par $10$.<br>
       Ainsi, $10\\,\\%$ de $${texNombre(a, 4)}=${texNombre(a, 4)} \\div 10 = ${miseEnEvidence(this.reponse)}$.`
-
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

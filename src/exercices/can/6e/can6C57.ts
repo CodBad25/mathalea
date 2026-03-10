@@ -141,7 +141,5 @@ ${frac1.texFraction} - ${frac2.texFraction} &= ${frac1.texFraction} - \\dfrac{${
     }
 
     this.reponse = resultat
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

@@ -56,16 +56,15 @@ export default class IdentitesCalculs extends Exercice {
   nouvelleVersion() {
     this.consigne =
       this.nbQuestions === 1
-        ?  this.can
+        ? this.can
           ? 'Calculer :'
-          :'Effectuer le calcul suivant '
+          : 'Effectuer le calcul suivant '
         : this.can
           ? 'Calculer :'
-          :'Effectuer les calculs suivants '
+          : 'Effectuer les calculs suivants '
     this.consigne += this.can
-          ? ''
-          :
-      'sans calculatrice. Utiliser la double distributivité ou les identités remarquables.'
+      ? ''
+      : 'sans calculatrice. Utiliser la double distributivité ou les identités remarquables.'
     let typesDeQuestionsDisponibles
 
     // une fonction pour gérer un \hfill dans la sortie LaTeX
@@ -393,8 +392,6 @@ export default class IdentitesCalculs extends Exercice {
                 this.reponse = `${enonces[0].resultatCan}`
                 break
             }
-            this.canEnonce = this.question
-            this.canReponseACompleter = ''
           }
           break
         case 1: // carré d'une différence
@@ -429,8 +426,6 @@ export default class IdentitesCalculs extends Exercice {
                 this.reponse = `${enonces[1].resultatCan}`
                 break
             }
-            this.canEnonce = this.question
-            this.canReponseACompleter = ''
           }
           break
         case 2: // Produit somme différence
@@ -466,8 +461,6 @@ export default class IdentitesCalculs extends Exercice {
                 this.reponse = `${enonces[2].resultatCan}`
                 break
             }
-            this.canEnonce = this.question
-            this.canReponseACompleter = ''
           }
           break
       }

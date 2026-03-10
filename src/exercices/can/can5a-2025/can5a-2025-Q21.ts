@@ -1,7 +1,7 @@
-import { texNombre } from '../../../lib/outils/texNombre'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { randint } from '../../../modules/outils'
 import { choice } from '../../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { texNombre } from '../../../lib/outils/texNombre'
+import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Calculer facilement avec la distributivité'
@@ -32,8 +32,7 @@ export default class Can2025N5Q21 extends ExerciceCan {
     &=${texNombre((a - 1) * b, 0)}+${b}\\\\
     &=${miseEnEvidence(texNombre(this.reponse, 0))}
     \\end{aligned}$`
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
+
     if (this.interactif) {
       this.question += '$=$'
     }

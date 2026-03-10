@@ -1,9 +1,9 @@
-import ExerciceSimple from '../../ExerciceSimple'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import ExerciceSimple from '../../ExerciceSimple'
 
-import { randint } from '../../../modules/outils'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { texNombre } from '../../../lib/outils/texNombre'
+import { randint } from '../../../modules/outils'
 export const titre = ''
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -30,7 +30,7 @@ export default class CalculAnnee2026 extends ExerciceSimple {
     // Paramètre modifiable : l'année cible
     const annee = 2026
     const anneePrecedente = annee - 1
-    
+
     const date = this.canOfficielle ? 30 : randint(29, 30)
     const nbre = this.canOfficielle ? 10 : randint(1, 23)
     this.question = `Nous sommes le $${date}$ décembre $${anneePrecedente}$. Il est $${nbre}$ h${nbre < 12 ? ' du matin' : ''}.<br>
@@ -43,7 +43,5 @@ export default class CalculAnnee2026 extends ExerciceSimple {
     if (this.interactif) {
       this.question += '<br>'
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

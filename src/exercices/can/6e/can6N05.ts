@@ -75,7 +75,5 @@ export default class ChiffreDes extends ExerciceSimple {
     this.correction += `${a}&${b}&${c} & \\Large{\\textbf{,}}& ${d}&${e}& ${f}\\\\ \n`
     this.correction += '\\hline\n'
     this.correction += '\\end{array}\n$'
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

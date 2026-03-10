@@ -1,9 +1,9 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { randint } from '../../../modules/outils'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { texNombre } from '../../../lib/outils/texNombre'
-import { prenomF, prenomM } from '../../../lib/outils/Personne'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { prenomF, prenomM } from '../../../lib/outils/Personne'
+import { texNombre } from '../../../lib/outils/texNombre'
+import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Résoudre un problème avec une addition'
 export const interactifReady = true
@@ -43,7 +43,7 @@ Combien a-t-il dépensé en tout ?`
           this.correction = `${prenom} a d'abord dépensé  $${a}$ €, puis  il a dépensé $${b}$ €.<br>
           $${a} +${b}=${this.reponse}$<br>
           En tout, ${prenom} a dépensé $${miseEnEvidence(this.reponse)}$ €.`
-          this.canEnonce = this.question
+
           this.canReponseACompleter = '$\\ldots$ €'
           this.optionsChampTexte = { texteApres: '€' }
         }
@@ -59,7 +59,7 @@ Combien a-t-il dépensé en tout ?`
           this.correction = `$${a}$ élèves de CE et $${b}$ élèves de CM partent en voyage.<br>
           $${a} +${b}=${this.reponse}$ <br>
           En tout,  $${miseEnEvidence(this.reponse)}$ élèves partent en voyage.`
-          this.canEnonce = this.question
+
           this.canReponseACompleter = '$\\ldots$ élèves'
           this.optionsChampTexte = { texteApres: 'élèves' }
         }
@@ -74,7 +74,7 @@ Quel est le montant de la vente du jour pour ce vendeur ?`
           this.correction = `Dans la journée, le vendeur a vendu  un VTT à  $${a}$ € et  un casque à $${b}$ €.<br>
           $${a} +${b}=${this.reponse}$<br>
           La vente du jour pour ce vendeur est $${miseEnEvidence(this.reponse)}$ €.`
-          this.canEnonce = this.question
+
           this.canReponseACompleter = '$\\ldots$ €'
           this.optionsChampTexte = { texteApres: '€' }
         }
@@ -91,7 +91,7 @@ Quel est le montant de la vente du jour pour ce vendeur ?`
           this.correction = `Il y a $${a}$ élèves dans un collège et $${b}$ élèves dans un autre.<br>
           $${a} +${b}=${this.reponse}$<br>
           En tout, il y a  $${miseEnEvidence(this.reponse)}$ élèves au collège dans cette ville.`
-          this.canEnonce = this.question
+
           this.canReponseACompleter = '$\\ldots$ élèves'
           this.optionsChampTexte = { texteApres: 'élèves' }
         }
@@ -108,7 +108,7 @@ Combien de billes a-t-il maintenant ? `
           this.correction = `${prenom} a $${a}$ billes puis en gagne $${b}$.<br>
           $${a} +${b}=${this.reponse}$<br>
           En tout, ${prenom} a  $${miseEnEvidence(this.reponse)}$ billes.`
-          this.canEnonce = this.question
+
           this.canReponseACompleter = '$\\ldots$ billes'
           this.optionsChampTexte = { texteApres: 'billes' }
         }
@@ -125,7 +125,7 @@ Combien de billes a-t-il maintenant ? `
           this.correction = `${prenom} a $${a}$ € sur son compte puis dépose $${b}$ €.<br>
           $${a} +${b}=${this.reponse}$<br>
            ${prenom} a maintenant $${miseEnEvidence(this.reponse)}$ euros sur son compte.`
-          this.canEnonce = this.question
+
           this.canReponseACompleter = '$\\ldots$ €'
           this.optionsChampTexte = { texteApres: '€' }
         }
@@ -142,7 +142,7 @@ Combien de billes a-t-il maintenant ? `
           this.correction = `Le prix de la maison est $${texNombre(a, 0)}$ € et les frais d'agence  $${texNombre(b, 0)}$ €.<br>
            $${texNombre(a, 0)} +${texNombre(b, 0)}=${this.reponse}$<br>
          La maison coûte $${miseEnEvidence(this.reponse)}$ euros frais d'agence inclus.`
-          this.canEnonce = this.question
+
           this.canReponseACompleter = '$\\ldots$ €'
           this.optionsChampTexte = { texteApres: '€' }
         }

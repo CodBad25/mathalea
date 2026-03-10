@@ -25,7 +25,7 @@ export const refs = {
 export default class CalculImageParFonctionAffineFraction extends ExerciceSimple {
   constructor() {
     super()
-   this.optionsDeComparaison = { fractionEgale: true }
+    this.optionsDeComparaison = { fractionEgale: true }
     this.nbQuestions = 1
     this.versionQcmDisponible = true
     this.typeExercice = 'simple'
@@ -124,8 +124,5 @@ export default class CalculImageParFonctionAffineFraction extends ExerciceSimple
     } else {
       this.reponse = resultat.texFractionSimplifiee
     }
-
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

@@ -334,7 +334,5 @@ Comme $v \\geqslant 0$, en prenant la racine carrée, on obtient : $${miseEnEvid
         }
         break
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

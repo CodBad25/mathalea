@@ -29,7 +29,6 @@ export default class Can2025N5Q10 extends ExerciceCan {
     Le nombre d'élèves dans un groupe est :`
     this.correction = `$${a}\\div ${b} = ${miseEnEvidence(String(c))}$<br>
     Donc, chaque groupe contient $${c}$ élèves.`
-    this.canEnonce = this.question
 
     if (!this.interactif) {
       this.question += ' $\\ldots$'

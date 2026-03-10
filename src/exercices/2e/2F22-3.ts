@@ -236,7 +236,6 @@ export default class BetaModeleSpline extends Exercice {
       this.listeQuestions.push(texteEnonce)
       this.listeCorrections.push(texteCorrection)
       this.canEnonce = texteEnonce // 'Compléter'
-      this.canReponseACompleter = ''
     }
 
     listeQuestionsToContenu(this) // On envoie l'exercice à la fonction de mise en page

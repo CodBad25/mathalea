@@ -56,7 +56,5 @@ export default class ArrondiDixiemeCentieme extends ExerciceSimple {
         this.reponse = arrondi(d, 2)
       }
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

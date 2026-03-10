@@ -1,17 +1,17 @@
 import { choice } from '../../../lib/outils/arrayOutils'
 import {
-  miseEnEvidence,
-  texteEnCouleur,
-} from '../../../lib/outils/embellissements'
-import {
   ecritureAlgebrique,
   ecritureParentheseSiNegatif,
   reduireAxPlusB,
   reduirePolynomeDegre3,
 } from '../../../lib/outils/ecritures'
-import ExerciceSimple from '../../ExerciceSimple'
+import {
+  miseEnEvidence,
+  texteEnCouleur,
+} from '../../../lib/outils/embellissements'
 import { fraction } from '../../../modules/fractions'
 import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre =
   'Déterminer le nombre de solutions d’une équation du second degré'
 export const interactifReady = true
@@ -164,7 +164,5 @@ et évaluez le signe de leur différence. `)
         }
         break
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

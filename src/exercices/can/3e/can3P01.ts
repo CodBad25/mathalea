@@ -3,8 +3,8 @@ import {
   reduireAxPlusB,
 } from '../../../lib/outils/ecritures'
 import { sp } from '../../../lib/outils/outilString'
-import ExerciceSimple from '../../ExerciceSimple'
 import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre =
   'Utiliser la proportionnalité sur une expression algébrique'
 export const interactifReady = true
@@ -45,7 +45,5 @@ export default class ProportionnaliteExpressionAlgebrique extends ExerciceSimple
       $${reduireAxPlusB(n * a, n * b)}=${n}\\times ${ecritureParentheseSiNegatif(c)}=${n * c}$`
 
     this.reponse = n * c
-    this.canEnonce = this.question // 'Compléter'
-    this.canReponseACompleter = ''
   }
 }

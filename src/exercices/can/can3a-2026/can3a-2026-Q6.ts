@@ -32,7 +32,7 @@ export default class Can32026Q6 extends ExerciceCan {
     this.reponse = b - a
     this.question = `$${a} + \\text{?} = ${b}$`
     this.correction = `Pour trouver le nombre manquant, on peut calculer $${b}-${a}=${miseEnEvidence(texNombre(b - a, 0))}$.`
-    this.canEnonce = this.question
+
     this.canReponseACompleter = `? $= \\ldots$`
     if (this.interactif) {
       this.question += '<br> ? $=$'

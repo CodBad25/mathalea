@@ -74,8 +74,8 @@ export default class CalculProbaSimple extends ExerciceSimple {
         lab2Plur: 'thrillers',
         lab3Sing: 'romance',
         lab3Plur: 'romances',
-        lab4Sing: 'roman d\'anticipation',
-        lab4Plur: 'romans d\'anticipation',
+        lab4Sing: "roman d'anticipation",
+        lab4Plur: "romans d'anticipation",
         lab5Sing: 'roman de fantasy',
         lab5Plur: 'romans de fantasy',
         lab6Sing: 'polar',
@@ -91,8 +91,8 @@ export default class CalculProbaSimple extends ExerciceSimple {
         lab1Plur: 'comédies',
         lab2Sing: 'drame',
         lab2Plur: 'drames',
-        lab3Sing: 'film d\'action',
-        lab3Plur: 'films d\'actions',
+        lab3Sing: "film d'action",
+        lab3Plur: "films d'actions",
         lab4Sing: 'film de science-fiction',
         lab4Plur: 'films de science-fictions',
         lab5Sing: 'thriller',
@@ -258,8 +258,5 @@ Quelle est la probabilité de choisir ${ciblePhrase} ?`
       const picked = shuffle(uniq).slice(0, 3)
       this.distracteurs = picked.map((s) => `$${s}$`)
     }
-
-    this.canEnonce = this.question // 'Compléter'
-    this.canReponseACompleter = ''
   }
 }

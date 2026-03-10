@@ -23,18 +23,17 @@ export default class QuestionsAiresEtPerimetres2 extends ExerciceSimple {
     super()
     this.typeExercice = 'simple'
     this.nbQuestions = 1
-    this.optionsChampTexte = {texteAvant : '<br>', texteApres: '$\\text{cm}$' }
+    this.optionsChampTexte = { texteAvant: '<br>', texteApres: '$\\text{cm}$' }
   }
 
   nouvelleVersion() {
-  const a = randint(1, 10)
-         const c = a * a
-          this.reponse = 4 * a
-    this.question =`Déterminer le périmètre  d'un carré d'aire $${c}\\text{ cm}^2$. `
+    const a = randint(1, 10)
+    const c = a * a
+    this.reponse = 4 * a
+    this.question = `Déterminer le périmètre  d'un carré d'aire $${c}\\text{ cm}^2$. `
     this.correction = `Le côté du carré est : $\\sqrt{${c}}=${a}$.<br>
          Son périmètre est donc  : $4\\times ${a}=${miseEnEvidence(4 * a)}\\text{ cm}$.`
 
-    this.canEnonce = this.question
     this.canReponseACompleter = '$\\ldots\\text{ cm}$'
     this.listeCanEnonces.push(this.canEnonce)
     this.listeCanReponsesACompleter.push(this.canReponseACompleter)

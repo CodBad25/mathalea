@@ -53,7 +53,5 @@ export default class NombreDeDizaines extends ExerciceSimple {
         this.reponse = b * 10 + c
       }
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

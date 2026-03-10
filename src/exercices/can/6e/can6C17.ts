@@ -47,7 +47,7 @@ export default class FractionSimpleDeQuantite extends ExerciceSimple {
      `,
       bleuMathalea,
     )
-    this.canEnonce = this.question
+
     this.canReponseACompleter = '$\\dots$ L'
   }
 }

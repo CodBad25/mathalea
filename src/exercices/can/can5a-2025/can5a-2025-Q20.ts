@@ -1,7 +1,7 @@
-import { texNombre } from '../../../lib/outils/texNombre'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import ExerciceCan from '../../ExerciceCan'
+import { texNombre } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
+import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Division euclidienne'
 export const interactifReady = true
@@ -31,7 +31,7 @@ export default class Can2025N5Q20 extends ExerciceCan {
     this.reponse = r
     this.question = `Détermine le reste de la division euclidienne de $${a}$ par $${b}$.`
     this.correction = `$${a} = ${b}\\times${q}+${r}=${b * q}+${r}$, donc le reste est $${miseEnEvidence(texNombre(r, 0))}$.`
-    this.canEnonce = this.question
+
     if (this.interactif) {
       this.question += '<br>'
     }

@@ -1,11 +1,11 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { randint } from '../../../modules/outils'
-import { choice } from '../../../lib/outils/arrayOutils'
-import { prenomF } from '../../../lib/outils/Personne'
-import { context } from '../../../modules/context'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { choice } from '../../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { prenomF } from '../../../lib/outils/Personne'
 import { formatMinute } from '../../../lib/outils/texNombre'
+import { context } from '../../../modules/context'
+import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Calculer une durée en minutes'
 export const interactifReady = true
@@ -51,7 +51,7 @@ export default class NomExercice extends ExerciceSimple {
     } else {
       this.question += `${context.isHtml ? '$\\ldots$ min.' : ''}`
     }
-    this.canEnonce = this.question
+
     this.canReponseACompleter = ' $\\ldots$ min'
   }
 }

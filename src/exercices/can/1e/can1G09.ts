@@ -344,7 +344,5 @@ export default class AngleSurCercleTrigo extends ExerciceSimple {
 
         break
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

@@ -25,8 +25,8 @@ export default class MultiplierFraction extends ExerciceSimple {
     super()
     this.typeExercice = 'simple'
     this.nbQuestions = 1
-this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
-      this.optionsChampTexte = { texteAvant: '<br>' }
+    this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
+    this.optionsChampTexte = { texteAvant: '<br>' }
     this.optionsDeComparaison = { fractionIrreductible: true }
   }
 
@@ -100,7 +100,5 @@ this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
     this.reponse = f1.produitFraction(f2).simplifie()
     this.question = `Calculer et écrire sous la forme d'une fraction simplifiée : $${f1.texFraction}\\times ${f2.texFraction}$.<br>`
     this.correction = `$${f1.texProduitFraction(f2, false)}$`
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

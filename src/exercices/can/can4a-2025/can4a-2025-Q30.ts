@@ -23,7 +23,7 @@ export default class Can2025N4Q27 extends ExerciceCan {
     }
     this.question = `Aire exacte du disque de diamètre $${a}\\text{ m}$`
     this.correction = `Le rayon du disque est : $r=${a}\\div 2=${a / 2}$.<br>L'aire du disque est : $\\pi r^2=\\pi\\times ${a / 2}^2=${miseEnEvidence(`${(a * a) / 4}\\pi`)}\\text{ m}^2$.`
-    this.canEnonce = this.question
+
     this.canReponseACompleter = '$\\ldots\\text{ m}^2$'
     this.optionsChampTexte = { texteApres: '$\\text{ m}^2$' }
     this.formatChampTexte = KeyboardType.clavierDeBase

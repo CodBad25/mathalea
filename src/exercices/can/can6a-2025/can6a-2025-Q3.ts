@@ -1,8 +1,8 @@
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { choice } from '../../../lib/outils/arrayOutils'
-import ExerciceCan from '../../ExerciceCan'
-import { randint } from '../../../modules/outils'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
+import { randint } from '../../../modules/outils'
+import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Nombre de dizaines'
 export const interactifReady = true
@@ -33,7 +33,7 @@ export default class Can2025N6Q2 extends ExerciceCan {
     }
     this.correction = `$${a} \\times ${texNombre(c)} =${texNombre(a * c, 0)}= ${a * 10} \\times ${b}$<br>
     Il y a $${miseEnEvidence(a * 10)}$ ${premierMot} dans $${a}$ ${deuxiemeMot}.`
-    this.canEnonce = this.question
+
     this.canReponseACompleter = `$\\ldots$ ${premierMot}`
   }
 

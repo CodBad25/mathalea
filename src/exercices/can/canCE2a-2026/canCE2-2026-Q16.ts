@@ -86,7 +86,7 @@ export default class Can2026CE2Q16 extends ExerciceCan {
       objets,
     )
     this.canReponseACompleter = figure
-    this.canEnonce = this.question
+
     if (context.isHtml) {
       const svgItems = pieces.map((valeur) => {
         const piece = new PieceBuilder(valeur).make(0, 0, 2)

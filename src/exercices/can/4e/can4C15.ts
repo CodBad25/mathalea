@@ -73,7 +73,5 @@ export default class CalculFractionDecimal extends ExerciceSimple {
 
         break
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

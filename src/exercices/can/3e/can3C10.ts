@@ -125,7 +125,5 @@ export default class EncadrementAvecPuissancesDe10 extends ExerciceSimple {
         }
         break
     }
-    this.canEnonce = this.question // 'Compléter'
-    this.canReponseACompleter = ''
   }
 }

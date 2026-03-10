@@ -106,7 +106,6 @@ export default class Can20266Q16 extends ExerciceCan {
 
     this.formatChampTexte = KeyboardType.clavierDeBase
     this.canEnonce = 'Complète.<br>' + figure
-    this.canReponseACompleter = ''
   }
 
   nouvelleVersion() {

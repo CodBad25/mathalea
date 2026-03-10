@@ -1,9 +1,9 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { choice } from '../../../lib/outils/arrayOutils'
-import { texNombre } from '../../../lib/outils/texNombre'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { choice } from '../../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { texNombre } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Écrire un nombre à partir des dizaines ou des centaines'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -29,8 +29,6 @@ export default class NomExercice extends ExerciceSimple {
       this.reponse = 2500
       this.question = 'Écris le nombre égal à $25$ centaines. '
       this.correction = `$25$ centaines $=25\\times 100=${miseEnEvidence(2500)}$`
-      this.canEnonce = this.question
-      this.canReponseACompleter = ''
     } else {
       const choix = choice([true, false])
       const a = randint(12, 29)
@@ -38,8 +36,5 @@ export default class NomExercice extends ExerciceSimple {
       this.question = `Écris le nombre égal à $${a}$ ${choix ? 'centaines' : 'dizaines'}. `
       this.correction = `$${a}$ ${choix ? 'centaines' : 'dizaines'} $=${a}\\times ${choix ? '100' : '10'}=${miseEnEvidence(texNombre(this.reponse, 0))}$.`
     }
-
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

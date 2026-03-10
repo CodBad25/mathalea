@@ -1,6 +1,6 @@
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import ExerciceCan from '../../ExerciceCan'
 import { randint } from '../../../modules/outils'
+import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Expression à calculer'
 export const interactifReady = true
@@ -25,8 +25,7 @@ export default class Can2025N5Q25 extends ExerciceCan {
     this.reponse = a * (b + c)
     this.question = `Le produit de $${a}$ par la somme de $${b}$ et $${c}$`
     this.correction = `On calcule : $${a}\\times (${b}+${c})=${a}\\times ${b + c}= ${miseEnEvidence(a * (b + c))}$.`
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
+
     this.optionsChampTexte = { texteApres: '.' }
     if (this.interactif) {
       this.question += ' est : '

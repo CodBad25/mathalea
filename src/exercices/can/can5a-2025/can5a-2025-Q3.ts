@@ -1,8 +1,8 @@
-import { texNombre } from '../../../lib/outils/texNombre'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { choice } from '../../../lib/outils/arrayOutils'
-import ExerciceCan from '../../ExerciceCan'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { texNombre } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
+import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Fraction simple'
 export const interactifReady = true
@@ -31,8 +31,7 @@ export default class Can2025N5Q3 extends ExerciceCan {
     this.reponse = b / c
     this.question = `${a} de $${b}$ `
     this.correction = `${a} de $${b}$ est égal à : $${b}\\div ${c} = ${miseEnEvidence(texNombre(b / c, 0))}$.`
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
+
     if (this.interactif) {
       this.question += '<br>'
     }

@@ -38,7 +38,5 @@ export default class TablesPhrase extends ExerciceSimple {
     this.reponse = b
     this.question = `Dans $${c}$, combien de fois $${a}$ ?`
     this.correction = `Dans $${c}$, il y a $${miseEnEvidence(b)}$ fois $${a}$ car $${a}\\times ${b}=${c}$.`
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

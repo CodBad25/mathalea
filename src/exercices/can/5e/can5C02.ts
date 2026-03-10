@@ -36,7 +36,5 @@ export default class SommeEntiers5e extends ExerciceSimple {
     On décompose le calcul $${a} + ${b}$ en  $(100+${a - 100})+ ${b}=100+ (\\underbrace{${a - 100} +${b}}_{${a - 100 + b}})$ .<br>
        Cela donne :  $100+${a - 100 + b}=${this.reponse}$.
       `)
-    this.canEnonce = this.question // 'Compléter'
-    this.canReponseACompleter = ''
   }
 }

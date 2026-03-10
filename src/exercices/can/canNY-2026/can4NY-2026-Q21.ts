@@ -35,7 +35,7 @@ export default class perimetreCalcul2026 extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const annee= 2026
+    const annee = 2026
     const objets = []
     const diviseur = this.canOfficielle ? 1 : choice([1, 10, 100, 1000])
     const a = new Decimal(annee).div(diviseur)
@@ -87,7 +87,7 @@ export default class perimetreCalcul2026 extends ExerciceSimple {
     if (this.interactif) {
       this.question += '<br>'
     }
-    this.canEnonce = this.question
+
     this.canReponseACompleter = '$\\ldots\\text{ cm}$'
   }
 }

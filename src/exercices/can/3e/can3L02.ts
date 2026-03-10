@@ -43,7 +43,5 @@ export default class EquationAXPlusBEgalZero extends ExerciceSimple {
     x&=${this.reponse}
     \\end{aligned}$
    `
-    this.canEnonce = this.question // 'Compléter'
-    this.canReponseACompleter = ''
   }
 }

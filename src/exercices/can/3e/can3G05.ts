@@ -150,6 +150,5 @@ export default class Trigo extends ExerciceSimple {
       objets,
     )
     this.canEnonce = this.question.replaceAll('<br>', '\\\\') // 'Compléter'
-    this.canReponseACompleter = ''
   }
 }

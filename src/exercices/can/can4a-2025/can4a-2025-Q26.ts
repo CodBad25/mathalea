@@ -1,7 +1,7 @@
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import ExerciceCan from '../../ExerciceCan'
-import { randint } from '../../../modules/outils'
 import { texNombre } from '../../../lib/outils/texNombre'
+import { randint } from '../../../modules/outils'
+import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Convertir des heures décimales en minutes'
 export const interactifReady = true
@@ -30,7 +30,7 @@ export default class Can2025N4Q26 extends ExerciceCan {
      &= ${Math.floor(a) * 60} \\text{ min } +${texNombre(dp * 60, 0)} \\text{ min }\\\\
      &=${miseEnEvidence(texNombre(a * 60, 0))} \\text{ min }
      \\end{aligned}$`
-    this.canEnonce = this.question
+
     this.canReponseACompleter = '$\\ldots\\text{ min}$'
     this.reponse = Math.round(a * 60)
     this.optionsChampTexte = { texteApres: ' min' }

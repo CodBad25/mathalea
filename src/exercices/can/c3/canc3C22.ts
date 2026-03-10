@@ -1,8 +1,8 @@
-import { choice } from '../../../lib/outils/arrayOutils'
-import { texNombre } from '../../../lib/outils/texNombre'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { randint } from '../../../modules/outils'
+import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { texNombre } from '../../../lib/outils/texNombre'
+import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Multiplier par 10, 100, 1000 '
 export const interactifReady = true
@@ -72,7 +72,5 @@ export default class MultiplierPar10Par100Par1000 extends ExerciceSimple {
         this.reponse = resultat
         break
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

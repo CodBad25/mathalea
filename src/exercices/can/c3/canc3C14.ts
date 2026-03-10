@@ -1,8 +1,8 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import ExerciceSimple from '../../ExerciceSimple'
 import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre =
   'Connaitre les tables de multiplication (avec des divisions)'
 export const interactifReady = true
@@ -64,8 +64,6 @@ export default class TableDivisions extends ExerciceSimple {
           this.reponse = b
           this.question = `Calculer $${c} \\div ${a}$.`
           this.correction = `$${c} \\div ${a}=${miseEnEvidence(b)}$`
-          this.canEnonce = this.question
-          this.canReponseACompleter = ''
         }
         break
     }

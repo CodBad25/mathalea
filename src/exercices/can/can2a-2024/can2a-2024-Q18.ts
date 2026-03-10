@@ -2,12 +2,12 @@
  * ⚠️ Cet exercice est utilisé dans le test : tests/e2e/tests/view/viewcan.2024.2e.test.ts ⚠️
  */
 
-import ExerciceSimple from '../../ExerciceSimple'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { randint } from '../../../modules/outils'
-import { choice } from '../../../lib/outils/arrayOutils'
-import { stringNombre, texNombre } from '../../../lib/outils/texNombre'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { choice } from '../../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { stringNombre, texNombre } from '../../../lib/outils/texNombre'
+import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = "Déterminer l'écriture scientifique"
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -61,7 +61,5 @@ export default class NomExercice extends ExerciceSimple {
                 Ici : $${texNombre(a, 6)}=\\underbrace{${miseEnEvidence(texNombre(truc, 6))}}_{1\\leqslant ${texNombre(truc, 6)} <10}${miseEnEvidence('\\times')} ${miseEnEvidence('10^{-4}')}$. `
       }
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

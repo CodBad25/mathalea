@@ -82,7 +82,5 @@ On obtient donc comme résultat : $${texNombre(a, 0)}\\div 9=${texNombre(b * 100
         )
         break
     }
-    this.canEnonce = this.question // 'Compléter'
-    this.canReponseACompleter = ''
   }
 }

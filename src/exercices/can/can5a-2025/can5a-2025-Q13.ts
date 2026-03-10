@@ -1,8 +1,8 @@
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import ExerciceCan from '../../ExerciceCan'
-import { randint } from '../../../modules/outils'
 import { choice } from '../../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
+import { randint } from '../../../modules/outils'
+import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Produit de 3 facteurs'
 export const interactifReady = true
@@ -38,7 +38,7 @@ export default class Can2025N5Q13 extends ExerciceCan {
     &= ${texNombre(a * c, 0)}\\times ${b}\\\\
     &= ${miseEnEvidence(texNombre(a * b * c, 0))}
     \\end{aligned}$`
-    this.canEnonce = this.question
+
     if (this.interactif) {
       this.question += ' $=$'
     }

@@ -49,14 +49,12 @@ export default class calcAvecChiffres2026 extends ExerciceSimple {
       this.reponse = centaine
     } else {
       this.question = `Quel est le chiffre des milliers dans $${texNombre(annee, 0)}$ ?`
-      this.correction = `$${texNombre(annee, 0)}=(${miseEnEvidence(texNombre(mille,0))}\\times${texNombre(1000, 0)})+(${centaine}\\times100)+(${dizaine}\\times10)+(${unite}\\times1)$`
+      this.correction = `$${texNombre(annee, 0)}=(${miseEnEvidence(texNombre(mille, 0))}\\times${texNombre(1000, 0)})+(${centaine}\\times100)+(${dizaine}\\times10)+(${unite}\\times1)$`
       this.correction += `<br>Le chiffre des milliers est $${miseEnEvidence(texNombre(mille, 0))}$.`
       this.reponse = mille
     }
     if (this.interactif) {
       this.question += '<br>'
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

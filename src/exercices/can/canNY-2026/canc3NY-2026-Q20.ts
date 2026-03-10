@@ -29,7 +29,7 @@ export default class resoudreUnProblemeArgent extends ExerciceSimple {
 
   nouvelleVersion() {
     const prenoms = this.canOfficielle ? ['Charly', 'Samuel'] : prenomF(2)
-const annee = 2026
+    const annee = 2026
     const a = this.canOfficielle ? 500 : randint(5, 15) * 100
     this.reponse = annee - a
     this.question = `${prenoms[0]} et ${prenoms[1]} ont ensemble $${texNombre(annee, 0)}$ €.<br>
@@ -42,7 +42,7 @@ const annee = 2026
     if (this.interactif) {
       this.question += '<br>'
     }
-    this.canEnonce = this.question
+
     this.canReponseACompleter = '$\\ldots$ €'
   }
 }

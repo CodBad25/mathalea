@@ -461,7 +461,7 @@ export default class NomExercice extends ExerciceSimple {
         this.correction = `Une unité correspond à $${b}$ carreaux, la ligne brisée mesure $5$ carreaux, soit $\\dfrac{${miseEnEvidence(5)}}{${miseEnEvidence(b)}}$ u.l. `
       }
       this.optionsChampTexte = { texteApres: 'u.l.' }
-      this.canEnonce = this.question
+
       this.canReponseACompleter = '$\\ldots$ u.l.'
     }
   }

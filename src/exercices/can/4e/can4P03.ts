@@ -1,8 +1,8 @@
+import { tableau2x2 } from '../../../lib/2d/tableau'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { texteEnCouleur } from '../../../lib/outils/embellissements'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
-import { tableau2x2 } from '../../../lib/2d/tableau'
 export const titre = 'Calculer une quatrième proportionnelle'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -135,7 +135,5 @@ export default class QuatriemeProportionnelle extends ExerciceSimple {
          Ainsi, le nombre manquant est donné par : $${b}\\times ${c}=${b * c}$.`)
         break
     }
-    this.canEnonce = this.question // 'Compléter'
-    this.canReponseACompleter = ''
   }
 }

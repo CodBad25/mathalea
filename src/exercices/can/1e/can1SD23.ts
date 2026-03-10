@@ -73,7 +73,5 @@ export default class FormeCanonique extends ExerciceSimple {
       `${beta}+(x${ecritureAlgebrique(b / 2)})^2`,
     ]
     this.correction += `${miseEnEvidence(this.reponse[0])}$`
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

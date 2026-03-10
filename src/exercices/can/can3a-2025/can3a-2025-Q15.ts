@@ -79,7 +79,7 @@ export default class hypoténusePythagore extends ExerciceSimple {
       },
       objets,
     )
-    this.canEnonce = this.question
+
     this.question += '<br>La valeur exacte de $ST$ est '
     if (!this.interactif) {
       this.question += '$\\ldots\\text{ cm}$.'

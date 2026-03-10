@@ -36,7 +36,6 @@ export default class NomExercice extends ExerciceSimple {
       La proportion d’élèves de cette classe qui ne viennent pas à vélo est : `
     this.correction = `$${b}$ viennent au lycée à vélo, donc $${a - b}$ ne viennent pas au lycée à vélo.<br>
       La proportion d’élèves de cette classe qui ne viennent pas à vélo est donc $${miseEnEvidence(f.texFraction)}$.`
-    this.canEnonce = this.question
 
     if (!this.interactif) {
       this.question += ' $\\ldots$'

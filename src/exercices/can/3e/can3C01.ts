@@ -173,6 +173,5 @@ export default class CalculPuissanceSimple extends Exercice {
       this.listeCorrections.push(texteCorr + '.')
     }
     listeQuestionsToContenu(this)
-    this.canReponseACompleter = ''
   }
 }

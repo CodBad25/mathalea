@@ -1,7 +1,7 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = "Calculer un terme d'une suite récurrente"
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -30,7 +30,7 @@ export default class Can2025TQ25 extends ExerciceSimple {
     this.reponse = 1
     this.question =
       'Soit la suite $(u_n)$ définie par $u_0=1$ et pour tout $n\\in\\mathbb{N}$, $u_{n+1}=\\dfrac{1}{u_n}$.'
-    this.canEnonce = this.question
+
     if (!this.interactif) {
       this.question += `<br>$u_{${texNombre(2025, 0)}}=\\ldots$`
     }

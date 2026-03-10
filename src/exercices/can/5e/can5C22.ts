@@ -61,7 +61,5 @@ export default class DecimalVersFraction extends ExerciceSimple {
         "<br><br><em>Remarque : une fraction a une infinité d'écritures différentes.</em>"
     this.question = `Écrire $${texNombre(d, 3)}$ sous la forme d'une fraction.`
     this.reponse = maFraction
-    this.canEnonce = this.question // 'Compléter'
-    this.canReponseACompleter = ''
   }
 }

@@ -1,8 +1,8 @@
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import ExerciceCan from '../../ExerciceCan'
-import { randint } from '../../../modules/outils'
 import { choice } from '../../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
+import { randint } from '../../../modules/outils'
+import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Multiplier astucieusement'
 export const interactifReady = true
@@ -33,7 +33,7 @@ export default class Can2025N4Q29 extends ExerciceCan {
     &=${texNombre(b, 2)}\\times 10\\\\
     &=${miseEnEvidence(texNombre(10 * b, 1))}
     \\end{aligned}$`
-    this.canEnonce = this.question
+
     this.reponse = (10 * b).toFixed(1)
     this.question += this.interactif ? '$=$' : ''
   }

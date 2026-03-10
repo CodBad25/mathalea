@@ -1,11 +1,11 @@
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choice } from '../../../lib/outils/arrayOutils'
 import {
   ecritureAlgebrique,
   ecritureParentheseSiNegatif,
 } from '../../../lib/outils/ecritures'
-import ExerciceSimple from '../../ExerciceSimple'
 import { randint } from '../../../modules/outils'
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre =
   'Donner la forme explicite d’une suite arithmétique/géométrique'
 export const interactifReady = true
@@ -151,7 +151,5 @@ export default class CalculTermeSuiteRec extends ExerciceSimple {
         ]
         break
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

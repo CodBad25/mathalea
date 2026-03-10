@@ -59,7 +59,5 @@ export default class SommeFractionsCompatibles extends ExerciceSimple {
     }
 
     this.reponse = a.sommeFraction(b).simplifie()
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

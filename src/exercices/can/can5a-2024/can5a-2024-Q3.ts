@@ -1,8 +1,8 @@
-import ExerciceSimple from '../../ExerciceSimple'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { randint } from '../../../modules/outils'
-import { choice } from '../../../lib/outils/arrayOutils'
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Calculer une différence de deux entiers'
 export const interactifReady = true
@@ -36,8 +36,7 @@ export default class NomExercice extends ExerciceSimple {
       this.question = `$${a}-${b}$ `
       this.correction = `$${a}-${b}=${a}-${b + 1}+1=${a - b}$`
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
+
     if (this.interactif) {
       this.question += ' $=$'
     }

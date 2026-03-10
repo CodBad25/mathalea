@@ -31,7 +31,9 @@ export default class CalculDizCent2026 extends ExerciceSimple {
     const b = 0
     const c = 2
     const d = annee % 10
-    const m = this.canOfficielle ? 'dizaines' : choice(['centaines', 'dizaines'])
+    const m = this.canOfficielle
+      ? 'dizaines'
+      : choice(['centaines', 'dizaines'])
     const n = a * 1000 + b * 100 + c * 10 + d
     this.question = `Quel est le nombre entier de ${m} dans $${texNombre(n)}$ ? `
     if (m === 'centaines') {
@@ -44,7 +46,5 @@ export default class CalculDizCent2026 extends ExerciceSimple {
     if (this.interactif) {
       this.question += '<br>'
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

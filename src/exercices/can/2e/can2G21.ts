@@ -123,8 +123,5 @@ export default class LectureCoordonnees extends ExerciceSimple {
       `(\\dfrac{${arrondi(a * k1, 0)}}{${k1}};${arrondi(b, 2)})`,
       `(${arrondi(a, 2)};\\dfrac{${arrondi(b * k2, 0)}}{${k2}})`,
     ]
-
-    this.canEnonce = this.question // 'Compléter'
-    this.canReponseACompleter = ''
   }
 }

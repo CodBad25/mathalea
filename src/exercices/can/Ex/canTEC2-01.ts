@@ -44,7 +44,5 @@ export default class NomExercice extends ExerciceSimple {
     this.correction += ` d'où $\\vert z\\vert=\\sqrt{${a * a}+${b * b}}=\\sqrt{${a * a + b * b}}$.`
     this.correction += `<br>Le module de $z$ est donc $\\vert z\\vert=${miseEnEvidence(`\\sqrt{${a * a + b * b}}`)}$.`
     this.reponse = Math.sqrt(a * a + b * b)
-    this.canEnonce = this.question // 'Compléter'
-    this.canReponseACompleter = ''
   }
 }

@@ -39,8 +39,7 @@ export default class Can32026Q7 extends ExerciceCan {
     this.reponse = b / c
     this.question = `${a} de $${b}$ `
     this.correction = `${a} de $${b}$ est égal${a === 'La moitié' ? 'e' : ''} à : $${b}\\div ${c} = ${miseEnEvidence(texNombre(b / c, 0))}$.`
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
+
     if (this.interactif) {
       this.question += '<br>'
     }

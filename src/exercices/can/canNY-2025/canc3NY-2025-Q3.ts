@@ -1,8 +1,8 @@
-import ExerciceSimple from '../../ExerciceSimple'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
-import { choice } from '../../../lib/outils/arrayOutils'
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Calculer des sommes avec 2025'
 export const interactifReady = true
@@ -48,8 +48,5 @@ export default class calcAvecSommes extends ExerciceSimple {
       this.correction = `$${texNombre(2025, 0)}+${texNombre(2026, 0)}=${miseEnEvidence(texNombre(4051, 0))}$`
       this.reponse = 4051
     }
-
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

@@ -223,7 +223,7 @@ export default class Can2a2026Q23 extends ExerciceCan {
     this.correction += `${objetC}`
 
     this.canEnonce = `Coefficient directeur de la droite $(AB)$.<br>${objet}`
-    this.canReponseACompleter = ''
+
     this.reponse = m.texFractionSimplifiee
   }
 

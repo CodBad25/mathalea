@@ -50,8 +50,5 @@ Quel est le plus petit dénominateur commun de ces deux fractions ?`
 On cherche le plus petit dénominateur commun en trouvant le plus petit multiple commun entre ces deux nombres.<br>
 Le plus petit multiple commun  de $${frac1.den}$ et $${frac2.den}$ (c'est-à-dire le plus petit nombre qui est à la fois dans la table de $${frac1.den}$ et de $${frac2.den}$) est  $${miseEnEvidence(resultat)}$.`
     this.reponse = resultat
-
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

@@ -33,7 +33,7 @@ export default class calculerPythagore2026 extends ExerciceSimple {
 
   nouvelleVersion() {
     const choix = this.canOfficielle ? true : choice([true, false])
-const annee = 2026
+    const annee = 2026
     const nom = creerNomDePolygone(3, ['QD'])
     const a = this.canOfficielle ? 1 : randint(1, 6)
     const A = point(0, 0, nom[0], 'below')
@@ -62,7 +62,7 @@ const annee = 2026
                 ${nom[0]}${nom[1]}&= ${miseEnEvidence(`\\sqrt{${texNombre(annee - a * a)}}`)}\\\\
                 \\end{aligned}$ `
       this.reponse = `\\sqrt{${annee - a * a}}`
-      this.canEnonce = this.question
+
       this.canReponseACompleter = `$${nom[0]}${nom[1]}=\\ldots$`
     } else {
       objets.push(
@@ -107,6 +107,5 @@ const annee = 2026
         ? (this.question += `<br>$${nom[0]}${nom[1]}=$`)
         : (this.question += `<br>$${nom[0]}${nom[2]}=$`)
     }
-    this.canEnonce = this.question
   }
 }

@@ -3,10 +3,10 @@ import {
   miseEnEvidence,
   texteEnCouleur,
 } from '../../../lib/outils/embellissements'
-import { texNombre } from '../../../lib/outils/texNombre'
-import ExerciceSimple from '../../ExerciceSimple'
-import { randint } from '../../../modules/outils'
 import { arrondi } from '../../../lib/outils/nombres'
+import { texNombre } from '../../../lib/outils/texNombre'
+import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer avec un pourcentage de proportion'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -94,8 +94,6 @@ export default class PoucentageP2 extends ExerciceSimple {
           ? `$${texNombre((c * b * a) / 10000, 2)}$`
           : arrondi((c * b * a) / 10000)
 
-        this.canEnonce = this.question // 'Compléter'
-        this.canReponseACompleter = ''
         break
 
       case 2:
@@ -136,7 +134,6 @@ export default class PoucentageP2 extends ExerciceSimple {
           ? `$${texNombre((100 * b) / a, 2)}$ €`
           : arrondi((100 * b) / a)
 
-        this.canEnonce = this.question // 'Compléter'
         this.canReponseACompleter = '$\\ldots$ €'
         break
     }

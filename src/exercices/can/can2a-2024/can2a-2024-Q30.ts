@@ -152,8 +152,6 @@ export default class NomExercice extends ExerciceSimple {
       this.correction = `La fonction est positive ou nulle lorsque les images sont positives ou nulles.<br>
     Graphiquement, les images sont positives ou nulles  lorsque la courbe se situe sur ou au-dessus  de l'axe des abscisses, soit sur l'intervalle  
     $${miseEnEvidence('[-5\\,;\\,2]')}$.`
-      this.canEnonce = this.question
-      this.canReponseACompleter = ''
     } else {
       const noeuds1 = [
         { x: -3, y: -1, deriveeGauche: -1, deriveeDroit: -1, isVisible: true },
@@ -255,8 +253,6 @@ export default class NomExercice extends ExerciceSimple {
         ${choix ? `$${miseEnEvidence(`[${theSpline.x[0]}\\,;\\,${theSpline.x[3]}`)}]$` : `$${miseEnEvidence(`[${theSpline.x[3]}\\,;\\,${theSpline.x[6]}]`)}$`}
         `
       }
-      this.canEnonce = this.question // 'Compléter'
-      this.canReponseACompleter = ''
     }
   }
 }

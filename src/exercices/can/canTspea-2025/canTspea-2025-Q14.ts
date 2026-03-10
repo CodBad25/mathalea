@@ -151,7 +151,5 @@ export default class Can2025TQ14 extends ExerciceSimple {
       En parcourant la courbe $\\mathscr{C}_f$, on constate qu'il y a $${this.reponse}$ 
       ${extrema.length < 2 ? 'tangente horizontale' : 'tangentes horizontales'} (au niveau des changmements de variations),
        on en déduit que l'équation $f'(x)=0$ admet $${miseEnEvidence(this.reponse)}$ ${extrema.length < 2 ? 'solution' : 'solutions'}.`
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

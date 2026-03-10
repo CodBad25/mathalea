@@ -1,5 +1,5 @@
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { choice } from '../../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import ExerciceCan from '../../ExerciceCan'
 
 export const titre = "Compter les sommets d'un prisme"
@@ -62,7 +62,7 @@ export default class Can2025N4Q20 extends ExerciceCan {
       solide === 'tétraèdre'
         ? 'Un tétraèdre a 4 sommets.'
         : `Un ${solide} a $${miseEnEvidence(nbSommets)}$ sommets car il possède deux bases opposées à $${nbSommets / 2}$ sommets chacune.`
-    this.canEnonce = this.question
+
     this.question += this.interactif ? '<br>' : ''
   }
 

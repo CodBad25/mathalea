@@ -79,7 +79,7 @@ export default class ProblemeFraction extends ExerciceSimple {
         }
         break
     }
-    this.canEnonce = this.question
+
     this.canReponseACompleter = '$\\ldots$ g'
   }
 }

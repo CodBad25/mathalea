@@ -69,7 +69,5 @@ export default class DoubleOuTripleDecimal extends ExerciceSimple {
         bleuMathalea,
       )
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

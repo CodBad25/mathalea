@@ -1,9 +1,9 @@
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import ExerciceCan from '../../ExerciceCan'
-import { randint } from '../../../modules/outils'
 import { choice } from '../../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { context } from '../../../modules/context'
+import { randint } from '../../../modules/outils'
+import ExerciceCan from '../../ExerciceCan'
 export const titre = 'Écrire un nombre en chiffres'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -80,9 +80,6 @@ export default class Can2025N6Q4 extends ExerciceCan {
         : `${context.isHtml ? `<i>mille-${chiffre2[b][0]} </i>` : `\\textit{mille-${chiffre2[b][0]}} `}`
     } $=${miseEnEvidence(this.reponse)}$`
 
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
-    this.canEnonce = this.question
     if (this.interactif) {
       this.question += ' <br> '
     }

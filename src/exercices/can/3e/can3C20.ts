@@ -152,8 +152,5 @@ Quel est le plus petit dénominateur commun de ces deux fractions ?`
 
       this.distracteurs = picked.map((n) => `$${n}$`)
     }
-
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

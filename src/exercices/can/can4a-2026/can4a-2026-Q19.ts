@@ -43,8 +43,6 @@ export default class Can20264emeQ19 extends ExerciceCan {
     Le plus grand multiple de $${diviseur}$ inférieur ou égal à $${dividende}$ est $${plusGrandMultiple}$ (il se termine par $${terminaison}$).<br>
     Le reste de la division euclidienne est donc $${miseEnEvidence(reste)}$.`
 
-    this.canEnonce = this.question
-
     this.reponse = reste
 
     if (!this.interactif) {

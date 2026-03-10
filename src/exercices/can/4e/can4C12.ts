@@ -26,7 +26,7 @@ export default class CalculMoitieFraction extends ExerciceSimple {
     super()
     this.typeExercice = 'simple'
     this.nbQuestions = 1
-this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
+    this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
     this.optionsDeComparaison = { fractionIrreductible: true }
     this.spacingCorr = 2.5
   }
@@ -97,7 +97,5 @@ this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
     $${f.texFraction}\\div 2=${f.texFraction}\\times \\dfrac{1}{2}=${reponse.texFraction}${reponse.texSimplificationAvecEtapes()}$
           `
     this.correction += `<br>La moitié de $${f.texFraction}$ est $${miseEnEvidence(this.reponse.texFraction)}$.`
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

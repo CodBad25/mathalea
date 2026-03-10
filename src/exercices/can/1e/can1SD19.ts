@@ -300,7 +300,7 @@ export default class InequationCasParticuliers extends Exercice {
         this.listeCorrections[i] = texteCorr
 
         this.canEnonce = texte
-        this.canReponseACompleter = ''
+
         this.listeCanEnonces.push(this.canEnonce)
         this.listeCanReponsesACompleter.push(this.canReponseACompleter)
         i++

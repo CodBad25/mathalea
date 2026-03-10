@@ -36,8 +36,6 @@ export default class Can20264emeQ24 extends ExerciceCan {
     this.correction = `$${a}\\div ${b}=${miseEnEvidence(resultat)}$<br>
     Le quotient de deux nombres de signes contraires est négatif.`
 
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
     this.reponse = resultat
 
     if (!this.interactif) {

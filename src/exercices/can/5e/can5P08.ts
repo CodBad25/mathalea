@@ -89,7 +89,7 @@ export default class Proportionnalite3 extends ExerciceSimple {
         `
         }
         this.reponse = frac
-        this.canEnonce = this.question // 'Compléter'
+
         this.canReponseACompleter = '$\\ldots$ kg'
         break
       case 2: // proportionnalité avec nombre de pastèques / melons
@@ -149,7 +149,7 @@ export default class Proportionnalite3 extends ExerciceSimple {
             `
         }
         this.reponse = frac
-        this.canEnonce = this.question // 'Compléter'
+
         this.canReponseACompleter = `$\\ldots$ de ${fruits2[0]}`
         break
     }

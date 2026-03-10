@@ -52,7 +52,7 @@ export default class NomExercice extends ExerciceSimple {
       this.correction = `En $${choix[1]}$ minutes, ${P.pronom} parcourt $${choix[2]}$ fois moins de $\\text{km}$ qu'en $1$ heure, 
       soit $\\dfrac{${choix[0]}}{${choix[2]}}=${miseEnEvidence(this.reponse)}\\text{ km}$.`
     }
-    this.canEnonce = this.question
+
     this.canReponseACompleter = ' $\\ldots\\text{ km}$'
   }
 }

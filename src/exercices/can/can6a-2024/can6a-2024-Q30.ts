@@ -1,7 +1,7 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { randint } from '../../../modules/outils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
+import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Résoudre un problème avec une différence'
 export const interactifReady = true
@@ -34,7 +34,7 @@ export default class QuestionDeDifference extends ExerciceSimple {
       nbCarteTotale = nbCarteGagnee + randint(4, 9)
     }
     this.question = `À midi, j'ai gagné $${nbCarteGagnee}$ cartes.<br>J'en ai maintenant $${nbCarteTotale}$.<br>Combien en avais-je ce matin ?`
-    this.canEnonce = this.question
+
     this.canReponseACompleter = "Ce matin, j'avais $\\ldots$ cartes"
     this.reponse = texNombre(nbCarteTotale - nbCarteGagnee, 0)
     this.correction = `Ce matin, j'avais $${miseEnEvidence(this.reponse)}$ cartes.<br>`

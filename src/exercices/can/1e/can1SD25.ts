@@ -4,8 +4,8 @@ import {
   reduireAxPlusB,
   rienSi1,
 } from '../../../lib/outils/ecritures'
-import ExerciceSimple from '../../ExerciceSimple'
 import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Déterminer un coefficient dans un développement*'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -73,7 +73,5 @@ export default class DeveloppementCoeff2 extends ExerciceSimple {
      Le coefficient devant $x$ est donc $${2 * e * f + a * d + b * c}$.`
 
     this.reponse = 2 * e * f + a * d + b * c
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

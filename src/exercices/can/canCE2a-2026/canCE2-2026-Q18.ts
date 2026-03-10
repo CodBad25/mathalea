@@ -26,7 +26,6 @@ export default class Can2026CE2Q18 extends ExerciceCan {
     this.reponse = nombre * 2
     this.question = `Le double de $${nombre}$ est : `
     this.correction = `Le double de $${nombre}$ est $${nombre}\\times 2=${miseEnEvidence(texNombre(this.reponse, 0))}$.`
-    this.canEnonce = this.question
 
     if (!this.interactif) {
       this.question += `$\\ldots$`

@@ -67,7 +67,6 @@ export default class Can2025N4Q28 extends ExerciceCan {
     this.correction = `Le ratio entre le nombre de minimes et le nombre de cadets est de $${miseEnEvidence(`${partA}`)}:${miseEnEvidence(`${partB}`)}$ ou $${miseEnEvidence(`${a}`)}:${miseEnEvidence(`${b}`)}$.`
     this.canEnonce = `Dans un club sportif de $${c}$ membres, il y a $${partA}$ minimes et $${partB}$ cadets.<br>
     Quel est le ratio entre le nombre de minimes et le nombre de cadets ?`
-    this.canReponseACompleter = ''
   }
 
   nouvelleVersion() {

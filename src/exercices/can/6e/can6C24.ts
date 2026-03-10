@@ -122,7 +122,5 @@ export default class MultiplierParPuissanceDixNeg extends ExerciceSimple {
         bleuMathalea,
       )
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

@@ -2,13 +2,13 @@
  * ⚠️ Cet exercice est utilisé dans le test : tests/e2e/tests/view/viewcan.2024.2e.test.ts ⚠️
  */
 
-import ExerciceSimple from '../../ExerciceSimple'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { randint } from '../../../modules/outils'
 import { arrondi } from '../../../lib/outils/nombres'
 import { texNombre } from '../../../lib/outils/texNombre'
-import { choice } from '../../../lib/outils/arrayOutils'
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer avec des puissances de 10'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -48,7 +48,5 @@ export default class NomExercice extends ExerciceSimple {
       &=${miseEnEvidence(texNombre(this.reponse, 3))}
       \\end{aligned}$`
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

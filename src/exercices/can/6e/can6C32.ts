@@ -44,7 +44,5 @@ export default class Pyramide3Etages extends ExerciceSimple {
     pyr.isVisible = [[true], [true, true], [true, true, true]]
     this.correction = `Le nombre qui se trouve au sommet de la pyramide est : $${miseEnEvidence(this.reponse)}$.<br>
     ${mathalea2d({ xmin: 0, ymin: 0, xmax: 12, ymax: 3.5, scale: 0.6 }, pyr.representeMoi(0, 0))}`
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

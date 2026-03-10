@@ -129,7 +129,7 @@ export default class Can2025CE2Q13 extends ExerciceCan {
     }
     this.question = `${objet} coûte ${prix} €.<br>Je paye avec ${nbBillets} billet${nbBillets > 1 ? 's' : ''} de ${billet} €.<br>Combien doit-on me rendre ?`
     this.reponse = nbBillets * billet - prix // C'est juste pour pas faire planter mathaleaHandleExerciceSimple, cette réponse ne sera pas utilisée.
-    this.canEnonce = this.question
+
     this.correction = `J'ai donné $${nbBillets}$ billets de $${billet}$ €, soit  la somme de $${nbBillets * billet}$ €.<br>
     $${nbBillets * billet}$ € - $${prix}$ € $ = ${nbBillets * billet - prix}$ €<br>
     On doit me rendre $${miseEnEvidence(nbBillets * billet - prix)}$ €.`

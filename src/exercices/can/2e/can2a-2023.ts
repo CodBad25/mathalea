@@ -158,7 +158,7 @@ export default class SujetCAN2023Seconde extends Exercice {
               ajouteChampTexteMathLive(this, index, KeyboardType.clavierNumbers)
           }
           this.canEnonce = `$${a} \\times ${texNombre(b, 1)}$`
-          this.canReponseACompleter = ''
+
           this.listeCanEnonces.push(this.canEnonce)
           this.listeCanReponsesACompleter.push(this.canReponseACompleter)
           nbChamps = 1
@@ -177,7 +177,6 @@ export default class SujetCAN2023Seconde extends Exercice {
           texte = `Écriture décimale de $1-\\dfrac{${b}}{${c}}$`
           texteCorr = `$1-\\dfrac{${b}}{${c}}=1-${texNombre(b / c, 2)}=${miseEnEvidence(texNombre(reponse, 2))}$`
           this.canEnonce = texte
-          this.canReponseACompleter = ''
 
           handleAnswers(this, index, { reponse: { value: reponse.toFixed(2) } })
           if (this.interactif) {
@@ -237,7 +236,7 @@ export default class SujetCAN2023Seconde extends Exercice {
             }
 
             this.canEnonce = texte
-            this.canReponseACompleter = ''
+
             if (this.interactif) {
               texte += ajouteChampTexteMathLive(
                 this,
@@ -297,7 +296,7 @@ export default class SujetCAN2023Seconde extends Exercice {
               ajouteChampTexteMathLive(this, index, KeyboardType.clavierDeBase)
           }
           this.canEnonce = texte
-          this.canReponseACompleter = ''
+
           this.listeCanEnonces.push(this.canEnonce)
           this.listeCanReponsesACompleter.push(this.canReponseACompleter)
           nbChamps = 1
@@ -327,7 +326,7 @@ export default class SujetCAN2023Seconde extends Exercice {
               texte += ajouteChampTexteMathLive(this, index)
             }
             this.canEnonce = texte
-            this.canReponseACompleter = ''
+
             this.listeCanEnonces.push(this.canEnonce)
             this.listeCanReponsesACompleter.push(this.canReponseACompleter)
             nbChamps = 1
@@ -391,7 +390,7 @@ export default class SujetCAN2023Seconde extends Exercice {
                 )
             }
             this.canEnonce = texte
-            this.canReponseACompleter = ''
+
             this.listeCanEnonces.push(this.canEnonce)
             this.listeCanReponsesACompleter.push(this.canReponseACompleter)
             nbChamps = 1
@@ -420,7 +419,7 @@ export default class SujetCAN2023Seconde extends Exercice {
                 )
             }
             this.canEnonce = texte
-            this.canReponseACompleter = ''
+
             this.listeCanEnonces.push(this.canEnonce)
             this.listeCanReponsesACompleter.push(this.canReponseACompleter)
             nbChamps = 1
@@ -533,7 +532,7 @@ export default class SujetCAN2023Seconde extends Exercice {
             )
           }
           this.canEnonce = texte
-          this.canReponseACompleter = ''
+
           this.listeCanEnonces.push(this.canEnonce)
           this.listeCanReponsesACompleter.push(this.canReponseACompleter)
           nbChamps = 1
@@ -552,7 +551,7 @@ export default class SujetCAN2023Seconde extends Exercice {
               ajouteChampTexteMathLive(this, index, KeyboardType.clavierNumbers)
           }
           this.canEnonce = `$${a} \\times 0,5$ `
-          this.canReponseACompleter = ''
+
           this.listeCanEnonces.push(this.canEnonce)
           this.listeCanReponsesACompleter.push(this.canReponseACompleter)
           nbChamps = 1
@@ -659,7 +658,7 @@ export default class SujetCAN2023Seconde extends Exercice {
               ajouteChampTexteMathLive(this, index, KeyboardType.clavierNumbers)
           }
           this.canEnonce = texte
-          this.canReponseACompleter = ''
+
           this.listeCanEnonces.push(this.canEnonce)
           this.listeCanReponsesACompleter.push(this.canReponseACompleter)
           nbChamps = 1
@@ -710,7 +709,7 @@ export default class SujetCAN2023Seconde extends Exercice {
             }
 
             this.canEnonce = texte
-            this.canReponseACompleter = ''
+
             this.listeCanEnonces.push(this.canEnonce)
             this.listeCanReponsesACompleter.push(this.canReponseACompleter)
             nbChamps = 1
@@ -808,7 +807,7 @@ export default class SujetCAN2023Seconde extends Exercice {
             )
           }
           this.canEnonce = texte
-          this.canReponseACompleter = ''
+
           this.listeCanEnonces.push(this.canEnonce)
           this.listeCanReponsesACompleter.push(this.canReponseACompleter)
           nbChamps = 1
@@ -841,7 +840,7 @@ export default class SujetCAN2023Seconde extends Exercice {
             )
           }
           this.canEnonce = texte
-          this.canReponseACompleter = ''
+
           this.listeCanEnonces.push(this.canEnonce)
           this.listeCanReponsesACompleter.push(this.canReponseACompleter)
           nbChamps = 1
@@ -1176,7 +1175,7 @@ export default class SujetCAN2023Seconde extends Exercice {
             )
           }
           this.canEnonce = texte
-          this.canReponseACompleter = ''
+
           this.listeCanEnonces.push(this.canEnonce)
           this.listeCanReponsesACompleter.push(this.canReponseACompleter)
           nbChamps = 1
@@ -1722,7 +1721,7 @@ export default class SujetCAN2023Seconde extends Exercice {
               )
             }
             this.canEnonce = texte
-            this.canReponseACompleter = ''
+
             this.listeCanEnonces.push(this.canEnonce)
             this.listeCanReponsesACompleter.push(this.canReponseACompleter)
             nbChamps = 1

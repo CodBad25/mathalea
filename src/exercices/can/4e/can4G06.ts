@@ -127,7 +127,7 @@ export default class CalculLongueurThales extends ExerciceSimple {
         Ainsi, $${nom[3]}${nom[2]}=${texNombre(a / b)}\\times ${nom[1]}${nom[4]}=${texNombre(a / b)}\\times ${c}=${texNombre((a * c) / b)}$.
                   <br>`
       this.reponse = (a * c) / b
-      this.canEnonce = this.question // 'Compléter'
+
       this.canReponseACompleter = `$${nom[3]}${nom[2]}=\\ldots$`
     } else {
       nom = creerNomDePolygone(5, ['QD'])
@@ -196,7 +196,7 @@ export default class CalculLongueurThales extends ExerciceSimple {
        Ainsi, $${nom[0]}${nom[3]}=${texNombre(k)}\\times ${nom[0]}${nom[1]}=${texNombre(k)}\\times ${a}=${texNombre(k * a)}$.
                  <br>`
       this.reponse = k * a
-      this.canEnonce = this.question // 'Compléter'
+
       this.canReponseACompleter = `$${nom[0]}${nom[3]}=\\ldots$`
     }
   }

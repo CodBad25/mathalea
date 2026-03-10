@@ -1,8 +1,8 @@
-import ExerciceSimple from '../../ExerciceSimple'
 import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 
-import { texNombre } from '../../../lib/outils/texNombre'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { texNombre } from '../../../lib/outils/texNombre'
 
 export const titre = "Calculer la moitié d'un entier"
 export const interactifReady = true
@@ -33,8 +33,7 @@ export default class Moitie extends ExerciceSimple {
     }
     const moitie = entier >> 1
     this.question = `La moitié de $${entier}$`
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
+
     this.reponse = texNombre(moitie, 0)
     const unit = entier % 10
     const rondeur = entier - 10 - unit

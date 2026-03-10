@@ -1,15 +1,15 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { texNombre } from '../../../lib/outils/texNombre'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { randint } from '../../../modules/outils'
+import { choice } from '../../../lib/outils/arrayOutils'
 import {
   ecritureAlgebrique,
   ecritureParentheseSiNegatif,
   reduirePolynomeDegre3,
   rienSi1,
 } from '../../../lib/outils/ecritures'
-import { choice } from '../../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { texNombre } from '../../../lib/outils/texNombre'
+import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Calculer une dérivée'
 export const interactifReady = true
@@ -30,7 +30,7 @@ export default class calcDerivee2026 extends ExerciceSimple {
     this.nbQuestions = 1
     this.formatChampTexte =
       KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets
-       this.optionsDeComparaison = { calculFormel: true }
+    this.optionsDeComparaison = { calculFormel: true }
   }
 
   nouvelleVersion() {
@@ -41,12 +41,12 @@ export default class calcDerivee2026 extends ExerciceSimple {
       this.correction = "$f'(x)="
 
       a = this.canOfficielle ? 2 : randint(-3, 3, 0)
-      this.reponse = `${a * annee}\\times x^{${annee-1}}`
+      this.reponse = `${a * annee}\\times x^{${annee - 1}}`
       this.question += `$f(x)=${rienSi1(a)}x^{${texNombre(annee, 0)}}$`
       this.correction = `$f'(x)=${
         a === 1 || a === -1
-          ? `${miseEnEvidence(`${texNombre(a * annee, 0)}x^{${texNombre(annee-1, 0)}}`)}`
-          : `${a}\\times ${texNombre(annee, 0)} x^{${texNombre(annee-1, 0)}}= ${miseEnEvidence(`${texNombre(a * annee, 0)}x^{${texNombre(annee-1, 0)}}`)}`
+          ? `${miseEnEvidence(`${texNombre(a * annee, 0)}x^{${texNombre(annee - 1, 0)}}`)}`
+          : `${a}\\times ${texNombre(annee, 0)} x^{${texNombre(annee - 1, 0)}}= ${miseEnEvidence(`${texNombre(a * annee, 0)}x^{${texNombre(annee - 1, 0)}}`)}`
       }$`
 
       this.question += '.<br>Donner sa fonction dérivée.'
@@ -69,7 +69,7 @@ export default class calcDerivee2026 extends ExerciceSimple {
     if (this.interactif) {
       this.question += "<br> $f'(x)=$"
     }
-    this.canEnonce = this.question
+
     this.canReponseACompleter = "$f'(x)=\\ldots$"
   }
 }

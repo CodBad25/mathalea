@@ -1,9 +1,9 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { randint } from '../../../modules/outils'
-import { stringNombre, texNombre } from '../../../lib/outils/texNombre'
 import Decimal from 'decimal.js'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { stringNombre, texNombre } from '../../../lib/outils/texNombre'
+import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Donner une écriture scientifique'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -45,7 +45,5 @@ export default class EcritureScientifique extends ExerciceSimple {
         options: { ecritureScientifique: true },
       },
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

@@ -1,7 +1,7 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { choice } from '../../../lib/outils/arrayOutils'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { choice } from '../../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Décomposer une fraction'
 export const interactifReady = true
@@ -54,6 +54,5 @@ export default class FractionAvecPi extends ExerciceSimple {
       this.question += ' $\\ldots$'
     }
     this.canEnonce = 'Compléter.'
-    this.canReponseACompleter = ''
   }
 }

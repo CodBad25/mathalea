@@ -76,9 +76,14 @@ export default class DecomposerUnNombre extends ExerciceSimple {
         mult: 8,
         carre: 4,
         racine: 2,
-       reponsesSupp: ['16\\times2', '2\\times16', '4^2\\times2', '2\\times4^2'],
-  correctionSupp: `On peut aussi écrire $32=${miseEnEvidence(`2\\times16`)}=${miseEnEvidence(`2\\times4^2`)}$ car $16$ est aussi un carré parfait (carré de $4$).<br>`,
-},
+        reponsesSupp: [
+          '16\\times2',
+          '2\\times16',
+          '4^2\\times2',
+          '2\\times4^2',
+        ],
+        correctionSupp: `On peut aussi écrire $32=${miseEnEvidence(`2\\times16`)}=${miseEnEvidence(`2\\times4^2`)}$ car $16$ est aussi un carré parfait (carré de $4$).<br>`,
+      },
       {
         nombre: 40,
         mult: 10,
@@ -136,13 +141,18 @@ export default class DecomposerUnNombre extends ExerciceSimple {
         correctionSupp: '',
       },
       {
-  nombre: 72,
-  mult: 8,
-  carre: 9,
-  racine: 3,
-  reponsesSupp: ['36\\times2', '2\\times36', '6^2\\times2', '2\\times6^2'],
-  correctionSupp: `On peut aussi écrire $72=${miseEnEvidence(`2\\times36`)}=${miseEnEvidence(`2\\times6^2`)}$ car $36$ est aussi un carré parfait (carré de $6$).<br>`,
-},
+        nombre: 72,
+        mult: 8,
+        carre: 9,
+        racine: 3,
+        reponsesSupp: [
+          '36\\times2',
+          '2\\times36',
+          '6^2\\times2',
+          '2\\times6^2',
+        ],
+        correctionSupp: `On peut aussi écrire $72=${miseEnEvidence(`2\\times36`)}=${miseEnEvidence(`2\\times6^2`)}$ car $36$ est aussi un carré parfait (carré de $6$).<br>`,
+      },
       {
         nombre: 90,
         mult: 10,
@@ -246,7 +256,6 @@ export default class DecomposerUnNombre extends ExerciceSimple {
     Ainsi, $${a}=${miseEnEvidence(`${mult}\\times${carre}`)}=${miseEnEvidence(`${mult}\\times${racine}^2`)}$.<br>
     ${correctionSupp}`
 
-    this.canEnonce = this.question
     this.canReponseACompleter = `$${a}=\\ldots$`
   }
 }

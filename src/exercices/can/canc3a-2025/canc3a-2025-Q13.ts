@@ -1,8 +1,8 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { texNombre } from '../../../lib/outils/texNombre'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { texNombre } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Résoudre un problème de monnaie'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -33,7 +33,7 @@ export default class Can2025N62Q13 extends ExerciceSimple {
     this.question = `Combien faut-il de pièces de $10$ centimes pour avoir $${texNombre(a, 2, true)}$ € ? `
     this.correction = `Il faut $10$ pièces de $10$ centimes pour faire $1$ €. <br>
     Il faur donc $${miseEnEvidence(this.reponse)}$ pièces pour faire $${texNombre(a, 2, true)}$ €.`
-    this.canEnonce = this.question
+
     this.canReponseACompleter = '$\\ldots$ pièces'
   }
 }

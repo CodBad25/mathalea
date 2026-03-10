@@ -1,12 +1,12 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { randint } from '../../../modules/outils'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { choice } from '../../../lib/outils/arrayOutils'
 import {
   ecritureParentheseSiNegatif,
   reduirePolynomeDegre3,
 } from '../../../lib/outils/ecritures'
-import { choice } from '../../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = "Calculer l'abscisse du sommet d'une parabole"
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -47,8 +47,7 @@ export default class SommetParabole extends ExerciceSimple {
      L'abscisse du sommet est donnée  par $x_S=-\\dfrac{${b}}{2\\times ${ecritureParentheseSiNegatif(a)}}=${miseEnEvidence(this.reponse)}$.
      <br>
    `
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
+
     if (!this.interactif) {
       this.question += ' $\\ldots$'
     }

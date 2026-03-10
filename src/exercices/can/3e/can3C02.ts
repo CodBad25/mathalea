@@ -79,7 +79,5 @@ export default class MoyenneEntiereDeDecimaux extends ExerciceSimple {
 
     $\\bullet$ On divise par le nombre de valeurs (soit $3$) : $\\dfrac{${texNombre(a / 10 + b / 10 + c / 10)}}{3}= ${this.reponse}$  <br>
       `)
-    this.canEnonce = this.question // 'Compléter'
-    this.canReponseACompleter = ''
   }
 }

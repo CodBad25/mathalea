@@ -1,10 +1,10 @@
-import ExerciceSimple from '../../ExerciceSimple'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
+import ExerciceSimple from '../../ExerciceSimple'
 
-import { randint } from '../../../modules/outils'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { prenomM } from '../../../lib/outils/Personne'
+import { randint } from '../../../modules/outils'
 export const titre = ''
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -28,7 +28,7 @@ export default class resoudreUnProbleme2026 extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const annee = 2026 
+    const annee = 2026
     const prenoms = prenomM(2)
     this.reponse = this.canOfficielle ? 8 : randint(8, 12, 10)
     const a = this.reponse * 2
@@ -42,7 +42,7 @@ export default class resoudreUnProbleme2026 extends ExerciceSimple {
     if (this.interactif) {
       this.question += '<br>'
     }
-    this.canEnonce = this.question
+
     this.canReponseACompleter = '$\\ldots$ €'
   }
 }

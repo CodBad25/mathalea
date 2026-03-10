@@ -160,7 +160,5 @@ export default class EquationPlusMoinsX2PlusAEgalB extends ExerciceSimple {
         }
         break
     }
-    this.canEnonce = this.question // 'Compléter'
-    this.canReponseACompleter = ''
   }
 }

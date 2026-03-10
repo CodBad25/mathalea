@@ -43,8 +43,6 @@ export default class Can52026Q12 extends ExerciceCan {
     En effet, $0,2 = \\dfrac{2}{10} = \\dfrac{1}{5}$.<br>
     $${texNombre(a, 1)} \\times 0,2 = ${miseEnEvidence(texNombre(resultat.toNumber(), 2))}$`
 
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
     if (this.interactif) {
       this.question += ' $=$'
     }

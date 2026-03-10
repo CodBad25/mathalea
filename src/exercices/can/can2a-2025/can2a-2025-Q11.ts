@@ -1,9 +1,9 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { randint } from '../../../modules/outils'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { toutPourUnPoint } from '../../../lib/interactif/mathLive'
 import { choice } from '../../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = "Calculer les coordonnées d'un milieu"
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -48,6 +48,5 @@ export default class CoordonneesMilieu extends ExerciceSimple {
       Ainsi,  $M(${miseEnEvidence(`${xm}\\,;\\,${ym}`)})$.`
 
     this.canEnonce = `Coordonnées du  milieu de $[AB]$ avec $A(${xa}\\,;\\,${ya})$ et $B(${xb}\\,;\\,${yb})$`
-    this.canReponseACompleter = ''
   }
 }

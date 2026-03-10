@@ -27,14 +27,13 @@ export default class CalculsPourcentages2026 extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const annee =2026
-    const a = new Decimal(annee).div(this.canOfficielle ? 10 : choice([10, 100, 1000]))
+    const annee = 2026
+    const a = new Decimal(annee).div(
+      this.canOfficielle ? 10 : choice([10, 100, 1000]),
+    )
     this.reponse = texNombre(new Decimal(a).div(10), 5)
     this.question = `$10\\,\\%$ de $${texNombre(a, 4)}$`
     this.correction = `Prendre $10\\,\\%$ d'une quantité revient à la diviser par $10$.<br>
       Ainsi, $10\\,\\%$ de $${texNombre(a, 4)}=${texNombre(a, 4)} \\div 10 = ${miseEnEvidence(this.reponse)}$.`
-
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

@@ -74,7 +74,5 @@ export default class RecomposerEntier extends ExerciceSimple {
   \\end{aligned}$.`
     this.correction += `=${miseEnEvidence(texNombre(this.reponse))}$`
     this.correction += texteEnCouleur(correction, bleuMathalea)
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

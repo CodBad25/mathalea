@@ -80,7 +80,5 @@ export default class CompleterUneSuite extends ExerciceSimple {
         latex2d('A', x1B * 5, 0.5, { color: 'blue' }),
         d,
       )
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

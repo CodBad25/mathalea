@@ -59,7 +59,6 @@ On veut le prix de $${facteur}$ fois moins de gommes.<br>
 On divise donc le prix de $${nbDepart}$ gommes par $${facteur}$.<br>
 $${texPrix(prixDepart)}\\div ${facteur}=${miseEnEvidence(texPrix(reponse))}$ €`
 
-    this.canEnonce = this.question
     this.canReponseACompleter = '$\\ldots$ €'
 
     if (this.interactif) {

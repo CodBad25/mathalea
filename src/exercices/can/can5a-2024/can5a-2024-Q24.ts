@@ -1,9 +1,9 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { randint } from '../../../modules/outils'
-import { choice } from '../../../lib/outils/arrayOutils'
-import FractionEtendue from '../../../modules/FractionEtendue'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { choice } from '../../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import FractionEtendue from '../../../modules/FractionEtendue'
+import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Simplifier une fraction'
 export const interactifReady = true
@@ -54,7 +54,7 @@ export default class NomExercice extends ExerciceSimple {
       `
     }
     this.reponse = reponse.texFraction
-    this.canEnonce = this.question
+
     this.canReponseACompleter = '$\\dfrac{\\ldots}{\\ldots}$'
   }
 }

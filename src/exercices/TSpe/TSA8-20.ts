@@ -1,5 +1,4 @@
-import ExerciceSimple from '../ExerciceSimple'
-import { randint } from '../../modules/outils'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import {
   ecritureAlgebrique,
   ecritureAlgebriqueSauf1,
@@ -7,9 +6,11 @@ import {
   reduireAxPlusB,
   rienSi1,
 } from '../../lib/outils/ecritures'
-import FractionEtendue from '../../modules/FractionEtendue'
-import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
+import FractionEtendue from '../../modules/FractionEtendue'
+import { randint } from '../../modules/outils'
+import ExerciceSimple from '../ExerciceSimple'
 export const titre = "Calculer l'intégrale d'une fonction affine"
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -32,6 +33,8 @@ export default class IntegraleAffine extends ExerciceSimple {
 
     this.typeExercice = 'simple'
 
+    this.formatChampTexte = KeyboardType.clavierFullOperations
+    this.optionsChampTexte = { texteAvant: '<br>$I=$ ' }
     this.nbQuestions = 1
   }
 
@@ -43,19 +46,13 @@ export default class IntegraleAffine extends ExerciceSimple {
     const fraction = new FractionEtendue(c, 2)
     const fraction2 = new FractionEtendue(c * b * b, 2)
     const fraction3 = new FractionEtendue(c * a * a, 2)
-    this.formatChampTexte = KeyboardType.clavierFullOperations
     this.question = `Calculer $I=\\displaystyle\\int_{${a}}^{${b}} \\left(${reduireAxPlusB(c, d)} \\right)\\mathrm{d}x$<br>`
 
-    if (this.interactif) {
-      this.question += '<br>$I=$ '
-    }
+    this.reponse = (b ** 2 * c) / 2 + b * d - (a ** 2 * c) / 2 - a * d
     this.correction = `$\\begin{aligned}\\displaystyle\\int_{${a}}^{${b}} \\left(${reduireAxPlusB(c, d)} \\right)\\ \\mathrm{d}x&=\\Bigl[${rienSi1(fraction.simplifie())}x^2 ${ecritureAlgebriqueSauf1(d)}x\\Bigr]_{${a}}^{${b}}\\\\
     &=\\left(${c === 2 ? '' : c === -2 ? '-' : `${fraction.texFractionSimplifiee}\\times`}${ecritureParentheseSiNegatif(b)}^2 ${d === 1 ? '+' : d === -1 ? '-' : `${ecritureAlgebrique(d)}\\times`} ${ecritureParentheseSiNegatif(b)}\\right)-
     \\left( ${c === 2 ? '' : c === -2 ? '-' : `${fraction.texFractionSimplifiee}\\times`}${ecritureParentheseSiNegatif(a)}^2 ${d === 1 ? '+' : d === -1 ? '-' : `${ecritureAlgebrique(d)}\\times`} ${ecritureParentheseSiNegatif(a)}\\right)\\\\
     &=${fraction2.texFractionSimplifiee}${ecritureAlgebrique(d * b)}-\\left(${fraction3.texFractionSimplifiee}${ecritureAlgebrique(d * a)}\\right)\\\\
-    &=${texNombre((b ** 2 * c) / 2 + b * d - (a ** 2 * c) / 2 - a * d)}\\end{aligned}$`
-    this.reponse = (b ** 2 * c) / 2 + b * d - (a ** 2 * c) / 2 - a * d
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
+    &=${miseEnEvidence(texNombre(this.reponse))}\\end{aligned}$`
   }
 }

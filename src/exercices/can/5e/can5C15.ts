@@ -1,8 +1,8 @@
-import { texteEnCouleur } from '../../../lib/outils/embellissements'
 import { ecritureParentheseSiNegatif } from '../../../lib/outils/ecritures'
+import { texteEnCouleur } from '../../../lib/outils/embellissements'
 import { abs } from '../../../lib/outils/nombres'
-import ExerciceSimple from '../../ExerciceSimple'
 import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Rechercher un nombre à ajouter'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -41,7 +41,5 @@ export default class NombreATrouver extends ExerciceSimple {
 L'"écart" entre les deux nombres est $${abs(c - a)}$. Il faut donc ajouter $${c - a}$.
 `)
     this.reponse = c - a
-    this.canEnonce = this.question // 'Compléter'
-    this.canReponseACompleter = ''
   }
 }

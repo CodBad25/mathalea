@@ -38,8 +38,6 @@ export default class SuitesRep extends ExerciceSimple {
           this.reponse = choix === 2 * n ? 'B' : 'A'
           this.question = `Dans la suite répétitive « ABABAB$\\ldots$ », quelle est la $${choix}^{\\mathrm{e}}$ lettre ?`
 
-          this.canEnonce = this.question
-          this.canReponseACompleter = ''
           this.correction = `Pour les rangs pairs, la lettre est 'B' et pour les rangs impairs, la lettre est 'A'.<br>
     Comme ${choix === 2 * n ? `$${choix}$ est pair alors la $${choix}^{\\mathrm{e}}$ lettre est '${texteEnCouleurEtGras('B')}'.` : `$${choix}$ est impair alors la $${choix}^{\\mathrm{e}}$ lettre est '${texteEnCouleurEtGras('A')}'.`}`
         }
@@ -59,8 +57,6 @@ export default class SuitesRep extends ExerciceSimple {
           }
           this.question = `Dans la suite répétitive « ABCABCABC$\\ldots$ », quelle est la $${choix}^{\\mathrm{e}}$ lettre ?`
 
-          this.canEnonce = this.question
-          this.canReponseACompleter = ''
           this.correction = `Quand le rang de la lettre est un multiple de $3$, la lettre est C.<br>
   Comme `
           if (choix === 3 * n) {

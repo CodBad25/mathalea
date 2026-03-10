@@ -1,8 +1,12 @@
 import { choice } from '../../../lib/outils/arrayOutils'
-import { ecritureAlgebrique, ecritureParentheseSiNegatif } from '../../../lib/outils/ecritures'
+import {
+  ecritureAlgebrique,
+  ecritureParentheseSiNegatif,
+} from '../../../lib/outils/ecritures'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
-export const titre = 'Appliquer la définition d’une suite arithmétique/géométrique'
+export const titre =
+  'Appliquer la définition d’une suite arithmétique/géométrique'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 
@@ -36,12 +40,13 @@ export default class CalculTerme extends ExerciceSimple {
     switch (
       choice(['a', 'b']) // 'c', 'd'
     ) {
-      case 'a': { // suite arithmétique
+      case 'a': {
+        // suite arithmétique
         u = randint(-10, 10, 0)
         r = randint(-5, 5, 0)
-        
+
         i = randint(2, 3)
-        
+
         this.question = `Soit $(${s}_n)$ une suite arithmétique de premier terme $${s}_0=${u}$ et de raison $r=${r}$.<br>
 
 Calculer le terme $${s}_{${i}}$.`
@@ -53,21 +58,22 @@ Calculer le terme $${s}_{${i}}$.`
         this.correction = `Comme la suite $(${s}_n)$ est arithmétique  de premier terme $${s}_0=${u}$ et de raison $r=${r}$, <br>pour tout entier $n$, $${s}_{n+1} = ${s}_n  ${ecritureAlgebrique(r)}$.<br>
        Donc `
         let current = u
-       for (let k = 0; k < i; k++) {
-         this.correction += `$${s}_{${k+1}} = ${s}_${k} ${ecritureAlgebrique(r)} = ${current + r}$. <br>`;
-         current += r;
-       }
-this.correction +=` On aurait pu aussi directement utiliser la forme explicite d'une suite arithmétique : $${s}_n = ${s}_0 + n \\times r$.<br>`
-this.correction +=` Ce qui donne le même résultat :  $${s}_{${i}} = ${u} + ${i} \\times ${ecritureParentheseSiNegatif(r)} = ${u + i * r}$.<br>`
+        for (let k = 0; k < i; k++) {
+          this.correction += `$${s}_{${k + 1}} = ${s}_${k} ${ecritureAlgebrique(r)} = ${current + r}$. <br>`
+          current += r
+        }
+        this.correction += ` On aurait pu aussi directement utiliser la forme explicite d'une suite arithmétique : $${s}_n = ${s}_0 + n \\times r$.<br>`
+        this.correction += ` Ce qui donne le même résultat :  $${s}_{${i}} = ${u} + ${i} \\times ${ecritureParentheseSiNegatif(r)} = ${u + i * r}$.<br>`
         this.reponse = u + i * r
-        this.canEnonce = this.question
+
         this.canReponseACompleter = `$${s}_{${i}}=\\ldots$`
         break
       }
-      case 'b': { // suite géométrique
+      case 'b': {
+        // suite géométrique
         u = randint(-3, 3, 0)
         q = randint(2, 4)
-       
+
         i = randint(2, 5)
         this.question = `Soit $(${s}_n)$ une suite géométrique de premier terme $${s}_0=${u}$ et de raison $q=${q}$.<br>
 
@@ -89,7 +95,7 @@ Calculer le terme $${s}_{${i}}$.`
         this.correction += `Ce qui donne le même résultat :  $${s}_{${i}} = ${u} \\times ${q}^{${i}} = ${u * Math.pow(q, i)}$.<br>`
 
         this.reponse = u * Math.pow(q, i)
-        this.canEnonce = this.question
+
         this.canReponseACompleter = `$${s}_{${i}}=\\ldots$`
         break
       }

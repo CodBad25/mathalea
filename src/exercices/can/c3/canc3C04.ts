@@ -47,7 +47,5 @@ export default class DoubleOuBienMoitie extends ExerciceSimple {
       this.reponse = a >> 1
       this.correction = `$${a}\\div 2 = ${a >> 1}$`
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

@@ -114,7 +114,6 @@ export default class ExerciceEquationASolutionEntiere extends Exercice {
     if (!context.isHtml) {
       this.canEnonce = "Résoudre l'équation " + this.listeQuestions[0] + '.'
       this.correction = this.listeCorrections[0]
-      this.canReponseACompleter = ''
 
       for (const enonce of this.listeQuestions) {
         this.listeCanEnonces.push("Résoudre l'équation " + enonce + '.')

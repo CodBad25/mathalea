@@ -51,7 +51,5 @@ export default class Denombrement extends ExerciceSimple {
         this.reponse = arrondi(a * b)
         break
     }
-    this.canEnonce = this.question // 'Compléter'
-    this.canReponseACompleter = ''
   }
 }

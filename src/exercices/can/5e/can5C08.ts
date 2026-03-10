@@ -60,7 +60,5 @@ export default class ProchainMultipleDeTroisOuDeNeuf extends ExerciceSimple {
           : `C'est $${texNombre(b % 9)}$ de trop pour qu'il soit divisible par $9$, donc $${texNombre(b)}$ n'est pas un multiple de $9$ mais $${texNombre(b - (b % 9))}$ en est un et $${texNombre(this.reponse)}$ aussi.<br>`
       this.correction += `Le prochain multiple de $9$ est donc : $${texNombre(this.reponse)}$.`
     }
-    this.canEnonce = this.question // 'Compléter'
-    this.canReponseACompleter = ''
   }
 }

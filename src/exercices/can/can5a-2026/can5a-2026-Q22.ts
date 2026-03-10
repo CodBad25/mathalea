@@ -205,9 +205,8 @@ export default class Can52026Q22 extends ExerciceCan {
         ) + '<br>Nombre de faces de ce solide'
       this.correction = `Ce solide est une pyramide à base carrée. Il a $${miseEnEvidence(5)}$ faces : $1$ face carrée et $4$ faces triangulaires.`
     }
-    this.canEnonce = this.question
+
     this.reponse = reponse
-    this.canReponseACompleter = ''
   }
 
   nouvelleVersion() {

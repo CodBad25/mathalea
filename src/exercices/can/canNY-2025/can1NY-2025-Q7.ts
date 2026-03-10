@@ -1,7 +1,7 @@
-import ExerciceSimple from '../../ExerciceSimple'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import ExerciceSimple from '../../ExerciceSimple'
 
 import Decimal from 'decimal.js'
 import { randint } from '../../../modules/outils'
@@ -35,8 +35,5 @@ export default class ecritureScien extends ExerciceSimple {
     if (this.interactif) {
       this.question += `<br>$${texNombre(a)}=$`
     }
-
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

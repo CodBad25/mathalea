@@ -237,6 +237,5 @@ $f(${alpha}) \\leqslant f(u_{k+1})\\leqslant f(u_k) \\leqslant f(${beta}) $<br>
     // Affichage du corrigé dans la version non interactive
     this.correction = this.reponse
     this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

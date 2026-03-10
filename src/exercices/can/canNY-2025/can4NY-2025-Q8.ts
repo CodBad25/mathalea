@@ -1,10 +1,10 @@
-import ExerciceSimple from '../../ExerciceSimple'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import ExerciceSimple from '../../ExerciceSimple'
 
-import { randint } from '../../../modules/outils'
 import Decimal from 'decimal.js'
+import { randint } from '../../../modules/outils'
 export const titre = 'Calculer avec des parenthèses'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -36,7 +36,5 @@ export default class CalculParentheses extends ExerciceSimple {
     if (this.interactif) {
       this.question += '<br>'
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

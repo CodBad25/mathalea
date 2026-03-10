@@ -92,7 +92,5 @@ export default class EcondDegreAbscisseOrdonneeSommet extends ExerciceSimple {
       }
       this.reponse = r
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

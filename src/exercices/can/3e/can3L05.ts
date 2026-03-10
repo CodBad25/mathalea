@@ -165,7 +165,5 @@ Le produit de ces soltions est donc égal à : $${ecritureParentheseSiNegatif(p)
         }
         break
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

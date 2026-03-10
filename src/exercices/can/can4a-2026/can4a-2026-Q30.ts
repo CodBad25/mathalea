@@ -102,7 +102,6 @@ $\\mathcal{B}=\\dfrac{${base}\\times ${hauteurTriangle}}{2}=${aireBase}\\text{ c
 Le volume du prisme est :<br>
 $\\mathcal{V}=\\mathcal{B}\\times h=${aireBase}\\times ${profondeur}=${miseEnEvidence(volume)}\\text{ cm}^3$.`
 
-    this.canEnonce = this.question
     this.canReponseACompleter = '$\\ldots\\text{ cm}^3$'
 
     this.optionsChampTexte = { texteApres: '$\\text{ cm}^3$.' }

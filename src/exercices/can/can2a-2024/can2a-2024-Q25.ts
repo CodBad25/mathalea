@@ -60,7 +60,5 @@ export default class NomExercice extends ExerciceSimple {
           break
       }
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

@@ -49,8 +49,5 @@ export default class calcAvecSommes2026 extends ExerciceSimple {
       this.correction = `$${texNombre(annee, 0)}+${texNombre(annee + 1, 0)}=${miseEnEvidence(texNombre(2 * annee + 1, 0))}$`
       this.reponse = 2 * annee + 1
     }
-
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

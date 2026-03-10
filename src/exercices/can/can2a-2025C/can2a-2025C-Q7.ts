@@ -18,10 +18,14 @@ export const refs = {
 
 */
 export default class Can2a2025CQ7 extends ExerciceCan {
-   enonce(cas?: number): void {
+  enonce(cas?: number): void {
     // Chaque cas : [facteurs dans l'ordre d'affichage, paire1 (indices), paire2 (indices)]
     // Le produit de la paire 8×décimal donne un entier, les autres donnent un produit simple
-    const tableauCas: { facteurs: number[], paire1: [number, number], paire2: [number, number] }[] = [
+    const tableauCas: {
+      facteurs: number[]
+      paire1: [number, number]
+      paire2: [number, number]
+    }[] = [
       // VO : 3 × 2 × 5 × 8 × 2,5 = (2×5) × (8×2,5) × 3 = 10 × 20 × 3 = 600
       { facteurs: [3, 2, 5, 8, 2.5], paire1: [1, 2], paire2: [3, 4] },
       // 2 × 5 × 3 × 8 × 3,5 = (2×5) × (8×3,5) × 3 = 10 × 28 × 3 = 840
@@ -53,7 +57,9 @@ export default class Can2a2025CQ7 extends ExerciceCan {
 
     // Le facteur restant (celui qui n'est dans aucune paire)
     const indices = [0, 1, 2, 3, 4]
-    const indiceRestant = indices.find(i => i !== i1 && i !== j1 && i !== i2 && i !== j2)!
+    const indiceRestant = indices.find(
+      (i) => i !== i1 && i !== j1 && i !== i2 && i !== j2,
+    )!
     const facteurRestant = f[indiceRestant]
 
     let resultat = new Decimal(1)
@@ -61,17 +67,18 @@ export default class Can2a2025CQ7 extends ExerciceCan {
       resultat = resultat.mul(v)
     }
 
-    const texteFacteurs = f.map(v => texNombre(v, 1)).join('\\times ')
+    const texteFacteurs = f.map((v) => texNombre(v, 1)).join('\\times ')
 
     this.formatChampTexte = KeyboardType.clavierDeBase
     this.reponse = texNombre(resultat, 0)
     this.question = `$${texteFacteurs}=$`
-    if (!this.interactif) { this.question += ' $\\ldots$' }
+    if (!this.interactif) {
+      this.question += ' $\\ldots$'
+    }
 
     this.correction = `On regroupe astucieusement :<br>
     $\\underbrace{${texNombre(f[i1], 1)}\\times ${texNombre(f[j1], 1)}}_{${texNombre(prodPaire1, 0)}}\\times \\underbrace{${texNombre(f[i2], 1)}\\times ${texNombre(f[j2], 1)}}_{${texNombre(prodPaire2, 0)}}\\times ${texNombre(facteurRestant, 1)}=${texNombre(prodPaire1, 0)}\\times ${texNombre(prodPaire2, 0)}\\times ${texNombre(facteurRestant, 1)}=${miseEnEvidence(texNombre(resultat, 0))}$`
     this.canEnonce = `$${texteFacteurs}=$`
-    this.canReponseACompleter = ''
   }
 
   nouvelleVersion(): void {

@@ -1,9 +1,9 @@
-import ExerciceSimple from '../../ExerciceSimple'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { texNombre } from '../../../lib/outils/texNombre'
 import FractionEtendue from '../../../modules/FractionEtendue'
+import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Additionner des fractions'
 export const interactifReady = true
@@ -78,6 +78,5 @@ export default class additionnerFrac extends ExerciceSimple {
     this.canEnonce = `Écrire sous la forme d'une fraction irréductible : <br>
     $${choix ? `${b.texFraction} + ${c.texFraction}` : `${c.texFraction} + ${b.texFraction}`}$
        `
-    this.canReponseACompleter = ''
   }
 }

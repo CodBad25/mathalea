@@ -64,7 +64,7 @@ export default class CalculProbaTableauEff extends ExerciceSimple {
 
     switch (choice([1, 2, 3, 4, 5, 6, 7, 8])) {
       case 1: // p(F)
-        this.question = enonce 
+        this.question = enonce
         if (choice([true, false])) {
           this.optionsChampTexte = { texteAvant: '<br>$P(F)=$ ' }
           this.canEnonce = enonce
@@ -73,32 +73,34 @@ export default class CalculProbaTableauEff extends ExerciceSimple {
         } else {
           this.question += 'Déterminer la probabilité de choisir une fille.'
           this.optionsChampTexte = { texteAvant: '<br>' }
-          this.canEnonce = enonce + 'Quelle est la probabilité de choisir une fille ?'
-          this.canReponseACompleter = ''
+          this.canEnonce =
+            enonce + 'Quelle est la probabilité de choisir une fille ?'
         }
         texteCorr = `$P(F)=\\dfrac{\\text{Nombre de filles}}{\\text{Nombre  de personnes au total}}=\\dfrac{${texNombre(F)}}{${texNombre(T)}}$`
         reponse = new FractionEtendue(F, T)
         break
 
       case 2: // p(FinterV)
-        this.question = enonce 
+        this.question = enonce
         if (choice([true, false])) {
           this.optionsChampTexte = { texteAvant: '<br>$P(F\\cap V)=$ ' }
           this.canEnonce = enonce
           this.canReponseACompleter = '$P(F\\cap V)=\\ldots$'
           this.question += 'Déterminer $P(F\\cap V)$.'
         } else {
-          this.question += 'Déterminer la probabilité de choisir une fille de plus de $20$ ans.'
+          this.question +=
+            'Déterminer la probabilité de choisir une fille de plus de $20$ ans.'
           this.optionsChampTexte = { texteAvant: '<br>' }
-          this.canEnonce = enonce + 'Quelle est la probabilité de choisir une fille de plus de $20$ ans ?'
-          this.canReponseACompleter = ''
+          this.canEnonce =
+            enonce +
+            'Quelle est la probabilité de choisir une fille de plus de $20$ ans ?'
         }
         texteCorr = `$P(F\\cap V)=\\dfrac{\\text{Nombre de filles de plus de 20 ans}}{\\text{Nombre  de personnes au total}}=\\dfrac{${texNombre(FinterV)}}{${texNombre(T)}}$`
         reponse = new FractionEtendue(FinterV, T)
         break
 
       case 3: // p_V(F)
-        this.question = enonce 
+        this.question = enonce
         if (choice([true, false])) {
           this.optionsChampTexte = { texteAvant: '<br>$P_V(F)=$ ' }
           this.canEnonce = enonce
@@ -114,35 +116,41 @@ export default class CalculProbaTableauEff extends ExerciceSimple {
             ? "Quelle est la probabilité de choisir une fille sachant qu'elle a plus de $20$ ans ?"
             : 'La personne choisie a plus de $20$ ans. Quelle est la probabilité que ce soit une fille ?'
           this.canEnonce = enonce + questionCan
-          this.canReponseACompleter = ''
         }
         texteCorr = `$P_V(F)=\\dfrac{\\text{Nombre de filles de plus de 20 ans}}{\\text{Nombre  de personnes de plus de 20 ans}}=\\dfrac{${texNombre(FinterV)}}{${texNombre(V)}}$`
         reponse = new FractionEtendue(FinterV, V)
         break
 
       case 4: // p(FinterVbarre))
-        this.question = enonce 
+        this.question = enonce
         if (choice([true, false])) {
-          this.optionsChampTexte = { texteAvant: '<br>$P(F\\cap\\overline{V})=$ ' }
+          this.optionsChampTexte = {
+            texteAvant: '<br>$P(F\\cap\\overline{V})=$ ',
+          }
           this.canEnonce = enonce
           this.canReponseACompleter = '$P(F\\cap\\overline{V})=\\ldots$'
           this.question += 'Déterminer $P(F\\cap\\overline{V})$.'
         } else {
-          this.question += 'Déterminer la probabilité de choisir une fille de moins de $20$ ans.'
+          this.question +=
+            'Déterminer la probabilité de choisir une fille de moins de $20$ ans.'
           this.optionsChampTexte = { texteAvant: '<br>' }
-          this.canEnonce = enonce + 'Quelle est la probabilité de choisir une fille de moins de $20$ ans ?'
-          this.canReponseACompleter = ''
+          this.canEnonce =
+            enonce +
+            'Quelle est la probabilité de choisir une fille de moins de $20$ ans ?'
         }
         texteCorr = `$P(F\\cap\\overline{V})=\\dfrac{\\text{Nombre de filles de moins de 20 ans}}{\\text{Nombre  total de personnes}}=\\dfrac{${texNombre(F - FinterV)}}{${texNombre(T)}}$`
         reponse = new FractionEtendue(F - FinterV, T)
         break
 
       case 5: // p_Vbarre(Fbarre)
-        this.question = enonce 
+        this.question = enonce
         if (choice([true, false])) {
-          this.optionsChampTexte = { texteAvant: '<br>$P_{\\overline{V}}(\\overline{F})=$ ' }
+          this.optionsChampTexte = {
+            texteAvant: '<br>$P_{\\overline{V}}(\\overline{F})=$ ',
+          }
           this.canEnonce = enonce
-          this.canReponseACompleter = '$P_{\\overline{V}}(\\overline{F})=\\ldots$'
+          this.canReponseACompleter =
+            '$P_{\\overline{V}}(\\overline{F})=\\ldots$'
           this.question += 'Déterminer $P_{\\overline{V}}(\\overline{F})$.'
         } else {
           const question = choix
@@ -154,14 +162,13 @@ export default class CalculProbaTableauEff extends ExerciceSimple {
             ? "Quelle est la probabilité de choisir un garçon sachant qu'il a moins de $20$ ans ?"
             : 'La personne choisie a moins de $20$ ans. Quelle est la probabilité que ce soit un garçon ?'
           this.canEnonce = enonce + questionCan
-          this.canReponseACompleter = ''
         }
         texteCorr = `$P_{\\overline{V}}(\\overline{F})=\\dfrac{\\text{Nombre de garçons de moins de 20 ans}}{\\text{Nombre  de personnes de moins de 20 ans}}=\\dfrac{${texNombre(T - F - V + FinterV)}}{${texNombre(T - V)}}$`
         reponse = new FractionEtendue(T - F - V + FinterV, T - V)
         break
 
       case 6: // p_F(V)
-        this.question = enonce 
+        this.question = enonce
         if (choice([true, false])) {
           this.optionsChampTexte = { texteAvant: '<br>$P_{F}(V)=$ ' }
           this.canEnonce = enonce
@@ -177,16 +184,17 @@ export default class CalculProbaTableauEff extends ExerciceSimple {
             ? "Quelle est la probabilité de choisir une personne de plus de $20$ ans sachant que c'est une fille ?"
             : "La personne choisie est une fille. Quelle est la probabilité qu'elle ait plus de $20$ ans  ?"
           this.canEnonce = enonce + questionCan
-          this.canReponseACompleter = ''
         }
         texteCorr = `$P_{F}(V)=\\dfrac{\\text{Nombre de filles de plus de 20 ans}}{\\text{Nombre  de filles}}=\\dfrac{${texNombre(FinterV)}}{${texNombre(F)}}$`
         reponse = new FractionEtendue(FinterV, F)
         break
 
       case 7: // p_Farre(V)
-        this.question = enonce 
+        this.question = enonce
         if (choice([true, false])) {
-          this.optionsChampTexte = { texteAvant: '<br>$P_{\\overline{F}}(V)=$ ' }
+          this.optionsChampTexte = {
+            texteAvant: '<br>$P_{\\overline{F}}(V)=$ ',
+          }
           this.canEnonce = enonce
           this.canReponseACompleter = '$P_{\\overline{F}}(V)=\\ldots$'
           this.question += 'Déterminer $P_{\\overline{F}}(V)$.'
@@ -200,24 +208,25 @@ export default class CalculProbaTableauEff extends ExerciceSimple {
             ? "Quelle est la probabilité de choisir une personne de plus de $20$ ans sachant que c'est un garçon ?"
             : "La personne choisie est un garçon. Quelle est la probabilité qu'il ait plus de $20$ ans  ?"
           this.canEnonce = enonce + questionCan
-          this.canReponseACompleter = ''
         }
         texteCorr = `$P_{\\overline{F}}(V)=\\dfrac{\\text{Nombre de garçons de plus de 20 ans}}{\\text{Nombre  de garçons}}=\\dfrac{${texNombre(V - FinterV)}}{${texNombre(T - F)}}$`
         reponse = new FractionEtendue(V - FinterV, T - F)
         break
 
       case 8: // p(Vbarre)
-        this.question = enonce 
+        this.question = enonce
         if (choice([true, false])) {
           this.optionsChampTexte = { texteAvant: '<br>$P(\\overline{V})=$ ' }
           this.canEnonce = enonce
           this.canReponseACompleter = '$P(\\overline{V})=\\ldots$'
           this.question += 'Déterminer $P(\\overline{V})$.'
         } else {
-          this.question += 'Déterminer la probabilité de choisir une personne de moins de $20$ ans.'
+          this.question +=
+            'Déterminer la probabilité de choisir une personne de moins de $20$ ans.'
           this.optionsChampTexte = { texteAvant: '<br>' }
-          this.canEnonce = enonce + 'Quelle est la probabilité de choisir une personne de moins de $20$ ans ?'
-          this.canReponseACompleter = ''
+          this.canEnonce =
+            enonce +
+            'Quelle est la probabilité de choisir une personne de moins de $20$ ans ?'
         }
         texteCorr = `$P(\\overline{V})=\\dfrac{\\text{Nombre de personnes de moins de 20 ans}}{\\text{Nombre  de personnes au total}}=\\dfrac{${texNombre(T - V)}}{${texNombre(T)}}$`
         reponse = new FractionEtendue(T - V, T)

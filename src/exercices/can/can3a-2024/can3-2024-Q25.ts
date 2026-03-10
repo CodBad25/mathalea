@@ -1,8 +1,8 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { choice } from '../../../lib/outils/arrayOutils'
-import { texNombre } from '../../../lib/outils/texNombre'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { choice } from '../../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { texNombre } from '../../../lib/outils/texNombre'
+import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Trouver un pourcentage'
 export const interactifReady = true
@@ -71,7 +71,7 @@ export default class NomExercice extends ExerciceSimple {
       Le prix a baissé de $${miseEnEvidence(this.reponse)}\\,\\%$.`
       }
     }
-    this.canEnonce = this.question
+
     this.canReponseACompleter = '$\\ldots\\,\\%$'
   }
 }

@@ -1,7 +1,7 @@
-import ExerciceSimple from '../../ExerciceSimple'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { randint } from '../../../modules/outils'
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import ExerciceSimple from '../../ExerciceSimple'
 
 import { texNombre } from '../../../lib/outils/texNombre'
 
@@ -64,7 +64,6 @@ export default class ordonneePointDroite extends ExerciceSimple {
       `$${texNombre(coeff * a, 1)}$`,
     ]
 
-    this.canEnonce = this.question
     this.canReponseACompleter = '$B(1\\,;\\,\\ldots)$'
   }
 }

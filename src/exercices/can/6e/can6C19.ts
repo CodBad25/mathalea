@@ -45,7 +45,5 @@ export default class ComplementACent extends ExerciceSimple {
      `,
       bleuMathalea,
     )
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

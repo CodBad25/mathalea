@@ -1,7 +1,7 @@
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import ExerciceCan from '../../ExerciceCan'
-import { randint } from '../../../modules/outils'
 import { choice } from '../../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { randint } from '../../../modules/outils'
+import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Somme astucieuse'
 export const interactifReady = true
@@ -25,7 +25,7 @@ export default class Can2025N4Q25 extends ExerciceCan {
     }
     this.question = `$${a} + ${b}$`
     this.correction = `$${a} + ${b}=${Math.max(a, b)}+100-1=${miseEnEvidence(a + b)}$`
-    this.canEnonce = this.question
+
     this.reponse = a + b
     this.question += this.interactif ? ' $=$' : ''
   }

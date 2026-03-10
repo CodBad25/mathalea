@@ -54,7 +54,7 @@ export default class Can2025N6Q10 extends ExerciceCan {
     this.formatInteractif = 'qcm'
 
     const monQcm = propositionsQcm(this, 0)
-    this.canEnonce = this.question
+
     this.question += `${monQcm.texte}`
     this.correction = monQcm.texteCorr
     this.canReponseACompleter = `\\faSquare[regular] $${texNombre(a, 1)}\\text{ m}$ \\faSquare[regular] $${texNombre(a, 1)}\\text{ cm}$ <br>\\faSquare[regular] $${texNombre(a, 1)}\\text{ km}$`

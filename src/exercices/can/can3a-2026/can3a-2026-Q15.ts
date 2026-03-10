@@ -44,9 +44,6 @@ export default class Can32026Q15 extends ExerciceCan {
 
     this.correction = `Pour $x=${x}$, on obtient : $(${x})^2+${a}=${x ** 2}+${a}=${miseEnEvidence(this.reponse)}$.<br>
 Pour $x=${x}$, $${expression}$ prend la valeur $${miseEnEvidence(this.reponse)}$.`
-
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 
   nouvelleVersion() {

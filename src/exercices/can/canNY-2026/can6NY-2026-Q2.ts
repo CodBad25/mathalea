@@ -1,8 +1,8 @@
-import ExerciceSimple from '../../ExerciceSimple'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
-import { choice } from '../../../lib/outils/arrayOutils'
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Calculer des sommes ou différences'
 export const interactifReady = true
@@ -48,7 +48,5 @@ export default class CalculsNombres2026 extends ExerciceSimple {
       this.correction = `$202-6=${miseEnEvidence(texNombre(196, 0))}$`
       this.reponse = 196
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

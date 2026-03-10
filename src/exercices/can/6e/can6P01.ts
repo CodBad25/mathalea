@@ -51,7 +51,7 @@ export default class ProportionnaliteSimple extends ExerciceSimple {
     La masse de ${fruits[a][0]} est proportionnelle au prix payé.<br>
     On remarque qu'on demande le prix pour une quantité double ($${texNombre(c / 5)}=2\\times ${texNombre(c / 10)}$).<br>
     Ainsi, le prix à payer pour $${texNombre(c / 5)}$ kg de ${fruits[a][0]} est :  $${texPrix((c / 10) * b)} \\times 2 = ${miseEnEvidence(texPrix(this.reponse))}$ €`
-    this.canEnonce = this.question
+
     this.canReponseACompleter = '$\\dots$ €'
   }
 }

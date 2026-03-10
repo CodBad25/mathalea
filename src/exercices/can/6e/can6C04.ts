@@ -40,8 +40,8 @@ export default class Ajoute10NPlus9 extends ExerciceSimple {
     const c = randint(1, 5)
     this.reponse = a * 10 + b + c * 10 + 9
     this.question = `Calculer $${texNombre(a * 10 + b, 0)} + ${texNombre(c * 10 + 9, 0)}$.`
-    this.canEnonce = this.question
-    this.canReponseACompleter = '' // `${this.question} \\dots \\dots`
+
+    // `${this.question} \\dots \\dots`
     this.correction = `$${texNombre(a * 10 + b, 0)} + ${texNombre(c * 10 + 9, 0)}= ${miseEnEvidence(texNombre(this.reponse, 0))}$<br>`
     this.correction += texteEnCouleur(
       `<br> Mentalement : <br>

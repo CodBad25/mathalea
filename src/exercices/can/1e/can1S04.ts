@@ -5,9 +5,9 @@ import { texNombre } from '../../../lib/outils/texNombre'
 import { listeQuestionsToContenu, randint } from '../../../modules/outils'
 import Exercice from '../../Exercice'
 
+import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
 import { remplisLesBlancs } from '../../../lib/interactif/questionMathLive'
 import { arrondi } from '../../../lib/outils/nombres'
-import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
 
 export const titre = 'Déterminer une relation de récurrence'
 export const interactifReady = true
@@ -40,7 +40,6 @@ export default class RelationRec extends Exercice {
     for (
       let i = 0, texte, texteCorr, a, b, c, T, proportion, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       switch (
         choice([1, 1, 2, 3, 4]) //
@@ -55,7 +54,11 @@ export default class RelationRec extends Exercice {
           On note, pour tout $n\\in\\mathbb{N}$, $${s}_{n}$ le nombre d'abonnés en $2020+n$.<br>`
           if (this.interactif) {
             texte += `On a alors  : $${s}_{n+1} = a~${s}_{n} + b$<br>avec `
-            texte += remplisLesBlancs(this, i, `a~=~%{champ1}~\\text{ et }~b~=~%{champ2}`)
+            texte += remplisLesBlancs(
+              this,
+              i,
+              `a~=~%{champ1}~\\text{ et }~b~=~%{champ2}`,
+            )
           } else {
             texte += ` Donner le premier terme de cette suite et l'expression de $${s}_{n+1}$ en fonction de $${s}_{n}$.  `
           }
@@ -63,9 +66,16 @@ export default class RelationRec extends Exercice {
 
 
           Le premier terme de la suite est $${s}_{0}=${texNombre(c)}$ et  $${s}_{n+1}=${texNombre(1 - a / 100)}${s}_{n}+${b}$.<br>`
-          handleAnswers(this, i, { bareme: (listePoints: number[]) => [Math.min(listePoints[0], listePoints[1]), 1], champ1: { value: arrondi(1 - a / 100) }, champ2: { value: b }})
+          handleAnswers(this, i, {
+            bareme: (listePoints: number[]) => [
+              Math.min(listePoints[0], listePoints[1]),
+              1,
+            ],
+            champ1: { value: arrondi(1 - a / 100) },
+            champ2: { value: b },
+          })
           this.canEnonce = texte
-          this.canReponseACompleter = ''
+
           break
 
         case 2: // magazine geo
@@ -77,8 +87,12 @@ export default class RelationRec extends Exercice {
           En $2020$, ce magazine compte $${texNombre(c)}$ abonnés.
           On note, pour tout $n\\in\\mathbb{N}$, $${s}_{n}$ le nombre d'abonnés en $2020+n$.<br>`
           if (this.interactif) {
-           texte += `On a alors  : $${s}_{n+1} = a~${s}_{n} + b$<br>avec `
-           texte += remplisLesBlancs(this, i, `a~=~%{champ1}~\\text{ et }~b~=~%{champ2}`)
+            texte += `On a alors  : $${s}_{n+1} = a~${s}_{n} + b$<br>avec `
+            texte += remplisLesBlancs(
+              this,
+              i,
+              `a~=~%{champ1}~\\text{ et }~b~=~%{champ2}`,
+            )
           } else {
             texte += ` Donner le premier terme de cette suite et l'expression de $${s}_{n+1}$ en fonction de $${s}_{n}$.  `
           }
@@ -87,10 +101,17 @@ export default class RelationRec extends Exercice {
 
 
           Le premier terme de la suite est $${s}_{0}=${texNombre(c)}$ et  $${s}_{n+1}=${texNombre(1 - a / 100)}${s}_{n}$.<br>`
-          handleAnswers(this, i, { bareme: (listePoints: number[]) => [Math.min(listePoints[0], listePoints[1]), 1], champ1: { value: arrondi(1 - a / 100) }, champ2: { value: 0 }})
+          handleAnswers(this, i, {
+            bareme: (listePoints: number[]) => [
+              Math.min(listePoints[0], listePoints[1]),
+              1,
+            ],
+            champ1: { value: arrondi(1 - a / 100) },
+            champ2: { value: 0 },
+          })
 
           this.canEnonce = texte
-          this.canReponseACompleter = ''
+
           break
 
         case 3: // magazine arith
@@ -101,18 +122,29 @@ export default class RelationRec extends Exercice {
           En $2020$, ce magazine compte $${texNombre(c)}$ abonnés.
           On note, pour tout $n\\in\\mathbb{N}$, $${s}_{n}$ le nombre d'abonnés en $2020+n$.<br>`
           if (this.interactif) {
-           texte += `On a alors  : $${s}_{n+1} = a~${s}_{n} + b$<br>avec `
-           texte += remplisLesBlancs(this, i, `a~=~%{champ1}~\\text{ et }~b~=~%{champ2}`)
+            texte += `On a alors  : $${s}_{n+1} = a~${s}_{n} + b$<br>avec `
+            texte += remplisLesBlancs(
+              this,
+              i,
+              `a~=~%{champ1}~\\text{ et }~b~=~%{champ2}`,
+            )
           } else {
             texte += ` Donner le premier terme de cette suite et l'expression de $${s}_{n+1}$ en fonction de $${s}_{n}$.  `
           }
 
           texteCorr = `On a $${s}_{n+1}=${s}_{n}-${a}$.<br>
           Le premier terme de la suite est $${s}_{0}=${texNombre(c)}$ et  $${s}_{n+1}=${s}_{n}-${a}$.<br>`
-          handleAnswers(this, i, { bareme: (listePoints: number[]) => [Math.min(listePoints[0], listePoints[1]), 1], champ1: { value: 1 }, champ2: { value: -a }})
+          handleAnswers(this, i, {
+            bareme: (listePoints: number[]) => [
+              Math.min(listePoints[0], listePoints[1]),
+              1,
+            ],
+            champ1: { value: 1 },
+            champ2: { value: -a },
+          })
 
           this.canEnonce = texte
-          this.canReponseACompleter = ''
+
           break
         case 4:
         default: // magazine arith/geo avec tiers....
@@ -131,8 +163,12 @@ export default class RelationRec extends Exercice {
           En $2020$, ce magazine compte $${texNombre(c)}$ abonnés.
           On note, pour tout $n\\in\\mathbb{N}$, $${s}_{n}$ le nombre d'abonnés en $2020+n$.<br>`
           if (this.interactif) {
-           texte += `On a alors  : $${s}_{n+1} = a~${s}_{n} + b$<br>avec `
-           texte += remplisLesBlancs(this, i, `a~=~%{champ1}~\\text{ et }~b~=~%{champ2}`)
+            texte += `On a alors  : $${s}_{n+1} = a~${s}_{n} + b$<br>avec `
+            texte += remplisLesBlancs(
+              this,
+              i,
+              `a~=~%{champ1}~\\text{ et }~b~=~%{champ2}`,
+            )
           } else {
             texte += ` Donner le premier terme de cette suite et l'expression de $${s}_{n+1}$ en fonction de $${s}_{n}$.  `
           }
@@ -159,25 +195,59 @@ export default class RelationRec extends Exercice {
           }
 
           if (T === 'la moitié') {
-            handleAnswers(this, i, { bareme: (listePoints: number[]) => [Math.min(listePoints[0], listePoints[1]), 1], champ1: { value: ['0,5', `${texFractionFromString(1, 2)}`] }, champ2: { value: b }})
+            handleAnswers(this, i, {
+              bareme: (listePoints: number[]) => [
+                Math.min(listePoints[0], listePoints[1]),
+                1,
+              ],
+              champ1: { value: ['0,5', `${texFractionFromString(1, 2)}`] },
+              champ2: { value: b },
+            })
           }
 
           if (T === 'le quart') {
-            handleAnswers(this, i, { bareme: (listePoints: number[]) => [Math.min(listePoints[0], listePoints[1]), 1], champ1: { value: ['0,75', `${texFractionFromString(3, 4)}`] }, champ2: { value: b }})
-
+            handleAnswers(this, i, {
+              bareme: (listePoints: number[]) => [
+                Math.min(listePoints[0], listePoints[1]),
+                1,
+              ],
+              champ1: { value: ['0,75', `${texFractionFromString(3, 4)}`] },
+              champ2: { value: b },
+            })
           }
           if (T === 'le tiers') {
-            handleAnswers(this, i, { bareme: (listePoints: number[]) => [Math.min(listePoints[0], listePoints[1]), 1], champ1: { value: [`${texFractionFromString(2, 3)}`] }, champ2: { value: b }})
+            handleAnswers(this, i, {
+              bareme: (listePoints: number[]) => [
+                Math.min(listePoints[0], listePoints[1]),
+                1,
+              ],
+              champ1: { value: [`${texFractionFromString(2, 3)}`] },
+              champ2: { value: b },
+            })
           }
           if (T === 'le cinquième') {
-            handleAnswers(this, i, { bareme: (listePoints: number[]) => [Math.min(listePoints[0], listePoints[1]), 1], champ1: { value: ['0,8', `${texFractionFromString(4, 5)}`] }, champ2: { value: b }})
+            handleAnswers(this, i, {
+              bareme: (listePoints: number[]) => [
+                Math.min(listePoints[0], listePoints[1]),
+                1,
+              ],
+              champ1: { value: ['0,8', `${texFractionFromString(4, 5)}`] },
+              champ2: { value: b },
+            })
           }
           if (T === 'le dixième') {
-            handleAnswers(this, i, { bareme: (listePoints: number[]) => [Math.min(listePoints[0], listePoints[1]), 1], champ1: { value: ['0,9', `${texFractionFromString(9, 10)}`] }, champ2: { value: b }})
+            handleAnswers(this, i, {
+              bareme: (listePoints: number[]) => [
+                Math.min(listePoints[0], listePoints[1]),
+                1,
+              ],
+              champ1: { value: ['0,9', `${texFractionFromString(9, 10)}`] },
+              champ2: { value: b },
+            })
           }
 
           this.canEnonce = texte
-          this.canReponseACompleter = ''
+
           break
       }
 

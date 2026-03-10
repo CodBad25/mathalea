@@ -1,14 +1,14 @@
-import { choice } from '../../../lib/outils/arrayOutils'
-import ExerciceSimple from '../../ExerciceSimple'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { choice } from '../../../lib/outils/arrayOutils'
 import {
   ecritureAlgebrique,
   reduireAxPlusB,
   reduirePolynomeDegre3,
   rienSi1,
 } from '../../../lib/outils/ecritures'
-import { randint } from '../../../modules/outils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer $f(x+a)$ avec $f$ affine'
 export const interactifReady = true
 export const interactifType = 'qcm'
@@ -65,7 +65,5 @@ export default class CalculCompose extends ExerciceSimple {
     if (this.interactif && !this.versionQcm) {
       this.question += `<br> $${nomF}(x${ecritureAlgebrique(c)})=$`
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

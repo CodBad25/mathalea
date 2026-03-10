@@ -61,7 +61,7 @@ export default class Can20266Q27 extends ExerciceCan {
         texteApres: ' €.',
       }
     }
-    // this.canEnonce = this.question
+    //
     this.canReponseACompleter = 'On me rend $\\dots$ €.'
   }
 

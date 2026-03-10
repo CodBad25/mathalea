@@ -1,10 +1,10 @@
-import ExerciceSimple from '../../ExerciceSimple'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
+import ExerciceSimple from '../../ExerciceSimple'
 
-import { randint } from '../../../modules/outils'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { prenomM } from '../../../lib/outils/Personne'
+import { randint } from '../../../modules/outils'
 export const titre = ''
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -27,7 +27,6 @@ export default class CalculDivers extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-   
     const choixM = prenomM()
     const pm = randint(1, 9) * 100 + 25
     switch (randint(1, 2)) {
@@ -53,7 +52,5 @@ export default class CalculDivers extends ExerciceSimple {
     if (this.interactif) {
       this.question += '<br>'
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

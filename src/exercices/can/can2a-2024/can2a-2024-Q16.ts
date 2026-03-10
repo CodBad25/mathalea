@@ -2,11 +2,11 @@
  * ⚠️ Cet exercice est utilisé dans le test : tests/e2e/tests/view/viewcan.2024.2e.test.ts ⚠️
  */
 
-import ExerciceSimple from '../../ExerciceSimple'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { ecritureAlgebrique } from '../../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { randint } from '../../../modules/outils'
-import { ecritureAlgebrique } from '../../../lib/outils/ecritures'
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Résoudre une équation'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -63,7 +63,5 @@ export default class NomExercice extends ExerciceSimple {
       La solution de l'équation est : $${miseEnEvidence(this.reponse)}$.
       `
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

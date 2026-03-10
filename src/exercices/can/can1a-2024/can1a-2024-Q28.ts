@@ -43,8 +43,6 @@ export default class calculProba extends ExerciceSimple {
     
       `
 
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
     if (!this.interactif) {
       this.question += ''
     }

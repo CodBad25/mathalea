@@ -67,8 +67,7 @@ export default class Can20264emeQ12 extends ExerciceCan {
     if (this.interactif) {
       this.question += ' $=$'
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
+
     this.reponse = reponse
   }
 

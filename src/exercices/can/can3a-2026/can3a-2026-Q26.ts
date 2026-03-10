@@ -73,9 +73,6 @@ ${texNombre(decimal)}\\times ${a}${operateurSymbole}${texNombre(decimal)}\\times
 &=${texNombre(decimal)}\\times ${resultatOperation}\\\\
 &=${miseEnEvidence(texNombre(reponse))}
 \\end{aligned}$`
-
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 
   nouvelleVersion() {

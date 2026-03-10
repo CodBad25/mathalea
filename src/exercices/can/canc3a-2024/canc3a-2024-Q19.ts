@@ -1,8 +1,8 @@
-import ExerciceSimple from '../../ExerciceSimple'
+import Decimal from 'decimal.js'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
-import Decimal from 'decimal.js'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Soustraire un décimal à un entier'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -40,8 +40,7 @@ export default class SoustractionPasFacileCM2 extends ExerciceSimple {
     }
     this.reponse = a.sub(b).toFixed(1)
     this.question = `$${texNombre(a, 0)}- ${texNombre(b, 1)}$`
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
+
     this.correction = `On décompose pour calculer plus simplement : <br>
     $\\begin{aligned}
      ${texNombre(a, 0)}- ${texNombre(b, 1)}&= ${texNombre(a, 0)}- ${b.floor()}-${texNombre(b.sub(b.floor()), 1)}\\\\

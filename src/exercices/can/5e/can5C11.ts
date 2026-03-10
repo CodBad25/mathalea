@@ -36,7 +36,5 @@ export default class DifferenceNegative extends ExerciceSimple {
     On décompose $${b}$ en $${a}+${b - a}$, ce qui donne :<br>
      $${a}-${b}=${a}-${a}-${b - a}=${a - b}$.
        `)
-    this.canEnonce = this.question // 'Compléter'
-    this.canReponseACompleter = ''
   }
 }

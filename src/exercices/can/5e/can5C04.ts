@@ -37,7 +37,5 @@ export default class TripleEtMoitie extends ExerciceSimple {
     Puisqu'on cherche sa moitié, on le divise par $2$, soit  $${a}\\div 2=${texNombre(a / 2)}$.<br>
      `)
     this.reponse = a / 2
-    this.canEnonce = this.question // 'Compléter'
-    this.canReponseACompleter = ''
   }
 }

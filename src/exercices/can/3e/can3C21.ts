@@ -70,8 +70,5 @@ export default class PrendreUnPourcentage extends ExerciceSimple {
 
       this.distracteurs = picked.map((n) => `$${texNombre(n, 2)}$`)
     }
-
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

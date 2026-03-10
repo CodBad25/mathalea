@@ -1,9 +1,9 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choice } from '../../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import FractionEtendue from '../../../modules/FractionEtendue'
 import { obtenirListeFractionsIrreductibles } from '../../../modules/fractions'
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Soustraire deux fractions'
 export const interactifReady = true
@@ -70,7 +70,5 @@ export default class NomExercice extends ExerciceSimple {
       Par conséquent, $ ${b.texFraction}-${a.texFraction}= ${miseEnEvidence(reponse.simplifie().texFraction)}$.`
       }
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

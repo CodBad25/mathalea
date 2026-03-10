@@ -51,7 +51,7 @@ export default class NomExercice extends ExerciceSimple {
       this.correction = `$${b.texFraction}+${c.texFraction}=${miseEnEvidence(reponse.texFraction)}$`
     }
     this.reponse = reponse.texFraction
-    this.canEnonce = this.question
+
     this.canReponseACompleter = '$\\dfrac{\\ldots}{\\ldots}$'
   }
 }

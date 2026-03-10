@@ -1,7 +1,7 @@
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import ExerciceCan from '../../ExerciceCan'
-import { randint } from '../../../modules/outils'
 import { prenomM } from '../../../lib/outils/Personne'
+import { randint } from '../../../modules/outils'
+import ExerciceCan from '../../ExerciceCan'
 export const titre = 'Résoudre un problème'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -31,7 +31,6 @@ export default class Can2025CE1Q12 extends ExerciceCan {
      $${a}-${b}= ${a - b}$<br>
      Il reste $${miseEnEvidence(a - b)}$ gâteaux.`
 
-    this.canEnonce = this.question
     this.canReponseACompleter = '$\\ldots$ gâteaux'
     if (this.interactif) {
       this.question += ' <br> '

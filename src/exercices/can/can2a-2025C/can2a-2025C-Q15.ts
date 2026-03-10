@@ -4,7 +4,8 @@ import { ecritureParentheseSiNegatif } from '../../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
-export const titre = 'Calculer avec le vocabulaire : carré, triple, double, etc.'
+export const titre =
+  'Calculer avec le vocabulaire : carré, triple, double, etc.'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const uuid = '1zcj3'
@@ -18,7 +19,7 @@ export const refs = {
 
 */
 export default class Can2a2025CQ15 extends ExerciceCan {
-   enonce(cas?: number, n?: number): void {
+  enonce(cas?: number, n?: number): void {
     if (cas == null || n == null) {
       cas = choice([1, 2, 3, 4])
       n = randint(-6, -2)
@@ -71,10 +72,11 @@ export default class Can2a2025CQ15 extends ExerciceCan {
     this.formatChampTexte = KeyboardType.clavierDeBase
     this.reponse = String(resultat)
     this.question = question + '<br>'
-    if (!this.interactif) { this.question += '$\\ldots$' }
+    if (!this.interactif) {
+      this.question += '$\\ldots$'
+    }
     this.correction = explication
     this.canEnonce = question
-    this.canReponseACompleter = ''
   }
 
   nouvelleVersion(): void {

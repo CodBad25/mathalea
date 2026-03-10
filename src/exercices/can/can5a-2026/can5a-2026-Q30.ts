@@ -74,7 +74,7 @@ Or, $${texNombre(dureeEnHeures)}$ h $=${texNombre(dureeEnHeures)}\\times 60 \\te
 Le trajet a duré $${miseEnEvidence(texNombre(dureeEnMinutes, 0))}$ min.`
 
     this.reponse = dureeEnMinutes
-    this.canEnonce = this.question
+
     this.canReponseACompleter = '$\\ldots\\text{ min}$'
 
     if (!this.interactif) {

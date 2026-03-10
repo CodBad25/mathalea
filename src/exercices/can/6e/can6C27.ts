@@ -55,7 +55,7 @@ export default class RenduMonnaie extends ExerciceSimple {
         if (this.interactif) {
           this.optionsChampTexte = { texteApres: ' €' }
         }
-        this.canEnonce = this.question
+
         this.canReponseACompleter = '$\\dots$ €'
         break
 
@@ -70,7 +70,7 @@ Combien me rend-on ?`
         if (this.interactif) {
           this.optionsChampTexte = { texteApres: ' €' }
         }
-        this.canEnonce = this.question
+
         this.canReponseACompleter = '$\\dots$ €'
         break
 
@@ -94,7 +94,7 @@ Combien me rend-on ?`
         if (this.interactif) {
           this.optionsChampTexte = { texteApres: ' €' }
         }
-        this.canEnonce = this.question
+
         this.canReponseACompleter = '$\\dots$ €'
         break
 
@@ -123,7 +123,7 @@ Combien me rend-on ?`
         if (this.interactif) {
           this.optionsChampTexte = { texteApres: ' mangas' }
         }
-        this.canEnonce = this.question
+
         this.canReponseACompleter = '$\\dots$ mangas'
         break
     }

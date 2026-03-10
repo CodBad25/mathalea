@@ -76,7 +76,5 @@ export default class Equation1degre extends ExerciceSimple {
       La solution de l'équation est : $${miseEnEvidence(this.reponse)}$.
       `
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

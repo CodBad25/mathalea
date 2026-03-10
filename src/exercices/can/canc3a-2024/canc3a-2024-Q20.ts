@@ -37,7 +37,7 @@ export default class vitesseCM2 extends ExerciceSimple {
     const distance = duree * vitesse
 
     this.question = `Une voiture roule à une vitesse de $${vitesse} \\text{ km/h}$.<br>`
-    this.canEnonce = this.question
+
     this.question += `En $${String(duree)}$ h, elle parcourt `
     if (!this.interactif) {
       this.question += '$\\ldots\\ldots\\text{ km}$'

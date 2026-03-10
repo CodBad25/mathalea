@@ -1,7 +1,7 @@
-import ExerciceSimple from '../../ExerciceSimple'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Résoudre un problème concret'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -46,7 +46,7 @@ export default class NomExercice extends ExerciceSimple {
       `
     this.correction = `Comme $${valeurs[0]}\\times${valeurs[1]}=${valeurs[0] * valeurs[1]}$, le fleuriste peut faire 
       au maximum $${miseEnEvidence(valeurs[1])}$ bouquets.`
-    this.canEnonce = this.question
+
     this.canReponseACompleter = '$\\ldots$ bouquets'
   }
 }

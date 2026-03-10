@@ -1,12 +1,12 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { randint } from '../../../modules/outils'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choice } from '../../../lib/outils/arrayOutils'
 import {
   ecritureParentheseSiNegatif,
   rienSi1,
 } from '../../../lib/outils/ecritures'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 
 import { texNombre } from '../../../lib/outils/texNombre'
 import { context } from '../../../modules/context'
@@ -52,7 +52,7 @@ export default class TrouverpFonctionAffine extends ExerciceSimple {
     if (this.interactif) {
       this.question += '<br>$p=$'
     }
-    this.canEnonce = this.question
+
     this.canReponseACompleter = '$p=\\ldots$'
   }
 }

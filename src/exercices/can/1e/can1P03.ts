@@ -166,7 +166,7 @@ export default class CalculerProbabiliteIntersection extends Exercice {
       `
           setReponse(this, i, reponse1)
           this.canEnonce = texte
-          this.canReponseACompleter = ''
+
           break
 
         case 2:
@@ -257,7 +257,7 @@ export default class CalculerProbabiliteIntersection extends Exercice {
         `
           setReponse(this, i, reponse2)
           this.canEnonce = texte
-          this.canReponseACompleter = ''
+
           break
 
         case 3:
@@ -355,7 +355,7 @@ export default class CalculerProbabiliteIntersection extends Exercice {
         `
           setReponse(this, i, reponse3)
           this.canEnonce = texte
-          this.canReponseACompleter = ''
+
           break
 
         case 4:
@@ -453,7 +453,7 @@ export default class CalculerProbabiliteIntersection extends Exercice {
         `
           setReponse(this, i, reponse4)
           this.canEnonce = texte
-          this.canReponseACompleter = ''
+
           break
       }
       if (this.questionJamaisPosee(i, pA, pBsachantA)) {

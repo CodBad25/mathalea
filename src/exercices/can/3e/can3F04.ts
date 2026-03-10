@@ -61,7 +61,5 @@ export default class CalculAntecedentLineaire extends ExerciceSimple {
         this.reponse = n * x
         break
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

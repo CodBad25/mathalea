@@ -2,12 +2,12 @@
  * ⚠️ Cet exercice est utilisé dans le test : tests/e2e/tests/view/viewcan.2024.2e.test.ts ⚠️
  */
 
-import ExerciceSimple from '../../ExerciceSimple'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choice } from '../../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import FractionEtendue from '../../../modules/FractionEtendue'
 import { randint } from '../../../modules/outils'
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Calculer avec des fractions '
 export const interactifReady = true
@@ -70,7 +70,5 @@ export default class NomExercice extends ExerciceSimple {
       &  =${miseEnEvidence(d.texFraction)}
       \\end{aligned}$`
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

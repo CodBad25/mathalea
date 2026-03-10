@@ -48,8 +48,7 @@ export default class Can2025CM1Q26 extends ExerciceSimple {
       Object.assign({ scale: 0.5 }, fixeBordures(objets)),
       objets,
     )
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
+
     this.correction = `L'unité est partagée en $4$. Ainsi, chaque part correspond à $0,25$.<br>
        Le point $A$  repère le nombre $${miseEnEvidence(texNombre(x / 4, 2))}$.`
   }

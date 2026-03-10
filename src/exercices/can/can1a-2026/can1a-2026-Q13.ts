@@ -18,7 +18,7 @@ export const refs = {
 export default class Can1a2026Q14 extends ExerciceCan {
   constructor() {
     super()
-     this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
+    this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
   }
 
   enonce(cas?: number): void {
@@ -27,8 +27,6 @@ export default class Can1a2026Q14 extends ExerciceCan {
     }
 
     const intervalle = '[0\\,;\\,2\\pi['
-
-    
 
     switch (cas) {
       case 1: // pi/6
@@ -78,7 +76,7 @@ export default class Can1a2026Q14 extends ExerciceCan {
     if (this.interactif) {
       this.question += '<br>'
     }
-    this.canEnonce = this.question
+
     this.canReponseACompleter = '$\\alpha=\\ldots$'
   }
 

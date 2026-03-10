@@ -100,8 +100,7 @@ export default class NomExercice extends ExerciceSimple {
       Une graduation correspond donc à ${choix ? '$0,25$' : '$0,2$'}.<br>
       Ainsi, l'abscisse du point $A$ est : ${choix ? `$${miseEnEvidence(texNombre(a, 2))}$` : `$${miseEnEvidence(texNombre(b))}$`}.`
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
+
     if (!this.interactif) {
       this.question += ' $\\ldots$'
     }

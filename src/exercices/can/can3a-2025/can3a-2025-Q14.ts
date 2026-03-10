@@ -1,8 +1,8 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import FractionEtendue from '../../../modules/FractionEtendue'
 import { choice } from '../../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import FractionEtendue from '../../../modules/FractionEtendue'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = "Déterminer l'inverse ou l'opposé d'une fraction"
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -60,7 +60,5 @@ export default class InverseOuOppose extends ExerciceSimple {
     }
 
     this.reponse = reponse.texFSD
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

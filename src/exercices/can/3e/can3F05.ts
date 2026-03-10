@@ -40,8 +40,5 @@ export default class CalculAntecedentAffine extends ExerciceSimple {
      On cherche donc $x$ tel que : <br>
    $${m}x${ecritureAlgebrique(y)}=${m * x + y}$ <br>On obtient $x=\\dfrac{${m * x + y}${ecritureAlgebrique(-y)}}{${m}}=${miseEnEvidence(x)}$.`
     this.reponse = x
-
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

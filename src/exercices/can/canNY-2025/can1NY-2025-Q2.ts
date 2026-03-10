@@ -43,7 +43,7 @@ export default class decimalPuisance extends ExerciceSimple {
     if (this.interactif) {
       this.question += `<br>$${texNombre(dec, 5)}=$`
     }
-    this.canEnonce = this.question
+
     this.canReponseACompleter = `$${texNombre(dec, 5)}=\\ldots$`
   }
 }

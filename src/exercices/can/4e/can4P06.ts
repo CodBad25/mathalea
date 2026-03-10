@@ -1,11 +1,11 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { miseEnEvidence, texteGras } from '../../../lib/outils/embellissements'
-import { randint } from '../../../modules/outils'
-import { choice } from '../../../lib/outils/arrayOutils'
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import Decimal from 'decimal.js'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { choice } from '../../../lib/outils/arrayOutils'
+import { miseEnEvidence, texteGras } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { context } from '../../../modules/context'
+import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Déterminer une valeur définie avec un pourcentage'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -58,7 +58,6 @@ export default class ValeursDefPourcentage extends ExerciceSimple {
       this.question += ' On a :'
     }
 
-    this.canEnonce = this.question
     this.canReponseACompleter = '$N=\\ldots$'
     this.correction = `Pour passer de $${choix[0]}\\,\\%$ à $100\\,\\%$, on multiplie par $${choix[2]}$.<br>
         $\\begin{aligned}

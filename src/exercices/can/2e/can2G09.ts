@@ -1,8 +1,8 @@
 import { choice } from '../../../lib/outils/arrayOutils'
-import { sp } from '../../../lib/outils/outilString'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import ExerciceSimple from '../../ExerciceSimple'
+import { sp } from '../../../lib/outils/outilString'
 import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre =
   'Déterminer le coefficient de colinéarité entre deux vecteurs'
 export const interactifReady = true
@@ -42,7 +42,7 @@ export default class VecteursColineaires extends ExerciceSimple {
     this.correction = `Les deux vecteurs sont colinéaires, donc il existe un réel $k$ tel que $\\vec{v}=k\\times \\vec{u}$.<br>
        Comme $${vx}=${p}\\times ${ux}$, alors $y_{\\vec{v}}=${p}\\times${uy}=${p * uy}$, donc $a=${miseEnEvidence(`${p * uy}`)}$.`
     this.reponse = vy
-    this.canEnonce = this.question // 'Compléter'
+
     this.canReponseACompleter = '$a=\\ldots$'
   }
 }

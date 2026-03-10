@@ -46,7 +46,7 @@ Combien a-t-il de roses ?`
           this.correction = `${prenom} achète $${b}$ bouquets de $${a}$ roses chacun.<br>
           $${a} \\times ${b}=${this.reponse}$<br>
           ${prenom} a $${miseEnEvidence(this.reponse)}$ roses en tout.`
-          this.canEnonce = this.question
+
           this.canReponseACompleter = '$\\ldots$ roses'
           this.optionsChampTexte = { texteApres: 'roses' }
         }
@@ -63,7 +63,7 @@ Combien de mètres a-t-elle parcouru ?`
           this.correction = `La nageuse a parcouru $${b}$ longueurs d'une piscine de $${a}$ mètres.<br>
           $${a} \\times ${b}=${this.reponse}$ <br>          
           Elle a parcouru $${miseEnEvidence(this.reponse)}$ mètres au total.`
-          this.canEnonce = this.question
+
           this.canReponseACompleter = '$\\ldots\\text{ m}$'
           this.optionsChampTexte = { texteApres: '$\\text{ m}$' }
         }
@@ -79,7 +79,7 @@ Combien cela coûte-t-il pour le collège ?`
           this.correction = `Le collège achète $${b}$ VTT à $${a}$ € l'unité.<br>
           $${a} \\times ${b}=${this.reponse}$<br>
           Le coût pour le collège est de  $${miseEnEvidence(this.reponse)}$ €.`
-          this.canEnonce = this.question
+
           this.canReponseACompleter = '$\\ldots$ €'
           this.optionsChampTexte = { texteApres: '€' }
         }
@@ -95,7 +95,7 @@ Combien cela coûte-t-il pour le collège ?`
           this.correction = `Il y a $${a}$ rangées de $${b}$ chaises chacune.<br>
           $${a} \\times ${b}=${this.reponse}$<br>          
           Il y a $${miseEnEvidence(this.reponse)}$ places assises dans cette salle.`
-          this.canEnonce = this.question
+
           this.canReponseACompleter = '$\\ldots$ places assises'
           this.optionsChampTexte = { texteApres: 'places assises' }
         }
@@ -123,7 +123,7 @@ Combien cela coûte-t-il pour le collège ?`
           this.correction = `Les ${a[1]} billets ont été vendus au tarif unique de $${b}$ €.<br>        
         $${texNombre(a[0], 0)} \\times ${texNombre(b, 0)}=${this.reponse}$<br>
         La recette totale est  $${miseEnEvidence(this.reponse)}$ €.`
-          this.canEnonce = this.question
+
           this.canReponseACompleter = '$\\ldots$ €'
           this.optionsChampTexte = { texteApres: '€' }
         }
@@ -147,7 +147,7 @@ Combien de bonbons avaient-ils à partager ?`
           this.correction = `Chacun des ${a[0]} enfants (${prenom} et ses ${a[1]} amis) a le même nombre de bonbons.<br>
           $${texNombre(a[0], 0)} \\times ${b}=${this.reponse}$<br>
           Le nombre de bonbons à partager est $${miseEnEvidence(this.reponse)}$.`
-          this.canEnonce = this.question
+
           this.canReponseACompleter = '$\\ldots$ bonbons'
           this.optionsChampTexte = { texteApres: 'bonbons' }
         }

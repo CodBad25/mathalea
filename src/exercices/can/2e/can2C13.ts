@@ -1,10 +1,10 @@
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { ecritureParentheseSiNegatif } from '../../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import ExerciceSimple from '../../ExerciceSimple'
-import { randint } from '../../../modules/outils'
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { context } from '../../../modules/context'
+import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer avec  des puissances'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -30,19 +30,19 @@ export default class CalculPuissancesOperation extends ExerciceSimple {
     this.versionQcmDisponible = true
     this.typeExercice = 'simple'
     this.nbQuestions = 1
-    this.formatChampTexte = KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets
+    this.formatChampTexte =
+      KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets
   }
 
   nouvelleVersion() {
     if (!this.versionQcm) {
-      this.question =
-        `Écrire sous la forme $a^n$ où $a$ et $n$  sont ${context.isDiaporama ? '<br>' : ''} des  entiers relatifs. <br>`
+      this.question = `Écrire sous la forme $a^n$ où $a$ et $n$  sont ${context.isDiaporama ? '<br>' : ''} des  entiers relatifs. <br>`
     } else {
       this.question = ''
     }
     let a, b, n, p, s
     switch (
-    choice(['a', 'b', 'c', 'd', 'e']) //
+      choice(['a', 'b', 'c', 'd', 'e']) //
     ) {
       case 'a':
         a = randint(-9, 9, [0, 1, -1])
@@ -130,7 +130,5 @@ export default class CalculPuissancesOperation extends ExerciceSimple {
     if (this.interactif || this.versionQcm) {
       this.question += '$=$'
     }
-    this.canEnonce = this.question // 'Compléter'
-    this.canReponseACompleter = ''
   }
 }

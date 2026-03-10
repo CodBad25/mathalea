@@ -38,8 +38,5 @@ export default class ResteDivisionEuclidienne2 extends ExerciceSimple {
     this.question = `   En utilisant l'égalité $${a}=(${b}\\times ${q})+${r}$, donner le reste de la division euclidienne de $${a}$ par $${b}$.`
     this.correction = `Puisque $${r}$ est strictement inférieur à $${b}$, le reste est $${miseEnEvidence(r)}$.`
     this.reponse = r
-
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

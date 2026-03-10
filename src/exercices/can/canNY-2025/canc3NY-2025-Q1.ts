@@ -1,8 +1,8 @@
-import ExerciceSimple from '../../ExerciceSimple'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
-import { choice } from '../../../lib/outils/arrayOutils'
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Calculer avec les chiffres'
 export const interactifReady = true
@@ -42,7 +42,5 @@ export default class calcAvecChiffres extends ExerciceSimple {
       this.correction = `$202+5=${miseEnEvidence(texNombre(207, 0))}$`
       this.reponse = 207
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

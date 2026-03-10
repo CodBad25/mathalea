@@ -1,8 +1,8 @@
-import FractionEtendue from '../../../modules/FractionEtendue'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { obtenirListeFractionsIrreductibles } from '../../../lib/outils/deprecatedFractions'
+import FractionEtendue from '../../../modules/FractionEtendue'
 import ExerciceSimple from '../../ExerciceSimple'
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 
 export const titre = 'Rendre irréductible une fraction'
 export const interactifReady = true
@@ -40,8 +40,7 @@ export default class FractionIrreductibleCan extends ExerciceSimple {
     this.reponse = new FractionEtendue(maFraction[0], maFraction[1]).simplifie()
     this.question = `Rendre  la fraction $\\dfrac{${a}}{${b}}$ irréductible.`
     this.correction = `$\\dfrac{${a}}{${b}} ${frac.texSimplificationAvecEtapes(false, '#f15929')}$`
-    this.canEnonce = this.question // 'Compléter'
-    this.canReponseACompleter = ''
+
     if (this.interactif) {
       this.question += '<br>'
     }

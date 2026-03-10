@@ -38,7 +38,5 @@ export default class ArrondiUnite extends ExerciceSimple {
     this.question = `Quel est l'arrondi à l'unité de $${texNombre(d, 2)}$ ?`
     this.correction = `$${texNombre(d, 2)} \\approx ${Math.round(d)}$`
     this.reponse = Math.round(d)
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

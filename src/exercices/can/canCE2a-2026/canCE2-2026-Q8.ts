@@ -4,7 +4,8 @@ import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
 
-export const titre = "Déterminer un nombre défini par une phrase (table de multiplication)"
+export const titre =
+  'Déterminer un nombre défini par une phrase (table de multiplication)'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const uuid = '34aa9'
@@ -24,19 +25,17 @@ export default class Can2026CE2Q8 extends ExerciceCan {
       const quotient = randint(4, 8)
       dividende = diviseur * quotient
     }
-    
+
     const resultat = dividende / diviseur
-    
+
     this.question = `Dans $${dividende}$ combien de fois $${diviseur}$ ?`
-    
+
     this.correction = `$${dividende}\\div ${diviseur}=${miseEnEvidence(resultat)}$<br>
     Dans $${dividende}$, il y a $${resultat}$ fois $${diviseur}$.`
-    
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
+
     this.reponse = resultat
     this.formatChampTexte = KeyboardType.clavierDeBase
-     this.optionsChampTexte = { texteAvant: '<br>', texteApres: '' }
+    this.optionsChampTexte = { texteAvant: '<br>', texteApres: '' }
     if (!this.interactif) {
       this.question += '<br>$\\ldots$'
     }

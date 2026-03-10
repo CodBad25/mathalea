@@ -115,7 +115,7 @@ export default class RechercheValeurPythagore extends ExerciceSimple {
         this.reponse = `\\sqrt{${a / 2}}`
         break
     }
-    this.canEnonce = this.question // 'Compléter'
+
     this.canReponseACompleter = '$x=\\ldots$'
   }
 }

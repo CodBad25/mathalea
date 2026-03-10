@@ -1,12 +1,12 @@
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choice } from '../../../lib/outils/arrayOutils'
 import {
   miseEnEvidence,
   texteEnCouleur,
 } from '../../../lib/outils/embellissements'
-import { obtenirListeFractionsIrreductibles } from '../../../modules/fractions'
 import FractionEtendue from '../../../modules/FractionEtendue'
+import { obtenirListeFractionsIrreductibles } from '../../../modules/fractions'
 import ExerciceSimple from '../../ExerciceSimple'
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 export const titre = 'Effectuer une division avec une fraction'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -56,7 +56,5 @@ export default class QuotientEntierQuiVaBienParFraction extends ExerciceSimple {
     on commence par diviser $${b}$ par $${a.n}$, ce qui donne $${b / a.n}$,
      puis on multiplie par $${a.d}$, ce qui donne $${b / a.n}\\times ${a.d}=${c * a.d}$.      `)
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

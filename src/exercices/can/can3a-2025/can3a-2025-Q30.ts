@@ -1,7 +1,7 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer un produit avec des fractions'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -33,8 +33,5 @@ export default class ProduitCalculNul extends ExerciceSimple {
     this.question = `$\\left(1-\\dfrac{${a - 2}}{${a}}\\right)\\left(1-\\dfrac{${a - 1}}{${a}}\\right)\\left(1-\\dfrac{${a}}{${a}}\\right)$`
     this.correction = `Le dernier facteur est égal à 0. <br>
     Ainsi, $\\left(1-\\dfrac{${a - 2}}{${a}}\\right)\\left(1-\\dfrac{${a - 1}}{${a}}\\right)\\left(1-\\dfrac{${a}}{${a}}\\right)=${miseEnEvidence(reponse)}$.`
-
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

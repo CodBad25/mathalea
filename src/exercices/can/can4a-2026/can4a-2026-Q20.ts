@@ -44,8 +44,6 @@ export default class Can20264emeQ20 extends ExerciceCan {
     &=${miseEnEvidence(reponse)}
     \\end{aligned}$`
 
-    this.canEnonce = this.question
-
     this.reponse = reponse
   }
 

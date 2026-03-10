@@ -1,13 +1,13 @@
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import {
   ecritureAlgebrique,
   reduirePolynomeDegre3,
   rienSi1,
 } from '../../../lib/outils/ecritures'
-import ExerciceSimple from '../../ExerciceSimple'
-import { randint } from '../../../modules/outils'
-import FractionEtendue from '../../../modules/FractionEtendue'
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import FractionEtendue from '../../../modules/FractionEtendue'
+import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Résoudre une équation $ax^2+bx+c=c$ '
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -74,8 +74,5 @@ export default class EquationSecondDegreParticuliere extends ExerciceSimple {
           En factorisant le premier membre (facteur commun $x$), on obtient $x(${rienSi1(a)}x${ecritureAlgebrique(b)})=0$.<br>
           On reconnaît une équation produit nul dont les solutions sont : $0$ et $\\dfrac{${-b}}{${a}}${f.texSimplificationAvecEtapes()}$.<br>
           $\\mathscr{S}=${miseEnEvidence(`\\{0;${new FractionEtendue(-b, a).texFractionSimplifiee}\\}`)}$`
-
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

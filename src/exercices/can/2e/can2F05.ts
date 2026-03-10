@@ -1,8 +1,8 @@
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import ExerciceSimple from '../../ExerciceSimple'
+import { context } from '../../../modules/context'
 import { fraction } from '../../../modules/fractions'
 import { randint } from '../../../modules/outils'
-import { context } from '../../../modules/context'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Déterminer un antécédent avec la racine carrée'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -48,7 +48,5 @@ Pour résoudre cette équation, on isole la racine carrée dans le membre de gau
     \\end{aligned}$
     `
     this.reponse = maFraction.puissanceFraction(2)
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

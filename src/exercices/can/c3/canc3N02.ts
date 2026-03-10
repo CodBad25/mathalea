@@ -72,7 +72,5 @@ export default class SuiteSurDroiteGraduee extends ExerciceSimple {
       d,
     )
     this.correction = `${texteEnCouleur('Comme les graduations vont de ' + a)} ${texteEnCouleur('en ' + a)} ${texteEnCouleur(', le nombre repéré par la croix correspond à ')} ${texteEnCouleur(String(c + 2 * a))} ${texteEnCouleur(' + ' + a)} ${texteEnCouleur("donc c'est " + texNombre(c + 3 * a) + '.')}`
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

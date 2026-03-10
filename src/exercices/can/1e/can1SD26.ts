@@ -117,7 +117,7 @@ export default class TableauSignesSecondDegre extends Exercice {
         this.listeCorrections[i] = texteCorr
 
         this.canEnonce = texte
-        this.canReponseACompleter = ''
+
         this.listeCanEnonces.push(this.canEnonce)
         this.listeCanReponsesACompleter.push(this.canReponseACompleter)
         i++

@@ -70,7 +70,5 @@ export default class SimplifierQuotient extends ExerciceSimple {
         }
         break
     }
-    this.canEnonce = this.question // 'Compléter'
-    this.canReponseACompleter = ''
   }
 }

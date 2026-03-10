@@ -78,7 +78,7 @@ export default class CalculLongueurThalesMilieu extends ExerciceSimple {
   `
 
       this.reponse = 2 * a
-      this.canEnonce = this.question // 'Compléter'
+
       this.canReponseACompleter = `$${nom[1]}${nom[2]}=\\ldots$`
     } else {
       nom = creerNomDePolygone(5, ['QD'])
@@ -123,7 +123,7 @@ export default class CalculLongueurThalesMilieu extends ExerciceSimple {
      `
 
       this.reponse = a / 2
-      this.canEnonce = this.question // 'Compléter'
+
       this.canReponseACompleter = `$${nom[3]}${nom[4]}=\\ldots$`
     }
   }

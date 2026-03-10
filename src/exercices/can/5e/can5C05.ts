@@ -39,7 +39,5 @@ export default class Division5e extends ExerciceSimple {
         Ainsi :
      $${c} \\div ${b}=10+${(c - 10 * b) / b}=${a}$.<br>
      `)
-    this.canEnonce = this.question // 'Compléter'
-    this.canReponseACompleter = ''
   }
 }

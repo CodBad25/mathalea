@@ -2,16 +2,16 @@
  * ⚠️ Cet exercice est utilisé dans le test : tests/e2e/tests/view/viewcan.2024.2e.test.ts ⚠️
  */
 
-import ExerciceSimple from '../../ExerciceSimple'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choice } from '../../../lib/outils/arrayOutils'
 import {
   ecritureAlgebrique,
-  rienSi1,
   ecritureAlgebriqueSauf1,
+  rienSi1,
 } from '../../../lib/outils/ecritures'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { randint } from '../../../modules/outils'
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Déterminer un coefficient directeur'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -49,7 +49,5 @@ export default class NomExercice extends ExerciceSimple {
        Le coefficient directeur est $m$ et l'ordonnée à l'origine est $p$. <br>
       Le coefficient directeur de la droite est donc $m=${miseEnEvidence(this.reponse)}$.`
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

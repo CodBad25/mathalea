@@ -33,7 +33,7 @@ export default class Can2025N5Q26 extends ExerciceSimple {
 
     this.reponse = texNombre((1 - coeffmul ** 2) * 100, 2)
     this.question = `Deux diminutions successives de  $${dim}\\,\\%$ correspondent à une diminution globale de `
-    this.canEnonce = this.question
+
     if (!this.interactif) {
       this.question += ' $\\ldots \\,\\%$.'
     }

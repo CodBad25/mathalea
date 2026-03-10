@@ -79,7 +79,5 @@ export default class FSomme2Decimaux extends ExerciceSimple {
         bleuMathalea,
       )
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

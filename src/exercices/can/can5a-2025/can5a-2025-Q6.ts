@@ -1,7 +1,7 @@
-import { texNombre } from '../../../lib/outils/texNombre'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import ExerciceCan from '../../ExerciceCan'
+import { texNombre } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
+import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Priorité des opérations'
 export const interactifReady = true
@@ -26,8 +26,7 @@ export default class Can2025N5Q6 extends ExerciceCan {
     this.reponse = a + b * c
     this.question = `$${a} + ${b}\\times ${c}$`
     this.correction = `La multiplication est prioritaire sur l'addition, donc :<br> $${a} + ${b}\\times ${c}=${a} + ${b * c} = ${miseEnEvidence(texNombre(a + b * c, 0))}$.`
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
+
     if (this.interactif) {
       this.question += ' $=$'
     }

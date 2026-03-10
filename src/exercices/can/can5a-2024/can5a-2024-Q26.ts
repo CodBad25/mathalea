@@ -49,7 +49,7 @@ export default class NomExercice extends ExerciceSimple {
         le véhicule parcourt $4\\times ${a}\\text{ km}$ $= ${miseEnEvidence(4 * a)}\\text{ km}$.`
       }
     }
-    this.canEnonce = this.question
+
     this.canReponseACompleter = '$\\ldots\\text{ km}$'
     if (!this.interactif) {
       this.question += '$\\ldots\\text{ km}$'

@@ -77,7 +77,7 @@ export default class CalculVolumePyramide extends ExerciceSimple {
         bleuMathalea,
       )
     }
-    this.canEnonce = this.question // 'Compléter'
+
     this.canReponseACompleter = '$\\ldots\\text{ cm}^3$'
   }
 }

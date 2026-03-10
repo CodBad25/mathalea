@@ -1,9 +1,9 @@
-import ExerciceSimple from '../../ExerciceSimple'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { choice } from '../../../lib/outils/arrayOutils'
+import { reduireAxPlusB } from '../../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { randint } from '../../../modules/outils'
-import { choice } from '../../../lib/outils/arrayOutils'
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { reduireAxPlusB } from '../../../lib/outils/ecritures'
+import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Réduire une expression littérale'
 export const interactifReady = true
@@ -57,7 +57,5 @@ export default class NomExercice extends ExerciceSimple {
         \\end{aligned}$`
       }
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

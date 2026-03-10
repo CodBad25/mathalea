@@ -1,8 +1,8 @@
-import ExerciceSimple from '../../ExerciceSimple'
+import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
-import { choice } from '../../../lib/outils/arrayOutils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = "Calculer le quart d'une quantité"
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -37,7 +37,7 @@ export default class PourcentageFacileCM2 extends ExerciceSimple {
 
     this.reponse = distance.toFixed(0)
     this.question = `Le quart de $${texNombre(distance * 4, 0)}\\text{ ${unite}}$`
-    this.canEnonce = this.question
+
     this.canReponseACompleter = `$\\ldots$ ${unite}`
     this.correction = `Prendre le quart d'une quantité revient à la diviser par $4$. <br>
     Ainsi, le quart de $${texNombre(distance * 4, 0)}\\text{ ${unite}}$ est éagl à $${texNombre(distance * 4, 0)}\\div 4=${miseEnEvidence(this.reponse)}\\text{ ${unite}}$.`

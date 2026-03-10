@@ -1,7 +1,7 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import {  texPrix } from '../../../lib/outils/texNombre'
+import { texPrix } from '../../../lib/outils/texNombre'
 
 import ExerciceCan from '../../ExerciceCan'
 
@@ -19,23 +19,22 @@ export const refs = {
 
 */
 export default class Can20266Q3 extends ExerciceCan {
-   enonce(nbStylos?: number, prixUnitaire?: number) {
+  enonce(nbStylos?: number, prixUnitaire?: number) {
     if (nbStylos == null || prixUnitaire == null) {
       nbStylos = choice([4, 6])
       prixUnitaire = choice([1.5, 2.5, 3.5])
     }
 
     this.reponse = nbStylos * prixUnitaire
-    
+
     // Conversion du prix en format "X € 50"
     const euros = Math.floor(prixUnitaire)
     const prixFormate = `$${euros}$ € $50$`
-    
+
     this.question = `J'ai acheté $${nbStylos}$ stylos à ${prixFormate} chacun.<br>Combien vais-je payer ?`
-    
+
     this.correction = `Le prix total est donné par : $${nbStylos}\\times ${texPrix(prixUnitaire)}=${miseEnEvidence(texPrix(this.reponse))}$ €.`
-    
-    this.canEnonce = this.question
+
     this.canReponseACompleter = `$\\ldots$ €`
 
     if (this.interactif) {
@@ -43,7 +42,7 @@ export default class Can20266Q3 extends ExerciceCan {
     } else {
       this.question += `<br>$\\ldots$ €`
     }
-    
+
     this.formatChampTexte = KeyboardType.clavierDeBase
   }
 

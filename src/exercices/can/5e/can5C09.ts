@@ -35,7 +35,5 @@ export default class MutliplierParN0N extends ExerciceSimple {
     this.correction = `$${b}\\times ${a * 101}= ${101 * a * b}$<br><br>`
     this.correction += `${texteEnCouleur('Mentalement :')}<br>`
     this.correction += `${texteEnCouleur('On calcule $' + a + '\\times ' + b + '=' + texNombre(a * b) + '$ puis on multiplie par $101$ ce qui revient à ajouter $' + texNombre(a * b * 100) + '$ et $' + texNombre(a * b) + '$.')}`
-    this.canEnonce = this.question // 'Compléter'
-    this.canReponseACompleter = ''
   }
 }

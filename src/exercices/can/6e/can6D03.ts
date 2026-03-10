@@ -54,7 +54,7 @@ export default class CalculDureeMinutes extends ExerciceSimple {
           `,
       bleuMathalea,
     )
-    this.canEnonce = this.question
+
     this.canReponseACompleter = '$\\ldots$ minutes'
   }
 }

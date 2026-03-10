@@ -34,7 +34,5 @@ export default class Tables5A9 extends ExerciceSimple {
     this.reponse = a * b
     this.question = `Calculer $${a} \\times ${b}$.`
     this.correction = `$${a} \\times ${b}=${miseEnEvidence(a * b)}$`
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

@@ -41,7 +41,5 @@ export default class MultiplierPar extends ExerciceSimple {
     <br> Mentalement : <br>
     $${a}\\times ${texNombre(b, 1)}=${a}\\times ${Math.floor(b)}+\\underbrace{${a}\\times 0,5}_{\\text{La moitié de }${a}}
     =${a * Math.floor(b)}+${texNombre(a / 2, 1)}=${texNombre(this.reponse, 1)}$  `)
-    this.canEnonce = this.question // 'Compléter'
-    this.canReponseACompleter = ''
   }
 }

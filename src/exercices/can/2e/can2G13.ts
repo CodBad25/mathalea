@@ -1,13 +1,13 @@
-import { choice } from '../../../lib/outils/arrayOutils'
-import {
-  texteEnCouleur,
-  miseEnEvidence,
-} from '../../../lib/outils/embellissements'
-import { ecritureParentheseSiNegatif } from '../../../lib/outils/ecritures'
-import { lettreMinusculeDepuisChiffre } from '../../../lib/outils/outilString'
-import ExerciceSimple from '../../ExerciceSimple'
-import { randint } from '../../../modules/outils'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { choice } from '../../../lib/outils/arrayOutils'
+import { ecritureParentheseSiNegatif } from '../../../lib/outils/ecritures'
+import {
+  miseEnEvidence,
+  texteEnCouleur,
+} from '../../../lib/outils/embellissements'
+import { lettreMinusculeDepuisChiffre } from '../../../lib/outils/outilString'
+import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer la norme d’un vecteur'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -93,7 +93,5 @@ export default class NormeVecteur extends ExerciceSimple {
         }
         break
     }
-    this.canEnonce = this.question // 'Compléter'
-    this.canReponseACompleter = ''
   }
 }

@@ -38,12 +38,14 @@ export default class ReduireDecimaux extends ExerciceSimple {
     const b = new Decimal(randint(1, 99)).div(100)
     const a = randint(1, 2)
     let reduction: Decimal
- if (context.isAmc) this.versionQcm = false
+    if (context.isAmc) this.versionQcm = false
     switch (choice([1, 2])) {
       case 1: // x-ax ou 2x-ax
         reduction = b.mul(-1).plus(a)
         this.reponse = texNombre(reduction, 2) + `${variable}`
-        this.question = this.versionQcm ? `Une écriture simplifiée de $${rienSi1(a)}${variable}-${texNombre(b, 2)}${variable}$ est :`:`Écrire le plus simplement possible  $${rienSi1(a)}${variable}-${texNombre(b, 2)}${variable}$.`
+        this.question = this.versionQcm
+          ? `Une écriture simplifiée de $${rienSi1(a)}${variable}-${texNombre(b, 2)}${variable}$ est :`
+          : `Écrire le plus simplement possible  $${rienSi1(a)}${variable}-${texNombre(b, 2)}${variable}$.`
         if (this.interactif && !this.versionQcm) {
           this.question += `<br>$${rienSi1(a)}${variable}-${texNombre(b, 2)}${variable}=$`
         }
@@ -65,7 +67,9 @@ export default class ReduireDecimaux extends ExerciceSimple {
       case 2: // ax-x ou ax-2x
         reduction = b.sub(a)
         this.reponse = texNombre(reduction, 2) + `${variable}`
-        this.question = this.versionQcm ? `Une écriture simplifiée de $${texNombre(b, 2)}${variable}-${rienSi1(a)}${variable}$ est :`:`Écrire le plus simplement possible  $${texNombre(b, 2)}${variable}-${rienSi1(a)}${variable}$.`
+        this.question = this.versionQcm
+          ? `Une écriture simplifiée de $${texNombre(b, 2)}${variable}-${rienSi1(a)}${variable}$ est :`
+          : `Écrire le plus simplement possible  $${texNombre(b, 2)}${variable}-${rienSi1(a)}${variable}$.`
         if (this.interactif && !this.versionQcm) {
           this.question += `<br>$${texNombre(b, 2)}${variable}-${rienSi1(a)}${variable}=$`
         }
@@ -85,8 +89,6 @@ export default class ReduireDecimaux extends ExerciceSimple {
 
         break
     }
-    this.canEnonce = this.question // 'Compléter'
-    this.canReponseACompleter = ''
 
     if (this.versionQcm) {
       const distracteurs: string[] = []

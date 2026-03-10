@@ -50,7 +50,7 @@ export default class NomExercice extends ExerciceSimple {
         \\text{ cm}^2$.`
       }
     }
-    this.canEnonce = this.question
+
     this.canReponseACompleter = '$\\ldots\\text{ cm}^2$'
     if (!this.interactif) {
       this.question += ' $\\ldots\\text{ cm}^2$.'

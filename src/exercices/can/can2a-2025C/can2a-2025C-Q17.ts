@@ -19,14 +19,14 @@ export const refs = {
 
 */
 export default class Can2a2025CQ17 extends ExerciceCan {
-   enonce(xa?: number, ya?: number, xb?: number, yb?: number): void {
+  enonce(xa?: number, ya?: number, xb?: number, yb?: number): void {
     if (xa == null || ya == null || xb == null || yb == null) {
-      xa = randint(-5, 5,0)
+      xa = randint(-5, 5, 0)
       ya = randint(-5, 5)
       do {
         xb = randint(-5, 5)
       } while (xb === xa)
-      yb = randint(-5, 5, [ya,0])
+      yb = randint(-5, 5, [ya, 0])
     }
 
     const resultat = new FractionEtendue(yb - ya, xb - xa).simplifie()
@@ -38,13 +38,11 @@ export default class Can2a2025CQ17 extends ExerciceCan {
 
     this.question = `Dans un repère orthonormé, on donne $${nomA}(${xa}\\,;\\,${ya})$ et $${nomB}(${xb}\\,;\\,${yb})$.<br>
     Quel est le coefficient directeur de $(${nomA}${nomB})$ ?<br>`
-    
 
     this.correction = `Le coefficient directeur de $(${nomA}${nomB})$ est $m=\\dfrac{y_{${nomB}}-y_{${nomA}}}{x_{${nomB}}-x_{${nomA}}}=\\dfrac{${yb}-${ecritureParentheseSiNegatif(ya)}}{${xb}-${ecritureParentheseSiNegatif(xa)}}=\\dfrac{${yb - ya}}{${xb - xa}}=${miseEnEvidence(resultat.texFSD)}$.`
 
     this.canEnonce = `Dans un repère orthonormé, on donne $${nomA}(${xa}\\,;\\,${ya})$ et $${nomB}(${xb}\\,;\\,${yb})$.<br>
     Quel est le coefficient directeur de $(${nomA}${nomB})$ ?`
-    this.canReponseACompleter = ''
   }
 
   nouvelleVersion(): void {

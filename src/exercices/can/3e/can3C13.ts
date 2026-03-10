@@ -50,7 +50,5 @@ export default class Pyramide3EtagesAdditionFractions extends ExerciceSimple {
     this.correction = `Le nombre qui se trouve au sommet de la pyramide est : $${this.reponse}$<br>
     
     ${mathalea2d({ xmin: 0, ymin: 0, xmax: 12, ymax: 7, scale: 0.7 }, pyr.representeMoi(0, 0))}`
-    this.canEnonce = this.question // 'Compléter'
-    this.canReponseACompleter = ''
   }
 }

@@ -97,7 +97,6 @@ export default class longueursRectPerimetre extends ExerciceSimple {
           $2\\times (${choix[0]}+${choix[1]})=${2 * choix[0] + 2 * choix[1]}\\text{ cm}$.<br>
           Le périmètre du rectangle est : $${miseEnEvidence(stringNombre(2 * choix[0] + 2 * choix[1], 0))}\\text{ cm}$.<br>`
 
-    this.canEnonce = this.question
     this.canReponseACompleter = '$\\ldots\\text{ cm}$'
     if (this.interactif) {
       this.optionsChampTexte = {

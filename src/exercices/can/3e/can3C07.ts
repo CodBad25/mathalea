@@ -74,7 +74,5 @@ export default class MilieuEntre1EtFraction extends ExerciceSimple {
     \\dfrac{${texNombre(a + b)}}{2}=${texNombre((a + b) / 2)}$`
 
     this.reponse = (a + b) / 2
-    this.canEnonce = this.question // 'Compléter'
-    this.canReponseACompleter = ''
   }
 }

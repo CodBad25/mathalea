@@ -1,9 +1,9 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { randint } from '../../../modules/outils'
-import { texNombre } from '../../../lib/outils/texNombre'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choice } from '../../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { texNombre } from '../../../lib/outils/texNombre'
+import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Appliquer 25 % sur un nombre'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -47,7 +47,5 @@ export default class AppliquerPourcentage extends ExerciceSimple {
       Ainsi, $25\\,\\%$ de $${a}$ est égal à $${a}\\div 4 =${a / 4}$.
      `
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

@@ -42,8 +42,7 @@ export default class NombreFois5 extends ExerciceSimple {
         : randint(1, 9) * 10 + randint(1, 9, 5)
     this.reponse = a * 5
     this.question = `Calculer $${a}\\times 5$.`
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
+
     this.correction = `$${a}\\times 5 = ${miseEnEvidence(this.reponse)}$<br>`
     this.correction += texteEnCouleur(
       `<br> Mentalement : <br>

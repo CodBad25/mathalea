@@ -34,7 +34,7 @@ export default class Can20266Q9 extends ExerciceCan {
     this.correction = `$${a}-${b}=${miseEnEvidence(texNombre(a - b))}$`
 
     this.formatChampTexte = KeyboardType.clavierDeBase
-    this.canEnonce = this.question
+
     this.canReponseACompleter = ``
   }
 

@@ -69,8 +69,5 @@ export default class AjouterDizainesCentaines extends Exercice {
         }
         break
     }
-
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

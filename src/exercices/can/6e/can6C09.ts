@@ -43,7 +43,5 @@ export default class SoustraireX9 extends ExerciceSimple {
        `,
       bleuMathalea,
     )
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

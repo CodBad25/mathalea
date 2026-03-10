@@ -1,9 +1,9 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { randint } from '../../../modules/outils'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { texNombre } from '../../../lib/outils/texNombre'
-import { prenomM } from '../../../lib/outils/Personne'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { prenomM } from '../../../lib/outils/Personne'
+import { texNombre } from '../../../lib/outils/texNombre'
+import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 
 import { choice } from '../../../lib/outils/arrayOutils'
 export const titre = 'Résoudre un problème avec une division'
@@ -44,7 +44,7 @@ Combien de bouquets de $${a}$ roses peut-il faire au maximum ?`
           this.correction = `Le fleuriste a au total $${b}$ roses et veut faire un maximum de bouquets avec $${a}$ roses chacun.<br>
           $${b} \\div ${a}=${this.reponse}$<br>
           Le fleuriste peut faire $${miseEnEvidence(this.reponse)}$ bouquets de $${a}$ roses chacun.`
-          this.canEnonce = this.question
+
           this.canReponseACompleter = '$\\ldots$ bouquets'
           this.optionsChampTexte = { texteApres: 'bouquets' }
         }
@@ -62,7 +62,7 @@ Combien de packs dois-je acheter ?`
           this.correction = `Je dois acheter au total $${b}$ bouteilles et les bouteilles sont vendues en pack de $${a}$ bouteilles.
           $${b} \\div ${a}=${this.reponse}$<br>          
           Je dois donc acheter $${miseEnEvidence(this.reponse)}$ packs.`
-          this.canEnonce = this.question
+
           this.canReponseACompleter = '$\\ldots$ packs'
           this.optionsChampTexte = { texteApres: 'packs' }
         }
@@ -79,7 +79,7 @@ Combien d’appartements y a-t-il à chaque étage ?`
           this.correction = `L'immeuble de $${a}$ étages comporte $${b}$ appartements au total.<br>
           $${b} \\div ${a}=${this.reponse}$<br>
           Il y a  $${miseEnEvidence(this.reponse)}$ appartements à chaque étage.`
-          this.canEnonce = this.question
+
           this.canReponseACompleter = '$\\ldots$ appartements'
           this.optionsChampTexte = { texteApres: 'appartements' }
         }
@@ -97,7 +97,7 @@ Combien d’appartements y a-t-il à chaque étage ?`
           this.correction = `Au total, la dépense pour l'achat des tee-shirts est $${texNombre(b, 0)}$ € et chaque tee-shirt coûte $${a}$ €.<br>
           $${b} \\div ${a}=${this.reponse}$<br>          
           L'association a acheté  $${miseEnEvidence(this.reponse)}$ tee-shirts.`
-          this.canEnonce = this.question
+
           this.canReponseACompleter = '$\\ldots$ tee-shirts'
           this.optionsChampTexte = { texteApres: 'tee-shirts' }
         }
@@ -116,7 +116,7 @@ Combien de paquets ${prenom} doit-il acheter ?`
           this.correction = `Au total, ${prenom} a besoin de $${b}$ biscuits et ils sont vendus par paquet de $${a}$.<br>
             $${b} \\div ${a}=${this.reponse}$<br>       
           ${prenom} doit acheter  $${miseEnEvidence(this.reponse)}$ paquets.`
-          this.canEnonce = this.question
+
           this.canReponseACompleter = '$\\ldots$ paquets'
           this.optionsChampTexte = { texteApres: 'paquets' }
         }
@@ -134,7 +134,7 @@ Quel est le prix d'une place pour ce concert ?`
           this.correction = `La recette totale est $${texNombre(b, 0)}$ € pour $${texNombre(a, 0)}$ spectateurs. <br>
           $${texNombre(b, 0)} \\div ${texNombre(a, 0)}=${this.reponse}$<br>
           Le prix de la place de concert est   $${miseEnEvidence(this.reponse)}$ €.`
-          this.canEnonce = this.question
+
           this.canReponseACompleter = '$\\ldots$ €'
           this.optionsChampTexte = { texteApres: '€' }
         }

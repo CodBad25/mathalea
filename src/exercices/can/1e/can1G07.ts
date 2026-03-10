@@ -73,7 +73,7 @@ export default class RechercheCoordonneesProdScal extends ExerciceSimple {
     if (this.interactif) {
       this.question += '<br>'
     }
-    this.canEnonce = this.question
+
     this.canReponseACompleter = '$x=\\ldots$'
   }
 }

@@ -1,7 +1,7 @@
-import ExerciceSimple from '../../ExerciceSimple'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import ExerciceSimple from '../../ExerciceSimple'
 
 import { randint } from '../../../modules/outils'
 export const titre = 'Calculer une différence de deux carrés'
@@ -54,7 +54,5 @@ export default class diffDeDeuxCarres extends ExerciceSimple {
       }
       this.reponse = ['x^2-2025', 'x\\times x-2025']
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

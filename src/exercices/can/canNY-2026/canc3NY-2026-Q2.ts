@@ -32,18 +32,16 @@ export default class calcAvecChiffres2026 extends ExerciceSimple {
 
     if (choix === 1) {
       this.question = `$202-${annee % 10}$`
-      this.correction = `$202-${annee % 10}=${miseEnEvidence(texNombre(202-annee % 10, 0))}$`
-      this.reponse = 202-annee % 10
+      this.correction = `$202-${annee % 10}=${miseEnEvidence(texNombre(202 - (annee % 10), 0))}$`
+      this.reponse = 202 - (annee % 10)
     } else if (choix === 2) {
-      this.question = `$${texNombre(annee, 0)}-${annee%100 +1}$`
-      this.correction = `$${texNombre(annee, 0)}-${annee%100 +1}= ${miseEnEvidence(texNombre(annee-(annee%100+1), 0))}$`
-      this.reponse = annee-(annee%100+1)
+      this.question = `$${texNombre(annee, 0)}-${(annee % 100) + 1}$`
+      this.correction = `$${texNombre(annee, 0)}-${(annee % 100) + 1}= ${miseEnEvidence(texNombre(annee - ((annee % 100) + 1), 0))}$`
+      this.reponse = annee - ((annee % 100) + 1)
     } else if (choix === 3) {
       this.question = `$${texNombre(annee, 0)}-30$`
-      this.correction = `$${texNombre(annee, 0)}-30= ${miseEnEvidence(texNombre(annee-30, 0))}$`
-      this.reponse = annee-30
+      this.correction = `$${texNombre(annee, 0)}-30= ${miseEnEvidence(texNombre(annee - 30, 0))}$`
+      this.reponse = annee - 30
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

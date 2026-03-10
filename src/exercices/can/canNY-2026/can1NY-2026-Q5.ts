@@ -1,10 +1,10 @@
-import ExerciceSimple from '../../ExerciceSimple'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import ExerciceSimple from '../../ExerciceSimple'
 
-import { randint } from '../../../modules/outils'
 import { choice } from '../../../lib/outils/arrayOutils'
+import { randint } from '../../../modules/outils'
 export const titre = 'Calculer avec des fractions'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -27,7 +27,7 @@ export default class calculsFractions extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const annee=2026
+    const annee = 2026
     const a = this.canOfficielle ? 2026 : randint(2023, 2026)
     if (this.canOfficielle ? true : choice([true, false])) {
       this.question = `Calculer  $\\left(\\dfrac{1}{${texNombre(annee, 0)}}\\div \\dfrac{1}{${texNombre(annee, 0)}}\\right)\\div\\dfrac{1}{${texNombre(a, 0)}}$.`
@@ -44,8 +44,5 @@ export default class calculsFractions extends ExerciceSimple {
         this.question = `Calculer.<br><br>  $\\left(\\dfrac{1}{${texNombre(annee, 0)}}\\times \\dfrac{${texNombre(annee, 0)}}{${texNombre(a, 0)}}\\right)\\div\\dfrac{1}{${texNombre(a, 0)}}$`
       }
     }
-
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

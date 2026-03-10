@@ -38,7 +38,7 @@ export default class CoordonneesPointDroite extends ExerciceSimple {
     this.question = ` Déterminer les coordonnées du point ${context.isDiaporama ? '<br>' : ''} de la   droite 
         d'équation $y=${reduireAxPlusB(a, b)}$ ${context.isDiaporama ? '<br>' : ''}dont l'abscisse est $${c}$.
        `
-       
+
     if (this.interactif) {
       this.optionsChampTexte = { texteApres: '$)$' }
       this.question += '<br>$($'
@@ -56,6 +56,5 @@ export default class CoordonneesPointDroite extends ExerciceSimple {
 
     this.canEnonce = ` Déterminer les coordonnées du point de la droite
     d'équation $y=${reduireAxPlusB(a, b)}$ dont l'abscisse est $${c}$. `
-    this.canReponseACompleter = ''
   }
 }

@@ -62,7 +62,7 @@ export default class calculerPythagore extends ExerciceSimple {
                 ${nom[0]}${nom[1]}&= ${miseEnEvidence(`\\sqrt{${texNombre(2025 - a * a)}}`)}\\\\
                 \\end{aligned}$ `
       this.reponse = `\\sqrt{${2025 - a * a}}`
-      this.canEnonce = this.question
+
       this.canReponseACompleter = `$${nom[0]}${nom[1]}=\\ldots$`
     } else {
       objets.push(
@@ -107,6 +107,5 @@ export default class calculerPythagore extends ExerciceSimple {
         ? (this.question += `<br>$${nom[0]}${nom[1]}=$`)
         : (this.question += `<br>$${nom[0]}${nom[2]}=$`)
     }
-    this.canEnonce = this.question
   }
 }

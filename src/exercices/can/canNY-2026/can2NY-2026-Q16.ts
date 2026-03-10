@@ -1,8 +1,8 @@
-import ExerciceSimple from '../../ExerciceSimple'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
-import { choice } from '../../../lib/outils/arrayOutils'
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Trouver un entier dans un intervalle'
 export const interactifReady = true
@@ -30,17 +30,15 @@ export default class entierDansIntervalle2026 extends ExerciceSimple {
     const crochet2 = this.canOfficielle ? ']' : choice([']', '['])
     if (choice([true, false])) {
       this.question = `Quel est le plus grand entier relatif appartenant à l'intervalle $${crochet1} ${texNombre(-annee, 0)}\\,;\\,${texNombre(annee, 0)}${crochet2}$ ? `
-      this.correction = `Le second crochet  étant ${crochet2 === ']' ? 'fermé' : 'ouvert'}, c'est $${miseEnEvidence(`${texNombre(crochet2 === ']' ? annee : annee-1, 0)}`)}$.`
-      this.reponse = `${crochet2 === ']' ? annee : annee-1}`
+      this.correction = `Le second crochet  étant ${crochet2 === ']' ? 'fermé' : 'ouvert'}, c'est $${miseEnEvidence(`${texNombre(crochet2 === ']' ? annee : annee - 1, 0)}`)}$.`
+      this.reponse = `${crochet2 === ']' ? annee : annee - 1}`
     } else {
       this.question = `Quel est le plus petit entier relatif appartenant à l'intervalle $${crochet1} ${texNombre(-annee, 0)}\\,;\\,${texNombre(annee, 0)}${crochet2}$ ? `
-      this.correction = `Le premier crochet  étant ${crochet1 === '[' ? 'fermé' : 'ouvert'}, c'est $${miseEnEvidence(`${texNombre(crochet1 === '[' ? -annee : -annee+1, 0)}`)}$.`
-      this.reponse = `${crochet1 === '[' ? -annee : -annee+1}`
+      this.correction = `Le premier crochet  étant ${crochet1 === '[' ? 'fermé' : 'ouvert'}, c'est $${miseEnEvidence(`${texNombre(crochet1 === '[' ? -annee : -annee + 1, 0)}`)}$.`
+      this.reponse = `${crochet1 === '[' ? -annee : -annee + 1}`
     }
     if (this.interactif) {
       this.question += '<br>'
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

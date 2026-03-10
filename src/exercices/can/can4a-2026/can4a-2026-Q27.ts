@@ -68,8 +68,6 @@ export default class Can20264emeQ27 extends ExerciceCan {
 
     this.correction = `La moyenne est : $\\dfrac{${a}+${b}+${c}+${d}}{4}=\\dfrac{${somme}}{4}=${miseEnEvidence(texNombre(moyenne))}$.`
 
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
     this.reponse = moyenne
   }
 

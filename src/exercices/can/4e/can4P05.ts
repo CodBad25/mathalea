@@ -76,7 +76,5 @@ export default class ImageSpline extends ExerciceSimple {
     if (this.interactif) {
       this.question += '<br> Répondre par OUI (saisir O) ou NON (saisir N).<br>'
     }
-    this.canEnonce = this.question // 'Compléter'
-    this.canReponseACompleter = ''
   }
 }

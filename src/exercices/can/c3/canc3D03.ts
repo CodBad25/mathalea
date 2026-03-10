@@ -55,7 +55,7 @@ export default class AjouterDesDurees extends ExerciceSimple {
         options: { HMS: true },
       },
     }
-    this.canEnonce = this.question
+
     this.canReponseACompleter = '$\\ldots$ h $\\ldots$ min'
   }
 }

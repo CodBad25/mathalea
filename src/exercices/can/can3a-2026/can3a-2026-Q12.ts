@@ -64,7 +64,6 @@ Sa vitesse moyenne est  `
     this.correction = `En $${temps}$ min, ${prenom} a parcouru $${distance}$ km.<br>
 En $60$ min (soit $1$ h), ${prenom} parcourt $${60 / temps}$ fois plus, soit $${distance}\\times ${60 / temps}=${miseEnEvidence(vitesse)}$ km/h.`
 
-    this.canEnonce = this.question
     this.canReponseACompleter = '$\\ldots$ km/h'
 
     if (this.interactif) {

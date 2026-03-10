@@ -36,7 +36,7 @@ export default class Can2025N4Q17 extends ExerciceCan {
       "À l'issue de l'exécution de ce programme, de combien de pas le lutin a-t-il avancé ?<br>"
     this.question += texte || 'Problème de rendu'
     this.correction = `Il y a $${a}$ répétitions de la boucle, et à chaque répétition le lutin avance de $${b}$ pas, donc il avance de $${a}$ fois de $${b}$ pas, soit $${miseEnEvidence(a * b)}$ pas.`
-    this.canEnonce = this.question
+
     this.optionsChampTexte = {
       texteAvant: '<br>Le lutin a avancé de ',
       texteApres: ' pas.',

@@ -27,8 +27,7 @@ export default class Can2025N5Q23 extends ExerciceCan {
     this.question = `Le plus petit entier supérieur à $\\dfrac{${a}}{${b}}$`
     this.correction = `$\\dfrac{${a}}{${b}}=\\dfrac{${ent * b}}{${b}}+\\dfrac{${f}}{${b}}=${ent}+\\dfrac{${f}}{${b}}$<br>
     Étant donné que $\\dfrac{${f}}{${b}}<1$, le plus petit entier supérieur à $\\dfrac{${a}}{${b}}$ est $${ent}+1=${miseEnEvidence(ent + 1)}$.`
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
+
     if (this.interactif) {
       this.question += ' est '
     }

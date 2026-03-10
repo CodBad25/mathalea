@@ -95,8 +95,7 @@ export default class NomExercice extends ExerciceSimple {
     }
 
     this.reponse = reponse
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
+
     if (!this.interactif) {
       this.question += '.'
     }

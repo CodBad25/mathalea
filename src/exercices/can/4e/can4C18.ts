@@ -1,8 +1,8 @@
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choice } from '../../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import FractionEtendue from '../../../modules/FractionEtendue'
 import ExerciceSimple from '../../ExerciceSimple'
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 export const titre = 'Décomposer une fraction'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -26,7 +26,7 @@ export default class DecomposerFraction extends ExerciceSimple {
     this.typeExercice = 'simple'
     this.nbQuestions = 1
     this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
- this.optionsDeComparaison = { expressionNumerique: true }  
+    this.optionsDeComparaison = { expressionNumerique: true }
   }
 
   nouvelleVersion() {
@@ -78,7 +78,5 @@ export default class DecomposerFraction extends ExerciceSimple {
     }
     this.correction = `Le plus grand multiple de $${d}$ inférieur à $${n}$ est $${Math.trunc(n / d) * d}$. <br>
     Ainsi, $\\dfrac{${n}}{${d}}=\\dfrac{${Math.trunc(n / d) * d}}{${d}}+\\dfrac{${n - Math.trunc(n / d) * d}}{${d}}=${miseEnEvidence(this.reponse)}$.`
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

@@ -61,7 +61,5 @@ export default class FractionVersDecimal extends ExerciceSimple {
 
         break
     }
-    this.canEnonce = this.question // 'Compléter'
-    this.canReponseACompleter = ''
   }
 }

@@ -130,12 +130,10 @@ export default class ResoudreEquationsSecondDegreSansDelta extends Exercice {
               texte = `Résoudre dans $\\mathbb{R}$ :${sp(2)}
             $${a}x^2${ecritureAlgebrique(b)}=0$.`
               this.canEnonce = texte
-              this.canReponseACompleter = ''
             } else {
               texte = `Résoudre dans $\\mathbb{R}$ :${sp(2)}
             $${b}${ecritureAlgebrique(a)}x^2=0$.`
               this.canEnonce = texte
-              this.canReponseACompleter = ''
             }
           }
 
@@ -212,12 +210,10 @@ export default class ResoudreEquationsSecondDegreSansDelta extends Exercice {
               texte = `Résoudre dans $\\mathbb{R}$ :${sp(2)}
             $${a}x^2${ecritureAlgebrique(b)}=0$.`
               this.canEnonce = texte
-              this.canReponseACompleter = ''
             } else {
               texte = `Résoudre dans $\\mathbb{R}$ :${sp(2)}
             $${b}${ecritureAlgebrique(a)}x^2=0$.`
               this.canEnonce = texte
-              this.canReponseACompleter = ''
             }
           }
 
@@ -295,12 +291,10 @@ export default class ResoudreEquationsSecondDegreSansDelta extends Exercice {
               texte = `Résoudre dans $\\mathbb{R}$ :${sp(2)}
               $${rienSi1(a)}x^2${ecritureAlgebriqueSauf1(b)}x=0$.`
               this.canEnonce = texte
-              this.canReponseACompleter = ''
             } else {
               texte = `Résoudre dans $\\mathbb{R}$ :${sp(2)}
               $${rienSi1(b)}x${ecritureAlgebriqueSauf1(a)}x^2=0$.`
               this.canEnonce = texte
-              this.canReponseACompleter = ''
             }
           }
 
@@ -383,12 +377,10 @@ export default class ResoudreEquationsSecondDegreSansDelta extends Exercice {
               texte = `Résoudre dans $\\mathbb{R}$ :${sp(2)}
               $${rienSi1(a * a)}x^2${ecritureAlgebriqueSauf1(b * 2 * a)}x+${c}=0$.`
               this.canEnonce = texte
-              this.canReponseACompleter = ''
             } else {
               texte = `Résoudre dans $\\mathbb{R}$ :${sp(2)}
               $${rienSi1(b * 2 * a)}x${ecritureAlgebriqueSauf1(a * a)}x^2+${c}=0$.`
               this.canEnonce = texte
-              this.canReponseACompleter = ''
             }
           }
 

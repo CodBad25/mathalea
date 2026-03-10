@@ -1,7 +1,7 @@
-import { texNombre } from '../../../lib/outils/texNombre'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import ExerciceCan from '../../ExerciceCan'
+import { texNombre } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
+import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Somme de deux nombres décimaux'
 export const interactifReady = true
@@ -25,8 +25,7 @@ export default class Can2025N5Q2 extends ExerciceCan {
     this.reponse = (a + b).toFixed(2)
     this.question = `$${texNombre(a, 2)} + ${texNombre(b, 2)}$ `
     this.correction = `$${texNombre(a, 2)} + ${texNombre(b, 2)}=${miseEnEvidence(texNombre(a + b, 2))}$`
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
+
     if (this.interactif) {
       this.question += '$=$'
     }

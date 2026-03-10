@@ -1,8 +1,8 @@
-import ExerciceSimple from '../../ExerciceSimple'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { randint } from '../../../modules/outils'
-import { choice } from '../../../lib/outils/arrayOutils'
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Calculer avec un ratio'
 export const interactifReady = true
@@ -49,7 +49,6 @@ export default class NomExercice extends ExerciceSimple {
     this.correction = `Quand Alice prend $${nbreA}$ billes, Bruno en prend $${nbreB}$.<br>
       Comme Alice en prend $${k}\\times ${ratio[0]}=${nbreA}$, alors Bruno en prend $${k}\\times ${ratio[1]}=${miseEnEvidence(nbreB)}$.`
 
-    this.canEnonce = this.question
     this.canReponseACompleter = 'Bruno a pris $\\ldots$ billes.'
     if (!this.interactif) {
       this.question += '<br>Bruno a pris $\\ldots$ billes.'

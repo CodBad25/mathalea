@@ -36,7 +36,7 @@ export default class NomExercice extends ExerciceSimple {
       this.question = `Le volume d'un cube d'arête $${texNombre(a, 1)}\\text{ cm}$ est : `
       this.correction = `Le volume du cube est : $${texNombre(a, 1)}^3=${miseEnEvidence(texNombre(a ** 3, 3))}\\text{ cm}^3$`
     }
-    this.canEnonce = this.question
+
     this.canReponseACompleter = '$\\ldots\\text{ cm}^3$'
     this.reponse = reponse.toFixed(3)
     if (!this.interactif) {

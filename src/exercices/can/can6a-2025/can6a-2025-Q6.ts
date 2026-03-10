@@ -1,9 +1,9 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { randint } from '../../../modules/outils'
-import Hms from '../../../modules/Hms'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { formatMinute } from '../../../lib/outils/texNombre'
+import Hms from '../../../modules/Hms'
+import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Ajouter une demi-heure'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -39,7 +39,6 @@ export default class Can2025N62Q6 extends ExerciceSimple {
     this.correction = `Une demi-heure est égale à $30$ minutes. <br>
     Ainsi $${h}$ h $${min}$ min + $30$ min est égal à $${miseEnEvidence(h + 1)}$ h $${miseEnEvidence(formatMinute(min - 30))}$ min.`
 
-    this.canEnonce = this.question
     this.canReponseACompleter = '$\\ldots$ h $\\ldots$ min'
   }
 }

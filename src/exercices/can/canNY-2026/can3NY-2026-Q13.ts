@@ -82,7 +82,7 @@ export default class longueurDansTriangle2026 extends ExerciceSimple {
     if (this.interactif) {
       this.question += '<br>'
     }
-    this.canEnonce = this.question
+
     this.canReponseACompleter = '$\\ldots\\text{ cm}$'
   }
 }

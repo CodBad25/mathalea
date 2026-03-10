@@ -198,7 +198,6 @@ export default class CalculerAngle extends ExerciceSimple {
         break
     }
 
-    this.canEnonce = this.question
     this.canReponseACompleter = '$x = \\ldots^\\circ$'
   }
 }

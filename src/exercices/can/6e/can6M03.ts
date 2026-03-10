@@ -44,7 +44,7 @@ export default class ConvertirEnM extends ExerciceSimple {
 
       this.optionsChampTexte = { texteApres: '$\\text{ m}$' }
     }
-    this.canEnonce = this.question
+
     this.canReponseACompleter = '$\\dots\\text{ m}$'
   }
 }

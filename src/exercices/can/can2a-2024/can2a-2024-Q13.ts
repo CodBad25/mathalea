@@ -58,7 +58,6 @@ export default class NomExercice extends ExerciceSimple {
           objets,
         )
       this.correction = `L'aire est donnée par le produit des deux plus petits côtés divisé par $2$, soit : $\\dfrac{3\\times 4}{2}=${miseEnEvidence(this.reponse)}\\text{ cm}^2$.`
-      this.canReponseACompleter = ''
     } else {
       if (choice([true, false])) {
         tri = shuffle(['3', '4', '5'])
@@ -72,6 +71,5 @@ export default class NomExercice extends ExerciceSimple {
       this.question = `Aire d'un triangle rectangle dont les côtés mesurent $${tri[0]}\\text{ cm}$, $${tri[1]}\\text{ cm}$ et $${tri[2]}\\text{ cm}$.`
       this.canReponseACompleter = '$ \\ldots\\text{ cm}^2$'
     }
-    this.canEnonce = this.question
   }
 }

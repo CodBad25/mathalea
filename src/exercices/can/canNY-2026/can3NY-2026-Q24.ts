@@ -25,7 +25,7 @@ export default class canQ24 extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const annee=2026
+    const annee = 2026
     switch (this.canOfficielle ? 1 : randint(1, 3)) {
       case 1:
         this.question = `Exprimer la somme de $a$ et $${texNombre(annee, 0)}$ en fonction de $a$.`
@@ -48,7 +48,5 @@ export default class canQ24 extends ExerciceSimple {
     if (this.interactif) {
       this.question += '<br>'
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }

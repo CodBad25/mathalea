@@ -42,7 +42,5 @@ export default class calcAvecChiffres2026 extends ExerciceSimple {
       this.correction = `$202+${annee % 10}=${miseEnEvidence(texNombre(202 + (annee % 10), 0))}$`
       this.reponse = 202 + (annee % 10)
     }
-    this.canEnonce = this.question
-    this.canReponseACompleter = ''
   }
 }
