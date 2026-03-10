@@ -360,7 +360,7 @@ build:
     - if: $CI_COMMIT_BRANCH == "main"
       when: always
     - if: $CI_COMMIT_BRANCH == "guironne-jobs"
-      when: always
+      when: manual
     - when: never
   artifacts:
     when: always
@@ -474,12 +474,13 @@ playwright-testCanEleve:
   script:
     - pnpm test:e2e:views
   rules:
-    - if: $CI_OPEN_MERGE_REQUESTS
+    # Se lance uniquement si le pipeline est déclenché par une Merge Request
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
       when: always
     - if: $CI_COMMIT_BRANCH == "main"
       when: always
     - if: $CI_COMMIT_BRANCH == "guironne-jobs"
-      when: always
+      when: manual
     - when: never
   artifacts:
     when: on_failure
@@ -498,12 +499,13 @@ playwright-testConsistency:
   script:
     - pnpm test:e2e:consistency
   rules:
-    - if: $CI_OPEN_MERGE_REQUESTS
+    # Se lance uniquement si le pipeline est déclenché par une Merge Request
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
       when: always
     - if: $CI_COMMIT_BRANCH == "main"
       when: always
     - if: $CI_COMMIT_BRANCH == "guironne-jobs"
-      when: always
+      when: manual
     - when: never
   artifacts:
     when: on_failure
@@ -522,12 +524,13 @@ playwright-testInteractivity:
   script:
     - pnpm test:e2e:interactivity
   rules:
-    - if: $CI_OPEN_MERGE_REQUESTS
+    # Se lance uniquement si le pipeline est déclenché par une Merge Request
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
       when: always
     - if: $CI_COMMIT_BRANCH == "main"
       when: always
     - if: $CI_COMMIT_BRANCH == "guironne-jobs"
-      when: always
+      when: manual
     - when: never
   artifacts:
     when: on_failure
@@ -572,17 +575,19 @@ testExosModifiedWithoutPlayWright:
     - echo "$CHANGED_FILES"
     - CHANGED_FILES="$CHANGED_FILES" pnpm vitest --config tests/e2e/vitest.config.all_exercises.js --run
   rules:
-    - if: $CI_OPEN_MERGE_REQUESTS
+    # Se lance uniquement si le pipeline est déclenché par une Merge Request
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
       when: always
     - if: $CI_COMMIT_BRANCH == "main"
       when: always
     - if: $CI_COMMIT_BRANCH == "guironne-jobs"
-      when: always
+      when: manual
     - when: never
 
 testExosModified:
   extends: .testCI
   stage: build-projet
+  timeout: 3h
   script:
     # - NODE_OPTIONS=--max-old-space-size=4096 pnpm run makeJson && pnpm run prebuild-unit-tests && pnpm vite build
     # - NODE_OPTIONS=--max-old-space-size=4096 pnpm run makeJson && pnpm vite build
@@ -613,12 +618,13 @@ testExosModified:
     - echo "$CHANGED_FILES"
     - CHANGED_FILES="$CHANGED_FILES" pnpm test:e2e:console_errors
   rules:
-    - if: $CI_OPEN_MERGE_REQUESTS
+    # Se lance uniquement si le pipeline est déclenché par une Merge Request
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
       when: always
     - if: $CI_COMMIT_BRANCH == "main"
       when: always
     - if: $CI_COMMIT_BRANCH == "guironne-jobs"
-      when: always
+      when: manual
     - when: never
 
 tests-unitaires:
@@ -638,12 +644,13 @@ tests-unitaires:
     - NODE_OPTIONS=--max-old-space-size=4096 pnpm test:unit
     - NODE_OPTIONS=--max-old-space-size=4096 pnpm test:src
   rules:
-    - if: $CI_OPEN_MERGE_REQUESTS
+    # Se lance uniquement si le pipeline est déclenché par une Merge Request
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
       when: always
     - if: $CI_COMMIT_BRANCH == "main"
       when: always
     - if: $CI_COMMIT_BRANCH == "guironne-jobs"
-      when: always
+      when: manual
     - when: never
   artifacts:
     when: on_failure

@@ -43,6 +43,33 @@ function testIfLoaded(
   return ''
 }
 
+function estimerLongueurLatex(
+  texte: string,
+  options: {
+    includeSpaces?: boolean
+  } = {},
+): string {
+  const { includeSpaces = true } = options
+
+  // Étape 1: Supprimer les commandes LaTeX qui ne produisent pas de caractères visibles
+  let nettoye = texte
+    // Remplacer les commandes mathématiques simples comme $f$ par 'f'
+    .replace(/\$([^$]+)\$/g, '$1')
+    // Remplacer \mathbb{R} par 'R' (un caractère)
+    .replace(/\\mathbb\{R\}/g, 'R')
+    .replace(/\\mathbb\{([^}]+)\}/g, '$1') // cas général
+    // Supprimer autres commandes LaTeX courantes
+    .replace(/\\[a-zA-Z]+/g, '') // enlève les commandes comme \text, \frac, etc.
+    .replace(/[{}]/g, '') // enlève les accolades
+
+  // Compter les caractères (en tenant compte des espaces si demandé)
+  if (!includeSpaces) {
+    nettoye = nettoye.replace(/\s/g, '')
+  }
+
+  return nettoye
+}
+
 class Latex {
   exercices: (IExercice | IExerciceStatique)[]
   constructor() {
@@ -340,17 +367,22 @@ class Latex {
           )
         } else if (isIExercice(exercice)) {
           contentlocal += `\n% @see Group ${exoIndex}: ${getUrlFromExercice(this.exercices[exoIndex], indiceVersion)}`
+
+          const prefix = [exercice.introduction, exercice.consigne]
+            .filter(Boolean)
+            .join('\n')
+
+          const questionsAvecIntro = exercice.listeQuestions.map(
+            (q) => `${prefix}\n${q}`,
+          )
           exoGroups.listeQuestions = [
             ...exoGroups.listeQuestions,
-            ...exercice.listeQuestions,
+            ...questionsAvecIntro,
           ]
           exoGroups.listeCorrections = [
             ...exoGroups.listeCorrections,
             ...exercice.listeCorrections,
           ]
-          exoGroups.consigne = exoGroups.consigne + '\n' + exercice.consigne
-          exoGroups.introduction =
-            exoGroups.introduction + '\n' + exercice.introduction
           exoGroups.typeExercice = exercice.typeExercice
           exoGroups.titre = exoGroups.titre + '\n' + `Groupe ${groupIndex + 1}`
         }
@@ -487,14 +519,16 @@ class Latex {
         exercice.listeQuestions.length > 0
           ? exercice.listeQuestions[0].split(/\\\\|\r?\n/)
           : []
-      const firstQuestion = phrases.length > 0 ? phrases[0] : ''
-      const secondQuestion = phrases.length > 1 ? phrases[1] : ''
+      const firstQuestion =
+        phrases.length > 0 ? estimerLongueurLatex(phrases[0]) : ''
+      const secondQuestion =
+        phrases.length > 1 ? estimerLongueurLatex(phrases[1]) : ''
       if (
         latexFileInfos.qrcodeOption === 'AvecQrcode' &&
-        (exercice.introduction.length > 40 ||
-          exercice.consigne.length > 40 ||
-          firstQuestion.length > 40 ||
-          secondQuestion.length > 40)
+        (exercice.introduction.length > 50 ||
+          estimerLongueurLatex(exercice.consigne).length > 50 ||
+          firstQuestion.length > 50 ||
+          secondQuestion.length > 50)
       ) {
         // il faut un espace pour le QRCODE
         content += '\n\\vspace{2cm}'

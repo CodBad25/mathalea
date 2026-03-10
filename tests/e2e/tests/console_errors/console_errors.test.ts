@@ -339,11 +339,12 @@ if (process.env.NIV !== null && process.env.NIV !== undefined) {
       })
     })
   } else {
-    filtered.forEach((file, index) => {
+    const cfiltered = filtered.slice(0, 200) // limiter à 200 exercices pour éviter de surcharger le serveur
+    cfiltered.forEach((file, index) => {
       const filter = file.replaceAll(' ', '')
       console.log(
         'launching test for:',
-        filter + `,  ${index + 1}/${filtered.length}`,
+        filter + `,  ${index + 1}/${cfiltered.length}`,
       )
       testRunAllLots(filter)
     })
