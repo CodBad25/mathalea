@@ -87,9 +87,8 @@ export function generateLatex(
       for (const item of document.items) {
         if (itemsWithExercises[item]) {
           for (const exercise of itemsWithExercises[item]) {
-            if (exercise.typeExercice === 'statique') continue
             const latex = new Latex()
-            latex.addExercices([exercise as IExercice])
+            latex.addExercices([exercise])
             const contents = latex.getContentsForAVersion(
               {
                 title: '',
