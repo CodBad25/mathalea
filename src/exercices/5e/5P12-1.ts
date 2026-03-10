@@ -469,7 +469,7 @@ export default class ProblemeDeRatio extends Exercice {
                 objetReponse: {
                   champ1: { value: String(k * x) },
                   champ2: { value: String(k * y) },
-                  champ3: { value: String(k * z - k * y) },
+                  champ3: { value: String(total) },
                   bareme: toutAUnPoint,
                 },
                 typeInteractivite: 'fillInTheBlank',
