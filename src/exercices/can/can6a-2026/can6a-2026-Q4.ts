@@ -85,7 +85,7 @@ export default class Can20266Q4 extends ExerciceCan {
       objets,
     )
     if (this.interactif) {
-      this.question = graphique
+      this.question = 'Complète.' + graphique
       this.optionsChampTexte = {
         texteAvant: "La longueur d'un carreau est  ",
         texteApres: ' .',

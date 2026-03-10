@@ -7,7 +7,7 @@ import { fraction } from '../../../modules/fractions'
 import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
 
-export const titre = 'Q19'
+export const titre = 'Trouver le plus grand nombre (QCM)'
 export const interactifReady = true
 export const interactifType = 'qcm'
 export const uuid = 'ytght'
@@ -61,7 +61,7 @@ export default class Can20266Q19 extends ExerciceCan {
     const qcm = propositionsQcm(this, 0)
     this.question += qcm.texte
 
-    this.correction = `La fraction $${a.texFraction}$ a un numérateur plus grand que son dénominateur, elle est donc plus grande que $1$.<br>
+    this.correction = `La fraction $${a.texFraction}$ a un numérateur plus grand que son dénominateur, elle est donc plus grande que $1$.<br><br>
     La fraction $${b.texFraction}$ a un numérateur plus petit que son dénominateur, elle est donc plus petite que $1$.<br>
     Ainsi, le plus grand nombre est $${miseEnEvidence(a.texFraction)}$.`
 

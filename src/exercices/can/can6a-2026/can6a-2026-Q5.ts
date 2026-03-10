@@ -17,6 +17,14 @@ export const refs = {
 
 */
 export default class Can20266Q5 extends ExerciceCan {
+   constructor() {
+    super()
+    this.formatChampTexte = KeyboardType.clavierDeBase
+    this.optionsDeComparaison = {
+      nombreDecimalSeulement: true,
+    }
+  }
+
   enonce(a?: number) {
     if (a == null) {
       a = randint(15, 19)

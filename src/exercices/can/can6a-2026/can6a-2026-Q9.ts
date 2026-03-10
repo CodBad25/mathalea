@@ -5,7 +5,7 @@ import { texNombre } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
 
-export const titre = 'Q9'
+export const titre = 'Calculer une différence'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const uuid = '9nw10'
@@ -19,6 +19,14 @@ export const refs = {
 
 */
 export default class Can20266Q9 extends ExerciceCan {
+  constructor() {
+    super()
+    this.formatChampTexte = KeyboardType.clavierDeBase
+    this.optionsDeComparaison = {
+      nombreDecimalSeulement: true,
+    }
+  }
+
   enonce(a?: number, b?: number) {
     if (a == null || b == null) {
       a = choice([50, 150, 250])
@@ -33,7 +41,6 @@ export default class Can20266Q9 extends ExerciceCan {
 
     this.correction = `$${a}-${b}=${miseEnEvidence(texNombre(a - b))}$`
 
-    this.formatChampTexte = KeyboardType.clavierDeBase
 
     this.canReponseACompleter = ``
   }

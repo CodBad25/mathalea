@@ -6,7 +6,7 @@ import { texNombre } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
 
-export const titre = 'Q12'
+export const titre = 'Calculer une valeur à l\'aide d\'un tableau'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const uuid = 'suvzx'
@@ -20,6 +20,14 @@ export const refs = {
 
 */
 export default class Can20266Q12 extends ExerciceCan {
+  constructor() {
+    super()
+    this.formatChampTexte = KeyboardType.clavierDeBase
+    this.optionsDeComparaison = {
+      nombreDecimalSeulement: true,
+    }
+  }
+
  enonce(ouiF?: number, nonF?: number, ouiG?: number, nonG?: number, cas?: number) {
     if (ouiF == null || nonF == null || ouiG == null || nonG == null || cas == null) {
       ouiF = randint(2, 6) * 5
@@ -29,7 +37,7 @@ export default class Can20266Q12 extends ExerciceCan {
       cas = choice([1, 2])
     }
 
-    this.formatChampTexte = KeyboardType.clavierDeBase
+   
 
     const tableau = tableauColonneLigne(
       ['', '\\text{Oui}', '\\text{Non}'],

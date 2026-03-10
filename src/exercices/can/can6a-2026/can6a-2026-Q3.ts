@@ -19,6 +19,15 @@ export const refs = {
 
 */
 export default class Can20266Q3 extends ExerciceCan {
+ constructor() {
+    super()
+    this.formatChampTexte = KeyboardType.clavierDeBase
+    this.optionsDeComparaison = {
+      nombreDecimalSeulement: true,
+    }
+  }
+
+
   enonce(nbStylos?: number, prixUnitaire?: number) {
     if (nbStylos == null || prixUnitaire == null) {
       nbStylos = choice([4, 6])

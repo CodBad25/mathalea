@@ -4,7 +4,7 @@ import { texNombre } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
 
-export const titre = 'Q18'
+export const titre = 'Calculer la moitié d\'un nombre en dixièmes'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const uuid = 'ity6q'
@@ -21,6 +21,9 @@ export default class Can20266Q18 extends ExerciceCan {
   constructor() {
     super()
     this.optionsChampTexte = { texteApres: ' unité(s)' }
+     this.optionsDeComparaison = {
+      nombreDecimalSeulement: true,
+    }
   }
 
   enonce(nbDixièmes?: number) {
@@ -30,11 +33,11 @@ export default class Can20266Q18 extends ExerciceCan {
 
     this.reponse = texNombre(nbDixièmes / 20, 1)
     this.question =
-      `La moitié de $${texNombre(nbDixièmes, 0)}$ dixièmes.` +
+      `La moitié de $${texNombre(nbDixièmes, 0)}$ dixièmes` +
       (this.interactif ? '<br>' : '<br>$\\ldots$ unité(s)')
 
     this.correction = `La moitié de $${texNombre(nbDixièmes, 0)}$ dixièmes est $${texNombre(nbDixièmes / 2, 1)}$.<br>
-    Ainsi, la moitié de $${texNombre(nbDixièmes, 0)}$ est $${miseEnEvidence(texNombre(nbDixièmes / 20, 1))}$ unités.`
+    Ainsi, la moitié de $${texNombre(nbDixièmes, 0)}$ dixièmes est $${miseEnEvidence(texNombre(nbDixièmes / 20, 1))}$ unités.`
 
     this.formatChampTexte = KeyboardType.clavierDeBase
     this.canEnonce = `La moitié de $${texNombre(nbDixièmes, 0)}$ dixièmes.`

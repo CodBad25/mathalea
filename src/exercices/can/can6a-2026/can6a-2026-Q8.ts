@@ -79,21 +79,21 @@ export default class Can20266Q8 extends ExerciceCan {
     const objets = [drGrad, fleche, input, lab1, lab2, origine]
 
     const graphique = mathalea2d(
-      Object.assign({ pixelsParCm: 25, scale: 0.6 }, fixeBordures(objets)),
+      Object.assign({ pixelsParCm: 25, scale: 0.5 }, fixeBordures(objets)),
       objets,
     )
 
     this.formatChampTexte = KeyboardType.clavierDeBase
     this.reponse = { field0: { value: texNombre(valeur, 0) } }
-    this.question = 'Quel nombre est repéré par le point $A$ ?<br>'
+    this.question = 'Complète.<br>'
     this.question +=
       graphique +
       (context.isHtml
         ? `<span id="resultatCheckEx${this.numeroExercice}Q0"></span>` +
           ajouteFeedback(this, 0)
         : '')
-    this.canEnonce = 'Quel nombre est repéré par le point $A$ ?<br>' + graphique
-
+    this.canEnonce = 'Complète.' 
+this.canReponseACompleter =  graphique
     this.correction = `Les graduations vont de $${texNombre(pas, 0)}$ en $${texNombre(pas, 0)}$, ainsi le point $A$ repère le nombre $${miseEnEvidence(texNombre(valeur, 0))}$.`
   }
 

@@ -11,7 +11,7 @@ import { mathalea2d } from '../../../modules/mathalea2d'
 import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
 
-export const titre = 'Q16'
+export const titre = 'Compléter sur une droite graduée'
 export const interactifReady = true
 export const interactifType = 'MetaInteractif2d'
 export const uuid = 'br9n6'
@@ -94,14 +94,14 @@ export default class Can20266Q16 extends ExerciceCan {
     )
     this.reponse = { field0: { value: texNombre(abscisse, 3) } }
     this.question =
-      'Complète' +
+      'Complète.' +
       figure +
       (context.isHtml
         ? `<span id="resultatCheckEx${this.numeroExercice}Q0"></span>` +
           ajouteFeedback(this, 0)
         : '')
 
-    this.correction = `Un pas de graduation est égal à $0{,}001$ et il y a $${texNombre((abscisse - min) / 0.001, 0)}$ pas de graduation entre $${texNombre(min, 3)}$ et la flèche.<br>
+    this.correction = `Un pas de graduation est égal à $0{,}001$ et il y a $${texNombre((abscisse - min) / 0.001, 0)}$ pas de graduation entre $${texNombre(min, 3)}$ et la dernière flèche.<br>
     Donc l'abscisse de la flèche est $${miseEnEvidence(texNombre(abscisse, 3))}$.`
 
     this.formatChampTexte = KeyboardType.clavierDeBase

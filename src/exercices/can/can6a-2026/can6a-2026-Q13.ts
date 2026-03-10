@@ -4,7 +4,7 @@ import { texNombre } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
 
-export const titre = 'Q13'
+export const titre = 'Additionner des kg et des g'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const uuid = 'dvd8q'
@@ -20,8 +20,11 @@ export const refs = {
 export default class Can20266Q13 extends ExerciceCan {
   constructor() {
     super()
-    this.enonce()
+        this.formatChampTexte = KeyboardType.clavierDeBase
     this.optionsChampTexte = { texteApres: '$\\text{ kg}$' }
+      this.optionsDeComparaison = {
+      nombreDecimalSeulement: true,
+    }
   }
 
   enonce(nbKilos?: number, nbGrammes?: number) {
@@ -37,7 +40,7 @@ export default class Can20266Q13 extends ExerciceCan {
     this.correction = `$${texNombre(nbGrammes, 0)}\\text{ g}=${texNombre(nbGrammes / 1000, 1)}\\text{ kg}$.<br>
     Donc $${texNombre(nbKilos, 1)}+${texNombre(nbGrammes / 1000, 1)}=${miseEnEvidence(texNombre(nbKilos + nbGrammes / 1000, 1))}\\text{ kg}$`
 
-    this.formatChampTexte = KeyboardType.clavierDeBase
+
     this.canEnonce = 'Complète.'
     this.canReponseACompleter = `$${texNombre(nbKilos, 1)}\\text{ kg}+${texNombre(nbGrammes, 0)}\\text{ g}= \\ldots \\text{ kg}$`
   }
