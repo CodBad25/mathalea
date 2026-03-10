@@ -32,115 +32,86 @@ export default class CalculProbaSimple extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const parfums = [
-      'au citron',
-      'à la fraise',
-      'à la menthe',
-      "à l'orange",
-      'à la cerise',
-      'à la framboise',
-      'au cassis',
-    ]
-
     const situations = [
       {
         key: 'bonbons',
         start: 'Un sachet de bonbons contient',
         itemSing: 'bonbon',
         itemPlur: 'bonbons',
-        type: 'flavour',
-        labels: parfums,
+        lab1Sing: 'un bonbon au citron',
+        lab1Plur: 'bonbons au citron',
+        lab2Sing: 'un bonbon à la fraise',
+        lab2Plur: 'bonbons à la fraise',
       },
       {
         key: 'eleves',
         start: 'On choisit au hasard un élève dans un groupe composé de',
         itemSing: 'élève',
         itemPlur: 'élèves',
-        type: 'fixed',
-        lab1Sing: 'fille',
+        lab1Sing: 'une fille',
         lab1Plur: 'filles',
-        lab2Sing: 'garçon',
+        lab2Sing: 'un garçon',
         lab2Plur: 'garçons',
       },
       {
         key: 'livres',
         start: 'On choisit un livre au hasard sur un étal présentant',
-        itemSing: 'un livre',
-        itemPlur: '',
-        type: 'fixed',
-        lab1Sing: 'roman historique',
+        itemSing: 'un roman',
+        itemPlur: 'romans',
+        lab1Sing: 'un roman historique',
         lab1Plur: 'romans historiques',
-        lab2Sing: 'thriller',
-        lab2Plur: 'thrillers',
-        lab3Sing: 'romance',
-        lab3Plur: 'romances',
-        lab4Sing: "roman d'anticipation",
-        lab4Plur: "romans d'anticipation",
-        lab5Sing: 'roman de fantasy',
-        lab5Plur: 'romans de fantasy',
-        lab6Sing: 'polar',
-        lab6Plur: 'polars',
+        lab2Sing: "un roman d'anticipation",
+        lab2Plur: "romans d'anticipation",
       },
       {
         key: 'films',
         start: "On choisit un film au hasard parmi ceux à l'affiche proposant",
         itemSing: 'un film',
         itemPlur: '',
-        type: 'fixed',
-        lab1Sing: 'comédie',
+        lab1Sing: 'une comédie',
         lab1Plur: 'comédies',
-        lab2Sing: 'drame',
+        lab2Sing: 'un drame',
         lab2Plur: 'drames',
-        lab3Sing: "film d'action",
-        lab3Plur: "films d'actions",
-        lab4Sing: 'film de science-fiction',
-        lab4Plur: 'films de science-fictions',
-        lab5Sing: 'thriller',
-        lab5Plur: 'thrillers',
       },
       {
         key: 'urne',
         start: 'On tire une boule au hasard dans une urne contenant',
         itemSing: 'boule',
         itemPlur: 'boules',
-        type: 'fixed',
-        lab1Sing: 'noire',
-        lab1Plur: 'noires',
-        lab2Sing: 'blanche',
-        lab2Plur: 'blanches',
+        lab1Sing: 'une boule noire',
+        lab1Plur: 'boules noires',
+        lab2Sing: 'une boule blanche',
+        lab2Plur: 'boules blanches',
       },
       {
         key: 'cartes',
         start: 'On tire une carte au hasard dans un paquet contenant',
         itemSing: 'carte',
         itemPlur: 'cartes',
-        type: 'fixed',
-        lab1Sing: 'rouge',
-        lab1Plur: 'rouges',
-        lab2Sing: 'verte',
-        lab2Plur: 'vertes',
+        lab1Sing: 'une carte rouge',
+        lab1Plur: 'cartes rouges',
+        lab2Sing: 'une carte noire',
+        lab2Plur: 'cartes noires',
       },
       {
         key: 'tickets',
         start: 'On choisit un ticket au hasard parmi',
         itemSing: 'ticket',
         itemPlur: 'tickets',
-        type: 'fixed',
-        lab1Sing: 'gagnant',
-        lab1Plur: 'gagnants',
-        lab2Sing: 'perdant',
-        lab2Plur: 'perdants',
+        lab1Sing: 'un ticket gagnant',
+        lab1Plur: 'tickets gagnants',
+        lab2Sing: 'un ticket perdant',
+        lab2Plur: 'tickets perdants',
       },
       {
         key: 'billes',
         start: 'On prend au hasard une bille dans un sac contenant',
         itemSing: 'bille',
         itemPlur: 'billes',
-        type: 'fixed',
-        lab1Sing: 'claire',
-        lab1Plur: 'claires',
-        lab2Sing: 'foncée',
-        lab2Plur: 'foncées',
+        lab1Sing: 'une bille claire',
+        lab1Plur: 'billes claires',
+        lab2Sing: 'une bille foncée',
+        lab2Plur: 'billes foncées',
       },
     ]
 
@@ -148,68 +119,34 @@ export default class CalculProbaSimple extends ExerciceSimple {
     const a = randint(3, 10)
     const k = choice([3, 4, 9])
 
-    let label1Sing: string,
-      label2Sing: string,
-      label1Plur: string,
-      label2Plur: string
-    let displayLabel1: string, displayLabel2: string
-
-    if (situ.type === 'flavour' && Array.isArray((situ as any).labels)) {
-      // cas bonbons / livres / films : choisir deux étiquettes distinctes
-      const labels = (situ as any).labels as string[]
-      displayLabel1 = choice(labels)
-      do {
-        displayLabel2 = choice(labels)
-      } while (displayLabel2 === displayLabel1)
-      label1Sing = displayLabel1
-      label2Sing = displayLabel2
-      label1Plur = displayLabel1
-      label2Plur = displayLabel2
-    } else {
-      label1Sing = situ.lab1Sing ?? ''
-      label2Sing = situ.lab2Sing ?? ''
-      label1Plur = situ.lab1Plur ?? ''
-      label2Plur = situ.lab2Plur ?? ''
-      displayLabel1 = situ.lab1Sing ?? ''
-      displayLabel2 = situ.lab2Sing ?? ''
-    }
-
     // choisir aléatoirement si la question porte sur la première ou la seconde étiquette
     const ciblePremiere = choice([true, false])
-    const cibleLabelSing = ciblePremiere ? label1Sing : label2Sing
 
     // construction d'une phrase naturelle pour la cible (heuristique)
     const construitPhraseCible = (
       situ: any,
-      itemSing: string,
-      labelSing: string,
+      inversion: boolean,
+      a: number,
+      b: number,
     ) => {
-      if (!labelSing) return ''
-      // si l'étiquette contient déjà un article ou une préposition appropriée -> l'utiliser telle quelle
-      if (/^(un |une |au |à |aux )/i.test(labelSing)) return labelSing
-      // pour les situations "personnes" ou types (élèves, livres, films) : préférer "un/une + label"
-      if (
-        ['eleves', 'livres', 'films', 'cartes', 'tickets'].includes(situ.key)
-      ) {
-        // heuristique simple pour l'article : mot finissant par 'e' ou commençant par voyelle => 'une' sinon 'un'
-        const article =
-          /^[aeiouàéèùyâêîôûh]/i.test(labelSing) || /e$/i.test(labelSing)
-            ? 'une'
-            : 'un'
-        return `${article} ${labelSing}`
+      let lab1Sing: string
+      let lab1Plur: string
+      let lab2Plur: string
+
+      if (!inversion) {
+        lab1Sing = situ.lab1Sing
+        lab1Plur = situ.lab1Plur
+        lab2Plur = situ.lab2Plur
+      } else {
+        lab1Sing = situ.lab2Sing
+        lab1Plur = situ.lab2Plur
+        lab2Plur = situ.lab1Plur
       }
-      // sinon : utiliser "un/une itemSing label" (utile pour 'bille claire', 'bonbon au citron' ...)
-      const articleItem = /e$/.test(itemSing) ? 'une' : 'un'
-      return `${articleItem} ${itemSing} ${labelSing}`
+      let phrase = `${situ.start} $${a}$ ${lab1Plur} et $${b}$ ${lab2Plur}.<br>`
+      phrase += `Quelle est la probabilité de choisir ${lab1Sing} ?`
+      return phrase
     }
-
-    const ciblePhrase = construitPhraseCible(
-      situ,
-      situ.itemSing,
-      cibleLabelSing,
-    )
-
-    // déterminer la bonne réponse selon que la cible soit la 1ère ou la 2ème étiquette
+    const inversion = choice([true, false])
     const numCorrect = ciblePremiere ? a : k * a
     const denomTotal = a + k * a
     const correctTexSimpl = fraction(
@@ -218,14 +155,19 @@ export default class CalculProbaSimple extends ExerciceSimple {
     ).texFractionSimplifiee
     this.reponse = `$${fraction(numCorrect, denomTotal).texFraction}$`
 
-    // Construction de l'énoncé en utilisant les formes plurielles pour les quantités
-    this.question = `${situ.start} $${a}$ ${situ.itemPlur} ${label1Plur} et $${k * a}$ ${situ.itemPlur} ${label2Plur}.<br>
-     On choisit ${situ.itemSing} au hasard. <br>
-Quelle est la probabilité de choisir ${ciblePhrase} ?`
+    // déterminer la bonne réponse selon que la cible soit la 1ère ou la 2ème étiquette
 
+    // Construction de l'énoncé en utilisant les formes plurielles pour les quantités
+    this.question = construitPhraseCible(
+      situ,
+      inversion,
+      numCorrect,
+      denomTotal - numCorrect,
+    )
+    const labelCible = inversion ? situ.lab2Sing : situ.lab1Sing
     this.correction = this.versionQcm
-      ? `Il y a en tout : $${a} + ${k * a} = ${denomTotal}$ ${situ.itemPlur}.<br>La probabilité de choisir ${ciblePhrase} est de $${miseEnEvidence(`\\dfrac{${numCorrect}}{${denomTotal}}`)}$.`
-      : `Il y a en tout : $${a} + ${k * a} = ${denomTotal}$ ${situ.itemPlur}.<br>La probabilité de choisir ${ciblePhrase} est de $${miseEnEvidence(`\\dfrac{${numCorrect}}{${denomTotal}}`)}$ ou $${miseEnEvidence(correctTexSimpl)}$.`
+      ? `Il y a en tout : $${a} + ${k * a} = ${denomTotal}$ ${situ.itemPlur}.<br>La probabilité de choisir ${labelCible} est de $${miseEnEvidence(`\\dfrac{${numCorrect}}{${denomTotal}}`)}$.`
+      : `Il y a en tout : $${a} + ${k * a} = ${denomTotal}$ ${situ.itemPlur}.<br>La probabilité de choisir ${labelCible} est de $${miseEnEvidence(`\\dfrac{${numCorrect}}{${denomTotal}}`)}$ ou $${miseEnEvidence(correctTexSimpl)}$.`
 
     // Version QCM : distracteurs plausibles
     if (this.versionQcm) {
@@ -242,16 +184,7 @@ Quelle est la probabilité de choisir ${ciblePhrase} ?`
       // oublier le facteur k (si cible = 2ème étiquette on peut confondre num / a)
       const otherNum = ciblePremiere ? k * a : a
       candidates.push(fraction(otherNum, denomTotal).texFraction) // confondre les deux catégories
-      // erreurs arithmétiques courantes
-      /*  if (numCorrect > 1)
-        candidates.push(
-          fraction(numCorrect - 1, denomTotal).texFractionSimplifiee,
-        )
-      candidates.push(
-        fraction(numCorrect + 1, denomTotal).texFractionSimplifiee,
-      )
-*/
-      // filtrer, dédupliquer et retirer la bonne réponse, puis choisir 3 distracteurs
+
       const uniq = Array.from(
         new Set(candidates.filter((s) => s && s !== correctTex)),
       )
