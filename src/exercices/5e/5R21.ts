@@ -169,19 +169,14 @@ export default class ExerciceSoustractionsRelatifs extends Exercice {
         this.listeCorrections[i] = texteCorr
 
         if (context.isAmc) {
-          setReponse(
-            this,
-            i,
-            [arrondi(a - b), `(${ecritureAlgebrique(a - b)})`],
-            {
-              signe: true,
-              digits: Math.max(
-                2,
-                nombreDeChiffresDansLaPartieEntiere(arrondi(a - b)),
-              ),
-              decimals: 0,
-            },
-          )
+          setReponse(this, i, [arrondi(a - b)], {
+            signe: true,
+            digits: Math.max(
+              2,
+              nombreDeChiffresDansLaPartieEntiere(arrondi(a - b)),
+            ),
+            decimals: 0,
+          })
         } else
           handleAnswers(this, i, {
             reponse: {
