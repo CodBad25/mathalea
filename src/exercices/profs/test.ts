@@ -20,98 +20,98 @@ export const uuid = 'testEEE'
 const ce = new ComputeEngine({ tolerance: 1e-21 })
 // handleExpressionsForcementReduites('\\dfrac23 x', '\\dfrac23 x')
 
-console.log('+++++++++++++++++++')
-console.log(expand('3x+12').latex)
-console.log(expand('3.1x+12').latex)
-console.log(ce.parse('3.1x+12', { form: 'raw' }).latex)
+console.info('+++++++++++++++++++')
+console.info(expand('3x+12').latex)
+console.info(expand('3.1x+12').latex)
+console.info(ce.parse('3.1x+12', { form: 'raw' }).latex)
 // true but should be false.
 
-/* console.log('3-1', ce.parse('3-1', { form: 'raw' }).toJSON())
-console.log('3+-1', ce.parse('3+-1', { form: 'raw' }).toJSON())
-console.log(
+/* console.info('3-1', ce.parse('3-1', { form: 'raw' }).toJSON())
+console.info('3+-1', ce.parse('3+-1', { form: 'raw' }).toJSON())
+console.info(
   '(+3)-(+1)',
   ce.parse('(+3)-(+1)', { form: ['Flatten'] }).toJSON(),
 )
-console.log('Comparaison avec 2x+1')
-console.log(
+console.info('Comparaison avec 2x+1')
+console.info(
   ce.parse('1+2x', { form: 'raw' }).toJSON(),
   ce.parse('1+2x', { form: 'raw' }).latex,
 )
-console.log(
+console.info(
   'isSame avec raw : 1+2x',
   engine
     .parse('1+2x', { form: 'raw' })
     .isSame(ce.parse('2x+1', { form: 'raw' })),
 )
-console.log(
+console.info(
   'isEqual avec raw : 1+2x',
   engine
     .parse('1+2x', { form: 'raw' })
     .isEqual(ce.parse('2x+1', { form: 'raw' })),
 )
-console.log(
+console.info(
   ce.parse('1+2x', { form: 'canonical' }).toJSON(),
   ce.parse('1+2x', { form: 'canonical' }).latex,
 )
-console.log(
+console.info(
   'isSame avec canonical : 1+2x',
   engine
     .parse('1+2x', { form: 'canonical' })
     .isSame(ce.parse('2x+1', { form: 'canonical' })),
 )
-console.log(
+console.info(
   'isEqual avec canonical : 1+2x',
   engine
     .parse('1+2x', { form: 'canonical' })
     .isEqual(ce.parse('2x+1', { form: 'canonical' })),
 )
-console.log('Comparaison avec 2x+1')
-console.log(
+console.info('Comparaison avec 2x+1')
+console.info(
   ce.parse('1+x+x', { form: 'raw' }).toJSON(),
   ce.parse('1+x+x', { form: 'raw' }).latex,
 )
-console.log(
+console.info(
   'isSame avec raw : 1+x+x',
   engine
     .parse('1+x+x', { form: 'raw' })
     .isSame(ce.parse('2x+1', { form: 'raw' })),
 )
-console.log(
+console.info(
   'isEqual avec raw : 1+x+x',
   engine
     .parse('1+x+x', { form: 'raw' })
     .isEqual(ce.parse('2x+1', { form: 'raw' })),
 )
-console.log(
+console.info(
   ce.parse('1+x+x', { form: 'canonical' }).toJSON(),
   ce.parse('1+x+x', { form: 'canonical' }).latex,
 )
-console.log(
+console.info(
   'isSame avec canonical : 1+x+x',
   engine
     .parse('1+x+x', { form: 'canonical' })
     .isSame(ce.parse('2x+1', { form: 'canonical' })),
 )
-console.log(
+console.info(
   'isEqual avec canonical : 1+x+x',
   engine
     .parse('1+x+x', { form: 'canonical' })
     .isEqual(ce.parse('2x+1', { form: 'canonical' })),
 )
-console.log(ce.parse('1+x+x').isSame(ce.parse('2x+1')))
-console.log(
+console.info(ce.parse('1+x+x').isSame(ce.parse('2x+1')))
+console.info(
   customCanonical(ce.parse('1+x+x', { form: 'raw' }), {
     expressionsForcementReduites: true,
     fractionIrreductible: false,
     nombreDecimalSeulement: false,
   }).isEqual(ce.parse('2x+1')),
 ) */
-/* console.log(
+/* console.info(
   engine
     .parse('1000')
     .toLatex({ notation: 'scientific', avoidExponentsInRange: [0, 0] }),
 )
-console.log(
+console.info(
   engine
     .parse('2000')
     .toLatex({ notation: 'scientific', avoidExponentsInRange: [0, 0] }),

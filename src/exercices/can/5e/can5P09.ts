@@ -1,7 +1,9 @@
 import { texPrix } from '../../../lib/format/style'
 import { choice } from '../../../lib/outils/arrayOutils'
-import { miseEnEvidence, texteEnCouleur } from '../../../lib/outils/embellissements'
-import { texPrix } from '../../../lib/format/style'
+import {
+  miseEnEvidence,
+  texteEnCouleur,
+} from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
@@ -30,7 +32,7 @@ export default class CalculPrix extends ExerciceSimple {
     this.typeExercice = 'simple'
     this.nbQuestions = 1
 
-     this.optionsChampTexte = { texteApres: '€' , texteAvant:'<br>'}
+    this.optionsChampTexte = { texteApres: '€', texteAvant: '<br>' }
   }
 
   nouvelleVersion() {
@@ -56,7 +58,7 @@ export default class CalculPrix extends ExerciceSimple {
         this.question = `Le prix d'un kg ${n} est $${texPrix(a)}$ €. <br>
 
         Quel est le prix de $${b}$ g ? `
-       
+
         this.correction = `Comme $${b}$ g $=${texNombre(b1, 1)}$ kg, le  prix  de $${b}$ g ${n} est donné par : <br>
         $${texNombre(b1, 1)}\\times ${texPrix(a)}=${texNombre(b2, 2)}$.<br>
         Le prix de $${b}$ g ${n} est $${miseEnEvidence(texPrix(b2))}$ €.`
@@ -66,13 +68,13 @@ export default class CalculPrix extends ExerciceSimple {
   <br> Mentalement : <br>
   Multiplier par $0,5$ revient à diviser par $2$. <br>
   Ainsi, $${texNombre(b1, 1)}\\times ${texPrix(a)}=${texPrix(a)}\\div 2=${texPrix(reponse)}$.
-  
+
 `)
           } else {
             this.correction += texteEnCouleur(`
   <br> Mentalement : <br>
   $${texNombre(b1, 1)}\\times ${texPrix(a)}=${texNombre(b1 * 10, 1)}\\times 0,1\\times ${texNombre(a, 1)}=${texNombre(b1 * 10, 1)}\\times ${texNombre(a / 10, 1)}=${texPrix(reponse)}$.
-  
+
 `)
           }
         } else {
@@ -92,7 +94,7 @@ export default class CalculPrix extends ExerciceSimple {
         this.question = `Le prix d'un kg ${n} est $${texPrix(a)}$ €. <br>
 
         Quel est le prix de $${b}$ g ? `
-      
+
         this.correction = `Comme $${b}$ g $=${texNombre(b1, 1)}$ kg, le  prix  de $${b}$ g ${n} est donné par : <br>
         $${texNombre(b1, 1)}\\times ${texPrix(a)}=${texNombre(b2, 2)}$.<br>
         Le prix de $${b}$ g ${n} est $${miseEnEvidence(texPrix(b2))}$ €.`
@@ -102,13 +104,13 @@ export default class CalculPrix extends ExerciceSimple {
   <br> Mentalement : <br>
   Multiplier par $0,5$ revient à diviser par $2$. <br>
   Ainsi, $${texNombre(b1, 1)}\\times ${texPrix(a)}=${texPrix(a)}\\div 2=${texPrix(reponse)}$.
-  
+
 `)
           } else {
             this.correction += texteEnCouleur(`
   <br> Mentalement : <br>
   $${texNombre(b1, 1)}\\times ${texPrix(a)}=${texNombre(b1 * 10, 1)}\\times 0,1\\times ${texNombre(a, 1)}=${texNombre(b1 * 10, 1)}\\times ${texNombre(a / 10, 1)}=${texPrix(reponse)}$.
-  
+
 `)
           }
         } else {
@@ -137,9 +139,9 @@ export default class CalculPrix extends ExerciceSimple {
         b2 = b1 * a
         reponse = b2
         this.question = `Le prix d'un kg de café ${n} est $${texPrix(a)}$ €. <br>
-        
+
           Quel est le prix de $${b}$ g ? `
-      
+
         this.correction = `Comme $${b}$ g $=${texNombre(b1, 1)}$ kg, le  prix  de $${b}$ g de café ${n} est donné par : <br>
           $${texNombre(b1, 1)}\\times ${texPrix(a)}=${texNombre(b2, 2)}$.<br>
           Le prix de $${b}$ g de café ${n} est $${miseEnEvidence(texPrix(b2))}$ €.`
@@ -149,13 +151,13 @@ export default class CalculPrix extends ExerciceSimple {
     <br> Mentalement : <br>
     Multiplier par $0,5$ revient à diviser par $2$. <br>
     Ainsi, $${texNombre(b1, 1)}\\times ${texPrix(a)}=${texPrix(a)}\\div 2=${texPrix(reponse)}$.
-    
+
   `)
           } else {
             this.correction += texteEnCouleur(`
     <br> Mentalement : <br>
     $${texNombre(b1, 1)}\\times ${texPrix(a)}=${texNombre(b1 * 10, 1)}\\times 0,1\\times ${texNombre(a, 1)}=${texNombre(b1 * 10, 1)}\\times ${texNombre(a / 10, 1)}=${texPrix(reponse)}$.
-    
+
   `)
           }
         } else {
