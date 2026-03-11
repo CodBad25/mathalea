@@ -1,3 +1,4 @@
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choice } from '../../../lib/outils/arrayOutils'
 import {
   ecritureAlgebrique,
@@ -26,7 +27,8 @@ export const refs = {
 export default class ResoudreEquationAvecQuotient extends ExerciceSimple {
   constructor() {
     super()
-
+ this.optionsChampTexte = { texteAvant: '<br>' }
+ this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
     this.typeExercice = 'simple'
     this.nbQuestions = 1
   }
@@ -62,6 +64,7 @@ export default class ResoudreEquationAvecQuotient extends ExerciceSimple {
         this.reponse = b * c - a
         break
     }
+    
     this.canEnonce = this.question // 'Compléter'
     this.canReponseACompleter = ''
   }
