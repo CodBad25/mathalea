@@ -4,7 +4,7 @@ import {
 } from '../../modules/outils'
 import Shikaku from '../6e/_Shikaku'
 import Exercice from '../Exercice'
-export const titre = 'Générateur de Shikaku'
+export const titre = 'Générer un Shikaku'
 
 export const refs = {
   'fr-fr': ['P019'],

@@ -12,7 +12,7 @@ export const refs = {
   'fr-ch': [],
 }
 export const interactifReady = false
-export const titre = 'Métropole Juin 2025 - Exercice 3'
+export const titre = "Résoudre l'exercice 3 du brevet Métropole Juin 2025"
 export const dateDePublication = '27/08/2025'
 /**
  * @author Jean-Claude Lhote

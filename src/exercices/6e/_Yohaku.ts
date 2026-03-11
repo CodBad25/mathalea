@@ -10,7 +10,7 @@ import {
 } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-export const titre = 'Générateur de Yohaku'
+export const titre = 'Générer un Yohaku'
 export const interactifReady = true
 export const interactifType = 'custom'
 export const amcReady = true

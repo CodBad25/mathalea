@@ -10,7 +10,7 @@ import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-export const titre = 'Situation de proportionnalité avec des échelles'
+export const titre = 'Étudier une situation de proportionnalité avec des échelles'
 export const dateDePublication = '15/03/2024'
 export const interactifReady = true
 export const interactifType = 'mathLive'

@@ -1,7 +1,7 @@
 import ExternalApp from './_ExternalApp'
 
 export const uuid = 'duduLabydiv'
-export const titre = 'Labydiv'
+export const titre = 'Résoudre un labyrinthe de multiples'
 
 class duduLabydiv extends ExternalApp {
   constructor() {

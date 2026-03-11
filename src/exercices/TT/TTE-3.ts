@@ -12,7 +12,7 @@ import {
 } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-export const titre = "Résolution d'inéquations du type $a^x \\leq b$ avec log"
+export const titre = 'Résoudre des inéquations du type $a^x \leq b$ avec logarithme'
 export const dateDePublication = '4/5/2024'
 export const dateDeModifImportante = '18/07/2024'
 export const uuid = '00a7a'

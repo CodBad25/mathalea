@@ -14,7 +14,7 @@ import {
 } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-export const titre = 'Calculs complexes utilisant les priorités opératoires'
+export const titre = 'Effectuer des calculs complexes utilisant les priorités opératoires'
 export const dateDePublication = '23/04/2025'
 export const interactifReady = true
 export const interactifType = 'mathLive'

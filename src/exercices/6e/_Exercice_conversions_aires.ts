@@ -15,7 +15,7 @@ export const amcReady = true
 export const amcType = 'qcmMono'
 export const interactifReady = true
 export const interactifType = ['qcm', 'mathLive']
-export const titre = "Conversions d'aires"
+export const titre = "Effectuer des conversions d'aires"
 
 /**
  * Conversions d'aires en utilisant le préfixe pour déterminer la multiplication ou division à faire.

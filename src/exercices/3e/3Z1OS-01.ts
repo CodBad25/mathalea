@@ -23,7 +23,7 @@ export const refs = {
   'fr-fr': ['3Z1OS-01'],
   'fr-ch': ['1mF3-13'],
 }
-export const titre = 'Objectif seconde : Fonction, équation, calcul littéral'
+export const titre = 'Se préparer à la seconde : fonction, équation, calcul littéral'
 export const dateDePublication = '06/04/2025'
 
 /**

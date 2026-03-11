@@ -12,7 +12,7 @@ import { listeQuestionsToContenu } from '../../modules/outils'
 import Trinome from '../../modules/Trinome'
 import Exercice from '../Exercice'
 
-export const titre = "Étude d'une suite $u_{n+1}=f(u_n)$ par récurrence"
+export const titre = 'Étudier une suite $u_{n+1}=f(u_n)$ par récurrence'
 export const dateDePublication = '25/10/2024'
 
 /**

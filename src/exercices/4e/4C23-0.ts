@@ -13,7 +13,7 @@ import {
 } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-export const titre = 'Calculs simples avec un nombre entier et une fraction'
+export const titre = 'Effectuer des calculs simples avec un nombre entier et une fraction'
 export const interactifType = 'mathLive'
 export const interactifReady = true
 export const dateDePublication = '11/02/2026'

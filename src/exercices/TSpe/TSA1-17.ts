@@ -1,5 +1,5 @@
 import N2PlusRacineDeN from '../can/TSpe/canTSpeS07'
-export const titre = 'Limite de $n^m-n^p$'
+export const titre = 'Calculer la limite de $n^m-n^p$'
 export const dateDePublication = '04/08/2025'
 export const amcReady = true
 export const amcType = 'AMCNum'

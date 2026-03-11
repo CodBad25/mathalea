@@ -28,7 +28,7 @@ export const refs = {
   'fr-fr': ['3I1DNB-0', '3Z1DNB-16'],
   'fr-ch': [],
 }
-export const titre = 'Scratch'
+export const titre = 'Se préparer au DNB : Scratch'
 export const dateDePublication = '7/12/2024'
 
 /**

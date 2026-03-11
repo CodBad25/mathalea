@@ -5,7 +5,7 @@ import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
 import { miseEnEvidence } from '../../lib/outils/embellissements'
-export const titre = 'Union et Intersection de proportions'
+export const titre = "Calculer l'union et l'intersection  de proportions"
 
 // Les exports suivants sont optionnels mais au moins la date de publication semble essentielle
 export const dateDePublication = '26/06/2022' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag

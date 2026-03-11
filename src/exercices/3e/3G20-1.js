@@ -15,7 +15,7 @@ import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-export const titre = 'Problèmes avec le théorème de Thalès'
+export const titre = 'Résoudre des problèmes avec le théorème  de Thalès'
 
 /**
  * Banque de problèmes utilisant le théorème de Thalès et différentes propriétés de géométrie

@@ -5,10 +5,10 @@ import { context } from '../modules/context'
 import { listeQuestionsToContenu } from '../modules/outils'
 import Exercice from './Exercice'
 
-export const titre = 'A trouver'
-export const dateDePublication = '01/01/2000'
-export const interactifReady = true
-export const interactifType = 'qcm'
+// export const titre = 'A trouver'
+// export const dateDePublication = '01/01/2000'
+// export const interactifReady = true
+// export const interactifType = 'qcm'
 
 /**
  * @author Rémi Angot

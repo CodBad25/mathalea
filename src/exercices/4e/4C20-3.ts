@@ -1,6 +1,6 @@
 import EqResolvantesThales from '../3e/3L13-2'
 
-export const titre = 'Fractions égales et égalité des produits en croix 4e'
+export const titre = 'Résoudre des équations avec produits en croix'
 export const amcReady = true
 export const amcType = 'qcmMono'
 export const interactifType = 'qcm'

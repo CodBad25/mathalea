@@ -6,7 +6,7 @@ import { arrondi } from '../../lib/outils/nombres'
 import { texNombre } from '../../lib/outils/texNombre'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-export const titre = "Proportion d'une sous-population"
+export const titre = "Calculer la proportion d'une sous-population"
 
 export const interactifReady = true
 export const interactifType = 'mathLive'

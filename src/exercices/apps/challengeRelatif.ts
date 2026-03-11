@@ -1,7 +1,7 @@
 import ExternalApp from './_ExternalApp'
 
 export const uuid = 'challengeRelatif'
-export const titre = 'Challenge relatifs'
+export const titre = 'Relever le challenge des nombres relatifs'
 
 class challengeRelatif extends ExternalApp {
   constructor() {

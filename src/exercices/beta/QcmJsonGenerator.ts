@@ -76,7 +76,7 @@ const qcmData: QcmJsonData = {
     },
   ],
 }
-export const titre = "Générateur d'exercices QCM à partir de JSON"
+export const titre = 'Générer des exercices de type QCM à partir de JSON'
 export const dateDePublication = '3/7/2025'
 export const refs = {
   'fr-fr': [],

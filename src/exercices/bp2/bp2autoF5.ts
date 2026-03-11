@@ -1,6 +1,6 @@
 import NotationScientifiqueQCM from '../QCMBrevet/A2020/NCD20E1Q2'
 
-export const titre = 'notation scientifique (QCM)'
+export const titre = 'Identifier une notation scientifique (QCM)'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 

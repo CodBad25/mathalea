@@ -3,7 +3,7 @@ import Exercice from '../Exercice'
 import { context } from '../../modules/context'
 import { Polynome } from '../../lib/mathFonctions/Polynome'
 export const dateDePublication = '30/10/2021'
-export const titre = 'Division de polynômes'
+export const titre = 'Effectuer la division de polynômes'
 
 /**
  *

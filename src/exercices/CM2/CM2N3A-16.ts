@@ -6,7 +6,7 @@ import { texNombre } from '../../lib/outils/texNombre'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-export const titre = 'Somme de deux nombres mariés'
+export const titre = 'Effectuer la somme de deux nombres mariés'
 export const amcReady = true
 export const interactifReady = true
 export const interactifType = 'mathLive'

@@ -15,7 +15,7 @@ export const interactifReady = true
 export const interactifType = 'mathLive'
 export const amcReady = true
 export const amcType = 'AMCNum'
-export const titre = 'Tables de multiplication'
+export const titre = 'Mémoriser les tables de multiplication'
 export const dateDeModifImportante = '27/08/2024'
 /**
  * Tables de multiplication classiques, à trou ou un mélange des deux.

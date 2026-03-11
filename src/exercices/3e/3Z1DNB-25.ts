@@ -16,7 +16,7 @@ export const refs = {
   'fr-fr': ['3Z1DNB-25'],
   'fr-ch': [],
 }
-export const titre = 'Préparation DNB : graphique, vitesse et proportionnalité'
+export const titre = 'Se préparer au DNB  : graphique, vitesse et proportionnalité'
 export const dateDePublication = '20/01/2026'
 
 /**

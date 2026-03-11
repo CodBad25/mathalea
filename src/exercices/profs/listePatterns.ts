@@ -38,7 +38,7 @@ import { randint } from '../../modules/outils'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
 
-export const titre = "Liste des patterns disponibles pour l'exercice 6N4B"
+export const titre = "Consulter la liste des patterns disponibles pour l'exercice 6N4B"
 export const dateDePublication = '26/11/2025'
 
 export const refs = {

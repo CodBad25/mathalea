@@ -1,7 +1,7 @@
 import ExternalApp from './_ExternalApp'
 
 export const uuid = 'duduParallelogramme'
-export const titre = 'Parallélogrammes'
+export const titre = 'Étudier les propriétés des parallélogrammes'
 
 class duduParallelogramme extends ExternalApp {
   constructor() {

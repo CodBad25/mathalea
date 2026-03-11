@@ -7,7 +7,7 @@ import { mathalea2d } from '../../modules/mathalea2d'
 import { randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-export const titre = 'Droites graduées avec zoom'
+export const titre = 'Construire des droites graduées avec zoom'
 
 export const refs = {
   'fr-fr': ['P004'],

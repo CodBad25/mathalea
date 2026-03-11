@@ -7,7 +7,7 @@ import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-export const titre = 'Opérations à trous'
+export const titre = 'Compléter des opérations à trous'
 
 export const dateDePublication = '2/11/2024'
 export const uuid = 'b3704'

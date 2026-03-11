@@ -8,7 +8,7 @@ import { texNombre } from '../../lib/outils/texNombre'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-export const titre = 'Propriétés des logarithmes'
+export const titre = 'Utiliser les propriétés des logarithmes'
 export const dateDePublication = '12/02/2026'
 export const interactifReady = true
 export const interactifType = 'mathLive'

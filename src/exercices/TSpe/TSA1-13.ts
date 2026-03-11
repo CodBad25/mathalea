@@ -1,5 +1,5 @@
 import N2PlusRacineDeN from '../can/TSpe/canTSpeS03'
-export const titre = "Limite de $e^{-n}\\pm kn$"
+export const titre = 'Calculer la limite de $e^{-n}\pm kn$'
 export const dateDePublication = '04/08/2025'
 export const amcReady = true
 export const amcType = 'AMCNum'

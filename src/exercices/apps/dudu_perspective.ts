@@ -1,7 +1,7 @@
 import ExternalApp from './_ExternalApp'
 
 export const uuid = 'duduPerspective'
-export const titre = 'Perspective'
+export const titre = 'Représenter des solides en perspective'
 
 class duduPerspective extends ExternalApp {
   constructor() {

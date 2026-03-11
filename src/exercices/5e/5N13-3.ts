@@ -1,6 +1,6 @@
 import { randint } from "../../modules/outils"
 import ExerciceLabyrinthe from "../_Exercice_labyrinthe"
-export const titre = 'Labyrinthe des fractions égales'
+export const titre = 'Parcourir un labyrinthe de fractions égales'
 
 export const dateDePublication = '30/10/2026'
 export const interactifReady = true

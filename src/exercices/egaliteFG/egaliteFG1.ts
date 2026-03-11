@@ -1,7 +1,7 @@
 import Exercice from '../Exercice'
 import { listeQuestionsToContenu } from '../../modules/outils'
 import { texteItalique } from '../../lib/outils/embellissements'
-export const titre = 'Égalité F/G 1'
+export const titre = "Réfléchir sur l'égalité filles-garçons"
 
 export const dateDePublication = '28/08/2025' 
 

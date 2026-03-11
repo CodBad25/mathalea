@@ -41,7 +41,7 @@ export const interactifReady = true
 export const interactifType = 'listeDeroulante'
 export const dateDeModifImportante = '14/05/2023'
 export const dateDePublication = '11/04/2021'
-export const titre = 'Note la couleur (scratch)'
+export const titre = 'Noter la couleur avec Scratch'
 
 /**
  * Note_la_couleur() Exercice inspiré de l'activité débranchée de Jean-Yves Labouche Note La Couleur

@@ -35,7 +35,7 @@ import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-export const titre = 'Tranformations de triangle'
+export const titre = 'Effectuer des transformations de triangles'
 /**
  * @author Liouba Leroux & Jean-Claude Lhote
  */

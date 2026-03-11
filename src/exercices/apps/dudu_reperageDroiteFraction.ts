@@ -1,7 +1,7 @@
 import ExternalApp from './_ExternalApp'
 
 export const uuid = 'duduReperageDroiteFraction'
-export const titre = 'Abscisses fractionnaires'
+export const titre = 'Utiliser les abscisses fractionnaires'
 
 class duduReperageDroiteFraction extends ExternalApp {
   constructor() {

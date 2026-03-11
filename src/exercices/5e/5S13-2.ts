@@ -19,7 +19,7 @@ import Exercice from '../Exercice'
 import { tableauColonneLigne } from '../../lib/2d/tableau'
 import { setReponse } from '../../lib/interactif/gestionInteractif'
 
-export const titre = 'Calculs de fréquences'
+export const titre = 'Calculer des fréquences statistiques'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const amcReady = true

@@ -22,7 +22,7 @@ export const refs = {
   'fr-fr': ['3Z1DNB-21'],
   'fr-ch': [],
 }
-export const titre = "Préparation DNB : Aires, prise d'initiative, volumes"
+export const titre = "Se préparer au DNB  : aires, prise d'initiative, volumes"
 export const dateDePublication = '15/04/2025'
 
 /**

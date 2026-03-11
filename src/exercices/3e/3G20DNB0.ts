@@ -24,7 +24,7 @@ export const refs = {
   'fr-fr': ['3G20DNB0', '3Z1DNB-02'],
   'fr-ch': ['1mG4-1'],
 }
-export const titre = 'Préparation DNB : Thales, Pythagore, aire'
+export const titre = 'Se préparer au DNB  : Thalès, Pythagore, aire'
 export const dateDePublication = '26/11/2024'
 
 /**

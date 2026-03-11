@@ -15,7 +15,7 @@ import Exercice from '../Exercice'
 
 export const interactifReady = false
 // export const interactifType = 'mathLive'
-export const titre = 'Équation du second degré (via forme canonique)'
+export const titre = 'Résoudre une équation du second degré (via sa forme canonique)'
 
 /**
  * Déterminer les solutions d'une équation du second degré

@@ -3,7 +3,7 @@ export const amcReady = true
 export const amcType = 'qcmMono'
 export const interactifReady = true
 export const interactifType = 'mathLive'
-export const titre = 'Égalités entre fractions simples'
+export const titre = 'Compléter des égalités entre fractions simples'
 export const uuid = '4718e'
 export const refs = {
   'fr-fr': ['5N13-2'],

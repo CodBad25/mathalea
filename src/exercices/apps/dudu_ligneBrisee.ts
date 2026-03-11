@@ -1,7 +1,7 @@
 import ExternalApp from './_ExternalApp'
 
 export const uuid = 'duduLigneBrisee'
-export const titre = 'Ligne brisée'
+export const titre = 'Étudier une ligne brisée'
 
 class duduLigneBrisee extends ExternalApp {
   constructor() {

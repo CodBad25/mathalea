@@ -5,7 +5,7 @@ import { context } from '../../modules/context'
 import operation from '../../modules/operations'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-export const titre = "Additions et soustractions dans d'autres bases"
+export const titre = "Effectuer des additions et soustractions dans d'autres bases"
 export const dateDePublication = '31/10/2021'
 
 /**

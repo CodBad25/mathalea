@@ -9,7 +9,7 @@ import { texNombre } from '../../lib/outils/texNombre'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-export const titre = 'Variations en pourcentage'
+export const titre = 'Étudier des variations en pourcentage'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 

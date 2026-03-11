@@ -14,7 +14,7 @@ import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 
-export const titre = 'Limites de suites (synthèse opérations avec les limites)'
+export const titre = 'Calculer des limites de suites (synthèse opérations avec les limites)'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const uuid = 'ff9d1'

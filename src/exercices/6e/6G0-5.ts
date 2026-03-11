@@ -14,7 +14,7 @@ import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-export const titre = "Appartient ou n'appartient pas ?"
+export const titre = 'Appartenir ou ne pas apparteni'
 export const dateDePublication = '05/10/2022'
 export const dateDeModifImportante = '4/10/2023'
 // Ajout de l'interactivité et suppression de (AB] par Rémi Angot

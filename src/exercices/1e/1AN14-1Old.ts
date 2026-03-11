@@ -13,7 +13,7 @@ import { texNombre } from '../../lib/outils/texNombre'
 import { obtenirListeFractionsIrreductibles } from '../../modules/fractions'
 import { gestionnaireFormulaireTexte, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-export const titre = 'Dérivée de $\\lambda u$'
+export const titre = 'Calculer la dérivée de $\lambda u$'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const uuid = 'ebd89'

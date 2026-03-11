@@ -18,7 +18,7 @@ export const refs = {
   'fr-2016': ['c3C32-06'],
   'fr-ch': [],
 }
-export const titre = 'Problèmes de billes'
+export const titre = 'Résoudre des problèmes de billes'
 export const dateDePublication = '30/11/2024'
 export const interactifType = 'mathLive'
 export const interactifReady = true

@@ -8,7 +8,7 @@ import operation from '../../modules/operations'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-export const titre = "Multiplications dans d'autres bases"
+export const titre = "Effectuer des multiplications dans d'autres bases"
 export const dateDePublication = '2/11/2021'
 
 /**

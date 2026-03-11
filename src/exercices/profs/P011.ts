@@ -10,7 +10,7 @@ import { contraindreValeur } from '../../modules/outils'
 import { Triangle } from '../../modules/Triangle'
 import Exercice from '../Exercice'
 
-export const titre = "Construction animée d'un triangle"
+export const titre = "Construire l'animation d'un triangle"
 
 export const refs = {
   'fr-fr': ['P011'],

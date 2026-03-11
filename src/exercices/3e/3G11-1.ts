@@ -6,7 +6,7 @@ import FractionEtendue from '../../modules/FractionEtendue'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-export const titre = 'Homothétie - Rapport'
+export const titre = "Lier le rapport d'une homothétie à un agrandissement ou réduction"
 
 export const dateDePublication = '27/11/2022'
 

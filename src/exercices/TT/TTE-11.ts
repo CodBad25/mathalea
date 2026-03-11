@@ -19,7 +19,7 @@ import {
   randint,
 } from '../../modules/outils'
 
-export const titre = "Domaine de définition d'une fonction logarithme"
+export const titre = "Déterminer le domaine de définition d'une fonction logarithme"
 export const dateDePublication = '22/7/2024'
 export const uuid = '450e7'
 export const interactifReady = true

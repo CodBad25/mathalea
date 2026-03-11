@@ -1,7 +1,7 @@
 import ExternalApp from './_ExternalApp'
 
 export const uuid = 'duduLineaire'
-export const titre = 'Fonctions linéaires'
+export const titre = 'Étudier les fonctions linéaires'
 
 class duduLineaire extends ExternalApp {
   constructor() {

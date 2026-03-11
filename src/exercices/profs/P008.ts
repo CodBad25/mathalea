@@ -2,7 +2,7 @@ import { orangeMathalea } from 'apigeom/src/elements/defaultValues'
 import { context } from '../../modules/context'
 import operation from '../../modules/operations'
 import Exercice from '../Exercice'
-export const titre = 'Opérations posées'
+export const titre = 'Poser des opérations'
 
 export const refs = {
   'fr-fr': ['P008'],

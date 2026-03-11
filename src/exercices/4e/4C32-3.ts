@@ -13,7 +13,7 @@ import {
 } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-export const titre = 'Problèmes avec des puissances de 10 et des conversions'
+export const titre = 'Résoudre des problèmes avec des puissances de 10 et des conversions'
 export const dateDePublication = '05/02/2021'
 export const dateDeModifImportante = '20/09/2025'
 export const interactifReady = true

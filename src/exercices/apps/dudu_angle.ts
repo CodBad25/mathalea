@@ -1,7 +1,7 @@
 import ExternalApp from './_ExternalApp'
 
 export const uuid = 'duduAngleAI'
-export const titre = 'Angles correspondants et alternes-internes'
+export const titre = 'Identifier des angles correspondants  et alternes-internes'
 
 class duduAngleAI extends ExternalApp {
   constructor() {

@@ -5,7 +5,7 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
-export const titre = 'Simulateur de Dés'
+export const titre = 'Simuler des lancers de dés'
 
 export const refs = {
   'fr-fr': ['P016'],

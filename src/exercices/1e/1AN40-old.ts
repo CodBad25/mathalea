@@ -12,7 +12,7 @@ import {
 } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-export const titre = 'Valeurs remarquables du cosinus et sinus'
+export const titre = 'Utiliser les valeurs remarquables  du cosinus et sinus'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 // Les exports suivants sont optionnels mais au moins la date de publication semble essentielle

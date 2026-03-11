@@ -46,7 +46,7 @@ export const interactifType = 'mathLive'
 export const amcReady = true
 export const amcType = 'AMCHybride'
 export const dateDeModifImportante = '11/04/2023'
-export const titre = "Calculs de périmètres et d'aires"
+export const titre = 'Calculer des périmètres et des aires'
 
 /**
  * Déterminer le périmètre et l'aire d'un carré, d'un rectangle, d'un triangle rectangle, d'un disque

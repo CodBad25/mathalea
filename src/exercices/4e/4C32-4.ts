@@ -11,7 +11,7 @@ export const amcType = 'qcmMono'
 export const interactifType = 'qcm'
 export const interactifReady = true
 
-export const titre = 'Calculs avec des multiplications et des puissances de 10'
+export const titre = 'Effectuer des calculs avec  des multiplications et des puissances de 10'
 export const dateDePublication = '20/08/2022' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
 
 /**

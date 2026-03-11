@@ -58,7 +58,7 @@ export const interactifType = 'listeDeroulante' // 'mathLive'
 export const amcReady = true // pour définir que l'exercice peut servir à AMC
 export const amcType = 'qcmMono'
 
-export const titre = 'Triangles semblables'
+export const titre = 'Utiliser les propriétés des triangles semblables'
 export const dateDePublication = '16/05/2024' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
 export const dateDeModifImportante = '06/11/2025'
 

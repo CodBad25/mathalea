@@ -30,7 +30,7 @@ import {
 } from '../../modules/outils'
 import { RedactionPythagore } from '../4e/_pythagore'
 import Exercice from '../Exercice'
-export const titre = 'Bonne année...'
+export const titre = 'Résoudre des calculs pour fêter la nouvelle année'
 
 export const dateDePublication = '02/01/2023'
 

@@ -27,7 +27,7 @@ export const interactifReady = true // pour définir qu'exercice peut s'afficher
 export const interactifType = 'listeDeroulante' // 'mathLive'
 export const amcReady = true // pour définir que l'exercice peut servir à AMC
 export const amcType = 'qcmMono'
-export const titre = 'Triangles égaux et côtés homologues'
+export const titre = 'Effectuer un lien entre triangles égaux et côtés homologues'
 
 /**
  * Deux triangles égaux sont codés, il faut reconnaitre les côtés homologues

@@ -12,7 +12,7 @@ import { mathalea2d } from '../../modules/mathalea2d'
 import { gestionnaireFormulaireTexte } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-export const titre = 'Grilles décimales'
+export const titre = 'Utiliser des grilles décimales'
 
 export const refs = {
   'fr-fr': ['P005'],

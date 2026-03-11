@@ -1,7 +1,7 @@
 import ExternalApp from './_ExternalApp'
 
 export const uuid = 'scratch2Latex'
-export const titre = 'Convertisseur Scratch vers LaTeX'
+export const titre = 'Convertir du code Scratch vers LaTeX'
 
 class Scratch2Latex extends ExternalApp {
   constructor() {

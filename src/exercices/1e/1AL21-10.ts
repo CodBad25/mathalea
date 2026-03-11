@@ -7,7 +7,7 @@ import { numAlpha } from '../../lib/outils/outilString'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-export const titre = 'Interpolation polynomiale'
+export const titre = 'Effectuer une interpolation polynomiale'
 export const dateDePublication = '10/07/2024'
 export const dateDeModifImportante = '10/01/2025'
 

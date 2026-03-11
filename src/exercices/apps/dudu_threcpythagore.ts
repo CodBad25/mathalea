@@ -1,7 +1,7 @@
 import ExternalApp from './_ExternalApp'
 
 export const uuid = 'duduThrecpythagore'
-export const titre = 'Réciproque du théorème de Pythagore'
+export const titre = 'Travailler sur la réciproque du théorème de Pythagore'
 
 class duduThRecPythagore extends ExternalApp {
   constructor() {
