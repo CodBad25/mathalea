@@ -478,11 +478,11 @@ export default class Stat {
             every box/.style={ultra thick,fill=blue!15},
             every whisker/.style={ultra thick},
             every median/.style={ultra thick},
-            lower whisker=${texNombre(boxplotData.moustacheInferieure, 2)},
+            lower whisker=${boxplotData.moustacheInferieure},
             lower quartile=${boxplotData.q1},
             median=${boxplotData.q2},
             upper quartile=${boxplotData.q3},
-            upper whisker=${texNombre(boxplotData.moustacheSuperieure, 2)},
+            upper whisker=${boxplotData.moustacheSuperieure},
           },
       ] coordinates {};
       \\foreach \\x/\\name [count=\\xi from 0] in {${boxplotData.min}/Min,${boxplotData.q1}/Q1,${boxplotData.q2}/Méd,${boxplotData.q3}/Q3,${boxplotData.max}/Max} {

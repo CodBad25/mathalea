@@ -33,7 +33,8 @@ export default mergeConfig(
       // et si un test s'arrête dans l'une les autres continuent de tourner rendant impossible
       // l'inspection du pb)
       // on le laisse et tant pis pour le wrap des tests dans webstorm
-      reporters: ['html', 'junit', 'json', 'default'],
+      reporters: ['default', 'html', 'junit', 'json'],
+      printConsoleTrace: false,
       outputFile: {
         junit: './logs/junit-report.xml',
         json: './logs/json-report.json',
