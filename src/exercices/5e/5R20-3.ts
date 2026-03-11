@@ -26,7 +26,7 @@ import { setReponse } from '../../lib/interactif/gestionInteractif'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { texNombre } from '../../lib/outils/texNombre'
 
-export const titre = 'Additions de 5 nombres relatifs'
+export const titre = 'Additionner 5 nombres relatifs'
 export const interactifReady = true
 
 export const amcReady = true

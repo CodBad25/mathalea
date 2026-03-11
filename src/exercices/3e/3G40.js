@@ -26,7 +26,7 @@ import {
 import Exercice from '../Exercice'
 
 export const dateDeModifImportante = '02/11/2022' // EE : Mise en place de this.sup2, des unités et du grossissement des points
-export const titre = 'Repérage sur la sphère'
+export const titre = 'Se repérer sur une sphère'
 export const amcReady = true
 export const amcType = 'AMCHybride'
 

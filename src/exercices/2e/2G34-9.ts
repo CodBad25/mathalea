@@ -19,7 +19,7 @@ import {
   premiersEntreBornes,
 } from '../../lib/outils/primalite'
 import { texNombre } from '../../lib/outils/texNombre'
-export const titre = "Problèmes avec les systèmes d'équations du premier degré"
+export const titre = "Résoudre des problèmes avec des systèmes d'équations du premier degré"
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const dateDePublication = '21/03/2024'

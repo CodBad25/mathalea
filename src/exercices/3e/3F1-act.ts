@@ -16,7 +16,7 @@ import {
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-export const titre = 'Fonctions : Notion et vocabulaire'
+export const titre = 'Découvrir la notion et le vocabulaire des fonctions'
 
 /**
  * 3F1-act - Notion de fonction - vocabulaire

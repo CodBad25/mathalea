@@ -1,7 +1,7 @@
 import ExternalApp from './_ExternalApp'
 
 export const uuid = 'duduEquadorix'
-export const titre = 'Équadorix'
+export const titre = 'Résoudre des équations avec Équadorix'
 
 class duduEquadorix extends ExternalApp {
   constructor() {

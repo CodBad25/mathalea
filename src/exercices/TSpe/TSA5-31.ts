@@ -7,7 +7,7 @@ import FractionEtendue from '../../modules/FractionEtendue'
 import { gestionnaireFormulaireTexte, randint } from '../../modules/outils'
 import Trinome from '../../modules/Trinome'
 import Exercice from '../Exercice'
-export const titre = 'Dérivation de $\\ln(u)$'
+export const titre = 'Calculer la dérivée de  $\ln(u)$'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 

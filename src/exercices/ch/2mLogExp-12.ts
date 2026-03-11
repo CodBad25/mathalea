@@ -17,7 +17,7 @@ import {
 } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-export const titre = 'Équations exponentielles'
+export const titre = 'Résoudre des équations exponentielles'
 export const dateDePublication = '18/02/2026'
 export const interactifReady = true
 export const interactifType = 'mathLive'

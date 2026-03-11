@@ -19,7 +19,7 @@ import {
 } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-export const titre = 'Équations logarithmiques'
+export const titre = 'Résoudre des équations logarithmiques'
 export const dateDePublication = '18/02/2026'
 export const interactifReady = true
 export const interactifType = 'mathLive'

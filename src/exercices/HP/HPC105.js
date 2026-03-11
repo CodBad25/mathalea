@@ -8,7 +8,7 @@ import {
 import { listeQuestionsToContenu } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-export const titre = "Matrice d'une application linéaire"
+export const titre = "Déterminer la matrice d'une application linéaire"
 
 // Les exports suivants sont optionnels mais au moins la date de publication semble essentielle
 export const dateDePublication = '26/11/2024' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag

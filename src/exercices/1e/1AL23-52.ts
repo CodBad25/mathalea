@@ -10,7 +10,7 @@ import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-export const titre = 'Étude complète de paraboles avec les zéros de la fonction'
+export const titre = 'Effectuer une étude complète de paraboles avec les zéros de la fonction'
 export const interactifReady = false
 
 export const dateDePublication = '25/11/2024'

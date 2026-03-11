@@ -20,7 +20,7 @@ export const amcType = ['AMCOpen', 'AMCNum', 'qcmMult', 'qcmMono']
 export const interactifReady = true
 export const interactifType = ['mathLive', 'qcm']
 
-export const titre = 'Simplification de fractions'
+export const titre = 'Simplifier des fractions'
 export const dateDeModifImportante = '08/03/2024'
 
 /**

@@ -1,7 +1,7 @@
 import ExternalApp from './_ExternalApp'
 
 export const uuid = 'duduConstructible'
-export const titre = 'Triangles constructibles ?'
+export const titre = 'Déterminer si des triangles sont constructibles'
 
 class duduConstructible extends ExternalApp {
   constructor() {

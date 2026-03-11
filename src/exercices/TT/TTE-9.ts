@@ -7,7 +7,7 @@ import { pgcd } from '../../lib/outils/primalite'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-export const titre = "Résolution d'équations du type $x^a = b$"
+export const titre = 'Résoudre des équations du type $x^a = b$'
 export const dateDePublication = '28/08/2024'
 export const dateDeModifImportante = '28/08/2024'
 export const uuid = '364dd'

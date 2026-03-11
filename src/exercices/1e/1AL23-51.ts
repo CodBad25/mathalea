@@ -4,7 +4,7 @@ import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Trinome from '../../modules/Trinome'
 import Exercice from '../Exercice'
 
-export const titre = 'Étude complète de paraboles'
+export const titre = 'Effectuer une étude complète de paraboles'
 export const interactifReady = false
 
 export const dateDePublication = '27/10/2022'

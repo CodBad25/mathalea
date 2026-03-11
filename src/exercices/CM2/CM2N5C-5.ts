@@ -16,7 +16,7 @@ export const refs = {
   'fr-2016': ['c3C32-04'],
   'fr-ch': ['9NO16-7'],
 }
-export const titre = 'Le spectacle (problème complexe)'
+export const titre = 'Résoudre le problème complexe du spectacle'
 export const dateDePublication = '21/11/2024'
 export const interactifType = 'mathLive'
 export const interactifReady = true

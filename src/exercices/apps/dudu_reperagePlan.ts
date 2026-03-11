@@ -1,7 +1,7 @@
 import ExternalApp from './_ExternalApp'
 
 export const uuid = 'duduReperagePlan'
-export const titre = 'Repérage dans le plan'
+export const titre = 'Effectuer un repérage dans le plan'
 
 class duduReperagePlan extends ExternalApp {
   constructor() {

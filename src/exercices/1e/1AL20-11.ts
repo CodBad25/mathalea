@@ -16,7 +16,7 @@ import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-export const titre = "Calcul du discriminant d'une équation du second degré"
+export const titre = "Calculer le discriminant  d'une équation du second degré"
 
 /**
  * Calculer le discriminant d'une équation

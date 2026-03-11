@@ -11,7 +11,7 @@ import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Trinome from '../../modules/Trinome'
 import Exercice from '../Exercice'
 
-export const titre = 'Bilan : équations et inéquations du second degré'
+export const titre = 'Dresser un bilan sur les équations et inéquations du second degré'
 export const interactifReady = false
 
 export const dateDePublication = '28/10/2022'

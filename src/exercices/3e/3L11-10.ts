@@ -15,7 +15,7 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
-export const titre = 'Table de double distributivité'
+export const titre = 'Compléter une table de double distributivité'
 export const dateDePublication = '23/02/2023'
 export const dateDeModifImportante = '29/12/2025'
 export const interactifReady = true

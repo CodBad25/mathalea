@@ -1,7 +1,7 @@
 import ExternalApp from './_ExternalApp'
 
 export const uuid = 'duduTrigo'
-export const titre = 'Trigonométrie'
+export const titre = 'Utiliser la trigonométrie'
 
 class duduTrigo extends ExternalApp {
   constructor() {

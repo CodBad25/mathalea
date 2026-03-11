@@ -1,7 +1,7 @@
 import ExternalApp from './_ExternalApp'
 
 export const uuid = 'duduReduction5e'
-export const titre = 'Réductions 5e'
+export const titre = 'Effectuer des réductions algébriques en 5e'
 
 class duduReduction5e extends ExternalApp {
   constructor() {

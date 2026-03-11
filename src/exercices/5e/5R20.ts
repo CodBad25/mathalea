@@ -32,7 +32,7 @@ export const amcType = 'qcmMono'
 export const interactifReady = true
 export const interactifType = ['qcm', 'mathLive']
 
-export const titre = 'Addition de deux nombres relatifs'
+export const titre = "Effectuer l'addition de deux nombres relatifs"
 export const dateDeModifImportante = '24/9/2024'
 
 /**

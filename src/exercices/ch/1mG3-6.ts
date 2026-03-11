@@ -23,7 +23,7 @@ import {
 } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-export const titre = 'Relations métriques dans un triangle rectangle'
+export const titre = 'Utiliser les relations métriques dans un triangle rectangle'
 export const dateDePublication = '10/04/2025'
 export const interactifReady = false
 export const uuid = '4f81e'

@@ -42,7 +42,7 @@ import { scratchblock } from '../../modules/scratchblock'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
 
-export const titre = 'Note la couleur (Scratch)'
+export const titre = 'Noter la couleur avec Scratch'
 export const interactifReady = true
 export const interactifType = 'listeDeroulante'
 export const dateDeModifImportante = '14/09/2024'

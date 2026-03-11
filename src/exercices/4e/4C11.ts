@@ -18,7 +18,7 @@ import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 import { bleuMathalea } from './../../lib/colors'
 
-export const titre = 'Calculs utilisant les priorités opératoires'
+export const titre = 'Effectuer des calculs avec des priorités opératoires'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 

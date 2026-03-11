@@ -10,7 +10,7 @@ export const interactifReady = true
 export const interactifType = 'qcm'
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
-export const titre = 'Affirmations sur les logarithmes'
+export const titre = 'Vérifier des affirmations sur les logarithmes'
 export const dateDePublication = '1/3/2025'
 
 /*

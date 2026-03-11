@@ -29,7 +29,7 @@ import {
 } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-export const titre = 'Fonctions affines'
+export const titre = 'Étudier des fonctions affines'
 export const interactifType = 'mathLive'
 export const interactifReady = true
 export const amcReady = true

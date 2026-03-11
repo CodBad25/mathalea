@@ -7,7 +7,7 @@ import Exercice from '../Exercice'
 import FractionEtendue from '../../modules/FractionEtendue'
 import EquationSecondDegre from '../../modules/EquationSecondDegre'
 
-export const titre = 'Équation du second degré (cas général)'
+export const titre = 'Résoudre une équation du second degré (cas général)'
 export const dateDePublication = '14/05/2024'
 export const interactifReady = false
 export const uuid = '1be55'

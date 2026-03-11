@@ -6,7 +6,7 @@ import Derivees6 from './1AN14-6'
 import Derivees7 from './1AN14-7'
 
 import MetaExercice from '../MetaExerciceCan'
-export const titre = 'Dérivation : bilan'
+export const titre = 'Effectuer un bilan sur la dérivation'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const uuid = 'f38cf'

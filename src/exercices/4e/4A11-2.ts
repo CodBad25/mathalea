@@ -1,5 +1,5 @@
 import FractionsIrreductibles from '../3e/3A11'
-export const titre = 'Fractions irréductibles'
+export const titre = 'Rendre des fractions irréductibles'
 export const interactifReady = false
 export const uuid = '426f5'
 export const refs = {

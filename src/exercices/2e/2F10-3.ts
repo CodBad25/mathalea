@@ -25,7 +25,7 @@ import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
 
-export const titre = "Représentation graphique d'une fonction affine"
+export const titre = 'Représenter graphiquement une fonction affine'
 export const dateDeModifImportante = '06/04/2024'
 export const interactifReady = true
 export const interactifType = 'custom'

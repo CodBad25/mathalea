@@ -13,7 +13,7 @@ import {
 } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-export const titre = "Problèmes d'intérêts composés simples"
+export const titre = "Résoudre des problèmes d'intérêts composés simples"
 export const dateDePublication = '03/02/2026'
 export const interactifReady = true
 export const interactifType = 'mathLive'

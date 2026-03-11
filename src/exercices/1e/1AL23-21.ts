@@ -15,7 +15,7 @@ import { listeQuestionsToContenu, randint } from '../../modules/outils'
 
 export const interactifReady = true
 export const interactifType = 'mathLive'
-export const titre = 'Équation du second degré (égale 0)'
+export const titre = 'Résoudre une équation du second degré (égale à 0)'
 export const dateDeModifImportante = '17/12/2024'
 
 /**

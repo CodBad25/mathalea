@@ -14,7 +14,7 @@ export const refs = {
   'fr-fr': ['3A10DNB0', '3Z1DNB-17'],
   'fr-ch': ['9NO4-30'],
 }
-export const titre = 'Problème de partage'
+export const titre = 'Résoudre un problème de partage'
 export const dateDePublication = '15/11/2024'
 /**
  * @Author Jean-Claude Lhote

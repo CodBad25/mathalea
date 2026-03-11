@@ -1,7 +1,7 @@
 import ExternalApp from './_ExternalApp'
 
 export const uuid = 'challengeTables'
-export const titre = 'Challenge tables'
+export const titre = 'Relever le challenge des tables de multiplication'
 
 class challengeTables extends ExternalApp {
   constructor() {

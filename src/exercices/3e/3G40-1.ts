@@ -11,7 +11,7 @@ import { randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
 export const dateDePublication = '13/07/2025'
-export const titre = 'Repérage géodésique'
+export const titre = 'Utiliser le repérage géodésique'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 

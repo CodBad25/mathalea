@@ -33,7 +33,7 @@ export const interactifReady = true
 export const interactifType = 'cliqueFigure'
 export const amcReady = true
 export const amcType = 'qcmMono'
-export const titre = 'Tortue Scratch avec répétitions'
+export const titre = 'Programmer la tortue Scratch avec des répétitions'
 export const dateDePublication = '29/06/2021'
 
 /**

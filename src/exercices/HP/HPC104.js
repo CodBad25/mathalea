@@ -8,7 +8,7 @@ import { lettreIndiceeDepuisChiffre } from '../../lib/outils/outilString'
 import { listeQuestionsToContenu } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-export const titre = 'Calcul de déterminant'
+export const titre = "Calculer le déterminant d'une matrice"
 
 // Les exports suivants sont optionnels mais au moins la date de publication semble essentielle
 export const dateDePublication = '25/10/2021' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag

@@ -1,7 +1,7 @@
 import ExternalApp from './_ExternalApp'
 
 export const uuid = 'duduStatistix6e'
-export const titre = 'Statistix 6e'
+export const titre = 'Pratiquer les statistiques en 6e'
 
 class duduStatistix6e extends ExternalApp {
   constructor() {

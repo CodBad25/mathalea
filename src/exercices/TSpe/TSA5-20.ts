@@ -1,5 +1,5 @@
 import EquationsLog from '../TT/TTE-5'
-export const titre =   "Résolution d'équations du type $a^x = b$"
+export const titre = 'Résoudre des équations du type $a^x = b$'
 export const dateDePublication = '04/08/2025'
 export const amcReady = true
 export const amcType = 'AMCNum'
@@ -18,8 +18,9 @@ export const refs = {
   'fr-ch': [],
 }
 export default class EquationsLogln extends EquationsLog {
-     constructor() {
+  constructor() {
     super()
     this.nbQuestions = 2
-     this.sup2 = 2
-}}
+    this.sup2 = 2
+  }
+}

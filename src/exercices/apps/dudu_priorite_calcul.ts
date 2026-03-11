@@ -1,7 +1,7 @@
 import ExternalApp from './_ExternalApp'
 
 export const uuid = 'prioritesOperatoires'
-export const titre = 'Priorités opératoires'
+export const titre = 'Respecter les priorités opératoires'
 
 class prioritesOperatoires extends ExternalApp {
   constructor() {

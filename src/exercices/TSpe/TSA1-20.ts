@@ -10,7 +10,7 @@ import FractionEtendue from '../../modules/FractionEtendue'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-export const titre = "Étude d'une suite par récurrence"
+export const titre = 'Étudier une suite par récurrence'
 export const dateDePublication = '25/10/2024'
 
 /**

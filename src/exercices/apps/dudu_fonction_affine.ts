@@ -1,7 +1,7 @@
 import ExternalApp from './_ExternalApp'
 
 export const uuid = 'duduAffine'
-export const titre = 'Fonctions affines'
+export const titre = 'Étudier les fonctions affines'
 
 class duduAffine extends ExternalApp {
   constructor() {

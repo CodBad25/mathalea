@@ -18,7 +18,7 @@ export const interactifReady = true
 export const interactifType = 'qcm'
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
-export const titre = "Fonction calcul d'image variante QCM de Asie Juin 2021"
+export const titre = "Effectuer le calcul d'images dans une fonction"
 export const dateDePublication = '13/11/2024'
 /**
  *

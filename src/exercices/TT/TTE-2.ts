@@ -6,7 +6,7 @@ import { texNombre } from '../../lib/outils/texNombre'
 import { randint } from '../../modules/outils'
 import ExerciceSimple from '../ExerciceSimple'
 
-export const titre = "Taux moyen d'évolution" // Ce titre est nécessaire et doit commencer par un verbe à l'infinitif
+export const titre = "Calculer le taux moyen d'évolution" // Ce titre est nécessaire et doit commencer par un verbe à l'infinitif
 
 // Les éléménts ci-dessous sont nécessaires pour la prise en compte d'un champ classique pour l'interactivité
 export const interactifReady = true

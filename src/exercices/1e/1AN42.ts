@@ -7,7 +7,7 @@ import Exercice from '../Exercice'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 
-export const titre = 'cos et sin associés à un réel $x$'
+export const titre = 'Calculer cos et sin associés à un réel $x$'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 

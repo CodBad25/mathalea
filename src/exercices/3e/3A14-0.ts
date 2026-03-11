@@ -23,7 +23,7 @@ import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-export const titre = 'Arithmétique & volumes'
+export const titre = 'Se préparer au DNB  : arithmétique et volumes'
 
 /**
  * diviseurs communs, calcul de volume

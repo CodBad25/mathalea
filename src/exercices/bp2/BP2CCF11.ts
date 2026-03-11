@@ -1,5 +1,5 @@
 import Exercice2S112 from '../2e/2S11-2'
-export const titre = 'Variations en pourcentage'
+export const titre = 'Calculer des variations en pourcentage'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const amcReady = true

@@ -1,5 +1,5 @@
 import NoteLaCouleur6e from '../6e/6I1B-2'
-export const titre = 'Note la couleur (scratch) 5e'
+export const titre = 'Noter la couleur avec Scratch'
 export const interactifReady = true
 export const interactifType = 'listeDeroulante'
 export const dateDeModifImportante = '27/12/2023'

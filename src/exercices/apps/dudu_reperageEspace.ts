@@ -1,7 +1,7 @@
 import ExternalApp from './_ExternalApp'
 
 export const uuid = 'duduReperageEspace'
-export const titre = "Repérage dans l'espace"
+export const titre = "Effectuer un repérage dans l'espace"
 
 class duduReperageEspace extends ExternalApp {
   constructor() {

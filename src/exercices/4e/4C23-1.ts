@@ -19,7 +19,7 @@ import { fraction } from '../../modules/fractions'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-export const titre = 'Fractions et priorités opératoires'
+export const titre = 'Effectuer des calculs avec des fractions et les priorités  opératoires'
 export const amcReady = true
 export const amcType = 'AMCNum'
 export const interactifReady = true

@@ -6,7 +6,7 @@ import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { gestionnaireFormulaireTexte } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-export const titre = "Différentes écritures d'un nombre complexe"
+export const titre = "Travailler sur différentes écritures d'un nombre complexe"
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const uuid = '9c8d5'

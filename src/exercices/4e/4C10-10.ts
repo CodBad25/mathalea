@@ -12,7 +12,7 @@ export const amcType = 'qcmMono'
 export const interactifReady = true
 export const interactifType = 'qcm'
 
-export const titre = 'Multiplication à trou de deux entiers relatifs'
+export const titre = 'Compléter une multiplication à trou de deux entiers relatifs'
 
 export const dateDePublication = '26/08/2022'
 

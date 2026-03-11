@@ -10,7 +10,7 @@ import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { setReponse } from '../../lib/interactif/gestionInteractif'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 
-export const titre = 'Multiplication de deux entiers relatifs'
+export const titre = 'Multiplier deux entiers relatifs'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 

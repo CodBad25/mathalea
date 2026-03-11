@@ -3,7 +3,7 @@ import { texNombre } from '../../lib/outils/texNombre'
 import { context } from '../../modules/context'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-export const titre = 'Problèmes avec des puissances de 10 et des conversions'
+export const titre = 'Résoudre des problèmes avec des  puissances de 10 et des conversions'
 export const amcReady = true
 export const amcType = 'AMCOpen'
 

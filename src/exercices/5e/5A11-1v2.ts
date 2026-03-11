@@ -1,7 +1,7 @@
 import { choice } from '../../lib/outils/arrayOutils'
 import { randint } from '../../modules/outils'
 import ExerciceLabyrinthe from '../_Exercice_labyrinthe'
-export const titre = 'Labyrinthe des multiples'
+export const titre = 'Parcourir un labyrinthe des multiples'
 
 export const dateDePublication = '30/10/2026'
 export const interactifReady = true

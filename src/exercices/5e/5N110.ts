@@ -9,7 +9,7 @@ import { context } from '../../modules/context'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-export const titre = 'Variation en pourcentages'
+export const titre = 'Calculer des variations en pourcentages'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const amcReady = true

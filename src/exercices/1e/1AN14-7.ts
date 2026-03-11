@@ -14,7 +14,7 @@ import {
 import Exercice from '../Exercice'
 export const interactifReady = true
 export const interactifType = 'mathLive'
-// export const titre = 'Dérivée de $x\\mapsto u(ax + b)$'
+// export const titre = 'Calculer la dérivée de $x\mapsto u(ax + b)$'
 export const titre = 'Dériver une fonction du type $u(ax + b)$'
 
 /**

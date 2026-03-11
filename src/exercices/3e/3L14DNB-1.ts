@@ -24,7 +24,7 @@ export const refs = {
   'fr-fr': ['3L14DNB-1', '3Z1DNB-13'],
   'fr-ch': ['11FA4-4'],
 }
-export const titre = 'Programme de calcul, scratch et calcul littéral'
+export const titre = 'Se préparer au DNB : programme de calcul, scratch et calcul littéral'
 export const dateDePublication = '25/11/2024'
 
 /**

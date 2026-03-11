@@ -5,7 +5,7 @@ import { mathalea2d } from '../../modules/mathalea2d'
 import Exercice from '../Exercice'
 import { valideListeOfPoints } from './P013'
 
-export const titre = 'Interpollation par splines avec tangentes'
+export const titre = 'Effectuer une interpolation par splines avec tangentes'
 
 export const refs = {
   'fr-fr': ['P021'],

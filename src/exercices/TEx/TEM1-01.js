@@ -5,7 +5,7 @@ import { rangeMinMax } from '../../lib/outils/nombres'
 import { listeQuestionsToContenu } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-export const titre = 'Produit de matrices carrées ou colonnes'
+export const titre = 'Calculer un produit de matrices carrées ou colonnes'
 
 // Les exports suivants sont optionnels mais au moins la date de publication semble essentielle
 export const dateDePublication = '25/10/2021' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag

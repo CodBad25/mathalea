@@ -24,7 +24,7 @@ import Exercice from '../Exercice'
 import { orangeMathalea } from 'apigeom/src/elements/defaultValues'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 
-export const titre = 'Soustraction de deux nombres relatifs'
+export const titre = 'Soustraire deux nombres relatifs'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const amcReady = true

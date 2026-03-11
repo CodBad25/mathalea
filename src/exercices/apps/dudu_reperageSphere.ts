@@ -1,7 +1,7 @@
 import ExternalApp from './_ExternalApp'
 
 export const uuid = 'duduReperageSphere'
-export const titre = 'Repérage sur une sphère'
+export const titre = 'Effectuer un repérage sur une sphère'
 
 class duduReperageSphere extends ExternalApp {
   constructor() {

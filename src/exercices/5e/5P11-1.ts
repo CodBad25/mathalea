@@ -16,7 +16,7 @@ import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
 export const dateDeModifImportante = '29/02/2024'
-export const titre = 'Problème de vitesse'
+export const titre = 'Résoudre un problème de vitesse'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 

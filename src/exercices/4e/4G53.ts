@@ -1,5 +1,5 @@
 import CalculDeVolumes from '../5e/5M20-1'
-export const titre = 'Calculs de volumes'
+export const titre = 'Calculer des volumes de solides'
 export const amcReady = true
 export const amcType = 'AMCHybride'
 export const interactifReady = true

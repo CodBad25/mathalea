@@ -17,7 +17,7 @@ export const refs = {
   'fr-fr': ['3S20DNB', '3Z1DNB-15', 'BP2FLUC9'],
   'fr-ch': [],
 }
-export const titre = 'Probabilités. Exercice de brevet'
+export const titre = 'Calculer des probabilités (exercice de brevet)'
 export const dateDePublication = '27/11/2024'
 
 const listeNumeros = [

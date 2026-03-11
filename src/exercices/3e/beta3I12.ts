@@ -8,7 +8,7 @@ import comprendreScriptMultiples from './3I12-2'
 import completerScriptDiviseurs from './3I12-3'
 import comprendreScriptListeMultiples from './3I12-4'
 import completerScriptMultiple from './3I12-1'
-export const titre = "Différents exercices d'algorithmique"
+export const titre = "Réaliser différents exercices  d'algorithmique"
 export const uuid = 'f56d8'
 
 const listeExos = [

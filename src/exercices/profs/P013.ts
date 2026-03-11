@@ -6,7 +6,7 @@ import { repere } from '../../lib/2d/reperes'
 import { tracePoint } from '../../lib/2d/TracePoint'
 import { mathalea2d } from '../../modules/mathalea2d'
 import Exercice from '../Exercice'
-export const titre = 'Interpolation cosinusoïdale'
+export const titre = 'Effectuer une interpolation cosinusoïdale'
 
 export const refs = {
   'fr-fr': ['P013'],

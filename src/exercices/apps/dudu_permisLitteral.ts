@@ -1,7 +1,7 @@
 import ExternalApp from './_ExternalApp'
 
 export const uuid = 'permisLitteral'
-export const titre = 'Permis Littéral'
+export const titre = 'Obtenir son permis littéral'
 
 class permisLitteral extends ExternalApp {
   constructor() {

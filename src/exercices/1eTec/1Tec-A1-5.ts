@@ -2,7 +2,7 @@ import { choice } from '../../lib/outils/arrayOutils'
 import { texNombre } from '../../lib/outils/texNombre'
 import { randint } from '../../modules/outils'
 import ExerciceSimple from '../ExerciceSimple'
-export const titre = 'Proportions'
+export const titre = 'Travailler sur les proportions'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const amcReady = true

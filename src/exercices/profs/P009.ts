@@ -7,7 +7,7 @@ import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-export const titre = "Simulation d'expériences aléatoires"
+export const titre = "Consulter la simulation d'expériences aléatoires"
 
 export const refs = {
   'fr-fr': ['P009'],
