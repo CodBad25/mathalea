@@ -369,7 +369,7 @@ export default class CalculsImagesFonctions extends Exercice {
         } else {
           texte =
             enonce +
-            ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers, {
+            ajouteChampTexteMathLive(this, i, KeyboardType.clavierDeBaseAvecFraction, {
               texteAvant: '$f($',
               texteApres: `$)=${img}$`,
             })
