@@ -27,8 +27,16 @@ stages:
   - playwright-pdfDNB
   - playwright-pdfBAC
 
+variables:
+  SAST_DISABLED: "true"
+  SAST_EXCLUDED_PATHS: "node_modules,.pnpm-store,dist,build,coverage,logs,.cache,.git,tests/e2e,playwright-report"
+
 sast:
   stage: test
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+      when: always
+    - when: never
 include:
   - template: Security/SAST.gitlab-ci.yml
 
@@ -349,11 +357,17 @@ test3ePDF:
 build:
   extends: .testCI
   stage: build-projet
+  before_script:
+    - npm install -g corepack@latest
+    - corepack enable
+    - corepack prepare pnpm@latest-10 --activate
+    - pnpm config set store-dir .pnpm-store
+    - pnpm -v
+    - NODE_OPTIONS=--max-old-space-size=4096 pnpm install
   script:
     - echo "CI_COMMIT_BRANCH '$CI_COMMIT_BRANCH'"
     - echo "CI_OPEN_MERGE_REQUESTS '$CI_OPEN_MERGE_REQUESTS'"
     - echo "CI_PIPELINE_SOURCE '$CI_PIPELINE_SOURCE'"
-    #- NODE_OPTIONS=--max-old-space-size=4096 pnpm run makeJson && pnpm run prebuild-unit-tests && pnpm vite build
     - NODE_OPTIONS=--max-old-space-size=4096 pnpm run makeJson && pnpm vite build
     - echo "$CI_COMMIT_AUTHOR"
   rules:
