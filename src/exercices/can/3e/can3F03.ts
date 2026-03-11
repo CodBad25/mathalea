@@ -29,7 +29,7 @@ export const refs = {
 export default class CalculImageParFonctionAffine extends ExerciceSimple {
   constructor() {
     super()
-    this.optionsDeComparaison = { fractionEgale: true }
+    
     this.nbQuestions = 1
     this.versionQcmDisponible = true
     this.typeExercice = 'simple'
@@ -46,7 +46,6 @@ export default class CalculImageParFonctionAffine extends ExerciceSimple {
         m = randint(2, 6, [n, n * 2, n * 3])
         nomF = choice(['f', 'g', 'h', 'u', 'v', 'w', 'p', 'm', 't', 'k'])
         this.question = `Soit $${nomF}$ la fonction définie par : $${nomF}(x)=${m}x+${n}$.<br>
-        
         Quelle est l'image de $${x}$ par la fonction $${nomF}$ ?`
         this.correction = `Comme $${nomF}(x)=${m}x+${n}$, on a  :<br>
          $\\begin{aligned}
@@ -55,6 +54,7 @@ export default class CalculImageParFonctionAffine extends ExerciceSimple {
          &=${miseEnEvidence(m * x + n)}
          \\end{aligned}$`
         this.reponse = m * x + n
+        this.optionsDeComparaison = { nombreDecimalSeulement: true }
         break
       case 2:
         x = randint(-9, 9, [0, 1, -1])
@@ -81,6 +81,7 @@ export default class CalculImageParFonctionAffine extends ExerciceSimple {
           `$${texNombre(n * x + y)}$`,
           `$${texNombre(m * n * x + y)}$`,
         ]
+        this.optionsDeComparaison = { nombreDecimalSeulement: true }
         break
 
       case 3:
@@ -108,6 +109,7 @@ export default class CalculImageParFonctionAffine extends ExerciceSimple {
           `$${new FractionEtendue(m, n).ajouteEntier(x + y).texFractionSimplifiee}$`,
           `$${texNombre(m * x + y)}$`,
         ]
+        this.optionsDeComparaison = { fractionEgale: true }
         break
     }
   }
