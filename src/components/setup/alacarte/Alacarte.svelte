@@ -1024,7 +1024,7 @@
           <span
             class="text-xs text-coopmaths-corpus-lightest dark:text-coopmathsdark-corpus-lightest"
           >
-            titre + exercices + nombre de versions
+            nom + exercices + nombre de versions
           </span>
         </div>
 
@@ -1068,7 +1068,7 @@
                       bg-coopmaths-canvas-dark dark:bg-coopmathsdark-canvas-dark
                       text-coopmaths-corpus dark:text-coopmathsdark-corpus
                       focus:outline-none focus:border-coopmaths-action dark:focus:border-coopmathsdark-action
-                      transition-colors"
+                      transition-colors [color-scheme:light]"
                     title="Nombre de versions"
                   />
                 </div>
@@ -1219,4 +1219,5 @@
   footer {
     margin-top: auto;
   }
+
 </style>

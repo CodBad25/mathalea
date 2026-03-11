@@ -168,15 +168,10 @@ const preambuleLight = `
 \\newcommand{\\exercice}[2]{%
   \\stepcounter{numexercice}%
   \\subsection*{%
-    \\makebox[\\textwidth]{%
-      Exercice \\thenumexercice%
-      \\ifstrempty{#2}
-        {}
-        {\\hfill\\textit{#2}}%
-    }%
-      \\ifstrempty{#1}
-       {}
-       \\textnormal{ #1}%
+    Exercice \\thenumexercice%
+    \\ifstrempty{#1}
+     {}
+     {\\textnormal{ #1}}%
   }%
 }
 
