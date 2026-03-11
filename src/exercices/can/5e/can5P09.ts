@@ -1,6 +1,7 @@
 import { texPrix } from '../../../lib/format/style'
 import { choice } from '../../../lib/outils/arrayOutils'
-import { texteEnCouleur } from '../../../lib/outils/embellissements'
+import { miseEnEvidence, texteEnCouleur } from '../../../lib/outils/embellissements'
+import { texPrix } from '../../../lib/format/style'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
@@ -29,7 +30,7 @@ export default class CalculPrix extends ExerciceSimple {
     this.typeExercice = 'simple'
     this.nbQuestions = 1
 
-    this.optionsChampTexte = { texteApres: ' €' }
+     this.optionsChampTexte = { texteApres: '€' , texteAvant:'<br>'}
   }
 
   nouvelleVersion() {
@@ -55,10 +56,10 @@ export default class CalculPrix extends ExerciceSimple {
         this.question = `Le prix d'un kg ${n} est $${texPrix(a)}$ €. <br>
 
         Quel est le prix de $${b}$ g ? `
-        this.optionsChampTexte = { texteApres: '€' }
+       
         this.correction = `Comme $${b}$ g $=${texNombre(b1, 1)}$ kg, le  prix  de $${b}$ g ${n} est donné par : <br>
         $${texNombre(b1, 1)}\\times ${texPrix(a)}=${texNombre(b2, 2)}$.<br>
-        Le prix de $${b}$ g ${n} est $${texPrix(b2)}$ €.`
+        Le prix de $${b}$ g ${n} est $${miseEnEvidence(texPrix(b2))}$ €.`
         if (b !== 100) {
           if (b === 500) {
             this.correction += texteEnCouleur(`
@@ -91,10 +92,10 @@ export default class CalculPrix extends ExerciceSimple {
         this.question = `Le prix d'un kg ${n} est $${texPrix(a)}$ €. <br>
 
         Quel est le prix de $${b}$ g ? `
-        this.optionsChampTexte = { texteApres: '€' }
+      
         this.correction = `Comme $${b}$ g $=${texNombre(b1, 1)}$ kg, le  prix  de $${b}$ g ${n} est donné par : <br>
         $${texNombre(b1, 1)}\\times ${texPrix(a)}=${texNombre(b2, 2)}$.<br>
-        Le prix de $${b}$ g ${n} est $${texPrix(b2)}$ €.`
+        Le prix de $${b}$ g ${n} est $${miseEnEvidence(texPrix(b2))}$ €.`
         if (b !== 100) {
           if (b === 500) {
             this.correction += texteEnCouleur(`
@@ -138,10 +139,10 @@ export default class CalculPrix extends ExerciceSimple {
         this.question = `Le prix d'un kg de café ${n} est $${texPrix(a)}$ €. <br>
         
           Quel est le prix de $${b}$ g ? `
-        this.optionsChampTexte = { texteApres: '€' }
+      
         this.correction = `Comme $${b}$ g $=${texNombre(b1, 1)}$ kg, le  prix  de $${b}$ g de café ${n} est donné par : <br>
           $${texNombre(b1, 1)}\\times ${texPrix(a)}=${texNombre(b2, 2)}$.<br>
-          Le prix de $${b}$ g de café ${n} est $${texPrix(b2)}$ €.`
+          Le prix de $${b}$ g de café ${n} est $${miseEnEvidence(texPrix(b2))}$ €.`
         if (b !== 100) {
           if (b === 500) {
             this.correction += texteEnCouleur(`
