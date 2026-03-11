@@ -46,12 +46,19 @@ export default class FatorisationEgR extends ExerciceSimple {
           ]
           tableau = shuffle(tableau)
           this.distracteurs = [tableau[0], tableau[1], tableau[2]]
-
-          this.question = ` Factoriser  : ${this.interactif ? '<br>' : ''} ${
-            choix
-              ? `$${rienSi1(a ** 2)}x^2+${reduireAxPlusB(2 * a * b, b ** 2)}$${this.interactif ? ' $=$' : '.'}`
-              : `$${reduireAxPlusB(2 * a * b, b ** 2)}+${rienSi1(a ** 2)}x^2$${this.interactif ? ' $=$' : '.'}`
-          }` //
+          if (this.versionQcm) {
+            this.question = ` Une  factorisation de    ${
+              choix
+                ? `$${rienSi1(a ** 2)}x^2+${reduireAxPlusB(2 * a * b, b ** 2)}$`
+                : `$${reduireAxPlusB(2 * a * b, b ** 2)}+${rienSi1(a ** 2)}x^2$`
+            } est :`
+          } else {
+            this.question = ` Factoriser : ${this.interactif ? '<br>' : ''} ${
+              choix
+                ? `$${rienSi1(a ** 2)}x^2+${reduireAxPlusB(2 * a * b, b ** 2)}$${this.interactif ? ' $=$' : '.'}`
+                : `$${reduireAxPlusB(2 * a * b, b ** 2)}+${rienSi1(a ** 2)}x^2$${this.interactif ? ' $=$' : '.'}`
+            }`
+          }
           this.correction = `On reconnaît le développement de l'égalité remarquable : <br>
           $(a+b)^2=a^2+2ab+b^2$ avec $a=${rienSi1(a)}x$ et $b=${b}$.<br>
           On a donc :
@@ -68,7 +75,10 @@ export default class FatorisationEgR extends ExerciceSimple {
           const a = randint(1, 2)
           const b = randint(1, 6)
           const choix = choice([true, false])
-          const reponses = [`$(${reduireAxPlusB(a, -b)})^2$`, `$(${reduireAxPlusB(-a, b)})^2$`]
+          const reponses = [
+            `$(${reduireAxPlusB(a, -b)})^2$`,
+            `$(${reduireAxPlusB(-a, b)})^2$`,
+          ]
           if (this.versionQcm) {
             this.reponse = choice(reponses)
           } else {
@@ -82,12 +92,19 @@ export default class FatorisationEgR extends ExerciceSimple {
           ]
           tableau = shuffle(tableau)
           this.distracteurs = [tableau[0], tableau[1], tableau[2]]
-
-          this.question = ` Factoriser  : ${this.interactif ? '<br>' : ''} ${
-            choix
-              ? `$${rienSi1(a ** 2)}x^2-${reduireAxPlusB(2 * a * b, b ** 2)}$${this.interactif ? ' $=$' : '.'}`
-              : `$${reduireAxPlusB(-2 * a * b, b ** 2)}+${rienSi1(a ** 2)}x^2$${this.interactif ? ' $=$' : '.'}`
-          }` //
+          if (this.versionQcm) {
+            this.question = ` Une  factorisation de    ${
+              choix
+                ? `$${rienSi1(a ** 2)}x^2-${reduireAxPlusB(2 * a * b, b ** 2)}$`
+                : `$${reduireAxPlusB(-2 * a * b, b ** 2)}+${rienSi1(a ** 2)}x^2$`
+            } est :`
+          } else {
+            this.question = ` Factoriser : ${this.interactif ? '<br>' : ''} ${
+              choix
+                ? `$${rienSi1(a ** 2)}x^2-${reduireAxPlusB(2 * a * b, b ** 2)}$${this.interactif ? ' $=$' : '.'}`
+                : `$${reduireAxPlusB(-2 * a * b, b ** 2)}+${rienSi1(a ** 2)}x^2$${this.interactif ? ' $=$' : '.'}`
+            }`
+          }
           this.correction = `On reconnaît le développement de l'égalité remarquable : <br>
         $(a-b)^2=a^2-2ab+b^2$ avec $a=${rienSi1(a)}x$ et $b=${b}$.<br>
         On a donc :
@@ -112,11 +129,19 @@ export default class FatorisationEgR extends ExerciceSimple {
             `$(${reduireAxPlusB(a ** 2, b ** 2)})(${reduireAxPlusB(a ** 2, -b * b)})$`,
             `$(${reduireAxPlusB(a ** 2, b)})(${reduireAxPlusB(a ** 2, -b)})$`,
           ]
-          this.question = ` Factoriser  : ${this.interactif ? '<br>' : ''} ${
-            choix
-              ? `$${rienSi1(a ** 2)}x^2-${b ** 2}$${this.interactif ? ' $=$' : '.'}`
-              : `$${b ** 2}-${rienSi1(a ** 2)}x^2$${this.interactif ? ' $=$' : '.'}`
-          }` //
+          if (this.versionQcm) {
+            this.question = ` Une  factorisation de    ${
+              choix
+                ? `$${rienSi1(a ** 2)}x^2-${b ** 2}$`
+                : `$${b ** 2}-${rienSi1(a ** 2)}x^2$`
+            } est :`
+          } else {
+            this.question = ` Factoriser : ${this.interactif ? '<br>' : ''} ${
+              choix
+                ? `$${rienSi1(a ** 2)}x^2-${b ** 2}$${this.interactif ? ' $=$' : '.'}`
+                : `$${b ** 2}-${rienSi1(a ** 2)}x^2$${this.interactif ? ' $=$' : '.'}`
+            }`
+          }
           this.correction = `On reconnaît le développement de l'égalité remarquable : <br>
           $(a+b)(a-b)=a^2-b^2$ avec $a=${choix ? `${rienSi1(a)}x` : `${b}`}$ et $b=${choix ? `${b}` : `${rienSi1(a)}x`}$.<br>
           On a donc :
