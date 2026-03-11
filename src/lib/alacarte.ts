@@ -64,8 +64,9 @@ export function handleUrl(url: URL) {
 export function generateLatex(
   userSettings: UserSettings,
   itemsWithExercises: itemsWithExercises,
+  documentTitle = 'Évaluation à la carte',
 ) {
-  let output = preambuleLight
+  let output = preambuleLight.replace('DOCUMENT_TITLE_PLACEHOLDER', documentTitle)
   let outputCorr = '\n\n%%%%%%%%%%%%%%%%%%%%'
   outputCorr += '\n%%%  CORRECTION  %%%'
   outputCorr += '\n%%%%%%%%%%%%%%%%%%%%'
@@ -179,7 +180,7 @@ const preambuleLight = `
   }%
 }
 
-\\fancyhead[C]{Évaluation à la carte}
+\\fancyhead[C]{DOCUMENT_TITLE_PLACEHOLDER}
 \\fancyfoot{}
 \\fancyhead[R]{}
 
