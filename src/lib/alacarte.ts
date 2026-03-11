@@ -106,7 +106,7 @@ export function generateLatex(
                 titleOption: 'SansTitre',
                 nbVersions: 1,
               },
-              1,
+              i + 1,
             )
             output +=
               '\n\n' +
