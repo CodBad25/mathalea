@@ -31,7 +31,9 @@ export default class CalculPrix extends ExerciceSimple {
     super()
     this.typeExercice = 'simple'
     this.nbQuestions = 1
-
+  this.optionsDeComparaison = {
+      nombreDecimalSeulement: true,
+    }
     this.optionsChampTexte = { texteApres: '€', texteAvant: '<br>' }
   }
 
