@@ -97,7 +97,7 @@
   >
     <textarea
       bind:value={$userInput}
-      class="w-full p-2 border rounded mb-5"
+      class="w-full p-2 border rounded mb-5 bg-coopmaths-canvas dark:bg-coopmathsdark-canvas-dark text-coopmaths-corpus dark:text-coopmathsdark-corpus border-coopmaths-canvas-dark dark:border-coopmathsdark-canvas-dark"
       rows="10"
       placeholder=""
       on:keydown={handleKeyDownUserInput}

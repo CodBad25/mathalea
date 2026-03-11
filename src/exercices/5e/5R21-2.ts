@@ -10,7 +10,7 @@ export const amcType = 'AMCNum'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const dateDePublication = '31/12/2025'
-export const titre = 'Sustraction à trou de deux nombres relatifs'
+export const titre = 'Soustraction à trou de deux nombres relatifs'
 
 /**
  * Compléter une addition à trou entre 2 nombres relatifs.
