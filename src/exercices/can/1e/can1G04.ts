@@ -12,6 +12,7 @@ import FractionEtendue from '../../../modules/FractionEtendue'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 export const titre =
   'Calculer un produit scalaire à l’aide de normes et d’un angle '
 export const interactifReady = true
@@ -34,7 +35,7 @@ export default class ProduitScalaireNormesAngles extends ExerciceSimple {
     super()
 
     this.typeExercice = 'simple'
-
+this.formatChampTexte = KeyboardType.clavierFullOperations
     this.nbQuestions = 1
   }
 
