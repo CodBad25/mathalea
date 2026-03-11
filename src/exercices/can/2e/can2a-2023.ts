@@ -227,12 +227,12 @@ export default class SujetCAN2023Seconde extends Exercice {
               texte = ` Factoriser $${n}${f}${ecritureAlgebrique(m)}${f}^2$`
               texteCorr = `$${f}$ est un facteur commun aux deux termes : $${n}${f}$ et $${abs(m)}${f}^2$.<br>
           En effet :<br>
-          $${n}${f}${ecritureAlgebrique(m)}${f}^2=\\underbrace{${f}\\times ${n}}_{${n}${f}} ${m < 0 ? '-' : '+'}\\underbrace{${f}\\times ${ecritureParentheseSiNegatif(m)}${f}}_{${m}${f}^2}=${f}(${n}${ecritureAlgebrique(m)}${f})$`
+          $${n}${f}${ecritureAlgebrique(m)}${f}^2=\\underbrace{${f}\\times ${n}}_{${n}${f}} ${m < 0 ? '-' : '+'}\\underbrace{${f}\\times ${ecritureParentheseSiNegatif(m)}${f}}_{${m}${f}^2}=${miseEnEvidence(`${f}(${n}${ecritureAlgebrique(m)}${f})`)}$`
             } else {
               texte = ` Factoriser $${m}${f}^2+${n}${f}$`
               texteCorr = `$${f}$ est un facteur commun aux deux termes : $${n}${f}$ et $${abs(m)}${f}^2$.<br>
           En effet :<br>
-          $${m}${f}^2+${n}${f}=\\underbrace{${f}\\times ${ecritureParentheseSiNegatif(m)}${f}}_{${m}${f}^2}+\\underbrace{${f}\\times ${n}}_{${n}${f}} =${f}(${m}${f}+${n})$`
+          $${m}${f}^2+${n}${f}=\\underbrace{${f}\\times ${ecritureParentheseSiNegatif(m)}${f}}_{${m}${f}^2}+\\underbrace{${f}\\times ${n}}_{${n}${f}} =${miseEnEvidence(`${f}(${m}${f}+${n})`)}$`
             }
 
             this.canEnonce = texte
@@ -243,7 +243,9 @@ export default class SujetCAN2023Seconde extends Exercice {
                 index,
                 KeyboardType.lyceeClassique,
               )
+              this.optionsDeComparaison = { factorisation: true }
             }
+
             this.listeCanEnonces.push(this.canEnonce)
             this.listeCanReponsesACompleter.push(this.canReponseACompleter)
             nbChamps = 1
