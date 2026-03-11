@@ -7,7 +7,13 @@ import {
   createRealisticEarthSphere,
   createSkySphere,
 } from './solidesThreeJs'
-import { OrbitControls, Text, THREE, type Object3DJSON } from './threeInstance'
+import {
+  BufferGeometryUtils,
+  OrbitControls,
+  Text,
+  THREE,
+  type Object3DJSON,
+} from './threeInstance'
 
 class Canvas3dElement extends HTMLElement {
   private background: number = 0xeeeeee
@@ -164,7 +170,7 @@ class Canvas3dElement extends HTMLElement {
                   geometry = bufferGeometries[0]
                 } else {
                   // Nécessite BufferGeometryUtils
-                  geometry = (THREE as any).BufferGeometryUtils.mergeGeometries(
+                  geometry = BufferGeometryUtils.mergeGeometries(
                     bufferGeometries,
                     true,
                   )

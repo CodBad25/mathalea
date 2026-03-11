@@ -360,6 +360,8 @@ export function loadPackagesFromContent(contents: contentsType) {
       contents.preamble += '\n\\definecolor{nombres}{cmyk}{0,.8,.95,0}'
   }
   testIfLoaded(['\\begin{axis}'], '\\usepackage{pgfplots}', contents)
+  testIfLoaded(['\\addplot+['], '\\pgfplotsset{compat=1.18}', contents)
+  testIfLoaded(['\\addplot+['], '\\usetikzlibrary{plotmarks}', contents)
   testIfLoaded(
     ['pgfmathsetmacro'],
     '\\usetikzlibrary{decorations,decorations.text}',

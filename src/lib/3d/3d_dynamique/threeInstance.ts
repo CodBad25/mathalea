@@ -10,6 +10,14 @@ import {
   Wireframe,
 } from 'three/examples/jsm/Addons.js'
 export { Text } from 'troika-three-text'
+
+const BoxGeometry = THREE.BoxGeometry
+const Mesh = THREE.Mesh
+const MeshPhongMaterial = THREE.MeshPhongMaterial
+
+const EdgesGeometry = THREE.EdgesGeometry
+type Object3DJSON = THREEType.Object3DJSON
+
 export {
   BoxGeometry,
   BufferGeometryUtils,
@@ -25,10 +33,3 @@ export {
   type Object3DJSON,
   type THREEType,
 }
-
-const BoxGeometry = THREE.BoxGeometry
-const Mesh = THREE.Mesh
-const MeshPhongMaterial = THREE.MeshPhongMaterial
-
-const EdgesGeometry = THREE.EdgesGeometry
-type Object3DJSON = THREEType.Object3DJSON

@@ -456,7 +456,8 @@ export default class Stat {
         objetsToTrace,
       )
     } else {
-      return ` \\begin{tikzpicture}[every node/.style={inner sep=0pt,font=\\scriptsize},%
+      return ` \\medskip
+      \\begin{tikzpicture}[scale=1.5,every node/.style={inner sep=0pt,font=\\scriptsize},%
       boxplot prepared/every whisker/.style={ultra thick}]
     \\begin{axis}[
         clip=false,
@@ -467,11 +468,9 @@ export default class Stat {
         height=${height}cm,
         width=${size / 2}cm,
         ytick=\\empty,
-        axis y line=left,
+        axis y line=none,     % supprimer l'axe vertical
         axis x line=middle,
         xtick = \\empty,
-        y axis line style={draw=none},
-        enlarge y limits={abs=5mm},
       ]
       \\addplot+[
         boxplot prepared ={

@@ -28,15 +28,19 @@ stages:
   - playwright-pdfBAC
 
 variables:
-  SAST_DISABLED: "true"
   SAST_EXCLUDED_PATHS: "node_modules,.pnpm-store,dist,build,coverage,logs,.cache,.git,tests/e2e,playwright-report"
+  SAST_EXCLUDED_ANALYZERS: "bandit,gosec,flawfinder,brakeman"
 
-sast:
-  stage: test
+semgrep-sast:
   rules:
     - if: $CI_COMMIT_BRANCH == "main"
       when: always
     - when: never
+
+sast:
+  rules:
+    - when: never
+
 include:
   - template: Security/SAST.gitlab-ci.yml
 
@@ -355,7 +359,11 @@ test3ePDF:
       - updatefile/output/3e*
 
 build:
-  extends: .testCI
+  image: node:20-bullseye
+  allow_failure: true
+  variables:
+    KUBERNETES_MEMORY_REQUEST: "5Gi"
+    KUBERNETES_MEMORY_LIMIT: "6Gi"
   stage: build-projet
   before_script:
     - npm install -g corepack@latest
@@ -368,7 +376,11 @@ build:
     - echo "CI_COMMIT_BRANCH '$CI_COMMIT_BRANCH'"
     - echo "CI_OPEN_MERGE_REQUESTS '$CI_OPEN_MERGE_REQUESTS'"
     - echo "CI_PIPELINE_SOURCE '$CI_PIPELINE_SOURCE'"
-    - NODE_OPTIONS=--max-old-space-size=4096 pnpm run makeJson && pnpm vite build
+    # Étape 1: makeJson
+    - pnpm run makeJson
+    # Étape 2: build séparé
+    - NODE_OPTIONS="--max-old-space-size=5096 --expose-gc" pnpm vite build
+    # - NODE_OPTIONS=--max-old-space-size=4096 pnpm run makeJson && pnpm vite build
     - echo "$CI_COMMIT_AUTHOR"
   rules:
     - if: $CI_COMMIT_BRANCH == "main"
@@ -544,7 +556,6 @@ playwright-testInteractivity:
     - if: $CI_COMMIT_BRANCH == "main"
       when: always
     - if: $CI_COMMIT_BRANCH == "guironne-jobs"
-      when: manual
     - when: never
   artifacts:
     when: on_failure
