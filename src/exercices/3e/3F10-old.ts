@@ -1,13 +1,6 @@
-import {
-  handleAnswers,
-  setReponse,
-} from '../../lib/interactif/gestionInteractif'
-import {
-  ajouteChampTexteMathLive,
-  remplisLesBlancs,
-} from '../../lib/interactif/questionMathLive'
+import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice, shuffle2tableaux } from '../../lib/outils/arrayOutils'
-import { range } from '../../lib/outils/nombres'
 import { numAlpha } from '../../lib/outils/outilString'
 import { getLang } from '../../lib/stores/languagesStore'
 import { context } from '../../modules/context'
@@ -23,11 +16,11 @@ export const amcType = 'AMCHybride'
 /**
  * @author Rémi Angot
  */
-export const uuid = 'b92db'
+export const uuid = 'b92da'
 
 export const refs = {
-  'fr-fr': ['3F10', 'BP2AutoO1'],
-  'fr-ch': ['10FA5-4', '1mF1-6'],
+  'fr-fr': [],
+  'fr-ch': [],
 }
 export default class ImageAntecedentDepuisTableauOuFleche extends Exercice {
   constructor() {
@@ -42,7 +35,6 @@ export default class ImageAntecedentDepuisTableauOuFleche extends Exercice {
       let i = 0, texte, texteCorr, texteAMC, cpt = 0;
       i < this.nbQuestions && cpt < 50;
     ) {
-      const voies = range(5).map(() => choice([true, false]))
       const a = randint(-20, 20)
       const b = randint(-20, 20, [a])
       const c = randint(-20, 20, [a, b])
@@ -83,16 +75,11 @@ export default class ImageAntecedentDepuisTableauOuFleche extends Exercice {
         }
       }
       texteAMC =
-        numAlpha(0) +
-        (voies[0]
-          ? `Quelle est l'image de $${a}$ par la fonction $f$ ?`
-          : `Quel nombre $${a}$ a-t-il comme image ?`)
+        numAlpha(0) + `Quelle est l'image de $${a}$ par la fonction $f$ ?`
       texte += '<br>' + texteAMC
       texteCorr =
         numAlpha(0) +
-        (voies[0]
-          ? `L'image de $${a}$ par la fonction $f$ est $${b}$, on note $f(${a})=${b}$.<br>`
-          : `Le nombre $${a}$ a pour image $${b}$ par la fonction $f$, on note $f(${a})=${b}$.<br>`)
+        `L'image de $${a}$ par la fonction $f$ est $${b}$, on note $f(${a})=${b}$.<br>`
       setReponse(this, 6 * i, b)
       texte += ajouteChampTexteMathLive(this, 6 * i)
       if (context.isAmc) {
@@ -102,16 +89,11 @@ export default class ImageAntecedentDepuisTableauOuFleche extends Exercice {
       }
 
       texteAMC =
-        numAlpha(1) +
-        (voies[1]
-          ? `Quelle est l'image de $${c}$ par la fonction $f$ ?`
-          : `Quel nombre $${c}$ a-t-il comme image ?`)
+        numAlpha(1) + `Quelle est l'image de $${c}$ par la fonction $f$ ?`
       texte += '<br>' + texteAMC
       texteCorr +=
         numAlpha(1) +
-        (voies[1]
-          ? `L'image de $${c}$ par la fonction $f$ est $${d}$, on note $f(${c})=${d}$.`
-          : `Le nombre $${c}$ a pour image $${d}$ par la fonction $f$, on note $f(${c})=${d}$.`)
+        `L'image de $${c}$ par la fonction $f$ est $${d}$, on note $f(${c})=${d}$.`
       texte += ajouteChampTexteMathLive(this, i * 6 + 1)
       setReponse(this, i * 6 + 1, d)
       if (context.isAmc) {
@@ -120,16 +102,8 @@ export default class ImageAntecedentDepuisTableauOuFleche extends Exercice {
         )
       }
 
-      let texte3 = `Déterminer ${
-        voies[2]
-          ? lang === 'fr-CH'
-            ? `la préimage de $${a}$ par $f$.`
-            : `l'antécédent ou les antécédents de $${a}$ par la fonction $f$.`
-          : `le ou les nombres qui ont $${a}$ comme image par $f$.`
-      }`
-      const texteCorr3 = voies[2]
-        ? `$${a}$ a ${lang === 'fr-CH' ? 'un seul élément dans la préimage' : 'un seul antécédent'} par la fonction $f$ qui est $${d}$, on note $f(${d})=${a}$.`
-        : `Le nombre $${d}$ a pour image $${a}$ par la fonction $f$, donc $f(${d})=${a}$.`
+      let texte3 = `Déterminer ${lang === 'fr-CH' ? 'la préimage' : "l'antécédent ou les antécédents"} de $${a}$ par la fonction $f$.`
+      const texteCorr3 = `$${a}$ a ${lang === 'fr-CH' ? 'un seul élément dans la préimage' : 'un seul antécédent'} par la fonction $f$ qui est $${d}$, on note $f(${d})=${a}$.`
       setReponse(this, i * 6 + 2, d)
       texte3 += ajouteChampTexteMathLive(this, i * 6 + 2)
       if (context.isAmc) {
@@ -142,16 +116,8 @@ export default class ImageAntecedentDepuisTableauOuFleche extends Exercice {
         )
       }
 
-      let texte4 = voies[3]
-        ? lang === 'fr-CH'
-          ? `Déterminer la préimage de $${d}$ par la fonction $f$.`
-          : `Déterminer l'antécédent ou les antécédents de $${d}$ par la fonction $f$.`
-        : `Déterminer le ou les nombres qui ont $${d}$ comme image par la fonction $f$.`
-      const texteCorr4 = voies[3]
-        ? lang === 'fr-CH'
-          ? `$${d}$ a deux éléments dans la préimage : $${c}$ et $${e}$, on note $f(${c})=f(${e})=${d}$.`
-          : `$${d}$ a deux antécédents : $${c}$ et $${e}$, on note $f(${c})=f(${e})=${d}$.`
-        : `$${c}$ et $${e}$ ont pour image $${d}$ par la fonction $f$, on note $f(${c})=f(${e})=${d}$.`
+      let texte4 = `Déterminer l'antécédent ou les antécédents de $${d}$ par la fonction $f$.`
+      const texteCorr4 = `$${d}$ ${lang === 'fr-CH' ? 'deux éléments dans la préimage' : 'a deux antécédents'} par la fonction $f$ qui sont $${c}$ et $${e}$, on note $f(${c})=f(${e})=${d}$.`
       setReponse(this, i * 6 + 3, [`${c};${e}`, `${e};${c}`], {
         formatInteractif: 'texte',
       })
@@ -179,10 +145,13 @@ export default class ImageAntecedentDepuisTableauOuFleche extends Exercice {
 
       texte += '<br>' + numAlpha(4)
       texte += this.interactif
-        ? `Compléter : ${remplisLesBlancs(this, i * 6 + 4, `f(${c})=%{champ1}`, 'fillInTheBlank')}`
+        ? `Compléter : $f(${c})=\\ldots$`
         : `Recopier et compléter : $f(${c})=\\ldots$`
       texteCorr += '<br>' + numAlpha(4) + `$f(${c})=${d}$`
-      handleAnswers(this, i * 6 + 4, { champ1: { value: d.toString() } })
+      texte += ajouteChampTexteMathLive(this, i * 6 + 4)
+      setReponse(this, i * 6 + 4, [`f(${c})=${d}`, `${d}`], {
+        formatInteractif: 'texte',
+      })
       if (context.isAmc) {
         this.autoCorrection[i].propositions?.push(
           ajouteProposition(numAlpha(4) + `Compléter : $f(${c})=\\ldots$`, d),
@@ -191,18 +160,22 @@ export default class ImageAntecedentDepuisTableauOuFleche extends Exercice {
 
       texte += '<br>' + numAlpha(5)
       texte += this.interactif
-        ? `Compléter : ${remplisLesBlancs(this, i * 6 + 5, `f(%{champ1})=${c}`, 'fillInTheBlank')}`
+        ? `Compléter : $f(\\ldots)=${c}$`
         : `Recopier et compléter : $f(\\ldots)=${c}$`
 
       texteCorr += '<br>' + numAlpha(5) + `$f(${f})=${c}$`
-      handleAnswers(this, i * 6 + 5, { champ1: { value: f.toString() } })
+      texte += ajouteChampTexteMathLive(this, i * 6 + 5)
+      setReponse(this, i * 6 + 5, [`f(${f})=${c}`, `${f}`], {
+        formatInteractif: 'texte',
+      })
       if (context.isAmc) {
         this.autoCorrection[i].propositions?.push(
           ajouteProposition(numAlpha(5) + `Compléter : $f(\\ldots)=${c}$`, f),
         )
       }
 
-      if (this.questionJamaisPosee(i, [a, b, c, d, e, f].join(''))) {
+      if (this.listeQuestions.indexOf(texte) === -1) {
+        // Si la question n'a jamais été posée, on en créé une autre
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr
         i++

@@ -20,7 +20,7 @@ export const amcType = 'AMCHybride'
  * Lecture d'images et antécédents sur un graphe sinusoidale
  * @author Rémi Angot
  */
-export const uuid = '4b121'
+export const uuid = '4b122'
 
 export const refs = {
   'fr-fr': ['3F13-1', 'BP2AutoO9'],
@@ -32,6 +32,12 @@ export default class AntecedentEtImageGraphique extends Exercice {
 
     this.nbQuestions = 1
     this.nbQuestionsModifiable = false
+    this.besoinFormulaireNumerique = [
+      'Types de questions',
+      3,
+      "Déterminer l'image\nDéterminer le ou les antécédents\nToutes les questions",
+    ]
+    this.sup = 3
 
     if (context.isHtml) {
       this.spacingCorr = 2
@@ -39,6 +45,12 @@ export default class AntecedentEtImageGraphique extends Exercice {
   }
 
   nouvelleVersion() {
+    const lettreQuestion =
+      this.sup === 3
+        ? [0, 1, 2, 3]
+        : this.sup === 1
+          ? [0, 1, null, null]
+          : [null, null, 0, 1]
     const r = repere({
       xMin: -5,
       xMax: 5,
@@ -117,114 +129,124 @@ export default class AntecedentEtImageGraphique extends Exercice {
         "<br><em>S'il y a plusieurs réponses, séparer les réponses avec un point-virgule.</em>"
     }
     this.contenu += '<br><br>'
-    let cont1 = `${numAlpha(0)} Quelle est l'image de $${x0}$ ?`
-    cont1 += ajouteChampTexteMathLive(this, 0)
-    if (context.isAmc) {
-      this.autoCorrection[0].propositions?.push({
-        type: 'AMCNum', // on donne le type de la première question-réponse qcmMono, qcmMult, AMCNum, AMCOpen
-        propositions: [
-          // une ou plusieurs (Qcms) 'propositions'
-          {
-            texte: '', // Facultatif. la proposition de Qcm ou ce qui est affiché dans le corrigé pour cette question quand ce n'est pas un Qcm
-            reponse: {
-              // utilisé si type = 'AMCNum'
-              texte: cont1, // facultatif
-              valeur: a, // obligatoire (la réponse numérique à comparer à celle de l'élève). EE : Si une fraction est la réponse, mettre un tableau sous la forme [num,den]
-              alignement: 'center', // EE : ce champ est facultatif et n'est fonctionnel que pour l'hybride. Il permet de choisir où les cases sont disposées sur la feuille. Par défaut, c'est comme le texte qui le précède. Pour mettre à gauche, au centre ou à droite, choisir parmi ('flushleft', 'center', 'flushright').
-              param: {
-                digits: 1, // obligatoire pour AMC (le nombre de chiffres dans le nombre, si digits est mis à 0, alors il sera déterminé pour coller au nombre décimal demandé)
-                decimals: 0, // obligatoire pour AMC (le nombre de chiffres dans la partie décimale du nombre, si decimals est mis à 0, alors il sera déterminé pour coller au nombre décimal demandé)
-                signe: true, // obligatoire pour AMC (présence d'une case + ou -)
-                approx: 0, // (0 = valeur exacte attendue, sinon valeur de tolérance (voir explication détaillée dans type AMCNum))
+    const activeOuPassive1 = choice([true, false])
+    let cont1 = ''
+    if (lettreQuestion[0] !== null) {
+      cont1 = `${numAlpha(lettreQuestion[0])} ${activeOuPassive1 ? `Quelle est l'image de $${x0}$ ?` : `Quel nombre $${x0}$ a-t-il comme image ?`}`
+      cont1 += ajouteChampTexteMathLive(this, 0)
+      if (context.isAmc) {
+        this.autoCorrection[0].propositions?.push({
+          type: 'AMCNum', // on donne le type de la première question-réponse qcmMono, qcmMult, AMCNum, AMCOpen
+          propositions: [
+            // une ou plusieurs (Qcms) 'propositions'
+            {
+              texte: '', // Facultatif. la proposition de Qcm ou ce qui est affiché dans le corrigé pour cette question quand ce n'est pas un Qcm
+              reponse: {
+                // utilisé si type = 'AMCNum'
+                texte: cont1, // facultatif
+                valeur: a, // obligatoire (la réponse numérique à comparer à celle de l'élève). EE : Si une fraction est la réponse, mettre un tableau sous la forme [num,den]
+                alignement: 'center', // EE : ce champ est facultatif et n'est fonctionnel que pour l'hybride. Il permet de choisir où les cases sont disposées sur la feuille. Par défaut, c'est comme le texte qui le précède. Pour mettre à gauche, au centre ou à droite, choisir parmi ('flushleft', 'center', 'flushright').
+                param: {
+                  digits: 1, // obligatoire pour AMC (le nombre de chiffres dans le nombre, si digits est mis à 0, alors il sera déterminé pour coller au nombre décimal demandé)
+                  decimals: 0, // obligatoire pour AMC (le nombre de chiffres dans la partie décimale du nombre, si decimals est mis à 0, alors il sera déterminé pour coller au nombre décimal demandé)
+                  signe: true, // obligatoire pour AMC (présence d'une case + ou -)
+                  approx: 0, // (0 = valeur exacte attendue, sinon valeur de tolérance (voir explication détaillée dans type AMCNum))
+                },
               },
             },
-          },
-        ],
-      })
+          ],
+        })
+      }
     }
-    const enonceAMC = `${numAlpha(1)} Quelle est l'image de $${x0 + 5}$ ?`
-    cont1 += '<br>' + enonceAMC
-    cont1 += ajouteChampTexteMathLive(this, 1)
-    if (context.isAmc) {
-      this.autoCorrection[0].propositions?.push({
-        type: 'AMCNum', // on donne le type de la première question-réponse qcmMono, qcmMult, AMCNum, AMCOpen
-        propositions: [
-          // une ou plusieurs (Qcms) 'propositions'
-          {
-            texte: '', // Facultatif. la proposition de Qcm ou ce qui est affiché dans le corrigé pour cette question quand ce n'est pas un Qcm
-            reponse: {
-              // utilisé si type = 'AMCNum'
-              texte: enonceAMC, // facultatif
-              valeur: (b + c) / 2, // obligatoire (la réponse numérique à comparer à celle de l'élève). EE : Si une fraction est la réponse, mettre un tableau sous la forme [num,den]
-              alignement: 'center', // EE : ce champ est facultatif et n'est fonctionnel que pour l'hybride. Il permet de choisir où les cases sont disposées sur la feuille. Par défaut, c'est comme le texte qui le précède. Pour mettre à gauche, au centre ou à droite, choisir parmi ('flushleft', 'center', 'flushright').
-              param: {
-                digits: 1, // obligatoire pour AMC (le nombre de chiffres dans le nombre, si digits est mis à 0, alors il sera déterminé pour coller au nombre décimal demandé)
-                decimals: 0, // obligatoire pour AMC (le nombre de chiffres dans la partie décimale du nombre, si decimals est mis à 0, alors il sera déterminé pour coller au nombre décimal demandé)
-                signe: true, // obligatoire pour AMC (présence d'une case + ou -)
-                approx: 0, // (0 = valeur exacte attendue, sinon valeur de tolérance (voir explication détaillée dans type AMCNum))
+    if (lettreQuestion[1] !== null) {
+      const activeOuPassive2 = choice([true, false])
+      const enonceAMC = `${numAlpha(lettreQuestion[1])} ${activeOuPassive2 ? `Quelle est l'image de $${x0 + 5}$ ?` : `Quel nombre $${x0 + 5}$ a-t-il comme image ?`}`
+      cont1 += '<br>' + enonceAMC
+      cont1 += ajouteChampTexteMathLive(this, 1)
+      if (context.isAmc) {
+        this.autoCorrection[0].propositions?.push({
+          type: 'AMCNum', // on donne le type de la première question-réponse qcmMono, qcmMult, AMCNum, AMCOpen
+          propositions: [
+            // une ou plusieurs (Qcms) 'propositions'
+            {
+              texte: '', // Facultatif. la proposition de Qcm ou ce qui est affiché dans le corrigé pour cette question quand ce n'est pas un Qcm
+              reponse: {
+                // utilisé si type = 'AMCNum'
+                texte: enonceAMC, // facultatif
+                valeur: (b + c) / 2, // obligatoire (la réponse numérique à comparer à celle de l'élève). EE : Si une fraction est la réponse, mettre un tableau sous la forme [num,den]
+                alignement: 'center', // EE : ce champ est facultatif et n'est fonctionnel que pour l'hybride. Il permet de choisir où les cases sont disposées sur la feuille. Par défaut, c'est comme le texte qui le précède. Pour mettre à gauche, au centre ou à droite, choisir parmi ('flushleft', 'center', 'flushright').
+                param: {
+                  digits: 1, // obligatoire pour AMC (le nombre de chiffres dans le nombre, si digits est mis à 0, alors il sera déterminé pour coller au nombre décimal demandé)
+                  decimals: 0, // obligatoire pour AMC (le nombre de chiffres dans la partie décimale du nombre, si decimals est mis à 0, alors il sera déterminé pour coller au nombre décimal demandé)
+                  signe: true, // obligatoire pour AMC (présence d'une case + ou -)
+                  approx: 0, // (0 = valeur exacte attendue, sinon valeur de tolérance (voir explication détaillée dans type AMCNum))
+                },
               },
             },
-          },
-        ],
-      })
+          ],
+        })
+      }
     }
     const ordre = randint(1, 2)
-    let cont2
-    if (ordre === 1) {
-      cont2 = `${numAlpha(2)} Déterminer le (ou les) antécédent(s) de $${b}$.`
-      cont2 += ajouteChampTexteMathLive(this, 2)
-      cont2 += `<br>${numAlpha(3)} Déterminer le (ou les) antécédent(s) de $${c}$.`
-      cont2 += ajouteChampTexteMathLive(this, 3)
-    } else {
-      cont2 = `${numAlpha(2)} Déterminer le (ou les) antécédent(s) de $${c}$.`
-      cont2 += ajouteChampTexteMathLive(this, 2)
-      cont2 += `<br>${numAlpha(3)} Déterminer le (ou les) antécédent(s) de $${b}$.`
-      cont2 += ajouteChampTexteMathLive(this, 3)
-    }
-    if (context.isAmc) {
-      this.autoCorrection[0].propositions?.push({
-        type: 'AMCNum', // on donne le type de la première question-réponse qcmMono, qcmMult, AMCNum, AMCOpen
-        propositions: [
-          // une ou plusieurs (Qcms) 'propositions'
-          {
-            texte: '', // Facultatif. la proposition de Qcm ou ce qui est affiché dans le corrigé pour cette question quand ce n'est pas un Qcm
-            reponse: {
-              // utilisé si type = 'AMCNum'
-              texte: `${numAlpha(2)} Déterminer un antécédent de $${b}$.`, // facultatif
-              valeur: x0 + 4, // obligatoire (la réponse numérique à comparer à celle de l'élève). EE : Si une fraction est la réponse, mettre un tableau sous la forme [num,den]
-              alignement: 'center', // EE : ce champ est facultatif et n'est fonctionnel que pour l'hybride. Il permet de choisir où les cases sont disposées sur la feuille. Par défaut, c'est comme le texte qui le précède. Pour mettre à gauche, au centre ou à droite, choisir parmi ('flushleft', 'center', 'flushright').
-              param: {
-                digits: 1, // obligatoire pour AMC (le nombre de chiffres dans le nombre, si digits est mis à 0, alors il sera déterminé pour coller au nombre décimal demandé)
-                decimals: 0, // obligatoire pour AMC (le nombre de chiffres dans la partie décimale du nombre, si decimals est mis à 0, alors il sera déterminé pour coller au nombre décimal demandé)
-                signe: true, // obligatoire pour AMC (présence d'une case + ou -)
-                approx: 0, // (0 = valeur exacte attendue, sinon valeur de tolérance (voir explication détaillée dans type AMCNum))
+    let cont2 = ''
+    if (lettreQuestion[2] !== null && lettreQuestion[3] !== null) {
+      const activeOuPassive3 = choice([true, false])
+      if (ordre === 1) {
+        cont2 = `${numAlpha(lettreQuestion[2])} ${activeOuPassive3 ? `Déterminer le (ou les) antécédent(s) de $${b}$.` : `Déterminer le (ou les) nombres qui ont $${b}$ comme image.`}`
+        cont2 += ajouteChampTexteMathLive(this, lettreQuestion[2])
+        cont2 += `<br>${numAlpha(lettreQuestion[3])} ${activeOuPassive3 ? `Déterminer le (ou les) nombres qui ont $${c}$ comme image.` : `Déterminer le (ou les) antécédent(s) de $${c}$.`}`
+        cont2 += ajouteChampTexteMathLive(this, lettreQuestion[3])
+      } else {
+        cont2 = `${numAlpha(2)} ${activeOuPassive3 ? `Déterminer le (ou les) antécédent(s) de $${c}$.` : `Déterminer le (ou les) nombres qui ont $${c}$ comme image.`}`
+        cont2 += ajouteChampTexteMathLive(this, 2)
+        cont2 += `<br>${numAlpha(3)} ${activeOuPassive3 ? `Déterminer le (ou les) nombres qui ont $${b}$ comme image.` : `Déterminer le (ou les) antécédent(s) de $${b}$.`}`
+        cont2 += ajouteChampTexteMathLive(this, 3)
+      }
+      if (context.isAmc) {
+        this.autoCorrection[0].propositions?.push({
+          type: 'AMCNum', // on donne le type de la première question-réponse qcmMono, qcmMult, AMCNum, AMCOpen
+          propositions: [
+            // une ou plusieurs (Qcms) 'propositions'
+            {
+              texte: '', // Facultatif. la proposition de Qcm ou ce qui est affiché dans le corrigé pour cette question quand ce n'est pas un Qcm
+              reponse: {
+                // utilisé si type = 'AMCNum'
+                texte: `${numAlpha(lettreQuestion[2])} Déterminer un antécédent de $${b}$.`, // facultatif
+                valeur: x0 + 4, // obligatoire (la réponse numérique à comparer à celle de l'élève). EE : Si une fraction est la réponse, mettre un tableau sous la forme [num,den]
+                alignement: 'center', // EE : ce champ est facultatif et n'est fonctionnel que pour l'hybride. Il permet de choisir où les cases sont disposées sur la feuille. Par défaut, c'est comme le texte qui le précède. Pour mettre à gauche, au centre ou à droite, choisir parmi ('flushleft', 'center', 'flushright').
+                param: {
+                  digits: 1, // obligatoire pour AMC (le nombre de chiffres dans le nombre, si digits est mis à 0, alors il sera déterminé pour coller au nombre décimal demandé)
+                  decimals: 0, // obligatoire pour AMC (le nombre de chiffres dans la partie décimale du nombre, si decimals est mis à 0, alors il sera déterminé pour coller au nombre décimal demandé)
+                  signe: true, // obligatoire pour AMC (présence d'une case + ou -)
+                  approx: 0, // (0 = valeur exacte attendue, sinon valeur de tolérance (voir explication détaillée dans type AMCNum))
+                },
               },
             },
-          },
-        ],
-      })
-      this.autoCorrection[0].propositions?.push({
-        type: 'AMCNum', // on donne le type de la première question-réponse qcmMono, qcmMult, AMCNum, AMCOpen
-        propositions: [
-          // une ou plusieurs (Qcms) 'propositions'
-          {
-            texte: '', // Facultatif. la proposition de Qcm ou ce qui est affiché dans le corrigé pour cette question quand ce n'est pas un Qcm
-            reponse: {
-              // utilisé si type = 'AMCNum'
-              texte: `${numAlpha(3)} Déterminer un antécédent de $${c}$.`, // facultatif
-              valeur: x0 + 2, // obligatoire (la réponse numérique à comparer à celle de l'élève). EE : Si une fraction est la réponse, mettre un tableau sous la forme [num,den]
-              alignement: 'center', // EE : ce champ est facultatif et n'est fonctionnel que pour l'hybride. Il permet de choisir où les cases sont disposées sur la feuille. Par défaut, c'est comme le texte qui le précède. Pour mettre à gauche, au centre ou à droite, choisir parmi ('flushleft', 'center', 'flushright').
-              param: {
-                aussiCorrect: x0 + 6,
-                digits: 1, // obligatoire pour AMC (le nombre de chiffres dans le nombre, si digits est mis à 0, alors il sera déterminé pour coller au nombre décimal demandé)
-                decimals: 0, // obligatoire pour AMC (le nombre de chiffres dans la partie décimale du nombre, si decimals est mis à 0, alors il sera déterminé pour coller au nombre décimal demandé)
-                signe: true, // obligatoire pour AMC (présence d'une case + ou -)
-                approx: 0, // (0 = valeur exacte attendue, sinon valeur de tolérance (voir explication détaillée dans type AMCNum))
+          ],
+        })
+        this.autoCorrection[0].propositions?.push({
+          type: 'AMCNum', // on donne le type de la première question-réponse qcmMono, qcmMult, AMCNum, AMCOpen
+          propositions: [
+            // une ou plusieurs (Qcms) 'propositions'
+            {
+              texte: '', // Facultatif. la proposition de Qcm ou ce qui est affiché dans le corrigé pour cette question quand ce n'est pas un Qcm
+              reponse: {
+                // utilisé si type = 'AMCNum'
+                texte: `${numAlpha(lettreQuestion[3])} Déterminer un antécédent de $${c}$.`, // facultatif
+                valeur: x0 + 2, // obligatoire (la réponse numérique à comparer à celle de l'élève). EE : Si une fraction est la réponse, mettre un tableau sous la forme [num,den]
+                alignement: 'center', // EE : ce champ est facultatif et n'est fonctionnel que pour l'hybride. Il permet de choisir où les cases sont disposées sur la feuille. Par défaut, c'est comme le texte qui le précède. Pour mettre à gauche, au centre ou à droite, choisir parmi ('flushleft', 'center', 'flushright').
+                param: {
+                  aussiCorrect: x0 + 6,
+                  digits: 1, // obligatoire pour AMC (le nombre de chiffres dans le nombre, si digits est mis à 0, alors il sera déterminé pour coller au nombre décimal demandé)
+                  decimals: 0, // obligatoire pour AMC (le nombre de chiffres dans la partie décimale du nombre, si decimals est mis à 0, alors il sera déterminé pour coller au nombre décimal demandé)
+                  signe: true, // obligatoire pour AMC (présence d'une case + ou -)
+                  approx: 0, // (0 = valeur exacte attendue, sinon valeur de tolérance (voir explication détaillée dans type AMCNum))
+                },
               },
             },
-          },
-        ],
-      })
+          ],
+        })
+      }
     }
 
     this.contenu += deuxColonnes(cont1, cont2)
@@ -233,32 +255,43 @@ export default class AntecedentEtImageGraphique extends Exercice {
       r,
       gr,
     )
-    this.contenuCorrection = `${numAlpha(0)} L'image de $${x0}$ est $${a}$, on note $f(${x0})=${a}$.`
-    setReponse(this, 0, a)
-
-    this.contenuCorrection += `<br>${numAlpha(1)} L'image de $${x0 + 5}$ est $${(b + c) / 2}$, on note $f(${x0 + 5})=${(b + c) / 2}$.`
-    setReponse(this, 1, (b + c) / 2)
-    if (ordre === 1) {
-      this.contenuCorrection += `<br>${numAlpha(2)} $${b}$ a pour unique antécédent $${x0 + 4}$, on note $f(${x0 + 4})=${b}$.`
-      setReponse(this, 2, x0 + 4)
-      this.contenuCorrection += `<br>${numAlpha(3)} $${c}$ a deux antécédents $${x0 + 2}$ et $${x0 + 6}$, on note $f(${x0 + 2})=f(${x0 + 6})=${c}$.`
-      setReponse(
-        this,
-        3,
-        [`${x0 + 2};${x0 + 6}`, `${x0 + 6};${x0 + 2}`],
-        { formatInteractif: 'texte' },
-      )
-    } else {
-      this.contenuCorrection += `<br>${numAlpha(2)} $${c}$ a deux antécédents $${x0 + 2}$ et $${x0 + 6}$, on note $f(${x0 + 2})=f(${x0 + 6})=${c}$.`
-      setReponse(
-        this,
-        2,
-        [`${x0 + 2};${x0 + 6}`, `${x0 + 6};${x0 + 2}`],
-        { formatInteractif: 'texte' },
-      )
-      this.contenuCorrection += `<br>${numAlpha(3)} $${b}$ a pour unique antécédent $${x0 + 4}$, on note $f(${x0 + 4})=${b}$.`
-      setReponse(this, 3, x0 + 4)
+    this.contenuCorrection = ''
+    if (lettreQuestion[0] !== null) {
+      this.contenuCorrection += `${numAlpha(lettreQuestion[0])} L'image de $${x0}$ est $${a}$, on note $f(${x0})=${a}$.`
+      setReponse(this, lettreQuestion[0], a)
     }
+    if (lettreQuestion[1] !== null) {
+      this.contenuCorrection += `<br>${numAlpha(lettreQuestion[1])} L'image de $${x0 + 5}$ est $${(b + c) / 2}$, on note $f(${x0 + 5})=${(b + c) / 2}$.`
+      setReponse(this, lettreQuestion[1], (b + c) / 2)
+    }
+    if (lettreQuestion[2] !== null && lettreQuestion[3] !== null) {
+      if (ordre === 1) {
+        this.contenuCorrection += `<br>${numAlpha(lettreQuestion[2])} $${b}$ a pour unique antécédent $${x0 + 4}$, on note $f(${x0 + 4})=${b}$.`
+        setReponse(this, lettreQuestion[2], x0 + 4)
+        this.contenuCorrection += `<br>${numAlpha(lettreQuestion[3])} $${c}$ a deux antécédents $${x0 + 2}$ et $${x0 + 6}$, on note $f(${x0 + 2})=f(${x0 + 6})=${c}$.`
+        setReponse(
+          this,
+          lettreQuestion[3],
+          [`${x0 + 2};${x0 + 6}`, `${x0 + 6};${x0 + 2}`],
+          {
+            formatInteractif: 'texte',
+          },
+        )
+      } else {
+        this.contenuCorrection += `<br>${numAlpha(lettreQuestion[2])} $${c}$ a deux antécédents $${x0 + 2}$ et $${x0 + 6}$, on note $f(${x0 + 2})=f(${x0 + 6})=${c}$.`
+        setReponse(
+          this,
+          lettreQuestion[2],
+          [`${x0 + 2};${x0 + 6}`, `${x0 + 6};${x0 + 2}`],
+          {
+            formatInteractif: 'texte',
+          },
+        )
+        this.contenuCorrection += `<br>${numAlpha(lettreQuestion[3])} $${b}$ a pour unique antécédent $${x0 + 4}$, on note $f(${x0 + 4})=${b}$.`
+        setReponse(this, lettreQuestion[3], x0 + 4)
+      }
+    }
+
     if (!context.isHtml) {
       this.contenu =
         texConsigne('') +
