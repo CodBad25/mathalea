@@ -385,7 +385,7 @@ export default class ModeliserEquationsGeometrie extends Exercice {
             const a = randint(1, 8)
             const b = randint(a * a + 1, 100)
 
-            texte = ` En augmentant le côté d'un carré de $${a}\\text{ cm}$, son aire aumente de $${b}\\text{ cm}^2$.<br>
+            texte = ` En augmentant le côté d'un carré de $${a}\\text{ cm}$, son aire augmente de $${b}\\text{ cm}^2$.<br>
       Quelle est la longueur du côté de ce carré ? <br>
       On donnera le résultat sous la forme d'une fraction irréductible ou d'un nombre entier le cas échéant.`
             texteCorr = `On note $x$ la longueur du côté du carré que l'on cherche.<br>
