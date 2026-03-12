@@ -32,7 +32,7 @@ export const amcType = 'qcmMono'
 export const interactifReady = true
 export const interactifType = ['qcm', 'mathLive']
 
-export const titre = "Effectuer l'addition de deux nombres relatifs"
+export const titre = 'Additionner deux nombres relatifs'
 export const dateDeModifImportante = '24/9/2024'
 
 /**
@@ -57,7 +57,7 @@ export default class ExerciceAdditionsRelatifs extends Exercice {
     this.sup3 = false
     this.besoinFormulaireNumerique = ['Valeur maximale', 99999]
     this.besoinFormulaire2Numerique = [
-      'Type de questions',
+      "Type d'expressions",
       3,
       'Tous les nombres entre parenthèses \n2 : Seul le 2e terme négatif est entre parenthèses \n3 : Écriture simplifiée',
     ]

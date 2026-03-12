@@ -88,7 +88,7 @@ export function rienSi0(a: number | IFractionEtendue | Decimal) {
   return String(a)
 }
 
-/**
+/*
  * @deprecated
  * Gère l'écriture de l'exposant en mode text (ne doit pas s'utiliser entre $ $)
  * Pour le mode maths (entre $ $) on utilisera tout simplement ^3 pour mettre au cube ou ^{42} pour la puissance 42.
