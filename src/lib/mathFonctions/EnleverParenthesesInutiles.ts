@@ -1,39 +1,95 @@
 /**
- * 🧹 deparenthise()
- * Nettoie une expression LaTeX sans changer les opérateurs d'origine.
+ * Supprime les parenthèses inutiles dans du LaTeX tout en conservant :
+ * - (-x) après +, -, \times ou \div
+ * - Les fractions et nombres négatifs correctement
+ *
+ * Exemples :
+ *  deparenthise('\\dfrac{(+4)}{(-8)}')
+ *    -> '\\dfrac{4}{-8}'
+ *  deparenthise('$ … + (-3{,}3) = (+5{,}6) $')
+ *    -> '$ … + (-3{,}3) = 5{,}6 $'
+ *  deparenthise('2 \\times (-3)')
+ *    -> '2 \\times (-3)'
  */
 export function deparenthise(latexIn: string): string {
-  let s = latexIn
+  let result = ''
+  let i = 0
 
-  // (+x) -> x
-  s = s.replace(/\(\+([^)]+)\)/g, '$1')
+  while (i < latexIn.length) {
+    // Détecte (+...) ou (-...) parenthèse ouvrante suivie d'un signe
+    if (
+      latexIn[i] === '(' &&
+      (latexIn[i + 1] === '+' || latexIn[i + 1] === '-')
+    ) {
+      const sign = latexIn[i + 1] // '+' ou '-'
+      let j = i + 2
+      let depth = 1
 
-  // (-x) -> -x sauf après \times ou \div
-  s = s.replace(/(?<!\\times\s)(?<!\\div\s)\(-([^)]+)\)/g, '-$1')
+      // Trouver la parenthèse fermante correspondante
+      while (j < latexIn.length && depth > 0) {
+        if (latexIn[j] === '(') depth++
+        else if (latexIn[j] === ')') depth--
+        j++
+      }
 
-  // parenthèses autour d’un nombre (sauf après \times ou \div)
-  s = s.replace(/(?<!\\times\s)(?<!\\div\s)\(([-+]?\d+)\)/g, '$1')
+      const content = latexIn.slice(i + 2, j - 1) // contenu à l'intérieur des parenthèses
 
-  // produit négatif
-  s = s.replace(/\\times-([0-9]+)/g, '\\times(-$1)')
+      // Chercher le dernier caractère significatif avant '('
+      let k = result.length - 1
+      while (k >= 0 && result[k] === ' ') k--
+      const prev = k >= 0 ? result[k] : '<<START>>'
 
-  // division négative
-  s = s.replace(/\\div-([0-9]+)/g, '\\div(-$1)')
+      if (sign === '+') {
+        // (+x) -> on supprime toujours les parenthèses
+        result += content
+      } else {
+        // (-x) -> on garde les parenthèses si précédé de +, -, \ ou on supprime sinon
+        if (prev === '+' || prev === '-' || prev === '\\') {
+          result += `(-${content})` // garde les parenthèses
+        } else {
+          result += `-${content}` // enlève les parenthèses
+        }
+      }
 
-  // +(...×...) -> +...×...
-  s = s.replace(/\+\((\d+\\times[^()]*(?:\([^()]*\)[^()]*)*)\)/g, '+$1')
+      i = j
+      continue
+    }
 
-  // +(...÷...) -> +...÷...
-  s = s.replace(/\+\((\d+\\div[^()]*(?:\([^()]*\)[^()]*)*)\)/g, '+$1')
+    // Sinon, copie le caractère tel quel
+    result += latexIn[i]
+    i++
+  }
 
-  // (...×...)+ -> ...×...+
-  s = s.replace(/\((\d+\\times\d+)\)\+/g, '$1+')
+  // Enlève les parenthèses autour d’un nombre positif si :
+  // - pas après \times, \div, + ou -
+  // ⚡ Remarque : ne touche pas aux nombres négatifs déjà entre parenthèses
+  result = result.replace(
+    /(?<!\\times\s)(?<!\\div\s)(?<![-+])\((\d+(?:{,}\d+)?)\)/g,
+    '$1',
+  )
 
-  // (...÷...)+ -> ...÷...+
-  s = s.replace(/\((\d+\\div\d+)\)\+/g, '$1+')
+  // Produit et division négatifs : ajoute des parenthèses pour la clarté
+  result = result.replace(/\\times-([0-9]+)/g, '\\times(-$1)')
+  result = result.replace(/\\div-([0-9]+)/g, '\\div(-$1)')
 
-  return s
+  // Cas +(...×...) -> +...×...
+  result = result.replace(
+    /\+\((\d+\\times[^()]*(?:\([^()]*\)[^()]*)*)\)/g,
+    '+$1',
+  )
+
+  // Cas +(...÷...) -> +...÷...
+  result = result.replace(/\+\((\d+\\div[^()]*(?:\([^()]*\)[^()]*)*)\)/g, '+$1')
+
+  // Cas (...×...)+ -> ...×...+
+  result = result.replace(/\((\d+\\times\d+)\)\+/g, '$1+')
+
+  // Cas (...÷...)+ -> ...÷...+
+  result = result.replace(/\((\d+\\div\d+)\)\+/g, '$1+')
+
+  return result
 }
+
 /* Ancienne version mais qui ne fonctionne plus depuis le passage à la version 0.54.1 de ComputeEngine
 export function deparenthise(latexIn: string): string {
   // Comptage des \frac et \dfrac

@@ -1,3 +1,6 @@
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import {
   choice,
   combinaisonListes,
@@ -18,13 +21,10 @@ import {
   triePositifsNegatifs,
 } from '../../lib/outils/nombres'
 import { lettreDepuisChiffre } from '../../lib/outils/outilString'
-import Exercice from '../Exercice'
+import { texNombre } from '../../lib/outils/texNombre'
 import { context } from '../../modules/context'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
-import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
-import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { texNombre } from '../../lib/outils/texNombre'
+import Exercice from '../Exercice'
 
 export const titre = 'Additionner 5 nombres relatifs'
 export const interactifReady = true
@@ -67,7 +67,7 @@ export default class ExerciceAdditionsDe5Relatifs extends Exercice {
     this.amcReady = amcReady
     this.besoinFormulaireNumerique = ['Valeur maximale', 99999]
     this.besoinFormulaire2Numerique = [
-      'Type de questions',
+      "Type d'expressions",
       3,
       'Tous les nombres entre parenthèses \n2 : Seul les termes négatifs sont entre parenthèses \n3 : Écriture simplifiée',
     ]

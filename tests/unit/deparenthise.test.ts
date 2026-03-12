@@ -15,6 +15,20 @@ describe('deparenthise()', () => {
       expect(norm(deparenthise('3+(4\\times2)'))).toBe('3+4\\times2')
     })
 
+    it('supprime les parenthèses inutiles', () => {
+      expect(norm(deparenthise('(+3)+(+4)'))).toBe('3+4')
+    })
+
+    it('supprime les parenthèses inutiles', () => {
+      expect(
+        norm(deparenthise('$ \\ldots\\ldots\\ldots + (-3{,}3) = (+5{,}6) $')),
+      ).toBe('$\\ldots\\ldots\\ldots+(-3{,}3)=5{,}6$')
+    })
+
+    it('supprime les parenthèses inutiles', () => {
+      expect(norm(deparenthise('(+3)+(-4)'))).toBe('3+(-4)')
+    })
+
     it('conserve les parenthèses utiles', () => {
       expect(norm(deparenthise('(3+4)\\times2'))).toBe('(3+4)\\times2')
     })
