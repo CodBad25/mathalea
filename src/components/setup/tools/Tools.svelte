@@ -218,7 +218,7 @@
           />
           <button
             class="tooltip tooltip-bottom tooltip-neutral"
-            data-tip="LaTeX"
+            data-tip="PDV via LaTeX"
             on:click={() => handleExport('latex')}
           >
             <PdfTextIcon
