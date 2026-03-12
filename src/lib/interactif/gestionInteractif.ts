@@ -507,9 +507,9 @@ export function setReponse(
       signe = (valeurs[0] as FractionEtendue).signe === -1 // si c'est une fraction, alors on regarde son signe (valeur -1, 0 ou 1)
     } else {
       if (typeof valeurs[0] === 'number') {
-        signe = valeurs[0] < 0 // on teste si elle est négative, si oui, on force la case signe pour AMC
+        signe = signe ?? valeurs[0] < 0 // on teste si elle est négative, si oui, on force la case signe pour AMC
       } else {
-        signe = Number(valeurs[0]) < 0
+        signe = signe ?? Number(valeurs[0]) < 0
       }
     }
   } else {
