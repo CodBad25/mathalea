@@ -6,7 +6,8 @@ import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-export const titre = "Déterminer l'inverse d'un entier modulo $k$"
+export const titre = "Déterminer l'inverse d'un entier modulo k"
+// Bug : Si on écrit $k$ dans le titre alors inverse s'écrit en mode maths 
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const dateDePublication = '27/11/2025'

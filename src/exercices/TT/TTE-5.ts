@@ -13,7 +13,7 @@ import {
 import Exercice from '../Exercice'
 
 export const titre =
-  "Résolution d'équations du type $a^x = b$ avec un logaritme"
+  "Résolution d'équations du type $a^x = b$ avec un logarithme"
 export const dateDePublication = '28/07/2024'
 export const dateDeModifImportante = '28/07/2024'
 export const uuid = '00ec8'
