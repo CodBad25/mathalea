@@ -223,6 +223,11 @@ async function checkLatex(
   }
 }
 
+async function openAmcFromMoreExports(page: Page) {
+  await page.locator('[data-tip="Plus d\'exports"] button').click()
+  await page.getByRole('dialog').locator('button:has(p:text-is("AMC"))').click()
+}
+
 async function checkLatexVariation(
   page: Page,
   description: string,
@@ -230,7 +235,11 @@ async function checkLatexVariation(
   variation: LatexVariation | AMCVariation,
   callback: CallbackType,
 ) {
-  await page.locator(`button[data-tip="${view}"]`).click()
+  if (view === 'AMC') {
+    await openAmcFromMoreExports(page)
+  } else {
+    await page.locator('button[data-tip="PDF via LaTeX"]').click()
+  }
   await page.click(`input[type="radio"][value="${variation}"]`)
   await waitForLatex(page, variation)
   await callback(page, description, view, variation)
@@ -290,7 +299,7 @@ async function checkAmc(
 }
 
 async function isAmcAvailable(page: Page): Promise<boolean> {
-  await page.locator('button[data-tip="AMC"]').click()
+  await openAmcFromMoreExports(page)
   await page.waitForTimeout(1000)
   const AmcErrorLocator = await page
     .getByRole('dialog')
@@ -299,7 +308,7 @@ async function isAmcAvailable(page: Page): Promise<boolean> {
   if (AmcErrorLocator.length > 0) {
     await page
       .getByRole('dialog')
-      .getByRole('button', { name: '' })
+      .getByRole('button', { name: '' })
       .locator('.bx-x')
       .click()
     await page.locator('.bx-x').first().click()
