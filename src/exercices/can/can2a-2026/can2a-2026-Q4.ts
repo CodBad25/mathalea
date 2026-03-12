@@ -63,9 +63,7 @@ export default class Can2a2026Q4 extends ExerciceCan {
 
     &=${miseEnEvidence(resultat.texFraction)}\\end{aligned}$`
 
-    if (this.interactif) {
-      this.question += ' $=$'
-    }
+   
   }
 
   nouvelleVersion() {
