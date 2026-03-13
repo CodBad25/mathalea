@@ -111,7 +111,7 @@ export default class ExercicePerimetresEtAires extends Exercice {
       defaut: this.exo === 'NoDisk' ? 2 : 4,
       nbQuestions: this.nbQuestions,
       melange: this.exo === 'NoDisk' ? 4 : 6,
-      shuffle: true,
+      shuffle: false,
       saisie: this.sup,
     })
     let listeDeNomsDePolygones: string[] = []
@@ -154,9 +154,8 @@ export default class ExercicePerimetresEtAires extends Exercice {
           : this.sup5 === 1
             ? 'Calculer le périmètre '
             : "Calculer l'aire "
-      const typeDeLaQuestion: string =
-        typesDeQuestionsDisponibles[Number(typesDeQuestions[i]) - 1]
-      switch (typeDeLaQuestion) {
+
+      switch (typesDeQuestionsDisponibles[Number(typesDeQuestions[i]) - 1]) {
         case 'carre':
           cote = randint(2, 8) + partieDecimale1
           nomCarre = creerNomDePolygone(4, listeDeNomsDePolygones)
@@ -416,8 +415,8 @@ export default class ExercicePerimetresEtAires extends Exercice {
         case 'cercle':
           R = this.sup2 ? randint(2, 4) + randint(1, 9) / 10 : randint(2, 5)
           if (this.sup3) {
-            // this.sup5 = 3
-            texte += 'de ce disque. '
+            texte +=
+              "de ce disque. Donner une valeur approchée au dixième de $\\text{cm}$ pour l'un et au dixième de $\\text{cm}^2$ pour l'autre."
             const nomCercle = creerNomDePolygone(4, listeDeNomsDePolygones)
             listeDeNomsDePolygones.push(nomCercle)
             const A = point(0, 0, nomCercle.charAt(0), 'below left')
@@ -474,12 +473,10 @@ export default class ExercicePerimetresEtAires extends Exercice {
           } else {
             donneLeDiametre = choice([true, false])
             if (donneLeDiametre) {
-              // this.sup5 = 3
-              texte += `d'un disque de $${texNombre(2 * R)}\\text{ cm}$ de diamètre. `
+              texte += `d'un disque de $${texNombre(2 * R)}\\text{ cm}$ de diamètre. Donner une valeur approchée au dixième de $\\text{cm}$ pour l'un et au dixième de $\\text{cm}^2$ pour l'autre.`
               texteCorr = `Le diamètre est de $${texNombre(2 * R)}\\text{ cm}$ donc le rayon est de $${texNombre(R)}\\text{ cm}$.<br>`
             } else {
-              // this.sup5 = 3
-              texte += `d'un disque de $${texNombre(R)}\\text{ cm}$ de rayon. `
+              texte += `d'un disque de $${texNombre(R)}\\text{ cm}$ de rayon. Donner une valeur approchée au dixième de $\\text{ cm}$ pour l'un et au dixième de $\\text{cm}^2$ pour l'autre.`
               texteCorr = ''
             }
           }
@@ -514,8 +511,8 @@ export default class ExercicePerimetresEtAires extends Exercice {
         default:
           R = this.sup2 ? randint(2, 4) + randint(1, 9) / 10 : randint(2, 5)
           if (this.sup3) {
-            // this.sup5 = 3
-            texte += 'de ce demi-disque. '
+            texte +=
+              "de ce demi-disque. Donner une valeur approchée au dixième de $\\text{cm}$ pour l'un et au dixième de $\\text{cm}^2$ pour l'autre."
             const nomCercle = creerNomDePolygone(4, listeDeNomsDePolygones)
             listeDeNomsDePolygones.push(nomCercle)
             const A = point(0, 0, nomCercle.charAt(0), 'below left')
@@ -574,12 +571,12 @@ export default class ExercicePerimetresEtAires extends Exercice {
           } else {
             donneLeDiametre = choice([true, false])
             if (donneLeDiametre) {
-              // this.sup5 = 3
-              texte += `d'un demi-disque de $${texNombre(2 * R)}\\text{ cm}$ de diamètre. `
+              texte +=
+                `d'un demi-disque de $${texNombre(2 * R)}\\text{ cm}$ de diamètre. Donner une valeur approchée au dixième de $\\text{cm}$ pour l'un et au dixième de $\\text{cm}^2$  pour l'autre.` +
+                '<br>'
               texteCorr = `Le diamètre est de $${texNombre(2 * R)}\\text{ cm}$ donc le rayon est de $${texNombre(R)}\\text{ cm}$.<br>`
             } else {
-              // this.sup5 = 3
-              texte += `d'un demi-disque de $${texNombre(R)}\\text{ cm}$ de rayon. `
+              texte += `d'un demi-disque de $${texNombre(R)}\\text{ cm}$ de rayon. Donner une valeur approchée au dixième de $\\text{cm}$ pour l'un et au dixième de $\\text{cm}^2$  pour l'autre.`
               texteCorr = ''
             }
           }
@@ -610,16 +607,6 @@ export default class ExercicePerimetresEtAires extends Exercice {
           resultat2 = arrondi((R * R * (this.sup4 ? 3.14 : Math.PI)) / 2, 1)
           break
       }
-      if (typeDeLaQuestion === 'demi-disque' || typeDeLaQuestion === 'cercle') {
-        texte += `Donner une valeur approchée au dixième de `
-        texte +=
-          this.sup5 === 3
-            ? `$\\text{cm}$ pour l'un et au dixième de $\\text{cm}^2$  pour l'autre.`
-            : this.sup5 === 1
-              ? `$\\text{cm}$`
-              : `$\\text{cm}^2$.`
-      }
-
       if (this.sup5 !== 2) {
         texte += ajouteChampTexteMathLive(
           this,

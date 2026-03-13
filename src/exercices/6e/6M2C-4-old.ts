@@ -1,4 +1,4 @@
-import ExercicePerimetresEtAires from './_Exercice_perimetres_et_aires'
+import ExercicePerimetresEtAires from './_Exercice_perimetres_et_aires-old'
 export const titre = "Calculer le périmètre et/ou l'aire de polygones usuels"
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -10,7 +10,7 @@ export const dateDeModifImportante = '11/04/2023'
 /**
  * @author Rémi Angot
  */
-export const uuid = '065d1'
+export const uuid = '83be1'
 
 export const refs = {
   'fr-fr': ['6M2C-4', 'BP2AutoV2'],

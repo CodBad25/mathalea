@@ -1,4 +1,4 @@
-import ExercicePerimetresEtAires from '../6e/_Exercice_perimetres_et_aires'
+import ExercicePerimetresEtAires from '../6e/_Exercice_perimetres_et_aires-old'
 
 export const titre =
   "Calculer le périmètre et l'aire de disques ou demi-disques"
@@ -10,7 +10,7 @@ export const amcType = 'AMCHybride'
 export const dateDeModifImportante = '11/04/2023'
 
 /** */
-export const uuid = 'd8741'
+export const uuid = 'ac571'
 
 export const refs = {
   'fr-fr': ['5M11-2', 'BP2AutoV6'],
