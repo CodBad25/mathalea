@@ -1,9 +1,11 @@
 import { BoiteBuilder } from '../../../lib/2d/BoiteBuilder'
 import { fixeBordures } from '../../../lib/2d/fixeBordures'
 import { FlecheBuilder } from '../../../lib/2d/fleches'
+import { MetaInteractif2d } from '../../../lib/2d/interactif2d'
 import { segment } from '../../../lib/2d/segmentsVecteurs'
 import { latex2d } from '../../../lib/2d/textes'
 import { bleuMathalea } from '../../../lib/colors'
+import { ajouteFeedback } from '../../../lib/interactif/questionMathLive'
 import { choice } from '../../../lib/outils/arrayOutils'
 import {
   miseEnEvidence,
@@ -17,8 +19,8 @@ import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Calculer des additions avec des sauts de 9 ou 19'
 export const interactifReady = true
-export const interactifType = 'mathLive'
-export const uuid = '1473g'
+export const interactifType = 'MetaInteractif2d'
+export const uuid = '1473f'
 export const refs = {
   'fr-fr': [],
   'fr-ch': [],
@@ -36,10 +38,10 @@ export default class Can2026CE2Q7 extends ExerciceCan {
       step2 = randint(step1 + 1, 3)
     }
     this.reponse = {
-      champ1: { value: start + saut * step1 },
-      champ2: { value: start + saut * step2 },
+      field0: { value: start + saut * step1 },
+      field1: { value: start + saut * step2 },
     }
-    this.canEnonce = 'Compléter les cases vides'
+    this.question = 'Compléter les cases vides'
     const trait = segment(-0.3, 0, 4.2, 0)
     const graduations = [0, 1, 2, 3, 4].map((i) => segment(i, -0.1, i, 0.1))
     const boxes = [
@@ -57,7 +59,7 @@ export default class Can2026CE2Q7 extends ExerciceCan {
       }).render(),
     ]
     const startNb = latex2d(String(start), 0, -0.5, { letterSize: 'small' })
-    /* const inputs = new MetaInteractif2d(
+    const inputs = new MetaInteractif2d(
       [
         {
           x: step1,
@@ -80,13 +82,7 @@ export default class Can2026CE2Q7 extends ExerciceCan {
       ],
       { exercice: this, question: 0 },
     )
-*/
-    const input1 = latex2d(context.isHtml ? '?' : '~', step1, -0.6, {
-      letterSize: 'small',
-    })
-    const input2 = latex2d(context.isHtml ? '??' : '~', step2, -0.6, {
-      letterSize: 'small',
-    })
+
     const liste = range(step2 - 1).map((i) => {
       const maFleche = new FlecheBuilder({
         coords: [
@@ -113,8 +109,7 @@ export default class Can2026CE2Q7 extends ExerciceCan {
       ...graduations,
       ...boxes,
       startNb,
-      input1,
-      input2,
+      inputs,
       ...liste.flat(),
       saut2d,
     ]
@@ -123,10 +118,13 @@ export default class Can2026CE2Q7 extends ExerciceCan {
       objets,
     )
     this.canReponseACompleter = figure
-    this.canEnonce = 'Complète les cases vides.'
-    this.question = this.canReponseACompleter
-    this.consigne = figure
-    this.question = '?=%{champ1} \\text{ et  } ??=%{champ2}'
+    if (context.isHtml) {
+      this.question +=
+        this.canReponseACompleter +
+        (context.isHtml
+          ? `<span id="resultatCheckEx${this.numeroExercice}Q${0}"></span>${ajouteFeedback(this, 0)}`
+          : '')
+    }
     this.correction =
       `La première case contient : $${start}+${step1 === 1 ? String(saut) : `${step1}\\times ${saut}`}=${miseEnEvidence(start + saut * step1)}$ et la deuxième case contient : $${start}+${step2}\\times ${saut}=${miseEnEvidence(start + saut * step2)}$.<br>
     ` +
@@ -137,7 +135,7 @@ export default class Can2026CE2Q7 extends ExerciceCan {
   }
 
   nouvelleVersion() {
-    this.formatInteractif = 'fillInTheBlank'
+    this.formatInteractif = 'MetaInteractif2d'
     this.canOfficielle || this.sup ? this.enonce(127, 9, 1, 2) : this.enonce()
   }
 }
