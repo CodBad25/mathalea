@@ -79,7 +79,10 @@ export async function loadMathLive(divExercice) {
   if (champs != null) {
     for (const mf of champs) {
       if (mf instanceof MathfieldElement) {
-        if (mf.classList.contains('fillInTheBlanks')) {
+        if (
+          mf.classList.contains('fillInTheBlanks') ||
+          mf.classList.contains('metaInteractif2d')
+        ) {
           mf.classList.remove('invisible')
         }
         mf.classList.add('ml-1')
@@ -128,7 +131,9 @@ export async function loadMathLive(divExercice) {
 
 function handleFocusMathField(event) {
   const mf = event.target
-  const isFillInTheBlanks = mf.classList.contains('fillInTheBlanks')
+  const isFillInTheBlanks =
+    mf.classList.contains('fillInTheBlanks') ||
+    mf.classList.contains('metaInteractif2d')
   const isNotFillInTheBlanksAndReadOnly = !isFillInTheBlanks && mf.readOnly
   const isCorrected =
     isNotFillInTheBlanksAndReadOnly || mf.classList.contains('corrected')
