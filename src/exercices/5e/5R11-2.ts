@@ -216,6 +216,7 @@ class PlacerPointsSurAxeRelatifs extends Exercice {
         label,
         x,
         y: 0,
+        precision: this.sup + 1
       })
       const point = points[0]
       if (isValid) {
