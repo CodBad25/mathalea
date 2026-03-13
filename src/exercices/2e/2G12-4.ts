@@ -37,7 +37,7 @@ export default class NaturePolygone extends Exercice {
     this.besoinFormulaireNumerique = [
       'Situations',
       3,
-      '1 : Triangles \n2 : Quadrilétères\n3 : Mélange ',
+      '1 : Triangles \n2 : Quadrilatères\n3 : Mélange ',
     ]
 
     this.nbQuestions = 1
@@ -213,7 +213,7 @@ export default class NaturePolygone extends Exercice {
             s3,
           )
           texte =
-            'Dans un repère orthonormé $(O;I,J)$, on donne les points suivants :'
+            'Dans un repère orthonormé $(O, I, J)$, on donne les points suivants :'
           texte += ` $${A.nom}\\left(${xA}\\,;\\,${yA}\\right)$ ; $${B.nom}\\left(${xB}\\,;\\,${yB}\\right)$ et $${C.nom}\\left(${xC}\\,;\\,${yC}\\right)$.`
           texte += `<br>Déterminer la nature du triangle $${A.nom}${B.nom}${C.nom}$.`
           texteCorr =
@@ -267,7 +267,7 @@ export default class NaturePolygone extends Exercice {
             s3,
           )
           texte =
-            'Dans un repère orthonormé $(O;I,J)$, on donne les points suivants :'
+            'Dans un repère orthonormé $(O, I, J)$, on donne les points suivants :'
           texte += ` $${A.nom}\\left(${xA}\\,;\\,${yA}\\right)$ ; $${B.nom}\\left(${xB}\\,;\\,${yB}\\right)$ et $${C.nom}\\left(${xC}\\,;\\,${yC}\\right)$.`
           texte += `<br>Déterminer la nature du triangle $${A.nom}${B.nom}${C.nom}$.`
 
@@ -328,7 +328,7 @@ export default class NaturePolygone extends Exercice {
             s4,
           )
           texte =
-            'Dans un repère orthonormé $(O;I,J)$, on donne les points suivants :'
+            'Dans un repère orthonormé $(O, I, J)$, on donne les points suivants :'
           texte += ` $${A.nom}\\left(${xA}\\,;\\,${yA}\\right)$ ; $${B.nom}\\left(${xB}\\,;\\,${yB}\\right)$, $${C.nom}\\left(${xC}\\,;\\,${yC}\\right)$  et $${D.nom}\\left(${xD}\\,;\\,${yD}\\right)$.`
           texte += `<br>Démontrer que $${A.nom}${B.nom}${C.nom}${D.nom}$ est un losange.`
           texteCorr =
@@ -397,7 +397,7 @@ export default class NaturePolygone extends Exercice {
           )
 
           texte =
-            'Dans un repère orthonormé $(O;I,J)$, on donne les points suivants :'
+            'Dans un repère orthonormé $(O, I, J)$, on donne les points suivants :'
           texte += ` $${A.nom}\\left(${xA}\\,;\\,${yA}\\right)$ ; $${B.nom}\\left(${xB}\\,;\\,${yB}\\right)$, $${C.nom}\\left(${xC}\\,;\\,${yC}\\right)$  et $${D.nom}\\left(${xD}\\,;\\,${yD}\\right)$.`
           texte += `<br>Démontrer que $${A.nom}${C.nom}${D.nom}${B.nom}$ est un rectangle.`
           texteCorr =
@@ -467,7 +467,7 @@ export default class NaturePolygone extends Exercice {
           )
 
           texte =
-            'Dans un repère orthonormé $(O;I,J)$, on donne les points suivants :'
+            'Dans un repère orthonormé $(O, I, J)$, on donne les points suivants :'
           texte += ` $${A.nom}\\left(${xA}\\,;\\,${yA}\\right)$ ; $${B.nom}\\left(${xB}\\,;\\,${yB}\\right)$, $${C.nom}\\left(${xC}\\,;\\,${yC}\\right)$  et $${D.nom}\\left(${xD}\\,;\\,${yD}\\right)$.`
           texte += `<br>Démontrer que $${A.nom}${C.nom}${D.nom}${B.nom}$ est un carré.`
           texteCorr =
