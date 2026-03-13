@@ -233,7 +233,7 @@ export default class DeriveeProduit extends Exercice {
           const fExpand = ce.parse(`${a}${ecritureAlgebrique(b)}/x`).latex
           texteCorr += `Remarque : on pourrait bien entendu développer avant de dériver.<br>Dans ce cas, $${namef}(x)=${fExpand}$.<br>`
           const maReponse = ce
-            .box(['D', ce.parse(fExpand), 'x'])
+            .expr(['D', ce.parse(fExpand), 'x'])
             .evaluate().latex
           texteCorr += `Et donc $${namef}'(x)=${miseEnEvidence(maReponse)}$. Ce qui est bien cohérent avec le résultat trouvé plus haut.`
           // Sans le replace { x} est mal interprété par le parser de mathLive

@@ -232,7 +232,7 @@ class EqCartDroite extends Exercice {
           }
         } else {
           /* const fxy = ce
-            .box([
+            .expr([
               'Divide',
               ce.parse(equation[0]).json,
               ce.parse(reduireAxPlusByPlusC(xn, yn, constante)).json,
@@ -241,7 +241,7 @@ class EqCartDroite extends Exercice {
           const fxy = compile(
             `(${equation[0]})\\div(${reduireAxPlusByPlusC(xn, yn, constante)})`,
           )
-          if (fxy == null) {
+          if (!fxy || !fxy.run) {
             resultat = {
               isOk: false,
               feedback: "La saisie n'est pas conforme",
@@ -258,7 +258,7 @@ class EqCartDroite extends Exercice {
                   ['x', x],
                   ['y', y],
                 ])
-                //  results.push(Number(fxy(vars)))
+                // results.push(Number(fxy(vars)))
                 results.push(Number(fxy.run(vars)))
               }
             }

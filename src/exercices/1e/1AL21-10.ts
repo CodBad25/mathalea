@@ -40,7 +40,7 @@ function affineInterpolation(xA: number, yA: number, xB: number, yB: number) {
   // const m = ce.parse(`(${yB} - ${yA})/(${xB} - ${xA})`, {canonical: false})
   const m = ce.parse(`(${yB} - ${yA})/(${xB} - ${xA})`, { form: 'raw' })
   const p = ce.parse(`${yA} - ${m.evaluate()}*${xA}`)
-  return ce.box(['Add', ['Multiply', m, 'x'], p]).simplify()
+  return ce.expr(['Add', ['Multiply', m, 'x'], p]).simplify()
 }
 
 function polynomeInterpolation(
@@ -56,9 +56,9 @@ function polynomeInterpolation(
   // Renvoie également les détails de à la résolution de ce problème.
   fdex =
     typeof fdex === 'number' || typeof fdex === 'string'
-      ? ce.box(fdex)
+      ? ce.expr(fdex)
       : (fdex as Expression).simplify() // fdex est une Expression
-  const a = ce.box(
+  const a = ce.expr(
     ['Rational', fdex, ['Multiply', ['Add', x, -r1], ['Add', x, -r2]]],
     // { canonical: false },
     { form: 'raw' },
@@ -137,7 +137,7 @@ function questionInterpolation() {
   const hax = h.subs({ x: ax }, { canonical: false })
   const hbx = h.subs({ x: bx }, { canonical: false })
   const hcx = h.subs({ x: cx }, { canonical: false })
-  const f = ce.box(['Add', h, g])
+  const f = ce.expr(['Add', h, g])
 
   let texteCorr = `${numAlpha(0)} On a : \\[h(${ax}) = f(${ax}) - g(${ax}) = ${ay} - \\left(${gax.latex}\\right) = ${hax.simplify()}\\]`
   texteCorr += `De même on a $h(${cx}) = ${hcx.simplify().latex}$. `
