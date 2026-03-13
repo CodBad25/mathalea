@@ -200,7 +200,7 @@ export default class DevelopperReduireExprComplexe extends Exercice {
           level: 0,
         }).replaceAll('\\dfrac', '\\frac'),
       ).latex
-      // const devExpr1 = ce.box(['ExpandAll', ce.parse(expression1.replaceAll('\\dfrac', '\\frac'))]).evaluate().latex
+      // const devExpr1 = ce.expr(['ExpandAll', ce.parse(expression1.replaceAll('\\dfrac', '\\frac'))]).evaluate().latex
       const devExpr2 = ce.parse(
         developpe(expression2, {
           isColored: false,

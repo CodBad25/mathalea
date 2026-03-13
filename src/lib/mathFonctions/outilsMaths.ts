@@ -497,8 +497,8 @@ export function developpe(
       )
     } else {
       const dp = ce.parse(dbleProd).simplify().latex
-      const c1 = ce.box(['Multiply', terme1, terme1]).evaluate().latex
-      const c2 = ce.box(['Multiply', terme2, terme2]).evaluate().latex
+      const c1 = ce.expr(['Multiply', terme1, terme1]).evaluate().latex
+      const c2 = ce.expr(['Multiply', terme2, terme2]).evaluate().latex
       return `${miseEnForme(c1, couleurs[colorOffset], isColored)}${somme ? '+' : '-'}${miseEnForme(dp, couleurs[colorOffset + 1], isColored)}+${miseEnForme(c2, couleurs[colorOffset + 2], isColored)}`.replaceAll(
         '\\frac',
         '\\dfrac',
@@ -544,19 +544,19 @@ export function developpe(
           )
         } else {
           const prod1 = ce
-            .box(['Multiply', terme1, terme3])
+            .expr(['Multiply', terme1, terme3])
             .evaluate()
             .simplify().latex
           const prod2 = ce
-            .box(['Multiply', terme1, terme4])
+            .expr(['Multiply', terme1, terme4])
             .evaluate()
             .simplify().latex
           const prod3 = ce
-            .box(['Multiply', terme2, terme3])
+            .expr(['Multiply', terme2, terme3])
             .evaluate()
             .simplify().latex
           const prod4 = ce
-            .box(['Multiply', terme2, terme4])
+            .expr(['Multiply', terme2, terme4])
             .evaluate()
             .simplify().latex
           if (level === 1) {

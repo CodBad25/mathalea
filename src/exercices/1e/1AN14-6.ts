@@ -142,7 +142,7 @@ export default class DeriveeQuotient extends Exercice {
             : (fDen as string),
         )
         isQuotientConstant = ce
-          .box(['Divide', termeNum, termeDen])
+          .expr(['Divide', termeNum, termeDen])
           .simplify().isConstant
         if (isQuotientConstant) continue
         expression = `(${termeNum.latex})/(${termeDen.latex})`
@@ -169,8 +169,8 @@ export default class DeriveeQuotient extends Exercice {
         texte = ''
         texte += `$${nameF}(x)=${ce.parse(expression).simplify().latex}$`
         // Correction
-        const derNum = ce.box(['D', termeNum, 'x']).evaluate()
-        const derDen = ce.box(['D', termeDen, 'x']).evaluate()
+        const derNum = ce.expr(['D', termeNum, 'x']).evaluate()
+        const derDen = ce.expr(['D', termeDen, 'x']).evaluate()
         texteCorr = ''
         texteCorr +=
           "On rappelle le cours : si $u,v$ sont  deux fonctions dérivables sur un même intervalle $I$, et que $v$ ne s'annule pas sur $I$ alors leur quotient est dérivable sur $I$ et on a la formule : "

@@ -2138,6 +2138,21 @@ describe('fonctionComparaison', () => {
     })
     expect(result.isOk).toBe(true)
 
+    result = fonctionComparaison('x(5x+7)', 'x(5x+7)', {
+      factorisation: true,
+    })
+    expect(result.isOk).toBe(true)
+
+    result = fonctionComparaison('x(5x+7)', 'x\\times(5x+7)', {
+      factorisation: true,
+    })
+    expect(result.isOk).toBe(true)
+
+    result = fonctionComparaison('x(5x+7)', '5x^2+7x', {
+      factorisation: true,
+    })
+    expect(result.isOk).toBe(true)
+
     result = fonctionComparaison('(2a-5)(-2-2a)', '(2a-2)(2a-5)', {
       factorisation: true,
     })

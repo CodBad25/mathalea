@@ -109,8 +109,8 @@ export function deparenthise(latexIn: string): string {
   const restored = restoreFracNodes(stripped, fracCount).node
 
   // Conversion LaTeX
-  // let result = ce.box(restored).toLatex
-  let result = mathJsonToLatex(ce.box(restored))
+  // let result = ce.expr(restored).toLatex
+  let result = mathJsonToLatex(ce.expr(restored))
 
   // Restauration des \dfrac (si présents en tête)
   if (dfracCount > 0) {

@@ -1,8 +1,4 @@
-import type {
-  Expression,
-  LatexDictionaryEntry,
-  MathJsonExpression,
-} from '@cortex-js/compute-engine'
+import type { Expression, MathJsonExpression } from '@cortex-js/compute-engine'
 import {
   compile,
   ComputeEngine,
@@ -812,10 +808,10 @@ function handleHMS(saisie: string, goodAnswer: string): ResultType {
 }
 
 // Pour éviter que G en Latex soit pris pour CatalanConstant
-ce.latexDictionary = [
-  ...ce.latexDictionary,
-  { identifierTrigger: 'G', name: 'G' } as LatexDictionaryEntry,
-]
+// ce.latexDictionary = [
+//   ...ce.latexDictionary,
+//   { identifierTrigger: 'G', name: 'G' } as LatexDictionaryEntry,
+// ]
 
 function normaliseUnions(expr: string): string {
   if (!expr.includes('\\cup')) return expr
@@ -1941,9 +1937,14 @@ function handleFactorisation(
     'fractions',
     'parentheses',
   ])
-
+  // console.log(saisie, clean(saisie))
+  // console.log(JSON.stringify(parse('c(5c+6)').toJSON()))
   const s = parse(clean(saisie))
+  // const s = ce.parse(clean(saisie))
   const a = parse(answer)
+  // console.log(clean(saisie), answer)
+  // console.log('JSON de la saisie : ', JSON.stringify(a.toJSON()))
+  // console.log('JSON de la réponse attendue : ', JSON.stringify(s.toJSON()))
 
   const sFactors = getFactors(s)
   const aFactors = getFactors(a)
@@ -2009,10 +2010,10 @@ function handleFactorisation(
     let unmatchedCount = 0
 
     for (const sf of sRawFactors) {
-      const sfCan = ce.box(sf.json)
+      const sfCan = ce.expr(sf.json)
       let found = false
       for (let j = 0; j < aRemaining.length; j++) {
-        const afCan = ce.box(aRemaining[j].json)
+        const afCan = ce.expr(aRemaining[j].json)
         // Canonical match (or match up to sign — valid since valuesEqual)
         if (sfCan.isSame(afCan) || sfCan.isSame(afCan.neg())) {
           // Verify raw structural similarity (same number of additive terms)
@@ -3226,7 +3227,7 @@ export function handleEntiersConsecutifs(
         .map((el) => Number(ce.parse(el).re))
         .sort((a: number, b: number) => a - b)
   const diff = Number(
-    ce.box(['Subtract', String(entierSup), String(entierInf)]).N().re,
+    ce.expr(['Subtract', String(entierSup), String(entierInf)]).N().re,
   )
   if (diff === -1) {
     feedback =
@@ -3241,10 +3242,10 @@ export function handleEntiersConsecutifs(
   }
   if (valeurInter != null) {
     const diff1 = Number(
-      ce.box(['Subtract', String(entierSup), String(valeurInter)]).N().re,
+      ce.expr(['Subtract', String(entierSup), String(valeurInter)]).N().re,
     )
     const diff2 = Number(
-      ce.box(['Subtract', String(valeurInter), String(entierInf)]).N().re,
+      ce.expr(['Subtract', String(valeurInter), String(entierInf)]).N().re,
     )
     if (
       !(

@@ -1,7 +1,6 @@
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-import { ComputeEngine, expand } from '@cortex-js/compute-engine'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -17,13 +16,13 @@ export const refs = {
 
 export const uuid = 'testEEE'
 
-const ce = new ComputeEngine({ tolerance: 1e-21 })
+// const ce = new ComputeEngine({ tolerance: 1e-21 })
 // handleExpressionsForcementReduites('\\dfrac23 x', '\\dfrac23 x')
 
-console.info('+++++++++++++++++++')
-console.info(expand('3x+12').latex)
-console.info(expand('3.1x+12').latex)
-console.info(ce.parse('3.1x+12', { form: 'raw' }).latex)
+// console.info('+++++++++++++++++++')
+// console.info(expand('3x+12').latex)
+// console.info(expand('3.1x+12').latex)
+// console.info(ce.parse('3.1x+12', { form: 'raw' }).latex)
 // true but should be false.
 
 /* console.info('3-1', ce.parse('3-1', { form: 'raw' }).toJSON())
@@ -118,12 +117,12 @@ console.info(
 )
 const saisie = ce.parse('(x+5)^2', { canonical: true })
 const saisieDev = engine
-  .box(['ExpandAll', saisie])
+  .expr(['ExpandAll', saisie])
   .evaluate()
   .simplify().canonical
 const reponseParsed = ce.parse('(x+5)(x+5)', { canonical: true })
 const reponseDev = engine
-  .box(['ExpandAll', reponseParsed])
+  .expr(['ExpandAll', reponseParsed])
   .evaluate()
   .simplify().canonical
 console.info(saisieDev.isEqual(reponseDev))
