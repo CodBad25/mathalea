@@ -5,7 +5,7 @@ import { tracePoint } from '../../lib/2d/TracePoint'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { remplisLesBlancs } from '../../lib/interactif/questionMathLive'
-import type { NestedObjetMathalea2dArray } from '../../types/2d'
+import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import {
   arrondi,
   nombreDeChiffresDansLaPartieDecimale,
@@ -15,11 +15,7 @@ import { lettreDepuisChiffre } from '../../lib/outils/outilString'
 import { texNombre } from '../../lib/outils/texNombre'
 import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
-import {
-  gestionnaireFormulaireTexte,
-  listeQuestionsToContenu,
-  randint,
-} from '../../modules/outils'
+import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
 export const titre = "Lire l'abscisse relative d'un point"
@@ -32,152 +28,106 @@ export const amcType = 'AMCHybride'
  * Lire l'abscisse décimale d'un point
  * @author Jean-Claude Lhote et Rémi Angot
  */
-export const uuid = '4ca10'
+export const uuid = 'cd7ce'
 
 export const refs = {
-  'fr-fr': ['5R11', '3AutoN15-1'],
-  'fr-ch': ['9NO9-1'],
+  'fr-fr': [],
+  'fr-ch': [],
 }
-
 const changeCoord = function (x: number, abs0: number, pas1: number) {
   return abs0 + (x - abs0) * 3 * pas1
 }
-
 export default class LireAbscisseRelative extends Exercice {
   constructor() {
     super()
-    this.besoinFormulaireTexte = [
+    this.besoinFormulaireNumerique = [
       'Niveau de difficulté',
-      [
-        'Nombres séparés par des tirets :',
-        '1 : Nombre relatif entier',
-        '2 : Nombre relatif à une décimale',
-        '3 : Nombre relatif à deux décimales',
-        '4 : Nombre relatif à trois décimales',
-        '0 : Mélange',
-      ].join('\n'),
+      4,
+      '1 : Nombre relatif à une décimale\n2 : Nombre relatif à deux décimales\n3 : Nombre relatif à trois décimales\n4 : Mélange',
     ]
 
     this.consigne = "Lire l'abscisse de chacun des points suivants."
     this.nbQuestions = 3
-    this.sup = '2-3-4'
+
+    this.sup = 4
   }
 
   nouvelleVersion() {
-    const typesDeQuestionsDisponibles = [
-      'entier',
-      '1decimale',
-      '2decimales',
-      '3decimales',
-    ]
-    const listeTypeDeQuestions = gestionnaireFormulaireTexte({
-      saisie: this.sup,
-      min: 1,
-      max: 4,
-      melange: 0,
-      defaut: 0,
-      nbQuestions: this.nbQuestions,
-      listeOfCase: typesDeQuestionsDisponibles,
-    }) as string[]
+    let typesDeQuestions
 
-    let objets: NestedObjetMathalea2dArray = []
+    let objets = []
 
-    for (let i = 0; i < this.nbQuestions; i++) {
+    if (this.sup === 4) {
+      typesDeQuestions = combinaisonListes([1, 2, 3], this.nbQuestions)
+    } else {
+      typesDeQuestions = combinaisonListes(
+        [parseInt(this.sup)],
+        this.nbQuestions,
+      )
+    }
+
+    for (
+      let i = 0,
+        abs0,
+        l1,
+        l2,
+        l3,
+        x1,
+        x2,
+        x3,
+        x11,
+        x22,
+        x33,
+        pas1,
+        pas2,
+        abs1,
+        abs2,
+        abs3,
+        A,
+        B,
+        C,
+        texte,
+        texteCorr;
+      i < this.nbQuestions;
+      i++
+    ) {
       objets = []
-
-      const l1 = lettreDepuisChiffre(i * 3 + 1)
-      const l2 = lettreDepuisChiffre(i * 3 + 2)
-      const l3 = lettreDepuisChiffre(i * 3 + 3)
-
-      let abs0: number
-      let pas1: number
-      let pas2: number
-      let precision: number
-      let abs1: number
-      let abs2: number
-      let abs3: number
-
-      switch (listeTypeDeQuestions[i]) {
-        case 'entier': {
-          // Nombre relatif entier
-          // abs0 ∈ [-5, -2] garantit que 0 et 1 sont tous les deux dans [abs0+1, abs0+6]
-          // (abs0+1 ≤ 0 → abs0 ≤ -1 ; abs0+6 ≥ 1 → abs0 ≥ -5)
-          abs0 = randint(-5, -2)
-          pas1 = 1
-          pas2 = 1
-          precision = 0
-          // Candidats : entiers visibles sur l'axe, hors 0 et 1 (qui servent de repères)
-          const candidats = [1, 2, 3, 4, 5, 6]
-            .map((d) => abs0 + d)
-            .filter((v) => v !== 0 && v !== 1)
-          // Tirage de 3 valeurs distinctes, triées
-          const choisis = candidats
-            .sort(() => Math.random() - 0.5)
-            .slice(0, 3)
-            .sort((a, b) => a - b)
-          abs1 = choisis[0]
-          abs2 = choisis[1]
-          abs3 = choisis[2]
-          break
-        }
-
-        case '1decimale': {
-          // Décimaux relatifs à 1 décimale
+      let precision
+      l1 = lettreDepuisChiffre(i * 3 + 1)
+      l2 = lettreDepuisChiffre(i * 3 + 2)
+      l3 = lettreDepuisChiffre(i * 3 + 3)
+      switch (typesDeQuestions[i]) {
+        case 1: // Placer des décimaux relatifs sur un axe (1 décimale)
           abs0 = randint(-6, -3)
           pas1 = 1
           pas2 = 10
           precision = 1
-          const x1 = randint(0, 2)
-          const x2 = randint(3, 4)
-          const x3 = randint(5, 6)
-          const x11 = randint(1, 9)
-          const x22 = randint(1, 9)
-          const x33 = randint(1, 3)
-          abs1 = arrondi(abs0 + x1 / pas1 + x11 / pas1 / pas2, precision)
-          abs2 = arrondi(abs0 + x2 / pas1 + x22 / pas1 / pas2, precision)
-          abs3 = arrondi(abs0 + x3 / pas1 + x33 / pas1 / pas2, precision)
           break
-        }
 
-        case '2decimales': {
-          // Décimaux relatifs à 2 décimales
+        case 2: // Placer des décimaux relatifs sur un axe (2 décimales)
           abs0 = randint(-4, -2) / 10
           pas1 = 10
           pas2 = 10
           precision = 2
-          const x1 = randint(0, 2)
-          const x2 = randint(3, 4)
-          const x3 = randint(5, 6)
-          const x11 = randint(1, 9)
-          const x22 = randint(1, 9)
-          const x33 = randint(1, 3)
-          abs1 = arrondi(abs0 + x1 / pas1 + x11 / pas1 / pas2, precision)
-          abs2 = arrondi(abs0 + x2 / pas1 + x22 / pas1 / pas2, precision)
-          abs3 = arrondi(abs0 + x3 / pas1 + x33 / pas1 / pas2, precision)
           break
-        }
 
-        case '3decimales':
-        default: {
-          // Décimaux relatifs à 3 décimales
+        case 3: // Placer des décimaux relatifs sur un axe (3 décimales)
+        default:
           abs0 = randint(-6, -2) / 100
           pas1 = 100
           pas2 = 10
           precision = 3
-          const x1 = randint(0, 2)
-          const x2 = randint(3, 4)
-          const x3 = randint(5, 6)
-          const x11 = randint(1, 9)
-          const x22 = randint(1, 9)
-          const x33 = randint(1, 3)
-          abs1 = arrondi(abs0 + x1 / pas1 + x11 / pas1 / pas2, precision)
-          abs2 = arrondi(abs0 + x2 / pas1 + x22 / pas1 / pas2, precision)
-          abs3 = arrondi(abs0 + x3 / pas1 + x33 / pas1 / pas2, precision)
           break
-        }
       }
-
-      const estEntier = listeTypeDeQuestions[i] === 'entier'
+      x1 = randint(0, 2)
+      x2 = randint(3, 4)
+      x3 = randint(5, 6)
+      x11 = randint(1, 9)
+      x22 = randint(1, 9)
+      x33 = randint(1, 3)
+      abs1 = arrondi(abs0 + x1 / pas1 + x11 / pas1 / pas2, typesDeQuestions[i]) // le type de questions est égal au nombre de décimales.
+      abs2 = arrondi(abs0 + x2 / pas1 + x22 / pas1 / pas2, typesDeQuestions[i])
+      abs3 = arrondi(abs0 + x3 / pas1 + x33 / pas1 / pas2, typesDeQuestions[i])
       objets.push(
         droiteGraduee({
           Unite: 3 * pas1,
@@ -186,26 +136,20 @@ export default class LireAbscisseRelative extends Exercice {
           x: abs0,
           y: 0,
           thickSecDist: 1 / pas2 / pas1,
-          thickSec: pas2 > 1,
+          thickSec: true,
           axeEpaisseur: 1,
           thickEpaisseur: 1,
-          labelsPrincipaux: !estEntier,
+          labelsPrincipaux: true,
           thickDistance: 1 / pas1,
-          ...(estEntier && {
-            labelListe: [
-              [0, '0'],
-              [1, '1'],
-            ] as [number, string][],
-          }),
         }),
       )
 
-      const A = point(changeCoord(abs1, abs0, pas1), 0, l1, 'above')
-      const B = point(changeCoord(abs2, abs0, pas1), 0, l2, 'above')
-      const C = point(changeCoord(abs3, abs0, pas1), 0, l3, 'above')
+      A = point(changeCoord(abs1, abs0, pas1), 0, l1, 'above')
+      B = point(changeCoord(abs2, abs0, pas1), 0, l2, 'above')
+      C = point(changeCoord(abs3, abs0, pas1), 0, l3, 'above')
       objets.push(tracePoint(A, B, C), labelPoint(A, B, C))
 
-      let texte = mathalea2d(
+      texte = mathalea2d(
         {
           xmin: abs0 - 0.5,
           xmax: abs0 + 22,
@@ -216,7 +160,6 @@ export default class LireAbscisseRelative extends Exercice {
         },
         objets,
       )
-
       if (!context.isAmc && this.interactif) {
         texte += remplisLesBlancs(
           this,
@@ -225,6 +168,7 @@ export default class LireAbscisseRelative extends Exercice {
           KeyboardType.clavierDeBaseAvecFraction,
           '\\ldots',
         )
+        // j'ai aussi omis le paramêtre suivant {formatInteractif: 'fillInTheBlank'}, c'est la fonction verifQuestionMathlive qui va se débrouiller à partir des noms champ1 et suivants
         handleAnswers(this, i, {
           bareme: (listePoints) => [
             listePoints[0] + listePoints[1] + listePoints[2],
@@ -301,8 +245,7 @@ export default class LireAbscisseRelative extends Exercice {
           ],
         }
       }
-
-      const texteCorr = mathalea2d(
+      texteCorr = mathalea2d(
         {
           xmin: abs0 - 0.5,
           xmax: abs0 + 22,
@@ -318,10 +261,10 @@ export default class LireAbscisseRelative extends Exercice {
           x: abs0,
           y: 0,
           thickSecDist: 1 / pas2 / pas1,
-          thickSec: !estEntier,
+          thickSec: true,
           axeEpaisseur: 1,
           thickEpaisseur: 1,
-          labelsPrincipaux: !estEntier,
+          labelsPrincipaux: true,
           thickDistance: 1 / pas1,
           labelPointTaille: 8,
           labelPointLargeur: 0, // ce paramètre ne sert plus
@@ -330,24 +273,15 @@ export default class LireAbscisseRelative extends Exercice {
             [abs2, l2],
             [abs3, l3],
           ],
-          labelListe: estEntier
-            ? ([
-                [0, '0'],
-                [1, '1'],
-                [abs1, texNombre(abs1, precision)],
-                [abs2, texNombre(abs2, precision)],
-                [abs3, texNombre(abs3, precision)],
-              ] as [number, string][])
-            : ([
-                [abs1, texNombre(abs1, precision)],
-                [abs2, texNombre(abs2, precision)],
-                [abs3, texNombre(abs3, precision)],
-              ] as [number, string][]),
+          labelListe: [
+            [abs1, texNombre(abs1, precision)],
+            [abs2, texNombre(abs2, precision)],
+            [abs3, texNombre(abs3, precision)],
+          ],
           labelDistance: 0.7,
           labelCustomDistance: 1.2,
         }),
       )
-
       this.listeQuestions.push(texte)
       this.listeCorrections.push(texteCorr)
     }
