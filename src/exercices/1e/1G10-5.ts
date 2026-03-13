@@ -28,6 +28,7 @@ export const interactifReady = true
 export const interactifType = 'mathLive'
 export const titre = 'Calculer un  produit scalaire avec des coordonnées'
 export const dateDePublication = '29/04/2025'
+export const dateDeModifImportante = '13/03/2026'
 
 /**
  *
@@ -197,7 +198,7 @@ export default class ProduitScalaireCoordonnees extends Exercice {
                 texteCorr += `On a : $\\vec{v}${choix ? '+' : '-'}\\vec{w}\\begin{pmatrix}${xv}${choix ? '+' : '-'} ${ecritureParentheseSiNegatif(xw)}\\\\${yv}${choix ? '+' : '-'} ${ecritureParentheseSiNegatif(yw)}\\end{pmatrix}$, soit 
                 $\\vec{v}${choix ? '+' : '-'}\\vec{w}\\begin{pmatrix} ${choix ? `${xv + xw}` : `${xv - xw}`} \\\\${choix ? `${yv + yw}` : `${yv - yw}`} \\end{pmatrix}$.<br>
                     Ainsi, 
-                    $${choix ? '\\vec{u}\\cdot(\\vec{v}+\\vec{w})' : '\\vec{u}\\cdot(\\vec{v}-\\vec{w})'}=${xu}\\times ${choix ? `${ecritureParentheseSiNegatif(xv + xw)}` : `${ecritureParentheseSiNegatif(xv - xw)}`}${choix ? '+' : '-'}${ecritureParentheseSiNegatif(yu)}\\times ${choix ? ` ${ecritureParentheseSiNegatif(yv + yw)}` : `${ecritureParentheseSiNegatif(yv - yw)}`}=${choix ? `${miseEnEvidence(xu * (xv + xw) + yu * (yv + yw))}` : `${miseEnEvidence(xu * (xv - xw) - yu * (yv - yw))}`}$.`
+                    $${choix ? '\\vec{u}\\cdot(\\vec{v}+\\vec{w})' : '\\vec{u}\\cdot(\\vec{v}-\\vec{w})'}=${xu}\\times ${choix ? `${ecritureParentheseSiNegatif(xv + xw)}` : `${ecritureParentheseSiNegatif(xv - xw)}`}+${ecritureParentheseSiNegatif(yu)}\\times ${choix ? ` ${ecritureParentheseSiNegatif(yv + yw)}` : `${ecritureParentheseSiNegatif(yv - yw)}`}=${choix ? `${xu * (xv + xw)} + ${ecritureParentheseSiNegatif(yu * (yv + yw))}` : `${xu * (xv - xw)} + ${ecritureParentheseSiNegatif(yu * (yv - yw))}`}=${choix ? `${miseEnEvidence(xu * (xv + xw) + yu * (yv + yw))}` : `${miseEnEvidence(xu * (xv - xw) + yu * (yv - yw))}`}$.`
                 reponse = choix
                   ? xu * (xv + xw) + yu * (yv + yw)
                   : xu * (xv - xw) - yu * (yv - yw)
