@@ -7,7 +7,7 @@ import { mathalea2d } from '../../modules/mathalea2d'
 import { randint } from '../../modules/outils'
 import ExerciceQcmA from '../ExerciceQcmA'
 export const dateDePublication = '15/09/2025'
-export const uuid = '5b981'
+export const uuid = '3a5ab'
 // Author Stéphane Guyon// repris par Gilles Mora pour sortie npdf et nombres décimaux dans tableau
 export const refs = {
   'fr-fr': ['1A-P05-1'],
@@ -133,10 +133,8 @@ export default class auto1AP3 extends ExerciceQcmA {
     let objets = []
 
     const pA = randint(1, 9) / 10
-    let pBA = randint(1, 9)
-    let pBbAb = randint(1, 9, [5, pBA, 10 - pBA])
-    pBA /= 10
-    pBbAb /= 10
+    const pBA = randint(1, 9) / 10
+    const pBbAb = randint(1, 9) / 10
     const omega = new Arbre({
       racine: true,
       nom: '',
