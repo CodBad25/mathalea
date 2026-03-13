@@ -152,19 +152,19 @@
   "can1SD": {
     "titre": "Second degré"
   },
- "can1SD0": {
+  "can1SD0": {
     "titre": "Paraboles"
   },
   "can1SD1": {
     "titre": "Equations - Inéquations"
   },
-   "can1SD2": {
+  "can1SD2": {
     "titre": "Polynômes - Variations"
   },
   "can1D": {
     "titre": "Dérivation"
   },
- 
+
   "can1D0": {
     "titre": "Tangentes - Nombre dérivé"
   },
@@ -177,7 +177,7 @@
   "can1E": {
     "titre": "Exponentielle"
   },
-   "can1E1": {
+  "can1E1": {
     "titre": "Propriétés"
   },
   "can1G": {
@@ -1884,7 +1884,7 @@
   "4C25": {
     "titre": "Résoudre des problèmes avec des nombres rationnels"
   },
-  "4C2QCM": {
+  "4C2Q": {
     "titre": "QCM"
   },
   "4C3": {
@@ -1953,6 +1953,9 @@
   "4P1": {
     "titre": "Proportionnalité"
   },
+  "4P1Q": {
+    "titre": "QCM"
+  },
   "4P10": {
     "titre": "Reconnaître sur un graphique une situation de proportionnalité ou de non proportionnalité"
   },
@@ -1998,7 +2001,7 @@
   "4G13": {
     "titre": "Mener des raisonnements en utilisant des propriétés des figures, des configurations et de la translation"
   },
-  "4G1QCM": {
+  "4G1Q": {
     "titre": "QCM"
   },
   "4G2": {
@@ -2037,7 +2040,7 @@
   "4G42": {
     "titre": "Résoudre un problème géométrique"
   },
-  "4G2QCM": {
+  "4G2Q": {
     "titre": "QCM"
   },
   "4G5": {
@@ -2082,7 +2085,7 @@
   "3L16": {
     "titre": "Résoudre des problèmes se ramenant à une équation, qui peuvent être internes aux mathématiques ou en lien avec d'autres disciplines"
   },
-  "3L1QCM": {
+  "3L1Q": {
     "titre": "QCM"
   },
   "3Auto": {
@@ -2232,7 +2235,7 @@
   "3A12": {
     "titre": "Modéliser et résoudre des problèmes mettant en jeu la divisibilité (engrenages, conjonction de phénomènes...)"
   },
-  "3A1QCM": {
+  "3A1Q": {
     "titre": "QCM"
   },
   "3C1": {
@@ -2253,7 +2256,7 @@
   "3N13": {
     "titre": "Résoudre des problèmes avec des puissances, notamment en utilisant la notation scientifique"
   },
-  "3N1QCM": {
+  "3N1Q": {
     "titre": "QCM"
   },
   "3F1": {
@@ -2277,7 +2280,7 @@
   "3F15": {
     "titre": "Résoudre des problèmes modélisés par des fonctions en utilisant un ou plusieurs modes de représentation"
   },
-  "3F1QCM": {
+  "3F1Q": {
     "titre": "QCM"
   },
   "3F2": {
@@ -2295,11 +2298,14 @@
   "3F23": {
     "titre": "Déterminer de manière algébrique l'antécédent par une fonction, dans des cas se ramenant à la résolution d'une équation du premier degré"
   },
-  "3F2QCM": {
+  "3F2Q": {
     "titre": "QCM"
   },
   "3P1": {
     "titre": "Proportionnalité"
+  },
+  "3P1Q": {
+    "titre": "QCM"
   },
   "3P10": {
     "titre": "Utiliser le lien entre pourcentage d'évolution et coefficient multiplicateur"
@@ -2316,11 +2322,11 @@
   "3P14": {
     "titre": "Résoudre des problèmes en utilisant la proportionnalité dans le cadre de la géométrie"
   },
-  "3P1QCM": {
-    "titre": "QCM"
-  },
   "3S1": {
     "titre": "Statistiques"
+  },
+  "3S1Q": {
+    "titre": "QCM"
   },
   "3S10": {
     "titre": "Lire, interpréter et représenter des données sous forme d'histogrammes pour des classes de même amplitude"
@@ -2331,7 +2337,7 @@
   "3S12": {
     "titre": "Calculer des effectifs et des fréquences"
   },
-  "3S1QCM": {
+  "3S1Q": {
     "titre": "QCM"
   },
   "3S2": {
@@ -2343,7 +2349,7 @@
   "3S21": {
     "titre": "Faire le lien entre stabilisation des fréquences et probabilités"
   },
-  "3S2QCM": {
+  "3S2Q": {
     "titre": "QCM"
   },
   "3G1": {
@@ -2364,7 +2370,7 @@
   "3G14": {
     "titre": "Calculer des grandeurs géométriques (longueurs, aires et volumes) en utilisant les transformations (symétries, rotations, translations, homothétie)"
   },
-  "3G1QCM": {
+  "3G1Q": {
     "titre": "QCM"
   },
   "3G2": {
@@ -2379,7 +2385,7 @@
   "3G22": {
     "titre": "Connaître et utiliser une définition et une propriété caractéristique des triangles semblables"
   },
-  "3G2QCM": {
+  "3G2Q": {
     "titre": "QCM"
   },
   "3G3": {
@@ -2394,7 +2400,7 @@
   "3G32": {
     "titre": "Résoudre un problème géométrique"
   },
-  "3G3QCM": {
+  "3G3Q": {
     "titre": "QCM"
   },
   "3G4": {
@@ -2412,7 +2418,7 @@
   "3G43": {
     "titre": "Calculer les volumes d'assemblages de solides étudiés au cours du cycle"
   },
-  "3G4QCM": {
+  "3G4Q": {
     "titre": "QCM"
   },
   "3I1": {
