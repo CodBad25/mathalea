@@ -90,8 +90,8 @@ export default class TrouverLeBonProgramme extends Exercice {
         getProgrammesAvancer,
         getProgrammesTourner,
         getProgrammesAjouter,
-        getProgrammesPolygone,
         getProgrammesCarre,
+        getProgrammesPolygone,
         getProgrammesRebours,
         getProgrammesEscalier,
       ]
