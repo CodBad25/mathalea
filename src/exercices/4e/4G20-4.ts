@@ -1,4 +1,5 @@
 import Decimal from 'decimal.js'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { setReponse } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
@@ -53,7 +54,6 @@ export default class ArrondirUneValeur4e extends Exercice {
     for (
       let i = 0, texte = '', texteCorr = '', cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       this.autoCorrection[3 * i] = {}
       this.autoCorrection[3 * i + 1] = {}
@@ -88,7 +88,7 @@ export default class ArrondirUneValeur4e extends Exercice {
 
       texte += "<br>Son arrondi à l'unité est : "
       texte += this.interactif
-        ? ajouteChampTexteMathLive(this, 3 * i)
+        ? ajouteChampTexteMathLive(this, 3 * i, KeyboardType.clavierNumbers)
         : '$\\ldots\\ldots\\ldots$'
       // texteCorr = `Quand on écrit sur la calculatrice $${nb}$, elle renvoie : $${texNombre(n, 10)}.$`
       texteCorr = `Arrondi à l'unité de $${texNombre(n, 10)}$ : `
@@ -97,7 +97,7 @@ export default class ArrondirUneValeur4e extends Exercice {
 
       texte += '<br>Son arrondi au dixième est : '
       texte += this.interactif
-        ? ajouteChampTexteMathLive(this, 3 * i + 1)
+        ? ajouteChampTexteMathLive(this, 3 * i + 1, KeyboardType.clavierNumbers)
         : '$\\ldots\\ldots\\ldots$'
       texteCorr += `<br>Arrondi au dixième de $${texNombre(n, 10)}$ : `
       texteCorr += `$${miseEnEvidence(texNombre(n, 1, true))}$`
@@ -105,7 +105,7 @@ export default class ArrondirUneValeur4e extends Exercice {
 
       texte += '<br>Son arrondi au centième est : '
       texte += this.interactif
-        ? ajouteChampTexteMathLive(this, 3 * i + 2)
+        ? ajouteChampTexteMathLive(this, 3 * i + 2, KeyboardType.clavierNumbers)
         : '$\\ldots\\ldots\\ldots$'
       texteCorr += `<br>Arrondi au centième de $${texNombre(n, 10)}$ : `
       texteCorr += `$${miseEnEvidence(texNombre(n, 2, true))}$`

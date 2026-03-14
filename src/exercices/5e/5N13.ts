@@ -3,6 +3,7 @@
  */
 
 /* eslint-disable camelcase */
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { propositionsQcm } from '../../lib/interactif/qcm'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -298,7 +299,7 @@ export default class Exercice_fractions_simplifier extends Exercice {
         texte += ajouteChampTexteMathLive(
           this,
           i,
-          '  clavierDeBaseAvecFraction',
+          KeyboardType.clavierDeBaseAvecFraction,
         )
         if (this.amcType === 'AMCOpen')
           this.autoCorrection[i] = {

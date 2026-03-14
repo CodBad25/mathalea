@@ -17,6 +17,7 @@ import {
 import { handleAnswers } from '../../lib/interactif/gestionInteractif' // fonction qui va préparer l'analyse de la saisie
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive' // fonctions de mise en place des éléments interactifs
 
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { choixDeroulant } from '../../lib/interactif/questionListeDeroulante'
 import { fraction } from '../../modules/fractions'
 import Exercice from '../Exercice'
@@ -130,7 +131,28 @@ export default class FonctionsProbabilite2 extends Exercice {
           texte += `${quidame} en choisit un au hasard. Son frère ${quidam} en choisit un au hasard à son tour.<br>`
           texte += createList({
             items: [
-              `Combien d'issues possède cette experience aléatoire ?${this.interactif ? ' ' + ajouteChampTexteMathLive(this, iInteractif) : ''} Donner un exemple d'issue.${this.interactif ? ' ' + ajouteChampTexteMathLive(this, iInteractif + 1, '', { texteAvant: `<br>On donnera la réponse sous la forme $(X,Y)$ avec $X,Y$ deux lettres parmi $${Initiale[p]}$, $${Initiale[q]}$ et $${Initiale[r]}$ : ` }) : ''}`,
+              `Combien d'issues possède cette experience aléatoire ?${
+                this.interactif
+                  ? ' ' +
+                    ajouteChampTexteMathLive(
+                      this,
+                      iInteractif,
+                      KeyboardType.clavierNumbers,
+                    )
+                  : ''
+              } Donner un exemple d'issue.${
+                this.interactif
+                  ? ' ' +
+                    ajouteChampTexteMathLive(
+                      this,
+                      iInteractif + 1,
+                      KeyboardType.alphanumeric,
+                      {
+                        texteAvant: `<br>On donnera la réponse sous la forme $(X,Y)$ avec $X,Y$ deux lettres parmi $${Initiale[p]}$, $${Initiale[q]}$ et $${Initiale[r]}$ : `,
+                      },
+                    )
+                  : ''
+              }`,
               "Est-ce une expérience en situation d'équiprobabilité ?" +
                 (!this.interactif
                   ? ' Justifier.'
@@ -145,15 +167,27 @@ export default class FonctionsProbabilite2 extends Exercice {
                     ])),
               `Calculer la probabilité que ${quidame} et ${quidam} aient choisi tous les deux un yaourt ${qualites[0][p]}.` +
                 (this.interactif
-                  ? ajouteChampTexteMathLive(this, iInteractif + 3)
+                  ? ajouteChampTexteMathLive(
+                      this,
+                      iInteractif + 3,
+                      KeyboardType.clavierDeBaseAvecFraction,
+                    )
                   : ''),
               " Calculer la probabilité qu'ils aient choisi des yaourts aux parfums identiques." +
                 (this.interactif
-                  ? ajouteChampTexteMathLive(this, iInteractif + 4)
+                  ? ajouteChampTexteMathLive(
+                      this,
+                      iInteractif + 4,
+                      KeyboardType.clavierDeBaseAvecFraction,
+                    )
                   : ''),
               " Calculer la probabilité qu'ils aient choisi des yaourts aux parfums différents." +
                 (this.interactif
-                  ? ajouteChampTexteMathLive(this, iInteractif + 5)
+                  ? ajouteChampTexteMathLive(
+                      this,
+                      iInteractif + 5,
+                      KeyboardType.clavierDeBaseAvecFraction,
+                    )
                   : ''),
             ],
             style: 'alpha',
@@ -293,15 +327,27 @@ export default class FonctionsProbabilite2 extends Exercice {
             items: [
               'Quelle est la probabilité de tirer 2 cartes de la même couleur (Rouge/Rouge ou Noire/Noire) ?' +
                 (this.interactif
-                  ? ajouteChampTexteMathLive(this, iInteractif)
+                  ? ajouteChampTexteMathLive(
+                      this,
+                      iInteractif,
+                      KeyboardType.clavierDeBaseAvecFraction,
+                    )
                   : ''),
               ` Quelle est la probabilité de tirer 2 ${Initiale[r]}${Initiale[r] === 'valet' || Initiale[r] === 'roi' ? 's' : ''} ?` +
                 (this.interactif
-                  ? ajouteChampTexteMathLive(this, iInteractif + 1)
+                  ? ajouteChampTexteMathLive(
+                      this,
+                      iInteractif + 1,
+                      KeyboardType.clavierDeBaseAvecFraction,
+                    )
                   : ''),
               ` Quelle est la probabilité de tirer 2 cartes de ${qualites[1][p]} ?` +
                 (this.interactif
-                  ? ajouteChampTexteMathLive(this, iInteractif + 2)
+                  ? ajouteChampTexteMathLive(
+                      this,
+                      iInteractif + 2,
+                      KeyboardType.clavierDeBaseAvecFraction,
+                    )
                   : ''),
             ],
             style: 'alpha',
@@ -316,15 +362,27 @@ export default class FonctionsProbabilite2 extends Exercice {
               items: [
                 'Quelle est la probabilité de tirer 2 cartes de la même couleur (Rouge/Rouge ou Noire/Noire) ?' +
                   (this.interactif
-                    ? ajouteChampTexteMathLive(this, iInteractif + 3)
+                    ? ajouteChampTexteMathLive(
+                        this,
+                        iInteractif + 3,
+                        KeyboardType.clavierDeBaseAvecFraction,
+                      )
                     : ''),
                 ` Quelle est la probabilité de tirer 2 ${Initiale[r]}${Initiale[r] === 'valet' || Initiale[r] === 'roi' ? 's' : ''} ?` +
                   (this.interactif
-                    ? ajouteChampTexteMathLive(this, iInteractif + 4)
+                    ? ajouteChampTexteMathLive(
+                        this,
+                        iInteractif + 4,
+                        KeyboardType.clavierDeBaseAvecFraction,
+                      )
                     : ''),
                 ` Quelle est la probabilité de tirer 2 cartes de ${qualites[1][p]} ?` +
                   (this.interactif
-                    ? ajouteChampTexteMathLive(this, iInteractif + 5)
+                    ? ajouteChampTexteMathLive(
+                        this,
+                        iInteractif + 5,
+                        KeyboardType.clavierDeBaseAvecFraction,
+                      )
                     : ''),
               ],
               style: 'alpha',
@@ -466,15 +524,27 @@ export default class FonctionsProbabilite2 extends Exercice {
               items: [
                 ` Quelle est la probabilité que ${quidam} ait choisi des chaussettes et un T-shirt ${qualites[5][r]} ?` +
                   (this.interactif
-                    ? ajouteChampTexteMathLive(this, iInteractif + 0)
+                    ? ajouteChampTexteMathLive(
+                        this,
+                        iInteractif + 0,
+                        KeyboardType.clavierDeBaseAvecFraction,
+                      )
                     : ''),
                 ` Quelle est la probabilité que ${quidam} ait choisi des chaussettes et un T-shirt de la même couleur ?` +
                   (this.interactif
-                    ? ajouteChampTexteMathLive(this, iInteractif + 1)
+                    ? ajouteChampTexteMathLive(
+                        this,
+                        iInteractif + 1,
+                        KeyboardType.clavierDeBaseAvecFraction,
+                      )
                     : ''),
                 ` Quelle est la probabilité que ${quidam} ait choisi des chaussettes et un T-shirt de couleurs différentes ?` +
                   (this.interactif
-                    ? ajouteChampTexteMathLive(this, iInteractif + 2)
+                    ? ajouteChampTexteMathLive(
+                        this,
+                        iInteractif + 2,
+                        KeyboardType.clavierDeBaseAvecFraction,
+                      )
                     : ''),
               ],
               style: 'alpha',

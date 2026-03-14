@@ -4,6 +4,7 @@ import { droiteHorizontaleParPoint } from '../../lib/2d/droites'
 import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { repere } from '../../lib/2d/reperes'
 import { tracePoint } from '../../lib/2d/TracePoint'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
@@ -192,9 +193,14 @@ export default class AntecedentGraphique extends Exercice {
         r,
         Cf,
       )
-      texte += ajouteChampTexteMathLive(this, i, '', {
-        texteAvant: `Le ou les antécédents de $${imageChoisie}$ (séparer les nombres avec un point-virgule) :`,
-      })
+      texte += ajouteChampTexteMathLive(
+        this,
+        i,
+        KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets,
+        {
+          texteAvant: `Le ou les antécédents de $${imageChoisie}$ (séparer les nombres avec un point-virgule) :`,
+        },
+      )
       const horizontale = droiteHorizontaleParPoint(
         pointAbstrait(0, pointsDePassage[0].y * yUnite),
         '',

@@ -182,7 +182,6 @@ export default class SujetCAN2023troisieme extends Exercice {
         objets,
         cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       switch (typeQuestionsDisponibles[i]) {
         case 1:
@@ -194,7 +193,9 @@ export default class SujetCAN2023troisieme extends Exercice {
           setReponse(this, index, reponse, { formatInteractif: 'calcul' })
           this.listeCanEnonces.push(texte)
           if (this.interactif) {
-            texte += ' $=$' + ajouteChampTexteMathLive(this, index, '')
+            texte +=
+              ' $=$' +
+              ajouteChampTexteMathLive(this, index, KeyboardType.clavierNumbers)
           } else {
             texte += ''
           }
@@ -246,7 +247,11 @@ export default class SujetCAN2023troisieme extends Exercice {
               $<br>
               `
           if (this.interactif) {
-            texte += ajouteChampTexteMathLive(this, index, '')
+            texte += ajouteChampTexteMathLive(
+              this,
+              index,
+              KeyboardType.clavierNumbers,
+            )
             setReponse(this, index, reponse, { formatInteractif: 'calcul' })
           }
           this.listeCanEnonces.push(texte)
@@ -266,9 +271,14 @@ export default class SujetCAN2023troisieme extends Exercice {
              min pour atteindre $${a + 1}$ h $${d}$ min. Son trajet aura  duré  $${miseEnEvidence(formatMinute(60 - b + d))}$ min.`
 
           if (this.interactif) {
-            texte += ajouteChampTexteMathLive(this, index, '', {
-              texteApres: sp(5) + 'min',
-            })
+            texte += ajouteChampTexteMathLive(
+              this,
+              index,
+              KeyboardType.clavierNumbers,
+              {
+                texteApres: sp(5) + 'min',
+              },
+            )
             setReponse(this, index, reponse, { formatInteractif: 'calcul' })
           }
           nbChamps = 1
@@ -294,7 +304,11 @@ export default class SujetCAN2023troisieme extends Exercice {
 
           setReponse(this, index, reponse, { formatInteractif: 'calcul' })
           if (this.interactif) {
-            texte += ajouteChampTexteMathLive(this, index, '')
+            texte += ajouteChampTexteMathLive(
+              this,
+              index,
+              KeyboardType.clavierNumbers,
+            )
           }
           nbChamps = 1
           this.listeCanEnonces.push(texte)
@@ -560,7 +574,12 @@ export default class SujetCAN2023troisieme extends Exercice {
           this.listeCanReponsesACompleter.push('? $=\\ldots ^\\circ$')
           setReponse(this, index, reponse, { formatInteractif: 'calcul' })
           if (this.interactif) {
-            texte += ajouteChampTexteMathLive(this, index, '') + '°'
+            texte +=
+              ajouteChampTexteMathLive(
+                this,
+                index,
+                KeyboardType.clavierNumbers,
+              ) + '°'
           } else {
             texte += context.isHtml ? ' $\\ldots °$' : ''
           }
@@ -578,7 +597,12 @@ export default class SujetCAN2023troisieme extends Exercice {
         Comme $1\\text{ m}^2$ $=100\\text{ dm}^2$, alors $${texNombre(a, 1)}\\text{ m}^2$  $=${texNombre(a, 1)}\\times 100\\text{ dm}^2=${miseEnEvidence(texNombre(reponse, 0))}\\text{ dm}^2$. `
             setReponse(this, index, reponse, { formatInteractif: 'calcul' })
             if (this.interactif) {
-              texte += ajouteChampTexteMathLive(this, index, '') + ' dm$^2$'
+              texte +=
+                ajouteChampTexteMathLive(
+                  this,
+                  index,
+                  KeyboardType.clavierNumbers,
+                ) + ' dm$^2$'
             } else {
               texte += context.isHtml ? '  $\\ldots\\text{ dm}^2$' : ''
             }
@@ -593,7 +617,12 @@ export default class SujetCAN2023troisieme extends Exercice {
         Comme $1\\text{ dm}^2$ $=0,01\\text{ m}^2$, alors $${texNombre(a, 1)}\\text{ dm}^2$  $=${texNombre(a, 1)}\\times 0,01\\text{ m}^2=${miseEnEvidence(texNombre(reponse, 3))}\\text{ m}^2$. `
             setReponse(this, index, reponse, { formatInteractif: 'calcul' })
             if (this.interactif) {
-              texte += ajouteChampTexteMathLive(this, index, '') + ' m$^2$'
+              texte +=
+                ajouteChampTexteMathLive(
+                  this,
+                  index,
+                  KeyboardType.clavierNumbers,
+                ) + ' m$^2$'
             } else {
               texte += context.isHtml ? '  $\\ldots\\text{ m}^2$' : ''
             }
@@ -626,7 +655,12 @@ export default class SujetCAN2023troisieme extends Exercice {
           }
           setReponse(this, index, reponse, { formatInteractif: 'calcul' })
           if (this.interactif) {
-            texte += ajouteChampTexteMathLive(this, index, '') + ' €'
+            texte +=
+              ajouteChampTexteMathLive(
+                this,
+                index,
+                KeyboardType.clavierNumbers,
+              ) + ' €'
           }
           nbChamps = 1
           this.listeCanEnonces.push(texte)
@@ -670,7 +704,11 @@ export default class SujetCAN2023troisieme extends Exercice {
             formatInteractif: 'fractionEgale',
           })
           if (this.interactif) {
-            texte += ajouteChampTexteMathLive(this, index, '')
+            texte += ajouteChampTexteMathLive(
+              this,
+              index,
+              KeyboardType.clavierDeBaseAvecFraction,
+            )
           }
           this.listeCanEnonces.push(texte)
           break
@@ -685,7 +723,9 @@ export default class SujetCAN2023troisieme extends Exercice {
           setReponse(this, index, reponse, { formatInteractif: 'calcul' })
           this.listeCanEnonces.push(texte)
           if (this.interactif) {
-            texte += ' $=$' + ajouteChampTexteMathLive(this, index, '')
+            texte +=
+              ' $=$' +
+              ajouteChampTexteMathLive(this, index, KeyboardType.clavierNumbers)
           }
           nbChamps = 1
 
@@ -723,7 +763,11 @@ export default class SujetCAN2023troisieme extends Exercice {
           }
           setReponse(this, index, reponse, { formatInteractif: 'calcul' })
           if (this.interactif) {
-            texte += ajouteChampTexteMathLive(this, index, '')
+            texte += ajouteChampTexteMathLive(
+              this,
+              index,
+              KeyboardType.clavierNumbers,
+            )
           }
           nbChamps = 1
           this.listeCanEnonces.push(texte)
@@ -859,7 +903,12 @@ export default class SujetCAN2023troisieme extends Exercice {
           setReponse(this, index, reponse, { formatInteractif: 'calcul' })
           this.listeCanEnonces.push(texte)
           if (this.interactif) {
-            texte += ajouteChampTexteMathLive(this, index, '') + '$°$'
+            texte +=
+              ajouteChampTexteMathLive(
+                this,
+                index,
+                KeyboardType.clavierNumbers,
+              ) + '$^\\circ$'
           }
           nbChamps = 1
           break
@@ -891,7 +940,11 @@ export default class SujetCAN2023troisieme extends Exercice {
           this.listeCanEnonces.push(texte)
           this.listeCanReponsesACompleter.push('$x=\\ldots$')
           if (this.interactif) {
-            texte += ajouteChampTexteMathLive(this, index, '')
+            texte += ajouteChampTexteMathLive(
+              this,
+              index,
+              KeyboardType.clavierNumbers,
+            )
           } else {
             texte += '$\\ldots$'
           }
@@ -906,7 +959,11 @@ export default class SujetCAN2023troisieme extends Exercice {
           reponse = b * a ** 2
           if (this.interactif) {
             texte = `Pour $x=${a}$, ${sp(2)} $${b}x^2=$ `
-            texte += ajouteChampTexteMathLive(this, index, '')
+            texte += ajouteChampTexteMathLive(
+              this,
+              index,
+              KeyboardType.clavierDeBase,
+            )
           } else {
             texte = `Pour $x=${a}$, <br> $${b}x^2=$ `
             texte += ' $\\ldots$'
@@ -1161,7 +1218,12 @@ export default class SujetCAN2023troisieme extends Exercice {
 
           setReponse(this, index, reponse, { formatInteractif: 'calcul' })
           if (this.interactif) {
-            texte += ajouteChampTexteMathLive(this, index, '') + 'min'
+            texte +=
+              ajouteChampTexteMathLive(
+                this,
+                index,
+                KeyboardType.clavierNumbers,
+              ) + 'min'
           } else {
             texte += ' $\\ldots$ min'
           }
@@ -1182,7 +1244,11 @@ export default class SujetCAN2023troisieme extends Exercice {
 
           setReponse(this, index, reponse, { formatInteractif: 'calcul' })
           if (this.interactif) {
-            texte += ajouteChampTexteMathLive(this, index, '')
+            texte += ajouteChampTexteMathLive(
+              this,
+              index,
+              KeyboardType.clavierDeBase,
+            )
           }
           this.listeCanEnonces.push(texte)
           nbChamps = 1
@@ -1198,7 +1264,11 @@ export default class SujetCAN2023troisieme extends Exercice {
 
           setReponse(this, index, reponse, { formatInteractif: 'calcul' })
           if (this.interactif) {
-            texte += ajouteChampTexteMathLive(this, index, '')
+            texte += ajouteChampTexteMathLive(
+              this,
+              index,
+              KeyboardType.clavierNumbers,
+            )
           }
           this.listeCanEnonces.push(texte)
           nbChamps = 1
@@ -1226,7 +1296,11 @@ export default class SujetCAN2023troisieme extends Exercice {
           }
           setReponse(this, index, reponse, { formatInteractif: 'calcul' })
           if (this.interactif) {
-            texte += ajouteChampTexteMathLive(this, index, '')
+            texte += ajouteChampTexteMathLive(
+              this,
+              index,
+              KeyboardType.clavierDeBaseAvecX,
+            )
           }
           this.listeCanEnonces.push(texte)
           nbChamps = 1
@@ -1254,7 +1328,11 @@ export default class SujetCAN2023troisieme extends Exercice {
 
           setReponse(this, index, reponse, { formatInteractif: 'calcul' })
           if (this.interactif) {
-            texte += ajouteChampTexteMathLive(this, index, '')
+            texte += ajouteChampTexteMathLive(
+              this,
+              index,
+              KeyboardType.clavierNumbers,
+            )
           }
           this.listeCanEnonces.push(texte)
           nbChamps = 1
@@ -1361,7 +1439,6 @@ export default class SujetCAN2023troisieme extends Exercice {
                     8,
                   ),
             )
-            reponse = a
             texte = 'Loïs a représenté un problème :'
             texte +=
               '<br>' +
@@ -1496,7 +1573,6 @@ export default class SujetCAN2023troisieme extends Exercice {
                     8,
                   ),
             )
-            reponse = a
             texte = 'Loïs a représenté un problème :'
             texte +=
               '<br>' +
@@ -1516,9 +1592,14 @@ export default class SujetCAN2023troisieme extends Exercice {
             texte += '<br>$a=$'
             texteCorr = `$a=\\dfrac{${c}-${b}}{2}=${miseEnEvidence(a)}$.`
           }
+          reponse = a
           setReponse(this, index, reponse, { formatInteractif: 'calcul' })
           if (this.interactif) {
-            texte += ajouteChampTexteMathLive(this, index, '')
+            texte += ajouteChampTexteMathLive(
+              this,
+              index,
+              KeyboardType.clavierNumbers,
+            )
           } else {
             texte += ' $\\ldots$ '
           }
@@ -1575,7 +1656,11 @@ export default class SujetCAN2023troisieme extends Exercice {
             formatInteractif: 'fractionEgale',
           })
           if (this.interactif) {
-            texte += ajouteChampTexteMathLive(this, index, '')
+            texte += ajouteChampTexteMathLive(
+              this,
+              index,
+              KeyboardType.clavierDeBaseAvecFraction,
+            )
           }
           this.listeCanEnonces.push(texte)
           nbChamps = 1
@@ -1593,7 +1678,11 @@ export default class SujetCAN2023troisieme extends Exercice {
           reponse = arrondi(e / 4, 0)
           setReponse(this, index, reponse, { formatInteractif: 'calcul' })
           if (this.interactif) {
-            texte += ajouteChampTexteMathLive(this, index, '')
+            texte += ajouteChampTexteMathLive(
+              this,
+              index,
+              KeyboardType.clavierNumbers,
+            )
           }
           this.listeCanEnonces.push(texte)
           nbChamps = 1
@@ -1691,7 +1780,11 @@ export default class SujetCAN2023troisieme extends Exercice {
             setReponse(this, index, reponse, { formatInteractif: 'calcul' })
             if (this.interactif) {
               texte += '<br>$AE=$'
-              texte += ajouteChampTexteMathLive(this, index, '')
+              texte += ajouteChampTexteMathLive(
+                this,
+                index,
+                KeyboardType.clavierNumbers,
+              )
             } else {
               texte += '<br>$AE=\\ldots$'
             }
@@ -1791,7 +1884,11 @@ export default class SujetCAN2023troisieme extends Exercice {
             setReponse(this, index, reponse, { formatInteractif: 'calcul' })
             if (this.interactif) {
               texte += '<br>$CE=$'
-              texte += ajouteChampTexteMathLive(this, index, '')
+              texte += ajouteChampTexteMathLive(
+                this,
+                index,
+                KeyboardType.clavierNumbers,
+              )
             } else {
               texte += ' $CE=\\ldots$ '
             }
@@ -1882,7 +1979,14 @@ export default class SujetCAN2023troisieme extends Exercice {
           reponse = `${xC};${yA}`
           setReponse(this, index, reponse, { formatInteractif: 'texte' })
           if (this.interactif) {
-            texte += '$D($' + ajouteChampTexteMathLive(this, index, '') + '$)$'
+            texte +=
+              '$D($' +
+              ajouteChampTexteMathLive(
+                this,
+                index,
+                KeyboardType.clavierDeBase,
+              ) +
+              '$)$'
           }
           this.listeCanEnonces.push(
             '$ABCD$ est un carré.<br>' +
@@ -1921,7 +2025,11 @@ export default class SujetCAN2023troisieme extends Exercice {
           })
           if (this.interactif) {
             texte += 'Écrire les entiers séparés par un point-virgule'
-            texte += ajouteChampTexteMathLive(this, index, '')
+            texte += ajouteChampTexteMathLive(
+              this,
+              index,
+              KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets,
+            )
           }
           this.listeCanEnonces.push('Complète avec deux entiers consécutifs.')
           this.listeCanReponsesACompleter.push(
@@ -1951,7 +2059,11 @@ export default class SujetCAN2023troisieme extends Exercice {
             formatInteractif: 'fractionEgale',
           })
           if (this.interactif) {
-            texte += ajouteChampTexteMathLive(this, index, '')
+            texte += ajouteChampTexteMathLive(
+              this,
+              index,
+              KeyboardType.clavierDeBaseAvecFraction,
+            )
           }
           this.listeCanEnonces
             .push(`Une urne contient $${a}$ boules rouges et $${b}$ boules bleues. <br>
@@ -2009,7 +2121,11 @@ export default class SujetCAN2023troisieme extends Exercice {
             formatInteractif: 'fractionEgale',
           })
           if (this.interactif) {
-            texte += ajouteChampTexteMathLive(this, index, '')
+            texte += ajouteChampTexteMathLive(
+              this,
+              index,
+              KeyboardType.clavierDeBaseAvecFraction,
+            )
           }
           this.listeCanEnonces.push(texte)
           this.listeCanReponsesACompleter.push('? $=\\ldots$')
@@ -2037,7 +2153,11 @@ export default class SujetCAN2023troisieme extends Exercice {
           `
           setReponse(this, index, reponse, { formatInteractif: 'calcul' })
           if (this.interactif) {
-            texte += ajouteChampTexteMathLive(this, index, '')
+            texte += ajouteChampTexteMathLive(
+              this,
+              index,
+              KeyboardType.clavierDeBase,
+            )
           }
           this.listeCanEnonces.push(texte)
           this.listeCanReponsesACompleter.push('$x=\\ldots$')
@@ -2080,7 +2200,12 @@ export default class SujetCAN2023troisieme extends Exercice {
           this.listeCanReponsesACompleter.push('$\\ldots\\,\\%$')
           setReponse(this, index, reponse, { formatInteractif: 'calcul' })
           if (this.interactif) {
-            texte += ajouteChampTexteMathLive(this, index, '') + '%'
+            texte +=
+              ajouteChampTexteMathLive(
+                this,
+                index,
+                KeyboardType.clavierNumbers,
+              ) + '%'
           }
           nbChamps = 1
           break
@@ -2098,7 +2223,12 @@ export default class SujetCAN2023troisieme extends Exercice {
           this.listeCanReponsesACompleter.push('$\\ldots\\text{ km/h}$')
           setReponse(this, index, reponse, { formatInteractif: 'calcul' })
           if (this.interactif) {
-            texte += ajouteChampTexteMathLive(this, index, '') + 'km/h'
+            texte +=
+              ajouteChampTexteMathLive(
+                this,
+                index,
+                KeyboardType.clavierNumbers,
+              ) + 'km/h'
           } else {
             texte += ''
           }

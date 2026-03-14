@@ -1,3 +1,4 @@
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { setReponse } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
@@ -72,7 +73,6 @@ export default class TesterUneEgalite extends Exercice {
     for (
       let i = 0, texte, texteCorr, expression, rep1, rep2, rep3, rep4, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       let a, b, c, d, x1, x2, x3
       switch (listeTypeDeQuestions[i]) {
@@ -286,22 +286,34 @@ export default class TesterUneEgalite extends Exercice {
         )
         texte +=
           `<br> ${sp(10)}Pour $x=${x1}$, d'une part, ${sp(5)} ${expression.split('=')[0]}$ = ` +
-          ajouteChampTexteMathLive(this, 6 * i, ' ')
+          ajouteChampTexteMathLive(this, 6 * i, KeyboardType.clavierDeBase)
         texte +=
           `<br> ${sp(10)}Pour $x=${x1}$, d'autre part, ${sp(6)} $${expression.split('=')[1]} = ` +
-          ajouteChampTexteMathLive(this, 6 * i + 1, ' ')
+          ajouteChampTexteMathLive(
+            this,
+            6 * i + 1,
+            KeyboardType.clavierDeBaseAvecX,
+          )
         texte +=
           `<br> Conclure : l'égalité ${expression} est-elle vérifiée pour $${sp(1)}x=${x1}${sp(1)}$ ? (Oui/Non) ` +
-          ajouteChampTexteMathLive(this, 6 * i + 2, ' alphanumeric')
+          ajouteChampTexteMathLive(this, 6 * i + 2, KeyboardType.vFON)
         texte +=
           `<br><br> ${sp(10)}Pour $x=${x2}$, d'une part, ${sp(5)} ${expression.split('=')[0]}$ = ` +
-          ajouteChampTexteMathLive(this, 6 * i + 3, ' ')
+          ajouteChampTexteMathLive(
+            this,
+            6 * i + 3,
+            KeyboardType.clavierDeBaseAvecX,
+          )
         texte +=
           `<br> ${sp(10)}Pour $x=${x2}$, d'autre part, ${sp(6)} $${expression.split('=')[1]} = ` +
-          ajouteChampTexteMathLive(this, 6 * i + 4, ' ')
+          ajouteChampTexteMathLive(
+            this,
+            6 * i + 4,
+            KeyboardType.clavierDeBaseAvecX,
+          )
         texte +=
           `<br> Conclure : l'égalité ${expression} est-elle vérifiée pour $${sp(1)}x=${x2}${sp(1)}$ ? (Oui/Non)  ` +
-          ajouteChampTexteMathLive(this, 6 * i + 5, ' alphanumeric')
+          ajouteChampTexteMathLive(this, 6 * i + 5, KeyboardType.vFON)
       }
 
       if (context.isAmc) {

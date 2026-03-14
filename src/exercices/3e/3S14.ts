@@ -2,6 +2,7 @@
  * ⚠️ Cet exercice est utilisé dans le test : tests/e2e/tests/interactivity/mathLive.intervalleStrict.test.ts ⚠️
  */
 
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { setReponse } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import {
@@ -141,7 +142,11 @@ export default class CalculerCaracteristiques extends Exercice {
               texteAMC[questind] =
                 numAlpha(questind) +
                 'Calculer la moyenne des lancers arrondie au dixième.' +
-                ajouteChampTexteMathLive(this, i * nbReponse + questind, '') +
+                ajouteChampTexteMathLive(
+                  this,
+                  i * nbReponse + questind,
+                  KeyboardType.clavierNumbers,
+                ) +
                 '<br>'
               texte += texteAMC[questind]
               const [, somme] = OutilsStats.computeMoyenneTirages2D(tirages)
@@ -163,7 +168,11 @@ export default class CalculerCaracteristiques extends Exercice {
               texteAMC[questind] =
                 numAlpha(questind) +
                 'Calculer la médiane des lancers.' +
-                ajouteChampTexteMathLive(this, i * nbReponse + questind, '') +
+                ajouteChampTexteMathLive(
+                  this,
+                  i * nbReponse + questind,
+                  KeyboardType.clavierNumbers,
+                ) +
                 '<br>'
               texte += texteAMC[questind]
               const [scoresMedians, medianeCorr] =
@@ -210,7 +219,11 @@ export default class CalculerCaracteristiques extends Exercice {
               texteAMC[questind] =
                 numAlpha(questind) +
                 "Calculer l'étendue des lancers." +
-                ajouteChampTexteMathLive(this, i * nbReponse + questind, '') +
+                ajouteChampTexteMathLive(
+                  this,
+                  i * nbReponse + questind,
+                  KeyboardType.clavierNumbers,
+                ) +
                 '<br>'
               texte += texteAMC[questind]
               const [min, max] = [tirages[0][0], tirages[tirages.length - 1][0]]
@@ -249,7 +262,11 @@ export default class CalculerCaracteristiques extends Exercice {
               texteAMC[questind] =
                 numAlpha(questind) +
                 'Calculer la moyenne de ces notes arrondie au dixième.' +
-                ajouteChampTexteMathLive(this, i * nbReponse + questind, '') +
+                ajouteChampTexteMathLive(
+                  this,
+                  i * nbReponse + questind,
+                  KeyboardType.clavierNumbers,
+                ) +
                 '<br>'
               texte += texteAMC[questind]
 
@@ -267,7 +284,11 @@ export default class CalculerCaracteristiques extends Exercice {
               texteAMC[questind] =
                 numAlpha(questind) +
                 'Calculer la médiane de ces notes.' +
-                ajouteChampTexteMathLive(this, i * nbReponse + questind, '') +
+                ajouteChampTexteMathLive(
+                  this,
+                  i * nbReponse + questind,
+                  KeyboardType.clavierNumbers,
+                ) +
                 '<br>'
               texte += texteAMC[questind]
 
@@ -309,7 +330,11 @@ export default class CalculerCaracteristiques extends Exercice {
               texteAMC[questind] =
                 numAlpha(questind) +
                 "Calculer l'étendue de ces notes." +
-                ajouteChampTexteMathLive(this, i * nbReponse + questind, '') +
+                ajouteChampTexteMathLive(
+                  this,
+                  i * nbReponse + questind,
+                  KeyboardType.clavierNumbers,
+                ) +
                 '<br>'
               texte += texteAMC[questind]
 
@@ -366,7 +391,11 @@ export default class CalculerCaracteristiques extends Exercice {
               texteAMC[questind] =
                 numAlpha(questind) +
                 'Calculer la moyenne des températures arrondie au dixième.' +
-                ajouteChampTexteMathLive(this, i * nbReponse + questind, '') +
+                ajouteChampTexteMathLive(
+                  this,
+                  i * nbReponse + questind,
+                  KeyboardType.clavierNumbers,
+                ) +
                 '<br>'
               texte += texteAMC[questind]
 
@@ -389,7 +418,11 @@ export default class CalculerCaracteristiques extends Exercice {
               texteAMC[questind] =
                 numAlpha(questind) +
                 'Calculer la médiane des températures.' +
-                ajouteChampTexteMathLive(this, i * nbReponse + questind, '') +
+                ajouteChampTexteMathLive(
+                  this,
+                  i * nbReponse + questind,
+                  KeyboardType.clavierNumbers,
+                ) +
                 '<br>'
               texte += texteAMC[questind]
 
@@ -436,7 +469,11 @@ export default class CalculerCaracteristiques extends Exercice {
               texteAMC[questind] =
                 numAlpha(questind) +
                 "Calculer l'étendue des températures." +
-                ajouteChampTexteMathLive(this, i * nbReponse + questind, '') +
+                ajouteChampTexteMathLive(
+                  this,
+                  i * nbReponse + questind,
+                  KeyboardType.clavierNumbers,
+                ) +
                 '<br>'
               texte += texteAMC[questind]
 
@@ -530,7 +567,11 @@ export default class CalculerCaracteristiques extends Exercice {
               texteAMC[questind] =
                 numAlpha(questind) +
                 'Calculer le salaire moyen arrondi au dixième.' +
-                ajouteChampTexteMathLive(this, i * nbReponse + questind, '') +
+                ajouteChampTexteMathLive(
+                  this,
+                  i * nbReponse + questind,
+                  KeyboardType.clavierNumbers,
+                ) +
                 '<br>'
               texte += texteAMC[questind]
 
@@ -554,7 +595,11 @@ export default class CalculerCaracteristiques extends Exercice {
               texteAMC[questind] =
                 numAlpha(questind) +
                 'Calculer le salaire médian.' +
-                ajouteChampTexteMathLive(this, i * nbReponse + questind, '') +
+                ajouteChampTexteMathLive(
+                  this,
+                  i * nbReponse + questind,
+                  KeyboardType.clavierNumbers,
+                ) +
                 '<br>'
               texte += texteAMC[questind]
 
@@ -611,7 +656,11 @@ export default class CalculerCaracteristiques extends Exercice {
               texteAMC[questind] =
                 numAlpha(questind) +
                 "Calculer l'étendue des salaires." +
-                ajouteChampTexteMathLive(this, i * nbReponse + questind, '') +
+                ajouteChampTexteMathLive(
+                  this,
+                  i * nbReponse + questind,
+                  KeyboardType.clavierNumbers,
+                ) +
                 '<br>'
               texte += texteAMC[questind]
 
@@ -664,7 +713,11 @@ export default class CalculerCaracteristiques extends Exercice {
               texteAMC[questind] =
                 numAlpha(questind) +
                 'Calculer la moyenne de ces pointures arrondie au dixième.' +
-                ajouteChampTexteMathLive(this, i * nbReponse + questind, '') +
+                ajouteChampTexteMathLive(
+                  this,
+                  i * nbReponse + questind,
+                  KeyboardType.clavierNumbers,
+                ) +
                 '<br>'
               texte += texteAMC[questind]
 
@@ -688,7 +741,11 @@ export default class CalculerCaracteristiques extends Exercice {
               texteAMC[questind] =
                 numAlpha(questind) +
                 'Calculer la médiane de ces pointures.' +
-                ajouteChampTexteMathLive(this, i * nbReponse + questind, '') +
+                ajouteChampTexteMathLive(
+                  this,
+                  i * nbReponse + questind,
+                  KeyboardType.clavierNumbers,
+                ) +
                 '<br>'
               texte += texteAMC[questind]
 
@@ -740,7 +797,11 @@ export default class CalculerCaracteristiques extends Exercice {
               texteAMC[questind] =
                 numAlpha(questind) +
                 "Calculer l'étendue de ces pointures." +
-                ajouteChampTexteMathLive(this, i * nbReponse + questind, '') +
+                ajouteChampTexteMathLive(
+                  this,
+                  i * nbReponse + questind,
+                  KeyboardType.clavierNumbers,
+                ) +
                 '<br>'
               texte += texteAMC[questind]
 
@@ -788,7 +849,11 @@ export default class CalculerCaracteristiques extends Exercice {
               texteAMC[questind] =
                 numAlpha(questind) +
                 'Calculer la moyenne de ces notes arrondie au dixième.' +
-                ajouteChampTexteMathLive(this, i * nbReponse + questind, '') +
+                ajouteChampTexteMathLive(
+                  this,
+                  i * nbReponse + questind,
+                  KeyboardType.clavierNumbers,
+                ) +
                 '<br>'
               texte += texteAMC[questind]
 
@@ -812,7 +877,11 @@ export default class CalculerCaracteristiques extends Exercice {
               texteAMC[questind] =
                 numAlpha(questind) +
                 'Calculer la médiane de ces notes.' +
-                ajouteChampTexteMathLive(this, i * nbReponse + questind, '') +
+                ajouteChampTexteMathLive(
+                  this,
+                  i * nbReponse + questind,
+                  KeyboardType.clavierNumbers,
+                ) +
                 '<br>'
               texte += texteAMC[questind]
 
@@ -863,7 +932,11 @@ export default class CalculerCaracteristiques extends Exercice {
               texteAMC[questind] =
                 numAlpha(questind) +
                 "Calculer l'étendue de ces notes." +
-                ajouteChampTexteMathLive(this, i * nbReponse + questind, '') +
+                ajouteChampTexteMathLive(
+                  this,
+                  i * nbReponse + questind,
+                  KeyboardType.clavierNumbers,
+                ) +
                 '<br>'
               texte += texteAMC[questind]
 

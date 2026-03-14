@@ -1,3 +1,4 @@
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { setReponse } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import {
@@ -93,7 +94,9 @@ export default class TablesMultiplicationsDivisions extends Exercice {
           texte = '$ ' + a + ' \\times ' + b + ' = $'
           setReponse(this, i, a * b)
           if (this.interactif)
-            texte = `$${a} \\times ${b} = $` + ajouteChampTexteMathLive(this, i)
+            texte =
+              `$${a} \\times ${b} = $` +
+              ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers)
           texteCorr = '$ ' + a + ' \\times ' + b + ' = ' + a * b + ' $'
         } else {
           if (tables.length > 2) {
@@ -103,15 +106,22 @@ export default class TablesMultiplicationsDivisions extends Exercice {
               if (this.interactif)
                 texte =
                   `$ ${a} \\times $` +
-                  ajouteChampTexteMathLive(this, i) +
+                  ajouteChampTexteMathLive(
+                    this,
+                    i,
+                    KeyboardType.clavierNumbers,
+                  ) +
                   `$ = ${a * b} $`
             } else {
               texte =
                 '$ \\ldots\\ldots' + ' \\times ' + b + ' = ' + a * b + ' $'
               if (this.interactif)
                 texte =
-                  ajouteChampTexteMathLive(this, i) +
-                  `$ \\times ${b}  = ${a * b} $`
+                  ajouteChampTexteMathLive(
+                    this,
+                    i,
+                    KeyboardType.clavierNumbers,
+                  ) + `$ \\times ${b}  = ${a * b} $`
             }
             setReponse(this, i, a)
           } else {
@@ -119,7 +129,7 @@ export default class TablesMultiplicationsDivisions extends Exercice {
             texte = '$ ' + a + ' \\times \\ldots\\ldots = ' + a * b + ' $'
             if (this.interactif)
               texte =
-                ajouteChampTexteMathLive(this, i) +
+                ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers) +
                 `$ \\times ${b}  = ${a * b} $`
             setReponse(this, i, b)
           }
@@ -132,7 +142,8 @@ export default class TablesMultiplicationsDivisions extends Exercice {
           setReponse(this, i, a)
           if (this.interactif)
             texte =
-              `$${a * b} \\div ${b} = $` + ajouteChampTexteMathLive(this, i)
+              `$${a * b} \\div ${b} = $` +
+              ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers)
         } else {
           // a trous
           if (choice([true, false])) {
@@ -141,13 +152,15 @@ export default class TablesMultiplicationsDivisions extends Exercice {
             if (this.interactif)
               texte =
                 `$${a * b} \\div $` +
-                ajouteChampTexteMathLive(this, i) +
+                ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers) +
                 `$ = ${a}$`
           } else {
             texte = `$ \\ldots\\ldots \\div ${b}  = ${a}$`
             setReponse(this, i, a * b)
             if (this.interactif)
-              texte = ajouteChampTexteMathLive(this, i) + `$\\div ${b} = ${a}$`
+              texte =
+                ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers) +
+                `$\\div ${b} = ${a}$`
           }
         }
         texteCorr = `$ ${a * b} \\div ${b} = ${a}$`

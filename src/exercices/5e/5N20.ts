@@ -1,3 +1,4 @@
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { propositionsQcm } from '../../lib/interactif/qcm'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -230,7 +231,7 @@ export default class ExerciceAdditionnerSoustraireFractions5ebis extends Exercic
             texte += ajouteChampTexteMathLive(
               this,
               i,
-              '  clavierDeBaseAvecFraction',
+              KeyboardType.clavierDeBaseAvecFraction,
               { texteAvant: sp() + '$=$' },
             )
             handleAnswers(this, i, {
@@ -347,7 +348,7 @@ export default class ExerciceAdditionnerSoustraireFractions5ebis extends Exercic
             texte += ajouteChampTexteMathLive(
               this,
               i,
-              '  clavierDeBaseAvecFraction',
+              KeyboardType.clavierDeBaseAvecFraction,
               { texteAvant: sp() + '$=$' },
             )
             handleAnswers(this, i, {

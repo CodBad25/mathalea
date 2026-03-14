@@ -18,6 +18,7 @@ import Exercice from '../Exercice'
 
 import { arcPointPointAngle } from '../../lib/2d/Arc'
 import { texteSurArc } from '../../lib/2d/TexteSurArc'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { propositionsQcm } from '../../lib/interactif/qcm'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -134,7 +135,6 @@ export default class CalculsHomothetie extends Exercice {
     for (
       let i = 0, environ, melange, texte, texteCorr = '', cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       // Boucle principale où i+1 correspond au numéro de la question
       const lettres = choisitLettresDifferentes(
@@ -670,7 +670,7 @@ export default class CalculsHomothetie extends Exercice {
           texte += ajouteChampTexteMathLive(
             this,
             i,
-            'clavierDeBaseAvecFraction  ',
+            KeyboardType.clavierDeBaseAvecFraction,
             { texteAvant: ' :' },
           )
 
@@ -703,7 +703,7 @@ export default class CalculsHomothetie extends Exercice {
           texte += ajouteChampTexteMathLive(
             this,
             i,
-            'clavierDeBaseAvecFraction  ',
+            KeyboardType.clavierDeBaseAvecFraction,
             { texteAvant: ' :', texteApres: '$ \\text{ cm}$' },
           )
 
@@ -735,7 +735,7 @@ export default class CalculsHomothetie extends Exercice {
           texte += ajouteChampTexteMathLive(
             this,
             i,
-            'clavierDeBaseAvecFraction  ',
+            KeyboardType.clavierDeBaseAvecFraction,
             { texteAvant: ' :', texteApres: '$ \\text{ cm}$' },
           )
 
@@ -778,7 +778,7 @@ export default class CalculsHomothetie extends Exercice {
           texte += ajouteChampTexteMathLive(
             this,
             i,
-            'clavierDeBaseAvecFraction  ',
+            KeyboardType.clavierDeBaseAvecFraction,
             { texteAvant: ' :', texteApres: '$ \\text{ cm}$' },
           )
 
@@ -834,7 +834,7 @@ export default class CalculsHomothetie extends Exercice {
           texte += ajouteChampTexteMathLive(
             this,
             i,
-            'clavierDeBaseAvecFraction  ',
+            KeyboardType.clavierDeBaseAvecFraction,
             { texteAvant: ' :', texteApres: '$ \\text{ cm}$' },
           )
 
@@ -880,7 +880,7 @@ export default class CalculsHomothetie extends Exercice {
             texte += ajouteChampTexteMathLive(
               this,
               i,
-              'clavierDeBaseAvecFraction  ',
+              KeyboardType.clavierDeBaseAvecFraction,
               {
                 texteAvant: ' :',
                 texteApres:
@@ -918,7 +918,7 @@ export default class CalculsHomothetie extends Exercice {
           texte += ajouteChampTexteMathLive(
             this,
             i,
-            'clavierDeBaseAvecFraction  ',
+            KeyboardType.clavierDeBaseAvecFraction,
             { texteAvant: ' :', texteApres: ' $\\text{ cm}^2$' },
           )
 
@@ -949,7 +949,7 @@ export default class CalculsHomothetie extends Exercice {
           texte += ajouteChampTexteMathLive(
             this,
             i,
-            'clavierDeBaseAvecFraction  ',
+            KeyboardType.clavierDeBaseAvecFraction,
             { texteAvant: ' :' },
           )
 
@@ -985,7 +985,7 @@ export default class CalculsHomothetie extends Exercice {
           texte += ajouteChampTexteMathLive(
             this,
             i,
-            'clavierDeBaseAvecFraction  ',
+            KeyboardType.clavierDeBaseAvecFraction,
             { texteAvant: ' :' },
           )
 

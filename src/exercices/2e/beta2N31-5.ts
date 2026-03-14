@@ -1,3 +1,4 @@
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
@@ -130,7 +131,11 @@ export default class CalculerAvecEcritureScientifique extends Exercice {
           somme = 0
           break
       }
-      texte += ajouteChampTexteMathLive(this, i)
+      texte += ajouteChampTexteMathLive(
+        this,
+        i,
+        KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets,
+      )
       handleAnswers(this, i, {
         reponse: { value: reponse, options: { ecritureScientifique: true } },
       })

@@ -1,14 +1,15 @@
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { pgcd } from '../../lib/outils/primalite'
-import Exercice from '../Exercice'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
-import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
+import Exercice from '../Exercice'
 
-import FractionEtendue from '../../modules/FractionEtendue'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { sp } from '../../lib/outils/outilString'
 import { context } from '../../modules/context'
+import FractionEtendue from '../../modules/FractionEtendue'
 
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -96,7 +97,6 @@ export default class ExerciceAdditionnerSoustraireFractions5e extends Exercice {
         texteCorr,
         cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       // Boucle principale où i+1 correspond au numéro de la question
       // les numérateurs
@@ -402,7 +402,7 @@ export default class ExerciceAdditionnerSoustraireFractions5e extends Exercice {
       texte += ajouteChampTexteMathLive(
         this,
         i,
-        '  clavierDeBaseAvecFraction',
+        KeyboardType.clavierDeBaseAvecFraction,
         { texteAvant: sp() + '$=$' },
       )
       if (!context.isAmc) {

@@ -1,6 +1,7 @@
 // import Decimal from 'decimal.js'
 import { courbe } from '../../lib/2d/Courbe'
 import { repere } from '../../lib/2d/reperes'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { setReponse } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { resolutionSystemeLineaire2x2 } from '../../lib/mathFonctions/outilsMaths'
@@ -94,12 +95,22 @@ export default class AntecedentGraphique extends Exercice {
         b = a * x1 - fx1
         f = (x) => a * x - b
         texte += `Déterminer, par lecture graphique, le (ou les) antécédent(s) de $${fx1}$ et de $${fx2}$ par cette fonction $f$.<br><br>`
-        texte += ajouteChampTexteMathLive(this, indexInteractif, '', {
-          texteAvant: `Le (ou les) antécédent(s) de $${fx1}$ (séparer les nombres avec un point-virgule) :`,
-        })
-        texte += ajouteChampTexteMathLive(this, indexInteractif + 1, '', {
-          texteAvant: `<br>Le (ou les) antécédent(s) de $${fx2}$ (séparer les nombres avec un point-virgule) :`,
-        })
+        texte += ajouteChampTexteMathLive(
+          this,
+          indexInteractif,
+          KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets,
+          {
+            texteAvant: `Le (ou les) antécédent(s) de $${fx1}$ (séparer les nombres avec un point-virgule) :`,
+          },
+        )
+        texte += ajouteChampTexteMathLive(
+          this,
+          indexInteractif + 1,
+          KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets,
+          {
+            texteAvant: `<br>Le (ou les) antécédent(s) de $${fx2}$ (séparer les nombres avec un point-virgule) :`,
+          },
+        )
         setReponse(this, indexInteractif, x1, { formatInteractif: 'calcul' })
         setReponse(this, indexInteractif + 1, x2, {
           formatInteractif: 'calcul',
@@ -117,9 +128,14 @@ export default class AntecedentGraphique extends Exercice {
           }
           a = randint(-3, 3, 0)
           texte += `Déterminer, par lecture graphique, le (ou les) antécédent(s) de $${fx0}$ par cette fonction $f$.<br><br>`
-          texte += ajouteChampTexteMathLive(this, indexInteractif, '', {
-            texteAvant: `Le (ou les) antécédent(s) de ${fx0} (séparer les nombres avec un point-virgule) :`,
-          })
+          texte += ajouteChampTexteMathLive(
+            this,
+            indexInteractif,
+            KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets,
+            {
+              texteAvant: `Le (ou les) antécédent(s) de ${fx0} (séparer les nombres avec un point-virgule) :`,
+            },
+          )
           setReponse(this, indexInteractif, x0, { formatInteractif: 'calcul' })
           incrementInteractif = 1
           texteCorr = `$${fx0}$ a un unique antécédent $${x0}$, on note $f(${x0})=${fx0}$.<br>`
@@ -183,9 +199,14 @@ export default class AntecedentGraphique extends Exercice {
           fx2 = c
           f = (x) => a * x ** 2 + b * x + c
           texte += `Déterminer, par lecture graphique, le (ou les) antécédent(s) de $${fx1}$ par cette fonction $f$.<br><br>`
-          texte += ajouteChampTexteMathLive(this, indexInteractif, '', {
-            texteAvant: `Le (ou les) antécédent(s) de ${fx1} (séparer les nombres avec un point-virgule) :`,
-          })
+          texte += ajouteChampTexteMathLive(
+            this,
+            indexInteractif,
+            KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets,
+            {
+              texteAvant: `Le (ou les) antécédent(s) de ${fx1} (séparer les nombres avec un point-virgule) :`,
+            },
+          )
           setReponse(this, indexInteractif, [`${x1};${x3}`, `${x3};${x1}`], {
             formatInteractif: 'texte',
           })

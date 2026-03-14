@@ -2,21 +2,22 @@
  * ⚠️ Cet exercice est utilisé dans le test : tests/e2e/tests/interactivity/mathLive.texte.test.ts ⚠️
  */
 
+import Decimal from 'decimal.js'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
+import {
+  miseEnEvidence,
+  texteEnCouleurEtGras,
+} from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
-import Exercice from '../Exercice'
 import {
   contraindreValeur,
   listeQuestionsToContenu,
   randint,
 } from '../../modules/outils'
-import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
-import Decimal from 'decimal.js'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
-import {
-  miseEnEvidence,
-  texteEnCouleurEtGras,
-} from '../../lib/outils/embellissements'
+import Exercice from '../Exercice'
 
 export const titre =
   "Lier un coefficient multiplicateur d'une variation à un pourcentage et réciproquement"
@@ -77,7 +78,6 @@ export default class CoefficientEvolution extends Exercice {
     for (
       let i = 0, texte, texteCorr, reponse, taux, coeff, cpt = 0;
       i < this.nbQuestions && cpt < 100;
-
     ) {
       if (['taux-', 'coef-'].includes(listeTypeDeQuestions[i])) {
         taux = choice([randint(1, 9) * 10, randint(1, 29, [10, 20])])
@@ -145,7 +145,9 @@ export default class CoefficientEvolution extends Exercice {
           setReponse(this, i, reponse, { formatInteractif: 'texte' })
           break
       }
-      texte += this.interactif ? ajouteChampTexteMathLive(this, i) : '...'
+      texte += this.interactif
+        ? ajouteChampTexteMathLive(this, i, KeyboardType.clavierFullOperations)
+        : '...'
       if (this.questionJamaisPosee(i, taux)) {
         // Si la question n'a jamais été posée, on en créé une autre
         this.listeQuestions[i] = texte

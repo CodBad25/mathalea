@@ -1,4 +1,5 @@
 import { bleuMathalea, orangeMathalea } from '../../lib/colors'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { Personne } from '../../lib/outils/Personne'
@@ -130,19 +131,39 @@ export default class FonctionsProbabilite6e extends Exercice {
       texte += `${quidam} choisit au hasard l'${article} d'entre ${pronom}.`
       if (this.niveau > 4) {
         texte += `<br> ${numAlpha(0)} Quelle est la probabilité que son choix tombe sur l'${article} des ${objets} ${qualites[index1][m]} ? `
-        texte += ajouteChampTexteMathLive(this, 4 * i) + '<br>'
+        texte +=
+          ajouteChampTexteMathLive(
+            this,
+            4 * i,
+            KeyboardType.clavierDeBaseAvecFraction,
+          ) + '<br>'
         texte +=
           numAlpha(1) +
           ` Quelle est la probabilité que son choix tombe sur l'${article} des ${objets} ${qualites[index1][p]} ?`
-        texte += ajouteChampTexteMathLive(this, 4 * i + 1) + '<br>'
+        texte +=
+          ajouteChampTexteMathLive(
+            this,
+            4 * i + 1,
+            KeyboardType.clavierDeBaseAvecFraction,
+          ) + '<br>'
         texte +=
           numAlpha(2) +
           ` Quelle est la probabilité que son choix ne tombe pas sur l'${article} des ${objets} ${qualites[index1][q]} ?`
-        texte += ajouteChampTexteMathLive(this, 4 * i + 2) + '<br>'
+        texte +=
+          ajouteChampTexteMathLive(
+            this,
+            4 * i + 2,
+            KeyboardType.clavierDeBaseAvecFraction,
+          ) + '<br>'
         texte +=
           numAlpha(3) +
           ` Quelle est la probabilité que son choix tombe sur l'${article} des ${objets} ${qualites[index1][m]} ou ${qualites[index1][p]} ?`
-        texte += ajouteChampTexteMathLive(this, 4 * i + 3) + '<br>'
+        texte +=
+          ajouteChampTexteMathLive(
+            this,
+            4 * i + 3,
+            KeyboardType.clavierDeBaseAvecFraction,
+          ) + '<br>'
         texteCorr =
           this.niveau === 5
             ? "On est dans une situation d'équiprobabilité donc la probabilité est donnée par le quotient du nombre de cas favorables par le nombre de cas au total.<br>"

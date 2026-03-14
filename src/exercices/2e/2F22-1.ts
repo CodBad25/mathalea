@@ -257,7 +257,7 @@ export default class LecturesGraphiquesSurSplines extends Exercice {
       enonceSousRepere +=
         `<br>${numAlpha(2)}Déterminer une valeur entière de $k$ telle que $f(x)=k$ admette exactement $${nombreAntecedentsCherches2}$ solution${nombreAntecedentsCherches2 > 1 ? 's' : ''}` +
         (this.interactif ? ' : ' : '.') +
-        ajouteChampTexteMathLive(this, 3 * i + 2, ' ')
+        ajouteChampTexteMathLive(this, 3 * i + 2, KeyboardType.clavierDeBase)
 
       handleAnswers(this, 3 * i, {
         reponse: { value: nombreAntecedentCherches0 },

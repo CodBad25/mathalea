@@ -1,19 +1,20 @@
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import { texFractionReduite } from '../../lib/outils/deprecatedFractions'
 import {
   ecritureAlgebrique,
   ecritureParentheseSiNegatif,
 } from '../../lib/outils/ecritures'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { lettreMinusculeDepuisChiffre } from '../../lib/outils/outilString'
 import { pgcd } from '../../lib/outils/primalite'
-import Exercice from '../Exercice'
 import { context } from '../../modules/context'
-import { listeQuestionsToContenu, randint } from '../../modules/outils'
-import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
-import { fraction } from '../../modules/fractions'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
-import { miseEnEvidence } from '../../lib/outils/embellissements'
 import FractionEtendue from '../../modules/FractionEtendue'
+import { fraction } from '../../modules/fractions'
+import { listeQuestionsToContenu, randint } from '../../modules/outils'
+import Exercice from '../Exercice'
 
 export const titre = 'Compléter un tableau de valeurs'
 export const interactifReady = true
@@ -93,7 +94,6 @@ export default class TableauDeValeurs extends Exercice {
     for (
       let i = 0, texte, texteCorr, f, x1, x2, x3, nomdef, calculs = '', cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       let listeReponses: (number | FractionEtendue)[] = [] // : number[]
       let a = 0
@@ -318,13 +318,14 @@ export default class TableauDeValeurs extends Exercice {
                       approx: 0,
                       decimals: 1,
                       digits: 2,
-                      formatInteractif: !(
+                      /* formatInteractif: !(
                         listeReponses[0] instanceof FractionEtendue
                       )
                         ? 'calcul'
                         : listeReponses[0].d === 1
                           ? 'calcul'
                           : 'fractionEgale',
+                          */
                     },
                   },
                 },
@@ -348,13 +349,13 @@ export default class TableauDeValeurs extends Exercice {
                       approx: 0,
                       decimals: 1,
                       digits: 2,
-                      formatInteractif: !(
+                      /* formatInteractif: !(
                         listeReponses[1] instanceof FractionEtendue
                       )
                         ? 'calcul'
                         : listeReponses[1].d === 1
                           ? 'calcul'
-                          : 'fractionEgale',
+                          : 'fractionEgale', */
                     },
                   },
                 },
@@ -378,13 +379,13 @@ export default class TableauDeValeurs extends Exercice {
                       approx: 0,
                       decimals: 1,
                       digits: 2,
-                      formatInteractif: !(
+                      /* formatInteractif: !(
                         listeReponses[2] instanceof FractionEtendue
                       )
                         ? 'calcul'
                         : listeReponses[2].d === 1
                           ? 'calcul'
-                          : 'fractionEgale',
+                          : 'fractionEgale', */
                     },
                   },
                 },
@@ -409,13 +410,13 @@ export default class TableauDeValeurs extends Exercice {
       } else if (this.interactif) {
         texte +=
           `<br><br>$f(${listeDeX[i][0]}) = $` +
-          ajouteChampTexteMathLive(this, i * 3, '')
+          ajouteChampTexteMathLive(this, i * 3, KeyboardType.clavierDeBase)
         texte +=
           `<br><br>$f(${listeDeX[i][1]}) = $` +
-          ajouteChampTexteMathLive(this, i * 3 + 1, '')
+          ajouteChampTexteMathLive(this, i * 3 + 1, KeyboardType.clavierDeBase)
         texte +=
           `<br><br>$f(${listeDeX[i][2]}) = $` +
-          ajouteChampTexteMathLive(this, i * 3 + 2, '')
+          ajouteChampTexteMathLive(this, i * 3 + 2, KeyboardType.clavierDeBase)
 
         if (listeReponses[0] instanceof FractionEtendue) {
           if (listeReponses[0].den === 1)

@@ -7,6 +7,7 @@ import RepereBuilder from '../../lib/2d/RepereBuilder'
 import { segment } from '../../lib/2d/segmentsVecteurs'
 import { texteSurSegment } from '../../lib/2d/texteSurSegment'
 import { pointIntersectionDD } from '../../lib/2d/utilitairesPoint'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
@@ -282,13 +283,13 @@ export default class Quartiles extends Exercice {
       let texte = `On donne ci-dessus la représentation graphique des fréquences cumulées croissante ${situation.label}.<br>Les réponses seront données avec la précision permise par le graphique (à $${tolerance}$ près).<br>`
       texte +=
         `${numAlpha(0)} Donner la valeur du premier quartile.` +
-        ajouteChampTexteMathLive(this, 3 * i, '')
+        ajouteChampTexteMathLive(this, 3 * i, KeyboardType.clavierNumbers)
       texte +=
         `<br>${numAlpha(1)} Donner la valeur du troisième quartile.` +
-        ajouteChampTexteMathLive(this, 3 * i + 1, '')
+        ajouteChampTexteMathLive(this, 3 * i + 1, KeyboardType.clavierNumbers)
       texte +=
         `<br>${numAlpha(2)} Donner la valeur de l'écart inter-quartile.` +
-        ajouteChampTexteMathLive(this, 3 * i + 2, '')
+        ajouteChampTexteMathLive(this, 3 * i + 2, KeyboardType.clavierNumbers)
       handleAnswers(this, 3 * i, {
         reponse: {
           value: String(q1),

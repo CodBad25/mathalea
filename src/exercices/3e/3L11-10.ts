@@ -1,4 +1,5 @@
 import { tableauColonneLigne } from '../../lib/2d/tableau'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { toutPourUnPoint } from '../../lib/interactif/mathLive'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -154,11 +155,19 @@ export default class TableDoubleDistributivite extends Exercice {
       texte += context.isHtml
         ? '<br> Développement : '
         : '\\par\\medskip Développement : '
-      texte += ajouteChampTexteMathLive(this, 3 * i + 1, '')
+      texte += ajouteChampTexteMathLive(
+        this,
+        3 * i + 1,
+        KeyboardType.clavierDeBaseAvecX,
+      )
       texte += context.isHtml
         ? '<br> Développement réduit : '
         : '\\par\\medskip Développement réduit: '
-      texte += ajouteChampTexteMathLive(this, 3 * i + 2, '')
+      texte += ajouteChampTexteMathLive(
+        this,
+        3 * i + 2,
+        KeyboardType.clavierDeBaseAvecX,
+      )
       // aucune gestion de la largeur de colonne ici
       texteCorr += tableauColonneLigne(
         tableau.entetesCol,

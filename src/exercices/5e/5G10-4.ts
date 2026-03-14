@@ -10,6 +10,7 @@ import { labelPoint, texteParPosition } from '../../lib/2d/textes'
 import { tracePoint } from '../../lib/2d/TracePoint'
 import { pointEstSur } from '../../lib/2d/utilitairesGeometriques'
 import { texcolors, texteGras } from '../../lib/format/style'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { generateCleaner } from '../../lib/interactif/comparisonFunctions'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -549,7 +550,7 @@ export default class SymetrieAxialeConservation1 extends Exercice {
           texteAMC += ajouteChampTexteMathLive(
             this,
             i * this.sup3 + ii,
-            ' angles',
+            KeyboardType.angles,
           )
           handleAnswers(this, i * this.sup3 + ii, {
             reponse: { value: reponse },

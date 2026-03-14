@@ -150,7 +150,6 @@ export default class SujetCAN2022troisieme extends Exercice {
         objets,
         cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       switch (typeQuestionsDisponibles[i]) {
         case 1:
@@ -161,7 +160,11 @@ export default class SujetCAN2022troisieme extends Exercice {
           reponse = a * b
           setReponse(this, index, reponse, { formatInteractif: 'calcul' })
           if (this.interactif) {
-            texte += ajouteChampTexteMathLive(this, index, ' ')
+            texte += ajouteChampTexteMathLive(
+              this,
+              index,
+              KeyboardType.clavierNumbers,
+            )
           } else {
             texte += '$\\ldots$'
           }
@@ -246,7 +249,11 @@ export default class SujetCAN2022troisieme extends Exercice {
 
           setReponse(this, index, reponse, { formatInteractif: 'calcul' })
           if (this.interactif) {
-            texte += ajouteChampTexteMathLive(this, index, ' ')
+            texte += ajouteChampTexteMathLive(
+              this,
+              index,
+              KeyboardType.clavierNumbers,
+            )
           }
 
           nbChamps = 1
@@ -261,7 +268,11 @@ export default class SujetCAN2022troisieme extends Exercice {
 
           setReponse(this, index, reponse, { formatInteractif: 'calcul' })
           if (this.interactif) {
-            texte += ajouteChampTexteMathLive(this, index, ' ')
+            texte += ajouteChampTexteMathLive(
+              this,
+              index,
+              KeyboardType.clavierDeBase,
+            )
           } else {
             texte += '$\\ldots$'
           }
@@ -342,7 +353,11 @@ export default class SujetCAN2022troisieme extends Exercice {
 
           setReponse(this, index, reponse, { formatInteractif: 'calcul' })
           if (this.interactif) {
-            texte += ajouteChampTexteMathLive(this, index, ' ')
+            texte += ajouteChampTexteMathLive(
+              this,
+              index,
+              KeyboardType.clavierNumbers,
+            )
           }
           nbChamps = 1
           break
@@ -368,7 +383,11 @@ export default class SujetCAN2022troisieme extends Exercice {
           }
           setReponse(this, index, reponse, { formatInteractif: 'calcul' })
           if (this.interactif) {
-            texte += ajouteChampTexteMathLive(this, index, ' ')
+            texte += ajouteChampTexteMathLive(
+              this,
+              index,
+              KeyboardType.clavierNumbers,
+            )
           }
           nbChamps = 1
           break
@@ -383,7 +402,11 @@ export default class SujetCAN2022troisieme extends Exercice {
                                    `
           setReponse(this, index, reponse, { formatInteractif: 'calcul' })
           if (this.interactif) {
-            texte += ajouteChampTexteMathLive(this, index, ' ')
+            texte += ajouteChampTexteMathLive(
+              this,
+              index,
+              KeyboardType.clavierNumbers,
+            )
           } else {
             texte += '$\\ldots$'
           }
@@ -399,7 +422,11 @@ export default class SujetCAN2022troisieme extends Exercice {
 
           setReponse(this, index, reponse, { formatInteractif: 'calcul' })
           if (this.interactif) {
-            texte += ajouteChampTexteMathLive(this, index, ' ')
+            texte += ajouteChampTexteMathLive(
+              this,
+              index,
+              KeyboardType.clavierNumbers,
+            )
           } else {
             texte += '$\\ldots$'
           }
@@ -431,12 +458,16 @@ export default class SujetCAN2022troisieme extends Exercice {
           ])
           reponse = a.mul(b)
           setReponse(this, index, reponse, { formatInteractif: 'calcul' })
-          texte = `Recopie  le résultat de  :
+          texte = `Recopie le résultat de  :
             $${texNombre(a, 1)}\\times ${texNombre(b, 1)}$<br>`
           texte += `${propositions[0]} ${sp(6)} ${propositions[1]} ${sp(6)} ${propositions[2]}`
           texteCorr += `<br>On en déduit que la bonne réponse est $${texNombre(reponse, 2)}$`
           if (this.interactif) {
-            texte += ajouteChampTexteMathLive(this, index, ' ')
+            texte += ajouteChampTexteMathLive(
+              this,
+              index,
+              KeyboardType.clavierNumbers,
+            )
           }
           nbChamps = 1
           break
@@ -459,7 +490,11 @@ export default class SujetCAN2022troisieme extends Exercice {
 
           setReponse(this, index, reponse, { formatInteractif: 'calcul' })
           if (this.interactif) {
-            texte += ajouteChampTexteMathLive(this, index, ' ')
+            texte += ajouteChampTexteMathLive(
+              this,
+              index,
+              KeyboardType.clavierNumbers,
+            )
           }
           nbChamps = 1
           break
@@ -477,7 +512,11 @@ export default class SujetCAN2022troisieme extends Exercice {
           reponse = a[0] * k
           setReponse(this, index, reponse, { formatInteractif: 'calcul' })
           if (this.interactif) {
-            texte += ajouteChampTexteMathLive(this, index, ' ')
+            texte += ajouteChampTexteMathLive(
+              this,
+              index,
+              KeyboardType.clavierNumbers,
+            )
           }
           nbChamps = 1
           break
@@ -494,7 +533,11 @@ export default class SujetCAN2022troisieme extends Exercice {
 
           setReponse(this, index, reponse, { formatInteractif: 'calcul' })
           if (this.interactif) {
-            texte += ajouteChampTexteMathLive(this, index, ' ')
+            texte += ajouteChampTexteMathLive(
+              this,
+              index,
+              KeyboardType.clavierNumbers,
+            )
           }
           nbChamps = 1
           break
@@ -509,7 +552,12 @@ export default class SujetCAN2022troisieme extends Exercice {
 
           setReponse(this, index, reponse, { formatInteractif: 'calcul' })
           if (this.interactif) {
-            texte += ajouteChampTexteMathLive(this, index, ' ') + '$\\%$'
+            texte +=
+              ajouteChampTexteMathLive(
+                this,
+                index,
+                KeyboardType.clavierNumbers,
+              ) + '$\\%$'
           } else {
             texte += '$\\ldots \\%$'
           }
@@ -546,7 +594,11 @@ export default class SujetCAN2022troisieme extends Exercice {
 
           setReponse(this, index, reponse, { formatInteractif: 'calcul' })
           if (this.interactif) {
-            texte += ajouteChampTexteMathLive(this, index, ' ')
+            texte += ajouteChampTexteMathLive(
+              this,
+              index,
+              KeyboardType.clavierNumbers,
+            )
           } else {
             texte += '$\\ldots$'
           }
@@ -571,7 +623,11 @@ export default class SujetCAN2022troisieme extends Exercice {
           reponse = moy
           setReponse(this, index, reponse, { formatInteractif: 'calcul' })
           if (this.interactif) {
-            texte += ajouteChampTexteMathLive(this, index, ' ')
+            texte += ajouteChampTexteMathLive(
+              this,
+              index,
+              KeyboardType.clavierNumbers,
+            )
           }
           nbChamps = 1
           break
@@ -669,7 +725,11 @@ export default class SujetCAN2022troisieme extends Exercice {
 
           setReponse(this, index, reponse, { formatInteractif: 'calcul' })
           if (this.interactif) {
-            texte += ajouteChampTexteMathLive(this, index, ' ')
+            texte += ajouteChampTexteMathLive(
+              this,
+              index,
+              KeyboardType.clavierNumbers,
+            )
           } else {
             texte += '$\\ldots$'
           }
@@ -696,7 +756,11 @@ export default class SujetCAN2022troisieme extends Exercice {
 
           setReponse(this, index, reponse, { formatInteractif: 'calcul' })
           if (this.interactif) {
-            texte += ajouteChampTexteMathLive(this, index, ' ')
+            texte += ajouteChampTexteMathLive(
+              this,
+              index,
+              KeyboardType.clavierNumbers,
+            )
           } else {
             texte += '$\\ldots$'
           }
@@ -718,7 +782,11 @@ export default class SujetCAN2022troisieme extends Exercice {
 
           setReponse(this, index, reponse, { formatInteractif: 'calcul' })
           if (this.interactif) {
-            texte += ajouteChampTexteMathLive(this, index, ' ')
+            texte += ajouteChampTexteMathLive(
+              this,
+              index,
+              KeyboardType.clavierNumbers,
+            )
           } else {
             texte += '$\\ldots$'
           }
@@ -821,7 +889,11 @@ export default class SujetCAN2022troisieme extends Exercice {
             formatInteractif: 'fractionEgale',
           })
           if (this.interactif) {
-            texte += ajouteChampTexteMathLive(this, index, ' ')
+            texte += ajouteChampTexteMathLive(
+              this,
+              index,
+              KeyboardType.clavierDeBaseAvecFraction,
+            )
           }
 
           nbChamps = 1
@@ -837,7 +909,11 @@ export default class SujetCAN2022troisieme extends Exercice {
 
           setReponse(this, index, reponse, { formatInteractif: 'calcul' })
           if (this.interactif) {
-            texte += ajouteChampTexteMathLive(this, index, ' ')
+            texte += ajouteChampTexteMathLive(
+              this,
+              index,
+              KeyboardType.clavierNumbers,
+            )
           }
           nbChamps = 1
           break
@@ -854,7 +930,12 @@ export default class SujetCAN2022troisieme extends Exercice {
           setReponse(this, index, reponse, { formatInteractif: 'calcul' })
           if (this.interactif) {
             texte += '$($'
-            texte += ajouteChampTexteMathLive(this, index, '') + `$)=${b}$`
+            texte +=
+              ajouteChampTexteMathLive(
+                this,
+                index,
+                KeyboardType.clavierDeBase,
+              ) + `$)=${b}$`
           } else {
             texte += `$\\ldots=${b}$`
           }
@@ -1000,7 +1081,11 @@ export default class SujetCAN2022troisieme extends Exercice {
           setReponse(this, index, reponse, { formatInteractif: 'calcul' })
           if (this.interactif) {
             texte += '<br>$IJ=$'
-            texte += ajouteChampTexteMathLive(this, index, ' ')
+            texte += ajouteChampTexteMathLive(
+              this,
+              index,
+              KeyboardType.clavierFullOperations,
+            )
           }
           nbChamps = 1
           break
@@ -1057,7 +1142,12 @@ export default class SujetCAN2022troisieme extends Exercice {
 
           setReponse(this, index, reponse, { formatInteractif: 'calcul' })
           if (this.interactif) {
-            texte += ajouteChampTexteMathLive(this, index, ' ') + '$\\%$'
+            texte +=
+              ajouteChampTexteMathLive(
+                this,
+                index,
+                KeyboardType.clavierNumbers,
+              ) + '$\\%$'
           }
           nbChamps = 1
           break
@@ -1075,7 +1165,11 @@ export default class SujetCAN2022troisieme extends Exercice {
 
           setReponse(this, index, reponse, { formatInteractif: 'calcul' })
           if (this.interactif) {
-            texte += ajouteChampTexteMathLive(this, index, ' ')
+            texte += ajouteChampTexteMathLive(
+              this,
+              index,
+              KeyboardType.clavierDeBase,
+            )
           } else {
             texte += '$\\ldots$'
           }
@@ -1137,7 +1231,11 @@ export default class SujetCAN2022troisieme extends Exercice {
 
           setReponse(this, index, reponse, { formatInteractif: 'calcul' })
           if (this.interactif) {
-            texte += ajouteChampTexteMathLive(this, index, ' ')
+            texte += ajouteChampTexteMathLive(
+              this,
+              index,
+              KeyboardType.clavierNumbers,
+            )
           }
           nbChamps = 1
           break

@@ -1,11 +1,12 @@
-import { combinaisonListes } from '../../lib/outils/arrayOutils'
-import { listeDeNotes, unMoisDeTemperature } from '../../lib/outils/aleatoires'
-import Exercice from '../Exercice'
-import { OutilsStats } from '../../modules/outilsStat'
-import { listeQuestionsToContenu, randint } from '../../modules/outils'
-import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
+import { listeDeNotes, unMoisDeTemperature } from '../../lib/outils/aleatoires'
+import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import { context } from '../../modules/context'
+import { listeQuestionsToContenu, randint } from '../../modules/outils'
+import { OutilsStats } from '../../modules/outilsStat'
+import Exercice from '../Exercice'
 
 export const titre = 'Calculer des étendues'
 export const interactifReady = true
@@ -59,7 +60,6 @@ export default class CalculerEtendues extends Exercice {
         texteCorr,
         cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       switch (listeTypeQuestions[i]) {
         case 'notes':
@@ -94,7 +94,7 @@ export default class CalculerEtendues extends Exercice {
         }
       }
       setReponse(this, i, max - min)
-      texte += ajouteChampTexteMathLive(this, i)
+      texte += ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers)
       if (this.questionJamaisPosee(i, min, max)) {
         // Si la question n'a jamais été posée, on en créé une autre
         this.listeQuestions[i] = texte

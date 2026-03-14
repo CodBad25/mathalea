@@ -1,6 +1,7 @@
 import { graphiqueInterpole } from '../../lib/2d/GraphiqueInterpole'
 import { repere } from '../../lib/2d/reperes'
 import { deuxColonnes } from '../../lib/format/miseEnPage'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { setReponse } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
@@ -133,7 +134,7 @@ export default class AntecedentEtImageGraphique extends Exercice {
     let cont1 = ''
     if (lettreQuestion[0] !== null) {
       cont1 = `${numAlpha(lettreQuestion[0])} ${activeOuPassive1 ? `Quelle est l'image de $${x0}$ ?` : `Quel nombre $${x0}$ a-t-il comme image ?`}`
-      cont1 += ajouteChampTexteMathLive(this, 0)
+      cont1 += ajouteChampTexteMathLive(this, 0, KeyboardType.clavierDeBase)
       if (context.isAmc) {
         this.autoCorrection[0].propositions?.push({
           type: 'AMCNum', // on donne le type de la première question-réponse qcmMono, qcmMult, AMCNum, AMCOpen
@@ -162,7 +163,7 @@ export default class AntecedentEtImageGraphique extends Exercice {
       const activeOuPassive2 = choice([true, false])
       const enonceAMC = `${numAlpha(lettreQuestion[1])} ${activeOuPassive2 ? `Quelle est l'image de $${x0 + 5}$ ?` : `Quel nombre $${x0 + 5}$ a-t-il comme image ?`}`
       cont1 += '<br>' + enonceAMC
-      cont1 += ajouteChampTexteMathLive(this, 1)
+      cont1 += ajouteChampTexteMathLive(this, 1, KeyboardType.clavierDeBase)
       if (context.isAmc) {
         this.autoCorrection[0].propositions?.push({
           type: 'AMCNum', // on donne le type de la première question-réponse qcmMono, qcmMult, AMCNum, AMCOpen
@@ -193,14 +194,30 @@ export default class AntecedentEtImageGraphique extends Exercice {
       const activeOuPassive3 = choice([true, false])
       if (ordre === 1) {
         cont2 = `${numAlpha(lettreQuestion[2])} ${activeOuPassive3 ? `Déterminer le (ou les) antécédent(s) de $${b}$.` : `Déterminer le (ou les) nombres qui ont $${b}$ comme image.`}`
-        cont2 += ajouteChampTexteMathLive(this, lettreQuestion[2])
+        cont2 += ajouteChampTexteMathLive(
+          this,
+          lettreQuestion[2],
+          KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets,
+        )
         cont2 += `<br>${numAlpha(lettreQuestion[3])} ${activeOuPassive3 ? `Déterminer le (ou les) nombres qui ont $${c}$ comme image.` : `Déterminer le (ou les) antécédent(s) de $${c}$.`}`
-        cont2 += ajouteChampTexteMathLive(this, lettreQuestion[3])
+        cont2 += ajouteChampTexteMathLive(
+          this,
+          lettreQuestion[3],
+          KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets,
+        )
       } else {
         cont2 = `${numAlpha(2)} ${activeOuPassive3 ? `Déterminer le (ou les) antécédent(s) de $${c}$.` : `Déterminer le (ou les) nombres qui ont $${c}$ comme image.`}`
-        cont2 += ajouteChampTexteMathLive(this, 2)
+        cont2 += ajouteChampTexteMathLive(
+          this,
+          2,
+          KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets,
+        )
         cont2 += `<br>${numAlpha(3)} ${activeOuPassive3 ? `Déterminer le (ou les) nombres qui ont $${b}$ comme image.` : `Déterminer le (ou les) antécédent(s) de $${b}$.`}`
-        cont2 += ajouteChampTexteMathLive(this, 3)
+        cont2 += ajouteChampTexteMathLive(
+          this,
+          3,
+          KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets,
+        )
       }
       if (context.isAmc) {
         this.autoCorrection[0].propositions?.push({

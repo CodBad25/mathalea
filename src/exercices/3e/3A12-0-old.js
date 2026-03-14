@@ -1,6 +1,7 @@
 import { engrenages } from '../../lib/2d/engrenage'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { bleuMathalea } from '../../lib/colors'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { setReponse } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
@@ -182,7 +183,11 @@ export default class EngrenagesAnimes extends Exercice {
             '.<br>'
           texte += `Quand elle effectue $${nbToursA}$ tours, la roue de droite effectue $${nbToursB}$ tours.<br>`
           texte += 'Combien la roue de droite possède-t-elle de dents ?'
-          texte += ajouteChampTexteMathLive(this, kk, '')
+          texte += ajouteChampTexteMathLive(
+            this,
+            kk,
+            KeyboardType.clavierNumbers,
+          )
           texte += '<br>'
           texteCorr +=
             'Le nombre de dents multiplié par le nombre de tours de chaque roue doit donner le même résultat.<br>'
@@ -224,7 +229,11 @@ export default class EngrenagesAnimes extends Exercice {
             '.<br>'
           texte += `Elle tourne de $${nbToursA * nbDentsRoueA}$ dents. Pendant ce temps, la roue de droite fait $${nbToursB}$ tour${nbToursB > 1 ? 's' : ''}.<br>`
           texte += 'Combien la roue de droite possède-t-elle de dents ?'
-          texte += ajouteChampTexteMathLive(this, kk, '')
+          texte += ajouteChampTexteMathLive(
+            this,
+            kk,
+            KeyboardType.clavierNumbers,
+          )
           texte += '<br>'
           setReponse(this, kk, nbDentsRoueB)
           kk++
@@ -263,7 +272,11 @@ export default class EngrenagesAnimes extends Exercice {
           texte += `La roue dentée de gauche possède $${nbDentsRoueA}$ dents et celle de droite possède $${nbDentsRoueB}$ dents.<br>`
           texte += `${numAlpha(0)} Au bout de combien de tours pour la roue de gauche les deux roues retrouveront leur position initiale ?<br>`
           texte += `${numAlpha(1)} Combien de tours aura alors effectués la roue de droite ?`
-          texte += ajouteChampTexteMathLive(this, kk, '')
+          texte += ajouteChampTexteMathLive(
+            this,
+            kk,
+            KeyboardType.clavierNumbers,
+          )
           texte += '<br>'
           setReponse(this, kk, nbToursB)
           kk++
@@ -305,7 +318,11 @@ export default class EngrenagesAnimes extends Exercice {
             (context.isHtml ? "(le dessin n'est pas représentatif)" : '') +
             '.<br>'
           texte += `La roue de gauche tourne de $${nbToursA * nbDentsRoueA}$ dents.<br>Pendant ce temps, combien la roue de droite effectue-t-elle de tours ?`
-          texte += ajouteChampTexteMathLive(this, kk, '')
+          texte += ajouteChampTexteMathLive(
+            this,
+            kk,
+            KeyboardType.clavierNumbers,
+          )
           texte += '<br>'
           setReponse(this, kk, nbToursB)
           kk++
@@ -367,12 +384,20 @@ export default class EngrenagesAnimes extends Exercice {
           )
           texte += `La roue de gauche possède $${nbDentsRoueA}$ dents, celle du milieu en a $${nbDentsRoueB}$ et celle de droite en a $${nbDentsRoueC}$.<br>`
           texte += `${numAlpha(0)}Combien de tours doit effectuer la roue de gauche avant que son repère et celui de la roue du milieu soient à nouveau comme dans la position initiale ?`
-          texte += ajouteChampTexteMathLive(this, kk, '')
+          texte += ajouteChampTexteMathLive(
+            this,
+            kk,
+            KeyboardType.clavierNumbers,
+          )
           texte += '<br>'
           setReponse(this, kk, nbToursA)
           kk++
           texte += `${numAlpha(1)}Combien de tours doit effectuer la roue de gauche avant que son repère et celui de la roue de droite soient à nouveau comme dans la position initiale ?`
-          texte += ajouteChampTexteMathLive(this, kk, '')
+          texte += ajouteChampTexteMathLive(
+            this,
+            kk,
+            KeyboardType.clavierNumbers,
+          )
           texte += '<br>'
           setReponse(this, kk, nbToursB)
           kk++
@@ -380,7 +405,11 @@ export default class EngrenagesAnimes extends Exercice {
           texte += this.interactif
             ? `Dans la situation ${numAlpha(1, true)}, la roue du milieu n'étant pas dans sa position initiale, combien de tours la roue de gauche doit-elle effectuer pour que les trois roues retrouvent leur position initiale ?`
             : `Dans la situation ${numAlpha(1, true)}, la roue du milieu est-elle dans sa position initiale ? Sinon, combien de tours la roue de gauche doit-elle effectuer pour que les trois roues retrouvent leur position initiale ?`
-          texte += ajouteChampTexteMathLive(this, kk, '')
+          texte += ajouteChampTexteMathLive(
+            this,
+            kk,
+            KeyboardType.clavierNumbers,
+          )
           texte += '<br>'
           setReponse(this, kk, nbToursAbc)
           kk++
