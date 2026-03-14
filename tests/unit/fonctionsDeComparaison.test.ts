@@ -3379,6 +3379,18 @@ describe('fonctionComparaison', () => {
     })
     expect(result.isOk).toBe(true)
 
+    fonctionComparaison('\\dfrac63', '\\dfrac63', {
+      fractionEgale: true,
+      nombreDecimalSeulement: true,
+    })
+    expect(result.isOk).toBe(true)
+
+    fonctionComparaison('\\dfrac63', '2', {
+      fractionEgale: true,
+      nombreDecimalSeulement: true,
+    })
+    expect(result.isOk).toBe(true)
+
     result = fonctionComparaison('\\dfrac{12}{10}', '\\dfrac65', {
       fractionEgale: true,
       nombreDecimalSeulement: true,
