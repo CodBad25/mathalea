@@ -101,7 +101,7 @@ export default class SuitesExplicites extends Exercice {
           reponse = this.sup2
             ? `${reduireAxPlusB(r, b, 'n')}`
             : `${reduireAxPlusB(r, a, 'n')}`
-          handleAnswers(this, i, { reponse: { value: reponse } })
+          handleAnswers(this, i, { reponse: { value: reponse, options: { calculFormel: true }, } })
           texte = `Soit $(${NomS}_n)$ une suite arithmétique de raison $r=${texNombre(r, 1)}$ telle que $${NomS}_{${indice}}=${texNombre(a, 2)}$.<br>
         Donner l'expression de $${NomS}_n$ en fonction de $n$.`
 
@@ -144,7 +144,7 @@ export default class SuitesExplicites extends Exercice {
           handleAnswers(this, i, {
             reponse: {
               value: reponse,
-              options: { expressionsForcementReduites: true },
+              options: { calculFormel: true },
             },
           })
           texte = `Soit $(${NomS}_n)$ une suite définie par $${NomS}_{${indice}}=${texNombre(a, 1)}$ et  
@@ -218,7 +218,7 @@ export default class SuitesExplicites extends Exercice {
           reponse = this.sup2
             ? `${texNombre(a, 1)}\\times ${ecritureParentheseSiNegatif(q)}^{n-${indice}} `
             : `${texNombre(a, 1)}\\times ${ecritureParentheseSiNegatif(q)}^n`
-          handleAnswers(this, i, { reponse: { value: reponse } })
+          handleAnswers(this, i, { reponse: { value: reponse, options: { calculFormel: true }, } })
           texte = `Soit $(${NomS}_n)$ une suite définie par $${NomS}_{${indice}}=${texNombre(a, 1)}$ et  
         $${NomS}_{n+1}=${texNombre(q, 1)}\\times ${NomS}_n$ pour tout entier naturel $n$.<br>
       Donner l'expression de $${NomS}_n$ en fonction de $n$.`
