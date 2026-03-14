@@ -144,7 +144,9 @@ export default class ExerciceDistributiviteFractions extends Exercice {
       let texte = ''
       let reponseDev = ''
       let reponseRed = ''
+      let reponseRedSimplifiee = ''
       const lettre = lettreDepuisChiffre(i + 1)
+      let ASimplifier = false
 
       switch (typesDeQuestions) {
         case 'a/b(cx+d)': {
@@ -154,6 +156,8 @@ export default class ExerciceDistributiviteFractions extends Exercice {
           const coefX1 = new FractionEtendue(a * c, b)
           const coefCst1 = new FractionEtendue(a * d, b)
           reponseRed = `${firstTermLatex(coefX1, inconnue)}${coefCst1.ecritureAlgebrique}`
+          ASimplifier = !(coefX1.estIrreductible && coefCst1.estIrreductible)
+          reponseRedSimplifiee = `${firstTermLatex(coefX1.simplifie(), inconnue)}${coefCst1.simplifie().ecritureAlgebrique}`
           break
         }
         case 'a/bx(cx+d)': {
@@ -163,6 +167,8 @@ export default class ExerciceDistributiviteFractions extends Exercice {
           const coefX2 = new FractionEtendue(a * c, b)
           const coefX1b = new FractionEtendue(a * d, b)
           reponseRed = `${firstTermLatex(coefX2, `${inconnue}^2`)}${algTermLatex(coefX1b, inconnue)}`
+          ASimplifier = !(coefX2.estIrreductible && coefX1b.estIrreductible)
+          reponseRedSimplifiee = `${firstTermLatex(coefX2.simplifie(), inconnue)}${coefX1b.simplifie().ecritureAlgebrique}`
           break
         }
         case 'a/b(cx+d/e)': {
@@ -173,6 +179,8 @@ export default class ExerciceDistributiviteFractions extends Exercice {
           const prodFrac = f.produitFraction(f2)
           const coefX3 = new FractionEtendue(a * c, b)
           reponseRed = `${firstTermLatex(coefX3, inconnue)}${prodFrac.ecritureAlgebrique}`
+          ASimplifier = !(coefX3.estIrreductible && prodFrac.estIrreductible)
+          reponseRedSimplifiee = `${firstTermLatex(coefX3.simplifie(), inconnue)}${prodFrac.simplifie().ecritureAlgebrique}`
           break
         }
       }
@@ -181,7 +189,11 @@ export default class ExerciceDistributiviteFractions extends Exercice {
       let texteCorr = texte + '<br>'
       texteCorr += `$${lettre}=${reponseDev}$`
       texteCorr += '<br>'
-      texteCorr += `$${lettre}=${miseEnEvidence(reponseRed)}$`
+      if (ASimplifier) {
+        texteCorr += `$${lettre}=${reponseRed}$<br>`
+        texteCorr += `On peut encore réduire et obtenir : `
+        texteCorr += `$${lettre}=${miseEnEvidence(reponseRedSimplifiee)}$.`
+      } else texteCorr += `$${lettre}=${miseEnEvidence(reponseRed)}$`
 
       // Gestion de l'interactif
       handleAnswers(this, i, {
