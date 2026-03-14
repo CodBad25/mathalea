@@ -383,7 +383,7 @@ export default class UtiliserProduitScalaire extends Exercice {
 
         case 4:
         default:
-          switch (randint(1, 2)) {
+          switch (randint(1,2)) {
             case 1:
               objets = []
               listeLong = [
@@ -420,7 +420,7 @@ export default class UtiliserProduitScalaire extends Exercice {
               objets.push(poly, seg1, seg2, lE, lF, l1, l2)
               texte =
                 `Dans un rectangle $${nomA}${nomB}${nomC}${nomD}$ de longueur $${long[0]}$ et de largeur $${long[1]}$, on considère les points $${nomE}$ et $${nomF}$ tels que :<br>
-                $\\overrightarrow{${nomA}${nomE}}=${AE.texFraction}$ et  $\\overrightarrow{${nomA}${nomF}}=${AF.texFraction}\\overrightarrow{${nomA}${nomB}}$.<br>
+                $\\overrightarrow{${nomA}${nomE}}=${AE.texFraction}\\overrightarrow{${nomA}${nomD}}$ et  $\\overrightarrow{${nomA}${nomF}}=${AF.texFraction}\\overrightarrow{${nomA}${nomB}}$.<br>
                On considère le repère $\\left(${nomA}\\,;\\,\\dfrac{1}{${long[0]}}\\overrightarrow{${nomA}${nomB}}\\,,\\, \\dfrac{1}{${long[1]}}\\overrightarrow{${nomA}${nomD}}\\right)$.
                ` +
                 createList({
