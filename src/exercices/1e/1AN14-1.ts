@@ -68,8 +68,6 @@ class DerivationFonctionsUsuellesEtendue extends Exercice {
         'g',
         'h',
         'l',
-        'm',
-        'p',
         'r',
         's',
         't',
@@ -228,7 +226,8 @@ class DerivationFonctionsUsuellesEtendue extends Exercice {
         handleAnswers(this, i, {
           reponse: {
             value: reponse,
-            options: { fonction: true, variable: 'x', domaine: [-10, 10] },
+            //  options: { fonction: true, variable: 'x', domaine: [-10, 10] },
+            options: { calculFormel: true },
           },
         })
         i++
