@@ -2,12 +2,15 @@ import { texteEnCouleur } from '../../lib/outils/embellissements'
 import { prenom } from '../../lib/outils/Personne'
 import Exercice from '../Exercice'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
+import { ajouteQuestionMathlive } from '../../lib/interactif/questionMathLive'
+export const interactifReady = true
+export const interactifType = 'mathLive'
 export const titre =
   'Produire une forme littérale en introduisant une lettre pour désigner une valeur inconnue'
 
 /**
  * Produire une forme littérale en introduisant une lettre pour désigner une valeur inconnue
- * @author Sébastien Lozano
+ * @author Sébastien Lozano, modifié par François-Rémi Zawadzki
  */
 export const uuid = '8b18b'
 
@@ -48,7 +51,6 @@ export default class FormeLitteraleIntroduireUneLettre extends Exercice {
     for (
       let i = 0, texte, texteCorr, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       // une fonction pour gérer le pluriel
 
@@ -109,6 +111,171 @@ export default class FormeLitteraleIntroduireUneLettre extends Exercice {
             plur: 'enclumes',
           },
         },
+        {
+          prenom: prenom(),
+          elt1: {
+            lettre: 'r',
+            article: 'un',
+            sing: 'roman',
+            plur: 'romans',
+          },
+          elt2: {
+            lettre: 'm',
+            article: 'un',
+            sing: 'manga',
+            plur: 'mangas',
+          },
+        },
+        {
+          prenom: prenom(),
+          elt1: {
+            lettre: 'p',
+            article: 'un',
+            sing: 'poireau',
+            plur: 'poireaux',
+          },
+          elt2: {
+            lettre: 'n',
+            article: 'un',
+            sing: 'navet',
+            plur: 'navets',
+          },
+        },
+        {
+          prenom: prenom(),
+          elt1: {
+            lettre: 'b',
+            article: 'un',
+            sing: 'bracelet',
+            plur: 'bracelet',
+          },
+          elt2: {
+            lettre: 'c',
+            article: 'un',
+            sing: 'collier',
+            plur: 'colliers',
+          },
+        },
+        {
+          prenom: prenom(),
+          elt1: {
+            lettre: 'p',
+            article: 'un',
+            sing: 'pantalon',
+            plur: 'patallons',
+          },
+          elt2: {
+            lettre: 't',
+            article: 'un',
+            sing: 't-shirt',
+            plur: 't-shirts',
+          },
+        },
+        {
+          prenom: prenom(),
+          elt1: {
+            lettre: 'c',
+            article: 'un',
+            sing: 'CD',
+            plur: 'CDs',
+          },
+          elt2: {
+            lettre: 'v',
+            article: 'un',
+            sing: 'vynil',
+            plur: 'vynils',
+          },
+        },
+        {
+          prenom: prenom(),
+          elt1: {
+            lettre: 'm',
+            article: 'un',
+            sing: 'crayon',
+            plur: 'crayons',
+          },
+          elt2: {
+            lettre: 'g',
+            article: 'une',
+            sing: 'gomme',
+            plur: 'gommes',
+          },
+        },
+        {
+          prenom: prenom(),
+          elt1: {
+            lettre: 'r',
+            article: 'une',
+            sing: 'rose',
+            plur: 'roses',
+          },
+          elt2: {
+            lettre: 't',
+            article: 'une',
+            sing: 'tulipe',
+            plur: 'tulipes',
+          },
+        },
+        {
+          prenom: prenom(),
+          elt1: {
+            lettre: 'c',
+            article: 'un',
+            sing: 'croissant',
+            plur: 'croissants',
+          },
+          elt2: {
+            lettre: 'p',
+            article: 'un',
+            sing: 'pain au chocolat',
+            plur: 'pains au chocolat',
+          },
+        },
+        {
+          prenom: prenom(),
+          elt1: {
+            lettre: 'c',
+            article: 'un',
+            sing: 'café',
+            plur: 'cafés',
+          },
+          elt2: {
+            lettre: 't',
+            article: 'un',
+            sing: 'thé',
+            plur: 'thés',
+          },
+        },
+        {
+          prenom: prenom(),
+          elt1: {
+            lettre: 'g',
+            article: 'une',
+            sing: 'glace',
+            plur: 'glaces',
+          },
+          elt2: {
+            lettre: 's',
+            article: 'un',
+            sing: 'sorbet',
+            plur: 'sorbets',
+          },
+        },
+        {
+          prenom: prenom(),
+          elt1: {
+            lettre: 'e',
+            article: 'une',
+            sing: 'écharpe',
+            plur: 'écharpes',
+          },
+          elt2: {
+            lettre: 'b',
+            article: 'un',
+            sing: 'bonnet',
+            plur: 'bonnets',
+          },
+        },
       ]
       const enonces = []
       const n = randint(1, 6)
@@ -126,10 +293,27 @@ export default class FormeLitteraleIntroduireUneLettre extends Exercice {
       })
       texte = `${enonces[0].enonce}`
       texteCorr = `${enonces[0].correction}`
+      const formule = `${sliceUn(n)}${situation.elt1.lettre} + ${sliceUn(p)}${situation.elt2.lettre}`
 
-      if (this.listeQuestions.indexOf(texte) === -1) {
+      if (
+        this.questionJamaisPosee(i, situation.elt1.sing, situation.elt2.sing)
+      ) {
         // Si la question n'a jamais été posée, on en créé une autre
-        this.listeQuestions[i] = texte
+        this.listeQuestions[i] =
+          texte +
+          ajouteQuestionMathlive({
+            exercice: this, // ça, c'est pour que la fonction récupère un pointeur sur ton exo
+            question: i, // ça, c'est pour qu'il numérote correctement l'input
+            typeInteractivite: 'mathlive', // ça, c'est l'input le plus souvent utilisé
+            objetReponse: {
+              // ça c'est ce qui définit la réponse attendue et la façon dont elle doit être vérifiée
+              reponse: {
+                value: formule,
+                options: { calculFormel: true },
+              },
+            },
+          })
+
         this.listeCorrections[i] = texteCorr
         i++
       }
