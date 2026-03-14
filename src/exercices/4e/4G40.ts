@@ -5,10 +5,11 @@ export const amcReady = true
 export const amcType = 'AMCHybride'
 export const titre =
   'Utiliser le cosinus pour calculer une longueur dans un triangle rectangle'
+export const dateDeModifImportante = '14/03/2026'
 
 /**
  * @author Jean-Claude Lhote
- * 4G40 Exercice refait avec mathalea2d l'ancien exo MG32 porte la référence 4G40-MG32
+ * Exercice refait avec mathalea2d l'ancien exo MG32 porte la référence 4G40-MG32
  */
 export const uuid = '3303a'
 
