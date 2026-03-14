@@ -2,11 +2,7 @@ import { propositionsQcm } from '../../lib/interactif/qcm'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import { sommeDesChiffres } from '../../lib/outils/nombres'
 import { texNombre } from '../../lib/outils/texNombre'
-import {
-  gestionnaireFormulaireTexte,
-  listeQuestionsToContenu,
-  randint,
-} from '../../modules/outils'
+import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 export const amcReady = true
 export const amcType = 'qcmMono'
@@ -14,26 +10,25 @@ export const interactifReady = true
 export const interactifType = 'qcm'
 export const titre = 'Reconnaitre diviseur, multiple, divisible'
 
-export const dateDeModifImportante = '14/03/2026'
+export const dateDeModifImportante = '07/03/2023'
 
 /**
  * Vrai ou faux sur les notions de diviseur ou multiple
  * @author Rémi Angot
  * Ajout du critère de divisibilité par 10 par Guillaume Valmont le 07/03/2022
- * formulaire texte pour permettre de cumuler les critères par olivier Mimeau
 
 */
-export const uuid = 'af4b1'
+export const uuid = 'bbdd6'
 
 export const refs = {
-  'fr-fr': ['auto6N3D'],
-  'fr-2016': ['6N43-3'],
-  'fr-ch': ['9NO4-2'],
+  'fr-fr': [], // ['auto6N3D'],
+  'fr-2016': [], // ['6N43-3'],
+  'fr-ch': [], // ['9NO4-2'],
 }
 
-function justification(N: number, a: number, critereOK: boolean) {
+function justification(N: number, a: number, booleen: boolean) {
   let result
-  if (critereOK) {
+  if (booleen === true) {
     if (N === 2) {
       result = ', car son chiffre des unités est $0$, $2$, $4$, $6$ ou $8$.'
     } else if (N === 5) {
@@ -45,7 +40,8 @@ function justification(N: number, a: number, critereOK: boolean) {
     } else {
       result = `, car $${texNombre(a)} = ${N}\\times ${a / N}$.`
     }
-  } else {
+  }
+  if (booleen === false) {
     if (N === 2) {
       result =
         ", car son chiffre des unités n'est pas $0$, $2$, $4$, $6$ ou $8$."
@@ -64,17 +60,10 @@ function justification(N: number, a: number, critereOK: boolean) {
 export default class ExerciceVraiFauxDivisibleMultipleDiviseur extends Exercice {
   constructor() {
     super()
-
-    this.besoinFormulaireTexte = [
-      'Choix du nombre',
-      `Nombres séparés par des tirets :
-    1 : Critères de divisibilité par 2
-    2 : Critères de divisibilité par 3
-    3 : Critères de divisibilité par 5
-    4 : Critères de divisibilité par 9
-    5 : Critères de divisibilité par 10
-    6 : Sans critère de divisibilité
-    7 : Mélange`,
+    this.besoinFormulaireNumerique = [
+      'Niveau de difficulté',
+      4,
+      '1 : Critères de divisibilité par 2 et 5\n2 : Critères de divisibilité par 2, 3, 5 et 9\n3 : Sans critère de divisibilité\n4 : Critère de divisibilité par 10',
     ]
 
     this.consigne =
@@ -82,10 +71,12 @@ export default class ExerciceVraiFauxDivisibleMultipleDiviseur extends Exercice 
     this.nbQuestions = 5
     this.nbCols = 2 // Uniquement pour la sortie LaTeX
     this.nbColsCorr = 2 // Uniquement pour la sortie LaTeX
-    this.sup = '1-3-5'
+    this.sup = 1 // Niveau de difficulté
   }
 
   nouvelleVersion() {
+    this.sup2 = parseInt(this.sup2)
+
     let typeDeQuestionsDisponibles = [
       'Ndiviseur',
       'divisibleParN',
@@ -110,27 +101,17 @@ export default class ExerciceVraiFauxDivisibleMultipleDiviseur extends Exercice 
       typeDeQuestionsDisponibles,
       this.nbQuestions,
     ) // Tous les types de questions sont posés mais l'ordre diffère à chaque "cycle"
-    const listeDeN: number[] = [] // listeDeNDisponibles: number[] = []
-
-    const listecritere = gestionnaireFormulaireTexte({
-      saisie: this.sup,
-      min: 1,
-      max: 6,
-      melange: 7,
-      defaut: 7,
-      listeOfCase: ['2', '3', '5', '9', '10', 'Sans'], // critère de divisibilité
-      nbQuestions: this.nbQuestions,
-    })
-    for (const critere of listecritere) {
-      if (critere === 'Sans') {
-        listeDeN.push(choice([7, 11, 13, 20, 30, 25]))
-      } else {
-        if (typeof critere === 'string') {
-          listeDeN.push(parseInt(critere))
-        }
-      }
+    let listeDeNDisponibles
+    if (this.sup === 1) {
+      listeDeNDisponibles = [2, 5]
+    } else if (this.sup === 2) {
+      listeDeNDisponibles = [2, 3, 5, 9]
+    } else if (this.sup === 3) {
+      listeDeNDisponibles = [7, 11, 13, 20, 30, 25]
+    } else {
+      listeDeNDisponibles = [10]
     }
-    // const listeDeN = combinaisonListes(listeDeNDisponibles, this.nbQuestions) // Tous les types de questions sont posés mais l'ordre diffère à chaque "cycle"
+    const listeDeN = combinaisonListes(listeDeNDisponibles, this.nbQuestions) // Tous les types de questions sont posés mais l'ordre diffère à chaque "cycle"
     for (
       let i = 0, texte, texteCorr, N, a, cpt = 0;
       i < this.nbQuestions && cpt < 50;
