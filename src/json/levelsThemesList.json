@@ -2849,6 +2849,9 @@
   "1Tec-A2": {
     "titre": "Évolutions et variations"
   },
+  "1Tec-AN": {
+    "titre": "Analyse"
+  },
   "1Tec-AN1": {
     "titre": "Suites numériques"
   },
@@ -2857,6 +2860,12 @@
   },
   "1Tec-AN11": {
     "titre": "Suites arithmétiques et géométriques"
+  },
+  "1Tec-AN2": {
+    "titre": "Fonctions de la variable réelle"
+  },
+  "1Tec-AN21": {
+    "titre": "Fonctions polynômes de degré 2"
   },
   "PEA1": {
     "titre": "Numération et bases"
