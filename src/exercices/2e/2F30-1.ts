@@ -938,7 +938,7 @@ export default class VariationsCourbe extends Exercice {
                     [`$${nom}(x)$`, 4, 30],
                   ],
                   // Première ligne du tableau avec chaque antécédent suivi de son nombre de pixels de largeur estimée du texte pour le centrage
-                  ['$-\\infty$', 10, `$${x0}$`, 10, `$${x2}$`, 10],
+                  ['$-\\infty$', 10, `$${x1}$`, 10, `$${x2}$`, 10],
                 ],
                 // tabLines ci-dessous contient les autres lignes du tableau.
                 tabLines: [
