@@ -67,7 +67,7 @@ export default class ExprimerEnFonction extends ExerciceSimple {
             ? [
                 '$C=\\dfrac{9}{5}(F-32)$',
                 '$C=\\dfrac{5}{9}F-32$',
-                '$C=\\dfrac{5(F-32)}{9}$',
+                '$C=\\dfrac{5F-32}{9}$',
               ]
             : [
                 '$F=\\dfrac{5}{9}C+32$',
