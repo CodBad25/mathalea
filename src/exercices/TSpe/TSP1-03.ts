@@ -182,7 +182,7 @@ $Q_2.$`,
         $\\begin{aligned}\\mathrm P (A\\cap B) &= \\mathrm P (A) \\times \\mathrm P_A (B)\\\\& = ${texNombre(pA)} \\times ${texNombre(pBsipA)}\\\\& = ${texNombre(pA * pBsipA)}\\end{aligned}.$`
     const correction2 = `L'évènement «${texteItalique('le candidat répond correctement à la question $Q_2$')}» est $B.$<br>
        Comme $A$ et $\\overline{A}$ forment une partition de l'univers, on utilise la formule des probabilités totales : <br>
-       $\\begin{aligned}\\mathrm P (B) &= \\mathrm P (A) \\times \\mathrm P_B (B) + \\mathrm P (\\overline{A}) \\times \\mathrm P_{\\overline{A}} (B)\\\\& = ${texNombre(pA)} \\times ${texNombre(pBsipA)} + ${texNombre(1 - pA)} \\times ${texNombre(pBsiNonpA)}\\\\& = ${texNombre(pB)}\\end{aligned}.$`
+       $\\begin{aligned}\\mathrm P (B) &= \\mathrm P (A) \\times \\mathrm P_A (B) + \\mathrm P (\\overline{A}) \\times \\mathrm P_{\\overline{A}} (B)\\\\& = ${texNombre(pA)} \\times ${texNombre(pBsipA)} + ${texNombre(1 - pA)} \\times ${texNombre(pBsiNonpA)}\\\\& = ${texNombre(pB)}\\end{aligned}.$`
     const correction3 = `On calcule $\\mathrm P (A) \\times \\mathrm P (B) :$ <br>
        $\\begin{aligned}\\mathrm P (A) \\times \\mathrm P (B) &= ${texNombre(pA)} \\times ${texNombre(pB)}\\\\& = ${texNombre(pA * pB)}\\end{aligned}.$ <br>
        Or, on a vu précédemment que $\\mathrm P (A \\cap B) = ${texNombre(pA * pBsipA)}.$ <br>
