@@ -3476,5 +3476,8 @@ export function fonctionComparaison(
   // decimal approximations of fractions (e.g. 0.33333333333333 ≈ 1/3).
   // Expansion and structural matching still work; only the numeric evaluation
   // fallback requires an exact floating-point match.
-  return parse(saisie).is(parse(answer), 0) ? ok() : fail() // C'est le ,O qui change tout.
+  return parse(saisie).is(parse(answer), 0) || // C'est le ,O qui change tout.
+    (!parse(saisie).isNumber && parse(saisie).isEqual(parse(answer)))
+    ? ok()
+    : fail()
 }

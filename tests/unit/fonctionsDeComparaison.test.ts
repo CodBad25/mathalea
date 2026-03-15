@@ -32,6 +32,9 @@ describe('fonctionComparaison', () => {
 
     result = fonctionComparaison('0.25', '\\frac14')
     expect(result.isOk).toBe(true)
+
+    result = fonctionComparaison('m', 'm')
+    expect(result.isOk).toBe(true)
   })
 
   it('Doit retourner false si saisie et answer sont différents', () => {
