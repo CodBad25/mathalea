@@ -52,7 +52,7 @@ export default class TermesSASG extends Exercice {
         '1 : Suite arithmétique avec premier terme u_0',
         '2 : Suite arithmétique avec premier terme u_1',
         '3 : Suite arithmétique avec premier terme u_p',
-        '4 : Suite géométrique avec premier terme u_1',
+        '4 : Suite géométrique avec premier terme u_0',
         '5 : Suite géométrique avec premier terme u_1',
         '6 : Suite géométrique avec premier terme u_p',
         '7 : Mélange',
