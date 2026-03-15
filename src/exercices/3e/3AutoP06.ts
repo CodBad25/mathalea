@@ -11,6 +11,8 @@ export const titre =
 
 export const interactifReady = true
 export const interactifType = 'mathLive'
+export const amcReady = 'true'
+export const amcType = 'qcmMono'
 
 export const dateDePublication = '24/12/2025'
 

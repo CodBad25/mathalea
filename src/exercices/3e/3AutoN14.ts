@@ -7,7 +7,8 @@ import { nombreElementsDifferents } from '../ExerciceQcm'
 import ExerciceQcmA from '../ExerciceQcmA'
 
 export const titre = 'Résoudre une équation du type $ax+b=c$'
-
+export const amcReady = 'true'
+export const amcType = 'qcmMono'
 export const interactifReady = true
 export const interactifType = 'qcm'
 

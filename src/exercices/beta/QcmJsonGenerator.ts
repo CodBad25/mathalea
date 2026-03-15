@@ -78,6 +78,8 @@ const qcmData: QcmJsonData = {
 }
 export const titre = 'Générer des exercices de type QCM à partir de JSON'
 export const dateDePublication = '3/7/2025'
+export const amcReady = 'true'
+export const amcType = 'qcmMono'
 export const refs = {
   'fr-fr': [],
   'fr-ch': ['NR'],
