@@ -2,6 +2,7 @@ import Decimal from 'decimal.js'
 import { droiteGraduee } from '../../lib/2d/DroiteGraduee'
 import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { segment } from '../../lib/2d/segmentsVecteurs'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive' // fonctions de mise en place des éléments interactifs
 import { choisitLettresDifferentes } from '../../lib/outils/aleatoires'
@@ -112,11 +113,7 @@ export default class GradueeZommGrdNombres extends Exercice {
       if (this.interactif) {
         texte += `<br><br>Abscisse du point $${nomsPoints[0]}$ : `
         handleAnswers(this, i, { reponse: { value: arrondi(Number(x0), 5) } })
-        texte += ajouteChampTexteMathLive(
-          this,
-          i,
-          'inline largeur01 college6eme',
-        )
+        texte += ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers)
       }
       texteCorr += `L'abscisse du point $${nomsPoints[0]}$ est $${texNombre(x0, 5)}$ :`
       texteCorr += '<br><br>Voici la figure avec les lectures successives :<br>'

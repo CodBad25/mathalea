@@ -6,6 +6,7 @@ import { latexParPoint } from '../../lib/2d/textes'
 import { tracePoint } from '../../lib/2d/TracePoint'
 import { rotation } from '../../lib/2d/transformations'
 import { pointAdistance } from '../../lib/2d/utilitairesPoint'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { setReponse } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
@@ -92,7 +93,6 @@ export default class PerimetreAireDisques extends Exercice {
         reponseL2bis,
         reponseA2bis;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       const choixValeurApprochee =
         this.sup3 === 1 || this.sup3 === 4
@@ -271,7 +271,7 @@ export default class PerimetreAireDisques extends Exercice {
                 ajouteChampTexteMathLive(
                   this,
                   this.sup3 === 4 ? 2 * i : i,
-                  ' ',
+                  KeyboardType.clavierNumbers,
                   { texteApres: ' $\\text{cm}$' },
                 )
             }
@@ -288,7 +288,7 @@ export default class PerimetreAireDisques extends Exercice {
                 ajouteChampTexteMathLive(
                   this,
                   this.sup3 === 4 ? 2 * i + 1 : i,
-                  '   ',
+                  KeyboardType.clavierNumbers,
                   { texteApres: ' $\\text{cm}$' },
                 )
             }
@@ -356,7 +356,7 @@ export default class PerimetreAireDisques extends Exercice {
                 ajouteChampTexteMathLive(
                   this,
                   this.sup3 === 4 ? 2 * i : i,
-                  ' ',
+                  KeyboardType.clavierNumbers,
                   { texteApres: '$\\text{ cm}^2$' },
                 )
             }
@@ -373,7 +373,7 @@ export default class PerimetreAireDisques extends Exercice {
                 ajouteChampTexteMathLive(
                   this,
                   this.sup3 === 4 ? 2 * i + 1 : i,
-                  '   ',
+                  KeyboardType.clavierNumbers,
                   { texteApres: '$\\text{ cm}^2$' },
                 )
             }
@@ -442,7 +442,7 @@ export default class PerimetreAireDisques extends Exercice {
                 ajouteChampTexteMathLive(
                   this,
                   this.sup3 === 4 ? 4 * i : 2 * i,
-                  ' ',
+                  KeyboardType.clavierNumbers,
                   { texteApres: ' $\\text{cm}$' },
                 )
             }
@@ -459,7 +459,7 @@ export default class PerimetreAireDisques extends Exercice {
                 ajouteChampTexteMathLive(
                   this,
                   this.sup3 === 4 ? 4 * i + 1 : 2 * i,
-                  ' ',
+                  KeyboardType.clavierNumbers,
                   { texteApres: ' $\\text{cm}$' },
                 )
             }
@@ -479,7 +479,7 @@ export default class PerimetreAireDisques extends Exercice {
                 ajouteChampTexteMathLive(
                   this,
                   this.sup3 === 4 ? 4 * i + 2 : 2 * i + 1,
-                  ' ',
+                  KeyboardType.clavierNumbers,
                   { texteApres: '$\\text{ cm}^2$' },
                 )
             }
@@ -495,7 +495,7 @@ export default class PerimetreAireDisques extends Exercice {
                 ajouteChampTexteMathLive(
                   this,
                   this.sup3 === 4 ? 4 * i + 3 : 2 * i + 1,
-                  ' ',
+                  KeyboardType.clavierNumbers,
                   { texteApres: '$\\text{ cm}^2$' },
                 )
             }

@@ -248,8 +248,6 @@ export default class TranslationEtCoordonnes extends Exercice {
           objets,
         ) // On trace le graphique
       }
-      // texte += ajouteChampTexteMathLive(this, 2 * i, '', {texteAvant: '<br><br>Abscisse du point :' })
-      // texte += ajouteChampTexteMathLive(this, 2 * i + 1, '', {texteAvant: '<br><br>Ordonnée du point :' })
       // setReponse(this, 2 * i, AbsRep)
       // setReponse(this, 2 * i + 1, OrdRep)
       if (this.questionJamaisPosee(i, xA, yA, xB, yB)) {

@@ -7,6 +7,7 @@ import { polygoneAvecNom } from '../../lib/2d/polygones'
 import { rotation, similitude, translation } from '../../lib/2d/transformations'
 import { pointAdistance } from '../../lib/2d/utilitairesPoint'
 import { vecteur } from '../../lib/2d/Vecteur'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { arrondi, nombreDeChiffresDe } from '../../lib/outils/nombres'
@@ -78,7 +79,6 @@ export default class PerimetreOuAireDeCarresRectanglesTriangles extends Exercice
     for (
       let i = 0, texte, texteAMC, texteCorr, nbPuces, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       const nom = creerNomDePolygone(11, 'QD')
       const c = randint(2, 6)
@@ -177,7 +177,7 @@ export default class PerimetreOuAireDeCarresRectanglesTriangles extends Exercice
                 ajouteChampTexteMathLive(
                   this,
                   incrementation * i + nbPuces,
-                  ' unites[longueurs,aires]',
+                  KeyboardType.longueur + ' ' + KeyboardType.aire,
                   {
                     texteApres:
                       sp(5) +
@@ -235,7 +235,7 @@ export default class PerimetreOuAireDeCarresRectanglesTriangles extends Exercice
                 ajouteChampTexteMathLive(
                   this,
                   incrementation * i + nbPuces,
-                  ' unites[longueurs,aires]',
+                  KeyboardType.longueur + ' ' + KeyboardType.aire,
                   {
                     texteApres:
                       sp(5) +
@@ -293,7 +293,7 @@ export default class PerimetreOuAireDeCarresRectanglesTriangles extends Exercice
                 ajouteChampTexteMathLive(
                   this,
                   incrementation * i + nbPuces,
-                  ' unites[longueurs,aires]',
+                  KeyboardType.longueur + ' ' + KeyboardType.aire,
                   {
                     texteApres:
                       sp(5) +
@@ -351,7 +351,7 @@ export default class PerimetreOuAireDeCarresRectanglesTriangles extends Exercice
                 ajouteChampTexteMathLive(
                   this,
                   incrementation * i + nbPuces,
-                  ' unites[longueurs,aires]',
+                  KeyboardType.longueur + ' ' + KeyboardType.aire,
                   {
                     texteApres:
                       sp(5) +
@@ -411,7 +411,7 @@ export default class PerimetreOuAireDeCarresRectanglesTriangles extends Exercice
                 ajouteChampTexteMathLive(
                   this,
                   incrementation * i + nbPuces,
-                  ' unites[longueurs,aires]',
+                  KeyboardType.longueur + ' ' + KeyboardType.aire,
                   {
                     texteApres:
                       sp(5) +
@@ -467,7 +467,7 @@ export default class PerimetreOuAireDeCarresRectanglesTriangles extends Exercice
                 ajouteChampTexteMathLive(
                   this,
                   incrementation * i + nbPuces,
-                  ' unites[longueurs,aires]',
+                  KeyboardType.longueur + ' ' + KeyboardType.aire,
                   {
                     texteApres:
                       sp(5) +

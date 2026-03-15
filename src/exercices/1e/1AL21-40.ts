@@ -1,3 +1,4 @@
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choisiDelta } from '../../lib/mathFonctions/outilsMaths'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
@@ -71,7 +72,6 @@ export default class Resolutionavecformecanonique extends Exercice {
         alpha,
         cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       ;[a, b, c] = choisiDelta(listeTypeDeQuestions[i])
       alpha = fraction(-b, 2 * a)
@@ -207,7 +207,11 @@ export default class Resolutionavecformecanonique extends Exercice {
           // pour l'instant pas de delta nul avec choisiDelta
         }
       }
-      texte += ajouteChampTexteMathLive(this, i)
+      texte += ajouteChampTexteMathLive(
+        this,
+        i,
+        KeyboardType.clavierDeBaseAvecX,
+      )
       if (this.questionJamaisPosee(i, a, b, c)) {
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr

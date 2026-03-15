@@ -162,15 +162,12 @@ export default class RacineCareeDeCarresParfaits extends Exercice {
         } else {
           texte =
             `Quel est le nombre positif dont le carré est $${c}$ ?` +
-            ajouteChampTexteMathLive(this, i)
+            ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers)
         }
       } else {
         texte =
           figureCarre(c, this, i) +
           `Quelle est la longueur du côté de ce carré ?`
-        /* +
-          ajouteChampTexteMathLive(this, i, '', { texteApres: '$\\text{ cm}$' })
-          */
       }
 
       texteCorr = `$\\sqrt{${c}}${this.sup3 ? '\\text{ cm}' : ''}=${miseEnEvidence(a.toString())}${this.sup3 ? '\\text{ cm}' : ''}$`

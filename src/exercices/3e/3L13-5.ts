@@ -1,3 +1,4 @@
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import {
@@ -123,13 +124,61 @@ export default class ProgrammesDeCalculsEquivalent extends Exercice {
         ${texteGras('Programme B :')}<br>
         ${prog2.program.join('<br>')}<br><br>
         ${texteEnCouleurEtGras('a)')} Tester ces programmes avec les nombres $${x1}$ et $${x2}$.<br>
-        ${ajouteChampTexteMathLive(this, 6 * i, ' ', { texteAvant: `Pour le ${texteGras('Programme A')} si $x=${x1}$ on a:`, texteApres: '<br>' })}
-        ${ajouteChampTexteMathLive(this, 6 * i + 1, ' ', { texteAvant: `Pour le ${texteGras('Programme A')} si $x=${x2}$ on a:`, texteApres: '<br>' })}
-        ${ajouteChampTexteMathLive(this, 6 * i + 2, ' ', { texteAvant: `Pour le ${texteGras('Programme B')} si $x=${x1}$ on a:`, texteApres: '<br>' })}
-        ${ajouteChampTexteMathLive(this, 6 * i + 3, ' ', { texteAvant: `Pour le ${texteGras('Programme B')} si $x=${x2}$ on a:`, texteApres: '<br>' })}
+        ${ajouteChampTexteMathLive(
+          this,
+          6 * i,
+          KeyboardType.clavierDeBaseAvecX,
+          {
+            texteAvant: `Pour le ${texteGras('Programme A')} si $x=${x1}$ on a:`,
+            texteApres: '<br>',
+          },
+        )}
+        ${ajouteChampTexteMathLive(
+          this,
+          6 * i + 1,
+          KeyboardType.clavierDeBase,
+          {
+            texteAvant: `Pour le ${texteGras('Programme A')} si $x=${x2}$ on a:`,
+            texteApres: '<br>',
+          },
+        )}
+        ${ajouteChampTexteMathLive(
+          this,
+          6 * i + 2,
+          KeyboardType.clavierDeBase,
+          {
+            texteAvant: `Pour le ${texteGras('Programme B')} si $x=${x1}$ on a:`,
+            texteApres: '<br>',
+          },
+        )}
+        ${ajouteChampTexteMathLive(
+          this,
+          6 * i + 3,
+          KeyboardType.clavierDeBase,
+          {
+            texteAvant: `Pour le ${texteGras('Programme B')} si $x=${x2}$ on a:`,
+            texteApres: '<br>',
+          },
+        )}
         ${texteEnCouleurEtGras('b)')} Prouver que les deux programmes donnent les mêmes résultats quel que soit le nombre choisi.<br><br>
-        ${ajouteChampTexteMathLive(this, 6 * i + 4, ' ', { texteAvant: `Pour le ${texteGras('Programme A')}, <br> donner l'expression littérale sans la développer :`, texteApres: '<br>' })}
-        ${ajouteChampTexteMathLive(this, 6 * i + 5, ' ', { texteAvant: `Pour le ${texteGras('Programme B')}, <br> donner l'expression littérale sans la développer :`, texteApres: '<br>' })}`
+        ${ajouteChampTexteMathLive(
+          this,
+          6 * i + 4,
+          KeyboardType.clavierDeBaseAvecX,
+          {
+            texteAvant: `Pour le ${texteGras('Programme A')}, <br> donner l'expression littérale sans la développer :`,
+            texteApres: '<br>',
+          },
+        )}
+        ${ajouteChampTexteMathLive(
+          this,
+          6 * i + 5,
+          KeyboardType.clavierDeBaseAvecX,
+          {
+            texteAvant: `Pour le ${texteGras('Programme B')}, <br> donner l'expression littérale sans la développer :`,
+            texteApres: '<br>',
+          },
+        )}`
 
       handleAnswers(this, 6 * i, {
         reponse: { value: prog1.testV(x1).toString() },

@@ -1,12 +1,13 @@
-import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
-import { puissanceEnProduit } from '../../lib/outils/puissance'
-import Exercice from '../Exercice'
-import { listeQuestionsToContenu, randint } from '../../modules/outils'
-import FractionEtendue from '../../modules/FractionEtendue'
-import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { setReponse } from '../../lib/interactif/gestionInteractif'
-import { context } from '../../modules/context'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
+import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { puissanceEnProduit } from '../../lib/outils/puissance'
+import { context } from '../../modules/context'
+import FractionEtendue from '../../modules/FractionEtendue'
+import { listeQuestionsToContenu, randint } from '../../modules/outils'
+import Exercice from '../Exercice'
 
 export const titre =
   'Transformer une écriture de puissance en écriture décimale ou fractionnaire'
@@ -185,7 +186,11 @@ export default class PuissanceDecimaleOuFractionnaire extends Exercice {
 
       // Fin de cette uniformisation
 
-      texte += ajouteChampTexteMathLive(this, i)
+      texte += ajouteChampTexteMathLive(
+        this,
+        i,
+        KeyboardType.clavierDeBaseAvecFraction,
+      )
       if (this.questionJamaisPosee(i, a, n, listeTypeQuestions[i])) {
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr

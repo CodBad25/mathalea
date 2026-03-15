@@ -1,16 +1,17 @@
+import Decimal from 'decimal.js'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
-import { miseEnEvidence } from '../../lib/outils/embellissements'
 import {
   ecritureAlgebrique,
   ecritureAlgebriqueSauf1,
 } from '../../lib/outils/ecritures'
-import { texNombre } from '../../lib/outils/texNombre'
-import Exercice from '../Exercice'
-import { listeQuestionsToContenu, randint } from '../../modules/outils'
-import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
-import Decimal from 'decimal.js'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { arrondi } from '../../lib/outils/nombres'
+import { texNombre } from '../../lib/outils/texNombre'
+import { listeQuestionsToContenu, randint } from '../../modules/outils'
+import Exercice from '../Exercice'
 
 export const titre = 'Encadrer avec les racines carrées'
 export const interactifReady = true
@@ -71,9 +72,17 @@ export default class EncadrerRacineCarreeEntre2Entiers extends Exercice {
           texte = `Encadrer $\\sqrt{${a}}$ par deux entiers consécutifs.<br>`
           if (this.interactif) {
             texte +=
-              ajouteChampTexteMathLive(this, 2 * i, '') +
+              ajouteChampTexteMathLive(
+                this,
+                2 * i,
+                KeyboardType.clavierNumbers,
+              ) +
               `$< \\sqrt{${a}} <$` +
-              ajouteChampTexteMathLive(this, 2 * i + 1, ' ')
+              ajouteChampTexteMathLive(
+                this,
+                2 * i + 1,
+                KeyboardType.clavierNumbers,
+              )
           }
           texteCorr = `Comme $${a}$ n'est pas le carré d'un nombre entier, on encadre $${a}$ par deux carrés d'entiers : <br>
           $${Math.floor(Math.sqrt(a)) ** 2} < ${a} < ${(Math.floor(Math.sqrt(a)) + 1) ** 2}$, soit $${Math.floor(Math.sqrt(a))}^2 < ${a} < ${Math.floor(Math.sqrt(a)) + 1}^2$.<br><br>
@@ -91,12 +100,20 @@ export default class EncadrerRacineCarreeEntre2Entiers extends Exercice {
             c = randint(-9, 9, [0, 1])
             const reponse1 = b + c * Math.floor(Math.sqrt(a))
             const reponse2 = b + c * Math.floor(Math.sqrt(a) + 1)
-            texte = `En utilisant un encadrement  de $\\sqrt{${a}}$ par  deux entiers consécutifs, donner un encadrement de $${b}${ecritureAlgebriqueSauf1(c)}\\sqrt{${a}}$ le plus précis possible.<br>`
+            texte = `En utilisant un encadrement  de $\\sqrt{${a}}$ par deux entiers consécutifs, donner un encadrement de $${b}${ecritureAlgebriqueSauf1(c)}\\sqrt{${a}}$ le plus précis possible.<br>`
             if (this.interactif) {
               texte +=
-                ajouteChampTexteMathLive(this, 2 * i, '') +
+                ajouteChampTexteMathLive(
+                  this,
+                  2 * i,
+                  KeyboardType.clavierNumbers,
+                ) +
                 `$< ${b}${ecritureAlgebriqueSauf1(c)}\\sqrt{${a}} <$` +
-                ajouteChampTexteMathLive(this, 2 * i + 1, ' ')
+                ajouteChampTexteMathLive(
+                  this,
+                  2 * i + 1,
+                  KeyboardType.clavierNumbers,
+                )
             }
             texteCorr = `Comme $${a}$ n'est pas le carré d'un nombre entier, on encadre $${a}$ par deux carrés d'entiers : <br>
           $${Math.floor(Math.sqrt(a)) ** 2} < ${a} < ${(Math.floor(Math.sqrt(a)) + 1) ** 2}$, soit $${Math.floor(Math.sqrt(a))}^2 < ${a} < ${Math.floor(Math.sqrt(a)) + 1}^2$.<br><br>
@@ -135,18 +152,26 @@ export default class EncadrerRacineCarreeEntre2Entiers extends Exercice {
             a = randint(3, 143, [4, 9, 16, 25, 36, 49, 64, 81, 100, 121])
             b = randint(-9, 9, 0)
             c = randint(-9, 9, [0, 1])
-            const r1 = new Decimal(arrondi(Math.sqrt(a),1))
+            const r1 = new Decimal(arrondi(Math.sqrt(a), 1))
             const r1c = new Decimal(r1).mul(c)
             const r1b = new Decimal(r1c).add(b)
-            const r2 = new Decimal(arrondi(Math.sqrt(a),1)).add(0.1)
-            const r2c =  new Decimal(r2).mul(c)
+            const r2 = new Decimal(arrondi(Math.sqrt(a), 1)).add(0.1)
+            const r2c = new Decimal(r2).mul(c)
             const r2b = new Decimal(r2c).add(b)
             texte = `En utilisant l'encadrement $${texNombre(r1, 1)}<\\sqrt{${a}}<${texNombre(r2, 1)}$, donner un encadrement de $${b}${ecritureAlgebriqueSauf1(c)}\\sqrt{${a}}$ le plus précis possible.<br>`
             if (this.interactif) {
               texte +=
-                ajouteChampTexteMathLive(this, 2 * i, '') +
+                ajouteChampTexteMathLive(
+                  this,
+                  2 * i,
+                  KeyboardType.clavierNumbers,
+                ) +
                 `$< ${b}${ecritureAlgebriqueSauf1(c)}\\sqrt{${a}} <$` +
-                ajouteChampTexteMathLive(this, 2 * i + 1, ' ')
+                ajouteChampTexteMathLive(
+                  this,
+                  2 * i + 1,
+                  KeyboardType.clavierNumbers,
+                )
             }
             texteCorr = `À partir de l'encadrement $${texNombre(r1, 1)}<\\sqrt{${a}}<${texNombre(r2, 1)}$, on obtient successivement :<br>`
             if (c > 0) {

@@ -118,11 +118,11 @@ export interface Valeur {
   bareme?: (listePoints: number[]) => [number, number]
   feedback?: (saisies: Record<string, string>) => string
   reponse?: AnswerType
-  champ1?: AnswerType    // fillInTheBlank fields
-  champ2?: AnswerType    // ... up to champ6
+  champ1?: AnswerType // fillInTheBlank fields
+  champ2?: AnswerType // ... up to champ6
   rectangle1?: AnswerType // drag-and-drop zones
   // ... up to rectangle6
-  callback?: Function     // custom verification
+  callback?: Function // custom verification
   // L{row}C{col} keys for tableauMathlive
 }
 ```
@@ -141,18 +141,18 @@ Each `AnswerType` has:
 
 A **deprecated wrapper** around `handleAnswers()` translating legacy format specifiers:
 
-| Legacy format | What it does |
-|---|---|
+| Legacy format      | What it does                                                           |
+| ------------------ | ---------------------------------------------------------------------- |
 | `calcul` (default) | Cleans string values, calls `handleAnswers` with `fonctionComparaison` |
-| `Num` | Extracts numerator from `FractionEtendue` |
-| `Den` | Extracts denominator from `FractionEtendue` |
-| `texte` | Text with case sensitivity |
-| `ignorerCasse` | Lowercase comparison |
-| `fractionEgale` | Passes `FractionEtendue` directly |
-| `unites` | Passes `Grandeur` with unit precision |
-| `intervalleStrict` | `]a;b[` with interval checking |
-| `intervalle` | `[a;b]` with interval checking |
-| `puissance` | Power/exponent comparison |
+| `Num`              | Extracts numerator from `FractionEtendue`                              |
+| `Den`              | Extracts denominator from `FractionEtendue`                            |
+| `texte`            | Text with case sensitivity                                             |
+| `ignorerCasse`     | Lowercase comparison                                                   |
+| `fractionEgale`    | Passes `FractionEtendue` directly                                      |
+| `unites`           | Passes `Grandeur` with unit precision                                  |
+| `intervalleStrict` | `]a;b[` with interval checking                                         |
+| `intervalle`       | `[a;b]` with interval checking                                         |
+| `puissance`        | Power/exponent comparison                                              |
 
 ---
 
@@ -209,27 +209,27 @@ Calls `exercice.correctionInteractive(i)` returning `'OK'` or `'KO'`.
 
 Dispatches based on option flags:
 
-| Option | Comparison |
-|---|---|
-| `HMS` | Hours/minutes/seconds |
-| `fonction` | Function evaluation over a domain |
-| `intervalle` | Interval notation comparison |
-| `estDansIntervalle` | Check if input is within interval |
-| `ecritureScientifique` | Scientific notation |
-| `unite` | With unit precision tolerance |
-| `factorisation` | Factored form via ComputeEngine |
-| `puissance` | Power/exponent expressions |
-| `texteAvecCasse` | Case-sensitive text |
-| `texteSansCasse` | Case-insensitive text |
-| `egaliteExpression` | Equation equality |
-| `nombreAvecEspace` | Numbers with spaces |
-| `expressionNumerique` | Numeric expressions |
-| `ensembleDeNombres` / `kUplet` | Sets or tuples |
-| `suiteDeNombres` | Ordered sequences |
-| `fractionSimplifiee`/`fractionReduite`/`fractionIrreductible`/`fractionDecimale`/`fractionEgale`/`fractionIdentique` | Specialized fraction checks |
-| `developpementEgal` | Expanded form equality |
-| `calculFormel` | Symbolic comparison |
-| **Default** | `expressionDeveloppeeEtReduiteCompare` — uses ComputeEngine for canonical form comparison |
+| Option                                                                                                               | Comparison                                                                                |
+| -------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| `HMS`                                                                                                                | Hours/minutes/seconds                                                                     |
+| `fonction`                                                                                                           | Function evaluation over a domain                                                         |
+| `intervalle`                                                                                                         | Interval notation comparison                                                              |
+| `estDansIntervalle`                                                                                                  | Check if input is within interval                                                         |
+| `ecritureScientifique`                                                                                               | Scientific notation                                                                       |
+| `unite`                                                                                                              | With unit precision tolerance                                                             |
+| `factorisation`                                                                                                      | Factored form via ComputeEngine                                                           |
+| `puissance`                                                                                                          | Power/exponent expressions                                                                |
+| `texteAvecCasse`                                                                                                     | Case-sensitive text                                                                       |
+| `texteSansCasse`                                                                                                     | Case-insensitive text                                                                     |
+| `egaliteExpression`                                                                                                  | Equation equality                                                                         |
+| `nombreAvecEspace`                                                                                                   | Numbers with spaces                                                                       |
+| `expressionNumerique`                                                                                                | Numeric expressions                                                                       |
+| `ensembleDeNombres` / `kUplet`                                                                                       | Sets or tuples                                                                            |
+| `suiteDeNombres`                                                                                                     | Ordered sequences                                                                         |
+| `fractionSimplifiee`/`fractionReduite`/`fractionIrreductible`/`fractionDecimale`/`fractionEgale`/`fractionIdentique` | Specialized fraction checks                                                               |
+| `developpementEgal`                                                                                                  | Expanded form equality                                                                    |
+| `calculFormel`                                                                                                       | Symbolic comparison                                                                       |
+| **Default**                                                                                                          | `expressionDeveloppeeEtReduiteCompare` — uses ComputeEngine for canonical form comparison |
 
 **Input Cleaning:** `generateCleaner()` produces a chain of cleaning functions: `fractions`, `virgules` (commas → dots), `espaces`, `parentheses`, `puissances`, `divisions`, `latex`, `mathrm`, `operatorName`, `imaginaires`, etc.
 
@@ -239,12 +239,18 @@ Dispatches based on option flags:
 
 ```typescript
 export type AnswerValueType =
-  | string | string[]
-  | number | number[]
-  | IFractionEtendue | IFractionEtendue[]
-  | Decimal | Decimal[]
-  | IGrandeur | IGrandeur[]
-  | Hms | Hms[]
+  | string
+  | string[]
+  | number
+  | number[]
+  | IFractionEtendue
+  | IFractionEtendue[]
+  | Decimal
+  | Decimal[]
+  | IGrandeur
+  | IGrandeur[]
+  | Hms
+  | Hms[]
 ```
 
 `handleDefaultValeur()` normalizes all to strings:
@@ -289,9 +295,18 @@ In `gestionCan.ts`, each question has its own verify button. Score accumulates i
 this.reponse = '42'
 
 // Modern:
-handleAnswers(this, i, {
-  reponse: { value: '42', compare: fonctionComparaison, options: { nombreDecimalSeulement: true } }
-}, { formatInteractif: 'mathlive' })
+handleAnswers(
+  this,
+  i,
+  {
+    reponse: {
+      value: '42',
+      compare: fonctionComparaison,
+      options: { nombreDecimalSeulement: true },
+    },
+  },
+  { formatInteractif: 'mathlive' },
+)
 
 // Legacy:
 setReponse(this, i, 42, { formatInteractif: 'calcul' })
@@ -302,7 +317,7 @@ Exercise also sets `this.interactifReady = true` and `this.interactifType`.
 **Step 2 — HTML Generation** (in question-building code):
 
 ```typescript
-texte += ajouteChampTexteMathLive(this, i, 'largeur25 inline')
+texte += ajouteChampTexteMathLive(this, i, keyboardType.clavierDeBase)
 // or: propositionsQcm(this, i), choixDeroulant(), new DragAndDrop().ajouteDragAndDrop(), etc.
 ```
 
@@ -328,22 +343,22 @@ texte += ajouteChampTexteMathLive(this, i, 'largeur25 inline')
 
 ## Key Files Reference
 
-| File | Purpose |
-|---|---|
-| `src/lib/interactif/gestionInteractif.ts` | Central orchestrator: `handleAnswers()`, `setReponse()`, `exerciceInteractif()` |
-| `src/lib/interactif/comparisonFunctions.ts` | `fonctionComparaison()` and all specialized comparators |
-| `src/lib/interactif/mathLive.ts` | `verifQuestionMathLive()` for mathlive/fillInTheBlank/tableau |
-| `src/lib/interactif/questionMathLive.ts` | HTML generation: `ajouteChampTexteMathLive()`, `remplisLesBlancs()` |
-| `src/lib/interactif/qcm.ts` | `verifQuestionQcm()`, `propositionsQcm()` |
-| `src/lib/interactif/DragAndDrop.ts` | Drag-and-drop class and verification |
-| `src/lib/interactif/questionListeDeroulante.ts` | Dropdown creation and verification |
-| `src/lib/interactif/questionSvgSelection/questionSvgSelection.ts` | SVG selection creation and verification |
-| `src/lib/interactif/cliqueFigure.js` | Legacy click-on-figure implementation |
-| `src/lib/interactif/gestionCan.ts` | CAN timed test mode |
-| `src/lib/interactif/afficheScore.ts` | Score display utility |
-| `src/lib/types.ts` | All type definitions |
-| `src/exercices/Exercice.ts` | Base exercise class |
-| `tests/e2e/helpers/filter.ts` | Exercise discovery |
-| `tests/e2e/helpers/run.ts` | Test batching and Playwright page management |
-| `tests/e2e/helpers/testAllViews.ts` | Parameter combination testing |
-| `tests/e2e/helpers/issue.ts` | GitLab issue creation |
+| File                                                              | Purpose                                                                         |
+| ----------------------------------------------------------------- | ------------------------------------------------------------------------------- |
+| `src/lib/interactif/gestionInteractif.ts`                         | Central orchestrator: `handleAnswers()`, `setReponse()`, `exerciceInteractif()` |
+| `src/lib/interactif/comparisonFunctions.ts`                       | `fonctionComparaison()` and all specialized comparators                         |
+| `src/lib/interactif/mathLive.ts`                                  | `verifQuestionMathLive()` for mathlive/fillInTheBlank/tableau                   |
+| `src/lib/interactif/questionMathLive.ts`                          | HTML generation: `ajouteChampTexteMathLive()`, `remplisLesBlancs()`             |
+| `src/lib/interactif/qcm.ts`                                       | `verifQuestionQcm()`, `propositionsQcm()`                                       |
+| `src/lib/interactif/DragAndDrop.ts`                               | Drag-and-drop class and verification                                            |
+| `src/lib/interactif/questionListeDeroulante.ts`                   | Dropdown creation and verification                                              |
+| `src/lib/interactif/questionSvgSelection/questionSvgSelection.ts` | SVG selection creation and verification                                         |
+| `src/lib/interactif/cliqueFigure.js`                              | Legacy click-on-figure implementation                                           |
+| `src/lib/interactif/gestionCan.ts`                                | CAN timed test mode                                                             |
+| `src/lib/interactif/afficheScore.ts`                              | Score display utility                                                           |
+| `src/lib/types.ts`                                                | All type definitions                                                            |
+| `src/exercices/Exercice.ts`                                       | Base exercise class                                                             |
+| `tests/e2e/helpers/filter.ts`                                     | Exercise discovery                                                              |
+| `tests/e2e/helpers/run.ts`                                        | Test batching and Playwright page management                                    |
+| `tests/e2e/helpers/testAllViews.ts`                               | Parameter combination testing                                                   |
+| `tests/e2e/helpers/issue.ts`                                      | GitLab issue creation                                                           |

@@ -1,3 +1,6 @@
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import { texFractionReduite } from '../../lib/outils/deprecatedFractions'
 import {
@@ -5,15 +8,13 @@ import {
   ecritureParentheseSiNegatif,
 } from '../../lib/outils/ecritures'
 import { lettreMinusculeDepuisChiffre } from '../../lib/outils/outilString'
-import Exercice from '../Exercice'
+import { fraction } from '../../modules/fractions'
 import {
   gestionnaireFormulaireTexte,
   listeQuestionsToContenu,
   randint,
 } from '../../modules/outils'
-import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
-import { fraction } from '../../modules/fractions'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import Exercice from '../Exercice'
 
 export const dateDeModifImportante = '23/01/2025'
 
@@ -123,7 +124,6 @@ export default class ImageFonctionAlgebrique extends Exercice {
     for (
       let i = 0, texte, texteCorr, a, b, c, d, expression, nomdef, x, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       texteCorr = ''
       x = randint(1, 12)
@@ -245,7 +245,7 @@ export default class ImageFonctionAlgebrique extends Exercice {
       } else {
         texte += `Calculer l'image de ${x} par la fonction $${nomdef}$.`
       }
-      texte += ajouteChampTexteMathLive(this, i)
+      texte += ajouteChampTexteMathLive(this, i, KeyboardType.clavierDeBase)
 
       if (this.listeQuestions.indexOf(texte) === -1) {
         // Si la question n'a jamais été posée, on en créé une autre

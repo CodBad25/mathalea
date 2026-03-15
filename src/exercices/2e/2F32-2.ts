@@ -1,6 +1,7 @@
 import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { repere } from '../../lib/2d/reperes'
 import { texteParPosition } from '../../lib/2d/textes'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { setReponse } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { spline, type NoeudSpline } from '../../lib/mathFonctions/Spline'
@@ -141,16 +142,16 @@ export default class BetaModeleSpline extends Exercice {
       if (this.interactif) {
         texteEnonce +=
           '<br>Le maximum de $f$ est : ' +
-          ajouteChampTexteMathLive(this, 4 * i, ' ')
+          ajouteChampTexteMathLive(this, 4 * i, KeyboardType.clavierDeBase)
         texteEnonce +=
           '. Il est atteint en $x=$ ' +
-          ajouteChampTexteMathLive(this, 4 * i + 1, ' ')
+          ajouteChampTexteMathLive(this, 4 * i + 1, KeyboardType.clavierDeBase)
         texteEnonce +=
           '<br>Le minimum de $f$ est : ' +
-          ajouteChampTexteMathLive(this, 4 * i + 2, ' ')
+          ajouteChampTexteMathLive(this, 4 * i + 2, KeyboardType.clavierDeBase)
         texteEnonce +=
           '. Il est atteint en $x=$ ' +
-          ajouteChampTexteMathLive(this, 4 * i + 3, ' ')
+          ajouteChampTexteMathLive(this, 4 * i + 3, KeyboardType.clavierDeBase)
       }
       // on ajoute les tracés pour repérer les antécédents et on en profite pour rendre les autres noeuds invisibles
       const solsMax = maSpline.solve(Math.max(...nuage.map((el) => el.y)), 0)

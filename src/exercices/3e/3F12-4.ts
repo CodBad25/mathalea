@@ -1,5 +1,6 @@
 import { courbe } from '../../lib/2d/Courbe'
 import { repere } from '../../lib/2d/reperes'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { setReponse } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { chercheMinMaxFonction } from '../../lib/mathFonctions/etudeFonction'
@@ -82,7 +83,6 @@ export default class ImageGraphique extends Exercice {
     for (
       let i = 0, texte, texteCorr, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       initialiseVariables()
 
@@ -254,20 +254,36 @@ export default class ImageGraphique extends Exercice {
         }
       } else if (this.interactif) {
         if (this.sup === 1) {
-          texte += `$f(${x1})=$` + ajouteChampTexteMathLive(this, 2 * i, ' ')
+          texte +=
+            `$f(${x1})=$` +
+            ajouteChampTexteMathLive(this, 2 * i, KeyboardType.clavierDeBase)
           texte +=
             `<br><br>$f(${x2})=$` +
-            ajouteChampTexteMathLive(this, 2 * i + 1, ' ')
+            ajouteChampTexteMathLive(
+              this,
+              2 * i + 1,
+              KeyboardType.clavierDeBase,
+            )
           setReponse(this, 2 * i, fx1)
           setReponse(this, 2 * i + 1, fx2)
         } else {
-          texte += `$f(${x1})=$` + ajouteChampTexteMathLive(this, 3 * i, ' ')
+          texte +=
+            `$f(${x1})=$` +
+            ajouteChampTexteMathLive(this, 3 * i, KeyboardType.clavierDeBase)
           texte +=
             `<br><br>$f(${x2})=$` +
-            ajouteChampTexteMathLive(this, 3 * i + 1, ' ')
+            ajouteChampTexteMathLive(
+              this,
+              3 * i + 1,
+              KeyboardType.clavierDeBase,
+            )
           texte +=
             `<br><br>$f(${x3})=$` +
-            ajouteChampTexteMathLive(this, 3 * i + 2, ' ')
+            ajouteChampTexteMathLive(
+              this,
+              3 * i + 2,
+              KeyboardType.clavierDeBase,
+            )
           setReponse(this, 3 * i, fx1)
           setReponse(this, 3 * i + 1, fx2)
           setReponse(this, 3 * i + 2, fx3)

@@ -5,6 +5,7 @@ import {
   vecteur3d,
 } from '../../lib/3d/3dProjectionMathalea2d/elementsEtTransformations3d'
 import { sphere3d } from '../../lib/3d/3dProjectionMathalea2d/Sphere3dPerspectiveCavaliere'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { setReponse } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
@@ -90,7 +91,6 @@ export default class VolumeBoule extends Exercice {
         reponse,
         cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       texte = '' // Nous utilisons souvent cette variable pour construire le texte de la question.
       texteCorr = '' // Idem pour le texte de la correction.
@@ -219,7 +219,11 @@ export default class VolumeBoule extends Exercice {
       texte += ajouteChampTexteMathLive(
         this,
         i,
-        ' unites[Longueurs,Aires,Volumes]',
+        KeyboardType.volume +
+          ' ' +
+          KeyboardType.longueur +
+          ' ' +
+          KeyboardType.aire,
         {
           texteAvant:
             '<br>' +

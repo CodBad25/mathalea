@@ -1,11 +1,11 @@
-import Exercice from '../Exercice'
-import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
-import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { randint } from '../../modules/outils'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
+import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import { rienSi1 } from '../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { randint } from '../../modules/outils'
+import Exercice from '../Exercice'
 
 export const titre =
   'Utiliser $\\cos(\\theta+\\theta^\\prime)=\\cos(\\theta)\\cos(\\theta^\\prime)-\\sin(\\theta)\\sin(\\theta^\\prime)$'
@@ -235,7 +235,7 @@ export default class AcosOmegaTPlusBSinOmegaT extends Exercice {
       if (this.questionJamaisPosee(i, a, b, w)) {
         this.listeQuestions[i] =
           texte +
-          ajouteChampTexteMathLive(this, i, `  ${KeyboardType.grecTrigo}`, {
+          ajouteChampTexteMathLive(this, i, KeyboardType.grecTrigo, {
             texteAvant: '<br>$f(t)=$',
           })
 

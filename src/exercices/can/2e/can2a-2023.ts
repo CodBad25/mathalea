@@ -325,7 +325,11 @@ export default class SujetCAN2023Seconde extends Exercice {
 
             handleAnswers(this, index, { reponse: { value: reponse } })
             if (this.interactif) {
-              texte += ajouteChampTexteMathLive(this, index)
+              texte += ajouteChampTexteMathLive(
+                this,
+                index,
+                KeyboardType.clavierNumbers,
+              )
             }
             this.canEnonce = texte
 

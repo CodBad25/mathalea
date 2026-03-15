@@ -3,6 +3,7 @@ import { texNombre } from '../../lib/outils/texNombre'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { setReponse } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { arrondi } from '../../lib/outils/nombres'
@@ -65,7 +66,6 @@ export default class NomQuelconqueDeLaFonctionQuiCreeExercice extends Exercice {
     for (
       let i = 0, a, b, c, texte, texteCorr, reponse, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       // Boucle principale où i+1 correspond au numéro de la question
       a = choice([randint(1, 9), randint(1, 9), randint(10, 99)])
@@ -109,7 +109,7 @@ export default class NomQuelconqueDeLaFonctionQuiCreeExercice extends Exercice {
 
       if (this.questionJamaisPosee(i, a, b, c)) {
         setReponse(this, i, reponse)
-        texte += ajouteChampTexteMathLive(this, i)
+        texte += ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers)
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr
         i++

@@ -11,6 +11,7 @@ import Exercice from '../Exercice'
 
 import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { tableauColonneLigne } from '../../lib/2d/tableau'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { setReponse } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import FractionEtendue from '../../modules/FractionEtendue'
@@ -194,7 +195,11 @@ function unePieceDeuxUrnes(
     : ''
   texte +=
     `<br>Donner la probabilité d'obtenir une boule ${boules[choix]}.` +
-    ajouteChampTexteMathLive(exercice, i, '')
+    ajouteChampTexteMathLive(
+      exercice,
+      i,
+      KeyboardType.clavierDeBaseAvecFraction,
+    )
   setReponse(exercice, i, new FractionEtendue(p[choix].n, p[choix].d), {
     formatInteractif: 'fractionEgale',
   })
@@ -430,13 +435,28 @@ function urneDeuxTiragesAvecRemise(
         objets,
       ) + '<br><br>'
   texte += `${numAlpha(0)} Déterminer la probabilité d'obtenir deux boules ${choix[1]}${choix[2] !== 'O' ? 's' : ''}.`
-  texte += ajouteChampTexteMathLive(exercice, i, '') + '<br>'
+  texte +=
+    ajouteChampTexteMathLive(
+      exercice,
+      i,
+      KeyboardType.clavierDeBaseAvecFraction,
+    ) + '<br>'
   setReponse(exercice, i, probaChoix, { formatInteractif: 'fractionEgale' })
   texte += `${numAlpha(1)} Déterminer la probabilité d'obtenir deux boules de la même couleur.`
-  texte += ajouteChampTexteMathLive(exercice, i + 1, '') + '<br>'
+  texte +=
+    ajouteChampTexteMathLive(
+      exercice,
+      i + 1,
+      KeyboardType.clavierDeBaseAvecFraction,
+    ) + '<br>'
   setReponse(exercice, i + 1, proba1et2, { formatInteractif: 'fractionEgale' })
   texte += `${numAlpha(2)} Déterminer la probabilité d'obtenir deux boules de couleurs différentes.`
-  texte += ajouteChampTexteMathLive(exercice, i + 2, '') + '<br>'
+  texte +=
+    ajouteChampTexteMathLive(
+      exercice,
+      i + 2,
+      KeyboardType.clavierDeBaseAvecFraction,
+    ) + '<br>'
   setReponse(exercice, i + 2, proba4, { formatInteractif: 'fractionEgale' })
   let texteCorr = ''
   texteCorr += "On a représenté l'expérience par le tableau ci-dessous :<br>"

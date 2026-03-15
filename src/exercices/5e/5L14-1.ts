@@ -1,17 +1,19 @@
-import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
-import { range1 } from '../../lib/outils/nombres'
-import Exercice from '../Exercice'
-import { listeQuestionsToContenu, randint } from '../../modules/outils'
-import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { setReponse } from '../../lib/interactif/gestionInteractif'
-import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
+import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import {
   ecritureAlgebrique,
   ecritureParentheseSiNegatif,
 } from '../../lib/outils/ecritures'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { range1 } from '../../lib/outils/nombres'
 import { texNombre } from '../../lib/outils/texNombre'
+import { listeQuestionsToContenu, randint } from '../../modules/outils'
+import Exercice from '../Exercice'
 
-export const titre = "Calculer la valeur d'une expression littérale avec une ou deux variables"
+export const titre =
+  "Calculer la valeur d'une expression littérale avec une ou deux variables"
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const dateDeModificationImportante = '26/05/2025'
@@ -65,7 +67,6 @@ export default class CalculerLaValeurDUneExpressionLitterale extends Exercice {
     for (
       let i = 0, texte, texteCorr, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       let a, b, c, d, x, y
       switch (listeTypeDeQuestions[i]) {
@@ -265,7 +266,9 @@ export default class CalculerLaValeurDUneExpressionLitterale extends Exercice {
           setReponse(this, i, (a * x + b) * (c * y - d))
           break
       }
-      texte += this.interactif ? ' : ' + ajouteChampTexteMathLive(this, i) : '.'
+      texte += this.interactif
+        ? ' : ' + ajouteChampTexteMathLive(this, i, KeyboardType.clavierDeBase)
+        : '.'
 
       if (this.questionJamaisPosee(i, texteCorr)) {
         // Si la question n'a jamais été posée, on en créé une autre

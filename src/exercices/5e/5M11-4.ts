@@ -5,6 +5,7 @@ import { placeLatexSurSegment } from '../../lib/2d/placeLatexSurSegment'
 import { point } from '../../lib/2d/PointAbstrait'
 import { rotation } from '../../lib/2d/transformations'
 import { pointAdistance } from '../../lib/2d/utilitairesPoint'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
@@ -83,7 +84,6 @@ export default class PerimetreAireEtPortionsDeDisques extends Exercice {
     for (
       let i = 0, cpt = 0, texte, texteCorr;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       texte = ''
       texteCorr = ''
@@ -230,9 +230,14 @@ export default class PerimetreAireEtPortionsDeDisques extends Exercice {
         })
         texte =
           'Valeur approchée au dixième de $\\text{cm}$ du périmètre : ' +
-          ajouteChampTexteMathLive(this, this.sup === 3 ? 2 * i : i, '   ', {
-            texteApres: ' $\\text{cm}$',
-          }) +
+          ajouteChampTexteMathLive(
+            this,
+            this.sup === 3 ? 2 * i : i,
+            KeyboardType.clavierNumbers,
+            {
+              texteApres: ' $\\text{cm}$',
+            },
+          ) +
           '<br>'
       }
       if (this.sup !== 1) {
@@ -244,7 +249,7 @@ export default class PerimetreAireEtPortionsDeDisques extends Exercice {
           ajouteChampTexteMathLive(
             this,
             this.sup === 3 ? 2 * i + 1 : i,
-            '   ',
+            KeyboardType.clavierNumbers,
             { texteApres: ' $\\text{cm}^2$' },
           )
       }

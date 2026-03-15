@@ -1,6 +1,7 @@
 import { graphiqueInterpole } from '../../lib/2d/GraphiqueInterpole'
 import { repere } from '../../lib/2d/reperes'
 import { deuxColonnes } from '../../lib/format/miseEnPage'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { setReponse } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
@@ -118,7 +119,7 @@ export default class AntecedentEtImageGraphique extends Exercice {
     }
     this.contenu += '<br><br>'
     let cont1 = `${numAlpha(0)} Quelle est l'image de $${x0}$ ?`
-    cont1 += ajouteChampTexteMathLive(this, 0)
+    cont1 += ajouteChampTexteMathLive(this, 0, KeyboardType.clavierDeBase)
     if (context.isAmc) {
       this.autoCorrection[0].propositions?.push({
         type: 'AMCNum', // on donne le type de la première question-réponse qcmMono, qcmMult, AMCNum, AMCOpen
@@ -144,7 +145,7 @@ export default class AntecedentEtImageGraphique extends Exercice {
     }
     const enonceAMC = `${numAlpha(1)} Quelle est l'image de $${x0 + 5}$ ?`
     cont1 += '<br>' + enonceAMC
-    cont1 += ajouteChampTexteMathLive(this, 1)
+    cont1 += ajouteChampTexteMathLive(this, 1, KeyboardType.clavierDeBase)
     if (context.isAmc) {
       this.autoCorrection[0].propositions?.push({
         type: 'AMCNum', // on donne le type de la première question-réponse qcmMono, qcmMult, AMCNum, AMCOpen
@@ -172,14 +173,14 @@ export default class AntecedentEtImageGraphique extends Exercice {
     let cont2
     if (ordre === 1) {
       cont2 = `${numAlpha(2)} Déterminer le (ou les) antécédent(s) de $${b}$.`
-      cont2 += ajouteChampTexteMathLive(this, 2)
+      cont2 += ajouteChampTexteMathLive(this, 2, KeyboardType.clavierDeBase)
       cont2 += `<br>${numAlpha(3)} Déterminer le (ou les) antécédent(s) de $${c}$.`
-      cont2 += ajouteChampTexteMathLive(this, 3)
+      cont2 += ajouteChampTexteMathLive(this, 3, KeyboardType.clavierDeBase)
     } else {
       cont2 = `${numAlpha(2)} Déterminer le (ou les) antécédent(s) de $${c}$.`
-      cont2 += ajouteChampTexteMathLive(this, 2)
+      cont2 += ajouteChampTexteMathLive(this, 2, KeyboardType.clavierDeBase)
       cont2 += `<br>${numAlpha(3)} Déterminer le (ou les) antécédent(s) de $${b}$.`
-      cont2 += ajouteChampTexteMathLive(this, 3)
+      cont2 += ajouteChampTexteMathLive(this, 3, KeyboardType.clavierDeBase)
     }
     if (context.isAmc) {
       this.autoCorrection[0].propositions?.push({

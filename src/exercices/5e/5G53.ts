@@ -17,6 +17,7 @@ import {
 import { prisme3d } from '../../lib/3d/3dProjectionMathalea2d/Prisme3dPerspectiveCavaliere'
 import { pyramide3d } from '../../lib/3d/3dProjectionMathalea2d/Pyramide3dPerspectiveCavaliere'
 import { pyramideTronquee3d } from '../../lib/3d/3dProjectionMathalea2d/PyramideTronquee3dPerspectiveCavaliere'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
@@ -378,7 +379,11 @@ export default class NombreDeFacesEtDAretes extends Exercice {
       }
       if (this.questionJamaisPosee(j, choix, n)) {
         handleAnswers(this, j, { reponse: { value: reponse } })
-        question += ajouteChampTexteMathLive(this, j, '')
+        question += ajouteChampTexteMathLive(
+          this,
+          j,
+          KeyboardType.clavierNumbers,
+        )
         this.listeQuestions[j] = question ?? ''
         this.listeCorrections[j] = correction
         j++

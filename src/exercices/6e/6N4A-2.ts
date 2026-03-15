@@ -779,7 +779,11 @@ ${barreCorr.display()}`
       if (interactif && exercice != null) {
         enonce = enonce.replaceAll(
           `zone${k}`,
-          ajouteChampTexteMathLive(exercice, indexInteractif, 'schemaEnBoite'),
+          ajouteChampTexteMathLive(
+            exercice,
+            indexInteractif,
+            `schemaEnBoite ${KeyboardType.clavierNumbers}`,
+          ),
         )
         handleAnswers(exercice, indexInteractif, {
           reponse: {
@@ -805,7 +809,7 @@ ${barreCorr.display()}`
               ajouteChampTexteMathLive(
                 exercice,
                 indexInteractif,
-                `schemaEnBoite ${KeyboardType.clavierDeBase}`,
+                `schemaEnBoite ${KeyboardType.clavierNumbers}`,
               ),
             )
             handleAnswers(exercice, indexInteractif, {
@@ -836,7 +840,7 @@ ${barreCorr.display()}`
               ajouteChampTexteMathLive(
                 exercice,
                 indexInteractif,
-                `schemaEnBoite ${KeyboardType.clavierDeBase}`,
+                `schemaEnBoite ${KeyboardType.clavierNumbers}`,
               ),
             )
             handleAnswers(exercice, indexInteractif, {
@@ -865,7 +869,7 @@ ${barreCorr.display()}`
               ajouteChampTexteMathLive(
                 exercice,
                 indexInteractif,
-                `schemaEnBoite ${KeyboardType.clavierDeBase}`,
+                `schemaEnBoite ${KeyboardType.clavierNumbers}`,
               ),
             )
             handleAnswers(exercice, indexInteractif, {

@@ -1,3 +1,4 @@
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { setReponse } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice, shuffle2tableaux } from '../../lib/outils/arrayOutils'
@@ -81,7 +82,7 @@ export default class ImageAntecedentDepuisTableauOuFleche extends Exercice {
         numAlpha(0) +
         `L'image de $${a}$ par la fonction $f$ est $${b}$, on note $f(${a})=${b}$.<br>`
       setReponse(this, 6 * i, b)
-      texte += ajouteChampTexteMathLive(this, 6 * i)
+      texte += ajouteChampTexteMathLive(this, 6 * i, KeyboardType.clavierDeBase)
       if (context.isAmc) {
         this.autoCorrection[i].propositions?.push(
           ajouteProposition(texteAMC, b),
@@ -94,7 +95,11 @@ export default class ImageAntecedentDepuisTableauOuFleche extends Exercice {
       texteCorr +=
         numAlpha(1) +
         `L'image de $${c}$ par la fonction $f$ est $${d}$, on note $f(${c})=${d}$.`
-      texte += ajouteChampTexteMathLive(this, i * 6 + 1)
+      texte += ajouteChampTexteMathLive(
+        this,
+        i * 6 + 1,
+        KeyboardType.clavierDeBase,
+      )
       setReponse(this, i * 6 + 1, d)
       if (context.isAmc) {
         this.autoCorrection[i].propositions?.push(
@@ -105,7 +110,11 @@ export default class ImageAntecedentDepuisTableauOuFleche extends Exercice {
       let texte3 = `Déterminer ${lang === 'fr-CH' ? 'la préimage' : "l'antécédent ou les antécédents"} de $${a}$ par la fonction $f$.`
       const texteCorr3 = `$${a}$ a ${lang === 'fr-CH' ? 'un seul élément dans la préimage' : 'un seul antécédent'} par la fonction $f$ qui est $${d}$, on note $f(${d})=${a}$.`
       setReponse(this, i * 6 + 2, d)
-      texte3 += ajouteChampTexteMathLive(this, i * 6 + 2)
+      texte3 += ajouteChampTexteMathLive(
+        this,
+        i * 6 + 2,
+        KeyboardType.clavierDeBase,
+      )
       if (context.isAmc) {
         this.autoCorrection[i].propositions?.push(
           ajouteProposition(
@@ -121,7 +130,11 @@ export default class ImageAntecedentDepuisTableauOuFleche extends Exercice {
       setReponse(this, i * 6 + 3, [`${c};${e}`, `${e};${c}`], {
         formatInteractif: 'texte',
       })
-      texte4 += ajouteChampTexteMathLive(this, i * 6 + 3)
+      texte4 += ajouteChampTexteMathLive(
+        this,
+        i * 6 + 3,
+        KeyboardType.clavierDeBase,
+      )
       if (context.isAmc) {
         this.autoCorrection[i].propositions?.push(
           ajouteProposition(
@@ -148,7 +161,11 @@ export default class ImageAntecedentDepuisTableauOuFleche extends Exercice {
         ? `Compléter : $f(${c})=\\ldots$`
         : `Recopier et compléter : $f(${c})=\\ldots$`
       texteCorr += '<br>' + numAlpha(4) + `$f(${c})=${d}$`
-      texte += ajouteChampTexteMathLive(this, i * 6 + 4)
+      texte += ajouteChampTexteMathLive(
+        this,
+        i * 6 + 4,
+        KeyboardType.clavierDeBase,
+      )
       setReponse(this, i * 6 + 4, [`f(${c})=${d}`, `${d}`], {
         formatInteractif: 'texte',
       })
@@ -164,7 +181,11 @@ export default class ImageAntecedentDepuisTableauOuFleche extends Exercice {
         : `Recopier et compléter : $f(\\ldots)=${c}$`
 
       texteCorr += '<br>' + numAlpha(5) + `$f(${f})=${c}$`
-      texte += ajouteChampTexteMathLive(this, i * 6 + 5)
+      texte += ajouteChampTexteMathLive(
+        this,
+        i * 6 + 5,
+        KeyboardType.clavierDeBase,
+      )
       setReponse(this, i * 6 + 5, [`f(${f})=${c}`, `${f}`], {
         formatInteractif: 'texte',
       })

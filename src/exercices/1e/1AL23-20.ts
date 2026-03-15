@@ -1,3 +1,4 @@
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choisiDelta } from '../../lib/mathFonctions/outilsMaths'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
@@ -13,9 +14,10 @@ import { fraction } from '../../modules/fractions'
 import { egal, listeQuestionsToContenu } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-export const interactifReady = false
-// export const interactifType = 'mathLive'
-export const titre = 'Résoudre une équation du second degré (via sa forme canonique)'
+export const interactifReady = true
+export const interactifType = 'mathLive'
+export const titre =
+  'Résoudre une équation du second degré (via sa forme canonique)'
 
 /**
  * Déterminer les solutions d'une équation du second degré
@@ -69,7 +71,6 @@ export default class Resolutionavecformecanonique extends Exercice {
         alpha,
         cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       ;[a, b, c] = choisiDelta(listeTypeDeQuestions[i])
       c1 = fraction(c, a)
@@ -226,7 +227,7 @@ export default class Resolutionavecformecanonique extends Exercice {
         // pour l'instant pas de delta nul avec choisiDelta
       }
 
-      texte += ajouteChampTexteMathLive(this, i)
+      texte += ajouteChampTexteMathLive(this, i, KeyboardType.clavierEnsemble)
       if (this.questionJamaisPosee(i, a, b, c)) {
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr

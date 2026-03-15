@@ -1,21 +1,22 @@
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
-import { miseEnEvidence } from '../../lib/outils/embellissements'
 import {
   ecritureAlgebrique,
   ecritureAlgebriqueSauf1,
   rienSi1,
 } from '../../lib/outils/ecritures'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { sp } from '../../lib/outils/outilString'
 import { pgcd } from '../../lib/outils/primalite'
-import Exercice from '../Exercice'
+import FractionEtendue from '../../modules/FractionEtendue'
 import {
   gestionnaireFormulaireTexte,
   listeQuestionsToContenu,
   randint,
 } from '../../modules/outils'
-import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
-import FractionEtendue from '../../modules/FractionEtendue'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import Exercice from '../Exercice'
 
 export const titre =
   'Résoudre une équation du second degré se ramenant au premier degré'
@@ -100,7 +101,6 @@ export default class ExerciceEquations extends Exercice {
         texteCorr,
         cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       texte = ''
       texteCorr = ''
@@ -123,12 +123,22 @@ export default class ExerciceEquations extends Exercice {
             { formatInteractif: 'fractionEgale' },
           )
           setReponse(this, fracReponse.signe === 1 ? indiceQ : indiceQ + 1, 0)
-          texte += ajouteChampTexteMathLive(this, indiceQ, ' ', {
-            texteAvant: `<br>${sp(5)} Solution la plus petite : `,
-          })
-          texte += ajouteChampTexteMathLive(this, indiceQ + 1, ' ', {
-            texteAvant: `<br>${sp(5)} Solution la plus grande : `,
-          })
+          texte += ajouteChampTexteMathLive(
+            this,
+            indiceQ,
+            KeyboardType.clavierDeBaseAvecFraction,
+            {
+              texteAvant: `<br>${sp(5)} Solution la plus petite : `,
+            },
+          )
+          texte += ajouteChampTexteMathLive(
+            this,
+            indiceQ + 1,
+            KeyboardType.clavierDeBaseAvecFraction,
+            {
+              texteAvant: `<br>${sp(5)} Solution la plus grande : `,
+            },
+          )
           increment = 2
           break
         case 'ax2+bxAvec1':
@@ -153,12 +163,22 @@ export default class ExerciceEquations extends Exercice {
             { formatInteractif: 'fractionEgale' },
           )
           setReponse(this, fracReponse.signe === 1 ? indiceQ : indiceQ + 1, 0)
-          texte += ajouteChampTexteMathLive(this, indiceQ, ' ', {
-            texteAvant: `<br>${sp(5)} Solution la plus petite : `,
-          })
-          texte += ajouteChampTexteMathLive(this, indiceQ + 1, ' ', {
-            texteAvant: `<br>${sp(5)} Solution la plus grande : `,
-          })
+          texte += ajouteChampTexteMathLive(
+            this,
+            indiceQ,
+            KeyboardType.clavierDeBaseAvecFraction,
+            {
+              texteAvant: `<br>${sp(5)} Solution la plus petite : `,
+            },
+          )
+          texte += ajouteChampTexteMathLive(
+            this,
+            indiceQ + 1,
+            KeyboardType.clavierDeBaseAvecFraction,
+            {
+              texteAvant: `<br>${sp(5)} Solution la plus grande : `,
+            },
+          )
           increment = 2
           break
         case 'ax2-b2':
@@ -203,12 +223,22 @@ export default class ExerciceEquations extends Exercice {
             new FractionEtendue(b, a),
             { formatInteractif: 'fractionEgale' },
           )
-          texte += ajouteChampTexteMathLive(this, indiceQ, ' ', {
-            texteAvant: `<br>${sp(5)} Solution la plus petite : `,
-          })
-          texte += ajouteChampTexteMathLive(this, indiceQ + 1, ' ', {
-            texteAvant: `<br>${sp(5)} Solution la plus grande : `,
-          })
+          texte += ajouteChampTexteMathLive(
+            this,
+            indiceQ,
+            KeyboardType.clavierDeBaseAvecFraction,
+            {
+              texteAvant: `<br>${sp(5)} Solution la plus petite : `,
+            },
+          )
+          texte += ajouteChampTexteMathLive(
+            this,
+            indiceQ + 1,
+            KeyboardType.clavierDeBaseAvecFraction,
+            {
+              texteAvant: `<br>${sp(5)} Solution la plus grande : `,
+            },
+          )
           increment = 2
           break
         case 'ax2=b2':
@@ -255,12 +285,22 @@ export default class ExerciceEquations extends Exercice {
             new FractionEtendue(b, a),
             { formatInteractif: 'fractionEgale' },
           )
-          texte += ajouteChampTexteMathLive(this, indiceQ, ' ', {
-            texteAvant: `<br>${sp(5)} Solution la plus petite : `,
-          })
-          texte += ajouteChampTexteMathLive(this, indiceQ + 1, ' ', {
-            texteAvant: `<br>${sp(5)} Solution la plus grande : `,
-          })
+          texte += ajouteChampTexteMathLive(
+            this,
+            indiceQ,
+            KeyboardType.clavierDeBaseAvecFraction,
+            {
+              texteAvant: `<br>${sp(5)} Solution la plus petite : `,
+            },
+          )
+          texte += ajouteChampTexteMathLive(
+            this,
+            indiceQ + 1,
+            KeyboardType.clavierDeBaseAvecFraction,
+            {
+              texteAvant: `<br>${sp(5)} Solution la plus grande : `,
+            },
+          )
           increment = 2
           break
         case 'bcx2+a=bx(cx+d)':
@@ -299,9 +339,14 @@ export default class ExerciceEquations extends Exercice {
           setReponse(this, indiceQ, fracReponse, {
             formatInteractif: 'fractionEgale',
           })
-          texte += ajouteChampTexteMathLive(this, indiceQ, ' ', {
-            texteAvant: `<br>${sp(5)} Solution : `,
-          })
+          texte += ajouteChampTexteMathLive(
+            this,
+            indiceQ,
+            KeyboardType.clavierDeBaseAvecFraction,
+            {
+              texteAvant: `<br>${sp(5)} Solution : `,
+            },
+          )
           increment = 1
           break
         case '(ax+b)2=0':
@@ -323,9 +368,14 @@ export default class ExerciceEquations extends Exercice {
           setReponse(this, indiceQ, fracReponse, {
             formatInteractif: 'fractionEgale',
           })
-          texte += ajouteChampTexteMathLive(this, indiceQ, ' ', {
-            texteAvant: `<br>${sp(5)} Solution : `,
-          })
+          texte += ajouteChampTexteMathLive(
+            this,
+            indiceQ,
+            KeyboardType.clavierDeBaseAvecFraction,
+            {
+              texteAvant: `<br>${sp(5)} Solution : `,
+            },
+          )
           increment = 1
           break
         case '(ax+b)(cx+d)=acx2':
@@ -357,9 +407,14 @@ export default class ExerciceEquations extends Exercice {
           setReponse(this, indiceQ, fracReponse, {
             formatInteractif: 'fractionEgale',
           })
-          texte += ajouteChampTexteMathLive(this, indiceQ, ' ', {
-            texteAvant: `<br>${sp(5)} Solution : `,
-          })
+          texte += ajouteChampTexteMathLive(
+            this,
+            indiceQ,
+            KeyboardType.clavierDeBaseAvecFraction,
+            {
+              texteAvant: `<br>${sp(5)} Solution : `,
+            },
+          )
           increment = 1
           break
       }

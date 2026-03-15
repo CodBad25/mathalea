@@ -18,6 +18,7 @@ import { colorToLatexOrHTML } from '../../lib/2d/colorToLatexOrHtml'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { segment } from '../../lib/2d/segmentsVecteurs'
 import { latex2d } from '../../lib/2d/textes'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { mathalea2d } from '../../modules/mathalea2d'
 
 export const titre = 'Résoudre graphiquement une équation ou une inéquation'
@@ -734,7 +735,11 @@ class resolutionEquationInequationGraphique extends Exercice {
         if (this.interactif)
           enonce +=
             `L'ensemble de solutions de l'équation $${f1}(x)${miseEnEvidence('~=~', 'black')}${f2}(x)$ sur [$${xMin};$${xMax}] est : ` +
-            ajouteChampTexteMathLive(this, indexQuestion, '  lycee ml-2') +
+            ajouteChampTexteMathLive(
+              this,
+              indexQuestion,
+              KeyboardType.clavierEnsemble,
+            ) +
             '<br><br>' // '$\\{' + Array.from(soluces).join(' ; ') + '\\}$'//
         handleAnswers(this, indexQuestion, {
           reponse: {
@@ -752,7 +757,11 @@ class resolutionEquationInequationGraphique extends Exercice {
           "On peut taper 'union' au clavier ou utiliser le clavier virtuel pour le signe $\\cup$.<br>"
         enonce +=
           `L'ensemble des solutions de l'inéquation $${f1}(x)${inferieur ? miseEnEvidence('\\leqslant', 'black') : miseEnEvidence('~\\geqslant~', 'black')}${f2}(x)$ sur [$${xMin};$${xMax}] est : ` +
-          ajouteChampTexteMathLive(this, indexQuestion, '  lycee ml-2') +
+          ajouteChampTexteMathLive(
+            this,
+            indexQuestion,
+            KeyboardType.clavierEnsemble,
+          ) +
           '<br><br>'
       }
       const soluces2: string = chercheIntervalles(

@@ -764,11 +764,6 @@ export default class EvolutionsEnPourcentage extends Exercice {
       }
       handleAnswers(this, i, { reponse: { value: arrondi(reponse) } })
       if (this.interactif) texte += '<br><br>'
-      //  if (listeTypeDeQuestions[i] === 'evolution') {
-      //    texte += ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers, { texteApres: '%' })
-      //  } else {
-      //  texte += ajouteChampTexteMathLive(this, i)
-      //  }
       if (this.questionJamaisPosee(i, depart, taux, typesDeSituations[i])) {
         // Si la question n'a jamais été posée, on en créé une autre
         this.listeQuestions[i] = texte

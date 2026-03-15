@@ -2,6 +2,7 @@ import { courbe } from '../../lib/2d/Courbe'
 import { point } from '../../lib/2d/PointAbstrait'
 import { repere } from '../../lib/2d/reperes'
 import { tracePoint } from '../../lib/2d/TracePoint'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { setReponse } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
@@ -69,7 +70,6 @@ export default class DeterminerFonctionAffine extends Exercice {
     for (
       let i = 0, tA, tB, r, texte, texteCorr, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       texte = '' // Nous utilisons souvent cette variable pour construire le texte de la question.
       texteCorr = '' // Idem pour le texte de la correction.
@@ -289,7 +289,11 @@ export default class DeterminerFonctionAffine extends Exercice {
       }
       texte = `La fonction $f$ est une fonction affine et on sait que $f(${x1})=${y1}$ et $f(${x2})=${y2}$.<br>`
       texte += 'Déterminer la forme algébrique de la fonction $f$.'
-      texte += ajouteChampTexteMathLive(this, i)
+      texte += ajouteChampTexteMathLive(
+        this,
+        i,
+        KeyboardType.clavierDeBaseAvecX,
+      )
       if (
         this.questionJamaisPosee(
           i,

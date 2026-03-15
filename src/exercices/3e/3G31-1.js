@@ -8,6 +8,7 @@ import { labelPoint } from '../../lib/2d/textes'
 import { texteSurSegment } from '../../lib/2d/texteSurSegment'
 import { similitude } from '../../lib/2d/transformations'
 import { angle, longueur } from '../../lib/2d/utilitairesGeometriques'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
@@ -191,22 +192,37 @@ export default class CalculDAngleFigureComplexe extends Exercice {
             })
             texte +=
               '<br><br>' +
-              ajouteChampTexteMathLive(this, 3 * i, ' ', {
-                texteAvant: `$\\widehat{${A.nom + C.nom + D.nom}}=$`,
-                texteApres: '$^\\circ$',
-              })
+              ajouteChampTexteMathLive(
+                this,
+                3 * i,
+                KeyboardType.clavierNumbers,
+                {
+                  texteAvant: `$\\widehat{${A.nom + C.nom + D.nom}}=$`,
+                  texteApres: '$^\\circ$',
+                },
+              )
             texte +=
               '<br><br>' +
-              ajouteChampTexteMathLive(this, 3 * i + 1, ' ', {
-                texteAvant: `$\\widehat{${B.nom + C.nom + A.nom}}=$`,
-                texteApres: '$^\\circ$',
-              })
+              ajouteChampTexteMathLive(
+                this,
+                3 * i + 1,
+                KeyboardType.clavierNumbers,
+                {
+                  texteAvant: `$\\widehat{${B.nom + C.nom + A.nom}}=$`,
+                  texteApres: '$^\\circ$',
+                },
+              )
             texte +=
               '<br><br>' +
-              ajouteChampTexteMathLive(this, 3 * i + 2, ' ', {
-                texteAvant: `$\\widehat{${C.nom + D.nom + A.nom}}=$`,
-                texteApres: '$^\\circ$',
-              })
+              ajouteChampTexteMathLive(
+                this,
+                3 * i + 2,
+                KeyboardType.clavierNumbers,
+                {
+                  texteAvant: `$\\widehat{${C.nom + D.nom + A.nom}}=$`,
+                  texteApres: '$^\\circ$',
+                },
+              )
           }
           break
         case 'BA-AD-ACB':
@@ -300,22 +316,37 @@ export default class CalculDAngleFigureComplexe extends Exercice {
             })
             texte +=
               '<br><br>' +
-              ajouteChampTexteMathLive(this, 3 * i, ' ', {
-                texteAvant: `$\\widehat{${A.nom + C.nom + D.nom}}=$`,
-                texteApres: '$^\\circ$',
-              })
+              ajouteChampTexteMathLive(
+                this,
+                3 * i,
+                KeyboardType.clavierNumbers,
+                {
+                  texteAvant: `$\\widehat{${A.nom + C.nom + D.nom}}=$`,
+                  texteApres: '$^\\circ$',
+                },
+              )
             texte +=
               '<br><br>' +
-              ajouteChampTexteMathLive(this, 3 * i + 1, ' ', {
-                texteAvant: `$\\widehat{${B.nom + A.nom + C.nom}}=$`,
-                texteApres: '$^\\circ$',
-              })
+              ajouteChampTexteMathLive(
+                this,
+                3 * i + 1,
+                KeyboardType.clavierNumbers,
+                {
+                  texteAvant: `$\\widehat{${B.nom + A.nom + C.nom}}=$`,
+                  texteApres: '$^\\circ$',
+                },
+              )
             texte +=
               '<br><br>' +
-              ajouteChampTexteMathLive(this, 3 * i + 2, ' ', {
-                texteAvant: `$\\widehat{${C.nom + D.nom + A.nom}}=$`,
-                texteApres: '$^\\circ$',
-              })
+              ajouteChampTexteMathLive(
+                this,
+                3 * i + 2,
+                KeyboardType.clavierNumbers,
+                {
+                  texteAvant: `$\\widehat{${C.nom + D.nom + A.nom}}=$`,
+                  texteApres: '$^\\circ$',
+                },
+              )
           }
           break
       }
