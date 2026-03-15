@@ -29,7 +29,7 @@ export const refs = {
 export default class CalculImageParFonctionAffine extends ExerciceSimple {
   constructor() {
     super()
-    
+
     this.nbQuestions = 1
     this.versionQcmDisponible = true
     this.typeExercice = 'simple'
@@ -39,7 +39,7 @@ export default class CalculImageParFonctionAffine extends ExerciceSimple {
 
   nouvelleVersion() {
     let nomF, x, n, m, y
-    switch (this.versionQcm ? choice([2, 3]) : choice([3])) {
+    switch (this.versionQcm ? choice([2, 3]) : choice([1, 2, 3])) {
       case 1:
         x = randint(-9, 9, [0, 1, -1])
         n = choice([2, 4, 5])
@@ -81,7 +81,7 @@ export default class CalculImageParFonctionAffine extends ExerciceSimple {
           `$${texNombre(n * x + y)}$`,
           `$${texNombre(m * n * x + y)}$`,
         ]
-       this.optionsDeComparaison = { fractionEgale: true }
+        this.optionsDeComparaison = { fractionEgale: true }
         break
 
       case 3:
@@ -109,7 +109,10 @@ export default class CalculImageParFonctionAffine extends ExerciceSimple {
           `$${new FractionEtendue(m, n).ajouteEntier(x + y).texFractionSimplifiee}$`,
           `$${texNombre(m * x + y)}$`,
         ]
-        this.optionsDeComparaison = { fractionEgale: true, nombreDecimalSeulement:true }
+        this.optionsDeComparaison = {
+          fractionEgale: true,
+          nombreDecimalSeulement: true,
+        }
         break
     }
   }
