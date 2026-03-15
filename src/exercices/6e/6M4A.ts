@@ -42,16 +42,16 @@ export default class SommeDeDurees extends Exercice {
       'Niveau de difficulté',
       'Nombres séparés par des tirets :\n1 : Additions minutes-secondes sans conversion\n2 : Additions heures-minutes avec potentielle conversion\n3 : Additions heures-minutes-secondes sans conversion\n4 : Additions minutes-secondes avec potentielle conversion\n5 : Additions heures-minutes-secondes avec potentielle conversion\n6 : Mélange',
     ]
-    this.consigne =
-      this.nbQuestions > 1
-        ? 'Compléter les égalités suivantes.'
-        : "Compléter l'égalité suivante."
     this.sup = '1-2' // 2 niveaux de difficultés
     this.spacing = 2
     this.nbQuestions = 5
   }
 
   nouvelleVersion() {
+    this.consigne =
+      this.nbQuestions > 1
+        ? 'Compléter les égalités suivantes.'
+        : "Compléter l'égalité suivante."
     const typesDeQuestions = gestionnaireFormulaireTexte({
       saisie: this.sup,
       min: 1,
@@ -64,7 +64,6 @@ export default class SommeDeDurees extends Exercice {
     for (
       let i = 0, h1, h2, m1, m2, s1, s2, texte, texteCorr, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       h1 = 0
       h2 = 0
