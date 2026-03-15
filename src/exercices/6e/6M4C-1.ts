@@ -63,7 +63,6 @@ export default class ConversionHeuresMinutesOuMinutesEtSecondes extends Exercice
     for (
       let i = 0, cpt = 0, a, b, d, texte, texteCorr;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       a = randint(2, 4)
       b = randint(10, 59)
@@ -111,9 +110,9 @@ Ainsi $${d} = ${Math.floor(d / 60) * 60} + ${d % 60}$ donc $${d}$min $= ${Math.f
         }
       }
       if (listeTypeQuestions[i] === 'min vers h et min') {
-        texteCorr += `$${d} = ${a} \\times 60 + ${b}$ donc $${d}$ minutes = ${texteEnCouleurEtGras(minToHoraire(a * 60 + b))}.`
+        texteCorr += `$${d} = (${a} \\times 60) + ${b}$ donc $${d}$ minutes = ${texteEnCouleurEtGras(minToHoraire(a * 60 + b))}.`
       } else {
-        texteCorr += `$${d} = ${a} \\times 60 + ${b}$ donc $${d}$ s = ${texteEnCouleurEtGras(`${a}${sp()}min${sp()}${b}${sp()}s`)}.`
+        texteCorr += `$${d} = (${a} \\times 60) + ${b}$ donc $${d}$ s = ${texteEnCouleurEtGras(`${a}${sp()}min${sp()}${b}${sp()}s`)}.`
       }
       if (this.questionJamaisPosee(i, a, b, d)) {
         this.listeQuestions[i] = texte
