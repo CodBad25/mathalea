@@ -708,6 +708,7 @@ export function loadPackagesFromContent(contents: contentsType) {
   )
   testIfLoaded(['\\widearc{', '\\eurologo'], '\\usepackage{fourier}', contents)
   testIfLoaded(['\\tkzAxeXY'], '\\usepackage{tkz-base}', contents)
+  testIfLoaded(['\\begin{spacing}'], '\\usepackage{setspace}', contents)
   testIfLoaded(['\\tkz', '\\pic['], '\\usepackage{tkz-euclide}', contents)
   testIfLoaded(
     ['\\pstEllipse[linewidth='],
