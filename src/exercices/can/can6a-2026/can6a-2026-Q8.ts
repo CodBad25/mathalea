@@ -43,7 +43,7 @@ export default class Can20266Q8 extends ExerciceCan {
     const nbGrad = Math.max(position + 2, label2 + 2)
 
     const drGrad = droiteGraduee({
-      axeEpaisseur: context.isHtml ? 1.5 : 1.5,
+      axeEpaisseur: context.isHtml ? 1.5 : 1.2,
       Unite: 1,
       Min: 0,
       Max: nbGrad,

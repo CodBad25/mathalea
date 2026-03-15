@@ -40,7 +40,7 @@ export default class Can20266Q18 extends ExerciceCan {
     Ainsi, la moitié de $${texNombre(nbDixièmes, 0)}$ dixièmes est $${miseEnEvidence(texNombre(nbDixièmes / 20, 1))}$ unités.`
 
     this.formatChampTexte = KeyboardType.clavierDeBase
-    this.canEnonce = `La moitié de $${texNombre(nbDixièmes, 0)}$ dixièmes.`
+    this.canEnonce = `La moitié de $${texNombre(nbDixièmes, 0)}$ dixièmes`
     this.canReponseACompleter = `$\\ldots$ unité(s)`
   }
 
