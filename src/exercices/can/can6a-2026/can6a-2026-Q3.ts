@@ -48,9 +48,7 @@ export default class Can20266Q3 extends ExerciceCan {
 
     if (this.interactif) {
       this.optionsChampTexte = { texteAvant: '<br>', texteApres: ' €' }
-    } else {
-      this.question += `<br>$\\ldots$ €`
-    }
+    } 
 
     this.formatChampTexte = KeyboardType.clavierDeBase
   }

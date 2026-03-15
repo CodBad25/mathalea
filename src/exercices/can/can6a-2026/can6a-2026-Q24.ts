@@ -4,7 +4,7 @@ import { texNombre } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
 
-export const titre = 'Q24'
+export const titre = 'Convertir en centièmes/dixièmes'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const uuid = '4onq5'

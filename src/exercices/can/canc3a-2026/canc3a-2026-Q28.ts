@@ -1,21 +1,20 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { arrondi } from '../../../lib/outils/nombres'
 import { texNombre } from '../../../lib/outils/texNombre'
-import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
-
 export const titre = 'Calculer un produit avec un décimal'
 export const interactifReady = true
 export const interactifType = 'mathLive'
-export const uuid = 'ke05o'
+export const uuid = '90963'
 export const refs = {
   'fr-fr': [],
   'fr-ch': [],
 }
 
 /**
- * @author Eric Elter
+ * @author Gilles Mora
 
 */
 
@@ -23,55 +22,50 @@ type TypeDeNombre = {
   entier: number
   decimaux: number[]
 }
-export default class Can20266Q28 extends ExerciceCan {
-  constructor() {
+export default class Can2026CM2Q28 extends ExerciceCan {
+  constructor () {
     super()
     this.formatChampTexte = KeyboardType.clavierNumbers
     this.optionsDeComparaison = { nombreDecimalSeulement: true }
     this.optionsChampTexte = {
-      texteAvant: '$~=$',
+      texteAvant: '$~=$'
     }
   }
-
+ 
   typesDeNombres: TypeDeNombre[] = [
     {
-      entier: 5,
-      decimaux: [2.2, 3.2, 4.2, 5.2, 0.2, 1.2],
-    },
-    {
       entier: 4,
-      decimaux: [1.5, 2.5, 3.5, 4.5, 5.5],
+      decimaux: [1.3, 1.4, 1.6]
     },
     {
-      entier: 5,
-      decimaux: [1.4, 2.4, 3.4, 4.4, 5.4],
-    },
-  ]
-
-  enonce(entier?: number, decimal?: number) {
-    if (entier == null) {
-      const typeDeNombre = this.typesDeNombres[randint(0, 2)]
-
-      entier = typeDeNombre.entier
-      decimal =
-        typeDeNombre.decimaux[
-          Math.floor(Math.random() * typeDeNombre.decimaux.length)
-        ]
+      entier: 2,
+      decimaux: [0.6, 0.8, 1.6, 1.8]
     }
-
+  ]
+ 
+  enonce (entier?: number, decimal?: number) {
+    if (entier == null) {
+      const typeDeNombre = choice(this.typesDeNombres)
+      entier = typeDeNombre.entier
+      decimal = choice(typeDeNombre.decimaux)
+    }
+ 
     this.reponse = arrondi(entier * decimal!)
     this.question = `$${entier}\\times ${texNombre(decimal!)}$`
     const partieEntiere = Math.floor(decimal!)
-    const partieDecimale = arrondi(decimal! - Math.floor(decimal!))
-    this.correction =
-      this.question.slice(0, -1) +
-      `= ${entier}\\times (${partieEntiere} + ${texNombre(partieDecimale)})
+    const partieDecimale = arrondi(decimal! - partieEntiere)
+ 
+    if (partieEntiere === 0) {
+      this.correction = `$${entier}\\times ${texNombre(decimal!)}=${miseEnEvidence(texNombre(this.reponse))}$`
+    } else {
+      this.correction = `$${entier}\\times ${texNombre(decimal!)}= ${entier}\\times (${partieEntiere} + ${texNombre(partieDecimale)})
       = (${entier}\\times ${partieEntiere}) + (${entier}\\times ${texNombre(partieDecimale)})
-      = ${entier * partieEntiere} + ${arrondi(entier * partieDecimale)}
-      =${miseEnEvidence(this.reponse)}$`
+      = ${entier * partieEntiere} + ${texNombre(arrondi(entier * partieDecimale))}
+      =${miseEnEvidence(texNombre(this.reponse))}$`
+    }
   }
-
-  nouvelleVersion() {
-    this.canOfficielle ? this.enonce(5, 1.2) : this.enonce()
+ 
+  nouvelleVersion () {
+    this.canOfficielle ? this.enonce(2, 0.6) : this.enonce()
   }
 }
