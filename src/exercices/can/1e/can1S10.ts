@@ -3,6 +3,7 @@ import {
   ecritureAlgebrique,
   ecritureParentheseSiNegatif,
 } from '../../../lib/outils/ecritures'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre =
@@ -16,7 +17,7 @@ export const dateDePublication = '18/02/2026' // La date de publication initiale
 
 /**
  * Modèle d'exercice très simple pour la course aux nombres
- * @author Stéphane
+ * @author Stéphane Guyon
 
 */
 export const uuid = 'cd45f'
@@ -59,11 +60,11 @@ Calculer le terme $${s}_{${i}}$.`
        Donc `
         let current = u
         for (let k = 0; k < i; k++) {
-          this.correction += `$${s}_{${k + 1}} = ${s}_${k} ${ecritureAlgebrique(r)} = ${current + r}$. <br>`
+          this.correction += `$${s}_{${k + 1}} = ${s}_${k} ${ecritureAlgebrique(r)} = ${current + r}$ <br>`
           current += r
         }
-        this.correction += ` On aurait pu aussi directement utiliser la forme explicite d'une suite arithmétique : $${s}_n = ${s}_0 + n \\times r$.<br>`
-        this.correction += ` Ce qui donne le même résultat :  $${s}_{${i}} = ${u} + ${i} \\times ${ecritureParentheseSiNegatif(r)} = ${u + i * r}$.<br>`
+        this.correction += `  La réponse est donc $${s}_{${i}} = ${miseEnEvidence(u + i * r)}$.<br> On aurait pu aussi directement utiliser la forme explicite d'une suite arithmétique : $${s}_n = ${s}_0 + n \\times r$.<br>`
+        this.correction += ` Ce qui donne le même résultat :  $${s}_{${i}} = ${u} + ${i} \\times ${ecritureParentheseSiNegatif(r)} = ${miseEnEvidence(u + i * r)}$.<br>`
         this.reponse = u + i * r
 
         this.canReponseACompleter = `$${s}_{${i}}=\\ldots$`
@@ -72,9 +73,9 @@ Calculer le terme $${s}_{${i}}$.`
       case 'b': {
         // suite géométrique
         u = randint(-3, 3, 0)
-        q = randint(2, 4)
+        q = randint(2, 3)
 
-        i = randint(2, 5)
+        i = randint(2, 3)
         this.question = `Soit $(${s}_n)$ une suite géométrique de premier terme $${s}_0=${u}$ et de raison $q=${q}$.<br>
 
 Calculer le terme $${s}_{${i}}$.`
@@ -88,12 +89,11 @@ Calculer le terme $${s}_{${i}}$.`
        Donc `
         let current = u
         for (let k = 0; k < i; k++) {
-          this.correction += `$${s}_{${k + 1}} =  ${q} \\times ${ecritureParentheseSiNegatif(current)} = ${current * q}$. <br>`
+          this.correction += `$${s}_{${k + 1}} =  ${q} \\times ${ecritureParentheseSiNegatif(current)} = ${current * q}$ <br>`
           current *= q
         }
-        this.correction += `On aurait pu aussi directement utiliser la forme explicite d'une suite géométrique : $${s}_n = ${s}_0 \\times q^n$.<br>`
-        this.correction += `Ce qui donne le même résultat :  $${s}_{${i}} = ${u} \\times ${q}^{${i}} = ${u * Math.pow(q, i)}$.<br>`
-
+        this.correction += ` La réponse est donc $${s}_{${i}} = ${miseEnEvidence(u * Math.pow(q, i))}$.<br>On aurait pu aussi directement utiliser la forme explicite d'une suite géométrique : $${s}_n = ${s}_0 \\times q^n$.<br>`
+        this.correction += `Ce qui donne le même résultat :  $${s}_{${i}} = ${u} \\times ${q}^{${i}} = ${miseEnEvidence(u * Math.pow(q, i))}$.<br>`
         this.reponse = u * Math.pow(q, i)
 
         this.canReponseACompleter = `$${s}_{${i}}=\\ldots$`
