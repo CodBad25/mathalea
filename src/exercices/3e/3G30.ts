@@ -19,7 +19,7 @@ import {
 } from '../../lib/outils/embellissements'
 import { arrondi } from '../../lib/outils/nombres'
 import { creerNomDePolygone, numAlpha, sp } from '../../lib/outils/outilString'
-import { texNombre, texNombre2 } from '../../lib/outils/texNombre'
+import { texNombre } from '../../lib/outils/texNombre'
 import { context } from '../../modules/context'
 import Grandeur from '../../modules/Grandeur'
 import { mathalea2d } from '../../modules/mathalea2d'
@@ -42,7 +42,7 @@ export const titre =
 
 /**
  * @author Jean-Claude Lhote à partir de 3G30-1 de Rémi Angot
- * 3G30 Exercice remplaçant l'exercice initial utilisant MG32
+ * Exercice remplaçant l'exercice initial utilisant MG32
  * Calculer une longueur en utilisant l'un des trois rapport trigonométrique.
  * * Si this.level=4 alors seul le cosinus sera utilisé.
  * Mars 2021
@@ -145,12 +145,11 @@ export default class CalculDeLongueur extends Exercice {
           bc = randint(10, 15)
           ab = bc * Math.cos(angleABCr)
           ac = bc * Math.sin(angleABCr)
-          if (this.level === 4){
+          /* if (this.level === 4) {
             texteAMC += `Dans le triangle $${nom}$ rectangle en $${nom[0]}$,<br> $${nom[1] + nom[2]}=${texNombre2(bc)}\\text{ ${unite}}$, $${nom[0] + nom[2]} = ${texNombre2(arrondi(ac, 1))}\\text{ ${unite}}$ et $\\widehat{${nom}}=${angleABC}^\\circ$.<br>`
-          }
-          else{
+          } else { */
           texteAMC += `Dans le triangle $${nom}$ rectangle en $${nom[0]}$,<br> $${nom[1] + nom[2]}=${bc}\\text{ ${unite}}$ et $\\widehat{${nom}}=${angleABC}^\\circ$.<br>`
-          }
+          // }
           nom1 = nom[0]
           nom2 = nom[1]
           break
@@ -174,12 +173,11 @@ export default class CalculDeLongueur extends Exercice {
           ab = randint(7, 10)
           bc = ab / Math.cos(angleABCr)
           ac = bc * Math.sin(angleABCr)
-          if (this.level === 4){
+          /* if (this.level === 4) {
             texteAMC += `Dans le triangle $${nom}$ rectangle en $${nom[0]}$,<br> $${nom[0] + nom[1]}=${texNombre2(ab)}\\text{ ${unite}}$, $${nom[0] + nom[2]} = ${texNombre2(arrondi(ac, 1))}\\text{ ${unite}}$  et $\\widehat{${nom}}=${angleABC}^\\circ$.<br>`
-          }
-          else{
-            texteAMC += `Dans le triangle $${nom}$ rectangle en $${nom[0]}$,<br> $${nom[0] + nom[1]}=${ab}\\text{ ${unite}}$ et $\\widehat{${nom}}=${angleABC}^\\circ$.<br>`
-          }
+          } else { */
+          texteAMC += `Dans le triangle $${nom}$ rectangle en $${nom[0]}$,<br> $${nom[0] + nom[1]}=${ab}\\text{ ${unite}}$ et $\\widehat{${nom}}=${angleABC}^\\circ$.<br>`
+          //  }
           nom1 = nom[1]
           nom2 = nom[2]
           break
@@ -265,11 +263,18 @@ export default class CalculDeLongueur extends Exercice {
             '',
           )
           t2 = latexParPoint('?', m1, 'black', 120, 12, '')
-          if (this.level === 4) {
-            const mAC = milieu(A, C);
-            const tAC = latexParPoint(`${texNombre2(arrondi(ac, 1))} \\text{ ${unite}}`, mAC, 'black', 120, 12, '');
-            objetsEnonce.push(tAC);
-          } 
+          /*  if (this.level === 4) {
+            const mAC = milieu(A, C)
+            const tAC = latexParPoint(
+              `${texNombre2(arrondi(ac, 1))} \\text{ ${unite}}`,
+              mAC,
+              'black',
+              120,
+              12,
+              '',
+            )
+            objetsEnonce.push(tAC)
+          } */
           m4 = homothetie(G, B, 2.7 / longueur(B, G), 'B2', 'center')
           t1 = latexParPoint(`${angleABC}^\\circ`, m4, 'black', 20, 12, '')
           break
@@ -309,11 +314,18 @@ export default class CalculDeLongueur extends Exercice {
             '',
           )
           t3 = latexParPoint('?', m3, 'black', 120, 12, '')
-          if (this.level === 4) {
-            const mAC = milieu(A, C);
-            const tAC = latexParPoint(`${arrondi(ac, 1)} \\text{ ${unite}}`, mAC, 'black', 120, 12, '');
-            objetsEnonce.push(tAC);
-          }
+          /* if (this.level === 4) {
+            const mAC = milieu(A, C)
+            const tAC = latexParPoint(
+              `${arrondi(ac, 1)} \\text{ ${unite}}`,
+              mAC,
+              'black',
+              120,
+              12,
+              '',
+            )
+            objetsEnonce.push(tAC)
+          } */
           m4 = homothetie(G, B, 2.7 / longueur(B, G), 'B2', 'center')
           t2 = latexParPoint(`${angleABC}^\\circ`, m4, 'black', 100, 12, '')
           break
