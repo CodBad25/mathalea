@@ -134,7 +134,7 @@ export default class AlgoTortue extends Exercice {
       case 'polygonesReguliers':
         n = choice([3, 5, 6, 7, 8]) // Nombre de côtés
         val1 = arrondi(360 / n, 1)
-        val2 = (10 - n) * 10
+        val2 = (10 - n) * 20
         if (bonneReponse !== 3) {
           lutins[0].codeScratch += `\\blockrepeat{répéter \\ovalnum{${n}} fois}
 {
@@ -200,7 +200,7 @@ export default class AlgoTortue extends Exercice {
       case 'rosaces1':
         n = choice([3, 4, 5, 6, 8]) // Nombre branches
         n2 = randint(3, 6, 5)
-        val1 = randint(2, 4) * 10
+        val1 = 20 + randint(2, 4) * 10
         val2 = (10 - n) * 5
         val3 = (8 - n2) * 4
         lutins[0].codeScratch += `\\blockrepeat{répéter \\ovalnum{${n}} fois} \n{`
@@ -294,8 +294,8 @@ export default class AlgoTortue extends Exercice {
       case 'spirales':
         n = choice([3, 4, 5, 6, 8]) // Nombre de côtés
         n2 = randint(1, 4) + Math.floor((9 - n) / 2)
-        val1 = randint(1, 4) * 5
-        val2 = 60 + randint(0, 4) * 5
+        val1 = 20 + randint(1, 4) * 5
+        val2 = 80 + randint(0, 4) * 5
         val3 = 360 / n
 
         if (bonneReponse !== 2) {
@@ -357,8 +357,8 @@ export default class AlgoTortue extends Exercice {
         break
       case 'roueDentee':
         n = choice([3, 4, 5, 6, 8]) // Nombre de côtés
-        val1 = randint(1, 2) * 10
-        val2 = 720 / n
+        val1 = randint(2, 4) * 10
+        val2 = 180 / n
         val3 = 360 / n
 
         if (bonneReponse < 5) {
@@ -437,12 +437,12 @@ export default class AlgoTortue extends Exercice {
         }
         break
       case 'frise1':
-        n = 3 // Nombre de répétitions
+        n = 4 // Nombre de répétitions
         n2 = choice([45, 60, 90])
         n2 = choice([45, 60, 90])
-        val1 = randint(1, 2) * 5
-        val2 = randint(1, 3) * 5
-        val3 = randint(2, 4) * 5
+        val1 = randint(1, 2) * 10
+        val2 = randint(1, 3) * 10
+        val3 = randint(2, 4) * 10
         sequenceFrise1 = [
           [`\\blockmove{avancer de \\ovalnum{${val2}} pas}\n`, val2],
           [
