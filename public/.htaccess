@@ -35,6 +35,11 @@ RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
   ExpiresByType text/javascript "access plus 1 year"
   ExpiresByType application/javascript "access plus 1 year"
   ExpiresByType application/x-javascript "access plus 1 year"
+
+  # Exception : scripts Moodle sans hash => pas de cache long
+  <FilesMatch "^moodle(\.scorm|-bookmarklet)?\.js$">
+    ExpiresDefault "access plus 0 seconds"
+  </FilesMatch>
   ExpiresByType image/svg+xml "access plus 1 year"
   ExpiresByType image/x-icon "access plus 1 year"
   ExpiresByType image/png "access plus 1 year"
@@ -64,16 +69,19 @@ RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
   <FilesMatch "^version\.txt$">
     Header set Cache-Control "no-cache, no-store, must-revalidate, max-age=0"
   </FilesMatch>
-  
-   # SPECIAL: ne pas mettre en cache les scripts moodle
-  <FilesMatch "^(moodle(\.scorm|-bookmarklet)?\.js)$">
-    Header set Cache-Control "no-cache, no-store, must-revalidate, max-age=0"
-    Header unset Expires
-    Header unset Pragma
+
+  # SPECIAL: ne pas mettre en cache les scripts moodle
+  # "always" garantit que l'en-tête est envoyé même si Apache a déjà fixé une valeur
+  <FilesMatch "^moodle(\.scorm|-bookmarklet)?\.js$">
+    Header always set Cache-Control "no-cache, no-store, must-revalidate, max-age=0"
+    Header always unset Expires
+    Header always unset Pragma
+    Header always set Pragma "no-cache"
   </FilesMatch>
 
   # Assets AVEC hash (-[A-Za-z0-9]{8,}) => long cache immutable
-  Header set Cache-Control "public, max-age=31536000, immutable" "expr=%{REQUEST_URI} =~ m#\.(?:css|js|jpg|jpeg|png|gif|svg|ico|webp|woff|woff2|ttf|eot|otf|map|tex)$#i && %{REQUEST_URI} =~ m#-[A-Za-z0-9]{8,}#"
+  # On exclut explicitement les scripts Moodle de cette règle
+  Header set Cache-Control "public, max-age=31536000, immutable" "expr=%{REQUEST_URI} =~ m#\.(?:css|js|jpg|jpeg|png|gif|svg|ico|webp|woff|woff2|ttf|eot|otf|map|tex)$#i && %{REQUEST_URI} =~ m#-[A-Za-z0-9]{8,}# && %{REQUEST_URI} !~ m#moodle(\.scorm|-bookmarklet)?\.js$#i"
 
   # PNG et TEX SANS hash => revalidation systématique (toujours la dernière version)
   Header unset Cache-Control "expr=%{REQUEST_URI} =~ m#\.(?:png|tex)$#i && %{REQUEST_URI} !~ m#-[A-Za-z0-9]{8,}#"
