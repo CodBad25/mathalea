@@ -6,7 +6,7 @@ import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 
 export const titre = "Mesure principale d'un angle"
@@ -15,7 +15,7 @@ export const interactifType = 'mathLive'
 
 // Les exports suivants sont optionnels mais au moins la date de publication semble essentielle
 export const dateDePublication = '20/04/2022' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
-export const dateDeModifImportante = '27/12/2025'
+export const dateDeModifImportante = '15/03/2026'
 
 /**
  *
@@ -118,7 +118,9 @@ export default class MesurePrincipale extends Exercice {
 
       texte = `$${alfa}=\\dfrac{${angle}\\pi}{${n}}$` // Le LateX entre deux symboles $, les variables dans des ${ }
       if (this.interactif) {
-        setReponse(this, i, `$\\dfrac{${rienSi1(p)}\\pi}{${n}}$`)
+        handleAnswers(this, i, {
+          reponse: { value: `\\dfrac{${rienSi1(p)}\\pi}{${n}}` },
+        })
         texte +=
           ' et sa mesure principale est :' +
           ajouteChampTexteMathLive(
