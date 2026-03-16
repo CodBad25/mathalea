@@ -142,26 +142,19 @@ export default class AngleProduitScalaire extends Exercice {
                 $\\overrightarrow{AB}\\begin{pmatrix}${xB}-${ecritureParentheseSiNegatif(xA)}\\\\[0.7em]${yB}-${ecritureParentheseSiNegatif(yA)}\\end{pmatrix}$, soit $\\overrightarrow{AB}\\begin{pmatrix}${xB - xA}\\\\[0.7em]${yB - yA}\\end{pmatrix}$.<br>
                 $\\overrightarrow{AC}\\begin{pmatrix}${xC}-${ecritureParentheseSiNegatif(xA)}\\\\[0.7em]${yC}-${ecritureParentheseSiNegatif(yA)}\\end{pmatrix}$, soit $\\overrightarrow{AC}\\begin{pmatrix}${xC - xA}\\\\[0.7em]${yC - yA}\\end{pmatrix}$.<br>
                 Ainsi, $\\overrightarrow{AB}\\cdot\\overrightarrow{AC}=${xB - xA}\\times ${ecritureParentheseSiNegatif(xC - xA)}+${ecritureParentheseSiNegatif(yB - yA)}\\times ${ecritureParentheseSiNegatif(yC - yA)}=${(xB - xA) * (xC - xA) + (yB - yA) * (yC - yA)}$.`
+     const normeABsousRacine = (xB - xA) ** 2 + (yB - yA) ** 2
+      const normeACsousRacine = (xC - xA) ** 2 + (yC - yA) ** 2
       const texteCorrQ2 = `On calcule $\\Vert\\overrightarrow{AB}\\Vert$ : <br>
       $\\begin{aligned}
       \\Vert\\overrightarrow{AB}\\Vert&=\\sqrt{${ecritureParentheseSiNegatif(xB - xA)}^2+${ecritureParentheseSiNegatif(yB - yA)}^2}\\\\
-      &=\\sqrt{${(xB - xA) ** 2 + (yB - yA) ** 2}}${redAB[0] === 1 ? '' : '\\\\'}
-      ${redAB[0] === 1 ? '' : redAB[1] === 1 ? `&=${redAB[0]}` : `&=${redAB[0]}\\sqrt{${redAB[1]}}`}
+      &=${redAB[1] === 1 ? `${redAB[0]}` : `\\sqrt{${normeABsousRacine}}${redAB[0] === 1 ? '' : `\\\\&=${rienSi1(redAB[0])}\\sqrt{${redAB[1]}}`}`}
       \\end{aligned}$
     <br>
     On calcule $\\Vert\\overrightarrow{AC}\\Vert$ : <br>
       $\\begin{aligned}
       \\Vert\\overrightarrow{AC}\\Vert&=\\sqrt{${ecritureParentheseSiNegatif(xC - xA)}^2+${ecritureParentheseSiNegatif(yC - yA)}^2}\\\\
-      &=\\sqrt{${(xC - xA) ** 2 + (yC - yA) ** 2}}${redAC[0] === 1 ? '' : '\\\\'}
-      ${redAC[0] === 1 ? '' : redAC[1] === 1 ? `&=${redAC[0]}` : `&=${redAC[0]}\\sqrt{${redAC[1]}}`}
-      \\end{aligned}$
-      <br>
-      On en déduit : <br>
-      $\\begin{aligned}
-\\overrightarrow{AB}\\cdot\\overrightarrow{AC}&=\\Vert\\overrightarrow{AB}\\Vert\\times \\Vert\\overrightarrow{AC}\\Vert\\times \\cos(\\widehat{BAC})\\\\
-&= ${redAB[1] === 1 ? `${redAB[0]}` : `${rienSi1(redAB[0])}\\sqrt{${redAB[1]}}`}\\times ${redAC[1] === 1 ? `${redAC[0]}` : `${rienSi1(redAC[0])}\\sqrt{${redAC[1]}}`}\\times \\cos(\\widehat{BAC})\\\\
-&=${redABAC[1] === 1 ? `${redABAC[0]}` : `${rienSi1(redABAC[0])}\\sqrt{${redABAC[1]}}`}\\cos(\\widehat{BAC})
-\\end{aligned}$`
+      &=${redAC[1] === 1 ? `${redAC[0]}` : `\\sqrt{${normeACsousRacine}}${redAC[0] === 1 ? '' : `\\\\&=${rienSi1(redAC[0])}\\sqrt{${redAC[1]}}`}`}
+      \\end{aligned}$`
       const texteCorrQ3 = `En utilisant les deux égalités  
       $\\overrightarrow{AB}\\cdot\\overrightarrow{AC}=${(xB - xA) * (xC - xA) + (yB - yA) * (yC - yA)}$ 
       et $\\overrightarrow{AB}\\cdot\\overrightarrow{AC}=${redABAC[1] === 1 ? `${redABAC[0]}` : `${rienSi1(redABAC[0])}\\sqrt{${redABAC[1]}}`}\\cos(\\widehat{BAC})$, on obtient :<br>
