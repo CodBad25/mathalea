@@ -4,7 +4,7 @@ import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-export const titre = 'Connaître la relation de Newton.'
+export const titre = 'Connaître la relation de Pascal.'
 
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -17,9 +17,7 @@ export const refs = {
   'fr-ch': ['4mProbStat-18'],
 }
 /**
- * Modèle d'exercice très simple pour la course aux nombres
  * @author Stéphane Guyon
-
 */
 
 export default class nomExercice extends Exercice {
