@@ -51,7 +51,7 @@ export default class Can2026CM2Q26 extends ExerciceCan {
     const unite = 10
     this.nbCarreaux = num / den * unite
     this.reponse = this.nbCarreaux
-    this.question = `Tracer un segment de longueur $\\dfrac{${num}}{${den}}~\\text{u.l}$. `
+    this.question = `Trace un segment de longueur $\\dfrac{${num}}{${den}}~\\text{u.l}$. `
     this.correction = `L'unité a une longueur de $${unite}~\\text{carreaux}$ donc $\\dfrac{${num}}{${den}}~\\text{u.l}=${this.nbCarreaux}~\\text{carreaux}$.`
     this.correction += `<br><br>Il suffit donc de tracer un segment de longueur $${this.nbCarreaux}~\\text{carreaux}$.`
     this.canEnonce = ''
