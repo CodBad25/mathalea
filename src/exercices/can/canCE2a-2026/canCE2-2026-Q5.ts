@@ -25,7 +25,7 @@ export default class Can2026CE2Q5 extends ExerciceCan {
 
     const moitie = nombre / 2
 
-    this.question = `Compléter :<br>
+    this.question = `Compléter.<br>
     La moitié de $${texNombre(nombre)}$ est`
 
     this.correction = `La moitié de $${nombre}$ est : $${nombre}\\div 2=${miseEnEvidence(texNombre(moitie, 0))}$.`
@@ -37,6 +37,8 @@ export default class Can2026CE2Q5 extends ExerciceCan {
       this.question += ' $\\ldots$'
     }
     this.optionsChampTexte = { texteAvant: '', texteApres: `.` }
+     this.canEnonce = 'Complète.'
+    this.canReponseACompleter = ` La moitié de $${texNombre(nombre)}$ est $\\ldots$`
   }
 
   nouvelleVersion() {

@@ -36,9 +36,7 @@ export default class Can2026CE2Q8 extends ExerciceCan {
     this.reponse = resultat
     this.formatChampTexte = KeyboardType.clavierDeBase
     this.optionsChampTexte = { texteAvant: '<br>', texteApres: '' }
-    if (!this.interactif) {
-      this.question += '<br>$\\ldots$'
-    }
+   
   }
 
   nouvelleVersion() {
