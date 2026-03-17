@@ -263,7 +263,7 @@ export default class ArrondirUnDecimal extends Exercice {
                 value: (m * 1000 + c * 100 + d * 10 + u * 1).toString(),
               },
             })
-            texteCorr = `L'arrondiX ${termeEduscol} de $${nombreStr}$ est $${texNombre(m * 1000 + c * 100 + d * 10 + u * 1)}$.`
+            texteCorr = `L'arrondi ${termeEduscol} de $${nombreStr}$ est $${texNombre(m * 1000 + c * 100 + d * 10 + u * 1)}$.`
           } else {
             handleAnswers(this, indexQ, {
               reponse: {
@@ -374,7 +374,7 @@ export default class ArrondirUnDecimal extends Exercice {
                 ).toString(),
               },
             })
-            texteCorr = `Une valeur approchée au dixième par excès de $${nombreStr}$ est $${texNombre(m * 1000 + c * 100 + d * 10 + u * 1 + (di + 1) * 0.1)}$`
+            texteCorr = `Une valeur approchée au dixième par excès de $${nombreStr}$ est $${texNombre(m * 1000 + c * 100 + d * 10 + u * 1 + (di + 1) * 0.1)}$.`
           }
           indexQ++
           break
