@@ -1,4 +1,4 @@
-import { remplisLesBlancs } from '../../lib/interactif/questionMathLive'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { arrondi, nombreDeChiffresDe } from '../../lib/outils/nombres'
 import { sp } from '../../lib/outils/outilString'
@@ -11,7 +11,8 @@ import {
 } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { setReponse } from '../../lib/interactif/gestionInteractif'
 
 export const dateDePublication = '28/09/2022'
 export const titre = 'Encadrer un décimal'
@@ -25,11 +26,11 @@ export const amcType = 'AMCHybride'
  */
 
 export const refs = {
-  'fr-fr': ['6N1M'],
-  'fr-2016': ['6N31-5'],
-  'fr-ch': ['9NO7-8'],
+  'fr-fr': [],
+  'fr-2016': [],
+  'fr-ch': [],
 }
-export const uuid = 'a8c22'
+export const uuid = 'a8c21'
 export default class EncadrerUnDecimal extends Exercice {
   constructor() {
     super()
@@ -52,6 +53,23 @@ export default class EncadrerUnDecimal extends Exercice {
   }
 
   nouvelleVersion() {
+    /*
+        let listeTypeDeQuestions = []
+        if (!this.sup) { // Si aucune liste n'est saisie ou mélange demandé
+          listeTypeDeQuestions = combinaisonListes([1, 2, 3], this.nbQuestions)
+        } else {
+          const quests = this.sup.split('-')// Sinon on créé un tableau à partir des valeurs séparées par des -
+          for (let i = 0; i < quests.length; i++) { // on a un tableau avec des strings : ['1', '1', '2']
+            const choixtp = parseInt(quests[i])
+            if (choixtp >= 1 && choixtp <= 3) {
+              listeTypeDeQuestions.push(choixtp)
+            }
+          }
+          if (listeTypeDeQuestions.length === 0) { listeTypeDeQuestions = [1, 2, 3] }
+          listeTypeDeQuestions = combinaisonListes(listeTypeDeQuestions, this.nbQuestions)
+        }
+        */
+
     const listeTypeDeQuestions = gestionnaireFormulaireTexte({
       max: 3,
       defaut: 4,
@@ -62,6 +80,7 @@ export default class EncadrerUnDecimal extends Exercice {
 
     for (
       let i = 0,
+        indexQ = 0,
         texte,
         typesDeQuestions,
         texteCorr,
@@ -89,33 +108,43 @@ export default class EncadrerUnDecimal extends Exercice {
           // encadrement au centième
           reponseMin =
             m * 1000 + c * 100 + d * 10 + u * 1 + arrondi(di * 0.1 + ci * 0.01)
+          if (!context.isAmc) setReponse(this, indexQ, reponseMin)
+          texte = `Encadrer $${texNombre(m * 1000 + c * 100 + d * 10 + u * 1 + arrondi(di * 0.1 + ci * 0.01 + mi * 0.001))}$ au centième.<br>`
+          if (this.interactif) {
+            texte +=
+              ajouteChampTexteMathLive(
+                this,
+                indexQ,
+                KeyboardType.clavierNumbers,
+              ) + '$'
+          } else if (context.isAmc) {
+            texte += 'Ainsi  :' + sp(15) + 'a '
+          } else {
+            texte += '$ \\ldots\\ldots\\ldots '
+          }
+          indexQ++
+          texte += ` < ${texNombre(m * 1000 + c * 100 + d * 10 + u * 1 + arrondi(di * 0.1 + ci * 0.01 + mi * 0.001))} < `
           reponseMax =
             m * 1000 +
             c * 100 +
             d * 10 +
             u * 1 +
             arrondi(di * 0.1 + (ci + 1) * 0.01)
-          texte = `Encadrer $${texNombre(m * 1000 + c * 100 + d * 10 + u * 1 + arrondi(di * 0.1 + ci * 0.01 + mi * 0.001))}$ au centième.<br>`
-          if (!context.isAmc) {
-            texte += remplisLesBlancs(
-              this,
-              i,
-              `%{champ1}~<~${texNombre(m * 1000 + c * 100 + d * 10 + u * 1 + arrondi(di * 0.1 + ci * 0.01 + mi * 0.001))}~<~%{champ2}`,
-              'fillInTheBlank',
-            )
-          } else if (context.isAmc) {
+          if (!context.isAmc) setReponse(this, indexQ, reponseMax)
+          if (this.interactif) {
             texte +=
-              'Ainsi  :' +
-              sp(15) +
-              `$a~<~${texNombre(m * 1000 + c * 100 + d * 10 + u * 1 + arrondi(di * 0.1 + ci * 0.01 + mi * 0.001))}~<~b$`
+              '$' +
+              ajouteChampTexteMathLive(
+                this,
+                indexQ,
+                KeyboardType.clavierNumbers,
+              )
+          } else if (context.isAmc) {
+            texte += ' b'
+          } else {
+            texte += ' \\ldots\\ldots\\ldots $'
           }
-
-          if (!context.isAmc)
-            handleAnswers(this, i, {
-              champ1: { value: reponseMin },
-              champ2: { value: reponseMax },
-            })
-
+          indexQ++
           const nombreStr = texNombre(
             m * 1000 +
               c * 100 +
@@ -129,27 +158,39 @@ export default class EncadrerUnDecimal extends Exercice {
         case 2: {
           // encadrement au dixième
           reponseMin = m * 1000 + c * 100 + d * 10 + u * 1 + arrondi(di * 0.1)
+          if (!context.isAmc) setReponse(this, indexQ, reponseMin)
           texte = `Encadrer $${texNombre(m * 1000 + c * 100 + d * 10 + u * 1 + arrondi(di * 0.1 + ci * 0.01 + mi * 0.001))}$ au dixième.<br>`
-          if (!context.isAmc) {
-            texte += remplisLesBlancs(
-              this,
-              i,
-              `%{champ1} < ${texNombre(m * 1000 + c * 100 + d * 10 + u * 1 + arrondi(di * 0.1 + ci * 0.01 + mi * 0.001))} < %{champ2}`,
-            )
-          } else if (context.isAmc) {
+          if (this.interactif) {
             texte +=
-              'Ainsi  :' +
-              sp(15) +
-              `$a < ${texNombre(m * 1000 + c * 100 + d * 10 + u * 1 + arrondi(di * 0.1 + ci * 0.01 + mi * 0.001))} < b$`
+              ajouteChampTexteMathLive(
+                this,
+                indexQ,
+                KeyboardType.clavierNumbers,
+              ) + '$'
+          } else if (context.isAmc) {
+            texte += 'Ainsi  :' + sp(15) + 'a '
+          } else {
+            texte += '$ \\ldots\\ldots\\ldots '
           }
+          indexQ++
+          texte += ` < ${texNombre(m * 1000 + c * 100 + d * 10 + u * 1 + arrondi(di * 0.1 + ci * 0.01 + mi * 0.001))} < `
           reponseMax =
             m * 1000 + c * 100 + d * 10 + u * 1 + arrondi((di + 1) * 0.1)
-          if (!context.isAmc)
-            handleAnswers(this, i, {
-              champ1: { value: reponseMin },
-              champ2: { value: reponseMax },
-            })
-
+          if (!context.isAmc) setReponse(this, indexQ, reponseMax)
+          if (this.interactif) {
+            texte +=
+              '$' +
+              ajouteChampTexteMathLive(
+                this,
+                indexQ,
+                KeyboardType.clavierNumbers,
+              )
+          } else if (context.isAmc) {
+            texte += ' b'
+          } else {
+            texte += '\\ldots\\ldots\\ldots $ '
+          }
+          indexQ++
           const nombreStr = texNombre(
             m * 1000 +
               c * 100 +
@@ -164,26 +205,38 @@ export default class EncadrerUnDecimal extends Exercice {
         default: {
           // encadrement à l'unité
           reponseMin = m * 1000 + c * 100 + d * 10 + u * 1
+          if (!context.isAmc) setReponse(this, indexQ, reponseMin)
           texte = `Encadrer $${texNombre(m * 1000 + c * 100 + d * 10 + u * 1 + arrondi(di * 0.1 + ci * 0.01 + mi * 0.001))}$ à l'unité.<br>`
-          if (!context.isAmc) {
-            texte += remplisLesBlancs(
-              this,
-              i,
-              `%{champ1} < ${texNombre(m * 1000 + c * 100 + d * 10 + u * 1 + arrondi(di * 0.1 + ci * 0.01 + mi * 0.001))} < %{champ2}`,
-            )
-          } else if (context.isAmc) {
+          if (this.interactif) {
             texte +=
-              'Ainsi  :' +
-              sp(15) +
-              `$a < ${texNombre(m * 1000 + c * 100 + d * 10 + u * 1 + arrondi(di * 0.1 + ci * 0.01 + mi * 0.001))} < b$`
+              ajouteChampTexteMathLive(
+                this,
+                indexQ,
+                KeyboardType.clavierNumbers,
+              ) + '$'
+          } else if (context.isAmc) {
+            texte += 'Ainsi  :' + sp(15) + 'a '
+          } else {
+            texte += '$ \\ldots\\ldots\\ldots '
           }
+          indexQ++
+          texte += ` < ${texNombre(m * 1000 + c * 100 + d * 10 + u * 1 + arrondi(di * 0.1 + ci * 0.01 + mi * 0.001))} < `
           reponseMax = m * 1000 + c * 100 + d * 10 + (u + 1) * 1
-          if (!context.isAmc)
-            handleAnswers(this, i, {
-              champ1: { value: reponseMin },
-              champ2: { value: reponseMax },
-            })
-
+          if (!context.isAmc) setReponse(this, indexQ, reponseMax)
+          if (this.interactif) {
+            texte +=
+              '$' +
+              ajouteChampTexteMathLive(
+                this,
+                indexQ,
+                KeyboardType.clavierNumbers,
+              )
+          } else if (context.isAmc) {
+            texte += ' b'
+          } else {
+            texte += '\\ldots\\ldots\\ldots $ '
+          }
+          indexQ++
           const nombreStr = texNombre(
             m * 1000 +
               c * 100 +
