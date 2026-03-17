@@ -57,9 +57,9 @@ export default class Can20266Q30 extends ExerciceCan {
 Elle les emballe par boîte de $10$.<br>
 Combien de boîtes faut-il ?`
     this.reponse = Math.ceil(Nombre / 10)
-    this.correction = `Il faut partager $${texNombre(Nombre)}$ en $10$ pour trouver le nombre de boîtes pleines et mettre ce qui reste dans une autre boîte.<br>`
-    this.correction += `Or, $${texNombre(Nombre)}=(${Math.floor(Nombre / 10)} \\times 10) + ${Nombre % 10}$.<br>`
-    this.correction += `Il y aura donc $${Math.floor(Nombre / 10)}$ boîtes pleines et une autre boîte pour les $${Nombre % 10}$ ${choixQuestion!.produit} qui restent, soit $${miseEnEvidence(texNombre(this.reponse))}$ boîtes.`
+    this.correction = `Il faut partager $${texNombre(Nombre)}$ en $10$ pour trouver le nombre de boîtes pleines.<br>`
+    this.correction += `Or, $${texNombre(Nombre)}=${Math.floor(Nombre / 10)} \\times 10$.<br>`
+    this.correction += `Il y aura donc $${miseEnEvidence(texNombre(this.reponse))}$ boîtes pleines.`
   this.canReponseACompleter = 'Il faut $\\dots$ boîtes.'
   }
 

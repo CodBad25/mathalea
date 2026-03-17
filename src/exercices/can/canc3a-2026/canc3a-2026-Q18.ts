@@ -37,8 +37,8 @@ export default class Can2026CM2Q18 extends ExerciceCan {
 
     this.correction = `La moitié de $${texNombre(n, 0)}$ est $${texNombre(n, 0)}\\div 2=${miseEnEvidence(texNombre(n / 2, 0))}$.`
 
-    this.canEnonce = `La moitié de $${texNombre(n, 0)}$.`
-    this.canReponseACompleter = '$\\ldots$'
+    this.canEnonce = `La moitié de $${texNombre(n, 0)}$`
+    this.canReponseACompleter = ''
   }
 
   nouvelleVersion () {

@@ -1,9 +1,5 @@
 import { droiteGraduee } from '../../../lib/2d/DroiteGraduee'
-import { fixeBordures } from '../../../lib/2d/fixeBordures'
-import { MetaInteractif2d } from '../../../lib/2d/interactif2d'
-import { segment } from '../../../lib/2d/segmentsVecteurs'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { ajouteFeedback } from '../../../lib/interactif/questionMathLive'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { context } from '../../../modules/context'
@@ -21,97 +17,123 @@ export const refs = {
 }
 
 /**
- * @author Jean-Claude Lhote
+ * @author Gilles Mora
 
 */
 export default class Can2026CM2Q16 extends ExerciceCan {
-  constructor () {
-    super()
-    this.formatInteractif = 'MetaInteractif2d'
-  }
- 
-  enonce (min?: number, max?: number, abscisse?: number) {
-    if (min == null || max == null || abscisse == null) {
-      min = randint(0, 9)
-      max = min + 1
-      abscisse = min + randint(1, 9) * 0.1
-    }
- 
-    const dg = droiteGraduee({
+  enonce() {
+    const min = this.canOfficielle ? 2 : randint(0, 8)
+    const max = min + 1
+
+    // Les 9 dixièmes reçoivent les lettres A..I
+    const lettres = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I']
+
+    // pointListe : une lettre par dixième (0.1, 0.2, ..., 0.9)
+    const pointListe: [number, string][] = lettres.map((l, i) => [
+      min + (i + 1) * 0.1,
+      `\\text{${l}}`,
+    ])
+
+    // Lettre cible
+    // Version officielle : D → min + 0.4 = 2.4
+    const indexCible = this.canOfficielle ? 3 : randint(0, 8)
+    const lettreCible = lettres[indexCible]
+    const abscisseCible = min + (indexCible + 1) * 0.1
+
+    // ── Droite question (toutes les lettres) ──────────────────────────────
+    const d = droiteGraduee({
+      Unite: 10,
       Min: min,
-      Max: max + 0.05,
+      Max: max+0.1,
       x: 0,
       y: 0,
       thickDistance: 1,
-      thickSecDist: 0.1,
-      labelsPrincipaux: false,
       thickSec: true,
-      thickEpaisseur: 1,
+      thickSecDist: 0.1,
+      thickOffset: 0,
+      axeStyle: '->',
       labelListe: [
         [min, texNombre(min, 0)],
-        [max, texNombre(max, 0)]
+        [max, texNombre(max, 0)],
       ],
-      labelCustomDistance: 2.5,
-      Unite: 10
+      labelsPrincipaux: false,
+      pointListe,
+      pointCouleur: 'black',
+      pointStyle: '',
     })
-    const fleche = segment(
-      (abscisse - min) * 10,
-      -2,
-      (abscisse - min) * 10,
-      -0.5
-    )
-    const flecheMin = segment(0, -2, 0, -0.5)
-    const flecheMax = segment((max - min) * 10, -2, (max - min) * 10, -0.5)
-    flecheMax.styleExtremites = '->'
-    flecheMin.styleExtremites = '->'
-    fleche.styleExtremites = '->'
-    fleche.tailleExtremites = context.isHtml ? 6 : 1.5
-    flecheMax.tailleExtremites = context.isHtml ? 6 : 1.5
-    flecheMin.tailleExtremites = context.isHtml ? 6 : 1.5
- 
-    const input = new MetaInteractif2d(
-      [
-        {
-          x: (abscisse - min) * 10,
-          y: -3,
-          content: '%{champ1}',
-          classe: KeyboardType.clavierDeBase,
-          blanc: '\\ldots',
-          opacity: 0.8,
-          index: 0
-        }
+
+    // ── Droite correction PDF (lettre cible en bleu) ───────────────────────
+    const dCorrection = droiteGraduee({
+      Unite: 10,
+      Min: min,
+      Max: max,
+      x: 0,
+      y: 0,
+      thickDistance: 1,
+      thickSec: true,
+      thickSecDist: 0.1,
+      thickOffset: 0,
+      axeStyle: '->',
+      labelListe: [
+        [min, texNombre(min, 0)],
+        [max, texNombre(max, 0)],
       ],
-      { exercice: this, question: 0 }
+      labelsPrincipaux: false,
+      pointListe: [[abscisseCible, `\\text{${lettreCible}}`]],
+      pointCouleur: 'blue',
+      pointStyle: '',
+    })
+
+    // ── Réponse ────────────────────────────────────────────────────────────
+    this.reponse = lettreCible
+
+    // ── Question ───────────────────────────────────────────────────────────
+    const figureQuestion = mathalea2d(
+      {
+        xmin: -1,
+        ymin: -1.3,
+        xmax: 12,
+        ymax: 1.2,
+        pixelsParCm: 20,
+        scale: 0.6,
+        style: 'margin: auto',
+      },
+      d,
     )
-    const objets = [dg, fleche, input, flecheMin, flecheMax]
- 
-    const figure = mathalea2d(
-      Object.assign(
-        { scale: 0.38 },
-        fixeBordures(objets, { rxmin: -0.7, rxmax: 0.3 })
-      ),
-      objets
-    )
-    this.reponse = { field0: { value: texNombre(abscisse, 1) } }
-    this.question =
-      'Complète.' +
-      figure +
-      (context.isHtml
-        ? `<span id="resultatCheckEx${this.numeroExercice}Q0"></span>` +
-          ajouteFeedback(this, 0)
-        : '')
- 
-    this.correction = `Un pas de graduation est égal à $0{,}1$ et il y a $${texNombre((abscisse - min) / 0.1, 0)}$ pas de graduation entre $${texNombre(min, 0)}$ et la flèche.<br>
-    Donc l'abscisse de la flèche est $${miseEnEvidence(texNombre(abscisse, 1))}$.`
- 
-    this.formatChampTexte = KeyboardType.clavierDeBase
-    this.canEnonce = 'Complète.' 
-     this.canReponseACompleter = figure
+    this.question = figureQuestion
+    this.question += `<br>Quelle lettre repère le nombre $${texNombre(abscisseCible, 1)}$ ?`
+
+    // ── Correction ─────────────────────────────────────────────────────────
+    if (context.isHtml) {
+      this.correction = `L'unité est partagée en $10$ donc la lettre qui repère $${texNombre(abscisseCible, 1)}$ est $${miseEnEvidence(lettreCible)}$.`
+    } else {
+      this.correction = mathalea2d(
+        {
+          xmin: -1,
+          ymin: -1.3,
+          xmax: 11,
+          ymax: 1.5,
+          pixelsParCm: 20,
+          scale: 0.5,
+          style: 'margin: auto',
+        },
+        dCorrection,
+      )
+      this.correction += `<br>La lettre qui repère $${texNombre(abscisseCible, 1)}$ est $${miseEnEvidence(lettreCible)}$.`
+    }
+
+    // ── canEnonce / canReponseACompleter ───────────────────────────────────
+    this.canEnonce = figureQuestion
+    this.canEnonce += `<br>Quelle lettre repère le nombre $${texNombre(abscisseCible, 1)}$ ?`
+    this.canReponseACompleter = ''
   }
- 
-  nouvelleVersion () {
-    this.canOfficielle || this.sup
-      ? this.enonce(2, 3, 2.4)
-      : this.enonce()
+
+  nouvelleVersion() {
+    this.optionsDeComparaison = {
+      texteSansCasse: true
+    }
+     this.optionsChampTexte = { texteAvant: '<br>' }
+    this.formatChampTexte = KeyboardType.clavierMajuscules
+    this.enonce()
   }
 }

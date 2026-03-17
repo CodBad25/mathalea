@@ -23,9 +23,9 @@ export default class Can2026CM2Q14 extends ExerciceCan {
     super()
     this.enonce()
     this.optionsChampTexte = { texteAvant: '$~=~$' }
-    this.formatChampTexte = KeyboardType.clavierDeBase
+    this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
     this.optionsDeComparaison = {
-      nombreDecimalSeulement: true
+      nombreDecimalSeulement: true, fractionEgale:true
     }
   }
  
@@ -53,7 +53,7 @@ export default class Can2026CM2Q14 extends ExerciceCan {
     const nbDecimales = denominateur === 10 ? 1 : denominateur === 100 ? 2 : 3
     const resultat = a + numerateur / denominateur
  
-    this.reponse = texNombre(resultat, nbDecimales)
+    this.reponse = `\\dfrac{${a*denominateur+numerateur}}{${denominateur}}`
     this.question = `$${texNombre(a, nbDecimales)}+\\dfrac{${numerateur}}{${texNombre(denominateur, 0)}}$`
  
     this.correction = `$${texNombre(a, nbDecimales)}+\\dfrac{${numerateur}}{${texNombre(denominateur, 0)}}=${texNombre(a, nbDecimales)}+${texNombre(numerateur / denominateur, nbDecimales)}=${miseEnEvidence(texNombre(resultat, nbDecimales))}$`

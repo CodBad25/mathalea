@@ -20,26 +20,27 @@ export const refs = {
 export default class Can2026CM2Q13 extends ExerciceCan {
   constructor() {
     super()
-        this.formatChampTexte = KeyboardType.clavierDeBase
+    this.formatChampTexte = KeyboardType.clavierDeBase
     this.optionsChampTexte = { texteApres: '$\\text{ m}$' }
-      this.optionsDeComparaison = {
+    this.optionsDeComparaison = {
       nombreDecimalSeulement: true,
     }
   }
 
-  enonce(m?: number,cm?: number) {
-    if (m== null || cm == null) {
-      m = randint(2,6)
-      cm = randint(5, 20) 
+  enonce(m?: number, cm?: number) {
+    if (m == null || cm == null) {
+      m = randint(2, 6)
+      cm = randint(5, 20)
     }
 
     this.reponse = texNombre(m + cm / 100, 2)
 
     this.question = `$${texNombre(m, 0)}\\text{ m}+${texNombre(cm, 0)}\\text{ cm}=$`
-
-    this.correction = `$${texNombre(m, 0)}\\text{ m}+${texNombre(cm, 0)}\\text{ cm}=${texNombre(m, 0)}\\text{ m}+${texNombre(cm/100, 2)}\\text{ m}$.<br>
+    if (!this.interactif) {
+      this.question += ` $\\ldots\\text{ m}$ `
+    }
+    this.correction = `$${texNombre(m, 0)}\\text{ m}+${texNombre(cm, 0)}\\text{ cm}=${texNombre(m, 0)}\\text{ m}+${texNombre(cm / 100, 2)}\\text{ m}$<br>
     Donc $${texNombre(m, 0)}\\text{ m}+${texNombre(cm, 0)}\\text{ cm}=${miseEnEvidence(texNombre(m + cm / 100, 2))}\\text{ m}$.`
-
 
     this.canEnonce = 'Complète.'
     this.canReponseACompleter = `$${texNombre(m, 0)}\\text{ m}+${texNombre(cm, 0)}\\text{ cm}= \\ldots \\text{ m}$`

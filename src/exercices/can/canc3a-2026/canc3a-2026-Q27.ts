@@ -53,6 +53,7 @@ export default class Can2026CM2Q27 extends ExerciceCan {
 
     this.question = `J'achète ${NomViennoiserie![0]} à $${texPrix(PrixViennoiserie)}$ €.<br>
            Je donne $${PrixBillet}$ €.`
+           if(!this.interactif){this.question+=`<br>On me rend $\\ldots$  €.`}
     this.correction = `On doit me rendre $${PrixBillet}~€ -${texPrix(PrixViennoiserie)}~€=${miseEnEvidence(texPrix(this.reponse))}$ €.`
 
     this.canReponseACompleter = 'On me rend $\\dots$ €.'
