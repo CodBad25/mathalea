@@ -31,12 +31,12 @@ export default class Can20266Q27 extends ExerciceCan {
   }
 
   listeviennoiserie = [
-    ['croissants'],
-    ['pains au chocolat'],
-    ['chocolatines'],
-    ['pains aux raisins'],
-    ['cookies'],
-    ['brioches'],
+    ['croissants', 'chacun'],
+    ['pains au chocolat', 'chacun'],
+    ['chocolatines', 'chacune'],
+    ['pains aux raisins', 'chacun'],
+    ['cookies', 'chacun'],
+    ['briochettes', 'chacune'],
   ]
 
   enonce(
@@ -51,9 +51,9 @@ export default class Can20266Q27 extends ExerciceCan {
     }
 
     this.reponse = PrixBillet! - 2 * PrixUneViennoiserie
-    this.question = `J'achète deux ${NomViennoiserie} à $${texPrix(PrixUneViennoiserie)}$ €. <br>
+    this.question = `J'achète deux ${NomViennoiserie![0]} à $${texPrix(PrixUneViennoiserie)}$ € ${NomViennoiserie![1]}. <br>
            Je donne $${PrixBillet!}$  €.`
-    this.correction = `Deux ${NomViennoiserie} coûtent $2\\times${texPrix(PrixUneViennoiserie)}~€=${texPrix(2 * PrixUneViennoiserie)}~€$.<br>`
+    this.correction = `Deux ${NomViennoiserie![0]} coûtent $2\\times${texPrix(PrixUneViennoiserie)}~€=${texPrix(2 * PrixUneViennoiserie)}~€$.<br>`
     this.correction += `On doit me rendre $${PrixBillet!}~€ -${texPrix(2 * PrixUneViennoiserie)}~€=${miseEnEvidence(texPrix(this.reponse))}$ €.`
     if (this.interactif) {
       this.optionsChampTexte = {
