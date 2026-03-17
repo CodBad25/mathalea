@@ -84,14 +84,14 @@ export default class CalculsProbabilite2 extends ExerciceSimple {
         $\\dfrac{\\text{Nombre de boules ${couleurDemandee}s}}{\\text{Nombre total de boules}}
              =${new FractionEtendue(a, denom).estIrreductible ? miseEnEvidence(reponsepossible) : reponsepossible}  ${choix ? fraction(a, denom).texSimplificationAvecEtapes(false, orangeMathalea) : fraction(b, denom).texSimplificationAvecEtapes(false, orangeMathalea)}$`
       this.reponse = choix
-        ? `$${fraction(a, denom).texFractionSimplifiee}$`
-        : `$${fraction(b, denom).texFractionSimplifiee}$`
+        ? `${fraction(a, denom).texFractionSimplifiee}`
+        : `${fraction(b, denom).texFractionSimplifiee}`
     } else {
       // décimal
       this.correction = `${correctionCommun}
         $\\dfrac{\\text{Nombre de boules ${couleurDemandee}s}}{\\text{Nombre total de boules}}
              =${choix ? fraction(a, denom).texFraction : fraction(b, denom).texFraction} =${miseEnEvidence(`${choix ? texNombre(a / denom) : texNombre(b / denom)}`)}$`
-      this.reponse = choix ? a / denom : b / denom
+      this.reponse = choix ? texNombre(a / denom) : texNombre(b / denom)
     }
 
     // Version QCM : proposer des distracteurs plausibles
