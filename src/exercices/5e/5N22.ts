@@ -7,12 +7,20 @@ import { labelPoint } from '../../lib/2d/textes'
 import { rotation } from '../../lib/2d/transformations'
 import { lampeMessage } from '../../lib/format/message'
 import { texteGras } from '../../lib/format/style'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { shuffle } from '../../lib/outils/arrayOutils'
 import { texteEnCouleur } from '../../lib/outils/embellissements'
 import { numAlpha } from '../../lib/outils/outilString'
+import { fraction } from '../../modules/fractions'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+
+export const interactifReady = true
+export const interactifType = 'mathLive'
+export const dateDeModificationImportante = '17/03/2026' // Rendu interactif par Jean-Claude Lhote
 export const titre = 'Résoudre un problème en utilisant des fractions'
 
 /**
@@ -80,7 +88,6 @@ export default class ProblemesAdditifsFractions5e extends Exercice {
     for (
       let i = 0, texte, texteCorr, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       // on définit les fractions pour les vols et les arguments pour le graphique
       type FracVols = [
@@ -412,11 +419,11 @@ ${texteGras('Les angles de même couleur ont la même mesure.')}<br>
 ${texteGras("L'angle vert est un angle plat.")}<br>
 ${situations.fig}
 
-${numAlpha(indexSouSegmentQuestion++)} Quelle fraction représente les ${situations.nom_enonce} vers ${situations.cat1.destination} ?<br>
-${numAlpha(indexSouSegmentQuestion++)} Quelle fraction représente les ${situations.nom_enonce} vers ${situations.cat2.destination} ?<br>
+${numAlpha(indexSouSegmentQuestion++)} Quelle fraction représente les ${situations.nom_enonce} vers ${situations.cat1.destination} ?${ajouteChampTexteMathLive(this, 3 * i, KeyboardType.clavierNumbers)}<br>
+${numAlpha(indexSouSegmentQuestion++)} Quelle fraction représente les ${situations.nom_enonce} vers ${situations.cat2.destination} ?${ajouteChampTexteMathLive(this, 3 * i + 1, KeyboardType.clavierNumbers)}<br>
 ${numAlpha(indexSouSegmentQuestion++)} Sachant que ${situations.last_question[0]} ${situations.nb_total} ${situations.last_question[1]}
 et que les ${situations.nom_enonce} vers ${situations.cat3.destination} représentent $\\dfrac{${situations.cat3.frac[0]}}{${situations.cat3.frac[1]}}$ de ce total,
-calculer ${situations.last_question[2]} vers ${situations.cat3.destination} ?
+calculer ${situations.last_question[2]} vers ${situations.cat3.destination} ?${ajouteChampTexteMathLive(this, 3 * i + 2, KeyboardType.clavierNumbers)}
 
 `,
         correction: `
@@ -439,6 +446,23 @@ ${texteEnCouleur(`${situations.last_question[3]} vers ${situations.cat3.destinat
         // Si la question n'a jamais été posée, on en créé une autre
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr
+        handleAnswers(this, 3 * i, {
+          reponse: {
+            value: fraction(situations.cat1.frac[0], situations.cat1.frac[1])
+              .texFraction,
+            options: { fractionEgale: true },
+          },
+        })
+        handleAnswers(this, 3 * i + 1, {
+          reponse: {
+            value: fraction(situations.cat2.frac[0], situations.cat2.frac[1])
+              .texFraction,
+            options: { fractionEgale: true },
+          },
+        })
+        handleAnswers(this, 3 * i + 2, {
+          reponse: { value: situations.nb_total / situations.cat3.frac[1] },
+        })
         i++
       }
       cpt++
