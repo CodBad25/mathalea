@@ -54,7 +54,8 @@ export default class Can2026CE2Q6 extends ExerciceCan {
     }
 
     this.correction += `En tout j'ai $${miseEnEvidence(texPrix(total))}$ €.`
-
+  this.canEnonce =`J'ai $${nbBillets}$ billets de $${valeurBillet}$ € et ${textePieces} de $${valeurPiece}$ €.<br>
+    Combien ai-je en tout ?`
     this.canReponseACompleter = '$\\ldots$ €'
     this.reponse = total
     this.formatChampTexte = KeyboardType.clavierDeBase

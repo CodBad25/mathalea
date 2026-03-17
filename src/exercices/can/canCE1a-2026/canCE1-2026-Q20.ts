@@ -148,10 +148,10 @@ constructor() {
       objets,
     )
 
-    this.consigne = `Entoure la représentation de la fraction un demi.` + dessin
+    this.consigne = `Coche la représentation de la fraction un demi.` + dessin
 
     const monQcm = propositionsQcm(this, 0)
-    this.canEnonce = dessin +  'Entoure la représentation de la fraction un demi.'
+    this.canEnonce = dessin +  'Coche la représentation de la fraction un demi.'
     this.question = `${monQcm.texte}`
 
     this.correction =

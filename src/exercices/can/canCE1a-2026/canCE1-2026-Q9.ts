@@ -70,11 +70,13 @@ export default class Can2026CE1Q9 extends ExerciceCan {
       ],
     }
 
-    this.consigne = `Entoure le nombre<i> ${lettres
+    this.consigne = `Entoure le nombre  $\\textit{${lettres
       .charAt(0)
-      .toUpperCase()}${lettres.slice(1)}.<i>`
+      .toUpperCase()}${lettres.slice(1)}}$.`
     const monQcm = propositionsQcm(this, 0)
-    this.canEnonce = 'Coche la bonne réponse.<br>' + this.consigne
+    this.canEnonce = `Coche le nombre $\\textit{${lettres
+      .charAt(0)
+      .toUpperCase()}${lettres.slice(1)}}$.`
     this.question = `${monQcm.texte}`
     this.correction =
       monQcm.texteCorr +
