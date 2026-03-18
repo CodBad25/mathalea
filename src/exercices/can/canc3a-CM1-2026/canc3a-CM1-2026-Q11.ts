@@ -7,7 +7,7 @@ import ExerciceCan from '../../ExerciceCan'
 export const titre = 'Compléter une égalité'
 export const interactifReady = true
 export const interactifType = 'mathLive'
-export const uuid = '257d0'
+export const uuid = '450b6'
 export const refs = {
   'fr-fr': [],
   'fr-ch': [],
@@ -17,14 +17,16 @@ export const refs = {
  * @author Gilles Mora
 
 */
-export default class Can2026CM2Q11 extends ExerciceCan {
+export default class Can2026CM1Q11 extends ExerciceCan {
   enonce(a?: number, b?: number, c?: number) {
     if (a == null || b == null || c == null) {
-      a = randint(3, 5)
-      b = randint(4, 7)
-      c = a * b - randint(2, 5)
+      do {
+        a = randint(3, 5)
+        b = randint(6, 7)
+        c = b - randint(2, 4)
+      } while (c === a)
     }
-    const result = a * b - c
+    const result = a + b - c
 
     this.formatChampTexte = KeyboardType.clavierDeBase
     this.formatInteractif = 'fillInTheBlank'
@@ -34,18 +36,18 @@ export default class Can2026CM2Q11 extends ExerciceCan {
       champ1: { value: result },
     }
 
-    this.question = `${a}\\times ${b} = %{champ1} +${c}`
+    this.question = `${a}+ ${b} = %{champ1} +${c}`
 
     this.correction = `$\\begin{aligned}
-    ${a}\\times ${b} &= \\ldots + ${c}\\\\
-   ${a * b} &=${miseEnEvidence(texNombre(result, 0))}+ ${c}
+    ${a}+ ${b} &= \\ldots + ${c}\\\\
+   ${a + b} &=${miseEnEvidence(texNombre(result, 0))}+ ${c}
     \\end{aligned}$`
 
     this.canEnonce = 'Complète.'
-    this.canReponseACompleter = `$${a}\\times ${b} = \\ldots + ${c}$`
+    this.canReponseACompleter = `$${a}+ ${b} = \\ldots +${c}$`
   }
 
   nouvelleVersion() {
-    this.canOfficielle ? this.enonce(3, 5, 12) : this.enonce()
+    this.canOfficielle ? this.enonce(4, 6, 8) : this.enonce()
   }
 }
