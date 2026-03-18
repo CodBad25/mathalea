@@ -2,7 +2,7 @@ import Decimal from 'decimal.js'
 import { abs, acos, equal, largerEq, max, polynomialRoot, round } from 'mathjs'
 import FractionEtendue, { rationnalise } from '../../modules/FractionEtendue'
 import { egal, randint } from '../../modules/outils'
-import { generateCleaner } from '../interactif/comparisonFunctions'
+import { generateCleaner } from '../interactif/cleaners'
 import { choice } from '../outils/arrayOutils'
 import {
   ecritureAlgebrique,
