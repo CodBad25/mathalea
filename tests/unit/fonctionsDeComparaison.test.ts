@@ -3248,6 +3248,16 @@ describe('fonctionComparaison', () => {
     })
     expect(result.isOk).toBe(true)
 
+    result = fonctionComparaison('4;-5;10{,}2', '4;-5;10.2', {
+      suiteRangeeDeNombres: true,
+    })
+    expect(result.isOk).toBe(true)
+
+    result = fonctionComparaison('3;3', '3;3', {
+      suiteRangeeDeNombres: true,
+    })
+    expect(result.isOk).toBe(false)
+
     result = fonctionComparaison(
       '\\sqrt7;\\dfrac23;10^2',
       '\\sqrt7;\\dfrac23;10^{2}',
