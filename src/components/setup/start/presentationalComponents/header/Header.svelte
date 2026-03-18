@@ -28,6 +28,7 @@
   export let toggleSidenav: (test: boolean) => void
   export let exportQcmCam: () => Promise<void>
   export let isMd: boolean
+  export let isFlowmath: boolean
 
   let reorderModalDisplayed: boolean
 </script>
@@ -52,6 +53,9 @@
         {isExercisesListEmpty}
         {isCapytale}
         {handleRecorder}
+        {locale}
+        {handleLanguage}
+        {isFlowmath}
       />
     </div>
   {:else}

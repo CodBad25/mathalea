@@ -441,6 +441,7 @@
         {toggleSidenav}
         {exportQcmCam}
         {isMd}
+        isFlowmath={$globalOptions.recorder === 'flowmath'}
       />
       {#if isMd}
         <!-- ====================================================================================
