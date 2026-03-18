@@ -4,7 +4,8 @@ import {
   type Expression,
 } from '@cortex-js/compute-engine'
 import { randint } from '../../modules/outils'
-import ce, { generateCleaner } from '../interactif/comparisonFunctions'
+import { generateCleaner } from '../interactif/cleaners'
+import ce from '../interactif/comparisonFunctions'
 import { ecritureAlgebrique } from '../outils/ecritures'
 import { miseEnEvidence } from '../outils/embellissements'
 import { Matrice, matrice } from './Matrice'

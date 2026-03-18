@@ -12,10 +12,7 @@ import { pointEstSur } from '../../lib/2d/utilitairesGeometriques'
 import { milieu } from '../../lib/2d/utilitairesPoint'
 import { vecteur } from '../../lib/2d/Vecteur'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import {
-  handleAnswers,
-  setReponse,
-} from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { numAlpha } from '../../lib/outils/outilString'
@@ -269,25 +266,18 @@ export default class SymAxeEtCoordonnees extends Exercice {
         }
         texteCorr +=
           (i === 0 ? numAlpha(i) : '<br>' + numAlpha(i)) +
-          ` $${lettre1[i]}'$, l'image de $${lettre1[i]}$ par la symétrie d'axe $(d)$ a pour coordonnées $${miseEnEvidence(`(${texNombre(punto[i][0])};${texNombre(punto[i][1])})`)}$.<br>`
+          ` $${lettre1[i]}'$, l'image de $${lettre1[i]}$ par la symétrie d'axe $(d)$ a pour coordonnées $(${miseEnEvidence(`${texNombre(punto[i][0])};${texNombre(punto[i][1])}`)})$.<br>`
         texte += ajouteChampTexteMathLive(
           this,
           i,
-          KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets,
+          KeyboardType.lyceeClassique,
+          { texteAvant: `$~~${lettre1[i]}^{\\prime}($`, texteApres: '$)$' },
         )
         texte += '<br>'
-        if (context.isAmc)
-          setReponse(this, i, [
-            `${punto[i][0]};${punto[i][1]}`,
-            `(${punto[i][0]};${punto[i][1]})`,
-          ])
         handleAnswers(this, i, {
           reponse: {
-            value: [
-              `${punto[i][0]};${punto[i][1]}`,
-              `(${punto[i][0]};${punto[i][1]})`,
-            ],
-            options: { texteAvecCasse: true },
+            value: [`${punto[i][0]};${punto[i][1]}`],
+            options: { coordonnees: true },
           },
         })
 

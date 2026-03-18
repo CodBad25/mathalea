@@ -1,10 +1,10 @@
 import type { MathfieldElement } from 'mathlive'
-import { generateCleaner } from '../../../lib/interactif/comparisonFunctions'
+import { generateCleaner } from '../../../lib/interactif/cleaners'
 import { toutPourUnPoint } from '../../../lib/interactif/mathLive'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
+import type { IExercice } from '../../../lib/types'
 import { randint } from '../../../modules/outils'
-import type { IExercice } from '../../Exercice.type'
 import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Trouver un produit égal à 1000'

@@ -241,35 +241,21 @@ export const FILTER_SECTIONS_TITLES: FilterSectionNameType = {
 
 export type ResultType = { isOk: boolean; feedback?: string }
 export type OptionsComparaisonType = {
-  noFeedback?: boolean
-  expressionsForcementReduites?: boolean
-  avecSigneMultiplier?: boolean
-  avecFractions?: boolean
-  sansTrigo?: boolean
+  texteAvecCasse?: boolean
+  texteSansCasse?: boolean
+  additionSeulementEtNonResultat?: boolean
+  soustractionSeulementEtNonResultat?: boolean
+  multiplicationSeulementEtNonResultat?: boolean
+  divisionSeulementEtNonResultat?: boolean
+  avecFractions?: boolean // Encore utile ?
   fractionIrreductible?: boolean
   fractionSimplifiee?: boolean
   fractionReduite?: boolean
   fractionDecimale?: boolean
   fractionEgale?: boolean
   fractionIdentique?: boolean
-  fractionSansRacineCarree?: boolean
   nombreDecimalSeulement?: boolean
   expressionNumerique?: boolean
-  additionSeulementEtNonResultat?: boolean
-  soustractionSeulementEtNonResultat?: boolean
-  multiplicationSeulementEtNonResultat?: boolean
-  divisionSeulementEtNonResultat?: boolean
-  ensembleDeNombres?: boolean
-  fonction?: boolean
-  kUplet?: boolean
-  seulementCertainesPuissances?: boolean
-  sansExposantUn?: boolean
-  suiteDeNombres?: boolean
-  suiteRangeeDeNombres?: boolean
-  factorisation?: boolean
-  exclusifFactorisation?: boolean
-  nbFacteursIdentiquesFactorisation?: boolean
-  unSeulFacteurLitteral?: boolean
   HMS?: boolean
   intervalle?: boolean
   estDansIntervalle?: boolean
@@ -277,23 +263,33 @@ export type OptionsComparaisonType = {
   unite?: boolean
   precisionUnite?: number
   puissance?: boolean
-  texteAvecCasse?: boolean
-  texteSansCasse?: boolean
+  sansExposantUn?: boolean
+  seulementCertainesPuissances?: boolean
   nombreAvecEspace?: boolean
-  developpementEgal?: boolean
   egaliteExpression?: boolean
-  calculFormel?: boolean
-  noUselessParen?: boolean
+  factorisation?: boolean
+  exclusifFactorisation?: boolean
+  nbFacteursIdentiquesFactorisation?: boolean
+  unSeulFacteurLitteral?: boolean
   nonReponseAcceptee?: boolean
-  pluriels?: boolean
-  multi?: boolean // options pour le drag and drop
-  ordered?: boolean // options pour le drag and drop
-  tolerance?: number
+  developpementEgal?: boolean
+  fonction?: boolean
   variable?: string
   entier?: boolean
-  domaine?: [number, number]
-  approximatelyCompare?: boolean
-  entiersConsecutifs?: boolean
+  domaine?: number[]
+  ensembleDeNombres?: boolean
+  kUplet?: boolean
+  suiteDeNombres?: boolean
+  suiteRangeeDeNombres?: boolean
+  calculFormel?: boolean
+  fractionSansRacineCarree?: boolean
+  // Non fait : Pas de tests unitaires
+  sansTrigo?: boolean
+  variablefractionIdentique?: boolean
+  avecSigneMultiplier?: boolean
+  entiersConsecutifs?: boolean // Pas de wiki
+  expressionsForcementReduites?: boolean // Pas de wiki
+  coordonnees?: boolean
 }
 export type CompareFunction = (
   input: string,

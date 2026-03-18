@@ -1,11 +1,11 @@
 import type { MathfieldElement } from 'mathlive'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { generateCleaner } from '../../../lib/interactif/cleaners'
+import { toutPourUnPoint } from '../../../lib/interactif/mathLive'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import type { IExercice } from '../../../lib/types'
 import ExerciceCan from '../../ExerciceCan'
-import { generateCleaner } from '../../../lib/interactif/comparisonFunctions'
-import { toutPourUnPoint } from '../../../lib/interactif/mathLive'
 
 export const titre = "Déterminer les facteurs d'un carré parfait"
 export const interactifReady = true
