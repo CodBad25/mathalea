@@ -8,7 +8,7 @@ import ExerciceCan from '../../ExerciceCan'
 export const titre = 'Trouver un nombre de boîtes'
 export const interactifReady = true
 export const interactifType = 'mathLive'
-export const uuid = '496e9'
+export const uuid = 'c25bd'
 export const refs = {
   'fr-fr': [],
   'fr-ch': [],
@@ -50,7 +50,7 @@ export default class Can20266Q30 extends ExerciceCan {
   enonce(choixQuestion?: TypeDeQuestion, Nombre?: number) {
     if (Nombre == null) {
       choixQuestion = choice(this.typesDeQuestions)
-      Nombre = choice([randint(2, 4) * 100 + randint(2, 7) * 10 , randint(2, 4) * 1000 + randint(2, 7) * 100])
+      Nombre = randint(2, 4) * 100 + randint(2, 7) * 10 
     }
 
     this.question = `Une ${choixQuestion!.fabricant} a produit $${texNombre(Nombre)}$ ${choixQuestion!.produit}.<br>
@@ -65,7 +65,7 @@ Combien de boîtes faut-il ?`
 
   nouvelleVersion() {
     this.canOfficielle
-      ? this.enonce(this.typesDeQuestions[3], 3200)
+      ? this.enonce(this.typesDeQuestions[3], 320)
       : this.enonce()
   }
 }
