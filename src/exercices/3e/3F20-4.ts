@@ -1,6 +1,7 @@
 import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { ajouteQuestionMathlive } from '../../lib/interactif/questionMathLive'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
 import { texFractionFromString } from '../../lib/outils/deprecatedFractions'
 import { ecritureAlgebrique, reduireAxPlusB } from '../../lib/outils/ecritures'
@@ -8,6 +9,7 @@ import {
   miseEnEvidence,
   texteEnCouleurEtGras,
 } from '../../lib/outils/embellissements'
+import { numAlpha } from '../../lib/outils/outilString'
 import FractionEtendue from '../../modules/FractionEtendue'
 import {
   gestionnaireFormulaireTexte,
@@ -26,7 +28,7 @@ export const interactifType = 'mathLive'
  * Reconnaitre coefficient directeur et ordonnée à l'origine d'une fonction affine
  * @author Eric Elter
  */
-export const uuid = 'a2b1c'
+export const uuid = 'a2b1b'
 
 export const refs = {
   'fr-fr': ['3F20-4'],
@@ -296,26 +298,35 @@ export default class CoefficientDirecteur extends Exercice {
           }
           break
       }
-      texte = ` Soit $${nomFonction}_{${i + 1}}$ la fonction affine définie par $${nomFonction}_{${i + 1}}(${nomVariable})=${fonctionF}$.<br>`
+      texte = ` Soit $${nomFonction}_{${i + 1}}$ la fonction affine définie par $${nomFonction}_{${i + 1}}(${nomVariable})=${fonctionF}$.`
+      texte +=
+        '<br>' +
+        numAlpha(0) +
+        `Quel est le coefficient directeur de la droite représentative de $${nomFonction}_{${i + 1}}$ ?`
+      texte += ajouteChampTexteMathLive(
+        this,
+        2 * i,
+        typesDeQuestionsDisponibles[i] === 6
+          ? KeyboardType.clavierFullOperations
+          : KeyboardType.clavierDeBaseAvecFraction,
+      )
+      texte +=
+        '<br>' +
+        numAlpha(1) +
+        `Quelle est l'ordonnée à l'origine de la droite représentative de $${nomFonction}_{${i + 1}}$ ?`
+      texte += ajouteChampTexteMathLive(
+        this,
+        2 * i + 1,
+        typesDeQuestionsDisponibles[i] === 6
+          ? KeyboardType.clavierFullOperations
+          : KeyboardType.clavierDeBaseAvecFraction,
+      )
       const reponse1 =
         typeof coefDir === 'number' ? coefDir.toString() : coefDir
+      handleAnswers(this, 2 * i, { reponse: { value: reponse1 } })
       const reponse2 =
         typeof ordOrigine === 'number' ? ordOrigine.toString() : ordOrigine
-      texte += ajouteQuestionMathlive({
-        exercice: this,
-        question: i,
-        content: `\\text{Quel est le coefficient directeur de la droite représentative de } ${nomFonction}_{${i + 1}} \\text{ ? }%{champ1}\\text{ Quel est son ordonnée à l'origine ? }%{champ2}`,
-        typeInteractivite: 'fillInTheBlank',
-        classe:
-          typesDeQuestionsDisponibles[i] === 6
-            ? KeyboardType.clavierFullOperations
-            : KeyboardType.clavierDeBaseAvecFraction,
-        objetReponse: {
-          champ1: { value: reponse1 },
-          champ2: { value: reponse2 },
-        },
-      })
-
+      handleAnswers(this, 2 * i + 1, { reponse: { value: reponse2 } })
       texteCorr = ` $${nomFonction}_{${i + 1}}(${nomVariable})=${fonctionF}$.<br>`
       texteCorr += texteCorSelonCase
 
