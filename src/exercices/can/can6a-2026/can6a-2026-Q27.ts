@@ -3,6 +3,7 @@ import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { arrondi } from '../../../lib/outils/nombres'
 import { texPrix } from '../../../lib/outils/texNombre'
+import { context } from '../../../modules/context'
 import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
 
@@ -53,15 +54,12 @@ export default class Can20266Q27 extends ExerciceCan {
     this.reponse = PrixBillet! - 2 * PrixUneViennoiserie
     this.question = `J'achète deux ${NomViennoiserie![0]} à $${texPrix(PrixUneViennoiserie)}$ € ${NomViennoiserie![1]}. <br>
            Je donne $${PrixBillet!}$  €.`
+    if (!this.interactif && context.isHtml) {
+      this.question += `<br>On me rend $\\ldots$  €.`
+    }
     this.correction = `Deux ${NomViennoiserie![0]} coûtent $2\\times${texPrix(PrixUneViennoiserie)}~€=${texPrix(2 * PrixUneViennoiserie)}~€$.<br>`
     this.correction += `On doit me rendre $${PrixBillet!}~€ -${texPrix(2 * PrixUneViennoiserie)}~€=${miseEnEvidence(texPrix(this.reponse))}$ €.`
-    if (this.interactif) {
-      this.optionsChampTexte = {
-        texteAvant: '<br>On me rend ',
-        texteApres: ' €.',
-      }
-    }
-    //
+
     this.canReponseACompleter = 'On me rend $\\dots$ €.'
   }
 
