@@ -94,7 +94,7 @@ export default class Can20266Q8 extends ExerciceCan {
         : '')
     this.canEnonce = 'Complète.' 
 this.canReponseACompleter =  graphique
-    this.correction = `Les graduations vont de $${texNombre(pas, 0)}$ en $${texNombre(pas, 0)}$, ainsi le point $A$ repère le nombre $${miseEnEvidence(texNombre(valeur, 0))}$.`
+    this.correction = `Les graduations vont de $${texNombre(pas, 0)}$ en $${texNombre(pas, 0)}$, ainsi la flèche repère le nombre $${miseEnEvidence(texNombre(valeur, 0))}$.`
   }
 
   nouvelleVersion() {
