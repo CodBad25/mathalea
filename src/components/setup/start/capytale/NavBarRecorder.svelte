@@ -2,7 +2,11 @@
   import ButtonIconTooltip from '../../../shared/forms/ButtonIconTooltip.svelte'
   import ButtonTextAction from '../../../shared/forms/ButtonTextAction.svelte'
   import InputText from '../../../shared/forms/InputText.svelte'
+  import ModalLanguageChoice from '../../../shared/modal/ModalLanguageChoice.svelte'
+  import LanguageDropdown from '../../../shared/ui/LanguageDropdown.svelte'
+  import LanguageIcon from '../../../shared/ui/LanguageIcon.svelte'
   import ButtonsDeck from '../../../shared/ui/ButtonsDeck.svelte'
+  import type { Language } from '../../../../lib/types/languages'
 
   export let zoomUpdate: (plusMinus: '+' | '-') => void
   export let newDataForAll: () => void
@@ -13,8 +17,12 @@
   export let isExercisesListEmpty: boolean
   export let isCapytale: boolean
   export let handleRecorder: () => void
+  export let locale: Language
+  export let handleLanguage: (lang: string) => void
+  export let isFlowmath: boolean
 
   let urlFeuilleEleve: string = ''
+  let showLanguageChoiceModal: boolean = false
 </script>
 
 <nav
@@ -52,6 +60,23 @@
       </a>
     </div>
   </div>
+  {#if isFlowmath}
+    <div class="flex flex-row items-center space-x-2 ml-4">
+      <div class="hidden md:block">
+        <LanguageDropdown {locale} {handleLanguage} />
+      </div>
+      <div class="md:hidden">
+        <button
+          type="button"
+          on:click={() => {
+            showLanguageChoiceModal = !showLanguageChoiceModal
+          }}
+        >
+          <LanguageIcon {locale} />
+        </button>
+      </div>
+    </div>
+  {/if}
   <div class="w-full flex flex-row">
     <ButtonsDeck class="mt-4 md:mt-0">
       <div
@@ -128,3 +153,6 @@
     </ButtonsDeck>
   </div>
 </nav>
+{#if isFlowmath}
+  <ModalLanguageChoice bind:showLanguageChoiceModal {locale} {handleLanguage} />
+{/if}
