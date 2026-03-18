@@ -101,6 +101,24 @@
   let headerExerciceProps: { title: string } = { title }
 
   let numberOfAnswerFields: number = 0
+  let lastRenderedSignature = ''
+
+  function getRenderSignature() {
+    const questionsSignature = exercise.listeQuestions.join('||')
+    const correctionsSignature = isCorrectVisible
+      ? exercise.listeCorrections.join('||')
+      : ''
+
+    return [
+      exercise.key ?? '',
+      exercise.seed ?? '',
+      exercise.numeroExercice ?? '',
+      isInteractif ? '1' : '0',
+      isCorrectVisible ? '1' : '0',
+      questionsSignature,
+      correctionsSignature,
+    ].join('::')
+  }
 
   async function forceUpdate() {
     if (exercise == null) return
@@ -206,13 +224,19 @@
     log('afterUpdate:' + exercise.id + ', v:' + $globalOptions.v)
     const starttime = window.performance.now()
     if (exercise && divExercice) {
-      mathaleaRenderDiv(divExercice)
+      const renderSignature = getRenderSignature()
+      const shouldRenderContent = renderSignature !== lastRenderedSignature
       let time = window.performance.now()
-      log('duration mathaleaRenderDiv:' + (time - starttime))
+      if (shouldRenderContent) {
+        mathaleaRenderDiv(divExercice)
+        lastRenderedSignature = renderSignature
+        time = window.performance.now()
+        log('duration mathaleaRenderDiv:' + (time - starttime))
+      }
       adjustMathalea2dFiguresWidth()
       time = window.performance.now()
       log('duration adjustMathalea2dFiguresWidth:' + (time - starttime))
-      if (exercise.interactif) {
+      if (shouldRenderContent && exercise.interactif) {
         log('loadMathLive')
         loadMathLive(divExercice)
         log('end loadMathLive')
@@ -224,9 +248,11 @@
         time = window.performance.now()
         log('duration prepareExerciceCliqueFigure:' + (time - starttime))
       }
-      updateAnswers()
-      time = window.performance.now()
-      log('duration updateAnswers:' + (time - starttime))
+      if (shouldRenderContent) {
+        updateAnswers()
+        time = window.performance.now()
+        log('duration updateAnswers:' + (time - starttime))
+      }
     }
     document.dispatchEvent(exercicesAffiches)
     if (isCorrectVisible) {
@@ -289,14 +315,16 @@
     }
   }
 
-  async function updateInterfaceParamsAndReLoadExerciseIfNeed() {
+  async function updateInterfaceParamsAndReLoadExerciseIfNeed(
+    reloadExercise: boolean = true,
+  ) {
     log(
       'updateInterfaceParamsAndReLoadExercisesIfNeed:' +
         exercise.id +
         ', v:' +
         $globalOptions.v,
     )
-    if (exercise.typeExercice === 'simple') {
+    if (reloadExercise && exercise.typeExercice === 'simple') {
       if (exercise.seed === undefined) exercise.seed = generateFreshSeed()
       seedrandom(exercise.seed, { global: true })
       mathaleaHandleExerciceSimple(exercise, !!isInteractif, exerciseIndex)
@@ -352,6 +380,7 @@
 
     exercise.numeroExercice = exerciseIndex
     if (
+      reloadExercise &&
       exercise !== undefined &&
       exercise.typeExercice !== 'simple' &&
       typeof exercise.nouvelleVersionWrapper === 'function'
@@ -603,7 +632,7 @@
   function columnsCountUpdate(plusMinus: '+' | '-') {
     if (plusMinus === '+') columnsCount++
     if (plusMinus === '-') columnsCount--
-    updateInterfaceParamsAndReLoadExerciseIfNeed()
+    updateInterfaceParamsAndReLoadExerciseIfNeed(false)
   }
 </script>
 
