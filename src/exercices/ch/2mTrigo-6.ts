@@ -1,7 +1,7 @@
 import type { MathfieldElement } from 'mathlive'
-import { tableauColonneLigne } from '../../lib/2d/tableau'
 import { fonctionComparaison } from '../../lib/interactif/comparisonFunctions'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { AddTabDbleEntryMathlive } from '../../lib/interactif/tableaux/AjouteTableauMathlive'
 import { combinaisonListes, shuffleLettres } from '../../lib/outils/arrayOutils'
 import {
   miseEnEvidence,
@@ -75,6 +75,9 @@ export default class ResolutionTrianglesCCA extends Exercice {
       const listeDeNomsDePolygones = ['QD']
       const nom = shuffleLettres(creerNomDePolygone(3, listeDeNomsDePolygones))
       listeDeNomsDePolygones.push(nom)
+      const precisionInstruction = texteItalique(
+        "Lorsqu'il y en a, donner les réponses arrondies au centième.",
+      )
 
       // Side naming: lowercase of opposite vertex
       //   sa = lowercase(nom[0]) = side opposite nom[0] = segment nom[1]nom[2]
@@ -114,6 +117,7 @@ export default class ResolutionTrianglesCCA extends Exercice {
 
         // Statement
         texte = `Résoudre le triangle $${nom}$ sachant que $\\widehat{${angA}} = ${texDeg(texNombre(angleA, 1))}$, $${sa} = ${nom[1]}${nom[2]} = ${texNombre(sideA, 2)}$ et $${sc} = ${nom[0]}${nom[1]} = ${texNombre(sideC, 2)}$.`
+        texte += `<br>${precisionInstruction}`
 
         handleAnswers(this, i, buildAmbiguousCaseAnswers([], angB, angC, sb), {
           formatInteractif: 'tableauMathlive',
@@ -176,6 +180,7 @@ $\\sin(\\widehat{${angC}}) = \\dfrac{${sc} \\times \\sin(\\widehat{${angA}})}{${
 
         // Statement
         texte = `Résoudre le triangle $${nom}$ sachant que $\\widehat{${angA}} = ${texDeg(texNombre(angleA, 1))}$, $${sa} = ${nom[1]}${nom[2]} = ${texNombre(sideA, 2)}$ et $${sc} = ${nom[0]}${nom[1]} = ${texNombre(sideC, 2)}$.`
+        texte += `<br>${precisionInstruction}`
 
         handleAnswers(
           this,
@@ -278,6 +283,7 @@ ${sb} &= \\dfrac{${sa} \\times \\sin(\\widehat{${angB}})}{\\sin(\\widehat{${angA
 
         // Statement
         texte = `Résoudre le triangle $${nom}$ sachant que $\\widehat{${angA}} = ${texDeg(texNombre(angleA, 1))}$, $${sa} = ${nom[1]}${nom[2]} = ${texNombre(sideA, 2)}$ et $${sc} = ${nom[0]}${nom[1]} = ${texNombre(sideC, 2)}$.`
+        texte += `<br>${precisionInstruction}`
 
         const solutionsAttendues: [TriangleSolution, TriangleSolution] = [
           [
@@ -376,16 +382,43 @@ function buildAmbiguousCaseTable(
   angC: string,
   sideBName: string,
 ) {
-  return tableauColonneLigne(
-    ['\\text{}', `\\widehat{${angC}}`, `\\widehat{${angB}}`, sideBName],
-    ['\\text{Solution 1}', '\\text{Solution 2}'],
-    ['', '', '', '', '', ''],
-    1,
-    true,
+  const emptyAngleCell = {
+    texte: '',
+    latex: true,
+    gras: true,
+    color: 'black',
+    options: { texteApres: '°' },
+  }
+  const emptyLengthCell = {
+    texte: '',
+    latex: true,
+    gras: true,
+    color: 'black',
+  }
+
+  return AddTabDbleEntryMathlive.create(
     numeroExercice,
     question,
+    {
+      headingCols: [
+        { texte: '\\text{}', latex: true, gras: true, color: 'black' },
+        { texte: `\\widehat{${angC}}`, latex: true, gras: true, color: 'black' },
+        { texte: `\\widehat{${angB}}`, latex: true, gras: true, color: 'black' },
+        { texte: sideBName, latex: true, gras: true, color: 'black' },
+      ],
+      headingLines: [
+        { texte: '\\text{Solution 1}', latex: true, gras: true, color: 'black' },
+        { texte: '\\text{Solution 2}', latex: true, gras: true, color: 'black' },
+      ],
+      raws: [
+        [emptyAngleCell, emptyAngleCell, emptyLengthCell].map((cell) => ({ ...cell })),
+        [emptyAngleCell, emptyAngleCell, emptyLengthCell].map((cell) => ({ ...cell })),
+      ],
+    },
+    'tableauMathlive',
     true,
-  )
+    {},
+  ).output
 }
 
 function buildAmbiguousCaseAnswers(
