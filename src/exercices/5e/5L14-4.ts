@@ -6,6 +6,7 @@ import {
 } from '../../modules/outils'
 import Exercice from '../Exercice'
 import ChoisirExpressionLitterale from './_Choisir_expression_litterale'
+
 export const titre =
   'Déterminer la dernière opération à effectuer dans une expression littérale'
 
@@ -56,7 +57,6 @@ export default class DeterminerDerniereOperationExpressionLitterale extends Exer
     for (
       let i = 0, texte, texteCorr, val1, val2, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       nbOperations = listeTypeDeQuestions[i]
       val1 = randint(2, 5)
@@ -75,8 +75,9 @@ export default class DeterminerDerniereOperationExpressionLitterale extends Exer
       // nbval = resultats[3]
       lastOp = resultats[4]
       structureExpression = resultats[6]
-
-      if (expn.indexOf('ou') > 0) expn = expn.substring(0, expn.indexOf('ou')) // on supprime la deuxième expression fractionnaire
+      if (typeof expn === 'string') {
+        if (expn.indexOf('ou') > 0) expn = expn.substring(0, expn.indexOf('ou')) // on supprime la deuxième expression fractionnaire} // dans le cas où il y a deux expressions fractionnaires, on prend la première
+      }
       texte = `${expn}`
 
       texteCorr = `Pour fixer les idées, choisissons des valeurs pour $x$ et $y$, par exemple $x=${val1}$ et $y=${val2}$.`

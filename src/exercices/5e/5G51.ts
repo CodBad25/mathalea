@@ -1,5 +1,5 @@
 import { grille, seyes } from '../../lib/2d/Grille'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait, PointAbstrait } from '../../lib/2d/PointAbstrait'
 import { tracePoint } from '../../lib/2d/TracePoint'
 import { vide2d } from '../../lib/2d/Vide2d'
 import { colorToLatexOrHTML } from '../../lib/2d/colorToLatexOrHtml'
@@ -27,6 +27,7 @@ export const refs = {
   'fr-ch': ['9ES7-2'],
 }
 export default class RepresenterUnSolide5e extends Exercice {
+  classe: number
   constructor() {
     super()
     // Héritage de la classe Exercice ()
@@ -85,15 +86,15 @@ export default class RepresenterUnSolide5e extends Exercice {
       sc = 0.8
     }
 
-    let A
-    let B
-    let C
-    let D
-    let E
-    let F
-    let G
-    let H
-    let I
+    let A: PointAbstrait = pointAbstrait(0, 0)
+    let B: PointAbstrait = pointAbstrait(0, 0)
+    let C: PointAbstrait = pointAbstrait(0, 0)
+    let D: PointAbstrait = pointAbstrait(0, 0)
+    let E: PointAbstrait = pointAbstrait(0, 0)
+    let F: PointAbstrait = pointAbstrait(0, 0)
+    let G: PointAbstrait = pointAbstrait(0, 0)
+    let H: PointAbstrait = pointAbstrait(0, 0)
+    let I: PointAbstrait = pointAbstrait(0, 0)
     let AB
     let BC
     let CD
@@ -113,14 +114,15 @@ export default class RepresenterUnSolide5e extends Exercice {
     let BD
     let FH
     let coeffpersp
-    let enonce
-    let correction
+    let enonce = ''
+    let correction = ''
     let carreaux
     let g
     let objetsEnonce = []
     let objetsCorrection = []
-    let listeDeNomsDePolygones
-    for (let i = 0, texte, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    let listeDeNomsDePolygones: string[] = []
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+      const texte = ''
       if (i % 2 === 0) listeDeNomsDePolygones = ['QD']
       const nom = creerNomDePolygone(8, listeDeNomsDePolygones)
       listeDeNomsDePolygones.push(nom)
@@ -167,20 +169,20 @@ export default class RepresenterUnSolide5e extends Exercice {
 
       switch (listeTypeDeQuestions[i] % 2) {
         case 1:
-          A = point(6, 0, nom[0], 'left')
-          B = point(11, 0, nom[1], 'right')
-          C = point(11, 5, nom[2], 'right')
-          D = point(6, 5, nom[3], 'left')
+          A = pointAbstrait(6, 0, nom[0], 'left')
+          B = pointAbstrait(11, 0, nom[1], 'right')
+          C = pointAbstrait(11, 5, nom[2], 'right')
+          D = pointAbstrait(6, 5, nom[3], 'left')
           E = similitude(B, A, anglepersp, coeffpersp, nom[4], 'left')
           E.x = Math.round(E.x)
           E.y = Math.round(E.y)
           break
 
         case 0:
-          A = point(5, 0, nom[0], 'left')
-          B = point(9 + randint(1, 3), 0, nom[1], 'right')
-          C = point(B.x, randint(3, 7), nom[2], 'right')
-          D = point(A.x, C.y, nom[3], 'left')
+          A = pointAbstrait(5, 0, nom[0], 'left')
+          B = pointAbstrait(9 + randint(1, 3), 0, nom[1], 'right')
+          C = pointAbstrait(B.x, randint(3, 7), nom[2], 'right')
+          D = pointAbstrait(A.x, C.y, nom[3], 'left')
           E = similitude(
             B,
             A,
