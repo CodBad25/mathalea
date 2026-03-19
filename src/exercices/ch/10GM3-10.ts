@@ -1,9 +1,12 @@
-import { arrondi } from '../../lib/outils/nombres'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
-import { combinaisonListes } from '../../lib/outils/arrayOutils'
+import {
+  combinaisonListes,
+  compteOccurences,
+} from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { arrondi } from '../../lib/outils/nombres'
 import { sp } from '../../lib/outils/outilString'
 import { texNombre } from '../../lib/outils/texNombre'
 import FractionEtendue from '../../modules/FractionEtendue'
@@ -14,6 +17,7 @@ import Exercice from '../Exercice'
 export const titre =
   'Convertir des durées en heures-minutes-secondes, en heures décimales ou en minutes décimales'
 export const dateDePublication = '19/08/2025'
+export const dateDeModifImportante = '19/03/2026'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const uuid = '31e61'
@@ -37,7 +41,7 @@ export default class ConvertirDuree extends Exercice {
     this.besoinFormulaireNumerique = [
       'Type de conversions',
       6,
-      '1 : heures-minutes-secondes vers heures décimales\n2 : heures-minutes-secondes vers minutes décimales\n3 : heures décimales vers heures-minutes-secondes\n4 : minutes décimales vers heures-minutes-secondes\n5 : heures ↔ minutes décimales\n6 : Mélange',
+      '1 : Heures-minutes-secondes vers heures décimales\n2 : Heures-minutes-secondes vers minutes décimales\n3 : Heures décimales vers heures-minutes-secondes\n4 : Minutes décimales vers heures-minutes-secondes\n5 : Heures ↔ minutes décimales\n6 : Mélange',
     ]
     this.besoinFormulaire2CaseACocher = [
       'Quarts et demi-heures seulement',
@@ -120,7 +124,23 @@ export default class ConvertirDuree extends Exercice {
     )
 
     //    this.consigne = `${this.sup === 4 || this.sup === 3 || this.sup2 ? ' ' : `Arrondir, si nécessaire, les résultats au ${this.sup3 ? 'dixième' : 'centième'}`}`
-    this.consigne = `${this.sup === 4 || this.sup2 || this.sup3 ? ' ' : `Arrondir, si nécessaire, ${this.nbQuestions > 1 ? 'les résultats' : 'le résultat'} au centième.`}`
+    this.consigne = `${
+      typesDeQuestionsDisponibles.length ===
+        compteOccurences(typesDeQuestionsDisponibles, 3) ||
+      this.sup2 ||
+      this.sup3
+        ? ' '
+        : `Arrondir, si nécessaire, ${this.nbQuestions > 1 ? 'les résultats' : 'le résultat'}` +
+          `${
+            typesDeQuestionsDisponibles.length ===
+            compteOccurences(typesDeQuestionsDisponibles, 4) +
+              compteOccurences(typesDeQuestionsDisponibles, 3)
+              ? ' à la seconde près'
+              : ' au centième' +
+                `${compteOccurences(typesDeQuestionsDisponibles, 4) > 0 ? ' ou à la seconde près' : ''}`
+          }` +
+          '.'
+    }`
     for (
       let i = 0, cpt = 0, champIndex = 0;
       i < this.nbQuestions && cpt < 50;
@@ -134,7 +154,7 @@ export default class ConvertirDuree extends Exercice {
       let uniteDepart: string = ''
       let uniteArrivee: string = ''
       let reponse: number | string = 0
-      const estApproximation: boolean = false
+      let estApproximation: boolean = false
 
       // Déterminer les unités selon le type de question
       switch (typeDeQuestion) {
@@ -228,6 +248,9 @@ export default class ConvertirDuree extends Exercice {
             } */
             const dureeDepArr = new Grandeur(valeurDepart, uniteDepart)
             reponse = dureeDepArr.toHHMMSS()
+
+            estApproximation =
+              ((60 * arrondi(valeurDepart * 100)) % 100) % 100 !== 0
           } else {
             reponse = dureeBase.toHHMMSS()
           }
@@ -393,7 +416,8 @@ export default class ConvertirDuree extends Exercice {
         if (uniteArrivee === 'hhmmss') {
           texte += '<br><br>' + '$\\ldots \\ldots$' + ' h '
           texte += '$\\ldots \\ldots$' + ' min '
-          texte += '$\\ldots \\ldots$' + ' s '
+          if ((reponse as string).includes('s'))
+            texte += '$\\ldots \\ldots$' + ' s '
         } else {
           texte += '<br><br>' + `$\\ldots \\ldots$ ${uniteAffichageArrivee}`
         }
@@ -690,7 +714,7 @@ export default class ConvertirDuree extends Exercice {
               const secondesRestantes = Math.round(
                 secondesTotales - mFinal * 60,
               )
-              texteCorr += `Le nombre de secondes est donné par le nombre de secondes total moins le nombre de minutes entières $${texNombre(secondesTotales)} - ${mFinal} \\times 60 = ${texNombre(secondesRestantes)}\\text{\\,s}$`
+              texteCorr += `Le nombre de secondes est donné par le nombre de secondes total moins le nombre de minutes entières $${texNombre(secondesTotales)} - (${mFinal} \\times 60) = ${texNombre(secondesRestantes)}\\text{\\,s}$`
             } else {
               texteCorr += `<br><br>Comme ${texNombre(secondesTotales, 0)} < 60, il n'y a pas de minutes entières, donc ${texNombre(secondesTotales, 0)} secondes.`
             }
@@ -816,7 +840,7 @@ export default class ConvertirDuree extends Exercice {
       texteCorr += `${egalite} ${miseEnEvidence(texNombre(reponse, 2)) + uniteTexte}`
     }
 
-    texteCorr += '$.'
+    texteCorr = texteCorr.replace(/\s+\}$/, '}') + '$.'
     return texteCorr
   }
 }
