@@ -5,10 +5,10 @@ export const dateDePublication = '19/05/2025'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 
-export const uuid = '80d4f'
+export const uuid = '80d4e'
 export const refs = {
-  'fr-fr': [],
-  'fr-ch': [],
+  'fr-fr': ['2F10-9'],
+  'fr-ch': ['1mF1-13', '10FA5-18', '11FA8-15'],
 }
 export default class CoefficientDirecteur2nde extends CoefficientDirecteur {
   constructor() {

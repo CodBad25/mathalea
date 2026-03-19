@@ -77,83 +77,80 @@ export function ajouteQuestionMathlive({
   blocCenter?: boolean
   espace?: boolean
 }) {
-  if (context.isHtml && exercice.interactif) {
-    if (
-      !(
-        typeInteractivite === 'mathlive' ||
-        typeInteractivite === 'fillInTheBlank' ||
-        typeInteractivite === 'tableauMathlive' ||
-        typeInteractivite === 'texte'
-      )
-    ) {
-      window.notify(
-        `Type d'interactivité ${typeInteractivite} non reconnu. Exercice ${exercice.id} ${exercice.uuid}`,
-        { typeInteractivite },
-      )
-      return ''
-    }
-    if (reponseParams === undefined) {
-      reponseParams = { formatInteractif: 'mathlive' }
-    }
-    handleAnswers(exercice, question, objetReponse, reponseParams)
-    switch (typeInteractivite) {
-      case 'fillInTheBlank':
-        return remplisLesBlancs(exercice, question, content, classe, '\\ldots')
-      case 'tableauMathlive': {
-        if (!tableau) {
-          window.notify(
-            `Tableau non défini pour l'interactivité tableauMathlive. Exercice ${exercice.id} ${exercice.uuid}`,
-            { typeInteractivite },
-          )
-          return ''
-        }
-        const leTableau =
-          typeTableau === 'doubleEntree'
-            ? AddTabDbleEntryMathlive.create(
-                exercice.numeroExercice ?? 0,
-                question,
-                tableau as ItabDbleEntry,
-                classe,
-                true,
-                {
-                  texteAvant,
-                  texteApres,
-                  blocCenter: blocCenter ? ' bloccenter' : '',
-                  espace: espace ? ' ' : '',
-                },
-              )
-            : AddTabPropMathlive.create(
-                exercice.numeroExercice ?? 0,
-                question,
-                tableau as Itableau,
-                classe,
-                true,
-                {
-                  texteAvant,
-                  texteApres,
-                  blocCenter: blocCenter ? ' bloccenter' : '',
-                  espace: espace ? ' ' : '',
-                },
-              )
-        return leTableau.output
-      }
-      case 'texte':
-        return ajouteChampTexte(exercice, question, classe, {
-          texteAvant,
-          texteApres,
-          blocCenter,
-          espace,
-        })
-      default:
-        return ajouteChampTexteMathLive(exercice, question, classe, {
-          texteAvant,
-          texteApres,
-          blocCenter,
-          espace,
-        })
-    }
+  if (
+    !(
+      typeInteractivite === 'mathlive' ||
+      typeInteractivite === 'fillInTheBlank' ||
+      typeInteractivite === 'tableauMathlive' ||
+      typeInteractivite === 'texte'
+    )
+  ) {
+    window.notify(
+      `Type d'interactivité ${typeInteractivite} non reconnu. Exercice ${exercice.id} ${exercice.uuid}`,
+      { typeInteractivite },
+    )
+    return ''
   }
-  return ''
+  if (reponseParams === undefined) {
+    reponseParams = { formatInteractif: 'mathlive' }
+  }
+  handleAnswers(exercice, question, objetReponse, reponseParams)
+  switch (typeInteractivite) {
+    case 'fillInTheBlank':
+      return remplisLesBlancs(exercice, question, content, classe, '\\ldots')
+    case 'tableauMathlive': {
+      if (!tableau) {
+        window.notify(
+          `Tableau non défini pour l'interactivité tableauMathlive. Exercice ${exercice.id} ${exercice.uuid}`,
+          { typeInteractivite },
+        )
+        return ''
+      }
+      const leTableau =
+        typeTableau === 'doubleEntree'
+          ? AddTabDbleEntryMathlive.create(
+              exercice.numeroExercice ?? 0,
+              question,
+              tableau as ItabDbleEntry,
+              classe,
+              true,
+              {
+                texteAvant,
+                texteApres,
+                blocCenter: blocCenter ? ' bloccenter' : '',
+                espace: espace ? ' ' : '',
+              },
+            )
+          : AddTabPropMathlive.create(
+              exercice.numeroExercice ?? 0,
+              question,
+              tableau as Itableau,
+              classe,
+              true,
+              {
+                texteAvant,
+                texteApres,
+                blocCenter: blocCenter ? ' bloccenter' : '',
+                espace: espace ? ' ' : '',
+              },
+            )
+      return leTableau.output
+    }
+    case 'texte':
+      return ajouteChampTexte(exercice, question, classe, {
+        texteAvant,
+        texteApres,
+        blocCenter,
+        espace,
+      })
+    default:
+      return ajouteChampTexteMathLive(exercice, question, classe, {
+        texteAvant,
+        texteApres,
+        blocCenter,
+        espace,
+      })
+  }
 }
 
 /**
