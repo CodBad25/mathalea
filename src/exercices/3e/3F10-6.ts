@@ -1,4 +1,4 @@
-import CalculsImagesFonctions from './3F10-2'
+import CalculsImagesFonctions from './3F10-2-old'
 export const titre =
   'Calculer des images dans des fonctions polynomiales ou rationnelles'
 export const dateDePublication = '19/06/2024'
