@@ -1,20 +1,25 @@
-import { afficheMesureAngle } from '../../lib/2d/AfficheMesureAngle'
-import { codageAngle } from '../../lib/2d/angles'
+import { arc } from '../../lib/2d/Arc'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { nommePolygone } from '../../lib/2d/polygones'
+import { latex2d } from '../../lib/2d/textes'
 import { texteSurSegment } from '../../lib/2d/texteSurSegment'
+import { rotation } from '../../lib/2d/transformations'
 import {
   triangle2points1angle1longueur,
   triangle2points2angles,
   triangle2points2longueurs,
 } from '../../lib/2d/triangles'
 import { angleOriente } from '../../lib/2d/utilitairesGeometriques'
-import { pointAdistance } from '../../lib/2d/utilitairesPoint'
+import { pointAdistance, pointSurSegment } from '../../lib/2d/utilitairesPoint'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { remplisLesBlancs } from '../../lib/interactif/questionMathLive'
 import { combinaisonListes, shuffleLettres } from '../../lib/outils/arrayOutils'
-import { miseEnEvidence, texteGras } from '../../lib/outils/embellissements'
+import {
+  miseEnEvidence,
+  texteGras,
+  texteItalique,
+} from '../../lib/outils/embellissements'
 import { arrondi } from '../../lib/outils/nombres'
 import { creerNomDePolygone } from '../../lib/outils/outilString'
 import { texNombre } from '../../lib/outils/texNombre'
@@ -42,6 +47,137 @@ function texDeg(value: string) {
 
 function texResult(value: number) {
   return texNombre(arrondi(value, 2), 2, true)
+}
+
+type TriangleFigureRenderMetrics = {
+  pixelsParCm: number
+  scale: number
+}
+
+function getTriangleFigureRenderMetrics(
+  objets: any[],
+): TriangleFigureRenderMetrics {
+  const bordures = fixeBordures(objets)
+  const largeur = Math.max(bordures.xmax - bordures.xmin, 1)
+  const hauteur = Math.max(bordures.ymax - bordures.ymin, 1)
+  return {
+    pixelsParCm: Math.max(18, Math.min(75, Math.min(250 / largeur, 180 / hauteur))),
+    scale: Math.max(0.5, Math.min(1.2, Math.min(6 / largeur, 4.5 / hauteur))),
+  }
+}
+
+function renderTriangleFigure(
+  objets: any[],
+  metrics: TriangleFigureRenderMetrics = getTriangleFigureRenderMetrics(objets),
+) {
+  const bordures = fixeBordures(objets)
+  return mathalea2d(
+    {
+      ...bordures,
+      pixelsParCm: metrics.pixelsParCm,
+      scale: metrics.scale,
+      style: 'display: inline-block',
+    },
+    objets,
+  )
+}
+
+function angleDisplaySettings(angle: number) {
+  if (angle < 40) return { distance: 0.9, ecart: 0.12 }
+  if (angle < 70) return { distance: 0.75, ecart: 0.12 }
+  return { distance: 0.65, ecart: 0.1 }
+}
+
+function estimateLatexLabelWidthPx(label: string) {
+  const simplified = label
+    .replace(/\\,/g, ' ')
+    .replace(/\\text\{([^}]*)\}/g, '$1')
+    .replace(/\\(?:d)?frac\{([^}]*)\}\{([^}]*)\}/g, '$1/$2')
+    .replace(/\\circ/g, '°')
+    .replace(/\\left|\\right/g, '')
+    .replace(/\\[a-zA-Z]+/g, '')
+    .replace(/[{}]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim()
+  const charCount = Math.max(simplified.length, 1)
+  return 4 + charCount * 3.2
+}
+
+export function computeTrigo5AngleLabelDistance({
+  angleDegrees,
+  distance,
+  ecart,
+  label,
+  pixelsParCm,
+}: {
+  angleDegrees: number
+  distance: number
+  ecart: number
+  label: string
+  pixelsParCm: number
+}) {
+  const effectivePixelsParCm = Math.max(pixelsParCm, 1)
+  const baseDistance = distance + (ecart * 20) / effectivePixelsParCm
+  const labelWidthCm = estimateLatexLabelWidthPx(label) / effectivePixelsParCm
+  const labelHeightCm = 9 / effectivePixelsParCm
+  const labelHalfDiagonal = Math.hypot(labelWidthCm / 2, labelHeightCm / 2)
+  const halfAngleRadians =
+    (Math.max(Math.abs(angleDegrees), 18) * Math.PI) / 360
+  const safetyPaddingCm = 4 / effectivePixelsParCm
+  const minDistance =
+    (labelHalfDiagonal + safetyPaddingCm) /
+    Math.max(Math.sin(halfAngleRadians), 0.25)
+
+  return Math.max(baseDistance, minDistance)
+}
+
+function createTrigo5AngleMeasure(
+  depart: ReturnType<typeof pointAbstrait>,
+  sommet: ReturnType<typeof pointAbstrait>,
+  arrivee: ReturnType<typeof pointAbstrait>,
+  label: string,
+  pixelsParCm: number,
+) {
+  const angle = angleOriente(depart, sommet, arrivee)
+  const { distance, ecart } = angleDisplaySettings(Math.abs(angle))
+  const startPoint = pointSurSegment(sommet, depart, distance)
+  const labelDistance = computeTrigo5AngleLabelDistance({
+    angleDegrees: angle,
+    distance,
+    ecart,
+    label,
+    pixelsParCm,
+  })
+  const labelPoint = rotation(
+    pointSurSegment(sommet, startPoint, labelDistance),
+    sommet,
+    angle / 2,
+  )
+  const angleArc = arc(startPoint, sommet, angle, false, 'none', 'black', 0.2)
+  angleArc.epaisseur = 1
+  return [
+    latex2d(label, labelPoint.x, labelPoint.y, {
+      color: 'black',
+      letterSize: 'scriptsize',
+    }),
+    angleArc,
+  ]
+}
+
+function createTriangleFigure(
+  params: Omit<BuildFigureParams, 'showAngleMeasures' | 'pixelsParCmForAngles'>,
+) {
+  const objetsSansAngles = buildFigure({
+    ...params,
+    showAngleMeasures: false,
+  })
+  const metrics = getTriangleFigureRenderMetrics(objetsSansAngles)
+  const objets = buildFigure({
+    ...params,
+    showAngleMeasures: true,
+    pixelsParCmForAngles: metrics.pixelsParCm,
+  })
+  return renderTriangleFigure(objets, metrics)
 }
 
 /**
@@ -87,6 +223,9 @@ export default class ResolutionTrianglesNonAmbigus extends Exercice {
       const listeDeNomsDePolygones = ['QD']
       const nom = shuffleLettres(creerNomDePolygone(3, listeDeNomsDePolygones))
       listeDeNomsDePolygones.push(nom)
+      const precisionInstruction = texteItalique(
+        'Donner les réponses arrondies au centième.',
+      )
 
       // Vertices: nom[0], nom[1], nom[2]
       // Side naming: lowercase of opposite vertex
@@ -130,14 +269,21 @@ export default class ResolutionTrianglesNonAmbigus extends Exercice {
         const sideA = (sideC * Math.sin(angleARad)) / Math.sin(angleCRad)
         const sideB = (sideC * Math.sin(angleBRad)) / Math.sin(angleCRad)
 
-        const objets = buildFigure({ nom, type: 'ACA', sideC, angleA, angleB, sideA, sideB })
-        const figure = mathalea2d(
-          Object.assign({ scale: 0.7, pixelsParCm: 20, style: 'inline' }, fixeBordures(objets)),
-          objets,
-        )
+        const rotationDeg = randint(-170, 170)
+        const figure = createTriangleFigure({
+          nom,
+          type: 'ACA',
+          sideC,
+          angleA,
+          angleB,
+          sideA,
+          sideB,
+          rotationDeg,
+        })
 
         texte = `Résoudre le triangle $${nom}$ sachant que $\\widehat{${angA}} = ${texDeg(texNombre(angleA, 1))}$, $\\widehat{${angB}} = ${texDeg(texNombre(angleB, 1))}$ et $${sc} = ${nom[0]}${nom[1]} = ${texNombre(sideC, 2)}$.`
         if (this.sup2) texte += '<br>' + figure
+        texte += `<br>${precisionInstruction}`
 
         handleAnswers(this, i, {
           champ1: { value: texResult(angleC) },
@@ -201,14 +347,21 @@ ${sb} &= \\dfrac{${sc} \\times \\sin(\\widehat{${angB}})}{\\sin(\\widehat{${angC
           cptDo < 30
         )
 
-        const objets = buildFigure({ nom, type: 'AAC', sideC, angleA, angleB, sideA, sideB })
-        const figure = mathalea2d(
-          Object.assign({ scale: 0.7, pixelsParCm: 20, style: 'inline' }, fixeBordures(objets)),
-          objets,
-        )
+        const rotationDeg = randint(-170, 170)
+        const figure = createTriangleFigure({
+          nom,
+          type: 'AAC',
+          sideC,
+          angleA,
+          angleB,
+          sideA,
+          sideB,
+          rotationDeg,
+        })
 
         texte = `Résoudre le triangle $${nom}$ sachant que $\\widehat{${angA}} = ${texDeg(texNombre(angleA, 1))}$, $\\widehat{${angB}} = ${texDeg(texNombre(angleB, 1))}$ et $${sa} = ${nom[1]}${nom[2]} = ${texNombre(sideA, 2)}$.`
         if (this.sup2) texte += '<br>' + figure
+        texte += `<br>${precisionInstruction}`
 
         handleAnswers(this, i, {
           champ1: { value: texResult(angleC) },
@@ -270,14 +423,20 @@ ${sc} &= \\dfrac{${sa} \\times \\sin(\\widehat{${angC}})}{\\sin(\\widehat{${angA
           cptDo < 30
         )
 
-        const objets = buildFigure({ nom, type: 'CAC', sideC, angleA, sideB, sideA })
-        const figure = mathalea2d(
-          Object.assign({ scale: 0.7, pixelsParCm: 20, style: 'inline' }, fixeBordures(objets)),
-          objets,
-        )
+        const rotationDeg = randint(-170, 170)
+        const figure = createTriangleFigure({
+          nom,
+          type: 'CAC',
+          sideC,
+          angleA,
+          sideB,
+          sideA,
+          rotationDeg,
+        })
 
         texte = `Résoudre le triangle $${nom}$ sachant que $${sb} = ${nom[0]}${nom[2]} = ${texNombre(sideB, 2)}$, $\\widehat{${angA}} = ${texDeg(texNombre(angleA, 1))}$ et $${sc} = ${nom[0]}${nom[1]} = ${texNombre(sideC, 2)}$.`
         if (this.sup2) texte += '<br>' + figure
+        texte += `<br>${precisionInstruction}`
 
         handleAnswers(this, i, {
           champ1: { value: texResult(sideA) },
@@ -356,14 +515,19 @@ $\\widehat{${angC}} = ${texDeg('180')} - \\widehat{${angA}} - \\widehat{${angB}}
           cptDo < 30
         )
 
-        const objets = buildFigure({ nom, type: 'CCC', sideA, sideB, sideC })
-        const figure = mathalea2d(
-          Object.assign({ scale: 0.7, pixelsParCm: 20, style: 'inline' }, fixeBordures(objets)),
-          objets,
-        )
+        const rotationDeg = randint(-170, 170)
+        const figure = createTriangleFigure({
+          nom,
+          type: 'CCC',
+          sideA,
+          sideB,
+          sideC,
+          rotationDeg,
+        })
 
         texte = `Résoudre le triangle $${nom}$ sachant que $${sa} = ${nom[1]}${nom[2]} = ${texNombre(sideA, 2)}$, $${sb} = ${nom[0]}${nom[2]} = ${texNombre(sideB, 2)}$ et $${sc} = ${nom[0]}${nom[1]} = ${texNombre(sideC, 2)}$.`
         if (this.sup2) texte += '<br>' + figure
+        texte += `<br>${precisionInstruction}`
 
         handleAnswers(this, i, {
           champ1: { value: texResult(angleA) },
@@ -416,6 +580,19 @@ $\\widehat{${angC}} = ${texDeg('180')} - \\widehat{${angA}} - \\widehat{${angB}}
 /**
  * Build the figure objects for the triangle.
  */
+type BuildFigureParams = {
+  nom: string
+  type: 'ACA' | 'AAC' | 'CAC' | 'CCC'
+  sideC: number
+  angleA?: number
+  angleB?: number
+  sideA?: number
+  sideB?: number
+  rotationDeg: number
+  showAngleMeasures?: boolean
+  pixelsParCmForAngles?: number
+}
+
 function buildFigure({
   nom,
   type,
@@ -424,15 +601,10 @@ function buildFigure({
   angleB,
   sideA,
   sideB,
-	}: {
-	  nom: string
-	  type: 'ACA' | 'AAC' | 'CAC' | 'CCC'
-	  sideC: number
-	  angleA?: number
-	  angleB?: number
-  sideA?: number
-  sideB?: number
-}) {
+  rotationDeg,
+  showAngleMeasures = true,
+  pixelsParCmForAngles = 20,
+}: BuildFigureParams) {
   const objets: any[] = []
   // Lowercase side names: opposite vertex letter
   const sa = nom[0].toLowerCase()
@@ -440,8 +612,7 @@ function buildFigure({
   const sc = nom[2].toLowerCase()
 
   const A = pointAbstrait(0, 0)
-  const rot = randint(-170, 170)
-  const B = pointAdistance(A, sideC, rot)
+  const B = pointAdistance(A, sideC, rotationDeg)
 
   let ABC
   if (type === 'ACA' || type === 'AAC') {
@@ -461,6 +632,20 @@ function buildFigure({
     angleOriente(P3, P1, P2) > 0
       ? texteSurSegment(`$${text}$`, P1, P2, 'black', 0.5)
       : texteSurSegment(`$${text}$`, P2, P1, 'black', 0.5)
+  const measureAngle = (
+    P1: typeof A,
+    S: typeof A,
+    P2: typeof A,
+    angle: number,
+  ) => {
+    return createTrigo5AngleMeasure(
+      P1,
+      S,
+      P2,
+      texDeg(texNombre(angle, 1)),
+      pixelsParCmForAngles,
+    )
+  }
 
   if (type === 'ACA') {
     // Given: angleA, angleB, sideC. Unknown: sideA, sideB, angleC
@@ -469,11 +654,12 @@ function buildFigure({
       labelSeg(sa, B, C, A),                        // sa unknown on BC
       labelSeg(sb, C, A, B),                        // sb unknown on CA
     )
-    objets.push(
-      afficheMesureAngle(B, A, C, 'black', 1, texDeg(texNombre(angleA!, 1))),
-      afficheMesureAngle(A, B, C, 'black', 1, texDeg(texNombre(angleB!, 1))),
-    )
-    objets.push(codageAngle(A, C, B, 1, '', 'blue', 1, 1, 'blue'))
+    if (showAngleMeasures) {
+      objets.push(
+        measureAngle(B, A, C, angleA!),
+        measureAngle(A, B, C, angleB!),
+      )
+    }
   } else if (type === 'AAC') {
     // Given: angleA, angleB, sideA. Unknown: sideB, sideC, angleC
     objets.push(
@@ -481,11 +667,12 @@ function buildFigure({
       labelSeg(texNombre(sideA!, 2), B, C, A),      // sa value on BC
       labelSeg(sb, C, A, B),                        // sb unknown on CA
     )
-    objets.push(
-      afficheMesureAngle(B, A, C, 'black', 1, texDeg(texNombre(angleA!, 1))),
-      afficheMesureAngle(A, B, C, 'black', 1, texDeg(texNombre(angleB!, 1))),
-    )
-    objets.push(codageAngle(A, C, B, 1, '', 'blue', 1, 1, 'blue'))
+    if (showAngleMeasures) {
+      objets.push(
+        measureAngle(B, A, C, angleA!),
+        measureAngle(A, B, C, angleB!),
+      )
+    }
   } else if (type === 'CAC') {
     // Given: sideB (AC), angleA, sideC (AB). Unknown: sideA (BC), angleB, angleC
     objets.push(
@@ -493,24 +680,17 @@ function buildFigure({
       labelSeg(texNombre(sideB!, 2), C, A, B),    // sb value on CA
       labelSeg(sa, B, C, A),                        // sa unknown on BC
     )
-    objets.push(
-      afficheMesureAngle(B, A, C, 'black', 1, texDeg(texNombre(angleA!, 1))),
-    )
-    objets.push(
-      codageAngle(A, B, C, 1, '', 'green', 1, 1, 'green'),
-      codageAngle(A, C, B, 1, '', 'blue', 1, 1, 'blue'),
-    )
+    if (showAngleMeasures) {
+      objets.push(
+        measureAngle(B, A, C, angleA!),
+      )
+    }
   } else {
     // CCC: all sides given, all angles unknown
     objets.push(
       labelSeg(texNombre(sideC, 2), A, B, C),     // sc on AB
       labelSeg(texNombre(sideB!, 2), C, A, B),    // sb on CA
       labelSeg(texNombre(sideA!, 2), B, C, A),    // sa on BC
-    )
-    objets.push(
-      codageAngle(B, A, C, 1, '', 'red', 1, 1, 'red'),
-      codageAngle(A, B, C, 1, '', 'green', 1, 1, 'green'),
-      codageAngle(A, C, B, 1, '', 'blue', 1, 1, 'blue'),
     )
   }
 
