@@ -5,8 +5,13 @@ import { PointAbstrait, pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { polygone } from '../../lib/2d/polygones'
 import { rotation } from '../../lib/2d/transformations'
 import { pointAdistance } from '../../lib/2d/utilitairesPoint'
-import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
+import { choice } from '../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { context } from '../../modules/context'
+import FractionEtendue from '../../modules/FractionEtendue'
 import { fraction } from '../../modules/fractions'
 import { mathalea2d } from '../../modules/mathalea2d'
 import {
@@ -17,6 +22,9 @@ import {
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
 export const titre = 'Reconnaître une fraction sur des représentations variées'
+
+export const interactifReady = true // pour définir qu'exercice peut s'afficher en mode interactif.
+export const interactifType = 'mathLive'
 
 export const dateDePublication = '14/03/2026'
 
@@ -34,7 +42,7 @@ export const refs = {
 export default class reconnaitreDesFractions extends Exercice {
   constructor() {
     super()
-    this.consigne = 'Consigne'
+    this.consigne = 'Quelle fraction de la figure est colorée ?'
     this.nbQuestions = 3
     this.besoinFormulaireTexte = [
       'Type de découpage',
@@ -45,7 +53,7 @@ export default class reconnaitreDesFractions extends Exercice {
         '3 : Rectangles en ligne',
         '4 : Rectangles coupés en deux',
         '5 : Grilles',
-        // '6 : Secteurs éventuellement non consécutifs',
+        // '6 : Découpage non apparent',
         '0 : Mélange',
       ].join('\n'),
     ]
@@ -69,8 +77,9 @@ export default class reconnaitreDesFractions extends Exercice {
       'RectangleEnligne',
       'RectangleAvecTriangles',
       'RectangleAvecCarreaux',
+      'DecoupagePasApparent',
       // 'FiguresComplexes' cf APMEP,
-      // 'EviterSurComptage',
+      // 'DecoupagePasApparent',
     ]
     /* const listeTypeQuestions = combinaisonListes(
       typeQuestionsDisponibles,
@@ -104,15 +113,18 @@ export default class reconnaitreDesFractions extends Exercice {
       let codeSvgOuTikz: string = ''
       let secteursAColorier: number[] = []
       let paramsEnonce = {}
+
+      const zonesContigues = typesDeColoriage[i] === 1
       // listeTypeQuestions[i] = 'RectangleAvecCarreaux' // for tests
+
       switch (listeTypeQuestions[i]) {
         case 'Polygones': {
           denominateur = choice([3, 4, 5, 6, 8])
-          numerateur = randint(1, denominateur - 1)
+          numerateur = tireNumerateur(denominateur, zonesContigues)
           secteursAColorier = zonesAColorier(
             numerateur,
             denominateur,
-            typesDeColoriage[i] === 1,
+            zonesContigues,
             true,
           )
           const O = pointAbstrait(0, 0)
@@ -138,12 +150,12 @@ export default class reconnaitreDesFractions extends Exercice {
         }
         case 'Disques': {
           denominateur = choice([2, 3, 4, 5, 6, 8])
-          numerateur = randint(1, denominateur - 1)
+          numerateur = tireNumerateur(denominateur, zonesContigues)
           const angle = 360 / denominateur
           secteursAColorier = zonesAColorier(
             numerateur,
             denominateur,
-            typesDeColoriage[i] === 1,
+            zonesContigues,
             true,
           )
           const A = pointAbstrait(tailleFigure / 1.5, 0)
@@ -155,6 +167,7 @@ export default class reconnaitreDesFractions extends Exercice {
             a = arc(rotation(A, O, angle * i), O, angle, true)
             if (secteursAColorier.includes(i)) {
               a.couleurDeRemplissage = colorToLatexOrHTML('gray') // texcolors(i + 2) cf import { texcolors } from '../format/style'
+              a.opaciteDeRemplissage = 0.3
             }
             figure2D.push(a)
           }
@@ -165,11 +178,11 @@ export default class reconnaitreDesFractions extends Exercice {
           denominateur = choice([2, 3, 4, 5, 6])
           const pLongueur = longueur / denominateur
           const pHauteur = hauteur / denominateur
-          numerateur = randint(1, denominateur - 1)
+          numerateur = tireNumerateur(denominateur, zonesContigues)
           secteursAColorier = zonesAColorier(
             numerateur,
             denominateur,
-            typesDeColoriage[i] === 1,
+            zonesContigues,
             false,
           )
           let A, B, C, D: PointAbstrait
@@ -204,11 +217,11 @@ export default class reconnaitreDesFractions extends Exercice {
           denominateur = choice([2, 4, 6, 8])
           const pLongueur = (2 * longueur) / denominateur
           const pHauteur = (2 * hauteur) / denominateur
-          numerateur = randint(1, denominateur - 1)
+          numerateur = tireNumerateur(denominateur, zonesContigues)
           secteursAColorier = zonesAColorier(
             numerateur,
             denominateur,
-            typesDeColoriage[i] === 1,
+            zonesContigues,
             false,
           )
           let A = pointAbstrait(0, 0)
@@ -250,11 +263,11 @@ export default class reconnaitreDesFractions extends Exercice {
         }
         case 'RectangleAvecCarreaux': {
           denominateur = choice([4, 6, 8, 9, 10, 12, 15])
-          numerateur = randint(1, denominateur - 1)
+          numerateur = tireNumerateur(denominateur, zonesContigues)
           secteursAColorier = zonesAColorier(
             numerateur,
             denominateur,
-            typesDeColoriage[i] === 1,
+            zonesContigues,
             false,
           )
           const nbDiv: number[] = []
@@ -302,6 +315,11 @@ export default class reconnaitreDesFractions extends Exercice {
           }
           break
         }
+        case 'DecoupagePasApparent': {
+          denominateur = choice([2, 3, 4, 5, 6, 8])
+          numerateur = randint(1, denominateur - 1)
+          break
+        }
       }
       paramsEnonce = Object.assign(
         {
@@ -312,13 +330,22 @@ export default class reconnaitreDesFractions extends Exercice {
         fixeBordures(figure2D),
       )
       codeSvgOuTikz = mathalea2d(paramsEnonce, figure2D)
-      texte += `Quelle fraction de la figure est colorée ?<br>`
+      // texte += `${numerateur}/${denominateur}<br>`
       texte += codeSvgOuTikz
+
+      const reponse = new FractionEtendue(numerateur, denominateur).texFraction
+      texte +=
+        ajouteChampTexteMathLive(
+          this,
+          i,
+          KeyboardType.clavierDeBaseAvecFraction,
+        ) + '<br>'
+      handleAnswers(this, i, { reponse: { value: reponse } })
       texteCorr += `La figure est divisée en ${denominateur} secteurs de même aire.<br>`
       const unOuPlus = numerateur > 1 ? 'sont  colorés' : 'est  coloré'
       texteCorr += `Parmi ces secteurs, ${numerateur} ${unOuPlus}.<br>`
       const laFraction = fraction(numerateur, denominateur)
-      texteCorr += `La fraction de la figure qui est colorée est donc $${laFraction.texFraction}$`
+      texteCorr += `La fraction de la figure qui est colorée est donc $${miseEnEvidence(laFraction.texFraction)}$`
       if (laFraction.texFraction !== laFraction.texFractionSimplifiee) {
         texteCorr += `, on peut aussi ecrire $${laFraction.texFractionSimplifiee}$`
       }
@@ -341,6 +368,11 @@ export default class reconnaitreDesFractions extends Exercice {
   }
 }
 
+function tireNumerateur(denominateur: number, contigue: boolean): number {
+  const maxNumerateur = denominateur - (contigue ? 1 : 2)
+  return randint(denominateur > 3 && !contigue ? 2 : 1, maxNumerateur)
+}
+
 // rotation : faire tourner les secteurs si polygone ou disque
 function zonesAColorier(
   numerateur: number,
@@ -348,24 +380,47 @@ function zonesAColorier(
   contigue: boolean,
   rotation: boolean,
 ): number[] {
-  let choixSecteurs: number[] = []
   const lesSecteurs: number[] = []
-  let decalage = randint(0, denominateur - 1)
-  if (!rotation) {
-    decalage = randint(0, denominateur - numerateur - 1)
-  }
-  for (let i = 0; i < denominateur; i++) {
-    lesSecteurs.push((i + decalage) % denominateur)
-  }
+
   if (contigue) {
-    choixSecteurs = lesSecteurs.slice(0, numerateur)
+    for (let i = 0; i < numerateur; i++) {
+      lesSecteurs.push(i)
+    }
   } else {
-    choixSecteurs = combinaisonListes(
+    /* choixSecteurs = combinaisonListes(
       lesSecteurs, // .slice(0, numerateur),
       numerateur,
-    ).slice(0, numerateur)
+    ).slice(0, numerateur) */
+    let indiceCoupure = 0
+    let indiceAjout = 0
+    let nbEmplacementLibre = denominateur - numerateur - (rotation ? 1 : 0)
+    let indice = 0
+    let nbPush = 0
+
+    while (nbEmplacementLibre > 0) {
+      nbEmplacementLibre -= indiceAjout
+      indiceCoupure = randint(1, numerateur - indice - 1)
+      nbPush = nbPush + indiceAjout
+      for (let i = 0; i < indiceCoupure; i++) {
+        lesSecteurs.push(nbPush)
+        indice++
+        nbPush++
+      }
+      indiceAjout = randint(1, nbEmplacementLibre)
+    }
+
+    for (let i = lesSecteurs.length; i < numerateur; i++) {
+      lesSecteurs.push(nbPush)
+      nbPush++
+    }
   }
-  return choixSecteurs
+  const max: number = Math.max(...lesSecteurs)
+  const decalage = randint(0, denominateur - 1 - (rotation ? 0 : max))
+  for (let i = 0; i < lesSecteurs.length; i++) {
+    lesSecteurs[i] = (lesSecteurs[i] + decalage) % denominateur
+  }
+
+  return lesSecteurs.slice(0, numerateur)
 }
 
 function dimRectangle(tailleFigure: number): {
