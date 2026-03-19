@@ -1,10 +1,8 @@
-import Decimal from 'decimal.js'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
-import { choice } from '../../lib/outils/arrayOutils'
+import { remplisLesBlancs } from '../../lib/interactif/questionMathLive'
+import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
-import { texNombre } from '../../lib/outils/texNombre'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
@@ -33,18 +31,20 @@ export default class ProprietesLogarithmes extends Exercice {
   nouvelleVersion() {
     const logString = this.sup ? '\\ln' : '\\log'
 
+    const listeVariantes = combinaisonListes(
+      ['somme', 'difference', 'puissance', 'combinaison'],
+      this.nbQuestions,
+    )
+
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
       let texte = ''
       let texteCorr = ''
       let cleUnique = ''
+      let numerateur = 0
+      let denominateur = 0
 
       // Propriétés des logarithmes (somme→produit, différence→quotient, puissance)
-      const variante = choice([
-        'somme',
-        'difference',
-        'puissance',
-        'combinaison',
-      ])
+      const variante = listeVariantes[i]
 
       if (variante === 'somme') {
         // log_a(b) + log_a(c) = log_a(bc)
@@ -54,37 +54,17 @@ export default class ProprietesLogarithmes extends Exercice {
         const produit = b * c
 
         cleUnique = `proprietes-somme-${a}-${b}-${c}`
+        numerateur = produit
+        denominateur = a
 
-        texte = `Simplifier $\\log_{${a}}(${b}) + \\log_{${a}}(${c})$ en un seul logarithme, puis calculer.`
-        texte += ` Arrondir au millième près.`
-
-        const resultat = new Decimal(produit).ln().div(new Decimal(a).ln())
-        const resultatArrondi = resultat.toDecimalPlaces(3)
+        texte = `Exprimer $\\log_{${a}}(${b}) + \\log_{${a}}(${c})$ sous la forme $\\dfrac{${logString}(\\ldots)}{${logString}(\\ldots)}$.`
 
         texteCorr = `On utilise la propriété : $\\log_a(b) + \\log_a(c) = \\log_a(b \\times c)$<br><br>`
         texteCorr += `$\\begin{aligned}\n`
         texteCorr += `\\log_{${a}}(${b}) + \\log_{${a}}(${c}) &= \\log_{${a}}(${b} \\times ${c})\\\\\n`
         texteCorr += `&= \\log_{${a}}(${produit})\\\\\n`
-        texteCorr += `&= \\dfrac{${logString}(${produit})}{${logString}(${a})}\\\\\n`
-        texteCorr += `&\\approx ${miseEnEvidence(texNombre(resultatArrondi, 3, true))}\n`
+        texteCorr += `&= ${miseEnEvidence(`\\dfrac{${logString}(${produit})}{${logString}(${a})}`)}\n`
         texteCorr += `\\end{aligned}$`
-
-        if (this.interactif) {
-          texte += ajouteChampTexteMathLive(
-            this,
-            i,
-            KeyboardType.clavierDeBase,
-            {
-              texteAvant: '<br>Réponse : ',
-            },
-          )
-          handleAnswers(this, i, {
-            reponse: {
-              value: resultatArrondi.toFixed(3),
-              options: { nombreDecimalSeulement: true },
-            },
-          })
-        }
       } else if (variante === 'difference') {
         // log_a(b) - log_a(c) = log_a(b/c)
         const a = choice([2, 3, 5, 10])
@@ -94,37 +74,18 @@ export default class ProprietesLogarithmes extends Exercice {
 
         cleUnique = `proprietes-difference-${a}-${b}-${c}`
 
-        texte = `Simplifier $\\log_{${a}}(${b}) - \\log_{${a}}(${c})$ en un seul logarithme, puis calculer.`
-        texte += ` Arrondir au millième près.`
-
         const quotient = b / c
-        const resultat = new Decimal(quotient).ln().div(new Decimal(a).ln())
-        const resultatArrondi = resultat.toDecimalPlaces(3)
+        numerateur = quotient
+        denominateur = a
+
+        texte = `Exprimer $\\log_{${a}}(${b}) - \\log_{${a}}(${c})$ sous la forme $\\dfrac{${logString}(\\ldots)}{${logString}(\\ldots)}$.`
 
         texteCorr = `On utilise la propriété : $\\log_a(b) - \\log_a(c) = \\log_a\\left(\\dfrac{b}{c}\\right)$<br><br>`
         texteCorr += `$\\begin{aligned}\n`
         texteCorr += `\\log_{${a}}(${b}) - \\log_{${a}}(${c}) &= \\log_{${a}}\\left(\\dfrac{${b}}{${c}}\\right)\\\\\n`
         texteCorr += `&= \\log_{${a}}(${quotient})\\\\\n`
-        texteCorr += `&= \\dfrac{${logString}(${quotient})}{${logString}(${a})}\\\\\n`
-        texteCorr += `&\\approx ${miseEnEvidence(texNombre(resultatArrondi, 3, true))}\n`
+        texteCorr += `&= ${miseEnEvidence(`\\dfrac{${logString}(${quotient})}{${logString}(${a})}`)}\n`
         texteCorr += `\\end{aligned}$`
-
-        if (this.interactif) {
-          texte += ajouteChampTexteMathLive(
-            this,
-            i,
-            KeyboardType.clavierDeBase,
-            {
-              texteAvant: '<br>Réponse : ',
-            },
-          )
-          handleAnswers(this, i, {
-            reponse: {
-              value: resultatArrondi.toFixed(3),
-              options: { nombreDecimalSeulement: true },
-            },
-          })
-        }
       } else if (variante === 'puissance') {
         // n·log_a(b) = log_a(b^n)
         const a = choice([2, 3, 5, 10])
@@ -133,37 +94,17 @@ export default class ProprietesLogarithmes extends Exercice {
         const puissance = b ** n
 
         cleUnique = `proprietes-puissance-${a}-${b}-${n}`
+        numerateur = puissance
+        denominateur = a
 
-        texte = `Simplifier $${n}\\log_{${a}}(${b})$ en un seul logarithme, puis calculer.`
-        texte += ` Arrondir au millième près.`
-
-        const resultat = new Decimal(puissance).ln().div(new Decimal(a).ln())
-        const resultatArrondi = resultat.toDecimalPlaces(3)
+        texte = `Exprimer $${n}\\log_{${a}}(${b})$ sous la forme $\\dfrac{${logString}(\\ldots)}{${logString}(\\ldots)}$.`
 
         texteCorr = `On utilise la propriété : $n \\cdot \\log_a(b) = \\log_a(b^n)$<br><br>`
         texteCorr += `$\\begin{aligned}\n`
         texteCorr += `${n}\\log_{${a}}(${b}) &= \\log_{${a}}(${b}^{${n}})\\\\\n`
         texteCorr += `&= \\log_{${a}}(${puissance})\\\\\n`
-        texteCorr += `&= \\dfrac{${logString}(${puissance})}{${logString}(${a})}\\\\\n`
-        texteCorr += `&\\approx ${miseEnEvidence(texNombre(resultatArrondi, 3, true))}\n`
+        texteCorr += `&= ${miseEnEvidence(`\\dfrac{${logString}(${puissance})}{${logString}(${a})}`)}\n`
         texteCorr += `\\end{aligned}$`
-
-        if (this.interactif) {
-          texte += ajouteChampTexteMathLive(
-            this,
-            i,
-            KeyboardType.clavierDeBase,
-            {
-              texteAvant: '<br>Réponse : ',
-            },
-          )
-          handleAnswers(this, i, {
-            reponse: {
-              value: resultatArrondi.toFixed(3),
-              options: { nombreDecimalSeulement: true },
-            },
-          })
-        }
       } else {
         // Combinaison : n·log_a(b) + log_a(c) = log_a(b^n·c)
         const a = choice([2, 3, 5, 10])
@@ -173,12 +114,10 @@ export default class ProprietesLogarithmes extends Exercice {
         const resultatArg = b ** n * c
 
         cleUnique = `proprietes-combinaison-${a}-${b}-${c}-${n}`
+        numerateur = resultatArg
+        denominateur = a
 
-        texte = `Simplifier $${n}\\log_{${a}}(${b}) + \\log_{${a}}(${c})$ en un seul logarithme, puis calculer.`
-        texte += ` Arrondir au millième près.`
-
-        const resultat = new Decimal(resultatArg).ln().div(new Decimal(a).ln())
-        const resultatArrondi = resultat.toDecimalPlaces(3)
+        texte = `Exprimer $${n}\\log_{${a}}(${b}) + \\log_{${a}}(${c})$ sous la forme $\\dfrac{${logString}(\\ldots)}{${logString}(\\ldots)}$.`
 
         texteCorr = `On utilise les propriétés : $n \\cdot \\log_a(b) = \\log_a(b^n)$ et $\\log_a(x) + \\log_a(y) = \\log_a(xy)$<br><br>`
         texteCorr += `$\\begin{aligned}\n`
@@ -186,26 +125,22 @@ export default class ProprietesLogarithmes extends Exercice {
         texteCorr += `&= \\log_{${a}}(${b ** n}) + \\log_{${a}}(${c})\\\\\n`
         texteCorr += `&= \\log_{${a}}(${b ** n} \\times ${c})\\\\\n`
         texteCorr += `&= \\log_{${a}}(${resultatArg})\\\\\n`
-        texteCorr += `&= \\dfrac{${logString}(${resultatArg})}{${logString}(${a})}\\\\\n`
-        texteCorr += `&\\approx ${miseEnEvidence(texNombre(resultatArrondi, 3, true))}\n`
+        texteCorr += `&= ${miseEnEvidence(`\\dfrac{${logString}(${resultatArg})}{${logString}(${a})}`)}\n`
         texteCorr += `\\end{aligned}$`
+      }
 
-        if (this.interactif) {
-          texte += ajouteChampTexteMathLive(
-            this,
-            i,
-            KeyboardType.clavierDeBase,
-            {
-              texteAvant: '<br>Réponse : ',
-            },
-          )
-          handleAnswers(this, i, {
-            reponse: {
-              value: resultatArrondi.toFixed(3),
-              options: { nombreDecimalSeulement: true },
-            },
-          })
-        }
+      if (this.interactif) {
+        texte += '<br>'
+        texte += remplisLesBlancs(
+          this,
+          i,
+          `\\dfrac{${logString}(%{champ1})}{${logString}(%{champ2})}`,
+          KeyboardType.clavierDeBase,
+        )
+        handleAnswers(this, i, {
+          champ1: { value: `${numerateur}` },
+          champ2: { value: `${denominateur}` },
+        })
       }
 
       if (this.questionJamaisPosee(i, cleUnique)) {
