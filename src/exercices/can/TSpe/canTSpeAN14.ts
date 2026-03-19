@@ -1,13 +1,13 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { randint } from '../../../modules/outils'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import {
   ecritureAlgebrique,
   reduireAxPlusB,
 } from '../../../lib/outils/ecritures'
-import FractionEtendue from '../../../modules/FractionEtendue'
-import { texNombre } from '../../../lib/outils/texNombre'
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { texNombre } from '../../../lib/outils/texNombre'
+import FractionEtendue from '../../../modules/FractionEtendue'
+import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Résoudre une équation en logarithme népérien.'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -66,6 +66,6 @@ export default class NomExercice extends ExerciceSimple {
       this.correction += `<br> On vérifie que $\\dfrac{\\mathrm{e} ${ecritureAlgebrique(-b)}}{${a}} \\in D$. <br>   La solution de l'équation $\\ln(${reduireAxPlusB(a, b)})=1$ est donc  $S=\\left\\{${miseEnEvidence(`\\dfrac{\\mathrm{e} ${ecritureAlgebrique(-b)}}{${a}}`)} \\right\\}$.`
       this.reponse = `\\dfrac{e${ecritureAlgebrique(-b)}}{${a}}`
     }
-    this.optionsChampTexte = { texteAvant: '<br>$x=~$' }
+    this.optionsChampTexte = { texteAvant: '<br>$S=~\\{$', texteApres: '$\\}$' }
   }
 }
