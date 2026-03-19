@@ -15,7 +15,7 @@ import { listeQuestionsToContenuSansNumero } from '../../modules/outils'
 import Exercice from '../Exercice'
 
 export const titre = 'Factoriser une expression'
-export const dateDeModifImportante = '20/04/2025'
+export const dateDeModifImportante = '19/03/2026'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const amcReady = true
@@ -27,6 +27,7 @@ export const amcType = 'AMCOpen'
  * Ajout du paramétrage : Guillaume Valmont 13/08/2021
  * Ajout d'un nouveau paramètre sur le choix des lettres : Eric Elter 20/04/2025
  * Ajout d'un nouveau paramètre sur le choix du signe x final : Eric Elter 20/04/2025
+ * Meilleure gestion des lettres identiques : Eric Elter 19/03/2026
  */
 export const uuid = '5f5a6'
 
@@ -100,10 +101,16 @@ export default class FactoriserParNombreOux extends Exercice {
       typesDeQuestionsDisponibles,
       this.nbQuestions,
     ) // Tous les types de questions sont posées mais l'ordre diffère à chaque "cycle"
+
+    let a = choice(['x', 'y', 'z', 'k', 'n', 'a', 'b', 'c'])
+    let b = choice(['x', 'y', 'z', 'k', 'n', 'a', 'b', 'c'], a)
+    let x =
+      this.sup === 4 && this.sup2
+        ? choice([a, b])
+        : choice(['x', 'y', 'z', 'k', 'n', 'a', 'b', 'c'])
     for (
       let i = 0, texte, texteCorr, reponse, n, m, couplenm, k, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       texte = ''
       texteCorr = ''
@@ -136,15 +143,9 @@ export default class FactoriserParNombreOux extends Exercice {
       n = couplenm[0]
       m = couplenm[1]
       n = choice([n, n, -n])
-      const a = this.sup2
-        ? 'a'
-        : choice(['x', 'y', 'z', 'k', 'n', 'a', 'b', 'c'])
-      const b = this.sup2
-        ? 'b'
-        : choice(['x', 'y', 'z', 'k', 'n', 'a', 'b', 'c'], [a])
-      const x = this.sup2
-        ? 'x'
-        : choice(['x', 'y', 'z', 'k', 'n', 'a', 'b', 'c'])
+      a = !this.sup2 ? choice(['x', 'y', 'z', 'k', 'n', 'a', 'b', 'c']) : a
+      b = !this.sup2 ? choice(['x', 'y', 'z', 'k', 'n', 'a', 'b', 'c'], a) : b
+      x = !this.sup2 ? choice(['x', 'y', 'z', 'k', 'n', 'a', 'b', 'c']) : x
 
       switch (listeTypeDeQuestions[i]) {
         case 'ka+nkb':
