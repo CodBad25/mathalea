@@ -21,7 +21,7 @@ export const amcType = 'AMCNum'
 export const uuid = '99957'
 
 export const refs = {
-  'fr-fr': ['can6D08','6M4C-flash4'],
+  'fr-fr': ['can6D08', '6M4C-flash4'],
   'fr-ch': [],
 }
 export default class MinutesHeuresDecimale extends ExerciceSimple {
@@ -53,11 +53,11 @@ export default class MinutesHeuresDecimale extends ExerciceSimple {
 
           if (totalMinutes >= 60) {
             // Cas avec 1h + 15min ou 1h + 45min
-            this.correction = `$${totalMinutes}\\text{ min}= ${heures * 60} \\text{ min}+${minutes}\\text{ min}=${heures}\\text{ h}+${fractionText}\\text{ h}=${texNombre(heuresDecimales, 2)}\\text{ h}$.<br>
+            this.correction = `$${totalMinutes}\\text{ min}= ${heures * 60} \\text{ min}+${minutes}\\text{ min}=${heures}\\text{ h}+${fractionText}\\text{ h}=${texNombre(heuresDecimales, 2)}\\text{ h}$<br>
                Ainsi, $${totalMinutes}$ min correspond à $${miseEnEvidence(texNombre(heuresDecimales, 2))}$ ${texteEnCouleur(heuresDecimales > 1 ? 'heures' : 'heure')}.`
           } else {
             // Cas avec seulement 15min ou 45min
-            this.correction = `$${totalMinutes}\\text{ min}= ${fractionText}\\text{ h}=${decimalText}\\text{ h}$.<br>
+            this.correction = `$${totalMinutes}\\text{ min}= ${fractionText}\\text{ h}=${decimalText}\\text{ h}$<br>
                Ainsi, $${totalMinutes}$ min correspond à $${miseEnEvidence(texNombre(heuresDecimales, 2))}$ ${texteEnCouleur('heure')}.`
           }
 
@@ -135,7 +135,7 @@ export default class MinutesHeuresDecimale extends ExerciceSimple {
       this.question = this.canReponseACompleter
     }
     if (this.versionQcm) {
-      this.question = this.question 
+      this.question = this.question
     }
     this.canEnonce = 'Compléter.'
     this.optionsChampTexte = { texteApres: 'heure(s)' }

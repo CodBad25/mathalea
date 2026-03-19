@@ -36,7 +36,7 @@ export default class ConversionHeuresEtMinutesVersMinutes extends ExerciceSimple
       this.question += ' .... minutes'
     }
     this.correction = `Il y a $60$ minutes dans une heure.<br>
-    Comme $${a} \\times 60 + ${b}=${d}$ alors $${a}$h $${b}$min = $${miseEnEvidence(d)}$ minutes`
+    Comme $(${a} \\times 60) + ${b}=${d}$ alors $${a}$ h $${b}$min = $${miseEnEvidence(d)}$ minutes`
     this.reponse = d
     this.canEnonce = 'Compléter.'
     this.canReponseACompleter = `$${a}$ heures $${b} $ minutes $=$ $\\ldots$ minutes`
