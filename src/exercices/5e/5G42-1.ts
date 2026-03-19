@@ -1,8 +1,8 @@
-import { combinaisonListes } from '../../lib/outils/arrayOutils'
-import Exercice from '../Exercice'
-import { listeQuestionsToContenu } from '../../modules/outils'
 import { propositionsQcm } from '../../lib/interactif/qcm'
+import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import { context } from '../../modules/context'
+import { listeQuestionsToContenu } from '../../modules/outils'
+import Exercice from '../Exercice'
 export const titre =
   'Connaitre les propriétés des parallélogrammes particuliers'
 
@@ -32,7 +32,8 @@ export default class QcmProprietesParallelogrammesParticuliers extends Exercice 
   }
 
   nouvelleVersion() {
-    let texte, texteCorr
+    let texte: string = ''
+    let texteCorr: string = ''
     let questionsDirects = [
       'par1',
       'par2',

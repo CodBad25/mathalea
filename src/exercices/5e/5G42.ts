@@ -47,7 +47,7 @@ export default class DemonstrationsParallelogrammes extends Exercice {
       typesDeQuestionsDisponibles,
       this.nbQuestions,
     ) // Tous les types de questions sont posés mais l'ordre diffère à chaque "cycle"
-    const lesNoms = []
+    const lesNoms: string[][] = []
     let k = 0
     while (k < this.nbQuestions) {
       const nom = choisitLettresDifferentes(5, 'Q')
@@ -85,7 +85,6 @@ export default class DemonstrationsParallelogrammes extends Exercice {
         def,
         cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       noms = lesNoms[i]
       nom = `$${noms[0] + noms[1] + noms[2] + noms[3]}$`

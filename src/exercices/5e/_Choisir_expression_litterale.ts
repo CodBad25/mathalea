@@ -18,15 +18,15 @@ import { estentier, randint } from '../../modules/outils'
  * Ajout de la structure de l'expression le 14/08/2021 : Guillaume Valmont
  */
 export default function ChoisirExpressionLitterale(
-  nbOperations,
-  decimal,
+  nbOperations: number,
+  decimal: number,
   val1 = 1,
   val2 = 2,
   timesOn = true,
 ) {
   let expf
   let expl
-  let expc
+  let expc = '' // :string
   const arrondir = Math.log10(decimal)
   let a = arrondi(randint(2 * decimal, 10 * decimal) / decimal, arrondir)
   let b = arrondi(

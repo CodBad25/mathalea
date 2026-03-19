@@ -1,16 +1,16 @@
+import { tableauColonneLigne } from '../../lib/2d/tableau'
+import { propositionsQcm } from '../../lib/interactif/qcm'
 import {
   choice,
   combinaisonListesSansChangerOrdre,
   shuffle,
 } from '../../lib/outils/arrayOutils'
 import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
+import { arrondi } from '../../lib/outils/nombres'
 import { texNombre } from '../../lib/outils/texNombre'
-import Exercice from '../Exercice'
 import { context } from '../../modules/context'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
-import { tableauColonneLigne } from '../../lib/2d/tableau'
-import { propositionsQcm } from '../../lib/interactif/qcm'
-import { arrondi } from '../../lib/outils/nombres'
+import Exercice from '../Exercice'
 
 export const dateDeModifImportante = '01/06/2024'
 export const titre = 'Reconnaitre des tableaux de proportionnalité'
@@ -32,7 +32,13 @@ export const refs = {
 }
 
 // une fonction pour la justification
-function justificationsOK(n1, n2, n3, coeff, sens) {
+function justificationsOK(
+  n1: number,
+  n2: number,
+  n3: number,
+  coeff: number,
+  sens: string,
+) {
   let sortie
   switch (sens) {
     case 'L1L2':
@@ -46,9 +52,16 @@ function justificationsOK(n1, n2, n3, coeff, sens) {
 }
 
 // une fonction pour la justification sens1
-function justificationsKO(n1, n2, n3, coeff, operation, sens) {
+function justificationsKO(
+  n1: number,
+  n2: number,
+  n3: number,
+  coeff: number,
+  operation: string,
+  sens: string,
+) {
   let sortie
-  const isEq = function (n1, n2, coeff) {
+  const isEq = function (n1: number, n2: number, coeff: number) {
     if (arrondi(n1 / (n1 + coeff), 8) === arrondi(n2 / (n2 + coeff), 8)) {
       return '='
     } else {
@@ -115,7 +128,6 @@ export default class TableauxEtProportionnalite extends Exercice {
     for (
       let i = 0, texte, texteCorr, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       const n1 = randint(5, 9)
       const n2 = randint(5, 9, [n1])
