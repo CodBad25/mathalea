@@ -15,7 +15,6 @@ import {
 import { texNombre } from '../../lib/outils/texNombre'
 import { context } from '../../modules/context'
 import FractionEtendue from '../../modules/FractionEtendue'
-import { fraction } from '../../modules/fractions'
 import {
   gestionnaireFormulaireTexte,
   listeQuestionsToContenu,
@@ -35,11 +34,11 @@ export const titre =
  * Répondre à des questions sur les fonctions.
  * @author Jean-Claude Lhote
  */
-export const uuid = 'ba521'
+export const uuid = 'ba520'
 
 export const refs = {
-  'fr-fr': ['3F10-2', 'BP2AutoO3'],
-  'fr-ch': ['10FA5-6', '11FA8-2', '1mF1-10'],
+  'fr-fr': [],
+  'fr-ch': [],
 }
 export default class CalculsImagesFonctions extends Exercice {
   fonctions: string
@@ -160,10 +159,10 @@ export default class CalculsImagesFonctions extends Exercice {
         n = choice([2, 4, 5])
         m = randint(2, 6, [n, n * 2, n * 3])
       } else if (this.sup3 === 3) {
-        x = randint(-9, 9, [0, 1, -1])
+        x = randint(-9, 0, [0, 1, -1])
         y = randint(-9, 9, [x, 0])
         n = choice([2, 4, 5])
-        m = randint(2, 6, [n, n * 2, n * 3]) * choice([-1, 1])
+        m = randint(2, 6, [n, n * 2, n * 3])
       } else {
         if (this.sup3 === 4) {
           x = randint(2, 9)
@@ -172,13 +171,11 @@ export default class CalculsImagesFonctions extends Exercice {
         }
         y = randint(-9, 9, [x, 0])
         n = choice([2, 4, 5])
-        m = randint(2, 6, [n, n * 2, n * 3]) * choice([-1, 1])
+        m = randint(2, 6, [n, n * 2, n * 3])
       }
       if (this.sup3 === 5) {
         x = -Math.abs(x)
       }
-      const frac = fraction(m, n).texFSD
-      const fracInv = fraction(n, m).ecritureParentheseSiNegatif
       tagImage = true
       switch (listeTypeDeQuestions[i]) {
         case 'linéaire':
@@ -191,8 +188,8 @@ export default class CalculsImagesFonctions extends Exercice {
               tagImage = true
               break
             case 1:
-              enonce = `Soit $f$ la fonction définie par $f(x)=${frac}x$. <br> Quelle est l'image de $${n * x}$ ?<br>`
-              correction = `$f(x)=${frac}x$ donc ici on a : $f(${n * x})=${frac} \\times ${ecritureParentheseSiNegatif(n * x)}=\\dfrac{${m * x * n}}{${n}}=${m * x}$`
+              enonce = `Soit $f$ la fonction définie par $f(x)=\\dfrac{${m}}{${n}}x$. <br> Quelle est l'image de $${n * x}$ ?<br>`
+              correction = `$f(x)=\\dfrac{${m}}{${n}}x$ donc ici on a : $f(${n * x})=\\dfrac{${m}}{${n}} \\times ${ecritureParentheseSiNegatif(n * x)}=\\dfrac{${m * x * n}}{${n}}=${m * x}$`
               ant = n * x
               tagImage = true
               reponses[i] = m * x
@@ -213,8 +210,8 @@ export default class CalculsImagesFonctions extends Exercice {
               break
 
             case 4:
-              enonce = `Soit $f$ la fonction telle que $f(x)=${frac}x$. <br> Quel est l'antécédent de $${m * x}$ ?<br>`
-              correction = `$f(x)=${frac}x$ donc ici on a : $${frac}x=${m * x}$<br> soit $x=${m * x}\\times ${fracInv}=${x * n}$`
+              enonce = `Soit $f$ la fonction telle que $f(x)=\\dfrac{${m}}{${n}}x$. <br> Quel est l'antécédent de $${m * x}$ ?<br>`
+              correction = `$f(x)=\\dfrac{${m}}{${n}}x$ donc ici on a : $\\dfrac{${m}}{${n}}x=${m * x}$<br> soit $x=${m * x}\\times \\dfrac{${n}}{${m}}=${x * n}$`
               img = m * x
               reponses[i] = n * x
               tagImage = false
@@ -231,8 +228,8 @@ export default class CalculsImagesFonctions extends Exercice {
               reponses[i] = m * x + n
               break
             case 1:
-              enonce = `Soit $f$ la fonction définie par $f(x)=${frac}x${ecritureAlgebrique(y)}$. <br> Quelle est l'image de $${n * x}$ ?<br>`
-              correction = `$f(x)=${frac}x${ecritureAlgebrique(y)}$ donc ici on a : $f(${n * x})=${frac}\\times ${ecritureParentheseSiNegatif(n * x)}${ecritureAlgebrique(y)}=${m * x}${ecritureAlgebrique(y)}=${m * x + y}$`
+              enonce = `Soit $f$ la fonction définie par $f(x)=\\dfrac{${m}}{${n}}x${ecritureAlgebrique(y)}$. <br> Quelle est l'image de $${n * x}$ ?<br>`
+              correction = `$f(x)=\\dfrac{${m}}{${n}}x${ecritureAlgebrique(y)}$ donc ici on a : $f(${n * x})=\\dfrac{${m}}{${n}}\\times ${ecritureParentheseSiNegatif(n * x)}${ecritureAlgebrique(y)}=${m * x}${ecritureAlgebrique(y)}=${m * x + y}$`
               ant = n * x
               reponses[i] = m * x + y
               break
@@ -251,8 +248,8 @@ export default class CalculsImagesFonctions extends Exercice {
               tagImage = false
               break
             case 4:
-              enonce = `Soit $f$ la fonction telle que $f(x)=${frac}x${ecritureAlgebrique(y)}$. <br> Quel est l'antécédent de $${m * x + y}$ ?<br>`
-              correction = `$f(x)=${frac}x${ecritureAlgebrique(y)}$ donc ici on a : $${frac}x${ecritureAlgebrique(y)}=${m * x + y}$<br>Soit $x=(${m * x + y}${ecritureAlgebrique(-y)})\\times ${fracInv}=${m * x}\\times ${fracInv}=${n * x}$`
+              enonce = `Soit $f$ la fonction telle que $f(x)=\\dfrac{${m}}{${n}}x${ecritureAlgebrique(y)}$. <br> Quel est l'antécédent de $${m * x + y}$ ?<br>`
+              correction = `$f(x)=\\dfrac{${m}}{${n}}x${ecritureAlgebrique(y)}$ donc ici on a : $\\dfrac{${m}}{${n}}x${ecritureAlgebrique(y)}=${m * x + y}$<br>Soit $x=(${m * x + y}${ecritureAlgebrique(-y)})\\times \\dfrac{${n}}{${m}}=${m * x}\\times \\dfrac{${n}}{${m}}=${n * x}$`
               img = m * x + y
               reponses[i] = n * x
               tagImage = false

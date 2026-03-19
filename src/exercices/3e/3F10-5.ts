@@ -1,4 +1,4 @@
-import CalculsImagesFonctions from './3F10-2'
+import CalculsImagesFonctions from './3F10-2-old'
 export const titre =
   'Calculer des images (et antécédents) dans des fonctions linéaires ou affines'
 export const dateDePublication = '19/06/2024'
