@@ -242,9 +242,9 @@ export default class SujetCAN2022Seconde extends Exercice {
            ${a}x&=${-b}\\\\
                                 x&=${f.texFraction}${f.texSimplificationAvecEtapes()}
            \\end{aligned}$<br>
-  
-  
-  
+
+
+
             L'équation $${reduireAxPlusB(a, b)}=0$ a pour solution $x=${f.texFractionSimplifiee}$.`
           reponse = f
 
@@ -440,7 +440,7 @@ export default class SujetCAN2022Seconde extends Exercice {
             texte = `Donner l'écriture  scientifique de $${a}\\times 10^{${exp}}$.`
 
             texteCorr = `La notation scientifique est de la forme $a\\times 10^{n}$ avec $1\\leqslant a <10$ et $n$ un entier relatif.<br>
-              Ici : $${a}\\times 10^{${exp}}=\\underbrace{${texNombre(b, 2)}}_{1\\leqslant ${texNombre(b, 2)} <10}\\times10^2\\times 10^{${exp}}=${texNombre(b, 2)}\\times 10^{${exp + 2}}$.          
+              Ici : $${a}\\times 10^{${exp}}=\\underbrace{${texNombre(b, 2)}}_{1\\leqslant ${texNombre(b, 2)} <10}\\times10^2\\times 10^{${exp}}=${texNombre(b, 2)}\\times 10^{${exp + 2}}$.
  `
           } else if (choix === 'b') {
             a = randint(11, 99)
@@ -452,7 +452,7 @@ export default class SujetCAN2022Seconde extends Exercice {
 
             texteCorr = `La notation scientifique est de la forme $a\\times 10^{n}$ avec $1\\leqslant a <10$ et $n$ un entier relatif.<br>
               Ici : $${a}\\times 10^{${exp}}=\\underbrace{${texNombre(b, 2)}}_{1\\leqslant ${texNombre(b, 2)} <10}\\times10^1\\times 10^{${exp}}=${texNombre(b, 2)}\\times 10^{${exp + 1}}$.
-              
+
  `
           } else if (choix === 'c') {
             a = (randint(1, 9) * 10 + randint(1, 9)) / 100
@@ -855,6 +855,7 @@ export default class SujetCAN2022Seconde extends Exercice {
             const pol = polygoneAvecNom(A, B, C)
             const objets = []
             choix = choice(['a', 'b', 'c'])
+            let longueurATrouver = ''
             if (choix === 'a') {
               objets.push(pol[0])
               objets.push(
@@ -877,6 +878,7 @@ export default class SujetCAN2022Seconde extends Exercice {
               texteCorr = `On utilise le théorème de Pythagore dans le triangle rectangle $ABC$ :<br>
               On a $AB^2=BC^2-AC^2$, soit $AB^2=${a[2]}^2-${a[0]}^2=${a[2] ** 2 - a[0] ** 2}$.<br>
               Par conséquent, $AB=${a[1]}$.`
+              longueurATrouver = 'AB'
             } else if (choix === 'b') {
               objets.push(pol[0])
               objets.push(
@@ -899,6 +901,7 @@ export default class SujetCAN2022Seconde extends Exercice {
               texteCorr = `On utilise le théorème de Pythagore dans le triangle rectangle $ABC$ :<br>
                 On a $AC^2=BC^2-AB^2$, soit $AC^2=${a[2]}^2-${a[1]}^2=${a[2] ** 2 - a[1] ** 2}$.<br>
                 Par conséquent, $AC=${a[0]}$.`
+              longueurATrouver = 'AC'
             } else {
               objets.push(pol[0])
               objets.push(
@@ -921,6 +924,7 @@ export default class SujetCAN2022Seconde extends Exercice {
               texteCorr = `On utilise le théorème de Pythagore dans le triangle rectangle $ABC$ :<br>
                   On a $BC^2=AB^2+AC^2$, soit $BC^2=${a[0]}^2+${a[1]}^2=${a[0] ** 2 + a[1] ** 2}$.<br>
                   Par conséquent, $BC=${a[2]}$.`
+              longueurATrouver = 'BC'
             }
             texte += mathalea2d(
               Object.assign(
@@ -938,7 +942,7 @@ export default class SujetCAN2022Seconde extends Exercice {
 
             setReponse(this, index, reponse, { formatInteractif: 'calcul' })
             if (this.interactif) {
-              texte += '<br>$BC=$'
+              texte += `<br>$${longueurATrouver}=$`
               texte += ajouteChampTexteMathLive(
                 this,
                 index,
