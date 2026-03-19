@@ -1,10 +1,10 @@
-import { choice } from '../../../lib/outils/arrayOutils'
-import ExerciceSimple from '../../ExerciceSimple'
-import { randint } from '../../../modules/outils'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { choice } from '../../../lib/outils/arrayOutils'
 import { reduirePolynomeDegre3 } from '../../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { context } from '../../../modules/context'
+import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Développer avec les égalités remarquables'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -53,7 +53,7 @@ $\\begin{aligned}
            (${inconnue}+${a})^2&=${inconnue}^2+2 \\times ${a} \\times ${inconnue}+${a}^2\\\\
             &=${miseEnEvidence(`${inconnue}^2+${2 * a}${inconnue}+${a * a}`)}
             \\end{aligned}$`
-        this.reponse = `$${reduirePolynomeDegre3(0, 1, 2 * a, a ** 2, inconnue)}$`
+        this.reponse = `${reduirePolynomeDegre3(0, 1, 2 * a, a ** 2, inconnue)}`
         this.distracteurs = [
           `$${reduirePolynomeDegre3(0, 1, 0, a * a, inconnue)}$`,
           `$${reduirePolynomeDegre3(0, 1, -2 * a, a * a, inconnue)}$`,
@@ -64,14 +64,14 @@ $\\begin{aligned}
         if (this.versionQcm) {
           this.question = `La forme développée de ${expression2} est :` // (x-a)²
         } else {
-          this.question = ` Développer ${expression2}.` // (x-a)²
+          this.question = `Développer ${expression2}.` // (x-a)²
         }
         this.correction = `On utilise l'égalité remarquable $(a-b)^2=a^2-2ab+b^2$ avec $a=${inconnue}$ et $b=${a}$.<br>
       $\\begin{aligned}
             (${inconnue}-${a})^2&=${inconnue}^2-2 \\times ${a} \\times ${inconnue}+${a}^2\\\\
             &=${miseEnEvidence(`${inconnue}^2-${2 * a}${inconnue}+${a * a}`)}
             \\end{aligned}$`
-        this.reponse = `$${reduirePolynomeDegre3(0, 1, -2 * a, a ** 2, inconnue)}$`
+        this.reponse = `${reduirePolynomeDegre3(0, 1, -2 * a, a ** 2, inconnue)}`
         this.distracteurs = [
           `$${reduirePolynomeDegre3(0, 1, 0, a * a, inconnue)}$`,
           `$${reduirePolynomeDegre3(0, 1, -2 * a, -a * a, inconnue)}$`,
@@ -90,7 +90,7 @@ $\\begin{aligned}
            (${inconnue}-${a})(${inconnue}+${a})&=${inconnue}^2-${a}^2\\\\
             &=${miseEnEvidence(`${inconnue}^2-${a * a}`)}
             \\end{aligned}$`
-        this.reponse = `$${reduirePolynomeDegre3(0, 1, 0, -1 * a ** 2, inconnue)}$`
+        this.reponse = `${reduirePolynomeDegre3(0, 1, 0, -1 * a ** 2, inconnue)}`
         this.distracteurs = [
           `$${reduirePolynomeDegre3(0, 1, 0, a * a, inconnue)}$`,
           `$${reduirePolynomeDegre3(0, 1, -2 * a, a * a, inconnue)}$`,
@@ -110,7 +110,7 @@ $\\begin{aligned}
          (${b}${inconnue}+${a})^2&=(${b}${inconnue})^2+2 \\times ${b}${inconnue} \\times ${a} + ${a}^2\\\\
             &=${miseEnEvidence(`${b * b}${inconnue}^2+${2 * b * a}${inconnue}+${a * a}`)}
             \\end{aligned}$`
-        this.reponse = `$${reduirePolynomeDegre3(0, b ** 2, 2 * a * b, a ** 2, inconnue)}$`
+        this.reponse = `${reduirePolynomeDegre3(0, b ** 2, 2 * a * b, a ** 2, inconnue)}`
         this.distracteurs = [
           `$${reduirePolynomeDegre3(0, b * b, 0, a * a, inconnue)}$`,
           `$${reduirePolynomeDegre3(0, b * b, a * b, a * a, inconnue)}$`,
@@ -129,7 +129,7 @@ $\\begin{aligned}
          (${b}${inconnue}-${a})^2&=(${b}${inconnue})^2-2 \\times ${b}${inconnue} \\times ${a} + ${a}^2\\\\
             &=${miseEnEvidence(`${b * b}${inconnue}^2-${2 * b * a}${inconnue}+${a * a}`)}
             \\end{aligned}$`
-        this.reponse = `$${reduirePolynomeDegre3(0, b ** 2, -2 * a * b, a ** 2, inconnue)}$`
+        this.reponse = `${reduirePolynomeDegre3(0, b ** 2, -2 * a * b, a ** 2, inconnue)}`
         this.distracteurs = [
           `$${reduirePolynomeDegre3(0, b * b, 0, -a * a, inconnue)}$`,
           `$${reduirePolynomeDegre3(0, b * b, 0, a * a, inconnue)}$`,
@@ -150,7 +150,7 @@ $\\begin{aligned}
              (${b}${inconnue}-${a})(${b}${inconnue}+${a})&=(${b}${inconnue})^2-${a}^2\\\\
               &=${miseEnEvidence(`${b ** 2}${inconnue}^2-${a * a}`)}
               \\end{aligned}$`
-        this.reponse = `$${reduirePolynomeDegre3(0, b ** 2, 0, -1 * a ** 2, inconnue)}$`
+        this.reponse = `${reduirePolynomeDegre3(0, b ** 2, 0, -1 * a ** 2, inconnue)}`
         this.distracteurs = [
           `$${reduirePolynomeDegre3(0, b * b, 0, a * a, inconnue)}$`,
           `$${reduirePolynomeDegre3(0, b * b, -2 * a * b, a * a, inconnue)}$`,
