@@ -1,6 +1,7 @@
 import ConvertirDuree from '../ch/10GM3-10'
 export const titre = 'Convertir des durées en heures décimales ou en minutes'
 export const dateDePublication = '24/09/2025'
+export const dateDeModifImportante = '19/03/2026'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const uuid = '185f7'

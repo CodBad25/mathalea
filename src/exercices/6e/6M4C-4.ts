@@ -1,6 +1,7 @@
 import ConvertirDuree from '../ch/10GM3-10'
 export const titre = 'Convertir des durées en heures décimales ou en minutes'
 export const dateDePublication = '24/09/2025'
+export const dateDeModifImportante = '19/03/2026'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const uuid = '8013d'
@@ -19,8 +20,8 @@ export default class ConvertirDuree6eV2 extends ConvertirDuree {
     this.version = '6M4C-4'
     this.besoinFormulaireNumerique = [
       'Type de conversions',
-      6,
-      '1 : heures décimales vers heures-minutes-secondes\n2 : minutes décimales vers heures-minutes-secondes\n3 : Mélange',
+      3,
+      '1 : De heures décimales vers heures-minutes-secondes\n2 : De minutes décimales vers heures-minutes-secondes\n3 : Mélange',
     ]
 
     this.sup2 = true
