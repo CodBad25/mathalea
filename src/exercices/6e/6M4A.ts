@@ -18,6 +18,7 @@ import Exercice from '../Exercice'
 export const titre = 'Additionner des durées'
 export const interactifReady = true
 export const interactifType = 'mathLive'
+export const dateDeModifImportante = '20/03/2026'
 
 /**
  * Additions de durées de différents :
@@ -81,7 +82,10 @@ export default class SommeDeDurees extends Exercice {
         t1 = new Hms({ minute: m1, second: s1 })
         t2 = new Hms({ minute: m2, second: s2 })
         texte = `$${m1}~\\text{min}~${s1}~\\text{s}+${m2}~\\text{min}~${s2}~\\text{s}=$`
-        texteCorr = `$${m1}~\\text{min}~${s1}~\\text{s}+${m2}~\\text{min}~${s2}~\\text{s}= ${m1 + m2}~\\text{min}~${s1 + s2}~\\text{s}= ${miseEnEvidence(`1~\\text{h}~${m1 + m2 - 60}~\\text{min}~${s1 + s2}~\\text{s}`)}$`
+        texteCorr = `$${m1}~\\text{min}~${s1}~\\text{s}+${m2}~\\text{min}~${s2}~\\text{s}= ${m1 + m2}~\\text{min}~${s1 + s2}~\\text{s}$<br>`
+        texteCorr += `$${m1}~\\text{min}~${s1}~\\text{s}+${m2}~\\text{min}~${s2}~\\text{s}= 60~\\text{min} + ${m1 + m2 - 60}~\\text{min}+${s1 + s2}~\\text{s}$<br>`
+        texteCorr += `$${m1}~\\text{min}~${s1}~\\text{s}+${m2}~\\text{min}~${s2}~\\text{s}= 1~\\text{h} + ${m1 + m2 - 60}~\\text{min}+${s1 + s2}~\\text{s}$<br>`
+        texteCorr += `$${m1}~\\text{min}~${s1}~\\text{s}+${m2}~\\text{min}~${s2}~\\text{s}= ${miseEnEvidence(`1~\\text{h}~${m1 + m2 - 60}~\\text{min}~${s1 + s2}~\\text{s}`)}$`
       } else if (typesDeQuestions[i] === 2) {
         h1 = randint(2, 12)
         h2 = randint(2, 11)
@@ -90,7 +94,10 @@ export default class SommeDeDurees extends Exercice {
         t1 = new Hms({ minute: m1, hour: h1 })
         t2 = new Hms({ minute: m2, hour: h2 })
         texte = `$${h1}~\\text{h}~${m1}~\\text{min}+${h2}~\\text{h}~${m2}~\\text{min}=$`
-        texteCorr = `$${h1}~\\text{h}~${m1}~\\text{min}+${h2}~\\text{h}~${m2}~\\text{min}= ${h1 + h2}~\\text{h}~${m1 + m2}~\\text{min} = ${miseEnEvidence(`${h1 + h2 + 1}~\\text{h}~${m1 + m2 - 60}~\\text{min}`)}$`
+        texteCorr = `$${h1}~\\text{h}~${m1}~\\text{min}+${h2}~\\text{h}~${m2}~\\text{min}= ${h1 + h2}~\\text{h}~${m1 + m2}~\\text{min}$<br>`
+        texteCorr += `$${h1}~\\text{h}~${m1}~\\text{min}+${h2}~\\text{h}~${m2}~\\text{min}= ${h1 + h2}~\\text{h}+60~\\text{min}+${m1 + m2 - 60}~\\text{min}$<br>`
+        texteCorr += `$${h1}~\\text{h}~${m1}~\\text{min}+${h2}~\\text{h}~${m2}~\\text{min}= ${h1 + h2}~\\text{h}+1~\\text{h}+${m1 + m2 - 60}~\\text{min}$<br>`
+        texteCorr += `$${h1}~\\text{h}~${m1}~\\text{min}+${h2}~\\text{h}~${m2}~\\text{min}= ${miseEnEvidence(`${h1 + h2 + 1}~\\text{h}~${m1 + m2 - 60}~\\text{min}`)}$`
       } else if (typesDeQuestions[i] === 3) {
         h1 = randint(2, 12)
         h2 = randint(2, 11)
@@ -110,7 +117,13 @@ export default class SommeDeDurees extends Exercice {
         t1 = new Hms({ minute: m1, second: s1 })
         t2 = new Hms({ minute: m2, second: s2 })
         texte = `$${m1}~\\text{min}~${s1}~\\text{s}+${m2}~\\text{min}~${s2}~\\text{s}=$`
-        texteCorr = `$${m1}~\\text{min}~${s1}~\\text{s}+${m2}~\\text{min}~${s2}~\\text{s}= ${m1 + m2}~\\text{min}~${s1 + s2}~\\text{s} = ${m1 + m2 + 1}~\\text{min}~${s1 + s2 - 60}~\\text{s} = ${miseEnEvidence(`1~\\text{h}~${m1 + m2 + 1 - 60}~\\text{min}~${s1 + s2 - 60}~\\text{s}`)}$`
+        texteCorr = `$${m1}~\\text{min}~${s1}~\\text{s}+${m2}~\\text{min}~${s2}~\\text{s}= ${m1 + m2}~\\text{min}~${s1 + s2}~\\text{s}$<br>`
+        texteCorr += `$${m1}~\\text{min}~${s1}~\\text{s}+${m2}~\\text{min}~${s2}~\\text{s}= ${m1 + m2}~\\text{min}+60~\\text{s}+${s1 + s2 - 60}~\\text{s}$<br>`
+        texteCorr += `$${m1}~\\text{min}~${s1}~\\text{s}+${m2}~\\text{min}~${s2}~\\text{s}= ${m1 + m2}~\\text{min}+1~\\text{min}+${s1 + s2 - 60}~\\text{s}$<br>`
+        texteCorr += `$${m1}~\\text{min}~${s1}~\\text{s}+${m2}~\\text{min}~${s2}~\\text{s}= ${m1 + m2 + 1}~\\text{min}+${s1 + s2 - 60}~\\text{s}$<br>`
+        texteCorr += `$${m1}~\\text{min}~${s1}~\\text{s}+${m2}~\\text{min}~${s2}~\\text{s}= 60~\\text{min}+${m1 + m2 + 1 - 60}~\\text{min}+${s1 + s2 - 60}~\\text{s}$<br>`
+        texteCorr += `$${m1}~\\text{min}~${s1}~\\text{s}+${m2}~\\text{min}~${s2}~\\text{s}= 1~\\text{h}+${m1 + m2 + 1 - 60}~\\text{min}+${s1 + s2 - 60}~\\text{s}$<br>`
+        texteCorr += `$${m1}~\\text{min}~${s1}~\\text{s}+${m2}~\\text{min}~${s2}~\\text{s}= ${miseEnEvidence(`1~\\text{h}~${m1 + m2 + 1 - 60}~\\text{min}~${s1 + s2 - 60}~\\text{s}`)}$`
       } else {
         if (choice([true, false])) {
           h1 = randint(2, 12)
@@ -122,7 +135,11 @@ export default class SommeDeDurees extends Exercice {
           t1 = new Hms({ hour: h1, minute: m1, second: s1 })
           t2 = new Hms({ hour: h2, minute: m2, second: s2 })
           texte = `$${h1}~\\text{h}~${m1}~\\text{min}~${s1}~\\text{s}+${h2}~\\text{h}~${m2}~\\text{min}~${s2}~\\text{s}=$`
-          texteCorr = `$${h1}~\\text{h}~${m1}~\\text{min}~${s1}~\\text{s}+${h2}~\\text{h}~${m2}~\\text{min}~${s2}~\\text{s}= ${h1 + h2}~\\text{h}~${m1 + m2}~\\text{min}~${s1 + s2}~\\text{s} = ${miseEnEvidence(`${h1 + h2 + 1}~\\text{h}~${m1 + m2 - 60}~\\text{min}~${s1 + s2}~\\text{s}`)}$`
+          texteCorr = `$${h1}~\\text{h}~${m1}~\\text{min}~${s1}~\\text{s}+${h2}~\\text{h}~${m2}~\\text{min}~${s2}~\\text{s}= ${h1 + h2}~\\text{h}~${m1 + m2}~\\text{min}~${s1 + s2}~\\text{s}$<br>`
+          texteCorr += `$${h1}~\\text{h}~${m1}~\\text{min}~${s1}~\\text{s}+${h2}~\\text{h}~${m2}~\\text{min}~${s2}~\\text{s}= ${h1 + h2}~\\text{h}+60~\\text{min}+${m1 + m2 - 60}~\\text{min}+${s1 + s2}~\\text{s}$<br>`
+          texteCorr += `$${h1}~\\text{h}~${m1}~\\text{min}~${s1}~\\text{s}+${h2}~\\text{h}~${m2}~\\text{min}~${s2}~\\text{s}= ${h1 + h2}~\\text{h}+1~\\text{h}+${m1 + m2 - 60}~\\text{min}+${s1 + s2}~\\text{s}$<br>`
+          texteCorr += `$${h1}~\\text{h}~${m1}~\\text{min}~${s1}~\\text{s}+${h2}~\\text{h}~${m2}~\\text{min}~${s2}~\\text{s}= ${h1 + h2 + 1}~\\text{h}+${m1 + m2 - 60}~\\text{min}+${s1 + s2}~\\text{s}$<br>`
+          texteCorr += `$${h1}~\\text{h}~${m1}~\\text{min}~${s1}~\\text{s}+${h2}~\\text{h}~${m2}~\\text{min}~${s2}~\\text{s}= ${h1 + h2}~\\text{h}~${m1 + m2}~\\text{min}~${s1 + s2}~\\text{s} = ${miseEnEvidence(`${h1 + h2 + 1}~\\text{h}~${m1 + m2 - 60}~\\text{min}~${s1 + s2}~\\text{s}`)}$`
         } else {
           h1 = randint(2, 12)
           h2 = randint(2, 11)
@@ -133,8 +150,14 @@ export default class SommeDeDurees extends Exercice {
           t1 = new Hms({ hour: h1, minute: m1, second: s1 })
           t2 = new Hms({ hour: h2, minute: m2, second: s2 })
           texte = `$${h1}~\\text{h}~${m1}~\\text{min}~${s1}~\\text{s}+${h2}~\\text{h}~${m2}~\\text{min}~${s2}~\\text{s}=$`
-          texteCorr = `$${h1}~\\text{h}~${m1}~\\text{min}~${s1}~\\text{s}+${h2}~\\text{h}~${m2}~\\text{min}~${s2}~\\text{s}=`
-          texteCorr += ` ${h1 + h2}~\\text{h}~${m1 + m2}~\\text{min}~${s1 + s2}~\\text{s} = ${h1 + h2}~\\text{h}~${m1 + m2 + 1}~\\text{min}~${s1 + s2 - 60}~\\text{s} =${miseEnEvidence(`${h1 + h2 + 1}~\\text{h}~${m1 + m2 + 1 - 60}~\\text{min}~${s1 + s2 - 60}~\\text{s}`)}$`
+          texteCorr = `$${h1}~\\text{h}~${m1}~\\text{min}~${s1}~\\text{s}+${h2}~\\text{h}~${m2}~\\text{min}~${s2}~\\text{s}=${h1 + h2}~\\text{h}~${m1 + m2}~\\text{min}~${s1 + s2}~\\text{s}$<br>`
+          texteCorr += `$${h1}~\\text{h}~${m1}~\\text{min}~${s1}~\\text{s}+${h2}~\\text{h}~${m2}~\\text{min}~${s2}~\\text{s}=${h1 + h2}~\\text{h}+${m1 + m2}~\\text{min}+60~\\text{s}+${s1 + s2 - 60}~\\text{s}$<br>`
+          texteCorr += `$${h1}~\\text{h}~${m1}~\\text{min}~${s1}~\\text{s}+${h2}~\\text{h}~${m2}~\\text{min}~${s2}~\\text{s}=${h1 + h2}~\\text{h}+${m1 + m2}~\\text{min}+1~\\text{min}+${s1 + s2 - 60}~\\text{s}$<br>`
+          texteCorr += `$${h1}~\\text{h}~${m1}~\\text{min}~${s1}~\\text{s}+${h2}~\\text{h}~${m2}~\\text{min}~${s2}~\\text{s}=${h1 + h2}~\\text{h}+${m1 + m2 + 1}~\\text{min}+${s1 + s2 - 60}~\\text{s}$<br>`
+          texteCorr += `$${h1}~\\text{h}~${m1}~\\text{min}~${s1}~\\text{s}+${h2}~\\text{h}~${m2}~\\text{min}~${s2}~\\text{s}=${h1 + h2}~\\text{h}+60~\\text{min}+${m1 + m2 + 1 - 60}~\\text{min}+${s1 + s2 - 60}~\\text{s}$<br>`
+          texteCorr += `$${h1}~\\text{h}~${m1}~\\text{min}~${s1}~\\text{s}+${h2}~\\text{h}~${m2}~\\text{min}~${s2}~\\text{s}=${h1 + h2}~\\text{h}+1~\\text{h}+${m1 + m2 + 1 - 60}~\\text{min}+${s1 + s2 - 60}~\\text{s}$<br>`
+          texteCorr += `$${h1}~\\text{h}~${m1}~\\text{min}~${s1}~\\text{s}+${h2}~\\text{h}~${m2}~\\text{min}~${s2}~\\text{s}=${h1 + h2 + 1}~\\text{h}+${m1 + m2 + 1 - 60}~\\text{min}+${s1 + s2 - 60}~\\text{s}$<br>`
+          texteCorr += `$${h1}~\\text{h}~${m1}~\\text{min}~${s1}~\\text{s}+${h2}~\\text{h}~${m2}~\\text{min}~${s2}~\\text{s}=${miseEnEvidence(`${h1 + h2 + 1}~\\text{h}~${m1 + m2 + 1 - 60}~\\text{min}~${s1 + s2 - 60}~\\text{s}`)}$`
         }
       }
 
