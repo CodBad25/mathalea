@@ -2,6 +2,7 @@ import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
+import { rienSi1 } from '../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { pgcd } from '../../lib/outils/primalite'
 import { texNombre } from '../../lib/outils/texNombre'
@@ -12,7 +13,7 @@ import {
 } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-export const titre = 'Résoudre des inéquations du type $a^x \leq b$ avec logarithme'
+export const titre = 'Résoudre des inéquations du type $a^x \\leq b$ avec logarithme'
 export const dateDePublication = '4/5/2024'
 export const dateDeModifImportante = '18/07/2024'
 export const uuid = '00a7a'
@@ -335,7 +336,7 @@ export default class InequationsLog extends Exercice {
       if (quotient !== null && base !== null) {
         texteCorr += this.correctionDetaillee
           ? typeof quotient === 'number'
-            ? `<br>Or, $${logString}(${stringB})=${logString}(${texNombre(base, 5)}^{${quotient}})=${quotient}${logString}(${texNombre(base, 5)})$ donc $\\dfrac{${logString}(${stringB})}{${logString}(${stringA})}=\\dfrac{${quotient}${logString}(${texNombre(base, 5)})}{${logString}(${texNombre(base, 5)})}=${resultat}$. `
+            ? `<br>Or, $${logString}(${stringB})=${logString}(${texNombre(base, 5)}^{${quotient}})=${rienSi1(quotient)}${logString}(${texNombre(base, 5)})$ donc $\\dfrac{${logString}(${stringB})}{${logString}(${stringA})}=\\dfrac{${rienSi1(quotient)}${logString}(${texNombre(base, 5)})}{${logString}(${texNombre(base, 5)})}=${resultat}$. `
             : quotient[0] === 1
               ? `<br>Or, $${logString}(${stringA})=${logString}(${texNombre(base, 5)}^{${quotient[1]}})=${quotient[1]}${logString}(${texNombre(base, 5)})$ donc $\\dfrac{${logString}(${stringB})}{${logString}(${stringA})}=\\dfrac{${logString}(${stringB})}{${quotient[1]}${logString}(${texNombre(base, 5)})}=\\dfrac{${quotient[0]}}{${quotient[1]}}$. `
               : `<br>Or, $${logString}(${stringB})=${logString}(${texNombre(base, 5)}^{${quotient[0]}})=${quotient[0]}${logString}(${texNombre(base, 5)})$ et $${logString}(${stringA})=${logString}(${texNombre(base, 5)}^{${quotient[1]}})=${quotient[1]}${logString}(${texNombre(base, 5)})$ donc $\\dfrac{${logString}(${stringB})}{${logString}(${stringA})}=\\dfrac{${quotient[0]}${logString}(${texNombre(base, 5)})}{${quotient[1]}${logString}(${texNombre(base, 5)})}= ${resultat}$. `
