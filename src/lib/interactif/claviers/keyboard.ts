@@ -310,6 +310,7 @@ const shortcutsByKeyboards = {
     cos: { mode: 'math', value: '\\cos(#0)' },
     sin: { mode: 'math', value: '\\sin(#0)' },
     tan: { mode: 'math', value: '\\tan(#0)' },
+    log: { mode: 'math', value: '\\log(#0)' },
     '{': { mode: 'math', value: '\\{#0\\}' },
     '[': { mode: 'math', value: '$[$' },
     singleton: { mode: 'math', value: '\\{#0\\}' },
