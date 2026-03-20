@@ -1,6 +1,7 @@
 import { isArray, isInteger } from 'mathjs'
 import { context } from '../../modules/context'
 import type { IFractionEtendue } from '../../modules/FractionEtendue.type'
+import { orangeMathalea } from '../colors'
 import { choice } from './arrayOutils'
 
 // Garde structurel pour détecter une FractionEtendue
@@ -19,11 +20,13 @@ const isFractionEtendue = (x: unknown): x is IFractionEtendue =>
  */
 export function miseEnEvidence(
   texte: string | IFractionEtendue | number,
-  couleur: string = '#f15929',
+  couleur: string = orangeMathalea,
 ) {
   if (isFractionEtendue(texte)) texte = texte.texFraction
   if (typeof texte === 'number') texte = String(texte)
   if (isArray(couleur)) couleur = couleur[0]
+  texte = texte.replace(/\\text\{/g, '\\textbf{')
+
   if (context.isHtml) {
     return `{\\color{${couleur}}\\boldsymbol{${texte}}}`
   } else {
