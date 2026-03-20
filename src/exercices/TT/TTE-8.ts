@@ -93,27 +93,33 @@ export default class ExpressionsLogX extends Exercice {
               `${ecritureAlgebriqueSauf1(c * expC)}${logString}(x)`,
             ]
 
+      const coefficient = a * expA + b * expB + c * expC
+      const coefficientTex = rienSi1(coefficient)
+      const coefficientMisEnEvidence =
+        Math.abs(coefficient) === 1
+          ? coefficientTex
+          : miseEnEvidence(coefficientTex)
+      const resultatFinal = `=${coefficientMisEnEvidence}${logString}(x)`
       let texteCorr = `$${texte}=${corrA[0]}${corrB[0]}${corrC[0]}=${corrA[1]}${corrB[1]}${corrC[1]}`
-      texteCorr += `=${rienSi1(a * expA + b * expB + c * expC)}${logString}(x)$`
-      const answer: string = `${rienSi1(a * expA + b * expB + c * expC)}${logString}(x)`
+      texteCorr += `${resultatFinal}$`
+      const answer = `${coefficient}`
 
-      // on reprend la correction pour mettre me dernier membre en évidence.
-      const chunks = texteCorr.split('=')
-      const lastChunk = chunks[chunks.length - 1]
-      chunks[chunks.length - 1] =
-        miseEnEvidence(lastChunk.substring(0, lastChunk.length - 1)) + '$'
-      texteCorr = chunks.join('=')
-      // et voilà, c'est fait pour toute les corrections.
       if (this.questionJamaisPosee(i, a, b, c, expA, expB, expC)) {
         texte = `$${texte}$` // <- laisser le i et ajouter toutes les variables qui rendent les exercices différents (par exemple a, b, c et d)
         if (this.interactif) {
           texte += ajouteChampTexteMathLive(
             this,
             i,
-            KeyboardType.clavierFonctionsTerminales,
-            { texteAvant: '=' },
+            KeyboardType.clavierDeBase,
+            {
+              texteAvant: '$=$',
+              texteApres: `$${logString}(x)$`,
+              placeholder: '...',
+            },
           )
           handleAnswers(this, i, { reponse: { value: answer } })
+        } else {
+          texte += ` $= ... ${logString}(x)$`
         }
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr

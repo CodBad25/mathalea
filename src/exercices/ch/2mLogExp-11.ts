@@ -5,6 +5,7 @@ import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
 import {
   ecritureAlgebrique,
+  ecritureAlgebriqueSauf1,
   ecritureParentheseSiNegatif,
   reduireAxPlusB,
   rienSi1,
@@ -151,13 +152,13 @@ export default class EquationsLogarithmiques extends Exercice {
           texteCorr += `Par définition, $${logString}(a) = b \\iff a = ${base}^b$, donc :<br>`
           texteCorr += `$\\begin{aligned}\n`
           texteCorr += `&(${expr1})(${expr2}) = ${formatBasePow(n)}\\\\\n`
-          texteCorr += `\\iff &${A === 1 ? '' : A}x^2 + ${B}x - ${formatBasePow(n)} = 0\n`
+          texteCorr += `\\iff &${rienSi1(A)}x^2${ecritureAlgebriqueSauf1(B)}x-${formatBasePow(n)} = 0\n`
           texteCorr += `\\end{aligned}$<br>`
           texteCorr += `On résout cette équation du second degré.<br>`
           const deltaExpr = isLn
-            ? `${B}^2 + ${4 * A}\\text{e}^{${n}}`
+            ? `${ecritureParentheseSiNegatif(B)}^2${ecritureAlgebrique(4 * A)}\\text{e}^{${n}}`
             : `${texNombre(delta, 0)}`
-          texteCorr += `$\\Delta = ${B}^2 + 4 \\times ${A === 1 ? '' : A + ' \\times '}${formatBasePow(n)} ${isLn ? `= ${B * B} + ${4 * A}\\text{e}^{${n}}` : `= ${texNombre(delta, 0)}`}$<br>`
+          texteCorr += `$\\Delta = ${ecritureParentheseSiNegatif(B)}^2${ecritureAlgebrique(4 * A)}${formatBasePow(n)} ${isLn ? `= ${B * B}${ecritureAlgebrique(4 * A)}\\text{e}^{${n}}` : `= ${texNombre(delta, 0)}`}$<br>`
           texteCorr += `$x_1 = \\dfrac{-${B} + \\sqrt{${deltaExpr}}}{${2 * A}} \\approx ${texNombre(x1, 2, true)}$<br>`
           texteCorr += `$x_2 = \\dfrac{-${B} - \\sqrt{${deltaExpr}}}{${2 * A}} \\approx ${texNombre(x2, 2, true)}$<br>`
           texteCorr += `Vérifions que les solutions appartiennent au domaine :<br>`
@@ -220,13 +221,13 @@ export default class EquationsLogarithmiques extends Exercice {
           texteCorr += `Par définition, $${logString}(a) = b \\iff a = ${base}^b$, donc :<br>`
           texteCorr += `$\\begin{aligned}\n`
           texteCorr += `&(${expr1})(${expr2}) = ${formatBasePow(n)}\\\\\n`
-          texteCorr += `\\iff &${rienSi1(A)}x^2 ${bCoef >= 0 ? '+' : ''} ${bCoef !== 0 ? `${bCoef}x` : ''} ${ecritureAlgebrique(b1 * b2)} - ${formatBasePow(n)} = 0\n`
+          texteCorr += `\\iff &${rienSi1(A)}x^2${bCoef === 0 ? '' : `${ecritureAlgebriqueSauf1(bCoef)}x`}${ecritureAlgebrique(b1 * b2)}-${formatBasePow(n)} = 0\n`
           texteCorr += `\\end{aligned}$<br>`
           texteCorr += `On résout cette équation du second degré.<br>`
           const deltaExpr = isLn
-            ? `${bCoef}^2 - ${4 * A}(${b1 * b2} - \\text{e}^{${n}})`
+            ? `${ecritureParentheseSiNegatif(bCoef)}^2${ecritureAlgebrique(-4 * A)}(${b1 * b2} - \\text{e}^{${n}})`
             : `${texNombre(delta, 0)}`
-          texteCorr += `$\\Delta = ${ecritureParentheseSiNegatif(bCoef)}^2 - 4 \\times ${A === 1 ? '' : A + ' \\times '}(${b1 * b2} - ${formatBasePow(n)}) ${isLn ? '' : `= ${texNombre(delta, 0)}`}$<br>`
+          texteCorr += `$\\Delta = ${ecritureParentheseSiNegatif(bCoef)}^2${ecritureAlgebrique(-4 * A)}(${b1 * b2} - ${formatBasePow(n)}) ${isLn ? '' : `= ${texNombre(delta, 0)}`}$<br>`
           texteCorr += `$x_1 = \\dfrac{${-bCoef} + \\sqrt{${deltaExpr}}}{${2 * A}} \\approx ${texNombre(x1, 2, true)}$<br>`
           texteCorr += `$x_2 = \\dfrac{${-bCoef} - \\sqrt{${deltaExpr}}}{${2 * A}} \\approx ${texNombre(x2, 2, true)}$<br>`
           texteCorr += `Vérifions que les solutions appartiennent au domaine :<br>`
@@ -354,13 +355,13 @@ export default class EquationsLogarithmiques extends Exercice {
           texteCorr += `Par définition, $${logString}(a) = b \\iff a = ${base}^b$, donc :<br>`
           texteCorr += `$\\begin{aligned}\n`
           texteCorr += `&(${expr1})(${expr2}) = ${formatBasePow(c)}\\\\\n`
-          texteCorr += `\\iff &${rienSi1(A)}x^2 ${bCoef >= 0 ? '+' : ''} ${bCoef}x + ${prodBD} - ${formatBasePow(c)} = 0\n`
+          texteCorr += `\\iff &${rienSi1(A)}x^2${ecritureAlgebriqueSauf1(bCoef)}x${ecritureAlgebrique(prodBD)}-${formatBasePow(c)} = 0\n`
           texteCorr += `\\end{aligned}$<br>`
           texteCorr += `On résout cette équation du second degré.<br>`
           const deltaExpr = isLn
-            ? `${bCoef}^2 - ${4 * A}(${prodBD} - \\text{e}^{${c}})`
+            ? `${ecritureParentheseSiNegatif(bCoef)}^2${ecritureAlgebrique(-4 * A)}(${prodBD} - \\text{e}^{${c}})`
             : `${texNombre(delta, 0)}`
-          texteCorr += `$\\Delta = ${ecritureParentheseSiNegatif(bCoef)}^2 - 4 \\times ${A === 1 ? '' : A + ' \\times '}(${prodBD} - ${formatBasePow(c)}) ${isLn ? '' : `= ${texNombre(delta, 0)}`}$<br>`
+          texteCorr += `$\\Delta = ${ecritureParentheseSiNegatif(bCoef)}^2${ecritureAlgebrique(-4 * A)}(${prodBD} - ${formatBasePow(c)}) ${isLn ? '' : `= ${texNombre(delta, 0)}`}$<br>`
           texteCorr += `$x_1 = \\dfrac{${-bCoef} + \\sqrt{${deltaExpr}}}{${2 * A}} \\approx ${texNombre(x1, 2, true)}$<br>`
           texteCorr += `$x_2 = \\dfrac{${-bCoef} - \\sqrt{${deltaExpr}}}{${2 * A}} \\approx ${texNombre(x2, 2, true)}$<br>`
           texteCorr += `Vérifions que les solutions appartiennent au domaine :<br>`
@@ -421,10 +422,10 @@ export default class EquationsLogarithmiques extends Exercice {
           texteCorr += `Si $${logString}(a) = ${logString}(b)$, alors $a = b$, donc :<br>`
           texteCorr += `$\\begin{aligned}\n`
           texteCorr += `&${rienSi1(A)}x^2 = ${expr2}\\\\\n`
-          texteCorr += `\\iff &${rienSi1(A)}x^2 - ${a2}x - ${b2} = 0\n`
+          texteCorr += `\\iff &${rienSi1(A)}x^2${ecritureAlgebriqueSauf1(bCoef)}x${ecritureAlgebrique(cCoef)} = 0\n`
           texteCorr += `\\end{aligned}$<br>`
           texteCorr += `On résout cette équation du second degré.<br>`
-          texteCorr += `$\\Delta = ${a2}^2 + 4 \\times ${A === 1 ? '' : A + ' \\times '}${b2} = ${delta}$<br>`
+          texteCorr += `$\\Delta = ${ecritureParentheseSiNegatif(bCoef)}^2${ecritureAlgebrique(-4 * A)}(${cCoef}) = ${delta}$<br>`
           texteCorr += `$x_1 = \\dfrac{${a2} + \\sqrt{${delta}}}{${2 * A}} \\approx ${texNombre(x1, 2, true)}$<br>`
           texteCorr += `$x_2 = \\dfrac{${a2} - \\sqrt{${delta}}}{${2 * A}} \\approx ${texNombre(x2, 2, true)}$<br>`
           texteCorr += `Vérifions que les solutions appartiennent au domaine :<br>`
@@ -520,7 +521,7 @@ export default class EquationsLogarithmiques extends Exercice {
 
           const logBase = baseLog === 10 ? logString : `\\log_{${baseLog}}`
 
-          texte = `Résoudre l'équation $${coefA}${logBase}(x) = ${coefC}${logBase}(${d})$.`
+          texte = `Résoudre l'équation $${rienSi1(coefA)}${logBase}(x) = ${rienSi1(coefC)}${logBase}(${d})$.`
           texte += ` Arrondir la solution au millième près.`
 
           reponse = resultatArrondi.toFixed(3)
@@ -599,7 +600,7 @@ export default class EquationsLogarithmiques extends Exercice {
           const solutionArrondie = new Decimal(solution).toDecimalPlaces(3)
           const baseExpo = isLn ? '\\text{e}' : '10'
 
-          texte = `Résoudre l'équation $${coefA}${logString}(x) + ${coefB}${logString}(${k}x) = ${c}$.`
+          texte = `Résoudre l'équation $${rienSi1(coefA)}${logString}(x)${ecritureAlgebriqueSauf1(coefB)}${logString}(${k}x) = ${c}$.`
           texte += ` Arrondir la solution au millième près.`
 
           reponse = solutionArrondie.toFixed(3)
@@ -608,13 +609,13 @@ export default class EquationsLogarithmiques extends Exercice {
           texteCorr += `$\\textbf{Domaine :}$ $x > 0$, soit $D = \\left]0\\,;\\, +\\infty\\right[$<br>`
           texteCorr += `En développant $${logString}(${k}x) = ${logString}(${k}) + ${logString}(x)$, l'équation initiale est équivalente à :<br>`
           texteCorr += `$\\begin{aligned}\n`
-          texteCorr += `&${coefA}${logString}(x) + ${coefB}(${logString}(${k}) + ${logString}(x)) = ${c}\\\\\n`
-          texteCorr += `\\iff &${coefA}${logString}(x) + ${coefB}${logString}(${k}) + ${coefB}${logString}(x) = ${c}\\\\\n`
-          texteCorr += `\\iff &${coefA + coefB}${logString}(x) = ${c} - ${coefB}${logString}(${k})\\\\\n`
-          texteCorr += `\\iff &${logString}(x) = \\dfrac{${c} - ${coefB}${logString}(${k})}{${coefA + coefB}}\\\\\n`
+          texteCorr += `&${rienSi1(coefA)}${logString}(x)${ecritureAlgebriqueSauf1(coefB)}(${logString}(${k}) + ${logString}(x)) = ${c}\\\\\n`
+          texteCorr += `\\iff &${rienSi1(coefA)}${logString}(x)${ecritureAlgebriqueSauf1(coefB)}${logString}(${k})${ecritureAlgebriqueSauf1(coefB)}${logString}(x) = ${c}\\\\\n`
+          texteCorr += `\\iff &${rienSi1(coefA + coefB)}${logString}(x) = ${c}${ecritureAlgebriqueSauf1(-coefB)}${logString}(${k})\\\\\n`
+          texteCorr += `\\iff &${logString}(x) = \\dfrac{${c}${ecritureAlgebriqueSauf1(-coefB)}${logString}(${k})}{${coefA + coefB}}\\\\\n`
           texteCorr += `\\end{aligned}$<br>`
           texteCorr += `Par définition, $${logString}(a) = b \\iff a = ${baseExpo}^b$, donc :<br>`
-          texteCorr += `$x = ${baseExpo}^{(${c} - ${coefB}${logString}(${k}))/${coefA + coefB}} \\approx ${texNombre(solutionArrondie, 3, true)}$<br>`
+          texteCorr += `$x = ${baseExpo}^{(${c}${ecritureAlgebriqueSauf1(-coefB)}${logString}(${k}))/${coefA + coefB}} \\approx ${texNombre(solutionArrondie, 3, true)}$<br>`
           texteCorr += `Vérifions que la solution appartient au domaine :<br>`
           texteCorr += `$x \\approx ${texNombre(solutionArrondie, 3, true)} > 0 \\quad \\implies \\quad x \\in D$<br>`
           texteCorr += `$S \\approx \\left\\{ ${miseEnEvidence(texNombre(solutionArrondie, 3, true))} \\right\\}$`
