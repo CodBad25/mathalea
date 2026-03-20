@@ -28,7 +28,7 @@ export default class Can2a2026Q28 extends ExerciceCan {
     this.optionsDeComparaison = {
       suiteDeNombres: true,
     }
-    this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
+    this.formatChampTexte = KeyboardType.clavierFullOperations
     this.optionsChampTexte = {
       texteAvant: '<br>$S=\\{$',
       texteApres:
@@ -66,7 +66,6 @@ export default class Can2a2026Q28 extends ExerciceCan {
 
     this.canEnonce = `Résoudre dans $\\mathbb{R}$ l'équation : $${equationTexte}$`
     this.canReponseACompleter = '$S=\\ldots$'
-    this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
     this.optionsChampTexte = {
       texteAvant: ' $S=\\{$',
       texteApres:
