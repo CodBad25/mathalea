@@ -95,15 +95,15 @@ export default class MinutesHeuresDecimale extends ExerciceSimple {
 
           // Construire la fraction simplifiée
           let fractionText = `\\dfrac{${minutes}}{60}`
-          let decimalText = texNombre(minutes / 60, 2)
+          // let decimalText = texNombre(minutes / 60, 2)
 
           if (minutes === 30) {
             fractionText = '\\dfrac{1}{2}'
-            decimalText = '0,5'
+            // decimalText = '0,5'
           } else if (minutes % 6 === 0) {
             const dixieme = minutes / 6
             fractionText = `\\dfrac{${dixieme}}{10}`
-            decimalText = texNombre(dixieme / 10, 1)
+            // decimalText = texNombre(dixieme / 10, 1)
           }
 
           this.correction = `$${minutesTotales}\\text{ min}= ${heures * 60} \\text{ min}+${minutes}\\text{ min}=${heures}\\text{ h}+${fractionText}\\text{ h}=${texNombre(heuresDecimales, 1)}\\text{ h}$.<br>
@@ -134,9 +134,7 @@ export default class MinutesHeuresDecimale extends ExerciceSimple {
     if (!this.interactif && !this.versionQcm) {
       this.question = this.canReponseACompleter
     }
-    if (this.versionQcm) {
-      this.question = this.question
-    }
+
     this.canEnonce = 'Compléter.'
     this.optionsChampTexte = { texteApres: 'heure(s)' }
   }
