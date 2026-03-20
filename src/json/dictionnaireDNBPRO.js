@@ -369,7 +369,14 @@ export const dictionnaireDNBPRO = {
     mois: 'Juin',
     numeroInitial: '1',
     typeExercice: 'dnbpro',
-    tags: ['Pourcentages', 'Puissances', 'Proportionnalité', 'Volumes', 'Equations', 'QCM'],
+    tags: [
+      'Pourcentages',
+      'Puissances',
+      'Proportionnalité',
+      'Volumes',
+      'Équations',
+      'QCM',
+    ],
   },
   dnbpro_2025_06_metropole_2: {
     annee: '2025',
@@ -409,7 +416,14 @@ export const dictionnaireDNBPRO = {
     mois: 'Juin',
     numeroInitial: '1',
     typeExercice: 'dnbpro',
-    tags: ['QCM', 'Fonctions', 'Volumes', 'Equations', 'Fractions', 'Statistiques'],
+    tags: [
+      'QCM',
+      'Fonctions',
+      'Volumes',
+      'Équations',
+      'Fractions',
+      'Statistiques',
+    ],
   },
   dnbpro_2025_06_polynesie_2: {
     annee: '2025',
@@ -417,7 +431,7 @@ export const dictionnaireDNBPRO = {
     mois: 'Juin',
     numeroInitial: '2',
     typeExercice: 'dnbpro',
-    tags: ['Tableur', 'Pourcentages',],
+    tags: ['Tableur', 'Pourcentages'],
   },
   dnbpro_2025_06_polynesie_3: {
     annee: '2025',
@@ -433,7 +447,13 @@ export const dictionnaireDNBPRO = {
     mois: 'Juin',
     numeroInitial: '4',
     typeExercice: 'dnbpro',
-    tags: ['Aires et périmètres', 'Thalès', 'Pythagore', 'Fonctions', 'Lecture graphique'],
+    tags: [
+      'Aires et périmètres',
+      'Thalès',
+      'Pythagore',
+      'Fonctions',
+      'Lecture graphique',
+    ],
   },
   dnbpro_2025_06_polynesie_5: {
     annee: '2025',
