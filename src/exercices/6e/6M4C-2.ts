@@ -54,7 +54,6 @@ export default class HeuresDecimales extends Exercice {
         texteCorr,
         cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       partieEntiere = randint(1, 12)
       partieDecimale = choice([1, 2, 3, 4, 5, 6, 7, 8, 9, 25, 75])
@@ -76,7 +75,7 @@ export default class HeuresDecimales extends Exercice {
         minutes = 30
       } else {
         texteCorr = `$${partieEntiere},${partieDecimale}~\\text{h}=${partieEntiere}~\\text{h}+\\dfrac{${partieDecimale}}{10}~\\text{h}`
-        texteCorr += `=${partieEntiere}~\\text{h}+${partieDecimale}\\times6~\\text{min}=$`
+        texteCorr += `=${partieEntiere}~\\text{h}+(${partieDecimale}\\times6~\\text{min})=$`
         texteCorr += `${sp()}${texteEnCouleurEtGras(minToHoraire(partieEntiere * 60 + partieDecimale * 6))}`
         minutes = partieDecimale * 6
       }
