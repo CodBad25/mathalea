@@ -32,7 +32,7 @@ export default class ResteEnMinutes extends ExerciceSimple {
     const d = a * 60 + b
     this.question = ` $${d}$ minutes $=$  $a$ heure(s) et  $b$ minute(s).<br>
     Quelle est la valeur de $b$ sachant que $a$ est le plus grand possible?`
-    this.correction = `$${d} = ${a} \\times 60 + ${b}$ donc $${d}$ minutes = $${a}h ${b}$ min, donc $b=${miseEnEvidence(b)}$.`
+    this.correction = `$${d} = ${a} \\times 60 + ${b}$ donc $${d}$ minutes = $${a}$ h $${b}$ min, donc $b=${miseEnEvidence(b)}$.`
     this.reponse = b
   }
 }
