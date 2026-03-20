@@ -18,7 +18,7 @@ export const refs = {
 export default class Can2a2026Q9 extends ExerciceCan {
   constructor() {
     super()
-    this.formatChampTexte = KeyboardType.clavierDeBaseAvecX
+    this.formatChampTexte = KeyboardType.clavierFullOperations
     this.optionsDeComparaison = { expressionsForcementReduites: true }
     this.optionsChampTexte = { texteAvant: '<br>' }
   }

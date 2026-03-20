@@ -21,7 +21,7 @@ export default class Can2a2026Q11 extends ExerciceCan {
   constructor() {
     super()
     this.formatInteractif = 'fillInTheBlank'
-    this.formatChampTexte = KeyboardType.clavierNumbers
+    this.formatChampTexte = KeyboardType.clavierDeBase
     this.optionsDeComparaison = { nombreDecimalSeulement: true }
   }
 
