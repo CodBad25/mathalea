@@ -772,7 +772,7 @@ export default class SchemaEnBoite {
                     length: longueur - 3,
                     content: '\\ldots',
                     type: 'boite',
-                    options: { justify: 'start' },
+                    options: { justify: 'center' },
                   },
                 ],
         },
@@ -794,7 +794,7 @@ export default class SchemaEnBoite {
               length: longueur - 6,
               content: '\\ldots',
               type: 'boite' as const,
-              options: { justify: 'start' as 'start' },
+              options: { justify: 'center' },
             },
             {
               color: 'lightgray',
