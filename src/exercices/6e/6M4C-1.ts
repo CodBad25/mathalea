@@ -1,10 +1,9 @@
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import {
+  miseEnEvidence,
   texteEnCouleur,
-  texteEnCouleurEtGras,
 } from '../../lib/outils/embellissements'
-import { sp } from '../../lib/outils/outilString'
 import { context } from '../../modules/context'
 import Hms from '../../modules/Hms'
 
@@ -69,13 +68,13 @@ export default class ConversionHeuresMinutesOuMinutesEtSecondes extends Exercice
       d = arrondi(a * 60 + b)
       if (listeTypeQuestions[i] === 'min vers h et min') {
         texte =
-          `Convertir $${d}$ minutes en heures (h) et minutes (min).` +
+          `Convertir $${d}$ minutes en heures ($\\text{h}$) et minutes ($\\text{min}$).` +
           ajouteChampTexteMathLive(this, i, KeyboardType.clavierHms)
         this.canEnonce = `Convertir $${d}$ minutes en heures et minutes.`
         this.canReponseACompleter = '$\\ldots$ h $\\ldots$ min'
       } else {
         texte =
-          `Convertir $${d}$ secondes en minutes (min) et secondes (s).` +
+          `Convertir $${d}$ secondes en minutes ($\\text{min}$) et secondes ($\\text{s}$).` +
           ajouteChampTexteMathLive(this, i, KeyboardType.clavierHms)
         this.canEnonce = `Convertir $${d}$ secondes en minutes et secondes.`
         this.canReponseACompleter = '$\\ldots$ min $\\ldots$ s'
@@ -87,7 +86,7 @@ export default class ConversionHeuresMinutesOuMinutesEtSecondes extends Exercice
               `
     Mentalement : <br>
 On cherche le multiple de $60$ inférieur à $${d}$ le plus grand possible. C'est $${Math.floor(d / 60)}\\times 60 = ${Math.floor(d / 60) * 60}$.<br>
-Ainsi $${d} = ${Math.floor(d / 60) * 60} + ${d % 60}$ donc $${d}$ min $= ${Math.floor(d / 60)}$${sp(1)}h${sp(1)}$${d % 60}$${sp(1)}min.`,
+Ainsi $${d} = ${Math.floor(d / 60) * 60} + ${d % 60}$ donc $${d}\\text{~min~}= ${Math.floor(d / 60)}\\text{~h~}${d % 60}\\text{~min}$.`,
               bleuMathalea,
             ) + '<br>'
         } else {
@@ -96,23 +95,21 @@ Ainsi $${d} = ${Math.floor(d / 60) * 60} + ${d % 60}$ donc $${d}$ min $= ${Math.
               `
            Mentalement : <br>
       On cherche le multiple de $60$ inférieur à $${d}$ le plus grand possible. C'est $${Math.floor(d / 60)}\\times 60 = ${Math.floor(d / 60) * 60}$.<br>
-      Ainsi $${d} = ${Math.floor(d / 60) * 60} + ${d % 60}$ donc $${d}$ s $= ${Math.floor(d / 60)}$${sp(1)}min${sp(1)}$${d % 60}$${sp(1)}s.`,
+      Ainsi $${d} = ${Math.floor(d / 60) * 60} + ${d % 60}$ donc $${d}\\text{~s~}= ${Math.floor(d / 60)}\\text{~min~}${d % 60}\\text{~s}$.`,
               bleuMathalea,
             ) + '<br>'
         }
         this.listeCanEnonces.push(this.canEnonce)
         this.listeCanReponsesACompleter.push(this.canReponseACompleter)
-      } else {
-        if (this.correctionDetaillee) {
-          texteCorr = `On doit effectuer la division euclidienne de ${d} par 60 car il y a 60 minutes dans une heure.<br>Le quotient entier donne le nombre d'heures et le reste enter donne le nombre de minutes.<br>`
-        } else {
-          texteCorr = ''
-        }
-      }
+      } else
+        texteCorr = this.correctionDetaillee
+          ? `On doit effectuer la division euclidienne de $${d}$ par $60$ car il y a $60$ minutes dans une heure.<br>Le quotient entier donne le nombre d'heures et le reste enter donne le nombre de minutes.<br>`
+          : ''
+
       if (listeTypeQuestions[i] === 'min vers h et min') {
-        texteCorr += `$${d} = (${a} \\times 60) + ${b}$ donc $${d}$ minutes = ${texteEnCouleurEtGras(minToHoraire(a * 60 + b))}.`
+        texteCorr += `$${d} = (${a} \\times 60) + ${b}$ donc $${d}$ minutes = $${miseEnEvidence(minToHoraire(a * 60 + b, true))}$.`
       } else {
-        texteCorr += `$${d} = (${a} \\times 60) + ${b}$ donc $${d}$ s = ${texteEnCouleurEtGras(`${a}${sp()}min${sp()}${b}${sp()}s`)}.`
+        texteCorr += `$${d} = (${a} \\times 60) + ${b}$ donc $${d}$ s = $${miseEnEvidence(`${a}\\text{~min~}${b}\\text{~s}`)}$.`
       }
       if (this.questionJamaisPosee(i, a, b, d)) {
         this.listeQuestions[i] = texte
@@ -131,7 +128,7 @@ Ainsi $${d} = ${Math.floor(d / 60) * 60} + ${d % 60}$ donc $${d}$ min $= ${Math.
                       texte: texteCorr,
                       statut: '',
                       reponse: {
-                        texte: 'Heure(s)',
+                        texte: 'Heure($\\text{s}$)',
                         valeur: a,
                         param: {
                           digits: 1,
@@ -150,7 +147,7 @@ Ainsi $${d} = ${Math.floor(d / 60) * 60} + ${d % 60}$ donc $${d}$ min $= ${Math.
                       texte: '',
                       statut: '',
                       reponse: {
-                        texte: 'Minute(min)',
+                        texte: 'Minute($\\text{min}$)',
                         valeur: b,
                         param: {
                           digits: 2,
@@ -176,7 +173,7 @@ Ainsi $${d} = ${Math.floor(d / 60) * 60} + ${d % 60}$ donc $${d}$ min $= ${Math.
                       texte: texteCorr,
                       statut: '',
                       reponse: {
-                        texte: 'Minutes(min)',
+                        texte: 'Minutes($\\text{min}$)',
                         valeur: a,
                         param: {
                           digits: 1,
@@ -195,7 +192,7 @@ Ainsi $${d} = ${Math.floor(d / 60) * 60} + ${d % 60}$ donc $${d}$ min $= ${Math.
                       texte: '',
                       statut: '',
                       reponse: {
-                        texte: 'Secondes(s)',
+                        texte: 'Secondes($\\text{s}$)',
                         valeur: b,
                         param: {
                           digits: 2,
