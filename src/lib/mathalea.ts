@@ -39,7 +39,7 @@ import { createURL } from './createURL'
 import { sendToCapytaleMathaleaHasChanged } from './handleCapytale'
 import { fonctionComparaison } from './interactif/comparisonFunctions'
 import { handleAnswers, setReponse } from './interactif/gestionInteractif'
-import { propositionsQcm } from './interactif/qcm'
+import { compteLesReponsesDifferentes, propositionsQcm } from './interactif/qcm'
 import { shuffle } from './outils/arrayOutils'
 import { formaterReponse } from './outils/ecritures'
 import { renderScratchDiv } from './renderScratch'
@@ -1038,6 +1038,21 @@ export function mathaleaHandleExerciceSimple(
                     r instanceof Hms,
                 ))
             ) {
+              if (
+                !compteLesReponsesDifferentes(
+                  exercice,
+                  1 + exercice.distracteurs.length,
+                  false,
+                  {
+                    calculFormel: true,
+                  },
+                )
+              ) {
+                window.notify(
+                  `Un exercice simple de type qcm doit avoir au moins 4 réponses différentes, dans ${(exercice?.numeroExercice ?? 0) + 1} - ${exercice.titre} , reponse: ${JSON.stringify(exercice.reponse)}, distracteurs: ${JSON.stringify(exercice.distracteurs)}`,
+                  { exercice: JSON.stringify(exercice) },
+                )
+              }
               exercice.autoCorrection[i] = {
                 options: exercice.versionQcmOptions ?? { radio: true },
                 enonce: exercice.question,
