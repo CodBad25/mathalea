@@ -3,7 +3,7 @@ import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import Horloge from '../../../lib/2d/horloge'
 import { texteParPosition } from '../../../lib/2d/textes'
 import { choice } from '../../../lib/outils/arrayOutils'
-import { texteEnCouleurEtGras } from '../../../lib/outils/embellissements'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { personne } from '../../../lib/outils/Personne'
 import { formatMinute } from '../../../lib/outils/texNombre'
 import { context } from '../../../modules/context'
@@ -18,8 +18,6 @@ export const interactifType = 'mathLive'
 
 /**
  * @author Jean-Claude Lhote
- * Créé le 4/11/2021
-
  */
 export const uuid = '0861b'
 
@@ -109,9 +107,9 @@ export default class LireUneDuree extends ExerciceSimple {
     this.correction +=
       "Ensuite on regarde si la petite aiguille a avancé d'au moins une graduation.<br>"
     if (h2 === h1) {
-      this.correction += `Ce n'est pas le cas, donc il s'est écoulé seulement ${texteEnCouleurEtGras(`${formatMinute(m2 - m1)} minutes`)}.`
+      this.correction += `Ce n'est pas le cas, donc il s'est écoulé seulement $${miseEnEvidence(`${formatMinute(m2 - m1)}\\text{ min }`)}$.`
     } else {
-      this.correction += `La petite aiguille a avancé d'une heure, donc il s'est écoulé ${texteEnCouleurEtGras(`une heure et ${formatMinute(m2 - m1)} minutes`)}.`
+      this.correction += `La petite aiguille a avancé d'une heure, donc il s'est écoulé $${miseEnEvidence(`1\\text{ h }${formatMinute(m2 - m1)}\\text{ min }`)}$.`
     }
 
     this.canReponseACompleter = '$\\ldots$ h $\\ldots$ min'
