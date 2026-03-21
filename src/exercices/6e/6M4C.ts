@@ -1,11 +1,10 @@
-// import { MathfieldElement } from 'mathlive'
 import { orangeMathalea } from 'apigeom/src/elements/defaultValues'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
-import { texNombre } from '../../lib/outils/texNombre'
+import { formatMinute, texNombre } from '../../lib/outils/texNombre'
 import Hms from '../../modules/Hms'
 import operation from '../../modules/operations'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
@@ -149,14 +148,15 @@ export default class ConversionsDeDurees extends Exercice {
             m * 60 + s,
           )}~\\text{s} =${h}~\\text{h}+(${m}\\times60~\\text{s})+${s}~\\text{s}= `
           texteCorr +=
-            miseEnEvidence(`${h}~\\text{h}~${m}~\\text{min}~${s}~\\text{s}`) +
-            '$'
+            miseEnEvidence(
+              `${h}~\\text{h}~${formatMinute(m)}~\\text{min}~${formatMinute(s)}~\\text{s}`,
+            ) + '$'
           this.expectedAnswers[i] = new Hms({ hour: h, minute: m, second: s })
         } else {
           texte = `$${texNombre(m * 60 + s)}~\\text{s}$ en heures, minutes et secondes.`
           texteCorr = `$${texNombre(
             m * 60 + s,
-          )}~\\text{s} = (${m}\\times60~\\text{s})+${s}~\\text{s}=${m}~\\text{min}~${s}~\\text{s}$`
+          )}~\\text{s} = (${m}\\times60~\\text{s})+${s}~\\text{s}=${formatMinute(m)}~\\text{min}~${formatMinute(s)}~\\text{s}$`
           this.expectedAnswers[i] = new Hms({ minute: m, second: s })
         }
       } else if (typesDeQuestions[i] === 4) {
@@ -229,49 +229,4 @@ export default class ConversionsDeDurees extends Exercice {
     }
     listeQuestionsToContenu(this)
   }
-
-  /*
-  correctionInteractive = (i: number) => {
-    const mf = document.querySelector(`math-field#champTexteEx${this.numeroExercice}Q${i}`)
-    if (mf instanceof MathfieldElement === false) return 'KO'
-    mf.readOnly = true
-    // Sauvegarde de la réponse pour Capytale
-    if (this.answers == null) this.answers = {}
-    this.answers[`Ex${this.numeroExercice}Q${i}`] = mf.getValue()
-    // Saisie fournie par l'utilisateur qu'on va comparer éventuellement avec la réponse attendue.
-    const input = mf.value
-    // Partie test de la saisie de l'utilisateur
-    let feedback = ''
-    const inputHms = Hms.fromString(input)
-    let isEqual = false
-    let isInGoodFormat = false
-    if (inputHms.isEqual(this.expectedAnswers[i])) {
-      isEqual = true
-    }
-    if (inputHms.isTheSame(this.expectedAnswers[i])) {
-      isInGoodFormat = true
-    }
-    let smiley = ''
-    let reponse = ''
-    if (isEqual && isInGoodFormat) {
-      smiley = '😎'
-      reponse = 'OK'
-    } else {
-      smiley = '☹️'
-      reponse = 'KO'
-    }
-    if (isEqual && !isInGoodFormat) {
-      feedback = 'La durée est bien égale mais pas dans le format attendu.'
-    }
-    // Affichage du feedback
-    const divFeedback = document.querySelector(`#feedbackEx${this.numeroExercice}Q${i}`)
-    if (divFeedback && divFeedback instanceof HTMLElement) {
-      divFeedback.innerHTML = feedback
-      divFeedback.style.display = 'block'
-    }
-    // Affichage du smiley
-    const divCheck = document.querySelector(`span#resultatCheckEx${this.numeroExercice}Q${i}`)
-    if (divCheck) divCheck.innerHTML = smiley
-    return reponse
-  } */
 }
