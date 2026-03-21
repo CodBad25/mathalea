@@ -1,5 +1,9 @@
 import ExerciceQcm from '../../exercices/ExerciceQcm'
-import type { IExercice, UneProposition } from '../../lib/types'
+import type {
+  IExercice,
+  OptionsComparaisonType,
+  UneProposition,
+} from '../../lib/types'
 import { context } from '../../modules/context'
 import { messageFeedback } from '../../modules/messages'
 import { shuffleJusquaWithIndexes } from '../amc/qcmCam'
@@ -13,7 +17,8 @@ import {
 import { lettreDepuisChiffre } from '../outils/outilString'
 import type { ButtonWithMathaleaListener } from '../types/can'
 import { afficheScore } from './afficheScore'
-import ce from './comparisonFunctions'
+import { generateCleaner } from './cleaners'
+import { fonctionComparaison } from './comparisonFunctions'
 
 export function verifQuestionQcm(exercice: IExercice, i: number) {
   let resultat
@@ -433,11 +438,7 @@ export function compteLesReponsesDifferentes(
   exercice: any,
   nombreSouhaite: number, // le nombre de réponses différentes que l'on devrait avoir (bonne réponse + distracteurs)
   test = true, // Mettre à true pour ne pas afficher de notifications, utilisé dans l'exo pour tester l'aléatoire sans alerter l'utilisateur à chaque fois que ça ne marche pas
-  options: {
-    calculFormel?: boolean
-    numericalValue?: boolean
-    sansCasse?: boolean
-  },
+  options: OptionsComparaisonType,
 ): boolean {
   let reponses: string[]
   if (exercice instanceof ExerciceQcm) {
@@ -471,26 +472,40 @@ export function compteLesReponsesDifferentes(
       )
     return false
   }
+  const cleaner = generateCleaner([
+    'virgules',
+    'parentheses',
+    'espaces',
+    'accolades',
+  ])
+
+  reponses = reponses.map((s: string) =>
+    cleaner(s)
+      .replace(/\\,/g, '')
+      .replace(/ /g, '')
+      .replaceAll(/\\backslash/g, '\\'),
+  )
+
   // On compare des expressions littérales qui peuvent être différentes mais équivalentes
-  if (options.calculFormel) {
-    for (let i = 0; i < reponses.length - 1; i++) {
-      const reponse = ce.parse(reponses[i]).simplify().canonical
-      for (let j = i + 1; j < reponses.length; ) {
-        if (reponse.isEqual(ce.parse(reponses[j]).simplify().canonical)) {
-          reponses.splice(j, 1)
-        } else {
-          j++
-        }
+  for (let i = 0; i < reponses.length - 1; i++) {
+    const reponse = reponses[i]
+    for (let j = i + 1; j < reponses.length; ) {
+      const result = fonctionComparaison(reponse, reponses[j], options)
+      if (result.isOk) {
+        reponses.splice(j, 1)
+      } else {
+        j++
       }
     }
-    if (reponses.length !== nombreSouhaite)
-      if (!test)
-        window.notify(`J'ai du éliminer au moins un doublon`, {
-          exercice: JSON.stringify(exercice),
-        })
-    return reponses.length === nombreSouhaite
   }
-  // On compare numériquement des expressions
+  if (reponses.length !== nombreSouhaite)
+    if (!test)
+      window.notify(`J'ai du éliminer au moins un doublon`, {
+        exercice: JSON.stringify(exercice),
+      })
+  return reponses.length === nombreSouhaite
+
+  /*  // On compare numériquement des expressions
   if (options.numericalValue) {
     for (let i = 0; i < reponses.length - 1; i++) {
       const reponse = ce.parse(reponses[i]).evaluate()
@@ -547,4 +562,6 @@ export function compteLesReponsesDifferentes(
         exercice: JSON.stringify(exercice),
       })
   return reponses.length === nombreSouhaite
+}
+  */
 }
