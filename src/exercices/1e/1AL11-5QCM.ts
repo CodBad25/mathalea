@@ -1,3 +1,4 @@
+import { compteLesReponsesDifferentes } from '../../lib/interactif/qcm'
 import { ecritureParentheseSiMoins } from '../../lib/outils/ecritures'
 import {
   miseEnEvidence,
@@ -42,14 +43,17 @@ r&=${r}
   }
 
   versionAleatoire = () => {
-    const up = randint(-5, 5, [0, 1])
-    const p = randint(3, 10)
-    const k = randint(4, 10)
-    const r = randint(-5, 5, [-1, 0, 1])
+    const nombreSouhaites = 4
+    let compteur = 0
+    do {
+      const up = randint(-5, 5, [0, 1])
+      const p = randint(3, 10)
+      const k = randint(4, 10)
+      const r = randint(-5, 5, [-1, 0, 1, p])
 
-    this.enonce = `Soit $(u_n)$ une suite arithmétique.<br>On donne $u_{${p}}=${up}$ et $u_{${p + k} }=${up + k * r}$. <br>
+      this.enonce = `Soit $(u_n)$ une suite arithmétique.<br>On donne $u_{${p}}=${up}$ et $u_{${p + k} }=${up + k * r}$. <br>
     La raison de cette suite est est égale à :`
-    this.correction = `Soit $(u_n)$ une suite arithmétique, de premier terme $u_0\\in \\mathbb{R}$ et de raison $r\\in \\mathbb{R}.$
+      this.correction = `Soit $(u_n)$ une suite arithmétique, de premier terme $u_0\\in \\mathbb{R}$ et de raison $r\\in \\mathbb{R}.$
     <br> On a alors pour tout $n\\in \\mathbb{N}$ et tout $p\\in \\mathbb{N}$ : $u_n=u_p+(n-p)r$.
 <br>En particulier, avec l'énoncé, <br>$\\begin{aligned}
 u_{${p + k}}&=u_{${p}}+(${p + k}-${p})\\times r\\\\
@@ -59,14 +63,21 @@ r&=\\dfrac{${k * r}}{${k}}\\\\
 r&=${r}
 \\end{aligned}$.<br>
 La raison est donc $${miseEnEvidence(`r=${r}.`)}$ `
-    const distracteur = new FractionEtendue(k * r, k + 1)
+      const distracteur = new FractionEtendue(k * r, k + 1)
 
-    this.reponses = [
-      `$${r}$`,
-      ` $${p}$`,
-      `$${-r}$`,
-      `$${distracteur.texFractionSimplifiee}$`,
-    ]
+      this.reponses = [
+        `$${r}$`,
+        ` $${p}$`,
+        `$${-r}$`,
+        `$${distracteur.texFractionSimplifiee}$`,
+      ]
+      compteur++
+    } while (
+      compteur < 100 &&
+      !compteLesReponsesDifferentes(this, nombreSouhaites, true, {
+        avecFractions: true,
+      })
+    )
   }
 
   constructor() {
