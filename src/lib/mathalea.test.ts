@@ -4,7 +4,7 @@ import ExerciceSimple from '../../src/exercices/ExerciceSimple'
 import FractionEtendue from '../modules/FractionEtendue'
 import Grandeur from '../modules/Grandeur'
 import Hms from '../modules/Hms'
-import { getDistracteurs } from './mathalea'
+import { getDistracteurs, mathaleaHandleExerciceSimple } from './mathalea'
 
 // Mock avant l'import
 vi.mock('../../src/lib/renderScratch', () => ({
@@ -157,6 +157,37 @@ describe('getDistracteurs', () => {
     expect(distracteurs).not.toContain(hms3.toString())
     distracteurs.forEach((d) =>
       expect([hms1.toString(), hms4.toString()]).toContain(d),
+    )
+  })
+})
+
+describe('mathaleaHandleExerciceSimple', () => {
+  it('aligne la correction versionQcm sur le moteur QCM partage', () => {
+    class ExerciceSimpleQcm extends ExerciceSimple {
+      constructor() {
+        super()
+        this.nbQuestions = 1
+        this.versionQcm = true
+      }
+
+      nouvelleVersion() {
+        this.question = 'Combien font 2 + 2 ?'
+        this.reponse = '$4$'
+        this.correction = 'On calcule $2+2=4$.'
+        this.distracteurs = ['$2$', '$3$', '$5$']
+      }
+    }
+
+    const exercice = new ExerciceSimpleQcm()
+    mathaleaHandleExerciceSimple(exercice, false, 0, 'seed')
+
+    expect(exercice.listeQuestions[0]).includes('Combien font 2 + 2 ?')
+    expect(exercice.listeQuestions[0]).includes('$2$')
+    expect(exercice.listeQuestions[0]).includes('$3$')
+    expect(exercice.listeQuestions[0]).includes('$4$')
+    expect(exercice.listeQuestions[0]).includes('$5$')
+    expect(exercice.listeCorrections[0]).toContain(
+      'La bonne réponse est la réponse',
     )
   })
 })

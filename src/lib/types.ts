@@ -995,9 +995,11 @@ export interface IExerciceCan extends IExerciceSimple {
 }
 
 export interface IExerciceQcmOptions {
+  radio?: boolean
   ordered?: boolean
   vertical?: boolean
   lastChoice?: number
+  dontKnow?: boolean
 }
 
 export interface IExerciceQcm extends IExercice {

@@ -39,9 +39,8 @@ import { createURL } from './createURL'
 import { sendToCapytaleMathaleaHasChanged } from './handleCapytale'
 import { fonctionComparaison } from './interactif/comparisonFunctions'
 import { handleAnswers, setReponse } from './interactif/gestionInteractif'
-import { propositionsQcm } from './interactif/qcm'
+import { buildSimpleVersionQcm } from './interactif/qcmBuilder'
 import { shuffle } from './outils/arrayOutils'
-import { formaterReponse } from './outils/ecritures'
 import { renderScratchDiv } from './renderScratch'
 import { canOptions } from './stores/canStore'
 import {
@@ -1054,26 +1053,16 @@ export function mathaleaHandleExerciceSimple(
                 )
               }
                 */
-              exercice.autoCorrection[i] = {
+              const qcmData = buildSimpleVersionQcm(exercice, i, {
+                question: exercice.question ?? '',
+                correction: exercice.correction ?? '',
+                reponse: exercice.reponse,
+                distracteurs: exercice.distracteurs,
                 options: exercice.versionQcmOptions ?? { radio: true },
-                enonce: exercice.question,
-                propositions: [
-                  {
-                    texte: formaterReponse(exercice.reponse ?? ''),
-                    statut: true,
-                  },
-                  ...exercice.distracteurs.map((distracteur) => ({
-                    texte: formaterReponse(distracteur),
-                    statut: false,
-                  })),
-                ],
-              }
+              })
+              exercice.question = qcmData.question
+              exercice.correction = qcmData.correction
             }
-            const qcm = propositionsQcm(exercice, i, {
-              style: 'margin:0 3px 0 3px;',
-              format: exercice.interactif ? 'case' : 'lettre',
-            })
-            exercice.question += qcm.texte
           }
           exercice.listeQuestions.push(exercice.question || '')
         } else if (exercice.formatInteractif === 'listeDeroulante') {
