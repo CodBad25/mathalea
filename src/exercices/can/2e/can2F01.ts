@@ -328,9 +328,7 @@ export default class CalculImageSecondDegre extends ExerciceSimple {
       compteur++
     } while (
       compteur < 100 &&
-      !compteLesReponsesDifferentes(this, nombreSouhaites, true, {
-        numericalValue: true,
-      })
+      !compteLesReponsesDifferentes(this, nombreSouhaites, true, {})
     )
   }
 }
