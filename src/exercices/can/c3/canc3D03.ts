@@ -1,6 +1,7 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 
 import { choice } from '../../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { formatMinute } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
@@ -45,10 +46,10 @@ export default class AjouterDesDurees extends ExerciceSimple {
     const d = 60 - b - (variante ? choice([10, 20]) : 0)
     this.question = `Calculer $${a}\\text{ h } ${b}$ min + $${c}\\text{ h } ${d}$ min.`
     this.correction = variante
-      ? 'On ajoute les heures avec les heures et les minutes avec les minutes<br>' +
-        `$(${a}\\text{ h }+${c}\\text{ h })+(${b}\\text{ min }+${d}\\text{ min })=${a + c}\\text{ h }${formatMinute(b + d)}\\text{ min}$.`
+      ? 'On ajoute les heures avec les heures et les minutes avec les minutes.<br>' +
+        `$(${a}\\text{ h }+${c}\\text{ h })+(${b}\\text{ min }+${d}\\text{ min })=${miseEnEvidence(`${a + c}\\text{ h }${formatMinute(b + d)}\\text{ min}`)}$.`
       : `On remarque qu'il y a $${b}\\text{ min } + ${d}\\text{ min }=60\\text{ min}$ qui font une heure.<br>
-      On ajoute donc : $1\\text{ h }+${a}\\text{ h }+${c}\\text{ h }=${1 + a + c}\\text{ h}$.`
+      On ajoute donc : $1\\text{ h }+${a}\\text{ h }+${c}\\text{ h }=${miseEnEvidence(`${1 + a + c}\\text{ h}`)}$.`
     this.reponse = {
       reponse: {
         value: variante ? `${a + c}h ${b + d}min` : `${1 + a + c}h`,
