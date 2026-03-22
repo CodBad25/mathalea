@@ -4,6 +4,7 @@ import { fixeBordures } from '../../../lib/2d/fixeBordures'
 import { grille } from '../../../lib/2d/Grille'
 import { segment } from '../../../lib/2d/segmentsVecteurs'
 import { latex2d } from '../../../lib/2d/textes'
+import { wrapperApigeomToMathalea } from '../../../lib/apigeom/apigeomZoom'
 import figureApigeom from '../../../lib/figureApigeom'
 import { ajouteFeedback } from '../../../lib/interactif/questionMathLive'
 import { choice } from '../../../lib/outils/arrayOutils'
@@ -25,31 +26,31 @@ export const refs = {
 
 */
 export default class Can2026CM2Q26 extends ExerciceCan {
-   figure!: Figure
+  figure!: Figure
   nbCarreaux: number = 0
   numAffiche: number = 0
   denAffiche: number = 0
 
-  constructor () {
+  constructor() {
     super()
     this.formatChampTexte = 'none'
     this.nbQuestionsModifiable = false
     this.formatInteractif = 'custom'
   }
 
-  enonce (num?: number, den?: number) {
+  enonce(num?: number, den?: number) {
     if (num == null || den == null) {
       ;[num, den] = choice([
         [1, 2],
         [1, 5],
         [7, 10],
-        [3, 10]
+        [3, 10],
       ])
     }
     this.numAffiche = num
     this.denAffiche = den
     const unite = 10
-    this.nbCarreaux = num / den * unite
+    this.nbCarreaux = (num / den) * unite
     this.reponse = this.nbCarreaux
     this.question = `Trace un segment de longueur $\\dfrac{${num}}{${den}}~\\text{u.l}$. `
     this.correction = `L'unité a une longueur de $${unite}~\\text{carreaux}$ donc $\\dfrac{${num}}{${den}}~\\text{u.l}=${this.nbCarreaux}~\\text{carreaux}$.`
@@ -60,19 +61,19 @@ export default class Can2026CM2Q26 extends ExerciceCan {
       xMin: 0,
       yMin: 0,
       width: 360,
-      height: 160
+      height: 160,
     })
     this.figure = figure
     this.figure.setToolbar({
       tools: ['SEGMENT', 'REMOVE'],
-      position: 'top'
+      position: 'top',
     })
     figure.divUserMessage.style.display = 'none'
     figure.create('Grid', {
       axeX: false,
       axeY: false,
       labelX: false,
-      labelY: false
+      labelY: false,
     })
     figure.options.color = 'blue'
     figure.options.gridWithTwoPointsOnSamePosition = false
@@ -82,26 +83,26 @@ export default class Can2026CM2Q26 extends ExerciceCan {
     const ptB = figure.create('Point', {
       x: unite + 1,
       y: 5,
-      isVisible: false
+      isVisible: false,
     })
     figure.create('Segment', {
       point1: ptA,
       point2: ptB,
       shape: '|-|',
       thickness: 3,
-      isSelectable: false
+      isSelectable: false,
     })
     figure.create('TextByPosition', {
       x: unite / 2 + 1,
       y: 4,
       text: '$1~\\text{u.l}$',
-      isDeletable: false
+      isDeletable: false,
     })
     const figureCorr = new Figure({
       xMin: 0,
       yMin: 0,
       width: 360,
-      height: 160
+      height: 160,
     })
     figureCorr.options.color = 'blue'
     figureCorr.options.thickness = 2
@@ -109,54 +110,54 @@ export default class Can2026CM2Q26 extends ExerciceCan {
       axeX: false,
       axeY: false,
       labelX: false,
-      labelY: false
+      labelY: false,
     })
     const ptACorr = figureCorr.create('Point', { x: 1, y: 5, isVisible: false })
     const ptBCorr = figureCorr.create('Point', {
       x: unite + 1,
       y: 5,
-      isVisible: false
+      isVisible: false,
     })
     figureCorr.create('Segment', {
       point1: ptACorr,
       point2: ptBCorr,
       shape: '|-|',
-      thickness: 3
+      thickness: 3,
     })
     const ptCCorr = figureCorr.create('Point', { x: 1, y: 3, isVisible: false })
     const ptDCorr = figureCorr.create('Point', {
       x: this.nbCarreaux + 1,
       y: 3,
-      isVisible: false
+      isVisible: false,
     })
     figureCorr.create('Segment', {
       point1: ptCCorr,
       point2: ptDCorr,
       shape: '|-|',
-      thickness: 3
+      thickness: 3,
     })
     figureCorr.create('TextByPosition', {
       x: unite / 2 + 1,
       y: 4.5,
-      text: '$1~\\text{u.l}$'
+      text: '$1~\\text{u.l}$',
     })
     figureCorr.create('TextByPosition', {
       x: this.nbCarreaux / 2 + 1,
       y: 2,
-      text: `$\\dfrac{${this.numAffiche}}{${this.denAffiche}}~\\text{u.l}$`
+      text: `$\\dfrac{${this.numAffiche}}{${this.denAffiche}}~\\text{u.l}$`,
     })
 
     const emplacementPourFigure = figureApigeom({
       exercice: this,
       i: 25,
       figure,
-      defaultAction: 'SEGMENT'
+      defaultAction: 'SEGMENT',
     })
     if (context.isHtml) {
       if (this.interactif) {
         this.question += emplacementPourFigure + ajouteFeedback(this, 0)
       } else {
-        this.question += figure.getStaticHtml()
+        this.question += wrapperApigeomToMathalea(figure)
       }
     } else {
       const g = grille(0, 0, unite + 2, 5, 'gray', 0.5, 1)
@@ -165,25 +166,25 @@ export default class Can2026CM2Q26 extends ExerciceCan {
       s.styleExtremites = '|-|'
       s.tailleExtremites = 2
       const ul = latex2d('1~\\text{u.l}', unite / 2 + 1, 4.5, {
-        letterSize: 'scriptsize'
+        letterSize: 'scriptsize',
       })
       const objets = [g, s, ul]
       const fig = mathalea2d(
         Object.assign({ scale: 0.35 }, fixeBordures(objets)),
-        objets
+        objets,
       )
 
       this.canReponseACompleter = fig
     }
     this.correction += '\n\n<br><br>\n'
     if (context.isHtml) {
-      this.correction += figureCorr.getStaticHtml()
+      this.correction += wrapperApigeomToMathalea(figureCorr)
     } else {
       this.correction += '<br>' + figureCorr.tikz()
     }
   }
 
-  nouvelleVersion () {
+  nouvelleVersion() {
     this.canOfficielle || this.sup ? this.enonce(1, 2) : this.enonce()
   }
 
@@ -197,10 +198,10 @@ export default class Can2026CM2Q26 extends ExerciceCan {
     this.answers[figure.id] = figure.json
 
     const divFeedback = document.querySelector(
-      `#feedbackEx${this.numeroExercice}Q${i}`
+      `#feedbackEx${this.numeroExercice}Q${i}`,
     )
     const segments = [...figure.elements.values()].filter((e) =>
-      e.type.includes('Segment')
+      e.type.includes('Segment'),
     )
     let distance = Number.POSITIVE_INFINITY
     if (segments.length === 2) {

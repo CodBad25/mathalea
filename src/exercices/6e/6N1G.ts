@@ -1,6 +1,7 @@
 import { orangeMathalea } from 'apigeom/src/elements/defaultValues'
 import type Figure from 'apigeom/src/Figure'
 import { apigeomGraduatedLine } from '../../lib/apigeom/apigeomGraduatedLine'
+import { wrapperApigeomToMathalea } from '../../lib/apigeom/apigeomZoom'
 import figureApigeom from '../../lib/figureApigeom'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import { arrondi } from '../../lib/outils/nombres'
@@ -171,11 +172,11 @@ class PlacerPointsSurAxe extends Exercice {
           texte +=
             '<br>' +
             figureApigeom({ exercice: this, i, figure, defaultAction: 'POINT' })
-          texteCorr += figureCorr.getStaticHtml()
+          texteCorr += wrapperApigeomToMathalea(figureCorr)
           break
         case context.isHtml:
-          texte += '<br>' + figure.getStaticHtml()
-          texteCorr += figureCorr.getStaticHtml()
+          texte += '<br>' + wrapperApigeomToMathalea(figure)
+          texteCorr += wrapperApigeomToMathalea(figureCorr)
           break
         default:
           texte += '\n\n' + latex

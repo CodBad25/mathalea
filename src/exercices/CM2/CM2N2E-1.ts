@@ -1,17 +1,18 @@
+import Figure from 'apigeom'
+import { orangeMathalea } from 'apigeom/src/elements/defaultValues'
+import { wrapperApigeomToMathalea } from '../../lib/apigeom/apigeomZoom'
+import figureApigeom from '../../lib/figureApigeom'
 import { choice } from '../../lib/outils/arrayOutils'
+import { arrondi } from '../../lib/outils/nombres'
 import { lettreIndiceeDepuisChiffre } from '../../lib/outils/outilString'
-import Exercice from '../Exercice'
+import { context } from '../../modules/context'
+import { fraction } from '../../modules/fractions'
 import {
   gestionnaireFormulaireTexte,
   listeQuestionsToContenu,
   randint,
 } from '../../modules/outils'
-import { context } from '../../modules/context'
-import Figure from 'apigeom'
-import figureApigeom from '../../lib/figureApigeom'
-import { arrondi } from '../../lib/outils/nombres'
-import { orangeMathalea } from 'apigeom/src/elements/defaultValues'
-import { fraction } from '../../modules/fractions'
+import Exercice from '../Exercice'
 
 export const dateDePublication = '28/01/2023'
 export const dateDeModifImportante = '08/06/2024'
@@ -237,11 +238,11 @@ class PlacerPointsAbscissesFractionnairesBis extends Exercice {
               figure,
               defaultAction: 'POINT',
             })
-          texteCorr += figureCorr.getStaticHtml()
+          texteCorr += wrapperApigeomToMathalea(figureCorr)
           break
         case context.isHtml:
-          texte += '<br>' + figure.getStaticHtml()
-          texteCorr += figureCorr.getStaticHtml()
+          texte += '<br>' + wrapperApigeomToMathalea(figure)
+          texteCorr += wrapperApigeomToMathalea(figureCorr)
           break
         default:
           texte += '\n\n' + latex
