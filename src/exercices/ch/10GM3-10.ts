@@ -564,10 +564,9 @@ export default class ConvertirDuree extends Exercice {
           if (isExactMin) {
             texteCorr += `${!estApproximation ? '=' : '\\approx'}`
             // texteCorr += `${this.sup3 ? `${texNombre(minToHours, 1)}` : `${texNombre(minToHours, 2)}`}\\text{\\,h}$. <br>`
-            texteCorr += `${texNombre(minToHours, 2)}\\text{\\,h}$. <br>`
-          } else {
-            texteCorr += '$. <br>'
+            texteCorr += `${texNombre(minToHours, 2)}\\text{\\,h}`
           }
+          texteCorr += '$ <br>'
         }
         const secToHours = s1 / 3600
         const isExactSec = Math.round(secToHours * 100) === secToHours * 100
