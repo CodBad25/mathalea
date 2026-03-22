@@ -10,6 +10,7 @@
  * @attr {boolean} [showSecond=true] - Indique si l'aiguille des secondes doit être affichée
  */
 class InteractiveClock extends HTMLElement {
+  static readonly BASE_RENDER_SIZE_EM = 12.5
   svgHandHour!: SVGElement
   svgHandMinute!: SVGElement
   svgHandSecond!: SVGElement
@@ -62,9 +63,17 @@ class InteractiveClock extends HTMLElement {
 
     const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
     svgContainer.appendChild(svg)
-    svg.setAttribute('width', '200')
-    svg.setAttribute('height', '200')
+    svg.setAttribute(
+      'width',
+      `${InteractiveClock.BASE_RENDER_SIZE_EM.toString()}em`,
+    )
+    svg.setAttribute(
+      'height',
+      `${InteractiveClock.BASE_RENDER_SIZE_EM.toString()}em`,
+    )
     svg.setAttribute('viewBox', '-200 -200 400 400')
+    svg.style.maxWidth = '100%'
+    svg.style.height = 'auto'
 
     const circle = document.createElementNS(
       'http://www.w3.org/2000/svg',
