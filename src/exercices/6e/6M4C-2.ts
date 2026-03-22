@@ -7,7 +7,7 @@ import { listeQuestionsToContenu, randint } from '../../modules/outils'
 
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { minToHoraire } from '../../lib/outils/dateEtHoraires'
-import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { sp } from '../../lib/outils/outilString'
 import Exercice from '../Exercice'
 
@@ -63,20 +63,20 @@ export default class HeuresDecimales extends Exercice {
 
       if (partieDecimale === 25) {
         texteCorr = `$${partieEntiere},${partieDecimale}~\\text{h}=${partieEntiere}~\\text{h}+\\dfrac{1}{4}~\\text{h}=$`
-        texteCorr += `${sp()}${texteEnCouleurEtGras(minToHoraire(partieEntiere * 60 + 15))}`
+        texteCorr += `${sp()}$${miseEnEvidence(minToHoraire(partieEntiere * 60 + 15, true))}$`
         minutes = 15
       } else if (partieDecimale === 75) {
         texteCorr = `$${partieEntiere},${partieDecimale}~\\text{h}=${partieEntiere}~\\text{h}+\\dfrac{3}{4}~\\text{h}=$`
-        texteCorr += `${sp()}${texteEnCouleurEtGras(minToHoraire(partieEntiere * 60 + 45))}`
+        texteCorr += `${sp()}$${miseEnEvidence(minToHoraire(partieEntiere * 60 + 45, true))}$`
         minutes = 45
       } else if (partieDecimale === 5) {
         texteCorr = `$${partieEntiere},${partieDecimale}~\\text{h}=${partieEntiere}~\\text{h}+\\dfrac{1}{2}~\\text{h}=$`
-        texteCorr += `${sp()}${texteEnCouleurEtGras(minToHoraire(partieEntiere * 60 + 30))}`
+        texteCorr += `${sp()}$${miseEnEvidence(minToHoraire(partieEntiere * 60 + 30, true))}$`
         minutes = 30
       } else {
         texteCorr = `$${partieEntiere},${partieDecimale}~\\text{h}=${partieEntiere}~\\text{h}+\\dfrac{${partieDecimale}}{10}~\\text{h}`
         texteCorr += `=${partieEntiere}~\\text{h}+(${partieDecimale}\\times6~\\text{min})=$`
-        texteCorr += `${sp()}${texteEnCouleurEtGras(minToHoraire(partieEntiere * 60 + partieDecimale * 6))}`
+        texteCorr += `${sp()}$${miseEnEvidence(minToHoraire(partieEntiere * 60 + partieDecimale * 6, true))}$`
         minutes = partieDecimale * 6
       }
       if (!context.isAmc) {
