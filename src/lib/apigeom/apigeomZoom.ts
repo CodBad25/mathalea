@@ -8,6 +8,8 @@ export function wrapperApigeomToMathalea(figure: SuperFigure) {
   figure.divFigure.querySelector('svg')?.classList.add('mathalea2d')
   for (const di of figure.divFigure.querySelectorAll('div')) {
     di.classList.add('divLatex')
+    di.style.whiteSpace = 'nowrap'
+    di.style.lineHeight = '1'
   }
   const div = document.createElement('div')
   div.innerHTML = figure.getStaticHtml()
