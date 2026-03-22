@@ -1,9 +1,6 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choice } from '../../../lib/outils/arrayOutils'
-import {
-  miseEnEvidence,
-  texteEnCouleur,
-} from '../../../lib/outils/embellissements'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
@@ -54,11 +51,11 @@ export default class MinutesHeuresDecimale extends ExerciceSimple {
           if (totalMinutes >= 60) {
             // Cas avec 1h + 15min ou 1h + 45min
             this.correction = `$${totalMinutes}\\text{ min}= ${heures * 60} \\text{ min}+${minutes}\\text{ min}=${heures}\\text{ h}+${fractionText}\\text{ h}=${texNombre(heuresDecimales, 2)}\\text{ h}$<br>
-               Ainsi, $${totalMinutes}$ min correspond à $${miseEnEvidence(texNombre(heuresDecimales, 2))}$ ${texteEnCouleur(heuresDecimales > 1 ? 'heures' : 'heure')}.`
+               Ainsi, $${totalMinutes}$ min correspond à $${miseEnEvidence(texNombre(heuresDecimales, 2))}$ heure.`
           } else {
             // Cas avec seulement 15min ou 45min
             this.correction = `$${totalMinutes}\\text{ min}= ${fractionText}\\text{ h}=${decimalText}\\text{ h}$<br>
-               Ainsi, $${totalMinutes}$ min correspond à $${miseEnEvidence(texNombre(heuresDecimales, 2))}$ ${texteEnCouleur('heure')}.`
+               Ainsi, $${totalMinutes}$ min correspond à $${miseEnEvidence(texNombre(heuresDecimales, 2))}$ heure.`
           }
 
           // Générer des fausses réponses
@@ -74,8 +71,8 @@ export default class MinutesHeuresDecimale extends ExerciceSimple {
 
           this.distracteurs = [
             `$${texNombre(fausses[0], 2)}$ heure`,
-            `$${texNombre(fausses[1], 2)}$  heure`,
-            `$${texNombre(fausses[2], 2)}$  heure`,
+            `$${texNombre(fausses[1], 2)}$ heure`,
+            `$${texNombre(fausses[2], 2)}$ heure`,
           ]
         }
         break
@@ -107,7 +104,7 @@ export default class MinutesHeuresDecimale extends ExerciceSimple {
           }
 
           this.correction = `$${minutesTotales}\\text{ min}= ${heures * 60} \\text{ min}+${minutes}\\text{ min}=${heures}\\text{ h}+${fractionText}\\text{ h}=${texNombre(heuresDecimales, 1)}\\text{ h}$.<br>
-             Ainsi, $${minutesTotales}$ min correspond à $${miseEnEvidence(texNombre(heuresDecimales, 1))}$ ${texteEnCouleur('heure')}.`
+             Ainsi, $${minutesTotales}$ min correspond à $${miseEnEvidence(texNombre(heuresDecimales, 1))}$ heure.`
 
           // Générer des fausses réponses
           const erreurClassique =
