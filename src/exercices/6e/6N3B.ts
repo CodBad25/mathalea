@@ -3,6 +3,7 @@ import { distance } from 'apigeom/src/elements/calculus/Coords'
 import { orangeMathalea } from 'apigeom/src/elements/defaultValues'
 import GraduatedLine from 'apigeom/src/elements/grid/GraduatedLine'
 import type { MathfieldElement } from 'mathlive'
+import { wrapperApigeomToMathalea } from '../../lib/apigeom/apigeomZoom'
 import figureApigeom from '../../lib/figureApigeom'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { fonctionComparaison } from '../../lib/interactif/comparisonFunctions'
@@ -226,20 +227,20 @@ export default class DonnerSensDefinitionQuotient extends Exercice {
           texteCorr +=
             numAlpha(0) +
             texteCorr1 +
-            figureCorr.getStaticHtml() +
+            wrapperApigeomToMathalea(figureCorr) +
             numAlpha(1) +
             texteCorr2 +
-            figureCorr2.getStaticHtml()
+            wrapperApigeomToMathalea(figureCorr2)
           break
         case context.isHtml:
-          texte = figure.getStaticHtml()
+          texte = wrapperApigeomToMathalea(figure)
           texteCorr +=
             numAlpha(0) +
             texteCorr1 +
-            figureCorr.getStaticHtml() +
+            wrapperApigeomToMathalea(figureCorr) +
             numAlpha(1) +
             texteCorr2 +
-            figureCorr2.getStaticHtml()
+            wrapperApigeomToMathalea(figureCorr2)
           break
         default:
           texte = latex

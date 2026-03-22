@@ -1,5 +1,6 @@
 import Figure from 'apigeom'
 import GraduatedLine from 'apigeom/src/elements/grid/GraduatedLine'
+import { wrapperApigeomToMathalea } from '../../lib/apigeom/apigeomZoom'
 import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
@@ -158,8 +159,8 @@ export default class DonnerSensDefinitionQuotient extends Exercice {
       })
 
       if (context.isHtml) {
-        texte += '<br>' + figureEnonce.figure.getStaticHtml()
-        texteCorr += figureCorrection.figure.getStaticHtml()
+        texte += '<br>' + wrapperApigeomToMathalea(figureEnonce.figure)
+        texteCorr += wrapperApigeomToMathalea(figureCorrection.figure)
       } else {
         texte += '\n\n' + figureEnonce.latex
         texteCorr += '\\;\n' + figureCorrection.latex

@@ -4,6 +4,7 @@ import { fixeBordures } from '../../../lib/2d/fixeBordures'
 import { grille } from '../../../lib/2d/Grille'
 import { segment } from '../../../lib/2d/segmentsVecteurs'
 import { latex2d } from '../../../lib/2d/textes'
+import { wrapperApigeomToMathalea } from '../../../lib/apigeom/apigeomZoom'
 import figureApigeom from '../../../lib/figureApigeom'
 import { ajouteFeedback } from '../../../lib/interactif/questionMathLive'
 import { choice } from '../../../lib/outils/arrayOutils'
@@ -159,7 +160,7 @@ export default class Can2026Q26 extends ExerciceCan {
       if (this.interactif) {
         this.question += emplacementPourFigure + ajouteFeedback(this, 0)
       } else {
-        this.question += figure.getStaticHtml()
+        this.question += wrapperApigeomToMathalea(figure)
       }
     } else {
       const g = grille(0, 0, this.den + 2, 5, 'gray', 0.5, 1)
@@ -180,7 +181,7 @@ export default class Can2026Q26 extends ExerciceCan {
     }
     this.correction += '\n\n<br><br>\n'
     if (context.isHtml) {
-      this.correction += figureCorr.getStaticHtml()
+      this.correction += wrapperApigeomToMathalea(figureCorr)
     } else {
       this.correction += '<br>' + figureCorr.tikz()
     }

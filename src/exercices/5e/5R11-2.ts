@@ -1,6 +1,7 @@
 import { orangeMathalea } from 'apigeom/src/elements/defaultValues'
 import type Figure from 'apigeom/src/Figure'
 import { apigeomGraduatedLine } from '../../lib/apigeom/apigeomGraduatedLine'
+import { wrapperApigeomToMathalea } from '../../lib/apigeom/apigeomZoom'
 import figureApigeom from '../../lib/figureApigeom'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import { arrondi } from '../../lib/outils/nombres'
@@ -155,13 +156,6 @@ class PlacerPointsSurAxeRelatifs extends Exercice {
         colorLabel: orangeMathalea,
         labelDxInPixels: 0,
       })
-      // MGU : gère le zoom des figures apigeom statiques comme les figures mathalea2d
-      figureCorr.divFigure.classList.add('svgContainer')
-      figureCorr.divFigure.querySelector('svg')?.classList.add('mathalea2d')
-      for (const di of figureCorr.divFigure.querySelectorAll('div')) {
-        di.classList.add('divLatex')
-      }
-
       texte = `Placer les points : $${label1}(${texNombre(abs1, 5)}), ${label2}(${texNombre(abs2, 5)}), ${label3}(${texNombre(abs3, 5)})$.`
 
       switch (true) {
@@ -169,11 +163,11 @@ class PlacerPointsSurAxeRelatifs extends Exercice {
           texte +=
             '<br>' +
             figureApigeom({ exercice: this, i, figure, defaultAction: 'POINT' })
-          texteCorr += figureCorr.getStaticHtml()
+          texteCorr += wrapperApigeomToMathalea(figureCorr)
           break
         case context.isHtml:
-          texte += '<br>' + figure.getStaticHtml()
-          texteCorr += figureCorr.getStaticHtml()
+          texte += '<br>' + wrapperApigeomToMathalea(figure)
+          texteCorr += wrapperApigeomToMathalea(figureCorr)
           break
         default:
           texte += '\n\n' + latex
@@ -216,7 +210,7 @@ class PlacerPointsSurAxeRelatifs extends Exercice {
         label,
         x,
         y: 0,
-        precision: this.sup + 1
+        precision: this.sup + 1,
       })
       const point = points[0]
       if (isValid) {

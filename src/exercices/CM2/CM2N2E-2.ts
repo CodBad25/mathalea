@@ -1,6 +1,7 @@
 import Figure from 'apigeom'
 import { orangeMathalea } from 'apigeom/src/elements/defaultValues'
 import GraduatedLine from 'apigeom/src/elements/grid/GraduatedLine'
+import { wrapperApigeomToMathalea } from '../../lib/apigeom/apigeomZoom'
 import figureApigeom from '../../lib/figureApigeom'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import { arrondi } from '../../lib/outils/nombres'
@@ -169,11 +170,11 @@ class PlacerPointsAbscissesFractionnaires extends Exercice {
               figure,
               defaultAction: 'POINT',
             })
-          texteCorr += figureCorr.getStaticHtml()
+          texteCorr += wrapperApigeomToMathalea(figureCorr)
           break
         case context.isHtml:
-          texte += '<br>' + figure.getStaticHtml()
-          texteCorr += figureCorr.getStaticHtml()
+          texte += '<br>' + wrapperApigeomToMathalea(figure)
+          texteCorr += wrapperApigeomToMathalea(figureCorr)
           break
         default:
           texte += '\n\n' + latex

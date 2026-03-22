@@ -1,4 +1,6 @@
 import Figure from 'apigeom'
+import { wrapperApigeomToMathalea } from '../../lib/apigeom/apigeomZoom'
+import { centrage } from '../../lib/format/miseEnPage'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { remplisLesBlancs } from '../../lib/interactif/questionMathLive'
@@ -59,19 +61,19 @@ export default class ExerciceEchelleGraphique extends Exercice {
     })
     if (context.isHtml) {
       this.introduction = `Pour tout l'exercice, l'échelle graphique est de 1 cm pour ${nombreDeMetresPour1Cm} m.`
-      this.introduction += figure.getStaticHtml({ center: true })
+      this.introduction += `${centrage(wrapperApigeomToMathalea(figure))}`
     } else {
       this.introduction =
         "Pour tout l'exercice, l'échelle graphique est la suivante : <br>"
-      this.introduction += figure.latex(
-        { includePreambule: false,
-          xMax : figure.xMax,
-          xMin : figure.xMin,
-          yMax : figure.yMax,
-          yMin : figure.yMin
+      this.introduction += figure.latex({
+        includePreambule: false,
+        xMax: figure.xMax,
+        xMin: figure.xMin,
+        yMax: figure.yMax,
+        yMin: figure.yMin,
       })
     }
-    
+
     const rectangles = [
       { name: 'terrain de football', genre: 'm', width: 68, height: 105 },
       { name: 'terrain de rugby', genre: 'm', width: 68, height: 100 },
