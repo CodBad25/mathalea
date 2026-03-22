@@ -29,21 +29,29 @@ export function minToHoraire(minutes: number, NbEnLatex = false) {
  * @Example
  * //on écrira 24 minutes plutôt que 0 h 24
  */
-export function minToHour(minutes: number) {
+export function minToHour(minutes: number, NbEnLatex = false) {
   let nbHour = Math.floor(minutes / 60)
+  let retour = ''
   if (nbHour > 23) {
     nbHour = nbHour - 24
   }
   const nbminuteRestante = minutes % 60
   if (nbHour === 0) {
-    return nbminuteRestante + sp() + 'min'
+    retour = nbminuteRestante + sp() + 'min'
   } else {
     if (nbminuteRestante > 9) {
-      return nbHour + sp() + 'h' + sp() + nbminuteRestante + sp() + 'min'
+      retour = nbHour + sp() + 'h' + sp() + nbminuteRestante + sp() + 'min'
     } else {
-      return nbHour + sp() + 'h' + sp() + '0' + nbminuteRestante + sp() + 'min'
+      retour =
+        nbHour + sp() + 'h' + sp() + '0' + nbminuteRestante + sp() + 'min'
     }
   }
+  if (NbEnLatex)
+    retour = retour
+      .replace(/\bmin\b/g, '\\text{min}')
+      .replace(/\bh\b/g, '\\text{h}')
+
+  return retour
 }
 
 /**
