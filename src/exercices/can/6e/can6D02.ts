@@ -23,9 +23,9 @@ export default class ResteEnMinutes extends ExerciceSimple {
   constructor() {
     super()
     this.nbQuestions = 1
-this.formatChampTexte = KeyboardType.clavierDeBase
+    this.formatChampTexte = KeyboardType.clavierDeBase
     this.typeExercice = 'simple'
-    this.optionsChampTexte = {texteAvant : '<br>', texteApres: ' minutes' }
+    this.optionsChampTexte = { texteAvant: '<br>', texteApres: ' minutes' }
     this.optionsDeComparaison = { nombreDecimalSeulement: true }
   }
 
@@ -34,7 +34,7 @@ this.formatChampTexte = KeyboardType.clavierDeBase
     const b = randint(10, 59)
     const d = a * 60 + b
     this.question = ` Si on met $${d}$ minutes au format heures-minutes, quel serait le nombre de minutes ?`
-    this.correction = `$${d} = ${a} \\times 60 + ${b}$ donc $${d}$ minutes $= ${a}$ h $${miseEnEvidence(b)}$ min.`
+    this.correction = `$${d} = ${a} \\times 60 + ${b}$ donc $${d}$ minutes $= ${a}\\text{~h~}${miseEnEvidence(b)}\\text{~min}$.`
     this.reponse = b
     this.canReponseACompleter = `$\\ldots$ minutes `
   }
