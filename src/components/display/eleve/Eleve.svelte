@@ -180,7 +180,7 @@
       bubbles: true,
     })
     document.dispatchEvent(exercicesAffiches)
-    if (eleveSection && $globalOptions.presMode === 'une_question_par_page') {
+    if (eleveSection) {
       const params = $globalOptions
       const zoom = Number(params.z) ?? 1
       resizeContent(eleveSection, zoom)
