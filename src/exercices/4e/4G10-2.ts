@@ -43,6 +43,7 @@ function segmente(point: PointAbstrait, image: PointAbstrait) {
   const segmentAA = segment(point, image, 'red')
   segmentAA.styleExtremites = '|->'
   segmentAA.pointilles = 2
+  segmentAA.tailleExtremites = 5
   return segmentAA
 }
 export default class nomExercice extends Exercice {
@@ -60,7 +61,6 @@ export default class nomExercice extends Exercice {
     for (
       let i = 0, texte, texteCorr, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       objetsEnonceOnly = []
       objetsCorrectionOnly = []
@@ -99,9 +99,11 @@ export default class nomExercice extends Exercice {
       const imageB = translation2Points(B, D, E, `${lettres[1]}'`)
       const imageC = translation2Points(C, D, E, `${lettres[2]}'`)
       const imagePoly = polygoneAvecNom(imageA, imageB, imageC)
-
+      const de = representant(vecteur(D, E), D)
+      de.styleExtremites = '|->'
+      de.tailleExtremites = 5
       objetsEnonceEtCorr.push(
-        representant(vecteur(D, E), D),
+        de,
         afficheLongueurSegment(D, E),
         labelPoint(D, E),
       )
