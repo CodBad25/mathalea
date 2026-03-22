@@ -387,8 +387,8 @@ export class Segment extends ObjetMathalea2D {
       if (fin === '>') {
         // si ça termine par > on rajoute une flèche en B
         const M = pointSurSegment(B, A, h / context.pixelsParCm)
-        const B1 = similitudePoint(B, M, 45, 0.7)
-        const B2 = similitudePoint(B, M, -45, 0.7)
+        const B1 = similitudePoint(B, M, 45, 1.1)
+        const B2 = similitudePoint(B, M, -45, 1.1)
         code += `<line x1="${B.xSVG(coeff)}" y1="${B.ySVG(
           coeff,
         )}" x2="${B1.xSVG(coeff)}" y2="${B1.ySVG(coeff)}" stroke="${
@@ -401,8 +401,8 @@ export class Segment extends ObjetMathalea2D {
       if (fin === '<') {
         // si ça termine par < on rajoute une flèche inversée en B
         const M = pointSurSegment(B, A, -h / context.pixelsParCm)
-        const B1 = similitudePoint(B, M, 45, 0.7)
-        const B2 = similitudePoint(B, M, -45, 0.7)
+        const B1 = similitudePoint(B, M, 45, 1.1)
+        const B2 = similitudePoint(B, M, -45, 1.1)
         code += `<line x1="${B.xSVG(coeff)}" y1="${B.ySVG(
           coeff,
         )}" x2="${B1.xSVG(coeff)}" y2="${B1.ySVG(coeff)}" stroke="${
@@ -452,8 +452,8 @@ export class Segment extends ObjetMathalea2D {
       if (debut === '<') {
         // si ça commence par < on rajoute une flèche en A
         const M = pointSurSegment(A, B, h / context.pixelsParCm)
-        const A1 = similitudePoint(A, M, 45, 0.7)
-        const A2 = similitudePoint(A, M, -45, 0.7)
+        const A1 = similitudePoint(A, M, 45, 1.1)
+        const A2 = similitudePoint(A, M, -45, 1.1)
         code += `<line x1="${A.xSVG(coeff)}" y1="${A.ySVG(
           coeff,
         )}" x2="${A1.xSVG(coeff)}" y2="${A1.ySVG(coeff)}" stroke="${
@@ -468,8 +468,8 @@ export class Segment extends ObjetMathalea2D {
       if (debut === '>') {
         // si ça commence par > on rajoute une flèche inversée en A
         const M = pointSurSegment(A, B, -h / context.pixelsParCm)
-        const A1 = similitudePoint(A, M, 45, 0.7)
-        const A2 = similitudePoint(A, M, -45, 0.7)
+        const A1 = similitudePoint(A, M, 45, 1.1)
+        const A2 = similitudePoint(A, M, -45, 1.1)
         code += `<line x1="${A.xSVG(coeff)}" y1="${A.ySVG(
           coeff,
         )}" x2="${A1.xSVG(coeff)}" y2="${A1.ySVG(coeff)}" stroke="${
