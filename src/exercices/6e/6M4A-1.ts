@@ -4,7 +4,8 @@ import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { prenom, prenomF } from '../../lib/outils/Personne'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import { minToHoraire, minToHour } from '../../lib/outils/dateEtHoraires'
-import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { formatMinute } from '../../lib/outils/texNombre'
 import Hms from '../../modules/Hms'
 import { context } from '../../modules/context'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
@@ -73,12 +74,12 @@ export default class CalculsDeDureesOuHoraires extends Exercice {
         h,
         m,
         texte,
-        texteCorr,
         texteInteractif,
         cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
+      let texteCorr = ''
+      let texteCorrPerso = ''
       // d1 : heure de début (h1 heures m1 min)
       // d2 : heure de fin (h2 heures m2 min)
       // d : durée
@@ -97,37 +98,25 @@ export default class CalculsDeDureesOuHoraires extends Exercice {
         m2 = randint(1, m1 - 1) // pour s'assurer qu'il y a une retenue dans d2-d1
         d2 = h2 * 60 + m2
         d = d2 - d1
-        d1 = minToHoraire(d1)
-        d2 = minToHoraire(d2)
+        d1 = minToHoraire(d1, true)
+        d2 = minToHoraire(d2, true)
         h = Math.floor(d / 60)
         m = d % 60
-        d = minToHour(d)
+        d = minToHour(d, true)
         if (typesDeQuestions[i] === 1) {
-          texte = `La diffusion d'un film commence à ${d1} et se termine à ${d2}.<br>Combien de temps dure ce film ?`
-          texteCorr = `${d1}$~\\xrightarrow{+${60 - m1}~\\text{min}}${(h1 + 1) % 24}~\\text{h} \\xrightarrow{+${(h2 - h1 - 1) % 24}~\\text{h}~${m2}~\\min}${h2 % 24}~\\text{h}~${m2}~\\text{min}$`
-          texteCorr += `<br>${d2} $-$ ${d1} = ${d}`
-          texteCorr += '<br>'
-          texteCorr += `Le film dure ${texteEnCouleurEtGras(d)}.`
+          texte = `La diffusion d'un film commence à $${d1}$ et se termine à $${d2}$.<br>Combien de temps dure ce film ?`
+          texteCorrPerso = `Le film dure $${miseEnEvidence(d)}$.`
           texteInteractif = 'Le film dure'
           reponse = Hms.fromString(d)
         } else if (typesDeQuestions[i] === 2) {
-          texte = `Un film dure ${d} et commence à ${d1}. <br>À quelle heure termine-t-il ?`
-          texteCorr = `${d1} + ${d} = ${h1 + h} h ${m1 + m} min`
-          if (m1 + m > 59) texteCorr += ` = ${d2}`
-          texteCorr += '<br>'
-          texteCorr += `Le film termine à ${texteEnCouleurEtGras(d2)}.`
-          texteInteractif = 'Le film termine à'
+          texte = `Un film dure $${d}$ et commence à $${d1}$. <br>À quelle heure termine-t-il ?`
+          texteCorrPerso = `Le film termine à $${miseEnEvidence(d2)}$.`
+          texteInteractif = 'Le film termine à '
           reponse = Hms.fromString(d2)
         } else {
-          texte = `Un film de ${d} termine à ${d2}. <br>À quelle heure commence-t-il ?`
-          texteCorr = `$${h2 % 24}~\\text{h}~${m2}~\\text{min}`
-          if (h > 0)
-            texteCorr += `\\xrightarrow{-${h}~\\text{h}} ${h2 - h}~\\text{h}~${m2}~\\text{min}`
-          texteCorr += `\\xrightarrow{-${m2}~\\text{min}} ${(h2 - h) % 24}~\\text{h} \\xrightarrow{-${Math.abs(m - m2)}~\\text{min}} ${h1}~\\text{h}~${m1}~\\text{min}$`
-          texteCorr += `<br>${d2} $-$ ${d} = ${d1}`
-          texteCorr += '<br>'
-          texteCorr += `Le film commence à ${texteEnCouleurEtGras(d1)}.`
-          texteInteractif = 'Le film commencé à'
+          texte = `Un film de $${d}$ termine à $${d2}$. <br>À quelle heure commence-t-il ?`
+          texteCorrPerso = `Le film commence à $${miseEnEvidence(d1)}$.`
+          texteInteractif = 'Le film commence à'
           reponse = Hms.fromString(d1)
         }
       } else if (typeDeContexte[i] === 2) {
@@ -147,37 +136,25 @@ export default class CalculsDeDureesOuHoraires extends Exercice {
           d2 = h2 * 60 + m2
           d = d2 - d1
         }
-        d1 = minToHoraire(d1)
-        d2 = minToHoraire(d2)
+        d1 = minToHoraire(d1, true)
+        d2 = minToHoraire(d2, true)
         h = Math.floor(d / 60)
         m = d % 60
-        d = minToHour(d)
+        d = minToHour(d, true)
 
         if (typesDeQuestions[i] === 1) {
-          texte = `Sur son service de streaming favori, ${prenom()} commence à regarder une série à ${d1} et celle-ci se termine à ${d2}. <br>Combien de temps dure l'épisode ?`
-          texteCorr = `${d1}$~\\xrightarrow{+${60 - m1}~\\text{min}}${(h1 + 1) % 24}~\\text{h} \\xrightarrow{+${h2 - h1 - 1 > 0 ? `${(h2 - h1 - 1) % 24}~\\text{h}` : ''}~${m2}~\\min}${h2 % 24}~\\text{h}~${m2}~\\text{min}$`
-          texteCorr += `<br>${d2} $-$ ${d1} = ${d}`
-          texteCorr += '<br>'
-          texteCorr += `L'épisode dure ${texteEnCouleurEtGras(d)}. `
+          texte = `Sur son service de streaming favori, ${prenom()} commence à regarder une série à $${d1}$ et celle-ci se termine à $${d2}$. <br>Combien de temps dure l'épisode ?`
+          texteCorrPerso = `L'épisode dure $${miseEnEvidence(d)}$. `
           reponse = Hms.fromString(d)
           texteInteractif = "L'épisode dure"
         } else if (typesDeQuestions[i] === 2) {
-          texte = `${prenom()} allume son ordinateur à ${d1} pour regarder une série de ${d}. <br>À quelle heure la série s'achève-t-elle ?`
-          texteCorr = `${d1} + ${d} = ${h1 + h} h ${m1 + m} min`
-          if (m1 + m > 59) texteCorr += ` = ${d2}`
-          texteCorr += '<br>'
-          texteCorr += `La série s'achève à ${texteEnCouleurEtGras(d2)}. `
+          texte = `${prenom()} allume son ordinateur à $${d1}$ pour regarder une série de $${d}$. <br>À quelle heure la série s'achève-t-elle ?`
+          texteCorrPerso = `La série s'achève à $${miseEnEvidence(d2)}$. `
           reponse = Hms.fromString(d2)
           texteInteractif = "La série s'achève à"
         } else {
-          texte = `${prenom()} termine de regarder une série de ${d} à ${d2}. <br>À quelle heure la série commence-t-elle ?`
-          texteCorr = `$${h2 % 24}~\\text{h}~${m2}~\\text{min}`
-          if (h > 0)
-            texteCorr += `\\xrightarrow{-${h}~\\text{h}} ${h2 - h}~\\text{h}~${m2}~\\text{min}`
-          texteCorr += `\\xrightarrow{-${m2}~\\text{min}} ${(h2 - h) % 24}~\\text{h} \\xrightarrow{-${Math.abs(m - m2)}~\\text{min}} ${h1}~\\text{h}~${m1}~\\text{min}$`
-          texteCorr += `<br>${d2} $-$ ${d} = ${d1}`
-          texteCorr += '<br>'
-          texteCorr += `La série commence à ${texteEnCouleurEtGras(d1)}. `
+          texte = `${prenom()} termine de regarder une série de $${d}$ à $${d2}$. <br>À quelle heure la série commence-t-elle ?`
+          texteCorrPerso = `La série commence à $${miseEnEvidence(d1)}$. `
           reponse = Hms.fromString(d1)
           texteInteractif = 'La série commence à'
         }
@@ -189,37 +166,25 @@ export default class CalculsDeDureesOuHoraires extends Exercice {
         m2 = randint(1, 59) // pas forcément de retenue dans d2-d1
         d2 = h2 * 60 + m2
         d = d2 - d1
-        d1 = minToHoraire(d1)
-        d2 = minToHoraire(d2)
+        d1 = minToHoraire(d1, true)
+        d2 = minToHoraire(d2, true)
         h = Math.floor(d / 60)
         m = d % 60
-        d = minToHour(d)
+        d = minToHour(d, true)
 
         if (typesDeQuestions[i] === 1) {
-          texte = `Une émission télévisée est diffusée de ${d1} à ${d2}. <br>Combien de temps dure-t-elle ?`
-          texteCorr = `${d1}$~\\xrightarrow{+${60 - m1}~\\text{min}}${(h1 + 1) % 24}~\\text{h} \\xrightarrow{+${h2 - h1 - 1 > 0 ? `${(h2 - h1 - 1) % 24}~\\text{h}` : ''}~${m2}~\\min}${h2 % 24}~\\text{h}~${m2}~\\text{min}$`
-          texteCorr += `<br>${d2} $-$ ${d1} = ${d}`
-          texteCorr += '<br>'
-          texteCorr += `L'émission dure ${texteEnCouleurEtGras(d)}. `
+          texte = `Une émission télévisée est diffusée de $${d1}$ à $${d2}$. <br>Combien de temps dure-t-elle ?`
+          texteCorrPerso = `L'émission dure $${miseEnEvidence(d)}$. `
           reponse = Hms.fromString(d)
           texteInteractif = "L'émission dure"
         } else if (typesDeQuestions[i] === 2) {
-          texte = `Une émission télévisée de ${d} commence à ${d1}. <br>À quelle heure s'achèvera-t-elle ?`
-          texteCorr = `${d1} + ${d} = ${h1 + h} h ${m1 + m} min`
-          if (m1 + m > 59) texteCorr += ` = ${d2}`
-          texteCorr += '<br>'
-          texteCorr += `L'émission s'achèvera à ${texteEnCouleurEtGras(d2)}. `
+          texte = `Une émission télévisée de $${d}$ commence à $${d1}$. <br>À quelle heure s'achèvera-t-elle ?`
+          texteCorrPerso = `L'émission s'achèvera à $${miseEnEvidence(d2)}$. `
           reponse = Hms.fromString(d2)
           texteInteractif = "L'émission s'achèvera à"
         } else {
-          texte = `À ${d2}, ${prenom()} termine de regarder une émission de ${d}. <br>À quelle heure l'émission commence-t-elle ?`
-          texteCorr = `$${h2 % 24}~\\text{h}~${m2}~\\text{min}`
-          if (h > 0)
-            texteCorr += `\\xrightarrow{-${h}~\\text{h}} ${h2 - h}~\\text{h}~${m2}~\\text{min}`
-          texteCorr += `\\xrightarrow{-${m2}~\\text{min}} ${(h2 - h) % 24}~\\text{h} \\xrightarrow{-${Math.abs(m - m2)}~\\text{min}} ${h1}~\\text{h}~${m1}~\\text{min}$`
-          texteCorr += `<br>${d2} $-$ ${d} = ${d1}`
-          texteCorr += '<br>'
-          texteCorr += `L'émission commence à ${texteEnCouleurEtGras(d1)}. `
+          texte = `À $${d2}$, ${prenom()} termine de regarder une émission de $${d}$. <br>À quelle heure l'émission commence-t-elle ?`
+          texteCorrPerso = `L'émission commence à $${miseEnEvidence(d1)}$. `
           reponse = Hms.fromString(d1)
           texteInteractif = "L'émission commence à"
         }
@@ -240,37 +205,25 @@ export default class CalculsDeDureesOuHoraires extends Exercice {
           d2 = h2 * 60 + m2
           d = d2 - d1
         }
-        d1 = minToHoraire(d1)
-        d2 = minToHoraire(d2)
+        d1 = minToHoraire(d1, true)
+        d2 = minToHoraire(d2, true)
         h = Math.floor(d / 60)
         m = d % 60
-        d = minToHour(d)
+        d = minToHour(d, true)
 
         if (typesDeQuestions[i] === 1) {
-          texte = `Un papa regarde la compétition de gymnastique de sa fille  de ${d1} à ${d2}. <br>Quelle est la durée de cette compétition ?`
-          texteCorr = `${d1}$~\\xrightarrow{+${60 - m1}~\\text{min}}${(h1 + 1) % 24}~\\text{h} \\xrightarrow{+${h2 - h1 - 1 > 0 ? `${(h2 - h1 - 1) % 24}~\\text{h}` : ''}~${m2}~\\min}${h2 % 24}~\\text{h}~${m2}~\\text{min}$`
-          texteCorr += `<br>${d2} $-$ ${d1} = ${d}`
-          texteCorr += '<br>'
-          texteCorr += `La compétition dure ${texteEnCouleurEtGras(d)}. `
+          texte = `Un papa regarde la compétition de gymnastique de sa fille  de $${d1}$ à $${d2}$. <br>Quelle est la durée de cette compétition ?`
+          texteCorrPerso = `La compétition dure $${miseEnEvidence(d)}$. `
           reponse = Hms.fromString(d)
           texteInteractif = 'La compétition dure'
         } else if (typesDeQuestions[i] === 2) {
-          texte = `Une compétition de gymnastique commence à ${d1} et dure ${d}. <br>À quelle heure termine-t-elle ?`
-          texteCorr = `${d1} + ${d} = ${h1 + h} h ${m1 + m} min`
-          if (m1 + m > 59) texteCorr += ` = ${d2}`
-          texteCorr += '<br>'
-          texteCorr += `La compétition termine à ${texteEnCouleurEtGras(d2)}. `
+          texte = `Une compétition de gymnastique commence à $${d1}$ et dure $${d}$. <br>À quelle heure termine-t-elle ?`
+          texteCorrPerso = `La compétition termine à $${miseEnEvidence(d2)}$. `
           reponse = Hms.fromString(d2)
           texteInteractif = 'La compétition termine à'
         } else {
-          texte = `Une compétition de gymnastique qui termine à ${d2} dure ${d}. <br>À quelle heure commence-t-elle ?`
-          texteCorr = `$${h2 % 24}~\\text{h}~${m2}~\\text{min}`
-          if (h > 0)
-            texteCorr += `\\xrightarrow{-${h}~\\text{h}} ${h2 - h}~\\text{h}~${m2}~\\text{min}`
-          texteCorr += `\\xrightarrow{-${m2}~\\text{min}} ${(h2 - h) % 24}~\\text{h} \\xrightarrow{-${Math.abs(m - m2)}~\\text{min}} ${h1}~\\text{h}~${m1}~\\text{min}$`
-          texteCorr += `<br>${d2} $-$ ${d} = ${d1}`
-          texteCorr += '<br>'
-          texteCorr += `La compétition commence à ${texteEnCouleurEtGras(d1)}. `
+          texte = `Une compétition de gymnastique qui termine à $${d2}$ dure $${d}$. <br>À quelle heure commence-t-elle ?`
+          texteCorrPerso = `La compétition commence à $${miseEnEvidence(d1)}$. `
           reponse = Hms.fromString(d1)
           texteInteractif = 'La compétition commence à'
         }
@@ -291,42 +244,50 @@ export default class CalculsDeDureesOuHoraires extends Exercice {
           d2 = h2 * 60 + m2
           d = d2 - d1
         }
-        d1 = minToHoraire(d1)
-        d2 = minToHoraire(d2)
+        d1 = minToHoraire(d1, true)
+        d2 = minToHoraire(d2, true)
         h = Math.floor(d / 60)
         m = d % 60
-        d = minToHour(d)
+        d = minToHour(d, true)
 
         if (typesDeQuestions[i] === 1) {
-          texte = `Un train part à ${d1} et arrive à destination à ${d2}. <br>Quelle est la durée du trajet ?`
-          texteCorr = `${d1}$~\\xrightarrow{+${60 - m1}~\\text{min}}${(h1 + 1) % 24}~\\text{h} \\xrightarrow{+${h2 - h1 - 1 > 0 ? `${(h2 - h1 - 1) % 24}~\\text{h}` : ''}~${m2}~\\min}${h2 % 24}~\\text{h}~${m2}~\\text{min}$`
-          texteCorr += `<br>${d2} $-$ ${d1} = ${d}`
-          texteCorr += '<br>'
-          texteCorr += `Le trajet dure ${texteEnCouleurEtGras(d)}. `
+          texte = `Un train part à $${d1}$ et arrive à destination à $${d2}$. <br>Quelle est la durée du trajet ?`
+          texteCorrPerso = `Le trajet dure $${miseEnEvidence(d)}$. `
           reponse = Hms.fromString(d)
           texteInteractif = 'Le trajet dure'
         } else if (typesDeQuestions[i] === 2) {
           const prenom = prenomF()
-          texte = `${prenom} monte dans le train à ${d1} pour un trajet qui doit durer ${d}. <br>À quelle heure arrive-t-elle ?`
-          texteCorr = `${d1} + ${d} = ${h1 + h} h ${m1 + m} min`
-          if (m1 + m > 59) texteCorr += ` = ${d2}`
-          texteCorr += '<br>'
-          texteCorr += `${prenom} arrive à ${texteEnCouleurEtGras(d2)}. `
+          texte = `${prenom} monte dans le train à $${d1}$ pour un trajet qui doit durer $${d}$. <br>À quelle heure arrive-t-elle ?`
+          texteCorrPerso = `${prenom} arrive à $${miseEnEvidence(d2)}$. `
           reponse = Hms.fromString(d2)
           texteInteractif = `${prenom} arrive à`
         } else {
-          texte = `Un train arrive en gare à ${d2} après un trajet de ${d}. <br>À quelle heure le voyage commence-t-il ?`
-          texteCorr = `$${h2 % 24}~\\text{h}~${m2}~\\text{min}`
-          if (h > 0)
-            texteCorr += `\\xrightarrow{-${h}~\\text{h}} ${h2 - h}~\\text{h}~${m2}~\\text{min}`
-          texteCorr += `\\xrightarrow{-${m2}~\\text{min}} ${(h2 - h) % 24}~\\text{h} \\xrightarrow{-${Math.abs(m - m2)}~\\text{min}} ${h1}~\\text{h}~${m1}~\\text{min}$`
-          texteCorr += `<br>${d2} $-$ ${d} = ${d1}`
-          texteCorr += '<br>'
-          texteCorr += `Le voyage commencé à ${texteEnCouleurEtGras(d1)}. `
+          texte = `Un train arrive en gare à $${d2}$ après un trajet de $${d}$. <br>À quelle heure le voyage commence-t-il ?`
+          texteCorrPerso = `Le voyage commencé à $${miseEnEvidence(d1)}$. `
           reponse = Hms.fromString(d1)
-          texteInteractif = 'Le voyage commencé à'
+          texteInteractif = 'Le voyage commence à'
         }
       }
+      switch (typesDeQuestions[i]) {
+        case 1:
+          texteCorr += `$${d1}~\\xrightarrow{+${formatMinute(60 - m1)}~\\text{min}}${(h1 + 1) % 24}~\\text{h} \\xrightarrow{+${h2 - h1 - 1 > 0 ? `${(h2 - h1 - 1) % 24}~\\text{h}~` : ''}${formatMinute(m2)}~\\min}${h2 % 24}~\\text{h}~${formatMinute(m2)}~\\text{min}$<br>`
+          texteCorr += `$${d2} - ${d1} = ${d}$<br>`
+          break
+        case 2:
+          texteCorr += `$${d1} + ${d} = ${h1 + h}~\\text{h}~${formatMinute(m1 + m)}~\\text{min}`
+          if (m1 + m > 59)
+            texteCorr += `= ${h1 + h}~\\text{h}+ 60~\\text{min}+${formatMinute(m1 + m - 60)}~\\text{min}= ${h1 + h}~\\text{h}+ 1~\\text{h}+${formatMinute(m1 + m - 60)}~\\text{min}`
+          texteCorr += '$<br>'
+          break
+        case 3:
+          texteCorr += `$${h2 % 24}~\\text{h}~${formatMinute(m2)}~\\text{min}`
+          if (h > 0)
+            texteCorr += `\\xrightarrow{-${h}~\\text{h}} ${h2 - h}~\\text{h}~${formatMinute(m2)}~\\text{min}`
+          texteCorr += `\\xrightarrow{-${formatMinute(m2)}~\\text{min}} ${(h2 - h) % 24}~\\text{h} \\xrightarrow{-${formatMinute(Math.abs(m - m2))}~\\text{min}} ${h1}~\\text{h}~${formatMinute(m1)}~\\text{min}$<br>`
+          texteCorr += `$${d2}-${d} = ${d1}$<br>`
+          break
+      }
+      texteCorr += texteCorrPerso
       if (context.isAmc) {
         this.autoCorrection[i] = {
           enonce:
