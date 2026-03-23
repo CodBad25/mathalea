@@ -107,8 +107,9 @@ async function toolSetActivityParams({
     if (l.v === 'eleve') {
       l.isInteractiveFree = false
     }
-    // Si la séance est corrigée, l'élève a toujours accès à la correction
-    if (workflow === 'corrected') {
+    // Le prof a toujours accès à la correction
+    // L'élève n'y a accès que si la séance est corrigée
+    if (mode !== 'assignment' || workflow === 'corrected') {
       l.isSolutionAccessible = true
     }
     return l
