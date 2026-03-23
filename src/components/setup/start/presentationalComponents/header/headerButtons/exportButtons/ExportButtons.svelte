@@ -6,10 +6,14 @@
   import type { VueType } from '../../../../../../../lib/VueType'
   import ButtonActionInfo from '../../../../../../shared/forms/ButtonActionInfo.svelte'
   import ButtonIconTooltip from '../../../../../../shared/forms/ButtonIconTooltip.svelte'
+  import { exportKutsum } from '../../../../../../../lib/kutsum'
   import QcmCamIcon from '../../../../../../shared/icons/QcmCamIcon.svelte'
 
   export let handleExport: (vue: VueType) => void
   export let exportQcmCam: () => Promise<void>
+
+  // Bouton Kutsum masqué en production — activer avec ?kutsum=1 dans l'URL
+  const showKutsum = new URLSearchParams(window.location.search).get('kutsum') === '1'
 
   let showMoreModal = false
   let moreDialog: HTMLDialogElement
@@ -74,6 +78,21 @@
       component: AnkiIcon,
       action: () => exportAndClose('anki'),
     },
+    // Kutsum masqué en production — visible uniquement avec ?kutsum=1 dans l'URL
+    ...(showKutsum
+      ? [
+          {
+            id: 'kutsum',
+            label: 'Kutsum',
+            description: 'Pour créer des quiz interactifs sur Kutsum',
+            icon: 'bx bx-game',
+            action: () => {
+              showMoreModal = false
+              exportKutsum()
+            },
+          } satisfies ExportOption,
+        ]
+      : []),
   ]
 </script>
 

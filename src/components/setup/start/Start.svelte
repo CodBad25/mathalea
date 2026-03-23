@@ -408,6 +408,7 @@
     }
     downloadFile(content, 'questions.txt') // @todo Si possible, il faudrait l'nvoyer directement à travers l'ouverture d'un nouvel onglet qcmcam.net avec le lien vers ce fichier en argument.
   }
+
 </script>
 
 <svelte:window bind:innerWidth />
