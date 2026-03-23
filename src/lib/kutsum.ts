@@ -169,30 +169,37 @@ export async function sendToKutsum(payload: KutsumPayload): Promise<string> {
   return data.draftId
 }
 
-export function openKutsumDraft(draftId: string): void {
-  window.open(`${KUTSUM_IMPORT_URL}?draftId=${draftId}`, '_blank')
-}
-
 export async function exportKutsum(): Promise<void> {
-  const exercises = await getExercisesFromExercicesParams()
-  if (exercises.length === 0) {
-    alert("Aucun exercice sélectionné pour l'export vers Kutsum")
-    return
-  }
-
-  const payload = buildKutsumPayload(exercises)
-
-  if (payload.exercises.length === 0) {
-    alert(
-      "Aucun exercice compatible avec Kutsum parmi les exercices sélectionnés (seuls les QCM et les exercices interactifs sont supportés)",
-    )
-    return
-  }
+  // Ouvrir l'onglet de façon synchrone, avant tout await, pour ne pas être
+  // bloqué par le filtre anti-popup de Safari (qui rejette window.open après
+  // un appel asynchrone car il n'est plus dans le contexte du geste utilisateur).
+  const tab = window.open('', '_blank')
 
   try {
+    const exercises = await getExercisesFromExercicesParams()
+    if (exercises.length === 0) {
+      tab?.close()
+      alert("Aucun exercice sélectionné pour l'export vers Kutsum")
+      return
+    }
+
+    const payload = buildKutsumPayload(exercises)
+
+    if (payload.exercises.length === 0) {
+      tab?.close()
+      alert(
+        "Aucun exercice compatible avec Kutsum parmi les exercices sélectionnés (seuls les QCM et les exercices interactifs sont supportés)",
+      )
+      return
+    }
+
     const draftId = await sendToKutsum(payload)
-    openKutsumDraft(draftId)
+
+    if (tab) {
+      tab.location.href = `${KUTSUM_IMPORT_URL}?draftId=${draftId}`
+    }
   } catch (e) {
+    tab?.close()
     alert(`Impossible de contacter Kutsum : ${e instanceof Error ? e.message : String(e)}`)
   }
 }
