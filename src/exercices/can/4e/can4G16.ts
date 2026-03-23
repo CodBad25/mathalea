@@ -6,7 +6,7 @@ import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choice } from '../../../lib/outils/arrayOutils'
 import FractionEtendue from '../../../modules/FractionEtendue'
 import { randint } from '../../../modules/outils'
-export const titre = "Calculer avec un coefficient d\'agrandissement/réduction"
+export const titre = "Calculer avec un coefficient d'agrandissement/réduction"
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const dateDePublication = '09/12/2025'
@@ -30,7 +30,6 @@ export default class QuestionsAiresEtPerimetres5 extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const a = 0
     const N = choice(['a', 'b', 'c'])
     if (N === 'a') {
       const a = randint(2, 7) // aire
@@ -48,7 +47,6 @@ export default class QuestionsAiresEtPerimetres5 extends ExerciceSimple {
       this.reponse = a * c * c
 
       this.canReponseACompleter = '$\\ldots\\text{ cm}^2$'
-      this.listeCanEnonces.push(this.canEnonce)
       this.listeCanReponsesACompleter.push(this.canReponseACompleter)
     } else if (N === 'b') {
       const n = randint(1, 3)
@@ -61,9 +59,6 @@ export default class QuestionsAiresEtPerimetres5 extends ExerciceSimple {
       this.correction = ` Si les longueurs sont multiplées par $k$, les aires sont multipliées par $k^2$.<br>
           Ainsi, l'aire a été multipliée par : $\\left(${maFraction.texFraction}\\right)^2=${miseEnEvidence(this.reponse)}$.
       <br>`
-
-      this.listeCanEnonces.push(this.canEnonce)
-      this.listeCanReponsesACompleter.push(this.canReponseACompleter)
     } else {
       // N === 'c'
       const n = randint(1, 3)
@@ -78,9 +73,6 @@ export default class QuestionsAiresEtPerimetres5 extends ExerciceSimple {
       this.correction = ` Si les aires sont multiplées par $k$, les longueurs sont multipliées par $\\sqrt{k}$.<br>
           Ainsi, les longueurs ont été multipliées par : $\\sqrt{${maFractionAuCarre}}=${miseEnEvidence(this.reponse)}$.
       <br>`
-
-      this.listeCanEnonces.push(this.canEnonce)
-      this.listeCanReponsesACompleter.push(this.canReponseACompleter)
     }
   }
 }

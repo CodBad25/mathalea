@@ -14,7 +14,7 @@ export function downloadZip(filesUrls: string[], zipFileName: string) {
   const zip = new JSZip()
   let count = 0
   filesUrls.forEach((url) => {
-    JSZipUtils.getBinaryContent(url, (err, data) => {
+    JSZipUtils.getBinaryContent(url, (err: Error | null, data: ArrayBuffer | null) => {
       if (err) {
         throw err
       }
@@ -53,7 +53,7 @@ export async function downloadTexWithImagesZip(
     const imagesFolder = zip.folder('images')
     let count = 0
     urls.forEach((url) => {
-      JSZipUtils.getBinaryContent(url, (err, data) => {
+      JSZipUtils.getBinaryContent(url, (err: Error | null, data: ArrayBuffer | null) => {
         if (err) {
           throw err
         }

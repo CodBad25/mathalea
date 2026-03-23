@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { onDestroy, createEventDispatcher } from 'svelte'
-  import ElapsedTime from './ElapsedTime.svelte'
+  import { createEventDispatcher, onDestroy } from 'svelte'
   import { millisecondToMinSec } from '../../../../lib/components/time'
+  import ElapsedTime from './ElapsedTime.svelte'
 
   export let durationInMilliSeconds
   const dispatch = createEventDispatcher()

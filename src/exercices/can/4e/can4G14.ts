@@ -34,7 +34,6 @@ export default class QuestionsAiresEtPerimetres3 extends ExerciceSimple {
     this.correction = `Le côté du carré est : $${a}\\div 4=${miseEnEvidence(a1)}\\text{ cm}$.`
 
     this.canReponseACompleter = '$\\ldots\\text{ cm}$'
-    this.listeCanEnonces.push(this.canEnonce)
     this.listeCanReponsesACompleter.push(this.canReponseACompleter)
   }
 }

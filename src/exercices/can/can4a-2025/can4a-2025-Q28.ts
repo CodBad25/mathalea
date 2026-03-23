@@ -1,8 +1,8 @@
 import type { MathfieldElement } from 'mathlive'
 import { toutPourUnPoint } from '../../../lib/interactif/mathLive'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import type { IExercice } from '../../../lib/types'
 import { randint } from '../../../modules/outils'
-import type { IExercice } from '../../Exercice.type'
 import ExerciceCan from '../../ExerciceCan'
 
 export const titre = 'Ratios'

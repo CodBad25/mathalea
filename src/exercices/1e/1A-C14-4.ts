@@ -94,7 +94,6 @@ export default class Auto1AC16 extends ExerciceQcmA {
         Le tableau de signe du produit $2(x-3)(x+1)$ est : <br>` +
       tableauDeVariation({
         tabInit: [
-          // @ts-expect-error TableauDeVariation n'est pas typé correctement
           [
             ['$x$', 2, 30],
             ['$2$', 2, 50],
@@ -105,7 +104,6 @@ export default class Auto1AC16 extends ExerciceQcmA {
           ['$-\\infty$', 30, '$-1$', 20, '$3$', 20, '$+\\infty$', 30],
         ],
         tabLines: [lignePPP, ligneMMP, ligneMPP, lignePMP],
-        colorBackground: '',
         espcl: 4,
         deltacl: 1.5, // valeur par défaut, à ajuster si besoin
         lgt: 6.5,
@@ -253,7 +251,6 @@ export default class Auto1AC16 extends ExerciceQcmA {
         Le tableau de signe du produit  ${b === 0 ? `$${rienSi1(a)}x(x${ecritureAlgebrique(-c)})$` : `$${rienSi1(a)}(x${ecritureAlgebrique(-b)})(x${ecritureAlgebrique(-c)})$`} est : <br>` +
       tableauDeVariation({
         tabInit: [
-          // @ts-expect-error TableauDeVariation n'est pas typé correctement
           [
             ['$x$', 2, 30],
             [`$${a}$`, 2, 50],
@@ -268,7 +265,6 @@ export default class Auto1AC16 extends ExerciceQcmA {
           ['$-\\infty$', 30, `$${r1}$`, 20, `$${r2}$`, 20, '$+\\infty$', 30],
         ],
         tabLines: [ligneA, ligneFacteur1, ligneFacteur2, ligneProduit],
-        colorBackground: '',
         espcl: 4,
         deltacl: 1.5,
         lgt: 6.5,

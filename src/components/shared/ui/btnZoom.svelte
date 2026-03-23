@@ -35,7 +35,7 @@
       resizeTags([...svgDivs], parseInt($globalOptions.z ?? '1'))
     }
     // QCM
-    const checkboxes = document.querySelectorAll('[id^=checkEx')
+    const checkboxes = document.querySelectorAll<HTMLElement>('[id^=checkEx')
     resizeTags([...checkboxes], parseInt($globalOptions.z ?? '1'))
     mathaleaUpdateUrlFromExercicesParams($exercicesParams)
     // Event pour apiGeom

@@ -1,4 +1,4 @@
-import type { IExerciceBrevetA } from './Exercice.type'
+import type { IExerciceBrevetA } from '../lib/types'
 import ExerciceBrevet from './ExerciceBrevet'
 
 // class à utiliser pour fabriquer des Qcm ayant une version aléatoire

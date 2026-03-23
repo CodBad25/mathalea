@@ -31,23 +31,68 @@ if (get(globalOptions).beta) {
 delete baseReferentiel['Calcul mental']
 let referentielMap = toMap(baseReferentiel)
 
+type ReferentielTree = Record<string, unknown>
+type ReferentielLeaf = Partial<InterfaceReferentiel> & { uuid: string }
+
+function isReferentielTree(value: unknown): value is ReferentielTree {
+  return typeof value === 'object' && value !== null && !Array.isArray(value)
+}
+
+function isStringRecord(value: unknown): value is Record<string, string> {
+  return (
+    isReferentielTree(value) &&
+    Object.values(value).every((entry) => typeof entry === 'string')
+  )
+}
+
+function isReferentielLeaf(value: unknown): value is ReferentielLeaf {
+  return isReferentielTree(value) && typeof value.uuid === 'string'
+}
+
+function requireReferentielTree(
+  value: unknown,
+  context: string,
+): ReferentielTree {
+  if (!isReferentielTree(value)) {
+    throw new Error(`Invalid referentiel tree: ${context}`)
+  }
+  return value
+}
+
+function requireStringRecord(
+  value: unknown,
+  context: string,
+): Record<string, string> {
+  if (!isStringRecord(value)) {
+    throw new Error(`Invalid string record: ${context}`)
+  }
+  return value
+}
+
+const codeListMap = requireStringRecord(codeList, 'codeToLevelList.json')
+const referentielRoot = requireReferentielTree(
+  referentiel,
+  'referentiel2022FR.json',
+)
+
 /**
  *
  * @param listOfEntries COnstruction d'un référentiel basé sur une liste d'entrée
  * @returns
  */
-function buildReferentiel(listOfEntries) {
-  const referentiel = {}
+function buildReferentiel(listOfEntries: string[][]): ReferentielTree {
+  const referentiel: ReferentielTree = {}
   for (const path of listOfEntries) {
-    let schema = referentiel
-    let obj = { ...baseReferentiel }
+    let schema: ReferentielTree = referentiel
+    let obj: ReferentielTree = { ...baseReferentiel }
     for (let i = 0; i < path.length - 1; i++) {
       const elt = path[i]
       if (!schema[elt]) {
         schema[elt] = {}
       }
-      schema = schema[elt]
-      obj = { ...obj[path[i]] }
+      schema = requireReferentielTree(schema[elt], `schema.${elt}`)
+      const nextObj = obj[path[i]]
+      obj = isReferentielTree(nextObj) ? { ...nextObj } : {}
     }
     schema[path[path.length - 1]] = obj[path[path.length - 1]]
   }
@@ -70,41 +115,35 @@ const isObject = (val: unknown) =>
  * @return {[string]} objet des exos nouveaux
  * @author sylvain
  */
-function getRecentExercises(
-  obj: InterfaceReferentiel[],
-): InterfaceReferentiel[] {
-  const recentExercises: InterfaceReferentiel[] = []
+function getRecentExercises(obj: ReferentielTree): ReferentielTree {
+  const recentExercises: ReferentielTree[] = []
   /**
    * On parcourt récursivement l'objet référentiel et on en profite pour peupler
    * le tableau recentExercises avec les exercices dont les dates de publication
    * ou de modification sont récentes
    * @param obj Objet à parcourir
    */
-  const traverseObject = (
-    obj: InterfaceReferentiel[],
-  ): InterfaceReferentiel[] => {
-    return Object.entries(obj).reduce((product, [key, value]) => {
-      if (isObject(value as InterfaceReferentiel)) {
-        if ('uuid' in value) {
-          // <-- on arrête la récursivité lorsqu'on tombe sur les données de l'exo
-          if (
-            isRecent(value.datePublication) ||
-            isRecent(value.dateModification)
-          ) {
-            // @ts-ignore
-            recentExercises.push({ [key]: value })
-          }
-          return null
-        } else {
-          return traverseObject(value)
-        }
-      } else {
-        return null
+  const traverseObject = (tree: ReferentielTree): void => {
+    for (const [key, value] of Object.entries(tree)) {
+      if (!isObject(value)) {
+        continue
       }
-    }, [])
+      if (isReferentielLeaf(value)) {
+        if (
+          (value.datePublication != null && isRecent(value.datePublication)) ||
+          (value.dateModification != null && isRecent(value.dateModification))
+        ) {
+          recentExercises.push({ [key]: value })
+        }
+        continue
+      }
+      if (isReferentielTree(value)) {
+        traverseObject(value)
+      }
+    }
   }
   traverseObject(obj)
-  const recentExercisesAsObject = {}
+  const recentExercisesAsObject: ReferentielTree = {}
   recentExercises.forEach((exo) => Object.assign(recentExercisesAsObject, exo))
   return recentExercisesAsObject
 }
@@ -117,20 +156,20 @@ function getRecentExercises(
  * @returns tableau de tous les exercices filtrés
  */
 export function updateReferentiel(
-  isAmcOnlySelected,
-  isInteractiveOnlySelected,
-  itemsAccepted,
+  isAmcOnlySelected: boolean,
+  isInteractiveOnlySelected: boolean,
+  itemsAccepted: string[],
 ) {
   // console.log(getRecentExercices(baseReferentiel))
-  let filteredReferentiel = {}
+  let filteredReferentiel: ReferentielTree = {}
   if (itemsAccepted.length === 0) {
     // pas de filtres sélectionnés
-    filteredReferentiel = { ...referentiel }
+    filteredReferentiel = { ...referentielRoot }
   } else {
-    filteredReferentiel = Object.keys({ ...referentiel })
+    filteredReferentiel = Object.keys(referentielRoot)
       .filter((key) => itemsAccepted.includes(key))
-      .reduce((obj, key) => {
-        const ref = { ...referentiel }
+      .reduce<ReferentielTree>((obj, key) => {
+        const ref = referentielRoot
         return {
           ...obj,
           [key]: ref[key],
@@ -143,23 +182,23 @@ export function updateReferentiel(
   if (isAmcOnlySelected && !isInteractiveOnlySelected) {
     const amcCompatible = findPropPaths(
       baseReferentiel,
-      (key) => key === 'amc',
+      (key: string) => key === 'amc',
     ).map((elt) => elt.replace(/(?:\.tags\.amc)$/, '').split('.'))
     filteredReferentiel = { ...buildReferentiel(amcCompatible) }
   } else if (isInteractiveOnlySelected && !isAmcOnlySelected) {
     const interactiveCompatible = findPropPaths(
       baseReferentiel,
-      (key) => key === 'interactif',
+      (key: string) => key === 'interactif',
     ).map((elt) => elt.replace(/(?:\.tags\.interactif)$/, '').split('.'))
     filteredReferentiel = { ...buildReferentiel(interactiveCompatible) }
   } else if (isAmcOnlySelected && isInteractiveOnlySelected) {
     const amcCompatible = findPropPaths(
       baseReferentiel,
-      (key) => key === 'amc',
+      (key: string) => key === 'amc',
     ).map((elt) => elt.replace(/(?:\.tags\.amc)$/, '').split('.'))
     const interactiveCompatible = findPropPaths(
       baseReferentiel,
-      (key) => key === 'interactif',
+      (key: string) => key === 'interactif',
     ).map((elt) => elt.replace(/(?:\.tags\.interactif)$/, '').split('.'))
     // garder que les doublons
     const bothCompatible = findDuplicates(
@@ -180,8 +219,8 @@ export function updateReferentiel(
  * @param levelId
  */
 export function codeToLevelTitle(code: string) {
-  if (codeList[code]) {
-    return codeList[code]
+  if (code in codeListMap) {
+    return codeListMap[code]
   } else {
     return code
   }

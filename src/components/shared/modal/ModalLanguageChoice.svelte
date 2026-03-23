@@ -1,5 +1,6 @@
 <script lang="ts">
   import { languages } from '../../../lib/components/languagesUtils'
+  import { ALLOWED_LANGUAGES } from '../../../lib/types/languages'
   import type { Language } from '../../../lib/types/languages'
   import LanguageIcon from '../ui/LanguageIcon.svelte'
   import BasicClassicModal from './BasicClassicModal.svelte'
@@ -13,7 +14,8 @@
   <div slot="header" class="text-2xl w-full">Langue du Référentiel</div>
   <div slot="content">
     <ul class="p2 flex flex-col justify-start items-end">
-      {#each Object.entries(languages) as [loc, lang]}
+      {#each ALLOWED_LANGUAGES as loc}
+        {@const lang = languages[loc]}
         <li
           class="w-full space-x-2 py-2 px-4 font-light bg-coopmaths-canvas dark:bg-coopmathsdark-canvas hover:bg-coopmaths-canvas-dark dark:hover:bg-coopmathsdark-canvas-dark"
         >
