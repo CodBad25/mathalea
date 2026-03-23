@@ -134,7 +134,6 @@ export default class ResoudreEquationDegre2 extends Exercice {
           '<br>on en déduit le signe du polynôme dans un tableau de signes :'
         texteCorr += tableauDeVariation({
           tabInit: [
-            // @ts-expect-error tableau de variation n'est pas typé
             [
               // Première colonne du tableau avec le format [chaine d'entête, hauteur de ligne, nombre de pixels de largeur estimée du texte pour le centrage]
               ['$x$', 2, 30],
@@ -145,13 +144,10 @@ export default class ResoudreEquationDegre2 extends Exercice {
               ],
             ],
             // Première ligne du tableau avec chaque antécédent suivi de son nombre de pixels de largeur estimée du texte pour le centrage
-            // @ts-expect-error tableau de variation n'est pas typé
             ['$-\\infty$', 30, `${x1}`, 20, `${x2}`, 20, '$+\\infty$', 30],
           ],
           // tabLines ci-dessous contient les autres lignes du tableau.
-          // @ts-expect-error tableau de variation n'est pas typé
           tabLines: [ligne1],
-          colorBackground: '',
           espcl: 3.5, // taille en cm entre deux antécédents
           deltacl: 0.8, // distance entre la bordure et les premiers et derniers antécédents
           lgt: 8, // taille de la première colonne en cm
@@ -233,7 +229,6 @@ export default class ResoudreEquationDegre2 extends Exercice {
           '<br>On peut résumer le signe du polynôme dans un tableau de signes :'
         texteCorr += tableauDeVariation({
           tabInit: [
-            // @ts-expect-error tableau de variation n'est pas typé
             [
               // Première colonne du tableau avec le format [chaine d'entête, hauteur de ligne, nombre de pixels de largeur estimée du texte pour le centrage]
               ['$x$', 2, 30],
@@ -244,13 +239,10 @@ export default class ResoudreEquationDegre2 extends Exercice {
               ],
             ],
             // Première ligne du tableau avec chaque antécédent suivi de son nombre de pixels de largeur estimée du texte pour le centrage
-            // @ts-expect-error tableau de variation n'est pas typé
             ['$-\\infty$', 30, `${x1}`, 20, `${x2}`, 20, '$+\\infty$', 30],
           ],
           // tabLines ci-dessous contient les autres lignes du tableau.
-          // @ts-expect-error tableau de variation n'est pas typé
           tabLines: [ligne1],
-          colorBackground: '',
           espcl: 3.5, // taille en cm entre deux antécédents
           deltacl: 0.8, // distance entre la bordure et les premiers et derniers antécédents
           lgt: 8, // taille de la première colonne en cm
@@ -328,7 +320,6 @@ export default class ResoudreEquationDegre2 extends Exercice {
           '<br>On peut résumer le signe du polynôme dans un tableau de signes :'
         texteCorr += tableauDeVariation({
           tabInit: [
-            // @ts-expect-error tableau de variation n'est pas typé
             [
               // Première colonne du tableau avec le format [chaine d'entête, hauteur de ligne, nombre de pixels de largeur estimée du texte pour le centrage]
               ['$x$', 2, 30],
@@ -339,13 +330,10 @@ export default class ResoudreEquationDegre2 extends Exercice {
               ],
             ],
             // Première ligne du tableau avec chaque antécédent suivi de son nombre de pixels de largeur estimée du texte pour le centrage
-            // @ts-expect-error tableau de variation n'est pas typé
             ['$-\\infty$', 30, `${x1}`, 20, `${x2}`, 20, '$+\\infty$', 30],
           ],
           // tabLines ci-dessous contient les autres lignes du tableau.
-          // @ts-expect-error tableau de variation n'est pas typé
           tabLines: [ligne1],
-          colorBackground: '',
           espcl: 3.5, // taille en cm entre deux antécédents
           deltacl: 0.8, // distance entre la bordure et les premiers et derniers antécédents
           lgt: 8, // taille de la première colonne en cm
@@ -423,7 +411,6 @@ export default class ResoudreEquationDegre2 extends Exercice {
           '<br>On peut résumer le signe du polynôme dans un tableau de signes :'
         texteCorr += tableauDeVariation({
           tabInit: [
-            // @ts-expect-error tableau de variation n'est pas typé
             [
               // Première colonne du tableau avec le format [chaine d'entête, hauteur de ligne, nombre de pixels de largeur estimée du texte pour le centrage]
               ['$x$', 2, 30],
@@ -434,13 +421,10 @@ export default class ResoudreEquationDegre2 extends Exercice {
               ],
             ],
             // Première ligne du tableau avec chaque antécédent suivi de son nombre de pixels de largeur estimée du texte pour le centrage
-            // @ts-expect-error tableau de variation n'est pas typé
             ['$-\\infty$', 30, `${x1}`, 20, `${x2}`, 20, '$+\\infty$', 30],
           ],
           // tabLines ci-dessous contient les autres lignes du tableau.
-          // @ts-expect-error tableau de variation n'est pas typé
           tabLines: [ligne1],
-          colorBackground: '',
           espcl: 3.5, // taille en cm entre deux antécédents
           deltacl: 0.8, // distance entre la bordure et les premiers et derniers antécédents
           lgt: 8, // taille de la première colonne en cm

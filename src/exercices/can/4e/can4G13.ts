@@ -3,7 +3,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 
 import { randint } from '../../../modules/outils'
-export const titre = "Calculer le périmètre d\'un carré connaissant son aire"
+export const titre = "Calculer le périmètre d'un carré connaissant son aire"
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const dateDePublication = '09/12/2025'
@@ -35,7 +35,6 @@ export default class QuestionsAiresEtPerimetres2 extends ExerciceSimple {
          Son périmètre est donc  : $4\\times ${a}=${miseEnEvidence(4 * a)}\\text{ cm}$.`
 
     this.canReponseACompleter = '$\\ldots\\text{ cm}$'
-    this.listeCanEnonces.push(this.canEnonce)
     this.listeCanReponsesACompleter.push(this.canReponseACompleter)
   }
 }

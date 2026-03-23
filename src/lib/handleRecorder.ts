@@ -31,8 +31,12 @@ export async function sendActivityParams() {
       }
     }
     paramUrl = paramUrl.slice(0, -1)
+    let titre = exoParams[i].uuid
+    if ('titre' in exo[i]) {
+      titre = exo[i].titre
+    }
     exercices.push({
-      titre: exo[i].titre,
+      titre,
       url: paramUrl,
     })
     i++

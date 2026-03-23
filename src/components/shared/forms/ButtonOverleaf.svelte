@@ -8,7 +8,7 @@
   import { type latexFileType } from '../../../lib/LatexTypes'
 
   import ProfMaquette from '../../../lib/latex/ProfMaquette.sty?raw'
-  import type { IExercice } from '../../../lib/types'
+  import type { IExercice, IExerciceStatique } from '../../../lib/types'
 
   export let disabled: boolean
   export let exercices: (IExercice | IExerciceStatique)[]

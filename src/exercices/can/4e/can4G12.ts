@@ -37,7 +37,6 @@ export default class QuestionsAiresEtPerimetres1 extends ExerciceSimple {
      Son aire est donc : $${a}\\times ${a}=${miseEnEvidence(a ** 2)}\\text{ cm}^2$.`
 
     this.canReponseACompleter = '$\\ldots\\text{ cm}^2$'
-    this.listeCanEnonces.push(this.canEnonce)
     this.listeCanReponsesACompleter.push(this.canReponseACompleter)
   }
 }

@@ -9,6 +9,7 @@ import {
   sendFlowmathReplayCompleted,
 } from './flowmathRpc'
 import { globalOptions } from './stores/globalOptions'
+import type { InterfaceGlobalOptions } from './types'
 
 /**
  * Interface pour les paramètres d'activité envoyés par FlowMath
@@ -17,10 +18,10 @@ interface FlowmathActivityParams {
   mode: 'assignment' | 'review' | 'training'
   exercicesParams: any[]
   globalOptions?: {
-    v?: string
-    presMode?: string
+    v?: InterfaceGlobalOptions['v']
+    presMode?: InterfaceGlobalOptions['presMode']
     isInteractiveFree?: boolean
-    done?: string
+    done?: InterfaceGlobalOptions['done']
     [key: string]: any
   }
 }
@@ -72,7 +73,10 @@ export function handleFlowmath(
       // Update global options if provided
       if (payload.globalOptions) {
         globalOptions.update((opts) => {
-          const newOpts = { ...opts, ...payload.globalOptions }
+          const newOpts: InterfaceGlobalOptions = {
+            ...opts,
+            ...payload.globalOptions,
+          }
           // Ensure we stay in eleve view
           if (!newOpts.v) newOpts.v = 'eleve'
           newOpts.presMode = newOpts.presMode || 'un_exo_par_page'

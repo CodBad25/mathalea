@@ -241,6 +241,7 @@ export const FILTER_SECTIONS_TITLES: FilterSectionNameType = {
 
 export type ResultType = { isOk: boolean; feedback?: string }
 export type OptionsComparaisonType = {
+  noFeedback?: boolean
   texteAvecCasse?: boolean
   texteSansCasse?: boolean
   additionSeulementEtNonResultat?: boolean

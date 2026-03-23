@@ -129,7 +129,6 @@ export default class Auto1AC16b extends ExerciceQcmA {
     Le tableau de signe du produit $(3x+15)(x+2)$ est : <br>` +
       tableauDeVariation({
         tabInit: [
-          // @ts-expect-error TableauDeVariation n'est pas typé correctement
           [
             ['$x$', 2, 30],
             ['$3x-15$', 2, 50],
@@ -139,7 +138,6 @@ export default class Auto1AC16b extends ExerciceQcmA {
           ['$-\\infty$', 30, '$-2$', 20, '$5$', 20, '$+\\infty$', 30],
         ],
         tabLines: [ligne1, ligne2, ligne3],
-        colorBackground: '',
         espcl: 4,
         deltacl: 1.5, // valeur par défaut, à ajuster si besoin
         lgt: 3,
@@ -363,7 +361,6 @@ export default class Auto1AC16b extends ExerciceQcmA {
   Le tableau de signe du produit $(${reduireAxPlusB(a, b)})(${reduireAxPlusB(m, p)})$ est : <br>` +
       tableauDeVariation({
         tabInit: [
-          // @ts-expect-error TableauDeVariation n'est pas typé correctement
           [
             ['$x$', 2, 30],
             [`$${reduireAxPlusB(a, b)}$`, 2, 50],
@@ -382,7 +379,6 @@ export default class Auto1AC16b extends ExerciceQcmA {
           ],
         ],
         tabLines: [ligne1, ligne2, ligne3],
-        colorBackground: '',
         espcl: 3,
         deltacl: 1,
         lgt: 8,

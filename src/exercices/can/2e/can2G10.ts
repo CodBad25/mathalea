@@ -32,7 +32,9 @@ export default class RelationChasles1 extends Exercice {
   }
 
   nouvelleVersion() {
-    let texte, texteCorr, props
+    let texte = ''
+    let texteCorr = ''
+    let props: { texte: string; texteCorr: string } = { texte: '', texteCorr: '' }
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
       const nom = creerNomDePolygone(6, ['QD'])
       const choix = choice([1, 2, 3, 4, 5, 6])

@@ -1,7 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte'
   import { get } from 'svelte/store'
-  import type TypeExercice from '../../../exercices/Exercice'
   import MetaExercice from '../../../exercices/MetaExerciceCan'
   import {
     buildExercisesList,
@@ -31,7 +30,7 @@
     resultsByExercice,
   } from '../../../lib/stores/generalStore'
   import { globalOptions } from '../../../lib/stores/globalOptions'
-  import type { InterfaceResultExercice } from '../../../lib/types'
+  import type { IExercice, InterfaceResultExercice } from '../../../lib/types'
   import type { CanState } from '../../../lib/types/can'
   import { context } from '../../../modules/context'
   import { statsCanTracker } from '../../../modules/stats'
@@ -44,7 +43,7 @@
   import Solutions from './presentationalComponents/Solutions.svelte'
 
   let state: CanState = 'canHomeScreen'
-  let exercises: TypeExercice[] = []
+  let exercises: IExercice[] = []
   let questions: string[] = []
   let consignes: string[] = []
   let corrections: string[] = []
@@ -426,7 +425,7 @@
         const quest: InterfaceResultExercice = {
           uuid: exercise.uuid,
           title: exercise.titre,
-          indice: exercise.numeroExercice as number,
+          indice: exercise.numeroExercice,
           state: 'done',
           alea: exercise.seed,
           answers: answersType[ind].answers,
@@ -542,7 +541,11 @@
     : ''} relative w-full h-screen bg-coopmaths-canvas dark:bg-coopmathsdark-canvas"
 >
   {#if state === 'start' || state === 'canHomeScreen'}
-    <KickOff title={$canOptions.title} subTitle={$canOptions.subTitle} bind:state />
+    <KickOff
+      title={$canOptions.title}
+      subTitle={$canOptions.subTitle}
+      bind:state
+    />
   {/if}
   {#if state === 'countdown'}
     <CountDown bind:state />

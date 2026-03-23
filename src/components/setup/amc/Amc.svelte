@@ -136,16 +136,20 @@
    * Mécanismes de gestion du modal d'infos sur OverLeaf
    *
    */
-  let overleafForm: HTMLFormElement
+  let overleafForm: HTMLFormElement | undefined
   // $: isNonAmcModal Visible = false
   onMount(async () => {
-    overleafForm = document.getElementById('overleaf-form') as HTMLFormElement
+    const form = document.getElementById('overleaf-form')
+    if (form instanceof HTMLFormElement) {
+      overleafForm = form
+    }
   })
 
   /**
    * Gérer le POST pour Overleaf
    */
   function handleOverLeaf() {
+    if (overleafForm == null) return
     textForOverleaf.value =
       'data:text/plain;base64,' + btoa(unescape(encodeURIComponent(content)))
     overleafForm.submit()

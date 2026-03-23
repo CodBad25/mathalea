@@ -93,7 +93,6 @@ export default class QuestionsAiresEtPerimetres4 extends ExerciceSimple {
     this.reponse = a + b + c + d
 
     this.canReponseACompleter = '$\\ldots\\text{ m}$'
-    this.listeCanEnonces.push(this.canEnonce)
     this.listeCanReponsesACompleter.push(this.canReponseACompleter)
   }
 }

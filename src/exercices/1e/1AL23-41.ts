@@ -107,7 +107,6 @@ export default class EquationsEtInequations extends Exercice {
           '<br><br>On en déduit le signe du polynôme dans un tableau de signes :'
         texteCorr += tableauDeVariation({
           tabInit: [
-            // @ts-expect-error tableau de variation n'est pas typé
             [
               // Première colonne du tableau avec le format [chaine d'entête, hauteur de ligne, nombre de pixels de largeur estimée du texte pour le centrage]
               ['$x$', 3, 30],
@@ -120,7 +119,6 @@ export default class EquationsEtInequations extends Exercice {
               ],
             ],
             // Première ligne du tableau avec chaque antécédent suivi de son nombre de pixels de largeur estimée du texte pour le centrage
-            // @ts-expect-error tableau de variation n'est pas typé
             [
               '$-\\infty$',
               30,
@@ -133,9 +131,7 @@ export default class EquationsEtInequations extends Exercice {
             ],
           ],
           // tabLines ci-dessous contient les autres lignes du tableau.
-          // @ts-expect-error tableau de variation n'est pas typé
           tabLines: [ligne1, ligne2, ligne3],
-          colorBackground: '',
           espcl: 3.5, // taille en cm entre deux antécédents
           deltacl: 0.8, // distance entre la bordure et les premiers et derniers antécédents
           lgt: 8, // taille de la première colonne en cm

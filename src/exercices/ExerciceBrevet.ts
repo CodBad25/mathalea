@@ -1,5 +1,5 @@
 import Exercice from './Exercice'
-import type { IExerciceBrevet } from './Exercice.type'
+import type { IExerciceBrevet } from '../lib/types'
 
 // export const uuid = 'UUID à modifier'
 // export const titre = 'Titre de l'exercice à modifier'
