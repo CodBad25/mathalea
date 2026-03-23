@@ -1,4 +1,11 @@
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import {
+  choixDeroulant,
+  listeDeroulanteToQcm,
+} from '../../lib/interactif/questionListeDeroulante'
 import { texteEnCouleur } from '../../lib/outils/embellissements'
+import { sp } from '../../lib/outils/outilString'
+import { context } from '../../modules/context'
 import {
   gestionnaireFormulaireTexte,
   listeQuestionsToContenu,
@@ -6,6 +13,12 @@ import {
 } from '../../modules/outils'
 import Exercice from '../Exercice'
 import ChoisirExpressionLitterale from './_Choisir_expression_litterale'
+
+export const interactifReady = true
+export const interactifType = 'listeDeroulante'
+export const amcReady = true
+export const amcType = 'qcmMono'
+export const dateDeModifImportante = '23/03/2026'
 
 export const titre =
   'Déterminer la dernière opération à effectuer dans une expression littérale'
@@ -15,6 +28,7 @@ export const titre =
  * Déterminer la dernière opération à effectuer dans une expression littérale
  * @author Sébastien Lozano fork Jean-Claude Lhote
  * Rendu paramétrable et ajout de la structure d'une expression le 14/08/2021 : Guillaume Valmont
+ * Interactivite : Olivier Mimeau 23/03/2026
  */
 export const uuid = '97f1a'
 
@@ -33,8 +47,7 @@ export default class DeterminerDerniereOperationExpressionLitterale extends Exer
     ]
     this.nbQuestions = 4
     this.sup3 = 5
-    this.consigne =
-      "Déterminer la dernière opération à effectuer s'il fallait faire le calcul pour des valeurs données de $x$ et de $y$."
+    this.consigne = `Déterminer la dernière opération à effectuer s'il fallait faire le calcul pour des valeurs données de $x$ et de $y$.`
   }
 
   nouvelleVersion() {
@@ -87,16 +100,51 @@ export default class DeterminerDerniereOperationExpressionLitterale extends Exer
       texteCorr += texteEnCouleur(
         `<br>La dernière opération dans ${expn} est une ${lastOp}.`,
       )
+      let choix: {
+        label: string
+        value: string
+      }[] = []
+      let reponse = ''
       if (
         this.consigne ===
         'Déterminer si ces expressions sont des sommes, des différences, des produits ou des quotients.'
       ) {
+        choix = [
+          { label: '?', value: '' },
+          { label: 'une somme', value: 'une somme' },
+          { label: 'une différence', value: 'une différence' },
+          { label: 'un produit', value: 'un produit' },
+          { label: 'un quotient', value: 'un quotient' },
+        ]
+        reponse = String(structureExpression)
         texteCorr += texteEnCouleur(
           `<br>Cette expression est donc ${structureExpression}.`,
         )
+      } else {
+        choix = [
+          { label: '?', value: '' },
+          { label: 'une addition', value: 'addition' },
+          { label: 'une soustraction', value: 'soustraction' },
+          { label: 'une multiplication', value: 'multiplication' },
+          { label: 'une division', value: 'division' },
+        ]
+        reponse = String(lastOp)
       }
 
-      if (this.listeQuestions.indexOf(texte) === -1) {
+      if (this.interactif) {
+        texte += sp(10) + choixDeroulant(this, i, choix)
+        handleAnswers(
+          this,
+          i,
+          { reponse: { value: reponse } },
+          { formatInteractif: 'listeDeroulante' },
+        )
+      } else if (context.isAmc) {
+        const options = { ordered: true, vertical: true }
+        listeDeroulanteToQcm(this, i, choix, reponse, options)
+      }
+
+      if (this.questionJamaisPosee(i, String(expn))) {
         // Si la question n'a jamais été posée, on en créé une autre
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr
