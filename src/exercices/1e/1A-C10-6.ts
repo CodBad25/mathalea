@@ -5,6 +5,7 @@ import { repere } from '../../lib/2d/reperes'
 import { segment } from '../../lib/2d/segmentsVecteurs'
 import { latex2d } from '../../lib/2d/textes'
 import { deuxColonnes } from '../../lib/format/miseEnPage'
+import { compteLesReponsesDifferentes } from '../../lib/interactif/qcm'
 import { choice } from '../../lib/outils/arrayOutils'
 import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
@@ -295,11 +296,18 @@ export default class Auto1AC10f extends ExerciceQcmA {
   }
 
   versionAleatoire: () => void = () => {
-    const typeInequation = choice(['inf', 'sup'] as const)
-    const estInegStrict = choice([true, false])
-    const val = randint(1, 12)
+    let compteur = 0
+    do {
+      const typeInequation = choice(['inf', 'sup'] as const)
+      const estInegStrict = choice([true, false])
+      const val = randint(1, 12)
 
-    this.appliquerLesValeurs(val, estInegStrict, typeInequation)
+      this.appliquerLesValeurs(val, estInegStrict, typeInequation)
+      compteur++
+    } while (
+      compteur < 100 &&
+      !compteLesReponsesDifferentes(this, 4, true, { intervalle: true })
+    ) // On s'assure d'avoir 4 réponses différentes, sinon on régénère
   }
 
   constructor() {

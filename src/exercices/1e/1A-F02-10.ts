@@ -1,10 +1,15 @@
+import { compteLesReponsesDifferentes } from '../../lib/interactif/qcm'
 import { choice } from '../../lib/outils/arrayOutils'
-import { ecritureAlgebrique, ecritureParentheseSiNegatif, rienSi1 } from '../../lib/outils/ecritures'
+import {
+  ecritureAlgebrique,
+  ecritureParentheseSiNegatif,
+  rienSi1,
+} from '../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { randint } from '../../modules/outils'
 import ExerciceQcmA from '../ExerciceQcmA'
 export const titre =
-   "Calculer l'ordonnée d'un point sur une droite (non définie explicitement)"
+  "Calculer l'ordonnée d'un point sur une droite (non définie explicitement)"
 export const dateDePublication = '07/01/2026'
 export const amcReady = true
 export const amcType = 'AMCNum'
@@ -24,24 +29,34 @@ export const refs = {
 }
 export default class AutoFO2j extends ExerciceQcmA {
   appliquerLesValeurs = (valeurs: {
-    m: number,
-    xConnu: number,
-    yConnu: number,
-    b: number,
-    xDemande: number,
-    bonneReponse: number,
-    distracteur1: number,
-    distracteur2: number,
+    m: number
+    xConnu: number
+    yConnu: number
+    b: number
+    xDemande: number
+    bonneReponse: number
+    distracteur1: number
+    distracteur2: number
     distracteur3: number
   }) => {
-    const { m, xConnu, yConnu, b, xDemande, bonneReponse, distracteur1, distracteur2, distracteur3 } = valeurs
-    
+    const {
+      m,
+      xConnu,
+      yConnu,
+      b,
+      xDemande,
+      bonneReponse,
+      distracteur1,
+      distracteur2,
+      distracteur3,
+    } = valeurs
+
     // Énoncé
     this.enonce = `Soit $g$ la fonction affine définie sur $\\mathbb{R}$ par : $g(x)=${rienSi1(m)}x+b$.<br>
     On note $\\mathscr{D}$ sa courbe représentative dans un repère.<br>
     On sait que $A(${xConnu}~;~${yConnu})$ appartient à $\\mathscr{D}$.<br>
    L'ordonnée du point de $\\mathscr{D}$ dont l'abscisse est $${xDemande}$ est :`
-    
+
     // Correction
     this.correction = `On cherche d'abord la valeur de $b$ en utilisant la condition donnée dans l'énoncé.<br>
     $A(${xConnu}~;~${yConnu})$ appartient à $\\mathscr{D}$ signifie que $g(${xConnu})=${yConnu}$.<br>
@@ -57,18 +72,22 @@ export default class AutoFO2j extends ExerciceQcmA {
     
     L'image de $${xDemande}$ par cette fonction correspond à  l'ordonnée du point de  $\\mathscr{D}$ dont l'abscisse est $${xDemande}$ :<br>
     $\\begin{aligned}
-    g(${xDemande})&=${m === 1 ? `${xDemande}` : `${m}\\times ${ecritureParentheseSiNegatif(xDemande)}`}${ecritureAlgebrique(b)}${m === 1 ? '' : `\\\\
-    &=${m * xDemande}${ecritureAlgebrique(b)}`}\\\\
+    g(${xDemande})&=${m === 1 ? `${xDemande}` : `${m}\\times ${ecritureParentheseSiNegatif(xDemande)}`}${ecritureAlgebrique(b)}${
+      m === 1
+        ? ''
+        : `\\\\
+    &=${m * xDemande}${ecritureAlgebrique(b)}`
+    }\\\\
     &=${miseEnEvidence(bonneReponse)}
     \\end{aligned}$
     `
-    
+
     // Réponses
     this.reponses = [
       `$${bonneReponse}$`,
       `$${distracteur1}$`,
       `$${distracteur2}$`,
-      `$${distracteur3}$`
+      `$${distracteur3}$`,
     ]
   }
 
@@ -82,62 +101,71 @@ export default class AutoFO2j extends ExerciceQcmA {
       bonneReponse: -1,
       distracteur1: 3,
       distracteur2: 0,
-      distracteur3: 4
+      distracteur3: 4,
     })
   }
 
   versionAleatoire: () => void = () => {
-    // Choix du coefficient directeur m
-    const m = choice([2, 3, 4, 5, -2, -3])
-    
-    // Choix de l'antécédent connu (éviter 0 pour que ce soit intéressant)
-    const xConnu = randint(-5, 5, 0)
-    
-    // Choix de b (entier, pas de fraction)
-    const b = randint(-10, 10)
-    
-    // Calcul de l'image connue
-    const yConnu = m * xConnu + b
-    
-    // Question sur l'image demandée (souvent 0 ou une autre valeur simple)
-    const xDemande = choice([ xConnu + 1, xConnu - 1, -xConnu, randint(-5, 5, xConnu)])
-    const bonneReponse = m * xDemande + b
-    
-    // Distracteurs plausibles
-    const distracteur1 = yConnu // Confusion : réutiliser l'image connue
-    const distracteur2 = m * xDemande // Oubli de b
-    let distracteur3 = b // Confusion : juste la valeur de b
-    
-    // Vérification que tous les distracteurs sont différents de la bonne réponse
-    if (distracteur3 === bonneReponse) {
-      distracteur3 = bonneReponse + m
-    }
-    
-    // Vérification qu'on n'a pas de doublons parmi les réponses
-    const reponses = [bonneReponse, distracteur1, distracteur2, distracteur3]
-    const uniqueReponses = new Set(reponses)
-    
-    // Si on a des doublons, on régénère en modifiant légèrement
-    if (uniqueReponses.size < 4) {
-      return this.versionAleatoire()
-    }
-    
-    this.appliquerLesValeurs({
-      m,
-      xConnu,
-      yConnu,
-      b,
-      xDemande,
-      bonneReponse,
-      distracteur1,
-      distracteur2,
-      distracteur3
-    })
+    let compteur = 0
+    do {
+      // Choix du coefficient directeur m
+      const m = choice([2, 3, 4, 5, -2, -3])
+
+      // Choix de l'antécédent connu (éviter 0 pour que ce soit intéressant)
+      const xConnu = randint(-5, 5, 0)
+
+      // Choix de b (entier, pas de fraction)
+      const b = randint(-10, 10)
+
+      // Calcul de l'image connue
+      const yConnu = m * xConnu + b
+
+      // Question sur l'image demandée (souvent 0 ou une autre valeur simple)
+      const xDemande = choice([
+        xConnu + 1,
+        xConnu - 1,
+        -xConnu,
+        randint(-5, 5, xConnu),
+      ])
+      const bonneReponse = m * xDemande + b
+
+      // Distracteurs plausibles
+      const distracteur1 = yConnu // Confusion : réutiliser l'image connue
+      const distracteur2 = m * xDemande // Oubli de b
+      let distracteur3 = b // Confusion : juste la valeur de b
+
+      // Vérification que tous les distracteurs sont différents de la bonne réponse
+      if (distracteur3 === bonneReponse) {
+        distracteur3 = bonneReponse + m
+      }
+
+      // Vérification qu'on n'a pas de doublons parmi les réponses
+      const reponses = [bonneReponse, distracteur1, distracteur2, distracteur3]
+      const uniqueReponses = new Set(reponses)
+
+      // Si on a des doublons, on régénère en modifiant légèrement
+      if (uniqueReponses.size < 4) {
+        return this.versionAleatoire()
+      }
+
+      this.appliquerLesValeurs({
+        m,
+        xConnu,
+        yConnu,
+        b,
+        xDemande,
+        bonneReponse,
+        distracteur1,
+        distracteur2,
+        distracteur3,
+      })
+      compteur++
+    } while (compteur < 100 && !compteLesReponsesDifferentes(this, 4, true, {}))
   }
 
   constructor() {
     super()
     this.versionAleatoire()
-    this.spacing=1.5
+    this.spacing = 1.5
   }
 }

@@ -34,10 +34,10 @@ export default class Auto1AC13b extends ExerciceQcmA {
     <br>Une expression de $c$ en fonction de $a$, $b$ et $d$ est $${miseEnEvidence('c = \\dfrac{b - a}{d}')}$.`
 
     this.reponses = [
-      '$c = \\dfrac{b - a}{d}$',
-      '$c = \\dfrac{a - b}{d}$',
-      '$c = d(b - a)$',
-      '$c = \\dfrac{b + a}{d}$',
+      '$c=\\dfrac{b - a}{d}$',
+      '$c=\\dfrac{a - b}{d}$',
+      '$c=d(b - a)$',
+      '$c=\\dfrac{b + a}{d}$',
     ]
   }
 

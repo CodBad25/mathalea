@@ -1,3 +1,4 @@
+import { compteLesReponsesDifferentes } from '../../lib/interactif/qcm'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { randint } from '../../modules/outils'
 import ExerciceQcmA from '../ExerciceQcmA'
@@ -54,21 +55,25 @@ export default class auto1AC5a extends ExerciceQcmA {
   }
 
   versionAleatoire: () => void = () => {
-    const casChoisi = randint(1, 3)
+    let compteur = 0
+    do {
+      const casChoisi = randint(1, 3)
 
-    if (casChoisi === 1) {
-      const a = randint(10, 50)
-      const b = randint(10, 50)
-      this.appliquerLesValeurs(a, b, 1)
-    } else if (casChoisi === 2) {
-      const a = randint(1, 15)
-      const b = randint(10, 40)
-      this.appliquerLesValeurs(a, b, 2)
-    } else if (casChoisi === 3) {
-      const a = randint(1, 15)
-      const b = randint(-40, -10)
-      this.appliquerLesValeurs(a, b, 3)
-    }
+      if (casChoisi === 1) {
+        const a = randint(10, 50)
+        const b = randint(10, 50)
+        this.appliquerLesValeurs(a, b, 1)
+      } else if (casChoisi === 2) {
+        const a = randint(1, 15)
+        const b = randint(10, 40)
+        this.appliquerLesValeurs(a, b, 2)
+      } else if (casChoisi === 3) {
+        const a = randint(1, 15)
+        const b = randint(-40, -10)
+        this.appliquerLesValeurs(a, b, 3)
+      }
+      compteur++
+    } while (compteur < 100 && !compteLesReponsesDifferentes(this, 4, true, {}))
   }
 
   constructor() {

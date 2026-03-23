@@ -1,8 +1,8 @@
+import { compteLesReponsesDifferentes } from '../../lib/interactif/qcm'
 import { choice } from '../../lib/outils/arrayOutils'
 import { texNombre } from '../../lib/outils/texNombre'
 import { randint } from '../../modules/outils'
 
-import { nombreElementsDifferents } from '../ExerciceQcm'
 // import ExerciceQcmA from '../../ExerciceQcmA'
 import ExerciceQcmA from '../ExerciceQcmA'
 
@@ -137,11 +137,11 @@ export default class QuartileQCM extends ExerciceQcmA {
   // Pour un qcm à n réponses, il faudrait vérifier que nombreElementsDifferents(this.reponses) < n
 
   versionAleatoire: () => void = () => {
-    const n = 4 // nombre de réponses différentes voulues (on rappelle que la première réponse est la bonne)
-    const quartile = choice([1, 3]) // choix de Q1 ou Q3
-    let effectif: number
+    let compteur = 0
     do {
-      effectif = randint(5, 10) // nombre de valeurs dans la série
+      const quartile = choice([1, 3]) // choix de Q1 ou Q3
+
+      const effectif = randint(5, 10) // nombre de valeurs dans la série
 
       const valeurs: number[] = []
       while (valeurs.length < effectif) {
@@ -152,7 +152,11 @@ export default class QuartileQCM extends ExerciceQcmA {
       }
 
       this.appliquerLesValeurs(valeurs, effectif, quartile)
-    } while (nombreElementsDifferents(this.reponses) < n)
+      compteur++
+    } while (
+      compteur < 100 &&
+      !compteLesReponsesDifferentes(this, this.reponses.length, true, {})
+    ) // On s'assure d'avoir 5 réponses différentes, sinon on régénère
   }
 
   // Ici il n'y a rien à faire, on appelle juste la version aleatoire (pour un qcm aleatoirisé, c'est le fonctionnement par défaut)

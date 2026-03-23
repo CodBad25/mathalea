@@ -1,10 +1,10 @@
-
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 
 // import ExerciceQcmA from '../../ExerciceQcmA'
-import ExerciceQcmA from '../ExerciceQcmA'
+import { compteLesReponsesDifferentes } from '../../lib/interactif/qcm'
 import FractionEtendue from '../../modules/FractionEtendue'
+import ExerciceQcmA from '../ExerciceQcmA'
 
 export const uuid = '344f3'
 export const refs = {
@@ -43,7 +43,6 @@ Quelle fraction de la dépense totale Alice doit-elle donner à Louis pour que l
 Leur participation équilibrée doit être de $\\dfrac{1}{2}D$ chacun.<br>
 Alice doit donc donner à Louis la somme de $\\dfrac{1}{2}D - \\dfrac{1}{6}D = \\dfrac{1}{3}D$.<br>
 La fraction de la dépense totale que Alice doit donner à Louis est donc $${miseEnEvidence(`\\dfrac{1}{3}`)}$.`
-                   
 
     this.reponses = [
       '$\\dfrac{1}{3}$',
@@ -54,22 +53,24 @@ La fraction de la dépense totale que Alice doit donner à Louis est donc $${mis
   }
 
   versionAleatoire: () => void = () => {
-   const listeFractions = [
-          [1, 9],
-          [1,5],
-          [1, 4],
-          [1, 10],
-          [1, 7],
-          [2, 7],
-          [3, 7],
-          [3, 10],
-          [2, 5],
-          [2, 9]
-        ]
-        const frac = choice(listeFractions)
-        const f = new FractionEtendue(frac[0], frac[1])
-        const d= new FractionEtendue(1,2)
-    this.enonce = `Deux amis, Alice et Louis, décident d'offrir un voyage d'anniversaire à leur ami Charles. <br>
+    let compteur = 0
+    do {
+      const listeFractions = [
+        [1, 9],
+        [1, 5],
+        [1, 4],
+        [1, 10],
+        [1, 7],
+        [2, 7],
+        [3, 7],
+        [3, 10],
+        [2, 5],
+        [2, 9],
+      ]
+      const frac = choice(listeFractions)
+      const f = new FractionEtendue(frac[0], frac[1])
+      const d = new FractionEtendue(1, 2)
+      this.enonce = `Deux amis, Alice et Louis, décident d'offrir un voyage d'anniversaire à leur ami Charles. <br>
     Ils organisent les dépenses de la façon suivante :<br>
 
 $\\bullet$ Alice règle les billets de train ; <br>
@@ -81,18 +82,22 @@ Une fois le voyage terminé, ils souhaitent répartir équitablement toutes les 
 Quelle fraction de la dépense totale Alice doit-elle donner à Louis pour que leurs contributions finales soient parfaitement équilibrées ?
  `
 
-    this.correction = `En notant $D$ la dépense totale, Alice a dépensé $${f.texFraction}D$ et Louis, $${f.oppose().ajouteEntier(1).texFraction}D$.<br>
+      this.correction = `En notant $D$ la dépense totale, Alice a dépensé $${f.texFraction}D$ et Louis, $${f.oppose().ajouteEntier(1).texFraction}D$.<br>
 Leur participation équilibrée doit être de $\\dfrac{1}{2}D$ chacun.<br>
 Alice doit donc donner à Louis la somme de $\\dfrac{1}{2}D - ${f.texFraction}D = ${f.oppose().sommeFraction(d).texFraction}D$.<br>
 La fraction de la dépense totale que Alice doit donner à Louis est donc $${miseEnEvidence(`${f.oppose().sommeFraction(d).texFraction}`)}$.`
-                   
 
-    this.reponses = [
-      `$${f.oppose().sommeFraction(d).texFraction}$`,
-      `$${f.oppose().ajouteEntier(1).texFraction}$`,
-      `$${f.oppose().ajouteEntier(1).sommeFraction(f.oppose()).texFraction}$`,
-     `$${f.produitFraction(d).texFraction}$`,
-    ]
+      this.reponses = [
+        `$${f.oppose().sommeFraction(d).texFraction}$`,
+        `$${f.oppose().ajouteEntier(1).texFraction}$`,
+        `$${f.oppose().ajouteEntier(1).sommeFraction(f.oppose()).texFraction}$`,
+        `$${f.produitFraction(d).texFraction}$`,
+      ]
+      compteur++
+    } while (
+      compteur < 100 &&
+      !compteLesReponsesDifferentes(this, 4, true, { fractionEgale: true })
+    ) // On s'assure d'avoir 4 réponses différentes, sinon on régénère
   }
 
   // Ici il n'y a rien à faire, on appelle juste la version aleatoire (pour un qcm aleatoirisé, c'est le fonctionnement par défaut)

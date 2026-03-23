@@ -1,3 +1,4 @@
+import { compteLesReponsesDifferentes } from '../../lib/interactif/qcm'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
@@ -85,37 +86,41 @@ export default class auto1AC5 extends ExerciceQcmA {
   }
 
   versionAleatoire: () => void = () => {
-    // Génération du pourcentage (8, 9, 11, 12, 18, 19, 21, 22, etc.)
-    const dizaine = randint(0, 8) * 10
-    const unite = dizaine === 0 ? 9 : choice([1, 9])
-    const pourcentageReel = dizaine + unite
+    let compteur = 0
+    do {
+      // Génération du pourcentage (8, 9, 11, 12, 18, 19, 21, 22, etc.)
+      const dizaine = randint(0, 8) * 10
+      const unite = dizaine === 0 ? 9 : choice([1, 9])
+      const pourcentageReel = dizaine + unite
 
-    // Génération du nombre selon différentes valeurs
-    const valeurs = choice([
-      'centaines',
-      'milliers',
-      'dizainesMilliers',
-      'centainesMilliers',
-    ])
+      // Génération du nombre selon différentes valeurs
+      const valeurs = choice([
+        'centaines',
+        'milliers',
+        'dizainesMilliers',
+        'centainesMilliers',
+      ])
 
-    let nombreReel: number
-    switch (valeurs) {
-      case 'centaines':
-        nombreReel = randint(4, 9) * 100 + randint(-19, 19, 0)
-        break
-      case 'milliers':
-        nombreReel = randint(4, 9) * 1000 + randint(-199, 199, 0)
-        break
-      case 'dizainesMilliers':
-        nombreReel = randint(4, 9) * 10000 + randint(-2000, 2000, 0)
-        break
-      case 'centainesMilliers':
-      default:
-        nombreReel = 100000 + randint(-5000, 5000, 0)
-        break
-    }
+      let nombreReel: number
+      switch (valeurs) {
+        case 'centaines':
+          nombreReel = randint(4, 9) * 100 + randint(-19, 19, 0)
+          break
+        case 'milliers':
+          nombreReel = randint(4, 9) * 1000 + randint(-199, 199, 0)
+          break
+        case 'dizainesMilliers':
+          nombreReel = randint(4, 9) * 10000 + randint(-2000, 2000, 0)
+          break
+        case 'centainesMilliers':
+        default:
+          nombreReel = 100000 + randint(-5000, 5000, 0)
+          break
+      }
 
-    this.appliquerLesValeurs(pourcentageReel, nombreReel)
+      this.appliquerLesValeurs(pourcentageReel, nombreReel)
+      compteur++
+    } while (compteur < 100 && !compteLesReponsesDifferentes(this, 4, true, {})) // On s'assure d'avoir 4 réponses différentes, sinon on régénère
   }
 
   constructor() {

@@ -48,10 +48,10 @@ $a = ${texNombre(abo + nbreSeance1 * prixH)} - ${nbreSeance1} \\times ${prixH} =
 Le montant de l'abonnement mensuel est donc de $${miseEnEvidence(abo + sp(1) + '€')}$.`
 
     this.reponses = [
-      `$${abo}$ € `,
-      `$${prixH}$ €`,
-      `$${abo + 1}$ €`,
-      `$${nbreSeance2}$ €`,
+      `$${abo}\\text{ €} `,
+      `$${prixH}\\text{ €}`,
+      `$${abo + 1}\\text{ €}`,
+      `$${nbreSeance2}\\text{ €}`,
     ]
   }
 

@@ -1,3 +1,14 @@
+/**
+ * Devine les options de comparaison adaptées selon la nature des réponses proposées.
+ * Exemples :
+ * - intervalles : { intervalle: true }
+ * - ensembles : { ensembleDeNombres: true }
+ * - fractions : { fractionEgale: true }
+ * - puissances : { puissance: true }
+ * - suites : { suiteDeNombres: true }
+ * - coordonnées : { coordonnees: true }
+ * - expressions : { egaliteExpression: true }
+ */
 import ExerciceQcm from '../../exercices/ExerciceQcm'
 import type {
   IExercice,
@@ -5,6 +16,7 @@ import type {
   UneProposition,
 } from '../../lib/types'
 import { context } from '../../modules/context'
+import Grandeur, { USI } from '../../modules/Grandeur'
 import { messageFeedback } from '../../modules/messages'
 import { shuffleJusquaWithIndexes } from '../amc/qcmCam'
 import { get } from '../html/dom'
@@ -18,7 +30,119 @@ import { lettreDepuisChiffre } from '../outils/outilString'
 import type { ButtonWithMathaleaListener } from '../types/can'
 import { afficheScore } from './afficheScore'
 import { generateCleaner } from './cleaners'
-import { fonctionComparaison } from './comparisonFunctions'
+import ce, { fonctionComparaison } from './comparisonFunctions'
+
+export function guessOptionsForReponses(
+  reponses: string[],
+): OptionsComparaisonType {
+  if (!Array.isArray(reponses) || reponses.length === 0) return {}
+  // Cas spécial : plusieurs blocs $...$ ou séparateur 'ou' → comparer comme du texte
+  const hasMultiLatexOrOu = reponses.some((r) => {
+    // Compte le nombre de $ dans la chaîne
+    const dollarCount = (r.match(/\$/g) || []).length
+    return dollarCount > 0 || /\bou\b/i.test(r) // Les $ ont déjà été enlevés aux extrémités dans la fonction compteLesReponsesDifferentes, donc on regarde s'il en reste à l'intérieur de la chaîne. Si oui, on suppose que c'est du texte à comparer tel quel. De même, la présence de "ou" est un indice que la réponse contient plusieurs possibilités à comparer telles quelles.
+  })
+  if (hasMultiLatexOrOu) {
+    return { texteSansCasse: true }
+  }
+  // Cas spécial : réponse  alphabétique (hors espaces) sur les 8 premiers caractères ("On ne peux pas savoir")
+  const isAlpha = reponses
+    .map((r) => r.replaceAll('\\%', 'pourcent'))
+    .some((r) => {
+      if (r.includes('pourcent')) return true
+      if (r.includes('centime')) return true
+      const s = r.replace(/\s+/g, '').slice(0, 8) // On se limite aux 5 premiers caractères pour éviter la fallback si un chiffre se balade plus loin dans la réponse
+      return /^[A-Za-zÀ-ÿ]+$/.test(s)
+    })
+
+  // Utilise le premier élément comme heuristique principale
+  const reponse = reponses[0]
+
+  // Test grandeur (unité physique) : on nettoie le latex et on tente Grandeur.fromString
+  const cleaned = reponse
+    .replace(/^\$/g, '') // retire $ de début
+    .replace(/\$$/g, '') // retire $ de fin
+    .replace(/\\text\{([^}]*)\}/g, ' $1') // remplace \text{...} par ...
+    .replace(/\\,/g, '') // retire les virgules latex
+    .replace(/~/g, '') // retire les espaces insécables latex
+    .replace(/\\ /g, ' ') // retire les espaces latex
+    .replace(/\s+/g, ' ') // espaces multiples
+    .trim()
+  try {
+    const grandeur = Grandeur.fromString(cleaned)
+    // Vérifie que la mesure est un nombre fini et que l'unité contient au moins un caractère non alphabétique
+    if (
+      typeof grandeur.mesure === 'number' &&
+      isFinite(grandeur.mesure) &&
+      grandeur.unite &&
+      USI.includes(grandeur.uniteDeReference) &&
+      !isNaN(grandeur.puissancePrefixe) &&
+      /[^A-Za-zÀ-ÿ]/.test(grandeur.unite)
+    ) {
+      return { unite: true }
+    }
+    // Sinon, ce n'est pas une grandeur valide
+  } catch (e) {
+    // pas une grandeur reconnue, on continue
+  }
+
+  if (
+    /\[.*;.*\]/.test(reponse) ||
+    /\]/.test(reponse) ||
+    /\[/.test(reponse) ||
+    /\\emptyset/.test(reponse)
+  ) {
+    // Intervalles ou réunion d'intervalles
+    return { intervalle: true }
+  }
+  if (/\{.*[;].*\}/.test(reponse) || /\\emptyset/.test(reponse)) {
+    // Ensembles de nombres
+    return { ensembleDeNombres: true }
+  }
+  if (reponses.some((r) => /\\dfrac\{.*\}\{.*\}/.test(r))) {
+    // Fractions
+    return { fractionEgale: true }
+  }
+  if (/\^|\*/.test(reponse)) {
+    // Puissances ou expressions avec exposant
+    return { puissance: true }
+  }
+  if (/;/.test(reponse)) {
+    // Suites de nombres
+    return { suiteDeNombres: true }
+  }
+  if (/^\(.*;.*\)$/.test(reponse)) {
+    // Coordonnées
+    return { coordonnees: true }
+  }
+  if (/=/.test(reponse) || /\\approx/.test(reponse)) {
+    // Expressions avec égalité
+    // Vérification stricte : chaque membre autour du = doit être une expression mathématique valide
+    const parts = reponse.includes('=')
+      ? reponse.split('=')
+      : reponse.includes('\\approx')
+        ? reponse.split('\\approx')
+        : []
+    if (parts.length === 2) {
+      try {
+        ce.parse(parts[0])
+        ce.parse(parts[1])
+        return { egaliteExpression: true }
+      } catch (e) {
+        // Parsing échoué, fallback texte
+        return { texteSansCasse: true }
+      }
+    } else {
+      // Pas deux membres, fallback texte
+      return { texteSansCasse: true }
+    }
+  }
+  if (isAlpha) {
+    return { texteSansCasse: true }
+  }
+  // Par défaut, aucune option spéciale
+  return {}
+}
 
 export function verifQuestionQcm(exercice: IExercice, i: number) {
   let resultat
@@ -438,7 +562,7 @@ export function compteLesReponsesDifferentes(
   exercice: any,
   nombreSouhaite: number, // le nombre de réponses différentes que l'on devrait avoir (bonne réponse + distracteurs)
   test = true, // Mettre à true pour ne pas afficher de notifications, utilisé dans l'exo pour tester l'aléatoire sans alerter l'utilisateur à chaque fois que ça ne marche pas
-  options: OptionsComparaisonType,
+  options?: OptionsComparaisonType,
 ): boolean {
   let reponses: string[]
   if (exercice instanceof ExerciceQcm) {
@@ -472,27 +596,52 @@ export function compteLesReponsesDifferentes(
       )
     return false
   }
+  // Si options n'est pas fourni, on tente de le deviner automatiquement
+
   const cleaner = generateCleaner([
     'virgules',
+    'espaceNormal',
+    'fractions',
     'parentheses',
-    'espaces',
+    'mathrm',
+    'operatorName',
     'accolades',
   ])
 
-  reponses = reponses.map((s: string) =>
-    cleaner(s)
-      .replace(/\\,/g, '')
-      .replace(/ /g, '')
-      .replaceAll(/\\backslash/g, '\\'),
-  )
+  reponses = reponses
+    .map((s: string) =>
+      cleaner(s)
+        .replace(/\\,/g, '')
+        .replaceAll(/\\backslash/g, '\\')
+        .replace('S=', '')
+        .replace('S = ', '')
+        .replace('x\\longmapsto', ''),
+    )
+    .map((s: string) =>
+      options && 'texteAvecCasse' in options ? s : s.toLowerCase(),
+    )
+  const opts =
+    options && Object.keys(options).length > 0
+      ? options
+      : guessOptionsForReponses(reponses)
 
+  const doublons = []
   // On compare des expressions littérales qui peuvent être différentes mais équivalentes
   for (let i = 0; i < reponses.length - 1; i++) {
-    const reponse = reponses[i]
+    let reponse = reponses[i]
+    if (opts.unite) {
+      try {
+        const g = Grandeur.fromString(reponse)
+        reponse = `${g.mesure} \\operatorname{${g.uniteDeReference}}`
+      } catch (e) {
+        // Si on n'arrive pas à parser la grandeur, on laisse la réponse telle quelle et on verra si elle est considérée comme un doublon ou pas. Mieux vaut risquer un faux positif de doublon que de rater un doublon parce qu'on n'a pas réussi à parser la grandeur.
+      }
+    }
     for (let j = i + 1; j < reponses.length; ) {
-      const result = fonctionComparaison(reponse, reponses[j], options)
+      const result = fonctionComparaison(reponse, reponses[j], opts)
       if (result.isOk) {
         reponses.splice(j, 1)
+        doublons.push(reponse + ' et ' + reponses[j])
       } else {
         j++
       }
@@ -500,68 +649,11 @@ export function compteLesReponsesDifferentes(
   }
   if (reponses.length !== nombreSouhaite)
     if (!test)
-      window.notify(`J'ai du éliminer au moins un doublon`, {
-        exercice: JSON.stringify(exercice),
-      })
+      window.notify(
+        `CompteLesReponsesDifferentes : J'ai du éliminer ${reponses.length - nombreSouhaite} réponses`,
+        {
+          doublons: JSON.stringify(doublons),
+        },
+      )
   return reponses.length === nombreSouhaite
-
-  /*  // On compare numériquement des expressions
-  if (options.numericalValue) {
-    for (let i = 0; i < reponses.length - 1; i++) {
-      const reponse = ce.parse(reponses[i]).evaluate()
-      for (let j = i + 1; j < reponses.length; ) {
-        if (reponse.isEqual(ce.parse(reponses[j]).evaluate())) {
-          reponses.splice(j, 1)
-        } else {
-          j++
-        }
-      }
-    }
-    if (reponses.length !== nombreSouhaite)
-      if (!test)
-        window.notify(`J'ai du éliminer au moins un doublon`, {
-          exercice: JSON.stringify(exercice),
-        })
-    return reponses.length === nombreSouhaite
-  }
-
-  // On compare des string sans tenir compte dess majuscules
-  if (options.sansCasse) {
-    for (let i = 0; i < reponses.length - 1; i++) {
-      const reponse = reponses[i].toUpperCase()
-      for (let j = i + 1; j < reponses.length; ) {
-        if (reponses[j].toUpperCase() === reponse) {
-          reponses.splice(j, 1)
-        } else {
-          j++
-        }
-      }
-    }
-    if (reponses.length !== nombreSouhaite)
-      if (!test)
-        window.notify(`J'ai du éliminer au moins un doublon`, {
-          exercice: JSON.stringify(exercice),
-        })
-    return reponses.length === nombreSouhaite
-  }
-
-  // On compare des strings en respectant la casse.
-  for (let i = 0; i < reponses.length - 1; i++) {
-    const reponse = reponses[i]
-    for (let j = i + 1; j < reponses.length; ) {
-      if (reponses[j] === reponse) {
-        reponses.splice(j, 1)
-      } else {
-        j++
-      }
-    }
-  }
-  if (reponses.length !== nombreSouhaite)
-    if (!test)
-      window.notify(`J'ai du éliminer au moins un doublon`, {
-        exercice: JSON.stringify(exercice),
-      })
-  return reponses.length === nombreSouhaite
-}
-  */
 }

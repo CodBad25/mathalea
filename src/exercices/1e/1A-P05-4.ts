@@ -1,4 +1,5 @@
 import { fixeBordures } from '../../lib/2d/fixeBordures'
+import { compteLesReponsesDifferentes } from '../../lib/interactif/qcm'
 import { Arbre } from '../../modules/arbres'
 import FractionEtendue from '../../modules/FractionEtendue'
 import { mathalea2d } from '../../modules/mathalea2d'
@@ -76,8 +77,6 @@ export default class auto1AP3a extends ExerciceQcmA {
     omega.setTailles() // On calcule les tailles des arbres.
     objets = omega.represente(0, 6, 0, 3, true, 1, 8)
 
-   
-
     this.enonce = "On donne l'arbre de probabilités ci-dessous :<br>"
     this.enonce += mathalea2d(
       Object.assign({ style: 'inline' }, fixeBordures(objets)),
@@ -100,103 +99,108 @@ export default class auto1AP3a extends ExerciceQcmA {
   }
 
   versionAleatoire = () => {
-    let objets = []
-    const rationnel = true
-    const NumA = randint(1, 9)
-    const DenA = 10
-    const NumAC = randint(1, 9)
-    const DenAC = 10
-    const NumBC = randint(2, 8)
-    const DenBC = 10
-    const pA = new FractionEtendue(NumA, DenA)
-    const pAC = new FractionEtendue(NumAC, DenAC)
-    const pBC = new FractionEtendue(NumBC, DenBC)
+    let compteur = 0
+    do {
+      let objets = []
+      const rationnel = true
+      const NumA = randint(1, 9)
+      const DenA = 10
+      const NumAC = randint(1, 9)
+      const DenAC = 10
+      const NumBC = randint(2, 8)
+      const DenBC = 10
+      const pA = new FractionEtendue(NumA, DenA)
+      const pAC = new FractionEtendue(NumAC, DenAC)
+      const pBC = new FractionEtendue(NumBC, DenBC)
 
-    // On définit l'arbre complet
-    const omega = new Arbre({
-      racine: true,
-      rationnel,
-      nom: '',
-      proba: 1,
-      visible: false,
-      alter: '',
-      enfants: [
-        new Arbre({
-          rationnel,
-          nom: 'A',
-          proba: pA,
-          visible: false,
-          enfants: [
-            new Arbre({
-              rationnel,
-              nom: 'C',
-              proba: pAC,
-              visible: false,
-            }),
-            new Arbre({
-              rationnel,
-              nom: '\\bar C',
-              proba: pAC.entierMoinsFraction(1),
-            }),
-          ],
-        }),
-        new Arbre({
-          rationnel,
-          nom: '\\bar A',
-          proba: pA.entierMoinsFraction(1),
-          enfants: [
-            new Arbre({
-              rationnel,
-              nom: 'C',
-              proba: pBC,
-              visible: true,
-            }),
-            new Arbre({
-              rationnel,
-              nom: '\\bar C',
-              proba: pBC.entierMoinsFraction(1),
-              visible: false,
-              alter: '',
-            }),
-          ],
-        }),
-      ],
-    })
+      // On définit l'arbre complet
+      const omega = new Arbre({
+        racine: true,
+        rationnel,
+        nom: '',
+        proba: 1,
+        visible: false,
+        alter: '',
+        enfants: [
+          new Arbre({
+            rationnel,
+            nom: 'A',
+            proba: pA,
+            visible: false,
+            enfants: [
+              new Arbre({
+                rationnel,
+                nom: 'C',
+                proba: pAC,
+                visible: false,
+              }),
+              new Arbre({
+                rationnel,
+                nom: '\\bar C',
+                proba: pAC.entierMoinsFraction(1),
+              }),
+            ],
+          }),
+          new Arbre({
+            rationnel,
+            nom: '\\bar A',
+            proba: pA.entierMoinsFraction(1),
+            enfants: [
+              new Arbre({
+                rationnel,
+                nom: 'C',
+                proba: pBC,
+                visible: true,
+              }),
+              new Arbre({
+                rationnel,
+                nom: '\\bar C',
+                proba: pBC.entierMoinsFraction(1),
+                visible: false,
+                alter: '',
+              }),
+            ],
+          }),
+        ],
+      })
 
-    omega.setTailles() // On calcule les tailles des arbres.
-    objets = omega.represente(0, 6, 0, 3, true, 1, 8)
-    const pC1 = pA.produitFraction(pAC)
-    const distracteur = pA.sommeFraction(pAC)
+      omega.setTailles() // On calcule les tailles des arbres.
+      objets = omega.represente(0, 6, 0, 3, true, 1, 8)
+      const pC1 = pA.produitFraction(pAC)
+      const distracteur = pA.sommeFraction(pAC)
 
-    // Génère distracteur2 différent de distracteur1 et de la bonne réponse
+      // Génère distracteur2 différent de distracteur1 et de la bonne réponse
 
-    this.enonce = "On donne l'arbre de probabilités ci-dessous :<br>"
-    this.enonce += mathalea2d(
-      Object.assign({ style: 'inline' }, fixeBordures(objets)),
-      objets,
-    )
-    this.enonce += '<br>$P(A \\cap C)=\\ldots$'
+      this.enonce = "On donne l'arbre de probabilités ci-dessous :<br>"
+      this.enonce += mathalea2d(
+        Object.assign({ style: 'inline' }, fixeBordures(objets)),
+        objets,
+      )
+      this.enonce += '<br>$P(A \\cap C)=\\ldots$'
 
-    this.correction = `On sait que <br>$\\begin{aligned}
+      this.correction = `On sait que <br>$\\begin{aligned}
         P(A \\cap C) &= P(A) \\times P_A(C)\\\\
         &= ${pA.texFractionSimplifiee} \\times ${pAC.texFractionSimplifiee} \\\\
         &= ${pC1.texFractionSimplifiee}
         \\end{aligned}$`
 
-    this.reponses = [
-      `$${pC1.texFractionSimplifiee}$`,
-      `$${pAC.texFractionSimplifiee}$`,
-      `$${pBC.entierMoinsFraction(1).texFractionSimplifiee}$`,
-      `$${distracteur.texFractionSimplifiee}$`,
-      `$${pAC.texFractionSimplifiee}$`,
-    ]
+      this.reponses = [
+        `$${pC1.texFractionSimplifiee}$`,
+        `$${pAC.texFractionSimplifiee}$`,
+        `$${pBC.entierMoinsFraction(1).texFractionSimplifiee}$`,
+        `$${distracteur.texFractionSimplifiee}$`,
+      ]
+      compteur++
+    } while (
+      compteur < 100 &&
+      !compteLesReponsesDifferentes(this, this.reponses.length, true, {
+        fractionEgale: true,
+      })
+    ) // On s'assure d'avoir 4 réponses différentes, sinon on régénère
   }
 
   constructor() {
     super()
     this.versionAleatoire()
   }
-}
-function Do(arg0: number) {
-  throw new Error('Function not implemented.')
 }

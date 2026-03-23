@@ -1,3 +1,4 @@
+import { compteLesReponsesDifferentes } from '../../lib/interactif/qcm'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 
@@ -41,7 +42,6 @@ export default class Auto1C15h extends ExerciceQcmA {
     const d1 = reste // Le reste total (oubli de diviser)
     const d2 = acompte // L'acompte lui-même (confusion)
     const d3 = reste.produitFraction(new FractionEtendue(1, nbPaiements + 1)) // Erreur sur le nombre de paiements
-    
 
     this.enonce = `${quidam} achète un vélo électrique. Pour le réserver, ${pronom} paye $${acompte.texFraction}$ du prix au magasin. <br>
     Le magasin lui propose de payer le reste en $${nbPaiements}$ paiements d'un même montant.<br>
@@ -60,32 +60,46 @@ Diviser par $${nbPaiements}$ revient à multiplier par $\\dfrac{1}{${nbPaiements
   }
 
   versionOriginale: () => void = () => {
-    this.appliquerLesValeurs(1, 5, 3, 'Léa', 'elle')
+    let compteur = 0
+    do {
+      this.appliquerLesValeurs(1, 5, 3, 'Léa', 'elle')
+      compteur++
+    } while (
+      compteur < 100 &&
+      !compteLesReponsesDifferentes(this, 4, true, { fractionEgale: true })
+    ) // On s'assure d'avoir 4 réponses différentes, sinon on régénère
   }
 
   versionAleatoire: () => void = () => {
-    const listeFractions = [
-      [1, 5],
-      [1, 4],
-      [2, 5],
-      [1, 3],
-      [3, 10],
-      [2, 7],
-      [1, 6],
-      [3, 8],
-      [1, 10],
-      [2, 9],
-    ]
-    const frac = choice(listeFractions)
-    const nbPaiements = choice([3, 4, 5, 6])
-    const personne = prenomPronom()
-    this.appliquerLesValeurs(
-      frac[0],
-      frac[1],
-      nbPaiements,
-      personne.prenom,
-      personne.pronom,
-    )
+    let compteur = 0
+    do {
+      const listeFractions = [
+        [1, 5],
+        [1, 4],
+        [2, 5],
+        [1, 3],
+        [3, 10],
+        [2, 7],
+        [1, 6],
+        [3, 8],
+        [1, 10],
+        [2, 9],
+      ]
+      const frac = choice(listeFractions)
+      const nbPaiements = choice([3, 4, 5, 6])
+      const personne = prenomPronom()
+      this.appliquerLesValeurs(
+        frac[0],
+        frac[1],
+        nbPaiements,
+        personne.prenom,
+        personne.pronom,
+      )
+      compteur++
+    } while (
+      compteur < 100 &&
+      !compteLesReponsesDifferentes(this, 4, true, { fractionEgale: true })
+    ) // On s'assure d'avoir 4 réponses différentes, sinon on régénère
   }
 
   constructor() {

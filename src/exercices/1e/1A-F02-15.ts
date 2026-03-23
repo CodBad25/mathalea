@@ -1,3 +1,4 @@
+import { compteLesReponsesDifferentes } from '../../lib/interactif/qcm'
 import {
   ecritureAlgebrique,
   reduireAxPlusB,
@@ -92,21 +93,28 @@ export default class auto1AF2g extends ExerciceQcmA {
   }
 
   versionAleatoire: () => void = () => {
-    const a = randint(-4, 4, 0)
-    const b = randint(-9, 9, 0)
-    const c = randint(-7, 7, [0, a]) // En particulier, éviter les droites parallèles
-    let d = randint(-9, 9, 0)
+    let compteur = 0
+    do {
+      const a = randint(-4, 4, 0)
+      const b = randint(-9, 9, 0)
+      const c = randint(-7, 7, [0, a]) // En particulier, éviter les droites parallèles
+      let d = randint(-9, 9, 0)
 
-    // Continuer tant que les conditions problématiques sont remplies
-    while (
-      -Math.abs(d - b) < -5 || // Éviter un numérateur trop grand pour le produit
-      d - b === a - c || // En particulier, éviter solution x = 1
-      d === b // Éviter que les ordonnées à l'origine soient identiques
-    ) {
-      d = randint(-9, 9, 0)
-    }
+      // Continuer tant que les conditions problématiques sont remplies
+      while (
+        -Math.abs(d - b) < -5 || // Éviter un numérateur trop grand pour le produit
+        d - b === a - c || // En particulier, éviter solution x = 1
+        d === b // Éviter que les ordonnées à l'origine soient identiques
+      ) {
+        d = randint(-9, 9, 0)
+      }
 
-    this.appliquerLesValeurs(a, b, c, d)
+      this.appliquerLesValeurs(a, b, c, d)
+      compteur++
+    } while (
+      compteur < 100 &&
+      !compteLesReponsesDifferentes(this, 4, true, { fractionEgale: true })
+    ) // Limiter le nombre de tentatives pour éviter une boucle infinie
   }
 
   constructor() {

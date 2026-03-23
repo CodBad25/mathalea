@@ -1,5 +1,6 @@
 import { repere } from '../../lib/2d/reperes'
 import { latex2d } from '../../lib/2d/textes'
+import { compteLesReponsesDifferentes } from '../../lib/interactif/qcm'
 import {
   Spline,
   spline,
@@ -228,48 +229,62 @@ export default class AutoF01c extends ExerciceQcmA {
   }
 
   versionAleatoire = () => {
-    // Choix aléatoire entre deux ensembles de nœuds
-    const cas = randint(1, 2)
+    let compteur = 0
+    do {
+      // Générer aléatoirement les noeuds de la courbe et choisir un point spécifique
+      // Choix aléatoire entre deux ensembles de nœuds
+      const cas = randint(1, 2)
 
-    const noeuds1: NoeudSpline[] = [
-      { x: -4, y: -1, deriveeGauche: 0, deriveeDroit: 0, isVisible: true },
-      { x: -3, y: 0, deriveeGauche: 1, deriveeDroit: 1, isVisible: true },
-      { x: -2, y: 1, deriveeGauche: 0, deriveeDroit: 0, isVisible: true },
-      { x: -1, y: 0, deriveeGauche: -1, deriveeDroit: -1, isVisible: true },
-      { x: 0, y: -0.5, deriveeGauche: -1, deriveeDroit: -1, isVisible: true },
-      { x: 1, y: -3, deriveeGauche: -1, deriveeDroit: -1, isVisible: true },
-      { x: 3, y: -4, deriveeGauche: 0, deriveeDroit: 0, isVisible: true },
-      { x: 4, y: -2, deriveeGauche: 1, deriveeDroit: 1, isVisible: true },
-      { x: 5, y: -1, deriveeGauche: 0, deriveeDroit: 0, isVisible: true },
-    ]
+      const noeuds1: NoeudSpline[] = [
+        { x: -4, y: -1, deriveeGauche: 0, deriveeDroit: 0, isVisible: true },
+        { x: -3, y: 0, deriveeGauche: 1, deriveeDroit: 1, isVisible: true },
+        { x: -2, y: 1, deriveeGauche: 0, deriveeDroit: 0, isVisible: true },
+        { x: -1, y: 0, deriveeGauche: -1, deriveeDroit: -1, isVisible: true },
+        { x: 0, y: -0.5, deriveeGauche: -1, deriveeDroit: -1, isVisible: true },
+        { x: 1, y: -3, deriveeGauche: -1, deriveeDroit: -1, isVisible: true },
+        { x: 3, y: -4, deriveeGauche: 0, deriveeDroit: 0, isVisible: true },
+        { x: 4, y: -2, deriveeGauche: 1, deriveeDroit: 1, isVisible: true },
+        { x: 5, y: -1, deriveeGauche: 0, deriveeDroit: 0, isVisible: true },
+      ]
 
-    const noeuds2: NoeudSpline[] = [
-      { x: -6, y: 2, deriveeGauche: 1, deriveeDroit: 1, isVisible: true },
-      { x: -5, y: 3, deriveeGauche: 0, deriveeDroit: 0, isVisible: true },
-      { x: -4, y: 2, deriveeGauche: -1.5, deriveeDroit: -1.5, isVisible: true },
-      { x: -2, y: 0, deriveeGauche: -1, deriveeDroit: -1.5, isVisible: true },
-      { x: 0, y: -4, deriveeGauche: 0, deriveeDroit: 0, isVisible: true },
-      { x: 1, y: -2, deriveeGauche: 1.5, deriveeDroit: 1.5, isVisible: true },
-      { x: 2, y: 0, deriveeGauche: 0, deriveeDroit: 0, isVisible: true },
-      { x: 3, y: -2, deriveeGauche: -2, deriveeDroit: -2, isVisible: true },
-    ]
+      const noeuds2: NoeudSpline[] = [
+        { x: -6, y: 2, deriveeGauche: 1, deriveeDroit: 1, isVisible: true },
+        { x: -5, y: 3, deriveeGauche: 0, deriveeDroit: 0, isVisible: true },
+        {
+          x: -4,
+          y: 2,
+          deriveeGauche: -1.5,
+          deriveeDroit: -1.5,
+          isVisible: true,
+        },
+        { x: -2, y: 0, deriveeGauche: -1, deriveeDroit: -1.5, isVisible: true },
+        { x: 0, y: -4, deriveeGauche: 0, deriveeDroit: 0, isVisible: true },
+        { x: 1, y: -2, deriveeGauche: 1.5, deriveeDroit: 1.5, isVisible: true },
+        { x: 2, y: 0, deriveeGauche: 0, deriveeDroit: 0, isVisible: true },
+        { x: 3, y: -2, deriveeGauche: -2, deriveeDroit: -2, isVisible: true },
+      ]
 
-    const noeudsCourbe = cas === 1 ? noeuds1 : noeuds2
-    const coeffX = choice([-1, 1])
+      const noeudsCourbe = cas === 1 ? noeuds1 : noeuds2
+      const coeffX = choice([-1, 1])
 
-    // Choisir un point où x ≠ y
-    let abs1 = randint(0, noeudsCourbe.length - 1)
-    let valeurX = noeudsCourbe[abs1].x * coeffX
-    let valeurY = noeudsCourbe[abs1].y
+      // Choisir un point où x ≠ y
+      let abs1 = randint(0, noeudsCourbe.length - 1)
+      let valeurX = noeudsCourbe[abs1].x * coeffX
+      let valeurY = noeudsCourbe[abs1].y
 
-    // Tant que x = y, chercher un autre point
-    while (valeurX === valeurY) {
-      abs1 = randint(0, noeudsCourbe.length - 1)
-      valeurX = noeudsCourbe[abs1].x * coeffX
-      valeurY = noeudsCourbe[abs1].y
-    }
+      // Tant que x = y, chercher un autre point
+      while (valeurX === valeurY) {
+        abs1 = randint(0, noeudsCourbe.length - 1)
+        valeurX = noeudsCourbe[abs1].x * coeffX
+        valeurY = noeudsCourbe[abs1].y
+      }
 
-    this.appliquerLesValeurs(noeudsCourbe, coeffX, abs1)
+      this.appliquerLesValeurs(noeudsCourbe, coeffX, abs1)
+      compteur++
+    } while (
+      compteur < 100 &&
+      !compteLesReponsesDifferentes(this, 6, true, { texteSansCasse: true }) // on ne peut pas faire mieux vu les props
+    ) // On s'assure d'avoir 6 réponses différentes, sinon on régénère
   }
 
   constructor() {

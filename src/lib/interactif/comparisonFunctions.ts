@@ -1089,6 +1089,7 @@ function handleUnite(
     'operatorName',
   ])
   const inputGrandeur = inputToGrandeur(cleaner(localInput))
+
   const goodAnswerGrandeur = Grandeur.fromString(
     cleaner(answer).replace('^\\circ', '°').replace('\\degree', '°'),
   )
@@ -1096,7 +1097,7 @@ function handleUnite(
   if (inputGrandeur) {
     if (inputGrandeur.uniteDeReference !== goodAnswerGrandeur.uniteDeReference)
       return fail(
-        `Incorrect, il faut donner la réponse, par exemple, en $${goodAnswerGrandeur.latexUnit}$.`,
+        `La réponse pourrait être correcte si l'unité avait été précisée.`,
       )
 
     if (precision !== undefined) {

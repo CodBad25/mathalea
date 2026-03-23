@@ -1,3 +1,4 @@
+import { compteLesReponsesDifferentes } from '../../lib/interactif/qcm'
 import { choice } from '../../lib/outils/arrayOutils'
 import {
   miseEnEvidence,
@@ -315,7 +316,14 @@ $\\dfrac{${p}+${q}}{${r}} = ${miseEnEvidence(`\\dfrac{${p}}{${r}}+\\dfrac{${q}}{
   }
 
   versionAleatoire: () => void = () => {
-    this.genererExercice(randint(1, 16))
+    let compteur = 0
+    do {
+      this.genererExercice(randint(1, 16))
+      compteur++
+    } while (
+      compteur < 100 &&
+      !compteLesReponsesDifferentes(this, 4, true, { texteSansCasse: true })
+    )
   }
 
   constructor() {

@@ -1,3 +1,4 @@
+import { compteLesReponsesDifferentes } from '../../lib/interactif/qcm'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
@@ -105,15 +106,19 @@ Ainsi, le nouveau prix est donné par : $${miseEnEvidence(`${texNombre(prixIniti
   }
 
   versionAleatoire = () => {
-    // Génération d'un pourcentage de baisse (multiples de 5 entre 5 et 50)
+    let compteur = 0
+    do {
+      // Génération d'un pourcentage de baisse (multiples de 5 entre 5 et 50)
 
-    const pourcentage = randint(2, 70)
+      const pourcentage = randint(2, 70)
 
-    // Génération d'un prix (multiples de 10 entre 80 et 500)
+      // Génération d'un prix (multiples de 10 entre 80 et 500)
 
-    const prixInitial = randint(104, 299, 200)
+      const prixInitial = randint(104, 299, 200)
 
-    this.appliquerLesValeurs(prixInitial, pourcentage)
+      this.appliquerLesValeurs(prixInitial, pourcentage)
+      compteur++
+    } while (compteur < 100 && !compteLesReponsesDifferentes(this, 4, true, {})) // On s'assure d'avoir 4 réponses différentes, sinon on régénère
   }
 
   constructor() {

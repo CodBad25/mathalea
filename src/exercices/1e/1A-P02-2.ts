@@ -1,3 +1,4 @@
+import { compteLesReponsesDifferentes } from '../../lib/interactif/qcm'
 import { choice } from '../../lib/outils/arrayOutils'
 import { texNombre } from '../../lib/outils/texNombre'
 import ExerciceQcmA from '../ExerciceQcmA'
@@ -20,12 +21,12 @@ export const dateDePublication = '07/01/2026'
  *
  */
 export default class Auto1P02b extends ExerciceQcmA {
-private appliquerLesValeurs(
+  private appliquerLesValeurs(
     typeQuestion: string,
     p: number,
     n: number,
     probAuMoinsUn: number,
-    probAucun: number
+    probAucun: number,
   ): void {
     let situation = ''
     let explication = ''
@@ -194,7 +195,7 @@ $P(A) = 1 - ${texNombre(probAucun, 3)} = ${texNombre(probAuMoinsUn, 3)}$`
 
   versionOriginale: () => void = () => {
     // Dé truqué avec P(6) = 1/6, 3 lancers
-    const p = 1/6
+    const p = 1 / 6
     const n = 3
     const probAucun = Math.pow(1 - p, n)
     const probAuMoinsUn = 1 - probAucun
@@ -202,43 +203,50 @@ $P(A) = 1 - ${texNombre(probAucun, 3)} = ${texNombre(probAuMoinsUn, 3)}$`
   }
 
   versionAleatoire = () => {
-    const choix = choice([
-      // Dé truqué (2 cas)
-      { type: 'de1', p: 1/6, n: choice([3, 4]) },
-      { type: 'de2', p: 1/6, n: choice([3, 4]) },
-      
-      // Pièce truquée (2 cas)
-      { type: 'piece1', p: choice([0.6, 0.7, 0.4]), n: choice([3, 4]) },
-      { type: 'piece2', p: choice([0.6, 0.7, 0.4]), n: choice([3, 4]) },
-      
-      // Tir à l'arc (2 cas)
-      { type: 'tir1', p: choice([0.7, 0.8, 0.6]), n: choice([3, 4]) },
-      { type: 'tir2', p: choice([0.7, 0.8, 0.6]), n: choice([3, 4]) },
-      
-      // Contrôle qualité (2 cas)
-      { type: 'defaut1', p: choice([0.05, 0.1, 0.15]), n: choice([3, 4]) },
-      { type: 'defaut2', p: choice([0.05, 0.1, 0.15]), n: choice([3, 4]) },
-      
-      // Météo (2 cas)
-      { type: 'meteo1', p: choice([0.3, 0.4, 0.2]), n: choice([3, 4]) },
-      { type: 'meteo2', p: choice([0.3, 0.4, 0.2]), n: choice([3, 4]) },
-    ])
+    let compteur = 0
+    do {
+      const choix = choice([
+        // Dé truqué (2 cas)
+        { type: 'de1', p: 1 / 6, n: choice([3, 4]) },
+        { type: 'de2', p: 1 / 6, n: choice([3, 4]) },
 
-    const probAucun = Math.pow(1 - choix.p, choix.n)
-    const probAuMoinsUn = 1 - probAucun
+        // Pièce truquée (2 cas)
+        { type: 'piece1', p: choice([0.6, 0.7, 0.4]), n: choice([3, 4]) },
+        { type: 'piece2', p: choice([0.6, 0.7, 0.4]), n: choice([3, 4]) },
 
-    this.appliquerLesValeurs(
-      choix.type,
-      choix.p,
-      choix.n,
-      probAuMoinsUn,
-      probAucun
+        // Tir à l'arc (2 cas)
+        { type: 'tir1', p: choice([0.7, 0.8, 0.6]), n: choice([3, 4]) },
+        { type: 'tir2', p: choice([0.7, 0.8, 0.6]), n: choice([3, 4]) },
+
+        // Contrôle qualité (2 cas)
+        { type: 'defaut1', p: choice([0.05, 0.1, 0.15]), n: choice([3, 4]) },
+        { type: 'defaut2', p: choice([0.05, 0.1, 0.15]), n: choice([3, 4]) },
+
+        // Météo (2 cas)
+        { type: 'meteo1', p: choice([0.3, 0.4, 0.2]), n: choice([3, 4]) },
+        { type: 'meteo2', p: choice([0.3, 0.4, 0.2]), n: choice([3, 4]) },
+      ])
+
+      const probAucun = Math.pow(1 - choix.p, choix.n)
+      const probAuMoinsUn = 1 - probAucun
+
+      this.appliquerLesValeurs(
+        choix.type,
+        choix.p,
+        choix.n,
+        probAuMoinsUn,
+        probAucun,
+      )
+      compteur++
+    } while (
+      compteur < 100 &&
+      !compteLesReponsesDifferentes(this, 4, true, { texteSansCasse: true })
     )
   }
 
   constructor() {
     super()
     this.versionAleatoire()
-    this.spacing=1.5
+    this.spacing = 1.5
   }
 }
