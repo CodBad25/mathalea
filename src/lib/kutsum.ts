@@ -1,4 +1,5 @@
-import { getExercisesFromExercicesParams } from './mathalea'
+import seedrandom from 'seedrandom'
+import { getExercisesFromExercicesParams, mathaleaHandleExerciceSimple } from './mathalea'
 import type { IExercice } from './types'
 
 const KUTSUM_API_URL = 'https://app.kutsum.org/api/v1/external-drafts'
@@ -127,8 +128,15 @@ function buildKutsumQuestionsFromAutoCorrection(exercise: IExercice): KutsumQues
 export function buildKutsumPayload(exercises: IExercice[]): KutsumPayload {
   const kutsumExercises: KutsumExercise[] = []
 
-  for (const exercise of exercises) {
-    exercise.nouvelleVersion()
+  for (let i = 0; i < exercises.length; i++) {
+    const exercise = exercises[i]
+    // Reproduire exactement la même graine que lors de l'affichage dans la vue élève,
+    seedrandom(exercise.seed, { global: true })
+    if (exercise.typeExercice === 'simple') {
+      mathaleaHandleExerciceSimple(exercise, false, i)
+    } else if (typeof (exercise as IExercice & { nouvelleVersionWrapper?: (i: number) => void }).nouvelleVersionWrapper === 'function') {
+      ;(exercise as IExercice & { nouvelleVersionWrapper: (i: number) => void }).nouvelleVersionWrapper(i)
+    }
     const questions = buildKutsumQuestionsFromAutoCorrection(exercise)
     if (questions.length > 0) {
       kutsumExercises.push({
