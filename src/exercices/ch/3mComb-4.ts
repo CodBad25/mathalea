@@ -238,9 +238,9 @@ export default class EquipesComites extends Exercice {
         reponse = numerateur / factorielle(nbEquipes)
 
         texte = `Avec $${n}$ personnes, on souhaite former $${nbEquipes}$ équipes de $${tailleEquipe}$ joueurs chacune. `
-        texte += `De combien de façons peut-on répartir ces personnes en équipes (il n'y pas de rôle au sein de l'équipe) ?`
+        texte += `De combien de façons peut-on répartir ces personnes en équipes (il n'y a pas de rôle au sein de l'équipe) ?`
 
-        texteCorr = `On choisit successivement les membres de chaque équipe, puis on divise par ${nbEquipes === 2 ? '$2$' : `$${nbEquipes}!$`}, car il n'y a pas de rôle dans les équipes (combinaison).<br><br>`
+        texteCorr = `On choisit successivement les membres de chaque équipe (combinaison : l'ordre au sein d'une équipe ne compte pas), puis on divise par ${nbEquipes === 2 ? '$2$' : `$${nbEquipes}!$`} car les équipes ne sont pas numérotées : l'ordre dans lequel on forme les équipes ne compte pas.<br><br>`
         let calcul = ''
         reste = n
         for (let j = 0; j < nbEquipes; j++) {

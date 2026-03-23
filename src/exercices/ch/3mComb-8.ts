@@ -119,7 +119,7 @@ export default class PolygonesDenombrement extends Exercice {
           texte = `Combien de points d'intersection des diagonales se trouvent strictement à l'intérieur d'un ${nomPolygone} ($${n}$ sommets) convexe (en supposant qu'aucune trois diagonales ne sont concourantes) ?`
 
           texteCorr = `Chaque intersection intérieure est déterminée par exactement 4 sommets du polygone (les extrémités des 2 diagonales qui se coupent).<br>`
-          texteCorr += `On choisit 4 sommets parmi $${n}$, l'ordre n'important pas, si on considère le segment de $A$ vers $B$ ou $B$ vers $A$ cela revient au même (combinaison) :<br>`
+          texteCorr += `On choisit 4 sommets parmi $${n}$ (l'ordre n'importe pas : le même groupe de 4 sommets donne la même intersection). Il s'agit d'une combinaison :<br>`
           texteCorr += `$C_4^{${n}} = \\dfrac{${n}!}{4! \\times ${n - 4}!} = ${miseEnEvidence(texNombre(reponse, 0))}$`
         }
       } else if (typeQuestion === 'triangles') {

@@ -275,7 +275,7 @@ export default class PlacementsRangements extends Exercice {
 
           texteCorr = `On retire du total les rangements où les deux sont côte à côte.<br>`
           texteCorr += `$\\bullet$ Total : $P_{${nbObjets}} = ${nbObjets}! = ${totalSansContrainte}$<br>`
-          texteCorr += `$\\bullet$ Ensemble (bloc de 2, permutable) : $2 \\times P_{${nbObjets - 1}} = 2 \\times ${nbObjets - 1}! = ${avecEnsemble}$<br><br>`
+          texteCorr += `$\\bullet$ Côte à côte : on regroupe les deux objets en un bloc ($2$ ordres possibles dans le bloc), ce qui donne $${nbObjets - 1}$ éléments à permuter : $2 \\times ${nbObjets - 1}! = ${avecEnsemble}$<br><br>`
           texteCorr += `Résultat : $${totalSansContrainte} - ${avecEnsemble} = ${miseEnEvidence(texNombre(new Decimal(reponse), 0))}$`
         }
       } else {
