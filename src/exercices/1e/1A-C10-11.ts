@@ -1,3 +1,4 @@
+import { compteLesReponsesDifferentes } from '../../lib/interactif/qcm'
 import { ecritureAlgebrique, reduireAxPlusB } from '../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { randint } from '../../modules/outils'
@@ -29,64 +30,71 @@ export default class Auto1AC11c extends ExerciceQcmA {
   }
 
   versionAleatoire = () => {
-    switch (randint(1, 3)) {
-      case 1: // a>0, b<0 et c<0
-        {
-          const a = randint(71, 99, [80, 90])
-          const b = randint(-49, -29)
-          const c = randint(-149, -119)
+    let compteur = 0
+    do {
+      switch (randint(1, 3)) {
+        case 1: // a>0, b<0 et c<0
+          {
+            const a = randint(71, 99, [80, 90])
+            const b = randint(-49, -29)
+            const c = randint(-149, -119)
 
-          this.enonce = `La solution de l'équation  $${reduireAxPlusB(a, b)}=${c}$ est : `
-          this.correction = ` On obtient $x$ en ajoutant $${-b}$, puis en divisant le résultat par $${a}$.<br>
+            this.enonce = `La solution de l'équation  $${reduireAxPlusB(a, b)}=${c}$ est : `
+            this.correction = ` On obtient $x$ en ajoutant $${-b}$, puis en divisant le résultat par $${a}$.<br>
     Ainsi, $x=\\dfrac{${c}${ecritureAlgebrique(-b)}}{${a}}$, soit  $${miseEnEvidence(`x=\\dfrac{${-b}${ecritureAlgebrique(c)}}{${a}}`)}$.`
 
-          this.reponses = [
-            `$x=\\dfrac{${-b}${ecritureAlgebrique(c)}}{${a}}$`,
-            `$x=\\dfrac{${c}${ecritureAlgebrique(b)}}{${a}}$`,
-            `$x=\\dfrac{${-c}${ecritureAlgebrique(b)}}{${a}}$`,
-            `$x=\\dfrac{${c}${ecritureAlgebrique(-a)}}{${-b}}$`,
-          ]
-        }
-        break
-      case 2: // a<0, b<0 et c<0
-        {
-          const a = randint(-99, -34)
-          const b = randint(-49, -29)
-          const c = randint(-149, -119)
+            this.reponses = [
+              `$x=\\dfrac{${-b}${ecritureAlgebrique(c)}}{${a}}$`,
+              `$x=\\dfrac{${c}${ecritureAlgebrique(b)}}{${a}}$`,
+              `$x=\\dfrac{${-c}${ecritureAlgebrique(b)}}{${a}}$`,
+              `$x=\\dfrac{${c}${ecritureAlgebrique(-a)}}{${-b}}$`,
+            ]
+          }
+          break
+        case 2: // a<0, b<0 et c<0
+          {
+            const a = randint(-99, -34)
+            const b = randint(-49, -29)
+            const c = randint(-149, -119)
 
-          this.enonce = `La solution de l'équation  $${reduireAxPlusB(a, b)}=${c}$ est : `
-          this.correction = ` On obtient $x$ en ajoutant $${-b}$, puis en divisant le résultat par $${a}$.<br>
+            this.enonce = `La solution de l'équation  $${reduireAxPlusB(a, b)}=${c}$ est : `
+            this.correction = ` On obtient $x$ en ajoutant $${-b}$, puis en divisant le résultat par $${a}$.<br>
     Ainsi, $x=\\dfrac{${c}${ecritureAlgebrique(-b)}}{${a}}$, soit  $${miseEnEvidence(`x=\\dfrac{${-c}${ecritureAlgebrique(b)}}{${-a}}`)}$.`
 
-          this.reponses = [
-            `$x=\\dfrac{${-c}${ecritureAlgebrique(b)}}{${-a}}$`,
-            `$x=\\dfrac{${-c}${ecritureAlgebrique(-b)}}{${-a}}$`,
-            `$x=\\dfrac{${-c}${ecritureAlgebrique(-b)}}{${a}}$`,
-            `$x=\\dfrac{${c}${ecritureAlgebrique(-a)}}{${-b}}$`,
-          ]
-        }
-        break
+            this.reponses = [
+              `$x=\\dfrac{${-c}${ecritureAlgebrique(b)}}{${-a}}$`,
+              `$x=\\dfrac{${-c}${ecritureAlgebrique(-b)}}{${-a}}$`,
+              `$x=\\dfrac{${-c}${ecritureAlgebrique(-b)}}{${a}}$`,
+              `$x=\\dfrac{${c}${ecritureAlgebrique(-a)}}{${-b}}$`,
+            ]
+          }
+          break
 
-      case 3: // a<0, b>0 et c<0
-      default:
-        {
-          const a = randint(-99, -34)
-          const b = randint(29, 49)
-          const c = randint(-149, -119)
+        case 3: // a<0, b>0 et c<0
+        default:
+          {
+            const a = randint(-99, -34)
+            const b = randint(29, 49)
+            const c = randint(-149, -119)
 
-          this.enonce = `La solution de l'équation  $${reduireAxPlusB(a, b)}=${c}$ est : `
-          this.correction = ` On obtient $x$ en retranchant $${b}$, puis en divisant le résultat par $${a}$.<br>
+            this.enonce = `La solution de l'équation  $${reduireAxPlusB(a, b)}=${c}$ est : `
+            this.correction = ` On obtient $x$ en retranchant $${b}$, puis en divisant le résultat par $${a}$.<br>
     Ainsi, $x=\\dfrac{${c}-${b}}{${a}}$, soit  $${miseEnEvidence(`x=\\dfrac{${-c}${ecritureAlgebrique(b)}}{${-a}}`)}$.`
 
-          this.reponses = [
-            `$x=\\dfrac{${-c}${ecritureAlgebrique(b)}}{${-a}}$`,
-            `$x=\\dfrac{${-c}${ecritureAlgebrique(-b)}}{${a}}$`,
-            `$x=\\dfrac{${c}${ecritureAlgebrique(b)}}{${-a}}$`,
-            `$x=\\dfrac{${c}${ecritureAlgebrique(-a)}}{${-b}}$`,
-          ]
-        }
-        break
-    }
+            this.reponses = [
+              `$x=\\dfrac{${-c}${ecritureAlgebrique(b)}}{${-a}}$`,
+              `$x=\\dfrac{${-c}${ecritureAlgebrique(-b)}}{${a}}$`,
+              `$x=\\dfrac{${c}${ecritureAlgebrique(b)}}{${-a}}$`,
+              `$x=\\dfrac{${c}${ecritureAlgebrique(-a)}}{${-b}}$`,
+            ]
+          }
+          break
+      }
+      compteur++
+    } while (
+      compteur < 100 &&
+      !compteLesReponsesDifferentes(this, 4, true, { egaliteExpression: true })
+    ) // On s'assure d'avoir 4 réponses différentes, sinon on régénère
   }
 
   constructor() {

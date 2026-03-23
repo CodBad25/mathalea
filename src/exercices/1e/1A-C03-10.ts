@@ -1,3 +1,4 @@
+import { compteLesReponsesDifferentes } from '../../lib/interactif/qcm'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
@@ -45,9 +46,13 @@ export default class Auto1AC3j extends ExerciceQcmA {
   }
 
   versionAleatoire: () => void = () => {
-    const a = choice([randint(101, 999) / 100, randint(1001, 9999) / 1000])
-    const n = choice([randint(-5, -2), randint(2, 5)])
-    this.appliquerLesValeurs(a, n)
+    let compteur = 0
+    do {
+      const a = choice([randint(101, 999) / 100, randint(1001, 9999) / 1000])
+      const n = choice([randint(-5, -2), randint(2, 5)])
+      this.appliquerLesValeurs(a, n)
+      compteur++
+    } while (compteur < 100 && !compteLesReponsesDifferentes(this, 4, true, {}))
   }
 
   constructor() {

@@ -1,3 +1,4 @@
+import { compteLesReponsesDifferentes } from '../../lib/interactif/qcm'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { randint } from '../../modules/outils'
@@ -126,11 +127,15 @@ export default class AutoF2s extends ExerciceQcmA {
   }
 
   versionAleatoire = () => {
-    const a = randint(1, 4) * choice([-1, 1])
-    const x1 = randint(-5, 5, 0) // x1 ≠ 0
-    const x2 = randint(-5, 5, [0, x1, -x1]) // x2 ≠ 0
+    let compteur = 0
+    do {
+      const a = randint(1, 4) * choice([-1, 1])
+      const x1 = randint(-5, 5, 0) // x1 ≠ 0
+      const x2 = randint(-5, 5, [0, x1, -x1]) // x2 ≠ 0
 
-    this.appliquerLesValeurs({ a, x1, x2 })
+      this.appliquerLesValeurs({ a, x1, x2 })
+      compteur++
+    } while (compteur < 100 && !compteLesReponsesDifferentes(this, 4, true, {}))
   }
 
   constructor() {

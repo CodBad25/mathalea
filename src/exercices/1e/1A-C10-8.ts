@@ -1,3 +1,4 @@
+import { compteLesReponsesDifferentes } from '../../lib/interactif/qcm'
 import { choice } from '../../lib/outils/arrayOutils'
 import { texFractionFromString } from '../../lib/outils/deprecatedFractions'
 import { ecritureAlgebrique, rienSi1 } from '../../lib/outils/ecritures'
@@ -49,25 +50,27 @@ export default class Auto1C11 extends ExerciceQcmA {
   }
 
   versionAleatoire: () => void = () => {
-    const typeEquation = choice(['k(ax+b)=cx+d', 'k-(ax+b)=cx+d'])
+    let compteur = 0
+    do {
+      const typeEquation = choice(['k(ax+b)=cx+d', 'k-(ax+b)=cx+d'])
 
-    let bonnereponse, c
-    let erreur1, erreur2, erreur3
+      let bonnereponse, c
+      let erreur1, erreur2, erreur3
 
-    // Génération des coefficients
-    const a = randint(-9, 9, 0)
-    const b = randint(-9, 9, 0)
-    c = randint(-9, 9, a)
-    const d = randint(-9, 9, 0)
-    const k = randint(2, 9, b)
+      // Génération des coefficients
+      const a = randint(-9, 9, 0)
+      const b = randint(-9, 9, 0)
+      c = randint(-9, 9, a)
+      const d = randint(-9, 9, 0)
+      const k = randint(2, 9, b)
 
-    if (typeEquation === 'k(ax+b)=cx+d') {
-      if (c === k * a) {
-        c = randint(1, 9, [a])
-      } // éviter division par 0
+      if (typeEquation === 'k(ax+b)=cx+d') {
+        if (c === k * a) {
+          c = randint(1, 9, [k * a])
+        } // éviter division par 0
 
-      this.enonce = `La solution de l'équation $${k}(${rienSi1(a)}x${ecritureAlgebrique(b)})=${rienSi1(c)}x${ecritureAlgebrique(d)}$ est : `
-      this.correction = `On développe, puis on isole l'inconnue dans le membre de gauche :<br>
+        this.enonce = `La solution de l'équation $${k}(${rienSi1(a)}x${ecritureAlgebrique(b)})=${rienSi1(c)}x${ecritureAlgebrique(d)}$ est : `
+        this.correction = `On développe, puis on isole l'inconnue dans le membre de gauche :<br>
  $\\begin{aligned}
  ${k}(${rienSi1(a)}x${ecritureAlgebrique(b)})&=${rienSi1(c)}x${ecritureAlgebrique(d)}\\\\
  ${k * a}x${ecritureAlgebrique(k * b)}&=${rienSi1(c)}x${ecritureAlgebrique(d)}\\\\
@@ -78,27 +81,29 @@ export default class Auto1C11 extends ExerciceQcmA {
  x&=${texFractionFromString(d - k * b, k * a - c)}
  ${pgcd(abs(d - k * b), abs(k * a - c)) > 1 || k * a - c < 0 ? `\\\\x&=${new FractionEtendue(d - k * b, k * a - c).texFractionSimplifiee}` : ''}\\end{aligned}$
  `
-      this.correction += `<br> La solution est $${miseEnEvidence(new FractionEtendue(d - k * b, k * a - c).texFractionSimplifiee)}$.`
+        this.correction += `<br> La solution est $${miseEnEvidence(new FractionEtendue(d - k * b, k * a - c).texFractionSimplifiee)}$.`
 
-      bonnereponse = new FractionEtendue(d - k * b, k * a - c)
-        .texFractionSimplifiee
+        bonnereponse = new FractionEtendue(d - k * b, k * a - c)
+          .texFractionSimplifiee
 
-      // Erreurs possibles
-      erreur1 = new FractionEtendue(d - b, a - c).texFractionSimplifiee // Oubli du k dans le développement
-      erreur2 = new FractionEtendue(d + k * b, k * a - c).texFractionSimplifiee // Erreur de signe
-      erreur3 = new FractionEtendue(d - k * b, k * a + c).texFractionSimplifiee // Erreur dans la soustraction des x
-    } else {
-      // k-(ax+b)=cx+d
-      if (c === -a) {
-        c = randint(-9, 9, [0, a, -a])
-      } // éviter division par 0
+        // Erreurs possibles
+        erreur1 = new FractionEtendue(d - b, a - c).texFractionSimplifiee // Oubli du k dans le développement
+        erreur2 = new FractionEtendue(d + k * b, k * a - c)
+          .texFractionSimplifiee // Erreur de signe
+        erreur3 = new FractionEtendue(d - k * b, k * a + c)
+          .texFractionSimplifiee // Erreur dans la soustraction des x
+      } else {
+        // k-(ax+b)=cx+d
+        if (c === -a) {
+          c = randint(-9, 9, [0, a, -a])
+        } // éviter division par 0
 
-      // On calcule les nouvelles valeurs dès le début
-      const newA = -a
-      const newB = k - b
+        // On calcule les nouvelles valeurs dès le début
+        const newA = -a
+        const newB = k - b
 
-      this.enonce = `La solution de l'équation $${k}-(${rienSi1(a)}x${ecritureAlgebrique(b)})=${rienSi1(c)}x${ecritureAlgebrique(d)}$ est : `
-      this.correction = `On développe, puis on isole l'inconnue dans le membre de gauche :<br>
+        this.enonce = `La solution de l'équation $${k}-(${rienSi1(a)}x${ecritureAlgebrique(b)})=${rienSi1(c)}x${ecritureAlgebrique(d)}$ est : `
+        this.correction = `On développe, puis on isole l'inconnue dans le membre de gauche :<br>
  $\\begin{aligned}
  ${k}-(${rienSi1(a)}x${ecritureAlgebrique(b)})&=${rienSi1(c)}x${ecritureAlgebrique(d)}\\\\
  ${k}${ecritureAlgebrique(-a)}x${ecritureAlgebrique(-b)}&=${rienSi1(c)}x${ecritureAlgebrique(d)}\\\\
@@ -111,23 +116,28 @@ export default class Auto1C11 extends ExerciceQcmA {
  ${pgcd(abs(d - newB), abs(newA - c)) > 1 || newA - c < 0 ? `\\\\x&=${new FractionEtendue(d - newB, newA - c).texFractionSimplifiee}\n` : ''}\\end{aligned}$
  `
 
-      this.correction += `<br> La solution est $${miseEnEvidence(new FractionEtendue(d - newB, newA - c).texFractionSimplifiee)}$.`
+        this.correction += `<br> La solution est $${miseEnEvidence(new FractionEtendue(d - newB, newA - c).texFractionSimplifiee)}$.`
 
-      bonnereponse = new FractionEtendue(d - newB, newA - c)
-        .texFractionSimplifiee
+        bonnereponse = new FractionEtendue(d - newB, newA - c)
+          .texFractionSimplifiee
 
-      // Erreurs possibles
-      erreur1 = new FractionEtendue(d + newB, newA - c).texFractionSimplifiee // Erreur de signe
-      erreur2 = new FractionEtendue(d - b, a - c).texFractionSimplifiee // Pas de développement du membre de gauche
-      erreur3 = new FractionEtendue(-d + newB, newA - c).texFractionSimplifiee // Erreur dans la soustraction des x
-    }
+        // Erreurs possibles
+        erreur1 = new FractionEtendue(d + newB, newA - c).texFractionSimplifiee // Erreur de signe
+        erreur2 = new FractionEtendue(d - b, a - c).texFractionSimplifiee // Pas de développement du membre de gauche
+        erreur3 = new FractionEtendue(-d + newB, newA - c).texFractionSimplifiee // Erreur dans la soustraction des x
+      }
 
-    this.reponses = [
-      `$${bonnereponse}$`,
-      `$${erreur1}$`,
-      `$${erreur2}$`,
-      `$${erreur3}$`,
-    ]
+      this.reponses = [
+        `$${bonnereponse}$`,
+        `$${erreur1}$`,
+        `$${erreur2}$`,
+        `$${erreur3}$`,
+      ]
+      compteur++
+    } while (
+      compteur < 100 &&
+      !compteLesReponsesDifferentes(this, 4, true, { fractionEgale: true })
+    ) // On s'assure d'avoir 4 réponses différentes, sinon on régénère
   }
 
   // Ici il n'y a rien à faire, on appelle juste la version aleatoire (pour un qcm aleatoirisé, c'est le fonctionnement par défaut)

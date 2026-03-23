@@ -6,6 +6,7 @@ import { repere } from '../../lib/2d/reperes'
 import { segment } from '../../lib/2d/segmentsVecteurs'
 import { latex2d } from '../../lib/2d/textes'
 import { deuxColonnes } from '../../lib/format/miseEnPage'
+import { compteLesReponsesDifferentes } from '../../lib/interactif/qcm'
 import { choice } from '../../lib/outils/arrayOutils'
 import {
   ecritureAlgebrique,
@@ -142,25 +143,29 @@ export default class Auto1AF2p extends ExerciceQcmA {
   }
 
   versionAleatoire: () => void = () => {
-    const listeFractions = [
-      [1, 2],
-      [1, 3],
-      [1, 4],
-      [1, 5],
-      [2, 3],
-      [2, 5],
-      [-1, 2],
-      [-1, 3],
-      [-2, 3],
-      [-1, 5],
-      [-2, 5],
-      [-1, 6],
-      [1, 6],
-    ]
-    const frac = choice(listeFractions)
-    const abs = randint(5, 10) * 10 * choice([-1, 1])
-    const ordOrigine = randint(1, 3)
-    this.appliquerLesValeurs(frac[0], frac[1], abs, ordOrigine)
+    let compteur = 0
+    do {
+      const listeFractions = [
+        [1, 2],
+        [1, 3],
+        [1, 4],
+        [1, 5],
+        [2, 3],
+        [2, 5],
+        [-1, 2],
+        [-1, 3],
+        [-2, 3],
+        [-1, 5],
+        [-2, 5],
+        [-1, 6],
+        [1, 6],
+      ]
+      const frac = choice(listeFractions)
+      const abs = randint(5, 10) * 10 * choice([-1, 1])
+      const ordOrigine = randint(1, 3)
+      this.appliquerLesValeurs(frac[0], frac[1], abs, ordOrigine)
+      compteur++
+    } while (compteur < 100 && !compteLesReponsesDifferentes(this, 4, true, {}))
   }
 
   constructor() {

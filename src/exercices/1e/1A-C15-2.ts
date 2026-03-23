@@ -2,10 +2,10 @@ import { choice } from '../../lib/outils/arrayOutils'
 import { texNombre } from '../../lib/outils/texNombre'
 import { randint } from '../../modules/outils'
 // import ExerciceQcmA from '../../ExerciceQcmA'
-import ExerciceQcmA from '../ExerciceQcmA'
-import FractionEtendue from '../../modules/FractionEtendue'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { ppcm } from '../../lib/outils/primalite'
+import FractionEtendue from '../../modules/FractionEtendue'
+import ExerciceQcmA from '../ExerciceQcmA'
 
 export const uuid = '2ab24'
 export const refs = {
@@ -62,10 +62,10 @@ export default class Auto1C19b extends ExerciceQcmA {
         `
 
     this.reponses = [
-      `$${reponse.texFractionSimplifiee}$ du crédit.`,
-      '$\\dfrac{1}{2}$ du crédit.',
-      '$\\dfrac{5}{12}$ du crédit.',
-      '$\\dfrac{1}{4}$ du crédit.',
+      `$${reponse.texFractionSimplifiee}\\text{ du crédit.}$`,
+      '$\\dfrac{1}{2}\\text{ du crédit.}$',
+      '$\\dfrac{5}{12}\\text{ du crédit.}$',
+      '$\\dfrac{1}{4}\\text{ du crédit.}$',
     ]
   }
 
@@ -145,10 +145,10 @@ export default class Auto1C19b extends ExerciceQcmA {
     const fausseReponse3 = fracFevrier
 
     this.reponses = [
-      `$${reponse.texFractionSimplifiee}$ du crédit.`,
-      `$${fausseReponse1.texFractionSimplifiee}$ du crédit.`,
-      `$${fausseReponse2.texFractionSimplifiee}$ du crédit.`,
-      `$${fausseReponse3.texFractionSimplifiee}$ du crédit.`,
+      `$${reponse.texFractionSimplifiee}\\text{ du crédit.}$`,
+      `$${fausseReponse1.texFractionSimplifiee}\\text{ du crédit.}$`,
+      `$${fausseReponse2.texFractionSimplifiee}\\text{ du crédit.}$`,
+      `$${fausseReponse3.texFractionSimplifiee}\\text{ du crédit.}$`,
     ]
   }
 

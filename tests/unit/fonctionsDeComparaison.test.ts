@@ -1693,7 +1693,7 @@ describe('fonctionComparaison', () => {
     )
     expect(result.isOk).toBe(false)
     expect(result.feedback).toBe(
-      `Incorrect, il faut donner la réponse, par exemple, en $\\text{cm}$.`,
+      `La réponse pourrait être correcte si l'unité avait été précisée.`,
     )
 
     result = fonctionComparaison('3{,}5', '3{,}5cm', { unite: true })

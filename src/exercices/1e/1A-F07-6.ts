@@ -1,10 +1,15 @@
-import {  pointAbstrait } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { droite } from '../../lib/2d/droites'
 import { repere } from '../../lib/2d/reperes'
 import { latex2d } from '../../lib/2d/textes'
 import { deuxColonnes } from '../../lib/format/miseEnPage'
+import { compteLesReponsesDifferentes } from '../../lib/interactif/qcm'
 import { choice } from '../../lib/outils/arrayOutils'
-import { ecritureAlgebrique, ecritureAlgebriqueSauf1, rienSi1 } from '../../lib/outils/ecritures'
+import {
+  ecritureAlgebrique,
+  ecritureAlgebriqueSauf1,
+  rienSi1,
+} from '../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 
 import { mathalea2d } from '../../modules/mathalea2d'
@@ -24,11 +29,11 @@ export const interactifType = 'qcm'
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre =
-  "Déterminer une équation de droite à partir de sa représentation graphique"
+  'Déterminer une équation de droite à partir de sa représentation graphique'
 export const dateDePublication = '13/02/2026'
 
 export default class Auto1AF076 extends ExerciceQcmA {
-   private appliquerLesValeurs(
+  private appliquerLesValeurs(
     signeM: 1 | -1,
     typeP: 'pos' | 'neg' | 'nul',
   ): void {
@@ -42,25 +47,49 @@ export default class Auto1AF076 extends ExerciceQcmA {
     const d = droite(ptA, ptB, '', 'blue')
     d.epaisseur = 2
 
-    const lD = latex2d('D', signeM > 0 ? 0.5 : -0.5, 2.5, { color: 'blue', letterSize: 'normalsize' })
+    const lD = latex2d('D', signeM > 0 ? 0.5 : -0.5, 2.5, {
+      color: 'blue',
+      letterSize: 'normalsize',
+    })
 
     const r1 = repere({
-      xMin: -3, xMax: 3, xUnite: 1, yMin: -3, yMax: 3, yUnite: 1,
-      axeXStyle: '->', axeYStyle: '->',
-      grilleX: false, grilleY: false,
-      xThickListe: false, yThickListe: false,
-      xLabelListe: false, yLabelListe: false,
+      xMin: -3,
+      xMax: 3,
+      xUnite: 1,
+      yMin: -3,
+      yMax: 3,
+      yUnite: 1,
+      axeXStyle: '->',
+      axeYStyle: '->',
+      grilleX: false,
+      grilleY: false,
+      xThickListe: false,
+      yThickListe: false,
+      xLabelListe: false,
+      yLabelListe: false,
     })
 
     const objet = mathalea2d(
-      { xmin: -3, xmax: 3.5, ymin: -3, ymax: 3.5, pixelsParCm: 25, scale: 0.6, style: 'margin: auto' },
-      d, r1, o, lD,
+      {
+        xmin: -3,
+        xmax: 3.5,
+        ymin: -3,
+        ymax: 3.5,
+        pixelsParCm: 25,
+        scale: 0.6,
+        style: 'margin: auto',
+      },
+      d,
+      r1,
+      o,
+      lD,
     )
 
     // ===== Génération des valeurs numériques =====
     const absM = randint(1, 3)
     const mVal = signeM * absM
-    const pVal = typeP === 'pos' ? randint(1, 3) : typeP === 'neg' ? -randint(1, 3) : 0
+    const pVal =
+      typeP === 'pos' ? randint(1, 3) : typeP === 'neg' ? -randint(1, 3) : 0
 
     // ===== Forme réduite : y = mx + p =====
     const nuReduite = `y=${rienSi1(mVal)}x${pVal !== 0 ? ecritureAlgebrique(pVal) : ''}`
@@ -70,7 +99,11 @@ export default class Auto1AF076 extends ExerciceQcmA {
     let aC = -mVal * mult
     let bC = mult
     let cC = -pVal * mult
-    if (aC < 0) { aC = -aC; bC = -bC; cC = -cC }
+    if (aC < 0) {
+      aC = -aC
+      bC = -bC
+      cC = -cC
+    }
     const nuCartesienne = this.nuEquationCartesienne(aC, bC, cC)
 
     // ===== Forme x² : y = x² - (x + k)² + c =====
@@ -80,7 +113,6 @@ export default class Auto1AF076 extends ExerciceQcmA {
     const cX2 = pX2 + kBon * kBon
     const texKBon = kBon > 0 ? `x+${kBon}` : `x${kBon}`
     const nuX2 = `y=x^2-(${texKBon})^2${cX2 !== 0 ? ecritureAlgebrique(cX2) : ''}`
-
 
     // ===== Distracteurs (mauvais signe de m ou de p) =====
 
@@ -95,7 +127,11 @@ export default class Auto1AF076 extends ExerciceQcmA {
     let aCf = mVal * mult
     let bCf = mult
     let cCf = -pVal * mult
-    if (aCf < 0) { aCf = -aCf; bCf = -bCf; cCf = -cCf }
+    if (aCf < 0) {
+      aCf = -aCf
+      bCf = -bCf
+      cCf = -cCf
+    }
     const nuCartesienneFausseM = this.nuEquationCartesienne(aCf, bCf, cCf)
     // Forme réduite correspondante : m opposé, même p
     const nuReduiteDeCartFausse = `y=${rienSi1(-mVal)}x${pVal !== 0 ? ecritureAlgebrique(pVal) : ''}`
@@ -112,7 +148,10 @@ export default class Auto1AF076 extends ExerciceQcmA {
     const typeBonne = choice(['reduite', 'cartesienne', 'x2'])
 
     // Structure : { equation, reduite } pour chaque réponse
-    interface Reponse { eq: string; red: string }
+    interface Reponse {
+      eq: string
+      red: string
+    }
 
     let bonne: Reponse
     let faux1: Reponse
@@ -146,23 +185,28 @@ export default class Auto1AF076 extends ExerciceQcmA {
     // ===== Énoncé =====
     this.enonce = `${deuxColonnes(
       'On a représenté ci-contre une droite $D$.<br><br>' +
-      'Parmi les quatre équations ci-dessous, la seule susceptible d\'être représentée par la droite $D$ est :',
+        "Parmi les quatre équations ci-dessous, la seule susceptible d'être représentée par la droite $D$ est :",
       `${objet}`,
     )}`
 
     // ===== Correction =====
-    const texSigneM = signeM > 0 ? 'positif ($D$ représente une fonction affine croissante)' : 'négatif ($D$ représente une fonction affine décroissante)'
-    const texP = typeP === 'pos'
-      ? 'strictement positive ($D$ coupe l\'axe des ordonnées au-dessus de l\'origine)'
-      : typeP === 'neg'
-        ? 'strictement négative ($D$ coupe l\'axe des ordonnées en dessous de l\'origine)'
-        : 'nulle ($D$ passe par l\'origine)'
+    const texSigneM =
+      signeM > 0
+        ? 'positif ($D$ représente une fonction affine croissante)'
+        : 'négatif ($D$ représente une fonction affine décroissante)'
+    const texP =
+      typeP === 'pos'
+        ? "strictement positive ($D$ coupe l'axe des ordonnées au-dessus de l'origine)"
+        : typeP === 'neg'
+          ? "strictement négative ($D$ coupe l'axe des ordonnées en dessous de l'origine)"
+          : "nulle ($D$ passe par l'origine)"
 
     this.correction = `On observe sur le graphique que le coefficient directeur est ${texSigneM} et que l'ordonnée à l'origine est ${texP}.<br>`
 
     // Écriture de chaque équation sous forme réduite
     const toutes = [bonne, faux1, faux2, faux3]
-    this.correction += 'On écrit les équations qui ne sont pas forme réduite, sous forme réduite :<br>'
+    this.correction +=
+      'On écrit les équations qui ne sont pas forme réduite, sous forme réduite :<br>'
     for (const rep of toutes) {
       if (rep.eq === rep.red) {
         this.correction += `$\\bullet\\:$ $${rep.eq}$ est  sous forme réduite.<br>`
@@ -194,24 +238,47 @@ export default class Auto1AF076 extends ExerciceQcmA {
     const d = droite(ptA, ptB, '', 'blue')
     d.epaisseur = 2
 
-    const lD = latex2d('D', 0.5, 2.5, { color: 'blue', letterSize: 'normalsize' })
+    const lD = latex2d('D', 0.5, 2.5, {
+      color: 'blue',
+      letterSize: 'normalsize',
+    })
 
     const r1 = repere({
-      xMin: -3, xMax: 3, xUnite: 1, yMin: -3, yMax: 3, yUnite: 1,
-      axeXStyle: '->', axeYStyle: '->',
-      grilleX: false, grilleY: false,
-      xThickListe: false, yThickListe: false,
-      xLabelListe: false, yLabelListe: false,
+      xMin: -3,
+      xMax: 3,
+      xUnite: 1,
+      yMin: -3,
+      yMax: 3,
+      yUnite: 1,
+      axeXStyle: '->',
+      axeYStyle: '->',
+      grilleX: false,
+      grilleY: false,
+      xThickListe: false,
+      yThickListe: false,
+      xLabelListe: false,
+      yLabelListe: false,
     })
 
     const objet = mathalea2d(
-      { xmin: -3, xmax: 3.5, ymin: -3, ymax: 3.5, pixelsParCm: 25, scale: 0.6, style: 'margin: auto' },
-      d, r1, o, lD,
+      {
+        xmin: -3,
+        xmax: 3.5,
+        ymin: -3,
+        ymax: 3.5,
+        pixelsParCm: 25,
+        scale: 0.6,
+        style: 'margin: auto',
+      },
+      d,
+      r1,
+      o,
+      lD,
     )
 
     this.enonce = `${deuxColonnes(
       'On a représenté ci-contre une droite $D$.<br><br>' +
-      'Parmi les quatre équations ci-dessous, la seule susceptible d\'être représentée par la droite $D$ est :',
+        "Parmi les quatre équations ci-dessous, la seule susceptible d'être représentée par la droite $D$ est :",
       `${objet}`,
     )}`
 
@@ -227,18 +294,20 @@ export default class Auto1AF076 extends ExerciceQcmA {
     this.correction += `$\\bullet\\:$ $y=2x-1$ est sous forme réduite.<br>`
     this.correction += `<br>La seule équation ayant un coefficient directeur négatif et une ordonnée à l'origine nulle est : $${miseEnEvidence('y=x^2-(x+1)^2+1')}$.`
 
-    this.reponses = [
-      '$y=x^2-(x+1)^2+1$',
-      '$2x-y=0$',
-      '$2x+y+1=0$',
-      '$y=2x-1$',
-    ]
+    this.reponses = ['$y=x^2-(x+1)^2+1$', '$2x-y=0$', '$2x+y+1=0$', '$y=2x-1$']
   }
 
   versionAleatoire: () => void = () => {
-    const signeM = choice([1, -1]) as 1 | -1
-    const typeP = choice(['pos', 'neg', 'nul']) as 'pos' | 'neg' | 'nul'
-    this.appliquerLesValeurs(signeM, typeP)
+    let compteur = 0
+    do {
+      const signeM = choice([1, -1]) as 1 | -1
+      const typeP = choice(['pos', 'neg', 'nul']) as 'pos' | 'neg' | 'nul'
+      this.appliquerLesValeurs(signeM, typeP)
+      compteur++
+    } while (
+      compteur < 100 &&
+      !compteLesReponsesDifferentes(this, 4, true, { egaliteExpression: true })
+    ) // On s'assure d'avoir 4 réponses différentes, sinon on régénère
   }
 
   constructor() {

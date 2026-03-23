@@ -74,8 +74,6 @@ export default class auto1AP3c extends ExerciceQcmA {
     omega.setTailles() // On calcule les tailles des arbres.
     objets = omega.represente(0, 6, 0, 3, true, 1, 8)
 
-    let distracteur2: number
-    let distracteur3: number
     // Génère distracteur2 différent de distracteur1 et de la bonne réponse
 
     this.enonce = "On donne l'arbre de probabilités ci-dessous :<br>"
@@ -184,7 +182,6 @@ export default class auto1AP3c extends ExerciceQcmA {
       objets,
     )
     this.enonce += '<br>$P_C(A)=\\ldots$'
-    const resultat = Reponse.texFractionSimplifiee
 
     this.correction = `On sait que $ P_C(A)=\\dfrac{P(A \\cap C)}{P(C)}$<br>
         D'après la formule des probabilités totales :<br>
@@ -236,11 +233,9 @@ export default class auto1AP3c extends ExerciceQcmA {
       return candidats.splice(i, 1)[0] // retire du pool pour garantir la distinction
     }
     const n1 = takeOne()
-    const n2 = takeOne()
 
     // 4) Construire les deux distracteurs
     const distracteur1 = new FractionEtendue(n1, denom)
-    const distracteur2 = new FractionEtendue(n2, denom)
     this.reponses = [
       `$${Reponse.texFractionSimplifiee} $`,
       `$${distracteur1.texFractionSimplifiee}$ `,
@@ -253,7 +248,4 @@ export default class auto1AP3c extends ExerciceQcmA {
     super()
     this.versionAleatoire()
   }
-}
-function Do(arg0: number) {
-  throw new Error('Function not implemented.')
 }

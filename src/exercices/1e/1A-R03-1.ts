@@ -1,3 +1,4 @@
+import { compteLesReponsesDifferentes } from '../../lib/interactif/qcm'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { prenomM } from '../../lib/outils/Personne'
@@ -62,69 +63,76 @@ export default class ProportionDeProportion extends ExerciceQcmA {
   }
 
   versionAleatoire: () => void = () => {
-    const table = [
-      'lundi',
-      'mardi',
-      'mercredi',
-      'jeudi',
-      'vendredi',
-      'samedi',
-      'dimanche',
-    ]
-    const jour = randint(0, 6)
-    let proportions: [number, number] = [0, 0]
-    let bonnesReponses: string[] = []
-    let prop1: number
-    let prop2: number
-    let reponses: string[]
-    switch (choice([1, 2])) {
-      case 1:
-        proportions = choice([
-          [25, 4 * randint(7, 15)],
-          [20, 5 * randint(5, 15)],
-          [50, 2 * randint(26, 40)],
-        ])
-        prop1 = proportions[0]
-        prop2 = proportions[1]
-        bonnesReponses = [
-          `$${texNombre(prop1 / 100, 2)}\\times ${texNombre(prop2, 2)}\\,\\%$`,
-          `$${texNombre(prop2 / 100, 2)}\\times ${texNombre(prop1, 2)}\\,\\%$`,
-          `$${texNombre((prop2 * prop1) / 100, 2)}\\,\\%$`,
-        ]
-        reponses = [
-          choice(bonnesReponses),
-          `$${prop2}\\,\\%-${prop1}\\,\\%$`,
-          `$${prop2}\\,\\%\\times${texNombre(prop1 / 100, 2)}\\,\\%$`,
-          `$${texNombre(prop1 / 100, 2)}\\times${texNombre(prop2 / 100, 2)}\\,\\%$`,
-        ]
-        break
+    let compteur = 0
+    do {
+      const table = [
+        'lundi',
+        'mardi',
+        'mercredi',
+        'jeudi',
+        'vendredi',
+        'samedi',
+        'dimanche',
+      ]
+      const jour = randint(0, 6)
+      let proportions: [number, number] = [0, 0]
+      let bonnesReponses: string[] = []
+      let prop1: number
+      let prop2: number
+      let reponses: string[]
+      switch (choice([1, 2])) {
+        case 1:
+          proportions = choice([
+            [25, 4 * randint(7, 15)],
+            [20, 5 * randint(5, 15)],
+            [50, 2 * randint(26, 40)],
+          ])
+          prop1 = proportions[0]
+          prop2 = proportions[1]
+          bonnesReponses = [
+            `$${texNombre(prop1 / 100, 2)}\\times ${texNombre(prop2, 2)}\\,\\%$`,
+            `$${texNombre(prop2 / 100, 2)}\\times ${texNombre(prop1, 2)}\\,\\%$`,
+            `$${texNombre((prop2 * prop1) / 100, 2)}\\,\\%$`,
+          ]
+          reponses = [
+            choice(bonnesReponses),
+            `$${prop2}\\,\\%-${prop1}\\,\\%$`,
+            `$${prop2}\\,\\%\\times${texNombre(prop1 / 100, 2)}\\,\\%$`,
+            `$${texNombre(prop1 / 100, 2)}\\times${texNombre(prop2 / 100, 2)}\\,\\%$`,
+          ]
+          break
 
-      case 2:
-      default:
-        proportions = choice([
-          [25, 4 * randint(5, 15)],
-          [20, 5 * randint(5, 15)],
-          [50, 2 * randint(28, 40)],
-        ])
-        prop1 = proportions[0]
-        prop2 = proportions[1]
-        bonnesReponses = [
-          `$${texNombre(prop1 / 100, 2)}\\times ${texNombre(prop2, 2)}\\,\\%$`,
-          `$${texNombre(prop1 / 100, 2)}\\times ${texNombre(prop2 / 100, 2)}$`,
-          `$${texNombre(prop1 / 100, 2)}\\times ${new FractionEtendue(prop2, 100).texFractionSimplifiee}$`,
-          `$${new FractionEtendue(prop1, 100).texFractionSimplifiee}\\times ${texNombre(prop2 / 100, 2)}$`,
-        ]
+        case 2:
+        default:
+          proportions = choice([
+            [25, 4 * randint(5, 15)],
+            [20, 5 * randint(5, 15)],
+            [50, 2 * randint(28, 40)],
+          ])
+          prop1 = proportions[0]
+          prop2 = proportions[1]
+          bonnesReponses = [
+            `$${texNombre(prop1 / 100, 2)}\\times ${texNombre(prop2, 2)}\\,\\%$`,
+            `$${texNombre(prop1 / 100, 2)}\\times ${texNombre(prop2 / 100, 2)}$`,
+            `$${texNombre(prop1 / 100, 2)}\\times ${new FractionEtendue(prop2, 100).texFractionSimplifiee}$`,
+            `$${new FractionEtendue(prop1, 100).texFractionSimplifiee}\\times ${texNombre(prop2 / 100, 2)}$`,
+          ]
 
-        reponses = [
-          choice(bonnesReponses),
-          `$${prop2}\\,\\%-${prop1}\\,\\%$`,
-          `$${new FractionEtendue(prop1, 100).texFractionSimplifiee}\\times ${texNombre(prop2, 2)}$`,
-          `$${prop1}\\times ${texNombre(prop2 / 100, 2)}$`,
-        ]
-        break
-    }
-    const P = prenomM()
-    this.appliquerLesValeurs(table[jour], prop1, prop2, String(P), reponses)
+          reponses = [
+            choice(bonnesReponses),
+            `$${prop2}\\,\\%-${prop1}\\,\\%$`,
+            `$${new FractionEtendue(prop1, 100).texFractionSimplifiee}\\times ${texNombre(prop2, 2)}$`,
+            `$${prop1}\\times ${texNombre(prop2 / 100, 2)}$`,
+          ]
+          break
+      }
+      const P = prenomM()
+      this.appliquerLesValeurs(table[jour], prop1, prop2, String(P), reponses)
+      compteur++
+    } while (
+      compteur < 100 &&
+      !compteLesReponsesDifferentes(this, 4, true, { texteSansCasse: true })
+    ) // On s'assure d'avoir 4 réponses différentes, sinon on régénère
   }
 
   // Ici il n'y a rien à faire, on appelle juste la version aleatoire (pour un qcm aleatoirisé, c'est le fonctionnement par défaut)

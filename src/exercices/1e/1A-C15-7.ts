@@ -1,3 +1,4 @@
+import { compteLesReponsesDifferentes } from '../../lib/interactif/qcm'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { prenomM } from '../../lib/outils/Personne'
@@ -225,94 +226,108 @@ L'équation qui modélise la situation est $${miseEnEvidence(`${nbCroissants}x-$
   }
 
   versionAleatoire: () => void = () => {
-    const prenom = prenomM() as string
-    const typeCas = randint(1, 7)
+    let compteur = 0
+    do {
+      const prenom = prenomM() as string
+      const typeCas = randint(1, 7)
 
-    switch (typeCas) {
-      case 1: {
-        const nbViennoiseries = randint(5, 9)
-        const prixTotal = (randint(8, 15) * nbViennoiseries) / 10
-        this.cas1(prenom, nbViennoiseries, prixTotal)
-        break
-      }
+      switch (typeCas) {
+        case 1: {
+          const nbViennoiseries = randint(5, 9)
+          const prixTotal = (randint(8, 15) * nbViennoiseries) / 10
+          this.cas1(prenom, nbViennoiseries, prixTotal)
+          break
+        }
 
-      case 2: {
-        const choix = choice([true, false])
-        const nbBrioches = randint(4, 8)
-        const nbCroissants = nbBrioches
-        const prixCroissant = randint(11, 14) / 10
-        const prixTotal =
-          (randint(20, 30) * nbBrioches) / 10 + nbCroissants * prixCroissant
-        this.cas2(
-          choix,
-          prenom,
-          nbBrioches,
-          nbCroissants,
-          prixCroissant,
-          prixTotal,
-        )
-        break
-      }
+        case 2: {
+          const choix = choice([true, false])
+          const nbBrioches = randint(4, 8)
+          const nbCroissants = nbBrioches
+          const prixCroissant = randint(11, 14) / 10
+          const prixTotal =
+            (randint(20, 30) * nbBrioches) / 10 + nbCroissants * prixCroissant
+          this.cas2(
+            choix,
+            prenom,
+            nbBrioches,
+            nbCroissants,
+            prixCroissant,
+            prixTotal,
+          )
+          break
+        }
 
-      case 3: {
-        const nbCroissants = randint(5, 9)
-        const prixCroissant = randint(11, 14) / 10
-        const prixTotal = randint(15, 25) / 10 + nbCroissants * prixCroissant
-        this.cas3(nbCroissants, prixCroissant, prixTotal)
-        break
-      }
+        case 3: {
+          const nbCroissants = randint(5, 9)
+          const prixCroissant = randint(11, 14) / 10
+          const prixTotal = randint(15, 25) / 10 + nbCroissants * prixCroissant
+          this.cas3(nbCroissants, prixCroissant, prixTotal)
+          break
+        }
 
-      case 4: {
-        const multiplicateur = randint(2, 3)
-        const prixCroissant = randint(11, 14) / 10
-        const prixBrioche = randint(21, 39) / 10
-        const nbBrioches = randint(2, 5)
-        const prixTotal =
-          nbBrioches * prixBrioche + multiplicateur * nbBrioches * prixCroissant
-        this.cas4(prenom, multiplicateur, prixCroissant, prixBrioche, prixTotal)
-        break
-      }
+        case 4: {
+          const multiplicateur = randint(2, 3)
+          const prixCroissant = randint(11, 14) / 10
+          const prixBrioche = randint(21, 39) / 10
+          const nbBrioches = randint(2, 5)
+          const prixTotal =
+            nbBrioches * prixBrioche +
+            multiplicateur * nbBrioches * prixCroissant
+          this.cas4(
+            prenom,
+            multiplicateur,
+            prixCroissant,
+            prixBrioche,
+            prixTotal,
+          )
+          break
+        }
 
-      case 5: {
-        const nbBrioches = randint(3, 6)
-        const nbCroissants = randint(4, 7, nbBrioches)
-        const supplementBrioche = choice([0.3, 0.4, 0.5, 0.6, 0.7])
-        const prixCroissant = randint(11, 14) / 10
-        const prixBrioche = prixCroissant + supplementBrioche
-        const prixTotal =
-          nbBrioches * prixBrioche + nbCroissants * prixCroissant
-        this.cas5(
-          prenom,
-          nbBrioches,
-          nbCroissants,
-          supplementBrioche,
-          prixTotal,
-        )
-        break
-      }
+        case 5: {
+          const nbBrioches = randint(3, 6)
+          const nbCroissants = randint(4, 7, nbBrioches)
+          const supplementBrioche = choice([0.3, 0.4, 0.5, 0.6, 0.7])
+          const prixCroissant = randint(11, 14) / 10
+          const prixBrioche = prixCroissant + supplementBrioche
+          const prixTotal =
+            nbBrioches * prixBrioche + nbCroissants * prixCroissant
+          this.cas5(
+            prenom,
+            nbBrioches,
+            nbCroissants,
+            supplementBrioche,
+            prixTotal,
+          )
+          break
+        }
 
-      case 6: {
-        const nbTotal = randint(8, 12)
-        const prixCroissant = randint(11, 14) / 10
-        const prixBrioche = randint(21, 29) / 10
-        const nbCroissantsReel = randint(3, nbTotal - 3)
-        const prixTotal =
-          nbCroissantsReel * prixCroissant +
-          (nbTotal - nbCroissantsReel) * prixBrioche
-        this.cas6(prenom, nbTotal, prixCroissant, prixBrioche, prixTotal)
-        break
-      }
+        case 6: {
+          const nbTotal = randint(8, 12)
+          const prixCroissant = randint(11, 14) / 10
+          const prixBrioche = randint(21, 29) / 10
+          const nbCroissantsReel = randint(3, nbTotal - 3)
+          const prixTotal =
+            nbCroissantsReel * prixCroissant +
+            (nbTotal - nbCroissantsReel) * prixBrioche
+          this.cas6(prenom, nbTotal, prixCroissant, prixBrioche, prixTotal)
+          break
+        }
 
-      case 7: {
-        const nbCroissants = randint(5, 8)
-        const reduction = choice([1, 1.5, 2, 2.5])
-        const prixCroissant = randint(11, 14) / 10
-        const prixSansReduction = nbCroissants * prixCroissant
-        const prixTotal = prixSansReduction - reduction
-        this.cas7(prenom, nbCroissants, reduction, prixTotal)
-        break
+        case 7: {
+          const nbCroissants = randint(5, 8)
+          const reduction = choice([1, 1.5, 2, 2.5])
+          const prixCroissant = randint(11, 14) / 10
+          const prixSansReduction = nbCroissants * prixCroissant
+          const prixTotal = prixSansReduction - reduction
+          this.cas7(prenom, nbCroissants, reduction, prixTotal)
+          break
+        }
       }
-    }
+      compteur++
+    } while (
+      compteur < 100 &&
+      !compteLesReponsesDifferentes(this, 4, true, { egaliteExpression: true })
+    ) // On s'assure d'avoir 4 réponses différentes, sinon on régénère
   }
 
   constructor() {

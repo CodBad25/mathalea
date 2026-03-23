@@ -1,6 +1,23 @@
 import Decimal from 'decimal.js'
 import { stringNombre, texNombre } from '../lib/outils/texNombre'
 import type { IGrandeur } from '../lib/types'
+export const USI = [
+  'm',
+  'g',
+  'L',
+  's',
+  'm/s',
+  'km/h',
+  'm^3',
+  '°',
+  '°C',
+  '€',
+  "centime d'euro",
+  "centimes d'euro",
+  'a',
+  'ha',
+  'kwh',
+] // Unités du Système International (pour validation)
 
 /**
  * @class
