@@ -1,7 +1,7 @@
 <script lang="ts">
   import { languages } from '../../../lib/components/languagesUtils'
-  import { ALLOWED_LANGUAGES } from '../../../lib/types/languages'
   import type { Language } from '../../../lib/types/languages'
+  import { ALLOWED_LANGUAGES } from '../../../lib/types/languages'
   import LanguageIcon from './LanguageIcon.svelte'
   export let locale: Language
   let isMenuOpen: boolean = false
@@ -26,7 +26,7 @@
   <ul
     id="languageChoiceMenu"
     class="{isMenuOpen ? '' : 'hidden'}
-    w-full relative md:absolute md:top-5 md:right-0 min-w-[15rem] flex flex-col justify-start items-end shadow-lg"
+    w-full relative md:absolute md:top-5 md:right-0 min-w-60 flex flex-col justify-start items-end shadow-lg"
   >
     {#each ALLOWED_LANGUAGES as loc}
       {@const lang = languages[loc]}

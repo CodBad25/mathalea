@@ -545,5 +545,5 @@ export const homothetiePolygone = function (
     ...p2.listePoints,
     Object.assign({}, options, { epaisseur: 2 }),
   )
-  this.texteMasquer(t)
+  this.texteMasquer(t, options)
 }

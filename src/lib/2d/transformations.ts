@@ -632,7 +632,7 @@ export function symetrieAxiale(
   if ('listePoints' in A) {
     const p2: PointAbstrait[] = []
     for (let i = 0; i < A.listePoints.length; i++) {
-      p2[i] = symetrieAxiale(A.listePoints[i], d) as PointAbstrait
+      p2[i] = symetrieAxiale(A.listePoints[i], d) as unknown as PointAbstrait
       p2[i].nom = A.listePoints[i].nom + "'"
     }
     return polygone(p2, color)

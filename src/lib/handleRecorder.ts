@@ -3,6 +3,7 @@ import { buildMathAleaURL } from './components/urls'
 import { mathaleaGetExercicesFromParams } from './mathalea'
 import { exercicesParams } from './stores/generalStore'
 import { globalOptions } from './stores/globalOptions'
+import { isIExercice } from './types'
 
 export async function sendActivityParams() {
   const exercices = []
@@ -10,6 +11,7 @@ export async function sendActivityParams() {
   const exo = await mathaleaGetExercicesFromParams(exoParams)
   let i = 0
   for (const param of exoParams) {
+    const exercice = exo[i]
     let paramUrl = ''
     for (const key of Object.keys(param)) {
       if (key === 'sup') {
@@ -32,8 +34,8 @@ export async function sendActivityParams() {
     }
     paramUrl = paramUrl.slice(0, -1)
     let titre = exoParams[i].uuid
-    if ('titre' in exo[i]) {
-      titre = exo[i].titre
+    if (isIExercice(exercice)) {
+      titre = exercice.titre
     }
     exercices.push({
       titre,

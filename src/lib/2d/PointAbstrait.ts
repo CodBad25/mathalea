@@ -1,3 +1,4 @@
+import type { IPointAbstrait } from './Interfaces'
 import { ObjetMathalea2D } from './ObjetMathalea2D'
 
 export class PointAbstrait extends ObjetMathalea2D {
@@ -92,3 +93,6 @@ export class Point extends PointAbstrait {}
 export function point(x: number, y: number, nom = '', positionLabel = 'above') {
   return new PointAbstrait(x, y, nom, positionLabel)
 }
+
+export const IToPointAbstrait = (point: IPointAbstrait): PointAbstrait =>
+  pointAbstrait(point.x, point.y, point.nom, point.positionLabel)

@@ -3,7 +3,7 @@ import { colorToLatexOrHTML } from './colorToLatexOrHtml'
 import { fixeBordures } from './fixeBordures'
 import type { IPointAbstrait } from './Interfaces'
 import { ObjetMathalea2D } from './ObjetMathalea2D'
-import type { PointAbstrait } from './PointAbstrait'
+import { IToPointAbstrait, type PointAbstrait } from './PointAbstrait'
 import { polygone } from './polygones'
 import { polyline } from './Polyline'
 import { rotation } from './transformations'
@@ -38,10 +38,11 @@ import { pointSurSegment } from './utilitairesPoint'
 
 const longueur = (A: IPointAbstrait, B: IPointAbstrait) =>
   Math.sqrt((B.x - A.x) ** 2 + (B.y - A.y) ** 2)
+
 export class CodageAngleDroit extends ObjetMathalea2D {
-  sommet: IPointAbstrait
-  depart: IPointAbstrait
-  arrivee: IPointAbstrait
+  sommet: PointAbstrait
+  depart: PointAbstrait
+  arrivee: PointAbstrait
   taille: number
   color: [string, string]
   couleurDeRemplissage: [string, string]
@@ -59,9 +60,9 @@ export class CodageAngleDroit extends ObjetMathalea2D {
     opaciteDeRemplissage = 1,
   ) {
     super()
-    this.sommet = O
-    this.depart = A
-    this.arrivee = B
+    this.sommet = IToPointAbstrait(O)
+    this.depart = IToPointAbstrait(A)
+    this.arrivee = IToPointAbstrait(B)
     this.taille = d
     this.color = colorToLatexOrHTML(color)
     this.couleurDeRemplissage = colorToLatexOrHTML(couleurDeRemplissage)
@@ -72,9 +73,9 @@ export class CodageAngleDroit extends ObjetMathalea2D {
         "Création d'un codage d'angle droit avec un côté de longueur nulle, le codage peut être erroné",
         { A, O, B },
       )
-      this.sommet = O
-      this.depart = O
-      this.arrivee = O
+      this.sommet = IToPointAbstrait(O)
+      this.depart = IToPointAbstrait(O)
+      this.arrivee = IToPointAbstrait(O)
       bordures = { xmin: O.x, xmax: O.x, ymin: O.y, ymax: O.y }
     } else {
       const a = pointSurSegment(

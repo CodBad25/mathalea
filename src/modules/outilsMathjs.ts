@@ -102,8 +102,8 @@ export function assignVariables(expression: string, variables: Variables) {
 
 function transformNode(
   node: Node,
-  parent: Node,
-  oldNode: Node,
+  parent: Node | undefined,
+  oldNode: Node | undefined,
   params = { suppr1: true, suppr0: true, supprPlusMoins: true },
 ) {
   params = Object.assign(
@@ -493,7 +493,7 @@ export function toTex(
   }
 
   // On commence par convertir l'expression en arbre au format mathjs
-  let nodeCopy: MathNode
+  let nodeCopy: any
   if (typeof node === 'string') {
     nodeCopy = math.parse(node)
   } else {
@@ -549,7 +549,7 @@ export function toTex(
 
   const searchBasics = TreeSearch.preOrder(basics)
 
-  let nodeClone
+  let nodeClone: any
   let iter = 0
   const MAX_STEP_COUNT = 20
   do {
@@ -634,12 +634,12 @@ export function toString(
     nodeCopy = math.parse(aleaExpression(nodeCopy.toString(), params.variables))
   }
   printMS.ascii(nodeCopy)
-  let nodeClone
+  let nodeClone: any
   do {
     // À étudier, pour 79 et 85 et 50 cette boucle doit être maintenue
     nodeClone = nodeCopy.cloneDeep() // Vérifier le fonctionnement de .clone() et .cloneDeep() (peut-être y a-t-il un problème avec implicit avec cloneDeep())
     nodeCopy = nodeCopy.transform(function (nodeTree, path, parent) {
-      return transformNode(nodeTree, parent, undefined, params)
+      return transformNode(nodeTree as any, parent as any, undefined, params)
     })
   } while (nodeCopy.toString() !== nodeClone.toString())
 
@@ -2104,8 +2104,8 @@ export function calculExpression2(
       console.log(step.newNode.toString())
     }
     const oldNode =
-      step.oldNode !== null ? toTex(step.oldNode, { suppr1: true }) : ''
-    const newNode = toTex(step.newNode, { suppr1: true })
+      step.oldNode !== null ? toTex(step.oldNode as any, { suppr1: true }) : ''
+    const newNode = toTex(step.newNode as any, { suppr1: true })
     if (debug) {
       console.log(newNode.toString())
     }

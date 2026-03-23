@@ -13,6 +13,39 @@ import {
 import { texNombre } from '../outils/texNombre'
 
 type NombreType = number | Decimal | FractionEtendue
+type ComplexLike = {
+  re: number
+  toPolar: () => { r: number; phi: number }
+}
+
+function isNombreType(value: unknown): value is NombreType {
+  return (
+    typeof value === 'number' ||
+    value instanceof Decimal ||
+    value instanceof FractionEtendue
+  )
+}
+
+function isFractionPair(value: unknown): value is [number, number] {
+  return (
+    Array.isArray(value) &&
+    value.length === 2 &&
+    typeof value[0] === 'number' &&
+    typeof value[1] === 'number'
+  )
+}
+
+function isComplexLike(value: unknown): value is ComplexLike {
+  return (
+    typeof value === 'object' &&
+    value !== null &&
+    're' in value &&
+    typeof value.re === 'number' &&
+    'toPolar' in value &&
+    typeof value.toPolar === 'function'
+  )
+}
+
 /**
  *
  * @param {Polynome} poly degré maximum = 3
@@ -283,12 +316,17 @@ export class Polynome {
           if (el[0] === 0) return 0
           if (useFraction) {
             const den = choice([2, 4, 5])
-            const aFrac = new FractionEtendue(
-              ...(new Decimal(randint(1, den * Number(el[0])))
-                .div(den)
-                .toFraction(100)
-                .map(Number) as [number, number]),
-            )
+            const rawFraction = new Decimal(randint(1, den * Number(el[0])))
+              .div(den)
+              .toFraction(100)
+              .map(Number)
+            if (!isFractionPair(rawFraction)) {
+              throw new Error(
+                'Decimal.toFraction() did not return a [num, den] pair',
+              )
+            }
+            const [num, denom] = rawFraction
+            const aFrac = new FractionEtendue(num, denom)
             return el[1] ? aFrac.multiplieEntier(choice([-1, 1])) : aFrac
           } else if (useDecimal) {
             const dec = new Decimal(randint(1, 10 * Number(el[0]))).div(10)
@@ -347,14 +385,13 @@ export class Polynome {
     this.fonction = function (x: number) {
       let val = 0
       for (let i = 0; i < monomes.length; i++) {
-        if (monomes[i] instanceof FractionEtendue) {
-          const m = monomes[i] as FractionEtendue
+        const m = monomes[i]
+        if (m instanceof FractionEtendue) {
           val = val + m.valeurDecimale * x ** i
-        } else if (monomes[i] instanceof Decimal) {
-          const m = monomes[i] as Decimal
+        } else if (m instanceof Decimal) {
           val = val + m.toNumber() * x ** i
         } else {
-          val = val + Number(monomes[i]) * x ** i
+          val = val + Number(m) * x ** i
         }
       }
       return val
@@ -727,11 +764,13 @@ export class Polynome {
    * @returns {Polynome}
    */
   primitive0() {
-    let coeffPrimitive = this.monomes.map((el, i) => quotient(el, i + 1)) as (
-      | number
-      | FractionEtendue
-      | Decimal
-    )[]
+    let coeffPrimitive = this.monomes.map((el, i) => {
+      const value = quotient(el, i + 1)
+      if (!isNombreType(value)) {
+        throw new Error('Unexpected coefficient type while building primitive')
+      }
+      return value
+    })
     coeffPrimitive = [0, ...coeffPrimitive]
     const useFrac =
       coeffPrimitive.filter((el) => el instanceof FractionEtendue).length > 0
@@ -750,19 +789,23 @@ export class Polynome {
     if (this.monomes.slice(1).filter((el) => el !== 0).length === 0) {
       return null
     }
-    const liste = polynomialRoot(...this.monomes.map((el) => Number(el)))
+    const coeffs = this.monomes.map((el) => Number(el))
+    const liste = polynomialRoot(...coeffs)
+    if (!Array.isArray(liste)) {
+      throw new Error('polynomialRoot() did not return an array')
+    }
     for (const valeur of liste) {
       let arr
       if (typeof valeur === 'number') {
         arr = round(valeur, 3)
-      } else {
+      } else if (isComplexLike(valeur)) {
         // complexe !
         const module = valeur.toPolar().r
         if (module < 1e-5) {
           // module trop petit pour être complexe, c'est 0 !
           arr = 0
         } else {
-          const argument: number = valeur.arg() as number
+          const argument = valeur.toPolar().phi
           if (
             abs(argument) < 0.01 ||
             abs(abs(argument) - Number(acos(-1))) < 0.001
@@ -773,6 +816,8 @@ export class Polynome {
             arr = null // c'est une vraie racine complexe, du coup, on prend null
           }
         }
+      } else {
+        throw new Error('polynomialRoot() returned an unexpected root value')
       }
       if (arr !== null) {
         if (!antecedents.includes(arr)) {

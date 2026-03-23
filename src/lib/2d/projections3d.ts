@@ -1,3 +1,4 @@
+import { arrondi } from '../outils/nombres'
 import { afficheCoteSegment } from './AfficheCoteSegment'
 import { arc } from './Arc'
 import { cercle, Cercle } from './cercle'
@@ -236,7 +237,7 @@ export class Ellipse extends ObjetMathalea2D {
     let compteur = 1
     for (let k = 1, variation; k < 181; k++) {
       variation = ((Math.random() * 2 - 1) * amp) / 10
-      code += `${this.centre.xSVG(coeff) + Math.round((this.rx + variation) * Math.cos((2 * k * Math.PI) / 180) * coeff, 2)} ${this.centre.ySVG(coeff) + Math.round((this.ry + variation) * Math.sin((2 * k * Math.PI) / 180) * coeff, 2)}, `
+      code += `${this.centre.xSVG(coeff) + arrondi((this.rx + variation) * Math.cos((2 * k * Math.PI) / 180) * coeff, 2)} ${this.centre.ySVG(coeff) + arrondi((this.ry + variation) * Math.sin((2 * k * Math.PI) / 180) * coeff, 2)}, `
       compteur++
     }
     if (compteur % 2 === 0)
@@ -579,7 +580,7 @@ export class SemiEllipse extends ObjetMathalea2D {
         this.centre,
         k,
       )
-      code += `${round(P.xSVG(coeff), 2)} ${Math.round(P.ySVG(coeff), 2)}, `
+      code += `${arrondi(P.xSVG(coeff), 2)} ${arrondi(P.ySVG(coeff), 2)}, `
       compteur++
     }
     P = rotation(this.M, this.centre, this.angle)

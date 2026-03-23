@@ -2,6 +2,9 @@ import type { PointAbstrait } from '../lib/2d/PointAbstrait'
 
 export type OptionsIep = {
   id?: string
+  label?: string
+  dx?: number
+  dy?: number
   tempo?: number
   vitesse?: number
   couleur?: string
