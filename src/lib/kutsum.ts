@@ -7,14 +7,14 @@ const KUTSUM_IMPORT_URL = 'https://app.kutsum.org/import'
 type KutsumSingleChoiceQuestion = {
   questionType: 'singleChoice'
   text: string
-  choices: string[]
+  answerOptions: string[]
   correctAnswers: boolean[]
 }
 
 type KutsumMultipleChoiceQuestion = {
   questionType: 'multipleChoice'
   text: string
-  choices: string[]
+  answerOptions: string[]
   correctAnswers: boolean[]
 }
 
@@ -23,6 +23,7 @@ type KutsumNumericQuestion = {
   text: string
   correctAnswer: number
   tolerance: number
+  unit: string | null
 }
 
 type KutsumMathQuestion = {
@@ -77,7 +78,7 @@ function buildKutsumQuestionsFromAutoCorrection(exercise: IExercice): KutsumQues
       questions.push({
         questionType: isRadio ? 'singleChoice' : 'multipleChoice',
         text: ac.enonce ?? '',
-        choices: choices.map((c) => c.text),
+        answerOptions: choices.map((c) => c.text),
         correctAnswers: choices.map((c) => c.isCorrect),
       })
     } else if (formatInteractif === 'mathlive' || formatInteractif === 'calcul') {
@@ -102,6 +103,7 @@ function buildKutsumQuestionsFromAutoCorrection(exercise: IExercice): KutsumQues
             ac.reponse?.param?.approx != null && typeof ac.reponse.param.approx === 'number'
               ? ac.reponse.param.approx
               : 0,
+          unit: null,
         })
       } else {
         questions.push({
