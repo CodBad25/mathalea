@@ -471,7 +471,7 @@ export default class SujetCAN2022Premiere extends Exercice {
             const pav = pave(L, l, h)
             texte =
               ' Quel est le volume en $\\text{cm}^3$ de ce pavé droit ?<br>'
-            texte += ` ${mathalea2d({ xmin: -2, ymin: -2, xmax: 10, ymax: l + 2, scale: 0.8 }, pav)}`
+            texte += ` ${mathalea2d({ xmin: -2, ymin: -2, xmax: 10, ymax: l + 2, scale: 0.5 }, pav)}`
 
             const reponse = L * l * h
             texteCorr = `Le volume de ce pavé droit est : $${L}\\times ${l}\\times ${h}=${reponse}\\text{ cm}^3$.`
@@ -655,7 +655,7 @@ export default class SujetCAN2022Premiere extends Exercice {
                   ymin: -1,
                   ymax: 6,
                   pixelsParCm: 25,
-                  scale: 0.8,
+                  scale: 0.5,
                 },
                 r,
                 o,
@@ -680,7 +680,7 @@ export default class SujetCAN2022Premiere extends Exercice {
                   ymin: -1,
                   ymax: 6,
                   pixelsParCm: 25,
-                  scale: 0.8,
+                  scale: 0.5,
                 },
                 r,
                 o,
@@ -705,7 +705,7 @@ export default class SujetCAN2022Premiere extends Exercice {
                   ymin: -1,
                   ymax: 6,
                   pixelsParCm: 25,
-                  scale: 0.8,
+                  scale: 0.5,
                 },
                 r,
                 o,
@@ -922,7 +922,7 @@ export default class SujetCAN2022Premiere extends Exercice {
             const r = repere({
               xMin: -2,
               xMax: 3,
-              xUnite: 1.5,
+              xUnite: 1,
               yMin: -5,
               yMax: 5,
               thickHauteur: 0.2,
@@ -940,7 +940,7 @@ export default class SujetCAN2022Premiere extends Exercice {
               grilleSecondaireYMin: -5,
               grilleSecondaireYMax: 5,
               grilleSecondaireXMin: -2,
-              grilleSecondaireXMax: 5,
+              grilleSecondaireXMax: 3,
             })
             const F = (x: number) => a * x ** 3 + b * x ** 2 + c * x + d
             const o = texteParPosition('O', -0.3, -0.3, 0, 'black', 1)
@@ -963,7 +963,7 @@ export default class SujetCAN2022Premiere extends Exercice {
                   ymin: -5.1,
                   ymax: 5.1,
                   pixelsParCm: 30,
-                  scale: 0.7,
+                  scale: 0.5,
                 },
                 r,
                 o,
@@ -990,7 +990,7 @@ export default class SujetCAN2022Premiere extends Exercice {
                   ymin: -5.1,
                   ymax: 5.1,
                   pixelsParCm: 30,
-                  scale: 0.8,
+                  scale: 0.5,
                 },
                 r,
                 o,
@@ -1014,7 +1014,7 @@ export default class SujetCAN2022Premiere extends Exercice {
               const r = repere({
                 xMin: -2,
                 xMax: 3,
-                xUnite: 1.5,
+                xUnite: 1,
                 yMin: -5,
                 yMax: 5,
                 thickHauteur: 0.2,
@@ -1032,7 +1032,7 @@ export default class SujetCAN2022Premiere extends Exercice {
                 grilleSecondaireYMin: -5,
                 grilleSecondaireYMax: 5,
                 grilleSecondaireXMin: -2,
-                grilleSecondaireXMax: 5,
+                grilleSecondaireXMax: 3,
               })
               const F = (x: number) => x ** 3 - x ** 2 - 3 * x + 1
               const o = texteParPosition('O', -0.3, -0.3, 0, 'black', 1)
@@ -1046,7 +1046,7 @@ export default class SujetCAN2022Premiere extends Exercice {
                     ymin: -5.1,
                     ymax: 5.1,
                     pixelsParCm: 30,
-                    scale: 0.7,
+                    scale: 0.5,
                   },
                   r,
                   o,
@@ -1064,7 +1064,7 @@ export default class SujetCAN2022Premiere extends Exercice {
                     ymin: -5.1,
                     ymax: 5.1,
                     pixelsParCm: 30,
-                    scale: 0.7,
+                    scale: 0.5,
                   },
                   r,
                   o,
@@ -1087,7 +1087,7 @@ export default class SujetCAN2022Premiere extends Exercice {
               const r = repere({
                 xMin: -2,
                 xMax: 4,
-                xUnite: 1.5,
+                xUnite: 1,
                 yMin: -6,
                 yMax: 3,
                 thickHauteur: 0.2,
@@ -1104,8 +1104,8 @@ export default class SujetCAN2022Premiere extends Exercice {
                 grilleSecondaireXDistance: 1,
                 grilleSecondaireYMin: -6,
                 grilleSecondaireYMax: 5,
-                grilleSecondaireXMin: -3,
-                grilleSecondaireXMax: 5,
+                grilleSecondaireXMin: -2,
+                grilleSecondaireXMax: 3,
               })
               const F = (x: number) => -1 * x ** 3 + 3 * x ** 2 - 4
               const o = texteParPosition('O', -0.3, -0.3, 0, 'black', 1)
@@ -1119,7 +1119,7 @@ export default class SujetCAN2022Premiere extends Exercice {
                     ymin: -6.1,
                     ymax: 3.1,
                     pixelsParCm: 30,
-                    scale: 0.7,
+                    scale: 0.5,
                   },
                   r,
                   o,
@@ -1137,7 +1137,7 @@ export default class SujetCAN2022Premiere extends Exercice {
                     ymin: -6.1,
                     ymax: 3.1,
                     pixelsParCm: 30,
-                    scale: 0.7,
+                    scale: 0.5,
                   },
                   r,
                   o,
@@ -1155,7 +1155,7 @@ export default class SujetCAN2022Premiere extends Exercice {
                     ymin: -6.1,
                     ymax: 3.1,
                     pixelsParCm: 30,
-                    scale: 0.7,
+                    scale: 0.5,
                   },
                   r,
                   o,
@@ -1189,7 +1189,7 @@ export default class SujetCAN2022Premiere extends Exercice {
             const r = repere({
               xMin: -2,
               xMax: 3,
-              xUnite: 1.5,
+              xUnite: 1,
               yMin: -5,
               yMax: 5,
               thickHauteur: 0.2,
@@ -1207,7 +1207,7 @@ export default class SujetCAN2022Premiere extends Exercice {
               grilleSecondaireYMin: -5,
               grilleSecondaireYMax: 5,
               grilleSecondaireXMin: -2,
-              grilleSecondaireXMax: 5,
+              grilleSecondaireXMax: 3,
             })
             const f = (x: number) => 3 * a * x ** 2 + 2 * b * x + c
             const F = (x: number) => a * x ** 3 + b * x ** 2 + c * x + d
@@ -1222,7 +1222,7 @@ export default class SujetCAN2022Premiere extends Exercice {
                 ymin: -5.1,
                 ymax: 5.1,
                 pixelsParCm: 30,
-                scale: 0.8,
+                scale: 0.5,
               },
               r,
               o,
