@@ -196,7 +196,35 @@ function getEffectiveSvgFrame(figure: SVGSVGElement) {
   const [viewBoxX, viewBoxY, viewBoxWidth, viewBoxHeight] = initialViewBox
   const bounds = JSON.parse(initialBounds) as {
     x: number
+    y: number
     width: number
+    height: number
+  }
+  const maxHorizontalOverflow = Math.max(24, viewBoxWidth * 0.1)
+  const maxVerticalOverflow = Math.max(24, viewBoxHeight * 0.1)
+  const leftOverflow = viewBoxX - bounds.x
+  const rightOverflow = bounds.x + bounds.width - (viewBoxX + viewBoxWidth)
+  const topOverflow = viewBoxY - bounds.y
+  const bottomOverflow =
+    bounds.y + bounds.height - (viewBoxY + viewBoxHeight)
+  const hasReasonableBounds =
+    Number.isFinite(bounds.x) &&
+    Number.isFinite(bounds.y) &&
+    Number.isFinite(bounds.width) &&
+    Number.isFinite(bounds.height) &&
+    bounds.width > 0 &&
+    bounds.height > 0 &&
+    leftOverflow <= maxHorizontalOverflow &&
+    rightOverflow <= maxHorizontalOverflow &&
+    topOverflow <= maxVerticalOverflow &&
+    bottomOverflow <= maxVerticalOverflow
+  if (!hasReasonableBounds) {
+    return {
+      width,
+      height,
+      xOffset: 0,
+      viewBox: figure.dataset.viewBoxInitiale ?? null,
+    }
   }
   const minimumSidePadding = 14
   const minimumRightPadding = 24
