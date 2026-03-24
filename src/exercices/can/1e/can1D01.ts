@@ -61,13 +61,9 @@ export default class CalculCoeffDir extends ExerciceSimple {
 
 `
         if (a === 1 || a === 4 || a === 9 || a === 16 || a === 25) {
-          f = new FractionEtendue(1, Math.sqrt(a))
+          f = new FractionEtendue(1, 2 * Math.sqrt(a))
           this.correction += `Comme $f'(${a})=\\dfrac{1}{2\\sqrt{${a}}}=\\dfrac{1}{${2 * Math.sqrt(a)}}$, le coefficient directeur de la tangente au point d'abscisse $${a}$ est : $\\dfrac{1}{${2 * Math.sqrt(a)}}$.`
-          this.reponse = [
-            `\\dfrac{1}{2\\sqrt{${a}}}`,
-            f.texFraction,
-            1 / (2 * Math.sqrt(a)),
-          ]
+          this.reponse = [`\\dfrac{1}{2\\sqrt{${a}}}`, f.texFraction]
         } else {
           this.correction += `Comme $f'(${a})=\\dfrac{1}{2\\sqrt{${a}}}$, le coefficient directeur de la tangente au point d'abscisse $${a}$ est : $\\dfrac{1}{2\\sqrt{${a}}}$.`
           this.reponse = [
@@ -92,16 +88,16 @@ Comme $f'(${a})=-\\dfrac{1}{${ecritureParentheseSiNegatif(a)}^2}=-\\dfrac{1}{${a
           this.reponse = [
             `\\dfrac{-1}{${a * a}}`,
             `-\\dfrac{1}{${a * a}}`,
-            f,
-            -1,
+            f.texFraction,
+            String(-1),
           ]
         } else {
           this.correction += '.'
           this.reponse = [
             `\\dfrac{-1}{${a * a}}`,
             `-\\dfrac{1}{${a * a}}`,
-            f,
-            -1,
+            f.texFraction,
+            String(-1),
           ]
         }
 
@@ -117,7 +113,7 @@ Comme $f'(${a})=-\\dfrac{1}{${ecritureParentheseSiNegatif(a)}^2}=-\\dfrac{1}{${a
         La fonction $f$ définie par $f(x)=x^3$ a pour fonction dérivée la fonction $f'$ définie par $f'(x)=3x^2$.<br>
         Comme $f'(${a})=3\\times ${ecritureParentheseSiNegatif(a)}^2=${3 * a * a}$, le coefficient directeur de la tangente au point d'abscisse $${a}$ est : $${3 * a * a}$. `
 
-        this.reponse = 3 * a * a
+        this.reponse = String(3 * a * a)
 
         break
     }

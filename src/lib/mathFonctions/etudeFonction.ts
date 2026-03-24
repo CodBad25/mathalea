@@ -574,7 +574,7 @@ export type TableauSignesFacteursOptions = {
  * @returns {string} [options.nomFonction] // ce  qui est écrit dans l'entête de la deuxième ligne 'f(x)' par défaut
  */
 export function tableauSignesFonction(
-  fonction: (x: FractionEtendue | number) => number,
+  fonction: (x: number) => number,
   xMin: number | FractionEtendue,
   xMax: number | FractionEtendue,
   {
@@ -674,7 +674,7 @@ export function tableauSignesFonction(
     }
   }
   const tabLine = ['Line', 30]
-  if (egal(fonction(xMin), 0)) {
+  if (egal(fonction(Number(xMin)), 0)) {
     tabLine.push('z', 10)
   } else {
     tabLine.push('', 10)

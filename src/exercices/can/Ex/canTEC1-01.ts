@@ -40,29 +40,37 @@ export default class SommeDeComplexes extends ExerciceSimple {
         propositions: [
           {
             type: 'AMCNum',
-            propositions: {
-              texte: this.correction,
-            },
-            reponse: {
-              valeur: add(z1, z2).re,
-              digits: 2,
-              deciams: 0,
-              signe: true,
-              approx: 0,
-            },
+            propositions: [
+              {
+                texte: this.correction,
+                reponse: {
+                  valeur: add(z1, z2).re,
+                  param: {
+                    digits: 2,
+                    decimals: 0,
+                    signe: true,
+                    approx: 0,
+                  },
+                },
+              },
+            ],
           },
           {
             type: 'AMCNum',
-            propositions: {
-              texte: '',
-            },
-            reponse: {
-              valeur: add(z1, z2).im,
-              digits: 2,
-              deciams: 0,
-              signe: true,
-              approx: 0,
-            },
+            propositions: [
+              {
+                texte: '',
+                reponse: {
+                  valeur: add(z1, z2).im,
+                  param: {
+                    digits: 2,
+                    decimals: 0,
+                    signe: true,
+                    approx: 0,
+                  },
+                },
+              },
+            ],
           },
         ],
       }
