@@ -1,7 +1,5 @@
 import { codageSegment } from '../../lib/2d/CodageSegment'
 import { colorToLatexOrHTML } from '../../lib/2d/colorToLatexOrHtml'
-import { PointAbstrait } from '../../lib/2d/PointAbstrait'
-import type { Polygone } from '../../lib/2d/polygones'
 import { Segment, segment } from '../../lib/2d/segmentsVecteurs'
 import { texteParPosition } from '../../lib/2d/textes'
 import { tracePoint } from '../../lib/2d/TracePoint'
@@ -14,6 +12,7 @@ import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
 
+import type { IPointAbstrait, IPolygone } from '../../lib/2d/Interfaces'
 import { representant } from '../../lib/2d/representantVecteur'
 import { vecteur, type Vecteur } from '../../lib/2d/Vecteur'
 import {
@@ -78,7 +77,7 @@ export default class PavageEtTranslation2d extends Exercice {
       }
       return tableau
     }
-    const compare2polys = function (poly1: Polygone, poly2: Polygone) {
+    const compare2polys = function (poly1: IPolygone, poly2: IPolygone) {
       if (comparenbsommets(poly1, poly2)) {
         if (comparesommets(poly1, poly2)) {
           return true
@@ -89,21 +88,21 @@ export default class PavageEtTranslation2d extends Exercice {
         return false
       }
     }
-    const comparenbsommets = function (poly1: Polygone, poly2: Polygone) {
+    const comparenbsommets = function (poly1: IPolygone, poly2: IPolygone) {
       if (poly1.listePoints.length === poly2.listePoints.length) {
         return true
       } else return false
     }
 
     const compare2sommets = function (
-      sommet1: PointAbstrait,
-      sommet2: PointAbstrait,
+      sommet1: IPointAbstrait,
+      sommet2: IPointAbstrait,
     ) {
       if (egal(sommet1.x, sommet2.x, 0.1) && egal(sommet1.y, sommet2.y, 0.1)) {
         return true
       } else return false
     }
-    const comparesommets = function (poly1: Polygone, poly2: Polygone) {
+    const comparesommets = function (poly1: IPolygone, poly2: IPolygone) {
       let trouve = false
       let trouves = 0
       if (comparenbsommets(poly1, poly2)) {

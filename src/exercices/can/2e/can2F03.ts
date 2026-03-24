@@ -1,22 +1,22 @@
+import { propositionsQcm } from '../../../lib/interactif/qcm'
 import { choice } from '../../../lib/outils/arrayOutils'
-import {
-  texteEnCouleur,
-  texteEnCouleurEtGras,
-  miseEnEvidence,
-} from '../../../lib/outils/embellissements'
 import {
   ecritureParentheseSiNegatif,
   reduireAxPlusB,
   rienSi1,
 } from '../../../lib/outils/ecritures'
+import {
+  miseEnEvidence,
+  texteEnCouleur,
+  texteEnCouleurEtGras,
+} from '../../../lib/outils/embellissements'
 import { sp } from '../../../lib/outils/outilString'
 import { fraction } from '../../../modules/fractions'
-import Exercice from '../../Exercice'
 import {
-  randint,
   listeQuestionsToContenuSansNumero,
+  randint,
 } from '../../../modules/outils'
-import { propositionsQcm } from '../../../lib/interactif/qcm'
+import Exercice from '../../Exercice'
 export const titre = 'Déterminer le signe d’une fonction affine (V/F)'
 export const interactifReady = true
 export const interactifType = 'qcm'
@@ -34,6 +34,7 @@ export const refs = {
   'fr-ch': ['1mQCM-4'],
 }
 export default class SigneFonctionAffine extends Exercice {
+  date: number
   constructor() {
     super()
 
@@ -95,6 +96,7 @@ export default class SigneFonctionAffine extends Exercice {
 
           break
         case 'b':
+        default:
           a = randint(-5, 5, 0)
           n = randint(2, 7) * choice([-1, 1])
           b = n * a

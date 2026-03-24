@@ -1,4 +1,3 @@
-import Decimal from 'decimal.js'
 import { choice } from '../../../lib/outils/arrayOutils'
 import {
   ecritureAlgebrique,
@@ -34,6 +33,7 @@ export default class CalculFonctionDeriveeAffine extends ExerciceSimple {
 
     this.typeExercice = 'simple'
     this.nbQuestions = 1
+    this.optionsDeComparaison = { fractionEgale: true }
   }
 
   nouvelleVersion() {
@@ -44,13 +44,13 @@ export default class CalculFonctionDeriveeAffine extends ExerciceSimple {
       case 1: // mx+p
         m = choice([
           randint(1, 10) * choice([-1, 1]),
-          new Decimal(randint(-19, 19, [0, -10, 10])).div(10),
+          randint(-19, 19, [0, -10, 10]) / 10,
         ])
         p = choice([
           randint(1, 10) * choice([-1, 1]),
-          new Decimal(randint(-19, 19, [0, -10, 10])).div(10),
+          randint(-19, 19, [0, -10, 10]) / 10,
         ])
-        f = new FractionEtendue(m * 10, 10)
+        f = new FractionEtendue(Math.round(m * 10), 10)
         this.question = `Soit $f$ la fonction définie sur $\\mathbb{R}$ par : <br>
        $f(x)=${reduireAxPlusB(m, p)}$.<br>
         Déterminer $f'(x)$.`
@@ -60,7 +60,7 @@ export default class CalculFonctionDeriveeAffine extends ExerciceSimple {
         this.correction = `On reconnaît une fonction affine de la forme $f(x)=mx+p$ avec $m=${texNombre(m, 1)}$ et $p=${texNombre(p, 1)}$.<br>
         La fonction dérivée est donnée par $f'(x)=m$, soit ici $f'(x)=${texNombre(m, 1)}$. `
 
-        this.reponse = [m, f.texFraction]
+        this.reponse = f.texFraction
         this.canEnonce = `Soit $f$ la fonction définie sur $\\mathbb{R}$ par : <br>
         $f(x)=${reduireAxPlusB(m, p)}$.`
         this.canReponseACompleter = '$f^\\prime(x)=\\ldots$'
@@ -68,13 +68,13 @@ export default class CalculFonctionDeriveeAffine extends ExerciceSimple {
       case 2: // p+mx
         m = choice([
           randint(2, 10) * choice([-1, 1]),
-          new Decimal(randint(-19, 19, [0, -10, 10])).div(10),
+          randint(-19, 19, [0, -10, 10]) / 10,
         ])
         p = choice([
           randint(1, 10) * choice([-1, 1]),
-          new Decimal(randint(-19, 19, [0, -10, 10])).div(10),
+          randint(-19, 19, [0, -10, 10]) / 10,
         ])
-        f = new FractionEtendue(m * 10, 10)
+        f = new FractionEtendue(Math.round(m * 10), 10)
         this.question = `Soit $f$ la fonction définie sur $\\mathbb{R}$ par : <br>
       $f(x)=${texNombre(p, 1)}${ecritureAlgebrique(m)}x$.<br>
         Déterminer $f'(x)$.`
@@ -83,7 +83,7 @@ export default class CalculFonctionDeriveeAffine extends ExerciceSimple {
         }
         this.correction = `On reconnaît une fonction affine de la forme $f(x)=mx+p$ avec $m=${texNombre(m, 1)}$ et $p=${texNombre(p, 1)}$.<br>
         La fonction dérivée est donnée par $f'(x)=m$, soit ici $f'(x)=${texNombre(m, 1)}$. `
-        this.reponse = [m, f.texFraction]
+        this.reponse = f.texFraction
         this.canEnonce = `Soit $f$ la fonction définie sur $\\mathbb{R}$ par : <br>
         $f(x)=${texNombre(p, 1)}${ecritureAlgebrique(m)}x$.`
         this.canReponseACompleter = '$f^\\prime(x)=\\ldots$'
@@ -91,7 +91,7 @@ export default class CalculFonctionDeriveeAffine extends ExerciceSimple {
       case 3: // x+p
         p = choice([
           randint(1, 10) * choice([-1, 1]),
-          new Decimal(randint(-19, 19, [0, -10, 10])).div(10),
+          randint(-19, 19, [0, -10, 10]) / 10,
         ])
         m = choice([-1, 1])
         if (choice([true, false])) {

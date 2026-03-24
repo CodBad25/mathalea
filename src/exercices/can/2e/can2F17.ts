@@ -15,6 +15,7 @@ export const refs = {
   'fr-ch': [],
 }
 export default class BetaModeleSplineCAN extends BetaModeleSpline {
+  can: boolean
   constructor() {
     super()
     this.nbQuestions = 1

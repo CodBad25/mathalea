@@ -1,7 +1,7 @@
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
-import Exercice from '../Exercice'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
+import Exercice from '../Exercice'
 import ChoisirUneExpressionLitterale from './_Choisir_expression_litterale'
 
 export const titre =
@@ -45,7 +45,6 @@ export default class DeterminerDerniereOperationExpNum extends Exercice {
     for (
       let i = 0, texte, texteCorr, val1, val2, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       nbOperations = listeTypeDeQuestions[i]
       val1 = randint(2, 5)
@@ -60,9 +59,10 @@ export default class DeterminerDerniereOperationExpNum extends Exercice {
       expn = resultats[1]
       expc = resultats[2]
       lastOp = resultats[4]
-      const str = expc.split('=')
+      const str = String(expc).split('=')
 
-      if (expn.indexOf('ou') > 0) expn = expn.substring(0, expn.indexOf('ou')) // on supprime la deuxième expression fractionnaire
+      if (String(expn).indexOf('ou') > 0)
+        expn = String(expn).substring(0, String(expn).indexOf('ou')) // on supprime la deuxième expression fractionnaire
       this.consigne = 'Déterminer la dernière opération à effectuer.'
       texte = `$${str[1]}$`
 
@@ -71,7 +71,7 @@ export default class DeterminerDerniereOperationExpNum extends Exercice {
         texteCorr += `${str[l]}=`
       }
       texteCorr += `${str[str.length - 1]}`
-      texteCorr += `<br>La dernière opération dans $${str[1]}$ est donc une ${texteEnCouleurEtGras(lastOp)}.`
+      texteCorr += `<br>La dernière opération dans $${str[1]}$ est donc une ${texteEnCouleurEtGras(String(lastOp))}.`
 
       if (this.listeQuestions.indexOf(texte) === -1) {
         // Si la question n'a jamais été posée, on en créé une autre

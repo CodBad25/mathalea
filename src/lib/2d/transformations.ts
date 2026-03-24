@@ -309,7 +309,7 @@ export function translation2Points(
 
 export function rotation(
   A: IDroite,
-  O: PointAbstrait,
+  O: PointAbstrait | IPointAbstrait,
   angle: number,
   nom?: string,
   positionLabel?: string,
@@ -317,15 +317,15 @@ export function rotation(
 ): Droite
 export function rotation(
   A: ISegment,
-  O: PointAbstrait,
+  O: PointAbstrait | IPointAbstrait,
   angle: number,
   nom?: string,
   positionLabel?: string,
   color?: string,
 ): Segment
 export function rotation(
-  A: IPolygone,
-  O: PointAbstrait,
+  A: Polygone,
+  O: PointAbstrait | IPointAbstrait,
   angle: number,
   nom?: string,
   positionLabel?: string,
@@ -333,7 +333,7 @@ export function rotation(
 ): Polygone
 export function rotation(
   A: IVecteur,
-  O: PointAbstrait,
+  O: PointAbstrait | IPointAbstrait,
   angle: number,
   nom?: string,
   positionLabel?: string,
@@ -342,7 +342,7 @@ export function rotation(
 
 export function rotation(
   A: PointAbstrait,
-  O: PointAbstrait,
+  O: PointAbstrait | IPointAbstrait,
   angle: number,
   nom?: string,
   positionLabel?: string,
@@ -352,12 +352,12 @@ export function rotation(
 // Implémentation (avec classes concrètes pour instanceof)
 export function rotation(
   A: IPointAbstrait | IPoint | IDroite | ISegment | IPolygone | IVecteur,
-  O: PointAbstrait,
+  O: PointAbstrait | IPointAbstrait,
   angle: number,
   nom = '',
   positionLabel = 'above',
   color = 'black',
-): PointAbstrait | Droite | Segment | Polygone | Vecteur {
+): PointAbstrait | Droite | Segment | IPolygone | Vecteur {
   if (A instanceof PointAbstrait || A instanceof PointAbstrait) {
     const x =
       O.x +
@@ -374,9 +374,9 @@ export function rotation(
     }
   }
   if (A instanceof Polygone) {
-    const p2 = []
+    const p2: IPointAbstrait[] = []
     for (let i = 0; i < A.listePoints.length; i++) {
-      p2[i] = rotation(A.listePoints[i], O, angle) as PointAbstrait
+      p2[i] = rotation(A.listePoints[i], O, angle)
       p2[i].nom = A.listePoints[i].nom + "'"
     }
     return polygone(p2, color)

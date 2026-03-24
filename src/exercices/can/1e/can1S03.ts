@@ -91,7 +91,7 @@ export default class CalculTermeSuiteRec2 extends ExerciceSimple {
 
         for (let indice = 0; indice < k; indice++) {
           this.correction += `<br> $u_{${indice + 1}} = ${a}\\times ${miseEnEvidence('u_{' + indice + '}', arcenciel(indice, true))}  =
-               ${a}\\times ${miseEnEvidence(ecritureParentheseSiNegatif(u, arcenciel(indice, true)))}  = ${miseEnEvidence(u * a, arcenciel(indice + 1, true))}$`
+               ${a}\\times ${miseEnEvidence(ecritureParentheseSiNegatif(u), arcenciel(indice, true))}  = ${(miseEnEvidence(u * a), arcenciel(indice + 1, true))}$`
           u = u * a
         }
 
@@ -133,7 +133,7 @@ export default class CalculTermeSuiteRec2 extends ExerciceSimple {
         this.correction = `On calcule successivement les termes jusqu'à obtenir $u_{${k}}$ :`
         for (let indice = 0; indice < k; indice++) {
           this.correction += `<br> $u_{${indice + 1}} = ${texFractionFromString(n1, d1)}\\times ${miseEnEvidence('u_{' + indice + '}', arcenciel(indice, true))}  =
-          ${texFractionFromString(n1, d1)}\\times ${miseEnEvidence(ecritureParentheseSiNegatif(u, arcenciel(indice, true)))}  = ${miseEnEvidence((u * n1) / d1, arcenciel(indice + 1, true))}$`
+          ${texFractionFromString(n1, d1)}\\times ${miseEnEvidence(ecritureParentheseSiNegatif(u), arcenciel(indice, true))}  = ${miseEnEvidence((u * n1) / d1, arcenciel(indice + 1, true))}$`
           u = n1 * a * d1
         }
         this.reponse = n1 * n1 * a
@@ -159,7 +159,7 @@ export default class CalculTermeSuiteRec2 extends ExerciceSimple {
 
         for (let indice = 0; indice < k; indice++) {
           this.correction += `<br>$u_{${indice + 1}} = ${a}\\times ${miseEnEvidence('u_{' + indice + '}', arcenciel(indice, true))} ${ecritureAlgebrique(b)}=
-            ${a} \\times ${miseEnEvidence(ecritureParentheseSiNegatif(u, arcenciel(indice, true)))} ${ecritureAlgebrique(b)} =
+            ${a} \\times ${miseEnEvidence(ecritureParentheseSiNegatif(u), arcenciel(indice, true))} ${ecritureAlgebrique(b)} =
         ${miseEnEvidence(a * u + b, arcenciel(indice + 1, true))}$`
           u = u * a + b
         }
@@ -189,7 +189,7 @@ export default class CalculTermeSuiteRec2 extends ExerciceSimple {
 
         for (let indice = 0; indice < k; indice++) {
           this.correction += `<br> $u_{${indice + 1}} = ${a} ${signe(b)} ${miseEnEvidence('u_{' + indice + '}', arcenciel(indice, true))}^2=`
-          this.correction += `${a} ${signe(b)} ${miseEnEvidence(ecritureParentheseSiNegatif(u, arcenciel(indice, true)))}^2 =
+          this.correction += `${a} ${signe(b)} ${miseEnEvidence(ecritureParentheseSiNegatif(u), arcenciel(indice, true))}^2 =
               ${miseEnEvidence(texNombre(a + b * u * u), arcenciel(indice + 1, true))}$`
           u = a + b * u * u
         }

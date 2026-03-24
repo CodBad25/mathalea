@@ -77,7 +77,6 @@ export default class metropoleSept2024Ex4Q1 extends ExerciceQcm {
       yMax: b + step5,
     }).buildStandard().objets
     const maCourbe = f.courbe({
-      repere: rep,
       color: 'red',
       epaisseur: 2,
       ajouteNoeuds: true,

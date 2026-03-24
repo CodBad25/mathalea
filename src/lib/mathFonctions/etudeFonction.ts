@@ -544,7 +544,7 @@ export type ZeroDefinition =
 
 export type TableauSignesFacteur = {
   nom: string
-  fonction: (x: FractionEtendue | number) => number
+  fonction: (x: number) => number
   zero?: ZeroDefinition
   zeros?: ZeroDefinition[]
   interdit?: boolean
@@ -940,7 +940,7 @@ export function tableauSignesFacteurs(
   const signesFacteurs: string[][] = []
 
   const valeurSurIntervalle = (
-    f: (x: FractionEtendue | number) => number,
+    f: (x: number) => number,
     gauche: number,
     droite: number,
   ) => {
@@ -1059,8 +1059,8 @@ export function tableauSignesFacteurs(
  * @returns {string}
  */
 export function tableauVariationsFonction(
-  fonction: (x: FractionEtendue | number) => number,
-  derivee: (x: FractionEtendue | number) => number,
+  fonction: ((x: FractionEtendue | number) => number) | ((x: number) => number),
+  derivee: ((x: FractionEtendue | number) => number) | ((x: number) => number),
   xMin: number | FractionEtendue,
   xMax: number | FractionEtendue,
   {
@@ -1119,7 +1119,7 @@ export function tableauVariationsFonction(
     }
   }
   const tabLineDerivee = ['Line', 30]
-  if (egal(derivee(xMin), 0)) {
+  if (egal(derivee(Number(xMin)), 0)) {
     tabLineDerivee.push('z', 10)
   } else {
     tabLineDerivee.push('', 10)
@@ -1128,7 +1128,7 @@ export function tableauVariationsFonction(
     tabLineDerivee.push(signe.signe, 10)
     tabLineDerivee.push('z', 10)
   }
-  if (!egal(derivee(xMax), 0)) {
+  if (!egal(derivee(Number(xMax)), 0)) {
     tabLineDerivee.splice(-2, 2)
   }
 
@@ -1146,12 +1146,12 @@ export function tableauVariationsFonction(
   let variationD
   if (variationG.variation === 'croissant') {
     tabLineVariations.push(
-      `-/${stringNombre(fonction(variationG.xG), precisionImage)}`,
+      `-/${stringNombre(fonction(Number(variationG.xG)), precisionImage)}`,
       30,
     )
   } else {
     tabLineVariations.push(
-      `+/${stringNombre(fonction(variationG.xG), precisionImage)}`,
+      `+/${stringNombre(fonction(Number(variationG.xG)), precisionImage)}`,
       30,
     )
   }
@@ -1165,11 +1165,11 @@ export function tableauVariationsFonction(
         i + 1,
         i + 3,
         i + 2,
-        stringNombre(fonction(variationG.xD), precisionImage),
+        stringNombre(fonction(Number(variationG.xD)), precisionImage),
       ])
     } else {
       tabLineVariations.push(
-        `${variationG.variation === 'croissant' ? '+' : '-'}/${stringNombre(fonction(variationG.xD), precisionImage)}`,
+        `${variationG.variation === 'croissant' ? '+' : '-'}/${stringNombre(fonction(Number(variationG.xD)), precisionImage)}`,
         30,
       )
     }
@@ -1177,18 +1177,18 @@ export function tableauVariationsFonction(
   if (variationD != null) {
     if (variationD.variation === 'croissant') {
       tabLineVariations.push(
-        `+/${stringNombre(fonction(variationD.xD), precisionImage)}`,
+        `+/${stringNombre(fonction(Number(variationD.xD)), precisionImage)}`,
         30,
       )
     } else {
       tabLineVariations.push(
-        `-/${stringNombre(fonction(variationD.xD), precisionImage)}`,
+        `-/${stringNombre(fonction(Number(variationD.xD)), precisionImage)}`,
         30,
       )
     }
   } else {
     tabLineVariations.push(
-      `${variationG.variation === 'croissant' ? '+' : '-'}/${stringNombre(fonction(variationG.xD), precisionImage)}`,
+      `${variationG.variation === 'croissant' ? '+' : '-'}/${stringNombre(fonction(Number(variationG.xD)), precisionImage)}`,
       30,
     )
   }

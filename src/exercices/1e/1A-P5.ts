@@ -1,6 +1,7 @@
 import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { texNombre } from '../../lib/outils/texNombre'
 import { Arbre, texProba } from '../../modules/arbres'
+import { fraction } from '../../modules/fractions'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { randint } from '../../modules/outils'
 import ExerciceSimple from '../ExerciceSimple'
@@ -89,7 +90,7 @@ export default class can1P04 extends ExerciceSimple {
 
     omega.setTailles() // On calcule les tailles des arbres.
     objets = omega.represente(0, 6, 0, rationnel ? 2 : 1.5, true, 1, 8) // On crée l'arbre complet echelle 1.4 feuilles verticales sens gauche-droite
-    const pC = omega.getProba('C', false) // on calcule P(C) décimale.
+    const pC = omega.getProba('C') // on calcule P(C) décimale.
     let texte = `On donne l'arbre de probabilités ci-dessous et $P(C)=${texProba(pC)}$.<br><br> 
           `
     texte += mathalea2d(
@@ -106,9 +107,9 @@ export default class can1P04 extends ExerciceSimple {
     let texteCorr =
       "Comme $A$ et $\\bar A$ forment une partition de l'univers, d'après la loi des probabilités totales :<br>"
     texteCorr += '$P(C)=P(A \\cap C)+P(\\bar{A} \\cap C)$.<br>'
-    texteCorr += `Or $P(\\bar{A} \\cap C)=P(\\bar{A}) \\times P_{\\bar{A}}(C)=${texProba(pB, false)}x$.<br>`
-    texteCorr += `Donc $${texProba(pB, false)}x=P(C)-P(A \\cap C)=${texProba(pC, false)}-${texProba(pA, false)}\\times ${texProba(pAC, false)}=${texProba(pC, false)}-${texProba(pA * pAC, false)}=${texProba(pC - pA * pAC, false)}$.<br>`
-    texteCorr += `Donc $x=\\dfrac{${texProba(pC - pA * pAC, false)}}{${texProba(pB, false)}}=${texProba(pBC)}$`
+    texteCorr += `Or $P(\\bar{A} \\cap C)=P(\\bar{A}) \\times P_{\\bar{A}}(C)=${texProba(pB)}x$.<br>`
+    texteCorr += `Donc $${texProba(pB)}x=P(C)-P(A \\cap C)=${texProba(pC)}-${texProba(pA)}\\times ${texProba(pAC)}=${texProba(pC)}-${texProba(pA * pAC)}=${texProba(pC.differenceFraction(fraction(pA * pAC * 100, 100)))}$.<br>`
+    texteCorr += `Donc $x=\\dfrac{${texProba(pC.differenceFraction(fraction(pA * pAC * 100, 100)))}}{${texProba(pB)}}=${texProba(pBC)}$`
     this.reponse = pBC
     this.distracteurs = [
       `$Sol : ${texNombre(pBC)}$`,

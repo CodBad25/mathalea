@@ -178,8 +178,7 @@ export default class SecondDegreVariations extends Exercice {
           d'abord décroissante puis croissante (la parabole est "tournée vers le haut").
           <br>  Ainsi, $f$ est croissante sur $\\bigg[${-b} ${sp(1)} ;${sp(1)} +\\infty\\bigg[$.    `
             }
-          }
-          if (a < 0) {
+          } else {
             if (b > 0) {
               texteCorr = `On reconnaît la forme canonique d'une fonction polynôme du second degré :
               <br>$f(x)=a(x-\\alpha)^2+\\beta$<br>
@@ -402,8 +401,7 @@ export default class SecondDegreVariations extends Exercice {
           d'abord décroissante puis croissante (la parabole est "tournée vers le haut").
           <br>           Ainsi, $f$ est décroissante sur $\\bigg]-\\infty${sp(1)} ;${sp(1)}${-b} \\bigg]$.    `
             }
-          }
-          if (a < 0) {
+          } else {
             if (b > 0) {
               texteCorr = `On reconnaît la forme canonique d'une fonction polynôme du second degré :
               <br>        $f(x)=a(x-\\alpha)^2+\\beta$
@@ -424,6 +422,7 @@ export default class SecondDegreVariations extends Exercice {
           break
 
         case 6: // décroissante forme factorisée
+        default:
           a = randint(-5, 5, 0)
           b = randint(-9, 9)
           c = randint(-9, 9, 0)

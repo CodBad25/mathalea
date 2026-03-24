@@ -229,7 +229,6 @@ export default class EtudeFctRatio extends Exercice {
     for (
       let i = 0, ligne1, ligne2, ligne3, ligneVar, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       let texte = ''
       let texteCorr = ''
@@ -647,11 +646,11 @@ export default class EtudeFctRatio extends Exercice {
                       [
                         '$-\\infty$',
                         30,
-                        `$${pPrime.x1.simplifie().texFSD}$`,
+                        `$${pPrime.x1 instanceof FractionEtendue ? pPrime.x1.texFractionSimplifiee : pPrime.x1}$`,
                         20,
                         `$${valInterdite.texFSD}$`,
                         20,
-                        `$${pPrime.x2.simplifie().texFSD}$`,
+                        `$${pPrime.x2 instanceof FractionEtendue ? pPrime.x2.texFractionSimplifiee : pPrime.x2}$`,
                         20,
                         '$+\\infty$',
                         30,
@@ -680,7 +679,6 @@ export default class EtudeFctRatio extends Exercice {
                 const lignePP = ['Line', 30, '', 0, '+', 20, 't', 5, '+', 20]
                 const ligneMM = ['Line', 30, '', 0, '-', 20, 't', 5, '-', 20]
                 const lignePPz = ['Line', 30, '', 0, '+', 20, 'z', 5, '+', 20]
-                const ligneMMz = ['Line', 30, '', 0, '-', 20, 'z', 5, '-', 20]
                 const lignePPd = ['Line', 30, '', 0, '+', 20, 'd', 5, '+', 20]
                 const ligneMMd = ['Line', 30, '', 0, '-', 20, 'd', 5, '-', 20]
                 if (a * d > 0) {

@@ -6,6 +6,7 @@
 
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import type { ObjetMathalea2D } from './ObjetMathalea2D'
+import type { PointAbstrait } from './PointAbstrait'
 
 /**
  * Interface minimale pour Repere
@@ -316,7 +317,7 @@ export interface IVecteur {
  * Interface minimale pour Polygone
  */
 export interface IPolygone extends ObjetMathalea2D {
-  listePoints: IPointAbstrait[]
+  listePoints: PointAbstrait[]
   nom: string
   couleurDeRemplissage: string[]
   opaciteDeRemplissage: number

@@ -68,7 +68,6 @@ export default class TableauSignes extends Exercice {
                 ],
                 // tabLines ci-dessous contient les autres lignes du tableau.
                 tabLines: [['Line', 30, '', 0, '-', 20, 'z', 20, '+']],
-                colorBackground: '',
                 espcl: 3.5, // taille en cm entre deux antécédents
                 deltacl: 0.8, // distance entre la bordure et les premiers et derniers antécédents
                 lgt: 5,
@@ -96,7 +95,6 @@ export default class TableauSignes extends Exercice {
                 ],
                 // tabLines ci-dessous contient les autres lignes du tableau.
                 tabLines: [['Line', 30, '', 0, '-', 20, 'z', 20, '+']],
-                colorBackground: '',
                 espcl: 3.5, // taille en cm entre deux antécédents
                 deltacl: 0.8, // distance entre la bordure et les premiers et derniers antécédents
                 lgt: 5,
@@ -124,7 +122,6 @@ export default class TableauSignes extends Exercice {
                 ],
                 // tabLines ci-dessous contient les autres lignes du tableau.
                 tabLines: [['Line', 30, '', 0, '+', 20, 'z', 20, '-']],
-                colorBackground: '',
                 espcl: 3.5, // taille en cm entre deux antécédents
                 deltacl: 0.8, // distance entre la bordure et les premiers et derniers antécédents
                 lgt: 5, // taille de la première colonne en cm
@@ -161,7 +158,6 @@ export default class TableauSignes extends Exercice {
                 ],
                 // tabLines ci-dessous contient les autres lignes du tableau.
                 tabLines: [['Line', 30, '', 0, '+', 20, 'z', 20, '-']],
-                colorBackground: '',
                 espcl: 3.5, // taille en cm entre deux antécédents
                 deltacl: 0.8, // distance entre la bordure et les premiers et derniers antécédents
                 lgt: 5, // taille de la première colonne en cm
@@ -189,7 +185,6 @@ export default class TableauSignes extends Exercice {
                 ],
                 // tabLines ci-dessous contient les autres lignes du tableau.
                 tabLines: [['Line', 30, '', 0, '+', 20, 'z', 20, '-']],
-                colorBackground: '',
                 espcl: 3.5, // taille en cm entre deux antécédents
                 deltacl: 0.8, // distance entre la bordure et les premiers et derniers antécédents
                 lgt: 5, // taille de la première colonne en cm
@@ -217,7 +212,6 @@ export default class TableauSignes extends Exercice {
                 ],
                 // tabLines ci-dessous contient les autres lignes du tableau.
                 tabLines: [['Line', 30, '', 0, '-', 20, 'z', 20, '+']],
-                colorBackground: '',
                 espcl: 3.5, // taille en cm entre deux antécédents
                 deltacl: 0.8, // distance entre la bordure et les premiers et derniers antécédents
                 lgt: 5, // taille de la première colonne en cm
@@ -252,7 +246,6 @@ export default class TableauSignes extends Exercice {
         ],
         // tabLines ci-dessous contient les autres lignes du tableau.
         tabLines: [ligne1],
-        colorBackground: '',
         espcl: 3.5, // taille en cm entre deux antécédents
         deltacl: 0.8, // distance entre la bordure et les premiers et derniers antécédents
         lgt: 5, // taille de la première colonne en cm

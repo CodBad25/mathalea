@@ -194,6 +194,7 @@ export default class InequationCasParticuliers extends Exercice {
           break
 
         case 3: // cas a(x+b)^2> ou <0
+        default:
           a = randint(-5, 5, 0)
           b = randint(-10, 10, 0)
           inegalite = choice(['>', '\\geqslant', '<', '\\leqslant'])

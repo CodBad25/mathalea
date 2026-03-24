@@ -54,14 +54,14 @@ export default class probaArbre extends ExerciceSimple {
         new Arbre({
           rationnel: false,
           nom: 'A',
-          proba: pA,
+          proba: pA.toNumber(),
           visible: true,
           alter: '',
           enfants: [
             new Arbre({
               rationnel: false,
               nom: 'B',
-              proba: pBsachantA,
+              proba: pBsachantA.toNumber(),
               visible: true,
               alter: '',
             }),
@@ -83,13 +83,13 @@ export default class probaArbre extends ExerciceSimple {
               rationnel: false,
               visible: true,
               nom: 'B',
-              proba: new Decimal(pBsachantAbarre),
+              proba: pBsachantAbarre.toNumber(),
             }),
             new Arbre({
               rationnel: false,
               visible: false,
               nom: '\\overline{B}',
-              proba: new Decimal(pBsachantAbarre).sub(1).mul(-1),
+              proba: pBsachantAbarre.sub(1).mul(-1).toNumber(),
             }),
           ],
         }),
@@ -97,7 +97,7 @@ export default class probaArbre extends ExerciceSimple {
     })
 
     omega.setTailles() // On calcule les tailles des arbres.
-    const objets = omega.represente(0, 7, 0, 1.5, true, 1) // On crée l'arbre complet echelle 1.4 feuilles verticales sens gauche-droite
+    const objets = omega.represente(0, 7, 0, 1.5, true, 1, 10) // On crée l'arbre complet echelle 1.4 feuilles verticales sens gauche-droite
     this.question = "On donne l'arbre de probabilités ci-dessous :<br>"
     this.question += mathalea2d(
       {

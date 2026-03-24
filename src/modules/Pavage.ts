@@ -1,6 +1,6 @@
 import type { IPolygone } from '../lib/2d/Interfaces'
 import { PointAbstrait, pointAbstrait } from '../lib/2d/PointAbstrait'
-import { barycentre, polygone } from '../lib/2d/polygones'
+import { barycentre, Polygone, polygone } from '../lib/2d/polygones'
 import { polygoneRegulier } from '../lib/2d/polygonesParticuliers'
 import { TexteParPoint, texteParPosition } from '../lib/2d/textes'
 import { tracePoint, type TracePoint } from '../lib/2d/TracePoint'
@@ -21,7 +21,7 @@ import { egal } from './outils'
  */
 export class Pavage {
   type: number
-  polygones: IPolygone[]
+  polygones: Polygone[]
   barycentres: PointAbstrait[]
   tracesCentres: TracePoint[]
   numeros: TexteParPoint[]

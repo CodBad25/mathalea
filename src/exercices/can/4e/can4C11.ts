@@ -17,6 +17,7 @@ export const refs = {
   'fr-ch': [],
 }
 export default class SignePuissance extends Exercice {
+  can: boolean
   constructor() {
     super()
     this.consigne = 'Déterminer le signe de l’expression :'

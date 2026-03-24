@@ -60,10 +60,10 @@ export default class CalculCotePythagore extends ExerciceSimple {
         'x',
         milieu(B, C).x,
         milieu(B, C).y + 0.3,
-        'milieu',
+        0,
         'black',
         1,
-        'middle',
+        'milieu',
         true,
       ),
     )

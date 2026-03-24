@@ -1,7 +1,7 @@
 import { codageAngle } from '../../lib/2d/angles'
 import { colorToLatexOrHTML } from '../../lib/2d/colorToLatexOrHtml'
-import { pointAbstrait, type PointAbstrait } from '../../lib/2d/PointAbstrait'
-import type { Polygone } from '../../lib/2d/polygones'
+import type { IPointAbstrait, IPolygone } from '../../lib/2d/Interfaces'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { segment } from '../../lib/2d/segmentsVecteurs'
 import { labelPoint, texteParPosition } from '../../lib/2d/textes'
 import { tracePoint } from '../../lib/2d/TracePoint'
@@ -88,24 +88,24 @@ export default class PavageEtRotation2D extends Exercice {
       }
       return tableau
     }
-    const compare2polys = function (poly1: Polygone, poly2: Polygone) {
+    const compare2polys = function (poly1: IPolygone, poly2: IPolygone) {
       if (comparenbsommets(poly1, poly2)) {
         return comparesommets(poly1, poly2)
       } else {
         return false
       }
     }
-    const comparenbsommets = function (poly1: Polygone, poly2: Polygone) {
+    const comparenbsommets = function (poly1: IPolygone, poly2: IPolygone) {
       return poly1.listePoints.length === poly2.listePoints.length
     }
 
     const compare2sommets = function (
-      sommet1: PointAbstrait,
-      sommet2: PointAbstrait,
+      sommet1: IPointAbstrait,
+      sommet2: IPointAbstrait,
     ) {
       return egal(sommet1.x, sommet2.x, 0.1) && egal(sommet1.y, sommet2.y, 0.1)
     }
-    const comparesommets = function (poly1: Polygone, poly2: Polygone) {
+    const comparesommets = function (poly1: IPolygone, poly2: IPolygone) {
       let trouve = false
       let trouves = 0
       if (comparenbsommets(poly1, poly2)) {
@@ -134,14 +134,14 @@ export default class PavageEtRotation2D extends Exercice {
 
     const rotaccion = function (
       pavage: Pavage,
-      A: PointAbstrait,
+      A: IPointAbstrait,
       angle: number,
       numero: number,
     ) {
       const poly = pavage.polygones[numero - 1]
       let pol
       const result = -1
-      const sympoly = rotation(poly, A, angle) as Polygone
+      const sympoly = rotation(poly, A, angle) as IPolygone
       for (let k = 0; k < pavage.polygones.length; k++) {
         pol = pavage.polygones[k]
         if (compare2polys(sympoly, pol)) {
@@ -164,7 +164,7 @@ export default class PavageEtRotation2D extends Exercice {
     let Nx
     let Ny
     let index1
-    let A: PointAbstrait = pointAbstrait(0, 0)
+    let A = pointAbstrait(0, 0)
     let image
     let couples: number[][] = []
     let tailles = []
