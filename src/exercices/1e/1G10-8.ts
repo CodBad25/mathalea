@@ -28,7 +28,7 @@ export const uuid = 'ec888'
 
 export const refs = {
   'fr-fr': ['1G10-8'],
-  'fr-ch': [],
+  'fr-ch': ['3G93-6'],
 }
 
 export default class UtiliserProduitScalaire extends Exercice {

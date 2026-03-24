@@ -16,7 +16,7 @@ export const uuid = '8e145'
 
 export const refs = {
   'fr-fr': ['TSG2-14'],
-  'fr-ch': [],
+  'fr-ch': ['3G94-5'],
 }
 
 export default class ExercicePointParCombinaison extends Exercice {

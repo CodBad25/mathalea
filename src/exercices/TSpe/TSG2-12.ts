@@ -15,6 +15,6 @@ export const uuid = 'a85e6'
 
 export const refs = {
   'fr-fr': ['TSG2-12'],
-  'fr-ch': [],
+  'fr-ch': ['3G94-1'],
 }
 export default class CoordVect extends CoordonneesVecteur {}

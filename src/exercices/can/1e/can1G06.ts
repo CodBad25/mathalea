@@ -27,7 +27,7 @@ export const uuid = 'a394f'
 
 export const refs = {
   'fr-fr': ['can1G06'],
-  'fr-ch': [],
+  'fr-ch': ['3G93-9'],
 }
 export default class ProduitScalaireFiguresClassiques extends ExerciceSimple {
   constructor() {

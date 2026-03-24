@@ -20,7 +20,7 @@ export const uuid = '26f3b'
 
 export const refs = {
   'fr-fr': ['can2G10'],
-  'fr-ch': ['NR'],
+  'fr-ch': ['3G91-4'],
 }
 export default class RelationChasles1 extends Exercice {
   constructor() {

@@ -27,7 +27,7 @@ export const uuid = 'e7919'
 
 export const refs = {
   'fr-fr': ['can1G08'],
-  'fr-ch': [],
+  'fr-ch': ['3G92-4'],
 }
 export default class VecteurNormEqCart extends Exercice {
   constructor() {

@@ -26,7 +26,7 @@ export const uuid = 'cee3b'
 
 export const refs = {
   'fr-fr': ['1G21-7'],
-  'fr-ch': [],
+  'fr-ch': ['3G92-6'],
 }
 
 class EqCartVectNormal extends Exercice {

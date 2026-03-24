@@ -20,7 +20,7 @@ export const uuid = 'ee579'
 
 export const refs = {
   'fr-fr': ['can2G09'],
-  'fr-ch': [],
+  'fr-ch': ['3G90-11'],
 }
 export default class VecteursColineaires extends ExerciceSimple {
   constructor() {

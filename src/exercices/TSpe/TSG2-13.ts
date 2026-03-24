@@ -15,6 +15,6 @@ export const uuid = 'a85e5'
 
 export const refs = {
   'fr-fr': ['TSG2-13'],
-  'fr-ch': [],
+  'fr-ch': ['3G94-2'],
 }
 export default class NormeVecteurClone extends NormeVecteur {}

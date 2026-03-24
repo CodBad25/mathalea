@@ -21,7 +21,7 @@ export const uuid = '651a5'
 
 export const refs = {
   'fr-fr': ['can2G07'],
-  'fr-ch': [],
+  'fr-ch': ['3G90-4'],
 }
 export default class CoordonneesVecteur1 extends ExerciceSimple {
   constructor() {

@@ -19,7 +19,7 @@ export const interactifType = 'mathLive'
 export const uuid = '11dd8'
 export const refs = {
   'fr-fr': ['canTSpeE02'],
-  'fr-ch': ['3mAlgLin-2'],
+  'fr-ch': ['3G94-3'],
 }
 
 export default class CoordonneesVecteur extends Exercice {

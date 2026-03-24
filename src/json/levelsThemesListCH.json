@@ -305,6 +305,21 @@
   "3mGeomVect": {
     "titre": "Géométrie vectorielle"
   },
+  "3G90": {
+    "titre": "Coordonnées, normes et colinéarité"
+  },
+  "3G91": {
+    "titre": "Opérations, égalités, translations et parallélogrammes"
+  },
+  "3G92": {
+    "titre": "Droites, projections, vecteurs directeurs et normaux"
+  },
+  "3G93": {
+    "titre": "Produit scalaire"
+  },
+  "3G94": {
+    "titre": "Espace"
+  },
   "3mNC": {
     "titre": "Nombres complexes"
   },

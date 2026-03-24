@@ -19,7 +19,7 @@ export const interactifType = 'mathLive'
 export const uuid = '0cd98'
 export const refs = {
   'fr-fr': ['canTSpeE05'],
-  'fr-ch': ['3mGeomVect-2'],
+  'fr-ch': ['3G94-9'],
 }
 
 export default class VecteurNormalPlan extends Exercice {
