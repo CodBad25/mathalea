@@ -20,7 +20,7 @@ export const uuid = '84eaa'
 
 export const refs = {
   'fr-fr': ['can2G15'],
-  'fr-ch': [],
+  'fr-ch': ['3G90-12'],
 }
 export default class DeterminantVecteur extends ExerciceSimple {
   constructor() {

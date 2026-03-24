@@ -40,7 +40,7 @@ export const uuid = '09243'
 
 export const refs = {
   'fr-fr': ['1G10-2'],
-  'fr-ch': ['3mGeomVect-1'],
+  'fr-ch': ['3G93-5'],
 }
 
 export default class AngleProduitScalaire extends Exercice {

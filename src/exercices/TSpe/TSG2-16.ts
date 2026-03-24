@@ -1,12 +1,12 @@
-import Exercice from '../Exercice'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
-import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import {
   ecritureAlgebriqueSauf1,
   ecritureParentheseSiNegatif,
   rienSi1,
 } from '../../lib/outils/ecritures'
 import FractionEtendue from '../../modules/FractionEtendue'
+import { listeQuestionsToContenu, randint } from '../../modules/outils'
+import Exercice from '../Exercice'
 
 export const titre = 'Déterminer si des points sont ou non coplanaires'
 
@@ -15,7 +15,7 @@ export const dateDePublication = '11/01/2025' // La date de publication initiale
 export const uuid = '14e60'
 export const refs = {
   'fr-fr': ['TSG2-16'],
-  'fr-ch': ['3mAlgLin-5'],
+  'fr-ch': ['3G94-6'],
 }
 
 /**
@@ -66,7 +66,8 @@ export default class nomExercice extends Exercice {
             \\end{cases}$<br>`
           finCorrection += `Le système admet donc un couple solution : $S=\\{\\left(${lambda1};${lambda2}\\right)\\}$.<br>`
           finCorrection += `On vient donc de montrer que $\\overrightarrow{AD}=${rienSi1(lambda1)} \\overrightarrow{AB} ${ecritureAlgebriqueSauf1(lambda2)} \\overrightarrow{AC}$.`
-          finCorrection += '<br>Les points A, B, C et D sont coplanaires.'
+          finCorrection +=
+            '<br>Les points $A$, $B$, $C$ et $D$ sont coplanaires.'
           break
         default: {
           // case 'non-coplanaires':
@@ -100,7 +101,7 @@ export default class nomExercice extends Exercice {
           finCorrection +=
             "<br>On vient donc de montrer que les vecteurs $\\overrightarrow{AB}$ et $\\overrightarrow{AC}$ forment une base d'un plan et que le vecteur $\\overrightarrow{AD}$ n'est pas une combinaison linéaire de ces vecteurs."
           finCorrection +=
-            '<br>Les trois vecteurs ne sont donc pas coplanaires.<br> Les points A, B, C et D ne sont pas coplanaires.'
+            '<br>Les trois vecteurs ne sont donc pas coplanaires.<br> Les points $A$, $B$, $C$ et $D$ ne sont pas coplanaires.'
           break
         }
       }

@@ -22,7 +22,7 @@ export const dateDePublication = '31/03/2025'
 export const uuid = '57d64'
 export const refs = {
   'fr-fr': ['2G20-1'],
-  'fr-ch': [],
+  'fr-ch': ['3G90-8'],
 }
 
 /**

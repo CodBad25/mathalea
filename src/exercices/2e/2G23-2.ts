@@ -38,7 +38,7 @@ export const uuid = 'fa7b9'
 
 export const refs = {
   'fr-fr': ['2G23-2'],
-  'fr-ch': [],
+  'fr-ch': ['3G91-10'],
 }
 
 export default class TranslationEtCoordonnes extends Exercice {

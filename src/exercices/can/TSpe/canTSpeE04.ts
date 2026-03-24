@@ -20,7 +20,7 @@ export const uuid = '4a643'
 
 export const refs = {
   'fr-fr': ['canTSpeE04'],
-  'fr-ch': [],
+  'fr-ch': ['3G93-11'],
 }
 export default class ProduitScalaireCoordonnees extends ExerciceSimple {
   constructor() {

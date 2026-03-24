@@ -15,7 +15,7 @@ export const uuid = '15404'
 
 export const refs = {
   'fr-fr': ['TSG2-20'],
-  'fr-ch': [],
+  'fr-ch': ['3G93-12'],
 }
 // On ré-exporte la classe du can en lui donnant un nom adapté à la série TSG2-20
 export default class ProduitScalaireCoord extends ProduitScalaireCoordonnees {}

@@ -37,7 +37,7 @@ export const uuid = 'f71c1'
 
 export const refs = {
   'fr-fr': ['2G24-1'],
-  'fr-ch': [],
+  'fr-ch': ['3G90-3'],
 }
 export default class Calculercoordonneesvecteurs extends Exercice {
   constructor() {

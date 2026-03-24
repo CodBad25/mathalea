@@ -30,7 +30,7 @@ export const uuid = '8a0ce'
 
 export const refs = {
   'fr-fr': ['can2G18'],
-  'fr-ch': [],
+  'fr-ch': ['3G90-6'],
 }
 export default class LectureGraphiqueVecteurRepere extends Exercice {
   constructor() {

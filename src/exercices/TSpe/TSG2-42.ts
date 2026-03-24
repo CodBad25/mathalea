@@ -15,7 +15,7 @@ export const uuid = '8633b'
 
 export const refs = {
   'fr-fr': ['TSG2-42'],
-  'fr-ch': [],
+  'fr-ch': ['3G94-8'],
 }
 // On ré-exporte la classe du can en lui donnant un nom adapté à la série TSG2-30
 export default class VecteurNormalPlanEquuation extends VecteurNormalPlan {}

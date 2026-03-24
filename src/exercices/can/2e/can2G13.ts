@@ -24,7 +24,7 @@ export const uuid = '3a0e1'
 
 export const refs = {
   'fr-fr': ['can2G13'],
-  'fr-ch': [],
+  'fr-ch': ['3G90-7'],
 }
 export default class NormeVecteur extends ExerciceSimple {
   constructor() {
