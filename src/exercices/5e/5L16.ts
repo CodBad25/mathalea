@@ -46,7 +46,7 @@ export default class SimplifierEcritureLitterale extends Exercice {
       this.consigne =
         "On a simplifié des écritures littérales.<br>Recopier l'expression dans le même ordre et ajouter, si possible, les signes $\\times$ sous-entendus."
     } else {
-      this.consigne = "Simplifier l'écriture."
+      this.consigne = "Simplifier l'écriture si possible."
     }
 
     let typeQuestionsDisponibles
