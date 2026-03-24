@@ -1,3 +1,4 @@
+import { compteLesReponsesDifferentes } from '../../lib/interactif/qcm'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
@@ -20,7 +21,7 @@ export const interactifReady = true
 export const interactifType = 'qcm'
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
-export const titre = "Retrouver le calcul pour obtenir la valeur initiale"
+export const titre = 'Retrouver le calcul pour obtenir la valeur initiale'
 
 export default class Auto1AE025 extends ExerciceQcmA {
   private appliquerLesValeurs(prixFinal: number, pourcentage: number): void {
@@ -114,13 +115,17 @@ Ainsi, le prix initial est donné par : $${miseEnEvidence(`${texNombre(prixFinal
   }
 
   versionAleatoire = () => {
-    // Génération d'un pourcentage de baisse (multiples de 5 entre 5 et 50)
-    const pourcentage = randint(2, 70)
+    let compteur = 0
+    do {
+      // Génération d'un pourcentage de baisse (multiples de 5 entre 5 et 50)
+      const pourcentage = randint(2, 70)
 
-    // Génération d'un prix final
-    const prixFinal = randint(104, 299, 200)
+      // Génération d'un prix final
+      const prixFinal = randint(104, 299, 200)
 
-    this.appliquerLesValeurs(prixFinal, pourcentage)
+      this.appliquerLesValeurs(prixFinal, pourcentage)
+      compteur++
+    } while (compteur < 100 && !compteLesReponsesDifferentes(this, 4, true, {}))
   }
 
   constructor() {

@@ -1,5 +1,9 @@
 import { describe, expect, it, vi } from 'vitest'
-import { compteLesReponsesDifferentes } from '../../../../src/lib/interactif/qcm'
+import ExerciceQcm from '../../../../src/exercices/ExerciceQcm'
+import {
+  compteLesReponsesDifferentes,
+  guessOptionsForReponses,
+} from '../../../../src/lib/interactif/qcm'
 import { mathaleaLoadExerciceFromUuid } from '../../../../src/lib/mathalea'
 import { findStatic, findUuid } from '../../helpers/filter.js'
 
@@ -73,12 +77,24 @@ async function testQcmExercice(uuid: string) {
   if (typeof exercice.nouvelleVersion === 'function') {
     exercice.nouvelleVersion()
   }
+  let reponses: string[] = []
+  if (exercice instanceof ExerciceQcm) {
+    reponses = exercice.reponses
+  } else {
+    reponses = [
+      String(exercice.reponse),
+      ...(exercice as any).distracteurs.map(String),
+    ]
+  }
   const expected = getExpectedCount(exercice)
-  const ok = compteLesReponsesDifferentes(exercice, expected, true)
+  const options =
+    exercice.optionsDeComparaison || guessOptionsForReponses(reponses)
+  const ok = compteLesReponsesDifferentes(exercice, expected, true, options)
   if (!ok) {
     // Pour debug :
     console.error(
       `Exercice uuid=${uuid} n'a pas le bon nombre de réponses différentes (attendu: ${expected})`,
+      `Chercher le ou les doublons dans ${JSON.stringify(reponses)}`
     )
   }
   expect(ok, `uuid=${uuid} doit avoir ${expected} réponses différentes`).toBe(
@@ -103,9 +119,13 @@ async function runQcmTests(filter: string) {
 }
 
 // Modifier ici le filtre pour cibler les exercices souhaités
-// runQcmTests('1')
-// runQcmTests('4e/4G52')
-// runQcmTests('QCMBac')
-// runQcmTests('QCMBrevet')
-// runQcmTests('QCMStatiques')
-// runQcmTests('6e/6I16')
+runQcmTests('1')
+runQcmTests('2')
+runQcmTests('3')
+runQcmTests('4')
+runQcmTests('5')
+runQcmTests('6')
+runQcmTests('T')
+runQcmTests('QCMBac')
+runQcmTests('QCMBrevet')
+runQcmTests('QCMStatiques')

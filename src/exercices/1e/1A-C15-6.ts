@@ -1,3 +1,4 @@
+import { compteLesReponsesDifferentes } from '../../lib/interactif/qcm'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { sp } from '../../lib/outils/outilString'
 import { texNombre } from '../../lib/outils/texNombre'
@@ -60,13 +61,20 @@ Le montant de l'abonnement mensuel est donc de $${miseEnEvidence(abo + sp(1) + '
   }
 
   versionAleatoire: () => void = () => {
-    const abo = randint(8, 12)
+    let compteur = 0
+    do {
+      const abo = randint(8, 12)
 
-    const prixH = randint(3, 6)
-    const nbreSeance1 = randint(2, 6)
-    const nbreSeance2 = randint(2, 6, nbreSeance1)
+      const prixH = randint(3, 6)
+      const nbreSeance1 = randint(2, 6)
+      const nbreSeance2 = randint(2, 6, [nbreSeance1, prixH])
 
-    this.appliquerLesValeurs(prixH, nbreSeance1, nbreSeance2, abo)
+      this.appliquerLesValeurs(prixH, nbreSeance1, nbreSeance2, abo)
+      compteur++
+    } while (
+      compteur < 100 &&
+      !compteLesReponsesDifferentes(this, 4, false, { unite: true })
+    ) // On s'assure d'avoir 4 réponses différentes, sinon on régénère
   }
 
   constructor() {

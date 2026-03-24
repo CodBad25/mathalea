@@ -1,3 +1,4 @@
+import { compteLesReponsesDifferentes } from '../../lib/interactif/qcm'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
@@ -97,17 +98,24 @@ export default class VitesseEtDistance extends ExerciceQcmA {
   // s'occupe d'aléatoiriser les valeurs à passer à la fonction appliquerLesValeurs en vérifiant qu'on a bien 3 réponses différentes
   // Pour un qcm à n réponses, il faudrait vérifier que nombreElementsDifferents(this.reponses) < n
   versionAleatoire: () => void = () => {
-    const vitesse = this.sup2
-      ? choice([60, 80, 100, 120])
-      : choice([50, 70, 90, 110, 130])
-    const diviseurMultiple: [number, number[]] = this.sup2
-      ? choice([
-          [2, [1, 3, 5]],
-          [4, [1, 3, 5, 7]],
-          [10, [1, 3, 9, 11]],
-        ])
-      : choice([[20, [1, 9, 11]]])
-    this.appliquerLesValeurs(vitesse, diviseurMultiple)
+    let compteur = 0
+    do {
+      const vitesse = this.sup2
+        ? choice([60, 80, 100, 120])
+        : choice([50, 70, 90, 110, 130])
+      const diviseurMultiple: [number, number[]] = this.sup2
+        ? choice([
+            [2, [1, 3, 5]],
+            [4, [1, 3, 5, 7]],
+            [10, [1, 3, 9, 11]],
+          ])
+        : choice([[20, [1, 9, 11]]])
+      this.appliquerLesValeurs(vitesse, diviseurMultiple)
+      compteur++
+    } while (
+      compteur < 100 &&
+      !compteLesReponsesDifferentes(this, 4, true, { HMS: true })
+    )
   }
 
   // Ici il n'y a rien à faire, on appelle juste la version aleatoire (pour un qcm aleatoirisé, c'est le fonctionnement par défaut)
@@ -116,5 +124,6 @@ export default class VitesseEtDistance extends ExerciceQcmA {
     this.besoinFormulaire2CaseACocher = ['Distances entières', true]
     this.sup2 = true
     this.versionAleatoire()
+    this.optionsDeComparaison = { HMS: true } // pour le test qcm_exercices
   }
 }
