@@ -623,10 +623,11 @@ export function compteLesReponsesDifferentes(
   const opts =
     options && Object.keys(options).length > 0
       ? options
-      : guessOptionsForReponses(reponses)
+      : exercice.optionsDeComparaison || guessOptionsForReponses(reponses)
 
   const doublons = []
   // On compare des expressions littérales qui peuvent être différentes mais équivalentes
+  let doublonsTrouvés = false
   for (let i = 0; i < reponses.length - 1; i++) {
     let reponse = reponses[i]
     if (opts.unite) {
@@ -637,23 +638,31 @@ export function compteLesReponsesDifferentes(
         // Si on n'arrive pas à parser la grandeur, on laisse la réponse telle quelle et on verra si elle est considérée comme un doublon ou pas. Mieux vaut risquer un faux positif de doublon que de rater un doublon parce qu'on n'a pas réussi à parser la grandeur.
       }
     }
-    for (let j = i + 1; j < reponses.length; ) {
-      const result = fonctionComparaison(reponse, reponses[j], opts)
+    for (let j = i + 1; j < reponses.length; j++) {
+      const compare = exercice.compare || fonctionComparaison
+      const result = compare(
+        reponse,
+        opts.unite
+          ? reponses[j].replace(/\\text\{([^}]*)\}/g, ' $1') // Virer les \text{} qui peuvent gêner la comparaison des unités, par exemple "\text{ m}" -> m
+          : reponses[j],
+        opts,
+      )
       if (result.isOk) {
-        reponses.splice(j, 1)
-        doublons.push(reponse + ' et ' + reponses[j])
-      } else {
-        j++
+        doublons.push(
+          `à l'indice ${i} j'ai ${reponse} et à l'indice ${j} j'ai ${reponses[j]}`,
+        )
+        doublonsTrouvés = true
       }
     }
   }
-  if (reponses.length !== nombreSouhaite)
+  if (doublonsTrouvés) {
     if (!test)
       window.notify(
         `CompteLesReponsesDifferentes : J'ai du éliminer ${reponses.length - nombreSouhaite} réponses`,
         {
-          doublons: JSON.stringify(doublons),
+          doublons: doublons.join(' ; '),
         },
       )
-  return reponses.length === nombreSouhaite
+  }
+  return !doublonsTrouvés
 }

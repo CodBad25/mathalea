@@ -1,3 +1,4 @@
+import { compteLesReponsesDifferentes } from '../../lib/interactif/qcm'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { randint } from '../../modules/outils'
 import ExerciceQcmA from '../ExerciceQcmA'
@@ -33,26 +34,34 @@ export default class Puissances extends ExerciceQcmA {
   }
 
   versionAleatoire = () => {
-    const n = randint(2, 5)
-    const k = randint(2, 5)
-    this.enonce = `Soit $a$ un nombre réel non nul. À quelle expression est égal $a^${n}\\times a^${k}$ ?`
-    this.correction = `On utilise la propriété de cours, qui calcule le produit des puissances d'un nombre réel non nul $a$    :<br>
+    let compteur = 0
+    do {
+      const n = randint(2, 5)
+      const k = randint(3, 6) // ne pas mettre 2 car 2+2 = 2*2 !
+      this.enonce = `Soit $a$ un nombre réel non nul. À quelle expression est égal $a^${n}\\times a^${k}$ ?`
+      this.correction = `On utilise la propriété de cours, qui calcule le produit des puissances d'un nombre réel non nul $a$    :<br>
     Soit $n\\in \\mathbb{N}$ et $k\\in \\mathbb{N}$<br>
     On a alors : $a^n\\times a^k=a^{n+k}$<br>
     Dans notre situation : $a^{n}\\times a^${k}=a^{${n + k}}$
    
     &=${miseEnEvidence(`$a^{n}\\times a^${k}=a^{${n + k}}$`)}
     `
-    this.reponses = [
-      `$a^{${n + k}}$`,
-      `$a^{${n * k}}$`,
-      `$\\left(a^{${n}}\\right)^{${k}}$`,
-      'Aucune de ces propositions.',
-    ]
+      this.reponses = [
+        `$a^{${n + k}}$`,
+        `$a^{${n * k}}$`,
+        `$\\left(a^{${n}}\\right)^{${k}}$`,
+        'Aucune de ces propositions.',
+      ]
+      compteur++
+    } while (
+      compteur < 100 &&
+      !compteLesReponsesDifferentes(this, 4, true, { texteSansCasse: true })
+    )
   }
 
   constructor() {
     super()
+    this.optionsDeComparaison = { texteSansCasse: true }
     this.versionAleatoire()
   }
 }

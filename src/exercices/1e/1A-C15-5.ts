@@ -2,6 +2,7 @@ import { choice } from '../../lib/outils/arrayOutils'
 import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
 // import ExerciceQcmA from '../../ExerciceQcmA'
+import { compteLesReponsesDifferentes } from '../../lib/interactif/qcm'
 import { arrondi } from '../../lib/outils/nombres'
 import { prenom } from '../../lib/outils/Personne'
 import FractionEtendue from '../../modules/FractionEtendue'
@@ -103,32 +104,39 @@ export default class Auto1C15r extends ExerciceQcmA {
   }
 
   versionAleatoire: () => void = () => {
-    // Tableau des configurations simples
-    const configurations = [
-      { puissance: 600, duree: 5 },
-      { puissance: 600, duree: 10 },
-      { puissance: 1000, duree: 6 },
-      { puissance: 1000, duree: 10 },
-      { puissance: 1200, duree: 5 },
-      { puissance: 1200, duree: 10 },
-      { puissance: 1200, duree: 20 },
-      { puissance: 1500, duree: 10 },
-      { puissance: 1500, duree: 20 },
-      { puissance: 2000, duree: 15 },
-      { puissance: 3000, duree: 10 },
-    ]
+    let compteur = 0
+    do {
+      // Tableau des configurations simples
+      const configurations = [
+        { puissance: 600, duree: 5 },
+        { puissance: 600, duree: 10 },
+        { puissance: 1000, duree: 6 },
+        { puissance: 1000, duree: 10 },
+        { puissance: 1200, duree: 5 },
+        { puissance: 1200, duree: 10 },
+        { puissance: 1200, duree: 20 },
+        { puissance: 1500, duree: 10 },
+        { puissance: 1500, duree: 20 },
+        { puissance: 2000, duree: 15 },
+        { puissance: 3000, duree: 10 },
+      ]
 
-    const config = choice(configurations)
-    const appareils = [
-      'un aspirateur',
-      'un sèche-cheveux',
-      'un fer à repasser',
-      'un radiateur',
-      'une bouilloire',
-    ]
-    const appareil = choice(appareils)
+      const config = choice(configurations)
+      const appareils = [
+        'un aspirateur',
+        'un sèche-cheveux',
+        'un fer à repasser',
+        'un radiateur',
+        'une bouilloire',
+      ]
+      const appareil = choice(appareils)
 
-    this.appliquerLesValeurs(config.puissance, config.duree, appareil)
+      this.appliquerLesValeurs(config.puissance, config.duree, appareil)
+      compteur++
+    } while (
+      compteur < 100 &&
+      !compteLesReponsesDifferentes(this, 4, true, { texteSansCasse: true })
+    )
   }
 
   constructor() {

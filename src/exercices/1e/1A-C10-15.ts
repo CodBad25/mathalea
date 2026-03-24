@@ -1,6 +1,7 @@
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { randint } from '../../modules/outils'
 // import ExerciceQcmA from '../../ExerciceQcmA'
+import { compteLesReponsesDifferentes } from '../../lib/interactif/qcm'
 import { choice } from '../../lib/outils/arrayOutils'
 import { reduireAxPlusB } from '../../lib/outils/ecritures'
 import { texNombre } from '../../lib/outils/texNombre'
@@ -140,18 +141,26 @@ Ainsi, l'inéquation dont $${x0}$ est solution est $${miseEnEvidence(`${bonneIne
   }
 
   versionAleatoire: () => void = () => {
-    const x0 = choice([-1, -2, -3])
-    const typeCas = randint(1, 2)
+    let compteur = 0
+    do {
+      const x0 = choice([-1, -2, -3])
+      const typeCas = randint(1, 2)
 
-    if (typeCas === 1) {
-      this.cas1(x0)
-    } else {
-      this.cas2(x0)
-    }
+      if (typeCas === 1) {
+        this.cas1(x0)
+      } else {
+        this.cas2(x0)
+      }
+      compteur++
+    } while (
+      compteur < 100 &&
+      !compteLesReponsesDifferentes(this, 4, true, { texteSansCasse: true })
+    )
   }
 
   constructor() {
     super()
+    this.optionsDeComparaison = { texteSansCasse: true } // pour le test qcm_exercice
     this.versionAleatoire()
     this.spacing = 1.5
   }
