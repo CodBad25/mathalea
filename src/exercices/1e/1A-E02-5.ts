@@ -1,4 +1,4 @@
-import { compteLesReponsesDifferentes } from '../../lib/interactif/qcm'
+import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
@@ -125,7 +125,10 @@ Ainsi, le prix initial est donné par : $${miseEnEvidence(`${texNombre(prixFinal
 
       this.appliquerLesValeurs(prixFinal, pourcentage)
       compteur++
-    } while (compteur < 100 && !compteLesReponsesDifferentes(this, 4, true, {}))
+    } while (
+      compteur < 100 &&
+      !aLeBonNombreDePropsDifferentes(this, 4, true, {})
+    )
   }
 
   constructor() {

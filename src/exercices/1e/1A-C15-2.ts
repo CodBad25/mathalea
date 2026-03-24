@@ -2,7 +2,7 @@ import { choice } from '../../lib/outils/arrayOutils'
 import { texNombre } from '../../lib/outils/texNombre'
 import { randint } from '../../modules/outils'
 // import ExerciceQcmA from '../../ExerciceQcmA'
-import { compteLesReponsesDifferentes } from '../../lib/interactif/qcm'
+import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { ppcm } from '../../lib/outils/primalite'
 import FractionEtendue from '../../modules/FractionEtendue'
@@ -156,7 +156,7 @@ export default class Auto1C19b extends ExerciceQcmA {
       compteur++
     } while (
       compteur < 100 &&
-      !compteLesReponsesDifferentes(this, 4, false, { texteSansCasse: true })
+      !aLeBonNombreDePropsDifferentes(this, 4, false, { texteSansCasse: true })
     ) // On s'assure d'avoir 4 réponses différentes, sinon on régénère
   }
 

@@ -97,7 +97,7 @@ export default class ÉcrireUneExpressionMathador extends Exercice {
         }
       }
 
-      texteCorr += `L'expression correspondante au calcul de ${quidam} est :<br>$${miseEnEvidence(expression)}$ ou $${miseEnEvidence(solutionMathador[4])}$.`
+      texteCorr += `L'expression correspondante au calcul de ${quidam} est :<br>$${miseEnEvidence(expression[0])}$ ou $${miseEnEvidence(solutionMathador[4][0])}$.`
       if (!this.sup) {
         handleAnswers(this, i, {
           reponse: {

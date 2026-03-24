@@ -1,3 +1,4 @@
+import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
 import { choice } from '../../lib/outils/arrayOutils'
 import {
   ecritureAlgebrique,
@@ -52,97 +53,99 @@ export default class AutoF1f extends ExerciceQcmA {
   }
 
   versionAleatoire = () => {
-    const listeFractions = [
-      [1, 3],
-      [1, 6],
-      [2, 3],
-      [3, 4],
-      [3, 5],
-      [4, 5],
-      [5, 3],
-      [4, 3],
-      [5, 4],
-      [6, 5],
-      [5, 3],
-      [2, 5],
-    ]
-    const frac = choice(listeFractions)
-    const f = new FractionEtendue(frac[0], frac[1]).produitFraction(
-      new FractionEtendue(-1, 1),
-    )
-    const a = randint(-2, 2, 0)
-    const b = randint(-5, 5, [-1, 0, 1])
-    const c = randint(-2, 2, 0)
+    let compteur = 0
+    do {
+      const listeFractions = [
+        [1, 3],
+        [1, 6],
+        [2, 3],
+        [3, 4],
+        [3, 5],
+        [4, 5],
+        [5, 3],
+        [4, 3],
+        [5, 4],
+        [6, 5],
+        [5, 3],
+        [2, 5],
+      ]
+      const frac = choice(listeFractions)
+      const f = new FractionEtendue(frac[0], frac[1]).produitFraction(
+        new FractionEtendue(-1, 1),
+      )
+      const a = randint(-2, 2, 0)
+      const b = randint(-5, 5, [-1, 0, 1])
+      const c = randint(-2, 2, 0)
 
-    // Calcul de l'image de f par la fonction ax² + bx + c
-    // f(x) = a*x² + b*x + c où x = frac[0]/frac[1]
+      // Calcul de l'image de f par la fonction ax² + bx + c
+      // f(x) = a*x² + b*x + c où x = frac[0]/frac[1]
 
-    // Calcul de x²
-    const xCarre = new FractionEtendue(frac[0] * frac[0], frac[1] * frac[1])
+      // Calcul de x²
+      const xCarre = new FractionEtendue(frac[0] * frac[0], frac[1] * frac[1])
 
-    // Calcul de a*x²
-    const aXCarre = xCarre.produitFraction(new FractionEtendue(a, 1))
+      // Calcul de a*x²
+      const aXCarre = xCarre.produitFraction(new FractionEtendue(a, 1))
 
-    // Calcul de b*x
-    const bX = f.produitFraction(new FractionEtendue(b, 1))
-    // Calcul de c (converti en fraction)
-    const cFraction = new FractionEtendue(c, 1)
+      // Calcul de b*x
+      const bX = f.produitFraction(new FractionEtendue(b, 1))
+      // Calcul de c (converti en fraction)
+      const cFraction = new FractionEtendue(c, 1)
 
-    // Calcul du résultat : a*x² + b*x + c
-    const resultat = aXCarre.sommeFraction(bX).sommeFraction(cFraction)
+      // Calcul du résultat : a*x² + b*x + c
+      const resultat = aXCarre.sommeFraction(bX).sommeFraction(cFraction)
 
-    // Calcul du dénominateur commun (PPCM des dénominateurs)
-    const ppcm = (a: number, b: number): number => {
-      const pgcd = (x: number, y: number): number =>
-        y === 0 ? x : pgcd(y, x % y)
-      return Math.abs(a * b) / pgcd(a, b)
-    }
-    const denominateurCommun = ppcm(ppcm(aXCarre.den, bX.den), cFraction.den)
+      // Calcul du dénominateur commun (PPCM des dénominateurs)
+      const ppcm = (a: number, b: number): number => {
+        const pgcd = (x: number, y: number): number =>
+          y === 0 ? x : pgcd(y, x % y)
+        return Math.abs(a * b) / pgcd(a, b)
+      }
+      const denominateurCommun = ppcm(ppcm(aXCarre.den, bX.den), cFraction.den)
 
-    // Conversion des fractions au même dénominateur
-    const aXCarreCommun = new FractionEtendue(
-      aXCarre.num * (denominateurCommun / aXCarre.den),
-      denominateurCommun,
-    )
-    const bXCommun = new FractionEtendue(
-      bX.num * (denominateurCommun / bX.den),
-      denominateurCommun,
-    )
-    const cFractionCommun = new FractionEtendue(
-      c * (denominateurCommun / cFraction.den),
-      denominateurCommun,
-    )
+      // Conversion des fractions au même dénominateur
+      const aXCarreCommun = new FractionEtendue(
+        aXCarre.num * (denominateurCommun / aXCarre.den),
+        denominateurCommun,
+      )
+      const bXCommun = new FractionEtendue(
+        bX.num * (denominateurCommun / bX.den),
+        denominateurCommun,
+      )
+      const cFractionCommun = new FractionEtendue(
+        c * (denominateurCommun / cFraction.den),
+        denominateurCommun,
+      )
 
-    // Calcul du numérateur final
-    // const numerateurFinal =
-    //  aXCarreCommun.num + bXCommun.num + cFractionCommun.num
+      // Calcul du numérateur final
+      // const numerateurFinal =
+      //  aXCarreCommun.num + bXCommun.num + cFractionCommun.num
 
-    // Calcul des distracteurs
-    // Distracteur 1 : erreur sur le signe du résultat
-    const distracteur1 = resultat.oppose()
+      // Calcul des distracteurs
+      // Distracteur 1 : erreur sur le signe du résultat
+      const distracteur1 = resultat.oppose()
 
-    // Distracteur 2 : erreur dans la multiplication b*x (l'élève multiplie num et den par b)
-    const bXErreur = new FractionEtendue(f.num * b, f.den * b)
-    const distracteur2 = aXCarre
-      .sommeFraction(bXErreur)
-      .sommeFraction(cFraction)
+      // Distracteur 2 : erreur dans la multiplication b*x (l'élève multiplie num et den par b)
+      const bXErreur = new FractionEtendue(f.num * b, f.den * b)
+      const distracteur2 = aXCarre
+        .sommeFraction(bXErreur)
+        .sommeFraction(cFraction)
 
-    // Distracteur 3 : erreur dans le calcul de x² (l'élève ne met pas le signe au carré)
-    const xCarreErreur = new FractionEtendue(
-      -frac[0] * frac[0],
-      frac[1] * frac[1],
-    )
-    const aXCarreErreur = xCarreErreur.produitFraction(
-      new FractionEtendue(a, 1),
-    )
-    const distracteur3 = aXCarreErreur
-      .sommeFraction(bX)
-      .sommeFraction(cFraction)
+      // Distracteur 3 : erreur dans le calcul de x² (l'élève ne met pas le signe au carré)
+      const xCarreErreur = new FractionEtendue(
+        -frac[0] * frac[0],
+        frac[1] * frac[1],
+      )
+      const aXCarreErreur = xCarreErreur.produitFraction(
+        new FractionEtendue(a, 1),
+      )
+      const distracteur3 = aXCarreErreur
+        .sommeFraction(bX)
+        .sommeFraction(cFraction)
 
-    this.enonce = `On considère la fonction  $f$ définie sur $\\mathbb{R}$ par $f(x)=${rienSi1(a)}x^2${ecritureAlgebriqueSauf1(b)}x${ecritureAlgebrique(c)}$.<br>
+      this.enonce = `On considère la fonction  $f$ définie sur $\\mathbb{R}$ par $f(x)=${rienSi1(a)}x^2${ecritureAlgebriqueSauf1(b)}x${ecritureAlgebrique(c)}$.<br>
     L'image de $${f.texFSD}$ par cette fonction est : `
 
-    this.correction = `On remplace $x$ par $${f.texFSD}$ dans l'expression de $f$ :<br>
+      this.correction = `On remplace $x$ par $${f.texFSD}$ dans l'expression de $f$ :<br>
      
     $\\begin{aligned}
     f\\left(${f.texFSD}\\right)&=${a === 1 ? `` : `${a === -1 ? `-` : `${a}\\times`}`} \\left(${f.texFSD}\\right)^2${ecritureAlgebriqueSauf1(b)}\\times \\left(${f.texFSD}\\right)${ecritureAlgebrique(c)}\\\\
@@ -154,12 +157,17 @@ export default class AutoF1f extends ExerciceQcmA {
     
     L'image de $${f.texFSD}$ par la fonction $f$ est : $${miseEnEvidence(resultat.texFractionSimplifiee)}$.`
 
-    this.reponses = [
-      `$${resultat.texFractionSimplifiee}$`, // Bonne réponse
-      `$${distracteur1.texFractionSimplifiee}$`, // Erreur sur le signe
-      `$${distracteur2.texFractionSimplifiee}$`, // Erreur multiplication b*x
-      `$${distracteur3.texFractionSimplifiee}$`, // Erreur sur x²
-    ]
+      this.reponses = [
+        `$${resultat.texFractionSimplifiee}$`, // Bonne réponse
+        `$${distracteur1.texFractionSimplifiee}$`, // Erreur sur le signe
+        `$${distracteur2.texFractionSimplifiee}$`, // Erreur multiplication b*x
+        `$${distracteur3.texFractionSimplifiee}$`, // Erreur sur x²
+      ]
+      compteur++
+    } while (
+      compteur < 100 &&
+      !aLeBonNombreDePropsDifferentes(this, 4, true, {})
+    )
   }
 
   constructor() {

@@ -1,4 +1,4 @@
-import { compteLesReponsesDifferentes } from '../../lib/interactif/qcm'
+import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
 import { choice } from '../../lib/outils/arrayOutils'
 import { texNombre } from '../../lib/outils/texNombre'
 import { randint } from '../../modules/outils'
@@ -155,7 +155,7 @@ export default class QuartileQCM extends ExerciceQcmA {
       compteur++
     } while (
       compteur < 100 &&
-      !compteLesReponsesDifferentes(this, this.reponses.length, true, {})
+      !aLeBonNombreDePropsDifferentes(this, this.reponses.length, true, {})
     ) // On s'assure d'avoir 5 réponses différentes, sinon on régénère
   }
 

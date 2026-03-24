@@ -1,5 +1,5 @@
 import { fixeBordures } from '../../lib/2d/fixeBordures'
-import { compteLesReponsesDifferentes } from '../../lib/interactif/qcm'
+import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
 import { Arbre } from '../../modules/arbres'
 import FractionEtendue from '../../modules/FractionEtendue'
 import { mathalea2d } from '../../modules/mathalea2d'
@@ -193,7 +193,7 @@ export default class auto1AP3a extends ExerciceQcmA {
       compteur++
     } while (
       compteur < 100 &&
-      !compteLesReponsesDifferentes(this, this.reponses.length, true, {
+      !aLeBonNombreDePropsDifferentes(this, this.reponses.length, true, {
         fractionEgale: true,
       })
     ) // On s'assure d'avoir 4 réponses différentes, sinon on régénère

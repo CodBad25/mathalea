@@ -3,7 +3,7 @@ import { droite } from '../../lib/2d/droites'
 import { repere } from '../../lib/2d/reperes'
 import { latex2d } from '../../lib/2d/textes'
 import { deuxColonnes } from '../../lib/format/miseEnPage'
-import { compteLesReponsesDifferentes } from '../../lib/interactif/qcm'
+import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
 import { choice } from '../../lib/outils/arrayOutils'
 import {
   ecritureAlgebrique,
@@ -306,7 +306,9 @@ export default class Auto1AF076 extends ExerciceQcmA {
       compteur++
     } while (
       compteur < 100 &&
-      !compteLesReponsesDifferentes(this, 4, true, { egaliteExpression: true })
+      !aLeBonNombreDePropsDifferentes(this, 4, true, {
+        egaliteExpression: true,
+      })
     ) // On s'assure d'avoir 4 réponses différentes, sinon on régénère
   }
 

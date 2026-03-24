@@ -1,4 +1,4 @@
-import { compteLesReponsesDifferentes } from '../../lib/interactif/qcm'
+import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
 import { choice } from '../../lib/outils/arrayOutils'
 import {
   ecritureAlgebrique,
@@ -158,7 +158,10 @@ export default class AutoF3a extends ExerciceQcmA {
         distracteur3,
       })
       compteur++
-    } while (compteur < 100 && !compteLesReponsesDifferentes(this, 4, true, {}))
+    } while (
+      compteur < 100 &&
+      !aLeBonNombreDePropsDifferentes(this, 4, true, {})
+    )
   }
 
   constructor() {

@@ -1,4 +1,4 @@
-import { compteLesReponsesDifferentes } from '../../lib/interactif/qcm'
+import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
 import { choice } from '../../lib/outils/arrayOutils'
 import { texNombre } from '../../lib/outils/texNombre'
 import ExerciceQcmA from '../ExerciceQcmA'
@@ -240,7 +240,7 @@ $P(A) = 1 - ${texNombre(probAucun, 3)} = ${texNombre(probAuMoinsUn, 3)}$`
       compteur++
     } while (
       compteur < 100 &&
-      !compteLesReponsesDifferentes(this, 4, true, { texteSansCasse: true })
+      !aLeBonNombreDePropsDifferentes(this, 4, true, { texteSansCasse: true })
     )
   }
 

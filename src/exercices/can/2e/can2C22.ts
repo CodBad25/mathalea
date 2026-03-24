@@ -1,5 +1,5 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { compteLesReponsesDifferentes } from '../../../lib/interactif/qcm'
+import { aLeBonNombreDePropsDifferentes } from '../../../lib/interactif/qcm'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { ecritureAlgebrique } from '../../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
@@ -184,7 +184,7 @@ Calculer $F$ lorsque $a=${a}$, $b=${b.texFraction}$, $c=${c}$ et $d=${d.texFract
       compteur++
     } while (
       compteur < 100 &&
-      !compteLesReponsesDifferentes(this, nombreSouhaites, true, {
+      !aLeBonNombreDePropsDifferentes(this, nombreSouhaites, true, {
         avecFractions: true,
       })
     )

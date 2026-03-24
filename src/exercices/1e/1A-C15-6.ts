@@ -1,4 +1,4 @@
-import { compteLesReponsesDifferentes } from '../../lib/interactif/qcm'
+import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { sp } from '../../lib/outils/outilString'
 import { texNombre } from '../../lib/outils/texNombre'
@@ -73,7 +73,7 @@ Le montant de l'abonnement mensuel est donc de $${miseEnEvidence(abo + sp(1) + '
       compteur++
     } while (
       compteur < 100 &&
-      !compteLesReponsesDifferentes(this, 4, false, { unite: true })
+      !aLeBonNombreDePropsDifferentes(this, 4, false, { unite: true })
     ) // On s'assure d'avoir 4 réponses différentes, sinon on régénère
   }
 

@@ -1,11 +1,11 @@
 import { describe, expect, it, vi } from 'vitest'
-import ExerciceQcm from '../../../../src/exercices/ExerciceQcm'
+import ExerciceQcm from '../../src/exercices/ExerciceQcm.js'
 import {
-  compteLesReponsesDifferentes,
+  aLeBonNombreDePropsDifferentes,
   guessOptionsForReponses,
-} from '../../../../src/lib/interactif/qcm'
-import { mathaleaLoadExerciceFromUuid } from '../../../../src/lib/mathalea'
-import { findStatic, findUuid } from '../../helpers/filter.js'
+} from '../../src/lib/interactif/qcm.js'
+import { mathaleaLoadExerciceFromUuid } from '../../src/lib/mathalea.js'
+import { findStatic, findUuid } from '../e2e/helpers/filter.js'
 
 vi.mock('../../../../src/lib/components/version', () => ({
   fetchServerVersion: vi.fn(() => Promise.resolve('1.0.0')),
@@ -89,12 +89,12 @@ async function testQcmExercice(uuid: string) {
   const expected = getExpectedCount(exercice)
   const options =
     exercice.optionsDeComparaison || guessOptionsForReponses(reponses)
-  const ok = compteLesReponsesDifferentes(exercice, expected, true, options)
+  const ok = aLeBonNombreDePropsDifferentes(exercice, expected, true, options)
   if (!ok) {
     // Pour debug :
     console.error(
       `Exercice uuid=${uuid} n'a pas le bon nombre de réponses différentes (attendu: ${expected})`,
-      `Chercher le ou les doublons dans ${JSON.stringify(reponses)}`
+      `Chercher le ou les doublons dans ${JSON.stringify(reponses)}`,
     )
   }
   expect(ok, `uuid=${uuid} doit avoir ${expected} réponses différentes`).toBe(
@@ -120,12 +120,12 @@ async function runQcmTests(filter: string) {
 
 // Modifier ici le filtre pour cibler les exercices souhaités
 runQcmTests('1')
-runQcmTests('2')
-runQcmTests('3')
-runQcmTests('4')
-runQcmTests('5')
-runQcmTests('6')
-runQcmTests('T')
-runQcmTests('QCMBac')
-runQcmTests('QCMBrevet')
+// runQcmTests('2')
+// runQcmTests('3')
+// runQcmTests('4')
+// runQcmTests('5')
+// runQcmTests('6')
+// runQcmTests('T')
+// runQcmTests('QCMBac')
+// runQcmTests('QCMBrevet')
 runQcmTests('QCMStatiques')

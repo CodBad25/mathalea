@@ -1,4 +1,4 @@
-import { compteLesReponsesDifferentes } from '../../lib/interactif/qcm'
+import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
 import { choice } from '../../lib/outils/arrayOutils'
 import { ecritureAlgebrique } from '../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
@@ -146,7 +146,9 @@ export default class Puissances extends ExerciceQcmA {
       compteur++
     } while (
       compteur < 100 &&
-      !compteLesReponsesDifferentes(this, 4, true, { ensembleDeNombres: true })
+      !aLeBonNombreDePropsDifferentes(this, 4, true, {
+        ensembleDeNombres: true,
+      })
     ) // On s'assure d'avoir 4 réponses différentes, sinon on régénère
   }
 

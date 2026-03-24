@@ -1,6 +1,6 @@
 import { repere } from '../../lib/2d/reperes'
 import { latex2d } from '../../lib/2d/textes'
-import { compteLesReponsesDifferentes } from '../../lib/interactif/qcm'
+import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
 import {
   Spline,
   spline,
@@ -283,7 +283,7 @@ export default class AutoF01c extends ExerciceQcmA {
       compteur++
     } while (
       compteur < 100 &&
-      !compteLesReponsesDifferentes(this, 6, true, { texteSansCasse: true }) // on ne peut pas faire mieux vu les props
+      !aLeBonNombreDePropsDifferentes(this, 6, true, { texteSansCasse: true }) // on ne peut pas faire mieux vu les props
     ) // On s'assure d'avoir 6 réponses différentes, sinon on régénère
   }
 

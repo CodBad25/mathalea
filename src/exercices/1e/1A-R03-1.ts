@@ -1,4 +1,4 @@
-import { compteLesReponsesDifferentes } from '../../lib/interactif/qcm'
+import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { prenomM } from '../../lib/outils/Personne'
@@ -131,7 +131,7 @@ export default class ProportionDeProportion extends ExerciceQcmA {
       compteur++
     } while (
       compteur < 100 &&
-      !compteLesReponsesDifferentes(this, 4, true, { texteSansCasse: true })
+      !aLeBonNombreDePropsDifferentes(this, 4, true, { texteSansCasse: true })
     ) // On s'assure d'avoir 4 réponses différentes, sinon on régénère
   }
 

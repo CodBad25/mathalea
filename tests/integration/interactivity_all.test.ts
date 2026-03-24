@@ -9,6 +9,10 @@ import {
   vi,
 } from 'vitest'
 import { createURL } from '../../src/lib/createURL'
+import {
+  aLeBonNombreDePropsDifferentes,
+  guessOptionsForReponses,
+} from '../../src/lib/interactif/qcm'
 import { clearDOM } from './helpers/domSimulator'
 import { discoverExercises, loadExercise } from './helpers/exerciseLoader'
 import {
@@ -133,7 +137,12 @@ let domTestedQuestionsCount = 0
 let domSkippedQuestionsCount = 0
 const eitherTestedQuestionKeys = new Set<string>()
 
-function questionKey(filePath: string, seed: string, scenarioLabel: string | undefined, questionIndex: number) {
+function questionKey(
+  filePath: string,
+  seed: string,
+  scenarioLabel: string | undefined,
+  questionIndex: number,
+) {
   return `${filePath}|${seed}|${scenarioLabel ?? ''}|${questionIndex}`
 }
 
@@ -233,7 +242,14 @@ for (const [dir, entries] of grouped) {
                 continue
               }
               comparisonTestedQuestionsCount++
-              eitherTestedQuestionKeys.add(questionKey(entry.filePath, seed, scenario.label, result.questionIndex))
+              eitherTestedQuestionKeys.add(
+                questionKey(
+                  entry.filePath,
+                  seed,
+                  scenario.label,
+                  result.questionIndex,
+                ),
+              )
               if (!result.isOk) {
                 failures.push(
                   `${url} : la fonction de comparaison ${result.verificationFunctionName} (${result.format} - ${JSON.stringify(result.optionsComparaison)}) n'accepte pas les réponses attendues par la question ${result.questionIndex + 1}. Saisie simulée : ${result.simulatedInput}. Réponse attendue : ${result.goodAnswer}. Feedback : ${result.feedback}`,
@@ -259,10 +275,61 @@ for (const [dir, entries] of grouped) {
                 continue
               }
               domTestedQuestionsCount++
-              eitherTestedQuestionKeys.add(questionKey(entry.filePath, seed, scenario.label, result.questionIndex))
+              eitherTestedQuestionKeys.add(
+                questionKey(
+                  entry.filePath,
+                  seed,
+                  scenario.label,
+                  result.questionIndex,
+                ),
+              )
               if (!result.isOk) {
                 failures.push(
                   `${url} : la fonction ${result.verificationFunctionName} (${result.format}) n'accepte pas les réponses attendues par la question ${result.questionIndex + 1}. Saisie simulée : ${result.simulatedInput}. Réponse attendue : ${result.goodAnswer}. Feedback : ${result.feedback}`,
+                )
+              }
+            }
+
+            // Stratégie 3 : Vérification QCM (anti-doublons)
+            let isQcm = false
+            let expectedQcmCount = 0
+            if (
+              Array.isArray((exercice as any).reponses) &&
+              (exercice as any).reponses.length > 1
+            ) {
+              isQcm = true
+              expectedQcmCount = (exercice as any).reponses.length
+            } else if (
+              typeof (exercice as any).reponse !== 'undefined' &&
+              Array.isArray((exercice as any).distracteurs) &&
+              [(exercice as any).reponse, ...(exercice as any).distracteurs]
+                .length > 1
+            ) {
+              ;(exercice as any).versionQcm = true
+              isQcm = true
+              expectedQcmCount = [
+                (exercice as any).reponse,
+                ...(exercice as any).distracteurs,
+              ].length
+            }
+            if (isQcm) {
+              const options =
+                exercice.optionsDeComparaison ||
+                guessOptionsForReponses(
+                  (exercice as any).reponses ?? [
+                    String((exercice as any).reponse),
+                    ...((exercice as any).distracteurs ?? []).map(String),
+                  ],
+                )
+              const ok = aLeBonNombreDePropsDifferentes(
+                exercice,
+                expectedQcmCount,
+                true,
+                options,
+              )
+              if (!ok) {
+                failures.push(
+                  `${url} : QCM — les réponses proposées ne sont pas toutes différentes (doublons détectés)`,
                 )
               }
             }

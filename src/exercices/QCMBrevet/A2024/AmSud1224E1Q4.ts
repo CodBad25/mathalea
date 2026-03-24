@@ -2,7 +2,7 @@ import { colorToLatexOrHTML } from '../../../lib/2d/colorToLatexOrHtml'
 import { engrenages } from '../../../lib/2d/engrenage'
 import { fixeBordures } from '../../../lib/2d/fixeBordures'
 import { latex2d } from '../../../lib/2d/textes'
-import { compteLesReponsesDifferentes } from '../../../lib/interactif/qcm'
+import { aLeBonNombreDePropsDifferentes } from '../../../lib/interactif/qcm'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { ppcm } from '../../../lib/outils/primalite'
 import { context } from '../../../modules/context'
@@ -87,7 +87,7 @@ export default class AmeriqueSud1224Ex1Q4 extends ExerciceQcmA {
       compteur++
     } while (
       compteur < 100 &&
-      !compteLesReponsesDifferentes(this, 3, true, { texteSansCasse: true })
+      !aLeBonNombreDePropsDifferentes(this, 3, true, { texteSansCasse: true })
     )
   }
 

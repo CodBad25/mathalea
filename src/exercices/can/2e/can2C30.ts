@@ -1,5 +1,5 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { compteLesReponsesDifferentes } from '../../../lib/interactif/qcm'
+import { aLeBonNombreDePropsDifferentes } from '../../../lib/interactif/qcm'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { context } from '../../../modules/context'
@@ -69,7 +69,7 @@ On cherche $n$ tel que $2^{${p}n+1} = 2^{${k}}$, soit $${p}n+1=${k}$, d'où $n=\
     } while (
       this.versionQcm &&
       compteur < 100 &&
-      !compteLesReponsesDifferentes(this, 5, true, {})
+      !aLeBonNombreDePropsDifferentes(this, 5, true, {})
     )
   }
 }
