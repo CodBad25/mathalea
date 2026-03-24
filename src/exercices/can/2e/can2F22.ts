@@ -1,6 +1,6 @@
 import { repere } from '../../../lib/2d/reperes'
 import { texteParPosition } from '../../../lib/2d/textes'
-import { spline } from '../../../lib/mathFonctions/Spline'
+import { Spline, spline } from '../../../lib/mathFonctions/Spline'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { mathalea2d } from '../../../modules/mathalea2d'
@@ -24,7 +24,16 @@ export const refs = {
   'fr-fr': ['can2F22'],
   'fr-ch': ['2mIneq-2'],
 }
+
+type Noeud = {
+  x: number
+  y: number
+  deriveeGauche: number
+  deriveeDroit: number
+  isVisible: boolean
+}
 export default class InequationsGSpline extends ExerciceSimple {
+  spline!: Spline
   constructor() {
     super()
 
@@ -36,7 +45,7 @@ export default class InequationsGSpline extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const noeuds1 = [
+    const noeuds1: Noeud[] = [
       { x: -4, y: -3, deriveeGauche: 2, deriveeDroit: 2.5, isVisible: true },
       { x: -2, y: -1, deriveeGauche: 1, deriveeDroit: 0.5, isVisible: true },
       { x: 0, y: 0, deriveeGauche: 1, deriveeDroit: 2, isVisible: true },
@@ -45,7 +54,7 @@ export default class InequationsGSpline extends ExerciceSimple {
       { x: 3, y: 4, deriveeGauche: 0, deriveeDroit: 0, isVisible: true },
     ]
 
-    const noeuds3 = [
+    const noeuds3: Noeud[] = [
       { x: -4, y: -1, deriveeGauche: 0, deriveeDroit: 0, isVisible: true },
       { x: -2, y: 0, deriveeGauche: 0.8, deriveeDroit: 1, isVisible: true },
       { x: 0, y: 2, deriveeGauche: 1, deriveeDroit: 1, isVisible: true },
@@ -57,9 +66,9 @@ export default class InequationsGSpline extends ExerciceSimple {
       { x: 6, y: -4, deriveeGauche: 0, deriveeDroit: 0, isVisible: true },
     ]
 
-    const maFonction = choice([noeuds1, noeuds3]) //
-    const mesFonctions = [maFonction]
-    function aleatoiriseCourbe(listeFonctions) {
+    const maFonction: Noeud[] = choice([noeuds1, noeuds3]) //
+    const mesFonctions: Noeud[][] = [maFonction]
+    function aleatoiriseCourbe(listeFonctions: Noeud[][]): Noeud[] {
       const coeffX = 1 //  // symétries ou pas
       const coeffY = choice([-1, 1]) // choice([-1, 1])
       const deltaX = randint(-3, 3) //  // translations
@@ -75,7 +84,12 @@ export default class InequationsGSpline extends ExerciceSimple {
         }),
       )
     }
-    let bornes = {}
+    let bornes: { xMin: number; xMax: number; yMin: number; yMax: number } = {
+      xMin: 0,
+      xMax: 0,
+      yMin: 0,
+      yMax: 0,
+    }
     const o = texteParPosition('O', -0.3, -0.3, 0, 'black', 1)
     const nuage = aleatoiriseCourbe(mesFonctions)
     const theSpline = spline(nuage)
@@ -111,19 +125,20 @@ export default class InequationsGSpline extends ExerciceSimple {
     )
 
     const nombreAntecedentCherches1 = randint(1, nbAntecedentsEntiersMaximum)
-    const y1 = theSpline.trouveYPourNAntecedents(
-      nombreAntecedentCherches1,
-      maFonction === noeuds3 && theSpline.y[8] < 0
-        ? bornes.yMin + 1
-        : bornes.yMin,
-      maFonction === noeuds3 && theSpline.y[8] > 0
-        ? bornes.yMax - 1
-        : bornes.yMax,
-      true,
-      true,
-    )
+    const y1 =
+      theSpline.trouveYPourNAntecedents(
+        nombreAntecedentCherches1,
+        maFonction === noeuds3 && theSpline.y[8] < 0
+          ? bornes.yMin + 1
+          : bornes.yMin,
+        maFonction === noeuds3 && theSpline.y[8] > 0
+          ? bornes.yMax - 1
+          : bornes.yMax,
+        true,
+        true,
+      ) || 0
 
-    const solutions1 = theSpline.solve(y1)
+    const solutions1 = theSpline.solve(y1) || []
     const symbole = choice(['<', '\\leqslant', '>', '\\geqslant']) //
     const correction = `Les solutions de l'inéquation $f(x)${symbole}${y1}$ sont les abscisses des points de $\\mathscr{C}_f$ 
 qui se situent  ${symbole === '>' || symbole === '<' ? 'strictement' : 'sur ou '} ${symbole === '>' || symbole === '\\geqslant' ? 'au-dessus' : 'en dessous'} de la droite d'équation $y=${y1}$.<br>
@@ -363,7 +378,7 @@ On en déduit `
             : `[${solutions1[0]};${theSpline.x[5]}]`
       }
       this.correction = `${correction}`
-      this.correction += `$S=${miseEnEvidence(this.reponse)}$.`
+      this.correction += `$S=${miseEnEvidence(String(this.reponse))}$.`
     }
 
     this.canEnonce = this.question // 'Compléter'

@@ -1,7 +1,7 @@
 import { repere } from '../../../lib/2d/reperes'
 import { texteParPosition } from '../../../lib/2d/textes'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { spline } from '../../../lib/mathFonctions/Spline'
+import { Spline, spline } from '../../../lib/mathFonctions/Spline'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { mathalea2d } from '../../../modules/mathalea2d'
@@ -21,7 +21,15 @@ export const refs = {
   'fr-fr': ['can2F18'],
   'fr-ch': [],
 }
+type Noeud = {
+  x: number
+  y: number
+  deriveeGauche: number
+  deriveeDroit: number
+  isVisible: boolean
+}
 export default class MaxMinG extends ExerciceSimple {
+  spline!: Spline
   constructor() {
     super()
     this.typeExercice = 'simple'
@@ -30,7 +38,7 @@ export default class MaxMinG extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const noeuds1 = [
+    const noeuds1: Noeud[] = [
       { x: -4, y: -1, deriveeGauche: 0, deriveeDroit: 0, isVisible: true },
       { x: -3, y: 0, deriveeGauche: 1, deriveeDroit: 1, isVisible: true },
       { x: -2, y: 1, deriveeGauche: 0, deriveeDroit: 0, isVisible: true },
@@ -41,7 +49,7 @@ export default class MaxMinG extends ExerciceSimple {
       { x: 4, y: -2, deriveeGauche: 1, deriveeDroit: 1, isVisible: true },
       { x: 5, y: -1, deriveeGauche: 0, deriveeDroit: 0, isVisible: true },
     ]
-    const noeuds2 = [
+    const noeuds2: Noeud[] = [
       { x: -4, y: 0, deriveeGauche: 0, deriveeDroit: 0, isVisible: true },
       { x: -3, y: 1, deriveeGauche: 1, deriveeDroit: 1, isVisible: true },
       { x: -2, y: 3, deriveeGauche: 0, deriveeDroit: 0, isVisible: true },
@@ -64,7 +72,7 @@ export default class MaxMinG extends ExerciceSimple {
       { x: 5, y: 2, deriveeGauche: 2, deriveeDroit: 2, isVisible: true },
     ]
     const mesFonctions = [noeuds3, noeuds1, noeuds2] //
-    function aleatoiriseCourbe(listeFonctions) {
+    function aleatoiriseCourbe(listeFonctions: Noeud[][]): Noeud[] {
       const coeffX = choice([-1, 1]) // symétries ou pas
       const coeffY = choice([-1, 1])
       const deltaX = randint(-2, +2) // translations
@@ -80,7 +88,12 @@ export default class MaxMinG extends ExerciceSimple {
         }),
       )
     }
-    let bornes: { xMin: number; xMax: number; yMin: number; yMax: number } = {}
+    let bornes: { xMin: number; xMax: number; yMin: number; yMax: number } = {
+      xMin: 0,
+      xMax: 0,
+      yMin: 0,
+      yMax: 0,
+    }
     const o = texteParPosition('O', -0.3, -0.3, 0, 'black', 1)
     const nuage = aleatoiriseCourbe(mesFonctions)
     const theSpline = spline(nuage)
@@ -108,8 +121,8 @@ export default class MaxMinG extends ExerciceSimple {
       color: 'blue',
     })
     const objetsEnonce = [repere1, courbe1]
-    const solsMax = theSpline.solve(Math.max(...nuage.map((el) => el.y)))
-    const solsMin = theSpline.solve(Math.min(...nuage.map((el) => el.y)))
+    const solsMax = theSpline.solve(Math.max(...nuage.map((el) => el.y))) || []
+    const solsMin = theSpline.solve(Math.min(...nuage.map((el) => el.y))) || []
     const choix = choice([true, false])
     this.reponse = choix
       ? Math.max(...nuage.map((el) => el.y))

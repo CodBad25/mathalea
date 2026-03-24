@@ -1,4 +1,3 @@
-import Exercice from '../../Exercice'
 import { repere } from '../../../lib/2d/reperes'
 import { texteParPosition } from '../../../lib/2d/textes'
 import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
@@ -8,6 +7,7 @@ import { spline, type NoeudSpline } from '../../../lib/mathFonctions/Spline'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../../modules/outils'
+import Exercice from '../../Exercice'
 export const interactifReady = true
 export const interactifType = 'listeDeroulante'
 export const titre =
@@ -96,15 +96,20 @@ export default class SignesTabGSpline extends Exercice {
     for (
       let i = 0, cpt = 0, texte = '', texteCorr = '';
       i < this.nbQuestions && cpt < 50;
-
     ) {
-      let bornes = {}
+      let bornes: { xMin: number; xMax: number; yMin: number; yMax: number } = {
+        xMin: 0,
+        xMax: 0,
+        yMin: 0,
+        yMax: 0,
+      }
+
       const o = texteParPosition('O', -0.3, -0.3)
       const nuage = aleatoiriseCourbe(mesFonctions)
       const maSpline = spline(nuage)
       bornes = maSpline.trouveMaxes()
 
-      const fonctionD = (x) => maSpline.derivee(x)
+      const fonctionD = maSpline.derivee
       const { xMin, xMax, yMin, yMax } = bornes
       const tableau = tableauSignesFonction(maSpline.fonction, xMin, xMax, {
         step: 1,
