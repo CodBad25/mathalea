@@ -1,13 +1,13 @@
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
+import { remplisLesBlancs } from '../../../lib/interactif/questionMathLive'
 import { tableauDeVariation } from '../../../lib/mathFonctions/etudeFonction'
 import { choice } from '../../../lib/outils/arrayOutils'
-import { sp } from '../../../lib/outils/outilString'
-import { listeQuestionsToContenu, randint } from '../../../modules/outils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import Exercice from '../../Exercice'
-import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
+import { sp } from '../../../lib/outils/outilString'
 import { context } from '../../../modules/context'
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { remplisLesBlancs } from '../../../lib/interactif/questionMathLive'
+import { listeQuestionsToContenu, randint } from '../../../modules/outils'
+import Exercice from '../../Exercice'
 export const titre = 'Encadrer en utilisant un tableau de variations'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -94,7 +94,6 @@ export default class EncadrerTableau extends Exercice {
           ],
           // tabLines ci-dessous contient les autres lignes du tableau.
           tabLines: [ligne1],
-          colorBackground: '',
           espcl: 2, // taille en cm entre deux antécédents
           deltacl: 1, // distance entre la bordure et les premiers et derniers antécédents
           lgt: 3, // taille de la première colonne en cm
@@ -112,7 +111,6 @@ export default class EncadrerTableau extends Exercice {
         ],
         // tabLines ci-dessous contient les autres lignes du tableau.
         tabLines: [ligne1],
-        colorBackground: '',
         espcl: 4, // taille en cm entre deux antécédents
         deltacl: 1, // distance entre la bordure et les premiers et derniers antécédents
         lgt: 3, // taille de la première colonne en cm

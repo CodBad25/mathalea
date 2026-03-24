@@ -58,10 +58,10 @@ export default class CalculHypotenusePythagore extends ExerciceSimple {
             'x',
             milieu(A, C).x,
             milieu(A, C).y - 0.3,
-            'milieu',
+            0,
             'black',
             1,
-            'middle',
+            'milieu',
             true,
           ),
           texteParPosition(

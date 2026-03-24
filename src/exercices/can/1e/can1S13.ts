@@ -117,6 +117,7 @@ export default class NatureSuiteRec extends Exercice {
           break
 
         case 3: // suite géo u_n/a
+        default:
           a = randint(2, 10)
           u = randint(1, 10) * choice([-1, 1])
           b = choice([-1, 1])
@@ -188,7 +189,7 @@ export default class NatureSuiteRec extends Exercice {
           break
       }
 
-      if (this.questionJamaisPosee(i,u, a)) {
+      if (this.questionJamaisPosee(i, u, a)) {
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr
 

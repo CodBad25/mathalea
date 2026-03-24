@@ -91,7 +91,7 @@ export default class PolynesieJuin2024Ex2Q2 extends ExerciceQcm {
     const polygone1 = polygone(...nuage)
     const polygone2 = polygone(nuage2, 'blue')
     polygone2.epaisseur = 2
-    polygone1.hachures = 1
+    polygone1.hachures = 'north east lines'
     polygone1.couleurDesHachures = colorToLatexOrHTML('black')
     polygone1.couleurDeRemplissage = colorToLatexOrHTML('gray')
     const objets = [maSpline.courbe({ color: 'red', epaisseur: 2 }), leRepere]

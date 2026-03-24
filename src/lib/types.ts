@@ -291,6 +291,8 @@ export type OptionsComparaisonType = {
   entiersConsecutifs?: boolean // Pas de wiki
   expressionsForcementReduites?: boolean // Pas de wiki
   coordonnees?: boolean
+  ordered?: boolean // Options pour drag and drop
+  multi?: boolean // Options pour drag and drop
 }
 export type CompareFunction = (
   input: string,

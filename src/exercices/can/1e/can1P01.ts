@@ -1,4 +1,3 @@
-import Decimal from 'decimal.js'
 import { ajouteChampTexteMathLive } from '../../../lib/interactif/questionMathLive'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { texNombre } from '../../../lib/outils/texNombre'
@@ -29,14 +28,6 @@ export const refs = {
 export default class ProbabilitesNotation extends Exercice {
   constructor() {
     super()
-
-    this.keyboard = [
-      'numbers',
-      'fullOperations',
-      'variables',
-      'trigo',
-      'advanced',
-    ]
     this.sup = true
 
     this.nbQuestions = 1
@@ -47,7 +38,17 @@ export default class ProbabilitesNotation extends Exercice {
 
   nouvelleVersion() {
     for (
-      let i = 0, cpt = 0, p1, p2, p3, p4, p5, p6, texte, texteCorr, choix;
+      let i = 0,
+        cpt = 0,
+        p1 = 0,
+        p2 = 0,
+        p3 = 0,
+        p4 = 0,
+        p5 = 0,
+        p6 = 0,
+        texte,
+        texteCorr,
+        choix;
       i < this.nbQuestions && cpt < 50;
     ) {
       // switch (choice([1, 2, 3])) { //, 2, 3
@@ -56,7 +57,7 @@ export default class ProbabilitesNotation extends Exercice {
       ) {
         case 1:
           p1 = randint(25, 80)
-          p2 = new Decimal(p1).div(100)
+          p2 = p1 / 100
           choix = choice(['q1', 'q2', 'q3', 'q4', 'q5']) //
           texte = `Dans un lycée, on choisit au hasard un élève. On note : <br>
       $\\bullet$ $F$ : « L'élève choisi est une fille » ;<br>
@@ -191,7 +192,7 @@ export default class ProbabilitesNotation extends Exercice {
                 options: { texteAvecCasse: true },
               },
             })
-          } else if (choix === 'q5') {
+          } else {
             if (choice([true, false])) {
               texte += ` Dans ce lycée $${p1}\\,\\%$ des demi-pensionnaires sont des garçons.<br>`
               this.canEnonce += ` Dans ce lycée $${p1}\\,\\%$ des demi-pensionnaires sont des garçons.`
@@ -238,11 +239,11 @@ export default class ProbabilitesNotation extends Exercice {
 
         case 2:
           p1 = randint(80, 95)
-          p2 = new Decimal(p1).div(100)
+          p2 = p1 / 100
           p3 = randint(2, 7)
-          p4 = new Decimal(p3).div(100)
+          p4 = p3 / 100
           p5 = randint(35, 55)
-          p6 = new Decimal(p5).div(100)
+          p6 = p5 / 100
           choix = choice(['q1', 'q2', 'q3', 'q4', 'q5', 'q6', 'q7']) //,
           texte = `Dans un stock de pommes provenant de deux fournisseurs (A et B), on prend au hasard une pomme. On note :<br>
             A : « La pomme provient du fournisseur A » ;<br>
@@ -476,7 +477,7 @@ export default class ProbabilitesNotation extends Exercice {
             })
             this.canReponseACompleter = ` En utilisant les événements $A$ et $C$, compléter avec une probabilité :<br>
             $\\ldots = ${texNombre(p6, 2)}$`
-          } else if (choix === 'q7') {
+          } else {
             texte += ` $${p5}\\,\\%$ des pommes  proviennent du fournisseur A et ne sont pas commercialisables.<br>
           En utilisant les événements $A$ et $C$, compléter avec une probabilité :<br>`
             this.canEnonce += ` $${p5}\\,\\%$ des pommes  proviennent du fournisseur A et ne sont pas commercialisables.`
@@ -511,12 +512,13 @@ export default class ProbabilitesNotation extends Exercice {
           break
 
         case 3:
+        default:
           p1 = randint(90, 99)
-          p2 = new Decimal(p1).div(100)
+          p2 = p1 / 100
           p3 = randint(2, 7)
-          p4 = new Decimal(p3).div(100)
+          p4 = p3 / 100
           p5 = randint(35, 55)
-          p6 = new Decimal(p5).div(100)
+          p6 = p5 / 100
           choix = choice(['q1', 'q2', 'q3', 'q4', 'q5', 'q6']) //,
           texte = `Un test est utilisé pour dépister une maladie. On choisit une personne  au hasard. On note :<br>
               M : « La personne est malade » ;<br>
@@ -710,7 +712,7 @@ export default class ProbabilitesNotation extends Exercice {
             })
             this.canReponseACompleter = ` En utilisant les événements $M$ et $T$, compléter avec une probabilité :<br>
             $\\ldots = ${texNombre(p4, 2)}$`
-          } else if (choix === 'q6') {
+          } else {
             texte += `  $${p3}\\,\\%$ des personnes ont un test positif alors qu'elles ne sont pas malades.<br>
                 En utilisant les événements $T$ et $M$, compléter avec une probabilité :<br>`
             this.canEnonce += `$${p3}\\,\\%$ des personnes ont un test positif alors qu'elles ne sont pas malades.`

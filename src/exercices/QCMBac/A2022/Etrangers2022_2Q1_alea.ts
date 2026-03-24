@@ -76,7 +76,7 @@ export default class MetropoleJuin24Exo4Q1 extends ExerciceQcmA {
     }
     this.correction += `<br>L'équation $f(x) = ${k}$`
     if (delta < 0) this.correction += " n'"
-    this.correction += ` admet donc ${texteEnCouleurEtGras(this.reponse)}.`
+    this.correction += ` admet donc ${texteEnCouleurEtGras(String(this.reponse))}.`
   }
   // S'occupe de passser les données originales à la fonction appliquerLesValeurs
 

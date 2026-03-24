@@ -1,22 +1,12 @@
-import {
-  gestionnaireFormulaireTexte,
-  listeQuestionsToContenu,
-  randint,
-} from '../../modules/outils'
-import Exercice from '../Exercice'
-import {
-  ecritureAlgebrique,
-  ecritureAlgebriqueSauf1,
-  ecritureParentheseSiNegatif,
-  egalOuApprox,
-  reduireAxPlusB,
-  reduirePolynomeDegre3,
-} from '../../lib/outils/ecritures'
-import FractionEtendue from '../../modules/FractionEtendue'
 import { createList } from '../../lib/format/lists'
 import { tableauDeVariation } from '../../lib/mathFonctions/etudeFonction'
-import Trinome from '../../modules/Trinome'
-import { texNombre } from '../../lib/outils/texNombre'
+import {
+  ecritureAlgebrique,
+  ecritureParentheseSiNegatif,
+  reduirePolynomeDegre3,
+} from '../../lib/outils/ecritures'
+import { listeQuestionsToContenu, randint } from '../../modules/outils'
+import Exercice from '../Exercice'
 export const titre =
   "Étudier le sens de variations d'une fonction polynôme du troisième degré (sans discriminant)"
 export const dateDePublication = '08/06/2025'
@@ -42,8 +32,15 @@ export default class EtudeFctPoly3 extends Exercice {
   /**
    * Construit le tableau de variations de la fonction.
    */
-  tableau(fonction, a, x1, x2, xMin, xMax) {
-    function signe(a) {
+  tableau(
+    fonction: (x: number) => number,
+    a: number,
+    x1: number,
+    x2: number,
+    xMin: number,
+    xMax: number,
+  ) {
+    function signe(a: number) {
       if (a < 0) {
         return '-'
       } else {
@@ -152,14 +149,11 @@ export default class EtudeFctPoly3 extends Exercice {
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
       let texte = ''
       let texteCorr = ''
-      let fonction // La fonction étudiée
-      let derivee // Sa dérivée
-      let tolerance // la tolérance doit être réglée au cas par cas, car pour la dérivée de 1/x entre 17 et 19 par exemple, il y a trop peu de différence avec zéro !
 
       const a = 3 * randint(-3, 3, [0, 1])
       const x1 = randint(-5, 5, 0)
       let x2 = randint(-10, 10, [0, x1, -x1, 1 - x1]) // Pour s'assurer que la somme soit non nulle, différente de 1, et que x1 et x2 soient différents
-      if ((x1 + x2) % 2 != 0) {
+      if ((x1 + x2) % 2 !== 0) {
         // On veut que la somme soit paire, pour éviter les nombres à virgule
         if (x1 < x2) {
           x2 = x2 + 1
@@ -171,10 +165,8 @@ export default class EtudeFctPoly3 extends Exercice {
       const xMin = Math.min(x1, x2) - 2 // Borne gauche de l'intervalle d'étude
       const xMax = Math.max(x1, x2) + 2 // Borne droite de l'intervalle d'étude
       const intervalle = `[${xMin};${xMax}]` // Représentation de l'intervalle de définition comme un texte
-      fonction = (x: number) =>
+      const fonction = (x: number) =>
         (a / 3) * x ** 3 - ((a * (x1 + x2)) / 2) * x ** 2 + a * x1 * x2 * x + k
-      derivee = (x: number) => a * x ** 2 - a * (x1 + x2) * x + a * x1 * x2
-      tolerance = 0.005
 
       texte = `On considère la fonction $f$ définie sur $${intervalle}$ par : $f(x)=${reduirePolynomeDegre3(a / 3, (-a * (x1 + x2)) / 2, a * x1 * x2, k)}$. Le but de l'exercice est d'étudier le sens de variations de la fonction $f$ sur son intervalle de définition, puis de déterminer ses éventuels extremums.`
 

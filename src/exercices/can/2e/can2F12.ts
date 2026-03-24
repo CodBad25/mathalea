@@ -37,11 +37,11 @@ export default class ComparerAvecFctRef extends Exercice {
   nouvelleVersion() {
     let texte, texteCorr, a, b, N, props
     for (let i = 0; i < this.nbQuestions; ) {
+      N = randint(1, 2)
       switch (
         choice([1, 2, 3]) //
       ) {
         case 1:
-          N = randint(1, 2)
           if (N === 1) {
             a = randint(1, 9) + randint(5, 9) / 10
             b = a + (randint(1, 9) / 10) * choice([1, -1])
@@ -93,8 +93,7 @@ export default class ComparerAvecFctRef extends Exercice {
             } else {
               texteCorr += `Comme $${texNombre(b)}${miseEnEvidence('\\boldsymbol{<}', 'blue')}${texNombre(a)}$, alors  $\\dfrac{1}{${texNombre(b)}}${miseEnEvidence('\\boldsymbol{>}', 'blue')}\\dfrac{1}{${texNombre(a)}}$`
             }
-          }
-          if (N === 2) {
+          } else {
             a = (randint(1, 9) + randint(5, 9) / 10) * -1
             b = a + (randint(1, 9) / 10) * choice([1, -1])
             texte = 'Sélectionner l’affirmation correcte. '
@@ -204,6 +203,7 @@ export default class ComparerAvecFctRef extends Exercice {
 
           break
         case 3:
+        default:
           a = randint(0, 10) + randint(6, 9) / 10
           b = a + (randint(1, 5, 0) / 10) * choice([-1, 1])
           if (b === 1) {

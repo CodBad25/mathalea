@@ -199,6 +199,7 @@ export default class NatureSuiteRec extends Exercice {
 
           break
         case 5: // suite géo avec raison fraction
+        default:
           listeFractions1 = [
             [1, 2],
             [2, 3],

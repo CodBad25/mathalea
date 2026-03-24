@@ -115,12 +115,8 @@ et évaluez le signe de leur différence. `)
        $-(${reduireAxPlusB(1, b)})^2=0$.`
             this.correction = `On isole le carré : <br>
              $\\begin{aligned}
-             -(${reduireAxPlusB(1, b)})^2&=0\\\\
-             ${a === 1 ? '' : a}(${reduireAxPlusB(1, b)})^2&=0\\\\`
-            this.correction +=
-              a === 1
-                ? ''
-                : `\\dfrac{${a}}{${miseEnEvidence(a)}}(${reduireAxPlusB(1, b)})^2&=\\dfrac{${-c}}{${miseEnEvidence(a)}}\\\\`
+             -(${reduireAxPlusB(1, b)})^2&=0\\\\`
+            this.correction += `\\dfrac{${a}}{${miseEnEvidence(a)}}(${reduireAxPlusB(1, b)})^2&=\\dfrac{${-c}}{${miseEnEvidence(a)}}\\\\`
             this.correction += `
              (${reduireAxPlusB(1, b)})^2&=${maFraction.texFractionSimplifiee}
                      \\end{aligned}$<br>

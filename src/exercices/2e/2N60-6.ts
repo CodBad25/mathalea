@@ -139,14 +139,12 @@ export default class PositionRelative extends Exercice {
             }
             texteCorr += tableauDeVariation({
               tabInit: [
-                // @ts-expect-error tableauDeVariation n'est pas typé
                 [
                   // Première colonne du tableau avec le format [chaine d'entête, hauteur de ligne, nombre de pixels de largeur estimée du texte pour le centrage]
                   ['$x$', 2.5, 10],
                   ['$f(x)-g(x)$', 2, 50],
                 ],
                 // Première ligne du tableau avec chaque antécédent suivi de son nombre de pixels de largeur estimée du texte pour le centrage
-                // @ts-expect-error tableauDeVariation n'est pas typé
                 [
                   '$-\\infty$',
                   20,
@@ -157,9 +155,8 @@ export default class PositionRelative extends Exercice {
                 ],
               ],
               // tabLines ci-dessous contient les autres lignes du tableau.
-              // @ts-expect-error tableauDeVariation n'est pas typé
               tabLines: [ligne1],
-              colorBackground: '',
+
               espcl: 3.5, // taille en cm entre deux antécédents
               deltacl: 0.8, // distance entre la bordure et les premiers et derniers antécédents
               lgt: 5, // taille de la première colonne en cm
@@ -279,7 +276,6 @@ export default class PositionRelative extends Exercice {
 
                 texteCorr += tableauDeVariation({
                   tabInit: [
-                    // @ts-expect-error tableauDeVariation n'est pas typé
                     [
                       ['$x$', 2.5, 30],
                       [
@@ -294,7 +290,6 @@ export default class PositionRelative extends Exercice {
                       ],
                       ['$f(x)-g(x)$', 2, 200],
                     ],
-                    // @ts-expect-error tableauDeVariation n'est pas typé
                     [
                       '$-\\infty$',
                       30,
@@ -306,9 +301,8 @@ export default class PositionRelative extends Exercice {
                       30,
                     ],
                   ],
-                  // @ts-expect-error tableauDeVariation n'est pas typé
                   tabLines: [ligne1, ligne2, ligne3],
-                  colorBackground: '',
+
                   espcl: 3.5,
                   deltacl: 0.8,
                   lgt: 10,
@@ -407,7 +401,6 @@ export default class PositionRelative extends Exercice {
 
                 texteCorr += tableauDeVariation({
                   tabInit: [
-                    // @ts-expect-error tableauDeVariation n'est pas typé
                     [
                       ['$x$', 2.5, 30],
                       [
@@ -422,7 +415,6 @@ export default class PositionRelative extends Exercice {
                       ],
                       ['$f(x)-g(x)$', 2, 200],
                     ],
-                    // @ts-expect-error tableauDeVariation n'est pas typé
                     [
                       '$-\\infty$',
                       30,
@@ -434,9 +426,8 @@ export default class PositionRelative extends Exercice {
                       30,
                     ],
                   ],
-                  // @ts-expect-error tableauDeVariation n'est pas typé
                   tabLines: [ligne1, ligne2, ligne3],
-                  colorBackground: '',
+
                   espcl: 3.5,
                   deltacl: 0.8,
                   lgt: 10,
@@ -554,7 +545,6 @@ export default class PositionRelative extends Exercice {
 
                 texteCorr += tableauDeVariation({
                   tabInit: [
-                    // @ts-expect-error tableauDeVariation n'est pas typé
                     [
                       ['$x$', 2.5, 30],
                       [
@@ -569,7 +559,6 @@ export default class PositionRelative extends Exercice {
                       ],
                       ['$f(x)-g(x)$', 2, 200],
                     ],
-                    // @ts-expect-error tableauDeVariation n'est pas typé
                     [
                       '$-\\infty$',
                       30,
@@ -581,9 +570,8 @@ export default class PositionRelative extends Exercice {
                       30,
                     ],
                   ],
-                  // @ts-expect-error tableauDeVariation n'est pas typé
                   tabLines: [ligne1, ligne2, ligne3],
-                  colorBackground: '',
+
                   espcl: 3.5,
                   deltacl: 0.8,
                   lgt: 10,
@@ -683,7 +671,6 @@ export default class PositionRelative extends Exercice {
 
                 texteCorr += tableauDeVariation({
                   tabInit: [
-                    // @ts-expect-error tableauDeVariation n'est pas typé
                     [
                       ['$x$', 2.5, 30],
                       [
@@ -698,7 +685,6 @@ export default class PositionRelative extends Exercice {
                       ],
                       ['$f(x)-g(x)$', 2, 200],
                     ],
-                    // @ts-expect-error tableauDeVariation n'est pas typé
                     [
                       '$-\\infty$',
                       30,
@@ -710,9 +696,8 @@ export default class PositionRelative extends Exercice {
                       30,
                     ],
                   ],
-                  // @ts-expect-error tableauDeVariation n'est pas typé
                   tabLines: [ligne1, ligne2, ligne3],
-                  colorBackground: '',
+
                   espcl: 3.5,
                   deltacl: 0.8,
                   lgt: 10,
@@ -950,14 +935,12 @@ export default class PositionRelative extends Exercice {
 
               texteCorr += tableauDeVariation({
                 tabInit: [
-                  // @ts-expect-error tableauDeVariation n'est pas typé
                   [
                     ['$x$', 2.5, 30],
                     ['$x$', 2, 75],
                     [`$${rienSi1(a)}x${ecritureAlgebrique(b - d)}$`, 2, 75],
                     ['$f(x)-g(x)$', 2, 200],
                   ],
-                  // @ts-expect-error tableauDeVariation n'est pas typé
                   [
                     '$-\\infty$',
                     30,
@@ -969,9 +952,8 @@ export default class PositionRelative extends Exercice {
                     30,
                   ],
                 ],
-                // @ts-expect-error tableauDeVariation n'est pas typé
                 tabLines: [ligne1, ligne2, ligne3],
-                colorBackground: '',
+
                 espcl: 3.5,
                 deltacl: 0.8,
                 lgt: 10,
@@ -1221,14 +1203,12 @@ export default class PositionRelative extends Exercice {
 
               texteCorr += tableauDeVariation({
                 tabInit: [
-                  // @ts-expect-error tableauDeVariation n'est pas typé
                   [
                     ['$x$', 2.5, 30],
                     ['$x$', 2, 75],
                     [`$${rienSi1(a)}x${ecritureAlgebrique(b - d)}$`, 2, 75],
                     ['$f(x)-g(x)$', 2, 200],
                   ],
-                  // @ts-expect-error tableauDeVariation n'est pas typé
                   [
                     '$-\\infty$',
                     30,
@@ -1240,9 +1220,8 @@ export default class PositionRelative extends Exercice {
                     30,
                   ],
                 ],
-                // @ts-expect-error tableauDeVariation n'est pas typé
                 tabLines: [ligne1, ligne2, ligne3],
-                colorBackground: '',
+
                 espcl: 3.5,
                 deltacl: 0.8,
                 lgt: 10,

@@ -1,14 +1,12 @@
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { remplisLesBlancs } from '../../lib/interactif/questionMathLive'
 import {
   combinaisonListes,
   shuffle2tableaux,
 } from '../../lib/outils/arrayOutils'
-import Exercice from '../Exercice'
-import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import { ecritureParentheseSiNegatif } from '../../lib/outils/ecritures'
-import { texNombre } from '../../lib/outils/texNombre'
-import { remplisLesBlancs } from '../../lib/interactif/questionMathLive'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { ppcm } from '../../lib/outils/primalite'
 import {
   addCombLin,
   eqToLatex,
@@ -16,8 +14,10 @@ import {
   printSystem,
   timesIfNotUn,
 } from '../../lib/outils/systemeEquations'
+import { texNombre } from '../../lib/outils/texNombre'
 import FractionEtendue from '../../modules/FractionEtendue'
-import { ppcm } from '../../lib/outils/primalite'
+import { listeQuestionsToContenu, randint } from '../../modules/outils'
+import Exercice from '../Exercice'
 export const titre =
   'Résoudre un système linéaire de deux équations à deux inconnues par combinaison linéaire'
 export const interactifReady = true
@@ -123,10 +123,10 @@ export default class systemeEquationsPremDeg extends Exercice {
         return vectEquiv
       }
 
-      let eqInt1: Array<number> = []
-      let eqInt2: Array<number> = []
-      let eqSimpl1: Array<number> = []
-      let eqSimpl2: Array<number> = []
+      let eqInt1: Array<number | FractionEtendue> = []
+      let eqInt2: Array<number | FractionEtendue> = []
+      let eqSimpl1: Array<number | FractionEtendue> = []
+      let eqSimpl2: Array<number | FractionEtendue> = []
       switch (listeTypeQuestions[i]) {
         case 'lv1':
           eqInt1 = addCombLin(eqEquiv(eq1, 'lv1'), eqEquiv(eq2, 'lv1'), 1)
@@ -147,7 +147,11 @@ export default class systemeEquationsPremDeg extends Exercice {
       eqSimpl2 = addCombLin(eqInt2, vectX, -eqInt2[3])
       eqSimpl2 = addCombLin(eqSimpl2, vectY, -eqInt2[4])
       eqSimpl2 = addCombLin(eqSimpl2, vectConstant, -eqInt2[2])
-      while (eqSimpl1[0] * eqSimpl2[1] - eqSimpl1[1] * eqSimpl2[0] === 0) {
+      while (
+        Number(eqSimpl1[0]) * Number(eqSimpl2[1]) -
+          Number(eqSimpl1[1]) * Number(eqSimpl2[0]) ===
+        0
+      ) {
         switch (listeTypeQuestions[i]) {
           case 'lv1':
             eqInt1 = addCombLin(eqEquiv(eq1, 'lv1'), eqEquiv(eq2, 'lv1'), 1)
@@ -193,13 +197,25 @@ export default class systemeEquationsPremDeg extends Exercice {
       const eqFinale2 = eqInt2Droite.concat(eqInt2Gauche)
       const nomVal1 = nomVal12.concat(nomVal11)
       const nomVal2 = nomVal22.concat(nomVal21)
-      const mX = ppcm(Math.abs(eqSimpl1[0]), Math.abs(eqSimpl2[0]))
-      const mY = ppcm(Math.abs(eqSimpl1[1]), Math.abs(eqSimpl2[1]))
+      const mX = ppcm(
+        Math.abs(Number(eqSimpl1[0])),
+        Math.abs(Number(eqSimpl2[0])),
+      )
+      const mY = ppcm(
+        Math.abs(Number(eqSimpl1[1])),
+        Math.abs(Number(eqSimpl2[1])),
+      )
       let varElim = ''
       let coeffElim = 0
       let coeffEq: Array<number> = []
-      const eqSimpl1Abs = [Math.abs(eqSimpl1[0]), Math.abs(eqSimpl1[1])]
-      const eqSimpl2Abs = [Math.abs(eqSimpl2[0]), Math.abs(eqSimpl2[1])]
+      const eqSimpl1Abs = [
+        Math.abs(Number(eqSimpl1[0])),
+        Math.abs(Number(eqSimpl1[1])),
+      ]
+      const eqSimpl2Abs = [
+        Math.abs(Number(eqSimpl2[0])),
+        Math.abs(Number(eqSimpl2[1])),
+      ]
       if (
         (mX === eqSimpl1Abs[0] || mX === eqSimpl2Abs[0]) &&
         (mY === eqSimpl1Abs[1] || mY === eqSimpl2Abs[1])
@@ -207,37 +223,37 @@ export default class systemeEquationsPremDeg extends Exercice {
         if (mY === eqSimpl1Abs[1] && mY === eqSimpl2Abs[1]) {
           varElim = 'y'
           coeffElim = mY
-          coeffEq = [eqSimpl1[1], eqSimpl2[1]]
+          coeffEq = [Number(eqSimpl1[1]), Number(eqSimpl2[1])]
         } else if (mX === eqSimpl1Abs[0] && mX === eqSimpl2Abs[0]) {
           varElim = 'x'
           coeffElim = mX
-          coeffEq = [eqSimpl1[0], eqSimpl2[0]]
+          coeffEq = [Number(eqSimpl1[0]), Number(eqSimpl2[0])]
         } else if (Math.abs(mX) <= Math.abs(mY)) {
           varElim = 'x'
           coeffElim = mX
-          coeffEq = [eqSimpl1[0], eqSimpl2[0]]
+          coeffEq = [Number(eqSimpl1[0]), Number(eqSimpl2[0])]
         } else {
           varElim = 'y'
           coeffElim = mY
-          coeffEq = [eqSimpl1[1], eqSimpl2[1]]
+          coeffEq = [Number(eqSimpl1[1]), Number(eqSimpl2[1])]
         }
       } else if (mX === eqSimpl1Abs[0] || mX === eqSimpl2Abs[0]) {
         varElim = 'x'
         coeffElim = mX
-        coeffEq = [eqSimpl1[0], eqSimpl2[0]]
+        coeffEq = [Number(eqSimpl1[0]), Number(eqSimpl2[0])]
       } else if (mY === eqSimpl1Abs[1] || mX === eqSimpl2Abs[1]) {
         varElim = 'y'
         coeffElim = mY
-        coeffEq = [eqSimpl1[1], eqSimpl2[1]]
+        coeffEq = [Number(eqSimpl1[1]), Number(eqSimpl2[1])]
       } else {
         if (Math.abs(mX) <= Math.abs(mY)) {
           varElim = 'x'
           coeffElim = mX
-          coeffEq = [eqSimpl1[0], eqSimpl2[0]]
+          coeffEq = [Number(eqSimpl1[0]), Number(eqSimpl2[0])]
         } else {
           varElim = 'y'
           coeffElim = mY
-          coeffEq = [eqSimpl1[1], eqSimpl2[1]]
+          coeffEq = [Number(eqSimpl1[1]), Number(eqSimpl2[1])]
         }
       }
       const varPasElim = varElim === 'x' ? 'y' : 'x'
@@ -304,25 +320,25 @@ export default class systemeEquationsPremDeg extends Exercice {
           `On obtient alors le système équivalent suivant : \\[${printSystem(eqToLatex(multCoeff(eqSimpl1, coeffElim / coeffEq[0]), listeVar, true), eqToLatex(addCombLin(multCoeff(eqSimpl1, coeffElim / coeffEq[0]), multCoeff(eqSimpl2, -coeffElim / coeffEq[1]), 1), listeVar, true))}\\]`
         texteCorr =
           texteCorr +
-          `On obtient que $${varPasElim} = ${new FractionEtendue(addCombLin(multCoeff(eqSimpl1, coeffElim / coeffEq[0]), multCoeff(eqSimpl2, -coeffElim / coeffEq[1]), 1)[5], addCombLin(multCoeff(eqSimpl1, coeffElim / coeffEq[0]), multCoeff(eqSimpl2, -coeffElim / coeffEq[1]), 1)[indexVarPasElim]).texFractionSimplifiee}$.<br>`
+          `On obtient que $${varPasElim} = ${new FractionEtendue(Number(addCombLin(multCoeff(eqSimpl1, coeffElim / coeffEq[0]), multCoeff(eqSimpl2, -coeffElim / coeffEq[1]), 1)[5]), Number(addCombLin(multCoeff(eqSimpl1, coeffElim / coeffEq[0]), multCoeff(eqSimpl2, -coeffElim / coeffEq[1]), 1)[indexVarPasElim])).texFractionSimplifiee}$.<br>`
         texteCorr =
           texteCorr +
           `On subsitue la valeur obtenue pour $${varPasElim}$ dans l'équation restante pour déterminer la valeur de $${varElim}\\,:$`
-        eqVarElim = multCoeff(eqSimpl1, coeffElim / coeffEq[0])
+        eqVarElim = multCoeff(eqSimpl1, coeffElim / coeffEq[0]).map(Number)
         if (varPasElim === 'x') {
           listeVar[0] = `${timesIfNotUn(eqVarElim[0])} ${ecritureParentheseSiNegatif(solX)}`
           eqVarElim = addCombLin(
             eqVarElim,
             [-eqVarElim[0], 0, solX.multiplieEntier(eqVarElim[0]), 0, 0, 0],
             1,
-          )
+          ).map(Number)
         } else {
           listeVar[1] = `${timesIfNotUn(eqVarElim[1])} ${ecritureParentheseSiNegatif(solY)}`
           eqVarElim = addCombLin(
             eqVarElim,
             [0, -eqVarElim[1], solY.multiplieEntier(eqVarElim[1]), 0, 0, 0],
             1,
-          )
+          ).map(Number)
         }
         texteCorr =
           texteCorr +

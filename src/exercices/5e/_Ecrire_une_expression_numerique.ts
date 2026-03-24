@@ -127,15 +127,21 @@ export default class EcrireUneExpressionNumerique extends Exercice {
       nbval = resultats[3]
       const expNom = this.litteral ? String(resultats[6]) : resultats[5] // Le split, c'est pour virer le déterminant.
       if (
-        (this.questionJamaisPosee(i, nbOperations, nbval, this.version, expf) &&
+        (this.questionJamaisPosee(
+          i,
+          nbOperations,
+          String(nbval),
+          this.version,
+          String(expf),
+        ) &&
           !this.litteral) ||
         (this.litteral &&
           this.questionJamaisPosee(
             i,
             nbOperations,
-            nbval,
+            String(nbval),
             this.version,
-            resultats[4],
+            String(resultats[4]),
           ))
       ) {
         this.autoCorrection[i] = {}
@@ -168,8 +174,8 @@ export default class EcrireUneExpressionNumerique extends Exercice {
             texte = `${expn}`
             expf = 'l' + String(expf).substring(1)
             texteCorr = this.interactif
-              ? `${expn} est ${texteEnCouleurEtGras(expNom)} : ${expf}.`
-              : `${expn} s'écrit : ${texteEnCouleurEtGras(expf)}.`
+              ? `${expn} est ${texteEnCouleurEtGras(String(expNom))} : ${expf}.`
+              : `${expn} s'écrit : ${texteEnCouleurEtGras(String(expf))}.`
             break
           case 3: {
             if (this.interactif) {
@@ -369,7 +375,7 @@ export default class EcrireUneExpressionNumerique extends Exercice {
             handleAnswers(
               this,
               i,
-              { reponse: { value: val } },
+              { reponse: { value: String(val) } },
               { formatInteractif: 'listeDeroulante' },
             )
           }

@@ -55,7 +55,7 @@ export default class SujetZero2024Ex5Q5 extends ExerciceQcm {
       grilleSecondaireXMax: 1,
     })
 
-    const f = (x) => (2 * (x - 2)) / Math.exp(x / 2)
+    const f = (x: number) => (2 * (x - 2)) / Math.exp(x / 2)
 
     const graphique = mathalea2d(
       {

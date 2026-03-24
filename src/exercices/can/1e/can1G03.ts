@@ -9,6 +9,7 @@ export const refs = {
   'fr-ch': ['2mTrigo-2'],
 }
 export default class AnglesAssociesCAN extends MesurePrincipal {
+  can: boolean
   constructor() {
     super()
     this.nbQuestions = 1

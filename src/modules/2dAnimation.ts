@@ -8,7 +8,12 @@
 import type { DemiDroite } from '../lib/2d/DemiDroite'
 import type { Droite } from '../lib/2d/droites'
 import { fixeBordures } from '../lib/2d/fixeBordures'
-import type { IDroite, IPolygone, IVecteur } from '../lib/2d/Interfaces'
+import type {
+  IDroite,
+  IPointAbstrait,
+  IPolygone,
+  IVecteur,
+} from '../lib/2d/Interfaces'
 import { ObjetMathalea2D } from '../lib/2d/ObjetMathalea2D'
 import type { PointAbstrait } from '../lib/2d/PointAbstrait'
 import type { Polygone } from '../lib/2d/polygones'
@@ -326,18 +331,18 @@ export function translationAnimee(
  */
 export class RotationAnimee extends ObjetMathalea2D {
   liste: (PointAbstrait | Droite | Segment | DemiDroite | Polygone)[]
-  O: PointAbstrait
+  O: PointAbstrait | IPointAbstrait
   angle: number
   animation: string
   constructor(
     liste:
-      | (PointAbstrait | Droite | Segment | DemiDroite | Polygone)[]
+      | (PointAbstrait | Droite | Segment | DemiDroite | IPolygone)[]
       | Droite
       | Segment
       | DemiDroite
-      | Polygone
+      | IPolygone
       | PointAbstrait,
-    O: PointAbstrait,
+    O: PointAbstrait | IPointAbstrait,
     angle: number,
     animation = 'begin="0s" dur="2s" repeatCount="indefinite"',
   ) {
@@ -370,14 +375,16 @@ export class RotationAnimee extends ObjetMathalea2D {
     for (const objet of this.liste) {
       code += '\n' + objet.svg(coeff)
     }
-
-    code += `<animateTransform
+    if (this.O.xSVG != null && this.O.ySVG != null) {
+      code += `<animateTransform
   attributeName="transform"
   type="rotate"
   from="0 ${this.O.xSVG(coeff)} ${this.O.ySVG(coeff)}"
   to="${-this.angle} ${this.O.xSVG(coeff)} ${this.O.ySVG(coeff)}"
   ${this.animation}
   />`
+    }
+
     code += '</g>'
     return code
   }
@@ -388,13 +395,13 @@ export class RotationAnimee extends ObjetMathalea2D {
 }
 export function rotationAnimee(
   liste:
-    | (PointAbstrait | Droite | Segment | DemiDroite | Polygone)[]
+    | (PointAbstrait | Droite | Segment | DemiDroite | IPolygone)[]
     | Droite
     | Segment
     | DemiDroite
-    | Polygone
+    | IPolygone
     | PointAbstrait,
-  O: PointAbstrait | PointAbstrait,
+  O: IPointAbstrait | PointAbstrait,
   angle: number,
   animation = 'begin="0s" dur="2s" repeatCount="indefinite"',
 ) {

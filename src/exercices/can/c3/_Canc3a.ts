@@ -591,7 +591,6 @@ export default class ClasseCan2023 {
         ${prenom2} a ${a} ans de moins que ${prenom1}. ${prenom2} a `
         sortie.texteCorr = `Puisque ${prenom2} a ${a} ans de moins que ${prenom1}, son âge est  : $${b}-${a}=${miseEnEvidence(b - a)}$ ${texteEnCouleur('ans')}. `
         sortie.champTexteApres = { texteApres: sp(5) + 'ans.' }
-        sortie.texteApres = '$\\ldots$ ans'
         sortie.canReponseACompleter = `${prenom2} a \\ldots{} ans.`
         sortie.canEnonce = `${prenom1} a $${b}$ ans. <br>
         ${prenom2} a ${a} ans de moins que ${prenom1}.`

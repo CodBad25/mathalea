@@ -35,6 +35,9 @@ export default class ResoudreEquationsFonctionDeReference extends Exercice {
   nouvelleVersion() {
     let texte, texteCorr, a, k, b, c, props
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+      a = 0
+      b = 0
+      c = 0
       switch (
         choice([1, 1, 2, 3]) //
       ) {
@@ -311,6 +314,7 @@ export default class ResoudreEquationsFonctionDeReference extends Exercice {
           break
 
         case 3:
+        default:
           k = randint(-10, 10)
           texte = `L'ensemble des solutions $S$ de l'équation $\\dfrac{1}{x}=${k}$ est :
                      `

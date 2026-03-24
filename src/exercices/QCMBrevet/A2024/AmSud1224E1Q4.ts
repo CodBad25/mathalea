@@ -36,8 +36,8 @@ export default class AmeriqueSud1224Ex1Q4 extends ExerciceQcmA {
     )
     for (const roue of engins) {
       roue.couleurDeRemplissage = colorToLatexOrHTML('gray')
-      roue.marqueurD = false
-      roue.marqueurG = false
+      roue.marqueurD = null
+      roue.marqueurG = null
     }
     const y0 = Math.min(engins[0].bordures[1], engins[1].bordures[1])
     const x1 = (engins[0].bordures[0] + engins[0].bordures[2]) / 2
