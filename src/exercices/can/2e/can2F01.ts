@@ -1,4 +1,4 @@
-import { compteLesReponsesDifferentes } from '../../../lib/interactif/qcm'
+import { aLeBonNombreDePropsDifferentes } from '../../../lib/interactif/qcm'
 import { choice } from '../../../lib/outils/arrayOutils'
 import {
   ecritureAlgebrique,
@@ -328,7 +328,7 @@ export default class CalculImageSecondDegre extends ExerciceSimple {
       compteur++
     } while (
       compteur < 100 &&
-      !compteLesReponsesDifferentes(this, nombreSouhaites, true, {})
+      !aLeBonNombreDePropsDifferentes(this, nombreSouhaites, true, {})
     )
   }
 }

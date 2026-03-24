@@ -1,3 +1,4 @@
+import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { randint } from '../../modules/outils'
 import ExerciceQcmA from '../ExerciceQcmA'
@@ -38,9 +39,16 @@ export default class Auto1AC3c extends ExerciceQcmA {
   }
 
   versionAleatoire = () => {
-    const k = randint(2, 3)
-    const a = randint(2, 4)
-    this.appliquerLesValeurs(a, k)
+    let compteur = 0
+    do {
+      const k = randint(2, 3)
+      const a = randint(2, 4)
+      this.appliquerLesValeurs(a, k)
+      compteur++
+    } while (
+      compteur < 100 &&
+      !aLeBonNombreDePropsDifferentes(this, 4, true, { texteSansCasse: true })
+    )
   }
 
   constructor() {

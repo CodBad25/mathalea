@@ -1,4 +1,4 @@
-import { compteLesReponsesDifferentes } from '../../lib/interactif/qcm'
+import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 
@@ -66,7 +66,7 @@ Diviser par $${nbPaiements}$ revient à multiplier par $\\dfrac{1}{${nbPaiements
       compteur++
     } while (
       compteur < 100 &&
-      !compteLesReponsesDifferentes(this, 4, true, { fractionEgale: true })
+      !aLeBonNombreDePropsDifferentes(this, 4, true, { fractionEgale: true })
     ) // On s'assure d'avoir 4 réponses différentes, sinon on régénère
   }
 
@@ -98,7 +98,7 @@ Diviser par $${nbPaiements}$ revient à multiplier par $\\dfrac{1}{${nbPaiements
       compteur++
     } while (
       compteur < 100 &&
-      !compteLesReponsesDifferentes(this, 4, true, { fractionEgale: true })
+      !aLeBonNombreDePropsDifferentes(this, 4, true, { fractionEgale: true })
     ) // On s'assure d'avoir 4 réponses différentes, sinon on régénère
   }
 

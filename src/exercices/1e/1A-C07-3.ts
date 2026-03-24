@@ -1,4 +1,4 @@
-import { compteLesReponsesDifferentes } from '../../lib/interactif/qcm'
+import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { prenomF } from '../../lib/outils/Personne'
@@ -100,7 +100,7 @@ export default class auto1AC7b extends ExerciceQcmA {
         }
       }
       compteur++
-    } while (compteur < 100 && !compteLesReponsesDifferentes(this, 4, true))
+    } while (compteur < 100 && !aLeBonNombreDePropsDifferentes(this, 4, true))
   }
 
   constructor() {

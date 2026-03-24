@@ -1,4 +1,4 @@
-import { compteLesReponsesDifferentes } from '../../lib/interactif/qcm'
+import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
 import { ecritureAlgebrique, reduireAxPlusB } from '../../lib/outils/ecritures'
 import { miseEnEvidence, texteGras } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
@@ -65,7 +65,9 @@ export default class Binomiale extends ExerciceQcm {
       compteur++
     } while (
       compteur < 100 &&
-      !compteLesReponsesDifferentes(this, 4, true, { egaliteExpression: true })
+      !aLeBonNombreDePropsDifferentes(this, 4, true, {
+        egaliteExpression: true,
+      })
     )
   }
 

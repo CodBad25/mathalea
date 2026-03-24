@@ -1,4 +1,4 @@
-import { compteLesReponsesDifferentes } from '../../lib/interactif/qcm'
+import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { randint } from '../../modules/outils'
 import ExerciceQcmA from '../ExerciceQcmA'
@@ -73,7 +73,10 @@ export default class auto1AC5a extends ExerciceQcmA {
         this.appliquerLesValeurs(a, b, 3)
       }
       compteur++
-    } while (compteur < 100 && !compteLesReponsesDifferentes(this, 4, true, {}))
+    } while (
+      compteur < 100 &&
+      !aLeBonNombreDePropsDifferentes(this, 4, true, {})
+    )
   }
 
   constructor() {

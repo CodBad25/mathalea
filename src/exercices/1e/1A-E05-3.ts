@@ -1,4 +1,4 @@
-import { compteLesReponsesDifferentes } from '../../lib/interactif/qcm'
+import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
@@ -75,7 +75,7 @@ export default class TauxReciproqueP extends ExerciceQcmA {
       compteur++
     } while (
       compteur < 100 &&
-      !compteLesReponsesDifferentes(this, 4, true, { fractionEgale: true })
+      !aLeBonNombreDePropsDifferentes(this, 4, true, { fractionEgale: true })
     )
   }
 

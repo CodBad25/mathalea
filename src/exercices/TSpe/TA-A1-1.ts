@@ -1,4 +1,4 @@
-import { compteLesReponsesDifferentes } from '../../lib/interactif/qcm'
+import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { randint } from '../../modules/outils'
 import ExerciceQcmA from '../ExerciceQcmA'
@@ -55,7 +55,7 @@ export default class Puissances extends ExerciceQcmA {
       compteur++
     } while (
       compteur < 100 &&
-      !compteLesReponsesDifferentes(this, 4, true, { texteSansCasse: true })
+      !aLeBonNombreDePropsDifferentes(this, 4, true, { texteSansCasse: true })
     )
   }
 

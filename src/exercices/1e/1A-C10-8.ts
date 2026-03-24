@@ -1,4 +1,4 @@
-import { compteLesReponsesDifferentes } from '../../lib/interactif/qcm'
+import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
 import { choice } from '../../lib/outils/arrayOutils'
 import { texFractionFromString } from '../../lib/outils/deprecatedFractions'
 import { ecritureAlgebrique, rienSi1 } from '../../lib/outils/ecritures'
@@ -136,7 +136,7 @@ export default class Auto1C11 extends ExerciceQcmA {
       compteur++
     } while (
       compteur < 100 &&
-      !compteLesReponsesDifferentes(this, 4, true, { fractionEgale: true })
+      !aLeBonNombreDePropsDifferentes(this, 4, true, { fractionEgale: true })
     ) // On s'assure d'avoir 4 réponses différentes, sinon on régénère
   }
 

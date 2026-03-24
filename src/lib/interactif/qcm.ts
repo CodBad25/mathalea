@@ -558,7 +558,7 @@ export function elimineDoublons(propositions: UneProposition[]) {
  * @param options
  * @returns
  */
-export function compteLesReponsesDifferentes(
+export function aLeBonNombreDePropsDifferentes(
   exercice: any,
   nombreSouhaite: number, // le nombre de réponses différentes que l'on devrait avoir (bonne réponse + distracteurs)
   test = true, // Mettre à true pour ne pas afficher de notifications, utilisé dans l'exo pour tester l'aléatoire sans alerter l'utilisateur à chaque fois que ça ne marche pas

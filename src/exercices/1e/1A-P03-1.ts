@@ -1,5 +1,5 @@
 import { tableauColonneLigne } from '../../lib/2d/tableau'
-import { compteLesReponsesDifferentes } from '../../lib/interactif/qcm'
+import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
@@ -424,7 +424,9 @@ export default class auto1AP1 extends ExerciceQcmA {
       compteur++
     } while (
       compteur < 100 &&
-      !compteLesReponsesDifferentes(this, 4, true, { egaliteExpression: true })
+      !aLeBonNombreDePropsDifferentes(this, 4, true, {
+        egaliteExpression: true,
+      })
     )
   }
 

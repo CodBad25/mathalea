@@ -1,7 +1,7 @@
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { randint } from '../../modules/outils'
 // import ExerciceQcmA from '../../ExerciceQcmA'
-import { compteLesReponsesDifferentes } from '../../lib/interactif/qcm'
+import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
 import { choice } from '../../lib/outils/arrayOutils'
 import { reduireAxPlusB } from '../../lib/outils/ecritures'
 import { texNombre } from '../../lib/outils/texNombre'
@@ -154,7 +154,7 @@ Ainsi, l'inéquation dont $${x0}$ est solution est $${miseEnEvidence(`${bonneIne
       compteur++
     } while (
       compteur < 100 &&
-      !compteLesReponsesDifferentes(this, 4, true, { texteSansCasse: true })
+      !aLeBonNombreDePropsDifferentes(this, 4, true, { texteSansCasse: true })
     )
   }
 

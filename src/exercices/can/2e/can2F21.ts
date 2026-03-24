@@ -1,5 +1,5 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { compteLesReponsesDifferentes } from '../../../lib/interactif/qcm'
+import { aLeBonNombreDePropsDifferentes } from '../../../lib/interactif/qcm'
 import { choice } from '../../../lib/outils/arrayOutils'
 import {
   ecritureAlgebrique,
@@ -165,6 +165,9 @@ export default class seuilFctAff extends ExerciceSimple {
           break
       }
       compteur++
-    } while (compteur < 100 && !compteLesReponsesDifferentes(this, 4, true, {})) // On s'assure d'avoir 4 réponses différentes, sinon on régénère
+    } while (
+      compteur < 100 &&
+      !aLeBonNombreDePropsDifferentes(this, 4, true, {})
+    ) // On s'assure d'avoir 4 réponses différentes, sinon on régénère
   }
 }

@@ -1,4 +1,4 @@
-import { compteLesReponsesDifferentes } from '../../lib/interactif/qcm'
+import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
 import { ecritureParentheseSiMoins } from '../../lib/outils/ecritures'
 import {
   miseEnEvidence,
@@ -74,7 +74,7 @@ La raison est donc $${miseEnEvidence(`r=${r}.`)}$ `
       compteur++
     } while (
       compteur < 100 &&
-      !compteLesReponsesDifferentes(this, nombreSouhaites, true, {
+      !aLeBonNombreDePropsDifferentes(this, nombreSouhaites, true, {
         avecFractions: true,
       })
     )

@@ -1,4 +1,4 @@
-import { compteLesReponsesDifferentes } from '../../lib/interactif/qcm'
+import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
 import { ecritureAlgebrique, reduireAxPlusB } from '../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { randint } from '../../modules/outils'
@@ -93,7 +93,9 @@ export default class Auto1AC11c extends ExerciceQcmA {
       compteur++
     } while (
       compteur < 100 &&
-      !compteLesReponsesDifferentes(this, 4, true, { egaliteExpression: true })
+      !aLeBonNombreDePropsDifferentes(this, 4, true, {
+        egaliteExpression: true,
+      })
     ) // On s'assure d'avoir 4 réponses différentes, sinon on régénère
   }
 

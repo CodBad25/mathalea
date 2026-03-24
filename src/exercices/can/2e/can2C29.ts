@@ -1,5 +1,5 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { compteLesReponsesDifferentes } from '../../../lib/interactif/qcm'
+import { aLeBonNombreDePropsDifferentes } from '../../../lib/interactif/qcm'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
@@ -108,7 +108,7 @@ Le nombre ${de}${personnes} venant ${moyensTransport2} est :`
     } while (
       this.versionQcm &&
       compteur < 100 &&
-      !compteLesReponsesDifferentes(this, 4, true, {})
+      !aLeBonNombreDePropsDifferentes(this, 4, true, {})
     )
   }
 }

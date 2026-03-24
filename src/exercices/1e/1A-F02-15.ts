@@ -1,4 +1,4 @@
-import { compteLesReponsesDifferentes } from '../../lib/interactif/qcm'
+import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
 import {
   ecritureAlgebrique,
   reduireAxPlusB,
@@ -113,7 +113,7 @@ export default class auto1AF2g extends ExerciceQcmA {
       compteur++
     } while (
       compteur < 100 &&
-      !compteLesReponsesDifferentes(this, 4, true, { fractionEgale: true })
+      !aLeBonNombreDePropsDifferentes(this, 4, true, { fractionEgale: true })
     ) // Limiter le nombre de tentatives pour éviter une boucle infinie
   }
 

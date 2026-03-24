@@ -1,6 +1,6 @@
 import { repere } from '../../lib/2d/reperes'
 import { latex2d } from '../../lib/2d/textes'
-import { compteLesReponsesDifferentes } from '../../lib/interactif/qcm'
+import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
 import {
   Spline,
   spline,
@@ -220,7 +220,10 @@ export default class AutoF01d extends ExerciceQcmA {
 
       this.appliquerLesValeurs(noeudsCourbe, coeffX, abs1, abs2, estSomme)
       compteur++
-    } while (compteur < 100 && !compteLesReponsesDifferentes(this, 4, true, {}))
+    } while (
+      compteur < 100 &&
+      !aLeBonNombreDePropsDifferentes(this, 4, true, {})
+    )
   }
 
   constructor() {

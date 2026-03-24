@@ -2,7 +2,7 @@ import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 
 // import ExerciceQcmA from '../../ExerciceQcmA'
-import { compteLesReponsesDifferentes } from '../../lib/interactif/qcm'
+import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
 import FractionEtendue from '../../modules/FractionEtendue'
 import ExerciceQcmA from '../ExerciceQcmA'
 
@@ -96,7 +96,7 @@ La fraction de la dépense totale que Alice doit donner à Louis est donc $${mis
       compteur++
     } while (
       compteur < 100 &&
-      !compteLesReponsesDifferentes(this, 4, true, { fractionEgale: true })
+      !aLeBonNombreDePropsDifferentes(this, 4, true, { fractionEgale: true })
     ) // On s'assure d'avoir 4 réponses différentes, sinon on régénère
   }
 
