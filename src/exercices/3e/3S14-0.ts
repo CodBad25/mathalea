@@ -23,7 +23,7 @@ export const dateDeModifImportante = '31/08/2022'
 export const uuid = '36e68'
 
 export const refs = {
-  'fr-fr': ['3S15'],
+  'fr-fr': ['3S14-0'],
   'fr-ch': ['11NO2-12'],
 }
 export default class CalculerEtendues extends Exercice {
