@@ -101,9 +101,11 @@ export default class CalculImageParFonctionAffineFraction extends ExerciceSimple
     this.correction += `&=${miseEnEvidence(resultat.texFractionSimplifiee)}`
     this.correction += '\\end{aligned}$'
 
+    this.reponse = resultat.texFractionSimplifiee
+
     // Réponse selon le format
     if (this.versionQcm) {
-      this.reponse = `$${resultat.texFractionSimplifiee}$`
+      this.reponse = '$' + this.reponse + '$'
 
       // Création des distracteurs
       const distracteur1 = new FractionEtendue(
@@ -121,8 +123,6 @@ export default class CalculImageParFonctionAffineFraction extends ExerciceSimple
         `$${distracteur2.texFractionSimplifiee}$`,
         `$${distracteur3.texFractionSimplifiee}$`,
       ]
-    } else {
-      this.reponse = resultat.texFractionSimplifiee
     }
   }
 }

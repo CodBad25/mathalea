@@ -153,7 +153,7 @@ export default class CalculProbaSimple extends ExerciceSimple {
       numCorrect,
       denomTotal,
     ).texFractionSimplifiee
-    this.reponse = `$${fraction(numCorrect, denomTotal).texFraction}$`
+    this.reponse = `${fraction(numCorrect, denomTotal).texFraction}`
 
     // déterminer la bonne réponse selon que la cible soit la 1ère ou la 2ème étiquette
 
@@ -167,10 +167,11 @@ export default class CalculProbaSimple extends ExerciceSimple {
     const labelCible = inversion ? situ.lab2Sing : situ.lab1Sing
     this.correction = this.versionQcm
       ? `Il y a en tout : $${a} + ${k * a} = ${denomTotal}$ ${situ.itemPlur}.<br>La probabilité de choisir ${labelCible} est de $${miseEnEvidence(`\\dfrac{${numCorrect}}{${denomTotal}}`)}$.`
-      : `Il y a en tout : $${a} + ${k * a} = ${denomTotal}$ ${situ.itemPlur}.<br>La probabilité de choisir ${labelCible} est de $${miseEnEvidence(`\\dfrac{${numCorrect}}{${denomTotal}}`)}$ ou $${miseEnEvidence(correctTexSimpl)}$.`
+      : `Il y a en tout : $${a} + ${k * a} = ${denomTotal}$ ${situ.itemPlur}.<br>La probabilité de choisir ${labelCible} est de $${miseEnEvidence(`\\dfrac{${numCorrect}}{${denomTotal}}`)}$, soit $${miseEnEvidence(correctTexSimpl)}$.`
 
     // Version QCM : distracteurs plausibles
     if (this.versionQcm) {
+      this.reponse = '$' + this.reponse + '$'
       const correctTex = correctTexSimpl
       const candidates: string[] = []
 

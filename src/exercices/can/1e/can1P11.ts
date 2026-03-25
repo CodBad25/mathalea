@@ -58,7 +58,7 @@ export default class ProbaCond extends ExerciceSimple {
     }
 
     if (context.isAmc) this.versionQcm = false
-
+    let reponse = new FractionEtendue(1, 1)
     switch (choice([1, 2])) {
       case 1:
         {
@@ -67,7 +67,7 @@ export default class ProbaCond extends ExerciceSimple {
           if (choixCouleur) {
             // Premier tiré : rouge → on veut noir en deuxième
             // Reste : (a-1) rouges, b noirs, total-1 jetons
-            const reponse = new FractionEtendue(b, total - 1)
+            reponse = new FractionEtendue(b, total - 1)
 
             this.question = `Une urne contient $${a}$ jetons rouges et $${b}$ jetons noirs.<br>`
             this.question += `On choisit au hasard un jeton, puis un deuxième ${texteGras('sans remettre')} le premier dans l'urne.<br>`
@@ -75,7 +75,6 @@ export default class ProbaCond extends ExerciceSimple {
               ? `La probabilité que le deuxième jeton soit noir sachant que le premier jeton tiré est rouge est égale à :`
               : `Quelle est la probabilité que le deuxième jeton soit noir sachant que le premier jeton tiré est rouge ?`
 
-            this.reponse = `$${reponse.texFractionSimplifiee}$`
             this.optionsChampTexte = { texteAvant: '<br> ' }
 
             this.correction = `Après avoir tiré un jeton rouge, il reste ${jetons(a - 1)} rouge${a - 1 === 1 ? '' : 's'} et ${jetons(b)} noir${b === 1 ? '' : 's'}, soit $${total - 1}$ jetons au total.<br>`
@@ -97,7 +96,7 @@ export default class ProbaCond extends ExerciceSimple {
           } else {
             // Premier tiré : noir → on veut rouge en deuxième
             // Reste : a rouges, (b-1) noirs, total-1 jetons
-            const reponse = new FractionEtendue(a, total - 1)
+            reponse = new FractionEtendue(a, total - 1)
 
             this.question = `Une urne contient $${a}$ jetons rouges et $${b}$ jetons noirs.<br>`
             this.question += `On choisit au hasard un jeton, puis un deuxième ${texteGras('sans remettre')} le premier dans l'urne.<br>`
@@ -105,7 +104,6 @@ export default class ProbaCond extends ExerciceSimple {
               ? `La probabilité que le deuxième jeton soit rouge sachant que le premier jeton tiré est noir est égale à :`
               : `Quelle est la probabilité que le deuxième jeton soit rouge sachant que le premier jeton tiré est noir ?`
 
-            this.reponse = `$${reponse.texFractionSimplifiee}$`
             this.optionsChampTexte = { texteAvant: '<br> ' }
 
             this.correction = `Après avoir tiré un jeton noir, il reste ${jetons(a)} rouge${a === 1 ? '' : 's'} et ${jetons(b - 1)} noir${b - 1 === 1 ? '' : 's'}, soit $${total - 1}$ jetons au total.<br>`
@@ -142,152 +140,138 @@ export default class ProbaCond extends ExerciceSimple {
 
           switch (choixNotation) {
             case 1:
-              {
-                // P_{R1}(R2) : premier rouge, deuxième rouge
-                const reponse = new FractionEtendue(a - 1, total - 1)
-                this.question += this.versionQcm
-                  ? ` $P_{R_1}(R_2)$ est égal à :`
-                  : this.interactif
-                    ? ''
-                    : `Calculer $P_{R_1}(R_2)$.`
+              // P_{R1}(R2) : premier rouge, deuxième rouge
+              reponse = new FractionEtendue(a - 1, total - 1)
+              this.question += this.versionQcm
+                ? ` $P_{R_1}(R_2)$ est égal à :`
+                : this.interactif
+                  ? ''
+                  : `Calculer $P_{R_1}(R_2)$.`
 
-                this.reponse = this.versionQcm
-                  ? `   $${reponse.texFractionSimplifiee}$`
-                  : reponse.texFractionSimplifiee
-                this.canReponseACompleter = '$P_{R_1}(R_2)=\\ldots$'
+              this.canReponseACompleter = '$P_{R_1}(R_2)=\\ldots$'
 
-                this.correction = `$P_{R_1}(R_2)$ est la probabilité que le deuxième jeton soit rouge sachant que le premier est rouge.<br>`
-                this.correction += `Après avoir tiré un jeton rouge, il reste ${jetons(a - 1)} rouge${a - 1 === 1 ? '' : 's'} et ${jetons(b)} noir${b === 1 ? '' : 's'}, soit $${total - 1}$ jetons au total.<br>`
-                this.correction += reponse.estIrreductible
-                  ? `$P_{R_1}(R_2) = ${miseEnEvidence(reponse.texFractionSimplifiee)}$`
-                  : `$P_{R_1}(R_2) = ${reponse.texFraction} = ${miseEnEvidence(reponse.texFractionSimplifiee)}$`
-                this.optionsChampTexte = { texteAvant: '<br>$P_{R_1}(R_2)=$' }
+              this.correction = `$P_{R_1}(R_2)$ est la probabilité que le deuxième jeton soit rouge sachant que le premier est rouge.<br>`
+              this.correction += `Après avoir tiré un jeton rouge, il reste ${jetons(a - 1)} rouge${a - 1 === 1 ? '' : 's'} et ${jetons(b)} noir${b === 1 ? '' : 's'}, soit $${total - 1}$ jetons au total.<br>`
+              this.correction += reponse.estIrreductible
+                ? `$P_{R_1}(R_2) = ${miseEnEvidence(reponse.texFractionSimplifiee)}$`
+                : `$P_{R_1}(R_2) = ${reponse.texFraction} = ${miseEnEvidence(reponse.texFractionSimplifiee)}$`
+              this.optionsChampTexte = { texteAvant: '<br>$P_{R_1}(R_2)=$' }
 
-                if (this.versionQcm) {
-                  this.distracteurs = distracteursValides(reponse, [
-                    new FractionEtendue(a, total),
-                    new FractionEtendue(a, total - 1),
-                    new FractionEtendue(b, total - 1),
-                    new FractionEtendue(b, total),
-                    new FractionEtendue(b - 1, total - 1),
-                    new FractionEtendue(a - 1, total),
-                  ])
-                }
+              if (this.versionQcm) {
+                this.distracteurs = distracteursValides(reponse, [
+                  new FractionEtendue(a, total),
+                  new FractionEtendue(a, total - 1),
+                  new FractionEtendue(b, total - 1),
+                  new FractionEtendue(b, total),
+                  new FractionEtendue(b - 1, total - 1),
+                  new FractionEtendue(a - 1, total),
+                ])
               }
+
               break
             case 2:
-              {
-                // P_{R1}(\overline{R2}) : premier rouge, deuxième noir
-                const reponse = new FractionEtendue(b, total - 1)
-                this.question += this.versionQcm
-                  ? ` $P_{R_1}(\\overline{R_2})$ est égal à :`
-                  : this.interactif
-                    ? ''
-                    : `Calculer $P_{R_1}(\\overline{R_2})$.`
+              // P_{R1}(\overline{R2}) : premier rouge, deuxième noir
+              reponse = new FractionEtendue(b, total - 1)
+              this.question += this.versionQcm
+                ? ` $P_{R_1}(\\overline{R_2})$ est égal à :`
+                : this.interactif
+                  ? ''
+                  : `Calculer $P_{R_1}(\\overline{R_2})$.`
 
-                this.reponse = this.versionQcm
-                  ? `   $${reponse.texFractionSimplifiee}$`
-                  : reponse.texFractionSimplifiee
-                this.canReponseACompleter = '$P_{R_1}(\\overline{R_2})=\\ldots$'
+              this.canReponseACompleter = '$P_{R_1}(\\overline{R_2})=\\ldots$'
 
-                this.correction = `$P_{R_1}(\\overline{R_2})$ est la probabilité que le deuxième jeton soit noir sachant que le premier est rouge.<br>`
-                this.correction += `Après avoir tiré un jeton rouge, il reste ${jetons(a - 1)} rouge${a - 1 === 1 ? '' : 's'} et ${jetons(b)} noir${b === 1 ? '' : 's'}, soit $${total - 1}$ jetons au total.<br>`
-                this.correction += reponse.estIrreductible
-                  ? `$P_{R_1}(\\overline{R_2}) = ${miseEnEvidence(reponse.texFractionSimplifiee)}$`
-                  : `$P_{R_1}(\\overline{R_2}) = ${reponse.texFraction} = ${miseEnEvidence(reponse.texFractionSimplifiee)}$`
-                this.optionsChampTexte = {
-                  texteAvant: '<br>$P_{R_1}(\\overline{R_2})=$',
-                }
-
-                if (this.versionQcm) {
-                  this.distracteurs = distracteursValides(reponse, [
-                    new FractionEtendue(b, total),
-                    new FractionEtendue(b - 1, total - 1),
-                    new FractionEtendue(a, total - 1),
-                    new FractionEtendue(a - 1, total),
-                    new FractionEtendue(a, total),
-                    new FractionEtendue(b + 1, total),
-                  ])
-                }
+              this.correction = `$P_{R_1}(\\overline{R_2})$ est la probabilité que le deuxième jeton soit noir sachant que le premier est rouge.<br>`
+              this.correction += `Après avoir tiré un jeton rouge, il reste ${jetons(a - 1)} rouge${a - 1 === 1 ? '' : 's'} et ${jetons(b)} noir${b === 1 ? '' : 's'}, soit $${total - 1}$ jetons au total.<br>`
+              this.correction += reponse.estIrreductible
+                ? `$P_{R_1}(\\overline{R_2}) = ${miseEnEvidence(reponse.texFractionSimplifiee)}$`
+                : `$P_{R_1}(\\overline{R_2}) = ${reponse.texFraction} = ${miseEnEvidence(reponse.texFractionSimplifiee)}$`
+              this.optionsChampTexte = {
+                texteAvant: '<br>$P_{R_1}(\\overline{R_2})=$',
               }
+
+              if (this.versionQcm) {
+                this.distracteurs = distracteursValides(reponse, [
+                  new FractionEtendue(b, total),
+                  new FractionEtendue(b - 1, total - 1),
+                  new FractionEtendue(a, total - 1),
+                  new FractionEtendue(a - 1, total),
+                  new FractionEtendue(a, total),
+                  new FractionEtendue(b + 1, total),
+                ])
+              }
+
               break
             case 3:
-              {
-                // P_{\overline{R1}}(R2) : premier noir, deuxième rouge
-                const reponse = new FractionEtendue(a, total - 1)
-                this.question += this.versionQcm
-                  ? ` $P_{\\overline{R_1}}(R_2)$ est égal à :`
-                  : this.interactif
-                    ? ''
-                    : `Calculer $P_{\\overline{R_1}}(R_2)$.`
+              // P_{\overline{R1}}(R2) : premier noir, deuxième rouge
+              reponse = new FractionEtendue(a, total - 1)
+              this.question += this.versionQcm
+                ? ` $P_{\\overline{R_1}}(R_2)$ est égal à :`
+                : this.interactif
+                  ? ''
+                  : `Calculer $P_{\\overline{R_1}}(R_2)$.`
 
-                this.reponse = this.versionQcm
-                  ? `   $${reponse.texFractionSimplifiee}$`
-                  : reponse.texFractionSimplifiee
-                this.canReponseACompleter = '$P_{\\overline{R_1}}(R_2)=\\ldots$'
+              this.canReponseACompleter = '$P_{\\overline{R_1}}(R_2)=\\ldots$'
 
-                this.correction = `$P_{\\overline{R_1}}(R_2)$ est la probabilité que le deuxième jeton soit rouge sachant que le premier est noir.<br>`
-                this.correction += `Après avoir tiré un jeton noir, il reste ${jetons(a)} rouge${a === 1 ? '' : 's'} et ${jetons(b - 1)} noir${b - 1 === 1 ? '' : 's'}, soit $${total - 1}$ jetons au total.<br>`
-                this.correction += reponse.estIrreductible
-                  ? `$P_{\\overline{R_1}}(R_2) = ${miseEnEvidence(reponse.texFractionSimplifiee)}$`
-                  : `$P_{\\overline{R_1}}(R_2) = ${reponse.texFraction} = ${miseEnEvidence(reponse.texFractionSimplifiee)}$`
-                this.optionsChampTexte = {
-                  texteAvant: '<br>$P_{\\overline{R_1}}(R_2)=$',
-                }
-
-                if (this.versionQcm) {
-                  this.distracteurs = distracteursValides(reponse, [
-                    new FractionEtendue(a, total),
-                    new FractionEtendue(a - 1, total - 1),
-                    new FractionEtendue(b, total - 1),
-                    new FractionEtendue(b - 1, total),
-                    new FractionEtendue(b, total),
-                    new FractionEtendue(a + 1, total),
-                  ])
-                }
+              this.correction = `$P_{\\overline{R_1}}(R_2)$ est la probabilité que le deuxième jeton soit rouge sachant que le premier est noir.<br>`
+              this.correction += `Après avoir tiré un jeton noir, il reste ${jetons(a)} rouge${a === 1 ? '' : 's'} et ${jetons(b - 1)} noir${b - 1 === 1 ? '' : 's'}, soit $${total - 1}$ jetons au total.<br>`
+              this.correction += reponse.estIrreductible
+                ? `$P_{\\overline{R_1}}(R_2) = ${miseEnEvidence(reponse.texFractionSimplifiee)}$`
+                : `$P_{\\overline{R_1}}(R_2) = ${reponse.texFraction} = ${miseEnEvidence(reponse.texFractionSimplifiee)}$`
+              this.optionsChampTexte = {
+                texteAvant: '<br>$P_{\\overline{R_1}}(R_2)=$',
               }
+
+              if (this.versionQcm) {
+                this.distracteurs = distracteursValides(reponse, [
+                  new FractionEtendue(a, total),
+                  new FractionEtendue(a - 1, total - 1),
+                  new FractionEtendue(b, total - 1),
+                  new FractionEtendue(b - 1, total),
+                  new FractionEtendue(b, total),
+                  new FractionEtendue(a + 1, total),
+                ])
+              }
+
               break
             case 4:
             default:
-              {
-                // P_{\overline{R1}}(\overline{R2}) : premier noir, deuxième noir
-                const reponse = new FractionEtendue(b - 1, total - 1)
-                this.question += this.versionQcm
-                  ? ` $P_{\\overline{R_1}}(\\overline{R_2})$ est égal à :`
-                  : this.interactif
-                    ? ''
-                    : `Calculer $P_{\\overline{R_1}}(\\overline{R_2})$.`
+              // P_{\overline{R1}}(\overline{R2}) : premier noir, deuxième noir
+              reponse = new FractionEtendue(b - 1, total - 1)
+              this.question += this.versionQcm
+                ? ` $P_{\\overline{R_1}}(\\overline{R_2})$ est égal à :`
+                : this.interactif
+                  ? ''
+                  : `Calculer $P_{\\overline{R_1}}(\\overline{R_2})$.`
 
-                this.reponse = this.versionQcm
-                  ? `   $${reponse.texFractionSimplifiee}$`
-                  : reponse.texFractionSimplifiee
-                this.canReponseACompleter =
-                  '$P_{\\overline{R_1}}(\\overline{R_2})=\\ldots$'
+              this.canReponseACompleter =
+                '$P_{\\overline{R_1}}(\\overline{R_2})=\\ldots$'
 
-                this.correction = `$P_{\\overline{R_1}}(\\overline{R_2})$ est la probabilité que le deuxième jeton soit noir sachant que le premier est noir.<br>`
-                this.correction += `Après avoir tiré un jeton noir, il reste ${jetons(a)} rouge${a === 1 ? '' : 's'} et ${jetons(b - 1)} noir${b - 1 === 1 ? '' : 's'}, soit $${total - 1}$ jetons au total.<br>`
-                this.correction += reponse.estIrreductible
-                  ? `$P_{\\overline{R_1}}(\\overline{R_2}) = ${miseEnEvidence(reponse.texFractionSimplifiee)}$`
-                  : `$P_{\\overline{R_1}}(\\overline{R_2}) = ${reponse.texFraction} = ${miseEnEvidence(reponse.texFractionSimplifiee)}$`
-                this.optionsChampTexte = {
-                  texteAvant: '<br>$P_{\\overline{R_1}}(\\overline{R_2})=$',
-                }
-
-                if (this.versionQcm) {
-                  this.distracteurs = distracteursValides(reponse, [
-                    new FractionEtendue(b, total),
-                    new FractionEtendue(b, total - 1),
-                    new FractionEtendue(a, total - 1),
-                    new FractionEtendue(a - 1, total),
-                    new FractionEtendue(a, total),
-                    new FractionEtendue(b + 1, total),
-                  ])
-                }
+              this.correction = `$P_{\\overline{R_1}}(\\overline{R_2})$ est la probabilité que le deuxième jeton soit noir sachant que le premier est noir.<br>`
+              this.correction += `Après avoir tiré un jeton noir, il reste ${jetons(a)} rouge${a === 1 ? '' : 's'} et ${jetons(b - 1)} noir${b - 1 === 1 ? '' : 's'}, soit $${total - 1}$ jetons au total.<br>`
+              this.correction += reponse.estIrreductible
+                ? `$P_{\\overline{R_1}}(\\overline{R_2}) = ${miseEnEvidence(reponse.texFractionSimplifiee)}$`
+                : `$P_{\\overline{R_1}}(\\overline{R_2}) = ${reponse.texFraction} = ${miseEnEvidence(reponse.texFractionSimplifiee)}$`
+              this.optionsChampTexte = {
+                texteAvant: '<br>$P_{\\overline{R_1}}(\\overline{R_2})=$',
               }
+
+              if (this.versionQcm) {
+                this.distracteurs = distracteursValides(reponse, [
+                  new FractionEtendue(b, total),
+                  new FractionEtendue(b, total - 1),
+                  new FractionEtendue(a, total - 1),
+                  new FractionEtendue(a - 1, total),
+                  new FractionEtendue(a, total),
+                  new FractionEtendue(b + 1, total),
+                ])
+              }
+
               break
           }
         }
         break
     }
+    this.reponse = reponse.texFractionSimplifiee
+    if (this.versionQcm) this.reponse = '$' + this.reponse + '$'
   }
 }
