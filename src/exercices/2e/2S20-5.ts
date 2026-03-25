@@ -7,6 +7,7 @@ import RepereBuilder from '../../lib/2d/RepereBuilder'
 import { segment } from '../../lib/2d/segmentsVecteurs'
 import { texteSurSegment } from '../../lib/2d/texteSurSegment'
 import { pointIntersectionDD } from '../../lib/2d/utilitairesPoint'
+import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -218,10 +219,11 @@ export default class Quartiles extends Exercice {
         (10 * q3) % (10 * intervalle) === 0 ||
         (10 * q1) % (10 * intervalle) === 0
       )
-      const q1Round =
-        Math.round(q1 / situation.precisionLecture) * situation.precisionLecture
-      const q3Round =
-        Math.round(q3 / situation.precisionLecture) * situation.precisionLecture
+
+      const q1Round = q1
+      // Math.round(q1 / situation.precisionLecture) * situation.precisionLecture
+      const q3Round = q3
+      //  Math.round(q3 / situation.precisionLecture) * situation.precisionLecture
       const line = polyline(pts, 'blue')
       const rep = new RepereBuilder({
         xMin: 0,
@@ -331,18 +333,24 @@ export default class Quartiles extends Exercice {
       texte +=
         `<br>${numAlpha(2)} Donner la valeur de l'écart inter-quartile.` +
         ajouteChampTexteMathLive(this, 3 * i + 2, KeyboardType.clavierNumbers)
-      const minIntervalleq1 = Math.floor(q1Round / intervalle) * intervalle
-      const maxIntervalleq1 =
-        intervalle + Math.floor(q1Round / intervalle) * intervalle
+      const minIntervalleq1 = Math.floor(
+        Math.floor(q1Round / intervalle) * intervalle,
+      )
+      const maxIntervalleq1 = Math.ceil(
+        intervalle + Math.floor(q1Round / intervalle) * intervalle,
+      )
       handleAnswers(this, 3 * i, {
         reponse: {
           value: `[${minIntervalleq1};${maxIntervalleq1}]`,
           options: { estDansIntervalle: true },
         },
       })
-      const minIntervalleq3 = Math.floor(q3Round / intervalle) * intervalle
-      const maxIntervalleq3 =
-        intervalle + Math.floor(q3Round / intervalle) * intervalle
+      const minIntervalleq3 = Math.floor(
+        Math.floor(q3Round / intervalle) * intervalle,
+      )
+      const maxIntervalleq3 = Math.ceil(
+        intervalle + Math.floor(q3Round / intervalle) * intervalle,
+      )
       handleAnswers(this, 3 * i + 1, {
         reponse: {
           value: `[${minIntervalleq3};${maxIntervalleq3}]`,
@@ -357,9 +365,9 @@ export default class Quartiles extends Exercice {
       })
 
       let texteCorr = 'Par lecture graphique, on trouve :<br>'
-      texteCorr += `${numAlpha(0)} La valeur du premier quartile est environ $${miseEnEvidence(texNombre(q1Round, 0))}$.`
-      texteCorr += `<br>${numAlpha(1)} La valeur du troisième quartile est environ $${miseEnEvidence(texNombre(q3Round, 0))}$.`
-      texteCorr += `<br>${numAlpha(2)} La valeur de l'écart inter-quartile est environ $${texNombre(q3Round, 0)}-${texNombre(q1Round, 0)}=${miseEnEvidence(texNombre(q3Round - q1Round, 0))}$.`
+      texteCorr += `${numAlpha(0)} La valeur du premier quartile est environ $${miseEnEvidence(texNombre(q1Round, 0))}$. Par la précision du graphique, serait acceptée toute valeur entre $${miseEnEvidence(minIntervalleq1, bleuMathalea)}$ et $${miseEnEvidence(maxIntervalleq1, bleuMathalea)}$.`
+      texteCorr += `<br>${numAlpha(1)} La valeur du troisième quartile est environ $${miseEnEvidence(texNombre(q3Round, 0))}$. Par la précision du graphique, serait acceptée toute valeur entre $${miseEnEvidence(minIntervalleq3, bleuMathalea)}$ et $${miseEnEvidence(maxIntervalleq3, bleuMathalea)}$.`
+      texteCorr += `<br>${numAlpha(2)} La valeur de l'écart inter-quartile est environ $${texNombre(q3Round, 0)}-${texNombre(q1Round, 0)}=${miseEnEvidence(texNombre(q3Round - q1Round, 0))}$. Par la précision du graphique, serait acceptée toute valeur entre $${miseEnEvidence(minIntervalleq3 - maxIntervalleq1, bleuMathalea)}$ et $${miseEnEvidence(maxIntervalleq3 - minIntervalleq1, bleuMathalea)}$.`
       texteCorr += figCorrection
 
       texte = fig + texte
