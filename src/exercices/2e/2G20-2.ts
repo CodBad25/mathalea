@@ -33,7 +33,7 @@ const BORNES = {
   maxY: 7,
 } as const
 
-const DIRECTIONS = [
+const DIRECTIONS: [number, number][] = [
   [1, 1],
   [1, 2],
   [2, 1],
@@ -68,7 +68,7 @@ export default class CoefficientColineariteGraphique extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const [dx, dy] = choice(DIRECTIONS)
+    const [dx, dy] = choice(DIRECTIONS) as [number, number]
     const longueurAB = randint(1, 3)
     const longueurCD = randint(1, 3, [longueurAB])
     const signe = choice([-1, 1])
