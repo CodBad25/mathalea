@@ -1,17 +1,12 @@
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { setReponse } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
-import {
-  choice,
-  combinaisonListes,
-  shuffle,
-} from '../../lib/outils/arrayOutils'
+import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import { texFractionReduite } from '../../lib/outils/deprecatedFractions'
 import {
   ecritureAlgebrique,
   ecritureParentheseSiNegatif,
 } from '../../lib/outils/ecritures'
-import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { lettreMinusculeDepuisChiffre } from '../../lib/outils/outilString'
 import { fraction } from '../../modules/fractions'
 import {
@@ -21,7 +16,7 @@ import {
 } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-export const dateDeModifImportante = '25/03/2026'
+export const dateDeModifImportante = '23/01/2025'
 
 export const titre =
   "Déterminer l'image d'un nombre par une fonction d'après sa forme algébrique"
@@ -40,12 +35,13 @@ export const amcType = 'AMCNum'
  * * Niveau 5 : Mélange
  * @author Rémi Angot
  * Ajout du choix du type de question par Guillaume Valmont le 23/01/2025
+ * 3F12-2
  */
-export const uuid = '082e7'
+export const uuid = '082d7'
 
 export const refs = {
-  'fr-fr': ['3F12-2'],
-  'fr-ch': ['10FA5-10', '11FA8-4', '1mF1-9'],
+  'fr-fr': [],
+  'fr-ch': [],
 }
 export default class ImageFonctionAlgebrique extends Exercice {
   constructor() {
@@ -73,45 +69,44 @@ export default class ImageFonctionAlgebrique extends Exercice {
 
   nouvelleVersion() {
     let situationsDisponibles: string[] = []
-    const affines = ['ax+b', 'ax-b', '-ax+b', '-ax-b']
-    const polynome2ndDegre = [
-      'ax2+bx+c',
-      'ax2+c',
-      'ax2+bx',
-      '-ax2+bx-c',
-      '-ax2-bx-c',
-      '-ax2-bx+c',
-      '-ax2-bx',
-    ]
-    const quotient = ['a/cx+d', 'ax+b/cx+d']
-    const produit = ['(ax+b)(cx+d)', '(ax+b)2']
     if (this.sup === 1) {
-      situationsDisponibles = affines
+      situationsDisponibles = ['ax+b', 'ax-b', '-ax+b', '-ax-b']
     }
     if (this.sup === 2) {
-      situationsDisponibles = polynome2ndDegre
-    } else if (this.sup === 3) {
-      situationsDisponibles = quotient
-    } else if (this.sup === 4) {
-      situationsDisponibles = produit
-    } else {
-      situationsDisponibles = []
-      for (let i = 0; i < Math.ceil(this.nbQuestions / 4); i++) {
-        let melange = [
-          choice(affines),
-          choice(polynome2ndDegre),
-          choice(quotient),
-          choice(produit),
-        ]
-        melange = shuffle(melange)
-        situationsDisponibles.push(...melange)
-      }
+      situationsDisponibles = [
+        'ax2+bx+c',
+        'ax2+c',
+        'ax2+bx',
+        '-ax2+bx-c',
+        '-ax2-bx-c',
+        '-ax2-bx+c',
+        '-ax2-bx',
+      ]
     }
-    const listeSituations =
-      this.sup < 5
-        ? combinaisonListes(situationsDisponibles, this.nbQuestions)
-        : situationsDisponibles
-
+    if (this.sup === 3) {
+      situationsDisponibles = ['a/cx+d', 'ax+b/cx+d']
+    }
+    if (this.sup === 4) {
+      situationsDisponibles = ['(ax+b)(cx+d)', '(ax+b)2']
+    }
+    if (this.sup === 5) {
+      situationsDisponibles = [
+        'ax+b',
+        'ax-b',
+        '-ax+b',
+        'ax2+bx+c',
+        '-ax2+bx-c',
+        '-ax2-bx',
+        'a/cx+d',
+        'ax+b/cx+d',
+        '(ax+b)(cx+d)',
+        '(ax+b)2',
+      ]
+    }
+    const listeSituations = combinaisonListes(
+      situationsDisponibles,
+      this.nbQuestions,
+    )
     const signesDeX = combinaisonListes([true, false], this.nbQuestions)
 
     const typesDeQuestionsDisponibles = gestionnaireFormulaireTexte({
@@ -251,18 +246,6 @@ export default class ImageFonctionAlgebrique extends Exercice {
         texte += `Calculer l'image de ${x} par la fonction $${nomdef}$.`
       }
       texte += ajouteChampTexteMathLive(this, i, KeyboardType.clavierDeBase)
-
-      // Uniformisation : Mise en place de la réponse attendue en interactif en orange et gras
-      const textCorrSplit = texteCorr.split('=')
-      let aRemplacer = textCorrSplit[textCorrSplit.length - 1]
-      aRemplacer = aRemplacer.replace('$', '')
-
-      texteCorr = ''
-      for (let ee = 0; ee < textCorrSplit.length - 1; ee++) {
-        texteCorr += textCorrSplit[ee] + '='
-      }
-      texteCorr += `$ $${miseEnEvidence(aRemplacer)}$`
-      // Fin de cette uniformisation
 
       if (this.listeQuestions.indexOf(texte) === -1) {
         // Si la question n'a jamais été posée, on en créé une autre
