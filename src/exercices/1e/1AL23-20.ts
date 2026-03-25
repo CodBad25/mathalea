@@ -219,8 +219,8 @@ export default class Resolutionavecformecanonique extends Exercice {
           texteCorr += `<br> $\\left(x ${x1String}\\right)\\left(x ${x2String}\\right)=0$`
         }
         texteCorr += '<br> On applique la propriété du produit nul :' // fin de la rédaction
-        texteCorr += `<br> Soit $x ${x1String}=0$ , soit $x ${x2String}=0$` // on isole les facteurs nuls
-        texteCorr += `<br> Soit $x = ${stringX1}$ , soit $x = ${stringX2}$` // on écrit les solutions
+        texteCorr += `<br> Soit $x ${x1String}=0$, soit $x ${x2String}=0$` // on isole les facteurs nuls
+        texteCorr += `<br> Soit $x = ${stringX1}$, soit $x = ${stringX2}$` // on écrit les solutions
         texteCorr += `<br> $S =\\left\\{${stringX2};${stringX1}\\right\\}$` // Solution
       } else {
         // cas de delta  = 0

@@ -31,7 +31,7 @@ export default class Can32026Q26 extends ExerciceCan {
 
     if (decimalValue == null || a == null || b == null || operation == null) {
       // Version aléatoire
-      // Nombre décimal : partie entière de 10 à 99, partie décimale ,01 à ,99
+      // Nombre décimal : partie entière de 10 à 99, partie décimale,01 à,99
       const partieEntiere = randint(10, 99)
       const partieDecimale = randint(1, 99)
       // Création directe du Decimal avec la bonne valeur

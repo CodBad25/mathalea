@@ -274,12 +274,12 @@ class FractionEtendue {
     this.n = Math.abs(num / pgcd)
     this.d = Math.abs(den / pgcd)
     /**
-     * le signe de la  FractionMathjs  : -1 pour négatif , 0 ou 1 pour positif
+     * le signe de la  FractionMathjs  : -1 pour négatif, 0 ou 1 pour positif
      * Au cas où quelqu'un oublie le e de this.signe
      * @type {number}
      */
     /**
-     * le signe de la fraction : -1 pour négatif , 0 ou 1 pour positif
+     * le signe de la fraction : -1 pour négatif, 0 ou 1 pour positif
      * @type {number}
      */
     let sign: 0 | 1 | -1 // Au cas où quelqu'un le demande en anglais

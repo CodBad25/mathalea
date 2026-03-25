@@ -20,10 +20,10 @@ export const dateDeModifImportante = '01/11/2014'
  * Poser et effectuer les divisions euclidiennes suivantes puis donner l'égalité fondamentale correspondante.
  *
  * Niveau de difficulté 2 :
- * * division par 2, 3 , 4 ou 5
+ * * division par 2, 3, 4 ou 5
  *
  * Niveau de difficulté 2 :
- * * division par 2, 3 , 4 ou 5
+ * * division par 2, 3, 4 ou 5
  * * division par 6 à 9
  * * un 0 dans le quotient
  *
@@ -81,7 +81,7 @@ export default class DivisionsEuclidiennes extends Exercice {
       // this.autoCorrection[i] = { enonce: texte, propositions: [{ texte: texteCorr, statut: 4, feedback: '' }] }
       typesDeQuestions = listeTypeDeQuestions[i]
       switch (typesDeQuestions) {
-        case 1: // division par 2, 3 , 4 ou 5
+        case 1: // division par 2, 3, 4 ou 5
           q = randint(2, 5) * 100 + randint(2, 5) * 10 + randint(2, 5)
           b = randint(2, 5)
           break

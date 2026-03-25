@@ -1,5 +1,5 @@
+import { propositionsQcm } from '../../lib/interactif/qcm'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
-import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import {
   ecritureAlgebrique,
   ecritureAlgebriqueSauf1,
@@ -7,9 +7,9 @@ import {
   reduireAxPlusB,
   rienSi1,
 } from '../../lib/outils/ecritures'
-import Exercice from '../Exercice'
+import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
-import { propositionsQcm } from '../../lib/interactif/qcm'
+import Exercice from '../Exercice'
 
 export const amcReady = true
 export const amcType = 'qcmMono'
@@ -73,7 +73,7 @@ export default class EtudierPariteFonction extends Exercice {
             texteCorr += 'Soit $x\\in D$.<br>'
             texteCorr += `$\\bullet$ $f(-x)=${a}\\times (-x) ${ecritureAlgebrique(b)}=${reduireAxPlusB(-a, b)}$<br>`
             texteCorr +=
-              "On observe que $f(-x)\\neq f(x)$ , la fonction $f$ n'est donc pas paire.<br>"
+              "On observe que $f(-x)\\neq f(x)$, la fonction $f$ n'est donc pas paire.<br>"
             texteCorr += `$\\bullet$ $-f(x)=-(${reduireAxPlusB(a, b)})=${reduireAxPlusB(-a, -b)}$<br>`
             texteCorr +=
               "On observe que $f(-x)\\neq -f(x)$, la fonction $f$ n'est donc pas impaire.<br>"
@@ -175,7 +175,7 @@ export default class EtudierPariteFonction extends Exercice {
             texteCorr += 'Soit $x\\in D$.<br>'
             texteCorr += `$\\bullet$ $f(-x)=${rienSi1(a)}(-x)^2${ecritureAlgebrique(b)}\\times (-x)${ecritureAlgebrique(c)}=${rienSi1(a)}x^2${ecritureAlgebriqueSauf1(-b)}x${ecritureAlgebrique(c)}.$<br>`
             texteCorr +=
-              "On observe que $f(-x)\\neq f(x)$ , la fonction $f$ n'est donc pas paire.<br>"
+              "On observe que $f(-x)\\neq f(x)$, la fonction $f$ n'est donc pas paire.<br>"
             texteCorr += `$\\bullet$ $-f(x)=-(${rienSi1(a)}x^2${ecritureAlgebriqueSauf1(b)}x${ecritureAlgebrique(c)})=${rienSi1(-a)}x^2${ecritureAlgebriqueSauf1(-b)}x${ecritureAlgebrique(-c)}$<br>`
             texteCorr +=
               "On observe alors que $f(-x)\\neq -f(x)$, la fonction $f$ n'est donc pas impaire.<br>"
@@ -207,7 +207,7 @@ export default class EtudierPariteFonction extends Exercice {
             const c = randint(-8, 8, [0]) // Pour définir fonctions
             const i1 = randint(1, 10) // pour définir un intervalle symétrique
 
-            texte = `Soit $f$ la fonction définie sur  $D=[${-i1};${i1}]$ , par $f(x)=${rienSi1(a)}x^2${ecritureAlgebrique(c)}.$`
+            texte = `Soit $f$ la fonction définie sur  $D=[${-i1};${i1}]$, par $f(x)=${rienSi1(a)}x^2${ecritureAlgebrique(c)}.$`
             if (this.interactif) {
               texte += ''
               texteCorr = ''
@@ -227,7 +227,7 @@ export default class EtudierPariteFonction extends Exercice {
             texteCorr += 'Soit $x\\in D$.<br>'
 
             texteCorr += `$f(-x)=${rienSi1(a)}(-x)^2${ecritureAlgebrique(c)}=${rienSi1(a)}x^2${ecritureAlgebrique(c)}.$<br>`
-            texteCorr += `On observe que pour tout $x\\in D$, $f(-x)= f(x)$ , la fonction $f$ est donc ${texteEnCouleurEtGras('paire')}.<br>`
+            texteCorr += `On observe que pour tout $x\\in D$, $f(-x)= f(x)$, la fonction $f$ est donc ${texteEnCouleurEtGras('paire')}.<br>`
             if (!this.interactif) {
               texteCorr +=
                 "<br>$\\textbf{b. }$ La fonction étant paire, sa courbe représentative admet une symétrie par rapport à l'axe des ordonnées."
@@ -306,7 +306,7 @@ export default class EtudierPariteFonction extends Exercice {
               texteCorr += `=\\dfrac{${-a}}{x}$<br>`
             }
             texteCorr +=
-              "On observe que $f(-x)\\neq f(x)$ , la fonction $f$ n'est donc pas paire.<br>"
+              "On observe que $f(-x)\\neq f(x)$, la fonction $f$ n'est donc pas paire.<br>"
             texteCorr += `$\\bullet$$-f(x)=-\\dfrac{${a}}{x}`
             if (a < 0) {
               texteCorr += `=\\dfrac{${-a}}{x}$<br>`

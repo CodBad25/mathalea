@@ -111,9 +111,9 @@ export default class VariationFA extends Exercice {
     On sait qu'une fonction affine est monotone sur $\\mathbb{R}$.<br>
       Son sens de variation dépend du signe de $a$.<br>`
           if (a > 0) {
-            texteCorr += `Comme $a=${a}>0$ , la fonction $${nomF}$ est strictement croissante sur $\\mathbb{R}$.<br>`
+            texteCorr += `Comme $a=${a}>0$, la fonction $${nomF}$ est strictement croissante sur $\\mathbb{R}$.<br>`
           } else {
-            texteCorr += `Comme $a=${a}<0$ , la fonction $${nomF}$ est strictement décroissante sur $\\mathbb{R}$.<br>`
+            texteCorr += `Comme $a=${a}<0$, la fonction $${nomF}$ est strictement décroissante sur $\\mathbb{R}$.<br>`
           }
           break
 
@@ -171,9 +171,9 @@ export default class VariationFA extends Exercice {
         On sait qu'une fonction affine est monotone sur $\\mathbb{R}$.<br>
           Son sens de variation dépend du signe de $a$.<br>`
           if (a > 0) {
-            texteCorr += `Comme $a=${texFractionReduite(a, d)}>0$ , la fonction $${nomF}$ est strictement croissante sur $\\mathbb{R}$.<br>`
+            texteCorr += `Comme $a=${texFractionReduite(a, d)}>0$, la fonction $${nomF}$ est strictement croissante sur $\\mathbb{R}$.<br>`
           } else {
-            texteCorr += `Comme $a=${texFractionReduite(a, d)}<0$ , la fonction $${nomF}$ est strictement décroissante sur $\\mathbb{R}$.<br>`
+            texteCorr += `Comme $a=${texFractionReduite(a, d)}<0$, la fonction $${nomF}$ est strictement décroissante sur $\\mathbb{R}$.<br>`
           }
           break
         case 3:

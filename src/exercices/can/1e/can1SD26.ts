@@ -108,7 +108,7 @@ export default class TableauSignesSecondDegre extends Exercice {
         `La fonction $f$ est une fonction polynôme du scond degré. <br>
       La forme factorisée donnée par l'énoncé permet d'obtenir rapidement ses racines : $${b}$ et $${c}$.<br>
       Un polynôme du second degré (de la forme $ax^2+bx+c$) est du signe de $a$ sauf entre ses racines. <br>
-      Ici ${a > 0 ? `$a=${a}>0$` : `$a=${a}<0$`} , donc le tableau de signes de $f$ sur $\\mathbb{R}$  est :  <br>
+      Ici ${a > 0 ? `$a=${a}>0$` : `$a=${a}<0$`}, donc le tableau de signes de $f$ sur $\\mathbb{R}$  est :  <br>
       ` + tableau1
 
       if (this.questionJamaisPosee(i, a, b, c)) {

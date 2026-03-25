@@ -56,7 +56,7 @@ export default class Binomiale extends ExerciceQcm {
         "La probabilité qu'il place exactement $k$ fléchettes dans la cible est donnée par la relation :<br>"
       correction +=
         '$P(X=k)=\\displaystyle\\binom{n}{k} \\times p^k \\times (1-p)^{n-k}$<br>'
-      correction += `Le nombre d'épreuves est donné par $n=${texNombre(n)} $ , la nombre de succès est $k=${texNombre(k)} $, la probabilité de succès est $p=${texNombre(p)} $.<br>`
+      correction += `Le nombre d'épreuves est donné par $n=${texNombre(n)} $, la nombre de succès est $k=${texNombre(k)} $, la probabilité de succès est $p=${texNombre(p)} $.<br>`
       correction += `En appliquant à l'énoncé : <br>$P\\left(X=${k}\\right)=\\displaystyle\\binom{${n}}{${k}} \\times ${texNombre(p)}^{${texNombre(k)}} \\times (1-${texNombre(p)})^{${texNombre(n)}-${texNombre(k)}}$`
       correction += `<br>Il vient: <br>$P\\left(X=${k}\\right)=${miseEnEvidence(`\\displaystyle\\binom{${n}}{${k}} \\times ${texNombre(p)}^{${k}} \\times ${texNombre(1 - p)}^{${n - k}}`)}$`
       this.correction = correction

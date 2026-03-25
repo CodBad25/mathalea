@@ -29,7 +29,7 @@ export default class MetropoleSep22Ex1Q4 extends ExerciceQcmA {
       `$${String(a)}$ et $${String(-c)}$`,
     ]
     this.enonce = `Les solutions de l'équation  $(${String(a)}x+${String(b)})(-x+${String(c)})$ sont :`
-    this.correction = `Un produit de facteurs est nul si l'un des facteurs est nul , soit <br>
+    this.correction = `Un produit de facteurs est nul si l'un des facteurs est nul, soit <br>
     $\\left\\{\\begin{array}{l c l}
     ${String(a)}x+${String(b)}&=0\\\\
     \\text{ou}&\\\\

@@ -398,40 +398,40 @@ export function pattern({
     // Sortie Latex
     switch (motif) {
       case 'north east lines':
-        myPattern = `pattern color = ${couleurDesHachures} , pattern = {Lines[angle=45, distance=${distanceDesHachures}pt, line width=0.3pt]}`
+        myPattern = `pattern color = ${couleurDesHachures}, pattern = {Lines[angle=45, distance=${distanceDesHachures}pt, line width=0.3pt]}`
         break
       case 'horizontal lines':
-        myPattern = `pattern color = ${couleurDesHachures} , pattern = {Lines[angle=0, distance=${distanceDesHachures}pt, line width=0.3pt]}`
+        myPattern = `pattern color = ${couleurDesHachures}, pattern = {Lines[angle=0, distance=${distanceDesHachures}pt, line width=0.3pt]}`
         break
       case 'vertical lines':
-        myPattern = `pattern color = ${couleurDesHachures} , pattern = {Lines[angle=90, distance=${distanceDesHachures}pt, line width=0.3pt]}`
+        myPattern = `pattern color = ${couleurDesHachures}, pattern = {Lines[angle=90, distance=${distanceDesHachures}pt, line width=0.3pt]}`
         break
       case 'dots':
-        myPattern = `pattern color = ${couleurDesHachures} , pattern = ${motif}`
+        myPattern = `pattern color = ${couleurDesHachures}, pattern = ${motif}`
         break
       case 'crosshatch dots':
-        myPattern = `pattern color = ${couleurDesHachures} , pattern = ${motif}`
+        myPattern = `pattern color = ${couleurDesHachures}, pattern = ${motif}`
         break
       case 'fivepointed stars':
-        myPattern = `pattern color = ${couleurDesHachures} , pattern = ${motif}`
+        myPattern = `pattern color = ${couleurDesHachures}, pattern = ${motif}`
         break
       case 'sixpointed stars':
-        myPattern = `pattern color = ${couleurDesHachures} , pattern = ${motif}`
+        myPattern = `pattern color = ${couleurDesHachures}, pattern = ${motif}`
         break
       case 'crosshatch':
-        myPattern = `pattern color = ${couleurDesHachures} , pattern = ${motif}`
+        myPattern = `pattern color = ${couleurDesHachures}, pattern = ${motif}`
         break
       case 'bricks':
-        myPattern = `pattern color = ${couleurDesHachures} , pattern = ${motif}`
+        myPattern = `pattern color = ${couleurDesHachures}, pattern = ${motif}`
         break
       case 'grid':
-        myPattern = `pattern color = ${couleurDesHachures} , pattern = ${motif}`
+        myPattern = `pattern color = ${couleurDesHachures}, pattern = ${motif}`
         break
       case 'checkerboard':
-        myPattern = `pattern color = ${couleurDesHachures} , pattern = ${motif}`
+        myPattern = `pattern color = ${couleurDesHachures}, pattern = ${motif}`
         break
       default:
-        myPattern = `pattern color = ${couleurDesHachures} , pattern = {Lines[angle=45, distance=${distanceDesHachures}pt, line width=0.3pt]}`
+        myPattern = `pattern color = ${couleurDesHachures}, pattern = {Lines[angle=45, distance=${distanceDesHachures}pt, line width=0.3pt]}`
         break
     }
     return `${myPattern}`

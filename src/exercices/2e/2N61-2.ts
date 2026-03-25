@@ -186,7 +186,7 @@ export default class ExerciceInequationProduit extends Exercice {
           texteCorr += `<br>Donc $${var1}x${ecritureAlgebrique(var2)}${symbolePlusGrand}0$ si et seulement si $x${symbolePlusGrand}${texFractionReduite(-var2, var1)}$.`
         }
       }
-      // Prépare les quatre types de lignes possibles pour les tableaux avec 2 antécédents : + + - , + - -, - + + et - - +
+      // Prépare les quatre types de lignes possibles pour les tableaux avec 2 antécédents : + + -, + - -, - + + et - - +
       // Les lignes sont des tableaux qui alternent chaîne de caractère et 'nombre de pixels de largeur estimée du texte pour le centrage'
       // La première chaîne 'Line' indique que c'est pour un tableau de signes et valeurs ('Var' pour un tableau de variations)
       // '' indique qu'il n'y a rien à afficher (pour laisser un espace sous la borne par exemple)
@@ -627,7 +627,7 @@ export default class ExerciceInequationProduit extends Exercice {
         })
         // Affiche l'ensemble de solutions
         if (signes[i] === '<' || signes[i] === '≤') {
-          texteCorr += `<br> L'ensemble de solutions de l'inéquation est $S = \\left] -\\infty ${separateur} ${racines[0]} \\right${pDroite} \\cup \\left${pGauche} ${racines[1]} , ${racines[2]} \\right${pDroite} $.`
+          texteCorr += `<br> L'ensemble de solutions de l'inéquation est $S = \\left] -\\infty ${separateur} ${racines[0]} \\right${pDroite} \\cup \\left${pGauche} ${racines[1]}, ${racines[2]} \\right${pDroite} $.`
           correctionInteractif = [
             `]-\\infty,${racines[0]}${pDroite}\\cup${pGauche}${racines[1]},${racines[2]}${pDroite}`,
           ]

@@ -4,7 +4,7 @@ import { texNombre } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
 
-export const titre = "Compléter un produit"
+export const titre = 'Compléter un produit'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const uuid = 'a456a'
@@ -18,7 +18,7 @@ export const refs = {
 
 */
 export default class Can2026CE1Q19 extends ExerciceCan {
-   enonce(facteur1?: number, produit?: number) {
+  enonce(facteur1?: number, produit?: number) {
     if (facteur1 == null || produit == null) {
       facteur1 = randint(3, 7)
       const facteur2 = randint(5, 7)
@@ -32,9 +32,13 @@ export default class Can2026CE1Q19 extends ExerciceCan {
     this.canReponseACompleter = `$${facteur1}\\times \\ldots =${produit}$`
 
     if (this.interactif) {
-      this.optionsChampTexte = { texteAvant : `$${facteur1}\\times$` , texteApres: `$=${produit}$` }
+      this.optionsChampTexte = {
+        texteAvant: `$${facteur1}\\times$`,
+        texteApres: `$=${produit}$`,
+      }
+    } else {
+      this.question += `$${facteur1}\\times \\ldots =${produit}$`
     }
-    else{this.question+=`$${facteur1}\\times \\ldots =${produit}$`}
     this.formatChampTexte = KeyboardType.clavierDeBase
   }
 

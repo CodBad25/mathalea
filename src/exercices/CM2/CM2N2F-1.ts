@@ -378,7 +378,7 @@ export default class LireAbscissesFractionnairesComplexes extends Exercice {
             lettreIndiceeDepuisChiffre(i * 3 + 1),
             textFractionCorr(num1, den1, fractionsSimplifiees),
             correctionNotationParentheses,
-          ) + ' , '
+          ) + ', '
         // ` $${lettreIndiceeDepuisChiffre(i * 3 + 1)} \\left( ${textFractionCorr(num1, den1, fractionsSimplifiees)}  \\right)$, `
         texteCorr +=
           ecritAbscisse(
@@ -427,7 +427,7 @@ export default class LireAbscissesFractionnairesComplexes extends Exercice {
           if (listeReponseSimplifiee.length > 0) {
             if (listeReponseSimplifiee.length > 1) {
               texteCorr +=
-                ' , ' +
+                ', ' +
                 ecritAbscisse(
                   listeReponseSimplifiee[0].lettre,
                   listeReponseSimplifiee[0].valeur,
@@ -480,7 +480,7 @@ export default class LireAbscissesFractionnairesComplexes extends Exercice {
           if (listeReponseDecimale.length > 0) {
             if (listeReponseDecimale.length > 1) {
               texteCorr +=
-                ' , ' +
+                ', ' +
                 ecritAbscisse(
                   listeReponseDecimale[0].lettre,
                   listeReponseDecimale[0].valeur,

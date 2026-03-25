@@ -356,7 +356,7 @@ export class Segment extends ObjetMathalea2D {
       }
     }
     tableauOptions.push(
-      `decorate,decoration={random steps , amplitude = ${amp}pt}`,
+      `decorate,decoration={random steps, amplitude = ${amp}pt}`,
     )
     optionsDraw = '[' + tableauOptions.join(',') + ']'
 

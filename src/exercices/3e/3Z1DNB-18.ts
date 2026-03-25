@@ -232,7 +232,7 @@ $\\mathcal{V} = \\mathcal{A}(EFJGH) \\times ${texNombre(epaisseur / 100, 2)} = $
     const document3 = `${texteGras('Document 3 : ')} Deux couches de peinture sont nécessaires. $1~\\mathrm{l}$ de peinture permet de réaliser une couche de $5~\\mathrm{m}^{2}$.<br>`
     const listeDocs = document1 + document2 + document3
     const question4 = `M. et M$^\\text{me}$ ${nomFamille} souhaitent peindre la surface supérieure de leur terrasse.<br>
-À l'aide des documents 1, 2 et 3 , déterminer le type et le nombre de pots nécessaires pour effectuer ces travaux avec un coût minimum.<br>
+À l'aide des documents 1, 2 et 3, déterminer le type et le nombre de pots nécessaires pour effectuer ces travaux avec un coût minimum.<br>
 ${listeDocs}`
     const listeQuestions = createList({
       items: [question1, question2, question3, question4],

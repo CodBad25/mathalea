@@ -194,7 +194,7 @@ export class Polyline extends ObjetMathalea2D {
       tableauOptions.push(`opacity = ${this.opacite}`)
     }
     tableauOptions.push(
-      `decorate,decoration={random steps , segment length=3pt, amplitude = ${amp}pt}`,
+      `decorate,decoration={random steps, segment length=3pt, amplitude = ${amp}pt}`,
     )
 
     let optionsDraw = ''

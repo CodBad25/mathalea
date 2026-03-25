@@ -550,7 +550,7 @@ export function ferACheval(options?: {
     <path d="
       M ${-rayonExterieur * 20},${-rayonExterieur * 20} 
       L 0,${-rayonExterieur * 20}
-      A ${rayonExterieur * 20} ,${rayonExterieur * 20}  0 0 1 0,${rayonExterieur * 20}  
+      A ${rayonExterieur * 20},${rayonExterieur * 20}  0 0 1 0,${rayonExterieur * 20}  
       L ${-rayonExterieur * 20},${rayonExterieur * 20}
       L ${-rayonExterieur * 20},${rayonInterieur * 20}
       L 0,${rayonInterieur * 20}

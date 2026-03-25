@@ -35,10 +35,10 @@ export default class NomExercice extends ExerciceSimple {
     this.correction =
       "Soit $F$ l'ensemble des filles de la classe et $G$ l'ensemble des garçons.<br>"
     this.correction +=
-      'On cherche le nombre de couples $(f,g)\\in F \\times G$ .<br>'
+      'On cherche le nombre de couples $(f,g)\\in F \\times G$.<br>'
     this.correction +=
-      'En appliquanf le principe multiplicatif, on sait que $\\mathrm{card}(F \\times G) = \\mathrm{card}(F) \\times \\mathrm{card}(G)$.<br>'
-    this.correction += `Comme $${filles}\\times${garçons}=${filles * garçons}$ ,<br>`
+      'En appliquant le principe multiplicatif, on sait que $\\mathrm{card}(F \\times G) = \\mathrm{card}(F) \\times \\mathrm{card}(G)$.<br>'
+    this.correction += `Comme $${filles}\\times${garçons}=${filles * garçons}$,<br>`
     this.correction += `il y a donc $${miseEnEvidence(filles * garçons)}$ couples possibles.<br>`
     this.reponse = filles * garçons
   }

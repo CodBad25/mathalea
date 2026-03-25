@@ -759,7 +759,7 @@ On note les évènements suivants :<br>`
           texte += createList({
             items: [
               `Donner les valeurs de $P(${ev[0]})$, $P(${ev[0]}\\cap ${ev[1]})$ et $P_{\\overline{${ev[0]}}}(${ev[1]})$.`,
-              'Calculer la probabilité que le client ne souhaite ni une « couleur-soin » , ni un « effet coup de soleil ».',
+              'Calculer la probabilité que le client ne souhaite ni une « couleur-soin », ni un « effet coup de soleil ».',
               "Calculer la probabilité qu'un client choisisse l'« effet coup de soleil » sachant qu'il a pris une « couleur-soin ». ",
               `Montrer que la probabilité de l'événement $${ev[1]}$ est $${texNombre(pB, 4)}$.`,
               `Les événements $${ev[0]}$ et $${ev[1]}$ sont-ils indépendants ? Justifier.`,
@@ -779,7 +779,7 @@ On note les évènements suivants :<br>`
                   ),
                   objetsC,
                 ) +
-                `La probabilité que le client ne souhaite ni une « couleur-soin » , ni un « effet coup de soleil » est $P(\\overline{${ev[0]}}\\cap \\overline{${ev[1]}})$ :<br>
+                `La probabilité que le client ne souhaite ni une « couleur-soin », ni un « effet coup de soleil » est $P(\\overline{${ev[0]}}\\cap \\overline{${ev[1]}})$ :<br>
             ${textePAbinterBb}`,
               `On a :<br>
                     $\\begin{aligned}

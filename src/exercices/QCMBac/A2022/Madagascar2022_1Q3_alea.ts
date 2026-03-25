@@ -55,7 +55,7 @@ export default class SujetZero2024Ex5Q5 extends ExerciceQcm {
     this.correction +=
       "<br>Ce nombre est égal à la limite du taux d'accroissement de la fonction $\\ln$ au voisinnage de $1$,<br> il est donc égal au nombre dérivé de la fonction logarithme népérien en $x = 1$.<br>"
     this.correction +=
-      "Comme sur $]1~;~+\\infty[$ , $(\\ln(x))'=\\dfrac 1x$, on a  $\\displaystyle\\lim_{x \\to 1^{+}}g(x)=\\dfrac{1}{1} = 1$ .<br>"
+      "Comme sur $]1~;~+\\infty[$, $(\\ln(x))'=\\dfrac 1x$, on a  $\\displaystyle\\lim_{x \\to 1^{+}}g(x)=\\dfrac{1}{1} = 1$ .<br>"
     this.correction +=
       "Il n'y a pas d'asymptote verticale au voisinage de $1$. <br>"
     this.correction += `${texteEnCouleurEtGras('La courbe $\\mathcal{C}_g$ admet donc une asymptote horizontale et aucune asymptote verticale.')}`

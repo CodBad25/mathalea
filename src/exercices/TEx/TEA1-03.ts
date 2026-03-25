@@ -118,7 +118,7 @@ $${a}x \\equiv ${b} \\,[${k}]$.<br> `
       texteCorr += table
       texteCorr += `<br>On en déduit que $x \\equiv ${r} \\,[${k}]$.`
       texteCorr += `<br>On vérifie réciproquement que si $x \\equiv ${r} \\,[${k}]$ alors $${a}x \\equiv ${miseEnEvidence(b)} \\,[${k}]$ $.`
-      texteCorr += `<br>L'ensemble des solutions est donc : $${miseEnEvidence(`S=\\{  ${r} + ${k}n , n \\in \\mathbb{Z} \\}`, bleuMathalea)}$. `
+      texteCorr += `<br>L'ensemble des solutions est donc : $${miseEnEvidence(`S=\\{  ${r} + ${k}n, n \\in \\mathbb{Z} \\}`, bleuMathalea)}$. `
 
       if (this.questionJamaisPosee(i, texte)) {
         // Question affichée + champ interactif

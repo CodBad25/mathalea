@@ -77,7 +77,7 @@ const noeuds4 = [
   { x: 3, y: -3, deriveeGauche: -2, deriveeDroit: -2, isVisible: true },
 ]
 // une liste des listes
-const mesFonctions = [noeuds1, noeuds2, noeuds3, noeuds4] //, , noeuds2noeuds1, noeuds2,
+const mesFonctions = [noeuds1, noeuds2, noeuds3, noeuds4] //,, noeuds2noeuds1, noeuds2,
 
 let coeffX
 let coeffY

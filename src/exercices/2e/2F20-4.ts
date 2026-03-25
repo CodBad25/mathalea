@@ -694,7 +694,7 @@ class resolutionEquationInequationGraphique extends Exercice {
         },
       })
 
-      texteCorr += `Pour trouver l'ensemble des solutions de l'inéquation $${f1}(x)${inferieur ? miseEnEvidence('\\leqslant', 'black') : miseEnEvidence('~\\geqslant~', 'black')}${f2}(x)$ sur $[${xMin};${xMax}]$ , on regarde les portions où la courbe $${miseEnEvidence('\\mathscr{C}_' + f1, 'blue')}$ est située ${inferieur ? 'en dessous' : 'au-dessus'} de la  courbe $${miseEnEvidence('\\mathscr{C}_' + f2, 'red')}$.<br>`
+      texteCorr += `Pour trouver l'ensemble des solutions de l'inéquation $${f1}(x)${inferieur ? miseEnEvidence('\\leqslant', 'black') : miseEnEvidence('~\\geqslant~', 'black')}${f2}(x)$ sur $[${xMin};${xMax}]$, on regarde les portions où la courbe $${miseEnEvidence('\\mathscr{C}_' + f1, 'blue')}$ est située ${inferieur ? 'en dessous' : 'au-dessus'} de la  courbe $${miseEnEvidence('\\mathscr{C}_' + f2, 'red')}$.<br>`
       texteCorr += `On lit les intervalles correspondants sur l'axe des abscisses : $${soluces2}$`
     }
 

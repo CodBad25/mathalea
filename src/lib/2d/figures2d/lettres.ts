@@ -56,7 +56,7 @@ export function lettreA(options?: {
   // Génération du code TikZ
   const codeTikz = `
     % Lettre A
-   \\draw[fill=${fillStyle}, draw=${strokeStyle}, line width=${lineWidth}pt, , rounded corners, line cap=round]
+   \\draw[fill=${fillStyle}, draw=${strokeStyle}, line width=${lineWidth}pt,, rounded corners, line cap=round]
         ${tikzPoints} -- cycle;
     \\draw[draw=${strokeStyle}, line width=${lineWidth * 1.5}pt,, rounded corners, line cap=round]
         (${-largeur / 4},${-hauteur / 5}) -- (${largeur / 4},${-hauteur / 5});

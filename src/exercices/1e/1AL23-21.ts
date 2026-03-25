@@ -20,7 +20,7 @@ export const dateDeModifImportante = '17/12/2024'
 
 /**
  * Calcul de discriminant pour identifier la forme graphique associée (0 solution dans IR, 1 ou 2)
- * @author Rémi Angot , Olivier Mimeau (ajout d'un cas)
+ * @author Rémi Angot, Olivier Mimeau (ajout d'un cas)
  *
  */
 export const uuid = 'cf78f'
@@ -50,7 +50,6 @@ export default class ResoudreEquationDegre2Entiers extends Exercice {
     for (
       let i = 0, texte, texteCorr, a, b, c, x1, x2, y1, k, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       let answer = ''
       if (listeTypeDeQuestions[i] === 'solutionsEntieres') {

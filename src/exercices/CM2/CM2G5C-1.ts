@@ -637,7 +637,7 @@ class UnPatron {
           if (correction) {
             // face1.addColor({ colorBackground: 'gray' }) // 'gray''blue'
             face1.addTextIn({
-              textIn: `${this.matrice[i][j].numero}` /* , color: couleurTexte1 */,
+              textIn: `${this.matrice[i][j].numero}` /*, color: couleurTexte1 */,
             })
           }
           const laFace1 = face1.render()

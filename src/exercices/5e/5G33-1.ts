@@ -69,7 +69,6 @@ export default class TracerCarresRectangleslongueurDonnees extends Exercice {
     for (
       let i = 0, texte, texteCorr, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       const objetsEnonce = []
       const noms = shuffle([
@@ -142,7 +141,7 @@ export default class TracerCarresRectangleslongueurDonnees extends Exercice {
         couleur(2),
         0.2,
       )
-      objetsEnonce.push(d0, d1, d2, d3, d4, d5, d6, A13, A23) // , labelLatexPoint({ points: [P03, P13, P23, P43, P53, P63, P3] }))
+      objetsEnonce.push(d0, d1, d2, d3, d4, d5, d6, A13, A23) //, labelLatexPoint({ points: [P03, P13, P23, P43, P53, P63, P3] }))
       // Les lignes ci-dessous permettent d'avoir un affichage aux dimensions optimisées
       const xmin = Math.min(P03.x, P13.x, P23.x, P43.x, P53.x, P63.x) - 3
       const xmax = Math.max(P03.x, P13.x, P23.x, P43.x, P53.x, P63.x) + 3

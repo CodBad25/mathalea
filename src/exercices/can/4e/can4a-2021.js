@@ -147,7 +147,6 @@ export default class SujetCAN20214ieme extends Exercice {
         objets,
         cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       switch (typeQuestionsDisponibles[i]) {
         case 1:
@@ -1018,7 +1017,7 @@ export default class SujetCAN20214ieme extends Exercice {
             texteCorr = `
 
        $10\\,\\%$  de $${a}$ est égal à $0,1\\times ${a}=${texNombre(a / 10, 1)}$.<br>
-      Puisque $5\\,\\%$  est deux fois plus petit  que $10\\,\\%$ ,  $5\\,\\%$  de $${a}$ est égal à $ ${a / 10}\\div 2=${a / 20}$.<br>
+      Puisque $5\\,\\%$  est deux fois plus petit  que $10\\,\\%$,  $5\\,\\%$  de $${a}$ est égal à $ ${a / 10}\\div 2=${a / 20}$.<br>
                    La réduction est donc de : $${texNombre((b * a) / 100)}$ €.<br>
            Le nouveau prix est :   $${a}-${texNombre((b * a) / 100)}= ${miseEnEvidence(texNombre(a - (b * a) / 100))}$  €.
 
@@ -1028,7 +1027,7 @@ export default class SujetCAN20214ieme extends Exercice {
                       $10\\,\\%$  de $${a}$ est égal à $0,1\\times ${a}=${texNombre(a / 10, 1)}$.<br>
        $5\\,\\%$  de $${a}$  est égal à la moitié de $10\\,\\%$  de $${a}$, soit
       $${a / 10}\\div 2=${a / 20}$.<br>
-      Puisque $15\\,\\%$  est égal à $10\\%$  $+5\\,\\%$ ,  $15\\,\\%$  de $${a}$ est égal à $${a / 10}+${a / 20}=${(3 * a) / 20}$.<br>
+      Puisque $15\\,\\%$  est égal à $10\\%$  $+5\\,\\%$,  $15\\,\\%$  de $${a}$ est égal à $${a / 10}+${a / 20}=${(3 * a) / 20}$.<br>
                       La réduction est donc de : $${texNombre((3 * a) / 20)}$ €.<br>
            Le nouveau prix est :   $${a}-${texNombre((b * a) / 100)}= ${miseEnEvidence(texNombre(a - (b * a) / 100))}$  €.
 

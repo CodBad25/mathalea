@@ -103,7 +103,7 @@ export default class nomExercice extends Exercice {
             expression2 = ce
               .parse(`${table[1][0]} x + ${table[1][1]} y`)
               .simplify().latex // On calcule l'expression de la deuxième ligne
-            texte = `On donne l'application linéaire : \\[ ${nomfonction} : \\begin{array}{rcl} \\mathbb{R}^2 & \\longrightarrow & \\mathbb{R}^2 \\\\ (x,y) & \\longmapsto & \\left( ${expression1} \\, , \\, ${expression2} \\right) \\end{array}.\\] <br> Déterminer la matrice de l'application linéaire $f$ dans la base canonique.`
+            texte = `On donne l'application linéaire : \\[ ${nomfonction} : \\begin{array}{rcl} \\mathbb{R}^2 & \\longrightarrow & \\mathbb{R}^2 \\\\ (x,y) & \\longmapsto & \\left( ${expression1} \\,, \\, ${expression2} \\right) \\end{array}.\\] <br> Déterminer la matrice de l'application linéaire $f$ dans la base canonique.`
             texteCorr = ''
             texteCorr += `On trouve la matrice de l'application linéaire $${nomfonction}$ en écrivant l'image par $${nomfonction}$ des vecteurs de la base canonique de  $\\mathbb{R}^2$ dans la base de $\\mathbb{R}^2$. Ces vecteurs constituent les colonnes de la matrice $${nommatrice}$ représentant $${nomfonction}$ dans la base canonique. 
               <br><br> On calcule : $${nomfonction}(1,0) = (${table[0][0]},${table[1][0]})$ et $${nomfonction}(0,1) = (${table[0][1]},${table[1][1]})$.
@@ -118,7 +118,7 @@ export default class nomExercice extends Exercice {
             expression3 = ce
               .parse(`${table[2][0]} x + ${table[2][1]} y`)
               .simplify().latex // On calcule l'expression de la troisième ligne
-            texte = `On donne l'application linéaire : \\[ ${nomfonction} : \\begin{array}{rcl} \\mathbb{R}^2 & \\longrightarrow & \\mathbb{R}^3 \\\\ (x,y) & \\longmapsto & \\left( ${expression1} \\, , \\, ${expression2} \\, , \\, ${expression3} \\right) \\end{array}.\\] <br> Déterminer la matrice de l'application linéaire $f$ dans la base canonique.`
+            texte = `On donne l'application linéaire : \\[ ${nomfonction} : \\begin{array}{rcl} \\mathbb{R}^2 & \\longrightarrow & \\mathbb{R}^3 \\\\ (x,y) & \\longmapsto & \\left( ${expression1} \\,, \\, ${expression2} \\,, \\, ${expression3} \\right) \\end{array}.\\] <br> Déterminer la matrice de l'application linéaire $f$ dans la base canonique.`
             texteCorr = ''
             texteCorr += `On trouve la matrice de l'application linéaire $${nomfonction}$ en écrivant l'image par $${nomfonction}$ des vecteurs de la base canonique de  $\\mathbb{R}^2$ dans la base de $\\mathbb{R}^3$. Ces vecteurs constituent les colonnes de la matrice $${nommatrice}$ représentant $${nomfonction}$ dans la base canonique.  
               <br><br> On calcule : $${nomfonction}(1,0) = (${table[0][0]},${table[1][0]},${table[2][0]})$ et $${nomfonction}(0,1) = (${table[0][1]},${table[1][1]},${table[2][1]})$.
@@ -161,7 +161,7 @@ export default class nomExercice extends Exercice {
             expression2 = ce
               .parse(`${table[1][0]} x + ${table[1][1]} y + ${table[1][2]} z`)
               .simplify().latex // On calcule l'expression de la deuxième ligne
-            texte = `On donne l'application linéaire : \\[ ${nomfonction} : \\begin{array}{rcl} \\mathbb{R}^3 & \\longrightarrow & \\mathbb{R}^2 \\\\ (x,y,z) & \\longmapsto & \\left( ${expression1} \\, , \\, ${expression2} \\right) \\end{array}.\\] <br> Déterminer la matrice de l'application linéaire $f$ dans la base canonique.`
+            texte = `On donne l'application linéaire : \\[ ${nomfonction} : \\begin{array}{rcl} \\mathbb{R}^3 & \\longrightarrow & \\mathbb{R}^2 \\\\ (x,y,z) & \\longmapsto & \\left( ${expression1} \\,, \\, ${expression2} \\right) \\end{array}.\\] <br> Déterminer la matrice de l'application linéaire $f$ dans la base canonique.`
             texteCorr = ''
             texteCorr += `On trouve la matrice de l'application linéaire $${nomfonction}$ en écrivant l'image par $${nomfonction}$ des vecteurs de la base canonique de  $\\mathbb{R}^3$ dans la base de $\\mathbb{R}^2$. Ces vecteurs constituent les colonnes de la matrice $${nommatrice}$ représentant $${nomfonction}$ dans la base canonique.  
               <br><br> On calcule : $${nomfonction}(1,0,0) = (${table[0][0]},${table[1][0]})$, $${nomfonction}(0,1,0) = (${table[0][1]},${table[1][1]})$ et $${nomfonction}(0,0,1) = (${table[0][2]},${table[1][2]})$.
@@ -176,7 +176,7 @@ export default class nomExercice extends Exercice {
             expression3 = ce
               .parse(`${table[2][0]} x + ${table[2][1]} y + ${table[2][2]} z`)
               .simplify().latex // On calcule l'expression de la troisième ligne
-            texte = `On donne l'application linéaire : \\[ ${nomfonction} : \\begin{array}{rcl} \\mathbb{R}^3 & \\longrightarrow & \\mathbb{R}^3 \\\\ (x,y,z) & \\longmapsto & \\left( ${expression1} \\, , \\, ${expression2} \\, , \\, ${expression3} \\right) \\end{array}.\\] <br> Déterminer la matrice de l'application linéaire $f$ dans la base canonique.`
+            texte = `On donne l'application linéaire : \\[ ${nomfonction} : \\begin{array}{rcl} \\mathbb{R}^3 & \\longrightarrow & \\mathbb{R}^3 \\\\ (x,y,z) & \\longmapsto & \\left( ${expression1} \\,, \\, ${expression2} \\,, \\, ${expression3} \\right) \\end{array}.\\] <br> Déterminer la matrice de l'application linéaire $f$ dans la base canonique.`
             texteCorr = ''
             texteCorr += `On trouve la matrice de l'application linéaire $${nomfonction}$ en écrivant l'image par $${nomfonction}$ des vecteurs de la base canonique de  $\\mathbb{R}^3$ dans la base de $\\mathbb{R}^3$. Ces vecteurs constituent les colonnes de la matrice $${nommatrice}$ représentant $${nomfonction}$ dans la base canonique.   
             <br><br> On calcule : $${nomfonction}(1,0,0) = (${table[0][0]},${table[1][0]},${table[2][0]})$, $${nomfonction}(0,1,0) = (${table[0][1]},${table[1][1]},${table[2][1]})$ et $${nomfonction}(0,0,1) = (${table[0][2]},${table[1][2]},${table[2][2]})$.

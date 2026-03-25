@@ -92,7 +92,7 @@ export default class MilieuEntre1EtFraction extends ExerciceSimple {
       segment(point(C.x - 0.3, C.y - 0.8), point(C.x + 0.3, C.y - 0.8)),
     )
     objets.push(texteParPosition('M', B.x, B.y - 0.5))
-    // objets.push(texteParPosition(`---`,C.x ,C.y-0.7))
+    // objets.push(texteParPosition(`---`,C.x,C.y-0.7))
     objets.push(texteParPosition(`${stringNombre(d)}`, C.x, C.y - 1.1))
     // objets.push(latexParCoordonnees(fraction(n, d).texFraction, C.x, -1, 'black', 20, 20, 'white', 6))
     //, labelPoint(B)

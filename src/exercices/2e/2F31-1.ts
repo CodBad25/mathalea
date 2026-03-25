@@ -184,7 +184,7 @@ export default class ComparerAvecFctRef extends Exercice {
                   texteCorr += `On a $${n3}<${n4}$, donc $${texFractionFromString(n3, d3)}<${texFractionFromString(n4, d3)}$, soit $${texFractionFromString(n1, d1)}<${texFractionFromString(n2, d2)}$.<br>
                 <br>Comme $${texFractionFromString(n1, d1)}${miseEnEvidence('\\boldsymbol{<}', 'blue')}${texFractionFromString(n2, d2)}$, alors $\\left(${texFractionFromString(n1, d1)}\\right)^2${miseEnEvidence('\\boldsymbol{<}', 'blue')}\\left(${texFractionFromString(n2, d2)}\\right)^2$`
                 } else {
-                  texteCorr += `On a $${n4}<${n3}$, donc $${texFractionFromString(n4, d3)}<${texFractionFromString(n3, d3)}$ , soit $${texFractionFromString(n2, d2)}<${texFractionFromString(n1, d1)}$.<br>
+                  texteCorr += `On a $${n4}<${n3}$, donc $${texFractionFromString(n4, d3)}<${texFractionFromString(n3, d3)}$, soit $${texFractionFromString(n2, d2)}<${texFractionFromString(n1, d1)}$.<br>
                 <br>Comme,  $${texFractionFromString(n2, d2)}${miseEnEvidence('\\boldsymbol{<}', 'blue')}${texFractionFromString(n1, d1)}$, alors $\\left(${texFractionFromString(n2, d2)}\\right)^2${miseEnEvidence('\\boldsymbol{<}', 'blue')}\\left(${texFractionFromString(n1, d1)}\\right)^2$`
                 }
               }

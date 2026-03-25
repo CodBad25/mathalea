@@ -197,14 +197,14 @@ export default class nomExercice extends Exercice {
       {
         num: 16,
         nom: 'le nombre pair suivant de number1',
-        enchainement: `$number1 + 2$ (si le nombre se termine par 0,2,4,6,8) , $number1 + 1$ sinon`,
+        enchainement: `$number1 + 2$ (si le nombre se termine par 0,2,4,6,8), $number1 + 1$ sinon`,
         fct: (x: number, y: number) =>
           Math.floor(x) % 2 === 0 ? Math.floor(x) + 2 : Math.floor(x) + 1,
       },
       {
         num: 17,
         nom: 'le nombre impair suivant de number1',
-        enchainement: `$number1 + 1$ (si le nombre se termine par 0,2,4,6,8) , $number1 + 2$ sinon`,
+        enchainement: `$number1 + 1$ (si le nombre se termine par 0,2,4,6,8), $number1 + 2$ sinon`,
         fct: (x: number, y: number) =>
           Math.floor(x) % 2 === 1 ? Math.floor(x) + 2 : Math.floor(x) + 1,
       },

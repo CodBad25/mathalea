@@ -22,7 +22,7 @@ export const dateDePublication = '16/01/2022'
 /**
  * Problèmes d'évolution réciproque'
  *
- * * Situations variées : prix , tarif horaire, nombre d'employés
+ * * Situations variées : prix, tarif horaire, nombre d'employés
  * * Déterminer un taux d'évolution réciproque
  * * Mélange des 3 types de problèmes
  * @author Florence Tapiero

@@ -1114,7 +1114,7 @@ export default class ExerciceAnglesTriangles extends Exercice {
           texteCorr += `L'angle $${miseEnEvidence('\\widehat{' + s1 + s3 + s2 + '}', 'black')}$ mesure $${miseEnEvidence('67.5')}^\\circ$ et l'angle $${miseEnEvidence('\\widehat{' + s1 + s2 + s3 + '}', 'black')}$ mesure $${miseEnEvidence('22.5')}^\\circ$.`
           reponseInteractive = [67.5, 22.5]
           break
-        case 10: // cas non aléatoire triangle 67.5 , 67.5 , 45.
+        case 10: // cas non aléatoire triangle 67.5, 67.5, 45.
           nomAngles.push(s1 + s3 + s2, s1 + s2 + s3, s2 + s1 + s3)
           texte = `$${s1 + s2 + s3}$ est un triangle isocèle en $${s1}$. L'angle $\\widehat{${s2 + s1 + s3}}$ mesure les deux tiers de l'angle $\\widehat{${s1 + s2 + s3}}$.<br>`
           texte += `Quelles sont les mesures respectives des angles $\\widehat{${nomAngles[choixAngle[0]]}}$, $\\widehat{${nomAngles[choixAngle[1]]}}$ et $\\widehat{${nomAngles[choixAngle[2]]}}$ ?`
@@ -1219,7 +1219,7 @@ export default class ExerciceAnglesTriangles extends Exercice {
           texteCorr += `L'angle $${miseEnEvidence('\\widehat{' + s1 + s3 + s2 + '}', 'black')}$ mesure $${miseEnEvidence('67.5')}^\\circ$, l'angle $${miseEnEvidence('\\widehat{' + s1 + s2 + s3 + '}', 'black')}$ mesure $${miseEnEvidence('67.5')}^\\circ$ et l'angle $${miseEnEvidence('\\widehat{' + s2 + s1 + s3 + '}', 'black')}$ mesure $${miseEnEvidence('45')}^\\circ$.`
           reponseInteractive = [67.5, 67.5, 45]
           break
-        case 11: // cas non aléatoire triangle 72 , 72 , 36.
+        case 11: // cas non aléatoire triangle 72, 72, 36.
         default:
           nomAngles.push(s1 + s3 + s2, s1 + s2 + s3, s2 + s1 + s3)
           texte = `$${s1 + s2 + s3}$ est un triangle isocèle en $${s1}$. L'angle $\\widehat{${s1 + s2 + s3}}$ mesure le double de l'angle $\\widehat{${s2 + s1 + s3}}$.<br>`

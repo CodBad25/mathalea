@@ -110,7 +110,7 @@ export default class Exercice3L14DNB0 extends ExerciceBrevetA {
               On a donc $x^2 - ${facteur}x - ${retrait} = (x+${a})(x-${b})$.`,
         `Il faut trouver un ou des nombres $x$ tels que $x^2-${facteur}x-${retrait}=0$ ou d'après la question précédente tels que :<br>
               $(x+${a})(x-${b})=0$.<br>
-              Un produit de facteurs est nul si l'un des facteurs est nul , soit <br>
+              Un produit de facteurs est nul si l'un des facteurs est nul, soit <br>
               $\\left\\{\\begin{array}{l c l}
               x+${a}&=&0\\\\
               &\\text{ou}&\\\\

@@ -73,7 +73,6 @@ export default class VariationDUneSuiteDefinieExplicitement extends Exercice {
         alea1: number,
         alea2: number;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       switch (
         listeTypeDeQuestions[i] // listeTypeDeQuestions[i]
@@ -287,13 +286,13 @@ export default class VariationDUneSuiteDefinieExplicitement extends Exercice {
                 if (denomC + denomD > 0) {
                   texteCorr += `Comme $n\\in\\mathbb{N}$, $${rienSi1(denomC)}n ${ecritureAlgebrique(denomD + denomC)}>0$.`
                 } else {
-                  texteCorr += `Pour tout $n \\geqslant ${texNombre(Math.ceil(-denomD / denomC))}$ on a $${rienSi1(denomC)}n \\geqslant ${texNombre(Math.ceil(-denomD / denomC) * denomC)}$ , soit  $${rienSi1(denomC)}n ${ecritureAlgebrique(denomD + denomC)} \\geqslant ${texNombre(Math.ceil(-denomD / denomC) * denomC + denomD + denomC)}$. On a donc $${rienSi1(denomC)}n ${ecritureAlgebrique(denomD + denomC)}>0$.`
+                  texteCorr += `Pour tout $n \\geqslant ${texNombre(Math.ceil(-denomD / denomC))}$ on a $${rienSi1(denomC)}n \\geqslant ${texNombre(Math.ceil(-denomD / denomC) * denomC)}$, soit  $${rienSi1(denomC)}n ${ecritureAlgebrique(denomD + denomC)} \\geqslant ${texNombre(Math.ceil(-denomD / denomC) * denomC + denomD + denomC)}$. On a donc $${rienSi1(denomC)}n ${ecritureAlgebrique(denomD + denomC)}>0$.`
                 }
                 texteCorr += '<br>'
                 if (denomD > 0) {
                   texteCorr += `Comme $n\\in\\mathbb{N}$, $${rienSi1(denomC)}n ${ecritureAlgebrique(denomD)}>0$.`
                 } else {
-                  texteCorr += `Pour tout $n \\geqslant ${texNombre(Math.ceil(-denomD / denomC))}$ on a $${rienSi1(denomC)}n \\geqslant ${texNombre(Math.ceil(-denomD / denomC) * denomC)}$ , soit  $${rienSi1(denomC)}n ${ecritureAlgebrique(denomD)} \\geqslant ${texNombre(Math.ceil(-denomD / denomC) * denomC + denomD)}$. On a donc $${rienSi1(denomC)}n ${ecritureAlgebrique(denomD)}>0$.`
+                  texteCorr += `Pour tout $n \\geqslant ${texNombre(Math.ceil(-denomD / denomC))}$ on a $${rienSi1(denomC)}n \\geqslant ${texNombre(Math.ceil(-denomD / denomC) * denomC)}$, soit  $${rienSi1(denomC)}n ${ecritureAlgebrique(denomD)} \\geqslant ${texNombre(Math.ceil(-denomD / denomC) * denomC + denomD)}$. On a donc $${rienSi1(denomC)}n ${ecritureAlgebrique(denomD)}>0$.`
                 }
               } else {
                 texteCorr += `Pour tout $n \\geqslant ${texNombre(Math.ceil(-denomD / denomC))}$ on a $${rienSi1(denomC)}n \\geqslant ${texNombre(Math.ceil(-denomD / denomC) * denomC)}$.`

@@ -492,7 +492,7 @@ export default class TableauCriteresDeDivisibilite extends Exercice {
               texte: '2',
               statut: false,
               feedback:
-                "Ce nombre est un nombre impair. Il ,'est pas divisible par 2.",
+                "Ce nombre est un nombre impair. Il n'est pas divisible par 2.",
             },
             {
               texte: '3',

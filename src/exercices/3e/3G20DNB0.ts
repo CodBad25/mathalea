@@ -152,7 +152,7 @@ export default class Exercice3G2DNB0 extends ExerciceBrevetA {
         soit $${texNombre(ratio, 1)} = \\dfrac{${A}${F}}{${texNombre(DA, 2)}}$, d'où $${A}${F} = ${texNombre(ratio, 1)} \\times ${texNombre(DA, 2)} = ${texNombre(AF, 3)}\\text{ cm}$.`,
         createList({
           items: [
-            `Si $\\mathscr{A}$ est l'aire du triangle $${A}${B}${D}$ , on sait que $\\mathscr{A} = \\dfrac{${D}${B} \\times ${A}${D}}{2} = \\dfrac{${texNombre(BD, 2)} \\times ${texNombre(DA, 2)}}{2} = \\dfrac{${texNombre(DA * BD, 4)}}{2}= ${texNombre(aireTriangle, 4)}\\text{ cm}^2$.`,
+            `Si $\\mathscr{A}$ est l'aire du triangle $${A}${B}${D}$, on sait que $\\mathscr{A} = \\dfrac{${D}${B} \\times ${A}${D}}{2} = \\dfrac{${texNombre(BD, 2)} \\times ${texNombre(DA, 2)}}{2} = \\dfrac{${texNombre(DA * BD, 4)}}{2}= ${texNombre(aireTriangle, 4)}\\text{ cm}^2$.`,
             `L'aire du disque est égale à $\\pi \\times R^2 = \\pi \\times ${texNombre(rayon, 1)}^2 = \\left(${rayonFrac.texFraction}\\right)^2 \\times \\pi  = ${rayonFracCarre.texFraction}\\pi \\approx ${texNombre(aireDisque, 3)}\\text{ cm}^2$, soit $${texNombre(aireDisque, 2)}$ au centième de $\\text{cm}^2$.`,
           ],
           style: 'alpha',
