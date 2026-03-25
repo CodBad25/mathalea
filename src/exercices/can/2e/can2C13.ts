@@ -11,7 +11,7 @@ export const interactifType = 'mathLive'
 export const amcReady = true
 export const amcType = 'AMCNum'
 export const dateDePublication = '15/09/2022' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
-export const dateDeModifImportante = '07/07/2025'
+export const dateDeModifImportante = '25/03/2026'
 /**
  * Modèle d'exercice très simple pour la course aux nombres
  * @author Gille Mora
@@ -32,6 +32,7 @@ export default class CalculPuissancesOperation extends ExerciceSimple {
     this.nbQuestions = 1
     this.formatChampTexte =
       KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets
+    this.optionsDeComparaison = { seulementCertainesPuissances: true }
   }
 
   nouvelleVersion() {
@@ -57,7 +58,7 @@ export default class CalculPuissancesOperation extends ExerciceSimple {
           `$${ecritureParentheseSiNegatif(a)}^{${n * p}}$`,
           `$${ecritureParentheseSiNegatif(a * a)}^{${n + p}}$`,
         ]
-        this.reponse = `$${ecritureParentheseSiNegatif(a)}^{${n + p}}$`
+        this.reponse = `${ecritureParentheseSiNegatif(a)}^{${n + p}}`
 
         break
       case 'b':
@@ -74,7 +75,7 @@ export default class CalculPuissancesOperation extends ExerciceSimple {
         this.correction = `On utilise la formule $a^n\\times b^n=(a\\times b)^{n}$
         avec $a=${a}$,  $b=${b}$ et $n=${n}$.<br>
         $${ecritureParentheseSiNegatif(a)}^{${n}}\\times ${ecritureParentheseSiNegatif(b)}^{${n}}=(${ecritureParentheseSiNegatif(a)}\\times ${ecritureParentheseSiNegatif(b)})^{${n}}=${miseEnEvidence(`${ecritureParentheseSiNegatif(p)}^{${n}}`)}$ `
-        this.reponse = `$${ecritureParentheseSiNegatif(p)}^{${n}}$`
+        this.reponse = `${ecritureParentheseSiNegatif(p)}^{${n}}`
         break
 
       case 'c':
@@ -91,7 +92,7 @@ export default class CalculPuissancesOperation extends ExerciceSimple {
         this.correction = `On utilise la formule $\\left(a^n\\right)^p=a^{n\\times p}$
         avec $a=${a}$,  $n=${n}$ et $p=${p}$.<br>
         $\\left(${ecritureParentheseSiNegatif(a)}^{${n}}\\right)^{${p}}=${ecritureParentheseSiNegatif(a)}^{${n}\\times ${ecritureParentheseSiNegatif(p)}}=${miseEnEvidence(`${ecritureParentheseSiNegatif(a)}^{${n * p}}`)}$ `
-        this.reponse = `$${ecritureParentheseSiNegatif(a)}^{${s}}$`
+        this.reponse = `${ecritureParentheseSiNegatif(a)}^{${s}}`
         break
 
       case 'd':
@@ -107,7 +108,7 @@ export default class CalculPuissancesOperation extends ExerciceSimple {
           `$${ecritureParentheseSiNegatif(a)}^{${-s}}$`,
           `$${ecritureParentheseSiNegatif(a)}^{${n * p}}$`,
         ]
-        this.reponse = `$${ecritureParentheseSiNegatif(a)}^{${s}}$`
+        this.reponse = `${ecritureParentheseSiNegatif(a)}^{${s}}`
         break
       case 'e':
         b = randint(2, 6, [0, 1, -1])
@@ -124,9 +125,10 @@ export default class CalculPuissancesOperation extends ExerciceSimple {
           `$${ecritureParentheseSiNegatif(a)}^{0}$`,
           `$${ecritureParentheseSiNegatif(s)}^{0}$`,
         ]
-        this.reponse = `$${s}^{${n}}$`
+        this.reponse = `${s}^{${n}}`
         break
     }
+    if (this.versionQcm) this.reponse = '$' + this.reponse + '$'
     if (this.interactif || this.versionQcm) {
       this.question += '$=$'
     }
