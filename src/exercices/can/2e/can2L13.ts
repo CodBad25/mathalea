@@ -1,7 +1,7 @@
-import ExerciceSimple from '../../ExerciceSimple'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { randint } from '../../../modules/outils'
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import ExerciceSimple from '../../ExerciceSimple'
 
 import { choice, shuffle } from '../../../lib/outils/arrayOutils'
 import {
@@ -16,6 +16,7 @@ export const titre = 'Développer avec la double distributivité'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const dateDePublication = '07/04/2024'
+export const dateDeModifImportante = '25/03/2026'
 export const uuid = '69fed'
 export const refs = {
   'fr-fr': ['can2L13'],
@@ -35,6 +36,7 @@ export default class DeveloppementDouble extends ExerciceSimple {
     this.nbQuestions = 1
     this.formatChampTexte = KeyboardType.clavierDeBaseAvecVariable
     this.versionQcmDisponible = true
+    this.optionsDeComparaison = { expressionsForcementReduites: true }
   }
 
   nouvelleVersion() {
@@ -45,7 +47,7 @@ export default class DeveloppementDouble extends ExerciceSimple {
           const b = randint(-10, 10, 0)
           const c = 1
           const d = randint(-10, 10, [0, b, -b])
-          this.reponse = `$x^2${ecritureAlgebriqueSauf1(b + d)}x${ecritureAlgebriqueSauf1(b * d)}$`
+          this.reponse = `x^2${ecritureAlgebriqueSauf1(b + d)}x${ecritureAlgebriqueSauf1(b * d)}`
           let tableau = [
             `$x^2${ecritureAlgebriqueSauf1(b * d)}x${ecritureAlgebrique(b * d)}$`,
             `$x^2${ecritureAlgebriqueSauf1(b + d)}x${ecritureAlgebrique(b + d)}$`,
@@ -72,7 +74,7 @@ export default class DeveloppementDouble extends ExerciceSimple {
           if (a === 2 && c === 2) {
             c = 3
           } // pour éviter a=c=2 car a+b=a*c
-          this.reponse = `$${rienSi1(a * c)}x^2${ecritureAlgebriqueSauf1(b * c + a * d)}x${ecritureAlgebriqueSauf1(b * d)}$`
+          this.reponse = `${rienSi1(a * c)}x^2${ecritureAlgebriqueSauf1(b * c + a * d)}x${ecritureAlgebriqueSauf1(b * d)}`
           let tableau = [
             `$${rienSi1(a * c)}x^2${ecritureAlgebriqueSauf1(b * d)}x${ecritureAlgebrique(b * d)}$`,
             `$${rienSi1(a + c)}x^2${ecritureAlgebriqueSauf1(b * c + a * d)}x${ecritureAlgebrique(b + d)}$`,
@@ -98,7 +100,7 @@ export default class DeveloppementDouble extends ExerciceSimple {
           const b = randint(-3, 3, 0)
           const c = randint(1, 2)
           const d = randint(-10, 10, [0, b, -b])
-          this.reponse = `$${rienSi1(a * c)}x^2${ecritureAlgebriqueSauf1(b * c + a * d)}x${ecritureAlgebrique(b * d)}$`
+          this.reponse = `${rienSi1(a * c)}x^2${ecritureAlgebriqueSauf1(b * c + a * d)}x${ecritureAlgebrique(b * d)}`
           let tableau = [
             `$${rienSi1(a * c)}x^2${ecritureAlgebriqueSauf1(b * d)}x${ecritureAlgebrique(b * d)}$`,
             `$${rienSi1(a + c)}x^2${ecritureAlgebriqueSauf1(b * c + a * d)}x${ecritureAlgebrique(b + d)}$`,
@@ -119,7 +121,8 @@ export default class DeveloppementDouble extends ExerciceSimple {
         }
         break
     }
-    this.canEnonce = this.question // 'Compléter'
+    if (this.versionQcm) this.reponse = '$' + this.reponse + '$'
+    this.canEnonce = this.question
     this.canReponseACompleter = ''
   }
 }
