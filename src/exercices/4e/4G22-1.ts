@@ -513,7 +513,7 @@ export default class CalculeDansPyramide extends Exercice {
               cote,
               hauteur,
               nomPied,
-              'arete',
+              'hauteur',
             )
             question =
               `Calculer la mesure de l'arête latérale $${nomPyramide[0] + nomApex}$ de la pyramide régulière $${nomPyramide}$ dont la base est un carré de $${texNombre(cote, 0)}$ cm et la hauteur mesure $${texNombre(hauteur, 0)}$ cm.<br>
