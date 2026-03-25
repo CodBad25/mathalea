@@ -29,6 +29,7 @@ import {
   testInstruction,
   testSequence,
   traducNum,
+  type CouleurNLC,
 } from '../../../modules/noteLaCouleur'
 import {
   contraindreValeur,
@@ -89,7 +90,7 @@ export default class CanNoteLaCouleur6 extends Exercice {
   }
 
   nouvelleVersion() {
-    const damier = [
+    const damier: CouleurNLC[][] = [
       ['Vert', 'Orange', 'Rose', 'Noir', 'Orange', 'Blanc'],
       ['Noir', 'Rouge', 'Rose', 'Vert', 'Orange', 'Rose'],
       ['Orange', 'Gris', 'Rouge', 'Jaune', 'Noir', 'Vert'],
@@ -116,7 +117,7 @@ export default class CanNoteLaCouleur6 extends Exercice {
     let result
     let nb_couleurs
     let instruction
-    let couleurs: string[] = []
+    let couleurs: CouleurNLC[] = []
     let liste_instructions
 
     let lutin, lutindepart

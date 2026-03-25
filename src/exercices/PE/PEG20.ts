@@ -55,7 +55,7 @@ export default class PartageSegmentCompasRegle extends Exercice {
     texteCorr += '<br><br>' + texteGras('Justification :')
     texteCorr += `<br>Les droites $(A_${d}B)$ et $(A_${n}M)$ sont parallèles donc d'après le théorème de Thalès, on a :`
     texteCorr += `<br><br>$\\dfrac{AA_${n}}{AA_${d}}=\\dfrac{AM}{AB}$ donc $\\dfrac{${n}}{${d}}=\\dfrac{AM}{AB}$ et finalement $AM=${texFractionFromString(n, d)}AB$. `
-    texteCorr += anim.html(this.numeroExercice)
+    texteCorr += anim.html(Number(this.numeroExercice))
 
     this.listeQuestions = [texte]
     this.listeCorrections = [texteCorr]

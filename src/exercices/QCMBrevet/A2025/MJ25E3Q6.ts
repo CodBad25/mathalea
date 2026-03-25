@@ -37,7 +37,7 @@ export default class MetropoleJ25EX3Q6 extends ExerciceQcmA {
     const point2 = point3d(8, -1, 0, true)
     const point3 = point3d(9, 4, 0, true)
     const point4 = point3d(1, 5, 0, false)
-    const base = polygone3d([point1, point2, point3, point4])
+    const base = polygone3d(point1, point2, point3, point4)
     const centre = point3d(4.5, 2, 0, false)
     const sommet = point3d(4.5, 2, 7, true)
     const hauteur = arete3d(centre, sommet, 'black', false)

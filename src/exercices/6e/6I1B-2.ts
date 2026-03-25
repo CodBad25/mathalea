@@ -27,6 +27,7 @@ import {
   thePlateau,
   traducColor,
   traducNum,
+  type CouleurNLC,
 } from '../../modules/noteLaCouleur'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import { scratchblock } from '../../modules/scratchblock'
@@ -84,7 +85,7 @@ export default class NoteLaCouleur6e extends Exercice {
   }
 
   nouvelleVersion() {
-    const damier = [
+    const damier: CouleurNLC[][] = [
       [
         'Blanc',
         'Blanc',
@@ -724,7 +725,7 @@ export default class NoteLaCouleur6e extends Exercice {
                 ? {
                     svg:
                       '<rect x="-10" y="-10" width="20" height="20" stroke="black" fill="' +
-                      traducColor(item) +
+                      traducColor(item as CouleurNLC) +
                       '"/>',
                     value: item,
                   }
@@ -769,7 +770,7 @@ export default class NoteLaCouleur6e extends Exercice {
                   ? {
                       svg:
                         '<rect x="-10" y="-10" width="20" height="20" stroke="black" fill="' +
-                        traducColor(item) +
+                        traducColor(item as CouleurNLC) +
                         '"/>',
                       value: item,
                     }
