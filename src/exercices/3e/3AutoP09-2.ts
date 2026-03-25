@@ -3,6 +3,7 @@ import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { lectureAntecedent } from '../../lib/2d/LectureAntecedent'
 import { lectureImage } from '../../lib/2d/LectureImage'
 import { repere } from '../../lib/2d/reperes'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { mathalea2d } from '../../modules/mathalea2d'
@@ -15,6 +16,7 @@ export const interactifReady = true
 export const interactifType = 'mathLive'
 
 export const dateDePublication = '2/01/2026'
+export const dateDeModifImportante = '24/03/2026'
 
 export const uuid = '5bc87'
 
@@ -31,7 +33,8 @@ export default class VitesseEtDistance extends ExerciceSimple {
     super()
     this.nbQuestions = 1
     this.interactif = true
-    this.optionsDeComparaison = { approximatelyCompare: true, tolerance: 2.5 }
+    this.optionsDeComparaison = { estDansIntervalle: true }
+    this.formatChampTexte = KeyboardType.clavierNumbers
   }
 
   nouvelleVersion(): void {
@@ -108,15 +111,15 @@ export default class VitesseEtDistance extends ExerciceSimple {
         ? `Une voiture roule à la vitesse de $${vitesse}\\text{ km/h}$ sur une route ${isDry ? 'sèche' : 'mouillée'}.<br>
     En utilisant le graphique ci-dessous, quelle est la distance de freinage en mètres ?`
         : `Une voiture freine sur une route ${isDry ? 'sèche' : 'mouillée'} et parcourt $${dist}\\text{ m}$.<br>
-    En utilisant le graphique ci-dessous, dire à quelle vitesse elle roulait ?`
+    En utilisant le graphique ci-dessous, à quelle vitesse roulait-elle ?`
       this.correction =
         `${graphiqueCorr}<br><br>` +
         (reciproquement
           ? `Pour une vitesse de $${vitesse}\\text{ km/h}$, la distance de freinage est d'environ $${miseEnEvidence(Math.round(distanceByVitesse(vitesse)))}\\text{ m}$.`
           : `Pour une distance de freinage de $${dist}\\text{ m}$, la vitesse est d'environ $${miseEnEvidence(Math.round(vitesseByDistance(dist)))}\\text{ km/h}$.`)
       this.reponse = reciproquement
-        ? `${Math.round(distanceByVitesse(vitesse))}`
-        : `${Math.round(vitesseByDistance(dist))}`
+        ? `[${Math.floor(distanceByVitesse(vitesse) - 2)};${Math.ceil(distanceByVitesse(vitesse) + 2)}]`
+        : `[${Math.floor(vitesseByDistance(dist) - 2)};${Math.ceil(vitesseByDistance(dist) + 2)}]`
       this.optionsChampTexte = reciproquement
         ? { texteApres: ' $\\text{m}$' }
         : { texteApres: ' $\\text{km/h}$' }
