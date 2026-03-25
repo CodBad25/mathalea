@@ -458,8 +458,8 @@ export default class ReperageSurLaTerre extends Exercice {
             classe: KeyboardType.geolocalisation,
             objetReponse: {
               champ1: {
-                value: `${choix === 'latitude' ? Math.round(Math.abs(ville.latitude)) : Math.round(Math.abs(ville.longitude))}`,
-                options: { approximatelyCompare: true, tolerance: 2 },
+                value: `${choix === 'latitude' ? `${Math.round(Math.abs(ville.latitude)) - 2};${Math.round(Math.abs(ville.latitude)) + 2}` : `${Math.round(Math.abs(ville.longitude)) - 2};${Math.round(Math.abs(ville.longitude)) + 2}`}`,
+                options: { estDansIntervalle: true },
               },
               champ2: {
                 value: `${choix === 'latitude' ? (ville.latitude >= 0 ? 'N' : 'S') : ville.longitude >= 0 ? 'E' : 'O'}`,

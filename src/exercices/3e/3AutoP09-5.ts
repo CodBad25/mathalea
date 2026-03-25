@@ -42,7 +42,7 @@ export default class ProblemeDePrix extends ExerciceSimple {
     super()
     this.nbQuestions = 1
     this.interactif = true
-    this.optionsDeComparaison = { approximatelyCompare: true }
+    this.optionsDeComparaison = { estDansIntervalle: true }
   }
 
   nouvelleVersion(): void {
@@ -116,15 +116,14 @@ export default class ProblemeDePrix extends ExerciceSimple {
       : `Quelle masse ${articleChoisi.det}${articleChoisi.nom} peut-on acheter avec $${texNombre(prix2, 2, true)}$ € ?`
 
     this.reponse = choix
-      ? texNombre(prix1, 2, true)
-      : texNombre(quantite2, 1, true)
+      ? `[${texNombre(prix1 - 0.2, 2, true)}; ${texNombre(prix1 + 0.2, 2, true)}]`
+      : `[${texNombre(quantite2 - 0.1, 1, true)}; ${texNombre(quantite2 + 0.1, 1, true)}]`
 
     this.correction =
       `${graphiqueCorrige}<br><br>` +
       (choix
-        ? `Le prix à payer pour l'achat de $${texNombre(quantite1, 1)}$ kg ${articleChoisi.det}${articleChoisi.nom} est de $${miseEnEvidence(this.reponse)}$ €.`
+        ? `Le prix à payer pour l'achat de $${texNombre(quantite1, 1)}$ kg ${articleChoisi.det}${articleChoisi.nom} est de $${miseEnEvidence(choix ? texNombre(prix1, 2, true) : texNombre(quantite2, 1, true))}$ €.`
         : `Avec $${texNombre(prix2, 2)}$ €, on peut acheter $${miseEnEvidence(this.reponse)}$ kg ${articleChoisi.det}${articleChoisi.nom}.`)
     this.optionsChampTexte = choix ? { texteApres: '€' } : { texteApres: ' kg' }
-    this.optionsDeComparaison = choix ? { tolerance: 0.2 } : { tolerance: 0.1 }
   }
 }

@@ -40,10 +40,10 @@ class Trait {
   create(figure: Figure): void {
     const point1 = [...figure.elements.values()].filter(
       (element) => element instanceof Point && element.label === this.nameA,
-    )[0]
+    )[0] as Point
     const point2 = [...figure.elements.values()].filter(
       (element) => element instanceof Point && element.label === this.nameB,
-    )[0]
+    )[0] as Point
     figure.create(this.type, { point1, point2 })
   }
 
@@ -191,9 +191,15 @@ class ConstructionSegmentRayLine extends ExerciceSimple {
     const points = [...this.figure.elements.values()].filter(
       (element) => element instanceof Point && element.type !== 'pointer',
     )
-    const pointsA = points.filter((point) => point.label === this.nameA)
-    const pointsB = points.filter((point) => point.label === this.nameB)
-    const pointsC = points.filter((point) => point.label === this.nameC)
+    const pointsA = points.filter(
+      (point) => point instanceof Point && point.label === this.nameA,
+    )
+    const pointsB = points.filter(
+      (point) => point instanceof Point && point.label === this.nameB,
+    )
+    const pointsC = points.filter(
+      (point) => point instanceof Point && point.label === this.nameC,
+    )
     if (pointsA.length > 1 || pointsB.length > 1 || pointsC.length > 1) {
       feedback = 'Il ne doit pas y avoir plusieurs points avec le même nom'
       resultat.push('KO', 'KO', 'KO')

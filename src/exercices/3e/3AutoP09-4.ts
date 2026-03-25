@@ -31,7 +31,7 @@ export default class HauteurValve extends ExerciceSimple {
     super()
     this.nbQuestions = 1
     this.interactif = true
-    this.optionsDeComparaison = { approximatelyCompare: true, tolerance: 2 }
+    this.optionsDeComparaison = { estDansIntervalle: true }
     this.optionsChampTexte = { texteApres: '$\\text{ cm}$' }
   }
 
@@ -111,7 +111,7 @@ export default class HauteurValve extends ExerciceSimple {
     Sur le graphique ci-dessus, on a représenté la hauteur de la valve d'une roue de vélo en fonction de la distance parcourue en $\\text{cm}$ lors d'un tour complet.<br>`
     this.question += `Quelle est la hauteur de la valve lorsque la distance parcourue est de $${dist}\\text{ cm}$ ?`
 
-    this.reponse = texNombre(y(tetaDist), 0)
+    this.reponse = `[${texNombre(y(tetaDist) - 2, 0)}; ${texNombre(y(tetaDist) + 2, 0)}]`
     this.correction =
       graphiqueCorr +
       `<br><br>La hauteur de la valve lorsque la distance parcourue est de $${dist}\\text{ cm}$ est de $${this.reponse}\\text{ cm}$.`

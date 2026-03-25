@@ -356,8 +356,8 @@ export default class ProblemeDeRatio extends Exercice {
                   question: i,
                   objetReponse: {
                     reponse: {
-                      value: p1,
-                      options: { approximatelyCompare: true, tolerance: 0.5 },
+                      value: `[${p1 - 0.5};${p1 + 0.5}]`,
+                      options: { estDansIntervalle: true },
                     },
                   },
                   texteApres: '%',
@@ -403,12 +403,12 @@ export default class ProblemeDeRatio extends Exercice {
                     '\\text{pourcentage minimum : }%{champ1}\\%\\text{ ;  pourcentage maximum : }%{champ2}\\%',
                   objetReponse: {
                     champ2: {
-                      value: Math.round((100 * x) / (x + y)),
-                      options: { approximatelyCompare: true, tolerance: 0.5 },
+                      value: `[${Math.round((100 * x) / (x + y)) - 0.5};${Math.round((100 * x) / (x + y)) + 0.5}]`,
+                      options: { estDansIntervalle: true },
                     },
                     champ1: {
-                      value: Math.round((100 * x) / (x + z)),
-                      options: { approximatelyCompare: true, tolerance: 0.5 },
+                      value: `[${Math.round((100 * x) / (x + z)) - 0.5};${Math.round((100 * x) / (x + z)) + 0.5}]`,
+                      options: { estDansIntervalle: true },
                     },
                     bareme: toutAUnPoint,
                   },

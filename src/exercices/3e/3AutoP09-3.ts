@@ -41,7 +41,7 @@ export default class LongueurEtAire extends ExerciceSimple {
     super()
     this.nbQuestions = 1
     this.interactif = true
-    this.optionsDeComparaison = { approximatelyCompare: true }
+    this.optionsDeComparaison = { estDansIntervalle: true }
     this.formatChampTexte = KeyboardType.clavierNumbers
   }
 
