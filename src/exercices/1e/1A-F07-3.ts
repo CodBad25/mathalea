@@ -7,6 +7,7 @@ import { segment } from '../../lib/2d/segmentsVecteurs'
 import { latex2d } from '../../lib/2d/textes'
 import { milieu } from '../../lib/2d/utilitairesPoint'
 import { deuxColonnes } from '../../lib/format/miseEnPage'
+import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import FractionEtendue from '../../modules/FractionEtendue'
 import { mathalea2d } from '../../modules/mathalea2d'
@@ -176,11 +177,19 @@ export default class Auto1AF6c extends ExerciceQcmA {
   }
 
   versionAleatoire: () => void = () => {
-    const xA = 0
-    const yA = randint(1, 5)
-    const xB = randint(-5, 5, 0)
-    const yB = randint(0, 6)
-    this.genererExercice(xA, yA, xB, yB)
+    let compteur = 0 // un compteur pour éviter les boucles infinies si le qcm est vraiment problématique
+    do {
+      const xA = 0
+      const yA = randint(1, 5)
+      const xB = randint(-5, 5, 0)
+      const yB = randint(0, 6)
+      this.genererExercice(xA, yA, xB, yB)
+      compteur++
+    } while (
+      compteur < 100 &&
+      !aLeBonNombreDePropsDifferentes(this, 4, true, {})
+    )
+    // Ici, on doit avoir une bonne réponse et 3 distracteurs distincts.
   }
 
   constructor() {
