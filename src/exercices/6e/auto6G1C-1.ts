@@ -43,6 +43,8 @@ export const refs = {
 export default class NbAxesDeSymetrie extends Exercice {
   constructor() {
     super()
+    this.comment = `Dans cet exercice, la fréquence des figures symétriques est de 40%. Les cas de non symétries sont variés : homothétie, rotation, translation.<br>
+    Pour l'impression, privilégier les petites figures et l'axe plutôt vertical`
     this.nbQuestions = 3
     this.sup = '1'
     this.besoinFormulaireTexte = [
@@ -54,7 +56,7 @@ export default class NbAxesDeSymetrie extends Exercice {
   }
 
   nouvelleVersion(): void {
-    const factor = this.sup4 ? 1.2 : 0.75
+    const factor = this.sup4 ? 3 : 1.5
     const numerosChoisis: number[] = []
     const typeAxe = gestionnaireFormulaireTexte({
       saisie: this.sup,
@@ -86,7 +88,7 @@ export default class NbAxesDeSymetrie extends Exercice {
       const figure: Forme = choice(choix)
       numerosChoisis.push(figure.numero)
       texte += `Les deux figures sont-elles symétriques par rapport à la droite $(d_{${(i + 1) % 10}})$ ?<br>`
-      const alpha = 0 // randint(-30, 30, 0)
+      const alpha = randint(-4, 4, [0]) * 15
       const options = figure.options ?? {}
       const forme =
         typeAxe[i] === 'vertical'
@@ -109,7 +111,7 @@ export default class NbAxesDeSymetrie extends Exercice {
       forme.name = figure.name.replace(/ /g, '_')
       forme.opacite = 0.5
       objets.push(forme)
-      const beta = randint(-4, 4, [0, 1, -1]) * 2
+      const beta = choice([-8, 8])
       const angle =
         typeAxe[i] === 'vertical' ? 0 : typeAxe[i] === 'horizontal' ? 90 : -45
       const axe = rotation(
@@ -130,13 +132,14 @@ export default class NbAxesDeSymetrie extends Exercice {
       const choixReponse = choice([
         'translation',
         'symetrie',
+        'symetrie',
         'rotation',
         'homothetie',
       ])
       let forme2
       switch (choixReponse) {
         case 'translation':
-          forme2 = forme.copy(forme.name + 'b').translate(v.x, 0)
+          forme2 = forme.copy(forme.name + 'b').translate(v.x, v.y)
           objets.push(forme2)
 
           break
@@ -150,7 +153,7 @@ export default class NbAxesDeSymetrie extends Exercice {
           forme2 = forme
             .copy(forme.name + 'b')
             .translate(-centre.x, -centre.y)
-            .dilate(choice([1.2, 1.3, 1.1, 0.9, 0.8]))
+            .dilate(choice([1.3, 0.75]))
             .translate(centre.x, centre.y)
           forme2 = forme2.symetrie(axe)
           objets.push(forme2)

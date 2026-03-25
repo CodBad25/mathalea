@@ -1,9 +1,15 @@
 import { context } from '../../modules/context'
-import type { Droite } from './droites'
+import { droite, type Droite } from './droites'
 import { ObjetMathalea2D } from './ObjetMathalea2D'
 import { pointAbstrait, type PointAbstrait } from './PointAbstrait'
 import { type Segment } from './segmentsVecteurs'
-import { rotation, symetrieAxiale } from './transformations'
+import {
+  homothetie,
+  rotation,
+  symetrieAxiale,
+  translation,
+} from './transformations'
+import { vecteur } from './Vecteur'
 
 // ne fonctionne qu'avec cx=0 et cy=0... je ne sais pas pourquoi.
 // Donc si cx = 0 et cy = 0, alors, il y a plein de code qui ne sert à rien.
@@ -222,6 +228,7 @@ export class Shape2D extends ObjetMathalea2D {
     const width = Number(this.width)
     const height = Number(this.height)
     const pixelsParCm = Number(this.pixelsParCm)
+
     return new Shape2D({
       codeSvg,
       codeTikz,
@@ -270,7 +277,6 @@ export class Figure2D extends Shape2D {
     nbAxes,
     opacite = 1,
     name = Date.now().toString(),
-    bordures,
   }: {
     codeSvg: string
     codeTikz: string
@@ -287,7 +293,6 @@ export class Figure2D extends Shape2D {
     opacite?: number
     name?: string
     nonAxe?: Segment | null
-    bordures?: [number, number, number, number]
   }) {
     super({ codeSvg, codeTikz, x, y, angle, scale, width, height })
     this.name = name
@@ -338,6 +343,15 @@ export class Figure2D extends Shape2D {
 
   rotate(angle: number) {
     this.angle += angle
+    this.axes = this.axes.map((el) =>
+      rotation(el, pointAbstrait(this.x, this.y), angle),
+    )
+    if (this.nonAxe) {
+      this.nonAxe = rotation(this.nonAxe, pointAbstrait(this.x, this.y), angle)
+    }
+    if (this.centre) {
+      this.centre = rotation(this.centre, pointAbstrait(this.x, this.y), angle)
+    }
     this.bordures = rotatedBoundingBoxWithCenter(
       this.bordures[0],
       this.bordures[1],
@@ -358,6 +372,22 @@ export class Figure2D extends Shape2D {
     this.scale.y *= factor.y
     this.width = this.width * factor.x
     this.height = this.height * factor.y
+    if (this.centre) {
+      this.centre = pointAbstrait(
+        (this.centre.x - this.x) * factor.x + this.x,
+        (this.centre.y - this.y) * factor.y + this.y,
+      )
+    }
+    this.axes = this.axes.map((el) =>
+      homothetie(el, pointAbstrait(this.x, this.y), factor.x),
+    )
+    if (this.nonAxe) {
+      this.nonAxe = homothetie(
+        this.nonAxe,
+        pointAbstrait(this.x, this.y),
+        factor.x,
+      )
+    }
     let xmin = this.bordures[0]
     let ymin = this.bordures[1]
     let xmax = this.bordures[2]
@@ -373,6 +403,14 @@ export class Figure2D extends Shape2D {
   translate(dx: number, dy: number) {
     this.x += dx
     this.y += dy
+    this.axes = this.axes.map((el) => translation(el, vecteur(dx, dy)))
+    if (this.nonAxe) {
+      this.nonAxe = translation(this.nonAxe, vecteur(dx, dy))
+    }
+    if (this.centre) {
+      this.centre = pointAbstrait(this.centre.x + dx, this.centre.y + dy)
+    }
+
     this.bordures = [
       this.bordures[0] + dx,
       this.bordures[1] + dy,
@@ -383,15 +421,78 @@ export class Figure2D extends Shape2D {
   }
 
   flip(axes: 'x' | 'y' | 'xy' = 'x') {
-    if (axes === 'x') {
+    if (axes === 'y') {
       this.scale.x = -this.scale.x
       this.angle = -this.angle
-    } else if (axes === 'y') {
+      this.axes = this.axes.map((el) =>
+        symetrieAxiale(
+          el,
+          droite(
+            pointAbstrait(this.x, this.y),
+            pointAbstrait(this.x + 1, this.y),
+          ),
+        ),
+      )
+      if (this.nonAxe) {
+        this.nonAxe = symetrieAxiale(
+          this.nonAxe,
+          droite(
+            pointAbstrait(this.x, this.y),
+            pointAbstrait(this.x + 1, this.y),
+          ),
+        )
+      }
+      if (this.centre) {
+        this.centre = symetrieAxiale(
+          this.centre,
+          droite(
+            pointAbstrait(this.x, this.y),
+            pointAbstrait(this.x + 1, this.y),
+          ),
+        )
+      }
+    } else if (axes === 'x') {
       this.scale.y = -this.scale.y
       this.angle = -this.angle
+      this.axes = this.axes.map((el) =>
+        symetrieAxiale(
+          el,
+          droite(
+            pointAbstrait(this.x, this.y),
+            pointAbstrait(this.x, this.y + 1),
+          ),
+        ),
+      )
+      if (this.nonAxe) {
+        this.nonAxe = symetrieAxiale(
+          this.nonAxe,
+          droite(
+            pointAbstrait(this.x, this.y),
+            pointAbstrait(this.x, this.y + 1),
+          ),
+        )
+      }
+      if (this.centre) {
+        this.centre = symetrieAxiale(
+          this.centre,
+          droite(
+            pointAbstrait(this.x, this.y),
+            pointAbstrait(this.x, this.y + 1),
+          ),
+        )
+      }
     } else if (axes === 'xy') {
       this.scale.x = -this.scale.x
       this.scale.y = -this.scale.y
+      this.axes = this.axes.map((el) =>
+        rotation(el, pointAbstrait(this.x, this.y), 180),
+      )
+      if (this.nonAxe) {
+        this.nonAxe = rotation(this.nonAxe, pointAbstrait(this.x, this.y), 180)
+      }
+      if (this.centre) {
+        this.centre = rotation(this.centre, pointAbstrait(this.x, this.y), 180)
+      }
     }
     return this
   }
@@ -899,7 +1000,6 @@ export function shapeToFigure2D(shape: Shape2D): Figure2D {
     height: shape.height,
     pixelsParCm: shape.pixelsParCm,
     opacite: shape.opacite,
-    bordures: shape.bordures,
     axes: [],
     nonAxe: null,
     centre: null,
