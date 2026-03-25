@@ -241,6 +241,7 @@ const produit = function (a: unknown, b: unknown) {
     if (b instanceof FractionEtendue) return a.produitFraction(b).simplifie()
     else return a.produitFraction(rationnalise(Number(b))).simplifie()
   }
+  return Number(a) * Number(b)
 }
 
 const quotient = function (a: unknown, b: unknown) {
@@ -789,7 +790,12 @@ export class Polynome {
     if (this.monomes.slice(1).filter((el) => el !== 0).length === 0) {
       return null
     }
-    const coeffs = this.monomes.map((el) => Number(el))
+    const coeffs = this.monomes.map((el) => Number(el)) as [
+      number,
+      number,
+      number,
+      number,
+    ]
     const liste = polynomialRoot(...coeffs)
     if (!Array.isArray(liste)) {
       throw new Error('polynomialRoot() did not return an array')

@@ -118,11 +118,11 @@ export default class AutoTheoremeThales extends ExerciceSimple {
 
     this.reponse = {
       champ1: { value: [nomTriangle[0], nomTriangle[1]].join('') },
-      champ2: { value: [[nomTriangle[1], D.nom].join(''), longueurBD] },
+      champ2: { value: [[nomTriangle[1], D.nom].join(''), String(longueurBD)] },
       champ3: {
-        value: [[nomTriangle[0], nomTriangle[2]].join(''), longueurAC],
+        value: [[nomTriangle[0], nomTriangle[2]].join(''), String(longueurAC)],
       },
-      champ4: { value: [D.nom + E.nom, longueurDE] },
+      champ4: { value: [D.nom + E.nom, String(longueurDE)] },
     }
 
     this.consigne =

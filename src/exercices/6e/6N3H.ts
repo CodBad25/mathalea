@@ -1,10 +1,10 @@
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { remplisLesBlancs } from '../../lib/interactif/questionMathLive'
 import { combinaisonListes, shuffle } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
-import Exercice from '../Exercice'
 import { context } from '../../modules/context'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
-import { remplisLesBlancs } from '../../lib/interactif/questionMathLive'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import Exercice from '../Exercice'
 
 export const titre = 'Compléter les égalités entre fractions simples'
 export const amcReady = true
@@ -95,7 +95,6 @@ export default class EgalitesEntreFractions extends Exercice {
         texte,
         texteCorr;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       if (this.sup2 === 3) {
         choix = i % 2
@@ -115,7 +114,7 @@ export default class EgalitesEntreFractions extends Exercice {
 
         switch (choix) {
           case 0:
-            texte = `$${stringTexFraction(a, b)} = ${stringTexFraction('\\ldots\\ldots\\ldots\\ldots\\ldots\\ldots', '\\ldots\\ldots\\ldots\\ldots\\ldots\\ldots')} = ${stringTexFraction('\\ldots\\ldots', d)}$`
+            texte = `$${stringTexFraction(a, b)} ${context.isDiaporama ? '' : stringTexFraction('=\\ldots\\ldots\\ldots', '\\ldots\\ldots\\ldots')} = ${stringTexFraction('\\ldots', d)}$`
             if (this.interactif && context.isHtml) {
               texte = remplisLesBlancs(
                 this,
@@ -163,7 +162,7 @@ export default class EgalitesEntreFractions extends Exercice {
             break
           case 1:
           default:
-            texte = `$${stringTexFraction(a, b)} = ${stringTexFraction('\\ldots\\ldots\\ldots\\ldots\\ldots\\ldots', '\\ldots\\ldots\\ldots\\ldots\\ldots\\ldots')} = ${stringTexFraction(c, '\\ldots\\ldots')}$`
+            texte = `$${stringTexFraction(a, b)} ${context.isDiaporama ? '' : stringTexFraction('=\\ldots\\ldots\\ldots', '\\ldots\\ldots\\ldots')} = ${stringTexFraction(c, '\\ldots')}$`
             if (this.interactif && context.isHtml) {
               const content = `\\dfrac{${a}}{${b}} = \\dfrac{${a} \\times %{champ1}}{${b} \\times %{champ2}} = \\dfrac{${c}}{%{champ3}}`
               texte = remplisLesBlancs(
@@ -243,7 +242,7 @@ export default class EgalitesEntreFractions extends Exercice {
                 champ3: { value: String(a * d) },
               })
             } else {
-              texte = `$${a} = ${stringTexFraction('\\ldots\\ldots\\ldots\\ldots\\ldots\\ldots', '\\ldots\\ldots\\ldots\\ldots\\ldots\\ldots')} = ${stringTexFraction('\\ldots\\ldots', d)}$`
+              texte = `$${a} ${context.isDiaporama ? '' : stringTexFraction('=\\ldots\\ldots\\ldots', '\\ldots\\ldots\\ldots')} = ${stringTexFraction('\\ldots', d)}$`
             }
             if (this.interactif && this.interactifType !== 'mathLive') {
               texte = `$${a} = \\ldots$`
@@ -277,7 +276,7 @@ export default class EgalitesEntreFractions extends Exercice {
             break
           case 1:
           default:
-            texte = `$${a} = ${stringTexFraction('\\ldots\\ldots\\ldots\\ldots\\ldots\\ldots', '\\ldots\\ldots\\ldots\\ldots\\ldots\\ldots')} = ${stringTexFraction(c, '\\ldots\\ldots\\ldots\\ldots')}$`
+            texte = `$${a} ${context.isDiaporama ? '' : stringTexFraction('=\\ldots\\ldots\\ldots', '\\ldots\\ldots\\ldots')} = ${stringTexFraction(c, '\\ldots\\ldots\\ldots\\ldots')}$`
             if (this.interactif && context.isHtml) {
               const content = `${a} = \\dfrac{${a} \\times %{champ1}}{1 \\times %{champ2}} = \\dfrac{${c}}{%{champ3}}`
               texte = remplisLesBlancs(

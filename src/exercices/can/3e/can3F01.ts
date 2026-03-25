@@ -1,6 +1,6 @@
 import { repere } from '../../../lib/2d/reperes'
 import { latex2d } from '../../../lib/2d/textes'
-import { spline } from '../../../lib/mathFonctions/Spline'
+import { Spline, spline } from '../../../lib/mathFonctions/Spline'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { mathalea2d } from '../../../modules/mathalea2d'
@@ -29,6 +29,7 @@ type Noeud = {
   isVisible: boolean
 }
 export default class ImageSpline extends ExerciceSimple {
+  spline!: Spline
   constructor() {
     super()
     this.versionQcmDisponible = true
@@ -121,7 +122,7 @@ export default class ImageSpline extends ExerciceSimple {
     this.reponse = theSpline.y[antecedent]
     this.distracteurs = [
       `$${theSpline.x[antecedent]}$`,
-      `L\'image de $${theSpline.x[antecedent]}$ n'existe pas`,
+      `L'image de $${theSpline.x[antecedent]}$ n'existe pas`,
       `$${theSpline.y[0]}$`,
       `$${antecedent}$`,
       `$${theSpline.x[antecedent]}$`,
