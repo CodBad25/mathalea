@@ -257,7 +257,6 @@ export default class ReperageSurLaSphere extends Exercice {
     for (
       let i = 0, latitude, longitude, M, lab, croix, texteAMC;
       i < this.nbQuestions;
-
     ) {
       latitude = randint(-3, 6, 0) * 10
       longitude = randint(-6, 4, 0) * 10
@@ -290,7 +289,7 @@ export default class ReperageSurLaSphere extends Exercice {
 
       switch (listeTypeDeQuestions[i]) {
         case 1:
-          texte += `${numAlpha(i)} Donner les coordonnées GPS du point $${nom[i]}$.<br>`
+          texte += `${this.nbQuestions > 1 ? numAlpha(i) : ''} Donner les coordonnées GPS du point $${nom[i]}$.<br>`
           texteCorrection += `${numAlpha(i)} Les coordonnées de $${nom[i]}$ sont `
           texteCorrection += this.sup2
             ? `($${latitudes[i]}^\\circ$ ; $${longitudes[i]}^\\circ$).<br>`
@@ -331,7 +330,7 @@ export default class ReperageSurLaSphere extends Exercice {
           texteAMC += this.sup2
             ? `($${latitudes[i]}^\\circ$ ; $${longitudes[i]}^\\circ$).<br>`
             : `($${Math.abs(latitudes[i])}^\\circ$${NordouSud[i]} ; $${Math.abs(longitudes[i])}^\\circ$${EstouOuest[i]}).<br>`
-          texte += `${numAlpha(i)} ` + texteAMC
+          texte += `${this.nbQuestions > 1 ? numAlpha(i) : ''} ` + texteAMC
           texteCorrection += `${numAlpha(i)} Le point $${nom[i]}$ de coordonnées GPS `
           texteCorrection += this.sup2
             ? `($${latitudes[i]}^\\circ$ ; $${longitudes[i]}^\\circ$).<br>`
