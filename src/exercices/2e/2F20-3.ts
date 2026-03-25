@@ -38,13 +38,12 @@ export const interactifType = 'mathLive'
 export const amcReady = true
 export const amcType = 'AMCHybride'
 export const dateDePublication = '1/08/2021'
-export const dateDeModifImportante = '5/08/2022'
+export const dateDeModifImportante = '24/03/2026'
 
 /**
- *
  * @author Jean-Claude Lhote
-
  */
+
 export const uuid = '573f2'
 
 export const refs = {
@@ -53,9 +52,12 @@ export const refs = {
 }
 
 function lesReponsesEnCouleur(x0: number): string {
-  if (arrondi(x0, 3) === x0) return `$${miseEnEvidence(texNombre(x0, 1))}$$`
-  else
-    return `$${miseEnEvidence(texNombre(x0, 1))}$ ou $${miseEnEvidence(texNombre(x0 + 0.1, 1))}$`
+  if (arrondi(x0, 1) === x0) return `$${miseEnEvidence(texNombre(x0, 1))}$`
+  else {
+    const minIntervalle = arrondi(Math.floor(x0 * 10) / 10, 1)
+    const maxIntervalle = arrondi(0.1 + Math.floor(x0 * 10) / 10, 1)
+    return `un nombre entre $${miseEnEvidence(texNombre(minIntervalle))}$ et $${miseEnEvidence(texNombre(maxIntervalle))}$`
+  }
 }
 export default class LecturesGraphiques extends Exercice {
   constructor() {
@@ -186,7 +188,7 @@ export default class LecturesGraphiques extends Exercice {
             handleAnswers(this, i, {
               reponse: {
                 value: minimum[1],
-                options: { approximatelyCompare: true },
+                options: { nombreDecimalSeulement: true },
               },
             })
           reponses[i] = minimum[1]
@@ -239,7 +241,7 @@ export default class LecturesGraphiques extends Exercice {
             handleAnswers(this, i, {
               reponse: {
                 value: maximum[1],
-                options: { approximatelyCompare: true },
+                options: { nombreDecimalSeulement: true },
               },
             })
           reponses[i] = maximum[1]
@@ -304,16 +306,27 @@ export default class LecturesGraphiques extends Exercice {
             2,
           )
           texte = `Lire graphiquement l'image de $${texNombre(x0, 1)}$ par la fonction $f$.<br>Donner la réponse avec la précision permise par le graphique.<br>`
+
           if (!context.isAmc)
-            handleAnswers(this, i, {
-              reponse: {
-                value: y0,
-                options: { approximatelyCompare: true },
-              },
-            })
+            arrondi(y0, 1) === y0
+              ? handleAnswers(this, i, {
+                  reponse: {
+                    value: y0,
+                    options: { nombreDecimalSeulement: true },
+                  },
+                })
+              : handleAnswers(this, i, {
+                  reponse: {
+                    value: `[${arrondi(Math.floor(y0 * 10) / 10, 1)};${arrondi(0.1 + Math.floor(y0 * 10) / 10, 1)}]`,
+                    options: { estDansIntervalle: true },
+                  },
+                })
           reponses[i] = y0
           texte += ajouteChampTexteMathLive(this, i, KeyboardType.clavierDeBase)
-          texteCorr = `$f(${texNombre(x0, 1)})=${lesReponsesEnCouleur(y0)}.<br>`
+          texteCorr =
+            arrondi(y0, 1) === y0
+              ? `$f(${texNombre(x0, 1)})=$${lesReponsesEnCouleur(y0)}.<br>`
+              : `L'image de ${texNombre(x0, 1)} par la fonction $f$ est ${lesReponsesEnCouleur(y0)}.<br>`
           if (this.correctionDetaillee) {
             s[0] =
               x0 !== 0 ? segment(0, y0 * 2, x0 * 2, y0 * 2, 'blue') : vide2d()
@@ -366,8 +379,8 @@ export default class LecturesGraphiques extends Exercice {
             if (!context.isAmc)
               handleAnswers(this, i, {
                 reponse: {
-                  value: x0.toFixed(2),
-                  options: { approximatelyCompare: true },
+                  value: `[${arrondi(Math.floor(x0 * 10) / 10, 1)};${arrondi(0.1 + Math.floor(x0 * 10) / 10, 1)}]`,
+                  options: { estDansIntervalle: true },
                 },
               })
             reponses[i] = arrondi(x0, 1)
@@ -428,8 +441,8 @@ export default class LecturesGraphiques extends Exercice {
             if (!context.isAmc)
               handleAnswers(this, i, {
                 reponse: {
-                  value: x0.toFixed(2),
-                  options: { approximatelyCompare: true },
+                  value: `[${arrondi(Math.floor(x0 * 10) / 10, 1)};${arrondi(0.1 + Math.floor(x0 * 10) / 10, 1)}]`,
+                  options: { estDansIntervalle: true },
                 },
               })
             reponses[i] = arrondi(x0, 1)
@@ -509,7 +522,12 @@ export default class LecturesGraphiques extends Exercice {
               break
           }
           if (!context.isAmc)
-            handleAnswers(this, i, { reponse: { value: antecedentTrouve } })
+            handleAnswers(this, i, {
+              reponse: {
+                value: antecedentTrouve,
+                options: { nombreDecimalSeulement: true },
+              },
+            })
           reponses[i] = antecedentTrouve
           if (this.correctionDetaillee) {
             s[0] = segment(-15, y0 * 2, 15, y0 * 2, 'blue')
