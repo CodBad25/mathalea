@@ -35,7 +35,7 @@ export default class Can2025N5Q18 extends ExerciceSimple {
     if (this.interactif) {
       this.question += '<br>'
     }
-    this.correction = `On reconnaît la forme canonique d'une fonction polynôme du second degré :\\[f(x)=a(x-\\alpha)^2+\\beta\\] où $\\beta$ est l'extremum.<br>
+    this.correction = `On reconnaît la forme canonique d'une fonction polynôme du second degré :$[f(x)=a(x-\\alpha)^2+\\beta]$ où $\\beta$ est l'extremum.<br>
     L'extremum de $f$ est $${miseEnEvidence(beta)}$.`
   }
 }
