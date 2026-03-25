@@ -1918,7 +1918,7 @@ const pattern69: PatternRiche = {
   formule: 'n^2',
   type: 'degré2',
   shapes: ['carréBleu', 'carré'],
-  texRatio: 'carrés bleus : carrés',
+  texRatio: 'carrés bleus : carrés gris',
   iterate: function (this: VisualPattern, n?: number) {
     if (n === undefined) n = 1
     const newCells = new Set<string>()
