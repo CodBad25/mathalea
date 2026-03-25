@@ -11,12 +11,13 @@ import { randint } from '../../modules/outils'
 import ExerciceSimple from '../ExerciceSimple'
 
 export const titre =
-  'Convertir un nombre décimal en écriture scientifique et réciproquement.'
+  'Convertir un nombre décimal en écriture scientifique et réciproquement'
 
 export const interactifReady = true
 export const interactifType = 'mathLive'
 
 export const dateDePublication = '18/10/2025'
+export const dateDeModifImportante = '25/03/2026'
 
 export const uuid = '4a986'
 
@@ -46,7 +47,8 @@ export default class DecimalToScientifique extends ExerciceSimple {
 
     if (pileOuFace) {
       this.question = `Donner l'écriture scientifique de $${texNombre(nombre)}$.`
-      this.reponse = `$${texNombre(mantisse)} \\times 10^{${exposant}}$`
+      this.reponse = `${texNombre(mantisse)} \\times 10^{${exposant}}`
+      this.optionsDeComparaison = { ecritureScientifique: true }
       const glisseNumber = glisseNombre(nombre, -exposant)
       this.correction = context.isHtml
         ? mathalea2d(
@@ -58,6 +60,7 @@ export default class DecimalToScientifique extends ExerciceSimple {
     } else {
       this.question = `Donner l'écriture décimale de $${texNombre(mantisse)} \\times 10^{${exposant}}$.`
       this.reponse = texNombre(nombre)
+      this.optionsDeComparaison = { nombreDecimalSeulement: true }
       const glisseNumber = glisseNombre(mantisse, exposant)
       this.correction = context.isHtml
         ? mathalea2d(
