@@ -14,7 +14,7 @@ import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { numAlpha } from '../../lib/outils/outilString'
-import { texNombre } from '../../lib/outils/texNombre'
+import { stringNombre, texNombre } from '../../lib/outils/texNombre'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
@@ -263,7 +263,7 @@ export default class Quartiles extends Exercice {
         1,
         'red',
         '25',
-        `${q1Round}`,
+        `${stringNombre(q1Round, 0)}`,
       )
       const marque3 = lectureAntecedent(
         q3Round * echelleX,
@@ -272,7 +272,7 @@ export default class Quartiles extends Exercice {
         1,
         'red',
         '75',
-        `${q3Round}`,
+        `${stringNombre(q3Round, 0)}`,
       )
       const offset = Math.log10(q1Round) * 0.2 + 0.5
       const ecartIQ = segment(
