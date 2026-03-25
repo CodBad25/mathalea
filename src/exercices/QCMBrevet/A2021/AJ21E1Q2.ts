@@ -33,7 +33,8 @@ export default class AsieJuin21Exo1Q2 extends ExerciceQcmA {
       `$f(${String(b)})=0$`,
       `l'image de $${String(-b)}$ par $f$ est $${String(b)}$.`,
     ]
-    this.enonce = `On considère la fonction $f$ définie par $f(x)=${rienSi1(a)}x^2${ecritureAlgebrique(b)}$.`
+    this.enonce = `On considère la fonction $f$ définie par $f(x)=${rienSi1(a)}x^2${ecritureAlgebrique(b)}$.<br>
+    Une seule des affirmations suivantes est vraie. Laquelle ?`
     this.correction = `l'image de $${String(-b)}$ par $f$ est : $${rienSi1(a)}${Math.abs(a) !== 1 ? '\\times ' : ''}${ecritureParentheseSiNegatif(-b)}^2${ecritureAlgebrique(b)}=${texNombre(a * b ** 2 + b, 0)}$.<br>
     $f(${b})=${rienSi1(a)}${Math.abs(a) !== 1 ? '\\times ' : ''}${ecritureParentheseSiNegatif(b)}^2${ecritureAlgebrique(b)}=${texNombre(a * b ** 2 + b, 0)}$.<br>
     $${miseEnEvidence(`f(0)=${rienSi1(a)}${Math.abs(a) !== 1 ? '\\times ' : ''}0^2${ecritureAlgebrique(b)}=${texNombre(b, 0)}`)}$.`
