@@ -8,8 +8,10 @@ import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { polygone } from '../../lib/2d/polygones'
 import { repere } from '../../lib/2d/reperes'
 import { labelPoint } from '../../lib/2d/textes'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { arrondi } from '../../lib/outils/nombres'
 import { texNombre } from '../../lib/outils/texNombre'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { randint } from '../../modules/outils'
@@ -22,6 +24,7 @@ export const interactifReady = true
 export const interactifType = 'mathLive'
 
 export const dateDePublication = '3/01/2026'
+export const dateDeModifImportante = '24/03/2026'
 
 export const uuid = '5bc80'
 
@@ -39,6 +42,7 @@ export default class LongueurEtAire extends ExerciceSimple {
     this.nbQuestions = 1
     this.interactif = true
     this.optionsDeComparaison = { approximatelyCompare: true }
+    this.formatChampTexte = KeyboardType.clavierNumbers
   }
 
   nouvelleVersion(): void {
@@ -129,21 +133,19 @@ export default class LongueurEtAire extends ExerciceSimple {
     Sur le graphique ci-dessus, on a représenté la relation entre la longueur $AD$ et l'aire du rectangle $ADEF$.<br>`
     if (choix) {
       this.question += `Quelle est la longueur $AD$ lorsque l'aire du rectangle $ADEF$ vaut $${aire}\\text{ cm}^2$ ?`
-      this.reponse = texNombre(
-        (coteTriangle - Math.sqrt(coteTriangle ** 2 - 4 * aire)) / 2,
-        1,
-      )
-      this.optionsDeComparaison = { tolerance: 0.25 }
+      const reponseNumerique =
+        (coteTriangle - Math.sqrt(coteTriangle ** 2 - 4 * aire)) / 2
+
+      this.reponse = `[${arrondi(reponseNumerique - 0.25, 1)};${arrondi(reponseNumerique + 0.25, 1)}]`
       this.optionsChampTexte = { texteApres: ' $\\text{ cm}$' }
       this.correction += `On cherche $AD$ tel que $Aire_{ADEF} = ${aire}\\text{ cm}^2$.<br>
-      On trouve $AD=${miseEnEvidence(this.reponse)}$ cm.`
+      On trouve $AD=${miseEnEvidence(texNombre(reponseNumerique, 1))}\\text{ cm}.`
     } else {
       this.question += `Quelle est l'aire du rectangle $ADEF$ lorsque la longueur $AD$ vaut $${largeur}\\text{ cm}$ ?`
-      this.reponse = f(largeur).toFixed(0)
-      this.optionsDeComparaison = { tolerance: 2.5 }
+      this.reponse = `[${Math.floor(f(largeur)) - 2};${Math.ceil(f(largeur)) + 2}]`
       this.optionsChampTexte = { texteApres: ' $\\text{ cm}^2$' }
       this.correction += `On cherche $Aire_{ADEF}$ lorsque $AD = ${largeur}\\text{ cm}$.<br>`
-      this.correction += `On trouve $Aire_{ADEF}=${miseEnEvidence(this.reponse)}$ cm².`
+      this.correction += `On trouve $Aire_{ADEF}=${miseEnEvidence(f(largeur).toFixed(0))}\\text{ cm}^2$.`
     }
   }
 }
