@@ -94,7 +94,7 @@ export default class QuartileQCM extends ExerciceQcmA {
       this.enonce = `On donne la série statistique suivante : 
       $${valeurs.join('  ;  ')}$.<br>
       Le premier quartile de la série est :`
-      this.correction = `La série triée par ordre croissant est : ${serieClassee.join('  ;  ')}.`
+      this.correction = `La série triée par ordre croissant est : $${serieClassee.join('$  ;  $')}$.`
       this.correction += `<br>La série contient $${effectif}$ valeurs.<br>
       Pour trouver le rang de $Q_1$, on calcule le quart de ${texNombre(effectif)} qui vaut
        $\\dfrac{${effectif}}{4}=${texNombre(effectif / 4)}$`

@@ -97,15 +97,15 @@ export default class MedianeQCM extends ExerciceQcmA {
     d4 = result.d4
     this.reponses = [
       `$${texNombre(mediane)}$`,
-      ` $${texNombre(d3)}$`,
+      `$${texNombre(d3)}$`,
       `$${texNombre(d4)}$`,
       `$${texNombre(distracteur2)}$`,
     ]
 
     this.enonce = `On donne la série statistique suivante : 
-    ${valeurs.join(' ; ')}<br>
+    $${valeurs.join('$ ; $')}$.<br>
     Parmi ces propositions, laquelle peut être la médiane de la série ?`
-    this.correction = `La série triée dans l'ordre croissant est : ${serieClassee.join('  ;  ')}.`
+    this.correction = `La série triée dans l'ordre croissant est : $${serieClassee.join('$  ;  $')}$.`
     this.correction += `<br>La série comporte $${effectif}$ valeurs, qui est `
     if (effectif % 2 === 0) {
       this.correction += `un nombre pair, donc une médiane est une valeur ${texteGras('strictement')} comprise entre les termes de rang $${rang}$ et $${rang + 1}$
