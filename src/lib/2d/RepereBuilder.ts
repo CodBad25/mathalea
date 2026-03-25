@@ -329,10 +329,21 @@ export default class RepereBuilder {
    * @param {number} xMin le premier
    * @param {number} xMax le dernier
    */
-  setLabelX({ dx, xMin, xMax }: { xMax?: number; xMin?: number; dx: number }) {
+  setLabelX({
+    dx,
+    xMin,
+    xMax,
+    xLabelEcart,
+  }: {
+    xMax?: number
+    xMin?: number
+    dx: number
+    xLabelEcart?: number
+  }) {
     this.xLabelMin = xMin ?? this.xMin
     this.xLabelMax = xMax ?? this.xMax
     this.xLabelDistance = dx
+    this.xLabelEcart = xLabelEcart ?? 1
     return this
   }
 
@@ -341,11 +352,23 @@ export default class RepereBuilder {
    * @param {number} dy distance entre deux labels
    * @param {number} yMin le premier
    * @param {number} yMax le dernier
+   * @param {number} yLabelEcart l'écart entre le label et l'axe (en unité de repère)
    */
-  setLabelY({ dy, yMin, yMax }: { yMax?: number; yMin?: number; dy: number }) {
+  setLabelY({
+    dy,
+    yMin,
+    yMax,
+    yLabelEcart,
+  }: {
+    yMax?: number
+    yMin?: number
+    dy: number
+    yLabelEcart?: number
+  }) {
     this.yLabelMin = yMin ?? this.yMin
     this.yLabelMax = yMax ?? this.yMax
     this.yLabelDistance = dy
+    this.yLabelEcart = yLabelEcart ?? 1
     return this
   }
 
