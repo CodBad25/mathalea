@@ -106,8 +106,6 @@ $<br>`
         break
       }
     }
-    if (this.versionQcm) {
-      this.reponse = `$${this.reponse}$`
-    }
+    if (this.versionQcm) this.reponse = '$' + this.reponse + '$'
   }
 }

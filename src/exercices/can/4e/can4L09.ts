@@ -31,7 +31,7 @@ export default class ReduireDecimaux extends ExerciceSimple {
     this.nbQuestions = 1
     this.formatChampTexte = KeyboardType.clavierDeBaseAvecVariable
     this.versionQcmDisponible = true
-     this.optionsDeComparaison = { exclusifFactorisation: true }
+    this.optionsDeComparaison = { exclusifFactorisation: true }
   }
 
   nouvelleVersion() {
@@ -100,7 +100,7 @@ export default class ReduireDecimaux extends ExerciceSimple {
       // Erreur : oubli du 1 devant la variable
       distracteurs.push(`$${texNombre(b, 2)}${variable}$`)
 
-      this.reponse = `$${this.reponse}$`
+      this.reponse = '$' + this.reponse + '$'
       this.distracteurs = distracteurs
     }
   }
