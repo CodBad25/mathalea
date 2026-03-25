@@ -10,7 +10,15 @@
   const duration = durationInMilliSeconds // 1min
   let displayedTime = ''
   let widthFactor = 1
-
+  export const terminateTimer = (): void => {
+    if (frame) cancelAnimationFrame(frame)
+    frame = undefined
+    dispatch('message', {
+      state: 'endTimer',
+      elapsed,
+      duration,
+    })
+  }
   let lastTime = window.performance.now()
   let frame: number | undefined
   ;(function update() {
@@ -33,15 +41,6 @@
     }
   })()
 
-  export const terminateTimer = (): void => {
-    if (frame) cancelAnimationFrame(frame)
-    frame = undefined
-    dispatch('message', {
-      state: 'endTimer',
-      elapsed,
-      duration,
-    })
-  }
   onDestroy(() => {
     if (frame) cancelAnimationFrame(frame)
     frame = undefined
