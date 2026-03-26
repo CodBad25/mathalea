@@ -419,11 +419,11 @@ ${texteGras('Les angles de même couleur ont la même mesure.')}<br>
 ${texteGras("L'angle vert est un angle plat.")}<br>
 ${situations.fig}
 
-${numAlpha(indexSouSegmentQuestion++)} Quelle fraction représente les ${situations.nom_enonce} vers ${situations.cat1.destination} ?${ajouteChampTexteMathLive(this, 3 * i, KeyboardType.clavierNumbers)}<br>
-${numAlpha(indexSouSegmentQuestion++)} Quelle fraction représente les ${situations.nom_enonce} vers ${situations.cat2.destination} ?${ajouteChampTexteMathLive(this, 3 * i + 1, KeyboardType.clavierNumbers)}<br>
+${numAlpha(indexSouSegmentQuestion++)} Quelle fraction représente les ${situations.nom_enonce} vers ${situations.cat1.destination} ?${ajouteChampTexteMathLive(this, 3 * i, KeyboardType.clavierDeBaseAvecFraction)}<br>
+${numAlpha(indexSouSegmentQuestion++)} Quelle fraction représente les ${situations.nom_enonce} vers ${situations.cat2.destination} ?${ajouteChampTexteMathLive(this, 3 * i + 1, KeyboardType.clavierDeBaseAvecFraction)}<br>
 ${numAlpha(indexSouSegmentQuestion++)} Sachant que ${situations.last_question[0]} ${situations.nb_total} ${situations.last_question[1]}
 et que les ${situations.nom_enonce} vers ${situations.cat3.destination} représentent $\\dfrac{${situations.cat3.frac[0]}}{${situations.cat3.frac[1]}}$ de ce total,
-calculer ${situations.last_question[2]} vers ${situations.cat3.destination} ?${ajouteChampTexteMathLive(this, 3 * i + 2, KeyboardType.clavierNumbers)}
+calculer ${situations.last_question[2]} vers ${situations.cat3.destination} ?${ajouteChampTexteMathLive(this, 3 * i + 2, KeyboardType.clavierDeBaseAvecFraction)}
 
 `,
         correction: `
