@@ -68,7 +68,7 @@ export default class HeureDecimalesMinutes extends ExerciceSimple {
 
           this.reponse = this.versionQcm
             ? `$${texNombre(totalMinutes, 0)}$ minutes`
-            : `$${texNombre(totalMinutes, 0)}$`
+            : `${texNombre(totalMinutes, 0)}`
 
           this.distracteurs = [
             `$${texNombre(fausses[0], 0)}$ minutes`,
@@ -111,7 +111,7 @@ export default class HeureDecimalesMinutes extends ExerciceSimple {
 
           this.reponse = this.versionQcm
             ? `$${texNombre(totalMinutes, 0)}$ minutes`
-            : `$${texNombre(totalMinutes, 0)}$`
+            : `${texNombre(totalMinutes, 0)}`
 
           this.distracteurs = [
             `$${texNombre(fausses[0], 0)}$ minutes`,
