@@ -127,10 +127,7 @@ export default class AgrandissementReduction extends Exercice {
         texte +=
           numAlpha(4) +
           ' Calculer le volume du tronc de la pyramide (partie de la pyramide située entre la base et la section).'
-        if (context.isHtml) {
-          texte +=
-            "<br>Le point $O$ peut être déplacé et on peut changer l'angle de vue &#x3C6;."
-        } else {
+        if (!context.isHtml) {
           texte += `\n\t \\end{minipage} \n\t \\begin{minipage}{0.35 \\linewidth} \n\t \\begin{tikzpicture}[scale=0.8] \n\t
           \\definecolor{hhhhhh}{rgb}{0,0,0}
           \\definecolor{phphph}{rgb}{0.5,0.5,0.5}
