@@ -71,7 +71,6 @@ export default class MettreAuMemeDenominateurLit extends Exercice {
         consigneI1,
         consigneI2;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       typesDeQuestions = listeTypeDeQuestions[i]
       consigne1 =
@@ -100,8 +99,8 @@ export default class MettreAuMemeDenominateurLit extends Exercice {
            \\end{aligned}$
         `
             const reponse = choix
-              ? [`\\dfrac{${b}x^2-${a}}{x}`]
-              : [`\\dfrac{${b}x^2+${a}}{x}`]
+              ? [`\\dfrac{${reduirePolynomeDegre3(0, b, 0, -a)}}{x}`]
+              : [`\\dfrac{${reduirePolynomeDegre3(0, b, 0, a)}}{x}`]
             setReponse(this, i, reponse)
             if (this.interactif) {
               texte = consigneI1
@@ -129,8 +128,8 @@ export default class MettreAuMemeDenominateurLit extends Exercice {
             &=\\dfrac{${rienSi1(b)}x${choix ? '+' : '-'}${a}}{x}
             \\end{aligned}$`
             const reponse = choix
-              ? [`\\dfrac{${b}x+${a}}{x}`]
-              : [`\\dfrac{${b}x-${a}}{x}`]
+              ? [`\\dfrac{${reduireAxPlusB(b, a)}}{x}`]
+              : [`\\dfrac{${reduireAxPlusB(b, -a)}}{x}`]
             setReponse(this, i, reponse)
             if (this.interactif) {
               texte = consigneI1
@@ -176,12 +175,12 @@ ${a}${choix ? '+' : '-'}\\dfrac{${b}}{${reduireAxPlusB(c, d)}}&=\\dfrac{${a}(${r
             \\end{aligned}$`
             const reponse = choix
               ? [
-                  `\\dfrac{${a * c}x+${a * d + b}}{${c}x+${d}}`,
-                  `\\dfrac{${-a * c}x+${-a * d - b}}{${-c}x+${-d}}`,
+                  `\\dfrac{${reduireAxPlusB(a * c, a * d + b)}}{${reduireAxPlusB(c, d)}}`,
+                  `\\dfrac{${reduireAxPlusB(-a * c, -a * d - b)}}{${reduireAxPlusB(-c, -d)}}`,
                 ]
               : [
-                  `\\dfrac{${a * c}x+${a * d - b}}{${c}x+${d}}`,
-                  `\\dfrac{${-a * c}x+${-a * d + b}}{${-c}x+${-d}}`,
+                  `\\dfrac{${reduireAxPlusB(a * c, a * d - b)}}{${reduireAxPlusB(c, d)}}`,
+                  `\\dfrac{${reduireAxPlusB(-a * c, -a * d + b)}}{${reduireAxPlusB(-c, -d)}}`,
                 ]
             setReponse(this, i, reponse)
             if (this.interactif) {
@@ -195,55 +194,67 @@ ${a}${choix ? '+' : '-'}\\dfrac{${b}}{${reduireAxPlusB(c, d)}}&=\\dfrac{${a}(${r
 
         case 4: // a/x +/- b/(cx+d)
           {
-            let b
-            const a = randint(-5, 5, 0)
-            const choix = choice([true, false])
-            const c = randint(-2, 5, 0)
-            const k = randint(1, 4)
-            const d = choice([k * c, randint(-5, 5, 0)])
-            b = choice([abs(d - 1), abs(d + 1)])
-            if (b === 0) {
-              b = b + 1
-            }
-            const f = new FractionEtendue(-d, c).simplifie()
-            const reponse = choix
-              ? [
-                  `\\dfrac{${a * c + b}x+${a * d}}{x(${c}x+${d})}`,
-                  `\\dfrac{${-a * c - b}x+${-a * d}}{x(${-c}x+${-d})}`,
-                ]
-              : [
-                  `\\dfrac{${a * c - b}x+${a * d}}{x(${c}x+${d})}`,
-                  `\\dfrac{${-a * c + b}x+${-a * d}}{x(${-c}x+${-d})}`,
-                ]
-            texte = consigne2
-            texte += `$\\dfrac{${a}}{x}${choix ? '+' : '-'}\\dfrac{${b}}{${reduireAxPlusB(c, d)}}$. et la réponse $${reponse}$`
-            if (context.isDiaporama) {
-              texteCorr = ''
-            } else {
-              texteCorr = this.interactif
-                ? ''
-                : `Déterminer les valeurs interdites de cette expression, revient à déterminer les valeurs qui annulent le dénominateur de $\\dfrac{${b}}{${reduireAxPlusB(c, d)}}$,
+            let compteur = 0
+            let a = 0
+            let b = 0
+            let choix = false
+            let c = 0
+            let d = 0
+            let k = 0
+            do {
+              a = randint(-5, 5, 0)
+              choix = choice([true, false])
+              c = randint(-2, 5, 0)
+              k = randint(1, 4)
+              d = choice([k * c, randint(-5, 5, 0)])
+              b = choice([abs(d - 1), abs(d + 1)])
+              if (b === 0) {
+                b = b + 1
+              }
+
+              const f = new FractionEtendue(-d, c).simplifie()
+              const reponse = choix
+                ? [
+                    `\\dfrac{${reduireAxPlusB(a * c + b, a * d)}}{x(${reduireAxPlusB(c, d)})}`,
+                    `\\dfrac{${reduireAxPlusB(-a * c - b, -a * d)}}{x(${reduireAxPlusB(-c, -d)})}`,
+                  ]
+                : [
+                    `\\dfrac{${reduireAxPlusB(a * c - b, a * d)}}{x(${reduireAxPlusB(c, d)})}`,
+                    `\\dfrac{${reduireAxPlusB(-a * c + b, -a * d)}}{x(${reduireAxPlusB(-c, -d)})}`,
+                  ]
+              texte = consigne2
+              texte += `$\\dfrac{${a}}{x}${choix ? '+' : '-'}\\dfrac{${b}}{${reduireAxPlusB(c, d)}}$.`
+              if (context.isDiaporama) {
+                texteCorr = ''
+              } else {
+                texteCorr = this.interactif
+                  ? ''
+                  : `Déterminer les valeurs interdites de cette expression, revient à déterminer les valeurs qui annulent le dénominateur de $\\dfrac{${b}}{${reduireAxPlusB(c, d)}}$,
             puisque la division par $0$ n'existe pas.<br>`
-            }
-            texteCorr += this.interactif
-              ? ''
-              : ` L'équation $${reduireAxPlusB(c, d)}=0$ a pour solution $${f.texFraction}$. <br>
+              }
+              texteCorr += this.interactif
+                ? ''
+                : ` L'équation $${reduireAxPlusB(c, d)}=0$ a pour solution $${f.texFraction}$. <br>
              $0$ et $${f.texFraction}$ sont donc des valeurs interdites pour l'expression. <br>`
 
-            texteCorr += `Pour $x\\in \\mathbb{R}\\smallsetminus\\left\\{${-d / c < 0 ? `${f.texFraction}\\,;\\,0` : `0\\,;\\,${f.texFraction}`}\\right\\}$,<br>
-            $\\begin{aligned}
+              texteCorr += `Pour $x\\in \\mathbb{R}\\smallsetminus\\left\\{${-d / c < 0 ? `${f.texFraction}\\,;\\,0` : `0\\,;\\,${f.texFraction}`}\\right\\}$,<br>
+            $\\begin{aligned} 
             \\dfrac{${a}}{x}${choix ? '+' : '-'}\\dfrac{${b}}{${reduireAxPlusB(c, d)}}&=\\dfrac{${a}(${reduireAxPlusB(c, d)})}{x(${reduireAxPlusB(c, d)})}${choix ? '+' : '-'}\\dfrac{${rienSi1(b)}x}{x(${reduireAxPlusB(c, d)})}\\\\
            & =\\dfrac{${reduireAxPlusB(a * c, a * d)}${choix ? '+' : '-'}${rienSi1(b)}x}{x(${reduireAxPlusB(c, d)})}\\\\
            &=\\dfrac{${choix ? `${reduireAxPlusB(a * c + b, a * d)}` : `${reduireAxPlusB(a * c - b, a * d)}`}}{x(${reduireAxPlusB(c, d)})}
            \\end{aligned}$`
 
-            setReponse(this, i, reponse)
-            if (this.interactif) {
-              texte = consigneI2
-              texte +=
-                `$\\dfrac{${a}}{x}${choix ? '+' : '-'}\\dfrac{${b}}{${reduireAxPlusB(c, d)}}=$` +
-                ajouteChampTexteMathLive(this, i, KeyboardType.lyceeClassique)
-            }
+              setReponse(this, i, reponse)
+              if (this.interactif) {
+                texte = consigneI2
+                texte +=
+                  `$\\dfrac{${a}}{x}${choix ? '+' : '-'}\\dfrac{${b}}{${reduireAxPlusB(c, d)}}=$` +
+                  ajouteChampTexteMathLive(this, i, KeyboardType.lyceeClassique)
+              }
+            } while (
+              compteur++ < 50 &&
+              ((a * c + b === 0 && choix) || (a * c - b === 0 && !choix))
+            )
           }
           break
 
@@ -281,7 +292,9 @@ ${a}${choix ? '+' : '-'}\\dfrac{${b}}{${reduireAxPlusB(c, d)}}&=\\dfrac{${a}(${r
             ${rienSi1(a)}x+\\dfrac{${b}}{${reduireAxPlusB(c, d)}}&=\\dfrac{${rienSi1(a)}x(${reduireAxPlusB(c, d)})}{${reduireAxPlusB(c, d)}}+\\dfrac{${b}}{${reduireAxPlusB(c, d)}}\\\\
             &=\\dfrac{${rienSi1(a * c)}x^2${ecritureAlgebriqueSauf1(a * d)}x+${b}}{${reduireAxPlusB(c, d)}}
             \\end{aligned}$`
-            const reponse = [`\\dfrac{${a * c}x^2+${a * d}x+${b}}{${c}x+${d}}`]
+            const reponse = [
+              `\\dfrac{${reduirePolynomeDegre3(0, a * c, a * d, b)}}{${reduireAxPlusB(c, d)}}`,
+            ]
             setReponse(this, i, reponse)
             if (this.interactif) {
               texte = consigneI2
@@ -294,13 +307,12 @@ ${a}${choix ? '+' : '-'}\\dfrac{${b}}{${reduireAxPlusB(c, d)}}&=\\dfrac{${a}(${r
 
         case 6: // ax+e+b/(cx+d)
           {
-            let b
             const a = randint(-3, 9, 0)
             const e = randint(-5, 5, 0)
             const c = randint(-2, 5, 0)
             const k = randint(1, 4)
             const d = choice([k * c, randint(-5, 5, 0)])
-            b = choice([abs(d - 1), abs(d + 1)])
+            let b = choice([abs(d - 1), abs(d + 1)])
             if (b === 0) {
               b = b + 1
             }
@@ -330,7 +342,7 @@ ${a}${choix ? '+' : '-'}\\dfrac{${b}}{${reduireAxPlusB(c, d)}}&=\\dfrac{${a}(${r
            & =\\dfrac{${reduirePolynomeDegre3(0, a * c, a * d + e * c, e * d + b)}}{${reduireAxPlusB(c, d)}}
            \\end{aligned}$`
             const reponse = [
-              `\\dfrac{${a * c}x^2+${a * d + e * c}x+${e * d + b}}{${c}x+${d}}`,
+              `\\dfrac{${reduirePolynomeDegre3(0, a * c, a * d + e * c, e * d + b)}}{${reduireAxPlusB(c, d)}}`,
             ]
             setReponse(this, i, reponse)
             if (this.interactif) {
@@ -345,7 +357,6 @@ ${a}${choix ? '+' : '-'}\\dfrac{${b}}{${reduireAxPlusB(c, d)}}&=\\dfrac{${a}(${r
         case 7: // a/(ex+f) +/- b/(cx+d)
         default:
           {
-            let b
             const choix = choice([true, false])
             const a = randint(-3, 9, 0)
             const c = randint(-2, 5, 0)
@@ -353,7 +364,7 @@ ${a}${choix ? '+' : '-'}\\dfrac{${b}}{${reduireAxPlusB(c, d)}}&=\\dfrac{${a}(${r
             const k = randint(1, 4)
             const d = choice([k * c, randint(-5, 5, 0)])
             const f = choice([k * c, randint(-5, 5, 0)])
-            b = choice([abs(d - 1), abs(d + 1)])
+            let b = choice([abs(d - 1), abs(d + 1)])
             if (b === 0) {
               b = b + 1
             }
@@ -384,14 +395,14 @@ ${a}${choix ? '+' : '-'}\\dfrac{${b}}{${reduireAxPlusB(c, d)}}&=\\dfrac{${a}(${r
             \\end{aligned}$`
             const reponse = choix
               ? [
-                  `\\dfrac{${a * c + b * e}x+${a * d + b * f}}{(${e}x+${f})(${c}x+${d})}`,
-                  `\\dfrac{${-a * c - b * e}x+${-a * d - b * f}}{(${-c}x+${-d})(${e}x+${f})}`,
-                  `\\dfrac{${-a * c - b * e}x+${-a * d - b * f}}{(${c}x+${d})(${-e}x+${-f})}`,
+                  `\\dfrac{${reduireAxPlusB(a * c + b * e, a * d + b * f)}}{(${reduireAxPlusB(e, f)})(${reduireAxPlusB(c, d)})}`,
+                  `\\dfrac{${reduireAxPlusB(-a * c - b * e, -a * d - b * f)}}{(${reduireAxPlusB(-c, -d)})(${reduireAxPlusB(e, f)})}`,
+                  `\\dfrac{${reduireAxPlusB(-a * c - b * e, -a * d - b * f)}}{(${reduireAxPlusB(c, d)})(${reduireAxPlusB(-e, -f)})}`,
                 ]
               : [
-                  `\\dfrac{${a * c - b * e}x+${a * d - b * f}}{(${e}x+${f})(${c}x+${d})}`,
-                  `\\dfrac{${-a * c + b * e}x+${-a * d + b * f}}{(${-e}x+${-f})(${c}x+${d})}`,
-                  `\\dfrac{${-a * c + b * e}x+${-a * d + b * f}}{(${e}x+${f})(${-c}x+${-d})}`,
+                  `\\dfrac{${reduireAxPlusB(a * c - b * e, a * d - b * f)}}{(${reduireAxPlusB(e, f)})(${reduireAxPlusB(c, d)})}`,
+                  `\\dfrac{${reduireAxPlusB(-a * c + b * e, -a * d + b * f)}}{(${reduireAxPlusB(-e, -f)})(${reduireAxPlusB(c, d)})}`,
+                  `\\dfrac{${reduireAxPlusB(-a * c + b * e, -a * d + b * f)}}{(${reduireAxPlusB(e, f)})(${reduireAxPlusB(-c, -d)})}`,
                 ]
             setReponse(this, i, reponse)
             if (this.interactif) {
