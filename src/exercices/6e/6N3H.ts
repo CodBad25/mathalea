@@ -114,7 +114,7 @@ export default class EgalitesEntreFractions extends Exercice {
 
         switch (choix) {
           case 0:
-            texte = `$${stringTexFraction(a, b)} ${context.isDiaporama ? '' : stringTexFraction('=\\ldots\\ldots\\ldots', '\\ldots\\ldots\\ldots')} = ${stringTexFraction('\\ldots', d)}$`
+            texte = `$${stringTexFraction(a, b)}= ${context.isDiaporama ? '' : stringTexFraction('\\ldots\\ldots\\ldots', '\\ldots\\ldots\\ldots')} = ${stringTexFraction('\\ldots', d)}$`
             if (this.interactif && context.isHtml) {
               texte = remplisLesBlancs(
                 this,
@@ -162,7 +162,7 @@ export default class EgalitesEntreFractions extends Exercice {
             break
           case 1:
           default:
-            texte = `$${stringTexFraction(a, b)} ${context.isDiaporama ? '' : stringTexFraction('=\\ldots\\ldots\\ldots', '\\ldots\\ldots\\ldots')} = ${stringTexFraction(c, '\\ldots')}$`
+            texte = `$${stringTexFraction(a, b)} =${context.isDiaporama ? '' : stringTexFraction('\\ldots\\ldots\\ldots', '\\ldots\\ldots\\ldots')} = ${stringTexFraction(c, '\\ldots')}$`
             if (this.interactif && context.isHtml) {
               const content = `\\dfrac{${a}}{${b}} = \\dfrac{${a} \\times %{champ1}}{${b} \\times %{champ2}} = \\dfrac{${c}}{%{champ3}}`
               texte = remplisLesBlancs(
@@ -242,7 +242,7 @@ export default class EgalitesEntreFractions extends Exercice {
                 champ3: { value: String(a * d) },
               })
             } else {
-              texte = `$${a} ${context.isDiaporama ? '' : stringTexFraction('=\\ldots\\ldots\\ldots', '\\ldots\\ldots\\ldots')} = ${stringTexFraction('\\ldots', d)}$`
+              texte = `$${a}= ${context.isDiaporama ? '' : stringTexFraction('\\ldots\\ldots\\ldots', '\\ldots\\ldots\\ldots')} = ${stringTexFraction('\\ldots', d)}$`
             }
             if (this.interactif && this.interactifType !== 'mathLive') {
               texte = `$${a} = \\ldots$`
@@ -276,7 +276,7 @@ export default class EgalitesEntreFractions extends Exercice {
             break
           case 1:
           default:
-            texte = `$${a} ${context.isDiaporama ? '' : stringTexFraction('=\\ldots\\ldots\\ldots', '\\ldots\\ldots\\ldots')} = ${stringTexFraction(c, '\\ldots\\ldots\\ldots\\ldots')}$`
+            texte = `$${a} =${context.isDiaporama ? '' : stringTexFraction('\\ldots\\ldots\\ldots', '\\ldots\\ldots\\ldots')} = ${stringTexFraction(c, '\\ldots')}$`
             if (this.interactif && context.isHtml) {
               const content = `${a} = \\dfrac{${a} \\times %{champ1}}{1 \\times %{champ2}} = \\dfrac{${c}}{%{champ3}}`
               texte = remplisLesBlancs(
