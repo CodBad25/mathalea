@@ -6,7 +6,7 @@ import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { sp } from '../../lib/outils/outilString'
 import { stringNombre } from '../../lib/outils/texNombre'
-import { gestionnaireFormulaireTexte, randint } from '../../modules/outils'
+import { randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
 export const titre = 'Résoudre une équation trigonométrique'
@@ -15,17 +15,17 @@ export const interactifReady = true
 export const interactifType = 'mathLive'
 export const amcReady = true
 export const amcType = 'AMCNum'
-export const dateDeModifImportante = '25/03/2026'
+export const dateDeModifImportante = '20/02/2024'
 
 /**
  * Résoudre une équation trigonométrique
  * @author Rémi Angot
  */
-export const uuid = 'e13e3'
+export const uuid = 'f13e3'
 
 export const refs = {
-  'fr-fr': ['3G30-2'],
-  'fr-ch': ['1mT-4'],
+  'fr-fr': [],
+  'fr-ch': [],
 }
 
 class EquationTrigo extends Exercice {
@@ -33,39 +33,31 @@ class EquationTrigo extends Exercice {
     super()
     this.nbQuestions = 3
     this.spacingCorr = 3
-    this.sup = '4'
-    this.besoinFormulaireTexte = [
-      'Type de questions',
-      [
-        'Nombres séparés par des tirets  :',
-        "1 : Recherche d'une longueur au numérateur",
-        "2 : Recherche d'une longueur au dénominateur",
-        "3 : Recherche d'un angle",
-        '4 : Mélange',
-      ].join('\n'),
+    this.sup = 3
+    this.besoinFormulaireNumerique = [
+      'Type des questions',
+      3,
+      "1 : Calculs de longueurs\n2 : Calculs de mesures d'angles\n3 : Calculs de longueurs et de mesures d'angles",
     ]
   }
 
   nouvelleVersion(): void {
-    // type TypeQuestionsDisponibles = 'num' | 'den' | 'angle'
+    type TypeQuestionsDisponibles = 'num' | 'den' | 'angle'
     type Trigo = 'cos' | 'sin' | 'tan'
-    // let typeQuestionsDisponibles: TypeQuestionsDisponibles[]
-
-    const typesDeQuestionsDisponibles = gestionnaireFormulaireTexte({
-      saisie: this.sup,
-      max: 3,
-      melange: 4,
-      defaut: 4,
-      nbQuestions: this.nbQuestions,
-      listeOfCase: ['num', 'den', 'angle'],
-    })
-    const listeTypeQuestions = combinaisonListes(
-      typesDeQuestionsDisponibles,
-      this.nbQuestions,
-    )
-
+    let typeQuestionsDisponibles: TypeQuestionsDisponibles[]
+    if (this.sup === 1) {
+      typeQuestionsDisponibles = ['num', 'den']
+    } else if (this.sup === 2) {
+      typeQuestionsDisponibles = ['angle']
+    } else {
+      typeQuestionsDisponibles = ['num', 'den', 'angle']
+    }
     const typeFormuleTrigo = ['cos', 'sin', 'tan'] as Trigo[]
 
+    const listeTypeQuestions = combinaisonListes(
+      typeQuestionsDisponibles,
+      this.nbQuestions,
+    ) as TypeQuestionsDisponibles[]
     const listeFonctions = combinaisonListes(
       typeFormuleTrigo,
       this.nbQuestions,
@@ -79,7 +71,7 @@ class EquationTrigo extends Exercice {
       let texte = `Dans le triangle rectangle $${nomA}${nomB}${nomC}$, on a : `
       const lAB = new Decimal(randint(30, 90)).div(10)
       let lBC: Decimal
-      let reponse = 0
+      let reponse: number
       const angle = randint(25, 75)
       const cosSinTan = listeFonctions[i]
       let texteCorr = ''
