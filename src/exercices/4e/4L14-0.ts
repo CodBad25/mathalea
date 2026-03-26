@@ -317,7 +317,7 @@ export default class TesterSiUnNombreEstSolutionDUneEquation extends Exercice {
             x2 = randint(-9, 9, [x1, x3])
           }
           ;[x1, x2, x3] = shuffle([x1, x2, x3])
-          texte = `$${rienSi1(a)}x${ecritureAlgebrique(-1 * a * b)}=x^2${ecritureAlgebrique(-1 * b)}x~$ pour $~x=${x1}~$ , pour $~x=${x2}~$ puis pour $~x=${x3}$`
+          texte = `$${rienSi1(a)}x${ecritureAlgebrique(-1 * a * b)}=x^2${ecritureAlgebrique(-1 * b)}x~$ pour $~x=${x1}~$, pour $~x=${x2}~$ puis pour $~x=${x3}$`
 
           texteCorr = testOneValueForCase6(x1, a, b)
           texteCorr += testOneValueForCase6(x2, a, b)
@@ -413,7 +413,7 @@ export default class TesterSiUnNombreEstSolutionDUneEquation extends Exercice {
           }
           ;[x1, x2, x3] = shuffle([x1, x2, x3])
 
-          texte = `$x^2${ecritureAlgebrique(-1 * (b + a))}x${ecritureAlgebrique(a * b)}=0~$ pour $~x=${x1}~$ , pour $~x=${x2}~$ puis pour $~x=${x3}$`
+          texte = `$x^2${ecritureAlgebrique(-1 * (b + a))}x${ecritureAlgebrique(a * b)}=0~$ pour $~x=${x1}~$, pour $~x=${x2}~$ puis pour $~x=${x3}$`
 
           texteCorr = testOneValueForCase9(x1, b, a)
           texteCorr += testOneValueForCase9(x2, b, a)

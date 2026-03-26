@@ -50,7 +50,10 @@ export default class Can20266Q30 extends ExerciceCan {
   enonce(choixQuestion?: TypeDeQuestion, Nombre?: number) {
     if (Nombre == null) {
       choixQuestion = choice(this.typesDeQuestions)
-      Nombre = choice([randint(2, 4) * 100 + randint(2, 7) * 10 , randint(2, 4) * 1000 + randint(2, 7) * 100])
+      Nombre = choice([
+        randint(2, 4) * 100 + randint(2, 7) * 10,
+        randint(2, 4) * 1000 + randint(2, 7) * 100,
+      ])
     }
 
     this.question = `Une ${choixQuestion!.fabricant} a produit $${texNombre(Nombre)}$ ${choixQuestion!.produit}.<br>
@@ -60,7 +63,7 @@ Combien de boîtes faut-il ?`
     this.correction = `Il faut partager $${texNombre(Nombre)}$ en $10$ pour trouver le nombre de boîtes pleines.<br>`
     this.correction += `Or, $${texNombre(Nombre)}=${Math.floor(Nombre / 10)} \\times 10$.<br>`
     this.correction += `Il y aura donc $${miseEnEvidence(texNombre(this.reponse))}$ boîtes pleines.`
-  this.canReponseACompleter = 'Il faut $\\dots$ boîtes.'
+    this.canReponseACompleter = 'Il faut $\\dots$ boîtes.'
   }
 
   nouvelleVersion() {

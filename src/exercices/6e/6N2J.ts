@@ -21,10 +21,10 @@ export const dateDeModifImportante = '01/02/2026'
  * Poser et effectuer les divisions euclidiennes suivantes puis donner l'égalité fondamentale correspondante.
  *
  * Niveau de difficulté 2 :
- * * division par 2, 3 , 4 ou 5
+ * * division par 2, 3, 4 ou 5
  *
  * Niveau de difficulté 2 :
- * * division par 2, 3 , 4 ou 5
+ * * division par 2, 3, 4 ou 5
  * * division par 6 à 9
  * * un 0 dans le quotient
  *

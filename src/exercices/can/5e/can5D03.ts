@@ -7,9 +7,9 @@ import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../../lib/interactif/questionMathLive'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import FractionEtendue from '../../../modules/FractionEtendue'
 import { listeQuestionsToContenu } from '../../../modules/outils'
 import Exercice from '../../Exercice'
-import FractionEtendue from '../../../modules/FractionEtendue'
 
 export const titre =
   'Convertir des fractions d’heures en minutes et inversement'
@@ -78,9 +78,12 @@ export default class HeuresFractionHeuresMinutes2 extends Exercice {
             )
             texteCorr = `$${texNombre(a + b)}$h$ = ${a}$ h $ + ${texNombre(b)} \\times 60  = ${a}$ h $${d}$ min`
           }
-            handleAnswers(this, i, {
-                        reponse: { value:  (a * 60) / b , options: { nombreDecimalSeulement: true }
-                      }})
+          handleAnswers(this, i, {
+            reponse: {
+              value: (a * 60) / b,
+              options: { nombreDecimalSeulement: true },
+            },
+          })
           texteCorr = `$\\dfrac{${a}}{${b}}$ h $= \\dfrac{${a}}{${b}}\\times 60$ min  $= ${a}\\times \\dfrac{60}{${b}}$ min $= ${a}\\times ${texNombre(60 / b)}$ min$=${miseEnEvidence(texNombre((a * 60) / b))}$ min`
           this.canEnonce = 'Compléter.'
           this.canReponseACompleter = `$\\dfrac{${a}}{${b}}$ h $=\\ldots$ min`
@@ -106,9 +109,12 @@ export default class HeuresFractionHeuresMinutes2 extends Exercice {
               },
             )
           }
-            handleAnswers(this, i, {
-                        reponse: { value: new FractionEtendue(a,60), options: {fractionEgale: true } },
-                      })
+          handleAnswers(this, i, {
+            reponse: {
+              value: new FractionEtendue(a, 60),
+              options: { fractionEgale: true },
+            },
+          })
           texteCorr = `$${a}$ min  $= \\dfrac{${a}}{60}$ h $=${miseEnEvidence(texFractionReduite(a, 60))}$ h`
           this.canEnonce = 'Compléter par une fraction.'
           this.canReponseACompleter = `$${a}$ min  $= \\ldots$ h`

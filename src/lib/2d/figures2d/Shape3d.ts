@@ -376,7 +376,7 @@ export function updateCubeIso({
     }
   }
   if (inCorrectionMode) {
-    // MGu Jean-Claude a raison , il faut cette évent pour savoir quand la correction est affichée
+    // MGu Jean-Claude a raison, il faut cette évent pour savoir quand la correction est affichée
     document.addEventListener('correctionsAffichees', setup)
   } else {
     // Listen for the 'exercicesAffiches' event to re-render the scene

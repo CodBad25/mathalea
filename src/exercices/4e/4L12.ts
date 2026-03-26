@@ -1,10 +1,10 @@
+import { texteGras } from '../../lib/format/style'
 import {
   miseEnEvidence,
   texteEnCouleurEtGras,
 } from '../../lib/outils/embellissements'
-import { texteGras } from '../../lib/format/style'
+import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { randint, listeQuestionsToContenu } from '../../modules/outils'
 export const titre = "Démontrer l'équivalence de deux programmes de calcul"
 
 // Les exports suivants sont optionnels mais au moins la date de publication semble essentielle
@@ -52,11 +52,10 @@ export default class EquivalenceProgrammesCalcul extends Exercice {
         signeB1B2B3,
         cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       const B1 = randint(-9, 9, [0])
       const B2 = randint(2, 6)
-      const B3 = randint(-9, 9, [0, -1 * B2 * B1]) // pour éviter -1 * B2 * B1 , car sinon A2 = 0
+      const B3 = randint(-9, 9, [0, -1 * B2 * B1]) // pour éviter -1 * B2 * B1, car sinon A2 = 0
       const A1 = B2
       const A2 = B1 * B2 + B3
       const nombreATester = randint(-9, 9)

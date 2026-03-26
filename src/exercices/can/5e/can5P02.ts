@@ -86,7 +86,7 @@ export default class PoucentageP2 extends ExerciceSimple {
         this.correction += texteEnCouleur(`
         <br> Mentalement : <br>
                 Prendre $10\\,\\%$  d'une quantité revient à la diviser par $10$. <br>
-       Pour calculer $20\\,\\%$ , $30\\,\\, \\%$ , $40\\,\\%$, .... d'une quantité, on
+       Pour calculer $20\\,\\%$, $30\\,\\, \\%$, $40\\,\\%$, .... d'une quantité, on
        commence par calculer  $10\\,\\%$  de cette quantité en la divisant par $10$, puis on multiplie
        par $2$ ce résultat si on veut en calculer $20\\, \\%$, par $3$ si on veut en calculer $30\\,\\%$, ....<br>
                            `)

@@ -469,7 +469,7 @@ export default class CourseAuxNombres6e extends Exercice {
           c = d * a + b
           resultat = c % a
           texte = `Je possède ${c} bonbons et je fabrique des sacs de ${a} bonbons. Une fois mes sacs complétés, combien me restera-t-il de bonbons ?`
-          texteCorr = `$${c}=${d}\\times ${a} + ${b}$ , donc il me restera ${b} bonbons.`
+          texteCorr = `$${c}=${d}\\times ${a} + ${b}$, donc il me restera ${b} bonbons.`
           setReponse(this, q, b)
           texte += ajouteChampTexteMathLive(this, q, KeyboardType.clavierDeBase)
           break

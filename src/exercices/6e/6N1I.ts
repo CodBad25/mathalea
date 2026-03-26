@@ -49,7 +49,7 @@ export default class ComparerDecimaux extends Exercice {
   nouvelleVersion() {
     this.consigne = this.interactif
       ? 'Choisir la bonne égalité ou inégalité.'
-      : 'Compléter avec le signe < , > ou =.'
+      : 'Compléter avec le signe <, > ou =.'
     const typesDeQuestionsDisponibles = [choice([1, 4, 5]), 2, 2, 3, 6, 7, 8, 9] // une seule question du type inversion de chiffres (1,4,5)
     const listeTypeDeQuestions = combinaisonListes(
       typesDeQuestionsDisponibles,
@@ -59,7 +59,6 @@ export default class ComparerDecimaux extends Exercice {
     for (
       let i = 0, texte, texteCorr, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       let x
       let y

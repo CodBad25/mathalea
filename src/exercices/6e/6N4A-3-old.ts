@@ -1049,7 +1049,7 @@ export default class ResoudreDesProblemes extends Exercice {
             d +
             ' et la deuxième par ' +
             b +
-            ', puis en retranchant membre à membre  , on obtient :<br>'
+            ', puis en retranchant membre à membre , on obtient :<br>'
           texteCorr += `$${d * a}x + ${d * b}y - ${b * c} x - ${b * d}y = ${texNombre(d * masseA, 3)} - ${texNombre(b * masseB, 3)}$ ${uniteVolume}<br>`
           texteCorr += `$${rienSi1(d * a - b * c)}x = ${texNombre(d * masseA - b * masseB, 3)} \\Rightarrow ${fruit1.nom} = ${texNombre(
             (d * masseA - b * masseB) / (d * a - b * c),

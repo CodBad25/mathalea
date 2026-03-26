@@ -1,20 +1,20 @@
-import Exercice from '../Exercice'
+import Decimal from 'decimal.js'
+import { propositionsQcm } from '../../lib/interactif/qcm'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
+import {
+  ecritureAlgebrique,
+  ecritureAlgebriqueSauf1,
+  ecritureParentheseSiNegatif,
+  rienSi1,
+} from '../../lib/outils/ecritures'
+import { texteEnCouleur } from '../../lib/outils/embellissements'
+import { texNombre } from '../../lib/outils/texNombre'
 import {
   gestionnaireFormulaireTexte,
   listeQuestionsToContenu,
   randint,
 } from '../../modules/outils'
-import { texNombre } from '../../lib/outils/texNombre'
-import Decimal from 'decimal.js'
-import {
-  ecritureAlgebrique,
-  rienSi1,
-  ecritureAlgebriqueSauf1,
-  ecritureParentheseSiNegatif,
-} from '../../lib/outils/ecritures'
-import { propositionsQcm } from '../../lib/interactif/qcm'
-import { texteEnCouleur } from '../../lib/outils/embellissements'
+import Exercice from '../Exercice'
 export const titre =
   "Déterminer le sens de variation d'une suite arithmétique/géométrique"
 export const interactifReady = true
@@ -71,7 +71,6 @@ export default class SensVariationsSuitesAG extends Exercice {
     for (
       let i = 0, r, q, u0, monQcm, texte, texteCorr, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       const ListeNomS = ['u', 'v', 'w', 't']
       const NomS = choice(ListeNomS)
@@ -155,13 +154,13 @@ export default class SensVariationsSuitesAG extends Exercice {
           texteCorr = `On reconnaît la forme explicite d'une suite $(${NomS}_n)$ géométrique de raison $q=${texNombre(q, 1)}$ et de premier terme $${NomS}_0=1$.<br>
            `
           if (q.comparedTo(1) === 1) {
-            texteCorr += `Or $q > 1$ , donc $(${NomS})_n$ est une suite ${texteEnCouleur('croissante.')}`
+            texteCorr += `Or $q > 1$, donc $(${NomS})_n$ est une suite ${texteEnCouleur('croissante.')}`
           }
           if (q.lessThan(1) && q.greaterThan(0)) {
-            texteCorr += `Or $0 < q < 1$ , donc $(${NomS}_n)$ est une suite ${texteEnCouleur('décroissante.')}`
+            texteCorr += `Or $0 < q < 1$, donc $(${NomS}_n)$ est une suite ${texteEnCouleur('décroissante.')}`
           }
           if (q.lessThan(0)) {
-            texteCorr += `Or $q < 0$ , donc $(${NomS}_n)$ est une suite ${texteEnCouleur('ni croissante ni décroissante.')}`
+            texteCorr += `Or $q < 0$, donc $(${NomS}_n)$ est une suite ${texteEnCouleur('ni croissante ni décroissante.')}`
           }
 
           this.autoCorrection[i] = {

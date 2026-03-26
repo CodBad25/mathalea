@@ -34,7 +34,7 @@ export const dateDeModifImportante = '23/02/2024'
  * * entier divisé par 4 quotient : xx,25 ou xx,75
  * * entier divisé par 8 quotient : x,125 ou x,375 ou x,625 ou x,875
  * * entier divisé par 6 quotient : xxx,5
- * * quotient xx,xx division par 2, 3 , 4 ou 5
+ * * quotient xx,xx division par 2, 3, 4 ou 5
  * * quotient x,xxx division par 6 à 9
  * * un 0 dans le quotient
  *

@@ -89,7 +89,7 @@ export default class TrouverEquationParabole extends Exercice {
             return a * x ** 2 + b * x + c
           }
           texte += `qui passe par les points de coordonnées $(${-x1};${f(-x1)})$, $(0;${f(0)})$ et $(${x1};${f(x1)})$ ?<br>`
-          texteCorr = `Soit $${fName[i]}(x)=ax^2+bx+c$ , l'expression de la fonction cherchée, comme $${fName[i]}(0)=${f(0)}$ nous en déduisons que $c=${miseEnEvidence(f(0), 'red')}$.<br>`
+          texteCorr = `Soit $${fName[i]}(x)=ax^2+bx+c$, l'expression de la fonction cherchée, comme $${fName[i]}(0)=${f(0)}$ nous en déduisons que $c=${miseEnEvidence(f(0), 'red')}$.<br>`
           texteCorr += `Donc $${fName[i]}(x)=ax^2+bx${miseEnEvidence(ecritureAlgebrique(f(0)), 'red')}$.<br>`
           texteCorr +=
             "En substituant dans cette expression les valeurs de l'énoncé, nous obtenons :<br>"

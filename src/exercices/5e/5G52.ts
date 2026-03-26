@@ -63,7 +63,7 @@ export default class nomExercice extends Exercice {
   }
 
   nouvelleVersion() {
-    // ['CylindreVersPatron', 'PatronVersCylindre'] , 'type3'
+    // ['CylindreVersPatron', 'PatronVersCylindre'], 'type3'
     const typeQuestionsDisponibles = gestionnaireFormulaireTexte({
       saisie: this.sup,
       min: 1,
@@ -484,14 +484,14 @@ export default class nomExercice extends Exercice {
           coteLongueurPatron,
           coteHauteurPatron,
           /* coteRayon, */ rLongueurPatron,
-          rHauteurPatron /* , rRayon */,
+          rHauteurPatron /*, rRayon */,
         )
         objetsPatronReponse.push(
           coteLongueurPatron,
           coteHauteurPatron,
           coteRayon,
           rLongueurPatron,
-          rHauteurPatron /* , rRayon */,
+          rHauteurPatron /*, rRayon */,
         )
       }
 

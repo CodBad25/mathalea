@@ -206,7 +206,7 @@ export default class UnionEtIntersectionIntervallesDeR extends Exercice {
             texteCorr = `${context.isHtml ? '<br>' : ''}On cherche les réels qui sont dans $[${a};${b}]$ ou bien $[${c};${d}]$, ou dans les deux.`
           } else if (test === 2) {
             texte += `$I=]${a};${b}]\\cup[${c};${d}]$`
-            texteCorr = `${context.isHtml ? '<br>' : ''}On cherche les réels qui sont dans  $]${a};${b}]$ ou bien  $[${c};${d}]$ , ou dans les deux.`
+            texteCorr = `${context.isHtml ? '<br>' : ''}On cherche les réels qui sont dans  $]${a};${b}]$ ou bien  $[${c};${d}]$, ou dans les deux.`
           } else if (test === 3) {
             texte += `$I=[${a};${b}]\\cup]${c};${d}]$`
             texteCorr = `${context.isHtml ? '<br>' : ''}On cherche les réels qui sont dans $[${a};${b}]$ou bien  $]${c};${d}]$, ou dans les deux.`
@@ -386,7 +386,7 @@ export default class UnionEtIntersectionIntervallesDeR extends Exercice {
             texteCorr += `$I=[${a};${d}]$`
           } else if (test === 2) {
             texte += `$I=]${a};${b}]\\cup[${c};${d}]$`
-            texteCorr = `${context.isHtml ? '<br>' : ''}On cherche les réels qui sont dans  $]${a};${b}]$ ou bien  $[${c};${d}]$ , ou dans les deux.`
+            texteCorr = `${context.isHtml ? '<br>' : ''}On cherche les réels qui sont dans  $]${a};${b}]$ ou bien  $[${c};${d}]$, ou dans les deux.`
             texteCorr +=
               "<br>On regarde donc la partie de l'intervalle qui est coloriée, soit en bleu, soit en rouge, soit en bleu et rouge :<br>"
 
@@ -572,7 +572,7 @@ export default class UnionEtIntersectionIntervallesDeR extends Exercice {
             texteCorr += `On a $[${c};${d}]\\subset [${a};${b}]$ donc $I=[${a};${b}]$`
           } else if (test === 2) {
             texte += `$I=]${a};${b}]\\cup[${c};${d}]$`
-            texteCorr = `${context.isHtml ? '<br>' : ''}On cherche les réels qui sont dans  $]${a};${b}]$ ou bien  $[${c};${d}]$ , ou dans les deux.`
+            texteCorr = `${context.isHtml ? '<br>' : ''}On cherche les réels qui sont dans  $]${a};${b}]$ ou bien  $[${c};${d}]$, ou dans les deux.`
             texteCorr +=
               "<br>On regarde donc la partie de l'intervalle qui est coloriée, soit en bleu, soit en rouge, soit en bleu et rouge.<br>"
 

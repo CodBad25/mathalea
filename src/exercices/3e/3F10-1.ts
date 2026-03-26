@@ -78,7 +78,6 @@ export default class VocabulaireNotationsFonctions extends Exercice {
         monQcm,
         cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       this.autoCorrection[i] = {}
       let texte = ''
@@ -108,10 +107,10 @@ export default class VocabulaireNotationsFonctions extends Exercice {
               break
           }
           reponses[i] = [
-            [`$${x}$ est un antécédent de $${y}$`, true],
-            [`$${x}$ est l'image de $${y}$`, false],
-            [`$${y}$ est un antécédent de $${x}$`, false],
-            [`$${y}$ est l'image de $${x}$`, true],
+            [`$${x}$ est un antécédent de $${y}$.`, true],
+            [`$${x}$ est l'image de $${y}$.`, false],
+            [`$${y}$ est un antécédent de $${x}$.`, false],
+            [`$${y}$ est l'image de $${x}$.`, true],
           ]
           break
 

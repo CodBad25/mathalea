@@ -74,7 +74,7 @@ export default class seuilFctAff extends ExerciceSimple {
     .<br>`
             if (Number.isInteger(-p / m)) {
               this.correction += `Comme ${choix ? `$${rienSi1(m)}n${ecritureAlgebrique(p)}>0$` : `$${rienSi1(m)}n${ecritureAlgebrique(p)}<0$`} équivaut à 
-      ${choix ? `$n>${Math.ceil(-p / m)}$` : `$n<${Math.ceil(-p / m)}$`}  , le plus ${choix ? 'petit ' : 'grand'} entier naturel $n$ est donc $${miseEnEvidence(this.reponse)}$.`
+      ${choix ? `$n>${Math.ceil(-p / m)}$` : `$n<${Math.ceil(-p / m)}$`} , le plus ${choix ? 'petit ' : 'grand'} entier naturel $n$ est donc $${miseEnEvidence(this.reponse)}$.`
             } else {
               this.correction += `Comme  ${choix ? `$${rienSi1(m)}n${ecritureAlgebrique(p)}>0$` : `$${rienSi1(m)}n${ecritureAlgebrique(p)}<0$`} équivaut à 
       ${choix ? `$n>\\dfrac{${-p}}{${m}}$` : `$n<\\dfrac{${-p}}{${m}}$`}, le plus ${choix ? 'petit ' : 'grand'} entier naturel $n$ est donc $${miseEnEvidence(this.reponse)}$.`
@@ -131,7 +131,7 @@ export default class seuilFctAff extends ExerciceSimple {
     .<br>`
             if (Number.isInteger(-p / m)) {
               this.correction += `Comme ${choix ? `$${rienSi1(m)}n${ecritureAlgebrique(p)}<0$` : `$${rienSi1(m)}n${ecritureAlgebrique(p)}>0$`} équivaut à 
-      ${choix ? `$n>${Math.ceil(-p / m)}$` : `$n<${Math.ceil(-p / m)}$`}  , le plus ${choix ? 'petit ' : 'grand'} entier naturel $n$ est donc $${miseEnEvidence(this.reponse)}$.`
+      ${choix ? `$n>${Math.ceil(-p / m)}$` : `$n<${Math.ceil(-p / m)}$`} , le plus ${choix ? 'petit ' : 'grand'} entier naturel $n$ est donc $${miseEnEvidence(this.reponse)}$.`
             } else {
               this.correction += `Comme  ${choix ? `$${rienSi1(m)}n${ecritureAlgebrique(p)}<0$` : `$${rienSi1(m)}n${ecritureAlgebrique(p)}>0$`} équivaut à 
       ${choix ? `$n>\\dfrac{${p}}{${-m}}$` : `$n<\\dfrac{${p}}{${-m}}$`}, le plus ${choix ? 'petit ' : 'grand'} entier naturel $n$ est donc $${miseEnEvidence(this.reponse)}$.`

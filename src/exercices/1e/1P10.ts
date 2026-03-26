@@ -435,7 +435,7 @@ export default class ProbabilitesConditionnelles extends Exercice {
           texte += `<br>$\\bullet$ Une coloration naturelle à base de plantes appelée  «${sp(1)}couleur-soin${sp(1)}»,`
           texte += `<br>$\\bullet$  Des mèches blondes pour donner du relief à la chevelure, appelées   «${sp(1)}effet coup de soleil${sp(1)}».`
           texte += `<br><br> Il apparaît que : <br>$\\diamond ${sp(3)} ${c}${sp()}\\%$ des clients demandent une  «${sp(1)}couleur-soin${sp(1)}».`
-          texte += `<br>$\\diamond ${sp(3)}$ Parmi ceux qui ne veulent pas de  «${sp(1)}couleur-soin${sp(1)}» , $${ec}${sp()}\\%$ des clients demandent un  «${sp(1)}effet coup de soleil${sp(1)}».`
+          texte += `<br>$\\diamond ${sp(3)}$ Parmi ceux qui ne veulent pas de  «${sp(1)}couleur-soin${sp(1)}», $${ec}${sp()}\\%$ des clients demandent un  «${sp(1)}effet coup de soleil${sp(1)}».`
           texte += `<br>$\\diamond ${sp(3)}$ Par ailleurs, $${ce}${sp()}\\%$ des clients demandent une  «${sp(1)}couleur-soin${sp(1)}»  et un  «${sp(1)}effet coup de soleil${sp(1)}».`
           texte += '<br>On interroge un client au hasard.'
           texte += `<br>On notera $C$ l'événement :  «${sp(1)}Le client souhaite une  «${sp(1)}couleur-soin${sp(1)}».`
@@ -446,7 +446,7 @@ export default class ProbabilitesConditionnelles extends Exercice {
             ' Donner les valeurs de $P(C)$, $P( C \\cap E)$ et $P_{\\bar{C}}(E)$.<br>'
           texte +=
             texteGras('2.') +
-            ` Calculer la probabilité que le client ne souhaite ni une  «${sp(1)}couleur-soin${sp(1)}» , ni un  «${sp(1)}effet coup de soleil${sp(1)}».<br>`
+            ` Calculer la probabilité que le client ne souhaite ni une  «${sp(1)}couleur-soin${sp(1)}», ni un  «${sp(1)}effet coup de soleil${sp(1)}».<br>`
           texte +=
             texteGras('3.') +
             ` Calculer la probabilité qu'un client choisisse l'«${sp(1)}effet coup de soleil${sp(1)}»  sachant qu'il a pris une  «${sp(1)}couleur-soin${sp(1)}».<br>`
@@ -466,7 +466,7 @@ export default class ProbabilitesConditionnelles extends Exercice {
             { xmin: -5, ymin: -1, xmax: 18, ymax: 10 },
             objets,
           )
-          texteCorr += `<br>${texteGras('2.')} L'événement  : le client ne souhaite ni une  «${sp(1)}couleur-soin${sp(1)}» , ni un  «${sp(1)}effet coup de soleil${sp(1)}»  correspond à $\\bar{C} \\cap \\bar{E}$.`
+          texteCorr += `<br>${texteGras('2.')} L'événement  : le client ne souhaite ni une  «${sp(1)}couleur-soin${sp(1)}», ni un  «${sp(1)}effet coup de soleil${sp(1)}»  correspond à $\\bar{C} \\cap \\bar{E}$.`
           texteCorr += `<br>On a $P(\\bar{C} \\cap \\bar{E})=P(\\bar{C}) \\times P_{\\bar{C}}(\\bar{E})=P(\\bar{C}) \\times (1-P_{\\bar{C}}(E))=${texProba(1 - c / 100, false)} \\times ${texProba(1 - ec / 100, false)}\\approx ${texProba((1 - c / 100) * (1 - ec / 100), false)}$.`
           texteCorr += `<br>${texteGras('3.')}  La probabilité qu'un client choisisse l'«${sp(1)}effet coup de soleil${sp(1)}»  sachant qu'il a pris une  «${sp(1)}couleur-soin${sp(1)}»  est $P_{C}(E)$.`
           texteCorr += `<br>On a alors d'après l'arbre pondéré${sp()}:`

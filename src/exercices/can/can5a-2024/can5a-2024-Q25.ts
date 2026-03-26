@@ -92,7 +92,7 @@ export default class NomExercice extends ExerciceSimple {
         '?',
         2,
       ),
-    ) // , labelPoint(A, B, C), tracePoint(A, B, C)
+    ) //, labelPoint(A, B, C), tracePoint(A, B, C)
     this.question = 'Donne la mesure de cet angle.'
 
     this.question +=

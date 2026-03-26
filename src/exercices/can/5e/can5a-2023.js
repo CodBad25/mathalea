@@ -151,7 +151,6 @@ export default class SujetCAN2023Cinquieme extends Exercice {
         objets,
         cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       switch (typeQuestionsDisponibles[i]) {
         case 1:
@@ -1577,8 +1576,8 @@ export default class SujetCAN2023Cinquieme extends Exercice {
 
             texte = `Un avion parcourt $${texNombre(b)}\\text{ km}$ en $3$ h. <br>
             Quelle durée met-il pour parcourir ${context.isHtml ? `$${texNombre(b + b / 6, 0)}\\text{ km}$` : `\\Lg[km]{${texNombre(b + b / 6, 0)}}`} ? `
-            texteCorr = `En $1$ h , l'avion parcourt $${texNombre(b / 3, 0)}\\text{ km}$, donc en $30$ min, il parcourt  $${texNombre(b / 6, 0)}\\text{ km}$. <br>
-            Ainsi, il met $${miseEnEvidence(3)}$ h $${miseEnEvidence(30)}$ min pour parcourir $${texNombre(b + b / 6, 0)}\\text{ km}$`
+            texteCorr = `En $1\\text{ h}$, l'avion parcourt $${texNombre(b / 3, 0)}\\text{ km}$, donc en $30\\text{ min}$, il parcourt  $${texNombre(b / 6, 0)}\\text{ km}$. <br>
+            Ainsi, il met $${miseEnEvidence(3)}\\text{ h }${miseEnEvidence(30)}\\text{ min}$ pour parcourir $${texNombre(b + b / 6, 0)}\\text{ km}$`
             handleAnswers(this, index, {
               reponse: {
                 value: new Hms({ hour: 3, minute: 30 }).toString(),

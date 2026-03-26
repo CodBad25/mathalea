@@ -41,7 +41,7 @@ export default class SujetZero2024Ex5Q5 extends ExerciceQcm {
     this.correction +=
       " Le produit des racines étant égal à $- 6$, l'autre racine est donc $- 3$.<br>"
     this.correction +=
-      'On aurait pu aussi calculer le discriminant : $\\Delta = 1^2 - 4 \\times 1 \\times (- 6) = 1 + 24 = 25$ ,<br>'
+      'On aurait pu aussi calculer le discriminant : $\\Delta = 1^2 - 4 \\times 1 \\times (- 6) = 1 + 24 = 25$,<br>'
     this.correction +=
       'ce qui donne aussi $x_1 = \\dfrac{- 1 - 5}{2} = - 3$ et $x_2 = \\dfrac{- 1 + 5}{2} = 2$.<br>'
     this.correction +=

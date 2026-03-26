@@ -142,10 +142,7 @@ export default class ExerciceInequationQuotient extends Exercice {
       f = randint(-13, 13, [0, a, b, c, d, e, (b * e) / a, (d * e) / c]) // Pour éviter que (ax + b et ex + f) ou (cx + d et ex + f) n'aient la même racine
       // Dans le type 5, (a + e*c) est le coefficient directeur du numérateur mis au même dénominateur.
       // S'il est nul, la réduction produit une "racine" de la forme n/0.
-      if (
-        listeTypeDeQuestions[i] === '(ax+b)/(cx+d)+e<0' &&
-        a + e * c === 0
-      ) {
+      if (listeTypeDeQuestions[i] === '(ax+b)/(cx+d)+e<0' && a + e * c === 0) {
         cpt++
         continue
       }
@@ -222,7 +219,7 @@ export default class ExerciceInequationQuotient extends Exercice {
           texteCorr += `Donc $${var1}x ${ecritureAlgebrique(var2)} ${symbolePlusGrand} 0$ si et seulement si $x ${symbolePlusGrand} ${new FractionEtendue(-var2, var1).texFractionSimplifiee}$.`
         }
       }
-      // Prépare les quatre types de lignes possibles pour les tableaux avec 2 antécédents : + + - , + - -, - + + et - - +
+      // Prépare les quatre types de lignes possibles pour les tableaux avec 2 antécédents : + + -, + - -, - + + et - - +
       // Les lignes sont des tableaux qui alternent chaîne de caractère et 'nombre de pixels de largeur estimée du texte pour le centrage'
       // La première chaîne 'Line' indique que c'est pour un tableau de signes et valeurs ('Var' pour un tableau de variations)
       // '' indique qu'il n'y a rien à afficher (pour laisser un espace sous la borne par exemple)

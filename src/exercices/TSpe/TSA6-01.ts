@@ -54,7 +54,7 @@ export default class Binomiale extends ExerciceQcm {
       correction += `On aurait pu être tenté d'appliquer directement le cours en posant $u$ la fonction définie sur  $]${texNombre(-a)};+\\infty[$ par $u(x)=${reduireAxPlusB(1, a)}$.<br>`
       correction += `$f$ peut alors s'écrire sous la forme : $f(x)=${c} \\times\\dfrac{1}{u^2(x)}$.<br>`
       correction +=
-        "On sait qu'une primitive d'une fonction sous la forme $\\dfrac{1}{u^2(x)}$, avec $u(x)\\neq0$, est définie par $-\\dfrac{1}{u(x)}+ k$ , avec $k\\in \\mathbb R$.<br>"
+        "On sait qu'une primitive d'une fonction sous la forme $\\dfrac{1}{u^2(x)}$, avec $u(x)\\neq0$, est définie par $-\\dfrac{1}{u(x)}+ k$, avec $k\\in \\mathbb R$.<br>"
       correction += `On obtient donc $F(x)=${-c} \\times \\dfrac{1}{${reduireAxPlusB(1, a)}}+ k$ avec $k\\in\\mathbb{R}$.<br>`
       correction +=
         'Aucune fonction proposée correspond à la primitive de $f$ avec $k=0$.<br>'
