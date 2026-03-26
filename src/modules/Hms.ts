@@ -43,10 +43,15 @@ class Hms {
     text = text.replaceAll(' ', '')
     text = text.replaceAll('&nbsp;', '')
     text = text.replaceAll('{\\:\\text{semaines}\\:}', 'semaines')
+    text = text.replaceAll('\\text{semaines}', 'semaines')
     text = text.replaceAll('{\\:\\text{j}\\:}', 'j')
+    text = text.replaceAll('\\text{j}', 'j')
     text = text.replaceAll('{\\:\\text{h}\\:}', 'h')
+    text = text.replaceAll('\\text{h}', 'h')
     text = text.replaceAll('{\\:\\text{min}\\:}', 'min')
+    text = text.replaceAll('\\text{min}', 'min')
     text = text.replaceAll('{\\:\\text{s}\\:}', 's')
+    text = text.replaceAll('\\text{s}', 's')
     text = text.replaceAll('sem', 'semaines')
     // Format avec semaines et jours
     const regexComplete =
