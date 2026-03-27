@@ -1,11 +1,11 @@
 <script lang="ts">
-  import type TypeExercice from '../../../exercices/Exercice'
   import {
     mathaleaGetExercicesFromParams,
     mathaleaUpdateExercicesParamsFromUrl,
   } from '../../../lib/mathalea.js'
   import { darkMode, exercicesParams } from '../../../lib/stores/generalStore'
   import { referentielLocale } from '../../../lib/stores/languagesStore'
+  import { isIExercice, type IExercice, type IExerciceStatique } from '../../../lib/types'
   import Footer from '../../Footer.svelte'
   import NavBar from '../../shared/header/NavBar.svelte'
 
@@ -21,7 +21,7 @@
     }
   }
   const notes: TypeNote[] = []
-  let exercices: TypeExercice[]
+  let exercices: (IExercice | IExerciceStatique)[] = []
 
   let chargement = true
 
@@ -47,12 +47,16 @@
         }
       }
       paramUrl = paramUrl.slice(0, -1)
+      const exercice = exercices[i]
+      const titre = isIExercice(exercice)
+        ? exercice.titre
+        : (param.id ?? param.uuid)
 
       notes.push({
         deckName: 'MathALÉA',
         modelName: 'MathALEA',
         fields: {
-          Titre: exercices[i].titre,
+          Titre: titre,
           url: 'https://coopmaths.fr/alea/?' + paramUrl,
         },
       })

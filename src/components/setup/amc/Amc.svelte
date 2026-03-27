@@ -1,7 +1,6 @@
 <script lang="ts">
   import seedrandom from 'seedrandom'
   import { onMount } from 'svelte'
-  import type TypeExercice from '../../../exercices/Exercice'
   import { creerDocumentAmc } from '../../../lib/amc/creerDocumentAmc.js'
   import {
     mathaleaGenerateSeed,
@@ -15,6 +14,7 @@
     exercicesParams,
   } from '../../../lib/stores/generalStore.js'
   import { referentielLocale } from '../../../lib/stores/languagesStore.js'
+  import type { IExercice } from '../../../lib/types'
   import { context } from '../../../modules/context.js'
   import Footer from '../../Footer.svelte'
   import ButtonActionInfo from '../../shared/forms/ButtonActionInfo.svelte'
@@ -26,7 +26,7 @@
   import BasicClassicModal from '../../shared/modal/BasicClassicModal.svelte'
 
   const isSettingsVisible: boolean[] = []
-  let exercices: TypeExercice[] = []
+  let exercices: IExercice[] = []
   let content = ''
   let entete = 'AMCcodeGrid'
   let format = 'A4'
@@ -51,7 +51,9 @@
   async function initExercices() {
     exercicesARetirer.length = 0
     await mathaleaUpdateExercicesParamsFromUrl()
-    exercices = await mathaleaGetExercicesFromParams($exercicesParams)
+    exercices = (await mathaleaGetExercicesFromParams($exercicesParams)).filter(
+      (exercice): exercice is IExercice => exercice.typeExercice !== 'statique',
+    )
     for (const exercice of exercices) {
       isSettingsVisible.push(false)
       context.isHtml = false
@@ -120,13 +122,14 @@
         }
       }
     }
+    const nbQuestionsParGroupe: number[] = nbQuestions.map((elt) => elt.nombre)
     content = creerDocumentAmc({
       exercices,
       typeEntete: entete,
       format,
       matiere,
       titre,
-      nbQuestions: nbQuestions.map((elt) => elt.nombre),
+      nbQuestions: nbQuestionsParGroupe,
       nbExemplaires,
     })
   }

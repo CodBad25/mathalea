@@ -10,19 +10,19 @@
   type="button"
   {title}
   id={$$props.id}
-  class={$$props.class || 'rounded-lg py-1 px-2'}
+  class="{($$props.class || 'rounded-lg py-1 px-2')} inline-flex items-center justify-center gap-2"
   {disabled}
   on:click
 >
   {#if iconFirst}
     {#if icon !== ''}
-      <i class="bx {icon} pr-1"></i>
+      <i class="bx {icon} shrink-0"></i>
     {/if}
     {text}
   {:else}
     {text}
     {#if icon !== ''}
-      <i class="bx {icon} pl-1"></i>
+      <i class="bx {icon} shrink-0"></i>
     {/if}
   {/if}
 </button>

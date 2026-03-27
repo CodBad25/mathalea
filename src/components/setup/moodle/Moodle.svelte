@@ -1,11 +1,11 @@
 <script lang="ts">
-  import type TypeExercice from '../../../exercices/Exercice'
   import {
     mathaleaGetExercicesFromParams,
     mathaleaUpdateExercicesParamsFromUrl,
   } from '../../../lib/mathalea'
   import { darkMode, exercicesParams } from '../../../lib/stores/generalStore'
   import { referentielLocale } from '../../../lib/stores/languagesStore'
+  import { isIExercice, type IExercice, type IExerciceStatique } from '../../../lib/types'
   import Footer from '../../Footer.svelte'
   import ButtonToggleAlt from '../../shared/forms/ButtonToggleAlt.svelte'
   import FormRadio from '../../shared/forms/FormRadio.svelte'
@@ -99,7 +99,7 @@
         </resource>
       </resources>
   */
-  let exercices: TypeExercice[]
+  let exercices: (IExercice | IExerciceStatique)[] = []
 
   let justBookmarklet = false
 
@@ -165,6 +165,11 @@
         }
       }
       paramUrl = paramUrl.slice(0, -1)
+      const exercice = exercices[i]
+      const titre = isIExercice(exercice)
+        ? exercice.titre
+        : (param.id ?? param.uuid)
+      const nbQuestions = isIExercice(exercice) ? exercice.nbQuestions : 1
       let graine
       if (aleaType === 'alea') {
         graine = ' graine\\="-1"'
@@ -173,7 +178,7 @@
       } else {
         graine = ` graine\\="${param.alea}" `
       }
-      contentGift += `:: ${param.id} - ${exercices[i].titre} - ${exercices[i].nbQuestions} ${exercices[i].nbQuestions > 1 ? 'questions' : 'question'} ::\n`
+      contentGift += `:: ${param.id} - ${titre} - ${nbQuestions} ${nbQuestions > 1 ? 'questions' : 'question'} ::\n`
       contentGift +=
         '<script src\\="https\\:\/\/coopmaths.fr\/alea\/assets\/externalJs\/moodle.js" type\\="module"><\/script>\n'
       contentGift += `<mathalea-moodle v="4" url\\="${paramUrl}"${showTitle ? '' : ' titre="false"'}${graine}/>\n`
@@ -189,7 +194,7 @@
       xmlItem.setAttribute('isvisible', 'true')
       xmlItem.setAttribute('identifierref', `MathAlea-Exo${i + 1}`)
       let xmlTitle = xmlScorm.createElement('title')
-      xmlTitle.textContent = exercices[i].titre
+      xmlTitle.textContent = titre
       xmlItem.appendChild(xmlTitle)
       xmlOrganization.appendChild(xmlItem)
       let xmlResource = xmlScorm.createElement('resource')

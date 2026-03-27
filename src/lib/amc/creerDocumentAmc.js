@@ -983,6 +983,15 @@ export function exportQcmAmc(exercice, idExo) {
  * s'il est indéfini, toutes les questions du groupe seront posées.
  * nb_exemplaire est le nombre de copies à générer
  * matiere et titre se passent de commentaires : ils renseignent l'entête du sujet.
+ * @param {{
+ *   exercices: import('../types').IExercice[],
+ *   nbQuestions?: number[],
+ *   nbExemplaires?: number,
+ *   matiere?: string,
+ *   titre?: string,
+ *   typeEntete?: string,
+ *   format?: string
+ * }} options
  */
 export function creerDocumentAmc({
   exercices,
