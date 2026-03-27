@@ -13,7 +13,7 @@
   import SearchBlock from './searchBlock/SearchBlock.svelte'
   import SideMenuApps from './SideMenuApps.svelte'
 
-  import { onDestroy, onMount, type Component } from 'svelte'
+  import { onDestroy, onMount } from 'svelte'
   import codeToLevelList from '../../../../../json/codeToLevelList.json'
   import { referentielLocale } from '../../../../../lib/stores/languagesStore'
   import { applyFilters } from './filtersStore'
@@ -26,14 +26,10 @@
   } from '../../../../../lib/stores/referentielsStore'
   import type { Language } from '../../../../../lib/types/languages'
 
-  interface SearchBlockType extends Component {
-    triggerUpdateFromSearchBlock: () => void
-  }
-
   export let excludedReferentiels: ActivationName[] = []
   export let addExercise: (uuid: string, id: string) => void
 
-  let searchBlock: SearchBlockType
+  let searchBlock: { triggerUpdateFromSearchBlock: () => void } | undefined
 
   let referentielsForMenu: ReferentielInMenu[] = []
 
@@ -170,7 +166,7 @@
     resourcesSet={buildResourcesSet(referentielsForMenu)}
     on:filters-change={() => {
       updateRepositories()
-      searchBlock.triggerUpdateFromSearchBlock()
+      searchBlock?.triggerUpdateFromSearchBlock()
     }}
     {addExercise}
   />
