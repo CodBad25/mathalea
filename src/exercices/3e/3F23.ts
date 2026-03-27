@@ -21,6 +21,7 @@ import {
 import Exercice from '../Exercice'
 
 export const dateDePublication = '05/06/2025'
+export const dateDeModifImportante = '27/03/2026'
 export const titre =
   "Trouver l'intersection des droites représentant des fonctions affines"
 export const interactifReady = true
@@ -72,7 +73,7 @@ export default class IntersectionDroites extends Exercice {
       }
 
       texte = `Soient $f$ et $g$ deux fonctions affines définies par : $f(x)=${reduireAxPlusB(a, b)}$ et $g(x)=${reduireAxPlusB(c, d)}$. <br>`
-      texte += `${numAlpha(1)} Quelle est l'abscisse du point d'intersection des deux droites représentatives respectivement de $f$ et de $g$ ?`
+      texte += `${numAlpha(0)} Quelle est l'abscisse du point d'intersection des deux droites représentatives respectivement de $f$ et de $g$ ?`
       texte += ajouteChampTexteMathLive(
         this,
         2 * i,
