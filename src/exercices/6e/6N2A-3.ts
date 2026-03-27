@@ -23,6 +23,7 @@ import Exercice from '../Exercice'
 export const titre =
   "Déterminer le dernier chiffre d'une somme ou différence entre décimaux"
 export const dateDePublication = '28/01/2026'
+export const dateDeModifImportante = '27/03/2026'
 export const amcReady = true
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -30,6 +31,7 @@ export const amcType = 'AMCNum'
 
 /**
  * Trouver le dernier chiffre d'un calcul (somme, différence) entre décimaux
+ * Modif 27/03/2026 : Le premier terme de la différence est toujours plus grand que le second terme
  * @author Eric Elter
  */
 
@@ -180,7 +182,7 @@ export default class DernierChiffreSommeDifférenceDécimaux extends Exercice {
 
               resultat = exposant1 > exposant2 ? chiffreA : 10 - chiffreB
             }
-          } while (b >= a && a < 2)
+          } while ((b >= a && a < 2) || b > a)
           texte = `$${texNombre(a)} - ${texNombre(b)}$`
           texteCorr = ''
           if (this.correctionDetaillee) {
