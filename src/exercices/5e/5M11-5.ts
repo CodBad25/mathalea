@@ -650,7 +650,8 @@ export default class PerimetreOuAireDeFiguresComposees extends Exercice {
           codagesSansDecoupage.push(
             codageAngleDroit(A, B, C),
             codageAngleDroit(D, A, B),
-            codageSegments('/', 'black', A, B, C, B, A, D),
+            codageSegments('/', 'black', A, B),
+            codageSegments('///', 'black', A, D, C, B),
             tracePoint(C, D),
           )
           codagesDecoupage.push(
