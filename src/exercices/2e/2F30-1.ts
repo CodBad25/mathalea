@@ -54,6 +54,8 @@ export default class VariationsCourbe extends Exercice {
   }
 
   nouvelleVersion() {
+    const margeHauteNomCourbe = 0.45
+
     const listeTypeDeQuestions = gestionnaireFormulaireTexte({
       saisie: this.sup,
       min: 1,
@@ -139,7 +141,7 @@ export default class VariationsCourbe extends Exercice {
                 xmin: x0 - 1,
                 xmax: 6,
                 ymin: Math.min(y0 - 1, y2 - 1),
-                ymax: y1 + 2,
+                ymax: y1 + 2 + margeHauteNomCourbe,
                 pixelsParCm: 30,
                 scale: 0.6,
                 style: 'margin: auto',
@@ -245,7 +247,7 @@ export default class VariationsCourbe extends Exercice {
                 xmin: x0 - 1,
                 xmax: 6,
                 ymin: y1 - 2,
-                ymax: Math.max(y2 + 1, y0 + 1),
+                ymax: Math.max(y2 + 1, y0 + 1) + margeHauteNomCourbe,
                 pixelsParCm: 30,
                 scale: 0.6,
                 style: 'margin: auto',
@@ -354,7 +356,7 @@ export default class VariationsCourbe extends Exercice {
                 xmin: x0 - 1,
                 xmax: 7,
                 ymin: Math.min(y1 - 1, y3 - 1),
-                ymax: Math.max(y2 + 1, y0 + 1),
+                ymax: Math.max(y2 + 1, y0 + 1) + margeHauteNomCourbe,
                 pixelsParCm: 30,
                 scale: 0.6,
                 style: 'margin: auto',
@@ -464,7 +466,7 @@ export default class VariationsCourbe extends Exercice {
                 xmin: x0 - 1,
                 xmax: x3 + 1,
                 ymin: Math.min(y2 - 1, y0 - 1),
-                ymax: Math.max(y1 + 1, y3 + 1),
+                ymax: Math.max(y1 + 1, y3 + 1) + margeHauteNomCourbe,
                 pixelsParCm: 30,
                 scale: 0.5,
                 style: 'margin: auto',
@@ -578,7 +580,7 @@ export default class VariationsCourbe extends Exercice {
                 xmin: x0 - 1,
                 xmax: x4 + 1,
                 ymin: Math.min(y2 - 1, y0 - 1, y4 - 1),
-                ymax: Math.max(y1 + 1, y3 + 1),
+                ymax: Math.max(y1 + 1, y3 + 1) + margeHauteNomCourbe,
                 pixelsParCm: 25,
                 scale: 0.5,
                 style: 'margin: auto',
@@ -702,7 +704,7 @@ export default class VariationsCourbe extends Exercice {
                 xmin: x0 - 1,
                 xmax: x4 + 1,
                 ymin: Math.min(y1 - 2, y3 - 2),
-                ymax: Math.max(y2 + 1, y0 + 1, y4 + 1),
+                ymax: Math.max(y2 + 1, y0 + 1, y4 + 1) + margeHauteNomCourbe,
                 pixelsParCm: 25,
                 scale: 0.5,
                 style: 'margin: auto',
