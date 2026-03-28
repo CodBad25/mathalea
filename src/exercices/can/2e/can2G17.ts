@@ -1,3 +1,4 @@
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import {
   ecritureAlgebrique,
   ecritureAlgebriqueSauf1,
@@ -32,6 +33,8 @@ export default class VecteurDirEqCart extends ExerciceSimple {
     this.nbQuestions = 1
 
     this.listeAvecNumerotation = false
+    this.formatChampTexte =
+      KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets
   }
 
   nouvelleVersion() {
