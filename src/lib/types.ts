@@ -782,7 +782,7 @@ export interface AutoCorrection {
   enonceAvantUneFois?: boolean
   enonceCentre?: boolean
   enonceApresNumQuestion?: boolean
-  propositions?: UneProposition[] | ChoixQcm
+  propositions?: UneProposition[]
   reponse?: {
     valeur?: ValeurNormalized
     param?: ReponseParams
