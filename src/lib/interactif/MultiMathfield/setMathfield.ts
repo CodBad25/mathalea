@@ -11,8 +11,24 @@ export function setMathfield(mf: MathfieldElement) {
   if ('menuItems' in mf) mf.menuItems = []
   if ('virtualKeyboardMode' in mf) mf.virtualKeyboardMode = 'manual'
   mf.classList.add('ml-1')
-  mf.addEventListener('focus', handleFocusMathField)
-  mf.addEventListener('focusout', handleFocusOutMathField)
+  mf.addEventListener('focus', (event) => {
+    console.log(
+      '[DEBUG] focus reçu sur',
+      mf.id,
+      'activeElement:',
+      document.activeElement,
+    )
+    handleFocusMathField(event)
+  })
+  mf.addEventListener('focusout', (event) => {
+    console.log(
+      '[DEBUG] focusout sur',
+      mf.id,
+      'activeElement:',
+      document.activeElement,
+    )
+    handleFocusOutMathField(event)
+  })
   mf.addEventListener('input', () => {
     const content = mf.getValue()
     // Remplace les espaces consécutifs par un seul espace
@@ -48,7 +64,7 @@ function handleFocusMathField(event: FocusEvent) {
   })
 }
 
-function handleFocusOutMathField() {
+function handleFocusOutMathField(event: FocusEvent) {
   // Si le focus est sur un autre élément que mathfield, on cache le clavier
   // On utilise setTimeout pour être sûr que le focus soit bien sur le nouvel élément
   // car au focusout, le focus est sur body
