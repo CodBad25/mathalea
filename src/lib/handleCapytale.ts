@@ -222,11 +222,9 @@ async function toolSetActivityParams({
               window.postMessage(message, '*')
             }
           } else {
-            const starttime = window.performance.now()
             await Promise.all(
               mathaleaWriteStudentPreviousAnswers(exercice.answers),
             )
-            const time = window.performance.now() - starttime // À quoi ça sert ? @todo supprimer
           }
         }
       }

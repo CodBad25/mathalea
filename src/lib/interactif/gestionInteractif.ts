@@ -226,6 +226,36 @@ export function exerciceInteractif(
         }
         resultat === 'OK' ? nbQuestionsValidees++ : nbQuestionsNonValidees++
         break
+      case 'multiMathfield':
+        {
+          const result = verifQuestionMultiMathfield(exercice, i)
+          if (result == null) {
+            window.notify('erreur dans la correction de la question', {
+              exercice,
+              i,
+            })
+          } else {
+            nbQuestionsValidees += result.score.nbBonnesReponses
+            nbQuestionsNonValidees +=
+              result.score.nbReponses - result.score.nbBonnesReponses
+            if (result.feedback && result.feedback !== '') {
+              const divFeedback = document.querySelector(
+                `#feedbackEx${exercice.numeroExercice}Q${i}`,
+              )
+              if (divFeedback != null) {
+                divFeedback.innerHTML = `💡 ${result.feedback}`
+                divFeedback.classList.add(
+                  'py-2',
+                  'italic',
+                  'text-coopmaths-warn-darkest',
+                  'dark:text-coopmathsdark-warn-darkest',
+                )
+                ;(divFeedback as HTMLDivElement).style.display = 'block'
+              }
+            }
+          }
+        }
+        break
       default:
         {
           const result = verifQuestionMathLive(exercice, i)
@@ -1106,7 +1136,7 @@ export function verifQuestionMetaInteractif2d(
   const reponses = exercice.autoCorrection[i].reponse.valeur
   if (reponses == null) {
     window.notify(
-      `verifQuestionMathlive: reponses est null pour la question ${i} de l'exercice ${exercice.id}`,
+      `verifQuestionMetaInteractif2d: reponses est null pour la question ${i} de l'exercice ${exercice.id}`,
       { exercice, i },
     )
     return {
@@ -1199,5 +1229,147 @@ export function verifQuestionMetaInteractif2d(
     isOk: nbBonnesReponses === nbReponses,
     feedback: noFeedback ? '' : feedback,
     score: { nbBonnesReponses, nbReponses },
+  }
+}
+
+function verifQuestionMultiMathfield(
+  exercice: IExercice,
+  i: number,
+): {
+  isOk: boolean
+  feedback: string
+  score: { nbBonnesReponses: number; nbReponses: number }
+} {
+  if (exercice.autoCorrection[i]?.reponse == null) {
+    throw Error(
+      `verifQuestionMultiMathfield appelé sur une question sans réponse: ${JSON.stringify(
+        {
+          exercice,
+          question: i,
+          autoCorrection: exercice.autoCorrection[i],
+        },
+      )}`,
+    )
+  }
+  const reponses = exercice.autoCorrection[i].reponse.valeur
+  if (reponses == null) {
+    window.notify(
+      `verifQuestionMultiMathfield: reponses est null pour la question ${i} de l'exercice ${exercice.id}`,
+      { exercice, i },
+    )
+    return {
+      isOk: false,
+      feedback: 'erreur dans le programme',
+      score: { nbBonnesReponses: 0, nbReponses: 1 },
+    }
+  } else if (typeof reponses !== 'object') {
+    window.notify(
+      `verifQuestionMultiMathfield: reponses n'est pas un objet pour la question ${i} de l'exercice ${exercice.id}`,
+      { exercice, i, reponses },
+    )
+    return {
+      isOk: false,
+      feedback: 'erreur dans le programme',
+      score: { nbBonnesReponses: 0, nbReponses: 1 },
+    }
+  }
+  const bareme: (arg: number[]) => [number, number] =
+    reponses.bareme ?? toutPourUnPoint
+  const variables = Object.entries(reponses).filter(
+    ([key]) => key !== 'bareme' && key !== 'feedback',
+  )
+  const points = []
+  const saisies: Record<string, string> = {}
+  let feedback = ''
+  let compteurSaisiesVides = 0
+  let compteurBonnesReponses = 0
+  let noFeedback = false
+  for (const [field, reponse] of variables) {
+    const options = reponse.options
+    noFeedback = noFeedback || Boolean(options?.noFeedback)
+    const compareFunction = reponse.compare ?? fonctionComparaison
+    // Récupère le composant MultiMathfield puis le Mathfield dans son shadowRoot
+    const multi = document.getElementById(
+      `multiMathfieldEx${exercice.numeroExercice}Q${i}`,
+    ) as HTMLElement
+    const mf = multi?.shadowRoot?.querySelector(
+      `#multiMathfieldEx${exercice.numeroExercice}Q${i}-${field}`,
+    ) as MathfieldElement
+    const saisie = mf.getValue()
+    mf.readOnly = true
+    mf.classList.add('corrected')
+    if (saisie === '') {
+      compteurSaisiesVides++
+      points.push(0)
+      continue
+    }
+    const eltFeedback = multi?.shadowRoot?.querySelector(
+      `#check-multiMathfieldEx${exercice.numeroExercice}Q${i}-${field}`,
+    ) as HTMLSpanElement
+    if (eltFeedback) {
+      setStyles(eltFeedback, 'marginBottom: 20px')
+      eltFeedback.innerHTML = ''
+    }
+    saisies[`multiMathfieldEx${exercice.numeroExercice}Q${i}-${field}`] = saisie
+    let result
+    if (Array.isArray(reponse.value)) {
+      let ii = 0
+      while (!result?.isOk && ii < reponse.value.length) {
+        result = compareFunction(saisie, reponse.value[ii], options)
+        ii++
+      }
+    } else {
+      result = compareFunction(saisie, reponse.value, options)
+    }
+    if (result.isOk) {
+      compteurBonnesReponses++
+      points.push(1)
+      eltFeedback.innerHTML = '😎'
+    } else {
+      points.push(0)
+      eltFeedback.innerHTML = '☹️'
+      if (result.feedback === 'saisieVide') result.feedback = null
+      else {
+        result = {
+          isOk: false,
+          feedback: '',
+        }
+      }
+    }
+    mf.classList.add('corrected')
+
+    if (result.feedback != null) feedback += result.feedback
+  }
+
+  if (compteurBonnesReponses === variables.length) {
+    feedback = ''
+  } else {
+    if (compteurSaisiesVides > 0) {
+      feedback = `Il manque ${compteurSaisiesVides} réponse(s).`
+    } else {
+      feedback = `Certaines réponses sont incorrectes.`
+    }
+  }
+  const [nbBonnesReponses, nbReponses] = bareme(points)
+  const spanReponseLigne = document.querySelector(
+    `#resultatCheckEx${exercice.numeroExercice}Q${i}`,
+  ) as HTMLSpanElement
+  if (spanReponseLigne != null) {
+    spanReponseLigne.innerHTML =
+      compteurBonnesReponses === variables.length ? '😎' : '☹️'
+  }
+  if (typeof exercice.answers === 'object' && exercice.answers !== null) {
+    exercice.answers[`MultiMathfieldEx${exercice.numeroExercice}Q${i}`] =
+      JSON.stringify(saisies)
+  }
+
+  // le feedback est déjà assuré par la fonction feedback(), donc on le met à ''
+  return {
+    isOk: compteurBonnesReponses === variables.length,
+    feedback: noFeedback ? '' : feedback,
+    score: {
+      nbBonnesReponses,
+      nbReponses,
+    },
   }
 }

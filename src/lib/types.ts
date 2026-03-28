@@ -331,6 +331,7 @@ export type InteractivityType =
   | 'tableur'
   | 'MetaInteractif2d'
   | 'svgSelection'
+  | 'multiMathfield'
 export function isInteractivityType(
   value: unknown,
 ): value is InteractivityType {
@@ -346,7 +347,8 @@ export function isInteractivityType(
     value === 'custom' ||
     value === 'tableur' ||
     value === 'MetaInteractif2d' ||
-    value === 'svgSelection'
+    value === 'svgSelection' ||
+    value === 'multiMathfield'
   )
 }
 
@@ -397,6 +399,47 @@ export type AnswerNormalizedType = {
   compare?: CompareFunction
   options?: OptionsComparaisonType
 }
+
+export type ValeurNames =
+  | 'reponse'
+  | 'champ1'
+  | 'champ2'
+  | 'champ3'
+  | 'champ4'
+  | 'champ5'
+  | 'champ6'
+  | 'rectangle1'
+  | 'rectangle2'
+  | 'rectangle3'
+  | 'rectangle4'
+  | 'rectangle5'
+  | 'rectangle6'
+  | 'rectangle7'
+  | 'rectangle8'
+  | 'field0'
+  | 'field1'
+  | 'field2'
+  | 'field3'
+  | 'field4'
+  | 'field5'
+  | 'field6'
+  | 'field7'
+  | 'field8'
+  | 'L1C1'
+  | 'L1C2'
+  | 'L1C3'
+  | 'L1C4'
+  | 'L1C5'
+  | 'L2C1'
+  | 'L2C2'
+  | 'L2C3'
+  | 'L2C4'
+  | 'L2C5'
+  | 'L3C1'
+  | 'L3C2'
+  | 'L3C3'
+  | 'L3C4'
+  | 'L3C5'
 
 /**
  * Type pour une valeur de réponse avec ses options
@@ -739,7 +782,7 @@ export interface AutoCorrection {
   enonceAvantUneFois?: boolean
   enonceCentre?: boolean
   enonceApresNumQuestion?: boolean
-  propositions?: UneProposition[]
+  propositions?: UneProposition[] | ChoixQcm
   reponse?: {
     valeur?: ValeurNormalized
     param?: ReponseParams
