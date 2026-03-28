@@ -1359,7 +1359,7 @@ function verifQuestionMultiMathfield(
       compteurBonnesReponses === variables.length ? '😎' : '☹️'
   }
   if (typeof exercice.answers === 'object' && exercice.answers !== null) {
-    exercice.answers[`MultiMathfieldEx${exercice.numeroExercice}Q${i}`] =
+    exercice.answers[`multiMathfieldEx${exercice.numeroExercice}Q${i}`] =
       JSON.stringify(saisies)
   }
 
