@@ -53,6 +53,7 @@ export class MultiMathfieldElement extends HTMLElement {
         const div = document.createElement('DIV')
         div.style.display = 'inline-block'
         const mathfield = new MathfieldElement()
+
         mathfield.classList.add('ml-1')
         if (options[name]) {
           const style = options[name].keyboard ? options[name].keyboard : ''
@@ -73,6 +74,7 @@ export class MultiMathfieldElement extends HTMLElement {
         }
         // On donne comme id la concaténation de l'id du MultiMathfield (this.id) et du name du champ pour être sûr d'avoir un id unique
         mathfield.id = (this.id ? this.id : 'multi-mathfield') + '-' + name
+        mathfield.setAttribute('data-name', mathfield.id)
         mathfield.style.verticalAlign = 'middle'
         mathfield.style.borderRadius = '8px'
         mathfield.style.boxShadow =
