@@ -9,7 +9,7 @@ export const interactifReady = true
 export const interactifType = 'qcm'
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
-export const titre = 'Amérique 08/23 : éspérance'
+export const titre = 'Amérique 08/23 : espérance'
 export const dateDePublication = '05/11/2024'
 /**
  * Ceci est un exo construit à partir d'une question de qcm de Bac.
