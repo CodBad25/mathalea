@@ -354,6 +354,7 @@ class ConstrctionsSymetriquesPoints extends Exercice {
         })
         if (isFigureArray(this.figures))
           this.figures.push(this.figuresApiGeom[i])
+        this.figuresApiGeom[i].options.labelAutomaticForPoints = true
         this.figuresApiGeom[i].options.labelAutomaticBeginsWith =
           this.labels[i][0] + "'"
         this.figuresApiGeom[i].setToolbar({
