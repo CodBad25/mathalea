@@ -1,13 +1,12 @@
 <script lang="ts">
-  import { afterUpdate, onMount } from 'svelte'
-  import { mathaleaRenderDiv } from '../../../../lib/mathalea'
+  import type { MathfieldElement } from 'mathlive'
+  import { afterUpdate, onDestroy, onMount } from 'svelte'
   import { setSizeWithinSvgContainer } from '../../../../lib/components/sizeTools'
+  import { questionCliqueFigure } from '../../../../lib/interactif/cliqueFigure'
+  import { mathaleaRenderDiv } from '../../../../lib/mathalea'
+  import { canOptions } from '../../../../lib/stores/canStore'
   import { loadMathLive } from '../../../../modules/loaders'
   import { keyboardState } from '../../../keyboard/stores/keyboardStore'
-  import type { MathfieldElement } from 'mathlive'
-  import { canOptions } from '../../../../lib/stores/canStore'
-  import { questionCliqueFigure } from '../../../../lib/interactif/cliqueFigure'
-
   export let question: string
   export let consigne: string
   export let correction: string
@@ -18,7 +17,6 @@
   export let nextQuestion: () => void
 
   let questionContainer: HTMLDivElement
-  import { onDestroy } from 'svelte'
 
   onDestroy(() => {
     const mf = questionContainer?.querySelector(
@@ -72,6 +70,28 @@
 
   function updateInteractivity() {
     if (questionContainer) {
+      const multiMf = questionContainer.querySelector('multi-mathfield')
+      if (multiMf != null) {
+        const shadowRoot = multiMf.shadowRoot
+        if (shadowRoot) {
+          const mathfields = Array.from(
+            shadowRoot.querySelectorAll('math-field'),
+          ) as MathfieldElement[]
+          for (const mf of mathfields) {
+            if (!mf.dataset.listenerAdded) {
+              mf.dataset.listenerAdded = 'true' // Marquer comme ajouté
+              mf.addEventListener('keyup', handleKeyUp)
+              mf.addEventListener('input', handleMathfieldElement)
+            }
+            $keyboardState.idMathField = mf.id
+          }
+          window.setTimeout(() => {
+            const mf = mathfields[0]
+            if (mf) mf.focus()
+          }, 0)
+          return
+        }
+      }
       const mf = questionContainer?.querySelector(
         'math-field',
       ) as MathfieldElement
@@ -84,9 +104,6 @@
         $keyboardState.idMathField = mf.id
         window.setTimeout(() => {
           mf.focus()
-          // @ToFix Je remets le clavier visible pour les fillInTheBlanks mais en fait je ne sais pas ce qui les rend invisibles
-          // Mgu je n'ai pas reproduit le problème ...
-          // $keyboardState.isVisible = true
         }, 0)
         return
       }
