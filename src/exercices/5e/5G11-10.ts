@@ -246,13 +246,17 @@ class ConstrctionsSymetrieCentralePoints extends Exercice {
             }),
           )
           this.figuresApiGeom[i].scale = 1
+          this.figuresApiGeom[i].options.labelPointAfterCreation = true
           this.figuresApiGeom[i].setToolbar({
+            nbCols: 10,
             tools: [
-              'NAME_POINT',
+              'POINT',
               'POINT_ON',
               'POINT_INTERSECTION',
+              'NAME_POINT',
               'CIRCLE_CENTER_POINT',
               'RAY',
+              'HIDE',
               'UNDO',
               'REDO',
               'REMOVE',
@@ -320,7 +324,6 @@ class ConstrctionsSymetrieCentralePoints extends Exercice {
             exercice: this,
             i,
             figure: this.figuresApiGeom[i],
-            defaultAction: 'NAME_POINT',
           })
           this.listeQuestions[i] = enonce + '<br><br>' + emplacementPourFigure
         } else {

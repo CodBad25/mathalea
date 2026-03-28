@@ -197,8 +197,10 @@ export default class BetaReperage2e extends Exercice {
       this.figuresApiGeom[i].options.latexHeight = 10
       this.figuresApiGeom[i].options.labelDxInPixels = 10
       this.figuresApiGeom[i].options.labelDyInPixels = 10
+      this.figuresApiGeom[i].options.labelPointAfterCreation = true
+      
       this.figuresApiGeom[i].setToolbar({
-        tools: ['NAME_POINT', 'POINT_INTERSECTION', 'UNDO', 'REDO', 'REMOVE'],
+        tools: ['POINT_INTERSECTION', 'DRAG', 'UNDO', 'REDO', 'REMOVE'],
         position: 'top',
       })
 
@@ -377,7 +379,7 @@ export default class BetaReperage2e extends Exercice {
             figure: this.figuresApiGeom[i],
             i,
             isDynamic: true,
-            defaultAction: 'NAME_POINT',
+            defaultAction: 'POINT_INTERSECTION',
           })
         } else {
           question = `Placer les points $${this.labelsPoints[i].map((el, k) => `${el}(${x[i][k].texFractionSimplifiee};${y[i][k].texFractionSimplifiee})`).join('$, $')}$ dans le repère $(${labelO},${labelI},${labelK})$.<br>`
