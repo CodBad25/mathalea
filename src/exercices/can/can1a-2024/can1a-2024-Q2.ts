@@ -1,11 +1,11 @@
-import { texteEnCouleurEtGras } from '../../../lib/outils/embellissements'
-import { randint } from '../../../modules/outils'
 import { choice } from '../../../lib/outils/arrayOutils'
 import {
   ecritureAlgebrique,
   ecritureParentheseSiNegatif,
   reduirePolynomeDegre3,
 } from '../../../lib/outils/ecritures'
+import { texteEnCouleurEtGras } from '../../../lib/outils/embellissements'
+import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Déterminer un point sur une courbe'
 export const interactifReady = true
@@ -19,12 +19,11 @@ export const uuid = '5157a'
 export default class PointsCourbe extends ExerciceSimple {
   constructor() {
     super()
-
+    this.formatInteractif = 'qcm'
     this.typeExercice = 'simple' // Cette ligne est très importante pour faire un exercice simple !
     this.nbQuestions = 1
     this.nbQuestionsModifiable = false
     this.canOfficielle = false
-    this.versionQcm = true
   }
 
   nouvelleVersion() {
@@ -56,10 +55,14 @@ export default class PointsCourbe extends ExerciceSimple {
 
     this.question = `Affirmation : <br>
     Le point $A(${abs}\\,;\\,${ord})$ appartient à la parabole d'équation $y=${reduirePolynomeDegre3(0, 1, 0, a)}$ `
-    // c'est ça qui fait le this.reponse !
     const affirmationVraie = ord === abs ** 2 + a
-    this.reponse = affirmationVraie ? 'Vrai' : 'Faux'
-    this.distracteurs = [affirmationVraie ? 'Faux' : 'Vrai']
+    this.autoCorrection[0] = {
+      enonce: this.question,
+      propositions: [
+        { texte: 'Vrai', statut: affirmationVraie },
+        { texte: 'Faux', statut: !affirmationVraie },
+      ],
+    }
 
     this.canEnonce = `Affirmation : <br>
     Le point $A(${abs}\\,;\\,${ord})$ appartient à la parabole d'équation $y=${reduirePolynomeDegre3(0, 1, 0, a)}$ `
