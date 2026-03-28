@@ -1,3 +1,4 @@
+/* eslint-disable no-unmodified-loop-condition */
 import { BoiteBuilder } from '../lib/2d/BoiteBuilder'
 import { choice } from '../lib/outils/arrayOutils'
 import { stringNombre } from '../lib/outils/texNombre'
@@ -43,53 +44,83 @@ export default class Pyramide {
     this.valeurs = []
     this.isVisible = []
     this.fractionOn = fractionOn
-
-    for (let y = nombreEtages - 1; y >= 0; y--) {
-      this.valeurs[y] = []
-      this.isVisible[y] = []
-      for (let x = 0, num, den; x <= y; x++) {
-        if (y === nombreEtages - 1) {
-          if (this.fractionOn) {
-            const rd = rangeData as [[number, number], [number, number]]
-            den = choice(rd[1])
-            num = randint(rd[0][0], rd[0][1], exclusions.concat([den]))
-            this.valeurs[y][x] = fraction(num, den).simplifie()
+    const assureHasNegative =
+      rangeData instanceof Array &&
+      typeof rangeData[0] === 'number' &&
+      typeof rangeData[1] === 'number'
+        ? rangeData[0] < 0 && rangeData[1] > 0
+        : rangeData instanceof Array &&
+          rangeData.length === 2 &&
+          rangeData[0] instanceof Array &&
+          rangeData[1] instanceof Array &&
+          typeof rangeData[0][0] === 'number' &&
+          typeof rangeData[0][1] === 'number' &&
+          typeof rangeData[1][0] === 'number' &&
+          typeof rangeData[1][1] === 'number' &&
+          rangeData[0][0] < 0 &&
+          rangeData[0][1] > 0
+    let compteur = 0
+    do {
+      for (let y = nombreEtages - 1; y >= 0; y--) {
+        this.valeurs[y] = []
+        this.isVisible[y] = []
+        for (let x = 0, num, den; x <= y; x++) {
+          if (y === nombreEtages - 1) {
+            if (this.fractionOn) {
+              const rd = rangeData as [[number, number], [number, number]]
+              den = choice(rd[1])
+              num = randint(rd[0][0], rd[0][1], exclusions.concat([den]))
+              this.valeurs[y][x] = fraction(num, den).simplifie()
+            } else {
+              const rd = rangeData as [number, number]
+              this.valeurs[y][x] = randint(rd[0], rd[1], exclusions)
+            }
           } else {
-            const rd = rangeData as [number, number]
-            this.valeurs[y][x] = randint(rd[0], rd[1], exclusions)
-          }
-        } else {
-          switch (operation) {
-            case '+':
-              if (this.fractionOn) {
-                this.valeurs[y][x] = (this.valeurs[y + 1][x] as FractionEtendue)
-                  .sommeFraction(this.valeurs[y + 1][x + 1] as FractionEtendue)
-                  .simplifie()
-              } else {
-                this.valeurs[y][x] =
-                  Number(this.valeurs[y + 1][x]) +
-                  Number(this.valeurs[y + 1][x + 1])
-              }
-              break
-            case '*':
-              if (this.fractionOn) {
-                this.valeurs[y][x] = (this.valeurs[y + 1][x] as FractionEtendue)
-                  .produitFraction(
-                    this.valeurs[y + 1][x + 1] as FractionEtendue,
+            switch (operation) {
+              case '+':
+                if (this.fractionOn) {
+                  this.valeurs[y][x] = (
+                    this.valeurs[y + 1][x] as FractionEtendue
                   )
-                  .simplifie()
-              } else {
-                this.valeurs[y][x] =
-                  Number(this.valeurs[y + 1][x]) *
-                  Number(this.valeurs[y + 1][x + 1])
-              }
+                    .sommeFraction(
+                      this.valeurs[y + 1][x + 1] as FractionEtendue,
+                    )
+                    .simplifie()
+                } else {
+                  this.valeurs[y][x] =
+                    Number(this.valeurs[y + 1][x]) +
+                    Number(this.valeurs[y + 1][x + 1])
+                }
+                break
+              case '*':
+                if (this.fractionOn) {
+                  this.valeurs[y][x] = (
+                    this.valeurs[y + 1][x] as FractionEtendue
+                  )
+                    .produitFraction(
+                      this.valeurs[y + 1][x + 1] as FractionEtendue,
+                    )
+                    .simplifie()
+                } else {
+                  this.valeurs[y][x] =
+                    Number(this.valeurs[y + 1][x]) *
+                    Number(this.valeurs[y + 1][x + 1])
+                }
 
-              break
+                break
+            }
           }
+          this.isVisible[y][x] = false
         }
-        this.isVisible[y][x] = false
       }
-    }
+      // eslint-disable no-unmodified-loop-condition
+    } while (
+      (compteur++ < 100 &&
+        !this.valeurs.some((etage) => etage.some((val) => Number(val) < 0)) &&
+        assureHasNegative) ||
+      (this.valeurs.some((etage) => etage.some((val) => Number(val) < 0)) &&
+        !assureHasNegative)
+    )
   }
 
   visible(x: number, y: number) {
@@ -131,19 +162,9 @@ export default class Pyramide {
 
   representeMoi(xO = 0, yO = 0): NestedObjetMathalea2dArray {
     const objets = []
-    const hCase = this.fractionOn ? 2 : 1
+    const hCase = this.fractionOn ? 2 : 1.5
     for (let y = this.nombreEtages; y > 0; y--) {
       for (let x = 0; x < y; x++) {
-        //  if (this.isVisible[y - 1][x]) {
-        /* objets.push(boite({
-                                                       Xmin: xO + x * 4 + (this.nombreEtages - y) * 2,
-                                                       Ymin: yO + (this.nombreEtages - y) * hCase,
-                                                       Xmax: xO + x * 4 + 4 + (this.nombreEtages - y) * 2,
-                                                       Ymax: yO + (1 + this.nombreEtages - y) * hCase,
-                                                       texteIn: this.fractionOn ? `$${this.valeurs[y - 1][x].texFractionSimplifiee}$` : stringNombre(this.valeurs[y - 1][x], 0),
-                                                       texteOpacite: 1
-                                                     }))
-                                                     */
         objets.push(
           new BoiteBuilder({
             xMin: xO + x * 4 + (this.nombreEtages - y) * 2,
