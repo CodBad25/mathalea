@@ -330,7 +330,7 @@
     }
     url = url.replace('&v=can', '&recorder=' + $globalOptions.recorder)
     // presMode|setInteractive|isSolutionAccessible|isInteractiveFree|oneShot|twoColumns|isTitleDisplayed|isReferenceDisplayed
-    if (url.includes('coopmaths.fr/alea') || url.includes('/mathalea.fr/')) {
+    if (url.includes('coopmaths.fr/alea') || url.includes('mathalea.fr/alea')) {
       const options = mathaleaUpdateExercicesParamsFromUrl(url)
       if (options !== null) {
         // On utilise update() pour fusionner les options au lieu de les remplacer complètement
