@@ -68,10 +68,24 @@
     }
   }
 
+  function handleMultiMathfieldElement(ev: Event) {
+    const mf = ev.currentTarget
+    if ((mf as MathfieldElement).value !== '') {
+      if ($canOptions.questionGetAnswer[index] !== true) {
+        $canOptions.questionGetAnswer[index] = true
+      }
+    } else {
+      if ($canOptions.questionGetAnswer[index] !== false) {
+        $canOptions.questionGetAnswer[index] = false
+      }
+    }
+  }
+
   function updateInteractivity() {
     if (questionContainer) {
       const multiMf = questionContainer.querySelector('multi-mathfield')
       if (multiMf != null) {
+        console.info('Je gère le multi-mathfield')
         const shadowRoot = multiMf.shadowRoot
         if (shadowRoot) {
           const mathfields = Array.from(
@@ -81,16 +95,22 @@
             if (!mf.dataset.listenerAdded) {
               mf.dataset.listenerAdded = 'true' // Marquer comme ajouté
               mf.addEventListener('keyup', handleKeyUp)
-              mf.addEventListener('input', handleMathfieldElement)
+              mf.addEventListener('input', handleMultiMathfieldElement)
             }
             $keyboardState.idMathField = mf.id
           }
           window.setTimeout(() => {
-            const mf = mathfields[0]
-            if (mf) mf.focus()
+            // Ne focus le premier mathfield que si aucun n'a le focus dans le shadowRoot
+            const hasFocus =
+              shadowRoot.activeElement &&
+              mathfields.includes(shadowRoot.activeElement as MathfieldElement)
+            if (!hasFocus) {
+              const mf = mathfields[0]
+              if (mf) mf.focus()
+            }
           }, 0)
-          return
         }
+        return
       }
       const mf = questionContainer?.querySelector(
         'math-field',

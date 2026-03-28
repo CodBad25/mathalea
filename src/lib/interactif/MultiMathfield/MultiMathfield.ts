@@ -26,6 +26,27 @@ export class MultiMathfieldElement extends HTMLElement {
     this.attachShadow({ mode: 'open' })
   }
 
+  /**
+   * Extrait les réponses des champs depuis un filledTemplate de la forme
+   * $2\times($%{champ1:"7"}$+$%{champ2:"10"}$)=%{champ3:"34"}
+   * et retourne un objet { champ1: "7", champ2: "10", champ3: "34" }
+   */
+  static answersFromFilledTemplate(
+    filledTemplate: string,
+  ): Record<string, string> {
+    const result: Record<string, string> = {}
+    if (typeof filledTemplate !== 'string') return result
+    // Regex pour trouver %{champ:"valeur"}
+    const regex = /%\{([a-zA-Z0-9_]+):"([^"]*)"\}/g
+    let match
+    while ((match = regex.exec(filledTemplate)) !== null) {
+      const champ = match[1]
+      const valeur = match[2]
+      result[champ] = valeur
+    }
+    return result
+  }
+
   connectedCallback() {
     this.render()
   }

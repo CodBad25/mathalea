@@ -17,7 +17,10 @@
     verifQuestionCliqueFigure,
   } from '../../../lib/interactif/cliqueFigure'
   import { verifDragAndDrop } from '../../../lib/interactif/DragAndDrop'
-  import { verifQuestionMetaInteractif2d } from '../../../lib/interactif/gestionInteractif'
+  import {
+    verifQuestionMetaInteractif2d,
+    verifQuestionMultiMathfield,
+  } from '../../../lib/interactif/gestionInteractif'
   import { verifQuestionMathLive } from '../../../lib/interactif/mathLive'
   import { verifQuestionQcm } from '../../../lib/interactif/qcm'
   import { verifQuestionListeDeroulante } from '../../../lib/interactif/questionListeDeroulante'
@@ -154,6 +157,7 @@
       | 'cliqueFigure'
       | 'svgSelection'
       | 'MetaInteractif2d'
+      | 'multiMathfield'
       | 'unknown'
     index: number
     answers?: { [key: string]: string }
@@ -168,6 +172,7 @@
       const type =
         exercice.autoCorrection?.[indiceQuestionInExercice[i]]?.reponse?.param
           ?.formatInteractif ?? exercice.interactifType
+
       if (type === 'mathlive' || type === 'fillInTheBlank') {
         resultsByQuestion[i] = Boolean(
           verifQuestionMathLive(exercice, indiceQuestionInExercice[i])?.isOk,
@@ -404,6 +409,26 @@
           answerTxt:
             exercice.answers![
               `MetaInteractif2dEx${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`
+            ],
+        }
+        answers[i] = answersType[i].answerTxt
+      } else if (type === 'multiMathfield') {
+        resultsByQuestion[i] = Boolean(
+          verifQuestionMultiMathfield(exercice, indiceQuestionInExercice[i])
+            .isOk,
+        )
+        answersType[i] = {
+          type,
+          index: i,
+          answers: {
+            [`Ex${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`]:
+              exercice.answers![
+                `multiMathfieldEx${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`
+              ],
+          },
+          answerTxt:
+            exercice.answers![
+              `multiMathfieldEx${indiceExercice[i]}Q${indiceQuestionInExercice[i]}`
             ],
         }
         answers[i] = answersType[i].answerTxt

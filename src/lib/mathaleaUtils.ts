@@ -3,7 +3,7 @@ import type { MathfieldElement } from 'mathlive'
 import { get } from 'svelte/store'
 import { type MathaleaSVG } from '../lib/types'
 import type ListeDeroulanteElement from './interactif/listeDeroulante/ListeDeroulanteElement'
-import type { MultiMathfieldElement } from './interactif/MultiMathfield/MultiMathfield'
+import { MultiMathfieldElement } from './interactif/MultiMathfield/MultiMathfield'
 import { previousView } from './stores/generalStore'
 import { globalOptions } from './stores/globalOptions'
 import type { MySpreadsheetElement } from './tableur/MySpreadSheet'
@@ -401,7 +401,9 @@ export function mathaleaWriteStudentPreviousAnswers(answers?: {
             const multiMathfield = document.querySelector(
               `#${answer}`,
             ) as any as MultiMathfieldElement
-            const answersMulti = JSON.parse(answers[answer])
+
+            const answersMulti =
+              MultiMathfieldElement.answersFromFilledTemplate(answers[answer])
             if (multiMathfield !== null) {
               multiMathfield.setAnswers(answersMulti)
             }

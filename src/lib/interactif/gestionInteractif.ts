@@ -1232,7 +1232,7 @@ export function verifQuestionMetaInteractif2d(
   }
 }
 
-function verifQuestionMultiMathfield(
+export function verifQuestionMultiMathfield(
   exercice: IExercice,
   i: number,
 ): {
@@ -1251,6 +1251,10 @@ function verifQuestionMultiMathfield(
       )}`,
     )
   }
+  const multi = document.getElementById(
+    `multiMathfieldEx${exercice.numeroExercice}Q${i}`,
+  ) as HTMLElement
+  const template = multi?.getAttribute('data-template')
   const reponses = exercice.autoCorrection[i].reponse.valeur
   if (reponses == null) {
     window.notify(
@@ -1289,9 +1293,7 @@ function verifQuestionMultiMathfield(
     noFeedback = noFeedback || Boolean(options?.noFeedback)
     const compareFunction = reponse.compare ?? fonctionComparaison
     // Récupère le composant MultiMathfield puis le Mathfield dans son shadowRoot
-    const multi = document.getElementById(
-      `multiMathfieldEx${exercice.numeroExercice}Q${i}`,
-    ) as HTMLElement
+
     const mf = multi?.shadowRoot?.querySelector(
       `#multiMathfieldEx${exercice.numeroExercice}Q${i}-${field}`,
     ) as MathfieldElement
@@ -1310,7 +1312,7 @@ function verifQuestionMultiMathfield(
       setStyles(eltFeedback, 'marginBottom: 20px')
       eltFeedback.innerHTML = ''
     }
-    saisies[`multiMathfieldEx${exercice.numeroExercice}Q${i}-${field}`] = saisie
+    saisies[`${field}`] = saisie
     let result
     if (Array.isArray(reponse.value)) {
       let ii = 0
@@ -1359,8 +1361,14 @@ function verifQuestionMultiMathfield(
       compteurBonnesReponses === variables.length ? '😎' : '☹️'
   }
   if (typeof exercice.answers === 'object' && exercice.answers !== null) {
+    let filledTemplate = template ?? ''
+    Object.entries(saisies).forEach(([champ, valeur]) => {
+      // Remplace toutes les occurrences de %{champ} par %{champ:"valeur"}
+      const regex = new RegExp(`%\\{${champ}\\}`, 'g')
+      filledTemplate = filledTemplate.replace(regex, `%{${champ}:"${valeur}"}`)
+    })
     exercice.answers[`multiMathfieldEx${exercice.numeroExercice}Q${i}`] =
-      JSON.stringify(saisies)
+      filledTemplate
   }
 
   // le feedback est déjà assuré par la fonction feedback(), donc on le met à ''
