@@ -407,6 +407,7 @@ export function mathaleaWriteStudentPreviousAnswers(answers?: {
             if (multiMathfield !== null) {
               multiMathfield.setAnswers(answersMulti)
             }
+            resolve(true)
           })
           .catch((reason) => {
             console.error(reason)
