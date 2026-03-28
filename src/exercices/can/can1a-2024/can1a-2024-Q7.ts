@@ -30,7 +30,7 @@ export default class TauxCoeff extends ExerciceSimple {
       this.question =
         'Multiplier une quantité par $0,87$ revient à la diminuer de : '
       this.correction = `Comme $0,87-1=-0,13$, multiplier par $0,87$ revient à diminuer de $${miseEnEvidence('13')}\\,\\%$. `
-      this.reponse = 12
+      this.reponse = 13 // Modification importante faite par JEan-Claude Lhote le 28/03/2026 : la réponse est 13 et pas 12 !
       this.optionsChampTexte = { texteApres: '$\\%$' }
       if (!this.interactif) {
         this.question += '$\\ldots\\,\\%$'
