@@ -6,6 +6,7 @@ import { labelPoint } from '../../lib/2d/textes'
 import { tracePoint } from '../../lib/2d/TracePoint'
 import { rotation, similitude } from '../../lib/2d/transformations'
 import { choice } from '../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { lettreDepuisChiffre } from '../../lib/outils/outilString'
 import { texNombre } from '../../lib/outils/texNombre'
 import { mathalea2d } from '../../modules/mathalea2d'
@@ -36,9 +37,9 @@ export default class MesurerUnAngle extends Exercice {
       'Type de questions',
       [
         'Nombres séparés par des tirets  :',
-        '1 : angle modulo 10°',
-        '2 : angle modulo 5°',
-        '3 : angle modulo 1°',
+        '1 : Angle modulo 10°',
+        '2 : Angle modulo 5°',
+        '3 : Angle modulo 1°',
         '4 : Mélange',
       ].join('\n'),
     ]
@@ -144,7 +145,7 @@ export default class MesurerUnAngle extends Exercice {
         this.listeQuestions[i] =
           `Mesurer l'angle $\\widehat{x${A.nom}y}$.<br>` + texte
         this.listeCorrections[i] =
-          `L'angle est égale à $${texNombre(angle)}^\\circ$.`
+          `La mesure de l'angle est égale à $${miseEnEvidence(texNombre(angle))}^\\circ$.`
         i++
       }
     }
