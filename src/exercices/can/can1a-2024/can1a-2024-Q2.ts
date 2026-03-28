@@ -1,3 +1,4 @@
+import { propositionsQcm } from '../../../lib/interactif/qcm'
 import { choice } from '../../../lib/outils/arrayOutils'
 import {
   ecritureAlgebrique,
@@ -63,6 +64,8 @@ export default class PointsCourbe extends ExerciceSimple {
         { texte: 'Faux', statut: !affirmationVraie },
       ],
     }
+    const monQcm = propositionsQcm(this, 0)
+    this.question += monQcm.texte
 
     this.canEnonce = `Affirmation : <br>
     Le point $A(${abs}\\,;\\,${ord})$ appartient à la parabole d'équation $y=${reduirePolynomeDegre3(0, 1, 0, a)}$ `
