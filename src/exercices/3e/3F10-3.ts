@@ -9,6 +9,10 @@ import {
   reduireAxPlusB,
   reduirePolynomeDegre3,
 } from '../../lib/outils/ecritures'
+import {
+  miseEnEvidence,
+  texteEnCouleurEtGras,
+} from '../../lib/outils/embellissements'
 import { range } from '../../lib/outils/nombres'
 import { sp } from '../../lib/outils/outilString'
 import { context } from '../../modules/context'
@@ -111,7 +115,6 @@ export default class VocabulaireNotationsFonctions2 extends Exercice {
         listeFonction = [],
         cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       let nomF = ''
       let PointC = ''
@@ -129,8 +132,8 @@ export default class VocabulaireNotationsFonctions2 extends Exercice {
               texte = `Traduire l'égalité  $${nomF}(${x})=${y}$ par une phrase contenant le mot «${sp(1)}image${sp(1)}».`
               // if (this.interactif) { //  texte += '<br>Une ou plusieurs réponses correctes.' }
               texteCorr = `L'égalité  $${nomF}(${x})=${y}$ se traduit par : <br>
-            $\\bullet$ L'image de $${x}$ par la fonction $${nomF}$ est $${y}$.<br>
-            $\\bullet$ $${x}$ a pour image $${y}$ par la fonction $${nomF}$.
+            $\\bullet$ ${texteEnCouleurEtGras(`L'image de `)}$${miseEnEvidence(x)}$${texteEnCouleurEtGras(` par la fonction `)}$${miseEnEvidence(nomF)}$${texteEnCouleurEtGras(` est `)}$${miseEnEvidence(y)}$.<br>
+            $\\bullet$ $${miseEnEvidence(x)}$${texteEnCouleurEtGras(` a pour image `)}$${miseEnEvidence(y)}$${texteEnCouleurEtGras(` par la fonction `)}$${miseEnEvidence(nomF)}$.
             `
               this.autoCorrection[i] = {
                 options: { ordered: false, vertical: true },
@@ -161,12 +164,12 @@ export default class VocabulaireNotationsFonctions2 extends Exercice {
               // if (this.interactif) { //  texte += '<br>Une ou plusieurs réponses correctes.' }
               if (this.interactif) {
                 texteCorr = `L'égalité  $${nomF}(${x})=${y}$ se traduit par : <br>
-            Par la fonction $${nomF}$,  $${x}$  a pour image $${y}$.
+            ${texteEnCouleurEtGras(`Par la fonction `)}$${miseEnEvidence(nomF)}$${texteEnCouleurEtGras(`, `)}$${miseEnEvidence(x)}$${texteEnCouleurEtGras(` a pour image `)}$${miseEnEvidence(y)}$.
             `
               } else {
                 texteCorr = `L'égalité  $${nomF}(${x})=${y}$ se traduit par : <br>
-            $\\bullet$ L'image de $${x}$ par la fonction $${nomF}$ est $${y}$.<br>
-            $\\bullet$ $${x}$ a pour image $${y}$ par la fonction $${nomF}$.
+            $\\bullet$ ${texteEnCouleurEtGras(`L'image de `)}$${miseEnEvidence(x)}$${texteEnCouleurEtGras(` par la fonction `)}$${miseEnEvidence(nomF)}$${texteEnCouleurEtGras(` est `)}$${miseEnEvidence(y)}$.<br>
+            $\\bullet$ $${miseEnEvidence(x)}$${texteEnCouleurEtGras(` a pour image `)}$${miseEnEvidence(y)}$${texteEnCouleurEtGras(` par la fonction `)}$${miseEnEvidence(nomF)}$.
             `
               }
               this.autoCorrection[i] = {
@@ -197,8 +200,8 @@ export default class VocabulaireNotationsFonctions2 extends Exercice {
               texte = `Traduire l'égalité  $${nomF}(${x})=${y}$ par une phrase contenant le mot «${sp(1)}antécédent${sp(1)}».`
               // if (this.interactif) { //  texte += '<br>Une ou plusieurs réponses correctes.' }
               texteCorr = `L'égalité  $${nomF}(${x})=${y}$ se traduit par : <br>
-            $\\bullet$ Un antécédent de $${y}$ par la fonction $${nomF}$ est $${x}$.<br>
-            $\\bullet$ $${x}$ est un antécédent de $${y}$ par la fonction $${nomF}$.
+            $\\bullet$ ${texteEnCouleurEtGras(`Un antécédent de `)}$${miseEnEvidence(y)}$${texteEnCouleurEtGras(` par la fonction `)}$${miseEnEvidence(nomF)}$${texteEnCouleurEtGras(` est `)}$${miseEnEvidence(x)}$.<br>
+            $\\bullet$ $${miseEnEvidence(x)}$${texteEnCouleurEtGras(` est un antécédent de `)}$${miseEnEvidence(y)}$${texteEnCouleurEtGras(` par la fonction `)}$${miseEnEvidence(nomF)}$.
             `
               this.autoCorrection[i] = {
                 options: { ordered: false, vertical: true },
@@ -229,12 +232,12 @@ export default class VocabulaireNotationsFonctions2 extends Exercice {
               // if (this.interactif) { //  texte += '<br>Une ou plusieurs réponses correctes.' }
               if (this.interactif) {
                 texteCorr = `L'égalité  $${nomF}(${x})=${y}$ se traduit par : <br>
-            Par la fonction $${nomF}$,  $${y}$  a pour antécédent $${x}$.
+            ${texteEnCouleurEtGras(`Par la fonction `)}$${miseEnEvidence(nomF)}$${texteEnCouleurEtGras(`, `)}$${miseEnEvidence(y)}$${texteEnCouleurEtGras(` a pour antécédent `)}$${miseEnEvidence(x)}$.
             `
               } else {
                 texteCorr = `L'égalité  $${nomF}(${x})=${y}$ se traduit par : <br>
-            $\\bullet$ Un antécédent de $${y}$ par la fonction $${nomF}$ est $${x}$.<br>
-            $\\bullet$ $${x}$ est un antécédent de $${y}$ par la fonction $${nomF}$.
+            $\\bullet$ ${texteEnCouleurEtGras(`Un antécédent de `)}$${miseEnEvidence(y)}$${texteEnCouleurEtGras(` par la fonction `)}$${miseEnEvidence(nomF)}$${texteEnCouleurEtGras(` est `)}$${miseEnEvidence(x)}$.<br>
+            $\\bullet$ $${miseEnEvidence(x)}$${texteEnCouleurEtGras(` est un antécédent de `)}$${miseEnEvidence(y)}$${texteEnCouleurEtGras(` par la fonction `)}$${miseEnEvidence(nomF)}$.
             `
               }
               this.autoCorrection[i] = {
@@ -265,9 +268,9 @@ export default class VocabulaireNotationsFonctions2 extends Exercice {
               texte = `Traduire l'égalité  $${nomF}(${x})=${y}$ par une phrase.`
               //  texte += '<br>Une ou plusieurs réponses correctes.'
               texteCorr = `L'égalité  $${nomF}(${x})=${y}$ se traduit par : <br>
-            $\\bullet$ Un antécédent de $${y}$ par la fonction $${nomF}$ est $${x}$.<br>
-            $\\bullet$ L'image de $${x}$ par la fonction $${nomF}$ est $${y}$.<br>
-            $\\bullet$ $${y}$ est l'image de $${x}$ par la fonction $${nomF}$.
+            $\\bullet$ ${texteEnCouleurEtGras(`Un antécédent de `)}$${miseEnEvidence(y)}$${texteEnCouleurEtGras(` par la fonction `)}$${miseEnEvidence(nomF)}$${texteEnCouleurEtGras(` est `)}$${miseEnEvidence(x)}$.<br>
+            $\\bullet$ ${texteEnCouleurEtGras(`L'image de `)}$${miseEnEvidence(x)}$${texteEnCouleurEtGras(` par la fonction `)}$${miseEnEvidence(nomF)}$${texteEnCouleurEtGras(` est `)}$${miseEnEvidence(y)}$.<br>
+            $\\bullet$ $${miseEnEvidence(y)}$${texteEnCouleurEtGras(` est l'image de `)}$${miseEnEvidence(x)}$${texteEnCouleurEtGras(` par la fonction `)}$${miseEnEvidence(nomF)}$.
             `
               this.autoCorrection[i] = {
                 options: { ordered: false, vertical: true },
@@ -297,7 +300,7 @@ export default class VocabulaireNotationsFonctions2 extends Exercice {
               texte = `Traduire l'égalité  $${nomF}(${x})=${y}$ par une phrase.`
               //  texte += '<br>Une ou plusieurs réponses correctes.'
               texteCorr = `L'égalité  $${nomF}(${x})=${y}$ se traduit par : <br>
-            $${x}$ a pour image $${y}$ par la fonction $${nomF}$.
+            $${miseEnEvidence(x)}$${texteEnCouleurEtGras(` a pour image `)}$${miseEnEvidence(y)}$${texteEnCouleurEtGras(` par la fonction `)}$${miseEnEvidence(nomF)}$.
             `
               this.autoCorrection[i] = {
                 options: { ordered: false, vertical: true },
@@ -356,7 +359,7 @@ export default class VocabulaireNotationsFonctions2 extends Exercice {
               break
             }
           }
-          texteCorr = `L'égalité traduisant cette phrase est : $${nomF}(${x})=${y}$
+          texteCorr = `L'égalité traduisant cette phrase est : $${miseEnEvidence(`${nomF}(${x})=${y}`)}$.
             `
           this.autoCorrection[i] = {
             options: { ordered: false, vertical: false },
@@ -406,8 +409,7 @@ export default class VocabulaireNotationsFonctions2 extends Exercice {
                 t,
                 labelPoint(A),
               )
-              texteCorr = `L'égalité traduisant que $${PointC}$ est sur la courbe représentant $${nomF}$ est : $${nomF}(${x})=${y}$
-            `
+              texteCorr = `L'égalité traduisant que $${PointC}$ est sur la courbe représentant $${nomF}$ est : $${miseEnEvidence(`${nomF}(${x})=${y}`)}$.`
               this.autoCorrection[i] = {
                 options: { ordered: false, vertical: false },
               }
@@ -429,8 +431,7 @@ export default class VocabulaireNotationsFonctions2 extends Exercice {
 
               texte = `Le point $${PointC}(${x}\\;;\\;${y})$  est un point de la courbe représentant la fonction $${nomF}$.<br>
               Donner l'égalité correspondante.`
-              texteCorr = `L'égalité traduisant que $${PointC}$ est sur la courbe représentant $${nomF}$ est : $${nomF}(${x})=${y}$.
-              `
+              texteCorr = `L'égalité traduisant que $${PointC}$ est sur la courbe représentant $${nomF}$ est : $${miseEnEvidence(`${nomF}(${x})=${y}`)}$.`
               this.autoCorrection[i] = {
                 options: { ordered: false, vertical: false },
               }
@@ -452,8 +453,7 @@ export default class VocabulaireNotationsFonctions2 extends Exercice {
 
               texte = ` La courbe représentant la fonction $${nomF}$ passe par le point $${PointC}(${x}\\;;\\;${y})$.<br>
               Donner l'égalité correspondante. `
-              texteCorr = `L'égalité traduisant que $${PointC}$ est sur la courbe représentant $${nomF}$ est : $${nomF}(${x})=${y}$
-              `
+              texteCorr = `L'égalité traduisant que $${PointC}$ est sur la courbe représentant $${nomF}$ est : $${miseEnEvidence(`${nomF}(${x})=${y}`)}$.`
               this.autoCorrection[i] = {
                 options: { ordered: false, vertical: false },
               }
@@ -476,8 +476,7 @@ export default class VocabulaireNotationsFonctions2 extends Exercice {
               texte = `
            Les coordonnées du point $${PointC}$ de la courbe représentant $${nomF}$ vérifient $${nomF}(${x})=${y}$.<br>
            Quelles sont les coordonnées du point $${PointC}$ ? `
-              texteCorr = `L'égalité $${nomF}(${x})=${y}$ permet d'affirmer que le point  $${PointC}(${x}\\;;\\;${y})$ est sur la courbe représentant $${nomF}$.
-              `
+              texteCorr = `L'égalité $${nomF}(${x})=${y}$ permet d'affirmer que le point  $${miseEnEvidence(`${PointC}(${x}\\;;\\;${y})`)}$ est sur la courbe représentant $${nomF}$.`
               this.autoCorrection[i] = {
                 options: { ordered: false, vertical: false },
               }
@@ -535,8 +534,7 @@ export default class VocabulaireNotationsFonctions2 extends Exercice {
                 break
               }
             }
-            texteCorr = `L'égalité traduisant cette phrase est : $${nomF}(x)=${fonction1}.$
-              `
+            texteCorr = `L'égalité traduisant cette phrase est : $${miseEnEvidence(`${nomF}(x)=${fonction1}`)}$.`
           } else {
             switch (choixDesQuestions[3][indice[3]]) {
               case 0: {
@@ -563,7 +561,7 @@ export default class VocabulaireNotationsFonctions2 extends Exercice {
                 ]
                 texteCorr = `$x$ a pour image $${fonction1}$ par la fonction $${nomF}$.<br>
               Alors :<br>
-              $${nomF}(x)=${fonction1}$
+              $${miseEnEvidence(`${nomF}(x)=${fonction1}`)}$
               `
                 break
               }
@@ -591,7 +589,7 @@ export default class VocabulaireNotationsFonctions2 extends Exercice {
                 ]
                 texteCorr = ` L'image de $x$ par la fonction $${nomF}$ est $${fonction1}$.<br>
               Alors :<br>
-              $x$ a pour image $${fonction1}$ par la fonction $${nomF}$.
+              $${miseEnEvidence(x)}$${texteEnCouleurEtGras(` a pour image `)}$${miseEnEvidence(fonction1)}$${texteEnCouleurEtGras(` par la fonction `)}$${miseEnEvidence(nomF)}$.
               `
                 break
               }
@@ -619,8 +617,8 @@ export default class VocabulaireNotationsFonctions2 extends Exercice {
                 ]
                 texteCorr = `Par la fonction $${nomF}$, $${fonction1}$ est l'image de $x$.<br>
               Alors :<br>
-              $\\bullet$ $${nomF}(x)=${fonction1}$, <br>
-              $\\bullet$ $x$ a pour image $${fonction1}$ par la fonction $${nomF}$.
+               $\\bullet$ $${miseEnEvidence(nomF)}(x)=${miseEnEvidence(fonction1)}$, <br>
+              $\\bullet$ $${miseEnEvidence(x)}$${texteEnCouleurEtGras(` a pour image `)}$${miseEnEvidence(fonction1)}$${texteEnCouleurEtGras(` par la fonction `)}$${miseEnEvidence(nomF)}$.
               `
                 break
               }
