@@ -5,6 +5,7 @@ import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { setReponse } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { resolutionSystemeLineaire2x2 } from '../../lib/mathFonctions/outilsMaths'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import {
@@ -17,13 +18,14 @@ export const titre = "Lire les antécédents d'un nombre à partir d'un graphiqu
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const dateDeModifImportante = '23/09/2023'
+
 /**
  * Un graphique étant tracé, déterminer les antécédents de nombres donnés.
  * La fonction est un polynôme de degré 1, 2 ou 3 et les nombres des questions ne sont que des entiers.
  * Interactivité et multiples questions ajoutés par J-C Lhote le 23/09/2023
  * @author Rémi Angot
- * 3F13
  */
+
 export const uuid = '8117d'
 
 export const refs = {
@@ -41,7 +43,7 @@ export default class AntecedentGraphique extends Exercice {
 
     this.sup = 2
 
-    context.isHtml ? (this.spacingCorr = 3) : (this.spacingCorr = 1)
+    // context.isHtml ? (this.spacingCorr = 3) : (this.spacingCorr = 1)
     this.nbQuestions = 1
 
     // this.listeAvecNumerotation = false
@@ -116,8 +118,8 @@ export default class AntecedentGraphique extends Exercice {
           formatInteractif: 'calcul',
         })
         incrementInteractif = 2
-        texteCorr = `L'antécédent de $${fx1}$ est $${x1}$, on note $f(${x1})=${fx1}$.<br>`
-        texteCorr += `L'antécédent de $${fx2}$ est $${x2}$, on note $f(${x2})=${fx2}$.`
+        texteCorr = `L'antécédent de $${fx1}$ est $${miseEnEvidence(x1)}$, on note $f(${miseEnEvidence(x1)})=${fx1}$.<br>`
+        texteCorr += `L'antécédent de $${fx2}$ est $${miseEnEvidence(x2)}$, on note $f(${miseEnEvidence(x2)})=${fx2}$.`
       } else if (choix === 2) {
         if (randint(1, 4) === 1) {
           // une fois sur 4 il n'y a qu'un seul antécédent
@@ -138,7 +140,7 @@ export default class AntecedentGraphique extends Exercice {
           )
           setReponse(this, indexInteractif, x0, { formatInteractif: 'calcul' })
           incrementInteractif = 1
-          texteCorr = `$${fx0}$ a un unique antécédent $${x0}$, on note $f(${x0})=${fx0}$.<br>`
+          texteCorr = `$${fx0}$ a un unique antécédent $${miseEnEvidence(x0)}$, on note $f(${miseEnEvidence(x0)})=${fx0}$..<br>`
           f = (x) => a * (x - x0) ** 2 + fx0
         } else {
           let tentatives = 0
@@ -211,7 +213,7 @@ export default class AntecedentGraphique extends Exercice {
             formatInteractif: 'texte',
           })
           incrementInteractif = 1
-          texteCorr = `$${fx1}$ a deux antécédents $${x1}$ et $${x3}$, on note $f(${x1})=f(${x3})=${fx1}$.<br>`
+          texteCorr = `$${fx1}$ a deux antécédents $${miseEnEvidence(x1)}$ et $${miseEnEvidence(x3)}$, on note $f(${miseEnEvidence(x1)})=f(${miseEnEvidence(x3)})=${fx1}$.<br>`
         }
       }
       const r = repere({ xMin: -10, xMax: 10, yMin: -10, yMax: 10 })
