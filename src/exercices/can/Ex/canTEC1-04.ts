@@ -24,7 +24,7 @@ export default class Complexes1 extends ExerciceQcmA {
   versionAleatoire = () => {
     let compteur = 0
     do {
-      const k = randint(3, 15) //
+      const k = randint(3, 10) //
 
       const moins = randint(1, 2) // pour jouer sur présence ou non d'un signe -
       switch (moins) {
