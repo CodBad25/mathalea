@@ -6,6 +6,8 @@ import { generateCleaner } from '../../lib/interactif/cleaners'
 import ce from '../../lib/interactif/comparisonFunctions'
 import { remplisLesBlancs } from '../../lib/interactif/questionMathLive'
 import { shuffle } from '../../lib/outils/arrayOutils'
+import { texFractionFromString } from '../../lib/outils/deprecatedFractions'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { context } from '../../modules/context'
 import FractionEtendue from '../../modules/FractionEtendue'
 import {
@@ -19,7 +21,7 @@ export const titre =
   "Décomposer une fraction (partie entière + fraction inférieure à 1) puis donner l'écriture décimale"
 export const interactifReady = true
 export const interactifType = 'custom'
-export const dateDeModifImportante = '24/01/2024' // Brouillon interactif
+export const dateDeModifImportante = '29/03/2026'
 
 /**
  * Décomposer une fraction (partie entière + fraction inférieure à 1) puis donner l'écriture décimale.
@@ -138,16 +140,19 @@ export default class ExerciceFractionsDifferentesEcritures extends Exercice {
         frac.texFraction +
         ' = \\phantom{00}\\text{........}\\phantom{00} + ' +
         '\\dfrac{\\phantom{00}\\text{........}\\phantom{00}}{\\phantom{00}\\text{........}\\phantom{00}}' +
-        (this.sup3 ? ' =  $' : '$')
+        (this.sup3 ? ' = \\phantom{00}\\text{........}\\phantom{00}  $' : '$')
       texteCorr =
         '$ ' +
         frac.texFraction +
         ' = ' +
-        entier +
+        miseEnEvidence(entier) +
         '+' +
-        partieFrac.texFraction +
+        texFractionFromString(
+          miseEnEvidence(partieFrac.num),
+          miseEnEvidence(partieFrac.den),
+        ) +
         ' = ' +
-        ecriDec +
+        miseEnEvidence(ecriDec) +
         ' $'
       this.reponsesAttendues[i] = {
         entier,
