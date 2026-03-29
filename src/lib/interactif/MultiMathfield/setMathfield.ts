@@ -12,21 +12,9 @@ export function setMathfield(mf: MathfieldElement) {
   if ('virtualKeyboardMode' in mf) mf.virtualKeyboardMode = 'manual'
   mf.classList.add('ml-1')
   mf.addEventListener('focus', (event) => {
-    console.log(
-      '[DEBUG] focus reçu sur',
-      mf.id,
-      'activeElement:',
-      document.activeElement,
-    )
     handleFocusMathField(event)
   })
   mf.addEventListener('focusout', (event) => {
-    console.log(
-      '[DEBUG] focusout sur',
-      mf.id,
-      'activeElement:',
-      document.activeElement,
-    )
     handleFocusOutMathField(event)
   })
   mf.addEventListener('input', () => {
@@ -35,6 +23,7 @@ export function setMathfield(mf: MathfieldElement) {
     const filteredContent = content.replaceAll('\\,\\,', '\\,')
     mf.setValue(filteredContent)
   })
+  mf.dataset.listenerAdded = 'true'
   if (mf.getAttribute('data-space') === 'true') {
     mf.mathModeSpace = '\\,'
   }
