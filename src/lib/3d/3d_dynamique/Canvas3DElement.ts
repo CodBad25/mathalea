@@ -848,14 +848,14 @@ interface CubeDescription {
 
 interface AmbientLightDescription {
   type: 'ambientLight'
-  color?: number
+  color?: string | number
   intensity?: number
   [key: string]: any
 }
 
 interface DirectionalLightDescription {
   type: 'directionalLight'
-  color?: number
+  color?: string | number
   intensity?: number
   position?: [number, number, number]
   [key: string]: any
@@ -870,7 +870,7 @@ interface SphereDescription {
   [key: string]: any
 }
 
-interface GeoPointDescription {
+export interface GeoPointDescription {
   type: 'geoPoint'
   latitude: number
   longitude: number
@@ -883,6 +883,43 @@ interface GeoPointDescription {
   labelSize?: number
   font?: string
   transparent?: boolean
+  [key: string]: any
+}
+
+interface RealisticEarthSphereDescription {
+  type: 'realisticEarthSphere'
+  position?: [number, number, number]
+  radius?: number
+  greenwichAlignment?: number
+  segmentsWidth?: number
+  segmentsHeight?: number
+  [key: string]: any
+}
+
+interface CustomWireSphereDescription {
+  type: 'customWireSphere'
+  position?: [number, number, number]
+  radius?: number
+  parallels?: number
+  meridians?: number
+  segments?: number
+  parallelColor?: string | number
+  meridianColor?: string | number
+  showParallels?: boolean
+  showMeridians?: boolean
+  showEquator?: boolean
+  equatorColor?: string | number
+  equatorThickness?: number
+  showGreenwich?: boolean
+  greenwichColor?: string | number
+  greenwichThickness?: number
+  [key: string]: any
+}
+
+interface SkySphereDescription {
+  type: 'skySphere'
+  radius?: number
+  image: string
   [key: string]: any
 }
 export interface BufferGeometryDescription {
@@ -927,32 +964,42 @@ export interface Canvas3dButtonDescription {
   onClick: string // nom de l'event custom à déclencher
 }
 
-// Ajoute d'autres types ici...
-
 export type Elements3DDescription =
   | BufferGeometryDescription
   | CubeDescription
   | SphereDescription
   | GroupDescription
   | GeoPointDescription
+  | RealisticEarthSphereDescription
+  | CustomWireSphereDescription
+  | SkySphereDescription
   | AmbientLightDescription
   | DirectionalLightDescription
   | Canvas3dButtonDescription
-// ...autres types
+
+export interface Canvas3DContentDescription {
+  objects: Elements3DDescription[]
+  autoCenterZoomMargin?: number
+  cameraPosition?: [number, number, number]
+  cameraTarget?: [number, number, number]
+}
 
 export function ajouteCanvas3d({
   id,
   content,
   width = 200,
   height = 200,
+  className,
 }: {
   id: string
-  content: { objects: Elements3DDescription[]; autoCenterZoomMargin?: number }
+  content: Canvas3DContentDescription
   width: number
   height: number
+  className?: string
 }): string {
   const contentJson = encodeURIComponent(JSON.stringify(content))
-  return `<canvas-3d id="${id}" content='${contentJson}' width="${width}" height="${height}"></canvas-3d>`
+  const classAttribute = className ? ` class="${className}"` : ''
+  return `<canvas-3d id="${id}"${classAttribute} content='${contentJson}' width="${width}" height="${height}"></canvas-3d>`
 }
 
 function applyDefaultMathaleaButtonStyle(btn: HTMLButtonElement) {
