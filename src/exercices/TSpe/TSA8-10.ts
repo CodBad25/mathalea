@@ -33,7 +33,7 @@ export default class VraiFauxSuites extends ExerciceVraiFaux {
           'Si $\\displaystyle\\int_{1}^3 f(x)\\mathrm{d}x \\leqslant 0$ alors pour tout $x\\in[1;3], f(x)\\leqslant 0$.',
         statut: false,
         correction:
-          "L'intégrale diverge car la fonction n'est pas intégrable en $0$.",
+          "Si pour tout $x\\in[1;3], f(x)\\leqslant 0$ alors $\\displaystyle\\int_{1}^3 f(x)\\mathrm{d}x \\leqslant 0$ mais la réciproque est fausse en général.<br>En effet, soit $f$ la fonction définie sur  définie sur $[1;3]$ par $f(x)=x-2,5$. On peut facilement montrer que $\\displaystyle\\int_{1}^3 f(x)\\mathrm{d}x=-1<0$  mais $f$ n'est pas négative sur $[1;3]$",
       },
       {
         texte:
@@ -79,20 +79,20 @@ export default class VraiFauxSuites extends ExerciceVraiFaux {
           'La fonction $F$ définie sur $[0;+\\infty]$ par $F(x)=\\displaystyle\\int_0^x \\mathrm{e}^{t^2} \\mathrm{d}t$ change de sens de variation.',
         statut: false,
         correction:
-          "$F'(x)=2x\\mathrm{e}^{x^2}>0$ donc $F$ est croissante sur $[0;+\\infty]$.",
+          "$F'(x)=\\mathrm{e}^{x^2}>0$ donc $F$ est croissante sur $[0;+\\infty]$.",
       },
       {
         texte:
-          'Soit $f$ une fonction continue sur $[2;5]$. $\\displaystyle\\int_2^5 f(t) + 3 \\mathrm{d}t=\\displaystyle\\int_2^5 f(t) \\mathrm{d}t + 3 $.',
+          'Soit $f$ une fonction continue sur $[2;5]$. $\\displaystyle\\int_2^5 (f(t) + 3 )\\mathrm{d}t=\\displaystyle\\int_2^5 f(t) \\mathrm{d}t + 3 $.',
         statut: false,
         correction:
-          '$\\displaystyle\\int_2^5 f(t) + 3 \\mathrm{d}t=\\displaystyle\\int_2^5 f(t) \\mathrm{d}t + \\displaystyle\\int_2^5 3 \\mathrm{d}t $\\displaystyle\\int_2^5 f(t) \\mathrm{d}t + 9.',
+          '$\\displaystyle\\int_2^5 f(t) + 3 \\mathrm{d}t=\\displaystyle\\int_2^5 f(t) \\mathrm{d}t + \\displaystyle\\int_2^5 3 \\mathrm{d}t =\\displaystyle\\int_2^5 f(t) \\mathrm{d}t + 9$.',
       },
       {
         texte: '$\\displaystyle\\int_2^5 2 \\mathrm{d}t=3 $.',
         statut: false,
         correction:
-          '$\\displaystyle\\int_2^5 2 \\mathrm{d}t=[2x]_2^5=3\\times 2 = 6 $.',
+          '$\\displaystyle\\int_2^5 2 \\mathrm{d}t=[2t]_2^5=2\\times 5-2 \\times 2 = 6 $.',
       },
       {
         texte:
@@ -105,13 +105,13 @@ export default class VraiFauxSuites extends ExerciceVraiFaux {
         texte: '$\\displaystyle\\int_{-\\pi}^{\\pi} \\cos(t) \\mathrm{d}t=0 $.',
         statut: true,
         correction:
-          '$\\displaystyle\\int_{-\\pi}^{\\pi} \\cos(t) \\mathrm{d}t= [\\sin(t)]_{-\\pi}^{\\pi}=\\sin(\\pi)+\\sin(-\\pi) =0+0=0$.',
+          '$\\displaystyle\\int_{-\\pi}^{\\pi} \\cos(t) \\mathrm{d}t= [\\sin(t)]_{-\\pi}^{\\pi}=\\sin(\\pi)-\\sin(-\\pi) =0-0=0$.',
       },
       {
-        texte: '$\\displaystyle\\int_-2^2 t \\mathrm{d}t=0 $.',
+        texte: '$\\displaystyle\\int_{-2}^2 t \\mathrm{d}t=0 $.',
         statut: true,
         correction:
-          '$\\displaystyle\\int_-2^2 t \\mathrm{d}t=[\\dfrac{t^2}{2}]_{-2}^{2}=0 $.', // 13
+          '$\\displaystyle\\int_{-2}^2 t \\mathrm{d}t=[\\dfrac{t^2}{2}]_{-2}^{2}=0 $.', // 13
       },
     ]
   }
