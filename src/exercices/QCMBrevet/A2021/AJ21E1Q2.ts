@@ -18,12 +18,11 @@ export const interactifReady = true
 export const interactifType = 'qcm'
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
-export const titre = "Fonction calcul d'image (06/2021 Asie)"
+export const titre = 'Calculer une image par une fonction (2021 Asie)'
 export const dateDePublication = '09/11/2024'
+
 /**
- *
  * @author Jean-Claude LHOTE
- * jean-claude.lhote@ac-nancy-metz.fr
  */
 
 export default class AsieJuin21Exo1Q2 extends ExerciceQcmA {
@@ -31,13 +30,13 @@ export default class AsieJuin21Exo1Q2 extends ExerciceQcmA {
     this.reponses = [
       `$f(0)=${String(b)}$`,
       `$f(${String(b)})=0$`,
-      `l'image de $${String(-b)}$ par $f$ est $${String(b)}$.`,
+      `L'image de $${String(-b)}$ par $f$ est $${String(b)}$.`,
     ]
     this.enonce = `On considère la fonction $f$ définie par $f(x)=${rienSi1(a)}x^2${ecritureAlgebrique(b)}$.<br>
     Une seule des affirmations suivantes est vraie. Laquelle ?`
-    this.correction = `l'image de $${String(-b)}$ par $f$ est : $${rienSi1(a)}${Math.abs(a) !== 1 ? '\\times ' : ''}${ecritureParentheseSiNegatif(-b)}^2${ecritureAlgebrique(b)}=${texNombre(a * b ** 2 + b, 0)}$.<br>
-    $f(${b})=${rienSi1(a)}${Math.abs(a) !== 1 ? '\\times ' : ''}${ecritureParentheseSiNegatif(b)}^2${ecritureAlgebrique(b)}=${texNombre(a * b ** 2 + b, 0)}$.<br>
-    $${miseEnEvidence(`f(0)=${rienSi1(a)}${Math.abs(a) !== 1 ? '\\times ' : ''}0^2${ecritureAlgebrique(b)}=${texNombre(b, 0)}`)}$.`
+    this.correction = `L'image de $${String(-b)}$ par $f$ est : $${rienSi1(a)}${Math.abs(a) !== 1 ? '\\times ' : ''}${ecritureParentheseSiNegatif(-b)}^2${ecritureAlgebrique(b)}=${texNombre(a * b ** 2 + b, 0)}$.<br>
+    $f(${b})=${rienSi1(a)}${Math.abs(a) !== 1 ? '\\times ' : ''}${ecritureParentheseSiNegatif(b)}^2${ecritureAlgebrique(b)}=${texNombre(a * b ** 2 + b, 0)}$<br>
+    $${miseEnEvidence(`f(0)=${rienSi1(a)}${Math.abs(a) !== 1 ? '\\times ' : ''}0^2${ecritureAlgebrique(b)}=${texNombre(b, 0)}`)}$`
   }
 
   versionOriginale: () => void = () => {
