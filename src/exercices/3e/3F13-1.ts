@@ -5,6 +5,7 @@ import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { setReponse } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { numAlpha } from '../../lib/outils/outilString'
 import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
@@ -274,18 +275,18 @@ export default class AntecedentEtImageGraphique extends Exercice {
     )
     this.contenuCorrection = ''
     if (lettreQuestion[0] !== null) {
-      this.contenuCorrection += `${numAlpha(lettreQuestion[0])} L'image de $${x0}$ est $${a}$, on note $f(${x0})=${a}$.`
+      this.contenuCorrection += `${numAlpha(lettreQuestion[0])} L'image de $${x0}$ est $${miseEnEvidence(a)}$, on note $f(${x0})=${miseEnEvidence(a)}$.`
       setReponse(this, lettreQuestion[0], a)
     }
     if (lettreQuestion[1] !== null) {
-      this.contenuCorrection += `<br>${numAlpha(lettreQuestion[1])} L'image de $${x0 + 5}$ est $${(b + c) / 2}$, on note $f(${x0 + 5})=${(b + c) / 2}$.`
+      this.contenuCorrection += `<br>${numAlpha(lettreQuestion[1])} L'image de $${x0 + 5}$ est $${miseEnEvidence((b + c) / 2)}$, on note $f(${x0 + 5})=${miseEnEvidence((b + c) / 2)}$.`
       setReponse(this, lettreQuestion[1], (b + c) / 2)
     }
     if (lettreQuestion[2] !== null && lettreQuestion[3] !== null) {
       if (ordre === 1) {
-        this.contenuCorrection += `<br>${numAlpha(lettreQuestion[2])} $${b}$ a pour unique antécédent $${x0 + 4}$, on note $f(${x0 + 4})=${b}$.`
+        this.contenuCorrection += `<br>${numAlpha(lettreQuestion[2])} $${b}$ a pour unique antécédent $${miseEnEvidence(x0 + 4)}$, on note $f(${miseEnEvidence(x0 + 4)})=${b}$.`
         setReponse(this, lettreQuestion[2], x0 + 4)
-        this.contenuCorrection += `<br>${numAlpha(lettreQuestion[3])} $${c}$ a deux antécédents $${x0 + 2}$ et $${x0 + 6}$, on note $f(${x0 + 2})=f(${x0 + 6})=${c}$.`
+        this.contenuCorrection += `<br>${numAlpha(lettreQuestion[3])} $${c}$ a deux antécédents $${miseEnEvidence(x0 + 2)}$ et $${miseEnEvidence(x0 + 6)}$, on note $f(${miseEnEvidence(x0 + 2)})=f(${miseEnEvidence(x0 + 6)})=${c}$.`
         setReponse(
           this,
           lettreQuestion[3],
@@ -295,7 +296,7 @@ export default class AntecedentEtImageGraphique extends Exercice {
           },
         )
       } else {
-        this.contenuCorrection += `<br>${numAlpha(lettreQuestion[2])} $${c}$ a deux antécédents $${x0 + 2}$ et $${x0 + 6}$, on note $f(${x0 + 2})=f(${x0 + 6})=${c}$.`
+        this.contenuCorrection += `<br>${numAlpha(lettreQuestion[2])} $${c}$ a deux antécédents $${miseEnEvidence(x0 + 2)}$ et $${miseEnEvidence(x0 + 6)}$, on note $f(${miseEnEvidence(x0 + 2)})=f(${miseEnEvidence(x0 + 6)})=${c}$.`
         setReponse(
           this,
           lettreQuestion[2],
@@ -304,7 +305,7 @@ export default class AntecedentEtImageGraphique extends Exercice {
             formatInteractif: 'texte',
           },
         )
-        this.contenuCorrection += `<br>${numAlpha(lettreQuestion[3])} $${b}$ a pour unique antécédent $${x0 + 4}$, on note $f(${x0 + 4})=${b}$.`
+        this.contenuCorrection += `<br>${numAlpha(lettreQuestion[3])} $${b}$ a pour unique antécédent $${miseEnEvidence(x0 + 4)}$, on note $f(${miseEnEvidence(x0 + 4)})=${b}$.`
         setReponse(this, lettreQuestion[3], x0 + 4)
       }
     }
