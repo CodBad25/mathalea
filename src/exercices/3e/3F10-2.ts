@@ -198,7 +198,7 @@ export default class CalculsImagesFonctions extends Exercice {
               reponses[i] = m * x
               break
             case 2:
-              enonce = `Soit $f$ la fonction qui à $x$ associe $${m}x$. <br> Quel est l'antécédent de $${m * x}$ ?<br>`
+              enonce = `Soit $f$ la fonction qui, à $x$, associe $${m}x$. <br> Quel est l'antécédent de $${m * x}$ ?<br>`
               correction = `$f(x)=${m}x$ donc ici on a : $${m}x=${m * x}$<br> soit $x=\\dfrac{${m * x}}{${m}}=${x}$`
               reponses[i] = x
               img = m * x
@@ -211,7 +211,6 @@ export default class CalculsImagesFonctions extends Exercice {
               reponses[i] = -x
               tagImage = false
               break
-
             case 4:
               enonce = `Soit $f$ la fonction telle que $f(x)=${frac}x$. <br> Quel est l'antécédent de $${m * x}$ ?<br>`
               correction = `$f(x)=${frac}x$ donc ici on a : $${frac}x=${m * x}$<br> soit $x=${m * x}\\times ${fracInv}=${x * n}$`
@@ -237,7 +236,7 @@ export default class CalculsImagesFonctions extends Exercice {
               reponses[i] = m * x + y
               break
             case 2:
-              enonce = `Soit $f$ la fonction qui à $x$ associe $${m}x+${n}$. <br> Quel est l'antécédent de $${m * x + n}$ ?<br>`
+              enonce = `Soit $f$ la fonction qui, à $x$, associe $${m}x+${n}$. <br> Quel est l'antécédent de $${m * x + n}$ ?<br>`
               correction = `$f(x)=${m}x+${n}$ donc ici on a : $${m}x+${n}=${m * x + n}$ <br>Soit $${m}x=${m * x + n}-${n}=${m * x}$ d'où $x=\\dfrac{${m * x}}{${m}}=${x}$`
               img = m * x + n
               reponses[i] = x
@@ -277,7 +276,7 @@ export default class CalculsImagesFonctions extends Exercice {
               break
 
             case 2:
-              enonce = `Soit $f$ la fonction qui à $x$ associe $${m}x^2+${n}x$. <br> Quelle est l'image de $${x}$ ?<br>`
+              enonce = `Soit $f$ la fonction qui, à $x$, associe $${m}x^2+${n}x$. <br> Quelle est l'image de $${x}$ ?<br>`
               correction = `$f(x)=${m}x^2+${n}x$ donc ici on a : $f(${x})=${m}\\times${ecritureParentheseSiNegatif(x)}^2+${n}\\times ${ecritureParentheseSiNegatif(x)}=${m}\\times ${x * x}${ecritureAlgebrique(n * x)}=${m * x ** 2 + n * x}$`
               reponses[i] = m * x ** 2 + n * x
               break
@@ -299,14 +298,20 @@ export default class CalculsImagesFonctions extends Exercice {
           // switch (sousChoix[i] % 4) {
           sousChoix[i] = randint(0, 3)
           switch (sousChoix[i]) {
-            case 0:
+            case 0: {
               if (n !== x)
                 m = n - x // n différent de 0 donc m + x différent de zéro
               else m = n ** 2 - x // idem
-              enonce = `Soit $f$ la fonction qui à $x$ associe $\\dfrac{x}{x${ecritureAlgebrique(m)}}$. <br> Quelle est l'image de $${x}$ ?<br>`
-              correction = `$f(x)=\\dfrac{x}{x${ecritureAlgebrique(m)}}$ donc ici on a : $f(${x})=\\dfrac{${x}}{${x}${ecritureAlgebrique(m)}}=\\dfrac{${x}}{${x + m}}$`
-              reponses[i] = new FractionEtendue(x, x + m)
+              enonce = `Soit $f$ la fonction qui, à $x$, associe $\\dfrac{x}{x${ecritureAlgebrique(m)}}$. <br> Quelle est l'image de $${x}$ ?<br>`
+              correction = `$f(x)=\\dfrac{x}{x${ecritureAlgebrique(m)}}$ donc ici on a : $f(${x})=\\dfrac{${x}}{${x}${ecritureAlgebrique(m)}}=\\dfrac{${x}}{${x + m}}`
+              const repFraction = new FractionEtendue(x, x + m)
+              correction +=
+                repFraction.estEntiere || !repFraction.estIrreductible
+                  ? `=${repFraction.texFractionSimplifiee}$`
+                  : '$'
+              reponses[i] = repFraction
               break
+            }
             case 1: {
               if (n !== x)
                 m = n - x // n différent de 0 donc m + x différent de zéro
@@ -317,23 +322,27 @@ export default class CalculsImagesFonctions extends Exercice {
               correction += reponses[i].estEntiere ? `=${reponses[i].simplifie().texFraction}$` : '$'
  */
               const repFraction = new FractionEtendue(m * x, x + m)
-              correction += repFraction.estEntiere
-                ? `=${repFraction.simplifie().texFraction}$`
-                : '$'
+              correction +=
+                repFraction.estEntiere || !repFraction.estIrreductible
+                  ? `=${repFraction.texFractionSimplifiee}$`
+                  : '$'
               reponses[i] = repFraction
               break
             }
-            case 2:
+            case 2: {
               if (n !== x)
                 m = n - x // // n différent de 0 donc m + x différent de zéro et x différent de zéro
               else m = n ** 2 - x
               enonce = `Soit $f$ telle que $f(x)=\\dfrac{${m}x^2+${n}x}{x^2${ecritureAlgebrique(m)}x}$. <br> Quelle est l'image de $${x}$ ?<br>`
-              correction = `$f(x)=\\dfrac{${rienSi1(m)}x^2+${n}x}{x^2${ecritureAlgebrique(m)}x}$ donc ici on a : $f(${x})=\\dfrac{${m}\\times ${ecritureParentheseSiNegatif(x)}^2+${n}\\times ${ecritureParentheseSiNegatif(x)}}{${ecritureParentheseSiNegatif(x)}^2${ecritureAlgebrique(m)}\\times ${ecritureParentheseSiNegatif(x)}}=\\dfrac{${m * x ** 2}${ecritureAlgebrique(n * x)}}{${x ** 2}${ecritureAlgebrique(m * x)}}=\\dfrac{${m * x ** 2 + n * x}}{${x ** 2 + m * x}}=\\dfrac{${m * x + n}}{${x + m}}$`
-              reponses[i] = new FractionEtendue(
+              correction = `$f(x)=\\dfrac{${rienSi1(m)}x^2+${n}x}{x^2${ecritureAlgebrique(m)}x}$ donc ici on a : $f(${x})=\\dfrac{${m}\\times ${ecritureParentheseSiNegatif(x)}^2+${n}\\times ${ecritureParentheseSiNegatif(x)}}{${ecritureParentheseSiNegatif(x)}^2${ecritureAlgebrique(m)}\\times ${ecritureParentheseSiNegatif(x)}}=\\dfrac{${m * x ** 2}${ecritureAlgebrique(n * x)}}{${x ** 2}${ecritureAlgebrique(m * x)}}=\\dfrac{${m * x ** 2 + n * x}}{${x ** 2 + m * x}}`
+              const repFraction = new FractionEtendue(
                 m * x ** 2 + n * x,
                 x ** 2 + m * x,
               )
+              correction += `=${repFraction.texFractionSimplifiee}$`
+              reponses[i] = repFraction
               break
+            }
             case 3: {
               if (n !== x && n !== 2 * x)
                 m = n - x // x - m = 2x - n donc différent de zéro
@@ -341,13 +350,13 @@ export default class CalculsImagesFonctions extends Exercice {
                 m = n ** 2 - x // x-m = 2x - n**2 donc différent de zéro
               else m = n + x // x-m = n donc différent de zéro
               enonce = `Soit $f: x \\longmapsto \\dfrac{x${ecritureAlgebrique(-m)}}{x^2${ecritureAlgebrique(-2 * m)}x+${m * m}}$. <br> Quelle est l'image de $${x}$ ?<br>`
-              correction = `$f(x)= \\dfrac{x${ecritureAlgebrique(-m)}}{x^2${ecritureAlgebrique(-2 * m)}x+${m * m}}$`
+              correction = `$f(x)=\\dfrac{x${ecritureAlgebrique(-m)}}{x^2${ecritureAlgebrique(-2 * m)}x+${m * m}}$`
               correction += `donc ici on a : $f(${x})= \\dfrac{${x}${ecritureAlgebrique(-m)}}{${ecritureParentheseSiNegatif(x)}^2${ecritureAlgebrique(-2 * m)}\\times ${ecritureParentheseSiNegatif(x)}+${m * m}}`
               correction += `=\\dfrac{${x - m}}{${x ** 2}${ecritureAlgebrique(-2 * m * x)}+${m * m}}=\\dfrac{${x - m}}{${x ** 2 - 2 * m * x + m * m}}`
               /* reponses[i] = new FractionEtendue(1, x - m)
             correction += `=${reponses[i].texFSD}$` */
               const repFraction = new FractionEtendue(1, x - m)
-              correction += `=${repFraction.texFSD}$`
+              correction += `=${repFraction.texFractionSimplifiee}$`
               reponses[i] = repFraction
               break
             }
@@ -357,6 +366,7 @@ export default class CalculsImagesFonctions extends Exercice {
           })
           break
       }
+      correction += '.'
       if (this.interactif) {
         if (tagImage) {
           texte =
