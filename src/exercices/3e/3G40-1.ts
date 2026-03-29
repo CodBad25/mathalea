@@ -1,4 +1,8 @@
-import { ajouteCanvas3d } from '../../lib/3d/3d_dynamique/Canvas3DElement'
+import {
+  ajouteCanvas3d,
+  type Canvas3DContentDescription,
+  type GeoPointDescription,
+} from '../../lib/3d/3d_dynamique/Canvas3DElement'
 import { sphericalToCartesian } from '../../lib/3d/3d_dynamique/solidesThreeJs'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { ajouteQuestionMathlive } from '../../lib/interactif/questionMathLive'
@@ -37,18 +41,6 @@ type GPSVille = {
   labelOffset?: number
   font?: string
   transparent?: boolean
-}
-type PointType = {
-  type: string
-  latitude: number
-  longitude: number
-  spherePosition: [number, number, number]
-  sphereRadius: number
-  pointRadius: number
-  pointColor: string
-  label: string
-  labelColor: string
-  labelSize: number
 }
 
 const baseVilles: GPSVille[] = [
@@ -248,10 +240,10 @@ function choisirNVillesAssezLointaines(n: number) {
 
 function buildSceneContent(
   villes: GPSVille[],
-  points: PointType[],
-  points2: PointType[],
-  points3: PointType[],
-) {
+  points: GeoPointDescription[],
+  points2: GeoPointDescription[],
+  points3: GeoPointDescription[],
+): Canvas3DContentDescription {
   return {
     objects: [
       // voie lactée
@@ -298,21 +290,23 @@ function buildSceneContent(
         position: [0, 10, -100],
       },
       // Points des villes
-      ...villes.map((ville) => ({
-        type: 'geoPoint',
-        latitude: ville.latitude,
-        longitude: ville.longitude,
-        spherePosition: [0, 0, 0], // <-- corrige ici
-        sphereRadius: 4,
-        label: ville.label,
-        labelOffset: ville.labelOffset,
-        pointColor: ville.pointColor,
-        pointRadius: ville.pointRadius,
-        labelColor: ville.labelColor,
-        labelSize: ville.labelSize,
-        font: ville.font,
-        transparent: ville.transparent,
-      })),
+      ...villes.map(
+        (ville): GeoPointDescription => ({
+          type: 'geoPoint',
+          latitude: ville.latitude,
+          longitude: ville.longitude,
+          spherePosition: [0, 0, 0],
+          sphereRadius: 4,
+          label: ville.label,
+          labelOffset: ville.labelOffset,
+          pointColor: ville.pointColor,
+          pointRadius: ville.pointRadius,
+          labelColor: ville.labelColor,
+          labelSize: ville.labelSize,
+          font: ville.font,
+          transparent: ville.transparent,
+        }),
+      ),
       // Graduations de l'équateur (longitudes)
       ...points,
       // Graduations des méridiens (latitudes)
@@ -391,11 +385,11 @@ export default class ReperageSurLaTerre extends Exercice {
 
       // Les longitudes
       const longitudes = rangeMinMax(-17, 18, [0]).map((el) => el * 10)
-      const points = longitudes.map((lon) => ({
+      const points: GeoPointDescription[] = longitudes.map((lon) => ({
         type: 'geoPoint',
         latitude: 0,
         longitude: lon,
-        spherePosition: [0, 0, 0] as [number, number, number],
+        spherePosition: [0, 0, 0],
         sphereRadius: 4,
         pointRadius: 0.001,
         pointColor: '#FFD700',
@@ -406,11 +400,11 @@ export default class ReperageSurLaTerre extends Exercice {
 
       // Les latitudes
       const latitudes = rangeMinMax(-8, 8, [0]).map((el) => el * 10)
-      const points2 = latitudes.map((lat) => ({
+      const points2: GeoPointDescription[] = latitudes.map((lat) => ({
         type: 'geoPoint',
         latitude: lat,
         longitude: 0,
-        spherePosition: [0, 0, 0] as [number, number, number],
+        spherePosition: [0, 0, 0],
         sphereRadius: 4,
         pointRadius: 0.001,
         pointColor: '#FFD700',
@@ -418,11 +412,11 @@ export default class ReperageSurLaTerre extends Exercice {
         labelColor: '#FFD700',
         labelSize: 0.15,
       }))
-      const points3 = latitudes.map((lat) => ({
+      const points3: GeoPointDescription[] = latitudes.map((lat) => ({
         type: 'geoPoint',
         latitude: lat,
         longitude: 180,
-        spherePosition: [0, 0, 0] as [number, number, number],
+        spherePosition: [0, 0, 0],
         sphereRadius: 4,
         pointRadius: 0.001,
         pointColor: '#FFD700',
@@ -445,7 +439,7 @@ export default class ReperageSurLaTerre extends Exercice {
 
       for (let i = 0; i < this.nbQuestions; i++) {
         const ville = villes[i]
-        const choix = choice(['latitude', 'longitude']) as
+        const choix = choice(['latitude', 'longitude']) satisfies
           | 'latitude'
           | 'longitude'
         const question =
@@ -484,7 +478,7 @@ export default class ReperageSurLaTerre extends Exercice {
       this.consigne = ''
       for (let i = 0; i < this.nbQuestions; i++) {
         const ville = villes[i]
-        const choix = choice(['latitude', 'longitude']) as
+        const choix = choice(['latitude', 'longitude']) satisfies
           | 'latitude'
           | 'longitude'
         const question = `Quelle est la ${choix} de ${ville.label} dont les coordonnées GPS sont $(~${texNombre(Math.round(ville.latitude), 0)}~;~${texNombre(Math.round(ville.longitude), 0)}~)$ ?<br>
