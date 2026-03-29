@@ -30,8 +30,8 @@ export const titre = 'Découvrir la notion et le vocabulaire des fonctions'
 export const uuid = '77d18'
 
 export const refs = {
-  'fr-fr': ['3F1-act'],
-  'fr-ch': ['10FA5-3'],
+  'fr-fr': [],
+  'fr-ch': [],
 }
 
 /**
@@ -151,7 +151,6 @@ Ces machines sont appelées $\\textit{fonctions}$, on a l'habitude de leur donne
     for (
       let i = 0, x, y, z, texte, texteCorr, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       typesDeQuestions = listeTypeDeQuestions[i]
       idDuDivDiag = ''

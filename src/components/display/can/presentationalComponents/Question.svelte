@@ -115,7 +115,7 @@
 
       const metaI2d = questionContainer.querySelectorAll('.metaInteractif2d')
       // gestion des metaInteractif2d
-      if (metaI2d != null) {
+      if (metaI2d != null && metaI2d.length > 0) {
         console.info('Je gère le metaInteractif2d')
         const listeMf = Array.from(metaI2d) as MathfieldElement[]
         for (const mf of listeMf) {
