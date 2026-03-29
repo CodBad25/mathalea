@@ -8,7 +8,7 @@ import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
-import { context } from '../../modules/context'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { gestionnaireFormulaireTexte, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
@@ -17,13 +17,14 @@ export const titre = "Résoudre $f(x)=k$ à partir d'un graphique"
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const dateDePublication = '31/01/2026'
+
 /**
  * Un graphique étant tracé, déterminer les antécédents de nombres donnés.
  * La fonction est un polynôme de degré 1, 2 ou 3 et les nombres des questions ne sont que des entiers.
  * Interactivité et multiples questions ajoutés par J-C Lhote le 23/09/2023
  * @author Rémi Angot
- * 3F13
  */
+
 export const uuid = '8117e'
 
 export const refs = {
@@ -40,7 +41,7 @@ export default class AntecedentGraphique extends Exercice {
     ]
     this.sup = '0'
 
-    context.isHtml ? (this.spacingCorr = 3) : (this.spacingCorr = 1)
+    // context.isHtml ? (this.spacingCorr = 3) : (this.spacingCorr = 1)
     this.nbQuestions = 1
 
     // this.listeAvecNumerotation = false
@@ -99,7 +100,7 @@ export default class AntecedentGraphique extends Exercice {
         texteCorr = ''
         const choixPoint = choice([pointDePassage1, pointDePassage2])
 
-        texteCorr = `L'antécédent de $${choixPoint.y}$ est $${choixPoint.x}$, on note $f(${choixPoint.x})=${choixPoint.y}$.<br>`
+        texteCorr = `L'antécédent de $${choixPoint.y}$ est $${miseEnEvidence(choixPoint.x)}$, on note $f(${miseEnEvidence(choixPoint.x)})=${choixPoint.y}$.<br>`
         imageChoisie = choixPoint.y
         reponses = [choixPoint.x]
       } else if (nbAnt === 2) {
@@ -128,7 +129,7 @@ export default class AntecedentGraphique extends Exercice {
         texteCorr = ''
 
         reponses = [racine1DuTrinome, racine2DuTrinome].sort((a, b) => a - b)
-        texteCorr = `Les antécédents de $${imageChoisie}$ sont $${reponses[0]}$ et $${reponses[1]}$, on note $f(${reponses[0]})=${imageChoisie}$ et $f(${reponses[1]})=${imageChoisie}$.<br>`
+        texteCorr = `Les antécédents de $${imageChoisie}$ sont $${miseEnEvidence(reponses[0])}$ et $${miseEnEvidence(reponses[1])}$, on note $f(${miseEnEvidence(reponses[0])})=${imageChoisie}$ et $f(${miseEnEvidence(reponses[1])})=${imageChoisie}$.<br>`
       } else {
         yUnite = 1 / 3
         yMin = -30
@@ -167,7 +168,7 @@ export default class AntecedentGraphique extends Exercice {
           racine2DeLaCubique,
           racine3DeLaCubique,
         ].sort((a, b) => a - b)
-        texteCorr = `Les antécédents de $${imageChoisie}$ sont $${reponses[0]}$, $${reponses[1]}$ et $${reponses[2]}$, on note $f(${reponses[0]})=${imageChoisie}$, $f(${reponses[1]})=${imageChoisie}$ et $f(${reponses[2]})=${imageChoisie}$.<br>`
+        texteCorr = `Les antécédents de $${imageChoisie}$ sont $${miseEnEvidence(reponses[0])}$, $${miseEnEvidence(reponses[1])}$ et $${miseEnEvidence(reponses[2])}$, on note $f(${miseEnEvidence(reponses[0])})=${imageChoisie}$, $f(${miseEnEvidence(reponses[1])})=${imageChoisie}$ et $f(${miseEnEvidence(reponses[2])})=${imageChoisie}$.<br>`
       }
       texte =
         'On a tracé ci-dessous la courbe représentative de la fonction $f$.<br>'
@@ -209,19 +210,21 @@ export default class AntecedentGraphique extends Exercice {
       const pointsY = pointsDePassage
         .sort((a, b) => a.x - b.x)
         .map((pt) => pointAbstrait(pt.x, pt.y * yUnite))
-      texteCorr += mathalea2d(
-        {
-          xmin: -10,
-          xmax: 10,
-          ymin: -10,
-          ymax: 10,
-          scale: 0.5,
-        },
-        r,
-        Cf,
-        horizontale,
-        tracePoint(...pointsY, 'red'),
-      )
+      texteCorr +=
+        '<br>' +
+        mathalea2d(
+          {
+            xmin: -10,
+            xmax: 10,
+            ymin: -10,
+            ymax: 10,
+            scale: 0.5,
+          },
+          r,
+          Cf,
+          horizontale,
+          tracePoint(...pointsY, 'red'),
+        )
       if (this.questionJamaisPosee(i, JSON.stringify(pointsDePassage))) {
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr
