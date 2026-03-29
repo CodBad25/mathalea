@@ -1,4 +1,4 @@
-import { index, range } from 'mathjs'
+import { range } from 'mathjs'
 import { matrice } from '../../lib/mathFonctions/Matrice'
 import { choice } from '../../lib/outils/arrayOutils'
 import { ecritureParentheseSiMoins } from '../../lib/outils/ecritures'
@@ -42,7 +42,6 @@ export default class nomExercice extends Exercice {
     for (
       let i = 0, texte, texteCorr, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       // Boucle principale où i+1 correspond au numéro de la question
       const matrices = [] // vecteur qui stocke les matrices
@@ -50,7 +49,7 @@ export default class nomExercice extends Exercice {
       const nbmatrice = 2
       let n = randint(1, 4)
       let m = randint(1, 4)
-      while ((n === m) & (n === 1)) {
+      while (n === m && n === 1) {
         m = randint(2, 4)
       }
       const nblignes = [] // vecteur qui stocke le nombre de lignes de chaque matrice
@@ -60,7 +59,7 @@ export default class nomExercice extends Exercice {
       n = choice([m, m, m, 1, 2, 3, 4]) // on favorise la compatibilité de la deuxieme matrices
       nblignes.push(n)
       m = choice([n, n, n, 1, 2, 3, 4])
-      while ((n === m) & (n === 1)) {
+      while (n === m && n === 1) {
         m = choice([2, 3, 4])
       }
       nbcolonnes.push(m)
@@ -138,7 +137,7 @@ export default class nomExercice extends Exercice {
           // Cas normal où l1 est un vecteur ou une matrice
           for (let i = 0; i < nbcolonnes[0]; i++) {
             detail +=
-              '\\textcolor{red}{' +
+              '\textcolor{red}{' +
               ecritureParentheseSiMoins(l1.subset(0, i).toString()) +
               '} \\times \\textcolor{blue}{' +
               ecritureParentheseSiMoins(c1.subset(i, 0).toString()) +
@@ -191,10 +190,10 @@ export default class nomExercice extends Exercice {
           // Cas normal où l1 est un vecteur ou une matrice
           for (let i = 0; i < nbcolonnes[1]; i++) {
             detail +=
-              '\\textcolor{blue}{' +
-              ecritureParentheseSiMoins(l1.subset(index(0, i)).toString()) +
+              '\textcolor{blue}{' +
+              ecritureParentheseSiMoins(l1.subset(0, i).toString()) +
               '} \\times \\textcolor{red}{' +
-              ecritureParentheseSiMoins(c1.subset(index(i, 0)).toString()) +
+              ecritureParentheseSiMoins(c1.subset(i, 0).toString()) +
               '}'
             if (i < nbcolonnes[1] - 1) {
               detail += '+'

@@ -23,6 +23,7 @@ const config = {
   precision: 64,
   predictable: false,
   randomSeed: null,
+  legacySubset: true,
 }
 
 const math = create(
