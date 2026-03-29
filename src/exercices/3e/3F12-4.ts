@@ -8,6 +8,7 @@ import {
   resolutionSystemeLineaire2x2,
   resolutionSystemeLineaire3x3,
 } from '../../lib/mathFonctions/outilsMaths'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import {
   abs,
   nombreDeChiffresDansLaPartieEntiere,
@@ -27,10 +28,9 @@ export const amcType = 'AMCHybride'
 /**
  * Un graphique étant tracé, déterminer l'image de nombres donnés.
  * La fonction est un polynôme de degré 1, 2 ou 3 et les nombres des questions ne sont que des entiers.
- *
  * @author Rémi Angot
- * 3F12-4
  */
+
 export const uuid = 'b8946'
 
 export const refs = {
@@ -48,10 +48,9 @@ export default class ImageGraphique extends Exercice {
 
     this.sup = 3
 
-    context.isHtml ? (this.spacingCorr = 3) : (this.spacingCorr = 1)
+    // context.isHtml ? (this.spacingCorr = 3) : (this.spacingCorr = 1)
     this.nbQuestions = 1
     this.pointsParQuestions = 3
-    // this.nbQuestionsModifiable = false
   }
 
   nouvelleVersion() {
@@ -97,8 +96,8 @@ export default class ImageGraphique extends Exercice {
         f = (x: number): number => a * x - b
 
         texte += `Déterminer par lecture graphique les images respectives de $${x1}$ et de $${x2}$ par cette fonction $f$.<br>`
-        texteCorr = `L'image de $${x1}$ est $${fx1}$, on note $f(${x1})=${fx1}$.<br>`
-        texteCorr += `L'image de $${x2}$ est $${fx2}$, on note $f(${x2})=${fx2}$.`
+        texteCorr = `L'image de $${x1}$ est $${miseEnEvidence(fx1)}$, on note $f(${x1})=${miseEnEvidence(fx1)}$.<br>`
+        texteCorr += `L'image de $${x2}$ est $${miseEnEvidence(fx2)}$, on note $f(${x2})=${miseEnEvidence(fx2)}$.`
       }
 
       if (this.sup === 2) {
@@ -170,9 +169,9 @@ export default class ImageGraphique extends Exercice {
 
       if (this.sup === 2 || this.sup === 3) {
         texte += `Déterminer par lecture graphique les images respectives de $${x1}$, de $${x2}$ et de $${x3}$ par cette fonction $f$.<br>`
-        texteCorr = `L'image de $${x1}$ est $${fx1}$, on note $f(${x1})=${fx1}$.<br>`
-        texteCorr += `L'image de $${x2}$ est $${fx2}$, on note $f(${x2})=${fx2}$.<br>`
-        texteCorr += `L'image de $${x3}$ est $${fx3}$, on note $f(${x3})=${fx3}$.<br>`
+        texteCorr = `L'image de $${x1}$ est $${miseEnEvidence(fx1)}$, on note $f(${x1})=${miseEnEvidence(fx1)}$.<br>`
+        texteCorr += `L'image de $${x2}$ est $${miseEnEvidence(fx2)}$, on note $f(${x2})=${miseEnEvidence(fx2)}$.<br>`
+        texteCorr += `L'image de $${x3}$ est $${miseEnEvidence(fx3)}$, on note $f(${x3})=${miseEnEvidence(fx3)}$.<br>`
       }
 
       const C = courbe(f, { repere: r, step: 0.25 })
