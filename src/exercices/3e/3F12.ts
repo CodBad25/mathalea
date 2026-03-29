@@ -24,8 +24,8 @@ export const titre =
 export const uuid = '02116'
 
 export const refs = {
-  'fr-fr': ['3F12'],
-  'fr-ch': ['10FA5-9', '11FA8-3'],
+  'fr-fr': [],
+  'fr-ch': [],
 }
 export default class FonctionsCalculsDImages extends Exercice {
   constructor() {

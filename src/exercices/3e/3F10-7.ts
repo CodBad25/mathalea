@@ -23,7 +23,6 @@ export const dateDePublication = '13/11/2024'
 /**
  *
  * @author Jean-Claude LHOTE
- * jean-claude.lhote@ac-nancy-metz.fr
  */
 
 export default class AsieJuin21Exo1Q2 extends ExerciceQcmA {
