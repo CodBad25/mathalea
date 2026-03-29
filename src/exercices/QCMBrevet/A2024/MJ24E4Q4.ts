@@ -19,12 +19,11 @@ export const interactifReady = true
 export const interactifType = 'qcm'
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
-export const titre = "Lecture graphique d'antécédent (2024 Métropole)"
+export const titre = 'Lire graphiquement un antécédent (2024 Métropole)'
 export const dateDePublication = '28/10/2024'
 /**
  *
  * @author Jean-Claude LHOTE
- * jean-claude.lhote@ac-nancy-metz.fr
  */
 
 export default class MetropoleJuin24Exo4Q4 extends ExerciceQcmA {
@@ -62,13 +61,13 @@ export default class MetropoleJuin24Exo4Q4 extends ExerciceQcmA {
       .buildStandard().objets
     const cF = droite(point(0, a), point(Math.abs(a), -a))
     cF.color = colorToLatexOrHTML('blue')
-    const labelF = latex2d('\\mathcal{C_F}', 1.5, 1.7, { color: 'blue' })
+    const labelF = latex2d('\\mathcal{C_f}', 1.5, 1.7, { color: 'blue' })
     const objets = [...theRepere, cF, labelF]
     this.enonce += mathalea2d(
       Object.assign({ pixelsParCm: 20, scale: 0.5 }, fixeBordures(objets)),
       objets,
     )
-    this.correction = `L'antécédent de ${image} est $${miseEnEvidence(antecedent.toString())}$, on note $f(${antecedent}) = ${image}$.`
+    this.correction = `L'antécédent de $${image}$ est $${miseEnEvidence(antecedent.toString())}$, on note $f(${antecedent}) = ${image}$.`
   }
 
   versionOriginale: () => void = () => {
