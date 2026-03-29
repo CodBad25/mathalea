@@ -1,6 +1,7 @@
 <script lang="ts">
   import { afterUpdate, onMount } from 'svelte'
   import { mathaleaRenderDiv } from '../../../../lib/mathalea'
+  import { enumeration } from '../../../../lib/outils/ecritures'
   import { canOptions } from '../../../../lib/stores/canStore'
   import ButtonToggle from '../../../shared/forms/ButtonToggle.svelte'
   import NavigationButtons from './NavigationButtons.svelte'
@@ -62,6 +63,8 @@
     if (question.includes('apigeomEx')) return answer // Pour le "Voir figure" des figures apigeom
     if (question.includes('divDragAndDropEx')) return answer // Pour les drag and drop
     if (question.includes('multiMathfield')) return cleanMultiMathfield(answer)
+    if (question.includes('metaInteractif2d'))
+      return cleanMetaInteractif2d(answer)
     return '$' + cleanFillInTheBlanks(answer, false) + '$'
   }
 
@@ -97,6 +100,14 @@
     cleaned = cleaned.replace(/\${2,}/g, '')
 
     return cleaned
+  }
+
+  function cleanMetaInteractif2d(text: string) {
+    const saisies = JSON.parse(text)
+    const reponses = Object.entries(saisies).map(
+      ([key, value]) => `$${String(value)}$`,
+    )
+    return enumeration(reponses)
   }
 
   function cleanFillInTheBlanks(text: string, removeDollar: boolean = true) {

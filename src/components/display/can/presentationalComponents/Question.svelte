@@ -84,8 +84,8 @@
   function updateInteractivity() {
     if (questionContainer) {
       const multiMf = questionContainer.querySelector('multi-mathfield')
+      // gestion des MultiMathfield
       if (multiMf != null) {
-        console.info('Je gère le multi-mathfield')
         const shadowRoot = multiMf.shadowRoot
         if (shadowRoot) {
           const mathfields = Array.from(
@@ -94,7 +94,7 @@
           for (const mf of mathfields) {
             if (!mf.dataset.listenerAdded) {
               mf.dataset.listenerAdded = 'true' // Marquer comme ajouté
-              mf.addEventListener('keyup', handleKeyUp)
+              //   mf.addEventListener('keyup', handleKeyUp) => Ne pas pas passer à la question suivante avec enter, il y a plusieurs champs
               mf.addEventListener('input', handleMultiMathfieldElement)
             }
             $keyboardState.idMathField = mf.id
@@ -112,6 +112,31 @@
         }
         return
       }
+
+      const metaI2d = questionContainer.querySelectorAll('.metaInteractif2d')
+      // gestion des metaInteractif2d
+      if (metaI2d != null) {
+        console.info('Je gère le metaInteractif2d')
+        const listeMf = Array.from(metaI2d) as MathfieldElement[]
+        for (const mf of listeMf) {
+          if (!mf.dataset.listenerAdded) {
+            mf.dataset.listenerAdded = 'true' // Marquer comme ajouté
+            mf.addEventListener('input', handleMathfieldElement)
+          }
+          $keyboardState.idMathField = mf.id
+          window.setTimeout(() => {
+            const hasFocus =
+              document.activeElement &&
+              listeMf.includes(document.activeElement as MathfieldElement)
+            if (!hasFocus) {
+              const mf = listeMf[0]
+              if (mf) mf.focus()
+            }
+          }, 0)
+        }
+        return
+      }
+
       const mf = questionContainer?.querySelector(
         'math-field',
       ) as MathfieldElement
