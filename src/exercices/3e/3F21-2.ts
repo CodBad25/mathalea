@@ -9,7 +9,9 @@ import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import {
   ecritureAlgebrique,
   ecritureParentheseSiNegatif,
+  reduireAxPlusB,
 } from '../../lib/outils/ecritures'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import FractionEtendue from '../../modules/FractionEtendue'
 import { fraction } from '../../modules/fractions'
 import { mathalea2d } from '../../modules/mathalea2d'
@@ -20,6 +22,7 @@ export const titre =
   'Déterminer une fonction affine par la donnée des images de deux nombres'
 export const interactifReady = true
 export const interactifType = 'mathLive'
+export const dateDeModifImportante = '29/03/2026'
 
 /**
  * Déterminer la forme algébrique à partir de la donnée de 2 nombres et de leurs images
@@ -51,7 +54,7 @@ export default class DeterminerFonctionAffine extends Exercice {
     this.nbQuestions = 2
     this.nbCols = 2 // Uniquement pour la sortie LaTeX
     this.nbColsCorr = 2 // Uniquement pour la sortie LaTeX
-    // this.sup = 1
+    this.spacingCorr = 2
   }
 
   nouvelleVersion() {
@@ -88,7 +91,7 @@ export default class DeterminerFonctionAffine extends Exercice {
           y1 = b
           y2 = b
           texteCorr = `On remarque que $f(${x1})=f(${x2})=${b}$ donc la droite représentant la fonction $f$ passe par deux points distincts ayant la même ordonnée.<br>`
-          texteCorr += `Elle est donc parallèle à l'axe des abscisses. La fonction $f$ est une fonction constante et $f(x)=${b}$.`
+          texteCorr += `Elle est donc parallèle à l'axe des abscisses. La fonction $f$ est une fonction constante et $${miseEnEvidence(`f(x)=${b}`)}$.`
           setReponse(this, i, `f(x)=${b}`)
           if (this.correctionDetaillee) {
             tA = tracePoint(point(x1, y1), 'red')
@@ -126,7 +129,7 @@ export default class DeterminerFonctionAffine extends Exercice {
           y2 = b + a * x2
           texteCorr = `Soit $f(x)=ax+b$. Nous savons que $f(0)=${y1}=b$.<br>`
           texteCorr += `Donc $f(x)=ax${ecritureAlgebrique(y1)}$. En utilisant la donnée $f(${x2})=${y2}$ on obtient : $a \\times ${ecritureParentheseSiNegatif(x2)}${ecritureAlgebrique(b)}=${y2}$ d'où $a \\times ${ecritureParentheseSiNegatif(x2)}=${y2}${ecritureAlgebrique(-b)}=${y2 - b}$ donc $a=\\dfrac{${y2 - b}}{${x2}}=${a}$.<br>`
-          texteCorr += `Donc $f(x)=${a}x${ecritureAlgebrique(b)}$.`
+          texteCorr += `Donc $${miseEnEvidence(`f(x)=${reduireAxPlusB(a, b)}`)}$.`
           setReponse(this, i, `f(x)=${a}x${ecritureAlgebrique(b)}`)
           if (this.correctionDetaillee) {
             tA = tracePoint(point(x1, y1), 'red')
@@ -166,7 +169,7 @@ export default class DeterminerFonctionAffine extends Exercice {
           if (y1 < 0) texteCorr += `${y2}${ecritureAlgebrique(-y1)}=${a}$.<br>`
           else texteCorr += `${a}$.<br>`
           texteCorr += `Donc $f(x)=${a}x+b$.<br>En utilisant la donnée $f(${x2})=${y2}$ on obtient : $${a} \\times ${ecritureParentheseSiNegatif(x2)}+b=${y2}$ d'où $${a * x2}+b=${y2}$ donc $b=${y2}${ecritureAlgebrique(-a * x2)}=${b}$.<br>`
-          texteCorr += `Donc $f(x)=${a}x${ecritureAlgebrique(b)}$.`
+          texteCorr += `Donc $${miseEnEvidence(`f(x)=${reduireAxPlusB(a, b)}`)}$.`
           setReponse(this, i, `f(x)=${a}x${ecritureAlgebrique(b)}`)
           if (this.correctionDetaillee) {
             tA = tracePoint(point(x1, y1), 'red')
@@ -202,13 +205,13 @@ export default class DeterminerFonctionAffine extends Exercice {
           y1 = a * x1 + b
           x2 = randint(-5, 5, [0, x1])
           y2 = b + a * x2
-          texteCorr = `Soit $f(x)=ax+b$. En utilisant les données de l'énoncé, on obtient : $f(${x1})=${y1}=a \\times ${ecritureParentheseSiNegatif(x1)}+b$ et $f(${x2})=${y2}=a \\times ${ecritureParentheseSiNegatif(x2)}+b$<br>`
+          texteCorr = `Soit $f(x)=ax+b$. En utilisant les données de l'énoncé, on obtient : $f(${x1})=${y1}=a \\times ${ecritureParentheseSiNegatif(x1)}+b$ et $f(${x2})=${y2}=a \\times ${ecritureParentheseSiNegatif(x2)}+b$.<br>`
           texteCorr += `Donc d'une part : $b=${y1}+a\\times ${ecritureParentheseSiNegatif(-x1)}$ et d'autre part : $b=${y2}+a\\times ${ecritureParentheseSiNegatif(-x2)}$.<br>`
           texteCorr += `Par identification, on obtient : $${y1}+a\\times ${ecritureParentheseSiNegatif(-x1)}=${y2}+a\\times ${ecritureParentheseSiNegatif(-x2)}$.<br>`
           texteCorr += `On en déduit que $${y1}${ecritureAlgebrique(-y2)}=a(${x1}${ecritureAlgebrique(-x2)})$ soit $${y1 - y2}=${x1 - x2}a$.<br>`
           texteCorr += `Donc $a=\\dfrac{${y1 - y2}}{${x1 - x2}}=${a}$.<br>`
           texteCorr += `Donc $b=${y1}${ecritureAlgebrique(a)}\\times ${ecritureParentheseSiNegatif(-x1)}=${y1}${ecritureAlgebrique(-a * x1)}=${b}$.<br>`
-          texteCorr += `Donc $f(x)=${a}x${ecritureAlgebrique(b)}$.`
+          texteCorr += `Donc $${miseEnEvidence(`f(x)=${reduireAxPlusB(a, b)}`)}$.`
           setReponse(this, i, `f(x)=${a}x${ecritureAlgebrique(b)}`)
           if (this.correctionDetaillee) {
             tA = tracePoint(point(x1, y1), 'red')
@@ -241,17 +244,17 @@ export default class DeterminerFonctionAffine extends Exercice {
           x1 = randint(-5, 5, 0)
           x2 = randint(-5, 5, [0, x1])
           y1 = randint(-5, 5)
-          y2 = randint(-5, 5)
+          y2 = randint(-5, 5, y1)
           const aFrac = new FractionEtendue(y2 - y1, x2 - x1)
           let bFrac = new FractionEtendue(y2 - y1, x2 - x1)
           bFrac = aFrac.multiplieEntier(-x1).ajouteEntier(y1)
-          texteCorr = `Soit $f(x)=ax+b$. En utilisant les données de l'énoncé, on obtient : $f(${x1})=${y1}=a \\times ${ecritureParentheseSiNegatif(x1)}+b$ et $f(${x2})=${y2}=a \\times ${ecritureParentheseSiNegatif(x2)}+b$<br>`
+          texteCorr = `Soit $f(x)=ax+b$. En utilisant les données de l'énoncé, on obtient : $f(${x1})=${y1}=a \\times ${ecritureParentheseSiNegatif(x1)}+b$ et $f(${x2})=${y2}=a \\times ${ecritureParentheseSiNegatif(x2)}+b$.<br>`
           texteCorr += `Donc d'une part : $b=${y1}+a\\times ${ecritureParentheseSiNegatif(-x1)}$ et d'autre part : $b=${y2}+a\\times ${ecritureParentheseSiNegatif(-x2)}$.<br>`
           texteCorr += `Par identification, on obtient : $${y1}+a\\times ${ecritureParentheseSiNegatif(-x1)}=${y2}+a\\times ${ecritureParentheseSiNegatif(-x2)}$.<br>`
           texteCorr += `On en déduit que $${y1}${ecritureAlgebrique(-y2)}=a(${x1}${ecritureAlgebrique(-x2)})$ soit $${y1 - y2}=${x1 - x2}a$.<br>`
           texteCorr += `Donc $a=\\dfrac{${y1 - y2}}{${x1 - x2}}=${aFrac.texFractionSimplifiee}$.<br>`
-          texteCorr += `Donc $b=${y1}+${aFrac.texFractionSimplifiee}\\times ${ecritureParentheseSiNegatif(-x1)}=${fraction(y1 * aFrac.denIrred, aFrac.denIrred).texFraction}+${aFrac.multiplieEntier(-x1).texFractionSimplifiee}=${bFrac.texFractionSimplifiee}$.<br>`
-          texteCorr += `Donc $f(x)=${aFrac.texFractionSimplifiee}x${bFrac.simplifie().texFractionSignee}$.`
+          texteCorr += `Donc $b=${y1}+${aFrac.signe === -1 ? '\\Big(' : ''}${aFrac.texFractionSimplifiee}${aFrac.signe === -1 ? '\\Big)' : ''}\\times ${ecritureParentheseSiNegatif(-x1)}=${fraction(y1 * aFrac.denIrred, aFrac.denIrred).texFraction}+${aFrac.multiplieEntier(-x1).texFractionSimplifiee}=${bFrac.texFractionSimplifiee}$.<br>`
+          texteCorr += `Donc $${miseEnEvidence(`f(x)=${aFrac.texFractionSimplifiee}x${bFrac.num === 0 ? '' : bFrac.simplifie().texFractionSignee}`)}$.`
           setReponse(
             this,
             i,
