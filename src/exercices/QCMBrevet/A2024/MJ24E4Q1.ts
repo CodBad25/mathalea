@@ -20,12 +20,11 @@ export const interactifReady = true
 export const interactifType = 'qcm'
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
-export const titre = "Fonction calcul d'image (06/2024 Métropole)"
+export const titre = 'Calculer une image par une fonction (2024 Métropole)'
 export const dateDePublication = '09/11/2024'
+
 /**
- *
  * @author Jean-Claude LHOTE
- * jean-claude.lhote@ac-nancy-metz.fr
  */
 
 export default class MetropoleJuin24Exo4Q1 extends ExerciceQcmA {
@@ -37,7 +36,7 @@ export default class MetropoleJuin24Exo4Q1 extends ExerciceQcmA {
     ]
     this.enonce = `On considère la fonction $f$ définie par $f(x)=${reduireAxPlusB(a, b)}$.<br>
     Quelle est l'image de $${String(c)}$ par cette fonction ?`
-    this.correction = `l'image de $${String(c)}$ par $f$ est : $${rienSi1(a)}${Math.abs(a) !== 1 ? '\\times ' : ''}${ecritureParentheseSiNegatif(c)}${ecritureAlgebrique(b)}=${miseEnEvidence(texNombre(a * c + b, 0))}$.<br>`
+    this.correction = `L'image de $${String(c)}$ par $f$ est : $${rienSi1(a)}${Math.abs(a) !== 1 ? '\\times ' : ''}${ecritureParentheseSiNegatif(c)}${ecritureAlgebrique(b)}=${miseEnEvidence(texNombre(a * c + b, 0))}$.`
   }
 
   versionOriginale: () => void = () => {
