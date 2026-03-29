@@ -1,6 +1,10 @@
 import { choice } from '../../../lib/outils/arrayOutils'
 import { texFractionReduite } from '../../../lib/outils/deprecatedFractions'
-import { ecritureParentheseSiNegatif } from '../../../lib/outils/ecritures'
+import {
+  ecritureParentheseSiNegatif,
+  reduireAxPlusB,
+} from '../../../lib/outils/ecritures'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { abs } from '../../../lib/outils/nombres'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
@@ -8,6 +12,7 @@ export const titre = 'Déterminer le coefficient d’une fonction affine'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const dateDePublication = '25/10/2021'
+export const dateDeModifImportante = '29/03/2026'
 
 /**
  * Modèle d'exercice très simple pour la course aux nombres
@@ -39,8 +44,12 @@ export default class CoefficientFonctionAffine extends ExerciceSimple {
 
     Donner la valeur de $a$.
     `
-      this.correction = `Comme $f(${c})=${d}$, on a $a\\times ${c}+${ecritureParentheseSiNegatif(b)}=${d}$.<br>
-    On en déduit $ ${c}a=${d}-${ecritureParentheseSiNegatif(b)}$, d'où $a=\\dfrac{${d}-${ecritureParentheseSiNegatif(b)}}{${c}}=\\dfrac{${d - b}}{${c}}=${texFractionReduite(d - b, c)}$.`
+      this.correction = `Comme $f(${c})=${d}$, on a $a\\times ${c}+${ecritureParentheseSiNegatif(b)}=${d}$, soit $${reduireAxPlusB(c, b, 'a')}=${d}$.<br>
+    On en déduit `
+      this.correction +=
+        c === 1
+          ? `$a=${d}-${ecritureParentheseSiNegatif(b)}=${miseEnEvidence(texFractionReduite(d - b, c))}$.`
+          : `$${c}a=${d}-${ecritureParentheseSiNegatif(b)}=${d - b}$, d'où $a=\\dfrac{${d - b}}{${c}}=${miseEnEvidence(texFractionReduite(d - b, c))}$.`
 
       this.reponse = (d - b) / c
     } else {
@@ -48,8 +57,12 @@ export default class CoefficientFonctionAffine extends ExerciceSimple {
 
       Donner la valeur de $a$.
     `
-      this.correction = `Comme $f(${c})=${d}$, on a $a\\times ${c}+${ecritureParentheseSiNegatif(b)}=${d}$.<br>
-    On en déduit $${c}a=${d}-${ecritureParentheseSiNegatif(b)}$, d'où $a=\\dfrac{${d}-${ecritureParentheseSiNegatif(b)}}{${c}}=\\dfrac{${d - b}}{${c}}=${texFractionReduite(d - b, c)}$.`
+      this.correction = `Comme $f(${c})=${d}$, on a $a\\times ${c}${b}=${d}$, soit $${reduireAxPlusB(c, b, 'a')}=${d}$.<br>
+    On en déduit `
+      this.correction +=
+        c === 1
+          ? `$a=${d}+${-b}=${miseEnEvidence(texFractionReduite(d - b, c))}$.`
+          : `$${c}a=${d}+${-b}=${d - b}$, d'où $a=\\dfrac{${d - b}}{${c}}=${miseEnEvidence(texFractionReduite(d - b, c))}$.`
 
       this.reponse = (d - b) / c
     }
