@@ -17,6 +17,7 @@ import Exercice from '../Exercice'
 
 import Figure from 'apigeom'
 import { lectureImage } from '../../lib/2d/LectureImage'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 
 export const titre = "Lire graphiquement l'image d'un nombre par une fonction"
 export const dateDePublication = '29/10/2023'
@@ -31,7 +32,7 @@ export const interactifType = 'mathLive'
 export const uuid = '6c6b3'
 
 export const refs = {
-  'fr-fr': ['3F10-4', 'BP2AutoO4'],
+  'fr-fr': ['3F10-4', 'BP2AutoO5'],
   'fr-ch': ['10FA5-8', '11FA7-2', '1mF1-2'],
 }
 
@@ -164,7 +165,12 @@ class LireImageParApiGeom extends Exercice {
       this.Y.map((el) =>
         Object.assign(
           {},
-          { texte: texNombre(el, 1), gras: false, color: 'black', latex: true },
+          {
+            texte: miseEnEvidence(texNombre(el, 1)),
+            gras: false,
+            color: 'black',
+            latex: true,
+          },
         ),
       ),
     )
