@@ -8,6 +8,7 @@ import {
   remplisLesBlancs,
 } from '../../lib/interactif/questionMathLive'
 import { choice, shuffle2tableaux } from '../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { range } from '../../lib/outils/nombres'
 import { numAlpha } from '../../lib/outils/outilString'
 import { getLang } from '../../lib/stores/languagesStore'
@@ -92,8 +93,8 @@ export default class ImageAntecedentDepuisTableauOuFleche extends Exercice {
       texteCorr =
         numAlpha(0) +
         (voies[0]
-          ? `L'image de $${a}$ par la fonction $f$ est $${b}$, on note $f(${a})=${b}$.<br>`
-          : `Le nombre $${a}$ a pour image $${b}$ par la fonction $f$, on note $f(${a})=${b}$.<br>`)
+          ? `L'image de $${a}$ par la fonction $f$ est $${miseEnEvidence(b)}$, on note $f(${a})=${miseEnEvidence(b)}$.<br>`
+          : `Le nombre $${a}$ a pour image $${miseEnEvidence(b)}$ par la fonction $f$, on note $f(${a})=${miseEnEvidence(b)}$.<br>`)
       setReponse(this, 6 * i, b)
       texte += ajouteChampTexteMathLive(this, 6 * i, KeyboardType.clavierDeBase)
       if (context.isAmc) {
@@ -111,8 +112,8 @@ export default class ImageAntecedentDepuisTableauOuFleche extends Exercice {
       texteCorr +=
         numAlpha(1) +
         (voies[1]
-          ? `L'image de $${c}$ par la fonction $f$ est $${d}$, on note $f(${c})=${d}$.`
-          : `Le nombre $${c}$ a pour image $${d}$ par la fonction $f$, on note $f(${c})=${d}$.`)
+          ? `L'image de $${c}$ par la fonction $f$ est $${miseEnEvidence(d)}$, on note $f(${c})=${miseEnEvidence(d)}$.`
+          : `Le nombre $${c}$ a pour image $${miseEnEvidence(d)}$ par la fonction $f$, on note $f(${c})=${miseEnEvidence(d)}$.`)
       texte += ajouteChampTexteMathLive(
         this,
         i * 6 + 1,
@@ -133,13 +134,13 @@ export default class ImageAntecedentDepuisTableauOuFleche extends Exercice {
           : `le ou les nombres qui ont $${a}$ comme image par $f$.`
       }`
       const texteCorr3 = voies[2]
-        ? `$${a}$ a ${lang === 'fr-CH' ? 'un seul élément dans la préimage' : 'un seul antécédent'} par la fonction $f$ qui est $${d}$, on note $f(${d})=${a}$.`
-        : `Le nombre $${d}$ a pour image $${a}$ par la fonction $f$, donc $f(${d})=${a}$.`
+        ? `$${a}$ a ${lang === 'fr-CH' ? 'un seul élément dans la préimage' : 'un seul antécédent'} par la fonction $f$ qui est $${miseEnEvidence(d)}$, on note $f(${miseEnEvidence(d)})=${a}$.`
+        : `Le nombre $${miseEnEvidence(d)}$ a pour image $${a}$ par la fonction $f$, donc $f(${miseEnEvidence(d)})=${a}$.`
       setReponse(this, i * 6 + 2, d)
       texte3 += ajouteChampTexteMathLive(
         this,
         i * 6 + 2,
-        KeyboardType.clavierDeBase,
+        KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets,
       )
       if (context.isAmc) {
         this.autoCorrection[i].propositions?.push(
@@ -158,16 +159,16 @@ export default class ImageAntecedentDepuisTableauOuFleche extends Exercice {
         : `Déterminer le ou les nombres qui ont $${d}$ comme image par la fonction $f$.`
       const texteCorr4 = voies[3]
         ? lang === 'fr-CH'
-          ? `$${d}$ a deux éléments dans la préimage : $${c}$ et $${e}$, on note $f(${c})=f(${e})=${d}$.`
-          : `$${d}$ a deux antécédents : $${c}$ et $${e}$, on note $f(${c})=f(${e})=${d}$.`
-        : `$${c}$ et $${e}$ ont pour image $${d}$ par la fonction $f$, on note $f(${c})=f(${e})=${d}$.`
+          ? `$${d}$ a deux éléments dans la préimage : $${miseEnEvidence(c)}$ et $${miseEnEvidence(e)}$, on note $f(${miseEnEvidence(c)})=f(${miseEnEvidence(e)})=${d}$.`
+          : `$${d}$ a deux antécédents : $${miseEnEvidence(c)}$ et $${miseEnEvidence(e)}$, on note $f(${miseEnEvidence(c)})=f(${miseEnEvidence(e)})=${d}$.`
+        : `$${miseEnEvidence(c)}$ et $${miseEnEvidence(e)}$ ont pour image $${d}$ par la fonction $f$, on note $f(${miseEnEvidence(c)})=f(${miseEnEvidence(e)})=${d}$.`
       setReponse(this, i * 6 + 3, [`${c};${e}`, `${e};${c}`], {
         formatInteractif: 'texte',
       })
       texte4 += ajouteChampTexteMathLive(
         this,
         i * 6 + 3,
-        KeyboardType.clavierDeBase,
+        KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets,
       )
       if (context.isAmc) {
         this.autoCorrection[i].propositions?.push(
@@ -192,10 +193,12 @@ export default class ImageAntecedentDepuisTableauOuFleche extends Exercice {
 
       texte += '<br>' + numAlpha(4)
       texte += this.interactif
-        ? `Compléter : ${remplisLesBlancs(this, i * 6 + 4, `f(${c})=%{champ1}`, 'fillInTheBlank')}`
+        ? `Compléter : ${remplisLesBlancs(this, i * 6 + 4, `f(${c})=%{champ1}`, KeyboardType.clavierDeBase)}`
         : `Recopier et compléter : $f(${c})=\\ldots$`
-      texteCorr += '<br>' + numAlpha(4) + `$f(${c})=${d}$`
-      handleAnswers(this, i * 6 + 4, { champ1: { value: d.toString() } })
+      texteCorr += '<br>' + numAlpha(4) + `$f(${c})=${miseEnEvidence(d)}$`
+      handleAnswers(this, i * 6 + 4, {
+        champ1: { value: d.toString() },
+      })
       if (context.isAmc) {
         this.autoCorrection[i].propositions?.push(
           ajouteProposition(numAlpha(4) + `Compléter : $f(${c})=\\ldots$`, d),
@@ -204,10 +207,10 @@ export default class ImageAntecedentDepuisTableauOuFleche extends Exercice {
 
       texte += '<br>' + numAlpha(5)
       texte += this.interactif
-        ? `Compléter : ${remplisLesBlancs(this, i * 6 + 5, `f(%{champ1})=${c}`, 'fillInTheBlank')}`
+        ? `Compléter : ${remplisLesBlancs(this, i * 6 + 5, `f(%{champ1})=${c}`, KeyboardType.clavierDeBase)}`
         : `Recopier et compléter : $f(\\ldots)=${c}$`
 
-      texteCorr += '<br>' + numAlpha(5) + `$f(${f})=${c}$`
+      texteCorr += '<br>' + numAlpha(5) + `$f(${miseEnEvidence(f)})=${c}$`
       handleAnswers(this, i * 6 + 5, { champ1: { value: f.toString() } })
       if (context.isAmc) {
         this.autoCorrection[i].propositions?.push(
