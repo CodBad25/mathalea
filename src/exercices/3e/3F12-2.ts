@@ -6,13 +6,13 @@ import {
   combinaisonListes,
   shuffle,
 } from '../../lib/outils/arrayOutils'
-import { texFractionReduite } from '../../lib/outils/deprecatedFractions'
 import {
   ecritureAlgebrique,
   ecritureParentheseSiNegatif,
 } from '../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { lettreMinusculeDepuisChiffre } from '../../lib/outils/outilString'
+import FractionEtendue from '../../modules/FractionEtendue'
 import { fraction } from '../../modules/fractions'
 import {
   gestionnaireFormulaireTexte,
@@ -195,18 +195,24 @@ export default class ImageFonctionAlgebrique extends Exercice {
           texteCorr = `$${nomdef}(${x})=-${a}\\times ${ecritureParentheseSiNegatif(x)}^2-${b}\\times ${ecritureParentheseSiNegatif(x)}=-${a}\\times${x * x}${ecritureAlgebrique(-1 * b * x)}=${-1 * a * x * x}${ecritureAlgebrique(-1 * b * x)}=${-1 * a * x * x - b * x}$`
           setReponse(this, i, -1 * a * x * x - b * x)
           break
-        case 'a/cx+d':
+        case 'a/cx+d': {
           d = randint(1, 11)
           while (c * x + d === 0) {
             c = randint(2, 11)
           }
           expression = `\\dfrac{${a}}{${c}x+${d}}`
-          texteCorr = `$${nomdef}(${x})=\\dfrac{${a}}{${c}\\times${ecritureParentheseSiNegatif(x)}+${d}}=\\dfrac{${a}}{${c * x}+${d}}=\\dfrac{${a}}{${c * x + d}}=${texFractionReduite(a, c * x + d)}$`
+          texteCorr = `$${nomdef}(${x})=\\dfrac{${a}}{${c}\\times${ecritureParentheseSiNegatif(x)}+${d}}=\\dfrac{${a}}{${c * x}+${d}}=\\dfrac{${a}}{${c * x + d}}`
+          const fractionReponse = new FractionEtendue(a, c * x + d)
+          texteCorr +=
+            fractionReponse.estIrreductible && a > 0 && c * x + d > 0
+              ? '$'
+              : `=${fractionReponse.texFractionSimplifiee}$`
           setReponse(this, i, fraction(a, c * x + d), {
             formatInteractif: 'fractionEgale',
           })
           break
-        case 'ax+b/cx+d':
+        }
+        case 'ax+b/cx+d': {
           d = randint(1, 11)
           while (c * x + d === 0) {
             c = randint(2, 11)
@@ -215,11 +221,17 @@ export default class ImageFonctionAlgebrique extends Exercice {
             a = randint(2, 11)
           }
           expression = `\\dfrac{${a}x+${b}}{${c}x+${d}}`
-          texteCorr = `$${nomdef}(${x})=\\dfrac{${a}\\times${ecritureParentheseSiNegatif(x)}+${b}}{${c}\\times${ecritureParentheseSiNegatif(x)}+${d}}=\\dfrac{${a * x}+${b}}{${c * x}+${d}}=\\dfrac{${a * x + b}}{${c * x + d}}=${texFractionReduite(a * x + b, c * x + d)}$`
+          texteCorr = `$${nomdef}(${x})=\\dfrac{${a}\\times${ecritureParentheseSiNegatif(x)}+${b}}{${c}\\times${ecritureParentheseSiNegatif(x)}+${d}}=\\dfrac{${a * x}+${b}}{${c * x}+${d}}=\\dfrac{${a * x + b}}{${c * x + d}}`
+          const fractionReponse = new FractionEtendue(a * x + b, c * x + d)
+          texteCorr +=
+            fractionReponse.estIrreductible && a * x + b > 0 && c * x + d > 0
+              ? '$'
+              : `=${fractionReponse.texFractionSimplifiee}$`
           setReponse(this, i, fraction(a * x + b, c * x + d), {
             formatInteractif: 'fractionEgale',
           })
           break
+        }
         case '(ax+b)(cx+d)':
           a = randint(-4, 4, [0, 1, -1])
           b = randint(-4, 4, [0])
