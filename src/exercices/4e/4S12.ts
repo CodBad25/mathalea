@@ -2,6 +2,7 @@ import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { ecritureParentheseSiNegatif } from '../../lib/outils/ecritures'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { arrondi } from '../../lib/outils/nombres'
 import { texNombre } from '../../lib/outils/texNombre'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
@@ -33,8 +34,12 @@ export default class MoyenneEtMediane extends Exercice {
       2,
       '1 : Impair\n2 : Pair',
     ]
-    this.besoinFormulaire2CaseACocher = ['Demander l\'interprétation pour la médiane']
+    this.besoinFormulaire2CaseACocher = [
+      "Demander l'interprétation pour la médiane",
+    ]
     this.sup2 = false
+    this.comment =
+      "La demande d'interprétation ne peut pas être satisfaite si l'exercice est interactif."
   }
 
   nouvelleVersion() {
@@ -62,13 +67,13 @@ export default class MoyenneEtMediane extends Exercice {
       })
     }
     let correction1 = stringCalculMoyenne(temperatures)
-    correction1 += `<br><br> La température moyenne est de $${texNombre(getMoyenne(temperatures), 1)}$°C.`
+    correction1 += `<br><br> La température moyenne est de $${miseEnEvidence(texNombre(getMoyenne(temperatures), 1))}$°C.`
 
     let question2 = ''
     let correction2 = ''
     if (this.onlyMoyenne === false) {
       question2 += 'Calculer la température médiane de cette série'
-      if (this.sup2) {
+      if (this.sup2 && !this.interactif) {
         question2 += ' et interpréter le résultat.'
       } else {
         question2 += '.'
@@ -76,8 +81,9 @@ export default class MoyenneEtMediane extends Exercice {
       correction2 = `On réordonne les températures par ordre croissant : ${sortedStringList(temperatures)}.<br>`
       const mediane = getMedianne(temperatures)
       correction2 +=
-        stringCalculMediane(temperatures) + `$${texNombre(mediane)}$°C.`
-      if (this.sup2) {
+        stringCalculMediane(temperatures) +
+        `$${miseEnEvidence(texNombre(mediane))}$°C.`
+      if (this.sup2 && !this.interactif) {
         correction2 += `<br>Cela signifie que la moitié au moins des températures est supérieure ou égale à $${texNombre(mediane)}$°C.`
       }
       if (this.interactif) {
@@ -115,7 +121,7 @@ export default class MoyenneEtMediane extends Exercice {
         }
       }
     }
-    
+
     if (this.onlyMoyenne) {
       this.listeQuestions = [question1]
       this.listeCorrections = [correction1]
