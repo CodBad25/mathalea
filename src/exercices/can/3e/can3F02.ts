@@ -1,5 +1,6 @@
 import { choice } from '../../../lib/outils/arrayOutils'
 import { ecritureParentheseSiNegatif } from '../../../lib/outils/ecritures'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer une image par une fonction linéaire'
@@ -9,7 +10,7 @@ export const amcReady = true
 export const amcType = 'AMCNum'
 export const dateDeModifImportante = '13/10/2022'
 /**
- * @author Jean-Claude Lhote/Gilles Mora
+ * @author Jean-Claude Lhote - Gilles Mora
   * Créé pendant l'été 2021
 
 */
@@ -38,7 +39,7 @@ export default class CalculImageParFonctionLineaire extends ExerciceSimple {
         this.question = `Soit $${nomF}$ la fonction définie par : $${nomF}(x)=${m}x$.<br>
         
         Quelle est l'image de $${x}$ par la fonction $${nomF}$ ?`
-        this.correction = `$${nomF}(x)=${m}x$ donc ici on a : $${nomF}(${x})=${m} \\times ${ecritureParentheseSiNegatif(x)}=${m * x}$.`
+        this.correction = `$${nomF}(x)=${m}x$ donc ici on a : $${nomF}(${x})=${m} \\times ${ecritureParentheseSiNegatif(x)}=${miseEnEvidence(m * x)}$.`
         this.reponse = m * x
         break
       case 2:
@@ -49,7 +50,7 @@ export default class CalculImageParFonctionLineaire extends ExerciceSimple {
         this.question = `Soit $${nomF}$ la fonction définie par : $${nomF}(x)=\\dfrac{${m}}{${n}}x$.<br>
             
             Quelle est l'image de $${n * x}$ par la fonction $${nomF}$ ?`
-        this.correction = `$${nomF}(x)=\\dfrac{${m}}{${n}}x$ donc ici on a : $${nomF}(${n * x})=\\dfrac{${m}}{${n}} \\times ${ecritureParentheseSiNegatif(n * x)}=${m}\\times \\dfrac{${n * x}}{${n}}=${m}\\times ${ecritureParentheseSiNegatif(x)}=${m * x}$.`
+        this.correction = `$${nomF}(x)=\\dfrac{${m}}{${n}}x$ donc ici on a : $${nomF}(${n * x})=\\dfrac{${m}}{${n}} \\times ${ecritureParentheseSiNegatif(n * x)}=${m}\\times \\dfrac{${n * x}}{${n}}=${m}\\times ${ecritureParentheseSiNegatif(x)}=${miseEnEvidence(m * x)}$.`
         this.reponse = m * x
         break
     }

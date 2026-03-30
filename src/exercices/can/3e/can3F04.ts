@@ -1,4 +1,5 @@
 import { choice } from '../../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer un antécédent par une fonction linéaire'
@@ -42,7 +43,7 @@ export default class CalculAntecedentLineaire extends ExerciceSimple {
         
         L'antécédent de $${m * x}$ est le nombre $x$ qui a pour image $${m * x}$. On cherche donc $x$ tel que : <br>
         
-         $${m}x=${m * x}$<br> soit $x=\\dfrac{${m * x}}{${m}}=${x}$.`
+         $${m}x=${m * x}$<br> soit $x=\\dfrac{${m * x}}{${m}}=${miseEnEvidence(x)}$.`
         this.reponse = x
         break
       case 2:
@@ -57,7 +58,7 @@ export default class CalculAntecedentLineaire extends ExerciceSimple {
         
         L'antécédent de $${m * x}$ est le nombre $x$ qui a pour image $${m * x}$. On cherche donc $x$ tel que : <br>
         
-         $\\dfrac{${m}}{${n}}x=${m * x}$<br>  soit $x=${m * x}\\times \\dfrac{${n}}{${m}}=${x * n}$.`
+         $\\dfrac{${m}}{${n}}x=${m * x}$<br>  soit $x=${m * x}\\times \\dfrac{${n}}{${m}}=${miseEnEvidence(x * n)}$.`
         this.reponse = n * x
         break
     }
