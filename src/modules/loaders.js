@@ -3,6 +3,7 @@ import { MathfieldElement } from 'mathlive'
 import { get } from 'svelte/store'
 import { keyboardState } from '../components/keyboard/stores/keyboardStore'
 import { getKeyboardShortcusts } from '../lib/interactif/claviers/keyboard'
+import { isMathfieldFocused } from '../lib/interactif/mathfieldFocus'
 import { globalOptions } from '../lib/stores/globalOptions'
 import { context } from './context'
 import { UserFriendlyError } from './messages'
@@ -158,7 +159,7 @@ function handleFocusOutMathField() {
   // car au focusout, le focus est sur body
   if (get(globalOptions).v === 'can') return
   setTimeout(() => {
-    if (document.activeElement.tagName !== 'MATH-FIELD') {
+    if (!isMathfieldFocused(document.activeElement)) {
       keyboardState.update((value) => {
         const newValue = value
         newValue.isVisible = false
