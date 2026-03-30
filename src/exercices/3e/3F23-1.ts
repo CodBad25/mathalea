@@ -22,7 +22,7 @@ export const interactifType = 'mathLive'
 export const uuid = 'd341f'
 
 export const refs = {
-  'fr-fr': ['3F22'],
+  'fr-fr': ['3F23-1'],
   'fr-ch': ['1mF2-17', '11FA8-20'],
 }
 export const dateDePublication = '08/10/2024'
