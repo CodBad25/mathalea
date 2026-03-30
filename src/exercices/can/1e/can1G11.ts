@@ -60,7 +60,7 @@ export default class mesureAngleCosSin extends ExerciceSimple {
         this.reponse = '\\dfrac{\\pi}{3}'
         break
       case 4: // 2pi/3
-        this.question = `$\\alpha$ est un réel de $${choix1}$ vérifiant $\\cos(\\alpha)=\\dfrac{1}{2}$ et $\\sin(\\alpha)=\\dfrac{\\sqrt{3}}{2}$. <br>
+        this.question = `$\\alpha$ est un réel de $${choix1}$ vérifiant $\\cos(\\alpha)=-\\dfrac{1}{2}$ et $\\sin(\\alpha)=\\dfrac{\\sqrt{3}}{2}$. <br>
        
         Quelle est la valeur de $\\alpha$ en radians ?`
         this.correction = `$\\cos \\dfrac{2\\pi}{3}=-\\dfrac{1}{2}$ et $\\sin \\dfrac{2\\pi}{3}=\\dfrac{\\sqrt{3}}{2}$.<br>
