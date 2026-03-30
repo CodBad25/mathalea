@@ -155,12 +155,7 @@ class EquationSecondDegre {
           `${
             this.coefficientsEqReduite[1]
               .multiplieEntier(-1)
-              .differenceFraction(
-                new FractionEtendue(
-                  Math.sqrt(this.delta.num) as number,
-                  Math.sqrt(this.delta.den) as number,
-                ),
-              )
+              .differenceFraction(this.delta.racineCarree() as FractionEtendue)
               .produitFraction(
                 this.coefficientsEqReduite[0].multiplieEntier(2).inverse(),
               ).texFractionSimplifiee
@@ -168,12 +163,7 @@ class EquationSecondDegre {
           `${
             this.coefficientsEqReduite[1]
               .multiplieEntier(-1)
-              .sommeFraction(
-                new FractionEtendue(
-                  Math.sqrt(this.delta.num) as number,
-                  Math.sqrt(this.delta.den) as number,
-                ),
-              )
+              .sommeFraction(this.delta.racineCarree() as FractionEtendue)
               .produitFraction(
                 this.coefficientsEqReduite[0].multiplieEntier(2).inverse(),
               ).texFractionSimplifiee
@@ -183,12 +173,7 @@ class EquationSecondDegre {
           `${
             this.coefficientsEqReduite[1]
               .multiplieEntier(-1)
-              .differenceFraction(
-                new FractionEtendue(
-                  Math.sqrt(this.delta.num) as number,
-                  Math.sqrt(this.delta.den) as number,
-                ),
-              )
+              .differenceFraction(this.delta.racineCarree() as FractionEtendue)
               .produitFraction(
                 this.coefficientsEqReduite[0].multiplieEntier(2).inverse(),
               )
@@ -197,12 +182,7 @@ class EquationSecondDegre {
           `${
             this.coefficientsEqReduite[1]
               .multiplieEntier(-1)
-              .sommeFraction(
-                new FractionEtendue(
-                  Math.sqrt(this.delta.num) as number,
-                  Math.sqrt(this.delta.den) as number,
-                ),
-              )
+              .sommeFraction(this.delta.racineCarree() as FractionEtendue)
               .produitFraction(
                 this.coefficientsEqReduite[0].multiplieEntier(2).inverse(),
               )
