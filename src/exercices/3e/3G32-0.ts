@@ -1726,8 +1726,7 @@ export default class ProblemesTrigoLongueur extends Exercice {
             enonceAMC = `$${A.nom + E.nom} = ${AE}\\text{ cm}$, $${A.nom + D.nom} = ${AD}\\text{ cm}$ et $${A.nom + C.nom} = ${AC}\\text{ cm}$.`
             enonceAMC += '<br>' + mathalea2d(paramsEnonce, objetsEnonce)
             enonceAMC += `Calculer la longueur $${A.nom + B.nom}$ et donner une valeur approchée `
-            texte =
-              enonceAMC + "(au millimètre près près, en précisant l'unité)."
+            texte = enonceAMC + "(au millimètre près, en précisant l'unité)."
             enonceAMC += 'en cm, au millimètre près.<br>'
             if (this.interactif) {
               texte += ajouteChampTexteMathLive(
