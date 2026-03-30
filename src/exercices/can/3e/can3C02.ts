@@ -1,4 +1,8 @@
-import { texteEnCouleur } from '../../../lib/outils/embellissements'
+import { bleuMathalea } from '../../../lib/colors'
+import {
+  miseEnEvidence,
+  texteEnCouleur,
+} from '../../../lib/outils/embellissements'
 import { sp } from '../../../lib/outils/outilString'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
@@ -11,9 +15,7 @@ export const amcType = 'AMCNum'
 
 /**
  * @author Jean-Claude Lhote
-  * Créé pendant l'été 2021
-
-*/
+ */
 export const uuid = 'debe7'
 
 export const refs = {
@@ -49,21 +51,23 @@ export default class MoyenneEntiereDeDecimaux extends ExerciceSimple {
         }
       }
       c = this.reponse * 30 - a - b
-    } while (b < 0 || c < 0)
+    } while (b < 0 || c < 0 || b % 10 === 0 || c % 10 === 0)
+
     this.question = `Calculer la moyenne des nombres :<br>
     
     $${sp(8)}${texNombre(a / 10)}${sp(8)}${texNombre(b / 10)}${sp(8)}${texNombre(c / 10)}$`
     this.correction = `La moyenne des trois nombres est : $\\dfrac{${texNombre(a / 10)}+${texNombre(b / 10)}+${texNombre(c / 10)}}{3}
-    =\\dfrac{${texNombre(a / 10 + b / 10 + c / 10)}}{3}= ${this.reponse}$.`
-    this.correction += texteEnCouleur(`<br> Mentalement : <br>
+    =\\dfrac{${texNombre(a / 10 + b / 10 + c / 10)}}{3}= ${miseEnEvidence(this.reponse)}$.`
+    this.correction += texteEnCouleur(
+      `<br> Mentalement : <br>
     
-    Pour faire la somme des trois nombres, <br>
+    Pour faire la somme des trois nombres : <br>
     $\\bullet$ On commence par faire la somme de leurs unités :
     $${Math.floor(a / 10)}+${Math.floor(b / 10)}+${Math.floor(c / 10)}
     =${texNombre(Math.floor(a / 10) + Math.floor(b / 10) + Math.floor(c / 10))}$.<br>
     $\\bullet$ Puis celle de leurs dixièmes :
     $${texNombre(a / 10 - Math.floor(a / 10))}+${texNombre(b / 10 - Math.floor(b / 10))}+${texNombre(c / 10 - Math.floor(c / 10))}=
-    ${texNombre(a / 10 - Math.floor(a / 10) + b / 10 - Math.floor(b / 10) + c / 10 - Math.floor(c / 10))}$
+    ${texNombre(a / 10 - Math.floor(a / 10) + b / 10 - Math.floor(b / 10) + c / 10 - Math.floor(c / 10))}$.
     <br>
     $\\bullet$ On les additionne :
     $${texNombre(Math.floor(a / 10) + Math.floor(b / 10) + Math.floor(c / 10))}
@@ -74,10 +78,12 @@ export default class MoyenneEntiereDeDecimaux extends ExerciceSimple {
         Math.floor(b / 10) +
         c / 10 -
         Math.floor(c / 10),
-    )}=${texNombre(a / 10 + b / 10 + c / 10)}$
+    )}=${texNombre(a / 10 + b / 10 + c / 10)}$.
     <br>
 
     $\\bullet$ On divise par le nombre de valeurs (soit $3$) : $\\dfrac{${texNombre(a / 10 + b / 10 + c / 10)}}{3}= ${this.reponse}$  <br>
-      `)
+      `,
+      bleuMathalea,
+    )
   }
 }
