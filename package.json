@@ -113,7 +113,7 @@
     "loadjs": "4.3.0",
     "lz-string": "^1.5.0",
     "mathjs": "^15.1.1",
-    "mathlive": "^0.104.2",
+    "mathlive": "^0.109.0",
     "mathsteps": "github:mathalea/mathsteps#update-mathjs",
     "node-fetch": "^3.3.2",
     "qrcode": "^1.5.4",
