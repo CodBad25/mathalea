@@ -4,6 +4,7 @@ import { keyboardState } from '../../../components/keyboard/stores/keyboardStore
 import type { BlockForKeyboard } from '../../../components/keyboard/types/keyboardContent'
 import { globalOptions } from '../../stores/globalOptions'
 import { getKeyboardShortcusts } from '../claviers/keyboard'
+import { isMathfieldFocused } from '../mathfieldFocus'
 export const setMathfieldListener = (e: Event) =>
   setMathfield(e.currentTarget as MathfieldElement)
 export function setMathfield(mf: MathfieldElement) {
@@ -59,10 +60,7 @@ function handleFocusOutMathField(event: FocusEvent) {
   // car au focusout, le focus est sur body
   if (get(globalOptions).v === 'can') return
   setTimeout(() => {
-    if (
-      document.activeElement &&
-      document.activeElement.tagName !== 'MATH-FIELD'
-    ) {
+    if (!isMathfieldFocused(document.activeElement)) {
       keyboardState.update((value) => {
         const newValue = value
         newValue.isVisible = false
