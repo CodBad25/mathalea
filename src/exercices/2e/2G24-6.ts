@@ -1,11 +1,13 @@
-import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { ecritureParentheseSiMoins } from '../../lib/outils/ecritures'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { randint } from '../../modules/outils'
 import ExerciceSimple from '../ExerciceSimple'
 
 export const titre =
   "Calculer les coordonnées du 4e sommet d'un parallélogramme"
 export const dateDePublication = '11/11/2023'
+export const dateDeModifImportante = '30/03/2026'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 
@@ -26,6 +28,8 @@ class CoordonneesParallelogramme extends ExerciceSimple {
     this.nbQuestions = 1
     this.spacingCorr = 3
     this.typeExercice = 'simple'
+    this.formatChampTexte =
+      KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets
   }
 
   nouvelleVersion(): void {

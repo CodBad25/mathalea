@@ -1,5 +1,5 @@
+import { remplisLesBlancs } from '../../../lib/interactif/questionMathLive'
 import { choice } from '../../../lib/outils/arrayOutils'
-import FractionEtendue from '../../../modules/FractionEtendue'
 import {
   ecritureAlgebrique,
   ecritureAlgebriqueSauf1,
@@ -8,9 +8,9 @@ import {
   rienSi1,
 } from '../../../lib/outils/ecritures'
 import { pgcd } from '../../../lib/outils/primalite'
-import Exercice from '../../Exercice'
+import FractionEtendue from '../../../modules/FractionEtendue'
 import { listeQuestionsToContenu, randint } from '../../../modules/outils'
-import { remplisLesBlancs } from '../../../lib/interactif/questionMathLive'
+import Exercice from '../../Exercice'
 
 import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
@@ -53,13 +53,13 @@ export default class ReconnaitreFonctionAffine extends Exercice {
             $f$ est une fonction affine de la forme $f(x)=ax+b$.<br>
             On a `
           texteCorr = `On identifie les valeurs de $a$ et de $b$ : <br>
-          la valeur de $a$ est le coefficient devant $x$ (attention, $x=1x$) et la valeur de $b$ est la constante. <br>
+          la valeur de $a$ est le coefficient devant $x$ ${a === 1 ? '(attention, $x=1x$)' : ''} et la valeur de $b$ est la constante. <br>
         $f(x)=${reduireAxPlusB(a, b)}=\\underbrace{${a}}_{a}x+\\underbrace{${ecritureParentheseSiNegatif(b)}}_{b}$.<br>
         On a donc $a=${miseEnEvidence(a)}$ et $b=${miseEnEvidence(b)}$.`
           texte += remplisLesBlancs(
             this,
             i,
-            'a =%{champ1}  \\text{ et  } b= %{champ2}',
+            'a =\\text{ }%{champ1}  \\text{ et  } b=\\text{ }%{champ2}.',
           )
           handleAnswers(this, i, {
             bareme: (listePoints) => [
@@ -80,14 +80,14 @@ export default class ReconnaitreFonctionAffine extends Exercice {
             $f$ est une fonction affine de la forme $f(x)=ax+b$.<br>
             On a `
           texteCorr = `On identifie les valeurs de $a$ et de $b$ : <br>
-          la valeur de $a$ est le coefficient devant $x$ (attention, $x=1x$) et la valeur de $b$ est la constante. <br>
+          la valeur de $a$ est le coefficient devant $x$ ${a === 1 ? '(attention, $x=1x$)' : ''} et la valeur de $b$ est la constante. <br>
         $f(x)=${b}${ecritureAlgebriqueSauf1(a)}x=\\underbrace{${a}}_{a}x+\\underbrace{${ecritureParentheseSiNegatif(b)}}_{b}$.<br>
         On a donc $a=${miseEnEvidence(a)}$ et $b=${miseEnEvidence(b)}$.`
 
           texte += remplisLesBlancs(
             this,
             i,
-            'a =%{champ1}  \\text{ et  } b= %{champ2}',
+            'a =\\text{ }%{champ1}  \\text{ et  } b =\\text{ }%{champ2}.',
           )
           handleAnswers(this, i, {
             bareme: (listePoints) => [
@@ -115,11 +115,11 @@ export default class ReconnaitreFonctionAffine extends Exercice {
          La fonction $f$ est une fonction affine de la forme $f(x)=ax+b$.`
           texteCorr = `On identifie les valeurs de $a$ et de $b$ : la valeur de $a$ est le coefficient devant $x$ (attention, $\\dfrac{ax}{b}=\\dfrac{a}{b}x$) et la valeur de $b$ est la constante.<br>
         $f(x)=\\dfrac{${rienSi1(a)}x}{${b}}${ecritureAlgebrique(c)}=\\underbrace{\\dfrac{${a}}{${b}}}_{a}x+\\underbrace{${ecritureParentheseSiNegatif(c)}}_{b}$<br>
-         On a donc $a=${miseEnEvidence(new FractionEtendue(a, b))}$ et $b=${miseEnEvidence(c)}$.`
+         On a donc $a=${miseEnEvidence(new FractionEtendue(a, b).texFSD)}$ et $b=${miseEnEvidence(c)}$.`
           texte += remplisLesBlancs(
             this,
             i,
-            'a =%{champ1}  \\text{ et  } b= %{champ2}',
+            'a =\\text{ }%{champ1}  \\text{ et  } b=\\text{ }%{champ2}',
           )
           handleAnswers(this, i, {
             bareme: (listePoints) => [
@@ -151,7 +151,7 @@ export default class ReconnaitreFonctionAffine extends Exercice {
           texte += remplisLesBlancs(
             this,
             i,
-            'a =%{champ1}  \\text{ et  } b= %{champ2}',
+            'a =\\text{ }%{champ1}  \\text{ et  } b=\\text{ }%{champ2}',
           )
           handleAnswers(this, i, {
             bareme: (listePoints) => [
@@ -164,7 +164,7 @@ export default class ReconnaitreFonctionAffine extends Exercice {
 
           texteCorr = `On identifie les valeurs de $a$ et de $b$ : la valeur de $a$ est le coefficient devant $x$  et la valeur de $b$ est la constante.<br>
         $f(x)=\\dfrac{${rienSi1(a)}x${ecritureAlgebrique(c)}}{${b}}=\\underbrace{\\dfrac{${a}}{${b}}}_{a}x+\\underbrace{\\dfrac{${c}}{${b}}}_{b}$<br>
-         On a donc $a=${miseEnEvidence(new FractionEtendue(a, b))}$ et $b=${miseEnEvidence(new FractionEtendue(c, b))}$.`
+         On a donc $a=${miseEnEvidence(new FractionEtendue(a, b).texFSD)}$ et $b=${miseEnEvidence(new FractionEtendue(c, b).texFSD)}$.`
           break
       }
 
