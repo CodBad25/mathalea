@@ -2,6 +2,7 @@ import { courbe } from '../../../lib/2d/Courbe'
 import { repere } from '../../../lib/2d/reperes'
 import { segment } from '../../../lib/2d/segmentsVecteurs'
 import { texteParPosition } from '../../../lib/2d/textes'
+import { bleuMathalea, vertMathalea } from '../../../lib/colors'
 import { texteCentre } from '../../../lib/format/miseEnPage'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { texFractionFromString } from '../../../lib/outils/deprecatedFractions'
@@ -43,7 +44,7 @@ export default class LectureGraphiqueFonctionAffine1 extends ExerciceSimple {
 
     const rep = repere({ xMin: -5, yMin: -5, xMax: 5, yMax: 5 })
 
-    this.question = `$f$ est une fonction affine${this.interactif ? '.' : ' définie par $f(x)=\\ldots$'}<br>`
+    this.question = `$f$ est une fonction affine${this.interactif ? '.' : ' définie par $f(x)=\\ldots$'}<br><br>`
     this.question += `
     ${mathalea2d(
       {
@@ -67,9 +68,9 @@ export default class LectureGraphiqueFonctionAffine1 extends ExerciceSimple {
     et $b$ l'ordonnée à l'origine (ordonnée du point d'intersection entre la droite et l'axe des ordonnées).<br>
     On a  $b=${b}$ et :`
     this.correction += texteCentre(
-      `$a=\\dfrac{\\text{Dénivelé vertical}}{\\text{Déplacement horizontal}}=${texFractionFromString(miseEnEvidence(a, 'red'), miseEnEvidence(1, 'green'))}=${a}$`,
+      `$a=\\dfrac{\\text{Dénivelé vertical}}{\\text{Déplacement horizontal}}=${texFractionFromString(miseEnEvidence(a, bleuMathalea), miseEnEvidence(1, vertMathalea))}=${a}$`,
     )
-    this.correction += `On en déduit que la fonction $f$ est définie par $f(x)=${reduireAxPlusB(a, b)}$.<br>`
+    this.correction += `On en déduit que la fonction $f$ est définie par $f(x)=${miseEnEvidence(reduireAxPlusB(a, b))}$.<br>`
     s1 = segment(0, 0, 1, 0, 'black')
     s2 = segment(0, 0, 1, 0, 'black')
     if (a > 0) {

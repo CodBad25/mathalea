@@ -5,7 +5,10 @@ import { segment } from '../../../lib/2d/segmentsVecteurs'
 import { texteParPosition } from '../../../lib/2d/textes'
 import { texteCentre } from '../../../lib/format/miseEnPage'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { ecritureAlgebrique } from '../../../lib/outils/ecritures'
+import {
+  ecritureAlgebrique,
+  reduireAxPlusB,
+} from '../../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { abs } from '../../../lib/outils/nombres'
 import FractionEtendue from '../../../modules/FractionEtendue'
@@ -49,7 +52,7 @@ export default class LectureGraphiqueFonctionAffine2 extends ExerciceSimple {
 
     c.color = colorToLatexOrHTML('red')
     c.epaisseur = 2
-    this.question = `$f$ est une fonction affine${this.interactif ? '.' : ' définie par $f(x)=\\ldots$'}<br>`
+    this.question = `$f$ est une fonction affine${this.interactif ? '.' : ' définie par $f(x)=\\ldots$'}<br><br>`
     this.question += `${mathalea2d(
       {
         xmin: -5,
@@ -78,7 +81,7 @@ export default class LectureGraphiqueFonctionAffine2 extends ExerciceSimple {
     this.correction +=
       texteCentre(`$a=\\dfrac{\\text{Dénivelé vertical}}{\\text{Déplacement horizontal}}=
     \\dfrac{${miseEnEvidence(a, 'blue')}}{${miseEnEvidence(d, 'green')}}$`)
-    this.correction += `On en déduit que la fonction $f$ est définie par : $f(x)=${miseEnEvidence(`${maFraction.texFractionSimplifiee}x${ecritureAlgebrique(b)}`)}$ .<br>`
+    this.correction += `On en déduit que la fonction $f$ est définie par : $f(x)=${miseEnEvidence(`${reduireAxPlusB(maFraction.simplifie(), b)}`)}$ .<br>`
     s1 = segment(0, 0, 1, 0, 'black')
     s2 = segment(0, 0, 1, 0, 'black')
     if (a > 0) {
