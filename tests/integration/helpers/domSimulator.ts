@@ -335,6 +335,58 @@ export function injectMetaInteractif2dDOM(
 }
 
 /**
+ * Injects DOM for multiMathfield questions.
+ * Creates a host element with the expected shadow DOM structure used by
+ * verifQuestionMultiMathfield().
+ */
+export function injectMultiMathfieldDOM(
+  exerciceIndex: number,
+  questionIndex: number,
+  fieldValues: Record<string, string>,
+) {
+  const multiId = `multiMathfieldEx${exerciceIndex}Q${questionIndex}`
+  const resultId = `resultatCheckEx${exerciceIndex}Q${questionIndex}`
+  const feedbackId = `feedbackEx${exerciceIndex}Q${questionIndex}`
+
+  document.getElementById(multiId)?.remove()
+  document.getElementById(resultId)?.remove()
+  document.getElementById(feedbackId)?.remove()
+
+  const host = document.createElement('div')
+  host.id = multiId
+  host.setAttribute(
+    'data-template',
+    Object.keys(fieldValues)
+      .map((field) => `%{${field}}`)
+      .join(' '),
+  )
+  const shadowRoot = host.attachShadow({ mode: 'open' })
+
+  for (const [fieldKey, value] of Object.entries(fieldValues)) {
+    const input = createFakeMfe(`${multiId}-${fieldKey}`)
+    input.id = `${multiId}-${fieldKey}`
+    input.setAttribute('data-name', fieldKey)
+    input.value = value
+    input.getValue = () => value
+    shadowRoot.appendChild(input)
+
+    const checkSpan = document.createElement('span')
+    checkSpan.id = `check-${multiId}-${fieldKey}`
+    shadowRoot.appendChild(checkSpan)
+  }
+
+  document.body.appendChild(host)
+
+  const resultSpan = document.createElement('span')
+  resultSpan.id = resultId
+  document.body.appendChild(resultSpan)
+
+  const feedbackDiv = document.createElement('div')
+  feedbackDiv.id = feedbackId
+  document.body.appendChild(feedbackDiv)
+}
+
+/**
  * Injects DOM for cliqueFigure questions.
  * Each clickable figure is represented by an element carrying its `etat`.
  */
