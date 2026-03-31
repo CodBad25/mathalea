@@ -45,14 +45,14 @@ export const interactifReady = true
 export const interactifType = 'mathLive'
 export const amcReady = true
 export const amcType = 'AMCHybride'
-export const dateDeModifImportante = '31/01/2025' // Modification du paramètre de choix pour mettre mélange en 0 et ajouter un cas par Jean-Claude Lhote
-
+export const dateDeModifImportante = '31/03/2026'
 /**
  * Il faut calculer le périmètre et/ou l'aire par addition ou soustraction d'aires
  *
  * @author Rémi Angot
  * Ajout de this.sup4 et correction coquilles sur aire et puis aussi sur précision au dixième par Eric Elter le 25/07/2023
  * Ajout de la possibilité de demander un découpage au lieu de calculer des périmètres ou des aires par Guillaume Valmont le 28/10/2023
+ * Modification du paramètre de choix pour mettre mélange en 0 et ajouter un cas par Jean-Claude Lhote
  */
 export const uuid = '5999e'
 
@@ -1214,7 +1214,7 @@ export default class PerimetreOuAireDeFiguresComposees extends Exercice {
             texteCorr += ` duquel on a découpé un demi-disque de rayon $${texNombre(L2 / 2, 1)}\\text{ cm}$ dans sa largeur pour le recoller sur sa longueur.<br>`
             texteCorr +=
               this.sup4 !== 2
-                ? `$\\mathcal{P}=${texNombre(L1, 1)}+${texNombre(L2, 1)}+${texNombre(L1, 1)}-${texNombre(L2, 1)}+${texNombre(L2, 1)}\\times \\pi \\approx ${texNombre(troncature(2 * L1 + L2 * Math.PI, 3), 3)}\\text{ cm'}$<br>`
+                ? `$\\mathcal{P}=${texNombre(L1, 1)}+${texNombre(L2, 1)}+${texNombre(L1, 1)}-${texNombre(L2, 1)}+${texNombre(L2, 1)}\\times \\pi \\approx ${texNombre(troncature(2 * L1 + L2 * Math.PI, 3), 3)}\\text{ cm}$<br>`
                 : ''
             texteCorr +=
               this.sup4 !== 1
@@ -1231,13 +1231,10 @@ export default class PerimetreOuAireDeFiguresComposees extends Exercice {
           }
 
           perimetreReponses = valeursApprochees(
-            L1 + L2 + L1 + (L2 * Math.PI) / 2,
+            L1 + L1 + L2 * Math.PI,
             this.sup3,
           )
-          aireReponses = valeursApprochees(
-            L1 * L2 + ((L2 / 2) * (L2 / 2) * Math.PI) / 2,
-            this.sup3,
-          )
+          aireReponses = valeursApprochees(L1 * L2, this.sup3)
           break
         }
       }
