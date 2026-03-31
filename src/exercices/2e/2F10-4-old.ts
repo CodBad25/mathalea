@@ -29,7 +29,7 @@ export const refs = {
   'fr-fr': [],
   'fr-ch': [],
 }
-export default class Determinerfonctionaffine extends Exercice {
+export default class DeterminerfonctionaffineOld extends Exercice {
   constructor() {
     super()
     this.besoinFormulaireNumerique = [
