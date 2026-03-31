@@ -135,19 +135,25 @@ export function injectTableauMathliveDOM(
   const table = document.createElement('table')
   table.id = tableId
   document.body.appendChild(table)
+  const fakeInputs: MathfieldElement[] = []
+  const originalQuerySelectorAll = table.querySelectorAll.bind(table)
+
+  table.querySelectorAll = ((selectors: string) => {
+    if (selectors === 'math-field') {
+      return fakeInputs as unknown as NodeListOf<Element>
+    }
+    return originalQuerySelectorAll(selectors)
+  }) as typeof table.querySelectorAll
 
   for (const [key, value] of Object.entries(cellValues)) {
     const cellId = `champTexteEx${exerciceIndex}Q${questionIndex}${key}`
     document.getElementById(cellId)?.remove()
 
-    const input = document.createElement(
-      'math-field',
-    ) as unknown as MathfieldElement
-    input.id = cellId
+    const input = createFakeMfe(cellId)
     input.value = value
     input.getValue = () => value
-    Object.defineProperty(input, 'readOnly', { value: false, writable: true })
     table.appendChild(input)
+    fakeInputs.push(input)
 
     const cellResultId = `resultatCheckEx${exerciceIndex}Q${questionIndex}${key}`
     document.getElementById(cellResultId)?.remove()
