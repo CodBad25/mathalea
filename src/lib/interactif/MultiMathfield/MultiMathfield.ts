@@ -1,4 +1,5 @@
 import { MathfieldElement } from 'mathlive'
+import { context } from '../../../modules/context'
 import type { IExercice, ValeurNames } from '../../types'
 import { buildDataKeyboardFromStyle, KeyboardType } from '../claviers/keyboard'
 import { setMathfield, setMathfieldListener } from './setMathfield'
@@ -188,36 +189,56 @@ export function addMultiMathfield(
     dataOptions,
   }: { dataTemplate: string; dataOptions: DataOptionsMultiMathfield },
 ) {
-  if (!customElements.get('multi-mathfield')) {
-    customElements.define('multi-mathfield', MultiMathfieldElement)
-  }
-  // Extraction des noms de champs %{name}
-  const regex = /%\{([^}]+)\}/g
-  let match
-  const enrichedOptions: Record<string, any> = { ...dataOptions }
-  while ((match = regex.exec(dataTemplate)) !== null) {
-    const name = match[1]
-    if (!(name in enrichedOptions)) {
-      enrichedOptions[name] = {
-        placeholder: '',
-        minWidth: 30,
-        maxWidth: 100,
-        keyboard: KeyboardType.clavierNumbers,
-      }
-    } else {
-      // Ajoute les valeurs par défaut manquantes
-      if (enrichedOptions[name].placeholder === undefined)
-        enrichedOptions[name].placeholder = ''
-      if (enrichedOptions[name].minWidth === undefined)
-        enrichedOptions[name].minWidth = 30
-      if (enrichedOptions[name].maxWidth === undefined)
-        enrichedOptions[name].maxWidth = 100
-      if (enrichedOptions[name].keyboard === undefined)
-        enrichedOptions[name].keyboard = KeyboardType.clavierNumbers
+  if (context.isHtml && exercice.interactif) {
+    if (!customElements.get('multi-mathfield')) {
+      customElements.define('multi-mathfield', MultiMathfieldElement)
     }
+    // Extraction des noms de champs %{name}
+    const regex = /%\{([^}]+)\}/g
+    let match
+    const enrichedOptions: Record<string, any> = { ...dataOptions }
+    while ((match = regex.exec(dataTemplate)) !== null) {
+      const name = match[1]
+      if (!(name in enrichedOptions)) {
+        enrichedOptions[name] = {
+          placeholder: '',
+          minWidth: 30,
+          maxWidth: 100,
+          keyboard: KeyboardType.clavierNumbers,
+        }
+      } else {
+        // Ajoute les valeurs par défaut manquantes
+        if (enrichedOptions[name].placeholder === undefined)
+          enrichedOptions[name].placeholder = ''
+        if (enrichedOptions[name].minWidth === undefined)
+          enrichedOptions[name].minWidth = 30
+        if (enrichedOptions[name].maxWidth === undefined)
+          enrichedOptions[name].maxWidth = 100
+        if (enrichedOptions[name].keyboard === undefined)
+          enrichedOptions[name].keyboard = KeyboardType.clavierNumbers
+      }
+    }
+    return `<multi-mathfield id="multiMathfieldEx${exercice.numeroExercice}Q${questionIndex}" data-template="${dataTemplate}" data-options='${JSON.stringify(enrichedOptions)}'></multi-mathfield>`
+  } else {
+    const regex = /(%\{[^}]+\})/g
+    let lastIndex = 0
+    let match
+    let result = ''
+    while ((match = regex.exec(dataTemplate)) !== null) {
+      if (match.index > lastIndex) {
+        result += dataTemplate.slice(lastIndex, match.index)
+      }
+      // Remplace les champs par des underscores
+      result += '$\\ldots\\ldots$'
+      lastIndex = regex.lastIndex
+    }
+    if (lastIndex < dataTemplate.length) {
+      result += dataTemplate.slice(lastIndex)
+    }
+    return result
   }
-  return `<multi-mathfield id="multiMathfieldEx${exercice.numeroExercice}Q${questionIndex}" data-template="${dataTemplate}" data-options='${JSON.stringify(enrichedOptions)}'></multi-mathfield>`
 }
+
 if (!customElements.get('multi-mathfield')) {
   customElements.define('multi-mathfield', MultiMathfieldElement)
 }
