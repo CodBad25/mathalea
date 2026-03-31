@@ -214,11 +214,11 @@ export default class DeterminerFonctionAffine3e extends Exercice {
         }
 
         tA = tracePoint(pointAbstrait(x1, y1), bleuMathalea)
-        tA.style = 'x'
-        tA.epaisseur = 5
+        tA.taille = 4
+        tA.epaisseur = 2
         tB = tracePoint(pointAbstrait(x2, y2), bleuMathalea)
-        tB.style = 'x'
-        tB.epaisseur = 5
+        tB.taille = 4
+        tB.epaisseur = 2
 
         r = repere({
           xMin: configRepere?.xmin,
