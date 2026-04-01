@@ -10,6 +10,7 @@ import type Decimal from 'decimal.js'
 import type FractionEtendue from '../modules/FractionEtendue'
 import Hms from '../modules/Hms'
 import type { VueType } from './VueType'
+import { Complexe } from './mathFonctions/Complexe'
 
 /**
  * setInteractive à 0 on enlève tout, à 1 on les met tous en interactif, à 2 on ne change rien
@@ -662,6 +663,8 @@ export type AnswerValueType =
   | Hms[]
   | Decimal[]
   | IFractionEtendue[]
+  | Complexe
+  | Complexe[]
 
 export function isAnswerValueType(value: unknown): value is AnswerValueType {
   return (
@@ -678,7 +681,9 @@ export function isAnswerValueType(value: unknown): value is AnswerValueType {
     isGrandeur(value) ||
     (Array.isArray(value) && value.every((v) => isGrandeur(v))) ||
     value instanceof Hms ||
-    (Array.isArray(value) && value.every((value) => value instanceof Hms))
+    (Array.isArray(value) && value.every((value) => value instanceof Hms)) ||
+    value instanceof Complexe ||
+    (Array.isArray(value) && value.every((value) => value instanceof Complexe))
   )
 }
 

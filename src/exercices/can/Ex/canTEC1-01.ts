@@ -1,4 +1,4 @@
-import { add, complex } from 'mathjs'
+import { Complexe } from '../../../lib/mathFonctions/Complexe'
 import { context } from '../../../modules/context'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
@@ -29,11 +29,11 @@ export default class SommeDeComplexes extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const z1 = complex(randint(-5, 5), randint(-5, 5))
-    const z2 = complex(randint(-5, 5), randint(-5, 5))
+    const z1 = new Complexe(randint(-5, 5), randint(-5, 5))
+    const z2 = new Complexe(randint(-5, 5), randint(-5, 5))
     this.question = `On donne $~~a = ${z1.toString()}~~$ et $~~b = ${z2.toString()}$.<br>Calcule $a + b$.`
-    this.correction = `$${z1.toString()} + ${z2.toString()} = ${add(z1, z2).toString()}$`
-    this.reponse = add(z1, z2).toString()
+    this.correction = `$${z1.toString()} + ${z2.toString()} = ${z1.add(z2).tex()}$`
+    this.reponse = z1.add(z2)
     if (context.isAmc)
       this.autoCorrection[0] = {
         enonce: this.question,
@@ -44,7 +44,7 @@ export default class SommeDeComplexes extends ExerciceSimple {
               {
                 texte: this.correction,
                 reponse: {
-                  valeur: add(z1, z2).re,
+                  valeur: Number(z1.add(z2).re),
                   param: {
                     digits: 2,
                     decimals: 0,
@@ -61,7 +61,7 @@ export default class SommeDeComplexes extends ExerciceSimple {
               {
                 texte: '',
                 reponse: {
-                  valeur: add(z1, z2).im,
+                  valeur: Number(z1.add(z2).im),
                   param: {
                     digits: 2,
                     decimals: 0,

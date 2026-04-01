@@ -2,6 +2,7 @@ import { isArray, isInteger } from 'mathjs'
 import { context } from '../../modules/context'
 import type { IFractionEtendue } from '../../modules/FractionEtendue.type'
 import { orangeMathalea } from '../colors'
+import { Complexe } from '../mathFonctions/Complexe'
 import { choice } from './arrayOutils'
 
 // Garde structurel pour détecter une FractionEtendue
@@ -19,9 +20,10 @@ const isFractionEtendue = (x: unknown): x is IFractionEtendue =>
  * @author Rémi Angot
  */
 export function miseEnEvidence(
-  texte: string | IFractionEtendue | number,
+  texte: string | IFractionEtendue | number | Complexe,
   couleur: string = orangeMathalea,
 ) {
+  if (texte instanceof Complexe) texte = texte.tex()
   if (isFractionEtendue(texte)) texte = texte.texFraction
   if (typeof texte === 'number') texte = String(texte)
   if (isArray(couleur)) couleur = couleur[0]

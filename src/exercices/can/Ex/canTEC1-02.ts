@@ -1,7 +1,8 @@
-import { complex, multiply, type Complex } from 'mathjs'
+import { Complexe } from '../../../lib/mathFonctions/Complexe'
 import { context } from '../../../modules/context'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
+
 export const titre = 'produit de nombres complexes'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -29,12 +30,12 @@ export default class SommeDeComplexes extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const z1 = complex(randint(-5, 5, 0), randint(-5, 5, 0))
-    const z2 = complex(0, randint(-5, 5, 0))
-    const z = multiply(z1, z2) as Complex
-    this.question = `On donne $~~a = ${z1.toString()}~~$ et $~~b = ${z2.toString()}$.<br>Calcule $a \\times b$.`
-    this.correction = `$(${z1.toString()}) \\times (${z2.toString()}) = ${z.toString()}$`
-    this.reponse = multiply(z1, z2).toString()
+    const z1 = new Complexe(randint(-5, 5, 0), randint(-5, 5, 0))
+    const z2 = new Complexe(0, randint(-5, 5, 0))
+    const z = z1.mul(z2)
+    this.question = `On donne $~~a = ${z1.tex()}~~$ et $~~b = ${z2.tex()}$.<br>Calcule $a \\times b$.`
+    this.correction = `$(${z1.tex()}) \\times (${z2.tex()}) = ${z.tex()}$`
+    this.reponse = z1.mul(z2)
     if (context.isAmc)
       this.autoCorrection[0] = {
         enonce: this.question,
@@ -45,7 +46,7 @@ export default class SommeDeComplexes extends ExerciceSimple {
               {
                 texte: this.correction,
                 reponse: {
-                  valeur: z.re,
+                  valeur: Number(z.re),
                   param: {
                     digits: 2,
                     decimals: 0,
@@ -62,7 +63,7 @@ export default class SommeDeComplexes extends ExerciceSimple {
               {
                 texte: '',
                 reponse: {
-                  valeur: z.im,
+                  valeur: Number(z.im),
                   param: {
                     digits: 2,
                     decimals: 0,

@@ -2,6 +2,7 @@ import Decimal from 'decimal.js'
 import { evaluate, format, round } from 'mathjs'
 import { context } from '../../modules/context'
 import type { IFractionEtendue } from '../../modules/FractionEtendue.type'
+import { Complexe } from '../mathFonctions/Complexe'
 import { extraireRacineCarree } from './calculs'
 import { miseEnEvidence } from './embellissements'
 import { nombreDeChiffresDansLaPartieDecimale } from './nombres'
@@ -96,7 +97,7 @@ export function numberFormat(nb: number) {
  * @returns string avec le nombre dans le format français à mettre entre des $ $
  */
 export function texNombre(
-  nb: number | Decimal | IFractionEtendue,
+  nb: number | Decimal | IFractionEtendue | Complexe,
   precision = 8,
   completerZeros = false,
   aussiCompleterEntiers = false,
@@ -268,11 +269,11 @@ export function scientifiqueToDecimal(mantisse: number, exp: number) {
  * @returns string avec le nombre dans le format français à placer hors des $ $
  */
 export function stringNombre(
-  nb: number | Decimal,
+  nb: number | Decimal | Complexe | IFractionEtendue,
   precision?: number,
   completerZeros?: boolean,
   aussiCompleterEntiers?: boolean,
-) {
+): string {
   if (completerZeros === undefined) completerZeros = false
   if (aussiCompleterEntiers === undefined) aussiCompleterEntiers = false
   if (precision === undefined) precision = 8
@@ -280,6 +281,23 @@ export function stringNombre(
     window.notify("stringNombre appelé avec un string à la place d'un nombre", {
       nombre: nb,
     })
+  }
+  if (nb instanceof Complexe) {
+    const nombre = nb as Complexe
+    return `${stringNombre(nombre.re, precision, completerZeros, aussiCompleterEntiers)} ${Number(nombre.im) >= 0 ? '+' : '-'} ${stringNombre(
+      Math.abs(Number(nombre.im)),
+      precision,
+      completerZeros,
+      aussiCompleterEntiers,
+    )}i`
+  }
+  if (isFractionEtendue(nb)) {
+    return stringNombre(
+      nb.valeurDecimale,
+      precision,
+      completerZeros,
+      aussiCompleterEntiers,
+    )
   }
   return afficherNombre(
     nb,
@@ -303,7 +321,7 @@ export function stringNombre(
  * @param {boolean} aussiCompleterEntiers true si on veut ajouter des zéros inutiles aux entiers
  */
 function afficherNombre(
-  nb: number | Decimal | IFractionEtendue | string,
+  nb: number | Decimal | IFractionEtendue | string | Complexe,
   precision: number,
   fonction: 'texNombre' | 'stringNombre',
   completerZeros = false,
@@ -314,7 +332,7 @@ function afficherNombre(
    * Elle renvoie un nombre dans le format français (avec virgule et des espaces pour séparer les classes dans la partie entière et la partie décimale)
    * @author Rémi Angot
    * @author Guillaume Valmont
-   * @param {number|string|FractionEtendue|Decimal} nb nombre à afficher
+   * @param {number|string|FractionEtendue|Decimal|Complexe} nb nombre à afficher
    * @param {number} nbChiffresPartieEntiere nombre de chiffres de la partie entière
    * @param {number} precision nombre de décimales demandé
    * @param {'stringNombre'|'texNombre'} fonction la fonction appelante
@@ -322,7 +340,7 @@ function afficherNombre(
    */
 
   function insereEspacesNombre(
-    nb: number | Decimal,
+    nb: number | Decimal | IFractionEtendue,
     nbChiffresPartieEntiere: number,
     precision: number,
     fonction: 'stringNombre' | 'texNombre',
@@ -330,6 +348,15 @@ function afficherNombre(
     let signe
     let nombre
     const maximumSignificantDigits = nbChiffresPartieEntiere + precision
+    if (isFractionEtendue(nb)) {
+      return insereEspacesNombre(
+        nb.valeurDecimale,
+        nb.valeurDecimale.toFixed(0).length,
+        precision,
+        fonction,
+      )
+    }
+
     if (nb instanceof Decimal) {
       Decimal.set({ toExpNeg: -precision - 1 })
       signe = nb.isNeg()
@@ -472,6 +499,18 @@ function afficherNombre(
           nb,
         })
       }
+    } else if (nb instanceof Complexe) {
+      return `${insereEspacesNombre(
+        Number(nb.re),
+        Number(nb.re).toFixed(0).length,
+        precision,
+        fonction,
+      )} ${Number(nb.im) >= 0 ? '+' : '-'} ${insereEspacesNombre(
+        Math.abs(Number(nb.im)),
+        Math.abs(Number(nb.im)).toFixed(0).length,
+        precision,
+        fonction,
+      )}i`
     } else if (typeof nb !== 'number') {
       window.notify(
         `afficherNombre a reçu un argument de type inconnu come nombre : ${nb}`,
@@ -563,20 +602,13 @@ function afficherNombre(
         ` : Trop de chiffres le nombre passé à la fonction a trop de chiffres significatifs, soit c'est un bug à corriger, soit il faut utiliser un Decimal !`,
       { nb, precision },
     )
-    return insereEspacesNombre(
-      Number(nb),
-      nbChiffresPartieEntiere,
-      precision,
-      fonction,
-    )
-  } else {
-    return insereEspacesNombre(
-      Number(nb),
-      nbChiffresPartieEntiere,
-      precision,
-      fonction,
-    )
   }
+  return insereEspacesNombre(
+    Number(nb),
+    nbChiffresPartieEntiere,
+    precision,
+    fonction,
+  )
 }
 
 /**

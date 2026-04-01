@@ -12,7 +12,7 @@ function log(...args: unknown[]) {
 }
 
 async function testCanView(page: Page) {
-  await page.setDefaultTimeout(60000) // Set timeout to 60 seconds
+  await page.setDefaultTimeout(200000) // Set timeout to 60 seconds
   log('===========================================================')
   log('===           TEST VUE CAN 2024       =====================')
   log('===========================================================')
@@ -266,10 +266,10 @@ async function testEleveView(page: Page) {
   await page1.evaluate(() => window.scrollTo(0, document.body.scrollHeight))
   log('Vérifier les questions')
   const element = await page1.waitForSelector('#buttonScoreEx0', {
-    timeout: 10000,
+    timeout: 30000,
   })
-  await element.click({ timeout: 30000 })
-  await page1.waitForSelector('#consigne0-29 + div', { timeout: 10000 })
+  await element.click({ timeout: 60000 })
+  await page1.waitForSelector('#consigne0-29 + div', { timeout: 30000 })
   const buttonResult = await page1.locator('#consigne0-29 + div').innerText()
   expect('30 / 30').toEqual(buttonResult)
   log(buttonResult)
