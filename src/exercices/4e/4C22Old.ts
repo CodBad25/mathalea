@@ -24,7 +24,7 @@ export const amcReady = true
 export const amcType = 'AMCNum'
 export const interactifReady = true
 export const interactifType = 'mathLive'
-export const dateDeModifImportante = '09/04/2022'
+export const dateDeModifImportante = '04/10/2025'
 
 /**
  * Exercice de calcul de produit de deux fractions.
@@ -36,8 +36,9 @@ export const dateDeModifImportante = '09/04/2022'
  * * Si décomposition cochée : les nombres utilisés sont plus importants.
  * @author Jean-Claude Lhote
  * Ajout d'une option pour ne pas exiger une fraction irréductible le 09/04/2022 par Guillaume Valmont
+ * Ajout dans la paramètre 1 de pouvoir choisir un numérateur fractionnaire et un dénominateur entier le 04/10/2025 par Eric Elter
  */
-export const uuid = '72ce7'
+export const uuid = '3eb4e'
 
 export const refs = {
   'fr-fr': [],
@@ -54,7 +55,7 @@ export default class ExerciceMultiplierFractions extends Exercice {
     this.nbColsCorr = 2
     this.besoinFormulaireTexte = [
       'Niveau de difficulté',
-      'Nombres séparés par des tirets\n1 : Un entier et une fraction (tout positif)\n2 : Deux fractions à numérateurs et dénominateurs positifs\n3 : Fractions avec nombres relatifs (au moins 2 négatifs)\n4 : Mélange',
+      'Nombres séparés par des tirets\n1 : Un numérateur entier et un dénominateur fractionnaire (tous positifs)\n2 : Un numérateur fractionnaire et un dénominateur entier (tous positifs)\n3 : Numérateurs et dénominateurs fractionnaires positifs\n4 : Numérateurs et dénominateurs fractionnaires relatifs (au moins 2 négatifs)\n5 : Mélange',
     ]
     this.besoinFormulaire2CaseACocher = [
       'Avec décomposition en produit de facteurs premiers',
@@ -88,9 +89,8 @@ export default class ExerciceMultiplierFractions extends Exercice {
     }
     const listeTypeDeQuestions = gestionnaireFormulaireTexte({
       saisie: this.sup,
-      min: 1,
-      max: 3,
-      melange: 4,
+      max: 4,
+      melange: 5,
       defaut: 2,
       nbQuestions: this.nbQuestions,
     })
@@ -137,10 +137,17 @@ export default class ExerciceMultiplierFractions extends Exercice {
             d = tampon
             break
           }
-          case 2: // fraction * fraction tout positif
+          case 2: {
+            // entier * fraction (tout positif)
+            if (d === 1) {
+              d = randint(2, 9)
+            }
+            c = 1
             break
-
-          case 3:
+          }
+          /* case 3: // fraction * fraction tout positif
+            break */
+          case 4:
             do {
               a = a * choice([-1, 1])
               b = b * choice([-1, 1])
