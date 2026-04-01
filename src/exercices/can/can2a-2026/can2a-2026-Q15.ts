@@ -36,7 +36,7 @@ export default class Can2a2026Q15 extends ExerciceCan {
     this.question = `\\dfrac{${a}^${exposant1}}{${a}^${exposant2}} = ${a}^{%{champ1}}`
 
     this.correction = `$\\dfrac{${a}^${exposant1}}{${a}^${exposant2}}=${a}^{${exposant1}-${exposant2}}=${a}^{${miseEnEvidence(exposant1 - exposant2)}}$`
-    this.canEnonce = `$\\dfrac{${a}^${exposant1}}{${a}^${exposant2}}$`
+    this.canEnonce = `$\\dfrac{${a}^${exposant1}}{${a}^${exposant2}}=$`
     this.canReponseACompleter = `$${a}^{\\ldots}$`
   }
 
