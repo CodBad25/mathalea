@@ -393,6 +393,9 @@ export default class FormulesAireCarreRectangle extends Exercice {
     let spanReponseLigne = document.querySelector(
       `#resultatCheckEx${this.numeroExercice}Q0`,
     )
+    this.listeReponses[i] = this.listeReponses[i].map((str) =>
+      extraireUnite(str),
+    )
     let isOk = false
     if (this.listeReponses[i].length === 3) {
       const select1 = document.querySelector(
@@ -475,4 +478,9 @@ export default class FormulesAireCarreRectangle extends Exercice {
 
     return isOk ? 'OK' : 'KO'
   }
+}
+
+function extraireUnite(str: string): string {
+  const match = str.match(/\$\\text\{([^}]*)\}\$/)
+  return match ? match[1] : str
 }
