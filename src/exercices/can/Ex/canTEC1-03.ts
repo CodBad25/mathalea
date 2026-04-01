@@ -1,4 +1,4 @@
-import { complex } from 'mathjs'
+import { Complexe } from '../../../lib/mathFonctions/Complexe'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
@@ -32,11 +32,11 @@ export default class PartieReelle extends ExerciceSimple {
   nouvelleVersion() {
     const ReZ = randint(-5, 5)
     const ImZ = randint(-5, 5)
-    const z1 = complex(ReZ, ImZ)
-    const z2 = complex(-ImZ, ReZ)
-    const moinsiz2 = complex(ImZ, -ReZ)
+    const z1 = new Complexe(ReZ, ImZ)
+    const z2 = new Complexe(-ImZ, ReZ)
+    const moinsiz2 = new Complexe(ImZ, -ReZ)
     const scenario = randint(0, 2)
-    this.question = `On donne le nombre complexe $~~z = ${z1.toString()}$.<br>`
+    this.question = `On donne le nombre complexe $~~z = ${z1.tex()}$.<br>`
 
     switch (scenario) {
       case 0:
@@ -48,7 +48,7 @@ export default class PartieReelle extends ExerciceSimple {
       case 1:
         this.question += 'Déterminer la partie imaginaire de $iz$.'
         this.correction = `On écrit $iz$ sous forme algébrique puis on identifie la partie imaginaire.<br>
-   $iz=i\\left( ${z1.toString()}\\right) =${z2.toString()}$<br>
+   $iz=i\\left( ${z1.tex()}\\right) =${z2.tex()}$<br>
 
    $\\mathcal{Im}(iz) = ${miseEnEvidence(ReZ)}.$`
         this.reponse = ReZ
@@ -57,7 +57,7 @@ export default class PartieReelle extends ExerciceSimple {
       default:
         this.question += 'Déterminer la partie imaginaire de $-iz$.'
         this.correction = `On écrit $-iz$ sous forme algébrique puis on identifie la partie imaginaire.<br>
-   $-iz=-i\\left( ${z1.toString()}\\right) =${moinsiz2.toString()}$<br>
+   $-iz=-i\\left( ${z1.tex()}\\right) =${moinsiz2.tex()}$<br>
 
    $\\mathcal{Im}(-iz) = ${miseEnEvidence(-ReZ)}.$`
         this.reponse = -ReZ

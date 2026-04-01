@@ -6,6 +6,7 @@ import {
   ajouteChampTexteMathLive,
   remplisLesBlancs,
 } from '../lib/interactif/questionMathLive'
+import { Complexe } from '../lib/mathFonctions/Complexe'
 import { combinaisonListes, shuffle } from '../lib/outils/arrayOutils'
 import { range1 } from '../lib/outils/nombres'
 import type {
@@ -15,6 +16,7 @@ import type {
 } from '../lib/types'
 import FractionEtendue from '../modules/FractionEtendue'
 import Grandeur from '../modules/Grandeur'
+import Hms from '../modules/Hms'
 import { gestionnaireFormulaireTexte } from '../modules/outils'
 import Exercice from './Exercice'
 
@@ -305,12 +307,24 @@ export default class MetaExercice extends Exercice {
                     },
                     { formatInteractif: Question.formatInteractif },
                   )
-                } else if (reponse instanceof Grandeur) {
+                } else if (
+                  reponse instanceof Grandeur ||
+                  reponse instanceof Hms
+                ) {
                   handleAnswers(
                     this,
                     indexQuestion,
                     {
-                      reponse: { value: reponse.toString(), options },
+                      reponse: { value: reponse, options },
+                    },
+                    { formatInteractif: Question.formatInteractif },
+                  )
+                } else if (reponse instanceof Complexe) {
+                  handleAnswers(
+                    this,
+                    indexQuestion,
+                    {
+                      reponse: { value: reponse.tex(), options },
                     },
                     { formatInteractif: Question.formatInteractif },
                   )

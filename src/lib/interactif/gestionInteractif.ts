@@ -18,6 +18,7 @@ import FractionEtendue from '../../modules/FractionEtendue'
 import Grandeur from '../../modules/Grandeur'
 import Hms from '../../modules/Hms'
 import { addElement, get, setStyles } from '../html/dom'
+import { Complexe } from '../mathFonctions/Complexe'
 import { verifQuestionTableur } from '../tableur/outilsTableur'
 import { afficheScore } from './afficheScore'
 import { fonctionComparaison } from './comparisonFunctions'
@@ -1016,6 +1017,9 @@ function handleDefaultValeur(reponse: Valeur): ValeurNormalized {
             ) {
               val.value[i] = val.value[i].toString()
             }
+            if (val.value[i] instanceof Complexe) {
+              val.value[i] = val.value[i].tex()
+            }
             if (val.value[i] instanceof FractionEtendue)
               val.value[i] = val.value[i].texFraction
           }
@@ -1028,6 +1032,9 @@ function handleDefaultValeur(reponse: Valeur): ValeurNormalized {
             typeof val.value === 'number'
           ) {
             val.value = val.value.toString()
+          }
+          if (val.value instanceof Complexe) {
+            val.value = val.value.tex()
           }
           if (val.value instanceof FractionEtendue)
             val.value = val.value.texFraction

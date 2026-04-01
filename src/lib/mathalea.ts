@@ -40,6 +40,7 @@ import { sendToCapytaleMathaleaHasChanged } from './handleCapytale'
 import { fonctionComparaison } from './interactif/comparisonFunctions'
 import { handleAnswers, setReponse } from './interactif/gestionInteractif'
 import { buildSimpleVersionQcm } from './interactif/qcmBuilder'
+import { Complexe } from './mathFonctions/Complexe'
 import { shuffle } from './outils/arrayOutils'
 import { renderScratchDiv } from './renderScratch'
 import { canOptions } from './stores/canStore'
@@ -955,6 +956,14 @@ export function mathaleaHandleExerciceSimple(
             ) {
               reponse = {
                 reponse: { value: exercice.reponse, compare, options },
+              }
+            } else if (exercice.reponse instanceof Complexe) {
+              reponse = {
+                reponse: {
+                  value: exercice.reponse.tex(),
+                  compare,
+                  options,
+                },
               }
             } else if (
               typeof exercice.reponse === 'object' &&

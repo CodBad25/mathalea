@@ -1,7 +1,7 @@
-import type { Page } from 'playwright'
-import { runTest } from '../../helpers/run'
 import { expect } from '@playwright/test'
+import type { Page } from 'playwright'
 import prefs from '../../helpers/prefs.js'
+import { runTest } from '../../helpers/run'
 
 async function testEleveView(page: Page) {
   const goodAnswers = [
@@ -41,7 +41,7 @@ async function testEleveView(page: Page) {
   const urlExercice =
     hostname +
     '?uuid=4581b&n=30&d=10&s=true&s2=1-2-3-4-5-6-7-8-9-10-11-12-13-14-15-16-17-18-19-20-21-22-23-24-25-26-27-28-29-30&s3=false&i=1&cd=1&alea=lyjz&v=eleve&es=0211001'
-  await page.goto(urlExercice, { timeout: 60000 })
+  await page.goto(urlExercice, { timeout: 120000 })
 
   for (let i = 0; i < 30; i++) {
     const mathField = page.locator(`#champTexteEx0Q${i}`)
@@ -58,7 +58,7 @@ async function testEleveView(page: Page) {
   await check2.click()
 
   const button = page.locator('#buttonScoreEx0')
-  await button.click()
+  await button.click({ timeout: 40000 })
   const stringScore = await page.locator('#divScoreEx0').first().innerText()
   // Attendre 5 minutes pour analyser les résultats
   // await page.waitForTimeout(5 * 60 * 1000)

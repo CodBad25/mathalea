@@ -1,5 +1,6 @@
 /* eslint-disable no-unmodified-loop-condition */
 import { BoiteBuilder } from '../lib/2d/BoiteBuilder'
+import { Complexe } from '../lib/mathFonctions/Complexe'
 import { choice } from '../lib/outils/arrayOutils'
 import { stringNombre } from '../lib/outils/texNombre'
 import type { NestedObjetMathalea2dArray } from '../types/2d'
@@ -13,9 +14,10 @@ import { randint } from './outils'
 export default class Pyramide {
   operation: '+' | '*'
   nombreEtages: number
-  valeurs: number[][] | FractionEtendue[][]
+  valeurs: (number | FractionEtendue | Complexe)[][]
   isVisible: boolean[][]
   fractionOn: boolean
+  complexOn: boolean
 
   /**
    *
@@ -32,18 +34,21 @@ export default class Pyramide {
     rangeData = [1, 10],
     exclusions = [],
     fractionOn = false,
+    complexOn = false,
   }: {
     operation: '+' | '*'
     nombreEtages: number
     rangeData: [number, number] | [[number, number], [number, number]]
     exclusions: number[]
     fractionOn: boolean
+    complexOn?: boolean
   }) {
     this.operation = operation
     this.nombreEtages = nombreEtages
     this.valeurs = []
     this.isVisible = []
     this.fractionOn = fractionOn
+    this.complexOn = !!complexOn
     const assureHasNegative =
       rangeData instanceof Array &&
       typeof rangeData[0] === 'number' &&
@@ -66,7 +71,17 @@ export default class Pyramide {
         this.isVisible[y] = []
         for (let x = 0, num, den; x <= y; x++) {
           if (y === nombreEtages - 1) {
-            if (this.fractionOn) {
+            if (this.complexOn) {
+              // Génération de complexes aléatoires (parties réelles et imaginaires)
+              const rd = rangeData as [number, number]
+              const re = this.fractionOn
+                ? fraction(randint(rd[0], rd[1], exclusions), choice([1, 2, 3]))
+                : randint(rd[0], rd[1], exclusions)
+              const im = this.fractionOn
+                ? fraction(randint(rd[0], rd[1], exclusions), choice([1, 2, 3]))
+                : randint(rd[0], rd[1], exclusions)
+              this.valeurs[y][x] = new Complexe(re, im)
+            } else if (this.fractionOn) {
               const rd = rangeData as [[number, number], [number, number]]
               den = choice(rd[1])
               num = randint(rd[0][0], rd[0][1], exclusions.concat([den]))
@@ -78,7 +93,11 @@ export default class Pyramide {
           } else {
             switch (operation) {
               case '+':
-                if (this.fractionOn) {
+                if (this.complexOn) {
+                  this.valeurs[y][x] = (this.valeurs[y + 1][x] as Complexe).add(
+                    this.valeurs[y + 1][x + 1] as Complexe,
+                  )
+                } else if (this.fractionOn) {
                   this.valeurs[y][x] = (
                     this.valeurs[y + 1][x] as FractionEtendue
                   )
@@ -93,7 +112,11 @@ export default class Pyramide {
                 }
                 break
               case '*':
-                if (this.fractionOn) {
+                if (this.complexOn) {
+                  this.valeurs[y][x] = (this.valeurs[y + 1][x] as Complexe).mul(
+                    this.valeurs[y + 1][x + 1] as Complexe,
+                  )
+                } else if (this.fractionOn) {
                   this.valeurs[y][x] = (
                     this.valeurs[y + 1][x] as FractionEtendue
                   )
@@ -106,7 +129,6 @@ export default class Pyramide {
                     Number(this.valeurs[y + 1][x]) *
                     Number(this.valeurs[y + 1][x + 1])
                 }
-
                 break
             }
           }
@@ -163,22 +185,27 @@ export default class Pyramide {
   representeMoi(xO = 0, yO = 0): NestedObjetMathalea2dArray {
     const objets = []
     const hCase = this.fractionOn ? 2 : 1.5
+    const wCase = this.complexOn ? 6 : 4
     for (let y = this.nombreEtages; y > 0; y--) {
       for (let x = 0; x < y; x++) {
         objets.push(
           new BoiteBuilder({
-            xMin: xO + x * 4 + (this.nombreEtages - y) * 2,
+            xMin: xO + x * wCase + (this.nombreEtages - y) * (wCase / 2),
             yMin: yO + (this.nombreEtages - y) * hCase,
-            xMax: xO + x * 4 + 4 + (this.nombreEtages - y) * 2,
+            xMax:
+              xO + x * wCase + wCase + (this.nombreEtages - y) * (wCase / 2),
             yMax: yO + (1 + this.nombreEtages - y) * hCase,
           })
             .addTextIn({
+              isLaTeX: true,
               textIn: !this.isVisible[y - 1][x]
                 ? ''
                 : this.fractionOn
                   ? (this.valeurs[y - 1][x] as FractionEtendue)
                       .texFractionSimplifiee
-                  : stringNombre(Number(this.valeurs[y - 1][x]), 0),
+                  : this.complexOn
+                    ? (this.valeurs[y - 1][x] as Complexe).tex()
+                    : stringNombre(Number(this.valeurs[y - 1][x]), 0),
               opacity: 1,
             })
             .render(),
