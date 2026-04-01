@@ -435,8 +435,8 @@ export default class ProblemesAvecOperations extends Exercice {
           oeufsRestants = oeufsPondus - oeufsUtilises
 
           texte = `Pour une fête, je prépare $${nbGateaux}$ gâteaux identiques.<br>
-          Chaque gâteau utilise $${oeufsParGateau}$ œufs et 200 g de farine.<br>
-          J'ai $${nbPoules}$ poules et dans la semaine, chacune a pondu $${oeufsParPoule}$ œufs.<br>
+          Chaque gâteau nécessite $${oeufsParGateau}$ œufs et 200 g de farine.<br>
+          J'ai $${nbPoules}$ poules et, dans la semaine, chacune a pondu $${oeufsParPoule}$ œufs.<br>
           Combien me reste-t-il d'œufs de mes poules à la fin de la semaine ?<br>`
 
           texte +=
@@ -446,12 +446,11 @@ export default class ProblemesAvecOperations extends Exercice {
                 }) + '<br>'
               : ''
 
-          texteCorr = `Les gâteaux utilisent au total $${nbGateaux} \\times ${oeufsParGateau} = ${texNombre(oeufsUtilises)}$ œufs.<br>`
+          texteCorr = `Les gâteaux nécessitent au total $${nbGateaux} \\times ${oeufsParGateau} = ${texNombre(oeufsUtilises)}$ œufs.<br>`
           texteCorr += `Les poules ont pondu au total $${nbPoules} \\times ${oeufsParPoule} = ${texNombre(oeufsPondus)}$ œufs.<br>`
-          texteCorr += `Il me reste $${texNombre(oeufsPondus)} - ${texNombre(oeufsUtilises)} = ${texNombre(oeufsRestants)}$ œufs.<br>`
           texteCorr +=
             'Donc il me reste ' +
-            `$${miseEnEvidence(texNombre(oeufsRestants))}$ œufs de mes poules à la fin de la semaine .`
+            `$${texNombre(oeufsPondus)} - ${texNombre(oeufsUtilises)} = ${miseEnEvidence(texNombre(oeufsRestants))}$ œufs de mes poules à la fin de la semaine .`
           if (context.isAmc) setReponse(this, i, oeufsRestants)
           else
             handleAnswers(this, i, {
