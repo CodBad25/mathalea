@@ -236,7 +236,7 @@ export function verifQuestionMathLive(
                 // On n'écrase le feedback que s'il n'y en a pas déjà un spécifique
                 result = {
                   isOk: false,
-                  feedback: `${fieldNumber}le résultat est incorrect.<br>`,
+                  feedback: `${fieldNumber}Le résultat est incorrect.<br>`,
                 }
               } else {
                 // On ajoute le numéro du champ avant le feedback existant
