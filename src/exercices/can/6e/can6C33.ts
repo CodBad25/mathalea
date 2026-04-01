@@ -1,8 +1,9 @@
-import { texteParPosition } from '../../../lib/2d/textes'
+import { latex2d } from '../../../lib/2d/textes'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import Pyramide from '../../../modules/pyramide'
 import ExerciceSimple from '../../ExerciceSimple'
 
+import { fixeBordures } from '../../../lib/2d/fixeBordures'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { mathalea2d } from '../../../modules/mathalea2d'
 export const titre = 'Calculer dans une pyramide multiplicative'
@@ -37,11 +38,16 @@ export default class PyramideMul3Etages extends ExerciceSimple {
       fractionOn: false,
     })
     pyr.isVisible = [[false], [false, false], [true, true, true]]
-    this.question = `Chaque case contient le produit des deux cases sur lesquelles elle repose. Quel est le nombre qui correspond à * ?<br>
-    ${mathalea2d({ xmin: 0, ymin: 0, xmax: 12, ymax: 3.5, scale: 0.6 }, pyr.representeMoi(0, 0), texteParPosition('*', 6, 2.5))}`
+    const objets = [
+      ...pyr.representeMoi(0, 0),
+      latex2d('?', 6, 3.75, { letterSize: 'large' }),
+    ]
+    this.question = `Chaque case contient le produit des deux cases sur lesquelles elle repose. Quel est le nombre qui manque au sommet de la pyramide ?<br>
+    ${mathalea2d(Object.assign({ scale: 0.6 }, fixeBordures(objets)), ...objets)}`
     this.reponse = pyr.valeurs[0][0]
     pyr.isVisible = [[true], [true, true], [true, true, true]]
-    this.correction = `Le nombre qui se trouve au sommet de la pyramide est : $${miseEnEvidence(this.reponse)}$.<br>
-    ${mathalea2d({ xmin: 0, ymin: 0, xmax: 12, ymax: 3.5, scale: 0.6 }, pyr.representeMoi(0, 0))}`
+    const objetsCorrection = [...pyr.representeMoi(0, 0)]
+    this.correction = `Le nombre qui manque au sommet de la pyramide est : $${miseEnEvidence(this.reponse)}$.<br>
+    ${mathalea2d(Object.assign({ scale: 0.6 }, fixeBordures(objetsCorrection)), ...objetsCorrection)}`
   }
 }
