@@ -15,7 +15,7 @@ import Exercice from '../Exercice'
 export const titre =
   'Calculer une expression littérale simple pour une valeur donnée'
 export const interactifReady = true
-export const dateDePublication = '22/10/2025'
+export const dateDePublication = '31/03/2026'
 
 export const uuid = 'd05d3'
 export const refs = {
@@ -117,7 +117,7 @@ export default class CalculerUneExpressionSimple extends Exercice {
           expression = this.sup
             ? `${inconnue} \\times ${inconnue} + ${a}`
             : `${inconnue}^2 + ${a}`
-          texteCorr = `$${lettreDepuisChiffre(i + 1)} = ${x} \\times ${x} + ${a}$<br>`
+          texteCorr = `$${lettreDepuisChiffre(i + 1)} = ${x} \\times ${ecritureParentheseSiNegatif(x)} + ${a}$<br>`
           texteCorr += `$${lettreDepuisChiffre(i + 1)} = ${x * x} + ${a}$<br>`
           texteCorr += `$${lettreDepuisChiffre(i + 1)} = ${miseEnEvidence(x * x + a)}$`
           answer = x * x + a
@@ -126,8 +126,8 @@ export default class CalculerUneExpressionSimple extends Exercice {
           expression = this.sup
             ? `${inconnue} \\times ${inconnue} + ${a} \\times ${inconnue}`
             : `${inconnue}^2 + ${a}${inconnue}`
-          texteCorr = `$${lettreDepuisChiffre(i + 1)} = ${x} \\times ${x} + ${a} \\times ${x}$<br>`
-          texteCorr += `$${lettreDepuisChiffre(i + 1)} = ${x * x} + ${a * x}$<br>`
+          texteCorr = `$${lettreDepuisChiffre(i + 1)} = ${x} \\times ${ecritureParentheseSiNegatif(x)} + ${a} \\times ${ecritureParentheseSiNegatif(x)}$<br>`
+          texteCorr += `$${lettreDepuisChiffre(i + 1)} = ${x * x} + ${ecritureParentheseSiNegatif(a * x)}$<br>`
           texteCorr += `$${lettreDepuisChiffre(i + 1)} = ${miseEnEvidence(x * x + a * x)}$`
           answer = x * x + a * x
           break
@@ -138,7 +138,7 @@ export default class CalculerUneExpressionSimple extends Exercice {
           expression = this.sup
             ? `${a} \\times ${inconnue} - ${b}`
             : `${a}${inconnue} - ${b}`
-          texteCorr = `$${lettreDepuisChiffre(i + 1)} = ${a} \\times ${x} - ${b}$<br>`
+          texteCorr = `$${lettreDepuisChiffre(i + 1)} = ${a} \\times ${ecritureParentheseSiNegatif(x)} - ${b}$<br>`
           texteCorr += `$${lettreDepuisChiffre(i + 1)} = ${a * x} - ${b}$<br>`
           texteCorr += `$${lettreDepuisChiffre(i + 1)} = ${miseEnEvidence(a * x - b)}$`
           answer = a * x - b
