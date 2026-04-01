@@ -17,7 +17,7 @@ import Exercice from '../Exercice'
 
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
-import { lettreDepuisChiffre } from '../../lib/outils/outilString'
+import { lettreIndiceeDepuisChiffre } from '../../lib/outils/outilString'
 
 export const titre = 'Multiplier ou/et diviser des fractions'
 export const amcReady = true
@@ -54,27 +54,35 @@ export default class ExerciceMultiplierFractions extends Exercice {
     this.besoinFormulaire2CaseACocher = [
       'Avec décomposition en produit de facteurs premiers',
     ]
-    this.besoinFormulaire3CaseACocher = ['Demander une fraction irréductible']
-    this.besoinFormulaire4Numerique = [
+    this.besoinFormulaire3CaseACocher = [
+      'La correction affiche une fraction irréductible',
+    ]
+    this.besoinFormulaire4CaseACocher = [
+      'La consigne demande une fraction irréductible',
+    ]
+    this.besoinFormulaire5Numerique = [
       "Type d'opération",
       3,
       '1 : Multiplication\n2 : Division\n3 : Mélange',
     ]
     this.listeAvecNumerotation = false
     this.sup = '2' // Avec ou sans relatifs
-    this.sup3 = true
+    this.sup2 = true // méthode de simplification par défaut = factorisation
+    this.sup3 = false
+    this.sup4 = true
+    this.sup5 = 1 // multiplications par défaut
     this.spacing = 3
     this.spacingCorr = 3
     this.nbQuestions = 5
-    this.sup2 = true // méthode de simplification par défaut = factorisation
-    this.sup4 = 1 // multiplications par défaut
     this.comment =
-      'Les facteurs sont positifs pour les trois premiers types de facteurs à choisir.'
+      'Les facteurs sont positifs pour les trois premiers types de facteurs à choisir.<br><br>'
+    this.comment +=
+      'Si la consigne demande une fraction irréductible, alors la correction affiche une fraction irréductible, quelle que soit la valeur choisie du paramètre à ce sujet.'
   }
 
   nouvelleVersion() {
     const listeFractions = obtenirListeFractionsIrreductibles()
-    const fractionIrreductibleDemandee = this.sup3
+    const fractionIrreductibleDemandee = this.sup4
     if (fractionIrreductibleDemandee) {
       this.consigne = 'Calculer et donner le résultat sous forme irréductible.'
     } else {
@@ -88,10 +96,10 @@ export default class ExerciceMultiplierFractions extends Exercice {
       nbQuestions: this.nbQuestions,
     })
 
-    // On choisit les opérations en fonction de this.sup4
+    // On choisit les opérations en fonction de this.sup5
     const typesDoperation = []
-    if (this.sup4 % 2 === 1) typesDoperation.push('mul')
-    if (this.sup4 > 1) typesDoperation.push('div')
+    if (this.sup5 % 2 === 1) typesDoperation.push('mul')
+    if (this.sup5 > 1) typesDoperation.push('div')
     const listeTypesDoperation = combinaisonListes(
       typesDoperation,
       this.nbQuestions,
@@ -126,6 +134,9 @@ export default class ExerciceMultiplierFractions extends Exercice {
             const tampon = c
             c = d
             d = tampon
+            if (d === 1) {
+              d = randint(2, 9)
+            }
             break
           }
           case 2: {
@@ -186,13 +197,13 @@ export default class ExerciceMultiplierFractions extends Exercice {
       const f1 = new FractionEtendue(a, b)
       if (listeTypesDoperation[i] === 'mul') {
         const f2 = new FractionEtendue(c, d)
-        texte = `$${lettreDepuisChiffre(i + 1)} = ${f1.texFraction}\\times${f2.texFraction}$`
-        texteCorr = `$\\begin{aligned}${lettreDepuisChiffre(i + 1)} &= ${f1.texProduitFraction(f2, this.sup2).replaceAll('=', '\\\\&=')}\\end{aligned}$`
+        texte = `$${lettreIndiceeDepuisChiffre(i + 1)} = ${f1.texFraction}\\times${f2.texFraction}$`
+        texteCorr = `$\\begin{aligned}${lettreIndiceeDepuisChiffre(i + 1)} &= ${f1.texProduitFraction(f2, this.sup3 || this.sup4 ? this.sup2 : 'none').replaceAll('=', '\\\\&=')}\\end{aligned}$`
         reponse = f1.produitFraction(f2).simplifie()
       } else {
         const f2 = new FractionEtendue(d, c)
-        texte = `$${lettreDepuisChiffre(i + 1)} = \\dfrac{${(f1.den === 1 ? space2 : space) + f1.texFSD + (f1.den === 1 ? space2 : space)}}{${(f2.den === 1 ? space2 : space) + f2.texFraction + (f2.den === 1 ? space2 : space)}}$`
-        texteCorr = `$\\begin{aligned}${lettreDepuisChiffre(i + 1)} &= ${f1.texDiviseFraction(f2, this.sup2, '/').replaceAll('=', '\\\\&=')}\\end{aligned}$`
+        texte = `$${lettreIndiceeDepuisChiffre(i + 1)} = \\dfrac{${(f1.den === 1 ? space2 : space) + f1.texFSD + (f1.den === 1 ? space2 : space)}}{${(f2.den === 1 ? space2 : space) + f2.texFraction + (f2.den === 1 ? space2 : space)}}$`
+        texteCorr = `$\\begin{aligned}${lettreIndiceeDepuisChiffre(i + 1)} &= ${f1.texDiviseFraction(f2, this.sup3 || this.sup4 ? this.sup2 : 'none', '/').replaceAll('=', '\\\\&=')}\\end{aligned}$`
         reponse = f1.diviseFraction(f2).simplifie()
       }
       if (this.questionJamaisPosee(i, a, b, c, d, typesDeQuestions)) {
