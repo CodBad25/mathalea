@@ -24,19 +24,24 @@ export const amcReady = true
 export const amcType = 'AMCNum'
 export const interactifReady = true
 export const interactifType = 'mathLive'
-export const dateDeModifImportante = '31/03/2026'
+export const dateDeModifImportante = '09/04/2022'
 
 /**
  * Exercice de calcul de produit de deux fractions.
+ *
+ * Paramétrages possibles :
+ * * 1 : Produits de nombres positifs seulement
+ * * 2 : deux questions niveau 1 puis deux questions niveau 3
+ * * 3 : Produits de nombres relatifs
+ * * Si décomposition cochée : les nombres utilisés sont plus importants.
  * @author Jean-Claude Lhote
  * Ajout d'une option pour ne pas exiger une fraction irréductible le 09/04/2022 par Guillaume Valmont
- * Ajout dans la paramètre 1 de pouvoir choisir un numérateur fractionnaire et un dénominateur entier le 04/10/2025 par Eric Elter
  */
-export const uuid = '3ee4e'
+export const uuid = '72ce7'
 
 export const refs = {
-  'fr-fr': ['4C22', 'BP2AutoH13'],
-  'fr-ch': ['10NO5-6'],
+  'fr-fr': [],
+  'fr-ch': [],
 }
 
 const space = '\\phantom{\\dfrac{(_(^(}{(_(^(}}' // Utilisé pour mettre de l'espace dans une fraction de fraction
@@ -45,11 +50,11 @@ const space2 = '\\phantom{(_(^(}' // Utilisé pour mettre de l'espace dans une f
 export default class ExerciceMultiplierFractions extends Exercice {
   constructor() {
     super()
-    // this.nbCols = 4 // Pour Latex
-    // this.nbColsCorr = 2
+    this.nbCols = 4 // Pour Latex
+    this.nbColsCorr = 2
     this.besoinFormulaireTexte = [
-      'Type de facteurs',
-      'Nombres séparés par des tirets\n1 : Un facteur entier\n2 : Un numérateur égal à 1\n3 : Sans cas particulier\n4 : Au moins deux valeurs négatives\n5 : Mélange',
+      'Niveau de difficulté',
+      'Nombres séparés par des tirets\n1 : Un entier et une fraction (tout positif)\n2 : Deux fractions à numérateurs et dénominateurs positifs\n3 : Fractions avec nombres relatifs (au moins 2 négatifs)\n4 : Mélange',
     ]
     this.besoinFormulaire2CaseACocher = [
       'Avec décomposition en produit de facteurs premiers',
@@ -63,13 +68,14 @@ export default class ExerciceMultiplierFractions extends Exercice {
     this.listeAvecNumerotation = false
     this.sup = '2' // Avec ou sans relatifs
     this.sup3 = true
+    if (context.isAmc)
+      this.titre =
+        'Multiplier des fractions et donner le résultat sous forme irréductible'
     this.spacing = 3
     this.spacingCorr = 3
     this.nbQuestions = 5
     this.sup2 = true // méthode de simplification par défaut = factorisation
     this.sup4 = 1 // multiplications par défaut
-    this.comment =
-      'Les facteurs sont positifs pour les trois premiers types de facteurs à choisir.'
   }
 
   nouvelleVersion() {
@@ -82,8 +88,9 @@ export default class ExerciceMultiplierFractions extends Exercice {
     }
     const listeTypeDeQuestions = gestionnaireFormulaireTexte({
       saisie: this.sup,
-      max: 4,
-      melange: 5,
+      min: 1,
+      max: 3,
+      melange: 4,
       defaut: 2,
       nbQuestions: this.nbQuestions,
     })
@@ -117,8 +124,10 @@ export default class ExerciceMultiplierFractions extends Exercice {
         ;[c, d] = choice(listeFractions)
       } while ((a * c) % (b * d) === 0 || (a * c) % d === 0 || b * d === 100)
       if (!this.sup2) {
+        // methode 1 : simplifications finale
         switch (typesDeQuestions) {
           case 1: {
+            // entier * fraction (tout positif)
             if (a === 1) {
               a = randint(2, 9)
             }
@@ -128,14 +137,10 @@ export default class ExerciceMultiplierFractions extends Exercice {
             d = tampon
             break
           }
-          case 2: {
-            if (d === 1) {
-              d = randint(2, 9)
-            }
-            c = 1
+          case 2: // fraction * fraction tout positif
             break
-          }
-          case 4:
+
+          case 3:
             do {
               a = a * choice([-1, 1])
               b = b * choice([-1, 1])
@@ -165,13 +170,12 @@ export default class ExerciceMultiplierFractions extends Exercice {
         )
 
         switch (typesDeQuestions) {
-          case 1:
+          case 1: // entier * fraction (tout positif)
             b = 1
             break
-          case 2:
-            c = 1
+          case 2: // fraction * fraction tout positif
             break
-          case 4:
+          case 3:
             do {
               a = a * choice([-1, 1])
               b = b * choice([-1, 1])
