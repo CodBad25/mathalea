@@ -11,6 +11,8 @@ import { obtenirListeFractionsIrreductibles } from '../../modules/fractions'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
+import { bleuMathalea } from '../../lib/colors'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { remplisLesBlancs } from '../../lib/interactif/questionMathLive'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -55,7 +57,6 @@ export default class ExerciceComparerDeuxFractions extends Exercice {
     for (
       let i = 0, cpt = 0, positifOuNegatif, texte, texteCorr, signe, signe2;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       this.autoCorrection[i] = {}
       if (this.sup2 === true) positifOuNegatif = listeSignes[i]
@@ -70,11 +71,11 @@ export default class ExerciceComparerDeuxFractions extends Exercice {
         ecart = ecart * -1
       }
       if (ecart > 0) {
-        signe = '<'
-        signe2 = '>'
+        signe = ['<', '\\leqslant']
+        signe2 = ['>', '\\geqslant']
       } else {
-        signe = '>'
-        signe2 = '<'
+        signe = ['>', '\\leqslant']
+        signe2 = ['<', '\\geqslant']
       }
       enleveElement(listeFractions, fractionAbsolue) // Il n'y aura pas 2 fois la même réponse
       const fraction = fractionAbsolue.multiplieEntier(positifOuNegatif)
@@ -88,7 +89,7 @@ export default class ExerciceComparerDeuxFractions extends Exercice {
           this,
           i,
           `${fraction.texFSD}\\quad%{champ1}\\quad${autreFraction.texFSD}`,
-          'clavierCompare',
+          KeyboardType.clavierCompare,
           '\\quad\\ldots\\quad',
         )
       } else {
@@ -96,7 +97,7 @@ export default class ExerciceComparerDeuxFractions extends Exercice {
           this,
           i,
           `${autreFraction.texFSD}\\quad%{champ1}\\quad${fraction.texFSD}`,
-          'clavierCompare',
+          KeyboardType.clavierCompare,
           '\\quad\\ldots\\quad',
         )
       }
@@ -106,11 +107,11 @@ export default class ExerciceComparerDeuxFractions extends Exercice {
       let signeAsurB
       if (fraction.signe < 0) signeAsurB = '-'
       else signeAsurB = ''
-      texteCorr = `$${fraction.texFSD}= ${signeAsurB} \\dfrac{${Math.abs(fractionAbsolue.num).toString() + miseEnEvidence('\\times  ' + k.toString())}}{${Math.abs(fractionAbsolue.den).toString() + miseEnEvidence('\\times  ' + k.toString())}}=${fraction.reduire(k).texFSD}\\quad$`
+      texteCorr = `$${fraction.texFSD}= ${signeAsurB} \\dfrac{${Math.abs(fractionAbsolue.num).toString() + miseEnEvidence('\\times  ' + k.toString(), bleuMathalea)}}{${Math.abs(fractionAbsolue.den).toString() + miseEnEvidence('\\times  ' + k.toString(), bleuMathalea)}}=${fraction.reduire(k).texFSD}\\quad$`
       if (ordreDesFractions) {
-        texteCorr += `  et   $\\quad${fraction.reduire(k).texFSD} ${signe} ${autreFraction.texFSD} \\quad$ donc $\\quad ${fraction.texFSD} ${signe} ${autreFraction.texFSD}$.`
+        texteCorr += `  et   $\\quad${fraction.reduire(k).texFSD} ${signe[0]} ${autreFraction.texFSD} \\quad$ donc $\\quad ${fraction.texFSD} ${miseEnEvidence(signe[0])} ${autreFraction.texFSD}$.`
       } else {
-        texteCorr += `  et   $\\quad${autreFraction.texFSD} ${signe2} ${fraction.reduire(k).texFSD} \\quad$ donc $\\quad ${autreFraction.texFSD} ${signe2} ${fraction.texFSD} $.`
+        texteCorr += `  et   $\\quad${autreFraction.texFSD} ${signe2[0]} ${fraction.reduire(k).texFSD} \\quad$ donc $\\quad ${autreFraction.texFSD} ${miseEnEvidence(signe2[0])} ${fraction.texFSD} $.`
       }
       if (context.isAmc) {
         this.autoCorrection[i] = {
