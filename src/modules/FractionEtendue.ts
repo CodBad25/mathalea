@@ -964,40 +964,51 @@ class FractionEtendue {
         simplification === 'none' || this.produitFraction(f2).estIrreductible
           ? `=${new FractionEtendue(this.num * f2.num, this.den * f2.den).texFSD}`
           : `${
-              this.den !== f2.num && f2.den !== this.num
+              this.den !== f2.num && f2.den !== this.num && f2.num === 1
                 ? '=\\dfrac{' +
-                  (decompositionFacteursPremiers(this.num) || '1') +
-                  '\\times ' +
-                  (decompositionFacteursPremiers(f2.num) || '1') +
+                  decompositionFacteursPremiers(this.num) +
                   '}{' +
-                  (decompositionFacteursPremiers(this.den) || '1') +
+                  decompositionFacteursPremiers(this.den) +
                   '\\times ' +
-                  (decompositionFacteursPremiers(f2.den) || '1') +
+                  decompositionFacteursPremiers(f2.den) +
                   '}' +
                   this.produitFraction(f2).texSimplificationAvecEtapes(
                     simplification,
                   )
-                : `${
-                    this.den === f2.num
-                      ? '=\\dfrac{' +
-                        this.num +
-                        '}{' +
-                        f2.den +
-                        '}' +
-                        new FractionEtendue(
-                          this.num,
-                          f2.den,
-                        ).texSimplificationAvecEtapes(simplification)
-                      : '=\\dfrac{' +
-                        f2.num +
-                        '}{' +
-                        this.den +
-                        '}' +
-                        new FractionEtendue(
-                          f2.num,
-                          this.den,
-                        ).texSimplificationAvecEtapes(simplification)
-                  }`
+                : this.den !== f2.num && f2.den !== this.num
+                  ? '=\\dfrac{' +
+                    decompositionFacteursPremiers(this.num) +
+                    '\\times ' +
+                    decompositionFacteursPremiers(f2.num) +
+                    '}{' +
+                    decompositionFacteursPremiers(this.den) +
+                    '\\times ' +
+                    decompositionFacteursPremiers(f2.den) +
+                    '}' +
+                    this.produitFraction(f2).texSimplificationAvecEtapes(
+                      simplification,
+                    )
+                  : `${
+                      this.den === f2.num
+                        ? '=\\dfrac{' +
+                          this.num +
+                          '}{' +
+                          f2.den +
+                          '}' +
+                          new FractionEtendue(
+                            this.num,
+                            f2.den,
+                          ).texSimplificationAvecEtapes(simplification)
+                        : '=\\dfrac{' +
+                          f2.num +
+                          '}{' +
+                          this.den +
+                          '}' +
+                          new FractionEtendue(
+                            f2.num,
+                            this.den,
+                          ).texSimplificationAvecEtapes(simplification)
+                    }`
             }`
       }`
     }
@@ -1030,7 +1041,7 @@ class FractionEtendue {
           return `\\dfrac{${space2 + this.texFraction + space2}}{${(f2.estEntiere ? space2 : space) + f2.texFraction + (f2.estEntiere ? space2 : space)}}=${this.texFractionSimplifiee}\\times ${f2.inverse().texFraction}=\\dfrac{${this.texFractionSimplifiee} \\times ${ecritureParentheseSiNegatif(f2.den)}}{${ecritureParentheseSiNegatif(f2.num)}}${
             simplification === 'none' || this.diviseFraction(f2).estIrreductible
               ? `=\\dfrac{${this.simplifie().num * f2.den}}{${f2.num}}`
-              : `=\\dfrac{${decompositionFacteursPremiers(this.num)}\\times ${decompositionFacteursPremiers(f2.den)}}{${decompositionFacteursPremiers(this.den)}\\times ${decompositionFacteursPremiers(f2.num)}}${this.diviseFraction(
+              : `=\\dfrac{${decompositionFacteursPremiers(this.num)}\\times ${decompositionFacteursPremiers(f2.den)}}{${decompositionFacteursPremiers(f2.num)}}${this.diviseFraction(
                   f2,
                 ).texSimplificationAvecEtapes(simplification)}`
           }`
@@ -1069,8 +1080,8 @@ class FractionEtendue {
         if (symbole === '/') {
           return `\\dfrac{${space + this.texFraction + space}}{${(f2.estEntiere ? space2 : space) + f2.texFraction + (f2.estEntiere ? space2 : space)}}=${this.texFraction}\\times ${f2.inverse().texFraction}=\\dfrac{${this.num + '\\times ' + ecritureParentheseSiNegatif(f2.den)}}{${this.den + '\\times ' + ecritureParentheseSiNegatif(f2.num)}}${
             simplification === 'none' || this.diviseFraction(f2).estIrreductible
-              ? `=\\dfrac{${this.num * f2.den}}{${this.den * f2.num}}`
-              : `=\\dfrac{${decompositionFacteursPremiers(this.num)}\\times ${decompositionFacteursPremiers(f2.den)}}{${decompositionFacteursPremiers(this.den)}\\times ${decompositionFacteursPremiers(f2.num)}}${this.diviseFraction(f2).texSimplificationAvecEtapes(simplification)}`
+              ? `=${new FractionEtendue(this.num * f2.den, this.den * f2.num).texFSD}`
+              : `=\\dfrac{${decompositionFacteursPremiers(this.num)}}{${decompositionFacteursPremiers(this.den)}\\times ${decompositionFacteursPremiers(f2.num)}}${this.diviseFraction(f2).texSimplificationAvecEtapes(simplification)}`
           }`
         } else {
           return `${this.texFraction}\\div${f2.texFraction}=${this.texFraction}\\times ${f2.inverse().texFraction}=\\dfrac{${this.num + '\\times ' + f2.den}}{${this.den + '\\times ' + f2.num}}${
