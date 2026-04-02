@@ -41,7 +41,6 @@ export const dateDePublication = '05/04/2022' // La date de publication initiale
 /**
  *
  * Gilles Mora
-
  */
 
 function compareNombres(a: number, b: number) {
@@ -1072,7 +1071,7 @@ export default class SujetCAN2021Seconde extends Exercice {
               texte += ajouteChampTexteMathLive(
                 this,
                 index,
-                KeyboardType.clavierNumbers,
+                KeyboardType.clavierFullOperations,
                 { texteApres: '$\\text{ cm}$' },
               )
             } else {
@@ -1091,7 +1090,7 @@ export default class SujetCAN2021Seconde extends Exercice {
           Combien pèse (en $\\text{kg}$) ce solide qui a la forme d'un cube  d'arête $${a}\\text{ cm}$  ?
       `
           texteCorr = `Le volume du cube est $${a}^3=${a ** 3}\\text{ cm}^3$.<br>
-          Sa masse est donc donnée par $${a ** 3}\\times 10=${10 * a ** 3}$ g soit $${texNombre(a ** 3 / 100, 2)}\text{ kg}$.
+          Sa masse est donc donnée par $${a ** 3}\\times 10=${10 * a ** 3}$ g soit $${texNombre(a ** 3 / 100, 2)}\\text{ kg}$.
 
           `
 
