@@ -83,7 +83,7 @@ export function listeFractions(...fractions: FractionEtendue[]): ListeFraction {
  * @param {number|undefined} b
  * @return {FractionEtendue}
  */
-export function fraction(a: number, b: number | undefined): FractionEtendue {
+export function fraction(a: number, b?: number | undefined): FractionEtendue {
   if (b === undefined) {
     // pas d'argument b
     if (a === undefined) {
