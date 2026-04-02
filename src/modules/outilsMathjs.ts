@@ -549,7 +549,7 @@ export function toTex(
 
   const searchBasics = TreeSearch.preOrder(basics)
 
-  let nodeClone: any
+  let nodeClone: MathNode
   let iter = 0
   const MAX_STEP_COUNT = 20
   do {
@@ -562,7 +562,6 @@ export function toTex(
     nodeCopy = SIMPLIFICATION_FUNCTIONS.removeUnnecessaryParens(nodeCopy, true)
     iter++
     if (iter++ === MAX_STEP_COUNT) {
-      // eslint-disable-next-line
       console.error(
         'Math error: Potential infinite loop for toTex: ' +
           node.toString() +
@@ -577,19 +576,6 @@ export function toTex(
   const forceMultiplySign = params.removeImplicit === false || false
   const flattenUsed = true
   const forceAddParenthesis = true
-  const postAction = [
-    (node: MathNode) => {
-      const resuNode = node.transform((nodeChild) => {
-        const resultStatus =
-          SIMPLIFICATION_FUNCTIONS.simplifyFractionSignsBefore(nodeChild)
-        if (resultStatus.hasChanged()) {
-          return resultStatus.newNode
-        }
-        return nodeChild
-      })
-      return resuNode
-    },
-  ]
   const resu = printMS
     .latex(
       nodeCopy,
@@ -634,13 +620,18 @@ export function toString(
     nodeCopy = math.parse(aleaExpression(nodeCopy.toString(), params.variables))
   }
   printMS.ascii(nodeCopy)
-  let nodeClone: any
+  let nodeClone: MathNode
   do {
     // À étudier, pour 79 et 85 et 50 cette boucle doit être maintenue
     nodeClone = nodeCopy.cloneDeep() // Vérifier le fonctionnement de .clone() et .cloneDeep() (peut-être y a-t-il un problème avec implicit avec cloneDeep())
     nodeCopy = nodeCopy.transform(function (nodeTree, path, parent) {
-      return transformNode(nodeTree as any, parent as any, undefined, params)
-    })
+      return transformNode(
+        nodeTree as any,
+        parent as any,
+        undefined,
+        params,
+      ) as unknown as MathNode
+    }) as MathNode
   } while (nodeCopy.toString() !== nodeClone.toString())
 
   // if (node.isConstantNode && node.value === undefined) nodeTex = ''
@@ -726,7 +717,8 @@ export function aleaVariables(
       switch (typeof variables[v as keyof Variables]) {
         case 'object':
           break
-        case 'boolean': // On génère un nombre aléatoire non nul entre 1 et 10 si false et entre -10 et 10 si true
+        case 'boolean': {
+          // On génère un nombre aléatoire non nul entre 1 et 10 si false et entre -10 et 10 si true
           const n = variables[v as keyof Variables] ? 1 : 0
 
           // Choix aléatoire entre -1 et +1
@@ -740,6 +732,7 @@ export function aleaVariables(
 
           assignations[v as keyof Variables] = math.fraction(result)
           break
+        }
         case 'number': // On ne fait que le convertir en fraction
           if (params.type === 'decimal') {
             assignations[v as keyof Variables] = math.bignumber(
@@ -1302,21 +1295,6 @@ export function isDecimal(value: number | string | Fraction): boolean {
     den !== 1 &&
     !obtenirListeFacteursPremiers(den).some((x: number) => x !== 2 && x !== 5)
   )
-}
-
-function logSteps(equationStatus: {
-  changeType: string
-  substeps?: Array<{
-    changeType: string
-    substeps?: any[]
-  }>
-}): void {
-  console.log('\n' + equationStatus.changeType)
-  if (equationStatus?.substeps && equationStatus.substeps.length > 0) {
-    console.log('\n substeps: [')
-    equationStatus.substeps.forEach(logSteps)
-    console.log('\n]')
-  }
 }
 
 /**
