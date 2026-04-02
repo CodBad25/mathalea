@@ -467,7 +467,12 @@ export default class nomExercice extends Exercice {
 
   async shakeCorrection(i: number) {
     if (this.figuresApiGeom[i].elements.size === 0) return
-    await this.figuresApiGeom[i].shake()
+    try {
+      await this.figuresApiGeom[i].shake()
+    } catch (e) {
+      // La figure peut être détruite pendant l'animation (ex : nouvelleVersion() appelée avant la fin du shake)
+      return
+    }
     for (let ee = 0; ee < this.lesPoints[i].length; ee++) {
       this.lesPointsCorr[i][ee].x = this.lesPoints[i][ee].x
       this.lesPointsCorr[i][ee].y = this.lesPoints[i][ee].y
