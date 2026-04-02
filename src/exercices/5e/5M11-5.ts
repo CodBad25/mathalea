@@ -745,11 +745,11 @@ export default class PerimetreOuAireDeFiguresComposees extends Exercice {
                 : ''
             texteCorr +=
               this.sup4 !== 2
-                ? `Une valeur approchée ${this.sup3 === 1 ? 'au cm' : 'au dixième de cm'} est donc $\\mathcal{P}\\approx ${miseEnEvidence(texNombre(troncature(L1 + L2 + L1 + (L2 * Math.PI) / 2, this.sup3 - 1), 1))}${sp()}${texTexte('cm')}$.<br>`
+                ? `Une valeur approchée ${this.sup3 === 1 ? 'au cm' : 'au dixième de cm'} est donc $\\mathcal{P}\\approx ${miseEnEvidence(texNombre(troncature(L1 + L2 + L1 + (L2 * Math.PI) / 2, this.sup3 - 1), 1))}${sp()}${texTexte('cm')}$ ou $\\mathcal{P}\\approx ${miseEnEvidence(texNombre(troncature(L1 + L2 + L1 + (L2 * Math.PI) / 2 + 10 ** (-this.sup3 + 1), this.sup3 - 1), 1))}${sp()}${texTexte('cm')}$.<br>`
                 : ''
             texteCorr +=
               this.sup4 !== 1
-                ? `Une valeur approchée ${this.sup3 === 1 ? 'au cm$^2$' : 'au dixième de cm$^2$'} est donc $\\mathcal{A}\\approx ${miseEnEvidence(texNombre(troncature(L1 * L2 + ((L2 / 2) * (L2 / 2) * Math.PI) / 2, this.sup3 - 1), 2))}${sp()}${texTexte('cm')}^2$.<br>`
+                ? `Une valeur approchée ${this.sup3 === 1 ? 'au cm$^2$' : 'au dixième de cm$^2$'} est donc $\\mathcal{A}\\approx ${miseEnEvidence(texNombre(troncature(L1 * L2 + ((L2 / 2) * (L2 / 2) * Math.PI) / 2, this.sup3 - 1), 2))}${sp()}${texTexte('cm')}^2$ ou $\\mathcal{A}\\approx ${miseEnEvidence(texNombre(troncature(L1 * L2 + ((L2 / 2) * (L2 / 2) * Math.PI) / 2 + 10 ** (-this.sup3 + 1), this.sup3 - 1), 2))}${sp()}${texTexte('cm')}^2$.<br>`
                 : ''
           }
 
@@ -905,11 +905,11 @@ export default class PerimetreOuAireDeFiguresComposees extends Exercice {
                 : ''
             texteCorr +=
               this.sup4 !== 2
-                ? `Une valeur approchée ${this.sup3 === 1 ? 'au cm' : 'au dixième de cm'} est donc $\\mathcal{P}\\approx ${miseEnEvidence(texNombre(troncature(L1 + L1 + L2 * Math.PI, this.sup3 - 1), 1))}${sp()}${texTexte('cm')}$.<br>`
+                ? `Une valeur approchée ${this.sup3 === 1 ? 'au cm' : 'au dixième de cm'} est donc $\\mathcal{P}\\approx ${miseEnEvidence(texNombre(troncature(L1 + L1 + L2 * Math.PI, this.sup3 - 1), 1))}${sp()}${texTexte('cm')}$ ou $\\mathcal{P}\\approx ${miseEnEvidence(texNombre(troncature(L1 + L1 + L2 * Math.PI + 10 ** (-this.sup3 + 1), this.sup3 - 1), 1))}${sp()}${texTexte('cm')}$.<br>`
                 : ''
             texteCorr +=
               this.sup4 !== 1
-                ? `Une valeur approchée ${this.sup3 === 1 ? 'au cm$^2$' : 'au dixième de cm$^2$'} est donc $\\mathcal{A}\\approx ${miseEnEvidence(texNombre(troncature(L1 * L2 + (L2 / 2) * (L2 / 2) * Math.PI, this.sup3 - 1), 1))}${sp()}${texTexte('cm')}^2$.<br>`
+                ? `Une valeur approchée ${this.sup3 === 1 ? 'au cm$^2$' : 'au dixième de cm$^2$'} est donc $\\mathcal{A}\\approx ${miseEnEvidence(texNombre(troncature(L1 * L2 + (L2 / 2) * (L2 / 2) * Math.PI, this.sup3 - 1), 1))}${sp()}${texTexte('cm')}^2$ ou $\\mathcal{A}\\approx ${miseEnEvidence(texNombre(troncature(L1 * L2 + (L2 / 2) * (L2 / 2) * Math.PI + 10 ** (-this.sup3 + 1), this.sup3 - 1), 1))}${sp()}${texTexte('cm')}^2$.<br>`
                 : ''
           }
           perimetreReponses = valeursApprochees(
@@ -1048,7 +1048,7 @@ export default class PerimetreOuAireDeFiguresComposees extends Exercice {
             texteCorr += `et d'un demi-disque de rayon ${stringNombre(l1 / 2, 1)}${sp()}cm.<br>`
             texteCorr +=
               this.sup4 !== 2
-                ? `$\\mathcal{P}=${texNombre(L1, 1)}+${texNombre(L1 + L2, 1)}+(${texNombre(l1, 1)}\\times \\pi \\div 2)+${texNombre(hyp, 1)}\\approx${texNombre(troncature(L1 + L1 + hyp + L2 + (l1 * Math.PI) / 2, 3), 1)}${sp()}${texTexte('cm')}$<br>`
+                ? `$\\mathcal{P}=${texNombre(L1, 1)}+${texNombre(L1 + L2, 1)}+(${texNombre(l1, 1)}\\times \\pi \\div 2)+${texNombre(hyp, 1)}\\approx${texNombre(troncature(L1 + L1 + hyp + L2 + (l1 * Math.PI) / 2, 3), 3)}${sp()}${texTexte('cm')}$<br>`
                 : ''
             texteCorr +=
               this.sup4 !== 1
@@ -1056,11 +1056,11 @@ export default class PerimetreOuAireDeFiguresComposees extends Exercice {
                 : ''
             texteCorr +=
               this.sup4 !== 2
-                ? `Une valeur approchée ${this.sup3 === 1 ? 'au cm' : 'au dixième de cm'} est donc $\\mathcal{P}\\approx ${miseEnEvidence(texNombre(troncature(L1 + L2 + hyp + L1 + (l1 * Math.PI) / 2, this.sup3 - 1), 1))}${sp()}${texTexte('cm')}$.<br>`
+                ? `Une valeur approchée ${this.sup3 === 1 ? 'au cm' : 'au dixième de cm'} est donc $\\mathcal{P}\\approx ${miseEnEvidence(texNombre(troncature(L1 + L2 + hyp + L1 + (l1 * Math.PI) / 2, this.sup3 - 1), 1))}${sp()}${texTexte('cm')}$ ou $\\mathcal{P}\\approx ${miseEnEvidence(texNombre(troncature(L1 + L2 + hyp + L1 + (l1 * Math.PI) / 2 + 10 ** (-this.sup3 + 1), this.sup3 - 1), 1))}${sp()}${texTexte('cm')}$.<br>`
                 : ''
             texteCorr +=
               this.sup4 !== 1
-                ? `Une valeur approchée ${this.sup3 === 1 ? 'au cm$^2$' : 'au dixième de cm$^2$'} est donc $\\mathcal{A}\\approx ${miseEnEvidence(texNombre(troncature(L1 * l1 + ((l1 / 2) * (l1 / 2) * Math.PI) / 2 + (L2 * l1) / 2, this.sup3 - 1), 2))}${sp()}${texTexte('cm')}^2$.<br>`
+                ? `Une valeur approchée ${this.sup3 === 1 ? 'au cm$^2$' : 'au dixième de cm$^2$'} est donc $\\mathcal{A}\\approx ${miseEnEvidence(texNombre(troncature(L1 * l1 + ((l1 / 2) * (l1 / 2) * Math.PI) / 2 + (L2 * l1) / 2, this.sup3 - 1), 2))}${sp()}${texTexte('cm')}^2$ ou $\\mathcal{A}\\approx ${miseEnEvidence(texNombre(troncature(L1 * l1 + ((l1 / 2) * (l1 / 2) * Math.PI) / 2 + (L2 * l1) / 2 + 10 ** (-this.sup3 + 1), this.sup3 - 1), 2))}${sp()}${texTexte('cm')}^2$.<br>`
                 : ''
           }
           // perimetre = arrondi(L1 + L2 + hyp + L1 + l1 * Math.PI / 2, this.sup3 - 1)
@@ -1222,11 +1222,11 @@ export default class PerimetreOuAireDeFiguresComposees extends Exercice {
                 : ''
             texteCorr +=
               this.sup4 !== 2
-                ? `Une valeur approchée ${this.sup3 === 1 ? 'au $\\text{cm}$' : 'au dixième de $\\text{cm}$'} est donc $\\mathcal{P}\\approx ${miseEnEvidence(texNombre(troncature(2 * L1 + L2 * Math.PI, this.sup3 - 1), 1))}\\text{ cm}$.<br>`
+                ? `Une valeur approchée ${this.sup3 === 1 ? 'au $\\text{cm}$' : 'au dixième de $\\text{cm}$'} est donc $\\mathcal{P}\\approx ${miseEnEvidence(texNombre(troncature(2 * L1 + L2 * Math.PI, this.sup3 - 1), 1))}\\text{ cm}$ ou $\\mathcal{P}\\approx ${miseEnEvidence(texNombre(troncature(2 * L1 + L2 * Math.PI + 10 ** (-this.sup3 + 1), this.sup3 - 1), 1))}\\text{ cm}$.<br>`
                 : ''
             texteCorr +=
               this.sup4 !== 1
-                ? `Une valeur approchée ${this.sup3 === 1 ? 'au $\\text{cm}^2$' : 'au dixième de $\\text{cm}^2$'} est donc $\\mathcal{A}\\approx ${miseEnEvidence(texNombre(troncature(L1 * L2, this.sup3 - 1), 2))}\\text{ cm}^2$.<br>`
+                ? `Une valeur approchée ${this.sup3 === 1 ? 'au $\\text{cm}^2$' : 'au dixième de $\\text{cm}^2$'} est donc $\\mathcal{A}\\approx ${miseEnEvidence(texNombre(troncature(L1 * L2, this.sup3 - 1), 2))}\\text{ cm}^2$ ou $\\mathcal{A}\\approx ${miseEnEvidence(texNombre(troncature(L1 * L2 + 10 ** (-this.sup3 + 1), this.sup3 - 1), 2))}\\text{ cm}^2$.<br>`
                 : ''
           }
 
