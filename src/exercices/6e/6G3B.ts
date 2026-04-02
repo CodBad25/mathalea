@@ -239,9 +239,17 @@ export default class nomExercice extends Exercice {
                 circle2: c2,
               },
             )
+            const { point1, point2 } = intersection2Cercles
+            if (point1 == null || point2 == null) {
+              window.notify(
+                "Les cercles devraient avoir deux points d'intersection.",
+                { intersection2Cercles },
+              )
+              continue
+            }
 
-            this.mediatrices[i][ee].pointMed1 = intersection2Cercles.point1
-            this.mediatrices[i][ee].pointMed2 = intersection2Cercles.point2
+            this.mediatrices[i][ee].pointMed1 = point1
+            this.mediatrices[i][ee].pointMed2 = point2
 
             // Les 4 segements égaux
             this.figuresApiGeomCorr[i].create('Segment', {

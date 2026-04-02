@@ -1,11 +1,11 @@
 import { pickRandom } from 'mathjs'
-import { arcPointPointAngle } from '../../lib/2d/Arc'
+import { Arc, arcPointPointAngle } from '../../lib/2d/Arc'
 import { colorToLatexOrHTML } from '../../lib/2d/colorToLatexOrHtml'
 import { droite } from '../../lib/2d/droites'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
-import { point } from '../../lib/2d/PointAbstrait'
+import { PointAbstrait, point } from '../../lib/2d/PointAbstrait'
 import { labelPoint } from '../../lib/2d/textes'
-import { texteSurArc } from '../../lib/2d/TexteSurArc'
+import { TexteSurArc, texteSurArc } from '../../lib/2d/TexteSurArc'
 import { homothetie, rotation, translation } from '../../lib/2d/transformations'
 import { vecteur } from '../../lib/2d/Vecteur'
 import { propositionsQcm } from '../../lib/interactif/qcm'
@@ -32,7 +32,35 @@ export const amcType = 'AMCHybride'
 export const interactifReady = true
 export const interactifType = 'qcm'
 
-function aleaName(names = [], n = names.length, result = []) {
+type AngleParams = { O: number; A: number }
+type AnglesSecantesResult = {
+  a: Arc
+  b: Arc
+  c: Arc
+  d: Arc
+  s: PointAbstrait
+  S: PointAbstrait
+  t: PointAbstrait
+  T: PointAbstrait
+  x: PointAbstrait
+  X: PointAbstrait
+  Ox: PointAbstrait
+  OX: PointAbstrait
+  As: ReturnType<typeof droite>
+  Ax: ReturnType<typeof droite>
+  A: PointAbstrait
+  labela: TexteSurArc
+  labelb: TexteSurArc
+  labelc: TexteSurArc
+  labeld: TexteSurArc
+  [key: string]: any
+}
+
+function aleaName(
+  names: string[] = [],
+  n = names.length,
+  result: string[] = [],
+) {
   const r = Math.floor(Math.random() * names.length)
   result.push(names[r])
   names.splice(r, 1)
@@ -43,7 +71,10 @@ function aleaName(names = [], n = names.length, result = []) {
   }
 }
 
-function anglesSecantes(A, rot = { O: 60, A: 0 }) {
+function anglesSecantes(
+  A: PointAbstrait,
+  rot: AngleParams = { O: 60, A: 0 },
+): AnglesSecantesResult {
   const s = rotation(translation(A, vecteur(1, 0)), A, rot.A)
   const S = rotation(translation(A, vecteur(3, 0)), A, rot.A)
   const t = rotation(s, A, 180)
@@ -154,9 +185,13 @@ export default class ExercicesAnglesAIC extends Exercice {
       shuffle: true,
     })
 
-    for (let i = 0, exercice, cpt = 0; i < this.nbQuestions && cpt < 100; ) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 100; ) {
       // Boucle principale où i+1 correspond au numéro de la question
-      const propositions = []
+      let exercice: { texte: string; texteCorr: string } = {
+        texte: '',
+        texteCorr: '',
+      }
+      const propositions: Array<{ texte: string; statut: boolean }> = []
       let options = { ordered: true }
       switch (
         nquestion[i] // Chaque question peut être d'un type différent, ici 4 cas sont prévus...
@@ -166,7 +201,7 @@ export default class ExercicesAnglesAIC extends Exercice {
           const objetsCorrection = [] // Idem pour la correction
           let param
           do {
-            const createVariables = (O, A, B) => ({
+            const createVariables = (O: number, A: number, B: number) => ({
               O,
               A,
               B,
@@ -194,13 +229,14 @@ export default class ExercicesAnglesAIC extends Exercice {
             homothetie(rotation(point(1, 0), O, param.O + 180), O, param.r2),
             { O: param.O, A: param.B },
           )
+          const secante = droite(anglesA.A, anglesB.A)
           for (const i of ['a', 'b', 'c', 'd']) {
             anglesA[i].couleurDeRemplissage = context.isAmc
-              ? ''
+              ? colorToLatexOrHTML('')
               : colorToLatexOrHTML('blue')
             anglesA[i].opaciteDeRemplissage = 0.7
             anglesB[i].couleurDeRemplissage = context.isAmc
-              ? ''
+              ? colorToLatexOrHTML('')
               : colorToLatexOrHTML('blue')
             anglesB[i].opaciteDeRemplissage = 0.7
           }
@@ -214,10 +250,9 @@ export default class ExercicesAnglesAIC extends Exercice {
           objetsEnonce.push(
             anglesA[a],
             anglesA.As,
-            anglesA.Ax,
+            secante,
             anglesB[b],
             anglesB.As,
-            anglesB.Ax,
             anglesA['label' + a],
             anglesB['label' + b],
           )
@@ -284,7 +319,7 @@ export default class ExercicesAnglesAIC extends Exercice {
           ) */
           let param
           do {
-            const createVariables = (O, A) => ({
+            const createVariables = (O: number, A: number) => ({
               O,
               A,
               B: A,
@@ -304,7 +339,7 @@ export default class ExercicesAnglesAIC extends Exercice {
           ) */
           let ab
           do {
-            const createVariables = (a, b) => ({
+            const createVariables = (a: number, b: number) => ({
               a,
               b,
             })
@@ -327,20 +362,21 @@ export default class ExercicesAnglesAIC extends Exercice {
             homothetie(rotation(point(1, 0), O, param.O + 180), O, param.r2),
             { O: param.O, A: param.B },
           )
+          const secante = droite(anglesA.A, anglesB.A)
           for (const i of ['a', 'b', 'c', 'd']) {
             anglesA[i].couleurDeRemplissage = context.isAmc
-              ? ''
+              ? colorToLatexOrHTML('')
               : colorToLatexOrHTML('blue')
             anglesA[i].opaciteDeRemplissage = 0.7
             anglesB[i].couleurDeRemplissage = context.isAmc
-              ? ''
+              ? colorToLatexOrHTML('')
               : colorToLatexOrHTML('blue')
             anglesB[i].opaciteDeRemplissage = 0.7
           }
           anglesA.As.color = colorToLatexOrHTML('red')
           anglesB.As.color = colorToLatexOrHTML('red')
-          const a = ['a', 'b', 'c', 'd'][parseInt(ab.a)]
-          const b = ['a', 'b', 'c', 'd'][parseInt(ab.b)]
+          const a = ['a', 'b', 'c', 'd'][ab.a]
+          const b = ['a', 'b', 'c', 'd'][ab.b]
           const epsilon = choice([pickRandom([-2, -1, 1, 2]), 0])
           anglesA.labela = texteSurArc(
             ((param.O - param.A) % 180) + epsilon + '°',
@@ -409,98 +445,98 @@ export default class ExercicesAnglesAIC extends Exercice {
           objetsEnonce.push(
             anglesA[a],
             anglesA.As,
-            anglesA.Ax,
+            secante,
             anglesB[b],
             anglesB.As,
-            anglesB.Ax,
             anglesA['label' + a],
             anglesB['label' + b],
           )
           objetsEnonce.forEach((objet) => {
             objetsCorrection.push(objet)
           })
-          let angles, calculs
+          let angles = ''
+          let calculs: string | undefined
           anglesA[a].couleurDeRemplissage = context.isAmc
-            ? ''
+            ? colorToLatexOrHTML('')
             : colorToLatexOrHTML('red')
-          anglesA.labela.color = 'red'
-          anglesA.labelb.color = 'red'
-          anglesA.labelc.color = 'red'
-          anglesA.labeld.color = 'red'
-          anglesB.labela.color = 'blue'
-          anglesB.labelb.color = 'blue'
-          anglesB.labelc.color = 'blue'
-          anglesB.labeld.color = 'blue'
+          anglesA.labela.color = colorToLatexOrHTML('red')
+          anglesA.labelb.color = colorToLatexOrHTML('red')
+          anglesA.labelc.color = colorToLatexOrHTML('red')
+          anglesA.labeld.color = colorToLatexOrHTML('red')
+          anglesB.labela.color = colorToLatexOrHTML('blue')
+          anglesB.labelb.color = colorToLatexOrHTML('blue')
+          anglesB.labelc.color = colorToLatexOrHTML('blue')
+          anglesB.labeld.color = colorToLatexOrHTML('blue')
 
           switch (a + b) {
             case 'ab':
             case 'ad':
               anglesB.a.couleurDeRemplissage = context.isAmc
-                ? ''
+                ? colorToLatexOrHTML('')
                 : colorToLatexOrHTML('green')
-              anglesB['label' + 'a'].color = 'green'
+              anglesB['label' + 'a'].color = colorToLatexOrHTML('green')
               objetsCorrection.push(anglesB['label' + 'a'], anglesB.a)
               angles = 'correspondants'
               calculs = `$180°-${miseEnEvidence(anglesB.labelb.texte, 'blue')} = ${miseEnEvidence(anglesB.labela.texte, 'green')}$`
               break
             case 'ac':
               anglesB.a.couleurDeRemplissage = context.isAmc
-                ? ''
+                ? colorToLatexOrHTML('')
                 : colorToLatexOrHTML('green')
-              anglesB['label' + 'a'].color = 'green'
+              anglesB['label' + 'a'].color = colorToLatexOrHTML('green')
               objetsCorrection.push(anglesB['label' + 'a'], anglesB.a)
               angles = 'correspondants'
               break
             case 'ba':
               anglesB.b.couleurDeRemplissage = context.isAmc
-                ? ''
+                ? colorToLatexOrHTML('')
                 : colorToLatexOrHTML('green')
-              anglesB['label' + 'b'].color = 'green'
+              anglesB['label' + 'b'].color = colorToLatexOrHTML('green')
               objetsCorrection.push(anglesB['label' + 'b'], anglesB.b)
               angles = 'correspondants'
               calculs = `$180°-${miseEnEvidence(anglesB.labela.texte, 'blue')} = ${miseEnEvidence(anglesB.labelb.texte, 'green')}$`
               break
             case 'bc':
               anglesB.b.couleurDeRemplissage = context.isAmc
-                ? ''
+                ? colorToLatexOrHTML('')
                 : colorToLatexOrHTML('green')
-              anglesB['label' + 'b'].color = 'green'
+              anglesB['label' + 'b'].color = colorToLatexOrHTML('green')
               objetsCorrection.push(anglesB['label' + 'b'], anglesB.b)
               angles = 'correspondants'
               calculs = `$180°-${miseEnEvidence(anglesB.labelc.texte, 'blue')} = ${miseEnEvidence(anglesB.labelb.texte, 'green')}$`
               break
             case 'bd':
               anglesB.b.couleurDeRemplissage = context.isAmc
-                ? ''
+                ? colorToLatexOrHTML('')
                 : colorToLatexOrHTML('green')
-              anglesB['label' + 'b'].color = 'green'
+              anglesB['label' + 'b'].color = colorToLatexOrHTML('green')
               objetsCorrection.push(anglesB['label' + 'b'], anglesB.b)
               angles = 'correspondants'
               break
             case 'cb':
             case 'cd':
               anglesB.a.couleurDeRemplissage = context.isAmc
-                ? ''
+                ? colorToLatexOrHTML('')
                 : colorToLatexOrHTML('green')
-              anglesB['label' + 'a'].color = 'green'
+              anglesB['label' + 'a'].color = colorToLatexOrHTML('green')
               objetsCorrection.push(anglesB['label' + 'a'], anglesB.a)
               angles = 'alternes-internes'
               calculs = `$180°-${miseEnEvidence(anglesB.labelb.texte, 'blue')} = ${miseEnEvidence(anglesB.labela.texte, 'green')}$`
               break
             case 'da':
               anglesB.b.couleurDeRemplissage = context.isAmc
-                ? ''
+                ? colorToLatexOrHTML('')
                 : colorToLatexOrHTML('green')
-              anglesB['label' + 'b'].color = 'green'
+              anglesB['label' + 'b'].color = colorToLatexOrHTML('green')
               objetsCorrection.push(anglesB['label' + 'b'], anglesB.b)
               angles = 'alternes-internes'
               calculs = `$180°-${miseEnEvidence(anglesB.labela.texte, 'blue')} = ${miseEnEvidence(anglesB.labelb.texte, 'green')}$`
               break
             case 'dc':
               anglesB.b.couleurDeRemplissage = context.isAmc
-                ? ''
+                ? colorToLatexOrHTML('')
                 : colorToLatexOrHTML('green')
-              anglesB['label' + 'b'].color = 'green'
+              anglesB['label' + 'b'].color = colorToLatexOrHTML('green')
               objetsCorrection.push(anglesB['label' + 'b'], anglesB.b)
               calculs = `$180°-${miseEnEvidence(anglesB.labelc.texte, 'blue')} = ${miseEnEvidence(anglesB.labelb.texte, 'green')}$`
               angles = 'alternes-internes'
@@ -562,7 +598,7 @@ export default class ExercicesAnglesAIC extends Exercice {
           ) */
           let param
           do {
-            const createVariables = (O, A) => ({
+            const createVariables = (O: number, A: number) => ({
               O,
               A,
               B: A,
@@ -581,7 +617,7 @@ export default class ExercicesAnglesAIC extends Exercice {
           ) */
           let ab
           do {
-            const createVariables = (a, b) => ({
+            const createVariables = (a: number, b: number) => ({
               a,
               b,
             })
@@ -604,18 +640,19 @@ export default class ExercicesAnglesAIC extends Exercice {
             homothetie(rotation(point(1, 0), O, param.O + 180), O, param.r2),
             { O: param.O, A: param.B },
           )
+          const secante = droite(anglesA.A, anglesB.A)
           for (const i of ['a', 'b', 'c', 'd']) {
             anglesA[i].couleurDeRemplissage = context.isAmc
-              ? ''
+              ? colorToLatexOrHTML('')
               : colorToLatexOrHTML('blue')
             anglesB[i].couleurDeRemplissage = context.isAmc
-              ? ''
+              ? colorToLatexOrHTML('')
               : colorToLatexOrHTML('blue')
             anglesA[i].opaciteDeRemplissage = 0.7
             anglesB[i].opaciteDeRemplissage = 0.7
           }
-          const a = ['a', 'b', 'c', 'd'][parseInt(ab.a)]
-          const b = ['a', 'b', 'c', 'd'][parseInt(ab.b)]
+          const a = ['a', 'b', 'c', 'd'][ab.a]
+          const b = ['a', 'b', 'c', 'd'][ab.b]
           anglesA.As.color = colorToLatexOrHTML('red')
           anglesB.As.color = colorToLatexOrHTML('red')
           const epsilon = 0
@@ -686,35 +723,36 @@ export default class ExercicesAnglesAIC extends Exercice {
           objetsEnonce.push(
             anglesA[a],
             anglesA.As,
-            anglesA.Ax,
+            secante,
             anglesB[b],
             anglesB.As,
-            anglesB.Ax,
             anglesA['label' + a],
           )
           objetsEnonce.forEach((objet) => {
             objetsCorrection.push(objet)
           })
           objetsCorrection.push(anglesB['label' + b])
-          let angles, calculs, mesure
+          let angles = ''
+          let calculs: string | undefined
+          let mesure = ''
           anglesA[a].couleurDeRemplissage = context.isAmc
-            ? ''
+            ? colorToLatexOrHTML('')
             : colorToLatexOrHTML('red')
-          anglesA.labela.color = 'red'
-          anglesA.labelb.color = 'red'
-          anglesA.labelc.color = 'red'
-          anglesA.labeld.color = 'red'
-          anglesB.labela.color = 'blue'
-          anglesB.labelb.color = 'blue'
-          anglesB.labelc.color = 'blue'
-          anglesB.labeld.color = 'blue'
+          anglesA.labela.color = colorToLatexOrHTML('red')
+          anglesA.labelb.color = colorToLatexOrHTML('red')
+          anglesA.labelc.color = colorToLatexOrHTML('red')
+          anglesA.labeld.color = colorToLatexOrHTML('red')
+          anglesB.labela.color = colorToLatexOrHTML('blue')
+          anglesB.labelb.color = colorToLatexOrHTML('blue')
+          anglesB.labelc.color = colorToLatexOrHTML('blue')
+          anglesB.labeld.color = colorToLatexOrHTML('blue')
 
           switch (a + b) {
             case 'ab':
               anglesB[a].couleurDeRemplissage = context.isAmc
-                ? ''
+                ? colorToLatexOrHTML('')
                 : colorToLatexOrHTML('green')
-              anglesB['label' + 'a'].color = 'green'
+              anglesB['label' + 'a'].color = colorToLatexOrHTML('green')
               objetsCorrection.push(anglesB['label' + 'a'], anglesB.a)
               angles = 'correspondants'
               calculs = `$180°-${miseEnEvidence(anglesB.labela.texte, 'blue')} = ${miseEnEvidence(anglesB.labelb.texte, 'green')}$`
@@ -722,18 +760,18 @@ export default class ExercicesAnglesAIC extends Exercice {
               break
             case 'ac':
               anglesB[a].couleurDeRemplissage = context.isAmc
-                ? ''
+                ? colorToLatexOrHTML('')
                 : colorToLatexOrHTML('green')
-              anglesB['label' + 'a'].color = 'green'
+              anglesB['label' + 'a'].color = colorToLatexOrHTML('green')
               objetsCorrection.push(anglesB['label' + 'a'], anglesB.a)
               angles = 'correspondants'
               mesure = anglesB.labela.texte
               break
             case 'ad':
               anglesB[a].couleurDeRemplissage = context.isAmc
-                ? ''
+                ? colorToLatexOrHTML('')
                 : colorToLatexOrHTML('green')
-              anglesB['label' + 'a'].color = 'green'
+              anglesB['label' + 'a'].color = colorToLatexOrHTML('green')
               objetsCorrection.push(anglesB['label' + 'a'], anglesB.a)
               angles = 'correspondants'
               calculs = `$180°-${miseEnEvidence(anglesB.labela.texte, 'blue')} = ${miseEnEvidence(anglesB.labelb.texte, 'green')}$`
@@ -741,9 +779,9 @@ export default class ExercicesAnglesAIC extends Exercice {
               break
             case 'ba':
               anglesB[a].couleurDeRemplissage = context.isAmc
-                ? ''
+                ? colorToLatexOrHTML('')
                 : colorToLatexOrHTML('green')
-              anglesB['label' + 'b'].color = 'green'
+              anglesB['label' + 'b'].color = colorToLatexOrHTML('green')
               objetsCorrection.push(anglesB['label' + 'b'], anglesB.b)
               angles = 'correspondants'
               calculs = `$180°-${miseEnEvidence(anglesB.labelb.texte, 'blue')} = ${miseEnEvidence(anglesB.labela.texte, 'green')}$`
@@ -751,9 +789,9 @@ export default class ExercicesAnglesAIC extends Exercice {
               break
             case 'bc':
               anglesB[a].couleurDeRemplissage = context.isAmc
-                ? ''
+                ? colorToLatexOrHTML('')
                 : colorToLatexOrHTML('green')
-              anglesB['label' + 'b'].color = 'green'
+              anglesB['label' + 'b'].color = colorToLatexOrHTML('green')
               objetsCorrection.push(anglesB['label' + 'b'], anglesB.b)
               angles = 'correspondants'
               calculs = `$180°-${miseEnEvidence(anglesB.labelb.texte, 'blue')} = ${miseEnEvidence(anglesB.labelc.texte, 'green')}$`
@@ -761,18 +799,18 @@ export default class ExercicesAnglesAIC extends Exercice {
               break
             case 'bd':
               anglesB[a].couleurDeRemplissage = context.isAmc
-                ? ''
+                ? colorToLatexOrHTML('')
                 : colorToLatexOrHTML('green')
-              anglesB['label' + 'b'].color = 'green'
+              anglesB['label' + 'b'].color = colorToLatexOrHTML('green')
               objetsCorrection.push(anglesB['label' + 'b'], anglesB.b)
               angles = 'correspondants'
               mesure = anglesB.labelb.texte
               break
             case 'cb':
               anglesB.a.couleurDeRemplissage = context.isAmc
-                ? ''
+                ? colorToLatexOrHTML('')
                 : colorToLatexOrHTML('green')
-              anglesB['label' + 'a'].color = 'green'
+              anglesB['label' + 'a'].color = colorToLatexOrHTML('green')
               objetsCorrection.push(anglesB['label' + 'a'], anglesB.a)
               angles = 'alternes-internes'
               calculs = `$180°-${miseEnEvidence(anglesB.labela.texte, 'blue')} = ${miseEnEvidence(anglesB.labelb.texte, 'green')}$`
@@ -780,9 +818,9 @@ export default class ExercicesAnglesAIC extends Exercice {
               break
             case 'cd':
               anglesB.a.couleurDeRemplissage = context.isAmc
-                ? ''
+                ? colorToLatexOrHTML('')
                 : colorToLatexOrHTML('green')
-              anglesB['label' + 'a'].color = 'green'
+              anglesB['label' + 'a'].color = colorToLatexOrHTML('green')
               objetsCorrection.push(anglesB['label' + 'a'], anglesB.a)
               angles = 'alternes-internes'
               calculs = `$180°-${miseEnEvidence(anglesB.labela.texte, 'blue')} = ${miseEnEvidence(anglesB.labeld.texte, 'green')}$`
@@ -790,9 +828,9 @@ export default class ExercicesAnglesAIC extends Exercice {
               break
             case 'da':
               anglesB.b.couleurDeRemplissage = context.isAmc
-                ? ''
+                ? colorToLatexOrHTML('')
                 : colorToLatexOrHTML('green')
-              anglesB['label' + 'b'].color = 'green'
+              anglesB['label' + 'b'].color = colorToLatexOrHTML('green')
               objetsCorrection.push(anglesB['label' + 'b'], anglesB.b)
               angles = 'alternes-internes'
               calculs = `$180°-${miseEnEvidence(anglesB.labelb.texte, 'blue')} = ${miseEnEvidence(anglesB.labela.texte, 'green')}$`
@@ -800,9 +838,9 @@ export default class ExercicesAnglesAIC extends Exercice {
               break
             case 'dc':
               anglesB.b.couleurDeRemplissage = context.isAmc
-                ? ''
+                ? colorToLatexOrHTML('')
                 : colorToLatexOrHTML('green')
-              anglesB['label' + 'b'].color = 'green'
+              anglesB['label' + 'b'].color = colorToLatexOrHTML('green')
               objetsCorrection.push(anglesB['label' + 'b'], anglesB.b)
               calculs = `$180°-${miseEnEvidence(anglesB.labelb.texte, 'blue')} = ${miseEnEvidence(anglesB.labelc.texte, 'green')}$`
               angles = 'alternes-internes'
@@ -877,7 +915,7 @@ export default class ExercicesAnglesAIC extends Exercice {
           ) */
           let param
           do {
-            const createVariables = (O, A, B) => ({
+            const createVariables = (O: number, A: number, B: number) => ({
               O,
               A,
               B,
@@ -909,6 +947,7 @@ export default class ExercicesAnglesAIC extends Exercice {
             homothetie(rotation(point(1, 0), O, param.O + 180), O, param.r2),
             { O: param.O, A: param.B },
           )
+          const secante = droite(anglesA.A, anglesB.A)
           const nomsPoints = aleaName(['A', 'B', 'C', 'D', 'E', 'F'], 2)
           anglesA.A.nom = nomsPoints[0]
           anglesB.A.nom = nomsPoints[1]
@@ -949,7 +988,7 @@ export default class ExercicesAnglesAIC extends Exercice {
           }
           for (const i of ['a', 'b', 'c', 'd']) {
             anglesA[i].couleurDeRemplissage = context.isAmc
-              ? ''
+              ? colorToLatexOrHTML('')
               : colorToLatexOrHTML('blue')
             anglesA[i].opaciteDeRemplissage = 0.4
             anglesB[i].opaciteDeRemplissage = 0.7
@@ -963,9 +1002,9 @@ export default class ExercicesAnglesAIC extends Exercice {
           objetsEnonce.push(
             anglesA[a],
             anglesA.As,
-            anglesA.Ax,
+            secante,
             anglesB.As,
-            anglesB.Ax /*,
+            /*
             labelPoint(anglesA.S),
             labelPoint(anglesA.T),
             labelPoint(anglesA.X),
@@ -973,7 +1012,8 @@ export default class ExercicesAnglesAIC extends Exercice {
             labelPoint(anglesB.T),
             labelPoint(anglesB.OX),
             labelPoint(anglesA.A),
-            labelPoint(anglesB.A) */,
+            labelPoint(anglesB.A),
+            */
           )
           const paramsEnonce = fixeBordures(
             [
@@ -992,21 +1032,21 @@ export default class ExercicesAnglesAIC extends Exercice {
           })
           const angleCorrection = anglesB[b]
           angleCorrection.couleurDeRemplissage = context.isAmc
-            ? ''
+            ? colorToLatexOrHTML('')
             : colorToLatexOrHTML('#f15929')
           objetsCorrection.push(angleCorrection)
           const couleurAngles = shuffle(['green', 'red', 'blue', 'gray'])
           anglesB['a'].couleurDeRemplissage = context.isAmc
-            ? ''
+            ? colorToLatexOrHTML('')
             : colorToLatexOrHTML(couleurAngles[0])
           anglesB['b'].couleurDeRemplissage = context.isAmc
-            ? ''
+            ? colorToLatexOrHTML('')
             : colorToLatexOrHTML(couleurAngles[1])
           anglesB['c'].couleurDeRemplissage = context.isAmc
-            ? ''
+            ? colorToLatexOrHTML('')
             : colorToLatexOrHTML(couleurAngles[2])
           anglesB['d'].couleurDeRemplissage = context.isAmc
-            ? ''
+            ? colorToLatexOrHTML('')
             : colorToLatexOrHTML(couleurAngles[3])
           // ici sont créés les texte, tex_corr, objets mathalea2d divers entrant dans le contenu de l'exercice
           let reponse
@@ -1074,19 +1114,19 @@ export default class ExercicesAnglesAIC extends Exercice {
           )
           exercice = { texte, texteCorr }
           propositions.push({
-            texte: 1,
+            texte: '1',
             statut: b === 'a',
           })
           propositions.push({
-            texte: 2,
+            texte: '2',
             statut: b === 'b',
           })
           propositions.push({
-            texte: 3,
+            texte: '3',
             statut: b === 'c',
           })
           propositions.push({
-            texte: 4,
+            texte: '4',
             statut: b === 'd',
           })
           break
@@ -1106,7 +1146,7 @@ export default class ExercicesAnglesAIC extends Exercice {
           ) */
           let param
           do {
-            const createVariables = (O, A, B) => ({
+            const createVariables = (O: number, A: number, B: number) => ({
               O,
               A,
               B,
@@ -1138,6 +1178,7 @@ export default class ExercicesAnglesAIC extends Exercice {
             homothetie(rotation(point(1, 0), O, param.O + 180), O, param.r2),
             { O: param.O, A: param.B },
           )
+          const secante = droite(anglesA.A, anglesB.A)
           const nomsPoints = aleaName(['A', 'B', 'C', 'D', 'E', 'F'], 2)
           anglesA.A.nom = nomsPoints[0]
           anglesB.A.nom = nomsPoints[1]
@@ -1178,11 +1219,11 @@ export default class ExercicesAnglesAIC extends Exercice {
           }
           for (const i of ['a', 'b', 'c', 'd']) {
             anglesA[i].couleurDeRemplissage = context.isAmc
-              ? ''
+              ? colorToLatexOrHTML('')
               : colorToLatexOrHTML('blue')
             anglesA[i].opaciteDeRemplissage = 0.7
             anglesB[i].couleurDeRemplissage = context.isAmc
-              ? ''
+              ? colorToLatexOrHTML('')
               : colorToLatexOrHTML('blue')
             anglesB[i].opaciteDeRemplissage = 0.7
           }
@@ -1195,9 +1236,8 @@ export default class ExercicesAnglesAIC extends Exercice {
           objetsEnonce.push(
             // anglesA[a],
             anglesA.As,
-            anglesA.Ax,
+            secante,
             anglesB.As,
-            anglesB.Ax,
             labelPoint(anglesA.S),
             labelPoint(anglesA.T),
             labelPoint(anglesA.X),
@@ -1224,7 +1264,7 @@ export default class ExercicesAnglesAIC extends Exercice {
           })
 
           anglesB[b].couleurDeRemplissage = context.isAmc
-            ? ''
+            ? colorToLatexOrHTML('')
             : colorToLatexOrHTML('#f15929')
           objetsCorrection.push(anglesB[b])
           objetsCorrection.push(anglesA[a])
@@ -1280,7 +1320,7 @@ export default class ExercicesAnglesAIC extends Exercice {
           ) */
           let param
           do {
-            const createVariables = (O, A) => ({
+            const createVariables = (O: number, A: number) => ({
               O,
               A,
               B: A,
@@ -1299,7 +1339,7 @@ export default class ExercicesAnglesAIC extends Exercice {
           ) */
           let ab
           do {
-            const createVariables = (a, b) => ({
+            const createVariables = (a: number, b: number) => ({
               a,
               b,
             })
@@ -1322,6 +1362,7 @@ export default class ExercicesAnglesAIC extends Exercice {
             homothetie(rotation(point(1, 0), O, param.O + 180), O, param.r2),
             { O: param.O, A: param.B },
           )
+          const secante = droite(anglesA.A, anglesB.A)
           const nomsPoints = aleaName(['A', 'B', 'C', 'D', 'E', 'F'], 2)
           anglesA.A.nom = nomsPoints[0]
           anglesB.A.nom = nomsPoints[1]
@@ -1362,16 +1403,16 @@ export default class ExercicesAnglesAIC extends Exercice {
           }
           for (const i of ['a', 'b', 'c', 'd']) {
             anglesA[i].couleurDeRemplissage = context.isAmc
-              ? ''
+              ? colorToLatexOrHTML('')
               : colorToLatexOrHTML('blue')
             anglesA[i].opaciteDeRemplissage = 0.4
             anglesB[i].couleurDeRemplissage = context.isAmc
-              ? ''
+              ? colorToLatexOrHTML('')
               : colorToLatexOrHTML('blue')
             anglesB[i].opaciteDeRemplissage = 0.4
           }
-          const a = ['a', 'b', 'c', 'd'][parseInt(ab.a)]
-          const b = ['a', 'b', 'c', 'd'][parseInt(ab.b)]
+          const a = ['a', 'b', 'c', 'd'][ab.a]
+          const b = ['a', 'b', 'c', 'd'][ab.b]
           const epsilon = choice([pickRandom([-2, -1, 1, 2]), 0])
           anglesA.labela = texteSurArc(
             ((param.O - param.A) % 180) + epsilon + '°',
@@ -1440,10 +1481,9 @@ export default class ExercicesAnglesAIC extends Exercice {
           objetsEnonce.push(
             anglesA[a],
             anglesA.As,
-            anglesA.Ax,
+            secante,
             anglesB[b],
             anglesB.As,
-            anglesB.Ax,
             anglesA['label' + a],
             anglesB['label' + b],
             labelPoint(anglesA.S),
@@ -1458,87 +1498,88 @@ export default class ExercicesAnglesAIC extends Exercice {
           objetsEnonce.forEach((objet) => {
             objetsCorrection.push(objet)
           })
-          let angles, calculs
+          let angles = ''
+          let calculs: string | undefined
           anglesA[a].couleurDeRemplissage = context.isAmc
-            ? ''
+            ? colorToLatexOrHTML('')
             : colorToLatexOrHTML('red')
-          anglesA.labela.color = 'red'
-          anglesA.labelb.color = 'red'
-          anglesA.labelc.color = 'red'
-          anglesA.labeld.color = 'red'
-          anglesB.labela.color = 'blue'
-          anglesB.labelb.color = 'blue'
-          anglesB.labelc.color = 'blue'
-          anglesB.labeld.color = 'blue'
+          anglesA.labela.color = colorToLatexOrHTML('red')
+          anglesA.labelb.color = colorToLatexOrHTML('red')
+          anglesA.labelc.color = colorToLatexOrHTML('red')
+          anglesA.labeld.color = colorToLatexOrHTML('red')
+          anglesB.labela.color = colorToLatexOrHTML('blue')
+          anglesB.labelb.color = colorToLatexOrHTML('blue')
+          anglesB.labelc.color = colorToLatexOrHTML('blue')
+          anglesB.labeld.color = colorToLatexOrHTML('blue')
           switch (a + b) {
             case 'ab':
             case 'ad':
               anglesB.a.couleurDeRemplissage = context.isAmc
-                ? ''
+                ? colorToLatexOrHTML('')
                 : colorToLatexOrHTML('green')
-              anglesB['label' + 'a'].color = 'green'
+              anglesB['label' + 'a'].color = colorToLatexOrHTML('green')
               objetsCorrection.push(anglesB['label' + 'a'], anglesB.a)
               angles = 'correspondants'
               calculs = `$180°-${miseEnEvidence(anglesB.labelb.texte, 'blue')} = ${miseEnEvidence(anglesB.labela.texte, 'green')}$`
               break
             case 'ac':
               anglesB.a.couleurDeRemplissage = context.isAmc
-                ? ''
+                ? colorToLatexOrHTML('')
                 : colorToLatexOrHTML('green')
-              anglesB['label' + 'a'].color = 'green'
+              anglesB['label' + 'a'].color = colorToLatexOrHTML('green')
               objetsCorrection.push(anglesB['label' + 'a'], anglesB.a)
               angles = 'correspondants'
               break
             case 'ba':
               anglesB.b.couleurDeRemplissage = context.isAmc
-                ? ''
+                ? colorToLatexOrHTML('')
                 : colorToLatexOrHTML('green')
-              anglesB['label' + 'b'].color = 'green'
+              anglesB['label' + 'b'].color = colorToLatexOrHTML('green')
               objetsCorrection.push(anglesB['label' + 'b'], anglesB.b)
               angles = 'correspondants'
               calculs = `$180°-${miseEnEvidence(anglesB.labela.texte, 'blue')} = ${miseEnEvidence(anglesB.labelb.texte, 'green')}$`
               break
             case 'bc':
               anglesB.b.couleurDeRemplissage = context.isAmc
-                ? ''
+                ? colorToLatexOrHTML('')
                 : colorToLatexOrHTML('green')
-              anglesB['label' + 'b'].color = 'green'
+              anglesB['label' + 'b'].color = colorToLatexOrHTML('green')
               objetsCorrection.push(anglesB['label' + 'b'], anglesB.b)
               angles = 'correspondants'
               calculs = `$180°-${miseEnEvidence(anglesB.labelc.texte, 'blue')} = ${miseEnEvidence(anglesB.labelb.texte, 'green')}$`
               break
             case 'bd':
               anglesB.b.couleurDeRemplissage = context.isAmc
-                ? ''
+                ? colorToLatexOrHTML('')
                 : colorToLatexOrHTML('green')
-              anglesB['label' + 'b'].color = 'green'
+              anglesB['label' + 'b'].color = colorToLatexOrHTML('green')
               objetsCorrection.push(anglesB['label' + 'b'], anglesB.b)
               angles = 'correspondants'
               break
             case 'cb':
             case 'cd':
               anglesB.a.couleurDeRemplissage = context.isAmc
-                ? ''
+                ? colorToLatexOrHTML('')
                 : colorToLatexOrHTML('green')
-              anglesB['label' + 'a'].color = 'green'
+              anglesB['label' + 'a'].color = colorToLatexOrHTML('green')
               objetsCorrection.push(anglesB['label' + 'a'], anglesB.a)
               angles = 'alternes-internes'
               calculs = `$180°-${miseEnEvidence(anglesB.labelb.texte, 'blue')} = ${miseEnEvidence(anglesB.labela.texte, 'green')}$`
               break
             case 'da':
               anglesB.b.couleurDeRemplissage = context.isAmc
-                ? ''
+                ? colorToLatexOrHTML('')
                 : colorToLatexOrHTML('green')
-              anglesB['label' + 'b'].color = 'green'
+              anglesB['label' + 'b'].color = colorToLatexOrHTML('green')
               objetsCorrection.push(anglesB['label' + 'b'], anglesB.b)
               angles = 'alternes-internes'
               calculs = `$180°-${miseEnEvidence(anglesB.labela.texte, 'blue')} = ${miseEnEvidence(anglesB.labelb.texte, 'green')}$`
               break
             case 'dc':
               anglesB.b.couleurDeRemplissage = context.isAmc
-                ? ''
+                ? colorToLatexOrHTML('')
                 : colorToLatexOrHTML('green')
-              anglesB['label' + 'b'].color = 'green'
+              anglesB['label' + 'b'].color = colorToLatexOrHTML('green')
               objetsCorrection.push(anglesB['label' + 'b'], anglesB.b)
               calculs = `$180°-${miseEnEvidence(anglesB.labelc.texte, 'blue')} = ${miseEnEvidence(anglesB.labelb.texte, 'green')}$`
               angles = 'alternes-internes'
@@ -1606,7 +1647,7 @@ export default class ExercicesAnglesAIC extends Exercice {
           ) */
           let param
           do {
-            const createVariables = (O, A) => ({
+            const createVariables = (O: number, A: number) => ({
               O,
               A,
               B: A,
@@ -1625,7 +1666,7 @@ export default class ExercicesAnglesAIC extends Exercice {
           ) */
           let ab
           do {
-            const createVariables = (a, b) => ({
+            const createVariables = (a: number, b: number) => ({
               a,
               b,
             })
@@ -1648,6 +1689,7 @@ export default class ExercicesAnglesAIC extends Exercice {
             homothetie(rotation(point(1, 0), O, param.O + 180), O, param.r2),
             { O: param.O, A: param.B },
           )
+          const secante = droite(anglesA.A, anglesB.A)
           const nomsPoints = aleaName(['A', 'B', 'C', 'D', 'E', 'F'], 2)
           anglesA.A.nom = nomsPoints[0]
           anglesB.A.nom = nomsPoints[1]
@@ -1688,16 +1730,16 @@ export default class ExercicesAnglesAIC extends Exercice {
           }
           for (const i of ['a', 'b', 'c', 'd']) {
             anglesA[i].couleurDeRemplissage = context.isAmc
-              ? ''
+              ? colorToLatexOrHTML('')
               : colorToLatexOrHTML('blue')
             anglesA[i].opaciteDeRemplissage = 0.4
             anglesB[i].couleurDeRemplissage = context.isAmc
-              ? ''
+              ? colorToLatexOrHTML('')
               : colorToLatexOrHTML('blue')
             anglesB[i].opaciteDeRemplissage = 0.4
           }
-          const a = ['a', 'b', 'c', 'd'][parseInt(ab.a)]
-          const b = ['a', 'b', 'c', 'd'][parseInt(ab.b)]
+          const a = ['a', 'b', 'c', 'd'][ab.a]
+          const b = ['a', 'b', 'c', 'd'][ab.b]
           const epsilon = 0
           anglesA.labela = texteSurArc(
             ((param.O - param.A) % 180) + epsilon + '°',
@@ -1766,9 +1808,8 @@ export default class ExercicesAnglesAIC extends Exercice {
           objetsEnonce.push(
             anglesA[a],
             anglesA.As,
-            anglesA.Ax,
+            secante,
             anglesB.As,
-            anglesB.Ax,
             anglesA['label' + a],
             labelPoint(anglesA.S),
             labelPoint(anglesA.T),
@@ -1785,25 +1826,27 @@ export default class ExercicesAnglesAIC extends Exercice {
           })
           objetsCorrection.push(anglesB['label' + b])
           objetsCorrection.push(anglesB[b])
-          let angles, calculs, mesure
+          let angles = ''
+          let calculs: string | undefined
+          let mesure = ''
           anglesA[a].couleurDeRemplissage = context.isAmc
-            ? ''
+            ? colorToLatexOrHTML('')
             : colorToLatexOrHTML('red')
-          anglesA.labela.color = 'red'
-          anglesA.labelb.color = 'red'
-          anglesA.labelc.color = 'red'
-          anglesA.labeld.color = 'red'
-          anglesB.labela.color = 'blue'
-          anglesB.labelb.color = 'blue'
-          anglesB.labelc.color = 'blue'
-          anglesB.labeld.color = 'blue'
+          anglesA.labela.color = colorToLatexOrHTML('red')
+          anglesA.labelb.color = colorToLatexOrHTML('red')
+          anglesA.labelc.color = colorToLatexOrHTML('red')
+          anglesA.labeld.color = colorToLatexOrHTML('red')
+          anglesB.labela.color = colorToLatexOrHTML('blue')
+          anglesB.labelb.color = colorToLatexOrHTML('blue')
+          anglesB.labelc.color = colorToLatexOrHTML('blue')
+          anglesB.labeld.color = colorToLatexOrHTML('blue')
 
           switch (a + b) {
             case 'ab':
               anglesB[a].couleurDeRemplissage = context.isAmc
-                ? ''
+                ? colorToLatexOrHTML('')
                 : colorToLatexOrHTML('green')
-              anglesB['label' + 'a'].color = 'green'
+              anglesB['label' + 'a'].color = colorToLatexOrHTML('green')
               objetsCorrection.push(anglesB['label' + 'a'], anglesB.a)
               angles = 'correspondants'
               calculs = `$180°-${miseEnEvidence(anglesB.labela.texte, 'blue')} = ${miseEnEvidence(anglesB.labelb.texte, 'green')}$`
@@ -1811,18 +1854,18 @@ export default class ExercicesAnglesAIC extends Exercice {
               break
             case 'ac':
               anglesB[a].couleurDeRemplissage = context.isAmc
-                ? ''
+                ? colorToLatexOrHTML('')
                 : colorToLatexOrHTML('green')
-              anglesB['label' + 'a'].color = 'green'
+              anglesB['label' + 'a'].color = colorToLatexOrHTML('green')
               objetsCorrection.push(anglesB['label' + 'a'], anglesB.a)
               angles = 'correspondants'
               mesure = anglesB.labela.texte
               break
             case 'ad':
               anglesB[a].couleurDeRemplissage = context.isAmc
-                ? ''
+                ? colorToLatexOrHTML('')
                 : colorToLatexOrHTML('green')
-              anglesB['label' + 'a'].color = 'green'
+              anglesB['label' + 'a'].color = colorToLatexOrHTML('green')
               objetsCorrection.push(anglesB['label' + 'a'], anglesB.a)
               angles = 'correspondants'
               calculs = `$180°-${miseEnEvidence(anglesB.labela.texte, 'blue')} = ${miseEnEvidence(anglesB.labelb.texte, 'green')}$`
@@ -1830,9 +1873,9 @@ export default class ExercicesAnglesAIC extends Exercice {
               break
             case 'ba':
               anglesB[a].couleurDeRemplissage = context.isAmc
-                ? ''
+                ? colorToLatexOrHTML('')
                 : colorToLatexOrHTML('green')
-              anglesB['label' + 'b'].color = 'green'
+              anglesB['label' + 'b'].color = colorToLatexOrHTML('green')
               objetsCorrection.push(anglesB['label' + 'b'], anglesB.b)
               angles = 'correspondants'
               calculs = `$180°-${miseEnEvidence(anglesB.labelb.texte, 'blue')} = ${miseEnEvidence(anglesB.labela.texte, 'green')}$`
@@ -1840,9 +1883,9 @@ export default class ExercicesAnglesAIC extends Exercice {
               break
             case 'bc':
               anglesB[a].couleurDeRemplissage = context.isAmc
-                ? ''
+                ? colorToLatexOrHTML('')
                 : colorToLatexOrHTML('green')
-              anglesB['label' + 'b'].color = 'green'
+              anglesB['label' + 'b'].color = colorToLatexOrHTML('green')
               objetsCorrection.push(anglesB['label' + 'b'], anglesB.b)
               angles = 'correspondants'
               calculs = `$180°-${miseEnEvidence(anglesB.labelb.texte, 'blue')} = ${miseEnEvidence(anglesB.labelc.texte, 'green')}$`
@@ -1850,18 +1893,18 @@ export default class ExercicesAnglesAIC extends Exercice {
               break
             case 'bd':
               anglesB[a].couleurDeRemplissage = context.isAmc
-                ? ''
+                ? colorToLatexOrHTML('')
                 : colorToLatexOrHTML('green')
-              anglesB['label' + 'b'].color = 'green'
+              anglesB['label' + 'b'].color = colorToLatexOrHTML('green')
               objetsCorrection.push(anglesB['label' + 'b'], anglesB.b)
               angles = 'correspondants'
               mesure = anglesB.labelb.texte
               break
             case 'cb':
               anglesB.a.couleurDeRemplissage = context.isAmc
-                ? ''
+                ? colorToLatexOrHTML('')
                 : colorToLatexOrHTML('green')
-              anglesB['label' + 'a'].color = 'green'
+              anglesB['label' + 'a'].color = colorToLatexOrHTML('green')
               objetsCorrection.push(anglesB['label' + 'a'], anglesB.a)
               angles = 'alternes-internes'
               calculs = `$180°-${miseEnEvidence(anglesB.labela.texte, 'blue')} = ${miseEnEvidence(anglesB.labelb.texte, 'green')}$`
@@ -1869,9 +1912,9 @@ export default class ExercicesAnglesAIC extends Exercice {
               break
             case 'cd':
               anglesB.a.couleurDeRemplissage = context.isAmc
-                ? ''
+                ? colorToLatexOrHTML('')
                 : colorToLatexOrHTML('green')
-              anglesB['label' + 'a'].color = 'green'
+              anglesB['label' + 'a'].color = colorToLatexOrHTML('green')
               objetsCorrection.push(anglesB['label' + 'a'], anglesB.a)
               angles = 'alternes-internes'
               calculs = `$180°-${miseEnEvidence(anglesB.labela.texte, 'blue')} = ${miseEnEvidence(anglesB.labeld.texte, 'green')}$`
@@ -1879,9 +1922,9 @@ export default class ExercicesAnglesAIC extends Exercice {
               break
             case 'da':
               anglesB.b.couleurDeRemplissage = context.isAmc
-                ? ''
+                ? colorToLatexOrHTML('')
                 : colorToLatexOrHTML('green')
-              anglesB['label' + 'b'].color = 'green'
+              anglesB['label' + 'b'].color = colorToLatexOrHTML('green')
               objetsCorrection.push(anglesB['label' + 'b'], anglesB.b)
               angles = 'alternes-internes'
               calculs = `$180°-${miseEnEvidence(anglesB.labelb.texte, 'blue')} = ${miseEnEvidence(anglesB.labela.texte, 'green')}$`
@@ -1889,9 +1932,9 @@ export default class ExercicesAnglesAIC extends Exercice {
               break
             case 'dc':
               anglesB.b.couleurDeRemplissage = context.isAmc
-                ? ''
+                ? colorToLatexOrHTML('')
                 : colorToLatexOrHTML('green')
-              anglesB['label' + 'b'].color = 'green'
+              anglesB['label' + 'b'].color = colorToLatexOrHTML('green')
               objetsCorrection.push(anglesB['label' + 'b'], anglesB.b)
               calculs = `$180°-${miseEnEvidence(anglesB.labelb.texte, 'blue')} = ${miseEnEvidence(anglesB.labelc.texte, 'green')}$`
               angles = 'alternes-internes'
@@ -1968,7 +2011,10 @@ export default class ExercicesAnglesAIC extends Exercice {
                   {
                     texte: '',
                     numQuestionVisible: false,
-                    statut: nquestion[i] < 6 && nquestion[i] > 1 ? 3 : 1, // (ici c'est le nombre de lignes du cadre pour la réponse de l'élève sur AMC)
+                    statut:
+                      Number(nquestion[i]) < 6 && Number(nquestion[i]) > 1
+                        ? 3
+                        : 1, // (ici c'est le nombre de lignes du cadre pour la réponse de l'élève sur AMC)
                     feedback: '',
                     //    enonce: figure[3][0] + mathalea2d(figure[1], figure[0]) + '<br>' + figure[3][1] + ' Justifier la réponse.' // EE : ce champ est facultatif et fonctionnel qu'en mode hybride (en mode normal, il n'y a pas d'intérêt)
                     enonce: exercice.texte, // EE : ce champ est facultatif et fonctionnel qu'en mode hybride (en mode normal, il n'y a pas d'intérêt)
