@@ -55,7 +55,9 @@ const definePropRo = (
  * @param x
  * @return {FractionEtendue}
  */
-export function rationnalise(x: number | FractionEtendue | Decimal | null) {
+export function rationnalise(
+  x: number | FractionEtendue | Decimal | null,
+): FractionEtendue {
   if (x == null) {
     window.notify(
       'rationnalise est appelé avec une valeur undefined ou nulle',
@@ -69,11 +71,20 @@ export function rationnalise(x: number | FractionEtendue | Decimal | null) {
     return new FractionEtendue(numDen[0].toNumber(), numDen[1].toNumber())
   }
   if (typeof x === 'number') {
-    // MGU  : C'est dangereux ce truc mais bon...
-    // Déjà ça gère au delà des centièmes...
+    // Gestion des fractions simples pour les flottants
     if (Number.isInteger(x)) {
       return new FractionEtendue(x, 1)
     }
+    const n = Math.trunc(x)
+    const frac = Math.abs(x - n)
+    for (let d = 2; d <= 1000; d++) {
+      const num = Math.round(frac * d)
+      if (num > 0 && num < d && Math.abs(frac - num / d) < 1e-8) {
+        const signe = x < 0 ? -1 : 1
+        return new FractionEtendue(signe * (Math.abs(n) * d + num), d)
+      }
+    }
+    // Sinon, fallback sur l'ancienne méthode
     const numDen = new Decimal(x.toFixed(5)).toFraction(10000)
     return new FractionEtendue(numDen[0].toNumber(), numDen[1].toNumber())
   }
@@ -98,6 +109,11 @@ function normalizeFraction(n: number | Decimal, d: number): [number, number] {
     return [NaN, NaN]
   }
   if (d == null) {
+    if (typeof n === 'number') {
+      const frac = rationnalise(n)
+      return [frac.num, frac.den]
+    }
+
     // Un seul argument : convertir en fraction
     const decimal = n instanceof Decimal ? n : new Decimal(n)
     const [numDec, denDec] = decimal.toFraction(10000) // Limite le dénominateur
