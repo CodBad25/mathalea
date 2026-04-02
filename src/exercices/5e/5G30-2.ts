@@ -229,6 +229,7 @@ export default class ExercicesAnglesAIC extends Exercice {
             homothetie(rotation(point(1, 0), O, param.O + 180), O, param.r2),
             { O: param.O, A: param.B },
           )
+          const secante = droite(anglesA.A, anglesB.A)
           for (const i of ['a', 'b', 'c', 'd']) {
             anglesA[i].couleurDeRemplissage = context.isAmc
               ? colorToLatexOrHTML('')
@@ -249,10 +250,9 @@ export default class ExercicesAnglesAIC extends Exercice {
           objetsEnonce.push(
             anglesA[a],
             anglesA.As,
-            anglesA.Ax,
+            secante,
             anglesB[b],
             anglesB.As,
-            anglesB.Ax,
             anglesA['label' + a],
             anglesB['label' + b],
           )
@@ -362,6 +362,7 @@ export default class ExercicesAnglesAIC extends Exercice {
             homothetie(rotation(point(1, 0), O, param.O + 180), O, param.r2),
             { O: param.O, A: param.B },
           )
+          const secante = droite(anglesA.A, anglesB.A)
           for (const i of ['a', 'b', 'c', 'd']) {
             anglesA[i].couleurDeRemplissage = context.isAmc
               ? colorToLatexOrHTML('')
@@ -444,10 +445,9 @@ export default class ExercicesAnglesAIC extends Exercice {
           objetsEnonce.push(
             anglesA[a],
             anglesA.As,
-            anglesA.Ax,
+            secante,
             anglesB[b],
             anglesB.As,
-            anglesB.Ax,
             anglesA['label' + a],
             anglesB['label' + b],
           )
@@ -640,6 +640,7 @@ export default class ExercicesAnglesAIC extends Exercice {
             homothetie(rotation(point(1, 0), O, param.O + 180), O, param.r2),
             { O: param.O, A: param.B },
           )
+          const secante = droite(anglesA.A, anglesB.A)
           for (const i of ['a', 'b', 'c', 'd']) {
             anglesA[i].couleurDeRemplissage = context.isAmc
               ? colorToLatexOrHTML('')
@@ -722,10 +723,9 @@ export default class ExercicesAnglesAIC extends Exercice {
           objetsEnonce.push(
             anglesA[a],
             anglesA.As,
-            anglesA.Ax,
+            secante,
             anglesB[b],
             anglesB.As,
-            anglesB.Ax,
             anglesA['label' + a],
           )
           objetsEnonce.forEach((objet) => {
@@ -947,6 +947,7 @@ export default class ExercicesAnglesAIC extends Exercice {
             homothetie(rotation(point(1, 0), O, param.O + 180), O, param.r2),
             { O: param.O, A: param.B },
           )
+          const secante = droite(anglesA.A, anglesB.A)
           const nomsPoints = aleaName(['A', 'B', 'C', 'D', 'E', 'F'], 2)
           anglesA.A.nom = nomsPoints[0]
           anglesB.A.nom = nomsPoints[1]
@@ -1001,9 +1002,9 @@ export default class ExercicesAnglesAIC extends Exercice {
           objetsEnonce.push(
             anglesA[a],
             anglesA.As,
-            anglesA.Ax,
+            secante,
             anglesB.As,
-            anglesB.Ax /*,
+            /*
             labelPoint(anglesA.S),
             labelPoint(anglesA.T),
             labelPoint(anglesA.X),
@@ -1011,7 +1012,8 @@ export default class ExercicesAnglesAIC extends Exercice {
             labelPoint(anglesB.T),
             labelPoint(anglesB.OX),
             labelPoint(anglesA.A),
-            labelPoint(anglesB.A) */,
+            labelPoint(anglesB.A),
+            */
           )
           const paramsEnonce = fixeBordures(
             [
@@ -1176,6 +1178,7 @@ export default class ExercicesAnglesAIC extends Exercice {
             homothetie(rotation(point(1, 0), O, param.O + 180), O, param.r2),
             { O: param.O, A: param.B },
           )
+          const secante = droite(anglesA.A, anglesB.A)
           const nomsPoints = aleaName(['A', 'B', 'C', 'D', 'E', 'F'], 2)
           anglesA.A.nom = nomsPoints[0]
           anglesB.A.nom = nomsPoints[1]
@@ -1233,9 +1236,8 @@ export default class ExercicesAnglesAIC extends Exercice {
           objetsEnonce.push(
             // anglesA[a],
             anglesA.As,
-            anglesA.Ax,
+            secante,
             anglesB.As,
-            anglesB.Ax,
             labelPoint(anglesA.S),
             labelPoint(anglesA.T),
             labelPoint(anglesA.X),
@@ -1360,6 +1362,7 @@ export default class ExercicesAnglesAIC extends Exercice {
             homothetie(rotation(point(1, 0), O, param.O + 180), O, param.r2),
             { O: param.O, A: param.B },
           )
+          const secante = droite(anglesA.A, anglesB.A)
           const nomsPoints = aleaName(['A', 'B', 'C', 'D', 'E', 'F'], 2)
           anglesA.A.nom = nomsPoints[0]
           anglesB.A.nom = nomsPoints[1]
@@ -1478,10 +1481,9 @@ export default class ExercicesAnglesAIC extends Exercice {
           objetsEnonce.push(
             anglesA[a],
             anglesA.As,
-            anglesA.Ax,
+            secante,
             anglesB[b],
             anglesB.As,
-            anglesB.Ax,
             anglesA['label' + a],
             anglesB['label' + b],
             labelPoint(anglesA.S),
@@ -1687,6 +1689,7 @@ export default class ExercicesAnglesAIC extends Exercice {
             homothetie(rotation(point(1, 0), O, param.O + 180), O, param.r2),
             { O: param.O, A: param.B },
           )
+          const secante = droite(anglesA.A, anglesB.A)
           const nomsPoints = aleaName(['A', 'B', 'C', 'D', 'E', 'F'], 2)
           anglesA.A.nom = nomsPoints[0]
           anglesB.A.nom = nomsPoints[1]
@@ -1805,9 +1808,8 @@ export default class ExercicesAnglesAIC extends Exercice {
           objetsEnonce.push(
             anglesA[a],
             anglesA.As,
-            anglesA.Ax,
+            secante,
             anglesB.As,
-            anglesB.Ax,
             anglesA['label' + a],
             labelPoint(anglesA.S),
             labelPoint(anglesA.T),
