@@ -43,14 +43,17 @@ export default class Can1a2022Q2 extends ExerciceCan {
 
     if (addition) {
       const reponse = new FractionEtendue(a * den + num, den)
-      this.question = `$${a}+${f.texFraction}=$`
+      this.question = `$${a}+${f.texFraction}$`
       this.correction = `$${a}+${f.texFraction}= \\dfrac{${a * den}}{${den}}+${f.texFraction}=${miseEnEvidence(reponse.texFraction)}${reponse.texSimplificationAvecEtapes()}$`
       this.reponse = reponse
     } else {
       const reponse = new FractionEtendue(a * den - num, den)
-      this.question = `$${a}-${f.texFraction}=$`
+      this.question = `$${a}-${f.texFraction}$`
       this.correction = `$${a}-${f.texFraction}= \\dfrac{${a * den}}{${den}}-${f.texFraction}=${miseEnEvidence(reponse.texFraction)}${reponse.texSimplificationAvecEtapes()}$`
       this.reponse = reponse
+    }
+     if (this.interactif) {
+      this.question += '$=$'
     }
   }
 
