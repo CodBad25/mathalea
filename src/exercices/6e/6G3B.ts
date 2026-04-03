@@ -67,7 +67,7 @@ export default class nomExercice extends Exercice {
     this.besoinFormulaire2Numerique = ['Nombre de médiatrices (3 maximum)', 3]
     this.besoinFormulaire3Texte = [
       'Type de construction',
-      '1 : Avec une perpendiculaire\n2 : Avec des cercles\n',
+      '1 : Avec une perpendiculaire\n2 : Avec des cercles\n0 : Mélange',
     ]
     this.sup = 1
     this.sup2 = 1
@@ -90,12 +90,12 @@ export default class nomExercice extends Exercice {
     })
     const sup3 = gestionnaireFormulaireTexte({
       saisie: this.sup3,
-      defaut: 0,
+      defaut: 1,
       melange: 0,
       nbQuestions: this.nbQuestions,
       min: 1,
       max: 2,
-    })
+    }).map(Number)
     this.figuresApiGeom = []
     this.figuresApiGeomCorr.forEach((fig) => {
       if (
