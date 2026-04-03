@@ -8,6 +8,7 @@ import { numAlpha } from '../../lib/outils/outilString'
 import { context } from '../../modules/context'
 import {
   contraindreValeur,
+  gestionnaireFormulaireTexte,
   listeQuestionsToContenu,
   randint,
 } from '../../modules/outils'
@@ -60,18 +61,17 @@ export default class nomExercice extends Exercice {
     super()
     this.nbQuestions = 1
     this.besoinFormulaireNumerique = [
-      'Nombre de points par question (entre 2 et 23)',
-      23,
-    ]
-    this.besoinFormulaire2Numerique = ['Nombre de médiatrices (4 maximum)', 4]
-    this.besoinFormulaire3Numerique = [
-      'Type de construction',
+      'Nombre de points supplémentaires (en plus des 2 minimum)',
       3,
-      "1 : Avec une perpendiculaire\n2 : Avec des cercles\n3 : L'un ou l'autre",
     ]
-    this.sup = 3
+    this.besoinFormulaire2Numerique = ['Nombre de médiatrices (3 maximum)', 3]
+    this.besoinFormulaire3Texte = [
+      'Type de construction',
+      '1 : Avec une perpendiculaire\n2 : Avec des cercles\n',
+    ]
+    this.sup = 1
     this.sup2 = 1
-    this.sup3 = 1
+    this.sup3 = '1'
     this.exoCustomResultat = true
     this.interactif = true
     this.comment =
@@ -87,6 +87,14 @@ export default class nomExercice extends Exercice {
       ) {
         fig.destroy()
       }
+    })
+    const sup3 = gestionnaireFormulaireTexte({
+      saisie: this.sup3,
+      defaut: 0,
+      melange: 0,
+      nbQuestions: this.nbQuestions,
+      min: 1,
+      max: 2,
     })
     this.figuresApiGeom = []
     this.figuresApiGeomCorr.forEach((fig) => {
@@ -107,7 +115,7 @@ export default class nomExercice extends Exercice {
       this.mediatrices[i] = []
       this.lesPoints[i] = []
       this.lesPointsCorr[i] = []
-      const nbPoints = contraindreValeur(2, 23, this.sup, 3)
+      const nbPoints = contraindreValeur(1, 3, this.sup, 1) + 2
       const nomDesPoints = choisitLettresDifferentes(nbPoints, 'OQW')
       let texte = ''
       let texteCorr = ''
@@ -202,7 +210,7 @@ export default class nomExercice extends Exercice {
         texte += `la médiatrice du segment $[${this.mediatrices[i][ee].pointSeg1.label}${this.mediatrices[i][ee].pointSeg2.label}]$.<br>`
         texteCorr += this.nbMediatrices === 1 ? '' : numAlpha(ee)
 
-        switch (this.sup3) {
+        switch (sup3[i]) {
           case 2: {
             // Construction au compas
             texteCorr += `La médiatrice du segment $[${this.mediatrices[i][ee].pointSeg1.label}${this.mediatrices[i][ee].pointSeg2.label}]$ est la droite contenant tous les points à égale distance de $${this.mediatrices[i][ee].pointSeg1.label}$ et de $${this.mediatrices[i][ee].pointSeg2.label}$.<br>`
