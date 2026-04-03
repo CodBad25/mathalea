@@ -971,7 +971,6 @@ export default class TrouverLaTransformation extends Exercice {
         // Si la question n'a jamais été posée, on en crée une autre
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr
-        i++
       }
       listeQuestionsToContenu(this)
       cpt++
