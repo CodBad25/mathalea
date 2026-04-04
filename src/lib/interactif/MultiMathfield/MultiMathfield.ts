@@ -55,21 +55,43 @@ export class MultiMathfieldElement extends HTMLElement {
   render() {
     const template = this.getAttribute('data-template') || ''
     const options = JSON.parse(this.getAttribute('data-options') || '{}')
-    // Regex qui détecte $...$ ou %{champ} ou texte
-    const regex = /(\$[^$]+\$|%\{[^}]+\})/g
+    const champNames: string[] = []
+    // On extrait les noms de champs pour gérer la navigation au clavier
+    const champRegex = /%\{([^}:]+)(:[^}]*)?\}/g
+    let matchChamp
+    while ((matchChamp = champRegex.exec(template)) !== null) {
+      const name = matchChamp[1]
+      if (!champNames.includes(name)) {
+        champNames.push(name)
+      }
+    }
+    let champIndex = 0
+    // Regex qui détecte $...$, %{champ}, \n ou texte
+    const regex = /(\$[^$]+\$|%\{[^}]+\}|\n)/g
     let lastIndex = 0
     let match
+    // On commence avec un span courant
+    let currentSpan = document.createElement('span')
+    currentSpan.style.display = 'inline-block'
     const container = document.createElement('span')
     container.style.display = 'inline-block'
-
     while ((match = regex.exec(template)) !== null) {
       if (match.index > lastIndex) {
-        container.appendChild(
+        // 2. On parcourt le template comme avant
+        currentSpan.appendChild(
           document.createTextNode(template.slice(lastIndex, match.index)),
         )
       }
       const token = match[0]
-      if (token.startsWith('%{')) {
+      if (token === '\n') {
+        // On ferme le span courant, ajoute <br>, puis nouveau span
+        if (currentSpan.childNodes.length > 0) {
+          container.appendChild(currentSpan)
+        }
+        container.appendChild(document.createElement('br'))
+        currentSpan = document.createElement('span')
+        currentSpan.style.display = 'inline-block'
+      } else if (token.startsWith('%{')) {
         // Champ éditable
         const name = token.slice(2, -1)
         const div = document.createElement('DIV')
@@ -102,13 +124,40 @@ export class MultiMathfieldElement extends HTMLElement {
         mathfield.style.boxShadow =
           'inset 2px 2px 6px #ccc, inset -2px -2px 6px #fff'
         mathfield.style.marginRight = '4px'
+        // Centre la saisie dans le champ
+        mathfield.style.alignContent = 'center'
 
+        // Ajout gestionnaire TAB pour navigation fiable (uniquement sur les champs éditables)
+        const myIndex = champIndex
+        mathfield.addEventListener('keydown', (e) => {
+          if (e.key === 'Tab') {
+            e.preventDefault()
+            const total = champNames.length
+            let nextIndex
+            if (!e.shiftKey) {
+              nextIndex = (myIndex + 1) % total
+            } else {
+              nextIndex = (myIndex - 1 + total) % total
+            }
+            const nextName = champNames[nextIndex]
+            const nextId =
+              (this.id ? this.id : 'multi-mathfield') + '-' + nextName
+            if (this.shadowRoot) {
+              const next = this.shadowRoot.getElementById(nextId)
+              // On ne focus que si c'est bien un MathfieldElement éditable
+              if (next && next instanceof MathfieldElement && !next.readOnly) {
+                ;(next as HTMLElement).focus()
+              }
+            }
+          }
+        })
+        champIndex++
         div.appendChild(mathfield)
         // Ajoute un span de vérification après chaque Mathfield
         const checkSpan = document.createElement('span')
         checkSpan.id = 'check-' + mathfield.id
         div.appendChild(checkSpan)
-        container.appendChild(div)
+        currentSpan.appendChild(div)
 
         if (mathfield.isConnected) {
           setMathfield(mathfield)
@@ -128,18 +177,24 @@ export class MultiMathfieldElement extends HTMLElement {
         mf.style.border = 'none'
         mf.style.margin = '0'
         mf.style.padding = '0'
-        container.appendChild(mf)
+        currentSpan.appendChild(mf)
       }
       lastIndex = regex.lastIndex
     }
     if (lastIndex < template.length) {
-      container.appendChild(document.createTextNode(template.slice(lastIndex)))
+      currentSpan.appendChild(
+        document.createTextNode(template.slice(lastIndex)),
+      )
+    }
+    // Ajoute le dernier span s'il n'est pas vide
+    if (currentSpan.childNodes.length > 0) {
+      container.appendChild(currentSpan)
     }
 
     // Nettoie et insère dans le shadow DOM
     if (this.shadowRoot) {
       this.shadowRoot.innerHTML = ''
-      // Ajoute le style pour masquer les toggles
+      // Ajoute le style pour masquer les toggles et centrer la saisie
       const style = document.createElement('style')
       style.textContent = `
         math-field::part(menu-toggle) {
@@ -148,7 +203,12 @@ export class MultiMathfieldElement extends HTMLElement {
         math-field::part(virtual-keyboard-toggle) {
           display: none;
         }
-      `
+        math-field {
+          text-align: center;
+        }
+        math-field::part(content) {
+          justify-content: center;
+        }`
       this.shadowRoot.appendChild(style)
       this.shadowRoot.appendChild(container)
     }
@@ -218,9 +278,11 @@ export function addMultiMathfield(
           enrichedOptions[name].keyboard = KeyboardType.clavierNumbers
       }
     }
-    return `<multi-mathfield id="multiMathfieldEx${exercice.numeroExercice}Q${questionIndex}" data-template="${dataTemplate}" data-options='${JSON.stringify(enrichedOptions)}'></multi-mathfield>`
+    return `<multi-mathfield id="multiMathfieldEx${exercice.numeroExercice}Q${questionIndex}" data-template="${dataTemplate}" data-options='${JSON.stringify(enrichedOptions)}'></multi-mathfield>
+    <div  class ="ml-2 py-2 italic text-coopmaths-warn-darkest dark:text-coopmathsdark-warn-darkest" id="feedbackEx${exercice.numeroExercice}Q${questionIndex}" style="display: none;"></div>`
   } else {
-    const regex = /(%\{[^}]+\})/g
+    // On veut aussi gérer les retours à la ligne (\n) en <br>
+    const regex = /(%\{[^}]+\}|\n)/g
     let lastIndex = 0
     let match
     let result = ''
@@ -228,8 +290,13 @@ export function addMultiMathfield(
       if (match.index > lastIndex) {
         result += dataTemplate.slice(lastIndex, match.index)
       }
-      // Remplace les champs par des underscores
-      result += '$\\ldots\\ldots$'
+      const token = match[0]
+      if (token === '\n') {
+        result += '<br>'
+      } else {
+        // Remplace les champs par des underscores
+        result += '$\\ldots\\ldots$'
+      }
       lastIndex = regex.lastIndex
     }
     if (lastIndex < dataTemplate.length) {

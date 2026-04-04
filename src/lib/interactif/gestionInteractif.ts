@@ -1286,15 +1286,16 @@ export function verifQuestionMultiMathfield(
   }
   const bareme: (arg: number[]) => [number, number] =
     reponses.bareme ?? toutPourUnPoint
+  const feedbackFunction = reponses.feedback ?? undefined
   const variables = Object.entries(reponses).filter(
     ([key]) => key !== 'bareme' && key !== 'feedback',
   )
   const points = []
   const saisies: Record<string, string> = {}
-  let feedback = ''
   let compteurSaisiesVides = 0
   let compteurBonnesReponses = 0
   let noFeedback = false
+  let feedback = ''
   for (const [field, reponse] of variables) {
     const options = reponse.options
     noFeedback = noFeedback || Boolean(options?.noFeedback)
@@ -1330,6 +1331,7 @@ export function verifQuestionMultiMathfield(
     } else {
       result = compareFunction(saisie, reponse.value, options)
     }
+
     if (result.isOk) {
       compteurBonnesReponses++
       points.push(1)
@@ -1357,6 +1359,12 @@ export function verifQuestionMultiMathfield(
       feedback = `Il manque ${compteurSaisiesVides} réponse(s).`
     } else {
       feedback = `Certaines réponses sont incorrectes.`
+    }
+  }
+  if (feedbackFunction != null) {
+    const feedbackFunctionResult = feedbackFunction(saisies)
+    if (typeof feedbackFunctionResult === 'string') {
+      feedback += feedbackFunctionResult
     }
   }
   const [nbBonnesReponses, nbReponses] = bareme(points)

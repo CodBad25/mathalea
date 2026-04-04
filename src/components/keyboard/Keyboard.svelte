@@ -132,15 +132,26 @@
     } else {
       if (event.currentTarget instanceof HTMLButtonElement) {
         const idMathField = $keyboardState.idMathField
-        const mf = document.querySelector(
+        // Recherche dans le DOM global
+        let mf = document.querySelector(
           ('#' + idMathField).replace('-button', ''),
-        ) as MathfieldElement
-        // console.log({
-        //   mf,
-        //   idMathField,
-        //   command: `${key.command}`,
-        //   insert: `${key.insert}`
-        // })
+        ) as MathfieldElement | null
+        // Si non trouvé, cherche dans les shadowRoot des multi-mathfield
+        if (!mf) {
+          const multiMathfields = document.querySelectorAll('multi-mathfield')
+          for (const el of multiMathfields) {
+            const shadow = el.shadowRoot
+            if (shadow) {
+              const found = shadow.querySelector(
+                ('#' + idMathField).replace('-button', ''),
+              ) as MathfieldElement | null
+              if (found) {
+                mf = found
+                break
+              }
+            }
+          }
+        }
         if (mf != null) {
           mf.focus()
           if (key.command && key.command === 'closeKeyboard') {

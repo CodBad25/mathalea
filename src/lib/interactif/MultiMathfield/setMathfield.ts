@@ -33,12 +33,7 @@ export function setMathfield(mf: MathfieldElement) {
 
 function handleFocusMathField(event: FocusEvent) {
   const mf = event.target as MathfieldElement
-  const isFillInTheBlanks =
-    mf.classList.contains('fillInTheBlanks') ||
-    mf.classList.contains('metaInteractif2d')
-  const isNotFillInTheBlanksAndReadOnly = !isFillInTheBlanks && mf.readOnly
-  const isCorrected =
-    isNotFillInTheBlanksAndReadOnly || mf.classList.contains('corrected')
+  const isCorrected = mf.classList.contains('corrected')
   getKeyboardShortcusts(mf)
   keyboardState.update((value) => {
     return {
