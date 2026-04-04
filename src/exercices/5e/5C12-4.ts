@@ -1,4 +1,4 @@
-import { evaluate, type Fraction } from 'mathjs'
+import { compile } from '@cortex-js/compute-engine'
 import type { MathfieldElement } from 'mathlive'
 import ce from '../../lib/interactif/comparisonFunctions'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
@@ -33,7 +33,7 @@ type Materiel = {
 
 type ListeVariableExo = 'a' | 'b' | 'c' | 'd'
 type VariablesExo = Partial<
-  Record<ListeVariableExo, string | number | boolean | Fraction | object>
+  Record<ListeVariableExo, string | number | boolean | object>
 >
 
 // Les tirets bas sont placés là où il n'y a pas de parenthèses mais qu'il pourrait y en avoir une. Cela sert à placer les placeholders et à savoir à quelle position on a quelle parenthèse
@@ -277,8 +277,8 @@ class MettreDesParentheses extends Exercice {
       // mathjs calcule l'expression avec les valeur choisies et fournit le membre de droite de l'énoncé
       const resultat =
         (parentheses
-          ? evaluate(materiel.expAP.replaceAll('_', ''), assignations)
-          : evaluate(materiel.expSP.replaceAll('_', ''), assignations)) ?? 0
+          ? compile(materiel.expAP.replaceAll('_', '')).run!(assignations)
+          : compile(materiel.expSP.replaceAll('_', '')).run!(assignations)) ?? 0
       let texte = ''
       let index = 1
       let content = ''
