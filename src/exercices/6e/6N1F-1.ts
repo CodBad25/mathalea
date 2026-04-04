@@ -1,5 +1,4 @@
 import Decimal from 'decimal.js'
-import { format } from 'mathjs'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import {
@@ -7,7 +6,7 @@ import {
   remplisLesBlancs,
 } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
-import { texNombre } from '../../lib/outils/texNombre'
+import { stringNombre, texNombre } from '../../lib/outils/texNombre'
 import {
   gestionnaireFormulaireTexte,
   listeQuestionsToContenu,
@@ -111,12 +110,7 @@ export default class ExerciceEcritureDecimaleOuFractionDecimale extends Exercice
         default: {
           // / écriture décimale -> fraction décimale
           consi[0] = true
-          const nombre = format(n, {
-            notation: 'auto',
-            lowerExp: -12,
-            upperExp: 12,
-            precision: 12,
-          }).replace('.', ',')
+          const nombre = stringNombre(n, 3)
           const rangVirgule = nombre.indexOf(',')
           let nbdigits = 0
           if (rangVirgule !== -1) {
