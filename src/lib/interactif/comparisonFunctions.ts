@@ -2267,7 +2267,10 @@ function handletexteAvecCasse(
   // return { isOk: saisie.toLowerCase() === answer.toLowerCase() }
   if (localanswer === localsaisie) return ok()
   if (firstTime)
-    if (handletexteAvecCasse(saisie.toLowerCase(), answer.toLowerCase(), false))
+    if (
+      handletexteAvecCasse(saisie.toLowerCase(), answer.toLowerCase(), false)
+        .isOk
+    )
       return fail(
         'Résultat incorrect car majuscules ou minuscules non respectées.',
       )

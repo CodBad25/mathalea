@@ -213,6 +213,9 @@ export function verifQuestionMathLive(
               let ii = 0
               while (!result?.isOk && ii < reponse.value.length) {
                 result = compareFunction(saisie, reponse.value[ii], options)
+                if (result.feedback) {
+                  feedback = result.feedback
+                }
                 ii++
               }
             } else {
@@ -232,6 +235,8 @@ export function verifQuestionMathLive(
                 variables.length > 1
                   ? ` Champ ${key.charAt(key.length - 1)} : `
                   : ''
+              result.feedback = feedback
+              feedback = ''
               if (!result.feedback) {
                 // On n'écrase le feedback que s'il n'y en a pas déjà un spécifique
                 result = {
