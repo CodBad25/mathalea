@@ -1,4 +1,3 @@
-import { clone } from 'mathjs'
 import { codageSegments } from '../../lib/2d/CodageSegment'
 import { point } from '../../lib/2d/PointAbstrait'
 import { tracePoint } from '../../lib/2d/TracePoint'
@@ -18,7 +17,11 @@ import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { propositionsQcm } from '../../lib/interactif/qcm'
 import { ajouteChampTexte } from '../../lib/interactif/questionMathLive'
 import { choisitLettresDifferentes } from '../../lib/outils/aleatoires'
-import { combinaisonListes, shuffle } from '../../lib/outils/arrayOutils'
+import {
+  arrayClone,
+  combinaisonListes,
+  shuffle,
+} from '../../lib/outils/arrayOutils'
 import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import {
   numAlpha,
@@ -155,7 +158,6 @@ export default class VocabulaireDuCercle extends Exercice {
     for (
       let i = 0, texte, texteCorr, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       const objetsEnonce = [] // on initialise le tableau des objets Mathalea2d de l'enoncé
       const propositionsAMC: UneProposition[] = []
@@ -353,11 +355,11 @@ export default class VocabulaireDuCercle extends Exercice {
           let propositions: Proposition[] = []
           if (question.sens === 'Un rayon est ...') {
             // clone réalise la deep copy d'un array ou d'un objet... ce qui rend propositions indépendant des changements de propositionsUnRayonEst
-            propositions = clone(propositionsUnRayonEst)
+            propositions = arrayClone(propositionsUnRayonEst)
           }
           if (question.sens === '[AB] est ...') {
             // clone réalise la deep copy d'un array ou d'un objet... ce qui rend propositions indépendant des changements de propositionsABEst
-            propositions = clone(propositionsABEst)
+            propositions = arrayClone(propositionsABEst)
           }
           for (let ee = 0; ee < propositions.length; ee++) {
             const statut =
