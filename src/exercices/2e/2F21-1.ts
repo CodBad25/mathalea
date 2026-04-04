@@ -78,7 +78,6 @@ export default class EtudeFctPoly3 extends Exercice {
     for (
       let i = 0, texte, texteCorr, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       // Boucle principale où i+1 correspond au numéro de la question
       const nomF = [['f'], ['g'], ['h'], ['u'], ['v'], ['w']]
@@ -235,7 +234,7 @@ On peut dire que lorsque le prix payé pour la location est $${texNombre(prix, 2
             texteCorr = createList({
               items: [
                 ` Le carré de la vitesse est $v^2$, donc la fonction $d$ est définie par : $d(v)=\\dfrac{v^2}{${texNombre(a, 1)}}$. `,
-                ` $d(${v})=\\dfrac{${v}^2}{${texNombre(a, 1)}}\\simeq ${texNombre(new Decimal(v.pow(2).div(a)), 0)}$. La distance de freinage est d'environ $${texNombre(new Decimal(v.pow(2).div(a)), 0)}$.`,
+                ` $d(${v})=\\dfrac{${v}^2}{${texNombre(a, 1)}}\\approx ${texNombre(new Decimal(v.pow(2).div(a)), 0)}$. La distance de freinage est d'environ $${texNombre(new Decimal(v.pow(2).div(a)), 0)}$.`,
                 " La distance de freinage n'est pas proportionnelle à la vitesse car la fonction $d$ n'est pas une fonction linéaire. Elle ne traduit pas une situation de proportionnalité.",
                 `   On cherche $v$ tel que $d(v)=${b}$.<br>
                     $\\begin{aligned}
@@ -244,7 +243,7 @@ v^2&=${b} \\times ${texNombre(a, 2)} ${sp(8)} \\text{(On multiplie par ${texNomb
 v^2&= ${texNombre(new Decimal(b).mul(a), 2)}\\\\
 v&= -\\sqrt{${texNombre(new Decimal(b).mul(a), 2)}} ${sp(8)} \\text{ou} ${sp(8)} v= \\sqrt{${texNombre(new Decimal(b).mul(a), 2)}}${sp(8)}\\text{(deux nombres ont pour carré } ${texNombre(new Decimal(b).mul(a), 2)} \\text{)}
 \\end{aligned}$<br>
-Puisque $v$ est un nombre positif, on en déduit $v= \\sqrt{${texNombre(new Decimal(b).mul(a), 2)}}\\simeq ${new Decimal(b).mul(a).sqrt().round()}$.<br>
+Puisque $v$ est un nombre positif, on en déduit $v= \\sqrt{${texNombre(new Decimal(b).mul(a), 2)}}\\approx ${new Decimal(b).mul(a).sqrt().round()}$.<br>
 Lorsque la distance de freinage de la voiture est $${b}\\text{ m}$, sa vitesse est alors d'environ $${new Decimal(b).mul(a).sqrt().round()}\\text{ km/h}$.<br>
 `,
               ],
@@ -785,7 +784,7 @@ On considère la fonction $${nom}$ qui associe à chaque valeur de $x$, le prix 
             \n \\text{Temps (en s)}&${texNombre(a5 / 1000, 3)}&60  \\\\\n \\hline\n
             \\end{array}\n$
             <br>
-             $n=\\dfrac{60\\times 1}{${texNombre(a5 / 1000, 3)}}\\simeq ${texNombre((60 * 1000) / a5, 0)}$.<br>
+             $n=\\dfrac{60\\times 1}{${texNombre(a5 / 1000, 3)}}\\approx ${texNombre((60 * 1000) / a5, 0)}$.<br>
              ${
                (60 * 1000) / a5 > 100
                  ? `Comme $${texNombre((60 * 1000) / a5, 0)}>100$, ce patient souffre de tachycardie.`
@@ -912,7 +911,7 @@ Calculer sa vitesse de rotation au bout de $1$ minute.`,
            ${texNombre(a, 3)} \\times t&=-${v}\\\\
            t&=\\dfrac{${v}}{${texNombre(-a, 3)}}
            \\end{aligned}$<br>
-           Comme  $\\dfrac{${v}}{${texNombre(-a, 3)}}\\simeq ${texNombre(new Decimal(-v).div(a), 0)}$, le hand-spinner s'arrte au bout de $${texNombre(new Decimal(-v).div(a), 0)}$ secondes (valeur arrondie à la seconde).`,
+           Comme  $\\dfrac{${v}}{${texNombre(-a, 3)}}\\approx ${texNombre(new Decimal(-v).div(a), 0)}$, le hand-spinner s'arrte au bout de $${texNombre(new Decimal(-v).div(a), 0)}$ secondes (valeur arrondie à la seconde).`,
                 ` D'une manière générale, on a  : <br>
            $\\begin{aligned}
             V(t)&=0\\\\

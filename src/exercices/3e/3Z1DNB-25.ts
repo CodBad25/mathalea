@@ -16,7 +16,8 @@ export const refs = {
   'fr-fr': ['3Z1DNB-25'],
   'fr-ch': [],
 }
-export const titre = 'Se préparer au DNB  : graphique, vitesse et proportionnalité'
+export const titre =
+  'Se préparer au DNB  : graphique, vitesse et proportionnalité'
 export const dateDePublication = '20/01/2026'
 
 /**
@@ -97,7 +98,7 @@ export default class ExerciceAmeriqueNord4062025 extends ExerciceBrevetA {
       if (texNombre(vitesse, 2) === texNombre(vitesse, 1)) {
         sousCorrection4a += `= $${texNombre(vitesse, 1)}\\text{ km/h}$.<br>`
       } else {
-        sousCorrection4a += `$\\simeq ${texNombre(vitesse, 1)}\\text{ km/h}$.<br>`
+        sousCorrection4a += `$\\approx ${texNombre(vitesse, 1)}\\text{ km/h}$.<br>`
       }
     }
     if (tempsParcours - 10 === 60) {
@@ -109,7 +110,7 @@ export default class ExerciceAmeriqueNord4062025 extends ExerciceBrevetA {
       if (texNombre(vitesse, 2) === texNombre(vitesse, 1)) {
         sousCorrection4b += `= $${texNombre(vitesse, 1)}\\text{ km/h}$.<br>`
       } else {
-        sousCorrection4b += `$\\simeq ${texNombre(vitesse, 1)}\\text{ km/h}$.<br>`
+        sousCorrection4b += `$\\approx ${texNombre(vitesse, 1)}\\text{ km/h}$.<br>`
       }
     }
     const listeCorrectionsSousQuestion4 = createList(
@@ -145,7 +146,7 @@ export default class ExerciceAmeriqueNord4062025 extends ExerciceBrevetA {
     if (texNombre(distanceDernier, 3) === texNombre(distanceDernier, 2)) {
       egalOuApprox = `=`
     } else {
-      egalOuApprox = `$\\simeq~$`
+      egalOuApprox = `$\\approx~$`
       ajouteEnviron = 'environ '
     }
     // heuristique simple pour l'article : mot commençant par voyelle

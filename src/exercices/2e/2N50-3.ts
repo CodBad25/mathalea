@@ -114,7 +114,7 @@ export default class ModeliserEquations extends Exercice {
             \\end{aligned}$<br>`
             } else {
               texteCorr += ` ${sp(40)}$ \\begin{aligned}
-            x&\\simeq ${Math.round((f - j - a) / (-t / 100))}
+            x&\\approx ${Math.round((f - j - a) / (-t / 100))}
             \\end{aligned}$<br>`
             }
 
@@ -157,7 +157,7 @@ export default class ModeliserEquations extends Exercice {
                `
             } else {
               texteCorr += ` ${sp(40)}$ \\begin{aligned}
-                            x&\\simeq ${Math.round((b - a) / (c - d))}
+                            x&\\approx ${Math.round((b - a) / (c - d))}
                             \\end{aligned}$<br>
                                          C'est pour une distance d'environ $${Math.round((b - a) / (c - d))}\\text{ km}$ que les deux tarifs sont identiques.
                                 `
@@ -200,7 +200,7 @@ export default class ModeliserEquations extends Exercice {
         `
             } else {
               texteCorr += `${sp(37)} $\\begin{aligned}
-        x&\\simeq${Math.round(b / (c - a))}
+        x&\\approx${Math.round(b / (c - a))}
         \\end{aligned}$<br>
            C'est pour une production d'environ $${Math.round(b / (c - a))}$ bouteilles  que le résultat net de l'entreprise est nul.
        `

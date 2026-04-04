@@ -1,6 +1,9 @@
 import Decimal from 'decimal.js'
 import { choice } from '../../lib/outils/arrayOutils'
-import { miseEnEvidence, texteEnCouleur } from '../../lib/outils/embellissements'
+import {
+  miseEnEvidence,
+  texteEnCouleur,
+} from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
 import { randint } from '../../modules/outils'
 import ExerciceQcmA from '../ExerciceQcmA'
@@ -17,16 +20,22 @@ export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = 'Effectuer une conversion kWh/Joules'
 export default class auto1AC7d extends ExerciceQcmA {
-   private appliquerLesValeurs(energieCoeff: number, bonneReponse: number, dist1: number, dist2: number, dist3: number): void {
+  private appliquerLesValeurs(
+    energieCoeff: number,
+    bonneReponse: number,
+    dist1: number,
+    dist2: number,
+    dist3: number,
+  ): void {
     // Test si le résultat est exact ou approché
     const resultatExact = new Decimal(energieCoeff).div(3.6).toNumber()
     const estApproche = Math.abs(resultatExact - bonneReponse) > 0.001
-    const symbole = estApproche ? '\\simeq' : '='
-    
+    const symbole = estApproche ? '\\approx' : '='
+
     // Calcul de l'approximation par 4
     const numApprox = Math.round(energieCoeff)
     const resultatApprox = numApprox / 4
-    
+
     this.enonce = `Un appareil a besoin d'une énergie de $${texNombre(energieCoeff)} \\times 10^{6}$ Joules (J) pour se mettre en route.<br>
 À combien de kiloWatts-heure (kWh) cela correspond-il ?<br>
 <br>
@@ -45,7 +54,7 @@ La seule réponse possible est $${miseEnEvidence(texNombre(bonneReponse))}$ ${te
       `$${texNombre(bonneReponse)}~\\text{kWh}$`,
       `$${texNombre(dist1)}~\\text{kWh}$`,
       `$${texNombre(dist2)}~\\text{kWh}$`,
-      `$${texNombre(dist3)}~\\text{kWh}$`
+      `$${texNombre(dist3)}~\\text{kWh}$`,
     ]
   }
 
@@ -56,13 +65,13 @@ La seule réponse possible est $${miseEnEvidence(texNombre(bonneReponse))}$ ${te
   versionAleatoire = () => {
     // On choisit d'abord une partie entière cible pour le résultat (on exclut 0)
     const partieEntiereCible = choice([1, 2, 3, 4])
-    
+
     // On génère un energieCoeff qui donnera cette partie entière
     // energieCoeff / 3.6 doit être entre partieEntiereCible et partieEntiereCible+1
     // Donc energieCoeff doit être entre 3.6*partieEntiereCible et 3.6*(partieEntiereCible+1)
     const borneMinDec = new Decimal(36).times(partieEntiereCible).div(10)
     const borneMaxDec = new Decimal(36).times(partieEntiereCible + 1).div(10)
-    
+
     // On génère une valeur avec 1 décimale entre borneMin et borneMax
     // On exclut les multiples exacts de 3.6 (pour éviter les divisions exactes)
     let energieCoeffDec: Decimal
@@ -70,33 +79,33 @@ La seule réponse possible est $${miseEnEvidence(texNombre(bonneReponse))}$ ${te
     let bonneReponseDec: Decimal
     let bonneReponse: number
     let resultatExact: number
-    
+
     do {
       const pas = borneMaxDec.minus(borneMinDec).div(10)
       energieCoeffDec = borneMinDec.plus(pas.times(randint(0, 10)))
       energieCoeff = energieCoeffDec.toNumber()
-      
+
       // On calcule la bonne réponse
       bonneReponseDec = energieCoeffDec.div(new Decimal(36).div(10))
       bonneReponse = parseFloat(bonneReponseDec.toFixed(2))
-      
+
       // On vérifie que ce n'est pas une division exacte
       resultatExact = energieCoeffDec.div(new Decimal(36).div(10)).toNumber()
     } while (Math.abs(resultatExact - Math.round(resultatExact)) < 0.001) // Répéter si division exacte
-    
+
     // On génère les distracteurs
     // dist1 : division par 15 au lieu de 3.6 (erreur classique)
     const dist1Dec = energieCoeffDec.div(15)
     const dist1 = parseFloat(dist1Dec.toFixed(2))
-    
+
     // dist2 : multiplication par energieCoeff au lieu de diviser
     const dist2Dec = energieCoeffDec.times(new Decimal(7).div(10))
     const dist2 = parseFloat(dist2Dec.toFixed(1))
-    
+
     // dist3 : multiplication par 10 (confusion avec les puissances)
     const dist3Dec = bonneReponseDec.times(10)
     const dist3 = parseFloat(dist3Dec.toFixed(2))
-    
+
     this.appliquerLesValeurs(energieCoeff, bonneReponse, dist1, dist2, dist3)
   }
 
