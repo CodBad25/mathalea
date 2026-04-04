@@ -1,20 +1,22 @@
-import { choice } from '../../lib/outils/arrayOutils'
-import { tableauColonneLigne } from '../../lib/2d/tableau'
-import { Arbre } from '../../modules/arbres'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
-
+import { tableauColonneLigne } from '../../lib/2d/tableau'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { AddTabDbleEntryMathlive } from '../../lib/interactif/tableaux/AjouteTableauMathlive'
+import { choice } from '../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { prenomF, prenomM } from '../../lib/outils/Personne'
 import { pgcd } from '../../lib/outils/primalite'
-import Exercice from '../Exercice'
+import { texNombre } from '../../lib/outils/texNombre'
+import { Arbre } from '../../modules/arbres'
+import { fraction } from '../../modules/fractions'
 import { mathalea2d } from '../../modules/mathalea2d'
 import {
   gestionnaireFormulaireTexte,
   listeQuestionsToContenu,
   randint,
 } from '../../modules/outils'
-import { fraction } from '../../modules/fractions'
-import { texNombre } from '../../lib/outils/texNombre'
-import { AddTabDbleEntryMathlive } from '../../lib/interactif/tableaux/AjouteTableauMathlive'
-export const interactifReady = false
+import Exercice from '../Exercice'
+export const interactifReady = true
 
 export const titre = "Loi de probabilité d'une variable aléatoire discrète"
 export const dateDePublication = '28/03/2026'
@@ -29,6 +31,7 @@ export const refs = {
   'fr-fr': ['1P2-1'],
   'fr-ch': [],
 }
+
 export default class LoiDeProba extends Exercice {
   constructor() {
     super()
@@ -55,7 +58,6 @@ export default class LoiDeProba extends Exercice {
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
       let texte = ''
       let texteCorr = ''
-      let reponse = ''
       // Boucle principale où i+1 correspond au numéro de la question
       switch (listeDeQuestions[i]) {
         case 1: // jeu de cartes
@@ -63,55 +65,122 @@ export default class LoiDeProba extends Exercice {
             const a = randint(2, 10) //
             const b = 10 * randint(3, 5) //
             const c = randint(a + 5, a + 10)
-            const d = randint(14, 19) / 100
-            const nom = choice(['Vincent', 'Amal', 'Franck', 'Julien'])
-          
-            texte = `On propose à ${nom} de faire un pari avec un jeu de 32 cartes.<br>
-              Il mise $${a} $ €. S'il obtient un as , il gagne $${b}€ $. S'il obtient un roi, une dame ou un valet, il gagne $${c}$ €. Dans tous les autres cas, il ne gagne rien.<br>
-              On note $X$ la variable aléatoire qui donne le gain de ${nom}. Déterminer la loi de probabilité de $X$.`
-            texteCorr =
-              `Les valeurs possibles pour $X$ sont $${b - a}$, $${c - a}$ et $${-a}$. Donc on obtient :<br> ` +
-              tableauColonneLigne(
-                ['x_i', `${b - a}`, `${c - a}`, `${-a}`],
-                ['P(X=x_i)'],
-                [
-                  `\\dfrac{ 4 } { 32 } `,
-                  `\\dfrac{ 12 } { 32 } `,
-                  `\\dfrac{16 } {32}`,
-                ],
+            const nom = prenomM(1)
+            const entetesCol = ['x_i', `${b - a}`, `${c - a}`, `${-a}`]
+            const entetesLgn = ['P(X=x_i)']
+            const rep1 = fraction(4, 32).texFraction
+            const rep2 = fraction(12, 32).texFraction
+            const rep3 = fraction(16, 32).texFraction
+            texte = `On propose à Monsieur ${nom} de faire un pari avec un jeu de $32$ cartes.<br>
+              Il mise $${a}$ €. S'il obtient un as , il gagne $${b}$ €. S'il obtient un roi, une dame ou un valet, il gagne $${c}$ €. Dans tous les autres cas, il ne gagne rien.<br>
+              On note $X$ la variable aléatoire qui donne le gain de Monsieur ${nom}. Déterminer la loi de probabilité de $X$.<br>`
+            const tableauCorr = tableauColonneLigne(
+              entetesCol,
+              entetesLgn,
+              [
+                miseEnEvidence(rep1),
+                miseEnEvidence(rep2),
+                miseEnEvidence(rep3),
+              ],
+              1.5,
+            )
+            const tabInteractif =
+              AddTabDbleEntryMathlive.convertTclToTableauMathlive(
+                entetesCol,
+                entetesLgn,
+                ['', '', ''],
               )
+            const tabMathlive = AddTabDbleEntryMathlive.create(
+              this.numeroExercice ?? 0, // numéro de l'exercice
+              i, // numéro de la question (0 si une seule question)
+              tabInteractif,
+              'clavierDeBaseAvecFraction', // type de clavier
+              this.interactif, // mode interactif
+              {}, // styles optionnels
+            )
+
+            texteCorr =
+              `Les valeurs possibles pour $X$ sont $${b - a}$, $${c - a}$ et $${-a}$. Donc, on obtient :<br> ` +
+              tableauCorr
+            if (this.interactif) {
+              texte += tabMathlive.output
+              const reponses = [
+                ['L1C1', { value: rep1 }],
+                ['L1C2', { value: rep2 }],
+                ['L1C3', { value: rep3 }],
+              ]
+              handleAnswers(this, i, Object.fromEntries(reponses))
+            }
           }
+
           break
 
         case 2: // jeu de loterie
           {
-            const nb = 100 * randint(20, 50)
-            const lot = 1000 * randint(1, 5)
-            const nb1 = randint(5, 10) //
-            const lot1 = 100 * randint(5, 10)
-            const nb2 = 10 * randint(5, 10)
-            const lot2 = 10 * randint(5, 10) //
-
+            const total = 100 * randint(20, 50)
+            const lot1 = 1000 * randint(1, 5)
+            const frac1 = fraction(1, total)
+            const nb2 = randint(5, 10) //
+            const lot2 = 100 * randint(5, 10)
+            const frac2 = fraction(nb2, total)
+            const nb3 = 10 * randint(5, 10)
+            const lot3 = 10 * randint(5, 10)
+            const frac3 = fraction(nb3, total)
+            const frac4 = fraction(total - 1 - nb2 - nb3, total)
+            const entetesCol = [
+              'x_i',
+              `${texNombre(lot1)}`,
+              `${texNombre(lot2)}`,
+              `${texNombre(lot3)}`,
+              '0',
+            ]
+            const entetesLgn = ['P(X=x_i)']
+            const tableauCorr = tableauColonneLigne(
+              entetesCol,
+              entetesLgn,
+              [
+                miseEnEvidence(frac1.texFraction),
+                miseEnEvidence(frac2.texFraction),
+                miseEnEvidence(frac3.texFraction),
+                miseEnEvidence(frac4.texFraction),
+              ],
+              1.5,
+            )
+            const tabInteractif =
+              AddTabDbleEntryMathlive.convertTclToTableauMathlive(
+                entetesCol,
+                entetesLgn,
+                ['', '', '', ''],
+              )
+            const tabMathlive = AddTabDbleEntryMathlive.create(
+              this.numeroExercice ?? 0, // numéro de l'exercice
+              i, // numéro de la question (0 si une seule question)
+              tabInteractif,
+              'clavierDeBaseAvecFraction', // type de clavier
+              this.interactif, // mode interactif
+              {}, // styles optionnels
+            )
             texte = `Une association décide d'organiser une loterie.<br>
-              Sur les $${nb}$ tickets mis en vente, un seul rapporte $${lot}$ €. $${nb1}$ billets font gagner $${lot1}$ €, $${nb2}$ rapportent $${lot2}$ € et les autres sont des billets perdants.<br>
+              Sur les $${total}$ tickets mis en vente, un seul rapporte $${lot1}$ €. $${nb2}$ billets font gagner $${lot2}$ €, $${nb3}$ rapportent $${lot3}$ € et les autres sont des billets perdants.<br>
              On note $X$ la variable aléatoire égale à la valeur en euro d'un ticket. Déterminer la loi de $X$. `
             texteCorr =
-              `Les valeurs possibles pour $X$ sont : $${lot}$, $${lot1}$, $${lot2}$ et $0$. Donc on obtient :<br> ` +
-              tableauColonneLigne(
-                ['x_i', `${texNombre(lot)}`, `${texNombre(lot1)}`, `${lot2}`, '0'],
-                ['P(X=x_i)'],
-                [
-                  `\\dfrac{ 1 } { ${nb} } `,
-                  `\\dfrac{  ${nb1} } { ${nb} } `,
-                  `\\dfrac{ ${nb2} } { ${nb}}`,
-                  `\\dfrac{ ${nb - nb1 - nb2 - 1}}{ ${nb}}`,
-                ],
-              )
+              `Les valeurs possibles pour $X$ sont : $${texNombre(lot1)}$, $${texNombre(lot2)}$, $${texNombre(lot3)}$ et $0$. Donc, on obtient :<br> ` +
+              tableauCorr
+            if (this.interactif) {
+              texte += tabMathlive.output
+              const reponses = [
+                ['L1C1', { value: frac1.texFraction }],
+                ['L1C2', { value: frac2.texFraction }],
+                ['L1C3', { value: frac3.texFraction }],
+                ['L1C4', { value: frac4.texFraction }],
+              ]
+              handleAnswers(this, i, Object.fromEntries(reponses))
+            }
           }
           break
         case 3: // jeu avec sport
           {
-            const nom = choice(['Rose', 'Lou', 'Lina', 'Aya'])
+            const nom = prenomF(1)
             const sport = choice(['football', 'handball', 'hockey'])
             let nb1 = randint(2, 8)
             let nb2 = nb1 + randint(1, 4)
@@ -119,12 +188,42 @@ export default class LoiDeProba extends Exercice {
             nb1 = nb1 / p
             nb2 = nb2 / p
             const rationnel = true
+            const entetesCol = ['x_i', '0', '1', '2']
+            const entetesLgn = ['P(X=x_i)']
+            const tableauCorr = tableauColonneLigne(
+              entetesCol,
+              entetesLgn,
+              [
+                miseEnEvidence(fraction(nb1 * nb1, nb2 * nb2).texFraction),
+                miseEnEvidence(
+                  fraction(2 * (nb2 - nb1) * nb1, nb2 * nb2).texFraction,
+                ),
+                miseEnEvidence(
+                  fraction((nb2 - nb1) * (nb2 - nb1), nb2 * nb2).texFraction,
+                ),
+              ],
+              1.5,
+            )
+            const tabInteractif =
+              AddTabDbleEntryMathlive.convertTclToTableauMathlive(
+                entetesCol,
+                entetesLgn,
+                ['', '', ''],
+              )
+            const tabMathlive = AddTabDbleEntryMathlive.create(
+              this.numeroExercice ?? 0, // numéro de l'exercice
+              i, // numéro de la question (0 si une seule question)
+              tabInteractif,
+              'clavierDeBaseAvecFraction', // type de clavier
+              this.interactif, // mode interactif
+              {}, // styles optionnels
+            )
             const omega = new Arbre({
               racine: true,
               rationnel,
               nom: '',
               proba: 1,
-              visible: true,
+              visible: false,
               alter: '',
               enfants: [
                 new Arbre({
@@ -138,14 +237,14 @@ export default class LoiDeProba extends Exercice {
                       nom: 'M',
                       proba: fraction(nb1, nb2),
                       visible: true,
-                      alter: 'X=2',
+                      alter: '',
                     }),
                     new Arbre({
                       rationnel,
                       nom: '\\bar M',
                       proba: fraction(nb2 - nb1, nb2),
                       visible: true,
-                      alter: 'X=1',
+                      alter: '',
                     }),
                   ],
                 }),
@@ -159,14 +258,14 @@ export default class LoiDeProba extends Exercice {
                       nom: 'M',
                       proba: fraction(nb1, nb2),
                       visible: true,
-                      alter: 'X=1',
+                      alter: '',
                     }),
                     new Arbre({
                       rationnel,
                       nom: '\\bar M',
                       proba: fraction(nb2 - nb1, nb2),
                       visible: true,
-                      alter: 'X=0',
+                      alter: '',
                     }),
                   ],
                 }),
@@ -174,31 +273,45 @@ export default class LoiDeProba extends Exercice {
             })
 
             omega.setTailles() // On calcule les tailles des arbres.
-            const objets = omega.represente(0, 6, 0, 4, true, 1, 8)
+            const objets = omega.represente(0, 6, 0, 3, true, 1, 8)
 
-            texte = `${nom} joue au ${sport} et elle a remarqué que lorsqu'elle tirait au but, elle avait ${nb1} chances sur  ${nb2} de marquer. <br>
-              On note $X$ la variable aléatoire égale au nombre de buts marqués au cours de 2 tirs successifs. Déterminer la loi de probabilité de $X$.`
-            texteCorr = `On considère l'arbre suivant où $M$ est l'évènement : " ${nom} marque un but "<br>
+            texte = `${nom} joue au ${sport} et elle a remarqué que lorsqu'elle tirait au but, elle avait $${nb1}$ chances sur $${nb2}$ de marquer.<br>
+              On note $X$ la variable aléatoire égale au nombre de buts marqués au cours de $2$ tirs successifs. Déterminer la loi de probabilité de $X$.`
+            texteCorr = `On considère l'arbre suivant où $M$ est l'évènement : " ${nom} marque un but ".<br>
               `
             texteCorr +=
               mathalea2d(
                 Object.assign({ style: 'inline' }, fixeBordures(objets)),
                 objets,
-              ) +' <br> '
-              +`Les valeurs possibles pour $X$ sont $0$, $1$, et $2$.<br>
-            $P(X = 2) =\\dfrac{ ${nb1} } { ${nb2} } \\times \\dfrac{ ${nb1} } { ${nb2} }= \\dfrac{ ${nb1 * nb1} } { ${nb2 * nb2} } $<br>
-            $P(X = 1)=\\dfrac{ ${nb1} }{ ${nb2} } \\times \\dfrac{ ${nb2 - nb1}} { ${nb2} }+\\dfrac{ ${nb2 - nb1} }{ ${nb2} } \\times \\dfrac{ ${nb1}} { ${nb2} }=\\dfrac{  ${2 * nb1 * (nb2 - nb1)} } { ${nb2 * nb2} }$<br>
-$P(X=0)=\\dfrac{ ${nb2 - nb1} }{ ${nb2} } \\times \\dfrac{ ${nb2 - nb1}} { ${nb2} }=  \\dfrac{ ${(nb2 - nb1) * (nb2 - nb1)} } { ${nb2 * nb2}}$
-                  Ainsi on obtient : <br>` +
-              tableauColonneLigne(
-                ['x_i', `${0}`, `${1}`, `${2}`],
-                ['P(X=x_i)'],
+              ) +
+              ' <br> ' +
+              `Les valeurs possibles pour $X$ sont $0$, $1$, et $2$.<br>
+            $P(X = 2) =${fraction(nb1, nb2).texFraction} \\times ${fraction(nb1, nb2).texFraction} = ${fraction(nb1 * nb1, nb2 * nb2).texFraction}$<br><br>
+            $P(X = 1)=${fraction(nb1, nb2).texFraction}  \\times ${fraction(nb2 - nb1, nb2).texFraction} +${fraction(nb2 - nb1, nb2).texFraction}  \\times ${fraction(nb1, nb2).texFraction}=${fraction(2 * (nb2 - nb1) * nb1, nb2 * nb2).texFraction}  $<br><br>
+            $P(X = 0) =${fraction(nb2 - nb1, nb2).texFraction} \\times ${fraction(nb2 - nb1, nb2).texFraction} = ${fraction((nb2 - nb1) * (nb2 - nb1), nb2 * nb2).texFraction}$<br><br>
+                  Ainsi, on obtient : <br>` +
+              tableauCorr
+            if (this.interactif) {
+              texte += tabMathlive.output
+              const reponses = [
+                ['L1C1', { value: fraction(nb1 * nb1, nb2 * nb2).texFraction }],
                 [
-                  `\\dfrac{ ${nb1 * nb1} } { ${nb2 * nb2} } `,
-                  ` \\dfrac{  ${2 * nb1 * (nb2 - nb1)} } { ${nb2 * nb2} } `,
-                  `   \\dfrac{ ${(nb2 - nb1) * (nb2 - nb1)} } { ${nb2 * nb2}}`,
+                  'L1C2',
+                  {
+                    value: fraction(2 * (nb2 - nb1) * nb1, nb2 * nb2)
+                      .texFraction,
+                  },
                 ],
-              )
+                [
+                  'L1C3',
+                  {
+                    value: fraction((nb2 - nb1) * (nb2 - nb1), nb2 * nb2)
+                      .texFraction,
+                  },
+                ],
+              ]
+              handleAnswers(this, i, Object.fromEntries(reponses))
+            }
           }
           break
       }
