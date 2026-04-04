@@ -30,11 +30,12 @@ export default class TestMultiMatfield extends Exercice {
     const a = randint(1, 2)
     const b = randint(1, 5)
     const c = randint(1, 2) * 5
-    this.listeQuestions[0] = `$ABCD$ est un rectangle tel que $AB=${texNombre((a * 10 + b) / 10, 1)}\\text{ dm}$ et $BC=${texNombre(c)}\\text{ dm}$. Quel est le périmètre de ce rectangle ?<br>
+    this.listeQuestions[0] = `$ABCD$ est un rectangle tel que $AB=${texNombre((a * 10 + b) / 10, 1)}\\text{ dm}$ et $BC=${texNombre(c)}\\text{ dm}$. Quelles sont les dimensions de ce rectangle en cm ?<br>
          ${addMultiMathfield(this, 0, {
-           dataTemplate: `%{champ1}$\\times($%{champ2}$~+~$%{champ3}$)=$%{champ4}`,
+           dataTemplate: `Tout d'abord, la largeur : %{champ2}\n
+           Ensuite, la longueur : %{champ3}\n
+           Le périmètre est : %{champ4}`,
            dataOptions: {
-             champ1: { placeholder: '...' },
              champ2: {
                keyboard: KeyboardType.longueur,
                placeholder: '123\\text{ cm}',
@@ -57,9 +58,14 @@ export default class TestMultiMatfield extends Exercice {
       this,
       0,
       {
-        champ1: { value: 2 },
-        champ2: { value: `${a * 10 + b} cm`, options: { unite: true } },
-        champ3: { value: `${c * 10} cm`, options: { unite: true } },
+        champ2: {
+          value: `${Math.min(a * 10 + b, c * 10)} cm`,
+          options: { unite: true },
+        },
+        champ3: {
+          value: `${Math.max(a * 10 + b, c * 10)} cm`,
+          options: { unite: true },
+        },
         champ4: {
           value: `${2 * (a * 10 + b + c * 10)} cm`,
           options: { unite: true },

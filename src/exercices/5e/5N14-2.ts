@@ -1,7 +1,7 @@
 import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { remplisLesBlancs } from '../../lib/interactif/questionMathLive'
+import { addMultiMathfield } from '../../lib/interactif/MultiMathfield/MultiMathfield'
 import {
   choice,
   combinaisonListes,
@@ -22,7 +22,7 @@ export const titre =
   'Comparer quatre fractions (dénominateurs multiples) et un nombre entier'
 export const dateDeModifImportante = '20/05/2025'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+export const interactifType = 'multiMathfield'
 
 /**
  * 4 fractions aux dénominateurs multiples et un nombre entier sont donnés, il faut les classer dans l'ordre croissant.
@@ -187,59 +187,79 @@ export default class ExerciceComparerQuatreFractions extends Exercice {
       if (this.interactif) {
         texte +=
           '<br>' +
-          remplisLesBlancs(
-            this,
-            i,
-            '%{champ1}~\\lt~%{champ2}~\\lt~%{champ3}~\\lt~%{champ4}~\\lt~%{champ5}',
-            ` ${KeyboardType.clavierDeBaseAvecFraction}`,
-          )
+          addMultiMathfield(this, i, {
+            dataTemplate:
+              '%{champ1}$~\\lt~$%{champ2}$~\\lt~$%{champ3}$~\\lt~$%{champ4}$~\\lt~$%{champ5}',
+            dataOptions: {
+              champ1: {
+                keyboard: KeyboardType.clavierDeBaseAvecFraction,
+              },
+              champ2: {
+                keyboard: KeyboardType.clavierDeBaseAvecFraction,
+              },
+              champ3: {
+                keyboard: KeyboardType.clavierDeBaseAvecFraction,
+              },
+              champ4: {
+                keyboard: KeyboardType.clavierDeBaseAvecFraction,
+              },
+              champ5: {
+                keyboard: KeyboardType.clavierDeBaseAvecFraction,
+              },
+            },
+          })
       }
 
-      handleAnswers(this, i, {
-        bareme: (listePoints: number[]) => [
-          listePoints[0] +
-            listePoints[1] +
-            listePoints[2] +
-            listePoints[3] +
-            listePoints[4],
-          5,
-        ],
-        champ1: {
-          value: new FractionEtendue(
-            tableauFractions[0][0],
-            tableauFractions[0][1],
-          ).texFSD,
-          options: { fractionIdentique: true },
+      handleAnswers(
+        this,
+        i,
+        {
+          bareme: (listePoints: number[]) => [
+            listePoints[0] +
+              listePoints[1] +
+              listePoints[2] +
+              listePoints[3] +
+              listePoints[4],
+            5,
+          ],
+          champ1: {
+            value: new FractionEtendue(
+              tableauFractions[0][0],
+              tableauFractions[0][1],
+            ).texFSD,
+            options: { fractionIdentique: true },
+          },
+          champ2: {
+            value: new FractionEtendue(
+              tableauFractions[1][0],
+              tableauFractions[1][1],
+            ).texFSD,
+            options: { fractionIdentique: true },
+          },
+          champ3: {
+            value: new FractionEtendue(
+              tableauFractions[2][0],
+              tableauFractions[2][1],
+            ).texFSD,
+            options: { fractionIdentique: true },
+          },
+          champ4: {
+            value: new FractionEtendue(
+              tableauFractions[3][0],
+              tableauFractions[3][1],
+            ).texFSD,
+            options: { fractionIdentique: true },
+          },
+          champ5: {
+            value: new FractionEtendue(
+              tableauFractions[4][0],
+              tableauFractions[4][1],
+            ).texFSD,
+            options: { fractionIdentique: true },
+          },
         },
-        champ2: {
-          value: new FractionEtendue(
-            tableauFractions[1][0],
-            tableauFractions[1][1],
-          ).texFSD,
-          options: { fractionIdentique: true },
-        },
-        champ3: {
-          value: new FractionEtendue(
-            tableauFractions[2][0],
-            tableauFractions[2][1],
-          ).texFSD,
-          options: { fractionIdentique: true },
-        },
-        champ4: {
-          value: new FractionEtendue(
-            tableauFractions[3][0],
-            tableauFractions[3][1],
-          ).texFSD,
-          options: { fractionIdentique: true },
-        },
-        champ5: {
-          value: new FractionEtendue(
-            tableauFractions[4][0],
-            tableauFractions[4][1],
-          ).texFSD,
-          options: { fractionIdentique: true },
-        },
-      })
+        { formatInteractif: 'multiMathfield' },
+      )
 
       texteCorr = `Pour comparer facilement ces fractions, mettons-les toutes sur le même dénominateur (ici, ce sera $${Math.max(d1, d2, d3, d4)}$).<br>`
       for (let j = 0; j < tableauFractionsEnonce.length; j++) {
