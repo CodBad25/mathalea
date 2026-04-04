@@ -1,4 +1,3 @@
-import { fraction, number } from 'mathjs'
 import { point } from '../../lib/2d/PointAbstrait'
 import { segment } from '../../lib/2d/segmentsVecteurs'
 import { latexParCoordonnees } from '../../lib/2d/textes'
@@ -9,6 +8,7 @@ import { egalOuApprox } from '../../lib/outils/ecritures'
 import { arrondi } from '../../lib/outils/nombres'
 import { sp } from '../../lib/outils/outilString'
 import { context } from '../../modules/context'
+import { fraction } from '../../modules/fractions'
 import { mathalea2d } from '../../modules/mathalea2d'
 import {
   contraindreValeur,
@@ -43,8 +43,8 @@ export const refs = {
  */
 function texProba(proba: number, rationnel: boolean, precision = 3) {
   return rationnel
-    ? fraction(arrondi(proba, precision)).toLatex().replace('frac', 'dfrac')
-    : number(arrondi(proba, precision)).toString().replace('.', '{,}')
+    ? fraction(arrondi(proba, precision)).toLatex().replace('\\frac', '\\dfrac')
+    : Number(arrondi(proba, precision)).toString().replace('.', '{,}')
 }
 export default class ProbabilitesConditionnelles extends Exercice {
   constructor() {
