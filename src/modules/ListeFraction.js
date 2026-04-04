@@ -1,8 +1,7 @@
-import { lcm } from 'mathjs'
-import { listeDesDiviseurs } from '../lib/outils/primalite'
+import { listeDesDiviseurs, ppcmListe } from '../lib/outils/primalite'
 
 function ppcm([...n]) {
-  return parseInt(lcm(...n))
+  return parseInt(ppcmListe(...n))
 }
 
 /**

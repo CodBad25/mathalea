@@ -20,7 +20,6 @@ import {
 } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-import { number } from 'mathjs'
 import type { CodageAngle } from '../../lib/2d/CodageAngle'
 import { CodageAngleDroit } from '../../lib/2d/CodageAngleDroit'
 import { demiDroite, type DemiDroite } from '../../lib/2d/DemiDroite'
@@ -84,7 +83,7 @@ export default class VocabulaireAngles extends Exercice {
       melange: 9,
       defaut: 9,
       nbQuestions: this.nbQuestions,
-    })
+    }).map(Number)
 
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
       let texteCorr = ''
@@ -174,7 +173,7 @@ export default class VocabulaireAngles extends Exercice {
         ),
         CodageAngle | CodageAngleDroit,
       ][] = []
-      const choixQuestion = number(typesDeQuestionsDisponibles[i]) - 1
+      const choixQuestion = typesDeQuestionsDisponibles[i] - 1
       let texteSousFigure = ''
       switch (choixQuestion) {
         case 0:

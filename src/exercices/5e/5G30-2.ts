@@ -1,4 +1,3 @@
-import { pickRandom } from 'mathjs'
 import { Arc, arcPointPointAngle } from '../../lib/2d/Arc'
 import { colorToLatexOrHTML } from '../../lib/2d/colorToLatexOrHtml'
 import { droite } from '../../lib/2d/droites'
@@ -377,7 +376,7 @@ export default class ExercicesAnglesAIC extends Exercice {
           anglesB.As.color = colorToLatexOrHTML('red')
           const a = ['a', 'b', 'c', 'd'][ab.a]
           const b = ['a', 'b', 'c', 'd'][ab.b]
-          const epsilon = choice([pickRandom([-2, -1, 1, 2]), 0])
+          const epsilon = randint(-2, 2, 0)
           anglesA.labela = texteSurArc(
             ((param.O - param.A) % 180) + epsilon + '°',
             anglesA.s,
@@ -1413,7 +1412,7 @@ export default class ExercicesAnglesAIC extends Exercice {
           }
           const a = ['a', 'b', 'c', 'd'][ab.a]
           const b = ['a', 'b', 'c', 'd'][ab.b]
-          const epsilon = choice([pickRandom([-2, -1, 1, 2]), 0])
+          const epsilon = randint(-2, 2, 0)
           anglesA.labela = texteSurArc(
             ((param.O - param.A) % 180) + epsilon + '°',
             anglesA.s,
