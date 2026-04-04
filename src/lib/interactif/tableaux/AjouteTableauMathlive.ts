@@ -139,6 +139,9 @@ function appendCell({
       element = document.createElement('span')
       cell.appendChild(element)
       element.outerHTML = `<span id="spanEx${NoEx}Q${NoQ}L${indexLine}C${indexCol}">$${icell.texte}$</span>`
+      if (icell.texte.includes('\\frac') || icell.texte.includes('\\dfrac')) {
+        cell.style.padding = '0.5em'
+      }
     } else {
       element = document.createElement('span')
       cell.appendChild(element)
