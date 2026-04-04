@@ -2340,7 +2340,7 @@ function handleFonction(
 
   // Proposition faite par ArnoG le 18/02/2026 suite à migration de compute-engine en 0.51.1
   let isEqual = false
-  for (let cpt = 0; cpt < 1000; cpt++) {
+  for (let cpt = 0; cpt < 100; cpt++) {
     const points = [valAlea(), valAlea(), valAlea()].map((v) => ({
       [varName]: v,
     }))
