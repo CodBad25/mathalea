@@ -1,10 +1,10 @@
 // import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { combinations } from '../../../lib/mathFonctions/combinatoire'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { rangeMinMax } from '../../../lib/outils/nombres'
 import { randint } from '../../../modules/outils'
 import { nombreElementsDifferents } from '../../ExerciceQcm'
 import ExerciceQcmA from '../../ExerciceQcmA'
-import { combinations } from 'mathjs'
 export const uuid = 'ecde7'
 export const refs = {
   'fr-fr': ['TSP1-QCM05'],
