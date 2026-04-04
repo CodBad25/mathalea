@@ -1,3 +1,6 @@
+import { ecritureAlgebrique, ecritureParentheseSiNegatif } from '../../lib/outils/ecritures'
+import { texNombre } from '../../lib/outils/texNombre'
+import { randint } from '../../modules/outils'
 import ExerciceVraiFaux from '../ExerciceVraiFaux'
 
 export const uuid = 'd4595'
@@ -16,47 +19,53 @@ export const dateDePublication = '4/4/2025'
 /*
  * @author Stéphane Guyon
  */
-export default class VraiFauxSuites extends ExerciceVraiFaux {
+export default class VraiFauxIntegrales extends ExerciceVraiFaux {
   constructor() {
     super()
     this.nbQuestions = 4
+    const a=randint(-5,5)
+    const b=randint(a+1,a+5)
+     const c=randint(1,8)
+    const m=randint(-5,5)
+    const M=randint(m+1,m+5,[0,1])
     this.affirmations = [
       {
         texte:
-          'Pour toute fonction $f$ continue sur $[a,b]$, $\\displaystyle\\int_a^b f(x) \\mathrm{d}x = -\\displaystyle\\int_b^a f(x) \\mathrm{d}x$.',
+          `Pour toute fonction $f$ continue sur $[${a}, ${b}]$, $\\displaystyle\\int_{${a}}^{${b}} f(x) \\,\\mathrm{d}t = -\\displaystyle\\int_{${b}}^{${a}} f(x) \\,\\mathrm{d}t$.`,
         statut: true,
         correction:
           "C'est une propriété de l'intégrale liée à l'orientation de l'intervalle.", // 1
       },
       {
         texte:
-          'Si $\\displaystyle\\int_{1}^3 f(x)\\mathrm{d}x \\leqslant 0$ alors pour tout $x\\in[1;3], f(x)\\leqslant 0$.',
+          `Si $\\displaystyle\\int_{${a}}^{${b}} f(x)\\,\\mathrm{d}t \\leqslant 0$ alors pour tout $x\\in[${a};${b}], f(x)\\leqslant 0$.`,
         statut: false,
         correction:
-          "Si pour tout $x\\in[1;3], f(x)\\leqslant 0$ alors $\\displaystyle\\int_{1}^3 f(x)\\mathrm{d}x \\leqslant 0$ mais la réciproque est fausse en général.<br>En effet, soit $f$ la fonction définie sur  définie sur $[1;3]$ par $f(x)=x-2,5$. On peut facilement montrer que $\\displaystyle\\int_{1}^3 f(x)\\mathrm{d}x=-1<0$  mais $f$ n'est pas négative sur $[1;3]$",
+          `Si pour tout $x\\in[${a};${b}], f(x)\\leqslant 0$ alors $\\displaystyle\\int_{${a}}^{${b}} f(x)\\,\\mathrm{d}t \\leqslant 0$ mais la réciproque est fausse en général.<br>En effet, soit $f$ la fonction affine définie sur  définie sur $[${a};${b}]$ par telle que $f(${a})=-2$ et $f(${b})=1$.<br>
+           On peut facilement montrer que $\\displaystyle\\int_{${a}}^{${b}} f(x)\\,\\mathrm{d}t<0$  mais $f$ n'est pas négative sur $[${a};${b}]$`,
       },
       {
         texte:
-          "La valeur moyenne d'une fonction $f$ continue sur $[a,b]$ est donnée par $\\dfrac{1}{b-a}\\displaystyle\\int_a^b f(x) \\mathrm{d}x$.",
+          `La valeur moyenne d'une fonction $f$ continue sur $[${a}, ${b}]$ est donnée par $\\dfrac{1}{${b}-${a}}\\displaystyle\\int_{${a}}^{${b}} f(x) \\,\\mathrm{d}t$.`,
         statut: true,
         correction:
           "C'est la définition de la valeur moyenne d'une fonction sur un intervalle.", // 3
       },
       {
         texte:
-          'Si $F$ est une primitive de $f$ sur $[a,b]$, alors $\\displaystyle\\int_a^b f(t) dt = F(a) - F(b)$.',
+          `Si $F$ est une primitive de $f$ sur $[${a}, ${b}]$, alors $\\displaystyle\\int_{${a}}^{${b}} f(t) \\,\\mathrm{d}t = F(${b}) - F(${a})$.`,
         statut: false,
-        correction: "C'est $\\displaystyle\\int_a^b f(t) dt = F(b) - F(a)$.",
+        correction: `C'est $\\displaystyle\\int_{${a}}^{${b}} f(t) \\,\\mathrm{d}t = F(${b}) - F(${a})$.`,
       },
       {
         texte:
-          'Pour toutes fonctions $f$ et $g$ continues sur $[a,b]$, $\\displaystyle\\int_a^b (f(x) + g(x)) \\mathrm{d}x = \\displaystyle\\int_a^b f(x) \\mathrm{d}x + \\displaystyle\\int_a^b g(x) \\mathrm{d}x$.',
+          `Pour toutes fonctions $f$ et $g$ continues sur $[${a}, ${b}]$, $\\displaystyle\\int_{${a}}^{${b}} (f(x) + g(x)) \\,\\mathrm{d}t = \\displaystyle\\int_{${a}}^{${b}} f(x) \\,\\mathrm{d}t + \\displaystyle\\int_{${a}}^{${b}} g(x) \\,\\mathrm{d}t$.`,
         statut: true,
-        correction: "C'est la linéarité de l'intégrale.",
+        correction: "C'est la propriété de la linéarité de l'intégrale.",
       },
       {
         texte:
-          "L'aire entre la courbe d'une fonction $f$ et l'axe des abscisses sur $[a,b]$ est donnée par $\\displaystyle\\int_a^b f(x) \\mathrm{d}x$.",
+          `L'aire entre la courbe d'une fonction $f$ et l'axe des abscisses sur $[${a}, ${b}]$ est donnée par $\\displaystyle\\int_{${a}}^{${b}} f(x) \\,\\mathrm{d}t$.`,
         statut: false,
         correction:
           "Ce n'est vrai que si on vérifie que $f$ est une fonction positive.",
@@ -69,49 +78,80 @@ export default class VraiFauxSuites extends ExerciceVraiFaux {
       },
       {
         texte:
-          "On sait qu'une fonction $f$ continue sur $[1;4]$, vérifie sur cet intervalle : $2\\leqslant f(x)\\leqslant 5$.<br>  On peut en déduire que $6\\leqslant\\displaystyle\\int_1^4 f(x) \\mathrm{d}x\\leqslant15$.",
+          `On sait que si une fonction $f$ continue sur $[${a};${b}]$, vérifie sur cet intervalle : $${m}\\leqslant f(x)\\leqslant ${M}$.<br>  On peut en déduire que $ ${texNombre(m*(b-a))}\\leqslant\\displaystyle\\int_{${a}}^{${b}} f(x) \\,\\mathrm{d}t\\leqslant ${texNombre(M*(b-a))}$.`,
         statut: true,
         correction:
-          'Si une fonction continue admet un minimum $m$ et un maximum $M$ sur $[a;b]$, alors $m(b-a)\\leqslant\\displaystyle\\int_a^b f(x) \\mathrm{d}x\\leqslant M(b-a)$.',
+          `Si une fonction continue admet un minimum $m$ et un maximum $M$ sur $[${a};${b}]$, alors :<br>
+          $m(${b}${ecritureAlgebrique(-a)})\\leqslant\\displaystyle\\int_{${a}}^{${b}} f(x) \\,\\mathrm{d}t\\leqslant M(${b}${ecritureAlgebrique(-a)})$.<br>
+          On a $m=${m}$ et $M=${M}$, donc on a bien $ ${texNombre(m*(b-a))}\\leqslant\\displaystyle\\int_{${a}}^{${b}} f(x) \\,\\mathrm{d}t\\leqslant ${texNombre(M*(b-a))}$.`,
       },
       {
         texte:
-          'La fonction $F$ définie sur $[0;+\\infty]$ par $F(x)=\\displaystyle\\int_0^x \\mathrm{e}^{t^2} \\mathrm{d}t$ change de sens de variation.',
+          'La fonction $F$ définie sur $[0;+\\infty]$ par $F(x)=\\displaystyle\\int_0^x \\mathrm{e}^{t^2} \\,\\mathrm{d}t$ change de sens de variation.',
         statut: false,
         correction:
           "$F'(x)=\\mathrm{e}^{x^2}>0$ donc $F$ est croissante sur $[0;+\\infty]$.",
       },
       {
         texte:
-          'Soit $f$ une fonction continue sur $[2;5]$. $\\displaystyle\\int_2^5 (f(t) + 3 )\\mathrm{d}t=\\displaystyle\\int_2^5 f(t) \\mathrm{d}t + 3 $.',
+          `Soit $f$ une fonction continue sur $[${a};${b}]$. <br>
+          $\\displaystyle\\int_{${a}}^{${b}} \\big(f(t) + ${texNombre(M)} \\big)\\,\\mathrm{d}t=\\displaystyle\\int_{${a}}^{${b}} f(t) \\,\\mathrm{d}t + ${texNombre(M)} $.`,
         statut: false,
         correction:
-          '$\\displaystyle\\int_2^5 f(t) + 3 \\mathrm{d}t=\\displaystyle\\int_2^5 f(t) \\mathrm{d}t + \\displaystyle\\int_2^5 3 \\mathrm{d}t =\\displaystyle\\int_2^5 f(t) \\mathrm{d}t + 9$.',
+          `$\\begin{aligned}
+          \\displaystyle\\int_{${a}}^{${b}} \\big(f(t) + ${texNombre(M)}\\big)\\,\\mathrm{d}t&=\\displaystyle\\int_{${a}}^{${b}} f(t) \\,\\mathrm{d}t + \\displaystyle\\int_{${a}}^{${b}} ${texNombre(M)} \\,\\mathrm{d}t\\\\
+          &= \\displaystyle\\int_{${a}}^{${b}} f(t) \\,\\mathrm{d}t + ${texNombre(M)}(${b}${ecritureAlgebrique(-a)})\\\\
+          &=\\displaystyle\\int_{${a}}^{${b}} f(t) \\,\\mathrm{d}t + ${texNombre(M*(b-a))}\\end{aligned}$.`,
       },
       {
-        texte: '$\\displaystyle\\int_2^5 2 \\mathrm{d}t=3 $.',
+        texte: `$\\displaystyle\\int_{${a}}^{${b}} ${texNombre(M)} \\,\\mathrm{d}t=${texNombre(M*(b-a)+randint(-2,2,0))} $.`,
         statut: false,
         correction:
-          '$\\displaystyle\\int_2^5 2 \\mathrm{d}t=[2t]_2^5=2\\times 5-2 \\times 2 = 6 $.',
+          `$\\begin{aligned}
+          \\displaystyle\\int_{${a}}^{${b}} ${texNombre(M)} \\,\\mathrm{d}t&=[${texNombre(M)}t]_{${a}}^{${b}}\\\\
+          &=${texNombre(M)}\\times ${ecritureParentheseSiNegatif(b)}${ecritureAlgebrique(-M)} \\times ${ecritureParentheseSiNegatif(a)} \\\\
+          &=${texNombre(M*b)} ${ecritureAlgebrique(-M*a)}\\\\
+          &= ${texNombre(M*(b-a))} .\\end{aligned}$`,
       },
       {
         texte:
-          'La valeur moyenne de la fonction $f$ définie sur $[-1;1]$ par $f(x)=x^2$ est $\\dfrac{1}{2}$.',
+          `La valeur moyenne de la fonction $f$ définie sur $[${a};${b}]$ par $f(x)=2x$ est $${texNombre(b**2-a**2)}$.`,
         statut: false,
         correction:
-          'On a $\\displaystyle\\int_{-1}^1 x^2 \\mathrm{d}x=\\dfrac{2}{3}$ donc la valeur moyenne est $\\dfrac{1}{2} \\times \\dfrac{2}{3} = \\dfrac{1}{3}$.',
+          `On a :<br>$\\begin{aligned}
+          \\displaystyle\\int_{${a}}^{${b}} 2x \\,\\mathrm{d}t&=\\left[ x^2 \\right]_{${a}}^{${b}}\\\\
+          &= ${texNombre(b**2)} ${ecritureAlgebrique(-1*a**2)}\\\\
+            &= ${texNombre(b**2-a**2)}.
+          \\end{aligned}$<br>
+          La valeur moyenne de $f$ sur $[${a};${b}]$ est donnée par $\\dfrac{1}{${b}-${a}}\\displaystyle\\int_{${a}}^{${b}} 2x \\,\\mathrm{d}t=\\dfrac{1}{${b}${ecritureAlgebrique(-a)}} \\times ${ecritureParentheseSiNegatif(b**2-a**2)}= ${texNombre((b**2-a**2)/(b-a))}$.`,
       },
       {
-        texte: '$\\displaystyle\\int_{-\\pi}^{\\pi} \\cos(t) \\mathrm{d}t=0 $.',
+        texte: '$\\displaystyle\\int_{-\\pi}^{\\pi} \\cos(t) \\,\\mathrm{d}t=0 $.',
         statut: true,
         correction:
-          '$\\displaystyle\\int_{-\\pi}^{\\pi} \\cos(t) \\mathrm{d}t= [\\sin(t)]_{-\\pi}^{\\pi}=\\sin(\\pi)-\\sin(-\\pi) =0-0=0$.',
+          '$\\displaystyle\\int_{-\\pi}^{\\pi} \\cos(t) \\,\\mathrm{d}t= [\\sin(t)]_{-\\pi}^{\\pi}=\\sin(\\pi)-\\sin(-\\pi) =0-0=0$.',
+      },
+       {
+        texte: '$\\displaystyle\\int_{-\\frac{\\pi}{2}}^{\\frac{\\pi}{2}} \\sin(t) \\,\\mathrm{d}t=0 $.',
+        statut: true,
+        correction:
+          '$\\displaystyle\\int_{-\\frac{\\pi}{2}}^{\\frac{\\pi}{2}} \\sin(t) \\,\\mathrm{d}t= [-\\cos(t)]_{-\\frac{\\pi}{2}}^{\\frac{\\pi}{2}}=-\\cos(\\frac{\\pi}{2})+\\cos(-\\frac{\\pi}{2}) =0+0=0$.',
+      }
+      ,
+       {
+        texte: '$\\displaystyle\\int_{0}^{\\frac{\\pi}{2}} \\cos(t) \\,\\mathrm{d}t=0 $.',
+        statut: false,
+        correction:
+          '$\\displaystyle\\int_{0}^{\\frac{\\pi}{2}} \\cos(t) \\,\\mathrm{d}t= [\\sin(t)]_{0}^{\\frac{\\pi}{2}}=\\sin(\\frac{\\pi}{2})-\\sin(0) =1-0=1$.',
       },
       {
-        texte: '$\\displaystyle\\int_{-2}^2 t \\mathrm{d}t=0 $.',
+        texte: `$\\displaystyle\\int_{${-c}}^{${c}} t \\,\\mathrm{d}t=0 $.`,
         statut: true,
         correction:
-          '$\\displaystyle\\int_{-2}^2 t \\mathrm{d}t=[\\dfrac{t^2}{2}]_{-2}^{2}=0 $.', // 13
+          `$\\begin{aligned}
+          \\displaystyle\\int_{${-c}}^{${c}} t \\,\\mathrm{d}t&=\\left[\\dfrac{t^2}{2}\\right]_{${-c}}^{${c}}\\\\
+          &=\\dfrac{${c}^2}{2}-\\dfrac{(-${c})^2}{2}\\\\
+          &=0 \\end{aligned}$.`, // 13
       },
     ]
   }
