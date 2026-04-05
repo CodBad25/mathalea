@@ -3,12 +3,13 @@ import { choice } from '../../lib/outils/arrayOutils'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
 
 import { createList } from '../../lib/format/lists'
+import { addMultiMathfield } from '../../lib/interactif/MultiMathfield/MultiMathfield'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { toutAUnPoint } from '../../lib/interactif/mathLive'
 import { sp } from '../../lib/outils/outilString'
 export const titre = 'Écrire ou reconnaitre une probabilité dans un énoncé'
 export const interactifReady = true
@@ -226,57 +227,15 @@ Enfin, ils estiment que $${texNombre(Pev2 * 100, 1)}\\,\\%$ des animaux contract
       texte += texte1
       const choix = this.sup === 3 ? randint(1, 2) : this.sup
       if (choix === 1) {
-        calc1 = this.interactif
-          ? ajouteChampTexteMathLive(
-              this,
-              3 * i,
-              KeyboardType.clavierProbabilite,
-              { texteApres: `$=${texNombre(Pev2sachantev1, 2)}$` },
-            )
-          : `$\\ldots =${texNombre(Pev2sachantev1, 3)}$`
-        calc2 = this.interactif
-          ? ajouteChampTexteMathLive(
-              this,
-              3 * i + 1,
-              KeyboardType.clavierProbabilite,
-              { texteApres: `$=${texNombre(Pev2, 3)}$` },
-            )
-          : `$\\ldots =${texNombre(Pev2, 3)}$`
-        calc3 = this.interactif
-          ? ajouteChampTexteMathLive(
-              this,
-              3 * i + 2,
-              KeyboardType.clavierProbabilite,
-              { texteApres: `$=${texNombre(Pev2sachantev1b, 2)}$` },
-            )
-          : `$\\ldots =${texNombre(Pev2sachantev1b, 3)}$`
+        calc1 = `$=${texNombre(Pev2sachantev1, 2)}$`
+        calc2 = `$=${texNombre(Pev2, 3)}$`
+        calc3 = `$=${texNombre(Pev2sachantev1b, 2)}$`
         calc1C = `Dans l'énoncé, $${texNombre(Pev2sachantev1, 3)}$ correspond à une probabilité conditionnelle :  $${miseEnEvidence(`P_{${ev[0]}}({${ev[1]}})`)}=${texNombre(Pev2sachantev1, 3)}$.<br>`
         calc2C = `$${miseEnEvidence(`P(${ev[1]})`)} =${texNombre(Pev2, 3)}$<br>`
         calc3C = `Dans l'énoncé, $${texNombre(Pev2sachantev1b, 3)}$ correspond à une probabilité conditionnelle : $${miseEnEvidence(`P_{\\overline{${ev[0]}}}({ ${ev[1]}})`)}=${texNombre(Pev2sachantev1b, 3)}$`
-        calc4 = this.interactif
-          ? ajouteChampTexteMathLive(
-              this,
-              3 * i,
-              KeyboardType.clavierProbabilite,
-              { texteApres: `$=${texNombre(Pev1bsachantev2, 3)}$` },
-            )
-          : `$\\ldots =${texNombre(Pev1bsachantev2, 3)}$`
-        calc5 = this.interactif
-          ? ajouteChampTexteMathLive(
-              this,
-              3 * i + 1,
-              KeyboardType.clavierProbabilite,
-              { texteApres: `$=${texNombre(Pev1 * Pev2sachantev1, 3)}$` },
-            )
-          : `$\\ldots =${texNombre(Pev1 * Pev2sachantev1, 3)}$`
-        calc6 = this.interactif
-          ? ajouteChampTexteMathLive(
-              this,
-              3 * i + 2,
-              KeyboardType.clavierProbabilite,
-              { texteApres: `$=${texNombre(Pev1, 3)}$` },
-            )
-          : `$\\ldots =${texNombre(Pev1, 3)}$`
+        calc4 = `$=${texNombre(Pev1bsachantev2, 3)}$`
+        calc5 = `$=${texNombre(Pev1 * Pev2sachantev1, 3)}$`
+        calc6 = `$=${texNombre(Pev1, 3)}$`
         calc4C = `Dans l'énoncé, $${texNombre(Pev1bsachantev2, 3)}$ correspond à une probabilité conditionnelle : $${miseEnEvidence(`P_{${ev[1]}}(\\overline{${ev[0]}})`)}=${texNombre(Pev1bsachantev2, 3)}$.<br>`
         calc5C = `Dans l'énoncé, $${texNombre(Pev1 * Pev2sachantev1, 3)}$ correspond à la probabilité d'une intersection : $${miseEnEvidence(`P(${ev[0]}\\cap ${ev[1]})`)} =${texNombre(Pev1 * Pev2sachantev1, 3)}$.<br>`
         calc6C = `$${miseEnEvidence(`P( ${ev[0]})`)}=${texNombre(Pev1, 3)}$`
@@ -284,110 +243,98 @@ Enfin, ils estiment que $${texNombre(Pev2 * 100, 1)}\\,\\%$ des animaux contract
         texte +=
           "  En utilisant les données de l'énoncé, écrire avec la notation de probabilité qui convient :<br>"
         if (choice([true, false])) {
-          texte += ` ${calc1}${sp(10)}${calc2}${sp(10)}${calc3}`
-          handleAnswers(this, 3 * i, {
-            reponse: {
-              value: [`P_{${ev[0]}}({${ev[1]}})`, `P_{${ev[0]}}(${ev[1]})`],
-              options: { texteAvecCasse: true },
+          texte += addMultiMathfield(this, i, {
+            dataTemplate: ` %{champ1} ${calc1}${sp(10)} %{champ2} ${calc2}${sp(10)}%{champ3} ${calc3} `,
+            dataOptions: {
+              champ1: {
+                keyboard: KeyboardType.clavierProbabilite,
+                minWidth: 100,
+              },
+              champ2: {
+                keyboard: KeyboardType.clavierProbabilite,
+                minWidth: 100,
+              },
+              champ3: {
+                keyboard: KeyboardType.clavierProbabilite,
+                minWidth: 100,
+              },
             },
           })
-          handleAnswers(this, 3 * i + 1, {
-            reponse: {
-              value: [`P(${ev[1]})`],
-              options: { texteAvecCasse: true },
+          handleAnswers(
+            this,
+            i,
+            {
+              bareme: toutAUnPoint,
+              champ1: {
+                value: [`P_{${ev[0]}}({${ev[1]}})`, `P_{${ev[0]}}(${ev[1]})`],
+                options: { texteAvecCasse: true },
+              },
+              champ2: {
+                value: [`P(${ev[1]})`],
+                options: { texteAvecCasse: true },
+              },
+              champ3: {
+                value: [
+                  `P_{\\overline{${ev[0]}}}({${ev[1]}})`,
+                  `P_{\\overline{${ev[0]}}}({ ${ev[1]}})`,
+                  `P_{\\overline{${ev[0]}}}(${ev[1]})`,
+                  `P_{\\overline{${ev[0]}}}( ${ev[1]})`,
+                ],
+                options: { texteAvecCasse: true },
+              },
             },
-          })
-          handleAnswers(this, 3 * i + 2, {
-            reponse: {
-              value: [
-                `P_{\\overline{${ev[0]}}}({${ev[1]}})`,
-                `P_{\\overline{${ev[0]}}}({ ${ev[1]}})`,
-                `P_{\\overline{${ev[0]}}}(${ev[1]})`,
-                `P_{\\overline{${ev[0]}}}( ${ev[1]})`,
-              ],
-              options: { texteAvecCasse: true },
-            },
-          })
+            { formatInteractif: 'multiMathfield' },
+          )
           texteCorr = ` ${calc1C}${calc2C}${calc3C}`
         } else {
-          texte += ` ${calc4}${sp(10)}${calc5}${sp(10)}${calc6}`
-          handleAnswers(this, 3 * i, {
-            reponse: {
-              value: [
-                `P_{${ev[1]}}(\\overline{${ev[0]}})`,
-                `P_{${ev[1]}}({\\overline{${ev[0]}}})`,
-              ],
-              options: { texteAvecCasse: true },
+          texte += addMultiMathfield(this, i, {
+            dataTemplate: `%{champ1} ${calc4} ${sp(10)} %{champ2} ${calc5}${sp(10)} %{champ3} ${calc6}`,
+            dataOptions: {
+              champ1: { keyboard: KeyboardType.lycee, minWidth: 100 },
+              champ2: { keyboard: KeyboardType.lycee, minWidth: 100 },
+              champ3: { keyboard: KeyboardType.lycee, minWidth: 100 },
             },
           })
-          handleAnswers(this, 3 * i + 1, {
-            reponse: {
-              value: [
-                `P({${ev[0]}}\\cap {${ev[1]}})`,
-                `P({${ev[1]}}\\cap {${ev[0]}})`,
-                `P(${ev[0]}\\cap ${ev[1]})`,
-              ],
-              options: { texteAvecCasse: true },
+          handleAnswers(
+            this,
+            i,
+            {
+              bareme: toutAUnPoint,
+              champ1: {
+                value: [
+                  `P_{${ev[1]}}(\\overline{${ev[0]}})`,
+                  `P_{${ev[1]}}({\\overline{${ev[0]}}})`,
+                ],
+                options: { texteAvecCasse: true },
+              },
+              champ2: {
+                value: [
+                  `P({${ev[0]}}\\cap {${ev[1]}})`,
+                  `P({${ev[1]}}\\cap {${ev[0]}})`,
+                  `P(${ev[0]}\\cap ${ev[1]})`,
+                ],
+                options: { texteAvecCasse: true },
+              },
+              champ3: {
+                value: [`P(${ev[0]})`],
+                options: { texteAvecCasse: true },
+              },
             },
-          })
-          handleAnswers(this, 3 * i + 2, {
-            reponse: {
-              value: [`P(${ev[0]})`],
-              options: { texteAvecCasse: true },
-            },
-          })
+            { formatInteractif: 'multiMathfield' },
+          )
           texteCorr = ` ${calc4C}${calc5C}${calc6C}`
         }
       } else {
-        calc1 = this.interactif
-          ? ajouteChampTexteMathLive(this, 3 * i, KeyboardType.clavierDeBase, {
-              texteAvant: `$P_{${ev[0]}}({${ev[1]}})=$`,
-            })
-          : `$P_{${ev[0]}}({${ev[1]}})=\\ldots$`
-        calc2 = this.interactif
-          ? ajouteChampTexteMathLive(
-              this,
-              3 * i + 1,
-              KeyboardType.clavierDeBase,
-              { texteAvant: `$P(${ev[1]})=$` },
-            )
-          : `$P(${ev[1]})=\\ldots$`
-        calc3 = this.interactif
-          ? ajouteChampTexteMathLive(
-              this,
-              3 * i + 2,
-              KeyboardType.clavierDeBase,
-              { texteAvant: `$P_{\\overline{${ev[0]}}}({${ev[1]}})=$` },
-            )
-          : `$P_{\\overline{${ev[0]}}}({${ev[1]}})=\\ldots$`
+        calc1 = `$P_{${ev[0]}}({${ev[1]}})=$`
+        calc2 = `$P(${ev[1]})=$`
+        calc3 = `$P_{\\overline{${ev[0]}}}({${ev[1]}})=$`
         calc1C = `$P_{${ev[0]}}({${ev[1]}})=${miseEnEvidence(`${texNombre(Pev2sachantev1, 3)}`)}$`
         calc2C = `$P(${ev[1]})= ${miseEnEvidence(`${texNombre(Pev2, 3)}`)}$`
         calc3C = `$P_{\\overline{${ev[0]}}}({${ev[1]}})=${miseEnEvidence(`${texNombre(Pev2sachantev1b, 3)}`)}$`
 
-        calc4 = this.interactif
-          ? ajouteChampTexteMathLive(
-              this,
-              3 * i,
-              KeyboardType.clavierProbabilite,
-              { texteAvant: `$P_{${ev[1]}}( \\overline{${ev[0]}})=$` },
-            )
-          : `$P_{${ev[1]}}( \\overline{${ev[0]}})=\\ldots$`
-        calc5 = this.interactif
-          ? ajouteChampTexteMathLive(
-              this,
-              3 * i + 1,
-              KeyboardType.clavierProbabilite,
-              { texteAvant: `$P({${ev[0]}}\\cap {${ev[1]}})=$` },
-            )
-          : `$P({${ev[0]}}\\cap {${ev[1]}})=\\ldots$`
-        calc6 = this.interactif
-          ? ajouteChampTexteMathLive(
-              this,
-              3 * i + 2,
-              KeyboardType.clavierProbabilite,
-              { texteAvant: `$P( ${ev[0]})=$` },
-            )
-          : `$P( ${ev[0]})=\\ldots$`
+        calc4 = `$P_{${ev[1]}}( \\overline{${ev[0]}})=$`
+        calc5 = `$P({${ev[0]}}\\cap {${ev[1]}})=$`
+        calc6 = `$P( ${ev[0]})=$`
         calc4C = `$P_{${ev[1]}}( \\overline{${ev[0]}})=${miseEnEvidence(`${texNombre(Pev1bsachantev2, 3)}`)}$`
         calc5C = ` $P({${ev[0]}}\\cap {${ev[1]}})= ${miseEnEvidence(`${texNombre(Pev1 * Pev2sachantev1, 3)}`)}$`
         calc6C = `$P( ${ev[0]})=${miseEnEvidence(`${texNombre(Pev1, 3)}`)}$`
@@ -395,46 +342,60 @@ Enfin, ils estiment que $${texNombre(Pev2 * 100, 1)}\\,\\%$ des animaux contract
         texte += " En utilisant les données de l'énoncé, compléter :<br>"
 
         if (choice([true, false])) {
-          texte += ` ${calc1}${sp(10)}${calc2}${sp(10)}${calc3}`
-          handleAnswers(this, 3 * i, {
-            reponse: {
-              value: texNombre(Pev2sachantev1, 3),
-              options: { texteAvecCasse: true },
+          texte += addMultiMathfield(this, i, {
+            dataTemplate: `${calc1} %{champ1} ${sp(10)}${calc2} %{champ2} ${sp(10)} ${calc3} %{champ3}`,
+            dataOptions: {
+              champ1: { keyboard: KeyboardType.lycee, minWidth: 100 },
+              champ2: { keyboard: KeyboardType.lycee, minWidth: 100 },
+              champ3: { keyboard: KeyboardType.lycee, minWidth: 100 },
             },
           })
-          handleAnswers(this, 3 * i + 1, {
-            reponse: {
-              value: texNombre(Pev2, 3),
-              options: { texteAvecCasse: true },
+          handleAnswers(
+            this,
+            i,
+            {
+              bareme: toutAUnPoint,
+              champ1: {
+                value: texNombre(Pev2sachantev1, 3),
+              },
+              champ2: {
+                value: texNombre(Pev2, 3),
+              },
+              champ3: {
+                value: texNombre(Pev2sachantev1b, 3),
+              },
             },
-          })
-          handleAnswers(this, 3 * i + 2, {
-            reponse: {
-              value: texNombre(Pev2sachantev1b, 3),
-              options: { texteAvecCasse: true },
-            },
-          })
+            { formatInteractif: 'multiMathfield' },
+          )
+
           texteCorr = ` ${calc1C}${sp(10)}${calc2C}${sp(10)}${calc3C}`
         } else {
-          texte += ` ${calc4}${sp(10)}${calc5}${sp(10)}${calc6}`
-          handleAnswers(this, 3 * i, {
-            reponse: {
-              value: texNombre(Pev1bsachantev2, 3),
-              options: { texteAvecCasse: true },
+          texte += addMultiMathfield(this, i, {
+            dataTemplate: `${calc4} %{champ1} ${sp(10)}${calc5} %{champ2} ${sp(10)} ${calc6} %{champ3}`,
+            dataOptions: {
+              champ1: { keyboard: KeyboardType.lycee, minWidth: 100 },
+              champ2: { keyboard: KeyboardType.lycee, minWidth: 100 },
+              champ3: { keyboard: KeyboardType.lycee, minWidth: 100 },
             },
           })
-          handleAnswers(this, 3 * i + 1, {
-            reponse: {
-              value: texNombre(Pev1 * Pev2sachantev1, 3),
-              options: { texteAvecCasse: true },
+          handleAnswers(
+            this,
+            i,
+            {
+              bareme: toutAUnPoint,
+              champ1: {
+                value: texNombre(Pev1bsachantev2, 3),
+              },
+              champ2: {
+                value: texNombre(Pev1 * Pev2sachantev1, 3),
+              },
+              champ3: {
+                value: texNombre(Pev1, 3),
+              },
             },
-          })
-          handleAnswers(this, 3 * i + 2, {
-            reponse: {
-              value: texNombre(Pev1, 3),
-              options: { texteAvecCasse: true },
-            },
-          })
+            { formatInteractif: 'multiMathfield' },
+          )
+
           texteCorr = `${calc4C}${sp(10)}${calc5C}${sp(10)}${calc6C}`
         }
       }

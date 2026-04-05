@@ -1,7 +1,8 @@
 import { createList } from '../../lib/format/lists'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
+import { toutAUnPoint } from '../../lib/interactif/mathLive'
+import { addMultiMathfield } from '../../lib/interactif/MultiMathfield/MultiMathfield'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import {
   ecritureAlgebrique,
@@ -273,30 +274,30 @@ $\\lim\\limits_{h \\rightarrow 0} \\dfrac{1}{\\sqrt{${a}+h}+\\sqrt{${a}}}=\\dfra
 
         case 5: // 'polynôme second degré':
           {
-          b = randint(-2, 3)
-          c = randint(-4, 5, b)
-          const poly = new Trinome(1, b, c)
-          const valeurEnA = a * a + b * a + c
-          const valeurEnAh = `((${a}+h)^2${b === 0 ? `` : `${ecritureAlgebriqueSauf1(b)}(${a}+h)`}${c === 0 ? `` : `${ecritureAlgebrique(c)}`})`
-          const developpementAh = `${a ** 2}${ecritureAlgebrique(2 * a)} h+h^2${b === 0 ? `` : `${ecritureAlgebrique(b * a)}${ecritureAlgebriqueSauf1(b)}h`}${c === 0 ? `` : `${ecritureAlgebrique(c)}`}`
-          const simplificationAh = `${a * a}${ecritureAlgebrique(2 * a)}h+h^2${b === 0 ? `` : `${ecritureAlgebrique(b * a)}${ecritureAlgebriqueSauf1(b)}h`}${c === 0 ? `` : `${ecritureAlgebrique(c)}`}`
-          const reductionNum = `${rienSi1(2 * a + b)}h+h^2`
-          const factorisation = `h(${2 * a + b}+h)`
-          reponse1 = String(2 * a + b) + '+h'
-          reponse2 = String(2 * a + b)
+            b = randint(-2, 3)
+            c = randint(-4, 5, b)
+            const poly = new Trinome(1, b, c)
+            const valeurEnA = a * a + b * a + c
+            const valeurEnAh = `((${a}+h)^2${b === 0 ? `` : `${ecritureAlgebriqueSauf1(b)}(${a}+h)`}${c === 0 ? `` : `${ecritureAlgebrique(c)}`})`
+            const developpementAh = `${a ** 2}${ecritureAlgebrique(2 * a)} h+h^2${b === 0 ? `` : `${ecritureAlgebrique(b * a)}${ecritureAlgebriqueSauf1(b)}h`}${c === 0 ? `` : `${ecritureAlgebrique(c)}`}`
+            const simplificationAh = `${a * a}${ecritureAlgebrique(2 * a)}h+h^2${b === 0 ? `` : `${ecritureAlgebrique(b * a)}${ecritureAlgebriqueSauf1(b)}h`}${c === 0 ? `` : `${ecritureAlgebrique(c)}`}`
+            const reductionNum = `${rienSi1(2 * a + b)}h+h^2`
+            const factorisation = `h(${2 * a + b}+h)`
+            reponse1 = String(2 * a + b) + '+h'
+            reponse2 = String(2 * a + b)
 
-          // Texte spécifique pour la correction détaillée
-          texteApp = `\\text{Application à  } f(x)=${poly.tex}`
+            // Texte spécifique pour la correction détaillée
+            texteApp = `\\text{Application à  } f(x)=${poly.tex}`
 
-          texte = ` Soit $f$ la fonction définie pour tout $x$ de $\\mathbb{R}$ par $f(x)=${poly.tex}$.<br>`
-          texte += createList({
-            items: [Q1, Q2],
-            style: 'nombres',
-          })
-          texteCorr = createList({
-            items: [
-              IntroCorrection +
-                `
+            texte = ` Soit $f$ la fonction définie pour tout $x$ de $\\mathbb{R}$ par $f(x)=${poly.tex}$.<br>`
+            texte += createList({
+              items: [Q1, Q2],
+              style: 'nombres',
+            })
+            texteCorr = createList({
+              items: [
+                IntroCorrection +
+                  `
 $\\begin{aligned}t(h) &= \\dfrac{f(${a}+h)-f(${a})}{h}${this.correctionDetaillee ? `&${texteDef}` : ``}\\\\
 &= \\dfrac{${valeurEnAh}-(${ecritureParentheseSiNegatif(a)}^2${b === 0 ? `` : `${ecritureAlgebrique(b * a)}`}${c === 0 ? `` : `${ecritureAlgebrique(c)}`})}{h}${this.correctionDetaillee ? `&${texteApp}` : ``}\\\\
 &= \\dfrac{(${developpementAh})${a * a + b * a + c === 0 ? `-0` : `-${ecritureParentheseSiNegatif(valeurEnA)}`}}{h}${this.correctionDetaillee ? `&${texteDev}` : ``}\\\\
@@ -305,41 +306,42 @@ $\\begin{aligned}t(h) &= \\dfrac{f(${a}+h)-f(${a})}{h}${this.correctionDetaillee
 &= \\dfrac{${factorisation}}{h}${this.correctionDetaillee ? `&${texteFact}` : ``}\\\\
 &=${miseEnEvidence(`${2 * a + b}+h`)}${this.correctionDetaillee ? `&${texteSimpH}` : ``}\\\\
 \\end{aligned}$`,
-              `On calcule la limite du taux de variation quand $h$ tend vers $0$.<br>
+                `On calcule la limite du taux de variation quand $h$ tend vers $0$.<br>
 $\\lim\\limits_{h \\rightarrow 0} ${2 * a + b}+h=${2 * a + b}$<br>
 ` +
-                Conclusion +
-                ` $${a}$ et donc $f'(${a})=${miseEnEvidence(2 * a + b)}$.`,
-            ],
-            style: 'nombres',
-          })
-        }
+                  Conclusion +
+                  ` $${a}$ et donc $f'(${a})=${miseEnEvidence(2 * a + b)}$.`,
+              ],
+              style: 'nombres',
+            })
+          }
           break
 
         case 6: // 'polynôme second degré avec coefficient ≠ 1':
-          {const coefA = randint(-2, 3, [0, 1]) // coefficient de x² différent de 0 et 1
-          b = randint(-2, 2)
-          c = randint(-2, 3)
-          const poly6 = new Trinome(coefA, b, c)
-          const valeurEnA6 = coefA * a * a + b * a + c
-          const valeurEnAh6 = `(${rienSi1(coefA)}(${a}+h)^2${b === 0 ? `` : `${ecritureAlgebriqueSauf1(b)}(${a}+h)`}${c === 0 ? `` : `${ecritureAlgebrique(c)}`})`
-          const developpementAh6 = `${rienSi1(coefA)}\\times${ecritureParentheseSiNegatif(a)}^2${ecritureAlgebrique(2 * coefA * a)} h${ecritureAlgebriqueSauf1(coefA)}h^2${b === 0 ? `` : `${ecritureAlgebrique(b * a)}${ecritureAlgebriqueSauf1(b)}h`}${c === 0 ? `` : `${ecritureAlgebrique(c)}`}`
-          const simplificationAh6 = `${coefA * a * a}${ecritureAlgebrique(2 * coefA * a)}h${ecritureAlgebriqueSauf1(coefA)}h^2${b === 0 ? `` : `${ecritureAlgebrique(b * a)}${ecritureAlgebriqueSauf1(b)}h`}${c === 0 ? `` : `${ecritureAlgebrique(c)}`}`
-          const reductionNum6 = `${rienSi1(2 * coefA * a + b)}h${ecritureAlgebriqueSauf1(coefA)}h^2`
-          const factorisation6 = `h(${2 * coefA * a + b}${ecritureAlgebriqueSauf1(coefA)}h)`
+          {
+            const coefA = randint(-2, 3, [0, 1]) // coefficient de x² différent de 0 et 1
+            b = randint(-2, 2)
+            c = randint(-2, 3)
+            const poly6 = new Trinome(coefA, b, c)
+            const valeurEnA6 = coefA * a * a + b * a + c
+            const valeurEnAh6 = `(${rienSi1(coefA)}(${a}+h)^2${b === 0 ? `` : `${ecritureAlgebriqueSauf1(b)}(${a}+h)`}${c === 0 ? `` : `${ecritureAlgebrique(c)}`})`
+            const developpementAh6 = `${rienSi1(coefA)}\\times${ecritureParentheseSiNegatif(a)}^2${ecritureAlgebrique(2 * coefA * a)} h${ecritureAlgebriqueSauf1(coefA)}h^2${b === 0 ? `` : `${ecritureAlgebrique(b * a)}${ecritureAlgebriqueSauf1(b)}h`}${c === 0 ? `` : `${ecritureAlgebrique(c)}`}`
+            const simplificationAh6 = `${coefA * a * a}${ecritureAlgebrique(2 * coefA * a)}h${ecritureAlgebriqueSauf1(coefA)}h^2${b === 0 ? `` : `${ecritureAlgebrique(b * a)}${ecritureAlgebriqueSauf1(b)}h`}${c === 0 ? `` : `${ecritureAlgebrique(c)}`}`
+            const reductionNum6 = `${rienSi1(2 * coefA * a + b)}h${ecritureAlgebriqueSauf1(coefA)}h^2`
+            const factorisation6 = `h(${2 * coefA * a + b}${ecritureAlgebriqueSauf1(coefA)}h)`
 
-          // Texte spécifique pour la correction détaillée
-          texteApp = `\\text{Application à } f(x)=${poly6.tex}`
+            // Texte spécifique pour la correction détaillée
+            texteApp = `\\text{Application à } f(x)=${poly6.tex}`
 
-          texte = `Soit $f$ la fonction définie pour tout $x$ de $\\mathbb{R}$ par $f(x)=${poly6.tex}$.<br>`
-          texte += createList({
-            items: [Q1, Q2],
-            style: 'nombres',
-          })
-          texteCorr = createList({
-            items: [
-              IntroCorrection +
-                `
+            texte = `Soit $f$ la fonction définie pour tout $x$ de $\\mathbb{R}$ par $f(x)=${poly6.tex}$.<br>`
+            texte += createList({
+              items: [Q1, Q2],
+              style: 'nombres',
+            })
+            texteCorr = createList({
+              items: [
+                IntroCorrection +
+                  `
 $\\begin{aligned}t(h) &= \\dfrac{f(${a}+h)-f(${a})}{h}${this.correctionDetaillee ? `&${texteDef}` : ``}\\\\
 &= \\dfrac{${valeurEnAh6}-(${rienSi1(coefA)}\\times${ecritureParentheseSiNegatif(a)}^2${b === 0 ? `` : `${ecritureAlgebrique(b * a)}`}${c === 0 ? `` : `${ecritureAlgebrique(c)}`})}{h}${this.correctionDetaillee ? `&${texteApp}` : ``}\\\\
 &= \\dfrac{(${developpementAh6})${ecritureAlgebrique(-valeurEnA6)}}{h}${this.correctionDetaillee ? `&${texteDev}` : ``}\\\\
@@ -348,41 +350,41 @@ $\\begin{aligned}t(h) &= \\dfrac{f(${a}+h)-f(${a})}{h}${this.correctionDetaillee
 &= \\dfrac{${factorisation6}}{h}${this.correctionDetaillee ? `&${texteFact}` : ``}\\\\
 &=${miseEnEvidence(`${2 * coefA * a + b}${ecritureAlgebriqueSauf1(coefA)}h`)}${this.correctionDetaillee ? `&${texteSimpH}` : ``}\\\\
 \\end{aligned}$`,
-              `On calcule la limite du taux de variation quand $h$ tend vers $0$.<br>
+                `On calcule la limite du taux de variation quand $h$ tend vers $0$.<br>
 $\\lim\\limits_{h \\rightarrow 0} ${2 * coefA * a + b}${ecritureAlgebriqueSauf1(coefA)}h=${2 * coefA * a + b}$<br>
 ` +
-                Conclusion +
-                ` $${a}$ et donc $f'(${a})=${miseEnEvidence(2 * coefA * a + b)}$.`,
-            ],
-            style: 'nombres',
-          })
-          reponse1 = `${2 * coefA * a + b}${ecritureAlgebriqueSauf1(coefA)}h`
-          reponse2 = String(2 * coefA * a + b)
-        }
+                  Conclusion +
+                  ` $${a}$ et donc $f'(${a})=${miseEnEvidence(2 * coefA * a + b)}$.`,
+              ],
+              style: 'nombres',
+            })
+            reponse1 = `${2 * coefA * a + b}${ecritureAlgebriqueSauf1(coefA)}h`
+            reponse2 = String(2 * coefA * a + b)
+          }
           break
 
         case 7: // 'fonction a/x':
           {
-          const coefNum7 = randint(-5, 10, [0, 1, -1]) // coefficient au numérateur
+            const coefNum7 = randint(-5, 10, [0, 1, -1]) // coefficient au numérateur
 
-          // S'assurer que le point où on calcule la dérivée est différent du coefficient
-          // et qu'il n'y a pas de simplification facile
-          const pointA7 = coefNum7 + choice([-1, 1])
+            // S'assurer que le point où on calcule la dérivée est différent du coefficient
+            // et qu'il n'y a pas de simplification facile
+            const pointA7 = coefNum7 + choice([-1, 1])
 
-          const Q1cas7 = `Calculer le taux de variation $t(h)$ de $f$ entre $${pointA7}$ et $${pointA7}+h$, où $h$ est un réel non nul.`
-          const Q2cas7 = `En déduire que $f$ est dérivable en $${pointA7}$ et déterminer $f'(${pointA7})$.`
+            const Q1cas7 = `Calculer le taux de variation $t(h)$ de $f$ entre $${pointA7}$ et $${pointA7}+h$, où $h$ est un réel non nul.`
+            const Q2cas7 = `En déduire que $f$ est dérivable en $${pointA7}$ et déterminer $f'(${pointA7})$.`
 
-          texteApp = `\\text{Application à } f(x)=\\dfrac{${coefNum7}}{x}`
+            texteApp = `\\text{Application à } f(x)=\\dfrac{${coefNum7}}{x}`
 
-          texte = `Soit $f$ la fonction définie pour tout $x$ de $\\mathbb{R}^*$ par $f(x)=\\dfrac{${coefNum7}}{x}$.<br>`
-          texte += createList({
-            items: [Q1cas7, Q2cas7],
-            style: 'nombres',
-          })
-          texteCorr = createList({
-            items: [
-              IntroCorrection +
-                `
+            texte = `Soit $f$ la fonction définie pour tout $x$ de $\\mathbb{R}^*$ par $f(x)=\\dfrac{${coefNum7}}{x}$.<br>`
+            texte += createList({
+              items: [Q1cas7, Q2cas7],
+              style: 'nombres',
+            })
+            texteCorr = createList({
+              items: [
+                IntroCorrection +
+                  `
 $\\begin{aligned}t(h) &= \\dfrac{f(${pointA7}+h)-f(${pointA7})}{h}${this.correctionDetaillee ? `&${texteDef}` : ``}\\\\
 &= \\dfrac{\\dfrac{${coefNum7}}{${pointA7}+h}-\\dfrac{${coefNum7}}{${pointA7}}}{h}${this.correctionDetaillee ? `&${texteApp}` : ``}\\\\
 &= \\dfrac{\\dfrac{${coefNum7}\\times ${pointA7}}{${pointA7}(${pointA7}+h)}-\\dfrac{${coefNum7}(${pointA7}+h)}{${pointA7}(${pointA7}+h)}}{h}${this.correctionDetaillee ? `&\\text{Mise au même dénominateur}` : ``}\\\\
@@ -392,48 +394,48 @@ $\\begin{aligned}t(h) &= \\dfrac{f(${pointA7}+h)-f(${pointA7})}{h}${this.correct
 &= \\dfrac{${-coefNum7}h}{${pointA7}(${pointA7}+h)} \\times \\dfrac{1}{h}${this.correctionDetaillee ? `&\\text{Diviser par } h\\text{, c'est multiplier par }\\dfrac{1}{h}` : ``}\\\\
 &=${miseEnEvidence(`\\dfrac{${-coefNum7}}{${pointA7}(${pointA7}+h)}`)}${this.correctionDetaillee ? `&${texteSimpH}` : ``}\\\\
 \\end{aligned}$`,
-              `On calcule la limite du taux de variation quand $h$ tend vers $0$.<br>
+                `On calcule la limite du taux de variation quand $h$ tend vers $0$.<br>
 $\\lim\\limits_{h \\rightarrow 0} \\dfrac{${-coefNum7}}{${pointA7}(${pointA7}+h)}=\\dfrac{${-coefNum7}}{${pointA7 * pointA7}}$<br>
 ` +
-                Conclusion +
-                ` $${pointA7}$ et donc $f'(${pointA7})=${miseEnEvidence(`\\dfrac{${-coefNum7}}{${pointA7 * pointA7}}`)}$.`,
-            ],
-            style: 'nombres',
-          })
+                  Conclusion +
+                  ` $${pointA7}$ et donc $f'(${pointA7})=${miseEnEvidence(`\\dfrac{${-coefNum7}}{${pointA7 * pointA7}}`)}$.`,
+              ],
+              style: 'nombres',
+            })
 
-          reponse1 = `\\frac{${-coefNum7}}{${pointA7}(${pointA7}+h)}`
-          reponse2 = `\\frac{${-coefNum7}}{${pointA7 * pointA7}}`
-        }
+            reponse1 = `\\frac{${-coefNum7}}{${pointA7}(${pointA7}+h)}`
+            reponse2 = `\\frac{${-coefNum7}}{${pointA7 * pointA7}}`
+          }
           break
-        
+
         case 8: // ' a/(x+b)':
         default:
           {
-          const coefNum = randint(2, 6) // coefficient a du numérateur
-          const coefDenom = randint(-5, 5, [0, coefNum + 1]) // coefficient b de x+b
+            const coefNum = randint(2, 6) // coefficient a du numérateur
+            const coefDenom = randint(-5, 5, [0, coefNum + 1]) // coefficient b de x+b
 
-          a = coefNum + 1 - coefDenom
+            a = coefNum + 1 - coefDenom
 
-          // Redéclarer Q1 et Q2 avec la nouvelle valeur de a
-          const Q1cas8 = `Calculer le taux de variation $t(h)$ de $f$ entre $${a}$ et $${a}+h$, où $h$ est un réel non nul.`
-          const Q2cas8 = `En déduire que $f$ est dérivable en $${a}$ et déterminer $f'(${a})$.`
+            // Redéclarer Q1 et Q2 avec la nouvelle valeur de a
+            const Q1cas8 = `Calculer le taux de variation $t(h)$ de $f$ entre $${a}$ et $${a}+h$, où $h$ est un réel non nul.`
+            const Q2cas8 = `En déduire que $f$ est dérivable en $${a}$ et déterminer $f'(${a})$.`
 
-          // Texte spécifique pour la correction détaillée
-          texteApp = `\\text{Application à } f(x)=\\dfrac{${coefNum}}{x${ecritureAlgebrique(coefDenom)}}`
+            // Texte spécifique pour la correction détaillée
+            texteApp = `\\text{Application à } f(x)=\\dfrac{${coefNum}}{x${ecritureAlgebrique(coefDenom)}}`
 
-          const xA = a // renommer pour clarifier : x_a est le point où on calcule la dérivée
-          const denominateurEnA = xA + coefDenom // Calculer x_a + b
-          const coefNumOppose = -coefNum // Simplifier directement l'opposé de coefNum
-          reponse1 = `\\frac{${coefNumOppose}}{${denominateurEnA}(${reduireAxPlusB(1, denominateurEnA, 'h')}) }`
-          reponse2 = `\\frac{${coefNumOppose}}{${denominateurEnA * denominateurEnA}}`
-          texte = `Soit $f$ la fonction définie pour tout $x$ de $\\mathbb{R} \\smallsetminus \\{${-coefDenom}\\}$ par $f(x)=\\dfrac{${coefNum}}{x${ecritureAlgebrique(coefDenom)}}$.<br>`
-          texte += createList({
-            items: [Q1cas8, Q2cas8],
-            style: 'nombres',
-          })
-          texteCorr = createList({
-            items: [
-              `Pour déterminer le taux de variation de $f$ entre $${xA}$ et $${xA}+h$, on applique la définition :<br>
+            const xA = a // renommer pour clarifier : x_a est le point où on calcule la dérivée
+            const denominateurEnA = xA + coefDenom // Calculer x_a + b
+            const coefNumOppose = -coefNum // Simplifier directement l'opposé de coefNum
+            reponse1 = `\\frac{${coefNumOppose}}{${denominateurEnA}(${reduireAxPlusB(1, denominateurEnA, 'h')}) }`
+            reponse2 = `\\frac{${coefNumOppose}}{${denominateurEnA * denominateurEnA}}`
+            texte = `Soit $f$ la fonction définie pour tout $x$ de $\\mathbb{R} \\smallsetminus \\{${-coefDenom}\\}$ par $f(x)=\\dfrac{${coefNum}}{x${ecritureAlgebrique(coefDenom)}}$.<br>`
+            texte += createList({
+              items: [Q1cas8, Q2cas8],
+              style: 'nombres',
+            })
+            texteCorr = createList({
+              items: [
+                `Pour déterminer le taux de variation de $f$ entre $${xA}$ et $${xA}+h$, on applique la définition :<br>
 $\\begin{aligned}t(h) &= \\dfrac{f(${xA}+h)-f(${xA})}{h}${this.correctionDetaillee ? `&${texteDef}` : ``}\\\\
 &= \\dfrac{\\dfrac{${coefNum}}{${xA}+h${ecritureAlgebrique(coefDenom)}}-\\dfrac{${coefNum}}{${denominateurEnA}}}{h}${this.correctionDetaillee ? `&${texteApp}` : ``}\\\\
 &= \\dfrac{\\dfrac{${coefNum}\\times ${denominateurEnA}}{ ${denominateurEnA}(h${ecritureAlgebrique(denominateurEnA)})}-\\dfrac{${coefNum}(h${ecritureAlgebrique(denominateurEnA)})}{${denominateurEnA}(h${ecritureAlgebrique(denominateurEnA)})}}{h}${this.correctionDetaillee ? `&\\text{Mise au même dénominateur}` : ``}\\\\
@@ -443,27 +445,34 @@ $\\begin{aligned}t(h) &= \\dfrac{f(${xA}+h)-f(${xA})}{h}${this.correctionDetaill
 &= \\dfrac{${coefNumOppose}h}{${denominateurEnA}(h${ecritureAlgebrique(denominateurEnA)})} \\times \\dfrac{1}{h}${this.correctionDetaillee ? `&\\text{Diviser par } h\\text{, c'est multiplier par }\\dfrac{1}{h}` : ``}\\\\
 &=${miseEnEvidence(`\\dfrac{${coefNumOppose}}{${denominateurEnA}(h${ecritureAlgebrique(denominateurEnA)}) }`)}${this.correctionDetaillee ? `&${texteSimpH}` : ``}\\\\
 \\end{aligned}$`,
-              `On calcule la limite du taux de variation quand $h$ tend vers $0$.<br>
+                `On calcule la limite du taux de variation quand $h$ tend vers $0$.<br>
 $\\lim\\limits_{h \\rightarrow 0} \\dfrac{${coefNumOppose}}{(h${ecritureAlgebrique(denominateurEnA)})\\times ${denominateurEnA}}=\\dfrac{${coefNumOppose}}{${denominateurEnA * denominateurEnA}}$<br>
 ` +
-                Conclusion +
-                ` $${xA}$ et donc $f'(${xA})=${miseEnEvidence(`${new FractionEtendue(coefNumOppose, denominateurEnA * denominateurEnA).texFractionSimplifiee}`)}$.`,
-            ],
-            style: 'nombres',
-          })
-        }
+                  Conclusion +
+                  ` $${xA}$ et donc $f'(${xA})=${miseEnEvidence(`${new FractionEtendue(coefNumOppose, denominateurEnA * denominateurEnA).texFractionSimplifiee}`)}$.`,
+              ],
+              style: 'nombres',
+            })
+          }
           break
       }
-      texte += ajouteChampTexteMathLive(this, 2 * i, KeyboardType.lycee, {
-        texteAvant: `$t(h)=$`,
+      texte += addMultiMathfield(this, i, {
+        dataTemplate: `$t(h)=$ %{champ1} $f'(${a})=$ %{champ2}`,
+        dataOptions: {
+          champ1: { keyboard: KeyboardType.lycee, minWidth: 100 },
+          champ2: { keyboard: KeyboardType.lycee },
+        },
       })
-      texte += ajouteChampTexteMathLive(this, 2 * i + 1, KeyboardType.lycee, {
-        texteAvant: `$f'(${a})=$`,
-      })
-      handleAnswers(this, 2 * i, {
-        reponse: { value: reponse1, options: { calculFormel: true } },
-      })
-      handleAnswers(this, 2 * i + 1, { reponse: { value: reponse2 } })
+      handleAnswers(
+        this,
+        i,
+        {
+          bareme: toutAUnPoint,
+          champ1: { value: reponse1, options: { calculFormel: true } },
+          champ2: { value: reponse2 },
+        },
+        { formatInteractif: 'multiMathfield' },
+      )
       if (this.questionJamaisPosee(i, typeDeQuestion, a)) {
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr
