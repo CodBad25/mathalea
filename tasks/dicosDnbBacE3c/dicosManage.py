@@ -43,6 +43,8 @@ def locationName(text:str)->str:
         return 'Polynésie'
     elif text == 'ameriquesud' :
         return 'Amérique du sud'
+    elif text == 'amsud' :
+        return 'Amérique du sud'
     elif text == 'caledonie' :
         return 'Nouvelle Calédonie'
     elif text == 'grece' :

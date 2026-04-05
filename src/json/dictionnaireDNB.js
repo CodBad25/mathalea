@@ -5793,7 +5793,7 @@ export const dictionnaireDNB = {
 
   dnb_2023_11_amsud_1: {
     annee: '2023',
-    lieu: 'amsud',
+    lieu: 'Amérique du Sud',
     mois: 'Octobre',
     numeroInitial: '1',
     typeExercice: 'dnb',
@@ -5807,7 +5807,7 @@ export const dictionnaireDNB = {
   },
   dnb_2023_11_amsud_2: {
     annee: '2023',
-    lieu: 'amsud',
+    lieu: 'Amérique du Sud',
     mois: 'Octobre',
     numeroInitial: '2',
     typeExercice: 'dnb',
@@ -5821,7 +5821,7 @@ export const dictionnaireDNB = {
   },
   dnb_2023_11_amsud_3: {
     annee: '2023',
-    lieu: 'amsud',
+    lieu: 'Amérique du Sud',
     mois: 'Octobre',
     numeroInitial: '3',
     typeExercice: 'dnb',
@@ -5829,7 +5829,7 @@ export const dictionnaireDNB = {
   },
   dnb_2023_11_amsud_4: {
     annee: '2023',
-    lieu: 'amsud',
+    lieu: 'Amérique du Sud',
     mois: 'Octobre',
     numeroInitial: '4',
     typeExercice: 'dnb',
@@ -5837,7 +5837,7 @@ export const dictionnaireDNB = {
   },
   dnb_2023_11_amsud_5: {
     annee: '2023',
-    lieu: 'amsud',
+    lieu: 'Amérique du Sud',
     mois: 'Octobre',
     numeroInitial: '5',
     typeExercice: 'dnb',
@@ -6942,7 +6942,12 @@ export const dictionnaireDNB = {
     mois: 'Janvier',
     numeroInitial: '4',
     typeExercice: 'dnb',
-    tags: ['Géométrie plane', 'Aires et périmètres', 'Pythagore', 'Pourcentages'],
+    tags: [
+      'Géométrie plane',
+      'Aires et périmètres',
+      'Pythagore',
+      'Pourcentages',
+    ],
   },
   dnb_2026_01_sujet0vb_1: {
     annee: '2026',
@@ -6966,7 +6971,13 @@ export const dictionnaireDNB = {
     mois: 'Janvier',
     numeroInitial: '3',
     typeExercice: 'dnb',
-    tags: ['Proportionnalité', 'Fonctions', 'Lecture graphique', 'Volumes', 'Équations'],
+    tags: [
+      'Proportionnalité',
+      'Fonctions',
+      'Lecture graphique',
+      'Volumes',
+      'Équations',
+    ],
   },
   dnb_2026_01_sujet0vb_4: {
     annee: '2026',
