@@ -1,3 +1,6 @@
+// Importer renderKatex de mathalea
+import { renderKatex } from '../mathalea'
+
 function detectPixelsPerCm() {
   try {
     const testElement = document.createElement('div')
@@ -131,6 +134,7 @@ export class GuideAne extends HTMLElement {
     this.style.background = '#f9f9f9'
     this.style.position = 'relative'
   }
+
   // Des méthodes d'accès publiques pour la correction interactive et le feedback
   public getN(): number {
     return this.n
@@ -682,6 +686,7 @@ export class GuideAne extends HTMLElement {
     this.svg.appendChild(textElement)
     return textElement
   }
+
   createArc(
     cx: number,
     cy: number,
@@ -976,7 +981,7 @@ export class GuideAne extends HTMLElement {
 
     if (this.dragTarget === 'B') {
       let x = pt.x
-      let y = this.A.y // même ordonnée que A
+      const y = this.A.y // même ordonnée que A
 
       // Aimantation systématique au centimètre: deltaX = k * pixelsParCm
       const deltaX = x - this.A.x
@@ -1009,7 +1014,7 @@ export class GuideAne extends HTMLElement {
 
   onTouchStart(e: TouchEvent) {
     e.preventDefault()
-    const touch = e.touches[0]
+    // const touch = e.touches[0]
     const target = e.target as SVGElement
     const draggable = target.getAttribute('data-draggable')
 
@@ -1028,7 +1033,7 @@ export class GuideAne extends HTMLElement {
 
     if (this.dragTarget === 'B') {
       let x = pt.x
-      let y = this.A.y
+      const y = this.A.y
 
       // Aimantation systématique au centimètre
       const deltaX = x - this.A.x
@@ -1131,6 +1136,7 @@ export class GuideAne extends HTMLElement {
     this.lengthDisplay.style.border = '1px solid #ccc'
     this.appendChild(this.lengthDisplay)
   }
+
   // Nouvelle méthode pour formater la valeur AD selon les paramètres
   formatADValue(lengthCm: number): string {
     if (this.p === 0) {
@@ -1362,6 +1368,3 @@ export const GuideAnePresets = {
     return addGuideAne({ alpha })
   },
 }
-
-// Importer renderKatex de mathalea
-import { renderKatex } from '../mathalea'
