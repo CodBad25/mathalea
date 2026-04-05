@@ -124,7 +124,7 @@ export default class ModeliseInequations extends Exercice {
              `
               reponse = texNombre(Math.ceil((a - b) / (d - c)) + 1, 0)
             } else {
-              texteCorr += ` Comme $\\dfrac{${abs(a - b)}}{${texNombre(abs(d - c), 2)}}\\simeq ${texNombre((a - b) / (d - c), 2)}$, c'est donc pour une distance minimale de  $${miseEnEvidence(Math.ceil((a - b) / (d - c)))}\\text{ km}$ que le tarif B est plus intéressant que le tarif A.
+              texteCorr += ` Comme $\\dfrac{${abs(a - b)}}{${texNombre(abs(d - c), 2)}}\\approx ${texNombre((a - b) / (d - c), 2)}$, c'est donc pour une distance minimale de  $${miseEnEvidence(Math.ceil((a - b) / (d - c)))}\\text{ km}$ que le tarif B est plus intéressant que le tarif A.
                             `
               reponse = texNombre(Math.ceil((a - b) / (d - c)), 0)
             }
@@ -163,7 +163,7 @@ export default class ModeliseInequations extends Exercice {
             x&\\leqslant\\dfrac{${budget - b}}{${texNombre(a, 2)}}
     \\end{aligned}$<br>`
 
-            texteCorr += `Comme $\\dfrac{${budget - b}}{${texNombre(a, 2)}}${Math.round((budget - b) / a) === (budget - b) / a ? '=' : '\\simeq'} ${texNombre((budget - b) / a, 2)}$, ${quidam} pourra faire au maximum  $${Math.floor((budget - b) / a)}\\text{ km}$ pendant le mois avec son budget de $${budget}$ €.
+            texteCorr += `Comme $\\dfrac{${budget - b}}{${texNombre(a, 2)}}${Math.round((budget - b) / a) === (budget - b) / a ? '=' : '\\approx'} ${texNombre((budget - b) / a, 2)}$, ${quidam} pourra faire au maximum  $${Math.floor((budget - b) / a)}\\text{ km}$ pendant le mois avec son budget de $${budget}$ €.
        `
             reponse = texNombre(Math.floor((budget - b) / a), 0)
 
@@ -197,7 +197,7 @@ export default class ModeliseInequations extends Exercice {
                 ${texNombre(PB, 2)}x&\\geqslant ${texNombre(RT - PB * EM, 2)}\\\\
                 x&\\geqslant \\dfrac{${texNombre(RT - PB * EM, 2)}}{${texNombre(PB, 2)}}\\\\
     \\end{aligned}$<br>
-  Comme  $\\dfrac{${texNombre(RT - PB * EM, 2)}}{${texNombre(PB, 2)}}${Math.round((RT - PB * EM) / PB) === (RT - PB * EM) / PB ? '=' : '\\simeq'} ${texNombre((RT - PB * EM) / PB, 1)}$,
+  Comme  $\\dfrac{${texNombre(RT - PB * EM, 2)}}{${texNombre(PB, 2)}}${Math.round((RT - PB * EM) / PB) === (RT - PB * EM) / PB ? '=' : '\\approx'} ${texNombre((RT - PB * EM) / PB, 1)}$,
   il faudra au minimum ${Math.round((RT - PB * EM) / PB) === (RT - PB * EM) / PB ? `$${texNombre((RT - PB * EM) / PB, 0)}$` : `$${texNombre(Math.floor((RT - PB * EM) / PB) + 1, 0)} $`} entrées pour que la recette de la journée soit au moins égale à  $${texNombre(RT)}$ €.
                             `
             reponse =

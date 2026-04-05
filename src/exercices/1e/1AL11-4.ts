@@ -225,7 +225,7 @@ export default class TermesSASG extends Exercice {
           ${NomS}_n&=${a}\\times ${ecritureParentheseSiMoins(texNombre(q, 1))}^n\\\\
            ${NomS}_{${k}}&=${a === 1 ? `${ecritureParentheseSiMoins(texNombre(q, 1))}^{${k}}` : `${a}\\times ${ecritureParentheseSiMoins(texNombre(q, 1))}^{${k}}`}
            \\end{aligned}$
-          <br>Ainsi, $${NomS}_{${k}}\\simeq${miseEnEvidence(texNombre(resultat, 1))}$.`
+          <br>Ainsi, $${NomS}_{${k}}\\approx${miseEnEvidence(texNombre(resultat, 1))}$.`
 
           break
         case 5:
@@ -252,7 +252,7 @@ export default class TermesSASG extends Exercice {
           ${NomS}_n&=${a}\\times ${ecritureParentheseSiMoins(texNombre(q, 1))}^{n-1}\\\\
            ${NomS}_{${k}}&=${a === 1 ? `${ecritureParentheseSiMoins(texNombre(q, 1))}^{${k - 1}}` : `${a}\\times ${ecritureParentheseSiMoins(texNombre(q, 1))}^{${k - 1}}`}
            \\end{aligned}$
-          <br>Ainsi, $${NomS}_{${k}}\\simeq${miseEnEvidence(texNombre(resultat, 1))}$.`
+          <br>Ainsi, $${NomS}_{${k}}\\approx${miseEnEvidence(texNombre(resultat, 1))}$.`
 
           break
 
@@ -280,7 +280,7 @@ export default class TermesSASG extends Exercice {
           ${NomS}_n&=${a}\\times ${ecritureParentheseSiMoins(texNombre(q, 1))}^{n-${p}}\\\\
            ${NomS}_{${k}}&=${a === 1 ? `${ecritureParentheseSiMoins(texNombre(q, 1))}^{${k - p}}` : `${a}\\times ${ecritureParentheseSiMoins(texNombre(q, 1))}^{${k - p}}`}
            \\end{aligned}$
-          <br>Ainsi, $${NomS}_{${k}}\\simeq${miseEnEvidence(texNombre(resultat, 1))}$.`
+          <br>Ainsi, $${NomS}_{${k}}\\approx${miseEnEvidence(texNombre(resultat, 1))}$.`
 
           break
       }
@@ -299,7 +299,7 @@ export default class TermesSASG extends Exercice {
         texte +=
           '<br>' +
           ajouteChampTexteMathLive(this, i, KeyboardType.clavierDeBase, {
-            texteAvant: `$${NomS}_{${k}}\\simeq$`,
+            texteAvant: `$${NomS}_{${k}}\\approx$`,
           })
       }
       if (this.questionJamaisPosee(i, texte)) {

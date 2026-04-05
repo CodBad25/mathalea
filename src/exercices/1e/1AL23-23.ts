@@ -331,7 +331,7 @@ export default class EquationDuSecondDegreAvecUnParametre extends Exercice {
       "Celui-ci étant strictement positif, l'équation $\\Delta = 0$ a 2 solutions :<br>"
 
     if (m1.includes('sqrt')) {
-      texteCorr += `$m_1=${m1}\\simeq${texNombre(Number(x1), 4)}$ et $m_2=${m2}\\simeq${texNombre(Number(x2), 4)}$<br>`
+      texteCorr += `$m_1=${m1}\\approx${texNombre(Number(x1), 4)}$ et $m_2=${m2}\\approx${texNombre(Number(x2), 4)}$<br>`
     } else {
       texteCorr += `$m_1=${m1}$ et $m_2=${m2}$<br>`
     }

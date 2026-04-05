@@ -2,6 +2,7 @@ import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { setReponse } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { nombreDeChiffresDansLaPartieEntiere } from '../../lib/outils/nombres'
 import { texNombre } from '../../lib/outils/texNombre'
 import { context } from '../../modules/context'
@@ -131,10 +132,10 @@ export default class CalculValeurApprocheeRacineCarree extends Exercice {
             KeyboardType.clavierNumbers,
           )
         }
-        texteCorr = `$\\sqrt{${a}} \\simeq ${texNombre(Math.sqrt(a), 6)}$.<br>`
+        texteCorr = `$\\sqrt{${a}} \\approx ${texNombre(Math.sqrt(a), 6)}$.<br>`
         texteCorr += `Or $${reponseG} < ${texNombre(Math.sqrt(a), 6)} < ${reponseD}$,<br>`
         texteCorr += `et $${texNombre(Math.sqrt(a), 6)}$ est plus proche de $${reponse}$ que de $${pasReponse}$.<br>`
-        texteCorr += `Donc l'arrondi ${type} près de $\\sqrt{${a}}$ est $${reponse}$.`
+        texteCorr += `Donc l'arrondi ${type} près de $\\sqrt{${a}}$ est $${miseEnEvidence(miseEnEvidence(reponse))}$.`
       } else {
         a = randint(2, 143, [4, 9, 16, 25, 36, 49, 64, 81, 100, 121])
         reponseG = Math.floor(Math.sqrt(a))
@@ -164,7 +165,7 @@ export default class CalculValeurApprocheeRacineCarree extends Exercice {
         } else {
           texteCorr += `donc $\\sqrt{${reponseG ** 2}} < \\sqrt{${a}} < \\sqrt{${reponseD ** 2}}$ puisque la fonction racine carrée est strictement croissante sur $\\mathbb{R}_+$,<br>`
         }
-        texteCorr += `enfin $${reponseG} < \\sqrt{${a}} < ${reponseD}$.`
+        texteCorr += `enfin $${miseEnEvidence(reponseG)} < \\sqrt{${a}} < ${miseEnEvidence(reponseD)}$.`
       }
       if (this.questionJamaisPosee(i, a)) {
         if (context.isAmc) {

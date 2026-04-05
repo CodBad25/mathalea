@@ -301,7 +301,7 @@ $\\begin{array}{|l|}\n
               Son premier terme est $${NomS}_{0}=${u0}$.`,
               `Pour tout entier naturel $n$, $${NomS}_n=${u0}\\times ${texNombre(cm, 2)}^n$.`,
               `$${2024 + Rannee}$ correspond à $n=${Rannee}$, d'où :<br>
-$${NomS}_{${Rannee}}=${u0}\\times (${texNombre(cm, 2)})^{${Rannee}}\\simeq ${texNombre(new Decimal(cm).pow(Rannee).mul(u0), 0)}$.<br>
+$${NomS}_{${Rannee}}=${u0}\\times (${texNombre(cm, 2)})^{${Rannee}}\\approx ${texNombre(new Decimal(cm).pow(Rannee).mul(u0), 0)}$.<br>
 Ce modèle prévoit $${texNombre(new Decimal(cm).pow(Rannee).mul(u0), 0)}$ habitants en $${2024 + Rannee}$.`,
               `On complète la fonction Python ci-dessous afin qu'elle permette de calculer, pour tout entier naturel $n$, le terme $${NomS}_n$.<br><br>
 $\\begin{array}{|l|}\n
@@ -449,7 +449,7 @@ En utilisant la calculatrice, on trouve $n=${n1}$.`,
 &=${texNombre(new Decimal(u0).div(cm.sub(1)))}\\times (${texNombre(cm, 2)}^{n+1}-1)
  \\end{aligned}$<br>
  
- Pour $n=${v}$, on obtient $S_{${v}}=${texNombre(new Decimal(u0).div(cm.sub(1)))}\\times (${texNombre(cm, 2)}^{${v}+1}-1)\\simeq ${texNombre(new Decimal(u0).div(cm.sub(1)).mul(cm.pow(v + 1)), 0)}$.<br>
+ Pour $n=${v}$, on obtient $S_{${v}}=${texNombre(new Decimal(u0).div(cm.sub(1)))}\\times (${texNombre(cm, 2)}^{${v}+1}-1)\\approx ${texNombre(new Decimal(u0).div(cm.sub(1)).mul(cm.pow(v + 1)), 0)}$.<br>
  Au bout de $${v}$ semaines, le nombre total de visionnages est $${texNombre(new Decimal(u0).div(cm.sub(1)).mul(cm.pow(v + 1)), 0)}$.`,
             ],
             style: 'nombres',
@@ -496,8 +496,8 @@ Calculer $t_0$, puis montrer que la suite $(t_n)$ est géométrique de raison $q
               `$${NomS}_{1}-${NomS}_{0}=${texNombre(u1, 2)}-${u0}=${texNombre(new Decimal(u1).sub(u0), 2)}$ <br>
                 $${NomS}_{2}-${NomS}_{1}=${texNombre(u2, 2)}-${texNombre(u1, 2)}=${texNombre(new Decimal(u2).sub(u1), 2)}$ <br> 
                 $${NomS}_{1}-${NomS}_{0}\\neq ${NomS}_{2}-${NomS}_{1}$ donc la suite n'est pas arithmétique.<br><br>
-                $\\dfrac{${NomS}_{1}}{${NomS}_{0}}=\\dfrac{${texNombre(u1, 2)}}{${u0}}\\simeq${texNombre(new Decimal(u1).div(u0), 3)}$ <br>
-                $\\dfrac{${NomS}_{2}}{${NomS}_{1}}=\\dfrac{${texNombre(u2, 2)}}{${texNombre(u1, 2)}}\\simeq${texNombre(new Decimal(u2).div(u1), 3)}$ <br> 
+                $\\dfrac{${NomS}_{1}}{${NomS}_{0}}=\\dfrac{${texNombre(u1, 2)}}{${u0}}\\approx${texNombre(new Decimal(u1).div(u0), 3)}$ <br>
+                $\\dfrac{${NomS}_{2}}{${NomS}_{1}}=\\dfrac{${texNombre(u2, 2)}}{${texNombre(u1, 2)}}\\approx${texNombre(new Decimal(u2).div(u1), 3)}$ <br> 
                 $\\dfrac{${NomS}_{1}}{${NomS}_{0}}\\neq \\dfrac{${NomS}_{2}}{${NomS}_{1}}$ donc la suite n'est pas géométrique.<br><br>
                 `,
 
@@ -523,7 +523,7 @@ Calculer $t_0$, puis montrer que la suite $(t_n)$ est géométrique de raison $q
 Or $t_n = ${NomS}_n${ecritureAlgebrique(-b)}$ donc $${NomS}_n = ${texNombre(new Decimal(u0).sub(b), 1)}\\times ${texNombre(cm, 2)}^n${ecritureAlgebrique(b)}$
 `,
                   `On a $${NomS}_{${nbreS}}=${texNombre(new Decimal(u0).sub(b), 1)}\\times ${texNombre(cm, 2)}^{${nbreS}}${ecritureAlgebrique(b)}
-\\simeq ${texNombre(new Decimal(b.sub(u0).mul(-1).mul(cm.pow(nbreS)).add(b)), 0)}$.<br>
+\\approx ${texNombre(new Decimal(b.sub(u0).mul(-1).mul(cm.pow(nbreS)).add(b)), 0)}$.<br>
 Au bout de $${nbreS}$ semaines, la surface envahie par les chardons est d'environ $${texNombre(new Decimal(b.sub(u0).mul(-1).mul(cm.pow(nbreS)).add(b)), 0)}\\text{ m}^2$.<br>
 Comme $${texNombre(new Decimal(b.sub(u0).mul(-1).mul(cm.pow(nbreS)).add(b)), 0)} ${b.sub(u0).mul(-1).mul(cm.pow(nbreS)).add(b).lessThan(u0.mul(2)) ? '<' : '>'} 2\\times ${texNombre(u0, 0)}$, la surface envahie par les chardons 
 ${b.sub(u0).mul(-1).mul(cm.pow(nbreS)).add(b).lessThan(u0.mul(2)) ? "n'aura pas" : 'aura'} doublé au bout de $${nbreS}$ semaines. `,
@@ -587,7 +587,7 @@ $\\begin{array}{|l|}\n
           texteCorr = createList({
             items: [
               `Augmenter de $${p}\\,\\%$ revient à multiplier par $${texNombre(cm, 2)}$.<br>
-                  Ainsi, $d_{2}=${texNombre(cm, 2)}\\times ${u0}=${texNombre(new Decimal(cm).mul(u0), 2)}$ et $d_{3}=${texNombre(cm, 2)}\\times ${texNombre(new Decimal(cm).mul(u0), 2)}\\simeq ${texNombre(new Decimal(cm).pow(2).mul(u0), 0)}$
+                  Ainsi, $d_{2}=${texNombre(cm, 2)}\\times ${u0}=${texNombre(new Decimal(cm).mul(u0), 2)}$ et $d_{3}=${texNombre(cm, 2)}\\times ${texNombre(new Decimal(cm).mul(u0), 2)}\\approx ${texNombre(new Decimal(cm).pow(2).mul(u0), 0)}$
                   `,
               `Chaque semaine, la distance parcourue augmente de $${p}\\,\\%$ par rapport à celle parcourue la semaine précédente. <br>
               Ainsi, quel que soit $n \\geqslant 1$, $d_{n+1} = ${texNombre(cm, 2)} \\times d_n$.<br>
@@ -665,12 +665,12 @@ $\\begin{array}{|l|}\n
           texteCorr = createList({
             items: [
               `Diminuer de $${p}\\,\\%$ revient à multiplier par $${texNombre(cm, 2)}$.<br>
-                Ainsi, $h_{1}=${texNombre(cm, 2)}\\times ${texNombre(u0, 0)}=${texNombre(new Decimal(cm).mul(u0), 2)}$ et  $h_{2}=${texNombre(cm, 2)}\\times ${texNombre(new Decimal(cm).mul(u0), 2)}\\simeq${texNombre(new Decimal(cm).pow(2).mul(u0), 2)}$.<br>`,
+                Ainsi, $h_{1}=${texNombre(cm, 2)}\\times ${texNombre(u0, 0)}=${texNombre(new Decimal(cm).mul(u0), 2)}$ et  $h_{2}=${texNombre(cm, 2)}\\times ${texNombre(new Decimal(cm).mul(u0), 2)}\\approx${texNombre(new Decimal(cm).pow(2).mul(u0), 2)}$.<br>`,
               `À chaque rebond, la balle perd $${p}\\,\\%$ de sa hauteur précédente, donc pour tout entier naturel $n$, $h_{n+1}=${texNombre(cm, 2)}\\times h_n$.<br>
 On reconnaît la définition par récurrence d'une suite géométrique de raison $${texNombre(cm, 2)}$.<br>
 Son premier terme est $h_0=${u0}$.`,
               `Pour tout entier naturel $n$, $h_n=${texNombre(u0, 0)}\\times ${texNombre(cm, 2)}^n$.`,
-              `$h_{${n}}=${texNombre(u0, 0)}\\times (${texNombre(cm, 2)})^{${n}}\\simeq ${texNombre(cm.pow(n).mul(u0), 2)}$.<br>
+              `$h_{${n}}=${texNombre(u0, 0)}\\times (${texNombre(cm, 2)})^{${n}}\\approx ${texNombre(cm.pow(n).mul(u0), 2)}$.<br>
 La balle rebondit à une hauteur de $${texNombre(cm.pow(n).mul(u0), 2)}\\text{ m}$ après $${n}$ rebonds.`,
               `On compléte les pointillés pour que cette fonction renvoie le nombre de rebonds à partir duquel la hauteur maximale de la balle sera inférieure ou égale à $${b}$ centimètres : <br>
    $\\begin{array}{|l|}\n
@@ -781,7 +781,7 @@ ${texNombre(u0, 0)}+${r}n&> ${texNombre(u0 + k * r + 10, 0)} \\\\
 ${r}n&>${texNombre(k * r + 10, 0)}\\\\
 n&>\\dfrac{${texNombre(k * r + 10, 0)}}{${r}}
 \\end{aligned}$<br>
-$\\dfrac{${texNombre(k * r + 10, 0)}}{${r}}\\simeq ${texNombre((k * r + 10) / r, 2)}$, c'est donc $${Math.ceil((k * r + 10) / r)}$ ans après $2020$ que le salaire de ${quidam[0]} dépassera $${texNombre(u0 + k * r + 10, 0)}$, 
+$\\dfrac{${texNombre(k * r + 10, 0)}}{${r}}\\approx ${texNombre((k * r + 10) / r, 2)}$, c'est donc $${Math.ceil((k * r + 10) / r)}$ ans après $2020$ que le salaire de ${quidam[0]} dépassera $${texNombre(u0 + k * r + 10, 0)}$, 
 c'est-à-dire en $${texNombre(2020 + Math.ceil((k * r + 10) / r), 0)}$.`,
                   `Le salaire de ${quidam[1]} augmente tous les ans de $${p}\\,\\%$.<br>
 On a donc pour tout entier naturel $n$, $v_{n+1}=${texNombre(cm, 2)}\\times v_n$.<br>
@@ -789,7 +789,7 @@ On reconnaît la définition par récurrence d'une suite géométrique de raison
 Comme  son premier terme  est $v_0=${texNombre(v0, 0)}$, alors pour tout entier naturel $n$, $v_n=${texNombre(v0, 0)}\\times ${texNombre(cm, 2)}^n$.
 `,
                   `Le salaire de ${quidam[1]} en $${annee}$ est donné par $v_{${texNombre(annee - 2020, 0)}}$. <br>
-$v_{${texNombre(annee - 2020, 0)}}=${texNombre(v0, 0)}\\times ${texNombre(cm, 2)}^{${texNombre(annee - 2020, 0)}}\\simeq
+$v_{${texNombre(annee - 2020, 0)}}=${texNombre(v0, 0)}\\times ${texNombre(cm, 2)}^{${texNombre(annee - 2020, 0)}}\\approx
  ${texNombre(new Decimal(cm).pow(annee - 2020).mul(v0), 2)}$<br>
  En $${annee}$, ${quidam[1]} gagne $${texNombre(new Decimal(cm).pow(annee - 2020).mul(v0), 2)}$ € par an.
  `,
