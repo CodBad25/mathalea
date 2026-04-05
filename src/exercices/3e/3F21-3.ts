@@ -7,10 +7,7 @@ import { segment } from '../../lib/2d/segmentsVecteurs'
 import { texteParPoint } from '../../lib/2d/textes'
 import { milieu } from '../../lib/2d/utilitairesPoint'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import {
-  handleAnswers,
-  setReponse,
-} from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
 import { ecritureAlgebrique, rienSi1 } from '../../lib/outils/ecritures'
@@ -19,11 +16,7 @@ import { numAlpha, sp } from '../../lib/outils/outilString'
 import { texNombre } from '../../lib/outils/texNombre'
 import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
-import {
-  contraindreValeur,
-  listeQuestionsToContenu,
-  randint,
-} from '../../modules/outils'
+import { contraindreValeur, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
 export const titre =
@@ -228,7 +221,8 @@ export default class PenteEtOrdonneeOrigineDroite extends Exercice {
           ? `$${miseEnEvidence(ecritureAlgebrique(b))}$.`
           : '.')
 
-      if (vocabulaire === 'affine') setReponse(this, questionInteractif, b)
+      if (vocabulaire === 'affine')
+        handleAnswers(this, questionInteractif, { reponse: { value: b } })
       handleAnswers(
         this,
         (vocabulaire === 'affine' ? 1 : 0) + questionInteractif,
@@ -323,6 +317,5 @@ export default class PenteEtOrdonneeOrigineDroite extends Exercice {
       }
       cpt++
     }
-    listeQuestionsToContenu(this)
   }
 }
