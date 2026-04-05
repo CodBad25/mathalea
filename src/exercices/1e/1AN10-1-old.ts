@@ -1,8 +1,7 @@
 import { createList } from '../../lib/format/lists'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { toutAUnPoint } from '../../lib/interactif/mathLive'
-import { addMultiMathfield } from '../../lib/interactif/MultiMathfield/MultiMathfield'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import {
   ecritureAlgebrique,
@@ -21,7 +20,7 @@ import {
 import Trinome from '../../modules/Trinome'
 import Exercice from '../Exercice'
 export const titre = 'Calculer un nombre dérivé à partir de la définition'
-export const interactifType = 'multiMathfield'
+export const interactifType = 'mathLive'
 export const interactifReady = true
 
 export const dateDePublication = '16/12/2021'
@@ -32,7 +31,7 @@ export const dateDeModifImportante = '29/11/2025'
  * Passage en typescript le 06/02/2025 + ajout des miseEnEvidence + interactivité Jean-Claude Lhote
  */
 
-export const uuid = '29212'
+export const uuid = '29202'
 
 export const refs = {
   'fr-fr': ['1AN10-1'],
@@ -456,23 +455,16 @@ $\\lim\\limits_{h \\rightarrow 0} \\dfrac{${coefNumOppose}}{(h${ecritureAlgebriq
           }
           break
       }
-      texte += addMultiMathfield(this, i, {
-        dataTemplate: `$t(h)=$ %{champ1} $f'(${a})=$ %{champ2}`,
-        dataOptions: {
-          champ1: { keyboard: KeyboardType.lycee, minWidth: 100 },
-          champ2: { keyboard: KeyboardType.lycee },
-        },
+      texte += ajouteChampTexteMathLive(this, 2 * i, KeyboardType.lycee, {
+        texteAvant: `$t(h)=$`,
       })
-      handleAnswers(
-        this,
-        i,
-        {
-          bareme: toutAUnPoint,
-          champ1: { value: reponse1, options: { calculFormel: true } },
-          champ2: { value: reponse2 },
-        },
-        { formatInteractif: 'multiMathfield' },
-      )
+      texte += ajouteChampTexteMathLive(this, 2 * i + 1, KeyboardType.lycee, {
+        texteAvant: `$f'(${a})=$`,
+      })
+      handleAnswers(this, 2 * i, {
+        reponse: { value: reponse1, options: { calculFormel: true } },
+      })
+      handleAnswers(this, 2 * i + 1, { reponse: { value: reponse2 } })
       if (this.questionJamaisPosee(i, typeDeQuestion, a)) {
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr
