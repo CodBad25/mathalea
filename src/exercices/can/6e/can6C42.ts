@@ -100,7 +100,7 @@ export default class ComparerFractionAUn extends Exercice {
           `${a.texFraction}\\quad %{champ1} \\quad 1`,
           KeyboardType.clavierCompare,
         )
-        this.correction = `Le numérateur de $${a.texFraction}$ est plus petit que son dénominateur. <br>
+        this.correction = `Le numérateur de $${a.texFraction}$ est plus petit que le dénominateur de $${a.texFraction}$.<br>
           On en déduit :    $${a.texFraction} ${miseEnEvidence('<')} 1$.`
         this.reponse = '<'
         handleAnswers(this, i, {
@@ -116,7 +116,7 @@ export default class ComparerFractionAUn extends Exercice {
           `${b.texFraction}\\quad %{champ1} \\quad 1`,
           KeyboardType.clavierCompare,
         )
-        this.correction = `Le numérateur de $${b.texFraction}$ est plus grand que son dénominateur. <br>
+        this.correction = `Le numérateur de $${b.texFraction}$ est plus grand que le dénominateur de $${b.texFraction}$.<br>
             On en déduit :    $${b.texFraction} ${miseEnEvidence('>')} 1$.`
         handleAnswers(this, i, {
           champ1: { value: '>', options: { texteSansCasse: true } },
