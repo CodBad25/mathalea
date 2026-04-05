@@ -2,11 +2,11 @@
  * ⚠️ Cet exercice est utilisé dans le test : tests/e2e/tests/view/viewcan.2024.2e.test.ts ⚠️
  */
 
-import ExerciceSimple from '../../ExerciceSimple'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { choice } from '../../../lib/outils/arrayOutils'
-import FractionEtendue from '../../../modules/FractionEtendue'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { choice } from '../../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import FractionEtendue from '../../../modules/FractionEtendue'
+import ExerciceSimple from '../../ExerciceSimple'
 
 export const titre = 'Compléter une égalité '
 export const interactifReady = true
@@ -35,7 +35,7 @@ export default class NomExercice extends ExerciceSimple {
         this.question = `Compléter : <br>
       `
       }
-      this.correction = `Le nombre qui multiplié par $3$ donne $17$ est $${miseEnEvidence(this.reponse)}$.
+      this.correction = `Le nombre qui, multiplié par $3$, donne $17$ est $${miseEnEvidence(this.reponse)}$.
     `
       this.canEnonce = 'Compléter.'
       this.canReponseACompleter = '$3\\times \\ldots =17$'
@@ -52,7 +52,7 @@ export default class NomExercice extends ExerciceSimple {
         this.question = `Compléter : <br>
       `
       }
-      this.correction = `Le nombre qui multiplié par $${b}$ donne $${a}$ est $${miseEnEvidence(this.reponse)}$.
+      this.correction = `Le nombre qui, multiplié par $${b}$, donne $${a}$ est $${miseEnEvidence(this.reponse)}$.
       `
       this.canEnonce = 'Compléter.'
       this.canReponseACompleter = `$${b}\\times \\ldots =${a}$`
