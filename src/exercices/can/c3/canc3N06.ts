@@ -1,11 +1,11 @@
+import { propositionsQcm } from '../../../lib/interactif/qcm'
 import { choice } from '../../../lib/outils/arrayOutils'
+import { texteEnCouleurEtGras } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { context } from '../../../modules/context'
-import { propositionsQcm } from '../../../lib/interactif/qcm'
+import FractionEtendue from '../../../modules/FractionEtendue'
 import { listeQuestionsToContenu } from '../../../modules/outils'
 import Exercice from '../../Exercice'
-import FractionEtendue from '../../../modules/FractionEtendue'
-import { texteEnCouleurEtGras } from '../../../lib/outils/embellissements'
 export const titre = 'Comparer deux nombres sur une droite graduée (QCM)'
 export const interactifReady = true
 export const interactifType = 'qcm'
@@ -15,7 +15,6 @@ export const dateDePublication = '17/11/2022'
 
 /**
  * @author Gilles Mora
-
  */
 
 export const uuid = 'a8597'
@@ -112,7 +111,6 @@ export default class ComparerDroiteGrad extends Exercice {
     for (
       let i = 0, frac, f, texte, texteCorr, fdec, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       switch (choice([1, 2])) {
         case 1:
@@ -123,10 +121,10 @@ export default class ComparerDroiteGrad extends Exercice {
           this.canEnonce = texte
           if (fdec < 1) {
             texteCorr = `Une fraction est inférieure à $1$ lorsque son numérateur est plus petit que son dénominateur. <br>
-       Ici, $${f[0]} < ${f[1]}$, donc la fraction $${frac.texFraction}$ est inférieure à $1$ et par suite ${texteEnCouleurEtGras(`$${frac.texFraction}$ est placée avant $1$ sur une droite graduée`)}.  `
+       Ici, $${f[0]} < ${f[1]}$, donc la fraction $${frac.texFraction}$ est inférieure à $1$ et, par suite, $${frac.texFraction}$ est placée ${texteEnCouleurEtGras(`avant`)} $1$ sur une droite graduée.`
           } else {
             texteCorr = `Une fraction est supérieure à $1$ lorsque son numérateur est plus grand que son dénominateur. <br>
-       Ici, $${f[0]} > ${f[1]}$, donc la fraction $${frac.texFraction}$ est supérieure à $1$ et par suite ${texteEnCouleurEtGras(`$${frac.texFraction}$ est placée après $1$ sur une droite graduée`)}.  `
+       Ici, $${f[0]} > ${f[1]}$, donc la fraction $${frac.texFraction}$ est supérieure à $1$ et, par suite, $${frac.texFraction}$ est placée ${texteEnCouleurEtGras(`après`)} $1$ sur une droite graduée.`
           }
           this.autoCorrection[i] = {
             enonce: texte,
@@ -151,10 +149,10 @@ export default class ComparerDroiteGrad extends Exercice {
           this.canEnonce = texte
           if (fdec < 0.5) {
             texteCorr = `Une fraction est inférieure à $\\dfrac{1}{2}$ lorsque son numérateur est plus petit que la moitié de son dénominateur. <br>
-       Ici, $${f[1]}\\div 2=${texNombre(f[1] / 2, 1)}$ et $${f[0]} < ${texNombre(f[1] / 2, 1)}$ donc la fraction $${frac.texFraction}$ est inférieure à $\\dfrac{1}{2}$ et par suite elle est placée avant $\\dfrac{1}{2}$ sur une droite graduée.  `
+       Ici, $${f[1]}\\div 2=${texNombre(f[1] / 2, 1)}$ et $${f[0]} < ${texNombre(f[1] / 2, 1)}$ donc la fraction $${frac.texFraction}$ est inférieure à $\\dfrac{1}{2}$ et, par suite, $${frac.texFraction}$ est placée ${texteEnCouleurEtGras(`avant`)} $\\dfrac{1}{2}$ sur une droite graduée.`
           } else {
             texteCorr = `Une fraction est supérieure à $\\dfrac{1}{2}$ lorsque son numérateur est plus grand que la moitié de son dénominateur. <br>
-          Ici, $${f[1]}\\div 2=${texNombre(f[1] / 2, 1)}$ et $${f[0]} > ${texNombre(f[1] / 2, 1)}$ donc la fraction $${frac.texFraction}$ est supérieure à $\\dfrac{1}{2}$ et par suite ${texteEnCouleurEtGras(`$${frac.texFraction}$ est placée après $\\dfrac{1}{2}$ sur une droite graduée`)}.  `
+          Ici, $${f[1]}\\div 2=${texNombre(f[1] / 2, 1)}$ et $${f[0]} > ${texNombre(f[1] / 2, 1)}$ donc la fraction $${frac.texFraction}$ est supérieure à $\\dfrac{1}{2}$ et, par suite, $${frac.texFraction}$ est placée ${texteEnCouleurEtGras(`après`)} $\\dfrac{1}{2}$ sur une droite graduée.`
           }
           this.autoCorrection[i] = {
             enonce: texte,

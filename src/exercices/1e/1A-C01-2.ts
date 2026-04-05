@@ -95,7 +95,7 @@ export default class Auto1AC1b extends ExerciceQcmA {
   versionAleatoire: () => void = () => {
     let compteur = 0
     do {
-      // 25 cas diffÃ©rents avec 4 nombres chacun (uniquement fractions avec dÃ©cimaux exacts)
+      // 25 cas différents avec 4 nombres chacun (uniquement fractions avec décimaux exacts)
       const cas = [
         // Cas 1
         {
@@ -274,13 +274,13 @@ export default class Auto1AC1b extends ExerciceQcmA {
         },
       ]
 
-      // SÃ©lection alÃ©atoire d'un cas
+      // Sélection aléatoire d'un cas
       const casChoisi = choice(cas)
 
-      // Choix alÃ©atoire entre plus grand ou plus petit
+      // Choix aléatoire entre plus grand ou plus petit
       const cherchePlusGrand = choice([true, false])
 
-      // Construction des 4 nombres avec leurs reprÃ©sentations
+      // Construction des 4 nombres avec leurs représentations
       const nombres = [
         {
           tex: this.formaterFraction(
@@ -316,13 +316,13 @@ export default class Auto1AC1b extends ExerciceQcmA {
         },
       ]
 
-      // Tri selon le critÃ¨re demandÃ©
+      // Tri selon le critÃ¨re demandé
       const nombresTriesParValeur = [...nombres].sort((x, y) => x.val - y.val)
       const solution = cherchePlusGrand
         ? nombresTriesParValeur[nombresTriesParValeur.length - 1]
         : nombresTriesParValeur[0]
 
-      // Construction de l'Ã©noncÃ©
+      // Construction de l'énoncé
       this.enonce = `Parmi les quatre nombres suivants, lequel est le ${cherchePlusGrand ? 'plus grand' : 'plus petit'} ?`
 
       // Construction de la correction
@@ -341,12 +341,12 @@ export default class Auto1AC1b extends ExerciceQcmA {
         .map((n) => texNombre(Math.round(n.val * 10000) / 10000))
         .join(' < ')
 
-      correctionTexte += `On a donc : $${valeursTriees}$<br><br>`
+      correctionTexte += `On a donc : $${valeursTriees}$.<br>`
       correctionTexte += `Le ${cherchePlusGrand ? 'plus grand' : 'plus petit'} nombre est donc : $${miseEnEvidence(solution.tex)}$.`
 
       this.correction = correctionTexte
 
-      // Construction des rÃ©ponses (bonne rÃ©ponse en premier)
+      // Construction des réponses (bonne réponse en premier)
       const autresNombres = nombres.filter((n) => n.tex !== solution.tex)
 
       this.reponses = [

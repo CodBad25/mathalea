@@ -1,11 +1,12 @@
-import { choice, enleveElement } from '../../../lib/outils/arrayOutils'
-import Exercice from '../../Exercice'
-import FractionEtendue from '../../../modules/FractionEtendue'
+import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
 import { remplisLesBlancs } from '../../../lib/interactif/questionMathLive'
+import { choice, enleveElement } from '../../../lib/outils/arrayOutils'
+import FractionEtendue from '../../../modules/FractionEtendue'
 import { obtenirListeFractionsIrreductibles } from '../../../modules/fractions'
 import { listeQuestionsToContenu, randint } from '../../../modules/outils'
-import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
+import Exercice from '../../Exercice'
 
+import { bleuMathalea } from '../../../lib/colors'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -38,7 +39,6 @@ export default class ExerciceComparerDeuxFractionsCAN extends Exercice {
     for (
       let i = 0, cpt = 0, texte, texteCorr, signe, signe2;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       this.autoCorrection[i] = {}
       const fractionAbsolue = choice(listeFractions)
@@ -89,7 +89,7 @@ export default class ExerciceComparerDeuxFractionsCAN extends Exercice {
       let signeAsurB
       if (fraction.signe < 0) signeAsurB = '-'
       else signeAsurB = ''
-      texteCorr = `$${fraction.texFSD}= ${signeAsurB} \\dfrac{${Math.abs(fractionAbsolue.num).toString() + miseEnEvidence('\\times  ' + k.toString())}}{${Math.abs(fractionAbsolue.den).toString() + miseEnEvidence('\\times  ' + k.toString())}}=${fraction.reduire(k).texFSD}\\quad$`
+      texteCorr = `$${fraction.texFSD}= ${signeAsurB} \\dfrac{${Math.abs(fractionAbsolue.num).toString() + miseEnEvidence('\\times  ' + k.toString(), bleuMathalea)}}{${Math.abs(fractionAbsolue.den).toString() + miseEnEvidence('\\times  ' + k.toString(), bleuMathalea)}}=${fraction.reduire(k).texFSD}\\quad$`
       if (ordreDesFractions) {
         texteCorr += `  et   $\\quad${fraction.reduire(k).texFSD} ${signe} ${autreFraction.texFSD} \\quad$ donc $\\quad ${fraction.texFSD} ${miseEnEvidence(signe)} ${autreFraction.texFSD}$.`
       } else {

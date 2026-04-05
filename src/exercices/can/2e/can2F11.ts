@@ -87,11 +87,11 @@ export default class ComparerAvecFctCarre extends Exercice {
             Autrement dit, si $a$ et $b$ sont deux nombres  positifs et si $a < b$, alors $a^2 < b^2$.<br>`
 
           if (a < b) {
-            texteCorr += `Comme $${texNombre(a)}${miseEnEvidence('\\boldsymbol{<}', 'blue')}${texNombre(b)}$,
-          alors  $${texNombre(a)}^2${miseEnEvidence('\\boldsymbol{<}', 'blue')}${texNombre(b)}^2$.`
+            texteCorr += `Comme $${texNombre(a)}${miseEnEvidence('<', 'blue')}${texNombre(b)}$,
+          alors  $${miseEnEvidence(`${texNombre(a)}^2 < ${texNombre(b)}^2`)}$.`
           } else {
-            texteCorr += `Comme $${texNombre(b)}${miseEnEvidence('\\boldsymbol{<}', 'blue')}${texNombre(a)}$,
-          alors  $${texNombre(b)}^2${miseEnEvidence('\\boldsymbol{<}', 'blue')}${texNombre(a)}^2$.`
+            texteCorr += `Comme $${texNombre(b)}${miseEnEvidence('<', 'blue')}${texNombre(a)}$,
+          alors  $${miseEnEvidence(`${texNombre(b)}^2 < ${texNombre(a)}^2`)}$.`
           }
           this.canEnonce = `Comparer $${texNombre(a)}^2$ et $${texNombre(b)}^2$.`
 
@@ -146,11 +146,11 @@ export default class ComparerAvecFctCarre extends Exercice {
             Autrement dit, si $a$ et $b$ sont deux nombres  négatifs et si $a < b$, alors $a^2 > b^2$.<br>`
 
           if (a < b) {
-            texteCorr += `Comme $${texNombre(a)}${miseEnEvidence('\\boldsymbol{<}', 'blue')}${texNombre(b)}$,
-        alors  $(${texNombre(a)})^2${miseEnEvidence('\\boldsymbol{>}', 'blue')}(${texNombre(b)})^2$`
+            texteCorr += `Comme $${texNombre(a)}${miseEnEvidence('<', 'blue')}${texNombre(b)}$,
+        alors  $${miseEnEvidence(`${texNombre(a)}^2 > ${texNombre(b)}^2`)}$.`
           } else {
-            texteCorr += `Comme $${texNombre(b)}${miseEnEvidence('\\boldsymbol{<}', 'blue')}${texNombre(a)}$,
-        alors  $(${texNombre(b)})^2${miseEnEvidence('\\boldsymbol{>}', 'blue')}(${texNombre(a)})^2$.`
+            texteCorr += `Comme $${texNombre(b)}${miseEnEvidence('<', 'blue')}${texNombre(a)}$,
+        alors  $${miseEnEvidence(`${texNombre(b)}^2 > ${texNombre(a)}^2`)}$.`
           }
           this.canEnonce = `Comparer $(${texNombre(a)})^2$ et $(${texNombre(b)})^2$.`
 
@@ -213,13 +213,13 @@ export default class ComparerAvecFctCarre extends Exercice {
              Cela signifie que deux nombres positifs sont rangés dans le même ordre que leurs carrés.<br>
              Autrement dit, si $a$ et $b$ sont deux nombres  positifs et si $a < b$, alors $a^2 < b^2$.<br>`
           if (abs(a) < abs(b)) {
-            texteCorr += `Comme $${texNombre(a)}${miseEnEvidence('\\boldsymbol{<}', 'blue')}${texNombre(-b)}$,
-        alors  $${texNombre(a)}^2${miseEnEvidence('\\boldsymbol{<}', 'blue')}${texNombre(-b)}^2$.<br>
-        On en déduit que $${texNombre(a)}^2 < (${texNombre(b)})^2$.`
+            texteCorr += `Comme $${texNombre(a)}${miseEnEvidence('<', 'blue')}${texNombre(-b)}$,
+        alors  $${texNombre(a)}^2${miseEnEvidence('<', 'blue')}${texNombre(-b)}^2$.<br>
+        On en déduit que $${miseEnEvidence(`${texNombre(a)}^2 < ${texNombre(b)}^2`)}$.`
           } else {
-            texteCorr += `Comme $${texNombre(a)}${miseEnEvidence('\\boldsymbol{>}', 'blue')}${texNombre(-b)}$,
-        alors  $${texNombre(a)}^2${miseEnEvidence('\\boldsymbol{>}', 'blue')}${texNombre(-b)}^2$.<br>
-        On en déduit que $${texNombre(a)}^2 > (${texNombre(b)})^2$.`
+            texteCorr += `Comme $${texNombre(a)}${miseEnEvidence('>', 'blue')}${texNombre(-b)}$,
+        alors  $${texNombre(a)}^2${miseEnEvidence('>', 'blue')}${texNombre(-b)}^2$.<br>
+        On en déduit que $${miseEnEvidence(`${texNombre(a)}^2 > ${texNombre(b)}^2`)}$.`
           }
 
           break
