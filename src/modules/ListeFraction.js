@@ -1,7 +1,7 @@
 import { listeDesDiviseurs, ppcmListe } from '../lib/outils/primalite'
 
-function ppcm([...n]) {
-  return parseInt(ppcmListe(...n))
+function ppcm(n) {
+  return parseInt(ppcmListe(n))
 }
 
 /**
