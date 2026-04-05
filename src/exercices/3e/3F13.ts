@@ -2,7 +2,10 @@
 import { courbe } from '../../lib/2d/Courbe'
 import { repere } from '../../lib/2d/reperes'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import {
+  handleAnswers,
+  setReponse,
+} from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { resolutionSystemeLineaire2x2 } from '../../lib/mathFonctions/outilsMaths'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
@@ -209,8 +212,11 @@ export default class AntecedentGraphique extends Exercice {
               texteAvant: `Le (ou les) antécédent(s) de ${fx1} (séparer les nombres avec un point-virgule) :`,
             },
           )
-          setReponse(this, indexInteractif, [`${x1};${x3}`, `${x3};${x1}`], {
-            formatInteractif: 'texte',
+          handleAnswers(this, indexInteractif, {
+            reponse: {
+              value: `${x1};${x3}`,
+              options: { suiteDeNombres: true },
+            },
           })
           incrementInteractif = 1
           texteCorr = `$${fx1}$ a deux antécédents $${miseEnEvidence(x1)}$ et $${miseEnEvidence(x3)}$, on note $f(${miseEnEvidence(x1)})=f(${miseEnEvidence(x3)})=${fx1}$.<br>`

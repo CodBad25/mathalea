@@ -2,7 +2,7 @@ import { graphiqueInterpole } from '../../lib/2d/GraphiqueInterpole'
 import { repere } from '../../lib/2d/reperes'
 import { deuxColonnes } from '../../lib/format/miseEnPage'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
@@ -276,37 +276,50 @@ export default class AntecedentEtImageGraphique extends Exercice {
     this.contenuCorrection = ''
     if (lettreQuestion[0] !== null) {
       this.contenuCorrection += `${numAlpha(lettreQuestion[0])} L'image de $${x0}$ est $${miseEnEvidence(a)}$, on note $f(${x0})=${miseEnEvidence(a)}$.`
-      setReponse(this, lettreQuestion[0], a)
+      handleAnswers(this, lettreQuestion[0], {
+        reponse: { value: a, options: { nombreDecimalSeulement: true } },
+      })
     }
     if (lettreQuestion[1] !== null) {
       this.contenuCorrection += `<br>${numAlpha(lettreQuestion[1])} L'image de $${x0 + 5}$ est $${miseEnEvidence((b + c) / 2)}$, on note $f(${x0 + 5})=${miseEnEvidence((b + c) / 2)}$.`
-      setReponse(this, lettreQuestion[1], (b + c) / 2)
+      handleAnswers(this, lettreQuestion[1], {
+        reponse: {
+          value: (b + c) / 2,
+          options: { nombreDecimalSeulement: true },
+        },
+      })
     }
     if (lettreQuestion[2] !== null && lettreQuestion[3] !== null) {
       if (ordre === 1) {
         this.contenuCorrection += `<br>${numAlpha(lettreQuestion[2])} $${b}$ a pour unique antécédent $${miseEnEvidence(x0 + 4)}$, on note $f(${miseEnEvidence(x0 + 4)})=${b}$.`
-        setReponse(this, lettreQuestion[2], x0 + 4)
-        this.contenuCorrection += `<br>${numAlpha(lettreQuestion[3])} $${c}$ a deux antécédents $${miseEnEvidence(x0 + 2)}$ et $${miseEnEvidence(x0 + 6)}$, on note $f(${miseEnEvidence(x0 + 2)})=f(${miseEnEvidence(x0 + 6)})=${c}$.`
-        setReponse(
-          this,
-          lettreQuestion[3],
-          [`${x0 + 2};${x0 + 6}`, `${x0 + 6};${x0 + 2}`],
-          {
-            formatInteractif: 'texte',
+        handleAnswers(this, lettreQuestion[2], {
+          reponse: {
+            value: x0 + 4,
+            options: { nombreDecimalSeulement: true },
           },
-        )
+        })
+        this.contenuCorrection += `<br>${numAlpha(lettreQuestion[3])} $${c}$ a deux antécédents $${miseEnEvidence(x0 + 2)}$ et $${miseEnEvidence(x0 + 6)}$, on note $f(${miseEnEvidence(x0 + 2)})=f(${miseEnEvidence(x0 + 6)})=${c}$.`
+        handleAnswers(this, lettreQuestion[3], {
+          reponse: {
+            value: `${x0 + 2};${x0 + 6}`,
+            options: { suiteDeNombres: true },
+          },
+        })
       } else {
         this.contenuCorrection += `<br>${numAlpha(lettreQuestion[2])} $${c}$ a deux antécédents $${miseEnEvidence(x0 + 2)}$ et $${miseEnEvidence(x0 + 6)}$, on note $f(${miseEnEvidence(x0 + 2)})=f(${miseEnEvidence(x0 + 6)})=${c}$.`
-        setReponse(
-          this,
-          lettreQuestion[2],
-          [`${x0 + 2};${x0 + 6}`, `${x0 + 6};${x0 + 2}`],
-          {
-            formatInteractif: 'texte',
+        handleAnswers(this, lettreQuestion[2], {
+          reponse: {
+            value: `${x0 + 2};${x0 + 6}`,
+            options: { suiteDeNombres: true },
           },
-        )
+        })
         this.contenuCorrection += `<br>${numAlpha(lettreQuestion[3])} $${b}$ a pour unique antécédent $${miseEnEvidence(x0 + 4)}$, on note $f(${miseEnEvidence(x0 + 4)})=${b}$.`
-        setReponse(this, lettreQuestion[3], x0 + 4)
+        handleAnswers(this, lettreQuestion[3], {
+          reponse: {
+            value: x0 + 4,
+            options: { nombreDecimalSeulement: true },
+          },
+        })
       }
     }
 

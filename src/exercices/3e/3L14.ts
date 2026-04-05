@@ -1,5 +1,5 @@
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import {
@@ -11,13 +11,13 @@ import {
   texteEnCouleurEtGras,
 } from '../../lib/outils/embellissements'
 import { context } from '../../modules/context'
+import FractionEtendue from '../../modules/FractionEtendue'
 import { fraction } from '../../modules/fractions'
 import {
   contraindreValeur,
   listeQuestionsToContenu,
   randint,
 } from '../../modules/outils'
-import { texArrayReponsesCoupleDeFractionsEgalesEtSimplifiees } from '../../modules/utilitairesFractionEtendues'
 import Exercice from '../Exercice'
 
 export const titre = 'Résoudre une équation produit nul'
@@ -99,9 +99,11 @@ export default class ResoudreUneEquationProduitNul extends Exercice {
         break
     }
     for (
-      let i = 0, a, b, c, d, solution1, solution2, texte, texteCorr, cpt = 0;
+      let i = 0, a, b, c, d, texte, texteCorr, cpt = 0;
       i < this.nbQuestions && cpt < 50;
     ) {
+      let solution1: number | FractionEtendue
+      let solution2: number | FractionEtendue
       // initialisation des variables pour this.questionJamaisPosee
       a = 0
       c = 0
@@ -123,7 +125,6 @@ export default class ResoudreUneEquationProduitNul extends Exercice {
             `$x=${0 - b}$` +
             ` ${texteEnCouleurEtGras('ou', 'black')} ` +
             `$x=${0 - d}$`
-          setReponse(this, i, [`${-b};${-d}`, `${-d};${-b}`])
           solution1 = Math.min(-b, -d)
           solution2 = Math.max(-b, -d)
           break
@@ -146,7 +147,6 @@ export default class ResoudreUneEquationProduitNul extends Exercice {
             (choix === 0 ? `$x=${b}$` : `$x=${-d}$`) +
             ` ${texteEnCouleurEtGras('ou', 'black')} ` +
             (choix === 0 ? `$x=${-d}$` : `$x=${b}$`)
-          setReponse(this, i, [`${b};${-d}`, `${-d};${b}`])
           solution1 = Math.min(b, -d)
           solution2 = Math.max(b, -d)
           break
@@ -189,15 +189,8 @@ export default class ResoudreUneEquationProduitNul extends Exercice {
             (choix === 0 ? `$x=${-b}$` : `$x=${-d / c}$`) +
             ` ${texteEnCouleurEtGras('ou', 'black')} ` +
             (choix === 0 ? `$x=${-d / c}$` : `$x=${-b}$`)
-          /* if (-b * c === -d) {
-            setReponse(this, i, `${-b}`)
-            solution1 = -b
-            solution2 = -b
-          } else { */
-          setReponse(this, i, [`${-b};${-d / c}`, `${-d / c};${-b}`])
           solution1 = Math.min(-b, -d / c)
           solution2 = Math.max(-b, -d / c)
-          // }
           break
         }
         case 42: {
@@ -233,7 +226,6 @@ export default class ResoudreUneEquationProduitNul extends Exercice {
             ` ${texteEnCouleurEtGras('ou', 'black')} ` +
             (choix === 0 ? `$x=${-d / c}$` : `$x=${b}$`)
           // il ne peut y avoir de solution double, il y a un positif et un négatif
-          setReponse(this, i, [`${b};${-d / c}`, `${-d / c};${b}`])
           solution1 = -d / c // la négative en premier
           solution2 = b
           break
@@ -269,15 +261,8 @@ export default class ResoudreUneEquationProduitNul extends Exercice {
             `$x=${-b / a}$` +
             ` ${texteEnCouleurEtGras('ou', 'black')} ` +
             `$x=${-d / c}$`
-          /* if (-b * c === -d * a) {
-            setReponse(this, i, `${-b / a}`)
-            solution1 = -b / a
-            solution2 = -b / a
-          } else { */
-          setReponse(this, i, [`${-b / a};${-d / c}`, `${-d / c};${-b / a}`])
           solution1 = Math.min(-b / a, -d / c)
           solution2 = Math.max(-b / a, -d / c)
-          // }
           break
         case 4: {
           // (ax+b)(cx-d)=0  avec b/a et d/c entiers.
@@ -320,7 +305,6 @@ export default class ResoudreUneEquationProduitNul extends Exercice {
             ` ${texteEnCouleurEtGras('ou', 'black')} ` +
             (choix === 0 ? `$x=${d / c}$` : `$x=${-b / a}$`)
           // il ne peut y avoir de solution double, il y a un positif et un négatif
-          setReponse(this, i, [`${-b / a};${d / c}`, `${d / c};${-b / a}`])
           solution1 = -b / a // la négative en premier
           solution2 = d / c
           break
@@ -356,16 +340,6 @@ export default class ResoudreUneEquationProduitNul extends Exercice {
           if (texFractionFromString(d, c) !== texFractionReduite(d, c)) {
             texteCorr += `$=-${texFractionReduite(d, c)}$`
           }
-          /* if (b * c === d * a) {
-            setReponse(this, i, `$-${texFractionReduite(d, c)}$`)
-            solution1 = fraction(-d, c).simplifie()
-            solution2 = fraction(-d, c).simplifie()
-          } else { */
-          setReponse(
-            this,
-            i,
-            texArrayReponsesCoupleDeFractionsEgalesEtSimplifiees(-b, a, -d, c),
-          )
           if (-b / a < -d / c) {
             solution1 = fraction(-b, a).simplifie()
             solution2 = fraction(-d, c).simplifie()
@@ -427,22 +401,22 @@ export default class ResoudreUneEquationProduitNul extends Exercice {
               texteCorr += `$=${texFractionReduite(d, c)}$`
             }
           }
-
-          // il ne peut y avoir de solution double, il y a un positif et un négatif
-          setReponse(
-            this,
-            i,
-            texArrayReponsesCoupleDeFractionsEgalesEtSimplifiees(-b, a, d, c),
-          )
           solution1 = fraction(-b, a).simplifie() // la négative en premier
           solution2 = fraction(d, c).simplifie()
           break
         }
       }
-      if (listeTypeDeQuestions[i] !== 5 && listeTypeDeQuestions[i] !== 6)
-        texteCorr += `<br>Les solutions de l'équation sont : $${miseEnEvidence(solution1)}$ et $${miseEnEvidence(solution2)}$.`
-      else
-        texteCorr += `<br>Les solutions de l'équation sont : $${miseEnEvidence('-' + texFractionReduite(b, a))}$ et $${miseEnEvidence((listeTypeDeQuestions[i] === 5 ? '-' : '') + texFractionReduite(d, c))}$.`
+      const solution1Interacif =
+        solution1 instanceof FractionEtendue ? solution1.texFSD : solution1
+      const solution2Interacif =
+        solution2 instanceof FractionEtendue ? solution2.texFSD : solution2
+      handleAnswers(this, i, {
+        reponse: {
+          value: `${solution1Interacif};${solution2Interacif}`,
+          options: { suiteDeNombres: true },
+        },
+      })
+      texteCorr += `<br>Les solutions de l'équation sont : $${miseEnEvidence(`${solution1Interacif}`)}$ et $${miseEnEvidence(`${solution2Interacif}`)}$.`
       texte += ajouteChampTexteMathLive(
         this,
         i,

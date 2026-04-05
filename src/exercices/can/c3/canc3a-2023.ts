@@ -206,7 +206,7 @@ export default class SujetCAN2023CM2 extends Exercice {
               texte += ajouteChampTexteMathLive(
                 this,
                 index,
-                KeyboardType.clavierFullOperations,
+                KeyboardType.clavierNumbers,
               )
             }
             nbChamps = 1
