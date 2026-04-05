@@ -2683,6 +2683,107 @@ describe('fonctionComparaison', () => {
   //     ██████  ██         ██    ██  ██████  ██   ████
   //
   //
+  //    ███████ ██   ██ ██████   █████  ███    ██ ██████  ███████ ██████
+  //    ██       ██ ██  ██   ██ ██   ██ ████   ██ ██   ██ ██      ██   ██
+  //    █████     ███   ██████  ███████ ██ ██  ██ ██   ██ █████   ██   ██
+  //    ██       ██ ██  ██      ██   ██ ██  ██ ██ ██   ██ ██      ██   ██
+  //    ███████ ██   ██ ██      ██   ██ ██   ████ ██████  ███████ ██████
+  //
+  //
+
+  it("Vérifie le fonctionnement de l'option expanded", () => {
+    let result = fonctionComparaison('6 \\times x \\times x -8', '6x^2-8', {
+      expanded: true,
+    })
+    expect(result.isOk).toBe(true)
+
+    result = fonctionComparaison(
+      '-8+6 \\times x \\times x',
+      '6 \\times x \\times x -8',
+      {
+        expanded: true,
+      },
+    )
+    expect(result.isOk).toBe(true)
+
+    result = fonctionComparaison('-8+6 \\times x \\times x', '6x^2-8', {
+      expanded: true,
+    })
+    expect(result.isOk).toBe(true)
+
+    result = fonctionComparaison('x \\times 6 \\times x-8', '6x^2-8', {
+      expanded: true,
+    })
+    expect(result.isOk).toBe(true)
+
+    result = fonctionComparaison('x \\times x \\times x', 'x^3', {
+      expanded: true,
+    })
+    expect(result.isOk).toBe(true)
+
+    result = fonctionComparaison('8 \\times (6 \\times x+5)', '8(6x+5)', {
+      expanded: true,
+    })
+    expect(result.isOk).toBe(true)
+
+    result = fonctionComparaison('(6 \\times x+5) \\times 8', '8(6x+5)', {
+      expanded: true,
+    })
+    expect(result.isOk).toBe(true)
+
+    result = fonctionComparaison('6x^2-8', '6x^2-8', {
+      expanded: true,
+    })
+    expect(result.isOk).toBe(false)
+    expect(result.feedback).toBe(
+      'La réponse fournie est bien égale à celle attendue mais il manque au moins un signe $\\times$.',
+    )
+
+    result = fonctionComparaison('6 \\times x^2-8', '6x^2-8', {
+      expanded: true,
+    })
+    expect(result.isOk).toBe(false)
+    expect(result.feedback).toBe(
+      'La réponse fournie est bien égale à celle attendue mais il manque au moins un signe $\\times$.',
+    )
+
+    result = fonctionComparaison('x \\times x^2', 'x^3', {
+      expanded: true,
+    })
+    expect(result.isOk).toBe(false)
+    expect(result.feedback).toBe(
+      'La réponse fournie est bien égale à celle attendue mais il manque au moins un signe $\\times$.',
+    )
+
+    result = fonctionComparaison('(6x+5) \\times 8', '8(6x+5)', {
+      expanded: true,
+    })
+    expect(result.isOk).toBe(false)
+    expect(result.feedback).toBe(
+      'La réponse fournie est bien égale à celle attendue mais il manque au moins un signe $\\times$.',
+    )
+
+    result = fonctionComparaison('8(6 \\times x+5)', '8(6x+5)', {
+      expanded: true,
+    })
+    expect(result.isOk).toBe(false)
+    expect(result.feedback).toBe(
+      'La réponse fournie est bien égale à celle attendue mais il manque au moins un signe $\\times$.',
+    )
+
+    result = fonctionComparaison('8(6 \\times x+4)', '8(6x+5)', {
+      expanded: true,
+    })
+    expect(result.isOk).toBe(false)
+  })
+
+  //     ██████  ██████  ████████ ██  ██████  ███    ██
+  //    ██    ██ ██   ██    ██    ██ ██    ██ ████   ██
+  //    ██    ██ ██████     ██    ██ ██    ██ ██ ██  ██
+  //    ██    ██ ██         ██    ██ ██    ██ ██  ██ ██
+  //     ██████  ██         ██    ██  ██████  ██   ████
+  //
+  //
   //    ███████  ██████  ███    ██  ██████ ████████ ██  ██████  ███    ██
   //    ██      ██    ██ ████   ██ ██         ██    ██ ██    ██ ████   ██
   //    █████   ██    ██ ██ ██  ██ ██         ██    ██ ██    ██ ██ ██  ██
