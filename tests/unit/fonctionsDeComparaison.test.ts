@@ -1686,15 +1686,11 @@ describe('fonctionComparaison', () => {
       { unite: true },
     )
     expect(result.isOk).toBe(true)
-    result = fonctionComparaison(
-      '0{,}035\\operatorname{\\mathrm{g}}',
-      '3{,}5cm',
-      { unite: true },
-    )
+    result = fonctionComparaison('0{,}035\\operatorname{\\mathrm{g}}', '32cm', {
+      unite: true,
+    })
     expect(result.isOk).toBe(false)
-    expect(result.feedback).toBe(
-      `La réponse pourrait être correcte si l'unité avait été précisée.`,
-    )
+    expect(result.feedback).toBe(`L'unité choisie n'est, déjà, pas correcte.`)
 
     result = fonctionComparaison('3{,}5', '3{,}5cm', { unite: true })
     expect(result.isOk).toBe(false)
@@ -1735,6 +1731,15 @@ describe('fonctionComparaison', () => {
     result = fonctionComparaison('3{,}4\\operatorname{\\mathrm{m}}', '3.47m', {
       unite: true,
       precisionUnite: 0.05,
+    })
+    expect(result.isOk).toBe(false)
+    expect(result.feedback).toBe(
+      `Incorrect car la réponse n'est pas arrondie comme il faut.`,
+    )
+
+    result = fonctionComparaison('3\\operatorname{\\mathrm{m}}', '3.4m', {
+      unite: true,
+      precisionUnite: 0.1,
     })
     expect(result.isOk).toBe(false)
     expect(result.feedback).toBe(
@@ -3384,6 +3389,7 @@ describe('fonctionComparaison', () => {
   //     ██████  ██         ██    ██  ██████  ██   ████ ███████
   //
   //
+  // from https://patorjk.com/software/taag/ // Style : ANSI Regular // C++ style Comment
 
   it('Vérifie le fonctionnement des options cumulées fractionEgale et nombreDecimalSeulement', () => {
     let result = fonctionComparaison('2', '\\dfrac63', {

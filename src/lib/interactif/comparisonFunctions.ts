@@ -1096,9 +1096,7 @@ function handleUnite(
 
   if (inputGrandeur) {
     if (inputGrandeur.uniteDeReference !== goodAnswerGrandeur.uniteDeReference)
-      return fail(
-        `La réponse pourrait être correcte si l'unité avait été précisée.`,
-      )
+      return fail(`L'unité choisie n'est, déjà, pas correcte.`)
 
     if (precision !== undefined) {
       const okPrecision1: boolean = inputGrandeur.estUneApproximation(
@@ -1113,10 +1111,18 @@ function handleUnite(
       if (okPrecision1 && okPrecision2) {
         return ok()
       } else {
-        return fail(
-          //  `Incorrect car la réponse n'est pas arrondie comme il faut.`,
-          `Incorrect car la réponse n'est pas arrondie comme il faut.`,
+        const okPrecision1: boolean = inputGrandeur.estUneApproximation(
+          goodAnswerGrandeur,
+          1,
         )
+        const okPrecision2: boolean = goodAnswerGrandeur.estUneApproximation(
+          inputGrandeur,
+          1,
+        )
+        if (okPrecision1 && okPrecision2)
+          return fail(
+            `Incorrect car la réponse n'est pas arrondie comme il faut.`,
+          )
       }
       return fail()
     }
@@ -2998,7 +3004,7 @@ export function handleEntiersConsecutifs(
 //    ██      ██   ██ ██ ██   ████  ██████ ██ ██      ██   ██ ███████ ███████
 //
 //
-// from https://patorjk.com/software/taag/ // Style : ANSI Regular
+// from https://patorjk.com/software/taag/ // Style : ANSI Regular // C++ style Comment
 
 export function fonctionComparaison(
   saisie: string,
