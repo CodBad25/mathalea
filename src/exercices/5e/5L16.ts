@@ -14,7 +14,7 @@ export const interactifReady = true
 export const interactifType = 'mathLive'
 export const titre = "Simplifier l'écriture d'une expression littérale"
 export const dateDePublication = '07/04/2022'
-export const dateDeModifImportante = '13/02/2025'
+export const dateDeModifImportante = '04/04/2026'
 /**
  * @author Guillaume Valmont
  * Ajout du paramètre de procédure inverse par Guillaume Valmont le 18/06/2022
@@ -42,11 +42,18 @@ export default class SimplifierEcritureLitterale extends Exercice {
   }
 
   nouvelleVersion() {
-    if (this.sup2) {
+    if (this.nbQuestions > 1)
+      if (this.sup2) {
+        this.consigne =
+          "On a simplifié des écritures littérales.<br>Recopier chaque expression en ajoutant tous les signes $\\times$ sous-entendus, si c'est possible."
+      } else {
+        this.consigne = 'Simplifier, au maximum, chaque écriture, si possible.'
+      }
+    else if (this.sup2) {
       this.consigne =
-        "On a simplifié des écritures littérales.<br>Recopier l'expression dans le même ordre et ajouter, si possible, les signes $\\times$ sous-entendus."
+        "On a simplifié une écriture littérale.<br>Recopier l'expression en ajoutant tous les signes $\\times$ sous-entendus, si c'est possible."
     } else {
-      this.consigne = "Simplifier l'écriture si possible."
+      this.consigne = "Simplifier, au maximum, l'écriture, si possible."
     }
 
     let typeQuestionsDisponibles
@@ -401,10 +408,15 @@ export default class SimplifierEcritureLitterale extends Exercice {
         )
       }
       if (!this.sup2) {
-        handleAnswers(this, i, { reponse: { value: reponse } })
+        handleAnswers(this, i, {
+          reponse: {
+            value: reponse,
+            options: { expressionsForcementReduites: true },
+          },
+        })
       } else {
         handleAnswers(this, i, {
-          reponse: { value: resultatBis, options: { texteAvecCasse: true } },
+          reponse: { value: resultatBis, options: { expanded: true } },
         })
       }
       if (this.questionJamaisPosee(i, texte)) {
