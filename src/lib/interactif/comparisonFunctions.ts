@@ -2267,13 +2267,36 @@ function handletexteAvecCasse(
   // return { isOk: saisie.toLowerCase() === answer.toLowerCase() }
   if (localanswer === localsaisie) return ok()
   if (firstTime)
-    if (
-      handletexteAvecCasse(saisie.toLowerCase(), answer.toLowerCase(), false)
-        .isOk
-    )
+    if (handletexteAvecCasse(saisie.toLowerCase(), answer.toLowerCase(), false))
       return fail(
         'Résultat incorrect car majuscules ou minuscules non respectées.',
       )
+  return fail()
+}
+
+function handleFonctionExpanded(saisie: string, answer: string): ResultType {
+  const clean = generateCleaner([
+    'virgules',
+    'parentheses',
+    'fractions',
+    'divisions',
+  ])
+  const cleanInput = clean(saisie)
+
+  if (handleCalculFormel(saisie, answer).isOk) {
+    if (
+      JSON.stringify(ce.parse(cleanInput, { form: 'raw' }).json).includes(
+        'InvisibleOperator',
+      ) ||
+      JSON.stringify(ce.parse(cleanInput, { form: 'raw' }).json).includes(
+        'Power',
+      )
+    )
+      return fail(
+        'La réponse fournie est bien égale à celle attendue mais il manque au moins un signe $\\times$.',
+      )
+    return ok()
+  }
   return fail()
 }
 
@@ -3157,6 +3180,9 @@ export function fonctionComparaison(
 
   // Calcul formel (accepte tout normalement)
   if (options.calculFormel) return handleCalculFormel(saisie, answer)
+
+  // Expressions expanded
+  if (options.expanded) return handleFonctionExpanded(saisie, answer)
 
   // Deux entiers consécutifs
   if (options.entiersConsecutifs)
