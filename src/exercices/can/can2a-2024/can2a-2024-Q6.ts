@@ -44,11 +44,11 @@ export default class NomExercice extends ExerciceSimple {
       this.reponse = (a * b).toFixed(2)
       this.question = `$${texNombre(a, 1)}\\times${texNombre(b, 1)}$`
       this.correction =
-        'On décompose le calcul pour le rendre plus simple mentalement :<br>'
-      this.correction += `  $\\begin{aligned} ${texNombre(a, 1)}\\times${texNombre(b, 1)} &=${texNombre(a * 10, 0)}\\times 0,1\\times ${texNombre(b * 10, 0)}\\times 0,1\\\\`
-      this.correction += ` &= ${texNombre(a * b * 100, 0)}\\times 0,01\\\\`
-      this.correction += `'\n&= ${miseEnEvidence(texNombre(a * b, 2))}`
-      this.correction += '\n\\end{aligned}$'
+        'On décompose le calcul pour le rendre plus simple mentalement :<br><br>'
+      this.correction += `$\\begin{aligned} ${texNombre(a, 1)}\\times${texNombre(b, 1)} &=${texNombre(a * 10, 0)}\\times 0,1\\times ${texNombre(b * 10, 0)}\\times 0,1\\\\`
+      this.correction += `&= ${texNombre(a * b * 100, 0)}\\times 0,01\\\\`
+      this.correction += `&= ${miseEnEvidence(texNombre(a * b, 2))}`
+      this.correction += '\\end{aligned}$'
     }
   }
 }
