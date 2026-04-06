@@ -1,8 +1,7 @@
 import { tableauColonneLigne } from '../../lib/2d/tableau'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { toutAUnPoint } from '../../lib/interactif/mathLive'
-import { addMultiMathfield } from '../../lib/interactif/MultiMathfield/MultiMathfield'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice, shuffle3tableaux } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
@@ -12,18 +11,18 @@ import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 export const titre = 'Calculer  une probabilité avec un tableau'
 export const interactifReady = true
-export const interactifType = 'mathfield'
+export const interactifType = 'mathLive'
 
 export const dateDePublication = '29/04/2025'
-export const dateDeModifImportante = '06/04/2026'
+
 /**
  *
  * @author Gilles Mora
  */
-export const uuid = 'a15fb'
+export const uuid = 'faacc'
 
 export const refs = {
-  'fr-fr': ['1P10-4'],
+  'fr-fr': [],
   'fr-ch': [],
 }
 export default class CalculerProbaTableau extends Exercice {
@@ -35,7 +34,7 @@ export default class CalculerProbaTableau extends Exercice {
     this.spacingCorr = 3
   }
 
-   nouvelleVersion() {
+  nouvelleVersion() {
     // Tous les types de questions sont posées mais l'ordre diffère à chaque "cycle"
 
     for (
@@ -132,6 +131,33 @@ export default class CalculerProbaTableau extends Exercice {
             `${pAinterBb.texFraction}`,
             `${pBsachantAb.texFraction}`,
           ]
+          shuffle3tableaux(calcul, calculCorr, reponse)
+          texte += ` Calculer $${calcul[0]}$, $${calcul[1]}$ et $${calcul[2]}$.`
+          texte +=
+            ajouteChampTexteMathLive(
+              this,
+              3 * i,
+              KeyboardType.clavierDeBaseAvecFraction,
+              { texteAvant: `<br>$${calcul[0]}=$` },
+            ) +
+            ajouteChampTexteMathLive(
+              this,
+              3 * i + 1,
+              KeyboardType.clavierDeBaseAvecFraction,
+              { texteAvant: `<br>$${calcul[1]}=$` },
+            ) +
+            ajouteChampTexteMathLive(
+              this,
+              3 * i + 2,
+              KeyboardType.clavierDeBaseAvecFraction,
+              { texteAvant: `<br>$${calcul[2]}=$` },
+            )
+          handleAnswers(this, 3 * i, { reponse: { value: reponse } })
+          handleAnswers(this, 3 * i + 1, { reponse: { value: reponse } })
+          handleAnswers(this, 3 * i + 2, { reponse: { value: reponse } })
+          texteCorr = `$${calculCorr[0]}$<br>
+          $${calculCorr[1]}$ <br> 
+          $${calculCorr[2]}$`
           break
         case 2: // PB, pAbinterBb, pAsachantBb
           calcul = [
@@ -149,8 +175,35 @@ export default class CalculerProbaTableau extends Exercice {
             `${pAbinterBb.texFraction}`,
             `${pAsachantBb.texFraction}`,
           ]
+          shuffle3tableaux(calcul, calculCorr, reponse)
+          texte += ` Calculer $${calcul[0]}$, $${calcul[1]}$ et $${calcul[2]}$.`
+          texte +=
+            ajouteChampTexteMathLive(
+              this,
+              3 * i,
+              KeyboardType.clavierDeBaseAvecFraction,
+              { texteAvant: `<br>$${calcul[0]}=$` },
+            ) +
+            ajouteChampTexteMathLive(
+              this,
+              3 * i + 1,
+              KeyboardType.clavierDeBaseAvecFraction,
+              { texteAvant: `<br>$${calcul[1]}=$` },
+            ) +
+            ajouteChampTexteMathLive(
+              this,
+              3 * i + 2,
+              KeyboardType.clavierDeBaseAvecFraction,
+              { texteAvant: `<br>$${calcul[2]}=$` },
+            )
+          handleAnswers(this, 3 * i, { reponse: { value: reponse } })
+          handleAnswers(this, 3 * i + 1, { reponse: { value: reponse } })
+          handleAnswers(this, 3 * i + 2, { reponse: { value: reponse } })
+          texteCorr = `$${calculCorr[0]}$<br>
+          $${calculCorr[1]}$ <br> 
+          $${calculCorr[2]}$`
           break
-        case 3: // pAb, pAbinterB, pBsachantA
+        case 3: // pAb,pAbinterB, pBsachantA
           calcul = [
             `P(\\overline{${ev[0]}})`,
             `P(\\overline{${ev[0]}}\\cap ${ev[1]})`,
@@ -166,6 +219,33 @@ export default class CalculerProbaTableau extends Exercice {
             `${pAbinterB.texFraction}`,
             `${pBsachantA.texFraction}`,
           ]
+          shuffle3tableaux(calcul, calculCorr, reponse)
+          texte += ` Calculer $${calcul[0]}$, $${calcul[1]}$ et $${calcul[2]}$.`
+          texte +=
+            ajouteChampTexteMathLive(
+              this,
+              3 * i,
+              KeyboardType.clavierDeBaseAvecFraction,
+              { texteAvant: `<br>$${calcul[0]}=$` },
+            ) +
+            ajouteChampTexteMathLive(
+              this,
+              3 * i + 1,
+              KeyboardType.clavierDeBaseAvecFraction,
+              { texteAvant: `<br>$${calcul[1]}=$` },
+            ) +
+            ajouteChampTexteMathLive(
+              this,
+              3 * i + 2,
+              KeyboardType.clavierDeBaseAvecFraction,
+              { texteAvant: `<br>$${calcul[2]}=$` },
+            )
+          handleAnswers(this, 3 * i, { reponse: { value: reponse } })
+          handleAnswers(this, 3 * i + 1, { reponse: { value: reponse } })
+          handleAnswers(this, 3 * i + 2, { reponse: { value: reponse } })
+          texteCorr = `$${calculCorr[0]}$<br>
+          $${calculCorr[1]}$ <br> 
+          $${calculCorr[2]}$`
           break
         case 4: // pBb, pAinterB, pBbsachantA
         default:
@@ -184,28 +264,35 @@ export default class CalculerProbaTableau extends Exercice {
             `${pAinterB.texFraction}`,
             `${pBbsachantA.texFraction}`,
           ]
-          break
-      }
-
-      shuffle3tableaux(calcul, calculCorr, reponse)
-      texte += ` Calculer $${calcul[0]}$, $${calcul[1]}$ et $${calcul[2]}$.<br>`
-      texte += `${addMultiMathfield(this, i, {
-        dataTemplate: `$${calcul[0]}=$ %{champ1}\n$${calcul[1]}=$ %{champ2}\n$${calcul[2]}=$ %{champ3}`,
-        dataOptions: {
-          champ1: { keyboard: KeyboardType.clavierDeBaseAvecFraction },
-          champ2: { keyboard: KeyboardType.clavierDeBaseAvecFraction },
-          champ3: { keyboard: KeyboardType.clavierDeBaseAvecFraction },
-        },
-      })}`
-      handleAnswers(this, i, {
-        champ1: { value: reponse[0] },
-        champ2: { value: reponse[1] },
-        champ3: { value: reponse[2] },
-        bareme: toutAUnPoint,
-      }, { formatInteractif: 'multiMathfield' })
-      texteCorr = `$${calculCorr[0]}$<br>
+          shuffle3tableaux(calcul, calculCorr, reponse)
+          texte += ` Calculer $${calcul[0]}$, $${calcul[1]}$ et $${calcul[2]}$.`
+          texte +=
+            ajouteChampTexteMathLive(
+              this,
+              3 * i,
+              KeyboardType.clavierDeBaseAvecFraction,
+              { texteAvant: `<br>$${calcul[0]}=$` },
+            ) +
+            ajouteChampTexteMathLive(
+              this,
+              3 * i + 1,
+              KeyboardType.clavierDeBaseAvecFraction,
+              { texteAvant: `<br>$${calcul[1]}=$` },
+            ) +
+            ajouteChampTexteMathLive(
+              this,
+              3 * i + 2,
+              KeyboardType.clavierDeBaseAvecFraction,
+              { texteAvant: `<br>$${calcul[2]}=$` },
+            )
+          handleAnswers(this, 3 * i, { reponse: { value: reponse } })
+          handleAnswers(this, 3 * i + 1, { reponse: { value: reponse } })
+          handleAnswers(this, 3 * i + 2, { reponse: { value: reponse } })
+          texteCorr = `$${calculCorr[0]}$<br>
           $${calculCorr[1]}$ <br> 
           $${calculCorr[2]}$`
+          break
+      }
 
       if (this.questionJamaisPosee(i, pA, pB)) {
         this.listeQuestions[i] = texte
