@@ -1,6 +1,6 @@
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { addMultiMathfield } from '../../lib/interactif/MultiMathfield/MultiMathfield'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import {
   ecritureAlgebriqueSauf1,
@@ -14,9 +14,8 @@ import FractionEtendue from '../../modules/FractionEtendue'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 export const interactifReady = true
-export const interactifType = 'mathfield'
+export const interactifType = 'mathlive'
 export const dateDePublication = '02/05/2023'
-export const dateDeModifImportante = '06/04/2026'
 export const titre = 'Résoudre des équations avec un quotient'
 
 /**
@@ -24,10 +23,10 @@ export const titre = 'Résoudre des équations avec un quotient'
  * @author Gilles Mora
  * 2N41-8
  */
-export const uuid = '31017'
+export const uuid = 'b5828'
 
 export const refs = {
-  'fr-fr': ['2N52-5', 'BP2RES32'],
+  'fr-fr': [],
   'fr-ch': [],
 }
 export default class ResoudreEquationsQuotient extends Exercice {
@@ -114,7 +113,7 @@ export default class ResoudreEquationsQuotient extends Exercice {
           ensSolutions = `\\left\\{${valSolution.texFractionSimplifiee}\\right\\}`
 
           texteCorr += `Or $${reduireAxPlusB(c, d)}=0$ si et seulement si  $x=${valInterdite.texFractionSimplifiee}$. <br>
-          Donc l'ensemble des valeurs interdites est  $${miseEnEvidence(ensValeursInterdites)}$. <br>`
+          Donc l'ensemble des valeurs interdites est  $${ensValeursInterdites}$. <br>`
           if (b === 0) {
             texteCorr += `Pour tout $x\\in \\mathbb{R}\\smallsetminus\\left\\{${valInterdite.texFractionSimplifiee}\\right\\}$, <br>
  $\\begin{aligned}
@@ -157,7 +156,7 @@ x&= ${valSolution.texFractionSimplifiee}
             ensValeursInterdites = `\\left\\{${valInterdite.texFractionSimplifiee}\\right\\}`
 
             texteCorr += `Or $${reduireAxPlusB(c, d)}=0$ si et seulement si  $x=${valInterdite.texFractionSimplifiee}$. <br>
-          Donc l'ensemble des valeurs interdites est  $${miseEnEvidence(ensValeursInterdites)}$.<br>
+          Donc l'ensemble des valeurs interdites est  $${ensValeursInterdites}$.<br>
           Pour tout $x\\in \\mathbb{R}\\smallsetminus${ensValeursInterdites}$, <br>
             $\\begin{aligned}
             ${choix ? `\\dfrac{${rienSi1(a)}x^2-${b}}{${reduireAxPlusB(c, d)}}&=0` : `\\dfrac{${b}-${rienSi1(a)}x^2}{${reduireAxPlusB(c, d)}}&=0`}\\\\
@@ -195,7 +194,7 @@ x&= ${valSolution.texFractionSimplifiee}
             ensSolutions = '\\emptyset'
 
             texteCorr += `Or $${reduireAxPlusB(c, d)}=0$ si et seulement si  $x=${-k2}$. <br>
-Donc l'ensemble des valeurs interdites est  $${miseEnEvidence(ensValeursInterdites)}$.<br>
+Donc l'ensemble des valeurs interdites est  $${ensValeursInterdites}$.<br>
 Pour tout $x\\in \\mathbb{R}\\smallsetminus${ensValeursInterdites}$, <br>
   $\\begin{aligned}
   ${choix ? `\\dfrac{${rienSi1(a)}x^2+${b}}{${reduireAxPlusB(c, d)}}&=0` : `\\dfrac{${b}+${rienSi1(a)}x^2}{${reduireAxPlusB(c, d)}}&=0`}\\\\
@@ -238,7 +237,7 @@ Pour tout $x\\in \\mathbb{R}\\smallsetminus${ensValeursInterdites}$, <br>
           ensValeursInterdites = `\\left\\{${valInterdite.texFractionSimplifiee}\\right\\}`
           valSolution = new FractionEtendue(e * d - b, a - e * c)
           texteCorr += `Or $${reduireAxPlusB(c, d)}=0$ si et seulement si  $x=${valInterdite.texFractionSimplifiee}$. <br>
-          Donc l'ensemble des valeurs interdites est  $${miseEnEvidence(ensValeursInterdites)}$. <br>
+          Donc l'ensemble des valeurs interdites est  $${ensValeursInterdites}$. <br>
           Pour tout $x\\in \\mathbb{R}\\smallsetminus${ensValeursInterdites}$,<br>`
           if (b === 0) {
             texteCorr += `
@@ -315,7 +314,7 @@ Pour tout $x\\in \\mathbb{R}\\smallsetminus${ensValeursInterdites}$, <br>
               ensValeursInterdites = `\\left\\{${valInterdite2.texFractionSimplifiee} \\, ; \\,${valInterdite.texFractionSimplifiee}\\right\\}`
             }
           }
-          texteCorr += `Or $${reduireAxPlusB(a, b)}=0$ si et seulement si  $x = ${valInterdite2.texFractionSimplifiee}$ et $${reduireAxPlusB(c, d)}=0$ si et seulement si  $x = ${valInterdite.texFractionSimplifiee} $. <br>Donc l'ensemble des valeurs interdites est $${miseEnEvidence(ensValeursInterdites)}$. <br>`
+          texteCorr += `Or $${reduireAxPlusB(a, b)}=0$ si et seulement si  $x = ${valInterdite2.texFractionSimplifiee}$ et $${reduireAxPlusB(c, d)}=0$ si et seulement si  $x = ${valInterdite.texFractionSimplifiee} $. <br>Donc l'ensemble des valeurs interdites est $${ensValeursInterdites}$. <br>`
 
           texteCorr += `Pour tout $x\\in \\mathbb{R}\\smallsetminus ${ensValeursInterdites}$,<br>
  $\\begin{aligned}
@@ -335,28 +334,32 @@ ${rienSi1(-e * c + f * a)}x&= ${e * d - f * b}${-e * c + f * a === 1 ? '' : '\\\
           }
           break
       }
-      texte+='<br>'
-      texte += `${addMultiMathfield(this, i, {
-        dataTemplate: 'Ensemble des valeurs interdites : %{champ1}\nEnsemble des solutions : %{champ2}',
-        dataOptions: {
-          champ1: {
-            keyboard: KeyboardType.clavierEnsemble,
-          },
-          champ2: {
-            keyboard: KeyboardType.clavierEnsemble,
-          },
-        },
-      })}`
-      handleAnswers(this,  i, {
-        champ1: {
+      if (this.interactif) {
+        texte += ajouteChampTexteMathLive(
+          this,
+          2 * i,
+          KeyboardType.clavierEnsemble,
+          { texteAvant: '<br>Ensemble des valeurs interdites : ' },
+        )
+        texte += ajouteChampTexteMathLive(
+          this,
+          2 * i + 1,
+          KeyboardType.clavierEnsemble,
+          { texteAvant: '<br>Ensemble des solutions : ' },
+        )
+      }
+      handleAnswers(this, 2 * i, {
+        reponse: {
           value: ensValeursInterdites,
           options: { ensembleDeNombres: true },
         },
-        champ2: {
+      })
+      handleAnswers(this, 2 * i + 1, {
+        reponse: {
           value: ensSolutions,
           options: { ensembleDeNombres: true },
         },
-      }, { formatInteractif: 'multiMathfield' })
+      })
       if (this.questionJamaisPosee(i, a, b, c, d)) {
         // Si la question n'a jamais été posée, on en créé une autre
         this.listeQuestions[i] = texte
