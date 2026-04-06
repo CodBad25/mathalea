@@ -86,11 +86,12 @@
     "@bugsnag/js": "^8.8.1",
     "@cortex-js/compute-engine": "^0.55.6",
     "@mixer/postmessage-rpc": "^1.1.4",
+    "@scratch2latex/scratch-core": "git+https://forge.apps.education.fr/coopmaths/scratch-core.git#main",
     "@svgdotjs/svg.js": "^3.2.5",
     "@types/crypto-js": "^4.2.2",
     "@types/jspreadsheet-ce": "^4.7.9",
     "@types/three": "^0.182.0",
-    "apigeom": "git+https://forge.apps.education.fr/coopmaths/apigeom.git#v0.9.10",
+    "apigeom": "git+https://forge.apps.education.fr/coopmaths/apigeom.git#v1.0.0",
     "blockly": "12.3.1",
     "boxicons": "^2.1.4",
     "brace": "^0.11.1",
@@ -117,7 +118,6 @@
     "node-fetch": "^3.3.2",
     "qrcode": "^1.5.4",
     "roughjs": "^4.6.6",
-    "@scratch2latex/scratch-core": "git+https://forge.apps.education.fr/coopmaths/scratch-core.git#main",
     "scratchblocks": "^3.6.4",
     "seedrandom": "^3.0.5",
     "sortablejs": "^1.15.7",
@@ -225,5 +225,5 @@
       "unrs-resolver"
     ]
   },
-  "packageManager": "pnpm@10.29.3"
+  "packageManager": "pnpm@10.33.0"
 }
