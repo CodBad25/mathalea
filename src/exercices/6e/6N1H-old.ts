@@ -1,8 +1,8 @@
 import { droiteGraduee } from '../../lib/2d/DroiteGraduee'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { addMultiMathfield } from '../../lib/interactif/MultiMathfield/MultiMathfield'
+import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import { arrondi } from '../../lib/outils/nombres'
 import { lettreDepuisChiffre, sp } from '../../lib/outils/outilString'
@@ -23,12 +23,12 @@ export const dateDeModifImportante = '31/10/2023'
  * Lire l'abscisse décimale d'un point
  * @author Jean-Claude Lhote et Rémi Angot
  */
-export const uuid = 'c1889'
+export const uuid = 'c1888'
 
 export const refs = {
-  'fr-fr': ['6N1H'],
-  'fr-2016': ['6N30'],
-  'fr-ch': ['9NO7-1'],
+  'fr-fr': [],
+  'fr-2016': [],
+  'fr-ch': [],
 }
 export default class LireAbscisseDecimale extends Exercice {
   constructor() {
@@ -199,31 +199,38 @@ export default class LireAbscisseDecimale extends Exercice {
       )
 
       if (this.interactif && context.isHtml) {
-        handleAnswers(
+        setReponse(this, 3 * i, arrondi(xA / pas1 + abs0, 1 + Math.log10(pas1)))
+        setReponse(
           this,
-          i,
-          {
-            champ1: { value: arrondi(xA / pas1 + abs0, 1 + Math.log10(pas1)) },
-            champ2: { value: arrondi(xB / pas1 + abs0, 1 + Math.log10(pas1)) },
-            champ3: { value: arrondi(xC / pas1 + abs0, 1 + Math.log10(pas1)) },
-          },
-          { formatInteractif: 'multiMathfield' },
+          3 * i + 1,
+          arrondi(xB / pas1 + abs0, 1 + Math.log10(pas1)),
         )
-
-        texte += `<br><br>`
-        texte += addMultiMathfield(this, i, {
-          dataTemplate: `$${l1}\\lparen$%{champ1} $\\rparen$ ${sp(6)} $${l2}\\lparen$%{champ2} $\\rparen$ ${sp(6)} $${l3}\\lparen$%{champ3} $\\rparen$`,
-          dataOptions: {
-            champ1: { keyboard: KeyboardType.clavierNumbers },
-            champ2: { keyboard: KeyboardType.clavierNumbers },
-            champ3: { keyboard: KeyboardType.clavierNumbers },
-          },
-        })
+        setReponse(
+          this,
+          3 * i + 2,
+          arrondi(xC / pas1 + abs0, 1 + Math.log10(pas1)),
+        )
+        texte +=
+          `<br><br>$${l1}$` +
+          sp(1) +
+          ajouteChampTexteMathLive(this, 3 * i, KeyboardType.clavierNumbers)
+        texte +=
+          sp(6) +
+          `$${l2}$` +
+          sp(1) +
+          ajouteChampTexteMathLive(this, 3 * i + 1, KeyboardType.clavierNumbers)
+        texte +=
+          sp(6) +
+          `$${l3}$` +
+          sp(1) +
+          ajouteChampTexteMathLive(this, 3 * i + 2, KeyboardType.clavierNumbers)
       } else {
         if (context.isAmc) {
           this.autoCorrection[i].enonce = texte
-          this.autoCorrection[i].propositions![0].texte = texteCorr
-          this.autoCorrection[i].propositions![0].statut = 1
+          // @ts-expect-error
+          this.autoCorrection[i].propositions[0].texte = texteCorr
+          // @ts-expect-error
+          this.autoCorrection[i].propositions[0].statut = 1
         }
       }
       if (this.questionJamaisPosee(i, texte)) {

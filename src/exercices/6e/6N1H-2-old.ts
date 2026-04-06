@@ -1,4 +1,5 @@
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choisitLettresDifferentes } from '../../lib/outils/aleatoires'
 import { shuffle } from '../../lib/outils/arrayOutils'
 import {
@@ -7,7 +8,7 @@ import {
   nombreDeChiffresDansLaPartieEntiere,
   nombreDeChiffresDe,
 } from '../../lib/outils/nombres'
-import { numAlpha } from '../../lib/outils/outilString'
+import { numAlpha, sp } from '../../lib/outils/outilString'
 import { stringNombre, texNombre } from '../../lib/outils/texNombre'
 import { context } from '../../modules/context'
 import FractionEtendue from '../../modules/FractionEtendue'
@@ -17,17 +18,15 @@ import Exercice from '../Exercice'
 
 import { droiteGraduee } from '../../lib/2d/DroiteGraduee'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { toutAUnPoint } from '../../lib/interactif/mathLive'
-import { addMultiMathfield } from '../../lib/interactif/MultiMathfield/MultiMathfield'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 
 export const titre = 'Lire des abscisses décimales sous trois formes'
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'mathLive'
 export const amcReady = true
 export const amcType = 'AMCHybride'
 
-export const dateDeModifImportante = '06/04/2026' // Passage à MultiMathfield
+export const dateDeModifImportante = '06/11/2025'
 /**
  * @author Jean-Claude Lhote (sauf erreur de ma part)
  * Amélioré par Eric Elter
@@ -35,12 +34,12 @@ export const dateDeModifImportante = '06/04/2026' // Passage à MultiMathfield
  * Il faut donner leur abscisse respective
  * Trois formes sont demandées : décimale, fraction décimale, décomposition partie entière + partie décimale fractionnaire.
  */
-export const uuid = '12774'
+export const uuid = '12773'
 
 export const refs = {
-  'fr-fr': ['6N1H-2'],
-  'fr-2016': ['6N23-2'],
-  'fr-ch': ['9NO11-7a'],
+  'fr-fr': [],
+  'fr-2016': [],
+  'fr-ch': [],
 }
 export default class LireAbscisseDecimaleTroisFormes extends Exercice {
   niveau: string
@@ -232,49 +231,56 @@ export default class LireAbscisseDecimaleTroisFormes extends Exercice {
         })
       }
       const texte1 = `${numAlpha(0)} Donner l'abscisse de $${noms[0]}$ en écriture décimale.`
-      texte = addMultiMathfield(this, i, {
-        dataTemplate: `Donner l'abscisse de $${noms[0]}$ en écriture décimale. $${noms[0]}\\lparen$%{champ1}$\\rparen$
-        Donner l'abscisse de $${noms[1]}$ comme la somme d'un nombre entier et d'une fraction décimale inférieure à 1. $${noms[1]}\\lparen$%{champ2}$\\rparen$
-       Donner l'abscisse de $${noms[2]}$ sous la forme d'une fraction décimale. $${noms[2]}\\lparen$%{champ3}$\\rparen$`,
-        dataOptions: {
-          champ1: { keyboard: KeyboardType.clavierNumbers, minWidth: 70 },
-          champ2: {
-            keyboard: KeyboardType.clavierDeBaseAvecFraction,
-            minWidth: 70,
-          },
-          champ3: {
-            keyboard: KeyboardType.clavierDeBaseAvecFraction,
-            minWidth: 70,
-          },
-        },
-      })
-
-      const multiple = this.sup === 1 ? 10 : this.sup === 2 ? 100 : 1000
-      texteCorr = `L'abscisse de $${noms[0]}$ est : $${miseEnEvidence(texNombre(x1, 3))}$.<br>`
-      texteCorr += `L'abscisse de $${noms[1]}$ est : $${miseEnEvidence(`${texNombre(Math.floor(x2))} + ${new FractionEtendue(multiple * arrondi(x2 - Math.floor(x2)), multiple).toLatex()}`)}$.<br>`
-      texteCorr += `L'abscisse de $${noms[2]}$ est : $${miseEnEvidence(new FractionEtendue(multiple * x3, multiple).toLatex())}$.`
-      if (!context.isAmc) {
-        handleAnswers(
+      texte =
+        texte1 +
+        ajouteChampTexteMathLive(this, i * 3, KeyboardType.clavierNumbers, {
+          texteAvant: `${sp(10)} $${noms[0]}($`,
+          texteApres: `$${sp(1)})$`,
+        })
+      texte +=
+        `<br>${numAlpha(1)} Donner l'abscisse de $${noms[1]}$ comme la somme d'un nombre entier et d'une fraction décimale inférieure à 1.` +
+        ajouteChampTexteMathLive(
           this,
-          i,
+          i * 3 + 1,
+          KeyboardType.clavierDeBaseAvecFraction,
           {
-            champ1: { value: x1 },
-            champ2: {
-              value: `${Math.floor(x2)}+${new FractionEtendue(multiple * arrondi(x2 - Math.floor(x2)), multiple).toLatex()}`,
-              options: { expressionNumerique: true },
-            },
-            champ3: {
-              value: new FractionEtendue(multiple * x3, multiple),
-              options: { fractionDecimale: true },
-            },
-            bareme: toutAUnPoint,
+            texteAvant: `${sp(10)} $${noms[1]}($`,
+            texteApres: `$${sp(1)})$`, // `$${sp(2)}+$`
           },
-          { formatInteractif: 'multiMathfield' },
         )
+      let texte3 = `Donner l'abscisse de $${noms[2]}$ sous la forme d'une fraction décimale.`
+      texte +=
+        `<br>${numAlpha(2)} ` +
+        texte3 +
+        ajouteChampTexteMathLive(
+          this,
+          i * 3 + 2,
+          KeyboardType.clavierDeBaseAvecFraction,
+          {
+            texteAvant: `${sp(10)} $${noms[2]}($`,
+            texteApres: `$${sp(1)})$`,
+          },
+        )
+      texte3 = `${numAlpha(1)} ` + texte3
+      const multiple = this.sup === 1 ? 10 : this.sup === 2 ? 100 : 1000
+      texteCorr = `${numAlpha(0)} L'abscisse de $${noms[0]}$ est : $${miseEnEvidence(texNombre(x1, 3))}$.<br>`
+      texteCorr += `${numAlpha(1)} L'abscisse de $${noms[1]}$ est : $${miseEnEvidence(`${texNombre(Math.floor(x2))} + ${new FractionEtendue(multiple * arrondi(x2 - Math.floor(x2)), multiple).toLatex()}`)}$.<br>`
+      texteCorr += `${numAlpha(2)} L'abscisse de $${noms[2]}$ est : $${miseEnEvidence(new FractionEtendue(multiple * x3, multiple).toLatex())}$.`
+      if (!context.isAmc) {
+        handleAnswers(this, i * 3, { reponse: { value: x1 } })
+        handleAnswers(this, i * 3 + 1, {
+          reponse: {
+            value: `${Math.floor(x2)}+${new FractionEtendue(multiple * arrondi(x2 - Math.floor(x2)), multiple).toLatex()}`,
+            options: { expressionNumerique: true },
+          },
+        })
+        handleAnswers(this, i * 3 + 2, {
+          reponse: {
+            value: new FractionEtendue(multiple * x3, multiple),
+            options: { fractionDecimale: true },
+          },
+        })
       } else {
-        let texte3 = `Donner l'abscisse de $${noms[2]}$ sous la forme d'une fraction décimale.`
-        texte3 = `${numAlpha(1)} ` + texte3
-
         this.autoCorrection[i] = {
           enonce: '', // on le remplira à la fin.
           options: { multicols: true, barreseparation: true },
