@@ -1,4 +1,3 @@
-import { cross, dot } from 'mathjs'
 import { context } from '../../../modules/context'
 import {
   assombrirOuEclaircir,
@@ -13,7 +12,7 @@ import { segment } from '../../2d/segmentsVecteurs'
 import { tracePoint } from '../../2d/TracePoint'
 import { translation } from '../../2d/transformations'
 import { pointIntersectionDD } from '../../2d/utilitairesPoint'
-import { vecteur } from '../../2d/Vecteur'
+import { cross, dot, vecteur } from '../../2d/Vecteur'
 import {
   demicercle3d,
   droite3d,
@@ -104,8 +103,8 @@ export class Cylindre3d extends ObjetMathalea2D {
     this.c2d = []
     let s
     this.normal = vecteur3d(this.centrebase1, this.centrebase2)
-    const coords = cross(this.normal.matrice, this.rayon1.matrice)
-    const coordsArray = (coords as any).toArray().map(Number) as number[]
+    const coords = cross(this.normal.matrice, this.rayon1.matrice) as number[]
+    const coordsArray = coords as any as number[]
     const prodvec = vecteur3d(coordsArray[0], coordsArray[1], coordsArray[2])
     const prodscal = dot(prodvec.matrice, vecteur3d(0, 1, 0).matrice) as number
 

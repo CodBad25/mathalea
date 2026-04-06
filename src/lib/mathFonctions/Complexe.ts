@@ -340,6 +340,10 @@ export class Complexe {
         ? `${rAff} e^{i}`
         : `${rAff} e^{${signe}i ${thetaTex}}`
   }
+
+  toPolar() {
+    return { r: Number(this.mod), phi: Number(this.arg) }
+  }
 }
 
 // Génère l'écriture symbolique LaTeX pour les angles multiples de Pi/2, Pi/3, Pi/4, Pi/5, Pi/6, etc.

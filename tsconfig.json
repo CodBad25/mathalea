@@ -27,8 +27,7 @@
     "src/**/*.svelte",
     ".eslintrc.cjs",
     "src/global.d.ts",
-    "src/vite-env.d.ts",
-    "src/exercices/can/canCE1a-2026/canCE1-2026-Q15.ts"
+    "src/vite-env.d.ts"
   ],
   "exclude": ["./built/**/*"],
   "references": [{ "path": "./tsconfig.node.json" }]

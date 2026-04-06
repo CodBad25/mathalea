@@ -1,5 +1,3 @@
-import { polynomialRoot, round } from 'mathjs'
-
 import type Point from 'apigeom/src/elements/points/Point'
 import type Figure from 'apigeom/src/Figure'
 import Decimal from 'decimal.js'
@@ -11,9 +9,14 @@ import { ObjetMathalea2D } from '../2d/ObjetMathalea2D'
 import { point } from '../2d/PointAbstrait'
 import { tracePoint } from '../2d/TracePoint'
 import { choice } from '../outils/arrayOutils'
-import { rangeMinMax } from '../outils/nombres'
+import { rangeMinMax, round } from '../outils/nombres'
 import { stringNombre } from '../outils/texNombre'
-import { brent, tableauDeVariation, variationsFonction } from './etudeFonction'
+import {
+  brent,
+  polynomialRoot,
+  tableauDeVariation,
+  variationsFonction,
+} from './etudeFonction'
 import { Matrice, matrice } from './Matrice'
 import { chercheMinMaxLocal, Polynome } from './Polynome'
 
@@ -418,18 +421,18 @@ export class Spline {
               arr = round(valeur, precision)
             } else {
               // complexe !
-              const module = valeur.toPolar().r
-              if (module < 10 ** (-precision - 4)) {
+              const module = valeur.mod
+              if (Number(module) < 10 ** (-precision - 4)) {
                 // module trop petit pour être complexe, c'est 0 !
                 arr = 0
               } else {
-                const argument = valeur.toPolar().phi
+                const argument = valeur.arg
                 if (
                   Math.abs(argument) < 0.001 ||
                   Math.abs(Math.abs(argument) - Math.PI) < 0.001
                 ) {
                   // si l'argument est proche de 0 ou de Pi ou de -Pi
-                  arr = round(valeur.re, precision) // on prend la partie réelle
+                  arr = round(Number(valeur.re), precision) // on prend la partie réelle
                 } else {
                   arr = null // c'est une vraie racine complexe, du coup, on prend null
                 }

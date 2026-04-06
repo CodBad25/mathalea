@@ -1,4 +1,3 @@
-import type { Matrix } from 'mathjs'
 import { colorToLatexOrHTML } from '../../lib/2d/colorToLatexOrHtml'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { pointAbstrait, PointAbstrait } from '../../lib/2d/PointAbstrait'
@@ -170,32 +169,20 @@ export default class Reperage2e extends Exercice {
       for (let xx = -4; xx < 4 + 1 / denX; xx += 1 / denX) {
         if (this.sup4) {
           const pointL = pointAbstrait(
-            ...((matrice.multiply([
-              xx,
-              -3,
-            ]) as unknown as Matrix)!.toArray() as [number, number]),
+            ...(matrice.multiply([xx, -3]) as [number, number]),
           )
           const pointH = pointAbstrait(
-            ...((matrice.multiply([xx, 3]) as unknown as Matrix)!.toArray() as [
-              number,
-              number,
-            ]),
+            ...(matrice.multiply([xx, 3]) as [number, number]),
           )
           if (Math.abs(xx) > 0.01) grid.push(segment(pointL, pointH))
         }
         for (let yy = -3; yy < 3 + 1 / denY; yy += 1 / denY) {
           if (this.sup4 && xx === -4) {
             const pointL = pointAbstrait(
-              ...((matrice.multiply([
-                -4,
-                yy,
-              ]) as unknown as Matrix)!.toArray() as [number, number]),
+              ...(matrice.multiply([-4, yy]) as [number, number]),
             )
             const pointH = pointAbstrait(
-              ...((matrice.multiply([
-                4,
-                yy,
-              ]) as unknown as Matrix)!.toArray() as [number, number]),
+              ...(matrice.multiply([4, yy]) as [number, number]),
             )
             if (Math.abs(yy) > 0.01) grid.push(segment(pointL, pointH))
           }
@@ -204,17 +191,11 @@ export default class Reperage2e extends Exercice {
             if (Math.abs(xx) > 0.1 && Math.abs(yy) > 0.1) {
               grid.push(
                 pointAbstrait(
-                  ...((matrice.multiply([
-                    xx,
-                    yy,
-                  ]) as unknown as Matrix)!.toArray() as [number, number]),
+                  ...(matrice.multiply([xx, yy]) as [number, number]),
                 ),
               )
             } else {
-              const [x, y] = (matrice.multiply([
-                xx,
-                yy,
-              ]) as unknown as Matrix)!.toArray() as [number, number]
+              const [x, y] = matrice.multiply([xx, yy]) as [number, number]
               if (Math.abs(x) < 0.1) {
                 // On est sur l'axe des ordonnées
                 const s = segment(x - 0.1, y, x + 0.1, y)
@@ -266,12 +247,10 @@ export default class Reperage2e extends Exercice {
               .map((el) => el.num)
               .includes(y[i][k].num))
         )
-        const [mdx, mdy] = (
-          matrice.multiply([
-            x[i][k].valeurDecimale,
-            y[i][k].valeurDecimale,
-          ]) as unknown as Matrix
-        ).toArray() as [number, number]
+        const [mdx, mdy] = matrice.multiply([
+          x[i][k].valeurDecimale,
+          y[i][k].valeurDecimale,
+        ]) as [number, number]
         X[i][k] = mdx
         Y[i][k] = mdy
         points[i][k] = pointAbstrait(

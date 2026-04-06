@@ -157,16 +157,25 @@ export function resolutionSystemeLineaire2x2(
   ])
   if (maMatrice.determinant() === 0) return [0, 0]
   const resultat = maMatrice.inverse().multiply([fx1 - c, fx2 - c])
-  let arr: number[]
+  let arr: unknown
   if (resultat instanceof Matrice) {
-    arr = resultat.toArray() as number[]
+    arr = resultat.toArray()
   } else if (Array.isArray(resultat)) {
-    arr = resultat as number[]
+    arr = resultat
   } else {
     return [0, 0]
   }
-  const [a, b] = arr
-  return [a, b]
+  // Vérification de la taille et du type
+  if (
+    Array.isArray(arr) &&
+    arr.length === 2 &&
+    typeof arr[0] === 'number' &&
+    typeof arr[1] === 'number'
+  ) {
+    const [a, b] = arr
+    return [a, b]
+  }
+  return [0, 0]
 }
 
 /**
@@ -195,16 +204,26 @@ export function resolutionSystemeLineaire3x3(
     return [0, 0, 0]
   }
   const resultat = maMatrice.inverse().multiply([y1, y2, y3])
-  let arr: number[]
+  let arr: unknown
   if (resultat instanceof Matrice) {
-    arr = resultat.toArray() as number[]
+    arr = resultat.toArray()
   } else if (Array.isArray(resultat)) {
-    arr = resultat as number[]
+    arr = resultat
   } else {
     return [0, 0, 0]
   }
-  const [a, b, c] = arr
-  return [a, b, c]
+  // Vérification de la taille et du type
+  if (
+    Array.isArray(arr) &&
+    arr.length === 3 &&
+    typeof arr[0] === 'number' &&
+    typeof arr[1] === 'number' &&
+    typeof arr[2] === 'number'
+  ) {
+    const [a, b, c] = arr
+    return [a, b, c]
+  }
+  return [0, 0, 0]
 }
 
 /**

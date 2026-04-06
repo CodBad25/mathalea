@@ -7,7 +7,6 @@ import {
   isNumber,
   isSymbol,
 } from '@cortex-js/compute-engine'
-import { isInteger, number } from 'mathjs'
 import Grandeur from '../../modules/Grandeur'
 import Hms from '../../modules/Hms'
 import { pgcd } from '../outils/primalite'
@@ -1000,7 +999,7 @@ function handleEcritureScientifique(
   // Si la puissance est 0, on accepte mais computeEngine ne met pas en notation scientitique et donc la comparaison entre notation scientifique n'est pas possible.
   // Donc il faut ces trois lignes pour comparer les nombres décimaux, dans ce cas précis.
   const match = saisieCleanFormattee.match(/\^{(-?\d+)}$/) // Recherche des nombres entre accolades
-  const puissance = match ? number(match[match.length - 1]) : null
+  const puissance = match ? Number(match[match.length - 1]) : null
   if (puissance === 0) {
     saisieCleanFormattee = ce
       .parse(saisieClean)
@@ -1266,7 +1265,7 @@ function handleFraction(
     return ok()
 
   if (
-    isInteger(ce.parse(clean(saisie)).re) &&
+    Number.isInteger(ce.parse(clean(saisie)).re) &&
     mathEqual(parse(saisie), parse(answer))
   )
     return ok()

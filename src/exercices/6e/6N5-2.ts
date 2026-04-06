@@ -16,7 +16,7 @@ import {
 } from '../../lib/outils/nombres'
 import { numAlpha, sp } from '../../lib/outils/outilString'
 import { prenomF } from '../../lib/outils/Personne'
-import { texNombre3 } from '../../lib/outils/texNombre'
+import { texNombre } from '../../lib/outils/texNombre'
 import { context } from '../../modules/context'
 import {
   estentier,
@@ -195,7 +195,7 @@ export default class QuestionsMasses extends Exercice {
       let lignesAMC
       let alignementAMC
       let sanscadreAMC
-      const enonceAMCInit = `${quidame} repère des ${ArticlePluriel} dans un magazine de publicité à $${texNombre3(PrixUnitaire)}$${sp()}€ le kilogramme. <br>`
+      const enonceAMCInit = `${quidame} repère des ${ArticlePluriel} dans un magazine de publicité à $${texNombre(PrixUnitaire)}$${sp()}€ le kilogramme. <br>`
       texte = enonceAMCInit + '<br>'
       texteCorr = ''
       correctionAMC = ''
@@ -214,7 +214,7 @@ export default class QuestionsMasses extends Exercice {
           case 1:
             enonceAMC += `Quel serait le prix de $${DixOuCent}$ kilogrammes de ${ArticlePluriel}${sp()}?<br><br>`
             reponseAMC = arrondi(DixOuCent * PrixUnitaire)
-            correctionAMC += ` $${DixOuCent} \\times ${texNombre3(PrixUnitaire)} = ${texNombre3(reponseAMC)}$<br>`
+            correctionAMC += ` $${DixOuCent} \\times ${texNombre(PrixUnitaire)} = ${texNombre(reponseAMC)}$<br>`
             correctionAMC +=
               `Le prix de $${DixOuCent}$ kilogrammes de ${ArticlePluriel} serait de ` +
               texteEnCouleurEtGras(`$${texPrix(reponseAMC)}$`) +
@@ -225,26 +225,26 @@ export default class QuestionsMasses extends Exercice {
           case 2:
             enonceAMC += `Quel serait le prix de $${NbArticles}$ kilogrammes de ${ArticlePluriel}${sp()}?<br><br>`
             reponseAMC = arrondi(NbArticles * PrixUnitaire)
-            correctionAMC += ` $${NbArticles} \\times ${texNombre3(PrixUnitaire)} = ${texNombre3(arrondi(NbArticles * PrixUnitaire))}$<br>`
+            correctionAMC += ` $${NbArticles} \\times ${texNombre(PrixUnitaire)} = ${texNombre(arrondi(NbArticles * PrixUnitaire))}$<br>`
             correctionAMC +=
               `Le prix de $${NbArticles}$ kilogrammes de ${ArticlePluriel} serait de ` +
               texteEnCouleurEtGras(`$${texPrix(reponseAMC)}$`) +
               `${sp()}€.<br><br>`
             break
           case 3:
-            enonceAMC += `Si ${quidame} achetait un kilogramme de ${ArticlePluriel} à $${texNombre3(PrixUnitaire)}$${sp()}€ le kilogramme puis d'autres articles pour $${texNombre3(AutrePrix)}$${sp()}€, quel serait le prix final${sp()}?<br><br>`
+            enonceAMC += `Si ${quidame} achetait un kilogramme de ${ArticlePluriel} à $${texNombre(PrixUnitaire)}$${sp()}€ le kilogramme puis d'autres articles pour $${texNombre(AutrePrix)}$${sp()}€, quel serait le prix final${sp()}?<br><br>`
             reponseAMC = arrondi(PrixUnitaire + AutrePrix)
-            correctionAMC += ` $${texNombre3(PrixUnitaire)} + ${texNombre3(AutrePrix)} = ${texNombre3(reponseAMC)}$<br>`
-            correctionAMC += `Si ${quidame} achetait un kilogramme de ${ArticlePluriel} ainsi que d'autres articles pour $${texNombre3(AutrePrix)}$${sp()}€, `
+            correctionAMC += ` $${texNombre(PrixUnitaire)} + ${texNombre(AutrePrix)} = ${texNombre(reponseAMC)}$<br>`
+            correctionAMC += `Si ${quidame} achetait un kilogramme de ${ArticlePluriel} ainsi que d'autres articles pour $${texNombre(AutrePrix)}$${sp()}€, `
             correctionAMC +=
               'le prix final serait de ' +
               texteEnCouleurEtGras(`$${texPrix(reponseAMC)}$`) +
               `${sp()}€.<br><br>`
             break
           case 4:
-            enonceAMC += `${quidame} dispose d'un bon de réduction de $${texNombre3(PrixReduction)}$${sp()}€. Si ${quidame} achetait un kilogramme de ${ArticlePluriel}, quelle somme d'argent paierait ${quidame} au final${sp()}?<br><br>`
+            enonceAMC += `${quidame} dispose d'un bon de réduction de $${texNombre(PrixReduction)}$${sp()}€. Si ${quidame} achetait un kilogramme de ${ArticlePluriel}, quelle somme d'argent paierait ${quidame} au final${sp()}?<br><br>`
             reponseAMC = arrondi(PrixUnitaire - PrixReduction)
-            correctionAMC += ` $${texNombre3(PrixUnitaire)} - ${texNombre3(PrixReduction)} = ${texNombre3(reponseAMC)}$<br>`
+            correctionAMC += ` $${texNombre(PrixUnitaire)} - ${texNombre(PrixReduction)} = ${texNombre(reponseAMC)}$<br>`
             correctionAMC +=
               `Grâce à son bon de réduction, ${quidame} ne paierait que ` +
               texteEnCouleurEtGras(`$${texPrix(reponseAMC)}$`) +
@@ -255,7 +255,7 @@ export default class QuestionsMasses extends Exercice {
             reponseAMC = arrondi((NbArticles2 + NbArticles3) * PrixUnitaire)
             correctionAMC += ` $${NbArticles2} + ${NbArticles3} = ${NbArticles2 + NbArticles3}$<br>`
             correctionAMC += `${quidame} et son ${Personnage1} achèteraient $${NbArticles2 + NbArticles3}$ ${ArticlePluriel}.<br>`
-            correctionAMC += `$${NbArticles2 + NbArticles3} \\times ${texNombre3(PrixUnitaire)} = ${texNombre3(reponseAMC)}$<br>`
+            correctionAMC += `$${NbArticles2 + NbArticles3} \\times ${texNombre(PrixUnitaire)} = ${texNombre(reponseAMC)}$<br>`
             correctionAMC += `Si ${quidame} et son ${Personnage1} achetaient $${NbArticles2 + NbArticles3}$ kilogrammes de ${ArticlePluriel}, `
             correctionAMC +=
               'le prix final serait de ' +
@@ -267,7 +267,7 @@ export default class QuestionsMasses extends Exercice {
             reponseAMC = arrondi((NbArticles5 - NbArticles4) * PrixUnitaire)
             correctionAMC += `$${NbArticles5} - ${NbArticles4} = ${NbArticles5 - NbArticles4}$<br>`
             correctionAMC += `${quidame} ne payerait que $${NbArticles5 - NbArticles4}$ ${ArticlePluriel}.<br>`
-            correctionAMC += `$${NbArticles5 - NbArticles4} \\times ${texNombre3(PrixUnitaire)} = ${texNombre3(reponseAMC)}$<br>`
+            correctionAMC += `$${NbArticles5 - NbArticles4} \\times ${texNombre(PrixUnitaire)} = ${texNombre(reponseAMC)}$<br>`
             correctionAMC += `Si ${quidame} achetait $${NbArticles5}$ kilogrammes de ${ArticlePluriel} mais que sa ${Personnage2} lui propose de lui en rembourser $${NbArticles4}$ kilogrammes, `
             correctionAMC +=
               `${quidame} dépenserait ` +
@@ -280,14 +280,14 @@ export default class QuestionsMasses extends Exercice {
             correctionAMC += 'Le partage se ferait entre $10$ personnes.<br>'
             if (this.sup3) {
               reponseAMC = arrondi(PrixUnitaire / 10, 3)
-              correctionAMC += `$${texNombre3(PrixUnitaire)} \\div 10 = ${texNombre3(reponseAMC)}$<br>`
+              correctionAMC += `$${texNombre(PrixUnitaire)} \\div 10 = ${texNombre(reponseAMC)}$<br>`
               correctionAMC +=
                 `Si ${quidame} partageait un kilogramme de ${ArticlePluriel} avec $9$ amis, chacun donnerait équitablement ` +
                 texteEnCouleurEtGras(`$${texPrix(reponseAMC)}$`) +
                 `${sp()}€.<br><br>`
             } else {
               reponseAMC = troncature(arrondi(PrixUnitaire / 10, 3) + 0.01, 2)
-              correctionAMC += `$${texNombre3(PrixUnitaire)} \\div 10 = ${texNombre3(arrondi(PrixUnitaire / 10, 3))}$ et $${texNombre3(troncature(arrondi(PrixUnitaire / 10, 3), 2))} < ${texNombre3(arrondi(PrixUnitaire / 10, 3))} < ${texNombre3(reponseAMC)}$<br>`
+              correctionAMC += `$${texNombre(PrixUnitaire)} \\div 10 = ${texNombre(arrondi(PrixUnitaire / 10, 3))}$ et $${texNombre(troncature(arrondi(PrixUnitaire / 10, 3), 2))} < ${texNombre(arrondi(PrixUnitaire / 10, 3))} < ${texNombre(reponseAMC)}$<br>`
               correctionAMC +=
                 `Si ${quidame} partageait un kilogramme de ${ArticlePluriel} avec $9$ amis, chacun donnerait équitablement au moins ` +
                 texteEnCouleurEtGras(`$${texPrix(reponseAMC)}$`) +
@@ -301,7 +301,7 @@ export default class QuestionsMasses extends Exercice {
             correctionAMC += `Le partage se ferait entre $${Nbpartage + 1}$ personnes.<br>`
             if (estentier(arrondi(PrixUnitaire * 100, 0) / (Nbpartage + 1))) {
               reponseAMC = arrondi(PrixUnitaire / (Nbpartage + 1), 3)
-              correctionAMC += `$${texNombre3(PrixUnitaire)} \\div ${Nbpartage + 1} = ${texNombre3(reponseAMC)}$<br>`
+              correctionAMC += `$${texNombre(PrixUnitaire)} \\div ${Nbpartage + 1} = ${texNombre(reponseAMC)}$<br>`
               correctionAMC +=
                 `Si ${quidame} partageait un kilogramme de ${ArticlePluriel} avec $${Nbpartage}$ camarades, chacun donnerait équitablement ` +
                 texteEnCouleurEtGras(`$${texPrix(reponseAMC)}$`) +
@@ -314,9 +314,9 @@ export default class QuestionsMasses extends Exercice {
               if (
                 estentier(arrondi(PrixUnitaire * 1000, 0) / (Nbpartage + 1))
               ) {
-                correctionAMC += `$${texNombre3(PrixUnitaire)} \\div ${Nbpartage + 1} = ${texNombre3(arrondi(PrixUnitaire / (Nbpartage + 1), 3))}$ et $${texNombre3(troncature(arrondi(PrixUnitaire / (Nbpartage + 1), 3), 2))} < ${texNombre3(arrondi(PrixUnitaire / (Nbpartage + 1), 3))} < ${texNombre3(reponseAMC)}$<br>`
+                correctionAMC += `$${texNombre(PrixUnitaire)} \\div ${Nbpartage + 1} = ${texNombre(arrondi(PrixUnitaire / (Nbpartage + 1), 3))}$ et $${texNombre(troncature(arrondi(PrixUnitaire / (Nbpartage + 1), 3), 2))} < ${texNombre(arrondi(PrixUnitaire / (Nbpartage + 1), 3))} < ${texNombre(reponseAMC)}$<br>`
               } else {
-                correctionAMC += `$${texNombre3(PrixUnitaire)} \\div ${Nbpartage + 1} \\approx ${texNombre3(arrondi(PrixUnitaire / (Nbpartage + 1), 3))}$ et $${texNombre3(troncature(arrondi(PrixUnitaire / (Nbpartage + 1), 3), 2))} < ${texNombre3(arrondi(PrixUnitaire / (Nbpartage + 1), 3))} < ${texNombre3(reponseAMC)}$<br>`
+                correctionAMC += `$${texNombre(PrixUnitaire)} \\div ${Nbpartage + 1} \\approx ${texNombre(arrondi(PrixUnitaire / (Nbpartage + 1), 3))}$ et $${texNombre(troncature(arrondi(PrixUnitaire / (Nbpartage + 1), 3), 2))} < ${texNombre(arrondi(PrixUnitaire / (Nbpartage + 1), 3))} < ${texNombre(reponseAMC)}$<br>`
               }
               correctionAMC +=
                 `Si ${quidame} partageait un kilogramme de ${ArticlePluriel} avec $${Nbpartage}$ camarades, chacun donnerait équitablement au moins ` +

@@ -1,6 +1,5 @@
 import { orangeMathalea } from 'apigeom/src/elements/defaultValues'
 import Decimal from 'decimal.js'
-import { equal, round } from 'mathjs'
 import type { IFractionEtendue } from '../../modules/FractionEtendue.type'
 import { fraction } from '../../modules/fractions'
 import Grandeur from '../../modules/Grandeur'
@@ -8,7 +7,7 @@ import Hms from '../../modules/Hms'
 import { egal } from '../../modules/outils'
 import type { AnswerValueType } from '../types'
 import { miseEnEvidence } from './embellissements'
-import { arrondi } from './nombres'
+import { arrondi, round } from './nombres'
 import { lettreDepuisChiffre } from './outilString'
 import { stringNombre, texNombre } from './texNombre'
 
@@ -207,8 +206,8 @@ export function ecritureAlgebriqueSauf1(
     })
     a = Number(a)
   }
-  if (equal(a, 1)) return '+'
-  else if (equal(a, -1)) return '-'
+  if (Number(a) === 1) return '+'
+  else if (Number(a) === -1) return '-'
   else if (typeof a === 'number' || a instanceof Decimal) {
     return ecritureAlgebrique(a)
   } else {
@@ -238,7 +237,7 @@ export function ecritureAlgebriqueSauf0(
     })
     a = Number(a)
   }
-  if (equal(a as number, 0)) return ''
+  if (Number(a) === 0) return ''
   else if (typeof a === 'number' || a instanceof Decimal) {
     return ecritureAlgebrique(a)
   } else {

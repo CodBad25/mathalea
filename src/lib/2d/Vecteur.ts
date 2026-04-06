@@ -89,3 +89,52 @@ export function vecteur(
 ): IVecteur {
   return new Vecteur(a as any, b as any, nom)
 }
+
+export function cross(a: number[], b: number[]): number[] {
+  return [
+    a[1] * b[2] - a[2] * b[1],
+    a[2] * b[0] - a[0] * b[2],
+    a[0] * b[1] - a[1] * b[0],
+  ]
+}
+
+export function dot(a: number[], b: number[]): number {
+  if (a.length !== b.length)
+    throw new Error('Les vecteurs doivent avoir la même taille')
+  let res = 0
+  for (let i = 0; i < a.length; i++) {
+    res += a[i] * b[i]
+  }
+  return res
+}
+
+// effectue le produit d'une matrice nx3 par un vecteur de taille 3
+export function matriceMultiply(A: number[][], V: number[]): number[] {
+  if (A[0].length !== V.length)
+    throw new Error(
+      'Le nombre de colonnes de la matrice doit être égal à la taille du vecteur',
+    )
+  const res: number[] = []
+  for (let i = 0; i < A.length; i++) {
+    let sum = 0
+    for (let j = 0; j < A[0].length; j++) {
+      sum += A[i][j] * V[j]
+    }
+    res.push(sum)
+  }
+  return res
+}
+
+export function norme(v: number[]): number {
+  return Math.sqrt(v.reduce((acc, val) => acc + val * val, 0))
+}
+
+export function scale(v: number[], scalar: number): number[] {
+  return v.map((component) => component * scalar)
+}
+
+export function normalize(v: number[]): number[] {
+  const vNorm = norme(v)
+  if (vNorm === 0) throw new Error('Le vecteur ne peut pas être normalisé')
+  return scale(v, 1 / vNorm)
+}
