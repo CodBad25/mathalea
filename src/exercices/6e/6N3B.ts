@@ -48,7 +48,7 @@ export default class DonnerSensDefinitionQuotient extends Exercice {
   constructor() {
     super()
 
-    this.nbQuestions = 5
+    this.nbQuestions = 2
     this.exoCustomResultat = true
     this.besoinFormulaireNumerique = [
       'Solution finale',
@@ -89,6 +89,7 @@ export default class DonnerSensDefinitionQuotient extends Exercice {
         stepBis: 1 / den,
         snapGrid: true,
       })
+      figure.options.labelAutomaticForPoints = true
       figure.options.labelAutomaticBeginsWith = label1
       figure.options.pointDescriptionWithCoordinates = false
       this.figuresApiGeom[i] = figure
