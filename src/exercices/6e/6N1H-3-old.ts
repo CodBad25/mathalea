@@ -1,6 +1,7 @@
 import { point } from '../../lib/2d/PointAbstrait'
 import { segment } from '../../lib/2d/segmentsVecteurs'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choisitLettresDifferentes } from '../../lib/outils/aleatoires'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { arrondi, nombreDeChiffresDe } from '../../lib/outils/nombres'
@@ -13,26 +14,24 @@ import Exercice from '../Exercice'
 
 import { droiteGraduee } from '../../lib/2d/DroiteGraduee'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { toutAUnPoint } from '../../lib/interactif/mathLive'
-import { addMultiMathfield } from '../../lib/interactif/MultiMathfield/MultiMathfield'
 
 export const titre = 'Lire une abscisse décimale grâce à des zooms successifs'
 
 export const amcReady = true
 export const amcType = 'AMCHybride'
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'mathLive'
 
-export const dateDeModifImportante = '05/04/2026' // Passage à MultiMathfield
+export const dateDeModifImportante = '05/09/2024'
 /**
  * Ajout Interactivité et AMC : Janvier 2022 par EE
  */
-export const uuid = '23c49'
+export const uuid = '23c48'
 
 export const refs = {
-  'fr-fr': ['6N1H-3'],
-  'fr-2016': ['6N23-3'],
-  'fr-ch': ['9NO11-7b'],
+  'fr-fr': [],
+  'fr-2016': [],
+  'fr-ch': [],
 }
 export default class LireUneAbscisseAvecZoom extends Exercice {
   niveau: string
@@ -700,40 +699,45 @@ export default class LireUneAbscisseAvecZoom extends Exercice {
       texte += " et sous forme d'une seule fraction décimale.<br>"
       texte += mathalea2d(fenetre, objets)
       if (this.interactif) {
-        handleAnswers(
-          this,
-          i,
-          {
-            champ1: { value: reponse1 },
-            champ2: {
-              value: `${reponse2A}+${reponse2B.toLatex()}`,
-              options: { additionSeulementEtNonResultat: true },
-            },
-            champ3: { value: reponse3, options: { fractionDecimale: true } },
-            bareme: toutAUnPoint,
-          },
-          { formatInteractif: 'multiMathfield' },
-        )
-
-        texte += addMultiMathfield(this, i, {
-          dataTemplate: `Abscisse de $${noms[1]}$ en écriture décimale : %{champ1}
-          Abscisse de $${noms[1]}$ comme somme d'un nombre entier et d'une fraction décimale inférieure à 1 : %{champ2}
-          Abscisse de $${noms[1]}$ sous forme d'une fraction décimale : %{champ3}`,
-          dataOptions: {
-            champ1: {
-              keyboard: KeyboardType.clavierNumbers,
-              minWidth: 70,
-            },
-            champ2: {
-              keyboard: KeyboardType.clavierDeBaseAvecFraction,
-              minWidth: 70,
-            },
-            champ3: {
-              keyboard: KeyboardType.clavierDeBaseAvecFraction,
-              minWidth: 70,
-            },
+        handleAnswers(this, 3 * i, { reponse: { value: reponse1 } })
+        handleAnswers(this, 3 * i + 1, {
+          reponse: {
+            value: `${reponse2A}+${reponse2B.toLatex()}`,
+            options: { additionSeulementEtNonResultat: true },
           },
         })
+        handleAnswers(this, 3 * i + 2, {
+          reponse: { value: reponse3, options: { fractionDecimale: true } },
+        })
+
+        texte += ajouteChampTexteMathLive(
+          this,
+          i * 3,
+          KeyboardType.clavierNumbers,
+          {
+            texteAvant: `Abscisse de $${noms[1]}$ en écriture décimale : `,
+          },
+        )
+        texte +=
+          '<br><br>' +
+          ajouteChampTexteMathLive(
+            this,
+            i * 3 + 1,
+            KeyboardType.clavierDeBaseAvecFraction,
+            {
+              texteAvant: `Abscisse de $${noms[1]}$ comme somme d'un nombre entier et d'une fraction décimale inférieure à 1 : `,
+            },
+          )
+        texte +=
+          '<br><br>' +
+          ajouteChampTexteMathLive(
+            this,
+            i * 3 + 2,
+            KeyboardType.clavierDeBaseAvecFraction,
+            {
+              texteAvant: `Abscisse de $${noms[1]}$ sous forme d'une fraction décimale : `,
+            },
+          )
       } else if (context.isAmc) {
         this.autoCorrection[i] = {
           enonce: texte,

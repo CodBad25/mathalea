@@ -1,9 +1,10 @@
 import { droiteGraduee } from '../../lib/2d/DroiteGraduee'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
-import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { toutAUnPoint } from '../../lib/interactif/mathLive'
+import { addMultiMathfield } from '../../lib/interactif/MultiMathfield/MultiMathfield'
 import { arrondi } from '../../lib/outils/nombres'
-import { lettreIndiceeDepuisChiffre } from '../../lib/outils/outilString'
+import { lettreIndiceeDepuisChiffre, sp } from '../../lib/outils/outilString'
 import { stringNombre } from '../../lib/outils/texNombre'
 import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
@@ -16,10 +17,10 @@ import Exercice from '../Exercice'
 
 export const titre = "Lire l'abscisse décimale d'un point (niveau 2)"
 export const interactifReady = true
-export const interactifType = 'mathLive'
+export const interactifType = 'multiMathfield'
 export const amcReady = true
 export const amcType = 'AMCOpen'
-export const dateDeModifImportante = '01/02/2022'
+export const dateDeModifImportante = '5/04/2026' // Passage à MultiMathfield
 
 /**
  * Exercice calqué sur lire abscisse fractionnaire sauf que le résultat attendu est en écriture décimale.
@@ -27,7 +28,7 @@ export const dateDeModifImportante = '01/02/2022'
  * @author Jean-Claude Lhote
 
  */
-export const uuid = '8418e'
+export const uuid = '8418f'
 
 export const refs = {
   'fr-fr': ['6N1H-1'],
@@ -35,6 +36,7 @@ export const refs = {
   'fr-ch': ['9NO7-2'],
 }
 export default class LireAbscisseDecimaleBis2d extends Exercice {
+  niveau: number = 6
   constructor() {
     super()
     this.besoinFormulaireTexte = [
@@ -102,7 +104,6 @@ export default class LireAbscisseDecimaleBis2d extends Exercice {
         texteCorr = '',
         cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       l1 = lettreIndiceeDepuisChiffre(i * 3 + 1)
       l2 = lettreIndiceeDepuisChiffre(i * 3 + 2)
@@ -140,6 +141,7 @@ export default class LireAbscisseDecimaleBis2d extends Exercice {
           pas2 = 10
           break
         case 2: // Placer des centièmes
+        default:
           abs0 =
             this.niveau === 2
               ? arrondi(randint(-80, 80) / 10, 1)
@@ -215,24 +217,32 @@ export default class LireAbscisseDecimaleBis2d extends Exercice {
       )
 
       if (this.interactif && context.isHtml) {
-        setReponse(this, 3 * i, arrondi(xA / pas1 + abs0))
-        setReponse(this, 3 * i + 1, arrondi(xB / pas1 + abs0))
-        setReponse(this, 3 * i + 2, arrondi(xC / pas1 + abs0))
-        texte +=
-          '$' +
-          l1 +
-          '$' +
-          ajouteChampTexteMathLive(this, 3 * i, KeyboardType.clavierNumbers)
-        texte +=
-          '$' +
-          l2 +
-          '$' +
-          ajouteChampTexteMathLive(this, 3 * i + 1, KeyboardType.clavierNumbers)
-        texte +=
-          '$' +
-          l3 +
-          '$' +
-          ajouteChampTexteMathLive(this, 3 * i + 2, KeyboardType.clavierNumbers)
+        handleAnswers(
+          this,
+          i,
+          {
+            champ1: {
+              value: stringNombre(arrondi(xA / pas1 + abs0)),
+            },
+            champ2: {
+              value: stringNombre(arrondi(xB / pas1 + abs0)),
+            },
+            champ3: {
+              value: stringNombre(arrondi(xC / pas1 + abs0)),
+            },
+            bareme: toutAUnPoint,
+          },
+          { formatInteractif: 'multiMathfield' },
+        )
+
+        texte += addMultiMathfield(this, i, {
+          dataTemplate: `$${l1}\\lparen$%{champ1} $\\rparen$ ${sp(6)} $${l2}\\lparen$%{champ2} $\\rparen$ ${sp(6)} $${l3}\\lparen$%{champ3} $\\rparen$`,
+          dataOptions: {
+            champ1: { keyboard: KeyboardType.clavierNumbers },
+            champ2: { keyboard: KeyboardType.clavierNumbers },
+            champ3: { keyboard: KeyboardType.clavierNumbers },
+          },
+        })
       } else {
         if (context.isAmc) {
           this.autoCorrection[i] = {
