@@ -1,10 +1,10 @@
 import Decimal from 'decimal.js'
-import { abs, gcd, lcm, multiply, round } from 'mathjs'
 import { extraireRacineCarree } from '../lib/outils/calculs'
 import { miseEnEvidence } from '../lib/outils/embellissements'
 import {
   decompositionFacteursPremiers,
   obtenirListeFacteursPremiers,
+  pgcd,
   ppcm,
 } from '../lib/outils/primalite'
 import { texNombre } from '../lib/outils/texNombre'
@@ -277,18 +277,18 @@ class FractionEtendue {
       throw Error(
         `Fraction Etendue les données ne permettent pas de définir une fraction : n=${n}, d=${d}`,
       )
-    const pgcd =
+    const pgcdNumDen =
       Math.abs(num) === 1 && Math.abs(den) === 1
         ? 1
-        : gcd(Math.abs(num), Math.abs(den))
+        : pgcd(Math.abs(num), Math.abs(den))
     const prodNumDen = num * den
     this.s = prodNumDen === 0 ? 0 : prodNumDen < 0 ? -1 : 1
-    const numIrred = this.s * Math.abs(num / pgcd)
-    const denIrred = Math.abs(den / pgcd)
+    const numIrred = this.s * Math.abs(num / pgcdNumDen)
+    const denIrred = Math.abs(den / pgcdNumDen)
     this.num = num
     this.den = den
-    this.n = Math.abs(num / pgcd)
-    this.d = Math.abs(den / pgcd)
+    this.n = Math.abs(num / pgcdNumDen)
+    this.d = Math.abs(den / pgcdNumDen)
     /**
      * le signe de la  FractionMathjs  : -1 pour négatif, 0 ou 1 pour positif
      * Au cas où quelqu'un oublie le e de this.signe
@@ -558,7 +558,7 @@ class FractionEtendue {
     definePropRo(this, 'estIrreductible', () => {
       if (!estIrreductible)
         estIrreductible =
-          gcd(Math.abs(this.num), Math.abs(this.den)) === 1 && this.den !== 1
+          pgcd(Math.abs(this.num), Math.abs(this.den)) === 1 && this.den !== 1
       return estIrreductible
     })
   }
@@ -634,8 +634,9 @@ class FractionEtendue {
    */
   simplifie() {
     return new FractionEtendue(
-      (abs(this.num) * this.signe) / gcd(abs(this.num), abs(this.den)),
-      abs(this.den) / gcd(abs(this.num), abs(this.den)),
+      (Math.abs(this.num) * this.signe) /
+        pgcd(Math.abs(this.num), Math.abs(this.den)),
+      Math.abs(this.den) / pgcd(Math.abs(this.num), Math.abs(this.den)),
     )
   }
 
@@ -644,7 +645,7 @@ class FractionEtendue {
    * @return {FractionEtendue} un objet  FractionMathjs  (mathjs)
    */
   valeurAbsolue(): FractionEtendue {
-    return new FractionEtendue(abs(this.num), abs(this.den))
+    return new FractionEtendue(Math.abs(this.num), Math.abs(this.den))
   }
 
   /**
@@ -660,8 +661,8 @@ class FractionEtendue {
    * @return {FractionEtendue} La FractionEtendue dont le numérateur et le dénominateur ont été multipliés par k.
    */
   reduire(k: number) {
-    const num = multiply(this.num, k)
-    const den = multiply(this.den, k)
+    const num = this.num * k
+    const den = this.den * k
     return new FractionEtendue(num, den)
   }
 
@@ -810,7 +811,7 @@ class FractionEtendue {
       throw Error(
         `estUneSimplification(f2) : f2 n'est pas une FractionEtendue ! f2=${JSON.stringify(f2)}`,
       )
-    return this.isEqual(f2) && abs(this.num) < abs(f2.num)
+    return this.isEqual(f2) && Math.abs(this.num) < Math.abs(f2.num)
   }
 
   /**
@@ -823,27 +824,27 @@ class FractionEtendue {
       if (this.den === f2.den) {
         // on ajoute 2 fractions de même dénominateur
         return new FractionEtendue(this.num + f2.num, f2.den)
-      } else if ([this.den, f2.den].indexOf(lcm(this.den, f2.den)) !== -1) {
+      } else if ([this.den, f2.den].indexOf(ppcm(this.den, f2.den)) !== -1) {
         // un dénominateur est multiple de l'autre
-        if (this.den === lcm(this.den, f2.den)) {
+        if (this.den === ppcm(this.den, f2.den)) {
           // c'est this qui a le dénominateur commun.
           return new FractionEtendue(
-            this.num + f2.num * round(this.den / f2.den),
+            this.num + f2.num * Math.round(this.den / f2.den),
             this.den,
           ) // on transforme f2
         } else {
           // c'est f2 qui a le dénominateur commun
           return new FractionEtendue(
-            f2.num + this.num * round(f2.den / this.den),
+            f2.num + this.num * Math.round(f2.den / this.den),
             f2.den,
           ) // on transforme this
         }
       } else {
         // besoin d'établir le dénominateur commun.
         return new FractionEtendue(
-          this.num * round(lcm(this.den, f2.den) / this.den) +
-            f2.num * round(lcm(this.den, f2.den) / f2.den),
-          lcm(this.den, f2.den),
+          this.num * Math.round(ppcm(this.den, f2.den) / this.den) +
+            f2.num * Math.round(ppcm(this.den, f2.den) / f2.den),
+          ppcm(this.den, f2.den),
         )
       }
     } else {
@@ -1288,21 +1289,21 @@ class FractionEtendue {
         const signe = this.sign === -1 ? '-' : ''
         const num = Math.abs(this.num)
         const den = Math.abs(this.den)
-        const pgcd = gcd(num, den)
-        if (pgcd !== 1) {
-          const redaction = `=${signe}\\dfrac{${num / pgcd}${miseEnEvidence('\\times' + ecritureParentheseSiNegatif(pgcd), '#2563a5')} }{${den / pgcd}${miseEnEvidence('\\times' + ecritureParentheseSiNegatif(pgcd), '#2563a5')}}=`
+        const pgcdNumDen = pgcd(num, den)
+        if (pgcdNumDen !== 1) {
+          const redaction = `=${signe}\\dfrac{${num / pgcdNumDen}${miseEnEvidence('\\times' + ecritureParentheseSiNegatif(pgcdNumDen), '#2563a5')} }{${den / pgcdNumDen}${miseEnEvidence('\\times' + ecritureParentheseSiNegatif(pgcdNumDen), '#2563a5')}}=`
           let redactionFinale
-          if (Math.abs(den / pgcd) !== 1)
-            redactionFinale = `${signe}\\dfrac{${Math.abs(num / pgcd)}}{${Math.abs(den / pgcd)}}`
-          else redactionFinale = `${signe}${Math.abs(num / pgcd)}`
+          if (Math.abs(den / pgcdNumDen) !== 1)
+            redactionFinale = `${signe}\\dfrac{${Math.abs(num / pgcdNumDen)}}{${Math.abs(den / pgcdNumDen)}}`
+          else redactionFinale = `${signe}${Math.abs(num / pgcdNumDen)}`
           if (couleurFinale !== '')
             redactionFinale = miseEnEvidence(redactionFinale, couleurFinale)
           return redaction + redactionFinale
         } else {
           let redactionFinale
-          if (Math.abs(den / pgcd) - 1 !== 0)
-            redactionFinale = `=${signe}\\dfrac{${Math.abs(num / pgcd)}}{${Math.abs(den / pgcd)}}`
-          else redactionFinale = `=${signe}${Math.abs(num / pgcd)}`
+          if (Math.abs(den / pgcdNumDen) - 1 !== 0)
+            redactionFinale = `=${signe}\\dfrac{${Math.abs(num / pgcdNumDen)}}{${Math.abs(den / pgcdNumDen)}}`
+          else redactionFinale = `=${signe}${Math.abs(num / pgcdNumDen)}`
           if (couleurFinale !== '')
             redactionFinale = miseEnEvidence(redactionFinale, couleurFinale)
           return redactionFinale

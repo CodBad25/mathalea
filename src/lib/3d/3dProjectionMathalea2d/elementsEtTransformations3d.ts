@@ -1,4 +1,3 @@
-import { cross, dot, matrix, multiply, norm, type Matrix } from 'mathjs'
 import { context } from '../../../modules/context'
 import { colorToLatexOrHTML } from '../../2d/colorToLatexOrHtml'
 import { Droite, droite } from '../../2d/droites'
@@ -9,9 +8,7 @@ import { Polygone, polygone } from '../../2d/polygones'
 import { polyline } from '../../2d/Polyline'
 import { representant } from '../../2d/representantVecteur'
 import { Segment, segment } from '../../2d/segmentsVecteurs'
-import { Vecteur, vecteur } from '../../2d/Vecteur'
-
-export const math = { matrix, multiply, norm, cross, dot }
+import { matriceMultiply, normalize, Vecteur, vecteur } from '../../2d/Vecteur'
 
 /*
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -55,18 +52,18 @@ export class Point3d {
   ) {
     const alpha = (context.anglePerspective * Math.PI) / 180 // context.anglePerspective peut être changé globalement pour modifier la perspective
     const rapport = context.coeffPerspective // idem pour context.coefficientPerspective qui est la réduction sur l'axe y.
-    const MT = math.matrix([
+    const MT = [
       [1, rapport * Math.cos(alpha), 0],
       [0, rapport * Math.sin(alpha), 1],
-    ]) // La matrice de projection 3d -> 2d
+    ] // La matrice de projection 3d -> 2d
     this.x = x
     this.y = y
     this.z = z
     this.isVisible = isVisible
     this.label = label
     this.typeObjet = 'point3d'
-    const V = math.matrix([this.x, this.y, this.z])
-    const W = (math.multiply(MT, V) as any).toArray().map(Number)
+    const V = [this.x, this.y, this.z]
+    const W = matriceMultiply(MT, V)
     this.c2d = pointAbstrait(
       Number(W[0].toFixed(2)),
       Number(W[1].toFixed(2)),
@@ -112,19 +109,17 @@ export class Vecteur3d {
   x: number = 0
   y: number = 0
   z: number = 0
-  matrice: Matrix
+  matrice: [number, number, number]
   norme: number
   c2d: Vecteur
   representant: (A: Point3d) => Segment
-  constructor(
-    ...args: [Point3d, Point3d] | [number, number, number] | [Matrix]
-  ) {
+  constructor(...args: [Point3d, Point3d] | [number, number, number]) {
     const alpha = (context.anglePerspective * Math.PI) / 180
     const rapport = context.coeffPerspective
-    const MT = matrix([
+    const MT = [
       [1, rapport * Math.cos(alpha), 0],
       [0, rapport * Math.sin(alpha), 1],
-    ]) // ceci est la matrice de projection 3d -> 2d
+    ] // ceci est la matrice de projection 3d -> 2d
     if (args.length === 2) {
       this.x = args[1].x - args[0].x
       this.y = args[1].y - args[0].y
@@ -133,15 +128,10 @@ export class Vecteur3d {
       this.x = args[0]
       this.y = args[1]
       this.z = args[2]
-    } else if (args.length === 1) {
-      const w = (args[0] as any).toArray().map(Number)
-      this.x = w[0]
-      this.y = w[1]
-      this.z = w[2]
     }
-    this.matrice = matrix([this.x, this.y, this.z]) // On exporte cette matrice colonne utile pour les calculs vectoriels qui seront effectués par math
+    this.matrice = [this.x, this.y, this.z] // On exporte cette matrice colonne utile pour les calculs vectoriels qui seront effectués par math
     this.norme = Math.sqrt(this.x ** 2 + this.y ** 2 + this.z ** 2) // la norme du vecteur
-    const W = (multiply(MT, this.matrice) as any).toArray().map(Number) // voilà comment on obtient les composantes du projeté 2d du vecteur
+    const W = matriceMultiply(MT, this.matrice) // voilà comment on obtient les composantes du projeté 2d du vecteur
     this.c2d = vecteur(W[0], W[1]) // this.c2d est l'objet 2d qui représente l'objet 3d this
     this.representant = function (A: Point3d) {
       const B = translation3d(A, this)
@@ -151,7 +141,7 @@ export class Vecteur3d {
 }
 
 export function vecteur3d(
-  ...args: [Point3d, Point3d] | [number, number, number] | [Matrix]
+  ...args: [Point3d, Point3d] | [number, number, number]
 ) {
   return new Vecteur3d(...args)
 }
@@ -446,28 +436,25 @@ export function rotationV3d<T extends Point3d | Vecteur3d>(
   angle: number,
 ): T {
   let V, p2
-  const norme = math.norm(vecteur3D.matrice)
-  const unitaire = (math.multiply(vecteur3D.matrice, 1 / Number(norme)) as any)
-    .toArray()
-    .map(Number)
+  const unitaire = normalize(vecteur3D.matrice) as number[] // on normalise le vecteur directeur de l'axe de rotation pour faire les calculs de rotation vectorielle
   const u = unitaire[0]
   const v = unitaire[1]
   const w = unitaire[2]
   const c = Math.cos((angle * Math.PI) / 180)
   const s = Math.sin((angle * Math.PI) / 180)
   const k = 1 - c
-  const matrice = math.matrix([
+  const matrice = [
     [u * u * k + c, u * v * k - w * s, u * w * k + v * s],
     [u * v * k + w * s, v * v * k + c, v * w * k - u * s],
     [u * w * k - v * s, v * w * k + u * s, w * w * k + c],
-  ])
+  ]
   if (point3D instanceof Point3d) {
-    V = math.matrix([point3D.x, point3D.y, point3D.z])
-    p2 = (math.multiply(matrice, V) as any).toArray().map(Number)
+    V = [point3D.x, point3D.y, point3D.z]
+    p2 = matriceMultiply(matrice, V)
     return point3d(p2[0], p2[1], p2[2]) as T
   } else {
     V = point3D
-    p2 = (math.multiply(matrice, V.matrice) as any).toArray().map(Number)
+    p2 = matriceMultiply(matrice, V.matrice)
     return vecteur3d(p2[0], p2[1], p2[2]) as T
   }
 }

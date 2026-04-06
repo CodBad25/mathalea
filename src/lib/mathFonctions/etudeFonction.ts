@@ -1,4 +1,3 @@
-import { Matrix, round } from 'mathjs'
 import { colorToLatexOrHTML } from '../../lib/2d/colorToLatexOrHtml'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { context } from '../../modules/context'
@@ -14,8 +13,85 @@ import { segment } from '../2d/segmentsVecteurs'
 import { latex2d } from '../2d/textes'
 import { translation } from '../2d/transformations'
 import { vecteur } from '../2d/Vecteur'
+import { round } from '../outils/nombres'
 import { stringNombre, texNombre } from '../outils/texNombre'
+import { Complexe } from './Complexe'
 import { matrice } from './Matrice'
+
+/**
+ * Calcule les racines d'un polynôme de degré 1, 2 ou 3 (ax^3 + bx^2 + cx + d = 0)
+ * Retourne un tableau de number | Complexe (pour les racines complexes)
+ * @param coeffs Les coefficients par ordre décroissant de degré (ex: [a, b, c, d])
+ */
+export function polynomialRoot(...coeffs: number[]): (number | Complexe)[] {
+  // Nettoyage des coefficients nuls en tête
+  while (coeffs.length > 1 && Math.abs(coeffs[0]) < 1e-14) coeffs.shift()
+  const n = coeffs.length - 1
+  if (n === 1) {
+    // ax + b = 0
+    const [a, b] = coeffs
+    if (Math.abs(a) < 1e-14) return []
+    return [-b / a]
+  }
+  if (n === 2) {
+    // ax^2 + bx + c = 0
+    const [a, b, c] = coeffs
+    if (Math.abs(a) < 1e-14) return polynomialRoot(b, c)
+    const delta = b * b - 4 * a * c
+    if (Math.abs(delta) < 1e-14) return [-b / (2 * a)]
+    if (delta > 0) {
+      const sqrtDelta = Math.sqrt(delta)
+      return [(-b - sqrtDelta) / (2 * a), (-b + sqrtDelta) / (2 * a)]
+    } else {
+      // Racines complexes
+      const re = -b / (2 * a)
+      const im = Math.sqrt(-delta) / (2 * a)
+      return [new Complexe(re, im), new Complexe(re, -im)]
+    }
+  }
+  if (n === 3) {
+    // ax^3 + bx^2 + cx + d = 0
+    const [a, b, c, d] = coeffs
+    if (Math.abs(a) < 1e-14) return polynomialRoot(b, c, d)
+    // Dépression de Cardan : x = y - b/(3a)
+    const p = (3 * a * c - b * b) / (3 * a * a)
+    const q =
+      (2 * b * b * b - 9 * a * b * c + 27 * a * a * d) / (27 * a * a * a)
+    const delta = (q * q) / 4 + (p * p * p) / 27
+    const shift = -b / (3 * a)
+    if (Math.abs(delta) < 1e-14) {
+      // Triple racine ou double + simple
+      if (Math.abs(q) < 1e-14) {
+        // Triple racine réelle
+        return [shift]
+      } else {
+        // Double + simple
+        const u = Math.cbrt(-q / 2)
+        return [2 * u + shift, -u + shift, -u + shift]
+      }
+    } else if (delta > 0) {
+      // Une racine réelle, deux complexes
+      const sqrtDelta = Math.sqrt(delta)
+      const u = Math.cbrt(-q / 2 + sqrtDelta)
+      const v = Math.cbrt(-q / 2 - sqrtDelta)
+      const y1 = u + v
+      const re = -0.5 * (u + v) + shift
+      const im = (Math.sqrt(3) / 2) * (u - v)
+      return [y1 + shift, new Complexe(re, im), new Complexe(re, -im)]
+    } else {
+      // Trois racines réelles
+      const r = Math.sqrt((-p * p * p) / 27)
+      const phi = Math.acos(-q / (2 * r))
+      const t = 2 * Math.cbrt(r)
+      const x1 = t * Math.cos(phi / 3) + shift
+      const x2 = t * Math.cos((phi + 2 * Math.PI) / 3) + shift
+      const x3 = t * Math.cos((phi + 4 * Math.PI) / 3) + shift
+      return [x1, x2, x3]
+    }
+  }
+  // Degré > 3 non supporté
+  return []
+}
 
 type TabInit0 = [string, number, number][]
 type TabInit1 = (string | number)[]
@@ -487,8 +563,8 @@ export function trouveFonctionAffine(
   if (maMatrice) {
     const inv = maMatrice.inverse()
     if (inv) {
-      const coeffs = inv.multiply([y1, y2]) as unknown as Matrix
-      return coeffs.toArray()
+      const coeffs = inv.multiply([y1, y2])
+      return coeffs
     }
   }
   window.notify('Pas de solution au système', { x1, x2, y1, y2 })

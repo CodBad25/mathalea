@@ -1,5 +1,4 @@
-import { range } from 'mathjs'
-import { matrice } from '../../lib/mathFonctions/Matrice'
+import { matrice, range } from '../../lib/mathFonctions/Matrice'
 import { choice } from '../../lib/outils/arrayOutils'
 import { ecritureParentheseSiMoins } from '../../lib/outils/ecritures'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
@@ -49,6 +48,7 @@ export default class nomExercice extends Exercice {
       const nbmatrice = 2
       let n = randint(1, 4)
       let m = randint(1, 4)
+      // eslint-disable-next-line no-unmodified-loop-condition
       while (n === m && n === 1) {
         m = randint(2, 4)
       }
@@ -59,6 +59,7 @@ export default class nomExercice extends Exercice {
       n = choice([m, m, m, 1, 2, 3, 4]) // on favorise la compatibilité de la deuxieme matrices
       nblignes.push(n)
       m = choice([n, n, n, 1, 2, 3, 4])
+      // eslint-disable-next-line no-unmodified-loop-condition
       while (n === m && n === 1) {
         m = choice([2, 3, 4])
       }

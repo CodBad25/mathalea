@@ -1,4 +1,3 @@
-import { isArray, isInteger } from 'mathjs'
 import { context } from '../../modules/context'
 import type { IFractionEtendue } from '../../modules/FractionEtendue.type'
 import { orangeMathalea } from '../colors'
@@ -26,7 +25,7 @@ export function miseEnEvidence(
   if (texte instanceof Complexe) texte = texte.tex()
   if (isFractionEtendue(texte)) texte = texte.texFraction
   if (typeof texte === 'number') texte = String(texte)
-  if (isArray(couleur)) couleur = couleur[0]
+  if (Array.isArray(couleur)) couleur = couleur[0]
   texte = texte.replace(/\\text\{/g, '\\textbf{')
 
   if (context.isHtml) {
@@ -162,7 +161,7 @@ export function miseEnCouleur(
   couleur: string = '#f15929',
 ) {
   texte = typeof texte === 'number' ? String(texte) : texte
-  if (isArray(couleur)) couleur = couleur[0]
+  if (Array.isArray(couleur)) couleur = couleur[0]
   if (context.isHtml) {
     return `{\\color{${couleur}} ${texte}}`
   } else {
@@ -184,7 +183,7 @@ export function miseEnCouleur(
  */
 export function texteEnCouleur(texte: string | number, couleur = '#f15929') {
   texte = typeof texte === 'number' ? String(texte) : texte
-  if (isArray(couleur)) couleur = couleur[0]
+  if (Array.isArray(couleur)) couleur = couleur[0]
   if (context.isHtml) {
     return `<span style="color:${couleur};">${texte}</span>`
   } else {
@@ -209,7 +208,7 @@ export function texteEnCouleurEtGras(
   couleur = '#f15929',
 ) {
   if (typeof texte === 'number') texte = String(texte)
-  if (isArray(couleur)) couleur = couleur[0]
+  if (Array.isArray(couleur)) couleur = couleur[0]
   if (context.isHtml) {
     return `<span style="color:${couleur};font-weight: bold;">${texte}</span>`
   }
@@ -269,7 +268,7 @@ export function couleurTab(choixCouleur = 999) {
   ]
   return choixCouleur === 999 ||
     choixCouleur >= panelCouleurs.length ||
-    !isInteger(choixCouleur)
+    !Number.isInteger(choixCouleur)
     ? choice(panelCouleurs)
     : panelCouleurs[choixCouleur]
 }

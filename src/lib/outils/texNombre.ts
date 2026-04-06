@@ -1,28 +1,16 @@
 import Decimal from 'decimal.js'
-import { evaluate, format, round } from 'mathjs'
 import { context } from '../../modules/context'
 import type { IFractionEtendue } from '../../modules/FractionEtendue.type'
 import { Complexe } from '../mathFonctions/Complexe'
 import { extraireRacineCarree } from './calculs'
 import { miseEnEvidence } from './embellissements'
-import { nombreDeChiffresDansLaPartieDecimale } from './nombres'
+import { nombreDeChiffresDansLaPartieDecimale, round } from './nombres'
 
 // Garde structurel pour détecter une FractionEtendue
 const isFractionEtendue = (x: unknown): x is IFractionEtendue =>
   typeof x === 'object' &&
   x !== null &&
   typeof (x as any).sommeFraction === 'function'
-
-const math = { format, evaluate }
-
-function sp(nb = 1) {
-  let s = ''
-  for (let i = 0; i < nb; i++) {
-    if (context.isHtml) s += '&nbsp;'
-    else s += '\\,'
-  }
-  return s
-}
 
 /**
  *
@@ -129,14 +117,7 @@ export function texNombre2(nb: number) {
       nombre: nb,
     })
   }
-  let nombre = math
-    .format(nb, {
-      notation: 'auto',
-      lowerExp: -12,
-      upperExp: 12,
-      precision: 12,
-    })
-    .replace('.', ',')
+  let nombre = stringNombre(nb)
   const rangVirgule = nombre.indexOf(',')
   let partieEntiere
   if (rangVirgule !== -1) {
@@ -162,56 +143,6 @@ export function texNombre2(nb: number) {
     nombre = partieEntiere
   } else {
     nombre = partieEntiere + '{,}' + partieDecimale
-  }
-  return nombre
-}
-
-/**
- * Renvoie un nombre dans le format français (séparateur de classes) pour la partie entière comme pour la partie décimale
- * Avec espace géré par nbsp en HTML pour pouvoir l'inclure dans une phrase formatée en français et pas seulement un calcul.
- * Modif EE pour la gestion de l'espace dans un texte non mathématique
- * @author Eric Elter d'après la fonction de Rémi Angot
- * Rajout Octobre 2021 pour 6C14
- */
-export function texNombre3(nb: number) {
-  if (typeof nb === 'string') {
-    window.notify("texNombre3 appelé avec un string à la place d'un nombre", {
-      nombre: nb,
-    })
-  }
-  let nombre = math
-    .format(nb, {
-      notation: 'auto',
-      lowerExp: -12,
-      upperExp: 12,
-      precision: 12,
-    })
-    .replace('.', ',')
-  const rangVirgule = nombre.indexOf(',')
-  let partieEntiere
-  if (rangVirgule !== -1) {
-    partieEntiere = nombre.substring(0, rangVirgule)
-  } else {
-    partieEntiere = nombre
-  }
-  let partieDecimale = ''
-  if (rangVirgule !== -1) {
-    partieDecimale = nombre.substring(rangVirgule + 1)
-  }
-
-  for (let i = partieEntiere.length - 3; i > 0; i -= 3) {
-    partieEntiere =
-      partieEntiere.substring(0, i) + sp() + partieEntiere.substring(i)
-  }
-  for (let i = 3; i <= partieDecimale.length; i += 3) {
-    partieDecimale =
-      partieDecimale.substring(0, i) + sp() + partieDecimale.substring(i)
-    i += 12
-  }
-  if (partieDecimale === '') {
-    nombre = partieEntiere
-  } else {
-    nombre = partieEntiere + ',' + partieDecimale
   }
   return nombre
 }

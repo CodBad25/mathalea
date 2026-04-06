@@ -348,7 +348,7 @@ class ConstructionsSymetrieCentraleFigures extends Exercice {
       ) {
         sym[k] = copyAntecedents[k].rotate(centreCorrection, 180, {
           label: this.antecedentsApiGeom[i][k].label + "'",
-        })
+        }) as PointApigeom
         correctionFig.create('Segment', {
           point1: copyAntecedents[k],
           point2: sym[k],

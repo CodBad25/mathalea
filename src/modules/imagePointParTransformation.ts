@@ -249,7 +249,9 @@ export function imagePointParTransformation(
       break
   }
   const pointA1 = (maMatrice! as Matrice).multiply(pointA)
-  const pointA2 = matriceChangementDeRepere.multiply(pointA1)
+  const pointA2 = matriceChangementDeRepere.multiply(
+    pointA1 as [number, number, number],
+  )
   return typeof (pointA2 as any).toArray === 'function'
     ? ((pointA2 as any).toArray().slice(0, 2) as [number, number])
     : Array.isArray(pointA2)

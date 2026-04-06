@@ -170,12 +170,10 @@ export default class BetaReperage2e extends Exercice {
             .map((el) => el.num)
             .includes(y[i][k].num)
         )
-        const [mdx, mdy] = (
-          matrice.multiply([
-            x[i][k].valeurDecimale,
-            y[i][k].valeurDecimale,
-          ]) as Matrice
-        ).toArray() as [number, number]
+        const [mdx, mdy] = matrice.multiply([
+          x[i][k].valeurDecimale,
+          y[i][k].valeurDecimale,
+        ]) as [number, number]
         this.X[i][k] = mdx
         this.Y[i][k] = mdy
       }
@@ -198,7 +196,7 @@ export default class BetaReperage2e extends Exercice {
       this.figuresApiGeom[i].options.labelDxInPixels = 10
       this.figuresApiGeom[i].options.labelDyInPixels = 10
       this.figuresApiGeom[i].options.labelPointAfterCreation = true
-      
+
       this.figuresApiGeom[i].setToolbar({
         tools: ['POINT_INTERSECTION', 'DRAG', 'UNDO', 'REDO', 'REMOVE'],
         position: 'top',
@@ -283,14 +281,8 @@ export default class BetaReperage2e extends Exercice {
       */
 
       for (let xx = -4; xx < 4 + 1 / denX; xx += 1 / denX) {
-        const coordL = (matrice.multiply([xx, -3]) as Matrice).toArray() as [
-          number,
-          number,
-        ]
-        const coordH = (matrice.multiply([xx, 3]) as Matrice).toArray() as [
-          number,
-          number,
-        ]
+        const coordL = matrice.multiply([xx, -3]) as [number, number]
+        const coordH = matrice.multiply([xx, 3]) as [number, number]
         const pointL = fig.create('Point', {
           x: coordL[0],
           y: coordL[1],
@@ -315,12 +307,8 @@ export default class BetaReperage2e extends Exercice {
           })
         for (let yy = -3; yy < 3 + 1 / denY; yy += 1 / denY) {
           if (xx === -4) {
-            const coordsL = (
-              matrice.multiply([-4, yy]) as Matrice
-            ).toArray() as [number, number]
-            const coordsR = (
-              matrice.multiply([4, yy]) as Matrice
-            ).toArray() as [number, number]
+            const coordsL = matrice.multiply([-4, yy]) as [number, number]
+            const coordsR = matrice.multiply([4, yy]) as [number, number]
             const pointL = fig.create('Point', {
               x: coordsL[0],
               y: coordsL[1],

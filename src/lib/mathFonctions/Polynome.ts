@@ -1,5 +1,4 @@
 import Decimal from 'decimal.js'
-import { abs, acos, equal, largerEq, max, polynomialRoot, round } from 'mathjs'
 import FractionEtendue, { rationnalise } from '../../modules/FractionEtendue'
 import { egal, randint } from '../../modules/outils'
 import { generateCleaner } from '../interactif/cleaners'
@@ -10,11 +9,15 @@ import {
   ecritureParentheseSiNegatif,
   rienSi1,
 } from '../outils/ecritures'
+import { round } from '../outils/nombres'
 import { texNombre } from '../outils/texNombre'
+import { Complexe } from './Complexe'
+import { polynomialRoot } from './etudeFonction'
 
 type NombreType = number | Decimal | FractionEtendue
 type ComplexLike = {
   re: number
+  im: number
   toPolar: () => { r: number; phi: number }
 }
 
@@ -36,14 +39,7 @@ function isFractionPair(value: unknown): value is [number, number] {
 }
 
 function isComplexLike(value: unknown): value is ComplexLike {
-  return (
-    typeof value === 'object' &&
-    value !== null &&
-    're' in value &&
-    typeof value.re === 'number' &&
-    'toPolar' in value &&
-    typeof value.toPolar === 'function'
-  )
+  return value instanceof Complexe
 }
 
 /**
@@ -304,7 +300,7 @@ export class Polynome {
   }) {
     this.letter = letter
     if (rand) {
-      if (largerEq(deg, 0)) {
+      if (deg >= 0) {
         // on construit coeffs indépendamment de la valeur fournie
         coeffs = new Array(deg + 1)
         coeffs.fill([10, true])
@@ -662,9 +658,9 @@ export class Polynome {
       const useFrac =
         p.monomes.filter((el) => el instanceof FractionEtendue).length > 0 ||
         this.monomes.filter((el) => el instanceof FractionEtendue).length > 0
-      const degSomme = max(this.deg, p.deg)
-      const pInf = equal(p.deg, degSomme) ? this : p
-      const pSup = equal(p.deg, degSomme) ? p : this
+      const degSomme = Math.max(this.deg, p.deg)
+      const pInf = p.deg === degSomme ? this : p
+      const pSup = p.deg === degSomme ? p : this
       const coeffSomme = pSup.monomes.map(function (el, index) {
         return index <= pInf.deg ? somme(el, pInf.monomes[index]) : el
       })
@@ -813,8 +809,8 @@ export class Polynome {
         } else {
           const argument = valeur.toPolar().phi
           if (
-            abs(argument) < 0.01 ||
-            abs(abs(argument) - Number(acos(-1))) < 0.001
+            Math.abs(argument) < 0.01 ||
+            Math.abs(Math.abs(argument) - Math.PI) < 0.001
           ) {
             // si l'argument est proche de 0 ou de Pi ou de -Pi
             arr = round(valeur.re, 3) // on prend la partie réelle
