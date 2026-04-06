@@ -162,8 +162,8 @@ export default class ImageAntecedentDepuisTableauOuFleche extends Exercice {
           ? `$${d}$ a deux éléments dans la préimage : $${miseEnEvidence(c)}$ et $${miseEnEvidence(e)}$, on note $f(${miseEnEvidence(c)})=f(${miseEnEvidence(e)})=${d}$.`
           : `$${d}$ a deux antécédents : $${miseEnEvidence(c)}$ et $${miseEnEvidence(e)}$, on note $f(${miseEnEvidence(c)})=f(${miseEnEvidence(e)})=${d}$.`
         : `$${miseEnEvidence(c)}$ et $${miseEnEvidence(e)}$ ont pour image $${d}$ par la fonction $f$, on note $f(${miseEnEvidence(c)})=f(${miseEnEvidence(e)})=${d}$.`
-      setReponse(this, i * 6 + 3, [`${c};${e}`, `${e};${c}`], {
-        formatInteractif: 'texte',
+      handleAnswers(this, i * 6 + 3, {
+        reponse: { value: `${c};${e}`, options: { suiteDeNombres: true } },
       })
       texte4 += ajouteChampTexteMathLive(
         this,

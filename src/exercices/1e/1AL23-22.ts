@@ -1,11 +1,11 @@
+import EquationSecondDegre from '../../modules/EquationSecondDegre'
+import FractionEtendue from '../../modules/FractionEtendue'
 import {
   gestionnaireFormulaireTexte,
   listeQuestionsToContenu,
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
-import FractionEtendue from '../../modules/FractionEtendue'
-import EquationSecondDegre from '../../modules/EquationSecondDegre'
 
 export const titre = 'Résoudre une équation du second degré (cas général)'
 export const dateDePublication = '14/05/2024'
@@ -20,9 +20,7 @@ export const refs = {
 
 /**
  * Résolution d'équation du degré 2 (cas général)
- *  TODO : trouver comment
- * supprimer les équations du type ax^2 + bx + c = 0
- * (déjà présentes dans les autres exercices)
+ *  TODO : trouver comment supprimer les équations du type ax^2 + bx + c = 0 (déjà présentes dans les autres exercices)
  * @author Nathan Scheinmann
  */
 
@@ -97,7 +95,7 @@ export default class ExerciceEquationSecondDegre extends Exercice {
     }
     if (this.interactif) {
       this.consigne +=
-        " Entrer les solutions sous forme d'un ensemble en séparant les éléments séparé par des point-virgules. Si une équation n'a pas de solution entrer l'ensemble vide."
+        " Entrer les solutions sous forme d'un ensemble en séparant chaque élément par un point-virgule. Si une équation n'a pas de solution, saisir l'ensemble vide."
     }
 
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {

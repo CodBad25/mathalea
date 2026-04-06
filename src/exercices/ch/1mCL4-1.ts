@@ -72,7 +72,7 @@ export default class ExerciceEquationSecondDegre extends Exercice {
     }
     if (this.interactif) {
       this.consigne +=
-        " Entrer l'ensembles des solutions en séparant les éléments par un point-virgule. Si une équation n'a pas de solution entrer l'ensemble vide."
+        " Entrer l'ensemble des solutions en séparant chaque élément par un point-virgule. Si une équation n'a pas de solution, saisir l'ensemble vide."
     }
 
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {

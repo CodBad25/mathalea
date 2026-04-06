@@ -1,5 +1,5 @@
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
@@ -102,7 +102,12 @@ export default class ResoudreEquatioeX2EgalA extends Exercice {
           texteCorr = `$x^2=${a * a}$ équivaut à $x = \\sqrt{${a * a}}$ ou $x = -\\sqrt{${a * a}}$.<br>Soit $x = ${a}$ ou $x = -${a}$.<br>`
           texteCorr += `Les solutions de l'équation sont donc $${miseEnEvidence(a)}$ et $${miseEnEvidence('-' + a)}$.<br>`
           texteCorr += `Il est équivalent de résoudre $x^2 - ${a * a}=0$, c'est-à-dire $x^2 - ${a}^{2}=0$.<br>Soit $(x - ${a})(x + ${a})=0$ qui donne les deux solutions ci-dessus. `
-          setReponse(this, i, [`${a};${-a}`, `${-a};${a}`])
+          handleAnswers(this, i, {
+            reponse: {
+              value: `${a};${-a}`,
+              options: { suiteDeNombres: true },
+            },
+          })
           break
         case 2: // x²=(ns*ns)/(ds*ds) solutions rationnelles
           fraction = choice(listeFractions)
@@ -113,12 +118,13 @@ export default class ResoudreEquatioeX2EgalA extends Exercice {
           texteCorr = `$x^2=\\dfrac{${ns * ns}}{${ds * ds}}$ équivaut à $x = \\sqrt{\\dfrac{${ns * ns}}{${ds * ds}}}$ ou $x = -\\sqrt{\\dfrac{${ns * ns}}{${ds * ds}}}$.<br>Soit $x = \\dfrac{${ns}}{${ds}}$ ou $x = -\\dfrac{${ns}}{${ds}}$.<br>`
           texteCorr += `Les solutions de l'équation sont donc $${miseEnEvidence(`\\dfrac{${ns}}{${ds}}`)}$ et $${miseEnEvidence(`-\\dfrac{${ns}}{${ds}}`)}$.<br>`
           texteCorr += `Il est équivalent de résoudre $x^2 - \\dfrac{${ns * ns}}{${ds * ds}}=0$, c'est-à-dire $x^2 - (\\dfrac{${ns}}{${ds}})^{2}=0$.<br>Soit $(x - \\dfrac{${ns}}{${ds}})(x + \\dfrac{${ns}}{${ds}})=0$ qui donne les deux solutions ci-dessus. `
-          setReponse(this, i, [
-            `\\dfrac{${ns}}{${ds}};-\\dfrac{${ns}}{${ds}}`,
-            `-\\dfrac{${ns}}{${ds}};\\dfrac{${ns}}{${ds}}`,
-          ])
+          handleAnswers(this, i, {
+            reponse: {
+              value: `\\dfrac{${ns}}{${ds}};-\\dfrac{${ns}}{${ds}}`,
+              options: { suiteDeNombres: true },
+            },
+          })
           break
-
         case 3:
         default:
           a = randint(2, 50, [4, 9, 16, 25, 36, 49]) // solution irrationnelles
@@ -126,10 +132,12 @@ export default class ResoudreEquatioeX2EgalA extends Exercice {
           texteCorr = `$x^2=${a}$ équivaut à $x = \\sqrt{${a}}$ ou $x = -\\sqrt{${a}}$.<br>`
           texteCorr += `Les solutions de l'équation sont donc $${miseEnEvidence(`\\sqrt{${a}}`)}$ et $${miseEnEvidence(`-\\sqrt{${a}}`)}$.<br>`
           texteCorr += `Il est équivalent de résoudre $x^2 - ${a}=0$, c'est-à-dire $x^2 - (\\sqrt{${a}})^{2}=0$.<br>Soit $(x - \\sqrt{${a}})(x + \\sqrt{${a}})=0$ qui donne les deux solutions ci-dessus. `
-          setReponse(this, i, [
-            `\\sqrt{${a}};-\\sqrt{${a}}`,
-            `-\\sqrt{${a}};\\sqrt{${a}}`,
-          ])
+          handleAnswers(this, i, {
+            reponse: {
+              value: `\\sqrt{${a}};-\\sqrt{${a}}`,
+              options: { suiteDeNombres: true },
+            },
+          })
           break
       }
       texte += ajouteChampTexteMathLive(this, i, KeyboardType.lyceeClassique)
