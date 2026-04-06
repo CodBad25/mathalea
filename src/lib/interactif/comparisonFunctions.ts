@@ -2279,7 +2279,7 @@ function handletexteAvecCasse(
   return fail()
 }
 
-function handleFonctionExpanded(saisie: string, answer: string): ResultType {
+function handleExpressionExpanded(saisie: string, answer: string): ResultType {
   const clean = generateCleaner([
     'virgules',
     'parentheses',
@@ -3187,7 +3187,7 @@ export function fonctionComparaison(
   if (options.calculFormel) return handleCalculFormel(saisie, answer)
 
   // Expressions expanded
-  if (options.expanded) return handleFonctionExpanded(saisie, answer)
+  if (options.expanded) return handleExpressionExpanded(saisie, answer)
 
   // Deux entiers consécutifs
   if (options.entiersConsecutifs)
