@@ -2,25 +2,23 @@ import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { repere } from '../../lib/2d/reperes'
 import { texteParPosition } from '../../lib/2d/textes'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { addMultiMathfield } from '../../lib/interactif/MultiMathfield/MultiMathfield'
+import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { spline, type NoeudSpline } from '../../lib/mathFonctions/Spline'
 import { choice } from '../../lib/outils/arrayOutils'
-import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
 export const titre = 'Déterminer graphiquement les extremums'
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'mathLive'
 
 export const dateDePublication = '27/06/2023' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
-export const dateDeModificationImportante = '06/04/2026' 
-export const uuid = 'd6c25' // @todo à changer dans un nouvel exo (utiliser pnpm getNewUuid)
+export const uuid = '7761e' // @todo à changer dans un nouvel exo (utiliser pnpm getNewUuid)
 
 export const refs = {
-  'fr-fr': ['2F32-2'],
+  'fr-fr': [],
   'fr-ch': [],
 }
 // une liste de nœuds pour définir une fonction Spline
@@ -141,31 +139,36 @@ export default class BetaModeleSpline extends Exercice {
         objetsEnonce,
         o,
       )
-      texteEnonce += `${addMultiMathfield(this, i, {
-        dataTemplate: 'Le maximum de $f$ est : %{champ1}. Il est atteint en $x=$ %{champ2}\nLe minimum de $f$ est : %{champ3}. Il est atteint en $x=$ %{champ4}',
-        dataOptions: {
-          champ1: { keyboard: KeyboardType.clavierDeBase },
-          champ2: { keyboard: KeyboardType.clavierDeBase },
-          champ3: { keyboard: KeyboardType.clavierDeBase },
-          champ4: { keyboard: KeyboardType.clavierDeBase },
-        },
-      })}`
-      // Les extrema sont atteints aux nœuds (dérivées nulles)
-      const fMax = Math.max(...nuage.map((el) => el.y))
-      const fMin = Math.min(...nuage.map((el) => el.y))
-      const solutionMax = nuage.find((el) => el.y === fMax)!.x
-      const solutionMin = nuage.find((el) => el.y === fMin)!.x
-      handleAnswers(this, i, {
-        champ1: { value: `${fMax}` },
-        champ2: { value: `${solutionMax}` },
-        champ3: { value: `${fMin}` },
-        champ4: { value: `${solutionMin}` },
-      }, { formatInteractif: 'multiMathfield' })
+      if (this.interactif) {
+        texteEnonce +=
+          '<br>Le maximum de $f$ est : ' +
+          ajouteChampTexteMathLive(this, 4 * i, KeyboardType.clavierDeBase)
+        texteEnonce +=
+          '. Il est atteint en $x=$ ' +
+          ajouteChampTexteMathLive(this, 4 * i + 1, KeyboardType.clavierDeBase)
+        texteEnonce +=
+          '<br>Le minimum de $f$ est : ' +
+          ajouteChampTexteMathLive(this, 4 * i + 2, KeyboardType.clavierDeBase)
+        texteEnonce +=
+          '. Il est atteint en $x=$ ' +
+          ajouteChampTexteMathLive(this, 4 * i + 3, KeyboardType.clavierDeBase)
+      }
+      // on ajoute les tracés pour repérer les antécédents et on en profite pour rendre les autres noeuds invisibles
+      const solsMax = maSpline.solve(Math.max(...nuage.map((el) => el.y)), 0)
+      const solsMin = maSpline.solve(Math.min(...nuage.map((el) => el.y)), 0)
+      const solutionMax =
+        solsMax!.length === 1 ? solsMax![0] : 'On a un problème'
+      const solutionMin =
+        solsMin!.length === 1 ? solsMin![0] : 'On a un problème'
+      setReponse(this, 4 * i, Math.max(...nuage.map((el) => el.y)))
+      setReponse(this, 4 * i + 1, solutionMax)
+      setReponse(this, 4 * i + 2, Math.min(...nuage.map((el) => el.y)))
+      setReponse(this, 4 * i + 3, solutionMin)
 
-      const texteCorrection = `Le point le plus haut de la courbe a pour coordonnées $(${solutionMax}\\,;\\,${fMax})$.<br>
-      On en déduit que le maximum de $f$ est $${miseEnEvidence(fMax)}$. Il est atteint en $x=${miseEnEvidence(solutionMax)}$.<br>
-      Le point le plus bas de la courbe a pour coordonnées $(${solutionMin}\\,;\\,${fMin})$.<br>
-      On en déduit que le minimum de $f$ est $${miseEnEvidence(fMin)}$. Il est atteint en $x=${miseEnEvidence(solutionMin)}$.`
+      const texteCorrection = `Le point le plus haut de la courbe a pour coordonnées $(${solutionMax}\\,;\\,${Math.max(...nuage.map((el) => el.y))})$.<br>
+      On en déduit que le maximum de $f$ est $${Math.max(...nuage.map((el) => el.y))}$. Il est atteint en $x=${solutionMax}$.<br>
+      Le point le plus bas de la courbe a pour coordonnées $(${solutionMin}\\,;\\,${Math.min(...nuage.map((el) => el.y))})$.<br>
+      On en déduit que le minimum de $f$ est $${Math.min(...nuage.map((el) => el.y))}$. Il est atteint en $x=${solutionMin}$.`
       this.listeQuestions.push(texteEnonce)
       this.listeCorrections.push(texteCorrection)
     }
