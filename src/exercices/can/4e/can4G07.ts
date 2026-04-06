@@ -77,7 +77,7 @@ export default class CalculLongueurThalesMilieu extends ExerciceSimple {
       Ainsi : $${nom[1]}${nom[2]}=2\\times ${nom[3]}${nom[4]}=2\\times ${texNombre(a)}=${texNombre(2 * a)}$.
   `
 
-      this.reponse = 2 * a
+      this.reponse = texNombre(2 * a)
 
       this.canReponseACompleter = `$${nom[1]}${nom[2]}=\\ldots$`
     } else {
@@ -122,7 +122,7 @@ export default class CalculLongueurThalesMilieu extends ExerciceSimple {
             Ainsi : $${nom[3]}${nom[4]}= ${nom[1]}${nom[2]} \\div 2 = ${texNombre(a)}\\div 2 =${texNombre(a / 2)}$.
      `
 
-      this.reponse = a / 2
+      this.reponse = texNombre(a / 2)
 
       this.canReponseACompleter = `$${nom[3]}${nom[4]}=\\ldots$`
     }
