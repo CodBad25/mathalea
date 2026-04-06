@@ -1,7 +1,7 @@
 import { demiDroite } from '../../lib/2d/DemiDroite'
 import { droite } from '../../lib/2d/droites'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
-import { addGuideAne, type GuideAne } from '../../lib/2d/GuidaAne'
+import { addGuideAne, type GuideAne } from '../../lib/2d/GuideAne'
 import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { segmentAvecExtremites } from '../../lib/2d/segmentsVecteurs'
 import { labelPoint } from '../../lib/2d/textes'
@@ -47,7 +47,7 @@ export default class MonExoGuideAne extends Exercice {
       const targetP = randint(1, targetN - 1)
       const targetFraction = `\\dfrac{${targetP}}{${targetN}}`
       const targetValue = (targetAB * targetP) / targetN
-      let texte = `Représenter en rouge un segment de longueur $${targetFraction}\\times AB$`
+      let texte = `Représenter en rouge un segment de longueur $${targetFraction}\\times AB$ lorsque $AB$ mesure $${targetAB}\\text{ cm}$`
 
       if (context.isHtml) {
         const guideAneData = {
