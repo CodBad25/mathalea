@@ -21,7 +21,7 @@ import { matrice } from './Matrice'
 /**
  * Calcule les racines d'un polynôme de degré 1, 2 ou 3 (ax^3 + bx^2 + cx + d = 0)
  * Retourne un tableau de number | Complexe (pour les racines complexes)
- * @param coeffs Les coefficients par ordre décroissant de degré (ex: [a, b, c, d])
+ * @param coeffs Les coefficients par ordre croissant de degré (ex: [d,c,b,a])
  */
 export function polynomialRoot(...coeffs: number[]): (number | Complexe)[] {
   // Nettoyage des coefficients nuls en tête
@@ -29,14 +29,14 @@ export function polynomialRoot(...coeffs: number[]): (number | Complexe)[] {
   const n = coeffs.length - 1
   if (n === 1) {
     // ax + b = 0
-    const [a, b] = coeffs
+    const [a, b] = coeffs.reverse()
     if (Math.abs(a) < 1e-14) return []
     return [-b / a]
   }
   if (n === 2) {
     // ax^2 + bx + c = 0
-    const [a, b, c] = coeffs
-    if (Math.abs(a) < 1e-14) return polynomialRoot(b, c)
+    const [a, b, c] = coeffs.reverse()
+    if (Math.abs(a) < 1e-14) return polynomialRoot(c, b) // polynomialRoot prend les coefficients dans l'ordre croissant de degré, donc c est le terme de degré 0 et b celui de degré 1
     const delta = b * b - 4 * a * c
     if (Math.abs(delta) < 1e-14) return [-b / (2 * a)]
     if (delta > 0) {
@@ -51,8 +51,8 @@ export function polynomialRoot(...coeffs: number[]): (number | Complexe)[] {
   }
   if (n === 3) {
     // ax^3 + bx^2 + cx + d = 0
-    const [a, b, c, d] = coeffs
-    if (Math.abs(a) < 1e-14) return polynomialRoot(b, c, d)
+    const [a, b, c, d] = coeffs.reverse()
+    if (Math.abs(a) < 1e-14) return polynomialRoot(d, c, b) // polynomialRoot prend les coefficients dans l'ordre croissant de degré, donc d est le terme de degré 0, c celui de degré 1 et b celui de degré 2
     // Dépression de Cardan : x = y - b/(3a)
     const p = (3 * a * c - b * b) / (3 * a * a)
     const q =

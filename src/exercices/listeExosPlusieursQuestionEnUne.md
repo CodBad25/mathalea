@@ -1,6 +1,4 @@
 1P10-4 Compatible : (long car 4 cas à traiter)
-2F22-1 Compatible : 3 champs
-2F32-2 Compatible : 4 champs
 2S20-5 Compatible : 3 champs
 3A12-1 Compatible : 3 cas 3 champs
 3F12-4 Compatible : 1 cas à 2 champs, 1 autre à 3 champs
