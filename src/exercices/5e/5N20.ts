@@ -28,12 +28,42 @@ export const titre =
  * On peut paramétrer de n'avoir que des soustractions.
  * @author Rémi Angot, modifié par Eric Elter
  * Modif : Rajout des numérateurs négatifs par Eric Elter
+ * Modif le 4/4/26 les termes pouvaient être interchangés pour ne pas avoir de résultats négatifs
+ * sans recalculer le résultat
  */
 export const uuid = 'd5ee3'
 export const refs = {
   'fr-fr': ['5N20', 'BP2AutoH22'],
   'fr-ch': ['9NO13-6'],
 }
+
+function formatFractionForQcm(
+  fraction: FractionEtendue,
+  simplifie: boolean,
+): string {
+  return `$${simplifie ? fraction.texFractionSimplifiee : fraction.texFraction}$`
+}
+
+function buildFractionQcmPropositions(
+  fractions: Array<{ fraction: FractionEtendue; statut: boolean }>,
+  simplifie: boolean,
+) {
+  const seen = new Set<string>()
+  const propositions = fractions
+    .filter(({ fraction }) => {
+      const key = fraction.simplifie().texFractionSimplifiee
+      if (seen.has(key)) return false
+      seen.add(key)
+      return true
+    })
+    .map(({ fraction, statut }) => ({
+      texte: formatFractionForQcm(fraction, simplifie),
+      statut,
+    }))
+
+  return propositions.length === fractions.length ? propositions : undefined
+}
+
 export default class ExerciceAdditionnerSoustraireFractions5ebis extends Exercice {
   level: number
   constructor() {
@@ -48,7 +78,7 @@ export default class ExerciceAdditionnerSoustraireFractions5ebis extends Exercic
     this.nbQuestions = 5
     this.besoinFormulaireNumerique = [
       'Valeur maximale du coefficient multiplicateur',
-      99999,
+      10,
     ]
     this.besoinFormulaire2Numerique = [
       'Type de calculs',
@@ -97,12 +127,14 @@ export default class ExerciceAdditionnerSoustraireFractions5ebis extends Exercic
     this.interactifType = this.sup4 ? 'qcm' : 'mathLive'
 
     for (
-      let i = 0, a, b, c, d, k, s, ordreDesFractions, texte, texteCorr;
-      i < this.nbQuestions;
+      let i = 0, a, b, c, d, k, s, ordreDesFractions, texte, texteCorr, cpt = 0;
+      i < this.nbQuestions && cpt < 50;
+      cpt++
     ) {
       this.autoCorrection[i] = {}
       texte = ''
       texteCorr = ''
+      let qcmPropositionsValides = true
 
       // Décision si les numérateurs seront négatifs ou non
       const aNegatif = randint(1, 100) <= this.sup5
@@ -138,42 +170,38 @@ export default class ExerciceAdditionnerSoustraireFractions5ebis extends Exercic
           (this.interactif && this.interactifType === 'qcm')
         ) {
           /** ***************** Choix des réponses du QCM ***********************************/
-          this.autoCorrection[i].propositions = [
-            {
-              texte: this.sup3
-                ? `$${new FractionEtendue(a * k + c, d).texFractionSimplifiee}$`
-                : `$${new FractionEtendue(a * k + c, d).texFraction}$`,
-              statut: true,
-            },
-            {
-              texte: this.sup3
-                ? `$${new FractionEtendue(a + c, d).texFractionSimplifiee}$`
-                : `$${new FractionEtendue(a + c, d).texFraction}$`,
-              statut: false,
-            },
-            {
-              texte: this.sup3
-                ? `$${new FractionEtendue(a + c, b + d).texFractionSimplifiee}$`
-                : `$${new FractionEtendue(a + c, b + d).texFraction}$`,
-              statut: false,
-            },
-            {
-              texte: this.sup3
-                ? `$${new FractionEtendue(a * c, d).texFractionSimplifiee}$`
-                : `$${new FractionEtendue(a * c, d).texFraction}$`,
-              statut: false,
-            },
-          ]
-          this.autoCorrection[i].options = {
-            ordered: false,
-            lastChoice: 5,
-          }
-          if (this.level === 6) {
-            // En 6e, pas de fraction simplifiée
-            // Les fractions ont le même dénominateur (b=d)
-            // @ts-expect-error
-            this.autoCorrection[i].propositions[0].texte =
-              `$${new FractionEtendue(a + c, b).texFraction}$`
+          const propositions = buildFractionQcmPropositions(
+            [
+              {
+                fraction:
+                  this.level === 6
+                    ? new FractionEtendue(a + c, b)
+                    : new FractionEtendue(a * k + c, d),
+                statut: true,
+              },
+              {
+                fraction: new FractionEtendue(a + c, d),
+                statut: false,
+              },
+              {
+                fraction: new FractionEtendue(a + c, b + d),
+                statut: false,
+              },
+              {
+                fraction: new FractionEtendue(a * c, d),
+                statut: false,
+              },
+            ],
+            this.sup3,
+          )
+          if (propositions) {
+            this.autoCorrection[i].propositions = propositions
+            this.autoCorrection[i].options = {
+              ordered: false,
+              lastChoice: 5,
+            }
+          } else {
+            qcmPropositionsValides = false
           }
           /*************************************************************************/
         }
@@ -224,7 +252,11 @@ export default class ExerciceAdditionnerSoustraireFractions5ebis extends Exercic
         }
 
         if (!context.isAmc) {
-          if (this.interactif && this.interactifType === 'qcm') {
+          if (
+            this.interactif &&
+            this.interactifType === 'qcm' &&
+            qcmPropositionsValides
+          ) {
             const props = propositionsQcm(this, i)
             texte += '<br>' + props.texte
           } else if (this.interactifType === 'mathLive') {
@@ -247,51 +279,6 @@ export default class ExerciceAdditionnerSoustraireFractions5ebis extends Exercic
         }
       } else {
         // une soustraction
-        /** ***************** Choix des réponses du QCM ***********************************/
-        if (
-          !context.isAmc ||
-          (this.interactif && this.interactifType === 'qcm')
-        ) {
-          this.autoCorrection[i].propositions = [
-            {
-              texte: this.sup3
-                ? `$${new FractionEtendue(a * k - c, d).texFractionSimplifiee}$`
-                : `$${new FractionEtendue(a * k - c, d).texFraction}$`,
-              statut: true,
-            },
-            {
-              texte: this.sup3
-                ? `$${new FractionEtendue(a - c, b + d).texFractionSimplifiee}$`
-                : `$${new FractionEtendue(a - c, b + d).texFraction}$`,
-              statut: false,
-            },
-            {
-              texte: this.sup3
-                ? `$${new FractionEtendue(a - c, d).texFractionSimplifiee}$`
-                : `$${new FractionEtendue(a - c, d).texFraction}$`,
-              statut: false,
-            },
-            {
-              texte: this.sup3
-                ? `$${new FractionEtendue(a * c, d).texFractionSimplifiee}$`
-                : `$${new FractionEtendue(a * c, d).texFraction}$`,
-              statut: false,
-            },
-          ]
-          this.autoCorrection[i].options = {
-            ordered: false,
-            lastChoice: 5,
-          }
-          if (this.level === 6) {
-            // En 6e, pas de fraction simplifiée
-            // Les fractions ont le même dénominateur (b=d)
-            // @ts-expect-error
-            this.autoCorrection[i].propositions[0].texte =
-              `$${new FractionEtendue(a - c, b).texFraction}$`
-          }
-          /*********************************************************************************/
-        }
-
         // S'il y a 0% de numérateur négatifs alors on
         // interchange f1 et f2 pour s'assurer que le résultat sera positif
         const f2PlusGdQuef1 = this.sup5 === 0 && f2.superieurstrict(f1)
@@ -300,11 +287,52 @@ export default class ExerciceAdditionnerSoustraireFractions5ebis extends Exercic
           ;[a, b, c, d] = [c, d, a, b]
         }
 
+        const numerateur = f2PlusGdQuef1 ? a - c * k : a * k - c
+        const denominateur = f2PlusGdQuef1 ? b : d
+
+        /** ***************** Choix des réponses du QCM ***********************************/
+        if (
+          !context.isAmc ||
+          (this.interactif && this.interactifType === 'qcm')
+        ) {
+          const propositions = buildFractionQcmPropositions(
+            [
+              {
+                fraction:
+                  this.level === 6
+                    ? new FractionEtendue(a - c, b)
+                    : new FractionEtendue(numerateur, denominateur),
+                statut: true,
+              },
+              {
+                fraction: new FractionEtendue(a - c, b + d),
+                statut: false,
+              },
+              {
+                fraction: new FractionEtendue(a - c, d),
+                statut: false,
+              },
+              {
+                fraction: new FractionEtendue(a * c, d),
+                statut: false,
+              },
+            ],
+            this.sup3,
+          )
+          if (propositions) {
+            this.autoCorrection[i].propositions = propositions
+            this.autoCorrection[i].options = {
+              ordered: false,
+              lastChoice: 5,
+            }
+          } else {
+            qcmPropositionsValides = false
+          }
+          /*********************************************************************************/
+        }
+
         texte = `$${f1.texFraction}-${f2.texFraction}$`
-        const reponse = new FractionEtendue(
-          f2PlusGdQuef1 ? a - c * k : a * k - c,
-          f2PlusGdQuef1 ? b : d,
-        ).toLatex()
+        const reponse = new FractionEtendue(numerateur, denominateur).toLatex()
 
         texteCorr = `$${f1.texFraction}-${f2.texFraction}=`
         if (this.level !== 6 && this.sup !== 1) {
@@ -325,8 +353,6 @@ export default class ExerciceAdditionnerSoustraireFractions5ebis extends Exercic
 
         // Est-ce que le résultat est simplifiable ?
         if (this.sup3) {
-          const numerateur = f2PlusGdQuef1 ? a - c * k : a * k - c
-          const denominateur = f2PlusGdQuef1 ? b : d
           s = pgcd(Math.abs(numerateur), denominateur)
           if (Math.abs(numerateur) % denominateur === 0) {
             // Si la fraction peut être un nombre entier
@@ -341,7 +367,11 @@ export default class ExerciceAdditionnerSoustraireFractions5ebis extends Exercic
         }
 
         if (!context.isAmc) {
-          if (this.interactif && this.interactifType === 'qcm') {
+          if (
+            this.interactif &&
+            this.interactifType === 'qcm' &&
+            qcmPropositionsValides
+          ) {
             const props = propositionsQcm(this, i)
             texte += '<br>' + props.texte
           } else if (this.interactifType === 'mathLive') {
@@ -382,7 +412,7 @@ export default class ExerciceAdditionnerSoustraireFractions5ebis extends Exercic
       texteCorr += `$ $${miseEnEvidence(aRemplacer)}$`
       // Fin de cette uniformisation
 
-      if (this.questionJamaisPosee(i, a, k, b, c)) {
+      if (qcmPropositionsValides && this.questionJamaisPosee(i, a, k, b, c)) {
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr
         i++
