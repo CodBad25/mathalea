@@ -248,8 +248,6 @@ export default class TranslationEtCoordonnes extends Exercice {
           objets,
         ) // On trace le graphique
       }
-      // setReponse(this, 2 * i, AbsRep)
-      // setReponse(this, 2 * i + 1, OrdRep)
       if (this.questionJamaisPosee(i, xA, yA, xB, yB)) {
         // Si la question n'a jamais été posée, on en créé une autre
         this.listeQuestions[i] = texte
