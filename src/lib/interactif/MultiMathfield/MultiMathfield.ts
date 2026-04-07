@@ -120,10 +120,11 @@ export class MultiMathfieldElement extends HTMLElement {
         mathfield.id = (this.id ? this.id : 'multi-mathfield') + '-' + name
         mathfield.setAttribute('data-name', name)
         mathfield.style.verticalAlign = 'middle'
-        mathfield.style.borderRadius = '8px'
+        mathfield.style.borderRadius = '4px'
         mathfield.style.boxShadow =
           'inset 2px 2px 6px #ccc, inset -2px -2px 6px #fff'
         mathfield.style.marginRight = '4px'
+        mathfield.style.marginLeft = '4px'
         // Centre la saisie dans le champ
         mathfield.style.alignContent = 'center'
 

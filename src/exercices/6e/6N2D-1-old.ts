@@ -1,11 +1,11 @@
 import { orangeMathalea } from 'apigeom/src/elements/defaultValues'
-import { addMultiMathfield } from '../../lib/interactif/MultiMathfield/MultiMathfield'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { toutAUnPoint } from '../../lib/interactif/mathLive'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { arrondi } from '../../lib/outils/nombres'
+import { numAlpha } from '../../lib/outils/outilString'
 import { texNombre } from '../../lib/outils/texNombre'
 import { context } from '../../modules/context'
 import operation from '../../modules/operations'
@@ -19,7 +19,7 @@ import Exercice from '../Exercice'
 export const dateDePublication = '06/05/2025'
 export const dateDeModifImportante = '25/05/2025'
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'mathLive'
 export const titre =
   'Calculer le produit (en ligne) de deux décimaux connaissant le produit de deux entiers'
 
@@ -28,12 +28,12 @@ export const titre =
  * @author Eric Elter
  */
 
-export const uuid = '56773'
+export const uuid = '56772'
 
 export const refs = {
-  'fr-fr': ['6N2D-1'],
-  'fr-2016': ['6C30-2b'],
-  'fr-ch': ['9NO8-19'],
+  'fr-fr': [],
+  'fr-2016': [],
+  'fr-ch': [],
 }
 
 function nomUnitePourPuissance(p1: number): string {
@@ -147,88 +147,92 @@ export default class ProduitDeDecimauxAPartirProduitConnu extends Exercice {
 
       if (this.sup2 === 1) {
         if (useNb1Decomposed) {
-          texteCorr += `a) $${nb1}\\times ${nb2} =
+          texteCorr +=
+            numAlpha(0) +
+            `$${nb1}\\times ${nb2} =
       (${nb1} \\times ${d2 * 10}) + (${nb1} \\times ${u2}) =
       ${nb1 * d2 * 10} + ${nb1 * u2} =
       ${miseEnEvidence(texNombre(reponse[0]))}$<br>`
         } else {
-          texteCorr += `a) $${nb1}\\times ${nb2} =
+          texteCorr +=
+            numAlpha(0) +
+            `$${nb1}\\times ${nb2} =
       (${d1 * 10} \\times ${nb2}) + (${u1} \\times ${nb2}) =
       ${nb2 * d1 * 10} + ${nb2 * u1} =
       ${miseEnEvidence(texNombre(reponse[0]))}$<br>`
         }
       } else {
-        if (!this.sup3) {
-          const [op1, op2] = useNb1Decomposed ? [nb1, nb2] : [nb2, nb1]
-          texteCorr += `Posons $${op1}\\times ${op2}$.<br>`
-          texteCorr += String(
-            operation({
-              operande1: op1,
-              operande2: op2,
-              type: 'multiplication',
-              options: { solution: true, colore: orangeMathalea },
-            }),
-          )
-          texteCorr += `$${nb1}\\times ${nb2} = ${miseEnEvidence(texNombre(reponse[0]))}$.<br>`
-        }
+        const [op1, op2] = useNb1Decomposed ? [nb1, nb2] : [nb2, nb1]
+        texteCorr += numAlpha(0) + `Posons $${op1}\\times ${op2}$.<br>`
+        texteCorr += String(
+          operation({
+            operande1: op1,
+            operande2: op2,
+            type: 'multiplication',
+            options: { solution: true, colore: orangeMathalea },
+          }),
+        )
+        texteCorr += `$${nb1}\\times ${nb2} = ${miseEnEvidence(texNombre(reponse[0]))}$.<br>`
       }
 
       reponse[1] = arrondi(multipleNb1 * multipleNb2)
 
       if (this.sup3) {
-        texte = addMultiMathfield(this, i, {
-          dataTemplate: `Sachant que $${nb1}\\times ${nb2} = ${texNombre(nb1 * nb2)}$, calculer : $${texNombre(multipleNb1)}$ $\\times$ $${texNombre(multipleNb2)} = $%{champ1}`,
-          dataOptions: {
-            champ1: {
-              keyboard: KeyboardType.clavierNumbers,
-              minWidth: 50,
+        texte = `Sachant que $${nb1}\\times ${nb2} = ${texNombre(nb1 * nb2)}$,
+                calculer $${texNombre(multipleNb1)}\\times ${texNombre(multipleNb2)}$`
+        if (this.interactif)
+          texte += ajouteChampTexteMathLive(
+            this,
+            i,
+            KeyboardType.clavierNumbers,
+            {
+              texteAvant: ' : ',
             },
+          )
+        texte += '.'
+        handleAnswers(this, i, {
+          reponse: {
+            value: reponse[1],
+            options: { nombreDecimalSeulement: true },
+          },
+        })
+        texteCorr = ''
+        reponse[0] = 0
+      } else {
+        texte = numAlpha(0) + `Calculer en ligne $${nb1}\\times ${nb2}$`
+
+        texte += this.interactif
+          ? ajouteChampTexteMathLive(this, 2 * i, KeyboardType.clavierNumbers, {
+              texteAvant: ' puis donner le résultat : ',
+              texteApres: '.',
+            })
+          : '.'
+        texte += '<br>'
+        handleAnswers(this, 2 * i, {
+          reponse: {
+            value: reponse[0],
+            options: { nombreDecimalSeulement: true },
           },
         })
 
-        texte += '.'
-        handleAnswers(
-          this,
-          i,
-          {
-            champ1: {
-              value: reponse[1],
-              options: { nombreDecimalSeulement: true },
-            },
-          },
-          { formatInteractif: 'multiMathfield' },
-        )
-        reponse[0] = 0
-      } else {
-        texte = addMultiMathfield(this, i, {
-          dataTemplate: `Calculer ${this.sup2 === 1 ? 'en ligne' : "en posant l'opération"} $${nb1}\\times ${nb2}=$%{champ1} puis en déduire le résultat de $${texNombre(multipleNb1)}\\times ${texNombre(multipleNb2)}$ : %{champ2}`,
-          dataOptions: {
-            champ1: {
-              keyboard: KeyboardType.clavierNumbers,
-              minWidth: 50,
-            },
-            champ2: {
-              keyboard: KeyboardType.clavierNumbers,
-              minWidth: 50,
-            },
+        texte +=
+          numAlpha(1) +
+          `En déduire le résultat de $${texNombre(multipleNb1)}\\times ${texNombre(multipleNb2)}$`
+        texte += this.interactif
+          ? ajouteChampTexteMathLive(
+              this,
+              2 * i + 1,
+              KeyboardType.clavierNumbers,
+              { texteAvant: ' : ', texteApres: '.' },
+            )
+          : '.'
+        handleAnswers(this, 2 * i + 1, {
+          reponse: {
+            value: reponse[1],
+            options: { nombreDecimalSeulement: true },
           },
         })
-        handleAnswers(
-          this,
-          i,
-          {
-            bareme: toutAUnPoint,
-            champ1: {
-              value: reponse[0],
-              options: { nombreDecimalSeulement: true },
-            },
-            champ2: {
-              value: reponse[1],
-              options: { nombreDecimalSeulement: true },
-            },
-          },
-          { formatInteractif: 'multiMathfield' },
-        )
+        texteCorr += numAlpha(1)
       }
 
       texteCorr += !this.sup4
