@@ -23,8 +23,8 @@ export const dateDePublication = '29/04/2025'
 export const uuid = '227f0'
 
 export const refs = {
-  'fr-fr': ['1P10-1'],
-  'fr-ch': ['4mProbStat-13'],
+  'fr-fr': [],
+  'fr-ch': [],
 }
 export default class EcritureProbabilite extends Exercice {
   constructor() {
