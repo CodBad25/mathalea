@@ -15,8 +15,6 @@
 5P10-2 Compatible : 3 champs
 5R12-2 Compatible : de 2\*(1 à 5) champs ! Actuellement, cet exercice ne produit qu'une question et les coordonnées de 1 à 5 points sont demandés produisant de 0 à 10 points !
 5S21-1 Compatible : 2 champs
-6N1C-1 Compatible : 3 champs
-6N2D-1 Compatible : 2 champs
 6N3H-1 Compatible : 2 champs
 6N3O Compatible. : 3 champs
 6N3Q-2 Compatible : 2 champs
