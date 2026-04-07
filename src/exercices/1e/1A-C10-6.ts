@@ -1,6 +1,6 @@
 import { courbe } from '../../lib/2d/Courbe'
 import { droiteParPointEtPente } from '../../lib/2d/droites'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { repere } from '../../lib/2d/reperes'
 import { segment } from '../../lib/2d/segmentsVecteurs'
 import { latex2d } from '../../lib/2d/textes'
@@ -9,7 +9,7 @@ import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
 import { choice } from '../../lib/outils/arrayOutils'
 import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
-
+import { crochetD, crochetG } from '../../lib/2d/intervalles'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { randint } from '../../modules/outils'
 import ExerciceQcmA from '../ExerciceQcmA'
@@ -94,29 +94,32 @@ export default class Auto1AC10f extends ExerciceQcmA {
     const carreValGraphique = valGraphique ** 2
 
     // Points et segments verticaux
-    const A = point(carreValGraphique, valGraphique)
-    const Ax = point(A.x, 0)
+    const A = pointAbstrait(carreValGraphique, valGraphique)
+    const Ax = pointAbstrait(A.x, 0)
     const sAAx = segment(A, Ax)
     sAAx.epaisseur = 2
     sAAx.pointilles = 5
 
-    const O = point(0, 0)
+    const O = pointAbstrait(0, 0)
 
-    // Segments de solution selon le type d'inéquation
+    // Segments de solution et crochets selon le type d'inéquation
     let segmentsSolution = []
+    let crochets = []
+
     if (typeInequation === 'inf') {
       const sOAx = segment(O, Ax, 'red')
       sOAx.epaisseur = 2
-      sOAx.styleExtremites = estInegStrict ? '[-[' : '[-]'
-      sOAx.tailleExtremites = 6
+      const c1 = crochetD(O, 'red')                                         // [ en O (domaine [0;+∞[, toujours fermé)
+      const c2 = estInegStrict ? crochetD(Ax, 'red') : crochetG(Ax, 'red') // ] strict ou [ large en Ax
       segmentsSolution = [sOAx]
+      crochets = [c1, c2]
     } else {
-      const AInf = point(5, 0)
+      const AInf = pointAbstrait(5, 0)
       const sAxAInf = segment(Ax, AInf, 'red')
       sAxAInf.epaisseur = 2
-      sAxAInf.styleExtremites = estInegStrict ? ']-' : '[-'
-      sAxAInf.tailleExtremites = 6
+      const c = estInegStrict ? crochetG(Ax, 'red') : crochetD(Ax, 'red')  // ] strict ou [ large en Ax
       segmentsSolution = [sAxAInf]
+      crochets = [c]
     }
 
     // Textes
@@ -141,6 +144,7 @@ export default class Auto1AC10f extends ExerciceQcmA {
       O,
       sAAx,
       segmentsSolution,
+      crochets,
       textes,
       carreValGraphique,
     }
@@ -148,7 +152,7 @@ export default class Auto1AC10f extends ExerciceQcmA {
 
   // Méthode utilitaire pour créer le repère et les graphiques
   private creerGraphiques(val: number, elements: any) {
-    const { o, sAAx, segmentsSolution, textes } = elements
+    const { o, sAAx, segmentsSolution, crochets, textes } = elements
 
     const r1 = repere({
       xMin: -1,
@@ -168,7 +172,7 @@ export default class Auto1AC10f extends ExerciceQcmA {
     })
 
     const f = (x: number) => Math.sqrt(Number(x))
-    const Cg = droiteParPointEtPente(point(0, 1.5), 0, '', 'green')
+    const Cg = droiteParPointEtPente(pointAbstrait(0, 1.5), 0, '', 'green')
     Cg.epaisseur = 2
 
     // Graphique simple pour l'énoncé
@@ -183,7 +187,7 @@ export default class Auto1AC10f extends ExerciceQcmA {
       },
       r1,
       o,
-      courbe(f, { repere: r1, color: 'blue', epaisseur: 2 }),
+      courbe(f, { repere: r1, color: 'blue', epaisseur: 2, step: 0.05 }),
     )
 
     // Graphique complet pour la correction
@@ -196,12 +200,13 @@ export default class Auto1AC10f extends ExerciceQcmA {
         pixelsParCm: 30,
         scale: 1,
       },
-      courbe(f, { repere: r1, color: 'blue', epaisseur: 2 }),
+      courbe(f, { repere: r1, color: 'blue', epaisseur: 2, step: 0.05 }),
       Cg,
       r1,
       o,
       sAAx,
       ...segmentsSolution,
+      ...crochets,
       ...textes,
     )
 
