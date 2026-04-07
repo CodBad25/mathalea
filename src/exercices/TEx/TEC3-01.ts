@@ -15,39 +15,32 @@ export const refs = {
   'fr-ch': [],
 }
 export const dateDePublication = '20/08/2024'
+export const dateDeModifImportante = '07/04/2026'
 // Les valeurs particulières des cosinus et des sinus
 
 const listePourPiSur6 = [
-  { a: '\\sqrt{3}', b: '1', a2: '\\sqrt{3}^2', b2: '1^2', A: '2' },
-  { a: '2\\sqrt{3}', b: '2', a2: '(2\\sqrt{3})^2', b2: '2^2', A: '4' },
-  { a: '3\\sqrt{3}', b: '3', a2: '(3\\sqrt{3})^2', b2: '3^2', A: '6' },
+  { a: '\\sqrt{3}', b: '1', A: '2' },
+  { a: '2\\sqrt{3}', b: '2', A: '4' },
+  { a: '3\\sqrt{3}', b: '3', A: '6' },
   {
     a: '1',
     b: '\\dfrac{\\sqrt{3}}{3}',
-    a2: '1^2',
-    b2: '\\left(\\dfrac{\\sqrt{3}}{3}\\right)^2',
     A: '2\\dfrac{\\sqrt{3}}{3}',
   },
   {
     a: '2',
     b: '\\dfrac{2\\sqrt{3}}{3}',
-    a2: '2^2',
-    b2: '\\left(2\\dfrac{\\sqrt{3}}{3}\\right)^2',
     A: '4\\dfrac{\\sqrt{3}}{3}',
   },
-  { a: '3', b: '\\sqrt{3}', a2: '3^2', b2: '\\sqrt{3}^2', A: '2\\sqrt{3}' },
+  { a: '3', b: '\\sqrt{3}', A: '2\\sqrt{3}' },
   {
     a: '\\sqrt{6}',
     b: '\\sqrt{2}',
-    a2: '\\sqrt{6}^2',
-    b2: '\\sqrt{2}^2',
     A: '2\\sqrt{2}',
   },
   {
     a: '\\sqrt{15}',
     b: '\\sqrt{5}',
-    a2: '\\sqrt{15}^2',
-    b2: '\\sqrt{15}^2',
     A: '2\\sqrt{5}',
   },
 ].map((el) =>
@@ -61,36 +54,28 @@ const listePourPiSur4 = [
   {
     a: '\\sqrt{2}',
     b: '\\sqrt{2}',
-    a2: '\\sqrt{2}^2',
-    b2: '\\sqrt{2}^2',
     A: '2',
   },
-  { a: '1', b: '1', a2: '1^2', b2: '1^2', A: '\\sqrt{2}' },
-  { a: '2', b: '2', a2: '2^2', b2: '2^2', A: '2\\sqrt{2}' },
+  { a: '1', b: '1', A: '\\sqrt{2}' },
+  { a: '2', b: '2', A: '2\\sqrt{2}' },
   {
     a: '\\sqrt{3}',
     b: '\\sqrt{3}',
-    a2: '\\sqrt{3}^2',
-    b2: '\\sqrt{3}^2',
     A: '\\sqrt{6}',
   },
-  { a: '3', b: '3', a2: '3^2', b2: '3^2', A: '3\\sqrt{2}' },
-  { a: '5', b: '5', a2: '5^2', b2: '5^2', A: '5\\sqrt{2}' },
+  { a: '3', b: '3', A: '3\\sqrt{2}' },
+  { a: '5', b: '5', A: '5\\sqrt{2}' },
   {
     a: '\\sqrt{6}',
     b: '\\sqrt{6}',
-    a2: '\\sqrt{6}^2',
-    b2: '\\sqrt{6}^2',
     A: '2\\sqrt{3}',
   },
   {
     a: '\\sqrt{5}',
     b: '\\sqrt{5}',
-    a2: '\\sqrt{5}^2',
-    b2: '\\sqrt{5}^2',
     A: '\\sqrt{10}',
   },
-  { a: '6', b: '6', a2: '6^2', b2: '6^2', A: '6\\sqrt{2}' },
+  { a: '6', b: '6', A: '6\\sqrt{2}' },
 ].map((el) =>
   Object.assign(el, {
     aSurA: '\\dfrac{\\sqrt{2}}{2}',
@@ -99,38 +84,30 @@ const listePourPiSur4 = [
   }),
 )
 const listePourPiSur3 = [
-  { a: '1', b: '\\sqrt{3}', a2: '1^2', b2: '\\sqrt{3}^2', A: '2' },
-  { a: '2', b: '2\\sqrt{3}', a2: '2^2', b2: '(2\\sqrt{3})^2', A: '4' },
-  { a: '3', b: '3\\sqrt{3}', a2: '3^2', b2: '(3\\sqrt{3})^2', A: '6' },
-  { a: '\\sqrt{3}', b: '3', a2: '\\sqrt{3}^2', b2: '3^2', A: '2\\sqrt{3}' },
-  { a: '2\\sqrt{3}', b: '6', a2: '(2\\sqrt{3})^2', b2: '6^2', A: '4\\sqrt{3}' },
-  { a: '3\\sqrt{3}', b: '9', a2: '(3\\sqrt{3})^2', b2: '9^2', A: '6\\sqrt{3}' },
+  { a: '1', b: '\\sqrt{3}', A: '2' },
+  { a: '2', b: '2\\sqrt{3}', A: '4' },
+  { a: '3', b: '3\\sqrt{3}', A: '6' },
+  { a: '\\sqrt{3}', b: '3', A: '2\\sqrt{3}' },
+  { a: '2\\sqrt{3}', b: '6', A: '4\\sqrt{3}' },
+  { a: '3\\sqrt{3}', b: '9', A: '6\\sqrt{3}' },
   {
     a: '\\sqrt{2}',
     b: '\\sqrt{6}',
-    a2: 'sqrt{2}^2',
-    b2: '\\sqrt{6}^2',
     A: '2\\sqrt{2}',
   },
   {
     a: '\\sqrt{5}',
     b: '\\sqrt{15}',
-    a2: '\\sqrt{5}^2',
-    b2: '\\sqrt{15}^2',
     A: '2\\sqrt{5}',
   },
   {
     a: '\\dfrac{\\sqrt{3}}{3}',
     b: '1',
-    a2: '\\left(\\dfrac{\\sqrt{3}}{3}\\right)^2',
-    b2: '1^2',
     A: '2\\dfrac{\\sqrt{3}}{3}',
   },
   {
     a: '2\\dfrac{\\sqrt{3}}{3}',
     b: '2',
-    a2: '\\left(2\\dfrac{\\sqrt{3}}{3}\\right)^2',
-    b2: '2^2',
     A: '4\\dfrac{\\sqrt{3}}{3}',
   },
 ].map((el) =>
@@ -145,8 +122,6 @@ const listePour3PiSur4 = listePourPiSur4.map((el) =>
     {},
     {
       a: `-${el.a}`,
-      a2: el.a2,
-      b2: el.b2,
       b: el.b,
       A: el.A,
       aSurA: `-${el.aSurA}`,
@@ -161,8 +136,6 @@ const listePour5PiSur6 = listePourPiSur6.map((el) =>
     {
       a: `-${el.a}`,
       b: el.b,
-      a2: el.a2,
-      b2: el.b2,
       A: el.A,
       aSurA: `-${el.aSurA}`,
       bSurA: el.bSurA,
@@ -176,8 +149,6 @@ const listePour2PiSur3 = listePourPiSur3.map((el) =>
     {
       a: `-${el.a}`,
       b: el.b,
-      a2: el.a2,
-      b2: el.b2,
       A: el.A,
       aSurA: `-${el.aSurA}`,
       bSurA: el.bSurA,
@@ -191,8 +162,6 @@ const listePourMoinsPiSur4 = listePourPiSur4.map((el) =>
     {
       a: el.a,
       b: `-${el.b}`,
-      a2: el.a2,
-      b2: el.b2,
       A: el.A,
       aSurA: el.aSurA,
       bSurA: `-${el.bSurA}`,
@@ -206,8 +175,6 @@ const listePourMoinsPiSur6 = listePourPiSur6.map((el) =>
     {
       a: el.a,
       b: `-${el.b}`,
-      a2: el.a2,
-      b2: el.b2,
       A: el.A,
       aSurA: el.aSurA,
       bSurA: `-${el.bSurA}`,
@@ -221,8 +188,6 @@ const listePourMoinsPiSur3 = listePourPiSur3.map((el) =>
     {
       a: el.a,
       b: `-${el.b}`,
-      a2: el.a2,
-      b2: el.b2,
       A: el.A,
       aSurA: el.aSurA,
       bSurA: `-${el.bSurA}`,
@@ -236,8 +201,6 @@ const listePourMoins3PiSur4 = listePour3PiSur4.map((el) =>
     {
       a: el.a,
       b: `-${el.b}`,
-      a2: el.a2,
-      b2: el.b2,
       A: el.A,
       aSurA: el.aSurA,
       bSurA: `-${el.bSurA}`,
@@ -251,8 +214,6 @@ const listePourMoins5PiSur6 = listePour5PiSur6.map((el) =>
     {
       a: el.a,
       b: `-${el.b}`,
-      a2: el.a2,
-      b2: el.b2,
       A: el.A,
       aSurA: el.aSurA,
       bSurA: `-${el.bSurA}`,
@@ -266,8 +227,6 @@ const listePourMoins2PiSur3 = listePour2PiSur3.map((el) =>
     {
       a: el.a,
       b: `-${el.b}`,
-      a2: el.a2,
-      b2: el.b2,
       A: el.A,
       aSurA: el.aSurA,
       bSurA: `-${el.bSurA}`,
@@ -289,7 +248,7 @@ export default class AcosOmegaTPlusBSinOmegaT extends Exercice {
     this.sup = '1'
     this.besoinFormulaireTexte = [
       'Type de questions',
-      ' Nombres séparés par des tirets :\n1 : algébrique vers trigonométrique\n2 : trigonométrique vers algébrique\n3 : algébrique vers $ke^{i\\theta}$\n4 : $ke^{i\\theta}$ vers algébrique\n5 : Mélange',
+      ' Nombres séparés par des tirets :\n1 : Algébrique vers trigonométrique\n2 : Trigonométrique vers algébrique\n3 : Algébrique vers exponentielle\n4 : Exponentielle vers algébrique\n5 : Mélange',
     ]
   }
 
@@ -321,7 +280,7 @@ export default class AcosOmegaTPlusBSinOmegaT extends Exercice {
       melange: 5,
     })
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 100; ) {
-      const { a, b, a2, b2, A, aSurA, bSurA, phi } = listeDeValeurs[i]
+      const { a, b, A, aSurA, bSurA, phi } = listeDeValeurs[i]
       let texte = 'Soit le nombre complexe '
       let texteCorr: string
       let value: string
@@ -331,15 +290,15 @@ export default class AcosOmegaTPlusBSinOmegaT extends Exercice {
           texte += `$z=${a}${b === '1' ? '+' : b === '-1' ? '-' : b.startsWith('-') ? b : `+${b}`}\\mathrm{i}$.<br>`
           texte += "Donner l'écriture trigonométrique de $z$."
           texteCorr = `$z=${a}${b === '1' ? '+' : b === '-1' ? '-' : b.startsWith('-') ? b : `+${b}`}\\mathrm{i}$ est de la forme $a+b\\mathrm{i}$ avec $a=${a}$ et $b=${b}$.<br>`
-          texteCorr += `Calculons le module de $z$ : $|z|=\\sqrt{${a2}+${b2}}=${A}$.<br>`
+          texteCorr += `Calculons le module de $z$ : $|z|=\\sqrt{${a.startsWith('-') || a.includes('frac') || a.includes('sqrt') ? `\\left(${a}\\right)^2` : `${a}^2`}+${b.startsWith('-') || b.includes('frac') || b.includes('sqrt') ? `\\left(${b}\\right)^2` : `${b}^2`}}=${A}$.<br>`
           texteCorr += `Factorisons $|z|$ : $z=${A}\\left(${aSurA}${bSurA.startsWith('-') ? `${bSurA}` : `+${bSurA}`}\\mathrm{i}\\right)$.<br>`
-          texteCorr += `Nous reconnaissons ici :<br>d'une part $\\cos(${phi})=${aSurA}$<br>d'autre part $\\sin(${phi})=${bSurA}$.<br>`
-          value = `${A}\\left(\\cos(${phi})+\\mathrm{i}\\sin(${phi})\\right)`
+          texteCorr += `Nous reconnaissons ici :<br>d'une part, $\\cos\\left(${phi}\\right)=${aSurA}$ et<br>d'autre part, $\\sin\\left(${phi}\\right)=${bSurA}$.<br>`
+          value = `${A}\\left(\\cos\\left(${phi}\\right)+\\mathrm{i}\\sin\\left(${phi}\\right)\\right)`
           break
         case 2: // trigo vers algébrique
-          texte += `$z=${A}\\left(\\cos(${phi})+\\mathrm{i}\\sin(${phi})\\right)$.<br>`
-          texte += "Donner l'écriture algébrique de $z$"
-          texteCorr = `Nous savons que $\\cos(${phi})=${aSurA}$ et $\\sin(${phi})=${bSurA}$, donc en substituant dans l'expression de $z$, nous obtenons :<br>`
+          texte += `$z=${A}\\left(\\cos\\left(${phi}\\right)+\\mathrm{i}\\sin\\left(${phi}\\right)\\right)$.<br>`
+          texte += "Donner l'écriture algébrique de $z$."
+          texteCorr = `Nous savons que $\\cos\\left(${phi}\\right)=${aSurA}$ et $\\sin\\left(${phi}\\right)=${bSurA}$, donc en substituant dans l'expression de $z$, nous obtenons :<br>`
           texteCorr += `$z=${A}\\left(${aSurA}${bSurA.startsWith('-') ? `${bSurA}` : `+${bSurA}`}\\mathrm{i}\\right)$.<br>`
           texteCorr += `En développant : $z=${A}\\times ${aSurA.startsWith('-') ? `\\left(${aSurA}\\right)` : aSurA}${bSurA.startsWith('-') ? `-${A}\\times ${bSurA.substring(1)}` : `+${A}\\times ${bSurA}`}\\mathrm{i}$.<br>`
           value = `${a}${b.startsWith('-') ? `${b}` : `+${b}`}\\mathrm{i}`
@@ -349,16 +308,16 @@ export default class AcosOmegaTPlusBSinOmegaT extends Exercice {
           texte += `$z=${a}${b === '1' ? '+' : b === '-1' ? '-' : b.startsWith('-') ? b : `+${b}`}\\mathrm{i}$.<br>`
           texte += "Donner l'écriture de $z$ sous la forme $ke^{i\\theta}$."
           texteCorr = `$z=${a}${b === '1' ? '+' : b === '-1' ? '-' : b.startsWith('-') ? b : `+${b}`}\\mathrm{i}$ est de la forme $a+b\\mathrm{i}$ avec $a=${a}$ et $b=${b}$.<br>`
-          texteCorr += `Calculons le module de $z$ : $|z|=\\sqrt{${a2}+${b2}}=${A}$.<br>`
+          texteCorr += `Calculons le module de $z$ : $|z|=\\sqrt{${a.startsWith('-') || a.includes('frac') || a.includes('sqrt') ? `\\left(${a}\\right)^2` : `${a}^2`}+${b.startsWith('-') || b.includes('frac') || b.includes('sqrt') ? `\\left(${b}\\right)^2` : `${b}^2`}}=${A}$.<br>`
           texteCorr += `Factorisons $|z|$ : $z=${A}\\left(${aSurA}${bSurA.startsWith('-') ? `${bSurA}` : `+${bSurA}`}\\mathrm{i}\\right)$.<br>`
-          texteCorr += `Nous reconnaissons ici :<br>d'une part $\\cos(${phi})=${aSurA}$<br>d'autre part $\\sin(${phi})=${bSurA}$.<br>`
-          value = `${A}e^{${phi.replace('\\dfrac', '\\mathrm{i}\\frac')}}`
+          texteCorr += `Nous reconnaissons ici :<br>d'une part, $\\cos\\left(${phi}\\right)=${aSurA}$ et<br>d'autre part, $\\sin\\left(${phi}\\right)=${bSurA}$.<br>`
+          value = `${A}\\mathrm{e}^{${phi.replace('\\dfrac', '\\mathrm{i}\\frac')}}`
 
           break
         default: // k.e^{i\\theta} vers écriture algébrique
-          texte += `$z=${A}e^{${phi.replace('\\dfrac', '\\mathrm{i}\\frac')}}$.<br>`
+          texte += `$z=${A}\\mathrm{e}^{${phi.replace('\\dfrac', '\\mathrm{i}\\frac')}}$.<br>`
           texte += "Donner l'écriture algébrique de $z$."
-          texteCorr = `Nous savons que $e^{${phi.replace('\\dfrac', '\\mathrm{i}\\frac')}}=\\cos(${phi})+\\mathrm{i}\\sin(${phi})=${aSurA}${bSurA.startsWith('-') ? `${bSurA}` : `+${bSurA}`}\\mathrm{i}$.<br>`
+          texteCorr = `Nous savons que $\\mathrm{e}^{${phi.replace('\\dfrac', '\\mathrm{i}\\frac')}}=\\cos\\left(${phi}\\right)+\\mathrm{i}\\sin\\left(${phi}\\right)=${aSurA}${bSurA.startsWith('-') ? `${bSurA}` : `+${bSurA}`}\\mathrm{i}$.<br>`
           texteCorr += `Donc $z=${A}\\left(${aSurA}${bSurA.startsWith('-') ? `${bSurA}` : `+${bSurA}`}\\mathrm{i}\\right)$.<br>`
           texteCorr += `Developpons : $z=${A}\\times ${aSurA.startsWith('-') ? `\\left(${aSurA}\\right)` : aSurA}${bSurA.startsWith('-') ? `-${A}\\times ${bSurA.substring(1)}` : `+${A}\\times ${bSurA}`}\\mathrm{i}$.<br>`
           value = `${a}${b.startsWith('-') ? `${b}` : `+${b}`}\\mathrm{i}`
