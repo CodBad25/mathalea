@@ -1,5 +1,6 @@
 import { choice } from '../../../lib/outils/arrayOutils'
 import { ecritureParentheseSiNegatif } from '../../../lib/outils/ecritures'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Calculer la raison d’une suite arithmétique/géométrique'
@@ -51,7 +52,7 @@ Donner la raison $r$ de cette suite.`
           this.question += '<br> $r=$'
         }
         this.correction = `La raison est donnée par la différence de deux termes consécutifs :<br>
-        $r=${s}_{${i + 1}}-${s}_{${i}}=${v}-${ecritureParentheseSiNegatif(u)}=${v - u}$.`
+        $r=${s}_{${i + 1}}-${s}_{${i}}=${v}-${ecritureParentheseSiNegatif(u)}=${miseEnEvidence(v - u)}$.`
 
         this.reponse = r
 
@@ -72,7 +73,7 @@ Donner la raison $q$ de cette suite.`
           this.question += '<br> $q=$'
         }
         this.correction = `La raison est donnée par le quotient de deux termes consécutifs :<br>
-        $q=\\dfrac{${s}_{${i + 1}}}{${s}_{${i}}}=\\dfrac{${v}}{${u}}=${v / u}$.`
+        $q=\\dfrac{${s}_{${i + 1}}}{${s}_{${i}}}=\\dfrac{${v}}{${u}}=${miseEnEvidence(v / u)}$.`
 
         this.reponse = q
 
