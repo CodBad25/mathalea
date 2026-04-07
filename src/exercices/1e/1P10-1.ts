@@ -290,9 +290,9 @@ Enfin, ils estiment que $${texNombre(Pev2 * 100, 1)}\\,\\%$ des animaux contract
           texte += addMultiMathfield(this, i, {
             dataTemplate: `%{champ1} ${calc4} ${sp(10)} %{champ2} ${calc5}${sp(10)} %{champ3} ${calc6}`,
             dataOptions: {
-              champ1: { keyboard: KeyboardType.lycee, minWidth: 100 },
-              champ2: { keyboard: KeyboardType.lycee, minWidth: 100 },
-              champ3: { keyboard: KeyboardType.lycee, minWidth: 100 },
+              champ1: { keyboard: KeyboardType.clavierProbabilite, minWidth: 100 },
+              champ2: { keyboard: KeyboardType.clavierProbabilite, minWidth: 100 },
+              champ3: { keyboard: KeyboardType.clavierProbabilite, minWidth: 100 },
             },
           })
           handleAnswers(
@@ -345,9 +345,9 @@ Enfin, ils estiment que $${texNombre(Pev2 * 100, 1)}\\,\\%$ des animaux contract
           texte += addMultiMathfield(this, i, {
             dataTemplate: `${calc1} %{champ1} ${sp(10)}${calc2} %{champ2} ${sp(10)} ${calc3} %{champ3}`,
             dataOptions: {
-              champ1: { keyboard: KeyboardType.lycee, minWidth: 100 },
-              champ2: { keyboard: KeyboardType.lycee, minWidth: 100 },
-              champ3: { keyboard: KeyboardType.lycee, minWidth: 100 },
+              champ1: { keyboard: KeyboardType.clavierDeBase, minWidth: 100 },
+              champ2: { keyboard: KeyboardType.clavierDeBase, minWidth: 100 },
+              champ3: { keyboard: KeyboardType.clavierDeBase, minWidth: 100 },
             },
           })
           handleAnswers(
@@ -373,9 +373,9 @@ Enfin, ils estiment que $${texNombre(Pev2 * 100, 1)}\\,\\%$ des animaux contract
           texte += addMultiMathfield(this, i, {
             dataTemplate: `${calc4} %{champ1} ${sp(10)}${calc5} %{champ2} ${sp(10)} ${calc6} %{champ3}`,
             dataOptions: {
-              champ1: { keyboard: KeyboardType.lycee, minWidth: 100 },
-              champ2: { keyboard: KeyboardType.lycee, minWidth: 100 },
-              champ3: { keyboard: KeyboardType.lycee, minWidth: 100 },
+              champ1: { keyboard: KeyboardType.clavierDeBase, minWidth: 100 },
+              champ2: { keyboard: KeyboardType.clavierDeBase, minWidth: 100 },
+              champ3: { keyboard: KeyboardType.clavierDeBase, minWidth: 100 },
             },
           })
           handleAnswers(
