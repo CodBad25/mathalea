@@ -2,7 +2,10 @@
   import type { MathfieldElement } from 'mathlive'
   import { afterUpdate, onDestroy, onMount } from 'svelte'
   import { setSizeWithinSvgContainer } from '../../../../lib/components/sizeTools'
-  import { questionCliqueFigure } from '../../../../lib/interactif/cliqueFigure'
+  import {
+    questionCliqueFigure,
+    type FigureClicable,
+  } from '../../../../lib/interactif/cliqueFigure'
   import { mathaleaRenderDiv } from '../../../../lib/mathalea'
   import { canOptions } from '../../../../lib/stores/canStore'
   import { loadMathLive } from '../../../../modules/loaders'
@@ -153,14 +156,15 @@
         return
       }
 
-      const figureCliquables =
-        questionContainer?.querySelectorAll<HTMLInputElement>(
+      const figureCliquables = Array.from(
+        questionContainer?.querySelectorAll<FigureClicable>(
           '[id^="cliquefigure"]',
-        )
+        ),
+      ) as FigureClicable[]
       if (figureCliquables.length > 0) {
         $keyboardState.isVisible = false
         for (const figureCliquable of figureCliquables) {
-          questionCliqueFigure(figureCliquable)
+          questionCliqueFigure(figureCliquable as FigureClicable)
           if (!figureCliquable.dataset.listenerAdded) {
             figureCliquable.dataset.listenerAdded = 'true' // Marquer comme ajouté
             figureCliquable.addEventListener('click', () => {
