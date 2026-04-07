@@ -6,6 +6,7 @@ import { toutAUnPoint } from '../../lib/interactif/mathLive'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { rangeMinMax } from '../../lib/outils/nombres'
+import { numAlpha } from '../../lib/outils/outilString'
 import { texNombre } from '../../lib/outils/texNombre'
 import { context } from '../../modules/context'
 import operation from '../../modules/operations'
@@ -139,7 +140,8 @@ export default class DivisionsEuclidiennes extends Exercice {
             operande2: b,
             type: 'divisionE',
             options: { solution: true, colore: orangeMathalea },
-          }) + `$${texNombre(a)}=${b}\\times${miseEnEvidence(texNombre(q))}$`
+          }) +
+          `$${texNombre(a)}=${b}\\times${miseEnEvidence(texNombre(q))}$<br>`
       } else {
         texteCorr =
           operation({
@@ -148,10 +150,10 @@ export default class DivisionsEuclidiennes extends Exercice {
             type: 'divisionE',
             options: { solution: true, colore: orangeMathalea },
           }) +
-          `$${texNombre(a)}=(${b}\\times${miseEnEvidence(texNombre(q))})+${miseEnEvidence(String(r))}$`
+          `$${texNombre(a)}=(${b}\\times${miseEnEvidence(texNombre(q))})+${miseEnEvidence(String(r))}$<br>`
       }
       texte += addMultiMathfield(this, i, {
-        dataTemplate: `Quel est le quotient de la division euclidienne de $${a}$ par $${b}$ ?  %{champ1}\nQuel est le reste de la division euclidienne de $${a}$ par $${b}$ ?  %{champ2}`,
+        dataTemplate: `a) Quel est le quotient de la division euclidienne de $${a}$ par $${b}$ ?  %{champ1}\nb) Quel est le reste de la division euclidienne de $${a}$ par $${b}$ ?  %{champ2}`,
         dataOptions: {
           champ1: {
             keyboard: KeyboardType.clavierNumbers,
@@ -176,6 +178,8 @@ export default class DivisionsEuclidiennes extends Exercice {
         },
         { formatInteractif: 'multiMathfield' },
       )
+      texteCorr += `${numAlpha(0)} Le quotient de la division euclidienne de $${texNombre(a)}$ par $${b}$ est $${miseEnEvidence(texNombre(q))}$.<br>`
+      texteCorr += `${numAlpha(1)} Le reste de la division euclidienne de $${texNombre(a)}$ par $${b}$ est $${miseEnEvidence(String(r))}$.`
 
       if (this.questionJamaisPosee(i, a, b)) {
         // Si la question n'a jamais été posée, on en crée une autre

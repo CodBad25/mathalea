@@ -1,8 +1,20 @@
+// Utilitaire pour styliser les items a), b), ... dans un texte brut
 import { MathfieldElement } from 'mathlive'
 import { context } from '../../../modules/context'
 import type { IExercice, ValeurNames } from '../../types'
 import { buildDataKeyboardFromStyle, KeyboardType } from '../claviers/keyboard'
 import { setMathfield, setMathfieldListener } from './setMathfield'
+function stylizeItems(text: string): string {
+  const itemRegex = /(^|\s)([a-z]\))/g
+  return text.replace(itemRegex, (match, p1, p2) => {
+    return (
+      (p1 || '') +
+      '<span style="color:#f15929; font-weight:bold">' +
+      p2 +
+      '</span>'
+    )
+  })
+}
 
 export type DataOptionsMultiMathfield = Partial<
   Record<
@@ -77,9 +89,13 @@ export class MultiMathfieldElement extends HTMLElement {
     container.style.display = 'inline-block'
     while ((match = regex.exec(template)) !== null) {
       if (match.index > lastIndex) {
-        // 2. On parcourt le template comme avant
-        currentSpan.appendChild(
-          document.createTextNode(template.slice(lastIndex, match.index)),
+        // Stylise les items a), b), ... dans le texte brut
+        const rawText = template.slice(lastIndex, match.index)
+        // On utilise innerHTML pour insérer le HTML stylisé
+        const temp = document.createElement('span')
+        temp.innerHTML = stylizeItems(rawText)
+        Array.from(temp.childNodes).forEach((node) =>
+          currentSpan.appendChild(node),
         )
       }
       const token = match[0]
@@ -183,8 +199,12 @@ export class MultiMathfieldElement extends HTMLElement {
       lastIndex = regex.lastIndex
     }
     if (lastIndex < template.length) {
-      currentSpan.appendChild(
-        document.createTextNode(template.slice(lastIndex)),
+      // Stylise les items a), b), ... dans le texte brut restant
+      const rawText = template.slice(lastIndex)
+      const temp = document.createElement('span')
+      temp.innerHTML = stylizeItems(rawText)
+      Array.from(temp.childNodes).forEach((node) =>
+        currentSpan.appendChild(node),
       )
     }
     // Ajoute le dernier span s'il n'est pas vide
@@ -282,26 +302,32 @@ export function addMultiMathfield(
     return `<multi-mathfield id="multiMathfieldEx${exercice.numeroExercice}Q${questionIndex}" data-template="${dataTemplate}" data-options='${JSON.stringify(enrichedOptions)}'></multi-mathfield>
     <div  class ="ml-2 py-2 italic text-coopmaths-warn-darkest dark:text-coopmathsdark-warn-darkest" id="feedbackEx${exercice.numeroExercice}Q${questionIndex}" style="display: none;"></div>`
   } else {
-    // On veut aussi gérer les retours à la ligne (\n) en <br>
-    const regex = /(%\{[^}]+\}|\n)/g
-    let lastIndex = 0
-    let match
+    // On traite ligne par ligne pour détecter les items a), b), ... en début de ligne
+    const lines = dataTemplate.split('\n')
+    const itemRegex = /(^|\s)([a-z]\))/g
+    const fieldRegex = /%\{[^}]+\}/g
     let result = ''
-    while ((match = regex.exec(dataTemplate)) !== null) {
-      if (match.index > lastIndex) {
-        result += dataTemplate.slice(lastIndex, match.index)
-      }
-      const token = match[0]
-      if (token === '\n') {
+    for (let i = 0; i < lines.length; i++) {
+      let line = lines[i]
+      // Remplace les champs %{...} par des underscores
+      line = line.replace(fieldRegex, '$\\ldots\\ldots$')
+      // Stylise les items a), b), ... en début de ligne ou après un espace
+      line = line.replace(itemRegex, (match, p1, p2) => {
+        if (context.isHtml) {
+          return (
+            (p1 || '') +
+            '<span style="color:#f15929; font-weight:bold">' +
+            p2 +
+            '</span>'
+          )
+        } else {
+          return (p1 || '') + '$\\textbf{' + p2 + '}$'
+        }
+      })
+      result += line
+      if (i < lines.length - 1) {
         result += '<br>'
-      } else {
-        // Remplace les champs par des underscores
-        result += '$\\ldots\\ldots$'
       }
-      lastIndex = regex.lastIndex
-    }
-    if (lastIndex < dataTemplate.length) {
-      result += dataTemplate.slice(lastIndex)
     }
     return result
   }
