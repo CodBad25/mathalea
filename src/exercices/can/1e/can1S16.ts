@@ -1,5 +1,6 @@
 import { choice } from '../../../lib/outils/arrayOutils'
 import { ecritureParentheseSiNegatif } from '../../../lib/outils/ecritures'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
@@ -54,7 +55,7 @@ Donner la raison $r$ de cette suite.`
         }
         this.correction = `La suite $(${s}_n)$ est une suite arithmétique  de raison $r$. Donc, pour tout entier naturel $n$ et $p$, on a : $u_n=u_p+(n-p)r$.<br>
         Ainsi, $${s}_{${i + n}}=${s}_{${i}}+(${i + n}-${i})r=${s}_{${i}}+${n}r$.<br>
-       On en déduit :  $r=\\dfrac{${s}_{${i + n}}-${s}_{${i}}}{${n}}=\\dfrac{${v}-${ecritureParentheseSiNegatif(u)}}{${n}}=${r}$.`
+       On en déduit :  $r=\\dfrac{${s}_{${i + n}}-${s}_{${i}}}{${n}}=\\dfrac{${v}-${ecritureParentheseSiNegatif(u)}}{${n}}=${miseEnEvidence(r)}$.`
 
         this.reponse = r
 
@@ -81,7 +82,7 @@ Donner la raison $q$ de cette suite.`
           this.correction = `La suite $(${s}_n)$ est une suite géométrique  de raison $q$ positive. Donc, pour tout entier naturel $n$ et $p$, on a : $u_n=u_p\\times q^{n-p}$.<br>
         Ainsi, $${s}_{${i + 2}}=${s}_{${i}}\\times q^{${i + 2}-${i}}=${s}_{${i}}\\times q^{2}$.<br>
        On en déduit :  $q^2=\\dfrac{${s}_{${i + 2}}}{${s}_{${i}}}=\\dfrac{${v}}{${u}}=${texNombre(q * q)}$.<br>
-       Puisque $q$ est un nombre positif, on obtient : $q=${texNombre(q)}$.`
+       Puisque $q$ est un nombre positif, on obtient : $q=${miseEnEvidence(`${texNombre(q)}`)}$.`
 
           this.reponse = q
 
@@ -106,7 +107,7 @@ Donner la raison $q$ de cette suite.`
           this.correction = `La suite $(${s}_n)$ est une suite géométrique  de raison $q$ positive. Donc, pour tout entier naturel $n$ et $p$, on a : $u_n=u_p\\times q^{n-p}$.<br>
             Ainsi, $${s}_{${i + 2}}=${s}_{${i}}\\times q^{${i + 2}-${i}}=${s}_{${i}}\\times q^{2}$.<br>
            On en déduit :  $q^2=\\dfrac{${s}_{${i + 2}}}{${s}_{${i}}}=\\dfrac{${v}}{${u}}=${q * q}$.<br>
-           Puisque $q$ est un nombre négatif, on obtient : $q=${-q}$.`
+           Puisque $q$ est un nombre négatif, on obtient : $q=${miseEnEvidence(-q)}$.`
 
           this.reponse = -q
 
@@ -130,7 +131,7 @@ Donner la raison $q$ de cette suite.`
           this.correction = `La suite $(${s}_n)$ est une suite géométrique  de raison $q$ positive. Donc, pour tout entier naturel $n$ et $p$, on a : $u_n=u_p\\times q^{n-p}$.<br>
           Ainsi, $${s}_{${i + 3}}=${s}_{${i}}\\times q^{${i + 3}-${i}}=${s}_{${i}}\\times q^{3}$.<br>
          On en déduit :  $q^3=\\dfrac{${s}_{${i + 3}}}{${s}_{${i}}}=\\dfrac{${v}}{${u}}=${q ** 3}$.<br>
-         On obtient : $q=${q}$.`
+         On obtient : $q=${miseEnEvidence(q)}$.`
 
           this.reponse = q
 
