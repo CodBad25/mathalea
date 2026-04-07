@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { onMount, tick } from 'svelte'
   import seedrandom from 'seedrandom'
+  import { onMount, tick } from 'svelte'
   import {
     buildExercisesList,
     splitExercisesIntoQuestions,
@@ -116,10 +116,7 @@
       resultsByQuestion[i] = false
       return
     }
-    if (
-      type.toLowerCase() === 'mathlive' ||
-      type === 'fillInTheBlank'
-    ) {
+    if (type.toLowerCase() === 'mathlive' || type === 'fillInTheBlank') {
       const resu = verifQuestionMathLive(
         exercices[indiceExercice[i]],
         indiceQuestionInExercice[i],

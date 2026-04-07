@@ -1,24 +1,29 @@
 import Decimal from 'decimal.js'
 import { courbe } from '../../lib/2d/Courbe'
 import { repere } from '../../lib/2d/reperes'
+import { setCliqueFigure } from '../../lib/interactif/gestionInteractif'
 import { Polynome } from '../../lib/mathFonctions/Polynome'
-import { choice } from '../../lib/outils/arrayOutils'
+import { choice, shuffle } from '../../lib/outils/arrayOutils'
 import { rienSi1 } from '../../lib/outils/ecritures'
 import { miseEnEvidence, texteGras } from '../../lib/outils/embellissements'
+import { range } from '../../lib/outils/nombres'
 import { texNombre } from '../../lib/outils/texNombre'
 import FractionEtendue from '../../modules/FractionEtendue'
 import { mathalea2d } from '../../modules/mathalea2d'
-import { gestionnaireFormulaireTexte, randint } from '../../modules/outils'
-import ExerciceQcmA from '../ExerciceQcmA'
+import {
+  gestionnaireFormulaireTexte,
+  listeQuestionsToContenu,
+  randint,
+} from '../../modules/outils'
+import Exercice from '../Exercice'
 
 export const dateDePublication = '28/02/2026'
+export const dateDeModifImportante = '25/03/2025'
 export const titre =
   'Associer une parabole à une expression algébrique de degré 2'
 /**
  * @author Jordan Martin
-  *
-
-*/
+ */
 export const uuid = 'e297b'
 
 export const refs = {
@@ -27,158 +32,246 @@ export const refs = {
 }
 
 export const interactifReady = true
-export const interactifType = 'qcm'
-export const amcReady = 'true'
-export const amcType = 'qcmMono'
+export const interactifType = 'cliqueFigure'
 
-const typePolynome = {
-  monome: 1,
-  monomeEtConstante: 2,
-  deuxRacines: 3,
-}
+export default class ExpressionAParabole extends Exercice {
+  // Type d'expressions fournie par le menu
+  private typePolynome = {
+    monome: 1,
+    monomeEtConstante: 2,
+    deuxRacines: 3,
+  }
 
-const amplitude = {
-  x: 5,
-  y: 10,
-}
+  // Amplitude de la fenetre
+  private amplitude = {
+    x: 5,
+    y: 10,
+  }
 
-export default class ExpressionAParabole extends ExerciceQcmA {
-  private creerQuestion(typeExpression: string | number): void {
-    const coefDominant = new Decimal(randint(-12, 12, [0])).div(10).toNumber()
-    const coefDominantTexte = texNombre(coefDominant)
-    let expressionLatex = ''
-    let grapheCorrect = ''
-    let grapheErr2 = ''
-    let grapheErr3 = ''
-    let correction
+  constructor() {
+    super()
+    this.nbQuestionsModifiable = true
+    this.nbQuestions = 1
+    this.besoinFormulaireCaseACocher = false
+    this.besoinFormulaire2CaseACocher = false
+    this.besoinFormulaire4CaseACocher = false
+    this.besoinFormulaire3Texte = [
+      "Types d'expression",
+      `Nombres séparés par des tirets\n1 : $ax^2$\n2 : $ax^2 + c$\n3 : $a(x-r_1)(x-r_2)$\n4 : Mélange`,
+    ]
+    this.sup3 = 4
+  }
 
-    // Premier graphe erroné : affine ou polynome degré 3
-    const erreur1 = this.affineOuPoly3()
-    const grapheErr1 = erreur1.graphe
+  nouvelleVersion() {
+    this.figures = []
 
-    // Distinguer le cas ax², ax²+c et a(x-r_1)(x-r_2)
-    switch (typeExpression) {
-      // Cas ax²
-      case typePolynome.monome: {
-        const polynome = new Polynome({ coeffs: [0, 0, coefDominant] })
-        expressionLatex = polynome.toLatex()
-        grapheCorrect = this.genererGraphique(
-          polynome.fonction,
-          this.reglerFenetrePoly2(coefDominant, 0, 0),
-        )
-        // Gestion du graphe erroné 2 : signe du coefficient dominant mal interprété
-        const erreur2 = this.erreurCoefDominantOpposé(polynome, typeExpression)
-        grapheErr2 = erreur2.graphe
-        // Gestion du graphe erroné 3 : décalage vertical
-        const erreur3 = this.erreurDecalageVertical(
-          polynome,
-          randint(-3, 3, [0]),
-        )
-        grapheErr3 = erreur3.graphe
-        // Correction
-        correction = `L'expression de $f$ est celle d'une fonction polynôme de degré 2 dont la représentation graphique est une ${texteGras('parabole')} ayant pour axe de symétrie l'axe des ordonnées.<br>`
-        let signeCoef, orientation, minMax
-        if (coefDominant > 0) {
-          signeCoef = texteGras('positif')
-          orientation = texteGras('haut')
-          minMax = texteGras('minimum')
-        } else {
-          signeCoef = texteGras('négatif')
-          orientation = texteGras('bas')
-          minMax = texteGras('maximum')
+    for (
+      let i = 0, texte, texteCorr, cpt = 0;
+      i < this.nbQuestions && cpt < 50;
+    ) {
+      // Gestion du choix du type d'expression
+      const expressionsPossibles = gestionnaireFormulaireTexte({
+        saisie: this.sup3,
+        min: 1,
+        max: 3,
+        defaut: 1,
+        melange: 4,
+        nbQuestions: 0,
+      })
+      const choixExpression = choice(expressionsPossibles)
+      // Coef dominant
+      const coefDominant = new Decimal(randint(-12, 12, [0])).div(10).toNumber()
+      const coefDominantTexte = texNombre(coefDominant)
+      const finId = `Ex${this.numeroExercice}Q${i}`
+      const id0 = `cliquefigure0` + finId
+      const id1 = `cliquefigure1` + finId
+      const id2 = `cliquefigure2` + finId
+      const id3 = `cliquefigure3` + finId
+      let expressionLatex = ''
+      let grapheCorrect = ''
+      let grapheErr2 = ''
+      let grapheErr3 = ''
+      texteCorr = ''
+      let polynome = new Polynome({ coeffs: [0] })
+
+      // Premier graphe erroné : affine ou polynome degré 3
+      const erreur1 = this.affineOuPoly3({ id: id1 })
+      const grapheErr1 = erreur1.graphe
+
+      // Distinguer le cas ax², ax²+c et a(x-r_1)(x-r_2)
+      switch (choixExpression) {
+        // Cas ax²
+        case this.typePolynome.monome: {
+          polynome = new Polynome({ coeffs: [0, 0, coefDominant] })
+          expressionLatex = polynome.toLatex()
+          grapheCorrect = this.genererGraphique(
+            polynome.fonction,
+            this.reglerFenetrePoly2(coefDominant, 0, 0),
+            id0,
+          )
+          // Gestion du graphe erroné 2 : signe du coefficient dominant mal interprété
+          const erreur2 = this.erreurCoefDominantOpposé({
+            polynome,
+            typePoly: choixExpression,
+            id: id2,
+          })
+          grapheErr2 = erreur2.graphe
+          // Gestion du graphe erroné 3 : décalage vertical
+          const erreur3 = this.erreurDecalageVertical({
+            polynome,
+            decalage: randint(-3, 3, [0]),
+            id: id3,
+          })
+          grapheErr3 = erreur3.graphe
+          // Correction
+          texteCorr = `L'expression de $f$ est celle d'une fonction polynôme de degré 2 dont la représentation graphique est une ${texteGras('parabole')} ayant pour axe de symétrie l'axe des ordonnées.<br>`
+          let signeCoef, orientation, minMax
+          if (coefDominant > 0) {
+            signeCoef = texteGras('positif')
+            orientation = texteGras('haut')
+            minMax = texteGras('minimum')
+          } else {
+            signeCoef = texteGras('négatif')
+            orientation = texteGras('bas')
+            minMax = texteGras('maximum')
+          }
+          texteCorr += `Le coefficient dominant est ${signeCoef} : $${miseEnEvidence(coefDominantTexte)}$. Les branches de la parabole sont donc orientées vers le ${orientation}.<br>`
+          texteCorr += `Le ${minMax} de $f$ est atteint en $0$ et vaut $${miseEnEvidence(0)}$.`
+          break
         }
-        correction += `Le coefficient dominant est ${signeCoef} : $${miseEnEvidence(coefDominantTexte)}$. Les branches de la parabole sont donc orientées vers le ${orientation}.<br>`
-        correction += `Le ${minMax} de $f$ est atteint en $0$ et vaut $${miseEnEvidence(0)}$.`
-        break
-      }
-      // Cas /ax²+c
-      case typePolynome.monomeEtConstante: {
-        const coefConstant = randint(-3, 3, [0])
-        const polynome = new Polynome({
-          coeffs: [coefConstant, 0, coefDominant],
-        })
-        expressionLatex = polynome.toLatex()
-        grapheCorrect = this.genererGraphique(
-          polynome.fonction,
-          this.reglerFenetrePoly2(coefDominant, 0, coefConstant),
-        )
-        // Gestion du graphe erroné 2 : signe du coefficient dominant mal interprété
-        const erreur2 = this.erreurCoefDominantOpposé(polynome, typeExpression)
-        grapheErr2 = erreur2.graphe
+        // Cas /ax²+c
+        case this.typePolynome.monomeEtConstante: {
+          const coefConstant = randint(-3, 3, [0])
+          polynome = new Polynome({
+            coeffs: [coefConstant, 0, coefDominant],
+          })
+          expressionLatex = polynome.toLatex()
+          grapheCorrect = this.genererGraphique(
+            polynome.fonction,
+            this.reglerFenetrePoly2(coefDominant, 0, coefConstant),
+            id0,
+          )
+          // Gestion du graphe erroné 2 : signe du coefficient dominant mal interprété
+          const erreur2 = this.erreurCoefDominantOpposé({
+            polynome,
+            typePoly: choixExpression,
+            id: id2,
+          })
+          grapheErr2 = erreur2.graphe
 
-        // Graphe erroné 3 : même coefficient dominant mais coefficient décalage vertical ou horizontal
-        const erreur3 = this.erreurDecalage(polynome, coefConstant)
-        grapheErr3 = erreur3.graphe
-        // Correction
-        correction = `L'expression de $f$ est celle d'une fonction polynôme de degré 2 dont la représentation graphique est une ${texteGras('parabole')} ayant pour axe de symétrie l'axe des ordonnées.<br>`
-        let signeCoef, orientation, minMax
-        if (coefDominant > 0) {
-          signeCoef = texteGras('positif')
-          orientation = texteGras('haut')
-          minMax = texteGras('minimum')
-        } else {
-          signeCoef = texteGras('négatif')
-          orientation = texteGras('bas')
-          minMax = texteGras('maximum')
+          // Graphe erroné 3 : même coefficient dominant mais coefficient décalage vertical ou horizontal
+          const erreur3 = this.erreurDecalage({
+            polynome,
+            decalage: coefConstant,
+            id: id3,
+          })
+          grapheErr3 = erreur3.graphe
+          // Correction
+          texteCorr = `L'expression de $f$ est celle d'une fonction polynôme de degré 2 dont la représentation graphique est une ${texteGras('parabole')} ayant pour axe de symétrie l'axe des ordonnées.<br>`
+          let signeCoef, orientation, minMax
+          if (coefDominant > 0) {
+            signeCoef = texteGras('positif')
+            orientation = texteGras('haut')
+            minMax = texteGras('minimum')
+          } else {
+            signeCoef = texteGras('négatif')
+            orientation = texteGras('bas')
+            minMax = texteGras('maximum')
+          }
+          texteCorr += `Le coefficient dominant est ${signeCoef} : $${miseEnEvidence(coefDominantTexte)}$. Les branches de la parabole sont donc orientées vers le ${orientation}.<br>`
+          texteCorr += `Le ${minMax} de $f$ est atteint en $0$ et vaut $${miseEnEvidence(coefConstant)}$.`
+          break
         }
-        correction += `Le coefficient dominant est ${signeCoef} : $${miseEnEvidence(coefDominantTexte)}$. Les branches de la parabole sont donc orientées vers le ${orientation}.<br>`
-        correction += `Le ${minMax} de $f$ est atteint en $0$ et vaut $${miseEnEvidence(coefConstant)}$.`
-        break
-      }
-      // Cas a(x-r_1)(r-r_2)
-      case typePolynome.deuxRacines: {
-        const racine1 = randint(-4, 4)
-        const racine2 = randint(-4, 4, [0])
-        // (x - r_1) et (x - r_2)
-        const polynome1 = new Polynome({ coeffs: [-racine1, 1] })
-        const polynome2 = new Polynome({ coeffs: [-racine2, 1] })
-        const polynome = polynome1.multiply(polynome2).multiply(coefDominant)
-        // Exression
-        expressionLatex = this.gererExpressionDeuxRacines(
-          coefDominant,
-          racine1,
-          racine2,
-        )
-        // Graphe
-        const absSommet = new Decimal(racine1 + racine2).div(2).toNumber()
-        const extremum = polynome.fonction(absSommet)
-        grapheCorrect = this.genererGraphique(
-          polynome.fonction,
-          this.reglerFenetrePoly2(coefDominant, absSommet, extremum),
-        )
-        // Gestion du graphe erroné 2 : signe du coefficient dominant mal interprété
-        const erreur2 = this.erreurCoefDominantOpposé(
-          polynome,
-          typeExpression,
-          absSommet,
-        )
-        grapheErr2 = erreur2.graphe
-        // Graphe erroné 3 : une racine changée ou les deux racines opposées
-        const erreur3 = this.erreurRacines(polynome, racine1, racine2)
-        grapheErr3 = erreur3.graphe
-        // Correction
-        correction = `L'expression  développée de $f$ est $${polynome.toLatex()}$.<br>C'est l'expression d'une fonction polynôme de degré 2. La représentation graphique est donc une ${texteGras('parabole')}.<br>`
-        let signeCoef, orientation
-        if (coefDominant > 0) {
-          signeCoef = texteGras('positif')
-          orientation = texteGras('haut')
-        } else {
-          signeCoef = texteGras('négatif')
-          orientation = texteGras('bas')
+        // Cas a(x-r_1)(r-r_2)
+        case this.typePolynome.deuxRacines: {
+          const racine1 = randint(-4, 4)
+          const racine2 = randint(-4, 4, [0])
+          // (x - r_1) et (x - r_2)
+          const polynome1 = new Polynome({ coeffs: [-racine1, 1] })
+          const polynome2 = new Polynome({ coeffs: [-racine2, 1] })
+          polynome = polynome1.multiply(polynome2).multiply(coefDominant)
+          // Exression
+          expressionLatex = this.gererExpressionDeuxRacines(
+            coefDominant,
+            racine1,
+            racine2,
+          )
+          // Graphe
+          const absSommet = new Decimal(racine1 + racine2).div(2).toNumber()
+          const extremum = polynome.fonction(absSommet)
+          grapheCorrect = this.genererGraphique(
+            polynome.fonction,
+            this.reglerFenetrePoly2(coefDominant, absSommet, extremum),
+            id0,
+          )
+          // Gestion du graphe erroné 2 : signe du coefficient dominant mal interprété
+          const erreur2 = this.erreurCoefDominantOpposé({
+            polynome,
+            typePoly: choixExpression,
+            absSommet,
+            id: id2,
+          })
+          grapheErr2 = erreur2.graphe
+          // Graphe erroné 3 : une racine changée ou les deux racines opposées
+          const erreur3 = this.erreurRacines({
+            polynome,
+            racine1,
+            racine2,
+            id: id3,
+          })
+          grapheErr3 = erreur3.graphe
+          // Correction
+          texteCorr = `L'expression  développée de $f$ est $${polynome.toLatex()}$.<br>C'est l'expression d'une fonction polynôme de degré 2. La représentation graphique est donc une ${texteGras('parabole')}.<br>`
+          let signeCoef, orientation
+          if (coefDominant > 0) {
+            signeCoef = texteGras('positif')
+            orientation = texteGras('haut')
+          } else {
+            signeCoef = texteGras('négatif')
+            orientation = texteGras('bas')
+          }
+          texteCorr += `Le coefficient dominant est ${signeCoef} : $${miseEnEvidence(coefDominantTexte)}$. Les branches de la parabole sont donc orientées vers le ${orientation}.<br>`
+          texteCorr +=
+            racine1 === racine2
+              ? `Le polynôme admet une racine double : $${miseEnEvidence(racine1)}$. La parabole passe donc par le point $(${texNombre(racine1)};0)$.`
+              : `Le polynôme possède deux racines distinctes : $${miseEnEvidence(racine1)}$ et $${miseEnEvidence(racine2)}$. La parabole passe donc par les points $(${texNombre(racine1)};0)$ et $(${texNombre(racine2)};0)$.`
+          break
         }
-        correction += `Le coefficient dominant est ${signeCoef} : $${miseEnEvidence(coefDominantTexte)}$. Les branches de la parabole sont donc orientées vers le ${orientation}.<br>`
-        correction +=
-          racine1 === racine2
-            ? `Le polynôme admet une racine double : $${miseEnEvidence(racine1)}$. La parabole passe donc par le point $(${texNombre(racine1)};0)$.`
-            : `Le polynôme possède deux racines distinctes : $${miseEnEvidence(racine1)}$ et $${miseEnEvidence(racine2)}$. La parabole passe donc par les points $(${texNombre(racine1)};0)$ et $(${texNombre(racine2)};0)$.`
-        break
       }
+
+      texte = `Choisir la représentation graphique de la fonction $f$ définie sur $\\mathbb{R}$
+    par $f(x) = ${expressionLatex}$.<br>`
+      const graphes = [grapheCorrect, grapheErr1, grapheErr2, grapheErr3]
+      const ordre = shuffle(range(3))
+      texte +=
+        graphes[ordre[0]] +
+        graphes[ordre[1]] +
+        graphes[ordre[2]] +
+        graphes[ordre[3]]
+
+      this.figures[i] = [
+        { id: id0, solution: true },
+        { id: id1, solution: false },
+        { id: id2, solution: false },
+        { id: id3, solution: false },
+      ]
+
+      if (this.interactif) {
+        this.autoCorrection[i] = {}
+        setCliqueFigure(this.autoCorrection[i])
+
+        texte += `<span id="resultatCheckEx${this.numeroExercice}Q${i}"></span>`
+      }
+
+      if (this.questionJamaisPosee(i, ...polynome.monomes)) {
+        this.listeQuestions[i] = texte
+        this.listeCorrections[i] = texteCorr
+        i++
+      }
+      cpt++
     }
-
-    this.enonce = `Choisir la représentation graphique de la fonction $f$ définie sur $\\mathbb{R}$
-    par $f(x) = ${expressionLatex}$.`
-    this.reponses = [grapheCorrect, grapheErr1, grapheErr2, grapheErr3]
-    this.correction = correction
+    listeQuestionsToContenu(this)
+    // this.creerQuestion(choixExpression)
   }
 
   // Renvoie les valeurs xMin, xMax, yMin et yMax pour une fenetre adaptée à une fonction polynôme de degré 2, à partir du coefficient dominant,de l'extremum et de son abscisse
@@ -191,14 +284,14 @@ export default class ExpressionAParabole extends ExerciceQcmA {
     // Gestion de yMin/Max selon l'orientatin de la parabole, donc selon le signe du coefficient dominant
     if (coefDominant > 0) {
       yMin = Math.min(extremum - 2, -2)
-      yMax = yMin + 2 * amplitude.y
+      yMax = yMin + 2 * this.amplitude.y
     } else {
       yMax = Math.max(extremum + 2, 2)
-      yMin = yMax - 2 * amplitude.y
+      yMin = yMax - 2 * this.amplitude.y
     }
     return {
-      xMin: absSommet - amplitude.x,
-      xMax: absSommet + amplitude.x,
+      xMin: absSommet - this.amplitude.x,
+      xMax: absSommet + this.amplitude.x,
       yMin,
       yMax,
     }
@@ -213,12 +306,13 @@ export default class ExpressionAParabole extends ExerciceQcmA {
       yMin?: number
       yMax?: number
     },
+    id?: string,
   ): string {
     const {
-      xMin = -amplitude.x,
-      xMax = amplitude.x,
-      yMin = -amplitude.y,
-      yMax = amplitude.y,
+      xMin = -this.amplitude.x,
+      xMax = this.amplitude.x,
+      yMin = -this.amplitude.y,
+      yMax = this.amplitude.y,
     } = fenetre
     const rapportY = 2
     const optionsFenetre = {
@@ -226,7 +320,9 @@ export default class ExpressionAParabole extends ExerciceQcmA {
       xmax: xMax * 1.1,
       ymin: new Decimal(yMin).div(rapportY).toNumber(),
       ymax: new Decimal(yMax).div(rapportY).toNumber(),
+      style: 'display: inline-block',
     }
+    if (id !== undefined) Object.assign(optionsFenetre, { id })
     const r1 = repere({
       xMin,
       yMin,
@@ -289,7 +385,10 @@ export default class ExpressionAParabole extends ExerciceQcmA {
   }
 
   // Génère une fausse réponse "évidente", une fonction affine ou une fonction polynôme de degré 3
-  public affineOuPoly3(avecGraphe = true): {
+  public affineOuPoly3({
+    avecGraphe = true,
+    id,
+  }: { avecGraphe?: boolean; id?: string } = {}): {
     polynome: Polynome | undefined
     graphe: string
   } {
@@ -301,12 +400,16 @@ export default class ExpressionAParabole extends ExerciceQcmA {
         const coefDominant = randint(-3, 3, [0])
         const coefConstant = randint(-3, 3)
         polynome = new Polynome({ coeffs: [coefConstant, coefDominant] })
-        const yMin = polynome.fonction(0) - amplitude.y
+        const yMin = polynome.fonction(0) - this.amplitude.y
         graphe = avecGraphe
-          ? this.genererGraphique(polynome.fonction, {
-              yMin,
-              yMax: yMin + 2 * amplitude.y,
-            })
+          ? this.genererGraphique(
+              polynome.fonction,
+              {
+                yMin,
+                yMax: yMin + 2 * this.amplitude.y,
+              },
+              id,
+            )
           : ''
         break
       }
@@ -330,7 +433,9 @@ export default class ExpressionAParabole extends ExerciceQcmA {
           .mul(attenuation)
           .toNumber()
         polynome = polynome.multiply(amplitudeMax)
-        graphe = avecGraphe ? this.genererGraphique(polynome.fonction, {}) : ''
+        graphe = avecGraphe
+          ? this.genererGraphique(polynome.fonction, {}, id)
+          : ''
         break
       }
     }
@@ -338,19 +443,26 @@ export default class ExpressionAParabole extends ExerciceQcmA {
   }
 
   // Génère une fausse réponse avec la parabole orientée dans le mauvais sens
-  public erreurCoefDominantOpposé(
-    polynome: Polynome,
-    typePoly: number,
+  public erreurCoefDominantOpposé({
+    polynome,
+    typePoly,
     absSommet = 0,
     avecGraphe = true,
-  ): {
+    id,
+  }: {
+    polynome: Polynome
+    typePoly: number
+    absSommet?: number
+    avecGraphe?: boolean
+    id?: string
+  }): {
     polynome: Polynome | undefined
     graphe: string
   } {
     let graphe = ''
     // Polynome opposé dans deux cas, "symétrie" dans l'autre
     let erreurPolynome = polynome.multiply(-1)
-    if (typePoly === typePolynome.monomeEtConstante)
+    if (typePoly === this.typePolynome.monomeEtConstante)
       erreurPolynome = erreurPolynome.add(2 * polynome.fonction(absSommet))
     if (avecGraphe) {
       let coefDominant = erreurPolynome.monomes[polynome.deg]
@@ -366,17 +478,24 @@ export default class ExpressionAParabole extends ExerciceQcmA {
           absSommet,
           erreurPolynome.fonction(absSommet),
         ),
+        id,
       )
     }
     return { polynome: erreurPolynome, graphe }
   }
 
   // Génère une fausse réponse avec un décalage vertical
-  public erreurDecalageVertical(
-    polynome: Polynome,
-    decalage: number,
+  public erreurDecalageVertical({
+    polynome,
+    decalage,
     avecGraphe = true,
-  ): { polynome: Polynome | undefined; graphe: string } {
+    id,
+  }: {
+    polynome: Polynome
+    decalage: number
+    avecGraphe?: boolean
+    id?: string
+  }): { polynome: Polynome | undefined; graphe: string } {
     let graphe = ''
     const coeffs = polynome.monomes.map(function (monome) {
       if (monome instanceof Decimal || monome instanceof FractionEtendue)
@@ -389,17 +508,24 @@ export default class ExpressionAParabole extends ExerciceQcmA {
       ? this.genererGraphique(
           erreurPolynome.fonction,
           this.reglerFenetrePoly2(coeffs[polynome.deg], 0, decalage),
+          id,
         )
       : ''
     return { polynome: erreurPolynome, graphe }
   }
 
   // Génère une fausse réponse avec un décalage horizontal ou vertical
-  public erreurDecalage(
-    polynome: Polynome,
-    decalage: number,
+  public erreurDecalage({
+    polynome,
+    decalage,
     avecGraphe = true,
-  ): { polynome: Polynome | undefined; graphe: string } {
+    id,
+  }: {
+    polynome: Polynome
+    decalage: number
+    avecGraphe?: boolean
+    id?: string
+  }): { polynome: Polynome | undefined; graphe: string } {
     let graphe = ''
     const coeffs = polynome.monomes.map(function (monome) {
       if (monome instanceof Decimal || monome instanceof FractionEtendue)
@@ -436,6 +562,7 @@ export default class ExpressionAParabole extends ExerciceQcmA {
                 decalage,
                 erreurPolynome.fonction(decalage),
               ),
+              id,
             )
           : ''
         break
@@ -447,6 +574,7 @@ export default class ExpressionAParabole extends ExerciceQcmA {
           ? this.genererGraphique(
               erreurPolynome.fonction,
               this.reglerFenetrePoly2(coefDominant, 0, decalage),
+              id,
             )
           : ''
         break
@@ -456,12 +584,19 @@ export default class ExpressionAParabole extends ExerciceQcmA {
   }
 
   // Génère une fausse réponse dans le cas (x - r_1)(x - r_2) en changeant les racines en leurs opposées si elles sont différentes ou en changeant une seule racine si les deux sont identiques
-  public erreurRacines(
-    polynome: Polynome,
-    racine1: number,
-    racine2: number,
+  public erreurRacines({
+    polynome,
+    racine1,
+    racine2,
     avecGraphe = true,
-  ): { polynome: Polynome | undefined; graphe: string } {
+    id,
+  }: {
+    polynome: Polynome
+    racine1: number
+    racine2: number
+    avecGraphe?: boolean
+    id?: string
+  }): { polynome: Polynome | undefined; graphe: string } {
     let graphe = ''
     if (racine1 === -racine2) {
       racine1 = randint(-4, 4, [racine2, -racine2])
@@ -488,35 +623,9 @@ export default class ExpressionAParabole extends ExerciceQcmA {
           absSommet,
           erreurPolynome.fonction(absSommet),
         ),
+        id,
       )
     }
     return { polynome: erreurPolynome, graphe }
-  }
-
-  versionAleatoire: () => void = () => {
-    const expressionsPossibles = gestionnaireFormulaireTexte({
-      saisie: this.sup3,
-      min: 1,
-      max: 3,
-      defaut: 1,
-      melange: 4,
-      nbQuestions: 0,
-    })
-    const choixExpression = choice(expressionsPossibles)
-    this.creerQuestion(choixExpression)
-  }
-
-  constructor() {
-    super()
-    this.nbQuestionsModifiable = true
-    this.besoinFormulaireCaseACocher = false
-    this.besoinFormulaire2CaseACocher = false
-    this.besoinFormulaire4CaseACocher = false
-    this.besoinFormulaire3Texte = [
-      "Types d'expression",
-      `Nombres séparés par des tirets\n1 : $ax^2$\n2 : $ax^2 + c$\n3 : $a(x-r_1)(x-r_2)$\n4 : Mélange`,
-    ]
-    this.sup3 = 4
-    this.versionAleatoire()
   }
 }

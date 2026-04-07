@@ -386,8 +386,11 @@ export function prepareExerciceCliqueFigure(exercice: IExercice) {
             } else {
               fig.etat = false
             }
-            fig.style.margin = '10px'
-            fig.style.border = '3px solid transparent'
+            // modification le 6/04/2026 suite à un signalement :
+            // ces marges et ce border décallent tous les divLatex.
+            // Un gros soucis pour les repères !
+            // fig.style.margin = '10px'
+            //   fig.style.border = '3px solid transparent'
             fig.hasMathaleaListener = true
             // On enregistre que l'élément a déjà un listenner pour ne pas lui remettre le même à l'appui sur "Nouvelles Données"
           }
