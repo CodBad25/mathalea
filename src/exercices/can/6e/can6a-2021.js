@@ -943,10 +943,10 @@ Par exemple, en choisissant 20 questions, la course aux nombres sera composée d
             '1 uA',
             6,
             6.5,
-            'milieu',
+            0,
             'black',
             1,
-            'middle',
+            'milieu',
             false,
           )
           C = grille(0, 0, 12, 7, 'black', 1, 1, false)

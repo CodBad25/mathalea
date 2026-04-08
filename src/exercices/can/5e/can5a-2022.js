@@ -724,6 +724,7 @@ export default class SujetCAN2022cinquieme extends Exercice {
           nbChamps = 1
           break
         case 16:
+          {
           a = randint(9, 15)
           b = randint(2, 4)
           propositions = shuffle([
@@ -806,6 +807,7 @@ export default class SujetCAN2022cinquieme extends Exercice {
           this.listeCanReponsesACompleter[i] =
             `${propositions[0]} ${sp(6)} ${propositions[1]} ${sp(6)} ${propositions[2]}${sp(6)} ${propositions[3]}`
           nbChamps = 1
+        }
           break
 
         case 17:
@@ -1276,10 +1278,10 @@ export default class SujetCAN2022cinquieme extends Exercice {
               '$1  \\text{cm}$',
               milieu(D, E).x,
               milieu(D, E).y + 0.6,
-              'milieu',
+              0,
               'black',
               1,
-              'middle',
+              'milieu',
               true,
             ),
             a,
@@ -1326,10 +1328,10 @@ export default class SujetCAN2022cinquieme extends Exercice {
               `${reponse}  cm`,
               milieu(A, H).x - 0.9,
               milieu(A, H).y,
-              'milieu',
+              0,
               'black',
               1,
-              'middle',
+              'milieu',
               true,
             ),
             labelPoint(H),
