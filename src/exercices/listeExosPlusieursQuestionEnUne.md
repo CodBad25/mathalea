@@ -22,7 +22,6 @@
 6P2B-1 Compatible : 4 champs
 6P2B Compatible : 3 champs
 6P3C-1 Compatible : 4 champs
-can1G08 Compatible : 2 champs avec une correction interactive pour gérer les vecteurs colinéaires.
 1mCL4-1 Compatible : 2 champs (suisse pas de ref française)
 TSG2-10 Compatible : 1 seule question dans cet exo qui produit 4 fillInTheBlank à 3 champs. Soit 12 champs au total pour un total de 4 points !
 TTE-7 Compatible : 2 champs
