@@ -187,10 +187,10 @@ export default class DeriveeExp extends Exercice {
                   texteIntro +
                   ` $f(x)=${poly.isMon() ? `${poly}\\mathrm{e}^x` : `(${poly})\\mathrm{e}^x`}$.<br>
             Calculer $f'(x)$ et écrire son expression sous forme factorisée.`
-                texteCorr += ` 
+                texteCorr += `
               $\\begin{aligned}
-              f'(x)&=\\underbrace{${poly.derivee()}}_{u'(x)}\\times \\underbrace{\\mathrm{e}^x}_{v(x)}+\\underbrace{(${poly})}_{u(x)}\\times \\underbrace{\\mathrm{e}^x}_{v'(x)}\\\\
-            ${poly.isMon() ? '' : `&=\\mathrm{e}^x(${poly.derivee()}+(${poly}))\\\\`}
+              f'(x)&=\\underbrace{${poly.derivee()}}_{u'(x)}\\times \\underbrace{\\mathrm{e}^x}_{v(x)}+\\underbrace{(${poly})}_{u(x)}\\times \\underbrace{\\mathrm{e}^x}_{v'(x)}\\\\${poly.isMon() ? '' : `
+              &=\\mathrm{e}^x(${poly.derivee()}+(${poly}))\\\\`}
               &= ${miseEnEvidence(`${ab[0] + ab[1] === 0 ? `${ab[0]}\\mathrm{e}^x` : `\\mathrm{e}^x(${reduireAxPlusB(ab[0], ab[0] + ab[1])})`}`)}.
               \\end{aligned}$`
 
@@ -236,11 +236,12 @@ export default class DeriveeExp extends Exercice {
                   texteIntro +
                   ` $f(x)=${poly.isMon() ? `${poly}\\mathrm{e}^x` : `(${poly})\\mathrm{e}^x`}$.<br>
             Calculer $f'(x)$ et écrire son expression sous forme factorisée.`
-                texteCorr += ` 
+                texteCorr += `
               $\\begin{aligned}
-              f'(x)&=\\underbrace{${derivee.isMon() ? `${derivee}` : `(${derivee})`}}_{u'(x)}\\times \\underbrace{\\mathrm{e}^x}_{v(x)}+\\underbrace{(${poly})}_{u(x)}\\times \\underbrace{\\mathrm{e}^x}_{v'(x)}\\\\
-           &=${derivee.isMon() ? `${miseEnEvidence(`\\mathrm{e}^x(${polyF})`)}.` : `\\mathrm{e}^x(${derivee}+(${poly}))`}\\\\
-              ${derivee.isMon() ? '' : `&=${miseEnEvidence(`\\mathrm{e}^x(${polyF})`)}.`}
+              f'(x)&=\\underbrace{${derivee.isMon() ? `${derivee}` : `(${derivee})`}}_{u'(x)}\\times \\underbrace{\\mathrm{e}^x}_{v(x)}+\\underbrace{(${poly})}_{u(x)}\\times \\underbrace{\\mathrm{e}^x}_{v'(x)}\\\\${derivee.isMon() ? `
+           &=${miseEnEvidence(`\\mathrm{e}^x(${polyF})`)}.` : `
+           &=\\mathrm{e}^x(${derivee}+(${poly}))\\\\
+              &=${miseEnEvidence(`\\mathrm{e}^x(${polyF})`)}.`}
               \\end{aligned}$`
                 texte += ajouteChampTexteMathLive(
                   this,
@@ -281,11 +282,11 @@ export default class DeriveeExp extends Exercice {
               texteIntro +
               ` $f(x)=${poly.isMon() ? `${poly}\\mathrm{e}^{${rienSi1(m)}x}` : `(${poly})\\mathrm{e}^{${rienSi1(m)}x}`}$.<br>
             Calculer $f'(x)$ et écrire son expression sous forme factorisée.`
-            texteCorr += ` 
+            texteCorr += `
               $\\begin{aligned}
-              f'(x)&=\\underbrace{${derivee}}_{u'(x)}\\times \\underbrace{\\mathrm{e}^{${rienSi1(m)}x}}_{v(x)}+\\underbrace{(${poly})}_{u(x)}\\times \\underbrace{${ecritureParentheseSiMoins(m)}\\mathrm{e}^{${rienSi1(m)}x}}_{v'(x)}\\\\
-            ${poly.isMon() ? `&=${rienSi1(m)}\\mathrm{e}^{${rienSi1(m)}x} ${ecritureAlgebriqueSauf1(ab[0] * m)}x\\mathrm{e}^{${rienSi1(m)}x}\\\\` : ''}
-            ${poly.isMon() ? '' : `&=\\mathrm{e}^{${rienSi1(m)}x}(${derivee}+${poly.isMon() ? `(${m}\\times (${poly}))` : `(${m}(${poly}))`}\\\\`}
+              f'(x)&=\\underbrace{${derivee}}_{u'(x)}\\times \\underbrace{\\mathrm{e}^{${rienSi1(m)}x}}_{v(x)}+\\underbrace{(${poly})}_{u(x)}\\times \\underbrace{${ecritureParentheseSiMoins(m)}\\mathrm{e}^{${rienSi1(m)}x}}_{v'(x)}\\\\${poly.isMon() ? `
+              &=${derivee}\\mathrm{e}^{${rienSi1(m)}x}${ecritureAlgebriqueSauf1(ab[0] * m)}x\\mathrm{e}^{${rienSi1(m)}x}\\\\` : `
+              &=\\mathrm{e}^{${rienSi1(m)}x}(${derivee}+${m}(${poly}))\\\\`}
               &= ${miseEnEvidence(`\\mathrm{e}^{${rienSi1(m)}x}(${polyF})`)}.
               \\end{aligned}$`
 
