@@ -249,6 +249,18 @@ export class MultiMathfieldElement extends HTMLElement {
     return result
   }
 
+  getSpansResultats() {
+    const result: Record<string, HTMLElement> = {}
+    if (this.shadowRoot) {
+      this.shadowRoot.querySelectorAll('span[id^="check-"]').forEach((el) => {
+        const id = el.id
+        const name = id.split('-')[2]
+        result[name] = el as HTMLElement
+      })
+    }
+    return result
+  }
+
   setAnswers(answers: Record<string, any>) {
     if (this.shadowRoot) {
       this.shadowRoot.querySelectorAll('math-field').forEach((el) => {
