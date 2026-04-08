@@ -41,7 +41,9 @@ export default class DifferenceAireParComptageCan extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const unite = ['u.a', 'cm²', 'm²'][contraindreValeur(1, 3, this.sup, 2) - 1]
+    const unite = ['u.a', '$\\text{cm}^2$', '$\\text{m}^2$'][
+      contraindreValeur(1, 3, this.sup, 2) - 1
+    ]
     let aireDiff = 0
     let aireTetris = 0
     let aireRectangle = 0
@@ -74,9 +76,10 @@ export default class DifferenceAireParComptageCan extends ExerciceSimple {
       )
       uniteAire.couleurDeRemplissage = colorToLatexOrHTML('gray')
       const texteUniteAire = texteParPosition(
-        '1 ' + unite,
-        xmax - 1.5,
-        ymax - 1.8,
+        `$1~${unite.replaceAll('$', '')}$`,
+        xmax + 0.5,
+        ymax - 0.5,
+        0,
       )
 
       tetris.poly.opaciteDeRemplissage = 1
@@ -133,8 +136,8 @@ export default class DifferenceAireParComptageCan extends ExerciceSimple {
     this.reponse = aire
     this.correction = `${
       aireDiff <= aireTetris
-        ? `L'aire de la zone non hachurée est $${aireRectangle}$ ${unite} - $${aireDiff}$ ${unite} = $${miseEnEvidence(aireTetris)}$ ${unite}`
-        : `L'aire de la zone hachurée est $${aireRectangle}$ ${unite} - $${aireTetris}$ ${unite} = $${miseEnEvidence(aireDiff)}$ ${unite}`
+        ? `L'aire de la zone non hachurée est $${aireRectangle}$ ${unite} - $${aireDiff}$ ${unite} = $${miseEnEvidence(aireTetris)}$ ${unite}.`
+        : `L'aire de la zone hachurée est $${aireRectangle}$ ${unite} - $${aireTetris}$ ${unite} = $${miseEnEvidence(aireDiff)}$ ${unite}.`
     }`
   }
 }
