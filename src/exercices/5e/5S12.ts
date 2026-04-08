@@ -27,7 +27,7 @@ import {
 import Exercice from '../Exercice'
 
 export const dateDePublication = '20/03/2022' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
-export const dateDeModifImportante = '17/04/2022'
+export const dateDeModifImportante = '08/04/2026'
 export const titre = 'Représenter des données par un diagramme'
 
 /**
@@ -200,6 +200,7 @@ export default class ConstruireUnDiagramme extends Exercice {
     }
 
     let emptyValues = []
+    let yMax = 8
     switch (listeTypeDeQuestions[0]) {
       case 1:
         emptyValues = new Array(2 * nbAnimaux).fill('', 0, 2 * nbAnimaux)
@@ -407,6 +408,7 @@ export default class ConstruireUnDiagramme extends Exercice {
             coef = 10
             break
         }
+        yMax = Math.max.apply(null, lstNombresAnimaux.map(Number))
         r = repere({
           grilleX: false,
           grilleY: 'pointilles',
@@ -414,7 +416,7 @@ export default class ConstruireUnDiagramme extends Exercice {
           xLabelListe: false,
           yUnite: 0.1 / coef,
           yThickDistance: 10 * coef,
-          yMax: Math.max.apply(null, lstNombresAnimaux.map(Number)) + 20 * coef,
+          yMax: yMax + 20 * coef,
           xMin: 0,
           xMax: 10,
           yMin: 0,
@@ -449,9 +451,9 @@ export default class ConstruireUnDiagramme extends Exercice {
         }
         paramsCorrection = {
           xmin: -6.5,
-          ymin: -3,
+          ymin: -3.5,
           xmax: 20,
-          ymax: 10,
+          ymax: yMax / 10 + 3,
           pixelsParCm: 20,
           scale: 1,
           mainlevee: false,
@@ -471,6 +473,7 @@ export default class ConstruireUnDiagramme extends Exercice {
             coef = 10
             break
         }
+        yMax = Math.max.apply(null, lstNombresAnimaux.map(Number))
         r = repere({
           grilleX: false,
           grilleY: 'pointilles',
@@ -478,7 +481,7 @@ export default class ConstruireUnDiagramme extends Exercice {
           xLabelListe: false,
           yUnite: 0.1 / coef,
           yThickDistance: 10 * coef,
-          yMax: Math.max.apply(null, lstNombresAnimaux.map(Number)) + 20 * coef,
+          yMax: yMax + 20 * coef,
           xMin: 0,
           xMax: 10,
           yMin: 0,
@@ -524,9 +527,9 @@ export default class ConstruireUnDiagramme extends Exercice {
         }
         paramsCorrection = {
           xmin: -6.5,
-          ymin: -3,
+          ymin: -3.5,
           xmax: 20,
-          ymax: 8,
+          ymax: yMax / 10 + 3,
           pixelsParCm: 20,
           scale: 1,
           mainlevee: false,
