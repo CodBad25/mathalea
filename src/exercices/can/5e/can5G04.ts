@@ -54,7 +54,6 @@ export default class longueursRectPerimetre extends ExerciceSimple {
     const poly = polygone([A, B, C, D], 'black')
     const segmentMD = segment(M, D)
     const segmentDA = segment(D, A)
-    // poly.hachures = true
     poly.couleurDeRemplissage = colorToLatexOrHTML('lightgray')
     const d = latex2d(`${choix[0]} \\text{ cm}`, milieu(C, D).x, 3.5, {
       color: 'black',
