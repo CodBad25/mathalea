@@ -1,3 +1,9 @@
+import { texteGras } from '../../lib/format/style'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { toutAUnPoint } from '../../lib/interactif/mathLive'
+import { addMultiMathfield } from '../../lib/interactif/MultiMathfield/MultiMathfield'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import {
   ecritureAlgebrique,
@@ -5,20 +11,27 @@ import {
   ecritureParentheseSiNegatif,
   rienSi1,
 } from '../../lib/outils/ecritures'
-import { texteGras } from '../../lib/format/style'
-import { abs } from '../../lib/outils/nombres'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { abs, arrondi } from '../../lib/outils/nombres'
 import { sp } from '../../lib/outils/outilString'
 import { texNombre } from '../../lib/outils/texNombre'
+import {
+  gestionnaireFormulaireTexte,
+  listeQuestionsToContenu,
+  randint,
+} from '../../modules/outils'
 import Exercice from '../Exercice'
-import { listeQuestionsToContenu, randint } from '../../modules/outils'
 export const titre =
   "Utiliser les propriétés de conservation du sens d'une inégalité"
 export const dateDePublication = '14/02/2023'
-/**
- *
- * @author Gilles Mora
+export const dateDeModifImportante = '07/04/2026'
+export const interactifType = ['multiMathfield', 'mathLive']
+export const interactifReady = true
 
-*/
+/**
+ * @author Gilles Mora
+ */
+
 export const uuid = 'e32f3'
 
 export const refs = {
@@ -28,45 +41,51 @@ export const refs = {
 export default class ProprietesInegalites extends Exercice {
   constructor() {
     super()
-    this.besoinFormulaireNumerique = [
-      'Choix des questions',
-      4,
-      '1 : Encadrer des expressions avec des racines carrées\n2 : Encadrer une expression avec une inconnue\n3 : Encadrer une expression avec deux inconnues\n4 : Mélange des cas précédents',
+    this.besoinFormulaireTexte = [
+      'Type des questions',
+      [
+        'Nombres séparés par des tirets  :',
+        '1 : Encadrer des expressions avec des racines carrées',
+        '2 : Comparer une expression avec une inconnue',
+        '3 : Encadrer une expression avec une inconnue',
+        '4 : Encadrer une expression avec deux inconnues',
+        '5 : Mélange',
+      ].join('\n'),
     ]
 
     this.nbQuestions = 1
 
-    this.sup = 4
+    this.sup = '5'
 
     this.spacing = 1.5 // Interligne des questions
     this.spacingCorr = 2 // Interligne des réponses
   }
 
   nouvelleVersion() {
-    let typeDeQuestionsDisponibles
-    if (this.sup === 1) {
-      typeDeQuestionsDisponibles = ['typeE1']
-    } else if (this.sup === 2) {
-      typeDeQuestionsDisponibles = ['typeE2', 'typeE3']
-    } else if (this.sup === 3) {
-      typeDeQuestionsDisponibles = ['typeE4']
-    } else {
-      typeDeQuestionsDisponibles = ['typeE1', 'typeE2', 'typeE3', 'typeE4']
-    }
-    //
-    const listeTypeQuestions = combinaisonListes(
-      typeDeQuestionsDisponibles,
+    const typesDeQuestionsDisponibles = gestionnaireFormulaireTexte({
+      saisie: this.sup,
+      max: 4,
+      melange: 5,
+      defaut: 5,
+      nbQuestions: this.nbQuestions,
+      listeOfCase: ['typeE1', 'typeE2', 'typeE3', 'typeE4'],
+    })
+    const listeTypeDeQuestions = combinaisonListes(
+      typesDeQuestionsDisponibles,
       this.nbQuestions,
-    ) // Tous les types de questions sont posés mais l'ordre diffère à chaque "cycle"
+    )
+
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
       let texte = ''
       let texteCorr = ''
       let a: number
       let m: number
       let p: number
-      // Boucle principale où i+1 correspond au numéro de la question
+      let enonceCalcul: string
+      let reponse1: string | number = 0
+      let reponse2 = 0
       switch (
-        listeTypeQuestions[i] // Suivant le type de question, le contenu sera différent
+        listeTypeDeQuestions[i] // Suivant le type de question, le contenu sera différent
       ) {
         case 'typeE1': //
           {
@@ -82,22 +101,40 @@ export default class ProprietesInegalites extends Exercice {
               ['<', '>'],
               ['\\leqslant', '\\geqslant'],
             ])
+            enonceCalcul = `${rienSi1(m)}\\sqrt{${a}}${ecritureAlgebrique(p)}`
             texte = ` Sachant que $${texNombre(Math.floor(100 * rac) / 100, 2)} ${choix1[0]} \\sqrt{${a}} ${choix2[0]} ${texNombre(Math.ceil(100 * rac) / 100, 2)}$,
-            encadrer le plus précisément possible  $${rienSi1(m)}\\sqrt{${a}}${ecritureAlgebrique(p)}$.
+            encadrer, le plus précisément possible, $${enonceCalcul}$.
                 `
-
+            if (this.interactif)
+              texte +=
+                '<br>' +
+                addMultiMathfield(this, i, {
+                  dataTemplate: `%{champ1} $${m > 0 ? `${choix1[0]}` : `${choix2[0]}`} ${enonceCalcul} ${m > 0 ? `${choix2[0]}` : `${choix1[0]}`}$ %{champ2}`,
+                  dataOptions: {
+                    champ1: { keyboard: KeyboardType.clavierDeBase },
+                    champ2: { keyboard: KeyboardType.clavierDeBase },
+                  },
+                })
+            const reponseMax = arrondi((m * Math.ceil(100 * rac)) / 100 + p, 2)
+            const reponseMin = arrondi((m * Math.floor(100 * rac)) / 100 + p, 2)
+            reponse1 = m > 0 ? reponseMin : reponseMax
+            reponse2 = m < 0 ? reponseMin : reponseMax
             texteCorr = `${texteGras('Méthode :')} en partant de l'encadrement initial de $\\sqrt{${a}}$,
 on forme, avec des opérations successives, $${rienSi1(m)}\\sqrt{${a}}${ecritureAlgebrique(p)}$.<br>
-$\\begin{aligned}
+$\\begin{aligned}\\phantom{'Ainsi, '}
 ${texNombre(Math.floor(100 * rac) / 100, 2)}${choix1[0]}&\\sqrt{${a}}${choix2[0]}${texNombre(Math.ceil(100 * rac) / 100, 2)}\\\\`
             texteCorr += `${m}\\times ${texNombre(Math.floor(100 * rac) / 100, 2)}${m > 0 ? `${choix1[0]}` : `${choix1[1]}`}&${m}\\times \\sqrt{${a}} ${m > 0 ? `${choix2[0]}` : `${choix2[1]}`} ${m}\\times ${texNombre(Math.ceil(100 * rac) / 100, 2)}   ${sp(7)}\\text{ On multiplie par ${m > 0 ? `$${m}> 0$ ` : `$${m}< 0 $`}, le sens des inégalités ${m > 0 ? 'ne change pas' : 'change'}.}\\\\`
             texteCorr += `${texNombre((m * Math.floor(100 * rac)) / 100, 2)}${m > 0 ? `${choix1[0]}` : `${choix1[1]}`}& ${m}\\sqrt{${a}} ${m > 0 ? `${choix2[0]}` : `${choix2[1]}`}${texNombre((m * Math.ceil(100 * rac)) / 100, 2)} \\\\`
             texteCorr += `${texNombre((m * Math.floor(100 * rac)) / 100, 2)} ${ecritureAlgebrique(p)}${m > 0 ? `${choix1[0]}` : `${choix1[1]}`}& ${m}\\sqrt{${a}} ${ecritureAlgebrique(p)} ${m > 0 ? `${choix2[0]}` : `${choix2[1]}`}  ${texNombre((m * Math.ceil(100 * rac)) / 100, 2)} ${ecritureAlgebrique(p)} ${sp(7)}\\text{ On  ${p > 0 ? 'ajoute' : 'retranche'} ${abs(p)}.} \\\\`
-            texteCorr += `${texNombre((m * Math.floor(100 * rac)) / 100 + p, 2)}  ${m > 0 ? `${choix1[0]}` : `${choix1[1]}`}&${m}\\sqrt{${a}} ${ecritureAlgebrique(p)}  ${m > 0 ? `${choix2[0]}` : `${choix2[1]}`} ${texNombre((m * Math.ceil(100 * rac)) / 100 + p, 2)} \\\\`
+            const texteCorrBis = `${texNombre((m * Math.floor(100 * rac)) / 100 + p, 2)}  ${m > 0 ? `${choix1[0]}` : `${choix1[1]}`}&${m}\\sqrt{${a}} ${ecritureAlgebrique(p)}  ${m > 0 ? `${choix2[0]}` : `${choix2[1]}`} ${texNombre((m * Math.ceil(100 * rac)) / 100 + p, 2)}`
+            const [gauche, droite] = texteCorrBis.split('&')
+            texteCorr +=
+              m > 0
+                ? `${miseEnEvidence(gauche)}&${miseEnEvidence(droite)}` + '\\\\'
+                : texteCorrBis + '\\\\'
             texteCorr += '\\end{aligned}$'
             if (m < 0) {
-              texteCorr += `<br>
-           Ainsi,  $ ${texNombre((m * Math.ceil(100 * rac)) / 100 + p, 2)}  ${choix2[0]} ${m}\\sqrt{${a}} ${ecritureAlgebrique(p)} ${choix1[0]} ${texNombre((m * Math.floor(100 * rac)) / 100 + p, 2)}  $.`
+              texteCorr += `<br>Ainsi,  $${miseEnEvidence(`${texNombre(reponse1)}  ${choix2[0]}`)}${miseEnEvidence(`${m}\\sqrt{${a}} ${ecritureAlgebrique(p)} ${choix1[0]} ${texNombre(reponse2)}`)}$.`
             }
           }
           break
@@ -115,14 +152,29 @@ ${texNombre(Math.floor(100 * rac) / 100, 2)}${choix1[0]}&\\sqrt{${a}}${choix2[0]
             ])
             texte = ` Si $x${choix1[0]} ${a}$, que peut-on dire de $${rienSi1(m)}x${ecritureAlgebrique(p)}$ ?
                 `
+            if (this.interactif)
+              texte += ajouteChampTexteMathLive(
+                this,
+                i,
+                KeyboardType.clavierCompare + ' ' + KeyboardType.clavierNumbers,
+                {
+                  texteAvant: `<br>On peut dire que : $${rienSi1(m)}x${ecritureAlgebrique(p)}$`,
+                  texteApres: '.',
+                },
+              )
+            reponse1 = `${m > 0 ? `${choix1[0]}` : `${choix1[1]}`}${texNombre(m * a + p)}`
+            handleAnswers(this, i, {
+              reponse: { value: reponse1, options: { texteSansCasse: true } },
+            })
+
             texteCorr = `${texteGras('Méthode :')} en partant de l'inégalité vérifiée par $x$, on forme, avec des opérations successives, $${rienSi1(m)}x${ecritureAlgebrique(p)}$.<br>
-$\\begin{aligned}
+$\\begin{aligned}\\phantom{'Ainsi xxxx, '}
 x &${choix1[0]} ${a}\\\\`
             texteCorr += `${m}\\times x&${m > 0 ? `${choix1[0]}` : `${choix1[1]}`} ${m}\\times ${ecritureParentheseSiNegatif(a)} ${sp(7)}\\text{ On multiplie par ${m > 0 ? `$${m}> 0$ ` : `$${m}< 0 $`}, le sens des inégalités ${m > 0 ? 'ne change pas' : 'change'}.}\\\\`
             texteCorr += `${m}x&${m > 0 ? `${choix1[0]}` : `${choix1[1]}`}${texNombre(m * a)}   \\\\`
             texteCorr += `${texNombre(m)}x ${ecritureAlgebrique(p)} &${m > 0 ? `${choix1[0]}` : `${choix1[1]}`} ${texNombre(m * a)} ${ecritureAlgebrique(p)} ${sp(7)}\\text{ On  ${p > 0 ? 'ajoute' : 'retranche'} ${abs(p)}.}  \\\\`
-            texteCorr += `${texNombre(m)}x ${ecritureAlgebrique(p)} &${m > 0 ? `${choix1[0]}` : `${choix1[1]}`} ${texNombre(m * a + p)} `
             texteCorr += '\\end{aligned}$'
+            texteCorr += `<br>Ainsi,  $${miseEnEvidence(`${texNombre(m)}x ${ecritureAlgebrique(p)} ${reponse1}`)}$.`
           }
           break
         case 'typeE3':
@@ -139,9 +191,24 @@ x &${choix1[0]} ${a}\\\\`
               ['<', '>'],
               ['\\leqslant', '\\geqslant'],
             ])
+            const enonceCalcul = `${rienSi1(m)}x${ecritureAlgebrique(p)}`
             texte = ` Sachant que $${a} ${choix1[0]} x ${choix2[0]} ${b}$,
-            encadrer le plus précisément possible  $${rienSi1(m)}x${ecritureAlgebrique(p)}$.
+            encadrer, le plus précisément possible,  $${enonceCalcul}$.
                 `
+            if (this.interactif)
+              texte +=
+                '<br>' +
+                addMultiMathfield(this, i, {
+                  dataTemplate: `%{champ1} $${m > 0 ? `${choix1[0]}` : `${choix2[0]}`} ${enonceCalcul} ${m > 0 ? `${choix2[0]}` : `${choix1[0]}`}$ %{champ2}`,
+                  dataOptions: {
+                    champ1: { keyboard: KeyboardType.clavierDeBase },
+                    champ2: { keyboard: KeyboardType.clavierDeBase },
+                  },
+                })
+            const reponseMax = m * a + p
+            const reponseMin = m * b + p
+            reponse1 = m < 0 ? reponseMin : reponseMax
+            reponse2 = m > 0 ? reponseMin : reponseMax
 
             texteCorr = `${texteGras('Méthode :')} en partant de l'encadrement initial de $x$,
 on forme, avec des opérations successives, $${rienSi1(m)}x${ecritureAlgebrique(p)}$.<br>
@@ -151,11 +218,16 @@ ${a} ${choix1[0]}  x &${choix2[0]} ${b}\\\\`
 ${m > 0 ? `${choix1[0]}` : `${choix1[1]}`} ${m}\\times x &${m > 0 ? `${choix2[0]}` : `${choix2[1]}`} ${m}\\times ${ecritureParentheseSiNegatif(b)}   ${sp(7)}\\text{ On multiplie par ${m > 0 ? `$${m}> 0$ ` : `$${m}< 0 $`}, le sens des inégalités ${m > 0 ? 'ne change pas' : 'change'}.}\\\\`
             texteCorr += `${texNombre(m * a)}${m > 0 ? `${choix1[0]}` : `${choix1[1]}`}${rienSi1(m)}x &${m > 0 ? `${choix2[0]}` : `${choix2[1]}`}  ${texNombre(m * b)}   \\\\`
             texteCorr += `${texNombre(m * a)} ${ecritureAlgebrique(p)} ${m > 0 ? `${choix1[0]}` : `${choix1[1]}`} ${rienSi1(m)}x ${ecritureAlgebrique(p)} &${m > 0 ? `${choix2[0]}` : `${choix2[1]}`}  ${texNombre(m * b)} ${ecritureAlgebrique(p)} ${sp(7)}\\text{ On  ${p > 0 ? 'ajoute' : 'retranche'} ${abs(p)}.}  \\\\`
-            texteCorr += `${texNombre(m * a + p)}  ${m > 0 ? `${choix1[0]}` : `${choix1[1]}`} ${rienSi1(m)}x ${ecritureAlgebrique(p)}&${m > 0 ? `${choix2[0]}` : `${choix2[1]}`} ${texNombre(m * b + p)}   \\\\`
+            const texteCorrBis = `${texNombre(m * a + p)}  ${m > 0 ? `${choix1[0]}` : `${choix1[1]}`} ${rienSi1(m)}x ${ecritureAlgebrique(p)}&${m > 0 ? `${choix2[0]}` : `${choix2[1]}`} ${texNombre(m * b + p)}`
+            const [gauche, droite] = texteCorrBis.split('&')
+            texteCorr +=
+              m > 0
+                ? `${miseEnEvidence(gauche)}&${miseEnEvidence(droite)}` + '\\\\'
+                : texteCorrBis + '\\\\'
             texteCorr += '\\end{aligned}$'
             if (m < 0) {
               texteCorr += `<br>
-           Ainsi,  $ ${texNombre(m * b + p, 2)}  ${choix2[0]} ${rienSi1(m)}x ${ecritureAlgebrique(p)} ${choix1[0]} ${texNombre(m * a + p)}  $.`
+           Ainsi,  $${miseEnEvidence(`${texNombre(m * b + p, 2)}  ${choix2[0]} ${rienSi1(m)}x ${ecritureAlgebrique(p)} ${choix1[0]} ${texNombre(m * a + p)}`)}$.`
             }
           }
           break
@@ -173,28 +245,32 @@ ${m > 0 ? `${choix1[0]}` : `${choix1[1]}`} ${m}\\times x &${m > 0 ? `${choix2[0]
               ['<', '>'],
               ['\\leqslant', '\\geqslant'],
             ])
+            const aEncadrer = `${rienSi1(m)}x${ecritureAlgebriqueSauf1(p)}y`
             texte = `Soit $x$ et $y$ deux réels tels que $${a} ${choix1[0]} x ${choix1[0]} ${b}$ et $${c} ${choix1[0]} y ${choix1[0]} ${d}$.<br>`
-            if (m > 0 && p > 0) {
-              texte += `Démontrer que  $${m * a + p * c} ${choix1[0]} ${rienSi1(m)}x${ecritureAlgebriqueSauf1(p)}y ${choix1[0]} ${m * b + p * d}$.`
-            } else {
-              if (m > 0 && p < 0) {
-                texte += `Démontrer que  $${m * a + p * d} ${choix1[0]} ${rienSi1(m)}x${ecritureAlgebriqueSauf1(p)}y ${choix1[0]} ${m * b + p * c}$.`
-              } else {
-                if (m < 0 && p > 0) {
-                  texte += `Démontrer que  $${m * b + p * c} ${choix1[0]} ${rienSi1(m)}x${ecritureAlgebriqueSauf1(p)}y ${choix1[0]} ${m * a + p * d}$.`
-                } else {
-                  if (m < 0 && p < 0) {
-                    texte += `Démontrer que  $${m * b + p * d} ${choix1[0]} ${rienSi1(m)}x${ecritureAlgebriqueSauf1(p)}y ${choix1[0]} ${m * a + p * c}$.<br>
-              `
-                  }
-                }
-              }
-            }
+            if (this.interactif) {
+              texte += `Que peut-on dire, le plus précisément possible, de $${aEncadrer}$ ?`
+              texte +=
+                '<br>' +
+                addMultiMathfield(this, i, {
+                  dataTemplate: `%{champ1} $${choix1[0]} ${aEncadrer} ${choix1[0]}$ %{champ2}`,
+                  dataOptions: {
+                    champ1: { keyboard: KeyboardType.clavierDeBase },
+                    champ2: { keyboard: KeyboardType.clavierDeBase },
+                  },
+                })
+            } else if (m > 0 && p > 0)
+              texte += `Démontrer que  $${m * a + p * c} ${choix1[0]} ${aEncadrer} ${choix1[0]} ${m * b + p * d}$.`
+            else if (m > 0 && p < 0)
+              texte += `Démontrer que  $${m * a + p * d} ${choix1[0]} ${aEncadrer} ${choix1[0]} ${m * b + p * c}$.`
+            else if (m < 0 && p > 0)
+              texte += `Démontrer que  $${m * b + p * c} ${choix1[0]} ${aEncadrer} ${choix1[0]} ${m * a + p * d}$.`
+            else if (m < 0 && p < 0)
+              texte += `Démontrer que  $${m * b + p * d} ${choix1[0]} ${aEncadrer} ${choix1[0]} ${m * a + p * c}$.<br> `
 
             texteCorr = `On commence par encadrer $${rienSi1(m)}x$, puis on encadre $${p}y$.<br>`
-            if (m > 0 && p > 0) {
-              texteCorr += ` $\\begin{aligned}
+            texteCorr += ` $\\begin{aligned}
               ${a} ${choix1[0]}  x &${choix1[0]} ${b}\\\\`
+            if (m > 0 && p > 0) {
               texteCorr += `${m}\\times ${ecritureParentheseSiNegatif(a)} ${choix1[0]} ${m}\\times x &${choix1[0]} ${m}\\times ${ecritureParentheseSiNegatif(b)} ${sp(7)} \\text{ On multiplie par } ${m} > 0 \\text{, le sens des inégalités ne change pas.}\\\\`
               texteCorr += `${m * a} ${choix1[0]} ${rienSi1(m)}x& ${choix1[0]} ${m * b}\\\\`
               texteCorr += '\\end{aligned}$'
@@ -204,67 +280,80 @@ ${m > 0 ? `${choix1[0]}` : `${choix1[1]}`} ${m}\\times x &${m > 0 ? `${choix2[0]
               texteCorr += `${p}\\times ${ecritureParentheseSiNegatif(c)} ${choix1[0]} ${p}\\times y &${choix1[0]} ${p}\\times ${ecritureParentheseSiNegatif(d)} ${sp(7)} \\text{ On multiplie par } ${p} > 0 \\text{, le sens des inégalités ne change pas.}\\\\`
               texteCorr += `${p * c} ${choix1[0]} ${rienSi1(p)}y& ${choix1[0]} ${p * d}\\\\`
               texteCorr += '\\end{aligned}$'
+              reponse1 = m * a + p * c
+              reponse2 = m * b + p * d
               texteCorr += `<br>
               Ainsi, on a : $\\begin{cases}    ${m * a} ${choix1[0]} ${rienSi1(m)}x ${choix1[0]} ${m * b}\\\\    ${p * c} ${choix1[0]} ${rienSi1(p)}y ${choix1[0]} ${p * d}     \\end{cases} $.<br>
-              Ces inégalités sont de même sens, en faisant les sommes, on obtient : $${m * a + p * c} ${choix1[0]} ${rienSi1(m)}x${ecritureAlgebriqueSauf1(p)}y ${choix1[0]} ${m * b + p * d}$.`
-            } else {
-              if (m > 0 && p < 0) {
-                texteCorr += ` $\\begin{aligned}
-                ${a} ${choix1[0]}  x &${choix1[0]} ${b}\\\\`
-                texteCorr += `${m}\\times ${ecritureParentheseSiNegatif(a)} ${choix1[0]} ${m}\\times x &${choix1[0]} ${m}\\times ${ecritureParentheseSiNegatif(b)} ${sp(7)} \\text{ On multiplie par } ${m} > 0 \\text{, le sens des inégalités ne change pas.}\\\\`
-                texteCorr += `${m * a} ${choix1[0]} ${rienSi1(m)}x& ${choix1[0]} ${m * b}\\\\`
-                texteCorr += '\\end{aligned}$'
-                texteCorr += `<br>De même, <br>
+              Ces inégalités sont de même sens, en faisant les sommes, on obtient : $${miseEnEvidence(reponse1)} ${choix1[0]} ${aEncadrer} ${choix1[0]} ${miseEnEvidence(reponse2)}$.`
+            } else if (m > 0 && p < 0) {
+              texteCorr += `${m}\\times ${ecritureParentheseSiNegatif(a)} ${choix1[0]} ${m}\\times x &${choix1[0]} ${m}\\times ${ecritureParentheseSiNegatif(b)} ${sp(7)} \\text{ On multiplie par } ${m} > 0 \\text{, le sens des inégalités ne change pas.}\\\\`
+              texteCorr += `${m * a} ${choix1[0]} ${rienSi1(m)}x& ${choix1[0]} ${m * b}\\\\`
+              texteCorr += '\\end{aligned}$'
+              texteCorr += `<br>De même, <br>
                  $\\begin{aligned}
                  ${c} ${choix1[0]} y &${choix1[0]} ${d}\\\\`
-                texteCorr += `${p}\\times ${ecritureParentheseSiNegatif(c)} ${choix1[1]} ${p}\\times y &${choix1[1]} ${p}\\times ${ecritureParentheseSiNegatif(d)} ${sp(7)} \\text{ On multiplie par } ${p} < 0 \\text{, le sens des inégalités change.}\\\\`
-                texteCorr += `${p * c} ${choix1[1]} ${rienSi1(p)}y& ${choix1[1]} ${p * d}\\\\`
-                texteCorr += '\\end{aligned}$'
-                texteCorr += `<br>
+              texteCorr += `${p}\\times ${ecritureParentheseSiNegatif(c)} ${choix1[1]} ${p}\\times y &${choix1[1]} ${p}\\times ${ecritureParentheseSiNegatif(d)} ${sp(7)} \\text{ On multiplie par } ${p} < 0 \\text{, le sens des inégalités change.}\\\\`
+              texteCorr += `${p * c} ${choix1[1]} ${rienSi1(p)}y& ${choix1[1]} ${p * d}\\\\`
+              texteCorr += '\\end{aligned}$'
+              reponse1 = m * a + p * d
+              reponse2 = m * b + p * c
+              texteCorr += `<br>
                                 Ainsi, on a : $\\begin{cases}    ${m * a} ${choix1[0]} ${rienSi1(m)}x ${choix1[0]} ${m * b}\\\\    ${p * d} ${choix1[0]} ${rienSi1(p)}y ${choix1[0]} ${p * c}     \\end{cases} $.<br>
-                Ces inégalités sont de même sens, en faisant les sommes, on obtient : $${m * a + p * d} ${choix1[0]} ${rienSi1(m)}x${ecritureAlgebriqueSauf1(p)}y ${choix1[0]} ${m * b + p * c}$.`
-              } else {
-                if (m < 0 && p > 0) {
-                  texteCorr += ` $\\begin{aligned}
-                  ${a} ${choix1[0]}  x &${choix1[0]} ${b}\\\\`
-                  texteCorr += `${m}\\times ${ecritureParentheseSiNegatif(a)} ${choix1[1]} ${m}\\times x &${choix1[1]} ${m}\\times ${ecritureParentheseSiNegatif(b)} ${sp(7)} \\text{ On multiplie par } ${m} < 0 \\text{, le sens des inégalités change.}\\\\`
-                  texteCorr += `${m * a} ${choix1[1]} ${rienSi1(m)}x& ${choix1[1]} ${m * b}\\\\`
-                  texteCorr += '\\end{aligned}$'
-                  texteCorr += `<br>De même, <br>
+                Ces inégalités sont de même sens, en faisant les sommes, on obtient : $${miseEnEvidence(reponse1)} ${choix1[0]} ${aEncadrer} ${choix1[0]} ${miseEnEvidence(reponse2)}$.`
+            } else if (m < 0 && p > 0) {
+              texteCorr += `${m}\\times ${ecritureParentheseSiNegatif(a)} ${choix1[1]} ${m}\\times x &${choix1[1]} ${m}\\times ${ecritureParentheseSiNegatif(b)} ${sp(7)} \\text{ On multiplie par } ${m} < 0 \\text{, le sens des inégalités change.}\\\\`
+              texteCorr += `${m * a} ${choix1[1]} ${rienSi1(m)}x& ${choix1[1]} ${m * b}\\\\`
+              texteCorr += '\\end{aligned}$'
+              texteCorr += `<br>De même, <br>
                    $\\begin{aligned}
                    ${c} ${choix1[0]} y &${choix1[0]} ${d}\\\\`
-                  texteCorr += `${p}\\times ${ecritureParentheseSiNegatif(c)} ${choix1[0]} ${p}\\times y &${choix1[0]} ${p}\\times ${ecritureParentheseSiNegatif(d)} ${sp(7)} \\text{ On multiplie par } ${p} > 0 \\text{, le sens des inégalités ne change pas.}\\\\`
-                  texteCorr += `
+              texteCorr += `${p}\\times ${ecritureParentheseSiNegatif(c)} ${choix1[0]} ${p}\\times y &${choix1[0]} ${p}\\times ${ecritureParentheseSiNegatif(d)} ${sp(7)} \\text{ On multiplie par } ${p} > 0 \\text{, le sens des inégalités ne change pas.}\\\\`
+              texteCorr += `
                   ${p * c} ${choix1[0]} ${rienSi1(p)}y& ${choix1[0]} ${p * d}\\\\`
-                  texteCorr += '\\end{aligned}$'
-                  texteCorr += `<br>
+              texteCorr += '\\end{aligned}$'
+              reponse1 = m * b + p * c
+              reponse2 = m * a + p * d
+              texteCorr += `<br>
                   Ainsi, on a : $\\begin{cases}    ${m * b} ${choix1[0]} ${rienSi1(m)}x ${choix1[0]} ${m * a}\\\\    ${p * c} ${choix1[0]} ${rienSi1(p)}y ${choix1[0]} ${p * d}     \\end{cases} $.<br>
-                  Ces inégalités sont de même sens, en faisant les sommes, on obtient : $${m * b + p * c} ${choix1[0]} ${rienSi1(m)}x${ecritureAlgebriqueSauf1(p)}y ${choix1[0]} ${m * a + p * d}$.`
-                } else {
-                  if (m < 0 && p < 0) {
-                    texteCorr += ` $\\begin{aligned}
-                    ${a} ${choix1[0]}  x &${choix1[0]} ${b}\\\\`
-                    texteCorr += `${m}\\times ${ecritureParentheseSiNegatif(a)} ${choix1[1]} ${m}\\times x &${choix1[1]} ${m}\\times ${ecritureParentheseSiNegatif(b)} ${sp(7)} \\text{ On multiplie par } ${m} < 0 \\text{, le sens des inégalités change.}\\\\`
-                    texteCorr += `
+                  Ces inégalités sont de même sens, en faisant les sommes, on obtient : $${miseEnEvidence(reponse1)} ${choix1[0]} ${aEncadrer} ${choix1[0]} ${miseEnEvidence(reponse2)}$.`
+            } else if (m < 0 && p < 0) {
+              texteCorr += `${m}\\times ${ecritureParentheseSiNegatif(a)} ${choix1[1]} ${m}\\times x &${choix1[1]} ${m}\\times ${ecritureParentheseSiNegatif(b)} ${sp(7)} \\text{ On multiplie par } ${m} < 0 \\text{, le sens des inégalités change.}\\\\`
+              texteCorr += `
                     ${m * a} ${choix1[1]} ${rienSi1(m)}x& ${choix1[1]} ${m * b}\\\\`
-                    texteCorr += '\\end{aligned}$'
-                    texteCorr += `<br>De même, <br>
+              texteCorr += '\\end{aligned}$'
+              texteCorr += `<br>De même, <br>
                     $\\begin{aligned}
                     ${c} ${choix1[0]} y &${choix1[0]} ${d}\\\\`
-                    texteCorr += `${p}\\times ${ecritureParentheseSiNegatif(c)} ${choix1[1]} ${p}\\times y &${choix1[1]} ${p}\\times ${ecritureParentheseSiNegatif(d)} ${sp(7)} \\text{ On multiplie par } ${p} < 0 \\text{, le sens des inégalités change.}\\\\`
-                    texteCorr += `
+              texteCorr += `${p}\\times ${ecritureParentheseSiNegatif(c)} ${choix1[1]} ${p}\\times y &${choix1[1]} ${p}\\times ${ecritureParentheseSiNegatif(d)} ${sp(7)} \\text{ On multiplie par } ${p} < 0 \\text{, le sens des inégalités change.}\\\\`
+              texteCorr += `
                    ${p * c} ${choix1[1]} ${rienSi1(p)}y& ${choix1[1]} ${p * d}\\\\`
-                    texteCorr += '\\end{aligned}$'
-                    texteCorr += `<br>
+              texteCorr += '\\end{aligned}$'
+              reponse1 = m * b + p * d
+              reponse2 = m * a + p * c
+              texteCorr += `<br>
                   Ainsi, on a : $\\begin{cases}    ${m * b} ${choix1[0]} ${rienSi1(m)}x ${choix1[0]} ${m * a}\\\\    ${p * d} ${choix1[0]} ${rienSi1(p)}y ${choix1[0]} ${p * c}     \\end{cases} $.<br>
-                  Ces inégalités sont de même sens, en faisant les sommes, on obtient : $${m * b + p * d} ${choix1[0]} ${rienSi1(m)}x${ecritureAlgebriqueSauf1(p)}y ${choix1[0]} ${m * a + p * c}$.`
-                  }
-                }
-              }
+                  Ces inégalités sont de même sens, en faisant les sommes, on obtient : $${miseEnEvidence(reponse1)} ${choix1[0]} ${aEncadrer} ${choix1[0]} ${miseEnEvidence(reponse2)}$.`
             }
           }
           break
       }
+      if (listeTypeDeQuestions[i] !== 'typeE2')
+        handleAnswers(
+          this,
+          i,
+          {
+            bareme: toutAUnPoint,
+            champ1: {
+              value: reponse1,
+              options: { nombreDecimalSeulement: true },
+            },
+            champ2: {
+              value: reponse2,
+              options: { nombreDecimalSeulement: true },
+            },
+          },
+          { formatInteractif: 'multiMathfield' },
+        )
       if (this.questionJamaisPosee(i, a, m, p)) {
         // Si la question n'a jamais été posée, on en crée une autre
         this.listeQuestions[i] = texte

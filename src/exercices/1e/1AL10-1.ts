@@ -63,7 +63,6 @@ export default class ModeliserSuites extends Exercice {
   nouvelleVersion() {
     const typesDeQuestionsDisponibles = gestionnaireFormulaireTexte({
       saisie: this.sup,
-      min: 1,
       max: 10,
       melange: 11,
       defaut: 11,
