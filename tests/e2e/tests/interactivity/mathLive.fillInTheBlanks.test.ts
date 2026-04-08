@@ -7,7 +7,7 @@ import {
   runTest,
 } from '../../helpers/run'
 
-async function test6N203(page: Page) {
+async function testCM2N2D1(page: Page) {
   const hostname = local
     ? `http://localhost:${process.env.CI ? '80' : '5173'}/alea/`
     : 'https://coopmaths.fr/alea/'
@@ -16,7 +16,8 @@ async function test6N203(page: Page) {
 
   for (const question of questions) {
     const mathField = question.mathField
-    const signe = mathField.includes('&lt') ? '<' : '>'
+    const signe = '<'
+    // mathField.includes('&lt') || mathField.includes('<') ? '<' : '>'
     const cleanMathField = mathField.replaceAll('\\,', '')
     const regex = /(\d+)/g
     const [, numString, denString] = cleanMathField.match(regex) as [
@@ -80,9 +81,9 @@ const local = true
 if (process.env.CI) {
   // utiliser pour les tests d'intégration
   prefs.headless = true
-  runTest(test6N203, import.meta.url, { pauseOnError: false }) // true pendant le développement, false ensuite
+  runTest(testCM2N2D1, import.meta.url, { pauseOnError: false }) // true pendant le développement, false ensuite
   runTest(test5R211, import.meta.url, { pauseOnError: false }) // true pendant le développement, false ensuite
 } else {
-  runTest(test6N203, import.meta.url)
+  runTest(testCM2N2D1, import.meta.url)
   runTest(test5R211, import.meta.url)
 }
