@@ -75,8 +75,8 @@ export default class ProblemeDePrix extends ExerciceSimple {
       grilleSecondaireXDistance: 0.4,
       xLegende: 'Masse (kg)',
       yLegende: 'Prix (€)',
-      yLegendePosition: [2, prixMax + 1],
-      xLegendePosition: [17, -1],
+      yLegendePosition: [0.2, prixMax + 0.5],
+      xLegendePosition: [15, -0.5],
     })
     const cP = courbe(p, {
       repere: rep,
