@@ -1,5 +1,6 @@
 import { context } from '../../modules/context'
 import type { NestedObjetMathalea2dArray, ObjetDivLatex } from '../../types/2d'
+import { renderKatex } from '../mathalea'
 import { arrondi } from '../outils/nombres'
 import { stringNombre } from '../outils/texNombre'
 import { colorToLatexOrHTML } from './colorToLatexOrHtml'
@@ -771,33 +772,31 @@ export function texteParPosition(
   mathOn: boolean = false,
   opacite?: number,
 ) {
+  if (typeof texte === 'string' && texte.charAt(0) === '$') {
+    return latex2d(texte.substring(1, texte.length - 1), x, y, {
+      color,
+      backgroundColor: 'white',
+      letterSize: 'normalsize',
+      justify: ancrageDeRotation,
+    })
+  }
   if (typeof texte === 'number') texte = String(texte)
   if (typeof orientation !== 'number') {
     ancrageDeRotation = orientation
     orientation = 0
   }
-  // @ts-expect-error TS2367 // normalement ts devrait veiller au grain, sauf que plein d'exo tournant en js ont mal utilisé ces paramètres, donc on blinde.
-  if (ancrageDeRotation === 'middle') ancrageDeRotation = 'milieu'
   if (!['milieu', 'droite', 'gauche'].includes(ancrageDeRotation))
     ancrageDeRotation = 'milieu'
-  if (texte[0] === '$') {
-    return latex2d(texte.substring(1, texte.length - 1), x, y, {
-      color,
-      backgroundColor: 'white',
-      letterSize: 'normalsize',
-    })
-  } else {
-    return new TexteParPoint(
-      texte,
-      pointAbstrait(x, y, ''),
-      orientation,
-      color,
-      scale,
-      ancrageDeRotation,
-      mathOn,
-      opacite,
-    )
-  }
+  return new TexteParPoint(
+    texte,
+    pointAbstrait(x, y, ''),
+    orientation,
+    color,
+    scale,
+    ancrageDeRotation,
+    mathOn,
+    opacite,
+  )
 }
 
 /**
@@ -1205,6 +1204,7 @@ export class Latex2d extends ObjetMathalea2D {
       orientation = 0,
       opacity = 1,
       gras = false,
+      justify = 'milieu',
     }: {
       color: string
       backgroundColor: string
@@ -1212,6 +1212,7 @@ export class Latex2d extends ObjetMathalea2D {
       orientation: number
       opacity: number
       gras: boolean
+      justify?: 'milieu' | 'gauche' | 'droite'
     },
   ) {
     super()
@@ -1221,11 +1222,49 @@ export class Latex2d extends ObjetMathalea2D {
     this.orientation = orientation
     this.opacity = opacity
     this.latex = latex
-    this.x = x
-    this.y = y
+
     const marge = 0.25
-    this.bordures = [x - marge, y - marge, x + marge, y + marge]
+    const katexElement = document.createElement('div')
+    katexElement.style.position = 'absolute'
+    katexElement.style.left = '-9999px'
+    katexElement.style.top = '0'
+    katexElement.style.width = 'auto'
+    katexElement.style.display = 'inline-block'
+    document.body.appendChild(katexElement)
+    katexElement.innerHTML = `$${this.latex}$`
+    renderKatex(katexElement)
+    const bbox = katexElement.getBoundingClientRect()
     this.gras = gras
+    this.x =
+      justify === 'milieu'
+        ? x
+        : justify === 'gauche'
+          ? x - bbox.width / context.pixelsParCm / 2
+          : x + bbox.width / context.pixelsParCm / 2
+    this.y = y
+    this.bordures =
+      justify === 'milieu'
+        ? [
+            x - bbox.width / context.pixelsParCm / 2 - marge / 2,
+            y - bbox.height / context.pixelsParCm / 2 - marge / 2,
+            x + bbox.width / context.pixelsParCm / 2 + marge / 2,
+            y + bbox.height / context.pixelsParCm / 2 + marge / 2,
+          ]
+        : justify === 'gauche'
+          ? [
+              x - marge / 2,
+              y - bbox.height / context.pixelsParCm / 2 - marge / 2,
+              x + bbox.width / context.pixelsParCm + marge / 2,
+              y + bbox.height / context.pixelsParCm / 2 + marge / 2,
+            ]
+          : [
+              x - bbox.width / context.pixelsParCm - marge / 2,
+              y - bbox.height / context.pixelsParCm / 2 - marge / 2,
+              x + marge / 2,
+              y + bbox.height / context.pixelsParCm / 2 + marge / 2,
+            ]
+
+    document.body.removeChild(katexElement)
   }
 
   svg(): ObjetDivLatex {
@@ -1290,6 +1329,7 @@ export function latex2d(
     orientation,
     opacity,
     gras,
+    justify = 'milieu',
   }: {
     color?: string
     backgroundColor?: string
@@ -1297,6 +1337,7 @@ export function latex2d(
     orientation?: number
     opacity?: number
     gras?: boolean
+    justify?: 'milieu' | 'gauche' | 'droite'
   },
 ) {
   color = color ?? 'black'
@@ -1318,6 +1359,7 @@ export function latex2d(
     orientation,
     opacity,
     gras,
+    justify,
   })
 }
 

@@ -313,6 +313,7 @@ export class TraceBarreHorizontale extends ObjetMathalea2D {
     },
   ) {
     super()
+    this.bordures = [0, y - epaisseur / 2, unite * longueur, y + epaisseur / 2]
     this.p =
       longueur === 0
         ? vide2d(0, y)

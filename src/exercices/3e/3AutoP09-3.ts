@@ -88,11 +88,11 @@ export default class LongueurEtAire extends ExerciceSimple {
       grilleSecondaireXDistance: 0.2,
       xLegende: '$AD\\text{ (cm)}$',
       xLegendePosition: [
-        choix ? (coteTriangle - 1) / 2 : coteTriangle - 1,
-        -1.3,
+        choix ? (coteTriangle - 1) / 2 + 2.5 : coteTriangle + 2,
+        -0.5,
       ],
       yLegende: '$\\text{Aire de } ADEF \\text{ (cm}^2\\text{)}$',
-      yLegendePosition: [3, (aireMax + 15) / 5],
+      yLegendePosition: [6, (aireMax + 15) / 5 + 0.5],
     })
     const cF = courbe(f, {
       repere: rep,

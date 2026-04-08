@@ -138,9 +138,9 @@ export default class VitesseEtDistance extends ExerciceSimple {
         grilleSecondaireY: true,
         grilleSecondaireYDistance: 0.2,
         xLegende: 'Vitesse (km/h)',
-        xLegendePosition: [14, 0.5],
+        xLegendePosition: [13, -0.5],
         yLegende: 'Distance de freinage (m)',
-        yLegendePosition: [5, 16],
+        yLegendePosition: [0, 16],
       })
       const cF = courbe(distanceByVitesse, { repere: rep, xMin: 0, xMax: 135 })
       const objets = [rep, cF]

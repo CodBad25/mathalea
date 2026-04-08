@@ -116,7 +116,7 @@ export default class GraphiquesEtProportionnalite2 extends Exercice {
             (situation.qte_max + 1) * situation.prix_unitaire + yscale,
           ),
           yLegendePosition: [
-            1,
+            0.2,
             premierMultipleSuperieur(
               yscale,
               (situation.qte_max + 1) * situation.prix_unitaire + yscale,
@@ -124,7 +124,7 @@ export default class GraphiquesEtProportionnalite2 extends Exercice {
               yscale +
               0.5,
           ],
-          xLegendePosition: [situation.qte_max + 1 + 0.2, -1],
+          xLegendePosition: [situation.qte_max + 0.7, -0.5],
         })),
       ]
       const f = (x: number) => situation.prix_unitaire * x

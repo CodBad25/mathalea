@@ -187,9 +187,9 @@ export default class ConjectureDeSyracuse extends Exercice {
         xThickMin: 0,
         xThickDistance: 1 * xCoeff,
         xLegende: "Applications de l'algorithme",
-        xLegendePosition: [(uneSuite.tempsDeVol + 2) / xCoeff, -1],
+        xLegendePosition: [(uneSuite.tempsDeVol + 1) / xCoeff, -0.5],
         yLegende: 'Altitude',
-        yLegendePosition: [0.5, (uneSuite.altitudeMaximale + 7) / yCoeff],
+        yLegendePosition: [0.2, (uneSuite.altitudeMaximale + 7) / yCoeff],
       })
 
       // Le graphique cartésien

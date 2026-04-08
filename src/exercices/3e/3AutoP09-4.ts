@@ -72,8 +72,8 @@ export default class HauteurValve extends ExerciceSimple {
       grilleSecondaireXDistance: 0.5,
       xLegende: 'Distance parcourue (cm)',
       yLegende: 'Hauteur de la valve (cm)',
-      yLegendePosition: [9, 11],
-      xLegendePosition: [30, -1],
+      yLegendePosition: [0.2, 10.5],
+      xLegendePosition: [29, -0.5],
     })
     const cF = polyline(...dots)
     const objets: NestedObjetMathalea2dArray = [rep, cF]

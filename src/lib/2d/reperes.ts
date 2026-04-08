@@ -984,7 +984,7 @@ export class Repere extends ObjetMathalea2D {
           0,
           'black',
           1,
-          'droite',
+          'gauche',
         ),
       )
     }
@@ -997,7 +997,7 @@ export class Repere extends ObjetMathalea2D {
           0,
           'black',
           1,
-          'droite',
+          'gauche',
         ),
       )
     }
