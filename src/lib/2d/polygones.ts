@@ -315,7 +315,7 @@ export class Polygone extends ObjetMathalea2D {
       )
     }
 
-    if (this.hachures) this.hachures = 'dotted'
+    // if (this.hachures) this.hachures = 'dotted' // EE : 08/04/2026 : Pourquoi obliger dotted...qui n'existe pas en plus dans pattern.ts ?
     if (this.hachures != null && typeof this.hachures === 'string') {
       tableauOptions.push(
         pattern({

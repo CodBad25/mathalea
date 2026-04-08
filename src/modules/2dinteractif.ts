@@ -3,6 +3,7 @@ import { ObjetMathalea2D } from '../lib/2d/ObjetMathalea2D'
 import { PointAbstrait, pointAbstrait } from '../lib/2d/PointAbstrait'
 import { Polygone, polygone } from '../lib/2d/polygones'
 import { tracePoint } from '../lib/2d/TracePoint'
+import { orangeMathalea, vertMathalea } from '../lib/colors'
 import { context } from './context'
 
 /**
@@ -259,7 +260,7 @@ export class RectangleCliquable extends ObjetMathalea2D {
     this.rectangle.epaisseurDesHachures = options.epaisseurDesHachures ?? 4
     this.bordure.epaisseur = options.epaisseur ?? 1
     this.etat = options.etat ?? false // Pour récupérer si le rectangle est cliqué ou pas
-    this.groupe = null // il sera initialiser lorsque les exercices seront affichés.
+    this.groupe = null // il sera initialisé lorsque les exercices seront affichés.
     this.stopCliquable = () => {
       // On retire tous les listener en le remplaçant par un clone
       this.groupe!.replaceWith(this.groupe!.cloneNode(true))
@@ -384,7 +385,7 @@ export class RectangleCliquable extends ObjetMathalea2D {
   tikz() {
     if (this.etat)
       this.bordure.couleurDeRemplissage = colorToLatexOrHTML(this.stringColor)
-    this.bordure.couleurDesHachures = colorToLatexOrHTML('white')
+    this.bordure.couleurDesHachures = colorToLatexOrHTML('black')
     this.bordure.hachures = this.rectangle.hachures
     return this.bordure.tikz()
   }
@@ -439,14 +440,14 @@ export class FractionCliquable extends ObjetMathalea2D {
     const hauteur = options.hauteur ?? 1
     const liste1 = options.liste1 ?? []
     const liste2 = options.liste2 ?? []
-    let couleur1 = options.couleur1 ?? '#f15929'
-    let couleur2 = options.couleur2 ?? '#1DA962'
+    let couleur1 = options.couleur1 ?? orangeMathalea
+    let couleur2 = options.couleur2 ?? vertMathalea
     if (!context.isHtml) {
       couleur1 = options.couleur1 ?? 'gray'
       couleur2 = options.couleur2 ?? 'lightgray'
     }
-    const hachures1 = options.hachures1 ?? false
-    const hachures2 = options.hachures2 ?? false
+    const hachures1 = options.hachures1 ? 'north east lines' : false
+    const hachures2 = options.hachures2 ? 'dots' : false
     const couleur =
       options.couleur ?? (liste1.length === 0 ? couleur1 : 'white')
     const cliquable = options.cliquable !== undefined ? options.cliquable : true
