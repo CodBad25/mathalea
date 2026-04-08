@@ -2,6 +2,7 @@ import { orangeMathalea } from 'apigeom/src/elements/defaultValues'
 import Decimal from 'decimal.js'
 import { grille, seyes } from '../../lib/2d/Grille'
 import { vide2d } from '../../lib/2d/Vide2d'
+import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import {
   handleAnswers,
@@ -9,6 +10,7 @@ import {
 } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
 import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
@@ -16,7 +18,7 @@ import operation from '../../modules/operations'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-export const dateDeModifImportante = '07/01/2025'
+export const dateDeModifImportante = '08/04/2026'
 export const amcReady = true
 export const amcType = 'AMCNum'
 export const interactifReady = true
@@ -32,8 +34,9 @@ export const titre = 'Poser des multiplications de nombres décimaux'
  * * x,xx * x0x
  * * 0,xx * x,x
  * @author Rémi Angot
-
+ * Eric Elter : Mise en place de la correction avec la pose d'entiers (08/04/2026)
  */
+
 export const uuid = '52939'
 
 export const refs = {
@@ -45,10 +48,10 @@ export default class MultiplierDecimaux extends Exercice {
   constructor() {
     super()
     this.consigne = 'Poser et effectuer les calculs suivants.'
+    this.besoinFormulaireCaseACocher = ['La correction pose des entiers']
     this.spacing = 2
-
     this.nbQuestions = 4
-    this.sup = false
+    this.sup = true
     this.sup2 = 3
     this.besoinFormulaire2Numerique = [
       'Type de cahier',
@@ -87,6 +90,7 @@ export default class MultiplierDecimaux extends Exercice {
       let i = 0, texte, texteCorr, cpt = 0, a, b, c;
       i < this.nbQuestions && cpt < 50;
     ) {
+      let facteuraEntier, facteurbEntier, puissanceDe10Poura, puissanceDe10Pourb
       typesDeQuestions = listeTypeDeQuestions[i]
       switch (typesDeQuestions) {
         case 1: // xxx * xx,x chiffres inférieurs à 5
@@ -95,12 +99,20 @@ export default class MultiplierDecimaux extends Exercice {
           )
           c = new Decimal(randint(2, 5)).div(10)
           b = new Decimal(randint(2, 5)).add(c)
+          facteuraEntier = a
+          puissanceDe10Poura = 1
+          facteurbEntier = new Decimal(b).mul(10)
+          puissanceDe10Pourb = 10
           break
         case 2: // xx,x * x,x
           c = new Decimal(randint(2, 9)).div(10)
           a = new Decimal(randint(2, 9) * 10 + randint(2, 9)).add(c)
           c = new Decimal(randint(6, 9)).div(10)
           b = new Decimal(randint(6, 9)).add(c)
+          facteuraEntier = new Decimal(a).mul(10)
+          puissanceDe10Poura = 10
+          facteurbEntier = new Decimal(b).mul(10)
+          puissanceDe10Pourb = 10
           break
         case 3: // x,xx * x0x
           c = new Decimal(randint(2, 9))
@@ -108,6 +120,10 @@ export default class MultiplierDecimaux extends Exercice {
             .add(new Decimal(randint(2, 9)).div(100))
           a = new Decimal(randint(2, 9)).add(c).add(c)
           b = new Decimal(randint(2, 9) * 100 + randint(2, 9))
+          facteuraEntier = new Decimal(a).mul(100)
+          puissanceDe10Poura = 100
+          facteurbEntier = b
+          puissanceDe10Pourb = 1
           break
         case 4: // 0,xx * x,x
         default:
@@ -115,30 +131,93 @@ export default class MultiplierDecimaux extends Exercice {
           a = new Decimal(randint(2, 9)).div(100).add(c)
           c = new Decimal(randint(2, 9)).div(10)
           b = new Decimal(randint(2, 9)).add(c)
+          facteuraEntier = new Decimal(a).mul(100)
+          puissanceDe10Poura = 100
+          facteurbEntier = new Decimal(b).mul(10)
+          puissanceDe10Pourb = 10
           break
       }
 
-      texte = `$${texNombre(a)}\\times${texNombre(b)}$`
+      texte = `$${texNombre(a)} \\times ${texNombre(b)}$`
       texte += grilletxt
       reponse = new Decimal(a).mul(b)
-      texteCorr = operation({
-        operande1: a.toNumber(),
-        operande2: b.toNumber(),
-        type: 'multiplication',
-        style: 'display: inline',
-        options: { solution: true, colore: orangeMathalea },
-      })
-      texteCorr += context.isHtml ? '' : '\\hspace*{30mm}'
-      texteCorr += operation({
-        operande1: b.toNumber(),
-        operande2: a.toNumber(),
-        type: 'multiplication',
-        style: 'display: inline',
-        options: { solution: true, colore: orangeMathalea },
-      })
+      switch (this.sup) {
+        case false:
+          texteCorr = operation({
+            operande1: a.toNumber(),
+            operande2: b.toNumber(),
+            type: 'multiplication',
+            style: 'display: inline',
+            options: { solution: true, colore: orangeMathalea },
+          })
+          texteCorr += context.isHtml ? '' : '\\hspace*{30mm}'
+          texteCorr += operation({
+            operande1: b.toNumber(),
+            operande2: a.toNumber(),
+            type: 'multiplication',
+            style: 'display: inline',
+            options: { solution: true, colore: orangeMathalea },
+          })
+          break
+        default: {
+          texteCorr = operation({
+            operande1: facteuraEntier.toNumber(),
+            operande2: facteurbEntier.toNumber(),
+            type: 'multiplication',
+            style: 'display: inline',
+            options: { solution: true, colore: bleuMathalea },
+          })
+          texteCorr += context.isHtml ? '' : '\\hspace*{30mm}'
+          texteCorr += `On obtient que : $${facteuraEntier.toNumber()} \\times ${facteurbEntier.toNumber()}=${texNombre(facteuraEntier.mul(facteurbEntier).toNumber())}$.<br><br>`
+          texteCorr += `Or `
+          if (puissanceDe10Poura !== 1)
+            texteCorr += `$${texNombre(a.toNumber())}=\\dfrac{${facteuraEntier.toNumber()}}{${puissanceDe10Poura}}=${facteuraEntier.toNumber()} \\times  ${texNombre(1 / puissanceDe10Poura)}$`
+          texteCorr +=
+            puissanceDe10Pourb === 1
+              ? '.<br>'
+              : puissanceDe10Poura !== 1
+                ? ' et '
+                : ''
+          const calcul = `${texNombre(a.toNumber())} \\times ${texNombre(b.toNumber())}`
+          if (puissanceDe10Pourb !== 1)
+            texteCorr += `$${texNombre(b.toNumber())}=\\dfrac{${facteurbEntier.toNumber()}}{${puissanceDe10Pourb}}=${facteurbEntier.toNumber()} \\times  ${texNombre(1 / puissanceDe10Pourb)}$.<br>`
+          texteCorr += `Et donc :<br> $\\begin{aligned}\\phantom{Et donc :}
+       ${calcul}&=`
+          texteCorr +=
+            puissanceDe10Poura !== 1 && puissanceDe10Pourb !== 1
+              ? `\\dfrac{${facteuraEntier.toNumber()}}{${puissanceDe10Poura}} \\times \\dfrac{${facteurbEntier.toNumber()}}{${puissanceDe10Pourb}}\\\\
+          ${calcul}&=${facteuraEntier.toNumber()} \\times \\dfrac{1}{${puissanceDe10Poura}} \\times ${facteurbEntier.toNumber()} \\times \\dfrac{1}{${puissanceDe10Pourb}}
+          =${facteuraEntier.toNumber()} \\times ${texNombre(1 / puissanceDe10Pourb)} \\times ${facteurbEntier.toNumber()} \\times ${texNombre(1 / puissanceDe10Pourb)}\\\\
+          ${calcul}&=\\left(${facteuraEntier.toNumber()} \\times ${facteurbEntier.toNumber()}\\right) \\times \\left(\\dfrac{1}{${puissanceDe10Poura}} \\times \\dfrac{1}{${puissanceDe10Pourb}}\\right)
+          =\\left(${facteuraEntier.toNumber()} \\times ${facteurbEntier.toNumber()}\\right) \\times \\left(${texNombre(1 / puissanceDe10Poura)} \\times ${texNombre(1 / puissanceDe10Pourb)}\\right)\\\\
+          ${calcul}&=${texNombre(facteuraEntier.mul(facteurbEntier).toNumber())} \\times \\dfrac{1}{${texNombre(puissanceDe10Poura * puissanceDe10Pourb)}}
+          =${texNombre(facteuraEntier.mul(facteurbEntier).toNumber())} \\times ${texNombre(1 / (puissanceDe10Poura * puissanceDe10Pourb))}\\\\
+          `
+              : puissanceDe10Poura !== 1
+                ? `\\dfrac{${facteuraEntier.toNumber()}}{${puissanceDe10Poura}} \\times ${facteurbEntier.toNumber()}\\\\
+          ${calcul}&=${facteuraEntier.toNumber()} \\times \\dfrac{1}{${puissanceDe10Poura}} \\times ${facteurbEntier.toNumber()}
+          =${facteuraEntier.toNumber()} \\times ${texNombre(1 / puissanceDe10Pourb)} \\times ${facteurbEntier.toNumber()}\\\\
+          ${calcul}&=\\left(${facteuraEntier.toNumber()} \\times ${facteurbEntier.toNumber()}\\right) \\times \\dfrac{1}{${puissanceDe10Poura}}
+          =\\left(${facteuraEntier.toNumber()} \\times ${facteurbEntier.toNumber()}\\right) \\times ${texNombre(1 / puissanceDe10Poura)}\\\\
+          ${calcul}&=${texNombre(facteuraEntier.mul(facteurbEntier).toNumber())} \\times \\dfrac{1}{${texNombre(puissanceDe10Poura * puissanceDe10Pourb)}}
+          =${texNombre(facteuraEntier.mul(facteurbEntier).toNumber())} \\times ${texNombre(1 / (puissanceDe10Poura * puissanceDe10Pourb))}\\\\
+          `
+                : `${facteuraEntier.toNumber()} \\times \\dfrac{${facteurbEntier.toNumber()}}{${puissanceDe10Pourb}}\\\\
+          ${calcul}&=${facteuraEntier.toNumber()} \\times ${facteurbEntier.toNumber()} \\times \\dfrac{1}{${puissanceDe10Pourb}}
+          =${facteuraEntier.toNumber()} \\times ${facteurbEntier.toNumber()} \\times ${texNombre(1 / puissanceDe10Pourb)}\\\\
+          ${calcul}&=${texNombre(facteuraEntier.mul(facteurbEntier).toNumber())} \\times \\dfrac{1}{${texNombre(puissanceDe10Poura * puissanceDe10Pourb)}}
+          =${texNombre(facteuraEntier.mul(facteurbEntier).toNumber())} \\times ${texNombre(1 / (puissanceDe10Poura * puissanceDe10Pourb))}\\\\
+          `
+
+          texteCorr += `${calcul}&=${miseEnEvidence(texNombre(reponse.toNumber()))}\\\\
+          \\end{aligned}$`
+          break
+        }
+      }
       texte += ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers, {
         texteAvant: '$~=$',
       })
+
       if (context.isAmc) setReponse(this, i, reponse)
       else handleAnswers(this, i, { reponse: { value: reponse } })
       this.autoCorrection[i].options = {
