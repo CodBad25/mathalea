@@ -25,17 +25,18 @@ import { matrice } from './Matrice'
  */
 export function polynomialRoot(...coeffs: number[]): (number | Complexe)[] {
   // Nettoyage des coefficients nuls en tête
+  coeffs = coeffs.reverse()
   while (coeffs.length > 1 && Math.abs(coeffs[0]) < 1e-14) coeffs.shift()
   const n = coeffs.length - 1
   if (n === 1) {
     // ax + b = 0
-    const [a, b] = coeffs.reverse()
+    const [a, b] = coeffs
     if (Math.abs(a) < 1e-14) return []
     return [-b / a]
   }
   if (n === 2) {
     // ax^2 + bx + c = 0
-    const [a, b, c] = coeffs.reverse()
+    const [a, b, c] = coeffs
     if (Math.abs(a) < 1e-14) return polynomialRoot(c, b) // polynomialRoot prend les coefficients dans l'ordre croissant de degré, donc c est le terme de degré 0 et b celui de degré 1
     const delta = b * b - 4 * a * c
     if (Math.abs(delta) < 1e-14) return [-b / (2 * a)]
@@ -51,7 +52,7 @@ export function polynomialRoot(...coeffs: number[]): (number | Complexe)[] {
   }
   if (n === 3) {
     // ax^3 + bx^2 + cx + d = 0
-    const [a, b, c, d] = coeffs.reverse()
+    const [a, b, c, d] = coeffs
     if (Math.abs(a) < 1e-14) return polynomialRoot(d, c, b) // polynomialRoot prend les coefficients dans l'ordre croissant de degré, donc d est le terme de degré 0, c celui de degré 1 et b celui de degré 2
     // Dépression de Cardan : x = y - b/(3a)
     const p = (3 * a * c - b * b) / (3 * a * a)
