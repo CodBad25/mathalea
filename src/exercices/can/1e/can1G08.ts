@@ -13,6 +13,7 @@ import {
   addMultiMathfield,
   MultiMathfieldElement,
 } from '../../../lib/interactif/MultiMathfield/MultiMathfield'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 
 export const titre =
   'Déterminer un vecteur normal avec une équation cartésienne'
@@ -67,8 +68,8 @@ export default class VecteurNormEqCart extends Exercice {
         },
         { formatInteractif: 'multiMathfield' },
       )
-      texteCorr = `Si l'équation est de la forme $ax+by+c=0$, on sait d'après le cours, qu'un vecteur normal $\\vec{u}$ a pour coordonnées $(a;b)$.<br>
-    On en déduit qu'un vecteur normal de $d$ est $\\vec{u}(${a};${b})$.<br>
+      texteCorr = `Si l'équation est de la forme $ax+by+c=0$, on sait d'après le cours, qu'un vecteur normal $\\vec{u}$ a pour coordonnées $(a\\,;\\,b)$.<br>
+    On en déduit qu'un vecteur normal de $d$ est $${miseEnEvidence(`\\vec{u}(${a}\\,;\\,${b})`)}$.<br>
      Tout vecteur colinéaire à $\\vec{u}$ est aussi un vecteur normal de $d$.`
 
       if (this.questionJamaisPosee(i, a, b)) {
