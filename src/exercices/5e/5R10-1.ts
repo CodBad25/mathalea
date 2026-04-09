@@ -1,16 +1,16 @@
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import {
   choice,
   combinaisonListes,
   shuffle,
 } from '../../lib/outils/arrayOutils'
+import { arrondi } from '../../lib/outils/nombres'
 import { obtenirListeFacteursPremiers } from '../../lib/outils/primalite'
 import { texNombre } from '../../lib/outils/texNombre'
-import Exercice from '../Exercice'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
-import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
-import { arrondi } from '../../lib/outils/nombres'
-import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import Exercice from '../Exercice'
 
 export const titre = 'Deviner un nombre relatif'
 
@@ -22,8 +22,8 @@ export const dateDeModifImportante = '15/01/2024'
 /**
  * Additions à trou dans les relatifs
  *
- *  @author Jean-Claude Lhote à partir de CM000 de Rémi Angot
- * Eric Elter le rend interactif le 15/01/2024
+ *  @author Jean-claude Lhote à partir de CM000 de Rémi Angot
+ * Éric Elter le rend interactif le 15/01/2024
  */
 
 export const uuid = '76343'
@@ -57,7 +57,6 @@ export default class DevinerNombreRelatif extends Exercice {
     for (
       let i = 0, texte, texteCorr, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       signe = choice([-1, 1])
       switch (listeTypeDeQuestions[i]) {

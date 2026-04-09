@@ -24,7 +24,8 @@ export const dateDePublication = '12/06/2023'
 
 /**
  * Coordonnées d'un point à partir d'une égalité
- * @author Stéphan Grignon Interactif Gilles Mora le 11 juin 2024
+ * @author Stéphan Grignon
+ *  Interactif Gilles Mora le 11 juin 2024
  */
 export const uuid = '222f6'
 

@@ -25,7 +25,7 @@ export const refs = {
 
 /**
  * Descriptif didacactique de l'exercice : Modèle d'exercice très simple pour la course aux nombres
- * @author Eric Elter // Information utile pour retrouver l'auteur d'un exercice
+ * @author Éric Elter // Information utile pour retrouver l'auteur d'un exercice
 
 */
 export default class NomExercice extends ExerciceSimple {

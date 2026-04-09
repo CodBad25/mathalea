@@ -18,7 +18,7 @@ const buildDataKeyboardString = (style = '') => {
 /*
   MathALEA2D
  @name      mathalea2d
- @author    Rémi Angot et Jean-Claude Lhote
+ @author    Rémi Angot et Jean-claude Lhote
  @license   MIT License - CC-BY-SA
  @homepage  https://coopmaths.fr/mathalea2d.html
  */

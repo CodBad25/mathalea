@@ -1,17 +1,17 @@
-import Exercice from '../../Exercice'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
+import { ajouteChampTexteMathLive } from '../../../lib/interactif/questionMathLive'
 import { choice, combinaisonListes } from '../../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { lettreDepuisChiffre } from '../../../lib/outils/outilString'
+import { texNombre } from '../../../lib/outils/texNombre'
+import { fraction } from '../../../modules/fractions'
 import {
   gestionnaireFormulaireTexte,
   listeQuestionsToContenu,
   randint,
 } from '../../../modules/outils'
-import { texNombre } from '../../../lib/outils/texNombre'
-import { lettreDepuisChiffre } from '../../../lib/outils/outilString'
-import { ajouteChampTexteMathLive } from '../../../lib/interactif/questionMathLive'
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { fraction } from '../../../modules/fractions'
+import Exercice from '../../Exercice'
 
 export const titre = 'Résoudre des inéquations du type a^x<b'
 export const dateDePublication = '4/5/2024'
@@ -164,7 +164,7 @@ export default class ExerciceCalculsDeLog extends Exercice {
       texteCorr += `<br>$\\mathcal{S}=${miseEnEvidence(`${crochetG} ${borneG} ; ${borneD} ${crochetD}`)}$`
 
       if (this.interactif) {
-        // demander à Eric Elter pourquoi la comparaison d'intervalles ne fonctionne pas.
+        // demander à Éric Elter pourquoi la comparaison d'intervalles ne fonctionne pas.
         handleAnswers(this, i, {
           reponse: {
             value: `${crochetG} ${borneG} ; ${borneD} ${crochetD}`,

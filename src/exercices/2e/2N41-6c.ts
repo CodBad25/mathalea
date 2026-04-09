@@ -23,7 +23,7 @@ export const titre = "Développer à l'aide des identités remarquables"
 export const dateDePublication = '19/11/2025'
 
 /**
- * @author Eric Elter
+ * @author Éric Elter
  */
 
 export const uuid = '7bd4f'

@@ -20,7 +20,7 @@ export const titre = 'Soustraire ou additionner des identités remarquables'
 export const dateDePublication = '20/11/2025'
 
 /**
- * @author Eric Elter
+ * @author Éric Elter
  */
 
 export const uuid = '8f546'

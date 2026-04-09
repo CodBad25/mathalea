@@ -27,7 +27,7 @@ export const titre = 'Se préparer au DNB  : arithmétique et volumes'
 
 /**
  * diviseurs communs, calcul de volume
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
 
  */
 export const uuid = '2e22a'

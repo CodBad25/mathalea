@@ -36,7 +36,7 @@ export const dateDeModifImportante = '25/11/2024'
 export const dateDePublication = '09/06/2021'
 /**
  * Un point est situé dans un pavé découpé suivant les trois axes, on doit donner ses coordonnées
- * @author Arnaud Durand et Jean-Claude Lhote (AMC par Eric Elter)
+ * @author Arnaud Durand et Jean-claude Lhote (AMC par Éric Elter)
  * Ajout d'un paramètre permettant de choisir entre placer un point et lire ses coordonnées
  */
 export const uuid = '9c916'
@@ -194,7 +194,6 @@ export default class ReperagePaveDroit extends Exercice {
         t,
         pointAplacer;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       let exists
       const objetsAtracerCorr: NestedObjetMathalea2dArray = []

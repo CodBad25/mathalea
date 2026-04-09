@@ -25,7 +25,7 @@ const questions = [
 ]
 /**
  * Un exercice bilan pour les regrouper tous (les exos de dérivation)
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  *
  */
 class DerivationBilan extends MetaExercice {

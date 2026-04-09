@@ -22,7 +22,7 @@ export const uuid = 'ad5f7'
 
 /**
  * Fonction permettant aux enseignants de proposer des grilles décimale à colorier
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export default class FeuilleDeGrilles extends Exercice {
   constructor() {

@@ -26,7 +26,7 @@ export const dateDeModifImportante = '29/10/2024'
 export const titre = 'Parcourir un labyrinthe de fractions égales'
 
 /**
- * @author Jean-Claude Lhote (remaniée par EE pour la prise en compte du nb de lignes et de colonnes du labyrinthe)
+ * @author Jean-claude Lhote (remaniée par EE pour la prise en compte du nb de lignes et de colonnes du labyrinthe)
  * Parcourir un labyrinthe de fractions en passant par des fractions égales.
  */
 export const uuid = 'f8a4d'

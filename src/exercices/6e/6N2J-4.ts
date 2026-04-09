@@ -35,7 +35,7 @@ export const dateDeModifImportante = '07/05/2023'
 /**
  * Détermination du vocabulaire associé à l'égalité issue de la division euclidienne
  *
- * @author Eric ELTER
+ * @author Éric ELTER
  */
 export const uuid = '4e35d'
 
@@ -159,12 +159,17 @@ export default class VocabulaireDivisionEuclidienne extends Exercice {
             Nbutilises[3] = randint(Nbutilises[2] + 1, Nbutilises[1] - 1)
           } else {
             Nbutilises[2] = randint(5, 99, [Nbutilises[1]])
-            Nbutilises[3] = randint(4, Math.min(Nbutilises[2], Nbutilises[1]) - 1)
+            Nbutilises[3] = randint(
+              4,
+              Math.min(Nbutilises[2], Nbutilises[1]) - 1,
+            )
           }
           Nbutilises[2] = randint(5, 99, [Nbutilises[1]])
-          Nbutilises[3] = randint(4, Math.max(Nbutilises[2], Nbutilises[1]) - 1, [
-            Math.min(Nbutilises[2], Nbutilises[1]),
-          ])
+          Nbutilises[3] = randint(
+            4,
+            Math.max(Nbutilises[2], Nbutilises[1]) - 1,
+            [Math.min(Nbutilises[2], Nbutilises[1])],
+          )
           break
       }
       Nbutilises[0] = Nbutilises[2] * Nbutilises[1] + Nbutilises[3]
@@ -238,7 +243,7 @@ export default class VocabulaireDivisionEuclidienne extends Exercice {
               ? mettreDernierMotEnCouleurEtGras(TabCorrection[3])
               : TabCorrection[3]
           texteCorr += '.<br>'
-          if ((ChoixQuestions[i] % 3) === 0) {
+          if (ChoixQuestions[i] % 3 === 0) {
             ReponsesCorrectes = [ChoixReponses[ChoixQuestions[i]]]
           } else {
             ReponsesCorrectes = ['diviseur', 'quotient']

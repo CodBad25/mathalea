@@ -170,7 +170,7 @@ export class Tableau extends ObjetMathalea2D {
     flecheGaucheSens = 'haut',
   }: TableauParams) {
     super()
-    // Jean-Claude Lhote 15/08/2023
+    // Jean-claude Lhote 15/08/2023
     if (ligne1 && ligne2 && Array.isArray(ligne1) && Array.isArray(ligne2)) {
       nbColonnes = Math.max(ligne1.length, ligne2.length, nbColonnes)
     }

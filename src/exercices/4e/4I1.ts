@@ -25,8 +25,8 @@ export const interactifType = 'cliqueFigure'
 /**
  * Dessiner selon un programme scratch
  * @author Sébastien Lozano
- * implémentation fonction scratchblock par Jean-Claude Lhote
- * Interactivité, grosse refactorisation par Eric Elter le 10/06/2025
+ * implémentation fonction scratchblock par Jean-claude Lhote
+ * Interactivité, grosse refactorisation par Éric Elter le 10/06/2025
  */
 
 export const uuid = '33c9a'

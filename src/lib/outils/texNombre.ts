@@ -16,7 +16,7 @@ const isFractionEtendue = (x: unknown): x is IFractionEtendue =>
  *
  * @param {number} n
  * retourne le code Latex de la racine carrée de n réduite
- * @author Jean-CLaude Lhote
+ * @author Jean-claude Lhote
  */
 export function texRacineCarree(n: number) {
   const result = extraireRacineCarree(n)
@@ -191,7 +191,7 @@ export function scientifiqueToDecimal(mantisse: number, exp: number) {
  * Destinée à être utilisée hors des $ $
  * Signale une erreur en console s'il y a plus de 15 chiffres significatifs (et donc qu'il y a un risque d'erreur d'approximation)
  * Sinon, renvoie le nombre à afficher dans le format français (avec virgule et des espaces pour séparer les classes dans la partie entière et la partie décimale)
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * @author Guillaume Valmont
  * @param {number|Decimal} nb nombre qu'on veut afficher
  * @param {number} precision nombre de décimales demandé
@@ -571,7 +571,7 @@ export function texPrix(nb: number | Decimal) {
  * // Renvoie [-2.315,3]
  * range(decimalToScientifique,[-2315])
  *
- * @author Eric Elter
+ * @author Éric Elter
  */
 export function decimalToScientifique(nbDecimal: number) {
   let exposant = 0

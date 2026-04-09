@@ -304,7 +304,7 @@ export function translation2Points(
  * @param {string} [positionLabel='above']
  * @param {string} [color='black'] Code couleur HTML acceptée
  * @return L'image de A par la rotation de centre O et d'angle angle
- * @author Rémi Angot et Jean-Claude Lhote
+ * @author Rémi Angot et Jean-claude Lhote
  */
 
 export function rotation(
@@ -545,7 +545,7 @@ export function homothetie(
 /**
  * Renvoie le  symétrique de A par la droite d.
  * @return {PointAbstrait|Polygone|Droite|Segment|Vecteur} M image de A par la symétrie axiale d'axe d.
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 
 // Surcharges
@@ -669,7 +669,7 @@ export function symetrieAxiale(
 
 /**
  * N = projectionOrtho(M,d,'N','below left')
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 // Surcharges
 export function projectionOrtho(
@@ -741,7 +741,7 @@ export function projectionOrtho(
  * @param {string} [nom=''] Nom de l'image (uniquement valable pour un point)
  * @param {string} [positionLabel = 'above'] Position de l'image (uniquement valable pour un point)
  * @param {string} [color='black']  Couleur de la valeur indiquée : du type 'blue' ou du type '#f15929' (non valable pour un point et pour un vecteur)
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * @example p2 = affiniteOrtho(p1,droite(B, C),k)
  * // p2 est l'image de p1 par une affinité orthogonale dont la direction est la droite (BC) et de rapport k
  * @example N = affiniteOrtho(M,d,0.5,'point N','right')
@@ -888,7 +888,7 @@ export function affiniteOrtho(
  * @param {string} nom
  * @param {string} positionLabel
  * M = similitude(B,O,30,1.1,'M') // Le point M est l'image de B dans la similitude de centre O d'angle 30° et de rapport 1.1
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 
 // Surcharges

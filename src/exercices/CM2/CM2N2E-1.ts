@@ -23,7 +23,7 @@ export const amcReady = true
 export const amcType = 'AMCHybride'
 
 /** Placer des points d'abscisses fractionnaires avec des subdivisions
- * @author Eric Elter // (sur la base de 6N21)
+ * @author Éric Elter // (sur la base de 6N21)
  */
 export const uuid = '778c0'
 

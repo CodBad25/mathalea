@@ -56,7 +56,7 @@ export function minToHour(minutes: number, NbEnLatex = false) {
 
 /**
  * Renvoie un tableau de deux valeurs : le nombre d'heures dans un paquet de minutes ainsi que le nombre de minutes restantes.
- * @author Eric Elter
+ * @author Éric Elter
  * @example minToHeuresMinutes (127) renvoie [2,7] car 127min = 2h7min
  * @example minToHeuresMinutes (300) renvoie [5,0] car 300min = 6h
  * @example minToHeuresMinutes (1456) renvoie [24,16] car 1456min = 24h16min
@@ -69,7 +69,7 @@ export function minToHeuresMinutes(minutes: number) {
 /**
  * Renvoie le nombre de jour d'un mois donné
  * @param n quantième du mois (janvier=1...)
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export function joursParMois(n: number, annee = 2022) {
   const joursMois = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
@@ -83,7 +83,7 @@ export function joursParMois(n: number, annee = 2022) {
 /**
  * Renvoie le nom du mois
  * @param n quantième du mois
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export function nomDuMois(n: number) {
   const mois = [

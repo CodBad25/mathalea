@@ -179,7 +179,7 @@ export function creerLutin() {
  * @param {number} d Nombre d'unités choisi pour avancer
  * @param {ObjetLutin} lutin Lutin
  * @example avance(5, lutin) // Fait avancer le lutin de 5 unités
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 // JSDOC Validee par EE Juin 2022
 export function avance(d: number, lutin: ObjetLutin) {
@@ -401,7 +401,7 @@ export function ajouterAy(y: number, lutin: ObjetLutin) {
  * @param {number} tempo Nombre de vibrations
  * @param {ObjetLutin} lutin Lutin
  * @example attendre(5, lutin) // Fait "vibrer" 5 fois le lutin
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 // JSDOC Validee par EE Juin 2022
 export function attendre(tempo: number, lutin: ObjetLutin) {

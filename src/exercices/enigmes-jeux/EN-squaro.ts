@@ -18,7 +18,7 @@ export const interactifReady = true
 export const interactifType = 'custom'
 
 /** Résoudre une grille de SquarO
- * @author Eric Elter
+ * @author Éric Elter
  * Soutenu par Rémi Angot pour l'aide pour le développement avec ApiGeom
  */
 

@@ -38,7 +38,7 @@ export const refs = {
 }
 export const titre = 'Résoudre des problèmes variés'
 /**
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export default class ProblemesVaries extends Exercice {
   constructor() {

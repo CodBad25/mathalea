@@ -23,7 +23,7 @@ export const titre =
  * * Type 3 : ax+b=cx+d
  * * Tous les types
  * @author Rémi Angot
- * Modifications de 4L20 pour n'avoir que des solutions entières : Jean-Claude Lhote
+ * Modifications de 4L20 pour n'avoir que des solutions entières : Jean-claude Lhote
  * Refactorisation et extraction de la fonction génératrice d'équations par Guillaume Valmont le 06/06/2025
  * 4L20-0
  */

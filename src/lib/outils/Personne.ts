@@ -185,7 +185,7 @@ export function prenom(n = 1) {
 
 /**
  * Définit l'objet personne
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * le 14/03/2021
  */
 export class Personne {
@@ -223,7 +223,7 @@ export class Personne {
 
 /**
  * crée une instance de la classe Personne
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * le 14/03/2021
  */
 export function personne({ prenom = '', genre = '', pronom = '' } = {}) {
@@ -232,7 +232,7 @@ export function personne({ prenom = '', genre = '', pronom = '' } = {}) {
 
 /**
  * Crée un tableau de n objet de la classe Personne
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * le 14/03/2021
  */
 export function personnes(n: number) {
@@ -258,7 +258,7 @@ export function personnes(n: number) {
 
 /**
  * Renvoie un objet {prénom,pronom} où pronom='il' ou 'elle'
- *  @author Jean-Claue Lhote
+ *  @author Jean-claude Lhote
  */
 export function prenomPronom(): { prenom: string; pronom: string } {
   const couple = choice(prenoms)

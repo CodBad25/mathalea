@@ -21,7 +21,7 @@ export const dateDePublication = '04/08/2025'
 
 /**
  * Connaître les multiples égalités d'une unité d'aire
- * @author Eric Elter
+ * @author Éric Elter
 
  */
 export const uuid = '61772'

@@ -26,7 +26,7 @@ export const dateDeModifImportante = '26/08/2024'
 
 /**
  * Lire l'abscisse entière d'un point
- * @author Jean-Claude Lhote et Rémi Angot
+ * @author Jean-claude Lhote et Rémi Angot
  * Relecture : Novembre 2021 par EE
  */
 export const uuid = 'acd4a'

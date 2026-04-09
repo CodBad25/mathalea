@@ -38,7 +38,7 @@ function remplaceParZero(chaine: string, place: number) {
 }
 
 /**
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export const uuid = 'f899b'
 

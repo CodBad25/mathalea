@@ -24,7 +24,7 @@ export const dateDePublication = '04/08/2025'
 
 /**
  * Connaître la définition d'une unité de volume
- * @author Eric Elter (sur la base du 6M25-4)
+ * @author Éric Elter (sur la base du 6M25-4)
 
  */
 export const uuid = 'fa88c'

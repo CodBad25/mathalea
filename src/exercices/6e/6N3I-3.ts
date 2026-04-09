@@ -24,7 +24,7 @@ export const titre = 'Comparer deux fractions (dénominateurs multiples)'
  * Comparer deux fractions dont les dénominateurs sont multiples (avec un coefficient paramétrable qui est par défaut inférieur à 11)
  * @author Rémi Angot
  * Ajout du paramètre d'inclusion de nombres négatifs le 14/08/2021 : Guillaume Valmont
- * rendu interactif + AMC par Jean-Claude Lhote
+ * rendu interactif + AMC par Jean-claude Lhote
  */
 export const uuid = '234a7'
 

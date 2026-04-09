@@ -29,7 +29,7 @@ export const dateDeModifImportante = '31/03/2023'
 
 /**
  * Trace jusqu'à 5 droites et demande l'expression de la fonction affine ou linéaire correspondante
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * MAJ de Guillaume Valmont le 31/03/2023 :
  * - Suppression des retours à la ligne en fin de question si non interactif
  * - Suppression des Math.round inutiles

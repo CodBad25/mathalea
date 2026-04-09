@@ -16,7 +16,7 @@ export const uuid = '5b767'
 
 /**
  * Trace une courbe interpolee par portions cosinusoïdales.
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
 
 */
 export function valideListeOfPoints(liste: string): boolean {

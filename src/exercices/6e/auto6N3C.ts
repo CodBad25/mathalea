@@ -1,17 +1,17 @@
-import { shuffle } from '../../lib/outils/arrayOutils'
-import Exercice from '../Exercice'
-import { listeQuestionsToContenu } from '../../modules/outils'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import {
   ajouteChampTexteMathLive,
   remplisLesBlancs,
 } from '../../lib/interactif/questionMathLive'
-import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { miseEnEvidence } from '../../lib/outils/embellissements'
-import FractionEtendue from '../../modules/FractionEtendue'
-import { range1, rangeMinMax } from '../../lib/outils/nombres'
+import { shuffle } from '../../lib/outils/arrayOutils'
 import { texFractionFromString } from '../../lib/outils/deprecatedFractions'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { range1, rangeMinMax } from '../../lib/outils/nombres'
 import { texNombre } from '../../lib/outils/texNombre'
+import FractionEtendue from '../../modules/FractionEtendue'
+import { listeQuestionsToContenu } from '../../modules/outils'
+import Exercice from '../Exercice'
 
 export const titre =
   "Passer, de façon automatique, d'une valeur décimale à une valeur fractionnaire (et réciproquement) sur des valeurs simples"
@@ -26,7 +26,7 @@ export const refs = {
 }
 
 /** Passer, de façon automatique, d\'une valeur décimale à une valeur fractionnaire (et réciproquement) sur des valeurs simples
- * @author Eric Elter
+ * @author Éric Elter
  */
 
 export default class DecimaleAFractionnaire extends Exercice {

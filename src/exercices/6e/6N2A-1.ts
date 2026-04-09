@@ -39,7 +39,7 @@ export const titre =
  * * abc*d0e tables de 2 à 5
  * * abc*de tables de 5 à 9
  * @author Rémi Angot
- * Support des opérations posées en html par Jean-Claude Lhote.
+ * Support des opérations posées en html par Jean-claude Lhote.
  */
 export const uuid = 'cfa6a'
 

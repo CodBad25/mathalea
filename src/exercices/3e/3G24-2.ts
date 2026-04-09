@@ -53,7 +53,7 @@ export const refs = {
 /**
  * calcul de longueurs avec des triangles semblables
  * @author Olivier Mimeau
- * Modification de l'interactif et coloration des réponses par Eric Elter
+ * Modification de l'interactif et coloration des réponses par Éric Elter
  */
 export default class nomExercice extends Exercice {
   constructor() {

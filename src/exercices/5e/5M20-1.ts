@@ -30,7 +30,7 @@ export const interactifType = ['qcm', 'mathLive']
 export const dateDeModifImportante = '10/06/2024'
 /**
  * Calcul de volumes.
- * @author Jean-Claude Lhote (AMC par EE) // modifié par Mireille Gain pour y ajouter les décimaux
+ * @author Jean-claude Lhote (AMC par EE) // modifié par Mireille Gain pour y ajouter les décimaux
  */
 
 export const uuid = '04b0d'

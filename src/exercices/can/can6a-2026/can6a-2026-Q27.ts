@@ -17,7 +17,7 @@ export const refs = {
 }
 
 /**
- * @author Eric Elter
+ * @author Éric Elter
 
 */
 export default class Can20266Q27 extends ExerciceCan {

@@ -14,7 +14,7 @@ export const titre = 'Comparer deux fractions (dénominateurs multiples)'
 export const dateDePublication = '04/11/2022'
 export const dateDeModifImportante = '12/10/2024'
 /**
- * @author Remi Angot repris par Gilles Mora pour une question can
+ * @author Rémi Angot repris par Gilles Mora pour une question can
  */
 export const uuid = 'f3b31'
 

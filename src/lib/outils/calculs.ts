@@ -5,7 +5,8 @@ import Decimal from 'decimal.js'
  * @Example
  * sommeDesChiffres(123)
  * // [ 6, '1+2+3']
- * @author Rémi Angot (Rajout Tableau par EE)
+ * @author Rémi Angot
+ * (Rajout Tableau par EE)
  */ export function sommeDesChiffres(n: number) {
   let nString: string
   if (Array.isArray(n)) nString = n.join('').toString()
@@ -35,7 +36,7 @@ import Decimal from 'decimal.js'
 /**
  * Retourne l'égalité des produits en croix à partir d'un tableau contenant les deux fractions [[a,b],[c,d]] pour a/b=c/d retourne ad=bc
  * Le résultat est un string en mode maths inline
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 
 export function produitsEnCroix([[a, b], [c, d]]: [
@@ -51,7 +52,7 @@ export function produitsEnCroix([[a, b], [c, d]]: [
 /**
  * Retourne la quatrième proportionnelle de 3 nombres en fonction d'une précision demandée
  * Le résultat est un string qui doit être entouré de $ pour le mode mathématique
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 const texNombre = (n: number | Decimal, precision: number) => {
   if (precision === 0) return n.toString()
@@ -89,7 +90,7 @@ export function quatriemeProportionnelle(
  * Extrait le plus grand facteur entier a dont le carré divise n
  * @param {number} n - Le nombre entier dont on veut extraire la racine carrée
  * @returns {[number, number]} - [a, n/a²] où a² est le plus grand carré parfait divisant n
- * @author Jean-Claude Lhote (réimplémentation sans dépendance circulaire)
+ * @author Jean-claude Lhote (réimplémentation sans dépendance circulaire)
  */
 export function extraireRacineCarree(n: number): [number, number] {
   if (n <= 0) return [0, n]

@@ -8,7 +8,7 @@ export const interactifType = 'mathLive'
 
 /**
  * Calculer l'aire de carré, rectangle ou triangle rectangle
- * @author Eric Elter (comme clone de 6M25-2 de Rémi Angot)
+ * @author Éric Elter (comme clone de 6M25-2 de Rémi Angot)
  */
 
 export const uuid = '4b146'

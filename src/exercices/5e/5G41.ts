@@ -42,7 +42,7 @@ export const amcReady = true
 export const amcType = 'AMCHybride'
 /**
  * Construction de quadrilatères avec dispositif d'auto-correction aléatoire
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export const uuid = '37e37'
 

@@ -41,7 +41,7 @@ export const dateDeModifImportante = '03/04/2025'
 
 /**
  * Trouver comment agrandir ou réduire des longueurs d'une figure et construire la figure demandée
- * @author Eric Elter
+ * @author Éric Elter
  */
 export const uuid = '4c6e2'
 

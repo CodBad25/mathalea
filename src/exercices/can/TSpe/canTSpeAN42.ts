@@ -24,7 +24,7 @@ export const refs = {
 
 /**
  * Exercice test
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
 
 */
 export default class IntegraleSurface extends ExerciceSimple {

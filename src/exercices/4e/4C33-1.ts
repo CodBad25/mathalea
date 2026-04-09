@@ -37,7 +37,7 @@ export const dateDeModifImportante = '09/05/2025'
  * * 4 : produit de puissances de même exposant
  * * 5 : quotient de puissances de même exposant
  * * 6 : mélange des quatre autres niveaux
- * @author Sébastien Lozano (Rajout du paramètre 5 par Eric Elter)
+ * @author Sébastien Lozano (Rajout du paramètre 5 par Éric Elter)
  */
 export const uuid = 'bae57'
 
@@ -157,7 +157,6 @@ export default class PuissancesDunRelatif1 extends Exercice {
         exposantInteractif,
         cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       base = randint(2, 9)
       base =

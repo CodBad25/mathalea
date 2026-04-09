@@ -8,7 +8,7 @@ import { texNombre } from '../../../outils/texNombre'
 import type Probleme from '../../Probleme'
 import ProblemeTransfoTransfo from './problemesTransofTransfo'
 /**
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export function courses4(decimal = true): Probleme {
   const personnage = prenomPronom()

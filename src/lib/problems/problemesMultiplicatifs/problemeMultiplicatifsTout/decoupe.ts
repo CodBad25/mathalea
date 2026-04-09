@@ -7,7 +7,7 @@ import { texNombre } from '../../../outils/texNombre'
 import type Probleme from '../../Probleme'
 import ProblemeMultiplicatifs from './problemesMultiplicatifsTout'
 /**
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export function decoupe1(decimal = false): Probleme {
   const objet = choice(['ficelle', 'corde', 'tissu', 'cartoline', 'bois'])

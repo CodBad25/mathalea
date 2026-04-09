@@ -9,6 +9,10 @@ import { createButon, createIButton, createTextInput } from './_components'
 export const uuid = 'video'
 export const titre = 'Vidéo'
 
+/**
+ * @author Rémi Angot
+ */
+
 class ressourceVideo extends Exercice {
   container: HTMLDivElement
   iframe: HTMLIFrameElement

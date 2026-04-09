@@ -11,7 +11,7 @@ import { milieu, pointSurSegment } from './utilitairesPoint'
  * P=tracePointSurDroite(A,d) //Ajoute un trait perpendiculaire à d supposée tracée marquant la posiion du point A
  * P=tracePointSurDroite(A,B) //Ajoute un trait perpendiculaire à la droite (AB) supposée tracée marquant la posiion du point A
  *
- * @author Rémi Angot et Jean-Claude Lhote
+ * @author Rémi Angot et Jean-claude Lhote
  */
 
 export class TracePointSurDroite extends ObjetMathalea2D {

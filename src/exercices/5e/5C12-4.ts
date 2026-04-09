@@ -21,7 +21,7 @@ export const refs = {
   'fr-ch': ['9NO6-6', '10NO6-4'],
 }
 /**
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * Placer des parenthèses mais pas inutilement dans une expression pour qu'elle vérifie une égalité
  */
 

@@ -28,7 +28,9 @@ export const dateDeModifImportante = '14/06/2023'
 
 /**
  * Produit d'un vecteur par un réel
- * @author Stéphan Grignon & Jean-Claude Lhote Interactif Gilles Mora le 11 juin 2024
+ * @author Stéphan Grignon
+ * @author Jean-claude Lhote
+ * Interactif Gilles Mora le 11 juin 2024
  */
 export const uuid = '68693'
 
@@ -140,7 +142,7 @@ export default class Calculercoordonneesproduitvecteurs extends Exercice {
               .produitFraction(k.multiplieEntier(a))
               .ajouteEntier(ux)
               .simplifie()
-            // vy est un entier... pourquoi ne pas utiliser un number (JC Lhote le 21/01/2025 lors du passage à typescript)
+            // vy est un entier... pourquoi ne pas utiliser un number (Jean-claude Lhote le 21/01/2025 lors du passage à typescript)
             //   wy = vy.produitFraction(k.multiplieEntier(a)).ajouteEntier(uy).simplifie()
             wy = vy
               .produitFraction(k.multiplieEntier(a))

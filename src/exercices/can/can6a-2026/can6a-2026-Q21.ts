@@ -17,7 +17,7 @@ export let aQ21 = 4
 export let bQ21 = 15
 
 /**
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
 
 */
 export default class Can20266Q21 extends ExerciceCan {

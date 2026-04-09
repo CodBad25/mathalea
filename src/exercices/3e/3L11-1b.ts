@@ -1,20 +1,20 @@
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { lettreDepuisChiffre } from '../../lib/outils/outilString'
-import Exercice from '../Exercice'
+import { context } from '../../modules/context'
 import {
   listeQuestionsToContenuSansNumero,
   randint,
 } from '../../modules/outils'
-import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
-import { context } from '../../modules/context'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { miseEnEvidence } from '../../lib/outils/embellissements'
+import Exercice from '../Exercice'
 
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import {
   doubleDeveloppement,
   reduirePolynomeDegre3,
 } from '../../lib/outils/ecritures'
-import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { abs } from '../../lib/outils/nombres'
 
 export const titre = 'Effectuer la double distributivité'
@@ -26,7 +26,7 @@ export const amcReady = true
 
 /**
  * Développer des expressions de la forme (ax+b)(cx+d) avec a, b, c et d relatifs et paramétrables ainsi que x
- * @author Eric Elter (Fork 3L11-1 de Jean-Claude Lhote)
+ * @author Éric Elter (Fork 3L11-1 de Jean-claude Lhote)
  */
 export const uuid = '67396'
 
@@ -85,7 +85,6 @@ export default class MultipleDistributivite extends Exercice {
     for (
       let i = 0, reponse, cpt = 0, a, b, c, d;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       a =
         randint(1, 9) *

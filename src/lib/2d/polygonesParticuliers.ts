@@ -78,7 +78,7 @@ export function parallelogramme2points1hauteur(
  * @example rectangle1Point2Longueurs(A, 5, 3, { nom: 'ABCD' })
  * @example rectangle1Point2Longueurs(A, 5, 3, { angleRotation: 45 })
  * @example rectangle1Point2Longueurs(A, 5, 3, { nom: 'ABCD', angleRotation: 45 })
- * @author Guillaume Valmont d'après 6M11 d'Eric Elter
+ * @author Guillaume Valmont d'après 6M11 d'Éric Elter
  */
 export function rectangle1Point2Longueurs(
   A: PointAbstrait,

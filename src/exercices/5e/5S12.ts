@@ -31,7 +31,7 @@ export const dateDeModifImportante = '08/04/2026'
 export const titre = 'Représenter des données par un diagramme'
 
 /**
- * @author Mickael Guironnet - Jean-Claude Lhote
+ * @author Mickael Guironnet - Jean-claude Lhote
  */
 export const uuid = 'd3ca7'
 

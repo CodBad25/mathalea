@@ -28,7 +28,7 @@ export const amcReady = true
  * Compter des cubes dans un empilement de cubes
  * @author Erwan DUPLESSY
  * Source : http://cache.media.education.gouv.fr/file/Geometrie_et_espace/47/1/RA16_C4_MATH_geo_espace_flash_567471.pdf
- * Ajout de la 3D dynamique par Jean-Claude Lhote
+ * Ajout de la 3D dynamique par Jean-claude Lhote
  */
 
 export const uuid = '5f115'

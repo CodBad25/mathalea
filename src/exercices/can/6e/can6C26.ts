@@ -13,7 +13,7 @@ export const dateDePublication = '21/10/2021'
 export const dateDeModifImportante = '03/07/2025'
 /**
  * Modèle d'exercice très simple pour la course aux nombres
- * @author Gilles Mora & Jean-Claude Lhote
+ * @author Gilles Mora & Jean-claude Lhote
  */
 export const uuid = '31096'
 

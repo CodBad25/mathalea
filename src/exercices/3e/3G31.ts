@@ -31,7 +31,7 @@ export const titre =
 export const dateDeModifImportante = '11/04/2023' // Modif consigne et passage à AMCHbride par EE.
 
 /**
- * @author Jean-Claude Lhote à partir de 3G30-1 de Rémi Angot
+ * @author Jean-claude Lhote à partir de 3G30-1 de Rémi Angot
  * 3G31 Exercice remplaçant l'exercice initial utilisant MG32
  * Calculer un angle en utilisant l'un des trois rapport trigonométrique.
  * * Si this.level=4 alors seul le cosinus sera utilisé.

@@ -21,7 +21,7 @@ export const interactifType = 'qcm'
 /**
  * Lire un diagramme en bâtons
  * @author Erwan Duplessy
- * Conversion Amc et interactif par Jean-Claude Lhote
+ * Conversion Amc et interactif par Jean-claude Lhote
  */
 
 export const uuid = '17bce'

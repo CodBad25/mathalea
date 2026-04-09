@@ -6,7 +6,7 @@ export const amcType = 'AMCNum'
 export const titre = 'Appliquer un pourcentage (bis)'
 export const dateDePublication = '13/11/2021'
 /**
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * Complété par des corrections de Gilles Mora
  */
 export const uuid = 'a2bbc'

@@ -14,6 +14,9 @@ export const interactifType = 'qcm'
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = 'Résoudre une équation simple'
+/**
+ * @author Gilles Mora
+ */
 export default class Auto1AC11b extends ExerciceQcmA {
   versionOriginale: () => void = () => {
     this.enonce = "La solution de l'équation  $3x=0$ est : "

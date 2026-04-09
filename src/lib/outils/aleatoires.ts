@@ -11,7 +11,7 @@ import {
  * retourne une liste de combien de nombres compris entre m et n (inclus) en évitant les valeurs de listeAEviter
  * toute la liste des nombres est retournée si combien est supérieur à l'effectif disponible
  * les valeurs sont dans un ordre aléatoire.
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  *
  */
 export function choisitNombresEntreMetN(
@@ -39,7 +39,7 @@ export function choisitNombresEntreMetN(
  * retourne une liste de lettres majuscules (ou minuscule si majuscule=false)
  * il y aura nombre lettres dans un ordre aléatoire
  * les lettres à éviter sont données dans une chaine par exemple : 'QXY'
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export function choisitLettresDifferentes(
   nombre: number,
@@ -64,7 +64,7 @@ export function choisitLettresDifferentes(
  * @param nombreTirages Combien de tirages ?
  * @param nombreFaces Pour spécifier le type de dés
  * @param nombreDes Combien de dés à chaque tirage ?
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export function tirerLesDes(
   nombreTirages: number,
@@ -88,7 +88,7 @@ export function tirerLesDes(
  * @param noteMin
  * @param noteMax
  * @param distincts Si distincts === true, les notes de la liste seront toutes distinctes
- * @author Jean-Claude Lhote et Guillaume Valmont
+ * @author Jean-claude Lhote et Guillaume Valmont
  */
 export function listeDeNotes(
   nombreNotes: number,
@@ -131,7 +131,7 @@ export function listeDeNotes(
  * @param base température médiane
  * @mois indice du mois (janvier=1...)
  * @annee pour déterminer si elle est bissextile ou non
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export function unMoisDeTemperature(
   base: number,

@@ -14,7 +14,8 @@ import {
 } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-export const titre = 'Effectuer des calculs complexes utilisant les priorités opératoires'
+export const titre =
+  'Effectuer des calculs complexes utilisant les priorités opératoires'
 export const dateDePublication = '23/04/2025'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -48,7 +49,7 @@ export const interactifType = 'mathLive'
     Case 12: Fraction complexe avec produits: (a - b × c) / (d × e + f)
  *
  *
- * @author Eric Elter
+ * @author Éric Elter
  */
 export const uuid = '1bf3b'
 export const refs = {

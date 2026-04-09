@@ -13,7 +13,7 @@ export const interactifType = 'mathLive'
 export const amcReady = true
 
 /**
- * @author Eric Elter
+ * @author Éric Elter
 
  */
 export const uuid = '10697'

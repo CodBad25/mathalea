@@ -12,7 +12,7 @@ export const amcType = 'AMCNum'
 export const dateDePublication = '01/07/2022'
 export const dateDeModifImportante = '26/10/2024'
 /**
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * Créé pendant l'été 2021
 
  */

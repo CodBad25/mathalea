@@ -29,7 +29,7 @@ import { pyramide3d } from './Pyramide3dPerspectiveCavaliere'
  * @property {string} colorAxe Couleur de l'axe et du centre de la base du cône : du type 'blue' ou du type '#f15929'
  * @property {string} colorCone Couleur du cône : du type 'blue' ou du type '#f15929'
  * @property {Array} c2d Contient les commandes à tracer en 2d de cette fonction
- * @author Eric Elter (d'après version précédente de Jean-Claude Lhote)
+ * @author Éric Elter (d'après version précédente de Jean-claude Lhote)
  * @class
  */
 
@@ -95,7 +95,7 @@ export class Cone3d extends ObjetMathalea2D {
  * @example cone3d(A,B,v,'red') // Créé un cône de centre A, de sommet B et dont le rayon correspond au vecteur v, la couleur du cône en fil de fer est rouge
  * @example cone3d(A,B,v,'red',true,'green') // Créé un cône de centre A, de sommet B et dont le rayon correspond au vecteur v, la couleur du cône en fil de fer est rouge, l'axe est affiché en vert
  * @example cone3d(A,B,v,'red',true,'green','blue') // Créé un cône de centre A, de sommet B et dont le rayon correspond au vecteur v, la couleur du cône en fil de fer est rouge, l'axe est affiché en vert et la face externe du cône est bleue
- * @author Eric Elter
+ * @author Éric Elter
  * @return {Cone3d}
  */
 export function cone3d(

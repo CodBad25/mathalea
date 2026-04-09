@@ -25,7 +25,7 @@ export const dateDePublication = '30/09/2023'
 
 /**
  * Combien ajouter (ou soustraire) à un nombre pour qu'il devienne multiple d'un autre ?
- * @author Eric ELTER
+ * @author Éric ELTER
  */
 
 export const uuid = '2ae9b'

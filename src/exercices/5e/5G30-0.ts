@@ -20,7 +20,7 @@ export const refs = {
 }
 /**
  * Utiliser le vocabulaire complémentaires et supplémentaires pour qualifier des paires d'angles ou calculer des mesures d'angles
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export default class AnglesEtVocabulaire extends Exercice {
   constructor() {

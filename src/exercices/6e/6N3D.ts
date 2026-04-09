@@ -26,7 +26,7 @@ export const amcReady = true
 export const amcType = 'AMCHybride'
 
 /** Lire une abscisse fractionnaire grâce à des graduations régulièrement espacées
- * @author Eric Elter
+ * @author Éric Elter
  */
 export const uuid = 'cff03'
 

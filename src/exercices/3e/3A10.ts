@@ -26,8 +26,8 @@ export const dateDeModifImportante = '08/10/2025'
 
 /**
  * Division Euclidienne; diviseurs, multiples, critères de divisibilité
- * @author Sébastien Lozano (refactorisé par Eric Elter)
- * Rajout de plusieurs paramètres par Eric Elter le 08/10/2025 et donc changement d'uuid
+ * @author Sébastien Lozano (refactorisé par Éric Elter)
+ * Rajout de plusieurs paramètres par Éric Elter le 08/10/2025 et donc changement d'uuid
  */
 export const uuid = '42d20'
 
@@ -134,7 +134,6 @@ export default class DivisionEuclidienneMultiplesDiviseursCriteres extends Exerc
         texteCorr,
         cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       typeDeQuestion = listeTypeDeQuestions[i]
       texte = ''

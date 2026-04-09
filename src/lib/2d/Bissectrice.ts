@@ -36,7 +36,7 @@ import { pointSurSegment } from './utilitairesPoint'
  * @property {number} epaisseurBissectrice Epaisseur de la bissectrice
  * @property {number} opaciteBissectrice Taux d'opacité de la bissectrice
  * @property {number} pointillesBissectrice Si cette valeur est entre 1 et 5, la bissectrice est en pointillés
- * @author Rémi Angot (amendée par Eric Elter en juin 2022)
+ * @author Rémi Angot (amendée par Éric Elter en juin 2022)
  * @class
  */
 // JSDOC Validee par EE Juin 2022
@@ -156,7 +156,7 @@ export class Bissectrice extends DemiDroite {
  * // Trace, en bleu, la bissectrice de l'angle NRJ, d'épaisseur 1 et d'opacité 100 %, sans autre option
  * @example bissectrice(N,R,J,'blue','red','green',true,true,'||',6,2,0.5,3)
  * // Trace, en rouge, la bissectrice de l'angle NRJ, d'épaisseur 1 et d'opacité 100 %. Les traits de construction sont dessinés en vert avec les marques '||' en rouge.
- * @author Rémi Angot (amendée par Eric Elter en juin 2022)
+ * @author Rémi Angot (amendée par Éric Elter en juin 2022)
  * @return {Bissectrice}
  */
 // JSDOC Validee par EE Juin 2022

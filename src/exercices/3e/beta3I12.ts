@@ -4,10 +4,10 @@ import { listeQuestionsToContenu } from '../../modules/outils'
 
 import Exercice from '../Exercice'
 
+import completerScriptMultiple from './3I12-1'
 import comprendreScriptMultiples from './3I12-2'
 import completerScriptDiviseurs from './3I12-3'
 import comprendreScriptListeMultiples from './3I12-4'
-import completerScriptMultiple from './3I12-1'
 export const titre = "Réaliser différents exercices  d'algorithmique"
 export const uuid = 'f56d8'
 
@@ -37,6 +37,9 @@ const listeParams = [
     ['1-2-3-4', '1-2', '1-2', false, 1],
   ],
 ]
+/**
+ * @author Éric Elter
+ */
 export default class ExosScratch extends Exercice {
   constructor() {
     super()

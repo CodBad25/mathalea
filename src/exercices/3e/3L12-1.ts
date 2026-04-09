@@ -24,7 +24,7 @@ export const dateDeModifImportante = '26/02/2023' // Une date de modification im
 
 /**
  * Développer (ax-b)(ax+b)
- * @author Jean-Claude Lhote (AMC par Eric Elter)
+ * @author Jean-claude Lhote (AMC par Éric Elter)
  * 3L12-1
  */
 export const uuid = 'be157'

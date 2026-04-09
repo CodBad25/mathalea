@@ -4,7 +4,7 @@ import { texNombre } from '../../../outils/texNombre'
 import type Probleme from '../../Probleme'
 import ProblemeMultiplicatifNbParts from './problemesMultiplcatifsNbParts'
 /**
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export function chocolats2(decimal = false): Probleme {
   const nbFois = randint(5, 12)

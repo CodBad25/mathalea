@@ -8,7 +8,7 @@ export const amcType = 'AMCOpen'
 
 /**
  * Travailler les tables de multiplication autrement
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 
 export const uuid = '9e862'

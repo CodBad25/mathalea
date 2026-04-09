@@ -8,7 +8,7 @@ export const amcType = 'AMCNum'
 export const dateDePublication = '28/07/2025'
 
 /**
- * @author Eric Elter
+ * @author Éric Elter
  */
 
 export const uuid = '7d71b'

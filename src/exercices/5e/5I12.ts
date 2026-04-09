@@ -29,7 +29,7 @@ export const refs = {
 /**
  * Calculs avec priorité et Scratch
  * @author Mickael Guironnet
- * Ajout par Eric Elter du paramètre pouvant avoir un résultat sans parenthèses inutiles.
+ * Ajout par Éric Elter du paramètre pouvant avoir un résultat sans parenthèses inutiles.
  */
 export default class CalculsAvecPriorité extends Exercice {
   constructor() {

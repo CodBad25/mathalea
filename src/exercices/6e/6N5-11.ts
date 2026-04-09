@@ -27,7 +27,7 @@ export const dateDeModifImportante = '17/02/2025'
 
 /**
  * Résoudre des problèmes (plus complexes)
- * @author Mikael Guironnet
+ * @author Mickael Guironnet
  * Relecture typographique par Rémi Angot
  */
 export const uuid = 'e906e'

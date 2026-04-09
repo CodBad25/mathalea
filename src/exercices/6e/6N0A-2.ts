@@ -8,7 +8,7 @@ export const dateDePublication = '12/08/2022'
 export const dateDeModifImportante = '26/09/2023'
 /**
  * Travailler les tables d'addition autrement
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 
 export const uuid = '322a0'

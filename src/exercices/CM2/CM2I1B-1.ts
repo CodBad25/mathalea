@@ -52,7 +52,7 @@ export const dateDePublication = '11/04/2021'
  * Note_la_couleur() Exercice inspiré de l'activité débranchée de Jean-Yves Labouche Note La Couleur
  * https://www.monclasseurdemaths.fr/profs/algorithmique-scratch/note-la-couleur/
  * variante de 6I11 avec des dalles de 20 x 20
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export const uuid = 'e380b'
 

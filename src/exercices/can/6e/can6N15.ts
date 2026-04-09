@@ -8,7 +8,7 @@ export const dateDePublication = '14/08/2022'
 /**
  * Écrire en chiffres un nombre donné en lettres
  * variante Can de 6N10
- * Par Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 
 export const uuid = '41030'
@@ -30,5 +30,5 @@ export default class EcrirePetitsNombresEntiersCan extends EcrirePetitsNombresEn
     this.besoinFormulaire2Texte = false // afin de conserver les paramètres fixés ci-dessus et choisis par le programmeur
     this.besoinFormulaire3Numerique = false
     this.besoinFormulaire4CaseACocher = false
-  }  
+  }
 }

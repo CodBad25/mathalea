@@ -16,7 +16,7 @@ export const dateDeModifImportante = '31/08/2022'
 
 /**
  * Calculer des étendues de séries statistiques
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * Ajout d'un paramètre "Mélange" par Guillaume Valmont le 31/08/2022
  * 12/01/2023 Mickael Guironnet Refactoring
  */

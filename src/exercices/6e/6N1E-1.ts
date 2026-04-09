@@ -27,7 +27,7 @@ export const interactifReady = true
 
 /**
  * Lier nombre décimal, fraction spécifique et pourcentage
- * @author Eric Elter
+ * @author Éric Elter
  */
 
 export const uuid = '13f50'
@@ -96,7 +96,6 @@ export default class DecimalFractionPourcentage extends Exercice {
     for (
       let i = 0, texte, texteCorr, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       numerateur = shuffle(numerateur)
       const longueurListe = numerateur.length

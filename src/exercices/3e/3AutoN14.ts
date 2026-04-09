@@ -21,7 +21,7 @@ export const refs = {
   'fr-ch': [],
 }
 /**
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export default class ResoudreEquationAxPlusBegaleC extends ExerciceQcmA {
   private appliquerLesValeurs(a: number, b: number, c: number): void {

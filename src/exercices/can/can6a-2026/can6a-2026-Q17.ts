@@ -15,7 +15,7 @@ export const refs = {
 }
 
 /**
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 const fruit = choice(['pommes', 'poires', 'pêches'])
 export default class Can20266Q17 extends ExerciceCan {

@@ -16,7 +16,7 @@ export const dateDePublication = '12/08/2024'
 
 /**
  * limites de suites (canT)
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  *
  */
 class APlusbBnSurN extends ExerciceSimple {

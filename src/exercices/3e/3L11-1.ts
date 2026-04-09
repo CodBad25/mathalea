@@ -29,7 +29,7 @@ export const dateDeModifImportante = '10/06/2024'
 
 /**
  * Développer des expressions de la forme(ax+ou-b)(cx+ou-d)
- * @author Jean-Claude Lhote  (Amélioration AMC par Eric Elter)
+ * @author Jean-claude Lhote  (Amélioration AMC par Éric Elter)
  */
 export const uuid = '4197c'
 

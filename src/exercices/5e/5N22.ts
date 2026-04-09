@@ -20,7 +20,7 @@ import Exercice from '../Exercice'
 
 export const interactifReady = true
 export const interactifType = 'mathLive'
-export const dateDeModificationImportante = '17/03/2026' // Rendu interactif par Jean-Claude Lhote
+export const dateDeModificationImportante = '17/03/2026' // Rendu interactif par Jean-claude Lhote
 export const titre = 'Résoudre un problème en utilisant des fractions'
 
 /**

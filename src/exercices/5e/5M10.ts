@@ -33,7 +33,7 @@ export const interactifType = 'mathLive'
  *
  * @author Rémi Angot
  * Ajout de la possibilité de choisir le nombre de questions par Guillaume Valmont le 08/05/2022
- * Ajout de l'interactif par Eric Elter le 05/05/2025
+ * Ajout de l'interactif par Éric Elter le 05/05/2025
  **/
 export const uuid = 'd6cd1'
 
@@ -68,7 +68,6 @@ export default class AireDuParallelogramme extends Exercice {
     for (
       let i = 0, texte, texteCorr, c, h, A, B, P, C, I, H, s, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       texteCorr = `Dans chaque parallélogramme, le segment en pointillés est ${texteEnCouleurEtGras('perpendiculaire', 'blue')} à deux côtés opposés, c'est donc une ${texteEnCouleurEtGras('hauteur', 'blue')}.<br>`
       texteCorr += `Pour obtenir l'aire, il faut multiplier cette ${texteEnCouleurEtGras('hauteur', 'blue')} par la longueur de la ${texteEnCouleurEtGras('base', 'blue')} correspondante.`

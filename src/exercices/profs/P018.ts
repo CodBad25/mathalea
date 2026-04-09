@@ -9,7 +9,9 @@ export const refs = {
   'fr-ch': [],
 }
 export const uuid = '75f89'
-
+/**
+ * @author Jean-claude Lhote
+ */
 export default class Pyramides extends Exercice {
   constructor() {
     super()

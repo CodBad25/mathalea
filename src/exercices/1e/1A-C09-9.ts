@@ -1,15 +1,19 @@
 import { choice } from '../../lib/outils/arrayOutils'
-import { ecritureAlgebrique, ecritureAlgebriqueSauf1, reduirePolynomeDegre3, rienSi1 } from '../../lib/outils/ecritures'
+import {
+  ecritureAlgebrique,
+  ecritureAlgebriqueSauf1,
+  reduirePolynomeDegre3,
+  rienSi1,
+} from '../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { randint } from '../../modules/outils'
 import ExerciceQcmA from '../ExerciceQcmA'
 export const dateDePublication = '20/02/2026'
 export const uuid = '6df3d'
-// Author Gilles Mora
+// @Author Gilles Mora
 export const refs = {
   'fr-fr': ['1A-C09-9'],
   'fr-ch': [],
-
 }
 export const interactifReady = true
 export const interactifType = 'qcm'
@@ -17,14 +21,13 @@ export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = 'Réduire une expression littérale avec une parenthèse'
 export default class Puissances extends ExerciceQcmA {
-  
- private appliquerLesValeurs(
+  private appliquerLesValeurs(
     a: number,
     b: number,
     c: number,
     d: number,
     e: number,
-    choixLettre: string
+    choixLettre: string,
   ): void {
     // Résultats corrects : -cx² + (a-d)x + (b-e)
     const reponse1 = -c
@@ -46,12 +49,7 @@ export default class Puissances extends ExerciceQcmA {
     // Erreur 3 : erreur de signe sur les termes en x et constant mais pas sur x²
     const dist3 = `$A=${reduirePolynomeDegre3(0, c, a - d, b - e, choixLettre)}$`
 
-    this.reponses = [
-      bonneReponse,
-      dist1,
-      dist2,
-      dist3,
-    ]
+    this.reponses = [bonneReponse, dist1, dist2, dist3]
 
     // Correction détaillée
     this.correction = `On supprime les parenthèses en changeant les signes dans la deuxième parenthèse (précédée du signe $-$) :<br>`
@@ -59,7 +57,7 @@ export default class Puissances extends ExerciceQcmA {
     this.correction += `On réduit :<br>`
     this.correction += `$A=${miseEnEvidence(reduirePolynomeDegre3(0, reponse1, reponse2, reponse3, choixLettre))}$`
   }
-  
+
   versionOriginale: () => void = () => {
     this.appliquerLesValeurs(3, 5, 2, -4, 7, 'x')
   }

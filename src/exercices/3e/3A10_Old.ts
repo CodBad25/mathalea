@@ -22,7 +22,7 @@ export const titre =
  * Division Euclidienne; diviseurs, multiples, critères de divisibilité
  * Exercice bilan
  * @author Sébastien Lozano
- * Déférencé le le 08/10/2025 par Eric Elter au profit du nouveau 3A10.
+ * Déférencé le le 08/10/2025 par Éric Elter au profit du nouveau 3A10.
  */
 export const uuid = '5b60d'
 
@@ -86,7 +86,6 @@ export default class DivisionEuclidienneMultiplesDiviseursCriteresOld extends Ex
         texteCorr,
         cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       typeDeQuestion = listeTypeDeQuestions[i]
       texte = ''

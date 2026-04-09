@@ -19,7 +19,7 @@ export const amcType = 'AMCHybride'
 export const titre = 'Calculer en respectant les priorités opératoires'
 
 /**
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export const uuid = 'e61fc'
 

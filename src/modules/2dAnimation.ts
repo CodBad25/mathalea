@@ -114,7 +114,7 @@ export function afficherTempo(
  * // Affiche figure1 pendant 1 seconde, puis le cache pendant 4 secondes et recommence ce cycle indéfiniment.
  * @example cacherTempo(figure1,2,8,3)
  * // Affiche figure1 pendant 2 secondes, puis le cache pendant 6 secondes et recommence ce cycle 3 fois en tout.
- * @author Eric Elter
+ * @author Éric Elter
  */
 // JSDOC Validee par EE Juin 2022
 export function cacherTempo(

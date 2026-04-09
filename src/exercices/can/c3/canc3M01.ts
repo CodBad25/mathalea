@@ -13,7 +13,7 @@ export const amcReady = true
 export const amcType = 'AMCOpen'
 
 /**
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export const uuid = 'd0314'
 

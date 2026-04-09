@@ -14,7 +14,7 @@ export const dateDeModifImportante = '25/08/2024'
 /**
  * Somme ou différence de deux fractions de même dénominateur simple, produit par un entier
  * @author Rémi Angot
- * refait en exercice classique par Jean-Claude Lhote
+ * refait en exercice classique par Jean-claude Lhote
  */
 export const uuid = '3a087'
 

@@ -25,7 +25,7 @@ export const dateDePublication = '04/11/2021'
 
 /**
  * Presentation didactique : Par combien diviser un nombre pour que le chiffre des unités devienne le chiffre des ...
- * @author Eric Elter (inspiré par Aude Duvold)
+ * @author Éric Elter (inspiré par Aude Duvold)
 
  */
 export const uuid = '85989'
@@ -78,7 +78,6 @@ export default class DiviserUnNombreParPuissanceDeDix extends Exercice {
     for (
       let i = 0, texte, texteCorr, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       const choixAlea = listeChoixAlea[0]
       listeChoixAlea.splice(0, 1)
@@ -113,7 +112,7 @@ export default class DiviserUnNombreParPuissanceDeDix extends Exercice {
         texteCorr += `Si on veut que son chiffre des ${texteEnCouleurEtGras('unités')} devienne le chiffre des ${texteEnCouleurEtGras(choixUnites[choixAlea])}, on doit diviser le nombre par ${texteEnCouleurEtGras(texNombre(10 ** (3 - choixAlea), 0))}.`
       }
       const aleaFaux = range(6, [3, choixAlea])
-      // enleveElement(aleaFaux) cette commande est incomplète on ne sait pas quel item enlever par conséquent je la supprime ! J-C Lhote le 25/03-2024
+      // enleveElement(aleaFaux) cette commande est incomplète on ne sait pas quel item enlever par conséquent je la supprime ! Jean-claude Lhote le 25/03-2024
       const choixAleaFaux = []
       for (let kk = 0; kk < 4; kk++) {
         choixAleaFaux.push(texNombre(10 ** (3 - aleaFaux[kk]), 0))

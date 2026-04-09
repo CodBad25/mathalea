@@ -32,7 +32,7 @@ export const titre =
   'Utiliser les propriétés des droites parallèles et perpendiculaires'
 
 /**
- * @author Jean-Claude Lhote (EE : pour l'ajout d'AMC et la possibilité de sélectionner différents mélanges)
+ * @author Jean-claude Lhote (EE : pour l'ajout d'AMC et la possibilité de sélectionner différents mélanges)
  * @author Mickael Guironnet (refactoring avec ajout des 4 à 6 et des figures)
  */
 export const uuid = 'c46e8'

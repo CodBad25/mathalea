@@ -16,7 +16,7 @@ export const amcReady = true
 export const amcType = 'AMCNum'
 
 /**
- * @author Jean-Claude Lhote ; Olivier Mimeau (ajout de catégories de nombres)
+ * @author Jean-claude Lhote ; Olivier Mimeau (ajout de catégories de nombres)
  * Créé pendant l'été 2021
  */
 export const uuid = 'c8078'

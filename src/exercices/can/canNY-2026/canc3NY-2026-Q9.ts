@@ -1,9 +1,8 @@
-import ExerciceSimple from '../../ExerciceSimple'
+import Decimal from 'decimal.js'
+import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
-import Decimal from 'decimal.js'
-import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
-import { choice } from '../../../lib/outils/arrayOutils'
+import ExerciceSimple from '../../ExerciceSimple'
 
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 export const titre = 'Compléter une multiplication'
@@ -16,7 +15,7 @@ export const refs = {
 }
 /**
  * Modèle d'exercice très simple pour la course aux nombres
- * @author Eric Elter + Gilles Mora
+ * @author Éric Elter + Gilles Mora
 
 */
 export default class ProduitACompleter2026 extends ExerciceSimple {
@@ -28,14 +27,14 @@ export default class ProduitACompleter2026 extends ExerciceSimple {
     this.formatChampTexte = KeyboardType.clavierDeBase
   }
 
- nouvelleVersion() {
+  nouvelleVersion() {
     const a = 2026
     const b = this.canOfficielle ? 100 : choice([10, 100, 1000])
     const resultat = new Decimal(a).mul(b)
     const choix = this.canOfficielle ? true : choice([true, false])
     this.reponse = texNombre(b, 3)
     this.question = "Compléter l'égalité.<br>"
-    
+
     if (this.interactif) {
       if (choix) {
         this.optionsChampTexte = {
@@ -53,7 +52,7 @@ export default class ProduitACompleter2026 extends ExerciceSimple {
         ? `$${texNombre(a, 0)}\\times \\ldots =${texNombre(resultat, 3)}$`
         : `$\\ldots \\times ${texNombre(a, 0)}=${texNombre(resultat, 3)}$`
     }
-    
+
     this.correction = `$${choix ? `${texNombre(a, 0)}\\times ${miseEnEvidence(this.reponse)} =${texNombre(resultat, 3)}` : `${miseEnEvidence(this.reponse)} \\times ${texNombre(a, 0)}=${texNombre(resultat, 3)} `}$`
     this.canEnonce = "Compléter l'égalité."
     this.canReponseACompleter = `$${choix ? `${texNombre(a, 0)}\\times \\ldots =${texNombre(resultat, 3)}` : `\\ldots \\times ${texNombre(a, 0)}=${texNombre(resultat, 3)} `}$`

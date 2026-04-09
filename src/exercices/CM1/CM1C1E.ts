@@ -5,7 +5,7 @@ export const interactifType = 'mathLive'
 export const titre = 'Multiplier un nombre entier par 10, 100 ou 1 000'
 
 /**
- * @author Eric Elter
+ * @author Éric Elter
  */
 
 export const uuid = 'da45c'

@@ -19,7 +19,7 @@ export const dateDePublication = '25/01/2024'
 /**
  *  :
  * Lire des abscisses sous forme de fractions avec possibilté d'avoir des fractions simplifiées
- * @author Jean-Claude Lhote à partir de 6N21-1 de Mickaël Guironnet
+ * @author Jean-claude Lhote à partir de 6N21-1 de Mickaël Guironnet
  */
 export const uuid = '442f4'
 

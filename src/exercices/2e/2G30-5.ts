@@ -7,7 +7,7 @@ export const interactifReady = true
 export const interactifType = 'mathLive'
 /**
  *
- * @author Stéphane Guyon  + Jean-Claude Lhote (interactif) + Gilles Mora
+ * @author Stéphane Guyon  + Jean-claude Lhote (interactif) + Gilles Mora
  */
 export const uuid = 'd1da3'
 

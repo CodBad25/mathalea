@@ -46,7 +46,7 @@ export const dateDeModifImportante = '04/04/2024'
 
 /**
  * Résoudre des problèmes dont certaines informations sont inutiles.
- * @author Eric Elter
+ * @author Éric Elter
 
  */
 export const uuid = '529ad'

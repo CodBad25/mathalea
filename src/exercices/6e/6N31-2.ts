@@ -19,7 +19,7 @@ export const interactifType = 'mathLive'
 /**
  * * Ordre de grandeur d'une multiplication d'entiers ou de décimaux
  * * 6N31-2
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 
 export const dateDePublication = '06/01/2025'

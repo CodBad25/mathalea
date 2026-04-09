@@ -24,7 +24,9 @@ export const dateDeModifImportante = '24/06/2024'
 
 /**
  * Calcul de moyennes de série statistiques
- * @author Jean-Claude Lhote et Guillaume Valmont (Interactif et AMC par EE)
+ * @author Jean-claude Lhote
+ * @author Guillaume Valmont
+ *  (Interactif et AMC par EE)
  * 12/01/2023 : Mickael Guironnet Refactoring (remodifié par EE car il n'y avait plus de correction et l'interactif ne fonctionnait plus)
  */
 export const uuid = 'ab91d'

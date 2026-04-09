@@ -18,7 +18,7 @@ export const refs = {
 }
 
 /**
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * Calcule les pièces qui font la somme cible et retourne le résultat encodé en base n
  */
 export default class Can2026CE2Q16 extends ExerciceCan {

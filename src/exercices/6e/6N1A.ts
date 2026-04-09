@@ -23,8 +23,8 @@ export const dateDeModifImportante = '08/09/2025'
 /**
  * Des questions sur le nombre ou le chiffre de centaines, de dizaines, de dixièmes, de centièmes...
  * @author Rémi Angot
- * Ajout de l'interactivité, de l'export AMC et du paramétrage par Jean-Claude Lhote (15/10/2021)
- * Rajout d'un paramètre par Eric Elter (08/09/2025)
+ * Ajout de l'interactivité, de l'export AMC et du paramétrage par Jean-claude Lhote (15/10/2021)
+ * Rajout d'un paramètre par Éric Elter (08/09/2025)
  */
 export const uuid = '6ea89'
 

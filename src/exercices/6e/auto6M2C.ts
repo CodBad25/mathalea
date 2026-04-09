@@ -21,7 +21,7 @@ export const dateDePublication = '20/04/2025'
 export const dateDeModifImportante = '26/04/2025'
 
 /**
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * Ajout du choix des unités par Guillaume Valmont le 26/04/2025
  */
 export const uuid = '83be3'

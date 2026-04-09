@@ -38,7 +38,7 @@ export const dateDePublication = '19/04/2022' // La date de publication initiale
 
 /**
  *
- * Gilles Mora
+ * @author Gilles Mora
 
  */
 

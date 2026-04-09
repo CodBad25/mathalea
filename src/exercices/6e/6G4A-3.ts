@@ -5,7 +5,7 @@ export const titre = 'Connaître le vocabulaire sur les angles'
 export const dateDePublication = '05/08/2025'
 
 /**
- * @author Eric Elter
+ * @author Éric Elter
  */
 
 export const uuid = '04ea4'

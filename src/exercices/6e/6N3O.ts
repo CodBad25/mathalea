@@ -22,7 +22,7 @@ export const interactifType = 'mathLive'
 export const dateDePublication = '22/07/2025'
 
 /** Comprendre le sens d'un pourcentage
- * @author Eric Elter
+ * @author Éric Elter
  */
 
 export const uuid = '44e23'

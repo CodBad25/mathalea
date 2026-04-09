@@ -69,7 +69,7 @@ export const refs = {
 
 /**
  * Aléatoirisation du sujet 2023 de CAN 5e
- * Gilles Mora
+ * @author Gilles Mora
 
  */
 

@@ -45,7 +45,7 @@ export const dateDePublication = '20/08/2025'
 
 /**
  * Multiplication d'un nombre décimal dans différentes écritures par 10, 100, 1000
- * @author Eric Elter (sur la base de 6C30-1 mais avec nx programmes)
+ * @author Éric Elter (sur la base de 6C30-1 mais avec nx programmes)
  *
  */
 export const uuid = 'cc3a9'
@@ -70,7 +70,7 @@ export const refs = {
  *
  * @throws Si `n` vaut 0 et aucune limite n'est fournie, la fonction entre dans une boucle infinie.
  *
- * @author Eric Elter
+ * @author Éric Elter
  *
  * @example
  * ```ts

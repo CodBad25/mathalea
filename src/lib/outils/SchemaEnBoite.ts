@@ -4,7 +4,7 @@ import './ShemasEnBoite.css'
 import { texNombre } from './texNombre'
 
 /**
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 
 type AccoladeType = {

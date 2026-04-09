@@ -13,7 +13,7 @@ export class Angle {
    * @param {string} [param.tan] valeur de la tangente sous forme de string
    * @param {string} [param.radians] mesure de l'angle en radians sous forme de string
    * @example const a = new Angle({ degres: '90', radians: '\\dfrac{5\\pi}{2}' }) => {degres: '90', cos: '0', sin: '1', tan: '\\infin', radians: '\\dfrac{5\\pi}{2}'}
-   * @author Jean-Claude Lhote
+   * @author Jean-claude Lhote
    */
   degres: string
   cos: string | string[]
@@ -161,7 +161,7 @@ export function angleModulo(angle: Angle, k: number) {
  * @param {object} param
  * @param {number[]} [param.modulos] liste des k à utiliser pour ajouter les angles modulo 2k*Pi
  * @returns {{liste1: string[], liste2: string[], liste3: string[]}} liste1, liste2, liste3 les listes (niveau2 contient niveau1 et niveau3 contient niveau2)
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 
 export function valeursTrigo({ modulos = [-1, 1] }) {

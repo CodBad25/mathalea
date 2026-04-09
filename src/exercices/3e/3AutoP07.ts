@@ -63,7 +63,7 @@ const populations = [
   },
 ]
 /**
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export default class PourcentageComplementaire extends ExerciceSimple {
   constructor() {

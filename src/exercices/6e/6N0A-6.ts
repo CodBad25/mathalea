@@ -109,9 +109,9 @@ export const etiquettesNumeration = [
  * Écrire en chiffres ou en lettres un nombre entier inférieur à 1 000 000.
  * Avec des paramètres sur le nombre de chiffres des nombres voulus
  * Avec des paramètres sur la présence obligatoire de nombres avec 80 (et ses copains qui n'aiment pas mettre de S dans leur vin) et avec 100 (et ses copains comme ceux de 80)
- * @author Eric Elter
+ * @author Éric Elter
  * Relecture : Novembre 2021 par EE
- * Ajout d'une version drag & drop pour la version 'en lettres' par Jean-Claude Lhote
+ * Ajout d'une version drag & drop pour la version 'en lettres' par Jean-claude Lhote
  */
 export const uuid = '0688e'
 

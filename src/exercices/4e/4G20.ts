@@ -225,7 +225,7 @@ export function pythagoreCompare(input: string, goodAnswer: string) {
 
 /**
  * Exercices sur le théorème de Pythagore avec MathALEA2D
- * @author Rémi Angot (Factorisation de la rédaction de Pythagore par Eric Elter )
+ * @author Rémi Angot (Factorisation de la rédaction de Pythagore par Éric Elter )
  */
 export const uuid = 'bd660'
 

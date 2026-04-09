@@ -22,7 +22,7 @@ export const refs = {
   'fr-ch': [],
 }
 /**
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * Cet exercice utilise le simulateur Scratch (ScratchSimulator) couplé à l'interpréteur Scratch (ScratchInterpreter) de la librairie maison.
  * Il propose à l'élève de choisir parmi 5 programmes différents celui ou ceux qui permettent d'obtenir un résultat donné
  *  - faire avancer le lutin d'une certaine distance

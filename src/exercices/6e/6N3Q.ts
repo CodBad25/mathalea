@@ -22,7 +22,7 @@ export const titre = "Calculer mentalement le pourcentage d'un nombre"
 
 /**
  * Calculer 10, 20, 30, 40 ou 50% d'un nombre
- * @author Rémi Angot + Jean-Claude Lhote
+ * @author Rémi Angot + Jean-claude Lhote
  * Ajout niveau 2 + 1 correction différente cgrolleau 03/2021
  */
 export const uuid = '66756'

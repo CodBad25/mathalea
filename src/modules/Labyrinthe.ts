@@ -22,7 +22,7 @@ export type LabyrintheChemin = [number, number][] // Un chemin est un tableau de
  * @param {number} [parametres.nbLignes = 3]
  * @param {number} [parametres.nbColonnes = 6]
  * @param {number} [parametres.scaleFigure = 1]
- * @author Jean-Claude Lhote & Eric Elter (améliorée par EE pour choisir le nombre de lignes et de colonnes)
+ * @author Jean-claude Lhote & Éric Elter (améliorée par EE pour choisir le nombre de lignes et de colonnes)
  * @author MGu (pour la fonction runAStar) car si le tableau est trop grand, le cout de calcul est exponentiel donc remplacer par reunAStar qui est un algorithme de recherche de chemin
  * Publié le 6/12/2020 (Modifié le 05/10/2022)
  * @class
@@ -209,7 +209,7 @@ export class Labyrinthe {
      * @memberof Labyrinthe
      * @param {number} niveau Niveau de résolution du labyrinthe entre 1 (le plus lent) et 6 (le plus rapide).
      * @example monCheminChoisi = laby.traceChemin(3) // Renvoie un chemin parmi tous ceux possibles, du labyrinthe laby, dont le niveau de rapidité est 3
-     * @author Jean-Claude Lhote (et EE pour la partie "choix du nombre de lignes et de colonnes")
+     * @author Jean-claude Lhote (et EE pour la partie "choix du nombre de lignes et de colonnes")
      * @return {Array.number[]}
      */
     // JSDOC Validee par EE Octobre 2022
@@ -250,7 +250,7 @@ export class Labyrinthe {
      * @example lesMursDeMonLabyrinthe = laby.construitMurs(monCheminChoisi)
      * // Renvoie les murs du labyrinthe laby correspondants au chemin monCheminChoisi.
      * // Penser à faire mathalea2d(param, lesMursDeMonLabyrinthe) ensuite
-     * @author Jean-Claude Lhote (et EE pour la partie "choix du nombre de lignes et de colonnes")
+     * @author Jean-claude Lhote (et EE pour la partie "choix du nombre de lignes et de colonnes")
      * @return {ObjecMathalea2d[]}
      */
     // JSDOC Validee par EE Octobre 2022
@@ -389,7 +389,7 @@ export class Labyrinthe {
      * @param {Array.number[]} monchemin Un chemin choisi parmi tous les chemins possibles.
      * @param {string} [color = 'brown'] Couleur du tracé de la correction : du type 'blue' ou du type '#f15929'
      * @example laCorrectionDeMonLabyrinthe = laby.traceChemin(monCheminChoisi) // Renvoie les traits signifiant le chemin correction du labyrinthe laby correspondant au chemin monCheminChoisi
-     * @author Jean-Claude Lhote (et EE pour la partie "choix du nombre de lignes et de colonnes")
+     * @author Jean-claude Lhote (et EE pour la partie "choix du nombre de lignes et de colonnes")
      * @return {ObjecMathalea2d[]}
      */
     // JSDOC Validee par EE Octobre 2022
@@ -434,7 +434,7 @@ export class Labyrinthe {
      * @param {number} taille Taille des écritures dans les cases du labyrinthe
      * @example aVotrePlace = laby.placeNombres(monCheminChoisi,reponsesOK,reponsesPasOK,1)
      * // Place les bonnes (reponsesOK) et les mauvaises (reponsesPasOK) réponses dans les cases adéquates du labyrinthe laby correspondant au chemin monCheminChoisi
-     * @author Jean-Claude Lhote (et EE pour la partie "choix du nombre de lignes et de colonnes")
+     * @author Jean-claude Lhote (et EE pour la partie "choix du nombre de lignes et de colonnes")
      * @return {ObjecMathalea2d[]}
      */
     // JSDOC Validee par EE Octobre 2022
@@ -533,7 +533,7 @@ export class Labyrinthe {
  * @param {number} [parametres.scaleFigure = 1]
  * @example laby = labyrinthe ({ nbLignes: 4, nbColonnes: 5 })
  * // Crée l'ensemble de chemins possibles dans un labyrinthe à 4 lignes et 5 colonnes
- * @author Jean-Claude Lhote & Eric Elter (améliorée par EE pour choisir le nombre de lignes et de colonnes)
+ * @author Jean-claude Lhote & Éric Elter (améliorée par EE pour choisir le nombre de lignes et de colonnes)
  * @return {Labyrinthe}
  */
 // JSDOC Validee par EE Septembre 2022

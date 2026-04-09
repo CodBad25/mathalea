@@ -5,7 +5,7 @@ import { randint } from '../../modules/outils'
 import ExerciceQcmA from '../ExerciceQcmA'
 export const dateDePublication = '19/12/2025'
 export const uuid = '4fa90'
-// Author Gilles Mora
+// @Author Gilles Mora
 export const refs = {
   'fr-fr': ['1A-C05-4'],
   'fr-ch': [],
@@ -16,7 +16,7 @@ export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = 'Déterminer un ordre de grandeur avec un pourcentage'
 export default class auto1AC5d extends ExerciceQcmA {
-   private appliquerLesValeurs(
+  private appliquerLesValeurs(
     prixInitial: number,
     remise: number,
     contexte: 'voiture' | 'maison',

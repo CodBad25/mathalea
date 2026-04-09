@@ -20,7 +20,7 @@ export const amcType = 'AMCOpen'
 
 /**
  * Construire un angle
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export const uuid = '34e3c'
 

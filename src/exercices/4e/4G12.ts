@@ -51,7 +51,7 @@ export const dateDePublication = '3/12/2021'
 /**
  * À partir de la figure 0, l'idée est de trouver un chemin qui mène à la figure 28 par une série
  * de transformations entre deux figures strictement voisines.
- * @author : Jean-Claude Lhote (et modifié par Eric Elter)
+ * @author : Jean-claude Lhote (et modifié par Éric Elter)
  */
 
 export const uuid = '4ffdb'

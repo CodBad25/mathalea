@@ -35,7 +35,7 @@ export const refs = {
 }
 /**
  * Exercice de recomposition décimale avec des solides 3D
- * @author Jean-Claude Lhote et Eric Elter
+ * @author Jean-claude Lhote et Éric Elter
  */
 export default class RecompositionDecimale extends Exercice {
   constructor() {

@@ -16,7 +16,7 @@ export const interactifReady = true
 
 /**
  * Un nombre est donné par le produit d'un décimal par une puissance de dix, il faut l'écrire en notation scientifique
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export const uuid = '762fe'
 

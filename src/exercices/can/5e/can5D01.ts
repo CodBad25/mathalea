@@ -19,7 +19,7 @@ export const amcReady = true
 export const amcType = 'AMCNum'
 export const dateDeModifImportante = '08/02/2022' // Une date de modification importante au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
 /**
- * @author Jean-Claude Lhote & Gilles Mora
+ * @author Jean-claude Lhote & Gilles Mora
  * Créé pendant l'été 2021
  */
 export const uuid = 'd8797'

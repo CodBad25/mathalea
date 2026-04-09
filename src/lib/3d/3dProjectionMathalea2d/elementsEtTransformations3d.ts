@@ -29,7 +29,7 @@ import { matriceMultiply, normalize, Vecteur, vecteur } from '../../2d/Vecteur'
 /**
  * LE POINT
  *
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * PointAbstrait de l'espace défini par ses trois coordonnées (Si deux sont données seulement, le point est dans le plan XY)
  * le paramètre visible définit si ce point est placé devant (par défaut) ou derrière une surface. Il sera utilisé pour définir la visibilité des arêtes qui en partent
  */
@@ -86,7 +86,7 @@ export function point3d(
 /**
  * LE VECTEUR
  *
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * le vecteur3d est sans doute l'objet le plus important de cette base d'objets
  * On les utilise dans tous les objets complexes et dans toutes les transformations
  * Ils servent notament à définir la direction des plans.
@@ -234,7 +234,7 @@ export function droite3d(point3D: Point3d, vecteur3D: Vecteur3d) {
  * @param {number} [angledepart = context.anglePerspective] Angle en degré entre le vecteur rayon depuis le centre et le point de début de tracé du demi-cercle
  * @example demicercle3d(A,n,v) // Crée un demi-cercle noir en trait plein de centre A, de vecteur normal v, dont le rayon correspond au vecteur v et le sens est direct
  * @example demicercle3d(A,n,v,'indirect',true,'red',0) // Crée un demi-cercle rouge en pointillés de centre A, de vecteur normal v, dont le rayon correspond au vecteur v, le sens est direct et l'angle de départ est 0°.
- * @author Eric Elter (d'après version précédente de Jean-Claude Lhote)
+ * @author Éric Elter (d'après version précédente de Jean-claude Lhote)
  * @return {demiCercle}
  */
 
@@ -317,7 +317,7 @@ export function arc3d(
 /**
  * LE CERCLE
  *
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  *
  * C'est la version entière du cercle : soit totalement visible, soit totalement caché.
  * visible est un booléen
@@ -354,7 +354,7 @@ export function cercle3d(
 /**
  * LE POLYGONE
  *
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * usages : polygone3d([A,B,C,...],color) ou polygone3d(A,B,C...) où A,B,C ... sont des point3d. color='black' par défaut.
  */
 export class Polygone3d {
@@ -420,7 +420,7 @@ export function polygone3d(
 /**
  * LA ROTATION VECTORIELLE
  *
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * Cette rotation se distingue de la rotation d'axe (d) par le fait qu'on tourne autour d'une droite vectorielle
  * Elle sert à faire tourner des vecteurs essentiellement.
  * Si on l'utilise sur un point, alors il tournera autour d'une droite passant par l'origine.
@@ -462,7 +462,7 @@ export function rotationV3d<T extends Point3d | Vecteur3d>(
 /**
  * LA ROTATION D'AXE UNE DROITE
  *
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  *
  * @param {Point3d} point3D Pour l'instant on ne fait tourner qu'un point3d
  * Remarque : ça n'a aucun sens de faire tourner un vecteur autour d'une droite particulière, on utilise la rotation vectorielle pour ça.
@@ -499,7 +499,7 @@ export function rotation3d<T extends Point3d | Vecteur3d | Polygone3d>(
 }
 
 /**
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * Crée une flèche en arc de cercle pour montrer un sens de rotation autour d'un axe 3d
  * cette flèche est dessinée dans le plan orthogonal à l'axe qui passe par l'origine de l'axe
  * le rayon est ici un vecteur 3d qui permet de fixer le point de départ de la flèche par translation de l'origine de l'axe
@@ -559,7 +559,7 @@ export function sensDeRotation3d(
 /**
  * LA TRANSLATION
  *
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * @param {Point3d | Polygone3d} point3D Pour l'instant on ne translate qu'un point3d ou un polygone3d
  * @param {Vecteur3d} vecteur3D
  */
@@ -588,7 +588,7 @@ export function translation3d<T extends Point3d | Polygone3d>(
 }
 /**
  * L'homothetie
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * La même chose qu'ne 2d, mais en 3d...
  * Pour les points3d les polygones ou les vecteurs (multiplication scalaire par rapport)
  */

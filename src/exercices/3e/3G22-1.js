@@ -21,7 +21,7 @@ export const dateDeModifImportante = '02/04/2023' // Une date de modification im
 
 /**
  *
- * @author Stéphane Guyon rendu interactif par JC Lhote + utilisation de decimal.js
+ * @author Stéphane Guyon rendu interactif par Jean-claude Lhote + utilisation de decimal.js
  * Choix des types de problèmes par Guillaume Valmont le 02/04/2023
 
  */

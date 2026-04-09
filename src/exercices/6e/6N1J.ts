@@ -6,7 +6,7 @@ export const interactifType = 'mathLive'
 
 /**
  * * Ranger une liste de nombres décimaux
- * @author Eric Elter
+ * @author Éric Elter
  */
 
 export const uuid = '15ece'

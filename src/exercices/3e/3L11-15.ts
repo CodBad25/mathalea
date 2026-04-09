@@ -20,7 +20,7 @@ export const dateDePublication = '04/09/2024'
 /**
  * Développer une identité remarquable
  * @author Nathan Scheinmann
- * Eric Elter a modifié le code pour qu'il soit exploitable en France le 09/08/2025 (omission de le 4ème IR)
+ * Éric Elter a modifié le code pour qu'il soit exploitable en France le 09/08/2025 (omission de le 4ème IR)
  */
 
 export const uuid = '6e472'

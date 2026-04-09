@@ -3,7 +3,7 @@ import { Plot } from './Plot'
 import { pointAbstrait } from './PointAbstrait'
 import { texteParPoint } from './textes'
 /**
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export class PieceBuilder {
   constructor(public valeur: number) {

@@ -30,7 +30,7 @@ export const titre = 'Construire par translation avec cible auto-corrective'
 export const dateDePublication = '23/03/2026'
 
 /**
- * @author Jean-Claude Lhote (sur une base Guillaume Valmont (4G10-2))
+ * @author Jean-claude Lhote (sur une base Guillaume Valmont (4G10-2))
  */
 export const uuid = '6a2de'
 

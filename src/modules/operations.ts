@@ -1187,7 +1187,7 @@ function multiplicationPosee(
 /**
  *
  * Pose une opération
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * les types possibles sont : addition, soustraction, multiplication, division, additiond, soustractiond, multiplicationd, divisiond
  * Le paramètre précision précise pour divisiond, le nombre de chiffres après la virgule dans le quotient.
  */

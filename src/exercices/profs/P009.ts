@@ -16,7 +16,7 @@ export const refs = {
 export const uuid = '691a7'
 
 /**
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * On donne les fréquences d\'apparition de chaque face d\'un dé pour 10000 lancers.
  * L\'élève interprète les résultats en les comparant aux probabilités théoriques.
  */

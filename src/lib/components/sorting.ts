@@ -313,7 +313,7 @@ function compareAlphaNumeric(a: string, b: string, order: Order): number {
  * @param {'asc' | 'desc' | 'ascStringdescNumber'} order ordre de tri (ascendant ou descendant)
  * ascStringdescNumber : ascendant pour les strings et descandants pour les nombres (car les nombres sont des années)
  * @returns {ResourceAndItsPath[]} la liste triée
- * @author Eric Elter
+ * @author Éric Elter
  */
 
 // Exemple d'utilisation : Ne pas supprimer car c'est pratique pour des tests.

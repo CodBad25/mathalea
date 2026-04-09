@@ -19,7 +19,7 @@ import { texNombre } from '../outils/texNombre'
  * Accepte une série de nombres ou une série de paires [valeur, effectif]
  * Fournit des méthodes pour calculer la moyenne, la variance, l'écart-type, la médiane, le mode, le min, le max, l'étendue et le coefficient de variation
  * Inclut également des méthodes statiques pour effectuer les mêmes calculs sur un tableau de nombres
- * @author Jean-Claude Lhote (aidé par GPT-5 mini)
+ * @author Jean-claude Lhote (aidé par GPT-5 mini)
  */
 export default class Stat {
   serie: (number | string)[]

@@ -21,7 +21,7 @@ export const dateDePublication = '21/07/2025'
 export const dateDeModificationImportante = '02/04/2026'
 
 /** Ordonner une liste de nombres écrits sous forme de fractions ou de nombres mixtes
- * @author Eric Elter
+ * @author Éric Elter
  */
 
 export const uuid = '98294'

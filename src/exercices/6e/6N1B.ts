@@ -30,7 +30,7 @@ export const dateDeModifImportante = '05/09/2025'
 /**
  * Connaitre les liens entre les unités de numération : unité, dizaine, centaine, millier, dixième, centième, millième
  *
- * @author Eric Elter
+ * @author Éric Elter
 
  */
 export const uuid = 'bc1e0'
@@ -140,7 +140,6 @@ export default class NombreDecimalOraliseDeDifferentesManieres extends Exercice 
     for (
       let i = 0, texte, texteCorr, cpt = 0;
       i < Math.min(this.nbQuestions, binomesConversion.length) && cpt < 50;
-
     ) {
       const reponse = Math.pow(
         10,

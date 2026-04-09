@@ -20,7 +20,7 @@ export const dateDeModifImportante = '26/09/2024'
 
 /**
  * Transformer un programme de calcul avec les 4 opérations dans un ordre aléatoire en un seul calcul.
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export const uuid = '3406a'
 

@@ -18,7 +18,7 @@ export const dateDeModifImportante = '10/01/2024'
  * Déterminer une valeur approchée d'un pourcentage à l'aide de la calculatrice
  * @author Rémi Angot
  * Ajout de l'interactivité par Guillaume Valmont le 17/03/2022
- * Amélioration de l'interactivité par Eric Elter le 10/01/2024
+ * Amélioration de l'interactivité par Éric Elter le 10/01/2024
  */
 export const uuid = '6b534'
 

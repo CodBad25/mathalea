@@ -4,7 +4,7 @@ import { randint } from '../../modules/outils'
 import ExerciceQcmA from '../ExerciceQcmA'
 export const dateDePublication = '10/08/2025'
 export const uuid = 'b37ab'
-// Author Stéphane Guyon
+// @Author Stéphane Guyon
 export const refs = {
   'fr-fr': ['1A-C03-4'],
   'fr-ch': [],
@@ -40,7 +40,9 @@ export default class Auto1AC3d extends ExerciceQcmA {
         \\end{aligned}$<br>`
 
       this.reponses = [
-       difference===1 ?  `$\\left(ab\\right)^${n}\\times b$` :  `$\\left(ab\\right)^${n}\\times b^{${difference}}$`,
+        difference === 1
+          ? `$\\left(ab\\right)^${n}\\times b$`
+          : `$\\left(ab\\right)^${n}\\times b^{${difference}}$`,
         `$\\left(ab\\right)^{${n + k}}$`,
         `$\\left(ab\\right)^{${n * k}} $`,
         'Aucune de ces propositions.',

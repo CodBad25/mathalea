@@ -14,7 +14,7 @@ export const interactifReady = true
 
 /**
  * * Remplir un tableau en utilisant la notion d'opposé
- * @author Sébastien Lozano - Eric Elter (pour la partie interactive)
+ * @author Sébastien Lozano - Éric Elter (pour la partie interactive)
  * Ajout d'un paramètre pour afficher quelques fois le signe des nombres positifs par Guillaume Valmont le 26/11/2021
  */
 
@@ -47,7 +47,6 @@ export default class TrouverOppose extends Exercice {
     for (
       let i = 0, texte, texteCorr, indice = 0, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       // une fonction pour générer un relatif et son opposé
       const nbRelatifEtSonOppose = function (signe: boolean) {

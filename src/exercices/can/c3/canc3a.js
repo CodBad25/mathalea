@@ -30,7 +30,7 @@ export const amcType = 'AMCNum'
 
 /**
  * Ensemble de questions pour course aux nombres
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
 
  */
 export const uuid = '32a0f'

@@ -24,8 +24,8 @@ export const interactifType = 'tableur'
 
 /*
  * Programmer des calculs sur tableur : New programme de 6eme 2025
- * @author Jean-Claude Lhote
- * revisité par Jean-Claude Lhote (intoduction du custom élément sheet-element) et modification de la librairie utilisée.
+ * @author Jean-claude Lhote
+ * revisité par Jean-claude Lhote (intoduction du custom élément sheet-element) et modification de la librairie utilisée.
  */
 
 export const uuid = 'ae07e'

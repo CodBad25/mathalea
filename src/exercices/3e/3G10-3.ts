@@ -18,7 +18,7 @@ export const titre =
 /**
  * Construction d'images par rotation avec dispositif d'auto-correction aléatoire
  * Ref 3G10-3
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * Publié le 30/11/2020
  */
 export const uuid = '19ce6'

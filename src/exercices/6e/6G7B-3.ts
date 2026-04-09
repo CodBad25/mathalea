@@ -26,7 +26,7 @@ export const titre =
 /**
  * Construction de symétrique avec dispositif d'auto-correction aléatoire
  * Ref 6G24-3
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * Publié le 30/11/2020
  */
 export const uuid = '60e16'

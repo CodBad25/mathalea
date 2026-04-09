@@ -28,7 +28,7 @@ function ajoutePlusSiPasMoins(str: string): string {
 }
 
 /**
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export default class NomExercice extends ExerciceSimple {
   constructor() {

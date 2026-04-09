@@ -1,8 +1,8 @@
-import Exercice from '../Exercice'
-import figureApigeom from '../../lib/figureApigeom'
-import { listeQuestionsToContenu } from '../../modules/outils'
 import Figure from 'apigeom'
+import figureApigeom from '../../lib/figureApigeom'
 import { choice } from '../../lib/outils/arrayOutils'
+import { listeQuestionsToContenu } from '../../modules/outils'
+import Exercice from '../Exercice'
 
 export const titre = 'TITRE'
 

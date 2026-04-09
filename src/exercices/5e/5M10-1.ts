@@ -38,7 +38,7 @@ export const dateDeModifImportante = '18/06/2024'
  *
  * Une figure dynamique est disponible sur laquelle on peut déplacer le pied de la hauteur.
  *
- * @author Rémi Angot conversion mathalea2d Jean-Claude Lhote
+ * @author Rémi Angot conversion mathalea2d Jean-claude Lhote
  * Ajout de la possibilité de choisir le nombre de questions par Guillaume Valmont le 08/05/2022
  */
 export const uuid = '06b1a'

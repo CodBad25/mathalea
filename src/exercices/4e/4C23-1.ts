@@ -29,7 +29,7 @@ export const interactifType = 'mathLive'
  2 : Fractions standards, tout enchaînement d'opérations possibles
  3 : Des expressions pièges démarrant sur une opération prioritaire ou pas
  4 : Uniquement des expressions pièges démarrant sur une opération non prioritaire`
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export const uuid = '18ddd'
 

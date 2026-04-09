@@ -16,7 +16,7 @@ export const amcReady = true
 export const amcType = 'AMCNum'
 export const dateDeModifImportante = '23/07/2025'
 /**
- * @author Jean-Claude Lhote avec Gilles Mora
+ * @author Jean-claude Lhote avec Gilles Mora
   * Créé pendant l'été 2021
 
 */

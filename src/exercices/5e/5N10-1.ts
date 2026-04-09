@@ -16,7 +16,7 @@ export const dateDePublication = '15/03/2025'
 
 /**
  * écrire une écriture fractionnaire présentant des numérateurs et dénominateurs décimaux sous forme de fraction et éventuellement simplifier
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export const uuid = '9cb7e'
 

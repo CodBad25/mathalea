@@ -25,7 +25,7 @@ export const dateDeModifImportante = '07/06/2023' // par EE : QCM interactif, no
 
 /**
  * fonction servant à plusieurs exercices autour du cube et du pavé droit
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export default class Solide6e extends Exercice {
   constructor() {

@@ -25,7 +25,7 @@ export const dateDeModifImportante = '5/04/2026' // Passage à MultiMathfield
 /**
  * Exercice calqué sur lire abscisse fractionnaire sauf que le résultat attendu est en écriture décimale.
  * demis, quart, cinquièmes dixièmes et centièmes
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
 
  */
 export const uuid = '8418f'

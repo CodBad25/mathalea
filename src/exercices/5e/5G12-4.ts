@@ -31,7 +31,7 @@ export const dateDePublication = '18/05/2025'
 
 /**
  * Dire si une figure possède un centre de symétrie.
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export const uuid = '428b2'
 

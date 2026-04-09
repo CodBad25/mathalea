@@ -7,8 +7,8 @@ export const interactifType = 'mathLive'
 
 /**
  * Résoudre des problèmes additifs et de comparaison sur les fractions
- * @author Eric Elter
- * Créé par Eric Elter après changements effectués dans 4C25-0
+ * @author Éric Elter
+ * Créé par Éric Elter après changements effectués dans 4C25-0
  */
 
 export const uuid = 'a3914'

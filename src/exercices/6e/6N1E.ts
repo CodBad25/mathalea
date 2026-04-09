@@ -21,7 +21,7 @@ export const interactifReady = true
 
 /**
  * Lier nombre décimal, fraction décimale et pourcentage
- * @author Eric Elter
+ * @author Éric Elter
  */
 
 export const uuid = '2359a'
@@ -75,7 +75,6 @@ export default class DecimalFractionPourcentage extends Exercice {
     for (
       let i = 0, texte, texteCorr, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       const nbfractionDecimaleEtPourcentage = function (i: number) {
         const numerateur =
@@ -142,17 +141,26 @@ export default class DecimalFractionPourcentage extends Exercice {
           .concat(fractionDecimaleCorrNu)
           .concat(pourcentageCorrNu),
         enonce: `${tableauColonneLigne(
-          [], 
-          ['\\text{Nombre décimal}', '\\text{Fraction décimale}', '\\text{Pourcentage}'], 
+          [],
+          [
+            '\\text{Nombre décimal}',
+            '\\text{Fraction décimale}',
+            '\\text{Pourcentage}',
+          ],
           nbDecimal.concat(fractionDecimale).concat(pourcentage),
-        2.5,
-        true
+          2.5,
+          true,
         )}`,
         correction: `${tableauColonneLigne(
-          [], ['\\text{Nombre décimal}', '\\text{Fraction décimale}', '\\text{Pourcentage}'], 
+          [],
+          [
+            '\\text{Nombre décimal}',
+            '\\text{Fraction décimale}',
+            '\\text{Pourcentage}',
+          ],
           nbDecimalCorr.concat(fractionDecimaleCorr).concat(pourcentageCorr),
-        2.5,
-        true
+          2.5,
+          true,
         )},`,
       })
       let objetReponse = {}

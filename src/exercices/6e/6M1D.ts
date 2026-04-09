@@ -9,7 +9,7 @@ export const amcType = 'AMCHybride'
 
 /**
  * Calculer périmètre de figures composées
- * @author Eric Elter (comme clone de 6M11-2 de Rémi Angot)
+ * @author Éric Elter (comme clone de 6M11-2 de Rémi Angot)
  */
 
 export const uuid = '7433b'

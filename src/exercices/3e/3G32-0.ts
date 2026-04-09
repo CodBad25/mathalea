@@ -73,15 +73,15 @@ export const dateDePublication = '05/03/2022'
 export const dateDeModifImportante = '10/10/2025'
 
 /**
- * Calculer la largeur d\'une rivière @author Jean-Claude Lhote
- * Calcul d\'un parallèle terrestre @author Jean-Claude Lhote
- * Calculer la hauteur d\'un objet vu sous un angle donné @author Jean-Claude Lhote
- * Calculer la hauteur d\'une falaise @author Jean-Claude Lhote
- * Calculer la hauteur d\'une montagne @author Jean-Claude Lhote
+ * Calculer la largeur d\'une rivière @author Jean-claude Lhote
+ * Calcul d\'un parallèle terrestre @author Jean-claude Lhote
+ * Calculer la hauteur d\'un objet vu sous un angle donné @author Jean-claude Lhote
+ * Calculer la hauteur d\'une falaise @author Jean-claude Lhote
+ * Calculer la hauteur d\'une montagne @author Jean-claude Lhote
  * Triangle rectangle inscrit dans un triangle rectangle @author Rémi Angot
  * Fusion des exercices @author Guillaume Valmont
- * Interactivité des exercices, aléatoirisation des figures et des points dans les exos, AMC-isation de tous les exos @author Eric Elter
- * Meilleure interactivite + colorisation des exercices par @author Eric Elter
+ * Interactivité des exercices, aléatoirisation des figures et des points dans les exos, AMC-isation de tous les exos @author Éric Elter
+ * Meilleure interactivite + colorisation des exercices par @author Éric Elter
  */
 export const uuid = '2045e'
 

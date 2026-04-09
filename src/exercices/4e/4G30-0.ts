@@ -27,7 +27,7 @@ export const refs = {
 }
 export const dateDePublication = '30/12/2025'
 /**
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export default class MonExoGuideAne extends Exercice {
   constructor() {

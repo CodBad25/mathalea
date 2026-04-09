@@ -32,7 +32,7 @@ export const titre = 'Se préparer au DNB : Scratch'
 export const dateDePublication = '7/12/2024'
 
 /**
- * @Author Jean-Claude Lhote
+ * @Author Jean-claude Lhote
  * Cet exerice exploite la nouvelle classe d'exercice que j'ai conçue pour les sujets de brevet
  * Il s'agit d'un exercice de type Brevet Aléatoirisé
  */

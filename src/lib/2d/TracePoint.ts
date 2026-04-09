@@ -20,7 +20,7 @@ import { segment } from './segmentsVecteurs'
  * pt.opacite = 0.2 (par défaut : 0.8 = 80%)
  * pt.style = '#' (choix parmi 'x','o','#','|','+','.' et par défaut : 'x')
  * @property {string} color
- * @author Rémi Angot et Jean-Claude Lhote
+ * @author Rémi Angot et Jean-claude Lhote
  */
 
 export class TracePoint extends ObjetMathalea2D {

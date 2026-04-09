@@ -40,7 +40,7 @@ import { Point3d, Polygone3d, arete3d } from './elementsEtTransformations3d'
  * @property {string} colorCone Couleur du cône : du type 'blue' ou du type '#f15929'
  * @property {arete3d[]} aretesSommet Ce tableau contient les arêtes liant le sommet de la pyramide aux sommets de la base
  * @property {Array} c2d Contient les commandes à tracer en 2d de cette fonction
- * @author Eric Elter (d'après version précédente de Jean-Claude Lhote)
+ * @author Éric Elter (d'après version précédente de Jean-claude Lhote)
  * @class
  */
 
@@ -350,7 +350,7 @@ export class Pyramide3d extends ObjetMathalea2D {
  * @param {boolean} [affichageNom = false] Permet (ou pas) l'affichage du nom des sommets de la pyramide.
  * @param {boolean} [estCone = false] Permet (ou pas) de considérer la pyramide comme un cône
  * @param {string} [colorCone = 'gray'] Couleur du cône : du type 'blue' ou du type '#f15929'
- * @author Eric Elter (d'après version précédente de Jean-Claude Lhote)
+ * @author Éric Elter (d'après version précédente de Jean-claude Lhote)
  * @example pyramide3d(p,A) // Créé une pyramide de base p et de sommet A
  * @example pyramide3d(p,A,'red') // Créé une pyramide de base p et de sommet A et dont les arêtes sont rouges
  * @example pyramide3d(p,A,'red',B) // Créé une pyramide de base p et de sommet A et dont les arêtes sont rouges, le centre affiché est B

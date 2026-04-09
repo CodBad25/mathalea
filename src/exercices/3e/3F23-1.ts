@@ -30,7 +30,8 @@ export const dateDeModifImportante = '11/06/2025'
 
 /**
  * Reconnaitre une fonction affine
- * @author Erwan Duplessy Remis au gout du jour et interactif par Jean-Claude Lhote
+ * @author Erwan Duplessy
+ * @author Jean-claude Lhote // remis au gout du jour et adapté à l'interactif
  * 3F23
  * date : 2021/02/21
  * référentiel 3F23 - Déterminer de manière algébrique l\'antécédent par une fonction, dans des cas se ramenant à la résolution d\'une équation du premier degré.

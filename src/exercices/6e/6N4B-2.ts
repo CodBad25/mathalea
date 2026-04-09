@@ -29,7 +29,7 @@ const patternsFor6N4B = listePattern3d.filter(
  * Étudier les premiers termes d'une série de motifs afin de donner le nombre de formes ${['e','a','é','i','o','u','y','è','ê'].includes(pattern.shapes[0][0]) ? 'd\'':'de'}${pattern.shapes[0]} du motif suivant.
  * Les patterns sont des motifs figuratifs qui évoluent selon des règles définies.
  * Cet exercice contient des patterns issus de l'excellent site : https://www.visualpatterns.org/
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export const uuid = '328b7'
 

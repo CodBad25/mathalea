@@ -25,7 +25,7 @@ export const refs = {
 }
 
 /**
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export default class Can2026CE2Q7 extends ExerciceCan {
   enonce(start?: number, saut?: number, step1?: number, step2?: number) {

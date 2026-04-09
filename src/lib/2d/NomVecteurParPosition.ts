@@ -8,7 +8,7 @@ import { rotation, similitude, translation } from './transformations'
 import { vecteur } from './Vecteur'
 
 /**
- * @author Jean-Claude Lhote le 31/01/2021
+ * @author Jean-claude Lhote le 31/01/2021
  * crée un nom de vecteur avec sa petite flèche
  * l'angle formé par avec l'horizontale est à donner comme argument, par défaut c'est 0
  * la taille impactera le nom et la flèche en proportion.

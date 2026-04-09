@@ -1,27 +1,27 @@
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import {
+  ajouteChampTexteMathLive,
+  remplisLesBlancs,
+} from '../../lib/interactif/questionMathLive'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
-import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texFractionFromString } from '../../lib/outils/deprecatedFractions'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import {
   arrondi,
   nombreDeChiffresDansLaPartieDecimale,
   nombreDeChiffresDansLaPartieEntiere,
 } from '../../lib/outils/nombres'
+import { sp } from '../../lib/outils/outilString'
 import { texNombre } from '../../lib/outils/texNombre'
 import { context } from '../../modules/context'
+import FractionEtendue from '../../modules/FractionEtendue'
 import {
   gestionnaireFormulaireTexte,
   listeQuestionsToContenu,
   randint,
 } from '../../modules/outils'
-import {
-  ajouteChampTexteMathLive,
-  remplisLesBlancs,
-} from '../../lib/interactif/questionMathLive'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import Exercice from '../Exercice'
-import FractionEtendue from '../../modules/FractionEtendue'
-import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { sp } from '../../lib/outils/outilString'
 
 export const amcReady = true
 export const amcType = 'AMCNum'
@@ -40,7 +40,7 @@ export const dateDeModifImportante = '11/02/2025'
  *  * Type 4 : écritures fractionnaires, décimales ou entières
  *
  *  * Sup2 : avec ou sans calculs à trous
- * @author Rémi Angot (Ajout 3 décimales maxi et que des entiers par Eric Elter)
+ * @author Rémi Angot (Ajout 3 décimales maxi et que des entiers par Éric Elter)
  * Relecture : Décembre 2021 par EE
  *
  */
@@ -147,7 +147,6 @@ export default class MultiplierDecimauxPar101001000 extends Exercice {
         aEntier,
         reponseAMC;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       typesDeQuestions = listeTypeDeQuestions[i]
       if (this.sup === 3 && !this.sup2) {

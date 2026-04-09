@@ -30,7 +30,7 @@ export const refs = {
 }
 /**
  * Utiliser la définition du cercle et du disque
- * @author Eric Elter
+ * @author Éric Elter
  */
 export default class defCercleDisque extends Exercice {
   figuresApiGeom!: Figure[]

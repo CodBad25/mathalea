@@ -28,7 +28,7 @@ export const dateDeModifImportante = '24/11/2024'
 
 /**
  * Lire les coordonnées d'un point du plan avec une précision allant de l'unité à 0,25.
- * @author Jean-Claude Lhote - Eric Elter (pour l'interactivité)
+ * @author Jean-claude Lhote - Éric Elter (pour l'interactivité)
  */
 export const uuid = 'ab968'
 

@@ -6,7 +6,7 @@ export const dateDeModifImportante = '05/11/2025'
 
 /**
  * Clone de 3L11-15 pour la France
- * @author Eric Elter
+ * @author Éric Elter
  */
 
 export const uuid = 'be864'

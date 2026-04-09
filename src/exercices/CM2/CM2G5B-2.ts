@@ -30,7 +30,7 @@ export const dateDePublication = '06/11/2022'
 
 /**
  * Nommer des faces dans un pavé droit
- * @author Eric Elter
+ * @author Éric Elter
  */
 
 export const uuid = '6809f'
@@ -44,7 +44,7 @@ export const refs = {
 /**
  * Inverse une chaîne de caractères
  * @param {string} str Chaîne à inverser
- * @author Eric Elter
+ * @author Éric Elter
  * @example inverseChaine('laval') renvoie 'laval' /// Hihihihi...
  * @example inverseChaine('parfait') renvoie 'tiafrap'
  * @example inverseChaine('1234') renvoie '4321'

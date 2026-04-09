@@ -15,7 +15,7 @@ export const interactifType = 'mathLive'
 export const uuid = 'f828d'
 /**
  * Modèle d'exercice très simple pour la course aux nombres
- * @author Gilles Mora (reprise du fichier de Jean-Claude Lhote 6ième)
+ * @author Gilles Mora (reprise du fichier de Jean-claude Lhote 6ième)
 
 */
 export default class PerimetreRectangleCM2 extends ExerciceSimple {

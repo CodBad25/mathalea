@@ -106,7 +106,7 @@ type ColorsTableauDeVariation = {
 }[]
 
 /**
- * Classe TableauDeVariation Initiée par Sebastien Lozano, transformée par Jean-Claude Lhote
+ * Classe TableauDeVariation Initiée par Sebastien Lozano, transformée par Jean-claude Lhote
  * publié le 9/02/2021
  * tabInit est un tableau contenant sous forme de chaine les paramètres de la macro Latex \tabInit{}{}
  * tabLines est un tableau contenant sous forme de chaine les paramètres des différentes macro \tabLine{}
@@ -134,7 +134,7 @@ type ColorsTableauDeVariation = {
  * Pour plus d'info sur le codage des variations, voir ce tuto : https://zestedesavoir.com/tutoriels/439/des-tableaux-de-variations-et-de-signes-avec-latex/
  * reste à faire les types  'Slope"
  * @param {Object} param0
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export function tableauDeVariation({
   tabInit = [[], []],
@@ -575,7 +575,7 @@ export function trouveFonctionAffine(
 /**
  * Fonction qui cherche les minimas et maximas d'une fonction polynomiale f(x)=ax^3 + bx² + cx + d
  * retourne [] si il n'y en a pas, sinon retourne [[x1,f(x1)],[x2,f(x2)] ne précise pas si il s'agit d'un minima ou d'un maxima.
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export function chercheMinMaxFonction([a, b, c, d]: [
   number,

@@ -24,7 +24,7 @@ export const titre = "Déterminer la nature d'une droite remarquable"
 
 /**
  * 5G22
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * Les droites remarquables du triangle : hauteurs médiatrices....médianes et bissectrices
  */
 export const uuid = '796f3'

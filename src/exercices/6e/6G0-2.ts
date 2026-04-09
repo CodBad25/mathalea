@@ -18,7 +18,7 @@ export const amcReady = true
 export const amcType = 'qcmMult'
 export const interactifReady = true
 export const interactifType = 'qcm'
-export const dateDeModifImportante = '07/10/2023' // Interactivité type Qcm par Jean-Claude Lhote puis style par Rémi Angot
+export const dateDeModifImportante = '07/10/2023' // Interactivité type Qcm par Jean-claude Lhote puis style par Rémi Angot
 
 /**
  * Utiliser les notations des segments, droites et demi-droites

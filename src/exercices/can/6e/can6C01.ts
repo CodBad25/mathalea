@@ -12,7 +12,7 @@ export const amcReady = true
 export const amcType = 'qcmMono'
 
 /**
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * Créé pendant l'été 2021
  */
 export const uuid = 'de779'

@@ -53,7 +53,7 @@ import {
  * @property {Points[]} pointsBase1 Liste des points formant la ligne de la base 1
  * @property {Points[]} pointsBase2 Liste des points formant la ligne de la base 2
  * @property {Array} c2d Contient les commandes à tracer en 2d de cette fonction
- * @author Jean-Claude Lhote (optimisé par Eric Elter)
+ * @author Jean-claude Lhote (optimisé par Éric Elter)
  * @class
  */
 
@@ -321,7 +321,7 @@ export class Cylindre3d extends ObjetMathalea2D {
  * @example cylindre3d(A, B, v, v, 'green', false, true, true, 'red', true, 'lightblue')
  * // Retourne un cylindre à bords verts dont les bases ont pour centre respectif A et B et le rayon est donné par le vecteur v.
  * // Les génératrices sont invisibles, les centres et axe sont visibles et rouges, le cylindre est coloré en bleu.
- * @author Jean-Claude Lhote (optimisé par Eric Elter)
+ * @author Jean-claude Lhote (optimisé par Éric Elter)
  * @return {Cylindre3d}
  */
 export function cylindre3d(

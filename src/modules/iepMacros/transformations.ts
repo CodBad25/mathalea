@@ -25,7 +25,7 @@ const marques = ['/', '//', '///', 'O', '\\\\']
  * @param {objet} d axe de symétrie.
  * @param {string} nom nom de l'image
  * @param {objet} options couleur et couleurCodage
- * @author Liouba Leroux et Jean-Claude Lhote
+ * @author Liouba Leroux et Jean-claude Lhote
  */
 export const symetrieAxialePoint = function (
   this: IAlea2iep,
@@ -73,7 +73,7 @@ export const symetrieAxialePoint = function (
  * @param {number} angle l'angle de la rotation
  * @param {string} nom le nom de l'image (si pas précisé ce sera le nom de l'antécédent avec un ')
  * @param {objet} param4 options couleur et couleurCodage
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export const rotationPoint = function (
   this: IAlea2iep,
@@ -138,7 +138,7 @@ export const rotationPoint = function (
 //  * @param {objet} d axe de symétrie.
 //  * @param {string} nom nom de l'image
 //  * @param {objet} options couleur et couleurCodage
-//  * @author Liouba Leroux et Jean-Claude Lhote
+//  * @author Liouba Leroux et Jean-claude Lhote
 //  */
 //   this.symetrieAxialePoint = function (p, d, nom, { couleur = this.couleur, couleurCodage = this.couleurCodage, codage = '//' } = {}) {
 //     this.epaisseur = 0.5 // épaisseur et couleur de crayon de papier bien taillé pour la construction
@@ -173,7 +173,7 @@ export const rotationPoint = function (
  * @param {objet} le point d'arrivée de la translation
  * @param {string} nom le nom de l'image (si pas précisé ce sera le nom de l'antécédent avec un ')
  * @param {objet} param4 options couleur et couleurCodage
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export const translationPoint = function (
   this: IAlea2iep,
@@ -233,7 +233,7 @@ export const translationPoint = function (
  * @param {objet} centre le centre de la rotation
  * @param {string} nom le nom de l'image (si pas précisé ce sera le nom de l'antécédent avec un ')
  * @param {objet} param4 options couleur et couleurCodage
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export const demiTourPoint = function (
   this: IAlea2iep,
@@ -339,7 +339,7 @@ export const homothetiePoint = function (
  * @param {objet} p le polygone qui est déjà tracé
  * @param {objet} centre le centre de la rotation
  * @param {number} angle l'angle de rotation
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * @param {objet} param4 options couleur et couleurCodage
  */
 export const rotationPolygone = function (
@@ -394,7 +394,7 @@ export const rotationPolygone = function (
  * @param {objet} d axe de symétrie.
  * @param {string[]} noms tableau contenant les noms des sommets dans le même ordre que p
  * @param {objet} param3 options couleur et couleurCodage
- * @author Liouba Leroux et Jean-Claude Lhote
+ * @author Liouba Leroux et Jean-claude Lhote
  */
 export const symetrieAxialePolygone = function (
   this: IAlea2iep,
@@ -434,7 +434,7 @@ export const symetrieAxialePolygone = function (
  * @param {objet} B point d'arrivée de la translation
  * @param {string[]} noms tableau contenant les noms des sommets dans le même ordre que p
  * @param {objet} param3 options couleur et couleurCodage
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export const translationPolygone = function (
   this: IAlea2iep,
@@ -464,7 +464,7 @@ export const translationPolygone = function (
  * @param {objet} centre le centre de symétrie
  * @param {array} noms les noms des sommets images (si pas précisé ce sera le nom de l'antécédent avec un ')
  * @param {objet} param3 options couleur et couleurCodage
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export const demiTourPolygone = function (
   this: IAlea2iep,

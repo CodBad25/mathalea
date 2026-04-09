@@ -39,7 +39,8 @@ export const interactifType = 'mathLive'
 /**
  * * Colorier le déplacement d'un lutin
  * * 6I10-2
- * @author Guillaume Valmont // d'après 6I10 de Erwan Duplessy
+ * @author Guillaume Valmont
+ * // d'après 6I10 de Erwan Duplessy
  * Ajout interactivité : Juin 2025 par Guillaume Valmont
  */
 export const uuid = '594eb'

@@ -17,7 +17,7 @@ export const refs = {
 }
 /**
  * Modèle d'exercice très simple pour la course aux nombres
- * @author Gilles Mora+Eric Elter
+ * @author Gilles Mora+Éric Elter
  */
 export default class decimalPuisance extends ExerciceSimple {
   constructor() {

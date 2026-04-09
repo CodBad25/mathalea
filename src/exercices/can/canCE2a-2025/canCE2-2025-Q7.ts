@@ -19,7 +19,7 @@ const classes = {
   10: 'dizaines',
 }
 /**
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
 
 */
 export default class Can2025CE2Q7 extends ExerciceCan {

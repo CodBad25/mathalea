@@ -27,6 +27,9 @@ export const refs = {
   'fr-fr': ['2N41-2'],
   'fr-ch': [],
 }
+/**
+ * @author Gilles Mora
+ */
 export default class factorisationDifferenceCarres extends Exercice {
   constructor() {
     super()

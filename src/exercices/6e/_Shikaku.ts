@@ -13,7 +13,7 @@ import { randint } from '../../modules/outils'
  * @param {array} flat
  * @param {string} noms
  * @return {Polygone}
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export function flatArrayToPolygone(
   flat: number[],
@@ -35,6 +35,7 @@ export function flatArrayToPolygone(
 /**
  * Générateur aléatoire de Shikaku : il suffit de donner la largeur et la hauteur globale, le générateur fait le reste
  * pour créer un Shikaku de largeur 12 et de hauteur 6, on utilise : const myShikaku = new Shikaku(12,6)
+ * @author Jean-claude Lhote
  */
 export default class Shikaku {
   /**

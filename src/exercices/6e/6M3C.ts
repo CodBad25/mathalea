@@ -32,6 +32,9 @@ export const refs = {
   'fr-2016': ['6M30-0'],
   'fr-ch': ['9GM3-1'],
 }
+/**
+ * @author Jean-claude Lhote
+ */
 export default class VolumesPavesParDenombrement extends Exercice {
   constructor() {
     super()
@@ -59,7 +62,6 @@ export default class VolumesPavesParDenombrement extends Exercice {
         texte,
         texteCorr;
       q < this.nbQuestions && cpt < 50;
-
     ) {
       const pavesCorr: NestedObjetMathalea2dArray[] = []
       l = randint(5, 10)

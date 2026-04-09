@@ -25,7 +25,7 @@ export const uuid = '0ff0f'
 
 /**
  * Encadre l'aire d'un disque par des aires de figures composées que de carrés de même taille
- * @author Eric Elter
+ * @author Éric Elter
 
 */
 export default class EncadrerAireDisque extends Exercice {

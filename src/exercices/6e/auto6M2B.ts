@@ -24,7 +24,7 @@ export const dateDePublication = '03/08/2025'
 
 /**
  * Connaître la définition d'une unité d'aire
- * @author Eric Elter
+ * @author Éric Elter
 
  */
 export const uuid = 'feeb3'

@@ -24,7 +24,7 @@ export const amcReady = true
 
 /**
  * Déduire un pourcentage par complément à 100%
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export const uuid = 'db772'
 

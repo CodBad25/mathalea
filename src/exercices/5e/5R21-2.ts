@@ -16,7 +16,7 @@ export const titre = 'Compléter une soustraction à trou de deux nombres relati
  * Compléter une addition à trou entre 2 nombres relatifs.
  *
  * * On peut paramétrer la distance à zéro maximale des deux termes (par défaut égale à 20)
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * 5R20-2
  */
 export const uuid = 'cea42'

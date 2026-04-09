@@ -17,7 +17,9 @@ export const refs = {
   'fr-fr': ['TSG2-15'],
   'fr-ch': [],
 }
-
+/**
+ * @author Stéphane Guyon
+ */
 export default class ExerciceAlignementEspace extends Exercice {
   constructor() {
     super()

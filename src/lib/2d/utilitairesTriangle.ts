@@ -10,7 +10,7 @@ import { milieu, pointIntersectionDD } from './utilitairesPoint'
  * @param {Polygone} p Triangle
  * @example aireTriangle(poygone(A,B,C)) // Retourne l'aire du triangle ABC
  * @example aireTriangle(poygone(A,B,C,D)) // Retourne false car le polygone n'est pas un triangle
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * @return {boolean|number}
  */
 // JSDOC Validee par EE Juin 2022
@@ -27,7 +27,7 @@ export function aireTriangle(p: IPolygone) {
 
 /**
  * Médiane issue de A relative à [BC]
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * @param {Point} A
  * @param {Point} B
  * @param {Point} C
@@ -54,7 +54,7 @@ export function medianeTriangle(
  * @example G = centreGraviteTriangle(F,C,N,'G','below')
  * // Crée G, le centre de gravité du triangle FCN, en notant G sous le point, s'il est tracé et labellisé.
  * @return {Point}
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 // JSDOC Validee par EE Juin 2022
 export function centreGraviteTriangle(
@@ -78,7 +78,7 @@ export function centreGraviteTriangle(
  * @param {string} [color = 'black'] Couleur de cette hauteur : du type 'blue' ou du type '#f15929'
  * @example hauteurTriangle (M, N, P) // Trace, en noir, la hauteur issue de M relative à [NP]
  * @example hauteurTriangle (M, N, P, 'red') // Trace, en rouge, la hauteur issue de M relative à [NP]
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * @return {Droite}
  */
 // JSDOC Validee par EE Aout 2022
@@ -95,7 +95,7 @@ export function hauteurTriangle(
 
 /**
  * Orthocentre du triangle ABC
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * @param {Point} A
  * @param {Point} B
  * @param {Point} C

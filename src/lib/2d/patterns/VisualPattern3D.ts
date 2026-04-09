@@ -8,7 +8,7 @@ import { rangeCubes } from './patternsPreDef'
 
 type Coord3d = [number, number, number, string]
 /**
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  *
  */
 

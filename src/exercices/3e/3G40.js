@@ -38,7 +38,7 @@ export const refs = {
 }
 
 /**
- * @author Jean-Claude Lhote, améliorations par Éric Elter
+ * @author Jean-claude Lhote, améliorations par Éric Elter
  *
  */
 export default class ReperageSurLaSphere extends Exercice {

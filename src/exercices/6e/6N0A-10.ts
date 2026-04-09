@@ -30,7 +30,7 @@ export const interactifType = 'mathLive'
 
 /**
  * * Ranger une liste de nombres dans l'ordre croissant ou décroissant
- * @author Eric Elter
+ * @author Éric Elter
  */
 
 export const uuid = '3bba9'

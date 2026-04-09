@@ -33,7 +33,7 @@ export const dateDePublication = '20/09/2025'
 
 /**
  * Multiplication d'un nombre décimal dans différentes écritures par 10, 100, 1000
- * @author Eric Elter et IA_Claude (basé sur auto6N2D)
+ * @author Éric Elter et IA_Claude (basé sur auto6N2D)
  */
 export const uuid = '5ec3c'
 
@@ -195,7 +195,6 @@ export default class MultiplierDecimauxPar101001000 extends Exercice {
     for (
       let i = 0, texte, cpt = 0, a, b, choixPuissance10, aEntier;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       aEntier = choice([randint(11, 99), randint(101, 999)])
       b = puissances[i]

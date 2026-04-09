@@ -22,7 +22,7 @@ export const titre = 'Compléter une représentation en perspective cavalière'
 /**
  * fonction servant à compléter des solides, inspirée des fonctions de 6G42 et 6G43
 
- * @author Mireille Gain, s'inspirant fortement de Jean-Claude Lhote
+ * @author Mireille Gain, s'inspirant fortement de Jean-claude Lhote
  */
 export const uuid = 'a8e0f'
 

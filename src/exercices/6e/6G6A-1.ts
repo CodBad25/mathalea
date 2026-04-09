@@ -31,8 +31,11 @@ export const titre = 'Construire un triangle avec les instruments'
 
 /**
  * Publié le 30/08/202
- * @author Jean-Claude Lhote (exercice) et Rémi Angot (animation Instrumenpoche)
- * @author Guironnet Refactoring et ajout des cas 4 à 10.
+ * @author Jean-claude Lhote
+ * @author Rémi Angot
+ *  (animation Instrumenpoche)
+ * @author Guironnet
+ *  Refactoring et ajout des cas 4 à 10.
  */
 export const uuid = 'e0bc9'
 

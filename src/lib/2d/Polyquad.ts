@@ -17,7 +17,7 @@ type BinomesXY = BinomeXY[]
  * @param {Point} pt2
  * @param {[Point,Point]} couple
  * @returns {boolean}
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export function trouveCouple(
   pt1: { x: number; y: number },
@@ -519,7 +519,7 @@ function sontVecteursAlignes(
  * Elle permet aussi de supprimer les doublons consécutifs puisque forcément, ils sont alignés
  * @param {BinomesXY} binomesXY une liste de binomesXY
  * @returns {BinomesXY} une liste de binomesXY
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 
 export function elimineBinomesXYIntermediairesAlignes(binomesXY: BinomesXY) {

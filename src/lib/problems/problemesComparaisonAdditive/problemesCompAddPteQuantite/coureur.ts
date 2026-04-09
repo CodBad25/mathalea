@@ -6,7 +6,7 @@ import { texNombre } from '../../../outils/texNombre'
 import type Probleme from '../../Probleme'
 import ProblemeCompAddPteQantite from './problemesCompAddPteQuantite'
 /**
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export function coureur6(decimal = true): Probleme {
   const personnage = prenomPronom()

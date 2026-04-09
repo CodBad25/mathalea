@@ -22,7 +22,7 @@ export const dateDePublication = '16/06/2024'
 
 /**
  * Un premier exercice de résolution d'équations différentielles
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  *
  */
 class EquaDiffs extends Exercice {

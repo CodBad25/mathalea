@@ -24,7 +24,7 @@ import Exercice from '../Exercice'
 export const titre = 'Décrire un assemblage de solides'
 export const dateDePublication = '9/3/2024'
 /**
- * @author Guillaume Valmont à partir de 6G44 de Jean-Claude Lhote
+ * @author Guillaume Valmont à partir de 6G44 de Jean-claude Lhote
  */
 export const uuid = '083b9'
 

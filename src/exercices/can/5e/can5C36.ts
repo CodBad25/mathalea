@@ -14,7 +14,7 @@ export const amcReady = true
 export const amcType = 'AMCNum'
 export const dateDePublication = '28/03/2026'
 /**
- * @author  Jean-Claude Lhote
+ * @author  Jean-claude Lhote
  */
 export const uuid = '7a19b'
 

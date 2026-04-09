@@ -16,7 +16,7 @@ import { egal } from './outils'
 
 /**
  * Classe Pavage : permet de créer des pavages de polygones en un tour de main et de manipuler les polygones qu'il contient
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * publié le 10/12/2020
  */
 export class Pavage {

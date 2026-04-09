@@ -71,7 +71,7 @@ export function etoile5Branches(options?: {
  * Génère une figure représentant un pentagone régulier.
  * @param options Options pour personnaliser le style du pentagone.
  * @returns Une instance de Figure2D représentant un pentagone régulier.
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export function pentagoneRegulier(options?: {
   fillStyle?: string // Couleur de remplissage du pentagone (par défaut bleu)
@@ -132,7 +132,7 @@ export function pentagoneRegulier(options?: {
  * Génère une figure représentant un cerf-volant (quadrilatère avec deux paires de côtés adjacents égaux).
  * @param options Options pour personnaliser le style du cerf-volant.
  * @returns Une instance de Figure2D représentant un cerf-volant.
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export function cerfVolant(options?: {
   fillStyle?: string // Couleur de remplissage du cerf-volant (par défaut vert)
@@ -189,7 +189,7 @@ export function cerfVolant(options?: {
  * Génère une figure représentant une aile delta (triangle isocèle).
  * @param options Options pour personnaliser le style de l'aile delta.
  * @returns Une instance de Figure2D représentant une aile delta.
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export function aileDelta(options?: {
   fillStyle?: string // Couleur de remplissage de l'aile delta (par défaut rouge)
@@ -246,7 +246,7 @@ export function aileDelta(options?: {
  * Génère une figure représentant un trapèze isocèle.
  * @param options Options pour personnaliser le style du trapèze isocèle.
  * @returns Une instance de Figure2D représentant un trapèze isocèle.
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export function trapezeIsocele(options?: {
   fillStyle?: string // Couleur de remplissage du trapèze (par défaut violet)
@@ -369,7 +369,7 @@ export function hexagoneNonRegulier(options?: {
  * Génère une figure représentant un triangle quelconque.
  * @param options Options pour personnaliser le style du triangle.
  * @returns Une instance de Figure2D représentant un triangle quelconque.
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export function triangleQuelconque1(options?: {
   fillStyle?: string // Couleur de remplissage du triangle (par défaut bleu)
@@ -420,7 +420,7 @@ export function triangleQuelconque1(options?: {
  * Génère une figure représentant un croissant de lune.
  * @param options Options pour personnaliser le style du croissant de lune.
  * @returns Une instance de Figure2D représentant un croissant de lune.
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export function croissantDeLune(options?: {
   fillStyle?: string // Couleur de remplissage du croissant (par défaut gris)
@@ -487,7 +487,7 @@ export function croissantDeLune(options?: {
   })
 }
 /**
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * @param options
  * @returns
  */
@@ -527,7 +527,7 @@ export function pacman(options?: {
  * Génère une figure représentant un fer à cheval.
  * @param options Options pour personnaliser le style du fer à cheval.
  * @returns Une instance de Figure2D représentant un fer à cheval.
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export function ferACheval(options?: {
   fillStyle?: string // Couleur de remplissage du fer à cheval (par défaut gris)
@@ -659,7 +659,7 @@ export function parallelogramme(options?: {
  * Génère une figure représentant une forme de cœur.
  * @param options Options pour personnaliser le style du cœur.
  * @returns Une instance de Figure2D représentant une forme de cœur.
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export function coeur(options?: {
   fillStyle?: string // Couleur de remplissage du cœur (par défaut rouge)
@@ -708,7 +708,7 @@ export function coeur(options?: {
  * Génère une figure représentant une ogive.
  * @param options Options pour personnaliser le style de l'ogive.
  * @returns Une instance de Figure2D représentant une ogive.
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export function ogive(options?: {
   fillStyle?: string // Couleur de remplissage de l'ogive (par défaut violet)
@@ -782,7 +782,7 @@ export function ogive(options?: {
  * Génère une figure représentant une étoile à 4 branches.
  * @param options Options pour personnaliser le style de l'étoile.
  * @returns Une instance de Figure2D représentant une étoile à 4 branches.
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export function etoile4Branches(options?: {
   fillStyle?: string // Couleur de remplissage de l'étoile (par défaut jaune)
@@ -936,7 +936,7 @@ export function croixRouge(options?: {
  * Génère une figure représentant un rectangle.
  * @param options Options pour personnaliser le style du rectangle.
  * @returns Une instance de Figure2D représentant un rectangle.
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export function rectangle(options?: {
   fillStyle?: string // Couleur de remplissage du rectangle (par défaut gris)
@@ -1194,7 +1194,7 @@ export function triangleEquilateral(options?: {
  * Génère une figure représentant un ovale.
  * @param options Options pour personnaliser le style de l'ovale.
  * @returns Une instance de Figure2D représentant un ovale.
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * @version 1.0
  * @date 2025-05-10
  */

@@ -18,7 +18,7 @@ export const titre = 'Résoudre des problèmes avec des calculs de pourcentages'
 
 /**
  * Calculer le montant d'une réduction donnée en pourcentage d'un prix initial
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export const uuid = 'd67e9'
 

@@ -12,7 +12,7 @@ export const dateDePublication = '21/10/2024'
 export const dateDeModifImportante = '15/06/2025'
 /**
  * Exercice de repérage sur droite graduée
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 
 class ReperageEntierC3 extends ReperageEntiersOuDecimaux {

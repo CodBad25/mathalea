@@ -21,7 +21,7 @@ export const dateDePublication = '17/03/2022'
 export const dateDeModifImportante = '03/10/2023'
 
 /**
- * @author Guillaume Valmont (amendée par Eric Elter pour this.sup2 et une version 3e)
+ * @author Guillaume Valmont (amendée par Éric Elter pour this.sup2 et une version 3e)
 
  */
 export const uuid = '612b9'

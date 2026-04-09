@@ -7,7 +7,7 @@ export const amcType = 'AMCOpen'
 export const interactifReady = false
 
 /**
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * Relecture : Novembre 2021 par EE
  */
 export const uuid = '91a00'

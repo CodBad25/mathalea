@@ -4,11 +4,11 @@ export const interactifReady = true
 export const interactifType = 'mathLive'
 export const amcReady = true
 export const amcType = 'AMCOpen'
-export const dateDeModifImportante = '23/09/2025' // Réparation de l'interactivité par Eric Elter
+export const dateDeModifImportante = '23/09/2025' // Réparation de l'interactivité par Éric Elter
 /**
  * Clone de 6N1H-2 pour les 2nde
  *
- * @author Jean-Claude Lhote et Rémi Angot
+ * @author Jean-claude Lhote et Rémi Angot
  */
 export const uuid = '8164e'
 

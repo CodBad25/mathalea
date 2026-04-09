@@ -25,7 +25,7 @@ export const interactifType = 'mathLive'
  * 4 : Quotient avec une somme ou une différence
  * 5 : Quotient de somme ou différence par une fraction
  * 6 : Quotient de sommes ou différences
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export const uuid = '18dde'
 

@@ -41,7 +41,7 @@ export const dateDeModifImportante = '14/01/2026'
  * * La somme avec entiers peut être avec retenue (genre 2+23/10) ou sans retenue (3+7/10)
  * * Tous les choix sont paramétrables
  * *
- * @author Eric Elter
+ * @author Éric Elter
 
  */
 

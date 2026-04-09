@@ -7,7 +7,7 @@ export const dateDeModifImportante = '20/06/2024'
 
 /**
  * Calculs de probabilités sur une expérience aléatoire à deux épreuves
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export const uuid = '04f53'
 export const refs = {

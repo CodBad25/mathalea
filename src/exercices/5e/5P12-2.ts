@@ -34,7 +34,7 @@ export const dateDeModificationImportante = '2/02/2026'
  * Étudier les premiers termes d'une série de motifs afin de donner le nombre de formes du motif de rang n sous forme de ratio.
  * Les patterns sont des motifs numériques qui évoluent selon des règles définies.
  * Cet exercice contient des patterns issus de l'excellent site : https://www.visualpatterns.org/
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export const uuid = '328b9'
 

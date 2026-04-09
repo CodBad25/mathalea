@@ -13,6 +13,10 @@ export const interactifType = 'qcm'
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = 'Transformer un calcul comportant des puissances'
+
+/**
+ * @author Gilles Mora
+ */
 export default class Auto1AC3a extends ExerciceQcmA {
   private appliquerLesValeurs(a: number[], n: number, k: number): void {
     const produit = a[0] * a[1]

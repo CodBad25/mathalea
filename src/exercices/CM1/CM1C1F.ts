@@ -7,7 +7,7 @@ export const amcType = 'AMCNum'
 export const titre = 'Multiplier un nombre décimal par 10'
 
 /**
- * @author Eric Elter
+ * @author Éric Elter
  */
 
 export const uuid = 'mp45c'

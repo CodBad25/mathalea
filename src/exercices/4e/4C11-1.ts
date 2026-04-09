@@ -11,7 +11,7 @@ import { listeQuestionsToContenu } from '../../modules/outils'
 /**
  * Problème à résoudre en utilisant les nombres relatifs
  * La dernière question est ouverte (et difficile pour prouver que l'on a trouvé toutes les solutions)
- * Auteur : Matthieu DEVILLERS matthieu.devillers@ac-rennes.fr
+ * @author Matthieu DEVILLERS
  */
 
 export const titre = 'Résoudre un problème avec les relatifs'

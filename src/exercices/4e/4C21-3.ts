@@ -8,7 +8,7 @@ export const dateDePublication = '12/08/2022'
 
 /**
  * Travailler les sommes de fractions
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 
 export const uuid = '0576d'

@@ -26,7 +26,7 @@ export const titre =
 /**
 
  * Déterminer la dernière opération à effectuer dans une expression littérale
- * @author Sébastien Lozano fork Jean-Claude Lhote
+ * @author Sébastien Lozano fork Jean-claude Lhote
  * Rendu paramétrable et ajout de la structure d'une expression le 14/08/2021 : Guillaume Valmont
  * Interactivite : Olivier Mimeau 23/03/2026
  */

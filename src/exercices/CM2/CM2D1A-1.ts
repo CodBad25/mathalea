@@ -25,7 +25,7 @@ export const dateDeModifImportante = '27/08/2024'
 /**
  * Organiser donnees depuis texte
  * @author Erwan Duplessy
- * Mis en interactif par Jean-Claude Lhote
+ * Mis en interactif par Jean-claude Lhote
  */
 
 // source : http://www.ac-grenoble.fr/savoie/pedagogie/docs_pedas/ogd_c2_c3/ogd_c2_c3.pdf

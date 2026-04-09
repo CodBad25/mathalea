@@ -26,7 +26,7 @@ export const interactifType = 'mathLive'
 
 /**
  * Reconnaitre coefficient directeur et ordonnée à l'origine d'une fonction affine
- * @author Eric Elter
+ * @author Éric Elter
  */
 export const uuid = 'a2b1b'
 

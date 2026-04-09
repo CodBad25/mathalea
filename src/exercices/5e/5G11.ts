@@ -9,7 +9,7 @@ export const dateDeModifImportante = '31/03/2025'
 
 /**
  * Transformations : trouvers un point numéroté par une des transformations du plan. Fonction générale utilisée sur tous les niveaux
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export const uuid = 'ec32b'
 

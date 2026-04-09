@@ -37,7 +37,7 @@ export const titre = 'Programmer la tortue Scratch avec des répétitions'
 export const dateDePublication = '29/06/2021'
 
 /**
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export const uuid = '8ded2'
 

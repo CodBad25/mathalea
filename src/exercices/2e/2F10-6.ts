@@ -19,7 +19,7 @@ export const titre = "Déterminer le sens de variation d'une fonction affine"
 export const dateDeModifImportante = '18/05/2023'
 /**
  * @author Stéphane Guyon mise à jour et ajout de cas Gilles Mora
- * typage typescript incomplet à cause de tableauDeVariation Jean-Claude Lhote
+ * typage typescript incomplet à cause de tableauDeVariation Jean-claude Lhote
  */
 export const uuid = 'b72b0'
 

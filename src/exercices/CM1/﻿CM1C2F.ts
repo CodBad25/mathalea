@@ -7,7 +7,7 @@ export const interactifReady = true
 export const interactifType = 'mathLive'
 export const dateDePublication = '01/02/2026'
 /**
- * @author Eric Elter
+ * @author Éric Elter
  */
 export const uuid = 'b659a'
 

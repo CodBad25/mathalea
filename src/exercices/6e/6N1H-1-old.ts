@@ -24,7 +24,7 @@ export const dateDeModifImportante = '01/02/2022'
 /**
  * Exercice calqué sur lire abscisse fractionnaire sauf que le résultat attendu est en écriture décimale.
  * demis, quart, cinquièmes dixièmes et centièmes
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
 
  */
 export const uuid = '8418e'

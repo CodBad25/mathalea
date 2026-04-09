@@ -35,7 +35,7 @@ export const dateDePublication = '03/08/2025'
 
 /**
  * Exercice tiré des documents officiels : un classique de la géométrie plane
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
 
 */
 export const uuid = '29c3c'

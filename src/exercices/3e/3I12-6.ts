@@ -24,7 +24,7 @@ export const refs = {
   'fr-ch': [],
 }
 /**
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * Cet exercice utilise le simulateur Scratch (ScratchSimulator) couplé à l'interpréteur Scratch (ScratchInterpreter) de la librairie maison.
  *  L'exercice génère aléatoirement les programmes et les résultats attendus.
  *  L'élève peut exécuter les programmes dans le simulateur pour vérifier leur fonctionnement.

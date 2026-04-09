@@ -6,7 +6,7 @@ export const interactifReady = true
 export const interactifType = 'mathLive'
 export const dateDeModifImportante = '01/11/2014'
 /**
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export const uuid = 'b259a'
 

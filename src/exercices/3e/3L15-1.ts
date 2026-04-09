@@ -13,7 +13,7 @@ export const interactifType = 'mathLive'
 
 /**
  * Résoudre une équation de type x²=a
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export const uuid = '57f44'
 

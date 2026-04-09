@@ -23,7 +23,7 @@ export const amcType = 'AMCNum'
 
 /**
  * Symétrie centrale sur papier pointé
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export const uuid = '36f08'
 

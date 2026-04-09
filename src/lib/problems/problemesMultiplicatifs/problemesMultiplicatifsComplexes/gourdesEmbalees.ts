@@ -5,7 +5,7 @@ import { texNombre } from '../../../outils/texNombre'
 import type Probleme from '../../Probleme'
 import ProblemeMultiplicatifsComplexes from './problemesMultiplicatifsComplexes'
 /**
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export function gourdes(decimal = false): Probleme {
   let nb1Fois = randint(13, 20) * 5 // nombre d'élèves

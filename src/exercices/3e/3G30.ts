@@ -41,7 +41,7 @@ export const titre =
   'Calculer une longueur dans un triangle rectangle en utilisant la trigonométrie'
 
 /**
- * @author Jean-Claude Lhote à partir de 3G30-1 de Rémi Angot
+ * @author Jean-claude Lhote à partir de 3G30-1 de Rémi Angot
  * Exercice remplaçant l'exercice initial utilisant MG32
  * Calculer une longueur en utilisant l'un des trois rapport trigonométrique.
  * * Si this.level=4 alors seul le cosinus sera utilisé.

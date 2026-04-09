@@ -25,7 +25,7 @@ const perimetres: [number, 'cm' | 'm' | 'km', string][] = [
 ]
 
 /**
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
 
 */
 export default class Can2025CE2Q4 extends ExerciceCan {

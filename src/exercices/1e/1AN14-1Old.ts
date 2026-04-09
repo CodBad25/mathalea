@@ -27,7 +27,7 @@ const listFrac = obtenirListeFractionsIrreductibles()
  *
  * Dérivation de fonctions du type x -> ku(x),
  * avec u une fonction de référence.
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  *
  */
 class DerivationFonctionsUsuelles extends Exercice {

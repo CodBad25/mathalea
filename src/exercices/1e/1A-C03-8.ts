@@ -3,7 +3,7 @@ import { randint } from '../../modules/outils'
 import ExerciceQcmA from '../ExerciceQcmA'
 export const dateDePublication = '10/08/2025'
 export const uuid = '7fe71'
-// Author Stéphane Guyon
+// @Author Stéphane Guyon
 export const refs = {
   'fr-fr': ['1A-C03-8'],
   'fr-ch': [],
@@ -16,14 +16,14 @@ export const titre = 'Calculer avec des puissances de $-1$'
 export default class Auto1AC3h extends ExerciceQcmA {
   private appliquerLesValeurs(k: number): void {
     this.enonce = `Soit $n$ un entier non nul.<br> À quelle expression est égale $\\left(-1\\right)^{n+${k}}$ ?`
-    
+
     if (k % 2 === 0) {
       // k est pair
       this.correction = `$\\begin{aligned} \\left(-1\\right)^{n+${k}}&=\\left(-1\\right)^{${k}} \\times \\left(-1\\right)^{n} \\\\  
       &=1\\times \\left(-1\\right)^{n} \\\\    
       &=${miseEnEvidence('\\left(-1\\right)^{n}')}      
       \\end{aligned}$<br>`
-      
+
       this.reponses = [
         '$\\left(-1\\right)^{n} $',
         '$\\left(-1\\right)^{n+1}$ ',
@@ -36,7 +36,7 @@ export default class Auto1AC3h extends ExerciceQcmA {
       &=1\\times \\left(-1\\right)^{n+1} \\\\    
       &=${miseEnEvidence('\\left(-1\\right)^{n+1}')}   
       \\end{aligned}$<br>`
-      
+
       this.reponses = [
         '$\\left(-1\\right)^{n+1} $',
         '$\\left(-1\\right)^{n+2} $',

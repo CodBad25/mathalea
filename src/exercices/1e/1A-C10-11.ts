@@ -15,6 +15,9 @@ export const interactifType = 'qcm'
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = 'Résoudre une équation $ax+b=c$'
+/**
+ * @author Gilles Mora
+ */
 export default class Auto1AC11c extends ExerciceQcmA {
   versionOriginale: () => void = () => {
     this.enonce = "La solution de l'équation  $-53x+72=-137$ est : "

@@ -4,7 +4,7 @@ import type { PointAbstrait } from './PointAbstrait'
 
 /**
  * m = traceCompas(O, A, 20) trace un arc de cercle de centre O qui commence 10° avant A et finit 10° après.
- *@author Jean-Claude Lhote
+ *@author Jean-claude Lhote
  */
 
 export function traceCompas(

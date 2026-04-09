@@ -8,7 +8,7 @@ export const titre =
   'Poser et effectuer des divisions décimales avec un dividende entier et un diviseur à un chiffre'
 
 /**
- * @author Eric Elter
+ * @author Éric Elter
  */
 
 export const uuid = 'dadpc'

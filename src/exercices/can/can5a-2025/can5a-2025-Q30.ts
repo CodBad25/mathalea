@@ -20,7 +20,7 @@ export const refs = {
 }
 
 /**
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
 
 */
 export default class Can2025N5Q30 extends ExerciceCan {

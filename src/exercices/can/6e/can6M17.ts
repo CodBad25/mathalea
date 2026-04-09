@@ -14,13 +14,13 @@ import type { NestedObjetMathalea2dArray } from '../../../types/2d'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre = "Mesurer différence d'aire par comptage"
 export const dateDePublication = '26/04/2024'
-export const dateDeModifImportante = '31/07/2025' // Rajout de différentes unités par Eric Elter
+export const dateDeModifImportante = '31/07/2025' // Rajout de différentes unités par Éric Elter
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const amcReady = true
 
 /**
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export const uuid = 'a17d6'
 

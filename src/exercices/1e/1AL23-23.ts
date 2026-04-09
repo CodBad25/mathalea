@@ -23,7 +23,7 @@ import Exercice from '../Exercice'
 
 export const titre =
   "Déterminer le nombre de solutions d'une équation du second degré selon un paramètre"
-export const dateDePublication = '30/10/2021' // exercice original de Éric Schraffstetter complètement refondu par Jean-Claude Lhote
+export const dateDePublication = '30/10/2021' // exercice original de Éric Schraffstetter complètement refondu par Jean-claude Lhote
 export const dateDeModificationImportante = '05/10/2025' // ajout de cas de figure 2 et 3 et grosse refactorisation
 
 export const uuid = 'fe4dg'

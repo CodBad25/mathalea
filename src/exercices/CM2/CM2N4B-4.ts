@@ -11,7 +11,7 @@ export const titre = 'Jouer au "compte est bon" original'
 
 /**
  * Un "Le compte est bon" avec des solutions "formatées" pour travailler certains incontournables du calcul mental
- *  @author Jean-Claude Lhote
+ *  @author Jean-claude Lhote
 
  */
 export const uuid = 'bd6ff'

@@ -21,7 +21,7 @@ import { reduireAxPlusB } from './ecritures'
  * @property {'addition'|'multiplication'} operation = 'addition'
  * @property {number} valeurMax = 50,
  * @property {boolean} solution = false,
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export class Yohaku {
   type: string

@@ -29,7 +29,7 @@ export const amcType = 'AMCHybride'
 
 /**
  * Lecture de diagrammes
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export const uuid = 'adac4'
 

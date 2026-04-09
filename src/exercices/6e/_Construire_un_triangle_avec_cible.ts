@@ -42,7 +42,7 @@ export const dateDeModifImportante = '18/01/2025'
 
 /**
  * publié le 1/12/2020
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export default class ConstruireUnTriangleAvecCible extends Exercice {
   classe: number

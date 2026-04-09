@@ -17,9 +17,12 @@ export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = "Calculer un taux d'évolution entre deux grandeurs"
 export const dateDePublication = '10/07/2025'
+/**
+ * @author Stéphane Guyon
+ */
 
 export default class TauxEvolution extends ExerciceQcmA {
-   private appliquerLesValeurs(
+  private appliquerLesValeurs(
     valeurInitiale: number,
     valeurFinale: number,
     evo: string,
@@ -79,16 +82,16 @@ export default class TauxEvolution extends ExerciceQcmA {
         valeurFinale =
           valeurInitiale + randint(-1, 1, 0) * base * randint(1, 5) * 10
       } while (valeurFinale === valeurInitiale || valeurFinale <= 0)
-      
+
       // Vérification pour éviter les cas problématiques
       const taux = ((valeurFinale - valeurInitiale) / valeurInitiale) * 100
       const diffBrute = valeurFinale - valeurInitiale
-      
+
       // Si le taux arrondi égale la différence brute, on recommence
       if (Math.round(abs(taux)) === abs(diffBrute)) {
         continue
       }
-      
+
       const evo = valeurFinale < valeurInitiale ? 'diminution' : 'augmentation'
       this.appliquerLesValeurs(valeurInitiale, valeurFinale, evo, base, coeff)
     } while (nombreElementsDifferents(this.reponses) < n)

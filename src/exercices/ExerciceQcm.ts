@@ -19,6 +19,9 @@ export const nombreElementsDifferents = (liste: string[]) => {
 }
 
 // class à utiliser pour fabriquer des Qcms sans aléatoirisation (en cas d'aléatoirisation, on utilisera ExerciceQcmA à la place)
+/**
+ * @author Jean-claude Lhote
+ */
 export default class ExerciceQcm extends Exercice implements IExerciceQcm {
   versionQcm?: boolean
   versionQcmDisponible = true

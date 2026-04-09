@@ -10,7 +10,7 @@ export const amcType = 'AMCHybride'
 
 /**
  * Calculer périmètre et/ou aire de carrés, rectangles et triangles rectangles
- * @author Eric Elter (comme clone de 6M11-1 de Rémi Angot)
+ * @author Éric Elter (comme clone de 6M11-1 de Rémi Angot)
  */
 
 export const uuid = '5e598'

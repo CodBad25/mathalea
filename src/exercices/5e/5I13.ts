@@ -48,7 +48,7 @@ export const dateDeModifImportante = '22/11/2025'
  * Étudier les premiers termes d'une série de motifs afin de donner le nombre de formes du motif suivant.
  * Les patterns sont des motifs figuratifs qui évoluent selon des règles définies.
  * Cet exercice contient des patterns issus de l'excellent site : https://www.visualpatterns.org/
- * @author Jean-Claude Lhote (modif par Eric Elter au niveau des paramètres notamment)
+ * @author Jean-claude Lhote (modif par Éric Elter au niveau des paramètres notamment)
  */
 export const uuid = 'f8b5e'
 

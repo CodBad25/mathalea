@@ -18,6 +18,9 @@ export const refs = {
   'fr-fr': ['TSG2-14'],
   'fr-ch': ['3G94-5'],
 }
+/**
+ * @author Stéphane Guyon
+ */
 
 export default class ExercicePointParCombinaison extends Exercice {
   constructor() {

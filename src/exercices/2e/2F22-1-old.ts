@@ -102,7 +102,7 @@ function aleatoiriseCourbe(listeFonctions: NoeudSpline[][]): NoeudSpline[] {
 
 /**
  * Aléatoirise une courbe et demande les antécédents d'une valeur entière (eux aussi entiers)
- * @author Jean-Claude Lhote (Gilles Mora)
+ * @author Jean-claude Lhote (Gilles Mora)
  */
 export default class LecturesGraphiquesSurSplines extends Exercice {
   spline: Spline | undefined

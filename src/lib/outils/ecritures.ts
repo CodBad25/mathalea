@@ -23,7 +23,7 @@ const isFractionEtendue = (x: unknown): x is IFractionEtendue =>
  * @Example
  * //rienSi1(1)+'x' -> x
  * //rienSi1(-1)+'x' -> -x
- * @author Rémi Angot et Jean-Claude Lhote pour le support des fractions
+ * @author Rémi Angot et Jean-claude Lhote pour le support des fractions
  */
 export function rienSi1(a: number | IFractionEtendue | Decimal) {
   if (typeof a === 'number') {
@@ -190,7 +190,7 @@ export function ecritureAlgebrique(a: number | IFractionEtendue | Decimal) {
  * Ajoute le + devant les nombres positifs, n'écrit rien si 1
  * @Example
  * //+3 ou -3
- * @author Rémi Angot et Jean-Claude Lhote pour le support des fractions
+ * @author Rémi Angot et Jean-claude Lhote pour le support des fractions
  */
 export function ecritureAlgebriqueSauf1(
   a: IFractionEtendue | number | Decimal,
@@ -376,7 +376,7 @@ export function calculAligne(numero: number, etapes: number[]) {
  * Retourne égal si la valeur est égale à l'arrondi souhaité ou environ égal si ce n'est pas le cas
  * Le nombre a est comparé à son arrondi à précision près. Si la différence est inférieure à epsilon, alors on retourne '=' sinon '\\approx'
  * fonctionne aussi si a est une fraction : permet de finir un calcul par la valeur décimale si on veut.
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export function egalOuApprox(
   a: number | IFractionEtendue | Decimal,
@@ -405,7 +405,7 @@ export function egalOuApprox(
 /**
  * renvoie une chaine correspondant à l'écriture réduite d'ax+b selon les valeurs de a et b
  * La lettre par défaut utilisée est 'x' mais peut être tout autre chose.
- * @author Eric Elter
+ * @author Éric Elter
  * @param {number | Decimal | FractionEtendue} a
  * @param {number | Decimal | FractionEtendue} b
  * @param {string} [inconnue = 'x'] 'x' par défaut, mais on peut préciser autre chose.
@@ -419,7 +419,7 @@ export function reduireAxPlusB(
   return reduireAxPlusByPlusC(a, 0, b, inconnue, undefined, options)
 }
 
-/* Ancienne version de Jean-Claude Lhote
+/* Ancienne version de Jean-claude Lhote
 
 if (!(a instanceof Decimal)) a = new Decimal(a)
   if (!(b instanceof Decimal)) b = new Decimal(b)
@@ -443,7 +443,7 @@ type OptionsReduireAxPlusByPlusC = {
 /**
  * renvoie une chaine correspondant à l'écriture réduite d'ax+by+c selon les valeurs de a, b et c
  * Les lettres par défaut utilisées sont 'x' et y mais peut être tout autre chose.
- * @author Eric Elter
+ * @author Éric Elter
  * @param {number | Decimal | FractionEtendue} a
  * @param {number | Decimal | FractionEtendue} b
  * @param {number | Decimal | FractionEtendue} c
@@ -567,7 +567,7 @@ export function reduireAxPlusByPlusC(
 
 /**
  * renvoie une chaine correspondant à l'écriture réduite d'ax^3+bx^2+cx+d selon les valeurs de a, b, c et d
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export function reduirePolynomeDegre3(
   a: number | string,
@@ -707,7 +707,7 @@ export function lister(array: unknown[]): string {
  * @param {string} [x='x'] Le nom de la variable (par défaut, c'est 'x')
  * @param {boolean} [reduire=false] Vrai si on veut réduire le développement en somme algébrique
  * @return {string[]}
- * @author Eric Elter
+ * @author Éric Elter
  * @example doubleDeveloppement({ a:5, b:-2, c:-1, d:4})[0] renvoie 5x*(-x)+5x*4+(-2)*(-x)+(-2)*4
  * @example doubleDeveloppement({ a:5, b:-2, c:-1, d:4})[1] renvoie -5x^2+20x+2x+(-8)
  * @example doubleDeveloppement({ a:5, b:-2, c:-1, d:4, variable:'y})[0] renvoie 5y*(-y)+5y*4+(-2)*(-y)+(-2)*4
@@ -767,7 +767,7 @@ export function doubleDeveloppement({
  * @param {string} [x='x'] Le nom de la variable (par défaut, c'est 'x')
  * @param {boolean} [sommeAGauche=true] Vrai si (ax+b)c, Faux si c(ax+b)
  * @return {string[]}
- * @author Eric Elter
+ * @author Éric Elter
  * @example simpleDeveloppement({ a:5, b:-2, c:3})[0] renvoie 5x*3+(-2)*3
  * @example simpleDeveloppement({ a:5, b:-2, c:3})[1] renvoie 15x+(-6)
  * @example simpleDeveloppement({ a:5, b:-2, c:3, variable:'y, sommeAGauche:false})[0] renvoie 3*5y+3*(-2)
@@ -821,7 +821,7 @@ export function simpleDeveloppement({
  * @param {string} [x='x'] Le nom de la variable (par défaut, c'est 'x')
  * @param {boolean} [sommeAGauche=true] Vrai si (ax+b)c, Faux si c(ax+b) (par défaut, c'est vrai)
  * @return {string[]}
- * @author Eric Elter
+ * @author Éric Elter
  * @example simpleDeveloppementAvecDoubleX({ a:5, b:-2, c:3})[0] renvoie 5x*3x+(-2)*3x
  * @example simpleDeveloppementAvecDoubleX({ a:5, b:-2, c:3})[1] renvoie 15x^2+(-6x)
  * @example simpleDeveloppementAvecDoubleX({ a:5, b:-2, c:3, variable:'y, sommeAGauche:false})[0] renvoie 3y*5y+3y*(-2)

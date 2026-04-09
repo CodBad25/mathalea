@@ -12,7 +12,7 @@ export const dateDePublication = '19/04/2024'
 /**
  * Clone de 5P13 pour les 6èmes
  *
- * @author Eric Elter
+ * @author Éric Elter
  */
 export const uuid = '9c78f'
 

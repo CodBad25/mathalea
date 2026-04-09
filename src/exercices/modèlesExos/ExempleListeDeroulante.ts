@@ -27,7 +27,7 @@ const choix = [
 
 /**
  * Affiche une courbe et demande de choisir sa définition dans une liste
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
 
  */
 export default class BetaListeDeroulante extends Exercice {

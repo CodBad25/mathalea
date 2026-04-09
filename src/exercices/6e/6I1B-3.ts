@@ -49,6 +49,9 @@ export const refs = {
   'fr-2016': ['6I12'],
   'fr-ch': [],
 }
+/**
+ * @author Jean-claude Lhote
+ */
 export default class AlgoTortue extends Exercice {
   // ça c'est la classe qui permet de créer cet exercice
   indiceBonneFigure!: number

@@ -47,7 +47,7 @@ interface Traduction {
  *
  * @param symbole - Le symbole de l’unité à traduire : `'m'` pour mètre, `'g'` pour gramme, `'€'` pour euro, ou `'L'` pour litre.
  * @returns Un objet contenant les formes singulière et plurielle en français.
- * @author Eric Elter
+ * @author Éric Elter
  * @throws {Error} Si le symbole fourni n’est pas pris en charge.
  *
  * @example
@@ -136,7 +136,6 @@ export default class ExerciceConversions extends Exercice {
         listeUniteInfo: Unite[] = [],
         cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       // On limite le nombre d'essais pour chercher des valeurs nouvelles
       k = randint(0, 2) // Choix du préfixe

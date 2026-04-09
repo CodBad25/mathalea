@@ -33,7 +33,7 @@ export const dateDePublication = '10/01/2026'
 
 /**
  * Calculer l’aire in situ d’un carré ou d’un rectangle
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 
 export const uuid = 'f36f4'

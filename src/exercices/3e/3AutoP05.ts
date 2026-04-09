@@ -54,7 +54,7 @@ function choisir3Points(
   return hiver ? points.map((p: [number, number]) => [p[0], p[1] - 20]) : points
 }
 /**
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export default class LireUnGraphiqueCartesien extends ExerciceSimple {
   constructor() {

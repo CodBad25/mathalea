@@ -25,9 +25,9 @@ export const dateDeModifImportante = '18/06/2022'
 
 /**
  * fonction servant à compléter des solides, inspirée des fonctions de 6G42 et 6G43
- * @author Mireille Gain, s'inspirant fortement de Jean-Claude Lhote
+ * @author Mireille Gain, s'inspirant fortement de Jean-claude Lhote
  * Ajout du cône par Guillaume Valmont le 18/06/2022
- * AMC pour Eric Elter le 25/11/2024
+ * AMC pour Éric Elter le 25/11/2024
  */
 export const uuid = '0e754'
 

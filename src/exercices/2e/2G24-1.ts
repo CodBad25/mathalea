@@ -31,7 +31,9 @@ export const dateDeModifImportante = '30/06/2023'
 
 /**
  * Coordonnées d'un vecteur à partir de deux points
- * @author Stéphane Guyon & Stéphan Grignon Interactif Gilles Mora le 11 juin 2024
+ * @author Stéphane Guyon
+ * @author Stéphan Grignon
+ *  Interactif Gilles Mora le 11 juin 2024
  */
 export const uuid = 'f71c1'
 
@@ -103,7 +105,7 @@ export default class Calculercoordonneesvecteurs extends Exercice {
         texte += `Déterminer les coordonnées du vecteur $\\overrightarrow{${nomsPoints[0]}${nomsPoints[1]}}$.`
 
         texteCorr = `$\\overrightarrow{${nomsPoints[0]}${nomsPoints[1]}}\\begin{pmatrix}${xB}-${ecritureParentheseSiNegatif(xA)}\\\\${yB}-${ecritureParentheseSiNegatif(yA)}\\end{pmatrix}$, soit $\\overrightarrow{${nomsPoints[0]}${nomsPoints[1]}}\\begin{pmatrix}${miseEnEvidence(xABFraction.texFSD)}\\\\[0.7em]${miseEnEvidence(yABFraction.texFSD)}\\end{pmatrix}$.<br>`
-                                                                                                                                                                                                                                                     
+
         if (this.correctionDetaillee) {
           texteCorr =
             "On sait d'après le cours que si $A(x_A\\,;\\,y_A)$ et $B(x_B\\,;\\,y_B)$ sont deux points d'un repère, alors on a $\\overrightarrow{AB}\\begin{pmatrix}x_B-x_A\\\\y_B-y_A\\end{pmatrix}$.<br>"

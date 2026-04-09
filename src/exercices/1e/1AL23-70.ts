@@ -21,7 +21,7 @@ import Exercice from '../Exercice'
 export const titre = 'Déterminer une équation de parabole'
 
 /**
- * @author Jean-Claude Lhote (modifié par EE pour corriger exo et remplacer Repere et Courbe par Repere2 et Courbe2 (juillet 2022))
+ * @author Jean-claude Lhote (modifié par EE pour corriger exo et remplacer Repere et Courbe par Repere2 et Courbe2 (juillet 2022))
  * Trois types de questions proposées :
  * 1) passant par trois dont deux d'abscisses opposées et le troisième d'abscisse 0 (pour simplifier la résolution du système)
  * 2) passant par un point et dont on connaît le sommet

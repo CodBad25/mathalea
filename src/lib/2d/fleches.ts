@@ -6,7 +6,7 @@ import { Segment, segment } from './segmentsVecteurs'
 import { homothetie, rotation, translation } from './transformations'
 import { vecteur } from './Vecteur'
 /**
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export class FlecheBuilder {
   pointe: Polygone | BezierPath

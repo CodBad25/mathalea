@@ -37,7 +37,7 @@ import Exercice from '../Exercice'
 
 export const titre = 'Effectuer des transformations de triangles'
 /**
- * @author Liouba Leroux & Jean-Claude Lhote
+ * @author Liouba Leroux & Jean-claude Lhote
  */
 export const uuid = '0da6a'
 

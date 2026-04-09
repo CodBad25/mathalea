@@ -31,7 +31,7 @@ export const interactifType = ['qcm', 'mathLive']
  * * Dans un rectangle, on connaît la longueur et la largeur, il faut calculer la diagonale.
  * * Est-ce qu'un parallélogramme est un losange ? On peut démontrer que les diagonales sont perpendiculaires ou pas.
  * * Est-ce qu'un parallélogramme est un rectangle ? On peut démontrer qu'il possède un angle droit ou pas .
- * @author Rémi Angot (Factorisation de la rédaction de Pythagore par Eric Elter)
+ * @author Rémi Angot (Factorisation de la rédaction de Pythagore par Éric Elter)
  */
 export const uuid = 'b18e8'
 

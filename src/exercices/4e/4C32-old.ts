@@ -30,7 +30,7 @@ export const amcType = 'AMCNum'
 
 /**
  * Écrire un nombre décimal en notation scientifique et inversement
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 
 export const uuid = 'a0d16'

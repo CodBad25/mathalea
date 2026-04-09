@@ -1,13 +1,13 @@
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { personne } from '../../lib/outils/Personne'
+import { texNombre } from '../../lib/outils/texNombre'
+import FractionEtendue from '../../modules/FractionEtendue'
 import { listeQuestionsToContenu } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { miseEnEvidence } from '../../lib/outils/embellissements'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { personne } from '../../lib/outils/Personne'
-import FractionEtendue from '../../modules/FractionEtendue'
-import { texNombre } from '../../lib/outils/texNombre'
 
 export const titre =
   'Trouver une probabilité sous forme fractionnaire, décimale et en pourcentage'
@@ -15,7 +15,7 @@ export const interactifReady = true
 export const interactifType = 'mathLive'
 
 /**
- * @author Eric Elter
+ * @author Éric Elter
  */
 export const dateDePublication = '10/08/2025'
 export const uuid = 'b8296'

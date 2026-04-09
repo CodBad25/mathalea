@@ -33,7 +33,7 @@ export const titre =
   'Préparation DNB : Fonctions, fonction affine, tableur et équation produit-nul'
 export const dateDePublication = '17/11/2024'
 /**
- * @Author Jean-Claude Lhote
+ * @Author Jean-claude Lhote
  * Cet exerice exploite la nouvelle classe d'exercices que j'ai conçue pour les sujets de brevet
  * Il s'agit d'un exercice de type Brevet Aléatoirisé
  * La méthode privée appliquerLesValeurs permet de générer les valeurs aléatoires et de construire l'énoncé et la correction

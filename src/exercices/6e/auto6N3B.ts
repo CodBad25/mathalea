@@ -21,7 +21,7 @@ export const refs = {
 }
 
 /** Connaître, de façon automatique, les liens entre 1/4, 1/2 et 3/4
- * @author Eric Elter
+ * @author Éric Elter
  */
 
 export default class ConnaitreQuart extends Exercice {

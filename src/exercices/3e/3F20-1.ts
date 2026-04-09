@@ -44,7 +44,7 @@ export const refs = {
 export const uuid = '20d20'
 /**
  * Questions sur les fonctions affines
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export default class FonctionsAffines extends Exercice {
   lycee: boolean

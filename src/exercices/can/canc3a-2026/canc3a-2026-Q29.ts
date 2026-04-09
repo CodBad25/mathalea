@@ -15,20 +15,20 @@ export const refs = {
 }
 
 /**
- * @author Eric Elter
+ * @author Éric Elter
 
 */
 export default class Can2026CM2Q29 extends ExerciceCan {
-  constructor () {
+  constructor() {
     super()
     this.formatChampTexte = KeyboardType.clavierNumbers
     this.optionsDeComparaison = { nombreDecimalSeulement: true }
     this.optionsChampTexte = {
-      texteAvant: '<br>'
+      texteAvant: '<br>',
     }
   }
 
-  enonce (nombre?: number, quotite?: string) {
+  enonce(nombre?: number, quotite?: string) {
     if (nombre == null || quotite == null) {
       quotite = choice(['dizaine', 'centaine'])
       if (quotite === 'dizaine') {
@@ -57,7 +57,7 @@ export default class Can2026CM2Q29 extends ExerciceCan {
       $${texNombre(nombre, 0)}-${texNombre(valeur, 0)}=${miseEnEvidence(texNombre(resultat, 0))}$`
   }
 
-  nouvelleVersion () {
+  nouvelleVersion() {
     this.canOfficielle ? this.enonce(2054, 'centaine') : this.enonce()
   }
 }

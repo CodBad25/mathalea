@@ -46,7 +46,7 @@ export function isTransformationsIndex(
  * @param {any} pointO Centre du repère local pour les symétries, centre pour les rotations et les homothéties
  * @param {any} vecteur=[] Vecteur de la translation
  * @param {number} rapport=1 rapport d'homothétie
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * @returns {number[]} Le point résultat
  */
 export function imagePointParTransformation(

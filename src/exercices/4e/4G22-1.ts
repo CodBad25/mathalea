@@ -332,6 +332,9 @@ function calculeDemiDiagonale(
   return correction
 }
 
+/**
+ * @author Jean-claude Lhote
+ */
 export default class CalculeDansPyramide extends Exercice {
   niveau: number = 4
   constructor() {

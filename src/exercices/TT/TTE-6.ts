@@ -22,7 +22,7 @@ export const refs = {
 }
 /**
  *
- * @author Jean-Claude Lhote et modifié par Claire Rousset
+ * @author Jean-claude Lhote et modifié par Claire Rousset
 
 */
 export default class ExerciceCalculsProprietesLn extends Exercice {

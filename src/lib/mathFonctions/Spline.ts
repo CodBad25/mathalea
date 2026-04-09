@@ -201,7 +201,7 @@ export function modifieNoeuds(
 }
 /**
  * Les noeuds sont des objets : {x,y, nombreDerive} attention à les donner dans l'ordre des x croissants
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export class Spline {
   /**
@@ -850,7 +850,7 @@ export function spline(noeuds: NoeudSpline[]) {
 /**
  * Fonction qui trie des noeuds pour Spline afin de les remettre dans l'ordre des x croissant
  * @param {Array<{x: number, y:number,nombreDerive:number}>} noeuds
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export function trieNoeuds(noeuds: NoeudSpline[]) {
   let xInter, yInter, dGaucheInter, dDroitInter, isVisibleInter

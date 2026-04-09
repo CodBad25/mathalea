@@ -22,7 +22,7 @@ export const dateDePublication = '12/12/2021'
 /**
  * Utiliser la double distributivité pour développer (a+b)² ou (a-b)²
  *
- * @author Rémi Angot (AMC par Eric Elter)
+ * @author Rémi Angot (AMC par Éric Elter)
  * 3L11-7
  */
 export const uuid = '7cf81'

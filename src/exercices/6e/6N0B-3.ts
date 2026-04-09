@@ -11,7 +11,7 @@ export const interactifType = 'listeDeroulante'
 export const dateDePublication = '08/10/2023'
 
 /**
- * @author Eric Elter
+ * @author Éric Elter
  */
 
 export const uuid = 'e6f62'

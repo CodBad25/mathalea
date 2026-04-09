@@ -34,7 +34,7 @@ export const dateDeModifImportante = '09/04/2022'
  * * 2 : deux questions niveau 1 puis deux questions niveau 3
  * * 3 : Produits de nombres relatifs
  * * Si décomposition cochée : les nombres utilisés sont plus importants.
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * Ajout d'une option pour ne pas exiger une fraction irréductible le 09/04/2022 par Guillaume Valmont
  */
 export const uuid = '72ce7'

@@ -10,7 +10,7 @@ export const interactifType = 'qcm'
 export const uuid = 'e1faf'
 /**
  * Modèle d'exercice très simple pour la course aux nombres
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
 
 */
 export default class CompareDecimalFraction extends ExerciceSimple {

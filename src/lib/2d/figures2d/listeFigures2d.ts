@@ -87,7 +87,7 @@ import {
 } from './panneaux'
 /**
  * @description formes utilisées dans l'exercice 6G25-4 notamment
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export const listeFigures2d: Forme[] = [
   // panneaux

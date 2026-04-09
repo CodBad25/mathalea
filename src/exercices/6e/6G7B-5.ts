@@ -374,6 +374,9 @@ const choisitTriangle = function (typeAxe: number, index: number) {
   return { antecedent, image, distracteurs }
 }
 
+/**
+ * @author Jean-claude Lhote
+ */
 export default class SymetrieAxialePavageTriangulaire extends Exercice {
   constructor() {
     super()

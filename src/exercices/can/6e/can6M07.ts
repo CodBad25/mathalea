@@ -13,7 +13,7 @@ export const amcReady = true
 export const amcType = 'AMCNum'
 
 /**
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * Publié le 15/09/2021
 
  */

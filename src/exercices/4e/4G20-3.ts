@@ -12,7 +12,7 @@ import Exercice from '../Exercice'
 
 export const titre = 'Calculer un carré'
 export const dateDePublication = '17/01/2023'
-export const dateDeModifImportante = '25/09/2025' // Eric Elter : Parenthèses + Eviter doublons
+export const dateDeModifImportante = '25/09/2025' // Éric Elter : Parenthèses + Eviter doublons
 export const interactifReady = true
 export const interactifType = 'mathLive'
 
@@ -87,7 +87,6 @@ export default class calculsDeCarre extends Exercice {
     for (
       let i = 0, texte, texteCorr, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       const entier = randint(1, 15)
       const signe = randint(-1, 1, [0])

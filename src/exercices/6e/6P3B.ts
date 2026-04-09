@@ -13,7 +13,7 @@ export const interactifReady = true
 export const interactifType = 'qcm'
 
 /**
- * @author Eric Elter
+ * @author Éric Elter
  */
 
 interface Affirmation {

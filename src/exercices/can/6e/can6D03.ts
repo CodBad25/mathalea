@@ -15,7 +15,7 @@ export const amcReady = true
 export const amcType = 'AMCNum'
 
 /**
- * @author Jean-Claude Lhote & Gilles Mora
+ * @author Jean-claude Lhote & Gilles Mora
  */
 
 export const uuid = '05b2e'

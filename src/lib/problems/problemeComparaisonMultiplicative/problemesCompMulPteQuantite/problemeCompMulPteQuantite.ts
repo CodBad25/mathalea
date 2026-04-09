@@ -5,7 +5,7 @@ import { texNombre } from '../../../outils/texNombre'
 import Probleme from '../../Probleme'
 
 /**
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export default class ProblemeCompMulPteQuantite extends Probleme {
   constructor(name: string = '', data?: { nb2: number; nbFois: number }) {

@@ -98,7 +98,7 @@ export function lettreMinusculeDepuisChiffre(i: number) {
 
 /**
  * Renvoie une lettre majuscule (éventuellement indicée) depuis un nombre compris entre 1 et... sans limite.
- * @author Eric Elter
+ * @author Éric Elter
  *@Example
  * // 0 -> @ 1->A ; 2->B...
  * // 27->A_1 ; 28 ->A_2 ...
@@ -125,7 +125,7 @@ export function lettreIndiceeMinusculeDepuisChiffre(i: number) {
 
 /**
  * Renvoie un espace insécable pour le mode texte suivant la sortie html ou Latex.
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export function sp(nb = 1) {
   let s = ''
@@ -173,7 +173,7 @@ export function numAlpha(k: number, nospace = false) {
 /**
  * Crée une liste de questions numérique
  * @param {number} k valeur numérique
- * @author Eric Elter
+ * @author Éric Elter
  */
 export function numAlphaNum(k: number, nospace = false) {
   k = k + 1

@@ -10,7 +10,7 @@ export const amcReady = true
 export const amcType = 'AMCNum'
 /**
  * Modèle d'exercice très simple pour la course aux nombres
- * @author Gille Mora
+ * @author Gilles Mora
  * Créé pendant l'été 2021
 
  * Date de publication

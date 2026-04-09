@@ -24,7 +24,7 @@ export const dateDeModifImportante = '08/05/2023' // par EE : Le nb de questions
 
 /**
  * Compléter un script sur les multiples et diviseurs
- * @author Eric Elter
+ * @author Éric Elter
  */
 export const uuid = '52c97'
 
@@ -193,7 +193,6 @@ export default class CompleterScriptDiviseurs extends Exercice {
     for (
       let i = 0, texte, texteCorr, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       const tableauTouches = []
       for (let i = 1; i < 27; i++)

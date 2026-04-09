@@ -39,7 +39,7 @@ export const refs = {
   'fr-ch': ['9GM1-9'],
 }
 /**
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 
 type ItemType = {

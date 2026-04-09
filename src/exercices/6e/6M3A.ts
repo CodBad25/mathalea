@@ -6,7 +6,7 @@ export const interactifType = 'custom'
 export const dateDePublication = '04/08/2025'
 
 /**
- * @author Eric Elter
+ * @author Éric Elter
  */
 
 export const uuid = '9bcab'

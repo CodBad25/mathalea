@@ -2,7 +2,7 @@ import { randint } from '../../../../modules/outils'
 import type Probleme from '../../Probleme'
 import ProblemeCompMulTout from './problemeCompMulTout'
 /**
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export function chocolats6(decimal = false): Probleme {
   const nbFois = randint(4, 6)

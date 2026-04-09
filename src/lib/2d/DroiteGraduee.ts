@@ -51,7 +51,7 @@ import { tracePoint } from './TracePoint'
  * @property {number?} Unite Nombre de cm par unité
  * @property {number?} Min Valeur minimum labelisée sur l'axe (les graduations commencent un peu avant)
  * @property {number?} Max Valeur maximum labelisée sur l'axe (les graduations finissent un peu après)
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * @return {array} Liste d'objets MathAlea2D
  */
 // JSDOC Validee par EE Aout 2022
@@ -140,7 +140,7 @@ export class DroiteGraduee extends ObjetMathalea2D {
     labelListeScriptsize?: boolean
   }) {
     super()
-    // correctif Jean-Claude Lhote 15/08/2023
+    // correctif Jean-claude Lhote 15/08/2023
     // Les propriétés exportables
     this.Unite = Unite
     this.Min = Min
@@ -385,7 +385,7 @@ export class DroiteGraduee extends ObjetMathalea2D {
         pointEpaisseur: 3
       })
  // Trace une droite graduée avec différentes options
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * @return {DroiteGraduee}
  */
 // JSDOC Validee par EE Aout 2022

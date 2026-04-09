@@ -22,7 +22,7 @@ export const amcType = 'AMCHybride'
 /**
  * Symétrie axiale sur papier pointé
  * Ref 6G24-4
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * Publié le 18/12/2021
  */
 export const uuid = '07f8a'

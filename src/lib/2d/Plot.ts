@@ -3,7 +3,7 @@ import { colorToLatexOrHTML } from './colorToLatexOrHtml'
 import { ObjetMathalea2D } from './ObjetMathalea2D'
 
 /**
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * @param {number} x abscisse
  * @param {number} y ordonnée
  * @param {object} param2 permet de définir le rayon du 'plot', sa couleur, sa couleur de remplissage

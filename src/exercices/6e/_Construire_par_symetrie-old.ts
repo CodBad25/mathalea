@@ -170,7 +170,7 @@ function choisi3Points(d: Droite, lieu = ['dessus', 'dessous', 'sur']) {
 }
 
 /**
- * @author Jean-Claude Lhote  (Ajout AMC par Eric Elter, ES6 par Loïc Geeraerts)
+ * @author Jean-claude Lhote  (Ajout AMC par Éric Elter, ES6 par Loïc Geeraerts)
  * Fonction générale pour les exercices de construction de symétriques (centrale/axiale et points/triangles)
  * Permet une sortie html/pdf sur petits carreaux/gros carreaux/papier blanc
  * Relecture : Novembre 2021 par EE

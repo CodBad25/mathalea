@@ -12,7 +12,7 @@ export const interactifType = 'mathLive'
 export const uuid = '36031'
 /**
  * Modèle d'exercice très simple pour la course aux nombres
- * @author Gilles Mora (reprise du fichier de Jean-Claude Lhote 6ième)
+ * @author Gilles Mora (reprise du fichier de Jean-claude Lhote 6ième)
 
 */
 export default class AbscisseEnDemisCM2 extends ExerciceSimple {

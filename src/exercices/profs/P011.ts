@@ -23,7 +23,7 @@ function aLeMinDArguments(params: any[], nombre: number) {
 }
 /**
  * Permet de construire un triangle animé à partir de différentes données
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export default class ConstruisMonTriangle extends Exercice {
   constructor() {

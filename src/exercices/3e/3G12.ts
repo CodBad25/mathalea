@@ -37,7 +37,7 @@ export const amcType = 'AMCHybride'
 
 /**
  * Trouver l'image par sune rotation d'une figure dans un pavage
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * Rajout par EE d'un quatrième paramètre, de l'interactif et de l'AMC
  */
 export const uuid = '442e0'

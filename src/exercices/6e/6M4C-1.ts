@@ -24,7 +24,7 @@ export const amcType = 'AMCHybride'
 export const dateDeModifImportante = '14/05/2022'
 
 /**
- * @author
+ * @author Rémi Angot
  * Ajout d'une option "Mélange" par Guillaume Valmont le 14/05/2022
  */
 

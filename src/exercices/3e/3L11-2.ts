@@ -31,7 +31,7 @@ export const dateDeModifImportante = '06/02/2024'
 /**
  * Réduire des expressions lorsque c'est possible
  *
- * @author Rémi Angot (Amélioration AMC par Eric Elter)
+ * @author Rémi Angot (Amélioration AMC par Éric Elter)
  */
 export const uuid = 'f6853'
 

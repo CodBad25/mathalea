@@ -17,7 +17,7 @@ export const dateDeModifImportante = '24/10/2021' // Une date de modification im
 /**
  *
  * @author Maxime Nguyen
- * Terminé par Jean-Claude Lhote (correction du cas 3x3 détaillée + mise en place classe MatriceCarree)
+ * Terminé par Jean-claude Lhote (correction du cas 3x3 détaillée + mise en place classe MatriceCarree)
 
  */
 export const uuid = '2806f'

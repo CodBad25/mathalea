@@ -436,7 +436,7 @@ function handleHMS(saisie: string, answer: string): ResultType {
  * @param {string} saisie
  * @param {string} goodAnswer
  * @return ResultType
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 // function hmsCompare(saisie: string, goodAnswer: string): ResultType {
 function handleHMS(saisie: string, goodAnswer: string): ResultType {
@@ -457,7 +457,7 @@ function handleHMS(saisie: string, goodAnswer: string): ResultType {
  * Compare deux chaînes de coordonnées (2D ou 3D), en normalisant les formats.
  * Gère : parenthèses, séparateur (;), fractions, décimaux, espaces, etc.
  * Exemples acceptés : (3;3), 3;4, (-3;2{,}5), (\frac35;-frac{2}{5}), 1,2,3
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export function handleCoordinates(saisie: string, answer: string): ResultType {
   // Nettoyage de base (parenthèses, espaces, fractions, virgules)
@@ -510,7 +510,7 @@ function normaliseUnions(expr: string): string {
 }
 
 // Version ArnoG (optimisée par rapport à la notre)
-// Initialement crée par Jean-Claude Lhote
+// Initialement crée par Jean-claude Lhote
 function handleIntervalle(saisie: string, answer: string): ResultType {
   // Unicode → LaTeX replacements for copy-paste from browsers/Wikipedia
   const UNICODE_TO_LATEX: Array<[string, string]> = [
@@ -667,7 +667,7 @@ function handleIntervalle(saisie: string, answer: string): ResultType {
  * La fonction de comparaison des intervalles pour l'interactif
  * @param {string} saisie
  * @param {string} answer
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  
 function handleIntervalle(saisie: string, answer: string) {
   const clean = generateCleaner(['virgules', 'parentheses', 'espaces'])
@@ -769,7 +769,7 @@ function handleIntervalle(saisie: string, answer: string) {
 } */
 
 // Version ArnoG
-// Initialement crée par Jean-Claude Lhote
+// Initialement crée par Jean-claude Lhote
 function handleEstDansIntervalle(saisie: string, answer: string): ResultType {
   const clean = generateCleaner(['virgules', 'parentheses', 'espaces'])
   const interval = parseInterval(clean(answer))
@@ -803,7 +803,7 @@ function handleEstDansIntervalle(saisie: string, answer: string): ResultType {
 /**
  * Format des nombres avec les espaces adéquats
  * @param {string} nombre // Un nombre sans espace sous forme d'une chaîne de caractères
- * @author Eric Elter (aide par ChatGPT)
+ * @author Éric Elter (aide par ChatGPT)
  * @example formatNumberWithSpaces('1234567') renvoie '1 234 567'
  * @example formatNumberWithSpaces('1239,4567') renvoie '1 239,456 7'
  * @returns {string}
@@ -871,7 +871,7 @@ function handleNombreAvecEspace(saisie: string, answer: string): ResultType {
 }
 
 /**
- * @author Eric Elter
+ * @author Éric Elter
  */
 function handlefractionSansRacineCarree(
   saisie: string,
@@ -901,13 +901,13 @@ function handlefractionSansRacineCarree(
  * Vérifie si une chaîne est en notation scientifique LaTeX valide.
  * Gère les formes "a\\times10^{b}" et "10^{b}\\timesa".
  * Retourne un objet avec isOk et feedback.
- * @author Eric Elter
+ * @author Éric Elter
  */
 /**
  * Vérifie si une chaîne est en notation scientifique LaTeX valide.
  * Gère les formes "a\\times10^b" et "10^b\\timesa" avec ou sans accolades.
  * Retourne un objet avec isOk et feedback.
- * @author Eric Elter
+ * @author Éric Elter
  */
 function isScientific(str: string): ResultType {
   // Regex 1 : a\times10^b ou a\times10^{b}
@@ -976,7 +976,7 @@ function handleEcritureScientifique(
   return !isNaN(plainVal) && Math.abs(plainVal - ansVal) < 1e-12 ? ok() : fail()
 */
 
-  // Version Eric Elter
+  // Version Éric Elter
   const clean = generateCleaner([
     'virgules',
     'espaces',
@@ -1077,7 +1077,7 @@ function handleUnite(
   }
   return ok()
   */
-  // Version Jean-Claude Lhote
+  // Version Jean-claude Lhote
   const localInput = saisie.replace('^\\circ', '°').replace('\\degree', '°')
   const cleaner = generateCleaner([
     'virgules',
@@ -2767,7 +2767,7 @@ function handleEnsembleNombres(
 }
 
 /**
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 
 export function handleLeCompteEstBon( // Ne fonctionne que si numbers est un tableau de nombres POSITIFS.
@@ -2916,7 +2916,7 @@ export function handleLeCompteEstBon( // Ne fonctionne que si numbers est un tab
  * Peut-être en faire une variation pour vérifier des inégalités ?
  * @param {string} input
  * @param {string} goodAnswer
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * @return ResultType
  */
 

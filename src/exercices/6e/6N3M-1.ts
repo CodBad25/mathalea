@@ -32,7 +32,7 @@ export const dateDeModifImportante = '01/04/2026'
 
 /**
  * Calculer la fraction d'une quantité avec ou sans dessin.
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export const uuid = 'a168e'
 

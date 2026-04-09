@@ -30,7 +30,7 @@ export const amcReady = true
 
 /**
  * Développer des expressions de la forme (ax+b)c ou (ax+b)c ou (ax+b)cx ou cx(ax+b) avec a, b, c relatifs et paramétrables ainsi que x
- * @author Eric Elter (modifié par Rémi Angot 10/10/2025 pour utiliser combinaisonListes)
+ * @author Éric Elter (modifié par Rémi Angot 10/10/2025 pour utiliser combinaisonListes)
  */
 export const uuid = 'f61d9'
 

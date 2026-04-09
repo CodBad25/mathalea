@@ -19,7 +19,7 @@ export const titre =
 
 /**
  * Problèmes calculs d'aire et de volumes utilisant l'effet d'une réduction sur les aires et les volumes
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export const uuid = '960f9'
 

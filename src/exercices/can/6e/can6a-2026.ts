@@ -46,7 +46,7 @@ export const dateDePublication = '03/03/2026'
 
 /**
  * Annales CAN 2026
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 
 const questions = [

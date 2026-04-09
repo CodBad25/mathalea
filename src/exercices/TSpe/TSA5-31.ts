@@ -21,7 +21,7 @@ export const dateDePublication = '17/04/2024'
 
 /**
  * Dérivée de ln(u)
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  *
  */
 class DerivationLnU extends Exercice {

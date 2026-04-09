@@ -16,7 +16,7 @@ export const interactifType = 'qcm'
  * Comparaison de deux nombres entiers avec deux niveaux de difficulté : avec un nombre de chiffres différents et avec le même nombre de chiffres
  * Dans le cas où les nombres ont le même nombre de chiffres, ils ont entre 1 et (max - 1) chiffres identiques
  * @author Guillaume Valmont
- * Mise en interactif par Jean-Claude Lhote
+ * Mise en interactif par Jean-claude Lhote
  */
 export const uuid = 'a7aa7'
 

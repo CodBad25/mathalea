@@ -4,7 +4,7 @@ import SchemaEnBoite from '../../../outils/SchemaEnBoite'
 import { texNombre } from '../../../outils/texNombre'
 import Probleme from '../../Probleme'
 /**
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export default class ProblemeMultiplicatifs extends Probleme {
   constructor(name: string = '', data?: { nbFois: number; facteur: number }) {

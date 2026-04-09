@@ -22,7 +22,7 @@ export const dateDeModifImportante = '12/01/2024'
 /**
  * donner les valeurs remarquables du cosinus et du sinus avec trois niveaux :
  * 1 : quart de cercle trigo, 2 : avec les angles associés, 3 : avec les angles modulo 2kpi.
- * @author Stéphane Guyon - Jean Claude Lhote - Loïc Geeraerts
+ * @author Stéphane Guyon - Jean-claude Lhote - Loïc Geeraerts
  */
 
 export const uuid = '4e685'

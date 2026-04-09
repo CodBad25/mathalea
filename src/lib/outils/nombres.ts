@@ -23,7 +23,8 @@ export function signe(a: number) {
  * @Example
  * sommeDesChiffres(123)
  * // [ 6, '1+2+3']
- * @author Rémi Angot (Rajout Tableau par EE)
+ * @author Rémi Angot
+ * (Rajout Tableau par EE)
  */ export function sommeDesChiffres(n: number | number[]): [number, string] {
   let nString
   if (Array.isArray(n)) nString = n.join('').toString()
@@ -76,7 +77,7 @@ export function round(valeur: number, precision: number = 0): number {
 
 /**
  * Retourne la troncature signée de nombre.
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export function troncature(nombre: number, precision: number) {
   const tmp = Math.pow(10, precision)
@@ -88,7 +89,7 @@ export function troncature(nombre: number, precision: number) {
 
 /**
  * Renvoie la valeur absolue
- * @author Rémi Angot + ajout du support des décimaux par Jean-Claude Lhote
+ * @author Rémi Angot + ajout du support des décimaux par Jean-claude Lhote
  * @returns {number|Decimal}
  */
 export function abs<T extends number | Decimal>(a: T): T {
@@ -160,7 +161,7 @@ export function nombreDeChiffresDansLaPartieEntiere(
  * Renvoie le nombre de chiffres d'un nombre décimal
  * @param {number} nb : nombre décimal
  * @param {number} except : chiffre à ne pas compter (0 par exemple) [Ajout EE]
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export function nombreDeChiffresDe(nb: number | Decimal, except?: number) {
   if (nb instanceof Decimal) nb = nb.toNumber()
@@ -280,7 +281,7 @@ export function numTrie(arr: number[]) {
  *
  * @param {number} a
  * -1 si a est négatif, 1 sinon.
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export function unSiPositifMoinsUnSinon(a: number) {
   if (a < 0) return -1
@@ -291,7 +292,7 @@ export function unSiPositifMoinsUnSinon(a: number) {
  *
  * @param a retourne vrai si tous les éléments de a sont de même signe
  * @returns boolean
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export function tousDeMemeSigne(a: number[]) {
   if (a.length === 0) return true

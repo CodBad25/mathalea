@@ -18,10 +18,10 @@ export const interactifReady = true
 export const interactifType = 'mathLive'
 
 export const dateDePublication = '24/04/2024'
-export const dateDeModifImportante = '31/07/2025' // Rajout de différentes unités par Eric Elter
+export const dateDeModifImportante = '31/07/2025' // Rajout de différentes unités par Éric Elter
 
 /**
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export const uuid = '83be9'
 

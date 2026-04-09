@@ -30,7 +30,7 @@ export const interactifType = 'mathLive'
 
 /**
  * On doit calculer la probabilité qu'un événement se réalise après une expérience aléatoire à deux épreuves
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export const uuid = '76230'
 

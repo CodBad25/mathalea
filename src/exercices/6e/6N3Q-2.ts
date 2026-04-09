@@ -32,7 +32,7 @@ export const dateDeModifImportante = '16/04/2023'
  * - 2 Comme le 1 mais avec 25% et 75% en plus ;
  * - 3 valeurs entières et 13%, 28%...;
  * - 4 valeurs décimale comme 13,5%...;
- * @author Laurence CANDILLE (Rajout de 25% et 50% par Eric Elter)
+ * @author Laurence CANDILLE (Rajout de 25% et 50% par Éric Elter)
  * Relecture : Novembre 2021 par EE
  */
 export const uuid = '064ce'

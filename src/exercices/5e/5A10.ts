@@ -27,7 +27,7 @@ export const amcType = 'AMCOpen'
 /**
  * 5A10 - Division Euclidienne; diviseurs, multiples, critères de divisibilité
  * Exercice bilan
- * @author Sébastien Lozano & Jean Claude Lhote
+ * @author Sébastien Lozano & Jean-claude Lhote
  */
 export const uuid = '4828d'
 
@@ -113,7 +113,6 @@ export default class ListeDesDiviseurs5e extends Exercice {
     for (
       let i = 0, nbDiviseursM, M, texte, texteCorr, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       typesDeQuestions = listeTypeDeQuestions[i]
       if (nbDiviseursMax[i] > 10) {

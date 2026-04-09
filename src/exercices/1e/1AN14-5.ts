@@ -22,7 +22,7 @@ export const interactifType = 'mathLive'
 /**
  * Calculer la dérivée d'un produit
  * @author Jean-Léon Henry modifié par Rémi Angot (choix des fonctions + parenthèses)
- * mise en jour par Jean-Claude Lhote à la demande des collègues de lycée (notations + paramétrage + quelques améliorations esthétiques)
+ * mise en jour par Jean-claude Lhote à la demande des collègues de lycée (notations + paramétrage + quelques améliorations esthétiques)
 
  */
 

@@ -7,7 +7,7 @@ export const interactifType = 'mathLive'
 
 /**
  * @author Sébastien Lozano
- * Passage en interactif : Eric Elter
+ * Passage en interactif : Éric Elter
  */
 
 export const uuid = 'd0fdc'

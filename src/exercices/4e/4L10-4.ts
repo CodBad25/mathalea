@@ -8,7 +8,7 @@ export const dateDePublication = '12/08/2022'
 
 /**
  * Travailler les réductions d'expressions littérales
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 
 export const uuid = 'a40d6'

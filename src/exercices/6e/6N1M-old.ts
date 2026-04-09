@@ -22,7 +22,7 @@ export const amcReady = true
 export const amcType = 'AMCHybride'
 /**
  * * Encadrer_un_decimal_selon_une_precision_donnée
- * @author Mickael Guironnet (rendu AMC par Eric Elter)
+ * @author Mickael Guironnet (rendu AMC par Éric Elter)
  */
 
 export const refs = {

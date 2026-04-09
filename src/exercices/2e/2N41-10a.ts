@@ -40,7 +40,7 @@ export const amcReady = true
 /**
  * Développer puis réduire une expression littérale.
  *
- * @author Matthieu DEVILLERS refactorisé par Jean-Claude Lhote
+ * @author Matthieu DEVILLERS refactorisé par Jean-claude Lhote
  */
 export const uuid = '889ef'
 export const refs = {

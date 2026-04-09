@@ -12,7 +12,7 @@ export const amcReady = true
 export const amcType = 'qcmMono'
 
 /**
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * Créé pendant l'été 2021
  * MAJ en décembre 2025 par Mireille Gain pour augmenter le nombre de cas
 

@@ -14,7 +14,7 @@ export const refs = {
 }
 
 /**
- * @author Eric Elter
+ * @author Éric Elter
  */
 
 export default class MultiplicationsPoseesCM1 extends AdditionsSoustractionsMultiplicationsPosees {

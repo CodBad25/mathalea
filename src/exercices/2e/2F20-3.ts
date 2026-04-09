@@ -41,7 +41,7 @@ export const dateDePublication = '1/08/2021'
 export const dateDeModifImportante = '24/03/2026'
 
 /**
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 
 export const uuid = '573f2'

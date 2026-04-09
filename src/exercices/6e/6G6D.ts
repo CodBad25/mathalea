@@ -55,7 +55,7 @@ Correction de quelques coquilles
  * * Dans un triangle rectangle, un angle aigu mesure 5 fois l'autre.
  * * Un triangle a 3 angles égaux.
  * * Dans un triangle rectangle, un angle mesure le tiers de l'autre.
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * Ajout de schémas aux questions "faciles" par Guillaume Valmont le 04/03/2023
 
  */

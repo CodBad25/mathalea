@@ -32,7 +32,7 @@ const buildDataKeyboardString = (style = '') => {
  * qui alimentera objetReponse.
  * ou alors, on fait un type conditionnel sur objetReponse...
  * C'est balaize à faire, mais ce serait mieux : on ouvre l'accolade, et si on commence à taper rep... il ouvre l'accolade, demande value, demande compare, demande options... idem si on commence à taper champ1....
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * @param {Exercice} exercice
  * @param {number} question
  * @param {Valeur} objetReponse

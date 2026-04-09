@@ -11,7 +11,7 @@ export const dateDePublication = '14/09/2022'
 /**
  * Détermination du vocabulaire associé à l'égalité issue de la division euclidienne
  *
- * @author Eric Elter
+ * @author Éric Elter
  */
 
 export const uuid = 'd9cf3'

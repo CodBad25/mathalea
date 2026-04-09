@@ -31,7 +31,7 @@ export const refs = {
 
 /**
  * Réduire une expression en fonction de ln/log de x
- * @author  Jean-Claude Lhote
+ * @author  Jean-claude Lhote
 
  */
 export default class DomaineDefFnLog extends Exercice {

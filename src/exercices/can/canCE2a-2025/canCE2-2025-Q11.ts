@@ -19,7 +19,7 @@ export const amcType = 'qcmMono'
 export const titre = 'Visualisation 3d'
 export const dateDePublication = '02/02/2025'
 /**
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 const colorT = 'darkgray'
 const colorD = 'gray'

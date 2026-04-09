@@ -16,7 +16,7 @@ export type SvgSelectionOptions = {
  * @param {object} exercice l'exercice appelant pour pouvoir atteindre ses propriétés.
  * @param {number} i le numéro de la question
  * @returns {string} 'OK' si la réponse est correcte, 'KO' sinon
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export function verifQuestionSvgSelection(exercice: IExercice, i: number) {
   const spanReponseLigne = document.querySelector(
@@ -79,7 +79,7 @@ export function verifQuestionSvgSelection(exercice: IExercice, i: number) {
  *   - itemPadding?: espacement interne des boutons (ex: '0px', '2px')
  *   - style?: style CSS personnalisé pour le conteneur
  * @returns {string} le code HTML du conteneur de sélection SVG
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export function selectionSvg(
   exercice: IExercice,

@@ -32,7 +32,7 @@ export const refs = {
   'fr-ch': ['9FA3-19'],
 }
 /**
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 
 // Les fonctions retournent une liste avec dans l'ordre :

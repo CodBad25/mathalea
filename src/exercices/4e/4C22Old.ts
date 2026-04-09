@@ -34,9 +34,9 @@ export const dateDeModifImportante = '04/10/2025'
  * * 2 : deux questions niveau 1 puis deux questions niveau 3
  * * 3 : Produits de nombres relatifs
  * * Si décomposition cochée : les nombres utilisés sont plus importants.
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * Ajout d'une option pour ne pas exiger une fraction irréductible le 09/04/2022 par Guillaume Valmont
- * Ajout dans la paramètre 1 de pouvoir choisir un numérateur fractionnaire et un dénominateur entier le 04/10/2025 par Eric Elter
+ * Ajout dans la paramètre 1 de pouvoir choisir un numérateur fractionnaire et un dénominateur entier le 04/10/2025 par Éric Elter
  */
 export const uuid = '3eb4e'
 

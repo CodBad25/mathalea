@@ -24,7 +24,7 @@ export const interactifType = 'mathLive'
 /**
  * Calculer la dérivée d'un quotient
  * @author Jean-Léon Henry
- * Finalisé par Jean-Claude Lhote
+ * Finalisé par Jean-claude Lhote
 
  */
 

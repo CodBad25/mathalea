@@ -11,7 +11,7 @@ export const interactifType = 'mathLive'
 export const dateDePublication = '16/04/2025'
 /**
  *
- * @author Stéphane Guyon (refactorisé par Eric Elter)
+ * @author Stéphane Guyon (refactorisé par Éric Elter)
 
  *
 */

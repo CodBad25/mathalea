@@ -38,7 +38,7 @@ export const dateDePublication = '13/04/2022' // La date de publication initiale
 
 /**
  * Aléatoirisation du sujet 2022 de CAN 6e
- * Gilles Mora
+ * @author Gilles Mora
  */
 
 function compareNombres(a, b) {
@@ -116,7 +116,6 @@ export default class SujetCAN2022Sixieme extends Exercice {
         objets,
         cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       switch (typeQuestionsDisponibles[i]) {
         case 1:

@@ -19,7 +19,7 @@ export const interactifReady = true
 
 /**
  * Trouver un pourcentage dans un problème
- * @author Eric Elter
+ * @author Éric Elter
  */
 
 export const uuid = '66c48'

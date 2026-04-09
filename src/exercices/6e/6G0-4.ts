@@ -27,7 +27,7 @@ export const interactifType = 'cliqueFigure'
 
 /**
  * Plusieurs éléments sont proposés, il faut choisir le bon (par clic si interactif, par case à cocher par AMC)
- * @author ANGOT Rémi (Ajout AMC par Eric Elter)
+ * @author ANGOT Rémi (Ajout AMC par Éric Elter)
 
 */
 export const uuid = '83763'
@@ -57,7 +57,6 @@ export default class CliqueFigure extends Exercice {
     for (
       let i = 0, texte, texteCorr, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       const numeroLettre = randint(1, 20)
       const A = point(0, 0)

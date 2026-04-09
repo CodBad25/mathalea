@@ -103,7 +103,7 @@ function deletePoints(points: { x: number; y: number }[], type: number) {
 
 /**
  * Construction interactive de symétriques de points
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 class ConstrctionsSymetriquesPoints extends Exercice {
   figuresApiGeom: Figure[] = []

@@ -10,7 +10,7 @@ export const dateDePublication = '12/12/2021'
 export const dateDeModifImportante = '11/02/2025'
 
 /**
- * @author Eric Elter et Rémi Angot
+ * @author Éric Elter et Rémi Angot
  * Date décembre 2021
  */
 export const uuid = 'f92e1'

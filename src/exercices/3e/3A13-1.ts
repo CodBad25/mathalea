@@ -9,7 +9,7 @@ export const interactifType = 'mathLive'
 /**
  * Poser et effectuer les divisions euclidiennes suivantes puis donner l'égalité fondamentale correspondante.
  *
- * @author Eric Elter
+ * @author Éric Elter
  */
 
 export const uuid = '8741f'

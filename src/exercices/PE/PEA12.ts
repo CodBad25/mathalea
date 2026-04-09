@@ -15,7 +15,7 @@ export const dateDePublication = '31/10/2021'
 * *
 * *
 *
-* @author Jean-Claude Lhote pour les opérations posées et Rémi Angot pour la correction détaillée
+* @author Jean-claude Lhote pour les opérations posées et Rémi Angot pour la correction détaillée
 */
 export const uuid = '3441e'
 

@@ -12,7 +12,7 @@ export const interactifType = 'listeDeroulante'
 
 /**
  * Choisir les bonnes unités de mesure de durées courtes
- * @author Eric Elter
+ * @author Éric Elter
  */
 export const uuid = 'd040a'
 

@@ -28,7 +28,7 @@ export const refs = {
 }
 /**
  * Construire des médiatrices
- * @author Eric Elter
+ * @author Éric Elter
  */
 
 interface Couleur {

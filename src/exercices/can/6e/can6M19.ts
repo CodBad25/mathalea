@@ -9,7 +9,7 @@ export const interactifType = 'mathLive'
 export const amcReady = true
 
 /**
- * @author Eric Elter (d'après can6M13 de Gilles Mora)
+ * @author Éric Elter (d'après can6M13 de Gilles Mora)
 
  */
 export const uuid = '9d3f3'

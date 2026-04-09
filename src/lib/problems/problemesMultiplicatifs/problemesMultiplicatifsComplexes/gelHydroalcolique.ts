@@ -4,7 +4,7 @@ import { texNombre } from '../../../outils/texNombre'
 import type Probleme from '../../Probleme'
 import ProblemeMultiplicatifsComplexes from './problemesMultiplicatifsComplexes'
 /**
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export function gelHA(decimal = false): Probleme {
   let nb1Fois = randint(3, 7) * 5 // flacons de gel

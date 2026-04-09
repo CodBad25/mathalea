@@ -27,7 +27,7 @@ export const amcReady = true
 export const amcType = 'AMCHybride'
 
 /** Donner du sens à la définition d'un quotient
- * @author Eric Elter
+ * @author Éric Elter
  */
 export const uuid = '42fbx'
 

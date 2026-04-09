@@ -3,7 +3,7 @@ import { randint } from '../../modules/outils'
 import ExerciceQcmA from '../ExerciceQcmA'
 export const dateDePublication = '10/08/2025'
 export const uuid = '6eba7'
-// Author Stéphane Guyon
+// @Author Stéphane Guyon
 export const refs = {
   'fr-fr': ['1A-C03-9'],
   'fr-ch': [],
@@ -12,7 +12,7 @@ export const interactifReady = true
 export const interactifType = 'qcm'
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
-export const titre = "Calculer l’inverse d’une puissance de $-1$"
+export const titre = 'Calculer l’inverse d’une puissance de $-1$'
 export default class Auto1AC3i extends ExerciceQcmA {
   private appliquerLesValeurs(k: number): void {
     this.enonce = `Soit $n$ un entier non nul.<br> À quelle expression est égale $\\dfrac{1}{\\left(-1\\right)^{n+${k}}}$ ?`

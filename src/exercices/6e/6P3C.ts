@@ -35,7 +35,7 @@ export const amcType = 'AMCHybride'
 /**
  * On donne une relation de proportionnalité du type n objets coûtent x€ et on demande le prix de y objets
  * et le nombre d'objets qu'on peut acheter avec z€.
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * 03/2021 : ajout de situations de proportionnalité : CGrolleau
  * 08/2021 : Ajout de la version simplifiée et de la possibilité de choisir le type de question : Guillaume Valmont
  * Relecture : Décembre 2021 par EE

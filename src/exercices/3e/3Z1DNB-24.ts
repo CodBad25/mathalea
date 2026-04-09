@@ -15,7 +15,7 @@ export const interactifReady = false
 export const titre = "Résoudre l'exercice 3 du brevet Métropole Juin 2025"
 export const dateDePublication = '27/08/2025'
 /**
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export default class MetropoleJ25Exo3 extends Exercice {
   questions: ExerciceQcmA[] = []

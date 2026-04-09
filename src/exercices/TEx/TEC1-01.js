@@ -9,7 +9,7 @@ export const dateDePublication = '30/10/2021'
 
 /**
  *
- * @author Eric Schrafstetter
+ * @author Éric Schrafstetter
 
 */
 export const uuid = '8e72e'

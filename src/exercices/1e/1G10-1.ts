@@ -29,6 +29,9 @@ export const refs = {
   'fr-fr': [],
   'fr-ch': [],
 }
+/**
+ * Stephan Grignon
+ */
 export default class SuperExoMathalea2d extends Exercice {
   constructor() {
     super()

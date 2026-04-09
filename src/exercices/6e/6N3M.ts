@@ -27,7 +27,7 @@ export const dateDePublication = '06/03/2025'
 export const titre = 'Résoudre des problèmes contenant des fractions'
 
 /**
- * @author Eric Elter
+ * @author Éric Elter
  * Résoudre des problèmes contenant des fractions
  */
 export const uuid = '8e07a'

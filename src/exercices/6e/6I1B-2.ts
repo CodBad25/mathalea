@@ -47,7 +47,7 @@ export const titre = 'Noter la couleur avec Scratch'
 /**
  * Note_la_couleur() Exercice inspiré de l'activité débranchée de Jean-Yves Labouche Note La Couleur
  * https://www.monclasseurdemaths.fr/profs/algorithmique-scratch/note-la-couleur/
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * A faire : ajouter d'autres niveaux avec des instructions conditionnelles, des blocs définis...
  */
 export const uuid = '0e016'

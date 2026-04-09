@@ -30,7 +30,7 @@ export const dateDeModifImportante = '10/12/2023'
 
 /**
  * Déterminer des angles en utilisant les cas d'égalités : opposés par le sommet, alternes-internes, correspondants...
- * @author Jean-Claude Lhote inspiré d'exercices du manuel sésamath.
+ * @author Jean-claude Lhote inspiré d'exercices du manuel sésamath.
  */
 export const uuid = 'd12db'
 

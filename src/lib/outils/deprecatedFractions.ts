@@ -138,7 +138,7 @@ export function simplificationDeFractionAvecEtapes(
  * @param num
  * @param den
  * @return {string}
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export function texFractionSigne(num: number, den: number): string {
   if (den === 1) return String(num)
@@ -153,7 +153,7 @@ export function texFractionSigne(num: number, den: number): string {
 
 /**
  * Retourne une liste de fractions irréductibles
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export function obtenirListeFractionsIrreductibles(): [number, number][] {
   // sous forme de tableaux [numérateur,dénominateur]

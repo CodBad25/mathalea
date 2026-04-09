@@ -8,7 +8,7 @@ import { randint } from '../../modules/outils'
 import ExerciceQcmA from '../ExerciceQcmA'
 export const dateDePublication = '15/09/2025'
 export const uuid = '3a5ab'
-// Author Stéphane Guyon// repris par Gilles Mora pour sortie npdf et nombres décimaux dans tableau
+// @Author Stéphane Guyon// repris par Gilles Mora pour sortie npdf et nombres décimaux dans tableau
 export const refs = {
   'fr-fr': ['1A-P05-1'],
   'fr-ch': [],

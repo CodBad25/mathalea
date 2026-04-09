@@ -28,8 +28,9 @@ export const dateDePublication = '16/12/2021'
 export const dateDeModifImportante = '29/11/2025'
 
 /*
+ * @author Gilles Mora
  * Calculer un taux de variation. chgt de titre Stéphane Guyon (retravaillé par Gilles Mora)
- * Passage en typescript le 06/02/2025 + ajout des miseEnEvidence + interactivité Jean-Claude Lhote
+ * Passage en typescript le 06/02/2025 + ajout des miseEnEvidence + interactivité Jean-claude Lhote
  */
 
 export const uuid = '29212'

@@ -19,7 +19,7 @@ import { calculer } from '../../modules/outilsMathjs'
 type ValueType = number | FractionEtendue | string
 /**
  * Classe Rose
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export class Rose {
   type: string

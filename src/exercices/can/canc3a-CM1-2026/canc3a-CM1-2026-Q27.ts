@@ -16,17 +16,17 @@ export const refs = {
 }
 
 /**
- * @author Eric Elter
+ * @author Éric Elter
 
 */
 export default class Can2026CM1Q27 extends ExerciceCan {
-   constructor () {
+  constructor() {
     super()
     this.formatChampTexte = KeyboardType.clavierNumbers
     this.optionsDeComparaison = { nombreDecimalSeulement: true }
     this.optionsChampTexte = {
       texteAvant: '<br>On me rend ',
-      texteApres: ' €.'
+      texteApres: ' €.',
     }
   }
 
@@ -36,13 +36,10 @@ export default class Can2026CM1Q27 extends ExerciceCan {
     ['un petit pain', 'm'],
     ['un pain aux raisins', 'm'],
     ['un cookie', 'm'],
-    ['une brioche', 'f']
+    ['une brioche', 'f'],
   ]
 
-  enonce (
-    PrixViennoiserie?: number,
-    NomViennoiserie?: [string, string]
-  ) {
+  enonce(PrixViennoiserie?: number, NomViennoiserie?: [string, string]) {
     if (PrixViennoiserie == null) {
       PrixViennoiserie = arrondi(1 + randint(1, 9, [5]) / 10)
       NomViennoiserie = choice(this.listeviennoiserie)
@@ -53,13 +50,15 @@ export default class Can2026CM1Q27 extends ExerciceCan {
 
     this.question = `J'achète ${NomViennoiserie![0]} à $${texPrix(PrixViennoiserie)}$ €.<br>
            Je donne $${PrixBillet}$ €.`
-           if(!this.interactif){this.question+=`<br>On me rend $\\ldots$  €.`}
+    if (!this.interactif) {
+      this.question += `<br>On me rend $\\ldots$  €.`
+    }
     this.correction = `On doit me rendre $${PrixBillet}~€ -${texPrix(PrixViennoiserie)}~€=${miseEnEvidence(texPrix(this.reponse))}$ €.`
 
     this.canReponseACompleter = 'On me rend $\\dots$ €.'
   }
 
-  nouvelleVersion () {
+  nouvelleVersion() {
     this.canOfficielle
       ? this.enonce(1.5, this.listeviennoiserie[1])
       : this.enonce()

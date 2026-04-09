@@ -35,7 +35,7 @@ export const refs = {
 // Ancien 5N15 avant septembre 2023
 /**
  * @description Problèmes de ratio
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export default class ProblemeDeRatio extends Exercice {
   constructor() {

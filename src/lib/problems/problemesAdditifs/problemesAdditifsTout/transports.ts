@@ -7,7 +7,7 @@ import { texNombre } from '../../../outils/texNombre'
 import type Probleme from '../../Probleme'
 import ProblemeAdditif from './problemesAdditifsTout'
 /**
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export function transports(): Probleme {
   const personnage = prenomPronom()

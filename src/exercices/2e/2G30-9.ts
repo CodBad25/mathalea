@@ -31,7 +31,7 @@ export const interactifReady = true
 export const interactifType = 'custom'
 
 /**
- * @author Gilles Mora (interactif par Eric Elter)
+ * @author Gilles Mora (interactif par Éric Elter)
  */
 export const uuid = '580a6'
 

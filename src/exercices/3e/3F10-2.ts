@@ -33,7 +33,7 @@ export const titre =
 
 /**
  * Répondre à des questions sur les fonctions.
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export const uuid = 'ba521'
 

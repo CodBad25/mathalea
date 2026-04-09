@@ -16,6 +16,9 @@ export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre =
   'Résoudre une équation du type $\\dfrac{a}{x}=b$ ou $\\dfrac{x}{a}=b$'
+/**
+ * @author Gilles Mora
+ */
 export default class Auto1AC11a extends ExerciceQcmA {
   versionOriginale: () => void = () => {
     this.enonce = "La solution de l'équation  $\\dfrac{144}{x}=9$ est : "

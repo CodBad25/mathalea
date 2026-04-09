@@ -30,7 +30,7 @@ export const dateDePublication = '17/05/2025'
 
 /**
  * Reconnaitre des figures symétriques par rapport à une droite donnée.
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export const uuid = '528b2'
 

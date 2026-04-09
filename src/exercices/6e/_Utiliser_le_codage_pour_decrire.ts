@@ -30,6 +30,9 @@ import {
 } from '../../modules/outils'
 import Exercice from '../Exercice'
 
+/**
+ * @author Jean-claude Lhote
+ */
 export default class UtiliserLeCodagePourDecrire extends Exercice {
   classe: number
   constructor() {
@@ -102,7 +105,6 @@ export default class UtiliserLeCodagePourDecrire extends Exercice {
     for (
       let i = 0, texte, texteCorr, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       objetsEnonce = []
       objetsCorrection = []

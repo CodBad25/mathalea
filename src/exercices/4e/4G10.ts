@@ -8,7 +8,7 @@ export const amcType = 'AMCHybride'
 
 /**
  * Transformations : trouver un point numéroté par une des transformations sauf rotation et homothetie
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
 
  * Pas de version LaTeX
  */

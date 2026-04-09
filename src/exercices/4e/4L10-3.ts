@@ -16,7 +16,7 @@ export const refs = {
   'fr-ch': ['10FA1-16'],
 }
 /**
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * @constructor
  */
 export default class FabriqueAYohaku4L1 extends FabriqueAYohaku {

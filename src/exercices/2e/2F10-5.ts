@@ -29,14 +29,14 @@ import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-export const dateDeModifImportante = '25/01/2026' // Mise en place de MetaInteractif2d par Jean-Claude Lhote
+export const dateDeModifImportante = '25/01/2026' // Mise en place de MetaInteractif2d par Jean-claude Lhote
 export const titre = "Déterminer le signe d'une fonction affine"
 export const interactifReady = true
 export const interactifType = 'MetaInteractif2d'
 
 /**
  * @author Stéphane Guyon+Gilles Mora
- * Lintage typescript incomplet car tableauDeVariation n'est pas typé Jean-Claude Lhote
+ * Lintage typescript incomplet car tableauDeVariation n'est pas typé Jean-claude Lhote
  * 2F10-3
  */
 export const uuid = '03b71'
