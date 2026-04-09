@@ -19,7 +19,7 @@ import Exercice from '../Exercice'
 export const interactifReady = true
 
 export const titre = "Loi de probabilité d'une variable aléatoire discrète"
-export const dateDePublication = '28/03/2026'
+export const dateDePublication = '29/03/2026'
 /**
  *
  * @author Arnaud Meistermann
@@ -28,7 +28,7 @@ export const dateDePublication = '28/03/2026'
 export const uuid = '5c031'
 
 export const refs = {
-  'fr-fr': ['1P2-1'],
+  'fr-fr': ['1P20-1','1Tec-P40'],
   'fr-ch': [],
 }
 

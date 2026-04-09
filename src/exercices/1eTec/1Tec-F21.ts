@@ -12,7 +12,7 @@ import {
 } from '../../lib/outils/embellissements'
 
 import { propositionsQcm } from '../../lib/interactif/qcm'
-import { calculImageTrinome } from './1Tec-racines-factorise'
+import { calculImageTrinome } from './1Tec-F22'
 export const titre =
   "Déterminer si un nombre est une racine d'un polynôme du second degré"
 
@@ -22,7 +22,7 @@ export const interactifType = 'qcm'
 
 export const uuid = '8f59a'
 export const refs = {
-  'fr-fr': ['1Tec-AN21-2'],
+  'fr-fr': ['1Tec-F21'],
   'fr-ch': [],
 }
 /**

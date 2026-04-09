@@ -25,7 +25,7 @@ export const interactifType = 'qcm'
 
 export const uuid = '61ff2'
 export const refs = {
-  'fr-fr': ['1Tec-AN21-3'],
+  'fr-fr': ['1Tec-F22'],
   'fr-ch': [],
 }
 export function calculImageTrinome(a: number, b: number, c: number, x: number) {
