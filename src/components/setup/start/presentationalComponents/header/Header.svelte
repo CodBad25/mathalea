@@ -74,32 +74,20 @@
       </div>
     {/if}
     <div
-      class="flex {isExerciseDisplayed ? 'h-[100px] lg:h-[50px]' : 'h-0'}"
+      class={`relative w-full flex flex-col justify-center items-center pl-100 h-25 lg:h-12.5 ${!isExerciseDisplayed ? 'invisible' : ''}`}
+      id="barre-boutons"
     >
-      <div
-        class={!isExerciseDisplayed
-          ? 'hidden'
-          : 'relative w-full flex flex-col justify-center items-center bg-coopmaths-canvas dark:bg-coopmathsdark-canvas transition-[padding-left] duration-300'}
-        style={isExerciseDisplayed && isMd ? `padding-left: ${isSidenavOpened ? '400px' : '0px'}` : ''}
-        id="barre-boutons"
-      >
-        <SideMenuWrapper
-          {isRecorder}
-          {isSidenavOpened}
-          {toggleSidenav}
-          {isMd}
-        />
-        <HeaderButtons
-          bind:reorderModalDisplayed
-          {zoomUpdate}
-          {setAllInteractive}
-          {newDataForAll}
-          {trash}
-          {setFullScreen}
-          {handleExport}
-          {exportQcmCam}
-        />
-      </div>
+      <SideMenuWrapper {isRecorder} {isSidenavOpened} {toggleSidenav} {isMd} />
+      <HeaderButtons
+        bind:reorderModalDisplayed
+        {zoomUpdate}
+        {setAllInteractive}
+        {newDataForAll}
+        {trash}
+        {setFullScreen}
+        {handleExport}
+        {exportQcmCam}
+      />
     </div>
   {/if}
 </header>
