@@ -13,7 +13,7 @@ import { segment } from '../../lib/2d/segmentsVecteurs'
 import { labelPoint, texteParPosition } from '../../lib/2d/textes'
 import { tracePoint } from '../../lib/2d/TracePoint'
 import { homothetie, rotation } from '../../lib/2d/transformations'
-import { angleOriente, longueur } from '../../lib/2d/utilitairesGeometriques'
+import { angleOriente } from '../../lib/2d/utilitairesGeometriques'
 import {
   pointIntersectionCC,
   pointIntersectionDD,
@@ -380,12 +380,12 @@ export default class ProblemeDeLaChevreDansSonEnclos extends Exercice {
                 const c2 = cercle(cabC, longueurRestante2)
                 const N = pointIntersectionLC(CD, c2, '', 2)
                 const t3 = polygone(K, N, cabC)
-                const X = homothetie(
+                /* const X = homothetie(
                   rotation(K, cabC, -45),
                   cabC,
                   longueurRestante2 / longueur(cabC, K),
                 )
-                const l2 = afficheCoteSegment(
+                 const l2 = afficheCoteSegment(
                   segment(cabC, X),
                   `${longueurRestante2}\\,\\text{m}`,
                   0,
@@ -395,12 +395,13 @@ export default class ProblemeDeLaChevreDansSonEnclos extends Exercice {
                   context.isHtml ? 'gray' : 'darkgray',
                   true,
                 )
+                  */
                 t3.couleurDeRemplissage = colorToLatexOrHTML('pink')
                 t3.opaciteDeRemplissage = 0.2
                 t3.couleurDesHachures = colorToLatexOrHTML('black')
                 t3.hachures = 'north east lines'
                 t3.opacite = 0.2
-                objetsCorrection.push(t3, l2)
+                objetsCorrection.push(t3 /* , l2 */)
                 if (longueurRestante2 > longueurCabane) {
                   // Le bord droit bloque : triangle + arc + triangle
                   const X = pointIntersectionLC(BC, c2, '', 1)
@@ -461,23 +462,58 @@ export default class ProblemeDeLaChevreDansSonEnclos extends Exercice {
               objetsCorrection.push(quartDeC2, r2, diff)
               if (longueurRestante1 > largeurCabane) {
                 const longueurRestante2 = longueurRestante1 - largeurCabane
-                const K = rotation(J, cabD, -90)
-                const quartDeC3 = arc(K, cabC, -90, true, 'pink', 'black', 0.2)
-                quartDeC3.hachures = 'north east lines'
-                quartDeC3.couleurDesHachures = colorToLatexOrHTML('black')
-                quartDeC3.opacite = 0.2
-                const W = rotation(K, cabC, -45)
-                const r3 = afficheCoteSegment(
-                  segment(cabC, W),
-                  `${longueurRestante2}\\,\\text{m}`,
-                  0,
-                  'black',
-                  0.5,
-                  0.5,
-                  context.isHtml ? 'gray' : 'darkgray',
-                  true,
-                )
-                objetsCorrection.push(quartDeC3, r3)
+                if (longueurRestante2 > longueurCabane) {
+                  // le bord droit bloque : on a un arc jusqu'au bord puis un triangle
+                  const c2 = cercle(cabC, longueurRestante2)
+                  const N = pointIntersectionLC(BC, c2, '', 1)
+                  const a2 = arc(
+                    N,
+                    cabC,
+                    angleOriente(N, cabC, rotation(cabB, cabC, 90)),
+                    true,
+                    'pink',
+                    'black',
+                    0.1,
+                  )
+                  a2.couleurDesHachures = colorToLatexOrHTML('black')
+                  a2.opaciteDeRemplissage = 0.1
+                  a2.hachures = 'north east lines'
+                  a2.opacite = 0.1
+                  objetsCorrection.push(a2)
+                  const t2 = polygone(N, cabC, cabB)
+                  t2.couleurDeRemplissage = colorToLatexOrHTML('pink')
+                  t2.opaciteDeRemplissage = 0.2
+                  t2.couleurDesHachures = colorToLatexOrHTML('black')
+                  t2.hachures = 'north east lines'
+                  t2.opacite = 0.2
+                  objetsCorrection.push(t2, a2)
+                } else {
+                  const K = rotation(J, cabD, -90)
+                  const quartDeC3 = arc(
+                    K,
+                    cabC,
+                    -90,
+                    true,
+                    'pink',
+                    'black',
+                    0.2,
+                  )
+                  quartDeC3.hachures = 'north east lines'
+                  quartDeC3.couleurDesHachures = colorToLatexOrHTML('black')
+                  quartDeC3.opacite = 0.2
+                  const W = rotation(K, cabC, -45)
+                  const r3 = afficheCoteSegment(
+                    segment(cabC, W),
+                    `${longueurRestante2}\\,\\text{m}`,
+                    0,
+                    'black',
+                    0.5,
+                    0.5,
+                    context.isHtml ? 'gray' : 'darkgray',
+                    true,
+                  )
+                  objetsCorrection.push(quartDeC3, r3)
+                }
               }
             }
           }
@@ -662,27 +698,33 @@ export default class ProblemeDeLaChevreDansSonEnclos extends Exercice {
                 context.isHtml ? 'gray' : 'darkgray',
                 true,
               )
-              const r2 = afficheCoteSegment(
-                segment(cabA, I),
-                `${longueurRestanteDroite}\\,\\text{m}`,
-                0,
-                'black',
-                0.5,
-                -0.5,
-                context.isHtml ? 'gray' : 'darkgray',
-                true,
-              )
+              const r2 =
+                longueurRestanteDroite === 0
+                  ? vide2d()
+                  : afficheCoteSegment(
+                      segment(cabA, I),
+                      `${longueurRestanteDroite}\\,\\text{m}`,
+                      0,
+                      'black',
+                      0.5,
+                      -0.5,
+                      context.isHtml ? 'gray' : 'darkgray',
+                      true,
+                    )
 
-              const r3 = afficheCoteSegment(
-                segment(cabD, J),
-                `${longueurRestanteGauche}\\,\\text{m}`,
-                0,
-                'black',
-                0.5,
-                0.5,
-                context.isHtml ? 'gray' : 'darkgray',
-                true,
-              )
+              const r3 =
+                longueurRestanteGauche === 0
+                  ? vide2d()
+                  : afficheCoteSegment(
+                      segment(cabD, J),
+                      `${longueurRestanteGauche}\\,\\text{m}`,
+                      0,
+                      'black',
+                      0.5,
+                      0.5,
+                      context.isHtml ? 'gray' : 'darkgray',
+                      true,
+                    )
               const a1 = arc(
                 I,
                 P,
@@ -1148,11 +1190,14 @@ export default class ProblemeDeLaChevreDansSonEnclos extends Exercice {
                 a4.couleurDesHachures = colorToLatexOrHTML('black')
                 a4.hachures = 'north east lines'
                 a4.opacite = 0.2
-                const a6 = polygone(
-                  cabB,
-                  VDroite,
-                  pointAbstrait(cabB.x, largeurEnclos),
-                )
+                const a6 =
+                  VDroite.x === cabB.x
+                    ? vide2d()
+                    : polygone(
+                        cabB,
+                        VDroite,
+                        pointAbstrait(cabB.x, largeurEnclos),
+                      )
                 a6.couleurDeRemplissage = colorToLatexOrHTML('pink')
                 a6.opaciteDeRemplissage = 0.3
                 a6.couleurDesHachures = colorToLatexOrHTML('black')
@@ -1184,11 +1229,14 @@ export default class ProblemeDeLaChevreDansSonEnclos extends Exercice {
                 a5.couleurDesHachures = colorToLatexOrHTML('black')
                 a5.hachures = 'north east lines'
                 a5.opacite = 0.2
-                const a7 = polygone(
-                  cabC,
-                  VGauche,
-                  pointAbstrait(cabC.x, largeurEnclos),
-                )
+                const a7 =
+                  cabC.x === VGauche.x
+                    ? vide2d()
+                    : polygone(
+                        cabC,
+                        VGauche,
+                        pointAbstrait(cabC.x, largeurEnclos),
+                      )
                 a7.couleurDeRemplissage = colorToLatexOrHTML('pink')
                 a7.opaciteDeRemplissage = 0.3
                 a7.couleurDesHachures = colorToLatexOrHTML('black')
@@ -1476,7 +1524,7 @@ export default class ProblemeDeLaChevreDansSonEnclos extends Exercice {
         objetsEnonce,
       )
       texteCorr += mathalea2d(
-        Object.assign({}, fixeBordures(objetsCorrection)),
+        Object.assign({ scale: 0.7 }, fixeBordures(objetsCorrection)),
         objetsCorrection,
       )
       if (
