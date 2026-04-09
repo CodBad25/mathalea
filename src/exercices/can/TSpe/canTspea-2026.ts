@@ -36,10 +36,10 @@ export const interactifReady = true
 export const interactifType = 'mathLive'
 export const uuid = '3aa48'
 export const refs = {
-  'fr-fr': [''],
+  'fr-fr': ['canTSpea-2026'],
   'fr-ch': [],
 }
-export const dateDePublication = '23/02/2026'
+export const dateDePublication = '09/04/2026'
 
 /**
  * Annales CAN 2026
