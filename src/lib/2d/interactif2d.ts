@@ -46,7 +46,9 @@ export class MetaInteractif2d extends ObjetMathalea2D {
     return this.inputs
       .map(
         (input) =>
-          `\\draw[opacity=${input.opacity ?? 1}] (${input.x},${input.y}) node[anchor = center, rotate=${this.orientation ?? 0}] {$\\ldots$};`,
+          `\\draw[opacity=${input.opacity ?? 1}] (${input.x},${input.y}) node[anchor = center, rotate=${this.orientation ?? 0}] {$${(
+            input.content ?? ''
+          ).replaceAll(/%\{champ(\d+)\}/g, '\\ldots')}$};`,
       )
       .join('\n')
   }
