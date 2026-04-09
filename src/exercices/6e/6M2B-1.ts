@@ -18,6 +18,7 @@ import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
 import type { IExercice } from '../../lib/types'
+import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { gestionnaireFormulaireTexte, randint } from '../../modules/outils'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
@@ -60,7 +61,7 @@ const figureCarre = (cote: number, exercice: IExercice, question: number) => {
     c / 2,
     c + 0.5,
     {
-      letterSize: 'scriptsize',
+      letterSize: 'small',
     },
   )
   const input = new MetaInteractif2d(
@@ -91,9 +92,11 @@ const figureCarre = (cote: number, exercice: IExercice, question: number) => {
     input,
   ]
   return (
-    mathalea2d(Object.assign({}, fixeBordures(objets)), objets) +
-    `<span id="resultatCheckEx${exercice.numeroExercice}Q${question}"></span>` +
-    ajouteFeedback(exercice, question)
+    mathalea2d(Object.assign({ scale: 0.7 }, fixeBordures(objets)), objets) +
+    (context.isHtml
+      ? `<span id="resultatCheckEx${exercice.numeroExercice}Q${question}"></span>` +
+        ajouteFeedback(exercice, question)
+      : '')
   )
 }
 const figureRectangle = (
@@ -120,7 +123,7 @@ const figureRectangle = (
     L + 1.5,
     l / 2,
     {
-      letterSize: 'scriptsize',
+      letterSize: 'small',
     },
   )
   const afficheLongueur = latex2d(
@@ -128,13 +131,13 @@ const figureRectangle = (
     L / 2,
     l + 0.5,
     {
-      letterSize: 'scriptsize',
+      letterSize: 'small',
     },
   )
   const input = new MetaInteractif2d(
     [
       {
-        content: '\\mathcal{A}=%{champ1}\\text{ cm}^2',
+        content: '%{champ1}\\text{ cm}^2',
         x: L / 2,
         y: l / 2,
         classe: '',
@@ -159,9 +162,11 @@ const figureRectangle = (
     input,
   ]
   return (
-    mathalea2d(Object.assign({}, fixeBordures(objets)), objets) +
-    `<span id="resultatCheckEx${exercice.numeroExercice}Q${question}"></span>` +
-    ajouteFeedback(exercice, question)
+    mathalea2d(Object.assign({ scale: 0.7 }, fixeBordures(objets)), objets) +
+    (context.isHtml
+      ? `<span id="resultatCheckEx${exercice.numeroExercice}Q${question}"></span>` +
+        ajouteFeedback(exercice, question)
+      : '')
   )
 }
 const figureTriangleRectangle1 = (
@@ -183,22 +188,22 @@ const figureTriangleRectangle1 = (
     b / 2,
     -0.5,
     {
-      letterSize: 'scriptsize',
+      letterSize: 'small',
     },
   )
   const cote2 =
     C.x === 0
       ? latex2d(`${texNombre(hauteur, precision)}\\text{ cm}`, -1, h / 2, {
-          letterSize: 'scriptsize',
+          letterSize: 'small',
         })
       : latex2d(`${texNombre(hauteur, precision)}\\text{ cm}`, b + 1, h / 2, {
-          letterSize: 'scriptsize',
+          letterSize: 'small',
         })
   const cote3 = placeLatexSurSegment(
     `\\approx${texNombre(Math.sqrt(base * base + hauteur * hauteur), precision)}\\text{ cm}`,
     C.x === 0 ? C : A,
     C.x === 0 ? B : C,
-    { distance: 0.5, letterSize: 'scriptsize' },
+    { distance: 0.5, letterSize: 'small' },
   )
   const triangle = polygone(A, B, C)
   triangle.hachures = true
@@ -207,7 +212,7 @@ const figureTriangleRectangle1 = (
   const input = new MetaInteractif2d(
     [
       {
-        content: '\\mathcal{A}=%{champ1}\\text{ cm}^2',
+        content: '%{champ1}\\text{ cm}^2',
         x: M.x,
         y: M.y - 0.5,
         classe: '',
@@ -230,9 +235,11 @@ const figureTriangleRectangle1 = (
     input,
   ]
   return (
-    mathalea2d(Object.assign({}, fixeBordures(objets)), objets) +
-    `<span id="resultatCheckEx${exercice.numeroExercice}Q${question}"></span>` +
-    ajouteFeedback(exercice, question)
+    mathalea2d(Object.assign({ scale: 0.7 }, fixeBordures(objets)), objets) +
+    (context.isHtml
+      ? `<span id="resultatCheckEx${exercice.numeroExercice}Q${question}"></span>` +
+        ajouteFeedback(exercice, question)
+      : '')
   )
 }
 
@@ -269,31 +276,31 @@ const figureTriangleQuelconque1 = (
     `${texNombre(hauteur, precision)}\\text{ cm}`,
     flip === 1 ? C : H,
     flip === 1 ? H : C,
-    { letterSize: 'scriptsize' },
+    { letterSize: 'small' },
   )
   const afficheBase = latex2d(
     `${texNombre(base, precision)}\\text{ cm}`,
     (A.x + B.x) / 2,
     -0.5,
-    { letterSize: 'scriptsize' },
+    { letterSize: 'small' },
   )
   const afficheHypotenuse = placeLatexSurSegment(
     `\\approx${texNombre(longueur(A, C), 1)}\\text{ cm}`,
     flip === 1 ? A : C,
     flip === 1 ? C : A,
-    { letterSize: 'scriptsize' },
+    { letterSize: 'small' },
   )
   const afficheCote = placeLatexSurSegment(
     `\\approx${texNombre(longueur(B, C), 1)}\\text{ cm}`,
     flip === 1 ? (angle > 90 ? B : C) : angle > 90 ? C : B,
     flip === 1 ? (angle > 90 ? C : B) : angle > 90 ? B : C,
-    { distance: 0.5, letterSize: 'scriptsize' },
+    { distance: 0.5, letterSize: 'small' },
   )
   const M = centreGraviteTriangle(A, B, C)
   const input = new MetaInteractif2d(
     [
       {
-        content: '\\mathcal{A}=%{champ1}\\text{ cm}^2',
+        content: '%{champ1}\\text{ cm}^2',
         x: M.x,
         y: M.y - 0.8,
         classe: '',
@@ -319,9 +326,11 @@ const figureTriangleQuelconque1 = (
     input,
   ]
   return (
-    mathalea2d(Object.assign({}, fixeBordures(objets)), objets) +
-    `<span id="resultatCheckEx${exercice.numeroExercice}Q${question}"></span>` +
-    ajouteFeedback(exercice, question)
+    mathalea2d(Object.assign({ scale: 0.7 }, fixeBordures(objets)), objets) +
+    (context.isHtml
+      ? `<span id="resultatCheckEx${exercice.numeroExercice}Q${question}"></span>` +
+        ajouteFeedback(exercice, question)
+      : '')
   )
 }
 export default class AireCarreRectangle extends Exercice {
@@ -340,6 +349,7 @@ export default class AireCarreRectangle extends Exercice {
   }
 
   nouvelleVersion() {
+    this.nbCols = context.isHtml ? 1 : 2
     this.consigne =
       this.nbQuestions > 1
         ? 'Dans chaque cas, calculer l’aire de la figure donnée.'
