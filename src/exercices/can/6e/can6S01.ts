@@ -1,6 +1,7 @@
 import { traceBarreHorizontale } from '../../../lib/2d/diagrammes'
 import { fixeBordures } from '../../../lib/2d/fixeBordures'
 import { repere } from '../../../lib/2d/reperes'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { prenom } from '../../../lib/outils/Personne'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { randint } from '../../../modules/outils'
@@ -94,6 +95,6 @@ export default class LectureDiagrammeBarre extends ExerciceSimple {
       objets,
     )
     this.question += ` Combien y a-t-il de ${valeurs[n][0]} en tout ?`
-    this.correction = `Il y a $${a}+${b}+${c} = ${this.reponse}$ ${valeurs[n][0]} en tout.`
+    this.correction = `Il y a $${a}+${b}+${c} = ${miseEnEvidence(this.reponse.toString())}$ ${valeurs[n][0]} en tout.`
   }
 }
