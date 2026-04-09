@@ -1,4 +1,4 @@
-import { orangeMathalea } from 'apigeom/src/elements/defaultValues'
+import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -36,7 +36,6 @@ export default class ConversionsDeDurees extends Exercice {
   constructor() {
     super()
     this.sup = 5
-    this.consigne = 'Convertir.'
     this.spacing = 2
     this.nbQuestions = 5
     this.besoinFormulaireNumerique = [
@@ -70,6 +69,7 @@ export default class ConversionsDeDurees extends Exercice {
     let j = 0
 
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+      const consigne = 'Convertir '
       if (typesDeQuestions[i] === 1) {
         const sousTypeDeQuestion = listeSousTypeDeQuestionV1[i]
         if (sousTypeDeQuestion === 1) {
@@ -88,18 +88,18 @@ export default class ConversionsDeDurees extends Exercice {
         }
         if (sousTypeDeQuestion === 3) {
           m = randint(2, 59)
-          texte = `$${m}~\\text{min}$ en secondes.`
-          texteCorr = `$${m}~\\text{min} = ${m}\\times60~\\text{s} = `
+          texte = `$${formatMinute(m)}~\\text{min}$ en secondes.`
+          texteCorr = `$${formatMinute(m)}~\\text{min} = ${formatMinute(m)}\\times60~\\text{s} = `
           texteCorr += miseEnEvidence(`${texNombre(m * 60)}~\\text{s}`) + '$'
           this.expectedAnswers[i] = new Hms({ second: m * 60 })
         }
         if (sousTypeDeQuestion === 4) {
           h = randint(1, 2)
           m = randint(2, 59)
-          texte = `$${h}~\\text{h}~${m}~\\text{min}$ en secondes.`
-          texteCorr = `$${h}~\\text{h}~${m}~\\text{min} = (${h}\\times3~600~\\text{s}) + (${m}\\times60~\\text{s}) = ${texNombre(
+          texte = `$${h}~\\text{h}~${formatMinute(m)}~\\text{min}$ en secondes.`
+          texteCorr = `$${h}~\\text{h}~${formatMinute(m)}~\\text{min} = (${h}\\times3~600~\\text{s}) + (${formatMinute(m)}\\times60~\\text{s}) = ${texNombre(
             h * 3600,
-          )}+${texNombre(m * 60)}~\\text{s} = `
+          )}~\\text{s}+${texNombre(m * 60)}~\\text{s} = `
           texteCorr +=
             miseEnEvidence(`${texNombre(h * 3600 + m * 60)}~\\text{s}`) + '$'
           this.expectedAnswers[i] = new Hms({ second: h * 3600 + m * 60 })
@@ -113,7 +113,7 @@ export default class ConversionsDeDurees extends Exercice {
           operande2: 24,
           type: 'divisionE',
           style: 'margin-bottom: 1em',
-          options: { solution: true, colore: orangeMathalea },
+          options: { solution: true, colore: bleuMathalea },
         })
         texteCorr += `<br>$${texNombre(
           h + 24 * j,
@@ -133,20 +133,20 @@ export default class ConversionsDeDurees extends Exercice {
             operande2: 3600,
             type: 'divisionE',
             style: 'margin-bottom: 1em',
-            options: { solution: true, colore: orangeMathalea },
+            options: { solution: true, colore: bleuMathalea },
           })
           texteCorr += operation({
             operande1: m * 60 + s,
             operande2: 60,
             type: 'divisionE',
             style: 'margin-bottom: 1em',
-            options: { solution: true, colore: orangeMathalea },
+            options: { solution: true, colore: bleuMathalea },
           })
           texteCorr += `<br>$${texNombre(
             h * 3600 + m * 60 + s,
           )}~\\text{s} = (${h}\\times${texNombre(3600)}~\\text{s})+${texNombre(
             m * 60 + s,
-          )}~\\text{s} =${h}~\\text{h}+(${m}\\times60~\\text{s})+${s}~\\text{s}= `
+          )}~\\text{s} =${h}~\\text{h}+(${formatMinute(m)}\\times60~\\text{s})+${formatMinute(s)}~\\text{s}= `
           texteCorr +=
             miseEnEvidence(
               `${h}~\\text{h}~${formatMinute(m)}~\\text{min}~${formatMinute(s)}~\\text{s}`,
@@ -154,9 +154,20 @@ export default class ConversionsDeDurees extends Exercice {
           this.expectedAnswers[i] = new Hms({ hour: h, minute: m, second: s })
         } else {
           texte = `$${texNombre(m * 60 + s)}~\\text{s}$ en heures, minutes et secondes.`
-          texteCorr = `$${texNombre(
+          texteCorr = operation({
+            operande1: m * 60 + s,
+            operande2: 60,
+            type: 'divisionE',
+            style: 'margin-bottom: 1em',
+            options: { solution: true, colore: bleuMathalea },
+          })
+          texteCorr += `$${texNombre(
             m * 60 + s,
-          )}~\\text{s} = (${m}\\times60~\\text{s})+${s}~\\text{s}=${formatMinute(m)}~\\text{min}~${formatMinute(s)}~\\text{s}$`
+          )}~\\text{s} = (${formatMinute(m)}\\times60~\\text{s})+${formatMinute(s)}~\\text{s}=`
+          texteCorr +=
+            miseEnEvidence(
+              `${formatMinute(m)}~\\text{min}~${formatMinute(s)}~\\text{s}`,
+            ) + '$'
           this.expectedAnswers[i] = new Hms({ minute: m, second: s })
         }
       } else if (typesDeQuestions[i] === 4) {
@@ -173,14 +184,14 @@ export default class ConversionsDeDurees extends Exercice {
             operande2: 24,
             type: 'divisionE',
             style: 'margin-bottom: 1em',
-            options: { solution: true, colore: orangeMathalea },
+            options: { solution: true, colore: bleuMathalea },
           })
           texteCorr += operation({
             operande1: 7 * s + j,
             operande2: 7,
             type: 'divisionE',
             style: 'margin-bottom: 1em',
-            options: { solution: true, colore: orangeMathalea },
+            options: { solution: true, colore: bleuMathalea },
           })
           texteCorr += `<br>$${texNombre(h + 24 * j + 24 * 7 * s)}~\\text{h} = (${
             j + 7 * s
@@ -221,7 +232,7 @@ export default class ConversionsDeDurees extends Exercice {
       if (this.questionJamaisPosee(i, m, s, h, j)) {
         // <- laisser le i et ajouter toutes les variables qui rendent les exercices différents (par exemple a, b, c et d)
         // Si la question n'a jamais été posée, on en crée une autre
-        this.listeQuestions[i] = texte
+        this.listeQuestions[i] = consigne + texte
         this.listeCorrections[i] = texteCorr
         i++
       }
