@@ -209,7 +209,8 @@ export default class MultiplierDecimaux extends Exercice {
           =${texNombre(facteuraEntier.mul(facteurbEntier).toNumber())} \\times ${texNombre(1 / (puissanceDe10Poura * puissanceDe10Pourb))}\\\\
           `
 
-          texteCorr += `${calcul}&=${miseEnEvidence(texNombre(reponse.toNumber()))}\\\\
+          texteCorr += `${calcul}&=\\dfrac{${texNombre(facteuraEntier.mul(facteurbEntier).toNumber())}}{${texNombre(puissanceDe10Poura * puissanceDe10Pourb)}}
+          =${miseEnEvidence(texNombre(reponse.toNumber()))}\\\\
           \\end{aligned}$`
           break
         }
