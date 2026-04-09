@@ -34,7 +34,7 @@ const longueur = (A: PointAbstrait, B: PointAbstrait): number =>
 /**
  * LA SPHERE - ANCIENNE FONCTION
  *
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * Produit une sphère : choisir un nombre de parallèles impair pour avoir l'équateur. normal défini l'axe Nord-Sud.
  * rayon est le rayon de la sphère. l'équateur est dans le plan xy l'axe Nord-Sud est sur z
  * @param {Point3d} centre
@@ -73,7 +73,7 @@ const longueur = (A: PointAbstrait, B: PointAbstrait): number =>
 /**
  * LA SPHERE - ANCIENNE FONCTION
  *
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * Produit une sphère : choisir un nombre de parallèles impair pour avoir l'équateur. normal défini l'axe Nord-Sud.
  * rayon est le rayon de la sphère. l'équateur est dans le plan xy l'axe Nord-Sud est sur z
  * @param {Point3d} centre
@@ -107,7 +107,7 @@ const longueur = (A: PointAbstrait, B: PointAbstrait): number =>
  * @property {boolean} affichageAxe Permet (ou pas) l'affichage de l'axe de la sphère.
  * @property {string} colorAxe Couleur de l'axe de la sphère : du type 'blue' ou du type '#f15929'
  * @property {Array} c2d Contient les commandes à tracer en 2d de cette fonction
- * @author Eric Elter (d'après version précédente de Jean-Claude Lhote)
+ * @author Éric Elter (d'après version précédente de Jean-claude Lhote)
  * @class
  */
 
@@ -820,7 +820,7 @@ export class Sphere3d extends ObjetMathalea2D {
  * @example sphere3d(A,v,'green','pink',18,'red') // Crée une sphère de centre A et dont le rayon correspond au vecteur v, l'équateur vert, l'enveloppe rose, avec 18 parallèles rouges
  * @example sphere3d(A,v,'green','pink',18,'red',36,'blue') // Crée une sphère de centre A et dont le rayon correspond au vecteur v, l'équateur vert, l'enveloppe rose, avec 18 parallèles rouges et 36 méridiens verts
  * @example sphere3d(A,v,'green','pink',18,'red',36,'blue',true,'#f15929') // Crée une sphère de centre A et dont le rayon correspond au vecteur v, l'équateur vert, l'enveloppe rose, avec 18 parallèles rouges, 36 méridiens verts et un axe affiché orange
- * @author Eric Elter (d'après version précédente de Jean-Claude Lhote)
+ * @author Éric Elter (d'après version précédente de Jean-claude Lhote)
  * @return {Sphere3d}
  */
 export function sphere3d(

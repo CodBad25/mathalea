@@ -150,7 +150,7 @@ export function deuxColonnesResp(cont1, cont2, options) {
  *
  * @param {string} texte
  * @returns le texte centré dans la page selon le contexte.
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export function centrage(texte) {
   return context.isHtml

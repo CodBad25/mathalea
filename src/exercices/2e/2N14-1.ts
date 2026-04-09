@@ -25,7 +25,7 @@ export const dateDeModifImportante = '13/08/2024'
 // Eric : 28/02/2025 Version 0.54.1 : le pb ci-dessus n'est plus d'actualité.
 
 /**
- * @author Stéphane Guyon (Exportable AMC et autres modifs par Eric Elter)
+ * @author Stéphane Guyon (Exportable AMC et autres modifs par Éric Elter)
  */
 
 export const uuid = '25fb4'

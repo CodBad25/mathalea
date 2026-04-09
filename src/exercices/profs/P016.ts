@@ -16,7 +16,7 @@ export const dateDePublication = '06/04/2022'
 
 /**
  * Simule des lancers de dés
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
 
 */
 export default class SimulateurDes extends Exercice {

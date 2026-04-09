@@ -1,14 +1,17 @@
-import { ecritureAlgebrique, ecritureAlgebriqueSauf1, rienSi1 } from '../../lib/outils/ecritures'
+import {
+  ecritureAlgebrique,
+  ecritureAlgebriqueSauf1,
+  rienSi1,
+} from '../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { randint } from '../../modules/outils'
 import ExerciceQcmA from '../ExerciceQcmA'
 export const dateDePublication = '02/09/2025'
 export const uuid = 'ba2e1'
-// Author Stéphane Guyon
+// @Author Stéphane Guyon
 export const refs = {
   'fr-fr': ['1A-C09-7'],
   'fr-ch': [],
-
 }
 export const interactifReady = true
 export const interactifType = 'qcm'
@@ -25,42 +28,49 @@ export default class Puissances extends ExerciceQcmA {
         &=2x^2-5x-3.
      \\end{aligned}$`
 
-    this.reponses = ['$3x^2+12x+4$', '$3x^2+12x-4$ ', '$3x^2+6x+4$ ', '$3x^2+6x-2$ ']
+    this.reponses = [
+      '$3x^2+12x+4$',
+      '$3x^2+12x-4$ ',
+      '$3x^2+6x+4$ ',
+      '$3x^2+6x-2$ ',
+    ]
   }
 
   versionAleatoire = () => {
-    const a = randint(-4, 4,0)
-    const alpha = randint(-5, 5,[-1,0,1])
-    const beta = randint(-4, 4,[0,1])
-   
-   
+    const a = randint(-4, 4, 0)
+    const alpha = randint(-5, 5, [-1, 0, 1])
+    const beta = randint(-4, 4, [0, 1])
+
     this.enonce = 'Soit $x$ un réel.<br>'
 
     this.enonce += `À quelle expression est égale $${rienSi1(a)}(x${ecritureAlgebrique(-alpha)})^2${ecritureAlgebrique(beta)}$ ?`
     this.correction = `On développe l'expression de l'énoncé. <br>
               $\\begin{aligned}
-    ${rienSi1(a)}(x${ecritureAlgebrique(-alpha)})^2${ecritureAlgebrique(beta)}&=${ecritureAlgebriqueSauf1(a)}\\left(x^2 ${ecritureAlgebrique(2*-alpha)}x${ecritureAlgebrique((-alpha)*(-alpha))}\\right)${ecritureAlgebrique(beta)}\\\\
-    &=${rienSi1(a)}x^2 ${ecritureAlgebrique(-2*a*alpha)}x${ecritureAlgebrique((a*-alpha)*(-alpha))} ${ecritureAlgebrique(beta)}\\\\
-        &=${miseEnEvidence(`${rienSi1(a)}x^2 ${ecritureAlgebrique(-2*a*alpha)}x${ecritureAlgebrique((a*-alpha)*(-alpha)+beta)}`)}\\\\
+    ${rienSi1(a)}(x${ecritureAlgebrique(-alpha)})^2${ecritureAlgebrique(beta)}&=${ecritureAlgebriqueSauf1(a)}\\left(x^2 ${ecritureAlgebrique(2 * -alpha)}x${ecritureAlgebrique(-alpha * -alpha)}\\right)${ecritureAlgebrique(beta)}\\\\
+    &=${rienSi1(a)}x^2 ${ecritureAlgebrique(-2 * a * alpha)}x${ecritureAlgebrique(a * -alpha * -alpha)} ${ecritureAlgebrique(beta)}\\\\
+        &=${miseEnEvidence(`${rienSi1(a)}x^2 ${ecritureAlgebrique(-2 * a * alpha)}x${ecritureAlgebrique(a * -alpha * -alpha + beta)}`)}\\\\
           \\end{aligned}$`
-    const constante = (a*-alpha)*(-alpha)+beta
-    let constante2 = 2*alpha+beta
-    if (constante2===0) {constante2=alpha*alpha-beta}
-    if (constante===0) {
-            this.reponses = [
-        `$${rienSi1(a)}x^2 ${ecritureAlgebrique(-2*a*alpha)}x$`,
-        `$${rienSi1(a)}x^2 ${ecritureAlgebrique(2*a*alpha)}x${ecritureAlgebrique((a*-alpha)*(-alpha)+beta)}$`,
-        `$${rienSi1(a)}x^2 ${ecritureAlgebrique(-2*a*alpha)}x${ecritureAlgebrique((a*-alpha)*(-alpha)-beta)}$`,
-        `$${rienSi1(a)}x^2 ${ecritureAlgebrique(-a*alpha)}x${ecritureAlgebrique((a*-alpha)*(-alpha)+beta)}$`
-        ]
+    const constante = a * -alpha * -alpha + beta
+    let constante2 = 2 * alpha + beta
+    if (constante2 === 0) {
+      constante2 = alpha * alpha - beta
+    }
+    if (constante === 0) {
+      this.reponses = [
+        `$${rienSi1(a)}x^2 ${ecritureAlgebrique(-2 * a * alpha)}x$`,
+        `$${rienSi1(a)}x^2 ${ecritureAlgebrique(2 * a * alpha)}x${ecritureAlgebrique(a * -alpha * -alpha + beta)}$`,
+        `$${rienSi1(a)}x^2 ${ecritureAlgebrique(-2 * a * alpha)}x${ecritureAlgebrique(a * -alpha * -alpha - beta)}$`,
+        `$${rienSi1(a)}x^2 ${ecritureAlgebrique(-a * alpha)}x${ecritureAlgebrique(a * -alpha * -alpha + beta)}$`,
+      ]
+    } else {
+      this.reponses = [
+        `$${rienSi1(a)}x^2 ${ecritureAlgebrique(-2 * a * alpha)}x${ecritureAlgebrique(a * -alpha * -alpha + beta)}$`,
+        `$${rienSi1(a)}x^2 ${ecritureAlgebrique(2 * a * alpha)}x${ecritureAlgebrique(a * -alpha * -alpha + beta)}$`,
+        `$${rienSi1(a)}x^2 ${ecritureAlgebrique(-2 * a * alpha)}x${ecritureAlgebrique(a * -alpha * -alpha - beta)}$`,
+        `$${rienSi1(a)}x^2 ${ecritureAlgebrique(-a * alpha)}x${ecritureAlgebrique(a * -alpha * -alpha + beta)}$`,
+      ]
+    }
   }
-  else { this.reponses = [
-        `$${rienSi1(a)}x^2 ${ecritureAlgebrique(-2*a*alpha)}x${ecritureAlgebrique((a*-alpha)*(-alpha)+beta)}$`,
-        `$${rienSi1(a)}x^2 ${ecritureAlgebrique(2*a*alpha)}x${ecritureAlgebrique((a*-alpha)*(-alpha)+beta)}$`,
-        `$${rienSi1(a)}x^2 ${ecritureAlgebrique(-2*a*alpha)}x${ecritureAlgebrique((a*-alpha)*(-alpha)-beta)}$`,
-        `$${rienSi1(a)}x^2 ${ecritureAlgebrique(-a*alpha)}x${ecritureAlgebrique((a*-alpha)*(-alpha)+beta)}$`
-        ]}
-}
 
   constructor() {
     super()

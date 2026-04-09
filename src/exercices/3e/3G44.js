@@ -60,7 +60,7 @@ export const dateDeModifImportante = '19/03/2025'
 
 /**
  * Calcul de longueurs avec Pythagore dans la géométrie dans l'espace
- * @author Eric Elter
+ * @author Éric Elter
  */
 
 export const uuid = '57c70'

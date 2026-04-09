@@ -9,7 +9,7 @@ export const dateDeModifImportante = '15/01/2023' //  Par EE
 
 /**
  * Transformations : trouver un point numéroté par une homothétie ou une rotation
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
 
  */
 

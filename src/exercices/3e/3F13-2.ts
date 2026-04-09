@@ -21,7 +21,7 @@ export const dateDePublication = '31/01/2026'
 /**
  * Un graphique étant tracé, déterminer les antécédents de nombres donnés.
  * La fonction est un polynôme de degré 1, 2 ou 3 et les nombres des questions ne sont que des entiers.
- * Interactivité et multiples questions ajoutés par J-C Lhote le 23/09/2023
+ * Interactivité et multiples questions ajoutés par Jean-claude Lhote le 23/09/2023
  * @author Rémi Angot
  */
 

@@ -55,7 +55,7 @@ export const dateDeModifImportante = '13/11/2025'
 
 /**
  * Utiliser les propriétés de la symétrie pour répondre à des questions
- * @author Eric Elter
+ * @author Éric Elter
  * Ajout de la symétrie centrale par Guillaume Valmont le 13/11/2025
  */
 

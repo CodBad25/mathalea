@@ -5,7 +5,7 @@ import { texNombre } from '../../../outils/texNombre'
 import type Probleme from '../../Probleme'
 import ProblemeMultiplicatifParts from './problemesMultiplicatifsPart'
 /**
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export function tempsEcran(decimal = false): Probleme {
   const quidam = prenomPronom()

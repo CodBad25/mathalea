@@ -9,7 +9,7 @@ export const amcType = 'AMCOpen'
 
 /**
  * Travailler la double distributivité
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 
 export const uuid = '4963b'

@@ -6,7 +6,7 @@ export const amcReady = true
 export const titre = 'Compter les cubes'
 
 /**
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
 
  */
 export const uuid = '76b93'

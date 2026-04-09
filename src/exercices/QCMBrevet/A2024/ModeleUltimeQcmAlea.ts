@@ -18,7 +18,7 @@ export const dateDePublication = '28/10/2024'
 // Ceci est un exemple de QCM avec version originale et version aléatoire
 /**
  *
- * @author Prénom Nom de l'auteur : Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * éventuellement e-mail jean-claude.lhote@ac-nancy-metz.fr
  */
 export default class MetropoleJuin24Exo4Q1 extends ExerciceQcmA {

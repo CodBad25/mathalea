@@ -20,7 +20,7 @@ export function texProba(proba: number | FractionEtendue): string {
 
 /**
  * classe pour faire des arbres de probabilités
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * la classe Arbre permet de définir un arbre de probabilité.
  * à son sommet, il y a un Arbre dont la proba est 1 et qui a la propriété racine = true (c'est le seul)
  * Ses enfants sont eux-mêmes Arbre(s).

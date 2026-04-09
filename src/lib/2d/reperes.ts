@@ -21,7 +21,7 @@ import { latex2d, texteParPosition } from './textes'
  * @param {number?} opacite=1
  * @param {number?} opaciteDeRemplissage=1
  * @constructor
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export class PapierPointe extends ObjetMathalea2D {
   plots: Plot[]

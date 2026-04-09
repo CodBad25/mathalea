@@ -65,7 +65,7 @@ export function miseEnEvidence(
  *   - `10`    → 2e chiffre à gauche de la virgule (dizaine)
  *   - `100`   → 3e chiffre à gauche de la virgule (centaine)
  *   - `1000`  → 4e chiffre à gauche de la virgule (millier)
- * @author Eric Elter
+ * @author Éric Elter
  * @returns {string} Une chaîne LaTeX avec un seul chiffre mis en couleur et en gras.
  *   Le reste du nombre est laissé tel quel.
  */
@@ -253,7 +253,7 @@ export function couleurAleatoire() {
  * soit le code d'une couleur imposée, ainsi que sa traduction française au masculin et au féminin.
  * @example couleurTab() peut renvoyer ['black','noir','noire'].
  * @example couleurTab(0) renverra de façon certaine ['black','noir','noire'].
- * @author Eric Elter
+ * @author Éric Elter
  */
 export function couleurTab(choixCouleur = 999) {
   const panelCouleurs = [

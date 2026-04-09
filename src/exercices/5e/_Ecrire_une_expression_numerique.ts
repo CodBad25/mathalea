@@ -26,7 +26,7 @@ export const amcType = 'AMCHybride'
 export const dateDeModifImportante = '21/09/2023'
 /**
  * Fonction noyau pour 6 fonctions qui utilisent les mêmes variables et la fonction choisirExpressionNumerique
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export default class EcrireUneExpressionNumerique extends Exercice {
   version: number

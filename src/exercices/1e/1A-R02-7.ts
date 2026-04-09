@@ -5,7 +5,7 @@ import { randint } from '../../modules/outils'
 import ExerciceQcmA from '../ExerciceQcmA'
 export const dateDePublication = '07/01/2026'
 export const uuid = '40c12'
-// Author Gilles Mora
+// @Author Gilles Mora
 export const refs = {
   'fr-fr': ['1A-R02-7'],
   'fr-ch': [],
@@ -16,15 +16,14 @@ export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = 'Utiliser une proportion pour trouver le tout'
 export default class ProblemesPourcentages extends ExerciceQcmA {
-private appliquerLesValeurs(
+  private appliquerLesValeurs(
     typeQuestion: string,
     valeurDonnee: number,
     pourcentageDonne: number,
     pourcentageCache: number,
-    unite: string
+    unite: string,
   ): void {
-    const total = Math.round(valeurDonnee * 100 / pourcentageDonne)
-   
+    const total = Math.round((valeurDonnee * 100) / pourcentageDonne)
 
     let situation = ''
     let explication = ''
@@ -104,23 +103,23 @@ Pour trouver le nombre total, on divise par $${pourcentageDonne / 10}$ (pour avo
 $(${texNombre(valeurDonnee)} \\div ${pourcentageDonne / 10}) \\times 10 = ${miseEnEvidence(texNombre(total))}$ $${miseEnEvidence(`\\text{${unite}}`)}$`
         break
 
-    case 'lecture1':
-  // Énoncé : "40% lu" + on donne les pages RESTANTES (60%)
-  situation = `Marie a lu $40 \\,\\%$ de son livre.<br>
+      case 'lecture1':
+        // Énoncé : "40% lu" + on donne les pages RESTANTES (60%)
+        situation = `Marie a lu $40 \\,\\%$ de son livre.<br>
 S'il lui reste $${valeurDonnee}$ ${unite} à lire, le nombre total de pages du livre est  :`
-  explication = `Les pages restantes représentent $${pourcentageDonne} \\,\\%$ du total.<br>
+        explication = `Les pages restantes représentent $${pourcentageDonne} \\,\\%$ du total.<br>
 Pour trouver le nombre total de pages, on divise le nombre de pages restantes par $${pourcentageDonne / 10}$ (pour avoir $10\\,\\%$), puis on multiplie par $10$ (pour avoir $100\\,\\%$) :<br>
 $(${valeurDonnee} \\div ${pourcentageDonne / 10}) \\times 10 = ${miseEnEvidence(texNombre(total))}$ $${miseEnEvidence(`\\text{${unite}}`)}$`
-  break
+        break
 
-case 'lecture2':
-  // Énoncé : "60% reste à lire" + on donne les pages DÉJÀ LUES (40%)
-  situation = `Il reste à Marie $60 \\,\\%$ de son livre à lire.<br>
+      case 'lecture2':
+        // Énoncé : "60% reste à lire" + on donne les pages DÉJÀ LUES (40%)
+        situation = `Il reste à Marie $60 \\,\\%$ de son livre à lire.<br>
 Si elle a déjà lu $${valeurDonnee}$ ${unite}, le nombre total de pages du livre est  :`
-  explication = `Les pages lues représentent $${pourcentageDonne} \\,\\%$ du total.<br>
+        explication = `Les pages lues représentent $${pourcentageDonne} \\,\\%$ du total.<br>
 Pour trouver le nombre total de pages, on divise le nombre de pages déjà luespar $${pourcentageDonne / 10}$ (pour avoir $10\\,\\%$), puis on multiplie par $10$ (pour avoir $100\\,\\%$) :<br>
 $(${valeurDonnee} \\div ${pourcentageDonne / 10}) \\times 10 = ${miseEnEvidence(texNombre(total))}$ $${miseEnEvidence(`\\text{${unite}}`)}$`
-  break
+        break
     }
 
     this.enonce = situation
@@ -129,19 +128,19 @@ $(${valeurDonnee} \\div ${pourcentageDonne / 10}) \\times 10 = ${miseEnEvidence(
     // Génération des distracteurs garantissant 4 réponses distinctes
     const reponsesSet = new Set<number>()
     reponsesSet.add(total) // Bonne réponse
-    
+
     // Distracteur 1 : multiplication par 10
     let dist1 = valeurDonnee * 10
     if (reponsesSet.has(dist1)) dist1 = Math.round(total * 0.9)
     reponsesSet.add(dist1)
-    
+
     // Distracteur 2 : calcul avec le mauvais pourcentage
-    let dist2 = Math.round(valeurDonnee * 100 / pourcentageCache)
+    let dist2 = Math.round((valeurDonnee * 100) / pourcentageCache)
     while (reponsesSet.has(dist2)) {
       dist2 = Math.round(total * 1.05)
     }
     reponsesSet.add(dist2)
-    
+
     // Distracteur 3 : autre erreur
     let dist3 = Math.round(total * 1.1)
     while (reponsesSet.has(dist3)) {
@@ -167,24 +166,84 @@ $(${valeurDonnee} \\div ${pourcentageDonne / 10}) \\times 10 = ${miseEnEvidence(
   versionAleatoire = () => {
     const choix = choice([
       // Cas iceberg : "90% sous l'eau" + visible OU "10% au-dessus" + sous l'eau
-      { type: 'iceberg1', valeur: randint(30, 40), pourcDonne: 10, pourcCache: 90, unite: 'm' },
-      { type: 'iceberg2', valeur: choice([90, 180, 270, 360]), pourcDonne: 90, pourcCache: 10, unite: 'm' },
-      
+      {
+        type: 'iceberg1',
+        valeur: randint(30, 40),
+        pourcDonne: 10,
+        pourcCache: 90,
+        unite: 'm',
+      },
+      {
+        type: 'iceberg2',
+        valeur: choice([90, 180, 270, 360]),
+        pourcDonne: 90,
+        pourcCache: 10,
+        unite: 'm',
+      },
+
       // Cas recyclage : "recycle 30%" + non recyclés OU "ne recycle pas 70%" + recyclés
-      { type: 'recyclage1', valeur: choice([7000, 14000, 21000, 28000]), pourcDonne: 70, pourcCache: 30, unite: 'tonnes' },
-      { type: 'recyclage2', valeur: choice([3000, 6000, 9000, 12000]), pourcDonne: 30, pourcCache: 70, unite: 'tonnes' },
-      
+      {
+        type: 'recyclage1',
+        valeur: choice([7000, 14000, 21000, 28000]),
+        pourcDonne: 70,
+        pourcCache: 30,
+        unite: 'tonnes',
+      },
+      {
+        type: 'recyclage2',
+        valeur: choice([3000, 6000, 9000, 12000]),
+        pourcDonne: 30,
+        pourcCache: 70,
+        unite: 'tonnes',
+      },
+
       // Cas budget : "25% loisirs" + autres OU "75% autres" + loisirs
-      { type: 'budget1', valeur: choice([1500, 3000, 4500, 6000]), pourcDonne: 75, pourcCache: 25, unite: '€' },
-      { type: 'budget2', valeur: choice([500, 1000, 1500, 2000]), pourcDonne: 25, pourcCache: 75, unite: '€' },
-      
+      {
+        type: 'budget1',
+        valeur: choice([1500, 3000, 4500, 6000]),
+        pourcDonne: 75,
+        pourcCache: 25,
+        unite: '€',
+      },
+      {
+        type: 'budget2',
+        valeur: choice([500, 1000, 1500, 2000]),
+        pourcDonne: 25,
+        pourcCache: 75,
+        unite: '€',
+      },
+
       // Cas déplacements : "20% vélo" + autres OU "80% autres" + vélo
-      { type: 'deplacements1', valeur: choice([8000, 16000, 24000, 32000]), pourcDonne: 80, pourcCache: 20, unite: 'déplacements' },
-      { type: 'deplacements2', valeur: choice([2000, 4000, 6000, 8000]), pourcDonne: 20, pourcCache: 80, unite: 'déplacements' },
-      
+      {
+        type: 'deplacements1',
+        valeur: choice([8000, 16000, 24000, 32000]),
+        pourcDonne: 80,
+        pourcCache: 20,
+        unite: 'déplacements',
+      },
+      {
+        type: 'deplacements2',
+        valeur: choice([2000, 4000, 6000, 8000]),
+        pourcDonne: 20,
+        pourcCache: 80,
+        unite: 'déplacements',
+      },
+
       // Cas lecture : "40% lu" + restant OU "60% reste" + lu
-      { type: 'lecture1', valeur: choice([120, 180, 240, 300]), pourcDonne: 60, pourcCache: 40, unite: 'pages' },
-      { type: 'lecture2', valeur: choice([80, 120, 160, 200]), pourcDonne: 40, pourcCache: 60, unite: 'pages' },
+      {
+        type: 'lecture1',
+        valeur: choice([120, 180, 240, 300]),
+        pourcDonne: 60,
+        pourcCache: 40,
+        unite: 'pages',
+      },
+      {
+        type: 'lecture2',
+        valeur: choice([80, 120, 160, 200]),
+        pourcDonne: 40,
+        pourcCache: 60,
+        unite: 'pages',
+      },
     ])
 
     this.appliquerLesValeurs(
@@ -192,7 +251,7 @@ $(${valeurDonnee} \\div ${pourcentageDonne / 10}) \\times 10 = ${miseEnEvidence(
       choix.valeur,
       choix.pourcDonne,
       choix.pourcCache,
-      choix.unite
+      choix.unite,
     )
   }
 

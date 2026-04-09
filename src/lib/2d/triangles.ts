@@ -23,7 +23,7 @@ import {
  * @param {number} h hauteur du triangle en cm
  * @param {number} d valeur algébrique de AH où H est le pied de la hauteur
  * @param {*} n = 1 ou 2 permet de choisir le côté pour C.
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * @return {objet} {triangle, pied}
  */
 export function triangle2points1hauteur(
@@ -109,7 +109,7 @@ export function triangle2points2angles(
  * @param {number} l la longueur du deuxième côté de l'angle
  * @param {number} n n=1 l'angle a est pris dans le sens direct, n différent de 1, l'angle a est pris dans le sens indirect.
  * t = triangle2points1angle1longueur(A,B,40,6) // Trace le triangle ABC tel que CAB = 40° et AC=6
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export function triangle2points1angle1longueur(
   A: PointAbstrait,
@@ -139,7 +139,7 @@ export function triangle2points1angle1longueur(
  * n=3 l'angle a est pris dans le sens direct et le point est le plus loin de A
  * n=4 l'angle est pris dans le sens indirect et le point est le plus loin de A
  * t = triangle2points1angle1longueurOppose(A,B,40,6) // Trace le triangle ABC tel que CAB = 40° et BC=6 Le point C est celui des deux points possible le plus près de A
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export function triangle2points1angle1longueurOppose(
   A: PointAbstrait,

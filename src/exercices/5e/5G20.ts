@@ -3,7 +3,7 @@ export const titre = 'Construire un triangle'
 export const interactifReady = false
 
 /**
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export const uuid = 'a808d'
 

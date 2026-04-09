@@ -26,7 +26,7 @@ export const dateDePublication = '06/12/2020'
 export const dateDeModifImportante = '29/10/2024'
 
 /**
- * @author Jean-Claude Lhote (remaniée par EE pour la prise en compte du nb de lignes et de colonnes du labyrinthe)
+ * @author Jean-claude Lhote (remaniée par EE pour la prise en compte du nb de lignes et de colonnes du labyrinthe)
  * Parcourir un labyrinthe de nombres en passant par les multiples du nombre choisi.
  * Relecture : Janvier 2022 par EE
  */

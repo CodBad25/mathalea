@@ -13,7 +13,8 @@ import {
 } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-export const titre = 'Résoudre des problèmes avec des puissances de 10 et des conversions'
+export const titre =
+  'Résoudre des problèmes avec des puissances de 10 et des conversions'
 export const dateDePublication = '05/02/2021'
 export const dateDeModifImportante = '20/09/2025'
 export const interactifReady = true
@@ -23,7 +24,7 @@ export const amcType = 'AMCOpen'
 
 /**
  * Problèmes avec des multiplications ou des divisions avec des puissances de 10 et des conversions
- * @author Rémi Angot (pour les problèmes 1 à 4) et Eric Elter (pour les problèmes 5 à 8 et pour l'interactif)
+ * @author Rémi Angot (pour les problèmes 1 à 4) et Éric Elter (pour les problèmes 5 à 8 et pour l'interactif)
  */
 export const uuid = '5c9c2'
 
@@ -78,7 +79,6 @@ export default class ProblemesPuissancesDe10EtConversions extends Exercice {
     for (
       let i = 0, texte, texteCorr, a, a1, b, b1, c, c1, u, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       let reponseNumerique = 0
       let mantisse, exposant

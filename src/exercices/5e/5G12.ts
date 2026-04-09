@@ -38,7 +38,7 @@ export const dateDeModifImportante = '23/07/2023'
  * Publié le 14/12/2020
  * Trouver l'image par symétrie centrale d'une figure dans un pavage
  * Version Latex & Html grâce à Mathalea2d
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export const uuid = '76ea9'
 

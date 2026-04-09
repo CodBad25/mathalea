@@ -237,7 +237,7 @@ const listePourMoins2PiSur3 = listePour2PiSur3.map((el) =>
 
 /**
  * Écrire un complexe sous différentes formes
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 
 export default class AcosOmegaTPlusBSinOmegaT extends Exercice {

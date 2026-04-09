@@ -9,7 +9,7 @@ export const amcType = 'AMCHybride'
 export const dateDePublication = '02/11/2021'
 
 /**
- * @author Eric Elter
+ * @author Éric Elter
 
  * Date octobre 2021
  */

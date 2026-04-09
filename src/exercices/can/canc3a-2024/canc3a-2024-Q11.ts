@@ -14,7 +14,7 @@ export const interactifType = 'qcm'
 export const uuid = '74ad3'
 /**
  * Modèle d'exercice très simple pour la course aux nombres
- * @author Gilles Mora (reprise du fichier de Jean-Claude Lhote 6ième)
+ * @author Gilles Mora (reprise du fichier de Jean-claude Lhote 6ième)
 
 */
 export default class CompareNombre extends ExerciceSimple {

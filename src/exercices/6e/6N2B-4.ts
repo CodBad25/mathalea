@@ -29,7 +29,7 @@ export const dateDePublication = '04/11/2021'
 
 /**
  * Presentation didactique : Par combien multiplier un nombre pour que le chiffre des unités devienne le chiffre des ...
- * @author Eric Elter (inspiré par Aude Duvold)
+ * @author Éric Elter (inspiré par Aude Duvold)
  */
 export const uuid = '18559'
 
@@ -105,7 +105,6 @@ export default class MultiplierUnNombreParPuissanceDeDix extends Exercice {
     for (
       let i = 0, texte, texteCorr, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       const choixAlea = listeChoixAlea[0]
       listeChoixAlea.splice(0, 1)

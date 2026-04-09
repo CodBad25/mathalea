@@ -13,7 +13,7 @@ export const refs = {
 
 /**
  *
- * @author clone de TSpeAN1-0 de Claire Rousset réalisé par Jean-Claude Lhote
+ * @author clone de TSpeAN1-0 de Claire Rousset réalisé par Jean-claude Lhote
 
  */
 export default class InequationsLn extends InequationsLog {

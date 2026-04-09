@@ -36,7 +36,7 @@ export const titre = 'Tracer des parallèles et des perpendiculaires'
 /**
  * Fonction générale pour exercices de constructions de parallèles et perpendiculaires
  * Animation de la correction ajoutée le 16/04/2021
- * @author Jean-Claude Lhote  (AMC par Eric Elter en septembre 2021, ES6 par Loïc Geeraerts)
+ * @author Jean-claude Lhote  (AMC par Éric Elter en septembre 2021, ES6 par Loïc Geeraerts)
  */
 
 export const uuid = 'd14bc'

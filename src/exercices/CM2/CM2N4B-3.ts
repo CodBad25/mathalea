@@ -7,7 +7,7 @@ import Exercice from '../Exercice'
 export const titre = 'Jouer au "compte est bon" en version semi-aléatoire'
 
 /**
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
 
  * Dans cette version, il est possible de choisir 1,2,3,4 ou 5 nombres du tirage et de contraindre la cible entre deux valeurs
  */

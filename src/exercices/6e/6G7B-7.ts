@@ -47,7 +47,7 @@ export const dateDePublication = '14/12/2020'
 
 /**
  * Trouver une figure symétrique dans un pavage. Symétrie axiale. 6 pavages différents.
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * Relecture : Novembre 2021 par EE
  */
 export const uuid = '328b1'

@@ -14,7 +14,7 @@ export const amcType = 'qcmMono'
 export const dateDePublication = '20/11/2021'
 
 /**
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
 
  */
 export const uuid = 'd0287'

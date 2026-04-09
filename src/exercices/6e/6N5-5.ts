@@ -13,7 +13,7 @@ export const dateDeModifImportante = '23/06/2024'
 
 /**
  * Résoudre des problèmes en choisissant la bonne réponse
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * 6C12-5
  */
 export const uuid = '103a2'

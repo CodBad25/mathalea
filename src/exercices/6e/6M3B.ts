@@ -22,7 +22,7 @@ export const amcReady = true
 
 /**
  * Comparer des volumes d'empilements de cubes
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 
 export const uuid = '5f117'

@@ -25,7 +25,7 @@ export const dateDeModifImportante = '01/02/2026'
 
 /**
  * Multiplication de deux nombres décimaux avec des paramètres sur le nombre de chiffres et de décimales dans chaque facteur
- * @author Eric Elter (sur la base de 6C30)
+ * @author Éric Elter (sur la base de 6C30)
  */
 export const uuid = 'f9113'
 

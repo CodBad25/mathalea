@@ -30,7 +30,7 @@ export const dateDeModifImportante = '09/03/2023'
 
 /**
  * Résolution d'équations de type (ax+b)(cx+d)=0
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * Tout est dans le nom de la fonction.
  * Rendu interactif par Guillaume Valmont le 18/03/2022
  */

@@ -11,7 +11,7 @@ import { vecteur } from './Vecteur'
 /**
  * Un objet pour avoir une horloge
  * Si heure n'est pas définie, il n'y a pas d'aiguilles.
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * Date de publication : 01/02/2025
  */
 export default class Horloge extends ObjetMathalea2D {

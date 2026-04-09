@@ -43,7 +43,7 @@ export const dateDePublication = '12/01/2026'
 
 /**
  * Annoter une figure en utilisant les propriétés de conservation de la symétrie et de la translation
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export const uuid = '07d1b'
 

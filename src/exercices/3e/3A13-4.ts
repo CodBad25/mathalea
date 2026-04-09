@@ -9,7 +9,7 @@ export const dateDePublication = '14/09/2022'
 /**
  * À partir de divisions euclidiennes, indiquer l'égalité fondamentale correspondante.
  *
- * @author Eric Elter
+ * @author Éric Elter
  */
 
 export const uuid = 'b0cee'

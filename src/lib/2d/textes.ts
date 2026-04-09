@@ -38,7 +38,7 @@ export const svgAncrages = {
  * @property {number} largeur Largeur en pixels du label à des fins de centrage
  * @property {number} hauteur Hauteur en pixels du label à des fins de centrage
  * @property {string} couleurDeRemplissage Couleur de fond de ce label. À associer obligatoirement à colorToLatexOrHTML().
- * @author Rémi Angot et Jean-Claude Lhote
+ * @author Rémi Angot et Jean-claude Lhote
  * @class
  */
 // JSDOC Validee par EE Juin 2022
@@ -66,7 +66,7 @@ export function labelLatexPoint(
     couleurDeRemplissage: '',
   },
 ): NestedObjetMathalea2dArray {
-  // Jean-Claude Lhote 15/08/2023
+  // Jean-claude Lhote 15/08/2023
   const offset = 0.25 * Math.log10(taille) // context.pixelsParCm ne correspond pas forcément à la valeur utilisée par mathalea2d... cela peut entrainer un trés léger écart
   let x
   let y
@@ -402,7 +402,7 @@ export function deplaceLabel(p: IPolygone, nom: string, positionLabel: string) {
  * ancrageDeRotation est à prendre parmi ['milieu', 'gauche', 'droite']
  * Si mathOn est true, la chaine est traitée par texteParPoint mais avec une police se rapprochant de la police Katex (quelques soucis d'alignement des caractères sur certains navigateurs)
  * Si le texte commence et finit par des $ la chaine est traitée par latexParPoint
- * @author Rémi Angot rectifié par Jean-Claude Lhote
+ * @author Rémi Angot rectifié par Jean-claude Lhote
  */
 export class TexteParPoint extends ObjetMathalea2D {
   texte: string
@@ -579,7 +579,7 @@ export class TexteParPoint extends ObjetMathalea2D {
  * ancrageDeRotation est à prendre parmi ['milieu', 'gauche', 'droite']
  * Si mathOn est true, la chaine est traitée par texteParPoint mais avec une police se rapprochant de la police Katex (quelques soucis d'alignement des caractères sur certains navigateurs)
  * Si le texte commence et finit par des $ la chaine est traitée par latexParPoint
- * @author Rémi Angot rectifié par Jean-Claude Lhote
+ * @author Rémi Angot rectifié par Jean-claude Lhote
  */
 export function texteParPoint(
   texte: string,

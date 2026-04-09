@@ -7,7 +7,7 @@ import { segment } from './segmentsVecteurs'
 import { rotation, similitude } from './transformations'
 
 /**
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * A1 Le point de départ de la flèche
  * centre Le centre de la rotation
  * sens Le sens (+1 ou -1) de la rotation. +1=sens trig

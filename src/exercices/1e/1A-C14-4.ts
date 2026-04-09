@@ -16,6 +16,9 @@ export const interactifType = 'qcm'
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = 'Résoudre une inéquation avec un tableau de signes'
+/**
+ * @author Gilles Mora
+ */
 export default class Auto1AC16 extends ExerciceQcmA {
   versionOriginale: () => void = () => {
     // Version fixe pour les tests ou exemple

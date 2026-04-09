@@ -1,13 +1,13 @@
-import ExerciceSimple from '../../ExerciceSimple'
+import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
-import { choice } from '../../../lib/outils/arrayOutils'
+import ExerciceSimple from '../../ExerciceSimple'
 
-import { randint } from '../../../modules/outils'
-import { abs } from '../../../lib/outils/nombres'
 import Decimal from 'decimal.js'
-import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
+import { abs } from '../../../lib/outils/nombres'
+import { randint } from '../../../modules/outils'
 export const titre = 'Calculer avec une puissance de 10'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -18,7 +18,7 @@ export const refs = {
 }
 /**
  * Modèle d'exercice très simple pour la course aux nombres
- * @author Eric Elter - Gilles Mora
+ * @author Éric Elter - Gilles Mora
 
 */
 export default class calcPuissanceDe102026 extends ExerciceSimple {
@@ -32,12 +32,14 @@ export default class calcPuissanceDe102026 extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const annee= 2026
-    const a = this.canOfficielle ? new Decimal(annee) : choice([
-      new Decimal(annee),
-      new Decimal(annee).div(10),
-      new Decimal(annee).div(100),
-    ])
+    const annee = 2026
+    const a = this.canOfficielle
+      ? new Decimal(annee)
+      : choice([
+          new Decimal(annee),
+          new Decimal(annee).div(10),
+          new Decimal(annee).div(100),
+        ])
     const exp = this.canOfficielle ? -2 : randint(-3, 3, 0)
     const expABS = abs(exp)
     this.consigne = 'Compléter.<br>'

@@ -29,7 +29,7 @@ export const titre = "Construire un point à partir d'une égalité vectorielle"
 export const dateDeModifImportante = '29/01/2023'
 
 /**
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export const uuid = '2b8bf'
 

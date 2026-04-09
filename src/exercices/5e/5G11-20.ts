@@ -53,7 +53,7 @@ function checkDistance(points: { x: number; y: number }[]) {
 
 /**
  * Construction interactive de symétriques de points
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 class ConstructionsSymetrieCentraleFigures extends Exercice {
   antecedentsApiGeom!: PointApigeom[][]

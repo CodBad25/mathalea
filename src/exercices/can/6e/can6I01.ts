@@ -58,7 +58,7 @@ export type NoteLaCouleurParams = {
 /**
  * Note_la_couleur() Exercice inspiré de l'activité débranchée de Jean-Yves Labouche Note La Couleur
  * https://www.monclasseurdemaths.fr/profs/algorithmique-scratch/note-la-couleur/
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export const uuid = '667d1'
 

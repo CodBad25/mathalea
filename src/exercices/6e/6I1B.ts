@@ -24,7 +24,8 @@ export const interactifType = 'mathLive'
 
 /**
  * * Colorier le déplacement d'un lutin
- * @author Erwan Duplessy // (Ajout paramètre 3 par EE)
+ * @author Erwan Duplessy
+ *  // (Ajout paramètre 3 par EE)
  * Ajout AMC : Janvier 2022 par EE
  * Ajout interactivité : Juin 2025 par Guillaume Valmont
  */

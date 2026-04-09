@@ -501,7 +501,7 @@ export class Segment extends ObjetMathalea2D {
    * @memberof Segment
    * @param {Segment | Droite | DemiDroite | Cercle} objet Objet géométrique dont on veut tester l'intersection avec le segment
    * @example s1.estSecant(d1) // Renvoie true si s1 est sécant avec d1, false sinon
-   * @author Jean-Claude Lhote
+   * @author Jean-claude Lhote
    * @return {boolean}
    */
   // JSDOC Validee par EE Aout 2022

@@ -5,7 +5,7 @@ import { texNombre } from '../../../outils/texNombre'
 import type Probleme from '../../Probleme'
 import ProblemeMultiplicatifsComplexes from './problemesMultiplicatifsComplexes'
 /**
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export function couverture(decimal = false): Probleme {
   const nb1Fois = randint(3, 7) * 5 // nombre de livres

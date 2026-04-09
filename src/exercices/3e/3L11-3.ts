@@ -28,7 +28,7 @@ export const amcReady = true
 /**
  * Utiliser la simple ou la double distributivité et réduire l'expression
  *
- * @author Rémi Angot (Amélioration AMC par Eric Elter)
+ * @author Rémi Angot (Amélioration AMC par Éric Elter)
  */
 export const uuid = '82313'
 

@@ -299,7 +299,7 @@ export function ellipse(
  * @param {string} color Facultatif, 'black' par défaut
  * @param {string} couleurDeRemplissage si 'none' alors pas de remplissage.
  * @param {number} opaciteDeRemplissage Transparence de remplissage de 0 à 1. Facultatif, 0.2 par défaut
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * @return {SemiEllipse} Objet SemiEllipse
  */
 export class SemiEllipse extends ObjetMathalea2D {
@@ -629,7 +629,7 @@ export class SemiEllipse extends ObjetMathalea2D {
  * @param {string} color Facultatif, 'black' par défaut
  * @param {string} couleurDeRemplissage si 'none' alors pas de remplissage.
  * @param {number} opaciteDeRemplissage Transparence de remplissage de 0 à 1. Facultatif, 0.2 par défaut
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * @return {SemiEllipse} Objet SemiEllipse
  */
 export function semiEllipse({
@@ -679,7 +679,7 @@ export function semiEllipse({
  * @param {string} [color = 'black'] Facultatif, 'black' par défaut
  * @param {string} [couleurDeRemplissage = 'none'] none' si on ne veut pas de remplissage, sinon une couleur du type 'blue' ou du type '#f15929'
  * @param {number} [opaciteDeRemplissage = 0.2] Taux d'opacité du remplissage
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * @private
  */
 export class Cone extends ObjetMathalea2D {
@@ -911,7 +911,7 @@ export function cone({
  * @param {number} [opaciteDeRemplissage = 0.2] Taux d'opacité du remplissage
  * @param {number} [angleDeFuite = 30] pour 'baseAvantCoucheVuDroite'
  * @param {number} [coefficientDeFuite = 0.5] 'baseAvantCoucheVuDroite'
- * @author Olivier Mimeau // d'après Cone de Jean-Claude Lhote
+ * @author Olivier Mimeau // d'après Cone de Jean-claude Lhote
  * @private
  */
 export class Cylindre extends ObjetMathalea2D {

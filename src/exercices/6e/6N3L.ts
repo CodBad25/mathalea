@@ -24,7 +24,7 @@ export const amcType = 'AMCNum'
  * Calculer la fracton d'un nombre divisible par le dénominateur ... ou pas.
  *
  * Par défaut la division du nombre par le dénominateur est inférieure à 11
- * @author Rémi Angot + Jean-Claude Lhote
+ * @author Rémi Angot + Jean-claude Lhote
  */
 export const uuid = 'ddb83'
 

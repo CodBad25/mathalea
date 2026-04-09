@@ -1,11 +1,11 @@
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { remplisLesBlancs } from '../../lib/interactif/questionMathLive'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import { ecritureParentheseSiNegatif } from '../../lib/outils/ecritures'
-import { remplisLesBlancs } from '../../lib/interactif/questionMathLive'
-import Exercice from '../Exercice'
-import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import FractionEtendue from '../../modules/FractionEtendue'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { listeQuestionsToContenu, randint } from '../../modules/outils'
+import Exercice from '../Exercice'
 
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 export const interactifReady = true
@@ -15,7 +15,8 @@ export const dateDePublication = '21/05/2023'
 
 /**
  * Somme de deux vecteurs à l'aide des coordonnées
- * @author Stéphan Grignon Interactif Gilles Mora le 11 juin 2024
+ * @author Stéphan Grignon
+ *  Interactif Gilles Mora le 11 juin 2024
  */
 export const uuid = '49570'
 

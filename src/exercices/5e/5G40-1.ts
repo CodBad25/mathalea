@@ -19,7 +19,7 @@ export const dateDeModifImportante = '28/04/2025'
  * On doit compléter des propriétés des parallélogrammes
  * @author Rémi Angot
  * Ajout de la possibilité de choisir le nombre de questions par Guillaume Valmont le 08/05/2022
- * Amélioration du QCM et de la sortie LaTex par Eric Elter le 28/04/2025
+ * Amélioration du QCM et de la sortie LaTex par Éric Elter le 28/04/2025
  */
 export const uuid = 'af2c2'
 

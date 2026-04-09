@@ -33,7 +33,7 @@ export const dateDePublication = '01/05/2022' // La date de publication initiale
 
 /**
  *
- * Gilles Mora
+ * @author Gilles Mora
 
  */
 
@@ -159,7 +159,6 @@ export default class SujetCAN2022quatrieme extends Exercice {
         objets,
         cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       switch (typeQuestionsDisponibles[i]) {
         case 1:

@@ -7,7 +7,7 @@ import { texNombre } from '../../../outils/texNombre'
 import type Probleme from '../../Probleme'
 import ProblemeMultiplicatifs from './problemesMultiplicatifsTout'
 /**
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export function coureur2(decimal = false): Probleme {
   const personnage = prenomPronom()

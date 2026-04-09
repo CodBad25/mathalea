@@ -135,7 +135,7 @@ export function obtenirSemiPremier(max: number): number {
  *
  * @param {Entier} n
  * Retourne la factorisation d'un entier sous la forme [[a0,n0],[a1,n1],...] où a0,a1 sont les facteurs premiers et n0, n1 sont les exposants de ces facteurs.
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 
 export function factorisation(n: number): [number, number][] {

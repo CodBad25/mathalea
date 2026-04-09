@@ -3,7 +3,7 @@ import { Figure2D } from '../Figures2D'
 import { point } from '../PointAbstrait'
 import { Segment, segment } from '../segmentsVecteurs'
 /**
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * @param nx nombre de studs en x
  * @param ny nombre
  * @param options

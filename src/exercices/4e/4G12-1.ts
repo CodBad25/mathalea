@@ -636,7 +636,7 @@ function definitElements(
   }
 }
 /**
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export default class TrouverLaTransformation extends Exercice {
   constructor() {

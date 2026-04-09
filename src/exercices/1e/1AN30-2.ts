@@ -36,7 +36,7 @@ export const refs = {
 /**
  *
  * @author Rémi Angot
- * Gilles Mora et Eric Elter ont créé l'interactif en QCM (suite demande JNAPMEP 2025 Toulon)
+ * @author Gilles Mora et Éric Elter ont créé l'interactif en QCM (suite demande JNAPMEP 2025 Toulon)
  */
 export default class SimplifierExponentielles extends Exercice {
   can: boolean

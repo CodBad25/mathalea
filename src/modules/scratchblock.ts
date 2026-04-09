@@ -17,7 +17,7 @@ export function scratchblock(
  * Il n'y a pas d'arguments, c'est un objet statique qui a sa méthode svg() et sa méthode tikz()
  * Il est difficile de modifier la taille de l'objet à cause du texte des blocks
  * @class
- * @author Jean-Claude Lhote, Sylvain Chambon, Sébastien Lozano
+ * @author Jean-claude Lhote, Sylvain Chambon, Sébastien Lozano
  * @return {RoseDesVents}
  */
 export class RoseDesVents extends ObjetMathalea2D {

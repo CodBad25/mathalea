@@ -53,6 +53,10 @@ export const refs = {
   'fr-ch': [],
 }
 export const dateDePublication = '01/01/2024'
+/**
+ * @author Éric Elter
+ * @author Gilles Mora
+ */
 
 export default class CourseAuxNombresSpeciale2024 extends Exercice {
   constructor() {

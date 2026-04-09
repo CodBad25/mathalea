@@ -10,7 +10,7 @@ export const interactifType = 'mathLive'
 export const dateDePublication = '11/05/2025'
 /**
  *
- * @author Eric Elter
+ * @author Éric Elter
  *
  */
 export const uuid = '15d3c'

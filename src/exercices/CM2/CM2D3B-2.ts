@@ -22,7 +22,7 @@ export const interactifType = 'mathLive'
 export const interactifReady = true
 
 /**
- * @Author Jean-Claude Lhote
+ * @Author Jean-claude Lhote
  * Sources (eduscol) : https://eduscol.education.fr/ressources/numerique/2020/2020-exercices-mathematiques-6e
  * Ces exercices seront proposés systématiquement pour 3 niveaux de difficulté afin de différentier autour d'un même problème
  */

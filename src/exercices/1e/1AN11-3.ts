@@ -28,7 +28,8 @@ export const dateDeModifImportante = '09/12/2025'
 
 /**
  * Déterminer une équation de tangente
- * Gilles Mora Ajout de l'interactivité par Jean-Claude Lhote et passage en typescript
+ * @author Gilles Mora
+ *  Ajout de l'interactivité par Jean-claude Lhote et passage en typescript
  */
 export const uuid = '4c8c7'
 

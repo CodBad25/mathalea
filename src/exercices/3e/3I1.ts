@@ -17,7 +17,8 @@ export const dateDeModifImportante = '02/01/2025'
 
 /**
  * * Instructions conditionnelles
- * @author Erwan Duplessy (rendu interactif par Eric Elter)(TS et sortie PDF par Olivier Mimeau)
+ * @author Erwan Duplessy
+ * (rendu interactif par Éric Elter)(TS et sortie PDF par Olivier Mimeau)
  */
 export const uuid = '8cbd6'
 

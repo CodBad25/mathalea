@@ -24,7 +24,7 @@ import { tracePoint } from './TracePoint'
  * @property {string} svg Sortie au format vectoriel (SVG) que l’on peut afficher dans un navigateur
  * @property {string} tikz Sortie au format TikZ que l’on peut utiliser dans un fichier LaTeX
  * @property {string} color Couleur du tracé de la courbe. À associer obligatoirement à colorToLatexOrHTML().
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * @class
  */
 export class CourbeSpline extends ObjetMathalea2D {
@@ -167,7 +167,7 @@ export class CourbeSpline extends ObjetMathalea2D {
  * // Trace, en noir avec une épaisseur de 2, la courbe spline g dans le repère r, tous deux précédemment définis.
  * @example courbeSpline(g, {repere: r, epaisseur: 5, color: 'blue'})
  * // Trace la courbe spline g dans le repère r, tous deux précédemment définis, en bleu, avec une épaisseur de 5.
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * @return {CourbeSpline}
  */
 // JSDOC Validee par EE Juin 2022

@@ -1,5 +1,5 @@
-import Exercice from './Exercice'
 import type { IExerciceBrevet } from '../lib/types'
+import Exercice from './Exercice'
 
 // export const uuid = 'UUID à modifier'
 // export const titre = 'Titre de l'exercice à modifier'
@@ -16,6 +16,9 @@ export const nombreElementsDifferents = (liste: string[]) => {
 }
 
 // class à utiliser pour fabriquer des Qcms sans aléatoirisation (en cas d'aléatoirisation, on utilisera ExerciceQcmA à la place)
+/**
+ * @author Jean-claude Lhote
+ */
 export default class ExerciceBrevet
   extends Exercice
   implements IExerciceBrevet

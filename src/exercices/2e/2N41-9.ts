@@ -24,6 +24,9 @@ export const refs = {
 
 const ecritureQuotient = (num: string, den: string, fractionnaire: boolean) =>
   fractionnaire ? `\\dfrac{${num}}{${den}}` : `${num}\\div ${den}`
+/**
+ * @author Gilles Mora
+ */
 export default class CalculFractionLitteral extends Exercice {
   constructor() {
     super()

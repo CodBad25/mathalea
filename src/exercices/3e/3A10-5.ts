@@ -28,7 +28,7 @@ export const dateDeModifImportante = '16/09/2024'
 /**
  *
  * Attendus de 3e : Recourir à une décomposition en facteurs premiers dans des cas simples
- * @author Eric Elter
+ * @author Éric Elter
  */
 
 export const uuid = 'eee79'

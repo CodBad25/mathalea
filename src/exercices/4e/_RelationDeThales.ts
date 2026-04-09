@@ -33,7 +33,7 @@ export const interactifReady = true
  *
  * @param arr - Tableau d'éléments (chaînes) à permuter.
  * @returns Un tableau de permutations uniques, où chaque permutation est un tableau de chaînes.
- * @author Eric Elter
+ * @author Éric Elter
  */
 function permutationsUnique(arr: string[]): string[][] {
   const results = new Set<string>()
@@ -57,7 +57,7 @@ function permutationsUnique(arr: string[]): string[][] {
  *
  * @param texte - Chaîne contenant des fractions LaTeX du type \dfrac{...}{...}.
  * @returns Un tableau d’objets représentant les fractions extraites avec leur forme brute, numérateur et dénominateur.
- * @author Eric Elter
+ * @author Éric Elter
  */
 function extraireFractions(
   texte: string,
@@ -87,7 +87,7 @@ function extraireFractions(
  * variantsFor("${a + b}")
  * // => ["${a + b}", "${b + a}"]
  *
- * @author Eric Elter
+ * @author Éric Elter
  */
 function variantsFor(content: string): string[] {
   const trimmed = content.trim()
@@ -126,7 +126,7 @@ function variantsFor(content: string): string[] {
  * @example
  * genererVariantsParFraction("\\dfrac{GE}{GH}=\\dfrac{BF}{BK}")
  * // => [["\\dfrac{GE}{GH}", "\\dfrac{EG}{GH}", "\\dfrac{GE}{HG}", "\\dfrac{EG}{HG}"], ...]
- * @author Eric Elter
+ * @author Éric Elter
  */
 function genererVariantsParFraction(texte: string): string[][] {
   const fractions = extraireFractions(texte)
@@ -151,7 +151,7 @@ function genererVariantsParFraction(texte: string): string[][] {
  * @example
  * inverserFraction("\\dfrac{GE}{GH}")
  * // => "\\dfrac{GH}{GE}"
- * @author Eric Elter
+ * @author Éric Elter
  */
 function inverserFraction(fraction: string): string {
   const match = /\\dfrac\{([^}]*)\}\{([^}]*)\}/.exec(fraction)
@@ -172,7 +172,7 @@ function inverserFraction(fraction: string): string {
  * genererToutesEgalites("\\dfrac{GE}{GH}=\\dfrac{BF}{BK}=\\dfrac{AB}{CD}", true)
  * // => ["\\dfrac{GE}{GH} = \\dfrac{BF}{BK} = \\dfrac{AB}{CD}", "\\dfrac{GH}{GE} = \\dfrac{BK}{BF} = \\dfrac{CD}{AB}", ...]
  * @throws Erreur si le texte contient moins de trois fractions.
- * @author Eric Elter
+ * @author Éric Elter
  */
 function genererToutesEgalites(
   texte: string,
@@ -237,7 +237,6 @@ export default class RelationDeThales extends Exercice {
     for (
       let i = 0, texte = '', texteCorr = '', cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       // this.autoCorrection[i] = {}
       if (i % 3 === 0) {

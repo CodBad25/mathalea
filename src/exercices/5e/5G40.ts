@@ -36,7 +36,7 @@ export const amcType = 'AMCHybride'
 
 /**
  * Terminer la construction d'un parallélogramme
- * @author Jean-Claude Lhote (exercice) et Rémi Angot (animations)
+ * @author Jean-claude Lhote (exercice) et Rémi Angot (animations)
  * Ajout de la possibilité de choisir le nombre de questions par Guillaume Valmont le 08/05/2022
  */
 export const uuid = 'b611a'

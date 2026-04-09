@@ -17,7 +17,7 @@ export const refs = {
   'fr-ch': [],
 }
 /**
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * @constructor
  */
 export default class YohakuCan6a extends Exercice {

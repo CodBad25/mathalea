@@ -42,7 +42,7 @@ export const amcReady = true
  * * 3 : Multiplication par un facteur relatif et les termes sont relatifs
  * *
  * * Refactoring 21/12/2012
- * @author Rémi Angot et Mickael Guironnet (AMC par Eric Elter)
+ * @author Rémi Angot et Mickael Guironnet (AMC par Éric Elter)
  */
 export const uuid = '77a62'
 export const refs = {

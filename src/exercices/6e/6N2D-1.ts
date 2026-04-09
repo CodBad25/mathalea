@@ -25,7 +25,7 @@ export const titre =
 
 /**
  * * Calculer le produit (en ligne) de deux décimaux à partir d'un produit de deux entiers
- * @author Eric Elter
+ * @author Éric Elter
  */
 
 export const uuid = '56773'

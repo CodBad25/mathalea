@@ -34,7 +34,7 @@ function aireTriangle(p: {
  * @param {string} [positionLabel = 'above'] Position du nom par rapport au point
  * @example G = barycentre(pol) // Crée G, le barycentre du polygone pol, sans lui donner de nom
  * @example G = barycentre(pol,'G','below') // Crée G, le barycentre du polygone pol, en notant G sous le point, s'il est tracé et labellisé.
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * @return {Point}
  */
 // JSDOC Validee par EE Juin 2022
@@ -466,7 +466,7 @@ export function renommePolygone(p: Polygone, noms: string | string[]) {
 /**
  * @param {Polygone} p
  * @return {number[]} retourne la liste des coordonnées des sommets de p dans un seul tableau.
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export function polygoneToFlatArray(p: Polygone) {
   const flatArray = []
@@ -653,7 +653,7 @@ export function polygoneATrous({
  * @description Si les noms peuvent avoir plusieurs caractères, il faudra ajouter des virgules entre chaque nom dans le string passé en argument.
  * @example nommePolygone (p, "A',B',C',D',E'", 0.5, 'red')
  * @example nommePolygone (p,'ABCDE',0.5,'red') nomme les sommets du polygone A, B, C, D et E. Les labels sont placés à une distance de 0,5 cm des sommets
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export class NommePolygone extends ObjetMathalea2D {
   poly: Polygone

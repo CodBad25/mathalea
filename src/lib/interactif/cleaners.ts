@@ -19,7 +19,7 @@ function cleanFractions(str: string): string {
  * Rajout des regex de MD pour gérer les fractions négatives (30/08/2024 : pas de solution directement par ComputeEngine mais ArnoG est sur le coup)
  * Cette fonction est amené à remplacer cleanFractions mais dans le doute (laissons-lui du temps pour vérifier qu'elle ne buggue pas), et pour vexer personne, je la mets en doublon.
  * @param {string} str
- * @author Eric Elter
+ * @author Éric Elter
  */
 function cleanFractionsMemesNegatives(str: string): string {
   // EE :
@@ -98,7 +98,7 @@ function cleanComas(str: string): string {
  * removeLatexSpaces("Hello ~ world\\, test \\: math \\quad fini");
  * // → "Helloworldtestmathfini"
  *
- * @author Eric Elter
+ * @author Éric Elter
  */
 function cleanSpaces(str: string): string {
   const patterns = [

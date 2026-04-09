@@ -37,7 +37,8 @@ export const dateDeModifImportante = '05/11/2023' // Une date de modification im
 
 /**
  * Calculer le volume d'une boule
- * @author Erwan DUPLESSY (AMC par EE)
+ * @author Erwan DUPLESSY
+ *  (AMC par EE)
  */
 
 export const uuid = '8c803'

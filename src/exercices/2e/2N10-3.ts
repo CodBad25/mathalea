@@ -8,7 +8,7 @@ export const dateDeModifImportante = '27/10/2021'
 /**
  * Clone de 6N21 pour les 2nde // OM : CM2N2E-2 maintenant
  *
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export const uuid = '7cfbe'
 

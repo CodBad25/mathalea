@@ -20,7 +20,7 @@ export const uuid = 'ad5f8'
 
 /**
  * Outil de création de pavages pour le prof
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * Publié le 12/12/2020
  * Ref : P007
  */

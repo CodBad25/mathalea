@@ -14,7 +14,7 @@ export const interactifType = 'mathLive'
 export const uuid = '5191d'
 /**
  * Modèle d'exercice très simple pour la course aux nombres
- * @author Jean-Claude Lhote pour la pyramide et Gilles Mora pour essayer d'en faire quelque chose de bien....
+ * @author Jean-claude Lhote pour la pyramide et Gilles Mora pour essayer d'en faire quelque chose de bien....
 
 */
 export default class NomExercice extends ExerciceSimple {

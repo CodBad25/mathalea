@@ -15,7 +15,7 @@ export const refs = {
 }
 
 /**
- * @author Eric Elter
+ * @author Éric Elter
 
 */
 

@@ -22,7 +22,7 @@ import { elimineBinomesXYIntermediairesAlignes } from './Polyquad'
  * // Trace l'aire entre la courbe de la fonction g et l'axe des abscisses dans le repère r, tous deux précédemment définis.
  * @example integraleComptable(g, {repere: r, pas: 0.1, sup: true, colorPositif: 'green', colorNegatif: 'orange'})
  * // Trace l'aire entre la courbe de la fonction g et l'axe des abscisses dans le repère r, tous deux précédemment définis. L'aire est arrondie par le haut, le pas entre deux abscisses est de 0.1, l'aire positive est verte et l'aire négative est orange.
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export class IntegraleComptable extends ObjetMathalea2D {
   aire: { negative: number; positive: number }

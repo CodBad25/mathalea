@@ -50,7 +50,7 @@ export const dateDeModifImportante = '28/11/2025' // Une date de modification im
 
 /**
  *
- * Gilles Mora
+ * @author Gilles Mora
 
  */
 

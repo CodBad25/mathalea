@@ -18,7 +18,7 @@ export const titre = 'Encadrer avec les racines carrées'
 export const interactifReady = true
 export const interactifType = 'multiMathfield'
 export const dateDePublication = '28/09/2022' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
-export const dateDeModificationImportante = '05/04/2026' // Passage en MultiMathfield par Jean-Claude Lhote
+export const dateDeModificationImportante = '05/04/2026' // Passage en MultiMathfield par Jean-claude Lhote
 /**
  *
  * @author Gilles Mora

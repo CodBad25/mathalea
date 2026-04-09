@@ -12,7 +12,7 @@ export const amcType = 'AMCNum'
 export const dateDePublication = '01/07/2021'
 export const dateDeModifImportante = '26/10/2024'
 /**
- * @author Jean-Claude Lhote +Gilles Mora pour modif (intégration du can6N02)
+ * @author Jean-claude Lhote +Gilles Mora pour modif (intégration du can6N02)
  * Créé pendant l'été 2021
 
  */

@@ -26,7 +26,7 @@ export const dateDeModifImportante = '07/06/2025'
 /**
  * On achète 2 aliments dont on connaît la masse (un en grammes et l'autre en kilogrammes) et le prix au kilogramme. Il faut calculer le prix total.
  * @author Rémi Angot
- * @author Jean-Claude Lhote pour les version probleme1, problem2 et probleme3 et l'ajout de schémas.
+ * @author Jean-claude Lhote pour les version probleme1, problem2 et probleme3 et l'ajout de schémas.
  */
 export const uuid = '96b94'
 
@@ -364,7 +364,7 @@ export default class ProblemeCourse extends Exercice {
     ]
     this.spacing = 2
     this.spacingCorr = 2
-    // Modification de l'exercice pour avoir plusieurs question. On peut revenir à la version initiale en décommentant. Jean-Claude Lhote
+    // Modification de l'exercice pour avoir plusieurs question. On peut revenir à la version initiale en décommentant. Jean-claude Lhote
     this.nbQuestions = 4
     // this.nbQuestionsModifiable = false
 

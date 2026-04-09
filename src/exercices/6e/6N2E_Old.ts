@@ -21,7 +21,7 @@ export const dateDePublication = '08/06/2022'
 /**
  * Multiplication de deux nombres décimaux avec des paramètres sur le nombre de chiffres et de décimales dans chaque facteur
  * Ref 6C30
- * @author Eric Elter (sur la base de 6C30)
+ * @author Éric Elter (sur la base de 6C30)
  * Publié le 08/06/2022
  */
 export const uuid = 'f6413'

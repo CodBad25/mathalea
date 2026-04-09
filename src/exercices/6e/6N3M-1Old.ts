@@ -31,7 +31,7 @@ export const amcType = 'AMCNum'
 
 /**
  * Calculer la fraction d'une quantité avec ou sans dessin.
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export const uuid = 'a168c'
 

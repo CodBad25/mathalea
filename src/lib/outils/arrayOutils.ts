@@ -115,7 +115,7 @@ export function creerCouples<T1, T2>(
 
 /**
  * Enlève toutes les occurences d'un élément d'un tableau donné
- * Ajouté par Jean-Claude Lhote : la gestion des listes contenant des listes. (par exemple, dans 6N20-2).
+ * Ajouté par Jean-claude Lhote : la gestion des listes contenant des listes. (par exemple, dans 6N20-2).
  * @param liste
  * @param element
  *
@@ -180,7 +180,7 @@ export function compteOccurences<T>(array: T[], value: T): number {
 
 /**
  * Enlève toutes les occurences d'un élément d'un tableau donné, mais sans modifier le tableau en paramètre et renvoie le tableau modifié
- * @author Rémi Angot & Jean-Claude Lhote
+ * @author Rémi Angot & Jean-claude Lhote
  */
 
 export function enleveElementBis<T>(array: T[], item?: T) {
@@ -200,7 +200,7 @@ export function enleveElementBis<T>(array: T[], item?: T) {
  * Enlève l'élément index d'un tableau attention ! modifie le tableau passé en argument ne retourne rien
  * @param {Array<any>} le tableau à modifier
  * @param {number} index de l'élément à retirer
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export function enleveElementNo<T>(array: T[], index: number) {
   if (index >= 0 && index < array.length) array.splice(index, 1)
@@ -211,7 +211,7 @@ export function enleveElementNo<T>(array: T[], index: number) {
  * @param {Array<any>} le tableau à modifier
  * @param {number} index de l'élément à retirer
  * @return {Array<any>} une copie du tableau modifié
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export function nouveauTableauPriveDunElement<T>(array: T[], index: number) {
   const tableaucopie = array.slice()
@@ -226,7 +226,7 @@ export function nouveauTableauPriveDunElement<T>(array: T[], index: number) {
  * @param {T} search - La valeur à rechercher dans le tableau.
  * @param {T} replace - La valeur de remplacement à insérer à la place de `search`.
  * @returns {T[]} Un nouveau tableau avec les valeurs remplacées.
- * @author Eric Elter
+ * @author Éric Elter
  * @example
  * remplaceDansTableau(['a', 'b', 'a'], 'a', 'z'); // ['z', 'b', 'z']
  *
@@ -249,7 +249,7 @@ export function remplaceDansTableau<T extends string | number>(
  * @param {number} nbQuestions - Le nombre total de valeurs souhaitées.
  * @param {number} valeurMax - La valeur maximale autorisée (minimum = 1).
  * @returns {number[]} Un nouveau tableau complété, sans doublons, avec des valeurs entre 1 et valeurMax.
- * @author Eric Elter
+ * @author Éric Elter
  *
  * @throws {Error} Si nbQuestions est supérieur à valeurMax.
  *
@@ -327,7 +327,7 @@ export function choice<T>(liste: T[], listeAEviter: T[] | T = []): T {
  * retourne un tableau dans lequel les doublons ont été supprimés s'il y en a MAIS SANS TRI
  * @param {array} arr Tableau duquel on veut supprimer les doublons numériques
  * @param {number} tolerance La différence minimale entre deux valeurs pour les considérer comme égales
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  **/
 export function enleveDoublonNum(arr: number[], tolerance = epsilon) {
   let k = 0
@@ -540,7 +540,7 @@ export function combinaisonListes<T>(liste: T[], tailleMinimale?: number) {
  * // [B,C,B,B,C,A,B]
  * combinaisonListes2([A,B,C,D],6)
  * // [B,C,D,B,C,A,B]
- * @author Eric Elter
+ * @author Éric Elter
  */
 export function combinaisonListes2<T>(liste: T[], tailleMinimale: number) {
   if (liste.length === 0) {
@@ -670,7 +670,7 @@ type OptionsBinomes = {
  * @param {boolean} [options.ordreCroissant=false] - Si true, ne conserve que les binômes [a, b] où a < b.
  * @param {boolean} [options.ordreDecroissant=false] - Si true, ne conserve que les binômes [a, b] où a > b.
  * @returns {[number, number][]} Liste de binômes valides.
- * @author Eric Elter
+ * @author Éric Elter
  *
  * @example
  * genererBinomesAleatoires([0,1,2,3])

@@ -219,7 +219,7 @@ export class Mediatrice extends ObjetMathalea2D implements IDroite {
  * @example mediatrice(M,N,'','blue','red','green',true,true,'OO','XX',2,0.5,3)
  * // Trace, en bleu, la médiatrice du segment[MN], d'épaisseur 2, avec une opacité de 50 % sans nom
  * // Les traits de construction sont dessinés en vert avec la marque 'OO' pour le segment initial et la marque 'XX' pour les rayons, toutes ces marques étant rouge.
- * @author Rémi Angot {amendée par Eric Elter en juin 2022}
+ * @author Rémi Angot {amendée par Éric Elter en juin 2022}
  * @return {Mediatrice|Droite}
  */
 // JSDOC Validee par EE Juin 2022

@@ -4,7 +4,7 @@ import { context } from '../../modules/context'
  *
  * @param {number} index Choix du motif
  * le nom du motif sert dans la fonction pattern
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 
 export function motifs(index: number) {
@@ -62,14 +62,14 @@ export function motifs(index: number) {
  *       → La largeur est `2 × distanceDesHachures` et la hauteur est `distanceDesHachures`
  *       → Pour des briques plus grandes, augmenter `distanceDesHachures`
  *
- * @author Eric Elter
+ * @author Éric Elter
  * @returns Une chaîne contenant le code TikZ généré, ou une chaîne vide si le motif est inconnu.
  *
  * @deprecated Cette fonction n'est pas recommandée pour créer des motifs au sein d'une surface quelconque en tikz
  * car elle ne fait qu'une surface rectangulaire et le fait en ajoutant un clip et un code très long.
  * Le même résultat (hachures, points, étoiles...) peut être obtenu la propriété hachures de l'objet Polygone.
  * les hachures sont gérées par la fonction pattern() et retourne une option pour la commande draw qui est plus efficace.
- * Il est donc préférable d'utiliser la propriété hachures des objets Polygone. (Jean-Claude Lhote)
+ * Il est donc préférable d'utiliser la propriété hachures des objets Polygone. (Jean-claude Lhote)
  */
 
 export function patternTikZ(params: {
@@ -254,7 +254,7 @@ export function patternTikZ(params: {
  *
  * @param {object} param0 paramètres de définition du motif de remplissage
  * définit un motif de remplissage pour les polygones, les rectangles... ou tout élément SVG qui se remplit.
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 
 export function pattern({

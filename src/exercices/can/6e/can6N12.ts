@@ -9,7 +9,7 @@ export const titre =
 export const dateDePublication = '20/01/2022'
 
 /**
- * @author Eric Elter
+ * @author Éric Elter
  * Créé le 20/01/2022
 
  */

@@ -19,6 +19,9 @@ export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre =
   'Exprimer une variable en fonction des autres (avec des quotients)'
+/**
+ * @author Gilles Mora
+ */
 export default class Auto1AC11c extends ExerciceQcmA {
   private appliquerLesValeurs(
     a: number,

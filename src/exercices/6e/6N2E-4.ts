@@ -21,7 +21,7 @@ export const amcType = 'AMCNum'
 
 /**
  * Trouver le dernier chiffre d'un produit entre décimaux
- * @author Eric Elter
+ * @author Éric Elter
  */
 
 export const uuid = 'em8m3'

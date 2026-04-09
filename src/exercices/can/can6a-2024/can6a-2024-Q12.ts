@@ -10,7 +10,7 @@ export const interactifType = 'mathLive'
 export const uuid = 'd149d'
 /**
  * Modèle d'exercice très simple pour la course aux nombres
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
 
 */
 export default class SoustractionDecimaux extends ExerciceSimple {

@@ -11,7 +11,7 @@ import {
 /**
  * La pyramide tronquée
  *
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * Crée une pyramide à partir d'une base Polygone3d d'un sommet et d'un coefficient compris entre 0 et 1
  * un coefficient de 0.5 coupera la pyramide à mi-hauteur (valeur par défaut).
  */

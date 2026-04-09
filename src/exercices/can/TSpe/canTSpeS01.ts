@@ -19,7 +19,7 @@ export const dateDePublication = '12/08/2024'
 
 /**
  * limites de suites (canT)
- * @author Jean-Claude Lhote et Stéphane Guyon
+ * @author Jean-claude Lhote et Stéphane Guyon
  *
  */
 class N2PlusRacineDeN extends ExerciceSimple {

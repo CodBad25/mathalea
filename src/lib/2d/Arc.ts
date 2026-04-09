@@ -60,7 +60,7 @@ export const rotationPoint = (
  * @property {number} [distanceDesHachures = 10] Distance des hachures si couleur de remplissage choisie.
  * @property {number} [pointilles = 0] Type de pointillés choisis (entre 1 et 5). Si autre nombre, pas de pointillés.
  * @property {number[]} bordures Coordonnées de la fenêtre d'affichage du genre [-2,-2,5,5]
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * @class
  **/
 // JSDOC Validee par EE Juin 2022
@@ -366,7 +366,7 @@ export class Arc extends ObjetMathalea2D {
  * @example arc(M,O,true,-40,'red','green',0.8,'white')
  // Trace l'arc en vert de centre O, d'extrémité M et d'angle orienté -40°, rempli en rouge à 80 %, avec des hachures blanches
  * @return {Arc}
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 // JSDOC Validee par EE Juin 2022
 
@@ -406,7 +406,7 @@ export function arc(
  * @example arcPointPointAngle(A,B,true,-40,'red','green',0.8,'white')
  // Trace l'arc en vert d'extrémités A et B (dans cet ordre) et d'angle orienté -40°, rempli en rouge à 80 %, avec des hachures blanches
  * @return {Arc}
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 // JSDOC Validee par EE Juin 2022
 export function arcPointPointAngle(

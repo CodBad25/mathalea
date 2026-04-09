@@ -26,8 +26,8 @@ export const titre =
  * Le coefficient est paramétrable, par défaut il est inférieur à 11.
  *
  * On peut paramétrer de n'avoir que des soustractions.
- * @author Rémi Angot, modifié par Eric Elter
- * Modif : Rajout des numérateurs négatifs par Eric Elter
+ * @author Rémi Angot, modifié par Éric Elter
+ * Modif : Rajout des numérateurs négatifs par Éric Elter
  * Modif le 4/4/26 les termes pouvaient être interchangés pour ne pas avoir de résultats négatifs
  * sans recalculer le résultat
  */

@@ -21,6 +21,9 @@ export const refs = {
   'fr-ch': [],
 }
 // une liste de nœuds pour définir une fonction Spline
+/**
+ * @author Gilles Mora
+ */
 export default class SignesTabGSpline extends Exercice {
   constructor() {
     super()

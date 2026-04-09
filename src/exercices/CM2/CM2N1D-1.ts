@@ -14,7 +14,7 @@ export const interactifType = 'mathLive'
 export const dateDeModifImportante = '24/09/2024'
 /**
  * Exercice modèle pour la nouvelle fonctionnalité de Drag&Drop
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
 
 */
 export const uuid = '6498e'

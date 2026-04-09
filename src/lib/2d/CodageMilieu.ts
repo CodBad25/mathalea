@@ -18,7 +18,7 @@ import { milieu } from './utilitairesPoint'
  * @property {string} svg Sortie au format vectoriel (SVG) que l’on peut afficher dans un navigateur
  * @property {string} tikz Sortie au format TikZ que l’on peut utiliser dans un fichier LaTeX
  * @property {string} color Couleur du codage. À associer obligatoirement à colorToLatexOrHTML().
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * @class
  */
 // JSDOC Validee par EE Juin 2022
@@ -71,7 +71,7 @@ export class CodageMilieu extends ObjetMathalea2D {
  * @param {boolean} [mil = true] Trace ou nom le point du milieu.
  * @example codageMilieu(M,N) // Code, en noir, le milieu du segment[MN] avec les marques 'x', en plaçant le milieu
  * @example codageMilieu(M,N,'red','oo',false) // Code, en rouge, le milieu du segment[MN] avec les marques 'oo', sans placer le milieu.
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * @return {CodageMilieu}
  */
 // JSDOC Validee par EE Juin 2022

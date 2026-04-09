@@ -21,7 +21,7 @@ export const dateDePublication = '09/05/2025'
 /**
  * Résoudre un problème en utilisant la division décimale.
  *
- * @author Eric Elter
+ * @author Éric Elter
 
  */
 export const uuid = '12d6e'

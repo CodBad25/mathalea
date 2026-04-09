@@ -13,7 +13,7 @@ import type {
  * @param {IPointAbstrait} B Deuxième sommet du triangle
  * @param {IPointAbstrait} C Troisième sommet du triangle
  * @example estDansTriangle(M, V, S, T) // Renvoie true si M appartient au triangle VST, false sinon
- * @author Eric Elter
+ * @author Éric Elter
  * @return {boolean}
  */
 export function estDansTriangle(
@@ -39,7 +39,7 @@ export function estDansTriangle(
  * @param {IPointAbstrait} C Troisième sommet du quadrilatère
  * @param {IPointAbstrait} D Quatrième sommet du quadrilatère
  * @example estDansQuadrilatere(M, F, G, H, I) // Renvoie true si M appartient au quadrilatère FGHI, false sinon
- * @author Eric Elter
+ * @author Éric Elter
  * @return {boolean}
  */
 export function estDansQuadrilatere(
@@ -57,7 +57,7 @@ export function estDansQuadrilatere(
  * @param {IPointAbstrait} M Point à tester
  * @param {Polygone} p Polygone dont on veut tester l'appartenance avec le point
  * @example estDansPolygoneConvexe(M, p1) // Renvoie true si M appartient au polygone convexe p1, false sinon
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * @return {boolean}
  */
 export function estDansPolygoneConvexe(
@@ -90,7 +90,7 @@ export function estDansPolygoneConvexe(
  * @param {IPointAbstrait} M Point à tester
  * @param {Polygone} p Polygone dont on veut tester l'appartenance avec le point
  * @example estDansPolygone(M, p1) // Renvoie true si M appartient au polygone p1, false sinon
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * @return {boolean}
  */
 export function estDansPolygone(M: IPointAbstrait, p: IPolygone): boolean {
@@ -193,7 +193,7 @@ export function angleModulo(a: number) {
  * @example x = angleOriente(H,E,T,0)
  * // x contient la valeur de la mesure de l'angle orienté HET, arrondie à l'unité
  * @return {number}
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export function angleOriente(
   A: IPointAbstrait,

@@ -22,7 +22,7 @@ export const dateDePublication = '07/11/2022'
 
 /**
  * Construire une section dans un un pavé droit
- * @author Eric Elter
+ * @author Éric Elter
  */
 
 export const uuid = 'a3cb9'
@@ -75,7 +75,6 @@ export default class ConstruireSectionPaveDroit extends Exercice {
         choix,
         cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       texte = ''
       texteCorr = ''

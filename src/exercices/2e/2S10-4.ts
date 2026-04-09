@@ -23,7 +23,7 @@ export const interactifType = 'mathLive'
 export const dateDeModifImportante = '08/01/2026'
 /**
  * Compléter ou utiliser un tableau
- * @author Gilles Mora +Jean-Claude Lhote pour l'interactif
+ * @author Gilles Mora +Jean-claude Lhote pour l'interactif
 
  */
 export const uuid = '3f39d'

@@ -14,7 +14,7 @@ type CellsOptions = {
 }
 type Coord = [number, number, ShapeName?, CellsOptions?] // Coordonnées sous forme de tableau de deux nombres, avec un troisième élément optionnel pour la forme à y mettre
 /**
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  *
  */
 

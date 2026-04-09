@@ -14,7 +14,7 @@ export const dateDeModifImportante = '17/04/2025'
  * Exercice de repérage sur droite graduée
  * L'exercice est décliné à partir de 6N30-0 (ReperageEntiersOuDecimaux)
  * C'est dans 6N30-0 qu'on paramètre toutes les variables didactiques de cet exo (notamment les niveaux de difficulté)
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 
 class ReperageEntier extends ReperageEntiersOuDecimaux {

@@ -112,7 +112,7 @@ export function listeQuestionsToContenuSansNumero(
 
 /**
  * Contraint une valeur à rester dans un intervalle donné. Si elle est trop petite, elle prend la valeur min, si elle est trop grande elle prend la valeur max
- * @author Jean-Claude Lhote à partir du code d'Eric Elter
+ * @author Jean-claude Lhote à partir du code d'Éric Elter
  * @param {number|string} min borne inférieure
  * @param {number|string} max borne supérieure
  * @param {number|string} valeur la valeur à contraindre
@@ -281,7 +281,7 @@ export function gestionnaireFormulaireTexte(
 /** Retourne un nombre décimal entre a et b, sans être trop près de a et de b
  * @param {number} a borne inférieure
  * @param {number} b borne supérieure
- * @author Eric Elter
+ * @author Éric Elter
  * @returns {number}
  */
 export function entreDeux(a: number, b: number) {
@@ -293,7 +293,7 @@ export function entreDeux(a: number, b: number) {
  * Compare deux nombres (pour les nombres en virgule flottante afin d'éviter les effets de la conversion en virgule flottante).
  * Devient compatible avec les FractionEtendue le 7/05/2024 en comparant leur valeur décimale
  * Pour les Decimal, la conversion automatique en number doit fonctionner.
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * @param {number} a premier nombre
  * @param {number} b deuxième nombre
  * @param {number} [tolerance=0.000001] seuil positif en dessous duquel une valeur est considérée comme nulle
@@ -461,7 +461,7 @@ export function randint(
  *
  * @param a : le minimim
  * @param b : le maximum
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * @returns un nombre aléatoire entre a et b
  */
 export const randFloat = (a: number, b: number, precision = 3): number => {
@@ -475,7 +475,7 @@ export const randFloat = (a: number, b: number, precision = 3): number => {
  * fonction qui retourne une chaine construite en concaténant les arguments
  * Le rôle de cette fonction est de construire un identifiant unique de question
  * afin de contrôler que l'aléatoire ne produit pas deux questions identiques.
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export function checkSum(...args: (number | string)[]) {
   let checkString = ''

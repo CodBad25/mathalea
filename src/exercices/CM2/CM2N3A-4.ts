@@ -10,7 +10,7 @@ export const amcType = 'AMCOpen'
 /**
  *Clone de 6C10 pour les CM1-CM2
  *
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export const uuid = 'fa836'
 

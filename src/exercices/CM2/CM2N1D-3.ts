@@ -29,7 +29,7 @@ export const interactifType = 'mathLive'
  * La présence de zéros est paramétrable (valeur par défaut : sans)
  * Le nombre de chiffres est réglable de 1 à 8 (valeur par défaut : 5)
  * On peut choisir de désordonner la décomposition pour éviter le remplissage 'en suivant' (valeur par défaut : non ordonnée)
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 class Decomp1 extends Exercice {
   constructor(numeroExercice: number) {

@@ -29,7 +29,7 @@ export const dateDePublication = '23/08/2024'
 
 /**
  * Donner le nom des côtés dans un triangle rectangle
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 
 export default class VocabulaireTriangleRectangle extends Exercice {

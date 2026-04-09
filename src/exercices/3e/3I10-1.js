@@ -40,8 +40,8 @@ export const dateDeModifImportante = '18/06/2028'
 
 /**
  * Analyser un programme scratch utilisant NoteLaCouleur
- * On interdit le mélange des cas (c'est forcément 3 ou 4 couleurs sinon souci Capytale) par Eric Elter le 18/06/2025
- * @author Jean-Claude Lhote
+ * On interdit le mélange des cas (c'est forcément 3 ou 4 couleurs sinon souci Capytale) par Éric Elter le 18/06/2025
+ * @author Jean-claude Lhote
  */
 export const uuid = '2ecd9'
 

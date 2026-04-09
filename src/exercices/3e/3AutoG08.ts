@@ -61,7 +61,7 @@ function choisirPolygone(
   }
 }
 /**
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export default class CalculerUnPerimetre extends ExerciceSimple {
   constructor() {

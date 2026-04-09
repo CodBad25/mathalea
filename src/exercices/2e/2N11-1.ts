@@ -31,7 +31,7 @@ export const interactifType = 'mathLive'
 
 /**
  * @author Stéphane Guyon
- * Rajout de paramètres et amélioration de l'aléatoire par Eric Elter (16/11/2025)
+ * Rajout de paramètres et amélioration de l'aléatoire par Éric Elter (16/11/2025)
  */
 
 export const uuid = '31c01'

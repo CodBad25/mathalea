@@ -15,7 +15,7 @@ const sortFractions = (liste) =>
 
 /**
  * Classe ListeFraction qui propose des méthodes utiles sur les collections de fractions
- * @author Jean-Claude Lhote sur une idée de Sébastien Lozano
+ * @author Jean-claude Lhote sur une idée de Sébastien Lozano
  */
 class ListeFraction {
   constructor(...fractions) {

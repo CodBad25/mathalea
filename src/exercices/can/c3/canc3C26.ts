@@ -10,7 +10,7 @@ export const interactifReady = true
 export const interactifType = 'multiMathfield'
 export const dateDePublication = '26/03/2026'
 /**
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export const uuid = '29957'
 

@@ -21,7 +21,7 @@ export const amcReady = true
 export const amcType = 'AMCHybride'
 
 /**
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export const uuid = '2ce11'
 

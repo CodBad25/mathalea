@@ -10,7 +10,7 @@ export const interactifType = 'mathLive'
 export const uuid = '25b8a'
 /**
  * Modèle d'exercice très simple pour la course aux nombres
- * @author Gilles Mora (reprise du fichier de Jean-Claude Lhote 6ième)
+ * @author Gilles Mora (reprise du fichier de Jean-claude Lhote 6ième)
 
 */
 

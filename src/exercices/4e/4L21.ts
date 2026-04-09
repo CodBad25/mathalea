@@ -11,7 +11,7 @@ export const refs = {
 export const dateDePublication = '24/05/2025'
 
 /**
- * @author Jean-Claude Lhote (implémentation des nombres relatifs dans 5L14)
+ * @author Jean-claude Lhote (implémentation des nombres relatifs dans 5L14)
  */
 export default class CalculerLaValeurDUneExpressionLitteraleDeg1Inc1 extends CalculerLaValeurDUneExpressionLitterale {
   constructor() {

@@ -255,7 +255,7 @@ export default class InequationsSecondDegre extends ExerciceQcmA {
 
       return [
         `${intervalleLaTex('-' + borne, borne, signeInegalité)}`,
-        `$x ${signeInegalité} ${borne}$`, // C'est ça qui correspond au sujet original à priori. Jean-Claude Lhote
+        `$x ${signeInegalité} ${borne}$`, // C'est ça qui correspond au sujet original à priori. Jean-claude Lhote
         // `${intervalleLaTex('-' + borne, borne, signeInegalitéFaux)}`,
         `$x=-\\sqrt{${val}}$ ou $x=\\sqrt{${val}}$`,
         `$-\\sqrt{${val}} ${signeInegalitéFaux} x ${signeInegalitéFaux}\\sqrt{${val}}$`,

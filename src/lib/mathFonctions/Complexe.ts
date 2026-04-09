@@ -28,7 +28,7 @@ function numerise(c: Complexe): Complexe {
 
 // Classe pour représenter les nombres complexes, avec des méthodes pour les opérations algébriques
 /**
- * @author : Jean-Claude Lhote
+ * @author : Jean-claude Lhote
  */
 export class Complexe {
   /**
@@ -356,7 +356,7 @@ const DENOMS = [1, 2, 3, 4, 5, 6, 8, 12]
 
 /**
  * Retourne l'écriture symbolique LaTeX d'un angle en radians si possible, sinon undefined.
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * @param {number} angleRadian - valeur de l'angle en radians
  * @param {number} [epsilon=1e-8] - tolérance pour l'approximation
  * @returns {string|undefined}
@@ -389,7 +389,7 @@ export function texAngleSymbolique(
 
 /**
  * Transforme un nombre en écriture symbolique LaTeX (fraction simple ou racine carrée d'entier)
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * @param x nombre à transformer
  * @returns string LaTeX
  */

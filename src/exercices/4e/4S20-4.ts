@@ -10,7 +10,7 @@ export const interactifReady = true
 export const interactifType = 'mathLive'
 
 export const dateDePublication = '02/08/2024' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
-export const dateDeModificationImportante = '29/12/2025' // Mise en place de l'interactivité (Jean-Claude Lhote)
+export const dateDeModificationImportante = '29/12/2025' // Mise en place de l'interactivité (Jean-claude Lhote)
 export const uuid = '24db8'
 export const refs = {
   'fr-fr': ['4S20-4', 'BP2FLUC12'],

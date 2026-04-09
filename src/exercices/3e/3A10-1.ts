@@ -21,7 +21,7 @@ export const amcType = 'qcmMono'
  * Nombres à 3 ou 4 chiffres, un multiple de 2, de 3, de 5, de 7, de 11, sous forme d'un produit de deux nombres premiers inférieurs à 100
  * et un nombre premier inferieur à 529
  * dans cet exo on n'utilise pas les critères par 7 et 11
- * @author Sébastien Lozano + Jean-Claude Lhote pour l'interactivité.
+ * @author Sébastien Lozano + Jean-claude Lhote pour l'interactivité.
 
  */
 export const uuid = 'bba55'

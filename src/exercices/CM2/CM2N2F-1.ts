@@ -27,7 +27,7 @@ export const dateDeModifImportante = '30/10/2025'
 /**
  *
  * Lire des abscisses sous forme de fractions avec possibilté d'avoir des fractions simplifiées
- * @author Olivier Mimeau d'après Jean-Claude Lhote 6N21-2
+ * @author Olivier Mimeau d'après Jean-claude Lhote 6N21-2
  */
 export const uuid = '0e527'
 

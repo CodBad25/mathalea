@@ -39,7 +39,7 @@ export const dateDePublication = '11/04/2022' // La date de publication initiale
 /**
  *
  *
- * Gilles Mora
+ * @author Gilles Mora
 
  */
 
@@ -151,7 +151,6 @@ Par exemple, en choisissant 20 questions, la course aux nombres sera composée d
         objets,
         cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       switch (typeQuestionsDisponibles[i]) {
         case 1:
@@ -939,16 +938,7 @@ Par exemple, en choisissant 20 questions, la course aux nombres sera composée d
             'black',
           )
           A.couleurDeRemplissage = colorToLatexOrHTML('lightgray')
-          B = texteParPosition(
-            '1 uA',
-            6,
-            6.5,
-            0,
-            'black',
-            1,
-            'milieu',
-            false,
-          )
+          B = texteParPosition('1 uA', 6, 6.5, 0, 'black', 1, 'milieu', false)
           C = grille(0, 0, 12, 7, 'black', 1, 1, false)
           D = point(1 + a, 4 - b)
           d = polygone(

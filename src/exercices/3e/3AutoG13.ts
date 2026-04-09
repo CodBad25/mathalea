@@ -25,7 +25,7 @@ export const refs = {
   'fr-ch': [],
 }
 /**
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export default class FormuleCosinus extends ExerciceSimple {
   constructor() {

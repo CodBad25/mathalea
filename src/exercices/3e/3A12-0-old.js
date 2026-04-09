@@ -26,7 +26,7 @@ export const dateDePublication = '05/10/2022'
 export const dateDeModifImportante = '17/01/2024'
 
 /**
- * @author Jean-Claude Lhote et Mickael Guironnet (pour la possibilité d'avoir plusieurs questions)
+ * @author Jean-claude Lhote et Mickael Guironnet (pour la possibilité d'avoir plusieurs questions)
  * Résoudre des problèmes de ppcm avec les engrenages.
  */
 export const uuid = '6b37f'

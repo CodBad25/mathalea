@@ -21,7 +21,7 @@ export const titre = "Estimer un angle sans rapporteur sur l'énoncé"
 
 /**
  * Estimer un angle
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export const uuid = 'c7f7a'
 

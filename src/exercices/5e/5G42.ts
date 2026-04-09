@@ -26,6 +26,9 @@ export const refs = {
   'fr-fr': ['5G42', '3AutoG02-3'],
   'fr-ch': ['9ES2-3'],
 }
+/**
+ * @author Rémi Angot
+ */
 export default class DemonstrationsParallelogrammes extends Exercice {
   constructor() {
     super()

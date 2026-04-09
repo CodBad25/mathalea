@@ -35,7 +35,7 @@ import { vide2d } from './Vide2d'
  *   const d0nom = labelOnLine(d0, '$' + noms[0] + '$', { color: 'red', taille: 8, usedPosition: [d3nom] })
  *
  * @author Mickael Guironnet
- * Modifications par Jean-Claude Lhote : factorisation dans droites.ts, passage en typescript et utilisation de latex2d à la place de LAtexParCoordonneesBox
+ * Modifications par Jean-claude Lhote : factorisation dans droites.ts, passage en typescript et utilisation de latex2d à la place de LAtexParCoordonneesBox
  */
 export function labelOnLine(
   droite: Droite,
@@ -744,7 +744,7 @@ export function droiteAvecNomLatex(d: Droite, nom: string, color = 'black') {
  * @property {number} epaisseur
  * @property {number} pointilles
  * @property {number} opacite
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * @class
  */
 // JSDOC Validee par EE Aout 2022
@@ -1277,7 +1277,7 @@ export class Droite extends ObjetMathalea2D {
  * @example droite(M, N, '(d1)','blue') // Trace la droite passant par M et N se nommant (d1) et de couleur bleue
  * @example droite(m, n, p) // Trace la droite définie par les coefficients de mx+ny+p=0 et de couleur noire
  * @example droite(m, n, p, '(d1)', 'red') // Trace la droite définie par les coefficients de mx+ny+p=0, se nommant (d1) et de couleur rouge
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * @return {Droite}
  */
 export function droite(
@@ -1378,7 +1378,7 @@ export function positionLabelDroite(
  * @param {string} [color = 'black'] Couleur de la droite : du type 'blue' ou du type '#f15929'
  * @example droiteParPointEtVecteur(M, v1) // Trace la droite passant par le point M et de vecteur directeur v1
  * @example droiteParPointEtVecteur(M, v1, 'd1', 'red') // Trace, en rouge, la droite d1 passant par le point M et de vecteur directeur v1
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * @return {Droite}
  */
 // JSDOC Validee par EE Aout 2022
@@ -1399,7 +1399,7 @@ export function droiteParPointEtVecteur(
  * @param {string} [color = 'black'] Couleur de la droite : du type 'blue' ou du type '#f15929'
  * @example droiteParPointEtParallele(M, d2) // Trace la droite parallèle à d2 passant par le point M
  * @example droiteParPointEtParallele(M, d2, 'd1', 'red') // Trace, en rouge, la droite d1 parallèle à d2 passant par le point M
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * @return {Droite}
  */
 // JSDOC Validee par EE Aout 2022
@@ -1419,7 +1419,7 @@ export function droiteParPointEtParallele(
  * @param {string} [color = 'black'] Couleur de la droite : du type 'blue' ou du type '#f15929'
  * @example droiteParPointEtPerpendiculaire(M, d2) // Trace la droite perpendiculaire à d2 passant par le point M
  * @example droiteParPointEtPerpendiculaire(M, d2, 'd1', 'red') // Trace, en rouge, la droite d1 perpendiculaire à d2 passant par le point M
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * @return {Droite}
  */
 // JSDOC Validee par EE Aout 2022
@@ -1438,7 +1438,7 @@ export function droiteParPointEtPerpendiculaire(
  * @param {string} [color = 'black'] Couleur de la droite : du type 'blue' ou du type '#f15929'
  * @example droiteHorizontaleParPoint(M) // Trace la droite horizontale passant par le point M
  * @example droiteHorizontaleParPoint(M, 'd1', 'red') // Trace, en rouge, la droite horizontale d1 passant par le point M
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * @return {Droite}
  */
 // JSDOC Validee par EE Aout 2022
@@ -1456,7 +1456,7 @@ export function droiteHorizontaleParPoint(
  * @param {string} [color = 'black'] Couleur de la droite : du type 'blue' ou du type '#f15929'
  * @example droiteVerticaleParPoint(M) // Trace la droite verticale passant par le point M
  * @example droiteVerticaleParPoint(M, 'd1', 'red') // Trace, en rouge, la droite verticale d1 passant par le point M
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * @return {Droite}
  */
 // JSDOC Validee par EE Aout 2022
@@ -1475,7 +1475,7 @@ export function droiteVerticaleParPoint(
  * @param {string} [color = 'black'] Couleur de la droite : du type 'blue' ou du type '#f15929'
  * @example droiteParPointEtPente(M, p) // Trace la droite passant par le point M et de pente p
  * @example droiteParPointEtPente(M, p, 'd1', 'red') // Trace, en rouge, la droite d1 passant par le point M et de pente p
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * @return {Droite}
  */
 // JSDOC Validee par EE Aout 2022
@@ -1493,7 +1493,7 @@ export function droiteParPointEtPente(
  * @param {PointAbstrait} A
  * @param {IDroite} d
  * @example distancePointDroite (M, d1) // Retourne la distance entre le point M et la droite d1
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * @return {number}
  */
 // JSDOC Validee par EE Aout 2022

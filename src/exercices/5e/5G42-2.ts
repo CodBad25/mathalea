@@ -30,7 +30,7 @@ export const interactifType = 'mathLive'
 
 /**
  * Trouver les coordonnees du 4e sommet d'un parallélogramme à partir de 3 sommets donnés.
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export const uuid = '37e38'
 

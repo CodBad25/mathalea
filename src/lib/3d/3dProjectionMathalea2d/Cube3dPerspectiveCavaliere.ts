@@ -27,7 +27,7 @@ import {
  * @property {boolean} affichageNom Si true, le nom des sommets est affiché
  * @property {Point3d[]} sommets Tableau contenant les sommets du cube
  * @property {Array} c2d Contient les commandes à tracer en 2d de cette fonction
- * @author Jean-Claude Lhote (Amendée par Eric Elter)
+ * @author Jean-claude Lhote (Amendée par Éric Elter)
  * @class
  */
 
@@ -147,7 +147,7 @@ export class Cube3d extends ObjetMathalea2D {
  * @example cube(0,0,0,10,'#f15929','','','',trie,true)
  * // Construit un cube orange d'arête 10 dont le sommet en bas à gauche est l'origine du repère et dont aucune face n'est coloriée.
  * // Les arêtes cachées sont visibles et le cube s'appelle ABCDEFGH.
- * @author Jean-Claude Lhote (Amendée par Eric Elter)
+ * @author Jean-claude Lhote (Amendée par Éric Elter)
  * @return {Cube3d}
  */
 export function cube3d(

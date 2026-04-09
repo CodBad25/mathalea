@@ -33,6 +33,9 @@ export const refs = {
   'fr-2016': [],
   'fr-ch': [],
 }
+/**
+ * @author Jean-claude Lhote
+ */
 export default class LireUneAbscisseAvecZoom extends Exercice {
   niveau: string
   constructor() {

@@ -38,7 +38,7 @@ export const amcReady = true
 export const amcType = 'AMCOpen'
 /**
  * Construction de médiatrices avec dispositif d'auto-correction aléatoire
- * @author Jean-Claude Lhote (Ajout AMC par Eric Elter)
+ * @author Jean-claude Lhote (Ajout AMC par Éric Elter)
  */
 export const uuid = 'd7052'
 

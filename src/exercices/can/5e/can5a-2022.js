@@ -28,10 +28,10 @@ import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { arrondi } from '../../../lib/outils/nombres'
 import { lettreDepuisChiffre, sp } from '../../../lib/outils/outilString'
 import { stringNombre, texNombre } from '../../../lib/outils/texNombre'
+import { context } from '../../../modules/context'
 import { fraction } from '../../../modules/fractions'
 import Grandeur from '../../../modules/Grandeur'
 import Hms from '../../../modules/Hms'
-import { context } from '../../../modules/context'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../../modules/outils'
 import Exercice from '../../Exercice'
@@ -45,7 +45,7 @@ export const dateDeModifImportante = '30/11/2025' // Une date de modification im
 
 /**
  *
- * Gilles Mora avec aide EE et JCL
+ * @author Gilles Mora avec aide EE et JCL
 
  */
 
@@ -188,7 +188,6 @@ export default class SujetCAN2022cinquieme extends Exercice {
         objets,
         cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       switch (typeQuestionsDisponibles[i]) {
         case 1:
@@ -725,89 +724,89 @@ export default class SujetCAN2022cinquieme extends Exercice {
           break
         case 16:
           {
-          a = randint(9, 15)
-          b = randint(2, 4)
-          propositions = shuffle([
-            `$${texNombre(2 * a + 5 * b)}\\text{ cm}$`,
-            `$${texNombre(2 * a + 8 * b)}\\text{ cm}$`,
-            `$${texNombre(2 * a + 6 * b)}\\text{ cm}$`,
-            `$${texNombre(2 * a + 3 * b)}\\text{ cm}$`,
-          ])
-          A = point(0, 0, 'A', 'below')
-          B = point(6, 0, 'B', 'below')
-          C = point(6, 4, 'C', 'left')
-          D = point(0, 4, 'D', 'above')
-          codage1 = codageAngleDroit(B, A, D)
-          codage2 = codageAngleDroit(A, B, C)
-          codage3 = codageAngleDroit(B, C, D)
-          codage4 = codageAngleDroit(C, D, A)
-          segmentAB = segment(A, B)
-          segmentAD = segment(A, D)
-          segmentDC = segment(D, C)
-          segmentBC = segment(B, C)
-          segmentBC.pointilles = 2
-          demiDisque = arc(B, milieu(B, C), 180, false, 'white', 'black', 0.2)
+            a = randint(9, 15)
+            b = randint(2, 4)
+            propositions = shuffle([
+              `$${texNombre(2 * a + 5 * b)}\\text{ cm}$`,
+              `$${texNombre(2 * a + 8 * b)}\\text{ cm}$`,
+              `$${texNombre(2 * a + 6 * b)}\\text{ cm}$`,
+              `$${texNombre(2 * a + 3 * b)}\\text{ cm}$`,
+            ])
+            A = point(0, 0, 'A', 'below')
+            B = point(6, 0, 'B', 'below')
+            C = point(6, 4, 'C', 'left')
+            D = point(0, 4, 'D', 'above')
+            codage1 = codageAngleDroit(B, A, D)
+            codage2 = codageAngleDroit(A, B, C)
+            codage3 = codageAngleDroit(B, C, D)
+            codage4 = codageAngleDroit(C, D, A)
+            segmentAB = segment(A, B)
+            segmentAD = segment(A, D)
+            segmentDC = segment(D, C)
+            segmentBC = segment(B, C)
+            segmentBC.pointilles = 2
+            demiDisque = arc(B, milieu(B, C), 180, false, 'white', 'black', 0.2)
 
-          e = texteParPosition(
-            `${a}  cm`,
-            milieu(D, C).x - 0.5,
-            milieu(D, C).y + 0.3,
-          )
-          f = texteParPosition(
-            `${texNombre(b * 2, 0)} cm`,
-            milieu(A, D).x - 0.7,
-            milieu(A, D).y,
-          )
-          const figure = mathalea2d(
-            {
-              xmin: -1.5,
-              ymin: -1,
-              xmax: 10,
-              ymax: 5,
-              pixelsParCm: 27,
-              scale: 0.6,
-            },
-            segmentAB,
-            segmentAD,
-            segmentDC,
-            segmentBC,
-            demiDisque,
-            e,
-            f,
-            codage1,
-            codage2,
-            codage3,
-            codage4,
-          )
-          texte =
-            'Un ordre de grandeur du périmètre de cette figure est : <br> '
-          texte += `${propositions[0]} ${sp(6)} ${propositions[1]} ${sp(6)} ${propositions[2]}${sp(6)} ${propositions[3]}<br>`
-          texte += figure
-          texteCorr = `La figure est constituée de deux longueurs de $${a}\\text{ cm}$, d'une longueur de $${texNombre(2 * b, 0)}\\text{ cm}$ et de la longueur d'un demmi-cercle de rayon $${b}\\text{ cm}$.<br>
+            e = texteParPosition(
+              `${a}  cm`,
+              milieu(D, C).x - 0.5,
+              milieu(D, C).y + 0.3,
+            )
+            f = texteParPosition(
+              `${texNombre(b * 2, 0)} cm`,
+              milieu(A, D).x - 0.7,
+              milieu(A, D).y,
+            )
+            const figure = mathalea2d(
+              {
+                xmin: -1.5,
+                ymin: -1,
+                xmax: 10,
+                ymax: 5,
+                pixelsParCm: 27,
+                scale: 0.6,
+              },
+              segmentAB,
+              segmentAD,
+              segmentDC,
+              segmentBC,
+              demiDisque,
+              e,
+              f,
+              codage1,
+              codage2,
+              codage3,
+              codage4,
+            )
+            texte =
+              'Un ordre de grandeur du périmètre de cette figure est : <br> '
+            texte += `${propositions[0]} ${sp(6)} ${propositions[1]} ${sp(6)} ${propositions[2]}${sp(6)} ${propositions[3]}<br>`
+            texte += figure
+            texteCorr = `La figure est constituée de deux longueurs de $${a}\\text{ cm}$, d'une longueur de $${texNombre(2 * b, 0)}\\text{ cm}$ et de la longueur d'un demmi-cercle de rayon $${b}\\text{ cm}$.<br>
           Comme le périmètre d'un cercle est $2\\times \\pi \\times $ Rayon, le périmètre du demi-cercle est $ \\pi\\times $ Rayon, dont une valeur approchée est $3\\times $Rayon.<br>
           Ainsi, un ordre de grandeur du périmètre de la figure est : $2\\times ${a}+${texNombre(2 * b, 0)}+3\\times ${b}=${miseEnEvidence(texNombre(2 * a + 5 * b))}\\text{ cm}$.`
 
-          setReponse(this, index, new Grandeur(2 * a + 5 * b, 'cm'), {
-            formatInteractif: 'unites',
-          })
-          if (this.interactif) {
-            texte +=
-              ' Recopie la réponse correcte (nombre et unité à recopier).'
-            texte += ajouteChampTexteMathLive(
-              this,
-              index,
-              ' unites[Longueur]',
-              { texteAvant: '<br>' },
+            setReponse(this, index, new Grandeur(2 * a + 5 * b, 'cm'), {
+              formatInteractif: 'unites',
+            })
+            if (this.interactif) {
+              texte +=
+                ' Recopie la réponse correcte (nombre et unité à recopier).'
+              texte += ajouteChampTexteMathLive(
+                this,
+                index,
+                ' unites[Longueur]',
+                { texteAvant: '<br>' },
+              )
+            }
+            this.listeCanEnonces.push(
+              'Entoure la réponse correcte.<br>Un ordre de grandeur du périmètre de cette figure est :<br>' +
+                figure,
             )
+            this.listeCanReponsesACompleter[i] =
+              `${propositions[0]} ${sp(6)} ${propositions[1]} ${sp(6)} ${propositions[2]}${sp(6)} ${propositions[3]}`
+            nbChamps = 1
           }
-          this.listeCanEnonces.push(
-            'Entoure la réponse correcte.<br>Un ordre de grandeur du périmètre de cette figure est :<br>' +
-              figure,
-          )
-          this.listeCanReponsesACompleter[i] =
-            `${propositions[0]} ${sp(6)} ${propositions[1]} ${sp(6)} ${propositions[2]}${sp(6)} ${propositions[3]}`
-          nbChamps = 1
-        }
           break
 
         case 17:

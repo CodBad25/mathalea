@@ -34,7 +34,7 @@ export const interactifType = 'mathLive'
 /**
  * Développer puis réduire une expression littérale.
  *
- * @author Matthieu DEVILLERS refactorisé par Jean-Claude Lhote
+ * @author Matthieu DEVILLERS refactorisé par Jean-claude Lhote
  */
 export const uuid = '1f3da'
 export const refs = {

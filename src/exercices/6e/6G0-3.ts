@@ -7,7 +7,7 @@ export const dateDeModifImportante = '17/08/2023'
 /**
  * Exercice du test de positionnement 5e
  * Variantes à venir...
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export const uuid = 'e8f0b'
 

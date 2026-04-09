@@ -11,7 +11,7 @@ export const dateDePublication = '14/09/2022'
 /**
  * Détermination du reste et quotient à partir de l'égalité découlant de la division euclidienne
  *
- * @author Eric Elter
+ * @author Éric Elter
  */
 
 export const uuid = 'd8bf2'

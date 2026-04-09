@@ -61,7 +61,7 @@ export const uuid = '4c9ca'
  *   type: 'linéaire' | 'affine' | 'degré2' | 'degré3' | 'autre'
  *   pattern: Un PatternNumerique initialisé avec ses cellules de rang 1
  *  iterate: la fonction qui permet de fabriquer les cellules au rang n
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * Remplacé par listePatterns.ts
  */
 export default class ListePatternsPreDef extends Exercice {

@@ -11,6 +11,11 @@ export const refs = {
   'fr-ch': [],
 }
 export const uuid = '6fb13'
+
+/**
+ * @author Jean-claude Lhote
+ */
+
 export default class GenerateurShikaku extends Exercice {
   constructor() {
     super()
@@ -30,7 +35,6 @@ export default class GenerateurShikaku extends Exercice {
     for (
       let i = 0, shikaku, texte, texteCorr, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       shikaku = new Shikaku(largeur, hauteur)
       texte = `${shikaku.represente('')}`

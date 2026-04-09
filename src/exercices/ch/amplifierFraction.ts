@@ -1,14 +1,14 @@
+import { texNombre } from '../../../src/lib/outils/texNombre'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { remplisLesBlancs } from '../../lib/interactif/questionMathLive'
 import {
   choice,
   combinaisonListes,
   shuffle,
 } from '../../lib/outils/arrayOutils'
-import Exercice from '../Exercice'
-import { listeQuestionsToContenu, randint } from '../../modules/outils'
-import { remplisLesBlancs } from '../../lib/interactif/questionMathLive'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { texNombre } from '../../../src/lib/outils/texNombre'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { listeQuestionsToContenu, randint } from '../../modules/outils'
+import Exercice from '../Exercice'
 
 export const titre = 'Amplifier ou simplifier une fraction'
 export const dateDePublication = '14/03/2024'
@@ -22,7 +22,7 @@ export const refs = {
 
 /**
  *
- * @author Remi Angot & Nathan Scheinmann
+ * @author Rémi Angot & Nathan Scheinmann
  */
 
 export default class AmplifierOuReduireFraction extends Exercice {

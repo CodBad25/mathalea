@@ -13,7 +13,7 @@ export const interactifReady = true
 export const interactifType = 'mathLive'
 export const dateDePublication = '17/07/2025'
 /**
- * @author Eric Elter (sur la base du can6C41 de Gilles Mora)
+ * @author Éric Elter (sur la base du can6C41 de Gilles Mora)
  */
 
 export const uuid = '87514'

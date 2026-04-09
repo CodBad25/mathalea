@@ -24,7 +24,7 @@ export const titre =
 
 /**
  * problèmes de grandeurs composées
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
 
  */
 export const uuid = '72c5a'

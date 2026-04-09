@@ -8,7 +8,7 @@ export const dateDeModifImportante = '27/08/2024'
 
 /**
  *
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export const uuid = '4e27f'
 

@@ -25,7 +25,7 @@ export const amcType = 'AMCNum'
 /**
  * Symétrie axiale sur papier pointé
  * Ref can6G07
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * Publié le 18/12/2021
  */
 export const uuid = '85dfb'

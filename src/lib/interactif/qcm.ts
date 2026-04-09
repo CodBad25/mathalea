@@ -538,7 +538,7 @@ export function exerciceQcm(exercice: IExercice) {
 /**
  * prend un tableau de propositions [{texte: 'prop1', statut: true, feedback: 'Correct !'}, {texte: 'prop2', statut: false, ....}
  * élimine en cas de doublon la proposition fausse ou la deuxième proposition si elle sont toutes les deux fausses.
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export function elimineDoublons(propositions: UneProposition[]) {
   // fonction qui va éliminer les doublons si il y en a

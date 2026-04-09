@@ -35,7 +35,7 @@ const articles = [
 ]
 
 /**
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export default class ProblemeDePrix extends ExerciceSimple {
   constructor() {

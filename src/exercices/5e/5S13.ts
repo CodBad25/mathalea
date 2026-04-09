@@ -29,7 +29,7 @@ export const dateDeModifImportante = '28/02/2022'
 
 /**
  * Calculs de fréquences dans des séries statistiques
- * @author Jean-Claude Lhote (Interactif et AMC par EE)
+ * @author Jean-claude Lhote (Interactif et AMC par EE)
  */
 export const uuid = '8cdd5'
 

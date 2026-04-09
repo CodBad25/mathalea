@@ -29,7 +29,7 @@ export const interactifType = 'mathLive'
 /**
  *
  *
- * @author Gilles Mora // suppression des calcul des texNombre et simplification des racines carrées de fration par Jean-Claude Lhote
+ * @author Gilles Mora // suppression des calcul des texNombre et simplification des racines carrées de fration par Jean-claude Lhote
  *
  */
 export const uuid = 'de0d1'

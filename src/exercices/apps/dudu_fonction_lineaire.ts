@@ -3,7 +3,10 @@ import ExternalApp from './_ExternalApp'
 export const uuid = 'duduLineaire'
 export const titre = 'Étudier les fonctions linéaires'
 
-class duduLineaire extends ExternalApp {
+/**
+ * @author Arnaud Durand
+ */
+class DuduLineaire extends ExternalApp {
   constructor() {
     super(
       'https://mathix.org/exerciseur_fonction_lineaire_suivi/index.html?suivi=1&mathalea=1',
@@ -11,4 +14,4 @@ class duduLineaire extends ExternalApp {
   }
 }
 
-export default duduLineaire
+export default DuduLineaire

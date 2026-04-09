@@ -26,7 +26,7 @@ export const interactifType = 'mathLive'
 
 /**
  * Lire une image sur une Spline
- * @author Jean-Claude Lhote (sur le modèle de 5R12-1 de Rémi Angot)
+ * @author Jean-claude Lhote (sur le modèle de 5R12-1 de Rémi Angot)
 
  */
 export const uuid = '6c6b3'

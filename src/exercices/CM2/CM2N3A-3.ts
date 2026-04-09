@@ -17,7 +17,7 @@ export const dateDePublication = '22/08/2024'
 
 /**
  * Soustraire deux entiers
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
 
  */
 export const uuid = '3751c'

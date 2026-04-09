@@ -39,7 +39,7 @@ export const dateDeModifImportante = '06/04/2024'
 
 /**
  * Résoudre un problème relevant de la proportionnalité avec les propriétés de linéarité
- * @author Sébastien Lozano (et Eric Elter pour divers enrichissements)
+ * @author Sébastien Lozano (et Éric Elter pour divers enrichissements)
  */
 
 export const uuid = 'c511f'

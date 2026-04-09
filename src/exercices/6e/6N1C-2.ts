@@ -22,7 +22,7 @@ export const amcReady = true
 export const amcType = 'AMCOpen'
 /**
  * Placer un point d'abscisse entière
- * @author Jean-Claude Lhote et Rémi Angot
+ * @author Jean-claude Lhote et Rémi Angot
  * Relecture : Novembre 2021 par EE
  * Correction : Problème de score 19/10/22 par Rémi ANGOT
  */

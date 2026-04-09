@@ -30,7 +30,7 @@ export const dateDeModifImportante = '26/12/2022' // Une date de modification im
  * Développer et réduire des expressions avec des parenthèses précédées d'un signe + ou -
  *
  *
- * @author Rémi Angot (Ajout des case 3 et 4 + Passage en AMC par Eric Elter)
+ * @author Rémi Angot (Ajout des case 3 et 4 + Passage en AMC par Éric Elter)
  * 3L10-1
  */
 export const uuid = '815eb'

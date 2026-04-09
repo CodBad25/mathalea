@@ -22,7 +22,7 @@ export const refs = {
 }
 /**
  * Donner la liste de tous les diviseurs de tête pour des nombres simples
- * @author
+ * @author Rémi Angot
  */
 export default class ListeDiviseurs extends Exercice {
   constructor() {

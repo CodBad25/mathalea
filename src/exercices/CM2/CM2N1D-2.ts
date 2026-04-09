@@ -37,7 +37,7 @@ export const glossaire = [
 ]
 
 /**
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
 
  */
 export const uuid = 'c96de'

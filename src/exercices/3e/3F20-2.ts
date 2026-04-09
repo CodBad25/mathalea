@@ -20,7 +20,7 @@ export const refs = {
 export const uuid = '17c65'
 /**
  * Questions sur les fonctions affines ou linéaires
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export default class FonctionsAffinesOuLineaires extends Exercice {
   lycee: boolean

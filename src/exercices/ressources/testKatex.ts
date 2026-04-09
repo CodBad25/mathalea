@@ -3,6 +3,9 @@ import katex from 'katex'
 export const uuid = 'testKatex'
 export const titre = 'Katex sandbox'
 
+/**
+ * @author Jean-claude Lhote
+ */
 export default class KatexSandbox {
   typeExercice: string
   numeroExercice!: number

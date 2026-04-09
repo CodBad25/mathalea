@@ -11,7 +11,7 @@ export const refs = {
 }
 /**
  * Exercice de conversion de durées
- * @author Eric Elter
+ * @author Éric Elter
  */
 export default class ConvertirDuree6eV2 extends ConvertirDuree {
   // ConvertirDuree6eV1 et ConvertirDuree6eV2 diffère à cause du nb différent de questions dans l'interactif

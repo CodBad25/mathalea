@@ -42,7 +42,7 @@ export const dateDePublication = '02/11/2021'
  * soit après un calcul avec calculatrice (division)
  * Chacune de ces questions indépendantes trouve de l'intérêt par le choix de l'opération à effectuer
  * et donc à donner du sens à chacune des opérations.
- * @author Eric Elter
+ * @author Éric Elter
  */
 
 export const uuid = '4e2b2'

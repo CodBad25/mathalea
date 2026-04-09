@@ -6,7 +6,7 @@ export const amcReady = true
 export const amcType = 'AMCHybride'
 
 /**
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * Créé pendant l'été 2021
 
  */

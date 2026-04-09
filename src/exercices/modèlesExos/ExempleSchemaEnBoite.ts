@@ -14,6 +14,9 @@ export const refs = {
   'fr-ch': [],
 }
 
+/**
+ * @author Jean-claude Lhote
+ */
 export default class BetaSchemaEnBoite extends Exercice {
   constructor() {
     super()

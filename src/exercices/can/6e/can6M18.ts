@@ -15,7 +15,7 @@ export const amcReady = true
 export const amcType = 'AMCNum'
 
 /**
- * @author Eric Elter (d'après can6M04 de Jean-Claude Lhote & Gilles Mora)
+ * @author Éric Elter (d'après can6M04 de Jean-claude Lhote & Gilles Mora)
 
  */
 export const uuid = '616e6'

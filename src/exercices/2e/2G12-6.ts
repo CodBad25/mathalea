@@ -28,7 +28,7 @@ export const refs = {
 
 /**
  * @title Repérage 2e
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * On se propose de lire des coordonnées dans un repère orthogonal, normé ou quelconque.
  * Une version de cet exercice en sens inverse est disponible sous le titre "Repérage 2e" (bis).
  */

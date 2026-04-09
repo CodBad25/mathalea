@@ -43,7 +43,7 @@ export const dateDeModifImportante = '08/10/2025'
  * * Type 2 : ax+b≤c
  * * Type 3 : ax+b≤cx+d
  * * Tous les types
- * @author Remi Angot et Guillaume Valmont et Gilles Mora pour l'interactif
+ * @author Rémi Angot et Guillaume Valmont et Gilles Mora pour l'interactif
  * 2N60-4, ex 2L13
  */
 export const uuid = 'bc1e4'

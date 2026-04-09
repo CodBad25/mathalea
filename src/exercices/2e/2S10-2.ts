@@ -30,7 +30,7 @@ export const dateDeModifImportante = '28/04/2023' // ajout du cas entreprise
  * * Retrouver l'effectif de la population totale'
  * * Mélange des 3 types de problèmes
  * @author Florence Tapiero
- * * ajout de lignes pour l'export AMC par Jean-Claude Lhote
+ * * ajout de lignes pour l'export AMC par Jean-claude Lhote
  * 2S10-1
  * ajout du cas entreprise par Gilles Mora
  */

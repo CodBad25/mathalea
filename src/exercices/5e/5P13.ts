@@ -41,7 +41,7 @@ export const dateDeModifImportante = '05/07/2024'
 
 /**
  * Utiliser ou trouver des échelles dans diverses situations
- * @author Eric Elter
+ * @author Éric Elter
  */
 export const uuid = 'edb61'
 

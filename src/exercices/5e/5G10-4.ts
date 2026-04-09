@@ -36,10 +36,10 @@ export const interactifType = 'mathLive'
 
 // Gestion de la date de publication initiale
 export const dateDePublication = '26/10/2020'
-export const dateDeModifImportante = '27/06/2024' // EE : Rajout du paramètre du nombre de symétriques // interactivité ajouté par Jean-Claude Lhote
+export const dateDeModifImportante = '27/06/2024' // EE : Rajout du paramètre du nombre de symétriques // interactivité ajouté par Jean-claude Lhote
 
 /**
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * Relecture : Novembre 2021 par EE
  */
 export const uuid = 'cd69a'

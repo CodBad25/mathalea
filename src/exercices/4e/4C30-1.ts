@@ -22,7 +22,7 @@ export const titre = 'Encadrer des nombres positifs avec des puissances de 10'
 
 /**
  * Encadrer par des puissances de 10
- * @author Sébastien Lozano (Modifications apportées par Eric Elter)
+ * @author Sébastien Lozano (Modifications apportées par Éric Elter)
  */
 export const uuid = '760d7'
 

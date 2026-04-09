@@ -16,7 +16,7 @@ export const amcType = 'AMCOpen'
 
 /**
  * Supprimer les zéros inutiles, séparer les classes d'un nombre entier.
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * 6N10-4
  * Relecture : Novembre 2021 par EE
  */

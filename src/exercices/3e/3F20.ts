@@ -43,7 +43,7 @@ export const refs = {
 export const uuid = 'aeb5a'
 /**
  * Questions sur les fonctions linéaires
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export default class FonctionsLineaires extends Exercice {
   lycee: boolean

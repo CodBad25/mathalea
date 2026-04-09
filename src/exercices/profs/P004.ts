@@ -18,7 +18,7 @@ export const uuid = 'ad5f6'
 /**
  * Fonction permettant aux enseignants de proposer des feuilles à compléter pour la lecture d'abscisse décimale avec zoom
  * L'enseignant peut ajouter "à la main" les données qu'il souhaite
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export default class FeuilleDeZooms extends Exercice {
   constructor() {

@@ -30,7 +30,7 @@ export const titre = "Trouver le terme manquant d'une somme de nombres relatifs"
 /**
  * Additions à trou dans les relatifs
  *
- *  @author Jean-Claude Lhote à partir de CM000 de Rémi Angot
+ *  @author Jean-claude Lhote à partir de CM000 de Rémi Angot
  */
 export const uuid = '61b4a'
 

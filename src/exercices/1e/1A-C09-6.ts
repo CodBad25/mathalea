@@ -9,7 +9,7 @@ import { randint } from '../../modules/outils'
 import ExerciceQcmA from '../ExerciceQcmA'
 export const dateDePublication = '02/09/2025'
 export const uuid = 'b0831'
-// Author Stéphane Guyon
+// @Author Stéphane Guyon
 export const refs = {
   'fr-fr': ['1A-C09-6'],
   'fr-ch': [],

@@ -23,7 +23,7 @@ export const titre = 'Donner une écriture fractionnaire'
 
 /**
  * Donner la fraction correspondant à un nombre ou à un calcul
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export const uuid = '4d0dd'
 

@@ -19,7 +19,7 @@ export const dateDePublication = '3/06/2025'
 
 /**
  * Associer des problèmes à des modélisations en barres.
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export const uuid = '4e89c'
 

@@ -1,20 +1,20 @@
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { lettreDepuisChiffre, sp } from '../../lib/outils/outilString'
-import Exercice from '../Exercice'
+import { context } from '../../modules/context'
 import {
   listeQuestionsToContenuSansNumero,
   randint,
 } from '../../modules/outils'
-import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
-import { context } from '../../modules/context'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { miseEnEvidence } from '../../lib/outils/embellissements'
+import Exercice from '../Exercice'
 
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import {
   doubleDeveloppement,
   reduirePolynomeDegre3,
 } from '../../lib/outils/ecritures'
-import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 
 export const titre = 'Additionner des expressions à développer'
 export const dateDePublication = '03/02/2025'
@@ -25,7 +25,7 @@ export const amcReady = true
 
 /**
  * Développer des expressions de la forme (ax+b)(cx+d)+(ex+f)(gx+h) avec a, b, c, d, e, f, g et h relatifs et paramétrables ainsi que x
- * @author Eric Elter
+ * @author Éric Elter
  */
 export const uuid = 'd28ff'
 
@@ -79,7 +79,6 @@ export default class MultipleDistributivite extends Exercice {
     for (
       let i = 0, reponse, a, b, c, d, e, f, g, h, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       let texteCorr = ''
       let texte = ''

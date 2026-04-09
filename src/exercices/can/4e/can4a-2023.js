@@ -62,7 +62,7 @@ export const refs = {
 
 /**
  * Aléatoirisation du sujet 2023 de CAN 4e
- * Gilles Mora
+ * @author Gilles Mora
  */
 
 function compareNombres(a, b) {
@@ -158,7 +158,6 @@ export default class SujetCAN2023Quatrieme extends Exercice {
         objets,
         cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       switch (typeQuestionsDisponibles[i]) {
         case 1:

@@ -22,7 +22,7 @@ export const titre =
   'Parcourir un labyrinthe de multiples basé sur les critères de divisibilité'
 
 /**
- * @author Jean-Claude Lhote (remaniée par EE pour la prise en compte du nb de lignes et de colonnes du labyrinthe)
+ * @author Jean-claude Lhote (remaniée par EE pour la prise en compte du nb de lignes et de colonnes du labyrinthe)
  * Sortir du labyrinthe en utilisant les critères de divisibilité.
  */
 export const uuid = 'a3870'

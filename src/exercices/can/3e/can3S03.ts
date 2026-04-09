@@ -16,7 +16,7 @@ export const interactifType = 'mathLive'
  * @author Gilles Mora
  */
 export const uuid = 'd86be'
-export const dateDeModificationImportante = '12/10/2025' // ajout de versionQcmDisponible Jean-Claude Lhote
+export const dateDeModificationImportante = '12/10/2025' // ajout de versionQcmDisponible Jean-claude Lhote
 
 export const refs = {
   'fr-fr': ['can3S03', 'BP2FLUC17', '3AutoP01'],

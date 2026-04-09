@@ -6,7 +6,8 @@ import { point } from '../../2d/PointAbstrait'
 import { polygone } from '../../2d/polygones'
 
 /**
- * @author Erwan Duplessis et Jean-Claude Lhote
+ * @author Erwan Duplessy
+ * @author Jean-claude Lhote
  * Attention !
  * Cette Classe définit un objet cube dans une représentation en perspective axonométrique paramétrée par alpha et beta
  * et non pas context.anglePerspective (contrairement à l'objet cube3d ci-dessus ou l'objet pave3d ci-dessous)

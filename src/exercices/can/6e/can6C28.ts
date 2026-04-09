@@ -10,7 +10,7 @@ export const interactifType = 'mathLive'
 export const dateDeModifImportante = '19/09/2024'
 /**
  * Modèle d'exercice très simple pour la course aux nombres
- * @author Gilles Mora & Jean-Claude Lhote
+ * @author Gilles Mora & Jean-claude Lhote
 
  * Date de publication 21/10/2021
 */

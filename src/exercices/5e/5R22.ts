@@ -46,7 +46,7 @@ export const amcType = 'AMCHybride'
  *
  * * On peut paramétrer les distances à zéro qui sont par défaut inférieures à 20
  * * On peut utiliser des écritures simplifiées (ce qui n'est pas le cas par défaut)
- * @author Rémi Angot modifications par Jean-Claude Lhote (Correction optimisée par Eric Elter)
+ * @author Rémi Angot modifications par Jean-claude Lhote (Correction optimisée par Éric Elter)
  */
 export const uuid = 'f6ea7'
 
@@ -84,7 +84,6 @@ export default class ExerciceAdditionsSoustractionRelatifsV2 extends Exercice {
     for (
       let i = 0, texte, texteCorr, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       // On limite le nombre d'essais pour chercher des valeurs nouvelles
       relatifs = []
@@ -103,13 +102,18 @@ export default class ExerciceAdditionsSoustractionRelatifsV2 extends Exercice {
           : 100
         : 1
       const valeurMaximale = this.sup > 5 ? this.sup : 9
-      const a0 = (randint(1, valeurMaximale * CoefDecimales) / CoefDecimales) * signeA
-      const b0 = (randint(1, valeurMaximale * CoefDecimales) / CoefDecimales) * signeB
-      const c0 = (randint(1, valeurMaximale * CoefDecimales) / CoefDecimales) * signeC
+      const a0 =
+        (randint(1, valeurMaximale * CoefDecimales) / CoefDecimales) * signeA
+      const b0 =
+        (randint(1, valeurMaximale * CoefDecimales) / CoefDecimales) * signeB
+      const c0 =
+        (randint(1, valeurMaximale * CoefDecimales) / CoefDecimales) * signeC
       const d0 =
-        (randint(1, valeurMaximale * CoefDecimales) / CoefDecimales) * choice([-1, 1])
+        (randint(1, valeurMaximale * CoefDecimales) / CoefDecimales) *
+        choice([-1, 1])
       const e0 =
-        (randint(1, valeurMaximale * CoefDecimales) / CoefDecimales) * choice([-1, 1])
+        (randint(1, valeurMaximale * CoefDecimales) / CoefDecimales) *
+        choice([-1, 1])
 
       const [a, b, c, d, e] = choice([
         shuffle([a0, b0, c0, d0, e0]),

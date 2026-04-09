@@ -34,7 +34,7 @@ export const titre = 'Poser des multiplications de nombres décimaux'
  * * x,xx * x0x
  * * 0,xx * x,x
  * @author Rémi Angot
- * Eric Elter : Mise en place de la correction avec la pose d'entiers (08/04/2026)
+ * Éric Elter : Mise en place de la correction avec la pose d'entiers (08/04/2026)
  */
 
 export const uuid = '52939'

@@ -26,7 +26,7 @@ export const interactifType = 'mathLive'
  * * 2 : inverse d'une fraction
  * * 3 : inverse d'un nombre décimal
  * * 4 : mélange des trois autres niveaux
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export const uuid = '43cea'
 

@@ -32,7 +32,7 @@ export const dateDeModificationImportante = '26/05/2025'
  * * axy+x+y
  * * (ax+b)(cy-d)
  * @author Rémi Angot
- * Modifications pour intégrer des nombres relatifs + mise en forme Jean-Claude Lhote le 26/05/2025 + ajout des clones 4L21 et 4L22
+ * Modifications pour intégrer des nombres relatifs + mise en forme Jean-claude Lhote le 26/05/2025 + ajout des clones 4L21 et 4L22
  * 5L14
  */
 export const uuid = '17e39'

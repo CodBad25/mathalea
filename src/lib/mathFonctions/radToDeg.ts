@@ -2,7 +2,7 @@
  * Convertit un angle de radian vers degrés et fonction inverse
  * @Example
  * // PI->180
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 
 export function radToDeg(radians: number) {
@@ -15,7 +15,7 @@ export function degToRad(degres: number) {
 /**
  * @param {number} a angle en degrés
  * @returns flottant : le cosinus de l'angle
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 
 export function degCos(a: number) {
@@ -24,7 +24,7 @@ export function degCos(a: number) {
 /**
  * @param {number} a angle en degrés
  * @returns flottant : le sinus de l'angle
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 
 export function degSin(a: number) {
@@ -33,7 +33,7 @@ export function degSin(a: number) {
 /**
  * @param {number} a angle en degrés
  * @returns flottant : la tangente de l'angle
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 
 export function degTan(a: number) {
@@ -42,7 +42,7 @@ export function degTan(a: number) {
 /**
  * @param {number} x un nombre qui correspond au cosinus de l'angle
  * @returns flottant : la mesure de l'angle en degrés
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 
 export function degAcos(x: number) {
@@ -51,7 +51,7 @@ export function degAcos(x: number) {
 /**
  * @param {number} x un nombre qui correspond au sinus de l'angle
  * @returns flottant : la mesure de l'angle en degrés
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 
 export function degAsin(x: number) {
@@ -60,7 +60,7 @@ export function degAsin(x: number) {
 /**
  * @param {number} x un nombre qui correspond à la tangente de l'angle
  * @returns flottant : la mesure de l'angle en degrés
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 
 export function degAtan(x: number) {

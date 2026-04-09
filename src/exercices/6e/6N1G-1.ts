@@ -32,7 +32,7 @@ export const dateDePublication = '26/08/2024'
 export const dateDeModifImportante = '15/06/2025'
 
 /**
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 
 let listesPas: Array<[number, number][]>

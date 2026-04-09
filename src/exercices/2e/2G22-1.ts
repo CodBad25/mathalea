@@ -41,7 +41,7 @@ export const dateDeModifImportante = '06/08/2024'
 
 /**
  * Tracer un vecteur dont on connait les coordonnées dans un repère.
- * @author Stéphane Guyon légèrement modifié par Jean-Claude Lhote, rendu interactif par Eric Elter
+ * @author Stéphane Guyon légèrement modifié par Jean-claude Lhote, rendu interactif par Éric Elter
  */
 export const uuid = '3a3ec'
 

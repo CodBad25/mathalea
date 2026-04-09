@@ -38,7 +38,8 @@ import { randint } from '../../modules/outils'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
 
-export const titre = "Consulter la liste des patterns disponibles pour l'exercice 6N4B"
+export const titre =
+  "Consulter la liste des patterns disponibles pour l'exercice 6N4B"
 export const dateDePublication = '26/11/2025'
 
 export const refs = {
@@ -49,8 +50,8 @@ export const uuid = '71ff5'
 
 /**
  * Affiche les patterns propres à un exercice
- * @author Eric Elter (sur la base de listePatterns de Jean-Claude Lhote)
-
+ * @author Éric Elter
+ *  (sur la base de listePatterns de Jean-claude Lhote)
  */
 export default class ListePatternsTousLesExos extends Exercice {
   destroyers: (() => void)[] = []
@@ -96,6 +97,7 @@ export default class ListePatternsTousLesExos extends Exercice {
         break
       case 2:
         listeOfAll = listePattern3d
+        break
       case 5:
         listeOfAll = listePatternRatio
         break

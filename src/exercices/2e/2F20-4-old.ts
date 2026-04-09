@@ -30,7 +30,7 @@ export const interactifType = 'mathLive'
 /**
  * Résoudre graphiquement une équation ou une inéquation
  *
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 
 export const uuid = '28997'

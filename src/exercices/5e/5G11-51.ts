@@ -40,7 +40,7 @@ export const dateDeCreation = '26/09/2025'
 
 /**
  * Trouver les coordonnées d'un point transformé d'un autre par une des transformations du plan
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export const uuid = 'd4090'
 

@@ -19,7 +19,7 @@ export const amcReady = true
 export const amcType = 'AMCOpen'
 /**
  * Placer un point d'abscisse décimale
- * @author Jean-Claude Lhote et Rémi Angot
+ * @author Jean-claude Lhote et Rémi Angot
  * Relecture : Janvier 2022 par EE
  */
 

@@ -21,7 +21,7 @@ export const dateDeModifImportante = '26/04/2023' // Correction par Rémi Angot 
 
 /**
  * Développer avec les 3 identités remarquables
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export const uuid = '04b0a'
 

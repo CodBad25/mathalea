@@ -18,7 +18,7 @@ export let bQ21 = 75
 export let coeffQ21 = 3
 
 /**
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
 
 */
 export default class Can2026CM2Q21 extends ExerciceCan {

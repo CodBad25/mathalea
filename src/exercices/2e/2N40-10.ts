@@ -57,6 +57,9 @@ function garantirUnNegatif(...args: number[]) {
   }
   return args
 }
+/**
+ * @author Ludwig Trossel
+ */
 export default class SubstituerDansUneExpressionLitterale extends Exercice {
   constructor() {
     super()
@@ -108,7 +111,6 @@ export default class SubstituerDansUneExpressionLitterale extends Exercice {
     for (
       let i = 0, texte, texteCorr, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       let [a, b, x, c]: number[] = []
       let expressionABCX = listeTypeExpression[i] as string

@@ -11,7 +11,7 @@ export const dateDePublication = '26/10/2021'
 
 /**
  * Question de can : calcul de la somme de deux nombres complexes
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
 
 */
 export const uuid = '71292'

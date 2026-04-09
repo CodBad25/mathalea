@@ -7,7 +7,7 @@ export const amcReady = true
 export const amcType = 'AMCHybride'
 
 /**
- * @author Eric Elter
+ * @author Éric Elter
  */
 
 export const uuid = '45885'

@@ -1,7 +1,7 @@
 import { choice, shuffle } from '../../lib/outils/arrayOutils'
 
 /**
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * @param {number} min Valeur minimum pour la solution
  * @param {number} max Valeur maximum pour la solution
  * Cette fonction produit aléatoirement un tirage de 5 nombres, une solution, un tableau contenant les calculs successifs, une chaine contenant l'expression mathador correspondante

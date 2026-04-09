@@ -41,7 +41,7 @@ export const refs = {
 export const dateDePublication = '08/12/2024'
 /**
  * Annales CAN 2025
- * @author Gilles Mora - Eric Elter
+ * @author Gilles Mora - Éric Elter
  */
 
 const questions = [

@@ -24,7 +24,7 @@ export const interactifType = 'mathLive'
 export const interactifReady = true
 
 /**
- * @author Jean-Claude Lhote (rendu interactif par Lydie El Halougi)
+ * @author Jean-claude Lhote (rendu interactif par Lydie El Halougi)
  * Sources (eduscol) : https://eduscol.education.fr/ressources/numerique/2020/2020-exercices-mathematiques-6e
  * Ces exercices seront proposés systématiquement pour 3 niveaux de difficulté afin de différentier autour d'un même problème
  */

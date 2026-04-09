@@ -19,7 +19,7 @@ import { texNombre } from '../../lib/outils/texNombre'
  * @example RedactionPythagore('M','N','P',2,reponse,5,13,'dm')
  * // Crée la rédaction du théorème de Pythagore dans un triangle MNP rectangle en M de dimensions reponse-5-13 dm dont on recherche la longueur de MN.
  * // reponse doit être fournie à la fonction, elle n'est pas calculée par la fonction.
- * @author Eric Elter
+ * @author Éric Elter
  * @return {[string, string]} // Le premier élément du tableau est la rédaction complète, le second élément du tableau est le signe égal (ou arrondi) qui peut être utilisé si besoin pour introduire l'interactif.
  */
 export function RedactionPythagore(

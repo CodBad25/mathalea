@@ -9,7 +9,7 @@ export const dateDeModifImportante = '26/09/2023'
 
 /**
  * Travailler les tables de multiplication autrement
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 
 export const uuid = '3e4d9'

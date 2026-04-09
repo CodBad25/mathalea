@@ -3,7 +3,7 @@ import { randint } from '../../modules/outils'
 import ExerciceQcmA from '../ExerciceQcmA'
 export const dateDePublication = '10/08/2025'
 export const uuid = '3f994'
-// Author Stéphane Guyon
+// @Author Stéphane Guyon
 export const refs = {
   'fr-fr': ['1A-C03-6'],
   'fr-ch': [],
@@ -14,12 +14,9 @@ export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = 'Combiner produit et puissance de puissance'
 export default class Auto1AC3f extends ExerciceQcmA {
-  private appliquerLesValeurs(
-    k: number,
-    p: number
-  ): void {
+  private appliquerLesValeurs(k: number, p: number): void {
     this.enonce = `Soit $a$ un nombre réel non nul et $n$ un entier non nul. <br>À quelle expression est égale $a^{${k}n}(a^n)^${p}$ ?`
-    
+
     this.correction = `On applique la propriété du produit des puissances d'un réel : <br>
    Soient $n$ et $p$ deux entiers et $a$ un réel :  $a^n\\times a^p=a^{n+p}$<br>
     et la propriété des puissances de puissances : <br>
@@ -27,7 +24,7 @@ export default class Auto1AC3f extends ExerciceQcmA {
     $\\begin{aligned} a^{${k}n}(a^n)^${p}&=a^{${k}n}\\times a^{${p}n}\\\\
    &=${miseEnEvidence(`a^{${k + p}n}`)}
     \\end{aligned}$<br>`
-    
+
     this.reponses = [
       `$a^{${k + p}n}$`,
       `$a^{${k * p}n}$`,

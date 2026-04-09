@@ -46,7 +46,7 @@ export function milieu(
  *
  * M = pointSurSegment(A,B,'h','M') // M est un point au hasard sur [AB] (on peut écrire n'importe quel texte à la place de 'h')
  * M = pointSurSegment(A,B) // M est un point au hasard sur [AB]
- * Sécurité ajoutée par Jean-Claude Lhote : si AB=0, alors on retourne A
+ * Sécurité ajoutée par Jean-claude Lhote : si AB=0, alors on retourne A
  * @author Rémi Angot
  */
 export function pointSurSegment(
@@ -86,7 +86,7 @@ export function pointSurSegment(
  * M = pointSurCercle(c,'','M') // M est un point choisi au hasard sur le cercle c et se nomme M.
  * N = pointSurCercle(c,90) // N est le point du cercle c situé à 90° par rapport à l'horizontale, donc au dessus du centre de c
  * P = pointSurCercle(c,-90) // P est le point du cercle c situé à l'opposé du point N précédent.
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export function pointSurCercle(
   c: ICercle,
@@ -108,7 +108,7 @@ export function pointSurCercle(
  * @param {string} [nom] Nom du point
  * @param {string} [positionLabel='above'] Facultatif, 'above' par défaut.
  * @return {PointAbstrait} PointAbstrait de la droite d dont l'abscisse est x
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export function pointSurDroite(
   d: IDroite,
@@ -129,7 +129,7 @@ export function pointSurDroite(
  * @param {string} nom  le nom du point d'intersection. Facultatif, vide par défaut.
  * @param {string} [positionLabel='above'] Facultatif, 'above' par défaut.
  * @return {PointAbstrait} PointAbstrait 'M' d'intersection de d1 et de d2
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export function pointIntersectionDD(
   d: IDroite,
@@ -157,7 +157,7 @@ export function pointIntersectionDD(
 /**
  * @example pointAdistance(A,d,angle,nom="",positionLabel="above") // Seuls le point A et la distance d sont obligatoires, angle peut être choisi : il s'agit de l'angle signé avec l'axe [OI) sinon, il est choisi aléatoirement.
  * @example p=pointAdistance(A,5,'M') // Place un point aléatoirement à 5 unités de A et lui donne le nom de 'M'.
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export function pointAdistance(
   A: IPointAbstrait,
@@ -204,7 +204,7 @@ export function pointAdistance(
  * @param {string} nom le nom du point d'intersection
  * @param {entier} n 1 pour le premier point, 2 sinon. Si il n'y a qu'un seul point d'intesection, l'un ou l'autre renvoie ce point.
  * @example I = pointItersectionLC(d,c,'I',1) // I est le premier point d'intersection si il existe de la droite (d) et du cercle (c). On renvoie le centre du cercle sinon.
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export function pointIntersectionLC(
   d: IDroite,
@@ -369,7 +369,7 @@ function pointIntersectionNonTrouveEntre(
  * Vérifie si x est un point
  * @param x
  * @returns true si x est un point, false sinon
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export function isPoint(x: unknown): x is PointAbstrait {
   return (

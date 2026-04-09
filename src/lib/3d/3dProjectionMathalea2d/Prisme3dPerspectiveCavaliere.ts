@@ -28,7 +28,7 @@ import {
  * @property {boolean} [affichageNom = false] Permet (ou pas) l'affichage du nom des sommets du prisme.
  * @property {Array} c2d Contient les commandes à tracer en 2d de cette fonction
  * @property {string} nom Nom du prisme
- * @author Eric Elter (d'après version précédente de Jean-Claude Lhote)
+ * @author Éric Elter (d'après version précédente de Jean-claude Lhote)
  * @class
  */
 
@@ -170,7 +170,7 @@ export class Prisme3d extends ObjetMathalea2D {
  * // Retourne un prisme droit de base p dont un vecteur normal à la base est v.
  * @example prisme3d(p, v, 'blue', true)
  * // Retourne un prisme droit de base p dont un vecteur normal à la base est v, de couleur V et dont les sommets sont nommés
- * @author Eric Elter (d'après version précédente de Jean-Claude Lhote)
+ * @author Éric Elter (d'après version précédente de Jean-claude Lhote)
  * @return {Prisme3d}
  */
 export function prisme3d(

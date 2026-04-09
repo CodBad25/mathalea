@@ -25,7 +25,7 @@ export const refs = {
 }
 
 /**
- * @author Eric Elter
+ * @author Éric Elter
  */
 
 function formaterReponse(reponse: (number | string)[]): string {

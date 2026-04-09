@@ -20,7 +20,7 @@ export const amcType = 'AMCHybride'
 
 /**
  * Symétrie centrale sur papier pointé
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export const uuid = '2a611'
 

@@ -40,7 +40,7 @@ import { pointSurSegment } from './utilitairesPoint'
  * @property {number} opaciteDeRemplissage Opacité de la couleur de remplissage de l'angle
  * @property {number} tailleTexte Pour choisir la taille du texte à côté de l'angle
  * @property {number} echelleMark Pour choisir la taille relative de la marque
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * @return {array} Liste d'objets MathAlea2D
  */
 // JSDOC Validee par EE Juin 2022

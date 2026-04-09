@@ -7,7 +7,7 @@ export const amcType = 'AMCHybride'
 
 /**
  * Exercice en html seulement. Symétrie centrale dans un pavage.
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
 
  */
 export const uuid = '261bf'

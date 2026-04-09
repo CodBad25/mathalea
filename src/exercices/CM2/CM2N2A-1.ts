@@ -17,7 +17,7 @@ export const interactifType = 'custom'
 export const dateDeModifImportante = '7/10/2024'
 /**
  * Tracer un segment de longueur une fraction de l'unité.
- * @author Jean-Claude Lhote (Rémi Angot pour l'interactivité)
+ * @author Jean-claude Lhote (Rémi Angot pour l'interactivité)
  * 6N32
  */
 

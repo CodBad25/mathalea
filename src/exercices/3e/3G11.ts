@@ -26,7 +26,7 @@ export const dateDePublication = '30/11/2020'
 export const dateDeModifImportante = '31/01/2023'
 /**
  * Construction d'images par homothétie avec dispositif d'auto-correction aléatoire
- * @author Jean-Claude Lhote (modifié par EE)
+ * @author Jean-claude Lhote (modifié par EE)
  */
 export const uuid = '18e25'
 

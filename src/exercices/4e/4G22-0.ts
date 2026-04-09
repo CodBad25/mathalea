@@ -178,6 +178,9 @@ Donc le côté $${nomHypotenuse}$ est égal à ${
   return correction
 }
 
+/**
+ * @author Jean-claude Lhote
+ */
 export default class TriangleEquilateral extends Exercice {
   niveau: number = 4
   constructor() {

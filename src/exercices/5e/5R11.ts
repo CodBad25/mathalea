@@ -30,7 +30,7 @@ export const amcType = 'AMCHybride'
 
 /**
  * Lire l'abscisse décimale d'un point
- * @author Jean-Claude Lhote et Rémi Angot
+ * @author Jean-claude Lhote et Rémi Angot
  */
 export const uuid = '4ca10'
 

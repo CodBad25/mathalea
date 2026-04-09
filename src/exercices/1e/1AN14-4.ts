@@ -20,7 +20,7 @@ export const dateDeModifImportante = '28/01/2026'
 
 /**
  * Calculer la dérivée d'une somme
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  *
  */
 class DerivationSommesSimples extends Exercice {

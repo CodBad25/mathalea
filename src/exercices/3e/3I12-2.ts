@@ -21,7 +21,7 @@ export const dateDeModifImportante = '08/05/2023' // par EE : Le nb de questions
 
 /**
  * Comprendre un script sur les multiples et diviseurs
- * @author Eric Elter
+ * @author Éric Elter
  */
 export const uuid = 'defeb'
 
@@ -124,7 +124,6 @@ export default class ComprendreScriptMultiples extends Exercice {
     for (
       let i = 0, texte, texteCorr, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       const tableauTouches = []
       for (let i = 1; i < 27; i++)

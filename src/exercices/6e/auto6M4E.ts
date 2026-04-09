@@ -15,7 +15,7 @@ export const interactifType = 'listeDeroulante'
 
 /**
  * Choisir des rapports entre fraction d\'heure et minutes
- * @author Eric Elter
+ * @author Éric Elter
  */
 export const uuid = 'de920'
 

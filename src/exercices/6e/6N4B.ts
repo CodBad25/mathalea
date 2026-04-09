@@ -52,7 +52,7 @@ export const dateDeModifImportante = '22/11/2025'
 /**
  * Identifier la structure d'un motif (itératif)
  * Cet exercice contient des patterns issus de l'excellent site : https://www.visualpatterns.org/
- * @author Eric Elter (sur les bases du 6I13 de Jean-Claude Lhote)
+ * @author Éric Elter (sur les bases du 6I13 de Jean-claude Lhote)
  */
 export const uuid = 'd41c5'
 

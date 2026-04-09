@@ -6,7 +6,7 @@ import { Segment, segment } from '../segmentsVecteurs'
  * Génère une figure représentant un panneau de route prioritaire.
  * @param options Options pour personnaliser le style du panneau.
  * @returns Une instance de Figure2D représentant un panneau de route prioritaire.
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * @version 1.0
  * @date 2025-05-10
  */
@@ -93,7 +93,7 @@ export function panneauFinDeRoutePrioritaire(options?: {
  * Génère une figure représentant un panneau de stationnement interdit.
  * @param options Options pour personnaliser le style du panneau.
  * @returns Une instance de Figure2D représentant un panneau de stationnement interdit.
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * @version 1.0
  * @date 2025-05-10
  */
@@ -138,7 +138,7 @@ export function panneauStationnementInterdit(options?: {
  * Génère une figure représentant un panneau STOP.
  * @param options Options pour personnaliser le style du panneau.
  * @returns Une instance de Figure2D représentant un panneau STOP.
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * @version 1.0
  * @date 2025-05-10
  */
@@ -180,7 +180,7 @@ export function panneauStop(options?: {
  * Génère une figure représentant un panneau de voie sans issue.
  * @param options Options pour personnaliser le style du panneau.
  * @returns Une instance de Figure2D représentant un panneau de voie sans issue.
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export function panneauVoieSansIssue(options?: {
   fillStyle?: string // Couleur de remplissage du carré bleu (par défaut bleu)
@@ -221,7 +221,7 @@ export function panneauVoieSansIssue(options?: {
  * Génère une figure représentant un panneau de parking.
  * @param options Options pour personnaliser le style du panneau.
  * @returns Une instance de Figure2D représentant un panneau de parking.
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export function panneauParking(options?: {
   fillStyle?: string // Couleur de remplissage du carré bleu (par défaut bleu)
@@ -261,7 +261,7 @@ export function panneauParking(options?: {
  * Génère une figure représentant un panneau de céder le passage.
  * @param options Options pour personnaliser le style du panneau.
  * @returns
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export function panneauCederLePassage(options?: {
   fillStyle?: string // Couleur de remplissage de l'intérieur du triangle (par défaut blanc)
@@ -329,7 +329,7 @@ export function panneauCederLePassage(options?: {
  * Génère une figure représentant un panneau signalant une circulation à double sens.
  * @param options Options pour personnaliser le style du panneau.
  * @returns Une instance de Figure2D représentant un panneau de danger pour une circulation à double sens.
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export function panneauDoubleSens(options?: {
   fillStyle?: string // Couleur de remplissage de l'intérieur du triangle (par défaut blanc)
@@ -400,7 +400,7 @@ export function panneauDoubleSens(options?: {
  *
  * @param options Options pour personnaliser le style du panneau.
  * @returns
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export function panneauRetrecissementChaussee1(options?: {
   fillStyle?: string // Couleur de remplissage de l'intérieur du triangle (par défaut blanc)
@@ -469,7 +469,7 @@ export function panneauRetrecissementChaussee1(options?: {
  *
  * @param options Options pour personnaliser le style du panneau.
  * @returns
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export function panneauRetrecissementChaussee2(options?: {
   fillStyle?: string // Couleur de remplissage de l'intérieur du triangle (par défaut blanc)
@@ -534,7 +534,7 @@ export function panneauRetrecissementChaussee2(options?: {
  *
  * @param options Options pour personnaliser le style du panneau.
  * @returns
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export function panneauRetrecissementChaussee3(options?: {
   fillStyle?: string // Couleur de remplissage de l'intérieur du triangle (par défaut blanc)
@@ -603,7 +603,7 @@ export function panneauRetrecissementChaussee3(options?: {
  *
  * @param options Options pour personnaliser le style du panneau.
  * @returns
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export function panneauCroisementPrioriteADroite(options?: {
   fillStyle?: string // Couleur de remplissage de l'intérieur du triangle (par défaut blanc)
@@ -668,7 +668,7 @@ export function panneauCroisementPrioriteADroite(options?: {
  *
  * @param options Options pour personnaliser le style du panneau.
  * @returns Figure2D représentant un panneau de feu tricolore.
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export function panneauFeuTricolore(options?: {
   fillStyle?: string // Couleur de remplissage de l'intérieur du triangle (par défaut blanc)
@@ -801,7 +801,7 @@ export function panneauCroisementRouteSecondaire(options?: {
  * Génère une figure représentant un panneau de sens interdit.
  * @param options Options pour personnaliser le style du panneau.
  * @returns Une instance de Figure2D représentant un panneau de sens interdit.
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * @version 1.0
  * @date 2025-05-10
  */
@@ -898,7 +898,7 @@ export function panneauInterdictionDeCirculer(options?: {
  * Génère une figure représentant un panneau de fin de limitation.
  * @param options Options pour personnaliser le style du panneau.
  * @returns Une instance de Figure2D représentant un panneau de fin de limitation.
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * @version 1.0
  * @date 2025-05-10
  */
@@ -942,7 +942,7 @@ export function panneauFinDeLimitation(options?: {
  * Génère une figure représentant un panneau d'interdiction de stationner.
  * @param options Options pour personnaliser le style du panneau.
  * @returns Une instance de Figure2D représentant un panneau d'interdiction de stationner.
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * @version 1.0
  * @date 2025-05-10
  */

@@ -9,7 +9,7 @@ export const amcType = 'AMCHybride'
 
 /**
  * Exercice en html seulement. Translations dans un pavage.
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
 
  */
 export const uuid = '48253'

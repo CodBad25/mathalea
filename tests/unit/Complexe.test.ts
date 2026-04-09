@@ -7,7 +7,7 @@ import FractionEtendue from '../../src/modules/FractionEtendue'
 import { fraction } from '../../src/modules/fractions'
 
 // Tests unitaires pour la classe Complexe
-// @author : Jean-Claude Lhote
+// @author : Jean-claude Lhote
 describe('Complexe', () => {
   it('devrait créer un complexe avec number ou FractionEtendue', () => {
     const c1 = new Complexe(3, 4)

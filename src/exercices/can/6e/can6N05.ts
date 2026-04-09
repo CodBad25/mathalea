@@ -10,7 +10,7 @@ export const amcReady = true
 export const amcType = 'AMCNum'
 
 /**
- * @author Gilles Mora & Jean-Claude Lhote
+ * @author Gilles Mora & Jean-claude Lhote
  * Créé pendant l'été 2021
 
  */

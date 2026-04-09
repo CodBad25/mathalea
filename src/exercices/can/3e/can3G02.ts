@@ -6,7 +6,7 @@ export const amcType = 'AMCHybride'
 export const titre = 'Trouver l’image d’un point par une  transformation 3e'
 
 /**
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * Créé pendant l'été 2021
 
  */

@@ -33,7 +33,7 @@ export const dateDePublication = '05/07/2025'
 
 /**
  * Division d'un nombre décimal dans différentes écritures par 10, 100, 1000
- * @author Eric Elter (sur les bases de 6C30-1)
+ * @author Éric Elter (sur les bases de 6C30-1)
  */
 export const uuid = 'fkr1b'
 

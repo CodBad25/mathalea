@@ -29,7 +29,7 @@ export const dateDeModifImportante = '28/03/2024'
 /**
  * Trouver les informations utiles ou inutiles pour résoudre des problèmes
  * On peut choisir des problèmes qui n'ont pas de solution.
- * @author Eric Elter
+ * @author Éric Elter
  */
 export const uuid = '7fb24'
 

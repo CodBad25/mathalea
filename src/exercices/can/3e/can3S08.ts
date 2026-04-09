@@ -11,7 +11,7 @@ export const interactifReady = true
 export const interactifType = 'mathLive'
 
 /**
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
 
  * Date de publication
 */

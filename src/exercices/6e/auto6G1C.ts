@@ -29,7 +29,7 @@ export const dateDePublication = '08/05/2025'
 
 /**
  * Donner le nombre d'axes de symétrie d'une figure.
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export const uuid = '328b2'
 

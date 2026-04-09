@@ -40,7 +40,7 @@ export const dateDePublication = '05/04/2022' // La date de publication initiale
 
 /**
  *
- * Gilles Mora
+ * @author Gilles Mora
  */
 
 function compareNombres(a: number, b: number) {

@@ -19,7 +19,7 @@ export const amcType = 'AMCOpen'
 /**
  * Additionner deux entiers relatifs dans un tableau à double entrée
  * @author Rémi Angot
- * Passage en interactif, changement total du code pour les tableaux et amélioration de la consigne par Eric Elter le 07/06/2025
+ * Passage en interactif, changement total du code pour les tableaux et amélioration de la consigne par Éric Elter le 07/06/2025
  */
 export const uuid = '41254'
 

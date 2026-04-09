@@ -45,7 +45,7 @@ function resoudreAxPlusBZeroTex(a: number, b: number): string {
 
 /**
  *
- * @author  Jean-Claude Lhote - QQes aménagements Stéphane Guyon
+ * @author  Jean-claude Lhote - QQes aménagements Stéphane Guyon
  */
 export default class EquationsLog extends Exercice {
   version: string

@@ -8,7 +8,7 @@ export const titre =
 export const dateDeModifImportante = '14/03/2026'
 
 /**
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * Exercice refait avec mathalea2d l'ancien exo MG32 porte la référence 4G40-MG32
  */
 export const uuid = '3303a'

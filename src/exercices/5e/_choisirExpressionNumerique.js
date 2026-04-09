@@ -13,7 +13,7 @@ import { randint } from '../../modules/outils'
  * * Le détaillé du calcul en mode maths LaTex
  * * la réponse numérique du calcul (Ajout par EE)
  * * sousCas permet de choisir son opération quand il n'y a qu'une opération (Ajout par EE)
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * Fonction utilisée dans plusieurs exercices.
  */
 export default function ChoisirExpressionNumerique(

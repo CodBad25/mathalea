@@ -26,7 +26,7 @@ export const dateDeModifImportante = '30/09/2024'
 /**
  *
  * Attendus de 3e : Connaitre et utiliser les critères de divisibilité par 2, par 3, par 5, par 9 et par 10
- * @author Eric Elter
+ * @author Éric Elter
  */
 
 export const refs = {

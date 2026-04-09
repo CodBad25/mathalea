@@ -51,7 +51,7 @@ export const dateDeModifImportante = '06/02/2024'
 
 /**
  * Trouver les coordonnées d'un punto transformé d'un autre par une des transformations du plan
- * @author Jean-Claude Lhote (Modif des paramètres, nbQuestions modifiables par Eric Elter)
+ * @author Jean-claude Lhote (Modif des paramètres, nbQuestions modifiables par Éric Elter)
  */
 export const uuid = 'd4088'
 

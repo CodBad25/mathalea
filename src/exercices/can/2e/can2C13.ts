@@ -14,7 +14,7 @@ export const dateDePublication = '15/09/2022' // La date de publication initiale
 export const dateDeModifImportante = '25/03/2026'
 /**
  * Modèle d'exercice très simple pour la course aux nombres
- * @author Gille Mora
+ * @author Gilles Mora
  *
  */
 

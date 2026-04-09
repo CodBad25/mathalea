@@ -18,7 +18,7 @@ export const dateDeModifImportante = '15/01/2024'
 
 /**
  * Représenter des fractions simples avec des disques partagés de façon adéquate.
- * @author Jean-Claude Lhote (Modifié par EE : rajout d'un paramètre puis Rémi Angot pour apiGeom)
+ * @author Jean-claude Lhote (Modifié par EE : rajout d'un paramètre puis Rémi Angot pour apiGeom)
  * 6N14
  * Relecture : Novembre 2021 par EE
  */

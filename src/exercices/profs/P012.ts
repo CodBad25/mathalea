@@ -16,7 +16,7 @@ export const uuid = '62f5e'
 
 /**
  * Fonction permettant aux enseignants de proposer rapidement des diques partagés en parts
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export default class Camemberts extends Exercice {
   constructor() {

@@ -23,7 +23,7 @@ export const dateDeModifImportante = '26/02/2023'
 
 /**
  * Factoriser a²-b²
- * @author Jean-Claude Lhote,
+ * @author Jean-claude Lhote,
  * Ajout Mélange des questions Matthieu Devillers
  */
 export const uuid = '81fd2'

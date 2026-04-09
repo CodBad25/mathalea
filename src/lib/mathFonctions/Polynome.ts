@@ -270,7 +270,7 @@ export type CoeffType = NombreType | [number, boolean]
  * @param {boolean} rand Donner true si on veut un polynôme aléatoire
  * @param {number} deg à fournir >=0 en plus de rand === true pour fixer le degré
  * @param coeffs liste de coefficients par ordre de degré croissant OU liste de couples [valeurMax, relatif?]
- * @author Jean-Léon Henry, Jean-Claude Lhote
+ * @author Jean-Léon Henry, Jean-claude Lhote
  * @example Polynome({ coeffs:[0, 2, 3] }) donne 3x²+2x
  * @example Polynome({ rand:true, deg:3 }) donne un ax³+bx²+cx+d à coefficients entiers dans [-10;10]\{0}
  * @example Polynome({ rand:true, coeffs:[[10, true], 0, [5, false]] }) donne un ax²+b avec a∈[1;5] et b∈[-10;10]\{0}

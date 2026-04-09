@@ -8,7 +8,7 @@ import {
 } from './elementsEtTransformations3d'
 
 /**
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * Créer une barre de l cubes de c de côté à partir du point (x,y,z)
  * La barre est positionnée suivant l'axe x
  */
@@ -68,7 +68,7 @@ export function barre3d(
   return new Barre3d(x, y, z, c, l, color)
 }
 /**
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * Crée une plaque de cubes de côtés c de dimensions l suivant x et p suivant y
  */
 export class Plaque3d extends ObjetMathalea2D {

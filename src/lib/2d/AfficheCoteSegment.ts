@@ -21,7 +21,7 @@ import { Vide2d } from './Vide2d'
  * @param {boolean} [horizontal=false]  Si true, alors le texte est horizontal, sinon le texte est parallèle au segment.
  * @property {string} svg Sortie au format vectoriel (SVG) que l’on peut afficher dans un navigateur
  * @property {string} tikz Sortie au format TikZ que l’on peut utiliser dans un fichier LaTeX
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * @class
  */
 // JSDOC Validee par EE Juin 2022
@@ -115,7 +115,7 @@ export class AfficheCoteSegment extends ObjetMathalea2D {
  * @example afficheCoteSegment(s,'x',-1,'red',2,1,'blue',true)
  * // Affiche la côte du segment s, avec une flèche rouge d\'épaisseur 2 "cm", placée 1 "cm" sous le segment, avec le texte 'x' écrit en bleu, 1 "cm" au-dessus, et horizontalement.
  * @return {AfficheCoteSegment|Vide2d}
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 // JSDOC Validee par EE Juin 2022
 

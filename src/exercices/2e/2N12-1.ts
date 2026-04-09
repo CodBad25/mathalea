@@ -7,7 +7,7 @@ export const amcType = 'AMCHybride'
 /**
  * Clone de 6N20-1 pour les 2nde
  *
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export const dateDeModifImportante = '14/05/2023' // ajout d'un paramètre pour choisir les dénominateurs
 export const uuid = 'd309b'

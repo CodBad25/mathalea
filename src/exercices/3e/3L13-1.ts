@@ -34,7 +34,7 @@ export const dateDeModifImportante = '29/10/2025'
  * * Tous les types
  * @author Rémi Angot
  * Rendre interactif Laurence Candille
- * Eric Elter : Rajouter de deux paramètres, passage de la réponse en couleur
+ * Éric Elter : Rajouter de deux paramètres, passage de la réponse en couleur
  */
 export const uuid = 'b81d0'
 

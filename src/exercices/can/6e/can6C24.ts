@@ -20,7 +20,7 @@ export const dateDeModifImportante = '19/02/2023'
 export const dateDePublication = '15/09/2021'
 
 /**
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * Ajout de la division par Guillaume Valmont le 19/02/2023
  */
 export const uuid = '53034'

@@ -28,7 +28,7 @@ export const refs = {
 
 /**
  * Exercice de conversion de durées entre hhmmss, hdec et mindec utilisant la classe Grandeur
- * @author Nathan Scheinmann (Adaptation à la France par Eric Elter)
+ * @author Nathan Scheinmann (Adaptation à la France par Éric Elter)
  */
 export default class ConvertirDuree extends Exercice {
   version: string

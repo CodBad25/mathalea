@@ -1,18 +1,18 @@
-import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
-import Exercice from '../Exercice'
-import FractionEtendue from '../../modules/FractionEtendue'
-import { remplisLesBlancs } from '../../lib/interactif/questionMathLive'
-import { listeQuestionsToContenu, randint } from '../../modules/outils'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { remplisLesBlancs } from '../../lib/interactif/questionMathLive'
+import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
+import FractionEtendue from '../../modules/FractionEtendue'
+import { listeQuestionsToContenu, randint } from '../../modules/outils'
+import Exercice from '../Exercice'
 
 export const titre = 'Comparer une fraction avec $1$ ou $\\dfrac12$'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const dateDePublication = '17/07/2025'
 /**
- * @author Eric Elter
+ * @author Éric Elter
  */
 
 export const uuid = 'c4c53'

@@ -83,7 +83,7 @@ function aleatoiriseCourbe() {
 
 /**
  * Aléatoirise une courbe et demande les antécédents d'une valeur entière (eux aussi entiers)
- * @author Gilles Mora (grâce au travail de Jean-Claude Lhote)
+ * @author Gilles Mora (grâce au travail de Jean-claude Lhote)
 
  */
 export default class BetaModeleSpline extends Exercice {

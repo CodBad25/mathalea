@@ -26,7 +26,7 @@ export const amcType = 'qcmMono'
 export const dateDeModifImportante = '16/04/2024'
 /**
  * Exercice sur la notion de proportionnalité (ou pas)
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export const uuid = '850d5'
 

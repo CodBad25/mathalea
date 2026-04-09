@@ -33,7 +33,7 @@ export const titre = 'Nommer et coder des polygones'
 export const dateDeModifImportante = '10/01/2024'
 
 /**
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * Placer les sommets et les égalités de longueur...
  */
 export const uuid = '90e1a'

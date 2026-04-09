@@ -16,7 +16,7 @@ export const interactifType = 'mathLive'
 
 /**
  * Factoriser en utilisant les 3 identités remarquables
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export const uuid = '0bd00'
 

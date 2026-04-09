@@ -23,7 +23,7 @@ export const refs = {
 
 /**
  * Modèle d'exercice très simple pour la course aux nombres
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
 
  */
 export default class ModeleAutomatisme2nde extends ExerciceSimple {

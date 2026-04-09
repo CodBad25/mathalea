@@ -7,7 +7,7 @@ export const interactifType = 'qcm'
 
 /**
  * Comparer périmètres de figures avec ceux d'un rectangle référence
- * @author Eric Elter
+ * @author Éric Elter
  */
 export const uuid = '316d2'
 

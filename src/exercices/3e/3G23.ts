@@ -42,7 +42,7 @@ export const titre =
 
 /**
  * Reconnaitre des triangles égaux
- * @author Jean-Claude Lhote et Sébastien Lozano (Rendu QCM et interactif par EE)
+ * @author Jean-claude Lhote et Sébastien Lozano (Rendu QCM et interactif par EE)
  */
 export const uuid = '91513'
 

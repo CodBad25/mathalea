@@ -27,8 +27,8 @@ export const titre =
   'Utiliser les propriétés des droites parallèles et perpendiculaires - v2'
 
 /**
- * @author Eric Elter sur la base de 5G33-2
- * @author Jean-Claude Lhote pour 5G33-2 (EE : pour l'ajout d'AMC et la possibilité de sélectionner différents mélanges)
+ * @author Éric Elter sur la base de 5G33-2
+ * @author Jean-claude Lhote pour 5G33-2 (EE : pour l'ajout d'AMC et la possibilité de sélectionner différents mélanges)
  * @author Mickael Guironnet pour 5G33-2 (refactoring avec ajout des 4 à 6 et des figures)
  * Dans cet exercice, on peut choisir la(les) propriété(s) qu'on veut traiter.
  */
@@ -166,7 +166,7 @@ export default class ProprietesParallelesPerpendiculaires extends Exercice {
      * Un tableau contenant les indices (0-based) des cas de `differentsCas`
      * qui satisfont les conditions de sélection.
      *
-     * @author Eric Elter (pour le prompt)
+     * @author Éric Elter (pour le prompt)
      * @example
      * ```ts
      * const differentsCas = [
@@ -252,7 +252,7 @@ export default class ProprietesParallelesPerpendiculaires extends Exercice {
      * Un nouveau tableau contenant uniquement les entiers de `listeTypeDeQuestions`
      * qui appartiennent à au moins une plage autorisée par `questionsDisponibles`.
      *
-     * @author Eric Elter (pour le prompt)
+     * @author Éric Elter (pour le prompt)
      * @example
      * ```ts
      * const questionsDisponibles = [1, 4];

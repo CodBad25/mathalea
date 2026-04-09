@@ -16,7 +16,7 @@ export const amcType = 'AMCOpen'
 export const dateDePublication = '9/12/2020'
 export const dateDeModifImportante = '29/10/2024'
 /**
- * @author Jean-Claude Lhote (remaniée par EE pour la prise en compte du nb de lignes et de colonnes du labyrinthe)
+ * @author Jean-claude Lhote (remaniée par EE pour la prise en compte du nb de lignes et de colonnes du labyrinthe)
  * Sortir du labyrinthe en utilisant la numération décimale.
  * Ajout AMC et remaniement du code pour moins d'évidence dans la solution : Janvier 2022 par EE
  */

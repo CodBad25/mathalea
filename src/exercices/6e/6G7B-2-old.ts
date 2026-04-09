@@ -8,7 +8,7 @@ export const amcType = 'AMCOpen'
 
 /**
 
- * @author Jean-Claude Lhote   (Ajout AMC par Eric Elter)
+ * @author Jean-claude Lhote   (Ajout AMC par Éric Elter)
  */
 export const uuid = 'adfb5'
 

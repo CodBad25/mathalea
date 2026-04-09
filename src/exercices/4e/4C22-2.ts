@@ -25,7 +25,7 @@ export const interactifType = 'mathLive'
  * Calcul du quotient de deux fractions. Paramétrages possibles :
  * * 1 : Nombres positifs exclusivement
  * * 2 : nombres relatifs
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * 4C22-2
  */
 export const uuid = '55354'

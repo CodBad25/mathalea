@@ -7,7 +7,7 @@ type SvgWithValue = { svg: string; value: number }
  * La sélection est gérée via un attribut "value" qui encode la somme des valeurs des SVG sélectionnés
  * L'utilisateur peut cliquer sur les SVG pour les sélectionner/désélectionner, et le composant émet un événement "change" avec la nouvelle valeur
  * Le composant est accessible et réactif aux changements d'attributs
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 class SvgSelectionElement extends HTMLElement {
   private _svgsWithValue: SvgWithValue[][] = []

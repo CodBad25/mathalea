@@ -21,7 +21,7 @@ export const dateDeModifImportante = '31/10/2023'
 
 /**
  * Lire l'abscisse décimale d'un point
- * @author Jean-Claude Lhote et Rémi Angot
+ * @author Jean-claude Lhote et Rémi Angot
  */
 export const uuid = 'c1888'
 

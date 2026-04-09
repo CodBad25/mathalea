@@ -47,7 +47,7 @@ export const interactifType = 'qcm'
 
 /**
  * Comparer aires et/ou périmètres de figures avec ceux d'un rectangle référence
- * @author Eric Elter
+ * @author Éric Elter
  */
 export const uuid = '95313'
 
@@ -60,7 +60,7 @@ export const refs = {
 /** Retourne un nombre décimal entre a et b, sans être trop près de a et de b
  * @param {number} a borne inférieure
  * @param {number} b borne supérieure
- * @author Eric Elter
+ * @author Éric Elter
  * @returns {number}
  */
 function entreDeux(a: number, b: number) {

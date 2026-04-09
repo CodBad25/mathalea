@@ -28,7 +28,7 @@ export const dateDeModifImportante = '24/06/2024'
 
 /**
  * Détermination de médianes dans des séries statistiques numériques
- * @author Sébastien Lozano forked de Jean-Claude Lhote
+ * @author Sébastien Lozano forked de Jean-claude Lhote
  * Ajout de l'alternance entre effectif total pair et impair le 18/08/2021 : Guilllaume Valmont
  */
 export const uuid = '7c068'

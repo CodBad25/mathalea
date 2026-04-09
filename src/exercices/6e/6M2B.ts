@@ -20,7 +20,7 @@ export const dateDePublication = '03/08/2025'
 
 /**
  * Connaître la formule de l’aire d’un carré ou d’un rectangle
- * @author Eric Elter
+ * @author Éric Elter
  */
 
 export const uuid = 'f36f3'

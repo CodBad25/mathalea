@@ -16,6 +16,9 @@ export const refs = {
   'fr-fr': [],
   'fr-ch': ['NR'],
 }
+/**
+ * @author Jean-claude Lhote
+ */
 export default class TestListDeroulante extends ExerciceSimple {
   constructor() {
     super()

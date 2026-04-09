@@ -974,7 +974,7 @@ export function exportQcmAmc(exercice, idExo) {
 }
 
 /**
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * Fonction qui crée un document pour AMC (pour le compiler, le package automultiplechoice.sty doit être présent)
  *
  *  exercices est un tableau d'exercies TypeExercice[]

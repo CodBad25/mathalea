@@ -25,7 +25,7 @@ export const refs = {
 
 /**
  * @title Repérage 2e bis
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * On se propose de placer des points aux coordonnées données dans un repère orthogonal, normé ou quelconque.
  */
 export default class BetaReperage2e extends Exercice {

@@ -35,7 +35,7 @@ export const interactifType = 'mathLive'
 /**
  * Calculs dans une homothétie : longueurs, aires.
  * @author Frédéric PIOU
- * Grosse refactorisation par Eric ELTER
+ * Grosse refactorisation par Éric Elter
  */
 export const uuid = '6f383'
 

@@ -25,9 +25,9 @@ export const amcType = 'AMCOpen'
  * Utiliser la simple ou la double distributivité et réduire l'expression
  * @author Rémi Angot
  * Ajout du paramétrage : Guillaume Valmont 13/08/2021
- * Ajout d'un nouveau paramètre sur le choix des lettres : Eric Elter 20/04/2025
- * Ajout d'un nouveau paramètre sur le choix du signe x final : Eric Elter 20/04/2025
- * Meilleure gestion des lettres identiques : Eric Elter 19/03/2026
+ * Ajout d'un nouveau paramètre sur le choix des lettres : Éric Elter 20/04/2025
+ * Ajout d'un nouveau paramètre sur le choix du signe x final : Éric Elter 20/04/2025
+ * Meilleure gestion des lettres identiques : Éric Elter 19/03/2026
  */
 export const uuid = '5f5a6'
 

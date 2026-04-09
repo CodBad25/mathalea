@@ -27,7 +27,7 @@ export const dateDeModifImportante = '15/10/2025'
 
 /**
  *
- * @author Eric Elter (sur la base de 6N5-7)
+ * @author Éric Elter (sur la base de 6N5-7)
  */
 export const uuid = '716c5'
 
@@ -93,7 +93,6 @@ export default class ProblemesAvecOperations extends Exercice {
         carburantParReservoir,
         cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       const n = randint(1, 2)
       switch (

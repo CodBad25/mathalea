@@ -4,7 +4,7 @@ import { texNombre } from '../../lib/outils/texNombre'
 import ExerciceQcmA from '../ExerciceQcmA'
 export const dateDePublication = '22/12/2025'
 export const uuid = '6850f'
-// Author Gilles Mora
+// @Author Gilles Mora
 export const refs = {
   'fr-fr': ['1A-R01-5'],
   'fr-ch': [],
@@ -15,7 +15,7 @@ export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = 'Comparer  avec des pourcentages'
 export default class AutoARO1e extends ExerciceQcmA {
-   private appliquerLesValeurs(
+  private appliquerLesValeurs(
     p1: number,
     n1: number,
     r1: number,
@@ -33,13 +33,13 @@ export default class AutoARO1e extends ExerciceQcmA {
     this.enonce = `Parmi les nombres suivants, lequel est le plus grand ?`
 
     let correctionTexte =
-      '• Prendre $25\\,\\%$ d\'une valeur revient à la diviser par $4$.<br>'
+      "• Prendre $25\\,\\%$ d'une valeur revient à la diviser par $4$.<br>"
     correctionTexte +=
-      '• Prendre $10\\,\\%$ d\'une valeur revient à la diviser par $10$.<br>'
+      "• Prendre $10\\,\\%$ d'une valeur revient à la diviser par $10$.<br>"
     correctionTexte +=
-      '• Prendre $20\\,\\%$ d\'une valeur revient à en prendre deux fois $10\\,\\%$.<br>'
+      "• Prendre $20\\,\\%$ d'une valeur revient à en prendre deux fois $10\\,\\%$.<br>"
     correctionTexte +=
-      '• Prendre $5\\,\\%$ d\'une valeur revient à en prendre la moitié de $10\\,\\%$.<br>'
+      "• Prendre $5\\,\\%$ d'une valeur revient à en prendre la moitié de $10\\,\\%$.<br>"
 
     const calculs = [
       { pourcent: p1, nombre: n1, resultat: r1 },

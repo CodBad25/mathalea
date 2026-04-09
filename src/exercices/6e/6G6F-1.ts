@@ -34,7 +34,7 @@ export const dateDePublication = '01/09/2025'
 
 /**
  * Publié le 27/08/2025
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export const uuid = 'e0bcb'
 

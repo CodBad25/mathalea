@@ -29,7 +29,7 @@ export const interactifReady = true
  * @author Rémi Angot
  * 6N31
  * Ajout AMC : Janvier 2022 par EE
- * Ajout interactivité : 1/12/2024 par Jean-Claude Lhote
+ * Ajout interactivité : 1/12/2024 par Jean-claude Lhote
  */
 export const uuid = 'be1e4'
 

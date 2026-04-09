@@ -31,8 +31,8 @@ export const dateDeModifImportante = '21/07/2025'
 
 /**
  * Une fraction avec pour dénominateur 2, 3, 4, 5, 10 à encadrer entre 2 entiers
- * @author Rémi Angot (AMC par Eric Elter)
- * Rajout d'une correction (propre au programme 2025 de 6ème) par Eric Elter
+ * @author Rémi Angot (AMC par Éric Elter)
+ * Rajout d'une correction (propre au programme 2025 de 6ème) par Éric Elter
  * Relecture : Novembre 2021 par EE
  */
 export const uuid = '1f5de'

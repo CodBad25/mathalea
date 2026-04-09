@@ -30,7 +30,7 @@ export const uuid = 'can2a-2024-2'
 
 /**
  *
- * @author
+ * @author Rémi angot
  */
 
 export default class nomExercice extends Exercice {

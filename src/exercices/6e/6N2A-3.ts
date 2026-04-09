@@ -32,7 +32,7 @@ export const amcType = 'AMCNum'
 /**
  * Trouver le dernier chiffre d'un calcul (somme, différence) entre décimaux
  * Modif 27/03/2026 : Le premier terme de la différence est toujours plus grand que le second terme
- * @author Eric Elter
+ * @author Éric Elter
  */
 
 export const uuid = 'b38m3'

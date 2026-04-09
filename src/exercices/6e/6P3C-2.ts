@@ -28,7 +28,7 @@ export const amcType = 'AMCNum'
 /**
  * On donne une relation de proportionnalité du type n objets coûtent x€ et on demande le prix de y objets
  * et le nombre d'objets qu'on peut acheter avec z€.
- * @author Jean-Claude Lhote // pour l'exercice 6P11 original
+ * @author Jean-claude Lhote // pour l'exercice 6P11 original
  * @author CGrolleau // pour avoir ajouté des situations de proportionnalité en 03/2021
  * @author Guillaume Valmont // pour avoir fait la transition coefficient de linéarité -> coefficient de proportionnalité en 08/2021
  * Relecture : Novembre 2021 par EE

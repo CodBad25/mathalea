@@ -3,7 +3,7 @@ import type { OptionsComparaisonType } from '../types'
 
 type Donnees = Record<string, string | number | boolean>
 /**
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export default class Probleme {
   name: string

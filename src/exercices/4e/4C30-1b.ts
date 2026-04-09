@@ -23,7 +23,7 @@ export const titre =
 
 /**
  * Encadrer par des puissances de 10 avec coefficients entiers consécutifs
- * @author Eric Elter (d'après 4C30-1)
+ * @author Éric Elter (d'après 4C30-1)
  */
 export const uuid = '4068b'
 

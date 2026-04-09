@@ -39,7 +39,7 @@ export const dateDeModifImportante = '27/03/2024'
 
 /**
  * Nommer un angle
- * @author Eric Elter
+ * @author Éric Elter
  */
 export const uuid = 'e10d1'
 

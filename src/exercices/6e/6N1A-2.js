@@ -28,7 +28,7 @@ export const amcType = 'AMCNum'
 /**
  * * Donner le chiffre des ... le nombre de ...
  * @author Sébastien Lozano
- * Rendu interactif par Jean-Claude Lhote et ajout de paramètre type de questions
+ * Rendu interactif par Jean-claude Lhote et ajout de paramètre type de questions
  * Rajout paramètre par EE sur la classe maximale
  * Relecture : Décembre 2021 par EE
  */

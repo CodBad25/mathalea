@@ -39,7 +39,7 @@ export const dateDeModifImportante = '09/05/2023'
 
 /**
  * Calculer un angle à partir de figures simples
- * @author Eric Elter
+ * @author Éric Elter
  * Publié le 03/05/2022
  */
 export const uuid = '329fe'

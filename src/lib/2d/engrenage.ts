@@ -17,7 +17,7 @@ function degSin(deg: number): number {
 }
 
 /**
- * @author Jean-Claude Lhote (Sébastien Lozano et Sylvain Chambon pour la partie tikz)
+ * @author Jean-claude Lhote (Sébastien Lozano et Sylvain Chambon pour la partie tikz)
  * @param {object} parametres paramètres de l'objet voir ci-dessous
  * @param {number} [parametres.rayon] rayon du disque sans les dents
  * @param {number} [parametres.rayonExt] rayon du disque avec les dents
@@ -194,7 +194,7 @@ class Engrenage extends ObjetMathalea2D {
 }
 
 /**
- * @author Jean-Claude Lhote (Sébastien Lozano et Sylvain Chambon pour la partie tikz)
+ * @author Jean-claude Lhote (Sébastien Lozano et Sylvain Chambon pour la partie tikz)
  * @param {object} parametres paramètres de l'objet voir ci-dessous
  * @param {number} [parametres.rayon] rayon du disque sans les dents
  * @param {number} [parametres.rayonExt] rayon du disque avec les dents

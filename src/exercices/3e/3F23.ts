@@ -29,7 +29,7 @@ export const interactifType = 'mathLive'
 
 /**
  * Trouver les coordonnées du point d'intersection des droites représentant des fonctions affines
- * @author Eric Elter
+ * @author Éric Elter
  */
 export const uuid = 'ac71d'
 

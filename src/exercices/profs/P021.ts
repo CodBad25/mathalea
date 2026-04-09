@@ -15,8 +15,7 @@ export const uuid = '4c7ca'
 
 /**
  * Trace une courbe interpolee par des splines version cubiques avec tangentes
- * @author Jean-Claude Lhote
-
+ * @author Jean-claude Lhote
  */
 export default class TraceCourbeSpline extends Exercice {
   constructor() {

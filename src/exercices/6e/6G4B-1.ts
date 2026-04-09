@@ -33,7 +33,7 @@ export const dateDePublication = '26/04/2022'
 
 /**
  * Mesurer un angle avec rapporteur déjà en place
- * @author Eric Elter
+ * @author Éric Elter
  */
 export const uuid = 'ff2cc'
 

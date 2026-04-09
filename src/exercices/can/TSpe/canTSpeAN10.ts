@@ -20,7 +20,7 @@ export const refs = {
 
 /**
  * Exprimer un nombre en fonction de ln(2), ln(3), ln(5)...
- * @author  Jean-Claude Lhote
+ * @author  Jean-claude Lhote
 
  */
 export default class ExpressionsLog extends Exercice {

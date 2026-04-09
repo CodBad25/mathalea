@@ -61,7 +61,7 @@ export const amcReady = true
 export const amcType = 'AMCHybride'
 /**
  * Trouver l'image d'une figure par diverses transformations dans un pavage (7 motifs différents)
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * Relecture : Novembre 2021 par EE
  */
 export default class PavagesEtTransformations extends Exercice {

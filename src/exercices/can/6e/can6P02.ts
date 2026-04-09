@@ -11,7 +11,7 @@ export const amcReady = true
 export const amcType = 'AMCNum'
 
 /**
- * @author Jean-Claude Lhote (quelques modif Gilles)
+ * @author Jean-claude Lhote (quelques modif Gilles)
  * Créé pendant l'été 2021
 
  */

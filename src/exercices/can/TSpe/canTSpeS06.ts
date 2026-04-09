@@ -18,7 +18,7 @@ export const dateDePublication = '13/08/2024'
 
 /**
  * limites de suites (canT)
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  *
  */
 class UnSurVn extends ExerciceSimple {

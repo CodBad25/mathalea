@@ -15,7 +15,7 @@ export const titre = 'Identifier des patterns numériques  (divisibilité)'
  * On donne une liste de nombre et on demande si des nombres sont dans cette liste.
  *
  *
- * @author Jean-Claude Lhote (idée de Claire Bruneau)
+ * @author Jean-claude Lhote (idée de Claire Bruneau)
  * 6N43-1
  */
 export const uuid = 'fa2ec'

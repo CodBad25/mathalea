@@ -177,7 +177,7 @@ const listePourMoins2PiSur3 = listePour2PiSur3.map((el) =>
 
 /**
  * Transformer acos(wt)+bsin(wt) en A.cos(wt+phi)
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 
 export default class AcosOmegaTPlusBSinOmegaT extends Exercice {

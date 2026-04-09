@@ -16,6 +16,11 @@ export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = 'Comparer deux nombres'
 export const dateDePublication = '02/09/2025'
+
+/**
+ * @author Jean-claude Lhote
+ */
+
 export default class BetaBAM extends Exercice {
   constructor() {
     super()

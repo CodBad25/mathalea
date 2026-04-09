@@ -30,7 +30,8 @@ export const amcType = 'AMCHybride'
 
 /**
  * Dessiner différentes vues d'un empilement de cubes
- * @author Eric Elter (sur un début d'exercices d'Erwan Duplessy)
+ * @author Éric Elter
+ *  (sur un début d'exercices d'Erwan Duplessy)
  * Source : http://cache.media.education.gouv.fr/file/Geometrie_et_espace/47/1/RA16_C4_MATH_geo_espace_flash_567471.pdf
  */
 
@@ -86,7 +87,6 @@ export default class VuesEmpilementCubes extends Exercice {
         texteCorr,
         cpt = 0;
       q < this.nbQuestions && cpt < 50;
-
     ) {
       let listeVuesPossibles = gestionnaireFormulaireTexte({
         max: 7,

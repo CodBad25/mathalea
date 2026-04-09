@@ -28,7 +28,7 @@ export const dateDePublication = '29/06/2025'
  * Étudier les premiers termes d'une série de motifs afin de donner le nombre de formes ${['e','a','é','i','o','u','y','è','ê'].includes(pattern.shapes[0][0]) ? 'd\'':'de'}${pattern.shapes[0]} du motif suivant.
  * Les patterns sont des motifs figuratifs ou numériques qui évoluent selon des règles définies.\n
  * Cet exercice contient des patterns issus de l'excellent site : https://www.visualpatterns.org/
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export const uuid = '328c3'
 
@@ -44,7 +44,7 @@ export default class PaternRepetitif extends Exercice {
     this.nbQuestions = 3
     this.comment = `Étudier une série d'éléments figuratifs afin d'identifier un pattern et être capable d'interpoler l'élément de rang quelconque.\n
  <br>Les patterns (angliscisme utilisé dans certains documents de référence) sont des motifs figuratifs ou numériques répétitifs qui évoluent selon une règle définie.\n
- <br>Cet exercice contient des patterns figuratifs créés par Jean-Claude Lhote, d'après une idée de Sophie Roubin`
+ <br>Cet exercice contient des patterns figuratifs créés par Jean-claude Lhote, d'après une idée de Sophie Roubin`
     this.besoinFormulaireTexte = [
       'Types de pattern',
       'Nombres séparés par des tirets\n1 : Pattern court sans symétrie\n2 : Pattern long sans symétrie\n3 : Pattern court avec symétrie\n4 : Pattern long avec symétrie\n5 : Pattern complexe avec sous-série\n6 : Mélange',

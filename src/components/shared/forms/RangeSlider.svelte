@@ -33,7 +33,7 @@
 <style lang="scss">
   // Styling Cross-Browser Compatible Range Inputs with Sass
   // Github: https://github.com/darlanrod/input-range-sass
-  // Author: Darlan Rod https://github.com/darlanrod
+  // @Author: Darlan Rod https://github.com/darlanrod
   // Version 1.5.3
   // MIT License
 

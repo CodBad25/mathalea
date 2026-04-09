@@ -37,6 +37,9 @@ function produitPourCaractere(car: string, map: Map<number, string>): number {
   }
   return NaN
 }
+/**
+ * @author Jean-claude Lhote
+ */
 export default class EncodeurTexte extends Exercice {
   besoinCorrection: boolean
   type: string

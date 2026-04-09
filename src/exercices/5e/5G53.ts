@@ -34,7 +34,7 @@ export const interactifType = 'mathLive'
 export const amcReady = true
 export const amcType = 'AMCNum'
 /**
- * @author Jean-Claude Lhote (Adapté par Eric Elter pour que les nouvelles fonctions 3d soient bien utilisées)
+ * @author Jean-claude Lhote (Adapté par Éric Elter pour que les nouvelles fonctions 3d soient bien utilisées)
  */
 export const uuid = 'da6a4'
 

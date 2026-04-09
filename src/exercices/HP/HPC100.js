@@ -1,13 +1,14 @@
+import { Polynome } from '../../lib/mathFonctions/Polynome'
+import { context } from '../../modules/context'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { context } from '../../modules/context'
-import { Polynome } from '../../lib/mathFonctions/Polynome'
 export const dateDePublication = '30/10/2021'
 export const titre = 'Effectuer la division de polynômes'
 
 /**
  *
- * @author Jean-Claude Lhote à partir d'un exercice de Eric Schrafstetter
+ * @author Jean-claude Lhote
+ * à partir d'un exercice de Éric Schrafstetter
  * abandon de l'usage de xcas au profit de Polynome.
  */
 export const uuid = 'ad6a2'
@@ -32,7 +33,6 @@ export default class DivisionDePolynomes extends Exercice {
     for (
       let i = 0, texte, texteCorr, a, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       // Boucle principale où i+1 correspond au numéro de la question
       a = randint(-5, 5, 0)

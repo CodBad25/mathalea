@@ -29,7 +29,7 @@ export const interactifType = 'multiMathfield'
  * Pour la correction, les fractions sont toutes écrites avec un dénominateur commun avant d'être classées
  * @author Rémi Angot
  * Ajout du paramètre d'inclusion de nombres négatifs le 14/08/2021 : Guillaume Valmont
- * Rendu interactif le 20/05/2025 par Eric Elter
+ * Rendu interactif le 20/05/2025 par Éric Elter
  */
 export const uuid = 'ce9ca'
 

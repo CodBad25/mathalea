@@ -13,7 +13,7 @@ import { estentier, randint } from '../../modules/outils'
  * @param {number} val2=2
  * @param {boolean} timesOn=true
  * @returns {string,string,string,number,string,string} [expf,expl,expc,nbval,lastOp, structureExpression]
- * @author Jean Claude Lhote forked by Sébastien LOZANO
+ * @author Jean-claude Lhote forked by Sébastien LOZANO
 
  * Ajout de la structure de l'expression le 14/08/2021 : Guillaume Valmont
  */

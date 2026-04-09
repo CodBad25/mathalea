@@ -65,7 +65,7 @@ function checkDistance(points: { x: number; y: number }[]) {
 
 /**
  * Construction interactive de symétriques de points
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 class ConstrctionsSymetrieCentralePoints extends Exercice {
   antecedents2d!: object[][]

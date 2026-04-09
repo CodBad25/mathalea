@@ -24,7 +24,7 @@ export const refs = {
 }
 export const dateDeModifImportante = '16/12/2023'
 /**
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * @constructor
  */
 export default class FabriqueAYohaku extends Exercice {

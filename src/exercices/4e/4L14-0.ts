@@ -13,7 +13,7 @@ import {
 import Exercice from '../Exercice'
 
 export const titre = "Tester si un nombre est solution d'une équation"
-export const dateDeModificationImportante = '13/01/2026' // Correction de la rédaction Jean-Claude Lhote
+export const dateDeModificationImportante = '13/01/2026' // Correction de la rédaction Jean-claude Lhote
 
 /**
  * Tester si un nombre est solution d'une équation

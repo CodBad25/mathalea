@@ -1,11 +1,11 @@
-import ExerciceSimple from '../../ExerciceSimple'
-import { miseEnEvidence } from '../../../lib/outils/embellissements'
-import { choice, shuffle } from '../../../lib/outils/arrayOutils'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { choice, shuffle } from '../../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 
-import FractionEtendue from '../../../modules/FractionEtendue'
 import { sp } from '../../../lib/outils/outilString'
+import FractionEtendue from '../../../modules/FractionEtendue'
 export const titre = 'Comparer des fractions'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -16,7 +16,7 @@ export const refs = {
 }
 /**
  * Modèle d'exercice très simple pour la course aux nombres
- * @author Eric Elter - Gilles Mora
+ * @author Éric Elter - Gilles Mora
  */
 export default class ComparerFractions2026 extends ExerciceSimple {
   constructor() {
@@ -25,12 +25,12 @@ export default class ComparerFractions2026 extends ExerciceSimple {
     this.nbQuestions = 1
     this.formatChampTexte = KeyboardType.clavierDeBaseAvecFraction
     this.optionsDeComparaison = { fractionEgale: true }
-     this.optionsChampTexte = { texteAvant: ' <br>' }
+    this.optionsChampTexte = { texteAvant: ' <br>' }
   }
 
   nouvelleVersion() {
     const annee = 2026
-    const a = this.canOfficielle ? annee+1 : randint(annee+1, annee+2)
+    const a = this.canOfficielle ? annee + 1 : randint(annee + 1, annee + 2)
     const f1 = new FractionEtendue(a, annee)
     const f2 = new FractionEtendue(annee, a)
     const listeNombre1 = [f1.texFraction, f2.texFraction, 1]

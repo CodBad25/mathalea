@@ -18,7 +18,7 @@ export const dateDeModifImportante = '09/08/2025'
 /**
  * Placer un événement sur une échelle de probabilités.
  * @author Erwan Duplessy
- * Modif paramètre par Eric Elter
+ * Modif paramètre par Éric Elter
  */
 // Source : https://pedagogie.ac-guadeloupe.fr/sites/default/files/File/flouvet/ra16_c4_math_probabilite_flash_pdf_69131.pdf
 export const uuid = '2b600'

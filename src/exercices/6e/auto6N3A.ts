@@ -36,7 +36,7 @@ export const refs = {
 }
 /**
  * reconnaître une fraction sur des représentations variées
- * @author OLivier Mimeau
+ * @author Olivier Mimeau
  */
 
 export default class reconnaitreDesFractions extends Exercice {

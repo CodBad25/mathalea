@@ -41,14 +41,14 @@ export const amcType = 'AMCHybride'
 export const dateDePublication = '15/02/2022'
 export const dateDeModifImportante = '06/04/2023'
 /**
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * Différents problèmes à résoudre.
  * Mise en équation de degré 1 à une inconnue, résolution et vérification.
  * Réf : 3L13-3 2N50-1 (pour une version sans commentaires)
  * Ajout du choix des types de problèmes par Guillaume Valmont le 06/04/2023
  * Ajout d'un paramètre permettant d'avoir uniquement des nombres entiers dans l'énoncé par Guillaume-Valmont le 06/04/2023
  * Date de publication 15/02/2022
- * Refactorisation complète et passage en typescript Jean-Claude Lhote le 24/01/2025
+ * Refactorisation complète et passage en typescript Jean-claude Lhote le 24/01/2025
  */
 export const uuid = '22412'
 

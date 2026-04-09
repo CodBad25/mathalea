@@ -10,7 +10,7 @@ export const amcReady = true
 export const amcType = 'AMCHybride'
 
 /**
- * Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * Publié le 11 / 09 / 2021
 
  */

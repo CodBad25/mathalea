@@ -24,7 +24,7 @@ export const USI = [
  * @param {number|Decimal} mesure
  * @param {string} unite (cm, cm^2, m^3, L, kg, m/s, km/h, hhmmss, hdec, mindec, a, ha, ...)
  * Keeps existing behavior and adds vitesse & durée conversions.
- * @author Jean-Claude Lhote et Sébastien Lozano, Nathan Scheinmann (ajout des unité de vitesse et de durée)
+ * @author Jean-claude Lhote et Sébastien Lozano, Nathan Scheinmann (ajout des unité de vitesse et de durée)
  */
 class Grandeur implements IGrandeur {
   mesureDecimal: Decimal

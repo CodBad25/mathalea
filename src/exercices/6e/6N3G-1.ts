@@ -9,7 +9,7 @@ export const amcType = 'AMCNum'
 
 /**
  * Effectuer des multiplications simples avec des fractions
- * @author Rémi Angot pour 6N22 et Eric Elter pour ce clone
+ * @author Rémi Angot pour 6N22 et Éric Elter pour ce clone
  */
 
 export const uuid = '704ee'

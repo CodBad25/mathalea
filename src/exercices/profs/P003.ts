@@ -16,7 +16,7 @@ export const uuid = 'ad5f5'
 
 /**
  * Pour imprimer des repères vierges pour les élèves.
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
 
  * publié le ?/2/2020
  * Réécrit le 14/08/2021 avec mathalea2d

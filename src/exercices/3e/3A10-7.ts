@@ -21,7 +21,7 @@ export const interactifReady = true
 export const interactifType = 'mathLive'
 
 /** Explorer un labyrinthe de nombres premiers
- * @author Eric Elter // Sur la base d'autres labyrinthes déjà créés
+ * @author Éric Elter // Sur la base d'autres labyrinthes déjà créés
  */
 export const uuid = '9552d'
 

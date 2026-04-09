@@ -3,7 +3,10 @@ import ExternalApp from './_ExternalApp'
 export const uuid = 'duduPerspective'
 export const titre = 'Représenter des solides en perspective'
 
-class duduPerspective extends ExternalApp {
+/**
+ * @author Arnaud Durand
+ */
+class DuduPerspective extends ExternalApp {
   constructor() {
     super(
       'https://mathix.org/exerciseur-perspective/index.html?suivi=1&mathalea=1',
@@ -11,4 +14,4 @@ class duduPerspective extends ExternalApp {
   }
 }
 
-export default duduPerspective
+export default DuduPerspective

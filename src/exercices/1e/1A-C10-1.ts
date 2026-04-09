@@ -18,6 +18,9 @@ export const interactifType = 'qcm'
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre = 'Résoudre une équation du type $x^2=a$'
+/**
+ * @author Gilles Mora
+ */
 export default class Puissances extends ExerciceQcmA {
   versionOriginale: () => void = () => {
     this.enonce =

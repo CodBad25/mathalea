@@ -7,7 +7,7 @@ export const amcType = 'AMCOpen'
 export const dateDePublication = '4/12/2021'
 
 /**
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * Créé le 4/12/2021
 
  */

@@ -24,7 +24,7 @@ export const dateDeModifImportante = '08/05/2025'
 
 /**
  * @author Guillaume Valmont
- * Rajout du paramètre 3 par Eric Elter
+ * Rajout du paramètre 3 par Éric Elter
  */
 export const uuid = '42ade'
 export const refs = {

@@ -22,7 +22,9 @@ export const interactifReady = true
 export const interactifType = 'custom'
 export const amcReady = true
 export const amcType = 'AMCOpen'
-
+/**
+ * @author Jean-claude Lhote
+ */
 export default class ExoRose extends Exercice {
   operation: string
   type: string

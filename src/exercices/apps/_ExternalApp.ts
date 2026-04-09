@@ -6,7 +6,9 @@ import {
 } from '../../lib/stores/generalStore'
 import { globalOptions } from '../../lib/stores/globalOptions'
 import Exercice from '../Exercice'
-
+/**
+ * @author Rémi Angot
+ */
 class ExternalApp extends Exercice {
   typeExercice: string
   container: HTMLDivElement

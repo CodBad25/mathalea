@@ -72,7 +72,7 @@ export class Vecteur {
  * @example v = vecteur(x,y) // ses composantes
  * @example v = vecteur(A,B) // son origine et son extrémité (deux Points)
  * @example v = vecteur(x,y,'v') // son nom et ses composantes.
- * @author Jean-Claude Lhote et Rémi Angot
+ * @author Jean-claude Lhote et Rémi Angot
  */
 // Surcharges pour la fabrique
 

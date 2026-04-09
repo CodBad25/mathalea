@@ -1,11 +1,11 @@
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import { nombreDeChiffresDansLaPartieEntiere } from '../../lib/outils/nombres'
 import { texNombre } from '../../lib/outils/texNombre'
-import Exercice from '../Exercice'
-import { listeQuestionsToContenu, randint } from '../../modules/outils'
-import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { context } from '../../modules/context'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { listeQuestionsToContenu, randint } from '../../modules/outils'
+import Exercice from '../Exercice'
 
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 
@@ -22,7 +22,7 @@ export const dateDeModifImportante = '09/09/2022'
  * Le nombre de dizaines, centaines et milliers étant donné, il faut écrire le nombre.
  *
  * 2 fois sur 5 il y a chevauchement entre les classes
- * @author Rémi Angot (complété par Eric Elter pour mettre des niveaux de difficulté)
+ * @author Rémi Angot (complété par Éric Elter pour mettre des niveaux de difficulté)
  * Relecture : Novembre 2021 par EE
  */
 export const uuid = '7efdf'
@@ -92,7 +92,6 @@ export default class ExerciceNumerationEntier extends Exercice {
     for (
       let i = 0, texte, texteCorr, a, b, rangA, rangB, rangRef, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       const rangs = [
         'unités',

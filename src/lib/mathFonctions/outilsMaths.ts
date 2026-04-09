@@ -14,7 +14,7 @@ import { Polynome } from './Polynome'
 /**
  * delta(true) retourne dans un tableau des valeurs de a, b, c telles que b*b-4*a*c >0
  * delta(false) retourne dans un tableau des valeurs de a, b, c telles que b*b-4*a*c <0
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export function choisiDelta(positif: boolean) {
   let d, a, b, c
@@ -29,7 +29,7 @@ export function choisiDelta(positif: boolean) {
 
 /**
  * fonction qui retourne un polynome du second degré correctement écrit.
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * @param {number} a
  * @param {number} b
  * @param {number} c
@@ -93,7 +93,7 @@ export function expTrinome(a: number, b: number, c: number): string {
 
 /**
  * Une fonction qui retourrne le polynome de Lagrange passant par une liste de points
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * @param {{x:number,y:number}[]} listePoints
  * @return {Polynome}
  */
@@ -142,7 +142,7 @@ export function interpolationDeLagrange(
  * @param {number} y1
  * @param {number} c
  * @return {[[number,number],[number,number]]}
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export function resolutionSystemeLineaire2x2(
   x1: number,
@@ -181,7 +181,7 @@ export function resolutionSystemeLineaire2x2(
 /**
  * Fonction qui retourne les coefficients a, b et c de f(x)=ax^3 + bx² + cx + d à partir des données de x1,x2,x3,f(x1),f(x2),f(x3) et d (entiers !)
  * sous forme de fraction irréductible. Si pas de solution (déterminant nul) alors retourne [[0,0],[0,0],[0,0]]
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export function resolutionSystemeLineaire3x3(
   x1: number,
@@ -228,7 +228,7 @@ export function resolutionSystemeLineaire3x3(
 
 /**
  * Une fonction utilisée dans les 3 fonctions qui suivent (suppressionParentheses, regroupeTermesMemeDegre et developpe afin de colorier ou pas les termes
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * @param str
  * @param color
  * @param isColored
@@ -246,7 +246,7 @@ function neg(expr: Expression): Expression {
 
 /**
  * Une fonction pour supprimer les parenthèses et aplatir l'expression (un Add avec une série de termes)
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * @param expr
  * @return {*|Expression}
  */
@@ -278,7 +278,7 @@ function flattenAdd(expr: Expression): Expression {
 
 /**
  * Supprime les parenthèses dans une somme du type (5x+3)-(2x^2-3x+4)+(4x+7-3x^3)
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * @param {string} exp
  * @param {{color: boolean}} options
  */
@@ -347,7 +347,7 @@ export function suppressionParentheses(
 
 /**
  * une fonction pour trier les termes d'une somme algébrique selon l'exposant de la puissance
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * @param {string} exp
  */
 export function regroupeTermesMemeDegre(
@@ -433,7 +433,7 @@ const isSingleSymbol = (node: Expression) =>
   node.latex.length === 1
 
 /**
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * @param expr
  * @param {{isColored: boolean, colorOffset: number, level: 0|1}} options
  * @return {string}

@@ -159,7 +159,7 @@ function normalizeFraction(n: number | Decimal, d: number): [number, number] {
 
 /**
  * La classe FractionEtendue est une extension de la classe  FractionMathjs  de mathjs
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * Merci à Daniel Caillibaud pour son aide.
  * Pour créer une instance de la classe FractionEtendue on peut utiliser la fonction fraction() qui se trouve dans le fichier modules/fractions
  * Ou utiliser la syntaxe f = new FractionEtendue () qui crée une  FractionMathjs  nulle.

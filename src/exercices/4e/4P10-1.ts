@@ -18,7 +18,7 @@ export const titre =
   "Résoudre un problème de proportionnalité à l'aide d'un graphique"
 
 /**
- * fork de 4P10-1 par Jean-Claude Lhote
+ * fork de 4P10-1 par Jean-claude Lhote
  * @author Sébastien LOZANO
  */
 

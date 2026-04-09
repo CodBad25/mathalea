@@ -18,7 +18,7 @@ import { pointSurSegment } from './utilitairesPoint'
  * @property {string} mark Symbole posé sur les arcs
  * @property {PointAbstrait} centre Sommet de l'angle
  * @property {PointAbstrait} depart Point sur un côté de l'angle (équivalent au point A)
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * @class
  */
 // JSDOC Validee par EE Juin 2022
@@ -75,7 +75,7 @@ export class CodageBissectrice extends ObjetMathalea2D {
  * @param {string} [mark='x'] Symbole posé sur les arcs
  * @example codagebissectrice(M,N,P) // Code, en noir, la bissectrice de l'angle MNP avec les marques 'x'
  * @example codagebissectrice(M,N,P,'red','oo') // Code, en rouge, la bissectrice de l'angle MNP avec les marques 'oo'
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * @return {CodageBissectrice}
  */
 // JSDOC Validee par EE Juin 2022

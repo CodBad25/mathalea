@@ -16,7 +16,6 @@ import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { creerNomDePolygone } from '../../lib/outils/outilString'
 import { texNombre } from '../../lib/outils/texNombre'
 import { context } from '../../modules/context'
-import Grandeur from '../../modules/Grandeur'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
@@ -34,7 +33,7 @@ export const dateDePublication = '27/11/2022'
  * Il faut calculer les périmètres
  *
  * @author Sébastien LOZANO
- * Lachement repiquer à Remi Angot et adapté
+ * Lachement repiquer à Rémi Angot et adapté
 
  */
 export const uuid = '5563e'

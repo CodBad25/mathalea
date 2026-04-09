@@ -12,7 +12,7 @@ export const refs = {
 
 /**
  * Développer des expressions de la forme (ax+b)c ou (ax+b)c ou (ax+b)cx ou cx(ax+b) avec a, b, c relatifs et paramétrables ainsi que x
- * @author Eric Elter
+ * @author Éric Elter
  */
 
 export const titre = 'Effectuer la simple distributivité'

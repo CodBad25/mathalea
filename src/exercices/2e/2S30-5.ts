@@ -36,7 +36,7 @@ export const refs = {
 
 /**
  * Calculs de probabilités sur une expérience aléatoire à deux épreuves
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  */
 export default class FonctionsProbabilite2 extends Exercice {
   constructor() {

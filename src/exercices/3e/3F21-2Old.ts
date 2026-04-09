@@ -32,7 +32,7 @@ export const dateDeModifImportante = '29/03/2026'
  * cas 3 : f(x1) et f(x2) donnés a et b entiers
  * cas 4 : f(x1) et f(x2) donnés a et b rationnels
  * x1, x2, f(x1) et f(x2) sont toujours entiers relatifs
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
 
  */
 export const uuid = 'b8b33'

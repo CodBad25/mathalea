@@ -17,7 +17,9 @@ export const titre = 'Conjecture de Syracuse'
 /**
  * @class Syracuse
  * @classdesc Outils pour les suites de Syracuse
- * @author Sébastien Lozano (Olivier Mimeau Passage TS et Class)
+ * @author Sébastien Lozano
+ * Olivier Mimeau Passage TS et Class
+ *
  */
 
 class Syracuse {

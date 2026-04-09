@@ -25,7 +25,8 @@ export const interactifType = 'mathLive'
 
 /**
  *
- * @author Gilles Mora+Jean Claude Lhote interactif
+ * @author Gilles Mora
+ * Jean-claude Lhote interactif
  */
 export const uuid = '816d5'
 

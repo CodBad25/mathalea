@@ -31,7 +31,7 @@ export const refs = {
 
 /**
  * Étudier le sens de variations d'une fonction polynôme du troisième degré'
- * @author Gilles Mora avec l'aide précieuse de Jean-Claude Lhote
+ * @author Gilles Mora avec l'aide précieuse de Jean-claude Lhote
  */
 
 function rationnelleDegre2(

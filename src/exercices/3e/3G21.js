@@ -35,7 +35,7 @@ export const titre =
 
 /**
  * Reciproque_Thales
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * 18/10/21 passage de MG32 à MathALEA2D par Rémi Angot
  */
 export const uuid = '3451c'

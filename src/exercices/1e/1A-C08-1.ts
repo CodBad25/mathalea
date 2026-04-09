@@ -3,7 +3,7 @@ import { miseEnEvidence } from '../../lib/outils/embellissements'
 import ExerciceQcmA from '../ExerciceQcmA'
 export const dateDePublication = '18/01/2026'
 export const uuid = 'b0bd2'
-// Author Gilles Mora
+// @Author Gilles Mora
 export const refs = {
   'fr-fr': ['1A-C08-1'],
   'fr-ch': [],
@@ -80,31 +80,31 @@ export default class auto1AC8a extends ExerciceQcmA {
         On additionne $x$ avec ce carré : $${miseEnEvidence('x + (2x)^2')}$.`
         break
 
-        case 7:
-  // x² + 3x (inversion de l'ordre)
-  enonce = `On additionne le carré d'un nombre réel $x$ avec son triple. <br>Le résultat est égal à :`
-  reponses = ['$x^2 + 3x$', '$x^2 + (3x)^2$', '$(x^2 + 3)x$', '$4x^2$']
-  explication = `Le carré de $x$ est $x^2$.<br>
+      case 7:
+        // x² + 3x (inversion de l'ordre)
+        enonce = `On additionne le carré d'un nombre réel $x$ avec son triple. <br>Le résultat est égal à :`
+        reponses = ['$x^2 + 3x$', '$x^2 + (3x)^2$', '$(x^2 + 3)x$', '$4x^2$']
+        explication = `Le carré de $x$ est $x^2$.<br>
   Le triple de $x$ est $3x$.<br>
   On additionne les deux : $${miseEnEvidence('x^2 + 3x')}$.`
-  break
+        break
 
-case 8:
-  // x × 3x + x²
-  enonce = `On multiplie un nombre réel $x$ par son triple, puis on ajoute son carré. <br>Le résultat est égal à :`
-  reponses = ['$3x^2 + x^2$', '$4x + x^2$', '$(x + 3x)^2$', '$x + 3x^2$']
-  explication = `On multiplie $x$ par son triple $3x$ : $x \\times 3x = 3x^2$.<br>
+      case 8:
+        // x × 3x + x²
+        enonce = `On multiplie un nombre réel $x$ par son triple, puis on ajoute son carré. <br>Le résultat est égal à :`
+        reponses = ['$3x^2 + x^2$', '$4x + x^2$', '$(x + 3x)^2$', '$x + 3x^2$']
+        explication = `On multiplie $x$ par son triple $3x$ : $x \\times 3x = 3x^2$.<br>
   On ajoute le carré $x^2$ : $3x^2 + x^2 = ${miseEnEvidence('4x^2')}$.`
-  break
+        break
 
-case 9:
-  // 2x + x²
-  enonce = `On additionne le double d'un nombre réel $x$ avec son carré. <br>Le résultat est égal à :`
-  reponses = ['$2x + x^2$', '$(2x)^2$', '$2(x + x^2)$', '$3x^2$']
-  explication = `Le double de $x$ est $2x$.<br>
+      case 9:
+        // 2x + x²
+        enonce = `On additionne le double d'un nombre réel $x$ avec son carré. <br>Le résultat est égal à :`
+        reponses = ['$2x + x^2$', '$(2x)^2$', '$2(x + x^2)$', '$3x^2$']
+        explication = `Le double de $x$ est $2x$.<br>
   Le carré de $x$ est $x^2$.<br>
   On additionne les deux : $${miseEnEvidence('2x + x^2')}$.`
-  break
+        break
     }
 
     this.reponses = reponses

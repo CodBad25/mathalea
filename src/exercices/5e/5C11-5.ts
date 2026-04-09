@@ -20,7 +20,7 @@ export const interactifType = 'mathLive'
 export const dateDePublication = '10/09/2025'
 
 /**
- * @author Eric Elter (sur la base de 6N5-13)
+ * @author Éric Elter (sur la base de 6N5-13)
  */
 export const uuid = '0a113'
 
@@ -94,7 +94,6 @@ export default class ProblemesAvecOperationsEnUneLigne extends Exercice {
         carburantParReservoir = 0,
         cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       const n = randint(1, 2)
       switch (

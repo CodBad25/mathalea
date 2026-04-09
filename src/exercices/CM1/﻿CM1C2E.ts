@@ -10,7 +10,7 @@ export const titre =
 export const dateDePublication = '01/02/2026'
 
 /**
- * @author Eric Elter
+ * @author Éric Elter
  */
 
 export const uuid = 'sdk4s'

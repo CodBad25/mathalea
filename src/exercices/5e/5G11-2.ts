@@ -5,7 +5,7 @@ export const amcReady = true
 export const amcType = 'AMCOpen'
 export const dateDeModifImportante = '14/11/2021'
 /**
- * @author Jean-Claude Lhote
+ * @author Jean-claude Lhote
  * Fonction générale pour les exercices de construction de symétriques (centrale/axiale et points/triangles)
  * Permet une sortie html/pdf sur petits carreaux/gros carreaux/papier blanc
  */

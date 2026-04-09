@@ -15,7 +15,7 @@ export const refs = {
 }
 /**
  * Modèle d'exercice très simple pour la course aux nombres
- * @author Eric Elter + Gilles Mora
+ * @author Éric Elter + Gilles Mora
  */
 export default class Convertir extends ExerciceSimple {
   constructor() {
@@ -65,7 +65,7 @@ export default class Convertir extends ExerciceSimple {
         this.optionsChampTexte = { texteApres: '$\\text{ m}^3$' }
         this.canEnonce = 'Compléter.'
         this.canReponseACompleter = `$${texNombre(a)}\\text{ L} = \\dots\\text{ m}^3$`
-        this.correction = `Comme $1\\text{ L} =0,001\\text{ m}^3$, alors $${texNombre(a,4)}\\text{ L}=${texNombre(a,4)}\\times 0,001\\text{ m}^3 = ${miseEnEvidence(this.reponse)}\\text{ m}^3$.`
+        this.correction = `Comme $1\\text{ L} =0,001\\text{ m}^3$, alors $${texNombre(a, 4)}\\text{ L}=${texNombre(a, 4)}\\times 0,001\\text{ m}^3 = ${miseEnEvidence(this.reponse)}\\text{ m}^3$.`
 
         break
     }

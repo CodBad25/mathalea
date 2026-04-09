@@ -51,7 +51,7 @@ export const dateDeModifImportante = '06/05/2024'
  * Il faut calculer le périmètre et/ou l'aire par addition ou soustraction d'aires
  *
  * @author Rémi Angot
- * Ajout de this.sup4 et correction coquilles sur aire et puis aussi sur précision au dixième par Eric Elter le 25/07/2023
+ * Ajout de this.sup4 et correction coquilles sur aire et puis aussi sur précision au dixième par Éric Elter le 25/07/2023
  * Ajout de la possibilité de demander un découpage au lieu de calculer des périmètres ou des aires par Guillaume Valmont le 28/10/2023
  */
 export const uuid = '5999f'

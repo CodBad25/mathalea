@@ -36,7 +36,7 @@ export const dateDePublication = '02/01/2023'
 
 /**
  * Questions à propos de 2023 (et à l'occasion de la nouvelle année)
- * @author Eric Elter (et Jean-Claude Lhote pour l'exercice 22)
+ * @author Éric Elter (et Jean-claude Lhote pour l'exercice 22)
  */
 
 export const uuid = '75002'
