@@ -37,7 +37,7 @@ export const interactifReady = true
 export const interactifType = 'mathLive'
 export const uuid = '6461d'
 export const refs = {
-  'fr-fr': [''],
+  'fr-fr': ['canc3a-2026b'],
   'fr-ch': [],
 }
 export const dateDePublication = '01/05/2026'
