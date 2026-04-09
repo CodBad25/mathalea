@@ -26,6 +26,13 @@ export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre =
   'Retrouver la phrase correcte avec des images et antécédents grahiquement'
+
+/**
+ *
+ * @author Gilles Mora
+ *
+ */
+
 export default class AutoF01c extends ExerciceQcmA {
   compteur = 0
   spline?: Spline
@@ -283,8 +290,8 @@ export default class AutoF01c extends ExerciceQcmA {
       compteur++
     } while (
       compteur < 100 &&
-      !aLeBonNombreDePropsDifferentes(this, 6, true, { texteSansCasse: true }) // on ne peut pas faire mieux vu les props
-    ) // On s'assure d'avoir 6 réponses différentes, sinon on régénère
+      !aLeBonNombreDePropsDifferentes(this, 4, true, { texteSansCasse: true }) // on ne peut pas faire mieux vu les props
+    ) // On s'assure d'avoir 4 réponses différentes, sinon on régénère
   }
 
   constructor() {
