@@ -1,6 +1,7 @@
 import { propositionsQcm } from '../../lib/interactif/qcm'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { arrondi } from '../../lib/outils/nombres'
 import { texNombre2 } from '../../lib/outils/texNombre'
 import {
   gestionnaireFormulaireTexte,
@@ -73,15 +74,13 @@ export default class DiviserPar101001000 extends Exercice {
         exposant,
         cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       texte = '' // Nous utilisons souvent cette variable pour construire le texte de la question.
       texteCorr = '' // Idem pour le texte de la correction.
       coef = -randint(1, 3)
-      if (this.sup2) {
-        if (this.sup) {
-          exposant = 0
-        } else {
+      exposant = 0
+      if (!this.sup)
+        if (this.sup2) {
           switch (coef) {
             case -1:
               exposant = -randint(0, 2)
@@ -89,15 +88,10 @@ export default class DiviserPar101001000 extends Exercice {
             case -2:
               exposant = -randint(0, 1)
               break
-            case -3:
-            default:
-              exposant = -randint(0, 0)
-              break
           }
+        } else {
+          exposant = -randint(1, 3)
         }
-      } else {
-        exposant = this.sup ? 0 : -randint(1, 3)
-      }
       nombreEntier = randint(10, 1000) + randint(10, 999) * choice([0, 1000])
       nombre = nombreEntier * 10 ** exposant
       resultat = nombre * 10 ** coef
@@ -118,7 +112,7 @@ export default class DiviserPar101001000 extends Exercice {
               statut: true,
             },
             {
-              texte: `$${texNombre2(nombre * 10 ** -coef)}$`,
+              texte: `$${texNombre2(arrondi(nombre * 10 ** -coef, 5))}$`,
               statut: false,
             },
             {
@@ -126,7 +120,7 @@ export default class DiviserPar101001000 extends Exercice {
               statut: false,
             },
             {
-              texte: `$${texNombre2(nombre * 10 ** (-coef + 1))}$`,
+              texte: `$${texNombre2(arrondi(nombre * 10 ** (-coef + 1), 5))}$`,
               statut: false,
             },
           ]
@@ -188,7 +182,7 @@ export default class DiviserPar101001000 extends Exercice {
               statut: false,
             },
             {
-              texte: `$${texNombre2(nombre * 10 ** (-coef + 1))}$`,
+              texte: `$${texNombre2(arrondi(nombre * 10 ** (-coef + 1), 5))}$`,
               statut: false,
             },
           ]
