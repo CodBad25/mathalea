@@ -1073,7 +1073,7 @@ export class LatexParCoordonneesBox extends ObjetMathalea2D {
           ) {
             dy = 0
           } else {
-            dy = parseInt(options.dy.substr(0, options.dy.indexOf('%')))
+            dy = parseInt(options.dy.slice(0, options.dy.indexOf('%')))
           }
           let dx = 0
           if (
@@ -1083,7 +1083,7 @@ export class LatexParCoordonneesBox extends ObjetMathalea2D {
           ) {
             dx = 0
           } else {
-            dx = parseInt(options.dx.substr(0, options.dx.indexOf('%')))
+            dx = parseInt(options.dx.slice(0, options.dx.indexOf('%')))
           }
           this.style = `position:fixed;top: 50%;left: 50%;transform: translate(${-50 + dx}%, ${-50 + dy}%);`
           break

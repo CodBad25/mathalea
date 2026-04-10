@@ -840,7 +840,7 @@ export default class SerieDeTransformations extends Exercice {
                 ? `$${miseEnEvidence(etape + 1 + ')' + sp(1))}$` +
                   texteEnCouleur(
                     'qui ' +
-                      transfos[etape].texte.substr(context.isHtml ? 22 : 18) +
+                      transfos[etape].texte.slice(context.isHtml ? 22 : 18) +
                       (etape === chemin.length - 2 ? '.' : ','),
                     etape % 2 === 0 ? 'black' : 'brown',
                   ) +
