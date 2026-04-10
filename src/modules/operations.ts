@@ -21,7 +21,7 @@ function nombreDeChiffresApresLaVirgule(x: Decimal) {
 function cacherleszerosdevant(chaine: string) {
   let blancs = ''
   while (chaine[0] === '0') {
-    chaine = chaine.substr(1)
+    chaine = chaine.slice(1)
     blancs += ' '
   }
   for (let i = 0; i < chaine.length; i++) {
@@ -379,26 +379,35 @@ function divisionPosee(
   let dec2 = nombreDeChiffresApresLaVirgule(divid)
   dec2 = precision - dec2 - dec1
   divid = divid.mul(10 ** dec2) // math.format(divid * 10 ** dec2, { notation: 'auto', lowerExp: -12, upperExp: 12, precision: 12 })
-  const ecriresoustraction = function (upos: number, P: string) {
+  const ecriresoustraction = function (
+    upos: number,
+    PremierTerme: string,
+    SecondTerme: string,
+  ) {
     objets.push(
-      latex2d('-', (upos - P.length - 0.5) * espacement, 10 - i * 2, {
+      latex2d('-', (upos - PremierTerme.length - 1) * espacement, 10 - i * 2, {
         color: 'black',
         letterSize: 'normalsize',
         gras: false,
       }),
     )
-    for (let k = 0; k < P.length; k++) {
+    for (let k = 0; k < SecondTerme.length; k++) {
       objets.push(
-        latex2d(P[P.length - k - 1], (upos - k - 1) * espacement, 10 - i * 2, {
-          color: 'black',
-          letterSize: 'normalsize',
-          gras: false,
-        }),
+        latex2d(
+          SecondTerme[SecondTerme.length - k - 1],
+          (upos - k - 1) * espacement,
+          10 - i * 2,
+          {
+            color: 'black',
+            letterSize: 'normalsize',
+            gras: false,
+          },
+        ),
       )
     }
     objets.push(
       segment(
-        (upos - P.length - 0.5) * espacement,
+        (upos - PremierTerme.length - 0.5) * espacement,
         9.6 - i * 2,
         (upos + 0.2 - 1) * espacement,
         9.6 - i * 2,
@@ -480,9 +489,9 @@ function divisionPosee(
   ) // on trace le trait vertical
   let i = 0
   if (calculer) {
-    divd.push(dividende.substr(0, m))
+    divd.push(dividende.slice(0, m))
     if (parseInt(divd[0]) < divis.toNumber()) {
-      divd[0] += dividende.substr(m, 1)
+      divd[0] += dividende.slice(m, m + 1)
       if (divis.div(10 ** dec2).lt(divis) && zeroutile) {
         ecrirequotient(-1, '0')
       } else if (zeroutile) {
@@ -512,10 +521,10 @@ function divisionPosee(
         }
         P[i] += divis.mul(parseInt(Q[i])).toString()
       }
-      // ecriresoustraction(upos, divd[i])
-      ecriresoustraction(upos, ProduitPartiel[i])
+
+      ecriresoustraction(upos, divd[i], ProduitPartiel[i])
       if (upos < n) {
-        R[i] += dividende.substr(upos, 1)
+        R[i] += dividende.slice(upos, upos + 1)
         ecrirereste(upos + 1, R[i])
       } else {
         ecrirereste(upos, R[i], true)
@@ -544,7 +553,10 @@ function divisionPosee(
     objets.push(segment(n * espacement, 10.5, (n + m + 2) * espacement, 10.5)) // on trace le trait horizontal
 
   const code = mathalea2d(
-    Object.assign({ pixelsParCm: 20, scale: 0.8, style }, fixeBordures(objets)),
+    Object.assign(
+      { pixelsParCm: 20, scale: 0.8, style },
+      fixeBordures(objets, { rxmin: -5 }),
+    ),
     objets,
   )
   return code
