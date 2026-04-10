@@ -2,7 +2,7 @@ import { bleuMathalea } from '../../lib/colors'
 import { createList } from '../../lib/format/lists'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { addMultiMathfield } from '../../lib/interactif/MultiMathfield/MultiMathfield'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { arrondi, rangeMinMax } from '../../lib/outils/nombres'
@@ -18,18 +18,17 @@ import Exercice from '../Exercice'
 
 export const titre = "Comprendre le sens d'un pourcentage"
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'mathLive'
 export const dateDePublication = '22/07/2025'
 
 /** Comprendre le sens d'un pourcentage
  * @author Éric Elter
  */
 
-export const uuid = '44e2e'
+export const uuid = '44e23'
 
 export const refs = {
-  'fr-fr': ['6N3O'],
-  'fr-2016': ['6N33-5'],
+  'fr-fr': [],
   'fr-ch': [],
 }
 
@@ -323,40 +322,25 @@ export default class ComprendreSensPourcentage extends Exercice {
         pourcentage * multiplePour100[i],
         texNombre(arrondi(pourcentage / diviseurPour100[i])),
       ]
-
-      const texte = `<br>${addMultiMathfield(this, i, {
-        dataTemplate: `a) ${texteAvant[0]} %{champ1} ${texteApres}
-                   b) ${texteAvant[1]} %{champ2} ${texteApres}
-                   c) ${texteAvant[2]} %{champ3} ${texteApres}
-                  `,
-        dataOptions: {
-          champ1: { keyboard: KeyboardType.clavierNumbers },
-          champ2: { keyboard: KeyboardType.clavierNumbers },
-          champ3: { keyboard: KeyboardType.clavierNumbers },
-        },
-      })}`
-      handleAnswers(
-        this,
-        i,
-        {
-          champ1: {
-            value: reponse[0],
-            options: { nombreDecimalSeulement: true },
-          },
-          champ2: {
-            value: reponse[1],
-            options: { nombreDecimalSeulement: true },
-          },
-          champ3: {
-            value: reponse[2],
-            options: { nombreDecimalSeulement: true },
-          },
-        },
-        { formatInteractif: 'multiMathfield' },
-      )
-
+      const items = []
       const itemsCorr = []
       for (let indice = 0; indice < 3; indice++) {
+        items.push(
+          this.interactif
+            ? ajouteChampTexteMathLive(
+                this,
+                3 * i + indice,
+                KeyboardType.clavierNumbers,
+                { texteAvant: texteAvant[indice], texteApres },
+              )
+            : texteAvant[indice] + ' $\\ldots$ ' + texteApres,
+        )
+        handleAnswers(this, 3 * i + indice, {
+          reponse: {
+            value: reponse[indice],
+            options: { nombreDecimalSeulement: true },
+          },
+        })
         texteCorr = ''
         switch (indice) {
           case 1:
@@ -378,7 +362,7 @@ export default class ComprendreSensPourcentage extends Exercice {
           texteApres
         itemsCorr.push(texteCorr)
       }
-
+      const texte = createList({ items, style: 'alpha' })
       texteCorr = createList({ items: itemsCorr, style: 'alpha' })
       if (
         this.questionJamaisPosee(

@@ -1,6 +1,7 @@
 // Utilitaire pour styliser les items a), b), ... dans un texte brut
 import { MathfieldElement } from 'mathlive'
 import { context } from '../../../modules/context'
+import { bleuMathalea } from '../../colors'
 import type { IExercice, ValeurNames } from '../../types'
 import { buildDataKeyboardFromStyle, KeyboardType } from '../claviers/keyboard'
 import { setMathfield, setMathfieldListener } from './setMathfield'
@@ -9,7 +10,7 @@ function stylizeItems(text: string): string {
   return text.replace(itemRegex, (match, p1, p2) => {
     return (
       (p1 || '') +
-      '<span style="color:#f15929; font-weight:bold">' +
+      `<span style="color:${bleuMathalea}; font-weight:bold">` +
       p2 +
       '</span>'
     )
@@ -328,7 +329,7 @@ export function addMultiMathfield(
         if (context.isHtml) {
           return (
             (p1 || '') +
-            '<span style="color:#f15929; font-weight:bold">' +
+            `<span style="color:${bleuMathalea}; font-weight:bold">` +
             p2 +
             '</span>'
           )
