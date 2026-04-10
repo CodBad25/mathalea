@@ -65,6 +65,21 @@ export function loadScratchblocks() {
   return load('scratchblocks')
 }
 
+export function injectFontInMetaInteractif2d(mf) {
+  const shadow = mf.shadowRoot
+  if (shadow && !shadow.getElementById('katex-main-font')) {
+    // Crée une balise style
+    const style = document.createElement('style')
+    style.id = 'katex-main-font'
+    style.textContent = `
+        .ML__text {
+          font-family: 'KaTeX_Main', serif !important;
+        }
+      `
+    shadow.appendChild(style)
+  }
+}
+
 /**
  * Charge MathLive et personnalise les réglages
  * MathLive est chargé dès qu'un tag math-field est créé
@@ -173,5 +188,6 @@ function setMathfield(mf) {
   if ('mathVirtualKeyboardPolicy' in mf) mf.mathVirtualKeyboardPolicy = 'manual'
   if ('menuItems' in mf) mf.menuItems = []
   if ('virtualKeyboardMode' in mf) mf.virtualKeyboardMode = 'manual'
+  injectFontInMetaInteractif2d(mf)
   mf.removeEventListener('mount', setMathfield)
 }

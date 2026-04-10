@@ -91,13 +91,7 @@ const figureCarre = (cote: number, exercice: IExercice, question: number) => {
     cotesMarques,
     input,
   ]
-  return (
-    mathalea2d(Object.assign({ scale: 0.7 }, fixeBordures(objets)), objets) +
-    (context.isHtml
-      ? `<span id="resultatCheckEx${exercice.numeroExercice}Q${question}"></span>` +
-        ajouteFeedback(exercice, question)
-      : '')
-  )
+  return objets
 }
 const figureRectangle = (
   largeur: number,
@@ -161,13 +155,7 @@ const figureRectangle = (
     ang4,
     input,
   ]
-  return (
-    mathalea2d(Object.assign({ scale: 0.7 }, fixeBordures(objets)), objets) +
-    (context.isHtml
-      ? `<span id="resultatCheckEx${exercice.numeroExercice}Q${question}"></span>` +
-        ajouteFeedback(exercice, question)
-      : '')
-  )
+  return objets
 }
 const figureTriangleRectangle1 = (
   base: number,
@@ -234,13 +222,7 @@ const figureTriangleRectangle1 = (
     ang1,
     input,
   ]
-  return (
-    mathalea2d(Object.assign({ scale: 0.7 }, fixeBordures(objets)), objets) +
-    (context.isHtml
-      ? `<span id="resultatCheckEx${exercice.numeroExercice}Q${question}"></span>` +
-        ajouteFeedback(exercice, question)
-      : '')
-  )
+  return objets
 }
 
 const figureTriangleQuelconque1 = (
@@ -325,13 +307,7 @@ const figureTriangleQuelconque1 = (
     afficheCote,
     input,
   ]
-  return (
-    mathalea2d(Object.assign({ scale: 0.7 }, fixeBordures(objets)), objets) +
-    (context.isHtml
-      ? `<span id="resultatCheckEx${exercice.numeroExercice}Q${question}"></span>` +
-        ajouteFeedback(exercice, question)
-      : '')
-  )
+  return objets
 }
 export default class AireCarreRectangle extends Exercice {
   constructor() {
@@ -373,7 +349,24 @@ export default class AireCarreRectangle extends Exercice {
             // carré
             const cote = this.sup2 ? randint(20, 70) / 10 : randint(2, 9)
             a = cote * cote
-            texte = figureCarre(cote, this, i)
+            const objets = figureCarre(cote, this, i)
+            if (!context.isHtml || !this.interactif) {
+              objets.pop()
+            }
+            const figure =
+              mathalea2d(
+                Object.assign({ scale: 0.7 }, fixeBordures(objets)),
+                objets,
+              ) +
+              (context.isHtml
+                ? `<span id="resultatCheckEx${this.numeroExercice}Q${i}"></span>` +
+                  ajouteFeedback(this, i)
+                : '')
+            texte =
+              figure +
+              (!context.isHtml || !this.interactif
+                ? 'Quelle est l’aire du carré représenté ci-contre ?'
+                : '')
             texteCorr = `L'aire du carré est de $${texNombre(cote, 1)}\\text{ cm}\\times ${texNombre(cote, 1)}\\text{ cm}=${miseEnEvidence(texNombre(a, 2))}\\text{ cm}^2$.`
           }
           break
@@ -383,7 +376,24 @@ export default class AireCarreRectangle extends Exercice {
             const largeur = this.sup2 ? randint(20, 50) / 10 : randint(2, 5)
             const longueur = this.sup2 ? randint(55, 100) / 10 : randint(6, 10)
             a = largeur * longueur
-            texte = figureRectangle(largeur, longueur, this, i)
+            const objets = figureRectangle(largeur, longueur, this, i)
+            if (!context.isHtml || !this.interactif) {
+              objets.pop()
+            }
+            const figure =
+              mathalea2d(
+                Object.assign({ scale: 0.7 }, fixeBordures(objets)),
+                objets,
+              ) +
+              (context.isHtml
+                ? `<span id="resultatCheckEx${this.numeroExercice}Q${i}"></span>` +
+                  ajouteFeedback(this, i)
+                : '')
+            texte =
+              figure +
+              (!context.isHtml || !this.interactif
+                ? 'Quelle est l’aire du rectangle représenté ci-contre ?'
+                : '')
             texteCorr = `L'aire du rectangle est de $${texNombre(largeur, 1)}\\text{ cm}\\times ${texNombre(longueur, 1)}\\text{ cm}=${miseEnEvidence(texNombre(a, 2))}\\text{ cm}^2$.`
           }
           break
@@ -393,7 +403,31 @@ export default class AireCarreRectangle extends Exercice {
             const base = this.sup2 ? randint(40, 90) / 10 : randint(4, 9)
             const hauteur = this.sup2 ? randint(30, 50) / 10 : randint(3, 5)
             a = (base * hauteur) / 2
-            texte = figureTriangleRectangle1(base, hauteur, this.sup2, this, i)
+
+            const objets = figureTriangleRectangle1(
+              base,
+              hauteur,
+              this.sup2,
+              this,
+              i,
+            )
+            if (!context.isHtml || !this.interactif) {
+              objets.pop()
+            }
+            const figure =
+              mathalea2d(
+                Object.assign({ scale: 0.7 }, fixeBordures(objets)),
+                objets,
+              ) +
+              (context.isHtml
+                ? `<span id="resultatCheckEx${this.numeroExercice}Q${i}"></span>` +
+                  ajouteFeedback(this, i)
+                : '')
+            texte =
+              figure +
+              (!context.isHtml || !this.interactif
+                ? 'Quelle est l’aire du triangle rectangle représenté ci-contre ?'
+                : '')
             texteCorr = `L'aire du triangle rectangle est de $\\dfrac{${texNombre(base, 1)}\\text{ cm}\\times ${texNombre(hauteur, 1)}\\text{ cm}}{2}=${miseEnEvidence(texNombre(a, 3))}\\text{ cm}^2$.`
           }
           break
@@ -404,7 +438,7 @@ export default class AireCarreRectangle extends Exercice {
           const hauteur = this.sup2 ? randint(30, 50) / 10 : randint(3, 5)
           const angle = [randint(100, 120), randint(60, 80)][i % 2]
           a = (base * hauteur) / 2
-          texte = figureTriangleQuelconque1(
+          const objets = figureTriangleQuelconque1(
             base,
             hauteur,
             angle,
@@ -412,6 +446,23 @@ export default class AireCarreRectangle extends Exercice {
             this,
             i,
           )
+          if (!context.isHtml || !this.interactif) {
+            objets.pop()
+          }
+          const figure =
+            mathalea2d(
+              Object.assign({ scale: 0.7 }, fixeBordures(objets)),
+              objets,
+            ) +
+            (context.isHtml
+              ? `<span id="resultatCheckEx${this.numeroExercice}Q${i}"></span>` +
+                ajouteFeedback(this, i)
+              : '')
+          texte =
+            figure +
+            (!context.isHtml || !this.interactif
+              ? 'Quelle est l’aire du triangle représenté ci-contre ?'
+              : '')
           texteCorr = `L'aire du triangle est de $\\dfrac{${texNombre(base, 1)}\\text{ cm}\\times ${texNombre(hauteur, 1)}\\text{ cm}}{2}=${miseEnEvidence(texNombre(a, 3))}\\text{ cm}^2$.`
         }
       }

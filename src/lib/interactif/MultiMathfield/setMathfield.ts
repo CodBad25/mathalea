@@ -2,6 +2,7 @@ import { MathfieldElement } from 'mathlive'
 import { get } from 'svelte/store'
 import { keyboardState } from '../../../components/keyboard/stores/keyboardStore'
 import type { BlockForKeyboard } from '../../../components/keyboard/types/keyboardContent'
+import { injectFontInMetaInteractif2d } from '../../../modules/loaders'
 import { globalOptions } from '../../stores/globalOptions'
 import { getKeyboardShortcusts } from '../claviers/keyboard'
 import { isMathfieldFocused } from '../mathfieldFocus'
@@ -28,6 +29,7 @@ export function setMathfield(mf: MathfieldElement) {
   if (mf.getAttribute('data-space') === 'true') {
     mf.mathModeSpace = '\\,'
   }
+  injectFontInMetaInteractif2d(mf)
   mf.removeEventListener('mount', setMathfieldListener)
 }
 
