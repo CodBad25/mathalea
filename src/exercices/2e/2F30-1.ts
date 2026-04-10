@@ -718,7 +718,7 @@ export default class VariationsCourbe extends Exercice {
 
             texte = `${graphique}`
 
-            texteCorr = `La fonction $${nom}$ est définie sur $[${x0}\\,;\\,+\\infty[$.<br>
+            texteCorr = `La fonction $${nom}$ est définie sur $[${x0}\\,;\\,${x4}]$.<br>
         Son tableau de variations est : <br><br>`
             texteCorr += tableauDeVariation({
               tabInit: [
@@ -737,7 +737,7 @@ export default class VariationsCourbe extends Exercice {
                   10,
                   `$${x3}$`,
                   10,
-                  '$+\\infty$',
+                 `$${x4}$`,
                   10,
                 ],
               ],
