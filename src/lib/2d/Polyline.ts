@@ -162,7 +162,7 @@ export class Polyline extends ObjetMathalea2D {
     for (const point of this.listePoints) {
       binomeXY += `(${arrondi(point.x)},${arrondi(point.y)})--`
     }
-    binomeXY = binomeXY.substr(0, binomeXY.length - 2)
+    binomeXY = binomeXY.slice(0, binomeXY.length - 2)
     return `\\draw${optionsDraw} ${binomeXY};`
   }
 
@@ -205,7 +205,7 @@ export class Polyline extends ObjetMathalea2D {
     for (const point of this.listePoints) {
       binomeXY += `(${arrondi(point.x)},${arrondi(point.y)})--`
     }
-    binomeXY = binomeXY.substr(0, binomeXY.length - 2)
+    binomeXY = binomeXY.slice(0, binomeXY.length - 2)
     return `\\draw${optionsDraw} ${binomeXY};`
   }
 }

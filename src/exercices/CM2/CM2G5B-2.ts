@@ -50,7 +50,7 @@ export const refs = {
  * @example inverseChaine('1234') renvoie '4321'
  */
 function inverseChaine(str: string): string {
-  return str === '' ? '' : inverseChaine(str.substr(1)) + str.charAt(0)
+  return str === '' ? '' : inverseChaine(str.slice(1)) + str.charAt(0)
 }
 
 function differentsNomsPossiblesDUneFace(
