@@ -183,11 +183,13 @@ pnpm test:e2e:interactivity
 
 ### `testExosModifiedWithoutPlayWright`
 
-Ce job récupère les fichiers modifiés sur une fenêtre allant jusqu'à 5 commits, les place dans `CHANGED_FILES`, puis exécute :
+Ce job récupère les fichiers modifiés sur une fenêtre allant jusqu'à 5 commits, les place dans `CHANGED_FILES`, active le mode CI, puis exécute :
 
 ```bash
-CHANGED_FILES="$CHANGED_FILES" pnpm vitest --config tests/e2e/vitest.config.all_exercises.js --run
+CI=1 CHANGED_FILES="$CHANGED_FILES" pnpm vitest --config tests/e2e/vitest.config.all_exercises.js --run
 ```
+
+Note : sans `CI=1`, la branche conditionnelle qui filtre sur les fichiers modifiés n'est pas activée dans `all_exercises.test.ts`.
 
 Déclenchement :
 
@@ -200,7 +202,7 @@ Reproduction locale :
 ```bash
 pnpm install
 pnpm start
-CHANGED_FILES="$(git diff --name-only HEAD~5..HEAD)" pnpm vitest --config tests/e2e/vitest.config.all_exercises.js --run
+CI=1 CHANGED_FILES="$(git diff --name-only HEAD~5..HEAD)" pnpm vitest --config tests/e2e/vitest.config.all_exercises.js --run
 ```
 
 ### `testExosModified`
@@ -319,6 +321,8 @@ NIV=can/Ex^can/TSpe pnpm test:e2e:console_errors
 
 Ces jobs héritent de `.testCIPDF`.
 
+Note : dans `pdfexports.test.ts`, les modes ciblés par `NIV` et `CHANGED_FILES` ne sont activés que si `CI` est défini. En local, il faut donc préfixer les commandes ciblées par `CI=1`.
+
 Déclenchement commun :
 
 - manuel sur `guironne-jobs`
@@ -330,25 +334,25 @@ Déclenchement commun :
 #### `test6ePDF`
 
 ```bash
-NIV=6e/6 pnpm test:e2e:pdfexports
+CI=1 NIV=6e/6 pnpm test:e2e:pdfexports
 ```
 
 #### `test5ePDF`
 
 ```bash
-NIV=5e/5 pnpm test:e2e:pdfexports
+CI=1 NIV=5e/5 pnpm test:e2e:pdfexports
 ```
 
 #### `test4ePDF`
 
 ```bash
-NIV=4e/4 pnpm test:e2e:pdfexports
+CI=1 NIV=4e/4 pnpm test:e2e:pdfexports
 ```
 
 #### `test3ePDF`
 
 ```bash
-NIV=3e/3 pnpm test:e2e:pdfexports
+CI=1 NIV=3e/3 pnpm test:e2e:pdfexports
 ```
 
 ### Export PDF CAN
@@ -356,19 +360,19 @@ NIV=3e/3 pnpm test:e2e:pdfexports
 #### `testCan6e5ePDF`
 
 ```bash
-NIV=can/6e^can/5e pnpm test:e2e:pdfexports
+CI=1 NIV=can/6e^can/5e pnpm test:e2e:pdfexports
 ```
 
 #### `testCan4e3ePDF`
 
 ```bash
-NIV=can/4e^can/3e pnpm test:e2e:pdfexports
+CI=1 NIV=can/4e^can/3e pnpm test:e2e:pdfexports
 ```
 
 #### `testCan2e1ePDF`
 
 ```bash
-NIV=can/2e^can/1e pnpm test:e2e:pdfexports
+CI=1 NIV=can/2e^can/1e pnpm test:e2e:pdfexports
 ```
 
 ### Export PDF DNB
@@ -383,19 +387,19 @@ mv ./public/static/dnb/sujets_decoupes/* ./public/static/dnb/
 #### `testDNB20132015PDF`
 
 ```bash
-NIV=dnb_2013^dnb_2014^dnb_2015 pnpm test:e2e:pdfexports
+CI=1 NIV=dnb_2013^dnb_2014^dnb_2015 pnpm test:e2e:pdfexports
 ```
 
 #### `testDNB20162019PDF`
 
 ```bash
-NIV=dnb_2016^dnb_2017^dnb_2018^dnb_2019 pnpm test:e2e:pdfexports
+CI=1 NIV=dnb_2016^dnb_2017^dnb_2018^dnb_2019 pnpm test:e2e:pdfexports
 ```
 
 #### `testDNB20202024PDF`
 
 ```bash
-NIV=dnb_2020^dnb_2021^dnb_2022^dnb_2023^dnb_2024 pnpm test:e2e:pdfexports
+CI=1 NIV=dnb_2020^dnb_2021^dnb_2022^dnb_2023^dnb_2024 pnpm test:e2e:pdfexports
 ```
 
 ### Export PDF BAC et E3C
@@ -409,13 +413,13 @@ git clone https://forge.apps.education.fr/coopmaths/bac.git ./public/static/bac
 #### `testBAC20202024PDF`
 
 ```bash
-NIV=bac_2024^bac_2023^bac_2022^bac_2021 pnpm test:e2e:pdfexports
+CI=1 NIV=bac_2024^bac_2023^bac_2022^bac_2021 pnpm test:e2e:pdfexports
 ```
 
 #### `testE3C20202024PDF`
 
 ```bash
-NIV=e3c_2024^e3c_2023^e3c_2022^e3c_2021 pnpm test:e2e:pdfexports
+CI=1 NIV=e3c_2024^e3c_2023^e3c_2022^e3c_2021 pnpm test:e2e:pdfexports
 ```
 
 ## Build et déploiements
@@ -488,7 +492,7 @@ NIV=6e/6 pnpm test:e2e:console_errors
 ```bash
 pnpm install
 pnpm start
-NIV=6e/6 pnpm test:e2e:pdfexports
+CI=1 NIV=6e/6 pnpm test:e2e:pdfexports
 ```
 
 ## Points d'attention
