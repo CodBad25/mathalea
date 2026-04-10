@@ -197,7 +197,7 @@ export default class ConversionsDeDurees extends Exercice {
             j + 7 * s
           }\\times24~\\text{h}) + ${h}~\\text{h} = ${
             j + 7 * s
-          }~\\text{j}~${h}~\\text{h} = (${s}\\times7~\\text{j}) + ${j}~\\text{j}~${h}~\\text{h} = `
+          }~\\text{j}~${h}~\\text{h} = (${s}\\times7~\\text{j}) + ${j}~\\text{j} + ${h}~\\text{h} = `
           texteCorr +=
             miseEnEvidence(
               `${s}~\\text{semaines}~${j}~\\text{j}~${h}~\\text{h}`,
@@ -209,7 +209,7 @@ export default class ConversionsDeDurees extends Exercice {
             j + 7 * s
           }\\times24~\\text{h}) + ${h}~\\text{h} = ${
             j + 7 * s
-          }~\\text{j}~${h}~\\text{h} = (${s}\\times7~\\text{j}) + ${j}~\\text{j}~${h}~\\text{h} = `
+          }~\\text{j}~${h}~\\text{h} = (${s}\\times7~\\text{j}) + ${j}~\\text{j} + ${h}~\\text{h} = `
           texteCorr +=
             miseEnEvidence(
               `${s}~\\text{semaine}~${j}~\\text{j}~${h}~\\text{h}`,
