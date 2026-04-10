@@ -48,7 +48,6 @@ export default class TermeDUneSuiteDefinieExplicitement extends Exercice {
   nouvelleVersion() {
     const typesDeQuestionsDisponibles = gestionnaireFormulaireTexte({
       saisie: this.sup,
-      min: 1,
       max: 3,
       melange: 4,
       defaut: 4,
