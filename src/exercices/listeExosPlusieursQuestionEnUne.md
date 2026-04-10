@@ -1,3 +1,5 @@
+[Cette liste est disponible et modifiable ici](https://codimd.apps.education.fr/s/BduSo3TRb)
+
 1P10-4 Compatible : (long car 4 cas à traiter)
 2S20-5 Compatible : 3 champs
 3A12-1 Compatible : 3 cas 3 champs
@@ -19,9 +21,7 @@
 6N3O Compatible. : 3 champs
 6N3Q-2 Compatible : 2 champs
 6N4A-3 Compatible : il est en fillInTheBlank 2 champs, mais serait plus joli avec MultiMathfield (si on a le temps)
-6P2B-1 Compatible : 4 champs
-6P2B Compatible : 3 champs
-6P3C-1 Compatible : 4 champs
+6P3C-1 Compatible : 4 champs // JCL
 1mCL4-1 Compatible : 2 champs (suisse pas de ref française)
 TSG2-10 Compatible : 1 seule question dans cet exo qui produit 4 fillInTheBlank à 3 champs. Soit 12 champs au total pour un total de 4 points !
 TTE-7 Compatible : 2 champs
