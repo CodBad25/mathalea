@@ -1,17 +1,17 @@
-import Exercice from '../Exercice'
-import { listeQuestionsToContenu, randint } from '../../modules/outils'
-import { arrondi, rangeMinMax } from '../../lib/outils/nombres'
-import FractionEtendue from '../../modules/FractionEtendue'
+import { propositionsQcm } from '../../lib/interactif/qcm'
 import {
   choice,
   combinaisonListes,
   shuffle,
 } from '../../lib/outils/arrayOutils'
-import { propositionsQcm } from '../../lib/interactif/qcm'
-import { texNombre } from '../../lib/outils/texNombre'
 import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
-import { pgcd } from '../../lib/outils/primalite'
+import { arrondi, rangeMinMax } from '../../lib/outils/nombres'
 import { sp } from '../../lib/outils/outilString'
+import { pgcd } from '../../lib/outils/primalite'
+import { texNombre } from '../../lib/outils/texNombre'
+import FractionEtendue from '../../modules/FractionEtendue'
+import { listeQuestionsToContenu, randint } from '../../modules/outils'
+import Exercice from '../Exercice'
 
 export const titre =
   'Savoir que la fraction peut représenter un nombre entier, un nombre décimal non entier ou un nombre non décimal'
@@ -119,6 +119,8 @@ export default class FractionRepresenteNb extends Exercice {
     this.sup = 1
     this.sup2 = 100
     this.sup3 = 1
+
+    this.comment = '1 ne peut pas être choisi comme numérateur.'
   }
 
   nouvelleVersion() {
@@ -132,8 +134,8 @@ export default class FractionRepresenteNb extends Exercice {
       listeTypeDeQuestions.push(...shuffle([1, 2, 3]))
     }
     let indiceNonDecimal = 0
-    let numerateurMin = this.sup
-    let numerateurMax = this.sup2
+    let numerateurMin = Math.max(2, this.sup)
+    let numerateurMax = Math.max(2, this.sup2)
     if (numerateurMin > numerateurMax) {
       const tampon = numerateurMax
       numerateurMax = numerateurMin
