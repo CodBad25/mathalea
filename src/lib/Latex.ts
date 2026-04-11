@@ -25,6 +25,20 @@ import type {
 import { mathaleaHandleExerciceSimple } from './mathalea.js'
 import { getLang } from './stores/languagesStore'
 
+export function sanitizeLatexInput(str: string): string {
+  return str
+    .replace(/\\/g, '\\textbackslash{}')
+    .replace(/\{/g, '\\{')
+    .replace(/\}/g, '\\}')
+    .replace(/&/g, '\\&')
+    .replace(/_/g, '\\_')
+    .replace(/#/g, '\\#')
+    .replace(/%/g, '\\%')
+    .replace(/\$/g, '\\$')
+    .replace(/\^/g, '\\^{}')
+    .replace(/~/g, '\\textasciitilde{}')
+}
+
 function testIfLoaded(
   values: string[],
   valuetoSearch: string,
@@ -595,7 +609,7 @@ class Latex {
             i,
             latexFileInfos,
           )
-          contents.content += `\n\\begin{Maquette}[Fiche=${latexFileInfos.typeFiche === 'Fiche' ? 'true' : 'false'},IE=${latexFileInfos.typeFiche === 'Fiche' ? 'false' : 'true'}]{Numero= ,Niveau=${latexFileInfos.subtitle || ' '},Classe=${latexFileInfos.reference || ' '},Date= ${latexFileInfos.nbVersions > 1 ? 'v' + i : ' '} ,Theme={${latexFileInfos.title || 'Exercices'}},Code= ,Calculatrice=false}\n`
+          contents.content += `\n\\begin{Maquette}[Fiche=${latexFileInfos.typeFiche === 'Fiche' ? 'true' : 'false'},IE=${latexFileInfos.typeFiche === 'Fiche' ? 'false' : 'true'}]{Numero= ,Niveau=${sanitizeLatexInput(latexFileInfos.subtitle || ' ')},Classe=${sanitizeLatexInput(latexFileInfos.reference || ' ')},Date= ${latexFileInfos.nbVersions > 1 ? 'v' + i : ' '} ,Theme={${sanitizeLatexInput(latexFileInfos.title || 'Exercices')}},Code= ,Calculatrice=false}\n`
           contents.content += contentVersion
 
           contents.content += '\n\\end{Maquette}'
@@ -615,7 +629,7 @@ class Latex {
             i,
             latexFileInfos,
           )
-          contents.content += `\n\\begin{Maquette}[Fiche=true, IE=false, CorrigeApres=false, CorrigeFin=true]{Niveau=${latexFileInfos.subtitle || ' '},Classe=${latexFileInfos.reference || ' '},Date= ${latexFileInfos.nbVersions > 1 ? 'v' + i : ' '} ,Theme=${latexFileInfos.title || 'Exercices'}}\n`
+          contents.content += `\n\\begin{Maquette}[Fiche=true, IE=false, CorrigeApres=false, CorrigeFin=true]{Niveau=${sanitizeLatexInput(latexFileInfos.subtitle || ' ')},Classe=${sanitizeLatexInput(latexFileInfos.reference || ' ')},Date= ${latexFileInfos.nbVersions > 1 ? 'v' + i : ' '} ,Theme=${sanitizeLatexInput(latexFileInfos.title || 'Exercices')}}\n`
           contents.content += contentVersion
           contents.content += '\n\\end{Maquette}'
           contents.content += '\n\\clearpage'
@@ -698,7 +712,7 @@ class Latex {
       } else {
         const currentUrl = this.getURL()
         contents.preamble += `% @see : ${currentUrl.href.replaceAll('%', '\\%')}\n\\documentclass[a4paper,11pt,fleqn]{article}\n\n${addPackages(latexFileInfos, contents)}\n\n`
-        contents.preamble += `\\Theme[${latexFileInfos.style}]{nombres}{${latexFileInfos.title}}{${latexFileInfos.reference}}{${latexFileInfos.subtitle}}`
+        contents.preamble += `\\Theme[${latexFileInfos.style}]{nombres}{${sanitizeLatexInput(latexFileInfos.title)}}{${sanitizeLatexInput(latexFileInfos.reference)}}{${sanitizeLatexInput(latexFileInfos.subtitle)}}`
         contents.intro += '\n\\begin{document}\n'
       }
     }
