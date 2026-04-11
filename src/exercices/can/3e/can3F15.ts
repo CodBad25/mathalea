@@ -1,6 +1,6 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { numAlpha } from '../../../lib/outils/outilString'
-import CoefficientDirecteur from '../../3e/3F20-4'
+import CoefficientDirecteur from '../../3e/3F20-4-old2'
 import ExerciceSimple from '../../ExerciceSimple'
 export const titre =
   "Reconnaitre coefficient directeur ou ordonnée à l'origine d'une fonction affine"
