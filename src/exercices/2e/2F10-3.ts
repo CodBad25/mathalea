@@ -201,7 +201,7 @@ export default class Representerfonctionaffine extends Exercice {
         case 2: // cas du coefficient directeur fractionnaire
           {
             a = randint(-5, 5, [0]) // numérateur coefficient directeur non nul
-            b = randint(-5, 5, [0]) // ordonnée à l'origine non nulle
+            b = randint(-4, 4, [0]) // ordonnée à l'origine non nulle
             if (this.level === 3) {
               d = 2
               a = randint(-5, 5, [0, -4, -2, 2, 4]) // numérateur coefficient directeur non nul
