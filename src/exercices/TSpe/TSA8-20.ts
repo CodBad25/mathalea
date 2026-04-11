@@ -40,7 +40,7 @@ export default class IntegraleAffine extends ExerciceSimple {
 
   nouvelleVersion() {
     const a = randint(-5, 5)
-    const b = randint(a, a + 5, -a)
+    const b = randint(a, a + 5, a)
     const c = randint(-5, 5, 0)
     const d = randint(-5, 5, 0)
     const fraction = new FractionEtendue(c, 2)
