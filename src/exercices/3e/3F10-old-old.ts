@@ -26,7 +26,8 @@ export const refs = {
 export default class ImageAntecedentDepuisTableauOuFleche extends Exercice {
   constructor() {
     super()
-
+    this.comment = `Cet exercice est une ancienne version non compatible avec les vue CAN et une question par page. Il est souhaitable d'utiliser la nouvelle version.
+Il existe une version CAN de cet exercice avec une seule question en 'can3F16'.`
     this.nbQuestions = 1
   }
 
