@@ -118,33 +118,20 @@ export function updateFigures(svgContainer: Element, zoom: number) {
         const viewBox = figure.getAttribute('viewBox')
         if (viewBox != null) figure.dataset.viewBoxInitiale = viewBox
       }
-      if (
-        figure.dataset.contentBoundsInitiales === undefined &&
-        figure.dataset.viewBoxInitiale !== undefined
-      ) {
-        try {
-          const bbox = figure.getBBox()
-          figure.dataset.contentBoundsInitiales = JSON.stringify({
-            x: bbox.x,
-            y: bbox.y,
-            width: bbox.width,
-            height: bbox.height,
-          })
-        } catch {
-          figure.dataset.contentBoundsInitiales = ''
-        }
-      }
-      const effectiveFrame = getEffectiveSvgFrame(figure)
-      const newHeight = (effectiveFrame.height * zoom).toString()
-      const newWidth = (effectiveFrame.width * zoom).toString()
+
+      const initialWidth = Number(figure.dataset.widthInitiale)
+      const initialHeight = Number(figure.dataset.heightInitiale)
+      const initialViewBox = figure.dataset.viewBoxInitiale ?? null
+      const newHeight = (initialHeight * zoom).toString()
+      const newWidth = (initialWidth * zoom).toString()
       if (newHeight !== height) {
         figure.setAttribute('height', newHeight)
       }
       if (newWidth !== width) {
         figure.setAttribute('width', newWidth)
       }
-      if (effectiveFrame.viewBox !== null) {
-        figure.setAttribute('viewBox', effectiveFrame.viewBox)
+      if (initialViewBox !== null) {
+        figure.setAttribute('viewBox', initialViewBox)
       }
       if (
         svgContainer instanceof HTMLElement &&
@@ -169,86 +156,9 @@ export function updateFigures(svgContainer: Element, zoom: number) {
         const initialTop = Number(e.dataset.top)
         const initialLeft = Number(e.dataset.left)
         e.style.setProperty('top', (initialTop * zoom).toString() + 'px')
-        e.style.setProperty(
-          'left',
-          ((initialLeft - effectiveFrame.xOffset) * zoom).toString() + 'px',
-        )
+        e.style.setProperty('left', (initialLeft * zoom).toString() + 'px')
       }
     }
-  }
-}
-
-function getEffectiveSvgFrame(figure: SVGSVGElement) {
-  const width = Number(figure.dataset.widthInitiale)
-  const height = Number(figure.dataset.heightInitiale)
-  const initialViewBox = figure.dataset.viewBoxInitiale
-    ?.split(/\s+/)
-    .map(Number)
-  const initialBounds = figure.dataset.contentBoundsInitiales
-  if (!initialViewBox || initialViewBox.length !== 4 || !initialBounds) {
-    return {
-      width,
-      height,
-      xOffset: 0,
-      viewBox: figure.dataset.viewBoxInitiale ?? null,
-    }
-  }
-  const [viewBoxX, viewBoxY, viewBoxWidth, viewBoxHeight] = initialViewBox
-  const bounds = JSON.parse(initialBounds) as {
-    x: number
-    y: number
-    width: number
-    height: number
-  }
-  const maxHorizontalOverflow = Math.max(24, viewBoxWidth * 0.1)
-  const maxVerticalOverflow = Math.max(24, viewBoxHeight * 0.1)
-  const leftOverflow = viewBoxX - bounds.x
-  const rightOverflow = bounds.x + bounds.width - (viewBoxX + viewBoxWidth)
-  const topOverflow = viewBoxY - bounds.y
-  const bottomOverflow =
-    bounds.y + bounds.height - (viewBoxY + viewBoxHeight)
-  const hasReasonableBounds =
-    Number.isFinite(bounds.x) &&
-    Number.isFinite(bounds.y) &&
-    Number.isFinite(bounds.width) &&
-    Number.isFinite(bounds.height) &&
-    bounds.width > 0 &&
-    bounds.height > 0 &&
-    leftOverflow <= maxHorizontalOverflow &&
-    rightOverflow <= maxHorizontalOverflow &&
-    topOverflow <= maxVerticalOverflow &&
-    bottomOverflow <= maxVerticalOverflow
-  if (!hasReasonableBounds) {
-    return {
-      width,
-      height,
-      xOffset: 0,
-      viewBox: figure.dataset.viewBoxInitiale ?? null,
-    }
-  }
-  const minimumSidePadding = 14
-  const minimumRightPadding = 24
-  const whitespaceRatio = bounds.width / viewBoxWidth
-  let effectiveX = viewBoxX
-  let effectiveWidth = viewBoxWidth
-  if (Number.isFinite(whitespaceRatio) && whitespaceRatio < 0.8) {
-    const leftPadding = Math.min(18, Math.max(10, bounds.width * 0.02))
-    const rightPadding = Math.min(36, Math.max(24, bounds.width * 0.05))
-    effectiveX = bounds.x - leftPadding
-    effectiveWidth = bounds.width + leftPadding + rightPadding
-  }
-  const currentLeftGap = bounds.x - effectiveX
-  const currentRightGap =
-    effectiveX + effectiveWidth - (bounds.x + bounds.width)
-  const extraLeftPadding = Math.max(0, minimumSidePadding - currentLeftGap)
-  const extraRightPadding = Math.max(0, minimumRightPadding - currentRightGap)
-  effectiveX -= extraLeftPadding
-  effectiveWidth += extraLeftPadding + extraRightPadding
-  return {
-    width: effectiveWidth,
-    height,
-    xOffset: effectiveX - viewBoxX,
-    viewBox: `${effectiveX} ${viewBoxY} ${effectiveWidth} ${viewBoxHeight}`,
   }
 }
 
