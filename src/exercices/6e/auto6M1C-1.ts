@@ -9,7 +9,7 @@ export const dateDeModifImportante = '10/04/2026'
  *
  */
 
-export const uuid = '3cb1d'
+export const uuid = 'ab9ff'
 
 export const refs = {
   'fr-fr': ['auto6M1C-1'],
