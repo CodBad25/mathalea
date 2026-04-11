@@ -51,6 +51,6 @@ export default class ProduitScalaireCoordonnees extends ExerciceSimple {
     &=${ux * vx} ${ecritureAlgebrique(uy * vy)}${ecritureAlgebrique(uz * vz)}\\\\
     &=${miseEnEvidence(ux * vx + uy * vy + uz * vz)}
     \\end{aligned}$`
-    this.reponse = ux * vx + uy * vy
+    this.reponse = ux * vx + uy * vy + uz * vz
   }
 }
