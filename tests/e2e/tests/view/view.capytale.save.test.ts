@@ -1,3 +1,4 @@
+import { writeFileSync } from 'fs'
 import { expect } from '@playwright/test'
 import type { Page } from 'playwright'
 import { logDiffContext } from '../../helpers/compareStrings'
@@ -37,7 +38,7 @@ async function testV(page: Page) {
 
   // Go to the page
   const hostname = `http://localhost:${process.env.CI ? '80' : '5173'}/parent`
-  await page.setDefaultTimeout(60000) // Set timeout to 60 seconds
+  page.setDefaultTimeout(60000) // Set timeout to 60 seconds
   await page.goto(hostname)
 
   await page.getByText('bonjour').waitFor({ state: 'visible' })
@@ -222,15 +223,15 @@ async function testV(page: Page) {
   )
 
   const value = JSON.parse(valueString ?? '')
-  await expect(value).not.toBe(null)
-  await expect(value.studentAssignment.length).toEqual(7)
+  expect(value).not.toBe(null)
+  expect(value.studentAssignment.length).toEqual(7)
   const responses = [
     { clockEx0Q0: '12h15' },
     { Ex1Q0R0: '1', Ex1Q0R1: '0', Ex1Q0R2: '0', Ex1Q0R3: '0', Ex1Q0R4: '0' },
     { Ex2Q0: '6000' },
     {
       apigeomEx3F06GXX0:
-        '{\n  "apiGeomVersion": "3.0.20230508",\n  "options": {\n    "animationStepInterval": 3000,\n    "automaticUserMessage": true,\n    "borderSize": 0.2,\n    "color": "currentColor",\n    "colorPointPolygon": "none",\n    "changeColorChangeActionToSetOptions": true,\n    "discFillOpacity": 0.2,\n    "decimalSeparator": "auto",\n    "displayDigits": 1,\n    "displayDigitsAngle": 0,\n    "displayGrid": false,\n    "distanceWithoutNewPoint": 0.2,\n    "figureHasBorder": true,\n    "fillColor": "none",\n    "fillColorAndBorderColorAreSame": true,\n    "fillOpacity": 0.2,\n    "gridWithTwoPointsOnSamePosition": true,\n    "fontSize": "1em",\n    "isHandDrawn": false,\n    "isDashed": false,\n    "labelAutomaticForPoints": false,\n    "labelPointAfterCreation": false,\n    "labelDxInPixels": 15,\n    "labelDyInPixels": 15,\n    "latexHeight": 12,\n    "labelIsVisible": true,\n    "latexWidth": 18,\n    "limitNumberOfElement": {},\n    "mark": "||",\n    "segmentShape": "",\n    "moveTextGrid": 15,\n    "pointDescriptionWithCoordinates": true,\n    "showCoordsInContextMenu": false,\n    "pointSize": 5,\n    "thickness": 1,\n    "shape": "x",\n    "shapeForPolygon": "x",\n    "thicknessForPoint": 2,\n    "tmpColor": "gray",\n    "tmpFillColor": "rgba(241, 89, 41, 0.5)",\n    "tmpFillOpacity": 0.2,\n    "tmpIsDashed": true,\n    "tmpThickness": 1,\n    "tmpShape": "x",\n    "trace": false\n  },\n  "xMin": -5.5,\n  "yMin": -5.5,\n  "scale": 1,\n  "pixelsPerUnit": 30,\n  "xScale": 1,\n  "yScale": 1,\n  "zoomLevel": 1,\n  "snapGrid": false,\n  "point1": {\n    "color": "currentColor",\n    "id": "point1",\n    "isDashed": false,\n    "isHidden": false,\n    "isVisible": true,\n    "isSelectable": true,\n    "isDeletable": false,\n    "opacity": 1,\n    "thickness": 2,\n    "type": "Point",\n    "colorLabel": "currentColor",\n    "label": "B",\n    "labelDxInPixels": 10,\n    "labelDyInPixels": 20,\n    "labelIsVisible": true,\n    "shape": "x",\n    "sizeInPixels": 5,\n    "x": 1,\n    "y": 2\n  },\n  "point2": {\n    "color": "currentColor",\n    "id": "point2",\n    "isDashed": false,\n    "isHidden": false,\n    "isVisible": true,\n    "isSelectable": true,\n    "isDeletable": false,\n    "opacity": 1,\n    "thickness": 2,\n    "type": "Point",\n    "colorLabel": "currentColor",\n    "label": "S",\n    "labelDxInPixels": 10,\n    "labelDyInPixels": 20,\n    "labelIsVisible": true,\n    "shape": "x",\n    "sizeInPixels": 5,\n    "x": -3,\n    "y": 2\n  },\n  "element0": {\n    "color": "currentColor",\n    "id": "element0",\n    "isDashed": false,\n    "isHidden": false,\n    "isVisible": true,\n    "isSelectable": true,\n    "isDeletable": true,\n    "opacity": 1,\n    "thickness": 1,\n    "type": "Circle",\n    "fillColor": "currentColor",\n    "fillOpacity": 0.2,\n    "idCenter": "point1",\n    "radius": "5"\n  }\n}',
+        '{\n  "apiGeomVersion": "3.0.20230508",\n  "options": {\n    "autoPositionLabels": false,\n    "animationStepInterval": 3000,\n    "automaticUserMessage": true,\n    "borderSize": 0.2,\n    "color": "currentColor",\n    "colorPointPolygon": "none",\n    "changeColorChangeActionToSetOptions": true,\n    "discFillOpacity": 0.2,\n    "decimalSeparator": "auto",\n    "displayDigits": 1,\n    "displayDigitsAngle": 0,\n    "displayGrid": false,\n    "distanceWithoutNewPoint": 0.2,\n    "figureHasBorder": true,\n    "fillColor": "none",\n    "fillColorAndBorderColorAreSame": true,\n    "fillOpacity": 0.2,\n    "gridWithTwoPointsOnSamePosition": true,\n    "fontSize": "1em",\n    "isHandDrawn": false,\n    "isDashed": false,\n    "labelAutomaticForPoints": false,\n    "labelPointAfterCreation": false,\n    "labelDxInPixels": 15,\n    "labelDyInPixels": 15,\n    "latexHeight": 12,\n    "labelIsVisible": true,\n    "latexWidth": 18,\n    "limitNumberOfElement": {},\n    "mark": "||",\n    "segmentShape": "",\n    "moveTextGrid": 15,\n    "pointDescriptionWithCoordinates": true,\n    "showCoordsInContextMenu": false,\n    "pointSize": 5,\n    "thickness": 1,\n    "shape": "x",\n    "shapeForPolygon": "x",\n    "thicknessForPoint": 2,\n    "tmpColor": "gray",\n    "tmpFillColor": "rgba(241, 89, 41, 0.5)",\n    "tmpFillOpacity": 0.2,\n    "tmpIsDashed": true,\n    "tmpThickness": 1,\n    "tmpShape": "x",\n    "trace": false,\n    "visibleButtons": [\n      "DRAG",\n      "HIDE",\n      "REMOVE",\n      "POINT",\n      "POINT_ON",\n      "POINT_INTERSECTION",\n      "MIDDLE",\n      "SEGMENT",\n      "LINE",\n      "RAY",\n      "POLYGON",\n      "LINE_PARALLEL",\n      "LINE_PERPENDICULAR",\n      "DRAW_ANGLE",\n      "PERPENDICULAR_BISECTOR",\n      "BISECTOR_BY_POINTS",\n      "CIRCLE_CENTER_POINT",\n      "CIRCLE_RADIUS",\n      "REFLECTION_OVER_LINE",\n      "REFLECTION",\n      "ROTATE",\n      "TRANSLATION",\n      "DILATE",\n      "VECTOR",\n      "CURSOR",\n      "GRID",\n      "GRAPH",\n      "SUB_REPERE",\n      "SET_OPTIONS",\n      "FILL",\n      "ARC_BY_THREE_POINTS",\n      "MARK_BETWEEN_POINTS",\n      "MESURE_SEGMENT",\n      "MESURE_ANGLE",\n      "MESURE_AREA",\n      "NAME_POINT",\n      "EDIT",\n      "IMAGE",\n      "TEXT_TEMPLATE",\n      "SHAKE",\n      "MOVE_LABEL",\n      "DRAG_ALL",\n      "ZOOM_OUT",\n      "ZOOM_IN",\n      "SAVE",\n      "OPEN",\n      "UNDO",\n      "REDO",\n      "DOWNLOAD_LATEX_SVG",\n      "DESCRIPTION",\n      "OPTIONS"\n    ]\n  },\n  "xMin": -5.5,\n  "yMin": -5.5,\n  "scale": 1,\n  "pixelsPerUnit": 30,\n  "xScale": 1,\n  "yScale": 1,\n  "zoomLevel": 1,\n  "snapGrid": false,\n  "point1": {\n    "color": "currentColor",\n    "id": "point1",\n    "isDashed": false,\n    "isHidden": false,\n    "isVisible": true,\n    "isSelectable": true,\n    "isDeletable": false,\n    "opacity": 1,\n    "thickness": 2,\n    "type": "Point",\n    "colorLabel": "currentColor",\n    "label": "B",\n    "labelDxInPixels": 10,\n    "labelDyInPixels": 20,\n    "labelIsVisible": true,\n    "shape": "x",\n    "sizeInPixels": 5,\n    "x": 1,\n    "y": 2\n  },\n  "point2": {\n    "color": "currentColor",\n    "id": "point2",\n    "isDashed": false,\n    "isHidden": false,\n    "isVisible": true,\n    "isSelectable": true,\n    "isDeletable": false,\n    "opacity": 1,\n    "thickness": 2,\n    "type": "Point",\n    "colorLabel": "currentColor",\n    "label": "S",\n    "labelDxInPixels": 10,\n    "labelDyInPixels": 20,\n    "labelIsVisible": true,\n    "shape": "x",\n    "sizeInPixels": 5,\n    "x": -3,\n    "y": 2\n  },\n  "element0": {\n    "color": "currentColor",\n    "id": "element0",\n    "isDashed": false,\n    "isHidden": false,\n    "isVisible": true,\n    "isSelectable": true,\n    "isDeletable": true,\n    "opacity": 1,\n    "thickness": 1,\n    "type": "Circle",\n    "fillColor": "currentColor",\n    "fillOpacity": 0.2,\n    "idCenter": "point1",\n    "radius": 5\n  }\n}',
     },
     { cliquefigure1Ex4Q0: '1', cliquefigure0Ex4Q1: '1' },
     { ex5Q0: 'somme', ex5Q1: '', ex5Q2: 'différence', ex5Q3: '' },
@@ -239,6 +240,7 @@ async function testV(page: Page) {
       texteDNDEx6Q0R1: 'deux',
     },
   ]
+  const apigeomCaptures: Record<string, string> = {}
   value.studentAssignment.forEach((assignment: any, i: number) => {
     const keys = Object.keys(assignment.answers)
     const keysRep = Object.keys(responses[i])
@@ -252,12 +254,29 @@ async function testV(page: Page) {
         expect(assignment.answers[key].split('-')[0]).toEqual(
           (responses[i] as any)[key].split('-')[0],
         )
+      } else if (
+        key.includes('apigeom') &&
+        process.env.UPDATE_APIGEOM_SNAPSHOTS
+      ) {
+        apigeomCaptures[key] = assignment.answers[key]
       } else {
         logDiffContext(assignment.answers[key], (responses[i] as any)[key])
         expect(assignment.answers[key]).toEqual((responses[i] as any)[key])
       }
     })
   })
+  if (
+    process.env.UPDATE_APIGEOM_SNAPSHOTS &&
+    Object.keys(apigeomCaptures).length > 0
+  ) {
+    writeFileSync(
+      '/tmp/mathalea-apigeom-save.json',
+      JSON.stringify(apigeomCaptures, null, 2),
+    )
+    console.log(
+      '📸 Snapshots apigeom capturés dans /tmp/mathalea-apigeom-save.json',
+    )
+  }
   return true
 }
 

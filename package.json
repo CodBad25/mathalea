@@ -79,6 +79,7 @@
     "test:exo:file:headed": "HEADFUL=1 DEBUG=DEBUG SLOWMO=200 NIV=$FILE pnpm test:e2e:console_errors",
     "test:exo:file:debug": "HEADFUL=1 PAUSE_ON_ERROR=1 DEBUG=DEBUG SLOWMO=200 NIV=$FILE pnpm test:e2e:console_errors:debug",
     "prepare": "husky",
+    "update:apigeom-snapshots": "node tasks/update-apigeom-snapshots.js",
     "prebuild-unit-tests": "pnpm test:unit && pnpm test:src",
     "prebuild-e2e-tests": "AUTOTEST=true pnpm test:e2e:views && AUTOTEST=true pnpm test:e2e:interactivity && AUTOTEST=true pnpm test:e2e:consistency"
   },
@@ -91,7 +92,7 @@
     "@types/crypto-js": "^4.2.2",
     "@types/jspreadsheet-ce": "^4.7.9",
     "@types/three": "^0.182.0",
-    "apigeom": "git+https://forge.apps.education.fr/coopmaths/apigeom.git#v1.0.0",
+    "apigeom": "git+https://forge.apps.education.fr/coopmaths/apigeom.git#v1.3.1",
     "blockly": "12.3.1",
     "boxicons": "^2.1.4",
     "brace": "^0.11.1",
