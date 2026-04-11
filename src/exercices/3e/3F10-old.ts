@@ -28,14 +28,16 @@ export const amcType = 'AMCHybride'
 export const uuid = 'b92db'
 
 export const refs = {
-  'fr-fr': [],
-  'fr-ch': [],
+  'fr-fr': ['3F10', 'BP2AutoO1'],
+  'fr-ch': ['10FA5-4', '1mF1-6'],
 }
 export default class ImageAntecedentDepuisTableauOuFleche extends Exercice {
   constructor() {
     super()
 
     this.nbQuestions = 1
+    this.comment = `Cet exercice est une ancienne version non compatible avec les vue CAN et une question par page. Il est souhaitable d'utiliser la nouvelle version.
+Il existe une version CAN de cet exercice avec une seule question en 'can3F16'.`
   }
 
   nouvelleVersion() {

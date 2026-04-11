@@ -20,7 +20,7 @@ export const amcType = 'AMCHybride'
 /**
  * @author Rémi Angot
  */
-export const uuid = 'b92dc'
+export const uuid = 'b92de'
 
 export const refs = {
   'fr-fr': ['3F10', 'BP2AutoO1'],
@@ -29,6 +29,7 @@ export const refs = {
 export default class ImageAntecedentDepuisTableauOuFleche extends Exercice {
   constructor() {
     super()
+    this.comment = `Il existe une version CAN de cet exercice avec une seule question en 'can3F16'.`
 
     this.nbQuestions = 1
   }
