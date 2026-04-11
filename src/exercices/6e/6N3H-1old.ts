@@ -1,4 +1,5 @@
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { pgcd } from '../../lib/outils/primalite'
@@ -13,11 +14,10 @@ import {
 import Exercice from '../Exercice'
 
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { addMultiMathfield } from '../../lib/interactif/MultiMathfield/MultiMathfield'
 import { rangeMinMax } from '../../lib/outils/nombres'
 import FractionEtendue from '../../modules/FractionEtendue'
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'mathLive'
 export const amcReady = true
 export const amcType = 'AMCHybride'
 export const dateDePublication = '11/12/2020'
@@ -26,18 +26,16 @@ export const dateDeModifImportante = '29/10/2024'
 export const titre = 'Parcourir un labyrinthe de fractions égales'
 
 /**
- * @author Jean-Claude Lhote (remaniée par Éric Elter pour la prise en compte du nb de lignes et de colonnes du labyrinthe)
- * 10/04/2026 : Passage en multiMathfield par Éric Elter
+ * @author Jean-claude Lhote (remaniée par EE pour la prise en compte du nb de lignes et de colonnes du labyrinthe)
  * Parcourir un labyrinthe de fractions en passant par des fractions égales.
  */
-export const uuid = 'f8a4e'
+export const uuid = 'f8a4d'
 
 export const refs = {
-  'fr-fr': ['6N3H-1', 'BP2AutoG5'],
-  'fr-2016': ['6N41-1', 'BP2AutoG5'],
-  'fr-ch': ['9NO12-2'],
+  'fr-fr': [],
+  'fr-ch': [],
 }
-export default class ExerciceLabyrintheFractionsEgales extends Exercice {
+export default class ExerciceLabyrintheFractionsEgalesOld extends Exercice {
   niveau: string
   constructor() {
     super()
@@ -158,23 +156,24 @@ export default class ExerciceLabyrintheFractionsEgales extends Exercice {
         laby.chemin2d,
       )
       if (this.interactif) {
-        texte += `${addMultiMathfield(this, i, {
-          dataTemplate:
-            'Indiquer le numéro de la bonne sortie : %{champ1}.\n Combien de nombres rencontrés avant la sortie ? %{champ2}',
-          dataOptions: {
-            champ1: { keyboard: KeyboardType.clavierNumbers },
-            champ2: { keyboard: KeyboardType.clavierNumbers },
-          },
-        })}`
-        handleAnswers(
+        texte += ajouteChampTexteMathLive(
           this,
-          i,
-          {
-            champ1: { value: numeroDeSortie },
-            champ2: { value: nbDeNombresRencontres },
-          },
-          { formatInteractif: 'multiMathfield' },
+          2 * i,
+          KeyboardType.clavierNumbers,
+          { texteAvant: 'Indiquer le numéro de la bonne sortie :' },
         )
+        handleAnswers(this, 2 * i, {
+          reponse: { value: numeroDeSortie },
+        })
+        texte += ajouteChampTexteMathLive(
+          this,
+          2 * i + 1,
+          KeyboardType.clavierNumbers,
+          { texteAvant: '<br>Combien de nombres rencontrés avant la sortie ?' },
+        )
+        handleAnswers(this, 2 * i + 1, {
+          reponse: { value: nbDeNombresRencontres },
+        })
       }
       if (context.isAmc) {
         this.autoCorrection[0] = {
