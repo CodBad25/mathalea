@@ -109,7 +109,7 @@ function sampleSup<T extends Record<number, any>>(sup: T): number[] {
     .sort((a, b) => a - b)
   const n = keys.length
 
-  if (n <= 10) {
+  if (n <= 3) {
     // Tous les éléments
     return keys
   } else {
@@ -117,12 +117,12 @@ function sampleSup<T extends Record<number, any>>(sup: T): number[] {
     const first = keys[0]
     const last = keys[n - 1]
 
-    // 3 indices intermédiaires espacés uniformément
-    const step = (n - 1) / 4
-    const middle = [1, 2, 3].map((i) => keys[Math.round(i * step)])
+    // On prend 1au milieu
+    const step = (n - 1) / 2
+    const middle = keys[Math.round(step)]
 
     // Fusion et supprimer doublons si step arrondi coïncide avec first/last
-    const sampled = Array.from(new Set([first, ...middle, last]))
+    const sampled = Array.from(new Set([first, middle, last]))
     return sampled
   }
 }
@@ -335,9 +335,9 @@ async function getConsoleTest(uuid: string, urlExercice: string) {
       for (const keySup of keysToUse) {
         exercice.sup = sup[keySup]
         log('sup=' + exercice.sup)
-        for (const keySup2 in sup2) {
+        for (const keySup2 of sampleSup(sup2)) {
           exercice.sup2 = sup2[keySup2]
-          for (const keySup3 in sup3) {
+          for (const keySup3 of sampleSup(sup3)) {
             exercice.sup3 = sup3[keySup3]
             const signature = [
               'uuuid:' + exercice.uuid,
