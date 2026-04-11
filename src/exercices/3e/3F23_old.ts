@@ -1,8 +1,7 @@
 import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { toutAUnPoint } from '../../lib/interactif/mathLive'
-import { addMultiMathfield } from '../../lib/interactif/MultiMathfield/MultiMathfield'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
 import { texFractionFromString } from '../../lib/outils/deprecatedFractions'
 import {
@@ -22,20 +21,20 @@ import {
 import Exercice from '../Exercice'
 
 export const dateDePublication = '05/06/2025'
-export const dateDeModifImportante = '11/04/2026'
+export const dateDeModifImportante = '27/03/2026'
 export const titre =
   "Trouver l'intersection des droites représentant des fonctions affines"
 export const interactifReady = true
-export const interactifType = 'multimathfield'
+export const interactifType = 'mathLive'
 
 /**
  * Trouver les coordonnées du point d'intersection des droites représentant des fonctions affines
  * @author Éric Elter
  */
-export const uuid = '13cfb'
+export const uuid = 'ac71d'
 
 export const refs = {
-  'fr-fr': ['3F23'],
+  'fr-fr': [],
   'fr-ch': [],
 }
 export default class IntersectionDroites extends Exercice {
@@ -74,18 +73,18 @@ export default class IntersectionDroites extends Exercice {
       }
 
       texte = `Soient $f$ et $g$ deux fonctions affines définies par : $f(x)=${reduireAxPlusB(a, b)}$ et $g(x)=${reduireAxPlusB(c, d)}$. <br>`
-     if (this.interactif) {
-        texte += `${addMultiMathfield(this, i, {
-          dataTemplate: `a) Quelle est l'abscisse du point d'intersection des deux droites représentatives respectivement de $f$ et de $g$ ? %{champ1}\nb) Quelle est l'ordonnée de ce point d'intersection ? %{champ2}`,
-          dataOptions: {
-            champ1: { keyboard: KeyboardType.clavierDeBaseAvecFraction },
-            champ2: { keyboard: KeyboardType.clavierDeBaseAvecFraction },
-          },
-        })}`
-      } else {
-        texte += `${numAlpha(0)} Quelle est l'abscisse du point d'intersection des deux droites représentatives respectivement de $f$ et de $g$ ?<br>`
-        texte += `${numAlpha(1)} Quelle est l'ordonnée de ce point d'intersection ?`
-      }
+      texte += `${numAlpha(0)} Quelle est l'abscisse du point d'intersection des deux droites représentatives respectivement de $f$ et de $g$ ?`
+      texte += ajouteChampTexteMathLive(
+        this,
+        2 * i,
+        KeyboardType.clavierDeBaseAvecFraction,
+      )
+      texte += `<br>${numAlpha(1)} Quelle est l'ordonnée de ce point d'intersection ?`
+      texte += ajouteChampTexteMathLive(
+        this,
+        2 * i + 1,
+        KeyboardType.clavierDeBaseAvecFraction,
+      )
       texteCorr = `${numAlpha(0)} Le point d'intersection appartient aux droites représentatives respectivement de $f$ et de $g$.<br>
               Si $a$ est l'abscisse de ce point, alors l'image de $a$ par $f$ est la même que l'image de $a$ par $g$. <br>
               Donc $f(a)=g(a)$ et donc $${reduireAxPlusB(a, b, 'a')}=${reduireAxPlusB(c, d, 'a')}$<br>
@@ -142,18 +141,19 @@ export default class IntersectionDroites extends Exercice {
           : `${ecritureParentheseSiNegatif(abscisseFractionEtendue)} ${ecritureAlgebrique(b)}=${miseEnEvidence(ordonnee)}$<br>`
       texteCorr += `Le point d'intersection des droites représentatives respectivement de $f$ et de $g$ a pour ordonnée $${miseEnEvidence(ordonnee)}$.<br>`
       // Important laisser ici les deux options de comparaison
-      handleAnswers(this, i, {
-        champ1: {
+      handleAnswers(this, 2 * i, {
+        reponse: {
           value: abscisse,
           options: { fractionEgale: true, nombreDecimalSeulement: true },
         },
-        champ2: {
+      })
+      handleAnswers(this, 2 * i + 1, {
+        reponse: {
           value: ordonnee,
           options: { fractionEgale: true, nombreDecimalSeulement: true },
         },
-        bareme: toutAUnPoint,
-      }, { formatInteractif: 'multiMathfield' })
-    
+      })
+
       if (this.questionJamaisPosee(i, a, b, c, d)) {
         // Si la question n'a jamais été posée, on en créé une autre
         this.listeQuestions[i] = texte
