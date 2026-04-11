@@ -1,9 +1,8 @@
 import { courbe } from '../../lib/2d/Courbe'
 import { repere } from '../../lib/2d/reperes'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { handleAnswers} from '../../lib/interactif/gestionInteractif'
-import { toutAUnPoint } from '../../lib/interactif/mathLive'
-import { addMultiMathfield } from '../../lib/interactif/MultiMathfield/MultiMathfield'
+import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { chercheMinMaxFonction } from '../../lib/mathFonctions/etudeFonction'
 import {
   resolutionSystemeLineaire2x2,
@@ -22,7 +21,7 @@ import Exercice from '../Exercice'
 
 export const titre = "Lire l'image d'un nombre à partir d'un graphique"
 export const interactifReady = true
-export const interactifType = 'multimathfield'
+export const interactifType = 'mathLive'
 export const amcReady = true
 export const amcType = 'AMCHybride'
 
@@ -32,11 +31,11 @@ export const amcType = 'AMCHybride'
  * @author Rémi Angot
  */
 
-export const uuid = 'f2352'
+export const uuid = 'b8946'
 
 export const refs = {
-  'fr-fr': ['3F12-4'],
-  'fr-ch': ['11FA7-3', '1mF1-3'],
+  'fr-fr': [],
+  'fr-ch': [],
 }
 export default class ImageGraphique extends Exercice {
   constructor() {
@@ -254,33 +253,39 @@ export default class ImageGraphique extends Exercice {
         }
       } else if (this.interactif) {
         if (this.sup === 1) {
-          texte += `${addMultiMathfield(this, i, {
-            dataTemplate: `$f(${x1})=$ %{champ1}\n$f(${x2})=$ %{champ2}`,
-            dataOptions: {
-              champ1: { keyboard: KeyboardType.clavierDeBase },
-              champ2: { keyboard: KeyboardType.clavierDeBase },
-            },
-          })}`
-          handleAnswers(this, i, {
-            champ1: { value: `${fx1}` },
-            champ2: { value: `${fx2}` },
-            bareme: toutAUnPoint,
-          }, { formatInteractif: 'multiMathfield' })
+          texte +=
+            `$f(${x1})=$` +
+            ajouteChampTexteMathLive(this, 2 * i, KeyboardType.clavierDeBase)
+          texte +=
+            `<br><br>$f(${x2})=$` +
+            ajouteChampTexteMathLive(
+              this,
+              2 * i + 1,
+              KeyboardType.clavierDeBase,
+            )
+          setReponse(this, 2 * i, fx1)
+          setReponse(this, 2 * i + 1, fx2)
         } else {
-          texte += `${addMultiMathfield(this, i, {
-            dataTemplate: `$f(${x1})=$ %{champ1}\n$f(${x2})=$ %{champ2}\n$f(${x3})=$ %{champ3}`,
-            dataOptions: {
-              champ1: { keyboard: KeyboardType.clavierDeBase },
-              champ2: { keyboard: KeyboardType.clavierDeBase },
-              champ3: { keyboard: KeyboardType.clavierDeBase },
-            },
-          })}`
-          handleAnswers(this, i, {
-            champ1: { value: `${fx1}` },
-            champ2: { value: `${fx2}` },
-            champ3: { value: `${fx3}` },
-            bareme: toutAUnPoint,
-          }, { formatInteractif: 'multiMathfield' })
+          texte +=
+            `$f(${x1})=$` +
+            ajouteChampTexteMathLive(this, 3 * i, KeyboardType.clavierDeBase)
+          texte +=
+            `<br><br>$f(${x2})=$` +
+            ajouteChampTexteMathLive(
+              this,
+              3 * i + 1,
+              KeyboardType.clavierDeBase,
+            )
+          texte +=
+            `<br><br>$f(${x3})=$` +
+            ajouteChampTexteMathLive(
+              this,
+              3 * i + 2,
+              KeyboardType.clavierDeBase,
+            )
+          setReponse(this, 3 * i, fx1)
+          setReponse(this, 3 * i + 1, fx2)
+          setReponse(this, 3 * i + 2, fx3)
         }
       }
       if (this.questionJamaisPosee(i, a, b, c, d)) {
