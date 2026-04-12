@@ -411,7 +411,7 @@ export default class SimplifierEcritureLitterale extends Exercice {
         handleAnswers(this, i, {
           reponse: {
             value: reponse,
-            options: { expressionsForcementReduites: true },
+            options: { sansTimes: true },
           },
         })
       } else {
