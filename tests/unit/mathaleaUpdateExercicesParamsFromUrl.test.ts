@@ -1,7 +1,7 @@
-import { describe, it, expect, vi } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 
-import { exercicesParams, freezeUrl } from '../../src/lib/stores/generalStore'
 import { get } from 'svelte/store'
+import { exercicesParams, freezeUrl } from '../../src/lib/stores/generalStore'
 
 // Mock avant l'import
 vi.mock('../../src/lib/renderScratch', () => ({
@@ -85,7 +85,7 @@ describe('mathaleaUpdateExercicesParamsFromUrl', () => {
         alea: 'Wm22',
       },
       {
-        uuid: '46234',
+        uuid: '4623e',
         id: '5L12-1',
         interactif: '0',
         nbQuestions: 6,
