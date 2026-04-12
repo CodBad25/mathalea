@@ -1216,7 +1216,7 @@ export function verifQuestionMetaInteractif2d(
     feedback = ''
   } else {
     if (compteurSaisiesVides > 0) {
-      feedback = `Il manque ${compteurSaisiesVides} réponse(s).`
+      feedback = `Il manque ${compteurSaisiesVides} réponse${compteurSaisiesVides > 1 ? 's' : ''}.`
     } else {
       feedback = `Certaines réponses sont incorrectes.`
     }
@@ -1359,7 +1359,7 @@ export function verifQuestionMultiMathfield(
     feedback = ''
   } else {
     if (compteurSaisiesVides > 0) {
-      feedback = `Il manque ${compteurSaisiesVides} réponse(s).`
+      feedback = `Il manque ${compteurSaisiesVides} réponse${compteurSaisiesVides > 1 ? 's' : ''}.`
     } else {
       feedback = `Certaines réponses sont incorrectes.`
     }
