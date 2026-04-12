@@ -285,6 +285,7 @@ export type OptionsComparaisonType = {
   suiteRangeeDeNombres?: boolean
   calculFormel?: boolean
   expanded?: boolean
+  sansTimes?: boolean
   fractionSansRacineCarree?: boolean
   // Non fait : Pas de tests unitaires
   sansTrigo?: boolean

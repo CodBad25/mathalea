@@ -2080,7 +2080,7 @@ function handleExpressionsForcementReduites(
 
   if (!mathEqual(s, a))
     return fail(
-      "Incorrect car cette expression n'est pas assez égale à celle attendue.",
+      "Incorrect car cette expression n'est pas égale à celle attendue.",
     )
 
   if (saisie.includes('\\times'))
@@ -2305,6 +2305,29 @@ function handleExpressionExpanded(saisie: string, answer: string): ResultType {
   return fail()
 }
 
+function handleExpressionSansTimes(saisie: string, answer: string): ResultType {
+  const clean = generateCleaner([
+    'virgules',
+    'parentheses',
+    'fractions',
+    'divisions',
+  ])
+  const cleanInput = clean(saisie)
+
+  if (handleCalculFormel(saisie, answer).isOk) {
+    if (
+      JSON.stringify(ce.parse(cleanInput, { form: 'raw' }).json).includes(
+        'Multiply',
+      )
+    )
+      return fail(
+        'La réponse fournie est bien égale à celle attendue mais il y a au moins un signe $\\times$ en trop.',
+      )
+    return ok()
+  }
+  return fail()
+}
+
 function handleFonction(
   saisie: string,
   answer: string,
@@ -2460,7 +2483,7 @@ function handleDeveloppementEgal(saisie: string, answer: string): ResultType {
 
   if (!mathEqual(parsedSaisie, parsedAnswer))
     return fail(
-      "Incorrect car cette expression n'est pas assez égale à celle attendue.",
+      "Incorrect car cette expression n'est pas égale à celle attendue.",
     )
 
   return isExpandedExpression(parsedSaisie)
@@ -3188,6 +3211,9 @@ export function fonctionComparaison(
 
   // Expressions expanded
   if (options.expanded) return handleExpressionExpanded(saisie, answer)
+
+  // Expressions sansTimes
+  if (options.sansTimes) return handleExpressionSansTimes(saisie, answer)
 
   // Deux entiers consécutifs
   if (options.entiersConsecutifs)
