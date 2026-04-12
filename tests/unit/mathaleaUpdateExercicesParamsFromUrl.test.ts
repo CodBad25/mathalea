@@ -73,7 +73,7 @@ describe('mathaleaUpdateExercicesParamsFromUrl', () => {
 
   it('should update exercicesParams V2 from URL', async () => {
     const url =
-      'https://coopmaths.fr/alea/?uuid=edb61&id=5P13&alea=Wm22&uuid=46234&id=5L12-1&n=6&d=10&s=3&cd=1&alea=iDSe&uuid=b87a5&id=4L10b&n=2&d=10&s=1-2&s2=1&s3=3&s4=1&cd=1&cols=2&alea=G6FS&uuid=71dd8&id=4L10&n=3&d=10&s=3&s2=1&s3=7&s4=false&cd=1&cols=3&alea=4nBh&uuid=&alea=fE6p'
+      'https://coopmaths.fr/alea/?uuid=edb61&id=5P13&alea=Wm22&uuid=4623e&id=5L12-1&n=6&d=10&s=3&cd=1&alea=iDSe&uuid=b87a5&id=4L10b&n=2&d=10&s=1-2&s2=1&s3=3&s4=1&cd=1&cols=2&alea=G6FS&uuid=71dd8&id=4L10&n=3&d=10&s=3&s2=1&s3=7&s4=false&cd=1&cols=3&alea=4nBh&uuid=&alea=fE6p'
     const { mathaleaUpdateExercicesParamsFromUrl } =
       await import('../../src/lib/mathalea')
     const result = mathaleaUpdateExercicesParamsFromUrl(url)
