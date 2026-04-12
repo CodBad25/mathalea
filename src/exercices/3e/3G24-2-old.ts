@@ -19,10 +19,9 @@ import { mathalea2d } from '../../modules/mathalea2d'
 
 import { markTypeArray, MarqueAngle } from '../../lib/2d/MarkType'
 import { PointAbstrait, pointAbstrait } from '../../lib/2d/PointAbstrait'
-import { addMultiMathfield } from '../../lib/interactif/MultiMathfield/MultiMathfield'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif' // fonction qui va préparer l'analyse de la saisie
-import { toutAUnPoint } from '../../lib/interactif/mathLive'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive' // fonctions de mise en place des éléments interactifs
 import {
   choice,
   combinaisonListes,
@@ -40,16 +39,16 @@ import {
 import Exercice from '../Exercice'
 
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'mathLive'
 
 export const titre = 'Calculer des longueurs avec des triangles semblables'
 export const dateDePublication = '30/12/2024' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
 export const dateDeModifImportante = '16/11/2025'
 
-export const uuid = '58a6f'
+export const uuid = '58a6e'
 export const refs = {
-  'fr-fr': ['3G24-2'],
-  'fr-ch': ['11GM3-9', '1mG3-2'],
+  'fr-fr': [],
+  'fr-ch': [],
 }
 /**
  * calcul de longueurs avec des triangles semblables
@@ -347,25 +346,45 @@ export default class nomExercice extends Exercice {
           widthmincol1: '0px',
           widthmincol2: '0px',
         })
-
-        texte += addMultiMathfield(this, i, {
-          dataTemplate: `$${D.nom}${F.nom} =$ %{champ1} $\\text{ cm}$<br>$${E.nom}${F.nom} =$ %{champ2} $\\text{ cm}$`,
-          dataOptions: {
-            champ1: { keyboard: KeyboardType.clavierNumbers },
-            champ2: { keyboard: KeyboardType.clavierNumbers },
-          },
-        })
-
-        handleAnswers(
+        /*
+        texte += remplisLesBlancs(
           this,
           i,
-          {
-            bareme: toutAUnPoint,
-            champ1: { value: texNombre(longueurAC * coeff, 1) },
-            champ2: { value: texNombre(longueurBC * coeff, 1) },
-          },
-          { formatInteractif: 'multiMathfield' },
+          `${D.nom}${F.nom} =  %{champ1}` +
+            '\\text{ cm} ' +
+            `${E.nom}${F.nom} =  %{champ2}` +
+            '\\text{ cm}',
+          KeyboardType.clavierNumbers,
+          '\\ldots\\ldots',
         )
+        handleAnswers(this, i, {
+          bareme: (listePoints) => [listePoints[0] + listePoints[1], 2],
+          champ1: { value: texNombre(longueurAC * coeff, 1) },
+          champ2: { value: texNombre(longueurBC * coeff, 1) },
+        })
+          */
+        texte += ajouteChampTexteMathLive(
+          this,
+          2 * i,
+          KeyboardType.clavierNumbers,
+          { texteApres: '$\\text{ cm}$', texteAvant: `$${D.nom}${F.nom} =$` },
+        )
+        handleAnswers(this, 2 * i, {
+          reponse: { value: texNombre(longueurAC * coeff, 1) },
+        })
+
+        texte += ajouteChampTexteMathLive(
+          this,
+          2 * i + 1,
+          KeyboardType.clavierNumbers,
+          {
+            texteApres: '$\\text{ cm}$',
+            texteAvant: `<br>$${E.nom}${F.nom} =$`,
+          },
+        )
+        handleAnswers(this, 2 * i + 1, {
+          reponse: { value: texNombre(longueurBC * coeff, 1) },
+        })
       } else {
         texte += `Calculer les longueurs des segments $[${D.nom}${F.nom}]$ et $[${E.nom}${F.nom}]$. Justifier.<br>`
         texte += deuxColonnesResp(colonne1, colonne2, {
