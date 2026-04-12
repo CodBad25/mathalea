@@ -7,9 +7,8 @@ import { tracePoint } from '../../lib/2d/TracePoint'
 import { rotation } from '../../lib/2d/transformations'
 import { pointAdistance } from '../../lib/2d/utilitairesPoint'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { toutAUnPoint } from '../../lib/interactif/mathLive'
-import { addMultiMathfield } from '../../lib/interactif/MultiMathfield/MultiMathfield'
+import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { arrondi } from '../../lib/outils/nombres'
@@ -22,7 +21,7 @@ import Exercice from '../Exercice'
 
 export const titre = 'Calculer périmètre et/ou aire de disques'
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'mathLive'
 export const amcReady = true
 export const amcType = 'AMCHybride'
 export const dateDeModifImportante = '20/11/2023'
@@ -34,12 +33,12 @@ export const dateDeModifImportante = '20/11/2023'
  * * 3 : Calculer le périmètre et l'aire de disques
  * @author Rémi Angot (AMC par EE)
  */
-export const uuid = 'f9a03'
+export const uuid = 'f9a02'
 
 export const refs = {
-  'fr-fr': ['5M11-3', 'BP2AutoV7'],
-  'fr-2016': ['6M22-1', 'BP2AutoV7'],
-  'fr-ch': ['10GM1-2'],
+  'fr-fr': [],
+  'fr-2016': [],
+  'fr-ch': [],
 }
 
 /**
@@ -146,18 +145,18 @@ export default class PerimetreAireDisques extends Exercice {
       if (this.sup === 1) {
         this.consigne =
           this.nbQuestions > 1
-            ? 'Calculer le périmètre (en$\\text{cm}$) des disques suivants.'
-            : 'Calculer le périmètre (en$\\text{cm}$) du disque suivant.'
+            ? 'Calculer le périmètre (en $\\text{cm}$) des disques suivants.'
+            : 'Calculer le périmètre (en $\\text{cm}$) du disque suivant.'
       } else if (this.sup === 2) {
         this.consigne =
           this.nbQuestions > 1
-            ? "Calculer l'aire (en$\\text{cm}^2$) des disques suivants."
-            : "Calculer l'aire (en$\\text{cm}^2$) du disque suivant."
+            ? "Calculer l'aire (en $\\text{cm}^2$) des disques suivants."
+            : "Calculer l'aire (en $\\text{cm}^2$) du disque suivant."
       } else {
         this.consigne =
           this.nbQuestions > 1
-            ? "Calculer le périmètre (en$\\text{cm}$) et l'aire (en$\\text{cm}^2$) des disques suivants."
-            : "Calculer le périmètre (en$\\text{cm}$) et l'aire (en$\\text{cm}^2$) du disque suivant."
+            ? "Calculer le périmètre (en $\\text{cm}$) et l'aire (en $\\text{cm}^2$) des disques suivants."
+            : "Calculer le périmètre (en $\\text{cm}$) et l'aire (en $\\text{cm}^2$) du disque suivant."
       }
       reponseL1 = this.sup === 2 ? 0 : arrondi(2 * r, 2)
       reponseL2 =
@@ -173,9 +172,9 @@ export default class PerimetreAireDisques extends Exercice {
           this.consigne +=
             '<br> On donnera une valeur approchée au dixième près '
           if (this.sup === 1) {
-            this.consigne += 'de$\\text{cm}$.'
+            this.consigne += 'de $\\text{cm}$.'
           } else if (this.sup === 2) {
-            this.consigne += 'de$\\text{cm}^2$.'
+            this.consigne += 'de $\\text{cm}^2$.'
           } else {
             this.consigne += 'des unités respectives ci-dessus.'
           }
@@ -187,9 +186,9 @@ export default class PerimetreAireDisques extends Exercice {
           this.consigne +=
             '<br> On donnera la valeur exacte ou une valeur approchée au dixième près '
           if (this.sup === 1) {
-            this.consigne += 'de$\\text{cm}$.'
+            this.consigne += 'de $\\text{cm}$.'
           } else if (this.sup === 2) {
-            this.consigne += 'de$\\text{cm}^2$.'
+            this.consigne += 'de $\\text{cm}^2$.'
           } else {
             this.consigne += 'des unités respectives ci-dessus.'
           }
@@ -199,9 +198,9 @@ export default class PerimetreAireDisques extends Exercice {
           this.consigne +=
             '<br> On donnera la valeur exacte puis une valeur approchée au dixième près '
           if (this.sup === 1) {
-            this.consigne += 'de$\\text{cm}$.'
+            this.consigne += 'de $\\text{cm}$.'
           } else if (this.sup === 2) {
-            this.consigne += 'de$\\text{cm}^2$.'
+            this.consigne += 'de $\\text{cm}^2$.'
           } else {
             this.consigne += 'des unités respectives ci-dessus.'
           }
@@ -223,7 +222,7 @@ export default class PerimetreAireDisques extends Exercice {
               ? `La valeur exacte du périmètre de ce disque est $${miseEnEvidence(`${texNombre(2 * r)}\\pi`)}${sp()}\\text{cm}$.<br>`
               : '') +
             (this.sup3 !== 2
-              ? `Les valeurs approchées au dixième de$\\text{cm}$ du périmètre de ce disque sont $${miseEnEvidence(texNombre(reponseL2))}${sp()}\\text{cm}$ et $${miseEnEvidence(texNombre(reponseL2bis))}${sp()}\\text{cm}$.<br>`
+              ? `Les valeurs approchées au dixième de $\\text{cm}$ du périmètre de ce disque sont $${miseEnEvidence(texNombre(reponseL2))}${sp()}\\text{cm}$ et $${miseEnEvidence(texNombre(reponseL2bis))}${sp()}\\text{cm}$.<br>`
               : '')
       texteCorr +=
         this.sup === 1
@@ -241,7 +240,7 @@ export default class PerimetreAireDisques extends Exercice {
               ? `La valeur exacte de l'aire de ce disque est $${miseEnEvidence(`${texNombre(r * r)}\\pi`)}${sp()}\\text{cm}^2$.<br>`
               : '') +
             (this.sup3 !== 2
-              ? `Les valeurs approchées au dixième de$\\text{cm}^2$ de l'aire de ce disque sont $${miseEnEvidence(texNombre(reponseA2))}${sp()}\\text{cm}^2$ et $${miseEnEvidence(texNombre(reponseA2bis))}${sp()}\\text{cm}^2$.<br>`
+              ? `Les valeurs approchées au dixième de $\\text{cm}^2$ de l'aire de ce disque sont $${miseEnEvidence(texNombre(reponseA2))}${sp()}\\text{cm}^2$ et $${miseEnEvidence(texNombre(reponseA2bis))}${sp()}\\text{cm}^2$.<br>`
               : '')
 
       if (
@@ -254,11 +253,46 @@ export default class PerimetreAireDisques extends Exercice {
           this.sup4,
         )
       ) {
-        let dataTemplate = ''
-        let dataOptions = {}
-        let reponses = {}
         if (this.sup === 1) {
-          if (context.isAmc) {
+          if (context.isHtml && this.interactif) {
+            if (choixValeurExacte) {
+              setReponse(
+                this,
+                this.sup3 === 4 ? 2 * i : i,
+                [
+                  stringNombre(reponseL1) + '\\pi',
+                  stringNombre(reponseL1) + '\\times\\pi',
+                  '\\pi\\times' + stringNombre(reponseL1),
+                ],
+                { formatInteractif: 'texte' },
+              )
+              texte +=
+                'Valeur exacte du périmètre : ' +
+                ajouteChampTexteMathLive(
+                  this,
+                  this.sup3 === 4 ? 2 * i : i,
+                  KeyboardType.clavierNumbers,
+                  { texteApres: ' $\\text{cm}$' },
+                )
+            }
+            if (choixValeurApprochee) {
+              setReponse(
+                this,
+                this.sup3 === 4 ? 2 * i + 1 : i,
+                [reponseL2, reponseL2bis],
+                { formatInteractif: 'calcul' },
+              )
+              texte +=
+                (this.sup3 === 4 ? '<br>' : '') +
+                'Valeur approchée du périmètre : ' +
+                ajouteChampTexteMathLive(
+                  this,
+                  this.sup3 === 4 ? 2 * i + 1 : i,
+                  KeyboardType.clavierNumbers,
+                  { texteApres: ' $\\text{cm}$' },
+                )
+            }
+          } else {
             this.autoCorrection[i] = {
               enonce: '',
               options: { multicolsAll: true, barreseparation: true },
@@ -303,56 +337,46 @@ export default class PerimetreAireDisques extends Exercice {
                 },
               ],
             }
-          } else {
-            switch ([choixValeurExacte, choixValeurApprochee].toString()) {
-              case 'true,false':
-                dataTemplate =
-                  'Valeur exacte du périmètre : %{champ1}$\\text{cm}$'
-                dataOptions = {
-                  champ1: { keyboaed: KeyboardType.clavierNumbers },
-                }
-                reponses = {
-                  champ1: {
-                    value: [
-                      stringNombre(reponseL1) + '\\pi',
-                      stringNombre(reponseL1) + '\\times\\pi',
-                      '\\pi\\times' + stringNombre(reponseL1),
-                    ],
-                  },
-                }
-                break
-              case 'false,true':
-                dataTemplate =
-                  'Valeur approchée du périmètre : %{champ1}$\\text{cm}$'
-                dataOptions = {
-                  champ1: { keyboaed: KeyboardType.clavierNumbers },
-                }
-                reponses = {
-                  champ1: { value: [reponseL2, reponseL2bis] },
-                }
-                break
-              case 'true,true':
-              default:
-                dataTemplate =
-                  'Valeur exacte du périmètre : %{champ1}$\\text{cm}$\nValeur approchée du périmètre : %{champ2}$\\text{cm}$'
-                dataOptions = {
-                  champ1: { keyboaed: KeyboardType.clavierNumbers },
-                  champ2: { keyboaed: KeyboardType.clavierNumbers },
-                }
-                reponses = {
-                  champ1: {
-                    value: [
-                      stringNombre(reponseL1) + '\\pi',
-                      stringNombre(reponseL1) + '\\times\\pi',
-                      '\\pi\\times' + stringNombre(reponseL1),
-                    ],
-                  },
-                  champ2: { value: [reponseL2, reponseL2bis] },
-                }
-            }
           }
         } else if (this.sup === 2) {
-          if (context.isAmc) {
+          if (context.isHtml && this.interactif) {
+            if (choixValeurExacte) {
+              setReponse(
+                this,
+                this.sup3 === 4 ? 2 * i : i,
+                [
+                  stringNombre(reponseA1) + '\\pi',
+                  stringNombre(reponseA1) + '\\times\\pi',
+                  '\\pi\\times' + stringNombre(reponseA1),
+                ],
+                { formatInteractif: 'texte' },
+              )
+              texte +=
+                "Valeur exacte de l'aire : " +
+                ajouteChampTexteMathLive(
+                  this,
+                  this.sup3 === 4 ? 2 * i : i,
+                  KeyboardType.clavierNumbers,
+                  { texteApres: '$\\text{ cm}^2$' },
+                )
+            } else if (choixValeurApprochee) {
+              setReponse(
+                this,
+                this.sup3 === 4 ? 2 * i + 1 : i,
+                [reponseA2, reponseA2bis],
+                { formatInteractif: 'calcul' },
+              )
+              texte +=
+                (this.sup3 === 4 ? '<br>' : '') +
+                "Valeur approchée de l'aire : " +
+                ajouteChampTexteMathLive(
+                  this,
+                  this.sup3 === 4 ? 2 * i + 1 : i,
+                  KeyboardType.clavierNumbers,
+                  { texteApres: '$\\text{ cm}^2$' },
+                )
+            }
+          } else {
             this.autoCorrection[i] = {
               enonce: '',
               options: { multicolsAll: true, barreseparation: true },
@@ -398,57 +422,83 @@ export default class PerimetreAireDisques extends Exercice {
                 },
               ],
             }
-          } else {
-            switch ([choixValeurExacte, choixValeurApprochee].toString()) {
-              case 'true,false':
-                dataTemplate =
-                  "Valeur exacte de l'aire : %{champ1}$\\text{cm}^2$"
-                dataOptions = {
-                  champ1: { keyboaed: KeyboardType.clavierNumbers },
-                }
-                reponses = {
-                  champ1: {
-                    value: [
-                      stringNombre(reponseA1) + '\\pi',
-                      stringNombre(reponseA1) + '\\times\\pi',
-                      '\\pi\\times' + stringNombre(reponseA1),
-                    ],
-                  },
-                }
-                break
-              case 'false,true':
-                dataTemplate =
-                  "Valeur approchée de l'aire : %{champ1}$\\text{cm}^2$"
-                dataOptions = {
-                  champ1: { keyboaed: KeyboardType.clavierNumbers },
-                }
-                reponses = {
-                  champ1: { value: [reponseA2, reponseA2bis] },
-                }
-                break
-              case 'true,true':
-              default:
-                dataTemplate =
-                  "Valeur exacte de l'aire : %{champ1}$\\text{cm}^2$\nValeur approchée de l'aire : %{champ2}$\\text{cm}^2$"
-                dataOptions = {
-                  champ1: { keyboaed: KeyboardType.clavierNumbers },
-                  champ2: { keyboaed: KeyboardType.clavierNumbers },
-                }
-                reponses = {
-                  champ1: {
-                    value: [
-                      stringNombre(reponseA1) + '\\pi',
-                      stringNombre(reponseA1) + '\\times\\pi',
-                      '\\pi\\times' + stringNombre(reponseA1),
-                    ],
-                  },
-                  champ2: { value: [reponseA2, reponseA2bis] },
-                }
-                break
-            }
           }
         } else {
-          if (context.isAmc) {
+          if (context.isHtml && this.interactif) {
+            if (choixValeurExacte) {
+              setReponse(
+                this,
+                this.sup3 === 4 ? 4 * i : 2 * i,
+                [
+                  stringNombre(reponseL1) + '\\pi',
+                  stringNombre(reponseL1) + '\\times\\pi',
+                  '\\pi\\times' + stringNombre(reponseL1),
+                ],
+                { formatInteractif: 'texte' },
+              )
+              texte +=
+                'Valeur exacte du périmètre : ' +
+                ajouteChampTexteMathLive(
+                  this,
+                  this.sup3 === 4 ? 4 * i : 2 * i,
+                  KeyboardType.clavierNumbers,
+                  { texteApres: ' $\\text{cm}$' },
+                )
+            }
+            if (choixValeurApprochee) {
+              setReponse(
+                this,
+                this.sup3 === 4 ? 4 * i + 1 : 2 * i,
+                [reponseL2, reponseL2bis],
+                { formatInteractif: 'calcul' },
+              )
+              texte +=
+                (this.sup3 === 4 ? '<br>' : '') +
+                'Valeur approchée du périmètre : ' +
+                ajouteChampTexteMathLive(
+                  this,
+                  this.sup3 === 4 ? 4 * i + 1 : 2 * i,
+                  KeyboardType.clavierNumbers,
+                  { texteApres: ' $\\text{cm}$' },
+                )
+            }
+            if (choixValeurExacte) {
+              setReponse(
+                this,
+                this.sup3 === 4 ? 4 * i + 2 : 2 * i + 1,
+                [
+                  stringNombre(reponseA1) + '\\pi',
+                  stringNombre(reponseA1) + '\\times\\pi',
+                  '\\pi\\times' + stringNombre(reponseA1),
+                ],
+                { formatInteractif: 'texte' },
+              )
+              texte +=
+                "<br>Valeur exacte de l'aire : " +
+                ajouteChampTexteMathLive(
+                  this,
+                  this.sup3 === 4 ? 4 * i + 2 : 2 * i + 1,
+                  KeyboardType.clavierNumbers,
+                  { texteApres: '$\\text{ cm}^2$' },
+                )
+            }
+            if (choixValeurApprochee) {
+              setReponse(
+                this,
+                this.sup3 === 4 ? 4 * i + 3 : 2 * i + 1,
+                [reponseA2, reponseA2bis],
+                { formatInteractif: 'calcul' },
+              )
+              texte +=
+                "<br>Valeur approchée de l'aire : " +
+                ajouteChampTexteMathLive(
+                  this,
+                  this.sup3 === 4 ? 4 * i + 3 : 2 * i + 1,
+                  KeyboardType.clavierNumbers,
+                  { texteApres: '$\\text{ cm}^2$' },
+                )
+            }
+          } else {
             this.autoCorrection[i] = {
               enonce: '',
               options: { multicolsAll: true, barreseparation: true },
@@ -530,86 +580,9 @@ export default class PerimetreAireDisques extends Exercice {
                 },
               ],
             }
-          } else {
-            switch ([choixValeurExacte, choixValeurApprochee].toString()) {
-              case 'true,false':
-                dataTemplate =
-                  "Valeur exacte du périmètre : %{champ1}$\\text{cm}$\nValeur exacte de l'aire : %{champ2}$\\text{cm}^2$"
-                dataOptions = {
-                  champ1: { keyboaed: KeyboardType.clavierNumbers },
-                  champ2: { keyboaed: KeyboardType.clavierNumbers },
-                }
-                reponses = {
-                  champ1: {
-                    value: [
-                      stringNombre(reponseL1) + '\\pi',
-                      stringNombre(reponseL1) + '\\times\\pi',
-                      '\\pi\\times' + stringNombre(reponseL1),
-                    ],
-                  },
-                  champ2: {
-                    value: [
-                      stringNombre(reponseA1) + '\\pi',
-                      stringNombre(reponseA1) + '\\times\\pi',
-                      '\\pi\\times' + stringNombre(reponseA1),
-                    ],
-                  },
-                }
-                break
-              case 'false,true':
-                dataTemplate =
-                  "Valeur approchée du périmètre : %{champ1}$\\text{cm}$\nValeur approchée de l'aire : %{champ2}$\\text{cm}^2$"
-                dataOptions = {
-                  champ1: { keyboaed: KeyboardType.clavierNumbers },
-                  champ2: { keyboaed: KeyboardType.clavierNumbers },
-                }
-                reponses = {
-                  champ1: { value: [reponseL2, reponseL2bis] },
-                  champ2: { value: [reponseA2, reponseA2bis] },
-                }
-                break
-              case 'true,true':
-              default:
-                dataTemplate =
-                  "Valeur exacte du périmètre : %{champ1}$\\text{cm}$\nValeur approchée du périmètre : %{champ2}$\\text{cm}$\nValeur exacte de l'aire : %{champ3}$\\text{cm}^2$\nValeur approchée de l'aire : %{champ4}$\\text{cm}^2$"
-                dataOptions = {
-                  champ1: { keyboaed: KeyboardType.clavierNumbers },
-                  champ2: { keyboaed: KeyboardType.clavierNumbers },
-                  champ3: { keyboaed: KeyboardType.clavierNumbers },
-                  champ4: { keyboaed: KeyboardType.clavierNumbers },
-                }
-                reponses = {
-                  champ1: {
-                    value: [
-                      stringNombre(reponseL1) + '\\pi',
-                      stringNombre(reponseL1) + '\\times\\pi',
-                      '\\pi\\times' + stringNombre(reponseL1),
-                    ],
-                  },
-                  champ2: { value: [reponseL2, reponseL2bis] },
-                  champ3: {
-                    value: [
-                      stringNombre(reponseA1) + '\\pi',
-                      stringNombre(reponseA1) + '\\times\\pi',
-                      '\\pi\\times' + stringNombre(reponseA1),
-                    ],
-                  },
-                  champ4: { value: [reponseA2, reponseA2bis] },
-                }
-                break
-            }
           }
         }
-        texte += addMultiMathfield(this, i, {
-          dataTemplate,
-          dataOptions,
-        })
-        handleAnswers(
-          this,
-          i,
-          { bareme: toutAUnPoint, ...reponses },
-          { formatInteractif: 'multiMathfield' },
-        )
+
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr
         i++

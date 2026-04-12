@@ -1,8 +1,7 @@
 import Decimal from 'decimal.js'
-import { addMultiMathfield } from '../../lib/interactif/MultiMathfield/MultiMathfield'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { toutAUnPoint } from '../../lib/interactif/mathLive'
+import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
@@ -18,7 +17,7 @@ function degCos(deg: number): number {
 }
 
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'mathLive'
 export const dateDePublication = '27/06/2021'
 export const dateDeModifImportante = '18/09/2024'
 export const titre = 'Arrondir une racine carrée'
@@ -28,11 +27,11 @@ export const titre = 'Arrondir une racine carrée'
  * @author Mireille Gain
  */
 
-export const uuid = '41188'
+export const uuid = '41187'
 
 export const refs = {
-  'fr-fr': ['4G20-4', 'BP2AutoS2', 'BP2G8'],
-  'fr-ch': ['10NO3-2'],
+  'fr-fr': [],
+  'fr-ch': [],
 }
 export default class ArrondirUneValeur4e extends Exercice {
   version: number
@@ -56,6 +55,9 @@ export default class ArrondirUneValeur4e extends Exercice {
       let i = 0, texte = '', texteCorr = '', cpt = 0;
       i < this.nbQuestions && cpt < 50;
     ) {
+      this.autoCorrection[3 * i] = {}
+      this.autoCorrection[3 * i + 1] = {}
+      this.autoCorrection[3 * i + 2] = {}
       if (this.version === 1) {
         rac = new Decimal(
           randint(
@@ -82,38 +84,32 @@ export default class ArrondirUneValeur4e extends Exercice {
         }
       }
 
-      texte = `Quand on écrit sur la calculatrice $${nb}$, elle renvoie : $${texNombre(n, 10)}$.<br>`
+      texte = `Quand on écrit sur la calculatrice $${nb}$, elle renvoie : $${texNombre(n, 10)}.$`
 
-      texte += addMultiMathfield(this, i, {
-        dataTemplate: `a) Son arrondi à l'unité est : %{champ1}
-  b) Son arrondi au dixième est : %{champ2}
-  c) Son arrondi au centième est : %{champ3}
-  `,
-        dataOptions: {
-          champ1: { keyboard: KeyboardType.clavierNumbers },
-          champ2: { keyboard: KeyboardType.clavierNumbers },
-          champ3: { keyboard: KeyboardType.clavierNumbers },
-        },
-      })
-      handleAnswers(
-        this,
-        i,
-        {
-          bareme: toutAUnPoint,
-          champ1: { value: n.round().toString() },
-          champ2: { value: n.toDP(1).toString() },
-          champ3: { value: n.toDP(2).toString() },
-        },
-        { formatInteractif: 'multiMathfield' },
-      )
-
+      texte += "<br>Son arrondi à l'unité est : "
+      texte += this.interactif
+        ? ajouteChampTexteMathLive(this, 3 * i, KeyboardType.clavierNumbers)
+        : '$\\ldots\\ldots\\ldots$'
       // texteCorr = `Quand on écrit sur la calculatrice $${nb}$, elle renvoie : $${texNombre(n, 10)}.$`
       texteCorr = `Arrondi à l'unité de $${texNombre(n, 10)}$ : `
       texteCorr += `$${miseEnEvidence(texNombre(n, 0))}$`
+      setReponse(this, 3 * i, n.round())
+
+      texte += '<br>Son arrondi au dixième est : '
+      texte += this.interactif
+        ? ajouteChampTexteMathLive(this, 3 * i + 1, KeyboardType.clavierNumbers)
+        : '$\\ldots\\ldots\\ldots$'
       texteCorr += `<br>Arrondi au dixième de $${texNombre(n, 10)}$ : `
       texteCorr += `$${miseEnEvidence(texNombre(n, 1, true))}$`
+      setReponse(this, 3 * i + 1, n.toDP(1))
+
+      texte += '<br>Son arrondi au centième est : '
+      texte += this.interactif
+        ? ajouteChampTexteMathLive(this, 3 * i + 2, KeyboardType.clavierNumbers)
+        : '$\\ldots\\ldots\\ldots$'
       texteCorr += `<br>Arrondi au centième de $${texNombre(n, 10)}$ : `
       texteCorr += `$${miseEnEvidence(texNombre(n, 2, true))}$`
+      setReponse(this, 3 * i + 2, n.toDP(2))
 
       if (this.questionJamaisPosee(i, n)) {
         // Si la question n'a jamais été posée, on en créé une autre

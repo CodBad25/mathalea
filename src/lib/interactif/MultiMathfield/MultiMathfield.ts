@@ -1,6 +1,7 @@
 // Utilitaire pour styliser les items a), b), ... dans un texte brut
 import { MathfieldElement } from 'mathlive'
 import { context } from '../../../modules/context'
+import { injectFontInMetaInteractif2d } from '../../../modules/loaders'
 import { bleuMathalea } from '../../colors'
 import type { IExercice, ValeurNames } from '../../types'
 import { buildDataKeyboardFromStyle, KeyboardType } from '../claviers/keyboard'
@@ -196,6 +197,7 @@ export class MultiMathfieldElement extends HTMLElement {
         mf.style.margin = '0'
         mf.style.padding = '0'
         currentSpan.appendChild(mf)
+        injectFontInMetaInteractif2d(mf)
       }
       lastIndex = regex.lastIndex
     }

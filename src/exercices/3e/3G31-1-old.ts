@@ -18,19 +18,20 @@ import { texNombre } from '../../lib/outils/texNombre'
 import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
+import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
 
 /**
  * Convertit un angle en degrés vers des radians
  */
-function degToRad(deg) {
+function degToRad(deg: number) {
   return (deg * Math.PI) / 180
 }
 
 /**
  * Convertit un angle en radians vers des degrés
  */
-function radToDeg(rad) {
+function radToDeg(rad: number) {
   return (rad * 180) / Math.PI
 }
 
@@ -49,8 +50,8 @@ export const titre = "Calculer toutes les mesures d'angle d'une figure complexe"
 export const uuid = '35e0b'
 
 export const refs = {
-  'fr-fr': ['3G31-1'],
-  'fr-ch': ['1mT-6'],
+  'fr-fr': [],
+  'fr-ch': [],
 }
 export default class CalculDAngleFigureComplexe extends Exercice {
   constructor() {
@@ -101,7 +102,13 @@ export default class CalculDAngleFigureComplexe extends Exercice {
       a5.epaisseur = 2
       const ACB = Math.round(angle(A, C, B))
 
-      const objetsMathalea = [t1, t2, c1, c2, labels]
+      const objetsMathalea: NestedObjetMathalea2dArray = [
+        t1,
+        t2,
+        c1,
+        c2,
+        labels,
+      ]
       switch (
         typesDeQuestion // Suivant le type de question, le contenu sera différent
       ) {
@@ -226,6 +233,7 @@ export default class CalculDAngleFigureComplexe extends Exercice {
           }
           break
         case 'BA-AD-ACB':
+        default:
           AC = BA / Math.sin(degToRad(ACB))
           ACD = Math.round(radToDeg(Math.atan(AD / AC)))
           a1 = afficheMesureAngle(A, C, B, 'black', 1, ACB + '^\\circ')
