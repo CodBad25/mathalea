@@ -1,7 +1,6 @@
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { toutAUnPoint } from '../../lib/interactif/mathLive'
-import { addMultiMathfield } from '../../lib/interactif/MultiMathfield/MultiMathfield'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { sp } from '../../lib/outils/outilString'
@@ -16,7 +15,7 @@ import Exercice from '../Exercice'
 
 export const dateDePublication = '08/09/2025'
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'mathLive'
 export const amcReady = true
 export const amcType = 'AMCHybride'
 export const titre =
@@ -26,10 +25,10 @@ export const titre =
  * Encadrer par des puissances de 10 avec coefficients entiers consécutifs
  * @author Éric Elter (d'après 4C30-1)
  */
-export const uuid = '4068c'
+export const uuid = '4068b'
 
 export const refs = {
-  'fr-fr': ['4C30-1b'],
+  'fr-fr': [],
   'fr-ch': [''],
 }
 
@@ -176,38 +175,32 @@ export default class PuissancesEncadrementCoefficients extends Exercice {
       consigneAMC = `$\\dots\\dots\\dots${sp(1)}\\leqslant ${nombreTexte}\\leqslant${sp(1)}\\dots\\dots\\dots$`
 
       texte = this.interactif
-        ? addMultiMathfield(this, i, {
-            dataTemplate: `%{champ1} $\\leqslant ${nombreTexte} \\leqslant$ %{champ2}`,
-            dataOptions: {
-              champ1: {
-                keyboard:
-                  KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets,
-              },
-              champ2: {
-                keyboard:
-                  KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets,
-              },
-            },
-          })
+        ? ajouteChampTexteMathLive(
+            this,
+            2 * i,
+            KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets,
+          ) +
+          `$\\leqslant ${nombreTexte}\\leqslant $` +
+          ajouteChampTexteMathLive(
+            this,
+            2 * i + 1,
+            KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets,
+          )
         : consigneAMC
 
       // Définir les réponses pour l'interactif
-      handleAnswers(
-        this,
-        i,
-        {
-          bareme: toutAUnPoint,
-          champ1: {
-            value: borneInfExpr,
-            options: { ecritureScientifique: true },
-          },
-          champ2: {
-            value: borneSupExpr,
-            options: { ecritureScientifique: true },
-          },
+      handleAnswers(this, 2 * i, {
+        reponse: {
+          value: borneInfExpr,
+          options: { ecritureScientifique: true },
         },
-        { formatInteractif: 'multiMathfield' },
-      )
+      })
+      handleAnswers(this, 2 * i + 1, {
+        reponse: {
+          value: borneSupExpr,
+          options: { ecritureScientifique: true },
+        },
+      })
 
       texteCorr = `$${miseEnEvidence(borneInfExpr)} \\leqslant ${nombreTexte} \\leqslant ${miseEnEvidence(borneSupExpr)}$`
       texteCorr += ` car $${borneInfExpr} = ${texNombre(encadrement.borneInf, 4)}$ et $${borneSupExpr} = ${texNombre(encadrement.borneSup, 4)}.$`

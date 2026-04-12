@@ -23,7 +23,11 @@ import { verifQuestionTableur } from '../tableur/outilsTableur'
 import { afficheScore } from './afficheScore'
 import { fonctionComparaison } from './comparisonFunctions'
 import { verifDragAndDrop } from './DragAndDrop'
-import { toutPourUnPoint, verifQuestionMathLive } from './mathLive'
+import {
+  toutAUnPoint,
+  toutPourUnPoint,
+  verifQuestionMathLive,
+} from './mathLive'
 import { verifQuestionQcm } from './qcm'
 import { verifQuestionListeDeroulante } from './questionListeDeroulante'
 import { verifQuestionSvgSelection } from './questionSvgSelection/questionSvgSelection'
@@ -1288,7 +1292,7 @@ export function verifQuestionMultiMathfield(
     }
   }
   const bareme: (arg: number[]) => [number, number] =
-    reponses.bareme ?? toutPourUnPoint
+    reponses.bareme ?? toutAUnPoint
   const feedbackFunction = reponses.feedback ?? undefined
   const variables = Object.entries(reponses).filter(
     ([key]) => key !== 'bareme' && key !== 'feedback',
@@ -1346,7 +1350,7 @@ export function verifQuestionMultiMathfield(
       else {
         result = {
           isOk: false,
-          feedback: '',
+          feedback: result.feedback ?? '',
         }
       }
     }
@@ -1361,7 +1365,7 @@ export function verifQuestionMultiMathfield(
     if (compteurSaisiesVides > 0) {
       feedback = `Il manque ${compteurSaisiesVides} réponse${compteurSaisiesVides > 1 ? 's' : ''}.`
     } else {
-      feedback = `Certaines réponses sont incorrectes.`
+      feedback = feedback ?? `Certaines réponses sont incorrectes.`
     }
   }
   if (feedbackFunction != null) {

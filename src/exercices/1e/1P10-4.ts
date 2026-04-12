@@ -12,7 +12,7 @@ import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 export const titre = 'Calculer  une probabilité avec un tableau'
 export const interactifReady = true
-export const interactifType = 'mathfield'
+export const interactifType = 'multiMMathfield'
 
 export const dateDePublication = '29/04/2025'
 export const dateDeModifImportante = '06/04/2026'
@@ -35,7 +35,7 @@ export default class CalculerProbaTableau extends Exercice {
     this.spacingCorr = 3
   }
 
-   nouvelleVersion() {
+  nouvelleVersion() {
     // Tous les types de questions sont posées mais l'ordre diffère à chaque "cycle"
 
     for (
@@ -66,7 +66,6 @@ export default class CalculerProbaTableau extends Exercice {
         listeEV,
         ev;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       listeEV = [
         ['A', 'B'],
@@ -197,12 +196,17 @@ export default class CalculerProbaTableau extends Exercice {
           champ3: { keyboard: KeyboardType.clavierDeBaseAvecFraction },
         },
       })}`
-      handleAnswers(this, i, {
-        champ1: { value: reponse[0] },
-        champ2: { value: reponse[1] },
-        champ3: { value: reponse[2] },
-        bareme: toutAUnPoint,
-      }, { formatInteractif: 'multiMathfield' })
+      handleAnswers(
+        this,
+        i,
+        {
+          champ1: { value: reponse[0] },
+          champ2: { value: reponse[1] },
+          champ3: { value: reponse[2] },
+          bareme: toutAUnPoint,
+        },
+        { formatInteractif: 'multiMathfield' },
+      )
       texteCorr = `$${calculCorr[0]}$<br>
           $${calculCorr[1]}$ <br> 
           $${calculCorr[2]}$`

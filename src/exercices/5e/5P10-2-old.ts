@@ -1,10 +1,9 @@
 import Decimal from 'decimal.js'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
-import { MetaInteractif2d } from '../../lib/2d/interactif2d'
 import { Tableau } from '../../lib/2d/tableau'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { toutAUnPoint } from '../../lib/interactif/mathLive'
+import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import {
@@ -17,22 +16,21 @@ import { context } from '../../modules/context'
 import FractionEtendue from '../../modules/FractionEtendue'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
-import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
 
 export const titre = 'Calculer le coefficient de proportionnalité'
 export const interactifReady = true
-export const interactifType = 'MetaInteractif2d'
+export const interactifType = 'mathLive'
 export const amcReady = true
 export const amcType = 'AMCHybride'
 export const dateDePublication = '18/03/2023'
 
-export const uuid = '2d5ec'
+export const uuid = '2d5eb'
 
 export const refs = {
-  'fr-fr': ['5P10-2', 'BP2AutoL9'],
-  'fr-2016': ['6P15', 'BP2AutoL9'],
-  'fr-ch': ['9FA3-2'],
+  'fr-fr': [],
+  'fr-2016': [],
+  'fr-ch': [],
 }
 /**
  * @author jean-claude Lhote
@@ -147,11 +145,13 @@ export default class CalculerCoeffPropo extends Exercice {
     for (let i = 0, texte, texteCorr; i < this.nbQuestions; i++) {
       if (context.isAmc) this.autoCorrection[i] = {}
       // Je suis en js, je fais du typage inline JsDoc pratique pour récupérer l'autocomplétion
-      let coefficient: number | Decimal | FractionEtendue
+      /** @type number | Decimal | FractionEtendue */
+      let coefficient
+      /** @type Array<{ nombre: number, visible: boolean }> */
       const premiereLigne: Cell[] = []
+      /** @type Array<{ nombre: number, visible: boolean }> */
       const deuxiemeLigne: Cell[] = []
       const colonneReference = randint(0, 2) // La colonne qui contiendra deux valeurs visibles pour faire le calcul
-      const objets: NestedObjetMathalea2dArray = []
       if (listCoefficientUsed.length >= 9)
         listCoefficientUsed.splice(0, listCoefficientUsed.length)
       do {
@@ -259,14 +259,14 @@ export default class CalculerCoeffPropo extends Exercice {
         premiereLigne.map((elt) => {
           return elt.visible
             ? { texte: `$${texNombre(elt.nombre)}$`, math: true }
-            : { texte: this.interactif ? '' : '...' }
+            : { texte: '...' }
         }),
       )
       const ligne2 = [{ texte: 'Grandeur B' }].concat(
         deuxiemeLigne.map((elt) => {
           return elt.visible
             ? { texte: `$${texNombre(elt.nombre)}$`, math: true }
-            : { texte: this.interactif ? '' : '...' }
+            : { texte: '...' }
         }),
       )
       const monTableau = context.isAmc // EE : En AMC, les flèches ne passent pas. Je les supprime en attendant de trouver une solution.
@@ -296,16 +296,13 @@ export default class CalculerCoeffPropo extends Exercice {
               ligne1,
               ligne2,
               flecheDroite: {
-                texte: this.interactif ? '' : '\\times \\ldots',
+                texte: '\\times \\ldots',
                 latex: true,
                 color: 'blue',
                 gras: true,
               },
               flecheDroiteSens: 'bas',
-              flecheGauche: {
-                texte: this.interactif ? '' : '\\times \\ldots',
-                latex: true,
-              },
+              flecheGauche: { texte: '\\times \\ldots', latex: true },
               flecheGaucheSens: 'haut',
             })
           : new Tableau({
@@ -316,14 +313,13 @@ export default class CalculerCoeffPropo extends Exercice {
               ligne1,
               ligne2,
               flecheDroite: {
-                texte: this.interactif ? '' : '\\times \\ldots',
+                texte: '\\times \\ldots',
                 latex: true,
                 color: 'blue',
                 gras: true,
               },
               flecheDroiteSens: 'bas',
             })
-      objets.push(monTableau)
       const ligne1Corr = [{ texte: 'Grandeur A' }].concat(
         premiereLigne.map((elt) => {
           return { texte: texNombre(elt.nombre), math: true }
@@ -406,66 +402,47 @@ export default class CalculerCoeffPropo extends Exercice {
         }
       }
       if (context.isHtml) {
-        const colonnesReponses = [1, 2, 3].filter(
-          (colonne) => colonne !== colonneReference + 1,
+        // Pour HTML on utilise mathalea2d
+        texte += mathalea2d(
+          Object.assign({}, fixeBordures([monTableau])),
+          monTableau,
         )
-        const yReponse2 = premiereLigne[colonnesReponses[0] - 1].visible ? 1 : 3
-        const yReponse3 = premiereLigne[colonnesReponses[1] - 1].visible ? 1 : 3
-        const xReponse2 = colonnesReponses[0] - 1
-        const xReponse3 = colonnesReponses[1] - 1
         if (this.interactif) {
-          const inputs = new MetaInteractif2d(
-            [
-              {
-                x: 17.3,
-                y: 2,
-                content: '\\times %{champ1}',
-                classe: KeyboardType.clavierDeBaseAvecFraction,
-                blanc: '\\ldots',
-                opacity: 1,
-                index: 0,
-              },
-              {
-                x: 7.5 + xReponse2 * 3,
-                y: yReponse2,
-                content: '%{champ1}',
-                classe: KeyboardType.clavierDeBaseAvecFraction,
-                blanc: '\\ldots',
-                opacity: 1,
-                index: 1,
-              },
-              {
-                x: 7.5 + xReponse3 * 3,
-                y: yReponse3,
-                content: '%{champ1}',
-                classe: KeyboardType.clavierDeBaseAvecFraction,
-                blanc: '\\ldots',
-                opacity: 1,
-                index: 2,
-              },
-            ],
-            {
-              exercice: this,
-              question: i,
-            },
-          )
-          objets.push(inputs)
-          handleAnswers(
+          texte +=
+            'Coefficient de proportionnalité de A à B : ' +
+            ajouteChampTexteMathLive(
+              this,
+              3 * i,
+              KeyboardType.clavierDeBaseAvecFraction,
+            )
+          setReponse(this, 3 * i, coefficient, {
+            formatInteractif: coefficientRationnel ? 'fractionEgale' : 'calcul',
+          })
+          texte += `<br>Valeur de la grandeur ${reponsesAttendue.reponse1.lettre} pour la colonne ${reponsesAttendue.reponse1.colonne} :`
+          texte += ajouteChampTexteMathLive(
             this,
-            i,
-            {
-              bareme: toutAUnPoint,
-              field0: { value: coefficient },
-              field1: { value: reponsesAttendue.reponse1.reponse.valeur },
-              field2: { value: reponsesAttendue.reponse2.reponse.valeur },
-            },
-            { formatInteractif: 'MetaInteractif2d' },
+            3 * i + 1,
+            KeyboardType.clavierNumbers,
+          )
+          setReponse(
+            this,
+            3 * i + 1,
+            reponsesAttendue.reponse1.reponse.valeur,
+            { formatInteractif: 'calcul' },
+          )
+          texte += `<br>Valeur de la grandeur ${reponsesAttendue.reponse2.lettre} pour la colonne ${reponsesAttendue.reponse2.colonne} :`
+          texte += ajouteChampTexteMathLive(
+            this,
+            3 * i + 2,
+            KeyboardType.clavierNumbers,
+          )
+          setReponse(
+            this,
+            3 * i + 2,
+            reponsesAttendue.reponse2.reponse.valeur,
+            { formatInteractif: 'calcul' },
           )
         }
-        texte += mathalea2d(
-          Object.assign({}, fixeBordures(objets, { rxmin: -1.5 })),
-          objets,
-        )
       } else {
         // pour LAtex, c'est profCollege dans le texte
         texte += '\n\\Propor[Math,Stretch=2,largeur=15]{'
