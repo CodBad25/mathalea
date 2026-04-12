@@ -10,7 +10,7 @@ import Exercice from '../Exercice'
 
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif' // fonction qui va préparer l'analyse de la saisie
-import { addMultiMathfield } from '../../lib/interactif/MultiMathfield/MultiMathfield'
+import { remplisLesBlancs } from '../../lib/interactif/questionMathLive' // fonctions de mise en place des éléments interactifs
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
@@ -20,26 +20,15 @@ export const titre =
 
 export const dateDePublication = '07/02/2026'
 
-export const uuid = 'b4e87'
+export const uuid = 'b4e86'
 
 export const refs = {
-  'fr-fr': ['TSG2-10'],
+  'fr-fr': [],
   'fr-ch': [],
 }
 export const interactifReady = true // pour définir qu'exercice peut s'afficher en mode interactif.
-export const interactifType = 'multiMathfield'
+export const interactifType = 'mathLive'
 
-function bareme(listePoints: number[]): [number, number] {
-  let points = 0
-  for (let i = 0; i < 4; i++) {
-    const indexBase = i * 3
-    const x = listePoints[indexBase]
-    const y = listePoints[indexBase + 1]
-    const z = listePoints[indexBase + 2]
-    points += x * y * z
-  }
-  return [points, 4]
-}
 /**
  * Exercice dans un cube, calculs de coordonnées,
  *
@@ -194,38 +183,52 @@ export default class NomExercice extends Exercice {
           objets,
         ) +
         '<br>' +
-        `Donner les coordonnées des points $${Point1}$, $${Point2}$, $${Point3}$ et $${Point4}$ dans le repère ${rep}.<br>`
+        `Donner les coordonnées des points $${Point1}$, $${Point2}$, $${Point3}$ et $${Point4}$ dans le repère ${rep}`
 
       if (this.interactif) {
         texte +=
           ' <br>' +
-          addMultiMathfield(this, i, {
-            dataTemplate: `$${Point1}($%{champ1}$~;~$%{champ2}$~;~$%{champ3}$)$, $${Point2}($%{champ4}$~;~$%{champ5}$~;~$%{champ6}$)$\n $${Point3}($%{champ7}$~;~$%{champ8}$~;~$%{champ9}$)$, $${Point4}($%{champ10}$~;~$%{champ11}$~;~$%{champ12}$)$`,
-            dataOptions: {},
-          })
-
-        handleAnswers(
-          this,
-          i,
-          {
-            bareme,
-            champ1: { value: texNombre(x1) },
-            champ2: { value: texNombre(y1) },
-            champ3: { value: texNombre(z1) },
-            champ4: { value: texNombre(x2) },
-            champ5: { value: texNombre(y2) },
-            champ6: { value: texNombre(z2) },
-            // @ts-ignore
-            champ7: { value: texNombre(x3) },
-            champ8: { value: texNombre(y3) },
-            champ9: { value: texNombre(z3) },
-            champ10: { value: texNombre(x4) },
-            champ11: { value: texNombre(y4) },
-            champ12: { value: texNombre(z4) },
-          },
-          { formatInteractif: 'multiMathfield' },
-        )
-      }
+          remplisLesBlancs(
+            this,
+            4 * i,
+            `${Point1}(%{champ1}~;~%{champ2}~;~%{champ3}),`,
+          ) +
+          remplisLesBlancs(
+            this,
+            4 * i + 1,
+            `${Point2}(%{champ1}~;~%{champ2}~;~%{champ3}),`,
+          ) +
+          remplisLesBlancs(
+            this,
+            4 * i + 2,
+            `${Point3}(%{champ1}~;~%{champ2}~;~%{champ3}),`,
+          ) +
+          remplisLesBlancs(
+            this,
+            4 * i + 3,
+            `${Point4}(%{champ1}~;~%{champ2}~;~%{champ3}),`,
+          )
+        handleAnswers(this, 4 * i, {
+          champ1: { value: texNombre(x1) },
+          champ2: { value: texNombre(y1) },
+          champ3: { value: texNombre(z1) },
+        })
+        handleAnswers(this, 4 * i + 1, {
+          champ1: { value: texNombre(x2) },
+          champ2: { value: texNombre(y2) },
+          champ3: { value: texNombre(z2) },
+        })
+        handleAnswers(this, 4 * i + 2, {
+          champ1: { value: texNombre(x3) },
+          champ2: { value: texNombre(y3) },
+          champ3: { value: texNombre(z3) },
+        })
+        handleAnswers(this, 4 * i + 3, {
+          champ1: { value: texNombre(x4) },
+          champ2: { value: texNombre(y4) },
+          champ3: { value: texNombre(z4) },
+        })
+      } else texte += '.'
 
       texteCorr =
         `Les coordonnées dans le repère ${rep} sont :<br>` +
