@@ -1,33 +1,49 @@
-import { codageAngle } from '../../lib/2d/angles'
-import { cercleCentrePoint } from '../../lib/2d/cercle'
-import { codageAngleDroit } from '../../lib/2d/CodageAngleDroit'
+import { Arc, arc } from '../../lib/2d/Arc'
+import { Cercle, cercleCentrePoint } from '../../lib/2d/cercle'
+import {
+  CodageAngleDroit,
+  codageAngleDroit,
+} from '../../lib/2d/CodageAngleDroit'
+import { colorToLatexOrHTML } from '../../lib/2d/colorToLatexOrHtml'
+import { fixeBordures } from '../../lib/2d/fixeBordures'
+import { motifs } from '../../lib/2d/pattern'
 import { PointAbstrait, pointAbstrait } from '../../lib/2d/PointAbstrait'
-import { segment } from '../../lib/2d/segmentsVecteurs'
+import { Segment, segment } from '../../lib/2d/segmentsVecteurs'
 import { labelPoint } from '../../lib/2d/textes'
 import { rotation } from '../../lib/2d/transformations'
-import { lampeMessage } from '../../lib/format/message'
-import { texteGras } from '../../lib/format/style'
+import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
-import { shuffle } from '../../lib/outils/arrayOutils'
-import { texteEnCouleur } from '../../lib/outils/embellissements'
+import { addMultiMathfield } from '../../lib/interactif/MultiMathfield/MultiMathfield'
+import {
+  combinaisonListes,
+  getRandomSubarray,
+  shuffle,
+} from '../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { numAlpha } from '../../lib/outils/outilString'
+import { texNombre } from '../../lib/outils/texNombre'
 import { fraction } from '../../modules/fractions'
 import { mathalea2d } from '../../modules/mathalea2d'
-import { listeQuestionsToContenu, randint } from '../../modules/outils'
+import {
+  gestionnaireFormulaireTexte,
+  listeQuestionsToContenu,
+  randint,
+} from '../../modules/outils'
 import Exercice from '../Exercice'
 
 export const interactifReady = true
-export const interactifType = 'mathLive'
-export const dateDeModificationImportante = '17/03/2026' // Rendu interactif par Jean-claude Lhote
+export const interactifType = 'multiMathField'
+export const dateDeModificationImportante = '12/04/2026'
 export const titre = 'Résoudre un problème en utilisant des fractions'
 
 /**
  * * Résoudre un problème additif de fractions niv 5e
- * @author Sébastien Lozano
+ * @author Éric Elter
+ * (sur les bases d'un exo de SL)
  */
-export const uuid = 'b6250'
+
+export const uuid = 'b625e'
 
 export const refs = {
   'fr-fr': ['5N22'],
@@ -39,28 +55,44 @@ function myCodageAngle(
   O: PointAbstrait,
   B: PointAbstrait,
   angle: number,
-  [...args],
-) {
+  numeroMotif: number,
+): CodageAngleDroit | Arc {
   if (angle === 90) {
     return codageAngleDroit(A, O, B)
   } else {
-    return codageAngle(A, O, angle, ...args)
+    const a = arc(A, O, angle, true, 'none', 'black', 0.5)
+    a.hachures = motifs(numeroMotif)
+    a.couleurDeRemplissage = colorToLatexOrHTML('none')
+    a.couleurDesHachures = colorToLatexOrHTML(bleuMathalea)
+    a.epaisseurDesHachures = 2
+    return a
   }
 }
 
-// une fonction pour gérer le texte en fonction de l'angle
-function myTexteVolsCorr(angle: number) {
+// une fonction pour gérer le texte en fonction de l'angle (sup=1 : 30°, sup=2 : 22.5°, sup=3 : 18°)
+function myTexteVolsCorr(
+  angle: number,
+  destination: string,
+  nbPetitsSecteurs: number,
+) {
   switch (angle) {
     case 90:
-      return `du secteur est un angle droit, il mesure $${angle}^\\circ$ sur les $360^\\circ$ d'un tour complet, donc il représente $\\dfrac{${angle}}{360}$ du disque soit $\\dfrac{1}{4}$.`
+      return `du secteur est un angle droit, il mesure $${angle}^\\circ$ sur les $360^\\circ$ d'un tour complet, donc il représente $\\dfrac{${angle}}{360}$ du disque, soit $\\dfrac{1}{4}$.`
     case 30:
-      return `rouge apparaît 3 fois, l'angle vert vaut $180^\\circ$ et il y a un angle droit.<br>
-L'angle pour un tour complet vaut $360^\\circ$, donc l'angle rouge vaut $(360-180-90)\\div 3 = ${angle}^\\circ$.<br>
-L'angle rouge mesure $${angle}^\\circ$ sur les $360^\\circ$ d'un tour complet, donc il représente $\\dfrac{${angle}}{360}$ du disque soit $\\dfrac{1}{12}$.
-`
+      return `du secteur apparaît ${nbPetitsSecteurs} fois, alors que le secteur le plus grand a un angle plat qui vaut $180^\\circ$ et que le dernier secteur a un angle droit qui vaut $90^\\circ$.<br>
+L'angle pour un tour complet vaut $360^\\circ$, donc pour l'angle ${destination} vaut $(360-180-90)\\div ${nbPetitsSecteurs} = ${angle}^\\circ$.<br>
+L'angle pour ${destination} mesure donc $${angle}^\\circ$ sur les $360^\\circ$ d'un tour complet, donc il représente $\\dfrac{${angle}}{360}$ du disque, soit $\\dfrac{1}{12}$.`
+    case 22.5:
+      return `du secteur apparaît ${nbPetitsSecteurs} fois, alors que le secteur le plus grand a un angle plat qui vaut $180^\\circ$ et que le dernier secteur a un angle droit qui vaut $90^\\circ$.<br>
+L'angle pour un tour complet vaut $360^\\circ$, donc pour l'angle ${destination} vaut $(360-180-90)\\div ${nbPetitsSecteurs} = ${texNombre(angle)}^\\circ$.<br>
+L'angle pour ${destination} mesure donc $${texNombre(angle)}^\\circ$ sur les $360^\\circ$ d'un tour complet, donc il représente $\\dfrac{${texNombre(angle)}}{360}$ du disque, soit $\\dfrac{1}{16}$.`
+    case 18:
+      return `du secteur apparaît ${nbPetitsSecteurs} fois, alors que le secteur le plus grand a un angle plat qui vaut $180^\\circ$ et que le dernier secteur a un angle droit qui vaut $90^\\circ$.<br>
+L'angle pour un tour complet vaut $360^\\circ$, donc pour l'angle ${destination} vaut $(360-180-90)\\div ${nbPetitsSecteurs} = ${angle}^\\circ$.<br>
+L'angle pour ${destination} mesure donc $${angle}^\\circ$ sur les $360^\\circ$ d'un tour complet, donc il représente $\\dfrac{${angle}}{360}$ du disque, soit $\\dfrac{1}{20}$.`
     case 180:
     default:
-      return `du secteur est un angle plat, il mesure $${angle}^\\circ$ sur les $360^\\circ$ d'un tour complet, donc il représente $\\dfrac{${angle}}{360}$ du disque soit $\\dfrac{1}{2}$.`
+      return `du secteur est un angle plat, il mesure $${angle}^\\circ$ sur les $360^\\circ$ d'un tour complet, donc il représente $\\dfrac{${angle}}{360}$ du disque, soit $\\dfrac{1}{2}$.`
   }
 }
 
@@ -77,105 +109,211 @@ export default class ProblemesAdditifsFractions5e extends Exercice {
   constructor() {
     super()
     this.nbQuestions = 1
+    this.spacing = 2
+    this.spacingCorr = 2
+    this.besoinFormulaireTexte = [
+      'Type de questions',
+      [
+        'Nombres séparés par des tirets  :',
+        '1 : 5 secteurs angulaires',
+        '2 : 6 secteurs angulaires',
+        '3 : 7 secteurs angulaires',
+        '4 : Mélange',
+      ].join('\n'),
+    ]
+    this.besoinFormulaire2Texte = [
+      'Type de destinations',
+      [
+        'Nombres séparés par des tirets  :',
+        '1 : Pays',
+        '2 : Ville',
+        '3 : Continents',
+        '4 : Mélange',
+      ].join('\n'),
+    ]
+    this.sup = '4'
+    this.sup2 = '4'
   }
 
   nouvelleVersion() {
-    this.introduction = lampeMessage({
-      titre: '',
-      texte: 'Calculatrice autorisée',
-      couleur: 'nombres',
-    })
+    const pays: [string, string][] = [
+      ['France', 'la France'],
+      ['Allemagne', "l'Allemagne"],
+      ['Espagne', "l'Espagne"],
+      ['Italie', "l'Italie"],
+      ['Royaume-Uni', 'le Royaume-Uni'],
+      ['États-Unis', 'les États-Unis'],
+      ['Canada', 'le Canada'],
+      ['Brésil', 'le Brésil'],
+      ['Argentine', "l'Argentine"],
+      ['Japon', 'le Japon'],
+      ['Chine', 'la Chine'],
+      ['Australie', "l'Australie"],
+    ]
+
+    const villes: [string, string][] = [
+      ['Paris', 'Paris'],
+      ['New York', 'New York'],
+      ['Tokyo', 'Tokyo'],
+      ['Londres', 'Londres'],
+      ['Berlin', 'Berlin'],
+      ['Madrid', 'Madrid'],
+      ['Rome', 'Rome'],
+      ['Sydney', 'Sydney'],
+      ['Toronto', 'Toronto'],
+      ['Nouméa', 'Nouméa'],
+      ['Pékin', 'Pékin'],
+      ['Dubaï', 'Dubaï'],
+    ]
+    const continents: [string, string][] = [
+      ['Afrique', "l'Afrique"],
+      ['Amérique du Nord', "l'Amérique du Nord"],
+      ['Amérique du Sud', "l'Amérique du Sud"],
+      ['Asie', "l'Asie"],
+      ['Europe', "l'Europe"],
+      ['Océanie', "l'Océanie"],
+      ['Antarctique', "l'Antarctique"],
+    ]
+    const typesDestinationsDisponibles = gestionnaireFormulaireTexte({
+      saisie: this.sup2,
+      max: 3,
+      melange: 4,
+      defaut: 4,
+      nbQuestions: this.nbQuestions,
+    }).map(Number)
+
+    const listeDestinations = combinaisonListes(
+      typesDestinationsDisponibles,
+      this.nbQuestions,
+    )
+    const typesSecteursDisponibles = gestionnaireFormulaireTexte({
+      saisie: this.sup,
+      max: 3,
+      melange: 4,
+      defaut: 4,
+      nbQuestions: this.nbQuestions,
+    }).map(Number)
+
+    const listeSecteurs = combinaisonListes(
+      typesSecteursDisponibles,
+      this.nbQuestions,
+    )
+
     for (
       let i = 0, texte, texteCorr, cpt = 0;
       i < this.nbQuestions && cpt < 50;
     ) {
       // on définit les fractions pour les vols et les arguments pour le graphique
-      type FracVols = [
-        number,
-        number,
-        [number, string, string, number, number, string, number],
-      ][]
-      let fracVols: FracVols = [
-        [1, 12, [1.8, ' ', 'black', 2, 1, 'red', 0.4]],
-        [1, 12, [1.8, ' ', 'black', 2, 1, 'red', 0.4]],
-        [1, 12, [1.8, ' ', 'black', 2, 1, 'red', 0.4]],
-        [1, 4, [1.8, ' ', 'black', 2, 1, 'blue', 0.4]],
-        [1, 2, [1.8, ' ', 'black', 2, 1, 'green', 0.4]],
-      ]
-      // on mélange pour l'aléatoire tant que les deux premieres fractions sont égales
+      type FracVols = [number, number, number][]
+      const motif1 = randint(0, 3)
+      const motif2 = randint(4, 10)
+
+      /**
+       * Chaque entrée : [numérateur, dénominateur, motifIndex]
+       * sup=1 → 5 secteurs : 3×30°(1/12), 1×90°(1/4), 1×180°(1/2)
+       * sup=2 → 6 secteurs : 4×22,5°(1/16), 1×90°(1/4), 1×180°(1/2)
+       * sup=3 → 7 secteurs : 5×18°(1/20), 1×90°(1/4), 1×180°(1/2)
+       */
+      let fracVols: FracVols
+      let nbPetitsSecteurs: number // nombre de petits secteurs identiques (hors 90° et 180°)
+
+      switch (listeSecteurs[i]) {
+        case 2:
+          // 6 secteurs : 4×22,5° (1/16), 1×90° (1/4), 1×180° (1/2)
+          nbPetitsSecteurs = 4
+          fracVols = [
+            [1, 16, motif1],
+            [1, 16, motif1],
+            [1, 16, motif1],
+            [1, 16, motif1],
+            [1, 4, 100],
+            [1, 2, motif2],
+          ]
+          break
+        case 3:
+          // 7 secteurs : 5×18° (1/20), 1×90° (1/4), 1×180° (1/2)
+          nbPetitsSecteurs = 5
+          fracVols = [
+            [1, 20, motif1],
+            [1, 20, motif1],
+            [1, 20, motif1],
+            [1, 20, motif1],
+            [1, 20, motif1],
+            [1, 4, 100],
+            [1, 2, motif2],
+          ]
+          break
+        default:
+          // sup=1 → 5 secteurs : 3×30° (1/12), 1×90° (1/4), 1×180° (1/2)
+          nbPetitsSecteurs = 3
+          fracVols = [
+            [1, 12, motif1],
+            [1, 12, motif1],
+            [1, 12, motif1],
+            [1, 4, 100],
+            [1, 2, motif2],
+          ]
+          break
+      }
+
+      // on mélange pour l'aléatoire tant que les deux premières fractions sont égales
       do {
         fracVols = shuffle(fracVols)
       } while (fracVols[0][1] === fracVols[1][1])
 
-      // let q1a = randint(1,5); // indice pour faire varier la 1ere question sur la destination
-      // let q1b = randint(1,5,[q1a]); // indice pour faire varier la 2eme question sur la destination
       let nbVolsTotal
-      let destinationsVols = [
-        ["l'", 'Afrique'],
-        ["l'", 'Asie'],
-        ["l'", 'Amérique'],
-        ["l'", 'Europe'],
-        ['la', ' France'],
-      ]
-      destinationsVols = shuffle(destinationsVols)
-      do {
-        nbVolsTotal = randint(200, 600)
-      } while (
-        nbVolsTotal % 2 !== 0 ||
-        nbVolsTotal % 3 !== 0 ||
-        nbVolsTotal % 4 !== 0
+      let choixDestinations = []
+      switch (listeDestinations[i]) {
+        case 1:
+          choixDestinations = pays
+          break
+        case 2:
+          choixDestinations = villes
+          break
+        default:
+          choixDestinations = continents
+          break
+      }
+      const destinationsVols = getRandomSubarray(
+        choixDestinations,
+        listeSecteurs[i] + 4,
       )
 
-      // pour les situations
+      // nbVolsTotal doit être divisible par 2, 3 ou 4 selon sup
+      // sup=1 : dénominateurs 12, 4, 2  → divisible par 12 (= ppcm(12,4,2))
+      // sup=2 : dénominateurs 16, 4, 2  → divisible par 16
+      // sup=3 : dénominateurs 20, 4, 2  → divisible par 20
+      const diviseur =
+        listeSecteurs[i] === 2 ? 16 : listeSecteurs[i] === 3 ? 20 : 12
+      do {
+        nbVolsTotal = randint(200, 600)
+      } while (nbVolsTotal % diviseur !== 0)
+
+      type Categorie = {
+        destination: string
+        nom: string
+        frac: [number, number, number]
+        angle: number
+        numeroMotif: number
+      }
+
       type Situation = {
         fin_enonce_situation: string
         nom_enonce: string
         last_question: string[]
-        cat1: {
-          destination: string
-          article: string
-          nom: string
-          frac: FracVols[0]
-          angle: number
-          arg_graph: [number, string, string, number, number, string, number]
-        }
-        cat2: {
-          destination: string
-          article: string
-          nom: string
-          frac: FracVols[1]
-          angle: number
-          arg_graph: [number, string, string, number, number, string, number]
-        }
-        cat3: {
-          destination: string
-          article: string
-          nom: string
-          frac: FracVols[2]
-          angle: number
-          arg_graph: [number, string, string, number, number, string, number]
-        }
-        cat4: {
-          destination: string
-          article: string
-          nom: string
-          frac: FracVols[3]
-          angle: number
-          arg_graph: [number, string, string, number, number, string, number]
-        }
-        cat5: {
-          destination: string
-          article: string
-          nom: string
-          frac: FracVols[4]
-          angle: number
-          arg_graph: [number, string, string, number, number, string, number]
-        }
+        categories: Categorie[]
         nb_total: number
         fig: string
       }
+
+      const categories: Categorie[] = destinationsVols.map((dest, i) => ({
+        destination: dest[1],
+        nom: dest[0],
+        frac: fracVols[i],
+        angle: 360 / fracVols[i][1],
+        numeroMotif: fracVols[i][2],
+      }))
       const situations: Situation = {
-        // case 0 --> vols
         fin_enonce_situation:
           "vols d'une compagnie aérienne selon la destination",
         nom_enonce: 'vols',
@@ -185,257 +323,154 @@ export default class ProblemesAdditifsFractions5e extends Exercice {
           'le nombre de vols',
           'Le nombre de vols',
         ],
-        cat1: {
-          destination: destinationsVols[0][0] + destinationsVols[0][1],
-          article: destinationsVols[0][0],
-          nom: destinationsVols[0][1],
-          frac: fracVols[0],
-          angle: 360 / fracVols[0][1],
-          arg_graph: fracVols[0][2],
-        },
-        cat2: {
-          destination: destinationsVols[1][0] + destinationsVols[1][1],
-          article: destinationsVols[1][0],
-          nom: destinationsVols[1][1],
-          frac: fracVols[1],
-          angle: 360 / fracVols[1][1],
-          arg_graph: fracVols[1][2],
-        },
-        cat3: {
-          destination: destinationsVols[2][0] + destinationsVols[2][1],
-          article: destinationsVols[2][0],
-          nom: destinationsVols[2][1],
-          frac: fracVols[2],
-          angle: 360 / fracVols[2][1],
-          arg_graph: fracVols[2][2],
-        },
-        cat4: {
-          destination: destinationsVols[3][0] + destinationsVols[3][1],
-          article: destinationsVols[3][0],
-          nom: destinationsVols[3][1],
-          frac: fracVols[3],
-          angle: 360 / fracVols[3][1],
-          arg_graph: fracVols[3][2],
-        },
-        cat5: {
-          destination: destinationsVols[4][0] + destinationsVols[4][1],
-          article: destinationsVols[4][0],
-          nom: destinationsVols[4][1],
-          frac: fracVols[4],
-          angle: 360 / fracVols[4][1],
-          arg_graph: fracVols[4][2],
-        },
+        categories,
         nb_total: nbVolsTotal,
         fig: '',
       }
 
-      // on prépare la fenetre mathalea2d
+      // Vestige utile de fenetreMathalea2d
       const fenetreMathalea2D = {
         xmin: -10,
-        ymin: -8,
-        xmax: 10,
-        ymax: 8,
-        pixelsParCm: 20,
-        scale: 0.5,
       }
-      const OVols = pointAbstrait(0, 0)
-      const AVols = pointAbstrait(fenetreMathalea2D.xmin + 6, 0)
-      const cVols = cercleCentrePoint(OVols, AVols, 'blue')
-      cVols.epaisseur = 2
-      // on trace les quartiers
-      // cat1
-      const BVols = rotation(AVols, OVols, situations.cat1.angle)
-      const segmentOAVols = segment(OVols, AVols)
-      const segmentOBVols = segment(OVols, BVols)
-      const codageAOB = myCodageAngle(
-        AVols,
-        OVols,
-        BVols,
-        situations.cat1.angle,
-        situations.cat1.arg_graph,
-      )
-      // cat2
-      const CVols = rotation(BVols, OVols, situations.cat2.angle)
-      const segmentOCVols = segment(OVols, CVols)
-      const codageBOC = myCodageAngle(
-        BVols,
-        OVols,
-        CVols,
-        situations.cat2.angle,
-        situations.cat2.arg_graph,
-      )
-      // cat3
-      const DVols = rotation(CVols, OVols, situations.cat3.angle)
-      const segmentODVols = segment(OVols, DVols)
-      const codageCOD = myCodageAngle(
-        CVols,
-        OVols,
-        DVols,
-        situations.cat3.angle,
-        situations.cat3.arg_graph,
-      )
-      // cat4
-      const EVols = rotation(DVols, OVols, situations.cat4.angle)
-      const segmentOEVols = segment(OVols, EVols)
-      const codageDOE = myCodageAngle(
-        DVols,
-        OVols,
-        EVols,
-        situations.cat4.angle,
-        situations.cat4.arg_graph,
-      )
-      // cat5
-      const FVols = rotation(EVols, OVols, situations.cat5.angle)
-      const segmentOFVols = segment(OVols, FVols)
-      const codageEOF = myCodageAngle(
-        EVols,
-        OVols,
-        FVols,
-        situations.cat5.angle,
-        situations.cat5.arg_graph,
-      )
 
-      // légende
+      const OVols: PointAbstrait = pointAbstrait(0, 0)
+      const AVols: PointAbstrait = pointAbstrait(fenetreMathalea2D.xmin + 6, 0)
+      const cVols: Cercle = cercleCentrePoint(OVols, AVols, 'black')
+      cVols.epaisseur = 2
+
+      const points = [AVols] // point de départ
+      const segments: Segment[] = []
+      const codages: (Arc | CodageAngleDroit)[] = []
+
+      situations.categories.forEach((cat, i) => {
+        const prevPoint: PointAbstrait = points[i]
+
+        const nextPoint: PointAbstrait = rotation(prevPoint, OVols, cat.angle)
+        points.push(nextPoint)
+
+        segments.push(segment(OVols, nextPoint))
+
+        codages.push(
+          myCodageAngle(
+            prevPoint,
+            OVols,
+            nextPoint,
+            cat.angle,
+            cat.numeroMotif,
+          ),
+        )
+      })
+
+      const legendSegments: Segment[] = []
+      const legendPoints: PointAbstrait[] = []
+
       const ALegende = pointAbstrait(fenetreMathalea2D.xmin + 4, 0)
-      const LVolsegmentcat1 = rotation(
+
+      // point initial
+      let prevLegendPoint = rotation(
         ALegende,
         OVols,
-        situations.cat1.angle / 2,
-        situations.cat1.nom,
+        situations.categories[0].angle / 2,
+        // situations.categories[0].nom,
       )
-      LVolsegmentcat1.positionLabel = myLabelPosition(LVolsegmentcat1.y)
-      const LLVolsegmentcat1 = rotation(
-        AVols,
-        OVols,
-        situations.cat1.angle / 2,
-        situations.cat1.nom,
-      )
-      const segmentLegendeCat1 = segment(LVolsegmentcat1, LLVolsegmentcat1)
-      segmentLegendeCat1.styleExtremites = '->'
-      segmentLegendeCat1.pointilles = 5
 
-      const LVolsegmentcat2 = rotation(
-        LVolsegmentcat1,
-        OVols,
-        situations.cat1.angle / 2 + situations.cat2.angle / 2,
-        situations.cat2.nom,
+      prevLegendPoint.positionLabel = myLabelPosition(prevLegendPoint.y)
+      const labelDestination = pointAbstrait(
+        OVols.x < prevLegendPoint.x
+          ? prevLegendPoint.x + situations.categories[0].nom.length / 10
+          : prevLegendPoint.x - situations.categories[0].nom.length / 5,
+        prevLegendPoint.y,
+        situations.categories[0].nom,
+        myLabelPosition(prevLegendPoint.y),
       )
-      LVolsegmentcat2.positionLabel = myLabelPosition(LVolsegmentcat2.y)
-      const LLVolsegmentcat2 = rotation(
-        BVols,
-        OVols,
-        situations.cat2.angle / 2,
-        situations.cat2.nom,
-      )
-      const segmentLegendeCat2 = segment(LVolsegmentcat2, LLVolsegmentcat2)
-      segmentLegendeCat2.styleExtremites = '->'
-      segmentLegendeCat2.pointilles = 5
+      legendPoints.push(prevLegendPoint, labelDestination)
 
-      const LVolsegmentcat3 = rotation(
-        LVolsegmentcat2,
-        OVols,
-        situations.cat2.angle / 2 + situations.cat3.angle / 2,
-        situations.cat3.nom,
-      )
-      LVolsegmentcat3.positionLabel = myLabelPosition(LVolsegmentcat3.y)
-      const LLVolsegmentcat3 = rotation(
-        CVols,
-        OVols,
-        situations.cat3.angle / 2,
-        situations.cat3.nom,
-      )
-      const segmentLegendeCat3 = segment(LVolsegmentcat3, LLVolsegmentcat3)
-      segmentLegendeCat3.styleExtremites = '->'
-      segmentLegendeCat3.pointilles = 5
+      for (let i = 0; i < situations.categories.length; i++) {
+        const cat = situations.categories[i]
 
-      const LVolsegmentcat4 = rotation(
-        LVolsegmentcat3,
-        OVols,
-        situations.cat3.angle / 2 + situations.cat4.angle / 2,
-        situations.cat4.nom,
-      )
-      LVolsegmentcat4.positionLabel = myLabelPosition(LVolsegmentcat4.y)
-      const LLVolsegmentcat4 = rotation(
-        DVols,
-        OVols,
-        situations.cat4.angle / 2,
-        situations.cat4.nom,
-      )
-      const segmentLegendeCat4 = segment(LVolsegmentcat4, LLVolsegmentcat4)
-      segmentLegendeCat4.styleExtremites = '->'
-      segmentLegendeCat4.pointilles = 5
+        const piePoint = points[i] // A, B, C, D...
 
-      const LVolsegmentcat5 = rotation(
-        LVolsegmentcat4,
-        OVols,
-        situations.cat4.angle / 2 + situations.cat5.angle / 2,
-        situations.cat5.nom,
-      )
-      LVolsegmentcat5.positionLabel = myLabelPosition(LVolsegmentcat5.y)
-      const LLVolsegmentcat5 = rotation(
-        EVols,
-        OVols,
-        situations.cat5.angle / 2,
-        situations.cat5.nom,
-      )
-      const segmentLegendeCat5 = segment(LVolsegmentcat5, LLVolsegmentcat5)
-      segmentLegendeCat5.styleExtremites = '->'
-      segmentLegendeCat5.pointilles = 5
+        const projected = rotation(piePoint, OVols, cat.angle / 2) //, cat.nom)
+
+        const seg = segment(prevLegendPoint, projected)
+        seg.styleExtremites = '->'
+        seg.pointilles = 5
+
+        legendSegments.push(seg)
+
+        // préparer le point suivant (sauf dernier)
+        if (i < situations.categories.length - 1) {
+          const nextCat = situations.categories[i + 1]
+
+          const nextLegendPoint = rotation(
+            prevLegendPoint,
+            OVols,
+            cat.angle / 2 + nextCat.angle / 2,
+          )
+
+          nextLegendPoint.positionLabel = myLabelPosition(nextLegendPoint.y)
+          legendPoints.push(nextLegendPoint)
+          prevLegendPoint = nextLegendPoint
+          const labelDestination = pointAbstrait(
+            OVols.x < prevLegendPoint.x
+              ? prevLegendPoint.x + nextCat.nom.length / 5
+              : prevLegendPoint.x - nextCat.nom.length / 5,
+            prevLegendPoint.y,
+            nextCat.nom,
+            myLabelPosition(prevLegendPoint.y),
+          )
+
+          legendPoints.push(labelDestination)
+        }
+      }
+      const segmentOA = segment(OVols, AVols)
 
       const mesAppels = [
         cVols,
-        segmentOAVols,
-        segmentOBVols,
-        segmentOCVols,
-        segmentODVols,
-        segmentOEVols,
-        segmentOFVols,
-        codageAOB,
-        codageBOC,
-        codageCOD,
-        codageDOE,
-        codageEOF,
-        labelPoint(LVolsegmentcat1),
-        labelPoint(LVolsegmentcat2),
-        labelPoint(LVolsegmentcat3),
-        labelPoint(LVolsegmentcat4),
-        labelPoint(LVolsegmentcat5),
-        segmentLegendeCat1,
-        segmentLegendeCat2,
-        segmentLegendeCat3,
-        segmentLegendeCat4,
-        segmentLegendeCat5,
+        segmentOA,
+        ...segments,
+        ...codages,
+        ...legendPoints.map((p) => labelPoint(p)),
+        ...legendSegments,
       ]
-      const figVols = mathalea2d(fenetreMathalea2D, mesAppels)
+
+      const figVols = mathalea2d(
+        Object.assign({ scale: 0.5 }, fixeBordures(mesAppels)),
+        mesAppels,
+      )
       situations.fig = figVols
 
-      let indexSouSegmentQuestion = 0
       let indexSouSegmentQuestionCorr = 0
+
+      const texteMathfield = `${addMultiMathfield(this, i, {
+        dataTemplate: `a) Quelle fraction représente les ${situations.nom_enonce} vers ${situations.categories[0].destination} ? %{champ1}
+                   b) Quelle fraction représente les ${situations.nom_enonce} vers ${situations.categories[1].destination} ? %{champ2}
+                   c) Sachant que ${situations.last_question[0]} $${situations.nb_total}$ ${situations.last_question[1]} et que les ${situations.nom_enonce} vers ${situations.categories[2].destination} représentent $\\dfrac{${situations.categories[2].frac[0]}}{${situations.categories[2].frac[1]}}$ de ce total, calculer ${situations.last_question[2]} vers ${situations.categories[2].destination} ? %{champ3}
+                  `,
+        dataOptions: {
+          champ1: { keyboard: KeyboardType.clavierNumbers },
+          champ2: { keyboard: KeyboardType.clavierNumbers },
+          champ3: { keyboard: KeyboardType.clavierNumbers },
+        },
+      }).replaceAll('$\\ldots\\ldots$', '')}`
 
       const enonces = {
         enonce: `
 On a représenté sur le diagramme circulaire ci-dessous la répartition des ${situations.fin_enonce_situation}.<br>
-${texteGras('Les angles de même couleur ont la même mesure.')}<br>
-${texteGras("L'angle vert est un angle plat.")}<br>
+Les secteurs angulaires ayant le même motif ont la même mesure d'angle. L'un des angles est un angle plat.<br>
 ${situations.fig}
-
-${numAlpha(indexSouSegmentQuestion++)} Quelle fraction représente les ${situations.nom_enonce} vers ${situations.cat1.destination} ?${ajouteChampTexteMathLive(this, 3 * i, KeyboardType.clavierDeBaseAvecFraction)}<br>
-${numAlpha(indexSouSegmentQuestion++)} Quelle fraction représente les ${situations.nom_enonce} vers ${situations.cat2.destination} ?${ajouteChampTexteMathLive(this, 3 * i + 1, KeyboardType.clavierDeBaseAvecFraction)}<br>
-${numAlpha(indexSouSegmentQuestion++)} Sachant que ${situations.last_question[0]} ${situations.nb_total} ${situations.last_question[1]}
-et que les ${situations.nom_enonce} vers ${situations.cat3.destination} représentent $\\dfrac{${situations.cat3.frac[0]}}{${situations.cat3.frac[1]}}$ de ce total,
-calculer ${situations.last_question[2]} vers ${situations.cat3.destination} ?${ajouteChampTexteMathLive(this, 3 * i + 2, KeyboardType.clavierDeBaseAvecFraction)}
-
+${texteMathfield}
 `,
         correction: `
-${numAlpha(indexSouSegmentQuestionCorr++)} Pour ${situations.cat1.destination}, l'angle ${myTexteVolsCorr(situations.cat1.angle)}<br>
-${texteEnCouleur(`La fraction qui représente les ${situations.nom_enonce} vers ${situations.cat1.destination} vaut donc $\\dfrac{${situations.cat1.frac[0]}}{${situations.cat1.frac[1]}}$`)}.<br>
+${numAlpha(indexSouSegmentQuestionCorr++)} Pour ${situations.categories[0].destination}, l'angle ${myTexteVolsCorr(situations.categories[0].angle, situations.categories[0].destination, nbPetitsSecteurs)}<br>
+La fraction qui représente les ${situations.nom_enonce} vers ${situations.categories[0].destination} vaut donc $${miseEnEvidence(`\\dfrac{${situations.categories[0].frac[0]}}{${situations.categories[0].frac[1]}}`)}$.<br>
 
-${numAlpha(indexSouSegmentQuestionCorr++)} Pour ${situations.cat2.destination}, l'angle ${myTexteVolsCorr(situations.cat2.angle)}<br>
-${texteEnCouleur(`La fraction qui représente les ${situations.nom_enonce} vers ${situations.cat2.destination} vaut donc $\\dfrac{${situations.cat2.frac[0]}}{${situations.cat2.frac[1]}}$`)}<br>
+${numAlpha(indexSouSegmentQuestionCorr++)} Pour ${situations.categories[1].destination}, l'angle ${myTexteVolsCorr(situations.categories[1].angle, situations.categories[0].destination, nbPetitsSecteurs)}<br>
+La fraction qui représente les ${situations.nom_enonce} vers ${situations.categories[1].destination} vaut donc $${miseEnEvidence(`\\dfrac{${situations.categories[1].frac[0]}}{${situations.categories[1].frac[1]}}`)}$.<br>
 
-${numAlpha(indexSouSegmentQuestionCorr++)} Calculons $\\dfrac{${situations.cat3.frac[0]}}{${situations.cat3.frac[1]}}$ de ${situations.nb_total} :<br>
-$\\dfrac{${situations.cat3.frac[0]}}{${situations.cat3.frac[1]}}\\times ${situations.nb_total} = \\dfrac{${situations.cat3.frac[0]}\\times ${situations.nb_total}}{${situations.cat3.frac[1]}} = \\dfrac{${situations.cat3.frac[0]}\\times ${situations.nb_total / situations.cat3.frac[1]}\\times ${situations.cat3.frac[1]}}{${situations.cat3.frac[1]}} = \\dfrac{${situations.cat3.frac[0]}\\times ${situations.nb_total / situations.cat3.frac[1]}\\times \\cancel{${situations.cat3.frac[1]}}}{\\cancel{${situations.cat3.frac[1]}}} = ${situations.cat3.frac[0]}\\times ${situations.nb_total / situations.cat3.frac[1]} = ${situations.nb_total / situations.cat3.frac[1]}$<br>
-${texteEnCouleur(`${situations.last_question[3]} vers ${situations.cat3.destination} vaut donc ${situations.nb_total / situations.cat3.frac[1]}.`)}
+${numAlpha(indexSouSegmentQuestionCorr++)} Calculons $\\dfrac{${situations.categories[2].frac[0]}}{${situations.categories[2].frac[1]}}$ de $${situations.nb_total}$ :<br>
+$\\dfrac{${situations.categories[2].frac[0]}}{${situations.categories[2].frac[1]}}\\times ${situations.nb_total} = \\dfrac{${situations.categories[2].frac[0]}\\times ${situations.nb_total}}{${situations.categories[2].frac[1]}} = \\dfrac{${situations.categories[2].frac[0]}\\times ${situations.nb_total / situations.categories[2].frac[1]}\\times ${situations.categories[2].frac[1]}}{${situations.categories[2].frac[1]}} = \\dfrac{${situations.categories[2].frac[0]}\\times ${situations.nb_total / situations.categories[2].frac[1]}\\times \\cancel{${situations.categories[2].frac[1]}}}{\\cancel{${situations.categories[2].frac[1]}}} = ${situations.categories[2].frac[0]}\\times ${situations.nb_total / situations.categories[2].frac[1]} = ${situations.nb_total / situations.categories[2].frac[1]}$<br>
+${situations.last_question[3]} vers ${situations.categories[2].destination} vaut donc $${miseEnEvidence(`${situations.nb_total / situations.categories[2].frac[1]}`)}$.
 `,
       }
 
@@ -446,23 +481,44 @@ ${texteEnCouleur(`${situations.last_question[3]} vers ${situations.cat3.destinat
         // Si la question n'a jamais été posée, on en créé une autre
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr
-        handleAnswers(this, 3 * i, {
-          reponse: {
-            value: fraction(situations.cat1.frac[0], situations.cat1.frac[1])
-              .texFraction,
-            options: { fractionEgale: true },
+        handleAnswers(
+          this,
+          3 * i,
+          {
+            reponse: {
+              value: fraction(
+                situations.categories[0].frac[0],
+                situations.categories[0].frac[1],
+              ).texFraction,
+              options: { fractionEgale: true },
+            },
           },
-        })
-        handleAnswers(this, 3 * i + 1, {
-          reponse: {
-            value: fraction(situations.cat2.frac[0], situations.cat2.frac[1])
-              .texFraction,
-            options: { fractionEgale: true },
+          { formatInteractif: 'multiMathfield' },
+        )
+        handleAnswers(
+          this,
+          3 * i + 1,
+          {
+            reponse: {
+              value: fraction(
+                situations.categories[1].frac[0],
+                situations.categories[1].frac[1],
+              ).texFraction,
+              options: { fractionEgale: true },
+            },
           },
-        })
-        handleAnswers(this, 3 * i + 2, {
-          reponse: { value: situations.nb_total / situations.cat3.frac[1] },
-        })
+          { formatInteractif: 'multiMathfield' },
+        )
+        handleAnswers(
+          this,
+          3 * i + 2,
+          {
+            reponse: {
+              value: situations.nb_total / situations.categories[2].frac[1],
+            },
+          },
+          { formatInteractif: 'multiMathfield' },
+        )
         i++
       }
       cpt++

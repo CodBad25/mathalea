@@ -96,7 +96,7 @@ export default class ResoudreDesProblemes extends Exercice {
     this.spacingCorr = 2
     this.besoinFormulaireTexte = [
       'Niveaux de difficultés',
-      'Nombres séparés par des tirets\n1: Soustraction\n2 : soustraction puis division\n3 multiplication puis soustraction\n4 : multiplication, soustraction puis division\n5 : Mélange',
+      'Nombres séparés par des tirets\n1: Soustraction\n2 : Soustraction puis division\n3 : Multiplication puis soustraction\n4 : Multiplication, soustraction puis division\n5 : Mélange',
     ]
     this.sup = '5'
     this.besoinFormulaire2CaseACocher = ['Masse décimale (unité kg)', false]
@@ -249,26 +249,31 @@ export default class ResoudreDesProblemes extends Exercice {
         ),
         [shape2.shapeDef, shape2.shape2D],
       )
-      texte += '<br><br>'
+      // texte += '<br><br>'
       texte += addMultiMathfield(this, i, {
-        dataTemplate: `Quelle est la masse  d'${shape1.articleSingulier} ${shape1.nomSingulier} : %{champ1} ?\nQuelle est la masse d'${shape2.articleSingulier} ${shape2.nomSingulier} : %{champ2} ?`,
+        dataTemplate: `Quelle est la masse  d'${shape1.articleSingulier} ${shape1.nomSingulier} ? %{champ1} \nQuelle est la masse d'${shape2.articleSingulier} ${shape2.nomSingulier} ? %{champ2}`,
         dataOptions: {
           champ1: { keyboard: KeyboardType.masse },
           champ2: { keyboard: KeyboardType.masse },
         },
       }).replaceAll(': $\\ldots\\ldots$', '')
 
-      handleAnswers(this, i, {
-        bareme: toutAUnPoint,
-        champ1: {
-          value: `${stringNombre(p1, 3)}${this.sup2 ? ' kg' : ' g'}`,
-          options: { unite: true },
+      handleAnswers(
+        this,
+        i,
+        {
+          bareme: toutAUnPoint,
+          champ1: {
+            value: `${stringNombre(p1, 3)}${this.sup2 ? ' kg' : ' g'}`,
+            options: { unite: true },
+          },
+          champ2: {
+            value: `${stringNombre(p2, 3)}${this.sup2 ? ' kg' : ' g'}`,
+            options: { unite: true },
+          },
         },
-        champ2: {
-          value: `${stringNombre(p2, 3)}${this.sup2 ? ' kg' : ' g'}`,
-          options: { unite: true },
-        },
-      })
+        { formatInteractif: 'multiMathfield' },
+      )
 
       switch (niveaux[i]) {
         case 1: // élimination directe d'un des deux fruits par soustraction
