@@ -79,7 +79,6 @@ export class MultiMathfieldElement extends HTMLElement {
         champNames.push(name)
       }
     }
-    let champIndex = 0
     // Regex qui détecte $...$, %{champ}, \n ou texte
     const regex = /(\$[^$]+\$|%\{[^}]+\}|\n)/g
     let lastIndex = 0
@@ -114,6 +113,15 @@ export class MultiMathfieldElement extends HTMLElement {
         const name = token.slice(2, -1)
         const div = document.createElement('DIV')
         div.style.display = 'inline-block'
+        div.classList.add('ml-1')
+        div.style.marginLeft = '5px'
+        div.style.marginRight = '5px'
+        div.style.marginTop = '0'
+        div.style.marginBottom = '0'
+        div.style.paddingTop = '0'
+        div.style.paddingBottom = '0'
+        div.style.paddingLeft = '4px'
+        div.style.paddingRight = '4px'
         const mathfield = new MathfieldElement()
 
         mathfield.classList.add('ml-1')
@@ -137,40 +145,54 @@ export class MultiMathfieldElement extends HTMLElement {
         // On donne comme id la concaténation de l'id du MultiMathfield (this.id) et du name du champ pour être sûr d'avoir un id unique
         mathfield.id = (this.id ? this.id : 'multi-mathfield') + '-' + name
         mathfield.setAttribute('data-name', name)
-        mathfield.style.verticalAlign = 'middle'
-        mathfield.style.borderRadius = '4px'
-        mathfield.style.boxShadow =
-          'inset 2px 2px 6px #ccc, inset -2px -2px 6px #fff'
-        mathfield.style.marginRight = '4px'
-        mathfield.style.marginLeft = '4px'
-        // Centre la saisie dans le champ
-        mathfield.style.alignContent = 'center'
+        mathfield.style.border = 'none'
 
-        // Ajout gestionnaire TAB pour navigation fiable (uniquement sur les champs éditables)
-        const myIndex = champIndex
+        // mathfield.style.verticalAlign = 'middle'
+        // mathfield.style.boxShadow =
+        //   'inset 2px 2px 6px #ccc, inset -2px -2px 6px #fff'
+
+        // Ajout gestionnaire TAB pour navigation globale entre tous les mathfields du DOM (y compris dans les shadowRoots)
         mathfield.addEventListener('keydown', (e) => {
           if (e.key === 'Tab') {
             e.preventDefault()
-            const total = champNames.length
-            let nextIndex
-            if (!e.shiftKey) {
-              nextIndex = (myIndex + 1) % total
-            } else {
-              nextIndex = (myIndex - 1 + total) % total
-            }
-            const nextName = champNames[nextIndex]
-            const nextId =
-              (this.id ? this.id : 'multi-mathfield') + '-' + nextName
-            if (this.shadowRoot) {
-              const next = this.shadowRoot.getElementById(nextId)
-              // On ne focus que si c'est bien un MathfieldElement éditable
-              if (next && next instanceof MathfieldElement && !next.readOnly) {
-                ;(next as HTMLElement).focus()
+            // Fonction utilitaire pour collecter tous les mathfields du DOM et des shadowRoots
+            function collectAllMathfields(): MathfieldElement[] {
+              const mathfields = []
+              // 1. Mathfields dans le document principal
+              mathfields.push(
+                ...Array.from(document.querySelectorAll('math-field')),
+              )
+              // 2. Mathfields dans les shadowRoots des MultiMathfieldElement
+              const multiEls = Array.from(
+                document.querySelectorAll('multi-mathfield'),
+              )
+              for (const el of multiEls) {
+                if (el.shadowRoot) {
+                  mathfields.push(
+                    ...Array.from(el.shadowRoot.querySelectorAll('math-field')),
+                  )
+                }
               }
+              return mathfields as MathfieldElement[]
+            }
+            const allMathfields = collectAllMathfields().filter(
+              (mf) => !mf.readOnly,
+            )
+            // Trouver l'index du mathfield courant
+            const current = e.target as MathfieldElement
+            const idx = allMathfields.indexOf(current)
+            let nextIdx
+            if (!e.shiftKey) {
+              nextIdx = (idx + 1) % allMathfields.length
+            } else {
+              nextIdx = (idx - 1 + allMathfields.length) % allMathfields.length
+            }
+            const next = allMathfields[nextIdx]
+            if (next) {
+              ;(next as HTMLElement).focus()
             }
           }
         })
-        champIndex++
         div.appendChild(mathfield)
         // Ajoute un span de vérification après chaque Mathfield
         const checkSpan = document.createElement('span')
@@ -194,8 +216,7 @@ export class MultiMathfieldElement extends HTMLElement {
         mf.style.pointerEvents = 'none'
         mf.style.verticalAlign = 'middle'
         mf.style.border = 'none'
-        mf.style.margin = '0'
-        mf.style.padding = '0'
+
         currentSpan.appendChild(mf)
         injectFontInMetaInteractif2d(mf)
       }
@@ -231,7 +252,7 @@ export class MultiMathfieldElement extends HTMLElement {
           text-align: center;
         }
         math-field::part(content) {
-          justify-content: center;
+          justify-content: start;
         }`
       this.shadowRoot.appendChild(style)
       this.shadowRoot.appendChild(container)
@@ -285,34 +306,35 @@ export function addMultiMathfield(
     dataOptions,
   }: { dataTemplate: string; dataOptions: DataOptionsMultiMathfield },
 ) {
+  // Extraction des noms de champs %{name}
+  const regex = /%\{([^}]+)\}/g
+  let match
+  const enrichedOptions: Record<string, any> = { ...dataOptions }
+  while ((match = regex.exec(dataTemplate)) !== null) {
+    const name = match[1]
+    if (!(name in enrichedOptions)) {
+      enrichedOptions[name] = {
+        placeholder: '',
+        minWidth: 30,
+        keyboard: KeyboardType.clavierNumbers,
+        ldots: false,
+      }
+    } else {
+      // Ajoute les valeurs par défaut manquantes
+      if (enrichedOptions[name].placeholder === undefined)
+        enrichedOptions[name].placeholder = ''
+      if (enrichedOptions[name].minWidth === undefined)
+        enrichedOptions[name].minWidth = 30
+      if (enrichedOptions[name].keyboard === undefined)
+        enrichedOptions[name].keyboard = KeyboardType.clavierNumbers
+      if (enrichedOptions[name].ldots === undefined) {
+        enrichedOptions[name].ldots = false
+      }
+    }
+  }
   if (context.isHtml && exercice.interactif) {
     if (!customElements.get('multi-mathfield')) {
       customElements.define('multi-mathfield', MultiMathfieldElement)
-    }
-    // Extraction des noms de champs %{name}
-    const regex = /%\{([^}]+)\}/g
-    let match
-    const enrichedOptions: Record<string, any> = { ...dataOptions }
-    while ((match = regex.exec(dataTemplate)) !== null) {
-      const name = match[1]
-      if (!(name in enrichedOptions)) {
-        enrichedOptions[name] = {
-          placeholder: '',
-          minWidth: 30,
-          maxWidth: 100,
-          keyboard: KeyboardType.clavierNumbers,
-        }
-      } else {
-        // Ajoute les valeurs par défaut manquantes
-        if (enrichedOptions[name].placeholder === undefined)
-          enrichedOptions[name].placeholder = ''
-        if (enrichedOptions[name].minWidth === undefined)
-          enrichedOptions[name].minWidth = 30
-        if (enrichedOptions[name].maxWidth === undefined)
-          enrichedOptions[name].maxWidth = 100
-        if (enrichedOptions[name].keyboard === undefined)
-          enrichedOptions[name].keyboard = KeyboardType.clavierNumbers
-      }
     }
     return `<multi-mathfield id="multiMathfieldEx${exercice.numeroExercice}Q${questionIndex}" data-template="${dataTemplate}" data-options='${JSON.stringify(enrichedOptions)}'></multi-mathfield>
     <div  class ="ml-2 py-2 italic text-coopmaths-warn-darkest dark:text-coopmathsdark-warn-darkest" id="feedbackEx${exercice.numeroExercice}Q${questionIndex}" style="display: none;"></div>`
@@ -324,8 +346,19 @@ export function addMultiMathfield(
     let result = ''
     for (let i = 0; i < lines.length; i++) {
       let line = lines[i]
-      // Remplace les champs %{...} par des underscores
-      line = line.replace(fieldRegex, '$\\ldots\\ldots$')
+      // Remplace les champs %{...} par $\ldots\ldots$ uniquement si ldots est à true
+      line = line.replace(fieldRegex, (match) => {
+        const fieldMatch = match.match(/%\{([^}]+)\}/)
+        if (fieldMatch) {
+          const fieldName = fieldMatch[1]
+          if (enrichedOptions[fieldName] && enrichedOptions[fieldName].ldots) {
+            return '$\\ldots\\ldots$'
+          } else {
+            return ''
+          }
+        }
+        return match
+      })
       // Stylise les items a), b), ... en début de ligne ou après un espace
       line = line.replace(itemRegex, (match, p1, p2) => {
         if (context.isHtml) {
