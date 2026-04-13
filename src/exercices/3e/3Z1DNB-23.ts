@@ -49,10 +49,6 @@ export default class ExerciceMetropole392024 extends ExerciceBrevetA {
     super()
     this.besoinFormulaireCaseACocher = ['Sujet original', false]
     this.sup = false
-    this.introduction = texteItalique(
-      "D'après l'exercice 1 du brevet Métropole juin 2025.<br>",
-    )
-
     this.versionAleatoire()
   }
 
@@ -63,6 +59,10 @@ export default class ExerciceMetropole392024 extends ExerciceBrevetA {
     min: number,
     ajout: number,
   ): void {
+    this.introduction = texteItalique(
+      "D'après l'exercice 1 du brevet Métropole juin 2025.<br>",
+    )
+
     const nbPrem = urneB.filter((n) => estPremier(n)).length
     const probaPrem = new FractionEtendue(nbPrem, urneB.length)
     const probaPair = new FractionEtendue(

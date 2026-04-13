@@ -408,6 +408,30 @@ export function loadPackagesFromContent(contents: contentsType) {
     contents,
   )
   testIfLoaded(['boxplot'], '\\usepgfplotslibrary{statistics}', contents)
+
+  testIfLoaded(['lstlisting'], '\\tcbuselibrary{listings}', contents)
+
+  testIfLoaded(
+    ['[style=python]'],
+    `
+\\tcbuselibrary{listings}
+
+% Style Python
+\\lstdefinestyle{python}{
+  language=Python,
+  basicstyle=\\ttfamily\\small,
+  keywordstyle=\\color{blue}\\bfseries,
+  commentstyle=\\color{gray}\\itshape,
+  stringstyle=\\color{orange},
+  numbers=left,
+  numberstyle=\\tiny\\color{gray},
+  breaklines=true,
+  frame=single,
+  backgroundcolor=\\color{gray!5}
+}`,
+    contents,
+  )
+
   testIfLoaded(
     ['\\blocrep{', '\\blocrep['],
     `
