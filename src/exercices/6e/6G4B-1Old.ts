@@ -1,5 +1,5 @@
 import { fixeBordures } from '../../lib/2d/fixeBordures'
-import { pointAbstrait } from '../../lib/2d/PointAbstrait'
+import { point } from '../../lib/2d/PointAbstrait'
 import { rapporteur } from '../../lib/2d/Rapporteur'
 import { segment } from '../../lib/2d/segmentsVecteurs'
 import { labelPoint } from '../../lib/2d/textes'
@@ -9,9 +9,8 @@ import { angleModulo } from '../../lib/2d/utilitairesGeometriques'
 import { pointSurSegment } from '../../lib/2d/utilitairesPoint'
 import { texteGras } from '../../lib/format/style'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { toutAUnPoint } from '../../lib/interactif/mathLive'
-import { addMultiMathfield } from '../../lib/interactif/MultiMathfield/MultiMathfield'
+import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
 import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import { abs } from '../../lib/outils/nombres'
@@ -26,7 +25,7 @@ import {
 import Exercice from '../Exercice'
 
 export const titre = 'Mesurer un angle avec rapporteur intégré'
-export const interactifType = 'multiMathField'
+export const interactifType = 'mathLive'
 export const interactifReady = true
 export const amcReady = true
 export const amcType = 'AMCHybride'
@@ -35,16 +34,14 @@ export const dateDePublication = '26/04/2022'
 /**
  * Mesurer un angle avec rapporteur déjà en place
  * @author Éric Elter
- * Passage en multiMathField par Éric Elter le 13/04/2026
  */
-export const uuid = 'ff2ce'
+export const uuid = 'ff2cc'
 
 export const refs = {
-  'fr-fr': ['6G4B-1'],
-  'fr-2016': ['6G23-4'],
-  'fr-ch': ['9ES5-7'],
+  'fr-fr': [],
+  'fr-ch': [],
 }
-export default class MesurerUnAngleAvecRapporteur extends Exercice {
+export default class MesurerUnAngleAvecRapporteurOld extends Exercice {
   constructor() {
     super()
     this.besoinFormulaireNumerique = [
@@ -72,6 +69,7 @@ export default class MesurerUnAngleAvecRapporteur extends Exercice {
 
   nouvelleVersion() {
     let figureExo
+
     for (
       let i = 0,
         texteAMC,
@@ -85,22 +83,19 @@ export default class MesurerUnAngleAvecRapporteur extends Exercice {
       i < this.nbQuestions;
       i++
     ) {
-      let enonceQuestion = ''
-      const reponses = []
-      const dataTemplate = []
       const propositionsAMC = []
       // On prépare la figure...
       const objetsEnonce = [] // on initialise le tableau des objets Mathalea2d de l'enoncé
       const objetsCorrection = [] // Idem pour la correction
       const tailleRapporteur = contraindreValeur(7, 12, this.sup2, 12)
       // Mise en place des points encadrant l'espace pour le rapporteur. Utiles pour paramsEnonce car le rapporteur peut tourner et optimisons l'espace pour ce rapporteur.
-      sudOuest = pointAbstrait(-(tailleRapporteur + 3), 0)
-      nordOuest = pointAbstrait(-(tailleRapporteur + 3), tailleRapporteur + 3)
-      sudEst = pointAbstrait(tailleRapporteur + 3, 0)
-      nordEst = pointAbstrait(tailleRapporteur + 3, tailleRapporteur + 3)
+      sudOuest = point(-(tailleRapporteur + 3), 0)
+      nordOuest = point(-(tailleRapporteur + 3), tailleRapporteur + 3)
+      sudEst = point(tailleRapporteur + 3, 0)
+      nordEst = point(tailleRapporteur + 3, tailleRapporteur + 3)
 
       // Le centre du rapporteur est A.
-      // Le pointAbstrait sur la ligne 0 est B. En fait, on construit B1 et B est entre A et B1 (afin que B ne soit pas toujours à X cm de A car cette distance n'a pas à être fixe pour un élève)
+      // Le point sur la ligne 0 est B. En fait, on construit B1 et B est entre A et B1 (afin que B ne soit pas toujours à X cm de A car cette distance n'a pas à être fixe pour un élève)
       // Les autres points seront dans l'ordre C, D, E et F. Avec la construction préalable de C1, D1... dans les mêmes conditions que précédemment.
 
       const nbAngles = contraindreValeur(1, 4, this.sup3, 1)
@@ -121,7 +116,7 @@ export default class MesurerUnAngleAvecRapporteur extends Exercice {
             ? sensRot * 90
             : randint(0, 360) - 180
 
-      // posA (et posB, pos C...) permet de choisir une position du pointAbstrait pour ne pas que celui-ci soit illisible (géné par le rapporteur ou l'orientation d'une demi-droite)
+      // posA (et posB, pos C...) permet de choisir une position du point pour ne pas que celui-ci soit illisible (géné par le rapporteur ou l'orientation d'une demi-droite)
       if (sensRot2 * sensRot === 1) {
         posA =
           angB > 135
@@ -145,8 +140,8 @@ export default class MesurerUnAngleAvecRapporteur extends Exercice {
                   ? 'right'
                   : 'below'
       }
-      const A = pointAbstrait(0, 0, lettreDepuisChiffre(numA), posA)
-      const B1 = rotation(pointAbstrait(tailleRapporteur + 3, 0), A, angB)
+      const A = point(0, 0, lettreDepuisChiffre(numA), posA)
+      const B1 = rotation(point(tailleRapporteur + 3, 0), A, angB)
 
       const posB =
         angB > 135
@@ -212,13 +207,21 @@ export default class MesurerUnAngleAvecRapporteur extends Exercice {
       ) // On remplit les tableaux d'objets Mathalea2d
       texteAMC = nbAngles > 1 ? `${numAlpha(0)} ` : ''
       texteCorr = texteAMC
-      enonceQuestion = `Quelle est la mesure, en degrés, de l'angle $\\widehat{${lettreDepuisChiffre(numB) + lettreDepuisChiffre(numA) + lettreDepuisChiffre(numC)}}$ ?`
-      dataTemplate.push(enonceQuestion)
-      texteAMC += enonceQuestion
+      texteAMC += `Quelle est la mesure, en degrés, de l'angle $\\widehat{${lettreDepuisChiffre(numB) + lettreDepuisChiffre(numA) + lettreDepuisChiffre(numC)}}$ ?`
+
       texte = texteAMC
       texteCorr += `Comme la demi-droite (${lettreDepuisChiffre(numB) + lettreDepuisChiffre(numA)}] passe par la graduation ${texteGras(0)} du rapporteur et que la demi-droite (${lettreDepuisChiffre(numC) + lettreDepuisChiffre(numA)}] passe par la graduation ${texteEnCouleurEtGras(Math.abs(angC), 'red')} du rapporteur, on lit que l'angle $\\widehat{${lettreDepuisChiffre(numB) + lettreDepuisChiffre(numA) + lettreDepuisChiffre(numC)}}$ mesure ${texteEnCouleurEtGras(abs(angC) + '°')}.<br>`
-      reponses.push(abs(angC))
-
+      if (this.interactif) {
+        texte += ajouteChampTexteMathLive(
+          this,
+          i * nbAngles,
+          KeyboardType.clavierNumbers,
+          {
+            texteApres: ' °',
+          },
+        )
+      }
+      setReponse(this, i * nbAngles, abs(angC))
       if (context.isAmc) {
         propositionsAMC[0] = {
           type: 'AMCNum', // on donne le type de la première question-réponse qcmMono, qcmMult, AMCNum, AMCOpen
@@ -274,16 +277,23 @@ export default class MesurerUnAngleAvecRapporteur extends Exercice {
         const AD = segment(A, D1)
         const ADCorr = segment(A, D1, 'blue')
         ADCorr.epaisseur = 2
-        enonceQuestion = `Quelle est la mesure, en degrés, de l'angle $\\widehat{${lettreDepuisChiffre(numC) + lettreDepuisChiffre(numA) + lettreDepuisChiffre(numD)}}$ ?`
-        dataTemplate.push(enonceQuestion)
-        texteAMC = `${numAlpha(1)} ${enonceQuestion}`
+        texteAMC = `${numAlpha(1)} Quelle est la mesure, en degrés, de l'angle $\\widehat{${lettreDepuisChiffre(numC) + lettreDepuisChiffre(numA) + lettreDepuisChiffre(numD)}}$ ?`
 
         texte += '<br>' + texteAMC
         texteCorr += `<br>${numAlpha(1)} La demi-droite (${lettreDepuisChiffre(numC) + lettreDepuisChiffre(numA)}] passe par la graduation ${texteEnCouleurEtGras(Math.abs(angC), 'red')} du rapporteur. `
         texteCorr += `La demi-droite (${lettreDepuisChiffre(numD) + lettreDepuisChiffre(numA)}] passe par la graduation ${texteEnCouleurEtGras(Math.abs(angC + angD), 'blue')} du rapporteur. `
         texteCorr += `Et ${abs(angC + angD)}-${abs(angC)}=${texteGras(Math.abs(angD))}.<br>Donc on en déduit que l'angle $\\widehat{${lettreDepuisChiffre(numC) + lettreDepuisChiffre(numA) + lettreDepuisChiffre(numD)}}$ mesure ${texteEnCouleurEtGras(abs(angD) + '°')}.<br>`
-        reponses.push(abs(angD))
-
+        if (this.interactif) {
+          texte += ajouteChampTexteMathLive(
+            this,
+            i * nbAngles + 1,
+            KeyboardType.clavierNumbers,
+            {
+              texteApres: ' °',
+            },
+          )
+        }
+        setReponse(this, i * nbAngles + 1, abs(angD))
         if (context.isAmc) {
           propositionsAMC[1] = {
             type: 'AMCNum', // on donne le type de la première question-réponse qcmMono, qcmMult, AMCNum, AMCOpen
@@ -349,15 +359,23 @@ export default class MesurerUnAngleAvecRapporteur extends Exercice {
           const AE = segment(A, E1)
           const AECorr = segment(A, E1, 'magenta')
           AECorr.epaisseur = 2
-          enonceQuestion = `Quelle est la mesure, en degrés, de l'angle $\\widehat{${lettreDepuisChiffre(numD) + lettreDepuisChiffre(numA) + lettreDepuisChiffre(numE)}}$ ?`
-          dataTemplate.push(enonceQuestion)
-          texteAMC = `${numAlpha(2)} ${enonceQuestion}`
+          texteAMC = `${numAlpha(2)} Quelle est la mesure, en degrés, de l'angle $\\widehat{${lettreDepuisChiffre(numD) + lettreDepuisChiffre(numA) + lettreDepuisChiffre(numE)}}$ ?`
+
           texte += '<br>' + texteAMC
           texteCorr += `<br>${numAlpha(2)} La demi-droite (${lettreDepuisChiffre(numD) + lettreDepuisChiffre(numA)}] passe par la graduation ${texteEnCouleurEtGras(Math.abs(angC + angD), 'blue')} du rapporteur. `
           texteCorr += `La demi-droite (${lettreDepuisChiffre(numE) + lettreDepuisChiffre(numA)}] passe par la graduation ${texteEnCouleurEtGras(Math.abs(angC + angD + angE), 'magenta')} du rapporteur. `
           texteCorr += `Et ${abs(angC + angD + angE)}-${abs(angC + angD)}=${texteGras(Math.abs(angE))}.<br>Donc on en déduit que l'angle $\\widehat{${lettreDepuisChiffre(numD) + lettreDepuisChiffre(numA) + lettreDepuisChiffre(numE)}}$ mesure ${texteEnCouleurEtGras(abs(angE) + '°')}.<br>`
-          reponses.push(abs(angE))
-
+          if (this.interactif) {
+            texte += ajouteChampTexteMathLive(
+              this,
+              i * nbAngles + 2,
+              KeyboardType.clavierNumbers,
+              {
+                texteApres: ' °',
+              },
+            )
+          }
+          setReponse(this, i * nbAngles + 2, abs(angE))
           if (context.isAmc) {
             propositionsAMC[2] = {
               type: 'AMCNum', // on donne le type de la première question-réponse qcmMono, qcmMult, AMCNum, AMCOpen
@@ -424,14 +442,23 @@ export default class MesurerUnAngleAvecRapporteur extends Exercice {
             const AF = segment(A, F1)
             const AFCorr = segment(A, F1, 'green')
             AFCorr.epaisseur = 2
-            enonceQuestion = `Quelle est la mesure, en degrés, de l'angle $\\widehat{${lettreDepuisChiffre(numE) + lettreDepuisChiffre(numA) + lettreDepuisChiffre(numF)}}$ ?`
-            dataTemplate.push(enonceQuestion)
-            texteAMC = `${numAlpha(3)} ${enonceQuestion}`
+            texteAMC = `${numAlpha(3)} Quelle est la mesure, en degrés, de l'angle $\\widehat{${lettreDepuisChiffre(numE) + lettreDepuisChiffre(numA) + lettreDepuisChiffre(numF)}}$ ?`
+
             texte += '<br>' + texteAMC
             texteCorr += `<br>${numAlpha(3)} La demi-droite (${lettreDepuisChiffre(numE) + lettreDepuisChiffre(numA)}] passe par la graduation ${texteEnCouleurEtGras(Math.abs(angC + angD + angE), 'magenta')} du rapporteur. `
             texteCorr += `La demi-droite (${lettreDepuisChiffre(numF) + lettreDepuisChiffre(numA)}] passe par la graduation ${texteEnCouleurEtGras(Math.abs(angC + angD + angE + angF), 'green')} du rapporteur. `
             texteCorr += `Et ${abs(angC + angD + angE + angF)}-${abs(angC + angD + angE)}=${texteGras(Math.abs(angF))}.<br>Donc on en déduit que l'angle $\\widehat{${lettreDepuisChiffre(numE) + lettreDepuisChiffre(numA) + lettreDepuisChiffre(numF)}}$ mesure ${texteEnCouleurEtGras(abs(angF) + '°')}.<br>`
-            reponses.push(abs(angF))
+            if (this.interactif) {
+              texte += ajouteChampTexteMathLive(
+                this,
+                i * nbAngles + 3,
+                KeyboardType.clavierNumbers,
+                {
+                  texteApres: ' °',
+                },
+              )
+            }
+            setReponse(this, i * nbAngles + 3, abs(angF))
             if (context.isAmc) {
               propositionsAMC[3] = {
                 type: 'AMCNum', // on donne le type de la première question-réponse qcmMono, qcmMult, AMCNum, AMCOpen
@@ -459,55 +486,6 @@ export default class MesurerUnAngleAvecRapporteur extends Exercice {
             objetsCorrection.push(AFCorr, labelPoint(F), tracePoint(F)) // On remplit les tableaux d'objets Mathalea2d
           }
         }
-      }
-
-      if (this.interactif) {
-        const lettres = 'abcdefghijklmnopqrstuvwxyz'
-
-        const dataOptions: Record<string, any> = {}
-        const answers: Record<string, any> = {}
-
-        const lignes = []
-
-        for (let k = 0; k < nbAngles; k++) {
-          const champName = `champ${k + 1}`
-
-          // 🔹 Préfixe a), b), c)... seulement si nbAngles > 1
-          const prefix = nbAngles > 1 ? `${lettres[k]}) ` : ''
-
-          // 🔹 Ligne template
-          lignes.push(`${prefix}${dataTemplate[k]} %{${champName}}$^\\circ$`)
-
-          // 🔹 Options champ
-          dataOptions[champName] = {
-            keyboard: KeyboardType.clavierNumbers,
-          }
-
-          // 🔹 Réponses
-          answers[champName] = {
-            value: reponses[k],
-            options: { nombreDecimalSeulement: true },
-          }
-        }
-
-        const templateFinal = lignes.join('\n')
-
-        texte =
-          '<br>' +
-          addMultiMathfield(this, i, {
-            dataTemplate: templateFinal,
-            dataOptions,
-          })
-
-        handleAnswers(
-          this,
-          i,
-          {
-            bareme: toutAUnPoint,
-            ...answers,
-          },
-          { formatInteractif: 'multiMathfield' },
-        )
       }
 
       figureExo = mathalea2d(
