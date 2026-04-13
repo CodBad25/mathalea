@@ -2,10 +2,12 @@ import { createList } from '../../lib/format/lists'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
+import { toutAUnPoint } from '../../lib/interactif/mathLive'
+import { addMultiMathfield } from '../../lib/interactif/MultiMathfield/MultiMathfield'
 import {
   choice,
   combinaisonListes,
+  enleveDoublonNum,
   shuffle,
 } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
@@ -15,22 +17,96 @@ import {
   texFactorisation,
 } from '../../lib/outils/primalite'
 import { texNombre } from '../../lib/outils/texNombre'
+import type { OptionsComparaisonType } from '../../lib/types'
+import { gestionnaireFormulaireTexte } from '../../modules/outils'
 import Exercice from '../Exercice'
 
 export const titre =
   'Decomposer et rechercher le plus grand diviseur commun de deux nombres'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+export const interactifType = 'multiMathfield'
 export const dateDePublication = '13/11/2024'
-export const uuid = 'cb844'
+export const dateDeModifImportante = '12/04/2026'
+export const uuid = 'eb844'
 export const refs = {
   'fr-fr': ['3A10-8'],
   'fr-ch': ['9NO4-29'],
 }
 /**
- * @Author Jean-Claude LHOTE
+ * @author Jean-Claude LHOTE
  * Ajout de this.sup 7 et 8 par Guillaume Valmont le 12/04/2025
+ * Refactorisation des paramètres et passage en multiMathField par Éric Elter le 12/04/2026
  */
+
+type OptionsComparaisonAvecClavier = OptionsComparaisonType & {
+  keyboard?: string | undefined
+}
+
+type Reponse = [string, OptionsComparaisonAvecClavier]
+
+/**
+ * Construit la configuration pour un composant multiMathfield à partir
+ * d'une liste d'items (énoncés) et de leurs réponses associées.
+ *
+ * Génère automatiquement :
+ * - un `dataTemplate` avec préfixes a), b), c), ...
+ * - un objet `dataOptions` contenant les champs %{champX} nécessaires
+ *
+ * IMPORTANT :
+ * L’ordre des champs %{champX} doit correspondre exactement à l’ordre
+ * des réponses dans `itemsReponses`.
+ *
+ * Exemple de correspondance :
+ * itemsReponses = [
+ *   [rep1, rep2], // → champ1, champ2
+ *   [rep3],       // → champ3
+ *   [rep4, rep5]  // → champ4, champ5
+ * ]
+ *
+ * @param items Liste des énoncés (chaque item correspond à une ligne a), b), c)...)
+ * @param itemsReponses Tableau des réponses associées à chaque item.
+ * Chaque item contient une liste de couples [valeur attendue, options de comparaison].
+ * @param keyboard Type de clavier à utiliser pour tous les champs (optionnel)
+ *
+ * @returns Un objet contenant :
+ * - `dataTemplate` : string formatée pour multiMathfield
+ * - `dataOptions` : configuration des champs (champ1, champ2, ...)
+ *
+ */
+export function buildMultiMathfield(
+  items: string[],
+  itemsReponses: Reponse[][],
+  keyboard: string | undefined = KeyboardType.clavierNumbers,
+) {
+  const lettres = 'abcdefghijklmnopqrstuvwxyz'
+
+  // 🔹 1. Génération du template (a), b), c)...
+  const dataTemplate = items
+    .map((item, index) => {
+      const prefix = items.length > 1 ? `${lettres[index]}) ` : ''
+      return `${prefix}${item}`
+    })
+    .join('\n\n')
+
+  const dataOptions: Record<string, { keyboard: string | undefined }> = {}
+
+  let compteur = 1
+
+  itemsReponses.forEach((item) => {
+    item.forEach(([, options]) => {
+      dataOptions[`champ${compteur}`] = {
+        keyboard: options.keyboard ?? keyboard,
+      }
+      compteur++
+    })
+  })
+
+  return {
+    dataTemplate,
+    dataOptions,
+  }
+}
+
 export default class LireUnePuissance extends Exercice {
   constructor() {
     super()
@@ -43,6 +119,18 @@ export default class LireUnePuissance extends Exercice {
       6,
       '1 : Décomposition seulement\n2 : Decomposition et liste des diviseurs\n3 : Decomposition, liste des diviseurs et PGCD\n4 : Liste des diviseurs et PGCD\n5 : Liste des diviseurs, PGCD et conclusion\n6 : Toutes les questions\n7 : Décomposition et PGCD\n8 : Décomposition, PGCD et conclusion',
     ]
+    this.besoinFormulaire2Texte = [
+      'Type de questions',
+      [
+        'Nombres séparés par des tirets  :',
+        '1 : Décomposition',
+        '2 : Liste des diviseurs',
+        '3 : PGCD',
+        '4 : Conclusion',
+        '5 : Toutes les questions',
+      ].join('\n'),
+    ]
+    this.sup2 = '5'
   }
 
   situations = [
@@ -204,18 +292,18 @@ export default class LireUnePuissance extends Exercice {
   ]
 
   nouvelleVersion(): void {
+    const typesDeQuestionsDisponibles = gestionnaireFormulaireTexte({
+      saisie: this.sup2,
+      max: 4,
+      melange: 5,
+      defaut: 5,
+      nbQuestions: 4,
+      shuffle: false,
+    }).map(Number)
+
+    const listeTypeDeQuestions = enleveDoublonNum(typesDeQuestionsDisponibles)
+
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
-      const listeQuestParChoix = [
-        [1],
-        [1, 2],
-        [1, 2, 3],
-        [2, 3],
-        [2, 3, 4],
-        [1, 2, 3, 4],
-        [1, 3],
-        [1, 3, 4],
-      ]
-      const listeQ = listeQuestParChoix[this.sup - 1]
       const situation = choice(this.situations)
       const [unPremier, unSecond] = shuffle(choice(situation.premiers))
       const facteurs1 = combinaisonListes([2, 3, 2, 3, 5, 2], 5).slice(0, 3)
@@ -227,106 +315,154 @@ export default class LireUnePuissance extends Exercice {
       const nb1parGroupe = nb1 / pgcd12
       const nb2parGroupe = nb2 / pgcd12
       let texte = `Un ${situation.qui} ${situation.faitQuoi} ${situation.ou} ${situation.pourQui}.<br>
-      Il souhaite répartir les ${nb1} ${situation.espece1}${situation.especePluriel} et les ${nb2} ${situation.espece2}${situation.especePluriel} dans des ${situation.groupement}s.<br>
-      Il souhaite que chaque ${situation.groupement} comporte le même nombre de ${situation.espece1}${situation.especePluriel} et le même nombre de ${situation.espece2}${situation.especePluriel}.<br>`
-      const indiceI = i * listeQ.length
-      let indiceII = 0
-
+      Il souhaite répartir les $${nb1}$ ${situation.espece1}${situation.especePluriel} et les $${nb2}$ ${situation.espece2}${situation.especePluriel} dans des ${situation.groupement}s.<br>
+      Il souhaite que chaque ${situation.groupement} comporte le même nombre de ${situation.espece1}${situation.especePluriel} et le même nombre de ${situation.espece2}${situation.especePluriel}.<br><br>`
+      let indice = 1
       const items: string[] = []
       const itemsCorr: string[] = []
+      const itemsReponses: Reponse[][] = []
 
-      if (listeQ.includes(1)) {
+      if (listeTypeDeQuestions.includes(1)) {
         items.push(
-          `Décomposer, en produit de facteurs premiers, les nombres ${nb1} et ${nb2}.${
+          `Décomposer, en produit de facteurs premiers, les nombres $${nb1}$ et $${nb2}$.${
             this.interactif
-              ? `<br> $${texNombre(nb1, 0)} =$ ${ajouteChampTexteMathLive(
-                  this,
-                  indiceI + indiceII,
-                  KeyboardType.clavierDeBase,
-                )}<br>$${texNombre(nb2, 0)} =$ ${ajouteChampTexteMathLive(this, indiceI + indiceII + 1, KeyboardType.clavierDeBase)}`
+              ? `
+          $${texNombre(nb1, 0)}=$%{champ${indice}}
+          $${texNombre(nb2, 0)}=$%{champ${indice + 1}}`
               : ''
           }`,
         )
         itemsCorr.push(`La décomposition en produit de facteurs premiers de $${texNombre(nb1, 0)}$ est $${miseEnEvidence(texFactorisation(nb1, false))}$
-et celle de $${texNombre(nb2, 0)}$ est $${miseEnEvidence(texFactorisation(nb2, false))}$, soit respectivement : $${miseEnEvidence(texFactorisation(nb1, true))}$
-et $${miseEnEvidence(texFactorisation(nb2, true))}$.`)
-        handleAnswers(this, indiceI + indiceII, {
-          reponse: {
-            value: texFactorisation(nb1, true),
-            options: { nbFacteursIdentiquesFactorisation: true },
-          },
-        })
-        handleAnswers(this, indiceI + indiceII + 1, {
-          reponse: {
-            value: texFactorisation(nb2),
-            options: { nbFacteursIdentiquesFactorisation: true },
-          },
-        })
-        indiceII += 2
+                        et celle de $${texNombre(nb2, 0)}$ est $${miseEnEvidence(texFactorisation(nb2, false))}$, soit respectivement : $${miseEnEvidence(texFactorisation(nb1, true))}$
+                        et $${miseEnEvidence(texFactorisation(nb2, true))}$.`)
+        itemsReponses.push([
+          [
+            texFactorisation(nb1, true),
+            {
+              nbFacteursIdentiquesFactorisation: true,
+              keyboard: KeyboardType.clavierDeBase,
+            },
+          ],
+          [
+            texFactorisation(nb2, true),
+            {
+              nbFacteursIdentiquesFactorisation: true,
+              keyboard: KeyboardType.clavierDeBase,
+            },
+          ],
+        ])
+        indice = indice + 2
       }
-      if (listeQ.includes(2)) {
-        items.push(`Trouver tous les entiers positifs qui divisent ${nb1} et ${nb2}.${this.interactif ? '<br>Écrire la liste des diviseurs en les séparant par des points-virgules.<br>' : ''}
-             ${
-               this.interactif
-                 ? `Pour $${texNombre(nb1, 0)}$ : ${ajouteChampTexteMathLive(this, indiceI + indiceII, KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets)}<br>Pour $${texNombre(nb2, 0)}$ : ${ajouteChampTexteMathLive(this, indiceI + indiceII + 1, KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets)}`
-                 : ''
-             }`)
+
+      if (listeTypeDeQuestions.includes(2)) {
+        items.push(`Trouver tous les entiers positifs qui divisent $${nb1}$ et $${nb2}$.
+                    Écrire la liste des diviseurs en les séparant par des points-virgules.${
+                      this.interactif
+                        ? `
+                    $${texNombre(nb1, 0)}=$%{champ${indice}}
+                    $${texNombre(nb2, 0)}=$%{champ${indice + 1}}`
+                        : ''
+                    }`)
+
         itemsCorr.push(`Les diviseurs de $${texNombre(nb1, 0)}$ sont $${miseEnEvidence(listDiv1.join('~;~'))}$.<br>
-        Et ceux de $${texNombre(nb2, 0)}$ sont $${miseEnEvidence(listDiv2.join('~;~'))}$.`)
-        handleAnswers(this, indiceI + indiceII, {
-          reponse: {
-            value: listDiv1.join(';'),
-            options: { suiteDeNombres: true },
-          },
-        })
-        handleAnswers(this, indiceI + indiceII + 1, {
-          reponse: {
-            value: listDiv2.join(';'),
-            options: { suiteDeNombres: true },
-          },
-        })
-        indiceII += 2
+                        Et ceux de $${texNombre(nb2, 0)}$ sont $${miseEnEvidence(listDiv2.join('~;~'))}$.`)
+
+        itemsReponses.push([
+          [
+            listDiv1.join(';'),
+            {
+              suiteDeNombres: true,
+              keyboard: KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets,
+            },
+          ],
+          [
+            listDiv2.join(';'),
+            {
+              suiteDeNombres: true,
+              keyboard: KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets,
+            },
+          ],
+        ])
+        indice = indice + 2
       }
-      if (listeQ.includes(3)) {
+
+      if (listeTypeDeQuestions.includes(3)) {
+        const verbe =
+          listeTypeDeQuestions.includes(1) || listeTypeDeQuestions.includes(2)
+            ? 'En déduire'
+            : 'Trouver'
         items.push(
-          `En déduire le plus grand nombre ${situation.groupementDet}${situation.groupement}s que le ${situation.qui} pourra constituer.` +
-            ajouteChampTexteMathLive(
-              this,
-              indiceI + indiceII,
-              KeyboardType.clavierNumbers,
-            ),
+          `${verbe} le plus grand nombre ${situation.groupementDet}${situation.groupement}s que le ${situation.qui} pourra constituer. ${
+            this.interactif ? `%{champ${indice}}` : ''
+          }`,
         )
+
         itemsCorr.push(
           `Le plus grand diviseur commun à $${texNombre(nb1, 0)}$ et $${texNombre(nb2, 0)}$ est $${miseEnEvidence(texNombre(pgcd12, 0))}$.`,
         )
-        handleAnswers(this, indiceI + indiceII, {
-          reponse: { value: String(pgcd12) },
-        })
-        indiceII += 1
+
+        itemsReponses.push([[String(pgcd12), { nombreDecimalSeulement: true }]])
+        indice++
       }
-      if (listeQ.includes(4)) {
+
+      if (listeTypeDeQuestions.includes(4)) {
         items.push(
-          `Combien de ${situation.espece1}${situation.especePluriel} et de ${situation.espece2}${situation.especePluriel} y aura-t-il dans chaque ${situation.groupement} ? ${this.interactif ? `<br> Il y aura ${ajouteChampTexteMathLive(this, indiceI + indiceII, KeyboardType.clavierNumbers)}  ${situation.espece1}${situation.especePluriel}.<br>Il y aura ${ajouteChampTexteMathLive(this, indiceI + indiceII + 1, KeyboardType.clavierNumbers)} ${situation.espece2}${situation.especePluriel}.` : ''}`,
+          `Combien de ${situation.espece1}${situation.especePluriel} et de ${situation.espece2}${situation.especePluriel} y aura-t-il dans chaque ${situation.groupement} ?${
+            this.interactif
+              ? `
+          Il y aura %{champ${indice}} ${situation.espece1}${situation.especePluriel}.
+          Il y aura %{champ${indice + 1}} ${situation.espece2}${situation.especePluriel}.`
+              : ''
+          }`,
         )
         itemsCorr.push(`Il y aura $${texNombre(nb1, 0)}\\div ${texNombre(pgcd12, 0)}=${miseEnEvidence(texNombre(nb1parGroupe, 0))}$ ${situation.espece1}${situation.especePluriel}
-             et $${texNombre(nb2, 0)}\\div ${texNombre(pgcd12, 0)}=${miseEnEvidence(texNombre(nb2parGroupe, 0))}$ ${situation.espece2}${situation.especePluriel}
-              dans chaque ${situation.groupement}.`)
-        handleAnswers(this, indiceI + indiceII, {
-          reponse: { value: String(nb1parGroupe) },
-        })
-        handleAnswers(this, indiceI + indiceII + 1, {
-          reponse: { value: String(nb2parGroupe) },
-        })
+                        et $${texNombre(nb2, 0)}\\div ${texNombre(pgcd12, 0)}=${miseEnEvidence(texNombre(nb2parGroupe, 0))}$ ${situation.espece2}${situation.especePluriel}
+                        dans chaque ${situation.groupement}.`)
+
+        itemsReponses.push([
+          [String(nb1parGroupe), { nombreDecimalSeulement: true }],
+          [String(nb2parGroupe), { nombreDecimalSeulement: true }],
+        ])
       }
-      const liste = createList({
-        items,
-        style: 'alpha',
+
+      const config = buildMultiMathfield(items, itemsReponses)
+
+      texte += addMultiMathfield(this, i, config)
+
+      const champs: Record<
+        string,
+        { value: string; options: OptionsComparaisonType }
+      > = {}
+
+      let compteur = 1
+
+      itemsReponses.forEach((item) => {
+        item.forEach(([value, options]) => {
+          champs[`champ${compteur}`] = {
+            value,
+            options,
+          }
+          compteur++
+        })
       })
-      texte += liste
-      const listeCorr = createList({
-        items: itemsCorr,
-        style: 'alpha',
-      })
+
+      handleAnswers(
+        this,
+        i,
+        {
+          bareme: toutAUnPoint,
+          ...champs,
+        },
+        { formatInteractif: 'multiMathfield' },
+      )
+
+      const listeCorr =
+        items.length > 1
+          ? createList({
+              items: itemsCorr,
+              style: 'alpha',
+            })
+          : itemsCorr[0]
       const texteCorr = listeCorr
       if (this.questionJamaisPosee(i, nb1, nb2)) {
         this.listeQuestions[i] = texte
