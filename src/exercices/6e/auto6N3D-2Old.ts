@@ -1,6 +1,6 @@
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { addMultiMathfield } from '../../lib/interactif/MultiMathfield/MultiMathfield'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import {
   choice,
   combinaisonListes,
@@ -20,7 +20,7 @@ import Exercice from '../Exercice'
 export const amcReady = true
 export const amcType = 'AMCOpen'
 export const interactifReady = true
-export const interactifType = 'multiMathField'
+export const interactifType = 'mathLive'
 export const titre = 'Parcourir un labyrinthe de multiples'
 export const dateDePublication = '06/12/2020'
 export const dateDeModifImportante = '29/10/2024'
@@ -29,17 +29,15 @@ export const dateDeModifImportante = '29/10/2024'
  * @author Jean-claude Lhote (remaniée par Éric Elter pour la prise en compte du nb de lignes et de colonnes du labyrinthe)
  * Parcourir un labyrinthe de nombres en passant par les multiples du nombre choisi.
  * Relecture : Janvier 2022 par Éric Elter
- * Passage en multiMahField par Éric Elter (13/04/2026)
  */
 
-export const uuid = 'ed4d8'
+export const uuid = 'fd4d8'
 
 export const refs = {
-  'fr-fr': ['auto6N3D-2'],
-  'fr-2016': ['6C10-5'],
+  'fr-fr': [],
   'fr-ch': ['9NO4-18'],
 }
-export default class ExerciceLabyrintheMultiples extends Exercice {
+export default class ExerciceLabyrintheMultiplesOld extends Exercice {
   niveau: string
   constructor() {
     super()
@@ -100,8 +98,8 @@ export default class ExerciceLabyrintheMultiples extends Exercice {
     const tailleChiffre = 1.5
 
     for (
-      let i = 0, texte, texteCorr, monChemin, laby, listeMultiples;
-      i < this.nbQuestions;
+      let q = 0, texte, texteCorr, monChemin, laby, listeMultiples;
+      q < this.nbQuestions;
     ) {
       const nbL = this.sup3 === 1 ? randint(2, 8) : Math.max(2, this.sup3)
       const nbC =
@@ -112,16 +110,16 @@ export default class ExerciceLabyrintheMultiples extends Exercice {
       laby.murs2d = laby.construitMurs(monChemin) // On construit le labyrinthe
       laby.chemin2d = laby.traceChemin(monChemin) // On trace le chemin solution
 
-      texte = `Trouver la sortie en ne passant que par les cases contenant un multiple de $${table[i]}$.<br>`
+      texte = `Trouver la sortie en ne passant que par les cases contenant un multiple de $${table[q]}$.<br>`
       // Zone de construction des tableaux de nombres
       listeMultiples = []
       const listeNonMultiples = []
-      for (let k = 2; k <= maximum; k++) {
-        listeMultiples.push(table[i] * k)
+      for (let i = 2; i <= maximum; i++) {
+        listeMultiples.push(table[q] * i)
       }
-      for (let k = 1; k <= nbC * nbL; k++) {
+      for (let i = 1; i <= nbC * nbL; i++) {
         listeNonMultiples.push(
-          randint(2, maximum) * table[i] + randint(1, table[i] - 1),
+          randint(2, maximum) * table[q] + randint(1, table[q] - 1),
         )
       }
 
@@ -144,35 +142,32 @@ export default class ExerciceLabyrintheMultiples extends Exercice {
       }
       texte += mathalea2d(params, laby.murs2d, laby.nombres2d)
       if (
-        (1 + i) % 3 === 0 &&
+        (1 + q) % 3 === 0 &&
         !context.isHtml &&
         !context.isAmc &&
         this.nbQuestions > 3
       ) {
-        // en contexte Latex, on évite que la consigne soit sur une page différente du labyrinthe
+        // en contexte Latex, on évite que la consigne soit sur un page différente du labyrinthe
         texte += '\\newpage'
       }
-      if (this.interactif) {
-        const numeroDeSortie = nbL - monChemin[monChemin.length - 1][1]
-        const nbDeNombresRencontres = laby.chemin2d.length - 1
-        texte += `${addMultiMathfield(this, i, {
-          dataTemplate:
-            'Indiquer le numéro de la bonne sortie : %{champ1}.\n Combien de nombres rencontrés avant la sortie ? %{champ2}',
-          dataOptions: {
-            champ1: { keyboard: KeyboardType.clavierNumbers },
-            champ2: { keyboard: KeyboardType.clavierNumbers },
-          },
-        })}`
-        handleAnswers(
-          this,
-          i,
-          {
-            champ1: { value: numeroDeSortie },
-            champ2: { value: nbDeNombresRencontres },
-          },
-          { formatInteractif: 'multiMathfield' },
-        )
-      }
+      texte += ajouteChampTexteMathLive(
+        this,
+        2 * q,
+        KeyboardType.clavierNumbers,
+        { texteAvant: 'Indiquer le numéro de la bonne sortie :' },
+      )
+      handleAnswers(this, 2 * q, {
+        reponse: { value: `${nbL - monChemin[monChemin.length - 1][1]}` },
+      })
+      texte += ajouteChampTexteMathLive(
+        this,
+        2 * q + 1,
+        KeyboardType.clavierNumbers,
+        { texteAvant: '<br>Combien de nombres rencontrés avant la sortie ?' },
+      )
+      handleAnswers(this, 2 * q + 1, {
+        reponse: { value: `${laby.chemin2d.length - 1}` },
+      })
       texteCorr = `Voici le chemin en couleur ($${miseEnEvidence(String(laby.chemin2d.length - 1))}$ nombres rencontrés avant la sortie) et la sortie est le numéro $${miseEnEvidence(String(nbL - monChemin[monChemin.length - 1][1]))}$.<br>`
       texteCorr += mathalea2d(
         params,
@@ -181,26 +176,23 @@ export default class ExerciceLabyrintheMultiples extends Exercice {
         laby.chemin2d,
       )
 
+      /** ********************** AMC Open *****************************/
       if (context.isAmc) {
-        this.autoCorrection[i] = {
-          enonce: texte,
-          propositions: [
-            {
-              texte: '',
-              statut: 3, // (ici c'est le nombre de lignes du cadre pour la réponse de l'élève sur AMC)
-              sanscadre: true, // EE : ce champ est facultatif et permet (si true) de cacher le cadre et les lignes acceptant la réponse de l'élève
-            },
-          ],
-        }
+        this.autoCorrection = [
+          {
+            enonce: texte,
+            propositions: [{ texte: texteCorr, statut: 3, feedback: '' }],
+          },
+        ]
       }
-
+      /****************************************************/
       if (
-        this.questionJamaisPosee(i, listeMultiples[0], listeNonMultiples[0])
+        this.questionJamaisPosee(q, listeMultiples[0], listeNonMultiples[0])
       ) {
-        this.listeQuestions[i] = texte
-        this.listeCorrections[i] = texteCorr
+        this.listeQuestions[q] = texte
+        this.listeCorrections[q] = texteCorr
 
-        i++
+        q++
       }
       listeQuestionsToContenu(this)
     }
