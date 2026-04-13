@@ -167,8 +167,14 @@ export default class ExerciceLabyrintheMultiples extends Exercice {
           this,
           i,
           {
-            champ1: { value: numeroDeSortie },
-            champ2: { value: nbDeNombresRencontres },
+            champ1: {
+              value: numeroDeSortie,
+              options: { nombreDecimalSeulement: true },
+            },
+            champ2: {
+              value: nbDeNombresRencontres,
+              options: { nombreDecimalSeulement: true },
+            },
           },
           { formatInteractif: 'multiMathfield' },
         )

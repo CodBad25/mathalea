@@ -1,14 +1,14 @@
 import { colorToLatexOrHTML } from '../../lib/2d/colorToLatexOrHtml'
 import { grille } from '../../lib/2d/Grille'
-import { pointAbstrait } from '../../lib/2d/PointAbstrait'
+import { point } from '../../lib/2d/PointAbstrait'
 import { polygone } from '../../lib/2d/polygones'
 import { texteParPosition } from '../../lib/2d/textes'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { addMultiMathfield } from '../../lib/interactif/MultiMathfield/MultiMathfield'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
 import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
-import { lettreDepuisChiffre } from '../../lib/outils/outilString'
+import { lettreDepuisChiffre, numAlphaNum } from '../../lib/outils/outilString'
 import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu } from '../../modules/outils'
@@ -20,24 +20,23 @@ export const amcType = 'AMCOpen'
 export const titre = 'Programmer des déplacements absolus (Scratch)'
 export const dateDeModifImportante = '09/06/2025'
 export const interactifReady = true
-export const interactifType = 'multiMathField'
+export const interactifType = 'mathLive'
 
 /**
  * * Colorier le déplacement d'un lutin
  * @author Erwan Duplessy
- *  Ajout paramètre 3 par Éric Elter
- * Ajout AMC : Janvier 2022 par Éric Elter
+ *  // (Ajout paramètre 3 par EE)
+ * Ajout AMC : Janvier 2022 par EE
  * Ajout interactivité : Juin 2025 par Guillaume Valmont
- * Passage en multiMathField par Éric Elter le 13/04/2026
  */
-export const uuid = 'c8fee'
+export const uuid = 'c8fe9'
 
 export const refs = {
-  'fr-fr': ['6I1B'],
-  'fr-2016': ['6I10'],
+  'fr-fr': [],
+  'fr-2016': [],
   'fr-ch': [],
 }
-export default class ColorierDeplacement extends Exercice {
+export default class ColorierDeplacementOld extends Exercice {
   constructor() {
     super()
     this.besoinFormulaireNumerique = [
@@ -182,10 +181,10 @@ export default class ColorierDeplacement extends Exercice {
 
     let p // carré gris représentant le lutin en position de départ
     p = polygone(
-      pointAbstrait(lstX[0], lstY[0]),
-      pointAbstrait(lstX[0] + 1, lstY[0]),
-      pointAbstrait(lstX[0] + 1, lstY[0] - 1),
-      pointAbstrait(lstX[0], lstY[0] - 1),
+      point(lstX[0], lstY[0]),
+      point(lstX[0] + 1, lstY[0]),
+      point(lstX[0] + 1, lstY[0] - 1),
+      point(lstX[0], lstY[0] - 1),
     )
     p.opacite = 0.5
     p.couleurDeRemplissage = colorToLatexOrHTML('black')
@@ -265,10 +264,10 @@ export default class ColorierDeplacement extends Exercice {
             break
           case 4:
             p = polygone(
-              pointAbstrait(xLutin, yLutin),
-              pointAbstrait(xLutin + 1, yLutin),
-              pointAbstrait(xLutin + 1, yLutin - 1),
-              pointAbstrait(xLutin, yLutin - 1),
+              point(xLutin, yLutin),
+              point(xLutin + 1, yLutin),
+              point(xLutin + 1, yLutin - 1),
+              point(xLutin, yLutin - 1),
             )
             p.couleurDeRemplissage = colorToLatexOrHTML(couleur)
             p.opaciteDeRemplissage = 0.25
@@ -335,31 +334,23 @@ export default class ColorierDeplacement extends Exercice {
       texte += '\\hfill \\null'
     }
 
-    if (this.interactif) {
-      texte += `<br>${addMultiMathfield(this, 0, {
-        dataTemplate:
-          'a) Quelle est la première case coloriée par le lutin ? %{champ1}.\n b) Quelle est la dernière case coloriée par le lutin ? %{champ2}',
-        dataOptions: {
-          champ1: { keyboard: KeyboardType.alphanumeric },
-          champ2: { keyboard: KeyboardType.alphanumeric },
+    if (this.interactif && context.isHtml) {
+      texte += `<br>
+      ${numAlphaNum(0)} Quelle est la première case coloriée par le lutin ? ${ajouteChampTexteMathLive(this, 0, KeyboardType.alphanumeric, { placeholder: 'A1' })}`
+      handleAnswers(this, 0, {
+        reponse: {
+          value: positionApresPremierDeplacement,
+          options: { texteSansCasse: true },
         },
-      })}`
-      handleAnswers(
-        this,
-        0,
-        {
-          champ1: {
-            value: positionApresPremierDeplacement,
-            options: { texteSansCasse: true },
-          },
-          champ2: {
-            value: positionApresDernierDeplacement,
-            options: { texteSansCasse: true },
-          },
+      })
+      texte += `<br>
+      ${numAlphaNum(1)} Quelle est la dernière case coloriée par le lutin ? ${ajouteChampTexteMathLive(this, 1, KeyboardType.alphanumeric, { placeholder: 'A1' })}`
+      handleAnswers(this, 1, {
+        reponse: {
+          value: positionApresDernierDeplacement,
+          options: { texteSansCasse: true },
         },
-        { formatInteractif: 'multiMathfield' },
-      )
-
+      })
       texteCorr += `<br>
       La première case coloriée par le lutin est ${texteEnCouleurEtGras(positionApresPremierDeplacement)}.<br>
       La dernière case coloriée par le lutin est ${texteEnCouleurEtGras(positionApresDernierDeplacement)}.`
