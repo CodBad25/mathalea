@@ -1,6 +1,6 @@
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { addMultiMathfield } from '../../lib/interactif/MultiMathfield/MultiMathfield'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { context } from '../../modules/context'
 import { labyrinthe } from '../../modules/Labyrinthe'
@@ -19,16 +19,14 @@ export const dateDeModifImportante = '29/10/2024'
  * @author Jean-claude Lhote (remaniée par Éric Elter pour la prise en compte du nb de lignes et de colonnes du labyrinthe)
  * Sortir du labyrinthe en utilisant la numération décimale.
  * Ajout AMC et remaniement du code pour moins d'évidence dans la solution : Janvier 2022 par Éric Elter
- * Passage en multiMahField par Éric Elter (13/04/2026)
  */
-export const uuid = '8064e'
+export const uuid = '80645'
 
 export const refs = {
-  'fr-fr': ['6N1A-4'],
-  'fr-2016': ['6N10-5'],
-  'fr-ch': ['9NO1-6'],
+  'fr-fr': [],
+  'fr-ch': [],
 }
-export default class ExerciceLabyrintheNumeration extends Exercice {
+export default class ExerciceLabyrintheNumerationOld extends Exercice {
   constructor() {
     super()
     this.besoinFormulaireCaseACocher = [
@@ -249,27 +247,24 @@ export default class ExerciceLabyrintheNumeration extends Exercice {
       scale: 0.7,
     }
     texte += mathalea2d(params, laby.murs2d, laby.nombres2d)
-    if (this.interactif) {
-      const numeroDeSortie = nbL - monchemin[monchemin.length - 1][1]
-      const nbDeNombresRencontres = laby.chemin2d.length - 1
-      texte += `${addMultiMathfield(this, 0, {
-        dataTemplate:
-          'Indiquer le numéro de la bonne sortie : %{champ1}.\n Combien de nombres rencontrés avant la sortie ? %{champ2}',
-        dataOptions: {
-          champ1: { keyboard: KeyboardType.clavierNumbers },
-          champ2: { keyboard: KeyboardType.clavierNumbers },
-        },
-      })}`
-      handleAnswers(
-        this,
-        0,
-        {
-          champ1: { value: numeroDeSortie },
-          champ2: { value: nbDeNombresRencontres },
-        },
-        { formatInteractif: 'multiMathfield' },
-      )
-    }
+    texte += ajouteChampTexteMathLive(
+      this,
+      2 * 0,
+      KeyboardType.clavierNumbers,
+      { texteAvant: 'Indiquer le numéro de la bonne sortie :' },
+    )
+    handleAnswers(this, 2 * 0, {
+      reponse: { value: `${nbL - monchemin[monchemin.length - 1][1]}` },
+    })
+    texte += ajouteChampTexteMathLive(
+      this,
+      2 * 0 + 1,
+      KeyboardType.clavierNumbers,
+      { texteAvant: '<br>Combien de nombres rencontrés avant la sortie ?' },
+    )
+    handleAnswers(this, 2 * 0 + 1, {
+      reponse: { value: `${laby.chemin2d.length - 1}` },
+    })
     texteCorr = `Voici le chemin en couleur ($${miseEnEvidence(laby.chemin2d.length - 1)}$ nombres rencontrés avant la sortie) et la sortie est le numéro $${miseEnEvidence(nbL - monchemin[monchemin.length - 1][1])}$.<br>`
     texteCorr += mathalea2d(params, laby.murs2d, laby.nombres2d, laby.chemin2d)
     if (context.isAmc) {
