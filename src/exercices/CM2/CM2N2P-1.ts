@@ -28,7 +28,7 @@ export const refs = {
   'fr-2016': ['c3N20'],
   'fr-ch': ['9NO13-3'],
 }
-export default class NomQuelconqueDeLaFonctionQuiCreeExercice extends Exercice {
+export default class CM2N2P1 extends Exercice {
   constructor() {
     super()
     this.besoinFormulaireNumerique = [
