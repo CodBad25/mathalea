@@ -14,6 +14,7 @@ import { rotation } from '../../lib/2d/transformations'
 import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { toutAUnPoint } from '../../lib/interactif/mathLive'
 import { addMultiMathfield } from '../../lib/interactif/MultiMathfield/MultiMathfield'
 import {
   combinaisonListes,
@@ -483,38 +484,26 @@ ${situations.last_question[3]} vers ${situations.categories[2].destination} vaut
         this.listeCorrections[i] = texteCorr
         handleAnswers(
           this,
-          3 * i,
+          i,
           {
-            reponse: {
+            bareme: toutAUnPoint,
+            champ1: {
               value: fraction(
                 situations.categories[0].frac[0],
                 situations.categories[0].frac[1],
               ).texFraction,
               options: { fractionEgale: true },
             },
-          },
-          { formatInteractif: 'multiMathfield' },
-        )
-        handleAnswers(
-          this,
-          3 * i + 1,
-          {
-            reponse: {
+            champ2: {
               value: fraction(
                 situations.categories[1].frac[0],
                 situations.categories[1].frac[1],
               ).texFraction,
               options: { fractionEgale: true },
             },
-          },
-          { formatInteractif: 'multiMathfield' },
-        )
-        handleAnswers(
-          this,
-          3 * i + 2,
-          {
-            reponse: {
+            champ3: {
               value: situations.nb_total / situations.categories[2].frac[1],
+              options: { nombreDecimalSeulement: true },
             },
           },
           { formatInteractif: 'multiMathfield' },
