@@ -1,32 +1,31 @@
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import Exercice from '../Exercice'
+import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 
-import { tableauColonneLigne } from '../../lib/2d/tableau'
-import { addMultiMathfield } from '../../lib/interactif/MultiMathfield/MultiMathfield'
-import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { toutAUnPoint } from '../../lib/interactif/mathLive'
-import { miseEnEvidence } from '../../lib/outils/embellissements'
-import { numAlpha } from '../../lib/outils/outilString'
 import FractionEtendue from '../../modules/FractionEtendue'
-import { context } from '../../modules/context'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import {
   gestionnaireFormulaireTexte,
   listeQuestionsToContenu,
   randint,
 } from '../../modules/outils'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { tableauColonneLigne } from '../../lib/2d/tableau'
+import { numAlpha } from '../../lib/outils/outilString'
+import { context } from '../../modules/context'
 export const titre =
   'Calculer des probabilités dans une situation concrète (union et intersection)'
 export const dateDePublication = '26/05/2024'
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'mathLive'
 /**
  *
  * @author Gilles Mora
  */
-export const uuid = 'ac940'
+export const uuid = 'ae872'
 export const refs = {
-  'fr-fr': ['2S30-7'],
+  'fr-fr': [],
   'fr-ch': [],
 }
 export default class ProbaConcret extends Exercice {
@@ -40,6 +39,8 @@ export default class ProbaConcret extends Exercice {
   }
 
   nouvelleVersion() {
+    let index = 0
+    let increment = 1
     const typesDeQuestionsDisponibles = gestionnaireFormulaireTexte({
       saisie: this.sup,
       min: 1,
@@ -145,8 +146,10 @@ export default class ProbaConcret extends Exercice {
           '\\overline{F}\\cap \\overline{C}',
           new FractionEtendue(nbHommesEtEmployes, total).texFraction,
           'la personne choisie est une femme ou fait partie des employés',
-          new FractionEtendue(nbHommes + nbEmployes - nbHommesEtEmployes, total)
-            .texFraction,
+          new FractionEtendue(
+            nbHommes + nbEmployes - nbHommesEtEmployes,
+            total,
+          ).texFraction,
         ],
       ]
       const EvUnion = choice(listeEvenementUnion)
@@ -239,26 +242,33 @@ export default class ProbaConcret extends Exercice {
                entreprise.<br>
                On définit les évènements suivants : <br>
                C : « la personne choisie fait partie des cadres » ;
-               F : « la personne choisie est une femme ».<br>`
-      texte += `${addMultiMathfield(this, i, {
-        dataTemplate: `a) Calculer la probabilité de l'événement ${choix1 ? `$${EvInter[0]}$` : `: « ${EvInter[1]} »`}. %{champ1}\nb) Calculer la probabilité de l'événement ${choix2 ? `$${EvUnion[0]}$` : `: « ${EvUnion[7]} »`}. %{champ2}\nc) On sait que la personne choisie ${EvCond[0]}. Quelle est la probabilité ${EvCond[1]} ? %{champ3}`,
-        dataOptions: {
-          champ1: { keyboard: KeyboardType.clavierDeBaseAvecFraction },
-          champ2: { keyboard: KeyboardType.clavierDeBaseAvecFraction },
-          champ3: { keyboard: KeyboardType.clavierDeBaseAvecFraction },
-        },
-      })}`
-      handleAnswers(
-        this,
-        i,
-        {
-          champ1: { value: EvInter[2] },
-          champ2: { value: EvUnion[8] },
-          champ3: { value: EvCond[4] },
-          bareme: toutAUnPoint,
-        },
-        { formatInteractif: 'multiMathfield' },
-      )
+               F : « la personne choisie est une femme ».<br>
+               ${numAlpha(0)}  Calculer la probabilité de l'événement ${choix1 ? `$${EvInter[0]}$` : `: « ${EvInter[1]} »`}.<br>`
+      texte +=
+        ajouteChampTexteMathLive(
+          this,
+          index,
+          KeyboardType.clavierDeBaseAvecFraction,
+        ) + '<br>'
+      handleAnswers(this, index, { reponse: { value: EvInter[2] } })
+      texte += `${numAlpha(1)}  Calculer la probabilité de l'événement ${choix2 ? `$${EvUnion[0]}$` : `: « ${EvUnion[7]} »`}.<br>`
+      texte +=
+        ajouteChampTexteMathLive(
+          this,
+          index + 1,
+          KeyboardType.clavierDeBaseAvecFraction,
+        ) + '<br>'
+      handleAnswers(this, index + 1, { reponse: { value: EvUnion[8] } })
+      texte += `${numAlpha(2)}  On sait que la personne choisie  ${EvCond[0]}.<br>
+          Quelle est la probabilité ${EvCond[1]} ?`
+      texte +=
+        '<br>' +
+        ajouteChampTexteMathLive(
+          this,
+          index + 2,
+          KeyboardType.clavierDeBaseAvecFraction,
+        )
+      handleAnswers(this, index + 2, { reponse: { value: EvCond[4] } })
       texteCorr = `${numAlpha(0)} La probabilité est donnée par : <br>
           $P(${EvInter[0]})=\\dfrac{\\text{Nombre ${EvInter[3]}}}{\\text{Effectif total}}=${miseEnEvidence(EvInter[2])}$.
                `
@@ -274,11 +284,14 @@ P(${EvUnion[0]})&=P(${EvUnion[1]})+P(${EvUnion[3]})-P(${EvUnion[5]})\\\\
         
                `
 
+      increment = 3
+
       if (this.questionJamaisPosee(i, listeTypeDeQuestions[i], a)) {
         // Si la question n'a jamais été posée, on en créé une autre
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr
         i++
+        index += increment
       }
       cpt++
     }
