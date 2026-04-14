@@ -26,6 +26,8 @@ export type DataOptionsMultiMathfield = Partial<
       placeholder?: string
       maxWidth?: number
       minWidth?: number
+      texteApres?: string
+      ldots?: boolean
     }
   >
 >
@@ -113,15 +115,17 @@ export class MultiMathfieldElement extends HTMLElement {
         const name = token.slice(2, -1)
         const div = document.createElement('DIV')
         div.style.display = 'inline-block'
+        div.style.border = '1px solid #ccc'
+        div.style.borderRadius = '4px'
         div.classList.add('ml-1')
-        div.style.marginLeft = '5px'
-        div.style.marginRight = '5px'
+        div.style.marginLeft = '2px'
+        div.style.marginRight = '2px'
         div.style.marginTop = '0'
         div.style.marginBottom = '0'
         div.style.paddingTop = '0'
         div.style.paddingBottom = '0'
-        div.style.paddingLeft = '4px'
-        div.style.paddingRight = '4px'
+        div.style.paddingLeft = '0'
+        div.style.paddingRight = '0'
         const mathfield = new MathfieldElement()
 
         mathfield.classList.add('ml-1')
@@ -194,11 +198,38 @@ export class MultiMathfieldElement extends HTMLElement {
           }
         })
         div.appendChild(mathfield)
+        let texteApres: HTMLElement | null = null
+        if (options[name] && options[name].texteApres) {
+          if (
+            typeof options[name].texteApres === 'string' &&
+            options[name].texteApres.startsWith('$')
+          ) {
+            // Bloc latex readonly
+            const latex = options[name].texteApres.slice(1, -1)
+            const mf = new MathfieldElement()
+            mf.value = latex
+            mf.readOnly = true
+            mf.style.pointerEvents = 'none'
+            mf.style.verticalAlign = 'baseline'
+            mf.style.border = 'none'
+            injectFontInMetaInteractif2d(mf)
+            texteApres = mf
+          } else {
+            texteApres = document.createElement('span')
+            texteApres.textContent = options[name].texteApres
+            texteApres.style.marginLeft = '0'
+          }
+        }
+
         // Ajoute un span de vérification après chaque Mathfield
+
         const checkSpan = document.createElement('span')
         checkSpan.id = 'check-' + mathfield.id
-        div.appendChild(checkSpan)
         currentSpan.appendChild(div)
+        if (texteApres) {
+          currentSpan.appendChild(texteApres)
+        }
+        currentSpan.appendChild(checkSpan)
 
         if (mathfield.isConnected) {
           setMathfield(mathfield)
@@ -214,7 +245,7 @@ export class MultiMathfieldElement extends HTMLElement {
         mf.value = latex
         mf.readOnly = true
         mf.style.pointerEvents = 'none'
-        mf.style.verticalAlign = 'middle'
+        mf.style.verticalAlign = 'baseline'
         mf.style.border = 'none'
 
         currentSpan.appendChild(mf)
