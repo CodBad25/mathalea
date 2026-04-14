@@ -1,7 +1,6 @@
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { toutAUnPoint } from '../../lib/interactif/mathLive'
-import { addMultiMathfield } from '../../lib/interactif/MultiMathfield/MultiMathfield'
+import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import { ecritureParentheseSiNegatif } from '../../lib/outils/ecritures'
 import {
@@ -17,7 +16,7 @@ import Exercice from '../Exercice'
 export const titre = 'Tester une égalité'
 export const dateDeModifImportante = '18/11/2023'
 export const interactifReady = true
-export const interactifType = 'multiMathField'
+export const interactifType = 'mathLive'
 export const amcReady = true
 export const amcType = 'AMCHybride'
 
@@ -30,13 +29,13 @@ export const amcType = 'AMCHybride'
  * * a-2x=b+2x
  * @author Rémi Angot
  */
-export const uuid = 'd8841'
+export const uuid = 'd88d6'
 
 export const refs = {
-  'fr-fr': ['5L15'],
-  'fr-ch': ['10FA3-1'],
+  'fr-fr': [''],
+  'fr-ch': [''],
 }
-export default class TesterUneEgalite extends Exercice {
+export default class TesterUneEgaliteOld extends Exercice {
   constructor() {
     super()
     this.besoinFormulaireNumerique = [
@@ -269,7 +268,7 @@ export default class TesterUneEgalite extends Exercice {
 
       texte = `Tester l'égalité ${expression} pour $${sp(1)}x=${x1}${sp(1)}$ puis pour $${sp(1)}x=${x2}$.`
       if (this.interactif && !context.isAmc) {
-        /*  setReponse(this, 6 * i, rep1)
+        setReponse(this, 6 * i, rep1)
         setReponse(this, 6 * i + 1, rep2)
         setReponse(
           this,
@@ -284,71 +283,10 @@ export default class TesterUneEgalite extends Exercice {
           6 * i + 5,
           rep3 === rep4 ? ['Oui', 'oui', 'OUI'] : ['Non', 'non', 'NON'],
           { formatInteractif: 'texte' },
-        ) */
-        handleAnswers(
-          this,
-          i,
-          {
-            bareme: toutAUnPoint,
-            champ1: { value: rep1 },
-            champ2: { value: rep2 },
-            champ3: {
-              value:
-                rep1 === rep2
-                  ? ['O', 'Oui', 'oui', 'OUI']
-                  : ['N', 'Non', 'non', 'NON'],
-            },
-            champ4: { value: rep3 },
-            champ5: { value: rep4 },
-            champ6: {
-              value:
-                rep3 === rep4
-                  ? ['O', 'Oui', 'oui', 'OUI']
-                  : ['N', 'Non', 'non', 'NON'],
-            },
-          },
-          { formatInteractif: 'multiMathfield' },
         )
-        texte += `<br>`
-        const chainePourReponses1 = `${sp(10)}Pour $x=${x1}$, d'une part, ${sp(5)} ${expression.split('=')[0]} =$ %{champ1} \n`
-        const chainePourReponses2 = `${sp(10)}Pour $x=${x1}$, d'autre part, ${sp(6)} $${expression.split('=')[1]} = %{champ2}\n`
-        const chainePourReponses3 = `Conclure : l'égalité ${expression} est-elle vérifiée pour $${sp(1)}x=${x1}${sp(1)}$ ? (Oui/Non)  %{champ3}\n\n`
-        const chainePourReponses4 = `${sp(10)}Pour $x=${x2}$, d'une part, ${sp(5)} ${expression.split('=')[0]} =$ %{champ4}\n`
-        const chainePourReponses5 = `${sp(10)}Pour $x=${x2}$, d'autre part, ${sp(6)} $${expression.split('=')[1]} = %{champ5}\n`
-        const chainePourReponses6 = `Conclure : l'égalité ${expression} est-elle vérifiée pour $${sp(1)}x=${x2}${sp(1)}$ ? (Oui/Non)  %{champ6}`
-        const chainePourReponses =
-          chainePourReponses1 +
-          chainePourReponses2 +
-          chainePourReponses3 +
-          chainePourReponses4 +
-          chainePourReponses5 +
-          chainePourReponses6
-        const tailleClavier = 75
-        texte += addMultiMathfield(this, i, {
-          dataTemplate: chainePourReponses,
-          dataOptions: {
-            champ1: {
-              keyboard: KeyboardType.clavierDeBaseAvecX,
-              minWidth: tailleClavier,
-            },
-            champ2: {
-              keyboard: KeyboardType.clavierDeBaseAvecX,
-              minWidth: tailleClavier,
-            },
-            champ3: { keyboard: KeyboardType.vFON, minWidth: tailleClavier },
-            champ4: {
-              keyboard: KeyboardType.clavierDeBaseAvecX,
-              minWidth: tailleClavier,
-            },
-            champ5: {
-              keyboard: KeyboardType.clavierDeBaseAvecX,
-              minWidth: tailleClavier,
-            },
-            champ6: { keyboard: KeyboardType.vFON, minWidth: tailleClavier },
-          },
-        })
-        /* texte += `${sp(10)}Pour $x=${x1}$, d'une part, ${sp(5)} ${expression.split('=')[0]}$ = ` +
-              ajouteChampTexteMathLive(this, 6 * i, KeyboardType.clavierDeBase)
+        texte +=
+          `<br> ${sp(10)}Pour $x=${x1}$, d'une part, ${sp(5)} ${expression.split('=')[0]}$ = ` +
+          ajouteChampTexteMathLive(this, 6 * i, KeyboardType.clavierDeBase)
         texte +=
           `<br> ${sp(10)}Pour $x=${x1}$, d'autre part, ${sp(6)} $${expression.split('=')[1]} = ` +
           ajouteChampTexteMathLive(
@@ -375,7 +313,7 @@ export default class TesterUneEgalite extends Exercice {
           )
         texte +=
           `<br> Conclure : l'égalité ${expression} est-elle vérifiée pour $${sp(1)}x=${x2}${sp(1)}$ ? (Oui/Non)  ` +
-          ajouteChampTexteMathLive(this, 6 * i + 5, KeyboardType.vFON) */
+          ajouteChampTexteMathLive(this, 6 * i + 5, KeyboardType.vFON)
       }
 
       if (context.isAmc) {
