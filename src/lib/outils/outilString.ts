@@ -1,5 +1,6 @@
 import { context } from '../../modules/context'
 import { quotientier, randint } from '../../modules/outils'
+import { bleuMathalea } from '../colors'
 
 /**
  * Créé un string de nbsommets caractères dans l'ordre alphabétique et en majuscule qui ne soit pas dans la liste donnée en 2e argument
@@ -158,7 +159,7 @@ export function premiereLettreEnMajuscule(text: string) {
 export function numAlpha(k: number, nospace = false) {
   if (context.isHtml)
     return (
-      '<span style="color:#f15929; font-weight:bold">' +
+      `<span style="color:${bleuMathalea}; font-weight:bold">` +
       String.fromCharCode(97 + k) +
       ')' +
       (nospace ? '' : '&nbsp;') +
@@ -179,7 +180,7 @@ export function numAlphaNum(k: number, nospace = false) {
   k = k + 1
   if (context.isHtml)
     return (
-      '<span style="color:#f15929; font-weight:bold">' +
+      `<span style="color:${bleuMathalea}; font-weight:bold">` +
       k +
       ')' +
       (nospace ? '' : '&nbsp;') +
