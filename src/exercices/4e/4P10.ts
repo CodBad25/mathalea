@@ -7,7 +7,7 @@ import {
 import { texFractionReduite } from '../../lib/outils/deprecatedFractions'
 import { egalOuApprox } from '../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
-import { ajouterAide, ajouterImage } from '../../lib/outils/enrichissements'
+import { ajouterAide } from '../../lib/outils/enrichissements'
 import { arrondi } from '../../lib/outils/nombres'
 import { numAlpha, sp } from '../../lib/outils/outilString'
 import { prenom, prenomF } from '../../lib/outils/Personne'
@@ -210,7 +210,6 @@ export default class ProblemesGrandeursComposees extends Exercice {
         texteCorr,
         cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       switch (grandeurs[i]) {
         case 1: // problème de consommation éléctrique
@@ -484,19 +483,10 @@ export default class ProblemesGrandeursComposees extends Exercice {
           index = randint(60, 90) // masse du père (recyclage de variable)
           masse = randint(20, 30) // masse de l'enfant
           distance = randint(25, 35) / 10
-          texte =
-            `${quidam} qui pèse $${masse}$ kg se trouve sur le siège d'une ` +
-            ajouterAide(
-              ajouterImage('balancoire_trebuchet.png'), // Public Domain file : https://svgsilh.com/fr/image/43897.html
-              {
-                texteAvant: 'balançoire trébuchet',
-                titreAide: 'Schéma explicatif',
-              },
-            ) +
-            ` dans un jardin d'enfant. Le siège est situé à $${texNombre(
-              distance,
-              1,
-            )}\\text{ m}$ du pivot central de la balançoire (bras de levier).<br>`
+          texte = `${quidam} qui pèse $${masse}$ kg se trouve sur le siège d'une balançoire dans un jardin d'enfant. Le siège est situé à $${texNombre(
+            distance,
+            1,
+          )}\\text{ m}$ du pivot central de la balançoire (bras de levier).<br>`
           texte +=
             numAlpha(0) +
             ' Calculer le ' +
