@@ -1,7 +1,6 @@
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { toutAUnPoint } from '../../lib/interactif/mathLive'
-import { addMultiMathfield } from '../../lib/interactif/MultiMathfield/MultiMathfield'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice, shuffle } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { prenomF, prenomM } from '../../lib/outils/Personne'
@@ -16,20 +15,20 @@ import Exercice from '../Exercice'
 
 export const titre = "Écrire un enchaînement de calculs à partir d'un problème"
 export const interactifReady = true
-export const interactifType = 'multiMathField'
+export const interactifType = 'mathLive'
 
 export const dateDePublication = '10/09/2025'
 
 /**
  * @author Éric Elter (sur la base de 6N5-13)
  */
-export const uuid = '34cce'
+export const uuid = '0a113'
 
 export const refs = {
-  'fr-fr': ['5C11-5'],
-  'fr-ch': ['9NO16-8'],
+  'fr-fr': [''],
+  'fr-ch': [''],
 }
-export default class ProblemesAvecOperationsEnUneLigne extends Exercice {
+export default class ProblemesAvecOperationsEnUneLigneOld extends Exercice {
   constructor() {
     super()
     this.nbQuestions = 4
@@ -71,7 +70,7 @@ export default class ProblemesAvecOperationsEnUneLigne extends Exercice {
       nbQuestions: this.nbQuestions,
       saisie: this.sup,
     }).map(Number)
-    // const nbQ = this.sup2 ? 2 : 1
+    const nbQ = this.sup2 ? 2 : 1
     for (
       let i = 0,
         texte = '',
@@ -80,7 +79,7 @@ export default class ProblemesAvecOperationsEnUneLigne extends Exercice {
         reponseNumerique = '',
         correctionDetaillee = '',
         texteAvant = '',
-        leTexteApres = '',
+        texteApres = '',
         prixTartelettes = 0,
         prixPains = 0,
         prixCahiers = 0,
@@ -118,7 +117,7 @@ export default class ProblemesAvecOperationsEnUneLigne extends Exercice {
           reponse = `(${texPrix(prix)} - ${quantitéPains} \\times ${texPrix(prixPains)}) \\div ${quantitéTartelettes}`
           reponseNumerique = texPrix(prixTartelettes)
           texteAvant = "<br> Prix d'une tartelette : "
-          leTexteApres = ' €'
+          texteApres = ' €'
 
           if (this.correctionDetaillee) {
             correctionDetaillee = `<br>Les pains coûtent $${quantitéPains} \\times ${texPrix(prixPains)} = ${texPrix(quantitéPains * prixPains)}$ €<br>`
@@ -149,7 +148,7 @@ export default class ProblemesAvecOperationsEnUneLigne extends Exercice {
 
           reponse = `(${texPrix(prix)} - ${quantitéCahiers} \\times ${texPrix(prixCahiers)}) \\div ${quantitéStylos}`
           reponseNumerique = texPrix(prixStylos)
-          leTexteApres = ' €'
+          texteApres = ' €'
           texteAvant = "<br> Prix d'un stylo : "
 
           if (this.correctionDetaillee) {
@@ -180,7 +179,7 @@ export default class ProblemesAvecOperationsEnUneLigne extends Exercice {
 
           reponse = `${rangees} \\times ${arbresParRangee} - ${arbresArraches} + ${nouveauxArbres}`
           reponseNumerique = texNombre(arbresFinaux)
-          leTexteApres = ' arbres'
+          texteApres = ' arbres'
           texteAvant = "<br> Nombre d'arbres dans le parc : "
 
           if (this.correctionDetaillee) {
@@ -227,7 +226,7 @@ export default class ProblemesAvecOperationsEnUneLigne extends Exercice {
             correctionDetaillee += `On relâche ${groupesRelaches} \\times ${texNombre(tortuesParGroupeApres)} = $${texNombre(tortuesRelachees)}$ tortues.`
           } else correctionDetaillee = ''
 
-          leTexteApres = ' tortues'
+          texteApres = ' tortues'
           texteAvant = '<br> Nombre de tortues relâchées : '
           reponseNumerique = texNombre(tortuesRelachees)
 
@@ -264,7 +263,7 @@ export default class ProblemesAvecOperationsEnUneLigne extends Exercice {
             correctionDetaillee += `Au total, l'école se procure $${texNombre(arbresAchetes)} + ${arbresCadeaux} = ${texNombre(arbresTotal)}$ arbres.`
           } else correctionDetaillee = ''
 
-          leTexteApres = ' arbres'
+          texteApres = ' arbres'
           texteAvant = "<br> Nombre total d'arbres : "
           reponseNumerique = texNombre(arbresTotal)
 
@@ -299,7 +298,7 @@ export default class ProblemesAvecOperationsEnUneLigne extends Exercice {
             correctionDetaillee += `Chaque ami dépense $${texNombre(coutTotal)} \\div ${nbAmis} = ${texPrix(coutParAmi)}$ €.`
           } else correctionDetaillee = ''
 
-          leTexteApres = ' €'
+          texteApres = ' €'
           texteAvant = '<br> Dépense par ami : '
           reponseNumerique = texPrix(coutParAmi)
 
@@ -338,7 +337,7 @@ export default class ProblemesAvecOperationsEnUneLigne extends Exercice {
             correctionDetaillee += `Chaque personne paie $${texNombre(coutTotal)} \\div ${nbAmis} = ${texPrix(coutParAmi)}$ €.`
           } else correctionDetaillee = ''
 
-          leTexteApres = ' €'
+          texteApres = ' €'
           texteAvant = '<br> Montant payé par ami : '
           reponseNumerique = texPrix(coutParAmi)
 
@@ -370,7 +369,7 @@ export default class ProblemesAvecOperationsEnUneLigne extends Exercice {
             correctionDetaillee += `Le nombre de bouteilles utilisées est $${texNombre(bouteillesDistribuees)} - ${bouteillesInutilisees} = ${texNombre(bouteillesUtilisees)}$ bouteilles.`
           } else correctionDetaillee = ''
 
-          leTexteApres = ' bouteilles'
+          texteApres = ' bouteilles'
           texteAvant = '<br> Nombre de bouteilles utilisées : '
           reponseNumerique = texNombre(bouteillesUtilisees)
 
@@ -406,7 +405,7 @@ export default class ProblemesAvecOperationsEnUneLigne extends Exercice {
             correctionDetaillee += `Chaque personne reçoit $${texNombre(resteAPartager)} \\div ${nbPersonnes} = ${texPrix(gainParPersonne)}$ €.`
           } else correctionDetaillee = ''
 
-          leTexteApres = ' €'
+          texteApres = ' €'
           texteAvant = '<br> Gain par personne : '
           reponseNumerique = texPrix(gainParPersonne)
 
@@ -443,7 +442,7 @@ export default class ProblemesAvecOperationsEnUneLigne extends Exercice {
             correctionDetaillee += `Il me reste $${texNombre(oeufsPondus)} - ${texNombre(oeufsUtilises)} = ${texNombre(oeufsRestants)}$ œufs.<br>`
           } else correctionDetaillee = ''
 
-          leTexteApres = ' œufs'
+          texteApres = ' œufs'
           texteAvant = "<br> Nombre d'œufs restants  à la fin de la semaine : "
           reponseNumerique = texNombre(oeufsRestants)
 
@@ -476,7 +475,7 @@ export default class ProblemesAvecOperationsEnUneLigne extends Exercice {
             correctionDetaillee += `Chaque réservoir contient $${texNombre(carburantRestant)} \\div ${nbReservoirs} = ${texNombre(carburantParReservoir)}$ litres.`
           } else correctionDetaillee = ''
 
-          leTexteApres = ' litres'
+          texteApres = ' litres'
           texteAvant = '<br> Carburant par réservoir : '
           reponseNumerique = texNombre(carburantParReservoir)
 
@@ -487,11 +486,7 @@ export default class ProblemesAvecOperationsEnUneLigne extends Exercice {
           break
         }
       }
-
-      texteCorr =
-        `Un enchaînement possible de calculs est : $${miseEnEvidence(reponse)}$.` +
-        correctionDetaillee
-      /* texte += ajouteChampTexteMathLive(
+      texte += ajouteChampTexteMathLive(
         this,
         i * nbQ,
         KeyboardType.clavierDeBaseAvecEgal,
@@ -499,6 +494,9 @@ export default class ProblemesAvecOperationsEnUneLigne extends Exercice {
           texteAvant: '<br> Enchaînement de calculs (en une seule ligne) : ',
         },
       )
+      texteCorr =
+        `Un enchaînement possible de calculs est : $${miseEnEvidence(reponse)}$.` +
+        correctionDetaillee
       handleAnswers(this, i * nbQ, {
         reponse: {
           value: reponse,
@@ -522,67 +520,6 @@ export default class ProblemesAvecOperationsEnUneLigne extends Exercice {
             options: { nombreDecimalSeulement: true },
           },
         })
-      } */
-      const tailleChampsReponse = 150
-      if (this.interactif) {
-        if (this.sup2) {
-          texte +=
-            '<br>' +
-            addMultiMathfield(this, i, {
-              dataTemplate: `Enchaînement de calculs (en une seule ligne) : %{champ1}\n ${texteAvant} %{champ2}`,
-              dataOptions: {
-                champ1: {
-                  keyboard: KeyboardType.clavierDeBaseAvecEgal,
-                  minWidth: tailleChampsReponse,
-                },
-                champ2: {
-                  keyboard: KeyboardType.clavierNumbers,
-                  texteApres: leTexteApres,
-                  minWidth: 50,
-                },
-              },
-            })
-          handleAnswers(
-            this,
-            i,
-            {
-              bareme: toutAUnPoint,
-              champ1: {
-                value: reponse,
-                options: { expressionNumerique: true },
-              },
-              champ2: {
-                value: reponseNumerique,
-                options: { nombreDecimalSeulement: true },
-              },
-            },
-            { formatInteractif: 'multiMathfield' },
-          )
-        } else {
-          texte +=
-            '<br>' +
-            addMultiMathfield(this, i, {
-              dataTemplate: `Enchaînement de calculs (en une seule ligne) : %{champ1}`,
-              dataOptions: {
-                champ1: {
-                  keyboard: KeyboardType.clavierDeBaseAvecEgal,
-                  minWidth: tailleChampsReponse,
-                },
-              },
-            })
-          handleAnswers(
-            this,
-            i,
-            {
-              bareme: toutAUnPoint,
-              champ1: {
-                value: reponse,
-                options: { expressionNumerique: true },
-              },
-            },
-            { formatInteractif: 'multiMathfield' },
-          )
-        }
       }
       if (
         this.questionJamaisPosee(
