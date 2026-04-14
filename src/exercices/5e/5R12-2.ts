@@ -150,8 +150,8 @@ export default class ReperagePointDuPlan extends Exercice {
 
     texte =
       nbPoints > 1
-        ? 'Déterminer les coordonnées respectives des points'
-        : 'Déterminer les coordonnées du point'
+        ? 'Déterminer les coordonnées respectives des points '
+        : 'Déterminer les coordonnées du point '
     texteCorr =
       nbPoints > 1
         ? 'Les coordonnées respectives des points sont :<br>'
