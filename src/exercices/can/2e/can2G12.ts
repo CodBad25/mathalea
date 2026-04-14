@@ -22,7 +22,7 @@ export const dateDePublication = '30/10/2021' // La date de publication initiale
 export const uuid = '2ba42'
 
 export const refs = {
-  'fr-fr': ['can2G12'],
+  'fr-fr': ['can2G12','2G25-1'],
   'fr-ch': ['3G90-10'],
 }
 export default class VecteursColineairesVF extends Exercice {
