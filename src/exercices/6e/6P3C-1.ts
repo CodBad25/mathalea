@@ -143,9 +143,9 @@ export default class ProportionnaliteParLineariteBis extends Exercice {
       shuffle2tableaux(consigneQuestions, prenomlisteEE)
 
       texte = `${situation.lieu}, ${prenomliste[0]} achète $${n1}$ ${pluriel(n1, situation)} et paie $${texPrix(n1 * situation.pu)}$${sp()}€.
-      <br>${prenomliste[1]} achète $${n2}$ ${pluriel(n2, situation)} et paie $${texPrix(n2 * situation.pu)}$${sp()}€.<br>`
+      ${prenomliste[1]} achète $${n2}$ ${pluriel(n2, situation)} et paie $${texPrix(n2 * situation.pu)}$${sp()}€.<br>`
       const q1 = `${String.fromCharCode(97 + k)}) Combien paiera ${prenomlisteEE[0]} pour $${consigneQuestions[k]}$ ${pluriel(consigneQuestions[k], situation)} ?`
-      const enonceQ1 = q1 + ` %{champ${k + 1}} €\n`
+      const enonceQ1 = q1 + ` %{champ${k + 1}}\n`
       k++
       let enonceAMC = texte + '<br>' + q1
       const propositionsAMC = [
@@ -174,7 +174,7 @@ export default class ProportionnaliteParLineariteBis extends Exercice {
         },
       ]
       enonceAMC = `${numAlpha(k)} Combien paiera ${prenomlisteEE[1]} pour $${consigneQuestions[k]}$ ${pluriel(consigneQuestions[k], situation)} ?`
-      const enonceQ2 = `${String.fromCharCode(97 + k)}) Combien paiera ${prenomlisteEE[1]} pour $${consigneQuestions[k]}$ ${pluriel(consigneQuestions[k], situation)} ? %{champ${k + 1}} €\n`
+      const enonceQ2 = `${String.fromCharCode(97 + k)}) Combien paiera ${prenomlisteEE[1]} pour $${consigneQuestions[k]}$ ${pluriel(consigneQuestions[k], situation)} ? %{champ${k + 1}}\n`
       k++
       propositionsAMC.push({
         type: 'AMCNum',
@@ -200,7 +200,7 @@ export default class ProportionnaliteParLineariteBis extends Exercice {
         ],
       })
       enonceAMC = `${numAlpha(k)} Combien paiera ${prenomlisteEE[2]} pour $${consigneQuestions[k]}$ ${pluriel(consigneQuestions[k], situation)} ? `
-      const enonceQ3 = `${String.fromCharCode(97 + k)}) Combien paiera ${prenomlisteEE[2]} pour $${consigneQuestions[k]}$ ${pluriel(consigneQuestions[k], situation)} ? %{champ${k + 1}} €\n`
+      const enonceQ3 = `${String.fromCharCode(97 + k)}) Combien paiera ${prenomlisteEE[2]} pour $${consigneQuestions[k]}$ ${pluriel(consigneQuestions[k], situation)} ? %{champ${k + 1}}\n`
       k++
       propositionsAMC.push({
         type: 'AMCNum',
@@ -423,9 +423,9 @@ export default class ProportionnaliteParLineariteBis extends Exercice {
         texte += addMultiMathfield(this, i, {
           dataTemplate: enonceQ1 + enonceQ2 + enonceQ3 + enonceQ4,
           dataOptions: {
-            champ1: { keyboard: KeyboardType.clavierNumbers },
-            champ2: { keyboard: KeyboardType.clavierNumbers },
-            champ3: { keyboard: KeyboardType.clavierNumbers },
+            champ1: { keyboard: KeyboardType.clavierNumbers, texteApres: ' €' },
+            champ2: { keyboard: KeyboardType.clavierNumbers, texteApres: ' €' },
+            champ3: { keyboard: KeyboardType.clavierNumbers, texteApres: ' €' },
             champ4: { keyboard: KeyboardType.clavierNumbers },
           },
         })
