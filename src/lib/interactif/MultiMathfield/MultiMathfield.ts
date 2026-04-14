@@ -1,7 +1,7 @@
 // Utilitaire pour styliser les items a), b), ... dans un texte brut
+import 'katex/dist/katex.min.css'
 import { MathfieldElement } from 'mathlive'
 import { context } from '../../../modules/context'
-import { injectFontInMetaInteractif2d } from '../../../modules/loaders'
 import { bleuMathalea } from '../../colors'
 import type { IExercice, ValeurNames } from '../../types'
 import { buildDataKeyboardFromStyle, KeyboardType } from '../claviers/keyboard'
@@ -200,25 +200,9 @@ export class MultiMathfieldElement extends HTMLElement {
         div.appendChild(mathfield)
         let texteApres: HTMLElement | null = null
         if (options[name] && options[name].texteApres) {
-          if (
-            typeof options[name].texteApres === 'string' &&
-            options[name].texteApres.startsWith('$')
-          ) {
-            // Bloc latex readonly
-            const latex = options[name].texteApres.slice(1, -1)
-            const mf = new MathfieldElement()
-            mf.value = latex
-            mf.readOnly = true
-            mf.style.pointerEvents = 'none'
-            mf.style.verticalAlign = 'baseline'
-            mf.style.border = 'none'
-            injectFontInMetaInteractif2d(mf)
-            texteApres = mf
-          } else {
-            texteApres = document.createElement('span')
-            texteApres.textContent = options[name].texteApres
-            texteApres.style.marginLeft = '0'
-          }
+          texteApres = document.createElement('span')
+          texteApres.style.marginLeft = '0'
+          texteApres.textContent = options[name].texteApres // On met le LaTeX brut dans le span, renderMathInElement va le transformer
         }
 
         // Ajoute un span de vérification après chaque Mathfield
@@ -239,17 +223,9 @@ export class MultiMathfieldElement extends HTMLElement {
           })
         }
       } else if (token.startsWith('$')) {
-        // Bloc latex readonly
-        const latex = token.slice(1, -1)
-        const mf = new MathfieldElement()
-        mf.value = latex
-        mf.readOnly = true
-        mf.style.pointerEvents = 'none'
-        mf.style.verticalAlign = 'baseline'
-        mf.style.border = 'none'
-
-        currentSpan.appendChild(mf)
-        injectFontInMetaInteractif2d(mf)
+        const span = document.createElement('span')
+        span.textContent = token // On met le LaTeX brut dans le span, renderMathInElement va le transformer
+        currentSpan.appendChild(span)
       }
       lastIndex = regex.lastIndex
     }
@@ -284,6 +260,23 @@ export class MultiMathfieldElement extends HTMLElement {
         }
         math-field::part(content) {
           justify-content: start;
+        }
+        .katex-mathml {
+  clip: rect(1px,1px,1px,1px);
+  border: 0;
+  height: 1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+
+}
+  .katex {
+    font: normal 1.21em KaTeX_Main,Times New Roman,serif;
+    line-height: 1.2;
+    position: relative;
+    text-indent: 0;
+    text-rendering: auto;
         }`
       this.shadowRoot.appendChild(style)
       this.shadowRoot.appendChild(container)

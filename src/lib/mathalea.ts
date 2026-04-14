@@ -552,6 +552,7 @@ export function mathaleaRenderDiv(
   zoom = zoom ?? Number(params.z)
 
   renderKatex(div)
+  renderKatexInAllShadowRoots(div)
   renderScratchDiv(div ?? document.body)
   if (zoom !== -1) {
     resizeContent(div, zoom)
@@ -1333,3 +1334,54 @@ export async function getExercisesFromExercicesParams() {
   }
   return exercises
 }
+
+/**
+ * Applique renderKatex dans tous les shadowRoots des éléments donnés
+ * @param {HTMLElement} root - Élément racine à explorer
+ */
+export function renderKatexInAllShadowRoots(root: HTMLElement) {
+  // Sélectionne tous les éléments avec un shadowRoot (ex: MultiMathfieldElement, math-field...)
+  const elementsWithShadow = root.querySelectorAll('*')
+  elementsWithShadow.forEach((el) => {
+    if (el.shadowRoot) {
+      // Vérifie s'il y a du LaTeX à traiter dans le shadowRoot
+      const shadowText = el.shadowRoot.textContent || ''
+      const hasLatex = /\$[^$]+\$|\\\[[\s\S]*?\\\]/.test(shadowText)
+      if (hasLatex) {
+        // Injecte le style d'accessibilité KaTeX si absent
+        const styleId = 'katex-mathml-style'
+        if (!el.shadowRoot.getElementById(styleId)) {
+          const style = document.createElement('style')
+          style.id = styleId
+          style.textContent = `
+            .katex-mathml {
+              clip: rect(1px,1px,1px,1px);
+              border: 0;
+              height: 1px;
+              overflow: hidden;
+              padding: 0;
+              position: absolute;
+              width: 1px;
+            }
+             .katex {
+    font: normal 1.21em KaTeX_Main,Times New Roman,serif;
+    line-height: 1.2;
+    position: relative;
+    text-indent: 0;
+    text-rendering: auto;
+        }`
+          el.shadowRoot.appendChild(style)
+        }
+        try {
+          renderKatex(el.shadowRoot as unknown as HTMLElement)
+        } catch (e) {
+          // ignore les erreurs sur les shadowRoots non pertinents
+        }
+      }
+    }
+  })
+}
+
+// Exemple d'utilisation après renderKatex classique :
+// renderKatex(div);
+// renderKatexInAllShadowRoots(div);
