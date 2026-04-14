@@ -6,10 +6,15 @@
     splitExercisesIntoQuestions,
   } from '../../../lib/components/exercisesUtils'
   import { verifQuestionCliqueFigure } from '../../../lib/interactif/cliqueFigure'
-  import { prepareExerciceCliqueFigure } from '../../../lib/interactif/gestionInteractif'
+  import {
+    prepareExerciceCliqueFigure,
+    verifQuestionMetaInteractif2d,
+    verifQuestionMultiMathfield,
+  } from '../../../lib/interactif/gestionInteractif'
   import { verifQuestionMathLive } from '../../../lib/interactif/mathLive'
   import { verifQuestionQcm } from '../../../lib/interactif/qcm'
   import { verifQuestionListeDeroulante } from '../../../lib/interactif/questionListeDeroulante'
+  import { verifQuestionSvgSelection } from '../../../lib/interactif/questionSvgSelection/questionSvgSelection'
   import {
     mathaleaFormatExercice,
     mathaleaGenerateSeed,
@@ -91,7 +96,7 @@
     loadMathLive()
     onQuestionsReady({ questions })
   }
-
+  // @TODO gérer les questions rapportant plusieurs points !
   async function checkQuestion(i: number) {
     const exercice = exercices[indiceExercice[i]]
     let type: InteractivityType | OldFormatInteractifType | undefined =
@@ -122,7 +127,7 @@
         indiceQuestionInExercice[i],
       )
       resultsByQuestion[i] =
-        resu !== undefined && (resu.isOk === 'Ok' || resu.isOk === true)
+        resu !== undefined && (resu.isOk === 'OK' || resu.isOk === true)
     } else if (type === 'qcm') {
       resultsByQuestion[i] =
         verifQuestionQcm(
@@ -146,6 +151,32 @@
         exercices[indiceExercice[i]].correctionInteractive!(
           indiceQuestionInExercice[i],
         ) === 'OK'
+    } else if (type === 'multiMathfield') {
+      const resu = verifQuestionMultiMathfield(
+        exercices[indiceExercice[i]],
+        indiceQuestionInExercice[i],
+      )
+      resultsByQuestion[i] = resu.isOk // En attendant mieux, mais ça ne va pas du tout...
+    } else if (type === 'MetaInteractif2d') {
+      const resu = verifQuestionMetaInteractif2d(
+        exercices[indiceExercice[i]],
+        indiceQuestionInExercice[i],
+      )
+      resultsByQuestion[i] = resu.isOk
+    } else if (type === 'svgSelection') {
+      const resu = verifQuestionSvgSelection(
+        exercices[indiceExercice[i]],
+        indiceQuestionInExercice[i],
+      )
+      resultsByQuestion[i] = resu === 'OK'
+    } else {
+      window.notify(
+        "Problème dans QuestionParPage.svelte : type d'interactif non géré",
+        {
+          exercice: JSON.stringify(exercices[indiceExercice[i]]),
+          question: indiceQuestionInExercice[i] + 1,
+        },
+      )
     }
     resultsByQuestion = [...resultsByQuestion]
     isDisabledButton[i] = true
