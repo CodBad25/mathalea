@@ -8,6 +8,7 @@
   export let order: number[]
   export let series: Serie[]
   export let correctionsSteps: number[]
+  export let zoom: string
 </script>
 
 {#each Array(series.length).keys() as seriesId}
@@ -23,6 +24,7 @@
       {order}
       {series}
       {correctionsSteps}
+      {zoom}
     />
   </div>
 {/each}

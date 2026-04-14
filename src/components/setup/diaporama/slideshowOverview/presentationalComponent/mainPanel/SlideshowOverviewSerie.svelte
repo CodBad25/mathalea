@@ -8,6 +8,7 @@
   export let order: number[]
   export let series: Serie[]
   export let correctionsSteps: number[]
+  export let zoom: string
 </script>
 
 <div
@@ -26,7 +27,7 @@
   class="mt-2
   mx-2 lg:mx-6"
 >
-  {#each order as i, index (series[seriesIndex].keys[i] + '-' + i)}
+  {#each order as i, index (series[seriesIndex].keys[i] + zoom + '-' + i)}
     <div class="flex flex-row my-4">
       <div class="pr-2">
         <span
