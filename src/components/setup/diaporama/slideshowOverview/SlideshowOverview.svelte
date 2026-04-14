@@ -194,6 +194,7 @@
         {order}
         {series}
         {correctionsSteps}
+        zoom={$globalOptions.z || '1'}
       />
     </main>
   </div>
