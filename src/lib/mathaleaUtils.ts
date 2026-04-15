@@ -2,6 +2,7 @@ import type LabyrintheElement from 'labyrinthe/src/LabyrintheElement'
 import type { MathfieldElement } from 'mathlive'
 import { get } from 'svelte/store'
 import { type MathaleaSVG } from '../lib/types'
+import { orangeMathalea } from './colors'
 import type ListeDeroulanteElement from './interactif/listeDeroulante/ListeDeroulanteElement'
 import { MultiMathfieldElement } from './interactif/MultiMathfield/MultiMathfield'
 import { previousView } from './stores/generalStore'
@@ -223,7 +224,7 @@ export function mathaleaWriteStudentPreviousAnswers(answers?: {
             const ele = document.querySelector(`#${answer}`) as MathaleaSVG
             if (ele) {
               ele.etat = true
-              ele.style.border = '3px solid #f15929'
+              ele.style.border = `3px solid ${orangeMathalea}`
               const time = window.performance.now()
               log(`duration ${answer}: ${time - starttime}`)
               resolve(true)

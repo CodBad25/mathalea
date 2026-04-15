@@ -18,6 +18,7 @@ import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { contraindreValeur, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { orangeMathalea } from '../../lib/colors'
 
 export const titre =
   "Lire graphiquement les caractéristiques de la courbe représentative d'une fonction affine ou linéaire"
@@ -103,7 +104,7 @@ export default class PenteEtOrdonneeOrigineDroite extends Exercice {
       const d = droite(a, -1, b)
       d.color = colorToLatexOrHTML('blue')
       d.epaisseur = 2
-      const c = cercle(point(0, b), 0.8, '#f15929')
+      const c = cercle(point(0, b), 0.8, orangeMathalea)
       c.epaisseur = 2
       let x0 = -7
       while (
@@ -123,14 +124,14 @@ export default class PenteEtOrdonneeOrigineDroite extends Exercice {
       const A = point(x0, f(x0))
       const B = point(x0 + 1, f(x0))
       const C = point(x0 + 1, f(x0 + 1))
-      const s1 = segment(A, B, '#f15929')
-      const s2 = segment(B, C, '#f15929')
+      const s1 = segment(A, B, orangeMathalea)
+      const s2 = segment(B, C, orangeMathalea)
       const M1 = milieu(A, B)
       const M2 = milieu(B, C)
       const t1 = texteParPoint('$1$', point(M1.x, M1.y + (a > 0 ? -0.4 : 0.4)))
       const t2 = texteParPoint(`$${texNombre(a)}$`, point(M2.x + 0.6, M2.y))
-      t1.color = colorToLatexOrHTML('#f15929')
-      t2.color = colorToLatexOrHTML('#f15929')
+      t1.color = colorToLatexOrHTML(orangeMathalea)
+      t2.color = colorToLatexOrHTML(orangeMathalea)
 
       s1.epaisseur = 3
       s1.pointilles = 5

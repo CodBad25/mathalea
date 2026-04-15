@@ -482,7 +482,7 @@ export default class CalculerUnAngle extends Exercice {
 
       // Commencent ici tous les cas particuliers
 
-      // Angle orange de toutes les corrections  '#f15929'
+      // Angle orange de toutes les corrections orangeMathalea
       if ([8, 13].indexOf(QuestionsDisponibles[i]) !== -1) {
         objetsCorrection.push(
           afficheMesureAngle(B, A, D, 'pink', 3, '', {

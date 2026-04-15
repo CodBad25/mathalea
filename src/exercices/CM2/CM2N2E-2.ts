@@ -1,7 +1,7 @@
 import Figure from 'apigeom'
-import { orangeMathalea } from 'apigeom/src/elements/defaultValues'
 import GraduatedLine from 'apigeom/src/elements/grid/GraduatedLine'
 import { wrapperApigeomToMathalea } from '../../lib/apigeom/apigeomZoom'
+import { orangeMathalea } from '../../lib/colors'
 import figureApigeom from '../../lib/figureApigeom'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import { arrondi } from '../../lib/outils/nombres'

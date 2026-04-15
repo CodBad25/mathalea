@@ -23,6 +23,7 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { orangeMathalea } from '../../lib/colors'
 export const titre = 'Effectuer des liens entre angles et parallélisme'
 export const dateDePublication = '15/01/2022'
 export const dateDeModifImportante = '24/12/2025'
@@ -1032,7 +1033,7 @@ export default class ExercicesAnglesAIC extends Exercice {
           const angleCorrection = anglesB[b]
           angleCorrection.couleurDeRemplissage = context.isAmc
             ? colorToLatexOrHTML('')
-            : colorToLatexOrHTML('#f15929')
+            : colorToLatexOrHTML(orangeMathalea)
           objetsCorrection.push(angleCorrection)
           const couleurAngles = shuffle(['green', 'red', 'blue', 'gray'])
           anglesB['a'].couleurDeRemplissage = context.isAmc
@@ -1264,7 +1265,7 @@ export default class ExercicesAnglesAIC extends Exercice {
 
           anglesB[b].couleurDeRemplissage = context.isAmc
             ? colorToLatexOrHTML('')
-            : colorToLatexOrHTML('#f15929')
+            : colorToLatexOrHTML(orangeMathalea)
           objetsCorrection.push(anglesB[b])
           objetsCorrection.push(anglesA[a])
 

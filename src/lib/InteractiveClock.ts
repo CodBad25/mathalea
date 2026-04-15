@@ -1,3 +1,4 @@
+import { orangeMathalea } from '../lib/colors'
 /**
  * Horloge interactive
  * @author Rémi Angot
@@ -318,15 +319,15 @@ class InteractiveClock extends HTMLElement {
     this._currentAction = value
     if (value === 'hour') {
       this.svgHandHour.setAttribute('stroke', '#216D9A')
-      this.svgHandMinute.setAttribute('stroke', '#F15929')
-      this.svgHandSecond.setAttribute('stroke', '#F15929')
+      this.svgHandMinute.setAttribute('stroke', orangeMathalea)
+      this.svgHandSecond.setAttribute('stroke', orangeMathalea)
     } else if (value === 'minute') {
-      this.svgHandHour.setAttribute('stroke', '#F15929')
+      this.svgHandHour.setAttribute('stroke', orangeMathalea)
       this.svgHandMinute.setAttribute('stroke', '#216D9A')
-      this.svgHandSecond.setAttribute('stroke', '#F15929')
+      this.svgHandSecond.setAttribute('stroke', orangeMathalea)
     } else if (value === 'second') {
-      this.svgHandHour.setAttribute('stroke', '#F15929')
-      this.svgHandMinute.setAttribute('stroke', '#F15929')
+      this.svgHandHour.setAttribute('stroke', orangeMathalea)
+      this.svgHandMinute.setAttribute('stroke', orangeMathalea)
       this.svgHandSecond.setAttribute('stroke', '#216D9A')
     } else {
       this.svgHandHour.setAttribute('stroke', 'black')

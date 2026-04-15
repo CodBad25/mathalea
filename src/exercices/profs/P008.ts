@@ -1,4 +1,4 @@
-import { orangeMathalea } from 'apigeom/src/elements/defaultValues'
+import { orangeMathalea } from '../../lib/colors'
 import { context } from '../../modules/context'
 import operation from '../../modules/operations'
 import Exercice from '../Exercice'

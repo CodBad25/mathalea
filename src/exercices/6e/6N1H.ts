@@ -11,6 +11,7 @@ import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { orangeMathalea } from '../../lib/colors'
 
 export const titre = "Lire l'abscisse décimale d'un point"
 export const interactifReady = true
@@ -173,7 +174,7 @@ export default class LireAbscisseDecimale extends Exercice {
             `\\boldsymbol{${texNombre(xC / pas1 + abs0, 1 + Math.log10(pas1))}}`,
           ],
         ],
-        labelColor: '#f15929',
+        labelColor: orangeMathalea,
         labelDistance: 1.5,
         pointListe: [
           [xA, l1],

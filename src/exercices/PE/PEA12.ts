@@ -1,11 +1,12 @@
-import { orangeMathalea } from 'apigeom/src/elements/defaultValues'
+import { orangeMathalea } from '../../lib/colors'
 import { base10VersBaseN } from '../../lib/mathFonctions/baseConversions'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import { context } from '../../modules/context'
 import operation from '../../modules/operations'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-export const titre = "Effectuer des additions et soustractions dans d'autres bases"
+export const titre =
+  "Effectuer des additions et soustractions dans d'autres bases"
 export const dateDePublication = '31/10/2021'
 
 /**

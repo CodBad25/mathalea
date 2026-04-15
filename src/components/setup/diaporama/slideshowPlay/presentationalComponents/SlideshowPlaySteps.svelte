@@ -1,6 +1,5 @@
 <script lang="ts">
   import { onMount } from 'svelte'
-
   export let isManualModeActive: boolean | undefined
   export let currentQuestionNumber: number
   export let totalQuestionsNumber: number

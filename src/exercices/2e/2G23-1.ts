@@ -20,6 +20,7 @@ import {
   listeQuestionsToContenu,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { orangeMathalea } from '../../lib/colors'
 
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -410,9 +411,9 @@ export default class ImagePtParTranslation extends Exercice {
             const ptSol = translation(PtDepart, VecDepl, NomSOL)
             ptSol.positionLabel =
               ptSol.y === 0 ? 'below' : ptSol.y === 4 ? 'above' : 'below left'
-            const trPtSol = tracePoint(ptSol, '#f15929')
+            const trPtSol = tracePoint(ptSol, orangeMathalea)
             trPtSol.epaisseur = 2
-            objetsCorr.push(labelPoint(ptSol, '#f15929'), trPtSol)
+            objetsCorr.push(labelPoint(ptSol, orangeMathalea), trPtSol)
             texteCorr =
               this.classe === 2
                 ? `Le point $${miseEnEvidence(NomSOL)}$ est l'image du point $${nomPD}$ par la translation de vecteur $\\overrightarrow{${nomOR}${nomEXT}}$.`
@@ -548,7 +549,7 @@ export default class ImagePtParTranslation extends Exercice {
               ySOLPDSeg,
               xSOLPASeg,
               ySOLPASeg,
-              '#f15929',
+              orangeMathalea,
             )
             SegSOL.epaisseur = 2 // Variable qui grossit le tracé du vecteur
 
@@ -717,10 +718,10 @@ export default class ImagePtParTranslation extends Exercice {
                   ? 'above'
                   : placementPoints
 
-            objetsCorr.push(tracePoint(ptSOLPDSeg, '#f15929'))
-            objetsCorr.push(tracePoint(ptSOLPASeg, '#f15929'))
-            objetsCorr.push(labelPoint(ptSOLPDSeg, '#f15929'))
-            objetsCorr.push(labelPoint(ptSOLPASeg, '#f15929'))
+            objetsCorr.push(tracePoint(ptSOLPDSeg, orangeMathalea))
+            objetsCorr.push(tracePoint(ptSOLPASeg, orangeMathalea))
+            objetsCorr.push(labelPoint(ptSOLPDSeg, orangeMathalea))
+            objetsCorr.push(labelPoint(ptSOLPASeg, orangeMathalea))
 
             texteCorr =
               this.classe === 3
@@ -960,7 +961,7 @@ export default class ImagePtParTranslation extends Exercice {
               ySOLPA1Tri,
               xSOLPA2Tri,
               ySOLPA2Tri,
-              '#f15929',
+              orangeMathalea,
             )
             SegSOL1.epaisseur = 2 // Variable qui grossit le tracé du segment
             const SegSOL2 = segment(
@@ -968,7 +969,7 @@ export default class ImagePtParTranslation extends Exercice {
               ySOLPA1Tri,
               xSOLPA3Tri,
               ySOLPA3Tri,
-              '#f15929',
+              orangeMathalea,
             )
             SegSOL2.epaisseur = 2 // Variable qui grossit le tracé du segment
             const SegSOL3 = segment(
@@ -976,7 +977,7 @@ export default class ImagePtParTranslation extends Exercice {
               ySOLPA2Tri,
               xSOLPA3Tri,
               ySOLPA3Tri,
-              '#f15929',
+              orangeMathalea,
             )
             SegSOL3.epaisseur = 2 // Variable qui grossit le tracé du segment
 
@@ -1157,8 +1158,8 @@ export default class ImagePtParTranslation extends Exercice {
                 : Pt1TriangleSOL.y === 4
                   ? 'above'
                   : placementPoints
-            objetsCorr.push(tracePoint(Pt1TriangleSOL, '#f15929'))
-            objetsCorr.push(labelPoint(Pt1TriangleSOL, '#f15929'))
+            objetsCorr.push(tracePoint(Pt1TriangleSOL, orangeMathalea))
+            objetsCorr.push(labelPoint(Pt1TriangleSOL, orangeMathalea))
             const Pt2TriangleSOL = translation(
               Pt2Triangle,
               VecDepl,
@@ -1170,8 +1171,8 @@ export default class ImagePtParTranslation extends Exercice {
                 : Pt2TriangleSOL.y === 4
                   ? 'above'
                   : placementPoints
-            objetsCorr.push(tracePoint(Pt2TriangleSOL, '#f15929'))
-            objetsCorr.push(labelPoint(Pt2TriangleSOL, '#f15929'))
+            objetsCorr.push(tracePoint(Pt2TriangleSOL, orangeMathalea))
+            objetsCorr.push(labelPoint(Pt2TriangleSOL, orangeMathalea))
             const Pt3TriangleSOL = translation(
               Pt3Triangle,
               VecDepl,
@@ -1183,8 +1184,8 @@ export default class ImagePtParTranslation extends Exercice {
                 : Pt3TriangleSOL.y === 4
                   ? 'above'
                   : placementPoints
-            objetsCorr.push(tracePoint(Pt3TriangleSOL, '#f15929'))
-            objetsCorr.push(labelPoint(Pt3TriangleSOL, '#f15929'))
+            objetsCorr.push(tracePoint(Pt3TriangleSOL, orangeMathalea))
+            objetsCorr.push(labelPoint(Pt3TriangleSOL, orangeMathalea))
 
             texteCorr =
               this.classe === 2

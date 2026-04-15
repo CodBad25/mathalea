@@ -18,6 +18,7 @@ import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { orangeMathalea } from '../../lib/colors'
 export const titre =
   "Construire l'image d'un point par une homothétie avec cible auto-corrective"
 export const amcReady = true
@@ -149,7 +150,7 @@ export default class ConstruireHomothetiePoint3e extends Exercice {
             rang: 4,
             num: plusieursCiblesPourUnPoint ? choixNumGrille[3] : k + 1,
             taille: 0.6,
-            color: '#f15929',
+            color: orangeMathalea,
             colorNum: 'gray',
             opaciteNum: context.isHtml ? 0.5 : 1,
           })
@@ -344,7 +345,7 @@ export default class ConstruireHomothetiePoint3e extends Exercice {
               rang: 4,
               num: choixNumGrille[j],
               taille: 0.6,
-              color: '#f15929',
+              color: orangeMathalea,
               colorNum: 'gray',
               opaciteNum: context.isHtml ? 0.5 : 1,
             })

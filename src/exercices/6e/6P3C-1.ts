@@ -1,7 +1,7 @@
-import { orangeMathalea } from 'apigeom/src/elements/defaultValues'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { tableau } from '../../lib/2d/tableau'
+import { orangeMathalea } from '../../lib/colors'
 import { createList } from '../../lib/format/lists'
 import { texPrix } from '../../lib/format/style'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'

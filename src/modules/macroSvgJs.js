@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
-import katex from 'katex'
 import { SVG } from '@svgdotjs/svg.js'
+import katex from 'katex'
 // import { context } from './context'
 import { arrondi } from '../lib/outils/nombres'
 
@@ -179,7 +179,7 @@ export function SvgMachineDiag3F12(
     7 * interligne +
     'L0 ' +
     7 * interligne +
-    `Z " fill="none" stroke-linejoin="null" stroke-linecap="round" stroke-width="3" stroke="#f15929">
+    `Z " fill="none" stroke-linejoin="null" stroke-linecap="round" stroke-width="3" stroke='#f15929'>
                       </path>                          
                   </g>
                   <g>
@@ -191,7 +191,7 @@ export function SvgMachineDiag3F12(
     7 * interligne +
     '" y2="' +
     5 * interligne +
-    `" stroke-width="3" stroke="#f15929">
+    `" stroke-width="3" stroke='#f15929'>
                       </line>
                       <circle r="` +
     2 * interligne +
@@ -199,7 +199,7 @@ export function SvgMachineDiag3F12(
     9 * interligne +
     '" cy="' +
     5 * interligne +
-    `" fill="none" stroke-linejoin="null" stroke-linecap="round" stroke-width="3" stroke="#f15929">
+    `" fill="none" stroke-linejoin="null" stroke-linecap="round" stroke-width="3" stroke='#f15929'>
                       </circle>
                       <path d="M` +
     11 * interligne +
@@ -221,7 +221,7 @@ export function SvgMachineDiag3F12(
     (13 * interligne - interligne / 2) +
     ' ' +
     (5 * interligne + interligne / 2) +
-    ` " fill="none" stroke-linejoin="null" stroke-linecap="round" stroke-width="3" stroke="#f15929">
+    ` " fill="none" stroke-linejoin="null" stroke-linecap="round" stroke-width="3" stroke='#f15929'>
                       </path>                          
                   </g>
                   <g>
@@ -245,7 +245,7 @@ export function SvgMachineDiag3F12(
     13 * interligne +
     ' ' +
     7 * interligne +
-    `Z " fill="none" stroke-linejoin="null" stroke-linecap="round" stroke-width="3" stroke="#f15929">
+    `Z " fill="none" stroke-linejoin="null" stroke-linecap="round" stroke-width="3" stroke='#f15929'>
                       </path>                          
                   </g>
                   <g>
@@ -257,7 +257,7 @@ export function SvgMachineDiag3F12(
     23 * interligne +
     '" y2="' +
     5 * interligne +
-    `" stroke-width="3" stroke="#f15929">
+    `" stroke-width="3" stroke='#f15929'>
                       </line>
                       <circle r="` +
     2 * interligne +
@@ -265,7 +265,7 @@ export function SvgMachineDiag3F12(
     25 * interligne +
     '" cy="' +
     5 * interligne +
-    `" fill="none" stroke-linejoin="null" stroke-linecap="round" stroke-width="3" stroke="#f15929">
+    `" fill="none" stroke-linejoin="null" stroke-linecap="round" stroke-width="3" stroke='#f15929'>
                       </circle>
                       <path d="M` +
     27 * interligne +
@@ -287,7 +287,7 @@ export function SvgMachineDiag3F12(
     (29 * interligne - interligne / 2) +
     ' ' +
     (5 * interligne + interligne / 2) +
-    ` " fill="none" stroke-linejoin="null" stroke-linecap="round" stroke-width="3" stroke="#f15929">
+    ` " fill="none" stroke-linejoin="null" stroke-linecap="round" stroke-width="3" stroke='#f15929'>
                       </path>                          
                   </g>
                   <g>
@@ -311,7 +311,7 @@ export function SvgMachineDiag3F12(
     29 * interligne +
     ' ' +
     7 * interligne +
-    `Z " fill="none" stroke-linejoin="null" stroke-linecap="round" stroke-width="3" stroke="#f15929">
+    `Z " fill="none" stroke-linejoin="null" stroke-linecap="round" stroke-width="3" stroke='#f15929'>
                       </path>                  
                   </g>
               </svg>
@@ -420,7 +420,7 @@ export function SvgMachineDiag3F1ActMono(
     7 * interligne +
     'L0 ' +
     7 * interligne +
-    `Z " fill="none" stroke-linejoin="null" stroke-linecap="round" stroke-width="3" stroke="#f15929">
+    `Z " fill="none" stroke-linejoin="null" stroke-linecap="round" stroke-width="3" stroke='#f15929'>
                       </path>
                   </g>
                   <g>
@@ -432,7 +432,7 @@ export function SvgMachineDiag3F1ActMono(
     7 * interligne +
     '" y2="' +
     5 * interligne +
-    `" stroke-width="3" stroke="#f15929">
+    `" stroke-width="3" stroke='#f15929'>
                       </line>
                       <circle r="` +
     2 * interligne +
@@ -440,7 +440,7 @@ export function SvgMachineDiag3F1ActMono(
     9 * interligne +
     '" cy="' +
     5 * interligne +
-    `" fill="none" stroke-linejoin="null" stroke-linecap="round" stroke-width="3" stroke="#f15929">
+    `" fill="none" stroke-linejoin="null" stroke-linecap="round" stroke-width="3" stroke='#f15929'>
                       </circle>
                       <path d="M` +
     11 * interligne +
@@ -462,7 +462,7 @@ export function SvgMachineDiag3F1ActMono(
     (13 * interligne - interligne / 2) +
     ' ' +
     (5 * interligne + interligne / 2) +
-    ` " fill="none" stroke-linejoin="null" stroke-linecap="round" stroke-width="3" stroke="#f15929">
+    ` " fill="none" stroke-linejoin="null" stroke-linecap="round" stroke-width="3" stroke='#f15929'>
                       </path>                
                   </g>
                   <g>
@@ -486,7 +486,7 @@ export function SvgMachineDiag3F1ActMono(
     13 * interligne +
     ' ' +
     7 * interligne +
-    `Z " fill="none" stroke-linejoin="null" stroke-linecap="round" stroke-width="3" stroke="#f15929">
+    `Z " fill="none" stroke-linejoin="null" stroke-linecap="round" stroke-width="3" stroke='#f15929'>
                       </path>                          
                   </g>
               </svg>
@@ -756,15 +756,12 @@ export function SVG_machine_maths(
         ' L10,' +
         (h / 2 - 5) +
         ' L10,0'
-      const machine = mon_svg
-        .path(path_machine)
-        .fill('#fff')
-        .stroke({
-          color: '#f15929',
-          width: 3,
-          linecap: 'round',
-          linejoin: 'round',
-        })
+      const machine = mon_svg.path(path_machine).fill('#fff').stroke({
+        color: '#f15929',
+        width: 3,
+        linecap: 'round',
+        linejoin: 'round',
+      })
       machine.dmove(w / 2 - w_etape_max / 2 - 20 + interligne / 2, h / 2) // w/2;  60 est la moitié de la taille de la machine en largeur
 
       const fobj_machine = mon_svg

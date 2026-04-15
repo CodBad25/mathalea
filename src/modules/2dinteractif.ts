@@ -5,6 +5,7 @@ import { Polygone, polygone } from '../lib/2d/polygones'
 import { tracePoint } from '../lib/2d/TracePoint'
 import { orangeMathalea, vertMathalea } from '../lib/colors'
 import { context } from './context'
+import { orangeMathalea } from '../lib/colors'
 
 /**
  * @author Rémi ANGOT
@@ -253,7 +254,7 @@ export class RectangleCliquable extends ObjetMathalea2D {
     this.out = options.out ?? { opacity: '0' }
     this.over = options.over ?? { opacity: '0.2' }
     this.click = options.click ?? { opacity: '1' }
-    this.stringColor = options.couleur ?? '#f15929'
+    this.stringColor = options.couleur ?? orangeMathalea
     this.cliquable = options.cliquable !== undefined ? options.cliquable : true
     this.rectangle.hachures = options.hachures ?? false
     this.rectangle.couleurDesHachures = colorToLatexOrHTML('black')

@@ -15,6 +15,7 @@ import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { orangeMathalea } from '../../lib/colors'
 
 export const titre =
   "Construire le symétrique d'un point avec cible auto-corrective"
@@ -113,7 +114,7 @@ export default class ConstruireSymetriquePoint5e extends Exercice {
         rang: 4,
         num: i + 1,
         taille: 0.6,
-        color: '#f15929',
+        color: orangeMathalea,
       })
       cible.taille = 0.6
       cible.opacite = 0.7

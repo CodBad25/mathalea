@@ -54,7 +54,7 @@ export function miseEnEvidence(
  *   - un nombre (ex. 123.45)
  *   - une instance de `FractionEtendue` (sa propriété `texFraction` sera utilisée)
  *
- * @param {string} [couleur='#f15929'] - Couleur à utiliser pour le chiffre mis en évidence.
+ * @param {string} [couleur=orangeMathalea] - Couleur à utiliser pour le chiffre mis en évidence.
  *   Peut être un nom de couleur LaTeX (ex. `"red"`) ou un code hexadécimal (ex. `"#FF0000"`).
  *
  * @param {number} [position=1] - La position du chiffre à mettre en évidence :
@@ -72,7 +72,7 @@ export function miseEnEvidence(
 
 export function coloreUnSeulChiffre(
   texte: string | IFractionEtendue | number,
-  couleur: string = '#f15929',
+  couleur: string = orangeMathalea,
   position: number = 1,
 ): string {
   if (isFractionEtendue(texte)) texte = texte.texFraction
@@ -158,7 +158,7 @@ export function coloreUnSeulChiffre(
  */
 export function miseEnCouleur(
   texte: string | number,
-  couleur: string = '#f15929',
+  couleur: string = orangeMathalea,
 ) {
   texte = typeof texte === 'number' ? String(texte) : texte
   if (Array.isArray(couleur)) couleur = couleur[0]
@@ -181,7 +181,10 @@ export function miseEnCouleur(
  * @param {string} couleur en anglais ou code couleur hexadécimal par défaut c'est le orange de CoopMaths
  * @author Rémi Angot
  */
-export function texteEnCouleur(texte: string | number, couleur = '#f15929') {
+export function texteEnCouleur(
+  texte: string | number,
+  couleur = orangeMathalea,
+) {
   texte = typeof texte === 'number' ? String(texte) : texte
   if (Array.isArray(couleur)) couleur = couleur[0]
   if (context.isHtml) {
@@ -205,7 +208,7 @@ export function texteEnCouleur(texte: string | number, couleur = '#f15929') {
  */
 export function texteEnCouleurEtGras(
   texte: string | number,
-  couleur = '#f15929',
+  couleur = orangeMathalea,
 ) {
   if (typeof texte === 'number') texte = String(texte)
   if (Array.isArray(couleur)) couleur = couleur[0]
@@ -276,9 +279,25 @@ export function couleurTab(choixCouleur = 999) {
 export function arcenciel(i: number, fondblanc = true) {
   let couleurs
   if (fondblanc)
-    couleurs = ['violet', 'purple', 'blue', 'green', 'lime', '#f15929', 'red']
+    couleurs = [
+      'violet',
+      'purple',
+      'blue',
+      'green',
+      'lime',
+      orangeMathalea,
+      'red',
+    ]
   else
-    couleurs = ['violet', 'indigo', 'blue', 'green', 'yellow', '#f15929', 'red']
+    couleurs = [
+      'violet',
+      'indigo',
+      'blue',
+      'green',
+      'yellow',
+      orangeMathalea,
+      'red',
+    ]
   return couleurs[i % 7]
 }
 

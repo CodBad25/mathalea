@@ -21,6 +21,7 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { orangeMathalea } from '../../lib/colors'
 
 export const titre = 'Opérations avec deux entiers relatifs'
 export const interactifReady = true
@@ -114,7 +115,7 @@ export default class ExerciceOperationsRelatifs extends Exercice {
             texteCorr = `$ ${a}  \\times ${ecritureParentheseSiNegatif(b)} = ${arrondi(a * b)} $`
           } else {
             texte = `$ ${ecritureNombreRelatif(a)}  \\times ${ecritureNombreRelatif(b)}$`
-            texteCorr = `$ ${ecritureNombreRelatifc(a)} \\times ${ecritureNombreRelatifc(b)}  = ${ecritureNombreRelatifc(a * b, { color: '#f15929' })} $`
+            texteCorr = `$ ${ecritureNombreRelatifc(a)} \\times ${ecritureNombreRelatifc(b)}  = ${ecritureNombreRelatifc(a * b, { color: orangeMathalea })} $`
           }
           setReponse(this, i, a * b, {
             signe: true,
@@ -128,7 +129,7 @@ export default class ExerciceOperationsRelatifs extends Exercice {
             texteCorr = `$ ${a} \\div ${ecritureParentheseSiNegatif(b)} = ${arrondi(a / b)}$`
           } else {
             texte = `$ ${ecritureNombreRelatif(a)}  \\div ${ecritureNombreRelatif(b)}$`
-            texteCorr = `$ ${ecritureNombreRelatifc(a)}  \\div ${ecritureNombreRelatifc(b)} = ${ecritureNombreRelatifc(a / b, { color: '#f15929' })}$`
+            texteCorr = `$ ${ecritureNombreRelatifc(a)}  \\div ${ecritureNombreRelatifc(b)} = ${ecritureNombreRelatifc(a / b, { color: orangeMathalea })}$`
           }
           setReponse(this, i, arrondi(a / b), {
             signe: true,
@@ -142,7 +143,7 @@ export default class ExerciceOperationsRelatifs extends Exercice {
             texteCorr = `$ ${a} + ${ecritureParentheseSiNegatif(b)}  = ${arrondi(a + b)} $`
           } else {
             texte = `$ ${ecritureNombreRelatif(a)} + ${ecritureNombreRelatif(b)} $`
-            texteCorr = `$  ${ecritureNombreRelatifc(a)} + ${ecritureNombreRelatifc(b)} = ${ecritureNombreRelatifc(a + b, { color: '#f15929' })} $`
+            texteCorr = `$  ${ecritureNombreRelatifc(a)} + ${ecritureNombreRelatifc(b)} = ${ecritureNombreRelatifc(a + b, { color: orangeMathalea })} $`
           }
           setReponse(this, i, a + b, {
             signe: true,
@@ -157,7 +158,7 @@ export default class ExerciceOperationsRelatifs extends Exercice {
             texteCorr = `$ ${a} - ${ecritureNombreRelatif(b)} = ${a - b} $`
           } else {
             texte = `$ ${ecritureNombreRelatif(a)} - ${ecritureNombreRelatif(b)} $`
-            texteCorr = `$  ${ecritureNombreRelatifc(a)} - ${ecritureNombreRelatifc(b)} = ${ecritureNombreRelatifc(a - b, { color: '#f15929' })} $`
+            texteCorr = `$  ${ecritureNombreRelatifc(a)} - ${ecritureNombreRelatifc(b)} = ${ecritureNombreRelatifc(a - b, { color: orangeMathalea })} $`
           }
           setReponse(this, i, [a - b, `(${ecritureAlgebrique(a - b)})`], {
             signe: true,

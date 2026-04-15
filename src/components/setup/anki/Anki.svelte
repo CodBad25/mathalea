@@ -5,7 +5,11 @@
   } from '../../../lib/mathalea.js'
   import { darkMode, exercicesParams } from '../../../lib/stores/generalStore'
   import { referentielLocale } from '../../../lib/stores/languagesStore'
-  import { isIExercice, type IExercice, type IExerciceStatique } from '../../../lib/types'
+  import {
+    isIExercice,
+    type IExercice,
+    type IExerciceStatique,
+  } from '../../../lib/types'
   import Footer from '../../Footer.svelte'
   import NavBar from '../../shared/header/NavBar.svelte'
 

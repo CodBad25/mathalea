@@ -3,6 +3,7 @@ import { choice } from '../../../lib/outils/arrayOutils'
 import { ecritureParentheseSiNegatif } from '../../../lib/outils/ecritures'
 import FractionEtendue from '../../../modules/FractionEtendue'
 import ExerciceCan from '../../ExerciceCan'
+import { orangeMathalea } from '../../../lib/colors'
 export const titre = 'Calculer le produit de deux fractions'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -46,7 +47,7 @@ export default class Can1a2026Q6 extends ExerciceCan {
     this.optionsDeComparaison = { fractionIrreductible: true }
     this.reponse = produit.simplifie().texFraction
     this.question = `Écrire sous forme d'une fraction irréductible $${f1.texFraction}\\times ${f2.texFraction}$.`
-    this.correction = `$${f1.texFraction}\\times ${f2.texFraction}=\\dfrac{${n1}\\times ${ecritureParentheseSiNegatif(n2)}}{${d1} \\times ${ecritureParentheseSiNegatif(d2)}}${produit.texSimplificationAvecEtapes(true, '#f15929')}$`
+    this.correction = `$${f1.texFraction}\\times ${f2.texFraction}=\\dfrac{${n1}\\times ${ecritureParentheseSiNegatif(n2)}}{${d1} \\times ${ecritureParentheseSiNegatif(d2)}}${produit.texSimplificationAvecEtapes(true, orangeMathalea)}$`
     this.canEnonce = `Écrire sous forme d'une fraction irréductible <br> \\vspace{0.2cm} $${f1.texFraction}\\times ${f2.texFraction}$.`
 
     if (this.interactif) {

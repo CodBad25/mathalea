@@ -17,6 +17,7 @@ import { droiteGraduee } from '../../lib/2d/DroiteGraduee'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { toutAUnPoint } from '../../lib/interactif/mathLive'
 import { addMultiMathfield } from '../../lib/interactif/MultiMathfield/MultiMathfield'
+import { orangeMathalea } from '../../lib/colors'
 
 export const titre = "Lire l'abscisse entière d'un point (grands nombres)"
 export const interactifReady = true
@@ -143,7 +144,7 @@ export default class LireAbscisseEntiere2d extends Exercice {
         pointTaille: 5,
         pointStyle: 'x',
         labelsPrincipaux: false,
-        labelColor: '#F15929',
+        labelColor: orangeMathalea,
         thickSec: true,
         step1: 10,
         labelListe: [

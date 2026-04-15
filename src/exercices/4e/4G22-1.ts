@@ -17,6 +17,7 @@ import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { gestionnaireFormulaireTexte, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { orangeMathalea } from '../../lib/colors'
 
 export const titre = 'Calculer dans une pyramide régulière à base carrée'
 export const dateDePublication = '31/12/2025'
@@ -223,7 +224,7 @@ function calculAireTotalePyramide(
 
   const correction = `
  Tout d'abord, calculons la hauteur $${nomMilieuBase + nomApex}$ de la face latérale $${nomFaceLaterale}$.<br>
-            ${calculeHauteurFaceLaterale(cote, hauteur, nomPyramide, 'exacte', nomPied, nomMilieuBase).replace(`${context.isHtml ? '#f15929' : 'f15929'}`, '000000')}<br>
+            ${calculeHauteurFaceLaterale(cote, hauteur, nomPyramide, 'exacte', nomPied, nomMilieuBase).replace(`${context.isHtml ? orangeMathalea : 'f15929'}`, '000000')}<br>
             Maintenant, calculons l'aire totale de la pyramide $${nomPyramide}$.<br>
             L'aire de la base est égale à :<br>
             $\\text{Aire}_{\\text{base}} = ${texNombre(cote, 0)} \\times ${texNombre(cote, 0)} = ${texNombre(aireBase, 0)}\\text{ cm}^2$<br>

@@ -1,9 +1,9 @@
-import { orangeMathalea } from 'apigeom/src/elements/defaultValues'
 import { droiteGraduee } from '../../lib/2d/DroiteGraduee'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { point } from '../../lib/2d/PointAbstrait'
 import { labelPoint, latex2d } from '../../lib/2d/textes'
 import { tracePoint } from '../../lib/2d/TracePoint'
+import { orangeMathalea } from '../../lib/colors'
 import { combinaisonListes, shuffle } from '../../lib/outils/arrayOutils'
 import { lettreIndiceeDepuisChiffre } from '../../lib/outils/outilString'
 import { texNombre } from '../../lib/outils/texNombre'
@@ -166,7 +166,7 @@ export default class PlacerUnPointAbscisseEntiere2d extends Exercice {
           [x2, `\\boldsymbol{${texNombre(x22, 0)}}`],
           [x3, `\\boldsymbol{${texNombre(x33, 0)}}`],
         ],
-        labelColor: '#F15929',
+        labelColor: orangeMathalea,
         thickSec: true,
         step1: 10,
         labelCustomDistance: 1.5,

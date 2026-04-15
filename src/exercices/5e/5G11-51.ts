@@ -29,6 +29,7 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { orangeMathalea } from '../../lib/colors'
 
 export const titre =
   "Trouver les coordonnées de l'image d'un point par une symétrie axiale (quart de plan)"
@@ -238,9 +239,9 @@ export default class SymAxeEtCoordonnees extends Exercice {
       )
       objetsCorrection.push(
         tracePoint(...antecedents),
-        tracePoint(...images, '#f15929'),
+        tracePoint(...images, orangeMathalea),
         labelPoint(...antecedents),
-        labelPoint(...images, '#f15929'),
+        labelPoint(...images, orangeMathalea),
         d,
         dLatex[1],
       )

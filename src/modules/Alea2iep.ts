@@ -19,6 +19,7 @@ import {
   pointSurSegment,
 } from '../lib/2d/utilitairesPoint'
 import { vecteur } from '../lib/2d/Vecteur'
+import { orangeMathalea } from '../lib/colors'
 import { context } from './context'
 import {
   bissectriceAuCompas,
@@ -260,7 +261,7 @@ export default class Alea2iep {
     this.couleurCompas = 'forestgreen'
     this.couleurTexte = 'black'
     this.couleurPoint = 'black' // Couleur du nom des points
-    this.couleurCodage = '#f15929'
+    this.couleurCodage = orangeMathalea
     this.couleurTraitsDeConstruction = 'gray'
     this.epaisseur = 2
     this.epaisseurTraitsDeConstruction = 0.5

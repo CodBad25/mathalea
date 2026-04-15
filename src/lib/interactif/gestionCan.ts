@@ -6,6 +6,7 @@ import { verifQuestionCliqueFigure } from './cliqueFigure'
 import { verifQuestionMathLive } from './mathLive'
 import { verifQuestionQcm } from './qcm'
 import { verifQuestionSvgSelection } from './questionSvgSelection/questionSvgSelection'
+import { orangeMathalea } from '../../lib/colors'
 
 export function gestionCan(exercice: IExercice) {
   context.nbBonnesReponses = 0
@@ -126,7 +127,7 @@ export function afficheScoreCan(
       // ToDo à sauvegarder dans les résultats
       // const tempsRestant = document.getElementById('timer').innerText
     }
-    divScore.style.color = '#f15929'
+    divScore.style.color = orangeMathalea
     divScore.style.fontWeight = 'bold'
     divScore.style.fontSize = 'xx-large'
     divScore.style.marginTop = '20px'

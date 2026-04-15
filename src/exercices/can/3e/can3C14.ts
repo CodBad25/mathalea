@@ -7,6 +7,7 @@ import { texNombre } from '../../../lib/outils/texNombre'
 import FractionEtendue from '../../../modules/FractionEtendue'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
+import { orangeMathalea } from '../../../lib/colors'
 
 export const titre = "Passer d'un décimal à une fraction irréductible"
 export const interactifReady = true
@@ -44,7 +45,7 @@ export default class DecimalVersFractionIr extends ExerciceSimple {
         maFraction = new FractionEtendue(a, 10)
         this.question = `Écrire $${texNombre(d, 1)}$ sous la forme d'une fraction irréductible.`
         this.correction = `
-        $${texNombre(d, 1)}=${pgcd(a, 10) === 1 ? `${miseEnEvidence(maFraction.texFraction)}` : `${maFraction.texFraction}`} ${maFraction.texSimplificationAvecEtapes(false, '#f15929')}$
+        $${texNombre(d, 1)}=${pgcd(a, 10) === 1 ? `${miseEnEvidence(maFraction.texFraction)}` : `${maFraction.texFraction}`} ${maFraction.texSimplificationAvecEtapes(false, orangeMathalea)}$
         `
         this.reponse = maFraction.simplifie()
 
@@ -55,7 +56,7 @@ export default class DecimalVersFractionIr extends ExerciceSimple {
         maFraction = new FractionEtendue(a, 100)
         this.question = `Écrire $${texNombre(d, 2)}$ sous la forme d'une fraction irréductible.`
         this.correction = `
-        $${texNombre(d, 2)}=${pgcd(a, 10) === 1 ? `${miseEnEvidence(maFraction.texFraction)}` : `${maFraction.texFraction}`} ${maFraction.texSimplificationAvecEtapes(false, '#f15929')}$
+        $${texNombre(d, 2)}=${pgcd(a, 10) === 1 ? `${miseEnEvidence(maFraction.texFraction)}` : `${maFraction.texFraction}`} ${maFraction.texSimplificationAvecEtapes(false, orangeMathalea)}$
         `
         this.reponse = maFraction.simplifie()
         break
