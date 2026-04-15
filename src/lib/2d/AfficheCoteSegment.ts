@@ -14,10 +14,10 @@ import { Vide2d } from './Vide2d'
  * @param {Segment} s Segment pour lequel on affiche la côte
  * @param {string} [Cote=''] Si '', alors la longueur en cm est affichée, sinon c'est cette valeur qui s'affiche (et cela peut être une variable).
  * @param {number} [positionCote = 0.5] Position de la flèche par rapport au segment. Valeur négative ou positive selon la position voulue.
- * @param {string} [couleurCote='black'] Couleur de la flèche  : du type 'blue' ou du type '#f15929'.
+ * @param {string} [couleurCote='black'] Couleur de la flèche  : du type 'red', bleuMathalea ou du type '#a12345'.
  * @param {number} [epaisseurCote=1] Epaisseur de la flèche.
  * @param {number} [positionValeur=0.5] Position de la valeur par rapport à la flèche. Valeur négative ou positive selon la position voulue.
- * @param {string} [couleurValeur='black']  Couleur de la valeur indiquée : du type 'blue' ou du type '#f15929'.
+ * @param {string} [couleurValeur='black']  Couleur de la valeur indiquée : du type 'red', bleuMathalea ou du type '#a12345'.
  * @param {boolean} [horizontal=false]  Si true, alors le texte est horizontal, sinon le texte est parallèle au segment.
  * @property {string} svg Sortie au format vectoriel (SVG) que l’on peut afficher dans un navigateur
  * @property {string} tikz Sortie au format TikZ que l’on peut utiliser dans un fichier LaTeX
@@ -105,14 +105,14 @@ export class AfficheCoteSegment extends ObjetMathalea2D {
  * @param {Segment} s Segment pour lequel on affiche la côte
  * @param {string} [Cote=''] Si '', alors la longueur en cm est affichée, sinon c'est cette valeur qui s'affiche (et cela peut être une variable).
  * @param {number} [positionCote = 0.5] Position de la flèche par rapport au segment. Valeur négative ou positive selon la position voulue.
- * @param {string} [couleurCote='black'] Couleur de la flèche  : du type 'blue' ou du type '#f15929'.
+ * @param {string} [couleurCote='black'] Couleur de la flèche  : du type 'red', bleuMathalea ou du type '#a12345'.
  * @param {number} [epaisseurCote=1] Epaisseur de la flèche.
  * @param {number} [positionValeur=0.5] Position de la valeur par rapport à la flèche. Valeur négative ou positive selon la position voulue.
- * @param {string} [couleurValeur='black']  Couleur de la valeur indiquée : du type 'blue' ou du type '#f15929'.
+ * @param {string} [couleurValeur='black']  Couleur de la valeur indiquée : du type 'red', bleuMathalea ou du type '#a12345'.
  * @param {boolean} [horizontal=false]  Si true, alors le texte est horizontal, sinon le texte est parallèle au segment.
  * @example afficheCoteSegment(s)
  * // Affiche la côte du segment s (avec une flèche noire d\'épaisseur 1 "cm", placée 0.5 "cm" sous le segment, avec la longueur du segment, en cm, écrite en noir, 0,5 "cm" au-dessus, et parallèle au segment).
- * @example afficheCoteSegment(s,'x',-1,'red',2,1,'blue',true)
+ * @example afficheCoteSegment(s,'x',-1,'red',2,1,bleuMathalea,true)
  * // Affiche la côte du segment s, avec une flèche rouge d\'épaisseur 2 "cm", placée 1 "cm" sous le segment, avec le texte 'x' écrit en bleu, 1 "cm" au-dessus, et horizontalement.
  * @return {AfficheCoteSegment|Vide2d}
  * @author Jean-claude Lhote

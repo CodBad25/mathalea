@@ -1,3 +1,4 @@
+import { bleuMathalea } from '../../lib/colors'
 import { codageMediatrice } from './CodageMediatrice'
 import { codageSegments } from './CodageSegment'
 import { colorToLatexOrHTML } from './colorToLatexOrHtml'
@@ -16,9 +17,9 @@ import { milieu, pointSurSegment } from './utilitairesPoint'
  * @param {PointAbstrait} A Première extrémité du segment
  * @param {PointAbstrait} B Seconde extrémité du segment
  * @param {string} [nom = ''] Nom affiché de la droite
- * @param {string} [couleurMediatrice = 'red'] Couleur de la médiatrice : du type 'blue' ou du type '#f15929'
- * @param {string} [color='blue'] Couleur du codage : du type 'blue' ou du type '#f15929'.
- * @param {string} [couleurConstruction = 'black'] Couleur des traits de construction : du type 'blue' ou du type '#f15929'.
+ * @param {string} [couleurMediatrice = 'red'] Couleur de la médiatrice : du type 'red', bleuMathalea ou du type '#a12345'
+ * @param {string} [color=bleuMathalea] Couleur du codage : du type 'red', bleuMathalea ou du type '#a12345'.
+ * @param {string} [couleurConstruction = 'black'] Couleur des traits de construction : du type 'red', bleuMathalea ou du type '#a12345'.
  * @param {boolean} [construction = false] Si construction est true, alors on affiche le codage et aussi les coups de compas utiles à la construction.
  * @param {boolean} [detail = false] Si detail est true, alors on affiche aussi en pointillés les rayons utiles à la construction.
  * @param {string} [markmilieu = 'x'] Symbole posé sur les deux parties du segment
@@ -31,11 +32,11 @@ import { milieu, pointSurSegment } from './utilitairesPoint'
  * @property {string} tikz Sortie au format TikZ que l’on peut utiliser dans un fichier LaTeX
  * @property {string} tikzml Sortie, à main levée, au format TikZ que l’on peut utiliser dans un fichier LaTeX
  * @property {string} color Couleur du codage. À associer obligatoirement à colorToLatexOrHTML().
- * @property {string} couleurMediatrice Couleur de la médiatrice : du type 'blue' ou du type '#f15929'
+ * @property {string} couleurMediatrice Couleur de la médiatrice : du type 'red', bleuMathalea ou du type '#a12345'
  * @property {number} epaisseurMediatrice Epaisseur de la médiatrice
  * @property {number} opaciteMediatrice Taux d'opacité de la médiatrice
  * @property {number} pointillesMediatrice Si cette valeur est entre 1 et 5, la médiatrice est en pointillés
- * @property {string} couleurConstruction Couleur des traits de construction : du type 'blue' ou du type '#f15929'.
+ * @property {string} couleurConstruction Couleur des traits de construction : du type 'red', bleuMathalea ou du type '#a12345'.
  * @return {Mediatrice|Droite}
  * @class
  */
@@ -63,7 +64,7 @@ export class Mediatrice extends ObjetMathalea2D implements IDroite {
     B: PointAbstrait,
     nom = '',
     couleurMediatrice = 'red',
-    color = 'blue',
+    color = bleuMathalea,
     couleurConstruction = 'black',
     construction = false,
     detail = false,
@@ -202,9 +203,9 @@ export class Mediatrice extends ObjetMathalea2D implements IDroite {
  * @param {Point} A Première extrémité du segment
  * @param {Point} B Seconde extrémité du segment
  * @param {string} [nom=''] Nom affiché de la droite
- * @param {string} [couleurMediatrice = 'red'] Couleur de la médiatrice : du type 'blue' ou du type '#f15929'
- * @param {string} [color='blue'] Couleur du codage : du type 'blue' ou du type '#f15929'.
- * @param {string} [couleurConstruction='black'] Couleur des traits de construction : du type 'blue' ou du type '#f15929'.
+ * @param {string} [couleurMediatrice = 'red'] Couleur de la médiatrice : du type 'red', bleuMathalea ou du type '#a12345'
+ * @param {string} [color=bleuMathalea] Couleur du codage : du type 'red', bleuMathalea ou du type '#a12345'.
+ * @param {string} [couleurConstruction='black'] Couleur des traits de construction : du type 'red', bleuMathalea ou du type '#a12345'.
  * @param {boolean} [construction=false] Si construction est true, alors on affiche le codage et aussi les coups de compas utiles à la construction.
  * @param {boolean} [detail=false] Si detail est true, alors on affiche aussi en pointillés les rayons utiles à la construction.
  * @param {string} [markmilieu='x'] Symbole posé sur les deux parties du segment
@@ -214,9 +215,9 @@ export class Mediatrice extends ObjetMathalea2D implements IDroite {
  * @param {number} [pointillesMediatrice = 0] Si cette valeur est entre 1 et 5, la médiatrice est en pointillés
  * @example mediatrice(M,N)
  * // Trace, en rouge, la médiatrice du segment[MN], d'épaisseur 1, avec une opacité de 100 % sans autre option
- * @example mediatrice(M,N,'d','blue')
+ * @example mediatrice(M,N,'d',bleuMathalea)
  * // Trace, en bleu, la médiatrice du segment[MN], d'épaisseur 1, avec une opacité de 100 % et qui s'appelle 'd'
- * @example mediatrice(M,N,'','blue','red','green',true,true,'OO','XX',2,0.5,3)
+ * @example mediatrice(M,N,'',bleuMathalea,'red','green',true,true,'OO','XX',2,0.5,3)
  * // Trace, en bleu, la médiatrice du segment[MN], d'épaisseur 2, avec une opacité de 50 % sans nom
  * // Les traits de construction sont dessinés en vert avec la marque 'OO' pour le segment initial et la marque 'XX' pour les rayons, toutes ces marques étant rouge.
  * @author Rémi Angot {amendée par Éric Elter en juin 2022}
@@ -229,7 +230,7 @@ export function mediatrice(
   B: PointAbstrait,
   nom = '',
   couleurMediatrice = 'red',
-  color = 'blue',
+  color = bleuMathalea,
   couleurConstruction = 'black',
   construction = false,
   detail = false,

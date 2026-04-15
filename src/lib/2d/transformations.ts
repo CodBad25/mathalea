@@ -422,12 +422,12 @@ export function rotation(
  * @param {number} k Rapport de l'homothétie
  * @param {string} [nom = ''] Nom du point-image
  * @param {string} [positionLabel = 'above'] Position du point-image. Les possibilités sont : 'left', 'right', 'below', 'above', 'above right', 'above left', 'below right', 'below left'. Si on se trompe dans l'orthographe, ce sera 'above left' et si on ne précise rien, pour un point ce sera 'above'.
- * @param {string} [color='black']  Couleur de l'image : du type 'blue' ou du type '#f15929' (non valable pour un point et pour un vecteur)
+ * @param {string} [color='black']  Couleur de l'image : du type 'red', bleuMathalea ou du type '#a12345' (non valable pour un point et pour un vecteur)
  * @example p2 = homothetie(p1,I,2)
  * // p2 est l'image de p1 par une homothétie de centre I et de rapport 2
  * @example N = homothetie(M, I, 0.5, 'point N', 'right')
  * // N est l'image de M par une homothétie de centre I et de rapport 0.5.  Le point sera affiché comme "point N" et ce nom sera écrit à droite de sa position.
- * @example s = homothetie(segment(A, B), I, -0.5, '', '','blue')
+ * @example s = homothetie(segment(A, B), I, -0.5, '', '',bleuMathalea)
  * // s est l'image du segment [AB] par une homothétie de centre I et de rapport -0.5.  s sera en bleu.
  * @author Rémi Angot
  * @return {PointAbstrait|Segment|Droite|Polygone|Vecteur}
@@ -740,7 +740,7 @@ export function projectionOrtho(
  * @param {number} k Rapport de l'affinité
  * @param {string} [nom=''] Nom de l'image (uniquement valable pour un point)
  * @param {string} [positionLabel = 'above'] Position de l'image (uniquement valable pour un point)
- * @param {string} [color='black']  Couleur de la valeur indiquée : du type 'blue' ou du type '#f15929' (non valable pour un point et pour un vecteur)
+ * @param {string} [color='black']  Couleur de la valeur indiquée : du type 'red', bleuMathalea ou du type '#a12345' (non valable pour un point et pour un vecteur)
  * @author Jean-claude Lhote
  * @example p2 = affiniteOrtho(p1,droite(B, C),k)
  * // p2 est l'image de p1 par une affinité orthogonale dont la direction est la droite (BC) et de rapport k

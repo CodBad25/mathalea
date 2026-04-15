@@ -11,7 +11,7 @@ import { milieu, pointSurSegment } from './utilitairesPoint'
  * Affiche la longueur de [AB] au dessus si A est le point le plus à gauche sinon au dessous.
  * @param  {PointAbstrait} A Première extrémité du segment
  * @param  {PointAbstrait} B Seconde extrémité du segment
- * @param  {string} [color='black'] Couleur de la longueur affichée : du type 'blue' ou du type '#f15929'.
+ * @param  {string} [color='black'] Couleur de la longueur affichée : du type 'red', bleuMathalea ou du type '#a12345'.
  * @param  {number} [d=0.5] Distance entre l'affichage de la longueur et le segment.
  * @param  {string} [unite='cm'] Affiche cette unité après la valeur numérique de la longueur.
  * @param  {boolean} [horizontal=false] Si true, alors le texte est horizontal, sinon le texte est parallèle au segment.
@@ -94,14 +94,14 @@ export class AfficheLongueurSegment extends ObjetMathalea2D {
  * Affiche la longueur de [AB] au dessus si A est le point le plus à gauche sinon au dessous.
  * @param  {PointAbstrait} A Première extrémité du segment
  * @param  {PointAbstrait} B Seconde extrémité du segment
- * @param  {string} [color='black'] Couleur affichée de la longueur affichée : du type 'blue' ou du type '#f15929'.
+ * @param  {string} [color='black'] Couleur affichée de la longueur affichée : du type 'red', bleuMathalea ou du type '#a12345'.
  * @param  {number} [d=0.5] Distance entre l'affichage de la longueur et le segment.
  * @param  {string} [unite='cm'] Affiche cette unité après la valeur numérique de la longueur.
  * @param  {boolean} [horizontal=false] Si true, alors le texte est horizontal, sinon le texte est parallèle au segment.
  * @param  {number} [precision=1]
  * @example  afficheLongueurSegment(A,B)
  * // Affiche la longueur du segment [AB] (en noir, à 0,5 "cm" du segment, complétée par l'unité cm et parallèlement au segment).
- * @example  afficheLongueurSegment(A,B,'blue',1,'mm',true)
+ * @example  afficheLongueurSegment(A,B,bleuMathalea,1,'mm',true)
  * // Affiche la longueur du segment [AB], en bleu, à 1 "cm" du segment, complétée par l'unité mm et horizontalement.
  * @return {AfficheLongueurSegment}
  * @author Rémi Angot

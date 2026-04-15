@@ -42,10 +42,10 @@ export const rotationPoint = (
  * @param {Point} Omega Centre de l'arc
  * @param {number|Point} angle Mesure de l'angle compris entre -360 et 360 (valeur négative = sens indirect) ou bien point formant un angle avec M et Omega.
  * @param {boolean} [rayon = false] Si true, les rayons délimitant l'arc sont ajoutés.
- * @param {string} [couleurDeRemplissage = 'none'] Couleur ou 'none' : du type 'blue' ou du type '#f15929'
- * @param {string} [color = 'black'] Couleur de l'arc ou 'none' : du type 'blue' ou du type '#f15929'
+ * @param {string} [couleurDeRemplissage = 'none'] Couleur ou 'none' : du type 'red', bleuMathalea ou du type '#a12345'
+ * @param {string} [color = 'black'] Couleur de l'arc ou 'none' : du type 'red', bleuMathalea ou du type '#a12345'
  * @param {number} [opaciteDeRemplissage = 0.2] Opacité de remplissage de 0 à 1.
- * @param {string} [couleurDesHachures = 'none'] Couleur des hachures ou 'none' : du type 'blue' ou du type '#f15929' Si 'none', pas de hachures.
+ * @param {string} [couleurDesHachures = 'none'] Couleur des hachures ou 'none' : du type 'red', bleuMathalea ou du type '#a12345' Si 'none', pas de hachures.
  * @property {string} svg Sortie au format vectoriel (SVG) que l'on peut afficher dans un navigateur
  * @property {string} svgml Sortie, à main levée, au format vectoriel (SVG) que l'on peut afficher dans un navigateur
  * @property {string} tikz Sortie au format TikZ que l'on peut utiliser dans un fichier LaTeX
@@ -357,10 +357,10 @@ export class Arc extends ObjetMathalea2D {
  * @param {Point} Omega Centre de l'arc
  * @param {number} angle Mesure de l'angle compris entre -360 et 360 (valeur négative = sens indirect)
  * @param {boolean} [rayon = false] Booléen. Si true, les rayons délimitant l'arc sont ajoutés.
- * @param {string} [couleurDeRemplissage = 'none'] Couleur ou 'none' : du type 'blue' ou du type '#f15929'
- * @param {string} [color = 'black'] Couleur de l'arc ou 'none' : du type 'blue' ou du type '#f15929'
+ * @param {string} [couleurDeRemplissage = 'none'] Couleur ou 'none' : du type 'red', bleuMathalea ou du type '#a12345'
+ * @param {string} [color = 'black'] Couleur de l'arc ou 'none' : du type 'red', bleuMathalea ou du type '#a12345'
  * @param {number} [opaciteDeRemplissage = 0.2] Opacité de remplissage de 0 à 1.
- * @param {string} [couleurDesHachures = 'none'] Couleur des hachures ou 'none' : du type 'blue' ou du type '#f15929' Si 'none', pas de hachures.
+ * @param {string} [couleurDesHachures = 'none'] Couleur des hachures ou 'none' : du type 'red', bleuMathalea ou du type '#a12345' Si 'none', pas de hachures.
  * @example arc(M,O,35)
  // Trace l'arc en noir de centre O, d'extrémité M et d'angle orienté 35° (sans remplissage et sans hachures)
  * @example arc(M,O,true,-40,'red','green',0.8,'white')
@@ -397,10 +397,10 @@ export function arc(
  * @param {Point} N Deuxième extrémité de l'arc
  * @param {number} angle Mesure de l'angle compris entre -360 et 360 (valeur négative = sens indirect)
  * @param {boolean} [rayon = false] Booléen. Si true, les rayons délimitant l'arc sont ajoutés.
- * @param {boolean|'none'} [couleurDeRemplissage = 'none'] Couleur ou 'none' : du type 'blue' ou du type '#f15929'
- * @param {string} [color = 'black'] Couleur de l'arc ou 'none' : du type 'blue' ou du type '#f15929'
+ * @param {boolean|'none'} [couleurDeRemplissage = 'none'] Couleur ou 'none' : du type 'red', bleuMathalea ou du type '#a12345'
+ * @param {string} [color = 'black'] Couleur de l'arc ou 'none' : du type 'red', bleuMathalea ou du type '#a12345'
  * @param {number} [opaciteDeRemplissage = 0.2] Opacité de remplissage de 0 à 1.
- * @param {string} [couleurDesHachures = 'none'] Couleur des hachures ou 'none' : du type 'blue' ou du type '#f15929' Si 'none', pas de hachures.
+ * @param {string} [couleurDesHachures = 'none'] Couleur des hachures ou 'none' : du type 'red', bleuMathalea ou du type '#a12345' Si 'none', pas de hachures.
  * @example arcPointPointAngle(A,B,35)
  // Trace l'arc en noir d'extrémités A et B (dans cet ordre) et d'angle orienté 35° (sans remplissage et sans hachures)
  * @example arcPointPointAngle(A,B,true,-40,'red','green',0.8,'white')

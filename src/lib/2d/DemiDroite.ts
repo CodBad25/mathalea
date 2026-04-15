@@ -6,7 +6,7 @@ import { pointSurSegment } from './utilitairesPoint'
 /**  Trace la demi-droite d'origine A passant par B
  * @param {PointAbstrait} A Origine de la droite
  * @param {PointAbstrait} B Point de la demi-droite, autre que l'origine
- * @param {string} [color = 'black'] Couleur de la demi-droite : du type 'blue' ou du type '#f15929'
+ * @param {string} [color = 'black'] Couleur de la demi-droite : du type 'red', bleuMathalea ou du type '#a12345'
  * @param {boolean} [extremites = false] Trace (ou pas) l'origine de la demi-droite
  * @property {string} color Couleur de la demi-droite. À associer obligatoirement à colorToLatexOrHTML().
  * @property {number} opacite
@@ -40,7 +40,7 @@ export class DemiDroite extends Segment {
  * @param {string} [color='black'] Facultatif, 'black' par défaut
  * @param {boolean} [extremites = false] Trace (ou pas) l'origine de la demi-droite
  * @example demiDroite(M, N) // Trace la demi-droite d'origine M passant par N et de couleur noire
- * @example demiDroite(M, N, 'blue', true) // Trace la demi-droite d'origine M passant par N et de couleur bleue, en traçant le trait signifiant l'origine de la demi-droite
+ * @example demiDroite(M, N, bleuMathalea, true) // Trace la demi-droite d'origine M passant par N et de couleur bleue, en traçant le trait signifiant l'origine de la demi-droite
  * @author Rémi Angot
  * @return {DemiDroite}
  */

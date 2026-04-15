@@ -1,6 +1,7 @@
 import { arrondi } from '../outils/nombres'
 import { colorToLatexOrHTML } from './colorToLatexOrHtml'
 import { ObjetMathalea2D } from './ObjetMathalea2D'
+import { bleuMathalea } from '../../lib/colors'
 
 /**
  * Calcule le cosinus d'un angle en degrés
@@ -299,11 +300,11 @@ export function engrenages(
         marqueurG = 180
         marqueurD = 0
         marqueurColorG = 'Sienna'
-        marqueurColorD = 'blue'
+        marqueurColorD = bleuMathalea
       } else {
         marqueurG = 180
         marqueurD = 0
-        marqueurColorG = 'blue'
+        marqueurColorG = bleuMathalea
         marqueurColorD = 'Sienna'
       }
     }

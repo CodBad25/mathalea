@@ -11,7 +11,7 @@ import { segment } from './segmentsVecteurs'
  * @param {number} [xstep=1] Pas sur l'axe des abscisses
  * @param {number} [ystep=1] Pas sur l'axe des ordonnées
  * @param {number} [epaisseur=2] Epaisseur des deux axes
- * @param {string} [color='black'] Couleur du codage : du type 'blue' ou du type '#f15929'.
+ * @param {string} [color='black'] Couleur du codage : du type 'red', bleuMathalea ou du type '#a12345'.
  * @param {number} [tailleExtremites=4] Taille des flèches à l'extrémité des axes.
  * @property {string} svg Sortie au format vectoriel (SVG) que l’on peut afficher dans un navigateur
  * @property {string} tikz Sortie au format TikZ que l’on peut utiliser dans un fichier LaTeX
@@ -88,7 +88,7 @@ export class Axes extends ObjetMathalea2D {
  * @param {number} [xstep=1] Pas sur l'axe des abscisses
  * @param {number} [ystep=1] Pas sur l'axe des ordonnées
  * @param {number} [epaisseur=2] Epaisseur des deux axes
- * @param {string} [color='black'] Couleur du codage : du type 'blue' ou du type '#f15929'.
+ * @param {string} [color='black'] Couleur du codage : du type 'red', bleuMathalea ou du type '#a12345'.
  * @example axes()
  * // Trace un repère orthonormé dont les axes des abscisses et des ordonnées ont pour minimum -30, maximum -30, épaisseur 2, avec un pas de 1 et de couleur noire. Le tiret de chaque graduation mesure 0,4.
  * @example axes(-10,-5,20,3,0.25,2,0.5,1,'red')

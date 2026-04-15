@@ -1,3 +1,4 @@
+import { bleuMathalea } from '../../lib/colors'
 import { context } from '../../modules/context'
 import { arrondi } from '../outils/nombres'
 import { nombreAvecEspace } from '../outils/texNombre'
@@ -16,12 +17,12 @@ import { tracePoint } from './TracePoint'
  * @param {number?} [parametres.x = 0] Abscisse du point de départ du tracé
  * @param {number?} [parametres.y = 0] Ordonnée du point de départ du tracé
  * @param {number?} [parametres.axeEpaisseur = 2] Épaisseur de l'axe gradué
- * @param {string?} [parametres.axeCouleur = 'black'] Couleur de l'axe gradué : du type 'blue' ou du type '#f15929'
+ * @param {string?} [parametres.axeCouleur = 'black'] Couleur de l'axe gradué : du type 'red', bleuMathalea ou du type '#a12345'
  * @param {string?} [parametres.axeStyle = "->"] Style final de l'axe gradué
  * @param {number?} [parametres.axeHauteur = 4] Définit la "largeur" de l'axe, celle des graduations et du style final
  * @param {string?} [parametres.axePosition = 'H'] Position de l'axe : 'H' pour horizontal, 'V' pour vertical
  * @param {number?} [parametres.thickEpaisseur = 2] Épaisseur des graduations
- * @param {string?} [parametres.thickCouleur = axeCouleur] Couleur des graduations : du type 'blue' ou du type '#f15929'
+ * @param {string?} [parametres.thickCouleur = axeCouleur] Couleur des graduations : du type 'red', bleuMathalea ou du type '#a12345'
  * @param {number?} [parametres.thickDistance = 1] Distance entre deux graduations principales
  * @param {number?} [parametres.thickOffset = 0] Décalage de toutes les graduations sur l'axe (pour, par exemple, faire coïncider le début de l'axe avec une graduation)
  * @param {boolean?} [parametres.thickSec = false] Affichage (ou pas) des graduations secondaires
@@ -31,7 +32,7 @@ import { tracePoint } from './TracePoint'
  * @param {[number, string][]} [parametres.pointListe = []] Liste de points à mettre sur l'axe comme, par exemple, [[3.4,'A'],[3.8,'B']]. Les noms se placent au-dessus de l'axe.
  * @param {number?} [parametres.labelPointTaille = 10] Taille (hauteur) de la police des points (de la liste des points pointListe) utilisée de 5 = \small à 20=\huge...
  * @param {number?} [parametres.labelPointLargeur = 20] Largeur de la boîte où sont affichés les points (de la liste des points pointListe) utilisée de 5 = \small à 20=\huge...
- * @param {string?} [parametres.pointCouleur = 'blue'] Couleur des points de la liste pointListe : du type 'blue' ou du type '#f15929'
+ * @param {string?} [parametres.pointCouleur = 'red', bleuMathalea] Couleur des points de la liste pointListe : du type 'red', bleuMathalea ou du type '#a12345'
  * @param {number?} [parametres.pointTaille = 4] Taille en pixels des points de la liste  pointListe
  * @param {string?} [parametres.pointStyle = '+'] Style des points de la liste pointListe
  * @param {number?} [parametres.pointOpacite = 0.8] Opacité des points de la liste pointListe
@@ -44,7 +45,7 @@ import { tracePoint } from './TracePoint'
  * @param {number?} [parametres.labelCustomDistance = (axeHauteur + 10) / context.pixelsParCm] Distance entre les labels et l'axe
  * @param {array?} [parametres.labelListe = []] Liste de labels à mettre sous l'axe comme, par exemple, [[2.8,'x'],[3.1,'y']]. Les noms se placent en-dessous de l'axe.
  * @param {boolean?} [parametres.labelListeScriptsize = false] Si true, les labels de la liste labelListe sont en \scriptsize
- * @param {string?} [parametres.labelColor = 'black'] Couleur des labels de la liste labelListe : du type 'blue' ou du type '#f15929'
+ * @param {string?} [parametres.labelColor = 'black'] Couleur des labels de la liste labelListe : du type 'red', bleuMathalea ou du type '#a12345'
  * @param {number?} [parametres.labelScale = 1] Echelle des labels
  * @param {string?} [parametres.Legende = ''] Légende de l'axe
  * @param {number?} [parametres.LegendePosition] Position de la légende
@@ -82,7 +83,7 @@ export class DroiteGraduee extends ObjetMathalea2D {
     pointListe = [],
     labelPointTaille = 10,
     labelPointLargeur = 20,
-    pointCouleur = 'blue',
+    pointCouleur = bleuMathalea,
     pointTaille = 4,
     pointStyle = '+',
     pointOpacite = 0.8,
@@ -335,12 +336,12 @@ export class DroiteGraduee extends ObjetMathalea2D {
  * @param {number} [parametres.x = 0] Abscisse du point de départ du tracé
  * @param {number} [parametres.y = 0] Ordonnée du point de départ du tracé
  * @param {number} [parametres.axeEpaisseur = 2] Épaisseur de l'axe gradué
- * @param {string} [parametres.axeCouleur = 'black'] Couleur de l'axe gradué : du type 'blue' ou du type '#f15929'
+ * @param {string} [parametres.axeCouleur = 'black'] Couleur de l'axe gradué : du type 'red', bleuMathalea ou du type '#a12345'
  * @param {string} [parametres.axeStyle = '->'] Style final de l'axe gradué
  * @param {number} [parametres.axeHauteur = 4] Définit la "largeur" de l'axe, celle des graduations et du style final
  * @param {string} [parametres.axePosition = 'H'] Position de l'axe : 'H' pour horizontal, 'V' pour vertical
  * @param {number} [parametres.thickEpaisseur = 2] Épaisseur des graduations
- * @param {string} [parametres.thickCouleur = axeCouleur] Couleur des graduations : du type 'blue' ou du type '#f15929'
+ * @param {string} [parametres.thickCouleur = axeCouleur] Couleur des graduations : du type 'red', bleuMathalea ou du type '#a12345'
  * @param {number} [parametres.thickDistance = 1] Distance entre deux graduations principales
  * @param {number} [parametres.thickOffset = 0] Décalage de toutes les graduations sur l'axe (pour, par exemple, faire coïncider le début de l'axe avec une graduation)
  * @param {boolean?} [parametres.thickSec = false] Affichage (ou pas) des graduations secondaires
@@ -350,7 +351,7 @@ export class DroiteGraduee extends ObjetMathalea2D {
  * @param {array?} [parametres.pointListe = []] Liste de points à mettre sur l'axe comme, par exemple, [[3.4,'A'],[3.8,'B']]. Les noms se placent au-dessus de l'axe.
  * @param {number} [parametres.labelPointTaille = 10] Taille (hauteur) de la police des points (de la liste des points pointListe) utilisée de 5 = \small à 20=\huge...
  * @param {number} [parametres.labelPointLargeur = 20] Largeur de la boîte où sont affichés les points (de la liste des points pointListe) utilisée de 5 = \small à 20=\huge...
- * @param {string} [parametres.pointCouleur = 'blue'] Couleur des points de la liste pointListe : du type 'blue' ou du type '#f15929'
+ * @param {string} [parametres.pointCouleur = 'red', bleuMathalea] Couleur des points de la liste pointListe : du type 'red', bleuMathalea ou du type '#a12345'
  * @param {number} [parametres.pointTaille = 4] Taille en pixels des points de la liste  pointListe
  * @param {string} [parametres.pointStyle = '+'] Style des points de la liste pointListe
  * @param {number} [parametres.pointOpacite = 0.8] Opacité des points de la liste pointListe
@@ -361,7 +362,7 @@ export class DroiteGraduee extends ObjetMathalea2D {
  * @param {number} [parametres.step2 = 1] Pas des labels numériques secondaires
  * @param {number} [parametres.labelDistance = (axeHauteur + 10) / context.pixelsParCm] Distance entre les labels et l'axe
  * @param {number} [parametres.labelCustomDistance = (axeHauteur + 10) / context.pixelsParCm] Distance entre les labels de labelListe et l'axe
- * @param {string?} [parametres.labelColor = 'black'] Couleur des labels de la liste labelListe : du type 'blue' ou du type '#f15929'
+ * @param {string?} [parametres.labelColor = 'black'] Couleur des labels de la liste labelListe : du type 'red', bleuMathalea ou du type '#a12345'
  * @param {number?} [parametres.labelScale = 1] Echelle des labels
  * @param {string} [parametres.Legende = ''] Légende de l'axe
  * @param {number} [parametres.LegendePosition] Position de la légende
@@ -373,7 +374,7 @@ export class DroiteGraduee extends ObjetMathalea2D {
         thickSec: true,
         Unite: 3,
         thickCouleur: 'red',
-        axeCouleur: 'blue',
+        axeCouleur: 'red', bleuMathalea,
         axeHauteur: 4,
         labelsPrincipaux: false,
         labelListe: [[0, 'O'], [1, 'I']],
@@ -412,7 +413,7 @@ export function droiteGraduee({
   pointListe = [],
   labelPointTaille = 10,
   labelPointLargeur = 20,
-  pointCouleur = 'blue',
+  pointCouleur = bleuMathalea,
   pointTaille = 4,
   pointStyle = '+',
   pointOpacite = 0.8,

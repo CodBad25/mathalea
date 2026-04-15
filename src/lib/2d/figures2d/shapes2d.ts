@@ -1,6 +1,7 @@
 import { Shape2D } from '../Figures2D'
 import { ObjetMathalea2D } from '../ObjetMathalea2D'
 import { emoji } from './Emojis'
+import { bleuMathalea } from '../../../lib/colors'
 
 export function shapeDefToShapeSvg(shapeName: string): string {
   const shapeDef = listeShapes2DInfos[shapeName].shapeDef
@@ -323,7 +324,7 @@ carreBleuDef.svg = function (coeff: number): string {
   <!-- Carré bleu -->
   <defs>
       <rect id="carre-bleu" x="-10" y="-10" width="20" height="20"
-        fill="blue" stroke="black" stroke-width="0.5" />
+        fill=bleuMathalea stroke="black" stroke-width="0.5" />
   </defs>`
 }
 carreBleuDef.tikz = function (): string {
@@ -396,7 +397,7 @@ rondDef.svg = function (coeff: number): string {
   <!-- Rond -->
   <defs>
     <g id="rond">
-      <circle cx="0" cy="0" r="10" fill="lightblue" stroke="blue" stroke-width="0.5" />
+      <circle cx="0" cy="0" r="10" fill="lightblue" stroke=bleuMathalea stroke-width="0.5" />
     </g>
   </defs>`
 }

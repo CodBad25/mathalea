@@ -75,7 +75,7 @@ export function centreGraviteTriangle(
  * @param {Point} A Point dont est issue la hauteur
  * @param {Point} B Première extrémité du segment dont est relative la hauteur
  * @param {Point} C Seconde extrémité du segment dont est relative la hauteur
- * @param {string} [color = 'black'] Couleur de cette hauteur : du type 'blue' ou du type '#f15929'
+ * @param {string} [color = 'black'] Couleur de cette hauteur : du type 'red', bleuMathalea ou du type '#a12345'
  * @example hauteurTriangle (M, N, P) // Trace, en noir, la hauteur issue de M relative à [NP]
  * @example hauteurTriangle (M, N, P, 'red') // Trace, en rouge, la hauteur issue de M relative à [NP]
  * @author Jean-claude Lhote

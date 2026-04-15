@@ -1,6 +1,7 @@
 import { Figure2D } from '../Figures2D'
 import { point } from '../PointAbstrait'
 import { Segment, segment } from '../segmentsVecteurs'
+import { bleuMathalea } from '../../../lib/colors'
 
 /**
  * Génère une figure représentant un panneau de route prioritaire.
@@ -103,7 +104,7 @@ export function panneauStationnementInterdit(options?: {
   lineWidth?: number // Épaisseur de la bordure
 }): Figure2D {
   // Génération du code SVG
-  const circleFill = options?.fillStyle || 'blue'
+  const circleFill = options?.fillStyle || bleuMathalea
   const circleStroke = options?.strokeStyle || 'red'
   const circleLineWidth = options?.lineWidth || 5
   const crossColor = 'red'
@@ -190,7 +191,7 @@ export function panneauVoieSansIssue(options?: {
   barFillStyle?: string // Couleur de la barre rouge (par défaut rouge)
 }): Figure2D {
   // Options par défaut
-  const fillStyle = options?.fillStyle || 'blue'
+  const fillStyle = options?.fillStyle || bleuMathalea
   const strokeStyle = options?.strokeStyle || 'black'
   const lineWidth = options?.lineWidth || 1
   const tFillStyle = options?.tFillStyle || 'white'
@@ -230,7 +231,7 @@ export function panneauParking(options?: {
   pFillStyle?: string // Couleur de la lettre P (par défaut blanc)
 }): Figure2D {
   // Options par défaut
-  const fillStyle = options?.fillStyle || 'blue'
+  const fillStyle = options?.fillStyle || bleuMathalea
   const strokeStyle = options?.strokeStyle || 'black'
   const lineWidth = options?.lineWidth || 1
   const pFillStyle = options?.pFillStyle || 'white'
@@ -952,7 +953,7 @@ export function panneauArretInterdit(options?: {
   lineWidth?: number // Épaisseur de la bordure
 }): Figure2D {
   // Génération du code SVG
-  const circleFill = options?.fillStyle || 'blue'
+  const circleFill = options?.fillStyle || bleuMathalea
   const circleStroke = options?.strokeStyle || 'red'
   const circleLineWidth = options?.lineWidth || 5
   const crossColor = 'red'

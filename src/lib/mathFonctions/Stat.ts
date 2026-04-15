@@ -13,6 +13,7 @@ import { milieu } from '../2d/utilitairesPoint'
 import { vide2d } from '../2d/Vide2d'
 import { shuffle } from '../outils/arrayOutils'
 import { texNombre } from '../outils/texNombre'
+import { bleuMathalea } from '../../lib/colors'
 
 /**
  * Classe pour les statistiques descriptives
@@ -367,17 +368,17 @@ export default class Stat {
     const q3UpPoint = point(q3Point.x, 2.4 * echelle)
     const q1MiddlePoint = milieu(q1DownPoint, q1UpPoint)
     const q3MiddlePoint = milieu(q3DownPoint, q3UpPoint)
-    const lineMin = segment(minDownPoint, minUpPoint, 'blue')
-    const lineMax = segment(maxDownPoint, maxUpPoint, 'blue')
-    const lineQ2 = segment(q2DownPoint, q2UpPoint, 'blue')
+    const lineMin = segment(minDownPoint, minUpPoint, bleuMathalea)
+    const lineMax = segment(maxDownPoint, maxUpPoint, bleuMathalea)
+    const lineQ2 = segment(q2DownPoint, q2UpPoint, bleuMathalea)
     const lineQ0Q1 =
       minMiddlePoint.x === q1MiddlePoint.x
         ? vide2d()
-        : segment(minMiddlePoint, q1MiddlePoint, 'blue')
+        : segment(minMiddlePoint, q1MiddlePoint, bleuMathalea)
     const lineQ3Q4 =
       q3MiddlePoint.x === maxMiddlePoint.x
         ? vide2d()
-        : segment(q3MiddlePoint, maxMiddlePoint, 'blue')
+        : segment(q3MiddlePoint, maxMiddlePoint, bleuMathalea)
     lineMin.epaisseur = 2
     lineMax.epaisseur = 2
     lineQ2.epaisseur = 2
@@ -385,10 +386,10 @@ export default class Stat {
     lineQ3Q4.epaisseur = 2
     const box = polygone(
       [q1DownPoint, q1UpPoint, q3UpPoint, q3DownPoint],
-      'blue',
+      bleuMathalea,
     )
     box.epaisseur = 2
-    box.couleurDeRemplissage = colorToLatexOrHTML('blue')
+    box.couleurDeRemplissage = colorToLatexOrHTML(bleuMathalea)
     box.opaciteDeRemplissage = 0.15
 
     const lineBase = segment(extremiteDroite, extremiteGauche)
@@ -730,7 +731,7 @@ export default class Stat {
             yMax: yPos,
           })
             .addColor({
-              color: 'blue',
+              color: bleuMathalea,
               colorBackground: '#9699FF',
               backgroudOpacity: 1,
             })
@@ -742,7 +743,7 @@ export default class Stat {
             const line = segment(
               point(xPos, yPos),
               point(xPosNext, yPosNext),
-              'blue',
+              bleuMathalea,
             )
             line.epaisseur = 2
             line.opacite = 0.5

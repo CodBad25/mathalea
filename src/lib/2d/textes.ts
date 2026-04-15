@@ -26,11 +26,11 @@ export const svgAncrages = {
  * @param {string} [label=''] Si vide, alors affiche la mesure de l'angle sinon affiche ce label.
  * @param {Object} parametres À saisir entre accolades
  * @param {PointAbstrait|PointAbstrait[]} [parametres.points = []] PointAbstrait ou tableau de points
- * @param {string} [parametres.color = 'black'] Couleur du label : du type 'blue' ou du type '#f15929'
+ * @param {string} [parametres.color = 'black'] Couleur du label : du type 'red', bleuMathalea ou du type '#a12345'
  * @param {number} [parametres.taille = 8] Taille du label
  * @param {number} [parametres.largeur = 10] Largeur en pixels du label à des fins de centrage
  * @param {number} [parametres.hauteur = 10] Hauteur en pixels du label à des fins de centrage
- * @param {string} [parametres.couleurDeRemplissage=''] Couleur de fond de ce label : du type 'blue' ou du type '#f15929'
+ * @param {string} [parametres.couleurDeRemplissage=''] Couleur de fond de ce label : du type 'red', bleuMathalea ou du type '#a12345'
  * @property {string} svg Sortie au format vectoriel (SVG) que l’on peut afficher dans un navigateur
  * @property {string} tikz Sortie au format TikZ que l’on peut utiliser dans un fichier LaTeX
  * @property {string} color Couleur du label. À associer obligatoirement à colorToLatexOrHTML().
@@ -1114,8 +1114,8 @@ export class LatexParCoordonneesBox extends ObjetMathalea2D {
       <div style='${this.style}'>
       $${this.taille} \\color{${this.color[0]}}{${this.texte}}$
       </div></div></foreignObject>`
-    // <circle cx="${this.x * coeff - demiLargeur}" cy="${-this.y * coeff - centrage - this.hauteur / 2}" r="1" fill="red" stroke="blue" stroke-width="2"  />
-    // <circle cx="${this.x * coeff}" cy="${-this.y * coeff}" r="1" fill="red" stroke="blue" stroke-width="2"  />`
+    // <circle cx="${this.x * coeff - demiLargeur}" cy="${-this.y * coeff - centrage - this.hauteur / 2}" r="1" fill="red" stroke="red", bleuMathalea stroke-width="2"  />
+    // <circle cx="${this.x * coeff}" cy="${-this.y * coeff}" r="1" fill="red" stroke="red", bleuMathalea stroke-width="2"  />`
   }
 
   tikz() {

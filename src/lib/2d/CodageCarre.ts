@@ -6,7 +6,7 @@ import { ObjetMathalea2D } from './ObjetMathalea2D'
 /**
  * Code un carré
  * @param {Polygone} c Carré à coder
- * @param {string} [color = 'black'] Couleur des codages : du type 'blue' ou du type '#f15929'
+ * @param {string} [color = 'black'] Couleur des codages : du type 'red', bleuMathalea ou du type '#a12345'
  * @param {string} [mark='x'] Symbole posé sur les côtés
  * @property {string} svg Sortie au format vectoriel (SVG) que l’on peut afficher dans un navigateur
  * @property {string} tikz Sortie au format TikZ que l’on peut utiliser dans un fichier LaTeX
@@ -74,7 +74,7 @@ export class CodageCarre extends ObjetMathalea2D {
 /**
  * Met un codage complet sur un carré
  * @param {Polygone} c Carré à coder
- * @param {string} [color = 'black'] Couleur des codages : du type 'blue' ou du type '#f15929'
+ * @param {string} [color = 'black'] Couleur des codages : du type 'red', bleuMathalea ou du type '#a12345'
  * @param {string} [mark='x'] Symbole posé sur les côtés
  * @property {string} svg Sortie au format vectoriel (SVG) que l’on peut afficher dans un navigateur
  * @property {string} tikz Sortie au format TikZ que l’on peut utiliser dans un fichier LaTeX

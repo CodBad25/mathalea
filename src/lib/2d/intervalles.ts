@@ -3,11 +3,12 @@ import { colorToLatexOrHTML } from './colorToLatexOrHtml'
 import { ObjetMathalea2D } from './ObjetMathalea2D'
 import { PointAbstrait, pointAbstrait } from './PointAbstrait'
 import { segment } from './segmentsVecteurs'
+import { bleuMathalea } from '../../lib/colors'
 
 export class CrochetD extends ObjetMathalea2D {
   A: PointAbstrait
   taille: number
-  constructor(A: PointAbstrait, color = 'blue') {
+  constructor(A: PointAbstrait, color = bleuMathalea) {
     super()
     this.epaisseur = 2
     this.color = colorToLatexOrHTML(color)
@@ -61,14 +62,14 @@ export class CrochetD extends ObjetMathalea2D {
   }
 }
 
-export function crochetD(A: PointAbstrait, color = 'blue') {
+export function crochetD(A: PointAbstrait, color = bleuMathalea) {
   return new CrochetD(A, color)
 }
 
 export class CrochetG extends ObjetMathalea2D {
   taille: number
   A: PointAbstrait
-  constructor(A: PointAbstrait, color = 'blue') {
+  constructor(A: PointAbstrait, color = bleuMathalea) {
     super()
     this.epaisseur = 2
     this.color = colorToLatexOrHTML(color)
@@ -122,14 +123,14 @@ export class CrochetG extends ObjetMathalea2D {
   }
 }
 
-export function crochetG(A: PointAbstrait, color = 'blue') {
+export function crochetG(A: PointAbstrait, color = bleuMathalea) {
   return new CrochetG(A, color)
 }
 
 export function intervalle(
   A: PointAbstrait,
   B: PointAbstrait,
-  color = 'blue',
+  color = bleuMathalea,
   h = 0,
 ) {
   const A1 = pointAbstrait(A.x, A.y + h)

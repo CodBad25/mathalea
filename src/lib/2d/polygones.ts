@@ -14,6 +14,7 @@ import { segment } from './segmentsVecteurs'
 import { texteParPoint } from './textes'
 import { longueur } from './utilitairesGeometriques'
 import { pointSurSegment } from './utilitairesPoint'
+import { bleuMathalea } from '../../lib/colors'
 
 type BinomeXY = { x: number; y: number }
 export type BinomesXY = BinomeXY[]
@@ -59,8 +60,8 @@ export function barycentre(p: IPolygone, nom = '', positionLabel = 'above') {
 */
 /**
  * polygone(A,B,C,D,E) //Trace ABCDE
- * polygone([A,B,C,D],"blue") // Trace ABCD en bleu
- * polygone([A,B,C,D],"blue","red","green") // Trace ABCD en bleu, rempli en rouge et hachuré en vert.
+ * polygone([A,B,C,D],"red", bleuMathalea) // Trace ABCD en bleu
+ * polygone([A,B,C,D],"red", bleuMathalea,"red","green") // Trace ABCD en bleu, rempli en rouge et hachuré en vert.
  * @property {Point[]} listePoints
  * @property {string[]} color
  * @property {string[]} couleurDeRemplissage
@@ -378,7 +379,7 @@ export class Polygone extends ObjetMathalea2D {
  * Propriétés possibles : .color, .opacite, .epaisseur, .couleurDeRemplissage, .opaciteDeRemplissage, .hachures (un string correspondant à l'un des motifs de pattern), .distanceDesHachures, .epaisseurDesHachures,.couleurDesHachures
  * @return {Polygone} objet Polygone
  * @example polygone(A,B,C,D,E) //Trace ABCDE
- * @example polygone([A,B,C,D],"blue") // Trace ABCD en bleu
+ * @example polygone([A,B,C,D],bleuMathalea) // Trace ABCD en bleu
  * @example polygone([A,B,C,D],orangeMathalea) // Trace ABCD en orange (orangeMathalea)
  * @property {PointAbstrait[]} listePoints
  * @property {string[]} color
@@ -503,7 +504,7 @@ export class PolygoneATrous extends ObjetMathalea2D {
     holes = [],
     noms = '',
     color = 'black',
-    couleurDeRemplissage = 'blue',
+    couleurDeRemplissage = bleuMathalea,
     couleurDeFond = 'white',
   }) {
     super()
@@ -626,7 +627,7 @@ export class PolygoneATrous extends ObjetMathalea2D {
  * @param {number[]}  [holes = []] tableau à une seule dimension contenant les indices des points qui démarrent un 'trou' dans le tableau data (exemple : holes = [4, 8] indique que les points 4 à 7 définissent un trou ainsi que 8 et suivants, donc les coordonnées 8 à 15 et 16 à ...(ne pas oublier que 1 point = 2 coordonnées))
  * @param {string} [noms = ''] contient les noms des sommets
  * @param {string} [color = 'black'] est la couleur des bords
- * @param {string} [couleurDeRemplissage = 'blue'] est la couleur de la surface
+ * @param {string} [couleurDeRemplissage = bleuMathalea] est la couleur de la surface
  * @param {string} [couleurDeFond = 'white'] est la couleur de remplissage des trous
  * @return {PolygoneaTrou} un polygone à trous (ou pas : il peut ne pas y avoir de trou !)
  */
@@ -635,7 +636,7 @@ export function polygoneATrous({
   holes = [],
   noms = '',
   color = 'black',
-  couleurDeRemplissage = 'blue',
+  couleurDeRemplissage = bleuMathalea,
   couleurDeFond = 'white',
 }) {
   return new PolygoneATrous({

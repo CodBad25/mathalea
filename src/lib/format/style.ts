@@ -4,6 +4,7 @@
  * @author Rémi Angot
  */
 import Decimal from 'decimal.js'
+import { bleuMathalea, orangeMathalea } from '../../lib/colors'
 import { context } from '../../modules/context'
 import { choice } from '../outils/arrayOutils'
 import { texNombre } from '../outils/texNombre'
@@ -13,7 +14,7 @@ type Colors =
   | 'black'
   | 'red'
   | 'green'
-  | 'blue'
+  | typeof bleuMathalea
   | 'cyan'
   | 'magenta'
   | 'yellow'
@@ -22,7 +23,7 @@ const colors: Colors[] = [
   'black',
   'red',
   'green',
-  'blue',
+  bleuMathalea,
   'cyan',
   'magenta',
   'yellow',
@@ -45,7 +46,7 @@ export function couleurTab(choixCouleur = 999) {
     ['black', 'noir', 'noire'],
     ['red', 'rouge', 'rouge'],
     ['green', 'vert', 'verte'],
-    ['blue', 'bleu', 'bleue'],
+    [bleuMathalea, 'bleu', 'bleue'],
     ['HotPink', 'rose', 'rose'],
     ['Sienna', 'marron', 'marron'],
     ['darkgray', 'gris', 'grise'],
@@ -61,16 +62,32 @@ export function couleurTab(choixCouleur = 999) {
 export function arcenciel(i: number, fondblanc = true) {
   let couleurs
   if (fondblanc)
-    couleurs = ['violet', 'purple', 'blue', 'green', 'lime', '#f15929', 'red']
+    couleurs = [
+      'violet',
+      'purple',
+      bleuMathalea,
+      'green',
+      'lime',
+      orangeMathalea,
+      'red',
+    ]
   else
-    couleurs = ['violet', 'indigo', 'blue', 'green', 'yellow', '#f15929', 'red']
+    couleurs = [
+      'violet',
+      'indigo',
+      bleuMathalea,
+      'green',
+      'yellow',
+      orangeMathalea,
+      'red',
+    ]
   return couleurs[i % 7]
 }
 
 export function texcolors(i: number, fondblanc = true) {
   const couleurs = [
     'black',
-    'blue',
+    bleuMathalea,
     'GreenYellow',
     'brown',
     'LightSlateBlue',

@@ -13,7 +13,7 @@ import { segment } from './segmentsVecteurs'
 /**
  * tracePoint(A) // Place une croix à l'emplacement du point A
  * tracePoint(A,B,C,D) // Place une croix pour les différents points
- * tracePoint(A,B,C,D,'blue') // Place une croix pour les différents points
+ * tracePoint(A,B,C,D,'red', bleuMathalea) // Place une croix pour les différents points
  * Après coup, on peut notamment changer l'épaissseur, le style et l'opacité du point par :
  * pt = tracePoint(A)
  * pt.epaisseur = 5 (par défaut : 1)

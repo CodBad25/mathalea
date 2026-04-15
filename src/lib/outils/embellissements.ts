@@ -3,6 +3,7 @@ import type { IFractionEtendue } from '../../modules/FractionEtendue.type'
 import { orangeMathalea } from '../colors'
 import { Complexe } from '../mathFonctions/Complexe'
 import { choice } from './arrayOutils'
+import { bleuMathalea } from '../../lib/colors'
 
 // Garde structurel pour détecter une FractionEtendue
 const isFractionEtendue = (x: unknown): x is IFractionEtendue =>
@@ -243,7 +244,7 @@ export function couleurAleatoire() {
     'black',
     'red',
     'green',
-    'blue',
+    bleuMathalea,
     'cyan',
     'magenta',
     'yellow',
@@ -263,7 +264,7 @@ export function couleurTab(choixCouleur = 999) {
     ['black', 'noir', 'noire'],
     ['red', 'rouge', 'rouge'],
     ['green', 'vert', 'verte'],
-    ['blue', 'bleu', 'bleue'],
+    [bleuMathalea, 'bleu', 'bleue'],
     ['HotPink', 'rose', 'rose'],
     ['Sienna', 'marron', 'marron'],
     ['darkgray', 'gris', 'grise'],
@@ -282,7 +283,7 @@ export function arcenciel(i: number, fondblanc = true) {
     couleurs = [
       'violet',
       'purple',
-      'blue',
+      bleuMathalea,
       'green',
       'lime',
       orangeMathalea,
@@ -292,7 +293,7 @@ export function arcenciel(i: number, fondblanc = true) {
     couleurs = [
       'violet',
       'indigo',
-      'blue',
+      bleuMathalea,
       'green',
       'yellow',
       orangeMathalea,
@@ -304,7 +305,7 @@ export function arcenciel(i: number, fondblanc = true) {
 export function texcolors(i: number, fondblanc = true) {
   const couleurs = [
     'black',
-    'blue',
+    bleuMathalea,
     'brown',
     'green',
     'cyan',

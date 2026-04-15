@@ -2,6 +2,7 @@ import { choice } from '../../outils/arrayOutils'
 import { Figure2D } from '../Figures2D'
 import { point } from '../PointAbstrait'
 import { Segment, segment } from '../segmentsVecteurs'
+import { bleuMathalea } from '../../../lib/colors'
 /**
  * @author Jean-claude Lhote
  * @param nx nombre de studs en x
@@ -25,7 +26,7 @@ export function briqueLego(options?: {
     ny = 1
   }
   const color = choice([
-    'blue',
+    bleuMathalea,
     'brown',
     'green',
     'cyan',

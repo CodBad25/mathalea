@@ -1,6 +1,7 @@
 import { Figure2D } from '../Figures2D'
 import { point } from '../PointAbstrait'
 import { segment } from '../segmentsVecteurs'
+import { bleuMathalea } from '../../../lib/colors'
 
 /**
  * Génère une figure représentant une étoile à 5 branches.
@@ -81,7 +82,7 @@ export function pentagoneRegulier(options?: {
   opacite?: number // Opacité de la figure (par défaut 1)
 }): Figure2D {
   // Options par défaut
-  const fillStyle = options?.fillStyle || 'blue'
+  const fillStyle = options?.fillStyle || bleuMathalea
   const strokeStyle = options?.strokeStyle || 'black'
   const lineWidth = options?.lineWidth || 1
   const rayon = options?.rayon || 2
@@ -1083,7 +1084,7 @@ export function triangleIsocele(options?: {
   opacite?: number // Opacité de la figure (par défaut 1)
 }): Figure2D {
   // Options par défaut
-  const fillStyle = options?.fillStyle || 'blue'
+  const fillStyle = options?.fillStyle || bleuMathalea
   const strokeStyle = options?.strokeStyle || 'black'
   const lineWidth = options?.lineWidth || 1
   const base = options?.base || 2
@@ -1140,7 +1141,7 @@ export function triangleEquilateral(options?: {
   opacite?: number // Opacité de la figure (par défaut 1)
 }): Figure2D {
   // Options par défaut
-  const fillStyle = options?.fillStyle || 'blue'
+  const fillStyle = options?.fillStyle || bleuMathalea
   const strokeStyle = options?.strokeStyle || 'black'
   const lineWidth = options?.lineWidth || 1
   const base = options?.base || 2

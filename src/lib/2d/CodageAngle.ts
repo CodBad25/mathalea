@@ -18,10 +18,10 @@ import { pointSurSegment } from './utilitairesPoint'
  * @param {number|Point} angle Mesure de l'angle ou nom d'un point sur l'autre côté de l'angle
  * @param {number} [taille=0.8] Taille de l'angle
  * @param {string} [mark=''] Marque sur l'angle
- * @param {string} [color='black'] Couleur de l'angle : du type 'blue' ou du type '#f15929'
+ * @param {string} [color='black'] Couleur de l'angle : du type 'red', bleuMathalea ou du type '#a12345'
  * @param {number} [epaisseur=1] Epaisseur du tracé de l'angle
  * @param {number} [opacite=1] Opacité de la couleur du tracé de l'angle
- * @param {string} [couleurDeRemplissage='none'] 'none' si on ne veut pas de remplissage, sinon une couleur du type 'blue' ou du type '#f15929'
+ * @param {string} [couleurDeRemplissage='none'] 'none' si on ne veut pas de remplissage, sinon une couleur du type 'red', bleuMathalea ou du type '#a12345'
  * @param {number} [opaciteDeRemplissage=0.2] Opacité de la couleur de remplissage de l'angle
  * @param {boolean} [mesureOn=false] Affichage de la mesure de l'angle
  * @param {boolean} [noAngleDroit=false] Pour choisir si on veut que l'angle droit soit marqué par un carré ou pas
