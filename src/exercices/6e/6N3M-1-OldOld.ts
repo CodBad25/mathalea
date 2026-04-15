@@ -39,7 +39,7 @@ export const refs = {
   'fr-fr': [],
   'fr-ch': [],
 }
-export default class FractionDuneQuantite extends Exercice {
+export default class FractionDuneQuantiteOldOld extends Exercice {
   constructor() {
     super()
     this.besoinFormulaireNumerique = [
