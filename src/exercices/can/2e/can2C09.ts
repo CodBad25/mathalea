@@ -18,6 +18,7 @@ import { fraction } from '../../../modules/fractions'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
+import { orangeMathalea } from '../../../lib/colors'
 
 export const titre = 'Calculer le "milieu" entre 1 et une fraction'
 export const interactifReady = true
@@ -129,7 +130,7 @@ export default class MilieuEntre1EtFraction extends ExerciceSimple {
     $x_I=\\dfrac{1+${bonneFraction.texFraction}}{2}=
     \\dfrac{${un.texFraction}+${bonneFraction.texFraction}}{2}=
         ${unPlusBonneFraction.texFraction}\\times ${half.texFraction}=
-        ${pgcd(d + n, 2 * d) === 1 ? `${miseEnEvidence(resultat.texFraction)}` : `${resultat.texFraction}`} ${resultat.texSimplificationAvecEtapes(false, '#f15929')}$ <br><br>`
+        ${pgcd(d + n, 2 * d) === 1 ? `${miseEnEvidence(resultat.texFraction)}` : `${resultat.texFraction}`} ${resultat.texSimplificationAvecEtapes(false, orangeMathalea)}$ <br><br>`
     this.correction += texteEnCouleur(` Mentalement : <br>
         On calcule d'abord $1+${bonneFraction.texFraction}$ en n'oubliant pas que $1=${un.texFraction}$, puis on multiplie le résultat par $${half.texFraction}$.`)
 

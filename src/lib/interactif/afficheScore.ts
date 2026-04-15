@@ -1,4 +1,5 @@
 import type { IExercice, ResultOfExerciceInteractif } from '../../lib/types'
+import { orangeMathalea } from '../../lib/colors'
 
 export function afficheScore(
   exercice: IExercice,
@@ -16,7 +17,7 @@ export function afficheScore(
   }
   if (divScore != null) {
     divScore.innerHTML = `${nbBonnesReponses} / ${nbBonnesReponses + nbMauvaisesReponses}`
-    divScore.style.color = '#f15929'
+    divScore.style.color = orangeMathalea
     divScore.style.fontWeight = 'bold'
     divScore.style.fontSize = 'x-large'
     divScore.style.display = 'inline'

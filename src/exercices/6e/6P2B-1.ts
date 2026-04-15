@@ -19,6 +19,7 @@ import FractionEtendue from '../../modules/FractionEtendue'
 import { context } from '../../modules/context'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { orangeMathalea } from '../../lib/colors'
 
 export const titre =
   'Calculer des probabilités dans une expérience aléatoire à une épreuve'
@@ -198,7 +199,7 @@ export default class FonctionsProbabilite6e extends Exercice {
               (this.niveau === 5
                 ? `: $${new FractionEtendue(n[p] + n[m], somme).estIrreductible ? miseEnEvidence(reponseValue) : reponseValue}${simplificationDeFractionAvecEtapes(n[p] + n[m], somme, { couleur1: bleuMathalea, couleur2: orangeMathalea })}$.<br>`
                 : `donc de ${n[p] + n[m]} chances sur ${somme}, ce qui s'écrit aussi : $${miseEnEvidence(reponseValue)}$.<br>`)
-            : ` La probabilité d'un événement est la somme des probabilités des issues qui le composent. Donc la probabilité que son choix tombe sur l'${article} des ${objets} ${qualites[index1][m]} ou ${qualites[index1][p]} est :<br> $${texFractionFromString(n[m], somme)}+${texFractionFromString(n[p], somme)}=${texFractionFromString(n[p] + n[m], somme)}${simplificationDeFractionAvecEtapes(n[p] + n[m], somme, { couleur1: 'blue', couleur2: '#f15929' })}$.<br>`)
+            : ` La probabilité d'un événement est la somme des probabilités des issues qui le composent. Donc la probabilité que son choix tombe sur l'${article} des ${objets} ${qualites[index1][m]} ou ${qualites[index1][p]} est :<br> $${texFractionFromString(n[m], somme)}+${texFractionFromString(n[p], somme)}=${texFractionFromString(n[p] + n[m], somme)}${simplificationDeFractionAvecEtapes(n[p] + n[m], somme, { couleur1: 'blue', couleur2: orangeMathalea })}$.<br>`)
       } else {
         texte += ` ${personne.Pronom} regarde ${natureDeLIssue[index1]}.<br>`
 

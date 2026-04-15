@@ -9,6 +9,7 @@ import { mathalea2d } from '../../../modules/mathalea2d'
 import ExerciceSimple from '../../ExerciceSimple'
 
 import { fractionCliquable } from '../../../modules/2dinteractif'
+import { orangeMathalea } from '../../../lib/colors'
 export const titre = 'Résoudre un problème de reste en fraction'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -100,7 +101,7 @@ export default class ProblemeResteFraction extends ExerciceSimple {
     Elle a déjà parcouru $${f1.texFraction}$ de la distance. <br>
     Quelle fraction de la distance lui reste-t-il à parcourir ?`
 
-      this.correction = `Comme $\\dfrac{${d1}}{${d1}}-${!context.isHtml ? `${miseEnEvidence(f1.texFraction, 'lightgray')}` : `${miseEnEvidence(f1.texFraction, '#f15929')}`}=${!context.isHtml ? `${miseEnEvidence(f2.texFraction, 'gray')}` : `${miseEnEvidence(f2.texFraction, '#1DA962')}`}$, il lui reste à parcourir $${miseEnEvidence(`\\dfrac{${d1 - n1}}{${d1}}`)}$ de la distance.`
+      this.correction = `Comme $\\dfrac{${d1}}{${d1}}-${!context.isHtml ? `${miseEnEvidence(f1.texFraction, 'lightgray')}` : `${miseEnEvidence(f1.texFraction, orangeMathalea)}`}=${!context.isHtml ? `${miseEnEvidence(f2.texFraction, 'gray')}` : `${miseEnEvidence(f2.texFraction, '#1DA962')}`}$, il lui reste à parcourir $${miseEnEvidence(`\\dfrac{${d1 - n1}}{${d1}}`)}$ de la distance.`
       this.correction +=
         '<br>' +
         mathalea2d(
@@ -111,7 +112,7 @@ export default class ProblemeResteFraction extends ExerciceSimple {
       this.question = `${p1} et ${p2} participent à une course à pied en relais. <br>
     ${p1} a déjà parcouru $${f1.texFraction}$ de la distance. ${p2} réalise le reste de la distance. <br>
     Quelle fraction de la distance lui reste-t-il à parcourir ?`
-      this.correction = `Comme $\\dfrac{${d1}}{${d1}}-${!context.isHtml ? `${miseEnEvidence(f1.texFraction, 'lightgray')}` : `${miseEnEvidence(f1.texFraction, '#f15929')}`}=${!context.isHtml ? `${miseEnEvidence(f2.texFraction, 'gray')}` : `${miseEnEvidence(f2.texFraction, '#1DA962')}`}$, il lui reste à parcourir $${miseEnEvidence(`\\dfrac{${d1 - n1}}{${d1}}`)}$ de la distance.`
+      this.correction = `Comme $\\dfrac{${d1}}{${d1}}-${!context.isHtml ? `${miseEnEvidence(f1.texFraction, 'lightgray')}` : `${miseEnEvidence(f1.texFraction, orangeMathalea)}`}=${!context.isHtml ? `${miseEnEvidence(f2.texFraction, 'gray')}` : `${miseEnEvidence(f2.texFraction, '#1DA962')}`}$, il lui reste à parcourir $${miseEnEvidence(`\\dfrac{${d1 - n1}}{${d1}}`)}$ de la distance.`
       this.correction +=
         '<br>' +
         mathalea2d(

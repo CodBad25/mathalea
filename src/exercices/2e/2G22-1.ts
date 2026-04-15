@@ -1,5 +1,4 @@
 import Figure from 'apigeom'
-import { orangeMathalea } from 'apigeom/src/elements/defaultValues'
 import type VectorByPoints from 'apigeom/src/elements/vector/VectorByPoints'
 import { colorToLatexOrHTML } from '../../lib/2d/colorToLatexOrHtml'
 import { nomVecteurParPosition } from '../../lib/2d/NomVecteurParPosition'
@@ -20,6 +19,7 @@ import { homothetie } from '../../lib/2d/transformations'
 import { longueur } from '../../lib/2d/utilitairesGeometriques'
 import { milieu } from '../../lib/2d/utilitairesPoint'
 import { vecteur } from '../../lib/2d/Vecteur'
+import { orangeMathalea } from '../../lib/colors'
 import figureApigeom, { isFigureArray } from '../../lib/figureApigeom'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import {

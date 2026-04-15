@@ -14,6 +14,7 @@ import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { gestionnaireFormulaireTexte, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { orangeMathalea } from '../../lib/colors'
 
 export const titre = 'Calculer dans un triangle équilatéral (longueur, aire)'
 export const dateDePublication = '12/12/2025'
@@ -125,7 +126,7 @@ function calculeAire(
     nomPied,
   )
   const correction = `Tout d'abord calculons la hauteur issue de $${nomTriangle[2]}$ dans le triangle $${nomTriangle}$ :<br>
-  ${calculeLaHauteur.replace(`${context.isHtml ? '#f15929' : 'f15929'}`, '000000')}<br>
+  ${calculeLaHauteur.replace(`${context.isHtml ? orangeMathalea : 'f15929'}`, '000000')}<br>
   L'aire d'un triangle est donnée par la formule $\\dfrac{\\mathcal{B}\\times h}{2}$.<br>
   Donc, l'aire du triangle $${nomTriangle}$ est :<br>
   $\\dfrac{${texNombre(cote, 0)}\\times \\sqrt{${texNombre((3 * cote * cote) / 4, 2)}}}{2}${

@@ -1,4 +1,4 @@
-import { orangeMathalea } from 'apigeom/src/elements/defaultValues'
+import { orangeMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -13,7 +13,8 @@ import {
 } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-export const titre = 'Effectuer des calculs simples avec un nombre entier et une fraction'
+export const titre =
+  'Effectuer des calculs simples avec un nombre entier et une fraction'
 export const interactifType = 'mathLive'
 export const interactifReady = true
 export const dateDePublication = '11/02/2026'
@@ -51,8 +52,8 @@ export default class CalculsSimplesEntiersFractions extends Exercice {
   nouvelleVersion() {
     this.consigne =
       this.nbQuestions > 1
-        ? 'Effectuer les calculs suivants en donnant le résultat sous forme d\'une fraction.'
-        : 'Effectuer le calcul suivant en donnant le résultat sous forme d\'une fraction.'
+        ? "Effectuer les calculs suivants en donnant le résultat sous forme d'une fraction."
+        : "Effectuer le calcul suivant en donnant le résultat sous forme d'une fraction."
 
     const typeQuestionsPossibles = [
       'prodEntierFraction',
@@ -73,7 +74,7 @@ export default class CalculsSimplesEntiersFractions extends Exercice {
       this.nbQuestions,
     )
 
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50;) {
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
       const fractionsDisponibles = [
         [1, 3],
         [2, 3],

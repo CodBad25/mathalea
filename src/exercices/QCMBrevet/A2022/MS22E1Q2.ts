@@ -1,8 +1,8 @@
-import ExerciceQcmA from '../../ExerciceQcmA'
-import { nombreElementsDifferents } from '../../ExerciceQcm'
-import FractionEtendue from '../../../modules/FractionEtendue'
-import { orangeMathalea } from 'apigeom/src/elements/defaultValues'
+import { orangeMathalea } from '../../../lib/colors'
 import { choice } from '../../../lib/outils/arrayOutils'
+import FractionEtendue from '../../../modules/FractionEtendue'
+import { nombreElementsDifferents } from '../../ExerciceQcm'
+import ExerciceQcmA from '../../ExerciceQcmA'
 
 export const uuid = '3337c'
 export const refs = {

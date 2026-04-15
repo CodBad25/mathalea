@@ -51,6 +51,7 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { orangeMathalea } from '../../lib/colors'
 
 export const dateDeModifImportante = '11/04/2025'
 export const interactifReady = true
@@ -298,7 +299,7 @@ export default class Transformations extends Exercice {
         traceAnt.opacite = 1
         traceIm.opacite = 1
         traceIm.epaisseur = 2
-        traceIm.color = colorToLatexOrHTML('#f15929')
+        traceIm.color = colorToLatexOrHTML(orangeMathalea)
         traceO = tracePoint(O)
         traceO.epaisseur = 2
         traceO.opacite = 1
@@ -380,7 +381,7 @@ export default class Transformations extends Exercice {
                 punto[i][0] - 4.2,
                 punto[i][1] - 4.2,
                 0,
-                '#f15929',
+                orangeMathalea,
                 1,
                 'milieu',
                 false,
@@ -472,7 +473,7 @@ export default class Transformations extends Exercice {
                 punto[i][0] - 4.2,
                 punto[i][1] - 4.2,
                 0,
-                '#f15929',
+                orangeMathalea,
                 1,
                 'milieu',
                 false,
@@ -563,7 +564,7 @@ export default class Transformations extends Exercice {
                 punto[i][0] - 4.2,
                 punto[i][1] - 4.2,
                 0,
-                '#f15929',
+                orangeMathalea,
                 1,
                 'milieu',
                 false,
@@ -634,7 +635,7 @@ export default class Transformations extends Exercice {
                       M[i],
                       milieu(M[i], N[i]),
                       pointSurDroite(d4, 15, ''),
-                      '#f15929',
+                      orangeMathalea,
                       0.4,
                       1,
                     ),
@@ -655,7 +656,7 @@ export default class Transformations extends Exercice {
                 punto[i][0] - 4.2,
                 punto[i][1] - 4.2,
                 0,
-                '#f15929',
+                orangeMathalea,
                 1,
                 'milieu',
                 false,
@@ -709,7 +710,7 @@ export default class Transformations extends Exercice {
                 punto[i][0] - 4.2,
                 punto[i][1] - 4.2,
                 0,
-                '#f15929',
+                orangeMathalea,
                 1,
                 'milieu',
                 false,
@@ -764,7 +765,7 @@ export default class Transformations extends Exercice {
                 punto[i][0] - 4.2,
                 punto[i][1] - 4.2,
                 0,
-                '#f15929',
+                orangeMathalea,
                 1,
                 'milieu',
                 false,
@@ -816,7 +817,7 @@ export default class Transformations extends Exercice {
                 punto[i][0] - 4.2,
                 punto[i][1] - 4.2,
                 0,
-                '#f15929',
+                orangeMathalea,
                 1,
                 'milieu',
                 false,
@@ -914,7 +915,7 @@ export default class Transformations extends Exercice {
                 punto[i][0] - 4.2,
                 punto[i][1] - 4.2,
                 0,
-                '#f15929',
+                orangeMathalea,
                 1,
                 'milieu',
                 false,
@@ -961,7 +962,7 @@ export default class Transformations extends Exercice {
                 punto[i][0] - 4.2,
                 punto[i][1] - 4.2,
                 0,
-                '#f15929',
+                orangeMathalea,
                 1,
                 'milieu',
                 false,
@@ -1017,7 +1018,7 @@ export default class Transformations extends Exercice {
                 punto[i][0] - 4.2,
                 punto[i][1] - 4.2,
                 0,
-                '#f15929',
+                orangeMathalea,
                 1,
                 'milieu',
                 false,

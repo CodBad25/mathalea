@@ -1,4 +1,4 @@
-import { orangeMathalea } from 'apigeom/src/elements/defaultValues'
+import { orangeMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -124,7 +124,9 @@ export default class QuatreOperationsDecimaux extends Exercice {
                 solution: true,
               },
             }) +
-            sp(10)+ 'ou' + sp(10) +
+            sp(10) +
+            'ou' +
+            sp(10) +
             operation({
               operande1: op1,
               operande2: op2,
@@ -150,7 +152,9 @@ export default class QuatreOperationsDecimaux extends Exercice {
               style: 'display: inline-block',
               options: { solution: true, colore: orangeMathalea },
             }) +
-            sp(10) + 'ou' + sp(10) +
+            sp(10) +
+            'ou' +
+            sp(10) +
             operation({
               operande1: b,
               operande2: a,
@@ -184,9 +188,7 @@ export default class QuatreOperationsDecimaux extends Exercice {
           ),
         )
         .filter(
-          (
-            operationDisponible,
-          ): operationDisponible is OperationDisponible =>
+          (operationDisponible): operationDisponible is OperationDisponible =>
             operationDisponible !== undefined,
         )
 

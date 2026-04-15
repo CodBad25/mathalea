@@ -3,6 +3,7 @@ import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import FractionEtendue from '../../../modules/FractionEtendue'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { orangeMathalea } from '../../../lib/colors'
 
 export const titre = 'Rendre une fraction irréductible'
 export const interactifReady = true
@@ -63,7 +64,7 @@ export default class MultiplicationFractions extends ExerciceSimple {
       this.reponse = f1.produitFraction(f2).simplifie().texFraction
       this.question = `Écrire sous forme d'une fraction irréductible $${f1.texFraction}\\times ${f2.texFraction}$.`
 
-      this.correction = `$${f1.texFraction}\\times ${f2.texFraction}${frac.texSimplificationAvecEtapes(false, '#f15929')}$`
+      this.correction = `$${f1.texFraction}\\times ${f2.texFraction}${frac.texSimplificationAvecEtapes(false, orangeMathalea)}$`
       this.canEnonce = `Écrire sous forme d'une fraction irréductible <br> \\vspace{0.2cm} $${f1.texFraction}\\times ${f2.texFraction}$.`
     }
     if (this.interactif) {

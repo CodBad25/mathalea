@@ -20,6 +20,7 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { orangeMathalea } from '../../lib/colors'
 
 export const dateDeModifImportante = '07/06/2023' // par EE : QCM interactif, nouveau paramètre, couleur appropriée dans la correction, AMC
 
@@ -543,55 +544,55 @@ export default class Solide6e extends Exercice {
               AB.color =
                 l === 0
                   ? colorToLatexOrHTML('blue')
-                  : colorToLatexOrHTML('#f15929')
+                  : colorToLatexOrHTML(orangeMathalea)
               CD.color =
                 l === 1
                   ? colorToLatexOrHTML('blue')
-                  : colorToLatexOrHTML('#f15929')
+                  : colorToLatexOrHTML(orangeMathalea)
               EF.color =
                 l === 2
                   ? colorToLatexOrHTML('blue')
-                  : colorToLatexOrHTML('#f15929')
+                  : colorToLatexOrHTML(orangeMathalea)
               GH.color =
                 l === 3
                   ? colorToLatexOrHTML('blue')
-                  : colorToLatexOrHTML('#f15929')
+                  : colorToLatexOrHTML(orangeMathalea)
               break
             case 1:
               BC.color =
                 l === 1
                   ? colorToLatexOrHTML('blue')
-                  : colorToLatexOrHTML('#f15929')
+                  : colorToLatexOrHTML(orangeMathalea)
               DA.color =
                 l === 0
                   ? colorToLatexOrHTML('blue')
-                  : colorToLatexOrHTML('#f15929')
+                  : colorToLatexOrHTML(orangeMathalea)
               FG.color =
                 l === 3
                   ? colorToLatexOrHTML('blue')
-                  : colorToLatexOrHTML('#f15929')
+                  : colorToLatexOrHTML(orangeMathalea)
               HE.color =
                 l === 2
                   ? colorToLatexOrHTML('blue')
-                  : colorToLatexOrHTML('#f15929')
+                  : colorToLatexOrHTML(orangeMathalea)
               break
             case 2:
               BF.color =
                 l === 1
                   ? colorToLatexOrHTML('blue')
-                  : colorToLatexOrHTML('#f15929')
+                  : colorToLatexOrHTML(orangeMathalea)
               CG.color =
                 l === 2
                   ? colorToLatexOrHTML('blue')
-                  : colorToLatexOrHTML('#f15929')
+                  : colorToLatexOrHTML(orangeMathalea)
               DH.color =
                 l === 3
                   ? colorToLatexOrHTML('blue')
-                  : colorToLatexOrHTML('#f15929')
+                  : colorToLatexOrHTML(orangeMathalea)
               AE.color =
                 l === 0
                   ? colorToLatexOrHTML('blue')
-                  : colorToLatexOrHTML('#f15929')
+                  : colorToLatexOrHTML(orangeMathalea)
               break
           }
           break
@@ -600,103 +601,103 @@ export default class Solide6e extends Exercice {
             case 0:
               AB.color =
                 l !== 0
-                  ? colorToLatexOrHTML('#f15929')
+                  ? colorToLatexOrHTML(orangeMathalea)
                   : colorToLatexOrHTML('blue')
               BC.color =
                 l !== 0
-                  ? colorToLatexOrHTML('#f15929')
+                  ? colorToLatexOrHTML(orangeMathalea)
                   : colorToLatexOrHTML('blue')
               CD.color =
                 l !== 0
-                  ? colorToLatexOrHTML('#f15929')
+                  ? colorToLatexOrHTML(orangeMathalea)
                   : colorToLatexOrHTML('blue')
               DA.color =
                 l !== 0
-                  ? colorToLatexOrHTML('#f15929')
+                  ? colorToLatexOrHTML(orangeMathalea)
                   : colorToLatexOrHTML('blue')
               EF.color =
                 l === 0
-                  ? colorToLatexOrHTML('#f15929')
+                  ? colorToLatexOrHTML(orangeMathalea)
                   : colorToLatexOrHTML('blue')
               FG.color =
                 l === 0
-                  ? colorToLatexOrHTML('#f15929')
+                  ? colorToLatexOrHTML(orangeMathalea)
                   : colorToLatexOrHTML('blue')
               GH.color =
                 l === 0
-                  ? colorToLatexOrHTML('#f15929')
+                  ? colorToLatexOrHTML(orangeMathalea)
                   : colorToLatexOrHTML('blue')
               HE.color =
                 l === 0
-                  ? colorToLatexOrHTML('#f15929')
+                  ? colorToLatexOrHTML(orangeMathalea)
                   : colorToLatexOrHTML('blue')
               break
             case 1:
               DH.color =
                 l !== 0
-                  ? colorToLatexOrHTML('#f15929')
+                  ? colorToLatexOrHTML(orangeMathalea)
                   : colorToLatexOrHTML('blue')
               HE.color =
                 l !== 0
-                  ? colorToLatexOrHTML('#f15929')
+                  ? colorToLatexOrHTML(orangeMathalea)
                   : colorToLatexOrHTML('blue')
               AE.color =
                 l !== 0
-                  ? colorToLatexOrHTML('#f15929')
+                  ? colorToLatexOrHTML(orangeMathalea)
                   : colorToLatexOrHTML('blue')
               DA.color =
                 l !== 0
-                  ? colorToLatexOrHTML('#f15929')
+                  ? colorToLatexOrHTML(orangeMathalea)
                   : colorToLatexOrHTML('blue')
               BF.color =
                 l === 0
-                  ? colorToLatexOrHTML('#f15929')
+                  ? colorToLatexOrHTML(orangeMathalea)
                   : colorToLatexOrHTML('blue')
               FG.color =
                 l === 0
-                  ? colorToLatexOrHTML('#f15929')
+                  ? colorToLatexOrHTML(orangeMathalea)
                   : colorToLatexOrHTML('blue')
               CG.color =
                 l === 0
-                  ? colorToLatexOrHTML('#f15929')
+                  ? colorToLatexOrHTML(orangeMathalea)
                   : colorToLatexOrHTML('blue')
               BC.color =
                 l === 0
-                  ? colorToLatexOrHTML('#f15929')
+                  ? colorToLatexOrHTML(orangeMathalea)
                   : colorToLatexOrHTML('blue')
               break
             case 2:
               AB.color =
                 l !== 0
-                  ? colorToLatexOrHTML('#f15929')
+                  ? colorToLatexOrHTML(orangeMathalea)
                   : colorToLatexOrHTML('blue')
               BF.color =
                 l !== 0
-                  ? colorToLatexOrHTML('#f15929')
+                  ? colorToLatexOrHTML(orangeMathalea)
                   : colorToLatexOrHTML('blue')
               EF.color =
                 l !== 0
-                  ? colorToLatexOrHTML('#f15929')
+                  ? colorToLatexOrHTML(orangeMathalea)
                   : colorToLatexOrHTML('blue')
               AE.color =
                 l !== 0
-                  ? colorToLatexOrHTML('#f15929')
+                  ? colorToLatexOrHTML(orangeMathalea)
                   : colorToLatexOrHTML('blue')
               CG.color =
                 l === 0
-                  ? colorToLatexOrHTML('#f15929')
+                  ? colorToLatexOrHTML(orangeMathalea)
                   : colorToLatexOrHTML('blue')
               GH.color =
                 l === 0
-                  ? colorToLatexOrHTML('#f15929')
+                  ? colorToLatexOrHTML(orangeMathalea)
                   : colorToLatexOrHTML('blue')
               DH.color =
                 l === 0
-                  ? colorToLatexOrHTML('#f15929')
+                  ? colorToLatexOrHTML(orangeMathalea)
                   : colorToLatexOrHTML('blue')
               CD.color =
                 l === 0
-                  ? colorToLatexOrHTML('#f15929')
+                  ? colorToLatexOrHTML(orangeMathalea)
                   : colorToLatexOrHTML('blue')
               break
           }
@@ -705,103 +706,103 @@ export default class Solide6e extends Exercice {
           switch (k) {
             case 0:
               AB.color = colorToLatexOrHTML('blue')
-              AE.color = colorToLatexOrHTML('#f15929')
-              DA.color = colorToLatexOrHTML('#f15929')
-              BF.color = colorToLatexOrHTML('#f15929')
-              BC.color = colorToLatexOrHTML('#f15929')
+              AE.color = colorToLatexOrHTML(orangeMathalea)
+              DA.color = colorToLatexOrHTML(orangeMathalea)
+              BF.color = colorToLatexOrHTML(orangeMathalea)
+              BC.color = colorToLatexOrHTML(orangeMathalea)
               break
             case 1:
               AE.color = colorToLatexOrHTML('blue')
-              AB.color = colorToLatexOrHTML('#f15929')
-              DA.color = colorToLatexOrHTML('#f15929')
-              EF.color = colorToLatexOrHTML('#f15929')
-              HE.color = colorToLatexOrHTML('#f15929')
+              AB.color = colorToLatexOrHTML(orangeMathalea)
+              DA.color = colorToLatexOrHTML(orangeMathalea)
+              EF.color = colorToLatexOrHTML(orangeMathalea)
+              HE.color = colorToLatexOrHTML(orangeMathalea)
               break
             case 2:
               DA.color = colorToLatexOrHTML('blue')
-              AB.color = colorToLatexOrHTML('#f15929')
-              AE.color = colorToLatexOrHTML('#f15929')
-              CD.color = colorToLatexOrHTML('#f15929')
-              DH.color = colorToLatexOrHTML('#f15929')
+              AB.color = colorToLatexOrHTML(orangeMathalea)
+              AE.color = colorToLatexOrHTML(orangeMathalea)
+              CD.color = colorToLatexOrHTML(orangeMathalea)
+              DH.color = colorToLatexOrHTML(orangeMathalea)
               break
             case 3:
               BC.color = colorToLatexOrHTML('blue')
-              AB.color = colorToLatexOrHTML('#f15929')
-              BF.color = colorToLatexOrHTML('#f15929')
-              CD.color = colorToLatexOrHTML('#f15929')
-              CG.color = colorToLatexOrHTML('#f15929')
+              AB.color = colorToLatexOrHTML(orangeMathalea)
+              BF.color = colorToLatexOrHTML(orangeMathalea)
+              CD.color = colorToLatexOrHTML(orangeMathalea)
+              CG.color = colorToLatexOrHTML(orangeMathalea)
               break
             case 4:
               BF.color = colorToLatexOrHTML('blue')
-              AB.color = colorToLatexOrHTML('#f15929')
-              BC.color = colorToLatexOrHTML('#f15929')
-              EF.color = colorToLatexOrHTML('#f15929')
-              FG.color = colorToLatexOrHTML('#f15929')
+              AB.color = colorToLatexOrHTML(orangeMathalea)
+              BC.color = colorToLatexOrHTML(orangeMathalea)
+              EF.color = colorToLatexOrHTML(orangeMathalea)
+              FG.color = colorToLatexOrHTML(orangeMathalea)
               break
             case 5:
               EF.color = colorToLatexOrHTML('blue')
-              BF.color = colorToLatexOrHTML('#f15929')
-              FG.color = colorToLatexOrHTML('#f15929')
-              AE.color = colorToLatexOrHTML('#f15929')
-              HE.color = colorToLatexOrHTML('#f15929')
+              BF.color = colorToLatexOrHTML(orangeMathalea)
+              FG.color = colorToLatexOrHTML(orangeMathalea)
+              AE.color = colorToLatexOrHTML(orangeMathalea)
+              HE.color = colorToLatexOrHTML(orangeMathalea)
               break
             case 6:
               FG.color = colorToLatexOrHTML('blue')
-              BF.color = colorToLatexOrHTML('#f15929')
-              EF.color = colorToLatexOrHTML('#f15929')
-              CG.color = colorToLatexOrHTML('#f15929')
-              GH.color = colorToLatexOrHTML('#f15929')
+              BF.color = colorToLatexOrHTML(orangeMathalea)
+              EF.color = colorToLatexOrHTML(orangeMathalea)
+              CG.color = colorToLatexOrHTML(orangeMathalea)
+              GH.color = colorToLatexOrHTML(orangeMathalea)
               break
             case 7:
               CG.color = colorToLatexOrHTML('blue')
-              FG.color = colorToLatexOrHTML('#f15929')
-              GH.color = colorToLatexOrHTML('#f15929')
-              BC.color = colorToLatexOrHTML('#f15929')
-              CD.color = colorToLatexOrHTML('#f15929')
+              FG.color = colorToLatexOrHTML(orangeMathalea)
+              GH.color = colorToLatexOrHTML(orangeMathalea)
+              BC.color = colorToLatexOrHTML(orangeMathalea)
+              CD.color = colorToLatexOrHTML(orangeMathalea)
               break
             case 8:
               CD.color = colorToLatexOrHTML('blue')
-              BC.color = colorToLatexOrHTML('#f15929')
-              CG.color = colorToLatexOrHTML('#f15929')
-              DA.color = colorToLatexOrHTML('#f15929')
-              DH.color = colorToLatexOrHTML('#f15929')
+              BC.color = colorToLatexOrHTML(orangeMathalea)
+              CG.color = colorToLatexOrHTML(orangeMathalea)
+              DA.color = colorToLatexOrHTML(orangeMathalea)
+              DH.color = colorToLatexOrHTML(orangeMathalea)
               break
             case 9:
               DH.color = colorToLatexOrHTML('blue')
-              CD.color = colorToLatexOrHTML('#f15929')
-              DA.color = colorToLatexOrHTML('#f15929')
-              HE.color = colorToLatexOrHTML('#f15929')
-              GH.color = colorToLatexOrHTML('#f15929')
+              CD.color = colorToLatexOrHTML(orangeMathalea)
+              DA.color = colorToLatexOrHTML(orangeMathalea)
+              HE.color = colorToLatexOrHTML(orangeMathalea)
+              GH.color = colorToLatexOrHTML(orangeMathalea)
               break
             case 10:
               HE.color = colorToLatexOrHTML('blue')
-              AE.color = colorToLatexOrHTML('#f15929')
-              EF.color = colorToLatexOrHTML('#f15929')
-              DH.color = colorToLatexOrHTML('#f15929')
-              GH.color = colorToLatexOrHTML('#f15929')
+              AE.color = colorToLatexOrHTML(orangeMathalea)
+              EF.color = colorToLatexOrHTML(orangeMathalea)
+              DH.color = colorToLatexOrHTML(orangeMathalea)
+              GH.color = colorToLatexOrHTML(orangeMathalea)
               break
             case 11:
               GH.color = colorToLatexOrHTML('blue')
-              CG.color = colorToLatexOrHTML('#f15929')
-              FG.color = colorToLatexOrHTML('#f15929')
-              DH.color = colorToLatexOrHTML('#f15929')
-              HE.color = colorToLatexOrHTML('#f15929')
+              CG.color = colorToLatexOrHTML(orangeMathalea)
+              FG.color = colorToLatexOrHTML(orangeMathalea)
+              DH.color = colorToLatexOrHTML(orangeMathalea)
+              HE.color = colorToLatexOrHTML(orangeMathalea)
               break
           }
           break
         case 4:
-          AB.color = colorToLatexOrHTML('#f15929')
-          BC.color = colorToLatexOrHTML('#f15929')
-          CD.color = colorToLatexOrHTML('#f15929')
-          DA.color = colorToLatexOrHTML('#f15929')
-          EF.color = colorToLatexOrHTML('#f15929')
-          FG.color = colorToLatexOrHTML('#f15929')
-          GH.color = colorToLatexOrHTML('#f15929')
-          HE.color = colorToLatexOrHTML('#f15929')
-          AE.color = colorToLatexOrHTML('#f15929')
-          BF.color = colorToLatexOrHTML('#f15929')
-          CG.color = colorToLatexOrHTML('#f15929')
-          DH.color = colorToLatexOrHTML('#f15929')
+          AB.color = colorToLatexOrHTML(orangeMathalea)
+          BC.color = colorToLatexOrHTML(orangeMathalea)
+          CD.color = colorToLatexOrHTML(orangeMathalea)
+          DA.color = colorToLatexOrHTML(orangeMathalea)
+          EF.color = colorToLatexOrHTML(orangeMathalea)
+          FG.color = colorToLatexOrHTML(orangeMathalea)
+          GH.color = colorToLatexOrHTML(orangeMathalea)
+          HE.color = colorToLatexOrHTML(orangeMathalea)
+          AE.color = colorToLatexOrHTML(orangeMathalea)
+          BF.color = colorToLatexOrHTML(orangeMathalea)
+          CG.color = colorToLatexOrHTML(orangeMathalea)
+          DH.color = colorToLatexOrHTML(orangeMathalea)
           switch (k) {
             case 0:
               AB.color = colorToLatexOrHTML('blue')

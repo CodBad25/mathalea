@@ -1,4 +1,4 @@
-import { orangeMathalea } from 'apigeom/src/elements/defaultValues'
+import { orangeMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -219,21 +219,21 @@ export default class ExerciceAdditionsSoustractionRelatifsV2 extends Exercice {
           }
           texteCorr = `$ ${lettreDepuisChiffre(i + 1)} =  ${texNombre(a, 2)}${signe(s1)}${ecritureParentheseSiNegatif(b)}${signe(s2)}${ecritureParentheseSiNegatif(c)}${signe(s3)}${ecritureParentheseSiNegatif(d)}${signe(s4)}${ecritureParentheseSiNegatif(e)}$<br>`
           relatifs = triePositifsNegatifs([aa, bb, cc, dd, ee])
-          texteCorr += `$ ${lettreDepuisChiffre(i + 1)}=${texNombreCoul(aa, 'blue', '#f15929', 'black', 2)}${ecritureAlgebriquec(bb)}${ecritureAlgebriquec(cc)}${ecritureAlgebriquec(dd)}${ecritureAlgebriquec(ee)}$<br>`
+          texteCorr += `$ ${lettreDepuisChiffre(i + 1)}=${texNombreCoul(aa, 'blue', orangeMathalea, 'black', 2)}${ecritureAlgebriquec(bb)}${ecritureAlgebriquec(cc)}${ecritureAlgebriquec(dd)}${ecritureAlgebriquec(ee)}$<br>`
           texteCorr += `$ ${lettreDepuisChiffre(i + 1)}=$`
           if (
             sommeDesTermesParSigne([a, bb, cc, dd, ee])[0] !== 0 &&
             sommeDesTermesParSigne([a, bb, cc, dd, ee])[1] !== 0
           ) {
-            texteCorr += `$ ${texNombreCoul(relatifs[0], 'blue', '#f15929', 'black', 2)}${ecritureAlgebriquec(relatifs[1])}${ecritureAlgebriquec(relatifs[2])}${ecritureAlgebriquec(relatifs[3])}${ecritureAlgebriquec(relatifs[4])}$<br>`
+            texteCorr += `$ ${texNombreCoul(relatifs[0], 'blue', orangeMathalea, 'black', 2)}${ecritureAlgebriquec(relatifs[1])}${ecritureAlgebriquec(relatifs[2])}${ecritureAlgebriquec(relatifs[3])}${ecritureAlgebriquec(relatifs[4])}$<br>`
             texteCorr += `$ ${lettreDepuisChiffre(i + 1)}=$`
-            texteCorr += `$ ${texNombreCoul(sommeDesTermesParSigne([a, bb, cc, dd, ee])[0], 'blue', '#f15929', 'black', 2)}${ecritureAlgebriquec(sommeDesTermesParSigne([aa, bb, cc, dd, ee])[1])}$<br>`
+            texteCorr += `$ ${texNombreCoul(sommeDesTermesParSigne([a, bb, cc, dd, ee])[0], 'blue', orangeMathalea, 'black', 2)}${ecritureAlgebriquec(sommeDesTermesParSigne([aa, bb, cc, dd, ee])[1])}$<br>`
             texteCorr += `$ ${lettreDepuisChiffre(i + 1)}=$`
-            texteCorr += `$ ${texNombreCoul(a + bb + cc + dd + ee, 'blue', '#f15929', 'black', 2)} $`
+            texteCorr += `$ ${texNombreCoul(a + bb + cc + dd + ee, 'blue', orangeMathalea, 'black', 2)} $`
           } else if (sommeDesTermesParSigne([a, bb, cc, dd, ee])[0] !== 0) {
-            texteCorr += `$ ${texNombreCoul(sommeDesTermesParSigne([a, bb, cc, dd, ee])[0], 'blue', '#f15929', 'black', 2)}$`
+            texteCorr += `$ ${texNombreCoul(sommeDesTermesParSigne([a, bb, cc, dd, ee])[0], 'blue', orangeMathalea, 'black', 2)}$`
           } else {
-            texteCorr += `$ ${ecritureAlgebriquec(sommeDesTermesParSigne([a, bb, cc, dd, ee])[1], '#f15929')}$`
+            texteCorr += `$ ${ecritureAlgebriquec(sommeDesTermesParSigne([a, bb, cc, dd, ee])[1], orangeMathalea)}$`
           }
           break
         }
@@ -248,19 +248,19 @@ export default class ExerciceAdditionsSoustractionRelatifsV2 extends Exercice {
             texte += `<br>$ ${lettreDepuisChiffre(i + 1)} =$`
           }
           relatifs = triePositifsNegatifs([aa, bb, cc, dd, ee])
-          texteCorr = `$ ${lettreDepuisChiffre(i + 1)}=${texNombreCoul(a, 'blue', '#f15929', 'black', 2)}${ecritureAlgebriquec(bb)}${ecritureAlgebriquec(cc)}${ecritureAlgebriquec(dd)}${ecritureAlgebriquec(ee)}$<br>`
+          texteCorr = `$ ${lettreDepuisChiffre(i + 1)}=${texNombreCoul(a, 'blue', orangeMathalea, 'black', 2)}${ecritureAlgebriquec(bb)}${ecritureAlgebriquec(cc)}${ecritureAlgebriquec(dd)}${ecritureAlgebriquec(ee)}$<br>`
           texteCorr += `$${lettreDepuisChiffre(i + 1)}=`
           if (
             sommeDesTermesParSigne([aa, bb, cc, dd, ee])[0] !== 0 &&
             sommeDesTermesParSigne([aa, bb, cc, dd, ee])[1] !== 0
           ) {
-            texteCorr += `${texNombreCoul(relatifs[0], 'blue', '#f15929', 'black', 2)}${ecritureAlgebriquec(relatifs[1])}${ecritureAlgebriquec(relatifs[2])}${ecritureAlgebriquec(relatifs[3])}${ecritureAlgebriquec(relatifs[4])}$<br>`
+            texteCorr += `${texNombreCoul(relatifs[0], 'blue', orangeMathalea, 'black', 2)}${ecritureAlgebriquec(relatifs[1])}${ecritureAlgebriquec(relatifs[2])}${ecritureAlgebriquec(relatifs[3])}${ecritureAlgebriquec(relatifs[4])}$<br>`
             texteCorr += `$${lettreDepuisChiffre(i + 1)}=`
-            texteCorr += `${texNombreCoul(sommeDesTermesParSigne([aa, bb, cc, dd, ee])[0], 'blue', '#f15929', 'black', 2)}${ecritureAlgebriquec(sommeDesTermesParSigne([aa, bb, cc, dd, ee])[1])}$<br>`
+            texteCorr += `${texNombreCoul(sommeDesTermesParSigne([aa, bb, cc, dd, ee])[0], 'blue', orangeMathalea, 'black', 2)}${ecritureAlgebriquec(sommeDesTermesParSigne([aa, bb, cc, dd, ee])[1])}$<br>`
             texteCorr += `$${lettreDepuisChiffre(i + 1)}=`
-            texteCorr += `${texNombreCoul(aa + bb + cc + dd + ee, 'blue', '#f15929', 'black', 2)} $`
+            texteCorr += `${texNombreCoul(aa + bb + cc + dd + ee, 'blue', orangeMathalea, 'black', 2)} $`
           } else if (sommeDesTermesParSigne([aa, bb, cc, dd, ee])[0] !== 0) {
-            texteCorr += `${texNombreCoul(sommeDesTermesParSigne([aa, bb, cc, dd, ee])[0], 'blue', '#f15929', 'black', 2)}$`
+            texteCorr += `${texNombreCoul(sommeDesTermesParSigne([aa, bb, cc, dd, ee])[0], 'blue', orangeMathalea, 'black', 2)}$`
           } else {
             texteCorr += `${ecritureAlgebriquec(sommeDesTermesParSigne([aa, bb, cc, dd, ee])[1], 'blue')}$`
           }
@@ -278,22 +278,22 @@ export default class ExerciceAdditionsSoustractionRelatifsV2 extends Exercice {
           }
           texteCorr = `$ ${lettreDepuisChiffre(i + 1)} = ${ecritureNombreRelatif(a)}${signe(s1)}${ecritureNombreRelatif(b)}${signe(s2)}${ecritureNombreRelatif(c)}${signe(s3)}${ecritureNombreRelatif(d)}${signe(s4)}${ecritureNombreRelatif(e)}$<br>`
           relatifs = triePositifsNegatifs([a, bb, cc, dd, ee])
-          texteCorr += `$ ${lettreDepuisChiffre(i + 1)}=${texNombreCoul(aa, 'blue', '#f15929', 'black', 2)}${ecritureAlgebriquec(bb)}${ecritureAlgebriquec(cc)}${ecritureAlgebriquec(dd)}${ecritureAlgebriquec(ee)}$<br>`
+          texteCorr += `$ ${lettreDepuisChiffre(i + 1)}=${texNombreCoul(aa, 'blue', orangeMathalea, 'black', 2)}${ecritureAlgebriquec(bb)}${ecritureAlgebriquec(cc)}${ecritureAlgebriquec(dd)}${ecritureAlgebriquec(ee)}$<br>`
           texteCorr += `$ ${lettreDepuisChiffre(i + 1)}=$`
 
           if (
             sommeDesTermesParSigne([aa, bb, cc, dd, ee])[0] !== 0 &&
             sommeDesTermesParSigne([aa, bb, cc, dd, ee])[1] !== 0
           ) {
-            texteCorr += `$ ${texNombreCoul(relatifs[0], 'blue', '#f15929', 'black', 2)}${ecritureAlgebriquec(relatifs[1])}${ecritureAlgebriquec(relatifs[2])}${ecritureAlgebriquec(relatifs[3])}${ecritureAlgebriquec(relatifs[4])}$<br>`
+            texteCorr += `$ ${texNombreCoul(relatifs[0], 'blue', orangeMathalea, 'black', 2)}${ecritureAlgebriquec(relatifs[1])}${ecritureAlgebriquec(relatifs[2])}${ecritureAlgebriquec(relatifs[3])}${ecritureAlgebriquec(relatifs[4])}$<br>`
             texteCorr += `$ ${lettreDepuisChiffre(i + 1)}=$`
-            texteCorr += `$ ${texNombreCoul(sommeDesTermesParSigne([aa, bb, cc, dd, ee])[0], 'blue', '#f15929', 'black', 2)}${ecritureAlgebriquec(sommeDesTermesParSigne([aa, bb, cc, dd, ee])[1])}$<br>`
+            texteCorr += `$ ${texNombreCoul(sommeDesTermesParSigne([aa, bb, cc, dd, ee])[0], 'blue', orangeMathalea, 'black', 2)}${ecritureAlgebriquec(sommeDesTermesParSigne([aa, bb, cc, dd, ee])[1])}$<br>`
             texteCorr += `$ ${lettreDepuisChiffre(i + 1)}=$`
-            texteCorr += `$ ${texNombreCoul(aa + bb + cc + dd + ee, 'blue', '#f15929', 'black', 2)} $`
+            texteCorr += `$ ${texNombreCoul(aa + bb + cc + dd + ee, 'blue', orangeMathalea, 'black', 2)} $`
           } else if (sommeDesTermesParSigne([aa, bb, cc, dd, ee])[0] !== 0) {
-            texteCorr += `$ ${texNombreCoul(sommeDesTermesParSigne([a, bb, cc, dd, ee])[0], 'blue', '#f15929', 'black', 2)}$`
+            texteCorr += `$ ${texNombreCoul(sommeDesTermesParSigne([a, bb, cc, dd, ee])[0], 'blue', orangeMathalea, 'black', 2)}$`
           } else {
-            texteCorr += `$ ${ecritureAlgebriquec(sommeDesTermesParSigne([a, bb, cc, dd, ee])[1], '#f15929')}$`
+            texteCorr += `$ ${ecritureAlgebriquec(sommeDesTermesParSigne([a, bb, cc, dd, ee])[1], orangeMathalea)}$`
           }
           break
       }

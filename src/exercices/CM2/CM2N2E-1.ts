@@ -1,6 +1,6 @@
 import Figure from 'apigeom'
-import { orangeMathalea } from 'apigeom/src/elements/defaultValues'
 import { wrapperApigeomToMathalea } from '../../lib/apigeom/apigeomZoom'
+import { orangeMathalea } from '../../lib/colors'
 import figureApigeom from '../../lib/figureApigeom'
 import { choice } from '../../lib/outils/arrayOutils'
 import { arrondi } from '../../lib/outils/nombres'

@@ -379,7 +379,7 @@ export class Polygone extends ObjetMathalea2D {
  * @return {Polygone} objet Polygone
  * @example polygone(A,B,C,D,E) //Trace ABCDE
  * @example polygone([A,B,C,D],"blue") // Trace ABCD en bleu
- * @example polygone([A,B,C,D],"#f15929") // Trace ABCD en orange (code couleur HTML : #f15929)
+ * @example polygone([A,B,C,D],orangeMathalea) // Trace ABCD en orange (orangeMathalea)
  * @property {PointAbstrait[]} listePoints
  * @property {string[]} color
  * @property {string[]} couleurDeRemplissage

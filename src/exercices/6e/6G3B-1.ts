@@ -30,6 +30,7 @@ import { lettreDepuisChiffre } from '../../lib/outils/outilString'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { orangeMathalea } from '../../lib/colors'
 
 export const dateDePublication = '30/11/2020'
 export const dateDeModifImportante = '06/09/2024'
@@ -151,7 +152,7 @@ export default class ConstruireMediatrices6e extends Exercice {
         y: result[1],
         rang: 6,
         taille: 0.6,
-        color: '#f15929',
+        color: orangeMathalea,
       })
       cible.opacite = 0.7
 

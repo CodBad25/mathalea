@@ -17,6 +17,7 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { orangeMathalea } from '../../lib/colors'
 
 export const titre = 'Programmer des calculs sur tableur'
 export const dateDePublication = '12/08/2025'
@@ -621,7 +622,7 @@ function createDigramm(
       objets.push(tex)
     }
     if (i > 0) {
-      const seg = segment(A.x - gap, largeur / 2, A.x, largeur / 2, '#f15929')
+      const seg = segment(A.x - gap, largeur / 2, A.x, largeur / 2, orangeMathalea)
       seg.styleExtremites = '->'
       objets.push(seg)
     }

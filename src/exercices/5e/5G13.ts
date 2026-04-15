@@ -31,6 +31,7 @@ import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { orangeMathalea } from '../../lib/colors'
 export const titre =
   'Utiliser les propriétés de conservation du parallélisme, des longueurs et des angles'
 
@@ -184,7 +185,7 @@ export default class ConservationTransformation extends Exercice {
                   symetrieAxiale(point(d1.x2, d1.y2), d),
                 ),
                 "(d_1')",
-                '#f15929',
+                orangeMathalea,
               ),
             )
           }
@@ -210,7 +211,7 @@ export default class ConservationTransformation extends Exercice {
                 rotation(point(d1.x1, d1.y1), O, 180),
                 rotation(point(d1.x2, d1.y2), O, 180),
                 '',
-                '#f15929',
+                orangeMathalea,
               ),
             )
           }
@@ -244,7 +245,7 @@ export default class ConservationTransformation extends Exercice {
                 translation2Points(point(d1.x1, d1.y1), D, E),
                 translation2Points(point(d1.x2, d1.y2), D, E),
                 '',
-                '#f15929',
+                orangeMathalea,
               ),
             )
           }
@@ -302,27 +303,27 @@ export default class ConservationTransformation extends Exercice {
       }
       if (listeTypeDeQuestions[i] === 'longueurEtAngle') {
         objetsCorrectionOnly.push(
-          segment(imageA, imageC, '#f15929'),
-          segment(imageB, imageC, '#f15929'),
+          segment(imageA, imageC, orangeMathalea),
+          segment(imageB, imageC, orangeMathalea),
         )
         objetsCorrectionOnly.push(
           afficheMesureAngle(
             imageA,
             imageB,
             imageC,
-            '#f15929',
+            orangeMathalea,
             1,
             Math.round(angle(A, B, C)) + '^\\circ',
-            { colorArc: '#f15929' },
+            { colorArc: orangeMathalea },
           ),
         )
         if (figureRetournee) {
           objetsCorrectionOnly.push(
-            afficheLongueurSegment(imageC, imageB, '#f15929'),
+            afficheLongueurSegment(imageC, imageB, orangeMathalea),
           )
         } else {
           objetsCorrectionOnly.push(
-            afficheLongueurSegment(imageB, imageC, '#f15929'),
+            afficheLongueurSegment(imageB, imageC, orangeMathalea),
           )
         }
       } else if (listeTypeDeQuestions[i] === 'parallelisme') {

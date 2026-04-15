@@ -54,6 +54,7 @@ import {
 } from '../../modules/outils'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
+import { orangeMathalea } from '../../lib/colors'
 
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -1616,7 +1617,7 @@ export default class PavagesEtTransformations extends Exercice {
           ' dans la rotation de centre ' +
           texteEnCouleurEtGras(`${s0}`, context.isAmc ? 'black' : 'green') +
           " et d'angle 90° dans le sens des aiguilles d'une montre porte le numéro " +
-          texteEnCouleurEtGras(`${num1}`, '#f15929') +
+          texteEnCouleurEtGras(`${num1}`, orangeMathalea) +
           '.<br>'
 
         // deuxième question : centre B, rotation 90° sens horaire, une figure de tabfigD donne une figure de tabfigC
@@ -1680,7 +1681,7 @@ export default class PavagesEtTransformations extends Exercice {
           ' dans la rotation de centre ' +
           texteEnCouleurEtGras(`${s1}`, context.isAmc ? 'black' : 'red') +
           " et d'angle 90° dans le sens contraire des aiguilles d'une montre porte le numéro " +
-          texteEnCouleurEtGras(`${num2}`, '#f15929') +
+          texteEnCouleurEtGras(`${num2}`, orangeMathalea) +
           '.<br>'
 
         // troisième question : centre B, rotation 90° sens anti-horaire, une figure de tabfigC donne une figure de tabfigD
@@ -1756,7 +1757,7 @@ export default class PavagesEtTransformations extends Exercice {
           ' dans la rotation de centre ' +
           texteEnCouleurEtGras(`${s2}`, context.isAmc ? 'black' : 'blue') +
           " et d'angle 90° dans le sens des aiguilles d'une montre porte le numéro " +
-          texteEnCouleurEtGras(`${num3}`, '#f15929') +
+          texteEnCouleurEtGras(`${num3}`, orangeMathalea) +
           '.<br>'
 
         trace = tracePoint(centre1, context.isAmc ? 'black' : 'green')

@@ -34,6 +34,7 @@ import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { orangeMathalea } from '../../lib/colors'
 
 export const titre = 'Effectuer des transformations de triangles'
 /**
@@ -239,7 +240,7 @@ export default class TransformationsDeTriangle extends Exercice {
       })
       anim.translationPolygone(triangle3, D, F, ['A_3', 'B_3', 'C_3'], {
         couleur: 'brown',
-        couleurCodage: '#f15929',
+        couleurCodage: orangeMathalea,
       })
       anim.rotationPolygone(triangle4, F, alpha, ['A_4', 'B_4', 'C_4'], {
         couleur: 'green',

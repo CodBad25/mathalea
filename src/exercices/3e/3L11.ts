@@ -22,6 +22,7 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { orangeMathalea } from '../../lib/colors'
 
 export const titre = 'Utiliser la simple distributivité'
 
@@ -129,7 +130,7 @@ export default class ExerciceDevelopper extends Exercice {
     )
 
     const couleurCorrection =
-      this.sup2 === 1 ? ['#f15929', 'blue'] : ['blue', '#f15929']
+      this.sup2 === 1 ? [orangeMathalea, 'blue'] : ['blue', orangeMathalea]
 
     for (
       let i = 0,

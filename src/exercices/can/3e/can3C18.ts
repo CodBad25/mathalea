@@ -7,6 +7,7 @@ import { choice } from '../../../lib/outils/arrayOutils'
 import { pgcd } from '../../../lib/outils/primalite'
 import FractionEtendue from '../../../modules/FractionEtendue'
 import { obtenirListeFractionsIrreductibles } from '../../../modules/fractions'
+import { orangeMathalea } from '../../../lib/colors'
 export const titre = 'Calculer une valeur dans une égalité de quotients'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -57,7 +58,7 @@ export default class calculDansQuotient extends ExerciceSimple {
     ${inconnue}\\times${f.n}&=${a}\\times ${f.d}\\\\
     ${inconnue}&=${pgcd(a * f.d, f.n) === 1 ? `${miseEnEvidence(reponse)}` : `${reponse}`}
     \\end{aligned}$<br>
-    ${pgcd(a * f.d, f.n) === 1 ? '' : `On peut simplifier : $${inconnue}=${reponse}${new FractionEtendue(a * f.d, f.n).texSimplificationAvecEtapes(false, '#f15929')}$`}`
+    ${pgcd(a * f.d, f.n) === 1 ? '' : `On peut simplifier : $${inconnue}=${reponse}${new FractionEtendue(a * f.d, f.n).texSimplificationAvecEtapes(false, orangeMathalea)}$`}`
     } else {
       reponse = new FractionEtendue(a * f.n, f.d).texFraction
       this.reponse = { reponse: { value: reponse } }
@@ -68,7 +69,7 @@ export default class calculDansQuotient extends ExerciceSimple {
     ${inconnue}\\times${f.d}&=${a}\\times ${f.n}\\\\
     ${inconnue}&=${pgcd(a * f.n, f.d) === 1 ? `${miseEnEvidence(reponse)}` : `${reponse}`}
     \\end{aligned}$<br>
-    ${pgcd(a * f.n, f.d) === 1 ? '' : `On peut simplifier : $${inconnue}=${reponse}${new FractionEtendue(a * f.n, f.d).texSimplificationAvecEtapes(false, '#f15929')}$`}`
+    ${pgcd(a * f.n, f.d) === 1 ? '' : `On peut simplifier : $${inconnue}=${reponse}${new FractionEtendue(a * f.n, f.d).texSimplificationAvecEtapes(false, orangeMathalea)}$`}`
     }
     if (this.interactif) {
       this.question += `<br> $${inconnue}=$`

@@ -12,6 +12,7 @@ import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { orangeMathalea } from '../../lib/colors'
 export const titre =
   "Construire l'image d'un point par une rotation avec cible auto-corrective"
 
@@ -117,7 +118,7 @@ export default class ConstruireRotationPoint3e extends Exercice {
         rang: 4,
         num: i + 1,
         taille: 0.6,
-        color: '#f15929',
+        color: orangeMathalea,
       })
       cible.opacite = 0.7
       cibles.push(cible)
