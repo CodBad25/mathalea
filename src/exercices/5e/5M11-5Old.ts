@@ -22,8 +22,7 @@ import {
 import { texTexte } from '../../lib/format/texTexte'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { toutAUnPoint } from '../../lib/interactif/mathLive'
-import { addMultiMathfield } from '../../lib/interactif/MultiMathfield/MultiMathfield'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { arrondi, troncature } from '../../lib/outils/nombres'
@@ -55,20 +54,20 @@ export const dateDeModifImportante = '31/03/2026'
  * Ajout de la possibilité de demander un découpage au lieu de calculer des périmètres ou des aires par Guillaume Valmont le 28/10/2023
  * Modification du paramètre de choix pour mettre mélange en 0 et ajouter un cas par Jean-claude Lhote
  */
-export const uuid = '6999f'
+export const uuid = '5999e'
 
 export const refs = {
-  'fr-fr': ['5M11-5', 'BP2AutoV5'],
-  'fr-2016': ['6M11-2', 'BP2AutoV5'],
-  'fr-ch': ['9GM1-8', '10GM1-6'],
+  'fr-fr': [],
+  'fr-2016': [],
+  'fr-ch': [],
 }
 
-function valeursApprochees(inputValue: number, sup3: number): [number, number] {
+function valeursApprochees(inputValue: number, sup3: number): number[] {
   // Calculer la valeur approchée
   const valeurAEncadrer = arrondi(inputValue, sup3 - 1)
 
   // Initialiser le tableau valeurApprochee
-  const valeurApprochee: [number, number] = [0, 0]
+  const valeurApprochee: number[] = []
 
   if (inputValue > valeurAEncadrer) {
     valeurApprochee[0] = valeurAEncadrer
@@ -164,16 +163,13 @@ export default class PerimetreOuAireDeFiguresComposees extends Exercice {
     }).map(Number)
 
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; cpt++) {
-      let perimetreReponses: [number, number] = [0, 0]
-      let aireReponses: [number, number] = [0, 0]
+      let perimetreReponses: number[] = []
+      let aireReponses: number[] = []
       let texte, texteCorr, perimetre, aire
       if (this.sup4 === 4) {
         this.nbCols = 2
         this.nbColsCorr = 2
       }
-      const questions: string[] = []
-      const reponses: [number, number][] = []
-
       const contourFigure = []
       const decoupages = []
       const codagesSansDecoupage: NestedObjetMathalea2dArray = []
@@ -1242,27 +1238,40 @@ export default class PerimetreOuAireDeFiguresComposees extends Exercice {
           break
         }
       }
-      if (this.sup4 === 1 || this.sup4 === 3) {
-        questions.push(
-          `Périmètre ${
-            typesDeQuestions[i] > 3
-              ? `(valeur approchée au ${this.sup3 === 2 ? 'dixième de' : ''} cm près)`
-              : ''
-          } : `,
+      if (this.sup4 === 1 || this.sup4 === 3 || this.sup4 === 4) {
+        texte += ajouteChampTexteMathLive(
+          this,
+          i * (this.sup4 === 3 ? 2 : 1),
+          KeyboardType.longueur,
+          {
+            texteAvant:
+              'Périmètre ' +
+              (typesDeQuestions[i] > 3
+                ? `(valeur approchée au ${this.sup3 === 2 ? 'dixième de' : ''} cm près)`
+                : '') +
+              ' : ',
+            texteApres:
+              sp(12) + "Il faut penser à préciser l'unité dans la réponse.",
+          },
         )
-        reponses.push(perimetreReponses)
       }
-      if (this.sup4 === 2 || this.sup4 === 3) {
-        questions.push(
-          `Aire ${
-            typesDeQuestions[i] > 3
-              ? `(valeur approchée au ${this.sup3 === 2 ? 'dixième de' : ''} cm$^2$ près)`
-              : ''
-          } : `,
+      if (this.sup4 === 2 || this.sup4 === 3 || this.sup4 === 4) {
+        texte += ajouteChampTexteMathLive(
+          this,
+          (this.sup4 === 3 ? 1 : 0) + i * (this.sup4 === 3 ? 2 : 1),
+          KeyboardType.aire,
+          {
+            texteAvant:
+              '<br>Aire ' +
+              (typesDeQuestions[i] > 3
+                ? `(valeur approchée au ${this.sup3 === 2 ? 'dixième de' : ''} cm$^2$ près)`
+                : '') +
+              ' : ',
+            texteApres:
+              sp(12) + "Il faut penser à préciser l'unité dans la réponse.",
+          },
         )
-        reponses.push(aireReponses)
       }
-
       if (context.isAmc) {
         this.autoCorrection[i] = {
           enonce: this.consigne + '\\\\' + texte,
@@ -1340,58 +1349,33 @@ export default class PerimetreOuAireDeFiguresComposees extends Exercice {
             ],
           })
         }
-      }
-
-      if (this.questionJamaisPosee(i, perimetreReponses[0], aireReponses[0])) {
-        if (this.sup4 !== 4) {
-          const dataTemplate = questions
-            .map((question, index) => `${question} %{champ${index + 1}}`)
-            .join('\n')
-          const dataOptions = Object.fromEntries(
-            questions.map((_, index) => [
-              `champ${index + 1}`,
-              {
-                keyboard: questions[index].includes('Périmètre')
-                  ? KeyboardType.longueur
-                  : KeyboardType.aire,
-                ldots: true,
-                texteApres: "(l'unité est requise)",
-              },
-            ]),
-          )
-          texte += addMultiMathfield(this, i, {
-            dataOptions,
-            dataTemplate,
+      } else {
+        if (this.sup4 === 1 || this.sup4 === 3)
+          handleAnswers(this, i * (this.sup4 === 3 ? 2 : 1), {
+            reponse: {
+              value: [
+                new Grandeur(perimetreReponses[0], 'cm'),
+                new Grandeur(perimetreReponses[1], 'cm'),
+              ],
+              options: { unite: true, precisionUnite: this.sup3 - 1 },
+            },
           })
-        }
-
-        if (!context.isAmc && this.sup4 !== 4) {
+        if (this.sup4 === 2 || this.sup4 === 3)
           handleAnswers(
             this,
-            i,
+            (this.sup4 === 3 ? 1 : 0) + i * (this.sup4 === 3 ? 2 : 1),
             {
-              bareme: toutAUnPoint,
-              ...Object.fromEntries(
-                questions.map((_, index) => [
-                  `champ${index + 1}`,
-                  {
-                    value: reponses[index].map(
-                      (v) =>
-                        new Grandeur(
-                          v,
-                          questions[index].includes('Périmètre')
-                            ? 'cm'
-                            : 'cm^2',
-                        ),
-                    ),
-                    options: { unite: true },
-                  },
-                ]),
-              ),
+              reponse: {
+                value: [
+                  new Grandeur(aireReponses[0], 'cm^2'),
+                  new Grandeur(aireReponses[1], 'cm^2'),
+                ],
+                options: { unite: true, precisionUnite: this.sup3 - 1 },
+              },
             },
-            { formatInteractif: 'multiMathfield' },
           )
-        }
+      }
+      if (this.questionJamaisPosee(i, perimetreReponses[0], aireReponses[0])) {
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr
         i++

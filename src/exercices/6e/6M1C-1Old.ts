@@ -1,4 +1,4 @@
-import PerimetreAireEtPortionsDeDisques from '../5e/5M11-4'
+import PerimetreAireEtPortionsDeDisques from '../5e/5M11-4Old'
 
 export const titre = 'Calculer périmètre de portions de disques'
 export const dateDePublication = '27/07/2025'
@@ -12,11 +12,11 @@ export const amcType = 'AMCHybride'
  * @author Éric Elter (comme clone de 6M22-2 de Rémi Angot)
  */
 
-export const uuid = '5db4b'
+export const uuid = '5db4a'
 
 export const refs = {
-  'fr-fr': ['6M1C-1'],
-  'fr-2016': ['6M22-2a'],
+  'fr-fr': [],
+  'fr-2016': [],
   'fr-ch': [],
 }
 export default class PerimetrePortionsDeDisques extends PerimetreAireEtPortionsDeDisques {

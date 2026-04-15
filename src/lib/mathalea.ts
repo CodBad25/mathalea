@@ -1364,12 +1364,16 @@ export function renderKatexInAllShadowRoots(root: HTMLElement) {
               width: 1px;
             }
              .katex {
-    font: normal 1.21em KaTeX_Main,Times New Roman,serif;
+    font: normal 1em KaTeX_Main,Times New Roman,serif;
     line-height: 1.2;
     position: relative;
     text-indent: 0;
     text-rendering: auto;
-        }`
+        }
+    .katex .mathnormal {
+      font-family: KaTeX_Math,Times New Roman,serif;
+      font-style: italic;
+    }`
           el.shadowRoot.appendChild(style)
         }
         try {

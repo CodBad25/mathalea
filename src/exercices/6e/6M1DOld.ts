@@ -1,4 +1,4 @@
-import PerimetreOuAireDeFiguresComposees from '../5e/5M11-5-old'
+import PerimetreOuAireDeFiguresComposees from '../5e/5M11-5Old'
 
 export const titre = 'Calculer périmètre de figures composées'
 export const dateDePublication = '27/07/2025'
@@ -12,7 +12,7 @@ export const amcType = 'AMCHybride'
  * @author Éric Elter (comme clone de 6M11-2 de Rémi Angot)
  */
 
-export const uuid = '7433a'
+export const uuid = '7433b'
 
 export const refs = {
   'fr-fr': [],
