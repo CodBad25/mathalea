@@ -19,6 +19,7 @@ import Exercice from '../Exercice'
 import { point } from '../../lib/2d/PointAbstrait'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { choice } from '../../lib/outils/arrayOutils'
+import { bleuMathalea } from '../../lib/colors'
 
 export const titre =
   'Déterminer une équation réduite à partir de sa représentation graphique'
@@ -156,13 +157,13 @@ export default class Lecturegraphiquedeaetb extends Exercice {
           let s2: Segment
           if (b + a < -8 || b + a > 8) {
             // Si cela sort du cadre
-            s1 = segment(-d, b - a, 0, b - a, 'blue')
+            s1 = segment(-d, b - a, 0, b - a, bleuMathalea)
             s1.epaisseur = 4
-            s2 = segment(0, b - a, 0, b, 'blue')
+            s2 = segment(0, b - a, 0, b, bleuMathalea)
           } else {
-            s1 = segment(0, b, d, b, 'blue')
+            s1 = segment(0, b, d, b, bleuMathalea)
             s1.epaisseur = 4
-            s2 = segment(d, b, d, a + b, 'blue')
+            s2 = segment(d, b, d, a + b, bleuMathalea)
           }
           s2.epaisseur = 4
 

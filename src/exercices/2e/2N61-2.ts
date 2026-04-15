@@ -19,6 +19,7 @@ import { sp } from '../../lib/outils/outilString'
 import { context } from '../../modules/context'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -145,8 +146,8 @@ export default class ExerciceInequationProduit extends Exercice {
       // Fonction détaillant la résolution d'une équation de type x + val
       const resolutionDetailleeEquation = function (val: number) {
         texteCorr += `$x${ecritureAlgebrique(val)}${texSymbole('>')}0$ <br>`
-        texteCorr += `$x${ecritureAlgebrique(val)}${miseEnEvidence(ecritureAlgebrique(-1 * val), 'blue')}
-        ${texSymbole('>')}${miseEnEvidence(ecritureAlgebrique(-1 * val), 'blue')}$<br>`
+        texteCorr += `$x${ecritureAlgebrique(val)}${miseEnEvidence(ecritureAlgebrique(-1 * val), bleuMathalea)}
+        ${texSymbole('>')}${miseEnEvidence(ecritureAlgebrique(-1 * val), bleuMathalea)}$<br>`
         texteCorr += `$x${texSymbole('>')}${-val}$<br>`
       }
       // Fonction écrivant la correction détaillée d'une inéquation du type var1*x + var2 > 0
@@ -163,25 +164,25 @@ export default class ExerciceInequationProduit extends Exercice {
         }
         // Détaille les étapes de la résolution en mettant en évidence les calculs réalisés.
         texteCorr += `<br>$${var1}x${ecritureAlgebrique(var2)}${symbolePlusGrand}0$ <br>`
-        texteCorr += `$${var1}x${ecritureAlgebrique(var2)}${miseEnEvidence(ecritureAlgebrique(-1 * var2), 'blue')}
-        ${symbolePlusGrand}${miseEnEvidence(ecritureAlgebrique(-1 * var2), 'blue')}$<br>`
+        texteCorr += `$${var1}x${ecritureAlgebrique(var2)}${miseEnEvidence(ecritureAlgebrique(-1 * var2), bleuMathalea)}
+        ${symbolePlusGrand}${miseEnEvidence(ecritureAlgebrique(-1 * var2), bleuMathalea)}$<br>`
         texteCorr += `$${var1}x${symbolePlusGrand}${-var2}$<br>`
         // Si var1 < 0, l'inégalité change de sens
         if (var1 < 0) {
-          texteCorr += `$${var1}x${miseEnEvidence('\\div' + ecritureParentheseSiNegatif(var1), 'blue')}`
+          texteCorr += `$${var1}x${miseEnEvidence('\\div' + ecritureParentheseSiNegatif(var1), bleuMathalea)}`
           if (egal) {
             // On met en évidence un > qui se change en <, pas un = qui ne change pas
             texteCorr += symbolePlusPetit
           } else {
-            texteCorr += miseEnEvidence(symbolePlusPetit, 'blue')
+            texteCorr += miseEnEvidence(symbolePlusPetit, bleuMathalea)
           }
-          texteCorr += `${String(-var2) + miseEnEvidence('\\div' + ecritureParentheseSiNegatif(var1), 'blue')}$<br>`
+          texteCorr += `${String(-var2) + miseEnEvidence('\\div' + ecritureParentheseSiNegatif(var1), bleuMathalea)}$<br>`
           texteCorr += `$x${symbolePlusPetit}${texFractionFromString(-var2, var1)}$`
           texteCorr += `<br>Donc $${var1}x${ecritureAlgebrique(var2)}${symbolePlusGrand}0$ si et seulement si $x${symbolePlusPetit} ${texFractionReduite(-var2, var1)}$.`
         } else {
           // sinon elle ne change pas de sens
-          texteCorr += `$${var1}x${miseEnEvidence('\\div' + ecritureParentheseSiNegatif(var1), 'blue')}
-            ${symbolePlusGrand}${-var2 + miseEnEvidence('\\div' + ecritureParentheseSiNegatif(var1), 'blue')}$<br>`
+          texteCorr += `$${var1}x${miseEnEvidence('\\div' + ecritureParentheseSiNegatif(var1), bleuMathalea)}
+            ${symbolePlusGrand}${-var2 + miseEnEvidence('\\div' + ecritureParentheseSiNegatif(var1), bleuMathalea)}$<br>`
           texteCorr += `$x${symbolePlusGrand} ${texFractionFromString(-var2, var1)}$`
           texteCorr += `<br>Donc $${var1}x${ecritureAlgebrique(var2)}${symbolePlusGrand}0$ si et seulement si $x${symbolePlusGrand}${texFractionReduite(-var2, var1)}$.`
         }

@@ -48,9 +48,9 @@ function similitudePoint(
 
 /**
  * s = segment(A, B) //Segment d'extrémités A et B
- * s = segment(A,B,'red', bleuMathalea) //Segment d'extrémités A et B et de couleur bleue
+ * s = segment(A,B,bleuMathalea) //Segment d'extrémités A et B et de couleur bleue
  * s = segment(x1,y1,x2,y2) //Segment défini par les coordonnées des deux extrémités
- * s = segment(x1,y1,x2,y2,'red', bleuMathalea) //Segment défini par les coordonnées des deux extrémités et de couleur bleue
+ * s = segment(x1,y1,x2,y2,bleuMathalea) //Segment défini par les coordonnées des deux extrémités et de couleur bleue
  * @class
  * @author Rémi Angot
  */

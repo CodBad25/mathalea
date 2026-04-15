@@ -22,22 +22,22 @@ import { Point3d, Polygone3d, arete3d } from './elementsEtTransformations3d'
  * (optimisée au niveau des pointillés pour une base sur le plan xOy et un sommet plus haut ou plus bas que la base)
  * @param {Polygone3d} base Base de la pyramide
  * @param {Point3d} sommet Sommet de la pyramide
- * @param {string} [color = 'black'] Couleur des arêtes du prisme droit : du type 'blue' ou du type '#f15929'
+ * @param {string} [color = 'black'] Couleur des arêtes du prisme droit : du type 'red', bleuMathalea ou du type '#f15929'
  * @param {Point3d} [centre] Centre de la pyramide... Entraine l'affichage de ce centre
  * @param {boolean} [affichageAxe = false] Permet (ou pas) l'affichage de l'axe de la pyramide. Ne fonctionne que si centre est défini.
- * @param {string} [colorAxe = 'black'] Couleur de l'axe et du centre de la base de la pyramide : du type 'blue' ou du type '#f15929'
+ * @param {string} [colorAxe = 'black'] Couleur de l'axe et du centre de la base de la pyramide : du type 'red', bleuMathalea ou du type '#f15929'
  * @param {boolean} [affichageNom = false] Permet (ou pas) l'affichage du nom des sommets de la pyramide.
  * @param {boolean} [estCone = false] Permet (ou pas) de considérer la pyramide comme un cône... dans le cas où la base est un disque.
- * @param {string} [colorCone = 'gray'] Couleur du cône : du type 'blue' ou du type '#f15929'
+ * @param {string} [colorCone = 'gray'] Couleur du cône : du type 'red', bleuMathalea ou du type '#f15929'
  * @property {Polygone3d} base Base de la pyramide
  * @property {Point3d} sommet Sommet de la pyramide
- * @property {string} color Couleur des arêtes de la pyramide : du type 'blue' ou du type '#f15929'
+ * @property {string} color Couleur des arêtes de la pyramide : du type 'red', bleuMathalea ou du type '#f15929'
  * @property {Point3d} centre Centre de la pyramide... Entraine l'affichage de ce centre
  * @property {boolean} affichageAxe Permet (ou pas) l'affichage de l'axe de la pyramide. Ne fonctionne que si centre est défini.
- * @property {string} colorAxe Couleur de l'axe et du centre de la base de la pyramide : du type 'blue' ou du type '#f15929'
+ * @property {string} colorAxe Couleur de l'axe et du centre de la base de la pyramide : du type 'red', bleuMathalea ou du type '#f15929'
  * @property {boolean} affichageNom Permet (ou pas) l'affichage du nom des sommets de la pyramide.
  * @property {string} nom Nom de la pyramide (si affichageNom = true)
- * @property {string} colorCone Couleur du cône : du type 'blue' ou du type '#f15929'
+ * @property {string} colorCone Couleur du cône : du type 'red', bleuMathalea ou du type '#f15929'
  * @property {arete3d[]} aretesSommet Ce tableau contient les arêtes liant le sommet de la pyramide aux sommets de la base
  * @property {Array} c2d Contient les commandes à tracer en 2d de cette fonction
  * @author Éric Elter (d'après version précédente de Jean-claude Lhote)
@@ -343,13 +343,13 @@ export class Pyramide3d extends ObjetMathalea2D {
  * Crée une pyramide
  * @param {Polygone3d} base Base de la pyramide
  * @param {Point3d} sommet Sommet de la pyramide
- * @param {string} [color = 'black'] Couleur des arêtes de la pyramide : du type 'blue' ou du type '#f15929'
+ * @param {string} [color = 'black'] Couleur des arêtes de la pyramide : du type 'red', bleuMathalea ou du type '#f15929'
  * @param {Point3d} [centre] Centre de la pyramide... Entraine l'affichage de ce centre
  * @param {boolean} [affichageAxe = false] Permet (ou pas) l'affichage de l'axe de la pyramide. Ne fonctionne que si centre est défini.
- * @param {string} [colorAxe = 'black'] Couleur de l'axe et du centre de la base de la pyramide : du type 'blue' ou du type '#f15929'
+ * @param {string} [colorAxe = 'black'] Couleur de l'axe et du centre de la base de la pyramide : du type 'red', bleuMathalea ou du type '#f15929'
  * @param {boolean} [affichageNom = false] Permet (ou pas) l'affichage du nom des sommets de la pyramide.
  * @param {boolean} [estCone = false] Permet (ou pas) de considérer la pyramide comme un cône
- * @param {string} [colorCone = 'gray'] Couleur du cône : du type 'blue' ou du type '#f15929'
+ * @param {string} [colorCone = 'gray'] Couleur du cône : du type 'red', bleuMathalea ou du type '#f15929'
  * @author Éric Elter (d'après version précédente de Jean-claude Lhote)
  * @example pyramide3d(p,A) // Créé une pyramide de base p et de sommet A
  * @example pyramide3d(p,A,'red') // Créé une pyramide de base p et de sommet A et dont les arêtes sont rouges
@@ -357,7 +357,7 @@ export class Pyramide3d extends ObjetMathalea2D {
  * @example pyramide3d(p,A,'red',B,true,'green') // Créé une pyramide de base p et de sommet A et dont les arêtes sont rouges, le centre affiché est B, l'axe affiché est vert
  * @example pyramide3d(p,A,'red',B,true,'green',true) // Créé une pyramide de base p et de sommet A et dont les arêtes sont rouges, le centre affiché est B, l'axe affiché est vert, les sommets sont nommés
  * @example pyramide3d(c,A,'red',B,true,'green',false,true) // Créé un CONE de cercle c et de sommet A et dont les "arêtes" sont rouges, le centre affiché est B, l'axe affiché est vert
- * @example pyramide3d(c,A,'red',B,true,'green',false,true,'blue') // Créé un CONE de cercle c et de sommet A et dont les "arêtes" sont rouges, le centre affiché est B, l'axe affiché est vert et le cône est peint en vert
+ * @example pyramide3d(c,A,'red',B,true,'green',false,true,bleuMathalea) // Créé un CONE de cercle c et de sommet A et dont les "arêtes" sont rouges, le centre affiché est B, l'axe affiché est vert et le cône est peint en vert
  * @return {Pyramide3d}
  */
 export function pyramide3d(

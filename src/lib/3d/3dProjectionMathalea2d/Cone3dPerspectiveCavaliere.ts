@@ -16,18 +16,18 @@ import { pyramide3d } from './Pyramide3dPerspectiveCavaliere'
  * @param {Point3d} centre Centre de la base du cône
  * @param {Point3d} sommet Sommet du cône
  * @param {Vecteur3d} rayon Rayon de la base du cône
- * @param {string} [color = 'black'] Couleur des génératrices visibles et de la base du cône : du type 'blue' ou du type '#f15929'
+ * @param {string} [color = 'black'] Couleur des génératrices visibles et de la base du cône : du type 'red', bleuMathalea ou du type '#f15929'
  * @param {boolean} [affichageAxe = true] Permet (ou pas) l'affichage de l'axe du cône.
- * @param {string} [colorAxe = 'black'] Couleur de l'axe et du centre de la base du cône : du type 'blue' ou du type '#f15929'
- * @param {string} [colorCone = 'gray'] Couleur du cône : du type 'blue' ou du type '#f15929'
+ * @param {string} [colorAxe = 'black'] Couleur de l'axe et du centre de la base du cône : du type 'red', bleuMathalea ou du type '#f15929'
+ * @param {string} [colorCone = 'gray'] Couleur du cône : du type 'red', bleuMathalea ou du type '#f15929'
  * @param {boolean} affichageCentre Affiche ou pas le centre du cône.
  * @property {Point3d} centre centre de la base du cône
  * @property {Point3d} sommet Sommet du cône
  * @property {Vecteur3d} rayon Rayon de la base du cône
- * @property {string} color Couleur des génératrices visibles et de la base du cône : du type 'blue' ou du type '#f15929'
+ * @property {string} color Couleur des génératrices visibles et de la base du cône : du type 'red', bleuMathalea ou du type '#f15929'
  * @property {boolean} affichageAxe Permet (ou pas) l'affichage de l'axe du cône.
- * @property {string} colorAxe Couleur de l'axe et du centre de la base du cône : du type 'blue' ou du type '#f15929'
- * @property {string} colorCone Couleur du cône : du type 'blue' ou du type '#f15929'
+ * @property {string} colorAxe Couleur de l'axe et du centre de la base du cône : du type 'red', bleuMathalea ou du type '#f15929'
+ * @property {string} colorCone Couleur du cône : du type 'red', bleuMathalea ou du type '#f15929'
  * @property {Array} c2d Contient les commandes à tracer en 2d de cette fonction
  * @author Éric Elter (d'après version précédente de Jean-claude Lhote)
  * @class
@@ -86,15 +86,15 @@ export class Cone3d extends ObjetMathalea2D {
  * @param {Point3d} centre centre de la base du cône
  * @param {Point3d} sommet Sommet du cône
  * @param {Vecteur3d} rayon Rayon de la base du cône
- * @param {string} [color = 'black'] Couleur des génératrices visibles et de la base du cône : du type 'blue' ou du type '#f15929'
+ * @param {string} [color = 'black'] Couleur des génératrices visibles et de la base du cône : du type 'red', bleuMathalea ou du type '#f15929'
  * @param {boolean} [affichageAxe = true] Permet (ou pas) l'affichage de l'axe du cône.
- * @param {string} [colorAxe = 'black'] Couleur de l'axe et du centre de la base du cône : du type 'blue' ou du type '#f15929'
- * @param {string} [colorCone = 'gray'] Couleur du cône : du type 'blue' ou du type '#f15929'
+ * @param {string} [colorAxe = 'black'] Couleur de l'axe et du centre de la base du cône : du type 'red', bleuMathalea ou du type '#f15929'
+ * @param {string} [colorCone = 'gray'] Couleur du cône : du type 'red', bleuMathalea ou du type '#f15929'
  * @param {boolean} affichageCentre Affiche ou pas le centre du cône.
  * @example cone3d(A,B,v) // Créé un cône de centre A, de sommet B et dont le rayon correspond au vecteur v
  * @example cone3d(A,B,v,'red') // Créé un cône de centre A, de sommet B et dont le rayon correspond au vecteur v, la couleur du cône en fil de fer est rouge
  * @example cone3d(A,B,v,'red',true,'green') // Créé un cône de centre A, de sommet B et dont le rayon correspond au vecteur v, la couleur du cône en fil de fer est rouge, l'axe est affiché en vert
- * @example cone3d(A,B,v,'red',true,'green','blue') // Créé un cône de centre A, de sommet B et dont le rayon correspond au vecteur v, la couleur du cône en fil de fer est rouge, l'axe est affiché en vert et la face externe du cône est bleue
+ * @example cone3d(A,B,v,'red',true,'green',bleuMathalea) // Créé un cône de centre A, de sommet B et dont le rayon correspond au vecteur v, la couleur du cône en fil de fer est rouge, l'axe est affiché en vert et la face externe du cône est bleue
  * @author Éric Elter
  * @return {Cone3d}
  */

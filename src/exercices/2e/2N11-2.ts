@@ -17,6 +17,7 @@ import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 
 export const titre =
   'Utiliser et comprendre les symboles $\\cup $ et $\\cap $ avec les intervalles de $\\mathbb{R}$'
@@ -95,37 +96,37 @@ export default class UnionEtIntersectionIntervallesDeR extends Exercice {
           if (test === 1) {
             c1 = crochetD(A, 'red')
             c2 = crochetG(B, 'red')
-            c3 = crochetD(C, 'blue')
-            c4 = crochetG(D, 'blue')
+            c3 = crochetD(C, bleuMathalea)
+            c4 = crochetG(D, bleuMathalea)
           } else if (test === 2) {
             c1 = crochetG(A, 'red')
             c2 = crochetG(B, 'red')
-            c3 = crochetD(C, 'blue')
-            c4 = crochetG(D, 'blue')
+            c3 = crochetD(C, bleuMathalea)
+            c4 = crochetG(D, bleuMathalea)
           } else if (test === 3) {
             c1 = crochetD(A, 'red')
             c2 = crochetG(B, 'red')
-            c3 = crochetG(C, 'blue')
-            c4 = crochetG(D, 'blue')
+            c3 = crochetG(C, bleuMathalea)
+            c4 = crochetG(D, bleuMathalea)
           } else if (test === 4) {
             c1 = crochetD(A, 'red')
             c2 = crochetG(B, 'red')
-            c3 = crochetD(C, 'blue')
-            c4 = crochetD(D, 'blue')
+            c3 = crochetD(C, bleuMathalea)
+            c4 = crochetD(D, bleuMathalea)
           } else if (test === 5) {
             c1 = crochetD(A, 'red')
             c2 = crochetD(B, 'red')
-            c3 = crochetD(C, 'blue')
-            c4 = crochetD(D, 'blue')
+            c3 = crochetD(C, bleuMathalea)
+            c4 = crochetD(D, bleuMathalea)
           } else {
             c1 = crochetG(A, 'red')
             c2 = crochetG(B, 'red')
-            c3 = crochetG(C, 'blue')
-            c4 = crochetG(D, 'blue')
+            c3 = crochetG(C, bleuMathalea)
+            c4 = crochetG(D, bleuMathalea)
           }
           int = intervalle(X1, X2, 'black', 0)
           int1 = intervalle(A, B, 'red', 0)
-          int2 = intervalle(C, D, 'blue', 0)
+          int2 = intervalle(C, D, bleuMathalea, 0)
 
           if (test === 1) {
             texte += `$I=[${a};${b}]\\cap[${c};${d}]$`
@@ -169,37 +170,37 @@ export default class UnionEtIntersectionIntervallesDeR extends Exercice {
           if (test === 1) {
             c1 = crochetD(A, 'red')
             c2 = crochetG(B, 'red')
-            c3 = crochetD(C, 'blue')
-            c4 = crochetG(D, 'blue')
+            c3 = crochetD(C, bleuMathalea)
+            c4 = crochetG(D, bleuMathalea)
           } else if (test === 2) {
             c1 = crochetG(A, 'red')
             c2 = crochetG(B, 'red')
-            c3 = crochetD(C, 'blue')
-            c4 = crochetG(D, 'blue')
+            c3 = crochetD(C, bleuMathalea)
+            c4 = crochetG(D, bleuMathalea)
           } else if (test === 3) {
             c1 = crochetD(A, 'red')
             c2 = crochetG(B, 'red')
-            c3 = crochetG(C, 'blue')
-            c4 = crochetG(D, 'blue')
+            c3 = crochetG(C, bleuMathalea)
+            c4 = crochetG(D, bleuMathalea)
           } else if (test === 4) {
             c1 = crochetD(A, 'red')
             c2 = crochetG(B, 'red')
-            c3 = crochetD(C, 'blue')
-            c4 = crochetD(D, 'blue')
+            c3 = crochetD(C, bleuMathalea)
+            c4 = crochetD(D, bleuMathalea)
           } else if (test === 5) {
             c1 = crochetD(A, 'red')
             c2 = crochetD(B, 'red')
-            c3 = crochetD(C, 'blue')
-            c4 = crochetD(D, 'blue')
+            c3 = crochetD(C, bleuMathalea)
+            c4 = crochetD(D, bleuMathalea)
           } else {
             c1 = crochetG(A, 'red')
             c2 = crochetG(B, 'red')
-            c3 = crochetG(C, 'blue')
-            c4 = crochetG(D, 'blue')
+            c3 = crochetG(C, bleuMathalea)
+            c4 = crochetG(D, bleuMathalea)
           }
           int = intervalle(X1, X2, 'black', 0)
           int1 = intervalle(A, B, 'red', 0)
-          int2 = intervalle(C, D, 'blue', 0)
+          int2 = intervalle(C, D, bleuMathalea, 0)
 
           if (test === 1) {
             texte += `$I=[${a};${b}]\\cup[${c};${d}]$`
@@ -256,37 +257,37 @@ export default class UnionEtIntersectionIntervallesDeR extends Exercice {
           if (test === 1) {
             c1 = crochetD(A, 'red')
             c2 = crochetG(B, 'red')
-            c3 = crochetD(C, 'blue')
-            c4 = crochetG(D, 'blue')
+            c3 = crochetD(C, bleuMathalea)
+            c4 = crochetG(D, bleuMathalea)
           } else if (test === 2) {
             c1 = crochetG(A, 'red')
             c2 = crochetG(B, 'red')
-            c3 = crochetD(C, 'blue')
-            c4 = crochetG(D, 'blue')
+            c3 = crochetD(C, bleuMathalea)
+            c4 = crochetG(D, bleuMathalea)
           } else if (test === 3) {
             c1 = crochetD(A, 'red')
             c2 = crochetG(B, 'red')
-            c3 = crochetG(C, 'blue')
-            c4 = crochetG(D, 'blue')
+            c3 = crochetG(C, bleuMathalea)
+            c4 = crochetG(D, bleuMathalea)
           } else if (test === 4) {
             c1 = crochetD(A, 'red')
             c2 = crochetD(B, 'red')
-            c3 = crochetG(C, 'blue')
-            c4 = crochetD(D, 'blue')
+            c3 = crochetG(C, bleuMathalea)
+            c4 = crochetD(D, bleuMathalea)
           } else if (test === 5) {
             c1 = crochetD(A, 'red')
             c2 = crochetD(B, 'red')
-            c3 = crochetD(C, 'blue')
-            c4 = crochetD(D, 'blue')
+            c3 = crochetD(C, bleuMathalea)
+            c4 = crochetD(D, bleuMathalea)
           } else {
             c1 = crochetG(A, 'red')
             c2 = crochetG(B, 'red')
-            c3 = crochetG(C, 'blue')
-            c4 = crochetG(D, 'blue')
+            c3 = crochetG(C, bleuMathalea)
+            c4 = crochetG(D, bleuMathalea)
           }
           int = intervalle(X1, X2, 'black', 0)
           int1 = intervalle(A, B, 'red', -0.1)
-          int2 = intervalle(C, D, 'blue', 0.1)
+          int2 = intervalle(C, D, bleuMathalea, 0.1)
 
           if (test === 1) {
             texte += `$I=[${a};${b}]\\cap[${c};${d}]$`
@@ -345,37 +346,37 @@ export default class UnionEtIntersectionIntervallesDeR extends Exercice {
           if (test === 1) {
             c1 = crochetD(A, 'red')
             c2 = crochetG(B, 'red')
-            c3 = crochetD(C, 'blue')
-            c4 = crochetG(D, 'blue')
+            c3 = crochetD(C, bleuMathalea)
+            c4 = crochetG(D, bleuMathalea)
           } else if (test === 2) {
             c1 = crochetG(A, 'red')
             c2 = crochetG(B, 'red')
-            c3 = crochetD(C, 'blue')
-            c4 = crochetG(D, 'blue')
+            c3 = crochetD(C, bleuMathalea)
+            c4 = crochetG(D, bleuMathalea)
           } else if (test === 3) {
             c1 = crochetD(A, 'red')
             c2 = crochetG(B, 'red')
-            c3 = crochetG(C, 'blue')
-            c4 = crochetG(D, 'blue')
+            c3 = crochetG(C, bleuMathalea)
+            c4 = crochetG(D, bleuMathalea)
           } else if (test === 4) {
             c1 = crochetD(A, 'red')
             c2 = crochetD(B, 'red')
-            c3 = crochetG(C, 'blue')
-            c4 = crochetD(D, 'blue')
+            c3 = crochetG(C, bleuMathalea)
+            c4 = crochetD(D, bleuMathalea)
           } else if (test === 5) {
             c1 = crochetD(A, 'red')
             c2 = crochetD(B, 'red')
-            c3 = crochetD(C, 'blue')
-            c4 = crochetD(D, 'blue')
+            c3 = crochetD(C, bleuMathalea)
+            c4 = crochetD(D, bleuMathalea)
           } else {
             c1 = crochetG(A, 'red')
             c2 = crochetG(B, 'red')
-            c3 = crochetG(C, 'blue')
-            c4 = crochetG(D, 'blue')
+            c3 = crochetG(C, bleuMathalea)
+            c4 = crochetG(D, bleuMathalea)
           }
           int = intervalle(X1, X2, 'black', 0)
           int1 = intervalle(A, B, 'red', -0.1)
-          int2 = intervalle(C, D, 'blue', 0.1)
+          int2 = intervalle(C, D, bleuMathalea, 0.1)
 
           if (test === 1) {
             texte += `$I=[${a};${b}]\\cup[${c};${d}]$`
@@ -441,37 +442,37 @@ export default class UnionEtIntersectionIntervallesDeR extends Exercice {
           if (test === 1) {
             c1 = crochetD(A, 'red')
             c2 = crochetG(B, 'red')
-            c3 = crochetD(C, 'blue')
-            c4 = crochetG(D, 'blue')
+            c3 = crochetD(C, bleuMathalea)
+            c4 = crochetG(D, bleuMathalea)
           } else if (test === 2) {
             c1 = crochetG(A, 'red')
             c2 = crochetG(B, 'red')
-            c3 = crochetD(C, 'blue')
-            c4 = crochetG(D, 'blue')
+            c3 = crochetD(C, bleuMathalea)
+            c4 = crochetG(D, bleuMathalea)
           } else if (test === 3) {
             c1 = crochetD(A, 'red')
             c2 = crochetG(B, 'red')
-            c3 = crochetG(C, 'blue')
-            c4 = crochetG(D, 'blue')
+            c3 = crochetG(C, bleuMathalea)
+            c4 = crochetG(D, bleuMathalea)
           } else if (test === 4) {
             c1 = crochetD(A, 'red')
             c2 = crochetD(B, 'red')
-            c3 = crochetG(C, 'blue')
-            c4 = crochetD(D, 'blue')
+            c3 = crochetG(C, bleuMathalea)
+            c4 = crochetD(D, bleuMathalea)
           } else if (test === 5) {
             c1 = crochetD(A, 'red')
             c2 = crochetD(B, 'red')
-            c3 = crochetD(C, 'blue')
-            c4 = crochetD(D, 'blue')
+            c3 = crochetD(C, bleuMathalea)
+            c4 = crochetD(D, bleuMathalea)
           } else {
             c1 = crochetG(A, 'red')
             c2 = crochetG(B, 'red')
-            c3 = crochetG(C, 'blue')
-            c4 = crochetG(D, 'blue')
+            c3 = crochetG(C, bleuMathalea)
+            c4 = crochetG(D, bleuMathalea)
           }
           int = intervalle(X1, X2, 'black', 0)
           int1 = intervalle(A, B, 'red', -0.1)
-          int2 = intervalle(C, D, 'blue', 0.1)
+          int2 = intervalle(C, D, bleuMathalea, 0.1)
 
           if (test === 1) {
             texte += `$I=[${a};${b}] \\cap [${c};${d}]$`
@@ -531,37 +532,37 @@ export default class UnionEtIntersectionIntervallesDeR extends Exercice {
           if (test === 1) {
             c1 = crochetD(A, 'red')
             c2 = crochetG(B, 'red')
-            c3 = crochetD(C, 'blue')
-            c4 = crochetG(D, 'blue')
+            c3 = crochetD(C, bleuMathalea)
+            c4 = crochetG(D, bleuMathalea)
           } else if (test === 2) {
             c1 = crochetG(A, 'red')
             c2 = crochetG(B, 'red')
-            c3 = crochetD(C, 'blue')
-            c4 = crochetG(D, 'blue')
+            c3 = crochetD(C, bleuMathalea)
+            c4 = crochetG(D, bleuMathalea)
           } else if (test === 3) {
             c1 = crochetD(A, 'red')
             c2 = crochetG(B, 'red')
-            c3 = crochetG(C, 'blue')
-            c4 = crochetG(D, 'blue')
+            c3 = crochetG(C, bleuMathalea)
+            c4 = crochetG(D, bleuMathalea)
           } else if (test === 4) {
             c1 = crochetD(A, 'red')
             c2 = crochetD(B, 'red')
-            c3 = crochetG(C, 'blue')
-            c4 = crochetD(D, 'blue')
+            c3 = crochetG(C, bleuMathalea)
+            c4 = crochetD(D, bleuMathalea)
           } else if (test === 5) {
             c1 = crochetD(A, 'red')
             c2 = crochetD(B, 'red')
-            c3 = crochetD(C, 'blue')
-            c4 = crochetD(D, 'blue')
+            c3 = crochetD(C, bleuMathalea)
+            c4 = crochetD(D, bleuMathalea)
           } else {
             c1 = crochetG(A, 'red')
             c2 = crochetG(B, 'red')
-            c3 = crochetG(C, 'blue')
-            c4 = crochetG(D, 'blue')
+            c3 = crochetG(C, bleuMathalea)
+            c4 = crochetG(D, bleuMathalea)
           }
           int = intervalle(X1, X2, 'black', 0)
           int1 = intervalle(A, B, 'red', -0.1)
-          int2 = intervalle(C, D, 'blue', 0.1)
+          int2 = intervalle(C, D, bleuMathalea, 0.1)
 
           if (test === 1) {
             texte += `$I=[${a};${b}]\\cup[${c};${d}]$`
@@ -627,47 +628,47 @@ export default class UnionEtIntersectionIntervallesDeR extends Exercice {
             D = point(10, 0, String(d))
             c1 = vide2d()
             c2 = crochetG(B, 'red')
-            c3 = crochetD(C, 'blue')
-            c4 = crochetG(D, 'blue')
+            c3 = crochetD(C, bleuMathalea)
+            c4 = crochetG(D, bleuMathalea)
           } else if (test === 2) {
             A = point(0, 0)
             D = point(10, 0, String(d))
             c1 = vide2d()
             c2 = crochetG(B, 'red')
-            c3 = crochetD(C, 'blue')
-            c4 = crochetG(D, 'blue')
+            c3 = crochetD(C, bleuMathalea)
+            c4 = crochetG(D, bleuMathalea)
           } else if (test === 3) {
             A = point(0, 0)
             D = point(10, 0, String(d))
             c1 = vide2d()
             c2 = crochetG(B, 'red')
-            c3 = crochetG(C, 'blue')
-            c4 = crochetG(D, 'blue')
+            c3 = crochetG(C, bleuMathalea)
+            c4 = crochetG(D, bleuMathalea)
           } else if (test === 4) {
             A = point(0, 0, String(a))
             D = point(15, 0)
             c1 = crochetD(A, 'red')
             c2 = crochetD(B, 'red')
-            c3 = crochetG(C, 'blue')
+            c3 = crochetG(C, bleuMathalea)
             c4 = vide2d()
           } else if (test === 5) {
             A = point(0, 0, String(a))
             D = point(15, 0)
             c1 = crochetD(A, 'red')
             c2 = crochetD(B, 'red')
-            c3 = crochetD(C, 'blue')
+            c3 = crochetD(C, bleuMathalea)
             c4 = vide2d()
           } else {
             A = point(0, 0, String(a))
             D = point(15, 0)
             c1 = crochetG(A, 'red')
             c2 = crochetG(B, 'red')
-            c3 = crochetG(C, 'blue')
+            c3 = crochetG(C, bleuMathalea)
             c4 = vide2d()
           }
           int = intervalle(X1, X2, 'black', 0)
           int1 = intervalle(A, B, 'red', 0)
-          int2 = intervalle(C, D, 'blue', 0)
+          int2 = intervalle(C, D, bleuMathalea, 0)
 
           if (test === 1) {
             texte += `$I=]-\\infty;${b}] \\cap [${c};${d}]$`
@@ -732,47 +733,47 @@ export default class UnionEtIntersectionIntervallesDeR extends Exercice {
             D = point(10, 0, String(d))
             c1 = vide2d()
             c2 = crochetG(B, 'red')
-            c3 = crochetD(C, 'blue')
-            c4 = crochetG(D, 'blue')
+            c3 = crochetD(C, bleuMathalea)
+            c4 = crochetG(D, bleuMathalea)
           } else if (test === 2) {
             A = point(0, 0)
             D = point(10, 0, String(d))
             c1 = vide2d()
             c2 = crochetG(B, 'red')
-            c3 = crochetD(C, 'blue')
-            c4 = crochetG(D, 'blue')
+            c3 = crochetD(C, bleuMathalea)
+            c4 = crochetG(D, bleuMathalea)
           } else if (test === 3) {
             A = point(0, 0)
             D = point(10, 0, String(d))
             c1 = vide2d()
             c2 = crochetG(B, 'red')
-            c3 = crochetG(C, 'blue')
-            c4 = crochetG(D, 'blue')
+            c3 = crochetG(C, bleuMathalea)
+            c4 = crochetG(D, bleuMathalea)
           } else if (test === 4) {
             A = point(0, 0, String(a))
             D = point(15, 0)
             c1 = crochetD(A, 'red')
             c2 = crochetD(B, 'red')
-            c3 = crochetG(C, 'blue')
+            c3 = crochetG(C, bleuMathalea)
             c4 = vide2d()
           } else if (test === 5) {
             A = point(0, 0, String(a))
             D = point(15, 0)
             c1 = crochetD(A, 'red')
             c2 = crochetD(B, 'red')
-            c3 = crochetD(C, 'blue')
+            c3 = crochetD(C, bleuMathalea)
             c4 = vide2d()
           } else {
             A = point(0, 0, String(a))
             D = point(15, 0)
             c1 = crochetD(A, 'red')
             c2 = crochetG(B, 'red')
-            c3 = crochetG(C, 'blue')
+            c3 = crochetG(C, bleuMathalea)
             c4 = vide2d()
           }
           int = intervalle(X1, X2, 'black', 0)
           int1 = intervalle(A, B, 'red', 0)
-          int2 = intervalle(C, D, 'blue', 0)
+          int2 = intervalle(C, D, bleuMathalea, 0)
 
           if (test === 1) {
             texte += `$I=]-\\infty;${b}] \\cup [${c};${d}]$`
@@ -845,11 +846,11 @@ export default class UnionEtIntersectionIntervallesDeR extends Exercice {
           D = point(9, 0, String(d))
           c1 = crochetG(A, 'red')
           c2 = crochetD(B, 'red')
-          c3 = crochetD(C, 'blue')
-          c4 = crochetG(D, 'blue')
+          c3 = crochetD(C, bleuMathalea)
+          c4 = crochetG(D, bleuMathalea)
           int = intervalle(X1, X2, 'black', 0)
           int1 = intervalle(A, B, 'red', -0.1)
-          int2 = intervalle(C, D, 'blue', 0.1)
+          int2 = intervalle(C, D, bleuMathalea, 0.1)
           texte += `$I=]${a};${b}[ \\cap [${c};${d}]$`
 
           texteCorr = `${context.isHtml ? '<br>' : ''}On cherche les réels qui sont à la fois dans $]${a};${b}[$ et dans $[${c};${d}]$.`
@@ -875,11 +876,11 @@ export default class UnionEtIntersectionIntervallesDeR extends Exercice {
           D = point(9, 0, String(d))
           c1 = crochetG(A, 'red')
           c2 = crochetD(B, 'red')
-          c3 = crochetG(C, 'blue')
-          c4 = crochetD(D, 'blue')
+          c3 = crochetG(C, bleuMathalea)
+          c4 = crochetD(D, bleuMathalea)
           int = intervalle(X1, X2, 'black', 0)
           int1 = intervalle(A, B, 'red', -0.1)
-          int2 = intervalle(C, D, 'blue', 0.1)
+          int2 = intervalle(C, D, bleuMathalea, 0.1)
           texte = `$I=]${a};${b}[ \\cup ]${c};${d}[$`
 
           texteCorr = `${context.isHtml ? '<br>' : ''}On cherche les réels qui sont dans $]${a};${b}[$, ou bien dans $]${c};${d}[$.`

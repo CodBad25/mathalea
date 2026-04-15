@@ -10,6 +10,7 @@ import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 
 /* auteur Stéphane Guyon */
 export const titre = 'Résoudre une équation avec des valeurs absolues'
@@ -86,7 +87,7 @@ export default class ValeurAbsolueEtEquation extends Exercice {
             A.positionLabel = 'below'
             const x1 = point(9, 0, String(c + b), 'below')
             x1.positionLabel = 'below'
-            const s1 = segmentAvecExtremites(x0, x1, 'blue')
+            const s1 = segmentAvecExtremites(x0, x1, bleuMathalea)
             s1.epaisseur = 2
             const s2 = segmentAvecExtremites(x0, A)
             const l = labelPoint(A, x0, x1)

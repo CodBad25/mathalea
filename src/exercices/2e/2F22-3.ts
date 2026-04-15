@@ -16,6 +16,7 @@ import Exercice from '../Exercice'
 import { ajouteChampTexte } from '../../lib/interactif/questionMathLive'
 import type FractionEtendue from '../../modules/FractionEtendue'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
+import { bleuMathalea } from '../../lib/colors'
 export const titre =
   "Déterminer le tableau de signes d'une fonction graphiquement"
 export const interactifReady = true
@@ -167,8 +168,8 @@ export default class BetaModeleSpline extends Exercice {
       const courbe1 = maSpline.courbe({
         epaisseur: 1.5,
         ajouteNoeuds: true,
-        optionsNoeuds: { color: 'blue', taille: 2, style: '.', epaisseur: 2 },
-        color: 'blue',
+        optionsNoeuds: { color: bleuMathalea, taille: 2, style: '.', epaisseur: 2 },
+        color: bleuMathalea,
       })
 
       const objetsEnonce = [

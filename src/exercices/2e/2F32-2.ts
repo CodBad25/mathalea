@@ -10,6 +10,7 @@ import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 
 export const titre = 'Déterminer graphiquement les extremums'
 export const interactifReady = true
@@ -129,8 +130,8 @@ export default class BetaModeleSpline extends Exercice {
       const courbe1 = maSpline.courbe({
         epaisseur: 1.5,
         ajouteNoeuds: true,
-        optionsNoeuds: { color: 'blue', taille: 1, style: '.', epaisseur: 2 },
-        color: 'blue',
+        optionsNoeuds: { color: bleuMathalea, taille: 1, style: '.', epaisseur: 2 },
+        color: bleuMathalea,
       })
       const objetsEnonce = [repere1, courbe1]
       let texteEnonce = `On donne la courbe représentative d'une fonction $f$ définie sur l'intervalle $[${maSpline.x[0]}\\,;\\,${maSpline.x[maSpline.n - 1]}]$. <br>`

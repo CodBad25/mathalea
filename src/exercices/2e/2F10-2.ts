@@ -23,6 +23,7 @@ import FractionEtendue from '../../modules/FractionEtendue'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 
 export const titre =
   "Déterminer graphiquement l'expression d'une fonction affine"
@@ -234,14 +235,14 @@ export default class Lecturefonctionaffine extends Exercice {
               let labs: Latex2d
               let lord: Latex2d
               if (b > -2 || a > 0) {
-                s1 = segment(0, b, 2, b, 'blue')
+                s1 = segment(0, b, 2, b, bleuMathalea)
                 s2 = segment(2, b, 2, b + a, 'green')
                 labs = texteParPosition(
                   '$1$',
                   1,
                   a < 0 ? b + 0.4 : b - 0.8,
                   0,
-                  'blue',
+                  bleuMathalea,
                   1,
                 ) as Latex2d
                 lord = texteParPosition(
@@ -253,14 +254,14 @@ export default class Lecturefonctionaffine extends Exercice {
                   1,
                 ) as Latex2d
               } else {
-                s1 = segment(-4, -2 * a + b, -2, -2 * a + b, 'blue')
+                s1 = segment(-4, -2 * a + b, -2, -2 * a + b, bleuMathalea)
                 s2 = segment(-2, -2 * a + b, -2, -1 * a + b, 'green')
                 labs = texteParPosition(
                   '$1$',
                   -3,
                   -2 * a + b + 0.5,
                   0,
-                  'blue',
+                  bleuMathalea,
                   1,
                 ) as Latex2d
                 lord = texteParPosition(
@@ -369,7 +370,7 @@ export default class Lecturefonctionaffine extends Exercice {
             if (this.correctionDetaillee) {
               texteCorr +=
                 '<br>On cherche un déplacement horizontal (en bleu) correspondant à un déplacement vertical entier (en vert).'
-              texteCorr += `<br>On lit que pour un déplacement vers la droite de ${texteEnCouleurEtGras(d + ' unités', 'blue')}, il faut `
+              texteCorr += `<br>On lit que pour un déplacement vers la droite de ${texteEnCouleurEtGras(d + ' unités', bleuMathalea)}, il faut `
               if (a > 0) {
                 texteCorr += 'monter de '
               }
@@ -483,14 +484,14 @@ export default class Lecturefonctionaffine extends Exercice {
 
             if (a > 0) {
               if (b > 2) {
-                s1 = segment(-d, b - a, 0, b - a, 'blue')
+                s1 = segment(-d, b - a, 0, b - a, bleuMathalea)
                 s2 = segment(0, b - a, 0, b, 'green')
                 labs = texteParPosition(
                   `$${d}$`,
                   -d / 2,
                   b - a - 0.8,
                   0,
-                  'blue',
+                  bleuMathalea,
                   1,
                 ) as Latex2d
                 lord = texteParPosition(
@@ -502,14 +503,14 @@ export default class Lecturefonctionaffine extends Exercice {
                   1,
                 ) as Latex2d
               } else {
-                s1 = segment(0, b, d, b, 'blue')
+                s1 = segment(0, b, d, b, bleuMathalea)
                 s2 = segment(d, b, d, a + b, 'green')
                 labs = texteParPosition(
                   `$${d}$`,
                   d / 2,
                   b - 1,
                   0,
-                  'blue',
+                  bleuMathalea,
                   1,
                 ) as Latex2d
                 lord = texteParPosition(
@@ -523,14 +524,14 @@ export default class Lecturefonctionaffine extends Exercice {
               }
             } else {
               if (b < 1) {
-                s1 = segment(-d, -a + b, 0, -a + b, 'blue')
+                s1 = segment(-d, -a + b, 0, -a + b, bleuMathalea)
                 s2 = segment(0, -a + b, 0, b, 'green')
                 labs = texteParPosition(
                   `$${d}$`,
                   -d / 2,
                   -a + b + 0.5,
                   0,
-                  'blue',
+                  bleuMathalea,
                   1,
                 ) as Latex2d
                 lord = texteParPosition(
@@ -542,14 +543,14 @@ export default class Lecturefonctionaffine extends Exercice {
                   1,
                 ) as Latex2d
               } else {
-                s1 = segment(0, b, d, b, 'blue')
+                s1 = segment(0, b, d, b, bleuMathalea)
                 s2 = segment(d, b, d, b + a, 'green')
                 labs = texteParPosition(
                   `$${d}$`,
                   d / 2,
                   b + 0.5,
                   0,
-                  'blue',
+                  bleuMathalea,
                   1,
                 ) as Latex2d
                 lord = texteParPosition(

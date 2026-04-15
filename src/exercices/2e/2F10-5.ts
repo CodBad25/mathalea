@@ -28,6 +28,7 @@ import FractionEtendue from '../../modules/FractionEtendue'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 
 export const dateDeModifImportante = '25/01/2026' // Mise en place de MetaInteractif2d par Jean-claude Lhote
 export const titre = "Déterminer le signe d'une fonction affine"
@@ -279,7 +280,7 @@ ${a !== 1 ? `x& ${a < 0 ? `${miseEnEvidence(`${sp(1.5)}\\boldsymbol{<}${sp(1.5)}
               grilleSecondaireXMin: -8,
               grilleSecondaireXMax: 8,
             })
-            const maCourbe = courbe(f, { repere: monRepere, color: 'blue' })
+            const maCourbe = courbe(f, { repere: monRepere, color: bleuMathalea })
             const A = point(-b / a, 0, '')
 
             const lA = labelPoint(A, 'red')
@@ -470,7 +471,7 @@ ${a !== 1 ? `x& ${a < 0 ? `${miseEnEvidence(`${sp(1.5)}\\boldsymbol{<}${sp(1.5)}
               grilleSecondaireXMin: -8,
               grilleSecondaireXMax: 8,
             })
-            const maCourbe = courbe(f, { repere: monRepere, color: 'blue' })
+            const maCourbe = courbe(f, { repere: monRepere, color: bleuMathalea })
             const A = point(-b / a.valeurDecimale, 0, '')
 
             const lA = labelPoint(A, 'red')

@@ -32,7 +32,7 @@ import { tracePoint } from './TracePoint'
  * @param {[number, string][]} [parametres.pointListe = []] Liste de points à mettre sur l'axe comme, par exemple, [[3.4,'A'],[3.8,'B']]. Les noms se placent au-dessus de l'axe.
  * @param {number?} [parametres.labelPointTaille = 10] Taille (hauteur) de la police des points (de la liste des points pointListe) utilisée de 5 = \small à 20=\huge...
  * @param {number?} [parametres.labelPointLargeur = 20] Largeur de la boîte où sont affichés les points (de la liste des points pointListe) utilisée de 5 = \small à 20=\huge...
- * @param {string?} [parametres.pointCouleur = 'red', bleuMathalea] Couleur des points de la liste pointListe : du type 'red', bleuMathalea ou du type '#a12345'
+ * @param {string?} [parametres.pointCouleur =  bleuMathalea] Couleur des points de la liste pointListe : du type 'red', bleuMathalea ou du type '#a12345'
  * @param {number?} [parametres.pointTaille = 4] Taille en pixels des points de la liste  pointListe
  * @param {string?} [parametres.pointStyle = '+'] Style des points de la liste pointListe
  * @param {number?} [parametres.pointOpacite = 0.8] Opacité des points de la liste pointListe
@@ -351,7 +351,7 @@ export class DroiteGraduee extends ObjetMathalea2D {
  * @param {array?} [parametres.pointListe = []] Liste de points à mettre sur l'axe comme, par exemple, [[3.4,'A'],[3.8,'B']]. Les noms se placent au-dessus de l'axe.
  * @param {number} [parametres.labelPointTaille = 10] Taille (hauteur) de la police des points (de la liste des points pointListe) utilisée de 5 = \small à 20=\huge...
  * @param {number} [parametres.labelPointLargeur = 20] Largeur de la boîte où sont affichés les points (de la liste des points pointListe) utilisée de 5 = \small à 20=\huge...
- * @param {string} [parametres.pointCouleur = 'red', bleuMathalea] Couleur des points de la liste pointListe : du type 'red', bleuMathalea ou du type '#a12345'
+ * @param {string} [parametres.pointCouleur = bleuMathalea] Couleur des points de la liste pointListe : du type 'red', bleuMathalea ou du type '#a12345'
  * @param {number} [parametres.pointTaille = 4] Taille en pixels des points de la liste  pointListe
  * @param {string} [parametres.pointStyle = '+'] Style des points de la liste pointListe
  * @param {number} [parametres.pointOpacite = 0.8] Opacité des points de la liste pointListe

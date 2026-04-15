@@ -13,6 +13,7 @@ import FractionEtendue from '../../modules/FractionEtendue'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 
 export const titre =
   "Déterminer les points d'intersection de trois droites données graphiquement"
@@ -235,7 +236,7 @@ export default class IntersectionTroisDroites extends Exercice {
 
       const droite1 = droiteAvecNomLatex(c, '(d_1)', 'red')
       const droite2 = droiteAvecNomLatex(c2, '(d_2)', 'green')
-      const droite3 = droiteAvecNomLatex(c3, '(d_3)', 'blue')
+      const droite3 = droiteAvecNomLatex(c3, '(d_3)', bleuMathalea)
       const droiteFrac1 = [new FractionEtendue(a, d), new FractionEtendue(b, 1)]
       const droiteFrac2 = [
         new FractionEtendue(a2, d2),

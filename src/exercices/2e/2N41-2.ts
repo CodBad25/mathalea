@@ -18,6 +18,7 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 export const titre = 'Factoriser avec $a^2-b^2$'
 export const uuid = '47f20'
 export const interactifReady = true
@@ -81,7 +82,7 @@ export default class factorisationDifferenceCarres extends Exercice {
 
       let texte = ''
       let texteCorr = ''
-      const texteEgaliteR = `On utilise l'égalité remarquable $${miseEnCouleur('a', 'red')}^2-${miseEnCouleur('b', 'blue')}^2=(${miseEnCouleur('a', 'red')}-${miseEnCouleur('b', 'blue')})(${miseEnCouleur('a', 'red')}+${miseEnCouleur('b', 'blue')})$ avec `
+      const texteEgaliteR = `On utilise l'égalité remarquable $${miseEnCouleur('a', 'red')}^2-${miseEnCouleur('b', bleuMathalea)}^2=(${miseEnCouleur('a', 'red')}-${miseEnCouleur('b', bleuMathalea)})(${miseEnCouleur('a', 'red')}+${miseEnCouleur('b', bleuMathalea)})$ avec `
       const choix = choice([true, false])
 
       switch (listeTypeDeQuestions[i]) {
@@ -92,16 +93,16 @@ export default class factorisationDifferenceCarres extends Exercice {
             if (this.correctionDetaillee) {
               texteCorr =
                 texteEgaliteR +
-                `${choix ? `$a=${miseEnCouleur('x', 'red')}$  et $b=${miseEnCouleur(`${a}`, 'blue')}$` : `$a=${miseEnCouleur(`${a}`, 'red')}$ et $b=${miseEnCouleur('x', 'blue')}$`}.<br>`
+                `${choix ? `$a=${miseEnCouleur('x', 'red')}$  et $b=${miseEnCouleur(`${a}`, bleuMathalea)}$` : `$a=${miseEnCouleur(`${a}`, 'red')}$ et $b=${miseEnCouleur('x', bleuMathalea)}$`}.<br>`
               if (choix === true) {
                 texteCorr += `$\\begin{aligned}
-         x^2-${a * a}&=\\underbrace{${miseEnCouleur('x', 'red')}^2-${miseEnCouleur(`${a}`, 'blue')}^2}_{a^2-b^2}\\\\
-         &=\\underbrace{(${miseEnCouleur('x', 'red')}-${miseEnCouleur(`${a}`, 'blue')})(${miseEnCouleur('x', 'red')}+${miseEnCouleur(`${a}`, 'blue')})}_{(a-b)(a+b)}
+         x^2-${a * a}&=\\underbrace{${miseEnCouleur('x', 'red')}^2-${miseEnCouleur(`${a}`, bleuMathalea)}^2}_{a^2-b^2}\\\\
+         &=\\underbrace{(${miseEnCouleur('x', 'red')}-${miseEnCouleur(`${a}`, bleuMathalea)})(${miseEnCouleur('x', 'red')}+${miseEnCouleur(`${a}`, bleuMathalea)})}_{(a-b)(a+b)}
          \\end{aligned}$ `
               } else {
                 texteCorr += `$\\begin{aligned}
-          ${a * a}-x^2&=\\underbrace{${miseEnCouleur(`${a}`, 'red')}^2-${miseEnCouleur('x', 'blue')}^2}_{a^2-b^2}\\\\
-          &=\\underbrace{(${miseEnCouleur(`${a}`, 'red')}-${miseEnCouleur('x', 'blue')})(${miseEnCouleur(`${a}`, 'red')}+${miseEnCouleur('x', 'blue')})}_{(a-b)(a+b)}
+          ${a * a}-x^2&=\\underbrace{${miseEnCouleur(`${a}`, 'red')}^2-${miseEnCouleur('x', bleuMathalea)}^2}_{a^2-b^2}\\\\
+          &=\\underbrace{(${miseEnCouleur(`${a}`, 'red')}-${miseEnCouleur('x', bleuMathalea)})(${miseEnCouleur(`${a}`, 'red')}+${miseEnCouleur('x', bleuMathalea)})}_{(a-b)(a+b)}
           \\end{aligned}$ `
               }
             } else {
@@ -131,16 +132,16 @@ export default class factorisationDifferenceCarres extends Exercice {
             if (this.correctionDetaillee) {
               texteCorr =
                 texteEgaliteR +
-                `${choix ? `$a=${miseEnCouleur('x', 'red')}$  et $b=${miseEnCouleur(`\\sqrt{${a}}`, 'blue')}$` : `$a=${miseEnCouleur(`\\sqrt{${a}}`, 'red')}$  et $b=${miseEnCouleur('x', 'blue')}$`}.<br>`
+                `${choix ? `$a=${miseEnCouleur('x', 'red')}$  et $b=${miseEnCouleur(`\\sqrt{${a}}`, bleuMathalea)}$` : `$a=${miseEnCouleur(`\\sqrt{${a}}`, 'red')}$  et $b=${miseEnCouleur('x', bleuMathalea)}$`}.<br>`
               if (choix === true) {
                 texteCorr += `$\\begin{aligned}
-         x^2-${a}&=\\underbrace{${miseEnCouleur('x', 'red')}^2-(${miseEnCouleur(`\\sqrt{${a}}`, 'blue')})^2}_{a^2-b^2}\\\\
-         &=\\underbrace{(${miseEnCouleur('x', 'red')}-${miseEnCouleur(`\\sqrt{${a}}`, 'blue')})(${miseEnCouleur('x', 'red')}+${miseEnCouleur(`\\sqrt{${a}}`, 'blue')})}_{(a-b)(a+b)}
+         x^2-${a}&=\\underbrace{${miseEnCouleur('x', 'red')}^2-(${miseEnCouleur(`\\sqrt{${a}}`, bleuMathalea)})^2}_{a^2-b^2}\\\\
+         &=\\underbrace{(${miseEnCouleur('x', 'red')}-${miseEnCouleur(`\\sqrt{${a}}`, bleuMathalea)})(${miseEnCouleur('x', 'red')}+${miseEnCouleur(`\\sqrt{${a}}`, bleuMathalea)})}_{(a-b)(a+b)}
          \\end{aligned}$ `
               } else {
                 texteCorr += `$\\begin{aligned}
           ${a}-x^2&=\\underbrace{(${miseEnCouleur(`\\sqrt{${a}}`, 'red')})^2-x^2}_{a^2-b^2}\\\\
-          &=\\underbrace{(${miseEnCouleur(`\\sqrt{${a}}`, 'red')}-${miseEnCouleur('x', 'blue')})(${miseEnCouleur(`\\sqrt{${a}}`, 'red')}+${miseEnCouleur('x', 'blue')})}_{(a-b)(a+b)}
+          &=\\underbrace{(${miseEnCouleur(`\\sqrt{${a}}`, 'red')}-${miseEnCouleur('x', bleuMathalea)})(${miseEnCouleur(`\\sqrt{${a}}`, 'red')}+${miseEnCouleur('x', bleuMathalea)})}_{(a-b)(a+b)}
           \\end{aligned}$ `
               }
             } else {
@@ -170,16 +171,16 @@ export default class factorisationDifferenceCarres extends Exercice {
             if (this.correctionDetaillee) {
               texteCorr =
                 texteEgaliteR +
-                `${choix ? `$a=${miseEnCouleur(`${a}x`, 'red')}$  et $b=${miseEnCouleur(`${b}`, 'blue')}$` : `$a=${miseEnCouleur(`${b}`, 'red')}$  et $b=${miseEnCouleur(`${a}x`, 'blue')}$`}.<br>`
+                `${choix ? `$a=${miseEnCouleur(`${a}x`, 'red')}$  et $b=${miseEnCouleur(`${b}`, bleuMathalea)}$` : `$a=${miseEnCouleur(`${b}`, 'red')}$  et $b=${miseEnCouleur(`${a}x`, bleuMathalea)}$`}.<br>`
               if (choix === true) {
                 texteCorr += `$\\begin{aligned}
-       ${a * a}x^2-${b * b}&=\\underbrace{(${miseEnCouleur(`${a}x`, 'red')})^2-${miseEnCouleur(`${b}`, 'blue')}^2}_{a^2-b^2}\\\\
-       &=\\underbrace{(${miseEnCouleur(`${a}x`, 'red')}-${miseEnCouleur(`${b}`, 'blue')})(${miseEnCouleur(`${a}x`, 'red')}+${miseEnCouleur(`${b}`, 'blue')})}_{(a-b)(a+b)}
+       ${a * a}x^2-${b * b}&=\\underbrace{(${miseEnCouleur(`${a}x`, 'red')})^2-${miseEnCouleur(`${b}`, bleuMathalea)}^2}_{a^2-b^2}\\\\
+       &=\\underbrace{(${miseEnCouleur(`${a}x`, 'red')}-${miseEnCouleur(`${b}`, bleuMathalea)})(${miseEnCouleur(`${a}x`, 'red')}+${miseEnCouleur(`${b}`, bleuMathalea)})}_{(a-b)(a+b)}
        \\end{aligned}$ `
               } else {
                 texteCorr += `$\\begin{aligned}
-        ${b * b}-${a * a}x^2&=\\underbrace{${miseEnCouleur(`${b}`, 'red')}^2-(${miseEnCouleur(`${a}x`, 'blue')})^2}_{a^2-b^2}\\\\
-        &=\\underbrace{(${miseEnCouleur(`${b}`, 'red')}-${miseEnCouleur(`${a}x`, 'blue')})(${miseEnCouleur(`${b}`, 'red')}+${miseEnCouleur(`${a}x`, 'blue')})}_{(a-b)(a+b)}
+        ${b * b}-${a * a}x^2&=\\underbrace{${miseEnCouleur(`${b}`, 'red')}^2-(${miseEnCouleur(`${a}x`, bleuMathalea)})^2}_{a^2-b^2}\\\\
+        &=\\underbrace{(${miseEnCouleur(`${b}`, 'red')}-${miseEnCouleur(`${a}x`, bleuMathalea)})(${miseEnCouleur(`${b}`, 'red')}+${miseEnCouleur(`${a}x`, bleuMathalea)})}_{(a-b)(a+b)}
         \\end{aligned}$ `
               }
             } else {
@@ -210,16 +211,16 @@ export default class factorisationDifferenceCarres extends Exercice {
             if (this.correctionDetaillee) {
               texteCorr =
                 texteEgaliteR +
-                `${choix ? `$a=${miseEnCouleur(`\\sqrt{${a}}x`, 'red')}$  et $b=${miseEnCouleur(`${b}`, 'blue')}$` : `$a=${miseEnCouleur(`${b}`, 'red')}$  et $b=${miseEnCouleur(`\\sqrt{${a}}x`, 'blue')}$`}.<br>`
+                `${choix ? `$a=${miseEnCouleur(`\\sqrt{${a}}x`, 'red')}$  et $b=${miseEnCouleur(`${b}`, bleuMathalea)}$` : `$a=${miseEnCouleur(`${b}`, 'red')}$  et $b=${miseEnCouleur(`\\sqrt{${a}}x`, bleuMathalea)}$`}.<br>`
               if (choix === true) {
                 texteCorr += `$\\begin{aligned}
-       ${a}x^2-${b * b}&=\\underbrace{(${miseEnCouleur(`\\sqrt{${a}}x`, 'red')})^2-${miseEnCouleur(`${b}`, 'blue')}^2}_{a^2-b^2}\\\\
-       &=\\underbrace{(${miseEnCouleur(`\\sqrt{${a}}x`, 'red')}-${miseEnCouleur(`${b}`, 'blue')})(${miseEnCouleur(`\\sqrt{${a}}x`, 'red')}+${miseEnCouleur(`${b}`, 'blue')})}_{(a-b)(a+b)}
+       ${a}x^2-${b * b}&=\\underbrace{(${miseEnCouleur(`\\sqrt{${a}}x`, 'red')})^2-${miseEnCouleur(`${b}`, bleuMathalea)}^2}_{a^2-b^2}\\\\
+       &=\\underbrace{(${miseEnCouleur(`\\sqrt{${a}}x`, 'red')}-${miseEnCouleur(`${b}`, bleuMathalea)})(${miseEnCouleur(`\\sqrt{${a}}x`, 'red')}+${miseEnCouleur(`${b}`, bleuMathalea)})}_{(a-b)(a+b)}
        \\end{aligned}$ `
               } else {
                 texteCorr += `$\\begin{aligned}
         ${b * b}-${a}x^2&=\\underbrace{${miseEnCouleur(`${b}`, 'red')}^2-(\\sqrt{${a}}x)^2}_{a^2-b^2}\\\\
-        &=\\underbrace{(${miseEnCouleur(`${b}`, 'red')}-${miseEnCouleur(`\\sqrt{${a}}x`, 'blue')})(${miseEnCouleur(`${b}`, 'red')}+${miseEnCouleur(`\\sqrt{${a}}x`, 'blue')})}_{(a-b)(a+b)}
+        &=\\underbrace{(${miseEnCouleur(`${b}`, 'red')}-${miseEnCouleur(`\\sqrt{${a}}x`, bleuMathalea)})(${miseEnCouleur(`${b}`, 'red')}+${miseEnCouleur(`\\sqrt{${a}}x`, bleuMathalea)})}_{(a-b)(a+b)}
         \\end{aligned}$ `
               }
             } else {
@@ -250,16 +251,16 @@ export default class factorisationDifferenceCarres extends Exercice {
             if (this.correctionDetaillee) {
               texteCorr =
                 texteEgaliteR +
-                `${choix ? `$a=${miseEnCouleur(`\\dfrac{x}{${a}}`, 'red')}$  et $b=${miseEnCouleur(`${b}`, 'blue')}$` : `$a=${miseEnCouleur(`${b}`, 'red')}$  et $b=${miseEnCouleur(`\\dfrac{x}{${a}}`, 'blue')}$`}.<br>`
+                `${choix ? `$a=${miseEnCouleur(`\\dfrac{x}{${a}}`, 'red')}$  et $b=${miseEnCouleur(`${b}`, bleuMathalea)}$` : `$a=${miseEnCouleur(`${b}`, 'red')}$  et $b=${miseEnCouleur(`\\dfrac{x}{${a}}`, bleuMathalea)}$`}.<br>`
               if (choix === true) {
                 texteCorr += `$\\begin{aligned}
-      \\dfrac{x^2}{${a * a}}-${b * b}&=\\underbrace{\\left(${miseEnCouleur(`\\dfrac{x}{${a}}`, 'red')}\\right)^2-${miseEnCouleur(`${b}`, 'blue')}^2}_{a^2-b^2}\\\\
-       &=\\underbrace{\\left(${miseEnCouleur(`\\dfrac{x}{${a}}`, 'red')}-${miseEnCouleur(`${b}`, 'blue')}\\right)\\left(${miseEnCouleur(`\\dfrac{x}{${a}}`, 'red')}+${miseEnCouleur(`${b}`, 'blue')}\\right)}_{(a-b)(a+b)}
+      \\dfrac{x^2}{${a * a}}-${b * b}&=\\underbrace{\\left(${miseEnCouleur(`\\dfrac{x}{${a}}`, 'red')}\\right)^2-${miseEnCouleur(`${b}`, bleuMathalea)}^2}_{a^2-b^2}\\\\
+       &=\\underbrace{\\left(${miseEnCouleur(`\\dfrac{x}{${a}}`, 'red')}-${miseEnCouleur(`${b}`, bleuMathalea)}\\right)\\left(${miseEnCouleur(`\\dfrac{x}{${a}}`, 'red')}+${miseEnCouleur(`${b}`, bleuMathalea)}\\right)}_{(a-b)(a+b)}
        \\end{aligned}$ `
               } else {
                 texteCorr += `$\\begin{aligned}
-        ${b * b}- \\dfrac{x^2}{${a * a}}&=\\underbrace{${miseEnCouleur(`${b}`, 'red')}^2-\\left(${miseEnCouleur(`\\dfrac{x}{${a}}`, 'blue')}\\right)^2}_{a^2-b^2}\\\\
-        &=\\underbrace{\\left(${miseEnCouleur(`${b}`, 'red')}-${miseEnCouleur(`\\dfrac{x}{${a}}`, 'blue')}\\right)\\left(${miseEnCouleur(`${b}`, 'red')}+${miseEnCouleur(`\\dfrac{x}{${a}}`, 'blue')}\\right)}_{(a-b)(a+b)}
+        ${b * b}- \\dfrac{x^2}{${a * a}}&=\\underbrace{${miseEnCouleur(`${b}`, 'red')}^2-\\left(${miseEnCouleur(`\\dfrac{x}{${a}}`, bleuMathalea)}\\right)^2}_{a^2-b^2}\\\\
+        &=\\underbrace{\\left(${miseEnCouleur(`${b}`, 'red')}-${miseEnCouleur(`\\dfrac{x}{${a}}`, bleuMathalea)}\\right)\\left(${miseEnCouleur(`${b}`, 'red')}+${miseEnCouleur(`\\dfrac{x}{${a}}`, bleuMathalea)}\\right)}_{(a-b)(a+b)}
         \\end{aligned}$ `
               }
             } else {
@@ -327,16 +328,16 @@ export default class factorisationDifferenceCarres extends Exercice {
             if (this.correctionDetaillee) {
               texteCorr =
                 texteEgaliteR +
-                `${choix ? `$a=${miseEnCouleur(`${dfrac.texFraction}x`, 'red')}$  et $b=${miseEnCouleur(`${b}`, 'blue')}$` : `$a=${miseEnCouleur(`${b}`, 'red')}$  et $b=${miseEnCouleur(`${dfrac.texFraction}x`, 'blue')}$`}.<br>`
+                `${choix ? `$a=${miseEnCouleur(`${dfrac.texFraction}x`, 'red')}$  et $b=${miseEnCouleur(`${b}`, bleuMathalea)}$` : `$a=${miseEnCouleur(`${b}`, 'red')}$  et $b=${miseEnCouleur(`${dfrac.texFraction}x`, bleuMathalea)}$`}.<br>`
               if (choix === true) {
                 texteCorr += `$\\begin{aligned}
-       ${dfrac2.texFraction}x^2-${b * b}&=\\underbrace{\\left(${miseEnCouleur(`${dfrac.texFraction}x`, 'red')}\\right)^2-${miseEnCouleur(`${b}`, 'blue')}^2}_{a^2-b^2}\\\\
-       &=\\underbrace{\\left(${miseEnCouleur(`${dfrac.texFraction}x`, 'red')}-${miseEnCouleur(`${b}`, 'blue')}\\right)\\left(${miseEnCouleur(`${dfrac.texFraction}x`, 'red')}+${miseEnCouleur(`${b}`, 'blue')}\\right)}_{(a-b)(a+b)}
+       ${dfrac2.texFraction}x^2-${b * b}&=\\underbrace{\\left(${miseEnCouleur(`${dfrac.texFraction}x`, 'red')}\\right)^2-${miseEnCouleur(`${b}`, bleuMathalea)}^2}_{a^2-b^2}\\\\
+       &=\\underbrace{\\left(${miseEnCouleur(`${dfrac.texFraction}x`, 'red')}-${miseEnCouleur(`${b}`, bleuMathalea)}\\right)\\left(${miseEnCouleur(`${dfrac.texFraction}x`, 'red')}+${miseEnCouleur(`${b}`, bleuMathalea)}\\right)}_{(a-b)(a+b)}
        \\end{aligned}$ `
               } else {
                 texteCorr += `$\\begin{aligned}
-        ${b * b}-${dfrac2.texFraction}x^2&=\\underbrace{${miseEnCouleur(`${b}`, 'red')}^2-\\left(${miseEnCouleur(`${dfrac.texFraction}x`, 'blue')}\\right)^2}_{a^2-b^2}\\\\
-        &=\\underbrace{\\left(${miseEnCouleur(`${b}`, 'red')}-${miseEnCouleur(`${dfrac.texFraction}x`, 'blue')}\\right)\\left(${miseEnCouleur(`${b}`, 'red')}+${miseEnCouleur(`${dfrac.texFraction}x`, 'blue')}\\right)}_{(a-b)(a+b)}
+        ${b * b}-${dfrac2.texFraction}x^2&=\\underbrace{${miseEnCouleur(`${b}`, 'red')}^2-\\left(${miseEnCouleur(`${dfrac.texFraction}x`, bleuMathalea)}\\right)^2}_{a^2-b^2}\\\\
+        &=\\underbrace{\\left(${miseEnCouleur(`${b}`, 'red')}-${miseEnCouleur(`${dfrac.texFraction}x`, bleuMathalea)}\\right)\\left(${miseEnCouleur(`${b}`, 'red')}+${miseEnCouleur(`${dfrac.texFraction}x`, bleuMathalea)}\\right)}_{(a-b)(a+b)}
         \\end{aligned}$ `
               }
             } else {
@@ -369,16 +370,16 @@ export default class factorisationDifferenceCarres extends Exercice {
             if (this.correctionDetaillee) {
               texteCorr =
                 texteEgaliteR +
-                `${choix ? `$a=${miseEnCouleur(`${texNombre(a, 2)}x`, 'red')}$  et $b=${miseEnCouleur(`${texNombre(b, 2)}`, 'blue')}$` : `$a=${miseEnCouleur(`${texNombre(b, 2)}`, 'red')}$  et $b=${miseEnCouleur(`${texNombre(a, 2)}x`, 'blue')}$`}.<br>`
+                `${choix ? `$a=${miseEnCouleur(`${texNombre(a, 2)}x`, 'red')}$  et $b=${miseEnCouleur(`${texNombre(b, 2)}`, bleuMathalea)}$` : `$a=${miseEnCouleur(`${texNombre(b, 2)}`, 'red')}$  et $b=${miseEnCouleur(`${texNombre(a, 2)}x`, bleuMathalea)}$`}.<br>`
               if (choix === true) {
                 texteCorr += `$\\begin{aligned}
-     ${texNombre(new Decimal(a.mul(a)), 2)}x^2-${texNombre(new Decimal(b.mul(b)), 2)}&=\\underbrace{(${miseEnCouleur(`${texNombre(a, 2)}x`, 'red')})^2-(${miseEnCouleur(`${texNombre(b, 2)}`, 'blue')})^2}_{a^2-b^2}\\\\
-     &=\\underbrace{(${miseEnCouleur(`${texNombre(a, 2)}x`, 'red')}-${miseEnCouleur(`${texNombre(b, 2)}`, 'blue')})(${miseEnCouleur(`${texNombre(a, 2)}x`, 'red')}+${miseEnCouleur(`${texNombre(b, 2)}`, 'blue')})}_{(a-b)(a+b)}
+     ${texNombre(new Decimal(a.mul(a)), 2)}x^2-${texNombre(new Decimal(b.mul(b)), 2)}&=\\underbrace{(${miseEnCouleur(`${texNombre(a, 2)}x`, 'red')})^2-(${miseEnCouleur(`${texNombre(b, 2)}`, bleuMathalea)})^2}_{a^2-b^2}\\\\
+     &=\\underbrace{(${miseEnCouleur(`${texNombre(a, 2)}x`, 'red')}-${miseEnCouleur(`${texNombre(b, 2)}`, bleuMathalea)})(${miseEnCouleur(`${texNombre(a, 2)}x`, 'red')}+${miseEnCouleur(`${texNombre(b, 2)}`, bleuMathalea)})}_{(a-b)(a+b)}
      \\end{aligned}$ `
               } else {
                 texteCorr += `$\\begin{aligned}
-     ${texNombre(new Decimal(b.mul(b)), 2)}-${texNombre(new Decimal(a.mul(a)), 2)}x^2&=\\underbrace{${miseEnCouleur(`${texNombre(b, 2)}`, 'red')}^2-(${miseEnCouleur(`${texNombre(a, 2)}x`, 'blue')})^2}_{a^2-b^2}\\\\
-      &=\\underbrace{(${miseEnCouleur(`${texNombre(b, 2)}`, 'red')}-${miseEnCouleur(`${texNombre(a, 2)}x`, 'blue')})(${miseEnCouleur(`${texNombre(b, 2)}`, 'red')}+${miseEnCouleur(`${texNombre(a, 2)}x`, 'blue')})}_{(a-b)(a+b)}
+     ${texNombre(new Decimal(b.mul(b)), 2)}-${texNombre(new Decimal(a.mul(a)), 2)}x^2&=\\underbrace{${miseEnCouleur(`${texNombre(b, 2)}`, 'red')}^2-(${miseEnCouleur(`${texNombre(a, 2)}x`, bleuMathalea)})^2}_{a^2-b^2}\\\\
+      &=\\underbrace{(${miseEnCouleur(`${texNombre(b, 2)}`, 'red')}-${miseEnCouleur(`${texNombre(a, 2)}x`, bleuMathalea)})(${miseEnCouleur(`${texNombre(b, 2)}`, 'red')}+${miseEnCouleur(`${texNombre(a, 2)}x`, bleuMathalea)})}_{(a-b)(a+b)}
       \\end{aligned}$ `
               }
             } else {
@@ -407,17 +408,17 @@ export default class factorisationDifferenceCarres extends Exercice {
             if (this.correctionDetaillee) {
               texteCorr =
                 texteEgaliteR +
-                `${choix ? `$a=${miseEnCouleur(`${reduireAxPlusB(a, b)}`, 'red')}$  et $b=${miseEnCouleur(`${c}`, 'blue')}$` : `$a=${miseEnCouleur(`${c}`, 'red')}$  et $b=${miseEnCouleur(`${reduireAxPlusB(a, b)}`, 'blue')}$`}.<br>`
+                `${choix ? `$a=${miseEnCouleur(`${reduireAxPlusB(a, b)}`, 'red')}$  et $b=${miseEnCouleur(`${c}`, bleuMathalea)}$` : `$a=${miseEnCouleur(`${c}`, 'red')}$  et $b=${miseEnCouleur(`${reduireAxPlusB(a, b)}`, bleuMathalea)}$`}.<br>`
               if (choix === true) {
                 texteCorr += `$\\begin{aligned}
-      (${reduireAxPlusB(a, b)})^2-${c * c}&=\\underbrace{(${miseEnCouleur(`${reduireAxPlusB(a, b)}`, 'red')})^2-${miseEnCouleur(`${c}`, 'blue')}^2}_{a^2-b^2}\\\\
-       &=\\underbrace{(${miseEnCouleur(`${reduireAxPlusB(a, b)}`, 'red')}-${miseEnCouleur(`${c}`, 'blue')})(${miseEnCouleur(`${reduireAxPlusB(a, b)}`, 'red')}+${miseEnCouleur(`${c}`, 'blue')})}_{(a-b)(a+b)}\\\\
+      (${reduireAxPlusB(a, b)})^2-${c * c}&=\\underbrace{(${miseEnCouleur(`${reduireAxPlusB(a, b)}`, 'red')})^2-${miseEnCouleur(`${c}`, bleuMathalea)}^2}_{a^2-b^2}\\\\
+       &=\\underbrace{(${miseEnCouleur(`${reduireAxPlusB(a, b)}`, 'red')}-${miseEnCouleur(`${c}`, bleuMathalea)})(${miseEnCouleur(`${reduireAxPlusB(a, b)}`, 'red')}+${miseEnCouleur(`${c}`, bleuMathalea)})}_{(a-b)(a+b)}\\\\
        &=${c === b ? `${reduireAxPlusB(a, b - c)}(${reduireAxPlusB(a, b + c)})` : `${c === -b ? `${reduireAxPlusB(a, b + c)}(${reduireAxPlusB(a, b - c)})` : `(${reduireAxPlusB(a, b - c)})(${reduireAxPlusB(a, b + c)})`}`}
        \\end{aligned}$ `
               } else {
                 texteCorr += `$\\begin{aligned}
-        ${c * c}-(${miseEnCouleur(`${reduireAxPlusB(a, b)}`, 'blue')})^2&=\\underbrace{${miseEnCouleur(`${c}`, 'red')}^2-(${miseEnCouleur(`${reduireAxPlusB(a, b)}`, 'blue')})^2}_{a^2-b^2}\\\\
-        &=\\underbrace{(${miseEnCouleur(`${c}`, 'red')}-(${miseEnCouleur(`${reduireAxPlusB(a, b)}`, 'blue')}))(${miseEnCouleur(`${c}`, 'red')}+(${miseEnCouleur(`${reduireAxPlusB(a, b)}`, 'blue')}))}_{(a-b)(a+b)}\\\\
+        ${c * c}-(${miseEnCouleur(`${reduireAxPlusB(a, b)}`, bleuMathalea)})^2&=\\underbrace{${miseEnCouleur(`${c}`, 'red')}^2-(${miseEnCouleur(`${reduireAxPlusB(a, b)}`, bleuMathalea)})^2}_{a^2-b^2}\\\\
+        &=\\underbrace{(${miseEnCouleur(`${c}`, 'red')}-(${miseEnCouleur(`${reduireAxPlusB(a, b)}`, bleuMathalea)}))(${miseEnCouleur(`${c}`, 'red')}+(${miseEnCouleur(`${reduireAxPlusB(a, b)}`, bleuMathalea)}))}_{(a-b)(a+b)}\\\\
         &=(${reduireAxPlusB(-a, c - b)})(${reduireAxPlusB(a, b + c)})
         \\end{aligned}$ `
               }
@@ -458,11 +459,11 @@ export default class factorisationDifferenceCarres extends Exercice {
             if (this.correctionDetaillee) {
               texteCorr =
                 texteEgaliteR +
-                `$a=${miseEnCouleur(`${reduireAxPlusB(a, b)}`, 'red')}$  et $b=${miseEnCouleur(`${reduireAxPlusB(c, d)}`, 'blue')}$.<br>`
+                `$a=${miseEnCouleur(`${reduireAxPlusB(a, b)}`, 'red')}$  et $b=${miseEnCouleur(`${reduireAxPlusB(c, d)}`, bleuMathalea)}$.<br>`
 
               texteCorr += `$\\begin{aligned}
-      (${reduireAxPlusB(a, b)})^2-(${reduireAxPlusB(c, d)})^2&=\\underbrace{(${miseEnCouleur(`${reduireAxPlusB(a, b)}`, 'red')})^2-(${miseEnCouleur(`${reduireAxPlusB(c, d)}`, 'blue')})^2}_{a^2-b^2}\\\\
-       &=\\underbrace{((${miseEnCouleur(`${reduireAxPlusB(a, b)}`, 'red')})-(${miseEnCouleur(`${reduireAxPlusB(c, d)}`, 'blue')}))((${miseEnCouleur(`${reduireAxPlusB(a, b)}`, 'red')})+(${miseEnCouleur(`${reduireAxPlusB(c, d)}`, 'blue')}))}_{(a-b)(a+b)}\\\\
+      (${reduireAxPlusB(a, b)})^2-(${reduireAxPlusB(c, d)})^2&=\\underbrace{(${miseEnCouleur(`${reduireAxPlusB(a, b)}`, 'red')})^2-(${miseEnCouleur(`${reduireAxPlusB(c, d)}`, bleuMathalea)})^2}_{a^2-b^2}\\\\
+       &=\\underbrace{((${miseEnCouleur(`${reduireAxPlusB(a, b)}`, 'red')})-(${miseEnCouleur(`${reduireAxPlusB(c, d)}`, bleuMathalea)}))((${miseEnCouleur(`${reduireAxPlusB(a, b)}`, 'red')})+(${miseEnCouleur(`${reduireAxPlusB(c, d)}`, bleuMathalea)}))}_{(a-b)(a+b)}\\\\
        &=(${reduireAxPlusB(a, b)}${ecritureAlgebriqueSauf1(-c)}x${ecritureAlgebrique(-d)})(${reduireAxPlusB(a, b)}${ecritureAlgebriqueSauf1(c)}x${ecritureAlgebrique(d)})\\\\
        \\end{aligned}$ `
               texteCorr += `<br>$\\phantom{(${reduireAxPlusB(a, b)})^2-(${reduireAxPlusB(c, d)})^2}=`
@@ -515,11 +516,11 @@ export default class factorisationDifferenceCarres extends Exercice {
             if (this.correctionDetaillee) {
               texteCorr =
                 texteEgaliteR +
-                `$a=${miseEnCouleur(`${e}(${a}x${ecritureAlgebrique(b)})`, 'red')}$ et $b=${miseEnCouleur(`${f}(${c}x${ecritureAlgebrique(d)}))`, 'blue')}$.<br>`
+                `$a=${miseEnCouleur(`${e}(${a}x${ecritureAlgebrique(b)})`, 'red')}$ et $b=${miseEnCouleur(`${f}(${c}x${ecritureAlgebrique(d)}))`, bleuMathalea)}$.<br>`
               texteCorr += `
   $\\begin{aligned}${e ** 2}(${a}x${ecritureAlgebrique(b)})^2-${f ** 2}(${c}x${ecritureAlgebrique(d)})^2
-  &=\\underbrace{(${miseEnCouleur(`${e}(${a}x${ecritureAlgebrique(b)})`, 'red')})^2-(${miseEnCouleur(`${f}(${c}x${ecritureAlgebrique(d)})`, 'blue')})^2}_{a^2-b^2}\\\\
-  &=\\underbrace{[(${miseEnCouleur(`${e}(${a}x${ecritureAlgebrique(b)})`, 'red')})-(${miseEnCouleur(`${f}(${c}x${ecritureAlgebrique(d)})`, 'blue')})][(${miseEnCouleur(`${e}(${a}x${ecritureAlgebrique(b)})`, 'red')})+(${miseEnCouleur(`${f}(${c}x${ecritureAlgebrique(d)})`, 'blue')})]}_{(a-b)(a+b)}\\\\
+  &=\\underbrace{(${miseEnCouleur(`${e}(${a}x${ecritureAlgebrique(b)})`, 'red')})^2-(${miseEnCouleur(`${f}(${c}x${ecritureAlgebrique(d)})`, bleuMathalea)})^2}_{a^2-b^2}\\\\
+  &=\\underbrace{[(${miseEnCouleur(`${e}(${a}x${ecritureAlgebrique(b)})`, 'red')})-(${miseEnCouleur(`${f}(${c}x${ecritureAlgebrique(d)})`, bleuMathalea)})][(${miseEnCouleur(`${e}(${a}x${ecritureAlgebrique(b)})`, 'red')})+(${miseEnCouleur(`${f}(${c}x${ecritureAlgebrique(d)})`, bleuMathalea)})]}_{(a-b)(a+b)}\\\\
    &= \\left[(${e}\\times ${a < 0 ? `(${a}x)` : `${a}x`}${ecritureAlgebrique(e)}\\times ${ecritureParentheseSiNegatif(b)})-(${f}\\times ${c < 0 ? `(${c}x)` : `${c}x`}${ecritureAlgebrique(f)}\\times ${ecritureParentheseSiNegatif(d)})\\right]
  \\left[(${e}\\times ${a < 0 ? `(${a}x)` : `${a}x`}${ecritureAlgebrique(e)}\\times ${ecritureParentheseSiNegatif(b)})+(${f}\\times ${c < 0 ? `(${c}x)` : `${c}x`}${ecritureAlgebrique(f)}\\times ${ecritureParentheseSiNegatif(d)})\\right]
    \\\\&= (${a * e}x${ecritureAlgebrique(b * e)}${ecritureAlgebrique(-c * f)}x${ecritureAlgebrique(-d * f)})(${a * e}x${ecritureAlgebrique(b * e)}${ecritureAlgebrique(c * f)}x${ecritureAlgebrique(d * f)})\\\\`

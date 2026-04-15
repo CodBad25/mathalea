@@ -20,11 +20,11 @@ import {
  * Pour d'autres usages, il faut approfondir la fonction mais laissé en l'état car justement pas d'autre usage demandé.
  * @param {Polygone3d} base Une des deux bases du prisme droit
  * @param {Vecteur3d} vecteur Vecteur normal à la base dont la norme indique la hauteur du prisme droit.
- * @param {string} [color = 'black'] Couleur des arêtes du prisme droit : du type 'blue' ou du type '#f15929'
+ * @param {string} [color = 'black'] Couleur des arêtes du prisme droit : du type 'red', bleuMathalea ou du type '#f15929'
  * @param {boolean} [affichageNom = false] Permet (ou pas) l'affichage du nom des sommets du prisme.
  * @property {Polygone3d} base1 La base entièrement visible du prisme droit
  * @property {Vecteur3d} vecteur Vecteur normal à la base dont la norme indique la hauteur du prisme droit.
- * @property {string} [color = 'black'] Couleur des arêtes du prisme droit : du type 'blue' ou du type '#f15929'
+ * @property {string} [color = 'black'] Couleur des arêtes du prisme droit : du type 'red', bleuMathalea ou du type '#f15929'
  * @property {boolean} [affichageNom = false] Permet (ou pas) l'affichage du nom des sommets du prisme.
  * @property {Array} c2d Contient les commandes à tracer en 2d de cette fonction
  * @property {string} nom Nom du prisme
@@ -162,13 +162,13 @@ export class Prisme3d extends ObjetMathalea2D {
  * Pour d'autres usages, il faut approfondir la fonction mais laissé en l'état car justement pas d'autre usage demandé.
  * @param {Polygone3d} base Une des deux bases du prisme droit
  * @param {Vecteur3d} vecteur Vecteur normal à la base dont la norme indique la hauteur du prisme droit.
- * @param {string} [color = 'black'] Couleur des arêtes du prisme droit : du type 'blue' ou du type '#f15929'
+ * @param {string} [color = 'black'] Couleur des arêtes du prisme droit : du type 'red', bleuMathalea ou du type '#f15929'
  * @param {boolean} [affichageNom = false] Permet (ou pas) l'affichage du nom des sommets du prisme.
  * @param {string} [nomBase2] Nom de la base 2
  * @param {string[]} [positionLabels2] Position des labels de la base 2
  * @example prisme3d(p, v)
  * // Retourne un prisme droit de base p dont un vecteur normal à la base est v.
- * @example prisme3d(p, v, 'blue', true)
+ * @example prisme3d(p, v, bleuMathalea, true)
  * // Retourne un prisme droit de base p dont un vecteur normal à la base est v, de couleur V et dont les sommets sont nommés
  * @author Éric Elter (d'après version précédente de Jean-claude Lhote)
  * @return {Prisme3d}

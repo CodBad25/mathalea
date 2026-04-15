@@ -6,6 +6,7 @@ import { arrondi, rangeMinMax } from '../../lib/outils/nombres'
 import { texNombre } from '../../lib/outils/texNombre'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 export const titre =
   "Trouver l'exposant manquant dans des nombres écrits avec des puissances de 10"
 export const dateDePublication = '08/09/2023'
@@ -101,7 +102,7 @@ export default class CalculsAvecPuissancesDeDixBis extends Exercice {
       // decimalstring = `${texNombre(mantisse1)} \\times 10^{${exp1}}`
       const scientifiquestring = `${texNombre(mantisse)} \\times 10^{${exp}}`
 
-      const texteCorr = `$${scientifiquestring}=${miseEnEvidence(texNombre(mantisse1) + `\\times 10^{${-decalage}}`, 'blue')}\\times  10^{${exp}}=${texNombre(mantisse1)} \\times 10^{${miseEnEvidence(-decalage + '+' + ecritureParentheseSiNegatif(exp), 'blue')}}= ${mantisse1} \\times 10^{${miseEnEvidence(exp1)}}$`
+      const texteCorr = `$${scientifiquestring}=${miseEnEvidence(texNombre(mantisse1) + `\\times 10^{${-decalage}}`, bleuMathalea)}\\times  10^{${exp}}=${texNombre(mantisse1)} \\times 10^{${miseEnEvidence(-decalage + '+' + ecritureParentheseSiNegatif(exp), bleuMathalea)}}= ${mantisse1} \\times 10^{${miseEnEvidence(exp1)}}$`
       let texte = `$${scientifiquestring}=${texNombre(mantisse1)}\\times 10^{${miseEnEvidence('....', 'black')}}$`
       this.autoCorrection[i] = {}
       this.autoCorrection[i].enonce = `${texte}\n`

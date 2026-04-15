@@ -7,7 +7,7 @@ import { repere } from '../../lib/2d/reperes'
 import { labelPoint, latex2d } from '../../lib/2d/textes'
 import { tracePoint } from '../../lib/2d/TracePoint'
 import { vecteur } from '../../lib/2d/Vecteur'
-import { orangeMathalea } from '../../lib/colors'
+import { orangeMathalea, bleuMathalea } from '../../lib/colors'
 import figureApigeom, { isFigureArray } from '../../lib/figureApigeom'
 import {
   ecritureAlgebrique,
@@ -112,11 +112,11 @@ export default class RepresenterDroiteDepuisEq extends Exercice {
       droiteAB.color = colorToLatexOrHTML('red')
       droiteAB.epaisseur = 2
       const monRepere = repere(cadre)
-      const marquePointA = tracePoint(A, 'blue')
-      const marquePointB = tracePoint(B, 'blue')
-      const marquePointC = tracePoint(C, 'blue')
-      const etiquetteA = labelPoint(A, 'blue')
-      const etiquetteC = labelPoint(C, 'blue')
+      const marquePointA = tracePoint(A, bleuMathalea)
+      const marquePointB = tracePoint(B, bleuMathalea)
+      const marquePointC = tracePoint(C, bleuMathalea)
+      const etiquetteA = labelPoint(A, bleuMathalea)
+      const etiquetteC = labelPoint(C, bleuMathalea)
       marquePointA.taille = 5
       marquePointA.epaisseur = 2
       marquePointB.taille = 5
@@ -205,7 +205,7 @@ export default class RepresenterDroiteDepuisEq extends Exercice {
       })
       figure.options.labelAutomaticBeginsWith = 'A'
       figure.create('Grid')
-      figure.options.color = 'blue'
+      figure.options.color = bleuMathalea
       figure.options.gridWithTwoPointsOnSamePosition = false
       figure.options.thickness = 2
       figure.snapGrid = true

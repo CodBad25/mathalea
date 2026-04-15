@@ -13,6 +13,7 @@ import {
 import { vecteur } from '../lib/2d/Vecteur'
 import { nombreAvecEspace } from '../lib/outils/texNombre'
 import { egal } from './outils'
+import { bleuMathalea } from '../lib/colors'
 
 /**
  * Classe Pavage : permet de créer des pavages de polygones en un tour de main et de manipuler les polygones qu'il contient
@@ -595,7 +596,7 @@ export class Pavage {
 
     for (let i = 0; i < this.nb_polygones; i++) {
       this.barycentres.push(barycentre(this.polygones[i]))
-      this.tracesCentres.push(tracePoint(this.barycentres[i], 'blue'))
+      this.tracesCentres.push(tracePoint(this.barycentres[i], bleuMathalea))
       this.tracesCentres[i].opacite = 0.5
       this.tracesCentres[i].taille = 2
       this.coordonnees.push([this.barycentres[i].x, this.barycentres[i].y])

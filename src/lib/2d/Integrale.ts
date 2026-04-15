@@ -14,7 +14,7 @@ import { polygone } from './polygones'
  * @param {Repere} [parametres.repere  = {}]  Repère dans lequel le tracé de la fonction se fait
  * @param {string} [parametres.color = 'black']  Couleur du contour de l'aire : du type 'red', bleuMathalea ou du type '#a12345'
  * @param {number} [parametres.epaisseur = 2]  Epaisseur du contour de l'aire
- * @param {string} [parametres.couleurDeRemplissage = 'red', bleuMathalea]  Couleur de l'intérieur de l'aire : du type 'red', bleuMathalea ou du type '#a12345'
+ * @param {string} [parametres.couleurDeRemplissage = bleuMathalea]  Couleur de l'intérieur de l'aire : du type 'red', bleuMathalea ou du type '#a12345'
  * @param {number} [parametres.opacite = 0.5] Taux d'opacité du remplissage entre 0 et 1
  * @param {number} [parametres.hachures = 0] Style des hachures dans cette aire (entier entre 0 et 10).
  * @param {boolean|number} [parametres.step = false] Si false, le pas entre deux abscisses pour tracer l'aire est 0.2/xUnite. Sinon, ce pas vaut la valeur indiquée.
@@ -158,7 +158,7 @@ export class Integrale extends ObjetMathalea2D {
  * @param {Repere} [parametres.repere  = {}]  Repère dans lequel le tracé de la fonction se fait
  * @param {string} [parametres.color = 'black']  Couleur du contour de l'aire : du type 'red', bleuMathalea ou du type '#a12345'
  * @param {number} [parametres.epaisseur = 2]  Epaisseur du contour de l'aire
- * @param {string} [parametres.couleurDeRemplissage = 'red', bleuMathalea]  Couleur de l'intérieur de l'aire : du type 'red', bleuMathalea ou du type '#a12345'
+ * @param {string} [parametres.couleurDeRemplissage = bleuMathalea]  Couleur de l'intérieur de l'aire : du type 'red', bleuMathalea ou du type '#a12345'
  * @param {number} [parametres.opacite = 0.5] Taux d'opacité du remplissage entre 0 et 1
  * @param {number} [parametres.hachures = 0] Style des hachures dans cette aire (entier entre 0 et 10).
  * @param {boolean|number} [parametres.step = false] Si false, le pas entre deux abscisses pour tracer l'aire est 0.2/xUnite. Sinon, ce pas vaut la valeur indiquée.

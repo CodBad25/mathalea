@@ -10,6 +10,7 @@ import {
   solveEquation,
   TreeSearch,
 } from 'mathsteps'
+import { bleuMathalea } from '../lib/colors'
 import { choice } from '../lib/outils/arrayOutils'
 import { obtenirListeFacteursPremiers } from '../lib/outils/primalite'
 import { texNombre2 } from '../lib/outils/texNombre'
@@ -1355,7 +1356,7 @@ export function resoudre(
   params = Object.assign(
     {
       comment: false,
-      color: 'blue',
+      color: bleuMathalea,
       comments: {},
       reduceSteps: true,
       formatSolution: 2,

@@ -24,6 +24,7 @@ import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 
 export const titre = 'Représenter graphiquement une fonction affine'
 export const dateDeModifImportante = '06/04/2024'
@@ -294,7 +295,7 @@ export default class Representerfonctionaffine extends Exercice {
           position: 'top',
         })
         figure.create('Grid')
-        figure.options.color = 'blue'
+        figure.options.color = bleuMathalea
         figure.options.thickness = 2
         figure.snapGrid = true
         figure.dx = 0.5
