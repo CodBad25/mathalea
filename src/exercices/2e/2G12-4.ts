@@ -19,6 +19,7 @@ import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 export const titre = "Déterminer la nature d'un polygone avec les coordonnées"
 export const dateDeModifImportante = '30/11/2023'
 /**
@@ -184,9 +185,9 @@ export default class NaturePolygone extends Exercice {
       let texteCorr = ''
       switch (typesDeQuestions) {
         case 1: // Triangle isocèle ou équilatéral
-          s1 = segment(A, B, 'blue')
-          s2 = segment(A, C, 'blue')
-          s3 = segment(B, C, 'blue')
+          s1 = segment(A, B, bleuMathalea)
+          s2 = segment(A, C, bleuMathalea)
+          s3 = segment(B, C, bleuMathalea)
           s1.epaisseur = 2
           s2.epaisseur = 2
           s3.epaisseur = 2
@@ -238,9 +239,9 @@ export default class NaturePolygone extends Exercice {
           }
           break
         case 2: // ABC isocèle triangle rectangle
-          s1 = segment(A, B, 'blue')
-          s2 = segment(A, C, 'blue')
-          s3 = segment(B, C, 'blue')
+          s1 = segment(A, B, bleuMathalea)
+          s2 = segment(A, C, bleuMathalea)
+          s3 = segment(B, C, bleuMathalea)
           s1.epaisseur = 2
           s2.epaisseur = 2
           s3.epaisseur = 2
@@ -298,11 +299,11 @@ export default class NaturePolygone extends Exercice {
           T = tracePoint(A, B, C, D) // Repère les points avec une croix
           P = polygoneAvecNom(A, B, C, D)
           objets.push(P[1])
-          s4 = segment(D, A, 'blue')
-          s1 = segment(A, B, 'blue')
-          s2 = segment(B, C, 'blue')
-          s3 = segment(D, C, 'blue')
-          s4 = segment(D, A, 'blue')
+          s4 = segment(D, A, bleuMathalea)
+          s1 = segment(A, B, bleuMathalea)
+          s2 = segment(B, C, bleuMathalea)
+          s3 = segment(D, C, bleuMathalea)
+          s4 = segment(D, A, bleuMathalea)
           s1.epaisseur = 2
           s2.epaisseur = 2
           s3.epaisseur = 2
@@ -366,11 +367,11 @@ export default class NaturePolygone extends Exercice {
           T = tracePoint(A, B, C, D) // Repère les points avec une croix
           P = polygoneAvecNom(A, B, C, D)
           objets.push(P[1])
-          s4 = segment(D, A, 'blue')
-          s1 = segment(A, B, 'blue')
-          s2 = segment(A, C, 'blue')
-          s3 = segment(D, C, 'blue')
-          s4 = segment(D, B, 'blue')
+          s4 = segment(D, A, bleuMathalea)
+          s1 = segment(A, B, bleuMathalea)
+          s2 = segment(A, C, bleuMathalea)
+          s3 = segment(D, C, bleuMathalea)
+          s4 = segment(D, B, bleuMathalea)
           s1.epaisseur = 2
           s2.epaisseur = 2
           s3.epaisseur = 2
@@ -436,11 +437,11 @@ export default class NaturePolygone extends Exercice {
           T = tracePoint(A, B, C, D) // Repère les points avec une croix
           P = polygoneAvecNom(A, B, C, D)
           objets.push(P[1])
-          s4 = segment(D, A, 'blue')
-          s1 = segment(A, B, 'blue')
-          s2 = segment(A, C, 'blue')
-          s3 = segment(D, C, 'blue')
-          s4 = segment(D, B, 'blue')
+          s4 = segment(D, A, bleuMathalea)
+          s1 = segment(A, B, bleuMathalea)
+          s2 = segment(A, C, bleuMathalea)
+          s3 = segment(D, C, bleuMathalea)
+          s4 = segment(D, B, bleuMathalea)
           s1.epaisseur = 2
           s2.epaisseur = 2
           s3.epaisseur = 2

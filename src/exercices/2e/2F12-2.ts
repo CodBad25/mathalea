@@ -17,6 +17,7 @@ import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { context } from '../../modules/context'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
+import { bleuMathalea } from '../../lib/colors'
 
 export const interactifReady = true
 export const interactifType = 'mathlive'
@@ -127,7 +128,7 @@ export default class ResoudreGraphFonctionRef extends Exercice {
               'y=x^2',
               3,
               4.5,
-              'blue',
+              bleuMathalea,
               0,
               0,
               '',
@@ -197,7 +198,7 @@ export default class ResoudreGraphFonctionRef extends Exercice {
               },
               courbe(f, {
                 repere: r1,
-                color: 'blue',
+                color: bleuMathalea,
                 epaisseur: 2,
               }),
               Cg,
@@ -282,7 +283,7 @@ export default class ResoudreGraphFonctionRef extends Exercice {
               'y=x^2',
               3,
               4.5,
-              'blue',
+              bleuMathalea,
               0,
               0,
               '',
@@ -352,7 +353,7 @@ export default class ResoudreGraphFonctionRef extends Exercice {
               },
               courbe(f, {
                 repere: r1,
-                color: 'blue',
+                color: bleuMathalea,
                 epaisseur: 2,
               }),
               Cg,
@@ -456,7 +457,7 @@ export default class ResoudreGraphFonctionRef extends Exercice {
               'y=\\dfrac{1}{x}',
               1.2,
               3,
-              'blue',
+              bleuMathalea,
               0,
               0,
               '',
@@ -536,7 +537,7 @@ export default class ResoudreGraphFonctionRef extends Exercice {
               },
               courbe(f, {
                 repere: r1,
-                color: 'blue',
+                color: bleuMathalea,
                 epaisseur: 2,
               }),
               Cg1,
@@ -564,7 +565,7 @@ export default class ResoudreGraphFonctionRef extends Exercice {
               },
               courbe(f, {
                 repere: r1,
-                color: 'blue',
+                color: bleuMathalea,
                 epaisseur: 2,
               }),
               Cg2,
@@ -668,7 +669,7 @@ export default class ResoudreGraphFonctionRef extends Exercice {
               'y=\\dfrac{1}{x}',
               1.2,
               3,
-              'blue',
+              bleuMathalea,
               0,
               0,
               '',
@@ -747,7 +748,7 @@ export default class ResoudreGraphFonctionRef extends Exercice {
               },
               courbe(f, {
                 repere: r1,
-                color: 'blue',
+                color: bleuMathalea,
                 epaisseur: 2,
               }),
               Cg1,
@@ -774,7 +775,7 @@ export default class ResoudreGraphFonctionRef extends Exercice {
               },
               courbe(f, {
                 repere: r1,
-                color: 'blue',
+                color: bleuMathalea,
                 epaisseur: 2,
               }),
               Cg2,
@@ -842,7 +843,7 @@ export default class ResoudreGraphFonctionRef extends Exercice {
               'y=\\sqrt{x}',
               3,
               2.3,
-              'blue',
+              bleuMathalea,
               0,
               0,
               '',
@@ -903,7 +904,7 @@ export default class ResoudreGraphFonctionRef extends Exercice {
               },
               courbe(f, {
                 repere: r1,
-                color: 'blue',
+                color: bleuMathalea,
                 epaisseur: 2,
                 xMin: 0,
               }),
@@ -964,7 +965,7 @@ export default class ResoudreGraphFonctionRef extends Exercice {
               'y=\\sqrt{x}',
               3,
               2.3,
-              'blue',
+              bleuMathalea,
               0,
               0,
               '',
@@ -1025,7 +1026,7 @@ export default class ResoudreGraphFonctionRef extends Exercice {
               },
               courbe(f, {
                 repere: r1,
-                color: 'blue',
+                color: bleuMathalea,
                 epaisseur: 2,
                 xMin: 0,
               }),

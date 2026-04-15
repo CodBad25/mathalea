@@ -14,6 +14,7 @@ import { nombreAvecEspace } from '../lib/outils/texNombre'
 import { runAStar } from './findPath'
 import type FractionEtendue from './FractionEtendue'
 import { randint } from './outils'
+import { bleuMathalea } from '../lib/colors'
 
 export type LabyrintheChemin = [number, number][] // Un chemin est un tableau de points [x, y] où x et y sont des entiers
 
@@ -297,7 +298,7 @@ export class Labyrinthe {
           'Départ',
           point(-1.5, 2.5 + choix * 3),
           0,
-          'blue',
+          bleuMathalea,
           taille,
           'milieu',
           false,
@@ -373,7 +374,7 @@ export class Labyrinthe {
             `Sortie ${i}`,
             point(3 * nbColonnes + 1.5, 2.5 + 3 * nbLignes - 3 * i),
             0,
-            'blue',
+            bleuMathalea,
             taille,
             'milieu',
             false,
@@ -387,7 +388,7 @@ export class Labyrinthe {
      * Retourne les traits signifiant le chemin correction
      * @memberof Labyrinthe
      * @param {Array.number[]} monchemin Un chemin choisi parmi tous les chemins possibles.
-     * @param {string} [color = 'brown'] Couleur du tracé de la correction : du type 'blue' ou du type '#f15929'
+     * @param {string} [color = 'brown'] Couleur du tracé de la correction : du type 'red', bleuMathalea ou du type '#f15929'
      * @example laCorrectionDeMonLabyrinthe = laby.traceChemin(monCheminChoisi) // Renvoie les traits signifiant le chemin correction du labyrinthe laby correspondant au chemin monCheminChoisi
      * @author Jean-claude Lhote (et EE pour la partie "choix du nombre de lignes et de colonnes")
      * @return {ObjecMathalea2d[]}

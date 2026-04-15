@@ -19,7 +19,7 @@ import {
   pointSurSegment,
 } from '../lib/2d/utilitairesPoint'
 import { vecteur } from '../lib/2d/Vecteur'
-import { orangeMathalea } from '../lib/colors'
+import { orangeMathalea, bleuMathalea } from '../lib/colors'
 import { context } from './context'
 import {
   bissectriceAuCompas,
@@ -257,7 +257,7 @@ export default class Alea2iep {
     this.idHTML = 0 // Identifiant pour les div et le svg
     this.tempo = 5 // Pause par défaut après une instruction
     this.vitesse = 10 // Vitesse par défaut pour les déplacements d'instruments
-    this.couleur = 'blue' // Couleur par défaut
+    this.couleur = bleuMathalea // Couleur par défaut
     this.couleurCompas = 'forestgreen'
     this.couleurTexte = 'black'
     this.couleurPoint = 'black' // Couleur du nom des points

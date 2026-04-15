@@ -9,7 +9,7 @@ import { segment } from '../../lib/2d/segmentsVecteurs'
 import { labelPoint, latex2d } from '../../lib/2d/textes'
 import { tracePoint } from '../../lib/2d/TracePoint'
 import { vecteur } from '../../lib/2d/Vecteur'
-import { orangeMathalea } from '../../lib/colors'
+import { orangeMathalea, bleuMathalea } from '../../lib/colors'
 import figureApigeom, { isFigureArray } from '../../lib/figureApigeom'
 import { choice } from '../../lib/outils/arrayOutils'
 import { abs } from '../../lib/outils/nombres'
@@ -108,10 +108,10 @@ export default class RepresenterfDroite extends Exercice {
             droiteAB.color = colorToLatexOrHTML('red')
             droiteAB.epaisseur = 2
             const monRepere = repere(cadre)
-            const tA = tracePoint(A, 'blue') // Variable qui trace les points avec une croix
-            const tB = tracePoint(B, 'blue') // Variable qui trace les points avec une croix
-            const lA = labelPoint(A, 'blue') // Variable qui trace les nom s A et B
-            const lB = labelPoint(B, 'blue') // Variable qui trace les nom s A et B
+            const tA = tracePoint(A, bleuMathalea) // Variable qui trace les points avec une croix
+            const tB = tracePoint(B, bleuMathalea) // Variable qui trace les points avec une croix
+            const lA = labelPoint(A, bleuMathalea) // Variable qui trace les nom s A et B
+            const lB = labelPoint(B, bleuMathalea) // Variable qui trace les nom s A et B
             tA.taille = 5
             tA.epaisseur = 2
             tB.taille = 5
@@ -176,10 +176,10 @@ export default class RepresenterfDroite extends Exercice {
             droiteAB.color = colorToLatexOrHTML('red')
             droiteAB.epaisseur = 2
             const monRepere = repere(cadre)
-            const tA = tracePoint(A, 'blue') // Variable qui trace les points avec une croix
-            const tB = tracePoint(B, 'blue') // Variable qui trace les points avec une croix
-            const lA = labelPoint(A, 'blue') // Variable qui trace les nom s A et B
-            const lB = labelPoint(B, 'blue') // Variable qui trace les nom s A et B
+            const tA = tracePoint(A, bleuMathalea) // Variable qui trace les points avec une croix
+            const tB = tracePoint(B, bleuMathalea) // Variable qui trace les points avec une croix
+            const lA = labelPoint(A, bleuMathalea) // Variable qui trace les nom s A et B
+            const lB = labelPoint(B, bleuMathalea) // Variable qui trace les nom s A et B
             tA.taille = 5
             tA.epaisseur = 2
             tB.taille = 5
@@ -217,14 +217,14 @@ export default class RepresenterfDroite extends Exercice {
             droiteAB.color = colorToLatexOrHTML('red')
             droiteAB.epaisseur = 2
             const monRepere = repere(cadre)
-            const AB = segment(A, B, 'blue', '->')
+            const AB = segment(A, B, bleuMathalea, '->')
             const vAB = vecteur(A, B)
             AB.epaisseur = 3
-            const nomvAB = representantNomme(vAB, A, 'u', 1, 'blue')
-            const tA = tracePoint(A, 'blue') // Variable qui trace les points avec une croix
-            const tB = tracePoint(B, 'blue') // Variable qui trace les points avec une croix
-            const lA = labelPoint(A, 'blue') // Variable qui trace les nom s A et B
-            const lB = labelPoint(B, 'blue') // Variable qui trace les nom s A et B
+            const nomvAB = representantNomme(vAB, A, 'u', 1, bleuMathalea)
+            const tA = tracePoint(A, bleuMathalea) // Variable qui trace les points avec une croix
+            const tB = tracePoint(B, bleuMathalea) // Variable qui trace les points avec une croix
+            const lA = labelPoint(A, bleuMathalea) // Variable qui trace les nom s A et B
+            const lB = labelPoint(B, bleuMathalea) // Variable qui trace les nom s A et B
             tA.taille = 5
             tA.epaisseur = 2
             tB.taille = 5
@@ -297,7 +297,7 @@ export default class RepresenterfDroite extends Exercice {
       if (isFigureArray(this.figures)) this.figures.push(figureCorr)
       figure.options.labelAutomaticBeginsWith = 'A'
       figure.create('Grid')
-      figure.options.color = 'blue'
+      figure.options.color = bleuMathalea
       figure.options.gridWithTwoPointsOnSamePosition = false
       figure.options.thickness = 2
       figure.snapGrid = true

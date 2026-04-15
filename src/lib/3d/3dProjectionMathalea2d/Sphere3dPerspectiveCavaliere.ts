@@ -1,3 +1,4 @@
+import { bleuMathalea } from '../../../lib/colors'
 import {
   assombrirOuEclaircir,
   colorToLatexOrHTML,
@@ -47,22 +48,22 @@ const longueur = (A: PointAbstrait, B: PointAbstrait): number =>
  * Classe de la sphère
  * @param {Point3d} centre Centre de la sphère
  * @param {number} rayon Rayon de la sphère
- * @param {string} [colorEquateur = 'red'] Couleur de l'équateur : du type 'blue' ou du type '#f15929'
- * @param {string} [colorEnveloppe = 'blue'] Couleur de l'enveloppe de la sphère : du type 'blue' ou du type '#f15929'
+ * @param {string} [colorEquateur = 'red'] Couleur de l'équateur : du type 'red', bleuMathalea ou du type '#f15929'
+ * @param {string} [colorEnveloppe = bleuMathalea] Couleur de l'enveloppe de la sphère : du type 'red', bleuMathalea ou du type '#f15929'
  * @param {number} [nbParalleles = 0]  Le nombre de parallèles au total
- * @param {string} [colorParalleles = 'gray'] Couleur des parallèles de la sphère : du type 'blue' ou du type '#f15929'
+ * @param {string} [colorParalleles = 'gray'] Couleur des parallèles de la sphère : du type 'red', bleuMathalea ou du type '#f15929'
  * @param {number} [nbMeridiens = 0]  Le nombre de méridiens au total
- * @param {string} [colorMeridiens = 'gray'] Couleur des méridiens de la sphère : du type 'blue' ou du type '#f15929'
+ * @param {string} [colorMeridiens = 'gray'] Couleur des méridiens de la sphère : du type 'red', bleuMathalea ou du type '#f15929'
  * @param {boolean} [affichageAxe = false] Permet (ou pas) l'affichage de l'axe de la sphère.
- * @param {string} [colorAxe = 'black'] Couleur de l'axe de la sphère : du type 'blue' ou du type '#f15929'
+ * @param {string} [colorAxe = 'black'] Couleur de l'axe de la sphère : du type 'red', bleuMathalea ou du type '#f15929'
  * @param {number} inclinaison angle d'inclinaison de l'axe N-S
  * @param {boolean} faceCachee Si false on économise tout ce qui est en pointillé à l'arrière.
  * @property {Point3d} centre Centre de la sphère
  * @property {Vecteur3d} rayon Rayon de la sphère
- * @property {string} colorEquateur Couleur de l'équateur : du type 'blue' ou du type '#f15929'
- * @property {string} colorEnveloppe Couleur de l'enveloppe de la sphère : du type 'blue' ou du type '#f15929'
+ * @property {string} colorEquateur Couleur de l'équateur : du type 'red', bleuMathalea ou du type '#f15929'
+ * @property {string} colorEnveloppe Couleur de l'enveloppe de la sphère : du type 'red', bleuMathalea ou du type '#f15929'
  * @property {number} nbParalleles Le nombre de parallèles au total
- * @property {string} colorParalleles Couleur des parallèles de la sphère : du type 'blue' ou du type '#f15929'
+ * @property {string} colorParalleles Couleur des parallèles de la sphère : du type 'red', bleuMathalea ou du type '#f15929'
  * @property {number} nbMeridiens Le nombre de méridiens au total
 
 /*
@@ -86,26 +87,26 @@ const longueur = (A: PointAbstrait, B: PointAbstrait): number =>
  * Classe de la sphère
  * @param {Point3d} centre Centre de la sphère
  * @param {number} rayon Rayon de la sphère
- * @param {string} [colorEquateur = 'red'] Couleur de l'équateur : du type 'blue' ou du type '#f15929'
- * @param {string} [colorEnveloppe = 'blue'] Couleur de l'enveloppe de la sphère : du type 'blue' ou du type '#f15929'
+ * @param {string} [colorEquateur = 'red'] Couleur de l'équateur : du type 'red', bleuMathalea ou du type '#f15929'
+ * @param {string} [colorEnveloppe = bleuMathalea] Couleur de l'enveloppe de la sphère : du type 'red', bleuMathalea ou du type '#f15929'
  * @param {number} [nbParalleles = 0]  Le nombre de parallèles au total
- * @param {string} [colorParalleles = 'gray'] Couleur des parallèles de la sphère : du type 'blue' ou du type '#f15929'
+ * @param {string} [colorParalleles = 'gray'] Couleur des parallèles de la sphère : du type 'red', bleuMathalea ou du type '#f15929'
  * @param {number} [nbMeridiens = 0]  Le nombre de méridiens au total
- * @param {string} [colorMeridiens = 'gray'] Couleur des méridiens de la sphère : du type 'blue' ou du type '#f15929'
+ * @param {string} [colorMeridiens = 'gray'] Couleur des méridiens de la sphère : du type 'red', bleuMathalea ou du type '#f15929'
  * @param {boolean} [affichageAxe = false] Permet (ou pas) l'affichage de l'axe de la sphère.
- * @param {string} [colorAxe = 'black'] Couleur de l'axe de la sphère : du type 'blue' ou du type '#f15929'
+ * @param {string} [colorAxe = 'black'] Couleur de l'axe de la sphère : du type 'red', bleuMathalea ou du type '#f15929'
  * @param {number} inclinaison angle d'inclinaison de l'axe N-S
  * @param {boolean} faceCachee Si false on économise tout ce qui est en pointillé à l'arrière.
  * @property {Point3d} centre Centre de la sphère
  * @property {Vecteur3d} rayon Rayon de la sphère
- * @property {string} colorEquateur Couleur de l'équateur : du type 'blue' ou du type '#f15929'
- * @property {string} colorEnveloppe Couleur de l'enveloppe de la sphère : du type 'blue' ou du type '#f15929'
+ * @property {string} colorEquateur Couleur de l'équateur : du type 'red', bleuMathalea ou du type '#f15929'
+ * @property {string} colorEnveloppe Couleur de l'enveloppe de la sphère : du type 'red', bleuMathalea ou du type '#f15929'
  * @property {number} nbParalleles Le nombre de parallèles au total
- * @property {string} colorParalleles Couleur des parallèles de la sphère : du type 'blue' ou du type '#f15929'
+ * @property {string} colorParalleles Couleur des parallèles de la sphère : du type 'red', bleuMathalea ou du type '#f15929'
  * @property {number} nbMeridiens Le nombre de méridiens au total
- * @property {string} colorMeridiens Couleur des méridiens de la sphère : du type 'blue' ou du type '#f15929'
+ * @property {string} colorMeridiens Couleur des méridiens de la sphère : du type 'red', bleuMathalea ou du type '#f15929'
  * @property {boolean} affichageAxe Permet (ou pas) l'affichage de l'axe de la sphère.
- * @property {string} colorAxe Couleur de l'axe de la sphère : du type 'blue' ou du type '#f15929'
+ * @property {string} colorAxe Couleur de l'axe de la sphère : du type 'red', bleuMathalea ou du type '#f15929'
  * @property {Array} c2d Contient les commandes à tracer en 2d de cette fonction
  * @author Éric Elter (d'après version précédente de Jean-claude Lhote)
  * @class
@@ -116,7 +117,7 @@ export class Sphere3d extends ObjetMathalea2D {
     centre: Point3d,
     rayon: Vecteur3d | number,
     colorEquateur = 'red',
-    colorEnveloppe = 'blue',
+    colorEnveloppe = bleuMathalea,
     nbParalleles = 0,
     colorParalleles = 'gray',
     nbMeridiens = 0,
@@ -806,20 +807,20 @@ export class Sphere3d extends ObjetMathalea2D {
  * Crée une sphère
  * @param {Point3d} centre Centre de la sphère
  * @param {Vecteur3d} rayon Vecteur correspondant au rayon de la sphère
- * @param {string} [colorEquateur = 'red'] Couleur de l'équateur : du type 'blue' ou du type '#f15929'
- * @param {string} [colorEnveloppe = 'blue'] Couleur de l'enveloppe de la sphère : du type 'blue' ou du type '#f15929'
+ * @param {string} [colorEquateur = 'red'] Couleur de l'équateur : du type 'red', bleuMathalea ou du type '#f15929'
+ * @param {string} [colorEnveloppe = bleuMathalea] Couleur de l'enveloppe de la sphère : du type 'red', bleuMathalea ou du type '#f15929'
  * @param {number} [nbParalleles = 0]  Le nombre de parallèles au total
- * @param {string} [colorParalleles = 'gray'] Couleur des parallèles de la sphère : du type 'blue' ou du type '#f15929'
+ * @param {string} [colorParalleles = 'gray'] Couleur des parallèles de la sphère : du type 'red', bleuMathalea ou du type '#f15929'
  * @param {number} [nbMeridiens = 0]  Le nombre de méridiens au total
- * @param {string} [colorMeridiens = 'gray'] Couleur des méridiens de la sphère : du type 'blue' ou du type '#f15929'
+ * @param {string} [colorMeridiens = 'gray'] Couleur des méridiens de la sphère : du type 'red', bleuMathalea ou du type '#f15929'
  * @param {boolean} [affichageAxe = false] Permet (ou pas) l'affichage de l'axe de la sphère.
- * @param {string} [colorAxe = 'black'] Couleur de l'axe de la sphère : du type 'blue' ou du type '#f15929'
+ * @param {string} [colorAxe = 'black'] Couleur de l'axe de la sphère : du type 'red', bleuMathalea ou du type '#f15929'
  * @param {number} inclinaison Angle d'inclinaison de l'axe N-S
  * @example sphere3d(A,v) // Crée une sphère de centre A et dont le rayon correspond au vecteur v, l'équateur rouge et l'enveloppe bleue
  * @example sphere3d(A,v,'green','pink') // Crée une sphère de centre A et dont le rayon correspond au vecteur v, l'équateur vert et l'enveloppe rose
  * @example sphere3d(A,v,'green','pink',18,'red') // Crée une sphère de centre A et dont le rayon correspond au vecteur v, l'équateur vert, l'enveloppe rose, avec 18 parallèles rouges
- * @example sphere3d(A,v,'green','pink',18,'red',36,'blue') // Crée une sphère de centre A et dont le rayon correspond au vecteur v, l'équateur vert, l'enveloppe rose, avec 18 parallèles rouges et 36 méridiens verts
- * @example sphere3d(A,v,'green','pink',18,'red',36,'blue',true,'#f15929') // Crée une sphère de centre A et dont le rayon correspond au vecteur v, l'équateur vert, l'enveloppe rose, avec 18 parallèles rouges, 36 méridiens verts et un axe affiché orange
+ * @example sphere3d(A,v,'green','pink',18,'red',36,bleuMathalea) // Crée une sphère de centre A et dont le rayon correspond au vecteur v, l'équateur vert, l'enveloppe rose, avec 18 parallèles rouges et 36 méridiens verts
+ * @example sphere3d(A,v,'green','pink',18,'red',36,bleuMathalea,true,'#f15929') // Crée une sphère de centre A et dont le rayon correspond au vecteur v, l'équateur vert, l'enveloppe rose, avec 18 parallèles rouges, 36 méridiens verts et un axe affiché orange
  * @author Éric Elter (d'après version précédente de Jean-claude Lhote)
  * @return {Sphere3d}
  */
@@ -827,7 +828,7 @@ export function sphere3d(
   centre: Point3d,
   rayon: Vecteur3d | number,
   colorEquateur = 'red',
-  colorEnveloppe = 'blue',
+  colorEnveloppe = bleuMathalea,
   nbParalleles = 0,
   colorParalleles = 'gray',
   nbMeridiens = 0,

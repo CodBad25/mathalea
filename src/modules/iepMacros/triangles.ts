@@ -14,6 +14,7 @@ import {
 import { nombreAvecEspace } from '../../lib/outils/texNombre'
 import type { IAlea2iep, OptionsCompas } from '../Alea2iep.types'
 import { randint } from '../outils'
+import { bleuMathalea } from '../../lib/colors'
 
 /**
  * Macro de construction d'un triangle à partir de ses 3 dimensions. Le premier point aura pour coordonnées (6,0).
@@ -81,7 +82,7 @@ export const triangle3longueurs = function (
   this.compasEcarterAvecRegle(BC, options)
   this.compasTracerArcCentrePoint(B, C, options)
   this.compasMasquer(options)
-  this.couleur = 'blue'
+  this.couleur = bleuMathalea
   this.epaisseur = 3
   if (description)
     this.textePosition(
@@ -166,7 +167,7 @@ export const triangleRectangleCoteHypotenuse = function (
   this.couleur = 'forestgreen'
   this.epaisseur = 2
   this.compasTracerArcCentrePoint(A, C, options)
-  this.couleur = 'blue'
+  this.couleur = bleuMathalea
   this.epaisseur = 2
   if (description)
     this.textePosition(
@@ -256,7 +257,7 @@ export const triangleRectangle2Cotes = function (
   this.regleRotation(C, options)
   this.crayonDeplacer(C, options)
   this.pointCreer(C, options)
-  this.couleur = 'blue'
+  this.couleur = bleuMathalea
   this.epaisseur = 2
   this.compasMasquer(options)
   this.regleSegment(A, C, options)
@@ -313,7 +314,7 @@ export const triangle1longueur2angles = function (
     B.nom = NOM[1]
     C.nom = NOM[2]
   }
-  this.couleur = 'blue'
+  this.couleur = bleuMathalea
   this.epaisseur = 3
   this.pointCreer(A, options)
   if (description)
@@ -363,7 +364,7 @@ export const triangle1longueur2angles = function (
   this.angleCodage(C, B, A, options)
   this.pointCreer(C, options)
   // this.pointNommer(C, C.nom, -0.5, 1, options)
-  this.couleur = 'blue'
+  this.couleur = bleuMathalea
   this.epaisseur = 3
   this.regleSegment(B, C, options)
   this.regleSegment(C, A, options)
@@ -412,7 +413,7 @@ export const triangle2longueurs1angle = function (
     B.nom = NOM[1]
     C.nom = NOM[2]
   }
-  this.couleur = 'blue'
+  this.couleur = bleuMathalea
   this.epaisseur = 3
   this.pointCreer(A, options)
   if (description)
@@ -451,7 +452,7 @@ export const triangle2longueurs1angle = function (
       options,
     )
   this.epaisseur = 3
-  this.couleur = 'blue'
+  this.couleur = bleuMathalea
   this.crayonDeplacer(C, options)
   this.pointCreer(C, options)
   this.regleSegment(A, C, options)
@@ -566,7 +567,7 @@ export const triangleIsocele2Longueurs = function (
   this.compasTracerArcCentrePoint(C, B, options)
   this.pointCreer(B, options)
   this.compasMasquer(options)
-  this.couleur = 'blue'
+  this.couleur = bleuMathalea
   this.epaisseur = 3
   if (options.description)
     this.textePosition(

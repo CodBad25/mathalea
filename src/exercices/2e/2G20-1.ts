@@ -12,6 +12,7 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 
 export const titre = 'Reconnaitre des vecteurs égaux/opposés/colinéaires (QCM)'
 export const interactifReady = true
@@ -111,10 +112,10 @@ export default class ReconnaitreVecteurs extends Exercice {
 
       const K = point(xC + k4 * k3, yC + k5 * k3) // pt extrémité vecteur quelconque avec norme différente et "même sens"
 
-      const AB = segment(A, B, 'blue', '->') // vecteur de base
+      const AB = segment(A, B, bleuMathalea, '->') // vecteur de base
       AB.epaisseur = 2
       const vAB = vecteur(A, B)
-      const nomvAB = representantNomme(vAB, A, 'u', 1.5, 'blue')
+      const nomvAB = representantNomme(vAB, A, 'u', 1.5, bleuMathalea)
 
       const ptsExt = [D, E, F, H, G, K, G, K] // liste des pts d'extrémité
       let choixPtExt = choice(ptsExt) // choix du pt d'extrémité

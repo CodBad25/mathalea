@@ -24,6 +24,7 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 
 type SymboleInegalite = '≤' | '≥' | '<' | '>'
 type Question =
@@ -201,8 +202,8 @@ export default class ExerciceInequation1 extends Exercice {
             texteCorr += `On ajoute $${-1 * b}$ aux deux membres.<br>`
           }
         }
-        texteCorr += `$${a}x${ecritureAlgebrique(b)}${miseEnEvidence(ecritureAlgebrique(-1 * b), 'blue')}
-          ${texSymbole(symboleInegalite)}${c}${miseEnEvidence(ecritureAlgebrique(-1 * b), 'blue')}$<br>`
+        texteCorr += `$${a}x${ecritureAlgebrique(b)}${miseEnEvidence(ecritureAlgebrique(-1 * b), bleuMathalea)}
+          ${texSymbole(symboleInegalite)}${c}${miseEnEvidence(ecritureAlgebrique(-1 * b), bleuMathalea)}$<br>`
         texteCorr += `$${a}x${texSymbole(symboleInegalite)}${c - b}$<br>`
         if (this.correctionDetaillee) {
           texteCorr += `On divise les deux membres par $${a}$.<br>`
@@ -215,13 +216,13 @@ export default class ExerciceInequation1 extends Exercice {
             '\\div' +
               ecritureParentheseSiNegatif(a) +
               texSymbole(symboleInegaliteOppose),
-            'blue',
-          )}${c - b + miseEnEvidence('\\div' + ecritureParentheseSiNegatif(a), 'blue')}$<br>`
+            bleuMathalea,
+          )}${c - b + miseEnEvidence('\\div' + ecritureParentheseSiNegatif(a), bleuMathalea)}$<br>`
           texteCorr += `$x${texSymbole(symboleInegaliteOppose)}${texFractionFromString(c - b, a)}$`
           texteCorr += `<br>$x${texSymbole(symboleInegaliteOppose)}${texFractionReduite(c - b, a)}$`
         } else {
-          texteCorr += `$${a}x${miseEnEvidence('\\div' + ecritureParentheseSiNegatif(a), 'blue')}
-            ${texSymbole(symboleInegalite)}${c - b + miseEnEvidence('\\div' + ecritureParentheseSiNegatif(a), 'blue')}$<br>`
+          texteCorr += `$${a}x${miseEnEvidence('\\div' + ecritureParentheseSiNegatif(a), bleuMathalea)}
+            ${texSymbole(symboleInegalite)}${c - b + miseEnEvidence('\\div' + ecritureParentheseSiNegatif(a), bleuMathalea)}$<br>`
           texteCorr += `$x${texSymbole(symboleInegalite)}${texFractionFromString(c - b, a)}$`
           if (pgcd(abs(a), abs(c - b)) > 1) {
             texteCorr += `<br>$x${texSymbole(symboleInegalite)}${texFractionReduite(c - b, a)}$`
@@ -254,8 +255,8 @@ export default class ExerciceInequation1 extends Exercice {
             texteCorr += `On ajoute $${-1 * b}$ aux deux membres.<br>`
           }
         }
-        texteCorr += `$x${ecritureAlgebrique(b)}${miseEnEvidence(ecritureAlgebrique(-1 * b), 'blue')}
-          ${texSymbole(symboleInegalite)}${c}${miseEnEvidence(ecritureAlgebrique(-1 * b), 'blue')}$<br>`
+        texteCorr += `$x${ecritureAlgebrique(b)}${miseEnEvidence(ecritureAlgebrique(-1 * b), bleuMathalea)}
+          ${texSymbole(symboleInegalite)}${c}${miseEnEvidence(ecritureAlgebrique(-1 * b), bleuMathalea)}$<br>`
         texteCorr += `$x${texSymbole(symboleInegalite)}${c - b}$`
         // Conclusion
         const borneInfinie =
@@ -283,13 +284,13 @@ export default class ExerciceInequation1 extends Exercice {
             '\\div' +
               ecritureParentheseSiNegatif(a) +
               texSymbole(symboleInegaliteOppose),
-            'blue',
-          )}${b + miseEnEvidence('\\div' + ecritureParentheseSiNegatif(a), 'blue')}$<br>`
+            bleuMathalea,
+          )}${b + miseEnEvidence('\\div' + ecritureParentheseSiNegatif(a), bleuMathalea)}$<br>`
           texteCorr += `$x${texSymbole(symboleInegaliteOppose)}${texFractionFromString(b, a)}$`
           texteCorr += `<br>$x${texSymbole(symboleInegaliteOppose)}${texFractionReduite(b, a)}$`
         } else {
-          texteCorr += `$${a}x${miseEnEvidence('\\div' + ecritureParentheseSiNegatif(a), 'blue')}
-            ${texSymbole(symboleInegalite)}${b + miseEnEvidence('\\div' + ecritureParentheseSiNegatif(a), 'blue')}$<br>`
+          texteCorr += `$${a}x${miseEnEvidence('\\div' + ecritureParentheseSiNegatif(a), bleuMathalea)}
+            ${texSymbole(symboleInegalite)}${b + miseEnEvidence('\\div' + ecritureParentheseSiNegatif(a), bleuMathalea)}$<br>`
           texteCorr += `$x${texSymbole(symboleInegalite)}${texFractionFromString(b, a)}$`
           if (pgcd(abs(a), abs(b)) > 1 || a < 0) {
             texteCorr += `<br>$x${texSymbole(symboleInegalite)}${texFractionReduite(b, a)}$`
@@ -328,8 +329,8 @@ export default class ExerciceInequation1 extends Exercice {
             texteCorr += `On ajoute $${rienSi1(-1 * c)}x$ aux deux membres.<br>`
           }
         }
-        texteCorr += `$${rienSi1(a)}x${ecritureAlgebrique(b)}${miseEnEvidence(signe(-1 * c) + rienSi1(abs(c)) + 'x', 'blue')}
-          ${texSymbole(symboleInegalite)}${c}x${ecritureAlgebrique(d)}${miseEnEvidence(signe(-1 * c) + rienSi1(abs(c)) + 'x', 'blue')}$<br>`
+        texteCorr += `$${rienSi1(a)}x${ecritureAlgebrique(b)}${miseEnEvidence(signe(-1 * c) + rienSi1(abs(c)) + 'x', bleuMathalea)}
+          ${texSymbole(symboleInegalite)}${c}x${ecritureAlgebrique(d)}${miseEnEvidence(signe(-1 * c) + rienSi1(abs(c)) + 'x', bleuMathalea)}$<br>`
         texteCorr += `$${rienSi1(a - c)}x${ecritureAlgebrique(b)}${texSymbole(symboleInegalite)}${d}$<br>`
         if (this.correctionDetaillee) {
           if (b > 0) {
@@ -338,8 +339,8 @@ export default class ExerciceInequation1 extends Exercice {
             texteCorr += `On ajoute $${-1 * b}$ aux deux membres.<br>`
           }
         }
-        texteCorr += `$${rienSi1(a - c)}x${ecritureAlgebrique(b)}${miseEnEvidence(ecritureAlgebrique(-1 * b), 'blue')}
-          ${texSymbole(symboleInegalite)}${d}${miseEnEvidence(ecritureAlgebrique(-1 * b), 'blue')}$<br>`
+        texteCorr += `$${rienSi1(a - c)}x${ecritureAlgebrique(b)}${miseEnEvidence(ecritureAlgebrique(-1 * b), bleuMathalea)}
+          ${texSymbole(symboleInegalite)}${d}${miseEnEvidence(ecritureAlgebrique(-1 * b), bleuMathalea)}$<br>`
         texteCorr += `$${rienSi1(a - c)}x${texSymbole(symboleInegalite)}${d - b}$<br>`
 
         if (this.correctionDetaillee) {
@@ -353,13 +354,13 @@ export default class ExerciceInequation1 extends Exercice {
             '\\div' +
               ecritureParentheseSiNegatif(a - c) +
               texSymbole(symboleInegaliteOppose),
-            'blue',
-          )}${d - b + miseEnEvidence('\\div' + ecritureParentheseSiNegatif(a - c), 'blue')}$<br>`
+            bleuMathalea,
+          )}${d - b + miseEnEvidence('\\div' + ecritureParentheseSiNegatif(a - c), bleuMathalea)}$<br>`
           texteCorr += `$x${texSymbole(symboleInegaliteOppose)}${texFractionFromString(d - b, a - c)}$`
           texteCorr += `<br>$x${texSymbole(symboleInegaliteOppose)}${texFractionReduite(d - b, a - c)}$`
         } else {
-          texteCorr += `$${rienSi1(a - c)}x${miseEnEvidence('\\div' + ecritureParentheseSiNegatif(a - c), 'blue')}
-            ${texSymbole(symboleInegalite)}${d - b + miseEnEvidence('\\div' + ecritureParentheseSiNegatif(a - c), 'blue')}$<br>`
+          texteCorr += `$${rienSi1(a - c)}x${miseEnEvidence('\\div' + ecritureParentheseSiNegatif(a - c), bleuMathalea)}
+            ${texSymbole(symboleInegalite)}${d - b + miseEnEvidence('\\div' + ecritureParentheseSiNegatif(a - c), bleuMathalea)}$<br>`
           texteCorr += `$x${texSymbole(symboleInegalite)}${texFractionFromString(d - b, a - c)}$`
           if (pgcd(abs(d - b), abs(a - c)) > 1 || a - c < 0) {
             texteCorr += `<br>$x${texSymbole(symboleInegalite)}${texFractionReduite(d - b, a - c)}$`
@@ -398,7 +399,7 @@ export default class ExerciceInequation1 extends Exercice {
             texteCorr += `On ajoute $${rienSi1(-d)}x$ aux deux membres.<br>`
           }
         }
-        texteCorr += `$${reduireAxPlusB(a * b, a * c)}${miseEnEvidence(signe(-1 * d) + rienSi1(abs(d)) + 'x', 'blue')}${texSymbole(symboleInegalite)}${reduireAxPlusB(d, e)}${miseEnEvidence(signe(-1 * d) + rienSi1(abs(d)) + 'x', 'blue')}$<br>`
+        texteCorr += `$${reduireAxPlusB(a * b, a * c)}${miseEnEvidence(signe(-1 * d) + rienSi1(abs(d)) + 'x', bleuMathalea)}${texSymbole(symboleInegalite)}${reduireAxPlusB(d, e)}${miseEnEvidence(signe(-1 * d) + rienSi1(abs(d)) + 'x', bleuMathalea)}$<br>`
         texteCorr += `$${rienSi1(a * b - d)}x${ecritureAlgebrique(a * c)}${texSymbole(symboleInegalite)}${e}$<br>`
         if (this.correctionDetaillee) {
           if (a * c > 0) {
@@ -407,8 +408,8 @@ export default class ExerciceInequation1 extends Exercice {
             texteCorr += `On ajoute $${-a * c}$ aux deux membres.<br>`
           }
         }
-        texteCorr += `$${rienSi1(a * b - d)}x${ecritureAlgebrique(a * c)}${miseEnEvidence(ecritureAlgebrique(-a * c), 'blue')}
-           ${texSymbole(symboleInegalite)}${e}${miseEnEvidence(ecritureAlgebrique(-a * c), 'blue')}$<br>`
+        texteCorr += `$${rienSi1(a * b - d)}x${ecritureAlgebrique(a * c)}${miseEnEvidence(ecritureAlgebrique(-a * c), bleuMathalea)}
+           ${texSymbole(symboleInegalite)}${e}${miseEnEvidence(ecritureAlgebrique(-a * c), bleuMathalea)}$<br>`
         texteCorr += `$${rienSi1(a * b - d)}x${texSymbole(symboleInegalite)}${e - a * c}$<br>`
         if (this.correctionDetaillee) {
           texteCorr += `On divise les deux membres par $${a * b - d}$.<br>`
@@ -423,8 +424,8 @@ export default class ExerciceInequation1 extends Exercice {
           '\\div' +
             ecritureParentheseSiNegatif(a * b - d) +
             texSymbole(symboleInegaliteFinal),
-          'blue',
-        )}${e - a * c + miseEnEvidence('\\div' + ecritureParentheseSiNegatif(a * b - d), 'blue')}$<br>`
+          bleuMathalea,
+        )}${e - a * c + miseEnEvidence('\\div' + ecritureParentheseSiNegatif(a * b - d), bleuMathalea)}$<br>`
         texteCorr += `$x${texSymbole(symboleInegaliteFinal)}${borneFinie.texFraction}$`
         if (!borneFinie.estIrreductible) {
           texteCorr += `<br><br>$x${texSymbole(symboleInegaliteFinal)}${borneFinie.texFractionSimplifiee}$`

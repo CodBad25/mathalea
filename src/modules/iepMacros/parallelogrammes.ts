@@ -14,6 +14,7 @@ import {
 import { longueur } from '../../lib/2d/utilitairesGeometriques'
 import { pointAdistance, pointSurSegment } from '../../lib/2d/utilitairesPoint'
 import type { IAlea2iep } from '../Alea2iep.types'
+import { bleuMathalea } from '../../lib/colors'
 
 /**
  * Trace un parallélogramme à partir de la donnée de 3 sommets consécutifs
@@ -155,7 +156,7 @@ export function parallelogramme2sommetsConsecutifsCentre(
   }
   this.compasTracerArcCentrePoint(O, D)
   this.compasMasquer()
-  this.couleur = 'blue'
+  this.couleur = bleuMathalea
   this.epaisseur = 3
   this.pointCreer(D)
   this.regleSegment(A, D)

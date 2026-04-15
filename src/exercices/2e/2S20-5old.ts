@@ -224,7 +224,7 @@ export default class Quartiles extends Exercice {
       // Math.round(q1 / situation.precisionLecture) * situation.precisionLecture
       const q3Round = q3
       //  Math.round(q3 / situation.precisionLecture) * situation.precisionLecture
-      const line = polyline(pts, 'blue')
+      const line = polyline(pts, bleuMathalea)
       const rep = new RepereBuilder({
         xMin: 0,
         xMax: valeurMax,

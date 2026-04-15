@@ -5,6 +5,7 @@ import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 export const titre =
   'Utiliser les variations des fonctions de référence pour comparer des images'
 export const dateDePublication = '07/01/2022'
@@ -132,11 +133,11 @@ export default class ComparerAvecFctRef extends Exercice {
             Autrement dit, si $a$ et $b$ sont deux nombres  positifs et si $a < b$, alors $a^2 < b^2$.`
 
               if (a < b) {
-                texteCorr += `<br>Comme $${texNombre(a, 3)}${miseEnEvidence('\\boldsymbol{<}', 'blue')}${texNombre(b, 3)}$,
-          alors  $${texNombre(a, 3)}^2${miseEnEvidence('\\boldsymbol{<}', 'blue')}${texNombre(b, 3)}^2$.`
+                texteCorr += `<br>Comme $${texNombre(a, 3)}${miseEnEvidence('\\boldsymbol{<}', bleuMathalea)}${texNombre(b, 3)}$,
+          alors  $${texNombre(a, 3)}^2${miseEnEvidence('\\boldsymbol{<}', bleuMathalea)}${texNombre(b, 3)}^2$.`
               } else {
-                texteCorr += `<br>Comme $${texNombre(b)}${miseEnEvidence('\\boldsymbol{<}', 'blue')}${texNombre(a)}$,
-          alors  $${texNombre(b, 3)}^2${miseEnEvidence('\\boldsymbol{<}', 'blue')}${texNombre(a, 3)}^2$.`
+                texteCorr += `<br>Comme $${texNombre(b)}${miseEnEvidence('\\boldsymbol{<}', bleuMathalea)}${texNombre(a)}$,
+          alors  $${texNombre(b, 3)}^2${miseEnEvidence('\\boldsymbol{<}', bleuMathalea)}${texNombre(a, 3)}^2$.`
               }
             } else if (N === 2) {
               const fraction1 = choice(listeFractions1)
@@ -158,10 +159,10 @@ export default class ComparerAvecFctRef extends Exercice {
             `
                 if (d1 < d2) {
                   texteCorr += `On a $${d1}<${d2}$, donc $${texFractionFromString(n2, d2)}<${texFractionFromString(n1, d1)}$.<br>
-                <br>Comme $${texFractionFromString(n2, d2)}${miseEnEvidence('\\boldsymbol{<}', 'blue')}${texFractionFromString(n1, d1)}$, alors $\\left(${texFractionFromString(n2, d2)}\\right)^2${miseEnEvidence('\\boldsymbol{<}', 'blue')}\\left(${texFractionFromString(n1, d1)}\\right)^2$`
+                <br>Comme $${texFractionFromString(n2, d2)}${miseEnEvidence('\\boldsymbol{<}', bleuMathalea)}${texFractionFromString(n1, d1)}$, alors $\\left(${texFractionFromString(n2, d2)}\\right)^2${miseEnEvidence('\\boldsymbol{<}', bleuMathalea)}\\left(${texFractionFromString(n1, d1)}\\right)^2$`
                 } else {
                   texteCorr += `On a $${d2}<${d1}$, donc $${texFractionFromString(n1, d1)}<${texFractionFromString(n2, d2)}$.<br>
-                <br> Comme,  $${texFractionFromString(n1, d1)}${miseEnEvidence('\\boldsymbol{<}', 'blue')}${texFractionFromString(n2, d2)}$, alors $\\left(${texFractionFromString(n1, d1)}\\right)^2${miseEnEvidence('\\boldsymbol{<}', 'blue')}\\left(${texFractionFromString(n2, d2)}\\right)^2$`
+                <br> Comme,  $${texFractionFromString(n1, d1)}${miseEnEvidence('\\boldsymbol{<}', bleuMathalea)}${texFractionFromString(n2, d2)}$, alors $\\left(${texFractionFromString(n1, d1)}\\right)^2${miseEnEvidence('\\boldsymbol{<}', bleuMathalea)}\\left(${texFractionFromString(n2, d2)}\\right)^2$`
                 }
               }
               if (d1 === d2) {
@@ -170,10 +171,10 @@ export default class ComparerAvecFctRef extends Exercice {
             `
                 if (n2 < n1) {
                   texteCorr += `On a $${n2}<${n1}$, donc $${texFractionFromString(n2, d2)}<${texFractionFromString(n1, d1)}$.<br>
-                <br>Comme $${texFractionFromString(n2, d2)}${miseEnEvidence('\\boldsymbol{<}', 'blue')}${texFractionFromString(n1, d1)}$, alors $\\left(${texFractionFromString(n2, d2)}\\right)^2${miseEnEvidence('<', 'blue')}\\left(${texFractionFromString(n1, d1)}\\right)^2$`
+                <br>Comme $${texFractionFromString(n2, d2)}${miseEnEvidence('\\boldsymbol{<}', bleuMathalea)}${texFractionFromString(n1, d1)}$, alors $\\left(${texFractionFromString(n2, d2)}\\right)^2${miseEnEvidence('<', bleuMathalea)}\\left(${texFractionFromString(n1, d1)}\\right)^2$`
                 } else {
                   texteCorr += `On a $${n1}<${n2}$, donc $${texFractionFromString(n1, d1)}<${texFractionFromString(n2, d2)}$.<br>
-                <br>Comme,  $${texFractionFromString(n1, d1)}${miseEnEvidence('\\boldsymbol{<}', 'blue')}${texFractionFromString(n2, d2)}$, alors $\\left(${texFractionFromString(n1, d1)}\\right)^2${miseEnEvidence('\\boldsymbol{<}', 'blue')}\\left(${texFractionFromString(n2, d2)}\\right)^2$`
+                <br>Comme,  $${texFractionFromString(n1, d1)}${miseEnEvidence('\\boldsymbol{<}', bleuMathalea)}${texFractionFromString(n2, d2)}$, alors $\\left(${texFractionFromString(n1, d1)}\\right)^2${miseEnEvidence('\\boldsymbol{<}', bleuMathalea)}\\left(${texFractionFromString(n2, d2)}\\right)^2$`
                 }
               }
               if (n1 !== n2 && d1 !== d2) {
@@ -182,10 +183,10 @@ export default class ComparerAvecFctRef extends Exercice {
           `
                 if (n3 < n4) {
                   texteCorr += `On a $${n3}<${n4}$, donc $${texFractionFromString(n3, d3)}<${texFractionFromString(n4, d3)}$, soit $${texFractionFromString(n1, d1)}<${texFractionFromString(n2, d2)}$.<br>
-                <br>Comme $${texFractionFromString(n1, d1)}${miseEnEvidence('\\boldsymbol{<}', 'blue')}${texFractionFromString(n2, d2)}$, alors $\\left(${texFractionFromString(n1, d1)}\\right)^2${miseEnEvidence('\\boldsymbol{<}', 'blue')}\\left(${texFractionFromString(n2, d2)}\\right)^2$`
+                <br>Comme $${texFractionFromString(n1, d1)}${miseEnEvidence('\\boldsymbol{<}', bleuMathalea)}${texFractionFromString(n2, d2)}$, alors $\\left(${texFractionFromString(n1, d1)}\\right)^2${miseEnEvidence('\\boldsymbol{<}', bleuMathalea)}\\left(${texFractionFromString(n2, d2)}\\right)^2$`
                 } else {
                   texteCorr += `On a $${n4}<${n3}$, donc $${texFractionFromString(n4, d3)}<${texFractionFromString(n3, d3)}$, soit $${texFractionFromString(n2, d2)}<${texFractionFromString(n1, d1)}$.<br>
-                <br>Comme,  $${texFractionFromString(n2, d2)}${miseEnEvidence('\\boldsymbol{<}', 'blue')}${texFractionFromString(n1, d1)}$, alors $\\left(${texFractionFromString(n2, d2)}\\right)^2${miseEnEvidence('\\boldsymbol{<}', 'blue')}\\left(${texFractionFromString(n1, d1)}\\right)^2$`
+                <br>Comme,  $${texFractionFromString(n2, d2)}${miseEnEvidence('\\boldsymbol{<}', bleuMathalea)}${texFractionFromString(n1, d1)}$, alors $\\left(${texFractionFromString(n2, d2)}\\right)^2${miseEnEvidence('\\boldsymbol{<}', bleuMathalea)}\\left(${texFractionFromString(n1, d1)}\\right)^2$`
                 }
               }
               variables.push(n1, d1, n2, d2, n3, d3, n4)
@@ -205,9 +206,9 @@ export default class ComparerAvecFctRef extends Exercice {
             Autrement dit, si $a$ et $b$ sont deux nombres  négatifs et si $a < b$, alors $a^2 > b^2$.`
 
               if (a < b) {
-                texteCorr += `<br>Comme $${texNombre(a, 3)}${miseEnEvidence('\\boldsymbol{<}', 'blue')}${texNombre(b, 3)}$, alors  $(${texNombre(a, 3)})^2${miseEnEvidence('\\boldsymbol{>}', 'blue')}(${texNombre(b, 3)})^2$`
+                texteCorr += `<br>Comme $${texNombre(a, 3)}${miseEnEvidence('\\boldsymbol{<}', bleuMathalea)}${texNombre(b, 3)}$, alors  $(${texNombre(a, 3)})^2${miseEnEvidence('\\boldsymbol{>}', bleuMathalea)}(${texNombre(b, 3)})^2$`
               } else {
-                texteCorr += `<br>Comme $${texNombre(b, 3)}${miseEnEvidence('\\boldsymbol{<}', 'blue')}${texNombre(a, 3)}$, alors  $(${texNombre(b, 3)})^2${miseEnEvidence('\\boldsymbol{>}', 'blue')}(${texNombre(a, 3)})^2$`
+                texteCorr += `<br>Comme $${texNombre(b, 3)}${miseEnEvidence('\\boldsymbol{<}', bleuMathalea)}${texNombre(a, 3)}$, alors  $(${texNombre(b, 3)})^2${miseEnEvidence('\\boldsymbol{>}', bleuMathalea)}(${texNombre(a, 3)})^2$`
               }
 
               variables.push(a, b)
@@ -228,9 +229,9 @@ export default class ComparerAvecFctRef extends Exercice {
               Autrement dit, si $a$ et $b$ sont deux nombres strictement positifs et si $a < b$, alors $\\dfrac{1}{a} > \\dfrac{1}{b}$.<br>`
 
               if (a < b) {
-                texteCorr += `Comme $${texNombre(a, 1)}${miseEnEvidence('\\boldsymbol{<}', 'blue')}${texNombre(b, 1)}$, alors  $\\dfrac{1}{${texNombre(a, 1)}}${miseEnEvidence('\\boldsymbol{>}', 'blue')}\\dfrac{1}{${texNombre(b, 1)}}$`
+                texteCorr += `Comme $${texNombre(a, 1)}${miseEnEvidence('\\boldsymbol{<}', bleuMathalea)}${texNombre(b, 1)}$, alors  $\\dfrac{1}{${texNombre(a, 1)}}${miseEnEvidence('\\boldsymbol{>}', bleuMathalea)}\\dfrac{1}{${texNombre(b, 1)}}$`
               } else {
-                texteCorr += `Comme $${texNombre(b, 1)}${miseEnEvidence('\\boldsymbol{<}', 'blue')}${texNombre(a, 1)}$, alors  $\\dfrac{1}{${texNombre(b, 1)}}${miseEnEvidence('\\boldsymbol{>}', 'blue')}\\dfrac{1}{${texNombre(a, 1)}}$`
+                texteCorr += `Comme $${texNombre(b, 1)}${miseEnEvidence('\\boldsymbol{<}', bleuMathalea)}${texNombre(a, 1)}$, alors  $\\dfrac{1}{${texNombre(b, 1)}}${miseEnEvidence('\\boldsymbol{>}', bleuMathalea)}\\dfrac{1}{${texNombre(a, 1)}}$`
               }
             } else {
               a = (randint(1, 9) * 10 + randint(5, 9)) / 10
@@ -243,9 +244,9 @@ export default class ComparerAvecFctRef extends Exercice {
                 Autrement dit, si $a$ et $b$ sont deux nombres strictement négatifs et si $a < b$, alors $\\dfrac{1}{a} > \\dfrac{1}{b}$.<br>`
 
               if (a > b) {
-                texteCorr += ` Comme $-${texNombre(a, 1)}${miseEnEvidence('\\boldsymbol{<}', 'blue')}-${texNombre(b, 1)}$, alors  $\\dfrac{1}{-${texNombre(a, 1)}}${miseEnEvidence('\\boldsymbol{>}', 'blue')}\\dfrac{1}{-${texNombre(b, 1)}}$`
+                texteCorr += ` Comme $-${texNombre(a, 1)}${miseEnEvidence('\\boldsymbol{<}', bleuMathalea)}-${texNombre(b, 1)}$, alors  $\\dfrac{1}{-${texNombre(a, 1)}}${miseEnEvidence('\\boldsymbol{>}', bleuMathalea)}\\dfrac{1}{-${texNombre(b, 1)}}$`
               } else {
-                texteCorr += `Comme $-${texNombre(b, 1)}${miseEnEvidence('\\boldsymbol{<}', 'blue')}-${texNombre(a, 1)}$, alors  $\\dfrac{1}{-${texNombre(b, 1)}}${miseEnEvidence('\\boldsymbol{>}', 'blue')}\\dfrac{1}{-${texNombre(a, 1)}}$`
+                texteCorr += `Comme $-${texNombre(b, 1)}${miseEnEvidence('\\boldsymbol{<}', bleuMathalea)}-${texNombre(a, 1)}$, alors  $\\dfrac{1}{-${texNombre(b, 1)}}${miseEnEvidence('\\boldsymbol{>}', bleuMathalea)}\\dfrac{1}{-${texNombre(a, 1)}}$`
               }
             }
             variables.push(a, b)
@@ -265,9 +266,9 @@ export default class ComparerAvecFctRef extends Exercice {
           Cela signifie que deux nombres réels  sont rangés dans le même ordre que leurs cubes.<br>
           Autrement dit, si $a$ et $b$ sont deux nombres réels et si $a < b$, alors $a^3 < b^3$.<br>`
             if (a < b) {
-              texteCorr += `Comme $${texNombre(a, 1)}${miseEnEvidence('\\boldsymbol{<}', 'blue')}${texNombre(b, 1)}$, alors $${ecritureParentheseSiNegatif(a)}^3${miseEnEvidence('\\boldsymbol{<}', 'blue')}${ecritureParentheseSiNegatif(b)}^3$.`
+              texteCorr += `Comme $${texNombre(a, 1)}${miseEnEvidence('\\boldsymbol{<}', bleuMathalea)}${texNombre(b, 1)}$, alors $${ecritureParentheseSiNegatif(a)}^3${miseEnEvidence('\\boldsymbol{<}', bleuMathalea)}${ecritureParentheseSiNegatif(b)}^3$.`
             } else {
-              texteCorr += `Comme $${texNombre(b, 1)}${miseEnEvidence('\\boldsymbol{<}', 'blue')}${texNombre(a, 1)}$, alors $${ecritureParentheseSiNegatif(b)}^3${miseEnEvidence('\\boldsymbol{<}', 'blue')}${ecritureParentheseSiNegatif(a)}^3$.`
+              texteCorr += `Comme $${texNombre(b, 1)}${miseEnEvidence('\\boldsymbol{<}', bleuMathalea)}${texNombre(a, 1)}$, alors $${ecritureParentheseSiNegatif(b)}^3${miseEnEvidence('\\boldsymbol{<}', bleuMathalea)}${ecritureParentheseSiNegatif(a)}^3$.`
             }
             variables.push(a, b)
           }
@@ -283,11 +284,11 @@ export default class ComparerAvecFctRef extends Exercice {
           Cela signifie que deux nombres réels positifs sont rangés dans le même ordre que leurs racines carrées.<br>
           Autrement dit, si $a$ et $b$ sont deux nombres réels positifs et si $a < b$, alors $\\sqrt{a} < \\sqrt{b}$.<br>`
             if (a < b) {
-              texteCorr += ` Comme $${texNombre(a, 1)}${miseEnEvidence('\\boldsymbol{<}', 'blue')}${texNombre(b, 1)}$, alors
-          $\\sqrt{${texNombre(a, 1)}}${miseEnEvidence('\\boldsymbol{<}', 'blue')}\\sqrt{${texNombre(b, 1)}}$.`
+              texteCorr += ` Comme $${texNombre(a, 1)}${miseEnEvidence('\\boldsymbol{<}', bleuMathalea)}${texNombre(b, 1)}$, alors
+          $\\sqrt{${texNombre(a, 1)}}${miseEnEvidence('\\boldsymbol{<}', bleuMathalea)}\\sqrt{${texNombre(b, 1)}}$.`
             } else {
-              texteCorr += ` Comme $${texNombre(b, 1)}${miseEnEvidence('\\boldsymbol{<}', 'blue')}${texNombre(a, 1)}$,
-          alors $\\sqrt{${texNombre(b, 1)}}${miseEnEvidence('\\boldsymbol{<}', 'blue')}\\sqrt{${texNombre(a, 1)}}$.`
+              texteCorr += ` Comme $${texNombre(b, 1)}${miseEnEvidence('\\boldsymbol{<}', bleuMathalea)}${texNombre(a, 1)}$,
+          alors $\\sqrt{${texNombre(b, 1)}}${miseEnEvidence('\\boldsymbol{<}', bleuMathalea)}\\sqrt{${texNombre(a, 1)}}$.`
             }
 
             variables.push(a, b)

@@ -1,5 +1,6 @@
 import { range } from '../../outils/nombres'
 import { BufferGeometryUtils, Text, THREE } from './threeInstance'
+import { bleuMathalea } from '../../../lib/colors'
 
 // Three.js pur pour créer un prisme polygonal utilisable dans une scène Three.js en perspective avec arêtes cachées en pointillés.
 export function createPrismGeometry(
@@ -260,8 +261,8 @@ const coloredCubeMeshTemplate = (() => {
     new THREE.MeshPhongMaterial({ color: 'red' }),
     new THREE.MeshPhongMaterial({ color: 'green' }),
     new THREE.MeshPhongMaterial({ color: 'green' }),
-    new THREE.MeshPhongMaterial({ color: 'blue' }),
-    new THREE.MeshPhongMaterial({ color: 'blue' }),
+    new THREE.MeshPhongMaterial({ color: bleuMathalea }),
+    new THREE.MeshPhongMaterial({ color: bleuMathalea }),
   ]
   const mesh = new THREE.Mesh(geometry, materials)
   return mesh
@@ -275,8 +276,8 @@ const coloredCubeWithEdgesTemplate = (() => {
     new THREE.MeshPhongMaterial({ color: 'red' }),
     new THREE.MeshPhongMaterial({ color: 'green' }),
     new THREE.MeshPhongMaterial({ color: 'green' }),
-    new THREE.MeshPhongMaterial({ color: 'blue' }),
-    new THREE.MeshPhongMaterial({ color: 'blue' }),
+    new THREE.MeshPhongMaterial({ color: bleuMathalea }),
+    new THREE.MeshPhongMaterial({ color: bleuMathalea }),
   ]
   const mesh = new THREE.Mesh(geometry, materials)
   const edges = new THREE.EdgesGeometry(geometry)

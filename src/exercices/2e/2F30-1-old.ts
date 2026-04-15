@@ -18,6 +18,7 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 
 export const titre = "Dresser un tableau de variations à partir d'une courbe"
 export const dateDePublication = '14/02/2023'
@@ -118,7 +119,7 @@ export default class VariationsCourbe extends Exercice {
               grilleYMax: y1 + 2,
             })
             const nomC = latex2d(`C_{${nomF}}`, x0 + 0.7, y0 + 1, {
-              color: 'blue',
+              color: bleuMathalea,
               letterSize: 'normalsize',
             })
             const gr = courbeInterpolee(
@@ -128,7 +129,7 @@ export default class VariationsCourbe extends Exercice {
                 [x2, y2],
               ],
               {
-                color: 'blue',
+                color: bleuMathalea,
                 epaisseur: 2,
                 repere: r1,
                 xMin: x0 - 1,
@@ -205,7 +206,7 @@ export default class VariationsCourbe extends Exercice {
               letterSize: 'scriptsize',
             })
             const nomC = latex2d(`C_{${nomF}}`, x0 + 0.4, y0 + 1, {
-              color: 'blue',
+              color: bleuMathalea,
               letterSize: 'normalsize',
             })
             const r1 = repere({
@@ -234,7 +235,7 @@ export default class VariationsCourbe extends Exercice {
                 [x2, y2],
               ],
               {
-                color: 'blue',
+                color: bleuMathalea,
                 epaisseur: 2,
                 repere: r1,
                 xMin: x0 - 1,
@@ -313,7 +314,7 @@ export default class VariationsCourbe extends Exercice {
               letterSize: 'scriptsize',
             })
             const nomC = latex2d(`C_{${nomF}}`, x0 + 0.4, y0 + 0.7, {
-              color: 'blue',
+              color: bleuMathalea,
               letterSize: 'normalsize',
             })
             const r1 = repere({
@@ -343,7 +344,7 @@ export default class VariationsCourbe extends Exercice {
                 [x3, y3],
               ],
               {
-                color: 'blue',
+                color: bleuMathalea,
                 epaisseur: 2,
                 repere: r1,
                 xMin: x0 - 1,
@@ -423,7 +424,7 @@ export default class VariationsCourbe extends Exercice {
               letterSize: 'scriptsize',
             })
             const nomC = latex2d(`C_{${nomF}}`, x0 + 0.4, y0 + 0.7, {
-              color: 'blue',
+              color: bleuMathalea,
               letterSize: 'normalsize',
             })
             const r1 = repere({
@@ -453,7 +454,7 @@ export default class VariationsCourbe extends Exercice {
                 [x3, y3],
               ],
               {
-                color: 'blue',
+                color: bleuMathalea,
                 epaisseur: 2,
                 repere: r1,
                 xMin: x0 - 1,
@@ -536,7 +537,7 @@ export default class VariationsCourbe extends Exercice {
               letterSize: 'scriptsize',
             })
             const nomC = latex2d(`C_{${nomF}}`, x0 + 0.4, y0 + 0.7, {
-              color: 'blue',
+              color: bleuMathalea,
               letterSize: 'normalsize',
             })
             const r1 = repere({
@@ -567,7 +568,7 @@ export default class VariationsCourbe extends Exercice {
                 [x4, y4],
               ],
               {
-                color: 'blue',
+                color: bleuMathalea,
                 epaisseur: 2,
                 repere: r1,
                 xMin: x0 - 1,
@@ -687,7 +688,7 @@ export default class VariationsCourbe extends Exercice {
                 [x4, y4],
               ],
               {
-                color: 'blue',
+                color: bleuMathalea,
                 epaisseur: 2,
                 repere: r1,
                 xMin: x0 - 1,
@@ -695,7 +696,7 @@ export default class VariationsCourbe extends Exercice {
               },
             )
             const nomC = latex2d(`C_{${nomF}}`, x0 + 0.4, y0 + 0.7, {
-              color: 'blue',
+              color: bleuMathalea,
               letterSize: 'normalsize',
             })
             const graphique = mathalea2d(
@@ -812,7 +813,7 @@ export default class VariationsCourbe extends Exercice {
                 [x2, y2],
               ],
               {
-                color: 'blue',
+                color: bleuMathalea,
                 epaisseur: 2,
                 repere: r1,
                 xMin: x0 - 1,
@@ -903,7 +904,7 @@ export default class VariationsCourbe extends Exercice {
                 [x2, y2],
               ],
               {
-                color: 'blue',
+                color: bleuMathalea,
                 epaisseur: 2,
                 repere: r1,
                 xMin: x0 - 1,
@@ -997,7 +998,7 @@ export default class VariationsCourbe extends Exercice {
                 [x3, y3],
               ],
               {
-                color: 'blue',
+                color: bleuMathalea,
                 epaisseur: 2,
                 repere: r1,
                 xMin: x0 - 1,
@@ -1111,7 +1112,7 @@ export default class VariationsCourbe extends Exercice {
                 [x3, y3],
               ],
               {
-                color: 'blue',
+                color: bleuMathalea,
                 epaisseur: 2,
                 repere: r1,
                 xMin: -4,
@@ -1230,7 +1231,7 @@ export default class VariationsCourbe extends Exercice {
                 [x4, y4],
               ],
               {
-                color: 'blue',
+                color: bleuMathalea,
                 epaisseur: 2,
                 repere: r1,
                 xMin: x0 - 1,
@@ -1350,7 +1351,7 @@ export default class VariationsCourbe extends Exercice {
                 [x4, y4],
               ],
               {
-                color: 'blue',
+                color: bleuMathalea,
                 epaisseur: 2,
                 repere: r1,
                 xMin: x0 - 1,
@@ -1470,7 +1471,7 @@ export default class VariationsCourbe extends Exercice {
                 repere: r,
                 xMin,
                 xMax,
-                color: 'blue',
+                color: bleuMathalea,
                 epaisseur: 2,
               }),
             ]
@@ -1540,7 +1541,7 @@ export default class VariationsCourbe extends Exercice {
                 repere: r,
                 xMin,
                 xMax,
-                color: 'blue',
+                color: bleuMathalea,
                 epaisseur: 2,
               }),
             ]
@@ -1617,7 +1618,7 @@ export default class VariationsCourbe extends Exercice {
                 repere: r,
                 xMin,
                 xMax,
-                color: 'blue',
+                color: bleuMathalea,
                 epaisseur: 2,
               }),
             ]

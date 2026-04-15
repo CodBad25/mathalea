@@ -20,7 +20,7 @@ import {
   listeQuestionsToContenu,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { orangeMathalea } from '../../lib/colors'
+import { orangeMathalea, bleuMathalea } from '../../lib/colors'
 
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -309,7 +309,7 @@ export default class ImagePtParTranslation extends Exercice {
                   (couple) => couple[0] === xSOL && couple[1] === ySOL,
                 )
               ]
-            const trPtDepart = tracePoint(PtDepart, 'blue')
+            const trPtDepart = tracePoint(PtDepart, bleuMathalea)
             trPtDepart.epaisseur = 2
             objets.push(PositionPt, LabelsPt, Grille)
             objets.push(trPtDepart)
@@ -407,7 +407,7 @@ export default class ImagePtParTranslation extends Exercice {
             if (this.classe === 2) objetsCorr.push(nomVecDepl)
             objetsCorr.push(labelPoint(OrigVec, ExtrVec, 'green'))
             objetsCorr.push(representant(VecDepl, OrigVec, 'green'))
-            objetsCorr.push(labelPoint(PtDepart, 'blue'), trPtDepart)
+            objetsCorr.push(labelPoint(PtDepart, bleuMathalea), trPtDepart)
             const ptSol = translation(PtDepart, VecDepl, NomSOL)
             ptSol.positionLabel =
               ptSol.y === 0 ? 'below' : ptSol.y === 4 ? 'above' : 'below left'
@@ -475,7 +475,7 @@ export default class ImagePtParTranslation extends Exercice {
               PtDepartSeg.y,
               xPtArrivSeg,
               yPtArrivSeg,
-              'blue',
+              bleuMathalea,
             )
             Seg.epaisseur = 2 // Variable qui grossit le tracé du segment
             const nomPDSeg = PtDepartSeg.nom
@@ -700,8 +700,8 @@ export default class ImagePtParTranslation extends Exercice {
             }
 
             objetsCorr.push(
-              labelPoint(PtDepartSeg, PtArrivSeg, 'blue'),
-              tracePoint(PtDepartSeg, PtArrivSeg, 'blue'),
+              labelPoint(PtDepartSeg, PtArrivSeg, bleuMathalea),
+              tracePoint(PtDepartSeg, PtArrivSeg, bleuMathalea),
             )
             const ptSOLPDSeg = translation(PtDepartSeg, VecDepl, nomSOLPDSeg)
             ptSOLPDSeg.positionLabel =
@@ -935,7 +935,7 @@ export default class ImagePtParTranslation extends Exercice {
               Pt1Triangle.y,
               xPt2Triangle,
               yPt2Triangle,
-              'blue',
+              bleuMathalea,
             )
             Seg1.epaisseur = 2 // Variable qui grossit le tracé du segment
             const Seg2 = segment(
@@ -943,7 +943,7 @@ export default class ImagePtParTranslation extends Exercice {
               Pt1Triangle.y,
               xPt3Triangle,
               yPt3Triangle,
-              'blue',
+              bleuMathalea,
             )
             Seg2.epaisseur = 2 // Variable qui grossit le tracé du segment
             const Seg3 = segment(
@@ -951,7 +951,7 @@ export default class ImagePtParTranslation extends Exercice {
               yPt2Triangle,
               xPt3Triangle,
               yPt3Triangle,
-              'blue',
+              bleuMathalea,
             )
             Seg3.epaisseur = 2 // Variable qui grossit le tracé du segment
 
@@ -1142,8 +1142,8 @@ export default class ImagePtParTranslation extends Exercice {
             }
 
             objetsCorr.push(
-              labelPoint(Pt1Triangle, Pt2Triangle, Pt3Triangle, 'blue'),
-              tracePoint(Pt1Triangle, Pt2Triangle, Pt3Triangle, 'blue'),
+              labelPoint(Pt1Triangle, Pt2Triangle, Pt3Triangle, bleuMathalea),
+              tracePoint(Pt1Triangle, Pt2Triangle, Pt3Triangle, bleuMathalea),
             )
 
             // Affichage des sommets du triangle image

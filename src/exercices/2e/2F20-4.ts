@@ -19,6 +19,7 @@ import { segment } from '../../lib/2d/segmentsVecteurs'
 import { latex2d } from '../../lib/2d/textes'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { mathalea2d } from '../../modules/mathalea2d'
+import { bleuMathalea } from '../../lib/colors'
 
 export const titre = 'Résoudre graphiquement une équation ou une inéquation'
 export const dateDePublication = '29/10/2023'
@@ -694,7 +695,7 @@ class resolutionEquationInequationGraphique extends Exercice {
         },
       })
 
-      texteCorr += `Pour trouver l'ensemble des solutions de l'inéquation $${f1}(x)${inferieur ? miseEnEvidence('\\leqslant', 'black') : miseEnEvidence('~\\geqslant~', 'black')}${f2}(x)$ sur $[${xMin};${xMax}]$, on regarde les portions où la courbe $${miseEnEvidence('\\mathscr{C}_' + f1, 'blue')}$ est située ${inferieur ? 'en dessous' : 'au-dessus'} de la  courbe $${miseEnEvidence('\\mathscr{C}_' + f2, 'red')}$.<br>`
+      texteCorr += `Pour trouver l'ensemble des solutions de l'inéquation $${f1}(x)${inferieur ? miseEnEvidence('\\leqslant', 'black') : miseEnEvidence('~\\geqslant~', 'black')}${f2}(x)$ sur $[${xMin};${xMax}]$, on regarde les portions où la courbe $${miseEnEvidence('\\mathscr{C}_' + f1, bleuMathalea)}$ est située ${inferieur ? 'en dessous' : 'au-dessus'} de la  courbe $${miseEnEvidence('\\mathscr{C}_' + f2, 'red')}$.<br>`
       texteCorr += `On lit les intervalles correspondants sur l'axe des abscisses : $${soluces2}$`
     }
 
@@ -730,18 +731,18 @@ class resolutionEquationInequationGraphique extends Exercice {
 
     let courbe1, courbe2
     if (f1Type === 'constante' || f1Type === 'affine') {
-      courbe1 = segment(-8, fonction1.func(-8), 8, fonction1.func(8), 'blue')
+      courbe1 = segment(-8, fonction1.func(-8), 8, fonction1.func(8), bleuMathalea)
     } else {
       courbe1 = courbe(fonction1.func, {
         repere,
         xMin: -8,
         xMax: 8,
-        color: 'blue',
+        color: bleuMathalea,
         epaisseur: 1,
       })
     }
     const nomCourbe1 = latex2d(`\\mathscr{C}_${f1}`, -7.5, 7, {
-      color: 'blue',
+      color: bleuMathalea,
       letterSize: 'normalsize',
       backgroundColor: '',
     })
@@ -751,7 +752,7 @@ class resolutionEquationInequationGraphique extends Exercice {
       backgroundColor: '',
     })
 
-    courbe1.color = colorToLatexOrHTML('blue')
+    courbe1.color = colorToLatexOrHTML(bleuMathalea)
 
     courbe1.epaisseur = 1
     if (f2Type === 'affine') {
@@ -772,7 +773,7 @@ class resolutionEquationInequationGraphique extends Exercice {
     const p1B = point(-6, 7)
     const p2A = point(-7, 6)
     const p2B = point(-6, 6)
-    const trait1 = segment(p1A, p1B, 'blue')
+    const trait1 = segment(p1A, p1B, bleuMathalea)
     const trait2 = segment(p2A, p2B, 'red')
     trait1.epaisseur = 1
     trait2.epaisseur = 1

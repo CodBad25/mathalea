@@ -13,6 +13,7 @@ import { stringNombre } from '../lib/outils/texNombre'
 import type { NestedObjetMathalea2dArray } from '../types/2d'
 import type FractionEtendue from './FractionEtendue'
 import { quotientier } from './outils'
+import { bleuMathalea } from '../lib/colors'
 
 type FractionRepresentationType = 'gateau' | 'barre' | 'segment'
 
@@ -578,8 +579,8 @@ export function representeFractionSurBarre(
     const rect = polygone([A, B, C, D])
     rect.couleurDeRemplissage = vide
       ? colorToLatexOrHTML('white')
-      : colorToLatexOrHTML('blue')
-    rect.couleur = colorToLatexOrHTML('blue')
+      : colorToLatexOrHTML(bleuMathalea)
+    rect.couleur = colorToLatexOrHTML(bleuMathalea)
     rect.opaciteDeRemplissage = 0.5
     return rect
   }
@@ -593,7 +594,7 @@ export function representeFractionSurBarre(
   }
   for (let k = 0; k <= max; k++) {
     const seg = segment(k * width, -hauteur - 0.1, k * width, hauteur + 0.1)
-    seg.color = colorToLatexOrHTML('blue')
+    seg.color = colorToLatexOrHTML(bleuMathalea)
     seg.epaisseur = 3
     const txt = latex2d(k.toString(), k * width, hauteur + 1, {
       color: 'black',

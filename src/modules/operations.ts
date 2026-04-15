@@ -149,7 +149,7 @@ function soustractionPosee(
             (i + offsetCarry - 1) * espacement,
             2.5 * coefEntreChiffres,
             {
-              color: 'blue',
+              color: bleuMathalea,
               letterSize: 'tiny',
               gras: false,
             },
@@ -1115,7 +1115,7 @@ function multiplicationPosee(
                 gras: false,
               }),
             )
-          // if (retenues[j][i] !== '0' && retenuesOn) objets.push(texteParPosition(`(${retenues[j][i]})`, i * espacement, 5.5 - j + lignesinutiles, 0, 'blue', 0.7, 'milieu', false))
+          // if (retenues[j][i] !== '0' && retenuesOn) objets.push(texteParPosition(`(${retenues[j][i]})`, i * espacement, 5.5 - j + lignesinutiles, 0, bleuMathalea, 0.7, 'milieu', false))
         }
       } else {
         lignesinutiles++

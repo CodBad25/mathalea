@@ -20,6 +20,7 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 export const titre = "Modéliser une situation à l'aide d'une fonction"
 export const dateDePublication = '14/02/2023'
 export const dateDeModifImportante = '13/12/2024'
@@ -403,7 +404,7 @@ On considère la fonction $${nom}$ qui associe à chaque valeur de $x$, le prix 
                 repere: r1,
                 xMin: 0,
                 xMax: 4,
-                color: 'blue',
+                color: bleuMathalea,
                 epaisseur: 2,
                 step: 0.2,
               }),
@@ -565,7 +566,7 @@ On considère la fonction $${nom}$ qui associe à chaque valeur de $x$, le prix 
                   repere: r1,
                   xMin: 0,
                   xMax: 10,
-                  color: 'blue',
+                  color: bleuMathalea,
                   epaisseur: 2,
                   step: 0.15,
                 }),
@@ -588,7 +589,7 @@ On considère la fonction $${nom}$ qui associe à chaque valeur de $x$, le prix 
                   repere: r1,
                   xMin: 0,
                   xMax: 9,
-                  color: 'blue',
+                  color: bleuMathalea,
                   epaisseur: 2,
                   step: 0.2,
                 }),
@@ -714,7 +715,7 @@ On considère la fonction $${nom}$ qui associe à chaque valeur de $x$, le prix 
                 [a5, b5],
               ],
               {
-                color: 'blue',
+                color: bleuMathalea,
                 epaisseur: 2,
                 repere: r1,
                 xMin: 0,

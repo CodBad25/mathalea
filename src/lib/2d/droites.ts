@@ -31,7 +31,7 @@ import { vide2d } from './Vide2d'
  *
  * Exemple :
  *   context.fenetreMathalea2d = [xmin + 0.2, ymin, xmax, ymax] // important pour la position des labels
- *   const d3nom = labelOnLine(d3, '$' + noms[3] + '$', { color: 'red', bleuMathalea, taille: 8, preferedPosition: 'left' })
+ *   const d3nom = labelOnLine(d3, '$' + noms[3] + '$', { color: 'red', taille: 8, preferedPosition: 'left' })
  *   const d0nom = labelOnLine(d0, '$' + noms[0] + '$', { color: 'red', taille: 8, usedPosition: [d3nom] })
  *
  * @author Mickael Guironnet

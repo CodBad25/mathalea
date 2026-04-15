@@ -16,6 +16,7 @@ import { stringNombre } from '../../lib/outils/texNombre'
 import type { IAlea2iep, OptionsCompas } from '../Alea2iep.types'
 import { randint } from '../outils'
 import { perpendiculaireRegleEquerre2points3epoint } from './parallelesEtPerpendiculaires'
+import { bleuMathalea } from '../../lib/colors'
 
 const marques = ['/', '//', '///', 'O', '\\\\']
 
@@ -328,7 +329,7 @@ export const homothetiePoint = function (
   )
   this.regleMasquer(options)
   this.crayonMasquer(options)
-  this.pointCreer(image, Object.assign({ couleurPoint: 'blue' }, options))
+  this.pointCreer(image, Object.assign({ couleurPoint: bleuMathalea }, options))
   this.pause()
   this.texteMasquer(idTexte1, options)
   this.texteMasquer(idTexte2, options)

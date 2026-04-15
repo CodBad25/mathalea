@@ -1,3 +1,4 @@
+import { bleuMathalea } from '../../lib/colors'
 import { estentier } from '../../modules/outils'
 import { tousDeMemeSigne } from '../outils/nombres'
 import { colorToLatexOrHTML } from './colorToLatexOrHtml'
@@ -6,7 +7,6 @@ import { ObjetMathalea2D } from './ObjetMathalea2D'
 import { point, PointAbstrait, pointAbstrait } from './PointAbstrait'
 import { Polygone, polygone } from './polygones'
 import { elimineBinomesXYIntermediairesAlignes } from './Polyquad'
-import { bleuMathalea } from '../../lib/colors'
 
 /**
  * Trace l'aire entre la courbe d'une fonction et l'axe des abscisses
@@ -18,7 +18,7 @@ import { bleuMathalea } from '../../lib/colors'
  * @param {number} [parametres.pas = 1]  Pas entre deux abscisses pour tracer l'aire
  * @param {boolean} [parametres.sup = false] Si true, l'aire est arrondie par le haut, sinon par le bas
  * @param {string} [parametres.colorPositif = 'red']  Couleur de l'aire positive
- * @param {string} [parametres.colorNegatif = 'red', bleuMathalea]  Couleur de l'aire négative
+ * @param {string} [parametres.colorNegatif = bleuMathalea]  Couleur de l'aire négative
  * @example integraleComptable(g, {repere: r})
  * // Trace l'aire entre la courbe de la fonction g et l'axe des abscisses dans le repère r, tous deux précédemment définis.
  * @example integraleComptable(g, {repere: r, pas: 0.1, sup: true, colorPositif: 'green', colorNegatif: 'orange'})

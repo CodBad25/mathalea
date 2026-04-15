@@ -10,6 +10,7 @@ import { texFractionReduite } from '../../lib/outils/deprecatedFractions'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 
 export const titre = "Étudier graphiquement la parité d'une fonction"
 
@@ -84,7 +85,7 @@ export default class EtudierGraphiqueParite extends Exercice {
             })
             const x = randint(-1, 1, [0]) * 2
             const f = (x: number) => a * x + b
-            const C = courbe(f, { repere: rC, step: 0.25, color: 'blue' })
+            const C = courbe(f, { repere: rC, step: 0.25, color: bleuMathalea })
             const B = point(x, a * x + b)
             const A = point(-x, -a * x + b)
 
@@ -182,7 +183,7 @@ export default class EtudierGraphiqueParite extends Exercice {
 
             const x = randint(2, 3, [0])
             const f = (x: number) => a * x
-            const C = courbe(f, { repere: r, step: 0.25, color: 'blue' })
+            const C = courbe(f, { repere: r, step: 0.25, color: bleuMathalea })
 
             const B = point(x, a * x)
             const A = point(-x, -a * x)
@@ -338,7 +339,7 @@ export default class EtudierGraphiqueParite extends Exercice {
 
             const x = 1
             const f = (x: number) => a * x * x + b
-            const C = courbe(f, { repere: r, color: 'blue' })
+            const C = courbe(f, { repere: r, color: bleuMathalea })
 
             const B = point(2 * x, a * x * x + b)
             const A = point(-2 * x, a * x * x + b)
@@ -498,7 +499,7 @@ export default class EtudierGraphiqueParite extends Exercice {
             })
             const x = 4 - Math.abs(b)
             const f = (x: number) => a * (x - b) * (x - b) + c
-            const C = courbe(f, { repere: rC, step: 0.25, color: 'blue' })
+            const C = courbe(f, { repere: rC, step: 0.25, color: bleuMathalea })
 
             const B = point(x, a * (x - b) * (x - b) + c)
             const A = point(-x, a * (-x - b) * (-x - b) + c)
@@ -605,7 +606,7 @@ export default class EtudierGraphiqueParite extends Exercice {
             const x = randint(-3, 3, [-b / a, b / a, 0, 1, -1])
 
             const f = (x: number) => 1 / (a * x + b)
-            const C = courbe(f, { repere: r, step: 0.01, color: 'blue' })
+            const C = courbe(f, { repere: r, step: 0.01, color: bleuMathalea })
 
             const B = point(x, 1 / (a * x + b))
             const A = point(-x, 1 / (-a * x + b))
@@ -705,7 +706,7 @@ export default class EtudierGraphiqueParite extends Exercice {
             })
             const x = 2
             const f = (x: number) => 1 / (a * x)
-            const C = courbe(f, { repere: r, step: 0.01, color: 'blue' })
+            const C = courbe(f, { repere: r, step: 0.01, color: bleuMathalea })
 
             const B = point(2 * x, 1 / (a * x))
             const A = point(-2 * x, -1 / (a * x))

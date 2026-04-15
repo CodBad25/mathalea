@@ -17,10 +17,10 @@ import {
  * @param {number} y Ordonnée du sommet du cube en bas à gauche
  * @param {number} x Altitude du sommet du cube en bas à gauche
  * @param {number} c Longueur de l'arête du cube
- * @param {string} [color = 'black'] Couleur des arêtes du cube : du type 'blue' ou du type '#f15929'
- * @param {string} [colorAV = 'lightgray'] Couleur de la face avant du cube : du type 'blue' ou du type '#f15929'
- * @param {string} [colorHautouBas = 'white'] Couleur de la face visible du dessus (ou du dessous) du cube : du type 'blue' ou du type '#f15929'
- * @param {string} [colorDr = 'darkgray'] Couleur de la face de droite (toujours visible) du cube : du type 'blue' ou du type '#f15929'
+ * @param {string} [color = 'black'] Couleur des arêtes du cube : du type 'red', bleuMathalea ou du type '#f15929'
+ * @param {string} [colorAV = 'lightgray'] Couleur de la face avant du cube : du type 'red', bleuMathalea ou du type '#f15929'
+ * @param {string} [colorHautouBas = 'white'] Couleur de la face visible du dessus (ou du dessous) du cube : du type 'red', bleuMathalea ou du type '#f15929'
+ * @param {string} [colorDr = 'darkgray'] Couleur de la face de droite (toujours visible) du cube : du type 'red', bleuMathalea ou du type '#f15929'
  * @param {boolean} [aretesCachee = true] Si true, les arêtes cachées sont visibles.
  * @param {boolean} [affichageNom = false] Si true, le nom des sommets est affiché
  * @param {string[]} [nom = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']] Nom du cube
@@ -131,10 +131,10 @@ export class Cube3d extends ObjetMathalea2D {
  * @param {number} y Ordonnée du sommet du cube en bas à gauche
  * @param {number} x Altitude du sommet du cube en bas à gauche
  * @param {number} c Longueur de l'arête du cube
- * @param {string} [color = 'black'] Couleur des arêtes du cube : du type 'blue' ou du type '#f15929'
- * @param {string} [colorAV = 'lightgray'] Couleur de la face avant du cube : du type 'blue' ou du type '#f15929'
- * @param {string} [colorHautouBas = 'white'] Couleur de la face visible du dessus (ou du dessous) du cube : du type 'blue' ou du type '#f15929'
- * @param {string} [colorDr = 'darkgray'] Couleur de la face de droite (toujours visible) du cube : du type 'blue' ou du type '#f15929'
+ * @param {string} [color = 'black'] Couleur des arêtes du cube : du type 'red', bleuMathalea ou du type '#f15929'
+ * @param {string} [colorAV = 'lightgray'] Couleur de la face avant du cube : du type 'red', bleuMathalea ou du type '#f15929'
+ * @param {string} [colorHautouBas = 'white'] Couleur de la face visible du dessus (ou du dessous) du cube : du type 'red', bleuMathalea ou du type '#f15929'
+ * @param {string} [colorDr = 'darkgray'] Couleur de la face de droite (toujours visible) du cube : du type 'red', bleuMathalea ou du type '#f15929'
  * @param {boolean} [aretesCachee = true] Si true, les arêtes cachées sont visibles.
  * @param {boolean} [affichageNom = false] Si true, le nom des sommets est affiché
  * @param {string[]} [nom = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']] Nom du cube

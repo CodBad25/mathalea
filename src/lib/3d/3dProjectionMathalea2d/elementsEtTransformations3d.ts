@@ -230,7 +230,7 @@ export function droite3d(point3D: Point3d, vecteur3D: Vecteur3d) {
  * @param {Vecteur3d} rayon Vecteur correspondant au rayon
  * @param {string} [sens = 'direct'] Sens de rotation pour créer le demi-cercle ('direct' ou 'indirect")
  * @param {boolean} [estCache = false] Si false, alors le tracé est en trait plein, sinon le tracé est en pointillés
- * @param {string} [color = 'black'] Couleur du demi-cercle : du type 'blue' ou du type '#f15929'
+ * @param {string} [color = 'black'] Couleur du demi-cercle : du type 'red', bleuMathalea ou du type '#f15929'
  * @param {number} [angledepart = context.anglePerspective] Angle en degré entre le vecteur rayon depuis le centre et le point de début de tracé du demi-cercle
  * @example demicercle3d(A,n,v) // Crée un demi-cercle noir en trait plein de centre A, de vecteur normal v, dont le rayon correspond au vecteur v et le sens est direct
  * @example demicercle3d(A,n,v,'indirect',true,'red',0) // Crée un demi-cercle rouge en pointillés de centre A, de vecteur normal v, dont le rayon correspond au vecteur v, le sens est direct et l'angle de départ est 0°.

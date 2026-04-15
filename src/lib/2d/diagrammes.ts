@@ -390,7 +390,7 @@ export function traceBarreHorizontale(
  * @param {string[]} etiquettes Tableau des labels pour chaque effectif
  * @param {Object} parametres À saisir entre accolades
  * @param {boolean} [parametres.reperageTraitPointille = false] Présence (ou non) du trait en pointillés, reliant le haut de chaque barre à l'axe des ordonnées
- * @param {string} [parametres.couleurDeRemplissage = 'red', bleuMathalea] Couleur de remplissage de toutes les barres : du type 'red', bleuMathalea ou du type '#a12345'.
+ * @param {string} [parametres.couleurDeRemplissage = bleuMathalea] Couleur de remplissage de toutes les barres : du type 'red', bleuMathalea ou du type '#a12345'.
  * @param {number} [parametres.titreAxeVertical = ''] Titre de l'axe des ordonnées
  * @param {boolean} [parametres.titre = ''] Titre du diagramme
  * @param {boolean} [parametres.hauteurDiagramme = 5] Hauteur du diagramme
@@ -549,7 +549,7 @@ export class DiagrammeBarres extends ObjetMathalea2D {
  * @param {string[]} etiquettes Tableau des labels pour chaque effectif
  * @param {Object} parametres À saisir entre accolades
  * @param {boolean} [parametres.reperageTraitPointille = false] Présence (ou non) du trait en pointillés, reliant le haut de chaque barre à l'axe des ordonnées
- * @param {string} [parametres.couleurDeRemplissage = 'red', bleuMathalea] Couleur de remplissage de toutes les barres : du type 'red', bleuMathalea ou du type '#a12345'.
+ * @param {string} [parametres.couleurDeRemplissage = bleuMathalea] Couleur de remplissage de toutes les barres : du type 'red', bleuMathalea ou du type '#a12345'.
  * @param {number} [parametres.titreAxeVertical = ''] Titre de l'axe des ordonnées
  * @param {boolean} [parametres.titre = ''] Titre du diagramme
  * @param {boolean} [parametres.hauteurDiagramme = 5] Hauteur du diagramme
