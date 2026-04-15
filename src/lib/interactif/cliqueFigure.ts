@@ -26,7 +26,7 @@ export function mouseSvgClick(this: FigureClicable) {
     // Passe à l'état choisi donc on désactive les listenners pour over et pour out
     this.removeEventListener('mouseover', mouseOverSvgEffect)
     this.removeEventListener('mouseout', mouseOutSvgEffect)
-    // this.style.border = `3px solid ${orangeMathalea}`
+    // this.style.border = `3px solid #f15929`
     this.etat = true
   }
 }
