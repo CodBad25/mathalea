@@ -1,5 +1,9 @@
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import {
+  handleAnswers,
+  setReponse,
+} from '../../lib/interactif/gestionInteractif'
+import { toutAUnPoint } from '../../lib/interactif/mathLive'
 import { addMultiMathfield } from '../../lib/interactif/MultiMathfield/MultiMathfield'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { numAlpha, sp } from '../../lib/outils/outilString'
@@ -121,14 +125,6 @@ export default class ResoudreDesProblemesDiviseursCommuns extends Exercice {
             miseEnEvidence(` ${var2}`) +
             '$.'
           if (context.isAmc) setReponse(this, 3 * i + 2, var2)
-          texte += addMultiMathfield(this, i, {
-            dataTemplate: `${texteA} %{champ1}\n${texteB} %{champ2}\n${texteC} %{champ3}`,
-            dataOptions: {
-              champ1: { keyboard: KeyboardType.clavierNumbers },
-              champ2: { keyboard: KeyboardType.clavierNumbers },
-              champ3: { keyboard: KeyboardType.clavierNumbers },
-            },
-          })
           break
         case 2:
           texte = `Un professeur organise une sortie pédagogique au Futuroscope pour ses élèves de 3ème. Il est accompagné de $${var1 * objet}$ garçons et de $${var2 * objet}$ filles.<br>`
@@ -172,14 +168,6 @@ export default class ResoudreDesProblemesDiviseursCommuns extends Exercice {
             miseEnEvidence(` ${var2}`) +
             '$.'
           if (context.isAmc) setReponse(this, 3 * i + 2, var2)
-          texte += addMultiMathfield(this, i, {
-            dataTemplate: `${texteA} %{champ1}\n${texteB} %{champ2}\n${texteC} %{champ3}`,
-            dataOptions: {
-              champ1: { keyboard: KeyboardType.clavierNumbers },
-              champ2: { keyboard: KeyboardType.clavierNumbers },
-              champ3: { keyboard: KeyboardType.clavierNumbers },
-            },
-          })
           break
         default: // si un utilisateur saisit 4 ou une valeur erronée renvoie par défaut vers le prbme 3
           texte = `Un boulanger dispose de $${var1 * objet}$ croissants et de $${var2 * objet}$ brioches.<br>`
@@ -223,16 +211,28 @@ export default class ResoudreDesProblemesDiviseursCommuns extends Exercice {
             miseEnEvidence(` ${var2}`) +
             '$.'
           if (context.isAmc) setReponse(this, 3 * i + 2, var2)
-          texte += addMultiMathfield(this, i, {
-            dataTemplate: `${texteA} %{champ1}\n${texteB} %{champ2}\n${texteC} %{champ3}`,
-            dataOptions: {
-              champ1: { keyboard: KeyboardType.clavierNumbers },
-              champ2: { keyboard: KeyboardType.clavierNumbers },
-              champ3: { keyboard: KeyboardType.clavierNumbers },
-            },
-          })
           break
       } // fin du switch
+      texte += addMultiMathfield(this, i, {
+        dataTemplate: `${texteA} %{champ1}\n${texteB} %{champ2}\n${texteC} %{champ3}`,
+        dataOptions: {
+          champ1: { keyboard: KeyboardType.clavierNumbers },
+          champ2: { keyboard: KeyboardType.clavierNumbers },
+          champ3: { keyboard: KeyboardType.clavierNumbers },
+        },
+      })
+      handleAnswers(
+        this,
+        i,
+        {
+          champ1: { value: objet },
+          champ2: { value: var1 },
+          champ3: { value: var2 },
+          bareme: toutAUnPoint,
+        },
+        { formatInteractif: 'multiMathfield' },
+      )
+
       if (this.questionJamaisPosee(i, var1, var2, objet)) {
         if (context.isAmc) {
           this.autoCorrection[i] = {
