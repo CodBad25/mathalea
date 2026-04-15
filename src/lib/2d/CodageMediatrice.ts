@@ -12,7 +12,7 @@ import { milieu } from './utilitairesPoint'
  * Code la médiatrice d'un segment
  * @param {PointAbstrait} A Première extrémité du segment
  * @param {PointAbstrait} B Seconde extrémité du segment
- * @param {string} [color='black'] Couleur du codage : du type 'blue' ou du type '#f15929'.
+ * @param {string} [color='black'] Couleur du codage : du type 'red', bleuMathalea ou du type '#a12345'.
  * @param {string} [mark='x'] Symbole posé sur les deux parties du segment
  * @property {string} svg Sortie au format vectoriel (SVG) que l’on peut afficher dans un navigateur
  * @property {string} svgml Sortie, à main levée, au format vectoriel (SVG) que l’on peut afficher dans un navigateur
@@ -58,7 +58,7 @@ export class CodageMediatrice extends ObjetMathalea2D {
  * Code la médiatrice d'un segment
  * @param {PointAbstrait} A Première extrémité du segment
  * @param {PointAbstrait} B Seconde extrémité du segment
- * @param {string} [color='black'] Couleur du codage : du type 'blue' ou du type '#f15929'.
+ * @param {string} [color='black'] Couleur du codage : du type 'red', bleuMathalea ou du type '#a12345'.
  * @param {string} [mark='x'] Symbole posé sur les deux parties du segment
  * @example codageMediatrice(M,N) // Code, en noir, la médiatrice du segment[MN] avec les marques 'x'
  * @example codageMediatrice(M,N,'red','oo') // Code, en rouge, la médiatrice du segment[MN] avec les marques 'oo'

@@ -12,7 +12,7 @@ import { milieu } from './utilitairesPoint'
  * Code le milieu d'un segment
  * @param {Point|PointAbstrait} A Première extrémité du segment
  * @param {Point|PointAbstrait} B Seconde extrémité du segment
- * @param {string} [color='black'] Couleur du codage : du type 'blue' ou du type '#f15929'.
+ * @param {string} [color='black'] Couleur du codage : du type 'red', bleuMathalea ou du type '#a12345'.
  * @param {string} [mark='x'] Symbole posé sur les deux parties du segment
  * @param {boolean} [mil=true] Trace ou nom le point du milieu.
  * @property {string} svg Sortie au format vectoriel (SVG) que l’on peut afficher dans un navigateur
@@ -66,7 +66,7 @@ export class CodageMilieu extends ObjetMathalea2D {
  * Code le milieu d'un segment
  * @param {Point} A Première extrémité du segment
  * @param {Point} B Seconde extrémité du segment
- * @param {string} [color = 'black'] Couleur du codage : du type 'blue' ou du type '#f15929'.
+ * @param {string} [color = 'black'] Couleur du codage : du type 'red', bleuMathalea ou du type '#a12345'.
  * @param {string} [mark = 'x'] Symbole posé de part et d'autre du milieu du segment
  * @param {boolean} [mil = true] Trace ou nom le point du milieu.
  * @example codageMilieu(M,N) // Code, en noir, le milieu du segment[MN] avec les marques 'x', en plaçant le milieu

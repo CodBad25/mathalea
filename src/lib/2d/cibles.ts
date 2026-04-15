@@ -13,6 +13,7 @@ import { TexteParPoint, texteParPoint, texteParPosition } from './textes'
 import { rotation, similitude } from './transformations'
 import { longueur } from './utilitairesGeometriques'
 import { milieu, pointSurSegment } from './utilitairesPoint'
+import { bleuMathalea } from '../../lib/colors'
 
 /**  Retourne un couple de coordonnées correspondant au centre d'une cible, connaissant les coordonnées du point réponse et de la cellule dans laquelle on veut qu'il soit
  * @param {number} x Abscisse du point réponse
@@ -164,7 +165,7 @@ export class CibleCarree extends ObjetMathalea2D {
           ((2 * i + 1) * this.taille) / 2,
         this.y - ((this.rang + 1) * this.taille) / 2,
         0,
-        'blue',
+        bleuMathalea,
         0.5,
         'milieu',
         false,
@@ -177,7 +178,7 @@ export class CibleCarree extends ObjetMathalea2D {
           (this.rang * this.taille) / 2 +
           ((2 * i + 1) * this.taille) / 2,
         0,
-        'blue',
+        bleuMathalea,
         0.5,
         'milieu',
         false,
@@ -237,7 +238,7 @@ export class CibleCarree extends ObjetMathalea2D {
  * @param {number} [opaciteNum = 0.5] Opacité du numéro identifiant la cible
  * @example cibleCarree({})
  * // Crée une cible Carree, de centre (0,0), avec 4 carrés en largeur dont chacune a pour côté 0.6, de couleur grise avec une opacité de 50 %
- * @example cibleCarree({ x: 2, y: -1, rang: 5, num: 17, taille: 0.5, color: 'blue', opacite: 0.8 })
+ * @example cibleCarree({ x: 2, y: -1, rang: 5, num: 17, taille: 0.5, color: bleuMathalea, opacite: 0.8 })
  * // Crée une cible Carree, de centre (2,-1), avec 5 carrés en largeur dont chacune a pour côté 0.5, de couleur bleue avec une opacité de 80 %, portant le numéro 17
  * @author Jean-claude Lhote
  * @return {CibleCarree}
@@ -445,7 +446,7 @@ export class CibleRonde extends ObjetMathalea2D {
  * @param {number} [opacite=0.5] Opacité de la cible
  * @example cibleRonde({})
  * // Crée une cible ronde, de centre (0,0), possédant 3 cercles, avec une distance de 0,3 entre chaque cercle consécutifu cercle intérieur est 5, de couleur grise avec une opacité de 50 %.
- * @example cibleRonde({ x: 2, y: -1, rang: 10, taille: 1, color: 'blue', opacite: 0.8 })
+ * @example cibleRonde({ x: 2, y: -1, rang: 10, taille: 1, color: bleuMathalea, opacite: 0.8 })
  * // Crée une cible ronde, de centre (2,-1), possédant 10 cercles, avec une distance de 1 entre chaque cercle consécutifu cercle intérieur est 5, de couleur bleue avec une opacité de 80 %.
  * @author Jean-claude Lhote
  * @return {CibleRonde}
@@ -648,7 +649,7 @@ export class CibleCouronne extends ObjetMathalea2D {
  * @example cibleCouronne({})
  * // Crée une cible couronne circulaire, de centre (0,0), dont le rayon du cercle intérieur est 5, la longueur des segments est 1, la première lettre démarre à 0°,
  * //    le nombre de divisions de la couronne est 18, le nombre de subdivisions est 3, leur opacité est 50 %, avec les lettres apparentes, de couleur grise
- * @example cibleCouronne({ x: 2, y: -1, taille: 4, taille2: 2, depart: 35, nbDivisions: 12, nbSubDivisions: 2, semi: true, label: false, color: 'blue', opacite: 0.8 })
+ * @example cibleCouronne({ x: 2, y: -1, taille: 4, taille2: 2, depart: 35, nbDivisions: 12, nbSubDivisions: 2, semi: true, label: false, color: bleuMathalea, opacite: 0.8 })
  * // Crée une cible couronne semi-circulaire, de centre (2,-1), dont le rayon du cercle intérieur est 4, la longueur des segments est 2, la première lettre démarre à 35°,
  * //    le nombre de divisions de la couronne est 12, le nombre de subdivisions est 2, leur opacité est 80 %, avec les lettres non apparentes, de couleur bleue
  * @author Jean-claude Lhote

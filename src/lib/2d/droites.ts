@@ -31,7 +31,7 @@ import { vide2d } from './Vide2d'
  *
  * Exemple :
  *   context.fenetreMathalea2d = [xmin + 0.2, ymin, xmax, ymax] // important pour la position des labels
- *   const d3nom = labelOnLine(d3, '$' + noms[3] + '$', { color: 'blue', taille: 8, preferedPosition: 'left' })
+ *   const d3nom = labelOnLine(d3, '$' + noms[3] + '$', { color: 'red', bleuMathalea, taille: 8, preferedPosition: 'left' })
  *   const d0nom = labelOnLine(d0, '$' + noms[0] + '$', { color: 'red', taille: 8, usedPosition: [d3nom] })
  *
  * @author Mickael Guironnet
@@ -723,8 +723,8 @@ export function droiteAvecNomLatex(d: Droite, nom: string, color = 'black') {
  * @param {PointAbstrait | number} arg1 Premier point de la droite OU BIEN coefficient a de l'équation de la droite ax+by+c=0
  * @param {PointAbstrait | number} arg2 Deuxième point de la droite OU BIEN coefficient b de l'équation de la droite ax+by+c=0
  * @param {string | number} arg3 Nom affiché de la droite OU BIEN coefficient c de l'équation de la droite ax+by+c=0
- * @param {string} arg4 Couleur de la droite : du type 'blue' ou du type '#f15929' OU BIEN Nom affiché de la droite si arg1 est un nombre
- * @param {string} arg5 Couleur de la droite : du type 'blue' ou du type '#f15929' si arg1 est un nombre
+ * @param {string} arg4 Couleur de la droite : du type 'red', bleuMathalea ou du type '#a12345' OU BIEN Nom affiché de la droite si arg1 est un nombre
+ * @param {string} arg5 Couleur de la droite : du type 'red', bleuMathalea ou du type '#a12345' si arg1 est un nombre
  * @property {string} svg Sortie au format vectoriel (SVG) que l’on peut afficher dans un navigateur
  * @property {string} svgml Sortie, à main levée, au format vectoriel (SVG) que l’on peut afficher dans un navigateur
  * @property {string} tikz Sortie au format TikZ que l’on peut utiliser dans un fichier LaTeX
@@ -1271,10 +1271,10 @@ export class Droite extends ObjetMathalea2D {
  * @param {PointAbstrait | number} arg1 Premier point de la droite OU BIEN coefficient a de l'équation de la droite ax+by+c=0 avec (a,b)!=(0,0)
  * @param {PointAbstrait | number} arg2 Deuxième point de la droite OU BIEN coefficient b de l'équation de la droite ax+by+c=0 avec (a,b)!=(0,0)
  * @param {string | number} arg3 Nom affiché de la droite OU BIEN coefficient c de l'équation de la droite ax+by+c=0
- * @param {string} arg4 Couleur de la droite : du type 'blue' ou du type '#f15929' OU BIEN nom affiché de la droite si arg1 est un nombre
- * @param {string} arg5 Couleur de la droite : du type 'blue' ou du type '#f15929' si arg1 est un nombre
+ * @param {string} arg4 Couleur de la droite : du type 'red', bleuMathalea ou du type '#a12345' OU BIEN nom affiché de la droite si arg1 est un nombre
+ * @param {string} arg5 Couleur de la droite : du type 'red', bleuMathalea ou du type '#a12345' si arg1 est un nombre
  * @example droite(M, N, '(d1)') // Trace la droite passant par M et N se nommant (d1) et de couleur noire
- * @example droite(M, N, '(d1)','blue') // Trace la droite passant par M et N se nommant (d1) et de couleur bleue
+ * @example droite(M, N, '(d1)',bleuMathalea) // Trace la droite passant par M et N se nommant (d1) et de couleur bleue
  * @example droite(m, n, p) // Trace la droite définie par les coefficients de mx+ny+p=0 et de couleur noire
  * @example droite(m, n, p, '(d1)', 'red') // Trace la droite définie par les coefficients de mx+ny+p=0, se nommant (d1) et de couleur rouge
  * @author Jean-claude Lhote
@@ -1375,7 +1375,7 @@ export function positionLabelDroite(
  * @param {PointAbstrait} A PointAbstrait de la droite
  * @param {Vecteur} v Vecteur directeur de la droite
  * @param {string} [nom = ''] Nom affiché de la droite
- * @param {string} [color = 'black'] Couleur de la droite : du type 'blue' ou du type '#f15929'
+ * @param {string} [color = 'black'] Couleur de la droite : du type 'red', bleuMathalea ou du type '#a12345'
  * @example droiteParPointEtVecteur(M, v1) // Trace la droite passant par le point M et de vecteur directeur v1
  * @example droiteParPointEtVecteur(M, v1, 'd1', 'red') // Trace, en rouge, la droite d1 passant par le point M et de vecteur directeur v1
  * @author Jean-claude Lhote
@@ -1396,7 +1396,7 @@ export function droiteParPointEtVecteur(
  * @param {PointAbstrait} A PointAbstrait de la droite
  * @param {Droite} d Droite
  * @param {string} [nom = ''] Nom affiché de la droite
- * @param {string} [color = 'black'] Couleur de la droite : du type 'blue' ou du type '#f15929'
+ * @param {string} [color = 'black'] Couleur de la droite : du type 'red', bleuMathalea ou du type '#a12345'
  * @example droiteParPointEtParallele(M, d2) // Trace la droite parallèle à d2 passant par le point M
  * @example droiteParPointEtParallele(M, d2, 'd1', 'red') // Trace, en rouge, la droite d1 parallèle à d2 passant par le point M
  * @author Jean-claude Lhote
@@ -1416,7 +1416,7 @@ export function droiteParPointEtParallele(
  * @param {PointAbstrait} A PointAbstrait de la droite
  * @param {Droite} d Droite
  * @param {string} [nom = ''] Nom affiché de la droite
- * @param {string} [color = 'black'] Couleur de la droite : du type 'blue' ou du type '#f15929'
+ * @param {string} [color = 'black'] Couleur de la droite : du type 'red', bleuMathalea ou du type '#a12345'
  * @example droiteParPointEtPerpendiculaire(M, d2) // Trace la droite perpendiculaire à d2 passant par le point M
  * @example droiteParPointEtPerpendiculaire(M, d2, 'd1', 'red') // Trace, en rouge, la droite d1 perpendiculaire à d2 passant par le point M
  * @author Jean-claude Lhote
@@ -1435,7 +1435,7 @@ export function droiteParPointEtPerpendiculaire(
 /**  Trace la droite horizontale passant par le point A
  * @param {PointAbstrait} A PointAbstrait de la droite
  * @param {string} [nom = ''] Nom affiché de la droite
- * @param {string} [color = 'black'] Couleur de la droite : du type 'blue' ou du type '#f15929'
+ * @param {string} [color = 'black'] Couleur de la droite : du type 'red', bleuMathalea ou du type '#a12345'
  * @example droiteHorizontaleParPoint(M) // Trace la droite horizontale passant par le point M
  * @example droiteHorizontaleParPoint(M, 'd1', 'red') // Trace, en rouge, la droite horizontale d1 passant par le point M
  * @author Jean-claude Lhote
@@ -1453,7 +1453,7 @@ export function droiteHorizontaleParPoint(
 /**  Trace la droite verticale passant par le point A
  * @param {PointAbstrait} A PointAbstrait de la droite
  * @param {string} [nom = ''] Nom affiché de la droite
- * @param {string} [color = 'black'] Couleur de la droite : du type 'blue' ou du type '#f15929'
+ * @param {string} [color = 'black'] Couleur de la droite : du type 'red', bleuMathalea ou du type '#a12345'
  * @example droiteVerticaleParPoint(M) // Trace la droite verticale passant par le point M
  * @example droiteVerticaleParPoint(M, 'd1', 'red') // Trace, en rouge, la droite verticale d1 passant par le point M
  * @author Jean-claude Lhote
@@ -1472,7 +1472,7 @@ export function droiteVerticaleParPoint(
  * @param {PointAbstrait} A PointAbstrait de la droite
  * @param {number} k Pente de la droite
  * @param {string} [nom = ''] Nom affiché de la droite
- * @param {string} [color = 'black'] Couleur de la droite : du type 'blue' ou du type '#f15929'
+ * @param {string} [color = 'black'] Couleur de la droite : du type 'red', bleuMathalea ou du type '#a12345'
  * @example droiteParPointEtPente(M, p) // Trace la droite passant par le point M et de pente p
  * @example droiteParPointEtPente(M, p, 'd1', 'red') // Trace, en rouge, la droite d1 passant par le point M et de pente p
  * @author Jean-claude Lhote

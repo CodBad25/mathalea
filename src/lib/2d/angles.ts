@@ -1,3 +1,4 @@
+import { bleuMathalea } from '../../lib/colors'
 import { mathalea2d } from '../../modules/mathalea2d'
 import type { Angle } from '../mathFonctions/Angle'
 import { cercle, cercleCentrePoint } from './cercle'
@@ -21,10 +22,10 @@ import { vide2d } from './Vide2d'
  * @param {number|PointAbstrait} angle Mesure de l'angle ou nom d'un point sur l'autre côté de l'angle
  * @param {number} [taille=0.8] Taille de l'angle
  * @param {string} [mark=''] Marque sur l'angle
- * @param {string} [color='black'] Couleur de l'angle : du type 'blue' ou du type '#f15929'
+ * @param {string} [color='black'] Couleur de l'angle : du type 'red', bleuMathalea ou du type '#a12345'
  * @param {number} [epaisseur=1] Epaisseur du tracé de l'angle
  * @param {number} [opacite=1] Opacité de la couleur du tracé de l'angle
- * @param {string} [couleurDeRemplissage='none'] 'none' si on ne veut pas de remplissage, sinon une couleur du type 'blue' ou du type '#f15929'
+ * @param {string} [couleurDeRemplissage='none'] 'none' si on ne veut pas de remplissage, sinon une couleur du type 'red', bleuMathalea ou du type '#a12345'
  * @param {number} [opaciteDeRemplissage=0.2] Opacité de la couleur de remplissage de l'angle
  * @param {boolean} [mesureOn=false] Affichage de la mesure de l'angle
  * @param {boolean} [noAngleDroit=false] Pour choisir si on veut que l'angle droit soit marqué par un carré ou pas
@@ -38,10 +39,10 @@ import { vide2d } from './Vide2d'
  * // en noir, avec une épaisseur de 1, une opacité de 100 %, un rayon d'arc de 0,8, sans autre option.
  * @example codageAngle(H,K,G)
  * // Code l'angle HKG, en noir, avec une épaisseur de 1, une opacité de 100 %, un rayon d'arc de 0,8, sans autre option.
- * @example codageAngle(H,K,G,2,'x','red',0.5,0.2,'blue',0.8,true,true)
+ * @example codageAngle(H,K,G,2,'x','red',0.5,0.2,bleuMathalea,0.8,true,true)
  * // Code l'angle HKG, en rouge, avec une épaisseur de 0.5 et une opacité de 20 %, rempli en bleu avec une opacité de 80 %
  * // avec un arc de cercle de rayon 2, avec une marque 'x' sur l'angle, en affichant la mesure de l'angle et sans faire apparaître d'angle droit le cas échéant.
- * @example codageAngle(H,K,G,2,'x','red',0.5,0.2,'blue',0.8,true,true,'?',2)
+ * @example codageAngle(H,K,G,2,'x','red',0.5,0.2,bleuMathalea,0.8,true,true,'?',2)
  * // Code l'angle HKG, en rouge, avec une épaisseur de 0.5 et une opacité de 20 %, rempli en bleu avec une opacité de 80 %
  * // avec un arc de cercle de rayon 2, avec une marque 'x' sur l'angle, en affichant le texte '?' d'une taille de 2 et sans faire apparaître d'angle droit le cas échéant.
  * @author Jean-claude Lhote
@@ -190,8 +191,8 @@ export function cercleTrigo(angle: Angle, cosOrSin = 'cos') {
   const c2 = cercle(O, 5.7)
   const M = pointSurCercle(c, monAngle, '')
   const M2 = pointSurCercle(c2, monAngle, '')
-  const sOM = segment(O, M, 'blue')
-  const sOI = segment(O, I, 'blue')
+  const sOM = segment(O, M, bleuMathalea)
+  const sOI = segment(O, I, bleuMathalea)
   sOM.epaisseur = 3
   sOI.epaisseur = 3
   const x = pointAbstrait(M.x, 0)
@@ -212,7 +213,7 @@ export function cercleTrigo(angle: Angle, cosOrSin = 'cos') {
   sCos.epaisseur = 3
   sSin.epaisseur = 3
   const marqueAngle = codageAngle(I, O, M)
-  marqueAngle.color = colorToLatexOrHTML('blue')
+  marqueAngle.color = colorToLatexOrHTML(bleuMathalea)
   marqueAngle.epaisseur = 3
   const objetsTrigo = []
   if (cosOrSin === 'cos') {

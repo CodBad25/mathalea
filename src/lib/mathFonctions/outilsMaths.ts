@@ -10,6 +10,7 @@ import { ecritureAlgebrique } from '../outils/ecritures'
 import { miseEnEvidence } from '../outils/embellissements'
 import { Matrice, matrice } from './Matrice'
 import { Polynome } from './Polynome'
+import { bleuMathalea } from '../../lib/colors'
 
 /**
  * delta(true) retourne dans un tableau des valeurs de a, b, c telles que b*b-4*a*c >0
@@ -288,11 +289,11 @@ export function suppressionParentheses(
 ) {
   const couleurs = options.couleurs ?? [
     'red',
-    'blue',
+    bleuMathalea,
     'green',
     'black',
     'red',
-    'blue',
+    bleuMathalea,
     'green',
     'black',
   ]
@@ -356,11 +357,11 @@ export function regroupeTermesMemeDegre(
 ) {
   const couleurs = options.couleurs ?? [
     'red',
-    'blue',
+    bleuMathalea,
     'green',
     'black',
     'red',
-    'blue',
+    bleuMathalea,
     'green',
     'black',
   ]
@@ -453,11 +454,11 @@ export function developpe(
   const clean = generateCleaner(['parentheses', 'fractions'])
   const couleurs = options.couleurs ?? [
     'red',
-    'blue',
+    bleuMathalea,
     'green',
     'black',
     'red',
-    'blue',
+    bleuMathalea,
     'green',
     'black',
   ]

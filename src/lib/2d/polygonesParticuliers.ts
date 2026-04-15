@@ -1,3 +1,4 @@
+import { bleuMathalea } from '../../lib/colors'
 import { randint } from '../../modules/outils'
 import { rangeMinMax } from '../outils/nombres'
 import { lettreDepuisChiffre } from '../outils/outilString'
@@ -116,7 +117,7 @@ export function rectangle1Point2Longueurs(
     // Lorsqu'un objet d'options est passé, le avecCodageSegments: true par défaut est écrasé donc s'il n'est pas redéfini en false, on le considère comme true
     objets.push(
       codageSegments('/', 'red', B, C, D, A),
-      codageSegments('||', 'blue', A, B, C, D),
+      codageSegments('||', bleuMathalea, A, B, C, D),
     )
   }
   if (
@@ -140,7 +141,7 @@ export function rectangle1Point2Longueurs(
  * @param {PointAbstrait} A
  * @param {PointAbstrait} B
  * @param {number} n Nombre de côtés
- * @param {string} [color = 'black'] Couleur de l'arc ou 'none' : du type 'blue' ou du type '#f15929'
+ * @param {string} [color = 'black'] Couleur de l'arc ou 'none' : du type 'red', bleuMathalea ou du type '#a12345'
  * @return {Polygone}
  * @author Rémi Angot
  **/
@@ -184,12 +185,12 @@ export function polygoneRegulierParCentreEtRayon(
  * Trace un carré
  * @param {PointAbstrait} A Un sommet du carré
  * @param {PointAbstrait} B Un sommet du carré, consécutif au précédent
- * @param {string} [color = 'black'] Couleur de l'arc ou 'none' : du type 'blue' ou du type '#f15929'
+ * @param {string} [color = 'black'] Couleur de l'arc ou 'none' : du type 'red', bleuMathalea ou du type '#a12345'
  * @example carre(M,N)
  *  // Trace le carré noir de sommets consécutifs M et N dans le sens direct
  * @example carre(N,M)
  *  // Trace le carré noir de sommets consécutifs M et N dans le sens indirect
- * @example carre(M,N,'blue')
+ * @example carre(M,N,bleuMathalea)
  *  // Trace le carré bleu de sommets consécutifs M et N dans le sens direct
  * @return {Polygone}
  * @author Rémi Angot

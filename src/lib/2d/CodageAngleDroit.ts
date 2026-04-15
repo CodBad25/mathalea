@@ -15,11 +15,11 @@ import { pointSurSegment } from './utilitairesPoint'
  * @param {PointAbstrait} A Point sur un côté de l'angle droit
  * @param {PointAbstrait} O Sommet de l'angle droit
  * @param {PointAbstrait} B Point sur l'autre côté de l'angle droit
- * @param {string} [color='black'] Couleur du codage : du type 'blue' ou du type '#f15929'
+ * @param {string} [color='black'] Couleur du codage : du type 'red', bleuMathalea ou du type '#a12345'
  * @param {number} [d=0.4] Taille du codage de l'angle droit
  * @param {number} [epaisseur=0.5] Epaisseur du trait
  * @param {number} [opacite=1] Opacité du trait
- * @param {string} [couleurDeRemplissage='none'] 'none' si on ne veut pas de remplissage, sinon une couleur du type 'blue' ou du type '#f15929'
+ * @param {string} [couleurDeRemplissage='none'] 'none' si on ne veut pas de remplissage, sinon une couleur du type 'red', bleuMathalea ou du type '#a12345'
  * @param {number} [opaciteDeRemplissage=1] Taux d'opacité du remplissage entre 0 et 1
  * @property {string} svg Sortie au format vectoriel (SVG) que l’on peut afficher dans un navigateur
  * @property {string} svgml Sortie, à main levée, au format vectoriel (SVG) que l’on peut afficher dans un navigateur
@@ -225,15 +225,15 @@ export class CodageAngleDroit extends ObjetMathalea2D {
  * @param {PointAbstrait} A Point sur un côté de l'angle droit
  * @param {PointAbstrait} O Sommet de l'angle droit
  * @param {PointAbstrait} B Point sur l'autre côté de l'angle droit
- * @param {string} [color='black'] Couleur du codage : du type 'blue' ou du type '#f15929'
+ * @param {string} [color='black'] Couleur du codage : du type 'red', bleuMathalea ou du type '#a12345'
  * @param {number} [d=0.4] Taille du codage de l'angle droit
  * @param {number} [epaisseur=0.5] Epaisseur du trait
  * @param {number} [opacite=1] Opacité du trait
- * @param {string} [couleurDeRemplissage='none'] 'none' si on ne veut pas de remplissage, sinon une couleur du type 'blue' ou du type '#f15929'
+ * @param {string} [couleurDeRemplissage='none'] 'none' si on ne veut pas de remplissage, sinon une couleur du type 'red', bleuMathalea ou du type '#a12345'
  * @param {number} [opaciteDeRemplissage=1] Taux d'opacité du remplissage
  * @example codageAngleDroit(A,J,T)
  * // Trace un codage d'angle droit pour l'angle direct AJT, de couleur noire, de taille 0,4, d'épaisseur 0,5 avec une opacité de 100 %, sans remplissage
- * @example codageAngleDroit(A,J,T,'pink',1,0.2,0.6,'blue',0.2)
+ * @example codageAngleDroit(A,J,T,'pink',1,0.2,0.6,bleuMathalea,0.2)
  * // Trace un codage d'angle droit pour l'angle direct AJT, de couleur rose, de taille 1, d'épaisseur 0,2 avec une opacité de 60 %, rempli en bleu avec une opacité de 20%.
  * @return {CodageAngleDroit}
  * @author Rémi Angot

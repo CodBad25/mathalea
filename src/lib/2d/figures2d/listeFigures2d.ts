@@ -66,6 +66,7 @@ import {
   lettreZ,
 } from './lettres'
 import {
+import { bleuMathalea } from '../../../lib/colors'
   panneauArretInterdit,
   panneauCederLePassage,
   panneauCroisementPrioriteADroite,
@@ -530,7 +531,7 @@ export const listeFigures2d: Forme[] = [
       coinsArrondis: true,
       largeur: 2,
       hauteur: 1.5,
-      fillStyle: 'blue',
+      fillStyle: bleuMathalea,
       opacite: 0.5,
     },
   },

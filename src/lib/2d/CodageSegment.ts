@@ -9,7 +9,7 @@ import { milieu } from './utilitairesPoint'
  * @param {PointAbstrait} A Première extrémité du segment
  * @param {PointAbstrait} B Seconde extrémité du segment
  * @param {string} [mark='||'] Symbole posé sur le segment
- * @param {string} [color='black'] Couleur du symbole : du type 'blue' ou du type '#f15929'
+ * @param {string} [color='black'] Couleur du symbole : du type 'red', bleuMathalea ou du type '#a12345'
  * @param {number} [echelle=1] Taille relative du symbole
  * @example codageSegment(H,K) // Code le segment [HK] avec la marque noire '||'
  * @example codageAngle(H,K,'x','green') // Code le segment [HK] avec la marque verte 'x'
@@ -39,7 +39,7 @@ export function codageSegment(
 /**
  * Code plusieurs segments de la même façon
  * @param {string} [mark = '||'] Symbole posé sur le segment
- * @param {string} [color = 'black'] Couleur du symbole : : du type 'blue' ou du type '#f15929'
+ * @param {string} [color = 'black'] Couleur du symbole : : du type 'red', bleuMathalea ou du type '#a12345'
  * @param  {Point[]|Segment|number} args Les segments différement codés + Taille relative du codage
  * @property {string} svg Sortie au format vectoriel (SVG) que l’on peut afficher dans un navigateur
  * @property {string} tikz Sortie au format TikZ que l’on peut utiliser dans un fichier LaTeX
@@ -221,14 +221,14 @@ export class CodageSegments extends ObjetMathalea2D {
 /**
  * Code plusieurs segments de la même façon
  * @param {string} [mark = '||'] Symbole posé sur le segment
- * @param {string} [color = 'black'] Couleur du symbole : : du type 'blue' ou du type '#f15929'
+ * @param {string} [color = 'black'] Couleur du symbole : : du type 'red', bleuMathalea ou du type '#a12345'
  * @param {Points|Point[]|Segments|number} args Les segments différement codés + Taille relative du codage. Voir exemples.
- * @example codageSegments('×','blue',A,B, B,C, C,D) // Code les segments [AB], [BC] et [CD] avec une croix bleue
- * @example codageSegments('×','blue',A,B, B,C, C,D, 1.2) // Code les segments [AB], [BC] et [CD] avec une croix bleue et une taille de 1.2
- * @example codageSegments('×','blue',[A,B,C,D]) // Code les segments [AB], [BC], [CD] et [DA] (attention, chemin fermé, pratique pour des polygones pas pour des lignes brisées)
- * @example codageSegments('×','blue',[A,B,C,D],1.5) // Code les segments [AB], [BC], [CD] et [DA] (attention, chemin fermé, pratique pour des polygones pas pour des lignes brisées) et une taille de la marque de 1.5
- * @example codageSegments('×','blue',s1,s2,s3) // Code les segments s1, s2 et s3 avec une croix bleue
- * @example codageSegments('×','blue',p.listePoints) // Code tous les segments du polygone avec une croix bleue
+ * @example codageSegments('×',bleuMathalea,A,B, B,C, C,D) // Code les segments [AB], [BC] et [CD] avec une croix bleue
+ * @example codageSegments('×',bleuMathalea,A,B, B,C, C,D, 1.2) // Code les segments [AB], [BC] et [CD] avec une croix bleue et une taille de 1.2
+ * @example codageSegments('×',bleuMathalea,[A,B,C,D]) // Code les segments [AB], [BC], [CD] et [DA] (attention, chemin fermé, pratique pour des polygones pas pour des lignes brisées)
+ * @example codageSegments('×',bleuMathalea,[A,B,C,D],1.5) // Code les segments [AB], [BC], [CD] et [DA] (attention, chemin fermé, pratique pour des polygones pas pour des lignes brisées) et une taille de la marque de 1.5
+ * @example codageSegments('×',bleuMathalea,s1,s2,s3) // Code les segments s1, s2 et s3 avec une croix bleue
+ * @example codageSegments('×',bleuMathalea,p.listePoints) // Code tous les segments du polygone avec une croix bleue
  * @author Rémi Angot
  * @return {CodageSegments}
  */

@@ -1,3 +1,4 @@
+import { bleuMathalea } from '../../lib/colors'
 import { colorToLatexOrHTML } from './colorToLatexOrHtml'
 import { ObjetMathalea2D } from './ObjetMathalea2D'
 import { segment } from './segmentsVecteurs'
@@ -7,7 +8,7 @@ import { segment } from './segmentsVecteurs'
  * @param {number} [ymin = -30] Ordonnée du coin en bas à gauche de la grille
  * @param {number} [xmax = 30] Abscisse du coin en haut à droite de la grille
  * @param {number} [ymax = 30] Ordonnée du coin en haut à droite de la grille
- * @param {string} [color = 'gray'] Couleur de la grille : du type 'blue' ou du type '#f15929'
+ * @param {string} [color = 'gray'] Couleur de la grille : du type 'red', bleuMathalea ou du type '#a12345'
  * @param {number} [opacite = 0.4] Opacité de la grille : entre 0 et 1
  * @param {number} [step = 1] Pas de la grille
  * @param {number} [pointilles = 0] Style des pointillés de la grille (entier entre 1 et 5). Si autre chose, pas de pointillés.
@@ -112,7 +113,7 @@ export class Grille extends ObjetMathalea2D {
  * @param {number} [ymin = -30] Ordonnée du coin en bas à gauche de la grille
  * @param {number} [xmax = 30] Abscisse du coin en haut à droite de la grille
  * @param {number} [ymax = 30] Ordonnée du coin en haut à droite de la grille
- * @param {string} [color = 'gray'] Couleur de la grille : du type 'blue' ou du type '#f15929'
+ * @param {string} [color = 'gray'] Couleur de la grille : du type 'red', bleuMathalea ou du type '#a12345'
  * @param {number} [opacite = 0.4] Opacité de la grille : entre 0 et 1
  * @param {number} [step = 1] Pas de la grille
  * @param {number} [pointilles = 0] Style des pointillés de la grille (entier entre 1 et 5). Si autre chose, pas de pointillés.
@@ -140,7 +141,7 @@ export function grille(
  * @param {number} [ymin = -30] Ordonnée du coin en bas à gauche de ces parallèles
  * @param {number} [xmax = 30] Abscisse du coin en haut à droite de ces parallèles
  * @param {number} [ymax = 30] Ordonnée du coin en haut à droite de ces parallèles
- * @param {string} [color = 'gray'] Couleur de ces parallèles : du type 'blue' ou du type '#f15929'
+ * @param {string} [color = 'gray'] Couleur de ces parallèles : du type 'red', bleuMathalea ou du type '#a12345'
  * @param {number} [opacite = 0.4] Opacité de ces parallèles : entre 0 et 1
  * @param {number} [step = 1] Pas de ces parallèles
  * @param {number} [pointilles = 0] Style des pointillés de ces parallèles (entier entre 1 et 5). Si autre chose, pas de pointillés.
@@ -203,7 +204,7 @@ export class LignesHorizontales extends ObjetMathalea2D {
  * @param {number} [ymin = -30] Ordonnée du coin en bas à gauche de ces parallèles
  * @param {number} [xmax = 30] Abscisse du coin en haut à droite de ces parallèles
  * @param {number} [ymax = 30] Ordonnée du coin en haut à droite de ces parallèles
- * @param {string} [color = 'gray'] Couleur de ces parallèles : du type 'blue' ou du type '#f15929'
+ * @param {string} [color = 'gray'] Couleur de ces parallèles : du type 'red', bleuMathalea ou du type '#a12345'
  * @param {number} [opacite = 0.4] Opacité de ces parallèles : entre 0 et 1
  * @param {number} [step = 1] Pas de ces parallèles
  * @param {number} [pointilles = 0] Style des pointillés de ces parallèles (entier entre 1 et 5). Si autre chose, pas de pointillés.
@@ -240,7 +241,7 @@ export function lignesHorizontales(
  * @param {number} [ymin = -30] Ordonnée du coin en bas à gauche de ces parallèles
  * @param {number} [xmax = 30] Abscisse du coin en haut à droite de ces parallèles
  * @param {number} [ymax = 30] Ordonnée du coin en haut à droite de ces parallèles
- * @param {string} [color = 'gray'] Couleur de ces parallèles : du type 'blue' ou du type '#f15929'
+ * @param {string} [color = 'gray'] Couleur de ces parallèles : du type 'red', bleuMathalea ou du type '#a12345'
  * @param {number} [opacite = 0.4] Opacité de ces parallèles : entre 0 et 1
  * @param {number} [step = 1] Pas de ces parallèles
  * @param {number} [pointilles = 0] Style des pointillés de ces parallèles (entier entre 1 et 5). Si autre chose, pas de pointillés.
@@ -308,7 +309,7 @@ export class LignesVerticales extends ObjetMathalea2D {
  * @param {number} [ymin = -30] Ordonnée du coin en bas à gauche de ces parallèles
  * @param {number} [xmax = 30] Abscisse du coin en haut à droite de ces parallèles
  * @param {number} [ymax = 30] Ordonnée du coin en haut à droite de ces parallèles
- * @param {string} [color = 'gray'] Couleur de ces parallèles : du type 'blue' ou du type '#f15929'
+ * @param {string} [color = 'gray'] Couleur de ces parallèles : du type 'red', bleuMathalea ou du type '#a12345'
  * @param {number} [opacite = 0.4] Opacité de ces parallèles : entre 0 et 1
  * @param {number} [step = 1] Pas de ces parallèles
  * @param {number} [pointilles = 0] Style des pointillés de ces parallèles (entier entre 1 et 5). Si autre chose, pas de pointillés.
@@ -359,7 +360,7 @@ export class Seyes extends ObjetMathalea2D {
         this.objets.push(d)
       }
     }
-    this.objets.push(grille(xmin, ymin, xmax, ymax, 'blue', opacite1, 1))
+    this.objets.push(grille(xmin, ymin, xmax, ymax, bleuMathalea, opacite1, 1))
   }
 
   svg(coeff: number) {

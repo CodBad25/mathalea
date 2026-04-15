@@ -168,7 +168,7 @@ export function triangle2points1angle1longueurOppose(
  * @param {PointAbstrait} A Premier sommet d'un triangle
  * @param {PointAbstrait} B Deuxième sommet d'un triangle
  * @param {PointAbstrait} C Troisième sommet d'un triangle
- * @param {string} [color = 'black'] Couleur des codages : du type 'blue' ou du type '#f15929'
+ * @param {string} [color = 'black'] Couleur des codages : du type 'red', bleuMathalea ou du type '#a12345'
  * @property {string} svg Sortie au format vectoriel (SVG) que l’on peut afficher dans un navigateur
  * @property {string} tikz Sortie au format TikZ que l’on peut utiliser dans un fichier LaTeX
  * @property {string} color Couleur des codages. À associer obligatoirement à colorToLatexOrHTML().
@@ -237,7 +237,7 @@ export class CodageHauteurTriangle extends ObjetMathalea2D {
  * @param {PointAbstrait} A Premier sommet d'un triangle
  * @param {PointAbstrait} B Deuxième sommet d'un triangle
  * @param {PointAbstrait} C Troisième sommet d'un triangle
- * @param {string} [color = 'black'] Couleur des codages : du type 'blue' ou du type '#f15929'
+ * @param {string} [color = 'black'] Couleur des codages : du type 'red', bleuMathalea ou du type '#a12345'
  * @example codageHauteurTriangle(M,N,P) // Code, en noir, la hauteur du triangle MNP.
  * @example codageHauteurTriangle(M,N,P,'red') // Code, en rouge, la hauteur du triangle MNP.
  * @return {CodageHauteurTriangle}
@@ -256,7 +256,7 @@ export function codageHauteurTriangle(
  * Code la médiane d'un triangle
  * @param {PointAbstrait} B Première extrémité du segment dont la médiane est relative
  * @param {PointAbstrait} C Seconde extrémité du segment dont la médiane est relative
- * @param {string} [color = 'black'] Couleur des codages : du type 'blue' ou du type '#f15929'
+ * @param {string} [color = 'black'] Couleur des codages : du type 'red', bleuMathalea ou du type '#a12345'
  * @param {string} [mark = '//'] Symbole posé de part et d'autre du milieu du segment
  * @param {boolean} [mil = false] Trace ou nom le point du milieu.
  * @example codageMedianeTriangle(M,N) // Code, en noir, la médiane d'un triangle relative au côté [MN], avec les symboles //

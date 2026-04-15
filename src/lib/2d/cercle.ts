@@ -9,9 +9,9 @@ import { longueur } from './utilitairesGeometriques'
  * Construit le cercle (ou le disque) de centre O, de rayon r
  * @param {PointAbstrait} O Centre du cercle
  * @param {number} r Rayon du cercle
- * @param {string} [color = 'black'] Couleur du cercle ou 'none' : du type 'blue' ou du type '#f15929'
- * @param {string} [couleurDeRemplissage = 'none'] Couleur de remplissage ou 'none' : du type 'blue' ou du type '#f15929'
- * @param {string} [couleurDesHachures = 'none'] Couleur des hachures ou 'none' : du type 'blue' ou du type '#f15929' Si 'none' ou '', pas de hachures.
+ * @param {string} [color = 'black'] Couleur du cercle ou 'none' : du type 'red', bleuMathalea ou du type '#a12345'
+ * @param {string} [couleurDeRemplissage = 'none'] Couleur de remplissage ou 'none' : du type 'red', bleuMathalea ou du type '#a12345'
+ * @param {string} [couleurDesHachures = 'none'] Couleur des hachures ou 'none' : du type 'red', bleuMathalea ou du type '#a12345' Si 'none' ou '', pas de hachures.
  * @param {number} [epaisseur = 1] Epaisseur du cercle
  * @param {number} [pointilles = 0] Style des pointillés du cercle (entier entre 1 et 5). Si autre chose, pas de pointillés.
  * @param {number} [opacite = 1] Opacité du cercle
@@ -235,9 +235,9 @@ export class Cercle extends ObjetMathalea2D {
  * Construit le cercle (ou le disque) de centre O, de rayon r
  * @param {PointAbstrait} O Centre du cercle
  * @param {number} r Rayon du cercle
- * @param {string} [color = 'black'] Couleur du cercle ou 'none' : du type 'blue' ou du type '#f15929'
- * @param {string} [couleurDeRemplissage = 'none'] Couleur de remplissage ou 'none' : du type 'blue' ou du type '#f15929'
- * @param {string} [couleurDesHachures = 'none'] Couleur des hachures ou 'none' : du type 'blue' ou du type '#f15929' Si 'none' ou '', pas de hachures.
+ * @param {string} [color = 'black'] Couleur du cercle ou 'none' : du type 'red', bleuMathalea ou du type '#a12345'
+ * @param {string} [couleurDeRemplissage = 'none'] Couleur de remplissage ou 'none' : du type 'red', bleuMathalea ou du type '#a12345'
+ * @param {string} [couleurDesHachures = 'none'] Couleur des hachures ou 'none' : du type 'red', bleuMathalea ou du type '#a12345' Si 'none' ou '', pas de hachures.
  * @param {number} [epaisseur = 1] Epaisseur du cercle
  * @param {number} [pointilles = 0] Style des pointillés du cercle (entier entre 1 et 5). Si autre chose, pas de pointillés.
  * @param {number} [opacite = 1] Opacité du cercle
@@ -246,9 +246,9 @@ export class Cercle extends ObjetMathalea2D {
  * @param {number} [distanceDesHachures = 10] Distance des hachures si couleur de remplissage choisie.
  * @example cercle (A,5)
  * // Construit un cercle c1 noir de centre A et de rayon 5
- * @example cercle (A,5,'red','blue','#f15929',3,2,0.3,0.8)
+ * @example cercle (A,5,'red',bleuMathalea,orangeMathalea,3,2,0.3,0.8)
  * // Construit un disque de centre A et de rayon 5, de bord rouge à 30 % d'opacité et en pointillés, rempli en bleu à 80 % d'opacité, et avec des hachures orange de 1 d'épaisseur et avec 10 d'écart entre deux hachures
- * @example cercle (A,5,'red','blue','#f15929',3,2,0.3,0.8,2,12)
+ * @example cercle (A,5,'red',bleuMathalea,orangeMathalea,3,2,0.3,0.8,2,12)
  * // Construit un disque de centre A et de rayon 5, de bord rouge à 30 % d'opacité et en pointillés, rempli en bleu à 80 % d'opacité, et avec des hachures orange de 2 d'épaisseur et avec 12 d'écart entre deux hachures
  * @return {Cercle}
  * @author Rémi Angot
@@ -286,9 +286,9 @@ export function cercle(
  * Construit le cercle (ou le disque) de centre O, passant par M
  * @param {PointAbstrait} O Centre du cercle
  * @param {PointAbstrait} M Point du cercle
- * @param {string} [color = 'black'] Couleur du cercle ou 'none' : du type 'blue' ou du type '#f15929'
- * @param {string} [couleurDeRemplissage = 'none'] Couleur de remplissage ou 'none' : du type 'blue' ou du type '#f15929'
- * @param {string} [couleurDesHachures = 'none'] Couleur des hachures ou 'none' : du type 'blue' ou du type '#f15929' Si 'none' ou '', pas de hachures.
+ * @param {string} [color = 'black'] Couleur du cercle ou 'none' : du type 'red', bleuMathalea ou du type '#a12345'
+ * @param {string} [couleurDeRemplissage = 'none'] Couleur de remplissage ou 'none' : du type 'red', bleuMathalea ou du type '#a12345'
+ * @param {string} [couleurDesHachures = 'none'] Couleur des hachures ou 'none' : du type 'red', bleuMathalea ou du type '#a12345' Si 'none' ou '', pas de hachures.
  * @param {number} [epaisseur = 1] Epaisseur du cercle
  * @param {number} [pointilles = 0] Style des pointillés du cercle (entier entre 1 et 5). Si autre chose, pas de pointillés.
  * @param {number} [opacite = 1] Opacité du cercle
@@ -297,9 +297,9 @@ export function cercle(
  * @param {number} [distanceDesHachures = 10] Distance des hachures si couleur de remplissage choisie.
  * @example cercleCentrePoint (A,B)
  * // Construit un cercle c1 noir de centre A, passant par B
- * @example cercleCentrePoint (A,B,'red','blue','#f15929',3,2,0.3,0.8)
+ * @example cercleCentrePoint (A,B,'red',bleuMathalea,orangeMathalea,3,2,0.3,0.8)
  * // Construit un disque de centre A, passant par B, de bord rouge à 30 % d'opacité et en pointillés, rempli en bleu à 80 % d'opacité, et avec des hachures orange de 1 d'épaisseur et avec 10 d'écart entre deux hachures
- * @example cercleCentrePoint (A,B,'red','blue','#f15929',3,2,0.3,0.8,2,12)
+ * @example cercleCentrePoint (A,B,'red',bleuMathalea,orangeMathalea,3,2,0.3,0.8,2,12)
  * // Construit un disque de centre A, passant par B, de bord rouge à 30 % d'opacité et en pointillés, rempli en bleu à 80 % d'opacité, et avec des hachures orange de 2 d'épaisseur et avec 12 d'écart entre deux hachures
  * @return {Cercle}
  * @author Rémi Angot

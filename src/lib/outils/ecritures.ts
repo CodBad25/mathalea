@@ -10,6 +10,7 @@ import { miseEnEvidence } from './embellissements'
 import { arrondi, round } from './nombres'
 import { lettreDepuisChiffre } from './outilString'
 import { stringNombre, texNombre } from './texNombre'
+import { bleuMathalea } from '../../lib/colors'
 
 // Garde de type structurel pour détecter une FractionEtendue sans import runtime
 const isFractionEtendue = (x: unknown): x is IFractionEtendue =>
@@ -142,7 +143,7 @@ export function ecritureNombreRelatifc(
   }
   let result = ''
   if (a > 0) {
-    result = miseEnEvidence('(+' + texNombre(a, 7) + ')', color ?? 'blue')
+    result = miseEnEvidence('(+' + texNombre(a, 7) + ')', color ?? bleuMathalea)
   } else if (a < 0) {
     result = miseEnEvidence('(' + texNombre(a, 7) + ')', color ?? 'green') // EE : Je change cette couleur pour ne pas avoir le orange de la correction.
   } else {
@@ -262,7 +263,7 @@ export function ecritureAlgebriquec(a: number | string, color?: string) {
   }
   let result = ''
   if (a > 0) {
-    result = miseEnEvidence('+' + texNombre(a, 7), color ?? 'blue')
+    result = miseEnEvidence('+' + texNombre(a, 7), color ?? bleuMathalea)
   } else if (a < 0) {
     result = miseEnEvidence(texNombre(a, 7), color ?? orangeMathalea)
   } else result = miseEnEvidence(texNombre(a, 7), color ?? 'black')

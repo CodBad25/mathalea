@@ -48,9 +48,9 @@ function similitudePoint(
 
 /**
  * s = segment(A, B) //Segment d'extrémités A et B
- * s = segment(A,B,'blue') //Segment d'extrémités A et B et de couleur bleue
+ * s = segment(A,B,'red', bleuMathalea) //Segment d'extrémités A et B et de couleur bleue
  * s = segment(x1,y1,x2,y2) //Segment défini par les coordonnées des deux extrémités
- * s = segment(x1,y1,x2,y2,'blue') //Segment défini par les coordonnées des deux extrémités et de couleur bleue
+ * s = segment(x1,y1,x2,y2,'red', bleuMathalea) //Segment défini par les coordonnées des deux extrémités et de couleur bleue
  * @class
  * @author Rémi Angot
  */
@@ -513,8 +513,8 @@ export class Segment extends ObjetMathalea2D {
 /**
  * @param {...any} args Points ou coordonnées + couleur facultative en dernier
  * @return {Segment}
- * @example segment(A,B,'blue') // Segment [AB] de couleur bleu
- * @example segment(x1,y1,x2,y2,'#f15929') // Segment dont les extrémités sont respectivement (x1,y1) et (x2,y2), de couleur orange (#f15929)
+ * @example segment(A,B,bleuMathalea) // Segment [AB] de couleur bleu
+ * @example segment(x1,y1,x2,y2,orangeMathalea) // Segment dont les extrémités sont respectivement (x1,y1) et (x2,y2), de couleur orange (orangeMathalea)
  * @author Rémi Angot
  */
 // Surcharges pour la fabrique
@@ -553,8 +553,8 @@ export function segment(
 /**
  * @param {...args} args Points ou coordonnées
  * @param {string} color Facultatif
- * @example segmentAvecExtremites(A,B,'blue')
- * @example segmentAvecExtremites(x1,y1,x2,y2,'#f15929')
+ * @example segmentAvecExtremites(A,B,bleuMathalea)
+ * @example segmentAvecExtremites(x1,y1,x2,y2,orangeMathalea)
  * @author Rémi Angot
  */
 export function segmentAvecExtremites(
