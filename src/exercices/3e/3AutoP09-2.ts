@@ -16,7 +16,7 @@ export const interactifReady = true
 export const interactifType = 'mathLive'
 
 export const dateDePublication = '2/01/2026'
-export const dateDeModifImportante = '24/03/2026'
+export const dateDeModifImportante = '15/04/2026'
 
 export const uuid = '5bc87'
 
@@ -63,9 +63,9 @@ export default class VitesseEtDistance extends ExerciceSimple {
         grilleSecondaireX: true,
         grilleSecondaireXDistance: 0.2,
         xLegende: 'Distance de freinage (m)',
-        xLegendePosition: [15, 0.5],
+        xLegendePosition: [16.1, 0],
         yLegende: 'Vitesse (km/h)',
-        yLegendePosition: [3, 14.5],
+        yLegendePosition: [-2, 15],
       })
       const cF = courbe(vitesseByDistance, {
         repere: rep,
@@ -138,9 +138,9 @@ export default class VitesseEtDistance extends ExerciceSimple {
         grilleSecondaireY: true,
         grilleSecondaireYDistance: 0.2,
         xLegende: 'Vitesse (km/h)',
-        xLegendePosition: [13, -0.5],
+        xLegendePosition: [15, 0],
         yLegende: 'Distance de freinage (m)',
-        yLegendePosition: [0, 16],
+        yLegendePosition: [-2, 16.5],
       })
       const cF = courbe(distanceByVitesse, { repere: rep, xMin: 0, xMax: 135 })
       const objets = [rep, cF]
@@ -189,8 +189,8 @@ export default class VitesseEtDistance extends ExerciceSimple {
           ? `Pour une distance de freinage de $${dist}\\text{ m}$, la vitesse est d'environ $${miseEnEvidence(Math.round(vitesseByDistance(dist)))}\\text{ km/h}$.`
           : `Pour une vitesse de $${vitesse}\\text{ km/h}$, la distance de freinage est d'environ $${miseEnEvidence(Math.round(distanceByVitesse(vitesse)))}\\text{ m}$.`)
       this.reponse = reciproquement
-        ? `${Math.round(vitesseByDistance(dist))}`
-        : `${Math.round(distanceByVitesse(vitesse))}`
+        ? `[${Math.floor(vitesseByDistance(dist) - 2)};${Math.ceil(vitesseByDistance(dist) + 2)}]`
+        : `[${Math.floor(distanceByVitesse(vitesse) - 2)};${Math.ceil(distanceByVitesse(vitesse) + 2)}]`
       this.optionsChampTexte = reciproquement
         ? { texteApres: ' $\\text{km/h}$' }
         : { texteApres: ' $\\text{m}$' }
