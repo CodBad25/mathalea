@@ -1,4 +1,4 @@
-import PerimetreOuAireDeFiguresComposees from '../5e/5M11-5-old'
+import PerimetreOuAireDeFiguresComposees from '../5e/5M11-5'
 
 export const titre = 'Décomposer une figure complexe en figures simples'
 export const amcReady = true
@@ -9,7 +9,7 @@ export const dateDePublication = '28/10/2023'
 /**
  * @author Guillaume Valmont
  */
-export const uuid = 'fbaff'
+export const uuid = 'fbafe'
 
 export const refs = {
   'fr-fr': [],

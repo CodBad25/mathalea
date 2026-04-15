@@ -1346,7 +1346,7 @@ export function verifQuestionMultiMathfield(
     } else {
       points.push(0)
       eltFeedback.innerHTML = '☹️'
-      if (result.feedback === 'saisieVide') result.feedback = null
+      if (result.feedback === 'saisieVide') result.feedback = ''
       else {
         result = {
           isOk: false,
@@ -1356,7 +1356,8 @@ export function verifQuestionMultiMathfield(
     }
     mf.classList.add('corrected')
 
-    if (result.feedback != null) feedback += result.feedback
+    if (result.feedback != null)
+      feedback += `${result.feedback !== '' ? `${result.feedback}<br>` : ''}`
   }
 
   if (compteurBonnesReponses === variables.length) {
@@ -1396,7 +1397,7 @@ export function verifQuestionMultiMathfield(
   // le feedback est déjà assuré par la fonction feedback(), donc on le met à ''
   return {
     isOk: compteurBonnesReponses === variables.length,
-    feedback: noFeedback ? '' : feedback,
+    feedback: noFeedback ? '' : feedback !== '' ? feedback : '',
     score: {
       nbBonnesReponses,
       nbReponses,

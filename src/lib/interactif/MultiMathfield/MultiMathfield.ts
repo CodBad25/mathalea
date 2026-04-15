@@ -70,7 +70,18 @@ export class MultiMathfieldElement extends HTMLElement {
 
   render() {
     const template = this.getAttribute('data-template') || ''
-    const options = JSON.parse(this.getAttribute('data-options') || '{}')
+    const rawOptionsAttr = this.getAttribute('data-options') || '%7B%7D'
+    let options
+    try {
+      options = JSON.parse(decodeURIComponent(rawOptionsAttr))
+    } catch (e) {
+      console.error(
+        '[MultiMathfield] Erreur JSON.parse sur data-options:',
+        decodeURIComponent(rawOptionsAttr),
+        e,
+      )
+      throw e
+    }
     const champNames: string[] = []
     // On extrait les noms de champs pour gérer la navigation au clavier
     const champRegex = /%\{([^}:]+)(:[^}]*)?\}/g
@@ -360,8 +371,11 @@ export function addMultiMathfield(
     if (!customElements.get('multi-mathfield')) {
       customElements.define('multi-mathfield', MultiMathfieldElement)
     }
-    return `<multi-mathfield id="multiMathfieldEx${exercice.numeroExercice}Q${questionIndex}" data-template="${dataTemplate}" data-options='${JSON.stringify(enrichedOptions)}'></multi-mathfield>
-    <div  class ="ml-2 py-2 italic text-coopmaths-warn-darkest dark:text-coopmathsdark-warn-darkest" id="feedbackEx${exercice.numeroExercice}Q${questionIndex}" style="display: none;"></div>`
+    // On encode la chaîne JSON et on échappe les guillemets doubles pour l'attribut HTML
+    const dataOptionsStr = encodeURIComponent(JSON.stringify(enrichedOptions))
+      .replace(/'/g, '%27')
+      .replace(/"/g, '%22')
+    return `<multi-mathfield id="multiMathfieldEx${exercice.numeroExercice}Q${questionIndex}" data-template="${dataTemplate.replace(/"/g, '&quot;')}" data-options="${dataOptionsStr}"></multi-mathfield><div class="ml-2 py-2 italic text-coopmaths-warn-darkest dark:text-coopmathsdark-warn-darkest" id="feedbackEx${exercice.numeroExercice}Q${questionIndex}" style="display: none;"></div>`
   } else {
     // On traite ligne par ligne pour détecter les items a), b), ... en début de ligne
     const lines = dataTemplate.split('\n')
