@@ -940,13 +940,13 @@ ol.Alpha > li {
   margin-top: 0.5em;
 }
 ol.roman {
-  @apply list-[lower-roman] list-outside ml-4  marker:text-coopmaths-struct;
+  @apply list-[lower-roman] list-outside ml-6  marker:text-coopmaths-struct;
 }
 ol.roman > li {
   margin-top: 0.5em;
 }
 ol.Roman {
-  @apply list-[upper-roman] list-outside ml-4  marker:text-coopmaths-struct;
+  @apply list-[upper-roman] list-outside ml-6  marker:text-coopmaths-struct;
 }
 ol.Roman > li {
   margin-top: 0.5em;
