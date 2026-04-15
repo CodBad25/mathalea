@@ -12,7 +12,7 @@ import {
   nombreDeChiffresDansLaPartieEntiere,
 } from '../../lib/outils/nombres'
 import { numAlpha } from '../../lib/outils/outilString'
-import { texNombre } from '../../lib/outils/texNombre'
+import { stringNombre, texNombre } from '../../lib/outils/texNombre'
 import { context } from '../../modules/context'
 import FractionEtendue from '../../modules/FractionEtendue'
 import { mathalea2d } from '../../modules/mathalea2d'
@@ -26,6 +26,7 @@ export const interactifType = 'MetaInteractif2d'
 export const amcReady = true
 export const amcType = 'AMCHybride'
 export const dateDePublication = '18/03/2023'
+export const dateDeModifImportante = '15/04/2026'
 
 export const uuid = '2d5ec'
 
@@ -258,14 +259,14 @@ export default class CalculerCoeffPropo extends Exercice {
       const ligne1 = [{ texte: 'Grandeur A' }].concat(
         premiereLigne.map((elt) => {
           return elt.visible
-            ? { texte: `$${texNombre(elt.nombre)}$`, math: true }
+            ? { texte: stringNombre(elt.nombre), math: true } // EE : Laisser stringNombre et pas texNombre car cela fait un encadré blanc qu'on devine sur les bordures
             : { texte: this.interactif ? '' : '...' }
         }),
       )
       const ligne2 = [{ texte: 'Grandeur B' }].concat(
         deuxiemeLigne.map((elt) => {
           return elt.visible
-            ? { texte: `$${texNombre(elt.nombre)}$`, math: true }
+            ? { texte: stringNombre(elt.nombre), math: true }
             : { texte: this.interactif ? '' : '...' }
         }),
       )
@@ -326,12 +327,12 @@ export default class CalculerCoeffPropo extends Exercice {
       objets.push(monTableau)
       const ligne1Corr = [{ texte: 'Grandeur A' }].concat(
         premiereLigne.map((elt) => {
-          return { texte: texNombre(elt.nombre), math: true }
+          return { texte: stringNombre(elt.nombre), math: true }
         }),
       )
       const ligne2Corr = [{ texte: 'Grandeur B' }].concat(
         deuxiemeLigne.map((elt) => {
-          return { texte: texNombre(elt.nombre), math: true }
+          return { texte: stringNombre(elt.nombre), math: true }
         }),
       )
       const monTableauCorr =
