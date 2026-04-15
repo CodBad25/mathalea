@@ -8,7 +8,7 @@ import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { addMultiMathfield } from '../../lib/interactif/MultiMathfield/MultiMathfield'
 import { choice } from '../../lib/outils/arrayOutils'
 import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
-import { lettreDepuisChiffre } from '../../lib/outils/outilString'
+import { lettreDepuisChiffre, sp } from '../../lib/outils/outilString'
 import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu } from '../../modules/outils'
@@ -322,6 +322,7 @@ export default class ColorierDeplacement extends Exercice {
     }
 
     texte +=
+      sp(5) +
       'Au départ, le lutin est situé dans la case grisée. Chaque déplacement se fait dans une case adjacente. Exécuter le programme.<br>'
 
     if (!context.isHtml) {
@@ -340,8 +341,8 @@ export default class ColorierDeplacement extends Exercice {
         dataTemplate:
           'a) Quelle est la première case coloriée par le lutin ? %{champ1}.\n b) Quelle est la dernière case coloriée par le lutin ? %{champ2}',
         dataOptions: {
-          champ1: { keyboard: KeyboardType.alphanumeric },
-          champ2: { keyboard: KeyboardType.alphanumeric },
+          champ1: { keyboard: KeyboardType.alphanumeric, placeholder: 'A1' },
+          champ2: { keyboard: KeyboardType.alphanumeric, placeholder: 'A1' },
         },
       })}`
       handleAnswers(

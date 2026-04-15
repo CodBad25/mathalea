@@ -1,6 +1,6 @@
 import { colorToLatexOrHTML } from '../../../lib/2d/colorToLatexOrHtml'
 import { fixeBordures } from '../../../lib/2d/fixeBordures'
-import { point } from '../../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { Polygone, polygone } from '../../../lib/2d/polygones'
 import { segment } from '../../../lib/2d/segmentsVecteurs'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
@@ -39,10 +39,10 @@ export default class Can2026CE2Q14 extends ExerciceCan {
     const nbCasesTotales = nbColonnes * nbLignes
 
     // Créer le rectangle principal
-    const A = point(0, 0)
-    const B = point(nbColonnes * taille, 0)
-    const C = point(nbColonnes * taille, nbLignes * taille)
-    const D = point(0, nbLignes * taille)
+    const A = pointAbstrait(0, 0)
+    const B = pointAbstrait(nbColonnes * taille, 0)
+    const C = pointAbstrait(nbColonnes * taille, nbLignes * taille)
+    const D = pointAbstrait(0, nbLignes * taille)
     const rectangle = polygone([A, B, C, D], 'black')
     rectangle.epaisseur = 2
 
@@ -52,15 +52,18 @@ export default class Can2026CE2Q14 extends ExerciceCan {
     // Lignes verticales
     for (let i = 1; i < nbColonnes; i++) {
       const s = segment(
-        point(i * taille, 0),
-        point(i * taille, nbLignes * taille),
+        pointAbstrait(i * taille, 0),
+        pointAbstrait(i * taille, nbLignes * taille),
       )
       s.epaisseur = 1
       segments.push(s)
     }
 
     // Ligne horizontale (une seule car 2 lignes)
-    const s = segment(point(0, taille), point(nbColonnes * taille, taille))
+    const s = segment(
+      pointAbstrait(0, taille),
+      pointAbstrait(nbColonnes * taille, taille),
+    )
     s.epaisseur = 1
     segments.push(s)
 
@@ -132,10 +135,10 @@ export default class Can2026CE2Q14 extends ExerciceCan {
       const col = numCase % nbColonnes
       const lig = Math.floor(numCase / nbColonnes)
       const carre = polygone([
-        point(col * taille, lig * taille),
-        point((col + 1) * taille, lig * taille),
-        point((col + 1) * taille, (lig + 1) * taille),
-        point(col * taille, (lig + 1) * taille),
+        pointAbstrait(col * taille, lig * taille),
+        pointAbstrait((col + 1) * taille, lig * taille),
+        pointAbstrait((col + 1) * taille, (lig + 1) * taille),
+        pointAbstrait(col * taille, (lig + 1) * taille),
       ])
       carre.couleurDeRemplissage = colorToLatexOrHTML('magenta')
       carre.couleurDesBords = 'none'
