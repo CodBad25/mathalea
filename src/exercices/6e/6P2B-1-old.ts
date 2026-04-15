@@ -18,7 +18,6 @@ import FractionEtendue from '../../modules/FractionEtendue'
 import { context } from '../../modules/context'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { orangeMathalea } from '../../lib/colors'
 
 export const titre =
   'Calculer des probabilités dans une expérience aléatoire à une épreuve'

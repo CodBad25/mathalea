@@ -5,7 +5,6 @@ import { Polygone, polygone } from '../lib/2d/polygones'
 import { tracePoint } from '../lib/2d/TracePoint'
 import { orangeMathalea, vertMathalea } from '../lib/colors'
 import { context } from './context'
-import { orangeMathalea } from '../lib/colors'
 
 /**
  * @author Rémi ANGOT
