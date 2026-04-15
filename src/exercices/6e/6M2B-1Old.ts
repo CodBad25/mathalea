@@ -14,7 +14,6 @@ import { centreGraviteTriangle } from '../../lib/2d/utilitairesTriangle'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteFeedback } from '../../lib/interactif/questionMathLive'
-import TripletPythagoricien from '../../lib/mathFonctions/TripletsPythagoriciens'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
@@ -30,17 +29,16 @@ export const titre =
 export const interactifReady = true
 export const interactifType = 'MetaInteractif2d'
 export const dateDePublication = '10/01/2026'
-export const dateDeModificationImporante = '14/04/2026'
 
 /**
  * Calculer l’aire in situ d’un carré ou d’un rectangle
  * @author Jean-claude Lhote
  */
 
-export const uuid = 'f36d5'
+export const uuid = 'f36f5'
 
 export const refs = {
-  'fr-fr': ['6M2B-1'],
+  'fr-fr': [],
   'fr-2016': [],
   'fr-ch': [''],
 }
@@ -190,7 +188,7 @@ const figureTriangleRectangle1 = (
           letterSize: 'small',
         })
   const cote3 = placeLatexSurSegment(
-    `${texNombre(Math.sqrt(base * base + hauteur * hauteur), precision)}\\text{ cm}`,
+    `\\approx${texNombre(Math.sqrt(base * base + hauteur * hauteur), precision)}\\text{ cm}`,
     C.x === 0 ? C : A,
     C.x === 0 ? B : C,
     { distance: 0.5, letterSize: 'small' },
@@ -257,13 +255,13 @@ const figureTriangleQuelconque1 = (
   segHauteur2.pointilles = 2
   const ang1 = codageAngleDroit(A, H, C)
   const afficheHauteur = placeLatexSurSegment(
-    `\\approx${texNombre(hauteur, precision)}\\text{ cm}`,
+    `${texNombre(hauteur, precision)}\\text{ cm}`,
     flip === 1 ? C : H,
     flip === 1 ? H : C,
     { letterSize: 'small' },
   )
   const afficheBase = latex2d(
-    `\\approx${texNombre(base, precision)}\\text{ cm}`,
+    `${texNombre(base, precision)}\\text{ cm}`,
     (A.x + B.x) / 2,
     -0.5,
     { letterSize: 'small' },
@@ -402,13 +400,8 @@ export default class AireCarreRectangle extends Exercice {
         case 3:
           {
             // Triangle rectangle
-            const [cote1, cote2] = TripletPythagoricien.getTriplets(25, 1)[0]
-            let base = Math.max(cote1, cote2)
-            let hauteur = Math.min(cote1, cote2)
-            if (this.sup2) {
-              base = base / 2.5
-              hauteur = hauteur / 2.5
-            }
+            const base = this.sup2 ? randint(40, 90) / 10 : randint(4, 9)
+            const hauteur = this.sup2 ? randint(30, 50) / 10 : randint(3, 5)
             a = (base * hauteur) / 2
 
             const objets = figureTriangleRectangle1(
@@ -433,7 +426,7 @@ export default class AireCarreRectangle extends Exercice {
             texte =
               figure +
               (!context.isHtml || !this.interactif
-                ? 'Quelle est l’aire du triangle rectangle représenté ci-contre ?(avec la précision permise par les indications sur la figure)'
+                ? 'Quelle est l’aire du triangle rectangle représenté ci-contre ?'
                 : '')
             texteCorr = `L'aire du triangle rectangle est de $\\dfrac{${texNombre(base, 1)}\\text{ cm}\\times ${texNombre(hauteur, 1)}\\text{ cm}}{2}=${miseEnEvidence(texNombre(a, 3))}\\text{ cm}^2$.`
           }
@@ -468,7 +461,7 @@ export default class AireCarreRectangle extends Exercice {
           texte =
             figure +
             (!context.isHtml || !this.interactif
-              ? 'Quelle est l’aire du triangle représenté ci-contre ?(avec la précision permise par les indications sur la figure)'
+              ? 'Quelle est l’aire du triangle représenté ci-contre ?'
               : '')
           texteCorr = `L'aire du triangle est de $\\dfrac{${texNombre(base, 1)}\\text{ cm}\\times ${texNombre(hauteur, 1)}\\text{ cm}}{2}=${miseEnEvidence(texNombre(a, 3))}\\text{ cm}^2$.`
         }
