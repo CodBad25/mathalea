@@ -67,10 +67,22 @@ export function ajouterBoutonMathalea2d(
 /**
  * Ajoute une image en HTML et en LaTeX
  * @param urlImage du type balancoire_trebuchet.png. Mettre les images dans le dossier public/images. Les svg ne sont pas supportés en LaTeX.
+ * @param forcePngForHtmlAndEpsForLatex Si true, remplace automatiquement les .png par des .eps en LaTeX et inversement en HTML. Utile pour éviter d'avoir à faire deux versions de la même image, une en .png pour le HTML et une en .eps pour le LaTeX.
  * @returns le code HTML ou LaTeX pour afficher l'image
  * @author Guillaume Valmont
  */
-export function ajouterImage(urlImage: string) {
+export function ajouterImage(
+  urlImage: string,
+  forcePngForHtmlAndEpsForLatex = false,
+) {
+  if (forcePngForHtmlAndEpsForLatex) {
+    if (context.isHtml) {
+      urlImage = urlImage.replace('.eps', '.png')
+    } else {
+      urlImage = urlImage.replace('.png', '.eps')
+    }
+  }
+
   if (context.isHtml) {
     return `<img class="inline" src="images/${urlImage}">`
   } else {

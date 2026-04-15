@@ -315,6 +315,8 @@ class Latex {
         }
       }
     }
+    content = content.replace(/\{images\//gi, '{') // exercice n°4P10
+    contentCorr = contentCorr.replace(/\{images\//gi, '{') // exercice n°4P10
     return { content, contentCorr }
   }
 
@@ -456,6 +458,7 @@ class Latex {
         )
       }
     }
+    content = content.replace(/\{images\//gi, '{') // exercice n°4P10
     return content
   }
 
