@@ -1,5 +1,6 @@
 import { diagrammeBarres } from '../../lib/2d/diagrammes'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice, shuffle } from '../../lib/outils/arrayOutils'
 import { egalOuApprox } from '../../lib/outils/ecritures'
 import { arrondi } from '../../lib/outils/nombres'
@@ -17,14 +18,11 @@ import Exercice from '../Exercice'
 
 import { tableauColonneLigne } from '../../lib/2d/tableau'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { toutAUnPoint } from '../../lib/interactif/mathLive'
-import { addMultiMathfield } from '../../lib/interactif/MultiMathfield/MultiMathfield'
-import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { setReponse } from '../../lib/interactif/gestionInteractif'
 
 export const titre = 'Calculer des fréquences statistiques'
 export const interactifReady = true
-export const interactifType = 'multiMathField'
+export const interactifType = 'mathLive'
 export const amcReady = true
 export const amcType = 'AMCHybride'
 
@@ -282,13 +280,13 @@ class Population {
  * Calculs de fréquences sur une série qualitative
  * avec un effectif manquant et l'effectif total donné
  * @author Eve & Sylvain CHAMBON
- * Olivier Mimeau : passage multiMathfield 15/04/2026
+
  */
-export const uuid = 'e9c50'
+export const uuid = 'ff67d'
 
 export const refs = {
-  'fr-fr': ['5S13-2', 'BP2AutoA3', 'BP2SP4', '3AutoP02-2'],
-  'fr-ch': ['11NO2-2'],
+  'fr-fr': [],
+  'fr-ch': [],
 }
 /**
  * version 0 :
@@ -415,7 +413,7 @@ function questionsEtCorrections(
   })
   correction1 += ')$<br>'
   correction1 += `$e=${texNombre(serie.effectifTotal, 0)}-${texNombre(serie.effectifTotal - serie.effectifs[serie.rangEffectifCache], 0)}$<br>`
-  correction1 += `$e=${miseEnEvidence(texNombre(serie.effectifs[serie.rangEffectifCache], 0))}$<br>`
+  correction1 += `$e=${texNombre(serie.effectifs[serie.rangEffectifCache], 0)}$<br>`
   // correction question 2
   let correction2
   if (!context.isAmc && !exercice.interactif) {
@@ -433,9 +431,7 @@ function questionsEtCorrections(
       enteteTableau.push(`\\text{${serie.modalites[index]}}`)
       const f = fraction(eff, serie.effectifTotal)
       premiereLigneTableau.push(f.texFraction)
-      deuxiemeLigneTableau.push(
-        miseEnEvidence(`${texNombre(f.pourcentage, 1)} ${sp(1)}\\%`),
-      )
+      deuxiemeLigneTableau.push(`${texNombre(f.pourcentage, 1)} ${sp(1)}\\%`)
     })
     premiereColonne.push(
       '\\textbf{Fréquences}',
@@ -463,8 +459,7 @@ function questionsEtCorrections(
       serie.effectifTotal,
     )
     correction2 += `$\\text{Fréquence}_{${serie.modalites[rangValeurChoisie]}}= ${fValeur.texFraction}$<br>`
-    correction2 += `$\\text{Fréquence}_{${serie.modalites[rangValeurChoisie]}}${egalOuApprox((serie.effectifs[rangValeurChoisie] * 100) / serie.effectifTotal, 1)}$`
-    correction2 += `$${miseEnEvidence(texNombre(arrondi(fValeur.pourcentage, 1)) + sp(1) + ` \\%`)}`
+    correction2 += `$\\text{Fréquence}_{${serie.modalites[rangValeurChoisie]}}${egalOuApprox((serie.effectifs[rangValeurChoisie] * 100) / serie.effectifTotal, 1)}${texNombre(arrondi(fValeur.pourcentage, 1))} ${sp(1)}\\%$`
   }
 
   if (!exercice.interactif && !context.isAmc) {
@@ -478,30 +473,36 @@ function questionsEtCorrections(
   } else {
     if (!context.isAmc) {
       // Questions pour interactivité html
-      handleAnswers(
+      setReponse(
         exercice,
-        numero,
-        {
-          bareme: toutAUnPoint,
-          champ1: { value: serie.effectifs[serie.rangEffectifCache] },
-          champ2: { value: frequenceDemandee },
-        },
-        { formatInteractif: 'multiMathfield' },
+        numero * 2,
+        serie.effectifs[serie.rangEffectifCache],
+        { formatInteractif: 'calcul' },
       )
+      setReponse(exercice, numero * 2 + 1, frequenceDemandee, {
+        formatInteractif: 'calcul',
+      })
       questions = [
         preambule,
-        addMultiMathfield(exercice, numero, {
-          dataTemplate: `a) Déterminer l'effectif manquant. %{champ1}\nb)Déterminer la fréquence de la valeur ${serie.modalites[rangValeurChoisie]} (en pourcentage, arrondir au dixième si besoin). %{champ2}\n`,
-          dataOptions: {
-            champ1: {
-              keyboard: KeyboardType.clavierNumbers,
-            },
-            champ2: {
-              keyboard: KeyboardType.clavierNumbers,
+        numAlpha(0) +
+          "Déterminer l'effectif manquant." +
+          ajouteChampTexteMathLive(
+            exercice,
+            numero * 2,
+            KeyboardType.clavierNumbers,
+          ) +
+          '<br>',
+        numAlpha(1) +
+          `Déterminer la fréquence de la valeur ${serie.modalites[rangValeurChoisie]} (en pourcentage, arrondir au dixième si besoin).` +
+          ajouteChampTexteMathLive(
+            exercice,
+            numero * 2 + 1,
+            KeyboardType.clavierNumbers,
+            {
               texteApres: '%',
             },
-          },
-        }),
+          ) +
+          '<br>',
       ]
     } else {
       // Pour AMC, on ne peut pas doubler les questions, il faut les intégrer dans un seul AMCHybride.
@@ -568,7 +569,7 @@ const listeDesThemes = [
   'parking',
   'collection',
 ]
-export default class CalculerDesFrequences extends Exercice {
+export default class CalculerDesFrequencesOld extends Exercice {
   constructor() {
     super()
 
@@ -600,16 +601,7 @@ export default class CalculerDesFrequences extends Exercice {
   }
 
   nouvelleVersion() {
-    let theme = listeDesThemes[this.sup2 - 1]
-    const typeDeTheme = gestionnaireFormulaireTexte({
-      saisie: this.sup2 - 1,
-      min: 0,
-      max: 4,
-      defaut: 0,
-      melange: 0,
-      nbQuestions: this.nbQuestions,
-    }).map(Number)
-
+    const theme = listeDesThemes[this.sup2 - 1]
     const exercice: { questions: string[]; corrections: string[] } = {
       questions: [],
       corrections: [],
@@ -624,7 +616,6 @@ export default class CalculerDesFrequences extends Exercice {
       nbQuestions: this.nbQuestions,
     }).map(Number)
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
-      theme = listeDesThemes[typeDeTheme[i]]
       switch (typeDeQuestions[i]) {
         case 1: // tableau
           transit = exerciceAvecTableau(theme, this, i)
