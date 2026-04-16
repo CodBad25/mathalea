@@ -1404,3 +1404,61 @@ export function verifQuestionMultiMathfield(
     },
   }
 }
+
+export function uniformiseResults(results: any): {
+  isOk: boolean
+  feedback: string
+  score: { nbBonnesReponses: number; nbReponses: number }
+} {
+  if (typeof results === 'string') {
+    // On traite ici le cas 'OK'|'KO'
+    return {
+      isOk: results === 'OK',
+      feedback: '',
+      score: {
+        nbBonnesReponses: results === 'OK' ? 1 : 0,
+        nbReponses: 1,
+      },
+    }
+  } else if (
+    Array.isArray(results) &&
+    results.every((r) => typeof r === 'string')
+  ) {
+    // On traite ici le cas ['OK','OK','KO',...]
+    const nbBonnesReponses = results.filter((r) => r === 'OK').length
+    return {
+      isOk: nbBonnesReponses === results.length,
+      feedback: '',
+      score: {
+        nbBonnesReponses,
+        nbReponses: results.length,
+      },
+    }
+  } else if (
+    typeof results === 'object' &&
+    results !== null &&
+    'isOk' in results
+  ) {
+    // On traite ici le cas { isOk: boolean, feedback?: string, score?: { nbBonnesReponses: number, nbReponses: number } }
+    return {
+      isOk: Boolean(results.isOk),
+      feedback: typeof results.feedback === 'string' ? results.feedback : '',
+      score:
+        typeof results.score === 'object' && results.score !== null
+          ? {
+              nbBonnesReponses: Number(results.score.nbBonnesReponses) || 0,
+              nbReponses: Number(results.score.nbReponses) || 0,
+            }
+          : { nbBonnesReponses: 0, nbReponses: 0 },
+    }
+  } else {
+    window.notify(`Résultats au format inattendu :`, {
+      results: JSON.stringify(results),
+    })
+    return {
+      isOk: false,
+      feedback: '',
+      score: { nbBonnesReponses: 0, nbReponses: 0 },
+    }
+  }
+}

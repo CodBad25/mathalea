@@ -33,7 +33,11 @@
     resultsByExercice,
   } from '../../../lib/stores/generalStore'
   import { globalOptions } from '../../../lib/stores/globalOptions'
-  import type { IExercice, InterfaceResultExercice } from '../../../lib/types'
+  import type {
+    IExercice,
+    InteractivityType,
+    InterfaceResultExercice,
+  } from '../../../lib/types'
   import type { CanState } from '../../../lib/types/can'
   import { context } from '../../../modules/context'
   import { statsCanTracker } from '../../../modules/stats'
@@ -146,19 +150,8 @@
     }
   })
 
-  type answerType = {
-    type:
-      | 'mathlive'
-      | 'fillInTheBlank'
-      | 'dnd'
-      | 'qcm'
-      | 'listeDeroulante'
-      | 'custom'
-      | 'cliqueFigure'
-      | 'svgSelection'
-      | 'MetaInteractif2d'
-      | 'multiMathfield'
-      | 'unknown'
+  type AnswerType = {
+    type: InteractivityType
     index: number
     answers?: { [key: string]: string }
     answerTxt: string
@@ -166,14 +159,18 @@
 
   function checkAnswers() {
     statsCanTracker($globalOptions.recorder ?? '', $globalOptions.v ?? '')
-    const answersType: answerType[] = []
+    const answersType: AnswerType[] = []
     for (let i = 0; i < questions.length; i++) {
       const exercice = exercises[indiceExercice[i]]
       const type =
         exercice.autoCorrection?.[indiceQuestionInExercice[i]]?.reponse?.param
           ?.formatInteractif ?? exercice.interactifType
 
-      if (type === 'mathlive' || type === 'fillInTheBlank') {
+      if (
+        type === 'mathlive' ||
+        type === 'fillInTheBlank' ||
+        type === 'tableauMathlive'
+      ) {
         resultsByQuestion[i] = Boolean(
           verifQuestionMathLive(exercice, indiceQuestionInExercice[i])?.isOk,
         )
@@ -434,7 +431,7 @@
         answers[i] = answersType[i].answerTxt
       } else {
         answersType[i] = {
-          type: 'unknown',
+          type: 'mathlive',
           index: i,
           answers: Object.keys(exercice.answers ?? {})
             .filter((key: string) =>
