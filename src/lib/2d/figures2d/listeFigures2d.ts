@@ -65,8 +65,8 @@ import {
   lettreY,
   lettreZ,
 } from './lettres'
-import {
 import { bleuMathalea } from '../../../lib/colors'
+import {
   panneauArretInterdit,
   panneauCederLePassage,
   panneauCroisementPrioriteADroite,
