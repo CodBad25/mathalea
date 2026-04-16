@@ -7,17 +7,17 @@ import { choice, shuffle } from '../../lib/outils/arrayOutils'
 import { range1 } from '../../lib/outils/nombres'
 import { listeDesDiviseurs } from '../../lib/outils/primalite'
 import { MySpreadsheetElement } from '../../lib/tableur/MySpreadSheet'
-import { addSheet } from '../../lib/tableur/outilsTableur'
+import { addSheet, createTableurLatex } from '../../lib/tableur/outilsTableur'
 import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 
+import { orangeMathalea } from '../../lib/colors'
 import {
   gestionnaireFormulaireTexte,
   listeQuestionsToContenu,
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { orangeMathalea } from '../../lib/colors'
 
 export const titre = 'Programmer des calculs sur tableur'
 export const dateDePublication = '12/08/2025'
@@ -622,7 +622,13 @@ function createDigramm(
       objets.push(tex)
     }
     if (i > 0) {
-      const seg = segment(A.x - gap, largeur / 2, A.x, largeur / 2, orangeMathalea)
+      const seg = segment(
+        A.x - gap,
+        largeur / 2,
+        A.x,
+        largeur / 2,
+        orangeMathalea,
+      )
       seg.styleExtremites = '->'
       objets.push(seg)
     }
@@ -645,64 +651,4 @@ function createDigramm(
     },
     objets,
   )
-}
-
-function createTableurLatex(
-  rowNbr: number,
-  colNbr: number,
-  data: any,
-  styles: any,
-  options: {
-    formule?: boolean
-    formuleTexte?: string
-    formuleCellule?: string
-    firstColHeaderWidth?: string
-  } = {},
-) {
-  let output = `\\begin{tabularx}{0.9\\linewidth}
-  {|>{\\cellcolor{lightgray}}c|
-  ${options.firstColHeaderWidth ? `>{\\centering \\arraybackslash}p{${options.firstColHeaderWidth}}|` : '>{\\centering \\arraybackslash}X|'}
-  *{${colNbr - 1}}{>{\\centering \\arraybackslash}X|}}\\hline\n`
-
-  if (options.formule) {
-    output += `\\multicolumn{1}{|l}{${options.formuleCellule}}&\\multicolumn{1}{r|}{▼}&\\multicolumn{${colNbr - 1}}{l|}{${options.formuleTexte}}\\\\ \\hline\n`
-  }
-  // en-tête
-  output += '\\rowcolor{lightgray} &'
-  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-  for (let colIndex = 0; colIndex < colNbr - 1; colIndex++) {
-    output += `\\textbf{\\sffamily ${alphabet[colIndex]}}  & `
-  }
-  output += `\\textbf{\\sffamily ${alphabet[colNbr - 1]}} \\\\ \\hline\n`
-
-  for (let rowIndex = 0; rowIndex < rowNbr; rowIndex++) {
-    const rowData = data[rowIndex] || {}
-    output += `\\textbf{\\sffamily ${rowIndex + 1}} &`
-    for (let colIndex = 0; colIndex < colNbr; colIndex++) {
-      const cell = rowData[colIndex] || {}
-      const styleCell = styles[cell.s ?? ''] || {}
-      let color = ''
-      if (styleCell.bg?.startsWith('#')) {
-        color = `\\cellcolor[HTML]{${styleCell.bg.replace('#', '')}}`
-      } else if (styleCell.bg) {
-        color = `\\cellcolor{${styleCell.bg}}`
-      }
-      if (cell?.t === 1) {
-        // texte
-        output += `\\raggedright ${color} ${cell.v || ''}  &`
-      } else if (cell?.t === 2) {
-        // number
-        output += `\\raggedleft ${color} ${cell.v || ''}  &`
-      } else if (cell?.t === 3) {
-        // boolean
-        output += `\\centering ${color} ${cell.v ? 'VRAI' : 'FAUX'}  &`
-      } else {
-        output += `${color} ${cell.v || ''}  &`
-      }
-    }
-    output = output.slice(0, -1) // enlever le dernier &
-    output += '\\\\ \\hline\n'
-  }
-  output += '\\end{tabularx}\n'
-  return output
 }
