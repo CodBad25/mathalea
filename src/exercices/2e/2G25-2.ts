@@ -75,7 +75,7 @@ export default class DroitesParallelesVF extends Exercice {
 
           texteCorr =
             monQcm.texteCorr +
-            `<br>Deux droites $(AB)$ et $(CD)$ sont parallèles si et seulement si les vecteurs $\\overrightarrow{AB}$ et $\\overrightarrow{CD}$ sont colinéaires.<br>
+            `Soient $A,B,C,D$ quatre points distincts. <br>Deux droites $(AB)$ et $(CD)$ sont parallèles si et seulement si les vecteurs $\\overrightarrow{AB}$ et $\\overrightarrow{CD}$ sont colinéaires.<br>
             Si $A(x_A\\;;\\;y_A)$, $B(x_B\\;;\\;y_B)$, $C(x_C\\;;\\;y_C)$ et $D(x_D\\;;\\;y_D)$, alors les vecteurs $\\overrightarrow{AB}$ et $\\overrightarrow{CD}$ ont pour coordonnées :<br>
             $\\overrightarrow{AB}\\begin{pmatrix}x_B - x_A \\\\ y_B - y_A \\end{pmatrix}$ et $\\overrightarrow{CD}\\begin{pmatrix}x_D - x_C \\\\ y_D - y_C \\end{pmatrix}$.<br>
             On a donc :<br>
@@ -127,7 +127,7 @@ export default class DroitesParallelesVF extends Exercice {
 
            texteCorr =
             monQcm.texteCorr +
-            `<br>Deux droites $(AB)$ et $(CD)$ sont parallèles si et seulement si les vecteurs $\\overrightarrow{AB}$ et $\\overrightarrow{CD}$ sont colinéaires.<br>
+`Soient $A,B,C,D$ quatre points distincts. <br>Deux droites $(AB)$ et $(CD)$ sont parallèles si et seulement si les vecteurs $\\overrightarrow{AB}$ et $\\overrightarrow{CD}$ sont colinéaires.<br>
             Si $A(x_A\\;;\\;y_A)$, $B(x_B\\;;\\;y_B)$, $C(x_C\\;;\\;y_C)$ et $D(x_D\\;;\\;y_D)$, alors les vecteurs $\\overrightarrow{AB}$ et $\\overrightarrow{CD}$ ont pour coordonnées :<br>
             $\\overrightarrow{AB}\\begin{pmatrix}x_B - x_A \\\\ y_B - y_A \\end{pmatrix}$ et $\\overrightarrow{CD}\\begin{pmatrix}x_D - x_C \\\\ y_D - y_C \\end{pmatrix}$.<br>
             On a donc :<br>
