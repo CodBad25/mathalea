@@ -17,6 +17,7 @@ import { fraction } from '../../modules/fractions'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -99,7 +100,7 @@ export default class ProblemesAdditifsFractions5eOld extends Exercice {
         [1, 12, [1.8, ' ', 'black', 2, 1, 'red', 0.4]],
         [1, 12, [1.8, ' ', 'black', 2, 1, 'red', 0.4]],
         [1, 12, [1.8, ' ', 'black', 2, 1, 'red', 0.4]],
-        [1, 4, [1.8, ' ', 'black', 2, 1, 'blue', 0.4]],
+        [1, 4, [1.8, ' ', 'black', 2, 1, bleuMathalea, 0.4]],
         [1, 2, [1.8, ' ', 'black', 2, 1, 'green', 0.4]],
       ]
       // on mélange pour l'aléatoire tant que les deux premieres fractions sont égales
@@ -240,7 +241,7 @@ export default class ProblemesAdditifsFractions5eOld extends Exercice {
       }
       const OVols = pointAbstrait(0, 0)
       const AVols = pointAbstrait(fenetreMathalea2D.xmin + 6, 0)
-      const cVols = cercleCentrePoint(OVols, AVols, 'blue')
+      const cVols = cercleCentrePoint(OVols, AVols, bleuMathalea)
       cVols.epaisseur = 2
       // on trace les quartiers
       // cat1

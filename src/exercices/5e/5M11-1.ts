@@ -23,6 +23,7 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 
 export const titre =
   'Calculer périmètre et/ou aire de carrés, rectangles et triangles rectangles'
@@ -112,7 +113,7 @@ export default class PerimetreOuAireDeCarresRectanglesTriangles extends Exercice
           codageAngleDroit(A, D, C),
           codageAngleDroit(D, C, B),
           codageAngleDroit(B, A, D),
-          codageSegments('//', 'blue', [A, B, C, D]),
+          codageSegments('//', 'red', bleuMathalea, [A, B, C, D]),
           afficheLongueurSegment(B, A),
         )
       }
@@ -124,7 +125,7 @@ export default class PerimetreOuAireDeCarresRectanglesTriangles extends Exercice
           codageAngleDroit(G, H, E),
           codageAngleDroit(H, E, F),
           codageSegments('/', 'red', E, F, G, H),
-          codageSegments('||', 'blue', F, G, H, E),
+          codageSegments('||', bleuMathalea, F, G, H, E),
           afficheLongueurSegment(F, E),
           afficheLongueurSegment(G, F),
         )

@@ -25,6 +25,7 @@ import { texNombre, texRacineCarree } from '../../lib/outils/texNombre'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const titre =
@@ -293,7 +294,7 @@ export default class Distance extends Exercice {
             s1.pointilles = 5
             const s2 = segment(M2, M3, 'black')
             s2.pointilles = 5
-            const s3 = segment(M2, M1, 'blue')
+            const s3 = segment(M2, M1, bleuMathalea)
             setReponse(this, i, ['OUI', 'oui', 'Oui'], {
               formatInteractif: 'texte',
             })
@@ -314,10 +315,10 @@ export default class Distance extends Exercice {
                 pixelsParCm: 25,
                 scale: 0.6,
               },
-              segment(M1, M2, 'blue'),
-              tracePoint(M1, 'blue'),
-              tracePoint(M2, 'blue'),
-              tracePoint(M3, 'blue'),
+              segment(M1, M2, bleuMathalea),
+              tracePoint(M1, bleuMathalea),
+              tracePoint(M2, bleuMathalea),
+              tracePoint(M3, bleuMathalea),
               texteParPosition(`${A.nom}`, 0, -0.5),
               texteParPosition(`${B.nom}`, 5, 0.5),
               s1,
@@ -404,7 +405,7 @@ export default class Distance extends Exercice {
             s1.pointilles = 5
             const s2 = segment(M2, M3, 'black')
             s2.pointilles = 5
-            const s3 = segment(M2, M1, 'blue')
+            const s3 = segment(M2, M1, bleuMathalea)
             setReponse(this, i, ['NON', 'non', 'Non'], {
               formatInteractif: 'texte',
             })
@@ -425,10 +426,10 @@ export default class Distance extends Exercice {
                 pixelsParCm: 25,
                 scale: 0.6,
               },
-              segment(M1, M2, 'blue'),
-              tracePoint(M1, 'blue'),
-              tracePoint(M2, 'blue'),
-              tracePoint(M3, 'blue'),
+              segment(M1, M2, bleuMathalea),
+              tracePoint(M1, bleuMathalea),
+              tracePoint(M2, bleuMathalea),
+              tracePoint(M3, bleuMathalea),
               texteParPosition(`${A.nom}`, 0, -0.5),
               texteParPosition(`${B.nom}`, 5, 0.5),
               s1,

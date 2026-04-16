@@ -25,6 +25,7 @@ import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 const cleaner = generateCleaner(['parentheses', 'espaces'])
 export const titre =
   'Appliquer les propriétés de conservation de la symétrie axiale'
@@ -580,11 +581,11 @@ export default class SymetrieAxialeConservation1 extends Exercice {
       for (let ii = 0; ii < 24; ii++) {
         objetsEnonce.push(
           labelPoint(points[ii]),
-          tracePoint(points[ii], 'blue'),
+          tracePoint(points[ii], bleuMathalea),
         )
         objetsCorrection.push(
           labelPoint(points[ii]),
-          tracePoint(points[ii], 'blue'),
+          tracePoint(points[ii], bleuMathalea),
         )
       }
       const enonceAMC = mathalea2d(

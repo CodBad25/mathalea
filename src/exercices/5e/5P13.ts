@@ -27,6 +27,7 @@ import {
   quotientier,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -205,7 +206,7 @@ export default class EchellesProblemes extends Exercice {
               flecheDroite: {
                 texte: '\\times \\ldots',
                 latex: true,
-                color: 'blue',
+                color: bleuMathalea,
                 gras: true,
               },
             })
@@ -246,7 +247,7 @@ export default class EchellesProblemes extends Exercice {
                   math: true,
                   latex: true,
                   gras: true,
-                  color: 'blue',
+                  color: bleuMathalea,
                 },
                 {
                   texte: texNombre(
@@ -266,7 +267,7 @@ export default class EchellesProblemes extends Exercice {
                     nb1Unite1,
                   ),
                 latex: true,
-                color: 'blue',
+                color: bleuMathalea,
                 gras: true,
               },
               flecheHaut: [
@@ -278,7 +279,7 @@ export default class EchellesProblemes extends Exercice {
                     math: true,
                     latex: true,
                     gras: true,
-                    color: 'blue',
+                    color: bleuMathalea,
                   },
                 ],
               ],
@@ -291,7 +292,7 @@ export default class EchellesProblemes extends Exercice {
                     math: true,
                     latex: true,
                     gras: true,
-                    color: 'blue',
+                    color: bleuMathalea,
                   },
                 ],
               ],
@@ -311,7 +312,7 @@ export default class EchellesProblemes extends Exercice {
             texteCorr += `$${texNombre(nb1Unite1, 2)}$ ${unite1} sur le plan représente alors $${texNombre(nb2Unite1, 2)}$ ${unite1} dans la réalité et l'échelle du plan est donc, de $${new FractionEtendue(nb1Unite1, nb2Unite1).texFSD}.$<br>`
             texteCorr +=
               "Cette réponse est acceptée mais on a l'habitude de trouver une fraction avec numérateur et dénominateur entiers et si possible, dont l'un des deux est égal à 1.<br>"
-            texteCorr += `Or, $${new FractionEtendue(nb1Unite1, nb2Unite1).texFSD}=${texFractionFromString(texNombre(nb1Unite1) + sp(2) + miseEnEvidence('\\div ' + sp(2) + texNombre(nb1Unite1), 'blue'), texNombre(nb2Unite1, 2) + sp(2) + miseEnEvidence('\\div ' + sp(2) + texNombre(nb1Unite1, 2), 'blue'))}=${reponse.simplifie().texFraction}$. `
+            texteCorr += `Or, $${new FractionEtendue(nb1Unite1, nb2Unite1).texFSD}=${texFractionFromString(texNombre(nb1Unite1) + sp(2) + miseEnEvidence('\\div ' + sp(2) + texNombre(nb1Unite1), bleuMathalea), texNombre(nb2Unite1, 2) + sp(2) + miseEnEvidence('\\div ' + sp(2) + texNombre(nb1Unite1, 2), bleuMathalea))}=${reponse.simplifie().texFraction}$. `
           }
           texteCorr += `Donc, l'échelle du plan ${echelleQ.lieu}  ${quidam[2]} ${quidam[0]} de ${quidam2} est de : $${miseEnEvidence(reponse.simplifie().texFSP)}$.<br>`
           texteCorr += `Remarque : cela signifie que, sur le plan ${echelleQ.lieu}  ${quidam[2]} ${quidam[0]} de ${quidam2}, $1$ ${unite1} représente $${texNombre(reponse.simplifie().den)}$ ${unite1} en réalité, et donc, $1$ ${unite1} représente $${texNombre(reponse.simplifie().den / Math.pow(10, Math.min(Math.floor(Math.log10(reponse.simplifie().den)), 6)), 2)}$ ${unite2} en réalité.`
@@ -398,7 +399,7 @@ export default class EchellesProblemes extends Exercice {
                   math: true,
                   latex: true,
                   gras: true,
-                  color: 'blue',
+                  color: bleuMathalea,
                 },
               ],
             })
@@ -442,7 +443,7 @@ export default class EchellesProblemes extends Exercice {
                     new Decimal(nb1Unite1).mul(echelleQ.echelle),
                     0,
                   ),
-                  color: 'blue',
+                  color: bleuMathalea,
                   math: true,
                   latex: true,
                   gras: true,
@@ -457,7 +458,7 @@ export default class EchellesProblemes extends Exercice {
                     math: true,
                     latex: true,
                     gras: true,
-                    color: 'blue',
+                    color: bleuMathalea,
                   },
                 ],
               ],
@@ -470,14 +471,14 @@ export default class EchellesProblemes extends Exercice {
                     math: true,
                     latex: true,
                     gras: true,
-                    color: 'blue',
+                    color: bleuMathalea,
                   },
                 ],
               ],
               flecheDroite: {
                 texte: '\\times' + texNombre(echelleQ.echelle, 0),
                 latex: true,
-                color: 'blue',
+                color: bleuMathalea,
                 gras: true,
               },
             })
@@ -573,7 +574,7 @@ export default class EchellesProblemes extends Exercice {
               flecheDroite: {
                 texte: '\\times' + texNombre(echelleQ.echelle, 0),
                 latex: true,
-                color: 'blue',
+                color: bleuMathalea,
                 gras: true,
               },
             })
@@ -600,7 +601,7 @@ export default class EchellesProblemes extends Exercice {
                 { texte: texNombre(1, 0), math: true, latex: true },
                 {
                   texte: texNombre(nb1Unite1, 2),
-                  color: 'blue',
+                  color: bleuMathalea,
                   math: true,
                   latex: true,
                 },
@@ -628,7 +629,7 @@ export default class EchellesProblemes extends Exercice {
               flecheDroite: {
                 texte: '\\div' + texNombre(echelleQ.echelle, 0),
                 latex: true,
-                color: 'blue',
+                color: bleuMathalea,
                 gras: true,
               },
               flecheDroiteSens: 'haut',
@@ -645,7 +646,7 @@ export default class EchellesProblemes extends Exercice {
           } else {
             texteCorr = `Une échelle de $${new FractionEtendue(1, echelleQ.echelle).texFSD}$ signifie que $1$ ${unite1} sur le plan représente $${texNombre(echelleQ.echelle)}$ ${unite1} en réalité, soit $${texNombre(echelleQUnite2, 2)}$ ${unite2}.<br>`
             texteCorr += `Cherchons par combien multiplier $${texNombre(echelleQUnite2, 2)}$ ${unite2} pour obtenir $${texNombre(nb2Unite2, 3)}$ ${unite2}. $${sp(10)} ${texNombre(nb2Unite2, 2)}\\div${texNombre(echelleQUnite2, 2)}=${texNombre(nb1Unite1)}$<br>`
-            texteCorr += `$${new FractionEtendue(1, echelleQ.echelle).texFSD}=${texFractionFromString(1 + miseEnEvidence('\\times' + texNombre(nb1Unite1), 'blue'), texNombre(echelleQ.echelle) + miseEnEvidence('\\times' + texNombre(nb1Unite1), 'blue'))}=${new FractionEtendue(nb1Unite1, nb2Unite1).texFSD}$ et donc, une distance de $${texNombre(nb2Unite1)}$ ${unite1} ($${texNombre(nb2Unite2)}$ ${unite2}) est représentée par un segment de $${texNombre(nb1Unite1)}$ ${unite1}.<br>`
+            texteCorr += `$${new FractionEtendue(1, echelleQ.echelle).texFSD}=${texFractionFromString(1 + miseEnEvidence('\\times' + texNombre(nb1Unite1), bleuMathalea), texNombre(echelleQ.echelle) + miseEnEvidence('\\times' + texNombre(nb1Unite1), bleuMathalea))}=${new FractionEtendue(nb1Unite1, nb2Unite1).texFSD}$ et donc, une distance de $${texNombre(nb2Unite1)}$ ${unite1} ($${texNombre(nb2Unite2)}$ ${unite2}) est représentée par un segment de $${texNombre(nb1Unite1)}$ ${unite1}.<br>`
           }
           texteCorr += `Le segment représentant $${texNombre(nb2Unite2)}$ ${unite2} dans la réalité, tracé par ${quidam2}, sur le plan ${echelleQ.lieu} de ${quidam[1]} ${quidam[0]}, mesure ${texteEnCouleurEtGras(stringNombre(reponse))} ${texteEnCouleurEtGras(unite1)}.`
 

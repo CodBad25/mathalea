@@ -14,6 +14,7 @@ import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 export const titre =
   'Se servir des relations entre perpendicularité et parallélisme'
 
@@ -82,7 +83,7 @@ export default class TracerCarresRectangleslongueurDonnees extends Exercice {
       ])
       const couleurs = shuffle([
         'black',
-        'blue',
+        bleuMathalea,
         'green',
         '#2471A3',
         'purple',

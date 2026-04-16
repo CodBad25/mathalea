@@ -10,6 +10,7 @@ import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { sp } from '../../lib/outils/outilString'
 import { context } from '../../modules/context'
 import FractionEtendue from '../../modules/FractionEtendue'
+import { bleuMathalea } from '../../lib/colors'
 
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -149,7 +150,7 @@ export default class ExerciceAdditionnerSoustraireFractions5e extends Exercice {
               if (ordreDesFractions === 1) {
                 s = pgcd(a * k + n * c, d)
                 if (s !== 1) {
-                  texteCorr += `$=${texFraction((a * k + n * c) / s + miseEnEvidence('\\times ' + s, 'blue'), d / s + miseEnEvidence('\\times ' + s, 'blue'))}=${texFractionReduite((a * k + n * c) / s, d / s)}$`
+                  texteCorr += `$=${texFraction((a * k + n * c) / s + miseEnEvidence('\\times ' + s, bleuMathalea), d / s + miseEnEvidence('\\times ' + s, bleuMathalea))}=${texFractionReduite((a * k + n * c) / s, d / s)}$`
                 }
                 reponse = {
                   num: a * k + n * c,
@@ -159,7 +160,7 @@ export default class ExerciceAdditionnerSoustraireFractions5e extends Exercice {
               } else {
                 s = pgcd(n * a * k + c, d)
                 if (s !== 1) {
-                  texteCorr += `$=${texFraction((n * a * k + c) / s + miseEnEvidence('\\times ' + s, 'blue'), d / s + miseEnEvidence('\\times ' + s, 'blue'))}=${texFractionReduite((n * a * k + c) / s, d / s)}$`
+                  texteCorr += `$=${texFraction((n * a * k + c) / s + miseEnEvidence('\\times ' + s, bleuMathalea), d / s + miseEnEvidence('\\times ' + s, bleuMathalea))}=${texFractionReduite((n * a * k + c) / s, d / s)}$`
                 }
                 reponse = {
                   num: n * a * k + c,
@@ -206,9 +207,9 @@ export default class ExerciceAdditionnerSoustraireFractions5e extends Exercice {
                 s = pgcd(a * k - n * c, d)
                 if (s !== 1 && a * k - n * c !== 0) {
                   if (a * k - n * c > 0)
-                    texteCorr += `$=${texFraction((a * k - n * c) / s + miseEnEvidence('\\times ' + s, 'blue'), d / s + miseEnEvidence('\\times ' + s, 'blue'))}=${texFractionReduite((a * k - n * c) / s, d / s)}$`
+                    texteCorr += `$=${texFraction((a * k - n * c) / s + miseEnEvidence('\\times ' + s, bleuMathalea), d / s + miseEnEvidence('\\times ' + s, bleuMathalea))}=${texFractionReduite((a * k - n * c) / s, d / s)}$`
                   else
-                    texteCorr += `$=-${texFraction(-(a * k - n * c) / s + miseEnEvidence('\\times ' + s, 'blue'), d / s + miseEnEvidence('\\times ' + s, 'blue'))}=-${texFractionReduite(-(a * k - n * c) / s, d / s)}$`
+                    texteCorr += `$=-${texFraction(-(a * k - n * c) / s + miseEnEvidence('\\times ' + s, bleuMathalea), d / s + miseEnEvidence('\\times ' + s, bleuMathalea))}=-${texFractionReduite(-(a * k - n * c) / s, d / s)}$`
                 }
                 reponse = {
                   num: a * k - n * c,
@@ -219,9 +220,9 @@ export default class ExerciceAdditionnerSoustraireFractions5e extends Exercice {
                 s = pgcd(n * a * k - c, d)
                 if (s !== 1 && c - n * a * k !== 0) {
                   if (c - n * a * k > 0)
-                    texteCorr += `$=${texFraction((c - n * a * k) / s + miseEnEvidence('\\times ' + s, 'blue'), d / s + miseEnEvidence('\\times ' + s, 'blue'))}=${texFractionReduite((c - n * a * k) / s, d / s)}$`
+                    texteCorr += `$=${texFraction((c - n * a * k) / s + miseEnEvidence('\\times ' + s, bleuMathalea), d / s + miseEnEvidence('\\times ' + s, bleuMathalea))}=${texFractionReduite((c - n * a * k) / s, d / s)}$`
                   else
-                    texteCorr += `$=-${texFraction(-(c - n * a * k) / s + miseEnEvidence('\\times ' + s, 'blue'), d / s + miseEnEvidence('\\times ' + s, 'blue'))}=-${texFractionReduite(-(c - n * a * k) / s, d / s)}$`
+                    texteCorr += `$=-${texFraction(-(c - n * a * k) / s + miseEnEvidence('\\times ' + s, bleuMathalea), d / s + miseEnEvidence('\\times ' + s, bleuMathalea))}=-${texFractionReduite(-(c - n * a * k) / s, d / s)}$`
                 }
                 reponse = {
                   num: c - n * a * k,
@@ -287,9 +288,9 @@ export default class ExerciceAdditionnerSoustraireFractions5e extends Exercice {
               s = pgcd(a * k - c * k - e, d)
               if (s !== 1 && a * k - c * k - e !== 0) {
                 if (a * k - c * k - e > 0)
-                  texteCorr += `$=${texFraction((a * k - c * k - e) / s + miseEnEvidence('\\times ' + s, 'blue'), d / s + miseEnEvidence('\\times ' + s, 'blue'))}=${texFractionReduite((a * k - c * k - e) / s, d / s)}$`
+                  texteCorr += `$=${texFraction((a * k - c * k - e) / s + miseEnEvidence('\\times ' + s, bleuMathalea), d / s + miseEnEvidence('\\times ' + s, bleuMathalea))}=${texFractionReduite((a * k - c * k - e) / s, d / s)}$`
                 else
-                  texteCorr += `$=-${texFraction(-(a * k - c * k - e) / s + miseEnEvidence('\\times ' + s, 'blue'), d / s + miseEnEvidence('\\times ' + s, 'blue'))}=-${texFractionReduite(-(a * k - c * k - e) / s, d / s)}$`
+                  texteCorr += `$=-${texFraction(-(a * k - c * k - e) / s + miseEnEvidence('\\times ' + s, bleuMathalea), d / s + miseEnEvidence('\\times ' + s, bleuMathalea))}=-${texFractionReduite(-(a * k - c * k - e) / s, d / s)}$`
               }
               reponse = {
                 num: a * k - c * k - e,
@@ -300,9 +301,9 @@ export default class ExerciceAdditionnerSoustraireFractions5e extends Exercice {
               s = pgcd(a * k - c - k * e, d)
               if (s !== 1 && a * k - c - k * e !== 0) {
                 if (a * k - c - k * e > 0)
-                  texteCorr += `$=${texFraction((a * k - c - k * e) / s + miseEnEvidence('\\times ' + s, 'blue'), d / s + miseEnEvidence('\\times ' + s, 'blue'))}=${texFractionReduite((a * k - c - k * e) / s, d / s)}$`
+                  texteCorr += `$=${texFraction((a * k - c - k * e) / s + miseEnEvidence('\\times ' + s, bleuMathalea), d / s + miseEnEvidence('\\times ' + s, bleuMathalea))}=${texFractionReduite((a * k - c - k * e) / s, d / s)}$`
                 else
-                  texteCorr += `$=-${texFraction(-(a * k - c - k * e) / s + miseEnEvidence('\\times ' + s, 'blue'), d / s + miseEnEvidence('\\times ' + s, 'blue'))}=-${texFractionReduite(-(a * k - c - k * e) / s, d / s)}$`
+                  texteCorr += `$=-${texFraction(-(a * k - c - k * e) / s + miseEnEvidence('\\times ' + s, bleuMathalea), d / s + miseEnEvidence('\\times ' + s, bleuMathalea))}=-${texFractionReduite(-(a * k - c - k * e) / s, d / s)}$`
               }
               reponse = {
                 num: a * k - c - k * e,
@@ -329,7 +330,7 @@ export default class ExerciceAdditionnerSoustraireFractions5e extends Exercice {
             if (this.sup3) {
               s = pgcd(a + n * b, b)
               if (s !== 1) {
-                texteCorr += `$=${texFraction((a + n * b) / s + miseEnEvidence('\\times ' + s, 'blue'), b / s + miseEnEvidence('\\times ' + s, 'blue'))}=${texFractionReduite((a + n * b) / s, b / s)}$`
+                texteCorr += `$=${texFraction((a + n * b) / s + miseEnEvidence('\\times ' + s, bleuMathalea), b / s + miseEnEvidence('\\times ' + s, bleuMathalea))}=${texFractionReduite((a + n * b) / s, b / s)}$`
               }
               reponse = {
                 num: a + n * b,
@@ -349,9 +350,9 @@ export default class ExerciceAdditionnerSoustraireFractions5e extends Exercice {
               s = pgcd(a - n * b, b)
               if (s !== 1 && a - n * b !== 0) {
                 if (a - n * b > 0)
-                  texteCorr += `$=${texFraction((a - n * b) / s + miseEnEvidence('\\times ' + s, 'blue'), b / s + miseEnEvidence('\\times ' + s, 'blue'))}=${texFractionReduite((a - n * b) / s, b / s)}$`
+                  texteCorr += `$=${texFraction((a - n * b) / s + miseEnEvidence('\\times ' + s, bleuMathalea), b / s + miseEnEvidence('\\times ' + s, bleuMathalea))}=${texFractionReduite((a - n * b) / s, b / s)}$`
                 else
-                  texteCorr += `$=-${texFraction(-(a - n * b) / s + miseEnEvidence('\\times ' + s, 'blue'), b / s + miseEnEvidence('\\times ' + s, 'blue'))}=-${texFractionReduite(-(a - n * b) / s, b / s)}$`
+                  texteCorr += `$=-${texFraction(-(a - n * b) / s + miseEnEvidence('\\times ' + s, bleuMathalea), b / s + miseEnEvidence('\\times ' + s, bleuMathalea))}=-${texFractionReduite(-(a - n * b) / s, b / s)}$`
               }
               reponse = {
                 num: a - n * b,
@@ -385,9 +386,9 @@ export default class ExerciceAdditionnerSoustraireFractions5e extends Exercice {
             s = pgcd(a * k - c + e * k, d)
             if (s !== 1 && a * k - c + e * k !== 0) {
               if (a * k - c + e * k > 0)
-                texteCorr += `$=${texFraction((a * k - c + e * k) / s + miseEnEvidence('\\times ' + s, 'blue'), d / s + miseEnEvidence('\\times ' + s, 'blue'))}=${texFractionReduite((a * k - c + e * k) / s, d / s)}$`
+                texteCorr += `$=${texFraction((a * k - c + e * k) / s + miseEnEvidence('\\times ' + s, bleuMathalea), d / s + miseEnEvidence('\\times ' + s, bleuMathalea))}=${texFractionReduite((a * k - c + e * k) / s, d / s)}$`
               else
-                texteCorr += `$=-${texFraction(-(a * k - c + e * k) / s + miseEnEvidence('\\times ' + s, 'blue'), d / s + miseEnEvidence('\\times ' + s, 'blue'))}=-${texFractionReduite(-(a * k - c + e * k) / s, d / s)}$`
+                texteCorr += `$=-${texFraction(-(a * k - c + e * k) / s + miseEnEvidence('\\times ' + s, bleuMathalea), d / s + miseEnEvidence('\\times ' + s, bleuMathalea))}=-${texFractionReduite(-(a * k - c + e * k) / s, d / s)}$`
             }
             reponse = {
               num: a * k - c + e * k,

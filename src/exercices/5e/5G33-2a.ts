@@ -9,7 +9,7 @@ import {
 import { point } from '../../lib/2d/PointAbstrait'
 import { rotation } from '../../lib/2d/transformations'
 import { pointIntersectionDD } from '../../lib/2d/utilitairesPoint'
-import { orangeMathalea } from '../../lib/colors'
+import { orangeMathalea, bleuMathalea } from '../../lib/colors'
 import { enleveDoublonNum, shuffle } from '../../lib/outils/arrayOutils'
 import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
@@ -101,7 +101,7 @@ export default class ProprietesParallelesPerpendiculaires extends Exercice {
     proprietesDisponibles = enleveDoublonNum(proprietesDisponibles)
 
     const droiteColor = context.isHtml
-      ? ['red', 'blue', 'green', 'black', 'magenta', orangeMathalea]
+      ? ['red', bleuMathalea, 'green', 'black', 'magenta', orangeMathalea]
       : ['black', 'black', 'black', 'black', 'black', 'black']
 
     const differentsCas = [

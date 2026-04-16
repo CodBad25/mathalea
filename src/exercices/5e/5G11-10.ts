@@ -23,6 +23,7 @@ import { mathalea2d } from '../../modules/mathalea2d'
 import { contraindreValeur, egal, randint } from '../../modules/outils'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 
 export const titre =
   'Construire des symétriques de points par rapport à un point'
@@ -97,7 +98,7 @@ class ConstrctionsSymetrieCentralePoints extends Exercice {
   nouvelleVersion() {
     const marks: string[] = ['//', '///', 'x', 'O', '|||']
     const colors: string[] = context.isHtml
-      ? ['red', 'green', 'purple', 'blue', 'gray']
+      ? ['red', 'green', 'purple', bleuMathalea, 'gray']
       : ['gray', 'gray', 'gray', 'gray', 'gray']
     this.answers = {}
 

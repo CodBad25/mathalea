@@ -12,6 +12,8 @@ import Exercice from '../Exercice'
 
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import ce from '../../lib/interactif/comparisonFunctions'
+
+import { bleuMathalea } from '../../lib/colors'
 import {
   parseExpression,
   type Expression,
@@ -151,9 +153,9 @@ export default class ExpressionsDepuisCalculs extends Exercice {
           if (this.sup3) redaction = parseExpression(calculRedaction) // sans parenthèse inutile
           cd = `
 $${miseEnCouleur(`${calcul1} = ${resultat1}`, 'red')}$<br>
-$${miseEnCouleur(`${miseEnCouleur(`\\overset{${calcul1}}{${resultat1}}`, 'red')} ${signes[1]} ${nombres[2]} = ${resultat2}`, 'blue')}$<br>
+$${miseEnCouleur(`${miseEnCouleur(`\\overset{${calcul1}}{${resultat1}}`, 'red')} ${signes[1]} ${nombres[2]} = ${resultat2}`, bleuMathalea)}$<br>
 <br>
-$${miseEnCouleur(`(${calcul1})`, 'red')}${miseEnCouleur(`${signes[1]}${nombres[2]} = ${nombreCible}`, 'blue')}$<br>
+$${miseEnCouleur(`(${calcul1})`, 'red')}${miseEnCouleur(`${signes[1]}${nombres[2]} = ${nombreCible}`, bleuMathalea)}$<br>
 <br>
 En supprimant les parenthèses inutiles, on peut écrire :<br> $${miseEnEvidence(parseExpression(calculRedaction))} = ${nombreCible}$<br>
 `
@@ -186,10 +188,10 @@ En supprimant les parenthèses inutiles, on peut écrire :<br> $${miseEnEvidence
           if (this.sup3) redaction = parseExpression(calculRedaction) // sans parenthèse inutile
           cd = `
 $${miseEnCouleur(`${calcul1} = ${resultat1}`, 'red')}$<br>
-$${miseEnCouleur(`${miseEnCouleur(`\\overset{${calcul1}}{${resultat1}}`, 'red')} ${signes[1]} ${nombres[2]} = ${resultat2}`, 'blue')}$<br>
-$${miseEnCouleur(`${miseEnCouleur(`\\overset{(${miseEnCouleur(`(${calcul1})`, 'red')}${signes[1]}${nombres[2]})}{${resultat2}}`, 'blue')} ${signes[2]} ${nombres[3]} = ${resultat3}`, 'green')}$<br>
+$${miseEnCouleur(`${miseEnCouleur(`\\overset{${calcul1}}{${resultat1}}`, 'red')} ${signes[1]} ${nombres[2]} = ${resultat2}`, bleuMathalea)}$<br>
+$${miseEnCouleur(`${miseEnCouleur(`\\overset{(${miseEnCouleur(`(${calcul1})`, 'red')}${signes[1]}${nombres[2]})}{${resultat2}}`, bleuMathalea)} ${signes[2]} ${nombres[3]} = ${resultat3}`, 'green')}$<br>
 <br>
-$${miseEnCouleur(`${miseEnCouleur(`(${miseEnCouleur(`(${calcul1})`, 'red')}${signes[1]}${nombres[2]})`, 'blue')}${signes[2]}${nombres[3]}=${resultat3}`, 'green')}$<br>
+$${miseEnCouleur(`${miseEnCouleur(`(${miseEnCouleur(`(${calcul1})`, 'red')}${signes[1]}${nombres[2]})`, bleuMathalea)}${signes[2]}${nombres[3]}=${resultat3}`, 'green')}$<br>
 <br>
 En supprimant les parenthèses inutiles, on peut écrire : <br> $${miseEnEvidence(parseExpression(calculRedaction))} = ${nombreCible}$<br>
 `
@@ -231,11 +233,11 @@ En supprimant les parenthèses inutiles, on peut écrire : <br> $${miseEnEvidenc
           if (this.sup3) redaction = parseExpression(calculRedaction) // sans parenthèse inutile
           cd = `
 $${miseEnCouleur(`${calcul1} = ${resultat1}`, 'red')}$<br>
-$${miseEnCouleur(`${miseEnCouleur(`\\overset{${calcul1}}{${resultat1}}`, 'red')} ${signes[1]} ${nombres[2]} = ${resultat2}`, 'blue')}$<br>
-$${miseEnCouleur(`${miseEnCouleur(`\\overset{(${miseEnCouleur(`(${calcul1})`, 'red')}${signes[1]}${nombres[2]})}{${resultat2}}`, 'blue')} ${signes[2]} ${nombres[3]} = ${resultat3}`, 'green')}$<br>
-$${miseEnCouleur(`\\overset{(${miseEnCouleur(`(${miseEnCouleur(`(${calcul1})`, 'red')}${signes[1]}${nombres[2]})`, 'blue')}${signes[2]}${nombres[3]})}{${resultat3}}`, 'green')} ${signes[3]} ${nombres[4]} = ${nombreCible}$<br>
+$${miseEnCouleur(`${miseEnCouleur(`\\overset{${calcul1}}{${resultat1}}`, 'red')} ${signes[1]} ${nombres[2]} = ${resultat2}`, bleuMathalea)}$<br>
+$${miseEnCouleur(`${miseEnCouleur(`\\overset{(${miseEnCouleur(`(${calcul1})`, 'red')}${signes[1]}${nombres[2]})}{${resultat2}}`, bleuMathalea)} ${signes[2]} ${nombres[3]} = ${resultat3}`, 'green')}$<br>
+$${miseEnCouleur(`\\overset{(${miseEnCouleur(`(${miseEnCouleur(`(${calcul1})`, 'red')}${signes[1]}${nombres[2]})`, bleuMathalea)}${signes[2]}${nombres[3]})}{${resultat3}}`, 'green')} ${signes[3]} ${nombres[4]} = ${nombreCible}$<br>
 <br>
-$${miseEnCouleur(`(${miseEnCouleur(`(${miseEnCouleur(`(${calcul1})`, 'red')}${signes[1]}${nombres[2]})`, 'blue')}${signes[2]}${nombres[3]})`, 'green')} ${signes[3]} ${nombres[4]} = ${nombreCible}$<br>
+$${miseEnCouleur(`(${miseEnCouleur(`(${miseEnCouleur(`(${calcul1})`, 'red')}${signes[1]}${nombres[2]})`, bleuMathalea)}${signes[2]}${nombres[3]})`, 'green')} ${signes[3]} ${nombres[4]} = ${nombreCible}$<br>
 <br>
 En supprimant les parenthèses inutiles, on peut écrire : <br> $${miseEnEvidence(parseExpression(calculRedaction))} = ${nombreCible}$<br>
 `

@@ -23,6 +23,7 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 
 export const titre = "Calculer l'aire de carré, rectangle ou triangle rectangle"
 export const dateDeModifImportante = '24/04/2025'
@@ -120,7 +121,7 @@ export default class AireCarresRectanglesTriangles extends Exercice {
             codageAngleDroit(A, D, C),
             codageAngleDroit(D, C, B),
             codageAngleDroit(B, A, D),
-            codageSegments('//', 'blue', [A, B, C, D]),
+            codageSegments('//', 'red', bleuMathalea, [A, B, C, D]),
             afficheLongueurSegment(B, A),
           )
           texte = "Calculer l'aire du carré."
@@ -156,7 +157,7 @@ export default class AireCarresRectanglesTriangles extends Exercice {
             codageAngleDroit(G, H, E),
             codageAngleDroit(H, E, F),
             codageSegments('/', 'red', E, F, G, H),
-            codageSegments('||', 'blue', F, G, H, E),
+            codageSegments('||', bleuMathalea, F, G, H, E),
             afficheLongueurSegment(F, E),
             afficheLongueurSegment(G, F),
           )

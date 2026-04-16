@@ -11,6 +11,7 @@ import { texNombre } from '../../lib/outils/texNombre'
 import { context } from '../../modules/context'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 
 export const dateDeModifImportante = '01/06/2024'
 export const titre = 'Reconnaitre des tableaux de proportionnalité'
@@ -72,10 +73,10 @@ function justificationsKO(
   switch (sens) {
     case 'L1L2':
       color1 = 'red'
-      color2 = 'blue'
+      color2 = bleuMathalea
       break
     case 'L2L1':
-      color1 = 'blue'
+      color1 = bleuMathalea
       color2 = 'red'
       break
   }

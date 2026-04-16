@@ -10,6 +10,7 @@ import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 export const titre = 'Compléter un nuage de points symétriques'
 export const dateDePublication = '18/12/2021'
 export const interactifReady = false
@@ -101,7 +102,7 @@ export default class CompleterParSymetrie5e extends Exercice {
       } else {
         O = point(4.33, 4.5, 'O')
       }
-      d = tracePoint(O, context.isHtml ? 'blue' : 'black')
+      d = tracePoint(O, context.isHtml ? bleuMathalea : 'black')
       d.epaisseur = 2
       d.style = '+'
       objetsEnonce.push(d)

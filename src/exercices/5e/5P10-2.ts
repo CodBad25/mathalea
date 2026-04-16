@@ -19,6 +19,7 @@ import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 
 export const titre = 'Calculer le coefficient de proportionnalité'
 export const interactifReady = true
@@ -299,7 +300,7 @@ export default class CalculerCoeffPropo extends Exercice {
               flecheDroite: {
                 texte: this.interactif ? '' : '\\times \\ldots',
                 latex: true,
-                color: 'blue',
+                color: bleuMathalea,
                 gras: true,
               },
               flecheDroiteSens: 'bas',
@@ -319,7 +320,7 @@ export default class CalculerCoeffPropo extends Exercice {
               flecheDroite: {
                 texte: this.interactif ? '' : '\\times \\ldots',
                 latex: true,
-                color: 'blue',
+                color: bleuMathalea,
                 gras: true,
               },
               flecheDroiteSens: 'bas',
@@ -579,14 +580,14 @@ export default class CalculerCoeffPropo extends Exercice {
           premiereLigne[colonneReference].nombre,
         )
         if (!quotient.estIrreductible) {
-          texteCorr += `${miseEnEvidence(`\\dfrac{${texNombre(deuxiemeLigne[colonneReference].nombre)}}{${texNombre(premiereLigne[colonneReference].nombre)}}`, 'blue')}`
+          texteCorr += `${miseEnEvidence(`\\dfrac{${texNombre(deuxiemeLigne[colonneReference].nombre)}}{${texNombre(premiereLigne[colonneReference].nombre)}}`, bleuMathalea)}`
           texteCorr += `= ${miseEnEvidence((coefficient as FractionEtendue).texFraction)}$.<br>`
         } else {
           texteCorr += `${miseEnEvidence(`\\dfrac{${texNombre(deuxiemeLigne[colonneReference].nombre)}}{${texNombre(premiereLigne[colonneReference].nombre)}}`)}`
           texteCorr += '$.<br>'
         }
       } else {
-        texteCorr += `${miseEnEvidence(`\\dfrac{${texNombre(deuxiemeLigne[colonneReference].nombre)}}{${texNombre(premiereLigne[colonneReference].nombre)}}`, 'blue')}`
+        texteCorr += `${miseEnEvidence(`\\dfrac{${texNombre(deuxiemeLigne[colonneReference].nombre)}}{${texNombre(premiereLigne[colonneReference].nombre)}}`, bleuMathalea)}`
         texteCorr += `= ${miseEnEvidence(texNombre(coefficient))}$.<br>`
       }
       texteCorr +=

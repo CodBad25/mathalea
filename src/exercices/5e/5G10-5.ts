@@ -12,6 +12,7 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 export const amcReady = true
 export const amcType = 'qcmMono'
 export const interactifReady = true
@@ -198,7 +199,7 @@ export default class ReconnaitreQuadrilatereParticulier extends Exercice {
           D = point(-2, 3)
           O = point(0, 3)
           ABCD = polygone(A, B, C, D)
-          marquesCotes = codageSegments('||', 'blue', A, B, B, C, C, D, D, A)
+          marquesCotes = codageSegments('||', bleuMathalea, A, B, B, C, C, D, D, A)
           if (this.correctionDetaillee) {
             texteCorr =
               mathalea2d(
@@ -223,8 +224,8 @@ export default class ReconnaitreQuadrilatereParticulier extends Exercice {
           sBD = segment(B, D)
           sAC.pointilles = 5
           sBD.pointilles = 5
-          marquesDemiDiagonales1 = codageSegments('|', 'blue', O, A, O, C)
-          marquesDemiDiagonales2 = codageSegments('|||', 'blue', O, B, O, D)
+          marquesDemiDiagonales1 = codageSegments('|', bleuMathalea, O, A, O, C)
+          marquesDemiDiagonales2 = codageSegments('|||', bleuMathalea, O, B, O, D)
           if (this.correctionDetaillee) {
             texteCorr =
               mathalea2d(
@@ -278,7 +279,7 @@ export default class ReconnaitreQuadrilatereParticulier extends Exercice {
           sBD = segment(B, D)
           marquesDemiDiagonales = codageSegments(
             '||',
-            'blue',
+            bleuMathalea,
             O,
             A,
             O,
@@ -337,7 +338,7 @@ export default class ReconnaitreQuadrilatereParticulier extends Exercice {
           codage1 = codageAngleDroit(A, B, C)
           codage2 = codageAngleDroit(B, C, D)
           codage3 = codageAngleDroit(C, D, A)
-          marquesCotes = codageSegments('||', 'blue', A, B, B, C, C, D, D, A)
+          marquesCotes = codageSegments('||', bleuMathalea, A, B, B, C, C, D, D, A)
           if (this.correctionDetaillee) {
             texteCorr =
               mathalea2d(
@@ -367,7 +368,7 @@ export default class ReconnaitreQuadrilatereParticulier extends Exercice {
           sBD.pointilles = 5
           marquesDemiDiagonales = codageSegments(
             '||',
-            'blue',
+            bleuMathalea,
             O,
             A,
             O,
@@ -400,7 +401,7 @@ export default class ReconnaitreQuadrilatereParticulier extends Exercice {
           O = point(1.5, 1.5)
           ABCD = polygone(A, B, C, D)
           codage = codageAngleDroit(A, B, C)
-          marquesCotes = codageSegments('||', 'blue', A, B, B, C, C, D, D, A)
+          marquesCotes = codageSegments('||', bleuMathalea, A, B, B, C, C, D, D, A)
           if (this.correctionDetaillee) {
             texteCorr =
               mathalea2d(

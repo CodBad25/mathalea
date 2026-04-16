@@ -16,7 +16,7 @@ import { imagePointParTransformation } from '../../modules/imagePointParTransfor
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { orangeMathalea } from '../../lib/colors'
+import { orangeMathalea, bleuMathalea } from '../../lib/colors'
 
 export const titre =
   "Trouver les coordonnées de l'image d'un point par une symétrie centrale (quart de plan)"
@@ -53,7 +53,7 @@ export default class DemiTourEtCoordonnees extends Exercice {
     let Cprime: PointAbstrait = pointAbstrait(0, 0)
     const lettre1 = ['A', 'B', 'C']
     const punto: number[][] = [[]]
-    const couleurs = ['brown', 'green', 'blue']
+    const couleurs = ['brown', 'green', bleuMathalea]
     for (
       let ee = 0,
         texte,

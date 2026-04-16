@@ -20,6 +20,7 @@ import Grandeur from '../../modules/Grandeur'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 
 export const titre = 'Aire du parallélogramme'
 
@@ -69,8 +70,8 @@ export default class AireDuParallelogramme extends Exercice {
       let i = 0, texte, texteCorr, c, h, A, B, P, C, I, H, s, cpt = 0;
       i < this.nbQuestions && cpt < 50;
     ) {
-      texteCorr = `Dans chaque parallélogramme, le segment en pointillés est ${texteEnCouleurEtGras('perpendiculaire', 'blue')} à deux côtés opposés, c'est donc une ${texteEnCouleurEtGras('hauteur', 'blue')}.<br>`
-      texteCorr += `Pour obtenir l'aire, il faut multiplier cette ${texteEnCouleurEtGras('hauteur', 'blue')} par la longueur de la ${texteEnCouleurEtGras('base', 'blue')} correspondante.`
+      texteCorr = `Dans chaque parallélogramme, le segment en pointillés est ${texteEnCouleurEtGras('perpendiculaire', bleuMathalea)} à deux côtés opposés, c'est donc une ${texteEnCouleurEtGras('hauteur', bleuMathalea)}.<br>`
+      texteCorr += `Pour obtenir l'aire, il faut multiplier cette ${texteEnCouleurEtGras('hauteur', bleuMathalea)} par la longueur de la ${texteEnCouleurEtGras('base', bleuMathalea)} correspondante.`
       switch (listeTypeQuestions[i]) {
         case 'type1':
           c = randint(3, 7)
