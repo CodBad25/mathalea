@@ -164,7 +164,7 @@ export function verifQuestionMathLive(
         }
         const [nbBonnesReponses, nbReponses] = bareme(points)
         return {
-          isOk: resultat,
+          isOk: resultat === 'OK',
           feedback: '',
           score: { nbBonnesReponses, nbReponses },
         }

@@ -8,6 +8,7 @@
   import { verifQuestionCliqueFigure } from '../../../lib/interactif/cliqueFigure'
   import {
     prepareExerciceCliqueFigure,
+    uniformiseResults,
     verifQuestionMetaInteractif2d,
     verifQuestionMultiMathfield,
   } from '../../../lib/interactif/gestionInteractif'
@@ -52,7 +53,11 @@
 
   /** Callback quand les résultats changent */
   export let onResultsChange: (data: {
-    resultsByQuestion: boolean[]
+    resultsByQuestion: {
+      isOk: boolean
+      feedback: string
+      score: { nbBonnesReponses: number; nbReponses: number }
+    }[]
   }) => void = () => {}
 
   /** Index de la question courante */
@@ -62,7 +67,11 @@
   let questions: (string | IExercice)[] = []
 
   /** Résultats par question */
-  let resultsByQuestion: boolean[] = []
+  let resultsByQuestion: {
+    isOk: boolean
+    feedback: string
+    score: { nbBonnesReponses: number; nbReponses: number }
+  }[] = []
 
   /** Référence vers le conteneur racine du composant */
   let containerRef: HTMLDivElement
@@ -118,57 +127,76 @@
           exercice: exercice.uuid,
         },
       )
-      resultsByQuestion[i] = false
+      resultsByQuestion[i] = {
+        isOk: false,
+        feedback: 'Exercice non interactif',
+        score: { nbBonnesReponses: 0, nbReponses: 0 },
+      }
       return
     }
-    if (type.toLowerCase() === 'mathlive' || type === 'fillInTheBlank') {
-      const resu = verifQuestionMathLive(
-        exercices[indiceExercice[i]],
-        indiceQuestionInExercice[i],
+    if (
+      type.toLowerCase() === 'mathlive' ||
+      type === 'fillInTheBlank' ||
+      type === 'tableauMathlive'
+    ) {
+      const resu = uniformiseResults(
+        verifQuestionMathLive(
+          exercices[indiceExercice[i]],
+          indiceQuestionInExercice[i],
+        ),
       )
-      resultsByQuestion[i] =
-        resu !== undefined && (resu.isOk === 'OK' || resu.isOk === true)
+      resultsByQuestion[i] = resu
     } else if (type === 'qcm') {
-      resultsByQuestion[i] =
+      resultsByQuestion[i] = uniformiseResults(
         verifQuestionQcm(
           exercices[indiceExercice[i]],
           indiceQuestionInExercice[i],
-        ) === 'OK'
+        ),
+      )
     } else if (type === 'listeDeroulante') {
-      resultsByQuestion[i] =
+      resultsByQuestion[i] = uniformiseResults(
         verifQuestionListeDeroulante(
           exercices[indiceExercice[i]],
           indiceQuestionInExercice[i],
-        ) === 'OK'
+        ),
+      )
     } else if (type === 'cliqueFigure') {
-      resultsByQuestion[i] =
+      resultsByQuestion[i] = uniformiseResults(
         verifQuestionCliqueFigure(
           exercices[indiceExercice[i]],
           indiceQuestionInExercice[i],
-        ) === 'OK'
+        ),
+      )
     } else if (type === 'custom') {
-      resultsByQuestion[i] =
+      resultsByQuestion[i] = uniformiseResults(
         exercices[indiceExercice[i]].correctionInteractive!(
           indiceQuestionInExercice[i],
-        ) === 'OK'
+        ),
+      )
     } else if (type === 'multiMathfield') {
-      const resu = verifQuestionMultiMathfield(
-        exercices[indiceExercice[i]],
-        indiceQuestionInExercice[i],
+      const resu = uniformiseResults(
+        verifQuestionMultiMathfield(
+          exercices[indiceExercice[i]],
+          indiceQuestionInExercice[i],
+        ),
       )
-      resultsByQuestion[i] = resu.isOk // En attendant mieux, mais ça ne va pas du tout...
+      resultsByQuestion[i] = resu // En attendant mieux, mais ça ne va pas du tout...
     } else if (type === 'MetaInteractif2d') {
-      const resu = verifQuestionMetaInteractif2d(
-        exercices[indiceExercice[i]],
-        indiceQuestionInExercice[i],
+      const resu = uniformiseResults(
+        verifQuestionMetaInteractif2d(
+          exercices[indiceExercice[i]],
+          indiceQuestionInExercice[i],
+        ),
       )
-      resultsByQuestion[i] = resu.isOk
+      resultsByQuestion[i] = resu
     } else if (type === 'svgSelection') {
-      const resu = verifQuestionSvgSelection(
-        exercices[indiceExercice[i]],
-        indiceQuestionInExercice[i],
+      const resu = uniformiseResults(
+        verifQuestionSvgSelection(
+          exercices[indiceExercice[i]],
+          indiceQuestionInExercice[i],
+        ),
       )
-      resultsByQuestion[i] = resu === 'OK'
+      resultsByQuestion[i] = resu
     } else {
       window.notify(
         "Problème dans QuestionParPage.svelte : type d'interactif non géré",
@@ -321,15 +349,38 @@
             Question {k + 1}
             <span
               class="ml-2 text-sm"
-              class:hidden={resultsByQuestion[k] !== true}>😎</span
+              class:hidden={resultsByQuestion[k] == null ||
+                resultsByQuestion[k].isOk !== true}>😎</span
             >
             <span
               class="ml-2 text-sm"
-              class:hidden={resultsByQuestion[k] !== false}>☹️</span
+              class:hidden={resultsByQuestion[k] == null ||
+                resultsByQuestion[k].isOk !== false}>☹️</span
             >
           </div>
         </button>
       </div>
+      {#if resultsByQuestion[k]}
+        <span
+          class="ml-4 text-lg font-bold {resultsByQuestion[k].score
+            .nbBonnesReponses /
+            resultsByQuestion[k].score.nbReponses ===
+          0
+            ? 'text-coopmaths-action-dark'
+            : resultsByQuestion[k].score.nbBonnesReponses /
+                  resultsByQuestion[k].score.nbReponses <
+                0.5
+              ? 'text-coopmaths-action-700'
+              : resultsByQuestion[k].score.nbBonnesReponses /
+                    resultsByQuestion[k].score.nbReponses ===
+                  1
+                ? 'text-coopmaths-warn-1100'
+                : 'text-coopmaths-warn-900'}"
+        >
+          Score : {resultsByQuestion[k].score
+            .nbBonnesReponses}/{resultsByQuestion[k].score.nbReponses}
+        </span>
+      {/if}
       <div
         class={currentIndex === k ? '' : 'hidden'}
         id={`exercice${indiceExercice[k]}Q${k}`}
