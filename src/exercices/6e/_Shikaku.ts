@@ -4,6 +4,7 @@ import { grille } from '../../lib/2d/Grille'
 import { point } from '../../lib/2d/PointAbstrait'
 import { nommePolygone, polygone } from '../../lib/2d/polygones'
 import { texteParPosition } from '../../lib/2d/textes'
+import { bleuMathalea } from '../../lib/colors'
 import { shuffle } from '../../lib/outils/arrayOutils'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { randint } from '../../modules/outils'
@@ -105,14 +106,14 @@ export default class Shikaku {
         ),
       )
       if (type === 'solution') {
-        /* const box = boite({ Xmin: rectangle.x, Ymin: rectangle.y, Xmax: rectangle.x + rectangle.largeur, Ymax: rectangle.y + rectangle.hauteur, color: 'blue' })
+        /* const box = boite({ Xmin: rectangle.x, Ymin: rectangle.y, Xmax: rectangle.x + rectangle.largeur, Ymax: rectangle.y + rectangle.hauteur, color: bleuMathalea })
          */
         const box = new BoiteBuilder({
           xMin: rectangle.x,
           yMin: rectangle.y,
           xMax: rectangle.x + rectangle.largeur,
           yMax: rectangle.y + rectangle.hauteur,
-        }).addColor({ color: 'blue' })
+        }).addColor({ color: bleuMathalea })
         objets.push(box.render())
       }
     }

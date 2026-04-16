@@ -16,6 +16,7 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 
 export const titre =
   "Décomposer une fraction (partie entière + fraction inférieure à 1) puis donner l'écriture décimale"
@@ -87,7 +88,7 @@ export default class ExerciceFractionsDifferentesEcritures extends Exercice {
         height: 120,
       })
       figure.options.automaticUserMessage = false
-      figure.options.color = 'blue'
+      figure.options.color = bleuMathalea
       figure.create('RectangleFractionDiagram', {
         denominator: 2,
         numberOfRectangles: 5,

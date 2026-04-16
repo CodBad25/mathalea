@@ -11,6 +11,7 @@ import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 
 export const titre = 'Placer un événement sur une échelle de probabilités'
 export const dateDeModifImportante = '09/08/2025'
@@ -341,7 +342,7 @@ export default class PlacerProbabilitesV2 extends Exercice {
           'milieu',
         ),
       )
-      lstObjetCorr.push(tracePoint(point(L * p, 0), 'blue'))
+      lstObjetCorr.push(tracePoint(point(L * p, 0), bleuMathalea))
     }
     for (let i = 0; i < nbEvenement; i++) {
       p = lstEvenenementExo[i][1]

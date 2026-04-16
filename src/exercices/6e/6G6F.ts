@@ -24,6 +24,7 @@ import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 
 export const titre = 'Construire un triangle et son cercle circonscrit'
 export const dateDePublication = '27/08/2025'
@@ -96,7 +97,7 @@ export default class ConstruireUnTriangleEtSonCercleCirconscrit extends Exercice
       const d2 = mediatrice(B, C) as Droite
       const d3 = mediatrice(A, C) as Droite
       const cod1 = codageMediatrice(B, A, 'red', '||')
-      const cod2 = codageMediatrice(C, B, 'blue', 'O')
+      const cod2 = codageMediatrice(C, B, bleuMathalea, 'O')
       const cod3 = codageMediatrice(A, C, 'green', '//')
       const O = pointIntersectionDD(d1, d2, 'O')
       O.positionLabel = 'above'

@@ -15,6 +15,7 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 
 export const dateDePublication = '28/09/2022'
 export const titre = "Trouver une valeur approchée ou l'arrondi d'un décimal"
@@ -134,7 +135,7 @@ export default class ArrondirUnDecimal extends Exercice {
             3,
             true,
           )
-            .replace('0', miseEnEvidence(ci, 'blue'))
+            .replace('0', miseEnEvidence(ci, bleuMathalea))
             .replace('0', miseEnEvidence(mi))
           if (mi < 5) {
             handleAnswers(this, i, {
@@ -186,7 +187,7 @@ export default class ArrondirUnDecimal extends Exercice {
               u * 1 +
               (0 * 0.1 + 0 * 0.01 + mi * 0.001),
           )
-            .replace('0', miseEnEvidence(di, 'blue'))
+            .replace('0', miseEnEvidence(di, bleuMathalea))
             .replace('0', miseEnEvidence(ci))
           if (ci < 5) {
             handleAnswers(this, i, {
@@ -254,7 +255,7 @@ export default class ArrondirUnDecimal extends Exercice {
             nbDecimales,
             true,
           )
-            .replace('0', miseEnEvidence(u, 'blue'))
+            .replace('0', miseEnEvidence(u, bleuMathalea))
             .replace('0', miseEnEvidence(di))
             .replace(this.version === 'CM1' ? '99' : '', '')
           if (di < 5) {
@@ -296,7 +297,7 @@ export default class ArrondirUnDecimal extends Exercice {
               (di * 0.1 + 0 * 0.01 + mi * 0.001),
             3,
             true,
-          ).replace('0', miseEnEvidence(ci, 'blue'))
+          ).replace('0', miseEnEvidence(ci, bleuMathalea))
           if (valeurdegaucheoudroite === 1) {
             handleAnswers(this, i, {
               reponse: {
@@ -348,7 +349,7 @@ export default class ArrondirUnDecimal extends Exercice {
               (0 * 0.1 + ci * 0.01 + mi * 0.001),
             3,
             true,
-          ).replace('0', miseEnEvidence(di, 'blue'))
+          ).replace('0', miseEnEvidence(di, bleuMathalea))
           if (valeurdegaucheoudroite === 1) {
             handleAnswers(this, i, {
               reponse: {
@@ -414,7 +415,7 @@ export default class ArrondirUnDecimal extends Exercice {
               (di * 0.1 + ci * 0.01 + mi * 0.001),
             nbDecimales,
             true,
-          ).replace('0', miseEnEvidence(u, 'blue'))
+          ).replace('0', miseEnEvidence(u, bleuMathalea))
           if (valeurdegaucheoudroite === 1) {
             handleAnswers(this, i, {
               reponse: {

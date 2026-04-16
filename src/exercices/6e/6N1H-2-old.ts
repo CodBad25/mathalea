@@ -19,6 +19,7 @@ import Exercice from '../Exercice'
 import { droiteGraduee } from '../../lib/2d/DroiteGraduee'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { bleuMathalea } from '../../lib/colors'
 
 export const titre = 'Lire des abscisses décimales sous trois formes'
 export const interactifReady = true
@@ -122,7 +123,7 @@ export default class LireAbscisseDecimaleTroisFormes extends Exercice {
           ],
           pointTaille: 6,
           pointOpacite: 0.8,
-          pointCouleur: 'blue',
+          pointCouleur: bleuMathalea,
           pointStyle: '|',
           pointEpaisseur: 2,
           axeStyle: extremite,
@@ -170,7 +171,7 @@ export default class LireAbscisseDecimaleTroisFormes extends Exercice {
           ],
           pointTaille: 6,
           pointOpacite: 0.8,
-          pointCouleur: 'blue',
+          pointCouleur: bleuMathalea,
           pointStyle: '|',
           pointEpaisseur: 2,
           axeStyle: extremite,
@@ -224,7 +225,7 @@ export default class LireAbscisseDecimaleTroisFormes extends Exercice {
           labelListe: [[xmin + 0.09, stringNombre(xmin + 0.09, 2)]],
           pointTaille: 6,
           pointOpacite: 0.8,
-          pointCouleur: 'blue',
+          pointCouleur: bleuMathalea,
           pointStyle: '|',
           pointEpaisseur: 2,
           axeStyle: extremite,

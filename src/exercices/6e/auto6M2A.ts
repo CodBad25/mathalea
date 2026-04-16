@@ -38,7 +38,7 @@ import {
 } from '../../modules/outils'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
-import { orangeMathalea } from '../../lib/colors'
+import { orangeMathalea, bleuMathalea } from '../../lib/colors'
 
 export const dateDePublication = '08/06/2022'
 export const dateDeModifImportante = '22/01/2025'
@@ -110,7 +110,7 @@ export default class CompareAireEtPerimetreAvecRectangle extends Exercice {
     })
 
     const color = combinaisonListes(
-      ['red', 'blue', 'green', 'gray', 'pink', orangeMathalea],
+      ['red', bleuMathalea, 'green', 'gray', 'pink', orangeMathalea],
       this.nbQuestions,
     )
 

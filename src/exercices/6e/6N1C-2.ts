@@ -3,7 +3,7 @@ import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { labelPoint, latex2d } from '../../lib/2d/textes'
 import { tracePoint } from '../../lib/2d/TracePoint'
-import { orangeMathalea } from '../../lib/colors'
+import { orangeMathalea, bleuMathalea } from '../../lib/colors'
 import { combinaisonListes, shuffle } from '../../lib/outils/arrayOutils'
 import { lettreIndiceeDepuisChiffre } from '../../lib/outils/outilString'
 import { texNombre } from '../../lib/outils/texNombre'
@@ -197,7 +197,7 @@ export default class PlacerUnPointAbscisseEntiere2d extends Exercice {
             size: 5,
             width: 3,
             opacite: 0.7,
-            color: 'blue',
+            color: bleuMathalea,
             radius: tailleUnite / 25,
           })
           mesObjets.push(monPoint)

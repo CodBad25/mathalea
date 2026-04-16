@@ -51,7 +51,7 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { orangeMathalea } from '../../lib/colors'
+import { orangeMathalea, bleuMathalea } from '../../lib/colors'
 
 export const dateDeModifImportante = '11/04/2025'
 export const interactifReady = true
@@ -102,7 +102,7 @@ export default class Transformations extends Exercice {
     d2.opacite = 0.5
     d3.opacite = 0.5
     d4.opacite = 0.5
-    const couleurs = ['brown', 'green', 'blue', 'purple']
+    const couleurs = ['brown', 'green', bleuMathalea, 'purple']
 
     const xO = 4
     const yO = 4
@@ -1056,8 +1056,8 @@ export default class Transformations extends Exercice {
               traceIm,
               traceO,
               labO,
-              segment(M[i], O, 'blue'),
-              segment(N[i], O, 'blue'),
+              segment(M[i], O, bleuMathalea),
+              segment(N[i], O, bleuMathalea),
               codageSegments('||', 'red', M[i], O, O, N[i]),
               afficheMesureAngle(M[i], O, N[i]),
             )
@@ -1079,8 +1079,8 @@ export default class Transformations extends Exercice {
               traceIm,
               traceO,
               labO,
-              segment(M[i], O, 'blue'),
-              segment(N[i], O, 'blue'),
+              segment(M[i], O, bleuMathalea),
+              segment(N[i], O, bleuMathalea),
               codageSegments('||', 'red', M[i], O, O, N[i]),
               afficheMesureAngle(M[i], O, N[i]),
             )
@@ -1102,8 +1102,8 @@ export default class Transformations extends Exercice {
               traceIm,
               traceO,
               labO,
-              segment(M[i], O, 'blue'),
-              segment(N[i], O, 'blue'),
+              segment(M[i], O, bleuMathalea),
+              segment(N[i], O, bleuMathalea),
               codageSegments('||', 'red', M[i], O, O, N[i]),
               afficheMesureAngle(M[i], O, N[i]),
             )
@@ -1125,8 +1125,8 @@ export default class Transformations extends Exercice {
               traceIm,
               traceO,
               labO,
-              segment(M[i], O, 'blue'),
-              segment(N[i], O, 'blue'),
+              segment(M[i], O, bleuMathalea),
+              segment(N[i], O, bleuMathalea),
               codageSegments('||', 'red', M[i], O, O, N[i]),
               afficheMesureAngle(M[i], O, N[i]),
             )

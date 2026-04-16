@@ -33,6 +33,7 @@ import {
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 
 export const amcReady = true
 export const amcType = 'AMCHybride'
@@ -131,10 +132,10 @@ export default class ExerciceInformationsProblemes extends Exercice {
               texte += 'Quel est le nombre total de livres distribués ?'
               reponse = nb1 * nb4
               texteCorr +=
-                `$${miseEnEvidence(nb1, 'blue')} \\times ${miseEnEvidence(nb4, 'blue')}$` +
-                texteEnCouleurEtGras(' livres', 'blue') +
-                `$${sp()}=${miseEnEvidence(reponse, 'blue')}$` +
-                texteEnCouleurEtGras(' livres', 'blue') +
+                `$${miseEnEvidence(nb1, bleuMathalea)} \\times ${miseEnEvidence(nb4, bleuMathalea)}$` +
+                texteEnCouleurEtGras(' livres', bleuMathalea) +
+                `$${sp()}=${miseEnEvidence(reponse, bleuMathalea)}$` +
+                texteEnCouleurEtGras(' livres', bleuMathalea) +
                 '<br>'
               texteCorr += `$${miseEnEvidence(reponse)}$ livres sont distribués par le professeur.`
               if (this.interactif) {
@@ -155,10 +156,10 @@ export default class ExerciceInformationsProblemes extends Exercice {
                 'Quelle est la masse totale des livres distribués à chaque enfant ?'
               reponse = nb5 * nb4
               texteCorr +=
-                `$${miseEnEvidence(nb5, 'blue')}$` +
-                texteEnCouleurEtGras(' g', 'blue') +
-                `$${sp()}\\times${sp()}${miseEnEvidence(nb4, 'blue')}=${miseEnEvidence(texNombre(reponse), 'blue')}$` +
-                texteEnCouleurEtGras(' g', 'blue') +
+                `$${miseEnEvidence(nb5, bleuMathalea)}$` +
+                texteEnCouleurEtGras(' g', bleuMathalea) +
+                `$${sp()}\\times${sp()}${miseEnEvidence(nb4, bleuMathalea)}=${miseEnEvidence(texNombre(reponse), bleuMathalea)}$` +
+                texteEnCouleurEtGras(' g', bleuMathalea) +
                 '<br>'
               texteCorr += `La masse totale des livres distribués à chaque enfant est de $${miseEnEvidence(texNombre(reponse))}$ g.`
               if (this.interactif) {
@@ -234,10 +235,10 @@ export default class ExerciceInformationsProblemes extends Exercice {
             case 1:
               texte += 'Quel est le prix total des fruits achetés ?'
               texteCorr +=
-                `$${miseEnEvidence(nb4, 'blue')} \\times ${miseEnEvidence(nb5, 'blue')}$` +
-                texteEnCouleurEtGras(' €', 'blue') +
-                `$${sp()}=${miseEnEvidence(texPrix(reponse1), 'blue')}$` +
-                texteEnCouleurEtGras(' €', 'blue') +
+                `$${miseEnEvidence(nb4, bleuMathalea)} \\times ${miseEnEvidence(nb5, bleuMathalea)}$` +
+                texteEnCouleurEtGras(' €', bleuMathalea) +
+                `$${sp()}=${miseEnEvidence(texPrix(reponse1), bleuMathalea)}$` +
+                texteEnCouleurEtGras(' €', bleuMathalea) +
                 '<br>'
               texteCorr += `Le prix total des fruits achetés est de $${miseEnEvidence(texPrix(reponse1))}$ €.`
               if (this.interactif) {
@@ -297,10 +298,10 @@ export default class ExerciceInformationsProblemes extends Exercice {
             default:
               texte += 'Quel est le prix total des légumes achetés ?'
               texteCorr +=
-                `$${miseEnEvidence(nb1, 'blue')} \\times ${miseEnEvidence(nb3, 'blue')}$` +
-                texteEnCouleurEtGras(' €', 'blue') +
-                `$${sp()}=${miseEnEvidence(texPrix(reponse2), 'blue')}$` +
-                texteEnCouleurEtGras(' €', 'blue') +
+                `$${miseEnEvidence(nb1, bleuMathalea)} \\times ${miseEnEvidence(nb3, bleuMathalea)}$` +
+                texteEnCouleurEtGras(' €', bleuMathalea) +
+                `$${sp()}=${miseEnEvidence(texPrix(reponse2), bleuMathalea)}$` +
+                texteEnCouleurEtGras(' €', bleuMathalea) +
                 '<br>'
               texteCorr += `Le prix total des légumes achetés est de $${miseEnEvidence(texPrix(reponse2))}$ €.`
               if (this.interactif) {
@@ -373,12 +374,12 @@ export default class ExerciceInformationsProblemes extends Exercice {
               texte += `Combien d'habitants compte le village de Saint-${quidam}-Le-Bouquetin ?`
               reponse = nb1 - nb5
               texteCorr +=
-                `$${miseEnEvidence(nb1, 'blue')}$` +
-                texteEnCouleurEtGras(' habitants', 'blue') +
-                `$${sp()}-${sp()} ${miseEnEvidence(nb5, 'blue')}$` +
-                texteEnCouleurEtGras(' habitants', 'blue') +
-                `$${sp()}=${miseEnEvidence(texNombre(reponse), 'blue')}$` +
-                texteEnCouleurEtGras(' habitants', 'blue') +
+                `$${miseEnEvidence(nb1, bleuMathalea)}$` +
+                texteEnCouleurEtGras(' habitants', bleuMathalea) +
+                `$${sp()}-${sp()} ${miseEnEvidence(nb5, bleuMathalea)}$` +
+                texteEnCouleurEtGras(' habitants', bleuMathalea) +
+                `$${sp()}=${miseEnEvidence(texNombre(reponse), bleuMathalea)}$` +
+                texteEnCouleurEtGras(' habitants', bleuMathalea) +
                 '<br>'
               texteCorr += `Le village de Saint-${quidam}-Le-Bouquetin compte $${miseEnEvidence(texNombre(reponse))}$ habitants.`
               if (this.interactif) {
@@ -398,12 +399,12 @@ export default class ExerciceInformationsProblemes extends Exercice {
               texte += `À quelle altitude se situe le village de Saint-${quidam}-Le-Bouquetin ?`
               reponse = nb2 + nb4
               texteCorr +=
-                `$${miseEnEvidence(nb2, 'blue')}$` +
-                texteEnCouleurEtGras(' m', 'blue') +
-                `$${sp()}+${sp()} ${miseEnEvidence(nb4, 'blue')}$` +
-                texteEnCouleurEtGras(' m', 'blue') +
-                `$${sp()}=${miseEnEvidence(texNombre(reponse), 'blue')}$` +
-                texteEnCouleurEtGras(' m', 'blue') +
+                `$${miseEnEvidence(nb2, bleuMathalea)}$` +
+                texteEnCouleurEtGras(' m', bleuMathalea) +
+                `$${sp()}+${sp()} ${miseEnEvidence(nb4, bleuMathalea)}$` +
+                texteEnCouleurEtGras(' m', bleuMathalea) +
+                `$${sp()}=${miseEnEvidence(texNombre(reponse), bleuMathalea)}$` +
+                texteEnCouleurEtGras(' m', bleuMathalea) +
                 '<br>'
               texteCorr += `Le village de Saint-${quidam}-Le-Bouquetin se situe à $${miseEnEvidence(texNombre(reponse))}\\text{ m}$ d'altitude.`
               if (this.interactif) {
@@ -479,11 +480,11 @@ export default class ExerciceInformationsProblemes extends Exercice {
               texte += `Combien y a-t-il de cases dans le manga de ${quidam2} ?`
               reponse1 = nb3 * nb5
               texteCorr +=
-                `$${miseEnEvidence(nb3, 'blue')}$` +
-                texteEnCouleurEtGras(' cases', 'blue') +
-                `$${sp()}\\times${sp()} ${miseEnEvidence(nb5, 'blue')}$` +
-                `$${sp()}=${miseEnEvidence(texNombre(reponse1), 'blue')}$` +
-                texteEnCouleurEtGras(' cases', 'blue') +
+                `$${miseEnEvidence(nb3, bleuMathalea)}$` +
+                texteEnCouleurEtGras(' cases', bleuMathalea) +
+                `$${sp()}\\times${sp()} ${miseEnEvidence(nb5, bleuMathalea)}$` +
+                `$${sp()}=${miseEnEvidence(texNombre(reponse1), bleuMathalea)}$` +
+                texteEnCouleurEtGras(' cases', bleuMathalea) +
                 '<br>'
               texteCorr += `Il y a $${miseEnEvidence(texNombre(reponse1))}$ cases dans le manga de ${quidam2}.`
               if (this.interactif) {
@@ -543,12 +544,12 @@ export default class ExerciceInformationsProblemes extends Exercice {
             default:
               texte += `Lorsqu'elle a acheté son manga, quelle somme d'argent a-t-on rendu à ${quidam2} ?`
               texteCorr +=
-                `$${miseEnEvidence(nb4, 'blue')}$` +
-                texteEnCouleurEtGras(' €', 'blue') +
-                `$${sp()}-${sp()} ${miseEnEvidence(nb2, 'blue')}$` +
-                texteEnCouleurEtGras(' €', 'blue') +
-                `$${sp()}=${miseEnEvidence(texPrix(reponse2), 'blue')}$` +
-                texteEnCouleurEtGras(' €', 'blue') +
+                `$${miseEnEvidence(nb4, bleuMathalea)}$` +
+                texteEnCouleurEtGras(' €', bleuMathalea) +
+                `$${sp()}-${sp()} ${miseEnEvidence(nb2, bleuMathalea)}$` +
+                texteEnCouleurEtGras(' €', bleuMathalea) +
+                `$${sp()}=${miseEnEvidence(texPrix(reponse2), bleuMathalea)}$` +
+                texteEnCouleurEtGras(' €', bleuMathalea) +
                 '<br>'
               texteCorr += `On a rendu à ${quidam2} $${miseEnEvidence(texPrix(reponse2))}$ €.`
               if (this.interactif) {
@@ -640,13 +641,13 @@ export default class ExerciceInformationsProblemes extends Exercice {
             case 1:
               texte += 'Quelle est la durée prévue du film ?'
               texteCorr +=
-                texteEnCouleurEtGras(nb3, 'blue') +
+                texteEnCouleurEtGras(nb3, bleuMathalea) +
                 `$${sp()}-${sp()}$` +
-                texteEnCouleurEtGras(nb2, 'blue') +
+                texteEnCouleurEtGras(nb2, bleuMathalea) +
                 `${sp()}=${sp()}` +
                 texteEnCouleurEtGras(
                   minToHour(reponse1[0] * 60 + reponse1[1]),
-                  'blue',
+                  bleuMathalea,
                 ) +
                 '<br>'
               texteCorr += `La durée prévue du film est de ${texteEnCouleurEtGras(minToHour(reponse1[0] * 60 + reponse1[1]))}.`
@@ -731,13 +732,13 @@ export default class ExerciceInformationsProblemes extends Exercice {
             default:
               texte += "À quelle heure se termine l'émission ?"
               texteCorr +=
-                texteEnCouleurEtGras(nb4, 'blue') +
+                texteEnCouleurEtGras(nb4, bleuMathalea) +
                 `$${sp()}+${sp()}$` +
-                texteEnCouleurEtGras(nb5 + ' minutes', 'blue') +
+                texteEnCouleurEtGras(nb5 + ' minutes', bleuMathalea) +
                 `${sp()}=${sp()}` +
                 texteEnCouleurEtGras(
                   minToHour(reponse2[0] * 60 + reponse2[1]),
-                  'blue',
+                  bleuMathalea,
                 ) +
                 '<br>'
               texteCorr += `L'émission se termine à ${texteEnCouleurEtGras(minToHoraire(reponse2[0] * 60 + reponse2[1]))}.`
@@ -842,10 +843,10 @@ export default class ExerciceInformationsProblemes extends Exercice {
               texte += `Quel est le montant de chaque versement que payera la ${personnage1} de ${quidam2} ?`
               reponse1 = arrondi(nb2 / nb5)
               texteCorr +=
-                `$${miseEnEvidence(nb2, 'blue')}$` +
-                texteEnCouleurEtGras(' €', 'blue') +
-                `$${sp()}\\div${sp()}${miseEnEvidence(nb5, 'blue')}=${miseEnEvidence(texPrix(reponse1), 'blue')}$` +
-                texteEnCouleurEtGras(' €', 'blue') +
+                `$${miseEnEvidence(nb2, bleuMathalea)}$` +
+                texteEnCouleurEtGras(' €', bleuMathalea) +
+                `$${sp()}\\div${sp()}${miseEnEvidence(nb5, bleuMathalea)}=${miseEnEvidence(texPrix(reponse1), bleuMathalea)}$` +
+                texteEnCouleurEtGras(' €', bleuMathalea) +
                 '<br>'
               texteCorr += `La ${personnage1} de ${quidam2} payera $${nb5}$ fois, la somme de $${miseEnEvidence(texPrix(reponse1))}$ €.`
               if (this.interactif) {
@@ -905,12 +906,12 @@ export default class ExerciceInformationsProblemes extends Exercice {
             default:
               texte += `Quel est le montant total des cadeaux offerts à ${quidam2} ?`
               texteCorr +=
-                `$${miseEnEvidence(nb4, 'blue')}$` +
-                texteEnCouleurEtGras(' €', 'blue') +
-                `$${sp()}+${sp()}${miseEnEvidence(nb2, 'blue')}$` +
-                texteEnCouleurEtGras(' €', 'blue') +
-                `$${sp()}=${sp()}${miseEnEvidence(texPrix(reponse2), 'blue')}$` +
-                texteEnCouleurEtGras(' €', 'blue') +
+                `$${miseEnEvidence(nb4, bleuMathalea)}$` +
+                texteEnCouleurEtGras(' €', bleuMathalea) +
+                `$${sp()}+${sp()}${miseEnEvidence(nb2, bleuMathalea)}$` +
+                texteEnCouleurEtGras(' €', bleuMathalea) +
+                `$${sp()}=${sp()}${miseEnEvidence(texPrix(reponse2), bleuMathalea)}$` +
+                texteEnCouleurEtGras(' €', bleuMathalea) +
                 '<br>'
               texteCorr += `Le montant total des cadeaux offerts à ${quidam2} est de $${miseEnEvidence(texPrix(reponse2))}$ €.`
               if (this.interactif) {
@@ -987,12 +988,12 @@ export default class ExerciceInformationsProblemes extends Exercice {
               texte += `Quel est l'âge de ${quidam2} ?`
               reponse1 = nb1 + 2 + nb3
               texteCorr +=
-                `$${miseEnEvidence(nb3, 'blue')}$` +
-                texteEnCouleurEtGras(' ans', 'blue') +
-                `$${sp()}+${sp()}${miseEnEvidence(nb1 + 2, 'blue')}$` +
-                texteEnCouleurEtGras(' ans', 'blue') +
-                `$${sp()}=${miseEnEvidence(reponse1, 'blue')}$` +
-                texteEnCouleurEtGras(' ans', 'blue') +
+                `$${miseEnEvidence(nb3, bleuMathalea)}$` +
+                texteEnCouleurEtGras(' ans', bleuMathalea) +
+                `$${sp()}+${sp()}${miseEnEvidence(nb1 + 2, bleuMathalea)}$` +
+                texteEnCouleurEtGras(' ans', bleuMathalea) +
+                `$${sp()}=${miseEnEvidence(reponse1, bleuMathalea)}$` +
+                texteEnCouleurEtGras(' ans', bleuMathalea) +
                 '<br>'
               texteCorr += `${quidam2} a $${miseEnEvidence(reponse1)}$ ans.`
               if (this.interactif) {
@@ -1052,16 +1053,16 @@ export default class ExerciceInformationsProblemes extends Exercice {
             default:
               texte += `Combien mesure ${quidam2} ?`
               texteCorr +=
-                `$${miseEnEvidence(nb4, 'blue')}$` +
-                texteEnCouleurEtGras(' m', 'blue') +
-                `$${sp()}+${sp()}${miseEnEvidence(nb5, 'blue')}$` +
-                texteEnCouleurEtGras(' cm', 'blue') +
-                `$${sp()}=${sp()}${miseEnEvidence(nb4, 'blue')}$` +
-                texteEnCouleurEtGras(' m', 'blue') +
-                `$${sp()}+${sp()}${miseEnEvidence(texNombre(arrondi(nb5 / 100)), 'blue')}$` +
-                texteEnCouleurEtGras(' m', 'blue') +
-                `$${sp()}=${sp()}${miseEnEvidence(texNombre(reponse2), 'blue')}$` +
-                texteEnCouleurEtGras(' m', 'blue') +
+                `$${miseEnEvidence(nb4, bleuMathalea)}$` +
+                texteEnCouleurEtGras(' m', bleuMathalea) +
+                `$${sp()}+${sp()}${miseEnEvidence(nb5, bleuMathalea)}$` +
+                texteEnCouleurEtGras(' cm', bleuMathalea) +
+                `$${sp()}=${sp()}${miseEnEvidence(nb4, bleuMathalea)}$` +
+                texteEnCouleurEtGras(' m', bleuMathalea) +
+                `$${sp()}+${sp()}${miseEnEvidence(texNombre(arrondi(nb5 / 100)), bleuMathalea)}$` +
+                texteEnCouleurEtGras(' m', bleuMathalea) +
+                `$${sp()}=${sp()}${miseEnEvidence(texNombre(reponse2), bleuMathalea)}$` +
+                texteEnCouleurEtGras(' m', bleuMathalea) +
                 '<br>'
               texteCorr += `${quidam2} mesure $${miseEnEvidence(texNombre(reponse2))}\\text{ m}$.`
               if (this.interactif) {
@@ -1138,10 +1139,10 @@ export default class ExerciceInformationsProblemes extends Exercice {
             case 1:
               texte += `Combien le ${personnage1} de ${quidam} dépense-t-il chaque semaine pour son journal ?`
               texteCorr +=
-                `$${miseEnEvidence(nb2, 'blue')} \\times ${miseEnEvidence(nb4, 'blue')}$` +
-                texteEnCouleurEtGras(' €', 'blue') +
-                `$${sp()}=${miseEnEvidence(texPrix(reponse1), 'blue')}$` +
-                texteEnCouleurEtGras(' €', 'blue') +
+                `$${miseEnEvidence(nb2, bleuMathalea)} \\times ${miseEnEvidence(nb4, bleuMathalea)}$` +
+                texteEnCouleurEtGras(' €', bleuMathalea) +
+                `$${sp()}=${miseEnEvidence(texPrix(reponse1), bleuMathalea)}$` +
+                texteEnCouleurEtGras(' €', bleuMathalea) +
                 '<br>'
               texteCorr += `Le ${personnage1} de ${quidam} dépense chaque semaine $${miseEnEvidence(texPrix(reponse1))}$ € pour son journal.`
               if (this.interactif) {
@@ -1201,13 +1202,13 @@ export default class ExerciceInformationsProblemes extends Exercice {
             default:
               texte += `À quelle heure le ${personnage1} de ${quidam} arrive-t-il à son travail ?`
               texteCorr +=
-                texteEnCouleurEtGras(nb3, 'blue') +
+                texteEnCouleurEtGras(nb3, bleuMathalea) +
                 `$${sp()}+${sp()}$` +
-                texteEnCouleurEtGras(nb5 + ' min', 'blue') +
+                texteEnCouleurEtGras(nb5 + ' min', bleuMathalea) +
                 `${sp()}=${sp()}` +
                 texteEnCouleurEtGras(
                   minToHour(reponse2[0] * 60 + reponse2[1]),
-                  'blue',
+                  bleuMathalea,
                 ) +
                 '<br>'
               texteCorr += `Le ${personnage1} de ${quidam} arrive à son travail ${texteEnCouleurEtGras(minToHoraire(reponse2[0] * 60 + reponse2[1]))}.`
@@ -1307,12 +1308,12 @@ export default class ExerciceInformationsProblemes extends Exercice {
               texte += "Quelle distance sépare l'entrepôt du premier arrêt ?"
               reponse = nb5 - nb3
               texteCorr +=
-                `$${miseEnEvidence(nb5, 'blue')}$` +
-                `$${miseEnEvidence('\\text{ km}', 'blue')}$` +
-                `$${sp()}-${sp()} ${miseEnEvidence(nb3, 'blue')}$` +
-                `$${miseEnEvidence('\\text{ km}', 'blue')}$` +
-                `$${sp()}=${miseEnEvidence(reponse, 'blue')}$` +
-                `$${miseEnEvidence('\\text{ km}', 'blue')}$` +
+                `$${miseEnEvidence(nb5, bleuMathalea)}$` +
+                `$${miseEnEvidence('\\text{ km}', bleuMathalea)}$` +
+                `$${sp()}-${sp()} ${miseEnEvidence(nb3, bleuMathalea)}$` +
+                `$${miseEnEvidence('\\text{ km}', bleuMathalea)}$` +
+                `$${sp()}=${miseEnEvidence(reponse, bleuMathalea)}$` +
+                `$${miseEnEvidence('\\text{ km}', bleuMathalea)}$` +
                 '<br>'
               texteCorr += `La distance séparant l'entrepôt du premier arrêt est de $${miseEnEvidence(reponse)}\\text{ km}$.`
               if (this.interactif) {
@@ -1333,12 +1334,12 @@ export default class ExerciceInformationsProblemes extends Exercice {
                 'Combien de colis le livreur a-t-il déposé à son deuxième arrêt ?'
               reponse = nb1 - nb2
               texteCorr +=
-                `$${miseEnEvidence(nb1, 'blue')}$` +
-                texteEnCouleurEtGras(' colis', 'blue') +
-                `$${sp()}-${sp()} ${miseEnEvidence(nb2, 'blue')}$` +
-                texteEnCouleurEtGras(' colis', 'blue') +
-                `$${sp()}=${miseEnEvidence(reponse, 'blue')}$` +
-                texteEnCouleurEtGras(' colis', 'blue') +
+                `$${miseEnEvidence(nb1, bleuMathalea)}$` +
+                texteEnCouleurEtGras(' colis', bleuMathalea) +
+                `$${sp()}-${sp()} ${miseEnEvidence(nb2, bleuMathalea)}$` +
+                texteEnCouleurEtGras(' colis', bleuMathalea) +
+                `$${sp()}=${miseEnEvidence(reponse, bleuMathalea)}$` +
+                texteEnCouleurEtGras(' colis', bleuMathalea) +
                 '<br>'
               texteCorr += `Le livreur a déposé $${miseEnEvidence(reponse)}$ colis à son deuxième arrêt.`
               if (this.interactif) {
@@ -1430,12 +1431,12 @@ export default class ExerciceInformationsProblemes extends Exercice {
                 "Quelle est la masse, en kg, de chacun des petits conteneurs, sachant qu'ils ont tous la même masse ?"
               reponse1 = arrondi(reponse2 * 1000, 0)
               texteCorr +=
-                `$${miseEnEvidence(nb5, 'blue')}$` +
-                texteEnCouleurEtGras(' tonnes', 'blue') +
-                `$${sp()}\\div${sp()}${miseEnEvidence(nb4, 'blue')}=${miseEnEvidence(texNombre(reponse2), 'blue')}$` +
-                texteEnCouleurEtGras(' tonnes', 'blue') +
-                `$${sp()}=${miseEnEvidence(texNombre(reponse1), 'blue')}$` +
-                texteEnCouleurEtGras(' kg', 'blue') +
+                `$${miseEnEvidence(nb5, bleuMathalea)}$` +
+                texteEnCouleurEtGras(' tonnes', bleuMathalea) +
+                `$${sp()}\\div${sp()}${miseEnEvidence(nb4, bleuMathalea)}=${miseEnEvidence(texNombre(reponse2), bleuMathalea)}$` +
+                texteEnCouleurEtGras(' tonnes', bleuMathalea) +
+                `$${sp()}=${miseEnEvidence(texNombre(reponse1), bleuMathalea)}$` +
+                texteEnCouleurEtGras(' kg', bleuMathalea) +
                 '<br>'
               texteCorr += `La masse de chacun des petits conteneurs est de $${miseEnEvidence(texNombre(reponse1))}$ kg.`
               if (this.interactif) {
@@ -1497,10 +1498,10 @@ export default class ExerciceInformationsProblemes extends Exercice {
                 'Quelle est la masse totale, en tonnes, des gros conteneurs ?'
               reponse = nb2 * nb3
               texteCorr +=
-                `$${miseEnEvidence(nb2, 'blue')} \\times ${miseEnEvidence(nb3, 'blue')}$` +
-                texteEnCouleurEtGras(' tonnes', 'blue') +
-                `$${sp()}=${miseEnEvidence(texNombre(reponse), 'blue')}$` +
-                texteEnCouleurEtGras(' tonnes', 'blue') +
+                `$${miseEnEvidence(nb2, bleuMathalea)} \\times ${miseEnEvidence(nb3, bleuMathalea)}$` +
+                texteEnCouleurEtGras(' tonnes', bleuMathalea) +
+                `$${sp()}=${miseEnEvidence(texNombre(reponse), bleuMathalea)}$` +
+                texteEnCouleurEtGras(' tonnes', bleuMathalea) +
                 '<br>'
               texteCorr += `La masse totale des gros conteneurs est de $${miseEnEvidence(texNombre(reponse))}$ tonnes.`
               if (this.interactif) {

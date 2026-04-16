@@ -16,6 +16,7 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 
 export const titre =
   'Construire un angle de mesure donnée avec autovérification'
@@ -175,7 +176,7 @@ export default class ConstruireUnAngle extends Exercice {
         ),
         droite,
         tracePoint(A),
-        codageAngle(C, A, D, 1, '', 'blue', 1, 1),
+        codageAngle(C, A, D, 1, '', bleuMathalea, 1, 1),
         labelPoint(A, C, DD),
         seg1,
         seg2,

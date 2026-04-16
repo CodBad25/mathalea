@@ -18,6 +18,7 @@ import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { setReponse } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
+import { bleuMathalea } from '../../lib/colors'
 
 export const titre = 'Déterminer le volume de pavés droit par dénombrement'
 export const interactifReady = true
@@ -114,7 +115,7 @@ export default class VolumesPavesParDenombrement extends Exercice {
                   -k * 1.5 + h * 1.5 - 1.5,
                   1,
                   'black',
-                  'blue',
+                  bleuMathalea,
                 ).c2d,
               )
             else if (i === l - 1 && j === 0 && k !== 0)
@@ -150,7 +151,7 @@ export default class VolumesPavesParDenombrement extends Exercice {
                   -k * 1.5 + h * 1.5 - 1.5,
                   1,
                   'black',
-                  'blue',
+                  bleuMathalea,
                   'green',
                   'red',
                 ).c2d,
@@ -191,7 +192,7 @@ export default class VolumesPavesParDenombrement extends Exercice {
         for (let i = 0; i < h * p; i++) {
           objetsAtracer.push(...pavesCorr[h * p - 1 - i])
         }
-        texteCorr = `La face de devant est composée de ${texteEnCouleur(String(l), 'blue')} $\\times$ ${texteEnCouleur(String(h), 'red')} cubes, soit ${l * h} cubes.<br>Donc le nombre de cubes de ce pavé droit est ${l * h} $\\times$ ${texteEnCouleur(String(p), 'green')} cubes, soit ${texteEnCouleurEtGras(l * h * p)} cubes.`
+        texteCorr = `La face de devant est composée de ${texteEnCouleur(String(l), bleuMathalea)} $\\times$ ${texteEnCouleur(String(h), 'red')} cubes, soit ${l * h} cubes.<br>Donc le nombre de cubes de ce pavé droit est ${l * h} $\\times$ ${texteEnCouleur(String(p), 'green')} cubes, soit ${texteEnCouleurEtGras(l * h * p)} cubes.`
         texteCorr += mathalea2d(
           { xmin: -1, ymin: -1, xmax: (l + p) * 1.5, ymax: h * 2 + p * 0.2 },
           objetsAtracer,

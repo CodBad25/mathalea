@@ -30,7 +30,7 @@ import { lettreDepuisChiffre } from '../../lib/outils/outilString'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { orangeMathalea } from '../../lib/colors'
+import { orangeMathalea, bleuMathalea } from '../../lib/colors'
 
 export const dateDePublication = '30/11/2020'
 export const dateDeModifImportante = '06/09/2024'
@@ -81,7 +81,7 @@ export default class ConstruireMediatrices6e extends Exercice {
 
       const dA = droiteParPointEtPerpendiculaire(A, medA)
       const dB = droiteParPointEtPerpendiculaire(B, medB)
-      medA.color = colorToLatexOrHTML('blue')
+      medA.color = colorToLatexOrHTML(bleuMathalea)
       medB.color = colorToLatexOrHTML('green')
       const cA = cercle(A, arrondi(randint(25, 40) / 20))
       const cB = cercle(B, arrondi(randint(45, 60) / 20))
@@ -171,7 +171,7 @@ export default class ConstruireMediatrices6e extends Exercice {
       objetsCorrection.push(
         medA,
         medB,
-        codageMediatrice(A1, A2, 'blue', marks[1]),
+        codageMediatrice(A1, A2, bleuMathalea, marks[1]),
         codageMediatrice(B1, B2, 'green', marks[2]),
       )
 

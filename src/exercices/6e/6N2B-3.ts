@@ -15,6 +15,7 @@ import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const titre =
@@ -82,8 +83,8 @@ export default class MultiplierUnDecimalParPuissanceDeDix extends Exercice {
     if (!context.isDiaporama && this.sup4) {
       this.consigne = lampeMessage({
         titre: '',
-        texte: `1${texteEnCouleur('4', 'green')},5 $\\times$ ${texteEnCouleur('10', 'blue')} = 1${texteEnCouleur('4', 'green')},5  ${texteEnCouleur('dizaines', 'blue')} = 1${texteEnCouleur('4', 'green')}5. <br>
-    En effet, le chiffre des unités ($${miseEnEvidence('4', 'green')}$) est devenu celui des ${texteEnCouleur('dizaines', 'blue')}.`,
+        texte: `1${texteEnCouleur('4', 'green')},5 $\\times$ ${texteEnCouleur('10', bleuMathalea)} = 1${texteEnCouleur('4', 'green')},5  ${texteEnCouleur('dizaines', bleuMathalea)} = 1${texteEnCouleur('4', 'green')}5. <br>
+    En effet, le chiffre des unités ($${miseEnEvidence('4', 'green')}$) est devenu celui des ${texteEnCouleur('dizaines', bleuMathalea)}.`,
         couleur: 'nombres',
       })
     }
@@ -114,9 +115,9 @@ export default class MultiplierUnDecimalParPuissanceDeDix extends Exercice {
       if (this.interactif) {
         texte += ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers)
       }
-      texteCorr = `$${texNombre(exemple, 2)} \\times ${miseEnCouleur(texNombre(10 ** (choixAlea - 3), 3), 'blue')} = $  `
-      texteCorr += `$${texNombre(exemple, 2)}$ ${texteEnCouleur(choixUnites[choixAlea], 'blue')} = $${miseEnEvidence(texNombre(exemple * 10 ** (choixAlea - 3), 5))}.$<br>`
-      texteCorr += `En effet, le chiffre des unités ( ${texteEnCouleur(unite, 'green')} ) est devenu celui des ${texteEnCouleur(choixUnites[choixAlea], 'blue')}. <br> `
+      texteCorr = `$${texNombre(exemple, 2)} \\times ${miseEnCouleur(texNombre(10 ** (choixAlea - 3), 3), bleuMathalea)} = $  `
+      texteCorr += `$${texNombre(exemple, 2)}$ ${texteEnCouleur(choixUnites[choixAlea], bleuMathalea)} = $${miseEnEvidence(texNombre(exemple * 10 ** (choixAlea - 3), 5))}.$<br>`
+      texteCorr += `En effet, le chiffre des unités ( ${texteEnCouleur(unite, 'green')} ) est devenu celui des ${texteEnCouleur(choixUnites[choixAlea], bleuMathalea)}. <br> `
       reponse = texNombre(exemple * 10 ** (choixAlea - 3))
       handleAnswers(this, i, { reponse: { value: reponse } })
       if (this.html) {

@@ -215,7 +215,7 @@ function questionAchat(exo: Exercice, i: number) {
     `${listeDeChose[index1][index2]} coûte $${miseEnEvidence(texPrix(x / n), bleuMathalea)}$ €.<br>` +
     `Cherchons maintenant le prix de $${y}$ ${objet}. <br>` +
     `$${y}$ ${objet}, c'est $${miseEnEvidence(y, bleuMathalea)}$ fois plus qu'${listeDeChose[index1][index2]}. <br>` +
-    `$${y}$ ${objet} coûtent donc $${miseEnEvidence(y, bleuMathalea)}$ fois plus que $${miseEnEvidence(texPrix(x / n), 'blue')}$ €, le prix d'${listeDeChose[index1][index2]}.` +
+    `$${y}$ ${objet} coûtent donc $${miseEnEvidence(y, bleuMathalea)}$ fois plus que $${miseEnEvidence(texPrix(x / n), bleuMathalea)}$ €, le prix d'${listeDeChose[index1][index2]}.` +
     `<br> $${miseEnEvidence(texPrix(x / n), bleuMathalea)}$ € $\\times ${miseEnEvidence(y, bleuMathalea)} = ${texPrix((x * y) / n)}$ €<br>` +
     ` ${texteEnCouleurEtGras('Conclusion :', 'black')} $${y}$ ${objet} coûtent $${miseEnEvidence(texPrix((x * y) / n))}$ €.`
   setReponse(exo, i, arrondi((x * y) / n, 2))
