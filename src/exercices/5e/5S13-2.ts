@@ -16,6 +16,7 @@ import {
 import Exercice from '../Exercice'
 
 import { tableauColonneLigne } from '../../lib/2d/tableau'
+import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { toutAUnPoint } from '../../lib/interactif/mathLive'
@@ -99,7 +100,7 @@ function graphique(
   etiquettes: string[],
   {
     reperageTraitPointille = false,
-    couleurDeRemplissage = 'blue',
+    couleurDeRemplissage = bleuMathalea,
     titreAxeVertical = '',
     titre = '',
     hauteurDiagramme = 8,

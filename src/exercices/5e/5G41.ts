@@ -21,6 +21,7 @@ import {
   pointIntersectionCC,
   pointIntersectionDD,
 } from '../../lib/2d/utilitairesPoint'
+import { bleuMathalea } from '../../lib/colors'
 import { choisitLettresDifferentes } from '../../lib/outils/aleatoires'
 import { choice } from '../../lib/outils/arrayOutils'
 import {
@@ -349,14 +350,25 @@ export default class ConstructionsParallelogrammesParticuliers extends Exercice 
           texteCorr += `Comme $${nom}$ est un parallélogramme, ses côtés opposés sont parallèles.<br>`
           texteCorr += `La diagonale $[${noms[0]}${noms[2]}]$ forme des angles $\\widehat{${noms[4] + noms[0] + noms[1]}}$ et $\\widehat{${noms[4] + noms[2] + noms[3]}}$ alternes-internes égaux.<br>`
           texteCorr += `De même les angles $\\widehat{${noms[4] + noms[0] + noms[3]}}$ et $\\widehat{${noms[4] + noms[2] + noms[1]}}$ sont alternes-internes égaux eux aussi.<br>`
-          texteCorr += `On en déduit que $\\widehat{${noms[4] + noms[0] + noms[3]}}=\\widehat{${noms[4] + noms[2] + noms[1]}}=${miseEnEvidence(c3, 'red')}^\\circ$ et que $\\widehat{${noms[4] + noms[0] + noms[1]}}=\\widehat{${noms[4] + noms[2] + noms[3]}}=${miseEnEvidence(c2, 'blue')}^\\circ$.<br>`
+          texteCorr += `On en déduit que $\\widehat{${noms[4] + noms[0] + noms[3]}}=\\widehat{${noms[4] + noms[2] + noms[1]}}=${miseEnEvidence(c3, 'red')}^\\circ$ et que $\\widehat{${noms[4] + noms[0] + noms[1]}}=\\widehat{${noms[4] + noms[2] + noms[3]}}=${miseEnEvidence(c2, bleuMathalea)}^\\circ$.<br>`
           texteCorr += `Construisons tout d'abord le triangle $${noms[0] + noms[1] + noms[2]}$ `
           texteCorr += `puis le point $${noms[3]}$ symétrique de $${noms[1]}$ par rapport à $${noms[4]}$.<br>`
         }
 
         texteCorr += `Le triangle $${noms[0] + noms[1] + noms[2]}$ n'est pas un triangle isocèle car ses angles ne sont pas égaux.<br>`
         texteCorr += `De plus, dans ce triangle $${noms[0] + noms[1] + noms[2]}$,  l'angle $\\widehat{${noms[0] + noms[1] + noms[2]}}$ mesure $${180 - c2 - c3}^\\circ$ et n'est pas droit donc $${miseEnEvidence(nom)}$ ${texteEnCouleurEtGras("n'est pas un paraléllogramme particulier")}.<br>`
-        t1 = afficheMesureAngle(O, A, B, 'blue', 1, texNombre(c2) + '^\\circ')
+        // t1 = afficheMesureAngle(O, A, B, bleuMathalea, 1, texNombre(c2) + '^\\circ')
+
+        t1 = afficheMesureAngle(
+          O,
+          A,
+          B,
+          // 'blue',
+          bleuMathalea, /// / EE : Pourquoi cette couleur en hexa fait planter object.assign ?
+          1,
+          texNombre(c2) + '^\\circ',
+        )
+
         t2 = afficheMesureAngle(O, C, B, 'red', 1, texNombre(c3) + '^\\circ')
         t3 = traceCompas(O, D, 30)
         t5 = tracePoint(O)
@@ -446,7 +458,7 @@ export default class ConstructionsParallelogrammesParticuliers extends Exercice 
           dd4,
           labelPoint(O),
           codageSegments('||', 'red', A, O, O, C),
-          codageSegments('|||', 'blue', B, O, O, D),
+          codageSegments('|||', bleuMathalea, B, O, O, D),
           afficheLongueurSegment(O, B),
         )
         if (this.sup3) {
@@ -487,7 +499,7 @@ export default class ConstructionsParallelogrammesParticuliers extends Exercice 
           dd4,
           labelPoint(O),
           codageSegments('||', 'red', A, O, O, C),
-          codageSegments('|||', 'blue', B, O, O, D),
+          codageSegments('|||', bleuMathalea, B, O, O, D),
           afficheMesureAngle(A, O, B, 'black', 1, alpha + '^\\circ'),
         )
         if (this.sup3) {
@@ -556,7 +568,7 @@ export default class ConstructionsParallelogrammesParticuliers extends Exercice 
           dd4,
           labelPoint(O),
           codageSegments('||', 'red', A, O, O, C),
-          codageSegments('|||', 'blue', B, O, O, D),
+          codageSegments('|||', bleuMathalea, B, O, O, D),
         )
         if (this.sup3) {
           objetsEnonce.push(cible1, cible2)
@@ -591,7 +603,7 @@ export default class ConstructionsParallelogrammesParticuliers extends Exercice 
           dd4,
           labelPoint(O),
           codageSegments('||', 'red', A, O, O, C),
-          codageSegments('|||', 'blue', B, O, O, D),
+          codageSegments('|||', bleuMathalea, B, O, O, D),
           afficheMesureAngle(B, A, D, 'black', 1, alpha + '^\\circ'),
           afficheLongueurSegment(B, A),
           afficheLongueurSegment(A, D),
@@ -635,7 +647,7 @@ export default class ConstructionsParallelogrammesParticuliers extends Exercice 
           dd4,
           labelPoint(O),
           codageSegments('||', 'red', A, O, O, C),
-          codageSegments('|||', 'blue', B, O, O, D),
+          codageSegments('|||', bleuMathalea, B, O, O, D),
         )
         if (this.sup3) {
           objetsEnonce.push(cible1, cible2)
@@ -675,9 +687,16 @@ export default class ConstructionsParallelogrammesParticuliers extends Exercice 
           dd4,
           labelPoint(O),
           codageSegments('||', 'red', A, O, O, C),
-          codageSegments('|||', 'blue', B, O, O, D),
+          codageSegments('|||', bleuMathalea, B, O, O, D),
           afficheMesureAngle(O, A, D, 'red', 1, texNombre(c3!) + '^\\circ'),
-          afficheMesureAngle(O, C, D, 'blue', 1, texNombre(c2!) + '^\\circ'),
+          afficheMesureAngle(
+            O,
+            C,
+            D,
+            bleuMathalea,
+            1,
+            texNombre(c2!) + '^\\circ',
+          ),
         )
         if (this.sup3) {
           objetsEnonce.push(cible3, cible1)

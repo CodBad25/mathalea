@@ -20,6 +20,7 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 
 export const interactifReady = true
 export const interactifType = 'multiMathfield'
@@ -131,7 +132,7 @@ export default class PerimetreAireEtPortionsDeDisques extends Exercice {
             quartDeDisque,
             codageSegments(
               '//',
-              context.isHtml ? 'blue' : 'black',
+              context.isHtml ? bleuMathalea : 'black',
               A,
               C,
               C,

@@ -27,6 +27,7 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 
 export const titre = 'Construire des parallélogrammes'
 export const dateDeModifImportante = '18/04/2024'
@@ -205,7 +206,7 @@ export default class ConstructionsParallelogrammes extends Exercice {
             traceCompas(D, C, 30),
             traceCompas(B, C, 30),
             codageSegments('||', 'red', A, B, D, C),
-            codageSegments('///', 'blue', A, D, B, C),
+            codageSegments('///', 'red', bleuMathalea, A, D, B, C),
           )
           animIEP.parallelogramme3sommetsConsecutifs(D, A, B, C.nom)
           if (this.sup3) {
@@ -246,7 +247,7 @@ export default class ConstructionsParallelogrammes extends Exercice {
             traceCompas(D, C, 30),
             traceCompas(B, C, 30),
             codageSegments('||', 'red', A, B, D, C),
-            codageSegments('///', 'blue', A, D, B, C),
+            codageSegments('///', 'red', bleuMathalea, A, D, B, C),
           )
           if (this.sup3) {
             texteCorr += `Le point $${noms[2]}$ se trouve dans la case ${cellule} de la cible.<br>`
@@ -276,7 +277,7 @@ export default class ConstructionsParallelogrammes extends Exercice {
             d3,
             d4,
             codageSegments('||', 'red', A, O, O, C),
-            codageSegments('|||', 'blue', B, O, O, D),
+            codageSegments('|||', bleuMathalea, B, O, O, D),
           )
           if (this.sup3) {
             texteCorr += `Le point $${noms[2]}$ se trouve dans la case ${cellule} de la cible 1.<br>`

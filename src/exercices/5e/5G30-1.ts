@@ -21,7 +21,7 @@ import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
-import { orangeMathalea } from '../../lib/colors'
+import { orangeMathalea, bleuMathalea } from '../../lib/colors'
 
 export const titre = "Déterminer des angles en utilisant les cas d'égalité"
 export const amcReady = true
@@ -129,7 +129,7 @@ export default class EgaliteDAngles extends Exercice {
           true,
         )
         const l1 = labelPoint(A, B, C, D, E)
-        const c1 = codageAngle(D, B, A, 1, '', 'blue', 2, 1, 'blue')
+        const c1 = codageAngle(D, B, A, 1, '', bleuMathalea, 2, 1, bleuMathalea)
         const c2 = codageAngle(B, D, E, 1, '', orangeMathalea, 2, 1, orangeMathalea)
         const c3 = codageAngle(D, E, A, 1, '', 'green', 2, 1, 'green')
         const c4 = codageAngle(D, B, C, 1, '', 'pink', 2, 1, 'pink')
@@ -158,7 +158,7 @@ export default class EgaliteDAngles extends Exercice {
         correction += `${numAlpha(4)} Comme les droites $(${noms[0]}${noms[4]})$ et $(${noms[1]}${noms[3]})$ sont parallèles, les angles correspondants $\\widehat{${noms[1]}${noms[3]}${noms[2]}}$ et $\\widehat{${noms[3]}${noms[4]}${noms[0]}}$ sont égaux, donc $\\widehat{${noms[3]}${noms[4]}${noms[0]}}$ mesure $${miseEnEvidence(180 - a - c, gras)}^\\circ$.<br>`
         correction += context.isAmc
           ? 'none'
-          : `${numAlpha(5)} La somme des angles du quadrilatère vaut donc : $${a}^\\circ+${miseEnEvidence(180 - a, 'blue')}^\\circ+${miseEnEvidence(a + c, 'blue')}^\\circ+${miseEnEvidence(180 - a - c, 'blue')}^\\circ=${miseEnEvidence(360)}^\\circ$.<br>`
+          : `${numAlpha(5)} La somme des angles du quadrilatère vaut donc : $${a}^\\circ+${miseEnEvidence(180 - a, bleuMathalea)}^\\circ+${miseEnEvidence(a + c, bleuMathalea)}^\\circ+${miseEnEvidence(180 - a - c, bleuMathalea)}^\\circ=${miseEnEvidence(360)}^\\circ$.<br>`
         correction += '$\\phantom{f/}$ La conjecture est bien vérifiée.'
         const reponsesAMC = [a, 180 - a, 180 - a - c, a + c, 180 - a - c]
         const params = {
@@ -224,7 +224,7 @@ export default class EgaliteDAngles extends Exercice {
           true,
         )
         const cD = codageAngle(C, D, B, 1, '', 'red', 2, 1, 'red', 0.2, true)
-        const cE = codageAngle(D, E, B, 1, '', 'blue', 2, 1, 'blue', 0.2, true)
+        const cE = codageAngle(D, E, B, 1, '', bleuMathalea, 2, 1, bleuMathalea, 0.2, true)
         const c4 = codageAngle(A, C, D, 1, '', 'green', 2, 1, 'green', 0.2)
         const c5 = codageAngle(B, D, E, 1, '', orangeMathalea, 2, 1, orangeMathalea, 0.2)
         const c6 = codageAngle(E, B, D, 1, '', 'pink', 2, 1, 'pink', 0.2)

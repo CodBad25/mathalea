@@ -21,6 +21,7 @@ import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
 
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { bleuMathalea } from '../../lib/colors'
 
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -102,7 +103,7 @@ export default class Milieu extends Exercice {
       const I = texteParPosition('I', 1, -0.5, 0, 'black', 1)
       const J = texteParPosition('J', -0.5, 1, 0, 'black', 1)
       const o = texteParPosition('O', -0.3, -0.3, 0, 'black', 1)
-      const s = segment(A, B, 'blue')
+      const s = segment(A, B, bleuMathalea)
 
       s.epaisseur = 2
       // s3 = codageSegments('X', 'red', s1, s2)

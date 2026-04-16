@@ -33,6 +33,7 @@ import {
 import { texNombre } from '../../lib/outils/texNombre'
 import { ajouteQuestionMathlive } from '../../lib/interactif/questionMathLive'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 export const titre =
   "Produire une forme littérale à partir d'une figure géométrique"
 export const interactifReady = true
@@ -453,7 +454,7 @@ export default class perimetreVersFormule extends Exercice {
         }
 
         // const rotpol = pol
-        const rotseg = rotation(seg, O, theta, '', '', 'blue')
+        const rotseg = rotation(seg, O, theta, '', '', bleuMathalea)
 
         appels2D.push(c)
         appels2D.push(rotseg)
@@ -584,10 +585,10 @@ export default class perimetreVersFormule extends Exercice {
         let a: Arc
         if (params.idDemiCercle === 0) {
           segBC = segment(rotB, rotC)
-          segCD = segment(rotC, rotD, 'blue')
+          segCD = segment(rotC, rotD, bleuMathalea)
           a = arc(rotC, milieu(rotC, rotD), 180)
         } else {
-          segBC = segment(rotB, rotC, 'blue')
+          segBC = segment(rotB, rotC, bleuMathalea)
           segCD = segment(rotC, rotD)
           a = arc(rotB, milieu(rotB, rotC), 180)
         }

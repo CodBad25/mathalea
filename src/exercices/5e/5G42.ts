@@ -11,6 +11,7 @@ import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 export const titre = 'Déterminer la nature de parallélogrammes'
 export const interactifReady = true
 export const interactifType = 'qcm'
@@ -104,9 +105,9 @@ export default class DemonstrationsParallelogrammes extends Exercice {
       C = similitude(A, O, 180, 0.9 + randint(1, 20) / 100, noms[2])
       D = similitude(B, O, 180, 0.9 + randint(1, 20) / 100, noms[3])
       p = polygoneAvecNom(A, B, C, D)
-      s1 = segment(A, B, 'blue')
+      s1 = segment(A, B, bleuMathalea)
       s2 = segment(B, C, 'red')
-      s3 = segment(C, D, 'blue')
+      s3 = segment(C, D, bleuMathalea)
       s4 = segment(D, A, 'red')
       d1 = segment(A, C)
       d2 = segment(B, D)
@@ -131,7 +132,7 @@ export default class DemonstrationsParallelogrammes extends Exercice {
           type = 'losange'
           t1 = codageSegments('||', 'red', A, O, O, C)
           t2 = codageAngleDroit(A, O, D)
-          t3 = codageSegments('|||', 'blue', B, O, O, D)
+          t3 = codageSegments('|||', bleuMathalea, B, O, O, D)
           t4 = labelPoint(O)
           objets.push(t1, t2, t3, t4, d1, d2)
           break

@@ -17,6 +17,7 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 
@@ -175,7 +176,7 @@ $${miseEnCouleur(`${nombres[0]} ${signes[1]}${miseEnCouleur(`\\overset{${calcul1
               redaction = rediger(calcul1, signes[1], nombres[2].toString())
               if (this.sup3) redaction = parseExpression(calcul2EN) // sans parenthèse inutile
               texteCorr = `$${miseEnCouleur(`${calcul1} = ${resultat1}`, 'red')}$<br>
-$${miseEnCouleur(`${miseEnCouleur(`\\overset{${calcul1}}{${resultat1}}`, 'red')} ${signes[1]} ${nombres[2]} = ${resultat2}`, 'blue')}$<br>
+$${miseEnCouleur(`${miseEnCouleur(`\\overset{${calcul1}}{${resultat1}}`, 'red')} ${signes[1]} ${nombres[2]} = ${resultat2}`, bleuMathalea)}$<br>
 `
               break
             }
@@ -223,9 +224,9 @@ $${miseEnCouleur(`${miseEnCouleur(`\\overset{${calcul1}}{${resultat1}}`, 'red')}
               if (this.sup3) redaction = parseExpression(calcul3EN) // sans parenthèse inutile
               texteCorr = `
 $${miseEnCouleur(`${calcul1} = ${resultat1}`, 'red')}$<br>
-$${miseEnCouleur(`${calcul2} = ${resultat2}`, 'blue')}$<br>
-$${miseEnCouleur(`${miseEnCouleur(`\\overset{${calcul1}}{${resultat1}}`, 'red')} ${signes[2]} ${miseEnCouleur(`\\overset{${calcul2}}{${resultat2}}`, 'blue')} = ${resultat3}`, 'green')}$<br>
-$${miseEnCouleur(`(${calcul1})`, 'red')} ${signes[2]} ${miseEnCouleur(`${miseEnCouleur(`(${calcul2})`, 'blue')} = ${nombreCible}`, 'green')}$<br><br>`
+$${miseEnCouleur(`${calcul2} = ${resultat2}`, bleuMathalea)}$<br>
+$${miseEnCouleur(`${miseEnCouleur(`\\overset{${calcul1}}{${resultat1}}`, 'red')} ${signes[2]} ${miseEnCouleur(`\\overset{${calcul2}}{${resultat2}}`, bleuMathalea)} = ${resultat3}`, 'green')}$<br>
+$${miseEnCouleur(`(${calcul1})`, 'red')} ${signes[2]} ${miseEnCouleur(`${miseEnCouleur(`(${calcul2})`, bleuMathalea)} = ${nombreCible}`, 'green')}$<br><br>`
               break
             }
             default: {
@@ -267,12 +268,12 @@ $${miseEnCouleur(`(${calcul1})`, 'red')} ${signes[2]} ${miseEnCouleur(`${miseEnC
               )
               if (this.sup3) redaction = parseExpression(calcul3EN) // sans parenthèse inutile
               texteCorr = `$${miseEnCouleur(`${calcul1} = ${resultat1}`, 'red')}$<br>
-$${miseEnCouleur(`${miseEnCouleur(`\\overset{${calcul1}}{${resultat1}}`, 'red')} ${signes[1]} ${nombres[2]} = ${resultat2}`, 'blue')}$<br><br>
-$${miseEnCouleur(`${miseEnCouleur(`\\overset{${miseEnCouleur(`(${calcul1})`, 'red')} ${signes[1]} ${nombres[2]}}{${resultat2}}`, 'blue')} ${signes[2]} ${nombres[2]} = ${resultat3}`, 'green')}$<br><br>
+$${miseEnCouleur(`${miseEnCouleur(`\\overset{${calcul1}}{${resultat1}}`, 'red')} ${signes[1]} ${nombres[2]} = ${resultat2}`, bleuMathalea)}$<br><br>
+$${miseEnCouleur(`${miseEnCouleur(`\\overset{${miseEnCouleur(`(${calcul1})`, 'red')} ${signes[1]} ${nombres[2]}}{${resultat2}}`, bleuMathalea)} ${signes[2]} ${nombres[2]} = ${resultat3}`, 'green')}$<br><br>
 `
               derniereLigneCorrection = miseEnCouleur(
                 `(${miseEnCouleur(`(${calcul1})`, 'red')}${signes[1]}${nombres[2]})`,
-                'blue',
+                bleuMathalea,
               )
               derniereLigneCorrection = miseEnCouleur(
                 `(${derniereLigneCorrection}${signes[2]}${nombres[3]})`,
@@ -333,11 +334,11 @@ $${miseEnCouleur(`${miseEnCouleur(`\\overset{${miseEnCouleur(`(${calcul1})`, 're
               if (this.sup3) redaction = parseExpression(calcul4EN) // sans parenthèse inutile
               texteCorr = `
 $${miseEnCouleur(`${calcul1} = ${resultat1}`, 'red')}$<br>
-$${miseEnCouleur(`${calcul2} = ${resultat2}`, 'blue')}$<br>
+$${miseEnCouleur(`${calcul2} = ${resultat2}`, bleuMathalea)}$<br>
 $${miseEnCouleur(`${miseEnCouleur(`\\overset{${calcul1}}{${resultat1}}`, 'red')} ${signes[2]} ${nombres[4]} = ${resultat3}`, 'green')}$<br>
-$${miseEnCouleur(`\\overset{${calcul2}}{${resultat2}}`, 'blue')} ${signes[3]} ${miseEnCouleur(`\\overset{${miseEnCouleur(`(${calcul1})`, 'red')} ${signes[2]} ${nombres[4]}}{${resultat3}}`, 'green')} = ${nombreCible}$<br>
+$${miseEnCouleur(`\\overset{${calcul2}}{${resultat2}}`, bleuMathalea)} ${signes[3]} ${miseEnCouleur(`\\overset{${miseEnCouleur(`(${calcul1})`, 'red')} ${signes[2]} ${nombres[4]}}{${resultat3}}`, 'green')} = ${nombreCible}$<br>
 <br>
-$${miseEnCouleur(`(${calcul2})`, 'blue')} ${signes[3]} ${miseEnCouleur(`(${miseEnCouleur(`(${calcul1})`, 'red')} ${signes[2]} ${nombres[4]})`, 'green')} = ${nombreCible}$<br>
+$${miseEnCouleur(`(${calcul2})`, bleuMathalea)} ${signes[3]} ${miseEnCouleur(`(${miseEnCouleur(`(${calcul1})`, 'red')} ${signes[2]} ${nombres[4]})`, 'green')} = ${nombreCible}$<br>
 <br>
 `
               break
@@ -388,11 +389,11 @@ $${miseEnCouleur(`(${calcul2})`, 'blue')} ${signes[3]} ${miseEnCouleur(`(${miseE
               if (this.sup3) redaction = parseExpression(calcul4EN) // sans parenthèse inutile
               texteCorr = `
 $${miseEnCouleur(`${calcul1} = ${resultat1}`, 'red')}$<br>
-$${miseEnCouleur(`${calcul2} = ${resultat2}`, 'blue')}$<br>
-$${miseEnCouleur(`${miseEnCouleur(`\\overset{${calcul2}}{${resultat2}}`, 'blue')} ${signes[2]} ${nombres[4]} = ${resultat3}`, 'green')}$<br>
-$${miseEnCouleur(`\\overset{${calcul1}}{${resultat1}}`, 'red')} ${signes[3]} ${miseEnCouleur(`\\overset{${miseEnCouleur(`(${calcul2})`, 'blue')} ${signes[2]} ${nombres[4]}}{${resultat3}}`, 'green')} = ${nombreCible}$<br>
+$${miseEnCouleur(`${calcul2} = ${resultat2}`, bleuMathalea)}$<br>
+$${miseEnCouleur(`${miseEnCouleur(`\\overset{${calcul2}}{${resultat2}}`, bleuMathalea)} ${signes[2]} ${nombres[4]} = ${resultat3}`, 'green')}$<br>
+$${miseEnCouleur(`\\overset{${calcul1}}{${resultat1}}`, 'red')} ${signes[3]} ${miseEnCouleur(`\\overset{${miseEnCouleur(`(${calcul2})`, bleuMathalea)} ${signes[2]} ${nombres[4]}}{${resultat3}}`, 'green')} = ${nombreCible}$<br>
 <br>
-$${miseEnCouleur(`(${calcul1})`, 'red')} ${signes[3]} ${miseEnCouleur(`(${miseEnCouleur(`(${calcul2})`, 'blue')} ${signes[2]} ${nombres[4]})`, 'green')} = ${nombreCible}$<br>
+$${miseEnCouleur(`(${calcul1})`, 'red')} ${signes[3]} ${miseEnCouleur(`(${miseEnCouleur(`(${calcul2})`, bleuMathalea)} ${signes[2]} ${nombres[4]})`, 'green')} = ${nombreCible}$<br>
 <br>
 `
               break
@@ -443,11 +444,11 @@ $${miseEnCouleur(`(${calcul1})`, 'red')} ${signes[3]} ${miseEnCouleur(`(${miseEn
               if (this.sup3) redaction = parseExpression(calcul4EN) // sans parenthèse inutile
               texteCorr = `
 $${miseEnCouleur(`${calcul1} = ${resultat1}`, 'red')}$<br>
-$${miseEnCouleur(`${miseEnCouleur(`\\overset{${calcul1}}{${resultat1}}`, 'red')} ${signes[1]} ${nombres[2]} = ${resultat2}`, 'blue')}$<br>
+$${miseEnCouleur(`${miseEnCouleur(`\\overset{${calcul1}}{${resultat1}}`, 'red')} ${signes[1]} ${nombres[2]} = ${resultat2}`, bleuMathalea)}$<br>
 $${miseEnCouleur(`${calcul3} = ${resultat3}`, 'green')}$<br>
-$${miseEnCouleur(`\\overset{${miseEnCouleur(`(${calcul1})`, 'red')} ${signes[1]} ${nombres[2]}}{${resultat2}}`, 'blue')} ${signes[3]} ${miseEnCouleur(`\\overset{${calcul3}}{${resultat3}}`, 'green')} = ${nombreCible}$<br>
+$${miseEnCouleur(`\\overset{${miseEnCouleur(`(${calcul1})`, 'red')} ${signes[1]} ${nombres[2]}}{${resultat2}}`, bleuMathalea)} ${signes[3]} ${miseEnCouleur(`\\overset{${calcul3}}{${resultat3}}`, 'green')} = ${nombreCible}$<br>
 <br>
-$${miseEnCouleur(`(${miseEnCouleur(`(${calcul1})`, 'red')} ${signes[1]} ${nombres[2]})`, 'blue')} ${signes[3]} ${miseEnCouleur(`(${calcul3})`, 'green')} = ${nombreCible}$<br>
+$${miseEnCouleur(`(${miseEnCouleur(`(${calcul1})`, 'red')} ${signes[1]} ${nombres[2]})`, bleuMathalea)} ${signes[3]} ${miseEnCouleur(`(${calcul3})`, 'green')} = ${nombreCible}$<br>
 <br>
 `
               break
@@ -502,12 +503,12 @@ $${miseEnCouleur(`(${miseEnCouleur(`(${calcul1})`, 'red')} ${signes[1]} ${nombre
               if (this.sup3) redaction = parseExpression(calcul4EN) // sans parenthèse inutile
 
               texteCorr = `$${miseEnCouleur(`${calcul1} = ${resultat1}`, 'red')}$<br>
-$${miseEnCouleur(`${miseEnCouleur(`\\overset{${calcul1}}{${resultat1}}`, 'red')} ${signes[1]} ${nombres[2]} = ${resultat2}`, 'blue')}$<br>`
-              texteCorr += `$${miseEnCouleur(`\\overset{${miseEnCouleur(`${miseEnCouleur(`(${calcul1})`, 'red')} ${signes[1]} ${nombres[2]}`, 'blue')}}{${miseEnCouleur(resultat2, 'blue')}} ${signes[2]} ${nombres[3]} = ${resultat3}`, 'green')}$<br>`
-              texteCorr += `$${miseEnCouleur(`\\overset{(${miseEnCouleur(`(${miseEnCouleur(`(${calcul1})`, 'red')}${signes[1]}${nombres[2]})`, 'blue')}${signes[2]}${nombres[3]})}{${resultat3}}`, 'green')} ${signes[3]} ${nombres[4]} = ${nombreCible}$<br><br>`
+$${miseEnCouleur(`${miseEnCouleur(`\\overset{${calcul1}}{${resultat1}}`, 'red')} ${signes[1]} ${nombres[2]} = ${resultat2}`, bleuMathalea)}$<br>`
+              texteCorr += `$${miseEnCouleur(`\\overset{${miseEnCouleur(`${miseEnCouleur(`(${calcul1})`, 'red')} ${signes[1]} ${nombres[2]}`, bleuMathalea)}}{${miseEnCouleur(resultat2, bleuMathalea)}} ${signes[2]} ${nombres[3]} = ${resultat3}`, 'green')}$<br>`
+              texteCorr += `$${miseEnCouleur(`\\overset{(${miseEnCouleur(`(${miseEnCouleur(`(${calcul1})`, 'red')}${signes[1]}${nombres[2]})`, bleuMathalea)}${signes[2]}${nombres[3]})}{${resultat3}}`, 'green')} ${signes[3]} ${nombres[4]} = ${nombreCible}$<br><br>`
               derniereLigneCorrection = miseEnCouleur(
                 `(${miseEnCouleur(`(${calcul1})`, 'red')}${signes[1]}${nombres[2]})`,
-                'blue',
+                bleuMathalea,
               )
               derniereLigneCorrection = miseEnCouleur(
                 `(${derniereLigneCorrection}${signes[2]}${nombres[3]})`,

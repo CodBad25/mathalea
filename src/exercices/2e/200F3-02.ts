@@ -11,6 +11,7 @@ import ExerciceSimple from '../ExerciceSimple'
 import { plot } from '../../lib/2d/Plot'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { bleuMathalea } from '../../lib/colors'
 
 export const titre = 'Lecture graphique de domaine de définition'
 export const interactifReady = true
@@ -147,18 +148,18 @@ export default class LectureEnsebleDef extends ExerciceSimple {
 
           courbeAvecTrace = [
             spline.courbe({
-              color: 'blue',
+              color: bleuMathalea,
               ajouteNoeuds: false,
               optionsNoeuds: { style: '.', epaisseur: 2 },
             }),
           ]
           if (ouvertGauche) {
             courbeAvecTrace.push(
-              croche(spline.x[0], spline.y[0], 'gauche', 0.1, 'blue'),
+              croche(spline.x[0], spline.y[0], 'gauche', 0.1, bleuMathalea),
             )
           } else {
             courbeAvecTrace.push(
-              plot(spline.x[0], spline.y[0], { couleur: 'blue' }),
+              plot(spline.x[0], spline.y[0], { couleur: bleuMathalea }),
             )
           }
           if (ouvertDroit) {
@@ -168,13 +169,13 @@ export default class LectureEnsebleDef extends ExerciceSimple {
                 spline.y[spline.n - 1],
                 'droit',
                 0.1,
-                'blue',
+                bleuMathalea,
               ),
             )
           } else {
             courbeAvecTrace.push(
               plot(spline.x[spline.n - 1], spline.y[spline.n - 1], {
-                couleur: 'blue',
+                couleur: bleuMathalea,
               }),
             )
           }

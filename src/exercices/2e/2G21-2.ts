@@ -1,6 +1,6 @@
 import Figure from 'apigeom'
 import type Point from 'apigeom/src/elements/points/Point'
-import { orangeMathalea } from '../../lib/colors'
+import { orangeMathalea, bleuMathalea } from '../../lib/colors'
 import figureApigeom, { isFigureArray } from '../../lib/figureApigeom'
 import { choice } from '../../lib/outils/arrayOutils'
 import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
@@ -162,7 +162,7 @@ export default class SommeDeVecteurs extends Exercice {
         // position: 'top'
       })
       this.figureApig[i].options.thickness = 3
-      this.figureApig[i].options.color = 'blue'
+      this.figureApig[i].options.color = bleuMathalea
       this.figureApig[i].buttons.get('POINT')?.click()
 
       /*
@@ -358,7 +358,7 @@ export default class SommeDeVecteurs extends Exercice {
           origin: pointOrigine,
           x: vecteur1.x,
           y: vecteur1.y,
-          color: 'blue',
+          color: bleuMathalea,
           thickness: 3,
           label: '\\vec{u}',
           isSelectable: false,
@@ -367,7 +367,7 @@ export default class SommeDeVecteurs extends Exercice {
           origin: pointOrigine,
           x: vecteur1.x,
           y: vecteur1.y,
-          color: 'blue',
+          color: bleuMathalea,
           thickness: 3,
           label: '\\vec{u}',
           isSelectable: false,
@@ -401,7 +401,7 @@ export default class SommeDeVecteurs extends Exercice {
           origin: pointOrigineChoix2,
           x: vecteur1.x,
           y: vecteur1.y,
-          color: 'blue',
+          color: bleuMathalea,
           thickness: 3,
           label: '\\vec{u}',
           isSelectable: false,
@@ -410,7 +410,7 @@ export default class SommeDeVecteurs extends Exercice {
           origin: pointOrigineChoix2Cor,
           x: vecteur1.x,
           y: vecteur1.y,
-          color: 'blue',
+          color: bleuMathalea,
           thickness: 3,
           label: '\\vec{u}',
           isSelectable: false,
@@ -424,7 +424,7 @@ export default class SommeDeVecteurs extends Exercice {
           origin: pointOrigine,
           x: vecteur2.x,
           y: vecteur2.y,
-          color: 'blue',
+          color: bleuMathalea,
           thickness: 3,
           label: '\\vec{v}',
           isSelectable: false,
@@ -433,7 +433,7 @@ export default class SommeDeVecteurs extends Exercice {
           origin: pointOrigine,
           x: vecteur2.x,
           y: vecteur2.y,
-          color: 'blue',
+          color: bleuMathalea,
           thickness: 3,
           label: '\\vec{v}',
           isSelectable: false,
@@ -467,7 +467,7 @@ export default class SommeDeVecteurs extends Exercice {
           origin: pointOrigineChoix3,
           x: vecteur2.x,
           y: vecteur2.y,
-          color: 'blue',
+          color: bleuMathalea,
           thickness: 3,
           label: '\\vec{v}',
           isSelectable: false,
@@ -476,7 +476,7 @@ export default class SommeDeVecteurs extends Exercice {
           origin: pointOrigineChoix3Cor,
           x: vecteur2.x,
           y: vecteur2.y,
-          color: 'blue',
+          color: bleuMathalea,
           thickness: 3,
           label: '\\vec{v}',
           isSelectable: false,

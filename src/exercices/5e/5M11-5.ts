@@ -40,6 +40,7 @@ import {
 } from '../../modules/outils'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 
 export const titre = 'Calculer périmètre et aire de figures composées'
 export const interactifReady = true
@@ -207,7 +208,7 @@ export default class PerimetreOuAireDeFiguresComposees extends Exercice {
             codageAngleDroit(C, E, A),
             codageSegments('/', 'black', A, B, C, E),
             codageSegments('//', 'black', B, C, A, E),
-            codageAngleDroit(E, C, D, 'blue'),
+            codageAngleDroit(E, C, D, bleuMathalea),
           )
           codagesSansDecoupage.push(
             codageAngleDroit(A, B, C),
@@ -529,7 +530,7 @@ export default class PerimetreOuAireDeFiguresComposees extends Exercice {
             codageAngleDroit(M, N, O),
             codageAngleDroit(N, O, P),
             codageAngleDroit(N, H, S),
-            codageAngleDroit(S, H, O, 'blue'),
+            codageAngleDroit(S, H, O, bleuMathalea),
             codageSegments('//', 'black', M, N, M, P, O, P),
           )
           const codagesDecoupages2 = [
@@ -964,7 +965,7 @@ export default class PerimetreOuAireDeFiguresComposees extends Exercice {
             codageAngleDroit(E, A, B),
             codageSegments('//', 'black', F, R, F, A, F, B),
             codageSegments('/', 'black', A, E, C, B),
-            codageAngleDroit(D, C, E, 'blue'),
+            codageAngleDroit(D, C, E, bleuMathalea),
           )
           const FR = segment(F, R)
           FR.pointilles = 5

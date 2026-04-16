@@ -20,6 +20,7 @@ import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { bleuMathalea } from '../../lib/colors'
 
 export const titre = 'Résoudre graphiquement une équation du type $f(x)=k$'
 export const interactifReady = true
@@ -294,9 +295,9 @@ export default class LecturesGraphiquesSurSplines extends Exercice {
       })
       const courbeATracer = theSpline.courbe({
         epaisseur: 1.2,
-        color: 'blue',
+        color: bleuMathalea,
         ajouteNoeuds: true,
-        optionsNoeuds: { color: 'blue', taille: 1, style: '.', epaisseur: 1.5 },
+        optionsNoeuds: { color: bleuMathalea, taille: 1, style: '.', epaisseur: 1.5 },
       })
       for (let j = 0; j < nombreAntecedentCherches1; j++) {
         for (let k = 0; k < theSpline.visibles.length; k++) {
@@ -305,9 +306,9 @@ export default class LecturesGraphiquesSurSplines extends Exercice {
       }
       const courbeCorrection = theSpline.courbe({
         epaisseur: 1.2,
-        color: 'blue',
+        color: bleuMathalea,
         ajouteNoeuds: true,
-        optionsNoeuds: { color: 'blue', taille: 1, style: '.', epaisseur: 1.5 },
+        optionsNoeuds: { color: bleuMathalea, taille: 1, style: '.', epaisseur: 1.5 },
       })
 
       objetsEnonce.push(repere1, courbeATracer)

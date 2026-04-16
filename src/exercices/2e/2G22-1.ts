@@ -19,7 +19,7 @@ import { homothetie } from '../../lib/2d/transformations'
 import { longueur } from '../../lib/2d/utilitairesGeometriques'
 import { milieu } from '../../lib/2d/utilitairesPoint'
 import { vecteur } from '../../lib/2d/Vecteur'
-import { orangeMathalea } from '../../lib/colors'
+import { orangeMathalea, bleuMathalea } from '../../lib/colors'
 import figureApigeom, { isFigureArray } from '../../lib/figureApigeom'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import {
@@ -210,19 +210,19 @@ export default class RepresenterUnVecteur extends Exercice {
 
       const H = point(this.xA[i] + ux, this.yA[i])
       const s = representant(AB, A) // On trace en rouge [AB]
-      const h1 = representant(vecteur(A, H), A, 'blue')
-      const h2 = representant(vecteur(H, B), H, 'blue')
+      const h1 = representant(vecteur(A, H), A, bleuMathalea)
+      const h2 = representant(vecteur(H, B), H, bleuMathalea)
       const longueurAH = latex2d(
         String(ux),
         milieu(A, H).x,
         milieu(A, H).y + 0.5,
-        { color: 'blue', letterSize: 'footnotesize' },
+        { color: bleuMathalea, letterSize: 'footnotesize' },
       )
       const longueurBH = latex2d(
         String(uy),
         milieu(B, H).x + 0.5,
         milieu(B, H).y,
-        { color: 'blue', letterSize: 'footnotesize' },
+        { color: bleuMathalea, letterSize: 'footnotesize' },
       )
       const O = point(0, 0) // On définit et on trace le point O
       const o = texteParPosition(
@@ -230,23 +230,23 @@ export default class RepresenterUnVecteur extends Exercice {
         -0.3,
         -0.3,
         0,
-        'blue',
+        bleuMathalea,
         0.75,
         'milieu',
         true,
       )
       const I = point(1, 0) // On définit sans tracer le point I
       const J = point(0, 1) // On définit sans tracer le point J
-      const k = representant(vecteur(O, I), O, 'blue') // Variable qui trace [OI] en bleu
-      const j = representant(vecteur(O, J), O, 'blue') // Variable qui trace [OJ] en bleu
+      const k = representant(vecteur(O, I), O, bleuMathalea) // Variable qui trace [OI] en bleu
+      const j = representant(vecteur(O, J), O, bleuMathalea) // Variable qui trace [OJ] en bleu
       s.epaisseur = 1.5 // Variable qui grossit le tracé du vecteur AB
       s.color = colorToLatexOrHTML(orangeMathalea)
       k.epaisseur = 1.1 // Variable qui grossit le tracé du vecteur OI
       j.epaisseur = 1.1 // Variable qui grossit le tracé du vecteur OJ
       h1.epaisseur = 1.5 // Variable qui grossit le tracé bleu
       h2.epaisseur = 1.5 // Variable qui grossit le tracé bleu
-      const nomi = nomVecteurParPosition('i', 0.5, -0.7, 0.7, 0, 'blue')
-      const nomj = nomVecteurParPosition('j', -0.7, 0.5, 0.7, 0, 'blue')
+      const nomi = nomVecteurParPosition('i', 0.5, -0.7, 0.7, 0, bleuMathalea)
+      const nomj = nomVecteurParPosition('j', -0.7, 0.5, 0.7, 0, bleuMathalea)
       const nomAB = representantNomme(AB, A, 'u', 0.7, 'red')
       let l: TexteParPoint[]
       if (listeQuestions[i] === 1) {

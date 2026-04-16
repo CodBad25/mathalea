@@ -17,6 +17,7 @@ import FractionEtendue from '../../modules/FractionEtendue'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 
 export const titre =
   "Associer des systèmes d'équations à leur représentation graphique"
@@ -199,7 +200,7 @@ export default class AssocierGraphiqueSysteme extends Exercice {
         a2 = a2Frac[0] * choice([-1, 1]) //
         d2 = a2Frac[1] //
         c2 = droite(a2 / d2, -1, b2)
-        c2.color = colorToLatexOrHTML('blue')
+        c2.color = colorToLatexOrHTML(bleuMathalea)
         c2.epaisseur = 1
         a3 = randint(-5, 5, [0]) // numérateut coefficient directeur non nul
         b3 = randint(-5, 5) // ordonnée à l'origine
@@ -215,7 +216,7 @@ export default class AssocierGraphiqueSysteme extends Exercice {
         a4 = a4Frac[0] * choice([-1, 1]) //
         d4 = a4Frac[1] //
         c4 = droite(a4 / d4, -1, b4)
-        c4.color = colorToLatexOrHTML('blue')
+        c4.color = colorToLatexOrHTML(bleuMathalea)
         c4.epaisseur = 1
         a5 = randint(-5, 5, [0]) // numérateut coefficient directeur non nul
         b5 = randint(-5, 5) // ordonnée à l'origine
@@ -231,7 +232,7 @@ export default class AssocierGraphiqueSysteme extends Exercice {
         a6 = a6Frac[0] * choice([-1, 1]) //
         d6 = a6Frac[1] //
         c6 = droite(a6 / d6, -1, b6)
-        c6.color = colorToLatexOrHTML('blue')
+        c6.color = colorToLatexOrHTML(bleuMathalea)
         c6.epaisseur = 1
       } while (
         (c === c3 && c2 === c4) ||

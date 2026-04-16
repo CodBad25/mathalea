@@ -24,7 +24,7 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { orangeMathalea } from '../../lib/colors'
+import { orangeMathalea, bleuMathalea } from '../../lib/colors'
 
 export const dateDePublication = '22/11/2020'
 export const amcReady = true
@@ -125,7 +125,7 @@ export default class ProprietesParallelesPerpendiculaires extends Exercice {
     )
 
     const droiteColor = context.isHtml
-      ? ['red', 'blue', 'green', 'black', 'magenta', orangeMathalea]
+      ? ['red', bleuMathalea, 'green', 'black', 'magenta', orangeMathalea]
       : ['black', 'black', 'black', 'black', 'black', 'black']
 
     for (

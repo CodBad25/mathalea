@@ -14,6 +14,7 @@ import { shuffle } from '../../lib/outils/arrayOutils'
 import { context } from '../../modules/context'
 import { gestionnaireFormulaireTexte, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 
 export const titre =
   'Construire des symétriques de figures par rapport à un point'
@@ -92,7 +93,7 @@ class ConstructionsSymetrieCentraleFigures extends Exercice {
   nouvelleVersion() {
     const marks: string[] = ['//', 'o', '||']
     const colors: string[] = context.isHtml
-      ? ['red', 'green', 'purple', 'blue', 'gray']
+      ? ['red', 'green', 'purple', bleuMathalea, 'gray']
       : ['gray', 'gray', 'gray', 'gray', 'gray']
     this.answers = {}
 

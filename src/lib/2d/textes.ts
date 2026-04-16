@@ -1268,7 +1268,8 @@ export class Latex2d extends ObjetMathalea2D {
   }
 
   svg(): ObjetDivLatex {
-    // On prend la couleur Latex, parce que c'est pour Katex !
+    // On prend la couleur Latex, parce que c'est pour Katex !)
+
     return {
       latex: this.latex,
       x: this.x,
@@ -1290,7 +1291,9 @@ export class Latex2d extends ObjetMathalea2D {
     } else {
       this.backgroundCol = `${this.backgroundCol}`
     }
-    if (this.col.startsWith('#')) {
+    if (!context.isHtml && this.col.startsWith('#')) {
+      /// Il est là le pb.... Pourquoi on rentre dans tikz() ?
+      // if (this.col.startsWith('eeeeeeee')) { /// Si on met autre chose juste pour tester, alors cela fonctionne.
       this.col = `[HTML]{${this.col.substring(1)}}`
     } else {
       this.col =
