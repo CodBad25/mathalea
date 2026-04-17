@@ -357,14 +357,11 @@ export default class ConstructionsParallelogrammesParticuliers extends Exercice 
 
         texteCorr += `Le triangle $${noms[0] + noms[1] + noms[2]}$ n'est pas un triangle isocèle car ses angles ne sont pas égaux.<br>`
         texteCorr += `De plus, dans ce triangle $${noms[0] + noms[1] + noms[2]}$,  l'angle $\\widehat{${noms[0] + noms[1] + noms[2]}}$ mesure $${180 - c2 - c3}^\\circ$ et n'est pas droit donc $${miseEnEvidence(nom)}$ ${texteEnCouleurEtGras("n'est pas un paraléllogramme particulier")}.<br>`
-        // t1 = afficheMesureAngle(O, A, B, bleuMathalea, 1, texNombre(c2) + '^\\circ')
-
         t1 = afficheMesureAngle(
           O,
           A,
           B,
-          // 'blue',
-          bleuMathalea, /// / EE : Pourquoi cette couleur en hexa fait planter object.assign ?
+          bleuMathalea,
           1,
           texNombre(c2) + '^\\circ',
         )
