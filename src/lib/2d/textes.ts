@@ -1286,14 +1286,12 @@ export class Latex2d extends ObjetMathalea2D {
 
   // @todo ajouter opacity, orientation au tikz.
   tikz() {
-    if (this.backgroundCol.startsWith('#')) {
+    if (!context.isHtml && this.backgroundCol.startsWith('#')) {
       this.backgroundCol = `[HTML]{${this.backgroundCol.substring(1)}}`
     } else {
       this.backgroundCol = `${this.backgroundCol}`
     }
     if (!context.isHtml && this.col.startsWith('#')) {
-      /// Il est là le pb.... Pourquoi on rentre dans tikz() ?
-      // if (this.col.startsWith('eeeeeeee')) { /// Si on met autre chose juste pour tester, alors cela fonctionne.
       this.col = `[HTML]{${this.col.substring(1)}}`
     } else {
       this.col =
