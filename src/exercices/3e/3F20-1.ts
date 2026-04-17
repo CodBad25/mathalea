@@ -28,6 +28,7 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 
 export const titre = 'Étudier des fonctions affines'
 export const interactifType = 'mathLive'
@@ -714,7 +715,7 @@ Le choix a été fait d'un antécédent primaire entier positif, le coefficient 
             const u = tracePoint(N)
             const projeteNX = point(N.x, 0)
             const projeteNY = point(0, N.y)
-            const pointillesN = polyline([projeteNY, N, projeteNX], 'blue')
+            const pointillesN = polyline([projeteNY, N, projeteNX], bleuMathalea)
             pointilles.pointilles = 2
             pointilles.epaisseur = 1
             const positionCoord = antecedent2 < 0 ? N.x - 0.5 : N.x + 0.5

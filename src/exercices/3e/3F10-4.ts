@@ -18,6 +18,7 @@ import Exercice from '../Exercice'
 import Figure from 'apigeom'
 import { lectureImage } from '../../lib/2d/LectureImage'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { bleuMathalea } from '../../lib/colors'
 
 export const titre = "Lire graphiquement l'image d'un nombre par une fonction"
 export const dateDePublication = '29/10/2023'
@@ -93,7 +94,7 @@ class LireImageParApiGeom extends Exercice {
         isVisible: true,
         label: 'M',
         shape: 'x',
-        color: 'blue',
+        color: bleuMathalea,
         size: 3,
         thickness: 3,
       })
@@ -303,7 +304,7 @@ class LireImageParApiGeom extends Exercice {
       .buildStandard()
 
     const objs = []
-    const colors = ['red', 'blue', 'green', 'purple', 'orange']
+    const colors = ['red', bleuMathalea, 'green', 'purple', 'orange']
     for (let i = 0; i < this.nbImages; i++) {
       objs.push(lectureImage(this.X[i], this.Y[i], 1, 1, colors[i % 5]))
     }

@@ -62,6 +62,7 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 
 export const titre =
   "Problèmes nécessitant un calcul de longueur à l'aide de la trigonométrie"
@@ -279,7 +280,7 @@ export default class ProblemesTrigoLongueur extends Exercice {
             point(absC, ordA + sensV),
           )
           R[0].color = context.isHtml
-            ? colorToLatexOrHTML('blue')
+            ? colorToLatexOrHTML(bleuMathalea)
             : colorToLatexOrHTML('lightgray')
           R[0].couleurDeRemplissage = R[0].color
           R[0].opaciteDeRemplissage = 0.5

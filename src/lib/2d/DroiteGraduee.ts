@@ -374,7 +374,7 @@ export class DroiteGraduee extends ObjetMathalea2D {
         thickSec: true,
         Unite: 3,
         thickCouleur: 'red',
-        axeCouleur: 'red', bleuMathalea,
+        axeCouleur: bleuMathalea,
         axeHauteur: 4,
         labelsPrincipaux: false,
         labelListe: [[0, 'O'], [1, 'I']],

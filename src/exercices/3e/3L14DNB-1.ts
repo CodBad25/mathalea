@@ -18,6 +18,7 @@ import { context } from '../../modules/context'
 import { randint } from '../../modules/outils'
 import { scratchblock } from '../../modules/scratchblock'
 import ExerciceBrevetA from '../ExerciceBrevetA'
+import { bleuMathalea } from '../../lib/colors'
 
 export const uuid = '972f5'
 export const refs = {
@@ -148,11 +149,11 @@ export default class Exercice3L14DNB1 extends ExerciceBrevetA {
       'Démontrer que, quel que soit le nombre choisi au départ, le résultat du programme A est toujours le double du résultat du programme B.'
     const correction3 = `Le résultat avec le programme A est :<br>
     $\\begin{aligned}2x^2 + ${2 * b}x -  ${2 * c} &=2x^2 + 2\\times ${rienSi1(b)}x - 2\\times ${c}\\\\
-     &= 2\\left(${miseEnEvidence(`x^2 + ${rienSi1(b)}x - ${c}`, 'blue')}\\right)
+     &= 2\\left(${miseEnEvidence(`x^2 + ${rienSi1(b)}x - ${c}`, bleuMathalea)}\\right)
      \\end{aligned}$<br>
     Or en développant $E_${indexB}$ (le résultat du programme B) :<br>
     $\\begin{aligned}E_${indexB} = (x + ${x1})(x - ${x2}) &= x^2 + ${x1}x - ${rienSi1(x2)}x -  ${x1}\\times ${x2}\\\\
-     &= ${miseEnEvidence(`x^2 + ${rienSi1(b)}x - ${c}`, 'blue')}\\end{aligned}$<br>
+     &= ${miseEnEvidence(`x^2 + ${rienSi1(b)}x - ${c}`, bleuMathalea)}\\end{aligned}$<br>
     ${texteEnCouleurEtGras('Le résultat du programme A est le double du résultat du programme B')}.`
 
     const enonce = `${deuxColonnesResp('Programme A', 'ProgrammeB', { largeur1: 50, widthmincol1: '100px', widthmincol2: '100px', stylecol1: 'border: solid; ', stylecol2: 'border: solid; ', eleId: '' })}

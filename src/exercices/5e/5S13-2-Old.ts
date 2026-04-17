@@ -19,6 +19,7 @@ import Exercice from '../Exercice'
 import { tableauColonneLigne } from '../../lib/2d/tableau'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { bleuMathalea } from '../../lib/colors'
 
 export const titre = 'Calculer des fréquences statistiques'
 export const interactifReady = true
@@ -97,7 +98,7 @@ function graphique(
   etiquettes: string[],
   {
     reperageTraitPointille = false,
-    couleurDeRemplissage = 'blue',
+    couleurDeRemplissage = bleuMathalea,
     titreAxeVertical = '',
     titre = '',
     hauteurDiagramme = 8,

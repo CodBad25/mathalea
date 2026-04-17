@@ -10,6 +10,7 @@ import { texNombre } from '../../lib/outils/texNombre'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { randint } from '../../modules/outils'
 import ExerciceBrevetA from '../ExerciceBrevetA'
+import { bleuMathalea } from '../../lib/colors'
 
 export const uuid = 'f296a'
 export const refs = {
@@ -183,7 +184,7 @@ export default class ExerciceAmeriqueNord4062025 extends ExerciceBrevetA {
       )
     }
 
-    const line = polyline(pts, 'blue')
+    const line = polyline(pts, bleuMathalea)
     const rep = new RepereBuilder({
       xMin: 0,
       xMax: valeurMaxX + 10,

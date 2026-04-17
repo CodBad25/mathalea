@@ -16,6 +16,7 @@ import Exercice from '../Exercice'
 
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
+import { bleuMathalea } from '../../lib/colors'
 
 export const titre =
   "Résoudre une équation à l'aide de la méthode de complétion du carré"
@@ -178,12 +179,12 @@ export default class ExerciceEquationSecondDegre extends Exercice {
       if (this.correctionDetaillee) {
         if (coefficientsEqReduite[0].texFraction !== '1') {
           // texteCorr += `On applique la méthode de la complétion du carré pour résoudre l'équation \\[${equation.printToLatexMDG()}=0.\\]`
-          texteCorr += `On divise l'équation par $${coefficientsEqReduite[0].texFraction}$, le coefficient dominant, pour obtenir une équation équivalente de la forme \\[${eqCoeffDom1.printToLatexMDG({ indice: -1, couleur: 'blue' })}=0.\\]`
+          texteCorr += `On divise l'équation par $${coefficientsEqReduite[0].texFraction}$, le coefficient dominant, pour obtenir une équation équivalente de la forme \\[${eqCoeffDom1.printToLatexMDG({ indice: -1, couleur: bleuMathalea })}=0.\\]`
         }
 
         texteCorr += `On isole les termes contenant des inconnus du terme constant \\[${miseEnEvidence(eqCoeffDom1SansConstant.printToLatexMDG(), 'red')}=${normalizedCoeff2.oppose().texFractionSimplifiee}\\]`
-        texteCorr += `On ne considère à présent que le membre de droite et on complète le carré, c'est-à-dire qu'on souhaite compléter $${eqCoeffDom1SansConstant.printToLatexMDG({ indice: 1, couleur: 'blue' })}$ pour obtenir la première ou la deuxième identité remarquable. Puisque le coefficient devant $${eqCoeffDom1SansConstant.variable}$ est ${eqCoeffDom1SansConstant.coefficients[1].signe < 0 ? 'négatif' : 'positif'}, on va compléter le carré pour obtenir la ${eqCoeffDom1SansConstant.coefficients[1].signe < 0 ? 'deuxième' : 'première'} identité. `
-        texteCorr += `On complète l'identité avec le carré du ${texteEnCouleurEtGras('coefficient de $x$', 'blue')} divisé par $2$, c'est-à-dire \\[\\left(\\dfrac{${miseEnEvidence(`${eqCoeffDom1.coefficientsEqReduite[1].texFractionSimplifiee}`, 'blue')}}{2}\\right)^2=\\left(${eqCoeffDom1.coefficientsEqReduite[1].entierDivise(2).texFractionSimplifiee}\\right)^2=${miseEnEvidence(termeCompletion.texFractionSimplifiee, 'green')}.\\]`
+        texteCorr += `On ne considère à présent que le membre de droite et on complète le carré, c'est-à-dire qu'on souhaite compléter $${eqCoeffDom1SansConstant.printToLatexMDG({ indice: 1, couleur: bleuMathalea })}$ pour obtenir la première ou la deuxième identité remarquable. Puisque le coefficient devant $${eqCoeffDom1SansConstant.variable}$ est ${eqCoeffDom1SansConstant.coefficients[1].signe < 0 ? 'négatif' : 'positif'}, on va compléter le carré pour obtenir la ${eqCoeffDom1SansConstant.coefficients[1].signe < 0 ? 'deuxième' : 'première'} identité. `
+        texteCorr += `On complète l'identité avec le carré du ${texteEnCouleurEtGras('coefficient de $x$', bleuMathalea)} divisé par $2$, c'est-à-dire \\[\\left(\\dfrac{${miseEnEvidence(`${eqCoeffDom1.coefficientsEqReduite[1].texFractionSimplifiee}`, bleuMathalea)}}{2}\\right)^2=\\left(${eqCoeffDom1.coefficientsEqReduite[1].entierDivise(2).texFractionSimplifiee}\\right)^2=${miseEnEvidence(termeCompletion.texFractionSimplifiee, 'green')}.\\]`
         texteCorr += `En effet, \\[${miseEnEvidence(eqCoeffDom1SansConstant.printToLatexMDG(), 'red')}+${miseEnEvidence(termeCompletion.texFractionSimplifiee, 'green')}=\\left(${eqCoeffDom1.variable}^2${eqCoeffDom1.coefficients[1].signe < 0 ? '-' : '+'}${termeCompletion.texRacineCarree()}\\right)^2\\]`
       }
 

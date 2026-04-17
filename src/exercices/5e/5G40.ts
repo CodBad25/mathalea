@@ -14,6 +14,7 @@ import {
   pointAdistance,
   pointIntersectionCC,
 } from '../../lib/2d/utilitairesPoint'
+import { bleuMathalea } from '../../lib/colors'
 import { choisitLettresDifferentes } from '../../lib/outils/aleatoires'
 import { choice } from '../../lib/outils/arrayOutils'
 import { arrondi } from '../../lib/outils/nombres'
@@ -27,7 +28,6 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { bleuMathalea } from '../../lib/colors'
 
 export const titre = 'Construire des parallélogrammes'
 export const dateDeModifImportante = '18/04/2024'
@@ -88,7 +88,6 @@ export default class ConstructionsParallelogrammes extends Exercice {
     for (
       let i = 0, texte, texteCorr, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       const celluleAlea = function (rang: number) {
         const lettre = lettreDepuisChiffre(randint(1, rang))
@@ -206,7 +205,7 @@ export default class ConstructionsParallelogrammes extends Exercice {
             traceCompas(D, C, 30),
             traceCompas(B, C, 30),
             codageSegments('||', 'red', A, B, D, C),
-            codageSegments('///', 'red', bleuMathalea, A, D, B, C),
+            codageSegments('///', bleuMathalea, A, D, B, C),
           )
           animIEP.parallelogramme3sommetsConsecutifs(D, A, B, C.nom)
           if (this.sup3) {
@@ -247,7 +246,7 @@ export default class ConstructionsParallelogrammes extends Exercice {
             traceCompas(D, C, 30),
             traceCompas(B, C, 30),
             codageSegments('||', 'red', A, B, D, C),
-            codageSegments('///', 'red', bleuMathalea, A, D, B, C),
+            codageSegments('///', bleuMathalea, A, D, B, C),
           )
           if (this.sup3) {
             texteCorr += `Le point $${noms[2]}$ se trouve dans la case ${cellule} de la cible.<br>`

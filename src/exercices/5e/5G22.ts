@@ -14,12 +14,12 @@ import {
   hauteurTriangle,
   medianeTriangle,
 } from '../../lib/2d/utilitairesTriangle'
+import { bleuMathalea } from '../../lib/colors'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import { Triangle } from '../../modules/Triangle'
 import Exercice from '../Exercice'
-import { bleuMathalea } from '../../lib/colors'
 
 export const titre = "Déterminer la nature d'une droite remarquable"
 
@@ -72,7 +72,6 @@ export default class DroiteRemarquableDuTriangle extends Exercice {
     for (
       let i = 0, a, angle, rapport, texte, texteCorr;
       i < this.nbQuestions;
-
     ) {
       // this.nbQuestions && cpt<50;) { // On limite le nombre d'essais pour chercher des valeurs nouvelles
       triangles[i] = new Triangle()
@@ -108,7 +107,7 @@ export default class DroiteRemarquableDuTriangle extends Exercice {
           c[i] = codageMediatrice(A[i], B[i])
           objets[i] = [t[i], d[i], n[i], c[i]]
           texteCorr = `La droite tracée est la médiatrice du segment [$${sommets[i][0]}${sommets[i][1]}]$.<br>`
-          // texteCorr += mathalea2d({ xmin: -3, ymin: -3, xmax: 8, ymax: 8, scale: 0.5, pixelsParCm: 20 }, ...objets[i], mediatrice(A[i], B[i], '', 'red', bleuMathalea, 'gray', 'green', true, true, '×', '||', 1))
+          // texteCorr += mathalea2d({ xmin: -3, ymin: -3, xmax: 8, ymax: 8, scale: 0.5, pixelsParCm: 20 }, ...objets[i], mediatrice(A[i], B[i], '', bleuMathalea, 'gray', 'green', true, true, '×', '||', 1))
           break
         case 3:
           d[i] = medianeTriangle(C[i], B[i], A[i], bleuMathalea)
@@ -125,7 +124,7 @@ export default class DroiteRemarquableDuTriangle extends Exercice {
           c[i] = codageBissectrice(A[i], B[i], C[i])
           objets[i] = [t[i], d[i], n[i], c[i]]
           texteCorr = `La droite tracée est la bissectrice de l'angle $\\widehat{${sommets[i][0]}${sommets[i][1]}${sommets[i][2]}}$.<br>`
-          // texteCorr += mathalea2d({ xmin: -3, ymin: -3, xmax: 8, ymax: 8, scale: 0.5, pixelsParCm: 20 }, ...objets[i], bissectrice(A[i], B[i], C[i], 'red', bleuMathalea, 'red', 'green', true, true, '×', 3, 1))
+          // texteCorr += mathalea2d({ xmin: -3, ymin: -3, xmax: 8, ymax: 8, scale: 0.5, pixelsParCm: 20 }, ...objets[i], bissectrice(A[i], B[i], C[i], bleuMathalea, 'red', 'green', true, true, '×', 3, 1))
           break
       }
 

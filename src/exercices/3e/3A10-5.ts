@@ -16,6 +16,7 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 
 export const titre =
   'Recourir à une décomposition en facteurs premiers dans des cas simples'
@@ -235,7 +236,7 @@ export default class RecourirDecompositionFacteursPremiers extends Exercice {
           texteCorr =
             texte +
             `${sp(2)}=${sp(1)}` +
-            miseEnEvidence(ecrireReponse(2, a, 3, b, 5, c)[0], 'blue') +
+            miseEnEvidence(ecrireReponse(2, a, 3, b, 5, c)[0], bleuMathalea) +
             `${sp(2)}=${sp(1)}` +
             miseEnEvidence(ecrireReponse(2, a, 3, b, 5, c)[1]) +
             '$'
@@ -254,7 +255,7 @@ export default class RecourirDecompositionFacteursPremiers extends Exercice {
           texteCorr =
             texte +
             `${sp(2)}=${sp(1)}` +
-            miseEnEvidence(ecrireReponse(2, a, 3, b, 7, c)[0], 'blue') +
+            miseEnEvidence(ecrireReponse(2, a, 3, b, 7, c)[0], bleuMathalea) +
             `${sp(2)}=${sp(1)}` +
             miseEnEvidence(ecrireReponse(2, a, 3, b, 7, c)[1]) +
             '$'
@@ -273,7 +274,7 @@ export default class RecourirDecompositionFacteursPremiers extends Exercice {
           texteCorr =
             texte +
             `${sp(2)}=${sp(1)}` +
-            miseEnEvidence(ecrireReponse(2, a, 5, b, 7, c)[0], 'blue') +
+            miseEnEvidence(ecrireReponse(2, a, 5, b, 7, c)[0], bleuMathalea) +
             `${sp(2)}=${sp(1)}` +
             miseEnEvidence(ecrireReponse(2, a, 5, b, 7, c)[1]) +
             '$'
@@ -292,7 +293,7 @@ export default class RecourirDecompositionFacteursPremiers extends Exercice {
           texteCorr =
             texte +
             `${sp(2)}=${sp(1)}` +
-            miseEnEvidence(ecrireReponse(3, a, 5, b, 7, c)[0], 'blue') +
+            miseEnEvidence(ecrireReponse(3, a, 5, b, 7, c)[0], bleuMathalea) +
             `${sp(2)}=${sp(1)}` +
             miseEnEvidence(ecrireReponse(3, a, 5, b, 7, c)[1]) +
             '$'
@@ -324,7 +325,7 @@ export default class RecourirDecompositionFacteursPremiers extends Exercice {
           texteCorr =
             texte +
             `${sp(2)}=${sp(1)}` +
-            miseEnEvidence(solution[0], 'blue') +
+            miseEnEvidence(solution[0], bleuMathalea) +
             `${sp(2)}=${sp(1)}` +
             miseEnEvidence(solution[1]) +
             '$'

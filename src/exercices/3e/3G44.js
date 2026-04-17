@@ -49,7 +49,7 @@ import {
 } from '../../modules/outils'
 import { RedactionPythagore } from '../4e/_pythagore'
 import Exercice from '../Exercice'
-import { orangeMathalea } from '../../lib/colors'
+import { orangeMathalea, bleuMathalea } from '../../lib/colors'
 
 export const titre = "Déterminer des longueurs dans la géométrie dans l'espace"
 export const amcReady = true
@@ -160,7 +160,7 @@ export default class CalculPythagoreEspace extends Exercice {
           E = point3d(0, choixProfondeur, 0)
 
           nomSolide = choisitLettresDifferentes(8, 'OQWX').join('')
-          solideDessine = pave3d(A, B, D, E, 'blue', true, nomSolide)
+          solideDessine = pave3d(A, B, D, E, bleuMathalea, true, nomSolide)
 
           choixSegments.push(['02', '1'], ['13', '2'])
           if (choixProfondeur > 0) {
@@ -250,7 +250,7 @@ export default class CalculPythagoreEspace extends Exercice {
             1,
             1,
             c,
-            'blue',
+            bleuMathalea,
             '',
             '',
             '',
@@ -343,7 +343,7 @@ export default class CalculPythagoreEspace extends Exercice {
           E = point3d(0, choixProfondeur, 0)
 
           nomSolide = choisitLettresDifferentes(8, 'OQWX').join('')
-          solideDessine = pave3d(A, B, D, E, 'blue', true, nomSolide)
+          solideDessine = pave3d(A, B, D, E, bleuMathalea, true, nomSolide)
           choixSegments = []
           choixSegments.push(['02', '1', L, h], ['13', '2', h, L])
           if (choixProfondeur > 0) {
@@ -434,7 +434,7 @@ export default class CalculPythagoreEspace extends Exercice {
           E = point3d(0, choixProfondeur, 0)
 
           nomSolide = choisitLettresDifferentes(8, 'OQWX').join('')
-          solideDessine = pave3d(A, B, D, E, 'blue', true, nomSolide)
+          solideDessine = pave3d(A, B, D, E, bleuMathalea, true, nomSolide)
           choixSegments = [
             ['60', '5', '05', '1', p, L, h],
             ['71', '4', '14', '0', p, L, h],
@@ -586,7 +586,7 @@ export default class CalculPythagoreEspace extends Exercice {
             D,
             v,
             v,
-            'blue',
+            bleuMathalea,
             false,
             true,
             true,
@@ -707,8 +707,8 @@ export default class CalculPythagoreEspace extends Exercice {
               ),
             )
           }
-          p = polygone3d(ptsBase, 'blue')
-          solideDessine = pyramide3d(p, D, 'blue', A, true, 'black', true)
+          p = polygone3d(ptsBase, bleuMathalea)
+          solideDessine = pyramide3d(p, D, bleuMathalea, A, true, 'black', true)
           numeroSommet = randint(0, nbSommets - 1)
           segmentATrouver = solideDessine.aretesSommet[numeroSommet].c2d
           segmentATrouver.epaisseur = 2
@@ -799,12 +799,12 @@ export default class CalculPythagoreEspace extends Exercice {
               ),
             )
           }
-          p = polygone3d(ptsBase, 'blue')
+          p = polygone3d(ptsBase, bleuMathalea)
           solideDessine = cone3d(
             A,
             D,
             v,
-            'blue',
+            bleuMathalea,
             true,
             'black',
             assombrirOuEclaircir('gray', 100),
@@ -921,7 +921,7 @@ export default class CalculPythagoreEspace extends Exercice {
             A,
             r,
             'green',
-            'blue',
+            bleuMathalea,
             12,
             'lightgray',
             0,
@@ -1026,7 +1026,7 @@ export default class CalculPythagoreEspace extends Exercice {
             A,
             r,
             'green',
-            'blue',
+            bleuMathalea,
             12,
             'lightgray',
             0,

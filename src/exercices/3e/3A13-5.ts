@@ -1,4 +1,4 @@
-import { orangeMathalea } from '../../lib/colors'
+import { orangeMathalea, bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { setReponse } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -132,11 +132,11 @@ export default class DivisionEuclidienneEtAjout extends Exercice {
       }
 
       texteCorr += `Sachant que $${texNombre(dividende)}= ${miseEnEvidence(`${diviseur}\\times${quotient}`, 'green')}${miseEnEvidence(`${sp()}+${sp()}${reste}`, 'black')}$, alors $${texNombre(dividende)}$ est encadré par deux multiples consécutifs de $${diviseur}$ de la façon suivante :<br>`
-      texteCorr += `${sp(10)}$${miseEnEvidence(`${diviseur}\\times${quotient}`, 'green')} < ${texNombre(dividende)} < ${miseEnEvidence(`${diviseur}\\times${quotient}`, 'green')}${miseEnEvidence(`${sp()}+${sp()}${diviseur}`, 'blue')}$<br>`
+      texteCorr += `${sp(10)}$${miseEnEvidence(`${diviseur}\\times${quotient}`, 'green')} < ${texNombre(dividende)} < ${miseEnEvidence(`${diviseur}\\times${quotient}`, 'green')}${miseEnEvidence(`${sp()}+${sp()}${diviseur}`, bleuMathalea)}$<br>`
 
       if (choixOperation === '+') {
         texteNbAMC += `est le plus petit entier naturel à ajouter à $${texNombre(dividende)}$ pour que la somme obtenue soit multiple de $${diviseur}$ ?`
-        texteCorr += `${sp(10)}$${miseEnEvidence(`${diviseur}`, 'blue')}${sp()}-${sp()} ${miseEnEvidence(`${reste}`, 'black')} ${sp()}=${sp()} ${miseEnEvidence(`${diviseur - reste}`)}$<br>`
+        texteCorr += `${sp(10)}$${miseEnEvidence(`${diviseur}`, bleuMathalea)}${sp()}-${sp()} ${miseEnEvidence(`${reste}`, 'black')} ${sp()}=${sp()} ${miseEnEvidence(`${diviseur - reste}`)}$<br>`
         texteCorr += `Donc en ajoutant $${miseEnEvidence(diviseur - reste)}$ à $${texNombre(dividende)}$, on obtiendra le plus petit multiple de $${diviseur}$ supérieur à $${texNombre(dividende)}$.<br>`
         reponse = diviseur - reste
       } else {

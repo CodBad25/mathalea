@@ -6,6 +6,7 @@ import { repere } from '../../lib/2d/reperes'
 import { tracePoint } from '../../lib/2d/TracePoint'
 import { mathalea2d } from '../../modules/mathalea2d'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 export const titre = 'Effectuer une interpolation cosinusoïdale'
 
 export const refs = {
@@ -75,8 +76,8 @@ export default class TraceCourbeInterpolee1 extends Exercice {
     const objets = []
     const couleurs = [
       { colPoint: 'red', colCourbe: 'black' },
-      { colPoint: 'blue', colCourbe: 'red' },
-      { colPoint: 'green', colCourbe: 'blue' },
+      { colPoint: bleuMathalea, colCourbe: 'red' },
+      { colPoint: 'green', colCourbe: bleuMathalea },
     ]
     for (let i = 0, coords; i < liste.length; i++) {
       coords = liste[i].split(';')

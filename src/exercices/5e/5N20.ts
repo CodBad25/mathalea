@@ -12,6 +12,7 @@ import FractionEtendue from '../../modules/FractionEtendue'
 import { context } from '../../modules/context'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 export const dateDeModifImportante = '04/12/2025'
 export const amcReady = true
 export const amcType = 'qcmMono'
@@ -224,14 +225,14 @@ export default class ExerciceAdditionnerSoustraireFractions5ebis extends Exercic
           texteCorr = `$${f1.texFraction}+${f2.texFraction}=`
           texte = `$${f1.texFraction}+${f2.texFraction}$`
           if (this.level !== 6 && this.sup !== 1) {
-            texteCorr += `\\dfrac{${a}${miseEnEvidence('\\times ' + k, 'blue')}}{${b}${miseEnEvidence('\\times ' + k, 'blue')}}+${f2.texFraction}=${new FractionEtendue(a * k, b * k).texFraction}+${f2.texFraction}=`
+            texteCorr += `\\dfrac{${a}${miseEnEvidence('\\times ' + k, bleuMathalea)}}{${b}${miseEnEvidence('\\times ' + k, bleuMathalea)}}+${f2.texFraction}=${new FractionEtendue(a * k, b * k).texFraction}+${f2.texFraction}=`
           }
           texteCorr += `\\dfrac{${a * k}+${ecritureParentheseSiNegatif(c)}}{${d}}=${new FractionEtendue(a * k + c, d).texFraction}`
         } else {
           texteCorr = `$${f2.texFraction}+${f1.texFraction}=`
           texte = `$${f2.texFraction}+${f1.texFraction}$`
           if (this.level !== 6 && this.sup !== 1) {
-            texteCorr += `${f2.texFraction}+\\dfrac{${a}${miseEnEvidence('\\times ' + k, 'blue')}}{${b}${miseEnEvidence('\\times ' + k, 'blue')}}=${f2.texFraction}+${new FractionEtendue(a * k, b * k).texFraction}=`
+            texteCorr += `${f2.texFraction}+\\dfrac{${a}${miseEnEvidence('\\times ' + k, bleuMathalea)}}{${b}${miseEnEvidence('\\times ' + k, bleuMathalea)}}=${f2.texFraction}+${new FractionEtendue(a * k, b * k).texFraction}=`
           }
 
           texteCorr += `\\dfrac{${c}+${ecritureParentheseSiNegatif(a * k)}}{${d}}=${new FractionEtendue(a * k + c, d).texFraction}`
@@ -244,9 +245,9 @@ export default class ExerciceAdditionnerSoustraireFractions5ebis extends Exercic
           s = pgcd(Math.abs(a * k + c), d)
           if (s !== 1) {
             if (a * k + c < 0) {
-              texteCorr += `$=-\\dfrac{${Math.abs(a * k + c) / s}${miseEnEvidence('\\times ' + s, 'blue')}}{${d / s}${miseEnEvidence('\\times ' + s, 'blue')}}=${new FractionEtendue((a * k + c) / s, d / s).texFractionSimplifiee}$`
+              texteCorr += `$=-\\dfrac{${Math.abs(a * k + c) / s}${miseEnEvidence('\\times ' + s, bleuMathalea)}}{${d / s}${miseEnEvidence('\\times ' + s, bleuMathalea)}}=${new FractionEtendue((a * k + c) / s, d / s).texFractionSimplifiee}$`
             } else {
-              texteCorr += `$=\\dfrac{${(a * k + c) / s}${miseEnEvidence('\\times ' + s, 'blue')}}{${d / s}${miseEnEvidence('\\times ' + s, 'blue')}}=${new FractionEtendue((a * k + c) / s, d / s).texFractionSimplifiee}$`
+              texteCorr += `$=\\dfrac{${(a * k + c) / s}${miseEnEvidence('\\times ' + s, bleuMathalea)}}{${d / s}${miseEnEvidence('\\times ' + s, bleuMathalea)}}=${new FractionEtendue((a * k + c) / s, d / s).texFractionSimplifiee}$`
             }
           }
         }
@@ -337,8 +338,8 @@ export default class ExerciceAdditionnerSoustraireFractions5ebis extends Exercic
         texteCorr = `$${f1.texFraction}-${f2.texFraction}=`
         if (this.level !== 6 && this.sup !== 1) {
           texteCorr += f2PlusGdQuef1
-            ? `${f1.texFraction}-\\dfrac{${c}${miseEnEvidence('\\times ' + k, 'blue')}}{${d}${miseEnEvidence('\\times ' + k, 'blue')}}=${f1.texFraction}-${new FractionEtendue(c * k, b).texFraction}=`
-            : `\\dfrac{${a}${miseEnEvidence('\\times ' + k, 'blue')}}{${b}${miseEnEvidence('\\times ' + k, 'blue')}}-${f2.texFraction}=${new FractionEtendue(a * k, b * k).texFraction}-${f2.texFraction}=`
+            ? `${f1.texFraction}-\\dfrac{${c}${miseEnEvidence('\\times ' + k, bleuMathalea)}}{${d}${miseEnEvidence('\\times ' + k, bleuMathalea)}}=${f1.texFraction}-${new FractionEtendue(c * k, b).texFraction}=`
+            : `\\dfrac{${a}${miseEnEvidence('\\times ' + k, bleuMathalea)}}{${b}${miseEnEvidence('\\times ' + k, bleuMathalea)}}-${f2.texFraction}=${new FractionEtendue(a * k, b * k).texFraction}-${f2.texFraction}=`
         }
         texteCorr += f2PlusGdQuef1
           ? `\\dfrac{${a}-${ecritureParentheseSiNegatif(c * k)}}{${d * k}}=${new FractionEtendue(a - c * k, b).texFraction}`
@@ -359,9 +360,9 @@ export default class ExerciceAdditionnerSoustraireFractions5ebis extends Exercic
             texteCorr += `$=${texNombre(numerateur / denominateur, 0)}$`
           } else if (s !== 1) {
             if (numerateur < 0) {
-              texteCorr += `$=-\\dfrac{${Math.abs(numerateur) / s}${miseEnEvidence('\\times ' + s, 'blue')}}{${denominateur / s}${miseEnEvidence('\\times ' + s, 'blue')}}=${new FractionEtendue(numerateur / s, denominateur / s).texFractionSimplifiee}$`
+              texteCorr += `$=-\\dfrac{${Math.abs(numerateur) / s}${miseEnEvidence('\\times ' + s, bleuMathalea)}}{${denominateur / s}${miseEnEvidence('\\times ' + s, bleuMathalea)}}=${new FractionEtendue(numerateur / s, denominateur / s).texFractionSimplifiee}$`
             } else {
-              texteCorr += `$=\\dfrac{${numerateur / s}${miseEnEvidence('\\times ' + s, 'blue')}}{${denominateur / s}${miseEnEvidence('\\times ' + s, 'blue')}}=${new FractionEtendue(numerateur / s, denominateur / s).texFractionSimplifiee}$`
+              texteCorr += `$=\\dfrac{${numerateur / s}${miseEnEvidence('\\times ' + s, bleuMathalea)}}{${denominateur / s}${miseEnEvidence('\\times ' + s, bleuMathalea)}}=${new FractionEtendue(numerateur / s, denominateur / s).texFractionSimplifiee}$`
             }
           }
         }

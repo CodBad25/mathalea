@@ -18,6 +18,7 @@ import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 
 export const titre = 'Déterminer une fonction affine'
 export const amcReady = true
@@ -72,7 +73,7 @@ export default class LectureExpressionFonctionsAffines extends Exercice {
     let k = Math.pow(2, preK - 1)
     let nbDroites = parseInt(this.sup2)
 
-    const colors = ['blue', 'red', 'black', 'purple', 'brown']
+    const colors = [bleuMathalea, 'red', 'black', 'purple', 'brown']
 
     const listeDroites = []
     const posLab = []

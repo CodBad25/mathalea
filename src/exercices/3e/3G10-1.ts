@@ -19,7 +19,7 @@ import { pointEstSur } from '../../lib/2d/utilitairesGeometriques'
 import { milieu, pointSurDroite } from '../../lib/2d/utilitairesPoint'
 import { vecteur } from '../../lib/2d/Vecteur'
 import { vide2d } from '../../lib/2d/Vide2d'
-import { orangeMathalea } from '../../lib/colors'
+import { orangeMathalea, bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -88,7 +88,7 @@ export default class TransformationsDuPlanEtCoordonnees extends Exercice {
     const lettre1 = ['A', 'B', 'C']
     const lettre2 = ["O'", 'A', 'B'] // si t[i]=0 alors la transformation concernée n'existe pas, si t[i]=1, on la dessine.
     const punto: number[][] = [[]]
-    const couleurs = ['brown', 'green', 'blue']
+    const couleurs = ['brown', 'green', bleuMathalea]
     const listeTypeDeQuestions = [[1, 2, 3, 4], [7], [8], [5, 6], [9], [10]]
     for (
       let ee = 0,

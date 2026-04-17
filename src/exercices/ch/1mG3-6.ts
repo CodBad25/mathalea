@@ -22,6 +22,7 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 
 export const titre = 'Utiliser les relations métriques dans un triangle rectangle'
 export const dateDePublication = '10/04/2025'
@@ -155,15 +156,15 @@ export default class RelationsMetriquesTriangleRectangle extends Exercice {
 
       const C = D // point(AC, 0, 'C', 'below')
       const ADE = polygone(A, D, E)
-      const ADESED = segment(E, D, 'blue')
+      const ADESED = segment(E, D, bleuMathalea)
       const ADESAD = segment(A, D)
       const ADESAE = segment(A, E, 'red')
       const AEBSAB = segment(A, B, 'red')
-      const AEBSEB = segment(E, B, 'blue')
+      const AEBSEB = segment(E, B, bleuMathalea)
       const AEBSEA = segment(A, E)
       const DEBSED = segment(D, E)
       const DEBSEB = segment(E, B, 'red')
-      const DEBSBD = segment(B, D, 'blue')
+      const DEBSBD = segment(B, D, bleuMathalea)
 
       const sEB = segment(E, B)
       const codageDroitAED = codageAngleDroit(A, E, D)
@@ -191,7 +192,7 @@ export default class RelationsMetriquesTriangleRectangle extends Exercice {
         'black',
         0.5,
         0.2,
-        'blue',
+        bleuMathalea,
         0.8,
         false,
         false,
@@ -233,7 +234,7 @@ export default class RelationsMetriquesTriangleRectangle extends Exercice {
         'black',
         0.5,
         0.2,
-        'blue',
+        bleuMathalea,
         0.8,
         false,
         false,
@@ -310,8 +311,8 @@ export default class RelationsMetriquesTriangleRectangle extends Exercice {
       <br><br>
       $\\begin{aligned}    
       \\dfrac{${miseEnCouleur(`${A.nom}${E.nom}`, 'red')}}{${miseEnCouleur(`${A.nom}${D.nom}`, 'black')}} = \\dfrac{${miseEnCouleur(`${A.nom}${B.nom}`, 'red')}}{${miseEnCouleur(`${A.nom}${E.nom}`, 'black')}} = \\dfrac{${miseEnCouleur(`${E.nom}${B.nom}`, 'red')}}{${miseEnCouleur(`${E.nom}${D.nom}`, 'black')}}\\\\\\\\
-      \\dfrac{${miseEnCouleur(`${A.nom}${E.nom}`, 'red')}}{${miseEnCouleur(`${E.nom}${D.nom}`, 'blue')}} = \\dfrac{${miseEnCouleur(`${A.nom}${B.nom}`, 'red')}}{${miseEnCouleur(`${E.nom}${B.nom}`, 'blue')}} = \\dfrac{${miseEnCouleur(`${E.nom}${B.nom}`, 'red')}}{${miseEnCouleur(`${B.nom}${D.nom}`, 'blue')}}\\\\\\\\
-      \\dfrac{${miseEnCouleur(`${A.nom}${D.nom}`, 'black')}}{${miseEnCouleur(`${E.nom}${D.nom}`, 'blue')}} = \\dfrac{${miseEnCouleur(`${A.nom}${E.nom}`, 'black')}}{${miseEnCouleur(`${E.nom}${B.nom}`, 'blue')}} = \\dfrac{${miseEnCouleur(`${E.nom}${D.nom}`, 'black')}}{${miseEnCouleur(`${B.nom}${D.nom}`, 'blue')}}
+      \\dfrac{${miseEnCouleur(`${A.nom}${E.nom}`, 'red')}}{${miseEnCouleur(`${E.nom}${D.nom}`, bleuMathalea)}} = \\dfrac{${miseEnCouleur(`${A.nom}${B.nom}`, 'red')}}{${miseEnCouleur(`${E.nom}${B.nom}`, bleuMathalea)}} = \\dfrac{${miseEnCouleur(`${E.nom}${B.nom}`, 'red')}}{${miseEnCouleur(`${B.nom}${D.nom}`, bleuMathalea)}}\\\\\\\\
+      \\dfrac{${miseEnCouleur(`${A.nom}${D.nom}`, 'black')}}{${miseEnCouleur(`${E.nom}${D.nom}`, bleuMathalea)}} = \\dfrac{${miseEnCouleur(`${A.nom}${E.nom}`, 'black')}}{${miseEnCouleur(`${E.nom}${B.nom}`, bleuMathalea)}} = \\dfrac{${miseEnCouleur(`${E.nom}${D.nom}`, 'black')}}{${miseEnCouleur(`${B.nom}${D.nom}`, bleuMathalea)}}
       \\end{aligned}$`
       } else {
         texteCorr += `Les trois triangles $\\triangle ${A.nom}${E.nom}${D.nom}$, $\\triangle ${A.nom}${E.nom}${B.nom}$ et $\\triangle ${E.nom}${D.nom}${B.nom}$ sont semblables, car ils sont tous rectangles et que $\\widehat{EAD}=\\widehat{EAB}$ et $\\widehat{EDA}=\\widehat{EDB}$.`
