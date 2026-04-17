@@ -31,12 +31,7 @@ type KutsumMathQuestion = {
   questionType: 'math'
   text: string
   targetLatex: string
-  validationConfig: {
-    kind: string
-    responseFormat: string
-    valueCheck: { method: string }
-    constraints: unknown[]
-  }
+  validationConfig: string[]
 }
 
 type KutsumQuestion =
@@ -62,12 +57,12 @@ type KutsumPayload = {
 
 function buildKutsumQuestionsFromAutoCorrection(exercise: IExercice): KutsumQuestion[] {
   const questions: KutsumQuestion[] = []
+  for (const [index, autoCorrection] of exercise.autoCorrection.entries()) {
+    const formatInteractif = autoCorrection.reponse?.param?.formatInteractif ?? exercise.formatInteractif
+    const text = autoCorrection.enonce || exercise.listeQuestions[index] || ''
 
-  for (const ac of exercise.autoCorrection) {
-    const formatInteractif = ac.reponse?.param?.formatInteractif ?? exercise.formatInteractif
-
-    if (formatInteractif === 'qcm' && ac.propositions && ac.propositions.length >= 2) {
-      const choices = ac.propositions
+    if (formatInteractif === 'qcm' && autoCorrection.propositions && autoCorrection.propositions.length >= 2) {
+      const choices = autoCorrection.propositions
         .filter((p): p is { texte: string; statut?: boolean | string | number } => p.texte != null)
         .map((p) => ({
           text: p.texte ?? '',
@@ -75,15 +70,22 @@ function buildKutsumQuestionsFromAutoCorrection(exercise: IExercice): KutsumQues
         }))
       if (choices.length < 2) continue
       const nbCorrect = choices.filter((c) => c.isCorrect).length
-      const isRadio = ac.options?.radio === true || nbCorrect <= 1
+      const isRadio = autoCorrection.options?.radio === true || nbCorrect <= 1
       questions.push({
         questionType: isRadio ? 'singleChoice' : 'multipleChoice',
-        text: ac.enonce ?? '',
+        text,
         answerOptions: choices.map((c) => c.text),
         correctAnswers: choices.map((c) => c.isCorrect),
       })
     } else if (formatInteractif === 'mathlive' || formatInteractif === 'calcul') {
-      const valeur = ac.reponse?.valeur
+      const options = autoCorrection.reponse?.valeur?.reponse?.options
+      const comparisons: string[] = []
+      if (options && typeof options === 'object') {
+        for (const [key, value] of Object.entries(options as Record<string, unknown>)) {
+          if (value === true) comparisons.push(key)
+        }
+      }
+      const valeur = autoCorrection.reponse?.valeur
       let targetLatex = ''
       if (valeur && typeof valeur === 'object' && 'reponse' in valeur && valeur.reponse) {
         const rep = valeur.reponse.value
@@ -98,25 +100,20 @@ function buildKutsumQuestionsFromAutoCorrection(exercise: IExercice): KutsumQues
       if (!isNaN(numericValue) && isFinite(numericValue)) {
         questions.push({
           questionType: 'numeric',
-          text: ac.enonce ?? '',
+          text,
           correctAnswer: numericValue,
           tolerance:
-            ac.reponse?.param?.approx != null && typeof ac.reponse.param.approx === 'number'
-              ? ac.reponse.param.approx
+            autoCorrection.reponse?.param?.approx != null && typeof autoCorrection.reponse.param.approx === 'number'
+              ? autoCorrection.reponse.param.approx
               : 0,
           unit: null,
         })
       } else {
         questions.push({
           questionType: 'math',
-          text: ac.enonce ?? '',
+          text,
           targetLatex,
-          validationConfig: {
-            kind: 'EXPRESSION',
-            responseFormat: 'SINGLE',
-            valueCheck: { method: 'EXACT' },
-            constraints: [],
-          },
+          validationConfig: comparisons
         })
       }
     }

@@ -13,7 +13,7 @@
   export let exportQcmCam: () => Promise<void>
 
   // Bouton Kutsum masqué en production — activer avec ?kutsum=1 dans l'URL
-  const showKutsum = new URLSearchParams(window.location.search).get('kutsum') === '1'
+  const showKutsum = new URLSearchParams(window.location.search).get('kutsum') === '1' || window.location.hostname === 'localhost'
 
   let showMoreModal = false
   let moreDialog: HTMLDialogElement
