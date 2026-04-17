@@ -10,7 +10,7 @@ import {
   texteParPosition,
 } from '../../lib/2d/textes'
 import { rotation } from '../../lib/2d/transformations'
-import { orangeMathalea } from '../../lib/colors'
+import { orangeMathalea, bleuMathalea } from '../../lib/colors'
 import { choisitLettresDifferentes } from '../../lib/outils/aleatoires'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import {
@@ -170,7 +170,7 @@ export default class Questions2023 extends Exercice {
             operande1: 2023,
             operande2: 7,
             type: 'divisionE',
-            options: { solution: true, colore: 'blue' },
+            options: { solution: true, colore: bleuMathalea },
           })
           texteCorr += `<br>Le reste de la division euclidienne de $${texNombre(2023)}$ par $7$ est $0$ donc $${texNombre(2023)}$ est bien ${texteEnCouleurEtGras('divisible')} par la somme de ses chiffres.<br>`
           break
@@ -257,7 +257,7 @@ export default class Questions2023 extends Exercice {
             operande1: 2023,
             operande2: 7,
             type: 'divisionE',
-            options: { solution: true, colore: 'blue' },
+            options: { solution: true, colore: bleuMathalea },
           })
           texteCorr += `<br>Le reste de la division euclidienne de $${texNombre(2023)}$ par $7$ est $0$ donc $${texNombre(2023)}$ est bien ${texteEnCouleurEtGras('divisible')} par la somme de ses chiffres.<br>`
           break

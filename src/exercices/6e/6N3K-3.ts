@@ -12,6 +12,7 @@ import { fraction } from '../../modules/fractions'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { gestionnaireFormulaireTexte } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 
 export const titre = 'Ajouter des barres fractionnaires'
 export const interactifReady = true
@@ -110,7 +111,7 @@ export default class AjouterDesLegosFractions extends Exercice {
     const barre2: SvgWithValue = { svg: barre(2, 'green'), value: 0.25 }
     const barre1: SvgWithValue = { svg: barre(1, 'yellow'), value: 0.125 }
     const barre8sur3: SvgWithValue = {
-      svg: barre(8 / 3, 'blue'),
+      svg: barre(8 / 3, bleuMathalea),
       value: 1 / 3,
     }
     const barre8sur9: SvgWithValue = {

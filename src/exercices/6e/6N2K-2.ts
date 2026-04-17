@@ -98,20 +98,20 @@ export default class QuestionsDivisionsEuclidiennes extends Exercice {
               operande1: nbPerlesJauneTotal,
               operande2: nbPerlesJaune,
               type: 'divisionE',
-              options: { solution: true, colore: 'blue' },
+              options: { solution: true, colore: bleuMathalea },
             }) +
-            `$${miseEnEvidence(`${texNombre(nbPerlesJauneTotal)}=${nbPerlesJauneTotal - nbPerlesJaune * nbColliersJaune === 0 ? `${nbPerlesJaune}\\times${texNombre(nbColliersJaune)}` : `(${nbPerlesJaune}\\times${texNombre(nbColliersJaune)})+ ${nbPerlesJauneTotal - nbPerlesJaune * nbColliersJaune}`}`, 'blue')}$`
-          texteCorr += `<br>Il peut faire $${miseEnEvidence(texNombre(nbColliersJaune), 'blue')}$ colliers avec les perles jaunes.`
+            `$${miseEnEvidence(`${texNombre(nbPerlesJauneTotal)}=${nbPerlesJauneTotal - nbPerlesJaune * nbColliersJaune === 0 ? `${nbPerlesJaune}\\times${texNombre(nbColliersJaune)}` : `(${nbPerlesJaune}\\times${texNombre(nbColliersJaune)})+ ${nbPerlesJauneTotal - nbPerlesJaune * nbColliersJaune}`}`, bleuMathalea)}$`
+          texteCorr += `<br>Il peut faire $${miseEnEvidence(texNombre(nbColliersJaune), bleuMathalea)}$ colliers avec les perles jaunes.`
           texteCorr += `<br>Posons la division euclidienne de $${texNombre(nbPerlesRougeTotal)}$ par $${nbPerlesRouge}$. <br>`
           texteCorr +=
             operation({
               operande1: nbPerlesRougeTotal,
               operande2: nbPerlesRouge,
               type: 'divisionE',
-              options: { solution: true, colore: 'blue' },
+              options: { solution: true, colore: bleuMathalea },
             }) +
-            `$${miseEnEvidence(`${texNombre(nbPerlesRougeTotal)}=${nbPerlesRougeTotal - nbPerlesRouge * nbColliersRouge === 0 ? `${nbPerlesRouge}\\times${texNombre(nbColliersRouge)}` : `(${nbPerlesRouge}\\times${texNombre(nbColliersRouge)})+ ${nbPerlesRougeTotal - nbPerlesRouge * nbColliersRouge}`}`, 'blue')}$`
-          texteCorr += `<br>Il peut faire $${miseEnEvidence(texNombre(nbColliersRouge), 'blue')}$ colliers avec les perles rouges.`
+            `$${miseEnEvidence(`${texNombre(nbPerlesRougeTotal)}=${nbPerlesRougeTotal - nbPerlesRouge * nbColliersRouge === 0 ? `${nbPerlesRouge}\\times${texNombre(nbColliersRouge)}` : `(${nbPerlesRouge}\\times${texNombre(nbColliersRouge)})+ ${nbPerlesRougeTotal - nbPerlesRouge * nbColliersRouge}`}`, bleuMathalea)}$`
+          texteCorr += `<br>Il peut faire $${miseEnEvidence(texNombre(nbColliersRouge), bleuMathalea)}$ colliers avec les perles rouges.`
           texteCorr += `<br>Finalement, en prenant en compte les deux couleurs, et puisque $${texNombre(Math.min(nbColliersRouge, nbColliersJaune))}$ < $${texNombre(Math.max(nbColliersRouge, nbColliersJaune))}$, le bijoutier ne pourra faire que $${miseEnEvidence(texNombre(Math.min(nbColliersRouge, nbColliersJaune)))}$ colliers.`
           texteCorr += `<br>${texteEnCouleurEtGras('b)', bleuMathalea)} $${nbPerlesJauneTotal} - (${nbPerlesJaune} \\times ${Math.min(nbColliersRouge, nbColliersJaune)})=${miseEnEvidence(String(nbPerlesJauneTotal - nbPerlesJaune * Math.min(nbColliersRouge, nbColliersJaune)))}$`
           texteCorr +=

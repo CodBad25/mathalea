@@ -36,6 +36,7 @@ import { mathalea2d } from '../../modules/mathalea2d'
 import { egal, randint } from '../../modules/outils'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 
 export const titre = 'Construire des symétriques de points'
 export const dateDePublication = '07/01/2024'
@@ -146,7 +147,7 @@ class ConstrctionsSymetriquesPoints extends Exercice {
     this.sup = Number(this.sup) || 1 // valeur min 1
     const marks: string[] = ['//', '///', 'x', 'O', '|||']
     const colors: string[] = context.isHtml
-      ? ['red', 'green', 'purple', 'blue', 'gray']
+      ? ['red', 'green', 'purple', bleuMathalea, 'gray']
       : ['gray', 'gray', 'gray', 'gray', 'gray']
     this.answers = {}
     let choixDeLaxe: number[] = []
@@ -335,7 +336,7 @@ class ConstrctionsSymetriquesPoints extends Exercice {
           antecedentsMathalea2d[k],
           middleMathalea2d[k],
           pointSurD,
-          'blue',
+          bleuMathalea,
           0.3,
           0.5,
         )
@@ -398,7 +399,7 @@ class ConstrctionsSymetriquesPoints extends Exercice {
           point1: O,
           point2: pointB,
         }) as Line
-        this.d[i].color = 'blue'
+        this.d[i].color = bleuMathalea
         this.d[i].thickness = 2
         const labelX = labelD.x
         const labelY = labelD.y

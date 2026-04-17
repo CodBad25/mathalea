@@ -13,6 +13,7 @@ import { texNombre } from '../../lib/outils/texNombre'
 import { context } from '../../modules/context'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 
 export const titre = "Calculer la fraction d'un nombre"
 export const interactifReady = true
@@ -101,8 +102,8 @@ export default class FractionDUnNombre extends Exercice {
         if (n / b - arrondi(n / b, 4) === 0) {
           texteCorr += `$${texFractionFromString(
             a,
-            miseEnEvidence(b, 'blue'),
-          )}\\times${n}=${n}\\div${miseEnEvidence(b, 'blue')}=${texNombre(
+            miseEnEvidence(b, bleuMathalea),
+          )}\\times${n}=${n}\\div${miseEnEvidence(b, bleuMathalea)}=${texNombre(
             n / b,
           )}$`
         } else {
@@ -117,10 +118,10 @@ export default class FractionDUnNombre extends Exercice {
           // si n/b décimal calcul (n/b)*a
           texteCorr += `$${texFractionFromString(
             a,
-            miseEnEvidence(b, 'blue'),
+            miseEnEvidence(b, bleuMathalea),
           )}\\times${n}=(${n}\\div${miseEnEvidence(
             b,
-            'blue',
+            bleuMathalea,
           )})\\times${a}=${texNombre(
             n / b,
           )}\\times${a}=${texNombre((n / b) * a)}$<br>`
@@ -129,26 +130,26 @@ export default class FractionDUnNombre extends Exercice {
             // si n/b non décimal, alors on se rabat sur (n*a)/b
             texteCorr += ` $${texFractionFromString(
               a,
-              miseEnEvidence(b, 'blue'),
+              miseEnEvidence(b, bleuMathalea),
             )}\\times${n}=(${n}\\times${a})\\div${miseEnEvidence(
               b,
-              'blue',
+              bleuMathalea,
             )}=${n * a}\\div${miseEnEvidence(
               b,
-              'blue',
+              bleuMathalea,
             )}=${texNombre((n / b) * a)}$<br>`
           } else {
             // si autre méthode et résultat fractionnaire calcul (n*a)/b
             texteCorr += ` $${texFractionFromString(
               a,
-              miseEnEvidence(b, 'blue'),
+              miseEnEvidence(b, bleuMathalea),
             )}\\times${n}=(${n}\\times${a})\\div${miseEnEvidence(
               b,
-              'blue',
+              bleuMathalea,
             )}=${n * a}\\div${miseEnEvidence(
               b,
-              'blue',
-            )}=${texFractionFromString(n * a, miseEnEvidence(b, 'blue'))}$<br>`
+              bleuMathalea,
+            )}=${texFractionFromString(n * a, miseEnEvidence(b, bleuMathalea))}$<br>`
           }
           j = true
         }
@@ -156,11 +157,11 @@ export default class FractionDUnNombre extends Exercice {
           // Si autres méthodes et si (a*n)/b décimal calcul (n*a)/b
           texteCorr += ` $${texFractionFromString(
             a,
-            miseEnEvidence(b, 'blue'),
+            miseEnEvidence(b, bleuMathalea),
           )}\\times${n}=(${n}\\times${a})\\div${miseEnEvidence(
             b,
-            'blue',
-          )}=${n * a}\\div${miseEnEvidence(b, 'blue')}=${texNombre(
+            bleuMathalea,
+          )}=${n * a}\\div${miseEnEvidence(b, bleuMathalea)}=${texNombre(
             (n / b) * a,
           )}$<br>`
         } else {
@@ -168,14 +169,14 @@ export default class FractionDUnNombre extends Exercice {
           if (this.sup2 && !j) {
             texteCorr += ` $${texFractionFromString(
               a,
-              miseEnEvidence(b, 'blue'),
+              miseEnEvidence(b, bleuMathalea),
             )}\\times${n}=(${n}\\times${a})\\div${miseEnEvidence(
               b,
-              'blue',
+              bleuMathalea,
             )}=${n * a}\\div${miseEnEvidence(
               b,
-              'blue',
-            )}=${texFractionFromString(n * a, miseEnEvidence(b, 'blue'))}$<br>`
+              bleuMathalea,
+            )}=${texFractionFromString(n * a, miseEnEvidence(b, bleuMathalea))}$<br>`
           }
         }
         // si autre méthode et a/b décimal calcul (a/b)*n
@@ -185,10 +186,10 @@ export default class FractionDUnNombre extends Exercice {
         ) {
           texteCorr += ` $${texFractionFromString(
             a,
-            miseEnEvidence(b, 'blue'),
+            miseEnEvidence(b, bleuMathalea),
           )}\\times${n}=(${a}\\div${miseEnEvidence(
             b,
-            'blue',
+            bleuMathalea,
           )})\\times${n}=${texNombre(
             a / b,
           )}\\times${n}=${texNombre((n / b) * a)}$`

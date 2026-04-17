@@ -19,6 +19,7 @@ import {
   pointSurCercle,
   pointSurDroite,
 } from '../../lib/2d/utilitairesPoint'
+import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { remplisLesBlancs } from '../../lib/interactif/questionMathLive'
@@ -100,7 +101,7 @@ export default class RegionsDuPlan extends Exercice {
             const dd = droite(N, P)
             const s = segmentAvecExtremites(A, B)
             const ad = codageAngleDroit(P, N, B)
-            const egLongueur = codageSegments('//', 'blue', A, N, N, B)
+            const egLongueur = codageSegments('//', bleuMathalea, A, N, N, B)
             const P1 = pointSurDroite(dd, 25)
             const P2 = pointSurDroite(dd, -25)
             const poly = polygone(
@@ -350,7 +351,7 @@ export default class RegionsDuPlan extends Exercice {
             const P = rotation(A, N, 90)
             const s = segmentAvecExtremites(A, B)
             const ad = codageAngleDroit(P, N, B)
-            const egLongueur = codageSegments('//', 'blue', A, N, N, B)
+            const egLongueur = codageSegments('//', bleuMathalea, A, N, N, B)
 
             objetsEnonce.push(s, d, ad, egLongueur, labels)
             texte = texte.replace('grisée du plan', 'rouge du plan')

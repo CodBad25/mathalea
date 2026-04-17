@@ -40,6 +40,7 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 export const dateDeModifImportante = '14/11/2021'
 export const amcReady = true
 export const amcType = 'AMCOpen'
@@ -412,7 +413,7 @@ export default class ConstruireParSymetrie extends Exercice {
           DD = symetrieAxiale(D, d, `${p1nom[3]}'`, 'above')
           EE = symetrieAxiale(E, d, `${p1nom[4]}'`, 'above')
           cC = pointEstSur(C, d) ? C : codageMediatrice(C, CC, 'red', '|')
-          cD = pointEstSur(D, d) ? D : codageMediatrice(D, DD, 'blue', 'X')
+          cD = pointEstSur(D, d) ? D : codageMediatrice(D, DD, bleuMathalea, 'X')
           cE = pointEstSur(E, d) ? E : codageMediatrice(E, EE, 'green', 'O')
           sC = pointEstSur(C, d) ? vide2d() : segment(C, CC)
           sD = pointEstSur(D, d) ? vide2d() : segment(D, DD)
@@ -496,7 +497,7 @@ export default class ConstruireParSymetrie extends Exercice {
           DD = symetrieAxiale(D, d, `${p1nom[3]}'`, 'above')
           EE = symetrieAxiale(E, d, `${p1nom[4]}'`, 'above')
           cC = pointEstSur(C, d) ? C : codageMediatrice(C, CC, 'red', '|')
-          cD = pointEstSur(D, d) ? D : codageMediatrice(D, DD, 'blue', 'X')
+          cD = pointEstSur(D, d) ? D : codageMediatrice(D, DD, bleuMathalea, 'X')
           cE = pointEstSur(E, d) ? E : codageMediatrice(E, EE, 'green', 'O')
           sC = pointEstSur(C, d) ? vide2d() : segment(C, CC)
           sD = pointEstSur(D, d) ? vide2d() : segment(D, DD)
@@ -578,7 +579,7 @@ export default class ConstruireParSymetrie extends Exercice {
           DD = symetrieAxiale(D, d, `${p1nom[3]}'`, 'above')
           EE = symetrieAxiale(E, d, `${p1nom[4]}'`, 'above')
           cC = pointEstSur(C, d) ? C : codageMediatrice(C, CC, 'red', '|')
-          cD = pointEstSur(D, d) ? D : codageMediatrice(D, DD, 'blue', 'X')
+          cD = pointEstSur(D, d) ? D : codageMediatrice(D, DD, bleuMathalea, 'X')
           cE = pointEstSur(E, d) ? E : codageMediatrice(E, EE, 'green', 'O')
           sC = pointEstSur(C, d) ? vide2d() : segment(C, CC)
           sD = pointEstSur(D, d) ? vide2d() : segment(D, DD)
@@ -718,7 +719,7 @@ export default class ConstruireParSymetrie extends Exercice {
             : codageMediatrice(
                 p1.listePoints[1],
                 p2.listePoints[1],
-                'blue',
+                bleuMathalea,
                 'X',
               )
           cE = pointEstSur(p1.listePoints[2], d)
@@ -734,7 +735,7 @@ export default class ConstruireParSymetrie extends Exercice {
             : segment(p1.listePoints[0], p2.listePoints[0], 'red')
           sD = pointEstSur(p1.listePoints[1], d)
             ? vide2d()
-            : segment(p1.listePoints[1], p2.listePoints[1], 'blue')
+            : segment(p1.listePoints[1], p2.listePoints[1], bleuMathalea)
           sE = pointEstSur(p1.listePoints[2], d)
             ? vide2d()
             : segment(p1.listePoints[2], p2.listePoints[2], 'green')
@@ -865,7 +866,7 @@ export default class ConstruireParSymetrie extends Exercice {
             : codageMediatrice(
                 p1.listePoints[1],
                 p2.listePoints[1],
-                'blue',
+                bleuMathalea,
                 'X',
               )
           cE = pointEstSur(p1.listePoints[2], d)
@@ -881,7 +882,7 @@ export default class ConstruireParSymetrie extends Exercice {
             : segment(p1.listePoints[0], p2.listePoints[0], 'red')
           sD = pointEstSur(p1.listePoints[1], d)
             ? vide2d()
-            : segment(p1.listePoints[1], p2.listePoints[1], 'blue')
+            : segment(p1.listePoints[1], p2.listePoints[1], bleuMathalea)
           sE = pointEstSur(p1.listePoints[2], d)
             ? vide2d()
             : segment(p1.listePoints[2], p2.listePoints[2], 'green')
@@ -1005,7 +1006,7 @@ export default class ConstruireParSymetrie extends Exercice {
             : codageMediatrice(
                 p1.listePoints[1],
                 p2.listePoints[1],
-                'blue',
+                bleuMathalea,
                 'X',
               )
           cE = pointEstSur(p1.listePoints[2], d)
@@ -1021,7 +1022,7 @@ export default class ConstruireParSymetrie extends Exercice {
             : segment(p1.listePoints[0], p2.listePoints[0], 'red')
           sD = pointEstSur(p1.listePoints[1], d)
             ? vide2d()
-            : segment(p1.listePoints[1], p2.listePoints[1], 'blue')
+            : segment(p1.listePoints[1], p2.listePoints[1], bleuMathalea)
           sE = pointEstSur(p1.listePoints[2], d)
             ? vide2d()
             : segment(p1.listePoints[2], p2.listePoints[2], 'green')
@@ -1140,7 +1141,7 @@ export default class ConstruireParSymetrie extends Exercice {
           DD = rotation(D, B, 180, `${p1nom[3]}'`, 'above')
           AA = rotation(A, B, 180, `${p1nom[0]}'`, 'above')
           cC = codageMilieu(C, CC, 'red', '|', false)
-          cD = codageMilieu(D, DD, 'blue', '||', false)
+          cD = codageMilieu(D, DD, bleuMathalea, '||', false)
           cA = codageMilieu(A, AA, 'green', '|||', false)
           sC = segment(C, CC)
           sD = segment(D, DD)
@@ -1216,7 +1217,7 @@ export default class ConstruireParSymetrie extends Exercice {
           cD = codageMilieu(
             p1.listePoints[1],
             p2.listePoints[1],
-            'blue',
+            bleuMathalea,
             'X',
             false,
           )
@@ -1228,7 +1229,7 @@ export default class ConstruireParSymetrie extends Exercice {
             false,
           )
           sA = segment(p1.listePoints[0], p2.listePoints[0], 'red')
-          sC = segment(p1.listePoints[1], p2.listePoints[1], 'blue')
+          sC = segment(p1.listePoints[1], p2.listePoints[1], bleuMathalea)
           sD = segment(p1.listePoints[2], p2.listePoints[2], 'green')
 
           objetsCorrection.push(

@@ -20,6 +20,7 @@ import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { ajouterAide } from '../../lib/outils/enrichissements'
 import { fraction } from '../../modules/fractions'
 import { representationFraction } from '../../modules/representationsFractions'
+import { bleuMathalea } from '../../lib/colors'
 
 export const titre =
   'Encadrer une fraction entre deux nombres entiers consécutifs'
@@ -90,7 +91,7 @@ export default class EncadrerFractionEntre2Entiers extends Exercice {
         height: 120,
       })
       figure.options.automaticUserMessage = false
-      figure.options.color = 'blue'
+      figure.options.color = bleuMathalea
       figure.create('RectangleFractionDiagram', {
         denominator: 2,
         numberOfRectangles: 5,
@@ -142,7 +143,7 @@ export default class EncadrerFractionEntre2Entiers extends Exercice {
           3,
           0,
           'barre',
-          'blue',
+          bleuMathalea,
         )
         texteCorr +=
           '<br>' +

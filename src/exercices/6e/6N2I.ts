@@ -1,4 +1,4 @@
-import { orangeMathalea } from '../../lib/colors'
+import { orangeMathalea, bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -102,7 +102,7 @@ export default class DivisionDecimale extends Exercice {
             operande2: b,
             type: 'division',
             precision: 4,
-            options: { solution: true, colore: 'blue' },
+            options: { solution: true, colore: bleuMathalea },
           })
           texteCorr += `<br>$${texNombre(a)}\\div${b}=${texNombre(q)}$`
           texteCorr += `<br>Chaque verre va contenir $${texNombre(q)}$ L de jus ${fruits}, soit $${miseEnEvidence(texNombre(arrondi(q * 100)))}$ cL.`
@@ -199,7 +199,7 @@ export default class DivisionDecimale extends Exercice {
             operande2: b,
             type: 'division',
             precision: 4,
-            options: { solution: true, colore: 'blue' },
+            options: { solution: true, colore: bleuMathalea },
           })
           texteCorr += `<br>$${texNombre(a)}\\div${b}=${texNombre(q)}$`
           texteCorr += `<br>Chaque morceau mesurera $${texNombre(q)}\\text{ m}$ ${matiere}, soit $${miseEnEvidence(texNombre(arrondi(q * 100)))}\\text{ cm}$.`
@@ -236,7 +236,7 @@ export default class DivisionDecimale extends Exercice {
             operande2: b,
             type: 'division',
             precision: 4,
-            options: { solution: true, colore: 'blue' },
+            options: { solution: true, colore: bleuMathalea },
           })
           texteCorr += `<br>$${texNombre(a)}\\div${b}=${texNombre(q)}$`
           texteCorr += `<br>Chaque portion contiendra $${texNombre(q)}$ kg ${aliment}, soit $${miseEnEvidence(texNombre(arrondi(q * 1000)))}$ g.`

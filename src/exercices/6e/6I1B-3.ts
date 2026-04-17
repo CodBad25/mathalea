@@ -35,6 +35,7 @@ import {
   tournerG,
 } from '../../modules/2dLutin'
 import { scratchblock } from '../../modules/scratchblock'
+import { bleuMathalea } from '../../lib/colors'
 
 export const interactifReady = true
 export const interactifType = 'cliqueFigure'
@@ -355,7 +356,7 @@ export default class AlgoTortue extends Exercice {
         point(lutins[i].listeTraces[0][0], lutins[i].listeTraces[0][1]),
       )
       depart[i].taille = 5
-      depart[i].color = colorToLatexOrHTML('blue')
+      depart[i].color = colorToLatexOrHTML(bleuMathalea)
       depart[i].epaisseur = 2
       if (i === 0) {
         objetsCorrection.push(depart[0])

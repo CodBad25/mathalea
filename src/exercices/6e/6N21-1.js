@@ -10,6 +10,7 @@ import FractionEtendue from '../../modules/FractionEtendue'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 export const titre = 'Utiliser des abscisses fractionnaires (niv 2)'
 export const interactifReady = false
 // remettre interactif_Ready à true qd point_Cliquable sera de nouveau opérationnel
@@ -212,7 +213,7 @@ export default class PlacerPointsAbscissesFractionnairesComplexes extends Exerci
             {
               size: 8,
               width: 5,
-              color: 'blue',
+              color: bleuMathalea,
               radius: tailleUnite / data[tab].id / 2,
             },
           )
@@ -258,7 +259,7 @@ export default class PlacerPointsAbscissesFractionnairesComplexes extends Exerci
           lettreIndiceeDepuisChiffre(i + 1),
         )
       }
-      const traceA = tracePoint(A, 'blue')
+      const traceA = tracePoint(A, bleuMathalea)
       traceA.epaisseur = this.interactif ? 3 : 2
       traceA.taille = this.interactif ? 5 : 3
       labels = labelPoint(A)
@@ -278,7 +279,7 @@ export default class PlacerPointsAbscissesFractionnairesComplexes extends Exerci
             lettreIndiceeDepuisChiffre(i * 3 + 2),
           )
         }
-        traceB = tracePoint(B, 'blue')
+        traceB = tracePoint(B, bleuMathalea)
         traceB.epaisseur = 2
         traceB.taille = 3
         if (context.isHtml) {
@@ -294,7 +295,7 @@ export default class PlacerPointsAbscissesFractionnairesComplexes extends Exerci
             lettreIndiceeDepuisChiffre(i * 3 + 3),
           )
         }
-        traceC = tracePoint(C, 'blue')
+        traceC = tracePoint(C, bleuMathalea)
         traceC.epaisseur = 2
         traceC.taille = 3
         labels = labelPoint(A, B, C)

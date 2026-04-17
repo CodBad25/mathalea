@@ -184,15 +184,15 @@ function questionAchat(exo: Exercice, i: number): QuestionReturn {
       texNombre(y / n),
     )}$ fois $${miseEnEvidence(
       texNombre(n),
-      'blue',
+      bleuMathalea,
     )}$ ${objet}.<br> Si $${miseEnEvidence(
       texNombre(n),
-      'blue',
+      bleuMathalea,
     )}$ ${objet} coûtent $${texPrix(x)}$${sp()}€, alors $${miseEnEvidence(
       texNombre(y / n),
     )}$ fois $${miseEnEvidence(
       texNombre(n),
-      'blue',
+      bleuMathalea,
     )}$ ${objet} coûtent $${miseEnEvidence(
       texNombre(y / n),
     )}$ fois $${texPrix(x)}$${sp()}€.<br>` +
@@ -214,7 +214,7 @@ function questionAchat(exo: Exercice, i: number): QuestionReturn {
     texNombre(z / x),
   )}$ fois $${texPrix(x)}$${sp()}€.<br> Si avec $${texPrix(x)}$${sp()}€ on peut acheter $${miseEnEvidence(
     texNombre(n),
-    'blue',
+    bleuMathalea,
   )}$ ${objet}, alors avec $${miseEnEvidence(
     texNombre(z / x),
   )}$ fois $${texPrix(x)}$${sp()}€, on peut acheter $${miseEnEvidence(

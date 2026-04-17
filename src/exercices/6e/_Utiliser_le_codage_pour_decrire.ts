@@ -29,6 +29,7 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 
 /**
  * @author Jean-claude Lhote
@@ -415,7 +416,7 @@ export default class UtiliserLeCodagePourDecrire extends Exercice {
               C,
               2,
               '||',
-              'blue',
+              bleuMathalea,
               2,
               1,
               'none',
@@ -434,7 +435,7 @@ export default class UtiliserLeCodagePourDecrire extends Exercice {
               C,
               2,
               '||',
-              'blue',
+              bleuMathalea,
               2,
               1,
               'none',

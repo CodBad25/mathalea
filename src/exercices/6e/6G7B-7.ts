@@ -33,6 +33,7 @@ import type {
 } from '../../lib/2d/Interfaces'
 import { mediatrice } from '../../lib/2d/Mediatrice'
 import { vide2d } from '../../lib/2d/Vide2d'
+import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { setReponse } from '../../lib/interactif/gestionInteractif'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
@@ -368,7 +369,10 @@ export default class PavageEtReflexion2d extends Exercice {
       objets,
       texteNoir,
     ) // monpavage.fenetre est calibrée pour faire entrer le pavage dans une feuille A4
-    const couleurs = combinaisonListes(['green', 'red', 'blue'], nbSymetriques)
+    const couleurs = combinaisonListes(
+      ['green', 'red', bleuMathalea],
+      nbSymetriques,
+    )
     for (let i = 0; i < nbSymetriques; i++) {
       setReponse(this, i, couples[i][1])
       texte +=

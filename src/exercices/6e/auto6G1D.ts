@@ -29,6 +29,7 @@ import {
 } from '../../modules/outils'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 export const titre = 'Nommer et coder des polygones'
 export const dateDeModifImportante = '10/01/2024'
 
@@ -70,9 +71,9 @@ const choisirPolygone: (
       C = p.listePoints[2]
       pnom = nommePolygone(p, nom[0] + nom[1] + nom[2])
       pcode = [
-        codageSegments('||', 'blue', A, B, A, C),
-        codageAngle(B, C, A, 0.8, '|', 'blue', 2, 0.8, 'blue', 0.2),
-        codageAngle(C, B, A, 0.8, '|', 'blue', 2, 0.8, 'blue', 0.2),
+        codageSegments('||', bleuMathalea, A, B, A, C),
+        codageAngle(B, C, A, 0.8, '|', bleuMathalea, 2, 0.8, bleuMathalea, 0.2),
+        codageAngle(C, B, A, 0.8, '|', bleuMathalea, 2, 0.8, bleuMathalea, 0.2),
       ]
       enonce = `Le triangle $${nom[0] + nom[1] + nom[2]}$ est isocèle en $${nom[0]}$.<br>`
       break
@@ -87,10 +88,10 @@ const choisirPolygone: (
       C = p.listePoints[2]
       pnom = nommePolygone(p, nom[0] + nom[1] + nom[2])
       pcode = [
-        codageSegments('||', 'blue', A, B, A, C, B, C),
-        codageAngle(B, C, A, 0.8, '|', 'blue', 2, 0.8, 'blue', 0.2),
-        codageAngle(C, B, A, 0.8, '|', 'blue', 2, 0.8, 'blue', 0.2),
-        codageAngle(C, A, B, 0.8, '|', 'blue', 2, 0.8, 'blue', 0.2),
+        codageSegments('||', bleuMathalea, A, B, A, C, B, C),
+        codageAngle(B, C, A, 0.8, '|', bleuMathalea, 2, 0.8, bleuMathalea, 0.2),
+        codageAngle(C, B, A, 0.8, '|', bleuMathalea, 2, 0.8, bleuMathalea, 0.2),
+        codageAngle(C, A, B, 0.8, '|', bleuMathalea, 2, 0.8, bleuMathalea, 0.2),
       ]
       enonce = `Le triangle $${nom[0] + nom[1] + nom[2]}$ est équilatéral.<br>$\\phantom{et sa longueur est AB}$`
       break
@@ -118,10 +119,10 @@ const choisirPolygone: (
       C = p.listePoints[2]
       pnom = nommePolygone(p, nom[0] + nom[1] + nom[2])
       pcode = [
-        codageSegments('||', 'blue', A, B, A, C),
+        codageSegments('||', bleuMathalea, A, B, A, C),
         codageAngleDroit(B, A, C),
-        codageAngle(B, C, A, 0.8, '|', 'blue', 2, 0.8, 'blue', 0.2),
-        codageAngle(C, B, A, 0.8, '|', 'blue', 2, 0.8, 'blue', 0.2),
+        codageAngle(B, C, A, 0.8, '|', bleuMathalea, 2, 0.8, bleuMathalea, 0.2),
+        codageAngle(C, B, A, 0.8, '|', bleuMathalea, 2, 0.8, bleuMathalea, 0.2),
       ]
       enonce = `Le triangle $${nom[0] + nom[1] + nom[2]}$ est rectangle et isocèle en $${nom[0]}$.`
       break
@@ -137,7 +138,7 @@ const choisirPolygone: (
       D = p.listePoints[3]
       pnom = nommePolygone(p, nom[0] + nom[1] + nom[2] + nom[3])
       pcode = [
-        codageSegments('||', 'blue', A, B, B, C, C, D, D, A),
+        codageSegments('||', bleuMathalea, A, B, B, C, C, D, D, A),
         codageAngleDroit(B, A, D),
         codageAngleDroit(A, B, C),
         codageAngleDroit(B, C, D),
@@ -158,7 +159,7 @@ const choisirPolygone: (
       D = p.listePoints[3]
       pnom = nommePolygone(p, nom[0] + nom[1] + nom[2] + nom[3])
       pcode = [
-        codageSegments('||', 'blue', A, B, C, D),
+        codageSegments('||', bleuMathalea, A, B, C, D),
         codageSegments('|', 'red', C, B, A, D),
         codageAngleDroit(B, A, C),
         codageAngleDroit(A, B, C),
@@ -180,11 +181,11 @@ const choisirPolygone: (
       D = p.listePoints[3]
       pnom = nommePolygone(p, nom[0] + nom[1] + nom[2] + nom[3])
       pcode = [
-        codageSegments('O', 'blue', A, B, B, C, C, D, D, A),
+        codageSegments('O', bleuMathalea, A, B, B, C, C, D, D, A),
         codageAngle(C, D, A, 0.8, '||', 'red', 2, 0.8, 'red', 0.2),
         codageAngle(C, B, A, 0.8, '||', 'red', 2, 0.8, 'red', 0.2),
-        codageAngle(B, C, D, 0.8, '|', 'blue', 2, 0.8, 'blue', 0.2),
-        codageAngle(D, A, B, 0.8, '|', 'blue', 2, 0.8, 'blue', 0.2),
+        codageAngle(B, C, D, 0.8, '|', bleuMathalea, 2, 0.8, bleuMathalea, 0.2),
+        codageAngle(D, A, B, 0.8, '|', bleuMathalea, 2, 0.8, bleuMathalea, 0.2),
       ]
       enonce = `Le quadrilatère $${nom[0] + nom[1] + nom[2] + nom[3]}$ est un losange et [$${nom[0] + nom[2]}$] est sa plus grande diagonale.`
       break

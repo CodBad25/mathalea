@@ -16,6 +16,7 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 
 export const titre = 'Mesurer un angle'
 
@@ -135,7 +136,7 @@ export default class MesurerUnAngle extends Exercice {
           fixeBordures([A, C, D, seg1, seg2, labelPoint(A, C, D)]),
         ),
         tracePoint(A),
-        codageAngle(C, A, D, 1, '', 'blue', 1, 1),
+        codageAngle(C, A, D, 1, '', bleuMathalea, 1, 1),
         labelPoint(A, C, D),
         seg1,
         seg2,
