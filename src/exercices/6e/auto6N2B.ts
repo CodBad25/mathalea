@@ -59,6 +59,7 @@ export default class NombreDecimalOraliseDeDifferentesManieres extends Exercice 
       '1 : Du nombre décimal à la fraction décimale\n2 : De la fraction décimale au nombre décimal',
     ]
     this.sup = 3
+    this.sup2 = 1
   }
 
   nouvelleVersion() {
