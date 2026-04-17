@@ -24,7 +24,6 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { bleuMathalea } from '../../lib/colors'
 
 export const titre = "Calculer l'aire de carré, rectangle ou triangle rectangle"
 export const dateDeModifImportante = '24/04/2025'
