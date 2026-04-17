@@ -40,6 +40,7 @@ import { mathalea2d } from '../../modules/mathalea2d'
 import { randint } from '../../modules/outils'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 
 export const titre =
   'Liste des patterns stockés dans MathALÉA avec leurs numéros de référence'
@@ -157,7 +158,7 @@ L'expression donnée entre crochets est la formule qui permet de calculer le nom
           pattern.iterate = pat.iterate
           objets.push(pattern.render(j, j + 1, 0))
         }
-        texte += `\n${texteEnCouleurEtGras(`Pattern ${i + 1}`, 'blue')}:  <br>`
+        texte += `\n${texteEnCouleurEtGras(`Pattern ${i + 1}`, bleuMathalea)}:  <br>`
         texte += mathalea2d(
           Object.assign(
             fixeBordures(objets, { rxmin: 0, rymin: -1, rxmax: 0, rymax: 1 }),
@@ -183,7 +184,7 @@ L'expression donnée entre crochets est la formule qui permet de calculer le nom
             : null
           : null
 
-        texte += `\n${texteEnCouleurEtGras(`Pattern ${i + 1}`, 'blue')}: Motif 43 : $\\left(${n43}\\right)$ ${n43F ? `; fraction : $${n43F}$ ` : ''} ${n43R ? `; ratio : $${n43R}$` : ''} ; formule : ${sp(6)}$\\left[${miseEnEvidence(pat.formule ?? '')}\\right]$ <br>`
+        texte += `\n${texteEnCouleurEtGras(`Pattern ${i + 1}`, bleuMathalea)}: Motif 43 : $\\left(${n43}\\right)$ ${n43F ? `; fraction : $${n43F}$ ` : ''} ${n43R ? `; ratio : $${n43R}$` : ''} ; formule : ${sp(6)}$\\left[${miseEnEvidence(pat.formule ?? '')}\\right]$ <br>`
 
         const patternRiche = pat
         if (context.isHtml)

@@ -15,6 +15,7 @@ import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu } from '../../modules/outils'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 export const titre = "Encadrer l'aire d'un disque"
 
 export const refs = {
@@ -185,15 +186,15 @@ export default class EncadrerAireDisque extends Exercice {
           longueur(centre, C) <= rayon &&
           longueur(centre, D) <= rayon
         ) {
-          Kre = polygone([A, B, C, D], 'blue')
+          Kre = polygone([A, B, C, D], bleuMathalea)
           Kre2 = symetrieAxiale(
             Kre,
             droite(centre, point(centre.x, centre.y + 1)),
           )
-          Kre.couleurDeRemplissage = colorToLatexOrHTML('blue')
+          Kre.couleurDeRemplissage = colorToLatexOrHTML(bleuMathalea)
           Kre.opaciteDeRemplissage = 0.5
-          Kre2.color = colorToLatexOrHTML('blue')
-          Kre2.couleurDeRemplissage = colorToLatexOrHTML('blue')
+          Kre2.color = colorToLatexOrHTML(bleuMathalea)
+          Kre2.couleurDeRemplissage = colorToLatexOrHTML(bleuMathalea)
           Kre2.opaciteDeRemplissage = 0.5
           objets.push(Kre, Kre2)
           Kre = symetrieAxiale(
@@ -205,11 +206,11 @@ export default class EncadrerAireDisque extends Exercice {
             droite(centre, point(centre.x + 1, centre.y)),
           )
           compteurInterieur = compteurInterieur + 4
-          Kre.color = colorToLatexOrHTML('blue')
-          Kre.couleurDeRemplissage = colorToLatexOrHTML('blue')
+          Kre.color = colorToLatexOrHTML(bleuMathalea)
+          Kre.couleurDeRemplissage = colorToLatexOrHTML(bleuMathalea)
           Kre.opaciteDeRemplissage = 0.5
-          Kre2.color = colorToLatexOrHTML('blue')
-          Kre2.couleurDeRemplissage = colorToLatexOrHTML('blue')
+          Kre2.color = colorToLatexOrHTML(bleuMathalea)
+          Kre2.couleurDeRemplissage = colorToLatexOrHTML(bleuMathalea)
           Kre2.opaciteDeRemplissage = 0.5
           objets.push(Kre, Kre2)
           ordonnee1 = ordonnee2

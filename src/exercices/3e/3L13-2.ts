@@ -23,6 +23,7 @@ import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 
 export const titre =
   'Résoudre une équation résolvante pour le théorème de Thalès'
@@ -247,11 +248,11 @@ export default class EqResolvantesThales extends Exercice {
           question: '',
           correction: `${corrPlusPremiereLigne}
 $${situations[k].eq}$<br>
-${texteEnCouleurEtGras('Les produits en croix sont égaux.', 'blue')}<br>
+${texteEnCouleurEtGras('Les produits en croix sont égaux.', bleuMathalea)}<br>
 $${texNombre(c, 4)}\\times ${inc} = ${texNombre(a, 2)}\\times ${ecritureParentheseSiNegatif(b)}$<br>
-${texteEnCouleurEtGras(`On divise les deux membres par ${texNombre(c, 2)}`, 'blue')}.<br>
+${texteEnCouleurEtGras(`On divise les deux membres par ${texNombre(c, 2)}`, bleuMathalea)}.<br>
 $\\dfrac{${texNombre(c, 4)}\\times ${inc}}{${texNombre(c, 4)}}= \\dfrac{${texNombre(a, 4)}\\times ${ecritureParentheseSiNegatif(b)}}{${texNombre(c, 4)}}$<br>
-${texteEnCouleurEtGras('On simplifie et on calcule.', 'blue')}<br>
+${texteEnCouleurEtGras('On simplifie et on calcule.', bleuMathalea)}<br>
 $${inc}=${miseEnEvidence(texNombre((b * a) / c, 4))}$`,
           correctionInteractif: [((b * a) / c).toFixed(4)],
         })

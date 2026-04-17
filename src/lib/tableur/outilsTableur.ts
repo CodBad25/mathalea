@@ -1,3 +1,4 @@
+import { context } from '../../modules/context'
 import { randint } from '../../modules/outils'
 import { toutPourUnPoint } from '../interactif/mathLive'
 import type { GoodAnswersFormulas, IExercice, SheetTestDatas } from '../types'
@@ -338,7 +339,7 @@ export function createTableurLatex(
       const cell = rowData[colIndex] || {}
       const styleCell = styles[cell.s ?? ''] || {}
       let color = ''
-      if (styleCell.bg?.startsWith('#')) {
+      if (!context.isHtml && styleCell.bg?.startsWith('#')) {
         color = `\\cellcolor[HTML]{${styleCell.bg.replace('#', '')}}`
       } else if (styleCell.bg) {
         color = `\\cellcolor{${styleCell.bg}}`

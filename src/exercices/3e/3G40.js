@@ -24,6 +24,7 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 
 export const dateDeModifImportante = '02/11/2022' // EE : Mise en place de this.sup2, des unités et du grossissement des points
 export const titre = 'Se repérer sur une sphère'
@@ -218,7 +219,7 @@ export default class ReperageSurLaSphere extends Exercice {
     if (this.sup3) {
       const Axe = arete3d(PoleSud, PoleNord)
       Axe.c2d.epaisseur = 2
-      Axe.c2d.color = colorToLatexOrHTML('blue')
+      Axe.c2d.color = colorToLatexOrHTML(bleuMathalea)
       objetsEnonce.push(Axe.c2d)
       objetsCorrection.push(Axe.c2d)
     }
@@ -279,12 +280,12 @@ export default class ReperageSurLaSphere extends Exercice {
       P[i].c2d.nom = `${nom[i]}`
       P[i].c2d.positionLabel = 'above left'
       lab = labelPoint(P[i].c2d)
-      lab.color = colorToLatexOrHTML('blue')
+      lab.color = colorToLatexOrHTML(bleuMathalea)
       lab.taille = 15
       croix = tracePoint(P[i].c2d)
       croix.taille = 5
       croix.epaisseur = 2
-      croix.color = colorToLatexOrHTML('blue')
+      croix.color = colorToLatexOrHTML(bleuMathalea)
       croix.style = 'x'
 
       switch (listeTypeDeQuestions[i]) {

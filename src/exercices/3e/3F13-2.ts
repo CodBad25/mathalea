@@ -12,6 +12,7 @@ import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { gestionnaireFormulaireTexte, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 
 export const titre = "Résoudre $f(x)=k$ à partir d'un graphique"
 export const interactifReady = true
@@ -182,7 +183,7 @@ export default class AntecedentGraphique extends Exercice {
         yUnite,
         yThickDistance: Math.round(1 / yUnite),
       })
-      const Cf = courbe(f, { repere: r, step: 0.2, color: 'blue' })
+      const Cf = courbe(f, { repere: r, step: 0.2, color: bleuMathalea })
       texte += mathalea2d(
         {
           xmin: -10,

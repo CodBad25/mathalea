@@ -21,6 +21,7 @@ import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -131,7 +132,7 @@ export default class CalculDAngle extends Exercice {
       const nomme = nommePolygone(p2, nom)
       const nommeb = nommePolygone(p4, nom)
 
-      const hypo = segment(Cb, Bb, 'blue')
+      const hypo = segment(Cb, Bb, bleuMathalea)
       hypo.epaisseur = 2
       const codageDeAngle = codageAngle(A, B, C, 2)
       const codageDeAngleB = codageAngle(A, Bb, Cb, 2)

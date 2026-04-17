@@ -129,7 +129,7 @@ export default class ListePatternsTousLesExos extends Exercice {
           if ('iterate' in pat) pattern.iterate = pat.iterate
           objets.push(pattern.render(j, j + 1, 0))
         }
-        texte += `\n${texteEnCouleurEtGras(`Pattern ${i + 1}`, 'blue')}:  <br>`
+        texte += `\n${texteEnCouleurEtGras(`Pattern ${i + 1}`, bleuMathalea)}:  <br>`
         texte += mathalea2d(
           Object.assign(
             fixeBordures(objets, { rxmin: 0, rymin: -1, rxmax: 0, rymax: 1 }),
@@ -269,7 +269,7 @@ export default class ListePatternsTousLesExos extends Exercice {
           yMax = Math.max(yMax, ymax)
           yMin = Math.min(yMin, ymin)
         }
-        texte += `${texteEnCouleurEtGras(`Pattern ${i + 1}`, 'blue')}:<br> Pour le motif 43, il y a ${n43} ${nom}.<br>`
+        texte += `${texteEnCouleurEtGras(`Pattern ${i + 1}`, bleuMathalea)}:<br> Pour le motif 43, il y a ${n43} ${nom}.<br>`
         texte += `Pour le motif $${miseEnEvidence('n', bleuMathalea)}$, il y a $${miseEnEvidence(pat.formule, bleuMathalea)}$ éléments.<br>`
 
         texte +=

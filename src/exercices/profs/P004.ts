@@ -6,6 +6,7 @@ import { arrondi, troncature } from '../../lib/outils/nombres'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 
 export const titre = 'Construire des droites graduées avec zoom'
 
@@ -92,7 +93,7 @@ export default class FeuilleDeZooms extends Exercice {
           ],
           pointTaille: 6,
           pointOpacite: 0.8,
-          pointCouleur: 'blue',
+          pointCouleur: bleuMathalea,
           pointStyle: '|',
           pointEpaisseur: 2,
           axeStyle: extremite,
@@ -118,7 +119,7 @@ export default class FeuilleDeZooms extends Exercice {
           ],
           pointTaille: 6,
           pointOpacite: 0.8,
-          pointCouleur: 'blue',
+          pointCouleur: bleuMathalea,
           pointStyle: '|',
           pointEpaisseur: 2,
           axeStyle: extremite,
@@ -182,7 +183,7 @@ export default class FeuilleDeZooms extends Exercice {
           ],
           pointTaille: 6,
           pointOpacite: 0.8,
-          pointCouleur: 'blue',
+          pointCouleur: bleuMathalea,
           pointStyle: '|',
           pointEpaisseur: 3,
           axeStyle: extremite,
@@ -213,7 +214,7 @@ export default class FeuilleDeZooms extends Exercice {
           ],
           pointTaille: 6,
           pointOpacite: 0.8,
-          pointCouleur: 'blue',
+          pointCouleur: bleuMathalea,
           pointStyle: '|',
           pointEpaisseur: 2,
           axeStyle: extremite,
@@ -240,7 +241,7 @@ export default class FeuilleDeZooms extends Exercice {
           ],
           pointTaille: 6,
           pointOpacite: 0.8,
-          pointCouleur: 'blue',
+          pointCouleur: bleuMathalea,
           pointStyle: '|',
           pointEpaisseur: 2,
           axeStyle: extremite,

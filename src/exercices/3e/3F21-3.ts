@@ -18,7 +18,7 @@ import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { contraindreValeur, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { orangeMathalea } from '../../lib/colors'
+import { orangeMathalea, bleuMathalea } from '../../lib/colors'
 
 export const titre =
   "Lire graphiquement les caractéristiques de la courbe représentative d'une fonction affine ou linéaire"
@@ -102,7 +102,7 @@ export default class PenteEtOrdonneeOrigineDroite extends Exercice {
       const f = (x: number): number => a * x + b
 
       const d = droite(a, -1, b)
-      d.color = colorToLatexOrHTML('blue')
+      d.color = colorToLatexOrHTML(bleuMathalea)
       d.epaisseur = 2
       const c = cercle(point(0, b), 0.8, orangeMathalea)
       c.epaisseur = 2

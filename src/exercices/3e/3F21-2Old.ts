@@ -17,6 +17,7 @@ import { fraction } from '../../modules/fractions'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 
 export const titre =
   'Déterminer une fonction affine par la donnée des images de deux nombres'
@@ -113,7 +114,7 @@ export default class DeterminerFonctionAffine3eOld extends Exercice {
                 scale: 0.7,
               },
               r,
-              courbe((x) => a * x + b, { repere: r, color: 'blue' }),
+              courbe((x) => a * x + b, { repere: r, color: bleuMathalea }),
               tA,
               tB,
             )}`
@@ -151,7 +152,7 @@ export default class DeterminerFonctionAffine3eOld extends Exercice {
                 scale: 0.7,
               },
               r,
-              courbe((x) => a * x + b, { repere: r, color: 'blue' }),
+              courbe((x) => a * x + b, { repere: r, color: bleuMathalea }),
               tA,
               tB,
             )}`
@@ -191,7 +192,7 @@ export default class DeterminerFonctionAffine3eOld extends Exercice {
                 scale: 0.7,
               },
               r,
-              courbe((x) => a * x + b, { repere: r, color: 'blue' }),
+              courbe((x) => a * x + b, { repere: r, color: bleuMathalea }),
               tA,
               tB,
             )}`
@@ -233,7 +234,7 @@ export default class DeterminerFonctionAffine3eOld extends Exercice {
                 scale: 0.7,
               },
               r,
-              courbe((x) => a * x + b, { repere: r, color: 'blue' }),
+              courbe((x) => a * x + b, { repere: r, color: bleuMathalea }),
               tA,
               tB,
             )}`
@@ -282,7 +283,7 @@ export default class DeterminerFonctionAffine3eOld extends Exercice {
                 scale: 0.7,
               },
               r,
-              courbe((x) => a * x + b, { repere: r, color: 'blue' }),
+              courbe((x) => a * x + b, { repere: r, color: bleuMathalea }),
               tA,
               tB,
             )}`

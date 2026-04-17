@@ -28,6 +28,7 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 
 export const titre =
   "Exprimer le cosinus, le sinus ou la tangente d'un angle en fonction des côtés du triangle"
@@ -137,7 +138,7 @@ export default class ExprimerCosSinTan extends Exercice {
         codageAngle = afficheMesureAngle(A, B, C, 'red', 1.5, '\\alpha')
         codageAngle2 = afficheMesureAngle(A, C, B, 'red', 1.5, '\\beta')
       }
-      const hypo = segment(C, B, 'blue')
+      const hypo = segment(C, B, bleuMathalea)
       hypo.epaisseur = 2
       codageAngle.epaisseur = 3
       codageAngle2.epaisseur = 3
@@ -168,7 +169,7 @@ export default class ExprimerCosSinTan extends Exercice {
         t23 = texteSurSegment('opposé à $\\alpha$', A, H)
         t33 = texteSurSegment('adjacent à $\\alpha$', H, B)
       }
-      const hypo3 = segment(A, B, 'blue')
+      const hypo3 = segment(A, B, bleuMathalea)
       hypo3.epaisseur = 2
 
       objetsEnonce.push(p2, codage, nomme)

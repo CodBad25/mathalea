@@ -6,6 +6,7 @@ import { polygoneAvecNom } from '../../lib/2d/polygones'
 import { rotation, similitude, translation } from '../../lib/2d/transformations'
 import { pointAdistance } from '../../lib/2d/utilitairesPoint'
 import { vecteur } from '../../lib/2d/Vecteur'
+import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { setReponse } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -121,7 +122,7 @@ export default class AireCarresRectanglesTriangles extends Exercice {
             codageAngleDroit(A, D, C),
             codageAngleDroit(D, C, B),
             codageAngleDroit(B, A, D),
-            codageSegments('//', 'red', bleuMathalea, [A, B, C, D]),
+            codageSegments('//', bleuMathalea, [A, B, C, D]),
             afficheLongueurSegment(B, A),
           )
           texte = "Calculer l'aire du carré."

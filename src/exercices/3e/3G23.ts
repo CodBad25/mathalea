@@ -34,6 +34,7 @@ import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 export const interactifReady = true
 export const interactifType = 'qcm'
 
@@ -140,7 +141,7 @@ export default class TrianglesEgaux extends Exercice {
       s = rotation(r, X, 180) // on fait topurner r autour du milieu des deux extremites du plus grand côté
       r.couleurDeRemplissage = colorToLatexOrHTML('red') // solution 1 en rouge
       r.opaciteDeRemplissage = 0.2 // 0.5; //
-      s.couleurDeRemplissage = colorToLatexOrHTML('blue') // solution 2 en bleu
+      s.couleurDeRemplissage = colorToLatexOrHTML(bleuMathalea) // solution 2 en bleu
       s.opaciteDeRemplissage = 0.2 // 0.5; //
 
       // mes ajouts par rapport à la figure de JC
@@ -168,7 +169,7 @@ export default class TrianglesEgaux extends Exercice {
       // L.nom='L';
       L.nom = tabPointsNames[3]
       // on trace le segment [DE] en pointillés pour que la figure soit plus lisible
-      const sgmt_DE = segment(D, E, 'blue')
+      const sgmt_DE = segment(D, E, bleuMathalea)
       sgmt_DE.pointilles = 5
       sgmt_DE.epaisseur = 1.5
 
@@ -302,9 +303,9 @@ export default class TrianglesEgaux extends Exercice {
           break
       }
       // DE = AB
-      const seg_DE_corr = segment(D, E, 'blue')
+      const seg_DE_corr = segment(D, E, bleuMathalea)
       seg_DE_corr.epaisseur = 2
-      const seg_AB_corr = segment(p.listePoints[0], p.listePoints[1], 'blue')
+      const seg_AB_corr = segment(p.listePoints[0], p.listePoints[1], bleuMathalea)
       seg_AB_corr.epaisseur = 2
       // DI = AC ou EI1 = AC
       const seg_DI_corr = segment(D, I, 'red')
@@ -350,7 +351,7 @@ export default class TrianglesEgaux extends Exercice {
           // les segments
           seg_AB_corr,
           seg_DE_corr,
-          codageSegments('×', 'blue', p.listePoints[0], p.listePoints[1], D, E),
+          codageSegments('×', bleuMathalea, p.listePoints[0], p.listePoints[1], D, E),
           seg_AC_corr,
           seg_DI_corr,
           codageSegments('||', 'red', p.listePoints[0], p.listePoints[2], D, I),
@@ -378,9 +379,9 @@ export default class TrianglesEgaux extends Exercice {
             p.listePoints[2],
             ang_BCA,
             true,
-            'blue',
+            bleuMathalea,
           ),
-          arc(pointSurSegment(I, E, 0.8), I, ang_EID, true, 'blue'),
+          arc(pointSurSegment(I, E, 0.8), I, ang_EID, true, bleuMathalea),
           arc(
             pointSurSegment(p.listePoints[0], p.listePoints[2], 0.8),
             p.listePoints[0],
@@ -394,7 +395,7 @@ export default class TrianglesEgaux extends Exercice {
           // les segments
           seg_AB_corr,
           seg_DE_corr,
-          codageSegments('×', 'blue', p.listePoints[0], p.listePoints[1], D, E),
+          codageSegments('×', bleuMathalea, p.listePoints[0], p.listePoints[1], D, E),
           seg_BC_corr,
           seg_DI1_corr,
           codageSegments(
@@ -429,9 +430,9 @@ export default class TrianglesEgaux extends Exercice {
             p.listePoints[2],
             ang_BCA,
             true,
-            'blue',
+            bleuMathalea,
           ),
-          arc(pointSurSegment(I1, E, 0.8), I1, ang_EI1D, true, 'blue'),
+          arc(pointSurSegment(I1, E, 0.8), I1, ang_EI1D, true, bleuMathalea),
           arc(
             pointSurSegment(p.listePoints[0], p.listePoints[2], 0.8),
             p.listePoints[0],

@@ -9,6 +9,7 @@ import {
 } from '../../lib/outils/embellissements'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 
 export const titre =
   "Déterminer si une équation cartésienne est l'équation d'un cercle"
@@ -58,8 +59,8 @@ export default class ExerciceTangenteCourbe extends Exercice {
       &${eqCerclePot} \\\\
       \\iff& x^2 ${ecritureAlgebriqueSauf1(cX)}x + y^2  ${ecritureAlgebriqueSauf1(cY)}y ${ecritureAlgebrique(cConst)} = 0 \\\\
       \\iff& x^2 ${ecritureAlgebriqueSauf1(cX)}x ${miseEnCouleur(`\\,+ \\left(\\frac{${cX}}{2}\\right)^2 - \\left(\\frac{${cX}}{2}\\right)^2`, 'red')} + y^2  ${ecritureAlgebriqueSauf1(cY)}y ${miseEnCouleur(`\\,+ \\left(\\frac{${cY}}{2}\\right)^2 - \\left(\\frac{${cY}}{2}\\right)^2`, 'red')} ${ecritureAlgebrique(cConst)} = 0 \\\\
-      \\iff& ${miseEnCouleur(`\\,x^2 ${ecritureAlgebriqueSauf1(cX)}x ${ecritureAlgebrique((cX / 2) ** 2)}`, 'green')}  ${miseEnCouleur(`\\,${ecritureAlgebrique(-((cX / 2) ** 2))}`, 'orange')} + ${miseEnCouleur(`\\,y^2  ${ecritureAlgebriqueSauf1(cY)}y ${ecritureAlgebrique((cY / 2) ** 2)}`, 'blue')}  ${miseEnCouleur(`\\,${ecritureAlgebrique(-((cY / 2) ** 2))} ${ecritureAlgebrique(cConst)}`, 'orange')} = 0 \\\\
-      \\iff& ${miseEnCouleur(`\\,(x ${ecritureAlgebrique(-x1)})^2`, 'green')} + ${miseEnCouleur(`\\,(y ${ecritureAlgebrique(-y1)})^2`, 'blue')} = ${miseEnCouleur(`\\,${rPot < 0 ? '-' : ''}${rPot ** 2}`, 'orange')}
+      \\iff& ${miseEnCouleur(`\\,x^2 ${ecritureAlgebriqueSauf1(cX)}x ${ecritureAlgebrique((cX / 2) ** 2)}`, 'green')}  ${miseEnCouleur(`\\,${ecritureAlgebrique(-((cX / 2) ** 2))}`, 'orange')} + ${miseEnCouleur(`\\,y^2  ${ecritureAlgebriqueSauf1(cY)}y ${ecritureAlgebrique((cY / 2) ** 2)}`, bleuMathalea)}  ${miseEnCouleur(`\\,${ecritureAlgebrique(-((cY / 2) ** 2))} ${ecritureAlgebrique(cConst)}`, 'orange')} = 0 \\\\
+      \\iff& ${miseEnCouleur(`\\,(x ${ecritureAlgebrique(-x1)})^2`, 'green')} + ${miseEnCouleur(`\\,(y ${ecritureAlgebrique(-y1)})^2`, bleuMathalea)} = ${miseEnCouleur(`\\,${rPot < 0 ? '-' : ''}${rPot ** 2}`, 'orange')}
       \\end{aligned}$<br>
       `
       if (rPot > 0) {

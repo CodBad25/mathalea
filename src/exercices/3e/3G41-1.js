@@ -14,7 +14,7 @@ import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { orangeMathalea } from '../../lib/colors'
+import { orangeMathalea, bleuMathalea } from '../../lib/colors'
 export const titre = "Construire la section d'un plan dans un un pavé droit"
 export const amcReady = true
 export const amcType = 'AMCOpen'
@@ -93,7 +93,7 @@ export default class ConstruireSectionPaveDroit extends Exercice {
       E = point3d(0, choixProfondeur, 0)
 
       nomSolide = choisitLettresDifferentes(8, 'OQWXD').join('')
-      solideDessine = pave3d(A, B, D, E, 'blue', true, nomSolide)
+      solideDessine = pave3d(A, B, D, E, bleuMathalea, true, nomSolide)
       objetsEnonce.push(...solideDessine.c2d)
       sommetsPave = solideDessine.sommets
 

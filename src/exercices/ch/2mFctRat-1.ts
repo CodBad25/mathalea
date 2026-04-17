@@ -23,6 +23,7 @@ import FractionEtendue from '../../modules/FractionEtendue'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 
 export const titre =
   'Étudier une fonction homographiquee et tracer sa courbe représentative'
@@ -148,7 +149,7 @@ export default class ExerciceTangenteCourbe extends Exercice {
       const asymptoteVerticale = droiteVerticaleParPoint(
         point(xInterdit, 0),
         '',
-        'blue',
+        bleuMathalea,
       )
       asymptoteVerticale.pointilles = 5
       asymptoteVerticale.usePgfplots = true
@@ -157,7 +158,7 @@ export default class ExerciceTangenteCourbe extends Exercice {
       const asymptoteHorizontale = droiteHorizontaleParPoint(
         point(0, yAsymptote),
         '',
-        'blue',
+        bleuMathalea,
       )
       asymptoteHorizontale.pointilles = 5
       asymptoteHorizontale.usePgfplots = true

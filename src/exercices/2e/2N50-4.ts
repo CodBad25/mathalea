@@ -5,6 +5,7 @@ import { segment, segmentAvecExtremites } from '../../lib/2d/segmentsVecteurs'
 import { labelPoint, texteParPosition } from '../../lib/2d/textes'
 import { texteSurSegment } from '../../lib/2d/texteSurSegment'
 import { milieu } from '../../lib/2d/utilitairesPoint'
+import { bleuMathalea } from '../../lib/colors'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import { texFractionReduite } from '../../lib/outils/deprecatedFractions'
 import { reduireAxPlusB, rienSi1 } from '../../lib/outils/ecritures'
@@ -16,7 +17,6 @@ import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
-import { bleuMathalea } from '../../lib/colors'
 export const titre =
   "Modéliser une situation géométrique à l'aide d'une équation"
 export const dateDePublication = '16/12/2021'
@@ -516,7 +516,7 @@ export default class ModeliserEquationsGeometrie extends Exercice {
               segment(E, H),
               codageAngleDroit(E, H, C),
               labelPoint(A, H, D, B, C, E),
-              codageSegments('//', 'red', bleuMathalea, D, E, E, C),
+              codageSegments('//', bleuMathalea, D, E, E, C),
             )
             objets.push(
               texteParPosition(
@@ -625,7 +625,7 @@ export default class ModeliserEquationsGeometrie extends Exercice {
               codageAngleDroit(B, C, D),
               codageAngleDroit(C, D, M),
               labelPoint(A, M, B, C, D, E),
-              codageSegments('//', 'red', bleuMathalea, A, E, E, M, A, M),
+              codageSegments('//', bleuMathalea, A, E, E, M, A, M),
               codageSegments('/', bleuMathalea, M, B, B, C, C, D, D, M),
             )
             objets.push(

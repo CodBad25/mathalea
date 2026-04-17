@@ -21,6 +21,7 @@ import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 
 /**
  * Convertit un angle en degrés vers des radians
@@ -76,12 +77,12 @@ export default class CalculDAngleFigureComplexe extends Exercice {
       const A = point(randint(4, 7), 0, '', 'below')
       const C = point(0, randint(3, 7, longueur(A, B)), '', 'above') // On exclue AB pour ne pas avoir un triangle isocèle
       const t1 = polygone([A, B, C])
-      const t1c = polygone([A, B, C], 'blue')
+      const t1c = polygone([A, B, C], bleuMathalea)
       t1c.epaisseur = 3
       const c1 = codageAngleDroit(A, B, C)
       const D = similitude(C, A, -90, randint(7, 12, 10) / 10, '', 'right') // On exclue 10 pour ne pas avoir un triangle isocèle
       const t2 = polygone([C, A, D])
-      const t2c = polygone([C, A, D], 'blue')
+      const t2c = polygone([C, A, D], bleuMathalea)
       t2c.epaisseur = 3
       const c2 = codageAngleDroit(C, A, D)
       const nom = creerNomDePolygone(4, 'QD')

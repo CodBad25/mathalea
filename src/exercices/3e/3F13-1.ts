@@ -11,6 +11,7 @@ import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { randint, texConsigne } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 
 export const titre = 'Lire graphiquement images et antécédents'
 export const interactifReady = true
@@ -78,7 +79,7 @@ export default class AntecedentEtImageGraphique extends Exercice {
         [x0 + 6, c],
         [randint(6, 10), c - 1],
       ], // Coordonnées des "sommets"
-      { repere: r, color: 'blue', step: 0.15, epaisseur: 2 },
+      { repere: r, color: bleuMathalea, step: 0.15, epaisseur: 2 },
     )
 
     if (choice([false, true])) {
@@ -93,7 +94,7 @@ export default class AntecedentEtImageGraphique extends Exercice {
           [x0 + 6, c],
           [randint(6, 10), c + 1],
         ], // Coordonnées des "sommets"
-        { repere: r, color: 'blue', step: 0.15, epaisseur: 2 },
+        { repere: r, color: bleuMathalea, step: 0.15, epaisseur: 2 },
       )
     }
     this.contenu =

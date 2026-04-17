@@ -18,6 +18,7 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 
 export const titre =
   "Lier un coefficient multiplicateur d'une variation à un pourcentage et réciproquement"
@@ -117,7 +118,7 @@ export default class CoefficientEvolution extends Exercice {
             ? `Multiplier par $${coeff}$ revient à faire `
             : `Multiplier par $${coeff}$ revient à `
 
-          texteCorr = `Multiplier par $${coeff}$ revient à ${texteEnCouleurEtGras('augmenter de ', 'blue')} $${miseEnEvidence(`${taux}~\\%`, 'blue')}$  car $${coeff} = ${100 + taux}~\\% = 100~\\% ${miseEnEvidence(`+ ${taux}~\\%`)}$.`
+          texteCorr = `Multiplier par $${coeff}$ revient à ${texteEnCouleurEtGras('augmenter de ', bleuMathalea)} $${miseEnEvidence(`${taux}~\\%`, bleuMathalea)}$  car $${coeff} = ${100 + taux}~\\% = 100~\\% ${miseEnEvidence(`+ ${taux}~\\%`)}$.`
           if (this.version === 2) {
             texteCorr = `On cherche le taux d'évolution $T$   connaissant le coefficient multiplicateur $CM=${coeff}$.<br>
           Comme $T=CM-1$, alors $T=${coeff}-1=${texNombre(taux / 100, 2)}$.<br>
@@ -134,7 +135,7 @@ export default class CoefficientEvolution extends Exercice {
           texte = this.interactif
             ? `Multiplier par $${coeff}$ revient à faire `
             : `Multiplier par $${coeff}$ revient à `
-          texteCorr = `Multiplier par $${coeff}$ revient à ${texteEnCouleurEtGras('diminuer de ', 'blue')} $${miseEnEvidence(`${taux}~\\%`, 'blue')}$ car $${coeff} = ${100 - taux}~\\% = 100~\\% ${miseEnEvidence(`- ${taux}~\\%`)}$.`
+          texteCorr = `Multiplier par $${coeff}$ revient à ${texteEnCouleurEtGras('diminuer de ', bleuMathalea)} $${miseEnEvidence(`${taux}~\\%`, bleuMathalea)}$ car $${coeff} = ${100 - taux}~\\% = 100~\\% ${miseEnEvidence(`- ${taux}~\\%`)}$.`
           if (this.version === 2) {
             texteCorr = `On cherche le taux d'évolution $T$  connaissant le coefficient multiplicateur $CM=${coeff}$.<br>
           Comme $T=CM-1$, alors $T=${coeff}-1=-${texNombre(taux / 100, 2)}$.<br>

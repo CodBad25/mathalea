@@ -22,6 +22,7 @@ import { angleOriente, longueur } from '../../lib/2d/utilitairesGeometriques'
 import { pointAdistance } from '../../lib/2d/utilitairesPoint'
 import { vecteur } from '../../lib/2d/Vecteur'
 import { vide2d } from '../../lib/2d/Vide2d'
+import { bleuMathalea } from '../../lib/colors'
 import { deuxColonnesResp } from '../../lib/format/miseEnPage'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif' // fonction qui va préparer l'analyse de la saisie
 import {
@@ -910,15 +911,15 @@ export default class TrianglesSemblables extends Exercice {
           let coteDE = segment(A, B)
           if (k < 10 && sign > 0) {
             // agrandissement
-            // codeDF = afficheCoteSegment(segment(F, A), `${longueurAF}`, -2, 'blue')
+            // codeDF = afficheCoteSegment(segment(F, A), `${longueurAF}`, -2, bleuMathalea)
             coteDF =
               angleOriente(E, A, F) > 0
-                ? afficheCoteSegmentSansTexte(segment(A, F), 1, 'blue')
-                : afficheCoteSegmentSansTexte(segment(A, F), -1, 'blue')
+                ? afficheCoteSegmentSansTexte(segment(A, F), 1, bleuMathalea)
+                : afficheCoteSegmentSansTexte(segment(A, F), -1, bleuMathalea)
             coteDE =
               angleOriente(E, A, F) > 0
-                ? afficheCoteSegmentSansTexte(segment(A, E), -1, 'blue')
-                : afficheCoteSegmentSansTexte(segment(A, E), 1, 'blue')
+                ? afficheCoteSegmentSansTexte(segment(A, E), -1, bleuMathalea)
+                : afficheCoteSegmentSansTexte(segment(A, E), 1, bleuMathalea)
             codeDF =
               angleOriente(E, A, F) > 0
                 ? placeLatexSurSegment(
@@ -946,12 +947,12 @@ export default class TrianglesSemblables extends Exercice {
           } else if (k > 10 && sign > 0) {
             coteDF =
               angleOriente(C, A, B) > 0
-                ? afficheCoteSegmentSansTexte(segment(A, B), 1, 'blue')
-                : afficheCoteSegmentSansTexte(segment(A, B), -1, 'blue')
+                ? afficheCoteSegmentSansTexte(segment(A, B), 1, bleuMathalea)
+                : afficheCoteSegmentSansTexte(segment(A, B), -1, bleuMathalea)
             coteDE =
               angleOriente(C, A, B) > 0
-                ? afficheCoteSegmentSansTexte(segment(A, C), -1, 'blue')
-                : afficheCoteSegmentSansTexte(segment(A, C), 1, 'blue')
+                ? afficheCoteSegmentSansTexte(segment(A, C), -1, bleuMathalea)
+                : afficheCoteSegmentSansTexte(segment(A, C), 1, bleuMathalea)
             codeAB =
               angleOriente(C, A, B) > 0
                 ? placeLatexSurSegment(

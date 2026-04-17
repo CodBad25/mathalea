@@ -10,6 +10,7 @@ import {
 } from '../../modules/outils'
 import Exercice from '../Exercice'
 
+import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import {
   doubleDeveloppement,
@@ -145,13 +146,13 @@ export default class MultipleDistributivite extends Exercice {
 
       texte = `$${lettreDepuisChiffre(i + 1)} = ${expression1}${signe}${expression2}$`
       texteCorr = texte.slice(0, -1)
-      texteCorr += `= ${doubleDeveloppement({ a, b, c, d, x: variable })[0]}${miseEnEvidence(sp() + signe + '\\Big(', 'blue')}${doubleDeveloppement({ a: e, b: f, c: g, d: h, x: variable })[0]}${miseEnEvidence('\\Big)', 'blue')}`
+      texteCorr += `= ${doubleDeveloppement({ a, b, c, d, x: variable })[0]}${miseEnEvidence(sp() + signe + '\\Big(', bleuMathalea)}${doubleDeveloppement({ a: e, b: f, c: g, d: h, x: variable })[0]}${miseEnEvidence('\\Big)', bleuMathalea)}`
 
       // Dans quelques cas, ligne 1 et ligne 2 sont identiques.
       // Si elles sont identiques, on n'en affiche qu'une.
-      const ligne1 = `=${doubleDeveloppement({ a, b, c, d, x: variable })[1]}${miseEnEvidence(sp() + signe + '\\Big(', 'blue')}${doubleDeveloppement({ a: e, b: f, c: g, d: h, x: variable })[1]}${miseEnEvidence('\\Big)', 'blue')}`
+      const ligne1 = `=${doubleDeveloppement({ a, b, c, d, x: variable })[1]}${miseEnEvidence(sp() + signe + '\\Big(', bleuMathalea)}${doubleDeveloppement({ a: e, b: f, c: g, d: h, x: variable })[1]}${miseEnEvidence('\\Big)', bleuMathalea)}`
       texteCorr += ligne1
-      const ligne2 = `=${reduirePolynomeDegre3(0, a * c, a * d + b * c, b * d, variable)}${miseEnEvidence(sp() + signe + '\\Big(', 'blue')}${reduirePolynomeDegre3(0, e * g, e * h + f * g, f * h, variable)}${miseEnEvidence('\\Big)', 'blue')}`
+      const ligne2 = `=${reduirePolynomeDegre3(0, a * c, a * d + b * c, b * d, variable)}${miseEnEvidence(sp() + signe + '\\Big(', bleuMathalea)}${reduirePolynomeDegre3(0, e * g, e * h + f * g, f * h, variable)}${miseEnEvidence('\\Big)', bleuMathalea)}`
       texteCorr += ligne1.replace(/\s+/g, '') === ligne2 ? '' : ligne2
       let reponse21 = e * g
       let reponse22 = e * h + f * g

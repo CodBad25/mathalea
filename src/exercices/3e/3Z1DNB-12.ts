@@ -14,6 +14,7 @@ import { mathalea2d } from '../../modules/mathalea2d'
 import { nombreEnLettres } from '../../modules/nombreEnLettres'
 import { randint } from '../../modules/outils'
 import ExerciceBrevetA from '../ExerciceBrevetA'
+import { bleuMathalea } from '../../lib/colors'
 
 export const uuid = 'fb6ad'
 export const refs = {
@@ -69,14 +70,14 @@ export default class ExerciceAmeriqueNord392024 extends ExerciceBrevetA {
     const pointF1D = point(yMax / classique, yMax / 10)
     const d1 = droite(pointF1G, pointF1D, '', 'red')
     const d2 = droite(pointF2G, pointF2D, '', 'green')
-    const d3 = droite(pointF3G, pointF3D, '', 'blue')
+    const d3 = droite(pointF3G, pointF3D, '', bleuMathalea)
     const n1 = latex2d('(d_1)', pointF1D.x - 1, pointF1D.y + 0.4, {
       color: 'red',
     })
     const n2 = latex2d('(d_2)', pointF2D.x - 1, pointF2D.y + 0.4, {
       color: 'green',
     })
-    const n3 = latex2d('(d_3)', pointF3D.x, pointF3D.y - 0.5, { color: 'blue' })
+    const n3 = latex2d('(d_3)', pointF3D.x, pointF3D.y - 0.5, { color: bleuMathalea })
     const legendY = texteParPosition('Prix à payer en €', 4.5, yMax / 10)
     const legendX = texteParPosition("Nombre d'entrees", xMax - 2, 1)
 
