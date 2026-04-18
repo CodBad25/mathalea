@@ -160,7 +160,7 @@ export default class TableSimpleDistributivite extends Exercice {
         reponse: {
           value: (a * b).toString(),
           options: {
-            avecSigneMultiplier: false,
+            sansTimes: true,
           },
         },
       })
