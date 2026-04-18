@@ -10,6 +10,7 @@ import { deuxColonnes } from '../../lib/format/miseEnPage'
 import { spline } from '../../lib/mathFonctions/Spline'
 import { mathalea2d } from '../../modules/mathalea2d'
 import ExerciceQcmA from '../ExerciceQcmA'
+import { bleuMathalea } from '../../lib/colors'
 export const dateDePublication = '24/07/2025'
 export const uuid = '7f5f6'
 /**
@@ -131,7 +132,7 @@ export default class auto1AF2 extends ExerciceQcmA {
         labelS,
         objetsEnonce,
         o,
-        courbe(fonc, { repere: repere1, color: 'blue', epaisseur: 2 }),
+        courbe(fonc, { repere: repere1, color: bleuMathalea, epaisseur: 2 }),
       ),
     )}`
 
@@ -270,7 +271,7 @@ export default class auto1AF2 extends ExerciceQcmA {
       epaisseur: 2,
       ajouteNoeuds: true,
       optionsNoeuds: { color: 'black', taille: 3, style: '.', epaisseur: 2 },
-      color: 'blue',
+      color: bleuMathalea,
     })
 
     const objetsEnonce = [repere1, courbe1]

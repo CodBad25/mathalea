@@ -54,7 +54,7 @@ import {
 } from '../../modules/outils'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
-import { orangeMathalea } from '../../lib/colors'
+import { orangeMathalea, bleuMathalea } from '../../lib/colors'
 
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -543,18 +543,18 @@ export default class PavagesEtTransformations extends Exercice {
                 point(xc, yc),
                 point(punto[0], punto[1]),
                 '',
-                context.isAmc ? 'black' : 'blue',
+                context.isAmc ? 'black' : bleuMathalea,
               ) as Droite
               mediatrice3.epaisseur = 2
               segCorr31 = segment(
                 point(xc, yc),
                 milieu(point(xc, yc), point(punto[0], punto[1])),
-                context.isAmc ? 'black' : 'blue',
+                context.isAmc ? 'black' : bleuMathalea,
               )
               segCorr32 = segment(
                 point(punto[0], punto[1]),
                 milieu(point(xc, yc), point(punto[0], punto[1])),
-                context.isAmc ? 'black' : 'blue',
+                context.isAmc ? 'black' : bleuMathalea,
               )
               segCorr31.epaisseur = 2
               segCorr31.pointilles = 2
@@ -565,13 +565,13 @@ export default class PavagesEtTransformations extends Exercice {
                   pointSurDroite(mediatrice3, 1, ''),
                   milieu(point(xc, yc), point(punto[0], punto[1])),
                   point(xc, yc),
-                  context.isAmc ? 'black' : 'blue',
+                  context.isAmc ? 'black' : bleuMathalea,
                   0.8,
                   1,
                 ),
               )
               quad[numC].couleurDeRemplissage = colorToLatexOrHTML(
-                context.isAmc ? 'black' : 'blue',
+                context.isAmc ? 'black' : bleuMathalea,
               )
               quad[numC].opaciteDeRemplissage = 0.6
               break
@@ -593,8 +593,8 @@ export default class PavagesEtTransformations extends Exercice {
         texteAMC3 =
           numAlpha(2) +
           ' Quel est le numéro de la figure symétrique de la figure ' +
-          texteEnCouleurEtGras(`${numC}`, context.isAmc ? 'black' : 'blue') +
-          ` dans la symétrie d'axe  $${miseEnEvidence('(d_3)', context.isAmc ? 'black' : 'blue')}$  ?` +
+          texteEnCouleurEtGras(`${numC}`, context.isAmc ? 'black' : bleuMathalea) +
+          ` dans la symétrie d'axe  $${miseEnEvidence('(d_3)', context.isAmc ? 'black' : bleuMathalea)}$  ?` +
           ajouteChampTexteMathLive(this, 2, KeyboardType.clavierNumbers) +
           '<br>'
         texte += '<br>' + texteAMC3
@@ -602,8 +602,8 @@ export default class PavagesEtTransformations extends Exercice {
           '<br>' +
           numAlpha(2) +
           ' La figure symétrique de la figure ' +
-          texteEnCouleurEtGras(`${numC}`, context.isAmc ? 'black' : 'blue') +
-          ` dans la symétrie d'axe  $${miseEnEvidence('(d_3)', context.isAmc ? 'black' : 'blue')}$  porte le numéro ${texteEnCouleurEtGras(String(num3))}.<br>`
+          texteEnCouleurEtGras(`${numC}`, context.isAmc ? 'black' : bleuMathalea) +
+          ` dans la symétrie d'axe  $${miseEnEvidence('(d_3)', context.isAmc ? 'black' : bleuMathalea)}$  porte le numéro ${texteEnCouleurEtGras(String(num3))}.<br>`
         if (
           mediatrice1 == null ||
           mediatrice2 == null ||
@@ -801,7 +801,7 @@ export default class PavagesEtTransformations extends Exercice {
             '(d_3)',
             pt1.x - 2,
             pt1.y + 1.5,
-            context.isAmc ? 'black' : 'blue',
+            context.isAmc ? 'black' : bleuMathalea,
             20,
             10,
             '',
@@ -813,7 +813,7 @@ export default class PavagesEtTransformations extends Exercice {
             '(d_3)',
             pt1.x - 2,
             pt1.y + 1.5,
-            context.isAmc ? 'black' : 'blue',
+            context.isAmc ? 'black' : bleuMathalea,
             20,
             10,
             '',
@@ -847,7 +847,7 @@ export default class PavagesEtTransformations extends Exercice {
         objetsCorrection.push(
           codageSegments(
             '|||',
-            context.isAmc ? 'black' : 'blue',
+            context.isAmc ? 'black' : bleuMathalea,
             segCorr31,
             segCorr32,
           ),
@@ -881,7 +881,7 @@ export default class PavagesEtTransformations extends Exercice {
         quad2.opaciteDeRemplissage = 0.3
         quad3 = translation(quad[num3], vecteur(0, 0))
         quad3.couleurDeRemplissage = colorToLatexOrHTML(
-          context.isAmc ? 'black' : 'blue',
+          context.isAmc ? 'black' : bleuMathalea,
         )
         quad3.opaciteDeRemplissage = 0.3
         objetsCorrection.push(
@@ -1056,7 +1056,7 @@ export default class PavagesEtTransformations extends Exercice {
               yc = tabfigA[indexC][1]
               centre3 = point(xmil3, ymil3, s2, 'left')
               quad[numC].couleurDeRemplissage = colorToLatexOrHTML(
-                context.isAmc ? 'black' : 'blue',
+                context.isAmc ? 'black' : bleuMathalea,
               )
               quad[numC].opaciteDeRemplissage = 0.6
               break
@@ -1091,7 +1091,7 @@ export default class PavagesEtTransformations extends Exercice {
           numAlpha(2) +
           texteEnCouleurEtGras(
             ` Quel est le numéro de la figure symétrique de la figure ${numC} dans la symétrie de centre ${s2} ?`,
-            context.isAmc ? 'black' : 'blue',
+            context.isAmc ? 'black' : bleuMathalea,
           ) +
           ajouteChampTexteMathLive(this, 2, KeyboardType.clavierNumbers) +
           '<br>'
@@ -1100,7 +1100,7 @@ export default class PavagesEtTransformations extends Exercice {
           numAlpha(2) +
           texteEnCouleurEtGras(
             ` La figure symétrique de la figure ${numC} dans la symétrie de centre ${s2} porte le numéro ${num3}.<br>`,
-            context.isAmc ? 'black' : 'blue',
+            context.isAmc ? 'black' : bleuMathalea,
           )
         labelCentre1 = tracePoint(centre1, 'red')
         labelCentre1.epaisseur = 2
@@ -1179,7 +1179,7 @@ export default class PavagesEtTransformations extends Exercice {
         quad2.opaciteDeRemplissage = 0.3
         quad3 = translation(quad[num3], vecteur(0, 0))
         quad3.couleurDeRemplissage = colorToLatexOrHTML(
-          context.isAmc ? 'black' : 'blue',
+          context.isAmc ? 'black' : bleuMathalea,
         )
         quad3.opaciteDeRemplissage = 0.3
         arc1 = arc(point(tabfigA[indexA][0], tabfigA[indexA][1]), centre1, 180)
@@ -1416,12 +1416,12 @@ export default class PavagesEtTransformations extends Exercice {
                 origine3,
               )
               vecteur3.color = colorToLatexOrHTML(
-                context.isAmc ? 'black' : 'blue',
+                context.isAmc ? 'black' : bleuMathalea,
               )
               vecteur3.epaisseur = 2
               vecteur3.pointilles = 2
               quad[numC].couleurDeRemplissage = colorToLatexOrHTML(
-                context.isAmc ? 'black' : 'blue',
+                context.isAmc ? 'black' : bleuMathalea,
               )
               quad[numC].opaciteDeRemplissage = 0.6
               break
@@ -1456,7 +1456,7 @@ export default class PavagesEtTransformations extends Exercice {
           numAlpha(2) +
           texteEnCouleurEtGras(
             ` Dans la translation qui transforme la figure ${tabfigC[iD1][2]} en la figure ${tabfigA[iB3][2]}, quel est le numéro de l'image de la figure ${numC} ?`,
-            context.isAmc ? 'black' : 'blue',
+            context.isAmc ? 'black' : bleuMathalea,
           ) +
           ajouteChampTexteMathLive(this, 2, KeyboardType.clavierNumbers) +
           '<br>'
@@ -1465,7 +1465,7 @@ export default class PavagesEtTransformations extends Exercice {
           numAlpha(2) +
           texteEnCouleurEtGras(
             ` La figure image de la figure ${numC}  dans la translation qui transforme la figure ${tabfigC[iD1][2]} en la figure ${tabfigA[iB3][2]} porte le numéro ${num3}.<br>`,
-            context.isAmc ? 'black' : 'blue',
+            context.isAmc ? 'black' : bleuMathalea,
           )
 
         objetsEnonce.push(vecteur1, vecteur2, vecteur3)
@@ -1518,7 +1518,7 @@ export default class PavagesEtTransformations extends Exercice {
         quad2.opaciteDeRemplissage = 0.3
         quad3 = translation(quad[num3], vecteur(0, 0))
         quad3.couleurDeRemplissage = colorToLatexOrHTML(
-          context.isAmc ? 'black' : 'blue',
+          context.isAmc ? 'black' : bleuMathalea,
         )
         quad3.opaciteDeRemplissage = 0.3
         rayon11 = representant(
@@ -1537,7 +1537,7 @@ export default class PavagesEtTransformations extends Exercice {
           vecteur(vecteur3.x2 - vecteur3.x1, vecteur3.y2 - vecteur3.y1),
           point(xc, yc),
         )
-        rayon31.color = colorToLatexOrHTML(context.isAmc ? 'black' : 'blue')
+        rayon31.color = colorToLatexOrHTML(context.isAmc ? 'black' : bleuMathalea)
         rayon31.epaisseur = 2
         objetsCorrection.push(quad1, quad2, quad3, rayon11, rayon21, rayon31)
         texteCorr += mathalea2d(
@@ -1708,7 +1708,7 @@ export default class PavagesEtTransformations extends Exercice {
               yc = tabfigA[indexC][1]
               centre3 = point(xmil3, ymil3, s2, 'above left')
               quad[numC].couleurDeRemplissage = colorToLatexOrHTML(
-                context.isAmc ? 'black' : 'blue',
+                context.isAmc ? 'black' : bleuMathalea,
               )
               quad[numC].opaciteDeRemplissage = 0.6
               break
@@ -1742,9 +1742,9 @@ export default class PavagesEtTransformations extends Exercice {
         texteAMC3 =
           numAlpha(2) +
           ' Quel est le numéro de la figure image de la figure ' +
-          texteEnCouleurEtGras(`${numC}`, context.isAmc ? 'black' : 'blue') +
+          texteEnCouleurEtGras(`${numC}`, context.isAmc ? 'black' : bleuMathalea) +
           ' dans la rotation de centre ' +
-          texteEnCouleurEtGras(`${s2}`, context.isAmc ? 'black' : 'blue') +
+          texteEnCouleurEtGras(`${s2}`, context.isAmc ? 'black' : bleuMathalea) +
           " et d'angle 90° dans le sens des aiguilles d'une montre ?" +
           ajouteChampTexteMathLive(this, 2, KeyboardType.clavierNumbers) +
           '<br>'
@@ -1753,9 +1753,9 @@ export default class PavagesEtTransformations extends Exercice {
           '<br>' +
           numAlpha(2) +
           ' La figure image de la figure ' +
-          texteEnCouleurEtGras(`${numC}`, context.isAmc ? 'black' : 'blue') +
+          texteEnCouleurEtGras(`${numC}`, context.isAmc ? 'black' : bleuMathalea) +
           ' dans la rotation de centre ' +
-          texteEnCouleurEtGras(`${s2}`, context.isAmc ? 'black' : 'blue') +
+          texteEnCouleurEtGras(`${s2}`, context.isAmc ? 'black' : bleuMathalea) +
           " et d'angle 90° dans le sens des aiguilles d'une montre porte le numéro " +
           texteEnCouleurEtGras(`${num3}`, orangeMathalea) +
           '.<br>'
@@ -1772,8 +1772,8 @@ export default class PavagesEtTransformations extends Exercice {
         trace.taille = 4
         objetsEnonce.push(trace, label)
         objetsCorrection.push(trace, label)
-        trace = tracePoint(centre3, context.isAmc ? 'black' : 'blue')
-        label = labelPoint(centre3, context.isAmc ? 'black' : 'blue')
+        trace = tracePoint(centre3, context.isAmc ? 'black' : bleuMathalea)
+        label = labelPoint(centre3, context.isAmc ? 'black' : bleuMathalea)
         trace.epaisseur = 2
         trace.taille = 4
         objetsEnonce.push(trace, label)
@@ -1829,7 +1829,7 @@ export default class PavagesEtTransformations extends Exercice {
         quad2.opaciteDeRemplissage = 0.3
         quad3 = translation(quad[num3], vecteur(0, 0))
         quad3.couleurDeRemplissage = colorToLatexOrHTML(
-          context.isAmc ? 'black' : 'blue',
+          context.isAmc ? 'black' : bleuMathalea,
         )
         quad3.opaciteDeRemplissage = 0.3
         arc1 = arc(point(tabfigA[indexA][0], tabfigA[indexA][1]), centre1, -90)
@@ -1862,15 +1862,15 @@ export default class PavagesEtTransformations extends Exercice {
         rayon31 = segment(
           point(tabfigC[indexC][0], tabfigC[indexC][1]),
           centre3,
-          context.isAmc ? 'black' : 'blue',
+          context.isAmc ? 'black' : bleuMathalea,
         )
         rayon32 = rotation(rayon31, centre3, -90)
         rayon31.pointilles = 2
         rayon32.pointilles = 2
-        rayon32.color = colorToLatexOrHTML(context.isAmc ? 'black' : 'blue')
+        rayon32.color = colorToLatexOrHTML(context.isAmc ? 'black' : bleuMathalea)
         arc3.pointilles = 2
         arc3.epaisseur = 2
-        arc3.color = colorToLatexOrHTML(context.isAmc ? 'black' : 'blue')
+        arc3.color = colorToLatexOrHTML(context.isAmc ? 'black' : bleuMathalea)
         objetsCorrection.push(
           quad1,
           quad2,
@@ -1916,7 +1916,7 @@ export default class PavagesEtTransformations extends Exercice {
               centre3,
               -90,
             ),
-            context.isAmc ? 'black' : 'blue',
+            context.isAmc ? 'black' : bleuMathalea,
             1,
             1,
           ),
@@ -1934,7 +1934,7 @@ export default class PavagesEtTransformations extends Exercice {
           ),
           codageSegments(
             'XXX',
-            context.isAmc ? 'black' : 'blue',
+            context.isAmc ? 'black' : bleuMathalea,
             rayon31,
             rayon32,
           ),

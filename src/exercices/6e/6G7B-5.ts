@@ -21,6 +21,7 @@ import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 
 export const titre = 'Utiliser des symétries axiales en pavage triangulaire'
 export const interactifReady = true
@@ -479,7 +480,7 @@ export default class SymetrieAxialePavageTriangulaire extends Exercice {
       typesDeQuestionsDisponibles,
       3,
     )
-    const couleurs = ['blue', 'green', 'red', 'gray', 'magenta', 'purple']
+    const couleurs = [bleuMathalea, 'green', 'red', 'gray', 'magenta', 'purple']
     let M: PointAbstrait
     let N: PointAbstrait
     const d = []

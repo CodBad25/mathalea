@@ -14,6 +14,7 @@ import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 export const titre = 'Appartenir ou ne pas appartenir'
 export const dateDePublication = '05/10/2022'
 export const dateDeModifImportante = '4/10/2023'
@@ -67,7 +68,7 @@ export default class constructionElementaire extends Exercice {
         lettreDepuisChiffre(indLettre + 1),
         'above right',
       )
-      const d = droite(A, B, '', 'blue')
+      const d = droite(A, B, '', bleuMathalea)
       const AA = pointSurDroite(
         d,
         randint(1, 2),

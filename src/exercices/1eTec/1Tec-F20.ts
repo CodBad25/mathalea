@@ -16,6 +16,7 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 
 export const dateDePublication = '28/02/2026'
 export const dateDeModifImportante = '25/03/2025'
@@ -339,7 +340,7 @@ export default class ExpressionAParabole extends Exercice {
     const graphe1 = mathalea2d(
       optionsFenetre,
       r1,
-      courbe(fonction, { repere: r1, color: 'blue', epaisseur: 2 }),
+      courbe(fonction, { repere: r1, color: bleuMathalea, epaisseur: 2 }),
     )
     return graphe1
   }

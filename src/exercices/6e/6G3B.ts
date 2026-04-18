@@ -193,8 +193,8 @@ export default class nomExercice extends Exercice {
       // On construit l'énoncé et les médiatrices en fonction du nombre de médiatrices demandés par l'utilisateur.
       const choixCouleur = combinaisonListes([
         ['rouge', 'red'],
-        ['bleu', 'blue'],
-        ['orange', 'orange'],
+        ['bleu', 'blue'], // Ne pas mettre bleuMathalea
+        ['orange', 'orange'], // Ne pas mettre orangeMathalea
         ['vert', 'green'],
       ])
       const codage = combinaisonListes(['||', 'O', '|', '|||'])

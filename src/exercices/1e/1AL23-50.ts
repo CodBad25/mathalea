@@ -20,6 +20,7 @@ import {
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 
 export const titre =
   "Utiliser la représentation graphique d'un polynôme du second degré"
@@ -242,7 +243,7 @@ export default class LireElementsCarac extends Exercice {
           repere: r,
           xMin: Xmin,
           xMax: Xmax,
-          color: 'blue',
+          color: bleuMathalea,
           epaisseur: 1.5,
         }),
       ]

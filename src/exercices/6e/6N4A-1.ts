@@ -20,6 +20,7 @@ import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 
 export const titre = 'Modéliser des problèmes'
 export const interactifReady = true
@@ -161,7 +162,7 @@ export default class ModelisationProblemes extends Exercice {
         // nbSchemas = 8
         typesDeQuestionsDisponibles = [1, 2, 3, 4, 5, 6, 7, 8]
         colorA = 'red'
-        colorB = 'blue'
+        colorB = bleuMathalea
         brouilleLesCartes = shuffle(range(7))
         break
       case 4:

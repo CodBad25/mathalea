@@ -6,7 +6,7 @@ import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { nommePolygone } from '../../lib/2d/polygones'
 import { segment } from '../../lib/2d/segmentsVecteurs'
 import { triangle2points2angles } from '../../lib/2d/triangles'
-import { orangeMathalea } from '../../lib/colors'
+import { orangeMathalea, bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { toutPourUnPoint } from '../../lib/interactif/mathLive'
@@ -199,7 +199,7 @@ export default class ExerciceAnglesTriangles extends Exercice {
             angle2,
             1,
             '',
-            'blue',
+            bleuMathalea,
             2,
             1,
             'none',
@@ -215,7 +215,7 @@ export default class ExerciceAnglesTriangles extends Exercice {
             -angle1,
             1,
             '',
-            'blue',
+            bleuMathalea,
             2,
             1,
             'none',
@@ -232,7 +232,7 @@ export default class ExerciceAnglesTriangles extends Exercice {
             angle2,
             0.7,
             '',
-            'blue',
+            bleuMathalea,
             2,
             1,
             'none',
@@ -248,7 +248,7 @@ export default class ExerciceAnglesTriangles extends Exercice {
             -angle1,
             0.7,
             '',
-            'blue',
+            bleuMathalea,
             2,
             1,
             'none',
@@ -309,7 +309,7 @@ export default class ExerciceAnglesTriangles extends Exercice {
             angle2,
             1,
             '',
-            'blue',
+            bleuMathalea,
             2,
             1,
             'none',
@@ -325,7 +325,7 @@ export default class ExerciceAnglesTriangles extends Exercice {
             -angle1,
             1,
             '',
-            'blue',
+            bleuMathalea,
             2,
             1,
             'none',
@@ -342,7 +342,7 @@ export default class ExerciceAnglesTriangles extends Exercice {
             angle2,
             0.7,
             '',
-            'blue',
+            bleuMathalea,
             2,
             1,
             'none',
@@ -358,7 +358,7 @@ export default class ExerciceAnglesTriangles extends Exercice {
             -angle1,
             0.7,
             '',
-            'blue',
+            bleuMathalea,
             2,
             1,
             'none',
@@ -417,7 +417,7 @@ export default class ExerciceAnglesTriangles extends Exercice {
             C,
             1,
             '',
-            'blue',
+            bleuMathalea,
             2,
             1,
             'none',
@@ -427,7 +427,7 @@ export default class ExerciceAnglesTriangles extends Exercice {
             '',
             1.2,
           )
-          angleB = codageAngleDroit(A, B, C, 'blue', 1, 1.5)
+          angleB = codageAngleDroit(A, B, C, bleuMathalea, 1, 1.5)
           objetsEnonce.push(angleA, angleB)
           angleA = codageAngle(
             B,
@@ -435,7 +435,7 @@ export default class ExerciceAnglesTriangles extends Exercice {
             C,
             1,
             '',
-            'blue',
+            bleuMathalea,
             2,
             1,
             'none',
@@ -489,7 +489,7 @@ export default class ExerciceAnglesTriangles extends Exercice {
             nommePolygone(triangle),
             codageSegments(
               '||',
-              'blue',
+              bleuMathalea,
               segment(triangle.listePoints[1], triangle.listePoints[2]),
               segment(triangle.listePoints[1], triangle.listePoints[0]),
               2,
@@ -500,7 +500,7 @@ export default class ExerciceAnglesTriangles extends Exercice {
             nommePolygone(triangle),
             codageSegments(
               '||',
-              'blue',
+              bleuMathalea,
               segment(triangle.listePoints[1], triangle.listePoints[2]),
               segment(triangle.listePoints[1], triangle.listePoints[0]),
               2,
@@ -512,7 +512,7 @@ export default class ExerciceAnglesTriangles extends Exercice {
             -angle1,
             1,
             '',
-            'blue',
+            bleuMathalea,
             2,
             1,
             'none',
@@ -547,7 +547,7 @@ export default class ExerciceAnglesTriangles extends Exercice {
             -angle1,
             1,
             '',
-            'blue',
+            bleuMathalea,
             2,
             1,
             'none',
@@ -609,7 +609,7 @@ export default class ExerciceAnglesTriangles extends Exercice {
             nommePolygone(triangle),
             codageSegments(
               '||',
-              'blue',
+              bleuMathalea,
               segment(triangle.listePoints[1], triangle.listePoints[2]),
               segment(triangle.listePoints[2], triangle.listePoints[0]),
               2,
@@ -620,7 +620,7 @@ export default class ExerciceAnglesTriangles extends Exercice {
             nommePolygone(triangle),
             codageSegments(
               '||',
-              'blue',
+              bleuMathalea,
               segment(triangle.listePoints[1], triangle.listePoints[2]),
               segment(triangle.listePoints[2], triangle.listePoints[0]),
               2,
@@ -632,7 +632,7 @@ export default class ExerciceAnglesTriangles extends Exercice {
             -angle1,
             1,
             '',
-            'blue',
+            bleuMathalea,
             2,
             1,
             'none',
@@ -650,7 +650,7 @@ export default class ExerciceAnglesTriangles extends Exercice {
             angle2,
             1,
             '',
-            'blue',
+            bleuMathalea,
             2,
             1,
             'none',
@@ -666,7 +666,7 @@ export default class ExerciceAnglesTriangles extends Exercice {
             -angle1,
             1,
             '',
-            'blue',
+            bleuMathalea,
             2,
             1,
             'none',
@@ -715,11 +715,11 @@ export default class ExerciceAnglesTriangles extends Exercice {
           C.nom = s3
           objetsEnonce.push(triangle, nommePolygone(triangle))
           objetsCorrection.push(triangle, nommePolygone(triangle))
-          angleA = codageAngleDroit(B, A, C, 'blue', 1, 1.5)
+          angleA = codageAngleDroit(B, A, C, bleuMathalea, 1, 1.5)
           angleA.echelleMark = 2
-          angleB = codageAngle(A, B, C, 1, '|', 'blue', 2)
+          angleB = codageAngle(A, B, C, 1, '|', bleuMathalea, 2)
           angleB.echelleMark = 2
-          angleC = codageAngle(A, C, B, 1, '|', 'blue', 2)
+          angleC = codageAngle(A, C, B, 1, '|', bleuMathalea, 2)
           angleC.echelleMark = 2
           objetsEnonce.push(angleA, angleB, angleC)
           angleB = codageAngle(
@@ -782,11 +782,11 @@ export default class ExerciceAnglesTriangles extends Exercice {
           C.nom = s3
           objetsEnonce.push(triangle, nommePolygone(triangle))
           objetsCorrection.push(triangle, nommePolygone(triangle))
-          angleA = codageAngleDroit(B, A, C, 'blue', 1, 1.5)
+          angleA = codageAngleDroit(B, A, C, bleuMathalea, 1, 1.5)
           angleA.echelleMark = 2
-          angleB = codageAngle(A, B, C, 1, '||', 'blue', 2)
+          angleB = codageAngle(A, B, C, 1, '||', bleuMathalea, 2)
           angleB.echelleMark = 2
-          angleC = codageAngle(A, C, B, 1, '|', 'blue', 1.5)
+          angleC = codageAngle(A, C, B, 1, '|', bleuMathalea, 1.5)
           angleC.echelleMark = 2
           objetsEnonce.push(angleA, angleB, angleC)
           angleB = codageAngle(
@@ -847,11 +847,11 @@ export default class ExerciceAnglesTriangles extends Exercice {
           C.nom = s3
           objetsEnonce.push(triangle, nommePolygone(triangle))
           objetsCorrection.push(triangle, nommePolygone(triangle))
-          angleA = codageAngleDroit(B, A, C, 'blue', 1, 1.5)
+          angleA = codageAngleDroit(B, A, C, bleuMathalea, 1, 1.5)
           angleA.echelleMark = 2
-          angleB = codageAngle(A, B, C, 1, '|', 'blue', 2)
+          angleB = codageAngle(A, B, C, 1, '|', bleuMathalea, 2)
           angleB.echelleMark = 2
-          angleC = codageAngle(A, C, B, 1, '||||', 'blue', 1.5)
+          angleC = codageAngle(A, C, B, 1, '||||', bleuMathalea, 1.5)
           angleC.echelleMark = 2
           objetsEnonce.push(angleA, angleB, angleC)
           angleB = codageAngle(
@@ -912,11 +912,11 @@ export default class ExerciceAnglesTriangles extends Exercice {
           C.nom = s3
           objetsEnonce.push(triangle, nommePolygone(triangle))
           objetsCorrection.push(triangle, nommePolygone(triangle))
-          angleA = codageAngleDroit(B, A, C, 'blue', 1, 1.5)
+          angleA = codageAngleDroit(B, A, C, bleuMathalea, 1, 1.5)
           angleA.echelleMark = 2
-          angleB = codageAngle(A, B, C, 1, '|||||', 'blue', 2)
+          angleB = codageAngle(A, B, C, 1, '|||||', bleuMathalea, 2)
           angleB.echelleMark = 2
-          angleC = codageAngle(A, C, B, 1, '|', 'blue', 2)
+          angleC = codageAngle(A, C, B, 1, '|', bleuMathalea, 2)
           angleC.echelleMark = 2
           objetsEnonce.push(angleA, angleB, angleC)
           angleB = codageAngle(
@@ -973,11 +973,11 @@ export default class ExerciceAnglesTriangles extends Exercice {
           triangle = triangle2points2angles(A, B, 60, 60)
           C = triangle.listePoints[2]
           C.nom = s3
-          angleA = codageAngle(B, A, 60, 1, '|', 'blue', 2)
+          angleA = codageAngle(B, A, 60, 1, '|', bleuMathalea, 2)
           angleA.echelleMark = 2
-          angleB = codageAngle(A, B, -60, 1, '|', 'blue', 2)
+          angleB = codageAngle(A, B, -60, 1, '|', bleuMathalea, 2)
           angleB.echelleMark = 2
-          angleC = codageAngle(A, C, 60, 1, '|', 'blue', 2)
+          angleC = codageAngle(A, C, 60, 1, '|', bleuMathalea, 2)
           angleC.echelleMark = 2
           objetsEnonce.push(
             triangle,
@@ -1064,11 +1064,11 @@ export default class ExerciceAnglesTriangles extends Exercice {
           C.nom = s3
           objetsEnonce.push(triangle, nommePolygone(triangle))
           objetsCorrection.push(triangle, nommePolygone(triangle))
-          angleA = codageAngleDroit(B, A, C, 'blue', 1, 1.5)
+          angleA = codageAngleDroit(B, A, C, bleuMathalea, 1, 1.5)
           angleA.echelleMark = 2
-          angleB = codageAngle(A, B, C, 1, '|', 'blue', 2)
+          angleB = codageAngle(A, B, C, 1, '|', bleuMathalea, 2)
           angleB.echelleMark = 2
-          angleC = codageAngle(A, C, B, 1, '|||', 'blue', 2)
+          angleC = codageAngle(A, C, B, 1, '|||', bleuMathalea, 2)
           angleC.echelleMark = 2
           objetsEnonce.push(angleA, angleB, angleC)
           angleB = codageAngle(
@@ -1133,7 +1133,7 @@ export default class ExerciceAnglesTriangles extends Exercice {
             nommePolygone(triangle),
             codageSegments(
               'XX',
-              'blue',
+              bleuMathalea,
               segment(triangle.listePoints[0], triangle.listePoints[2]),
               segment(triangle.listePoints[1], triangle.listePoints[0]),
               2,
@@ -1144,15 +1144,15 @@ export default class ExerciceAnglesTriangles extends Exercice {
             nommePolygone(triangle),
             codageSegments(
               'XX',
-              'blue',
+              bleuMathalea,
               segment(triangle.listePoints[0], triangle.listePoints[2]),
               segment(triangle.listePoints[1], triangle.listePoints[0]),
               2,
             ),
           )
-          angleA = codageAngle(B, A, C, 1, '||', 'blue', 2)
+          angleA = codageAngle(B, A, C, 1, '||', bleuMathalea, 2)
           angleA.echelleMark = 2
-          angleB = codageAngle(A, B, C, 1, '|||', 'blue', 2)
+          angleB = codageAngle(A, B, C, 1, '|||', bleuMathalea, 2)
           angleB.echelleMark = 2
           objetsEnonce.push(angleA, angleB)
           angleA = codageAngle(
@@ -1239,7 +1239,7 @@ export default class ExerciceAnglesTriangles extends Exercice {
             nommePolygone(triangle),
             codageSegments(
               '|||',
-              'blue',
+              bleuMathalea,
               segment(triangle.listePoints[0], triangle.listePoints[2]),
               segment(triangle.listePoints[1], triangle.listePoints[0]),
               2,
@@ -1250,15 +1250,15 @@ export default class ExerciceAnglesTriangles extends Exercice {
             nommePolygone(triangle),
             codageSegments(
               '|||',
-              'blue',
+              bleuMathalea,
               segment(triangle.listePoints[0], triangle.listePoints[2]),
               segment(triangle.listePoints[1], triangle.listePoints[0]),
               2,
             ),
           )
-          angleA = codageAngle(B, A, C, 1, '|', 'blue', 2)
+          angleA = codageAngle(B, A, C, 1, '|', bleuMathalea, 2)
           angleA.echelleMark = 2
-          angleB = codageAngle(A, B, C, 1, '||', 'blue', 2)
+          angleB = codageAngle(A, B, C, 1, '||', bleuMathalea, 2)
           angleB.echelleMark = 2
           objetsEnonce.push(angleA, angleB)
           angleA = codageAngle(

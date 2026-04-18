@@ -11,6 +11,7 @@ import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 export const titre = 'Compléter un nuage de points symétriques'
 export const dateDePublication = '18/12/2021'
 export const interactifReady = false
@@ -162,7 +163,7 @@ export default class CompleterParSymetrie6e extends Exercice {
       }
       d.epaisseur = 2
       d.color = context.isHtml
-        ? colorToLatexOrHTML('blue')
+        ? colorToLatexOrHTML(bleuMathalea)
         : colorToLatexOrHTML('black')
       objetsEnonce[i].push(d)
       pointsPossibles = papier.listeCoords.slice()

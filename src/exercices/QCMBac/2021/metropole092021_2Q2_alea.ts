@@ -10,6 +10,7 @@ import { tracePoint } from '../../../lib/2d/TracePoint'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { nombreElementsDifferents } from '../../ExerciceQcm'
 import ExerciceQcmA from '../../ExerciceQcmA'
+import { bleuMathalea } from '../../../lib/colors'
 
 export const uuid = 'azer'
 export const refs = {
@@ -93,7 +94,7 @@ export default class MetropoleJuin24Exo4Q1 extends ExerciceQcmA {
           repere: r,
           xMin: -5,
           xMax: 8,
-          color: 'blue',
+          color: bleuMathalea,
           epaisseur: 2,
         }),
         r,

@@ -9,6 +9,7 @@ import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { nombreElementsDifferents } from '../../ExerciceQcm'
 import ExerciceQcmA from '../../ExerciceQcmA'
+import { bleuMathalea } from '../../../lib/colors'
 
 export const uuid = '1c2db'
 export const refs = {
@@ -60,8 +61,8 @@ export default class MetropoleJuin24Exo4Q4 extends ExerciceQcmA {
       .setThickY({ yMin, yMax, dy: 1 })
       .buildStandard().objets
     const cF = droite(point(0, a), point(Math.abs(a), -a))
-    cF.color = colorToLatexOrHTML('blue')
-    const labelF = latex2d('\\mathcal{C_f}', 1.5, 1.7, { color: 'blue' })
+    cF.color = colorToLatexOrHTML(bleuMathalea)
+    const labelF = latex2d('\\mathcal{C_f}', 1.5, 1.7, { color: bleuMathalea })
     const objets = [...theRepere, cF, labelF]
     this.enonce += mathalea2d(
       Object.assign({ pixelsParCm: 20, scale: 0.5 }, fixeBordures(objets)),

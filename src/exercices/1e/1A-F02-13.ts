@@ -7,6 +7,7 @@ import { texNombre } from '../../lib/outils/texNombre'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { randint } from '../../modules/outils'
 import ExerciceQcmA from '../ExerciceQcmA'
+import { bleuMathalea } from '../../lib/colors'
 export const dateDePublication = '28/07/2025'
 export const uuid = '8fa9b'
 
@@ -63,7 +64,7 @@ export default class AutoF2e extends ExerciceQcmA {
         },
         r,
         o,
-        courbe(F, { repere: r, color: 'blue', epaisseur: 2 }),
+        courbe(F, { repere: r, color: bleuMathalea, epaisseur: 2 }),
       ),
     )}<br>`
   }

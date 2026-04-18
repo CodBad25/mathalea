@@ -13,6 +13,7 @@ import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
 import { fixeBordures } from '../../lib/2d/fixeBordures'
+import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { toutAUnPoint } from '../../lib/interactif/mathLive'
@@ -124,7 +125,7 @@ export default class FractionDuneQuantite extends Exercice {
               2,
               0,
               'gateau',
-              'blue',
+              bleuMathalea,
             )
             texte += mathalea2d(Object.assign({}, fixeBordures(figure)), figure)
           }
@@ -148,7 +149,7 @@ export default class FractionDuneQuantite extends Exercice {
               2,
               0,
               'gateau',
-              'blue',
+              bleuMathalea,
             )
             texte += mathalea2d(Object.assign({}, fixeBordures(figure)), figure)
           }
@@ -236,7 +237,7 @@ export default class FractionDuneQuantite extends Exercice {
               8,
               0,
               'segment',
-              'blue',
+              bleuMathalea,
               '0',
               `${stringNombre(longueur / 100)}`,
             )

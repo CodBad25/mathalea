@@ -17,6 +17,7 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 
 export const titre = 'Reconnaitre une situation de proportionnalité'
 export const interactifReady = true
@@ -204,9 +205,9 @@ export default class ProportionnalitePasProportionnalite extends Exercice {
             texte = `${prenoms[0]} achète ${listeDeLieux[index1]} des ${objet}.<br>`
             texte += `Elle  repart avec ${y} ${objet} pour $${texPrix(somme)}$${sp()}€.<br> ${prenoms[1]} achète quant à lui, au même endroit ${p} ${objet} pour $${texPrix(z)}$${sp()}€.<br>`
             texte += `Le prix des ${objet} est-il proportionnel à la quantité achetée  ?<br>`
-            texteCorr = `${prenoms[0]} dépense $${miseEnEvidence(texPrix(somme), 'blue')}$${sp()}€.<br>`
-            texteCorr += `${prenoms[1]} a acheté  $${miseEnEvidence(Math.round(p / y))}$ fois la quantité des ${objet} achetée par ${prenoms[0]} pour $${miseEnEvidence(texPrix(somme), 'blue')}$${sp()}€.<br>`
-            texteCorr += `Il a payé $${texPrix(z)}$${sp()}€ $=${miseEnEvidence(Math.round(p / y))}\\times${miseEnEvidence(texPrix(somme), 'blue')}$${sp()}€.<br>`
+            texteCorr = `${prenoms[0]} dépense $${miseEnEvidence(texPrix(somme), bleuMathalea)}$${sp()}€.<br>`
+            texteCorr += `${prenoms[1]} a acheté  $${miseEnEvidence(Math.round(p / y))}$ fois la quantité des ${objet} achetée par ${prenoms[0]} pour $${miseEnEvidence(texPrix(somme), bleuMathalea)}$${sp()}€.<br>`
+            texteCorr += `Il a payé $${texPrix(z)}$${sp()}€ $=${miseEnEvidence(Math.round(p / y))}\\times${miseEnEvidence(texPrix(somme), bleuMathalea)}$${sp()}€.<br>`
             texteCorr += `À l'aide de ces données, on constate que le prix des ${objet} et leur quantité sont tous les deux multipliés par le même nombre, donc ces deux grandeurs sont proportionnelles.<br>`
             bonneReponse = 'oui'
           } else {
@@ -225,9 +226,9 @@ export default class ProportionnalitePasProportionnalite extends Exercice {
             texte = `${prenoms[0]} achète ${listeDeLieux[index1]} des ${objet}. `
             texte += `Elle a obtenu ${y} ${objet} pour $${texPrix(somme)}${sp()}$${sp()}€. ${prenoms[1]} achète quant à lui, au même endroit ${p}${sp()}${objet} pour $${texPrix(z)}$${sp()}€.<br>`
             texte += `Le prix des ${objet} est-il proportionnel à la quantité achetée  ?<br>`
-            texteCorr = `${prenoms[0]} dépense $${miseEnEvidence(texPrix(somme), 'blue')}$${sp()}${sp()}€.<br>`
-            texteCorr += `${prenoms[1]} a acheté  $${miseEnEvidence(Math.round(p / y))}$ fois la quantité des ${objet} achetée par ${prenoms[0]} pour $${miseEnEvidence(texPrix(somme), 'blue')}$${sp()}€.<br>`
-            texteCorr += `Il a payé $${texPrix(z)}$${sp()}€.<br>Mais $${miseEnEvidence(Math.round(p / y))}\\times${miseEnEvidence(texPrix(somme), 'blue')}$${sp()}€ $=${texPrix(somme.mul(p).div(y))}$${sp()}€.<br>`
+            texteCorr = `${prenoms[0]} dépense $${miseEnEvidence(texPrix(somme), bleuMathalea)}$${sp()}${sp()}€.<br>`
+            texteCorr += `${prenoms[1]} a acheté  $${miseEnEvidence(Math.round(p / y))}$ fois la quantité des ${objet} achetée par ${prenoms[0]} pour $${miseEnEvidence(texPrix(somme), bleuMathalea)}$${sp()}€.<br>`
+            texteCorr += `Il a payé $${texPrix(z)}$${sp()}€.<br>Mais $${miseEnEvidence(Math.round(p / y))}\\times${miseEnEvidence(texPrix(somme), bleuMathalea)}$${sp()}€ $=${texPrix(somme.mul(p).div(y))}$${sp()}€.<br>`
             texteCorr += `À l'aide de ces données, on constate que le prix unitaire des ${objet} n'est pas le même pour ${prenoms[0]} qui en a acheté $${y}$ que pour ${prenoms[1]} qui en a acheté ${p}, donc ces deux grandeurs ne sont pas proportionnelles.<br>`
             bonneReponse = 'non'
           }

@@ -7,6 +7,7 @@ import { texNombre } from '../../lib/outils/texNombre'
 import operation from '../../modules/operations'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 
 export const titre =
   'Résoudre des problèmes utilisant la division euclidienne (1)'
@@ -92,10 +93,10 @@ export default class QuestionsDivisionsEuclidiennes extends Exercice {
               operande1: dividende,
               operande2: diviseur,
               type: 'divisionE',
-              options: { solution: true, colore: 'blue' },
+              options: { solution: true, colore: bleuMathalea },
             }) +
-            `$${miseEnEvidence(`${texNombre(dividende)}=(${diviseur}\\times${texNombre(quotient)})+ ${texNombre(reste)}`, 'blue')}$`
-          texteCorr += `<br>Il se sera écoulé ${texteEnCouleurEtGras(String(quotient), 'blue')} semaines complètes et ${texteEnCouleurEtGras(String(reste), 'blue')} jours.`
+            `$${miseEnEvidence(`${texNombre(dividende)}=(${diviseur}\\times${texNombre(quotient)})+ ${texNombre(reste)}`, bleuMathalea)}$`
+          texteCorr += `<br>Il se sera écoulé ${texteEnCouleurEtGras(String(quotient), bleuMathalea)} semaines complètes et ${texteEnCouleurEtGras(String(reste), bleuMathalea)} jours.`
           texteCorr += `<br>Donc nous serons ${reste} jours de plus que  ${table[jour]}, soit ${texteEnCouleurEtGras(table[(jour + reste) % diviseur])}.`
           indiceInteractif++
           break
