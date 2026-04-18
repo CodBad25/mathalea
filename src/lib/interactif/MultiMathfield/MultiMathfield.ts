@@ -1,5 +1,5 @@
 // Utilitaire pour styliser les items a), b), ... dans un texte brut
-import 'katex/dist/katex.min.css'
+import katexCss from 'katex/dist/katex.min.css?inline'
 import { MathfieldElement } from 'mathlive'
 import { context } from '../../../modules/context'
 import { bleuMathalea } from '../../colors'
@@ -260,6 +260,7 @@ export class MultiMathfieldElement extends HTMLElement {
       // Ajoute le style pour masquer les toggles et centrer la saisie
       const style = document.createElement('style')
       style.textContent = `
+        ${katexCss}
         math-field::part(menu-toggle) {
           display: none;
         }
@@ -272,23 +273,7 @@ export class MultiMathfieldElement extends HTMLElement {
         math-field::part(content) {
           justify-content: start;
         }
-        .katex-mathml {
-  clip: rect(1px,1px,1px,1px);
-  border: 0;
-  height: 1px;
-  overflow: hidden;
-  padding: 0;
-  position: absolute;
-  width: 1px;
-
-}
-  .katex {
-    font: normal 1.21em KaTeX_Main,Times New Roman,serif;
-    line-height: 1.2;
-    position: relative;
-    text-indent: 0;
-    text-rendering: auto;
-        }`
+      `
       this.shadowRoot.appendChild(style)
       this.shadowRoot.appendChild(container)
     }

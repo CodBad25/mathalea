@@ -72,7 +72,6 @@ export default class TableauProportion extends Exercice {
     )
 
     const index = 0
-    const increment = 1
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
       const typesDeQuestions = listeTypeDeQuestions[i]
 
