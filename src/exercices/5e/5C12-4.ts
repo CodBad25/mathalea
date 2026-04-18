@@ -1,12 +1,14 @@
 import { compile } from '@cortex-js/compute-engine'
 import type { MathfieldElement } from 'mathlive'
+import { assignVariablesCe } from '../../lib/assignVariablesCe'
+import { calculerCe } from '../../lib/calculerCe'
 import ce from '../../lib/interactif/comparisonFunctions'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { remplisLesBlancs } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import type { AnswerType, IExercice } from '../../lib/types'
 import { gestionnaireFormulaireTexte, randint } from '../../modules/outils'
-import { assignVariables, calculer } from '../../modules/outilsMathjs'
 import Exercice from '../Exercice'
 
 export const interactifReady = true
@@ -198,6 +200,7 @@ class MettreDesParentheses extends Exercice {
   constructor() {
     super()
     this.nbQuestions = 5
+    this.correctionDetailleeDisponible = true
     this.besoinFormulaireTexte = [
       'Complexité',
       'Nombres séparés par des tirets :\n1 : 2 opérations\n2 : 3 opérations\n3 Mélange',
@@ -277,8 +280,10 @@ class MettreDesParentheses extends Exercice {
       // mathjs calcule l'expression avec les valeur choisies et fournit le membre de droite de l'énoncé
       const resultat =
         (parentheses
-          ? compile(materiel.expAP.replaceAll('_', '')).run!(assignations)
-          : compile(materiel.expSP.replaceAll('_', '')).run!(assignations)) ?? 0
+          ? (compile(materiel.expAP.replaceAll('_', '')).run!(assignations) ??
+            0)
+          : (compile(materiel.expSP.replaceAll('_', '')).run!(assignations) ??
+            0)) || 0
       let texte = ''
       let index = 1
       let content = ''
@@ -305,25 +310,20 @@ class MettreDesParentheses extends Exercice {
         d: assignations.d,
         // test: assignations.test
       }
-      // La fonction calculer() de Frédéric Piou fournit la correction, mais elle fournit aussi le résultat, et bien d'autres choses que je n'utilise pas...
       const answer = parentheses
-        ? calculer(
-            assignVariables(materiel.expAP.replaceAll('_', ''), valeurs),
-            {
-              removeImplicit: false,
-              suppr1: false,
-              comment: true,
-            },
-          )
-        : calculer(
-            assignVariables(materiel.expSP.replaceAll('_', ''), valeurs),
-            {
-              removeImplicit: false,
-              suppr1: false,
-              comment: true,
-            },
-          )
-      const texteCorr: string = `${answer.texteCorr}`
+        ? calculerCe(materiel.expAP.replaceAll('_', ''), {
+            variables: valeurs,
+            comment: this.correctionDetaillee,
+            implicitMultiply: false,
+          })
+        : calculerCe(materiel.expSP.replaceAll('_', ''), {
+            variables: valeurs,
+            comment: this.correctionDetaillee,
+            implicitMultiply: false,
+          })
+
+      const texteCorr: string = `${answer.texteCorr}<br>
+      Il fallait donc ${parentheses ? 'mettre des parenthèses' : 'ne pas mettre de parenthèse'} : $${miseEnEvidence(assignVariablesCe((parentheses ? materiel.expAP : materiel.expSP).replaceAll('_', ''), valeurs))}$`
       // La callback de correction intéractive
       const callback = (
         exercice: IExercice,
@@ -354,7 +354,7 @@ class MettreDesParentheses extends Exercice {
             laSaisie += char
           }
         }
-        const expSaisie = assignVariables(laSaisie, valeurs)
+        const expSaisie = assignVariablesCe(laSaisie, valeurs)
         const saisieParsed = ce.parse(expSaisie)
         const isOk1 = goodAnswer.isEqual(saisieParsed) ?? false // L'expression saisie et la bonne réponse donne le même résultat, c'est trés bon signe.
         // cependant, il peut y avoir des parenthèses inutiles.

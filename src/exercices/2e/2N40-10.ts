@@ -1,3 +1,4 @@
+import { buildCorrDetails } from '../../lib/calculerCe'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import {
@@ -7,12 +8,11 @@ import {
 } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-import { simplify } from 'mathjs'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import ce from '../../lib/interactif/comparisonFunctions'
 import { shuffle } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { sp } from '../../lib/outils/outilString'
-import { calculer, toTex } from '../../modules/outilsMathjs'
 
 export const titre =
   "Calculer la valeur d'une expression littérale à une variable pour une valeur donnée"
@@ -57,6 +57,7 @@ function garantirUnNegatif(...args: number[]) {
   }
   return args
 }
+
 /**
  * @author Ludwig Trossel
  */
@@ -74,6 +75,7 @@ export default class SubstituerDansUneExpressionLitterale extends Exercice {
       'Nombres séparés par des tirets :\n1: Entiers positifs\n2: Entiers relatifs (au moins 1 coeff/x négatifs)\n3: Mélange',
     ]
     this.besoinFormulaire3CaseACocher = ['Rendre les questions plus variées']
+    this.correctionDetailleeDisponible = true
     this.sup = 4
     this.sup2 = 1
     this.sup3 = true
@@ -120,7 +122,9 @@ export default class SubstituerDansUneExpressionLitterale extends Exercice {
       switch (listeTypeExpression[i]) {
         case 'a+b*x':
           if (this.sup3) {
-            diversificationListe = ['a+b*x', 'x*b+a', 'b*x+a', 'a+x*b']
+            diversificationListe = ['a+b*x', 'x*b+a', 'b*x+a', 'a+x*b'].map(
+              (s) => s.replaceAll('*', '\\times '),
+            )
             expressionABCX =
               diversificationListe[randint(0, diversificationListe.length - 1)]
           }
@@ -145,7 +149,7 @@ export default class SubstituerDansUneExpressionLitterale extends Exercice {
               '(x*c+a)*b',
               '(c*x+a)*b',
               '(a+c*x)*b',
-            ]
+            ].map((s) => s.replaceAll('*', '\\times '))
             expressionABCX =
               diversificationListe[randint(0, diversificationListe.length - 1)]
           }
@@ -182,7 +186,7 @@ export default class SubstituerDansUneExpressionLitterale extends Exercice {
               'b*x+c+a*x^2',
               'c+a*x^2+x*b',
               'c+b*x+a*x^2',
-            ]
+            ].map((s) => s.replaceAll('*', '\\times '))
             expressionABCX =
               diversificationListe[randint(0, diversificationListe.length - 1)]
           }
@@ -198,26 +202,48 @@ export default class SubstituerDansUneExpressionLitterale extends Exercice {
         ;[a, b, x, c] = garantirUnNegatif(a, b, x, c)
         if (x === 1) x = -1
       }
+      const parsedExpressionX = ce
+        .parse(expressionABCX)
+        .subs({ a, b, c }, { canonical: false })
+      const expressionX = parsedExpressionX.toLatex({
+        form: 'raw',
+        implicitMultiplication: false,
+        multiplicationSign: '\\times',
+      })
+      const parsedExpression = parsedExpressionX.subs(
+        { x },
+        { canonical: false },
+      )
+      // Workaround compute-engine LaTeX serialization bug: 3*2^2 may render as 32^2 after numeric substitution.
+      const expression = expressionX.replace(
+        /(^|[^A-Za-z])x(?=[^A-Za-z]|$)/g,
+        `$1\\times{${x}}`,
+      )
+      const corrDetails = buildCorrDetails(parsedExpression, {
+        comment: this.correctionDetaillee,
+        singleOp: false,
+      })
 
-      const expressionX = simplify(expressionABCX, [], { a, b, c }).toString()
-      const expression = simplify(expressionX, [], { x }).toString()
-
-      texte = `Pour $x=${x}$,${sp(1)} calculer : $${toTex(expressionX, { rearrangeCoefficient: false })}$.`
+      texte = `Pour $x=${x}$,${sp(1)} calculer : $${expressionX}$.`
       if (this.interactif) {
-        texte = `Pour $x=${x}$,${sp(1)} $${toTex(expressionX, { rearrangeCoefficient: false })} = $`
+        texte = `Pour $x=${x}$,${sp(1)} $${ce.parse(expressionX).toLatex()} = $`
         texte += ajouteChampTexteMathLive(this, i, KeyboardType.clavierDeBase)
       }
-
-      const corrDetails = calculer(expression, {
-        removeImplicit: false,
-        removeMultiplicationByNegativeOne: false,
-      })
-      texteCorr = corrDetails.texteCorr + '<br>'
-      texteCorr += `Le  résultat est donc : $${miseEnEvidence(corrDetails.result)}$.`
+      const resultat = parsedExpression
+        .simplify()
+        .toNumericValue()[0]
+        .toString()
+      texteCorr = `$\\begin{aligned}${expression}`
+      if (corrDetails.length > 0) {
+        texteCorr +=
+          corrDetails.map((step) => `&=${step}`).join('\\\\') +
+          '\\end{aligned}$<br>'
+      }
+      texteCorr += `Le  résultat est donc : $${miseEnEvidence(resultat)}$.`
 
       handleAnswers(this, i, {
         reponse: {
-          value: corrDetails.result,
+          value: resultat,
         },
       })
 
