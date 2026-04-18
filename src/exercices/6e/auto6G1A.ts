@@ -103,7 +103,8 @@ export default class constructionElementaire extends Exercice {
         lettreDepuisChiffre(indLettre + 4),
         'below right',
       )
-      if (!E) {
+      if (!E || (E.x === 50 && E.y === 50)) {
+        // pointIntersectionDD renvoie (50,50) lorsqu'il n'y a pas d'intersection
         window.notify("pointIntersectionDD n'a pas renvoyé de point", {})
         continue
       }
@@ -337,8 +338,8 @@ export default class constructionElementaire extends Exercice {
         ]
       }
 
-      if (this.questionJamaisPosee(i, Xmin, Xmax, Ymin, Ymax)) {
-        // Si la question n'a jamais été posée, on en crée une autre
+      if (this.questionJamaisPosee(i, Xmin, Xmax, Ymin, Ymax) && F != null) {
+        // si pas d'intersection, alors la boucle continue et on ne pose pas la question
         this.listeQuestions[i] = enonce
         this.listeCorrections[i] = correction
         i++
@@ -364,7 +365,7 @@ export default class constructionElementaire extends Exercice {
     figure.isDynamic = false
     figure.divButtons.style.display = 'none'
     figure.divUserMessage.style.display = 'none'
-    figure.buttons.get('SHAKE')?.click()
+    // figure.buttons.get('SHAKE')?.click()
 
     // Sauvegarde de la réponse pour Capytale
     if (this.answers == null) this.answers = {}
