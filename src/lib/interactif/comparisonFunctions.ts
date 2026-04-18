@@ -3054,13 +3054,6 @@ export function fonctionComparaison(
       feedback: "Aucune fonction trigonométrique n'est autorisée.",
     }
 
-  // Ces 2 lignes sont à améliorer... EE : Faut que je teste un truc... et rajouter les racines carrées aussi
-  /*
-  if (!options.avecSigneMultiplier && saisie.includes('times'))
-    return { isOk: false, feedback: "Aucun signe $\\times$ n'est autorisé." }
-  if (!options.avecFractions && saisie.includes('frac'))
-    return { isOk: false, feedback: "Aucune fraction n'est autorisée." }
-*/
   // Text comparisons
   if (options.texteAvecCasse) return handletexteAvecCasse(saisie, answer, true)
   if (options.texteSansCasse)
@@ -3154,11 +3147,6 @@ export function fonctionComparaison(
   if (options.fractionSansRacineCarree) {
     return handlefractionSansRacineCarree(saisie, answer)
   }
-
-  /*
-  if (options.avecFractions)
-    return mathEqual(parse(saisie), parse(answer)) ? ok() : fail()
-  */
 
   // Numeric expression
   if (options.expressionNumerique)
