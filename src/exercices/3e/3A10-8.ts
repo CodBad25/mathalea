@@ -113,13 +113,7 @@ export default class LireUnePuissance extends Exercice {
     this.nbQuestions = 1
     this.spacing = 1.5
     this.spacingCorr = 1.5
-    this.sup = 6
-    this.besoinFormulaireNumerique = [
-      'Choix des questions',
-      6,
-      '1 : Décomposition seulement\n2 : Decomposition et liste des diviseurs\n3 : Decomposition, liste des diviseurs et PGCD\n4 : Liste des diviseurs et PGCD\n5 : Liste des diviseurs, PGCD et conclusion\n6 : Toutes les questions\n7 : Décomposition et PGCD\n8 : Décomposition, PGCD et conclusion',
-    ]
-    this.besoinFormulaire2Texte = [
+    this.besoinFormulaireTexte = [
       'Type de questions',
       [
         'Nombres séparés par des tirets  :',
@@ -130,7 +124,7 @@ export default class LireUnePuissance extends Exercice {
         '5 : Toutes les questions',
       ].join('\n'),
     ]
-    this.sup2 = '5'
+    this.sup = '5'
   }
 
   situations = [
@@ -293,7 +287,7 @@ export default class LireUnePuissance extends Exercice {
 
   nouvelleVersion(): void {
     const typesDeQuestionsDisponibles = gestionnaireFormulaireTexte({
-      saisie: this.sup2,
+      saisie: this.sup,
       max: 4,
       melange: 5,
       defaut: 5,
