@@ -2,6 +2,7 @@ import { droiteGraduee } from '../../lib/2d/DroiteGraduee'
 import { point } from '../../lib/2d/PointAbstrait'
 import { labelPoint } from '../../lib/2d/textes'
 import { tracePoint } from '../../lib/2d/TracePoint'
+import { bleuMathalea } from '../../lib/colors'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import { lettreIndiceeDepuisChiffre } from '../../lib/outils/outilString'
 import { pointCliquable } from '../../modules/2dinteractif'
@@ -10,7 +11,6 @@ import FractionEtendue from '../../modules/FractionEtendue'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { bleuMathalea } from '../../lib/colors'
 export const titre = 'Utiliser des abscisses fractionnaires (niv 2)'
 export const interactifReady = false
 // remettre interactif_Ready à true qd point_Cliquable sera de nouveau opérationnel
@@ -306,9 +306,6 @@ export default class PlacerPointsAbscissesFractionnairesComplexes extends Exerci
         if (B) B.positionLabel = 'above = 0.2'
         if (C) C.positionLabel = 'above = 0.2'
       }
-
-      const texFraction2 = new FractionEtendue(num2, den2).texFraction
-      const texFraction3 = new FractionEtendue(num3, den3).texFraction
       if (this.interactif) {
         texteCorr = `$${lettreIndiceeDepuisChiffre(i + 1)}\\left(${texFraction}\\right).$`
         texteCorr +=
@@ -327,6 +324,8 @@ export default class PlacerPointsAbscissesFractionnairesComplexes extends Exerci
             labels,
           )
       } else {
+        const texFraction2 = new FractionEtendue(num2, den2).texFraction
+        const texFraction3 = new FractionEtendue(num3, den3).texFraction
         texteCorr = `$${lettreIndiceeDepuisChiffre(i * 3 + 1)}\\left(${texFraction}\\right)$, $~${lettreIndiceeDepuisChiffre(i * 3 + 2)}\\left(${texFraction2}\\right)$ et $~${lettreIndiceeDepuisChiffre(i * 3 + 3)}\\left(${texFraction3}\\right)$`
         texteCorr +=
           '<br>' +

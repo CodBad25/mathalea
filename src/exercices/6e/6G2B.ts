@@ -6,7 +6,6 @@ import Figure from 'apigeom'
 import checkCircle from 'apigeom/src/check/checkCircleRadius'
 import type Point from 'apigeom/src/elements/points/Point'
 import Decimal from 'decimal.js'
-import { bleuMathalea, orangeMathalea } from '../../lib/colors'
 import figureApigeom, { isFigureArray } from '../../lib/figureApigeom'
 import { choisitLettresDifferentes } from '../../lib/outils/aleatoires'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
@@ -88,8 +87,8 @@ export default class defCercleDisque extends Exercice {
       this.choixRayon[i] = []
       this.choixCouleur[i] = combinaisonListes([
         ['rouge', 'red'],
-        ['bleu', bleuMathalea],
-        ['orange', orangeMathalea],
+        ['bleu', 'blue'], // Ne pas mettre bleuMathalea
+        ['orange', 'orange'], // Ne pas mettre orangeMathalea
         ['vert', 'green'],
       ])
       this.estUnCercle[i] = combinaisonListes(typeDeQuestions, this.sup2)
