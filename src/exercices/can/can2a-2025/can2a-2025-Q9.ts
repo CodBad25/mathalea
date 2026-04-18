@@ -7,6 +7,7 @@ import {
 } from '../../../lib/outils/embellissements'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
+import { bleuMathalea } from '../../../lib/colors'
 
 export const titre = 'Factoriser avec une identité remarquable'
 export const interactifReady = true
@@ -40,9 +41,9 @@ export default class FactoriserA2MoinsB2 extends ExerciceSimple {
       if (this.interactif) {
         this.question += '<br>$x^2-25=$'
       }
-      this.correction = `On utilise l'égalité remarquable $${miseEnCouleur('a', 'red')}^2-${miseEnCouleur('b', 'blue')}^2=(${miseEnCouleur('a', 'red')}-${miseEnCouleur('b', 'blue')})(${miseEnCouleur('a', 'red')}+${miseEnCouleur('b', 'blue')})$ avec $a=${miseEnCouleur('x', 'red')}$  et $b=${miseEnCouleur('5', 'blue')}$.<br>
-    $\\begin{aligned}x^2-25&=${miseEnCouleur('x', 'red')}^2-${miseEnCouleur('5', 'blue')}^2\\\\
-    &=${miseEnEvidence(`(${miseEnCouleur('x', 'red')}-${miseEnCouleur('5', 'blue')})(${miseEnCouleur('x', 'red')}+${miseEnCouleur('5', 'blue')})`)}\\end{aligned}$<br>
+      this.correction = `On utilise l'égalité remarquable $${miseEnCouleur('a', 'red')}^2-${miseEnCouleur('b', bleuMathalea)}^2=(${miseEnCouleur('a', 'red')}-${miseEnCouleur('b', bleuMathalea)})(${miseEnCouleur('a', 'red')}+${miseEnCouleur('b', bleuMathalea)})$ avec $a=${miseEnCouleur('x', 'red')}$  et $b=${miseEnCouleur('5', bleuMathalea)}$.<br>
+    $\\begin{aligned}x^2-25&=${miseEnCouleur('x', 'red')}^2-${miseEnCouleur('5', bleuMathalea)}^2\\\\
+    &=${miseEnEvidence(`(${miseEnCouleur('x', 'red')}-${miseEnCouleur('5', bleuMathalea)})(${miseEnCouleur('x', 'red')}+${miseEnCouleur('5', bleuMathalea)})`)}\\end{aligned}$<br>
     Une expression factorisée de $x^2-25$ est $${miseEnEvidence('(x-5)(x+5)')}$.`
     } else {
       const choix = choice([true, false])
@@ -54,17 +55,17 @@ export default class FactoriserA2MoinsB2 extends ExerciceSimple {
       if (this.interactif) {
         this.question += `<br>${choix ? `$x^2-${a * a}=$` : `<br>$${a * a}-x^2=$`}`
       }
-      this.correction = `On utilise l'égalité remarquable $${miseEnCouleur('a', 'red')}^2-${miseEnCouleur('b', 'blue')}^2=(${miseEnCouleur('a', 'red')}-${miseEnCouleur('b', 'blue')})(${miseEnCouleur('a', 'red')}+${miseEnCouleur('b', 'blue')})$ avec ${choix ? `$a=${miseEnCouleur('x', 'red')}$  et $b=${miseEnCouleur(`${a}`, 'blue')}$` : `$a=${miseEnCouleur(`${a}`, 'red')}$ et $b=${miseEnCouleur('x', 'blue')}$`}.<br>`
+      this.correction = `On utilise l'égalité remarquable $${miseEnCouleur('a', 'red')}^2-${miseEnCouleur('b', bleuMathalea)}^2=(${miseEnCouleur('a', 'red')}-${miseEnCouleur('b', bleuMathalea)})(${miseEnCouleur('a', 'red')}+${miseEnCouleur('b', bleuMathalea)})$ avec ${choix ? `$a=${miseEnCouleur('x', 'red')}$  et $b=${miseEnCouleur(`${a}`, bleuMathalea)}$` : `$a=${miseEnCouleur(`${a}`, 'red')}$ et $b=${miseEnCouleur('x', bleuMathalea)}$`}.<br>`
       if (choix === true) {
         this.correction += `$\\begin{aligned}
- x^2-${a * a}&=\\underbrace{${miseEnCouleur('x', 'red')}^2-${miseEnCouleur(`${a}`, 'blue')}^2}_{a^2-b^2}\\\\
- &=\\underbrace{(${miseEnCouleur('x', 'red')}-${miseEnCouleur(`${a}`, 'blue')})(${miseEnCouleur('x', 'red')}+${miseEnCouleur(`${a}`, 'blue')})}_{(a-b)(a+b)}
+ x^2-${a * a}&=\\underbrace{${miseEnCouleur('x', 'red')}^2-${miseEnCouleur(`${a}`, bleuMathalea)}^2}_{a^2-b^2}\\\\
+ &=\\underbrace{(${miseEnCouleur('x', 'red')}-${miseEnCouleur(`${a}`, bleuMathalea)})(${miseEnCouleur('x', 'red')}+${miseEnCouleur(`${a}`, bleuMathalea)})}_{(a-b)(a+b)}
  \\end{aligned}$ <br>
     Une expression factorisée de $x^2-${a * a}$ est $${miseEnEvidence(`(x-${a})(x+${a})`)}$.`
       } else {
         this.correction += `$\\begin{aligned}
-  ${a * a}-x^2&=\\underbrace{${miseEnCouleur(`${a}`, 'red')}^2-${miseEnCouleur('x', 'blue')}^2}_{a^2-b^2}\\\\
-  &=\\underbrace{(${miseEnCouleur(`${a}`, 'red')}-${miseEnCouleur('x', 'blue')})(${miseEnCouleur(`${a}`, 'red')}+${miseEnCouleur('x', 'blue')})}_{(a-b)(a+b)}
+  ${a * a}-x^2&=\\underbrace{${miseEnCouleur(`${a}`, 'red')}^2-${miseEnCouleur('x', bleuMathalea)}^2}_{a^2-b^2}\\\\
+  &=\\underbrace{(${miseEnCouleur(`${a}`, 'red')}-${miseEnCouleur('x', bleuMathalea)})(${miseEnCouleur(`${a}`, 'red')}+${miseEnCouleur('x', bleuMathalea)})}_{(a-b)(a+b)}
   \\end{aligned}$ <br>
     Une expression factorisée de $${a * a}-x^2$ est $${miseEnEvidence(`(${a}-x)(${a}+x)`)}$.`
       }

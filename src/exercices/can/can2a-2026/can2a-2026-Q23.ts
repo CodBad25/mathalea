@@ -12,6 +12,7 @@ import FractionEtendue from '../../../modules/FractionEtendue'
 import { context } from '../../../modules/context'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import ExerciceCan from '../../ExerciceCan'
+import { bleuMathalea } from '../../../lib/colors'
 export const titre = "Déterminer le coefficient directeur d'une droite"
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -114,7 +115,7 @@ export default class Can2a2026Q23 extends ExerciceCan {
       })
     }
     const lBBx = latex2d(`${deltaY}`, xB + 0.5, milieu(B, Bx).y, {
-      color: 'blue',
+      color: bleuMathalea,
       backgroundColor: '',
       letterSize: 'scriptsize',
     })
@@ -219,7 +220,7 @@ export default class Can2a2026Q23 extends ExerciceCan {
     this.optionsChampTexte = { texteAvant: '' }
 
     this.correction = `Le coefficient directeur $m$ de la droite $(AB)$ est donné par :<br><br>
-    $m=\\dfrac{\\text{déplacement vertical}}{\\text{déplacement horizontal}}=\\dfrac{${miseEnEvidence(deltaY, 'blue')}}{${miseEnEvidence(deltaX, 'red')}}${miseEnEvidence(m.texSimplificationAvecEtapes())}$.<br><br>`
+    $m=\\dfrac{\\text{déplacement vertical}}{\\text{déplacement horizontal}}=\\dfrac{${miseEnEvidence(deltaY, bleuMathalea)}}{${miseEnEvidence(deltaX, 'red')}}${miseEnEvidence(m.texSimplificationAvecEtapes())}$.<br><br>`
     this.correction += `${objetC}`
 
     this.canEnonce = `Coefficient directeur de la droite $(AB)$.<br>${objet}`

@@ -7,6 +7,7 @@ import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
+import { bleuMathalea } from '../../../lib/colors'
 
 export const dateDePublication = '05/05/2024'
 export const interactifReady = true
@@ -115,8 +116,8 @@ export default class ResolEquationDerivee extends ExerciceSimple {
     const courbe1 = theSpline.courbe({
       epaisseur: 1.5,
       ajouteNoeuds: true,
-      optionsNoeuds: { color: 'blue', taille: 2, style: 'x', epaisseur: 2 },
-      color: 'blue',
+      optionsNoeuds: { color: bleuMathalea, taille: 2, style: 'x', epaisseur: 2 },
+      color: bleuMathalea,
     })
     const objetsEnonce = [repere1, courbe1]
 

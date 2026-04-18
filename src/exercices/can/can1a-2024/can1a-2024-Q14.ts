@@ -10,6 +10,7 @@ import FractionEtendue from '../../../modules/FractionEtendue'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
+import { bleuMathalea } from '../../../lib/colors'
 
 export const titre = 'Déterminer une équation réduite de droite'
 export const interactifReady = true
@@ -55,7 +56,7 @@ export default class EquationReduite extends ExerciceSimple {
     sABx.epaisseur = 2
     const traceA = tracePoint(A, 'black') // Variable qui trace les points avec une croix
     const traceB = tracePoint(B, 'black') // Variable qui trace les points avec une croix
-    const d = droite(A, B, '', 'blue')
+    const d = droite(A, B, '', bleuMathalea)
     d.epaisseur = 2
     traceA.taille = 3
     traceA.epaisseur = 2

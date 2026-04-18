@@ -9,6 +9,7 @@ import { choice } from '../../../lib/outils/arrayOutils'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
+import { bleuMathalea } from '../../../lib/colors'
 export const titre =
   'Calculer une longueur/un périmètre/une aire (avec des entiers)'
 export const dateDePublication = '25/08/2022'
@@ -67,10 +68,10 @@ export default class ProblemesDeLongueursEtPerimetreCM extends ExerciceSimple {
         s4 = segment(A, D)
         if (choice([true, false])) {
           objets.push(
-            codageSegments('||', 'blue', A, B),
-            codageSegments('||', 'blue', B, C),
-            codageSegments('||', 'blue', C, D),
-            codageSegments('||', 'blue', A, D),
+            codageSegments('||', bleuMathalea, A, B),
+            codageSegments('||', bleuMathalea, B, C),
+            codageSegments('||', bleuMathalea, C, D),
+            codageSegments('||', bleuMathalea, A, D),
             texteParPosition(`${a} cm`, milieu(A, B).x, milieu(A, B).y - 0.8),
             codageAngleDroit(D, A, B),
             codageAngleDroit(A, B, C),
@@ -104,10 +105,10 @@ export default class ProblemesDeLongueursEtPerimetreCM extends ExerciceSimple {
         ${choix ? `$4$ fois la longueur de son côté, soit $4\\times ${a}=${4 * a}\\text{ cm}$.` : `le carré de la longueur de son côté, soit $${a}\\times ${a}=${a * a}\\text{ cm}^2$.`}`
         } else {
           objets.push(
-            codageSegments('||', 'blue', A, B),
-            codageSegments('||', 'blue', B, C),
-            codageSegments('||', 'blue', C, D),
-            codageSegments('||', 'blue', A, D),
+            codageSegments('||', bleuMathalea, A, B),
+            codageSegments('||', bleuMathalea, B, C),
+            codageSegments('||', bleuMathalea, C, D),
+            codageSegments('||', bleuMathalea, A, D),
             texteParPosition('?', milieu(A, B).x, milieu(A, B).y - 0.8),
             codageAngleDroit(D, A, B),
             codageAngleDroit(A, B, C),
@@ -157,10 +158,10 @@ export default class ProblemesDeLongueursEtPerimetreCM extends ExerciceSimple {
         s4 = segment(A, D)
 
         objets.push(
-          codageSegments('||', 'blue', A, B),
-          codageSegments('|', 'blue', B, C),
-          codageSegments('||', 'blue', C, D),
-          codageSegments('|', 'blue', A, D),
+          codageSegments('||', bleuMathalea, A, B),
+          codageSegments('|', bleuMathalea, B, C),
+          codageSegments('||', bleuMathalea, C, D),
+          codageSegments('|', bleuMathalea, A, D),
           texteParPosition(`${a} cm`, milieu(A, B).x, milieu(A, B).y - 0.7),
           texteParPosition(`${b} cm`, milieu(B, C).x + 1.5, milieu(B, C).y),
           codageAngleDroit(D, A, B),
@@ -210,9 +211,9 @@ export default class ProblemesDeLongueursEtPerimetreCM extends ExerciceSimple {
 
         if (choice([true, false])) {
           objets.push(
-            codageSegments('||', 'blue', A, B),
-            codageSegments('||', 'blue', B, C),
-            codageSegments('||', 'blue', C, A),
+            codageSegments('||', bleuMathalea, A, B),
+            codageSegments('||', bleuMathalea, B, C),
+            codageSegments('||', bleuMathalea, C, A),
             texteParPosition(`${a} cm`, milieu(A, B).x, milieu(A, B).y - 0.8),
             s1,
             s2,
@@ -240,9 +241,9 @@ export default class ProblemesDeLongueursEtPerimetreCM extends ExerciceSimple {
         Son périmètre est $3$ fois la longueur de son côté, soit $3\\times ${a}=${3 * a}\\text{ cm}$.`
         } else {
           objets.push(
-            codageSegments('||', 'blue', A, B),
-            codageSegments('||', 'blue', B, C),
-            codageSegments('||', 'blue', C, A),
+            codageSegments('||', bleuMathalea, A, B),
+            codageSegments('||', bleuMathalea, B, C),
+            codageSegments('||', bleuMathalea, C, A),
             texteParPosition('?', milieu(A, B).x, milieu(A, B).y - 0.7),
             s1,
             s2,
@@ -286,8 +287,8 @@ export default class ProblemesDeLongueursEtPerimetreCM extends ExerciceSimple {
         choix = choice(['a', 'b', 'c']) //
         if (choix === 'a') {
           objets.push(
-            codageSegments('||', 'blue', B, C),
-            codageSegments('||', 'blue', C, A),
+            codageSegments('||', bleuMathalea, B, C),
+            codageSegments('||', bleuMathalea, C, A),
             texteParPosition(`${b} cm`, milieu(A, B).x, milieu(A, B).y - 0.7),
             texteParPosition(
               `${a} cm`,
@@ -324,8 +325,8 @@ export default class ProblemesDeLongueursEtPerimetreCM extends ExerciceSimple {
         }
         if (choix === 'b') {
           objets.push(
-            codageSegments('||', 'blue', B, C),
-            codageSegments('||', 'blue', C, A),
+            codageSegments('||', bleuMathalea, B, C),
+            codageSegments('||', bleuMathalea, C, A),
             texteParPosition(`${b} cm`, milieu(A, B).x, milieu(A, B).y - 0.7),
             texteParPosition('?', milieu(B, C).x + 1, milieu(B, C).y + 0.5),
             s1,
@@ -358,8 +359,8 @@ export default class ProblemesDeLongueursEtPerimetreCM extends ExerciceSimple {
         }
         if (choix === 'c') {
           objets.push(
-            codageSegments('||', 'blue', B, C),
-            codageSegments('||', 'blue', C, A),
+            codageSegments('||', bleuMathalea, B, C),
+            codageSegments('||', bleuMathalea, C, A),
             texteParPosition('?', milieu(A, B).x, milieu(A, B).y - 0.7),
             texteParPosition(
               `${a} cm`,

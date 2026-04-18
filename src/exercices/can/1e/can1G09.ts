@@ -12,6 +12,7 @@ import { texteEnCouleurEtGras } from '../../../lib/outils/embellissements'
 import { abs } from '../../../lib/outils/nombres'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import ExerciceSimple from '../../ExerciceSimple'
+import { bleuMathalea } from '../../../lib/colors'
 export const titre =
   'Associer un point à un réel sur un cercle trigonométrique '
 export const interactifReady = true
@@ -54,36 +55,36 @@ export default class AngleSurCercleTrigo extends ExerciceSimple {
     const s2 = segment(J, J2)
     const c = cercleCentrePoint(O, I)
     c.epaisseur = 3
-    const sOI = segment(O, I, 'blue')
+    const sOI = segment(O, I, bleuMathalea)
     sOI.epaisseur = 3
     const A1 = pointSurCercle(c, 30, 'A', 'above right')
     const A2 = pointSurCercle(c, 210, 'G', 'below left')
-    const sA1A2 = segment(A1, A2, 'blue')
+    const sA1A2 = segment(A1, A2, bleuMathalea)
     sA1A2.epaisseur = 1
     sA1A2.pointilles = 5
     const B1 = pointSurCercle(c, 45, 'B', 'above right')
     const B2 = pointSurCercle(c, 225, 'H', 'below left')
-    const sB1B2 = segment(B1, B2, 'blue')
+    const sB1B2 = segment(B1, B2, bleuMathalea)
     sB1B2.epaisseur = 1
     sB1B2.pointilles = 5
     const C1 = pointSurCercle(c, 60, 'C', 'above right')
     const C2 = pointSurCercle(c, 240, 'M', 'below left')
-    const sC1C2 = segment(C1, C2, 'blue')
+    const sC1C2 = segment(C1, C2, bleuMathalea)
     sC1C2.epaisseur = 1
     sC1C2.pointilles = 5
     const D1 = pointSurCercle(c, 120, 'D', 'above left')
     const D2 = pointSurCercle(c, -60, 'N', 'below right')
-    const sD1D2 = segment(D1, D2, 'blue')
+    const sD1D2 = segment(D1, D2, bleuMathalea)
     sD1D2.epaisseur = 1
     sD1D2.pointilles = 5
     const E1 = pointSurCercle(c, 135, 'E', 'above left')
     const E2 = pointSurCercle(c, -45, 'P', 'below right')
-    const sE1E2 = segment(E1, E2, 'blue')
+    const sE1E2 = segment(E1, E2, bleuMathalea)
     sE1E2.epaisseur = 1
     sE1E2.pointilles = 5
     const F1 = pointSurCercle(c, 150, 'F', 'above left')
     const F2 = pointSurCercle(c, -30, 'Q', 'below right')
-    const sF1F2 = segment(F1, F2, 'blue')
+    const sF1F2 = segment(F1, F2, bleuMathalea)
     sF1F2.epaisseur = 1
     sF1F2.pointilles = 5
     const g = grille(-5, -5, 5, 5, 'black', 0.4, 2.5)

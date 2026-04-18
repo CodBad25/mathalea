@@ -9,6 +9,7 @@ import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../../modules/outils'
 import Exercice from '../../Exercice'
+import { bleuMathalea } from '../../../lib/colors'
 
 export const titre = 'Lire graphiquement le signe de $a$ et de $\\Delta$'
 export const interactifReady = true
@@ -108,7 +109,7 @@ export default class LectureGraphiqueParabole extends Exercice {
             },
             r,
             o,
-            courbe(F, { repere: r, color: 'blue', epaisseur: 2 }),
+            courbe(F, { repere: r, color: bleuMathalea, epaisseur: 2 }),
           )
 
           texteCorr = `La parabole a "les bras" tournés vers le haut, on en déduit que $a${miseEnEvidence('>')}0$. <br>
@@ -169,7 +170,7 @@ export default class LectureGraphiqueParabole extends Exercice {
             },
             r,
             o,
-            courbe(F, { repere: r, color: 'blue', epaisseur: 2 }),
+            courbe(F, { repere: r, color: bleuMathalea, epaisseur: 2 }),
           )
           texteCorr = `La parabole a "les bras" tournés vers le haut, on en déduit que $a${miseEnEvidence('>')}0$. <br>
     De plus, elle  coupe  l'axe des abscisses en deux points, donc $f$ a deux racines et par suite $\\Delta${miseEnEvidence('>')}0$.`
@@ -228,7 +229,7 @@ export default class LectureGraphiqueParabole extends Exercice {
             },
             r,
             o,
-            courbe(F, { repere: r, color: 'blue', epaisseur: 2 }),
+            courbe(F, { repere: r, color: bleuMathalea, epaisseur: 2 }),
           )
 
           texteCorr = `La parabole a "les bras" tournés vers le haut, on en déduit que $a${miseEnEvidence('>')}0$. <br>
@@ -289,7 +290,7 @@ export default class LectureGraphiqueParabole extends Exercice {
             },
             r,
             o,
-            courbe(F, { repere: r, color: 'blue', epaisseur: 2 }),
+            courbe(F, { repere: r, color: bleuMathalea, epaisseur: 2 }),
           )
 
           texteCorr = `La parabole a "les bras" tournés vers le bas, on en déduit que $a${miseEnEvidence('<')}0$. <br>
@@ -350,7 +351,7 @@ export default class LectureGraphiqueParabole extends Exercice {
             },
             r,
             o,
-            courbe(F, { repere: r, color: 'blue', epaisseur: 2 }),
+            courbe(F, { repere: r, color: bleuMathalea, epaisseur: 2 }),
           )
 
           texteCorr = `La parabole a "les bras" tournés vers le bas, on en déduit que $a${miseEnEvidence('<')}0$. <br>
@@ -412,7 +413,7 @@ export default class LectureGraphiqueParabole extends Exercice {
             },
             r,
             o,
-            courbe(F, { repere: r, color: 'blue', epaisseur: 2 }),
+            courbe(F, { repere: r, color: bleuMathalea, epaisseur: 2 }),
           )
 
           texteCorr = `La parabole a "les bras" tournés vers le bas, on en déduit que $a${miseEnEvidence('<')}0$. <br>

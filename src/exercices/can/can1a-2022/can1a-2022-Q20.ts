@@ -8,6 +8,7 @@ import { repere } from '../../../lib/2d/reperes'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { ecritureParentheseSiNegatif } from '../../../lib/outils/ecritures'
 import { courbe } from '../../../lib/2d/Courbe'
+import { bleuMathalea } from '../../../lib/colors'
 export const titre = 'Déterminer le produit de deux images à partir d\'un graphique'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -46,12 +47,12 @@ export default class Can1a2022Q20 extends ExerciceCan {
     const o = texteParPosition('O', -0.3, -0.3, 0, 'black', 1)
  const cf = latex2d('\\mathscr{C}_f', 0.5, 2.5,
       {
-        color: 'blue',
+        color: bleuMathalea,
         letterSize: 'normalsize',
       })
     const graphique = mathalea2d(
       { xmin: -4, xmax: 6, ymin: -1.1, ymax: 5.1, pixelsParCm: 30, scale: 0.8 },
-      r, o, cf, courbe(F, { repere: r, color: 'blue', epaisseur: 1.5 , step:0.05}), courbe(tang, { repere: r, color: 'red', epaisseur: 2 }),
+      r, o, cf, courbe(F, { repere: r, color: bleuMathalea, epaisseur: 1.5 , step:0.05}), courbe(tang, { repere: r, color: 'red', epaisseur: 2 }),
     )
 
     let x1: number

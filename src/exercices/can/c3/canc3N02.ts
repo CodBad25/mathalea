@@ -5,6 +5,7 @@ import { texNombre } from '../../../lib/outils/texNombre'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
+import { bleuMathalea } from '../../../lib/colors'
 export const titre = 'Trouver un nombre sur une droite graduée'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -51,7 +52,7 @@ export default class SuiteSurDroiteGraduee extends ExerciceSimple {
       axeStyle: '->',
       pointListe: [[c + a * 3, '']],
       labelListe: maListe,
-      pointCouleur: 'blue',
+      pointCouleur: bleuMathalea,
       pointStyle: 'x',
       labelsPrincipaux: false,
     })

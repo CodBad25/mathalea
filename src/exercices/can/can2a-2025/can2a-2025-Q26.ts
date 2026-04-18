@@ -12,6 +12,7 @@ import FractionEtendue from '../../../modules/FractionEtendue'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
+import { bleuMathalea } from '../../../lib/colors'
 
 export const titre = "Déterminer le coefficient directeur d'une droite"
 export const interactifReady = true
@@ -77,11 +78,11 @@ export default class CoeffDirecteurGraphique extends ExerciceSimple {
       })
     }
     const lBBx = latex2d(`${yB - yA}`, B.x + 0.5, milieu(B, Bx).y, {
-      color: 'blue',
+      color: bleuMathalea,
       backgroundColor: '',
     })
     const traceB = tracePoint(B, 'black') // Variable qui trace les points avec une croix
-    const d = droite(A, B, '', 'blue')
+    const d = droite(A, B, '', bleuMathalea)
     d.epaisseur = 2
     traceA.taille = 2
     traceA.epaisseur = 2
@@ -158,7 +159,7 @@ export default class CoeffDirecteurGraphique extends ExerciceSimple {
       this.correction = `La droite est horizontale. <br>On en déduit que $m=${miseEnEvidence('0')}$.`
     } else {
       this.correction = `Le coefficient directeur $m$ de la droite $(AB)$ est donné par :<br><br>
-            $m=\\dfrac{y_B-y_A}{x_B-x_A}=\\dfrac{${yB}-${ecritureParentheseSiNegatif(yA)}}{${xB}-${ecritureParentheseSiNegatif(xA)}}=\\dfrac{${miseEnEvidence(yB - yA, 'blue')}}{${miseEnEvidence(xB - xA, 'red')}}${miseEnEvidence(m.texSimplificationAvecEtapes())}$.<br><br>`
+            $m=\\dfrac{y_B-y_A}{x_B-x_A}=\\dfrac{${yB}-${ecritureParentheseSiNegatif(yA)}}{${xB}-${ecritureParentheseSiNegatif(xA)}}=\\dfrac{${miseEnEvidence(yB - yA, bleuMathalea)}}{${miseEnEvidence(xB - xA, 'red')}}${miseEnEvidence(m.texSimplificationAvecEtapes())}$.<br><br>`
       this.correction += `${objetC}`
     }
 
