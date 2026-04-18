@@ -5,6 +5,7 @@ import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { listeQuestionsToContenu, randint } from '../../../modules/outils'
 import Exercice from '../../Exercice'
+import { bleuMathalea } from '../../../lib/colors'
 export const titre =
   'Utiliser une fonction de référence (inverse, cube, racine) pour comparer deux images'
 export const interactifReady = true
@@ -89,10 +90,10 @@ export default class ComparerAvecFctRef extends Exercice {
         Autrement dit, si $a$ et $b$ sont deux nombres strictement positifs et si $a < b$, alors $\\dfrac{1}{a} > \\dfrac{1}{b}$.<br>`
 
             if (a < b) {
-              texteCorr += `Comme $${texNombre(a)}${miseEnEvidence('<', 'blue')}${texNombre(b)}$, 
+              texteCorr += `Comme $${texNombre(a)}${miseEnEvidence('<', bleuMathalea)}${texNombre(b)}$, 
                 alors  $${miseEnEvidence(`\\dfrac{1}{${texNombre(a)}} > \\dfrac{1}{${texNombre(b)}}`)}$.`
             } else {
-              texteCorr += `Comme $${texNombre(b)}${miseEnEvidence('<', 'blue')}${texNombre(a)}$, 
+              texteCorr += `Comme $${texNombre(b)}${miseEnEvidence('<', bleuMathalea)}${texNombre(a)}$, 
                 alors  $${miseEnEvidence(`\\dfrac{1}{${texNombre(b)}} > \\dfrac{1}{${texNombre(a)}}`)}$.`
             }
           } else {
@@ -142,10 +143,10 @@ export default class ComparerAvecFctRef extends Exercice {
     Autrement dit, si $a$ et $b$ sont deux nombres strictement négatifs et si $a < b$, alors $\\dfrac{1}{a} > \\dfrac{1}{b}$.<br>`
 
             if (a < b) {
-              texteCorr += `Comme $${texNombre(a)}${miseEnEvidence('<', 'blue')}${texNombre(b)}$, 
+              texteCorr += `Comme $${texNombre(a)}${miseEnEvidence('<', bleuMathalea)}${texNombre(b)}$, 
               alors  $${miseEnEvidence(`\\dfrac{1}{${texNombre(a)}} > \\dfrac{1}{${texNombre(b)}}`)}$.`
             } else {
-              texteCorr += `Comme $${texNombre(b)}${miseEnEvidence('<', 'blue')}${texNombre(a)}$, 
+              texteCorr += `Comme $${texNombre(b)}${miseEnEvidence('<', bleuMathalea)}${texNombre(a)}$, 
               alors  $${miseEnEvidence(`\\dfrac{1}{${texNombre(b)}} > \\dfrac{1}{${texNombre(a)}}`)}$.`
             }
           }
@@ -198,10 +199,10 @@ export default class ComparerAvecFctRef extends Exercice {
             Cela signifie que deux nombres réels  sont rangés dans le même ordre que leurs cubes.<br>
             Autrement dit, si $a$ et $b$ sont deux nombres réels et si $a < b$, alors $a^3 < b^3$.<br>`
           if (a < b) {
-            texteCorr += `Comme $${texNombre(a)}${miseEnEvidence('<', 'blue')}${texNombre(b)}$,
+            texteCorr += `Comme $${texNombre(a)}${miseEnEvidence('<', bleuMathalea)}${texNombre(b)}$,
             alors $${miseEnEvidence(`${ecritureParentheseSiNegatif(a)}^3 < ${ecritureParentheseSiNegatif(b)}^3`)}$.`
           } else {
-            texteCorr += `Comme $${texNombre(b)}${miseEnEvidence('<', 'blue')}${texNombre(a)}$, 
+            texteCorr += `Comme $${texNombre(b)}${miseEnEvidence('<', bleuMathalea)}${texNombre(a)}$, 
             alors $${miseEnEvidence(`${ecritureParentheseSiNegatif(b)}^3 < ${ecritureParentheseSiNegatif(a)}^3`)}$.`
           }
           this.canEnonce = `Comparer $${ecritureParentheseSiNegatif(a)}^3$ et $${ecritureParentheseSiNegatif(b)}^3$.`
@@ -257,10 +258,10 @@ export default class ComparerAvecFctRef extends Exercice {
                 Cela signifie que deux nombres réels positifs sont rangés dans le même ordre que leurs racines carrées.<br>
                 Autrement dit, si $a$ et $b$ sont deux nombres réels positifs et si $a < b$, alors $\\sqrt{a} < \\sqrt{b}$.<br>`
           if (a < b) {
-            texteCorr += ` Comme $${texNombre(a)}${miseEnEvidence('<', 'blue')}${texNombre(b)}$, alors
+            texteCorr += ` Comme $${texNombre(a)}${miseEnEvidence('<', bleuMathalea)}${texNombre(b)}$, alors
                 $${miseEnEvidence(`\\sqrt{${texNombre(a)}} < \\sqrt{${texNombre(b)}}`)}$.`
           } else {
-            texteCorr += ` Comme $${texNombre(b)}${miseEnEvidence('<', 'blue')}${texNombre(a)}$, alors 
+            texteCorr += ` Comme $${texNombre(b)}${miseEnEvidence('<', bleuMathalea)}${texNombre(a)}$, alors 
                 $${miseEnEvidence(`\\sqrt{${texNombre(b)}} < \\sqrt{${texNombre(a)}}`)}$.`
           }
           this.canEnonce = `Comparer $\\sqrt{${texNombre(a)}}$  et $\\sqrt{${texNombre(b)}}$.`

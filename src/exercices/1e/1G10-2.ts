@@ -24,6 +24,7 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -118,8 +119,8 @@ export default class AngleProduitScalaire extends Exercice {
       A = point(xA, yA)
       B = point(xB, yB)
       C = point(xC, yC)
-      const demiDroiteAB = demiDroite(A, B, 'blue')
-      const demiDroiteAC = demiDroite(A, C, 'blue')
+      const demiDroiteAB = demiDroite(A, B, bleuMathalea)
+      const demiDroiteAC = demiDroite(A, C, bleuMathalea)
       const labelA = latex2d('A', xA - 0.5, yA + 0.5, {
         letterSize: 'normalsize',
       })

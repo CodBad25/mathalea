@@ -37,6 +37,7 @@ import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../../lib/interactif/questionMathLive'
 import type { NestedObjetMathalea2dArray } from '../../../types/2d'
+import { bleuMathalea } from '../../../lib/colors'
 
 export const titre = 'CAN Seconde sujet 2023'
 export const interactifReady = true
@@ -578,7 +579,7 @@ export default class SujetCAN2023Seconde extends Exercice {
               segmentAvecExtremites(A, B),
               segmentAvecExtremites(B, C),
               s,
-              codageSegments('||', 'blue', A, B, B, C),
+              codageSegments('||', bleuMathalea, A, B, B, C),
             )
             objets.push(
               texteParPosition(
@@ -1403,7 +1404,7 @@ export default class SujetCAN2023Seconde extends Exercice {
 
             const lA = texteParPosition('A', xA26, yA26 + 0.5, 0, 'black', 1.5)
             const traceA = tracePoint(A26, 'black') // Variable qui trace les points avec une croix
-            const d = droite(A26, B26, '', 'blue')
+            const d = droite(A26, B26, '', bleuMathalea)
             d.epaisseur = 2
             traceA.taille = 3
             traceA.epaisseur = 2
@@ -1578,7 +1579,7 @@ export default class SujetCAN2023Seconde extends Exercice {
                 [x3, y3],
               ],
               {
-                color: 'blue',
+                color: bleuMathalea,
                 epaisseur: 2,
                 repere: r1,
                 xMin: x0 - 1,
@@ -1664,7 +1665,7 @@ export default class SujetCAN2023Seconde extends Exercice {
                 [6, -2],
               ],
               {
-                color: 'blue',
+                color: bleuMathalea,
                 epaisseur: 2,
                 repere: r1,
                 xMin: -6,

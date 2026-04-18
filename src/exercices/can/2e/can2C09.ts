@@ -18,7 +18,7 @@ import { fraction } from '../../../modules/fractions'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
-import { orangeMathalea } from '../../../lib/colors'
+import { orangeMathalea, bleuMathalea } from '../../../lib/colors'
 
 export const titre = 'Calculer le "milieu" entre 1 et une fraction'
 export const interactifReady = true
@@ -85,7 +85,7 @@ export default class MilieuEntre1EtFraction extends ExerciceSimple {
     objets.push(
       segmentAvecExtremites(A, B),
       segmentAvecExtremites(B, C),
-      codageSegments('||', 'blue', A, B, B, C),
+      codageSegments('||', bleuMathalea, A, B, B, C),
     )
     objets.push(texteParPosition(`${stringNombre(1)}`, 0, -0.6))
     objets.push(texteParPosition(`${stringNombre(n)}`, C.x, C.y - 0.5))

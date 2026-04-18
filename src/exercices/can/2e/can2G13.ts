@@ -8,6 +8,7 @@ import {
 import { lettreMinusculeDepuisChiffre } from '../../../lib/outils/outilString'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
+import { bleuMathalea } from '../../../lib/colors'
 export const titre = 'Calculer la norme d’un vecteur'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -68,7 +69,7 @@ export default class NormeVecteur extends ExerciceSimple {
           ${miseEnEvidence(`${Math.sqrt(a ** 2 + b ** 2)}`)}$.<br><br>`
           this.correction += texteEnCouleur(
             `Comme $${a ** 2 + b ** 2}$ est un carré parfait, on simplifie la racine carrée.`,
-            'blue',
+            bleuMathalea,
           )
           this.reponse = Math.sqrt(a ** 2 + b ** 2)
         } else {
@@ -84,7 +85,7 @@ export default class NormeVecteur extends ExerciceSimple {
           ${miseEnEvidence(`\\sqrt{${a ** 2 + b ** 2}}`)}$<br><br>`
           this.correction += texteEnCouleur(
             `Comme $${a ** 2 + b ** 2}$ n'est pas un carré parfait, on ne simplifie pas (la réponse doit être sous la forme $\\sqrt{a}$ ou d'un entier).<br>`,
-            'blue',
+            bleuMathalea,
           )
           this.reponse = [
             `\\sqrt{${a ** 2 + b ** 2}}`,

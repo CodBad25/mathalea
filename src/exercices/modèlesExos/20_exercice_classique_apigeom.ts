@@ -45,7 +45,7 @@ export default class nomExercice extends Exercice {
         position: 'top',
       })
       this.figuresApiGeom[i].create('Grid')
-      this.figuresApiGeom[i].options.color = 'blue'
+      this.figuresApiGeom[i].options.color = 'blue' // Ne pas mettre bleuMathalea quand il s'agit d'apigeom
       texte = figureApigeom({
         exercice: this,
         i,

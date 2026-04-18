@@ -17,6 +17,7 @@ import {
   randint,
 } from '../../../modules/outils'
 import Exercice from '../../Exercice'
+import { bleuMathalea } from '../../../lib/colors'
 export const titre = 'Déterminer le signe d’une fonction affine (V/F)'
 export const interactifReady = true
 export const interactifType = 'qcm'
@@ -89,8 +90,8 @@ export default class SigneFonctionAffine extends Exercice {
             En ajoutant $${ecritureParentheseSiNegatif(-b)}$ dans chaque membre, on obtient :<br>
             $${rienSi1(a)}x>${-b}$<br>
             En divisant par $(${a})$ dans chaque membre, on obtient :<br>
-            $x$ $${miseEnEvidence('<', 'blue')}$ $${maFraction.texFractionSimplifiee}$ ${sp(3)}
-            ${texteEnCouleur('(quand on divise par un nombre strictement négatif, on change le sens de l’inégalité).', 'blue')}<br><br>
+            $x$ $${miseEnEvidence('<', bleuMathalea)}$ $${maFraction.texFractionSimplifiee}$ ${sp(3)}
+            ${texteEnCouleur('(quand on divise par un nombre strictement négatif, on change le sens de l’inégalité).', bleuMathalea)}<br><br>
             $${reduireAxPlusB(a, b)}$ est strictement positif pour $x<${maFraction.texFractionSimplifiee}$, il fallait donc cocher "${texteEnCouleurEtGras('Faux')}".`
           }
 
@@ -126,8 +127,8 @@ export default class SigneFonctionAffine extends Exercice {
               En ajoutant $${ecritureParentheseSiNegatif(-b)}$ dans chaque membre, on obtient :<br>
               $${rienSi1(a)}x>${-b}$<br>
               En divisant par $(${a})$ dans chaque membre, on obtient :<br>
-              $x$ $${miseEnEvidence('<', 'blue')}$ $${maFraction.texFractionSimplifiee}$ ${sp(3)}
-              ${texteEnCouleur('(quand on divise par un nombre strictement négatif, on change le sens de l’inégalité).', 'blue')}<br><br>
+              $x$ $${miseEnEvidence('<', bleuMathalea)}$ $${maFraction.texFractionSimplifiee}$ ${sp(3)}
+              ${texteEnCouleur('(quand on divise par un nombre strictement négatif, on change le sens de l’inégalité).', bleuMathalea)}<br><br>
               $${reduireAxPlusB(a, b)}$ est strictement positif pour $x<${maFraction.texFractionSimplifiee}$, il fallait donc cocher "${texteEnCouleurEtGras('Vrai')}".`
           } else {
             texteCorr =

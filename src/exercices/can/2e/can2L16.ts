@@ -11,6 +11,7 @@ import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
+import { bleuMathalea } from '../../../lib/colors'
 
 export const titre =
   'Résoudre une inéquation du type $\\sqrt{x}<k$ ou $\\sqrt{x}>k$'
@@ -51,7 +52,7 @@ export default class EquationsRacCarree extends ExerciceSimple {
       backgroundColor: '',
     })
     const Texte2 = latex2d('y=\\sqrt{x}', 3, 2.3, {
-      color: 'blue',
+      color: bleuMathalea,
       letterSize: 'scriptsize',
       backgroundColor: '',
     })
@@ -108,7 +109,7 @@ export default class EquationsRacCarree extends ExerciceSimple {
             },
             courbe(f, {
               repere: r1,
-              color: 'blue',
+              color: bleuMathalea,
               epaisseur: 2,
               xMin: 0,
             }),
@@ -158,7 +159,7 @@ export default class EquationsRacCarree extends ExerciceSimple {
             },
             courbe(f, {
               repere: r1,
-              color: 'blue',
+              color: bleuMathalea,
               epaisseur: 2,
               xMin: 0,
             }),

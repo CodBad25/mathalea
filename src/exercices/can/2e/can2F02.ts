@@ -11,6 +11,7 @@ import { context } from '../../../modules/context'
 import FractionEtendue from '../../../modules/FractionEtendue'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
+import { bleuMathalea } from '../../../lib/colors'
 export const titre = 'Calculer une image avec un quotient'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -71,7 +72,7 @@ export default class CalculImageQuotient extends ExerciceSimple {
            $ ${a}\\times ${ecritureParentheseSiNegatif(x)}${ecritureAlgebrique(b)}=${a * x + b}$ et $${c}\\times ${ecritureParentheseSiNegatif(x)}${ecritureAlgebrique(d)}=${c * x + d}$.<br>
            On obtient le quotient que l'on simplifie éventuellement : $${maFraction.texFractionSimplifiee}$.
     `,
-      'blue',
+      bleuMathalea,
     )
   }
 }

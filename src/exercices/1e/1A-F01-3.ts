@@ -13,6 +13,7 @@ import { mathalea2d } from '../../modules/mathalea2d'
 import { randint } from '../../modules/outils'
 
 import ExerciceQcmA from '../ExerciceQcmA'
+import { bleuMathalea } from '../../lib/colors'
 export const dateDePublication = '11/11/2025'
 export const uuid = '3833f'
 
@@ -97,7 +98,7 @@ export default class AutoF01c extends ExerciceQcmA {
       epaisseur: 1.5,
       ajouteNoeuds: true,
       optionsNoeuds: { color: 'black', taille: 1.5, style: 'x', epaisseur: 2 },
-      color: 'blue',
+      color: bleuMathalea,
     })
 
     const objetsEnonce = [repere1, courbe1]

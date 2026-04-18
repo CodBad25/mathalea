@@ -12,6 +12,7 @@ import { texNombre } from '../../lib/outils/texNombre'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { randint } from '../../modules/outils'
 import ExerciceQcmA from '../ExerciceQcmA'
+import { bleuMathalea } from '../../lib/colors'
 export const dateDePublication = '26/09/2025'
 export const dateDeModifImportante = '12/10/2025'
 export const uuid = '84c9f'
@@ -200,7 +201,7 @@ export default class Auto1AC10d extends ExerciceQcmA {
       r1,
       o,
       textes[4],
-      courbe(f, { repere: r1, color: 'blue', epaisseur: 2 }),
+      courbe(f, { repere: r1, color: bleuMathalea, epaisseur: 2 }),
     )
 
     // Graphique complet pour la correction
@@ -213,7 +214,7 @@ export default class Auto1AC10d extends ExerciceQcmA {
         pixelsParCm: 30,
         scale: 1,
       },
-      courbe(f, { repere: r1, color: 'blue', epaisseur: 2 }),
+      courbe(f, { repere: r1, color: bleuMathalea, epaisseur: 2 }),
       Cg,
       r1,
       o,

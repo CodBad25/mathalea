@@ -13,6 +13,7 @@ import FractionEtendue from '../../../modules/FractionEtendue'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
+import { bleuMathalea } from '../../../lib/colors'
 export const titre =
   "Déterminer le coefficient directeur d'une droite (graphique)"
 export const interactifReady = true
@@ -105,11 +106,11 @@ export default class CoeffDirDroite extends ExerciceSimple {
           B.x + 0.5,
           milieu(B, Bx).y,
           0,
-          'blue',
+          bleuMathalea,
           1,
         )
         traceB = tracePoint(B, 'black') // Variable qui trace les points avec une croix
-        d = droite(A, B, '', 'blue')
+        d = droite(A, B, '', bleuMathalea)
         d.epaisseur = 2
         traceA.taille = 2
         traceA.epaisseur = 2
@@ -191,7 +192,7 @@ export default class CoeffDirDroite extends ExerciceSimple {
           this.correction = `La droite est horizontale. On en déduit que $m=${miseEnEvidence('0')}$.`
         } else {
           this.correction = `Le coefficient directeur $m$ de la droite $(AB)$ est donné par :<br><br>
-            $m=\\dfrac{y_B-y_A}{x_B-x_A}=\\dfrac{${yB}-${yA}}{${xB}-${ecritureParentheseSiNegatif(xA)}}=\\dfrac{${miseEnEvidence(yB - yA, 'blue')}}{${miseEnEvidence(xB - xA, 'red')}}${miseEnEvidence(m.texSimplificationAvecEtapes())}$.<br><br>`
+            $m=\\dfrac{y_B-y_A}{x_B-x_A}=\\dfrac{${yB}-${yA}}{${xB}-${ecritureParentheseSiNegatif(xA)}}=\\dfrac{${miseEnEvidence(yB - yA, bleuMathalea)}}{${miseEnEvidence(xB - xA, 'red')}}${miseEnEvidence(m.texSimplificationAvecEtapes())}$.<br><br>`
           this.correction += `${objetC}<br>`
         }
         break
@@ -241,11 +242,11 @@ export default class CoeffDirDroite extends ExerciceSimple {
           B.x + 0.5,
           milieu(B, Bx).y,
           0,
-          'blue',
+          bleuMathalea,
           1,
         )
         traceB = tracePoint(B, 'black') // Variable qui trace les points avec une croix
-        d = droite(A, B, '', 'blue')
+        d = droite(A, B, '', bleuMathalea)
         d.epaisseur = 2
         traceA.taille = 2
         traceA.epaisseur = 2
@@ -322,7 +323,7 @@ export default class CoeffDirDroite extends ExerciceSimple {
           this.correction = `La droite est horizontale. On en déduit que $m=${miseEnEvidence('0')}$.`
         } else {
           this.correction = `Le coefficient directeur $m$ de la droite $(AB)$ est donné par :<br><br>
-            $m=\\dfrac{y_B-y_A}{x_B-x_A}=\\dfrac{${2 * yB}-${ecritureParentheseSiNegatif(2 * yA)}}{${xB}-${ecritureParentheseSiNegatif(xA)}}=\\dfrac{${miseEnEvidence(2 * (yB - yA), 'blue')}}{${miseEnEvidence(xB - xA, 'red')}}${miseEnEvidence(m.texSimplificationAvecEtapes())}$.<br><br>`
+            $m=\\dfrac{y_B-y_A}{x_B-x_A}=\\dfrac{${2 * yB}-${ecritureParentheseSiNegatif(2 * yA)}}{${xB}-${ecritureParentheseSiNegatif(xA)}}=\\dfrac{${miseEnEvidence(2 * (yB - yA), bleuMathalea)}}{${miseEnEvidence(xB - xA, 'red')}}${miseEnEvidence(m.texSimplificationAvecEtapes())}$.<br><br>`
           this.correction += `${objetC}<br>`
         }
         break

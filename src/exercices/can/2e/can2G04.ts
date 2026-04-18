@@ -11,6 +11,7 @@ import { texNombre } from '../../../lib/outils/texNombre'
 import FractionEtendue from '../../../modules/FractionEtendue'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
+import { bleuMathalea } from '../../../lib/colors'
 export const titre = 'Calculer les coordonnées du milieu d\'un segment'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -59,7 +60,7 @@ export default class CalculCoordonneesMilieu extends ExerciceSimple {
             ` Mentalement : <br>
         On calcule les moyennes des abscisses et des ordonnées des deux points.
          `,
-            'blue',
+            bleuMathalea,
           )
           this.reponse = {
             bareme: toutPourUnPoint,
@@ -85,7 +86,7 @@ export default class CalculCoordonneesMilieu extends ExerciceSimple {
             ` Mentalement : <br>
        Puisque le premier point est l'origine du repère, les coordonnées du milieu sont données par la moitié de l'abscisse et de l'ordonnée du deuxième point.
          `,
-            'blue',
+            bleuMathalea,
           )
             this.reponse = {
             bareme: toutPourUnPoint,

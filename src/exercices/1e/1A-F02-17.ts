@@ -12,6 +12,7 @@ import FractionEtendue from '../../modules/FractionEtendue'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { randint } from '../../modules/outils'
 import ExerciceQcmA from '../ExerciceQcmA'
+import { bleuMathalea } from '../../lib/colors'
 /**
  * @author Gilles Mora
  *
@@ -65,7 +66,7 @@ export default class Auto1AF2q extends ExerciceQcmA {
     traceB.taille = 3
     traceB.epaisseur = 2
 
-    const d = droite(A, B, '', 'blue')
+    const d = droite(A, B, '', bleuMathalea)
     d.epaisseur = 2
 
     const xmin = -4

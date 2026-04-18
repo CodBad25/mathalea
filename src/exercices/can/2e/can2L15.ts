@@ -11,6 +11,7 @@ import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
+import { bleuMathalea } from '../../../lib/colors'
 
 export const titre = 'Résoudre une inéquation du type $x^2<k$ ou $x^2>k$'
 export const interactifReady = true
@@ -47,7 +48,7 @@ export default class EquationsCarree extends ExerciceSimple {
       backgroundColor: '',
     })
     const Texte2 = latex2d('y=x^2', 3, 4.5, {
-      color: 'blue',
+      color: bleuMathalea,
       letterSize: 'scriptsize',
       backgroundColor: '',
     })
@@ -109,7 +110,7 @@ export default class EquationsCarree extends ExerciceSimple {
             },
             courbe(f, {
               repere: r1,
-              color: 'blue',
+              color: bleuMathalea,
               epaisseur: 2,
             }),
             Cg,
@@ -178,7 +179,7 @@ export default class EquationsCarree extends ExerciceSimple {
             },
             courbe(f, {
               repere: r1,
-              color: 'blue',
+              color: bleuMathalea,
               epaisseur: 2,
             }),
             Cg,
