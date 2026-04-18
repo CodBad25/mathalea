@@ -26,7 +26,7 @@ export const dateDePublication = '15/02/2022' // La date de publication initiale
 export const uuid = 'fccb4'
 
 export const refs = {
-  'fr-fr': ['can1S03', '1Tec-AN10-12-2', '1Gen-A106'],
+  'fr-fr': ['can1S03', '1Tec-S107', '1Gen-A106'],
   'fr-ch': [],
 }
 export default class CalculTermeSuiteRec2 extends ExerciceSimple {
@@ -50,7 +50,7 @@ export default class CalculTermeSuiteRec2 extends ExerciceSimple {
         this.question = `Soit $(u_n)$ une suite définie par $u_0=${u}$ et pour tout  $n\\in\\mathbb{N}$ par $u_{n+1} = u_n ${ecritureAlgebrique(a)}$.`
         if (!this.interactif) {
           this.question += `<br>
-          
+
           Calculer $u_{${k}}$.`
         } else {
           this.question += `<br> $u_{${k}}=.....$`
@@ -82,7 +82,7 @@ export default class CalculTermeSuiteRec2 extends ExerciceSimple {
         this.question = `Soit $(u_n)$ une suite définie par $u_0=${u}$ et pour tout  $n\\in\\mathbb{N}$ par $u_{n+1} = ${a}u_n $.`
         if (!this.interactif) {
           this.question += `<br>
-          
+
           Calculer $u_{${k}}$.`
         } else {
           this.question += `<br> $u_{${k}}=.....$`
@@ -124,7 +124,7 @@ export default class CalculTermeSuiteRec2 extends ExerciceSimple {
 
         if (!this.interactif) {
           this.question += `<br>
-          
+
           Calculer $u_{${k}}$.`
         } else {
           this.question += `<br> $u_{${k}}=.....$`
@@ -149,7 +149,7 @@ export default class CalculTermeSuiteRec2 extends ExerciceSimple {
 
         if (!this.interactif) {
           this.question += `<br>
-          
+
           Calculer $u_{${k}}$.`
         } else {
           this.question += `<br> $u_{${k}}=.....$`
@@ -176,11 +176,11 @@ export default class CalculTermeSuiteRec2 extends ExerciceSimple {
 
         if (!this.interactif) {
           this.question += `<br>
-          
+
           Calculer $u_{${k}}$.`
         } else {
           this.question += `<br>
-        
+
         $u_{${k}}=.....$`
         }
 

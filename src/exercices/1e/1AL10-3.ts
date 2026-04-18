@@ -25,7 +25,7 @@ export const dateDeModifImportante = '22/09/2024'
 export const uuid = 'f0c2d'
 
 export const refs = {
-  'fr-fr': ['1AL10-3', '1Tec-AN10-11'],
+  'fr-fr': ['1AL10-3', '1Tec-S102'],
   'fr-ch': [],
 }
 export default class TermeDUneSuiteDefinieExplicitement extends Exercice {
@@ -96,7 +96,7 @@ u_{${k}}&=${a === 1 ? '' : a === -1 ? '-' : `${a} \\times`} ${k} ${ecritureAlgeb
           handleAnswers(this, i, {
             reponse: { value: reponse },
           })
-          texte = `Soit $(u_n)$ une suite définie pour tout entier $n\\in\\mathbb{N}$ par 
+          texte = `Soit $(u_n)$ une suite définie pour tout entier $n\\in\\mathbb{N}$ par
         ${b === 0 ? `$u_n = ${rienSi1(a)}n^2${ecritureAlgebrique(c)}$` : `$u_n = ${rienSi1(a)}n^2${ecritureAlgebriqueSauf1(b)}n${ecritureAlgebrique(c)}$`}  .`
 
           texte += `<br>Calculer $u_{${k}}$.`
@@ -123,7 +123,7 @@ u_{${k}}&=${a === 1 ? '' : a === -1 ? '-' : `${a} \\times`} ${k}^2 ${b === 1 ? '
           d = randint(1, 7)
           k = randint(1, 9)
           this.reponse = 1
-          texte = `Soit $(u_n)$ une suite définie pour tout entier $n\\in\\mathbb{N}$ par 
+          texte = `Soit $(u_n)$ une suite définie pour tout entier $n\\in\\mathbb{N}$ par
           $u_n =\\dfrac{${rienSi1(a)}n${ecritureAlgebrique(b)}}{${rienSi1(c)}n${ecritureAlgebrique(d)}} $.`
 
           texte += `<br>Calculer $u_{${k}}$. <br>

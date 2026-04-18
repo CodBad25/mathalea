@@ -36,7 +36,7 @@ export const dateDePublication = '23/11/2025'
 export const uuid = '397d2'
 
 export const refs = {
-  'fr-fr': ['2F20-5'],
+  'fr-fr': ['2F20-5', '1Tec-F102'],
   'fr-ch': [''],
 }
 
@@ -462,7 +462,7 @@ export default class CalculImageAntecedents extends Exercice {
                 )
 
                 correction = `On calcule l'image de $${f.texFraction}$ en remplaçant $x$ par $${f.texFraction}$ dans l'expression de $${nom}$ : <br>
-                  
+
                   $\\begin{aligned}
                   ${nom}\\left(${f.texFraction}\\right)&=${a === 1 ? '' : a === -1 ? '-' : `${a}\\times`} \\left(${f.texFraction}\\right)^2${b === 1 ? '+' : b === -1 ? '-' : `${b}\\times`}${f.texFraction}${ecritureAlgebrique(c)}\\\\
                   &=${a === 1 ? '' : a === -1 ? '-' : `${a}\\times`} \\dfrac{${f.n ** 2}}{${f.d ** 2}}${fractionb.ecritureAlgebrique}${ecritureAlgebrique(c)}\\\\
