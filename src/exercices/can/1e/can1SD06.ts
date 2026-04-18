@@ -9,6 +9,7 @@ import { texNombre } from '../../../lib/outils/texNombre'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
+import { bleuMathalea } from '../../../lib/colors'
 export const titre = 'Lire graphiquement la valeur de $a$ dans $ax^2+b$'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -94,7 +95,7 @@ export default class LectureGraphiqueParaboleA extends ExerciceSimple {
               },
               r,
               o,
-              courbe(f, { repere: r, color: 'blue', epaisseur: 2 }),
+              courbe(f, { repere: r, color: bleuMathalea, epaisseur: 2 }),
             ) + '<br>'
           this.question += `${this.versionQcm ? 'À partir de cette représentation graphique, on a : ' : 'À partir de cette représentation graphique, déterminer la valeur de $a$.<br>'}`
         } else {
@@ -142,7 +143,7 @@ export default class LectureGraphiqueParaboleA extends ExerciceSimple {
               },
               r,
               o,
-              courbe(f, { repere: r, color: 'blue', epaisseur: 2 }),
+              courbe(f, { repere: r, color: bleuMathalea, epaisseur: 2 }),
             ) + '<br>'
           this.question += `${this.versionQcm ? 'À partir de cette représentation graphique, on a : ' : 'À partir de cette représentation graphique, déterminer la valeur de $a$.<br>'}`
         }
@@ -203,7 +204,7 @@ export default class LectureGraphiqueParaboleA extends ExerciceSimple {
               },
               r,
               o,
-              courbe(f, { repere: r, color: 'blue', epaisseur: 2 }),
+              courbe(f, { repere: r, color: bleuMathalea, epaisseur: 2 }),
             ) +
             '<br>'
           this.question += `${this.versionQcm ? 'À partir de cette représentation graphique, on a : ' : 'À partir de cette représentation graphique, déterminer la valeur de $a$.<br>'}`
@@ -252,7 +253,7 @@ export default class LectureGraphiqueParaboleA extends ExerciceSimple {
               },
               r,
               o,
-              courbe(f, { repere: r, color: 'blue', epaisseur: 2 }),
+              courbe(f, { repere: r, color: bleuMathalea, epaisseur: 2 }),
             ) +
             '<br>'
           this.question += `${this.versionQcm ? 'À partir de cette représentation graphique, on a : ' : 'À partir de cette représentation graphique, déterminer la valeur de $a$.<br>'}`

@@ -6,6 +6,7 @@ import { context } from '../../../modules/context'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
+import { bleuMathalea } from '../../../lib/colors'
 
 export const titre = 'Déterminer une abscisse sur une droite graduée'
 export const interactifReady = true
@@ -41,7 +42,7 @@ export default class Can2025CE1Q20 extends ExerciceSimple {
       thickDistance: 10,
       axeStyle: '->',
       pointListe: [[absSol, '']],
-      pointCouleur: 'blue',
+      pointCouleur: bleuMathalea,
       pointStyle: context.isHtml ? 'x' : '',
       pointTaille: 7,
       labelListe: [

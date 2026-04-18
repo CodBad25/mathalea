@@ -11,6 +11,7 @@ import Exercice from '../../Exercice'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { setReponse } from '../../../lib/interactif/gestionInteractif'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { bleuMathalea } from '../../../lib/colors'
 
 export const titre = 'Lire graphiquement la valeur  $b$ dans $ax^2+b$'
 export const interactifReady = true
@@ -94,7 +95,7 @@ export default class LectureGraphiqueParaboleB extends Exercice {
                 },
                 r,
                 o,
-                courbe(f, { repere: r, color: 'blue', epaisseur: 2 }),
+                courbe(f, { repere: r, color: bleuMathalea, epaisseur: 2 }),
               )
           } else {
             r = repere({
@@ -135,7 +136,7 @@ export default class LectureGraphiqueParaboleB extends Exercice {
                 },
                 r,
                 o,
-                courbe(f, { repere: r, color: 'blue', epaisseur: 2 }),
+                courbe(f, { repere: r, color: bleuMathalea, epaisseur: 2 }),
               )
           }
           if (this.interactif) {
@@ -203,7 +204,7 @@ export default class LectureGraphiqueParaboleB extends Exercice {
                 },
                 r,
                 o,
-                courbe(f, { repere: r, color: 'blue', epaisseur: 2 }),
+                courbe(f, { repere: r, color: bleuMathalea, epaisseur: 2 }),
               )
           } else {
             r = repere({
@@ -244,7 +245,7 @@ export default class LectureGraphiqueParaboleB extends Exercice {
                 },
                 r,
                 o,
-                courbe(f, { repere: r, color: 'blue', epaisseur: 2 }),
+                courbe(f, { repere: r, color: bleuMathalea, epaisseur: 2 }),
               )
           }
           if (this.interactif) {

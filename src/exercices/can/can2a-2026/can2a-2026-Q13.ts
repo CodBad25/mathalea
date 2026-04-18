@@ -9,6 +9,7 @@ import { mathalea2d } from '../../../modules/mathalea2d'
 import { repere } from '../../../lib/2d/reperes'
 import { spline, type NoeudSpline } from '../../../lib/mathFonctions/Spline'
 import { choice } from '../../../lib/outils/arrayOutils'
+import { bleuMathalea } from '../../../lib/colors'
 export const titre = 'Déterminer une image graphiquement '
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -69,11 +70,11 @@ export default class Can2a2026Q13 extends ExerciceCan {
     const courbe1 = theSpline.courbe({
       epaisseur: 1.5,
       ajouteNoeuds: false,
-      color: 'blue',
+      color: bleuMathalea,
     })
 
     const labelCourbe = latex2d('(C)', -1.7, 2.3, {
-      color: 'blue',
+      color: bleuMathalea,
       letterSize: 'scriptsize',
     })
     const objetsEnonce = [repere1, courbe1, labelCourbe, o]

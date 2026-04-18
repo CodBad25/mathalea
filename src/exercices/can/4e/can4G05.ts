@@ -6,6 +6,7 @@ import {
 import { texRacineCarree } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
+import { bleuMathalea } from '../../../lib/colors'
 
 export const titre = 'Calculer la diagonale d’un carré'
 export const interactifReady = true
@@ -53,7 +54,7 @@ export default class DiagonaleCarre extends ExerciceSimple {
             `<br> Mentalement : <br>
    On calcule le double du carré du côté du carré,
    soit $2\\times ${a}^2=2\\times ${a ** 2}=${c2}$, puis on en prend la racine carrée.    `,
-            'blue',
+            bleuMathalea,
           )
           this.reponse = texRacineCarree(c2)
         }
@@ -93,7 +94,7 @@ export default class DiagonaleCarre extends ExerciceSimple {
             `<br> Mentalement : <br>
        On calcule le double du carré du côté du carré, soit
        $2\\times (\\sqrt{${a}})^2=2\\times ${a}=${c2}$, puis on en prend la racine carrée.    `,
-            'blue',
+            bleuMathalea,
           )
 
           this.reponse = texRacineCarree(c2)

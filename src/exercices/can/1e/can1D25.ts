@@ -8,6 +8,7 @@ import { choice } from '../../../lib/outils/arrayOutils'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../../modules/outils'
 import Exercice from '../../Exercice'
+import { bleuMathalea } from '../../../lib/colors'
 export const interactifReady = true
 export const interactifType = 'listeDeroulante'
 export const titre =
@@ -145,8 +146,8 @@ export default class SignesTabGSpline extends Exercice {
       const courbe1 = maSpline.courbe({
         epaisseur: 1.5,
         ajouteNoeuds: true,
-        optionsNoeuds: { color: 'blue', taille: 2, style: 'x', epaisseur: 2 },
-        color: 'blue',
+        optionsNoeuds: { color: bleuMathalea, taille: 2, style: 'x', epaisseur: 2 },
+        color: bleuMathalea,
       })
       const objetsEnonce = [repere1, courbe1]
 

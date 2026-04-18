@@ -7,6 +7,7 @@ import { texteEnCouleurEtGras } from '../../../lib/outils/embellissements'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
+import { bleuMathalea } from '../../../lib/colors'
 
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -46,7 +47,7 @@ export default class ImageSpline extends ExerciceSimple {
         {
           pente = randint(-15, 15, 0) / 5
           const OrdX0 = 0
-          c = droiteParPointEtPente(point(0, OrdX0), pente, '', 'blue')
+          c = droiteParPointEtPente(point(0, OrdX0), pente, '', bleuMathalea)
           this.reponse = ['O', 'Oui', 'oui', 'o', 'OUI']
           this.correction = `C'est une droite qui passe par l'origine.<br>Ce graphique représente donc une situation de proportionnalité.<br>
          Réponse : OUI (${texteEnCouleurEtGras('O')}) `
@@ -61,7 +62,7 @@ export default class ImageSpline extends ExerciceSimple {
             pente,
             0,
           ])
-          c = droiteParPointEtPente(point(0, OrdX0), pente, '', 'blue')
+          c = droiteParPointEtPente(point(0, OrdX0), pente, '', bleuMathalea)
           this.reponse = ['N', 'Non', 'NON', 'non']
           this.correction = `C'est bien une droite mais elle ne passe pas par l'origine.<br>Ce graphique ne représente donc pas une situation de proportionnalité.<br>
         Réponse : NON (${texteEnCouleurEtGras('N')}) `

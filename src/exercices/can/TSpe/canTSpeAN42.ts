@@ -10,6 +10,7 @@ import { texNombre } from '../../../lib/outils/texNombre'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
+import { bleuMathalea } from '../../../lib/colors'
 export const titre = 'Encadrer une intégrale'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -69,7 +70,7 @@ export default class IntegraleSurface extends ExerciceSimple {
         pas,
         sup: false,
         colorPositif: 'red',
-        colorNegatif: 'blue',
+        colorNegatif: bleuMathalea,
       })
       const integrale2 = new IntegraleComptable(f, {
         xMin: 0,
@@ -77,7 +78,7 @@ export default class IntegraleSurface extends ExerciceSimple {
         pas,
         sup: true,
         colorPositif: 'red',
-        colorNegatif: 'blue',
+        colorNegatif: bleuMathalea,
       })
       const repere = new RepereBuilder({ xMin: 0, xMax: 5, yMin: 0, yMax })
         .setThickX({ xMin: 0, xMax: 5.5, dx: 1 })
@@ -91,7 +92,7 @@ export default class IntegraleSurface extends ExerciceSimple {
         .buildStandard()
       cF = courbe(f, {
         repere,
-        color: 'blue',
+        color: bleuMathalea,
         epaisseur: 1,
         xMin: 0,
         xMax: 5,
@@ -132,7 +133,7 @@ export default class IntegraleSurface extends ExerciceSimple {
         pas: 0.1,
         sup: false,
         colorPositif: 'red',
-        colorNegatif: 'blue',
+        colorNegatif: bleuMathalea,
       })
       const integrale4 = new IntegraleComptable(f, {
         xMin: 0,
@@ -140,7 +141,7 @@ export default class IntegraleSurface extends ExerciceSimple {
         pas: 0.1,
         sup: true,
         colorPositif: 'red',
-        colorNegatif: 'blue',
+        colorNegatif: bleuMathalea,
       })
       const aireFine = Math.round(
         (integrale3.aire.positive + integrale4.aire.positive) / 2,

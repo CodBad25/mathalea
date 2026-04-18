@@ -6,6 +6,7 @@ import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import ExerciceSimple from '../../ExerciceSimple'
+import { bleuMathalea } from '../../../lib/colors'
 
 export const titre = 'Déterminer une image graphiquement '
 export const interactifReady = true
@@ -81,14 +82,14 @@ export default class ImageGraphique extends ExerciceSimple {
       .setThickX({ xMin: -3, xMax: 3, dx: 1.5 })
       .setThickY({ yMin: -3, yMax: 3, dy: 1.5 })
       .buildStandard()
-    const courbef1 = latex2d('\\mathscr{C}_g', 2.5, 2.7, { color: 'blue' })
+    const courbef1 = latex2d('\\mathscr{C}_g', 2.5, 2.7, { color: bleuMathalea })
     const courbef2 = latex2d('\\mathscr{C}_f', -1.7, -1.8, { color: 'red' })
     const objets1 = [
       r1,
       o,
       courbef1,
       courbef2,
-      courbe(f1, { repere: r1, color: 'blue', epaisseur: 2 }),
+      courbe(f1, { repere: r1, color: bleuMathalea, epaisseur: 2 }),
       courbe(f2, { repere: r1, color: 'red', epaisseur: 2 }),
     ]
     const colonne1 = mathalea2d(

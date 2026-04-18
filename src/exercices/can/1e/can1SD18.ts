@@ -8,6 +8,7 @@ import {
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { listeQuestionsToContenu, randint } from '../../../modules/outils'
 import Exercice from '../../Exercice'
+import { bleuMathalea } from '../../../lib/colors'
 
 export const titre =
   'Résoudre une inéquation du second degré (avec une forme factorisée)'
@@ -36,7 +37,7 @@ export default class TableauSignesSecondDegre extends Exercice {
   }
 
   nouvelleVersion() {
-    const coul0 = 'blue'
+    const coul0 = bleuMathalea
     let texte,
       texteCorr,
       a,
@@ -54,7 +55,7 @@ export default class TableauSignesSecondDegre extends Exercice {
       c = randint(1, 9, [b, -b]) * choice([-1, 1]) // racine2
       texteCorr = `$${rienSi1(a)}(x${ecritureAlgebrique(-b)})(x${ecritureAlgebrique(-c)})
         =\\mathbf{\\color{${coul0}}{${rienSi1(a)}}}\\color{black}(x-\\mathbf{\\color{${coul0}}{${ecritureParentheseSiNegatif(b)}}}\\color{black})(x-\\mathbf{\\color{${coul0}}{${ecritureParentheseSiNegatif(c)}}}\\color{black})$ 
-        est de la forme $${miseEnEvidence('a(x-x_1)(x-x_2)', 'blue')}$
+        est de la forme $${miseEnEvidence('a(x-x_1)(x-x_2)', bleuMathalea)}$
         avec $a=\\mathbf{\\color{${coul0}}{${a}}}$, $x_1=\\mathbf{\\color{${coul0}}{${b}}}$ et $x_2=\\mathbf{\\color{${coul0}}{${c}}}$.<br>
         Cette forme est une expression factorisée d'un polynôme du second degré. <br>
         Cette expression est du signe de $a$ sauf entre ses racines.<br>

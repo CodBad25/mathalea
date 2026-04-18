@@ -29,6 +29,7 @@ import { ajouteChampTexteMathLive } from '../../../lib/interactif/questionMathLi
 
 import { droiteGraduee } from '../../../lib/2d/DroiteGraduee'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { bleuMathalea } from '../../../lib/colors'
 
 export const titre = 'CAN 6e sujet 2018'
 export const interactifReady = true
@@ -331,7 +332,7 @@ Par exemple, en choisissant 20 questions, la course aux nombres sera composée d
                 scale: 0.8,
                 style: 'margin: auto',
               },
-              texteParPosition('?', (8 * b) / a, 0.7, 0, 'blue', 2),
+              texteParPosition('?', (8 * b) / a, 0.7, 0, bleuMathalea, 2),
               droiteGraduee({
                 Unite: 8,
                 Min: 0,
@@ -344,7 +345,7 @@ Par exemple, en choisissant 20 questions, la course aux nombres sera composée d
                 axeStyle: '|->',
                 // pointListe: [[b / a, '?']],
                 labelPointTaille: 15,
-                pointCouleur: 'blue',
+                pointCouleur: bleuMathalea,
                 pointStyle: 'x',
                 labelsPrincipaux: true,
                 step1: 1,
@@ -475,7 +476,7 @@ Par exemple, en choisissant 20 questions, la course aux nombres sera composée d
                 (3 * a) / 5,
                 0.7,
                 'milieu',
-                'blue',
+                bleuMathalea,
                 context.isHtml ? 2 : 1,
               ),
               droiteGraduee({
@@ -489,7 +490,7 @@ Par exemple, en choisissant 20 questions, la course aux nombres sera composée d
                 thickoffset: 0,
                 axeStyle: '|->',
                 pointListe: [[a / 5, '']],
-                pointCouleur: 'blue',
+                pointCouleur: bleuMathalea,
                 pointTaille: 4,
                 pointStyle: 'x',
                 labelsPrincipaux: true,

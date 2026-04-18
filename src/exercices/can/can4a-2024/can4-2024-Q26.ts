@@ -10,6 +10,7 @@ import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import ExerciceSimple from '../../ExerciceSimple'
+import { bleuMathalea } from '../../../lib/colors'
 export const titre = 'Calculer une longueur'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -100,7 +101,7 @@ export default class NomExercice extends ExerciceSimple {
       )
     }
     objets.push(
-      codageSegments('/', 'blue', A, ...pointsSurAB2, B2),
+      codageSegments('/', bleuMathalea, A, ...pointsSurAB2, B2),
       AB2,
       A3B3,
       Texte2,

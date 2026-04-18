@@ -13,6 +13,7 @@ import { mathalea2d } from '../../../modules/mathalea2d'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { bleuMathalea } from '../../../lib/colors'
 export const titre =
   'Calculer un produit scalaire à l’aide de normes et d’un angle '
 export const interactifReady = true
@@ -58,7 +59,7 @@ this.formatChampTexte = KeyboardType.clavierFullOperations
     ]
     const angle = choice(Angle)
     const C = pointAdistance(A, b, angle[0], nom[2], 'above')
-    const vAB = segment(A, B, 'blue', '->')
+    const vAB = segment(A, B, bleuMathalea, '->')
     vAB.epaisseur = 2
     const a1 = afficheLongueurSegment(B, A, 'black', 0.5, '')
     const a2 = afficheLongueurSegment(A, C, 'black', 0.5, '')
