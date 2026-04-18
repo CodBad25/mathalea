@@ -1,3 +1,4 @@
+import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { propositionsQcm } from '../../lib/interactif/qcm'
@@ -12,7 +13,6 @@ import FractionEtendue from '../../modules/FractionEtendue'
 import { context } from '../../modules/context'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { bleuMathalea } from '../../lib/colors'
 export const dateDeModifImportante = '04/12/2025'
 export const amcReady = true
 export const amcType = 'qcmMono'
@@ -61,7 +61,6 @@ function buildFractionQcmPropositions(
       texte: formatFractionForQcm(fraction, simplifie),
       statut,
     }))
-
   return propositions.length === fractions.length ? propositions : undefined
 }
 
@@ -130,69 +129,108 @@ export default class ExerciceAdditionnerSoustraireFractions5ebis extends Exercic
     for (
       let i = 0, a, b, c, d, k, s, ordreDesFractions, texte, texteCorr, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-      cpt++
     ) {
       this.autoCorrection[i] = {}
       texte = ''
       texteCorr = ''
       let qcmPropositionsValides = true
-
+      let aNegatif, cNegatif, f1, f2, f2PlusGdQuef1, numerateur, denominateur
       // Décision si les numérateurs seront négatifs ou non
-      const aNegatif = randint(1, 100) <= this.sup5
-      const cNegatif = randint(1, 100) <= this.sup5
+      do {
+        aNegatif = randint(1, 100) <= this.sup5
+        cNegatif = randint(1, 100) <= this.sup5
 
-      // Les numérateurs (positifs ou négatifs selon décision précédente)
-      a = randint(1, 9) * (aNegatif ? -1 : 1)
+        // Les numérateurs (positifs ou négatifs selon décision précédente)
+        a = randint(1, 9) * (aNegatif ? -1 : 1)
 
-      // Les dénominateurs (toujours positifs)
-      b = randint(2, 9, Math.abs(a))
+        // Les dénominateurs (toujours positifs)
+        b = randint(2, 9, Math.abs(a))
 
-      if (this.sup > 1) {
-        k = randint(2, this.sup)
-      } else k = 1
+        if (this.sup > 1) {
+          k = randint(2, this.sup)
+        } else k = 1
 
-      d = b * k
+        d = b * k
 
-      if (listeTypeDeQuestions[i] === '-') {
-        c =
-          choice([randint(1, b * k), randint(b * k, 9 * k)]) *
-          (cNegatif ? -1 : 1)
-      } else {
-        c = randint(1, 19, d) * (cNegatif ? -1 : 1)
-      }
+        if (listeTypeDeQuestions[i] === '-') {
+          c =
+            choice([randint(1, b * k), randint(b * k, 9 * k)]) *
+            (cNegatif ? -1 : 1)
+        } else {
+          c = randint(1, 19, d) * (cNegatif ? -1 : 1)
+        }
 
-      let f1 = new FractionEtendue(a, b)
-      let f2 = new FractionEtendue(c, d)
+        f1 = new FractionEtendue(a, b)
+        f2 = new FractionEtendue(c, d)
+        if (listeTypeDeQuestions[i] === '+') {
+          if (this.level === 6) {
+            numerateur = new FractionEtendue(a + c, b).num
+            denominateur = b
+          } else {
+            numerateur = new FractionEtendue(a * k + c, d).num
+            denominateur = d
+          }
+        } else {
+          // S'il y a 0% de numérateur négatifs alors on
+          // interchange f1 et f2 pour s'assurer que le résultat sera positif
+          f2PlusGdQuef1 = this.sup5 === 0 && f2.superieurstrict(f1)
+          if (f2PlusGdQuef1) {
+            ;[f2, f1] = [f1, f2]
+            ;[a, b, c, d] = [c, d, a, b]
+          }
 
+          numerateur = f2PlusGdQuef1 ? a - c * k : a * k - c
+          denominateur = f2PlusGdQuef1 ? b : d
+        }
+      } while (numerateur === 0)
       if (listeTypeDeQuestions[i] === '+') {
         // une addition
         if (
-          !context.isAmc ||
-          (this.interactif && this.interactifType === 'qcm')
+          //! context.isAmc ||
+          this.interactif &&
+          this.interactifType === 'qcm'
         ) {
           /** ***************** Choix des réponses du QCM ***********************************/
           const propositions = buildFractionQcmPropositions(
-            [
-              {
-                fraction:
-                  this.level === 6
-                    ? new FractionEtendue(a + c, b)
-                    : new FractionEtendue(a * k + c, d),
-                statut: true,
-              },
-              {
-                fraction: new FractionEtendue(a + c, d),
-                statut: false,
-              },
-              {
-                fraction: new FractionEtendue(a + c, b + d),
-                statut: false,
-              },
-              {
-                fraction: new FractionEtendue(a * c, d),
-                statut: false,
-              },
-            ],
+            b === d
+              ? [
+                  {
+                    fraction:
+                      this.level === 6
+                        ? new FractionEtendue(a + c, b)
+                        : new FractionEtendue(a * k + c, d),
+                    statut: true,
+                  },
+                  {
+                    fraction: new FractionEtendue(a + c, b + d),
+                    statut: false,
+                  },
+                  {
+                    fraction: new FractionEtendue(a * c, d),
+                    statut: false,
+                  },
+                ]
+              : [
+                  {
+                    fraction:
+                      this.level === 6
+                        ? new FractionEtendue(a + c, b)
+                        : new FractionEtendue(a * k + c, d),
+                    statut: true,
+                  },
+                  {
+                    fraction: new FractionEtendue(a + c, d),
+                    statut: false,
+                  },
+                  {
+                    fraction: new FractionEtendue(a + c, b + d),
+                    statut: false,
+                  },
+                  {
+                    fraction: new FractionEtendue(a * c, d),
+                    statut: false,
+                  },
+                ],
             this.sup3,
           )
           if (propositions) {
@@ -209,17 +247,16 @@ export default class ExerciceAdditionnerSoustraireFractions5ebis extends Exercic
 
         ordreDesFractions = randint(1, 2)
 
-        if (ordreDesFractions === 1) {
-          texte = `$${f1.texFraction}+${f2.texFraction}$`
-          /** ****************** AMC question/questionmult ********************************/
-          this.autoCorrection[i].enonce = `${texte}\n`
-          /*******************************************************************************/
-        } else {
-          texte = `$${f2.texFraction}+${f1.texFraction}$`
-          /** ****************** AMC question/questionmult ******************************/
-          this.autoCorrection[i].enonce = `${texte}\n`
-          /*******************************************************************************/
-        }
+        if (context.isAmc)
+          if (ordreDesFractions === 1) {
+            /** ****************** AMC question/questionmult ********************************/
+            this.autoCorrection[i].enonce = `${texte}\n`
+            /*******************************************************************************/
+          } else {
+            /** ****************** AMC question/questionmult ******************************/
+            this.autoCorrection[i].enonce = `${texte}\n`
+            /*******************************************************************************/
+          }
 
         if (ordreDesFractions === 1) {
           texteCorr = `$${f1.texFraction}+${f2.texFraction}=`
@@ -252,15 +289,11 @@ export default class ExerciceAdditionnerSoustraireFractions5ebis extends Exercic
           }
         }
 
-        if (!context.isAmc) {
-          if (
-            this.interactif &&
-            this.interactifType === 'qcm' &&
-            qcmPropositionsValides
-          ) {
+        if (this.interactif) {
+          if (this.interactifType === 'qcm' && qcmPropositionsValides) {
             const props = propositionsQcm(this, i)
             texte += '<br>' + props.texte
-          } else if (this.interactifType === 'mathLive') {
+          } else {
             texte += ajouteChampTexteMathLive(
               this,
               i,
@@ -280,44 +313,53 @@ export default class ExerciceAdditionnerSoustraireFractions5ebis extends Exercic
         }
       } else {
         // une soustraction
-        // S'il y a 0% de numérateur négatifs alors on
-        // interchange f1 et f2 pour s'assurer que le résultat sera positif
-        const f2PlusGdQuef1 = this.sup5 === 0 && f2.superieurstrict(f1)
-        if (f2PlusGdQuef1) {
-          ;[f2, f1] = [f1, f2]
-          ;[a, b, c, d] = [c, d, a, b]
-        }
-
-        const numerateur = f2PlusGdQuef1 ? a - c * k : a * k - c
-        const denominateur = f2PlusGdQuef1 ? b : d
 
         /** ***************** Choix des réponses du QCM ***********************************/
         if (
-          !context.isAmc ||
-          (this.interactif && this.interactifType === 'qcm')
+          //! context.isAmc ||
+          this.interactif &&
+          this.interactifType === 'qcm'
         ) {
           const propositions = buildFractionQcmPropositions(
-            [
-              {
-                fraction:
-                  this.level === 6
-                    ? new FractionEtendue(a - c, b)
-                    : new FractionEtendue(numerateur, denominateur),
-                statut: true,
-              },
-              {
-                fraction: new FractionEtendue(a - c, b + d),
-                statut: false,
-              },
-              {
-                fraction: new FractionEtendue(a - c, d),
-                statut: false,
-              },
-              {
-                fraction: new FractionEtendue(a * c, d),
-                statut: false,
-              },
-            ],
+            b === d
+              ? [
+                  {
+                    fraction:
+                      this.level === 6
+                        ? new FractionEtendue(a - c, b)
+                        : new FractionEtendue(numerateur, denominateur),
+                    statut: true,
+                  },
+                  {
+                    fraction: new FractionEtendue(a - c, b + d),
+                    statut: false,
+                  },
+                  {
+                    fraction: new FractionEtendue(a * c, d),
+                    statut: false,
+                  },
+                ]
+              : [
+                  {
+                    fraction:
+                      this.level === 6
+                        ? new FractionEtendue(a - c, b)
+                        : new FractionEtendue(numerateur, denominateur),
+                    statut: true,
+                  },
+                  {
+                    fraction: new FractionEtendue(a - c, b + d),
+                    statut: false,
+                  },
+                  {
+                    fraction: new FractionEtendue(a - c, d),
+                    statut: false,
+                  },
+                  {
+                    fraction: new FractionEtendue(a * c, d),
+                    statut: false,
+                  },
+                ],
             this.sup3,
           )
           if (propositions) {
@@ -367,15 +409,11 @@ export default class ExerciceAdditionnerSoustraireFractions5ebis extends Exercic
           }
         }
 
-        if (!context.isAmc) {
-          if (
-            this.interactif &&
-            this.interactifType === 'qcm' &&
-            qcmPropositionsValides
-          ) {
+        if (this.interactif) {
+          if (this.interactifType === 'qcm' && qcmPropositionsValides) {
             const props = propositionsQcm(this, i)
             texte += '<br>' + props.texte
-          } else if (this.interactifType === 'mathLive') {
+          } else {
             texte += ajouteChampTexteMathLive(
               this,
               i,
@@ -418,8 +456,9 @@ export default class ExerciceAdditionnerSoustraireFractions5ebis extends Exercic
         this.listeCorrections[i] = texteCorr
         i++
       }
+      cpt++
     }
 
-    listeQuestionsToContenu(this) // Espacement de 2 em entre chaque questions.
+    listeQuestionsToContenu(this)
   }
 }
