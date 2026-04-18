@@ -10,6 +10,7 @@ import { pgcd } from '../../lib/outils/primalite'
 import { context } from '../../modules/context'
 import Exercice from '../Exercice'
 
+import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -140,16 +141,16 @@ export default class ExerciceEquation1 extends Exercice {
           }
           texteCorr += `$${a}${inconnue}${ecritureAlgebrique(b)}${miseEnEvidence(
             gestionEspaceMiseEnEvidence(ecritureAlgebrique(-1 * b)),
-            'blue',
-          )}=${c}${miseEnEvidence(gestionEspaceMiseEnEvidence(ecritureAlgebrique(-1 * b)), 'blue')}$<br>`
+            bleuMathalea,
+          )}=${c}${miseEnEvidence(gestionEspaceMiseEnEvidence(ecritureAlgebrique(-1 * b)), bleuMathalea)}$<br>`
           texteCorr += `$${a}${inconnue}=${c - b}$<br>`
           if (this.correctionDetaillee) {
             texteCorr += `On divise les deux membres par $${a}$.<br>`
           }
           texteCorr += `$${a}${inconnue}${miseEnEvidence(
             sp() + '\\div' + sp() + ecritureParentheseSiNegatif(a),
-            'blue',
-          )}=${c - b + miseEnEvidence(sp() + '\\div' + sp() + ecritureParentheseSiNegatif(a), 'blue')}$<br>`
+            bleuMathalea,
+          )}=${c - b + miseEnEvidence(sp() + '\\div' + sp() + ecritureParentheseSiNegatif(a), bleuMathalea)}$<br>`
           texteCorr += `$${inconnue}=${new FractionEtendue(c - b, a).texFSD}$`
           reponse = new FractionEtendue(c - b, a).simplifie()
           if (pgcd(Math.abs(a), Math.abs(c - b)) > 1) {
@@ -176,8 +177,8 @@ export default class ExerciceEquation1 extends Exercice {
           }
           texteCorr += `$${inconnue}${ecritureAlgebrique(b)}${miseEnEvidence(
             gestionEspaceMiseEnEvidence(ecritureAlgebrique(-1 * b)),
-            'blue',
-          )}=${c}${miseEnEvidence(gestionEspaceMiseEnEvidence(ecritureAlgebrique(-1 * b)), 'blue')}$<br>`
+            bleuMathalea,
+          )}=${c}${miseEnEvidence(gestionEspaceMiseEnEvidence(ecritureAlgebrique(-1 * b)), bleuMathalea)}$<br>`
           texteCorr += `$${inconnue}=${c - b}$`
           reponse = new FractionEtendue(c - b, 1)
           break
@@ -199,8 +200,8 @@ export default class ExerciceEquation1 extends Exercice {
           }
           texteCorr += `$${a}${inconnue}${miseEnEvidence(
             sp() + '\\div' + sp() + ecritureParentheseSiNegatif(a),
-            'blue',
-          )}=${b + miseEnEvidence(sp() + '\\div' + sp() + ecritureParentheseSiNegatif(a), 'blue')}$<br>`
+            bleuMathalea,
+          )}=${b + miseEnEvidence(sp() + '\\div' + sp() + ecritureParentheseSiNegatif(a), bleuMathalea)}$<br>`
           texteCorr += `$${inconnue}=${new FractionEtendue(b, a).texFSD}$`
           reponse = new FractionEtendue(b, a).simplifie()
           // if (pgcd(abs(a), abs(b)) > 1 || a < 0) {
@@ -254,12 +255,12 @@ export default class ExerciceEquation1 extends Exercice {
             gestionEspaceMiseEnEvidence(
               signe(-1 * c) + rienSi1(abs(c)) + inconnue,
             ),
-            'blue',
+            bleuMathalea,
           )}=${c}${inconnue}${ecritureAlgebrique(d)}${miseEnEvidence(
             gestionEspaceMiseEnEvidence(
               signe(-1 * c) + rienSi1(abs(c)) + inconnue,
             ),
-            'blue',
+            bleuMathalea,
           )}$<br>`
           texteCorr += `$${rienSi1(a - c)}${inconnue}${ecritureAlgebrique(
             b,
@@ -275,8 +276,8 @@ export default class ExerciceEquation1 extends Exercice {
             b,
           )}${miseEnEvidence(
             gestionEspaceMiseEnEvidence(ecritureAlgebrique(-1 * b)),
-            'blue',
-          )}=${d}${miseEnEvidence(gestionEspaceMiseEnEvidence(ecritureAlgebrique(-1 * b)), 'blue')}$<br>`
+            bleuMathalea,
+          )}=${d}${miseEnEvidence(gestionEspaceMiseEnEvidence(ecritureAlgebrique(-1 * b)), bleuMathalea)}$<br>`
           texteCorr += `$${rienSi1(a - c)}${inconnue}=${d - b}$<br>`
 
           if (this.correctionDetaillee) {
@@ -284,13 +285,13 @@ export default class ExerciceEquation1 extends Exercice {
           }
           texteCorr += `$${rienSi1(a - c)}${inconnue}${miseEnEvidence(
             sp() + '\\div' + sp() + ecritureParentheseSiNegatif(a - c),
-            'blue',
+            bleuMathalea,
           )}=${
             d -
             b +
             miseEnEvidence(
               sp() + '\\div' + sp() + ecritureParentheseSiNegatif(a - c),
-              'blue',
+              bleuMathalea,
             )
           }$<br>`
           texteCorr += `$${inconnue}=${new FractionEtendue(d - b, a - c).texFSD}$`
@@ -318,8 +319,8 @@ export default class ExerciceEquation1 extends Exercice {
           }
           texteCorr += `$\\dfrac{${inconnue}}{${a}}${miseEnEvidence(
             '\\times' + sp() + ecritureParentheseSiNegatif(a),
-            'blue',
-          )}=${b + miseEnEvidence('\\times' + sp() + ecritureParentheseSiNegatif(a), 'blue')}$`
+            bleuMathalea,
+          )}=${b + miseEnEvidence('\\times' + sp() + ecritureParentheseSiNegatif(a), bleuMathalea)}$`
           texteCorr += `<br>$${inconnue}=${b * a}$`
           reponse = new FractionEtendue(a * b, 1)
           break
@@ -346,8 +347,8 @@ export default class ExerciceEquation1 extends Exercice {
               '\\times' +
               sp() +
               `\\dfrac{${a < 0 ? -b : b}}{${Math.abs(a)}}`,
-            'blue',
-          )}=${c + miseEnEvidence(sp() + '\\times' + sp() + `\\dfrac{${a < 0 ? -b : b}}{${Math.abs(a)}}`, 'blue')}$`
+            bleuMathalea,
+          )}=${c + miseEnEvidence(sp() + '\\times' + sp() + `\\dfrac{${a < 0 ? -b : b}}{${Math.abs(a)}}`, bleuMathalea)}$`
           texteCorr += `<br>$${inconnue}=\\dfrac{${c * b * (a < 0 ? -1 : 1)}}{${Math.abs(a)}}$`
           reponse = new FractionEtendue(c * b, a).simplifie()
           if (pgcd(c * b, a) !== 1) {

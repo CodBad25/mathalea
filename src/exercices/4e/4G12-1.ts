@@ -46,6 +46,7 @@ import {
 } from '../../modules/outils'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 
 export const dateDePublication = '3/12/2021'
 export const dateDeModifImportante = '25/11/2025'
@@ -793,7 +794,7 @@ export default class TrouverLaTransformation extends Exercice {
           numero.opaciteDeRemplissage = 1
           maGrille.push(numero)
           polys[x * 6 + y].opacite = 0.7
-          polys[x * 6 + y].color = colorToLatexOrHTML('blue')
+          polys[x * 6 + y].color = colorToLatexOrHTML(bleuMathalea)
         }
       }
       objetsEnonce.push(...polys)

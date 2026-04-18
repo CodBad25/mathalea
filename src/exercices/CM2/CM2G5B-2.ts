@@ -19,6 +19,7 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 
 export const titre = 'Nommer des faces dans un pavé droit'
 export const amcReady = true
@@ -165,7 +166,7 @@ export default class LireFacePaveDroit extends Exercice {
       E = point3d(0, choixProfondeur, 0)
 
       nomSolide = choisitLettresDifferentes(8, 'OQWXD').join('')
-      solideDessine = pave3d(A, B, D, E, 'blue', true, nomSolide)
+      solideDessine = pave3d(A, B, D, E, bleuMathalea, true, nomSolide)
       objetsEnonce.push(...solideDessine.c2d)
       // enonceFigure = (context.isAmc ? '' : '<br>') + mathalea2d(Object.assign({}, fixeBordures(objetsEnonce), { scale: context.isHtml ? 0.7 : 0.2, style: 'block' }), objetsEnonce) + '<br>'
       enonceFigure =

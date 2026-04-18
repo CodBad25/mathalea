@@ -12,6 +12,7 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 
 export const titre =
   'Effectuer des calculs avec des puissances de 10 uniquement'
@@ -82,7 +83,7 @@ export default class PuissancesDeDix extends Exercice {
 
     // pour pouvoir adapter les couleurs en cas de besoin
     const coul0 = 'red'
-    const coul1 = 'blue'
+    const coul1 = bleuMathalea
 
     for (
       let i = 0,

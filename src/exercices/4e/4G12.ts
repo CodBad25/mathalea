@@ -39,6 +39,7 @@ import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
 import { transfoPoly } from './4G12-1'
 import { CHEMINS_PREDEFINIS } from './_4G12-paths'
+import { bleuMathalea } from '../../lib/colors'
 
 export const titre = 'Trouver une série de transformations'
 export const interactifReady = true
@@ -739,7 +740,7 @@ export default class SerieDeTransformations extends Exercice {
           numero.opaciteDeRemplissage = 1
           maGrille.push(numero)
           polys[x * 6 + y].opacite = 0.7
-          polys[x * 6 + y].color = colorToLatexOrHTML('blue')
+          polys[x * 6 + y].color = colorToLatexOrHTML(bleuMathalea)
         }
       }
 

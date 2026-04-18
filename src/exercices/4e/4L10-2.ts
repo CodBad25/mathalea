@@ -8,6 +8,7 @@ import { texteParPosition } from '../../lib/2d/textes'
 import { rotation, similitude, translation } from '../../lib/2d/transformations'
 import { pointAdistance } from '../../lib/2d/utilitairesPoint'
 import { vecteur } from '../../lib/2d/Vecteur'
+import { bleuMathalea } from '../../lib/colors'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { mathalea2d } from '../../modules/mathalea2d'
@@ -92,7 +93,6 @@ export default class AirePerimetrePolygone extends Exercice {
         texteCorr,
         cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       // Boucle principale où i+1 correspond au numéro de la question
       texte = ''
@@ -118,7 +118,7 @@ export default class AirePerimetrePolygone extends Exercice {
             codageAngleDroit(A, D, C),
             codageAngleDroit(D, C, B),
             codageAngleDroit(B, A, D),
-            codageSegments('//', 'blue', A, B, B, C, C, D, D, A),
+            codageSegments('//', bleuMathalea, A, B, B, C, C, D, D, A),
             texteParPosition(`$${inc1}$`, 2, 4.7),
           )
           texteCorr += 'Périmètre :'
@@ -155,7 +155,7 @@ export default class AirePerimetrePolygone extends Exercice {
             codageAngleDroit(G, H, E),
             codageAngleDroit(H, E, F),
             codageSegments('/', 'red', E, F, G, H),
-            codageSegments('||', 'blue', F, G, H, E),
+            codageSegments('||', bleuMathalea, F, G, H, E),
             texteParPosition(`$${inc}$`, 3, 4.7),
             texteParPosition(`$${inc2}$`, -0.7, 2),
           )
@@ -203,7 +203,7 @@ export default class AirePerimetrePolygone extends Exercice {
           objets.push(
             o === 1
               ? codageSegments('/', 'red', F, G, H, E)
-              : codageSegments('||', 'blue', F, G, H, E),
+              : codageSegments('||', bleuMathalea, F, G, H, E),
           )
           texte += mathalea2d(
             Object.assign(params, {
@@ -251,7 +251,7 @@ export default class AirePerimetrePolygone extends Exercice {
             codageAngleDroit(F, G, H),
             codageAngleDroit(G, H, E),
             codageAngleDroit(H, E, F),
-            codageSegments('||', 'blue', F, G, H, E),
+            codageSegments('||', bleuMathalea, F, G, H, E),
             segment(I, J),
             texteParPosition(`$${inc1}$`, l / 2, 4.7),
             texteParPosition(`$${inc2}$`, 3 + l / 2, 4.7),

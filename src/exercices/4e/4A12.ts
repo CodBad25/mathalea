@@ -15,6 +15,7 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -348,18 +349,18 @@ export default class ProblemesEvenementsRecurrents extends Exercice {
         case 1:
           decompositionCommun = texteEnCouleurEtGras(
             nombreAvecEspace(Commun),
-            'blue',
+            bleuMathalea,
           )
           decompositionA = texteEnCouleurEtGras(nombreAvecEspace(A), 'red')
           decompositionB = texteEnCouleurEtGras(nombreAvecEspace(B), 'green')
           break
         case 2:
-          decompositionCommun = `${texteEnCouleurEtGras(nombreAvecEspace(listePremiers[indicesFacteursCommuns[0] + i * 5]), 'blue')} $\\times$ ${texteEnCouleurEtGras(nombreAvecEspace(listePremiers[indicesFacteursCommuns[1] + i * 5]), 'blue')}`
+          decompositionCommun = `${texteEnCouleurEtGras(nombreAvecEspace(listePremiers[indicesFacteursCommuns[0] + i * 5]), bleuMathalea)} $\\times$ ${texteEnCouleurEtGras(nombreAvecEspace(listePremiers[indicesFacteursCommuns[1] + i * 5]), bleuMathalea)}`
           decompositionA = texteEnCouleurEtGras(nombreAvecEspace(A), 'red')
           decompositionB = texteEnCouleurEtGras(nombreAvecEspace(B), 'green')
           break
         case 3:
-          decompositionCommun = `${texteEnCouleurEtGras(nombreAvecEspace(listePremiers[indicesFacteursCommuns[0] + i * 5]), 'blue')} $\\times$ ${texteEnCouleurEtGras(nombreAvecEspace(listePremiers[indicesFacteursCommuns[1] + i * 5]), 'blue')}`
+          decompositionCommun = `${texteEnCouleurEtGras(nombreAvecEspace(listePremiers[indicesFacteursCommuns[0] + i * 5]), bleuMathalea)} $\\times$ ${texteEnCouleurEtGras(nombreAvecEspace(listePremiers[indicesFacteursCommuns[1] + i * 5]), bleuMathalea)}`
           decompositionA = `${texteEnCouleurEtGras(nombreAvecEspace(listePremiers[indicesFacteursA[0] + i * 5]), 'red')} $\\times$ ${texteEnCouleurEtGras(nombreAvecEspace(listePremiers[indicesFacteursA[1] + i * 5]), 'red')}`
           decompositionB = `${texteEnCouleurEtGras(nombreAvecEspace(listePremiers[indicesFacteursB[0]]), 'green')} $\\times$ ${texteEnCouleurEtGras(nombreAvecEspace(listePremiers[indicesFacteursB[1] + i * 5]), 'green')}`
           break
@@ -367,7 +368,7 @@ export default class ProblemesEvenementsRecurrents extends Exercice {
         default:
           decompositionCommun = texteEnCouleurEtGras(
             nombreAvecEspace(Commun),
-            'blue',
+            bleuMathalea,
           )
           decompositionA = texteEnCouleurEtGras(nombreAvecEspace(A), 'red')
           decompositionB = texteEnCouleurEtGras(nombreAvecEspace(B), 'green')
@@ -382,24 +383,24 @@ export default class ProblemesEvenementsRecurrents extends Exercice {
       }
       if (this.sup === 3) {
         if (indicesFacteursA[0] >= indicesFacteursCommuns[1]) {
-          texteCorr += `${texteEnCouleurEtGras(nombreAvecEspace(Commun * A), 'red')} = ${texteEnCouleurEtGras(listePremiers[indicesFacteursCommuns[0] + i * 5], 'blue')} $\\times$ ${texteEnCouleurEtGras(listePremiers[indicesFacteursCommuns[1] + i * 5], 'blue')} $\\times$ ${texteEnCouleurEtGras(listePremiers[indicesFacteursA[0] + i * 5], 'red')} $\\times$ ${texteEnCouleurEtGras(listePremiers[indicesFacteursA[1] + i * 5], 'red')} <br>`
+          texteCorr += `${texteEnCouleurEtGras(nombreAvecEspace(Commun * A), 'red')} = ${texteEnCouleurEtGras(listePremiers[indicesFacteursCommuns[0] + i * 5], bleuMathalea)} $\\times$ ${texteEnCouleurEtGras(listePremiers[indicesFacteursCommuns[1] + i * 5], bleuMathalea)} $\\times$ ${texteEnCouleurEtGras(listePremiers[indicesFacteursA[0] + i * 5], 'red')} $\\times$ ${texteEnCouleurEtGras(listePremiers[indicesFacteursA[1] + i * 5], 'red')} <br>`
         } else if (
           indicesFacteursA[0] >= indicesFacteursCommuns[0] &&
           indicesFacteursA[0] < indicesFacteursCommuns[1]
         ) {
-          texteCorr += `${texteEnCouleurEtGras(nombreAvecEspace(Commun * A), 'red')} = ${texteEnCouleurEtGras(listePremiers[indicesFacteursCommuns[0] + i * 5], 'blue')} $\\times$ ${texteEnCouleurEtGras(listePremiers[indicesFacteursA[0] + i * 5], 'red')} $\\times$ ${texteEnCouleurEtGras(listePremiers[indicesFacteursCommuns[1] + i * 5], 'blue')} $\\times$ ${texteEnCouleurEtGras(listePremiers[indicesFacteursA[1] + i * 5], 'red')} <br>`
+          texteCorr += `${texteEnCouleurEtGras(nombreAvecEspace(Commun * A), 'red')} = ${texteEnCouleurEtGras(listePremiers[indicesFacteursCommuns[0] + i * 5], bleuMathalea)} $\\times$ ${texteEnCouleurEtGras(listePremiers[indicesFacteursA[0] + i * 5], 'red')} $\\times$ ${texteEnCouleurEtGras(listePremiers[indicesFacteursCommuns[1] + i * 5], bleuMathalea)} $\\times$ ${texteEnCouleurEtGras(listePremiers[indicesFacteursA[1] + i * 5], 'red')} <br>`
         } else if (indicesFacteursA[0] < indicesFacteursCommuns[0]) {
-          texteCorr += `${texteEnCouleurEtGras(nombreAvecEspace(Commun * A), 'red')} = ${texteEnCouleurEtGras(listePremiers[indicesFacteursA[0] + i * 5], 'red')} $\\times$ ${texteEnCouleurEtGras(listePremiers[indicesFacteursCommuns[0] + i * 5], 'blue')} $\\times$ ${texteEnCouleurEtGras(listePremiers[indicesFacteursCommuns[1] + i * 5], 'blue')} $\\times$ ${texteEnCouleurEtGras(listePremiers[indicesFacteursA[1] + i * 5], 'red')} <br>`
+          texteCorr += `${texteEnCouleurEtGras(nombreAvecEspace(Commun * A), 'red')} = ${texteEnCouleurEtGras(listePremiers[indicesFacteursA[0] + i * 5], 'red')} $\\times$ ${texteEnCouleurEtGras(listePremiers[indicesFacteursCommuns[0] + i * 5], bleuMathalea)} $\\times$ ${texteEnCouleurEtGras(listePremiers[indicesFacteursCommuns[1] + i * 5], bleuMathalea)} $\\times$ ${texteEnCouleurEtGras(listePremiers[indicesFacteursA[1] + i * 5], 'red')} <br>`
         }
         if (indicesFacteursB[0] >= indicesFacteursCommuns[1]) {
-          texteCorr += `${texteEnCouleurEtGras(nombreAvecEspace(Commun * B), 'green')} = ${texteEnCouleurEtGras(listePremiers[indicesFacteursCommuns[0] + i * 5], 'blue')} $\\times$ ${texteEnCouleurEtGras(listePremiers[indicesFacteursCommuns[1] + i * 5], 'blue')} $\\times$ ${texteEnCouleurEtGras(listePremiers[indicesFacteursB[0]], 'green')} $\\times$ ${texteEnCouleurEtGras(listePremiers[indicesFacteursB[1] + i * 5], 'green')} <br>`
+          texteCorr += `${texteEnCouleurEtGras(nombreAvecEspace(Commun * B), 'green')} = ${texteEnCouleurEtGras(listePremiers[indicesFacteursCommuns[0] + i * 5], bleuMathalea)} $\\times$ ${texteEnCouleurEtGras(listePremiers[indicesFacteursCommuns[1] + i * 5], bleuMathalea)} $\\times$ ${texteEnCouleurEtGras(listePremiers[indicesFacteursB[0]], 'green')} $\\times$ ${texteEnCouleurEtGras(listePremiers[indicesFacteursB[1] + i * 5], 'green')} <br>`
         } else if (
           indicesFacteursB[0] >= indicesFacteursCommuns[0] &&
           indicesFacteursB[0] < indicesFacteursCommuns[1]
         ) {
-          texteCorr += `${texteEnCouleurEtGras(nombreAvecEspace(Commun * B), 'green')} = ${texteEnCouleurEtGras(listePremiers[indicesFacteursCommuns[0] + i * 5], 'blue')} $\\times$ ${texteEnCouleurEtGras(listePremiers[indicesFacteursB[0]], 'green')} $\\times$ ${texteEnCouleurEtGras(listePremiers[indicesFacteursCommuns[1] + i * 5], 'blue')} $\\times$ ${texteEnCouleurEtGras(listePremiers[indicesFacteursB[1] + i * 5], 'green')} <br>`
+          texteCorr += `${texteEnCouleurEtGras(nombreAvecEspace(Commun * B), 'green')} = ${texteEnCouleurEtGras(listePremiers[indicesFacteursCommuns[0] + i * 5], bleuMathalea)} $\\times$ ${texteEnCouleurEtGras(listePremiers[indicesFacteursB[0]], 'green')} $\\times$ ${texteEnCouleurEtGras(listePremiers[indicesFacteursCommuns[1] + i * 5], bleuMathalea)} $\\times$ ${texteEnCouleurEtGras(listePremiers[indicesFacteursB[1] + i * 5], 'green')} <br>`
         } else if (indicesFacteursB[0] < indicesFacteursCommuns[0]) {
-          texteCorr += `${texteEnCouleurEtGras(nombreAvecEspace(Commun * B), 'green')} = ${texteEnCouleurEtGras(listePremiers[indicesFacteursB[0]], 'green')} $\\times$ ${texteEnCouleurEtGras(listePremiers[indicesFacteursCommuns[0] + i * 5], 'blue')} $\\times$ ${texteEnCouleurEtGras(listePremiers[indicesFacteursCommuns[1] + i * 5], 'blue')} $\\times$ ${texteEnCouleurEtGras(listePremiers[indicesFacteursB[1] + i * 5], 'green')} <br>`
+          texteCorr += `${texteEnCouleurEtGras(nombreAvecEspace(Commun * B), 'green')} = ${texteEnCouleurEtGras(listePremiers[indicesFacteursB[0]], 'green')} $\\times$ ${texteEnCouleurEtGras(listePremiers[indicesFacteursCommuns[0] + i * 5], bleuMathalea)} $\\times$ ${texteEnCouleurEtGras(listePremiers[indicesFacteursCommuns[1] + i * 5], bleuMathalea)} $\\times$ ${texteEnCouleurEtGras(listePremiers[indicesFacteursB[1] + i * 5], 'green')} <br>`
         }
       } else {
         texteCorr += `${texteEnCouleurEtGras(nombreAvecEspace(Commun * A), 'red')} = ${decompositionCommun} $\\times$ ${decompositionA} <br>

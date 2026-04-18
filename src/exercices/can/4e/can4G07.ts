@@ -8,6 +8,7 @@ import { texNombre } from '../../../lib/outils/texNombre'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
+import { bleuMathalea } from '../../../lib/colors'
 export const titre = 'Calculer une longueur avec le théorème de Thalès (milieu)'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -49,7 +50,7 @@ export default class CalculLongueurThalesMilieu extends ExerciceSimple {
         segment(D, E),
         segment(A, C),
         segment(B, C),
-        codageSegments('||', 'blue', A, D, D, C),
+        codageSegments('||', bleuMathalea, A, D, D, C),
         labelPoint(A, B, C, D, E),
       )
 
@@ -94,7 +95,7 @@ export default class CalculLongueurThalesMilieu extends ExerciceSimple {
         segment(D, E),
         segment(A, C),
         segment(B, C),
-        codageSegments('||', 'blue', A, D, D, C),
+        codageSegments('||', bleuMathalea, A, D, D, C),
         labelPoint(A, B, C, D, E),
       )
 

@@ -14,6 +14,7 @@ import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 export const titre =
   "Résoudre un problème de proportionnalité à l'aide d'un graphique"
 
@@ -179,7 +180,7 @@ export default class GraphiquesEtProportionnalite2 extends Exercice {
         situation.qte2,
         arrondi((situation.qte2 * situation.prix_unitaire) / yscale),
       )
-      const s3 = segment(D, E, 'blue')
+      const s3 = segment(D, E, bleuMathalea)
       s3.epaisseur = 2
       s3.pointilles = 5
       s3.styleExtremites = '->'
@@ -187,7 +188,7 @@ export default class GraphiquesEtProportionnalite2 extends Exercice {
         0,
         arrondi((situation.qte2 * situation.prix_unitaire) / yscale),
       )
-      const s4 = segment(E, F, 'blue')
+      const s4 = segment(E, F, bleuMathalea)
       s4.epaisseur = 2
       s4.pointilles = 5
       s4.styleExtremites = '->'

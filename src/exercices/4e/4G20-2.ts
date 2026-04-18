@@ -15,6 +15,7 @@ import { MetaInteractif2d } from '../../lib/2d/interactif2d'
 import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { carre } from '../../lib/2d/polygonesParticuliers'
 import { latex2d } from '../../lib/2d/textes'
+import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import {
   ajouteChampTexteMathLive,
@@ -53,7 +54,18 @@ const figureCarre = (aire: number, exercice: IExercice, question: number) => {
   const ang2 = codageAngleDroit(B, C, D)
   const ang3 = codageAngleDroit(C, D, A)
   const ang4 = codageAngleDroit(D, A, B)
-  const cotesMarques = codageSegments('//', 'blue', A, B, B, C, C, D, D, A)
+  const cotesMarques = codageSegments(
+    '//',
+    bleuMathalea,
+    A,
+    B,
+    B,
+    C,
+    C,
+    D,
+    D,
+    A,
+  )
   const square = carre(A, B)
   square.hachures = true
   square.couleurDesHachures = colorToLatexOrHTML('lightgray')

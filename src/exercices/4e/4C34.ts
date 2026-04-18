@@ -19,6 +19,7 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -152,11 +153,11 @@ export default class PrioritesEtRelatifsEtPuissances extends Exercice {
       switch (listeTypeDeQuestions[i]) {
         case 1: // a² + b*c
           texte = `$${lettreDepuisChiffre(i + 1)} = ${ecritureParentheseSiNegatif(a)}${affichePuissance(typeDePuissances[i])} +  ${ecritureParentheseSiNegatif(b)} \\times ${ecritureParentheseSiNegatif(c)}$`
-          texteCorr = `$${lettreDepuisChiffre(i + 1)}=${miseEnEvidence(ecritureParentheseSiNegatif(a) + affichePuissance(typeDePuissances[i]), 'blue')}  +  ${ecritureParentheseSiNegatif(b)} \\times ${ecritureParentheseSiNegatif(c)}$`
+          texteCorr = `$${lettreDepuisChiffre(i + 1)}=${miseEnEvidence(ecritureParentheseSiNegatif(a) + affichePuissance(typeDePuissances[i]), bleuMathalea)}  +  ${ecritureParentheseSiNegatif(b)} \\times ${ecritureParentheseSiNegatif(c)}$`
 
           texteCorr +=
             '<br>' +
-            `$${lettreDepuisChiffre(i + 1)}=${calculPuissance(a, typeDePuissances[i])} + ${miseEnEvidence(ecritureParentheseSiNegatif(b) + '\\times' + ecritureParentheseSiNegatif(c), 'blue')}$`
+            `$${lettreDepuisChiffre(i + 1)}=${calculPuissance(a, typeDePuissances[i])} + ${miseEnEvidence(ecritureParentheseSiNegatif(b) + '\\times' + ecritureParentheseSiNegatif(c), bleuMathalea)}$`
           texteCorr +=
             '<br>' +
             `$${lettreDepuisChiffre(i + 1)}=${calculPuissance(a, typeDePuissances[i])} ${ecritureAlgebrique(b * c)}$`
@@ -169,10 +170,10 @@ export default class PrioritesEtRelatifsEtPuissances extends Exercice {
 
         case 2: // a + b²*c
           texte = `$${lettreDepuisChiffre(i + 1)} = ${a} + ${ecritureParentheseSiNegatif(p)}${affichePuissance(typeDePuissances[i])} \\times ${ecritureParentheseSiNegatif(c)}$`
-          texteCorr = `$${lettreDepuisChiffre(i + 1)}          =${a} + ${miseEnEvidence(ecritureParentheseSiNegatif(p) + affichePuissance(typeDePuissances[i]), 'blue')} \\times ${ecritureParentheseSiNegatif(c)}$`
+          texteCorr = `$${lettreDepuisChiffre(i + 1)}          =${a} + ${miseEnEvidence(ecritureParentheseSiNegatif(p) + affichePuissance(typeDePuissances[i]), bleuMathalea)} \\times ${ecritureParentheseSiNegatif(c)}$`
           texteCorr +=
             '<br>' +
-            `$${lettreDepuisChiffre(i + 1)}=${a} + ${miseEnEvidence(ecritureParentheseSiNegatif(calculPuissance(p, typeDePuissances[i])) + '\\times' + ecritureParentheseSiNegatif(c), 'blue')}$`
+            `$${lettreDepuisChiffre(i + 1)}=${a} + ${miseEnEvidence(ecritureParentheseSiNegatif(calculPuissance(p, typeDePuissances[i])) + '\\times' + ecritureParentheseSiNegatif(c), bleuMathalea)}$`
           texteCorr +=
             '<br>' +
             `$${lettreDepuisChiffre(i + 1)}=${a + ecritureAlgebrique(calculPuissance(p, typeDePuissances[i]) * c)}$`
@@ -184,10 +185,10 @@ export default class PrioritesEtRelatifsEtPuissances extends Exercice {
 
         case 3: // a²+b+c*d
           texte = `$${lettreDepuisChiffre(i + 1)} = ${ecritureParentheseSiNegatif(a)}${affichePuissance(typeDePuissances[i])}   ${ecritureAlgebrique(b)} ${ecritureAlgebrique(c)} \\times ${ecritureParentheseSiNegatif(d)}$`
-          texteCorr = `$${lettreDepuisChiffre(i + 1)}        =${miseEnEvidence(ecritureParentheseSiNegatif(a) + affichePuissance(typeDePuissances[i]), 'blue')} ${ecritureAlgebrique(b)}  ${ecritureAlgebrique(c)} \\times ${ecritureParentheseSiNegatif(d)}$`
+          texteCorr = `$${lettreDepuisChiffre(i + 1)}        =${miseEnEvidence(ecritureParentheseSiNegatif(a) + affichePuissance(typeDePuissances[i]), bleuMathalea)} ${ecritureAlgebrique(b)}  ${ecritureAlgebrique(c)} \\times ${ecritureParentheseSiNegatif(d)}$`
           texteCorr +=
             '<br>' +
-            `$${lettreDepuisChiffre(i + 1)}=${calculPuissance(a, typeDePuissances[i])} ${ecritureAlgebrique(b)} +  ${miseEnEvidence(ecritureParentheseSiNegatif(c) + '\\times' + ecritureParentheseSiNegatif(d), 'blue')}$`
+            `$${lettreDepuisChiffre(i + 1)}=${calculPuissance(a, typeDePuissances[i])} ${ecritureAlgebrique(b)} +  ${miseEnEvidence(ecritureParentheseSiNegatif(c) + '\\times' + ecritureParentheseSiNegatif(d), bleuMathalea)}$`
           texteCorr +=
             '<br>' +
             `$${lettreDepuisChiffre(i + 1)}=${calculPuissance(a, typeDePuissances[i]) + ecritureAlgebrique(b) + ecritureAlgebrique(c * d)}$`
@@ -199,10 +200,10 @@ export default class PrioritesEtRelatifsEtPuissances extends Exercice {
 
         case 4: // n²*(b+c)
           texte = `$${lettreDepuisChiffre(i + 1)} = ${ecritureParentheseSiNegatif(n)}${affichePuissance(typeDePuissances[i])} \\times ( ${b + ecritureAlgebrique(c)})$`
-          texteCorr = `$${lettreDepuisChiffre(i + 1)}          =${miseEnEvidence(ecritureParentheseSiNegatif(n) + affichePuissance(typeDePuissances[i]), 'blue')}  \\times ( ${b + ecritureAlgebrique(c)})$`
+          texteCorr = `$${lettreDepuisChiffre(i + 1)}          =${miseEnEvidence(ecritureParentheseSiNegatif(n) + affichePuissance(typeDePuissances[i]), bleuMathalea)}  \\times ( ${b + ecritureAlgebrique(c)})$`
           texteCorr +=
             '<br>' +
-            `$${lettreDepuisChiffre(i + 1)}=${calculPuissance(n, typeDePuissances[i])} \\times ( ${miseEnEvidence(b + ecritureAlgebrique(c), 'blue')})$`
+            `$${lettreDepuisChiffre(i + 1)}=${calculPuissance(n, typeDePuissances[i])} \\times ( ${miseEnEvidence(b + ecritureAlgebrique(c), bleuMathalea)})$`
           texteCorr +=
             '<br>' +
             `$${lettreDepuisChiffre(i + 1)}=${calculPuissance(n, typeDePuissances[i])} \\times ${ecritureParentheseSiNegatif(b + c)}$`
@@ -214,13 +215,13 @@ export default class PrioritesEtRelatifsEtPuissances extends Exercice {
 
         case 5: // m*(n²+p*n)
           texte = `$${lettreDepuisChiffre(i + 1)} = ${m} \\times ( ${ecritureParentheseSiNegatif(n)}${affichePuissance(typeDePuissances[i])}${ecritureAlgebrique(p)}\\times${ecritureParentheseSiNegatif(n)})$`
-          texteCorr = `$${lettreDepuisChiffre(i + 1)}            =${m} \\times ( ${miseEnEvidence(ecritureParentheseSiNegatif(n) + affichePuissance(typeDePuissances[i]), 'blue')} ${ecritureAlgebrique(p)}\\times${ecritureParentheseSiNegatif(n)})$`
+          texteCorr = `$${lettreDepuisChiffre(i + 1)}            =${m} \\times ( ${miseEnEvidence(ecritureParentheseSiNegatif(n) + affichePuissance(typeDePuissances[i]), bleuMathalea)} ${ecritureAlgebrique(p)}\\times${ecritureParentheseSiNegatif(n)})$`
           texteCorr +=
             '<br>' +
-            `$${lettreDepuisChiffre(i + 1)}=${m} \\times ( ${calculPuissance(n, typeDePuissances[i])} + ${miseEnEvidence(ecritureParentheseSiNegatif(p) + '\\times' + ecritureParentheseSiNegatif(n), 'blue')})$`
+            `$${lettreDepuisChiffre(i + 1)}=${m} \\times ( ${calculPuissance(n, typeDePuissances[i])} + ${miseEnEvidence(ecritureParentheseSiNegatif(p) + '\\times' + ecritureParentheseSiNegatif(n), bleuMathalea)})$`
           texteCorr +=
             '<br>' +
-            `$${lettreDepuisChiffre(i + 1)}=${m}\\times ( ${miseEnEvidence(calculPuissance(n, typeDePuissances[i]) + ecritureAlgebrique(p * n), 'blue')})$`
+            `$${lettreDepuisChiffre(i + 1)}=${m}\\times ( ${miseEnEvidence(calculPuissance(n, typeDePuissances[i]) + ecritureAlgebrique(p * n), bleuMathalea)})$`
           texteCorr +=
             '<br>' +
             `$${lettreDepuisChiffre(i + 1)}=${m}\\times ${ecritureParentheseSiNegatif(calculPuissance(n, typeDePuissances[i]) + p * n)}$`
@@ -232,10 +233,10 @@ export default class PrioritesEtRelatifsEtPuissances extends Exercice {
 
         case 6: // (a+b+n²)*d
           texte = `$${lettreDepuisChiffre(i + 1)} = (${a} ${ecritureAlgebrique(b)} + ${ecritureParentheseSiNegatif(n)}${affichePuissance(typeDePuissances[i])} ) \\times ${ecritureParentheseSiNegatif(d)}$`
-          texteCorr = `$${lettreDepuisChiffre(i + 1)}              =(${a} + ${ecritureParentheseSiNegatif(b)} + ${miseEnEvidence(ecritureParentheseSiNegatif(n) + affichePuissance(typeDePuissances[i]), 'blue')}  ) \\times ${ecritureParentheseSiNegatif(d)}$`
+          texteCorr = `$${lettreDepuisChiffre(i + 1)}              =(${a} + ${ecritureParentheseSiNegatif(b)} + ${miseEnEvidence(ecritureParentheseSiNegatif(n) + affichePuissance(typeDePuissances[i]), bleuMathalea)}  ) \\times ${ecritureParentheseSiNegatif(d)}$`
           texteCorr +=
             '<br>' +
-            `$${lettreDepuisChiffre(i + 1)}=(${miseEnEvidence(a + ecritureAlgebrique(b) + ecritureAlgebrique(calculPuissance(n, typeDePuissances[i])), 'blue')}) \\times ${ecritureParentheseSiNegatif(d)}$`
+            `$${lettreDepuisChiffre(i + 1)}=(${miseEnEvidence(a + ecritureAlgebrique(b) + ecritureAlgebrique(calculPuissance(n, typeDePuissances[i])), bleuMathalea)}) \\times ${ecritureParentheseSiNegatif(d)}$`
           texteCorr +=
             '<br>' +
             `$${lettreDepuisChiffre(i + 1)}=${a + b + calculPuissance(n, typeDePuissances[i])} \\times ${ecritureParentheseSiNegatif(d)}$`
@@ -248,10 +249,10 @@ export default class PrioritesEtRelatifsEtPuissances extends Exercice {
         case 7: // n²*(a+b+c)
         default:
           texte = `$${lettreDepuisChiffre(i + 1)} = ${ecritureParentheseSiNegatif(n)}${affichePuissance(typeDePuissances[i])} \\times ( ${a + ecritureAlgebrique(b) + ecritureAlgebrique(c)})$`
-          texteCorr = `$${lettreDepuisChiffre(i + 1)}                =${miseEnEvidence(ecritureParentheseSiNegatif(n) + affichePuissance(typeDePuissances[i]), 'blue')} \\times ( ${a} ${ecritureAlgebrique(b)} ${ecritureAlgebrique(c)})$`
+          texteCorr = `$${lettreDepuisChiffre(i + 1)}                =${miseEnEvidence(ecritureParentheseSiNegatif(n) + affichePuissance(typeDePuissances[i]), bleuMathalea)} \\times ( ${a} ${ecritureAlgebrique(b)} ${ecritureAlgebrique(c)})$`
           texteCorr +=
             '<br>' +
-            `$${lettreDepuisChiffre(i + 1)}=${calculPuissance(n, typeDePuissances[i])} \\times ( ${miseEnEvidence(a + ecritureAlgebrique(b) + ecritureAlgebrique(c), 'blue')})$`
+            `$${lettreDepuisChiffre(i + 1)}=${calculPuissance(n, typeDePuissances[i])} \\times ( ${miseEnEvidence(a + ecritureAlgebrique(b) + ecritureAlgebrique(c), bleuMathalea)})$`
           texteCorr +=
             '<br>' +
             `$${lettreDepuisChiffre(i + 1)}=${calculPuissance(n, typeDePuissances[i])} \\times ${ecritureParentheseSiNegatif(a + b + c)}$`

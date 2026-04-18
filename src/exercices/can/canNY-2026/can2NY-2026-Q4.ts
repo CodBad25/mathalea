@@ -8,6 +8,7 @@ import { latex2d } from '../../../lib/2d/textes'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { randint } from '../../../modules/outils'
+import { bleuMathalea } from '../../../lib/colors'
 export const titre = 'Trouver le nombre à ajouter'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -74,7 +75,7 @@ export default class NombreAajouter extends ExerciceSimple {
           pixelsParCm: 20,
           scale: 0.6,
         },
-        latex2d('A', x1B * 5, 0.5, { color: 'blue' }),
+        latex2d('A', x1B * 5, 0.5, { color: bleuMathalea }),
         d,
       )
   }

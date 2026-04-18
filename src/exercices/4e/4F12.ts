@@ -25,6 +25,7 @@ import { toutPourUnPoint } from '../../lib/interactif/mathLive'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { sp } from '../../lib/outils/outilString'
 import Grandeur from '../../modules/Grandeur'
+import { bleuMathalea } from '../../lib/colors'
 
 export const titre =
   "Résoudre un problème s'appuyant sur la lecture d'une représentation graphique"
@@ -412,7 +413,7 @@ export default class ExploiterRepresentationGraphique extends Exercice {
                 point(3, v3),
                 point(4, 0),
               ],
-              'blue',
+              bleuMathalea,
             )
             tempsPause = 20
             periodeRapide = 'de la 30e à la 40e minute'
@@ -425,7 +426,7 @@ export default class ExploiterRepresentationGraphique extends Exercice {
                 point(3, v2),
                 point(4, 0),
               ],
-              'blue',
+              bleuMathalea,
             )
             tempsPause = 10
             periodeRapide = 'durant les 10 premières minutes'
@@ -438,7 +439,7 @@ export default class ExploiterRepresentationGraphique extends Exercice {
                 point(3, v2),
                 point(4, 0),
               ],
-              'blue',
+              bleuMathalea,
             )
             tempsPause = 20
             periodeRapide = 'durant les 10 premières minutes'
@@ -613,7 +614,7 @@ export default class ExploiterRepresentationGraphique extends Exercice {
               [26, tmin + 2],
             ],
             {
-              color: 'blue',
+              color: bleuMathalea,
               epaisseur: 2,
               repere: r,
               xMin: 0,

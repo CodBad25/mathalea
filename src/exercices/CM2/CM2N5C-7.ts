@@ -1,4 +1,4 @@
-import { orangeMathalea } from '../../lib/colors'
+import { orangeMathalea, bleuMathalea } from '../../lib/colors'
 import { deuxColonnesResp } from '../../lib/format/miseEnPage'
 import { ajouteQuestionMathlive } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
@@ -235,7 +235,7 @@ export default class ExerciceProbleme006 extends Exercice {
                       operande1: nb1 - nb2,
                       operande2: nb2,
                       type: 'addition',
-                      options: { solution: true, colore: 'blue' },
+                      options: { solution: true, colore: bleuMathalea },
                     }),
                   ),
                 (this.correctionDetaillee
@@ -344,7 +344,7 @@ export default class ExerciceProbleme006 extends Exercice {
                       operande1: nb1 - nb2,
                       operande2: nb2,
                       type: 'addition',
-                      options: { solution: true, colore: 'blue' },
+                      options: { solution: true, colore: bleuMathalea },
                     }),
                   ),
                 (this.correctionDetaillee
@@ -455,7 +455,7 @@ export default class ExerciceProbleme006 extends Exercice {
                     operande1: nb1,
                     operande2: nbFois,
                     type: 'multiplication',
-                    options: { solution: true, colore: 'blue' },
+                    options: { solution: true, colore: bleuMathalea },
                   }),
                 ),
               (this.correctionDetaillee

@@ -14,6 +14,7 @@ import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 
 /**
  * Convertit un angle en degrés vers des radians
@@ -224,7 +225,7 @@ export default class ReperagePaveDroit extends Exercice {
       s1 =
         longueur3d(pointAbscisse, A) === 0
           ? vide2d()
-          : arete3d(A, point3d(pointAplacer.x, 0, 0), 'blue', true).c2d
+          : arete3d(A, point3d(pointAplacer.x, 0, 0), bleuMathalea, true).c2d
       s2 =
         longueur3d(pointAbscisse, pointOrdonnee) === 0
           ? vide2d()
@@ -281,7 +282,7 @@ export default class ReperagePaveDroit extends Exercice {
           },
           objetsAtracerCorr,
         )
-        texteCorr += `<br>$${lettreDepuisChiffre(i + 12)}$ de coordonnées $(${miseEnEvidence(pointCoord[0], 'blue')};${miseEnEvidence(pointCoord[1], 'green')};${miseEnEvidence(pointCoord[2], 'red')})$.<br>`
+        texteCorr += `<br>$${lettreDepuisChiffre(i + 12)}$ de coordonnées $(${miseEnEvidence(pointCoord[0], bleuMathalea)};${miseEnEvidence(pointCoord[1], 'green')};${miseEnEvidence(pointCoord[2], 'red')})$.<br>`
         propositionsAMC = [
           {
             type: 'AMCOpen',
@@ -300,7 +301,7 @@ export default class ReperagePaveDroit extends Exercice {
       } else {
         texte = `Donner les coordonnées du point $${lettreDepuisChiffre(i + 12)}$.`
         objetsAtracer.push(
-          tracePoint(pointAplacer, 'blue'),
+          tracePoint(pointAplacer, bleuMathalea),
           labelPoint(pointAplacer.c2d),
         )
         texteCorr = mathalea2d(
@@ -322,7 +323,7 @@ export default class ReperagePaveDroit extends Exercice {
           },
           objetsAtracerCorr,
         )
-        texteCorr += `<br>Le point $${lettreDepuisChiffre(i + 12)}$ a pour coordonnées $(${miseEnEvidence(pointCoord[0], 'blue')};${miseEnEvidence(pointCoord[1], 'green')};${miseEnEvidence(pointCoord[2], 'red')})$.`
+        texteCorr += `<br>Le point $${lettreDepuisChiffre(i + 12)}$ a pour coordonnées $(${miseEnEvidence(pointCoord[0], bleuMathalea)};${miseEnEvidence(pointCoord[1], 'green')};${miseEnEvidence(pointCoord[2], 'red')})$.`
         propositionsAMC = [
           {
             type: 'AMCNum',

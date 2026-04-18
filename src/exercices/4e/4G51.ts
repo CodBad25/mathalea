@@ -16,6 +16,7 @@ import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 
 export const titre = 'Compléter une représentation en perspective cavalière'
 export const amcReady = true
@@ -437,10 +438,10 @@ export default class RepresenterUnSolide4e extends Exercice {
         FG.color = colorToLatexOrHTML('red')
         GH.color = colorToLatexOrHTML('green')
         HE.color = colorToLatexOrHTML('red')
-        AE.color = colorToLatexOrHTML('blue')
-        BF.color = colorToLatexOrHTML('blue')
-        CG.color = colorToLatexOrHTML('blue')
-        DH.color = colorToLatexOrHTML('blue')
+        AE.color = colorToLatexOrHTML(bleuMathalea)
+        BF.color = colorToLatexOrHTML(bleuMathalea)
+        CG.color = colorToLatexOrHTML(bleuMathalea)
+        DH.color = colorToLatexOrHTML(bleuMathalea)
         objetsCorrection.push(
           AB,
           BC,
@@ -469,10 +470,10 @@ export default class RepresenterUnSolide4e extends Exercice {
         FG.color = colorToLatexOrHTML('red')
         GH.color = colorToLatexOrHTML('green')
         HE.color = colorToLatexOrHTML('red')
-        AE.color = colorToLatexOrHTML('blue')
-        BF.color = colorToLatexOrHTML('blue')
-        CG.color = colorToLatexOrHTML('blue')
-        DH.color = colorToLatexOrHTML('blue')
+        AE.color = colorToLatexOrHTML(bleuMathalea)
+        BF.color = colorToLatexOrHTML(bleuMathalea)
+        CG.color = colorToLatexOrHTML(bleuMathalea)
+        DH.color = colorToLatexOrHTML(bleuMathalea)
         objetsCorrection.push(
           AB,
           BC,
@@ -501,10 +502,10 @@ export default class RepresenterUnSolide4e extends Exercice {
         FG.color = colorToLatexOrHTML('red')
         GH.color = colorToLatexOrHTML('green')
         HE.color = colorToLatexOrHTML('red')
-        AE.color = colorToLatexOrHTML('blue')
-        BF.color = colorToLatexOrHTML('blue')
-        CG.color = colorToLatexOrHTML('blue')
-        DH.color = colorToLatexOrHTML('blue')
+        AE.color = colorToLatexOrHTML(bleuMathalea)
+        BF.color = colorToLatexOrHTML(bleuMathalea)
+        CG.color = colorToLatexOrHTML(bleuMathalea)
+        DH.color = colorToLatexOrHTML(bleuMathalea)
         objetsCorrection.push(AB, DA, BD, EF, HE, AE, BF, DH, FH, g, carreaux)
       }
 
@@ -517,10 +518,10 @@ export default class RepresenterUnSolide4e extends Exercice {
         FG.color = colorToLatexOrHTML('red')
         GH.color = colorToLatexOrHTML('green')
         HE.color = colorToLatexOrHTML('red')
-        AE.color = colorToLatexOrHTML('blue')
-        BF.color = colorToLatexOrHTML('blue')
-        CG.color = colorToLatexOrHTML('blue')
-        DH.color = colorToLatexOrHTML('blue')
+        AE.color = colorToLatexOrHTML(bleuMathalea)
+        BF.color = colorToLatexOrHTML(bleuMathalea)
+        CG.color = colorToLatexOrHTML(bleuMathalea)
+        DH.color = colorToLatexOrHTML(bleuMathalea)
         objetsCorrection.push(
           AB,
           EF,
