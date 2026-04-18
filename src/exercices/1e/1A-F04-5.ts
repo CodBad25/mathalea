@@ -7,6 +7,7 @@ import { deuxColonnes } from '../../lib/format/miseEnPage'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { randint } from '../../modules/outils'
 import ExerciceQcmA from '../ExerciceQcmA'
+import { bleuMathalea } from '../../lib/colors'
 export const dateDePublication = '04/10/2025'
 export const uuid = '6d6ea'
 /**
@@ -251,7 +252,7 @@ export default class auto1AF4d extends ExerciceQcmA {
     const o = latex2d('\\text{O}', -0.3, -0.3, { letterSize: 'scriptsize' })
     const config = casConfigs[1]
 
-    const C = latex2d('C_f', 3.5, config.f(3), { color: 'blue' })
+    const C = latex2d('C_f', 3.5, config.f(3), { color: bleuMathalea })
     const D = latex2d('C_g', 3.5, config.g(3), { color: 'red' })
     const r = repere({
       yUnite: 1,
@@ -290,7 +291,7 @@ export default class auto1AF4d extends ExerciceQcmA {
           repere: r,
           xMin: config.curveMin,
           xMax: config.curveMax,
-          color: 'blue',
+          color: bleuMathalea,
           epaisseur: 2,
         }),
         courbe(config.g, {
@@ -326,7 +327,7 @@ export default class auto1AF4d extends ExerciceQcmA {
       'C_f',
       config.labelPositions.Cf[0],
       config.labelPositions.Cf[1],
-      { color: 'blue' },
+      { color: bleuMathalea },
     )
     const D = latex2d(
       'C_g',
@@ -372,7 +373,7 @@ export default class auto1AF4d extends ExerciceQcmA {
           repere: r,
           xMin: config.curveMin,
           xMax: config.curveMax,
-          color: 'blue',
+          color: bleuMathalea,
           epaisseur: 2,
         }),
         courbe(config.g, {

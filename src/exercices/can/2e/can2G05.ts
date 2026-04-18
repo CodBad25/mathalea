@@ -8,6 +8,7 @@ import {
 import { creerNomDePolygone } from '../../../lib/outils/outilString'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
+import { bleuMathalea } from '../../../lib/colors'
 export const titre = 'Calculer une distance avec les coordonnées'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -60,7 +61,7 @@ export default class DistanceRepere extends ExerciceSimple {
           On calcule  $(${c}-${a})^2$ et $(${d}-${b})^2$, ce qui donne $${(c - a) ** 2}$ et $${(d - b) ** 2}$. <br>
           Puis on calcule la somme de ces nombres soit $${(c - a) ** 2}+${(d - b) ** 2}=${(c - a) ** 2 + (d - b) ** 2}$.<br>
            Enfin, on en prend la racine carrée.`,
-            'blue',
+            bleuMathalea,
           )
           this.reponse = Math.sqrt((c - a) ** 2 + (d - b) ** 2)
         } else {
@@ -78,7 +79,7 @@ export default class DistanceRepere extends ExerciceSimple {
            Enfin, on en prend la racine carrée.<br>
             Comme $${(c - a) ** 2 + (d - b) ** 2}$ n'est pas un carré parfait, on ne simplifie pas (la réponse doit être sous la forme $\\sqrt{a}$ ou d'un entier).
            `,
-            'blue',
+            bleuMathalea,
           )
           this.reponse = [
             `\\sqrt{${(c - a) ** 2 + (d - b) ** 2}}`,
@@ -108,7 +109,7 @@ export default class DistanceRepere extends ExerciceSimple {
          Enfin, on en prend la racine carrée.<br>
           Comme $25$ est pas un carré parfait, on  simplifie.
          `,
-            'blue',
+            bleuMathalea,
           )
           this.reponse = Math.sqrt(a ** 2 + b ** 2)
         } else {
@@ -123,7 +124,7 @@ export default class DistanceRepere extends ExerciceSimple {
         Puis on calcule la somme de ces nombres soit $${a ** 2}+${b ** 2}=${a ** 2 + b ** 2}$.<br>
          Enfin, on en prend la racine carrée.         
          `,
-            'blue',
+            bleuMathalea,
           )
           this.reponse = `\\sqrt{${a ** 2 + b ** 2}}`
           if (this.interactif) {

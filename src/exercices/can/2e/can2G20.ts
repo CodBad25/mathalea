@@ -14,6 +14,7 @@ import { context } from '../../../modules/context'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
+import { bleuMathalea } from '../../../lib/colors'
 export const titre = 'Déterminer une équation de droite (graphique)'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -95,11 +96,11 @@ export default class EquationDroite extends ExerciceSimple {
       `${deltaY}`,
       pointCible.x + 0.5,
       milieu(pointCible, pointHorizontal).y,
-      { color: 'blue', letterSize: 'scriptsize' },
+      { color: bleuMathalea, letterSize: 'scriptsize' },
     )
 
     const traceB = tracePoint(B, 'black')
-    const d = droite(A, B, '', 'blue')
+    const d = droite(A, B, '', bleuMathalea)
     d.epaisseur = 2
     traceA.taille = 3
     traceA.epaisseur = 2
@@ -193,7 +194,7 @@ export default class EquationDroite extends ExerciceSimple {
     } else {
       // On utilise toujours le déplacement affiché graphiquement pour la correction
       this.correction = `Le coefficient directeur $m$ de la droite $(AB)$ est donné par : <br>
-$m=\\dfrac{${miseEnEvidence(deltaY, 'blue')}}{${miseEnEvidence(deltaX, 'red')}}${maFraction.texSimplificationAvecEtapes()}$.<br>`
+$m=\\dfrac{${miseEnEvidence(deltaY, bleuMathalea)}}{${miseEnEvidence(deltaX, 'red')}}${maFraction.texSimplificationAvecEtapes()}$.<br>`
 
       if ((yB - yA) / (xB - xA) === 1) {
         this.correction += `Son ordonnée à l'origine est $${yA}$, ainsi l'équation réduite de la droite est $${miseEnEvidence(`y=x${yA === 0 ? '' : `${ecritureAlgebrique(yA)}`}`)}$.`

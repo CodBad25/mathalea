@@ -13,6 +13,7 @@ import FractionEtendue from '../../modules/FractionEtendue'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { randint } from '../../modules/outils'
 import ExerciceQcmA from '../ExerciceQcmA'
+import { bleuMathalea } from '../../lib/colors'
 /**
  * @author Gilles Mora
  *
@@ -68,11 +69,11 @@ export default class Auto1AF6c extends ExerciceQcmA {
       letterSize: 'scriptsize',
     })
     const lBBx = latex2d(`${yB - yA}`, B.x + 0.5, milieu(B, Bx).y, {
-      color: 'blue',
+      color: bleuMathalea,
       letterSize: 'scriptsize',
     })
 
-    const d = droite(A, B, '', 'blue')
+    const d = droite(A, B, '', bleuMathalea)
     d.epaisseur = 2
 
     const xmin = -6
@@ -161,7 +162,7 @@ export default class Auto1AF6c extends ExerciceQcmA {
     } else {
       this.correction = `En prenant deux points sur la droite, on obtient :<br>
      
-    $m=\\dfrac{${miseEnEvidence(yB - yA, 'blue')}}{${miseEnEvidence(xB - xA, 'red')}}=${miseEnEvidence(`${maFraction.texFractionSimplifiee}`)}$`
+    $m=\\dfrac{${miseEnEvidence(yB - yA, bleuMathalea)}}{${miseEnEvidence(xB - xA, 'red')}}=${miseEnEvidence(`${maFraction.texFractionSimplifiee}`)}$`
       this.correction += `<br>${objetC}<br>`
       this.reponses = [
         `$${maFraction.texFractionSimplifiee}$`,

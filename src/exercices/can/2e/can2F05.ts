@@ -3,6 +3,7 @@ import { context } from '../../../modules/context'
 import { fraction } from '../../../modules/fractions'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
+import { bleuMathalea } from '../../../lib/colors'
 export const titre = 'Déterminer un antécédent avec la racine carrée'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -41,8 +42,8 @@ Pour résoudre cette équation, on isole la racine carrée dans le membre de gau
 
     $\\begin{aligned}
     ${m}\\sqrt{x}+${p}&=${a}\\\\[2ex]
-    ${m}\\sqrt{x}+${p}~${miseEnEvidence(-p, 'blue')}&=${a}~${miseEnEvidence(-p, 'blue')}\\\\[2ex]
-    \\dfrac{${m}\\sqrt{x}}{${miseEnEvidence(m, 'blue')}}&=\\dfrac{${a - p}}{${miseEnEvidence(m, 'blue')}}\\\\[2ex]
+    ${m}\\sqrt{x}+${p}~${miseEnEvidence(-p, bleuMathalea)}&=${a}~${miseEnEvidence(-p, bleuMathalea)}\\\\[2ex]
+    \\dfrac{${m}\\sqrt{x}}{${miseEnEvidence(m, bleuMathalea)}}&=\\dfrac{${a - p}}{${miseEnEvidence(m, bleuMathalea)}}\\\\[2ex]
     \\sqrt{x}&=${maFraction.simplifie().texFSD}{\\qquad\\text{ On cherche le nombre dont la racine carrée vaut }}${maFraction.simplifie().texFSD} \\\\[2ex]
     x&=${miseEnEvidence(maFraction.puissanceFraction(2).simplifie().texFraction)}
     \\end{aligned}$

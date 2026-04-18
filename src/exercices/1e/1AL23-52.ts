@@ -9,6 +9,7 @@ import FractionEtendue from '../../modules/FractionEtendue'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 
 export const titre = 'Effectuer une étude complète de paraboles avec les zéros de la fonction'
 export const interactifReady = false
@@ -135,7 +136,7 @@ export default class EtudeParabole extends Exercice {
         },
         r,
         o,
-        courbe(p.fonctionEvaluer, { repere: r, color: 'blue', epaisseur: 2 }),
+        courbe(p.fonctionEvaluer, { repere: r, color: bleuMathalea, epaisseur: 2 }),
       )
     this.listeQuestions = [question1, question2, question3, question4]
     this.listeCorrections = [correction1, correction2, correction3, correction4]

@@ -14,6 +14,7 @@ import {
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
+import { bleuMathalea } from '../../../lib/colors'
 
 export const dateDePublication = '28/07/2025'
 export const interactifReady = true
@@ -129,7 +130,7 @@ export default class EquationsGSplineNombre extends ExerciceSimple {
       epaisseur: 1.5,
       ajouteNoeuds: true,
       optionsNoeuds: { color: 'black', taille: 1.5, style: 'x', epaisseur: 2 },
-      color: 'blue',
+      color: bleuMathalea,
     })
     const objetsEnonce = [repere1, courbe1]
     const nbAntecedentsEntiersMaximum = theSpline.nombreAntecedentsMaximum(

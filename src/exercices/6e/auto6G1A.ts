@@ -83,7 +83,7 @@ export default class constructionElementaire extends Exercice {
         lettreDepuisChiffre(indLettre + 1),
         'above right',
       )
-      const d = droite(A, B, '', 'blue') // Ne pas mettre bleuMathalea
+      const d = droite(A, B, '', 'blue') // Ne pas mettre bleuMathalea quand il s'agit d'apigeom
       const C = point(
         randint(2, 4, [A.x]),
         randint(3, 6, [A.y]),
@@ -152,7 +152,7 @@ export default class constructionElementaire extends Exercice {
       const Ymax = Math.ceil(Math.max(A.y, B.y, C.y, D.y, E.y, F.y) + 1)
       anim.recadre(Xmin - 3, Ymax)
       anim.pointsCreer(A, B, C, D)
-      anim.regleDroite(A, B, { couleur: 'blue' }) // Ne pas mettre bleuMathalea
+      anim.regleDroite(A, B, { couleur: 'blue' }) // Ne pas mettre bleuMathalea quand il s'agit d'apigeom
       anim.regleSegment(A, C, { couleur: 'red' })
       anim.regleDemiDroiteOriginePoint(C, D, { couleur: 'green' })
       anim.regleMasquer({})
@@ -381,7 +381,7 @@ export default class constructionElementaire extends Exercice {
     const { isValid, message } = checkLineFromLabels({
       figure,
       nameLine: [`(${this.Anom}${this.Bnom})`, `(${this.Bnom}${this.Anom})`],
-      color: 'blue', // Ne pas mettre bleuMathalea
+      color: 'blue', // Ne pas mettre bleuMathalea quand il s'agit d'apigeom
     })
     resultat.push(isValid ? 'OK' : 'KO')
     if (message !== '') {

@@ -11,6 +11,7 @@ import {
 import { context } from '../../../modules/context'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
+import { bleuMathalea } from '../../../lib/colors'
 export const titre = 'Déterminer une fonction affine avec deux images'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -69,7 +70,7 @@ export default class FonctionAffAvec2Images extends ExerciceSimple {
 Les images de $0$ et de $1$ permettent de déterminer rapidement le coefficient directeur qui est la différence des images, 
 soit $${p + m}-${ecritureParentheseSiNegatif(p)}=${m}$.
 `,
-            'blue',
+            bleuMathalea,
           )
         }
         break
@@ -106,7 +107,7 @@ soit $${p + m}-${ecritureParentheseSiNegatif(p)}=${m}$.
 Les images de $-1$ et de $0$ permettent de déterminer rapidement le coefficient directeur qui est la différence des images, 
 soit $${p}-${ecritureParentheseSiNegatif(p - m)}=${m}$.
 `,
-            'blue',
+            bleuMathalea,
           )
         }
         break

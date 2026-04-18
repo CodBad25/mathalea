@@ -8,6 +8,7 @@ import { deuxColonnes } from '../../lib/format/miseEnPage'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { randint } from '../../modules/outils'
 import ExerciceQcmA from '../ExerciceQcmA'
+import { bleuMathalea } from '../../lib/colors'
 export const dateDePublication = '20/09/2025'
 export const uuid = '5586f'
 /**
@@ -69,7 +70,7 @@ export default class auto1AF4c extends ExerciceQcmA {
           xMin: -3,
           xMax: 2,
           repere: repere1,
-          color: 'blue',
+          color: bleuMathalea,
           epaisseur: 2,
         }),
       ),
@@ -139,7 +140,7 @@ export default class auto1AF4c extends ExerciceQcmA {
                 xMin: -3,
                 xMax: 2,
                 repere: repere1,
-                color: 'blue',
+                color: bleuMathalea,
                 epaisseur: 2,
               }),
             ),
@@ -206,7 +207,7 @@ export default class auto1AF4c extends ExerciceQcmA {
                 xMin: -3,
                 xMax: 2,
                 repere: repere1,
-                color: 'blue',
+                color: bleuMathalea,
                 epaisseur: 2,
               }),
             ),
@@ -273,7 +274,7 @@ export default class auto1AF4c extends ExerciceQcmA {
                 xMin: -3,
                 xMax: 2,
                 repere: repere1,
-                color: 'blue',
+                color: bleuMathalea,
                 epaisseur: 2,
               }),
             ),
@@ -339,7 +340,7 @@ export default class auto1AF4c extends ExerciceQcmA {
                 xMin: -3,
                 xMax: 2,
                 repere: repere1,
-                color: 'blue',
+                color: bleuMathalea,
                 epaisseur: 2,
               }),
             ),

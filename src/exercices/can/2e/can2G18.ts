@@ -11,6 +11,7 @@ import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../../modules/outils'
 import Exercice from '../../Exercice'
+import { bleuMathalea } from '../../../lib/colors'
 
 export const titre =
   'Lire les coordonnées d’un vecteur représenté dans un repère'
@@ -69,11 +70,11 @@ export default class LectureGraphiqueVecteurRepere extends Exercice {
       ymin = Math.min(A.y, B.y, -1) - 1
       xmax = Math.max(A.x, B.x, 1) + 1
       ymax = Math.max(A.y, B.y, 1) + 1
-      AB = segment(A, B, 'blue', '->')
+      AB = segment(A, B, bleuMathalea, '->')
       AB.epaisseur = 2
       vAB = vecteur(A, B)
       o = texteParPosition('O', -0.3, -0.3, 0, 'black', 1)
-      nomvAB = representantNomme(vAB, A, `${vec}`, 1.5, 'blue')
+      nomvAB = representantNomme(vAB, A, `${vec}`, 1.5, bleuMathalea)
       r1 = repere({
         xMin: xmin,
         xMax: xmax,

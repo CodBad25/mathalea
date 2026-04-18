@@ -13,6 +13,7 @@ import { crochetD, crochetG } from '../../lib/2d/intervalles'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { randint } from '../../modules/outils'
 import ExerciceQcmA from '../ExerciceQcmA'
+import { bleuMathalea } from '../../lib/colors'
 export const dateDePublication = '02/10/2025'
 export const dateDeModifImportante = '12/10/2025'
 export const uuid = 'cc015'
@@ -130,7 +131,7 @@ export default class Auto1AC10f extends ExerciceQcmA {
       }),
       latex2d('y=\\sqrt{x}', 3, 2.3, {
         letterSize: 'scriptsize',
-        color: 'blue',
+        color: bleuMathalea,
       }),
       latex2d(`${val ** 2}`, carreValGraphique, -0.6, {
         letterSize: 'scriptsize',
@@ -187,7 +188,7 @@ export default class Auto1AC10f extends ExerciceQcmA {
       },
       r1,
       o,
-      courbe(f, { repere: r1, color: 'blue', epaisseur: 2, step: 0.05 }),
+      courbe(f, { repere: r1, color: bleuMathalea, epaisseur: 2, step: 0.05 }),
     )
 
     // Graphique complet pour la correction
@@ -200,7 +201,7 @@ export default class Auto1AC10f extends ExerciceQcmA {
         pixelsParCm: 30,
         scale: 1,
       },
-      courbe(f, { repere: r1, color: 'blue', epaisseur: 2, step: 0.05 }),
+      courbe(f, { repere: r1, color: bleuMathalea, epaisseur: 2, step: 0.05 }),
       Cg,
       r1,
       o,

@@ -13,6 +13,7 @@ import { texNombre } from '../../../lib/outils/texNombre'
 import { context } from '../../../modules/context'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
+import { bleuMathalea } from '../../../lib/colors'
 export const titre = 'Calculer une image avec le second degré'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -72,7 +73,7 @@ export default class CalculImageSecondDegre extends ExerciceSimple {
    On calcule $${b}\\times ${ecritureParentheseSiNegatif(x)}$ que l'on ajoute à $${texNombre(a * x ** 2)}$, soit $${a * x ** 2}+${ecritureParentheseSiNegatif(b * x)}=${a * x ** 2 + b * x}$.<br>
   Pour finir, on ajoute   $${c}$, ce qui donne $${texNombre(a * x ** 2 + b * x)}+${c}$, soit $${texNombre(a * x ** 2 + b * x + c)}$.<br>
     `,
-              'blue',
+              bleuMathalea,
             )
           }
           if (a !== 1 && b !== 1) {
@@ -90,7 +91,7 @@ export default class CalculImageSecondDegre extends ExerciceSimple {
       On calcule $${b}\\times ${ecritureParentheseSiNegatif(x)}$ que l'on ajoute à $${texNombre(a * x ** 2)}$, soit $${a * x ** 2}+${ecritureParentheseSiNegatif(b * x)}=${a * x ** 2 + b * x}$.<br>
       Pour finir, on ajoute   $${c}$, ce qui donne $${texNombre(a * x ** 2 + b * x)}+${c}$, soit $${texNombre(a * x ** 2 + b * x + c)}$.<br>
         `,
-              'blue',
+              bleuMathalea,
             )
           }
           if (a === 1 && b === 1) {
@@ -106,7 +107,7 @@ export default class CalculImageSecondDegre extends ExerciceSimple {
    On ajoute  $${x}$ soit $${a * x ** 2}+${ecritureParentheseSiNegatif(x)}=${x ** 2 + b * x}$.<br>
   Pour finir, on ajoute   $${c}$, ce qui donne $${texNombre(a * x ** 2 + b * x)}+${c}$, soit $${texNombre(a * x ** 2 + b * x + c)}$.<br>
     `,
-              'blue',
+              bleuMathalea,
             )
           }
           if (a !== 1 && b === 1) {
@@ -124,7 +125,7 @@ export default class CalculImageSecondDegre extends ExerciceSimple {
  On ajoute  $${x}$ soit $${a * x ** 2}+${ecritureParentheseSiNegatif(x)}=${a * x ** 2 + b * x}$.<br>
   Pour finir, on ajoute   $${c}$, ce qui donne $${texNombre(a * x ** 2 + b * x)}+${c}$, soit $${texNombre(a * x ** 2 + b * x + c)}$.<br>
     `,
-              'blue',
+              bleuMathalea,
             )
           }
           this.reponse = this.versionQcm
@@ -172,7 +173,7 @@ export default class CalculImageSecondDegre extends ExerciceSimple {
            Puis la deuxième : $${ecritureParentheseSiNegatif(x)}${ecritureAlgebrique(d)}=${c * x + d}$.<br>
         On fait le produit des nombres obtenus : $${a * x + b}\\times ${c * x + d}=${(a * x + b) * (c * x + d)}$.
     `,
-              'blue',
+              bleuMathalea,
             )
           }
           if (a !== 1 && c !== 1) {
@@ -189,7 +190,7 @@ export default class CalculImageSecondDegre extends ExerciceSimple {
         <br>Puis la deuxième : $${c}\\times${ecritureParentheseSiNegatif(x)}${ecritureAlgebrique(d)}=${c * x + d}$.<br>
         On fait le produit des nombres obtenus : $${a * x + b}\\times ${ecritureParentheseSiNegatif(c * x + d)}=${(a * x + b) * (c * x + d)}$.
     `,
-              'blue',
+              bleuMathalea,
             )
           }
           if (a === 1 && c !== 1) {
@@ -206,7 +207,7 @@ export default class CalculImageSecondDegre extends ExerciceSimple {
         <br>Puis la deuxième : $${c}\\times${ecritureParentheseSiNegatif(x)}${ecritureAlgebrique(d)}=${c * x + d}$.<br>
         On fait le produit des nombres obtenus : $${a * x + b}\\times ${c * x + d}=${(a * x + b) * (c * x + d)}$.
     `,
-              'blue',
+              bleuMathalea,
             )
           }
           if (a !== 1 && c === 1) {
@@ -223,7 +224,7 @@ export default class CalculImageSecondDegre extends ExerciceSimple {
         <br>Puis la deuxième : $${ecritureParentheseSiNegatif(x)}${ecritureAlgebrique(d)}=${c * x + d}$.<br>
         On fait le produit des nombres obtenus : $${a * x + b}\\times ${ecritureParentheseSiNegatif(c * x + d)}=${(a * x + b) * (c * x + d)}$.
     `,
-              'blue',
+              bleuMathalea,
             )
           }
           this.reponse = this.versionQcm
@@ -262,7 +263,7 @@ export default class CalculImageSecondDegre extends ExerciceSimple {
           On commence par "calculer" le carré de $${x}$ :  $${ecritureParentheseSiNegatif(x)}^2=${x * x}$.<br>
           On calcule alors $${a}-${x * x}=${a - x * x}$.<br>
     `,
-              'blue',
+              bleuMathalea,
             )
           } else {
             this.correction = `On a :<br>
@@ -275,7 +276,7 @@ export default class CalculImageSecondDegre extends ExerciceSimple {
     On commence par "calculer" le carré de $${x}$ :  $${ecritureParentheseSiNegatif(x)}^2=${x * x}$.<br>
     Puis on multiplie le résultat par $${b}$ : $${b}\\times ${x ** 2}=${b * x * x}$.<br>
     On calcule alors : $${a}-${b * x * x}=${a - b * x * x}$.`,
-              'blue',
+              bleuMathalea,
             )
           }
           this.distracteurs = [
@@ -314,7 +315,7 @@ export default class CalculImageSecondDegre extends ExerciceSimple {
             ` Mentalement : <br>
           On commence par "calculer" l'intérieur de la parenthèse, puis on élève le résultat au carré.
     `,
-            'blue',
+            bleuMathalea,
           )
           this.distracteurs = [
             `$${texNombre(-1 * (a * x + b) * (a * x + b))}$`,

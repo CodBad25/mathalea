@@ -8,6 +8,7 @@ import { mathalea2d } from '../../modules/mathalea2d'
 import { randint } from '../../modules/outils'
 // import ExerciceQcmA from '../../ExerciceQcmA'
 import ExerciceQcmA from '../ExerciceQcmA'
+import { bleuMathalea } from '../../lib/colors'
 
 export const uuid = '35c0e'
 export const refs = {
@@ -82,7 +83,7 @@ export default class Auto1AF6b extends ExerciceQcmA {
         this.configGraphique,
         courbe(f, {
           repere: r,
-          color: 'blue',
+          color: bleuMathalea,
           epaisseur: 2,
         }),
         o,

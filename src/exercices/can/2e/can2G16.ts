@@ -6,7 +6,7 @@ import FractionEtendue from '../../../modules/FractionEtendue'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
-import { orangeMathalea } from '../../../lib/colors'
+import { orangeMathalea, bleuMathalea } from '../../../lib/colors'
 export const titre = 'Trouver un coefficient de colinéarité (graphique)'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -70,12 +70,12 @@ export default class VecteursCol extends ExerciceSimple {
               [b, ''],
               [a, ''],
             ],
-            pointCouleur: 'blue',
+            pointCouleur: bleuMathalea,
             labelsPrincipaux: false,
           }),
-          texteParPosition(`${noms[0]}`, 0, 0.9, 0, 'blue', 2),
-          texteParPosition(`${noms[1]}`, b * 1.5, 0.9, 0, 'blue', 2),
-          texteParPosition(`${noms[2]}`, a * 1.5, 0.9, 0, 'blue', 2),
+          texteParPosition(`${noms[0]}`, 0, 0.9, 0, bleuMathalea, 2),
+          texteParPosition(`${noms[1]}`, b * 1.5, 0.9, 0, bleuMathalea, 2),
+          texteParPosition(`${noms[2]}`, a * 1.5, 0.9, 0, bleuMathalea, 2),
         )
         this.optionsChampTexte = { texteAvant: '$k$ a pour valeur :' }
         this.correction = `Les vecteurs $\\overrightarrow{${noms[0]}${noms[1]}}$ et $\\overrightarrow{${noms[0]}${noms[2]}}$
@@ -110,7 +110,7 @@ export default class VecteursCol extends ExerciceSimple {
                 [b, `${noms[1]}`],
                 [a, `${noms[2]}`],
               ],
-              pointCouleur: 'blue',
+              pointCouleur: bleuMathalea,
               labelsPrincipaux: false,
             }),
           )
@@ -145,12 +145,12 @@ export default class VecteursCol extends ExerciceSimple {
               [b, ''],
               [a, ''],
             ],
-            pointCouleur: 'blue',
+            pointCouleur: bleuMathalea,
             labelsPrincipaux: false,
           }),
-          texteParPosition(`${noms[0]}`, 0, 0.9, 0, 'blue', 2),
-          texteParPosition(`${noms[1]}`, b * 1.5, 0.9, 0, 'blue', 2),
-          texteParPosition(`${noms[2]}`, a * 1.5, 0.9, 0, 'blue', 2),
+          texteParPosition(`${noms[0]}`, 0, 0.9, 0, bleuMathalea, 2),
+          texteParPosition(`${noms[1]}`, b * 1.5, 0.9, 0, bleuMathalea, 2),
+          texteParPosition(`${noms[2]}`, a * 1.5, 0.9, 0, bleuMathalea, 2),
         )
         this.optionsChampTexte = { texteAvant: '$k$ a pour valeur :' }
         this.correction = `Les vecteurs $\\overrightarrow{${noms[0]}${noms[1]}}$ et $\\overrightarrow{${noms[0]}${noms[2]}}$
@@ -185,7 +185,7 @@ export default class VecteursCol extends ExerciceSimple {
                 [b, `${noms[1]}`],
                 [a, `${noms[2]}`],
               ],
-              pointCouleur: 'blue',
+              pointCouleur: bleuMathalea,
               labelsPrincipaux: false,
             }),
           )
@@ -221,12 +221,12 @@ export default class VecteursCol extends ExerciceSimple {
               [b, ''],
               [a, ''],
             ],
-            pointCouleur: 'blue',
+            pointCouleur: bleuMathalea,
             labelsPrincipaux: false,
           }),
-          texteParPosition(`${noms[0]}`, 0, 0.9, 0, 'blue', 2),
-          texteParPosition(`${noms[1]}`, b * 1.5, 0.9, 0, 'blue', 2),
-          texteParPosition(`${noms[2]}`, a * 1.5, 0.9, 0, 'blue', 2),
+          texteParPosition(`${noms[0]}`, 0, 0.9, 0, bleuMathalea, 2),
+          texteParPosition(`${noms[1]}`, b * 1.5, 0.9, 0, bleuMathalea, 2),
+          texteParPosition(`${noms[2]}`, a * 1.5, 0.9, 0, bleuMathalea, 2),
         )
         this.optionsChampTexte = { texteAvant: '$k$ a pour valeur :' }
         this.correction = `Les vecteurs $\\overrightarrow{${noms[0]}${noms[1]}}$ et $\\overrightarrow{${noms[2]}${noms[0]}}$
@@ -261,7 +261,7 @@ export default class VecteursCol extends ExerciceSimple {
                 [b, `${noms[1]}`],
                 [a, `${noms[2]}`],
               ],
-              pointCouleur: 'blue',
+              pointCouleur: bleuMathalea,
               labelsPrincipaux: false,
             }),
           )
@@ -297,12 +297,12 @@ export default class VecteursCol extends ExerciceSimple {
               [b, ''],
               [a, ''],
             ],
-            pointCouleur: 'blue',
+            pointCouleur: bleuMathalea,
             labelsPrincipaux: false,
           }),
-          texteParPosition(`${noms[0]}`, 0, 0.9, 0, 'blue', 2),
-          texteParPosition(`${noms[1]}`, b * 1.5, 0.9, 0, 'blue', 2),
-          texteParPosition(`${noms[2]}`, a * 1.5, 0.9, 0, 'blue', 2),
+          texteParPosition(`${noms[0]}`, 0, 0.9, 0, bleuMathalea, 2),
+          texteParPosition(`${noms[1]}`, b * 1.5, 0.9, 0, bleuMathalea, 2),
+          texteParPosition(`${noms[2]}`, a * 1.5, 0.9, 0, bleuMathalea, 2),
         )
         this.optionsChampTexte = { texteAvant: '$k$ a pour valeur :' }
         this.correction = `Les vecteurs $\\overrightarrow{${noms[1]}${noms[0]}}$ et $\\overrightarrow{${noms[0]}${noms[2]}}$
@@ -337,7 +337,7 @@ export default class VecteursCol extends ExerciceSimple {
                 [b, `${noms[1]}`],
                 [a, `${noms[2]}`],
               ],
-              pointCouleur: 'blue',
+              pointCouleur: bleuMathalea,
               labelsPrincipaux: false,
             }),
           )

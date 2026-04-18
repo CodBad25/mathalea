@@ -15,6 +15,7 @@ import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { randint } from '../../modules/outils'
 import ExerciceQcmA from '../ExerciceQcmA'
+import { bleuMathalea } from '../../lib/colors'
 /**
  * @author Gilles Mora
  *
@@ -44,11 +45,11 @@ export default class Auto1AF076 extends ExerciceQcmA {
     const pente = signeM * 2
     const ptA = pointAbstrait(0, yOrd)
     const ptB = pointAbstrait(1, yOrd + pente)
-    const d = droite(ptA, ptB, '', 'blue')
+    const d = droite(ptA, ptB, '', bleuMathalea)
     d.epaisseur = 2
 
     const lD = latex2d('D', signeM > 0 ? 0.5 : -0.5, 2.5, {
-      color: 'blue',
+      color: bleuMathalea,
       letterSize: 'normalsize',
     })
 
@@ -235,11 +236,11 @@ export default class Auto1AF076 extends ExerciceQcmA {
 
     const ptA = pointAbstrait(0, 0)
     const ptB = pointAbstrait(1, -2)
-    const d = droite(ptA, ptB, '', 'blue')
+    const d = droite(ptA, ptB, '', bleuMathalea)
     d.epaisseur = 2
 
     const lD = latex2d('D', 0.5, 2.5, {
-      color: 'blue',
+      color: bleuMathalea,
       letterSize: 'normalsize',
     })
 

@@ -8,6 +8,7 @@ import { context } from '../../../modules/context'
 import FractionEtendue from '../../../modules/FractionEtendue'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import ExerciceSimple from '../../ExerciceSimple'
+import { bleuMathalea } from '../../../lib/colors'
 export const titre = 'Placer un point sur une droite graduée'
 export const interactifReady = true
 export const interactifType = 'qcm'
@@ -146,7 +147,7 @@ export default class Can2025N6Q26 extends ExerciceSimple {
     pointListe:[
         [a[4] as number, `\\text{${a[2]}}`]
       ],
-    pointCouleur: 'blue',
+    pointCouleur: bleuMathalea,
     pointStyle: '',
     labelsPrincipaux: true,
   })
