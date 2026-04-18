@@ -16,6 +16,7 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 
 export const titre = 'Calculer des probabilités conditionnelles'
 
@@ -122,12 +123,12 @@ export default class ProbabilitesConditionnelles extends Exercice {
           A3 = point(9, 3)
           A4 = point(9, 0)
           // On met les segments d'abord pour ne pas qu'ils passent par dessus le texte.(Jean-claude Lhote)
-          objets.push(segment(O, A, 'blue'))
-          objets.push(segment(O, B, 'blue'))
-          objets.push(segment(A, A1, 'blue'))
-          objets.push(segment(A, A2, 'blue'))
-          objets.push(segment(B, A3, 'blue'))
-          objets.push(segment(B, A4, 'blue'))
+          objets.push(segment(O, A, bleuMathalea))
+          objets.push(segment(O, B, bleuMathalea))
+          objets.push(segment(A, A1, bleuMathalea))
+          objets.push(segment(A, A2, bleuMathalea))
+          objets.push(segment(B, A3, bleuMathalea))
+          objets.push(segment(B, A4, bleuMathalea))
           objets.push(
             latexParCoordonnees('A', 5, 5.2, 'black', 20, 12, 'white', 10),
           ) // 1er noeud Avion) = A
@@ -308,12 +309,12 @@ export default class ProbabilitesConditionnelles extends Exercice {
           A3 = point(9, 3)
           A4 = point(9, 0)
           // On met les segments d'abord pour ne pas qu'ils passent par dessus le texte.(Jean-claude Lhote)
-          objets.push(segment(O, A, 'blue'))
-          objets.push(segment(O, B, 'blue'))
-          objets.push(segment(A, A1, 'blue'))
-          objets.push(segment(A, A2, 'blue'))
-          objets.push(segment(B, A3, 'blue'))
-          objets.push(segment(B, A4, 'blue'))
+          objets.push(segment(O, A, bleuMathalea))
+          objets.push(segment(O, B, bleuMathalea))
+          objets.push(segment(A, A1, bleuMathalea))
+          objets.push(segment(A, A2, bleuMathalea))
+          objets.push(segment(B, A3, bleuMathalea))
+          objets.push(segment(B, A4, bleuMathalea))
           objets.push(
             latexParCoordonnees('C', 5, 5.2, 'black', 20, 12, 'white', 10),
           ) // 1er noeud  = C

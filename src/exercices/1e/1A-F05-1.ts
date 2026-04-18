@@ -14,6 +14,7 @@ import type FractionEtendue from '../../modules/FractionEtendue'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { randint } from '../../modules/outils'
 import ExerciceQcmA from '../ExerciceQcmA'
+import { bleuMathalea } from '../../lib/colors'
 /**
  * @author Gilles Mora
  *
@@ -216,7 +217,7 @@ export default class Auto1AF5 extends ExerciceQcmA {
       },
       courbe(f1, {
         repere: r,
-        color: 'blue',
+        color: bleuMathalea,
         epaisseur: 2,
       }),
       courbe(f2, {
@@ -521,7 +522,7 @@ export default class Auto1AF5 extends ExerciceQcmA {
       },
       courbe(f1, {
         repere: r,
-        color: 'blue',
+        color: bleuMathalea,
         epaisseur: 2,
       }),
       courbe(f2, {

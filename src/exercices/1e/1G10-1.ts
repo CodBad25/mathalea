@@ -19,6 +19,7 @@ import { miseEnEvidence, texteGras } from '../../lib/outils/embellissements'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 
 export const titre = 'Calculer des produits scalaires par projection'
 export const interactifReady = true
@@ -149,7 +150,7 @@ export default class SuperExoMathalea2d extends Exercice {
 
         d2 = droite(B, H)
         d2.pointilles = 1
-        d2.color = colorToLatexOrHTML('blue')
+        d2.color = colorToLatexOrHTML(bleuMathalea)
       } else {
         pointProjete = 'C'
         autrePoint = 'B'
@@ -161,7 +162,7 @@ export default class SuperExoMathalea2d extends Exercice {
 
         d1 = droite(A, B)
         d1.pointilles = 1
-        d1.color = colorToLatexOrHTML('blue')
+        d1.color = colorToLatexOrHTML(bleuMathalea)
 
         H = projectionOrtho(C, d1, 'H')
         if (longueur(A, H) === 0) {
@@ -185,7 +186,7 @@ export default class SuperExoMathalea2d extends Exercice {
       const w = vecteur(A, H)
 
       const U = u.norme() === 0 ? vide2d() : representant(u, A)
-      U.color = colorToLatexOrHTML('blue')
+      U.color = colorToLatexOrHTML(bleuMathalea)
       const V = v.norme() === 0 ? vide2d() : representant(v, A)
       V.color = colorToLatexOrHTML('green')
       const W = Math.abs(AH) < 0.1 ? vide2d() : representant(w, A)

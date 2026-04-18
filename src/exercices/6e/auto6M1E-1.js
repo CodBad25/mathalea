@@ -10,6 +10,7 @@ import {
   pointIntersectionCC,
 } from '../../lib/2d/utilitairesPoint'
 import { vecteur } from '../../lib/2d/Vecteur'
+import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -106,7 +107,7 @@ export default class AireCarresRectanglesTrianglesSL extends Exercice {
       codageAngleDroit(A, D, C),
       codageAngleDroit(D, C, B),
       codageAngleDroit(B, A, D),
-      codageSegments('//', 'blue', [A, B, C, D]),
+      codageSegments('//', bleuMathalea, [A, B, C, D]),
       afficheLongueurSegment(B, A),
       rectangle,
       codageAngleDroit(E, F, G),
@@ -114,7 +115,7 @@ export default class AireCarresRectanglesTrianglesSL extends Exercice {
       codageAngleDroit(G, H, E),
       codageAngleDroit(H, E, F),
       codageSegments('/', 'red', E, F, G, H),
-      codageSegments('||', 'blue', F, G, H, E),
+      codageSegments('||', bleuMathalea, F, G, H, E),
       afficheLongueurSegment(F, E),
       afficheLongueurSegment(G, F),
       triangle,

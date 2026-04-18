@@ -16,6 +16,7 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 
 export const titre =
   'Compléter un tableau de proportionnalité avec les propriétés de linéarité'
@@ -277,72 +278,72 @@ function redaction(
       a === 0
         ? `${
             b % 1 === 0
-              ? `${miseEnEvidence(texNombre(b, 2), 'blue')}\\times ${texNombre(y, 2)}`
-              : `${texNombre(y, 2)}\\div ${miseEnEvidence(Math.round(1 / b), 'blue')}`
+              ? `${miseEnEvidence(texNombre(b, 2), bleuMathalea)}\\times ${texNombre(y, 2)}`
+              : `${texNombre(y, 2)}\\div ${miseEnEvidence(Math.round(1 / b), bleuMathalea)}`
           }`
         : `${
             a % 1 === 0
-              ? `${miseEnEvidence(texNombre(a, 2), 'blue')}\\times ${texNombre(x, 2)}`
-              : `${texNombre(x, 2)}\\div ${miseEnEvidence(Math.round(1 / a), 'blue')}`
+              ? `${miseEnEvidence(texNombre(a, 2), bleuMathalea)}\\times ${texNombre(x, 2)}`
+              : `${texNombre(x, 2)}\\div ${miseEnEvidence(Math.round(1 / a), bleuMathalea)}`
           }`
     }$, on a $${
       a === 0
         ? `${
             b % 1 === 0
-              ? `${miseEnEvidence(texNombre(b, 2), 'blue')}\\times ${texNombre(y * pu, 2)}`
-              : `${texNombre(y * pu, 2)}\\div ${miseEnEvidence(Math.round(1 / b), 'blue')}`
+              ? `${miseEnEvidence(texNombre(b, 2), bleuMathalea)}\\times ${texNombre(y * pu, 2)}`
+              : `${texNombre(y * pu, 2)}\\div ${miseEnEvidence(Math.round(1 / b), bleuMathalea)}`
           }`
         : `${
             a % 1 === 0
-              ? `${miseEnEvidence(texNombre(a, 2), 'blue')}\\times ${texNombre(x * pu, 2)}`
-              : `${texNombre(x * pu, 2)}\\div ${miseEnEvidence(Math.round(1 / a), 'blue')}`
+              ? `${miseEnEvidence(texNombre(a, 2), bleuMathalea)}\\times ${texNombre(x * pu, 2)}`
+              : `${texNombre(x * pu, 2)}\\div ${miseEnEvidence(Math.round(1 / a), bleuMathalea)}`
           }`
     }=${miseEnEvidence(texNombre(pNew, 2))}$.`
   }
   if (a === 1) {
     if (b === 1) {
-      return `Comme $${texNombre(nbNew, 2)} = ${miseEnEvidence(texNombre(x, 2), 'blue')} + ${miseEnEvidence(texNombre(y, 2), 'green')}$, on a $${miseEnEvidence(texNombre(x * pu, 2), 'blue')} + ${miseEnEvidence(texNombre(y * pu, 2), 'green')} = ${miseEnEvidence(texNombre(pNew, 2))}$.`
+      return `Comme $${texNombre(nbNew, 2)} = ${miseEnEvidence(texNombre(x, 2), bleuMathalea)} + ${miseEnEvidence(texNombre(y, 2), 'green')}$, on a $${miseEnEvidence(texNombre(x * pu, 2), bleuMathalea)} + ${miseEnEvidence(texNombre(y * pu, 2), 'green')} = ${miseEnEvidence(texNombre(pNew, 2))}$.`
     }
     if (b === -1) {
-      return `Comme $${texNombre(nbNew, 2)} = ${miseEnEvidence(texNombre(x, 2), 'blue')} - ${miseEnEvidence(texNombre(y, 2), 'green')}$, on a $${miseEnEvidence(texNombre(x * pu, 2), 'blue')} - ${miseEnEvidence(texNombre(y * pu, 2), 'green')} = ${miseEnEvidence(texNombre(pNew, 2))}$.`
+      return `Comme $${texNombre(nbNew, 2)} = ${miseEnEvidence(texNombre(x, 2), bleuMathalea)} - ${miseEnEvidence(texNombre(y, 2), 'green')}$, on a $${miseEnEvidence(texNombre(x * pu, 2), bleuMathalea)} - ${miseEnEvidence(texNombre(y * pu, 2), 'green')} = ${miseEnEvidence(texNombre(pNew, 2))}$.`
     }
     return `Comme $${texNombre(nbNew, 2)} = ${miseEnEvidence(texNombre(x, 2), 'green')} + ${`${
       b % 1 === 0
-        ? `${miseEnEvidence(texNombre(b, 2), 'blue')}\\times ${texNombre(y, 2)}`
-        : `${texNombre(y, 2)}\\div ${miseEnEvidence(Math.round(1 / b), 'blue')}`
+        ? `${miseEnEvidence(texNombre(b, 2), bleuMathalea)}\\times ${texNombre(y, 2)}`
+        : `${texNombre(y, 2)}\\div ${miseEnEvidence(Math.round(1 / b), bleuMathalea)}`
     }`}$, on a $${miseEnEvidence(texNombre(x * pu, 2), 'green')} + ${`${
       b % 1 === 0
-        ? `${miseEnEvidence(texNombre(b, 2), 'blue')}\\times ${texNombre(y * pu, 2)}`
-        : `${texNombre(y * pu, 2)}\\div ${miseEnEvidence(Math.round(1 / b), 'blue')}`
+        ? `${miseEnEvidence(texNombre(b, 2), bleuMathalea)}\\times ${texNombre(y * pu, 2)}`
+        : `${texNombre(y * pu, 2)}\\div ${miseEnEvidence(Math.round(1 / b), bleuMathalea)}`
     }`} = ${miseEnEvidence(texNombre(pNew, 2))}$.`
   }
   if (a === -1) {
     if (b === 1) {
-      return `Comme $${texNombre(nbNew, 2)} = ${miseEnEvidence(texNombre(y, 2), 'blue')}-${miseEnEvidence(texNombre(x, 2), 'green')}$, on a $${miseEnEvidence(texNombre(y * pu, 2), 'blue')}-${miseEnEvidence(texNombre(x * pu, 2), 'green')} = ${miseEnEvidence(texNombre(pNew, 2))}$.`
+      return `Comme $${texNombre(nbNew, 2)} = ${miseEnEvidence(texNombre(y, 2), bleuMathalea)}-${miseEnEvidence(texNombre(x, 2), 'green')}$, on a $${miseEnEvidence(texNombre(y * pu, 2), bleuMathalea)}-${miseEnEvidence(texNombre(x * pu, 2), 'green')} = ${miseEnEvidence(texNombre(pNew, 2))}$.`
     }
     return `Comme $${texNombre(nbNew, 2)} = ${`${
       b % 1 === 0
-        ? `${miseEnEvidence(texNombre(b, 2), 'blue')}\\times ${texNombre(y, 2)}`
-        : `${texNombre(y, 2)}\\div ${miseEnEvidence(Math.round(1 / b), 'blue')}`
+        ? `${miseEnEvidence(texNombre(b, 2), bleuMathalea)}\\times ${texNombre(y, 2)}`
+        : `${texNombre(y, 2)}\\div ${miseEnEvidence(Math.round(1 / b), bleuMathalea)}`
     }`}-${texNombre(x, 2)}$, on a $ ${`${
       b % 1 === 0
-        ? `${miseEnEvidence(texNombre(b, 2), 'blue')}\\times ${texNombre(y * pu, 2)}`
-        : `${texNombre(y * pu, 2)}\\div ${miseEnEvidence(Math.round(1 / b), 'blue')}`
+        ? `${miseEnEvidence(texNombre(b, 2), bleuMathalea)}\\times ${texNombre(y * pu, 2)}`
+        : `${texNombre(y * pu, 2)}\\div ${miseEnEvidence(Math.round(1 / b), bleuMathalea)}`
     }`} = ${miseEnEvidence(texNombre((x + b * y) * pu, 2))}-${texNombre(x * pu, 2)} = ${texNombre(pNew, 2)}$.`
   } else {
     // ici a est différent de 1 et -1
     if (b === 1) {
-      return `Comme $${texNombre(nbNew, 2)} = ${a % 1 === 0 ? `${miseEnEvidence(texNombre(a, 2), 'blue')}\\times ${texNombre(x, 2)}` : `${texNombre(x, 2)}\\div ${miseEnEvidence(Math.round(1 / a), 'blue')}`} + ${miseEnEvidence(texNombre(y, 2), 'green')}$, on a $${a % 1 === 0 ? `${miseEnEvidence(texNombre(a, 2), 'blue')}\\times ${texNombre(x * pu, 2)}` : `${texNombre(x * pu, 2)}\\div ${miseEnEvidence(Math.round(1 / a), 'blue')}`}  + ${miseEnEvidence(texNombre(y * pu, 2), 'green')} = ${miseEnEvidence(texNombre(pNew, 2))}$.`
+      return `Comme $${texNombre(nbNew, 2)} = ${a % 1 === 0 ? `${miseEnEvidence(texNombre(a, 2), bleuMathalea)}\\times ${texNombre(x, 2)}` : `${texNombre(x, 2)}\\div ${miseEnEvidence(Math.round(1 / a), bleuMathalea)}`} + ${miseEnEvidence(texNombre(y, 2), 'green')}$, on a $${a % 1 === 0 ? `${miseEnEvidence(texNombre(a, 2), bleuMathalea)}\\times ${texNombre(x * pu, 2)}` : `${texNombre(x * pu, 2)}\\div ${miseEnEvidence(Math.round(1 / a), bleuMathalea)}`}  + ${miseEnEvidence(texNombre(y * pu, 2), 'green')} = ${miseEnEvidence(texNombre(pNew, 2))}$.`
     }
     if (b === -1) {
-      return `Comme $${texNombre(nbNew, 2)} = ${a % 1 === 0 ? `${miseEnEvidence(texNombre(a, 2), 'blue')}\\times ${texNombre(x, 2)}` : `${texNombre(x, 2)}\\div ${miseEnEvidence(Math.round(1 / a), 'blue')}`} - ${miseEnEvidence(texNombre(y, 2), 'green')}$, on a $${a % 1 === 0 ? `${miseEnEvidence(texNombre(a, 2), 'blue')}\\times ${texNombre(x * pu, 2)}` : `${texNombre(x * pu, 2)}\\div ${miseEnEvidence(Math.round(1 / a), 'blue')}`} - ${miseEnEvidence(texNombre(y * pu, 2), 'green')} = ${miseEnEvidence(texNombre(pNew, 2))}$.`
+      return `Comme $${texNombre(nbNew, 2)} = ${a % 1 === 0 ? `${miseEnEvidence(texNombre(a, 2), bleuMathalea)}\\times ${texNombre(x, 2)}` : `${texNombre(x, 2)}\\div ${miseEnEvidence(Math.round(1 / a), bleuMathalea)}`} - ${miseEnEvidence(texNombre(y, 2), 'green')}$, on a $${a % 1 === 0 ? `${miseEnEvidence(texNombre(a, 2), bleuMathalea)}\\times ${texNombre(x * pu, 2)}` : `${texNombre(x * pu, 2)}\\div ${miseEnEvidence(Math.round(1 / a), bleuMathalea)}`} - ${miseEnEvidence(texNombre(y * pu, 2), 'green')} = ${miseEnEvidence(texNombre(pNew, 2))}$.`
     }
     // et b différent de 1 et -1
-    return `Comme $${texNombre(nbNew, 2)} = ${a % 1 === 0 ? `${miseEnEvidence(texNombre(a, 2), 'blue')}\\times ${texNombre(x, 2)}` : `${texNombre(x, 2)}\\div ${miseEnEvidence(Math.round(1 / a), 'blue')}`} + ${
+    return `Comme $${texNombre(nbNew, 2)} = ${a % 1 === 0 ? `${miseEnEvidence(texNombre(a, 2), bleuMathalea)}\\times ${texNombre(x, 2)}` : `${texNombre(x, 2)}\\div ${miseEnEvidence(Math.round(1 / a), bleuMathalea)}`} + ${
       b % 1 === 0
         ? `${miseEnEvidence(texNombre(b, 2), 'green')}\\times ${texNombre(y, 2)}`
         : `${texNombre(y, 2)}\\div ${miseEnEvidence(Math.round(1 / b), 'green')}`
-    }, on a $${a % 1 === 0 ? `${miseEnEvidence(texNombre(a, 2), 'blue')}\\times ${texNombre(x * pu, 2)}` : `${texNombre(x * pu, 2)}\\div ${miseEnEvidence(Math.round(1 / a), 'blue')}`}
+    }, on a $${a % 1 === 0 ? `${miseEnEvidence(texNombre(a, 2), bleuMathalea)}\\times ${texNombre(x * pu, 2)}` : `${texNombre(x * pu, 2)}\\div ${miseEnEvidence(Math.round(1 / a), bleuMathalea)}`}
       + ${
         b % 1 === 0
           ? `${miseEnEvidence(texNombre(b, 2), 'green')}\\times ${texNombre(y * pu, 2)}`

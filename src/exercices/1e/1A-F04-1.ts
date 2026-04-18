@@ -12,6 +12,7 @@ import { randint } from '../../modules/outils'
 import { ecritureParentheseSiNegatif } from '../../lib/outils/ecritures'
 import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import ExerciceQcmA from '../ExerciceQcmA'
+import { bleuMathalea } from '../../lib/colors'
 export const dateDePublication = '30/07/2025'
 export const uuid = '3d696'
 
@@ -74,7 +75,7 @@ export default class AutoF4 extends ExerciceQcmA {
       epaisseur: 1.5,
       ajouteNoeuds: true,
       optionsNoeuds: { color: 'black', taille: 1.5, style: 'x', epaisseur: 2 },
-      color: 'blue',
+      color: bleuMathalea,
     })
 
     const objetsEnonce = [repere1, courbe1]
@@ -188,7 +189,7 @@ export default class AutoF4 extends ExerciceQcmA {
       epaisseur: 1.5,
       ajouteNoeuds: true,
       optionsNoeuds: { color: 'black', taille: 1.5, style: 'x', epaisseur: 2 },
-      color: 'blue',
+      color: bleuMathalea,
     })
     const objetsEnonce = [repere1, courbe1]
     const nbAntecedentsEntiersMaximum = theSpline.nombreAntecedentsMaximum(

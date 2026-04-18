@@ -349,7 +349,7 @@ export default class ReconnaitreDesSolides extends Exercice {
               vecteur3d(0, 1, 0),
             )
             /* c1 = demicercle3d(point3d(0, 0, 0), point3d(0, -1, 0), vecteur3d(1, 0, 0), 'caché', 'red', 0)
-                        c2 = demicercle3d(point3d(0, 0, 0), point3d(0, -1, 0), vecteur3d(1, 0, 0), 'visible', 'blue', 0) */
+                        c2 = demicercle3d(point3d(0, 0, 0), point3d(0, -1, 0), vecteur3d(1, 0, 0), 'visible', bleuMathalea, 0) */
             const c1 = arc3d(
               point3d(0, 0, 1),
               vecteur3d(1, 0, 0),

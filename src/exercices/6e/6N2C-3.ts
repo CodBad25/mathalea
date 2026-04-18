@@ -9,6 +9,7 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 
 export const amcReady = true
 export const amcType = 'qcmMono'
@@ -102,7 +103,7 @@ export default class DiviserPar101001000 extends Exercice {
           texte = `$${texNombre2(nombre)}\\div ${texNombre2(10 ** -coef)}=\\ldots\\ldots\\ldots\\ldots$`
           texteCorr = `Quand on divise par $${texNombre2(10 ** -coef)}$, chaque chiffre prend une valeur $${texNombre2(10 ** -coef)}$ fois plus petite.<br>`
           texteCorr += `Le chiffre des unités se positionne donc dans les ${rang[3 + coef]} :<br>`
-          texteCorr += `$${texNombre2(nombre)}\\div ${texNombre2(10 ** -coef)}=${miseEnEvidence(texNombre2(resultat), 'blue')}$`
+          texteCorr += `$${texNombre2(nombre)}\\div ${texNombre2(10 ** -coef)}=${miseEnEvidence(texNombre2(resultat), bleuMathalea)}$`
 
           this.autoCorrection[i] = {}
           this.autoCorrection[i].enonce = `${texte}\n`
@@ -134,7 +135,7 @@ export default class DiviserPar101001000 extends Exercice {
           texte = `$${texNombre2(nombre)}\\div \\ldots\\ldots\\ldots=${texNombre2(resultat)}$`
           texteCorr = `Le chiffre des unités de $${texNombre2(nombre)}$ se positionne sur le chiffre des ${rang[3 + coef]} dans $${texNombre2(resultat)}$.<br>`
           texteCorr += `Chaque chiffre prend une valeur $${texNombre2(10 ** -coef)}$ fois plus petite, donc on divise par $${texNombre2(10 ** -coef)}$.<br>`
-          texteCorr += `$${texNombre2(nombre)}\\div ${miseEnEvidence(texNombre2(10 ** -coef), 'blue')}=${texNombre2(resultat)}$`
+          texteCorr += `$${texNombre2(nombre)}\\div ${miseEnEvidence(texNombre2(10 ** -coef), bleuMathalea)}=${texNombre2(resultat)}$`
           this.autoCorrection[i] = {}
           this.autoCorrection[i].enonce = `${texte}\n`
           this.autoCorrection[i].propositions = [
@@ -165,7 +166,7 @@ export default class DiviserPar101001000 extends Exercice {
           texte = `$\\ldots\\ldots\\ldots\\ldots\\div ${texNombre2(10 ** -coef)}=${texNombre2(resultat)}$`
           texteCorr = `Quand on divise par $${texNombre2(10 ** -coef)}$, chaque chiffre prend une valeur $${texNombre2(10 ** -coef)}$ fois plus petite.<br>`
           texteCorr += `Le chiffre des unités se positionne donc dans les ${rang[3 + coef]} :<br>`
-          texteCorr += `$${miseEnEvidence(texNombre2(nombre), 'blue')}\\div ${texNombre2(10 ** -coef)}=${texNombre2(resultat)}$`
+          texteCorr += `$${miseEnEvidence(texNombre2(nombre), bleuMathalea)}\\div ${texNombre2(10 ** -coef)}=${texNombre2(resultat)}$`
           this.autoCorrection[i] = {}
           this.autoCorrection[i].enonce = `${texte}\n`
           this.autoCorrection[i].propositions = [

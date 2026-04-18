@@ -20,6 +20,7 @@ import { texNombre } from '../../lib/outils/texNombre'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const titre = "Utiliser la formule d'Al-Kashi"
@@ -135,7 +136,7 @@ export default class ProduitScalaireAlKashi extends Exercice {
       const nommeABCcours = nommePolygone(ABC, 'ABC', 0.4)
       const codeAngleA = codageAngle(B, A, C, 1, '', 'red', 1, 1, 'red')
       const codeAngleB = codageAngle(A, B, C, 1, '', 'green', 1, 1, 'green')
-      const codeAngleC = codageAngle(B, C, A, 1, '', 'blue', 1, 1, 'blue')
+      const codeAngleC = codageAngle(B, C, A, 1, '', bleuMathalea, 1, 1, bleuMathalea)
       objetsC.push(
         ABC,
         nommeABCcours,

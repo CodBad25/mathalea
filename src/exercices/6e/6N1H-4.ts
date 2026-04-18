@@ -290,7 +290,7 @@ function faitLesDroites(
       pixelsParCm: 40,
       scale: 0.9,
     },
-    // latex2d('A', x1B * 5, 0.5, { color: 'blue' }),
+    // latex2d('A', x1B * 5, 0.5, { color: bleuMathalea }),
     droitesSegments,
   )
 }

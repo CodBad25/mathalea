@@ -7,6 +7,7 @@ import { context } from '../../modules/context'
 import { runAStar } from '../../modules/findPath'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 
 export const titre = "Programmer le déplacement d'un bus"
 export const dateDePublication = '15/07/2025'
@@ -534,7 +535,7 @@ ou
         if (x === start[0] && y === start[1]) {
           ellipse.setAttribute('fill', 'green')
         } else if (x === end[0] && y === end[1]) {
-          ellipse.setAttribute('fill', 'blue')
+          ellipse.setAttribute('fill', bleuMathalea)
         } else {
           ellipse.setAttribute('fill', '#ccc')
         }

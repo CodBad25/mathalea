@@ -29,6 +29,7 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 
 export const titre =
   "Agrandir ou réduire des figures, d'après une situation de proportionnalité"
@@ -195,7 +196,7 @@ class AgrandirReduireFigure extends Exercice {
                 afficheLongueurSegment(
                   sensRotation < 0 ? A : B,
                   sensRotation < 0 ? B : A,
-                  'blue',
+                  bleuMathalea,
                   0.5,
                   '',
                   true,
@@ -295,7 +296,7 @@ class AgrandirReduireFigure extends Exercice {
               texteCorr += '<br>En voici, une réalisation ci-dessous.'
               objets.push(
                 polygoneCorr,
-                codageSegments('|||', 'blue', polygoneCorr.listePoints),
+                codageSegments('|||', bleuMathalea, polygoneCorr.listePoints),
                 afficheLongueurSegment(
                   sensRotation < 0 ? A : BCorr,
                   sensRotation < 0 ? BCorr : A,
@@ -410,7 +411,7 @@ class AgrandirReduireFigure extends Exercice {
               objets.push(
                 polygoneInit,
                 codageSegments('||', 'red', polygoneInit.listePoints),
-                afficheLongueurSegment(A, B, 'blue', 0.5, '', true),
+                afficheLongueurSegment(A, B, bleuMathalea, 0.5, '', true),
                 nommePolygone(polygoneInit, nom),
               )
               objets.push(
@@ -512,7 +513,7 @@ class AgrandirReduireFigure extends Exercice {
               texteCorr += '<br>En voici, une réalisation ci-dessous.'
               objets.push(
                 polygoneCorr,
-                codageSegments('|||', 'blue', polygoneCorr.listePoints),
+                codageSegments('|||', bleuMathalea, polygoneCorr.listePoints),
                 afficheLongueurSegment(A, BCorr, 'red', 0.5, '', true),
                 nommePolygone(polygoneCorr, nomCorr),
               )
@@ -602,7 +603,7 @@ class AgrandirReduireFigure extends Exercice {
                 afficheLongueurSegment(
                   angleOriente(C, A, B) > 0 ? A : B,
                   angleOriente(C, A, B) > 0 ? B : A,
-                  'blue',
+                  bleuMathalea,
                   0.5,
                   '',
                   true,
@@ -612,7 +613,7 @@ class AgrandirReduireFigure extends Exercice {
                 afficheLongueurSegment(
                   angleOriente(A, B, C) > 0 ? B : C,
                   angleOriente(A, B, C) > 0 ? C : B,
-                  'blue',
+                  bleuMathalea,
                   0.5,
                   '',
                   true,
@@ -622,7 +623,7 @@ class AgrandirReduireFigure extends Exercice {
                 afficheLongueurSegment(
                   angleOriente(B, C, A) > 0 ? C : A,
                   angleOriente(B, C, A) > 0 ? A : C,
-                  'blue',
+                  bleuMathalea,
                   0.5,
                   '',
                   true,
@@ -982,7 +983,7 @@ class AgrandirReduireFigure extends Exercice {
                 afficheLongueurSegment(
                   angleOriente(C, A, B) > 0 ? A : B,
                   angleOriente(C, A, B) > 0 ? B : A,
-                  'blue',
+                  bleuMathalea,
                   0.5,
                   '',
                   true,
@@ -992,7 +993,7 @@ class AgrandirReduireFigure extends Exercice {
                 afficheLongueurSegment(
                   angleOriente(A, B, C) > 0 ? B : C,
                   angleOriente(A, B, C) > 0 ? C : B,
-                  'blue',
+                  bleuMathalea,
                   0.5,
                   '',
                   true,
@@ -1002,7 +1003,7 @@ class AgrandirReduireFigure extends Exercice {
                 afficheLongueurSegment(
                   angleOriente(B, C, A) > 0 ? C : A,
                   angleOriente(B, C, A) > 0 ? A : C,
-                  'blue',
+                  bleuMathalea,
                   0.5,
                   '',
                   true,
@@ -1310,7 +1311,7 @@ class AgrandirReduireFigure extends Exercice {
                 afficheLongueurSegment(
                   angleOriente(B, C, D) > 0 ? C : D,
                   angleOriente(B, C, D) > 0 ? D : C,
-                  'blue',
+                  bleuMathalea,
                   0.5,
                   '',
                   true,
@@ -1320,7 +1321,7 @@ class AgrandirReduireFigure extends Exercice {
                 afficheLongueurSegment(
                   angleOriente(C, D, A) > 0 ? D : A,
                   angleOriente(C, D, A) > 0 ? A : D,
-                  'blue',
+                  bleuMathalea,
                   0.5,
                   '',
                   true,
@@ -1470,8 +1471,8 @@ class AgrandirReduireFigure extends Exercice {
               texteCorr += `<br>Le rectangle issu d'un${texteAgrandissementOuReduction[0][choixAgrandissementOuReduction < 4 ? 0 : 1]} du rectangle ${nom} de coefficient $${texNombre(coefAgrandissement[choixAgrandissementOuReduction])}$ possède donc des côtés de longueur respective $${miseEnEvidence(texNombre(reponse))}$ et $${miseEnEvidence(texNombre(reponse1))}$.`
               texteCorr += '<br>En voici, une réalisation ci-dessous.'
               objets.push(polygoneCorr, nommePolygone(polygoneCorr, nomCorr))
-              objets.push(codageSegments('|||', 'blue', A, BCorr, CCorr, DCorr))
-              objets.push(codageSegments('XX', 'blue', BCorr, CCorr, DCorr, A))
+              objets.push(codageSegments('|||', bleuMathalea, A, BCorr, CCorr, DCorr))
+              objets.push(codageSegments('XX', bleuMathalea, BCorr, CCorr, DCorr, A))
               objets.push(
                 afficheLongueurSegment(
                   angleOriente(CCorr, A, BCorr) > 0 ? A : BCorr,
@@ -1630,7 +1631,7 @@ class AgrandirReduireFigure extends Exercice {
                 afficheLongueurSegment(
                   angleOriente(B, C, D) > 0 ? C : D,
                   angleOriente(B, C, D) > 0 ? D : C,
-                  'blue',
+                  bleuMathalea,
                   0.5,
                   '',
                   true,
@@ -1640,7 +1641,7 @@ class AgrandirReduireFigure extends Exercice {
                 afficheLongueurSegment(
                   angleOriente(C, D, A) > 0 ? D : A,
                   angleOriente(C, D, A) > 0 ? A : D,
-                  'blue',
+                  bleuMathalea,
                   0.5,
                   '',
                   true,
@@ -1748,8 +1749,8 @@ class AgrandirReduireFigure extends Exercice {
               texteCorr += `<br>Le rectangle issu d'un${texteAgrandissementOuReduction[0][choixAgrandissementOuReduction < 4 ? 0 : 1]} du rectangle ${nom} de coefficient $${texNombre(coefAgrandissement[choixAgrandissementOuReduction])}$ possède donc des côtés de longueur respective $${miseEnEvidence(texNombre(reponse))}$ et $${miseEnEvidence(texNombre(reponse1))}$.`
               texteCorr += '<br>En voici, une réalisation ci-dessous.'
               objets.push(polygoneCorr, nommePolygone(polygoneCorr, nomCorr))
-              objets.push(codageSegments('|||', 'blue', A, BCorr, CCorr, DCorr))
-              objets.push(codageSegments('XX', 'blue', BCorr, CCorr, DCorr, A))
+              objets.push(codageSegments('|||', bleuMathalea, A, BCorr, CCorr, DCorr))
+              objets.push(codageSegments('XX', bleuMathalea, BCorr, CCorr, DCorr, A))
               objets.push(
                 afficheLongueurSegment(
                   angleOriente(CCorr, A, BCorr) > 0 ? A : BCorr,

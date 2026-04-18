@@ -17,6 +17,7 @@ import { texNombre } from '../../lib/outils/texNombre'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 
 export const titre = 'Déterminer une équation de parabole'
 
@@ -108,8 +109,8 @@ ${f(x1) + f(-x1) - 2 * f(0)}=${2 * x1 ** 2}a \\\\
 ${f(x1) - f(-x1)}=${2 * x1}b
  \\end{cases}$<br>`
           }
-          texteCorr += `La résolution de ce système donne $a=${miseEnEvidence(texNombre(a), 'blue')}$ et $b=${miseEnEvidence(texNombre(b), 'green')}$.<br>`
-          texteCorr += `D'où $${fName[i]}(x)=${a !== 1 ? miseEnEvidence(String(rienSi1(a)), 'blue') : ''}x^2 ${miseEnEvidence(ecritureAlgebriqueSauf1(b), 'green')}x  ${miseEnEvidence(ecritureAlgebrique(c), 'red')}$<br>`
+          texteCorr += `La résolution de ce système donne $a=${miseEnEvidence(texNombre(a), bleuMathalea)}$ et $b=${miseEnEvidence(texNombre(b), 'green')}$.<br>`
+          texteCorr += `D'où $${fName[i]}(x)=${a !== 1 ? miseEnEvidence(String(rienSi1(a)), bleuMathalea) : ''}x^2 ${miseEnEvidence(ecritureAlgebriqueSauf1(b), 'green')}x  ${miseEnEvidence(ecritureAlgebrique(c), 'red')}$<br>`
 
           break
         case 2: // Passant par le sommet (x1,y1) et par le point (x2,y2)
@@ -139,10 +140,10 @@ ${f(x1) - f(-x1)}=${2 * x1}b
             texteCorr += `Développons la forme canonique : $${fName[i]}(x)=
   a(x${ecritureAlgebrique(-x1)})^2${ecritureAlgebrique(f(x1))}=
   a(x^2${miseEnEvidence(ecritureAlgebrique(-2 * x1), 'green')}x+${miseEnEvidence(texNombre(x1 ** 2), 'red')})${miseEnEvidence(ecritureAlgebrique(f(x1)), 'red')}
-  =${miseEnEvidence('a', 'blue')}x^2${miseEnEvidence(ecritureAlgebrique(-2 * x1) + 'a', 'green')}x${miseEnEvidence(ecritureAlgebriqueSauf1(x1 ** 2) + 'a' + ecritureAlgebrique(f(x1)), 'red')}$.<br>`
+  =${miseEnEvidence('a', bleuMathalea)}x^2${miseEnEvidence(ecritureAlgebrique(-2 * x1) + 'a', 'green')}x${miseEnEvidence(ecritureAlgebriqueSauf1(x1 ** 2) + 'a' + ecritureAlgebrique(f(x1)), 'red')}$.<br>`
           }
-          texteCorr += `En remplaçant $a$ par sa valeur $${a}$ dans l'expression canonique développée $${miseEnEvidence('a', 'blue')}x^2${miseEnEvidence(ecritureAlgebrique(-2 * x1) + 'a', 'green')}x${miseEnEvidence(ecritureAlgebriqueSauf1(x1 ** 2) + 'a' + ecritureAlgebrique(f(x1)), 'red')}$ on obtient :<br>`
-          texteCorr += `$${fName[i]}(x)=${a !== 1 ? miseEnEvidence(String(rienSi1(a)), 'blue') : ''}x^2${miseEnEvidence(ecritureAlgebriqueSauf1(b), 'green')}x${miseEnEvidence(ecritureAlgebrique(c), 'red')}$`
+          texteCorr += `En remplaçant $a$ par sa valeur $${a}$ dans l'expression canonique développée $${miseEnEvidence('a', bleuMathalea)}x^2${miseEnEvidence(ecritureAlgebrique(-2 * x1) + 'a', 'green')}x${miseEnEvidence(ecritureAlgebriqueSauf1(x1 ** 2) + 'a' + ecritureAlgebrique(f(x1)), 'red')}$ on obtient :<br>`
+          texteCorr += `$${fName[i]}(x)=${a !== 1 ? miseEnEvidence(String(rienSi1(a)), bleuMathalea) : ''}x^2${miseEnEvidence(ecritureAlgebriqueSauf1(b), 'green')}x${miseEnEvidence(ecritureAlgebrique(c), 'red')}$`
           break
         case 3: // on a deux racines x1 et x2 et un troisième point (x3;f(x3))
         default:
@@ -205,7 +206,7 @@ ${f(x1) - f(-x1)}=${2 * x1}b
           repere: r,
           xMin: -10,
           xMax: 10,
-          color: 'blue',
+          color: bleuMathalea,
           epaisseur: 1.5,
         }),
         r,

@@ -24,6 +24,7 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const titre = 'Calculer un  produit scalaire avec des coordonnées'
@@ -231,9 +232,9 @@ export default class ProduitScalaireCoordonnees extends Exercice {
             const xv = randint(-2, 2)
             const yv = randint(-5, 5, 0)
             const v = vecteur(xv, yv)
-            const nomvu = representantNomme(u, A, 'u', 1.5, 'blue')
+            const nomvu = representantNomme(u, A, 'u', 1.5, bleuMathalea)
             const vecu = representant(u, A)
-            vecu.color = colorToLatexOrHTML('blue')
+            vecu.color = colorToLatexOrHTML(bleuMathalea)
             vecu.epaisseur = 2
             const nomvv = representantNomme(v, B, 'v', 1.5, 'red')
             const vecv = representant(v, B)

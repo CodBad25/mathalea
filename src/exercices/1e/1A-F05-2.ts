@@ -16,6 +16,7 @@ import type FractionEtendue from '../../modules/FractionEtendue'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { randint } from '../../modules/outils'
 import ExerciceQcmA from '../ExerciceQcmA'
+import { bleuMathalea } from '../../lib/colors'
 /**
  * @author Gilles Mora
  *
@@ -70,7 +71,7 @@ export const dateDePublication = '02/02/2026'
     const courbe1 = maSpline.courbe({
       epaisseur: 1.5,
       ajouteNoeuds: false,
-      color: 'blue',
+      color: bleuMathalea,
     })
 
     const objetsEnonce = [repere1, courbe1]
@@ -208,7 +209,7 @@ ${tableauSignes1}`
     const courbe1 = maSpline.courbe({
       epaisseur: 1.5,
       ajouteNoeuds: false,
-      color: 'blue',
+      color: bleuMathalea,
     })
 
     const objetsEnonce = [repere1, courbe1]

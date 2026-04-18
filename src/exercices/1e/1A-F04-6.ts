@@ -7,6 +7,7 @@ import { deuxColonnes } from '../../lib/format/miseEnPage'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { randint } from '../../modules/outils'
 import ExerciceQcmA from '../ExerciceQcmA'
+import { bleuMathalea } from '../../lib/colors'
 export const dateDePublication = '04/10/2025'
 export const uuid = '90460'
 /**
@@ -43,7 +44,7 @@ export default class auto1AF4e extends ExerciceQcmA {
     const g = function (x: number) {
       return m * x + p
     }
-    const C = latex2d('C_f', 6.5, 9, { color: 'blue' })
+    const C = latex2d('C_f', 6.5, 9, { color: bleuMathalea })
     const D = latex2d('C_g', 8, g(4) - 1, { color: 'red' })
     const r = repere({
       yUnite: 1,
@@ -101,7 +102,7 @@ export default class auto1AF4e extends ExerciceQcmA {
           repere: r,
           xMin: -5,
           xMax: 5,
-          color: 'blue',
+          color: bleuMathalea,
           epaisseur: 2,
         }),
         courbe(g, { repere: r, xMin: -4, xMax: 4, color: 'red', epaisseur: 2 }),
@@ -146,7 +147,7 @@ export default class auto1AF4e extends ExerciceQcmA {
           return m * x + p
         }
 
-        const C = latex2d('C_f', 6.5, 9, { color: 'blue' })
+        const C = latex2d('C_f', 6.5, 9, { color: bleuMathalea })
         const D =
           g(4) < -4
             ? latex2d('C_g', -8, g(-4) - 1, { color: 'red' })
@@ -234,7 +235,7 @@ export default class auto1AF4e extends ExerciceQcmA {
               repere: r,
               xMin: -5,
               xMax: 5,
-              color: 'blue',
+              color: bleuMathalea,
               epaisseur: 2,
             }),
             courbe(g, {
@@ -261,7 +262,7 @@ export default class auto1AF4e extends ExerciceQcmA {
           return m * x + p
         }
 
-        const C = latex2d('C_f', 8, -8, { color: 'blue' })
+        const C = latex2d('C_f', 8, -8, { color: bleuMathalea })
         const D =
           g(3) > 4
             ? latex2d('C_g', -8, g(-4) - 1, { color: 'red' })
@@ -348,7 +349,7 @@ export default class auto1AF4e extends ExerciceQcmA {
               repere: r,
               xMin: -5,
               xMax: 5,
-              color: 'blue',
+              color: bleuMathalea,
               epaisseur: 2,
             }),
             courbe(g, {

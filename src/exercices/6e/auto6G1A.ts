@@ -21,6 +21,7 @@ import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 
 export const amcReady = true
 export const amcType = 'AMCHybride'
@@ -83,7 +84,7 @@ export default class constructionElementaire extends Exercice {
         lettreDepuisChiffre(indLettre + 1),
         'above right',
       )
-      const d = droite(A, B, '', 'blue')
+      const d = droite(A, B, '', bleuMathalea)
       const C = point(
         randint(2, 4, [A.x]),
         randint(3, 6, [A.y]),
@@ -151,7 +152,7 @@ export default class constructionElementaire extends Exercice {
       const Ymax = Math.ceil(Math.max(A.y, B.y, C.y, D.y, E.y, F.y) + 1)
       anim.recadre(Xmin - 3, Ymax)
       anim.pointsCreer(A, B, C, D)
-      anim.regleDroite(A, B, { couleur: 'blue' })
+      anim.regleDroite(A, B, { couleur: bleuMathalea })
       anim.regleSegment(A, C, { couleur: 'red' })
       anim.regleDemiDroiteOriginePoint(C, D, { couleur: 'green' })
       anim.regleMasquer({})
@@ -380,7 +381,7 @@ export default class constructionElementaire extends Exercice {
     const { isValid, message } = checkLineFromLabels({
       figure,
       nameLine: [`(${this.Anom}${this.Bnom})`, `(${this.Bnom}${this.Anom})`],
-      color: 'blue',
+      color: bleuMathalea,
     })
     resultat.push(isValid ? 'OK' : 'KO')
     if (message !== '') {

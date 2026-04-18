@@ -8,6 +8,7 @@ import { Spline } from '../../../lib/mathFonctions/Spline'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import ExerciceQcm from '../../ExerciceQcm'
+import { bleuMathalea } from '../../../lib/colors'
 
 export const uuid = '3ca11'
 export const refs = {
@@ -90,7 +91,7 @@ export default class PolynesieJuin2024Ex2Q2 extends ExerciceQcm {
       hachures: -1,
     })
     const polygone1 = polygone(...nuage)
-    const polygone2 = polygone(nuage2, 'blue')
+    const polygone2 = polygone(nuage2, bleuMathalea)
     polygone2.epaisseur = 2
     polygone1.hachures = 'north east lines'
     polygone1.couleurDesHachures = colorToLatexOrHTML('black')

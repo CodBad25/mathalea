@@ -4,6 +4,7 @@ import { texteParPosition } from '../../../lib/2d/textes'
 import { texteEnCouleurEtGras } from '../../../lib/outils/embellissements'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import ExerciceQcm from '../../ExerciceQcm'
+import { bleuMathalea } from '../../../lib/colors'
 
 export const uuid = 'fa682'
 export const refs = {
@@ -72,7 +73,7 @@ export default class SujetZero2024Ex5Q5 extends ExerciceQcm {
           repere: r,
           xMin: -0.3,
           xMax: 11,
-          color: 'blue',
+          color: bleuMathalea,
           epaisseur: 2,
         }),
         r,
@@ -80,7 +81,7 @@ export default class SujetZero2024Ex5Q5 extends ExerciceQcm {
         texteParPosition('2', 2, -0.4, 0, 'black', 1),
         texteParPosition('0', 0.4, -0.4, 0, 'black', 1),
         texteParPosition('1', 0.4, 1, 0, 'black', 1),
-        texteParPosition("$\\mathcal{C}_{f'}$", 0.8, -3.5, 0, 'blue', 1),
+        texteParPosition("$\\mathcal{C}_{f'}$", 0.8, -3.5, 0, bleuMathalea, 1),
       ],
     )
     this.reponses = [

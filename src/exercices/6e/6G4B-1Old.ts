@@ -23,6 +23,7 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 
 export const titre = 'Mesurer un angle avec rapporteur intégré'
 export const interactifType = 'mathLive'
@@ -275,13 +276,13 @@ export default class MesurerUnAngleAvecRapporteurOld extends Exercice {
           posD,
         )
         const AD = segment(A, D1)
-        const ADCorr = segment(A, D1, 'blue')
+        const ADCorr = segment(A, D1, bleuMathalea)
         ADCorr.epaisseur = 2
         texteAMC = `${numAlpha(1)} Quelle est la mesure, en degrés, de l'angle $\\widehat{${lettreDepuisChiffre(numC) + lettreDepuisChiffre(numA) + lettreDepuisChiffre(numD)}}$ ?`
 
         texte += '<br>' + texteAMC
         texteCorr += `<br>${numAlpha(1)} La demi-droite (${lettreDepuisChiffre(numC) + lettreDepuisChiffre(numA)}] passe par la graduation ${texteEnCouleurEtGras(Math.abs(angC), 'red')} du rapporteur. `
-        texteCorr += `La demi-droite (${lettreDepuisChiffre(numD) + lettreDepuisChiffre(numA)}] passe par la graduation ${texteEnCouleurEtGras(Math.abs(angC + angD), 'blue')} du rapporteur. `
+        texteCorr += `La demi-droite (${lettreDepuisChiffre(numD) + lettreDepuisChiffre(numA)}] passe par la graduation ${texteEnCouleurEtGras(Math.abs(angC + angD), bleuMathalea)} du rapporteur. `
         texteCorr += `Et ${abs(angC + angD)}-${abs(angC)}=${texteGras(Math.abs(angD))}.<br>Donc on en déduit que l'angle $\\widehat{${lettreDepuisChiffre(numC) + lettreDepuisChiffre(numA) + lettreDepuisChiffre(numD)}}$ mesure ${texteEnCouleurEtGras(abs(angD) + '°')}.<br>`
         if (this.interactif) {
           texte += ajouteChampTexteMathLive(
@@ -362,7 +363,7 @@ export default class MesurerUnAngleAvecRapporteurOld extends Exercice {
           texteAMC = `${numAlpha(2)} Quelle est la mesure, en degrés, de l'angle $\\widehat{${lettreDepuisChiffre(numD) + lettreDepuisChiffre(numA) + lettreDepuisChiffre(numE)}}$ ?`
 
           texte += '<br>' + texteAMC
-          texteCorr += `<br>${numAlpha(2)} La demi-droite (${lettreDepuisChiffre(numD) + lettreDepuisChiffre(numA)}] passe par la graduation ${texteEnCouleurEtGras(Math.abs(angC + angD), 'blue')} du rapporteur. `
+          texteCorr += `<br>${numAlpha(2)} La demi-droite (${lettreDepuisChiffre(numD) + lettreDepuisChiffre(numA)}] passe par la graduation ${texteEnCouleurEtGras(Math.abs(angC + angD), bleuMathalea)} du rapporteur. `
           texteCorr += `La demi-droite (${lettreDepuisChiffre(numE) + lettreDepuisChiffre(numA)}] passe par la graduation ${texteEnCouleurEtGras(Math.abs(angC + angD + angE), 'magenta')} du rapporteur. `
           texteCorr += `Et ${abs(angC + angD + angE)}-${abs(angC + angD)}=${texteGras(Math.abs(angE))}.<br>Donc on en déduit que l'angle $\\widehat{${lettreDepuisChiffre(numD) + lettreDepuisChiffre(numA) + lettreDepuisChiffre(numE)}}$ mesure ${texteEnCouleurEtGras(abs(angE) + '°')}.<br>`
           if (this.interactif) {

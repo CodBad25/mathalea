@@ -13,6 +13,7 @@ import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 
 export const dateDeModifImportante = '27/03/2024'
 export const titre =
@@ -160,7 +161,7 @@ export default class CalculerUnPourcentage extends Exercice {
           'black',
           2,
           1,
-          'blue',
+          bleuMathalea,
           0.4,
         ),
         texteParPoint(
