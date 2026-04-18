@@ -1,9 +1,8 @@
 import { traceBarre } from '../../lib/2d/diagrammes'
 import { repere } from '../../lib/2d/reperes'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { toutAUnPoint } from '../../lib/interactif/mathLive'
-import { addMultiMathfield } from '../../lib/interactif/MultiMathfield/MultiMathfield'
+import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
 import { texFractionSigne } from '../../lib/outils/deprecatedFractions'
 import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
@@ -21,21 +20,21 @@ import Exercice from '../Exercice'
 
 export const titre = 'Calculer des effectifs et des fréquences'
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'mathLive'
 export const amcReady = true
 export const amcType = 'AMCHybride'
 export const dateDePublication = '07/02/2021' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
-export const dateDeModifImportante = '18/04/2026' // passage en MultiMathfield
+export const dateDeModifImportante = '30/01/2024'
 
 /**
  * Calculer des effectifs et des fréquences.
  * @author Erwan DUPLESSY
  */
 
-export const uuid = 'f4b96'
+export const uuid = 'f4b95'
 
 export const refs = {
-  'fr-fr': ['3S12', '2S20-1', 'BP2AutoA5', 'BP2SP2'],
+  'fr-fr': [],
   'fr-ch': [],
 }
 export default class CalculEffectifFrequence extends Exercice {
@@ -191,33 +190,44 @@ export default class CalculEffectifFrequence extends Exercice {
           lstElementGraph,
         )
 
+      let texte0, texte1, texte2, texte3
       const texteAMC = texte
-      texte += addMultiMathfield(this, ee, {
-        dataTemplate: `a) Quel est l'effectif des ${lstAnimauxExo[0]} ? %{champ1}
-        b) Calculer la fréquence des ${lstAnimauxExo[1]}. Donner le résultat sous la forme d'un pourcentage arrondi, si besoin, à 0,1${symbolePourCent} près. %{champ2}
-        c) Calculer l'effectif des quadrupèdes. %{champ3}
-        d) Calculer la fréquence des oiseaux. Donner le résultat sous la forme d'un pourcentage arrondi, si besoin, à 0,1${symbolePourCent} près. %{champ4}`,
-        dataOptions: {
-          champ1: {
-            keyboard: KeyboardType.clavierNumbers,
-            ldots: false,
-          },
-          champ2: {
-            keyboard: KeyboardType.clavierNumbers,
-            texteApres: '$\\%$',
-            ldots: false,
-          },
-          champ3: {
-            keyboard: KeyboardType.clavierNumbers,
-            ldots: false,
-          },
-          champ4: {
-            keyboard: KeyboardType.clavierNumbers,
-            texteApres: '$\\%$',
-            ldots: false,
-          },
-        },
-      })
+      texte0 =
+        numAlpha(0) + " Quel est l'effectif des " + lstAnimauxExo[0] + ' ?'
+      texte0 +=
+        ajouteChampTexteMathLive(this, 4 * ee, KeyboardType.clavierNumbers) +
+        '<br>'
+      texte1 =
+        numAlpha(1) +
+        ' Calculer la fréquence des ' +
+        lstAnimauxExo[1] +
+        `. Donner le résultat sous la forme d'un pourcentage arrondi, si besoin, à 0,1${symbolePourCent} près.`
+      texte1 +=
+        ajouteChampTexteMathLive(
+          this,
+          4 * ee + 1,
+          KeyboardType.clavierNumbers,
+          { texteApres: '%' },
+        ) + '<br>'
+      texte2 = numAlpha(2) + " Calculer l'effectif des quadrupèdes."
+      texte2 +=
+        ajouteChampTexteMathLive(
+          this,
+          4 * ee + 2,
+          KeyboardType.clavierNumbers,
+        ) + '<br>'
+      texte3 =
+        numAlpha(3) +
+        ` Calculer la fréquence des oiseaux. Donner le résultat sous la forme d'un pourcentage arrondi, si besoin, à 0,1${symbolePourCent} près.`
+      texte3 +=
+        ajouteChampTexteMathLive(
+          this,
+          4 * ee + 3,
+          KeyboardType.clavierNumbers,
+          { texteApres: '%' },
+        ) + '<br>'
+      texte += texte0 + texte1 + texte2 + texte3
+
       // début de la correction
       // question 1
       texteCorr +=
@@ -227,6 +237,7 @@ export default class CalculEffectifFrequence extends Exercice {
         ' ' +
         lstAnimauxExo[0] +
         '. <br>'
+      setReponse(this, 4 * ee, lstNombresAnimaux[0])
       // question 2
       let Ntotal = lstNombresAnimaux[0]
       texteCorr +=
@@ -271,6 +282,11 @@ export default class CalculEffectifFrequence extends Exercice {
         sp(1) +
         symbolePourCent +
         '. <br>'
+      setReponse(
+        this,
+        4 * ee + 1,
+        arrondi((100 * lstNombresAnimaux[1]) / Ntotal, 1),
+      )
       // question 3
       texteCorr +=
         numAlpha(2) +
@@ -286,6 +302,7 @@ export default class CalculEffectifFrequence extends Exercice {
         "L'effectif des quadrupèdes est donc : " +
         texteEnCouleurEtGras(NTotalQuadri) +
         '.<br>'
+      setReponse(this, 4 * ee + 2, NTotalQuadri)
       // question 4
       let NTotalOiseaux = lstNombresAnimaux[3]
       texteCorr +=
@@ -318,19 +335,7 @@ export default class CalculEffectifFrequence extends Exercice {
         sp(1) +
         symbolePourCent +
         '. <br>'
-
-      handleAnswers(
-        this,
-        ee,
-        {
-          bareme: toutAUnPoint,
-          champ1: { value: lstNombresAnimaux[0] },
-          champ2: { value: arrondi((100 * lstNombresAnimaux[1]) / Ntotal, 1) },
-          champ3: { value: NTotalQuadri },
-          champ4: { value: arrondi((100 * NTotalOiseaux) / Ntotal, 1) },
-        },
-        { formatInteractif: 'multiMathfield' },
-      )
+      setReponse(this, 4 * ee + 3, arrondi((100 * NTotalOiseaux) / Ntotal, 1))
 
       if (context.isAmc) {
         this.autoCorrection[ee] = {
@@ -346,7 +351,7 @@ export default class CalculEffectifFrequence extends Exercice {
                   texte: texteCorr,
                   multicolsBegin: true,
                   reponse: {
-                    texte: `Quel est l'effectif des ${lstAnimauxExo[0]} ?`,
+                    texte: texte0,
                     valeur: lstNombresAnimaux[0],
                     param: {
                       signe: false,
@@ -363,7 +368,7 @@ export default class CalculEffectifFrequence extends Exercice {
                 {
                   texte: '',
                   reponse: {
-                    texte: `Quel est la fréquence des ${lstAnimauxExo[1]} ?`,
+                    texte: texte1,
                     valeur: arrondi((100 * lstNombresAnimaux[1]) / Ntotal, 1),
                     param: {
                       signe: false,
@@ -380,7 +385,7 @@ export default class CalculEffectifFrequence extends Exercice {
                 {
                   texte: '',
                   reponse: {
-                    texte: `Quel est l'effectif des ${lstAnimauxExo[2]} ?`,
+                    texte: texte2,
                     valeur: NTotalQuadri,
                     param: {
                       signe: false,
@@ -398,7 +403,7 @@ export default class CalculEffectifFrequence extends Exercice {
                   texte: '',
                   multicolsEnd: true,
                   reponse: {
-                    texte: `Quel est la fréquence des ${lstAnimauxExo[3]} ?`,
+                    texte: texte3,
                     valeur: arrondi((100 * NTotalOiseaux) / Ntotal, 1),
                     param: {
                       signe: false,

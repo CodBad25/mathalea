@@ -1,34 +1,33 @@
 import { createList } from '../../lib/format/lists'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { propositionsQcm } from '../../lib/interactif/qcm'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
 import {
   ecritureAlgebrique,
   ecritureParentheseSiNegatif,
+  rienSi1,
 } from '../../lib/outils/ecritures'
 import { texNombre } from '../../lib/outils/texNombre'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-import { addMultiMathfield } from '../../lib/interactif/MultiMathfield/MultiMathfield'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { toutAUnPoint } from '../../lib/interactif/mathLive'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
-import { context } from '../../modules/context'
 export const titre = 'Étudier une suite arithmético-géométrique'
 export const dateDePublication = '30/11/2024'
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
-export const dateDeModificationImportante = '18/04/2026' // Passage en MultiMathfield, ce qui sous-entend la 1e question en Mathlive et plus en Qcm.
+export const interactifType = 'mathLive'
 
 /**
  * Étudier une suite arithmético-géométrique
  * @author Gilles Mora
  */
-export const uuid = '12afd'
+export const uuid = '12afc'
 
 export const refs = {
-  'fr-fr': ['1AL13-2'],
-  'fr-ch': ['autres-10'],
+  'fr-fr': [],
+  'fr-ch': [],
 }
 export default class SuitesArithmeticoG extends Exercice {
   constructor() {
@@ -61,52 +60,63 @@ export default class SuitesArithmeticoG extends Exercice {
         k = randint(-6, 6, [u0, 0])
         b = k * (1 - a)
       }
+      this.autoCorrection[3 * i] = {
+        enonce: texte,
+        options: { vertical: true },
+        propositions: [
+          {
+            texte: `Pour tout entier naturel $n$, $${NomSA}_{n+1}=${texNombre(a, 1)}${NomSA}_n$`,
+            statut: true,
+          },
+          {
+            texte: `Pour tout entier naturel $n$, $${NomSA}_{n+1}=${texNombre(b, 1)}${NomSA}_n$`,
+            statut: false,
+          },
+          {
+            texte: `Pour tout entier naturel $n$, $${NomSA}_{n+1}= ${rienSi1(-k)}${NomSA}_n$`,
+            statut: false,
+          },
+          {
+            texte: `Pour tout entier naturel $n$, $${NomSA}_{n+1}=${NomSA}_n${ecritureAlgebrique(-k)}$`,
+            statut: false,
+          },
+        ],
+      }
+      const monQcm = propositionsQcm(this, 3 * i)
+      if (this.interactif) texte += monQcm.texte
 
-      texte = `Soit $(${NomS}_n)$ la suite définie pour tout entier naturel $n$ par $${NomS}_{n+1}=${texNombre(a, 1)}${NomS}_n ${ecritureAlgebrique(b)}$ et $${NomS}_0=${texNombre(u0, 1)}$.<br>`
-      texte +=
-        context.isHtml && this.interactif
-          ? addMultiMathfield(this, i, {
-              dataTemplate: `On pose $${NomSA}_n=${NomS}_n ${ecritureAlgebrique(-k)}$ pour tout entier naturel $n$.
-      a) Exprimer $${NomSA}_{n+1}$ en fonction de $${NomSA}_n$.\n$${NomSA}_{n+1}=$%{champ1}
-      b) Exprimer $${NomSA}_n$ en fonction de $n$.\n$${NomSA}_n=$%{champ2}
-      c) En déduire l'expression de $${NomS}_n$ en fonction de $n$.\n$${NomS}_n=$%{champ3}`,
-              dataOptions: {
-                champ1: {
-                  keyboard: KeyboardType.clavierSuite,
-                },
-                champ2: {
-                  keyboard: KeyboardType.clavierSuite,
-                },
-                champ3: {
-                  keyboard: KeyboardType.clavierSuite,
-                },
-              },
-            })
-          : createList({
-              items: [
-                `On pose $${NomSA}_n=${NomS}_n ${ecritureAlgebrique(-k)}$ pour tout entier naturel $n$.<br>
+      texte = `Soit $(${NomS}_n)$ la suite définie pour tout entier naturel $n$ par $${NomS}_{n+1}=${texNombre(a, 1)}${NomS}_n ${ecritureAlgebrique(b)}$ et $${NomS}_0=${texNombre(u0, 1)}$.`
+      texte += createList({
+        items: [
+          `${
+            this.interactif
+              ? `On pose $${NomSA}_n=${NomS}_n ${ecritureAlgebrique(-k)}$ pour tout entier naturel $n$.<br>
+` + monQcm.texte
+              : `On pose $${NomSA}_n=${NomS}_n ${ecritureAlgebrique(-k)}$ pour tout entier naturel $n$.<br>
 Montrer que  $(${NomSA}_n)$ est une suite géométrique.<br>
- Donner sa raison et son premier terme.`,
-                `Exprimer $${NomSA}_n$ en fonction de $n$.`,
-                `En déduire l'expression du terme général de $(${NomS}_n)$ en fonction de $n$.`,
-              ],
-              style: 'alpha',
-            })
-      handleAnswers(
-        this,
-        i,
-        {
-          bareme: toutAUnPoint,
-          champ1: { value: `${texNombre(a, 1)}${NomSA}_n` },
-          champ2: {
-            value: `${u0 - k} \\times ${ecritureParentheseSiNegatif(a)}^n`,
-          },
-          champ3: {
-            value: `${u0 - k}\\times ${ecritureParentheseSiNegatif(a)}^n ${ecritureAlgebrique(k)}`,
-          },
-        },
-        { formatInteractif: 'multiMathfield' },
-      )
+ Donner sa raison et son premier terme.`
+          }`,
+          `Exprimer $${NomSA}_n$ en fonction de $n$.` +
+            ajouteChampTexteMathLive(
+              this,
+              3 * i + 1,
+              KeyboardType.clavierSuite,
+              {
+                texteAvant: `<br>$${NomSA}_n=$`,
+              },
+            ),
+          `En déduire l'expression du terme général de $(${NomS}_n)$ en fonction de $n$.` +
+            ajouteChampTexteMathLive(
+              this,
+              3 * i + 2,
+              KeyboardType.clavierSuite,
+              {
+                texteAvant: `<br>$${NomS}_n=$`,
+              },
+            ),
+        ],
+        style: 'nombres',
+      })
 
       texteCorr = createList({
         items: [
@@ -136,6 +146,10 @@ Montrer que  $(${NomSA}_n)$ est une suite géométrique.<br>
         ],
         style: 'nombres',
       })
+      const reponse1 = `${u0 - k} \\times ${ecritureParentheseSiNegatif(a)}^n`
+      const reponse2 = `${u0 - k}\\times ${ecritureParentheseSiNegatif(a)}^n ${ecritureAlgebrique(k)}`
+      handleAnswers(this, 3 * i + 1, { reponse: { value: reponse1 } })
+      handleAnswers(this, 3 * i + 2, { reponse: { value: reponse2 } })
       if (this.questionJamaisPosee(i, texte)) {
         // <- laisser le i et ajouter toutes les variables qui rendent les exercices différents (par exemple a, b, c et d)
         this.listeQuestions[i] = texte
