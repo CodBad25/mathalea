@@ -1,5 +1,5 @@
 import { droite } from '../../lib/2d/droites'
-import { PointAbstrait, point } from '../../lib/2d/PointAbstrait'
+import { PointAbstrait, pointAbstrait } from '../../lib/2d/PointAbstrait'
 import {
   pointIntersectionDD,
   pointSurDroite,
@@ -175,9 +175,9 @@ export default class IntersectionDroitesPoints extends Exercice {
       let a3 = 0
       let b3 = 0
       let d3 = 0
-      let pAproxInt12 = point(0, 0)
-      let pAproxInt13 = point(0, 0)
-      let pAproxInt23 = point(0, 0)
+      let pAproxInt12 = pointAbstrait(0, 0)
+      let pAproxInt13 = pointAbstrait(0, 0)
+      let pAproxInt23 = pointAbstrait(0, 0)
       do {
         do {
           a = randint(-8, 8, [0]) // numérateut coefficient directeur non nul

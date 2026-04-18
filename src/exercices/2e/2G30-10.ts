@@ -2,7 +2,7 @@ import Figure from 'apigeom'
 import type Point from 'apigeom/src/elements/points/Point'
 import { colorToLatexOrHTML } from '../../lib/2d/colorToLatexOrHtml'
 import { droite } from '../../lib/2d/droites'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { repere } from '../../lib/2d/reperes'
 import { labelPoint, latex2d } from '../../lib/2d/textes'
 import { tracePoint } from '../../lib/2d/TracePoint'
@@ -55,15 +55,15 @@ export default class RepresenterDroiteDepuisEq extends Exercice {
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
       const xA = randint(-3, 3)
       const yA = randint(-2, 2)
-      const A = point(xA, yA, 'A')
+      const A = pointAbstrait(xA, yA, 'A')
       const pente = randint(-4, 4)
       // WARN: B.x != A.x, donc aucune droite ne sera verticale
-      const B = point(xA + 1, yA + pente, 'B')
+      const B = pointAbstrait(xA + 1, yA + pente, 'B')
       const droiteAB = droite(A, B)
       const coeffMult = randint(-2, 2, [0])
       const ordonnéeOrigine = yA - pente * xA
       const vecteurDirecteur = vecteur(coeffMult, coeffMult * pente)
-      const C = point(xA + vecteurDirecteur.x, yA + vecteurDirecteur.y, 'B')
+      const C = pointAbstrait(xA + vecteurDirecteur.x, yA + vecteurDirecteur.y, 'B')
 
       // Coefficient de l'équation cartésienne
       const coeffs = [

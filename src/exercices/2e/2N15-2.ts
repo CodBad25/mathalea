@@ -1,4 +1,4 @@
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { segment, segmentAvecExtremites } from '../../lib/2d/segmentsVecteurs'
 import { labelPoint, texteParPosition } from '../../lib/2d/textes'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
@@ -78,23 +78,23 @@ export default class ValeurAbsolueEtEquation extends Exercice {
                     $x_1=${c} ${ecritureAlgebrique(b)}$ et $x_2=${c} -${ecritureParentheseSiNegatif(b)}$<br>
                     $S=\\{${c - b};${c + b}\\}$`
           if (this.correctionDetaillee) {
-            const s = segment(point(0, 0), point(12, 0))
+            const s = segment(pointAbstrait(0, 0), pointAbstrait(12, 0))
             s.styleExtremites = '->'
-            const x0 = point(3, 0)
+            const x0 = pointAbstrait(3, 0)
             x0.nom = String(c - b)
             x0.positionLabel = 'below'
-            const A = point(6, 0, String(c))
+            const A = pointAbstrait(6, 0, String(c))
             A.positionLabel = 'below'
-            const x1 = point(9, 0, String(c + b), 'below')
+            const x1 = pointAbstrait(9, 0, String(c + b), 'below')
             x1.positionLabel = 'below'
             const s1 = segmentAvecExtremites(x0, x1, bleuMathalea)
             s1.epaisseur = 2
             const s2 = segmentAvecExtremites(x0, A)
             const l = labelPoint(A, x0, x1)
-            const cote = segment(point(3, 1), point(5.95, 1))
+            const cote = segment(pointAbstrait(3, 1), pointAbstrait(5.95, 1))
             cote.styleExtremites = '<->'
             const texteCote = texteParPosition(b, 4.5, 1.6)
-            const cote2 = segment(point(6.05, 1), point(9, 1))
+            const cote2 = segment(pointAbstrait(6.05, 1), pointAbstrait(9, 1))
             cote2.styleExtremites = '<->'
             const texteCote2 = texteParPosition(b, 7.5, 1.6)
             texteCorr += mathalea2d(

@@ -1,5 +1,5 @@
 import { grille } from '../../lib/2d/Grille'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { labelPoint } from '../../lib/2d/textes'
 import { tracePoint } from '../../lib/2d/TracePoint'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
@@ -112,10 +112,10 @@ export default class CoefficientColineariteGraphique extends ExerciceSimple {
       (xC - xA) * dy === (yC - yA) * dx
     )
 
-    const A = point(xA, yA, 'A', 'below')
-    const B = point(xB, yB, 'B', 'above')
-    const C = point(xC, yC, 'C', 'below')
-    const D = point(xD, yD, 'D', 'above')
+    const A = pointAbstrait(xA, yA, 'A', 'below')
+    const B = pointAbstrait(xB, yB, 'B', 'above')
+    const C = pointAbstrait(xC, yC, 'C', 'below')
+    const D = pointAbstrait(xD, yD, 'D', 'above')
 
     const objets = [
       grille(0, 0, 10, 8, 'gray', 1, 1),

@@ -1,6 +1,6 @@
 import Decimal from 'decimal.js'
 import { codageSegments } from '../../lib/2d/CodageSegment'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { tracePoint } from '../../lib/2d/TracePoint'
 import { polygoneAvecNom } from '../../lib/2d/polygones'
 import { repere } from '../../lib/2d/reperes'
@@ -154,10 +154,10 @@ export default class ParallélogrammeSommet extends Exercice {
             const yMd = (yA + yC) / 2
             const absReponse = xA + xC - xB
             const ordReponse = yA + yC - yB
-            const A = point(xA, yA, 'A', 'red')
-            const B = point(xB, yB, 'B', 'red')
-            const C = point(xC, yC, 'C', 'red')
-            const D = point(xD, yD, 'D', 'red')
+            const A = pointAbstrait(xA, yA, 'A', 'red')
+            const B = pointAbstrait(xB, yB, 'B', 'red')
+            const C = pointAbstrait(xC, yC, 'C', 'red')
+            const D = pointAbstrait(xD, yD, 'D', 'red')
             const s1 = segment(A, B, bleuMathalea)
             const s2 = segment(D, B, bleuMathalea)
             const s3 = segment(C, D, bleuMathalea)
@@ -304,10 +304,10 @@ export default class ParallélogrammeSommet extends Exercice {
             const yM = (yA + yC) / 2
             const absReponse = xM * 2 - xB
             const ordReponse = yM * 2 - yB
-            const A = point(xA, yA, 'A', 'red')
-            const B = point(xB, yB, 'B', 'red')
-            const C = point(xC, yC, 'C', 'red')
-            const D = point(xD, yD, 'D', 'red')
+            const A = pointAbstrait(xA, yA, 'A', 'red')
+            const B = pointAbstrait(xB, yB, 'B', 'red')
+            const C = pointAbstrait(xC, yC, 'C', 'red')
+            const D = pointAbstrait(xD, yD, 'D', 'red')
             const s1 = segment(A, B, bleuMathalea)
             const s2 = segment(D, B, bleuMathalea)
             const s3 = segment(C, D, bleuMathalea)
@@ -485,10 +485,10 @@ export default class ParallélogrammeSommet extends Exercice {
             const yM = (yA + yC) / 2
             const absReponse = xM * 2 - xB
             const ordReponse = yM * 2 - yB
-            const A = point(xA, yA, 'A', 'red') // E
-            const B = point(xB, yB, 'B', 'red') // G
-            const C = point(xC, yC, 'C', 'red') // M
-            const D = point(xD, yD, 'D', 'red') // T
+            const A = pointAbstrait(xA, yA, 'A', 'red') // E
+            const B = pointAbstrait(xB, yB, 'B', 'red') // G
+            const C = pointAbstrait(xC, yC, 'C', 'red') // M
+            const D = pointAbstrait(xD, yD, 'D', 'red') // T
             const s1 = segment(A, B, bleuMathalea)
             const s2 = segment(D, B, bleuMathalea)
             const s3 = segment(C, D, bleuMathalea)

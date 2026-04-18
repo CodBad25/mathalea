@@ -1,6 +1,6 @@
 import { codageAngleDroit } from '../../lib/2d/CodageAngleDroit'
 import { codageSegments } from '../../lib/2d/CodageSegment'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { segment, segmentAvecExtremites } from '../../lib/2d/segmentsVecteurs'
 import { labelPoint, texteParPosition } from '../../lib/2d/textes'
 import { texteSurSegment } from '../../lib/2d/texteSurSegment'
@@ -71,10 +71,10 @@ export default class ModeliserEquationsGeometrie extends Exercice {
             const d = randint(1, 7) // largeur
             const b = randint(4 * d + 2 * a + 1, 50) // périmètre
             const c = b - 2 * a - 2 * d
-            const A = point(0, 0, 'A', 'below')
-            const B = point(10, 0, 'B', 'below')
-            const C = point(10, 6, 'C')
-            const D = point(0, 6, 'D')
+            const A = pointAbstrait(0, 0, 'A', 'below')
+            const B = pointAbstrait(10, 0, 'B', 'below')
+            const C = pointAbstrait(10, 6, 'C')
+            const D = pointAbstrait(0, 6, 'D')
 
             objets.push(
               segment(A, B),
@@ -146,10 +146,10 @@ export default class ModeliserEquationsGeometrie extends Exercice {
             const d = randint(1, 5) // largeur
             const b = randint(d * d + d * a + 1, 100)
 
-            const A = point(0, 0, 'A', 'below')
-            const B = point(10, 0, 'B', 'below')
-            const C = point(10, 6, 'C')
-            const D = point(0, 6, 'D')
+            const A = pointAbstrait(0, 0, 'A', 'below')
+            const B = pointAbstrait(10, 0, 'B', 'below')
+            const C = pointAbstrait(10, 6, 'C')
+            const D = pointAbstrait(0, 6, 'D')
 
             objets.push(
               segment(A, B),
@@ -223,9 +223,9 @@ export default class ModeliserEquationsGeometrie extends Exercice {
           {
             const a = randint(1, 10)
             const b = randint(a * a + 1, 100)
-            const A = point(0, 0, 'A', 'below')
-            const B = point(10, 0, 'B', 'below')
-            const C = point(0, 6, 'C')
+            const A = pointAbstrait(0, 0, 'A', 'below')
+            const B = pointAbstrait(10, 0, 'B', 'below')
+            const C = pointAbstrait(0, 6, 'C')
             objets.push(
               segment(A, B),
               segment(B, C),
@@ -310,9 +310,9 @@ export default class ModeliserEquationsGeometrie extends Exercice {
           {
             const b = randint(1, 10)
             const a = randint(b + 1, 15)
-            const M = point(0, 0, 'M', 'below')
-            const N = point(10, 0, 'N', 'below')
-            const P = point(0, 6, 'P')
+            const M = pointAbstrait(0, 0, 'M', 'below')
+            const N = pointAbstrait(10, 0, 'N', 'below')
+            const P = pointAbstrait(0, 6, 'P')
 
             objets.push(
               segment(M, N),
@@ -412,13 +412,13 @@ export default class ModeliserEquationsGeometrie extends Exercice {
             const d = (a - b) / 2
             const e = randint(1, 10) * 2
             const c = (e * (a + b)) / 2 // aire
-            const A = point(0, 0, 'A', 'below')
-            const H = point(9, 0, 'H', 'below')
-            const B = point(15, 0, 'B', 'below')
-            const C = point(15, 8, 'C')
-            const D = point(9, 8, 'D')
-            const E = point(0, -1, 'E')
-            const F = point(15, -1, 'F')
+            const A = pointAbstrait(0, 0, 'A', 'below')
+            const H = pointAbstrait(9, 0, 'H', 'below')
+            const B = pointAbstrait(15, 0, 'B', 'below')
+            const C = pointAbstrait(15, 8, 'C')
+            const D = pointAbstrait(9, 8, 'D')
+            const E = pointAbstrait(0, -1, 'E')
+            const F = pointAbstrait(15, -1, 'F')
 
             objets.push(
               segment(A, D),
@@ -499,12 +499,12 @@ export default class ModeliserEquationsGeometrie extends Exercice {
             const c = randint(1, 6) // valeur ajout à x
             const e = randint(1, 20)
             const d = (e * (2 * a + b) + 2 * a * c + c * b) / 2 // aire
-            const A = point(0, 0, 'A', 'below')
-            const H = point(5, 6, 'H', 'below')
-            const B = point(10, 0, 'B', 'below')
-            const C = point(10, 6, 'C')
-            const D = point(0, 6, 'D')
-            const E = point(5, 10, 'E')
+            const A = pointAbstrait(0, 0, 'A', 'below')
+            const H = pointAbstrait(5, 6, 'H', 'below')
+            const B = pointAbstrait(10, 0, 'B', 'below')
+            const C = pointAbstrait(10, 6, 'C')
+            const D = pointAbstrait(0, 6, 'D')
+            const E = pointAbstrait(5, 10, 'E')
 
             objets.push(
               segment(A, B),
@@ -603,14 +603,14 @@ export default class ModeliserEquationsGeometrie extends Exercice {
         default:
           {
             const a = randint(10, 50) // longueur seg [AB]
-            const A = point(0, 0, 'A', 'below')
-            const B = point(10, 0, 'B', 'below')
-            const C = point(10, 6, 'C')
-            const D = point(4, 6, 'D')
-            const E = point(2, 3.46, 'E')
-            const M = point(4, 0, 'M', 'below')
-            const K = point(10, -1, 'K')
-            const L = point(0, -1, 'L')
+            const A = pointAbstrait(0, 0, 'A', 'below')
+            const B = pointAbstrait(10, 0, 'B', 'below')
+            const C = pointAbstrait(10, 6, 'C')
+            const D = pointAbstrait(4, 6, 'D')
+            const E = pointAbstrait(2, 3.46, 'E')
+            const M = pointAbstrait(4, 0, 'M', 'below')
+            const K = pointAbstrait(10, -1, 'K')
+            const L = pointAbstrait(0, -1, 'L')
 
             objets.push(
               segment(A, B),

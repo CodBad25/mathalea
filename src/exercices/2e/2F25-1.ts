@@ -1,5 +1,5 @@
 import { courbe } from '../../lib/2d/Courbe'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { repere } from '../../lib/2d/reperes'
 import { segment } from '../../lib/2d/segmentsVecteurs'
 import { latexParCoordonnees, texteParPosition } from '../../lib/2d/textes'
@@ -86,8 +86,8 @@ export default class EtudierGraphiqueParite extends Exercice {
             const x = randint(-1, 1, [0]) * 2
             const f = (x: number) => a * x + b
             const C = courbe(f, { repere: rC, step: 0.25, color: bleuMathalea })
-            const B = point(x, a * x + b)
-            const A = point(-x, -a * x + b)
+            const B = pointAbstrait(x, a * x + b)
+            const A = pointAbstrait(-x, -a * x + b)
 
             const lA = latexParCoordonnees(
               "M'",
@@ -185,8 +185,8 @@ export default class EtudierGraphiqueParite extends Exercice {
             const f = (x: number) => a * x
             const C = courbe(f, { repere: r, step: 0.25, color: bleuMathalea })
 
-            const B = point(x, a * x)
-            const A = point(-x, -a * x)
+            const B = pointAbstrait(x, a * x)
+            const A = pointAbstrait(-x, -a * x)
             const labA0 = latexParCoordonnees(
               '-x',
               -x - 0.2,
@@ -341,8 +341,8 @@ export default class EtudierGraphiqueParite extends Exercice {
             const f = (x: number) => a * x * x + b
             const C = courbe(f, { repere: r, color: bleuMathalea })
 
-            const B = point(2 * x, a * x * x + b)
-            const A = point(-2 * x, a * x * x + b)
+            const B = pointAbstrait(2 * x, a * x * x + b)
+            const A = pointAbstrait(-2 * x, a * x * x + b)
             const labA0 = latexParCoordonnees(
               '-x',
               -2 * x - 0.2,
@@ -501,8 +501,8 @@ export default class EtudierGraphiqueParite extends Exercice {
             const f = (x: number) => a * (x - b) * (x - b) + c
             const C = courbe(f, { repere: rC, step: 0.25, color: bleuMathalea })
 
-            const B = point(x, a * (x - b) * (x - b) + c)
-            const A = point(-x, a * (-x - b) * (-x - b) + c)
+            const B = pointAbstrait(x, a * (x - b) * (x - b) + c)
+            const A = pointAbstrait(-x, a * (-x - b) * (-x - b) + c)
             const lA = latexParCoordonnees(
               "M'",
               -x - 1,
@@ -608,8 +608,8 @@ export default class EtudierGraphiqueParite extends Exercice {
             const f = (x: number) => 1 / (a * x + b)
             const C = courbe(f, { repere: r, step: 0.01, color: bleuMathalea })
 
-            const B = point(x, 1 / (a * x + b))
-            const A = point(-x, 1 / (-a * x + b))
+            const B = pointAbstrait(x, 1 / (a * x + b))
+            const A = pointAbstrait(-x, 1 / (-a * x + b))
             const lA = texteParPosition(
               "$M'$",
               -x + (a > 0 ? -1 : 1),
@@ -708,8 +708,8 @@ export default class EtudierGraphiqueParite extends Exercice {
             const f = (x: number) => 1 / (a * x)
             const C = courbe(f, { repere: r, step: 0.01, color: bleuMathalea })
 
-            const B = point(2 * x, 1 / (a * x))
-            const A = point(-2 * x, -1 / (a * x))
+            const B = pointAbstrait(2 * x, 1 / (a * x))
+            const A = pointAbstrait(-2 * x, -1 / (a * x))
             const labA0 = texteParPosition(
               '$-x$',
               -2 * x - 0.2,

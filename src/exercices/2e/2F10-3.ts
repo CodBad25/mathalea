@@ -4,7 +4,7 @@ import { colorToLatexOrHTML } from '../../lib/2d/colorToLatexOrHtml'
 import { Droite, droite } from '../../lib/2d/droites'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { ObjetMathalea2D } from '../../lib/2d/ObjetMathalea2D'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { repere } from '../../lib/2d/reperes'
 import { labelPoint, texteParPosition } from '../../lib/2d/textes'
 import type { TracePoint } from '../../lib/2d/TracePoint'
@@ -122,8 +122,8 @@ export default class Representerfonctionaffine extends Exercice {
             xB = this.sup2 === 1 ? 1 : randint(1, 3) * choice([-1, 1]) // Abscisse de B
             yB = f(xB) // Ordonnée de B
 
-            const A = point(xA, yA, 'A')
-            const B = point(xB, yB, 'B')
+            const A = pointAbstrait(xA, yA, 'A')
+            const B = pointAbstrait(xB, yB, 'B')
             droiteAB = droite(A, B)
             droiteAB.color = colorToLatexOrHTML('red')
             droiteAB.epaisseur = 2
@@ -221,8 +221,8 @@ export default class Representerfonctionaffine extends Exercice {
             xB = d
             yB = f(xB)
 
-            const A1 = point(xA, yA, 'A')
-            const B1 = point(xB, yB, 'B')
+            const A1 = pointAbstrait(xA, yA, 'A')
+            const B1 = pointAbstrait(xB, yB, 'B')
             droiteAB = droite(A1, B1)
             droiteAB.color = colorToLatexOrHTML('red')
             droiteAB.epaisseur = 2

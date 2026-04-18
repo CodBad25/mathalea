@@ -1,4 +1,4 @@
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { tracePoint } from '../../lib/2d/TracePoint'
 import { polygoneAvecNom } from '../../lib/2d/polygones'
 import { latexParPoint } from '../../lib/2d/textes'
@@ -79,7 +79,7 @@ export default class SommeDeVecteurs extends Exercice {
         yV = randint(Math.round(4 + xV), 8) * choice([-0.5, 0.5])
         u = vecteur(xU, yU)
         v = vecteur(xV, yV)
-        A = point(0, 0, 'A', 'center')
+        A = pointAbstrait(0, 0, 'A', 'center')
         B = translation(A, u, 'B')
         C = translation(B, v, 'C')
       } while (A.x === C.x && A.y === C.y)

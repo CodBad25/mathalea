@@ -3,7 +3,7 @@ import { cercleCentrePoint } from '../../lib/2d/cercle'
 import { colorToLatexOrHTML } from '../../lib/2d/colorToLatexOrHtml'
 import { traceBarre, traceGraphiqueCartesien } from '../../lib/2d/diagrammes'
 import { motifs } from '../../lib/2d/pattern'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { carre } from '../../lib/2d/polygonesParticuliers'
 import { repere } from '../../lib/2d/reperes'
 import { segment } from '../../lib/2d/segmentsVecteurs'
@@ -229,9 +229,9 @@ export default class ConstruireUnDiagramme extends Exercice {
 
         texteCorr += `${tableauColonneLigne(entete, ['\\text{Effectifs}', '\\text{Fréquences}', '\\text{Angles}'], contenutableau, 3)}<br>`
 
-        A = point(0, 0)
-        B = point(6, 0)
-        T = point(7, 0)
+        A = pointAbstrait(0, 0)
+        B = pointAbstrait(6, 0)
+        T = pointAbstrait(7, 0)
         a0 = cercleCentrePoint(A, B, 'black')
         objetsEnonce.push(a0)
         objetsCorrection.push(a0)
@@ -327,9 +327,9 @@ export default class ConstruireUnDiagramme extends Exercice {
 
         texteCorr += `${tableauColonneLigne(entete, ['\\text{Effectifs}', '\\text{Fréquences}', '\\text{Angles}'], contenutableau, 3)}<br>`
 
-        A = point(0, 0)
-        B = point(6, 0)
-        T = point(7, 0)
+        A = pointAbstrait(0, 0)
+        B = pointAbstrait(6, 0)
+        T = pointAbstrait(7, 0)
         a0 = arc(B, A, 180, true, 'white', 'black')
         objetsEnonce.push(a0)
         objetsCorrection.push(a0)

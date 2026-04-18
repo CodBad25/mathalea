@@ -3,7 +3,7 @@ import { antecedentParDichotomie } from '../../lib/2d/antecedentParDichotomie'
 import { courbe } from '../../lib/2d/Courbe'
 import { courbeInterpolee } from '../../lib/2d/CourbeInterpolee.1'
 import { droiteParPointEtPente } from '../../lib/2d/droites'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { repere } from '../../lib/2d/reperes'
 import { segment } from '../../lib/2d/segmentsVecteurs'
 import { latex2d, texteParPosition } from '../../lib/2d/textes'
@@ -465,7 +465,7 @@ On considère la fonction $${nom}$ qui associe à chaque valeur de $x$, le prix 
             const o = texteParPosition('O', -0.3, -0.3)
             const f = (x: number) => a * x * Math.exp(b * x)
             const fprime = (x: number) => (a + a * b * x) * Math.exp(b * x)
-            const Cg = droiteParPointEtPente(point(0, 5), 0, '', 'red')
+            const Cg = droiteParPointEtPente(pointAbstrait(0, 5), 0, '', 'red')
             Cg.epaisseur = 2
             const s0 = antecedentParDichotomie(0, 7, fprime, 0, 0.01)
             if (s0 === false) {
@@ -514,23 +514,23 @@ On considère la fonction $${nom}$ qui associe à chaque valeur de $x$, le prix 
               grilleYMax: f(s0) + 0.2,
             })
 
-            const A = point(s0, f(s0) * 10)
-            const Ax = point(A.x, 0)
+            const A = pointAbstrait(s0, f(s0) * 10)
+            const Ax = pointAbstrait(A.x, 0)
             const sAAx = segment(A, Ax)
             sAAx.epaisseur = 2
             sAAx.pointilles = 5
-            const Ay = point(0, A.y)
+            const Ay = pointAbstrait(0, A.y)
             const sAAy = segment(A, Ay)
             sAAy.epaisseur = 2
             sAAy.pointilles = 5
-            const B = point(s1, f(s1) * 10)
-            const Bx = point(B.x, 0)
+            const B = pointAbstrait(s1, f(s1) * 10)
+            const Bx = pointAbstrait(B.x, 0)
             const sBBx = segment(B, Bx)
             sBBx.epaisseur = 2
             sBBx.pointilles = 5
 
-            const C = point(s2, f(s2) * 10)
-            const Cx = point(C.x, 0)
+            const C = pointAbstrait(s2, f(s2) * 10)
+            const Cx = pointAbstrait(C.x, 0)
             const sCCx = segment(C, Cx)
             sCCx.epaisseur = 2
             sCCx.pointilles = 5

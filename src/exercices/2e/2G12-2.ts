@@ -1,5 +1,5 @@
 import { fixeBordures } from '../../lib/2d/fixeBordures'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { repere } from '../../lib/2d/reperes'
 import { segment } from '../../lib/2d/segmentsVecteurs'
 import { labelPoint, texteParPosition } from '../../lib/2d/textes'
@@ -92,9 +92,9 @@ export default class Milieu extends Exercice {
         yLabelDistance: 2,
         xLabelDistance: 2,
       })
-      const A = point(xA, yA, 'A')
-      const B = point(xB, yB, 'B')
-      const M = point((xA + xB) / 2, (yA + yB) / 2, 'M')
+      const A = pointAbstrait(xA, yA, 'A')
+      const B = pointAbstrait(xB, yB, 'B')
+      const M = pointAbstrait((xA + xB) / 2, (yA + yB) / 2, 'M')
       const nom = creerNomDePolygone(3, ['OIJDXYMAB'])
       A.nom = nom[0]
       B.nom = nom[1]

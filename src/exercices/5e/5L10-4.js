@@ -1,4 +1,4 @@
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { polygone } from '../../lib/2d/polygones'
 import { tableauColonneLigne } from '../../lib/2d/tableau'
 import { choice } from '../../lib/outils/arrayOutils'
@@ -128,10 +128,10 @@ export default class TableauxEtFonction extends Exercice {
         pixelsParCm: 20,
         scale: 0.5,
       }
-      const A = point(-4, 2)
-      const B = point(-4, -2)
-      const C = point(4, -2)
-      const D = point(4, 2)
+      const A = pointAbstrait(-4, 2)
+      const B = pointAbstrait(-4, -2)
+      const C = pointAbstrait(4, -2)
+      const D = pointAbstrait(4, 2)
       const mesAppels = [polygone(A, B, C, D)]
       const figure = mathalea2d(fenetreMathalea2D, mesAppels)
 

@@ -2,7 +2,7 @@ import Figure from 'apigeom'
 import type Point from 'apigeom/src/elements/points/Point'
 import { colorToLatexOrHTML } from '../../lib/2d/colorToLatexOrHtml'
 import { droite } from '../../lib/2d/droites'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { repere } from '../../lib/2d/reperes'
 import { representantNomme } from '../../lib/2d/representantVecteur'
 import { segment } from '../../lib/2d/segmentsVecteurs'
@@ -79,8 +79,8 @@ export default class RepresenterfDroite extends Exercice {
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
       const xA = randint(-3, 3)
       const yA = randint(-2, 2)
-      const A = point(xA, yA, 'A')
-      const B = point(0, 0, 'B')
+      const A = pointAbstrait(xA, yA, 'A')
+      const B = pointAbstrait(0, 0, 'B')
       const cadre = {
         xMin: Math.min(-3, xA - 5),
         yMin: Math.min(-4, yA - 5),

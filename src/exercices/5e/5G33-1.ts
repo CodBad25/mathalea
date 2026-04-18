@@ -5,7 +5,7 @@ import {
   droiteParPointEtPerpendiculaire,
   labelOnLine,
 } from '../../lib/2d/droites'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { Latex2d } from '../../lib/2d/textes'
 import { pointSurDroite } from '../../lib/2d/utilitairesPoint'
 import { combinaisonListes, shuffle } from '../../lib/outils/arrayOutils'
@@ -104,8 +104,8 @@ export default class TracerCarresRectangleslongueurDonnees extends Exercice {
         x[i] = x[i] * 2 + randint(-10, 10) / 20
         y[i] = y[i] * 2 + randint(-10, 10) / 20
       }
-      const P03 = point(x[0], y[0]) //, texDroiteFigure(0), 'above left')
-      const P13 = point(x[1], y[0] + randint(-10, 10) / 10) //, texDroiteFigure(1), 'above left')
+      const P03 = pointAbstrait(x[0], y[0]) //, texDroiteFigure(0), 'above left')
+      const P13 = pointAbstrait(x[1], y[0] + randint(-10, 10) / 10) //, texDroiteFigure(1), 'above left')
       const d3 = droite(P03, P13, '', couleur(3))
       const P23 = pointSurDroite(d3, x[2]) //, texDroiteFigure(2), 'above left')
       const P43 = pointSurDroite(d3, x[3]) //, texDroiteFigure(4), 'above left')

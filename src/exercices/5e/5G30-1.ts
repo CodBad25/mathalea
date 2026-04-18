@@ -1,6 +1,6 @@
 import { codageAngle } from '../../lib/2d/angles'
 import { droite, droiteParPointEtParallele } from '../../lib/2d/droites'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { labelPoint } from '../../lib/2d/textes'
 import { rotation, similitude } from '../../lib/2d/transformations'
 import { angle, longueur } from '../../lib/2d/utilitairesGeometriques'
@@ -62,7 +62,7 @@ export default class EgaliteDAngles extends Exercice {
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; cpt++) {
       let figure = []
       const noms = choisitLettresDifferentes(5, 'Q', true)
-      const A = point(0, 0, noms[0], 'above left')
+      const A = pointAbstrait(0, 0, noms[0], 'above left')
       const fig1 = function (): [
         objets: NestedObjetMathalea2dArray,
         params: { xmin: number; xmax: number; ymin: number; ymax: number },
@@ -79,7 +79,7 @@ export default class EgaliteDAngles extends Exercice {
         const ac = randint(8, 10)
         const ce = randint(7, 10, ac)
         const C = similitude(
-          rotation(point(1, 0), A, randint(-45, 45)),
+          rotation(pointAbstrait(1, 0), A, randint(-45, 45)),
           A,
           a,
           ac,
@@ -184,7 +184,7 @@ export default class EgaliteDAngles extends Exercice {
         let d, CA, AB, CE, BE, B, C, D, E, ab, ac, a, cd, ad
         do {
           B = rotation(
-            point(randint(8, 10), randint(1, 3)),
+            pointAbstrait(randint(8, 10), randint(1, 3)),
             A,
             randint(-40, 40),
             noms[1],

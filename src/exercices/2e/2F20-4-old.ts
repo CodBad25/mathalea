@@ -12,7 +12,7 @@ import Exercice from '../Exercice'
 
 import Figure from 'apigeom'
 import { courbe } from '../../lib/2d/Courbe'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import RepereBuilder from '../../lib/2d/RepereBuilder'
 import { colorToLatexOrHTML } from '../../lib/2d/colorToLatexOrHtml'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
@@ -871,10 +871,10 @@ class resolutionEquationInequationGraphique extends Exercice {
     } else {
       courbe2 = courbe(fonction2.func, { repere, xMin, xMax, color: 'red' })
     }
-    const p1A = point(xMin + 1, yMax - 1)
-    const p1B = point(xMin + 2, yMax - 1)
-    const p2A = point(xMin + 1, yMax - 2)
-    const p2B = point(xMin + 2, yMax - 2)
+    const p1A = pointAbstrait(xMin + 1, yMax - 1)
+    const p1B = pointAbstrait(xMin + 2, yMax - 1)
+    const p2A = pointAbstrait(xMin + 1, yMax - 2)
+    const p2B = pointAbstrait(xMin + 2, yMax - 2)
     const trait1 = segment(p1A, p1B, bleuMathalea)
     const trait2 = segment(p2A, p2B, 'red')
     trait1.epaisseur = 2

@@ -5,7 +5,7 @@ import {
   crochetG,
   intervalle,
 } from '../../lib/2d/intervalles'
-import { point, PointAbstrait } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait, PointAbstrait } from '../../lib/2d/PointAbstrait'
 import { Segment, segment } from '../../lib/2d/segmentsVecteurs'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
@@ -128,8 +128,8 @@ export default class IntervallesDeR extends Exercice {
       let texteCorr = ''
       const s = segment(0, 0, 12, 0)
       s.styleExtremites = '->'
-      const X1 = point(0, 0)
-      const X2 = point(12, 0)
+      const X1 = pointAbstrait(0, 0)
+      const X2 = pointAbstrait(12, 0)
 
       const int = intervalle(X1, X2, 'black', 0)
       let a: number
@@ -146,7 +146,7 @@ export default class IntervallesDeR extends Exercice {
         // Combien de chiffres ? Quelles valeurs ?
         case 1:
           a = randint(1, 15)
-          A = point(2, 0, String(a))
+          A = pointAbstrait(2, 0, String(a))
           c1 = crochetG(A, 'red')
           c1.taille = context.isHtml ? 0.2 : 0.4
           int1 = intervalle(A, X2, 'red', 0)
@@ -171,7 +171,7 @@ export default class IntervallesDeR extends Exercice {
 
         case 2:
           a = randint(1, 15)
-          A = point(2, 0, String(a))
+          A = pointAbstrait(2, 0, String(a))
           c1 = crochetD(A, 'red')
           c1.taille = context.isHtml ? 0.2 : 0.4
           int1 = intervalle(A, X2, 'red', 0)
@@ -196,7 +196,7 @@ export default class IntervallesDeR extends Exercice {
 
         case 3:
           a = randint(1, 15)
-          A = point(2, 0, String(a))
+          A = pointAbstrait(2, 0, String(a))
           c1 = crochetD(A, 'red')
           c1.taille = context.isHtml ? 0.2 : 0.4
           int1 = intervalle(X1, A, 'red', 0)
@@ -221,7 +221,7 @@ export default class IntervallesDeR extends Exercice {
 
         case 4:
           a = randint(1, 15)
-          A = point(2, 0, String(a))
+          A = pointAbstrait(2, 0, String(a))
           c1 = crochetG(A, 'red')
           c1.taille = context.isHtml ? 0.2 : 0.4
           int1 = intervalle(X1, A, 'red', 0)
@@ -248,8 +248,8 @@ export default class IntervallesDeR extends Exercice {
           a = randint(1, 15)
           c = a + 1
           b = randint(c, 25)
-          A = point(2, 0, String(a))
-          B = point(6, 0, String(b))
+          A = pointAbstrait(2, 0, String(a))
+          B = pointAbstrait(6, 0, String(b))
           c1 = crochetG(A, 'red')
           c1.taille = context.isHtml ? 0.2 : 0.4
           c2 = crochetD(B, 'red')
@@ -279,8 +279,8 @@ export default class IntervallesDeR extends Exercice {
           a = randint(1, 15)
           c = a + 1
           b = randint(c, 25)
-          A = point(2, 0, String(a))
-          B = point(6, 0, String(b))
+          A = pointAbstrait(2, 0, String(a))
+          B = pointAbstrait(6, 0, String(b))
           c1 = crochetD(A, 'red')
           c1.taille = context.isHtml ? 0.2 : 0.4
           c2 = crochetD(B, 'red')
@@ -310,8 +310,8 @@ export default class IntervallesDeR extends Exercice {
           a = randint(1, 15)
           c = a + 1
           b = randint(c, 25)
-          A = point(2, 0, String(a))
-          B = point(6, 0, String(b))
+          A = pointAbstrait(2, 0, String(a))
+          B = pointAbstrait(6, 0, String(b))
           c1 = crochetD(A, 'red')
           c1.taille = context.isHtml ? 0.2 : 0.4
           c2 = crochetG(B, 'red')
@@ -341,8 +341,8 @@ export default class IntervallesDeR extends Exercice {
           a = randint(1, 15)
           c = a + 1
           b = randint(c, 25)
-          A = point(2, 0, String(a))
-          B = point(6, 0, String(b))
+          A = pointAbstrait(2, 0, String(a))
+          B = pointAbstrait(6, 0, String(b))
           c1 = crochetG(A, 'red')
           c1.taille = context.isHtml ? 0.2 : 0.4
           c2 = crochetG(B, 'red')
@@ -372,8 +372,8 @@ export default class IntervallesDeR extends Exercice {
           a = randint(1, 15)
           c = a + 1
           b = randint(c, 25)
-          A = point(2, 0, String(a))
-          B = point(6, 0, String(b))
+          A = pointAbstrait(2, 0, String(a))
+          B = pointAbstrait(6, 0, String(b))
           c1 = crochetG(A, 'red')
           c1.taille = context.isHtml ? 0.2 : 0.4
           c2 = crochetG(B, 'red')
@@ -402,8 +402,8 @@ export default class IntervallesDeR extends Exercice {
           a = randint(1, 15)
           c = a + 1
           b = randint(c, 25)
-          A = point(2, 0, String(a))
-          B = point(6, 0, String(b))
+          A = pointAbstrait(2, 0, String(a))
+          B = pointAbstrait(6, 0, String(b))
           c1 = crochetD(A, 'red')
           c1.taille = context.isHtml ? 0.2 : 0.4
           c2 = crochetG(B, 'red')
@@ -435,8 +435,8 @@ export default class IntervallesDeR extends Exercice {
           a = randint(1, 15)
           c = a + 1
           b = randint(c, 25)
-          A = point(2, 0, String(a))
-          B = point(6, 0, String(b))
+          A = pointAbstrait(2, 0, String(a))
+          B = pointAbstrait(6, 0, String(b))
           c1 = crochetD(A, 'red')
           c1.taille = context.isHtml ? 0.2 : 0.4
           c2 = crochetD(B, 'red')
@@ -465,8 +465,8 @@ export default class IntervallesDeR extends Exercice {
           a = randint(1, 15)
           c = a + 1
           b = randint(c, 25)
-          A = point(2, 0, String(a))
-          B = point(6, 0, String(b))
+          A = pointAbstrait(2, 0, String(a))
+          B = pointAbstrait(6, 0, String(b))
           c1 = crochetG(A, 'red')
           c1.taille = context.isHtml ? 0.2 : 0.4
           c2 = crochetD(B, 'red')
@@ -495,8 +495,8 @@ export default class IntervallesDeR extends Exercice {
           a = randint(1, 15)
           c = a + 1
           b = randint(c, 25)
-          A = point(2, 0, String(a))
-          B = point(12, 0, String(b))
+          A = pointAbstrait(2, 0, String(a))
+          B = pointAbstrait(12, 0, String(b))
           c1 = crochetG(A, 'red')
           c1.taille = context.isHtml ? 0.2 : 0.4
 
@@ -523,8 +523,8 @@ export default class IntervallesDeR extends Exercice {
           a = randint(1, 15)
           c = a + 1
           b = randint(c, 25)
-          A = point(2, 0, String(a))
-          B = point(12, 0, String(b))
+          A = pointAbstrait(2, 0, String(a))
+          B = pointAbstrait(12, 0, String(b))
           c1 = crochetD(A, 'red')
           c1.taille = context.isHtml ? 0.2 : 0.4
 
@@ -550,7 +550,7 @@ export default class IntervallesDeR extends Exercice {
         case 15:
           a = randint(1, 15)
           c = a + 1
-          A = point(7, 0, String(a))
+          A = pointAbstrait(7, 0, String(a))
           c1 = crochetD(A, 'red')
           c1.taille = context.isHtml ? 0.2 : 0.4
 
@@ -577,7 +577,7 @@ export default class IntervallesDeR extends Exercice {
         default:
           a = randint(1, 15)
           c = a + 1
-          A = point(7, 0, String(a))
+          A = pointAbstrait(7, 0, String(a))
           c1 = crochetG(A, 'red')
           c1.taille = context.isHtml ? 0.2 : 0.4
 

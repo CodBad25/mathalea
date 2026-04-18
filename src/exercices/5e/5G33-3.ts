@@ -5,7 +5,7 @@ import {
   distancePointDroite,
   droiteParPointEtPente,
 } from '../../lib/2d/droites'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { polygoneAvecNom } from '../../lib/2d/polygones'
 import { segment } from '../../lib/2d/segmentsVecteurs'
 import { labelPoint } from '../../lib/2d/textes'
@@ -50,16 +50,16 @@ export default class MesurerDistancePointDroite extends Exercice {
       const objetsEnonce = []
       const objetsCorrection = []
       const pente = randint(1, 3) * choice([-1, 1])
-      const O = point(0, 0, '$(d)$', 'left')
+      const O = pointAbstrait(0, 0, '$(d)$', 'left')
 
       const d = droiteParPointEtPente(O, pente)
-      let A = point(
+      let A = pointAbstrait(
         randint(-4, 4),
         randint(-3, 4),
         choisitLettresDifferentes(1, 'OH')[0],
       )
       while (distancePointDroite(A, d) < 1) {
-        A = point(
+        A = pointAbstrait(
           randint(-4, 4),
           randint(-3, 4),
           choisitLettresDifferentes(1, 'OH')[0],
