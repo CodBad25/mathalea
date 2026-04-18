@@ -7,6 +7,7 @@ import { texteEnCouleurEtGras } from '../../../lib/outils/embellissements'
 import { context } from '../../../modules/context'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import ExerciceCan from '../../ExerciceCan'
+import { bleuMathalea } from '../../../lib/colors'
 export const titre = 'Déterminer le signe de $f(a)\\times f\'(a)$ par lecture graphique'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -105,14 +106,14 @@ export const refs = {
     const courbe1 = theSpline.courbe({
       epaisseur: 1.5,
       ajouteNoeuds: false,
-      color: 'blue',
+      color: bleuMathalea,
     })
     const labelCf = texteParPosition(
       '$C_f$',
       bornes.xMin + 0.5,
       bornes.yMax,
       0,
-      'blue',
+      bleuMathalea,
       1.2,
     )
     const objetsEnonce = [repere1, courbe1, labelCf]

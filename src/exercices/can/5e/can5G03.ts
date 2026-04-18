@@ -13,6 +13,7 @@ import Exercice from '../../Exercice'
 
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { setReponse } from '../../../lib/interactif/gestionInteractif'
+import { bleuMathalea } from '../../../lib/colors'
 
 export const titre = 'Compter les points symétriques manquants'
 export const dateDePublication = '18/12/2021'
@@ -80,7 +81,7 @@ export default class CompterlesSymetriquesCan5e extends Exercice {
       })
       objetsEnonce.push(papier)
       const O = point(3, 3, 'O')
-      d = tracePoint(O, context.isHtml ? 'blue' : 'black')
+      d = tracePoint(O, context.isHtml ? bleuMathalea : 'black')
       d.epaisseur = 2
       d.style = '+'
       objetsEnonce.push(d)

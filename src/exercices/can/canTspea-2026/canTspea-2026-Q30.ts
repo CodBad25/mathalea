@@ -9,6 +9,7 @@ import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import ExerciceCan from '../../ExerciceCan'
+import { bleuMathalea } from '../../../lib/colors'
 export const titre = 'Question 30'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -73,7 +74,7 @@ enonce(choix?: { x: number; pente: number }): void {
     const p8 = pointAbstrait(4.5, 1)
 
     // 3. Tracé de la ligne avec la couleur passée directement
-    const courbe = polyline([p1, p2, p3, p4, p5, p6, p7, p8], 'blue')
+    const courbe = polyline([p1, p2, p3, p4, p5, p6, p7, p8], bleuMathalea)
     courbe.epaisseur = 2
 
     // 4. Création des étiquettes

@@ -10,6 +10,7 @@ import { texNombre } from '../../../lib/outils/texNombre'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
+import { bleuMathalea } from '../../../lib/colors'
 export const titre =
   'Déterminer une ordonnée/abscisse avec une fonction linéaire'
 export const interactifReady = true
@@ -109,7 +110,7 @@ export default class OrdonneeAbscisseFonctionLineaire extends ExerciceSimple {
         scale: 0.75,
         style: 'margin: auto',
       },
-      courbe(f, { repere: r1, color: 'blue', epaisseur: 2 }),
+      courbe(f, { repere: r1, color: bleuMathalea, epaisseur: 2 }),
       r1,
       lA,
       traceA,

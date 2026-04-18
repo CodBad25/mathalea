@@ -43,6 +43,7 @@ import Exercice from '../../Exercice'
 
 import { droiteGraduee } from '../../../lib/2d/DroiteGraduee'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { bleuMathalea } from '../../../lib/colors'
 export const titre = 'CAN Spéciale année 2024'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -778,7 +779,7 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
                   pixelsParCm: 30,
                   scale: 0.6,
                 },
-                texteParPosition('A', 4 * Number(x1), 0.8, 0, 'blue', 1.5),
+                texteParPosition('A', 4 * Number(x1), 0.8, 0, bleuMathalea, 1.5),
                 d,
               )
             this.listeCanEnonces.push(texte)
@@ -858,7 +859,7 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
                   pixelsParCm: 35,
                   scale: 0.75,
                 },
-                texteParPosition('A', 4 * Number(x1), 0.8, 0, 'blue', 2),
+                texteParPosition('A', 4 * Number(x1), 0.8, 0, bleuMathalea, 2),
                 d,
               )
             setReponse(this, index, reponse.toFixed(2))
@@ -1189,8 +1190,8 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
             const s3 = segment(A, C)
             if (choice([true, false])) {
               objets.push(
-                codageSegments('||', 'blue', B, C),
-                codageSegments('||', 'blue', C, A),
+                codageSegments('||', bleuMathalea, B, C),
+                codageSegments('||', bleuMathalea, C, A),
                 texteParPosition(
                   '2024 cm',
                   milieu(A, B).x,
@@ -1211,8 +1212,8 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
             Son périmètre est : $2\\times ${texNombre(a)}\\text{ cm}$ $+${texNombre(b)}\\text{ cm}$ $=${miseEnEvidence(texNombre(2 * a + b))}\\text{ cm}$.`
             } else {
               objets.push(
-                codageSegments('||', 'blue', B, C),
-                codageSegments('||', 'blue', C, A),
+                codageSegments('||', bleuMathalea, B, C),
+                codageSegments('||', bleuMathalea, C, A),
                 texteParPosition(
                   `${b} cm`,
                   milieu(A, B).x,
@@ -2514,10 +2515,10 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
                 '',
                 9,
               ),
-              codageSegments('||', 'blue', A, B),
-              codageSegments('||', 'blue', B, C),
-              codageSegments('||', 'blue', C, D),
-              codageSegments('||', 'blue', A, D),
+              codageSegments('||', bleuMathalea, A, B),
+              codageSegments('||', bleuMathalea, B, C),
+              codageSegments('||', bleuMathalea, C, D),
+              codageSegments('||', bleuMathalea, A, D),
               codageAngleDroit(D, A, B),
               codageAngleDroit(A, B, C),
               codageAngleDroit(B, C, D),
@@ -2571,7 +2572,7 @@ export default class CourseAuxNombresSpeciale2024 extends Exercice {
               segment(D, E),
               segment(A, C),
               segment(B, C),
-              codageSegments('||', 'blue', A, D, D, C),
+              codageSegments('||', bleuMathalea, A, D, D, C),
               labelPoint(A, B, C, D, E),
             )
             if (choice([true, false])) {

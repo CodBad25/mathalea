@@ -35,6 +35,7 @@ import Hms from '../../../modules/Hms'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../../modules/outils'
 import Exercice from '../../Exercice'
+import { bleuMathalea } from '../../../lib/colors'
 
 export const titre = 'CAN 5e sujet 2022'
 export const interactifReady = true
@@ -913,7 +914,7 @@ export default class SujetCAN2022cinquieme extends Exercice {
                   thickoffset: 0,
                   axeStyle: '->',
                   pointListe: [[a + k / 10, 'A']],
-                  pointCouleur: 'blue',
+                  pointCouleur: bleuMathalea,
                   pointStyle: 'x',
                   labelsPrincipaux: true,
                   labelPointTaille: 12,
@@ -948,7 +949,7 @@ export default class SujetCAN2022cinquieme extends Exercice {
                   thickoffset: 0,
                   axeStyle: '->',
                   pointListe: [[a + k / 5, 'A']],
-                  pointCouleur: 'blue',
+                  pointCouleur: bleuMathalea,
                   pointStyle: 'x',
                   labelsPrincipaux: true,
                   labelPointTaille: 12,

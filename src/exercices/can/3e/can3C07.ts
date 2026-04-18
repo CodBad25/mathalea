@@ -7,6 +7,7 @@ import { stringNombre, texNombre } from '../../../lib/outils/texNombre'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
+import { bleuMathalea } from '../../../lib/colors'
 export const titre = 'Calculer l’abscisse d’un milieu'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -42,7 +43,7 @@ export default class MilieuEntre1EtFraction extends ExerciceSimple {
     objets.push(
       segmentAvecExtremites(A, B),
       segmentAvecExtremites(B, C),
-      codageSegments('||', 'blue', A, B, B, C),
+      codageSegments('||', bleuMathalea, A, B, B, C),
     )
     objets.push(
       texteParPosition(`${stringNombre(a)}`, 0, -0.7, 0, 'black', 1.5),

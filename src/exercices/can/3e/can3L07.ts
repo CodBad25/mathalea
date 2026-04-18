@@ -5,6 +5,7 @@ import { segmentAvecExtremites } from '../../../lib/2d/segmentsVecteurs'
 import { labelPoint, latexParCoordonnees } from '../../../lib/2d/textes'
 import { tracePointSurDroite } from '../../../lib/2d/TracePointSurDroite'
 import { milieu } from '../../../lib/2d/utilitairesPoint'
+import { bleuMathalea } from '../../../lib/colors'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
@@ -110,7 +111,7 @@ export default class EnFonctionDe extends ExerciceSimple {
             )
           }
           objets.push(
-            codageSegments('//', 'blue', A, ...pointsSurAB2, B2),
+            codageSegments('//', bleuMathalea, A, ...pointsSurAB2, B2),
             AB2,
             A3B3,
             Texte2,
@@ -200,7 +201,7 @@ export default class EnFonctionDe extends ExerciceSimple {
             )
           }
           objets.push(
-            codageSegments('/', 'blue', A, ...pointsSurAB2, B2),
+            codageSegments('/', bleuMathalea, A, ...pointsSurAB2, B2),
             AB2,
             A3B3,
             Texte2,

@@ -7,6 +7,7 @@ import { texNombre } from '../../../lib/outils/texNombre'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
+import { bleuMathalea } from '../../../lib/colors'
 export const titre =
   'Lire une abscisse sur une droite graduée avec des décimaux'
 export const interactifReady = true
@@ -72,7 +73,7 @@ export default class AbscisseDroiteDecimaux extends ExerciceSimple {
             pixelsParCm: 35,
             scale: 0.75,
           },
-          latex2d('A', 4 * x1, 0.5, { color: 'blue' }),
+          latex2d('A', 4 * x1, 0.5, { color: bleuMathalea }),
           d,
         )
       this.correction = `Entre $${texNombre(abs0)}$ et $${texNombre(abs1)}$, il y a $5$ intervalles. Une graduation correspond donc à $0,002$. <br>
@@ -118,7 +119,7 @@ export default class AbscisseDroiteDecimaux extends ExerciceSimple {
             pixelsParCm: 35,
             scale: 0.75,
           },
-          latex2d('A', 4 * x1, 0.5, { color: 'blue' }),
+          latex2d('A', 4 * x1, 0.5, { color: bleuMathalea }),
           d,
         )
       this.correction = `Entre $${texNombre(abs0)}$ et $${texNombre(abs1)}$, il y a $4$ intervalles. Une graduation correspond donc à $${texNombre(0.0025)}$. <br>

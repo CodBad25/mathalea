@@ -21,6 +21,7 @@ import { context } from '../../../modules/context'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { listeQuestionsToContenu } from '../../../modules/outils'
 import Exercice from '../../Exercice'
+import { bleuMathalea } from '../../../lib/colors'
 
 export const titre = 'Course aux nombres - 2nde - Mai 2024'
 export const dateDePublication = '7/5/2024'
@@ -285,19 +286,19 @@ export default class nomExercice extends Exercice {
     const H = point(4, 4) // unite
     const s1 = segmentAvecExtremites(G, H)
     s1.epaisseur = 3
-    const s2 = segment(A, B, 'blue')
+    const s2 = segment(A, B, bleuMathalea)
     s2.epaisseur = 3
-    const s3 = segment(B, C, 'blue')
+    const s3 = segment(B, C, bleuMathalea)
     s3.epaisseur = 3
-    const s4 = segment(C, D, 'blue')
+    const s4 = segment(C, D, bleuMathalea)
     s4.epaisseur = 3
-    const s5 = segment(D, E, 'blue')
+    const s5 = segment(D, E, bleuMathalea)
     s5.epaisseur = 3
-    const s6 = segment(E, F, 'blue')
+    const s6 = segment(E, F, bleuMathalea)
     s6.epaisseur = 3
-    const s7 = segment(F, J, 'blue')
+    const s7 = segment(F, J, bleuMathalea)
     s7.epaisseur = 3
-    const s8 = segment(J, K, 'blue')
+    const s8 = segment(J, K, bleuMathalea)
     s8.epaisseur = 3
     const xmin = -1
     const ymin = 0
@@ -474,8 +475,8 @@ export default class nomExercice extends Exercice {
     const courbe1 = theSpline.courbe({
       epaisseur: 1.5,
       ajouteNoeuds: true,
-      optionsNoeuds: { color: 'blue', taille: 2, style: 'x', epaisseur: 2 },
-      color: 'blue',
+      optionsNoeuds: { color: bleuMathalea, taille: 2, style: 'x', epaisseur: 2 },
+      color: bleuMathalea,
     })
     const objetsEnonce = [repere1, courbe1, textO]
     this.listeQuestions[i] = 'On donne le graphique d’une fonction $f$ : <br>'

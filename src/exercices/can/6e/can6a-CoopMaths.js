@@ -22,6 +22,7 @@ import {
   randint,
 } from '../../../modules/outils'
 import Exercice from '../../Exercice'
+import { bleuMathalea } from '../../../lib/colors'
 
 export const dateDeModifImportante = '11/09/2024'
 export const dateDePublication = '5/08/2021'
@@ -556,7 +557,7 @@ export default class CourseAuxNombres6e extends Exercice {
                 thickoffset: 0,
                 axeStyle: '|->',
                 pointListe: [[b / a, 'A']],
-                pointCouleur: 'blue',
+                pointCouleur: bleuMathalea,
                 pointStyle: 'x',
                 labelsPrincipaux: true,
                 step1: 1,

@@ -11,6 +11,7 @@ import { choice } from '../../../lib/outils/arrayOutils'
 import { context } from '../../../modules/context'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import ExerciceCan from '../../ExerciceCan'
+import { bleuMathalea } from '../../../lib/colors'
 
 export const titre = 'Tracer un segment de longueur fractionnaire'
 export const interactifReady = true
@@ -75,7 +76,7 @@ export default class Can2026CM2Q26 extends ExerciceCan {
       labelX: false,
       labelY: false,
     })
-    figure.options.color = 'blue'
+    figure.options.color = bleuMathalea
     figure.options.gridWithTwoPointsOnSamePosition = false
     figure.options.thickness = 2
     figure.snapGrid = true
@@ -104,7 +105,7 @@ export default class Can2026CM2Q26 extends ExerciceCan {
       width: 360,
       height: 160,
     })
-    figureCorr.options.color = 'blue'
+    figureCorr.options.color = bleuMathalea
     figureCorr.options.thickness = 2
     figureCorr.create('Grid', {
       axeX: false,
@@ -161,7 +162,7 @@ export default class Can2026CM2Q26 extends ExerciceCan {
       }
     } else {
       const g = grille(0, 0, unite + 2, 5, 'gray', 0.5, 1)
-      const s = segment(1, 5, unite + 1, 5, 'blue')
+      const s = segment(1, 5, unite + 1, 5, bleuMathalea)
       s.epaisseur = 2
       s.styleExtremites = '|-|'
       s.tailleExtremites = 2

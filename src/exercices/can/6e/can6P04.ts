@@ -4,6 +4,7 @@ import { sp } from '../../../lib/outils/outilString'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
+import { bleuMathalea } from '../../../lib/colors'
 export const titre = 'Appliquer un pourcentage'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -43,7 +44,7 @@ export default class AppliquerUnPourcentage extends ExerciceSimple {
           `<br> Mentalement : <br>
         Prendre $10${sp(1)}\\%$  d'une quantité revient à la diviser par $10$.<br>
         Ainsi, $10${sp(1)}\\%$ de $${a} = \\dfrac{${a}}{10}=${texNombre(this.reponse)}$.`,
-          'blue',
+          bleuMathalea,
         )
         break
 
@@ -59,7 +60,7 @@ export default class AppliquerUnPourcentage extends ExerciceSimple {
         Comme $10${sp(1)}\\%$  de $${a}$ vaut $${a / 10}$ (pour prendre $10${sp(1)}\\%$  d'une quantité, on la divise par $10$), alors
         $${p}${sp(1)}\\%$ de $${a}=${p / 10}\\times ${a / 10}=${this.reponse}$.
        `,
-          'blue',
+          bleuMathalea,
         )
         break
       case 3:
@@ -73,7 +74,7 @@ export default class AppliquerUnPourcentage extends ExerciceSimple {
             `<br> Mentalement : <br>
             Prendre $50${sp(1)}\\%$  d'une quantité revient à la diviser par $2$.<br>
             Ainsi, $${p}${sp(1)}\\%$ de $${a} = ${a}\\div 2=${this.reponse}$.`,
-            'blue',
+            bleuMathalea,
           )
         } else {
           this.correction = `$${p}${sp(1)}\\%$ de $${a} = ${this.reponse}$`
@@ -83,7 +84,7 @@ export default class AppliquerUnPourcentage extends ExerciceSimple {
           Comme $10${sp(1)}\\%$  de $${a}$ vaut $${a / 10}$ (pour prendre $10${sp(1)}\\%$ d'une quantité, on la divise par $10$), alors
           $${p}${sp(1)}\\%$ de $${a}=${p / 10}\\times ${a / 10}=${this.reponse}$.
          `,
-            'blue',
+            bleuMathalea,
           )
         }
         break
@@ -96,7 +97,7 @@ export default class AppliquerUnPourcentage extends ExerciceSimple {
           `<br> Mentalement : <br>
         Prendre $1${sp(1)}\\%$  d'une quantité revient à la diviser par $100$.<br>
         Ainsi, $1${sp(1)}\\%$ de $${a} = \\dfrac{${a}}{100}=${texNombre(this.reponse)}$.`,
-          'blue',
+          bleuMathalea,
         )
         break
 
@@ -112,7 +113,7 @@ export default class AppliquerUnPourcentage extends ExerciceSimple {
         Prendre $25${sp(1)}\\%$  de $${a}$ revient à diviser $${a}$ par $4$.<br>
         $${p}${sp(1)}\\%$ de $${a}=\\dfrac{${a}}{4}=${this.reponse}$.
        `,
-            'blue',
+            bleuMathalea,
           )
         } else if (p === 75) {
           this.correction += texteEnCouleur(
@@ -121,14 +122,14 @@ export default class AppliquerUnPourcentage extends ExerciceSimple {
           Comme $25${sp(1)}\\%$  de $${a}$ vaut $${a / 4}$, alors
           $75${sp(1)}\\%$ de $${a}=${a / 4}\\times 3=${this.reponse}$.
          `,
-            'blue',
+            bleuMathalea,
           )
         } else {
           this.correction += texteEnCouleur(
             `<br> Mentalement : <br>
           Prendre $50${sp(1)}\\%$  d'une quantité revient à la diviser par $2$.<br>
           Ainsi, $50${sp(1)}\\%$ de $${a} = \\dfrac{${a}}{2}=${this.reponse}$.`,
-            'blue',
+            bleuMathalea,
           )
         }
         break
@@ -143,7 +144,7 @@ export default class AppliquerUnPourcentage extends ExerciceSimple {
             `<br> Mentalement : <br>
             Prendre $5${sp(1)}\\%$  d'une quantité revient à la diviser par $20$ soit la diviser par $10$ puis par $2$.<br>
             Ainsi, $5${sp(1)}\\%$ de $${a} = ${a}\\div 10 \\div 2=${this.reponse * 2}\\div 2=${this.reponse}$.`,
-            'blue',
+            bleuMathalea,
           )
         } else if (p === 10) {
           this.correction = `$10${sp(1)}\\%$ de $${a} = ${this.reponse}$`
@@ -152,7 +153,7 @@ export default class AppliquerUnPourcentage extends ExerciceSimple {
           Prendre $10${sp(1)}\\%$  de $${a}$ revient à diviser $${a}$ par $10$, alors
           $10${sp(1)}\\%$ de $${a}=\\dfrac{${a}}{10}=${this.reponse}$.
          `,
-            'blue',
+            bleuMathalea,
           )
         } else {
           this.correction = `$20${sp(1)}\\%$ de $${a} = ${this.reponse}$`
@@ -161,7 +162,7 @@ export default class AppliquerUnPourcentage extends ExerciceSimple {
           Prendre $20${sp(1)}\\%$  de $${a}$ revient à diviser $${a}$ par $5$ soit diviser par $10$ puis multiplier le résultat par $2$.<br>
           Donc $20${sp(1)}\\%$ de $${a}=\\dfrac{${a}}{10}\\times 2=${this.reponse / 2}\\times 2=${this.reponse}$.
          `,
-            'blue',
+            bleuMathalea,
           )
         }
         break

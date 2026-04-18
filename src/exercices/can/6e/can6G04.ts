@@ -10,6 +10,7 @@ import { tracePointSurDroite } from '../../../lib/2d/TracePointSurDroite'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
+import { bleuMathalea } from '../../../lib/colors'
 export const titre = 'Résoudre un problème de longueurs'
 export const dateDePublication = '2/11/2021'
 export const interactifReady = true
@@ -75,7 +76,7 @@ export default class ProblemesDeLongueurs extends ExerciceSimple {
     objets.push(
       // texteSurSegment(String(c), F, E),
       labelPoint(F),
-      codageSegments('/', 'blue', D, ...pointsSurDE, E),
+      codageSegments('/', bleuMathalea, D, ...pointsSurDE, E),
       s1,
       s2,
     )

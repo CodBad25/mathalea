@@ -1119,7 +1119,7 @@ export default class SujetCAN2021Seconde extends Exercice {
               xUnite: 2,
               yUnite: 1,
             })
-            // courbe(x => a * x + b, { repere: r, color: 'blue' })
+            // courbe(x => a * x + b, { repere: r, color: bleuMathalea })
             const f = (x: number) => 0.5 * x ** 3 + b
             const C = courbe(f, { repere: r, color: 'red' })
 

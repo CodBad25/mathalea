@@ -16,6 +16,7 @@ import { mathalea2d } from '../../../modules/mathalea2d'
 
 import { egal, randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
+import { bleuMathalea } from '../../../lib/colors'
 export const titre = 'Lire graphiquement une fonction affine*'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -80,17 +81,17 @@ export default class LectureGraphiqueFonctionAffine2 extends ExerciceSimple {
     L'ordonnée à l'origine  est $b=${b}$ et :`
     this.correction +=
       texteCentre(`$a=\\dfrac{\\text{Dénivelé vertical}}{\\text{Déplacement horizontal}}=
-    \\dfrac{${miseEnEvidence(a, 'blue')}}{${miseEnEvidence(d, 'green')}}$`)
+    \\dfrac{${miseEnEvidence(a, bleuMathalea)}}{${miseEnEvidence(d, 'green')}}$`)
     this.correction += `On en déduit que la fonction $f$ est définie par : $f(x)=${miseEnEvidence(`${reduireAxPlusB(maFraction.simplifie(), b)}`)}$ .<br>`
     s1 = segment(0, 0, 1, 0, 'black')
     s2 = segment(0, 0, 1, 0, 'black')
     if (a > 0) {
       s1 = segment(0, b - a, -d, b - a, 'green')
-      s2 = segment(0, b - a, 0, b, 'blue')
+      s2 = segment(0, b - a, 0, b, bleuMathalea)
     }
     if (a < 0) {
       s1 = segment(d, b, 0, b, 'green')
-      s2 = segment(d, b, d, b - abs(a), 'blue')
+      s2 = segment(d, b, d, b - abs(a), bleuMathalea)
     }
     s2.epaisseur = 2
     s1.epaisseur = 2
