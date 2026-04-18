@@ -1,18 +1,14 @@
-import CalculProbaExperience2Epreuves3e from '../3e/3S21'
+import CalculProbaExperience2Epreuves3e from '../3e/3S21Old'
 export const titre =
   'Simuler une expérience aléatoire à deux épreuves (indépendantes ou avec remise)'
 export const dateDePublication = '26/06/2024'
-export const dateDeModificationImportante = '18/04/2026' // passage en multiMathfield
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
-export const uuid = '4e68b'
+export const interactifType = 'mathLive'
+export const uuid = '4e68a'
 export const refs = {
-  'fr-fr': ['2S30-1'],
+  'fr-fr': [],
   'fr-ch': [],
 }
-/**
- * @author Jean-Claude Lhote
- */
 export default class CalculProbaExperience2Epreuves2nde extends CalculProbaExperience2Epreuves3e {
   constructor() {
     super()
