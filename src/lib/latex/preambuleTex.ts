@@ -3,7 +3,7 @@ import type { LatexFileInfos, contentsType } from '../LatexTypes'
 export function loadFonts(latexFileInfos: LatexFileInfos) {
   return `\n\\usepackage{etoolbox}
 \\newbool{dys}
-\\setbool{dys}{${latexFileInfos.fontOption === 'DysFont' ? 'true' : 'false'}}          
+\\setbool{dys}{${latexFileInfos.fontOption === 'DysFont' ? 'true' : 'false'}}
 \\ifbool{dys}{
 % POLICE DYS
 % ===== VARIABLE =====
@@ -51,11 +51,11 @@ export function loadFonts(latexFileInfos: LatexFileInfos) {
 \\usepackage{setspace}
 \\setstretch{1.7}
 % Une valeur d'environ 1.2 à 1.7 est souvent recommandée. Cela permet d'augmenter l'espace entre les lignes tout en offrant un léger espacement entre les mots.
-\\setlength{\\spaceskip}{1.2em}  
+\\setlength{\\spaceskip}{1.2em}
 % Une valeur d'environ 1.2em à 1.5em est couramment conseillée. Cela crée un espace plus ample entre les mots, ce qui peut aider à réduire la fatigue visuelle et à améliorer la fluidité de la lecture.
 }{
 % POLICE STANDARD
-\\usepackage[T1]{fontenc} 
+\\usepackage[T1]{fontenc}
 \\usepackage[scaled=1]{helvet}
 \\usepackage[fontsize=${latexFileInfos.tailleFontOption}]{scrextend}
 }`
@@ -120,27 +120,27 @@ function loadPreambuleCan() {
 \\tikzset{
   mybox/.style={
     rectangle,
-    drop shadow, 
+    drop shadow,
     inner sep=17pt,
     draw=gray,
     shade,
     top color=gray,
-    every shadow/.append style={fill=gray!40}, 
+    every shadow/.append style={fill=gray!40},
     bottom color=gray!20
     }
   }
-  
+
   \\newcommand\\MyBox[2][]{%
-    \\tikz\\node[mybox,#1] {#2}; 
+    \\tikz\\node[mybox,#1] {#2};
   }
   % Un compteur pour les questions CAN
   \\newcounter{nbEx}
   % Pour travailler avec les compteurs
   \\usepackage{totcount}
-  \\regtotcounter{nbEx}  
+  \\regtotcounter{nbEx}
 
   % Une checkmark !
-  \\def\\myCheckmark{\\tikz\\fill[scale=0.4](0,.35) -- (.25,0) -- (1,.7) -- (.25,.15) -- cycle;}  
+  \\def\\myCheckmark{\\tikz\\fill[scale=0.4](0,.35) -- (.25,0) -- (1,.7) -- (.25,.15) -- cycle;}
   % Repiqué sans vergogne dans lemanuel TikZ pour l'impatient
   \\def\\arete{3}   \\def\\epaisseur{5}   \\def\\rayon{2}
 
@@ -163,9 +163,9 @@ function loadPreambuleCan() {
       \\clip (0,-6) rectangle (6,6); % pour croiser
       \\shadedraw  \\ruban;
       \\draw (60:4) node [gray,xscale=2.5,yscale=2.5,rotate=-30]{CoopMaths};
-    \\end{tikzpicture} 
+    \\end{tikzpicture}
   }
-  
+
   \\newcommand{\\pageDeGardeCan}[1]{
     % #1 --> nom du compteur pour le nombre de questions
 
@@ -174,14 +174,14 @@ function loadPreambuleCan() {
 
     \\vspace{10mm}
     \\textsc{Classe} : \\makebox[.33\\linewidth]{\\dotfill} \\hfill
-    \\MyBox{\\Large\\textsc{Score} : \\makebox[.15\\linewidth]{\\dotfill} / \\total{#1}}      
+    \\MyBox{\\Large\\textsc{Score} : \\makebox[.15\\linewidth]{\\dotfill} / \\total{#1}}
     \\par\\medskip \\hrulefill \\par
     \\myCheckmark \\textit{\\textbf{Durée :  \\dureeCan}}
 
     \\smallskip
     \\myCheckmark \\textit{L'épreuve comporte \\total{#1} questions.}
 
-    \\smallskip  
+    \\smallskip
     \\myCheckmark \\textit{L'usage de la calculatrice et du brouillon est interdit.}
 
     \\smallskip
@@ -195,7 +195,7 @@ function loadPreambuleCan() {
   }
 
   \\newlength{\\Largeurcp}
-  
+
   % Nouveau TableauCan
   % Supprimer les headers et footer du longtblr
   \\DefTblrTemplate{contfoot-text}{default}{}
@@ -447,7 +447,7 @@ export function loadPackagesFromContent(contents: contentsType) {
   \\newcount\\foo
   \\ifstrequal{#3}{1}{%
   % --- Cas 1 colonne ---
-    
+
   \\foo=#2
 	\\loop
 		\\dotline
@@ -460,8 +460,8 @@ export function loadPackagesFromContent(contents: contentsType) {
     \\begin{multicols}{#3}
     \\foo=\\numexpr#2 * #3\\relax
 	  \\loop
-		  \\dotline 
-		
+		  \\dotline
+
       \\advance \\foo -1
     \\ifnum \\foo>0
     \\repeat
@@ -720,10 +720,10 @@ export function loadPackagesFromContent(contents: contentsType) {
   )
   testIfLoaded(
     ['\\Coord'],
-    `\\newcommand*{\\Coord}[4]{% 
-\\ensuremath{\\vect{#1}\\, 
-      \\begin{pmatrix} 
-        #2\\\\ 
+    `\\newcommand*{\\Coord}[4]{%
+\\ensuremath{\\vect{#1}\\,
+      \\begin{pmatrix}
+        #2\\\\
         #3\\\\
         #4
 \\end{pmatrix}}}`,
@@ -759,6 +759,74 @@ export function loadPackagesFromContent(contents: contentsType) {
 % Structure servant à avoir l'événement et la probabilité.
 \\def\\getEvene#1/#2\\endget{$#1$}
 \\def\\getProba#1/#2\\endget{$#2$}`
+  }
+
+  if (
+    contents.content.includes('\\begin{qcmprop}') ||
+    contents.contentCorr.includes('\\begin{qcmprop}')
+  ) {
+    contents.preamble += `
+% ===============================================================
+%                    FORMATAGE DES QCM (qcmenv.tex)
+% ===============================================================
+\\usepackage{tasks}
+\\usepackage{expkv-def}
+\\usepackage{fontawesome5}
+
+% --- Moteur logique pour détecter les bonnes réponses ---
+\\ExplSyntaxOn
+\\clist_new:N \\l_qcm_corrige_clist
+\\newcommand{\\SetQcmCorrige}[1]{\\clist_set:Nn \\l_qcm_corrige_clist {#1}}
+
+\\newcommand{\\IfCorrectTask}[2]{%
+  \\exp_args:NNx \\clist_if_in:NnTF \\l_qcm_corrige_clist { \\arabic{task} } { #1 } { #2 }
+}
+\\ExplSyntaxOff
+
+% ---------------------------------------------------------
+% 1. Définition des clés avec expkv-def
+% ---------------------------------------------------------
+\\ekvdefinekeys{qcmkeys}{
+  store   cols    = \\qcmcols,
+  initial cols    = 4,
+  noval   case    = \\qcmiscasetrue,
+  code    correct = \\SetQcmCorrige{#1}
+}
+\\newif\\ifqcmiscase
+
+% ---------------------------------------------------------
+% 2. Création de l'environnement QCM
+% ---------------------------------------------------------
+\\NewDocumentEnvironment{qcmprop}{ O{} +b }{%
+  \\qcmiscasefalse
+  \\SetQcmCorrige{}
+  \\ekvset{qcmkeys}{#1}%
+  \\ifqcmiscase
+    \\begin{tasks}[
+      label = \\IfCorrectTask{\\faCheckSquare[regular]}{\\faSquare[regular]},
+      label-width = 1.8em,
+      label-offset = 0.5em
+    ](\\qcmcols)
+      #2
+    \\end{tasks}
+  \\else
+    \\begin{tasks}[
+      label = \\begingroup\\setlength{\\fboxsep}{2pt}%
+              \\IfCorrectTask{%
+                \\fcolorbox{black}{white}{\\makebox[0.8em]{\\textbf{\\Alph*}}}%
+              }{%
+                \\colorbox{black}{\\makebox[0.8em]{\\textcolor{white}{\\textbf{\\Alph*}}}}%
+              }%
+              \\endgroup,
+      label-format = \\color{black},
+      label-width = 1.2em,
+      label-offset = 0.5em
+    ](\\qcmcols)
+      #2
+    \\end{tasks}
+  \\fi
+}{}
+`
   }
 }
 
@@ -867,18 +935,18 @@ Je refuse de décomposer zéro.
 function squareO() {
   return `%%%
   % Squaro
-  %%% 
-  
-  \\setKVdefault[Squaro]{Solution=false,Longueur=8,Largeur=8,Echelle=8mm,Graines=false,Perso=false} 
+  %%%
+
+  \\setKVdefault[Squaro]{Solution=false,Longueur=8,Largeur=8,Echelle=8mm,Graines=false,Perso=false}
   \\defKV[Squaro]{Graine=\\setKV[Squaro]{Graines}}%
-  
-  
+
+
   \\RenewDocumentCommand\\SquarO{o m}{%
     \\useKVdefault[Squaro]%
     \\setKV[Squaro]{#1}%
     \\BuildSquaro[#2]%
   }%
-  
+
   \\def\\BuildSquarobase{%
     numeric Longueur,Largeur;
     Longueur=\\useKV[Squaro]{Longueur};
@@ -895,13 +963,13 @@ function squareO() {
     pair A[];%centre des carrés.
     boolean Allume[][];
   }
-  
+
   \\RenewDocumentCommand\\BuildSquaro{o}{%
     \\mplibforcehmode
-    \\begin{mplibcode}  
+    \\begin{mplibcode}
       \\BuildSquarobase
-      
-    % Construction de la grille    
+
+    % Construction de la grille
       for k=0 upto Longueur-1:
         for l=0 upto Largeur-1:
           p:=p+1;
@@ -909,10 +977,10 @@ function squareO() {
           trace (unitsquare scaled u) shifted A[p];
         endfor;
       endfor;
-  
+
       % Tracé des cercles vides (ou pleins si Solution)
       if Perso :
-      string GrillePers;  
+      string GrillePers;
         GrillePers := "#1";
         string valeur;
         numeric indice;
@@ -946,7 +1014,7 @@ function squareO() {
           endfor;
         endfor;
       fi;
-      
+
     % Placement des chiffres dans les cases
       for k=0 upto Largeur-1:
       for l=0 upto Longueur-1:
