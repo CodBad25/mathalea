@@ -15,8 +15,8 @@ import Exercice from '../Exercice'
 
 import { tableauColonneLigne } from '../../lib/2d/tableau'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { addMultiMathfield } from '../../lib/interactif/MultiMathfield/MultiMathfield'
+import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { texFractionFromString } from '../../lib/outils/deprecatedFractions'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { context } from '../../modules/context'
@@ -26,17 +26,17 @@ export const titre =
 export const dateDePublication = '15/01/2022'
 export const dateDeModifImportante = '20/06/2024'
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'mathLive'
 
 /**
  * On doit calculer la probabilité qu'un événement se réalise après une expérience aléatoire à deux épreuves
  * @author Jean-claude Lhote
  */
-export const uuid = '77231'
+export const uuid = '76230'
 
 export const refs = {
-  'fr-fr': ['3S21'],
-  'fr-ch': ['11NO2-14'],
+  'fr-fr': [],
+  'fr-ch': [],
 }
 export default class CalculProbaExperience2Epreuves3e extends Exercice {
   niveau = '3eme'
@@ -69,12 +69,15 @@ export default class CalculProbaExperience2Epreuves3e extends Exercice {
       shuffle: false,
     })
 
-    for (let i = 0, cpt = 0, question; i < this.nbQuestions && cpt < 50; ) {
+    for (
+      let i = 0, cpt = 0, NoQuestion = 0, question;
+      i < this.nbQuestions && cpt < 50;
+    ) {
       switch (QuestionsDisponibles[i]) {
         case 1:
           question = unePieceDeuxUrnes(
             this,
-            i,
+            NoQuestion,
             this.sup2 && this.niveau === '2nde',
             false,
             true,
@@ -85,7 +88,7 @@ export default class CalculProbaExperience2Epreuves3e extends Exercice {
         default:
           question = urneDeuxTiragesAvecRemise(
             this,
-            i,
+            NoQuestion,
             this.sup2 && this.niveau === '2nde',
             false,
             this.niveau,
@@ -95,6 +98,7 @@ export default class CalculProbaExperience2Epreuves3e extends Exercice {
       if (this.questionJamaisPosee(i, ...question.alea)) {
         this.listeQuestions[i] = question.texte
         this.listeCorrections[i] = question.texteCorr
+        NoQuestion = question.NoQuestion
         i++
       }
       cpt++
@@ -283,21 +287,24 @@ function unePieceDeuxUrnes(
   const proba1 = fraction(nbBouleC, card)
   const proba2 = fraction(n1[choix2] + n2[choix2], card1 + card2)
   const urne = pileOuFace === 'Pile' ? 'première' : 'deuxième'
-  texte += addMultiMathfield(exercice, NoQuestion, {
-    dataTemplate: `a) La pièce vient de tomber sur «${pileOuFace}». Donner la probabilité d'obtenir une boule ${boules[choix1]}. %{champ1}
-    b) On recommence l'expérience au début. Donner la probabilité d'obtenir une boule ${boules[choix2]}. %{champ2}`,
-    dataOptions: {
-      champ1: {
-        keyboard: KeyboardType.clavierDeBaseAvecFraction,
-        ldots: false,
-      },
-      champ2: {
-        keyboard: KeyboardType.clavierDeBaseAvecFraction,
-        ldots: false,
-      },
-    },
-  })
-
+  texte +=
+    `${numAlpha(q)} La pièce vient de tomber sur «${pileOuFace}». Donner la probabilité d'obtenir une boule ${boules[choix1]}.` +
+    ajouteChampTexteMathLive(
+      exercice,
+      NoQuestion,
+      KeyboardType.clavierDeBaseAvecFraction,
+    ) +
+    '<br>'
+  q++
+  texte +=
+    `${numAlpha(q)} On recommence l'expérience au début. Donner la probabilité d'obtenir une boule ${boules[choix2]}.` +
+    ajouteChampTexteMathLive(
+      exercice,
+      NoQuestion + 1,
+      KeyboardType.clavierDeBaseAvecFraction,
+    ) +
+    '<br>'
+  q++
   const ligneEnt = ['\\text{Pièce\\textbackslash Boules}']
   const colonneEnt = ['\\text{Pile}', '\\text{Face}']
   const contenu = []
@@ -321,15 +328,9 @@ function unePieceDeuxUrnes(
   texteCorr += tableau + '<br>'
   texteCorr += `${numAlpha(q)} Comme on a fait «${pileOuFace}», on va tirer une boule dans la ${urne} urne où il y a ${nbBouleC} boule${nbBouleC > 1 ? 's' : ''} ${boules[choix1]}${nbBouleC > 1 ? 's' : ''} parmi ${card} boules.<br>`
   if (!context.isAmc)
-    handleAnswers(
-      exercice,
-      NoQuestion,
-      {
-        champ1: { value: proba1.texFraction, options: { fractionEgale: true } },
-        champ2: { value: proba2.texFraction, options: { fractionEgale: true } },
-      },
-      { formatInteractif: 'multiMathfield' },
-    )
+    setReponse(exercice, NoQuestion, proba1, {
+      formatInteractif: 'fractionEgale',
+    })
   q++
   texteCorr += `La probabilité de cet événement est donc de $${!proba1.estIrreductible ? proba1.texFraction + '=' + miseEnEvidence(proba1.texFractionSimplifiee) : miseEnEvidence(proba1.texFraction)}$.<br>`
   texteCorr += `${numAlpha(q)} `
@@ -338,8 +339,12 @@ function unePieceDeuxUrnes(
       ? "Il y a équiprobabilité entre toutes les issues du tableau car, d'une part, la pièce est équilibrée et, d'autre part, chaque urne contient 6 boules.<br>"
       : ''
   texteCorr += `Il y a ${n1[choix2] + n2[choix2]} issues avec une boule ${boules[choix2]} parmi ${card1 + card2} issues en tout. La probabilité de cet événement est donc de $${!proba2.estIrreductible ? proba2.texFraction + '=' + miseEnEvidence(proba2.texFractionSimplifiee) : miseEnEvidence(proba2.texFraction)}$.<br>`
+  if (!context.isAmc)
+    setReponse(exercice, NoQuestion + 1, proba2, {
+      formatInteractif: 'fractionEgale',
+    })
 
-  return { texte, texteCorr, alea: [...n1, ...n2] }
+  return { texte, texteCorr, alea: [...n1, ...n2], NoQuestion: NoQuestion + 2 }
 }
 
 // On tire deux boules dans une urne avec remise
@@ -495,26 +500,30 @@ function urneDeuxTiragesAvecRemise(
   const proba4 = proba3.multiplieEntier(2)
   let texte = `Dans une urne, il y a ${nbBoule1} boule${nbBoule1 > 1 ? 's' : ''} ${b1Color}${nbBoule1 > 1 && b1Char !== 'O' ? 's' : ''} et ${nbBoule2} boule${nbBoule2 > 1 ? 's' : ''} ${b2Color}${nbBoule2 > 1 && b2Char !== 'O' ? 's' : ''} indiscernables au toucher.<br>`
   texte += 'On tire successivement et avec remise deux boules.<br>'
-  texte += addMultiMathfield(exercice, NoQuestion, {
-    dataTemplate: `a) Donner la probabilité d'obtenir deux boules ${choix[1]}${choix[2] !== 'O' ? 's' : ''}. %{champ1}
-    b) Donner la probabilité d'obtenir deux boules de la même couleur. %{champ2}
-    c) Donner la probabilité d'obtenir deux boules de couleurs différentes. %{champ3}`,
-    dataOptions: {
-      champ1: {
-        keyboard: KeyboardType.clavierDeBaseAvecFraction,
-        ldots: false,
-      },
-      champ2: {
-        keyboard: KeyboardType.clavierDeBaseAvecFraction,
-        ldots: false,
-      },
-      champ3: {
-        keyboard: KeyboardType.clavierDeBaseAvecFraction,
-        ldots: false,
-      },
-    },
-  })
-
+  texte +=
+    `${numAlpha(0)} Déterminer la probabilité d'obtenir deux boules ${choix[1]}${choix[2] !== 'O' ? 's' : ''}.` +
+    ajouteChampTexteMathLive(
+      exercice,
+      NoQuestion,
+      KeyboardType.clavierDeBaseAvecFraction,
+    ) +
+    '<br>'
+  texte +=
+    `${numAlpha(1)} Déterminer la probabilité d'obtenir deux boules de la même couleur.` +
+    ajouteChampTexteMathLive(
+      exercice,
+      NoQuestion + 1,
+      KeyboardType.clavierDeBaseAvecFraction,
+    ) +
+    '<br>'
+  texte +=
+    `${numAlpha(2)} Déterminer la probabilité d'obtenir deux boules de couleurs différentes.` +
+    ajouteChampTexteMathLive(
+      exercice,
+      NoQuestion + 2,
+      KeyboardType.clavierDeBaseAvecFraction,
+    ) +
+    '<br>'
   let texteCorr = `L'issue «${b1Color}-${b1Color}» peut être obtenue de ${contenu[0]} façon${contenu[0] > 1 ? 's' : ''} et l'issue «${b1Color}-${b2Color}» peut être obtenue de ${contenu[1]} façon${contenu[1] > 1 ? 's' : ''}.<br>`
   texteCorr +=
     'Voici un tableau à double entrée qui représente toutes les issues de cette expérience.<br><br>'
@@ -562,26 +571,171 @@ function urneDeuxTiragesAvecRemise(
   texteCorr += `Une autre façon de faire est de considérer que c'est l'événement contraire de «obtenir deux boules de la même couleur» dont on a calculé la probabilité à la question ${numAlpha(1)}.<br>`
   texteCorr += `On peut donc calculer la probabilité de cet événement en calculant : $1 -${proba1et2.texFractionSimplifiee} = ${miseEnEvidence(proba1et2.entierMoinsFraction(1).texFractionSimplifiee)}$.`
   if (!context.isAmc)
-    handleAnswers(
-      exercice,
-      NoQuestion,
-      {
-        champ1: {
-          value: probaChoix.texFraction,
-          options: { fractionEgale: true },
-        },
-        champ2: {
-          value: proba1et2.texFraction,
-          options: { fractionEgale: true },
-        },
-        champ3: { value: proba4.texFraction, options: { fractionEgale: true } },
-      },
-      { formatInteractif: 'multiMathfield' },
-    )
+    setReponse(exercice, NoQuestion, probaChoix, {
+      formatInteractif: 'fractionEgale',
+    })
+  if (!context.isAmc)
+    setReponse(exercice, NoQuestion + 1, proba1et2, {
+      formatInteractif: 'fractionEgale',
+    })
+  if (!context.isAmc)
+    setReponse(exercice, NoQuestion + 2, proba4, {
+      formatInteractif: 'fractionEgale',
+    })
 
   return {
     texte,
     texteCorr,
     alea: [nbBoule1, nbBoule2, b1Char, b2Char],
+    NoQuestion: NoQuestion + 3,
   }
 }
+
+// On tire deux boules dans une urne sans remise
+/*
+function urneDeuxTiragesSansRemise (exercice, NoQuestion, avecArbreDansCorrection, sup2) { // tirage dans une urne avec remise
+  const [b1Color, b2Color] = shuffle(['bleue', 'rouge', 'verte', 'orange', 'noire', 'jaune']).splice(0, 2)
+
+  const b1Char = premiereLettreEnMajuscule(b1Color.charAt(0))
+  const b2Char = premiereLettreEnMajuscule(b2Color.charAt(0))
+  const nbBoule1 = randint(2, 3)
+  const nbBoule2 = randint(2, 3, nbBoule1)
+  const ligneEnt = ['\\text{Tirage1\\textbackslash Tirage2}']
+  const colonneEnt = []
+  const contenu = []
+  const card = nbBoule1 + nbBoule2
+  const tirage1 = []
+  for (let i = 0; i < nbBoule1; i++) {
+    tirage1.push(new Arbre({
+      nom: `${b1Char}`,
+      rationnel: true,
+      proba: fraction(1, card),
+      visible: false,
+      alter: '',
+      enfant: [],
+      racine: false
+    }))
+    for (let j = 0; j < nbBoule1 - 1; j++) {
+      tirage1[i].enfants.push(new Arbre({
+        nom: `${b1Char} `,
+        rationnel: true,
+        proba: fraction(1, card),
+        visible: false,
+        alter: '',
+        enfant: [],
+        racine: false
+      }))
+    }
+    for (let j = 0; j < nbBoule2; j++) {
+      tirage1[i].enfants.push(new Arbre({
+        nom: `${b2Char}`,
+        rationnel: true,
+        proba: fraction(1, card),
+        visible: false,
+        alter: '',
+        enfant: [],
+        racine: false
+      }))
+    }
+  }
+
+  for (let i = 0; i < nbBoule2; i++) {
+    tirage1.push(new Arbre({
+      nom: `${b2Char}`,
+      rationnel: true,
+      proba: fraction(1, card),
+      visible: false,
+      alter: '',
+      enfant: [],
+      racine: false
+    }))
+    for (let j = 0; j < nbBoule1; j++) {
+      tirage1[i + nbBoule1].enfants.push(new Arbre({
+        nom: `${b1Char} `,
+        rationnel: true,
+        proba: fraction(1, card),
+        visible: false,
+        alter: '',
+        enfant: [],
+        racine: false
+      }))
+    }
+    for (let j = 0; j < nbBoule2 - 1; j++) {
+      tirage1[i + nbBoule1].enfants.push(new Arbre({
+        nom: `${b2Char} `,
+        rationnel: true,
+        proba: fraction(1, card),
+        visible: false,
+        alter: '',
+        enfant: [],
+        racine: false
+      }))
+    }
+  }
+  const omega = new Arbre({
+    nom: '',
+    rationnel: true,
+    proba: 1,
+    visible: false,
+    alter: '',
+    enfants: tirage1,
+    racine: true
+  })
+
+  for (let i = 0; i < 2; i++) {
+    ligneEnt.push(`${i === 0 ? '\\text{' + b1Color + '}' : '\\text{' + b2Color + '}'}`)
+    colonneEnt.push(`${i === 0 ? '\\text{' + b1Color + '}' : '\\text{' + b2Color + '}'}`)
+    for (let j = 0; j < 2; j++) {
+      contenu.push(i === 0 ? (j === 0 ? (nbBoule1 - 1) * nbBoule1 : nbBoule1 * nbBoule2) : (j === 0 ? nbBoule1 * nbBoule2 : nbBoule2 * (nbBoule2 - 1)))
+    }
+  }
+
+  const tableau = tableauColonneLigne(ligneEnt, colonneEnt, contenu)
+
+  omega.setTailles() // On calcule les tailles des arbres.
+  const objets = omega.represente(0, 12, 0, sup2 ? 2.5 : 1.6, false, -1, 6) // On crée l'arbre complet echelle 1.4 feuilles verticales sens gauche-droite
+  const choix = choice([[nbBoule1, b1Color, b1Char], [nbBoule2, b2Color, b2Char]])
+  const probaChoix = fraction(choix[0] ** 2 - choix[0], card ** 2 - card)
+  const proba1 = fraction(nbBoule1 ** 2 - nbBoule1, card ** 2 - card)
+  const proba2 = fraction(nbBoule2 ** 2 - nbBoule2, card ** 2 - card)
+  const proba1et2 = proba1.sommeFraction(proba2)
+  const proba3 = fraction(nbBoule1 * nbBoule2, card ** 2 - card)
+  const proba4 = proba3.multiplieEntier(2)
+  let texte = `Dans une urne, il y a ${nbBoule1} boule${nbBoule1 > 1 ? 's' : ''} ${b1Color}${nbBoule1 > 1 && b1Char !== 'O' ? 's' : ''} et ${nbBoule2} boule${nbBoule2 > 1 ? 's' : ''} ${b2Color}${nbBoule2 > 1 && b2Char !== 'O' ? 's' : ''} indiscernables au toucher.<br>`
+  texte += 'On tire successivement et sans remise deux boules.<br>'
+  texte += `${numAlpha(0)} Déterminer la probabilité d'obtenir deux boules ${choix[1]}${choix[2] !== 'O' ? 's' : ''}.` + ajouteChampTexteMathLive(exercice, NoQuestion, KeyboardType.clavierDeBaseAvecFraction) + '<br>'
+  texte += `${numAlpha(1)} Déterminer la probabilité d'obtenir deux boules de la même couleur.` + ajouteChampTexteMathLive(exercice, NoQuestion + 1, KeyboardType.clavierDeBaseAvecFraction) + '<br>'
+  texte += `${numAlpha(2)} Déterminer la probabilité d'obtenir deux boules de couleurs différentes.` + ajouteChampTexteMathLive(exercice, NoQuestion + 2, KeyboardType.clavierDeBaseAvecFraction) + '<br>'
+  let texteCorr = `L'issue «${b1Color}-${b1Color}» peut être obtenue de ${contenu[0]} façon${contenu[0] > 1 ? 's' : ''} et l'issue «${b1Color}-${b2Color}» peut être obtenue de ${contenu[1]} façon${contenu[1] > 1 ? 's' : ''}.<br>`
+  texteCorr += 'On a représenté les issues de l\'expérience par le tableau ci-dessous :<br><br>'
+  texteCorr += tableau + '<br><br>'
+  if (avecArbreDansCorrection) {
+    texteCorr += 'On peut aussi présenter les issues sous la forme d\'un arbre de dénombrement :<br>'
+    texteCorr += mathalea2d({
+      xmin: 0,
+      xmax: card * 8.5,
+      ymin: 0,
+      ymax: 13,
+      zoom: 0.8,
+      scale: 9 / card / card
+    }, ...objets) + '<br>'
+    texteCorr += `Légende : ${b1Char} = ${b1Color} et ${b2Char} = ${b2Color}.<br>`
+  }
+  texteCorr += `${numAlpha(0)} L'événement «obtenir deux boules ${choix[1]}${choix[2] !== 'O' ? 's' : ''}» est réalisé par l'issue {${choix[2] + choix[2]}}.`
+  texteCorr += ` On comptabilise ${choix[0] ** 2 - choix[0]} issues {${choix[2] + choix[2]}} parmi ${card ** 2 - card} issues en tout.<br>`
+  texteCorr += `La probabilité de cet événement est donc de $${!probaChoix.estIrreductible ? probaChoix.texFraction + '=' + miseEnEvidence(probaChoix.texFractionSimplifiee) : miseEnEvidence(probaChoix.texFraction)}$.<br>`
+  texteCorr += `${numAlpha(1)} L'événement «obtenir deux boules de la même couleur» est réalisé par les issues {${b1Char + b1Char}, ${b2Char + b2Char}}.`
+  texteCorr += ` On comptabilise ${nbBoule1 ** 2 - nbBoule1} issues {${b1Char + b1Char}} et   ${nbBoule2 ** 2 - nbBoule2} issues {${b2Char + b2Char}} parmi ${card ** 2 - card} issues en tout.<br>`
+  texteCorr += `La probabilité de cet événement est donc de $${proba1.texFraction}+${proba2.texFraction}`
+  texteCorr += `=${!proba1et2.estIrreductible ? proba1et2.texFraction + '=' + miseEnEvidence(proba1et2.texFractionSimplifiee) : miseEnEvidence(proba1et2.texFraction)}$.<br>`
+
+  texteCorr += `${numAlpha(2)} L'événement «obtenir deux boules de couleurs différentes» est réalisé par les issues {${b1Char + b2Char}, ${b2Char + b1Char}}.`
+  texteCorr += ` On comptabilise ${nbBoule1 * nbBoule2} issues {${b1Char + b2Char}} et autant d'issues {${b2Char + b1Char}} parmi ${card ** 2 - card} issues en tout.<br>`
+  texteCorr += `La probabilité de cet événement est donc de $2\\times ${proba3.texFraction}=${proba4.texFraction}${!proba4.estIrreductible ? '=' + proba4.texFractionSimplifiee : ''}$.<br>`
+  texteCorr += `Une autre façon de faire est de considérer que c'est l'événement contraire de «obtenir deux boules de la même couleur» dont on a calculé la probabilité à la question ${numAlpha(1)}.<br>`
+  texteCorr += `On peut donc calculer la probabilité de cet événement en calculant : $1 -${proba1et2.texFractionSimplifiee} = ${proba4.texFractionSimplifiee}$.`
+  if (!context.isAmc) setReponse(exercice, NoQuestion, probaChoix, { formatInteractif: 'fractionEgale' })
+  if (!context.isAmc) setReponse(exercice, NoQuestion + 1, proba1et2, { formatInteractif: 'fractionEgale' })
+  if (!context.isAmc) setReponse(exercice, NoQuestion + 2, proba4, { formatInteractif: 'fractionEgale' })
+  return { texte, texteCorr, alea: [nbBoule1, nbBoule2, b1Char, b2Char], NoQuestion: NoQuestion + 3 }
+} */
