@@ -248,8 +248,8 @@ export type OptionsComparaisonType = {
   additionSeulementEtNonResultat?: boolean
   soustractionSeulementEtNonResultat?: boolean
   multiplicationSeulementEtNonResultat?: boolean
-  divisionSeulementEtNonResultat?: boolean
-  avecFractions?: boolean // Encore utile ?
+  divisionSeulementEtNonResultat?: boolean // Non encore utilisé
+  avecFractions?: boolean // Utilisé seulement dans aLeBonNombreDePropsDifferentes
   fractionIrreductible?: boolean
   fractionSimplifiee?: boolean
   fractionReduite?: boolean
@@ -280,7 +280,7 @@ export type OptionsComparaisonType = {
   entier?: boolean
   domaine?: number[]
   ensembleDeNombres?: boolean
-  kUplet?: boolean
+  kUplet?: boolean // Non encore utilisé
   suiteDeNombres?: boolean
   suiteRangeeDeNombres?: boolean
   calculFormel?: boolean
@@ -289,9 +289,7 @@ export type OptionsComparaisonType = {
   fractionSansRacineCarree?: boolean
   // Non fait : Pas de tests unitaires
   sansTrigo?: boolean
-  variablefractionIdentique?: boolean
-  avecSigneMultiplier?: boolean
-  entiersConsecutifs?: boolean // Pas de wiki
+  entiersConsecutifs?: boolean // Pas de wiki et non utilisé
   expressionsForcementReduites?: boolean // Pas de wiki
   coordonnees?: boolean
   ordered?: boolean // Options pour drag and drop
