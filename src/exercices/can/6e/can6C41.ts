@@ -36,6 +36,7 @@ export default class ComparerFraction extends Exercice {
       ].join('\n'),
     ]
     this.spacingCorr = 1.5
+    this.sup = 3
   }
 
   nouvelleVersion() {
