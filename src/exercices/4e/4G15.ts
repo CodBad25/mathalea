@@ -34,7 +34,7 @@ import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { orangeMathalea } from '../../lib/colors'
+import { orangeMathalea, bleuMathalea } from '../../lib/colors'
 
 export const titre = 'Effectuer des transformations de triangles'
 /**
@@ -231,7 +231,7 @@ export default class TransformationsDeTriangle extends Exercice {
       anim.traitRapide(X, Y, { couleur: 'red', epaisseur: 1 })
       anim.textePoint('(d)', milieu(B, B1))
       anim.symetrieAxialePolygone(triangle0, med, ['A_1', 'B_1', 'C_1'], {
-        couleur: 'blue',
+        couleur: bleuMathalea,
         couleurCodage: 'lightblue',
       })
       anim.demiTourPolygone(triangle2, D, ['A_2', 'B_2', 'C_2'], {

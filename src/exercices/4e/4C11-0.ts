@@ -13,6 +13,7 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 
 export const titre =
   'Effectuer des calculs complexes utilisant les priorités opératoires'
@@ -124,11 +125,11 @@ export default class PrioritesEtRelatifsComplex extends Exercice {
           const etape1 = c - d
           const etape2 = b + etape1
           resultat = texNombre(a - etape2)
-          texteCorr = `$${lettreDepuisChiffre(i + 1)} = ${a} - (${b} + (${miseEnEvidence(c + ' - ' + ecritureParentheseSiNegatif(d), 'blue')}))`
+          texteCorr = `$${lettreDepuisChiffre(i + 1)} = ${a} - (${b} + (${miseEnEvidence(c + ' - ' + ecritureParentheseSiNegatif(d), bleuMathalea)}))`
           if (d < 0) {
-            texteCorr += `= ${a} - (${b} + (${miseEnEvidence(c + ' + ' + -d, 'blue')}))`
+            texteCorr += `= ${a} - (${b} + (${miseEnEvidence(c + ' + ' + -d, bleuMathalea)}))`
           }
-          texteCorr += `= ${a} - (${miseEnEvidence(b + ' + ' + ecritureParentheseSiNegatif(etape1), 'blue')})`
+          texteCorr += `= ${a} - (${miseEnEvidence(b + ' + ' + ecritureParentheseSiNegatif(etape1), bleuMathalea)})`
           texteCorr += `= ${a} - ${ecritureParentheseSiNegatif(etape2)}`
           if (etape2 < 0) texteCorr += `= ${a} + ${-etape2}`
           break
@@ -144,8 +145,8 @@ export default class PrioritesEtRelatifsComplex extends Exercice {
           const etape1Q22 = c * d
           const etape2Q22 = b + etape1Q22
           resultat = texNombre(a * etape2Q22)
-          texteCorr = `$${lettreDepuisChiffre(i + 1)} = ${a} \\times (${b} + ${miseEnEvidence(ecritureParentheseSiNegatif(c) + ' \\times ' + ecritureParentheseSiNegatif(d), 'blue')})`
-          texteCorr += `= ${a} \\times (${miseEnEvidence(`${b} + ${ecritureParentheseSiNegatif(etape1Q22)}`, 'blue')})`
+          texteCorr = `$${lettreDepuisChiffre(i + 1)} = ${a} \\times (${b} + ${miseEnEvidence(ecritureParentheseSiNegatif(c) + ' \\times ' + ecritureParentheseSiNegatif(d), bleuMathalea)})`
+          texteCorr += `= ${a} \\times (${miseEnEvidence(`${b} + ${ecritureParentheseSiNegatif(etape1Q22)}`, bleuMathalea)})`
           texteCorr += `= ${a} \\times ${ecritureParentheseSiNegatif(etape2Q22)}`
           break
         }
@@ -168,10 +169,10 @@ export default class PrioritesEtRelatifsComplex extends Exercice {
           const etape3Q23 = d + e
           resultat = new FractionEtendue(etape2Q23, etape3Q23)
             .texFractionSimplifiee
-          texteCorr = `$${lettreDepuisChiffre(i + 1)} = \\dfrac{${a} - ${miseEnEvidence(ecritureParentheseSiNegatif(b) + ' \\times ' + ecritureParentheseSiNegatif(c), 'blue')}}{${miseEnEvidence(d + ' + ' + ecritureParentheseSiNegatif(e), 'blue')}}`
-          texteCorr += `= \\dfrac{${miseEnEvidence(`${a} - ${ecritureParentheseSiNegatif(etape1Q23)}`, 'blue')}}{${etape3Q23}}`
+          texteCorr = `$${lettreDepuisChiffre(i + 1)} = \\dfrac{${a} - ${miseEnEvidence(ecritureParentheseSiNegatif(b) + ' \\times ' + ecritureParentheseSiNegatif(c), bleuMathalea)}}{${miseEnEvidence(d + ' + ' + ecritureParentheseSiNegatif(e), bleuMathalea)}}`
+          texteCorr += `= \\dfrac{${miseEnEvidence(`${a} - ${ecritureParentheseSiNegatif(etape1Q23)}`, bleuMathalea)}}{${etape3Q23}}`
           if (etape1Q23 < 0) {
-            texteCorr += `= \\dfrac{${miseEnEvidence(`${a} + ${-etape1Q23}`, 'blue')}}{${etape3Q23}}`
+            texteCorr += `= \\dfrac{${miseEnEvidence(`${a} + ${-etape1Q23}`, bleuMathalea)}}{${etape3Q23}}`
           }
           if (!(etape2Q23 > 0 && etape3Q23 > 0)) {
             texteCorr += `= \\dfrac{${etape2Q23}}{${etape3Q23}}`
@@ -191,11 +192,11 @@ export default class PrioritesEtRelatifsComplex extends Exercice {
           const etape2Q24 = c * etape1Q24
           const etape3Q24 = b - etape2Q24
           resultat = texNombre(a * etape3Q24)
-          texteCorr = `$${lettreDepuisChiffre(i + 1)} = ${a} \\times (${b} - ${ecritureParentheseSiNegatif(c)} \\times (${miseEnEvidence(d + ' + ' + ecritureParentheseSiNegatif(e), 'blue')}))`
-          texteCorr += `= ${a} \\times (${b} - ${miseEnEvidence(ecritureParentheseSiNegatif(c) + ' \\times ' + ecritureParentheseSiNegatif(etape1Q24), 'blue')})`
-          texteCorr += `= ${a} \\times (${miseEnEvidence(b + ' - ' + ecritureParentheseSiNegatif(etape2Q24), 'blue')})`
+          texteCorr = `$${lettreDepuisChiffre(i + 1)} = ${a} \\times (${b} - ${ecritureParentheseSiNegatif(c)} \\times (${miseEnEvidence(d + ' + ' + ecritureParentheseSiNegatif(e), bleuMathalea)}))`
+          texteCorr += `= ${a} \\times (${b} - ${miseEnEvidence(ecritureParentheseSiNegatif(c) + ' \\times ' + ecritureParentheseSiNegatif(etape1Q24), bleuMathalea)})`
+          texteCorr += `= ${a} \\times (${miseEnEvidence(b + ' - ' + ecritureParentheseSiNegatif(etape2Q24), bleuMathalea)})`
           if (etape2Q24 < 0) {
-            texteCorr += `= ${a} \\times (${miseEnEvidence(b + ' + ' + -etape2Q24, 'blue')})`
+            texteCorr += `= ${a} \\times (${miseEnEvidence(b + ' + ' + -etape2Q24, bleuMathalea)})`
           }
           texteCorr += `= ${a} \\times ${ecritureParentheseSiNegatif(etape3Q24)}`
           break
@@ -213,12 +214,12 @@ export default class PrioritesEtRelatifsComplex extends Exercice {
           const etape2Q25 = c - etape1Q25
           const etape3Q25 = b + etape2Q25
           resultat = texNombre(a - etape3Q25)
-          texteCorr = `$${lettreDepuisChiffre(i + 1)} = ${a} - (${texNombre(b)} + (${c} - ${miseEnEvidence(ecritureParentheseSiNegatif(d) + ' \\times ' + ecritureParentheseSiNegatif(e), 'blue')}))`
-          texteCorr += `= ${a} - (${texNombre(b)} + (${miseEnEvidence(c + ' - ' + ecritureParentheseSiNegatif(etape1Q25), 'blue')}))`
+          texteCorr = `$${lettreDepuisChiffre(i + 1)} = ${a} - (${texNombre(b)} + (${c} - ${miseEnEvidence(ecritureParentheseSiNegatif(d) + ' \\times ' + ecritureParentheseSiNegatif(e), bleuMathalea)}))`
+          texteCorr += `= ${a} - (${texNombre(b)} + (${miseEnEvidence(c + ' - ' + ecritureParentheseSiNegatif(etape1Q25), bleuMathalea)}))`
           if (etape1Q25 < 0) {
-            texteCorr += `= ${a} - (${texNombre(b)} + (${miseEnEvidence(c + ' + ' + -etape1Q25, 'blue')}))`
+            texteCorr += `= ${a} - (${texNombre(b)} + (${miseEnEvidence(c + ' + ' + -etape1Q25, bleuMathalea)}))`
           }
-          texteCorr += `= ${a} - (${miseEnEvidence(texNombre(b) + ' + ' + ecritureParentheseSiNegatif(etape2Q25), 'blue')})`
+          texteCorr += `= ${a} - (${miseEnEvidence(texNombre(b) + ' + ' + ecritureParentheseSiNegatif(etape2Q25), bleuMathalea)})`
           texteCorr += `= ${a} - ${ecritureParentheseSiNegatif(etape3Q25)}`
           if (etape3Q25 < 0) {
             texteCorr += `= ${a} + ${ecritureParentheseSiNegatif(-etape3Q25)}`
@@ -240,8 +241,8 @@ export default class PrioritesEtRelatifsComplex extends Exercice {
           const etape3Q26 = d + e
           const etape4Q26 = etape3Q26 * f
           resultat = texNombre(etape2Q26 - etape4Q26)
-          texteCorr = `$${lettreDepuisChiffre(i + 1)} = ${a} \\times (${miseEnEvidence(texNombre(b) + ' + ' + ecritureParentheseSiNegatif(c), 'blue')}) - (${miseEnEvidence(d + ' + ' + ecritureParentheseSiNegatif(e), 'blue')}) \\times ${ecritureParentheseSiNegatif(f)}`
-          texteCorr += `= ${miseEnEvidence(a + ' \\times ' + ecritureParentheseSiNegatif(etape1Q26), 'blue')} - ${miseEnEvidence(ecritureParentheseSiNegatif(etape3Q26) + ' \\times ' + ecritureParentheseSiNegatif(f), 'blue')}`
+          texteCorr = `$${lettreDepuisChiffre(i + 1)} = ${a} \\times (${miseEnEvidence(texNombre(b) + ' + ' + ecritureParentheseSiNegatif(c), bleuMathalea)}) - (${miseEnEvidence(d + ' + ' + ecritureParentheseSiNegatif(e), bleuMathalea)}) \\times ${ecritureParentheseSiNegatif(f)}`
+          texteCorr += `= ${miseEnEvidence(a + ' \\times ' + ecritureParentheseSiNegatif(etape1Q26), bleuMathalea)} - ${miseEnEvidence(ecritureParentheseSiNegatif(etape3Q26) + ' \\times ' + ecritureParentheseSiNegatif(f), bleuMathalea)}`
           texteCorr += `= ${texNombre(etape2Q26)} - ${ecritureParentheseSiNegatif(etape4Q26)}`
           break
         }
@@ -262,8 +263,8 @@ export default class PrioritesEtRelatifsComplex extends Exercice {
           const etape4Q27 = f * g
           const etape5Q27 = e + etape4Q27
           resultat = new FractionEtendue(etape3Q27, etape5Q27).texFSD
-          texteCorr = `$${lettreDepuisChiffre(i + 1)} = \\dfrac{${a} \\times (${b} + ${miseEnEvidence(ecritureParentheseSiNegatif(c) + ' \\times ' + ecritureParentheseSiNegatif(d), 'blue')})}{${e} + ${miseEnEvidence(ecritureParentheseSiNegatif(f) + ' \\times ' + ecritureParentheseSiNegatif(g), 'blue')}}`
-          texteCorr += `= \\dfrac{${a} \\times (${miseEnEvidence(b + ' + ' + ecritureParentheseSiNegatif(etape1Q27), 'blue')})}{${miseEnEvidence(e + ' + ' + ecritureParentheseSiNegatif(etape4Q27), 'blue')}}`
+          texteCorr = `$${lettreDepuisChiffre(i + 1)} = \\dfrac{${a} \\times (${b} + ${miseEnEvidence(ecritureParentheseSiNegatif(c) + ' \\times ' + ecritureParentheseSiNegatif(d), bleuMathalea)})}{${e} + ${miseEnEvidence(ecritureParentheseSiNegatif(f) + ' \\times ' + ecritureParentheseSiNegatif(g), bleuMathalea)}}`
+          texteCorr += `= \\dfrac{${a} \\times (${miseEnEvidence(b + ' + ' + ecritureParentheseSiNegatif(etape1Q27), bleuMathalea)})}{${miseEnEvidence(e + ' + ' + ecritureParentheseSiNegatif(etape4Q27), bleuMathalea)}}`
           texteCorr += `= \\dfrac{${a} \\times ${ecritureParentheseSiNegatif(etape2Q27)}}{${etape5Q27}}`
           if (!(etape3Q27 > 0 && etape5Q27 > 0)) {
             texteCorr += `= \\dfrac{${etape3Q27}}{${etape5Q27}}`
@@ -288,14 +289,14 @@ export default class PrioritesEtRelatifsComplex extends Exercice {
           const etape4Q28 = etape3Q28 - g
           const etape5Q28 = a * etape4Q28
           resultat = texNombre(etape5Q28 + h)
-          texteCorr = `$${lettreDepuisChiffre(i + 1)} = ${a} \\times (${b} \\times (${c} + ${miseEnEvidence(ecritureParentheseSiNegatif(d) + ' \\times ' + ecritureParentheseSiNegatif(e), 'blue')} + ${ecritureParentheseSiNegatif(f)}) - ${ecritureParentheseSiNegatif(g)}) + ${ecritureParentheseSiNegatif(h)}`
-          texteCorr += `= ${a} \\times (${b} \\times (${miseEnEvidence(c + ' + ' + ecritureParentheseSiNegatif(etape1Q28) + ' + ' + ecritureParentheseSiNegatif(f), 'blue')}) - ${ecritureParentheseSiNegatif(g)}) + ${ecritureParentheseSiNegatif(h)}`
-          texteCorr += `= ${a} \\times (${miseEnEvidence(b + ' \\times ' + ecritureParentheseSiNegatif(etape2Q28), 'blue')} - ${ecritureParentheseSiNegatif(g)}) + ${ecritureParentheseSiNegatif(h)}`
-          texteCorr += `= ${a} \\times (${miseEnEvidence(etape3Q28 + ' - ' + ecritureParentheseSiNegatif(g), 'blue')}) + ${ecritureParentheseSiNegatif(h)}`
+          texteCorr = `$${lettreDepuisChiffre(i + 1)} = ${a} \\times (${b} \\times (${c} + ${miseEnEvidence(ecritureParentheseSiNegatif(d) + ' \\times ' + ecritureParentheseSiNegatif(e), bleuMathalea)} + ${ecritureParentheseSiNegatif(f)}) - ${ecritureParentheseSiNegatif(g)}) + ${ecritureParentheseSiNegatif(h)}`
+          texteCorr += `= ${a} \\times (${b} \\times (${miseEnEvidence(c + ' + ' + ecritureParentheseSiNegatif(etape1Q28) + ' + ' + ecritureParentheseSiNegatif(f), bleuMathalea)}) - ${ecritureParentheseSiNegatif(g)}) + ${ecritureParentheseSiNegatif(h)}`
+          texteCorr += `= ${a} \\times (${miseEnEvidence(b + ' \\times ' + ecritureParentheseSiNegatif(etape2Q28), bleuMathalea)} - ${ecritureParentheseSiNegatif(g)}) + ${ecritureParentheseSiNegatif(h)}`
+          texteCorr += `= ${a} \\times (${miseEnEvidence(etape3Q28 + ' - ' + ecritureParentheseSiNegatif(g), bleuMathalea)}) + ${ecritureParentheseSiNegatif(h)}`
           if (g < 0) {
-            texteCorr += `= ${a} \\times (${miseEnEvidence(etape3Q28 + ' + ' + -g, 'blue')}) + ${ecritureParentheseSiNegatif(h)}`
+            texteCorr += `= ${a} \\times (${miseEnEvidence(etape3Q28 + ' + ' + -g, bleuMathalea)}) + ${ecritureParentheseSiNegatif(h)}`
           }
-          texteCorr += `= ${miseEnEvidence(a + ' \\times ' + ecritureParentheseSiNegatif(etape4Q28), 'blue')} + ${ecritureParentheseSiNegatif(h)}`
+          texteCorr += `= ${miseEnEvidence(a + ' \\times ' + ecritureParentheseSiNegatif(etape4Q28), bleuMathalea)} + ${ecritureParentheseSiNegatif(h)}`
           texteCorr += `= ${etape5Q28} + ${ecritureParentheseSiNegatif(h)}`
           break
         }
@@ -310,7 +311,7 @@ export default class PrioritesEtRelatifsComplex extends Exercice {
           const etape1Q29 = a * b
           const etape2Q29 = c * d
           resultat = texNombre(etape1Q29 + etape2Q29)
-          texteCorr = `$${lettreDepuisChiffre(i + 1)} = ${miseEnEvidence(a + ' \\times ' + ecritureParentheseSiNegatif(b), 'blue')} + ${miseEnEvidence(ecritureParentheseSiNegatif(c) + ' \\times ' + ecritureParentheseSiNegatif(d), 'blue')}`
+          texteCorr = `$${lettreDepuisChiffre(i + 1)} = ${miseEnEvidence(a + ' \\times ' + ecritureParentheseSiNegatif(b), bleuMathalea)} + ${miseEnEvidence(ecritureParentheseSiNegatif(c) + ' \\times ' + ecritureParentheseSiNegatif(d), bleuMathalea)}`
           texteCorr += `= ${texNombre(etape1Q29)} + ${ecritureParentheseSiNegatif(etape2Q29)}`
           break
         }
@@ -325,7 +326,7 @@ export default class PrioritesEtRelatifsComplex extends Exercice {
           const etape1Q30 = a * b
           const etape2Q30 = c * d
           resultat = texNombre(etape1Q30 - etape2Q30)
-          texteCorr = `$${lettreDepuisChiffre(i + 1)} = ${miseEnEvidence(a + ' \\times ' + ecritureParentheseSiNegatif(b), 'blue')} - ${miseEnEvidence(ecritureParentheseSiNegatif(c) + ' \\times ' + ecritureParentheseSiNegatif(d), 'blue')}`
+          texteCorr = `$${lettreDepuisChiffre(i + 1)} = ${miseEnEvidence(a + ' \\times ' + ecritureParentheseSiNegatif(b), bleuMathalea)} - ${miseEnEvidence(ecritureParentheseSiNegatif(c) + ' \\times ' + ecritureParentheseSiNegatif(d), bleuMathalea)}`
           texteCorr += `= ${texNombre(etape1Q30)} - ${ecritureParentheseSiNegatif(etape2Q30)}`
           if (etape2Q30 < 0) {
             texteCorr += `= ${texNombre(etape1Q30)} + ${-etape2Q30}`
@@ -349,9 +350,9 @@ export default class PrioritesEtRelatifsComplex extends Exercice {
           const etape1Q31 = b * c
           const etape2Q31 = g + etape1Q31
           resultat = texNombre(etape2Q31 - a)
-          texteCorr = `$${lettreDepuisChiffre(i + 1)} = ${d} + ${miseEnEvidence(`${ecritureParentheseSiNegatif(b)} \\times ${ecritureParentheseSiNegatif(c)}`, 'blue')} - ${ecritureParentheseSiNegatif(a)}`
-          texteCorr += `= ${miseEnEvidence(`${d} + ${ecritureParentheseSiNegatif(etape1Q31)}`, 'blue')} - ${ecritureParentheseSiNegatif(a)}`
-          texteCorr += `= ${miseEnEvidence(`${texNombre(g)} + ${ecritureParentheseSiNegatif(etape1Q31)}`, 'blue')} - ${ecritureParentheseSiNegatif(a)}`
+          texteCorr = `$${lettreDepuisChiffre(i + 1)} = ${d} + ${miseEnEvidence(`${ecritureParentheseSiNegatif(b)} \\times ${ecritureParentheseSiNegatif(c)}`, bleuMathalea)} - ${ecritureParentheseSiNegatif(a)}`
+          texteCorr += `= ${miseEnEvidence(`${d} + ${ecritureParentheseSiNegatif(etape1Q31)}`, bleuMathalea)} - ${ecritureParentheseSiNegatif(a)}`
+          texteCorr += `= ${miseEnEvidence(`${texNombre(g)} + ${ecritureParentheseSiNegatif(etape1Q31)}`, bleuMathalea)} - ${ecritureParentheseSiNegatif(a)}`
           texteCorr += `= ${etape2Q31} - ${ecritureParentheseSiNegatif(a)}`
           if (a < 0) texteCorr += `= ${etape2Q31} + ${-a}`
           break
@@ -371,8 +372,8 @@ export default class PrioritesEtRelatifsComplex extends Exercice {
           const etape3Q32 = d * e
           const etape4Q32 = etape3Q32 + f
           resultat = new FractionEtendue(etape2Q32, etape4Q32).texFSD
-          texteCorr = `$${lettreDepuisChiffre(i + 1)} = \\dfrac{${a} - ${miseEnEvidence(ecritureParentheseSiNegatif(b) + ' \\times ' + ecritureParentheseSiNegatif(c), 'blue')}}{${miseEnEvidence(d + ' \\times ' + ecritureParentheseSiNegatif(e), 'blue')} + ${ecritureParentheseSiNegatif(f)}}`
-          texteCorr += `= \\dfrac{${miseEnEvidence(`${a} - ${ecritureParentheseSiNegatif(etape1Q32)}`, 'blue')}}{${miseEnEvidence(`${etape3Q32} + ${ecritureParentheseSiNegatif(f)}`, 'blue')}}`
+          texteCorr = `$${lettreDepuisChiffre(i + 1)} = \\dfrac{${a} - ${miseEnEvidence(ecritureParentheseSiNegatif(b) + ' \\times ' + ecritureParentheseSiNegatif(c), bleuMathalea)}}{${miseEnEvidence(d + ' \\times ' + ecritureParentheseSiNegatif(e), bleuMathalea)} + ${ecritureParentheseSiNegatif(f)}}`
+          texteCorr += `= \\dfrac{${miseEnEvidence(`${a} - ${ecritureParentheseSiNegatif(etape1Q32)}`, bleuMathalea)}}{${miseEnEvidence(`${etape3Q32} + ${ecritureParentheseSiNegatif(f)}`, bleuMathalea)}}`
           if (etape1Q32 < 0) {
             texteCorr += `= \\dfrac{${a} + ${-etape1Q32}}{${etape3Q32} + ${ecritureParentheseSiNegatif(f)}}`
           }

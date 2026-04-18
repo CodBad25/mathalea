@@ -14,6 +14,7 @@ import {
   listeQuestionsToContenuSansNumero,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 
 export const titre = 'Factoriser une expression littérale (Niveau 1)'
 export const dateDePublication = '20/04/2025'
@@ -151,8 +152,8 @@ export default class FactoriserExpressionsNiv1 extends Exercice {
         texteCorr +=
           var1 > 0
             ? var1 === var2
-              ? `<br>$${lettre}=${miseEnEvidence(var1, 'blue')}\\times ${terme}+${miseEnEvidence(var2, 'blue')}\\times${b}$`
-              : `<br>$${lettre}=${miseEnEvidence(var1, 'blue')}\\times ${terme}-${miseEnEvidence(-var2, 'blue')}\\times${b}$`
+              ? `<br>$${lettre}=${miseEnEvidence(var1, bleuMathalea)}\\times ${terme}+${miseEnEvidence(var2, bleuMathalea)}\\times${b}$`
+              : `<br>$${lettre}=${miseEnEvidence(var1, bleuMathalea)}\\times ${terme}-${miseEnEvidence(-var2, bleuMathalea)}\\times${b}$`
             : `<br>$${lettre}=${var1}\\times ${terme}${ecritureAlgebrique(var2)}\\times${b}$`
 
         // Si var2 est négatif ou var1 est négatif (mais pas les deux)
@@ -161,14 +162,14 @@ export default class FactoriserExpressionsNiv1 extends Exercice {
           if (var1 > 0) {
             reponse = `${var1}\\times(${terme}-${b})`
           } else {
-            texteCorr += `<br>$${lettre}=${miseEnEvidence(-var1, 'blue')}\\times(-${terme})+${miseEnEvidence(var2, 'blue')}\\times${b}$`
+            texteCorr += `<br>$${lettre}=${miseEnEvidence(-var1, bleuMathalea)}\\times(-${terme})+${miseEnEvidence(var2, bleuMathalea)}\\times${b}$`
             reponse = `${-var1}\\times(-${terme}+${b})`
           }
         } else {
           // Les deux termes ont le même signe
           reponse = `${var1}\\times(${terme}+${b})`
           if (var1 < 0) {
-            texteCorr += `<br>$${lettre}=${miseEnEvidence(var1, 'blue')}\\times ${terme}+${miseEnEvidence(ecritureParentheseSiNegatif(var2), 'blue')}\\times${b}$`
+            texteCorr += `<br>$${lettre}=${miseEnEvidence(var1, bleuMathalea)}\\times ${terme}+${miseEnEvidence(ecritureParentheseSiNegatif(var2), bleuMathalea)}\\times${b}$`
           }
         }
       } else {
@@ -176,8 +177,8 @@ export default class FactoriserExpressionsNiv1 extends Exercice {
         texteCorr +=
           var1 > 0
             ? var1 === var2
-              ? `<br>$${lettre}=${miseEnEvidence(var1, 'blue')}\\times${b}+${miseEnEvidence(var2, 'blue')}\\times ${terme}$`
-              : `<br>$${lettre}=${miseEnEvidence(var1, 'blue')}\\times${b}-${miseEnEvidence(-var2, 'blue')}\\times ${terme}$`
+              ? `<br>$${lettre}=${miseEnEvidence(var1, bleuMathalea)}\\times${b}+${miseEnEvidence(var2, bleuMathalea)}\\times ${terme}$`
+              : `<br>$${lettre}=${miseEnEvidence(var1, bleuMathalea)}\\times${b}-${miseEnEvidence(-var2, bleuMathalea)}\\times ${terme}$`
             : `<br>$${lettre}=${var1}\\times${b}${ecritureAlgebrique(var2)}\\times ${terme}$`
 
         // Si var1 est négatif ou var2 est négatif (mais pas les deux)
@@ -186,14 +187,14 @@ export default class FactoriserExpressionsNiv1 extends Exercice {
           if (var1 > 0) {
             reponse = `${var1}\\times(${b}-${terme})`
           } else {
-            texteCorr += `<br>$${lettre}=${miseEnEvidence(-var1, 'blue')}\\times(-${b})+${miseEnEvidence(var2, 'blue')}\\times ${terme}$`
+            texteCorr += `<br>$${lettre}=${miseEnEvidence(-var1, bleuMathalea)}\\times(-${b})+${miseEnEvidence(var2, bleuMathalea)}\\times ${terme}$`
             reponse = `${-var1}\\times(-${b}+${terme})`
           }
         } else {
           // Les deux termes ont le même signe
           reponse = `${var1}\\times(${b}+${terme})`
           if (var1 < 0) {
-            texteCorr += `<br>$${lettre}=${miseEnEvidence(var1, 'blue')}\\times${b}+${miseEnEvidence(ecritureParentheseSiNegatif(var2), 'blue')}\\times ${terme}$`
+            texteCorr += `<br>$${lettre}=${miseEnEvidence(var1, bleuMathalea)}\\times${b}+${miseEnEvidence(ecritureParentheseSiNegatif(var2), bleuMathalea)}\\times ${terme}$`
           }
         }
       }

@@ -1,4 +1,4 @@
-import { orangeMathalea } from '../../lib/colors'
+import { orangeMathalea, bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -164,7 +164,7 @@ export default class SommeOuProduitFractions extends Exercice {
             texteCorr += `$${lettre} = ${texFractionFromString(num1, den1)}+${texFractionFromString(num2, kden1)}$<br>`
             if (k > 1) {
               if (this.correctionDetaillee) {
-                texteCorr += `$${lettre} = ${texFractionFromString(num1 + miseEnEvidence('\\times' + k, 'blue'), den1 + miseEnEvidence('\\times' + k, 'blue'))}+${texFractionFromString(num2, kden1)}$<br>`
+                texteCorr += `$${lettre} = ${texFractionFromString(num1 + miseEnEvidence('\\times' + k, bleuMathalea), den1 + miseEnEvidence('\\times' + k, bleuMathalea))}+${texFractionFromString(num2, kden1)}$<br>`
               }
               texteCorr += `$${lettre} = ${texFractionFromString(num1 * k, kden1)}+${texFractionFromString(num2, kden1)}$<br>`
             }
@@ -177,7 +177,7 @@ export default class SommeOuProduitFractions extends Exercice {
             texteCorr += `$${lettre} = ${texFractionFromString(num1, kden1)}+${texFractionFromString(num2, den1)}$<br>`
             if (k > 1) {
               if (this.correctionDetaillee) {
-                texteCorr += `$${lettre} = ${texFractionFromString(num1, kden1)}+${texFractionFromString(num2 + miseEnEvidence('\\times' + k, 'blue'), den1 + miseEnEvidence('\\times' + k, 'blue'))}$<br>`
+                texteCorr += `$${lettre} = ${texFractionFromString(num1, kden1)}+${texFractionFromString(num2 + miseEnEvidence('\\times' + k, bleuMathalea), den1 + miseEnEvidence('\\times' + k, bleuMathalea))}$<br>`
               }
               texteCorr += `$${lettre} = ${texFractionFromString(num1, kden1)}+${texFractionFromString(num2 * k, kden1)}$<br>`
             }
@@ -213,7 +213,7 @@ export default class SommeOuProduitFractions extends Exercice {
             texteCorr += `$${lettre} = ${texFractionFromString(num1, den1)}-${texFractionFromString(num2, kden1)}$<br>`
             if (k > 1) {
               if (this.correctionDetaillee) {
-                texteCorr += `$${lettre} = ${texFractionFromString(num1 + miseEnEvidence('\\times' + k, 'blue'), den1 + miseEnEvidence('\\times' + k, 'blue'))} - ${texFractionFromString(num2, kden1)}$<br>`
+                texteCorr += `$${lettre} = ${texFractionFromString(num1 + miseEnEvidence('\\times' + k, bleuMathalea), den1 + miseEnEvidence('\\times' + k, bleuMathalea))} - ${texFractionFromString(num2, kden1)}$<br>`
               }
               texteCorr += `$${lettre} = ${texFractionFromString(num1 * k, den1 * k)}-${texFractionFromString(num2, kden1)}$<br>`
             }
@@ -226,7 +226,7 @@ export default class SommeOuProduitFractions extends Exercice {
             texteCorr += `$${lettre} = ${texFractionFromString(num1, kden1)}-${texFractionFromString(num2, den1)}$<br>`
             if (k > 1) {
               if (this.correctionDetaillee) {
-                texteCorr += `$${lettre} = ${texFractionFromString(num1, kden1)}-${texFractionFromString(num2 + miseEnEvidence('\\times' + k, 'blue'), den1 + miseEnEvidence('\\times' + k, 'blue'))}$<br>`
+                texteCorr += `$${lettre} = ${texFractionFromString(num1, kden1)}-${texFractionFromString(num2 + miseEnEvidence('\\times' + k, bleuMathalea), den1 + miseEnEvidence('\\times' + k, bleuMathalea))}$<br>`
               }
               texteCorr += `$${lettre} = ${texFractionFromString(num1, kden1)}-${texFractionFromString(num2 * k, kden1)}$<br>`
             }
@@ -371,7 +371,7 @@ export default class SommeOuProduitFractions extends Exercice {
         // Fin de cette uniformisation
       } else {
         if (this.sup2) {
-          texteCorr += `<br>$${lettre}  ${simplificationDeFractionAvecEtapes(num, den, { couleur1: 'blue', couleur2: orangeMathalea })}$`
+          texteCorr += `<br>$${lettre}  ${simplificationDeFractionAvecEtapes(num, den, { couleur1: bleuMathalea, couleur2: orangeMathalea })}$`
         }
       }
       texteCorr += '<br>'

@@ -16,6 +16,7 @@ import { mathalea2d } from '../../modules/mathalea2d'
 import { gestionnaireFormulaireTexte, randint } from '../../modules/outils'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 
 export const titre = 'Vocabulaire du triangle rectangle'
 export const interactifReady = true
@@ -75,7 +76,7 @@ export default class VocabulaireTriangleRectangle extends Exercice {
       B.nom = nom[1]
       C.nom = nom[2]
       const nomme = nommePolygone(p2, nom)
-      const hypo = segment(C, B, 'blue')
+      const hypo = segment(C, B, bleuMathalea)
       hypo.epaisseur = 2
       const codageDeAngle = codageAngle(A, B, C, 1)
       const objetsEnonce: NestedObjetMathalea2dArray = []

@@ -18,6 +18,7 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 export const titre =
   'Mettre en équation un problème sans objectif de résolution'
 export const dateDeModifImportante = '28/03/2025'
@@ -144,7 +145,7 @@ export default class MettreEnEquationSansResoudre extends Exercice {
       // on finit les appels
       const mesAppels = [
         po,
-        codageSegments('X', 'blue', po.listePoints),
+        codageSegments('X', bleuMathalea, po.listePoints),
         afficheCoteSegment(s, `${inc}`, 1, 'red', 2, 0.5, 'black'),
         nommePolygone(po, myPolyName(n).nameParSommets),
         anglesDroitsIfIsCarre,

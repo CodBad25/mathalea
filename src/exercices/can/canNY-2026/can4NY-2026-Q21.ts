@@ -13,6 +13,7 @@ import { latex2d } from '../../../lib/2d/textes'
 import { milieu } from '../../../lib/2d/utilitairesPoint'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { mathalea2d } from '../../../modules/mathalea2d'
+import { bleuMathalea } from '../../../lib/colors'
 export const titre = 'Calculer un périmètre'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -55,10 +56,10 @@ export default class perimetreCalcul2026 extends ExerciceSimple {
         milieu(B, C).y + 0.7,
         { letterSize: 'scriptsize' },
       ),
-      codageSegments('||', 'blue', A, B),
-      codageSegments('||', 'blue', B, C),
-      codageSegments('||', 'blue', C, D),
-      codageSegments('||', 'blue', A, D),
+      codageSegments('||', bleuMathalea, A, B),
+      codageSegments('||', bleuMathalea, B, C),
+      codageSegments('||', bleuMathalea, C, D),
+      codageSegments('||', bleuMathalea, A, D),
       codageAngleDroit(D, A, B),
       codageAngleDroit(A, B, C),
       codageAngleDroit(B, C, D),

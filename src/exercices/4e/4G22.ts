@@ -18,6 +18,7 @@ import { context } from '../../modules/context'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 import { RedactionPythagore } from './_pythagore'
+import { bleuMathalea } from '../../lib/colors'
 export const titre = 'Résoudre des problèmes utilisant le théorème de Pythagore'
 export const dateDeModifImportante = '26/01/2025'
 export const interactifReady = true
@@ -234,7 +235,7 @@ export default class ProblemesPythagore extends Exercice {
             a,
             c,
             'cm',
-            'blue',
+            bleuMathalea,
           )[0]
           texteCorr += `<br>Finalement comme $O$ est aussi le milieu de $[${
             D + B

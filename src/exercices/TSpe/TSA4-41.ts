@@ -11,6 +11,7 @@ import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 import FractionEtendue from '../../modules/FractionEtendue'
 import { randint } from '../../modules/outils'
 import ExerciceSimple from '../ExerciceSimple'
+import { bleuMathalea } from '../../lib/colors'
 export const dateDePublication = '27/12/2025'
 export const dateDeModifImportante = '17/01/2026'
 export const interactifReady = false
@@ -166,13 +167,13 @@ export default class ProblemePointFixe extends ExerciceSimple {
 
     let reponse2b = `Pour tout entier naturel $n$, on pose la propriété $\\mathcal{P}_n$ :  $${alpha}\\leqslant u_{n+1} \\leqslant u_n \\leqslant ${beta}.$<br>
     On va démontrer par récurrence que la propriété $\\mathcal{P}_n$ est vraie pour tout entier naturel $n$.<br>
-    ${texteEnCouleurEtGras('Initiatisation :', 'blue')} <br>
+    ${texteEnCouleurEtGras('Initiatisation :', bleuMathalea)} <br>
     Pour $n=0$, on a d'après l'énoncé $u_0=${u0}$.<br>
     On a calculé, à la question 2.a, $u_1=${u1.texFractionSimplifiee}$.<br>
     On vérifie que : $${alpha} \\leqslant u_1 \\leqslant u_0\\leqslant ${beta}.$<br>
     Ainsi, la propriété $\\mathcal{P}_0$ est vraie.<br>
     La propriété est donc initialisée au rang $n=0$.<br>
-    ${texteEnCouleurEtGras('Hérédité :', 'blue')} <br>
+    ${texteEnCouleurEtGras('Hérédité :', bleuMathalea)} <br>
     Soit $k$ un entier naturel tel que la propriété $\\mathcal{P}_k$ est vraie, c'est-à-dire que $${alpha} \\leqslant u_{k+1}\\leqslant u_k \\leqslant ${beta}.$<br>
     On cherche à montrer qu'alors, la propriété $\\mathcal{P}_{k+1}$ est vraie, c'est-à-dire que $${alpha} \\leqslant u_{k+2}\\leqslant u_{k+1} \\leqslant ${beta}.$<br>
     D'après  l'hypothèse de récurrence : <br>`
@@ -195,7 +196,7 @@ $f(${alpha}) \\leqslant f(u_{k+1})\\leqslant f(u_k) \\leqslant f(${beta}) $<br>
        <br>
        Ainsi, la propriété $\\mathcal{P}_{k+1}$ est vraie.<br>
        L'hérédité de la propriété est démontrée pour tout entier naturel $n$.<br>
-        ${texteEnCouleurEtGras('Conclusion :', 'blue')} <br>
+        ${texteEnCouleurEtGras('Conclusion :', bleuMathalea)} <br>
         La propriété $\\mathcal{P}_n$ est initialisée au rang $n-0$ et héréditaire pour tout entier naturel $n$.<br>
         Par le principe de récurrence, on en déduit qu'elle est vraie pour tout entier naturel $n$. <br>
         Pour tout entier naturel $n$, $${alpha} \\leqslant u_n \\leqslant ${beta}.$<br>`

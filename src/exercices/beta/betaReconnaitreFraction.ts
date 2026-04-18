@@ -13,6 +13,7 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 
 export const titre = 'Reconnaître une fraction sur des représentations variées'
 export const dateDePublication = '02/11/2025'
@@ -168,8 +169,8 @@ export default class ConnaitreQuart extends Exercice {
             borderMode: 'all',
             showPartNumbers: true,
           })}<br>
-          Il faut $${miseEnEvidence(nbPartsUnite, 'blue')}$ parts pour représenter une unité,
-          donc la partie colorée représente $\\dfrac{1}{${miseEnEvidence(nbPartsUnite, 'blue')}}$ de l'unité.`
+          Il faut $${miseEnEvidence(nbPartsUnite, bleuMathalea)}$ parts pour représenter une unité,
+          donc la partie colorée représente $\\dfrac{1}{${miseEnEvidence(nbPartsUnite, bleuMathalea)}}$ de l'unité.`
           break
         default:
           if (decoupages.length > 1) {
@@ -188,8 +189,8 @@ export default class ConnaitreQuart extends Exercice {
               borderMode: 'all',
               showPartNumbers: true,
             })} ${context.isHtml ? '' : '<br>'}
-            Avec $${miseEnEvidence(partsUniteDecoupage, 'blue')}$ part${partsUniteDecoupage > 1 ? 's' : ''} pour représenter une unité,
-            chaque part représente ${partsUniteDecoupage === 1 ? 'une unité' : `$\\dfrac{1}{${miseEnEvidence(partsUniteDecoupage, 'blue')}}$ de l'unité`} .<br>
+            Avec $${miseEnEvidence(partsUniteDecoupage, bleuMathalea)}$ part${partsUniteDecoupage > 1 ? 's' : ''} pour représenter une unité,
+            chaque part représente ${partsUniteDecoupage === 1 ? 'une unité' : `$\\dfrac{1}{${miseEnEvidence(partsUniteDecoupage, bleuMathalea)}}$ de l'unité`} .<br>
             Il faut $${miseEnEvidence(partsColoreesDecoupage, 'green')}$ ${partsUniteDecoupage === 1 ? `unité${partsUniteDecoupage > 1 ? 's' : ''}` : `parts de $\\dfrac{1}{${partsUniteDecoupage}}$`} pour représenter toute la partie colorée
             donc la partie colorée représente ${partsUniteDecoupage === 1 ? `$${miseEnEvidence(partsColoreesDecoupage, 'green')}$ unité${partsUniteDecoupage > 1 ? 's' : ''}` : `$\\dfrac{${miseEnEvidence(partsColoreesDecoupage, 'green')}}{${partsUniteDecoupage}}$ de l'unité`}.`
             if (i < decoupages.length - 1) {

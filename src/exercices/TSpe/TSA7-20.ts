@@ -9,6 +9,7 @@ import Exercice from '../Exercice'
 
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { context } from '../../modules/context'
+import { bleuMathalea } from '../../lib/colors'
 export const titre = 'Résoudre des équations différentielles'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -110,7 +111,7 @@ class EquaDiffs extends Exercice {
               'Comme le deuxième membre est une fonction affine, cherchons une solution particulière de la forme $y_f=mx+p$.<br>'
             texteCorr +=
               "Si $y_f=mx+p$, alors $y_f^\\prime=m$, l'équation différentielle que vérifie $y_f$ est alors : "
-            texteCorr += `$${miseEnEvidence(`m${ecritureAlgebrique(a)}(mx+p)=${texNombre(c, 0)}x${ecritureAlgebrique(d)}`, 'blue')}$.<br>`
+            texteCorr += `$${miseEnEvidence(`m${ecritureAlgebrique(a)}(mx+p)=${texNombre(c, 0)}x${ecritureAlgebrique(d)}`, bleuMathalea)}$.<br>`
             texteCorr +=
               'En regroupant les termes de même degré, on obtient le système :<br>$\\begin{cases}\n'
             texteCorr += `m${ecritureAlgebrique(a)}p &=${texNombre(d, 0)}\\\\\n`

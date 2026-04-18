@@ -11,6 +11,7 @@ import { latex2d } from '../../../lib/2d/textes'
 import { milieu } from '../../../lib/2d/utilitairesPoint'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { mathalea2d } from '../../../modules/mathalea2d'
+import { bleuMathalea } from '../../../lib/colors'
 export const titre = "Déterminer le périmètre d'un triangle"
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -45,8 +46,8 @@ export default class SommeDeProduitsCompleter extends ExerciceSimple {
     const s2 = segment(B, C)
     const s3 = segment(A, C)
     objets.push(
-      codageSegments('||', 'blue', B, C),
-      codageSegments('||', 'blue', C, A),
+      codageSegments('||', bleuMathalea, B, C),
+      codageSegments('||', bleuMathalea, C, A),
       latex2d(
         `${texNombre(annee, 0)} \\text{ cm}`,
         milieu(A, B).x,

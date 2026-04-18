@@ -9,6 +9,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 
 import { droiteGraduee } from '../../../lib/2d/DroiteGraduee'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { bleuMathalea } from '../../../lib/colors'
 export const titre = 'Déterminer une abscisse'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -78,7 +79,7 @@ export default class CompleterUneSuite2026 extends ExerciceSimple {
           pixelsParCm: 20,
           scale: 0.6,
         },
-        latex2d('A', x1B * 5, 0.5, { color: 'blue' }),
+        latex2d('A', x1B * 5, 0.5, { color: bleuMathalea }),
         d,
       )
   }

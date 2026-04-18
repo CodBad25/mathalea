@@ -19,6 +19,7 @@ import Exercice from '../Exercice'
 
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { ecritureParentheseSiNegatif } from '../../lib/outils/ecritures'
+import { bleuMathalea } from '../../lib/colors'
 
 export const titre = 'Effectuer des calculs avec des puissances'
 export const interactifReady = true
@@ -136,7 +137,7 @@ export default class PuissancesDunRelatif1 extends Exercice {
 
     // pour pouvoir adapter les couleurs en cas de besoin
     const coul0 = 'green'
-    const coul1 = 'blue'
+    const coul1 = bleuMathalea
 
     for (
       let i = 0,
