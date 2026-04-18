@@ -242,7 +242,7 @@ export default class TableSimpleDistributivite extends Exercice {
         reponse: {
           value: dvpt,
           options: {
-            avecSigneMultiplier: false,
+            sansTimes: true,
           },
         },
       })
