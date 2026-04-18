@@ -38,9 +38,34 @@ const buildDataKeyboardString = (style = '') => {
 }
 
 export class MultiMathfieldElement extends HTMLElement {
+  private readonly contentHost: HTMLSpanElement
+
   constructor() {
     super()
-    this.attachShadow({ mode: 'open' })
+    const shadowRoot = this.attachShadow({ mode: 'open' })
+
+    // Les styles KaTeX doivent exister dans le shadowRoot pour un rendu complet.
+    const style = document.createElement('style')
+    style.textContent = `
+      ${katexCss}
+      math-field::part(menu-toggle) {
+        display: none;
+      }
+      math-field::part(virtual-keyboard-toggle) {
+        display: none;
+      }
+      math-field {
+        text-align: center;
+      }
+      math-field::part(content) {
+        justify-content: start;
+      }
+    `
+    shadowRoot.appendChild(style)
+
+    this.contentHost = document.createElement('span')
+    this.contentHost.style.display = 'inline-block'
+    shadowRoot.appendChild(this.contentHost)
   }
 
   /**
@@ -254,29 +279,8 @@ export class MultiMathfieldElement extends HTMLElement {
       container.appendChild(currentSpan)
     }
 
-    // Nettoie et insère dans le shadow DOM
-    if (this.shadowRoot) {
-      this.shadowRoot.innerHTML = ''
-      // Ajoute le style pour masquer les toggles et centrer la saisie
-      const style = document.createElement('style')
-      style.textContent = `
-        ${katexCss}
-        math-field::part(menu-toggle) {
-          display: none;
-        }
-        math-field::part(virtual-keyboard-toggle) {
-          display: none;
-        }
-        math-field {
-          text-align: center;
-        }
-        math-field::part(content) {
-          justify-content: start;
-        }
-      `
-      this.shadowRoot.appendChild(style)
-      this.shadowRoot.appendChild(container)
-    }
+    // On ne remplace que le contenu, les styles du shadowRoot restent en place.
+    this.contentHost.replaceChildren(container)
   }
 
   getValue() {
