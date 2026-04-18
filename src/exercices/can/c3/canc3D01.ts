@@ -3,16 +3,17 @@ import { colorToLatexOrHTML } from '../../../lib/2d/colorToLatexOrHtml'
 import { point } from '../../../lib/2d/PointAbstrait'
 import { segment } from '../../../lib/2d/segmentsVecteurs'
 import { rotation } from '../../../lib/2d/transformations'
+import { bleuMathalea } from '../../../lib/colors'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import {
+  miseEnEvidence,
+  texteEnCouleurEtGras,
+} from '../../../lib/outils/embellissements'
 import { context } from '../../../modules/context'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 
-import {
-  miseEnEvidence,
-  texteEnCouleurEtGras,
-} from '../../../lib/outils/embellissements'
 export const titre = "Lire l'heure"
 export const dateDePublication = '4/11/2021'
 export const interactifReady = true
@@ -67,7 +68,7 @@ export default class LireHeure extends ExerciceSimple {
       : colorToLatexOrHTML('black')
     grandeAiguille.epaisseur = 2
     petiteAiguille.color = context.isHtml
-      ? colorToLatexOrHTML('blue')
+      ? colorToLatexOrHTML(bleuMathalea)
       : colorToLatexOrHTML('black')
     petiteAiguille.epaisseur = 4
     horloge.push(petiteAiguille, grandeAiguille)

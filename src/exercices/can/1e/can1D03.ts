@@ -7,6 +7,7 @@ import FractionEtendue from '../../../modules/FractionEtendue'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
+import { bleuMathalea } from '../../../lib/colors'
 export const titre = 'Lire graphiquement un nombre dérivé'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -116,7 +117,7 @@ export default class LectureGraphiqueNombreDerivee extends ExerciceSimple {
             },
             r,
             o,
-            courbe(F, { repere: r, color: 'blue', epaisseur: 2 }),
+            courbe(F, { repere: r, color: bleuMathalea, epaisseur: 2 }),
             courbe(tang, { repere: r, color: 'red', epaisseur: 2 }),
           )
         this.correction = `$f'(${nbre})$ est donné par le coefficient directeur de la tangente à la courbe au point d'abscisse $${nbre}$, soit $${f(nbre)}$.`
@@ -179,7 +180,7 @@ export default class LectureGraphiqueNombreDerivee extends ExerciceSimple {
             },
             r,
             o,
-            courbe(F, { repere: r, color: 'blue', epaisseur: 2 }),
+            courbe(F, { repere: r, color: bleuMathalea, epaisseur: 2 }),
             courbe(tang, { repere: r, color: 'red', epaisseur: 2 }),
           )
         this.correction = `$f'(${nbre})$ est donné par le coefficient directeur de la tangente à la courbe au point d'abscisse $${nbre}$, soit $${f(nbre)}$.`
@@ -245,7 +246,7 @@ export default class LectureGraphiqueNombreDerivee extends ExerciceSimple {
               repere: r,
               xMin: 0.1,
               xMax: 7,
-              color: 'blue',
+              color: bleuMathalea,
               epaisseur: 2,
             }),
             courbe(tang, { repere: r, color: 'red', epaisseur: 2 }),
@@ -313,7 +314,7 @@ export default class LectureGraphiqueNombreDerivee extends ExerciceSimple {
               repere: r,
               xMin: -2,
               xMax: 5,
-              color: 'blue',
+              color: bleuMathalea,
               epaisseur: 2,
             }),
             courbe(tang, { repere: r, color: 'red', epaisseur: 2 }),
@@ -382,7 +383,7 @@ export default class LectureGraphiqueNombreDerivee extends ExerciceSimple {
               repere: r,
               xMin: -5,
               xMax: 2,
-              color: 'blue',
+              color: bleuMathalea,
               epaisseur: 2,
             }),
             courbe(tang, { repere: r, color: 'red', epaisseur: 2 }),

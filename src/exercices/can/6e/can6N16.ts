@@ -7,6 +7,7 @@ import { texNombre } from '../../../lib/outils/texNombre'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
+import { bleuMathalea } from '../../../lib/colors'
 export const titre =
   'Lire une abscisse sur une droite graduée avec des grands nombres'
 export const interactifReady = true
@@ -68,7 +69,7 @@ export default class AbscisseDroiteEntiers extends ExerciceSimple {
             pixelsParCm: 35,
             scale: 0.7,
           },
-          latex2d('A', x1 * 4, 0.5, { color: 'blue' }),
+          latex2d('A', x1 * 4, 0.5, { color: bleuMathalea }),
           d,
         )
       this.correction = `Entre $${texNombre(abs0, 0)}$ et $${texNombre(abs1, 0)}$, il y a $5$ intervalles. Une graduation correspond donc à $200$. <br>
@@ -110,7 +111,7 @@ export default class AbscisseDroiteEntiers extends ExerciceSimple {
             pixelsParCm: 30,
             scale: 0.7,
           },
-          latex2d('A', 4 * x1, 0.5, { color: 'blue' }),
+          latex2d('A', 4 * x1, 0.5, { color: bleuMathalea }),
           d,
         )
       this.correction = `Entre $${texNombre(abs0, 0)}$ et $${texNombre(abs1, 0)}$, il y a $4$ intervalles. Une graduation correspond donc à $250$. <br>
@@ -152,7 +153,7 @@ export default class AbscisseDroiteEntiers extends ExerciceSimple {
             pixelsParCm: 30,
             scale: 0.7,
           },
-          latex2d('A', 4 * x1, 0.5, { color: 'blue' }),
+          latex2d('A', 4 * x1, 0.5, { color: bleuMathalea }),
           d,
         )
       this.correction = `Entre $${texNombre(abs0, 0)}$ et $${texNombre(abs1, 0)}$, il y a $5$ intervalles. Une graduation correspond donc à $20$. <br>Ainsi, l'abscisse du point $A$ est $${miseEnEvidence(texNombre(Number(this.reponse), 0))}$.`
@@ -193,7 +194,7 @@ export default class AbscisseDroiteEntiers extends ExerciceSimple {
             pixelsParCm: 30,
             scale: 0.7,
           },
-          latex2d('A', 4 * x1, 0.5, { color: 'blue' }),
+          latex2d('A', 4 * x1, 0.5, { color: bleuMathalea }),
           d,
         )
       this.correction = `Entre $${texNombre(abs0, 0)}$ et $${texNombre(abs1, 0)}$, il y a $4$ intervalles. Une graduation correspond donc à $25$. <br>
@@ -234,7 +235,7 @@ export default class AbscisseDroiteEntiers extends ExerciceSimple {
             pixelsParCm: 30,
             scale: 0.7,
           },
-          latex2d('A', 4 * x1, 0.5, { color: 'blue' }),
+          latex2d('A', 4 * x1, 0.5, { color: bleuMathalea }),
           d,
         )
       this.correction = `Entre $${texNombre(abs0, 0)}$ et $${texNombre(abs1, 0)}$, il y a $5$ i.5ntervalles.<br>
@@ -275,7 +276,7 @@ export default class AbscisseDroiteEntiers extends ExerciceSimple {
             pixelsParCm: 30,
             scale: 0.7,
           },
-          latex2d('A', 4 * x1, 0.5, { color: 'blue' }),
+          latex2d('A', 4 * x1, 0.5, { color: bleuMathalea }),
           d,
         )
       this.correction = `Entre $${texNombre(abs0, 0)}$ et $${texNombre(abs1, 0)}$, il y a $4$ intervalles. Une graduation correspond donc à $2,5$. <br>
@@ -316,7 +317,7 @@ export default class AbscisseDroiteEntiers extends ExerciceSimple {
             pixelsParCm: 30,
             scale: 0.7,
           },
-          latex2d('A', 4 * x1, 0.5, { color: 'blue' }),
+          latex2d('A', 4 * x1, 0.5, { color: bleuMathalea }),
           d,
         )
       this.correction = `Entre $${texNombre(abs0, 0)}$ et $${texNombre(abs1, 0)}$, il y a $5$ intervalles. Une graduation correspond donc à $0,2$. <br>
@@ -358,7 +359,7 @@ export default class AbscisseDroiteEntiers extends ExerciceSimple {
             pixelsParCm: 30,
             scale: 0.7,
           },
-          latex2d('A', 4 * x1, 0.5, { color: 'blue' }),
+          latex2d('A', 4 * x1, 0.5, { color: bleuMathalea }),
           d,
         )
       this.correction = `Entre $${texNombre(abs0, 0)}$ et $${texNombre(abs1, 0)}$, il y a $4$ intervalles. Une graduation correspond donc à $0,25$.<br>

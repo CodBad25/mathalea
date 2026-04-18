@@ -10,6 +10,7 @@ import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { segment } from '../../../lib/2d/segmentsVecteurs'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { repere } from '../../../lib/2d/reperes'
+import { bleuMathalea } from '../../../lib/colors'
 export const titre = 'Déterminer une coordonnée'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -52,9 +53,9 @@ export default class Can1a2022Q14 extends ExerciceCan {
     const A = pointAbstrait(xA, yA, 'A', 'above')
     const B = pointAbstrait(xB, yB, 'B', 'below')
     const C = pointAbstrait(xC, yC, 'C', 'below')
-    const AB = segment(A, B, 'blue')
-    const AC = segment(A, C, 'blue')
-    const BC = segment(B, C, 'blue')
+    const AB = segment(A, B, bleuMathalea)
+    const AC = segment(A, C, bleuMathalea)
+    const BC = segment(B, C, bleuMathalea)
     AB.epaisseur = 2
     AC.epaisseur = 2
     BC.epaisseur = 2

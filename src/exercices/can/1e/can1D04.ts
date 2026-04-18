@@ -12,6 +12,7 @@ import {
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
+import { bleuMathalea } from '../../../lib/colors'
 
 export const titre =
   'Déterminer une équation de tangente à partir des courbes de $f$ et $f’$'
@@ -129,7 +130,7 @@ export default class LectureGraphiqueTangente extends ExerciceSimple {
             '\\Large \\cal C_f',
             3,
             10,
-            'blue',
+            bleuMathalea,
             1,
             20,
             '',
@@ -150,7 +151,7 @@ export default class LectureGraphiqueTangente extends ExerciceSimple {
             r1,
             o,
             courbef,
-            courbe(F, { repere: r1, color: 'blue', epaisseur: 2 }),
+            courbe(F, { repere: r1, color: bleuMathalea, epaisseur: 2 }),
           ]
           const objets2 = [
             r2,
@@ -273,7 +274,7 @@ export default class LectureGraphiqueTangente extends ExerciceSimple {
           '\\Large \\cal C_f',
           3,
           4,
-          'blue',
+          bleuMathalea,
           1,
           20,
           '',
@@ -296,7 +297,7 @@ export default class LectureGraphiqueTangente extends ExerciceSimple {
           r1,
           o,
           courbef,
-          courbe(F, { repere: r1, color: 'blue', epaisseur: 2 }),
+          courbe(F, { repere: r1, color: bleuMathalea, epaisseur: 2 }),
         ]
         const objets2 = [
           r2,

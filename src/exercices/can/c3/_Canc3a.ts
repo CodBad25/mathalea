@@ -28,6 +28,7 @@ import { context } from '../../../modules/context'
 import FractionEtendue from '../../../modules/FractionEtendue'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { egal, randint } from '../../../modules/outils'
+import { bleuMathalea } from '../../../lib/colors'
 
 export const titre = 'Classe CAN C3'
 
@@ -203,7 +204,7 @@ export default class ClasseCan2023 {
         thickOffset: 0,
         axeStyle: '->',
         pointListe: [[a, '?']],
-        pointCouleur: 'blue',
+        pointCouleur: bleuMathalea,
         pointStyle: 'x',
         labelsPrincipaux: true,
       })
@@ -225,7 +226,7 @@ export default class ClasseCan2023 {
         thickOffset: 0,
         axeStyle: '->',
         pointListe: [[a, '?']],
-        pointCouleur: 'blue',
+        pointCouleur: bleuMathalea,
         pointStyle: 'x',
         labelsPrincipaux: true,
       })
@@ -677,7 +678,7 @@ export default class ClasseCan2023 {
         [table, `${table}`],
         [10 * table, `${10 * table}`],
       ],
-      pointCouleur: 'blue',
+      pointCouleur: bleuMathalea,
       pointStyle: 'x',
       labelsPrincipaux: false,
     })

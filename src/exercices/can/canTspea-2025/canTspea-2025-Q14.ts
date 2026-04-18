@@ -6,6 +6,7 @@ import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import ExerciceSimple from '../../ExerciceSimple'
+import { bleuMathalea } from '../../../lib/colors'
 export const titre = "Déterminer le nombre de solutions d'une équation"
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -121,10 +122,10 @@ export default class Can2025TQ14 extends ExerciceSimple {
     const courbe1 = theSpline.courbe({
       epaisseur: 1.5,
       ajouteNoeuds: true,
-      optionsNoeuds: { color: 'blue', taille: 2, style: 'x', epaisseur: 2 },
-      color: 'blue',
+      optionsNoeuds: { color: bleuMathalea, taille: 2, style: 'x', epaisseur: 2 },
+      color: bleuMathalea,
     })
-    const courbef1 = latex2d('\\mathscr{C}_f', -2, 1, { color: 'blue' })
+    const courbef1 = latex2d('\\mathscr{C}_f', -2, 1, { color: bleuMathalea })
 
     const objetsEnonce = [repere1, courbe1, courbef1]
 

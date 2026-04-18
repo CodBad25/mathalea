@@ -11,6 +11,7 @@ import { rienSi1 } from '../../../lib/outils/ecritures'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../../modules/outils'
 import Exercice from '../../Exercice'
+import { bleuMathalea } from '../../../lib/colors'
 export const titre =
   'Déterminer graphiquement la valeur de $b$ avec une parabole'
 export const interactifReady = true
@@ -49,7 +50,7 @@ export default class LectureGraphiqueParabolebEtc extends Exercice {
       o = texteParPosition('O', -0.3, -0.3, 0, 'black', 1, 'milieu')
       A = point(alpha, beta)
 
-      traceA = tracePoint(A, 'blue') // Variable qui trace les points avec une croix
+      traceA = tracePoint(A, bleuMathalea) // Variable qui trace les points avec une croix
       f = (x: number): number => a * (x - alpha) ** 2 + beta
       r = repere({
         yUnite: 1,
@@ -83,7 +84,7 @@ export default class LectureGraphiqueParabolebEtc extends Exercice {
         r,
         o,
         traceA,
-        courbe(f, { repere: r, color: 'blue', epaisseur: 2 }),
+        courbe(f, { repere: r, color: bleuMathalea, epaisseur: 2 }),
       )
 
       if (this.interactif) {

@@ -9,6 +9,7 @@ import { listeQuestionsToContenu, randint } from '../../../modules/outils'
 import Exercice from '../../Exercice'
 
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { bleuMathalea } from '../../../lib/colors'
 export const titre = 'Lire graphiquement le signe de $b$ dans $ax^2+bx+c$'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -104,7 +105,7 @@ export default class LectureGraphiqueParaboleB extends Exercice {
                 },
                 r,
                 o,
-                courbe(F, { repere: r, color: 'blue', epaisseur: 2 }),
+                courbe(F, { repere: r, color: bleuMathalea, epaisseur: 2 }),
               ) + '<br>'
 
             texteCorr = `L'abscisse du sommet de la parabole est négatif. Celui-ci est donné par : $-\\dfrac{b}{2a}$.<br>
@@ -173,7 +174,7 @@ export default class LectureGraphiqueParaboleB extends Exercice {
                 },
                 r,
                 o,
-                courbe(F, { repere: r, color: 'blue', epaisseur: 2 }),
+                courbe(F, { repere: r, color: bleuMathalea, epaisseur: 2 }),
               ) + '<br>'
 
             texteCorr = `L'abscisse du sommet de la parabole est négatif. Celui-ci est donné par : $-\\dfrac{b}{2a}$.<br>
@@ -242,7 +243,7 @@ export default class LectureGraphiqueParaboleB extends Exercice {
                 },
                 r,
                 o,
-                courbe(F, { repere: r, color: 'blue', epaisseur: 2 }),
+                courbe(F, { repere: r, color: bleuMathalea, epaisseur: 2 }),
               ) + '<br>'
 
             texteCorr = `L'abscisse du sommet de la parabole est positif. Celui-ci est donné par : $-\\dfrac{b}{2a}$.<br>
@@ -311,7 +312,7 @@ export default class LectureGraphiqueParaboleB extends Exercice {
                 },
                 r,
                 o,
-                courbe(F, { repere: r, color: 'blue', epaisseur: 2 }),
+                courbe(F, { repere: r, color: bleuMathalea, epaisseur: 2 }),
               ) + '<br>'
 
             texteCorr = `L'abscisse du sommet de la parabole est positif. Celui-ci est donné par : $-\\dfrac{b}{2a}$.<br>
@@ -377,7 +378,7 @@ export default class LectureGraphiqueParaboleB extends Exercice {
                 },
                 r,
                 o,
-                courbe(F, { repere: r, color: 'blue', epaisseur: 2 }),
+                courbe(F, { repere: r, color: bleuMathalea, epaisseur: 2 }),
               ) + '<br>'
 
             texteCorr = `L'abscisse du sommet de la parabole est nul. Celui-ci est donné par : $-\\dfrac{b}{2a}$.<br>
@@ -440,7 +441,7 @@ export default class LectureGraphiqueParaboleB extends Exercice {
                 },
                 r,
                 o,
-                courbe(F, { repere: r, color: 'blue', epaisseur: 2 }),
+                courbe(F, { repere: r, color: bleuMathalea, epaisseur: 2 }),
               ) + '<br>'
 
             texteCorr = `L'abscisse du sommet de la parabole est nul. Celui-ci est donné par : $-\\dfrac{b}{2a}$.<br>

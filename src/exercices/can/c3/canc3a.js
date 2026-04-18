@@ -21,6 +21,7 @@ import { setReponse } from '../../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../../lib/interactif/questionMathLive'
 import { arrondi } from '../../../lib/outils/nombres'
 import { mathalea2d } from '../../../modules/mathalea2d'
+import { bleuMathalea } from '../../../lib/colors'
 
 export const titre = 'Course aux nombres CM1'
 export const interactifReady = true
@@ -373,7 +374,7 @@ export default class CourseAuxNombresCM extends Exercice {
                 segment(A, C),
                 `${stringNombre(a)}`,
                 -1,
-                'blue',
+                bleuMathalea,
               )
               objets[4] = afficheCoteSegment(segment(C, B), '?', -1, 'red')
               texte = mathalea2d(
@@ -419,7 +420,7 @@ export default class CourseAuxNombresCM extends Exercice {
                 objets[2],
                 `${stringNombre(a)}`,
                 -1,
-                'blue',
+                bleuMathalea,
               )
               objets[4] = afficheCoteSegment(
                 segment(C, B),
@@ -604,7 +605,7 @@ export default class CourseAuxNombresCM extends Exercice {
             objets[2],
             stringNombre(a, 0),
             -1,
-            'blue',
+            bleuMathalea,
           )
           objets[4] = afficheCoteSegment(segment(C, B), '?', -1, 'red')
           texte = mathalea2d(
@@ -669,7 +670,7 @@ export default class CourseAuxNombresCM extends Exercice {
             objets[2],
             stringNombre(a, 0),
             -1,
-            'blue',
+            bleuMathalea,
           )
           objets[4] = afficheCoteSegment(
             segment(C, B),

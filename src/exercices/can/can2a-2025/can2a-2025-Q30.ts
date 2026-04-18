@@ -11,6 +11,7 @@ import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
+import { bleuMathalea } from '../../../lib/colors'
 export const titre = 'Calculer une longueur sur une grille'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -43,12 +44,12 @@ export default class CalculLongueurGrille extends ExerciceSimple {
     const C = this.canOfficielle
       ? point(5, 4, 'C', 'above')
       : point(B.x, A.y, 'C', 'above')
-    const s2 = segment(A, B, 'blue')
+    const s2 = segment(A, B, bleuMathalea)
     s2.epaisseur = 3
-    const s3 = segment(A, C, 'blue')
+    const s3 = segment(A, C, bleuMathalea)
     s3.epaisseur = 2
     s3.pointilles = 5
-    const s4 = segment(C, B, 'blue')
+    const s4 = segment(C, B, bleuMathalea)
     s4.epaisseur = 2
     s4.pointilles = 5
     const PositionPt = tracePoint(A, B, C)

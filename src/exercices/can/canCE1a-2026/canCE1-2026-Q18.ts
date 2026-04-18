@@ -10,6 +10,7 @@ import { context } from '../../../modules/context'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
+import { bleuMathalea } from '../../../lib/colors'
 
 export const titre = "Trouve l'heure sur une horloge (QCM)"
 export const interactifReady = true
@@ -70,7 +71,7 @@ export default class Can2026CE1Q18 extends ExerciceCan {
       alpha,
     )
     petiteAiguille.color = context.isHtml
-      ? colorToLatexOrHTML('blue')
+      ? colorToLatexOrHTML(bleuMathalea)
       : colorToLatexOrHTML('black')
     petiteAiguille.epaisseur = 4
 

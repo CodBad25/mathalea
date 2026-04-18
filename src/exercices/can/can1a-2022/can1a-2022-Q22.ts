@@ -5,6 +5,7 @@ import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import ExerciceCan from '../../ExerciceCan'
+import { bleuMathalea } from '../../../lib/colors'
 export const titre = 'Déterminer le coefficient directeur d\'une tangente à partir d\'un graphique'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -38,12 +39,12 @@ export default class Can1a2022Q22 extends ExerciceCan {
     const o = texteParPosition('O', -0.3, -0.3, 0, 'black', 1)
  const cf = latex2d('\\mathscr{C}_f', 0.5, 2.5,
       {
-        color: 'blue',
+        color: bleuMathalea,
         letterSize: 'normalsize',
       })
     const graphique = mathalea2d(
       { xmin: -4, xmax: 6, ymin: -1.1, ymax: 5.1, pixelsParCm: 30, scale: 0.8 },
-      r, o, cf, courbe(F, { repere: r, color: 'blue', epaisseur: 1.5, step: 0.05 }), courbe(tang, { repere: r, color: 'red', epaisseur: 2 }),
+      r, o, cf, courbe(F, { repere: r, color: bleuMathalea, epaisseur: 1.5, step: 0.05 }), courbe(tang, { repere: r, color: 'red', epaisseur: 2 }),
     )
 
     // f'(2) = 8.25×4 - 19.5×2 + 9 = 33 - 39 + 9 = 3
