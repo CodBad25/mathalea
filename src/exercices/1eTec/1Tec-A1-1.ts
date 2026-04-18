@@ -14,7 +14,7 @@ export const amcReady = true
 export const uuid = 'c988f'
 
 export const refs = {
-  'fr-fr': ['1Tec-A1-1', 'BP2AutoC5'],
+  'fr-fr': ['1A-R01-01', 'BP2AutoC5'],
   'fr-ch': [],
 }
 export default class EcritureFractionnaire1T extends EcritureFractionnaire {

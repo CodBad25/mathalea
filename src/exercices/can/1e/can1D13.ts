@@ -21,7 +21,7 @@ export const dateDePublication = '21/06/2022'
 export const uuid = 'ffbf6'
 
 export const refs = {
-  'fr-fr': ['can1D13'],
+  'fr-fr': ['can1D13', '1Tec-D202'],
   'fr-ch': ['3mA2-7'],
 }
 export default class DeriveePoly3 extends ExerciceSimple {
@@ -44,7 +44,7 @@ export default class DeriveePoly3 extends ExerciceSimple {
         d = randint(-10, 10, [0])
         if (!this.interactif) {
           this.question = `Soit $f$ la fonction définie sur $\\mathbb{R}$ par : <br>
-          
+
           $f(x)= ${reduirePolynomeDegre3(a, b, c, d)}$.<br>
 
        Déterminer $f'(x)$.`
@@ -70,7 +70,7 @@ export default class DeriveePoly3 extends ExerciceSimple {
             this.question = `Soit $f$ la fonction définie sur $\\mathbb{R}$ par : <br>
 
             $f(x)= ${rienSi1(b)}x^2${ecritureAlgebriqueSauf1(a)}x^3${ecritureAlgebriqueSauf1(c)}x${ecritureAlgebrique(d)}$.<br>
-       
+
             Déterminer $f'(x)$.`
           } else {
             this.question = `Soit $f$ la fonction définie sur $\\mathbb{R}$ par :
@@ -80,9 +80,9 @@ export default class DeriveePoly3 extends ExerciceSimple {
         } else {
           if (!this.interactif) {
             this.question = `Soit $f$ la fonction définie sur $\\mathbb{R}$ par : <br>
-            
+
             $f(x)=${rienSi1(c)}x${ecritureAlgebriqueSauf1(b)}x^2${ecritureAlgebrique(d)}${ecritureAlgebriqueSauf1(a)}x^3 $.<br>
-    
+
             Déterminer $f'(x)$.`
           } else {
             this.question = `Soit $f$ la fonction définie sur $\\mathbb{R}$ par : $f(x)=${rienSi1(c)}x${ecritureAlgebriqueSauf1(b)}x^2${ecritureAlgebrique(d)}${ecritureAlgebriqueSauf1(a)}x^3 $.<br>

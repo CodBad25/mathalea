@@ -22,7 +22,7 @@ export const interactifType = 'qcm'
 
 export const uuid = '8f59a'
 export const refs = {
-  'fr-fr': ['1Tec-F21'],
+  'fr-fr': ['1Tec-F202'],
   'fr-ch': [],
 }
 /**
@@ -74,7 +74,7 @@ export default class estUneRacine extends Exercice {
       }
       this.autoCorrection[i] = {
         options: { ordered: true, radio: true },
- 
+
         enonce: '',
         propositions: [
           {

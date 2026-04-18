@@ -30,7 +30,7 @@ export const dateDeModifImportante = '26/09/2025'
 export const uuid = '6487c'
 
 export const refs = {
-  'fr-fr': ['1AL10-1', '1Tec-AN10-10'],
+  'fr-fr': ['1AL10-1', '1Tec-S101'],
   'fr-ch': [],
 }
 export default class ModeliserSuites extends Exercice {
@@ -125,7 +125,7 @@ export default class ModeliserSuites extends Exercice {
           texteCorr = `$c_n$ est le nombre de colonies pendant l'année $2024 + n$.<br>
             D'une année sur l'autre, l'apiculteur perd $${p}$ % de colonies donc il en reste $${100 - p}$ %. <br>
           De plus, il installe $${b}$ nouvelles colonies chaque printemps.<br>
-          Ainsi, la suite $(c_n)$ est définie par : 
+          Ainsi, la suite $(c_n)$ est définie par :
           $\\begin{cases}c_0=${miseEnEvidence(`${texNombre(a, 0)}`)}\\\\
           c_{n+1}=${miseEnEvidence(`${texNombre(cm, 2)}\\times c_n+${b}`)} \\text{ pour tout entier naturel }n.
           \\end{cases}$`
@@ -178,7 +178,7 @@ qui suit le 1er juillet 2024.<br>
 qui suit le 1er juillet $2024$ l'année $2024 + n$.<br>
             D'une année sur l'autre, la retenue perd $${p}\\,\\%$  par évaporation donc il en reste $${100 - p}\\,\\%$. <br>
           De plus, la retenue perd  $${abs(b)}\\text{ m}^3$ chaque soir.<br>
-          Ainsi, la suite $(u_n)$ est définie par : 
+          Ainsi, la suite $(u_n)$ est définie par :
           $\\begin{cases}u_0=${miseEnEvidence(`${texNombre(a, 0)}`)}\\\\
           u_{n+1}=${miseEnEvidence(`${texNombre(cm, 2)}\\times u_n${ecritureAlgebrique(b)}`)} \\text{ pour tout entier naturel }n.
           \\end{cases}$`
@@ -230,7 +230,7 @@ au 1er janvier de l'année $2022 + n$.<br>
           texteCorr = `$v_n$ est le nombre de vélos de cette commune au 1er janvier de l'année $2022 + n$.<br>
             D'une année sur l'autre, la commune se sépare de $${p}\\,\\%$ de vélos donc il en reste $${100 - p}\\,\\%$. <br>
           De plus, $${b}$ nouveaux vélos sont mis en service.<br>
-          Ainsi, la suite $(v_n)$ est définie par : 
+          Ainsi, la suite $(v_n)$ est définie par :
           $\\begin{cases}v_0=${miseEnEvidence(`${texNombre(a, 0)}`)}\\\\
           v_{n+1}=${miseEnEvidence(`${texNombre(cm, 2)}\\times v_n${ecritureAlgebrique(b)}`)} \\text{ pour tout entier naturel }n.
           \\end{cases}$`
@@ -278,7 +278,7 @@ au 1er janvier de l'année $2022 + n$.<br>
           texteCorr = `$c_n$ est le capital 1er janvier de l'année $2023 + n$.<br>
             À la fin de chaque année, les intérêts sont ajoutés au capital. Cela signifie que le capital est multiplié par $${texNombre(cm, 2)}$. <br>
           De plus, les frais de gestion s'élèvent à $${b}$ €.<br>
-          Ainsi, la suite $(c_n)$ est définie par : 
+          Ainsi, la suite $(c_n)$ est définie par :
           $\\begin{cases}c_0=${miseEnEvidence(`${texNombre(a, 0)}`)}\\\\
           c_{n+1}=${miseEnEvidence(`${texNombre(cm, 2)}\\times c_n-${b}`)} \\text{ pour tout entier naturel }n.
           \\end{cases}$`
@@ -329,7 +329,7 @@ Pour l'année $2024$, il y a $${a}$ abonnés.<br>`
           texteCorr = `$u_n$ est le  nombre d'abonnés pour l'année  $2024 + n$.<br>
             Chaque année, $${p}\\,\\%$  des personnes abonnées renouvellent leur abonnement. <br>
           De plus, chaque année il y a $${b}$ nouveaux abonnés.<br>
-          Ainsi, la suite $(u_n)$ est définie par : 
+          Ainsi, la suite $(u_n)$ est définie par :
           $\\begin{cases}u_0=${miseEnEvidence(`${texNombre(a, 0)}`)}\\\\
           u_{n+1}=${miseEnEvidence(`${texNombre(cm, 2)}\\times u_n+${b}`)} \\text{ pour tout entier naturel }n.
           \\end{cases}$`
@@ -383,7 +383,7 @@ Le premier versement a lieu le $25$ février $2024$.<br>`
           texteCorr = `$v_n$ est le capital restant dû en euros juste après la $n$-ième mensualité.<br>
            Chaque mois, le capital restant dû augmente de $${texNombre(p, 2, true)}\\,\\%$, cela signifie qu'il est multiplié par $${texNombre(cm, 3)}$.<br>
           De plus, il baisse de $${b}$ euros (versement de la mensualité).<br>
-          Ainsi, la suite $(v_n)$ est définie par : 
+          Ainsi, la suite $(v_n)$ est définie par :
           $\\begin{cases}v_0=${miseEnEvidence(`${texNombre(a, 0)}`)}\\\\
           v_{n+1}=${miseEnEvidence(`${texNombre(cm, 3)}\\times v_n-${b}`)} \\text{ pour tout entier naturel }n.
           \\end{cases}$`

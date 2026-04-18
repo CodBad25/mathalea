@@ -23,7 +23,7 @@ export const dateDePublication = '14/02/2022' // La date de publication initiale
 export const uuid = '3f032'
 
 export const refs = {
-  'fr-fr': ['can1S02', '1Tec-AN10-12-1', '1Gen-A105'],
+  'fr-fr': ['can1S02', '1Tec-S106', '1Gen-A105'],
   'fr-ch': [],
 }
 export default class CalculTermeSuiteRec extends ExerciceSimple {
@@ -76,7 +76,7 @@ export default class CalculTermeSuiteRec extends ExerciceSimple {
 
         if (!this.interactif) {
           this.question += `<br>
-          
+
           Calculer $u_{${k}}$.`
           this.canEnonce = `Soit $(u_n)$ une suite définie par $u_0=${u}$ et pour tout  $n\\in\\mathbb{N}$ par $u_{n+1} = ${a}u_n $.`
           this.canReponseACompleter = `$u_{${k}}=\\ldots$`

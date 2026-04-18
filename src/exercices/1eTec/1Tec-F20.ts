@@ -28,7 +28,7 @@ export const titre =
 export const uuid = 'e297b'
 
 export const refs = {
-  'fr-fr': ['1Tec-F20'],
+  'fr-fr': ['1Tec-F201'],
   'fr-ch': [],
 }
 

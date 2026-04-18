@@ -24,7 +24,7 @@ export const dateDePublication = '23/11/2024'
 export const uuid = '42983'
 
 export const refs = {
-  'fr-fr': ['1AL11-1', '1Gen-A201', '1Tec-AN11-1'],
+  'fr-fr': ['1AL11-1', '1Gen-A201', '1Tec-S201'],
   'fr-ch': ['autres-2'],
 }
 export default class ReconnaitreSuites extends Exercice {
@@ -73,7 +73,7 @@ export default class ReconnaitreSuites extends Exercice {
               case 2: // SA forme explicite2
                 r = randint(-10, 10, 0)
                 u0 = randint(-10, 10, [0, r])
-                texte = `On considère la suite $(${NomS}_n)$ définie pour tout $n\\in \\mathbb{N}^*$ par : 
+                texte = `On considère la suite $(${NomS}_n)$ définie pour tout $n\\in \\mathbb{N}^*$ par :
           $${NomS}_n=${choice([true, false]) ? `\\dfrac{${rienSi1(r)}n^2${ecritureAlgebrique(u0)}n}{n}` : `\\dfrac{${rienSi1(u0)}n${ecritureAlgebriqueSauf1(r)}n^2}{n}`}$.<br>
           Alors :`
                 texteCorr = `$${NomS}_n=${choice([true, false]) ? `\\dfrac{${rienSi1(r)}n^2${ecritureAlgebrique(u0)}n}{n}` : `\\dfrac{${u0}n${ecritureAlgebriqueSauf1(r)}n^2}{n}`}
@@ -188,7 +188,7 @@ export default class ReconnaitreSuites extends Exercice {
                 texte = `On considère la suite $(${NomS}_n)$ définie pour tout $n\\in \\mathbb{N}$ par : $${NomS}_{n+1}=${a}-${NomS}_{n}$ et $${NomS}_{0}=${u0}$.<br>
             Alors :`
                 texteCorr =
-                  `On a $${NomS}_{0}=${u0}$, $${NomS}_{1}=${a - u0}$ et $${NomS}_{2}=${u0}$.<br> 
+                  `On a $${NomS}_{0}=${u0}$, $${NomS}_{1}=${a - u0}$ et $${NomS}_{2}=${u0}$.<br>
             ` + NiNi
                 break
               case 2:
@@ -199,7 +199,7 @@ export default class ReconnaitreSuites extends Exercice {
             Alors :`
 
                 texteCorr =
-                  `On a $${NomS}_{0}=${u0}$, $${NomS}_{1}=${a * u0 + b}$ et $${NomS}_{2}=${a * (a * u0 + b) + b}$.<br> 
+                  `On a $${NomS}_{0}=${u0}$, $${NomS}_{1}=${a * u0 + b}$ et $${NomS}_{2}=${a * (a * u0 + b) + b}$.<br>
             ` + NiNi
                 break
               default: // NiNi3
@@ -208,7 +208,7 @@ export default class ReconnaitreSuites extends Exercice {
                 texte = `On considère la suite $(${NomS}_n)$ définie pour tout $n\\in \\mathbb{N}$ par : $${NomS}_{n}=${rienSi1(a)}n^2${ecritureAlgebrique(u0)}$.<br>
             Alors :`
                 texteCorr =
-                  `On a $${NomS}_{0}=${u0}$, $${NomS}_{1}=${a + u0}$ et $${NomS}_{2}=${a * 4 + u0}$.<br> 
+                  `On a $${NomS}_{0}=${u0}$, $${NomS}_{1}=${a + u0}$ et $${NomS}_{2}=${a * 4 + u0}$.<br>
             ` + NiNi
                 break
             }

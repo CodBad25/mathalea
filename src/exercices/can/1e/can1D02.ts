@@ -22,7 +22,7 @@ export const dateDePublication = '20/06/2022'
 export const uuid = 'a1ba2'
 
 export const refs = {
-  'fr-fr': ['can1D02'],
+  'fr-fr': ['can1D02', '1Tec-D203'],
   'fr-ch': [],
 }
 export default class NombreDerivee extends ExerciceSimple {
@@ -66,7 +66,7 @@ export default class NombreDerivee extends ExerciceSimple {
           this.canEnonce = `Soit $f$ la fonction définie sur $\\mathbb{R}$ par : $f(x)= ${reduireAxPlusB(b, c)}${ecritureAlgebriqueSauf1(a)}x^2$.`
           this.canReponseACompleter = `$f'(${nbre})=\\ldots$`
         } else {
-          this.question = `Soit $f$ la fonction définie sur $\\mathbb{R}$ par : 
+          this.question = `Soit $f$ la fonction définie sur $\\mathbb{R}$ par :
           $f(x)= ${c}${ecritureAlgebriqueSauf1(a)}x^2${ecritureAlgebriqueSauf1(b)}x$.<br>
             Déterminer $f'(${nbre})$.`
           this.canEnonce = `Soit $f$ la fonction définie sur $\\mathbb{R}$ par : $f(x)= ${c}${ecritureAlgebriqueSauf1(a)}x^2${ecritureAlgebriqueSauf1(b)}x$.`
@@ -85,7 +85,7 @@ export default class NombreDerivee extends ExerciceSimple {
         c = randint(-10, 10, [0])
         nbre = randint(-5, 5)
         if (choice([true, false])) {
-          this.question = `Soit $f$ la fonction définie sur $\\mathbb{R}$ par : 
+          this.question = `Soit $f$ la fonction définie sur $\\mathbb{R}$ par :
           $f(x)= ${reduirePolynomeDegre3(0, a, 0, c)}$.<br>
             Déterminer $f'(${nbre})$.`
           this.canEnonce = `Soit $f$ la fonction définie sur $\\mathbb{R}$ par : $f(x)= ${reduirePolynomeDegre3(0, a, 0, c)}$.`

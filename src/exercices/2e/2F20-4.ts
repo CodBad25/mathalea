@@ -36,7 +36,7 @@ export const interactifType = 'mathLive'
 export const uuid = '28998'
 
 export const refs = {
-  'fr-fr': ['2F20-4'],
+  'fr-fr': ['2F20-4', '1Tec-F104'],
   'fr-ch': ['2mIneq-1'],
 }
 type TypesDeFonction = 'constante' | 'affine' | 'poly2' | 'poly3'

@@ -25,7 +25,7 @@ export const interactifType = 'qcm'
 
 export const uuid = '61ff2'
 export const refs = {
-  'fr-fr': ['1Tec-F22'],
+  'fr-fr': ['1Tec-F203'],
   'fr-ch': [],
 }
 export function calculImageTrinome(a: number, b: number, c: number, x: number) {
@@ -76,7 +76,7 @@ export default class factoriseTrinomeAvecRacines extends Exercice {
       let texteCorr = ''
       const x1 = randint(-9, 9, 0)
       const x2 = randint(-9, 9, [0, x1, -x1])
-      const a = choice([1, -1, 2, -2,-3,3])
+      const a = choice([1, -1, 2, -2, -3, 3])
       const b = -a * x1 - a * x2
       const c = a * x1 * x2
       texte = `Soit $f$ la fonction définie sur $\\mathbb{R}$ par $f(x)= ${rienSi1(a)}x^2${ecritureAlgebriqueSauf1(b)}x${ecritureAlgebriqueSauf0(c)}$.<br>`

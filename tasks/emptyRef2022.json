@@ -1166,36 +1166,27 @@
       }
     },
     "1eTec": {
-      "1Tec-A": {
-        "1Tec-A1": {},
-        "1Tec-A2": {}
-      },
       "1Tec-F": {
-        "1Tec-F1": {
-          "1Tec-F2": {},
-          "1Tec-F3": {}
-        },
-        "1Tec-S": {
-          "1Tec-S1": {},
-          "1Tec-S2": {}
-        }},
+        "1Tec-F1": {},
+        "1Tec-F2": {},
+        "1Tec-F3": {}
+      },
+      "1Tec-S": {
+        "1Tec-S1": {},
+        "1Tec-S2": {}
+      },
       "1Tec-P": {
-          "1Tec-P1": {}
-        ,
-          "1Tec-P2": {}
-        ,
-          "1Tec-SP3": {}
-        ,
-          "1Tec-P4": {}
-        },
-         "1Tec-D": {
-          "1Tec-D1": {}
-        ,
-          "1Tec-D2": {}
-        }
+        "1Tec-P1": {},
+        "1Tec-P2": {},
+        "1Tec-SP3": {},
+        "1Tec-P4": {}
+      },
+      "1Tec-D": {
+        "1Tec-D1": {},
+        "1Tec-D2": {}
       }
     }
-  ,
+  },
   "Terminale": {
     "Terminale Spé": {
       "TSA1": {

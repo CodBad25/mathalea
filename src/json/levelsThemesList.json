@@ -2840,27 +2840,17 @@
   "1Gen-A20": {
     "titre": "Suites arithmétiques et géométriques"
   },
-  "1Tec-A": {
-    "titre": "Automatismes"
-  },
-  "1Tec-A1": {
-    "titre": "Proportions et pourcentages"
-  },
-  "1Tec-A2": {
-    "titre": "Évolutions et variations"
-  },
-  
-  
+
   "1Tec-F": {
     "titre": "Fonctions de la variable réelle"
   },
-   "1Tec-F1": {
+  "1Tec-F1": {
     "titre": "Généralités sur les fonctions"
   },
   "1Tec-F2": {
     "titre": "Fonctions polynômes de degré 2"
   },
-   "1Tec-F3": {
+  "1Tec-F3": {
     "titre": "Fonctions polynômes de degré 3"
   },
   "1Tec-P": {
@@ -2869,13 +2859,13 @@
   "1Tec-P1": {
     "titre": "Croisement de deux variables catégorielles"
   },
-   "1Tec-P2": {
+  "1Tec-P2": {
     "titre": "Probabilités conditionnelles"
   },
-   "1Tec-P3": {
+  "1Tec-P3": {
     "titre": "Modèle associé à une expérience aléatoire à plusieurs épreuves indépendantes"
   },
-   "1Tec-P4": {
+  "1Tec-P4": {
     "titre": "Variables aléatoires"
   },
   "1Tec-S": {
@@ -2884,7 +2874,7 @@
   "1Tec-S1": {
     "titre": "Généralités sur les suites"
   },
-   "1Tec-S2": {
+  "1Tec-S2": {
     "titre": "Suites arithmétiques et géométriques"
   },
   "1Tec-D": {
