@@ -9,6 +9,7 @@ import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import { representeFractionSurBarre } from '../../modules/representationsFractions'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 export const titre = "Représenter une fraction de l'unité"
 export const amcReady = true
 export const amcType = 'AMCHybride'
@@ -103,7 +104,7 @@ export default class FractionsDunite extends Exercice {
         })
         this.figuresApigeom[i] = figure
         figure.setToolbar({ position: 'top', tools: ['FILL'] })
-        figure.options.color = 'blue'
+        figure.options.color = bleuMathalea
         figure.create('LineFractionDiagram', {
           denominator: unit,
           max: 3,

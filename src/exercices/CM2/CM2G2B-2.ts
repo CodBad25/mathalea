@@ -27,6 +27,7 @@ import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 
 export const dateDeModifImportante = '17/02/2025'
 export const amcReady = true
@@ -154,7 +155,7 @@ export default class ParalleleEtPerpendiculaires extends Exercice {
             s1 = segment(B, F, 'red')
             s1.epaisseur = 2
             s1.pointilles = 5
-            s2 = segment(F, E, 'blue')
+            s2 = segment(F, E, bleuMathalea)
             s2.epaisseur = 2
             s2.pointilles = 5
             dC = droiteParPointEtPerpendiculaire(C, d)
@@ -314,10 +315,10 @@ export default class ParalleleEtPerpendiculaires extends Exercice {
                   segment(A, EE),
                   `${stringNombre(lE)} cm`,
                   -0.2,
-                  'blue',
+                  bleuMathalea,
                   1,
                   -0.5,
-                  'blue',
+                  bleuMathalea,
                 ),
               )
             } else {
@@ -460,10 +461,10 @@ export default class ParalleleEtPerpendiculaires extends Exercice {
                   segment(A, DD),
                   `${stringNombre(lD)} cm`,
                   0,
-                  'blue',
+                  bleuMathalea,
                   1,
                   -0.5,
-                  'blue',
+                  bleuMathalea,
                 ),
                 afficheCoteSegment(
                   segment(A, EE),

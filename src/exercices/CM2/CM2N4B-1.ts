@@ -1,3 +1,4 @@
+import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif' // fonction qui va préparer l'analyse de la saisie
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive' // fonctions de mise en place des éléments interactifs
@@ -150,7 +151,7 @@ export default class nomExercice extends Exercice {
             txtExpression = ecritExpression(tree.root, true)
 
             if (typeof tree.root.value === 'number') {
-              txtArbre += `$${lettre} = ${miseEnEvidence(`${txtExpression}`)}$<br>` // miseEnEvidence(`${txtExpression}`,'blue')
+              txtArbre += `$${lettre} = ${miseEnEvidence(`${txtExpression}`)}$<br>` // miseEnEvidence(`${txtExpression}`, bleuMathalea)
             } else {
               txtArbre += `$${lettre} = ${txtExpression}$<br>`
             }
@@ -259,7 +260,7 @@ function parcoursExpression(
     rslt += ')'
   }
   if (enGras) {
-    rslt = miseEnEvidence(`${rslt}`, 'blue') // pour indiquer calcul à faire
+    rslt = miseEnEvidence(`${rslt}`, bleuMathalea) // pour indiquer calcul à faire
   }
   return [rslt, enGras]
 }
