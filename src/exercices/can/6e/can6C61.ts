@@ -80,7 +80,7 @@ $${entier} \\times ${texNombre(decimalEquivalent, 0)} = $`
           this.canEnonce = `Compléter l'égalité sachant que $${entier} \\times ${decimalStr} = ${texNombre(produitDecimal, 3)}$. `
           this.canReponseACompleter = `$${entier} \\times ${texNombre(decimalEquivalent, 0)} = \\ldots$`
           this.reponse = texNombre(produitEquivalent, 0)
-          // texteEnCouleurEtGras(nb3, 'blue') ?
+          // texteEnCouleurEtGras(nb3, bleuMathalea) ?
           this.correction = `On utilise la relation entre les deux écritures :<br>
 $\\begin{aligned}
 ${entier} \\times ${decimalStr} &= ${entier} \\times \\left(${texNombre(decimalEquivalent, 0)} \\times ${texNombre(new Decimal(1).div(coeff), 3)}\\right) \\\\

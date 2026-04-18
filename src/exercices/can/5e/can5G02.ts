@@ -10,6 +10,7 @@ import { texNombre } from '../../../lib/outils/texNombre'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
+import { bleuMathalea } from '../../../lib/colors'
 
 /**
 + * Calcule la tangente d'un angle en degrés
@@ -58,7 +59,7 @@ export default class AngleTriangleIsocele extends ExerciceSimple {
         objets.push(pol[0], pol[1])
         objets.push(
           afficheMesureAngle(B, A, C, 'black', 1, a + '^\\circ'),
-          codageSegments('||', 'blue', C, A, C, B),
+          codageSegments('||', bleuMathalea, C, A, C, B),
         )
         this.question = `Quelle est la mesure en degré de l'angle $\\widehat{${nom[2]}}$ ? <br>
         `
@@ -88,7 +89,7 @@ export default class AngleTriangleIsocele extends ExerciceSimple {
           a === 45
             ? codageAngleDroit(A, C, B)
             : afficheMesureAngle(A, C, B, 'black', 1, 180 - 2 * a + '^\\circ'),
-          codageSegments('||', 'blue', C, A, C, B),
+          codageSegments('||', bleuMathalea, C, A, C, B),
         )
         this.question = `Quelle est la mesure en degré de l'angle $\\widehat{${nom[1]}}$ ?<br>
             `

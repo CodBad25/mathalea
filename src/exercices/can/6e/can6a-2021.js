@@ -29,6 +29,7 @@ import Hms from '../../../modules/Hms'
 import { droiteGraduee } from '../../../lib/2d/DroiteGraduee'
 import { grille } from '../../../lib/2d/Grille'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
+import { bleuMathalea } from '../../../lib/colors'
 
 export const titre = 'CAN 6e sujet 2021'
 export const interactifReady = true
@@ -227,7 +228,7 @@ Par exemple, en choisissant 20 questions, la course aux nombres sera composée d
             pointListe: [[c - a, '?']],
             labelPointTaille: 15,
             labelListe: maListe,
-            pointCouleur: 'blue',
+            pointCouleur: bleuMathalea,
             pointStyle: 'x',
             labelsPrincipaux: false,
           })
@@ -872,7 +873,7 @@ Par exemple, en choisissant 20 questions, la course aux nombres sera composée d
                 axeStyle: '|->',
                 pointListe: [[b / a, '?']],
                 labelPointTaille: 15,
-                pointCouleur: 'blue',
+                pointCouleur: bleuMathalea,
                 pointStyle: 'x',
                 labelsPrincipaux: true,
                 step1: 1,

@@ -14,6 +14,7 @@ import Exercice from '../../Exercice'
 
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { setReponse } from '../../../lib/interactif/gestionInteractif'
+import { bleuMathalea } from '../../../lib/colors'
 
 export const titre = 'Compter les points symétriques manquants'
 export const dateDePublication = '18/12/2021'
@@ -96,7 +97,7 @@ export default class CompleterParSymetrieCan extends Exercice {
       }
       d.epaisseur = 2
       d.color = context.isHtml
-        ? colorToLatexOrHTML('blue')
+        ? colorToLatexOrHTML(bleuMathalea)
         : colorToLatexOrHTML('black')
       objetsEnonce.push(d)
       pointsPossibles = papier.listeCoords.slice()

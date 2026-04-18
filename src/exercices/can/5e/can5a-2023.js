@@ -38,6 +38,7 @@ import {
 import { ajouteChampTexteMathLive } from '../../../lib/interactif/questionMathLive'
 import Hms from '../../../modules/Hms'
 import { representationFraction } from '../../../modules/representationsFractions'
+import { bleuMathalea } from '../../../lib/colors'
 
 export const titre = 'CAN 5e sujet 2023'
 export const interactifReady = true
@@ -718,7 +719,7 @@ export default class SujetCAN2023Cinquieme extends Exercice {
               [1, `${stringNombre(1)}`],
               [0, `${stringNombre(0)}`],
             ],
-            pointCouleur: 'blue',
+            pointCouleur: bleuMathalea,
             pointStyle: 'x',
             labelsPrincipaux: false,
           })
@@ -741,7 +742,7 @@ export default class SujetCAN2023Cinquieme extends Exercice {
                 1.5 * a + 7 * 1.5,
                 0.9,
                 'milieu',
-                'blue',
+                bleuMathalea,
                 context.isHtml ? 2 : 1.5,
               ),
             ) +
@@ -1162,7 +1163,7 @@ export default class SujetCAN2023Cinquieme extends Exercice {
               [b, ''],
               [0, ''],
             ],
-            pointCouleur: 'blue',
+            pointCouleur: bleuMathalea,
             pointStyle: 'x',
             thickEpaisseur: 1,
             axeEpaisseur: 2.5,
@@ -1178,7 +1179,7 @@ export default class SujetCAN2023Cinquieme extends Exercice {
             a + 5,
             0.6,
             'milieu',
-            'blue',
+            bleuMathalea,
             context.isHtml ? 2 : 1,
           )
           labB = texteParPosition(
@@ -1186,7 +1187,7 @@ export default class SujetCAN2023Cinquieme extends Exercice {
             b + 5,
             0.6,
             'milieu',
-            'blue',
+            bleuMathalea,
             context.isHtml ? 2 : 1,
           )
           lab1 = texteParPosition(
@@ -1194,7 +1195,7 @@ export default class SujetCAN2023Cinquieme extends Exercice {
             a + 5,
             -0.9,
             'milieu',
-            'blue',
+            bleuMathalea,
             context.isHtml ? 1.5 : 1,
           )
           lab2 = texteParPosition(
@@ -1202,7 +1203,7 @@ export default class SujetCAN2023Cinquieme extends Exercice {
             b + 5,
             -0.9,
             'milieu',
-            'blue',
+            bleuMathalea,
             context.isHtml ? 1.5 : 1,
           )
           lab3 = texteParPosition(

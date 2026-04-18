@@ -16,6 +16,7 @@ import { context } from '../../../modules/context'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
+import { bleuMathalea } from '../../../lib/colors'
 
 export const titre = "Déterminer le signe d'une fonction graphiquement "
 export const interactifReady = true
@@ -121,8 +122,8 @@ export default class NomExercice extends ExerciceSimple {
       const courbe1 = theSpline.courbe({
         epaisseur: 1.5,
         ajouteNoeuds: true,
-        optionsNoeuds: { color: 'blue', taille: 2, style: 'x', epaisseur: 2 },
-        color: 'blue',
+        optionsNoeuds: { color: bleuMathalea, taille: 2, style: 'x', epaisseur: 2 },
+        color: bleuMathalea,
       })
       const objetsEnonce = [repere1, courbe1]
       this.question = ''
@@ -188,8 +189,8 @@ export default class NomExercice extends ExerciceSimple {
       const courbe1 = theSpline.courbe({
         epaisseur: 1.5,
         ajouteNoeuds: true,
-        optionsNoeuds: { color: 'blue', taille: 2, style: 'x', epaisseur: 2 },
-        color: 'blue',
+        optionsNoeuds: { color: bleuMathalea, taille: 2, style: 'x', epaisseur: 2 },
+        color: bleuMathalea,
       })
       const objetsEnonce = [repere1, courbe1]
       const choix = choice([true, false])

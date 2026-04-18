@@ -28,6 +28,7 @@ import {
 } from '../../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../../lib/interactif/questionMathLive'
 import Grandeur from '../../../modules/Grandeur'
+import { bleuMathalea } from '../../../lib/colors'
 
 export const titre = 'CAN 6e sujet 2022'
 export const interactifReady = true
@@ -221,7 +222,7 @@ export default class SujetCAN2022Sixieme extends Exercice {
             thickOffset: 0,
             axeStyle: '->',
             pointListe: [[a, '?']],
-            pointCouleur: 'blue',
+            pointCouleur: bleuMathalea,
             pointStyle: 'x',
             labelsPrincipaux: true,
           })
@@ -907,7 +908,7 @@ $${miseEnEvidence(a + 1)}$ h et $${miseEnEvidence(reponse)}$ min.`
                   thickoffset: 0,
                   axeStyle: '|->',
                   pointListe: [[a / 5, 'A']],
-                  pointCouleur: 'blue',
+                  pointCouleur: bleuMathalea,
                   pointStyle: 'x',
                   labelsPrincipaux: true,
                   step1: 1,
@@ -940,7 +941,7 @@ $${miseEnEvidence(a + 1)}$ h et $${miseEnEvidence(reponse)}$ min.`
                   thickoffset: 0,
                   axeStyle: '|->',
                   pointListe: [[a / 4, 'A']],
-                  pointCouleur: 'blue',
+                  pointCouleur: bleuMathalea,
                   pointStyle: 'x',
                   labelsPrincipaux: true,
                   step1: 1,

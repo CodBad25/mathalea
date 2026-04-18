@@ -13,6 +13,7 @@ import { texNombre } from '../../../lib/outils/texNombre'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
+import { bleuMathalea } from '../../../lib/colors'
 
 export const titre = "Déterminer la longueur d'un segment"
 export const interactifReady = true
@@ -43,7 +44,7 @@ export default class NomExercice extends ExerciceSimple {
     const C = point(a, 0, 'C', 'above')
     const D = point(0, -1, 'D', 'above')
     const E = point(a, -1, 'B', 'below')
-    const segAC = segment(A, C, 'blue')
+    const segAC = segment(A, C, bleuMathalea)
     const segDE = segmentAvecExtremites(D, E, 'black')
     segAC.epaisseur = 2
     segDE.epaisseur = 2

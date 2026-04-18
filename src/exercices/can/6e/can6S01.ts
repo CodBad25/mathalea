@@ -6,6 +6,7 @@ import { prenom } from '../../../lib/outils/Personne'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
+import { bleuMathalea } from '../../../lib/colors'
 export const titre = 'Lire un diagramme en barres'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -70,7 +71,7 @@ export default class LectureDiagrammeBarre extends ExerciceSimple {
     objets.push(
       traceBarreHorizontale(a, 1, '', {
         epaisseur: 1,
-        couleurDeRemplissage: 'blue',
+        couleurDeRemplissage: bleuMathalea,
         hachures: true,
       }),
       traceBarreHorizontale(b, 2.5, '', {

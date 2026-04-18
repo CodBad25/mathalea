@@ -17,6 +17,7 @@ import { context } from '../../../modules/context'
 import { fraction } from '../../../modules/fractions'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import ExerciceSimple from '../../ExerciceSimple'
+import { bleuMathalea } from '../../../lib/colors'
 
 export const titre = "Déterminer la longueur d'une ligne brisée"
 export const interactifReady = true
@@ -80,19 +81,19 @@ export default class NomExercice extends ExerciceSimple {
       H = point(4, 4, 'D', 'above') // unite
       s1 = segmentAvecExtremites(G, H)
       s1.epaisseur = 3
-      s2 = segment(A, B, 'blue')
+      s2 = segment(A, B, bleuMathalea)
       s2.epaisseur = 3
-      s3 = segment(C, A, 'blue')
+      s3 = segment(C, A, bleuMathalea)
       s3.epaisseur = 3
-      s4 = segment(C, D, 'blue')
+      s4 = segment(C, D, bleuMathalea)
       s4.epaisseur = 3
-      s5 = segment(D, E, 'blue')
+      s5 = segment(D, E, bleuMathalea)
       s5.epaisseur = 3
-      s6 = segment(E, F, 'blue')
+      s6 = segment(E, F, bleuMathalea)
       s6.epaisseur = 3
-      s7 = segment(F, J, 'blue')
+      s7 = segment(F, J, bleuMathalea)
       s7.epaisseur = 3
-      s8 = segment(J, K, 'blue')
+      s8 = segment(J, K, bleuMathalea)
       s8.epaisseur = 3
       xmin = -1
       ymin = 0

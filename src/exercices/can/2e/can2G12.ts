@@ -7,6 +7,7 @@ import { ecritureParentheseSiNegatif } from '../../../lib/outils/ecritures'
 import Exercice from '../../Exercice'
 import { listeQuestionsToContenu, randint } from '../../../modules/outils'
 import { propositionsQcm } from '../../../lib/interactif/qcm'
+import { bleuMathalea } from '../../../lib/colors'
 export const titre = 'Reconnaitre des vecteurs colinéaires (V/F)'
 export const interactifReady = true
 export const interactifType = 'qcm'
@@ -86,7 +87,7 @@ export default class VecteursColineairesVF extends Exercice {
             `<br><br> Mentalement : <br>
         On compare les produits en croix : $${ecritureParentheseSiNegatif(ux)}\\times ${ecritureParentheseSiNegatif(vy)}=${ux * vy}$ et $${ecritureParentheseSiNegatif(uy)}\\times ${ecritureParentheseSiNegatif(vx)}=${uy * vx}$.<br>
         Ils sont égaux, donc les vecteurs sont colinéaires.`,
-            'blue',
+            bleuMathalea,
           )
           break
         case 2:
@@ -132,7 +133,7 @@ export default class VecteursColineairesVF extends Exercice {
             `<br><br> Mentalement : <br>
             On compare les produits en croix : $${ecritureParentheseSiNegatif(ux)}\\times ${ecritureParentheseSiNegatif(vy)}=${ux * vy}$ et $${ecritureParentheseSiNegatif(uy)}\\times ${ecritureParentheseSiNegatif(vx)}=${uy * vx}$.<br>
             Ils sont égaux, donc les vecteurs sont colinéaires.`,
-            'blue',
+            bleuMathalea,
           )
           break
 
@@ -179,7 +180,7 @@ export default class VecteursColineairesVF extends Exercice {
             `<br><br> Mentalement : <br>
             On compare les produits en croix : $${ecritureParentheseSiNegatif(ux)}\\times ${ecritureParentheseSiNegatif(vy)}=${ux * vy}$ et $${ecritureParentheseSiNegatif(uy)}\\times ${ecritureParentheseSiNegatif(vx)}=${uy * vx}$.<br>
             Ils ne sont pas égaux, donc les vecteurs ne sont pas colinéaires.`,
-            'blue',
+            bleuMathalea,
           )
           break
 
@@ -226,7 +227,7 @@ export default class VecteursColineairesVF extends Exercice {
             `<br><br> Mentalement : <br>
             On compare les produits en croix : $${ecritureParentheseSiNegatif(ux)}\\times ${ecritureParentheseSiNegatif(vy)}=${ux * vy}$ et $${ecritureParentheseSiNegatif(uy)}\\times ${ecritureParentheseSiNegatif(vx)}=${uy * vx}$.<br>
             Ils ne sont pas égaux, donc les vecteurs ne sont pas colinéaires.`,
-            'blue',
+            bleuMathalea,
           )
           break
         case 5:
@@ -273,7 +274,7 @@ export default class VecteursColineairesVF extends Exercice {
             `<br><br> Mentalement : <br>
             On compare les produits en croix : $${ecritureParentheseSiNegatif(ux)}\\times ${ecritureParentheseSiNegatif(vy)}=${ux * vy}$ et $${ecritureParentheseSiNegatif(uy)}\\times ${ecritureParentheseSiNegatif(vx)}=${uy * vx}$.<br>
             Ils ne sont pas égaux, donc les vecteurs ne sont pas colinéaires.`,
-            'blue',
+            bleuMathalea,
           )
           break
       }

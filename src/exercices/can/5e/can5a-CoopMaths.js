@@ -17,6 +17,7 @@ import { setReponse } from '../../../lib/interactif/gestionInteractif'
 import { arrondi } from '../../../lib/outils/nombres'
 import FractionEtendue from '../../../modules/FractionEtendue'
 import Grandeur from '../../../modules/Grandeur'
+import { bleuMathalea } from '../../../lib/colors'
 
 export const titre = 'Course aux nombres début de 5e'
 export const interactifReady = true
@@ -466,7 +467,7 @@ export default class CourseAuxNombres5e extends Exercice {
                 thickoffset: 0,
                 axeStyle: '|->',
                 pointListe: [[b / a, 'A']],
-                pointCouleur: 'blue',
+                pointCouleur: bleuMathalea,
                 labelsPrincipaux: true,
                 step1: 1,
                 step2: 1,

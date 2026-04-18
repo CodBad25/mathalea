@@ -6,6 +6,7 @@ import { droiteGraduee } from '../../../lib/2d/DroiteGraduee'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import ExerciceSimple from '../../ExerciceSimple'
+import { bleuMathalea } from '../../../lib/colors'
 export const titre =
   "Lire l'abscisse décimale d'un point sur une droite graduée"
 export const interactifReady = true
@@ -53,7 +54,7 @@ export default class LireAbscisseDecimaleDeFraction extends ExerciceSimple {
             scale: 0.6,
             style: 'margin: auto',
           },
-          latex2d('A', (3 * a) / 4, 0.5, { color: 'blue' }),
+          latex2d('A', (3 * a) / 4, 0.5, { color: bleuMathalea }),
           droiteGraduee({
             Unite: 3,
             Min: 0,
@@ -64,7 +65,7 @@ export default class LireAbscisseDecimaleDeFraction extends ExerciceSimple {
             thickSec: true,
             axeStyle: '|->',
             pointListe: [[a / 4, '']],
-            pointCouleur: 'blue',
+            pointCouleur: bleuMathalea,
             pointStyle: 'x',
             labelsPrincipaux: true,
             step1: 1,
@@ -92,7 +93,7 @@ export default class LireAbscisseDecimaleDeFraction extends ExerciceSimple {
             scale: 0.6,
             style: 'margin: auto',
           },
-          latex2d('A', (3 * a) / 5, 0.5, { color: 'blue' }),
+          latex2d('A', (3 * a) / 5, 0.5, { color: bleuMathalea }),
           droiteGraduee({
             Unite: 3,
             Min: 0,
@@ -103,7 +104,7 @@ export default class LireAbscisseDecimaleDeFraction extends ExerciceSimple {
             thickSec: true,
             axeStyle: '|->',
             pointListe: [[a / 5, '']],
-            pointCouleur: 'blue',
+            pointCouleur: bleuMathalea,
             pointStyle: 'x',
             labelsPrincipaux: true,
             step1: 1,

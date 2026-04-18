@@ -6,6 +6,7 @@ import { context } from '../../../modules/context'
 import FractionEtendue from '../../../modules/FractionEtendue'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import ExerciceCan from '../../ExerciceCan'
+import { bleuMathalea } from '../../../lib/colors'
 
 export const titre = 'Placer une fraction sur une droite graduée'
 export const interactifReady = true
@@ -171,7 +172,7 @@ export default class Can2026CE2Q12 extends ExerciceCan {
         thickOffset: 0,
         axeStyle: '->',
         pointListe: [[a[3] as number, `\\text{${a[1]}}`]] as [number, string][],
-        pointCouleur: 'blue',
+        pointCouleur: bleuMathalea,
         pointStyle: '',
         labelsPrincipaux: true,
       })

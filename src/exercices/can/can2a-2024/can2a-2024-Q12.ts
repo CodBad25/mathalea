@@ -11,6 +11,7 @@ import { texNombre } from '../../../lib/outils/texNombre'
 import FractionEtendue from '../../../modules/FractionEtendue'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import ExerciceSimple from '../../ExerciceSimple'
+import { bleuMathalea } from '../../../lib/colors'
 
 export const titre = 'Déterminer une abscisse'
 export const interactifReady = true
@@ -44,7 +45,7 @@ export default class NomExercice extends ExerciceSimple {
           scale: 0.7,
           style: 'margin: auto',
         },
-        texteParPosition('A', 5.5, 0.9, 0, 'blue', 1.5),
+        texteParPosition('A', 5.5, 0.9, 0, bleuMathalea, 1.5),
         droiteGraduee({
           Unite: 7,
           Min: 1.8,
@@ -56,7 +57,7 @@ export default class NomExercice extends ExerciceSimple {
           thickOffset: 0,
           axeStyle: '->',
           pointListe: [[13 / 5, '']],
-          pointCouleur: 'blue',
+          pointCouleur: bleuMathalea,
           pointStyle: 'x',
           labelsPrincipaux: true,
           step1: 1,
@@ -79,7 +80,7 @@ export default class NomExercice extends ExerciceSimple {
             scale: 0.6,
             style: 'margin: auto',
           },
-          texteParPosition('A', (3 * a) / 4, 0.9, 0, 'blue', 2),
+          texteParPosition('A', (3 * a) / 4, 0.9, 0, bleuMathalea, 2),
           droiteGraduee({
             Unite: 3,
             Min: 0,
@@ -91,7 +92,7 @@ export default class NomExercice extends ExerciceSimple {
             thickOffset: 0,
             axeStyle: '->',
             pointListe: [[a / 4, '']],
-            pointCouleur: 'blue',
+            pointCouleur: bleuMathalea,
             pointStyle: 'x',
             labelsPrincipaux: true,
             step1: 1,
@@ -113,7 +114,7 @@ export default class NomExercice extends ExerciceSimple {
             scale: 0.6,
             style: 'margin: auto',
           },
-          texteParPosition('A', (3 * a) / 5, 0.9, 0, 'blue', 2),
+          texteParPosition('A', (3 * a) / 5, 0.9, 0, bleuMathalea, 2),
           droiteGraduee({
             Unite: 3,
             Min: 0,
@@ -125,7 +126,7 @@ export default class NomExercice extends ExerciceSimple {
             thickOffset: 0,
             axeStyle: '|->',
             pointListe: [[a / 5, '']],
-            pointCouleur: 'blue',
+            pointCouleur: bleuMathalea,
             pointStyle: 'x',
             labelsPrincipaux: true,
             step1: 1,

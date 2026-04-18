@@ -14,6 +14,7 @@ import { texNombre } from '../../../lib/outils/texNombre'
 import { context } from '../../../modules/context'
 import FractionEtendue from '../../../modules/FractionEtendue'
 import { mathalea2d } from '../../../modules/mathalea2d'
+import { bleuMathalea } from '../../../lib/colors'
 
 export const titre = 'Lire une abscisse sur une droite graduée'
 export const interactifReady = true
@@ -63,7 +64,7 @@ export default class AbscisseFractionnaire extends Exercice {
           pixelsParCm: 30,
           style: 'margin: auto',
         },
-        latex2d('A', (3 * b) / a, 0.5, { color: 'blue' }),
+        latex2d('A', (3 * b) / a, 0.5, { color: bleuMathalea }),
         droiteGraduee({
           Unite: 3,
           Min: 0,
@@ -75,7 +76,7 @@ export default class AbscisseFractionnaire extends Exercice {
           thickOffset: 0,
           axeStyle: '->',
           pointListe: [[b / a, '']],
-          pointCouleur: 'blue',
+          pointCouleur: bleuMathalea,
           pointTaille: 3,
           pointStyle: 'x',
           labelsPrincipaux: true,

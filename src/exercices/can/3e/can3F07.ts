@@ -57,7 +57,7 @@ export default class LectureGraphiqueFonctionAffine1 extends ExerciceSimple {
         style: 'margin: auto',
       },
       rep,
-      courbe((x) => a * x + b, { repere: rep, color: 'blue' }),
+      courbe((x) => a * x + b, { repere: rep, color: bleuMathalea }),
       o,
     )}
         `
@@ -97,7 +97,7 @@ export default class LectureGraphiqueFonctionAffine1 extends ExerciceSimple {
           style: 'margin: auto',
         },
         rep,
-        courbe((x) => a * x + b, { repere: rep, color: 'blue' }),
+        courbe((x) => a * x + b, { repere: rep, color: bleuMathalea }),
         o,
         s1,
         s2,
@@ -117,7 +117,7 @@ export default class LectureGraphiqueFonctionAffine1 extends ExerciceSimple {
           style: 'margin: auto',
         },
         rep,
-        courbe((x) => a * x + b, { repere: rep, color: 'blue' }),
+        courbe((x) => a * x + b, { repere: rep, color: bleuMathalea }),
         o,
         s1,
         s2,
@@ -139,7 +139,7 @@ export default class LectureGraphiqueFonctionAffine1 extends ExerciceSimple {
         style: 'margin: auto',
       },
       rep,
-      courbe((x) => a * x + b, { repere: rep, color: 'blue' }),
+      courbe((x) => a * x + b, { repere: rep, color: bleuMathalea }),
       o,
     )}`
     this.canReponseACompleter = '$f(x)=\\ldots$'

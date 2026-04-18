@@ -53,6 +53,7 @@ import {
 } from '../../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../../lib/interactif/questionMathLive'
 import { representationFraction } from '../../../modules/representationsFractions'
+import { bleuMathalea } from '../../../lib/colors'
 
 export const titre = 'CAN 3e sujet 2023'
 export const interactifReady = true
@@ -801,7 +802,7 @@ export default class SujetCAN2023troisieme extends Exercice {
             ymax = C.y + 1
             objets.push(pol[0], pol[1])
             objets.push(
-              codageSegments('||', 'blue', C, A, C, B),
+              codageSegments('||', bleuMathalea, C, A, C, B),
               texteParPosition(
                 '?',
                 C.x,
@@ -864,7 +865,7 @@ export default class SujetCAN2023troisieme extends Exercice {
             ymax = C.y + 1
             objets.push(pol[0], pol[1])
             objets.push(
-              codageSegments('||', 'blue', C, A, C, B),
+              codageSegments('||', bleuMathalea, C, A, C, B),
               texteParPosition(
                 `${stringNombre(a)}°`,
                 C.x,
@@ -2101,7 +2102,7 @@ export default class SujetCAN2023troisieme extends Exercice {
                 axeStyle: '|->',
                 pointListe: [[b / a, '']],
                 labelPointTaille: 15,
-                pointCouleur: 'blue',
+                pointCouleur: bleuMathalea,
                 pointStyle: 'x',
                 labelsPrincipaux: true,
                 step1: 1,
@@ -2112,7 +2113,7 @@ export default class SujetCAN2023troisieme extends Exercice {
                 (3 * b) / a - 2 * 3,
                 0.8,
                 'milieu',
-                'blue',
+                bleuMathalea,
                 1.5,
               ),
             )

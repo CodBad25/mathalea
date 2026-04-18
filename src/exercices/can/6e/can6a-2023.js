@@ -40,6 +40,7 @@ import {
 } from '../../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../../lib/interactif/questionMathLive'
 import Grandeur from '../../../modules/Grandeur'
+import { bleuMathalea } from '../../../lib/colors'
 
 export const titre = 'CAN 6e sujet 2023'
 export const interactifReady = true
@@ -269,7 +270,7 @@ Par exemple, en choisissant 20 questions, la course aux nombres sera composée d
               0.5 * a - 81 * 0.5,
               0.9,
               0,
-              'blue',
+              bleuMathalea,
               context.isHtml ? 2 : 1.5,
             )
             d = droiteGraduee({
@@ -285,7 +286,7 @@ Par exemple, en choisissant 20 questions, la course aux nombres sera composée d
               axeStyle: '->',
               pointListe: [[a, '']],
               labelListe: maListe,
-              pointCouleur: 'blue',
+              pointCouleur: bleuMathalea,
               pointStyle: 'x',
               labelsPrincipaux: true,
             })
@@ -296,7 +297,7 @@ Par exemple, en choisissant 20 questions, la course aux nombres sera composée d
               0.25 * a - 71 * 0.25,
               0.9,
               0,
-              'blue',
+              bleuMathalea,
               context.isHtml ? 2 : 1.5,
             )
             d = droiteGraduee({
@@ -312,7 +313,7 @@ Par exemple, en choisissant 20 questions, la course aux nombres sera composée d
               axeStyle: '->',
               pointListe: [[a, '']],
               labelListe: maListe,
-              pointCouleur: 'blue',
+              pointCouleur: bleuMathalea,
               pointStyle: 'x',
               labelsPrincipaux: true,
             })
@@ -715,7 +716,7 @@ Par exemple, en choisissant 20 questions, la course aux nombres sera composée d
               2 * a,
               0.9,
               0,
-              'blue',
+              bleuMathalea,
               context.isHtml ? 2 : 1.5,
             )
             d = droiteGraduee({
@@ -731,7 +732,7 @@ Par exemple, en choisissant 20 questions, la course aux nombres sera composée d
               axeStyle: '->',
               pointListe: [[a, '']],
               labelListe: [[0, `${stringNombre(0)}`]],
-              pointCouleur: 'blue',
+              pointCouleur: bleuMathalea,
               pointStyle: 'x',
               labelsPrincipaux: true,
             })
@@ -763,7 +764,7 @@ Par exemple, en choisissant 20 questions, la course aux nombres sera composée d
               4 * a,
               0.9,
               0,
-              'blue',
+              bleuMathalea,
               context.isHtml ? 2 : 1.5,
             )
             d = droiteGraduee({
@@ -779,7 +780,7 @@ Par exemple, en choisissant 20 questions, la course aux nombres sera composée d
               axeStyle: '->',
               pointListe: [[a, '']],
               labelListe: [[0, `${stringNombre(0)}`]],
-              pointCouleur: 'blue',
+              pointCouleur: bleuMathalea,
               pointStyle: 'x',
               labelsPrincipaux: true,
             })
@@ -1471,7 +1472,7 @@ Par exemple, en choisissant 20 questions, la course aux nombres sera composée d
                 (3 * a) / 5,
                 0.9,
                 0,
-                'blue',
+                bleuMathalea,
                 context.isHtml ? 2 : 1.5,
               ),
               droiteGraduee({
@@ -1485,7 +1486,7 @@ Par exemple, en choisissant 20 questions, la course aux nombres sera composée d
                 thickoffset: 0,
                 axeStyle: '|->',
                 pointListe: [[a / 5, '']],
-                pointCouleur: 'blue',
+                pointCouleur: bleuMathalea,
                 pointStyle: 'x',
                 labelsPrincipaux: true,
                 step1: 1,
@@ -1513,7 +1514,7 @@ Par exemple, en choisissant 20 questions, la course aux nombres sera composée d
                 50 * a - 1.2 * 50,
                 0.9,
                 0,
-                'blue',
+                bleuMathalea,
                 context.isHtml ? 2 : 1.5,
               ),
               droiteGraduee({
@@ -1528,7 +1529,7 @@ Par exemple, en choisissant 20 questions, la course aux nombres sera composée d
                 thickoffset: 0,
                 axeStyle: '|->',
                 pointListe: [[a, '']],
-                pointCouleur: 'blue',
+                pointCouleur: bleuMathalea,
                 pointStyle: 'x',
                 labelsPrincipaux: false,
                 labelListe: [

@@ -11,6 +11,7 @@ import { context } from '../../../modules/context'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
+import { bleuMathalea } from '../../../lib/colors'
 export const dateDePublication = '26/10/2023'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -111,8 +112,8 @@ export default class AntecedentSpline extends ExerciceSimple {
     const courbe1 = theSpline.courbe({
       epaisseur: 1.5,
       ajouteNoeuds: true,
-      optionsNoeuds: { color: 'blue', taille: 2, style: 'x', epaisseur: 2 },
-      color: 'blue',
+      optionsNoeuds: { color: bleuMathalea, taille: 2, style: 'x', epaisseur: 2 },
+      color: bleuMathalea,
     })
     const objetsEnonce = [repere1, courbe1]
     const nbAntecedentsEntiersMaximum = theSpline.nombreAntecedentsMaximum(

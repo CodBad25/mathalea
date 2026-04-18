@@ -6,6 +6,7 @@ import { texNombre } from '../../../lib/outils/texNombre'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
+import { bleuMathalea } from '../../../lib/colors'
 
 export const titre = 'Déterminer une abscisse sur une droite graduée'
 export const interactifReady = true
@@ -41,7 +42,7 @@ export default class NomExercice extends ExerciceSimple {
         thickOffset: 0,
         axeStyle: '->',
         pointListe: [[1.25, 'A']],
-        pointCouleur: 'blue',
+        pointCouleur: bleuMathalea,
         pointStyle: 'x',
         labelsPrincipaux: true,
       })
@@ -79,7 +80,7 @@ export default class NomExercice extends ExerciceSimple {
         thickOffset: 0,
         axeStyle: '->',
         pointListe: choix ? [[a, 'A']] : [[b, 'A']],
-        pointCouleur: 'blue',
+        pointCouleur: bleuMathalea,
         pointStyle: 'x',
         labelsPrincipaux: true,
       })

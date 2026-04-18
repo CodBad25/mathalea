@@ -34,6 +34,7 @@ import Hms from '../../../modules/Hms'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../../modules/outils'
 import Exercice from '../../Exercice'
+import { bleuMathalea } from '../../../lib/colors'
 
 export const titre = 'CAN 5e sujet 2021'
 export const interactifReady = true
@@ -955,7 +956,7 @@ export default class SujetCAN20215ieme extends Exercice {
                 axeStyle: '|->',
                 pointListe: [[b / a, '?']],
                 labelPointTaille: 15,
-                pointCouleur: 'blue',
+                pointCouleur: bleuMathalea,
                 pointStyle: 'x',
                 labelsPrincipaux: true,
                 step1: 1,

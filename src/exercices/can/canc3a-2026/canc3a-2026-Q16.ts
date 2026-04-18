@@ -6,6 +6,7 @@ import { context } from '../../../modules/context'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
+import { bleuMathalea } from '../../../lib/colors'
 
 export const titre = 'Compléter sur une droite graduée'
 export const interactifReady = true
@@ -80,7 +81,7 @@ export default class Can2026CM2Q16 extends ExerciceCan {
       ],
       labelsPrincipaux: false,
       pointListe: [[abscisseCible, `\\text{${lettreCible}}`]],
-      pointCouleur: 'blue',
+      pointCouleur: bleuMathalea,
       pointStyle: '',
     })
 
