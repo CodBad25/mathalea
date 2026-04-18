@@ -4,6 +4,7 @@ import {
   ecritureAlgebriqueSauf1,
   reduireAxPlusB,
 } from '../../../lib/outils/ecritures'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import FractionEtendue from '../../../modules/FractionEtendue'
 import { randint } from '../../../modules/outils'
@@ -33,7 +34,7 @@ export default class CalculFonctionDeriveeAffine extends ExerciceSimple {
 
     this.typeExercice = 'simple'
     this.nbQuestions = 1
-    this.optionsDeComparaison = { fractionEgale: true }
+    this.optionsDeComparaison = { calculFormel: true }
   }
 
   nouvelleVersion() {
@@ -58,7 +59,7 @@ export default class CalculFonctionDeriveeAffine extends ExerciceSimple {
           this.question += "<br>$f'(x)=$"
         }
         this.correction = `On reconnaît une fonction affine de la forme $f(x)=mx+p$ avec $m=${texNombre(m, 1)}$ et $p=${texNombre(p, 1)}$.<br>
-        La fonction dérivée est donnée par $f'(x)=m$, soit ici $f'(x)=${texNombre(m, 1)}$. `
+        La fonction dérivée est donnée par $f'(x)=m$, soit ici $f'(x)=${miseEnEvidence(texNombre(m, 1))}$. `
 
         this.reponse = f.texFraction
         this.canEnonce = `Soit $f$ la fonction définie sur $\\mathbb{R}$ par : <br>
@@ -82,7 +83,7 @@ export default class CalculFonctionDeriveeAffine extends ExerciceSimple {
           this.question += "<br>$f'(x)=$"
         }
         this.correction = `On reconnaît une fonction affine de la forme $f(x)=mx+p$ avec $m=${texNombre(m, 1)}$ et $p=${texNombre(p, 1)}$.<br>
-        La fonction dérivée est donnée par $f'(x)=m$, soit ici $f'(x)=${texNombre(m, 1)}$. `
+        La fonction dérivée est donnée par $f'(x)=m$, soit ici $f'(x)=${miseEnEvidence(texNombre(m, 1))}$. `
         this.reponse = f.texFraction
         this.canEnonce = `Soit $f$ la fonction définie sur $\\mathbb{R}$ par : <br>
         $f(x)=${texNombre(p, 1)}${ecritureAlgebrique(m)}x$.`
@@ -113,7 +114,7 @@ export default class CalculFonctionDeriveeAffine extends ExerciceSimple {
           this.question += "<br>$f'(x)=$"
         }
         this.correction = `On reconnaît une fonction affine de la forme $f(x)=mx+p$ avec $m=${m}$ et $p=${texNombre(p, 1)}$.<br>
-        La fonction dérivée est donnée par $f'(x)=m$, soit ici $f'(x)=${m}$. `
+        La fonction dérivée est donnée par $f'(x)=m$, soit ici $f'(x)=${miseEnEvidence(m)}$. `
         this.reponse = m
 
         break
