@@ -376,50 +376,38 @@ export function propositionsQcm(
     indexes.push(...melange.indexes)
   }
   if (!context.isHtml) {
-    const formateQ = (format: string, rep: number) => {
-      if (format == null || format === 'case') return '$\\square\\;$'
-      if (format === 'lettre') {
-        return `${texteGras(lettreDepuisChiffre(rep + 1))}.`
+    const propositions = exercice.autoCorrection[i].propositions
+
+    // Indices des bonnes réponses (1-indexé pour le package tasks)
+    const correctIndices: number[] = []
+    propositions.forEach((prop, index) => {
+      if (prop.statut) {
+        correctIndices.push(index + 1)
       }
-      return `${texteGras(lettreDepuisChiffre(rep + 1))}$\\square\\;$`
+    })
+
+    // Si nbCols vaut 1 mais qu'on veut un affichage horizontal (!vertical),
+    // on force le nombre de colonnes au nombre de propositions pour tout aligner sur une ligne.
+    const finalCols = nbCols === 1 && !vertical ? propositions.length : nbCols
+
+    const isLettre = options?.format === 'lettre'
+    const optCols = `cols=${finalCols}`
+    const optCase = isLettre ? '' : ', case' // Ajoute l'option 'case' par défaut ou si spécifié
+
+    // Les options pour l'énoncé (sans la correction)
+    const optionsQ = `[${optCols}${optCase}]`
+    // Les options pour le corrigé (avec la liste des bonnes réponses)
+    const optionsCorr = `[${optCols}${optCase}, correct={${correctIndices.join(',')}}]`
+
+    // 4. Construction du contenu des tâches (le même pour la Q et la R)
+    let contenuTasks = ''
+    for (let rep = 0; rep < propositions.length; rep++) {
+      contenuTasks += `  \\task ${propositions[rep].texte}\n`
     }
-    const formateRV = (format: string, rep: number) => {
-      if (format == null || format === 'case') return '$\\blacksquare\\;$'
-      if (format === 'lettre') {
-        return `${texteEnCouleurEtGras(lettreDepuisChiffre(rep + 1))}.`
-      }
-      return `${texteEnCouleurEtGras(lettreDepuisChiffre(rep + 1))}$\\blacksquare\\;$`
-    }
-    const formateRF = (format: string, rep: number) => {
-      if (format == null || format === 'case') return '$\\square\\;$'
-      if (format === 'lettre') {
-        return `$${miseEnEvidence(`\\cancel{\\text{${lettreDepuisChiffre(rep + 1)}}}`, 'black')}$.`
-      }
-      return `$${miseEnEvidence(`\\cancel{\\text{${lettreDepuisChiffre(rep + 1)}}}`, 'black')}\\square\\;$`
-    }
-    texte += nbCols === 1 ? '\t' : `\n\n\\begin{multicols}{${nbCols}}\n\t`
-    texteCorr += nbCols === 1 ? '\t' : `\n\n\\begin{multicols}{${nbCols}}\n\t`
-    for (
-      let rep = 0;
-      rep < exercice.autoCorrection[i].propositions.length;
-      rep++
-    ) {
-      texte += `${formateQ(options?.format, rep)} ${exercice.autoCorrection[i].propositions[rep].texte}`
-      if (exercice.autoCorrection[i].propositions[rep].statut) {
-        texteCorr += `${formateRV(options?.format, rep)} ${exercice.autoCorrection[i].propositions[rep].texte}`
-      } else {
-        texteCorr += `${formateRF(options?.format, rep)} ${exercice.autoCorrection[i].propositions[rep].texte}`
-      }
-      if (vertical) {
-        texte += '\\\\\n\t'
-        texteCorr += '\\\\\n\t'
-      } else {
-        texte += '\\qquad '
-        texteCorr += '\\qquad '
-      }
-    }
-    texte += nbCols === 1 ? (vertical ? '\n' : '\\\\\n') : '\\end{multicols}'
-    texteCorr += nbCols === 1 ? '\\\\\n' : '\\end{multicols}'
+
+    // 5. Injection dans les chaînes LaTeX finales
+    texte += `\\begin{qcmprop}${optionsQ}\n${contenuTasks}\\end{qcmprop}\n`
+    texteCorr += `\\begin{qcmprop}${optionsCorr}\n${contenuTasks}\\end{qcmprop}\n`
   }
   if (context.isHtml) {
     const isRadio = exercice.autoCorrection[i].options?.radio ?? false
@@ -483,14 +471,8 @@ export function propositionsQcm(
     texteCorr += '</div><div class="m-2"></div>'
   }
   if (!context.isHtml) {
-    texte =
-      ` 
-    
-    ` + texte
-    texteCorr =
-      ` 
-    
-    ` + texteCorr
+    texte = '\n' + texte
+    texteCorr = '\n' + texteCorr
   }
   return { texte, texteCorr, indexes }
 }
