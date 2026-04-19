@@ -1,5 +1,5 @@
 import { courbe } from '../../lib/2d/Courbe'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { repere } from '../../lib/2d/reperes'
 import { tracePoint } from '../../lib/2d/TracePoint'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
@@ -95,8 +95,8 @@ export default class DeterminerFonctionAffine3eOld extends Exercice {
           texteCorr += `Elle est donc parallèle à l'axe des abscisses. La fonction $f$ est une fonction constante et $${miseEnEvidence(`f(x)=${b}`)}$.`
           setReponse(this, i, `f(x)=${b}`)
           if (this.correctionDetaillee) {
-            tA = tracePoint(point(x1, y1), 'red')
-            tB = tracePoint(point(x2, y2), 'red')
+            tA = tracePoint(pointAbstrait(x1, y1), 'red')
+            tB = tracePoint(pointAbstrait(x2, y2), 'red')
 
             r = repere({
               xMin: -5,
@@ -133,8 +133,8 @@ export default class DeterminerFonctionAffine3eOld extends Exercice {
           texteCorr += `Donc $${miseEnEvidence(`f(x)=${reduireAxPlusB(a, b)}`)}$.`
           setReponse(this, i, `f(x)=${a}x${ecritureAlgebrique(b)}`)
           if (this.correctionDetaillee) {
-            tA = tracePoint(point(x1, y1), 'red')
-            tB = tracePoint(point(x2, y2), 'red')
+            tA = tracePoint(pointAbstrait(x1, y1), 'red')
+            tB = tracePoint(pointAbstrait(x2, y2), 'red')
 
             r = repere({
               xMin: -5,
@@ -173,8 +173,8 @@ export default class DeterminerFonctionAffine3eOld extends Exercice {
           texteCorr += `Donc $${miseEnEvidence(`f(x)=${reduireAxPlusB(a, b)}`)}$.`
           setReponse(this, i, `f(x)=${a}x${ecritureAlgebrique(b)}`)
           if (this.correctionDetaillee) {
-            tA = tracePoint(point(x1, y1), 'red')
-            tB = tracePoint(point(x2, y2), 'red')
+            tA = tracePoint(pointAbstrait(x1, y1), 'red')
+            tB = tracePoint(pointAbstrait(x2, y2), 'red')
 
             r = repere({
               xMin: -5,
@@ -215,8 +215,8 @@ export default class DeterminerFonctionAffine3eOld extends Exercice {
           texteCorr += `Donc $${miseEnEvidence(`f(x)=${reduireAxPlusB(a, b)}`)}$.`
           setReponse(this, i, `f(x)=${a}x${ecritureAlgebrique(b)}`)
           if (this.correctionDetaillee) {
-            tA = tracePoint(point(x1, y1), 'red')
-            tB = tracePoint(point(x2, y2), 'red')
+            tA = tracePoint(pointAbstrait(x1, y1), 'red')
+            tB = tracePoint(pointAbstrait(x2, y2), 'red')
 
             r = repere({
               xMin: -5,
@@ -262,8 +262,8 @@ export default class DeterminerFonctionAffine3eOld extends Exercice {
             `f(x)=${aFrac.texFractionSimplifiee}x${bFrac.simplifie().texFractionSignee}`,
           )
           if (this.correctionDetaillee) {
-            tA = tracePoint(point(x1, y1), 'red')
-            tB = tracePoint(point(x2, y2), 'red')
+            tA = tracePoint(pointAbstrait(x1, y1), 'red')
+            tB = tracePoint(pointAbstrait(x2, y2), 'red')
 
             a = aFrac.n / aFrac.d
             b = bFrac.n / bFrac.d

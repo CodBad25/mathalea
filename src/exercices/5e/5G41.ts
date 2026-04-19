@@ -7,7 +7,7 @@ import { codageSegments } from '../../lib/2d/CodageSegment'
 import { demiDroite } from '../../lib/2d/DemiDroite'
 import { droite } from '../../lib/2d/droites'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { polygone, polygoneAvecNom } from '../../lib/2d/polygones'
 import { segment } from '../../lib/2d/segmentsVecteurs'
 import { labelPoint, texteParPosition } from '../../lib/2d/textes'
@@ -119,7 +119,7 @@ export default class ConstructionsParallelogrammesParticuliers extends Exercice 
     const typeDeQuestion = choice(typesDeQuestionsDisponibles)
     switch (typeDeQuestion) {
       case 1:
-        A = point(0, 0, noms[0])
+        A = pointAbstrait(0, 0, noms[0])
         c1 = randint(35, 45) // 2 AB
         c4 = randint(30, 40, c1) // 5 AD
         d1 = Math.abs(c4 - c1) + 15
@@ -159,7 +159,7 @@ export default class ConstructionsParallelogrammesParticuliers extends Exercice 
         yM = Math.max(A.y, B.y, D.y) + 0.8
         break
       case 2:
-        O = point(0, 0, noms[4])
+        O = pointAbstrait(0, 0, noms[4])
         c1 = randint(35, 45) * 2 // AC
         c4 = randint((c1 + 20) / 2, 70) / 5 // BD
         c1 = c1 / 10
@@ -186,7 +186,7 @@ export default class ConstructionsParallelogrammesParticuliers extends Exercice 
         yM = Math.max(A.y, B.y, C.y) + 0.8
         break
       case 3:
-        A = point(0, 0, noms[0])
+        A = pointAbstrait(0, 0, noms[0])
         c1 = randint(35, 45) * 2 // AB
         c4 = randint(25, 34) / 5 // AD
         c1 = c1 / 10
@@ -220,7 +220,7 @@ export default class ConstructionsParallelogrammesParticuliers extends Exercice 
 
         break
       case 4:
-        A = point(0, 0, noms[0])
+        A = pointAbstrait(0, 0, noms[0])
         c1 = randint(35, 50) // AB
         c1 = c1 / 5
         c4 = (1.2 + randint(0, 8) / 20) * c1 // BD
@@ -254,7 +254,7 @@ export default class ConstructionsParallelogrammesParticuliers extends Exercice 
         yM = Math.max(A.y, B.y, D.y) + 0.8
         break
       case 5:
-        A = point(0, 0, noms[0])
+        A = pointAbstrait(0, 0, noms[0])
         c1 = randint(35, 45) * 2 // AC
         c4 = randint((c1 - 4) / 2, 35) / 5 // AD
         c1 = c1 / 10
@@ -284,7 +284,7 @@ export default class ConstructionsParallelogrammesParticuliers extends Exercice 
         yM = Math.max(A.y, B.y, D.y) + 0.8
         break
       case 6:
-        A = point(0, 0, noms[0])
+        A = pointAbstrait(0, 0, noms[0])
         c1 = randint(35, 45) * 2 // AC
         c2 = randint(15, 20) * 2 // AO
         c3 = c1 + randint(7, 10) * 2 - c2 // BO
@@ -330,7 +330,7 @@ export default class ConstructionsParallelogrammesParticuliers extends Exercice 
         break
       case 7:
       default:
-        A = point(0, 0, noms[0])
+        A = pointAbstrait(0, 0, noms[0])
         c1 = randint(50, 60) / 5 // AC
         c2 = randint(25, 40) // angle OAB
         c3 = randint(30, 45, c2) // angle OCB

@@ -1,5 +1,5 @@
 import { droiteGraduee } from '../../lib/2d/DroiteGraduee'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { segment } from '../../lib/2d/segmentsVecteurs'
 import { choisitLettresDifferentes } from '../../lib/outils/aleatoires'
 import { arrondi, troncature } from '../../lib/outils/nombres'
@@ -125,10 +125,10 @@ export default class FeuilleDeZooms extends Exercice {
           axeStyle: extremite,
         })
 
-        pA1 = point((Math.floor(x1) - xmin) * 3, 3)
-        pA2 = point(Math.floor(x1) - xmin + 1.5, 0)
-        pB1 = point((Math.floor(x1) + 1 - xmin) * 3, 3)
-        pB2 = point(Math.floor(x1) - xmin + 21.5, 0)
+        pA1 = pointAbstrait((Math.floor(x1) - xmin) * 3, 3)
+        pA2 = pointAbstrait(Math.floor(x1) - xmin + 1.5, 0)
+        pB1 = pointAbstrait((Math.floor(x1) + 1 - xmin) * 3, 3)
+        pB2 = pointAbstrait(Math.floor(x1) - xmin + 21.5, 0)
         sA = segment(pA1, pA2)
         sB = segment(pB1, pB2)
         sA.pointilles = 5
@@ -247,18 +247,18 @@ export default class FeuilleDeZooms extends Exercice {
           axeStyle: extremite,
         })
 
-        pA1 = point((x2 - xmin) * 30, 6)
-        pA2 = point(6.5, 3)
-        pB1 = point((x3 - xmin) * 30, 6)
-        pB2 = point(26.5, 3)
+        pA1 = pointAbstrait((x2 - xmin) * 30, 6)
+        pA2 = pointAbstrait(6.5, 3)
+        pB1 = pointAbstrait((x3 - xmin) * 30, 6)
+        pB2 = pointAbstrait(26.5, 3)
         sA = segment(pA1, pA2)
         sB = segment(pB1, pB2)
         sA.pointilles = 5
         sB.pointilles = 5
-        pC1 = point(6.5 + (x21 - x2) * 200, 3)
-        pC2 = point(6.5, 0)
-        pD1 = point(6.5 + (x31 - x2) * 200, 3)
-        pD2 = point(26.5, 0)
+        pC1 = pointAbstrait(6.5 + (x21 - x2) * 200, 3)
+        pC2 = pointAbstrait(6.5, 0)
+        pD1 = pointAbstrait(6.5 + (x31 - x2) * 200, 3)
+        pD2 = pointAbstrait(26.5, 0)
         sC = segment(pC1, pC2)
         sD = segment(pD1, pD2)
         sC.pointilles = 5

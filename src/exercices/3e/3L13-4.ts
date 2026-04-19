@@ -1,5 +1,5 @@
 import { fixeBordures } from '../../lib/2d/fixeBordures'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { rectangle1Point2Longueurs } from '../../lib/2d/polygonesParticuliers'
 import { texteSurSegment } from '../../lib/2d/texteSurSegment'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
@@ -62,7 +62,7 @@ export default class ProblemeEquationsPerimetreAireRectangle extends Exercice {
       i < this.nbQuestions && cpt < 50;
     ) {
       const objets = []
-      const rectangle = rectangle1Point2Longueurs(point(0, 0), 5, 3.5, {
+      const rectangle = rectangle1Point2Longueurs(pointAbstrait(0, 0), 5, 3.5, {
         angleRotation: randint(-20, 20),
         avecCodageSegments: false,
       })

@@ -3,7 +3,7 @@ import { cibleCarree, dansLaCibleCarree } from '../../lib/2d/cibles'
 import { codageSegments } from '../../lib/2d/CodageSegment'
 import { droite } from '../../lib/2d/droites'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { polygone, polygoneAvecNom } from '../../lib/2d/polygones'
 import { segment } from '../../lib/2d/segmentsVecteurs'
 import { labelPoint, texteParPoint } from '../../lib/2d/textes'
@@ -100,7 +100,7 @@ export default class ConstructionsParallelogrammes extends Exercice {
       const objetsEnonce = []
       const objetsCorrection = []
       // Préparation de la figure aléatoire et des objets 2d utiles
-      const O = point(0, 0, noms[4])
+      const O = pointAbstrait(0, 0, noms[4])
       const A = rotation(
         pointAdistance(O, arrondi(randint(50, 70) / 10)),
         O,

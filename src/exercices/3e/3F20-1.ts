@@ -1,5 +1,5 @@
 import { droite } from '../../lib/2d/droites'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { polyline } from '../../lib/2d/Polyline'
 import { repere } from '../../lib/2d/reperes'
 import { latexParPoint, texteParPoint } from '../../lib/2d/textes'
@@ -243,18 +243,18 @@ Le choix a été fait d'un antécédent primaire entier positif, le coefficient 
         yLabelEcart: 0.8,
         grille: false,
       })
-      const origine = point(0, ordonneeOrigine * yUnite)
-      const M = point(antecedent0 * xUnite, image0 * yUnite)
+      const origine = pointAbstrait(0, ordonneeOrigine * yUnite)
+      const M = pointAbstrait(antecedent0 * xUnite, image0 * yUnite)
       const d = droite(origine, M)
       const t = tracePoint(M)
-      const projeteX = point(M.x, 0)
-      const projeteY = point(0, M.y)
+      const projeteX = pointAbstrait(M.x, 0)
+      const projeteY = pointAbstrait(0, M.y)
       const pointilles = polyline([projeteY, M, projeteX], 'red')
       pointilles.pointilles = 2
       pointilles.epaisseur = 1
       const coordonnees = texteParPoint(
         `(${antecedent0};${image0})`,
-        point(M.x + 0.2, M.y),
+        pointAbstrait(M.x + 0.2, M.y),
         0,
         'black',
         1,
@@ -688,33 +688,33 @@ Le choix a été fait d'un antécédent primaire entier positif, le coefficient 
               yLabelEcart: 0.8,
               grille: false,
             })
-            const origine = point(0, ordonneeOrigine * yUnite)
-            const M = point(antecedent0 * xUnite, (image0 as number) * yUnite)
+            const origine = pointAbstrait(0, ordonneeOrigine * yUnite)
+            const M = pointAbstrait(antecedent0 * xUnite, (image0 as number) * yUnite)
             const d = droite(origine, M)
             const t = tracePoint(M)
-            const projeteX = point(M.x, 0)
-            const projeteY = point(0, M.y)
+            const projeteX = pointAbstrait(M.x, 0)
+            const projeteY = pointAbstrait(0, M.y)
             const pointilles = polyline([projeteY, M, projeteX], 'red')
             pointilles.pointilles = 2
             pointilles.epaisseur = 1
-            // const coordonnees = texteParPoint(`(${antecedent0};${image0String})`, point(M.x + 0.2, M.y), 0, 'black', 1, 'gauche')
+            // const coordonnees = texteParPoint(`(${antecedent0};${image0String})`, pointAbstrait(M.x + 0.2, M.y), 0, 'black', 1, 'gauche')
             const coordonnees = latexParPoint(
               `(${antecedent0};${image0String})`,
-              point(M.x + 0.2, M.y),
+              pointAbstrait(M.x + 0.2, M.y),
               'black',
               12,
               20,
               '',
             )
-            const N = point(
+            const N = pointAbstrait(
               antecedent2 * xUnite,
               coeffRationnel
                 ? (image2 as FractionEtendue).valeurDecimale * yUnite
                 : (image2 as number) * yUnite,
             )
             const u = tracePoint(N)
-            const projeteNX = point(N.x, 0)
-            const projeteNY = point(0, N.y)
+            const projeteNX = pointAbstrait(N.x, 0)
+            const projeteNY = pointAbstrait(0, N.y)
             const pointillesN = polyline([projeteNY, N, projeteNX], bleuMathalea)
             pointilles.pointilles = 2
             pointilles.epaisseur = 1
@@ -723,7 +723,7 @@ Le choix a été fait d'un antécédent primaire entier positif, le coefficient 
             const coordonneesN = coeffRationnel
               ? latexParPoint(
                   `(${stringNombre(antecedent2)};${image2String})`,
-                  point(positionCoord, N.y),
+                  pointAbstrait(positionCoord, N.y),
                   'black',
                   12,
                   20,
@@ -731,7 +731,7 @@ Le choix a été fait d'un antécédent primaire entier positif, le coefficient 
                 )
               : latexParPoint(
                   `(${antecedent2};${image2String})`,
-                  point(positionCoord, N.y),
+                  pointAbstrait(positionCoord, N.y),
                   'black',
                   12,
                   20,

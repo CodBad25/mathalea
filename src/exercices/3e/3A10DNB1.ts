@@ -1,5 +1,5 @@
 import { fixeBordures } from '../../lib/2d/fixeBordures'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { segment } from '../../lib/2d/segmentsVecteurs'
 import { latex2d } from '../../lib/2d/textes'
 import { point3d } from '../../lib/3d/3dProjectionMathalea2d/elementsEtTransformations3d'
@@ -71,9 +71,9 @@ export default class Exercice3A10DNB0 extends ExerciceBrevetA {
       point3d(0, 10, 0),
       point3d(0, 0, -2),
     )
-    const segH = segment(point(-0.3, 0), point(-0.3, -2))
-    const segL = segment(point(0, -2.3), point(6, -2.3))
-    const segP = segment(point(6.3, -2.2), point(10.3, 0.1))
+    const segH = segment(pointAbstrait(-0.3, 0), pointAbstrait(-0.3, -2))
+    const segL = segment(pointAbstrait(0, -2.3), pointAbstrait(6, -2.3))
+    const segP = segment(pointAbstrait(6.3, -2.2), pointAbstrait(10.3, 0.1))
     segP.styleExtremites = '<->'
     segL.styleExtremites = '<->'
     segH.styleExtremites = '<->'

@@ -2,7 +2,7 @@ import { bissectrice } from '../../lib/2d/Bissectrice'
 import { codageBissectrice } from '../../lib/2d/CodageBissectrice'
 import { codageMediatrice } from '../../lib/2d/CodageMediatrice'
 import { mediatrice } from '../../lib/2d/Mediatrice'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { nommePolygone, polygone } from '../../lib/2d/polygones'
 import { rotation, similitude } from '../../lib/2d/transformations'
 import {
@@ -77,8 +77,8 @@ export default class DroiteRemarquableDuTriangle extends Exercice {
       triangles[i] = new Triangle()
       sommets[i] = triangles[i].getSommets(false)
 
-      A0 = point(3, randint(1, 2))
-      B0 = point(6, randint(1, 2))
+      A0 = pointAbstrait(3, randint(1, 2))
+      B0 = pointAbstrait(6, randint(1, 2))
       angle = choice([50, 60, 70, 75, 80, 100, 110, 120])
       rapport = randint(7, 13) / 10
       C0 = similitude(B0, A0, angle, rapport)

@@ -2,7 +2,7 @@ import { afficheLongueurSegment } from '../../lib/2d/afficheLongueurSegment'
 import { afficheMesureAngle } from '../../lib/2d/AfficheMesureAngle'
 import { codageAngle } from '../../lib/2d/angles'
 import { codageAngleDroit } from '../../lib/2d/CodageAngleDroit'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { polygone } from '../../lib/2d/polygones'
 import { labelPoint } from '../../lib/2d/textes'
 import { texteSurSegment } from '../../lib/2d/texteSurSegment'
@@ -72,9 +72,9 @@ export default class CalculDAngleFigureComplexe extends Exercice {
       const typesDeQuestion = choice(['BA-AD-BAC', 'BA-AD-ACB'])
       let texte, texteCorr
 
-      const B = point(0, 0, '', 'below')
-      const A = point(randint(4, 7), 0, '', 'below')
-      const C = point(0, randint(3, 7, longueur(A, B)), '', 'above') // On exclue AB pour ne pas avoir un triangle isocèle
+      const B = pointAbstrait(0, 0, '', 'below')
+      const A = pointAbstrait(randint(4, 7), 0, '', 'below')
+      const C = pointAbstrait(0, randint(3, 7, longueur(A, B)), '', 'above') // On exclue AB pour ne pas avoir un triangle isocèle
       const t1 = polygone([A, B, C])
       const t1c = polygone([A, B, C], bleuMathalea)
       t1c.epaisseur = 3

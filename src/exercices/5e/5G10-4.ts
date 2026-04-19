@@ -3,7 +3,7 @@ import { codageAngle } from '../../lib/2d/angles'
 import { demiDroite } from '../../lib/2d/DemiDroite'
 import { droite } from '../../lib/2d/droites'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { polygone } from '../../lib/2d/polygones'
 import { segment } from '../../lib/2d/segmentsVecteurs'
 import { labelPoint, texteParPosition } from '../../lib/2d/textes'
@@ -190,17 +190,17 @@ export default class SymetrieAxialeConservation1 extends Exercice {
       }
       for (let ii = 0; ii < 24; ii++) {
         if (ii < 12)
-          points.push(point(coords[ii][0], coords[ii][1], noms[ii], labelPos))
+          points.push(pointAbstrait(coords[ii][0], coords[ii][1], noms[ii], labelPos))
         else if (
           coords[ii][0] === coords[ii - 12][0] &&
           coords[ii][1] === coords[ii - 12][1]
         ) {
           points.push(
-            point(coords[ii][0], coords[ii][1], noms[ii - 12], labelPos),
+            pointAbstrait(coords[ii][0], coords[ii][1], noms[ii - 12], labelPos),
           )
           noms[ii] = noms[ii - 12]
         } else
-          points.push(point(coords[ii][0], coords[ii][1], noms[ii], labelPos))
+          points.push(pointAbstrait(coords[ii][0], coords[ii][1], noms[ii], labelPos))
         traces.push(tracePoint(points[ii]))
       }
       // On rédige les questions et les réponses

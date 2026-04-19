@@ -1,6 +1,6 @@
 import { cibleCarree, dansLaCibleCarree } from '../../lib/2d/cibles'
 import { codageMilieu } from '../../lib/2d/CodageMilieu'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { segment } from '../../lib/2d/segmentsVecteurs'
 import { labelPoint } from '../../lib/2d/textes'
 import { traceCompas } from '../../lib/2d/traceCompas'
@@ -53,7 +53,7 @@ export default class ConstruireSymetriquePoint5e extends Exercice {
       return lettre + chiffre
     }
     // On prépare la figure...
-    const O = point(0, 0, 'O')
+    const O = pointAbstrait(0, 0, 'O')
     const marks = ['/', '//', '///', 'x', 'o', 'S', 'V']
     const noms = choisitLettresDifferentes(nbpoints, 'QO', true)
     this.consigne = `Construire le symétrique des points $${noms[0]}$`
@@ -72,7 +72,7 @@ export default class ConstruireSymetriquePoint5e extends Exercice {
     for (let i = 0; i < nbpoints; i++) {
       // On place les cibles.
       N.push(
-        point(
+        pointAbstrait(
           arrondi(randint(-80, 80, 0) / 10),
           arrondi(randint(-80, 80, 0) / 10),
           noms[i] + "'",

@@ -4,7 +4,7 @@ import {
   listePatternRatio,
   type PatternRiche,
 } from '../../lib/2d/patterns/patternsPreDef'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { polygone } from '../../lib/2d/polygones'
 import { texteParPosition } from '../../lib/2d/textes'
 import { ajouteQuestionMathlive } from '../../lib/interactif/questionMathLive'
@@ -153,10 +153,10 @@ Si le nombre de questions est supérieur au nombre de patterns choisis, alors l'
           ),
         )
         const cadre = polygone(
-          point(xmin - 2, ymin - 2),
-          point(xmax + 2, ymin - 2),
-          point(xmax + 2, ymax + 2),
-          point(xmin - 2, ymax + 2),
+          pointAbstrait(xmin - 2, ymin - 2),
+          pointAbstrait(xmax + 2, ymin - 2),
+          pointAbstrait(xmax + 2, ymax + 2),
+          pointAbstrait(xmin - 2, ymax + 2),
         )
         cadre.pointilles = 4
         figures[j].push(cadre)

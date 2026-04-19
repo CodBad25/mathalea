@@ -1,4 +1,4 @@
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { createList } from '../../lib/format/lists'
 import { infoMessage } from '../../lib/format/message'
 import { texteGras } from '../../lib/format/style'
@@ -97,38 +97,38 @@ export default class PuzzlesGeometriques extends Exercice {
     const samLoyd = (version: 'v1' | 'v2') => {
       // Adaptation de la taille de la fenêtre
       anim.taille(600, 600)
-      anim.image('assets/puzzlesGeom/img/samLoydQuadrillage.png', point(-4, 19))
+      anim.image('assets/puzzlesGeom/img/samLoydQuadrillage.png', pointAbstrait(-4, 19))
       // Les points
       let A, B, C, D, E, E1, F, F1, G, G1, H, H1, I
       switch (version) {
         case 'v1':
-          A = point(-2.35, 15.7, 'A')
-          B = point(1, 17.35, 'B')
-          C = point(6.01, 7.35, 'C')
-          D = point(-2.35, 7.35, 'D')
-          E = point(-2.35, 10.7, 'E')
-          F = point(-2.35, 14, 'F')
-          G = point(1, 14, 'G')
-          H = point(1, 9, 'H')
-          I = point(4.31, 10.7, 'I')
+          A = pointAbstrait(-2.35, 15.7, 'A')
+          B = pointAbstrait(1, 17.35, 'B')
+          C = pointAbstrait(6.01, 7.35, 'C')
+          D = pointAbstrait(-2.35, 7.35, 'D')
+          E = pointAbstrait(-2.35, 10.7, 'E')
+          F = pointAbstrait(-2.35, 14, 'F')
+          G = pointAbstrait(1, 14, 'G')
+          H = pointAbstrait(1, 9, 'H')
+          I = pointAbstrait(4.31, 10.7, 'I')
           break
         case 'v2':
         default:
           // Les points aux intersections du quadrillage
-          A = point(2.7, 17.35, 'A')
-          B = point(6.01, 17.35, 'B')
-          C = point(6.01, 7.35, 'C')
-          D = point(-0.7, 10.7, 'D')
-          E1 = point(-0.7, 14, 'E_1')
-          F1 = point(-0.7, 17.35, 'F_1')
-          G1 = point(6.01, 14, 'G_1')
-          H1 = point(1, 7.35, 'H_1')
+          A = pointAbstrait(2.7, 17.35, 'A')
+          B = pointAbstrait(6.01, 17.35, 'B')
+          C = pointAbstrait(6.01, 7.35, 'C')
+          D = pointAbstrait(-0.7, 10.7, 'D')
+          E1 = pointAbstrait(-0.7, 14, 'E_1')
+          F1 = pointAbstrait(-0.7, 17.35, 'F_1')
+          G1 = pointAbstrait(6.01, 14, 'G_1')
+          H1 = pointAbstrait(1, 7.35, 'H_1')
           // Les points aux intersections de lignes tracées
-          E = point(0.65, 13.3, 'E')
-          F = point(2, 16, 'F')
-          G = point(4.65, 14.7, 'G')
-          H = point(2.7, 10.7, 'H')
-          I = point(6.01, 10.7, 'I')
+          E = pointAbstrait(0.65, 13.3, 'E')
+          F = pointAbstrait(2, 16, 'F')
+          G = pointAbstrait(4.65, 14.7, 'G')
+          H = pointAbstrait(2.7, 10.7, 'H')
+          I = pointAbstrait(6.01, 10.7, 'I')
           break
       }
       // On place les points
@@ -230,15 +230,15 @@ export default class PuzzlesGeometriques extends Exercice {
           // Adaptation de la taille de la fenêtre
           anim.taille(1200, 1200)
           // Les points
-          const A1 = point(-3, 4)
-          const A = point(-2, 4, 'A')
-          const O = point(5, 4, 'O')
-          const C1 = point(13, 4)
-          const C = point(12, 4, 'C')
-          const B1 = point(5, 17, "(\\Delta ')")
-          const B = point(5, 11, 'B')
-          const D = point(5, -3, 'D')
-          const D1 = point(5, -4)
+          const A1 = pointAbstrait(-3, 4)
+          const A = pointAbstrait(-2, 4, 'A')
+          const O = pointAbstrait(5, 4, 'O')
+          const C1 = pointAbstrait(13, 4)
+          const C = pointAbstrait(12, 4, 'C')
+          const B1 = pointAbstrait(5, 17, "(\\Delta ')")
+          const B = pointAbstrait(5, 11, 'B')
+          const D = pointAbstrait(5, -3, 'D')
+          const D1 = pointAbstrait(5, -4)
           // On trace les perpendiculaires delta et delta'
           anim.regleModifierLongueur()
           anim.regleDroite(A1, C1, { longueur: 16 })
@@ -272,29 +272,29 @@ export default class PuzzlesGeometriques extends Exercice {
           anim.regleMasquer()
           anim.compasEcarter2Points(A, C)
           anim.compasTracerArc2Angles(0, 45, { couleur: 'red', epaisseur: 4 })
-          const F = point(7.9, 13.9, 'F')
+          const F = pointAbstrait(7.9, 13.9, 'F')
           anim.pointCreer(F, { dx: -0.2, dy: -0.5 })
           anim.compasEcarter2Points(C, A)
           anim.compasTracerArc2Angles(180, 135, {
             couleur: 'red',
             epaisseur: 4,
           })
-          const E = point(2.1, 13.9, 'E')
+          const E = pointAbstrait(2.1, 13.9, 'E')
           anim.pointCreer(E, { dx: -0.2, dy: -0.5 })
           anim.compasEcarter2Points(B, F)
           anim.compasTracerArc2Angles(45, 135, { couleur: 'red', epaisseur: 4 })
-          const H = point(5, 15.1, 'H')
+          const H = pointAbstrait(5, 15.1, 'H')
           anim.pointCreer(H, { dx: 0.2, dy: -0.5 })
           anim.compasDeplacer(D)
           anim.compasTracerArc2Angles(85, 95)
-          const G = point(5, 1.1, 'G')
+          const G = pointAbstrait(5, 1.1, 'G')
           anim.pointCreer(G, { dx: 0.2, dy: -0.2 })
           anim.compasDeplacer(G)
           anim.compasTracerArc2Angles(40, 140)
           anim.compasMasquer()
-          const L = point(2.1, 4, 'L')
+          const L = pointAbstrait(2.1, 4, 'L')
           anim.pointCreer(L, { dx: -0.2, dy: -0.2 })
-          const K = point(7.9, 4, 'K')
+          const K = pointAbstrait(7.9, 4, 'K')
           anim.pointCreer(K, { dx: 0.2, dy: -0.2 })
           anim.regleSegment(A, C, { couleur: 'red', epaisseur: 4 })
           anim.regleSegment(L, G, { couleur: 'red', epaisseur: 4 })
@@ -345,10 +345,10 @@ export default class PuzzlesGeometriques extends Exercice {
           // Adaptation de la taille de la fenêtre
           anim.taille(1200, 1200)
           // Les points
-          const A = point(-2, 11, 'A')
-          const B = point(12, 11, 'B')
-          const C = point(12, -3, 'C')
-          const D = point(-2, -3, 'D')
+          const A = pointAbstrait(-2, 11, 'A')
+          const B = pointAbstrait(12, 11, 'B')
+          const C = pointAbstrait(12, -3, 'C')
+          const D = pointAbstrait(-2, -3, 'D')
           anim.regleModifierLongueur()
           // [AB]
           anim.pointCreer(A, { dx: -0.8 })
@@ -386,9 +386,9 @@ export default class PuzzlesGeometriques extends Exercice {
           // Diagonale [BD]
           anim.regleDroite(D, B)
           // les points E,F,G
-          const E = point(1.5, 0.5, 'E')
-          const F = point(5, 4, 'F')
-          const G = point(8.5, 7.5, 'G')
+          const E = pointAbstrait(1.5, 0.5, 'E')
+          const F = pointAbstrait(5, 4, 'F')
+          const G = pointAbstrait(8.5, 7.5, 'G')
           anim.crayonDeplacer(E)
           anim.pointCreer(E, { dx: -0.8, dy: 0.8 })
           anim.crayonDeplacer(F)
@@ -396,8 +396,8 @@ export default class PuzzlesGeometriques extends Exercice {
           anim.crayonDeplacer(G)
           anim.pointCreer(G, { dx: -0.8, dy: 0.8 })
           // Les points H et J
-          const H = point(5, -3, 'H')
-          const J = point(12, 4, 'J')
+          const H = pointAbstrait(5, -3, 'H')
+          const J = pointAbstrait(12, 4, 'J')
           anim.regleMontrer()
           anim.regleRotation(0)
           anim.crayonMontrer()
@@ -417,7 +417,7 @@ export default class PuzzlesGeometriques extends Exercice {
           // le point I
           anim.regleDeplacer(A)
           anim.regleRotation(-45)
-          const I = point(8.5, 0.5, 'I')
+          const I = pointAbstrait(8.5, 0.5, 'I')
           anim.regleMontrer()
           anim.crayonMontrer()
           anim.crayonDeplacer(I)

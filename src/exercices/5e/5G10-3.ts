@@ -1,6 +1,6 @@
 import { distancePointDroite, droite } from '../../lib/2d/droites'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
-import { point, PointAbstrait, pointAbstrait } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait, PointAbstrait } from '../../lib/2d/PointAbstrait'
 import { barycentre, nommePolygone, polygone } from '../../lib/2d/polygones'
 import { segmentAvecExtremites } from '../../lib/2d/segmentsVecteurs'
 import { labelPoint, latexParPoint } from '../../lib/2d/textes'
@@ -84,7 +84,7 @@ const choisir3PointsAlignesOuPas = (
   let Bdistance: number
   let Cdistance: number
   do {
-    A = point(
+    A = pointAbstrait(
       arrondi(randint(-80, 80, 0) / 10),
       arrondi(randint(-80, 80, 0) / 10),
       noms[0],
@@ -120,7 +120,7 @@ const segmentPasCentreSurD = (d: IDroite, noms: string[]) => {
   let Bdistance: number
   let alpha: number
   do {
-    A = point(
+    A = pointAbstrait(
       arrondi(randint(-80, 80, 0) / 10),
       arrondi(randint(-80, 80, 0) / 10),
       noms[0],
@@ -150,7 +150,7 @@ const triangleLoinDeD = (d: IDroite, noms: string[]) => {
   let Cd: number
   let GH: number
   do {
-    const A = point(
+    const A = pointAbstrait(
       arrondi(randint(20, 80, 0) / 10),
       arrondi(randint(20, 80, 0) / 10),
       noms[0],

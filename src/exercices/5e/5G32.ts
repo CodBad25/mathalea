@@ -1,6 +1,6 @@
 import { afficheMesureAngle } from '../../lib/2d/AfficheMesureAngle'
 import { codageAngleDroit } from '../../lib/2d/CodageAngleDroit'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { tracePoint } from '../../lib/2d/TracePoint'
 import { codageAngle } from '../../lib/2d/angles'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
@@ -326,8 +326,8 @@ export default class CalculerUnAngle extends Exercice {
                 )
           ]
 
-      A = point(0, 0, lettreDepuisChiffre(numA), posA)
-      B1 = rotation(point(6, 0), A, angB)
+      A = pointAbstrait(0, 0, lettreDepuisChiffre(numA), posA)
+      B1 = rotation(pointAbstrait(6, 0), A, angB)
       posB =
         angB > 135
           ? 'above'

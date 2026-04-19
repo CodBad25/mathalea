@@ -3,7 +3,7 @@ import {
   lignesHorizontales,
   lignesVerticales,
 } from '../../lib/2d/Grille'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { polygone } from '../../lib/2d/polygones'
 import { carre } from '../../lib/2d/polygonesParticuliers'
 import { segment } from '../../lib/2d/segmentsVecteurs'
@@ -61,18 +61,18 @@ export default class FeuilleDeGrilles extends Exercice {
         for (let i = 0; i < 5; i++) {
           objets.length = 0
           // pixelsParCm=50
-          objets.push(carre(point(1, 1), point(2, 1)))
+          objets.push(carre(pointAbstrait(1, 1), pointAbstrait(2, 1)))
           objets.push(texteParPosition('= 1 unité', 3.5, 1.5))
           objets.push(grille(15, -2, 19, 2, 'black', 1, 4))
           for (let j = 0; j < 11; j++) {
-            A = point(0 + j * 1.1, -0.5)
-            B = point(1 + j * 1.1, -0.5)
-            C = point(1 + j * 1.1, 0.5)
-            D = point(0 + j * 1.1, 0.5)
+            A = pointAbstrait(0 + j * 1.1, -0.5)
+            B = pointAbstrait(1 + j * 1.1, -0.5)
+            C = pointAbstrait(1 + j * 1.1, 0.5)
+            D = pointAbstrait(0 + j * 1.1, 0.5)
             objets.push(polygone(A, B, C, D))
           }
-          objets.push(segment(point(11.5, 0.5), point(15, 2), 'gray'))
-          objets.push(segment(point(11.5, -0.5), point(15, -2), 'gray'))
+          objets.push(segment(pointAbstrait(11.5, 0.5), pointAbstrait(15, 2), 'gray'))
+          objets.push(segment(pointAbstrait(11.5, -0.5), pointAbstrait(15, -2), 'gray'))
           fleche = segment(12, 0, 15, 0)
           fleche.styleExtremites = '->'
           objets.push(texteParPosition('ZOOM', 13.5, 0.4))
@@ -101,20 +101,20 @@ export default class FeuilleDeGrilles extends Exercice {
         for (let i = 0; i < 4; i++) {
           objets.length = 0
           // pixelsParCm=50
-          objets.push(carre(point(1, 1.5), point(2, 1.5)))
+          objets.push(carre(pointAbstrait(1, 1.5), pointAbstrait(2, 1.5)))
           objets.push(texteParPosition('= 1 unité', 3.5, 2))
           objets.push(grille(15, -2.5, 20, 2.5, 'black', 1, 0.5))
           objets.push(grille(11, -0.5, 12, 0.5, 'black', 0.3, 0.1))
 
           for (let j = 0; j < 11; j++) {
-            A = point(0 + j * 1.1, -0.5)
-            B = point(1 + j * 1.1, -0.5)
-            C = point(1 + j * 1.1, 0.5)
-            D = point(0 + j * 1.1, 0.5)
+            A = pointAbstrait(0 + j * 1.1, -0.5)
+            B = pointAbstrait(1 + j * 1.1, -0.5)
+            C = pointAbstrait(1 + j * 1.1, 0.5)
+            D = pointAbstrait(0 + j * 1.1, 0.5)
             objets.push(polygone(A, B, C, D))
           }
-          objets.push(segment(point(11.5, 0.5), point(15, 2.5)))
-          objets.push(segment(point(11.5, -0.5), point(15, -2.5)))
+          objets.push(segment(pointAbstrait(11.5, 0.5), pointAbstrait(15, 2.5)))
+          objets.push(segment(pointAbstrait(11.5, -0.5), pointAbstrait(15, -2.5)))
           fleche = segment(12, 0, 15, 0)
           fleche.styleExtremites = '->'
           objets.push(texteParPosition('ZOOM', 13.5, 0.5))
@@ -139,16 +139,16 @@ export default class FeuilleDeGrilles extends Exercice {
           objets.length = 0
           // pixelsParCm=50
           for (let j = 0; j < 11; j++) {
-            A = point(0 + j * 1.1, -0.5)
-            B = point(1 + j * 1.1, -0.5)
-            C = point(1 + j * 1.1, 0.5)
-            D = point(0 + j * 1.1, 0.5)
+            A = pointAbstrait(0 + j * 1.1, -0.5)
+            B = pointAbstrait(1 + j * 1.1, -0.5)
+            C = pointAbstrait(1 + j * 1.1, 0.5)
+            D = pointAbstrait(0 + j * 1.1, 0.5)
             objets.push(polygone(A, B, C, D))
           }
-          objets.push(carre(point(1, 1.5), point(2, 1.5)))
+          objets.push(carre(pointAbstrait(1, 1.5), pointAbstrait(2, 1.5)))
           objets.push(texteParPosition('= 1 unité', 3.5, 2))
-          objets.push(segment(point(11.5, 0.5), point(15, 5)))
-          objets.push(segment(point(11.5, -0.5), point(15, -5)))
+          objets.push(segment(pointAbstrait(11.5, 0.5), pointAbstrait(15, 5)))
+          objets.push(segment(pointAbstrait(11.5, -0.5), pointAbstrait(15, -5)))
           fleche = segment(12, 0, 15, 0)
           fleche.styleExtremites = '->'
           objets.push(texteParPosition('ZOOM', 13.5, 0.5))

@@ -1,6 +1,6 @@
 import { cercle } from '../../lib/2d/cercle'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { polygoneRegulierParCentreEtRayon } from '../../lib/2d/polygonesParticuliers'
 import { segment } from '../../lib/2d/segmentsVecteurs'
 import { texteParPosition } from '../../lib/2d/textes'
@@ -74,9 +74,9 @@ export default class ExerciceCentresEtrangers262024 extends ExerciceBrevetA {
     style: 'fleches',
   })}`
     const depArr = texteParPosition('Départ / Arrivée', 0, 10)
-    const fleche = segment(point(0, 9.5), point(0, 8.5))
+    const fleche = segment(pointAbstrait(0, 9.5), pointAbstrait(0, 8.5))
     fleche.styleExtremites = '->'
-    const centrum = point(0, 3)
+    const centrum = pointAbstrait(0, 3)
     const poly1 = rotation(
       polygoneRegulierParCentreEtRayon(centrum, 3.5, nbEx1),
       centrum,

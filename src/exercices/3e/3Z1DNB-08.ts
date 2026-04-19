@@ -1,7 +1,7 @@
 import { droite } from '../../lib/2d/droites'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { lectureAntecedent } from '../../lib/2d/LectureAntecedent'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import RepereBuilder from '../../lib/2d/RepereBuilder'
 import { createList } from '../../lib/format/lists'
 import { choice } from '../../lib/outils/arrayOutils'
@@ -77,8 +77,8 @@ export default class ExercicePolynesie52024 extends ExerciceBrevetA {
     const repBuild = rep.buildCustom()
     const f = (x: number) => volumeArrondi - v2 * x
     const cF = droite(
-      point(xMin / 10, f(xMin) / 10),
-      point(xMax / 10, f(xMax) / 10),
+      pointAbstrait(xMin / 10, f(xMin) / 10),
+      pointAbstrait(xMax / 10, f(xMax) / 10),
       '',
       'ForestGreen',
     )

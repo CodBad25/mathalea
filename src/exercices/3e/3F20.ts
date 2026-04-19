@@ -1,5 +1,5 @@
 import { droite } from '../../lib/2d/droites'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { polyline } from '../../lib/2d/Polyline'
 import { repere } from '../../lib/2d/reperes'
 import { texteParPoint } from '../../lib/2d/textes'
@@ -203,18 +203,18 @@ Le choix a été fait d'un antécédent primaire entier positif, le coefficient 
         yLabelEcart: 0.8,
         grille: false,
       })
-      const origine = point(0, 0)
-      const M = point(antecedent0 * xUnite, image0 * yUnite)
+      const origine = pointAbstrait(0, 0)
+      const M = pointAbstrait(antecedent0 * xUnite, image0 * yUnite)
       const d = droite(origine, M)
       const t = tracePoint(M)
-      const projeteX = point(M.x, 0)
-      const projeteY = point(0, M.y)
+      const projeteX = pointAbstrait(M.x, 0)
+      const projeteY = pointAbstrait(0, M.y)
       const pointilles = polyline([projeteY, M, projeteX], 'red')
       pointilles.pointilles = 2
       pointilles.epaisseur = 1
       const coordonnees = texteParPoint(
         `(${antecedent0};${image0})`,
-        point(M.x + 0.7, M.y + (abs(M.y) / M.y) * 0.0),
+        pointAbstrait(M.x + 0.7, M.y + (abs(M.y) / M.y) * 0.0),
         0,
         'black',
         1,
