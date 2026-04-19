@@ -349,7 +349,8 @@ export default class nomExercice extends Exercice {
         })
 
         texte += addMultiMathfield(this, i, {
-          dataTemplate: `$${D.nom}${F.nom} =$ %{champ1} $\\text{ cm}$<br>$${E.nom}${F.nom} =$ %{champ2} $\\text{ cm}$`,
+          dataTemplate: `$${D.nom}${F.nom} =$ %{champ1} $\\text{ cm}$<br>
+          $${E.nom}${F.nom} =$ %{champ2} $\\text{ cm}$`,
           dataOptions: {
             champ1: { keyboard: KeyboardType.clavierNumbers },
             champ2: { keyboard: KeyboardType.clavierNumbers },

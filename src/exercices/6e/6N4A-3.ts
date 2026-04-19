@@ -251,7 +251,8 @@ export default class ResoudreDesProblemes extends Exercice {
       )
       // texte += '<br><br>'
       texte += addMultiMathfield(this, i, {
-        dataTemplate: `Quelle est la masse  d'${shape1.articleSingulier} ${shape1.nomSingulier} ? %{champ1} \nQuelle est la masse d'${shape2.articleSingulier} ${shape2.nomSingulier} ? %{champ2}`,
+        dataTemplate: `Quelle est la masse  d'${shape1.articleSingulier} ${shape1.nomSingulier} ? %{champ1}<br>
+        Quelle est la masse d'${shape2.articleSingulier} ${shape2.nomSingulier} ? %{champ2}`,
         dataOptions: {
           champ1: { keyboard: KeyboardType.masse },
           champ2: { keyboard: KeyboardType.masse },

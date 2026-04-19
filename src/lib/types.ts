@@ -93,7 +93,13 @@ export interface InterfaceReferentiel {
   dateModification?: string
   annee?: string
 }
-
+export type QuestionScore = { nbBonnesReponses: number; nbReponses: number }
+export type DetailedQuestionResult = {
+  isOk: boolean
+  feedback: string
+  score: QuestionScore
+}
+export type QuestionResult = boolean | DetailedQuestionResult
 export interface InterfaceResultExercice {
   numberOfPoints: number
   numberOfQuestions: number
@@ -107,7 +113,7 @@ export interface InterfaceResultExercice {
   bestScore?: number
   duration?: number
   checkSum?: string
-  resultsByQuestion?: boolean[]
+  resultsByQuestion?: QuestionResult[]
 }
 
 // Pour Capytale

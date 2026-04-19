@@ -32,8 +32,8 @@ export default class TestMultiMatfield extends Exercice {
     const c = randint(1, 2) * 5
     this.listeQuestions[0] = `$ABCD$ est un rectangle tel que $AB=${texNombre((a * 10 + b) / 10, 1)}\\text{ dm}$ et $BC=${texNombre(c)}\\text{ dm}$. Quelles sont les dimensions de ce rectangle en cm ?<br>
          ${addMultiMathfield(this, 0, {
-           dataTemplate: `Tout d'abord, la largeur : %{champ2}\n
-           Ensuite, la longueur : %{champ3}\n
+           dataTemplate: `Tout d'abord, la largeur : %{champ2}<br>
+           Ensuite, la longueur : %{champ3}<br>
            Le périmètre est : %{champ4}`,
            dataOptions: {
              champ2: {

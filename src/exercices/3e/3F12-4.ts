@@ -1,7 +1,7 @@
 import { courbe } from '../../lib/2d/Courbe'
 import { repere } from '../../lib/2d/reperes'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { handleAnswers} from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { toutAUnPoint } from '../../lib/interactif/mathLive'
 import { addMultiMathfield } from '../../lib/interactif/MultiMathfield/MultiMathfield'
 import { chercheMinMaxFonction } from '../../lib/mathFonctions/etudeFonction'
@@ -255,17 +255,23 @@ export default class ImageGraphique extends Exercice {
       } else if (this.interactif) {
         if (this.sup === 1) {
           texte += `${addMultiMathfield(this, i, {
-            dataTemplate: `$f(${x1})=$ %{champ1}\n$f(${x2})=$ %{champ2}`,
+            dataTemplate: `$f(${x1})=$ %{champ1}<br>
+            $f(${x2})=$ %{champ2}`,
             dataOptions: {
               champ1: { keyboard: KeyboardType.clavierDeBase },
               champ2: { keyboard: KeyboardType.clavierDeBase },
             },
           })}`
-          handleAnswers(this, i, {
-            champ1: { value: `${fx1}` },
-            champ2: { value: `${fx2}` },
-            bareme: toutAUnPoint,
-          }, { formatInteractif: 'multiMathfield' })
+          handleAnswers(
+            this,
+            i,
+            {
+              champ1: { value: `${fx1}` },
+              champ2: { value: `${fx2}` },
+              bareme: toutAUnPoint,
+            },
+            { formatInteractif: 'multiMathfield' },
+          )
         } else {
           texte += `${addMultiMathfield(this, i, {
             dataTemplate: `$f(${x1})=$ %{champ1}\n$f(${x2})=$ %{champ2}\n$f(${x3})=$ %{champ3}`,
@@ -275,12 +281,17 @@ export default class ImageGraphique extends Exercice {
               champ3: { keyboard: KeyboardType.clavierDeBase },
             },
           })}`
-          handleAnswers(this, i, {
-            champ1: { value: `${fx1}` },
-            champ2: { value: `${fx2}` },
-            champ3: { value: `${fx3}` },
-            bareme: toutAUnPoint,
-          }, { formatInteractif: 'multiMathfield' })
+          handleAnswers(
+            this,
+            i,
+            {
+              champ1: { value: `${fx1}` },
+              champ2: { value: `${fx2}` },
+              champ3: { value: `${fx3}` },
+              bareme: toutAUnPoint,
+            },
+            { formatInteractif: 'multiMathfield' },
+          )
         }
       }
       if (this.questionJamaisPosee(i, a, b, c, d)) {

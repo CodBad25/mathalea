@@ -3,6 +3,7 @@
   import { mathaleaRenderDiv } from '../../../../lib/mathalea'
   import { enumeration } from '../../../../lib/outils/ecritures'
   import { canOptions } from '../../../../lib/stores/canStore'
+  import type { QuestionResult } from '../../../../lib/types'
   import ButtonToggle from '../../../shared/forms/ButtonToggle.svelte'
   import NavigationButtons from './NavigationButtons.svelte'
   import Pagination from './Pagination.svelte'
@@ -14,7 +15,7 @@
   export let corrections: string[]
   export let consignesCorrections: string[]
   export let answers: string[]
-  export let resultsByQuestion: boolean[]
+  export let resultsByQuestion: QuestionResult[]
   export let time: string
   export let score: string
   const numberOfQuestions: number = questions.length

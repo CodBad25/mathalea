@@ -74,9 +74,10 @@ export default class IntersectionDroites extends Exercice {
       }
 
       texte = `Soient $f$ et $g$ deux fonctions affines définies par : $f(x)=${reduireAxPlusB(a, b)}$ et $g(x)=${reduireAxPlusB(c, d)}$. <br>`
-     if (this.interactif) {
+      if (this.interactif) {
         texte += `${addMultiMathfield(this, i, {
-          dataTemplate: `a) Quelle est l'abscisse du point d'intersection des deux droites représentatives respectivement de $f$ et de $g$ ? %{champ1}\nb) Quelle est l'ordonnée de ce point d'intersection ? %{champ2}`,
+          dataTemplate: `a) Quelle est l'abscisse du point d'intersection des deux droites représentatives respectivement de $f$ et de $g$ ? %{champ1}<br>
+          b) Quelle est l'ordonnée de ce point d'intersection ? %{champ2}`,
           dataOptions: {
             champ1: { keyboard: KeyboardType.clavierDeBaseAvecFraction },
             champ2: { keyboard: KeyboardType.clavierDeBaseAvecFraction },
@@ -142,18 +143,23 @@ export default class IntersectionDroites extends Exercice {
           : `${ecritureParentheseSiNegatif(abscisseFractionEtendue)} ${ecritureAlgebrique(b)}=${miseEnEvidence(ordonnee)}$<br>`
       texteCorr += `Le point d'intersection des droites représentatives respectivement de $f$ et de $g$ a pour ordonnée $${miseEnEvidence(ordonnee)}$.<br>`
       // Important laisser ici les deux options de comparaison
-      handleAnswers(this, i, {
-        champ1: {
-          value: abscisse,
-          options: { fractionEgale: true, nombreDecimalSeulement: true },
+      handleAnswers(
+        this,
+        i,
+        {
+          champ1: {
+            value: abscisse,
+            options: { fractionEgale: true, nombreDecimalSeulement: true },
+          },
+          champ2: {
+            value: ordonnee,
+            options: { fractionEgale: true, nombreDecimalSeulement: true },
+          },
+          bareme: toutAUnPoint,
         },
-        champ2: {
-          value: ordonnee,
-          options: { fractionEgale: true, nombreDecimalSeulement: true },
-        },
-        bareme: toutAUnPoint,
-      }, { formatInteractif: 'multiMathfield' })
-    
+        { formatInteractif: 'multiMathfield' },
+      )
+
       if (this.questionJamaisPosee(i, a, b, c, d)) {
         // Si la question n'a jamais été posée, on en créé une autre
         this.listeQuestions[i] = texte

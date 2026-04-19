@@ -300,40 +300,47 @@ export default class CoefficientDirecteur extends Exercice {
           }
           break
       }
-      texte =  ` Soit $${nomFonction}_{${i + 1}}$ la fonction affine définie par $${nomFonction}_{${i + 1}}(${nomVariable})=${fonctionF}$.<br>`
+      texte = ` Soit $${nomFonction}_{${i + 1}}$ la fonction affine définie par $${nomFonction}_{${i + 1}}(${nomVariable})=${fonctionF}$.<br>`
       const clavier =
         typesDeQuestionsDisponibles[i] === 6
           ? KeyboardType.clavierFullOperations
           : KeyboardType.clavierDeBaseAvecFraction
       if (this.interactif) {
         texte += `${addMultiMathfield(this, i, {
-          dataTemplate: `a) Quel est le coefficient directeur de la droite représentative de $${nomFonction}_{${i + 1}}$ ? %{champ1}\nb) Quelle est l'ordonnée à l'origine de la droite représentative de $${nomFonction}_{${i + 1}}$ ? %{champ2}`,
+          dataTemplate: `a) Quel est le coefficient directeur de la droite représentative de $${nomFonction}_{${i + 1}}$ ? %{champ1}<br>
+          b) Quelle est l'ordonnée à l'origine de la droite représentative de $${nomFonction}_{${i + 1}}$ ? %{champ2}`,
           dataOptions: {
             champ1: { keyboard: clavier },
             champ2: { keyboard: clavier },
           },
-        })}`}
-     else{ texte +=
-        '<br>' +
-        numAlpha(0) +
-        `Quel est le coefficient directeur de la droite représentative de $${nomFonction}_{${i + 1}}$ ?`
-    
-      texte +=
-        '<br>' +
-        numAlpha(1) +
-        `Quelle est l'ordonnée à l'origine de la droite représentative de $${nomFonction}_{${i + 1}}$ ?`
-     }
+        })}`
+      } else {
+        texte +=
+          '<br>' +
+          numAlpha(0) +
+          `Quel est le coefficient directeur de la droite représentative de $${nomFonction}_{${i + 1}}$ ?`
+
+        texte +=
+          '<br>' +
+          numAlpha(1) +
+          `Quelle est l'ordonnée à l'origine de la droite représentative de $${nomFonction}_{${i + 1}}$ ?`
+      }
       const reponse1 =
         typeof coefDir === 'number' ? coefDir.toString() : coefDir
-     
+
       const reponse2 =
         typeof ordOrigine === 'number' ? ordOrigine.toString() : ordOrigine
-        
-      handleAnswers(this, i, {
-        champ1: { value: reponse1 },
-        champ2: { value: reponse2 },
-        bareme:toutAUnPoint
-      }, { formatInteractif: 'multiMathfield' })
+
+      handleAnswers(
+        this,
+        i,
+        {
+          champ1: { value: reponse1 },
+          champ2: { value: reponse2 },
+          bareme: toutAUnPoint,
+        },
+        { formatInteractif: 'multiMathfield' },
+      )
       texteCorr = ` $${nomFonction}_{${i + 1}}(${nomVariable})=${fonctionF}$.<br>`
       texteCorr += texteCorSelonCase
 

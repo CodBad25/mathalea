@@ -140,7 +140,8 @@ export default class ExerciceLabyrintheDivisibilite2 extends Exercice {
       }) */
 
       texte += addMultiMathfield(this, q, {
-        dataTemplate: `Indiquer le numéro de la bonne sortie : %{champ1} \n Combien de nombres rencontrés avant la sortie ? %{champ2}`,
+        dataTemplate: `Indiquer le numéro de la bonne sortie : %{champ1}<br>
+        Combien de nombres rencontrés avant la sortie ? %{champ2}`,
         dataOptions: {
           champ1: { keyboard: KeyboardType.clavierNumbers, minWidth: 100 },
           champ2: { keyboard: KeyboardType.clavierNumbers, minWidth: 100 },

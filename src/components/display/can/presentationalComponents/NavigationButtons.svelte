@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte'
+  import type { QuestionResult } from '../../../../lib/types'
   import type { CanState } from '../../../../lib/types/can'
   import BasicClassicModal from '../../../shared/modal/BasicClassicModal.svelte'
   import ShortPagination from './ShortPagination.svelte'
@@ -8,7 +9,7 @@
   export let numberOfQuestions: number
   export let handleEndOfRace: () => void
   export let state: CanState
-  export let resultsByQuestion: boolean[]
+  export let resultsByQuestion: QuestionResult[]
 
   let isModalOpen = false
 

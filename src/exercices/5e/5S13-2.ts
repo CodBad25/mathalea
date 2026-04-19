@@ -492,7 +492,8 @@ function questionsEtCorrections(
       questions = [
         preambule,
         addMultiMathfield(exercice, numero, {
-          dataTemplate: `a) Déterminer l'effectif manquant. %{champ1}\nb)Déterminer la fréquence de la valeur ${serie.modalites[rangValeurChoisie]} (en pourcentage, arrondir au dixième si besoin). %{champ2}\n`,
+          dataTemplate: `a) Déterminer l'effectif manquant. %{champ1}<br>
+          b)Déterminer la fréquence de la valeur ${serie.modalites[rangValeurChoisie]} (en pourcentage, arrondir au dixième si besoin). %{champ2}`,
           dataOptions: {
             champ1: {
               keyboard: KeyboardType.clavierNumbers,

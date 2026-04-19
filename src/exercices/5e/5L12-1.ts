@@ -134,7 +134,7 @@ export default class ReduireDinstinctionSommeProduit extends Exercice {
         texte +=
           '<br>' +
           addMultiMathfield(this, i, {
-            dataTemplate: `${listeTypeDeQuestions[i] > 1 ? 'Somme : ' : 'Produit : '} %{champ1}\n
+            dataTemplate: `${listeTypeDeQuestions[i] > 1 ? 'Somme : ' : 'Produit : '} %{champ1}<br>
            ${listeTypeDeQuestions[i] > 1 ? 'Produit : ' : 'Somme : '} %{champ2}`,
             dataOptions: {
               champ1: {

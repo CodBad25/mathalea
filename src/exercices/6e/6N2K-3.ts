@@ -106,7 +106,8 @@ export default class DivisionsEuclidiennesEgalite2 extends Exercice {
       texte +=
         (this.interactif ? '<br>' : '') +
         addMultiMathfield(this, i, {
-          dataTemplate: `Quel est le quotient de la division euclidienne de $${a}$ par $${b}$ ?  %{champ1}\nQuel est le reste de la division euclidienne de $${a}$ par $${b}$ ?  %{champ2}`,
+          dataTemplate: `Quel est le quotient de la division euclidienne de $${a}$ par $${b}$ ?  %{champ1}<br>
+          Quel est le reste de la division euclidienne de $${a}$ par $${b}$ ?  %{champ2}`,
           dataOptions: {
             champ1: {
               keyboard: KeyboardType.clavierNumbers,

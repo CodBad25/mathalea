@@ -189,7 +189,9 @@ export default class CalculerProbaTableau extends Exercice {
       shuffle3tableaux(calcul, calculCorr, reponse)
       texte += ` Calculer $${calcul[0]}$, $${calcul[1]}$ et $${calcul[2]}$.<br>`
       texte += `${addMultiMathfield(this, i, {
-        dataTemplate: `$${calcul[0]}=$ %{champ1}\n$${calcul[1]}=$ %{champ2}\n$${calcul[2]}=$ %{champ3}`,
+        dataTemplate: `$${calcul[0]}=$ %{champ1}<br>
+        $${calcul[1]}=$ %{champ2}<br>
+        $${calcul[2]}=$ %{champ3}`,
         dataOptions: {
           champ1: { keyboard: KeyboardType.clavierDeBaseAvecFraction },
           champ2: { keyboard: KeyboardType.clavierDeBaseAvecFraction },

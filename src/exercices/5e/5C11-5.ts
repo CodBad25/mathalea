@@ -529,7 +529,8 @@ export default class ProblemesAvecOperationsEnUneLigne extends Exercice {
           texte +=
             '<br>' +
             addMultiMathfield(this, i, {
-              dataTemplate: `Enchaînement de calculs (en une seule ligne) : %{champ1}\n ${texteAvant} %{champ2}`,
+              dataTemplate: `Enchaînement de calculs (en une seule ligne) : %{champ1}<br>
+              ${texteAvant} %{champ2}`,
               dataOptions: {
                 champ1: {
                   keyboard: KeyboardType.clavierDeBaseAvecEgal,

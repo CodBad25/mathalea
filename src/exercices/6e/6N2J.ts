@@ -153,7 +153,8 @@ export default class DivisionsEuclidiennes extends Exercice {
           `$${texNombre(a)}=(${b}\\times${miseEnEvidence(texNombre(q))})+${miseEnEvidence(String(r))}$<br>`
       }
       texte += addMultiMathfield(this, i, {
-        dataTemplate: `a) Quel est le quotient de la division euclidienne de $${a}$ par $${b}$ ?  %{champ1}\nb) Quel est le reste de la division euclidienne de $${a}$ par $${b}$ ?  %{champ2}`,
+        dataTemplate: `a) Quel est le quotient de la division euclidienne de $${a}$ par $${b}$ ?  %{champ1}<br>
+        b) Quel est le reste de la division euclidienne de $${a}$ par $${b}$ ?  %{champ2}`,
         dataOptions: {
           champ1: {
             keyboard: KeyboardType.clavierNumbers,
