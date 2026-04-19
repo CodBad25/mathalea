@@ -348,7 +348,16 @@ export function calculerCe(
   )
 
   const exprLatex = expression
-  const substituted = assignVariablesCe(expression, params.variables || {})
+  const substituted = assignVariablesCe(
+    expression,
+    params.variables || {},
+    params.implicitMultiply
+      ? undefined
+      : {
+          invisibleMultiply: '\\times',
+          multiplySymbol: '\\times',
+        },
+  )
 
   const expr = ce.parse(substituted, { form: 'raw' })
   const substitutedForDisplay = renderMathJsonLatex(expr.json as MathJsonNode, {
