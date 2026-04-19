@@ -42,8 +42,8 @@ export default class CroissanceFonctions extends ExerciceQcmA {
       case 'affine':
         bonneReponse = a > 0 ? 'croissante' : 'décroissante'
         this.enonce = `Soit $f$ la fonction affine définie par $f(x) = ${a}x + ${b}$. Cette fonction est :`
-        this.correction = `La fonction $f(x) = ${a}x + ${b}$ est une fonction affine avec $a = ${a}$.
-        <br>Puisque $a ${a > 0 ? '> 0' : '< 0'}$, la fonction est ${miseEnEvidence(bonneReponse)}.`
+        this.correction = `La fonction $f(x) = ${a}x + ${b}$ est une fonction affine avec $a = ${a}$.<br>
+        Puisque $a ${a > 0 ? '> 0' : '< 0'}$, la fonction est ${miseEnEvidence(bonneReponse)}.`
         break
 
       case 'carre':
@@ -55,8 +55,8 @@ export default class CroissanceFonctions extends ExerciceQcmA {
           bonneReponse = 'ni croissante ni décroissante sur $\\mathbb{R}$'
         }
         this.enonce = `Soit $f$ la fonction définie par $f(x) = x^2$. Sur l'intervalle $[${x1} ; ${x2}]$, cette fonction est :`
-        this.correction = `La fonction $f(x) = x^2$ est une fonction carré.
-        <br>Sur l'intervalle $[${x1} ; ${x2}]$, elle est ${miseEnEvidence(bonneReponse)}.`
+        this.correction = `La fonction $f(x) = x^2$ est une fonction carré.<br>
+        Sur l'intervalle $[${x1} ; ${x2}]$, elle est ${miseEnEvidence(bonneReponse)}.`
         break
 
       default:

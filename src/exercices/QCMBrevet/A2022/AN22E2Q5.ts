@@ -78,10 +78,10 @@ export default class AmeriqueNordJuin22Ex1Q5 extends ExerciceQcmA {
     ]
     const objets = [lePrisme.c2d, a1, a2, largeur, hauteur, profondeur]
     this.enonce = mathalea2d(
-      Object.assign({ remToPixels: 30, scale: 1 }, fixeBordures(objets)),
+      Object.assign({ pixelsParCm: 20, scale: 0.7 }, fixeBordures(objets)),
       objets,
     )
-    this.enonce += '<br>Le volume de ce prisme droit est :'
+    this.enonce += 'Le volume de ce prisme droit est :' // un medskip pour passer à la ligne après le dessin
     this.correction = `La base de ce prisme est un triangle rectangle de $${l}\\text{ cm}$ et $${h}\\text{ cm}$ de côté.<br>
     Son aire est : $\\dfrac{${l}\\times ${h}}{2}=\\dfrac{${l * h}}{2}=${texNombre((l * h) / 2, 1)}\\text{ cm}^2$.<br>
     Le volume du prisme est le produit de l'aire de la base par la hauteur, soit :<br>
