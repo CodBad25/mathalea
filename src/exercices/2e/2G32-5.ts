@@ -33,7 +33,7 @@ export const interactifType = 'custom'
 export const uuid = 'd45ce'
 
 export const refs = {
-  'fr-fr': ['2G30-10'],
+  'fr-fr': ['2G32-5'],
   'fr-ch': [''],
 }
 export default class RepresenterDroiteDepuisEq extends Exercice {

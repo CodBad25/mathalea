@@ -13,7 +13,7 @@ export const interactifType = 'mathLive'
 export const uuid = '0ec77'
 
 export const refs = {
-  'fr-fr': ['2G30-4'],
+  'fr-fr': ['2G32-2'],
   'fr-ch': ['3G92-1'],
 }
 class EqCartpointVecteur extends EqCartDroite {

@@ -29,7 +29,7 @@ export const amcType = 'AMCHybride'
 export const uuid = '1ea16'
 
 export const refs = {
-  'fr-fr': ['2G30-1'],
+  'fr-fr': ['2G31-1'],
   'fr-ch': ['11FA9-9', '1mF2-1'],
 }
 export default class CoefficientDirecteurDeDroite extends Exercice {

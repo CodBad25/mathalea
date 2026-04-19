@@ -2544,14 +2544,12 @@
   "2G3": {
     "titre": "Représenter et caractériser les droites du plan"
   },
-  "2G30": {
-    "titre": "Déterminer une équation de droite à partir de deux points, un point et un vecteur directeur ou un point et la pente"
-  },
   "2G31": {
-    "titre": "Déterminer la pente ou un vecteur directeur d'une droite donnée par une équation ou une représentation graphique"
-  },
+    "titre": "Travailler avec les équations réduites de droite"
+  }
+  ,
   "2G32": {
-    "titre": "Tracer une droite connaissant son équation cartésienne ou réduite"
+    "titre": "Travailler avec les équations cartésiennes de droite"
   },
   "2G33": {
     "titre": "Établir alignement et parallélisme"

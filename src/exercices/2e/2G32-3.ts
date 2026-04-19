@@ -9,10 +9,10 @@ export const interactifType = 'mathLive'
  *
  * @author Stéphane Guyon  + Jean-claude Lhote (interactif) + Gilles Mora
  */
-export const uuid = 'd1da3'
+export const uuid = 'd1da4'
 
 export const refs = {
-  'fr-fr': ['2G30-5'],
+  'fr-fr': ['2G32-3'],
   'fr-ch': ['11FA9-6', '1mF2-5'],
 }
 class EqCart1pointVectDir extends EqCartDroite {
