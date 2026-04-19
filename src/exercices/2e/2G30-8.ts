@@ -10,7 +10,7 @@ import { ecritureAlgebrique, rienSi1 } from '../../lib/outils/ecritures'
 import { lettreDepuisChiffre } from '../../lib/outils/outilString'
 
 export const titre =
-  'Droite passant par un point parallèle ou perpendiculaire à une droite donnée'
+  'Déterminer une équation réduite d\'une droite passant par un point et parallèle ou perpendiculaire à une droite donnée'
 export const dateDePublication = '25/11/2024'
 export const interactifReady = false
 export const uuid = '2db22'
