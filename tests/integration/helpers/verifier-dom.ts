@@ -27,8 +27,8 @@ import {
 } from './domSimulator'
 import {
   ensureDragAndDropQuestion,
-  extractPromptValuesForCallbackQuestion,
   extractClockValuesForCustom,
+  extractPromptValuesForCallbackQuestion,
   extractPromptValuesForCustom,
   grandeurStringToLatex,
   normalizeCustomCorrectionResult,
@@ -136,12 +136,7 @@ function verifyCustomQuestion(
         ? String(rawHour - 12)
         : String(rawHour)
 
-    injectInteractiveClockDOM(
-      exIdx,
-      questionIndex,
-      domHour,
-      clockValues.minute,
-    )
+    injectInteractiveClockDOM(exIdx, questionIndex, domHour, clockValues.minute)
     const result = exercice.correctionInteractive(questionIndex)
     const isOk = normalizeCustomCorrectionResult(result)
     const clockAnswer = `${clockValues.hour}h${clockValues.minute}`
@@ -538,13 +533,21 @@ export function verifyDom(exercice: IExercice): VerificationResult[] {
           }
           const fieldValues: Record<string, string> = {}
           for (const [key, answer] of Object.entries(valeur)) {
-            if (key === 'bareme' || key === 'feedback' || answer?.value == null) {
+            if (
+              key === 'bareme' ||
+              key === 'feedback' ||
+              answer?.value == null
+            ) {
               continue
             }
             const val = answer.value
+            const options = answer.options ?? {}
             const raw = Array.isArray(val) ? String(val[0]) : String(val)
+
             const opts = answer.options ?? {}
-            fieldValues[key] = opts.unite ? grandeurStringToLatex(raw) : raw
+            fieldValues[key] = opts.unite
+              ? grandeurStringToLatex(raw)
+              : toCompareInput(raw, options)
           }
           if (Object.keys(fieldValues).length === 0) {
             results.push({

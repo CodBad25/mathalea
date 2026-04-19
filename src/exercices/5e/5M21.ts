@@ -1,3 +1,4 @@
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import type { AllChoicesType } from '../../lib/interactif/listeDeroulante/ListeDeroulante'
 import { choixDeroulant } from '../../lib/interactif/questionListeDeroulante'
 import { ajouteFeedback } from '../../lib/interactif/questionMathLive'
@@ -357,6 +358,9 @@ export default class DefinitionUnitesVolumes extends Exercice {
                 choixListeDeroulantePourCeCas[0],
               )
             : '$\\ldots\\ldots\\ldots$'
+          handleAnswers(this, indiceInteractif, {
+            reponse: { value: choixListeDeroulantePourCeCas[0][0].label ?? '' },
+          })
           texte += texteFixe[1]
           texte += this.interactif
             ? choixDeroulant(
@@ -365,6 +369,9 @@ export default class DefinitionUnitesVolumes extends Exercice {
                 choixListeDeroulantePourCeCas[1],
               )
             : '$\\ldots\\ldots\\ldots$'
+          handleAnswers(this, indiceInteractif, {
+            reponse: { value: choixListeDeroulantePourCeCas[1][0].label ?? '' },
+          })
           texte += texteFixe[2]
           texte += this.interactif
             ? choixDeroulant(
@@ -374,6 +381,9 @@ export default class DefinitionUnitesVolumes extends Exercice {
               )
             : '$\\ldots\\ldots\\ldots$'
           texte += texteFixe[3]
+          handleAnswers(this, indiceInteractif, {
+            reponse: { value: choixListeDeroulantePourCeCas[2][0].label ?? '' },
+          })
           break
       }
 
