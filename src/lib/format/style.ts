@@ -5,6 +5,7 @@
  */
 import Decimal from 'decimal.js'
 import { context } from '../../modules/context'
+import { bleuMathalea } from '../colors'
 import { choice } from '../outils/arrayOutils'
 import { texNombre } from '../outils/texNombre'
 
@@ -13,7 +14,7 @@ type Colors =
   | 'black'
   | 'red'
   | 'green'
-  | 'blue' // Ne pas mettre bleuMathalea - Erreur Katex
+  | typeof bleuMathalea
   | 'cyan'
   | 'magenta'
   | 'yellow'
@@ -22,7 +23,7 @@ const colors: Colors[] = [
   'black',
   'red',
   'green',
-  'blue', // Ne pas mettre bleuMathalea - Erreur Katex
+  bleuMathalea,
   'cyan',
   'magenta',
   'yellow',
@@ -45,7 +46,7 @@ export function couleurTab(choixCouleur = 999) {
     ['black', 'noir', 'noire'],
     ['red', 'rouge', 'rouge'],
     ['green', 'vert', 'verte'],
-    ['blue', 'bleu', 'bleue'], // Ne pas mettre bleuMathalea - Erreur Katex
+    [bleuMathalea, 'bleu', 'bleue'],
     ['HotPink', 'rose', 'rose'],
     ['Sienna', 'marron', 'marron'],
     ['darkgray', 'gris', 'grise'],
@@ -61,16 +62,32 @@ export function couleurTab(choixCouleur = 999) {
 export function arcenciel(i: number, fondblanc = true) {
   let couleurs
   if (fondblanc)
-    couleurs = ['violet', 'purple', 'blue', 'green', 'lime', 'orange', 'red'] // Ne pas mettre bleuMathalea - Erreur Katex
+    couleurs = [
+      'violet',
+      'purple',
+      bleuMathalea,
+      'green',
+      'lime',
+      'orange',
+      'red',
+    ]
   else
-    couleurs = ['violet', 'indigo', 'blue', 'green', 'yellow', 'orange', 'red'] // Ne pas mettre bleuMathalea - Erreur Katex
+    couleurs = [
+      'violet',
+      'indigo',
+      bleuMathalea,
+      'green',
+      'yellow',
+      'orange',
+      'red',
+    ]
   return couleurs[i % 7]
 }
 
 export function texcolors(i: number, fondblanc = true) {
   const couleurs = [
     'black',
-    'blue', // Ne pas mettre bleuMathalea - Erreur Katex
+    bleuMathalea,
     'GreenYellow',
     'brown',
     'LightSlateBlue',
