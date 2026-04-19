@@ -12,6 +12,11 @@ import { texNombre } from '../lib/outils/texNombre'
 import FractionEtendue from './FractionEtendue'
 import { randFloat, randint } from './outils'
 
+/**
+ * @author Mickaël Guironnet
+ * @param nbVal
+ * @returns
+ */
 function underbraceMediane(nbVal: number) {
   let sortie
   if (nbVal % 2 === 0) {
@@ -24,6 +29,14 @@ function underbraceMediane(nbVal: number) {
   return sortie
 }
 
+/**
+ *  @author Mickaël Guironnet
+ * @param tirages
+ * @param effCumulBool
+ * @param categories
+ * @param lignes
+ * @returns
+ */
 function desTabEffCumul(
   tirages: number[][],
   effCumulBool: boolean,
@@ -202,7 +215,7 @@ function desTabEffCumul(
 
   return sortie
 }
-
+// @author Mickaël Guironnet
 function computeMoyenne(notes: number[]): [string, number] {
   let somme = 0
   for (let j = 0; j < notes.length; j++) {
@@ -211,7 +224,7 @@ function computeMoyenne(notes: number[]): [string, number] {
 
   return [texFractionFromString(somme, notes.length), somme]
 }
-
+// @author Mickaël Guironnet
 function computeMediane(notes: number[]): [number | [number, number], number] {
   const notesRangees = notes.sort((a, b) => a - b)
   let mediane
@@ -230,7 +243,7 @@ function computeMediane(notes: number[]): [number | [number, number], number] {
     : (medianeCorr = mediane)
   return [mediane, medianeCorr]
 }
-
+// @author Mickaël Guironnet
 function computeEtendue(notes: number[]): [number, number] {
   let min = notes[0]
   let max = notes[0]
@@ -241,7 +254,7 @@ function computeEtendue(notes: number[]): [number, number] {
   }
   return [min, max]
 }
-
+// @author Mickaël Guironnet
 function computeMoyenneTirages2D(
   tirages: number[][],
 ): [string, number, number] {
@@ -253,7 +266,7 @@ function computeMoyenneTirages2D(
   }
   return [texFractionFromString(somme, effectif), somme, effectif]
 }
-
+// @author Mickaël Guironnet
 function computeMedianeTirages2D(
   nombreTirages: number,
   tirages: number[][],
@@ -304,7 +317,7 @@ function computeMedianeTirages2D(
   const scoreMed = scoresMedians.slice(0, 2) as [number, number]
   return [scoreMed, medianeCorr]
 }
-
+// @author Mickaël Guironnet
 function texteCorrMoyenneNotes(
   notesSeries: number[] | number[][],
   somme: number,
@@ -380,7 +393,7 @@ function texteCorrMoyenneNotes(
   }
   return texteCorr
 }
-
+// @author Mickaël Guironnet
 function texteCorrEtendueNotes(min: number, max: number, note = 'note') {
   const data = [
     ['note', 'La note la plus basse', 'La note la plus haute', ''],
@@ -404,7 +417,7 @@ function texteCorrEtendueNotes(min: number, max: number, note = 'note') {
   texteCorr += `Donc l'étendue des ${note}s est  $${texNombre(max, 1)}-${ecritureParentheseSiNegatif(min)}=${miseEnEvidence(texNombre(max - min, 1))}$ ${notes[3]}.`
   return texteCorr + '<br>'
 }
-
+// @author Mickaël Guironnet
 function texteCorrMedianeTemperatures(
   temperatures: number[],
   medianeCorr: number,
@@ -419,7 +432,7 @@ function texteCorrMedianeTemperatures(
     'température',
   )
 }
-
+// @author Mickaël Guironnet
 function texteCorrMedianeNotes(
   notes: number[],
   medianeCorr: number,
@@ -498,7 +511,7 @@ function texteCorrMedianeNotes(
   } */
   return texteCorr
 }
-
+//  @author Mickaël Guironnet
 function texteCorrMedianeTirages2DSalaires(
   nombreTirages: number,
   medianeCorr: number,
@@ -574,7 +587,7 @@ function texteCorrMedianeTirages2DSalaires(
   }
   return texteCorr
 }
-
+// @author Mickaël Guironnet
 function texteCorrMedianeTirages2D(
   nombreTirages: number,
   medianeCorr: number,
@@ -613,7 +626,7 @@ function texteCorrMedianeTirages2D(
   }
   return texteCorr
 }
-
+// @author Mickaël Guironnet
 function texteNotes(notes: number[]) {
   let texte = `${prenom()} a obtenu ces notes ce trimestre-ci en mathématiques :<br>`
   texte += `$${notes[0]}$`
@@ -623,7 +636,7 @@ function texteNotes(notes: number[]) {
   texte += `et $${notes[notes.length - 1]}$.`
   return texte
 }
-
+// @author Mickaël Guironnet
 function texteTemperatures(
   annee: number,
   mois: number,
@@ -673,7 +686,7 @@ function texteTemperatures(
   texte += '<br>'
   return texte
 }
-
+// @author Mickaël Guironnet
 function texteSalaires(
   salaires: number[][],
   categoriesCol: string[],
@@ -704,7 +717,7 @@ function texteSalaires(
     '<br>'
   return texte
 }
-
+// @author Mickaël Guironnet
 function texteTirages2D(
   nombreDes: number,
   nombreTirages: number,
@@ -730,7 +743,6 @@ function texteTirages2D(
   texte += desTabEffCumul(tirages, false) + '<br>'
   return texte
 }
-
 function solidName(nbCot: 4 | 6 | 8 | 10) {
   switch (nbCot) {
     case 4:
@@ -750,6 +762,7 @@ function solidName(nbCot: 4 | 6 | 8 | 10) {
  * Paramètres requis : q1, mediane, q3, etendue. La moyenne est optionnelle.
  * La série ne contiendra pas de valeurs aberrantes (selon la règle 1.5*IQR).
  * Retourne un tableau trié de longueur n (par défaut 20).
+ * @author Jean-Claude Lhote
  */
 export function creerSerieDeQuartiles({
   q1,
@@ -903,6 +916,7 @@ export function creerSerieDeQuartiles({
  * @param precision - précision décimale pour les flottants (par défaut 2)
  * @param gaussian - si les valeurs doivent suivre une distribution gaussienne (par défaut false)
  * @returns série de nombres de longueur `n`, avec moyenne exacte = `mean` et étendue exacte = `range`
+ * @author Jean-Claude Lhote
  */
 export function creerSerieDeMoyenneEtEtendue({
   mean,
@@ -1055,7 +1069,12 @@ export function creerSerieDeMoyenneEtEtendue({
   // Mélanger la série avant de la retourner
   return shuffle(serie)
 }
-
+/**
+ * @author Jean-Claude Lhote
+ * @param values
+ * @param n
+ * @returns
+ */
 export function creerSerieDeValeurs(
   values: number[],
   n: number,

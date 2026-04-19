@@ -5,7 +5,7 @@ import { StoreIep } from './Alea2iep'
 export class ElementInstrumenpoche extends HTMLElement {
   constructor() {
     super()
-    const id = this.getAttribute('id')
+    const id = this.getAttribute('id') ?? ''
     const xml = StoreIep.getXml(id)
     const divIep = document.createElement('div')
     this.appendChild(divIep)
@@ -17,7 +17,7 @@ export class ElementInstrumenpoche extends HTMLElement {
 export class ElementButtonInstrumenpoche extends HTMLElement {
   constructor() {
     super()
-    const id = this.getAttribute('id')
+    const id = this.getAttribute('id') ?? ''
     const xml = StoreIep.getXml(id)
     const divIep = document.createElement('div')
     divIep.classList.add('max-w-xl')
@@ -69,13 +69,14 @@ export class ElementButtonInstrumenpoche extends HTMLElement {
   }
 }
 
-async function loadIep(container, xml, options = {}) {
+async function loadIep(
+  container: HTMLElement,
+  xml: string,
+  options: Record<string, unknown> = {},
+) {
   try {
     const { default: iepLoadPromise } = await import('instrumenpoche')
     await iepLoadPromise(container, xml, options)
-    // la figure est chargée et l'animation lancée, si l'on veut rester en pause au début
-    // (en attendant une option autostart)
-    // le premier doc (le seul pour le moment)
   } catch (error) {
     // gérer l'erreur pour prévenir l'utilisateur du pb
   }
