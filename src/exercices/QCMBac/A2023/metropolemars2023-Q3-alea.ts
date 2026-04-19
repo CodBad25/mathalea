@@ -33,8 +33,8 @@ export default class metropoleSept2024Ex4Q1 extends ExerciceQcm {
     ]
 
     this.enonce = this.sup3
-      ? `Un jeu vidéo possède une vaste communauté de joueurs en ligne.<br> Avant de débuter une partie, le joueur doit choisir entre deux "mondes" : soit le monde A, soit le monde B.
-<br>On choisit au hasard un individu dans la communauté des joueurs.<br>
+      ? `Un jeu vidéo possède une vaste communauté de joueurs en ligne.<br> Avant de débuter une partie, le joueur doit choisir entre deux "mondes" : soit le monde A, soit le monde B.<br>
+On choisit au hasard un individu dans la communauté des joueurs.<br>
 Lorsqu'il joue une partie, on admet que :<br>
 $\\bullet~~$ la probabilité que le joueur choisisse le monde A est égale à $\\dfrac25$ ;<br>
 $\\bullet~~$ si le joueur choisit le monde A, la probabilité qu'il gagne la partie est de $\\dfrac{7}{10}$ ;<br>
@@ -51,7 +51,7 @@ $\\bullet~~$ $G$ :  "Le joueur gagne la partie" .<br><br>`
     this.correction =
       'On utilise la loi binomiale avec $n = 10$ et $p = \\dfrac{12}{25}$ :<br>'
     this.correction +=
-      '$P(X = 6) = \\binom{10}{6} \\left(\\dfrac{12}{25}\\right)^6 \\left(\\dfrac{13}{25}\\right)^4 \\approx 0,188.$<br>'
+      '$P(X = 6) = \\binom{10}{6} \\left(\\dfrac{12}{25}\\right)^6 \\left(\\dfrac{13}{25}\\right)^4 \\approx 0,188$.<br>'
     this.correction += `La bonne réponse est donc $${miseEnEvidence('0,188')}$.`
   }
 
