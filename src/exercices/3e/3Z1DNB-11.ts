@@ -3,7 +3,7 @@ import { codageAngleDroit } from '../../lib/2d/CodageAngleDroit'
 import { colorToLatexOrHTML } from '../../lib/2d/colorToLatexOrHtml'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { placeLatexSurSegment } from '../../lib/2d/placeLatexSurSegment'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { polygone } from '../../lib/2d/polygones'
 import { cone, ellipse } from '../../lib/2d/projections3d'
 import { segment } from '../../lib/2d/segmentsVecteurs'
@@ -82,9 +82,9 @@ export default class ExercicePolynesie392024 extends ExerciceBrevetA {
     this.enonce += '<br>'
     this.enonce += texteGras('Partie A')
     this.enonce += '<br>'
-    const O = point(0, 0, 'O', 'below')
-    const M = point(2, 0, 'M', 'right')
-    const S = point(0, 6, 'S', 'above')
+    const O = pointAbstrait(0, 0, 'O', 'below')
+    const M = pointAbstrait(2, 0, 'M', 'right')
+    const S = pointAbstrait(0, 6, 'S', 'above')
     const os = segment(O, S)
     os.pointilles = 2
     const om = segment(O, M)
@@ -108,9 +108,9 @@ export default class ExercicePolynesie392024 extends ExerciceBrevetA {
       { largeur1: 60, widthmincol1: '400px', widthmincol2: '200px' },
     )
     this.enonce += intro
-    const S2 = point(0, 0, 'S', 'below')
-    const M1 = point(3, 2, 'M', 'right')
-    const M2 = point(-3, 2, "M'", 'left')
+    const S2 = pointAbstrait(0, 0, 'S', 'below')
+    const M1 = pointAbstrait(3, 2, 'M', 'right')
+    const M2 = pointAbstrait(-3, 2, "M'", 'left')
     const labels2 = labelPoint(S2, M1, M2)
     const secteur = arc(M1, S2, M2, true)
     const circo2 = Math.round(2 * Math.PI * SM * 10) / 10
@@ -155,11 +155,11 @@ export default class ExercicePolynesie392024 extends ExerciceBrevetA {
 \\text{Longueur de l'arc } \\overset{\\displaystyle\\frown}{M'M} \\text{(en centimètres)} & ${texNombre(circo2, 1)} & ${texNombre(circo1, 1)}\\\\
 \\hline
 \\end{array}$`
-    const O3 = point(0, 0)
-    const S3 = point(0, -6)
-    const M3 = point(2, 0)
+    const O3 = pointAbstrait(0, 0)
+    const S3 = pointAbstrait(0, -6)
+    const M3 = pointAbstrait(2, 0)
     const cone3 = cone({ centre: O3, rx: 2, hauteur: -6 })
-    const O2 = point(0, -6 * (1 - rapport.num / rapport.den))
+    const O2 = pointAbstrait(0, -6 * (1 - rapport.num / rapport.den))
 
     const cone2 = cone({
       centre: O2,
@@ -169,11 +169,11 @@ export default class ExercicePolynesie392024 extends ExerciceBrevetA {
       opaciteDeRemplissage: 1,
     })
     const base = ellipse(O3, 2, 2 / 3)
-    const N2 = point(
+    const N2 = pointAbstrait(
       (2 * rapport.num) / rapport.den,
       -6 * (1 - rapport.num / rapport.den),
     )
-    const M4 = point(
+    const M4 = pointAbstrait(
       (-2 * rapport.num) / rapport.den,
       -6 * (1 - rapport.num / rapport.den),
     )
@@ -185,15 +185,15 @@ export default class ExercicePolynesie392024 extends ExerciceBrevetA {
     h3.pointilles = 2
     const angDr3 = codageAngleDroit(S3, O3, M3)
     const angDr2 = codageAngleDroit(S3, O2, N2)
-    const tri34 = polygone(point(0, -6), N2, M4)
+    const tri34 = polygone(pointAbstrait(0, -6), N2, M4)
     tri34.couleurDeRemplissage = colorToLatexOrHTML('lightgray')
     tri34.epaisseur = 0
-    const fl1G = point(0, 1)
-    const fl1D = point(2, 1)
-    const fl2H = point(2.5, 0)
-    const fl2B = point(2.5, -6)
-    const fl3H = point(1.5, -6 * (1 - rapport.num / rapport.den))
-    const fl3B = point(1.5, -6)
+    const fl1G = pointAbstrait(0, 1)
+    const fl1D = pointAbstrait(2, 1)
+    const fl2H = pointAbstrait(2.5, 0)
+    const fl2B = pointAbstrait(2.5, -6)
+    const fl3H = pointAbstrait(1.5, -6 * (1 - rapport.num / rapport.den))
+    const fl3B = pointAbstrait(1.5, -6)
     const fl1 = segment(fl1G, fl1D)
     const fl2 = segment(fl2H, fl2B)
     const fl3 = segment(fl3H, fl3B)

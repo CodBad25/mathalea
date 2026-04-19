@@ -1,5 +1,5 @@
 import { droite } from '../../lib/2d/droites'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { segment } from '../../lib/2d/segmentsVecteurs'
 import { rotation } from '../../lib/2d/transformations'
 import { longueur } from '../../lib/2d/utilitairesGeometriques'
@@ -58,13 +58,13 @@ export default class TracerTriangle2Angles extends Exercice {
         p[0] + p[1] + p[2]
       }}=${angle2}^\\circ$.`
       texte += `<br> Mesurer $${p[0] + p[2]}$ et $${p[1] + p[2]}$.`
-      // const A0 = point(0, 0, p[0], 'left')
-      const B0 = point(c, 0, p[1], 'right')
+      // const A0 = pointAbstrait(0, 0, p[0], 'left')
+      const B0 = pointAbstrait(c, 0, p[1], 'right')
       // const s0 = segmentAvecExtremites(A0, B0)
       // const t1 = afficheLongueurSegment(B0, A0)
 
-      const A1 = point(B0.x + 4, 0, p[0], 'left')
-      const B1 = point(A1.x + c, 0, p[1], 'right')
+      const A1 = pointAbstrait(B0.x + 4, 0, p[0], 'left')
+      const B1 = pointAbstrait(A1.x + c, 0, p[1], 'right')
       const s1 = segment(A1, B1)
       s1.styleExtremites = '-|'
       // const c1 = rotation(B1, A1, angle1)
@@ -72,8 +72,8 @@ export default class TracerTriangle2Angles extends Exercice {
       // const s2 = segment(A1, C1)
       // const t2 = afficheMesureAngle(B1, A1, C1)
 
-      const A2 = point(B1.x + 4, 0, p[0], 'left')
-      const B2 = point(A2.x + c, 0, p[1], 'right')
+      const A2 = pointAbstrait(B1.x + 4, 0, p[0], 'left')
+      const B2 = pointAbstrait(A2.x + c, 0, p[1], 'right')
       // const s3 = segment(A2, B2)
       const c2 = rotation(B2, A2, angle1)
       const C2 = pointSurSegment(c2, A2, -3)

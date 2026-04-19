@@ -1,7 +1,7 @@
 import { BoiteBuilder } from '../../lib/2d/BoiteBuilder'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { grille } from '../../lib/2d/Grille'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { nommePolygone, polygone } from '../../lib/2d/polygones'
 import { texteParPosition } from '../../lib/2d/textes'
 import { bleuMathalea } from '../../lib/colors'
@@ -22,7 +22,7 @@ export function flatArrayToPolygone(
 ) {
   const sommets = []
   for (let i = 0; i < flat.length; i += 2) {
-    sommets.push(point(flat[i], flat[i + 1]))
+    sommets.push(pointAbstrait(flat[i], flat[i + 1]))
   }
   const pol = polygone(...sommets)
   if (typeof noms === 'string') {

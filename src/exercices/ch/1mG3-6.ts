@@ -5,7 +5,7 @@ import {
 } from '../../lib/2d/CodageAngleDroit'
 import { droite } from '../../lib/2d/droites'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { polygone } from '../../lib/2d/polygones'
 import { segment } from '../../lib/2d/segmentsVecteurs'
 import { labelPoint } from '../../lib/2d/textes'
@@ -123,7 +123,7 @@ export default class RelationsMetriquesTriangleRectangle extends Exercice {
 
       // Original code with quadrant-based label adjustments:
 
-      const center = point(0, 0) // Define the center of rotation
+      const center = pointAbstrait(0, 0) // Define the center of rotation
       let angle = 90
       let angle2 = 0
       if (this.sup3 === true) {
@@ -135,11 +135,11 @@ export default class RelationsMetriquesTriangleRectangle extends Exercice {
 
       // For point D, base anchor is "below right"
       const labelD = adjustedAnchor('below right', angle2)
-      const D = rotation(point(r, 0), center, angle2, 'D', labelD)
+      const D = rotation(pointAbstrait(r, 0), center, angle2, 'D', labelD)
 
       // For point A, base anchor is "below left"
       const labelA = adjustedAnchor('below left', angle2)
-      const A = rotation(point(-r, 0), center, angle2, 'A', labelA)
+      const A = rotation(pointAbstrait(-r, 0), center, angle2, 'A', labelA)
 
       // For point E, the base anchor depends on the value of angle
       const baseE = angle < 0 ? 'below right' : 'above left'
@@ -154,7 +154,7 @@ export default class RelationsMetriquesTriangleRectangle extends Exercice {
       const labelB = adjustedAnchor(baseB, angle2)
       const B = projectionOrtho(E, dAD, 'B', labelB)
 
-      const C = D // point(AC, 0, 'C', 'below')
+      const C = D // pointAbstrait(AC, 0, 'C', 'below')
       const ADE = polygone(A, D, E)
       const ADESED = segment(E, D, bleuMathalea)
       const ADESAD = segment(A, D)

@@ -3,7 +3,7 @@ import { cercle } from '../../lib/2d/cercle'
 import { codageAngleDroit } from '../../lib/2d/CodageAngleDroit'
 import { colorToLatexOrHTML } from '../../lib/2d/colorToLatexOrHtml'
 import { droite, droiteVerticaleParPoint } from '../../lib/2d/droites'
-import { point, PointAbstrait } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait, PointAbstrait } from '../../lib/2d/PointAbstrait'
 import {
   NommePolygone,
   Polygone,
@@ -251,13 +251,13 @@ export default class ProblemesTrigoLongueur extends Exercice {
           )
           numA = randint(1, 26, [4, 5, 15, 23, 24, 25])
           ordA = sensV * randint(5, 9)
-          A = point(0, ordA, lA)
+          A = pointAbstrait(0, ordA, lA)
           numB = randint(1, 26, [4, 5, 15, 23, 24, 25, numA])
-          B = point(0, 0, lB)
+          B = pointAbstrait(0, 0, lB)
           AB = lA + lB
           numC = randint(1, 26, [4, 5, 15, 23, 24, 25, numA, numB])
           absC = sensH * randint(5, 9)
-          C = point(
+          C = pointAbstrait(
             absC,
             0,
             lC,
@@ -271,13 +271,13 @@ export default class ProblemesTrigoLongueur extends Exercice {
           )
           numS = randint(1, 26, [4, 5, 15, 23, 24, 25, numA, numB, numC])
           absS = randint(3, 7)
-          S = point(absC + sensH * absS, 0, lS)
+          S = pointAbstrait(absC + sensH * absS, 0, lS)
           p = polygoneAvecNom(A, B, S)
           R = polygoneAvecNom(
-            point(absC, -1 * sensV),
-            point(absC + sensH * absS, -1 * sensV),
-            point(absC + sensH * absS, ordA + sensV),
-            point(absC, ordA + sensV),
+            pointAbstrait(absC, -1 * sensV),
+            pointAbstrait(absC + sensH * absS, -1 * sensV),
+            pointAbstrait(absC + sensH * absS, ordA + sensV),
+            pointAbstrait(absC, ordA + sensV),
           )
           R[0].color = context.isHtml
             ? colorToLatexOrHTML(bleuMathalea)
@@ -664,7 +664,7 @@ export default class ProblemesTrigoLongueur extends Exercice {
           else if (taille < 50) index = 1
           else if (taille < 100) index = 2
           else index = 3
-          A = point(0, 0, lA)
+          A = pointAbstrait(0, 0, lA)
           ordA = sensH * randint(10, 14)
           B = pointAdistance(A, ordA, 0, lB)
           absC = choice([2.5, 3, 3.5])
@@ -951,7 +951,7 @@ export default class ProblemesTrigoLongueur extends Exercice {
           distance = randint(5, 10)
           taille = beta * distance
           numB = randint(1, 26, [4, 5, 15, 23, 24, 25])
-          B = point(0, 0, lB)
+          B = pointAbstrait(0, 0, lB)
           numS = randint(1, 26, [4, 5, 15, 23, 24, 25, numB])
           absS = sensH * randint(4, 6)
           S = pointAdistance(B, absS, 0, lS)
@@ -1301,7 +1301,7 @@ export default class ProblemesTrigoLongueur extends Exercice {
               Math.sin(((beta - alpha) * Math.PI) / 180),
           )
 
-          B = point(0, 0, lB)
+          B = pointAbstrait(0, 0, lB)
           absC = sensH * randint(4, 6)
           C = pointAdistance(B, absC, 0, lC)
           absS = sensH * randint(10, 14)
@@ -1680,9 +1680,9 @@ export default class ProblemesTrigoLongueur extends Exercice {
             const AD = randint(5, 9)
             const AE = randint(AD + 1, AD + 4)
             const AC = randint(3, AD - 1)
-            const A = point(0, 0, 'A', 'below left')
-            const C = point(AC, 0, 'C', 'below')
-            const D = point(AD, 0, 'D', 'below right')
+            const A = pointAbstrait(0, 0, 'A', 'below left')
+            const C = pointAbstrait(AC, 0, 'C', 'below')
+            const D = pointAbstrait(AD, 0, 'D', 'below right')
             const dDE = droiteVerticaleParPoint(D)
             const cAE = cercle(A, AE)
             const E = pointIntersectionLC(dDE, cAE, 'E')

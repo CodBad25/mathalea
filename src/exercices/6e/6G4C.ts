@@ -1,7 +1,7 @@
 import { afficheMesureAngle } from '../../lib/2d/AfficheMesureAngle'
 import { cibleCouronne } from '../../lib/2d/cibles'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { segment } from '../../lib/2d/segmentsVecteurs'
 import { sensDeRotation } from '../../lib/2d/SensDeRotation'
 import { texteParPoint } from '../../lib/2d/textes'
@@ -92,8 +92,8 @@ export default class ConstruireUnAngle extends Exercice {
       } else {
         texte += "inverse des aiguilles d'une montre.<br>"
       }
-      A = point(0, 0)
-      B = point(5, 0)
+      A = pointAbstrait(0, 0)
+      B = pointAbstrait(5, 0)
       B = rotation(B, A, anglerot)
       Apos = texteParPoint(
         p[1],

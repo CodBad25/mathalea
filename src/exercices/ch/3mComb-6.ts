@@ -1,5 +1,5 @@
 import { grille } from '../../lib/2d/Grille'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { labelPoint } from '../../lib/2d/textes'
 import { tracePoint } from '../../lib/2d/TracePoint'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
@@ -91,8 +91,8 @@ export default class CheminsQuadrillage extends Exercice {
         reponse = combinaison(total, droite)
 
         const g = grille(0, 0, droite, haut, 'gray', 1, 1)
-        const A = point(0, 0, 'A', 'below')
-        const B = point(droite, haut, 'B', 'above')
+        const A = pointAbstrait(0, 0, 'A', 'below')
+        const B = pointAbstrait(droite, haut, 'B', 'above')
         const objets = [g, tracePoint(A, B), labelPoint(A, B)]
         const grilleSVG = mathalea2d(
           {
@@ -133,9 +133,9 @@ export default class CheminsQuadrillage extends Exercice {
         const totalDroite = droite1 + droite2
         const totalHaut = haut1 + haut2
         const g = grille(0, 0, totalDroite, totalHaut, 'gray', 1, 1)
-        const A = point(0, 0, 'A', 'below')
-        const M = point(droite1, haut1, pointIntermediaire, 'above')
-        const B = point(totalDroite, totalHaut, 'B', 'above')
+        const A = pointAbstrait(0, 0, 'A', 'below')
+        const M = pointAbstrait(droite1, haut1, pointIntermediaire, 'above')
+        const B = pointAbstrait(totalDroite, totalHaut, 'B', 'above')
         const objets = [g, tracePoint(A, M, B), labelPoint(A, M, B)]
         const grilleSVG = mathalea2d(
           {
@@ -182,9 +182,9 @@ export default class CheminsQuadrillage extends Exercice {
         reponse = totalChemins - cheminsInterdits
 
         const g = grille(0, 0, droite, haut, 'gray', 1, 1)
-        const A = point(0, 0, 'A', 'below')
-        const B = point(droite, haut, 'B', 'above')
-        const F = point(xInterdit, yInterdit, '✕', 'above')
+        const A = pointAbstrait(0, 0, 'A', 'below')
+        const B = pointAbstrait(droite, haut, 'B', 'above')
+        const F = pointAbstrait(xInterdit, yInterdit, '✕', 'above')
         const objets = [g, tracePoint(A, B, F), labelPoint(A, B, F)]
         const grilleSVG = mathalea2d(
           {

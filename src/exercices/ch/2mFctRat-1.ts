@@ -4,7 +4,7 @@ import {
   droiteHorizontaleParPoint,
   droiteVerticaleParPoint,
 } from '../../lib/2d/droites'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { repere } from '../../lib/2d/reperes'
 import { texteParPosition } from '../../lib/2d/textes'
 import type { TracePoint } from '../../lib/2d/TracePoint'
@@ -147,7 +147,7 @@ export default class ExerciceTangenteCourbe extends Exercice {
       courbe2.color = colorToLatexOrHTML('red')
       courbe2.epaisseur = 1
       const asymptoteVerticale = droiteVerticaleParPoint(
-        point(xInterdit, 0),
+        pointAbstrait(xInterdit, 0),
         '',
         bleuMathalea,
       )
@@ -156,7 +156,7 @@ export default class ExerciceTangenteCourbe extends Exercice {
       asymptoteVerticale.pgfplotsOptions = 'dashed'
       const yAsymptote = a / c
       const asymptoteHorizontale = droiteHorizontaleParPoint(
-        point(0, yAsymptote),
+        pointAbstrait(0, yAsymptote),
         '',
         bleuMathalea,
       )
@@ -167,7 +167,7 @@ export default class ExerciceTangenteCourbe extends Exercice {
       const intersectionPoints: TracePoint[] = []
       if (a !== 0) {
         const xZero = -b / a
-        const pointIntersectionX = tracePoint(point(xZero, 0), 'green')
+        const pointIntersectionX = tracePoint(pointAbstrait(xZero, 0), 'green')
         pointIntersectionX.style = 'x'
         pointIntersectionX.taille = 4
         pointIntersectionX.tailleTikz = pointIntersectionX.taille / 15
@@ -178,7 +178,7 @@ export default class ExerciceTangenteCourbe extends Exercice {
       }
       if (d !== 0) {
         const yZero = b / d
-        const pointIntersectionY = tracePoint(point(0, yZero), 'green')
+        const pointIntersectionY = tracePoint(pointAbstrait(0, yZero), 'green')
         pointIntersectionY.style = 'x'
         pointIntersectionY.taille = 4
         pointIntersectionY.tailleTikz = pointIntersectionY.taille / 15

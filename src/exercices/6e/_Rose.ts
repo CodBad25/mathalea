@@ -1,5 +1,5 @@
 import { colorToLatexOrHTML } from '../../lib/2d/colorToLatexOrHtml'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { polygoneRegulierParCentreEtRayon } from '../../lib/2d/polygonesParticuliers'
 import { Segment, segment } from '../../lib/2d/segmentsVecteurs'
 import {
@@ -318,9 +318,9 @@ export class Rose {
       } else this.rayonBoite = 1
     }
     const objets = []
-    const O = point(0, 0, '', '')
+    const O = pointAbstrait(0, 0, '', '')
     const A = rotation(
-      point(this.rayon, 0, '', ''),
+      pointAbstrait(this.rayon, 0, '', ''),
       O,
       180 / this.nombreDeValeurs - 90,
       'A',

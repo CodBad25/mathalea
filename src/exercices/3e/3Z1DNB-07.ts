@@ -1,7 +1,7 @@
 import { codageAngleDroit } from '../../lib/2d/CodageAngleDroit'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { placeLatexSurSegment } from '../../lib/2d/placeLatexSurSegment'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { polygone } from '../../lib/2d/polygones'
 import { segment } from '../../lib/2d/segmentsVecteurs'
 import { labelPoint } from '../../lib/2d/textes'
@@ -59,7 +59,7 @@ export default class ExercicePythThalTrigo extends ExerciceBrevetA {
   ): void {
     const da = ((dk + kl) * dj) / dk
     this.enonce = `Sur la figure ci-après, qui n'est pas à l'échelle, on a représenté le trajet de la course que doit faire ${prenom}.<br>`
-    const flecheDL = segment(point(0, 0.7), point(5, 6))
+    const flecheDL = segment(pointAbstrait(0, 0.7), pointAbstrait(5, 6))
     flecheDL.styleExtremites = '<->'
     flecheDL.pointilles = 2
     const lDL = placeLatexSurSegment(
@@ -68,10 +68,10 @@ export default class ExercicePythThalTrigo extends ExerciceBrevetA {
       flecheDL.extremite2,
       { distance: 0.5 },
     )
-    const D = point(1, 0, 'D', 'below')
-    const L = point(6, 5.5, 'L', 'above')
+    const D = pointAbstrait(1, 0, 'D', 'below')
+    const L = pointAbstrait(6, 5.5, 'L', 'above')
     const K = homothetie(L, D, 0.6, 'K', 'above left')
-    const A = point(9, 3, 'A', 'right')
+    const A = pointAbstrait(9, 3, 'A', 'right')
     const J = homothetie(A, D, 0.6, 'J', 'below right')
     const triangle = polygone(D, L, A)
     const ad = codageAngleDroit(D, L, A)

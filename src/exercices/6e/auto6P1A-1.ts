@@ -4,7 +4,7 @@ import { colorToLatexOrHTML } from '../../lib/2d/colorToLatexOrHtml'
 import { traceBarre, traceGraphiqueCartesien } from '../../lib/2d/diagrammes'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { motifs } from '../../lib/2d/pattern'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { carre } from '../../lib/2d/polygonesParticuliers'
 import { repere } from '../../lib/2d/reperes'
 import { segment } from '../../lib/2d/segmentsVecteurs'
@@ -186,9 +186,9 @@ export default class LireUnDiagramme extends Exercice {
 
       switch (listeTypeDeQuestions[q]) {
         case 1:
-          A = point(0, 0)
-          B = point(6, 0)
-          T = point(7, 0)
+          A = pointAbstrait(0, 0)
+          B = pointAbstrait(6, 0)
+          T = pointAbstrait(7, 0)
           a0 = cercleCentrePoint(A, B, 'black')
           objets.push(a0)
           alpha = 90
@@ -241,9 +241,9 @@ export default class LireUnDiagramme extends Exercice {
           }
           break
         case 2:
-          A = point(0, 0)
-          B = point(6, 0)
-          T = point(7, 0)
+          A = pointAbstrait(0, 0)
+          B = pointAbstrait(6, 0)
+          T = pointAbstrait(7, 0)
           a0 = arc(B, A, 180, true, 'white', 'black')
           objets.push(a0)
           alpha = 0

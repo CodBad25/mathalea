@@ -1,7 +1,7 @@
 import { cercle } from '../../lib/2d/cercle'
 import { Droite, droite, droiteParPointEtParallele } from '../../lib/2d/droites'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { polygone } from '../../lib/2d/polygones'
 import { segment } from '../../lib/2d/segmentsVecteurs'
 import { labelPoint, latex2d } from '../../lib/2d/textes'
@@ -69,11 +69,11 @@ export default class Exercice3G2DNB0 extends ExerciceBrevetA {
     const rayonFrac = new FractionEtendue(rayon * 10, 10).simplifie()
     const rayonFracCarre = rayonFrac.produitFraction(rayonFrac)
     const aireDisque = rayon ** 2 * Math.PI
-    const pointO = point(0, 0, O, 'below')
-    const pointB = point(-rayon, 0, B, 'left')
-    const pointA = point(rayon, 0, A, 'right')
+    const pointO = pointAbstrait(0, 0, O, 'below')
+    const pointB = pointAbstrait(-rayon, 0, B, 'left')
+    const pointA = pointAbstrait(rayon, 0, A, 'right')
     const C = cercle(pointO, rayon)
-    const pointE = point(rayon - rayon * 2 * ratio, 0, E, 'below')
+    const pointE = pointAbstrait(rayon - rayon * 2 * ratio, 0, E, 'below')
     const C2 = cercle(pointB, BD)
     const pointD = pointIntersectionCC(C, C2, D, 1)
     if (!pointD) {

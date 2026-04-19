@@ -1,7 +1,7 @@
 import { colorToLatexOrHTML } from '../../lib/2d/colorToLatexOrHtml'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { grille } from '../../lib/2d/Grille'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { carre } from '../../lib/2d/polygonesParticuliers'
 import { Polyquad } from '../../lib/2d/Polyquad'
 import { segment } from '../../lib/2d/segmentsVecteurs'
@@ -122,8 +122,8 @@ export default class AireParComptage extends Exercice {
       )
 
       const visuelUniteLongueur = segment(
-        point(xmax - (2 + decalageVisuelAire), ymin + 1),
-        point(xmax - (1 + decalageVisuelAire), ymin + 1),
+        pointAbstrait(xmax - (2 + decalageVisuelAire), ymin + 1),
+        pointAbstrait(xmax - (1 + decalageVisuelAire), ymin + 1),
       )
       visuelUniteLongueur.epaisseur = 1.5
       visuelUniteLongueur.styleExtremites = '|-|'
@@ -136,8 +136,8 @@ export default class AireParComptage extends Exercice {
       )
 
       const visuelUniteAire = carre(
-        point(xmax - 2, ymin + 1),
-        point(xmax - 1, ymin + 1),
+        pointAbstrait(xmax - 2, ymin + 1),
+        pointAbstrait(xmax - 1, ymin + 1),
       )
       visuelUniteAire.couleurDeRemplissage = colorToLatexOrHTML('gray')
       const texteUniteAire = latex2d(

@@ -1,5 +1,5 @@
 import { demiDroite } from '../../lib/2d/DemiDroite'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { tracePoint } from '../../lib/2d/TracePoint'
 import { codageAngle } from '../../lib/2d/angles'
 import { texteParPoint } from '../../lib/2d/textes'
@@ -79,7 +79,7 @@ export default class ReconnaitreUnAngleParticulier extends Exercice {
       const indiceNomC = randint(1, 26, [indiceNomA, indiceNomB])
       const distanceAB = 3
       const distanceCB = this.sup ? 3 : 4
-      const A = point(0, 0, lettreDepuisChiffre(indiceNomA))
+      const A = pointAbstrait(0, 0, lettreDepuisChiffre(indiceNomA))
       let B = pointAdistance(A, distanceAB, lettreDepuisChiffre(indiceNomB))
       switch (listeTypeQuestions[i]) {
         case 'nul':
@@ -104,7 +104,7 @@ export default class ReconnaitreUnAngleParticulier extends Exercice {
             'Un angle droit est un angle dont la mesure est égale à 90°.'
           break
         case 'obtus':
-          B = point(
+          B = pointAbstrait(
             A.x + distanceAB * degCos(randint(-30, 30)),
             A.y + distanceAB * degSin(randint(-30, 30)),
             lettreDepuisChiffre(indiceNomB),
@@ -121,7 +121,7 @@ export default class ReconnaitreUnAngleParticulier extends Exercice {
           break
         case 'plat':
         default:
-          B = point(
+          B = pointAbstrait(
             A.x + distanceAB * degCos(randint(-30, 30)),
             A.y + distanceAB * degSin(randint(-30, 30)),
             lettreDepuisChiffre(indiceNomB),

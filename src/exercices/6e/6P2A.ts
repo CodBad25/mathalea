@@ -1,4 +1,4 @@
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { segment } from '../../lib/2d/segmentsVecteurs'
 import { latex2d, texteParPosition } from '../../lib/2d/textes'
 import { tracePoint } from '../../lib/2d/TracePoint'
@@ -342,7 +342,7 @@ export default class PlacerProbabilitesV2 extends Exercice {
           'milieu',
         ),
       )
-      lstObjetCorr.push(tracePoint(point(L * p, 0), bleuMathalea))
+      lstObjetCorr.push(tracePoint(pointAbstrait(L * p, 0), bleuMathalea))
     }
     for (let i = 0; i < nbEvenement; i++) {
       p = lstEvenenementExo[i][1]

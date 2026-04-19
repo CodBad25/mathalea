@@ -4,7 +4,7 @@ import { cercle } from '../../lib/2d/cercle'
 import { codageAngleDroit } from '../../lib/2d/CodageAngleDroit'
 import { codageSegments } from '../../lib/2d/CodageSegment'
 import { droite, droiteParPointEtPerpendiculaire } from '../../lib/2d/droites'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { Polygone, polygone } from '../../lib/2d/polygones'
 import { polygoneRegulier } from '../../lib/2d/polygonesParticuliers'
 import { segment } from '../../lib/2d/segmentsVecteurs'
@@ -164,7 +164,7 @@ export default class ExercicePerimetresEtAires extends Exercice {
           listeDeNomsDePolygones.push(nomCarre)
           if (this.sup3) {
             texte += 'de ce carré.'
-            const A = point(0, 0, nomCarre.charAt(0), 'below left')
+            const A = pointAbstrait(0, 0, nomCarre.charAt(0), 'below left')
             const B = pointAdistance(
               A,
               cote,
@@ -173,13 +173,13 @@ export default class ExercicePerimetresEtAires extends Exercice {
               'below right',
             )
             const figure = polygoneRegulier(A, B, 4) as Polygone
-            const C = point(
+            const C = pointAbstrait(
               figure.listePoints[2].x,
               figure.listePoints[2].y,
               nomCarre.charAt(2),
               'above right',
             )
-            const D = point(
+            const D = pointAbstrait(
               figure.listePoints[3].x,
               figure.listePoints[3].y,
               nomCarre.charAt(3),
@@ -284,7 +284,7 @@ export default class ExercicePerimetresEtAires extends Exercice {
           listeDeNomsDePolygones.push(nomRectangle)
           if (this.sup3) {
             texte += 'de ce rectangle.'
-            const A = point(0, 0, nomRectangle.charAt(0), 'below left')
+            const A = pointAbstrait(0, 0, nomRectangle.charAt(0), 'below left')
             const B = pointAdistance(
               A,
               L,
@@ -418,7 +418,7 @@ export default class ExercicePerimetresEtAires extends Exercice {
             texte += 'de ce triangle rectangle.'
             const zoom =
               (randint(4, 8) + randint(4, 8) * 0.1) / Math.max(a, b, c)
-            const A = point(0, 0, nomTriangle.charAt(0), 'below left')
+            const A = pointAbstrait(0, 0, nomTriangle.charAt(0), 'below left')
             const B = pointAdistance(
               A,
               a * zoom,
@@ -426,8 +426,8 @@ export default class ExercicePerimetresEtAires extends Exercice {
               nomTriangle.charAt(1),
               'below right',
             )
-            // const B = point(a * zoom, 0, nomTriangle.charAt(1), 'below right')
-            // const C = point(0, b * zoom, nomTriangle.charAt(2), 'above left')
+            // const B = pointAbstrait(a * zoom, 0, nomTriangle.charAt(1), 'below right')
+            // const C = pointAbstrait(0, b * zoom, nomTriangle.charAt(2), 'above left')
             const C = pointIntersectionCC(
               cercle(A, b * zoom),
               cercle(B, c * zoom),
@@ -511,7 +511,7 @@ export default class ExercicePerimetresEtAires extends Exercice {
             texte += 'de ce disque. '
             const nomCercle = creerNomDePolygone(4, listeDeNomsDePolygones)
             listeDeNomsDePolygones.push(nomCercle)
-            const A = point(0, 0, nomCercle.charAt(0), 'below left')
+            const A = pointAbstrait(0, 0, nomCercle.charAt(0), 'below left')
             const Rd = 3
             const figure = cercle(A, Rd)
             const B = pointSurCercle(
@@ -609,7 +609,7 @@ export default class ExercicePerimetresEtAires extends Exercice {
             texte += 'de ce demi-disque. '
             const nomCercle = creerNomDePolygone(4, listeDeNomsDePolygones)
             listeDeNomsDePolygones.push(nomCercle)
-            const A = point(0, 0, nomCercle.charAt(0), 'below left')
+            const A = pointAbstrait(0, 0, nomCercle.charAt(0), 'below left')
             const Rd = 3
             const B = pointAdistance(
               A,

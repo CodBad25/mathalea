@@ -2,7 +2,7 @@ import { afficheMesureAngle } from '../../lib/2d/AfficheMesureAngle'
 import { codageAngleDroit } from '../../lib/2d/CodageAngleDroit'
 import { droite } from '../../lib/2d/droites'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { nommePolygone, polygone } from '../../lib/2d/polygones'
 import { segment } from '../../lib/2d/segmentsVecteurs'
 import { texteParPoint } from '../../lib/2d/textes'
@@ -98,12 +98,12 @@ export default class ExprimerCosSinTan extends Exercice {
       const objetsCorrection = []
       const propositionsAMC = []
       let texteInit
-      const a = point(0, 0)
-      let b = point(0, 0)
-      let c = point(0, 0)
+      const a = pointAbstrait(0, 0)
+      let b = pointAbstrait(0, 0)
+      let c = pointAbstrait(0, 0)
       while (longueur(a, b) < 4.3 || longueur(a, c) < 4.3) {
         // Pour éviter que la zone de texte sur les segments dans la correction superposent des points
-        b = point(randint(3, 7), 0)
+        b = pointAbstrait(randint(3, 7), 0)
         c = similitude(b, a, 90, randint(3, 7) / longueur(a, b))
       }
       const angleRot = randint(0, 360)

@@ -2,7 +2,7 @@ import { afficheMesureAngle } from '../../lib/2d/AfficheMesureAngle'
 import { codageAngleDroit } from '../../lib/2d/CodageAngleDroit'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { placeLatexSurSegment } from '../../lib/2d/placeLatexSurSegment'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { polygone } from '../../lib/2d/polygones'
 import { labelPoint } from '../../lib/2d/textes'
 import { homothetie, similitude } from '../../lib/2d/transformations'
@@ -58,9 +58,9 @@ export default class ExercicePolynesie392024 extends ExerciceBrevetA {
   ): void {
     const triangle2 = `${nom1[0]}${nom2}`
     const triangle3 = `${nom1[0]}${nom3}`
-    const N = point(0, 0, nom1[1], 'above left')
-    const O = point(6, 0, nom1[0], 'above right')
-    const M = point(
+    const N = pointAbstrait(0, 0, nom1[1], 'above left')
+    const O = pointAbstrait(6, 0, nom1[0], 'above right')
+    const M = pointAbstrait(
       0,
       -6 *
         Math.tan((MON * Math.PI) / 180) *
