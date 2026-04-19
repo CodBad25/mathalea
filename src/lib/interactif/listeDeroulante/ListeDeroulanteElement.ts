@@ -90,11 +90,8 @@ span.listeDeroulante .ko {
 
 /* Liste déroulante */
 span.listeDeroulante ul {
-  position: absolute;
-  top: 100%;
-  left: 0;
+  position: fixed;
   width: max-content;
-  min-width: 100%;
   background: #fff;
   border: 1px solid #d1d5db;
   border-radius: 0.5rem;

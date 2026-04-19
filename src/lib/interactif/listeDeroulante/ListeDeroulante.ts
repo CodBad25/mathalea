@@ -284,13 +284,11 @@ class ListeDeroulante {
    * @private
    */
   _replace() {
-    if (this.container) {
-      const height = this.container.offsetHeight
-      const widthSpan = this.spanSelected?.offsetWidth ?? 0
-      if (this.ulContainer) {
-        this.ulContainer.style.top = `${height}px`
-        this.ulContainer.style.left = `${widthSpan - (this.width ?? 0)}px`
-      }
+    if (this.container && this.ulContainer) {
+      const rect = this.container.getBoundingClientRect()
+      this.ulContainer.style.top = `${rect.bottom}px`
+      this.ulContainer.style.left = `${rect.left}px`
+      this.ulContainer.style.minWidth = `${rect.width}px`
     }
   }
 
@@ -389,8 +387,8 @@ class ListeDeroulante {
     // Si this.width n'est pas défini (ça veut dire que c'est l'init qui l'appelle) on le renseigne et on replace la liste à droite et en dessous du spanSelected.
     if (!this.width) {
       this.width = this.ulContainer?.offsetWidth
-      this._replace()
     }
+    this._replace()
     this.focus() // pour usage au clavier
   }
 
