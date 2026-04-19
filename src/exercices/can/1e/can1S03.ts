@@ -14,14 +14,10 @@ export const titre = 'Calculer un terme d’une suite récurrente*'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 
-// Les exports suivants sont optionnels mais au moins la date de publication semble essentielle
-export const dateDePublication = '15/02/2022' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
-// export const dateDeModifImportante = '24/10/2021' // Une date de modification importante au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
+export const dateDePublication = '15/02/2022'
 
 /**
- * Modèle d'exercice très simple pour la course aux nombres
  * @author Gilles Mora
-
 */
 export const uuid = 'fccb4'
 
@@ -53,7 +49,7 @@ export default class CalculTermeSuiteRec2 extends ExerciceSimple {
 
           Calculer $u_{${k}}$.`
         } else {
-          this.question += `<br> $u_{${k}}=.....$`
+          this.question += `<br> $u_{${k}}=$`
         }
 
         this.correction = `On calcule successivement les termes jusqu'à obtenir $u_{${k}}$ :`
@@ -61,13 +57,13 @@ export default class CalculTermeSuiteRec2 extends ExerciceSimple {
         if (a > 0) {
           for (let indice = 0; indice < k; indice++) {
             this.correction += `<br> $u_{${indice + 1}} = ${miseEnEvidence('u_{' + indice + '}', arcenciel(indice, true))} ${ecritureAlgebrique(a)} =
-              ${miseEnEvidence(u, arcenciel(indice, true))} + ${a} = ${miseEnEvidence(u + a, arcenciel(indice + 1, true))}$`
+              ${miseEnEvidence(u, arcenciel(indice, true))} + ${a} = ${indice === k - 1 ? miseEnEvidence(u + a) : miseEnEvidence(u + a, arcenciel(indice + 1, true))}$`
             u = u + a
           }
         } else {
           for (let indice = 0; indice < k; indice++) {
             this.correction += `<br> $u_{${indice + 1}} = ${miseEnEvidence('u_{' + indice + '}', arcenciel(indice, true))} ${ecritureAlgebrique(a)} =
-            ${miseEnEvidence(u, arcenciel(indice, true))}  ${a} = ${miseEnEvidence(u + a, arcenciel(indice + 1, true))}$`
+            ${miseEnEvidence(u, arcenciel(indice, true))}  ${a} = ${indice === k - 1 ? miseEnEvidence(u + a) : miseEnEvidence(u + a, arcenciel(indice + 1, true))}$`
             u = u + a
           }
         }
@@ -85,13 +81,13 @@ export default class CalculTermeSuiteRec2 extends ExerciceSimple {
 
           Calculer $u_{${k}}$.`
         } else {
-          this.question += `<br> $u_{${k}}=.....$`
+          this.question += `<br> $u_{${k}}=$`
         }
         this.correction = `On calcule successivement les termes jusqu'à obtenir $u_{${k}}$ :`
 
         for (let indice = 0; indice < k; indice++) {
           this.correction += `<br> $u_{${indice + 1}} = ${a}\\times ${miseEnEvidence('u_{' + indice + '}', arcenciel(indice, true))}  =
-               ${a}\\times ${miseEnEvidence(ecritureParentheseSiNegatif(u), arcenciel(indice, true))}  = ${(miseEnEvidence(u * a), arcenciel(indice + 1, true))}$`
+               ${a}\\times ${miseEnEvidence(ecritureParentheseSiNegatif(u), arcenciel(indice, true))}  = ${indice === k - 1 ? miseEnEvidence(u * a) : miseEnEvidence(u * a, arcenciel(indice + 1, true))}$`
           u = u * a
         }
 
@@ -127,13 +123,13 @@ export default class CalculTermeSuiteRec2 extends ExerciceSimple {
 
           Calculer $u_{${k}}$.`
         } else {
-          this.question += `<br> $u_{${k}}=.....$`
+          this.question += `<br> $u_{${k}}=$`
         }
 
         this.correction = `On calcule successivement les termes jusqu'à obtenir $u_{${k}}$ :`
         for (let indice = 0; indice < k; indice++) {
           this.correction += `<br> $u_{${indice + 1}} = ${texFractionFromString(n1, d1)}\\times ${miseEnEvidence('u_{' + indice + '}', arcenciel(indice, true))}  =
-          ${texFractionFromString(n1, d1)}\\times ${miseEnEvidence(ecritureParentheseSiNegatif(u), arcenciel(indice, true))}  = ${miseEnEvidence((u * n1) / d1, arcenciel(indice + 1, true))}$`
+          ${texFractionFromString(n1, d1)}\\times ${miseEnEvidence(ecritureParentheseSiNegatif(u), arcenciel(indice, true))}  = ${indice === k - 1 ? miseEnEvidence((u * n1) / d1) : miseEnEvidence((u * n1) / d1, arcenciel(indice + 1, true))}$`
           u = n1 * a * d1
         }
         this.reponse = n1 * n1 * a
@@ -152,7 +148,7 @@ export default class CalculTermeSuiteRec2 extends ExerciceSimple {
 
           Calculer $u_{${k}}$.`
         } else {
-          this.question += `<br> $u_{${k}}=.....$`
+          this.question += `<br> $u_{${k}}=$`
         }
 
         this.correction = `On calcule successivement les termes jusqu'à obtenir $u_{${k}}$ :`
@@ -160,7 +156,7 @@ export default class CalculTermeSuiteRec2 extends ExerciceSimple {
         for (let indice = 0; indice < k; indice++) {
           this.correction += `<br>$u_{${indice + 1}} = ${a}\\times ${miseEnEvidence('u_{' + indice + '}', arcenciel(indice, true))} ${ecritureAlgebrique(b)}=
             ${a} \\times ${miseEnEvidence(ecritureParentheseSiNegatif(u), arcenciel(indice, true))} ${ecritureAlgebrique(b)} =
-        ${miseEnEvidence(a * u + b, arcenciel(indice + 1, true))}$`
+        ${indice === k - 1 ? miseEnEvidence(a * u + b) : miseEnEvidence(a * u + b, arcenciel(indice + 1, true))}$`
           u = u * a + b
         }
         this.reponse = u
@@ -181,7 +177,7 @@ export default class CalculTermeSuiteRec2 extends ExerciceSimple {
         } else {
           this.question += `<br>
 
-        $u_{${k}}=.....$`
+        $u_{${k}}=$`
         }
 
         this.correction = `En utilisant la relation de récurrence pour $n=0$, on obtient :<br>
@@ -190,7 +186,7 @@ export default class CalculTermeSuiteRec2 extends ExerciceSimple {
         for (let indice = 0; indice < k; indice++) {
           this.correction += `<br> $u_{${indice + 1}} = ${a} ${signe(b)} ${miseEnEvidence('u_{' + indice + '}', arcenciel(indice, true))}^2=`
           this.correction += `${a} ${signe(b)} ${miseEnEvidence(ecritureParentheseSiNegatif(u), arcenciel(indice, true))}^2 =
-              ${miseEnEvidence(texNombre(a + b * u * u), arcenciel(indice + 1, true))}$`
+              ${indice === k - 1 ? miseEnEvidence(texNombre(a + b * u * u)) : miseEnEvidence(texNombre(a + b * u * u), arcenciel(indice + 1, true))}$`
           u = a + b * u * u
         }
         this.reponse = u
