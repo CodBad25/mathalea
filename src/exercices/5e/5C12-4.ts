@@ -38,6 +38,34 @@ type VariablesExo = Partial<
   Record<ListeVariableExo, string | number | boolean | object>
 >
 
+const normalizeExpression = (expression: string) =>
+  expression.replaceAll('_', '')
+
+const evaluateExpression = (
+  expression: string,
+  assignations: Record<string, number>,
+) => compile(normalizeExpression(expression)).run!(assignations) ?? 0
+
+const getCandidateExpressions = (
+  materiel: Materiel,
+  choix: Materiel[],
+  parentheses: boolean,
+) => {
+  const baseExpression = parentheses ? materiel.expAP : materiel.expSP
+  const expressions = [materiel.expSP]
+
+  for (const option of choix) {
+    if (
+      option.expSP === materiel.expSP &&
+      !expressions.includes(option.expAP)
+    ) {
+      expressions.push(option.expAP)
+    }
+  }
+
+  return expressions.filter((expression) => expression !== baseExpression)
+}
+
 // Les tirets bas sont placés là où il n'y a pas de parenthèses mais qu'il pourrait y en avoir une. Cela sert à placer les placeholders et à savoir à quelle position on a quelle parenthèse
 // Pour l'analyse et l'utilisation de l'expression, ces tirets bas sont remplacés par du vide.
 // test est la valeur qui vient compléter a,b,c et d afin d'obtenir des données aux petits oignons
@@ -51,44 +79,44 @@ const dicoDesExpressions: {
     {
       expSP: '_a*_b_+c_',
       expAP: '_a*(b_+c)',
-      test: (a, b, c) => a * b + c !== a * (b + c),
+      test: (a) => a !== 1,
     },
     {
       expSP: '_a+_b_*c_',
       expAP: '(a+_b)*c_',
-      test: (a, b, c) => a + b * c !== (a + b) * c,
+      test: (a, b, c) => c !== 1,
     },
     {
       expSP: '_a*_b_-c_',
       expAP: '_a*(b_-c)',
-      test: (a, b, c) => a * b - c !== a * (b - c) && b > c,
+      test: (a, b, c) => a !== 1 && b > c,
     },
     {
       expSP: '_a-_b_*c_',
       expAP: '(a-_b)*c_',
-      test: (a, b, c) => a - b * c !== (a - b) * c && a > b * c,
+      test: (a, b, c) => c !== 1 && a > b * c,
     },
   ],
   troisSignesRelatifs: [
     {
       expSP: '_a*_b_+c_',
       expAP: '_a*(b_+c)',
-      test: (a, b, c) => a * b + c !== a * (b + c),
+      test: (a, b, c) => a !== 1,
     },
     {
       expSP: '_a+_b_*c_',
       expAP: '(a+_b)*c_',
-      test: (a, b, c) => a + b * c !== (a + b) * c,
+      test: (a, b, c) => c !== 1,
     },
     {
       expSP: '_a*_b_-c_',
       expAP: '_a*(b_-c)',
-      test: (a, b, c) => a * b - c !== a * (b - c),
+      test: (a, b, c) => a !== 1,
     },
     {
       expSP: '_a-_b_*c_',
       expAP: '(a-_b)*c_',
-      test: (a, b, c) => a - b * c !== (a - b) * c,
+      test: (a, b, c) => c !== 1,
     },
   ],
   quatreSignesToutPositif: [
@@ -123,6 +151,7 @@ const dicoDesExpressions: {
         (a - b) * (c + d) !== a - b * c + d &&
         (a - b) * (c + d) !== (a - b) * c + d &&
         (a - b) * (c + d) !== a - b * (c + d) &&
+        (a - b) * (c + d) !== a - (b * c + d) &&
         a > b * c,
     },
     {
@@ -132,6 +161,7 @@ const dicoDesExpressions: {
         a - b * (c + d) !== a - b * c + d &&
         a - b * (c + d) !== (a - b) * (c + d) &&
         a - b * (c + d) !== (a - b) * c + d &&
+        a - b * (c + d) !== a - (b * c + d) &&
         a > b * (c + d),
     },
     {
@@ -141,6 +171,7 @@ const dicoDesExpressions: {
         (a - b) * c + d !== a - b * c + d &&
         (a - b) * c + d !== (a - b) * (c + d) &&
         (a - b) * c + d !== a - b * (c + d) &&
+        (a - b) * c + d !== a - (b * c + d) &&
         a > b * c,
     },
   ],
@@ -175,7 +206,8 @@ const dicoDesExpressions: {
       test: (a, b, c, d) =>
         (a - b) * (c + d) !== a - b * c + d &&
         (a - b) * (c + d) !== (a - b) * c + d &&
-        (a - b) * (c + d) !== a - b * (c + d),
+        (a - b) * (c + d) !== a - b * (c + d) &&
+        (a - b) * (c + d) !== a - (b * c + d),
     },
     {
       expSP: '_a-_b_*_c_+d_',
@@ -183,15 +215,17 @@ const dicoDesExpressions: {
       test: (a, b, c, d) =>
         a - b * (c + d) !== a - b * c + d &&
         a - b * (c + d) !== (a - b) * (c + d) &&
-        a - b * (c + d) !== (a - b) * c + d,
+        a - b * (c + d) !== (a - b) * c + d &&
+        a - b * (c + d) !== a - (b * c + d),
     },
     {
       expSP: '_a-_b_*_c_+d_',
       expAP: '(a-_b)*_c_+d_',
       test: (a, b, c, d) =>
-        (a - b) * c + d !== a - b * c + d &&
+        (a - b) * c !== a - b * c + d &&
         (a - b) * c + d !== (a - b) * (c + d) &&
-        (a - b) * c + d !== a - b * (c + d),
+        (a - b) * c + d !== a - b * (c + d) &&
+        (a - b) * c + d !== a - (b * c + d),
     },
   ],
 }
@@ -228,6 +262,7 @@ class MettreDesParentheses extends Exercice {
       melange: 3,
       defaut: 3,
     })
+    let findExp = false
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
       const choix: Materiel[] = []
       if (listeTypeDeQuestion[i] === 1) {
@@ -269,25 +304,32 @@ class MettreDesParentheses extends Exercice {
           assignations.d,
         )
       )
-
+      // On choisit de proposer une expression sans parenthèse avec une probabilité de 25%
+      const parentheses = choice([true, true, true, false])
+      const expressionCible = parentheses ? materiel.expAP : materiel.expSP
+      const resultat = evaluateExpression(expressionCible, assignations) || 0
+      findExp = false
+      if (
+        // On vérifie toutes les autres expressions possibles avec les mêmes opérandes
+        // pour être sûr que la question n'est pas ambiguë.
+        getCandidateExpressions(materiel, choix, parentheses).some(
+          (expression) =>
+            resultat === evaluateExpression(expression, assignations),
+        )
+      ) {
+        continue
+      }
+      findExp = true // On a du matériel pour faire la question, on peut sortir de la boucle de recherche
       const a = Number(assignations.a)
       const b = Number(assignations.b)
       const c = Number(assignations.c)
       const d = Number(assignations.d)
 
-      // On choisit de proposer une expression sans parenthèse avec une probabilité de 25%
-      const parentheses = choice([true, true, true, false])
       // mathjs calcule l'expression avec les valeur choisies et fournit le membre de droite de l'énoncé
-      const resultat =
-        (parentheses
-          ? (compile(materiel.expAP.replaceAll('_', '')).run!(assignations) ??
-            0)
-          : (compile(materiel.expSP.replaceAll('_', '')).run!(assignations) ??
-            0)) || 0
+
       let texte = ''
       let index = 1
       let content = ''
-
       // on fabrique la string pour le Mathfield fillInTheBlank
       for (let c = 0; c < materiel.expSP.length; c++) {
         const char = materiel.expSP[c]
@@ -311,19 +353,28 @@ class MettreDesParentheses extends Exercice {
         // test: assignations.test
       }
       const answer = parentheses
-        ? calculerCe(materiel.expAP.replaceAll('_', ''), {
+        ? calculerCe(normalizeExpression(materiel.expAP), {
             variables: valeurs,
             comment: this.correctionDetaillee,
             implicitMultiply: false,
           })
-        : calculerCe(materiel.expSP.replaceAll('_', ''), {
+        : calculerCe(normalizeExpression(materiel.expSP), {
             variables: valeurs,
             comment: this.correctionDetaillee,
             implicitMultiply: false,
           })
 
       const texteCorr: string = `${answer.texteCorr}<br>
-      Il fallait donc ${parentheses ? 'mettre des parenthèses' : 'ne pas mettre de parenthèse'} : $${miseEnEvidence(assignVariablesCe((parentheses ? materiel.expAP : materiel.expSP).replaceAll('_', ''), valeurs))}$`
+      Il fallait donc ${parentheses ? 'mettre des parenthèses' : 'ne pas mettre de parenthèse'} : $${miseEnEvidence(
+        assignVariablesCe(
+          (parentheses ? materiel.expAP : materiel.expSP).replaceAll('_', ''),
+          valeurs,
+          {
+            invisibleMultiply: '\\times',
+            multiplySymbol: '\\times',
+          },
+        ),
+      )}$`
       // La callback de correction intéractive
       const callback = (
         exercice: IExercice,
@@ -354,7 +405,10 @@ class MettreDesParentheses extends Exercice {
             laSaisie += char
           }
         }
-        const expSaisie = assignVariablesCe(laSaisie, valeurs)
+        const expSaisie = assignVariablesCe(laSaisie, valeurs, {
+          invisibleMultiply: '\\times',
+          multiplySymbol: '\\times',
+        })
         const saisieParsed = ce.parse(expSaisie)
         const isOk1 = goodAnswer.isEqual(saisieParsed) ?? false // L'expression saisie et la bonne réponse donne le même résultat, c'est trés bon signe.
         // cependant, il peut y avoir des parenthèses inutiles.
@@ -483,7 +537,7 @@ class MettreDesParentheses extends Exercice {
         }
       }
 
-      if (this.questionJamaisPosee(i, a, b, c, d, materiel.expAP)) {
+      if (findExp && this.questionJamaisPosee(i, a, b, c, d, materiel.expAP)) {
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr
         i++

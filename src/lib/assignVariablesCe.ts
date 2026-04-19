@@ -10,7 +10,7 @@ export function assignVariablesCe(
   expression: string,
   variables: Record<string, any>,
   options?: {
-    invisibleMultiply?: boolean
+    invisibleMultiply?: string
     multiplySymbol?: string
     divideSymbol?: string
     divideToFraction?: boolean
@@ -37,9 +37,8 @@ export function assignVariablesCe(
   if (typeof substituted.toLatex === 'function') {
     return substituted.toLatex({
       canonical: false,
-      invisibleMultiply: options?.invisibleMultiply ?? false,
+      invisibleMultiply: options?.invisibleMultiply ?? '',
       multiply: options?.multiplySymbol ?? '\\times',
-      implicitMultiply: 'never',
     })
   }
   return substituted.toString()
