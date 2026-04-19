@@ -1,7 +1,7 @@
 import { droite } from '../../lib/2d/droites'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { lectureAntecedent } from '../../lib/2d/LectureAntecedent'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import RepereBuilder from '../../lib/2d/RepereBuilder'
 import { latex2d, texteParPosition } from '../../lib/2d/textes'
 import { createList } from '../../lib/format/lists'
@@ -61,13 +61,13 @@ export default class ExerciceAmeriqueNord392024 extends ExerciceBrevetA {
     const xMax = Math.round((liberteAbo - essentielAbo) / essentielUnitaire) + 5
     const pointF2D =
       f2(xMax) < yMax
-        ? point(xMax, f2(xMax) / 10)
-        : point((yMax - essentielAbo) / essentielUnitaire, yMax / 10)
-    const pointF2G = point(0, essentielAbo / 10)
-    const pointF3G = point(0, liberteAbo / 10)
-    const pointF3D = point(xMax, liberteAbo / 10)
-    const pointF1G = point(0, 0)
-    const pointF1D = point(yMax / classique, yMax / 10)
+        ? pointAbstrait(xMax, f2(xMax) / 10)
+        : pointAbstrait((yMax - essentielAbo) / essentielUnitaire, yMax / 10)
+    const pointF2G = pointAbstrait(0, essentielAbo / 10)
+    const pointF3G = pointAbstrait(0, liberteAbo / 10)
+    const pointF3D = pointAbstrait(xMax, liberteAbo / 10)
+    const pointF1G = pointAbstrait(0, 0)
+    const pointF1D = pointAbstrait(yMax / classique, yMax / 10)
     const d1 = droite(pointF1G, pointF1D, '', 'red')
     const d2 = droite(pointF2G, pointF2D, '', 'green')
     const d3 = droite(pointF3G, pointF3D, '', bleuMathalea)

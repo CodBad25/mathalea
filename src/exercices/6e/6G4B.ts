@@ -1,6 +1,6 @@
 import { afficheMesureAngle } from '../../lib/2d/AfficheMesureAngle'
 import { demiDroite } from '../../lib/2d/DemiDroite'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { texteParPoint } from '../../lib/2d/textes'
 import { homothetie, rotation, similitude } from '../../lib/2d/transformations'
 import { pointSurSegment } from '../../lib/2d/utilitairesPoint'
@@ -104,8 +104,8 @@ export default class MesurerUnAngle extends Exercice {
       } else {
         texte = `Mesurer l'angle $\\widehat{${p[0] + p[1] + p[2]}}$.<br>`
       }
-      A = point(0, 0)
-      B = point(6, 0)
+      A = pointAbstrait(0, 0)
+      B = pointAbstrait(6, 0)
       B = rotation(B, A, anglerot)
 
       Bpos = texteParPoint(

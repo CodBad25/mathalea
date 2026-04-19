@@ -1,5 +1,5 @@
 import { fixeBordures } from '../../lib/2d/fixeBordures'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { createList } from '../../lib/format/lists'
 import { choice } from '../../lib/outils/arrayOutils'
 import {
@@ -93,12 +93,12 @@ export default class ExercicePolynesie592015 extends ExerciceBrevetA {
     })
     const petitL = 5
     const grandL = 12
-    const A = point(0, 0)
-    const B = point(petitL, 0)
-    const C = point(petitL, petitL)
-    const D = point(grandL, petitL)
-    const E = point(grandL, 2 * petitL)
-    const F = point(0, 2 * petitL)
+    const A = pointAbstrait(0, 0)
+    const B = pointAbstrait(petitL, 0)
+    const C = pointAbstrait(petitL, petitL)
+    const D = pointAbstrait(grandL, petitL)
+    const E = pointAbstrait(grandL, 2 * petitL)
+    const F = pointAbstrait(0, 2 * petitL)
     const segmentAB = segment(A, B)
     const segmentBC = segment(B, C)
     const segmentCD = segment(C, D)

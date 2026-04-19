@@ -1,7 +1,7 @@
 import { codageAngleDroit } from '../../lib/2d/CodageAngleDroit'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { placeLatexSurSegment } from '../../lib/2d/placeLatexSurSegment'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { polygone } from '../../lib/2d/polygones'
 import { segment } from '../../lib/2d/segmentsVecteurs'
 import { tableauColonneLigne } from '../../lib/2d/tableau'
@@ -87,22 +87,22 @@ export default class ExerciceAmeriqueNord392024 extends ExerciceBrevetA {
     const masseGravier = (masseCiment * 7) / 2
     const masseSable = (masseCiment * 5) / 2
     const surfacePeinture = surfaceTerrasse * 2
-    const AP = point(0, 0, 'A', 'below')
-    const BP = point(-1, 5, 'B', 'left')
-    const HP = point(-1, 6.5, 'H', 'above left')
-    const CP = point(8, 5.5, 'C', 'below left')
-    const GP = point(8, 7, 'G', 'above')
-    const EP = point(0, 1.5, 'E', 'above right')
-    const DP = point(9, 0.5, 'D', 'below')
-    const FP = point(9, 2, 'F', 'above right')
-    const IP = point(13.5, 0.75, 'I', 'below')
-    const JP = point(13.5, 2.25, 'J', 'above')
-    const flecheP = segment(point(13.7, 0.75), point(13.7, 2.25))
+    const AP = pointAbstrait(0, 0, 'A', 'below')
+    const BP = pointAbstrait(-1, 5, 'B', 'left')
+    const HP = pointAbstrait(-1, 6.5, 'H', 'above left')
+    const CP = pointAbstrait(8, 5.5, 'C', 'below left')
+    const GP = pointAbstrait(8, 7, 'G', 'above')
+    const EP = pointAbstrait(0, 1.5, 'E', 'above right')
+    const DP = pointAbstrait(9, 0.5, 'D', 'below')
+    const FP = pointAbstrait(9, 2, 'F', 'above right')
+    const IP = pointAbstrait(13.5, 0.75, 'I', 'below')
+    const JP = pointAbstrait(13.5, 2.25, 'J', 'above')
+    const flecheP = segment(pointAbstrait(13.7, 0.75), pointAbstrait(13.7, 2.25))
     flecheP.styleExtremites = '<->'
     const epP = placeLatexSurSegment(
       `${epaisseur}~\\mathrm{cm}`,
-      point(13.7, 2.25),
-      point(13.7, 0.75),
+      pointAbstrait(13.7, 2.25),
+      pointAbstrait(13.7, 0.75),
       { distance: 0.5, letterSize: 'small' },
     )
     const labelsP = labelPoint(AP, BP, HP, CP, GP, EP, DP, FP, IP, JP)
@@ -134,11 +134,11 @@ export default class ExerciceAmeriqueNord392024 extends ExerciceBrevetA {
       Object.assign({ pixelsParCm: 25, scale: 0.5 }, fixeBordures(objetsP)),
       objetsP,
     )
-    const ED = point(0, 0, 'E', 'below')
-    const HD = point(0, 5, 'H', 'above')
-    const JD = point(14, 0, 'J', 'below right')
-    const GD = point(9.5, 5, 'G', 'above')
-    const FD = point(9.5, 0, 'F', 'below')
+    const ED = pointAbstrait(0, 0, 'E', 'below')
+    const HD = pointAbstrait(0, 5, 'H', 'above')
+    const JD = pointAbstrait(14, 0, 'J', 'below right')
+    const GD = pointAbstrait(9.5, 5, 'G', 'above')
+    const FD = pointAbstrait(9.5, 0, 'F', 'below')
     const poly1D = polygone([ED, JD, GD, HD])
     const GFPointilles = segment(GD, FD)
     GFPointilles.pointilles = 2
@@ -162,7 +162,7 @@ export default class ExerciceAmeriqueNord392024 extends ExerciceBrevetA {
       HD,
       { distance: 0.5 },
     )
-    const flecheD = segment(point(0, -1.5), point(14, -1.5))
+    const flecheD = segment(pointAbstrait(0, -1.5), pointAbstrait(14, -1.5))
     flecheD.styleExtremites = '<->'
     const objetsD = [
       poly1D,

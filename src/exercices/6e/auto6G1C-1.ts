@@ -4,7 +4,7 @@ import {
   type Forme,
 } from '../../lib/2d/figures2d/listeFigures2d'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { latex2d } from '../../lib/2d/textes'
 import {
   homothetie,
@@ -115,18 +115,18 @@ export default class NbAxesDeSymetrie extends Exercice {
       const angle =
         typeAxe[i] === 'vertical' ? 0 : typeAxe[i] === 'horizontal' ? 90 : -45
       const axe = rotation(
-        droite(point(0, -1), point(0, 1)),
-        point(0, 0),
+        droite(pointAbstrait(0, -1), pointAbstrait(0, 1)),
+        pointAbstrait(0, 0),
         angle + beta,
       )
 
       objets.push(axe)
       const centre =
         typeAxe[i] === 'vertical'
-          ? point(-4.5, 0)
+          ? pointAbstrait(-4.5, 0)
           : typeAxe[i] === 'horizontal'
-            ? point(0, 4.5)
-            : point(-4.5, 4.5)
+            ? pointAbstrait(0, 4.5)
+            : pointAbstrait(-4.5, 4.5)
       const h = projectionOrtho(centre, axe)
       const v = homothetie(vecteur(centre, h), h, 2)
       const choixReponse = choice([

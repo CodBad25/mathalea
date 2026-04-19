@@ -1,5 +1,5 @@
 import { traceGraphiqueCartesien } from '../../lib/2d/diagrammes'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { repere } from '../../lib/2d/reperes'
 import { segment } from '../../lib/2d/segmentsVecteurs'
 import { texteParPosition } from '../../lib/2d/textes'
@@ -200,8 +200,8 @@ export default class ConjectureDeSyracuse extends Exercice {
       // On pousse tout ça dans les objets, le repère aussi coño !!!
       objetsCorrection.push(r2, g)
 
-      const A = point(0, uneSuite.suiteDeSyracuse[0] / yCoeff)
-      const B = point(
+      const A = pointAbstrait(0, uneSuite.suiteDeSyracuse[0] / yCoeff)
+      const B = pointAbstrait(
         uneSuite.tempsDeVol / xCoeff,
         uneSuite.suiteDeSyracuse[0] / yCoeff,
       )

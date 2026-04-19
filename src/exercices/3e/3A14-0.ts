@@ -1,6 +1,6 @@
 import { colorToLatexOrHTML } from '../../lib/2d/colorToLatexOrHtml'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { polygone } from '../../lib/2d/polygones'
 import { segment } from '../../lib/2d/segmentsVecteurs'
 import { texteParPosition } from '../../lib/2d/textes'
@@ -92,18 +92,18 @@ export default class DesChocolatsDansDesBoites extends Exercice {
     const largeurCadre = 30
     const hauteurCadre = 20
     const cadrePrincipal = polygone([
-      point(0, 0),
-      point(largeurCadre, 0),
-      point(largeurCadre, hauteurCadre),
-      point(0, hauteurCadre),
+      pointAbstrait(0, 0),
+      pointAbstrait(largeurCadre, 0),
+      pointAbstrait(largeurCadre, hauteurCadre),
+      pointAbstrait(0, hauteurCadre),
     ])
     const ligne1 = segment(
-      point(0, hauteurCadre / 3),
-      point(largeurCadre, hauteurCadre / 3),
+      pointAbstrait(0, hauteurCadre / 3),
+      pointAbstrait(largeurCadre, hauteurCadre / 3),
     )
     const ligne2 = segment(
-      point(largeurCadre / 2, hauteurCadre),
-      point(largeurCadre / 2, 0),
+      pointAbstrait(largeurCadre / 2, hauteurCadre),
+      pointAbstrait(largeurCadre / 2, 0),
     )
     const text1 = texteParPosition(
       'type A',

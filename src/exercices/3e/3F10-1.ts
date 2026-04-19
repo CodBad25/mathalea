@@ -1,5 +1,5 @@
 import { droiteParPointEtPente } from '../../lib/2d/droites'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { repere } from '../../lib/2d/reperes'
 import { tracePoint } from '../../lib/2d/TracePoint'
 import { propositionsQcm } from '../../lib/interactif/qcm'
@@ -147,7 +147,7 @@ export default class VocabulaireNotationsFonctions extends Exercice {
               ]
               break
             case 3:
-              A = point(x, y)
+              A = pointAbstrait(x, y)
               d = droiteParPointEtPente(A, randint(-4, 4, 0) / 2, '', 'red')
               enonce =
                 'La fonction $f$ est représentée par la droite rouge ci-dessous.<br>'

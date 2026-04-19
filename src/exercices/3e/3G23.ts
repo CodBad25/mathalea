@@ -2,7 +2,7 @@
 import { arc } from '../../lib/2d/Arc'
 import { codageSegments } from '../../lib/2d/CodageSegment'
 import { grille } from '../../lib/2d/Grille'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { tracePoint } from '../../lib/2d/TracePoint'
 import { vecteur } from '../../lib/2d/Vecteur'
 import { vide2d } from '../../lib/2d/Vide2d'
@@ -89,8 +89,8 @@ export default class TrianglesEgaux extends Exercice {
       corr_animmee_sol2: '',
     }
     // on génère le triangle ABC avec une contrainte sur son aire
-    A = point(choice([0, 3]), choice([0, 3]), 'A') // le point A !
-    B = point(choice([6, 9]), choice([6, 9]), 'B') // le point B !
+    A = pointAbstrait(choice([0, 3]), choice([0, 3]), 'A') // le point A !
+    B = pointAbstrait(choice([6, 9]), choice([6, 9]), 'B') // le point B !
     C = rotation(B, A, 90, 'C') // le point C à partir de B par rotation autour de A!
     p = polygone(A, B, C) // on trace le polygone ABC
     let compteur2 = 0
@@ -104,8 +104,8 @@ export default class TrianglesEgaux extends Exercice {
       trouve = false
       compteur = 0
       while (!trouve && compteur < 100) {
-        A = point(choice([0, 3]), choice([0, 3]), 'A') // le point A !
-        B = point(choice([6, 9]), choice([6, 9]), 'B') // le point B !
+        A = pointAbstrait(choice([0, 3]), choice([0, 3]), 'A') // le point A !
+        B = pointAbstrait(choice([6, 9]), choice([6, 9]), 'B') // le point B !
         C = rotation(B, A, 90, 'C') // le point C à partir de B par rotation autour de A!
         C.x += choice([0, 3, 6]) // on décale l'abscise de C de 0, 3 ou 6 !
         C.y += choice([-3, 0, 3]) // on décale l'abscise de C de -3, 0 ou 3 !
@@ -128,7 +128,7 @@ export default class TrianglesEgaux extends Exercice {
       p.opaciteDeRemplissage = 0.2 // 0.5;//remplissage de ABC
       nom1 = nommePolygone(p, 'ABC', 0.4) // on  nomme ABC en plaçant A,B et C à 0,4
       grid = grille(-3, -3, 27, 18, 'gray', 0.4, 1) // on trace une grille
-      M = point(9, 12) // un point M fixe pour tourner autour
+      M = pointAbstrait(9, 12) // un point M fixe pour tourner autour
       q = rotation(p, M, 90) // on fait tourner ABC autour de M de 90°
 
       // on a besoin de récupérer le polygone non tracé
@@ -162,10 +162,10 @@ export default class TrianglesEgaux extends Exercice {
       // I1.nom='I1';
       I1.nom = tabPointsNames[1]
       // on place les mauvaises solutions
-      const F = point(I1.x + 1, I1.y + 1)
+      const F = pointAbstrait(I1.x + 1, I1.y + 1)
       // F.nom='F';
       F.nom = tabPointsNames[2]
-      const L = point(I.x - 1, I.y - 3)
+      const L = pointAbstrait(I.x - 1, I.y - 3)
       // L.nom='L';
       L.nom = tabPointsNames[3]
       // on trace le segment [DE] en pointillés pour que la figure soit plus lisible

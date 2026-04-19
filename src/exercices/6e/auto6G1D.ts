@@ -2,7 +2,7 @@ import { codageAngle } from '../../lib/2d/angles'
 import { codageAngleDroit } from '../../lib/2d/CodageAngleDroit'
 import { codageSegments } from '../../lib/2d/CodageSegment'
 import { grille, seyes } from '../../lib/2d/Grille'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import {
   barycentre,
   NommePolygone,
@@ -61,8 +61,8 @@ const choisirPolygone: (
   let enonce
   switch (n) {
     case 1: // triangle isocèle
-      A = point(3, randint(0, 20) / 10, nom[0])
-      B = point(randint(7, 8), randint(0, 10) / 10, nom[1])
+      A = pointAbstrait(3, randint(0, 20) / 10, nom[0])
+      B = pointAbstrait(randint(7, 8), randint(0, 10) / 10, nom[1])
       C = rotation(B, A, randint(25, 80), nom[2])
       q = polygone(A, B, C) as Polygone
       p = rotation(q, barycentre(q), randint(0, 360))
@@ -78,8 +78,8 @@ const choisirPolygone: (
       enonce = `Le triangle $${nom[0] + nom[1] + nom[2]}$ est isocèle en $${nom[0]}$.<br>`
       break
     case 2: // triangle équilatéral
-      A = point(3, randint(0, 20) / 10, nom[0])
-      B = point(randint(7, 8), randint(0, 10) / 10, nom[1])
+      A = pointAbstrait(3, randint(0, 20) / 10, nom[0])
+      B = pointAbstrait(randint(7, 8), randint(0, 10) / 10, nom[1])
       C = rotation(B, A, 60, nom[2])
       q = polygone(A, B, C) as Polygone
       p = rotation(q, barycentre(q), randint(0, 360))
@@ -96,8 +96,8 @@ const choisirPolygone: (
       enonce = `Le triangle $${nom[0] + nom[1] + nom[2]}$ est équilatéral.<br>$\\phantom{et sa longueur est AB}$`
       break
     case 3: // triangle rectangle
-      A = point(3, randint(0, 20) / 10, nom[0])
-      B = point(randint(7, 8), randint(0, 10) / 10, nom[1])
+      A = pointAbstrait(3, randint(0, 20) / 10, nom[0])
+      B = pointAbstrait(randint(7, 8), randint(0, 10) / 10, nom[1])
       C = similitude(B, A, 90, randint(30, 100) / 100, nom[2])
       q = polygone(A, B, C) as Polygone
       p = rotation(q, barycentre(q), randint(0, 360))
@@ -109,8 +109,8 @@ const choisirPolygone: (
       enonce = `Le triangle $${nom[0] + nom[1] + nom[2]}$ est rectangle en $${nom[0]}$.<br>$\\phantom{et sa longueur est AB}$`
       break
     case 4: // triangle rectangle isocèle
-      A = point(3, randint(0, 20) / 10, nom[0])
-      B = point(randint(7, 8), randint(0, 10) / 10, nom[1])
+      A = pointAbstrait(3, randint(0, 20) / 10, nom[0])
+      B = pointAbstrait(randint(7, 8), randint(0, 10) / 10, nom[1])
       C = rotation(B, A, 90, nom[2])
       q = polygone(A, B, C) as Polygone
       p = rotation(q, barycentre(q), randint(0, 360))
@@ -128,8 +128,8 @@ const choisirPolygone: (
       break
     // on choisit un quadrilatère
     case 5: // carré
-      A = point(3, randint(0, 20) / 10, nom[0])
-      B = point(randint(7, 8), randint(10, 30) / 10, nom[1])
+      A = pointAbstrait(3, randint(0, 20) / 10, nom[0])
+      B = pointAbstrait(randint(7, 8), randint(10, 30) / 10, nom[1])
       q = carre(A, B) as unknown as Polygone
       p = rotation(q, barycentre(q), randint(0, 360))
       A = p.listePoints[0]
@@ -147,8 +147,8 @@ const choisirPolygone: (
       enonce = `Le quadrilatère $${nom[0] + nom[1] + nom[2] + nom[3]}$ est un carré.<br>$\\phantom{et sa longueur est AB}$`
       break
     case 6: // rectangle
-      A = point(3, randint(0, 20) / 10, nom[0])
-      B = point(randint(7, 8), randint(10, 30) / 10, nom[1])
+      A = pointAbstrait(3, randint(0, 20) / 10, nom[0])
+      B = pointAbstrait(randint(7, 8), randint(10, 30) / 10, nom[1])
       C = similitude(A, B, -90, randint(30, 80) / 100, nom[2])
       D = translation(C, vecteur(B, A), nom[3])
       q = polygone(A, B, C, D) as Polygone
@@ -169,8 +169,8 @@ const choisirPolygone: (
       enonce = `Le quadrilatère $${nom[0] + nom[1] + nom[2] + nom[3]}$ est un rectangle et $${nom[0] + nom[1]}$ est sa longueur.`
       break
     case 7: // losange
-      A = point(3, randint(0, 20) / 10, nom[0])
-      B = point(randint(7, 8), randint(10, 30) / 10, nom[1])
+      A = pointAbstrait(3, randint(0, 20) / 10, nom[0])
+      B = pointAbstrait(randint(7, 8), randint(10, 30) / 10, nom[1])
       C = rotation(A, B, randint(100, 150), nom[2])
       D = translation(C, vecteur(B, A), nom[3])
       q = polygone(A, B, C, D) as Polygone
@@ -191,8 +191,8 @@ const choisirPolygone: (
       break
     case 8: // trapèze rectangle
     default:
-      A = point(3, randint(0, 20) / 10, nom[0])
-      B = point(randint(7, 8), randint(10, 30) / 10, nom[1])
+      A = pointAbstrait(3, randint(0, 20) / 10, nom[0])
+      B = pointAbstrait(randint(7, 8), randint(10, 30) / 10, nom[1])
       D = similitude(B, A, 90, randint(30, 80) / 100, nom[3])
       C = translation(
         D,

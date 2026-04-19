@@ -1,5 +1,5 @@
 import { codageMediatrice } from '../../lib/2d/CodageMediatrice'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { tracePoint } from '../../lib/2d/TracePoint'
 import { vecteur } from '../../lib/2d/Vecteur'
 import { cercle } from '../../lib/2d/cercle'
@@ -73,7 +73,7 @@ export default class ConstruireMediatrices6e extends Exercice {
       texte +=
         "Prolonger les droites $(d)$ et $(d')$ pour obtenir leur point d'intersection.<br>"
       const marks = ['/', '//', '///', 'x', 'o', 'S', 'V']
-      const I = point(0, 0, 'I')
+      const I = pointAbstrait(0, 0, 'I')
       const A = pointAdistance(I, randint(3, 6))
       const B = similitude(A, I, randint(65, 150), randint(8, 15) / 10)
       const medA = droite(I, A)
@@ -185,8 +185,8 @@ export default class ConstruireMediatrices6e extends Exercice {
         nomA2,
         nomB1,
         nomB2,
-        point(cible.x - 2.5, cible.y - 2.5),
-        point(cible.x + 2.5, cible.y + 2.5),
+        pointAbstrait(cible.x - 2.5, cible.y - 2.5),
+        pointAbstrait(cible.x + 2.5, cible.y + 2.5),
       ])
       const { xmin, xmax, ymin, ymax } = params
       objetsCorrection.push(

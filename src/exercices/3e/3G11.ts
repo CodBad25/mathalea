@@ -1,7 +1,7 @@
 import { cibleCarree, dansLaCibleCarree } from '../../lib/2d/cibles'
 import { codageSegments } from '../../lib/2d/CodageSegment'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { segment } from '../../lib/2d/segmentsVecteurs'
 import { labelPoint } from '../../lib/2d/textes'
 import { tracePoint } from '../../lib/2d/TracePoint'
@@ -83,7 +83,7 @@ export default class ConstruireHomothetiePoint3e extends Exercice {
           return lettre + chiffre
         }
         // On prépare la figure...
-        const O = point(0, 0, 'O')
+        const O = pointAbstrait(0, 0, 'O')
         const noms = choisitLettresDifferentes(nbpoints, 'QO', true)
         if (nbpoints > 1) {
           texte = `Construire l'image des points $${noms[0]}$`
@@ -108,7 +108,7 @@ export default class ConstruireHomothetiePoint3e extends Exercice {
         for (let k = 0; k < nbpoints; k++) {
           // On place les cibles.
           N.push(
-            point(
+            pointAbstrait(
               randint(-60, 60, 0) / 10,
               randint(-60, 60, 0) / 10,
               noms[k] + "'",

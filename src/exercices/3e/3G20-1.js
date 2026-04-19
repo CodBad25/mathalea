@@ -1,6 +1,6 @@
 import Decimal from 'decimal.js'
 import { codageAngleDroit } from '../../lib/2d/CodageAngleDroit'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { polygone } from '../../lib/2d/polygones'
 import { segment } from '../../lib/2d/segmentsVecteurs'
 import { labelPoint, texteParPoint } from '../../lib/2d/textes'
@@ -147,10 +147,10 @@ export default class ProblemesThales extends Exercice {
         BC = randint(2, 6)
         BD = 2 * BC
         MN = new Decimal(choice([2, 3, 4])).div(10).mul(BD)
-        A = point(0, 4, nomA, 'above')
-        B = point(7, 4, nomB, 'above')
-        C = point(7, 0, nomC, 'below')
-        D = point(0, 0, nomD, 'below')
+        A = pointAbstrait(0, 4, nomA, 'above')
+        B = pointAbstrait(7, 4, nomB, 'above')
+        C = pointAbstrait(7, 0, nomC, 'below')
+        D = pointAbstrait(0, 0, nomD, 'below')
         p = polygone(A, B, C, D)
         codage1 = codageAngleDroit(D, A, B)
         codage2 = codageAngleDroit(A, B, C)
@@ -160,11 +160,11 @@ export default class ProblemesThales extends Exercice {
         N = pointSurSegment(A, D, longueur(A, D) / 3, 'N', 'left')
         sMN = segment(M, N)
         sBD = segment(B, D)
-        sCote = segment(point(N.x - 1.3, N.y), point(D.x - 1.3, D.y))
+        sCote = segment(pointAbstrait(N.x - 1.3, N.y), pointAbstrait(D.x - 1.3, D.y))
         sCote.styleExtremites = '<->'
         texte1 = texteParPoint(
           '?',
-          milieu(point(N.x - 1.5, N.y), point(D.x - 1.5, D.y)),
+          milieu(pointAbstrait(N.x - 1.5, N.y), pointAbstrait(D.x - 1.5, D.y)),
           0,
           'black',
           1,

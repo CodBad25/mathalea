@@ -1,6 +1,6 @@
 import { codageAngle } from '../../lib/2d/angles'
 import { codageAngleDroit } from '../../lib/2d/CodageAngleDroit'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { barycentre, nommePolygone, polygone } from '../../lib/2d/polygones'
 import { segment } from '../../lib/2d/segmentsVecteurs'
 import { latexParPoint } from '../../lib/2d/textes'
@@ -207,9 +207,9 @@ export default class CalculDeLongueur extends Exercice {
       if (!context.isHtml && this.sup) {
         // texte += '\n\\end{minipage}\n'
       }
-      const a = point(0, 0)
-      const b = point(ab, 0)
-      const c = point(0, ac)
+      const a = pointAbstrait(0, 0)
+      const b = pointAbstrait(ab, 0)
+      const c = pointAbstrait(0, ac)
       const p1 = polygone(a, b, c)
       // p1.isVisible = false
       const p2 = rotation(p1, a, randint(0, 360))

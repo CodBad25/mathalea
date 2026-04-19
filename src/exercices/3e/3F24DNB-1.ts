@@ -1,7 +1,7 @@
 import { courbe } from '../../lib/2d/Courbe'
 import { droiteParPointEtPente } from '../../lib/2d/droites'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import RepereBuilder from '../../lib/2d/RepereBuilder'
 import { tableauColonneLigne } from '../../lib/2d/tableau'
 import { labelPoint, latex2d } from '../../lib/2d/textes'
@@ -84,9 +84,9 @@ export default class Exercice3F24DNB1 extends ExerciceBrevetA {
       .setGrille({ grilleX: { dx: 1 }, grilleY: { dy: 1 } })
       .buildStandard()
     const laCourbe = courbe(poly.fonction, { repere: rep, color: 'red' })
-    const dG = droiteParPointEtPente(point(0, b), a, '', bleuMathalea)
-    const A = point(x0, a * x0 + b, 'A', 'above left')
-    const B = point(x1, a * x1 + b, 'B', 'above left')
+    const dG = droiteParPointEtPente(pointAbstrait(0, b), a, '', bleuMathalea)
+    const A = pointAbstrait(x0, a * x0 + b, 'A', 'above left')
+    const B = pointAbstrait(x1, a * x1 + b, 'B', 'above left')
     const traces = tracePoint(A, B)
     const labels = labelPoint(A, B)
     const figure = mathalea2d(

@@ -1,4 +1,4 @@
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { Polygone, polygone } from '../../lib/2d/polygones'
 import { segment } from '../../lib/2d/segmentsVecteurs'
 import {
@@ -142,10 +142,10 @@ function creeRectangles(
       rectangles[i].push(
         polygone(
           [
-            point(xBordures[i], yBordures[j]),
-            point(xBordures[i + 1], yBordures[j]),
-            point(xBordures[i + 1], yBordures[j + 1]),
-            point(xBordures[i], yBordures[j + 1]),
+            pointAbstrait(xBordures[i], yBordures[j]),
+            pointAbstrait(xBordures[i + 1], yBordures[j]),
+            pointAbstrait(xBordures[i + 1], yBordures[j + 1]),
+            pointAbstrait(xBordures[i], yBordures[j + 1]),
           ],
           'black',
         ) as Rectangle,

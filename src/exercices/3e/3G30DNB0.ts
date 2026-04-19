@@ -1,7 +1,7 @@
 import { codageAngleDroit } from '../../lib/2d/CodageAngleDroit'
 import { colorToLatexOrHTML } from '../../lib/2d/colorToLatexOrHtml'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { polygone } from '../../lib/2d/polygones'
 import { labelPoint, latex2d } from '../../lib/2d/textes'
 import { translation } from '../../lib/2d/transformations'
@@ -63,17 +63,17 @@ export default class Exercice3G2DNB0 extends ExerciceBrevetA {
     const base = Math.round(Math.sqrt(hypo ** 2 - hauteur ** 2) * 10) / 10
     const ppcm = 25
     const sc = 0.5
-    const C = point(0, 0, 'C', 'below left')
-    const A = point(0, 4, 'A', 'above')
-    const B = point(7, 0, 'B', 'above right')
+    const C = pointAbstrait(0, 0, 'C', 'below left')
+    const A = pointAbstrait(0, 4, 'A', 'above')
+    const B = pointAbstrait(7, 0, 'B', 'above right')
     const terrain = polygone(
-      point(-6, 4),
-      point(0, 4),
+      pointAbstrait(-6, 4),
+      pointAbstrait(0, 4),
       A,
       C,
-      point(12, 0),
-      point(12, -2),
-      point(-6, -2),
+      pointAbstrait(12, 0),
+      pointAbstrait(12, -2),
+      pointAbstrait(-6, -2),
     )
     terrain.hachures = 'dots'
     // terrain.couleurDeRemplissage = colorToLatexOrHTML('green')
@@ -82,11 +82,11 @@ export default class Exercice3G2DNB0 extends ExerciceBrevetA {
     terrain.epaisseurDesHachures = 0.7
     terrain.distanceDesHachures = 10
     const maison = polygone(
-      point(-1, 4),
-      point(-4, 4),
-      point(-4, 7),
-      point(-2.5, 8.5),
-      point(-1, 7),
+      pointAbstrait(-1, 4),
+      pointAbstrait(-4, 4),
+      pointAbstrait(-4, 7),
+      pointAbstrait(-2.5, 8.5),
+      pointAbstrait(-1, 7),
     )
     const maison2 = translation(maison, vecteur(12, -4))
     const triangle = polygone(C, A, B)

@@ -1,7 +1,7 @@
 import { codageAngleDroit } from '../../lib/2d/CodageAngleDroit'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { placeLatexSurSegment } from '../../lib/2d/placeLatexSurSegment'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { polygone } from '../../lib/2d/polygones'
 import { segment } from '../../lib/2d/segmentsVecteurs'
 import { tableauColonneLigne } from '../../lib/2d/tableau'
@@ -57,11 +57,11 @@ export default class ExerciceMetropole392024 extends ExerciceBrevetA {
     hauteurToit: number,
     longueurToit: number,
   ): void {
-    const L = point(0, 0, 'L', 'left')
-    const O = point(4, 3, 'O', 'above')
-    const K = point(8, 0, 'K', 'right')
+    const L = pointAbstrait(0, 0, 'L', 'left')
+    const O = pointAbstrait(4, 3, 'O', 'above')
+    const K = pointAbstrait(8, 0, 'K', 'right')
     const V = milieu(L, K, 'V', 'below')
-    const fleche = segment(point(0.9, 2.7), point(1, 1.1))
+    const fleche = segment(pointAbstrait(0.9, 2.7), pointAbstrait(1, 1.1))
     fleche.styleExtremites = '->'
     fleche.epaisseur = 2
     const textePanneaux = texteParPosition('panneaux solaires', 0.9, 3)
@@ -74,8 +74,8 @@ export default class ExerciceMetropole392024 extends ExerciceBrevetA {
       O,
       {},
     )
-    const A = point(0, -5)
-    const B = point(8, -5)
+    const A = pointAbstrait(0, -5)
+    const B = pointAbstrait(8, -5)
     const batiment = polygone(A, B, K, O, L)
     const baseToit = segment(L, K)
     const hToit = segment(O, V)

@@ -1,6 +1,6 @@
 // on importe les fonctions nécessaires.
 import { colorToLatexOrHTML } from '../../lib/2d/colorToLatexOrHtml'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { segment } from '../../lib/2d/segmentsVecteurs'
 import { texteParPoint } from '../../lib/2d/textes'
 import { tracePoint } from '../../lib/2d/TracePoint'
@@ -353,7 +353,7 @@ export default class AlgoTortue extends Exercice {
     for (let i = 0; i < 5; i++) {
       // ajouter le point de départ de chaque tracé
       depart[i] = tracePoint(
-        point(lutins[i].listeTraces[0][0], lutins[i].listeTraces[0][1]),
+        pointAbstrait(lutins[i].listeTraces[0][0], lutins[i].listeTraces[0][1]),
       )
       depart[i].taille = 5
       depart[i].color = colorToLatexOrHTML(bleuMathalea)
@@ -396,10 +396,10 @@ export default class AlgoTortue extends Exercice {
         lutins[ordreLutins[i]],
         depart[ordreLutins[i]],
         grille(-0.5, -0.5, largeur, hauteur + 1, 'gray', 0.5, 0.5),
-        texteParPoint('40 pas', point(0.5, hauteur + 0.2), 0, 'black', 1),
+        texteParPoint('40 pas', pointAbstrait(0.5, hauteur + 0.2), 0, 'black', 1),
         texteParPoint(
           `figure ${i + 1}`,
-          point((largeur - 0.5) / 2, -0.8),
+          pointAbstrait((largeur - 0.5) / 2, -0.8),
           0,
           'black',
           1,
