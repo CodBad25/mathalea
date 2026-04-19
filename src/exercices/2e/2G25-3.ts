@@ -56,9 +56,9 @@ export default class DroitesParallelesVF extends Exercice {
           if (xc/2===xc%2){xc=xc+z}
           else {yc=yc+z}
           texte = `Dans un repère orthonormé, on considère les points $A(${xa}\\;;\\; ${ya})$, $B(${xb}\\;;\\;${yb})$ et $C(${xc}\\;;\\;${yc})$.<br>
-        Déterminer si les points $A$, $B$ et $C$ sont alignés.`
+        Les points $A$, $B$ et $C$ sont alignés.`
           this.canEnonce = `Dans un repère orthonormé, on considère les points $A(${xa}\\;;\\; ${ya})$, $B(${xb}\\;;\\;${yb})$ et $C(${xc}\\;;\\;${yc})$.<br>
-        Déterminer si les points $A$, $B$ et $C$ sont alignés.`
+        Les points $A$, $B$ et $C$ sont alignés.`
           this.autoCorrection[i] = {
             enonce: texte,
             propositions: [
@@ -93,11 +93,11 @@ export default class DroitesParallelesVF extends Exercice {
             &=${abx * (yc - ya) - aby * (xc - xa)}\\end{aligned}$.<br>`
             if (aligne === 'true') {
               texteCorr +=
-                `Le déterminant étant nul, on peut en déduire que les deux vecteurs sont colinéaires, donc les droites $(AB)$ et $(AC)$ sont alignées. <br>
+                `Le déterminant étant nul, on peut en déduire que les deux vecteurs sont colinéaires, donc les points $A$, $B$ et $C$ sont alignés. <br>
                 Il fallait donc cocher "${texteEnCouleurEtGras('Vrai')}".`
             } else {
               texteCorr +=
-                `Le déterminant étant non nul, on peut en déduire que les deux vecteurs ne sont pas colinéaires, donc les droites $(AB)$ et $(AC)$ ne sont pas alignées. <br>
+                `Le déterminant étant non nul, on peut en déduire que les deux vecteurs ne sont pas colinéaires, donc les points $A$, $B$ et $C$ ne sont pas alignés. <br>
                 Il fallait donc cocher "${texteEnCouleurEtGras('Faux')}".`
             }
          

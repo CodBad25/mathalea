@@ -72,7 +72,7 @@ export default class TrapezeVF extends Exercice {
           bcy = yc - yb
           let iterations = 0
           do {
-            k = randint(-5, 5, [0, 1])
+            k = randint(-5, 0, [0, 1])
             xd = xc + k * abx
             yd = yc + k * aby
             iterations++
@@ -92,7 +92,7 @@ export default class TrapezeVF extends Exercice {
           texte = `Dans un repère orthonormé, on considère les points $A(${xa}\\;;\\; ${ya})$, $B(${xb}\\;;\\;${yb})$, $C(${xc}\\;;\\;${yc})$ et $D(${texNombre(xd)}\\;;\\;${yd})$.<br>
         Le quadrilatère $ABCD$ est un trapèze.`
           this.canEnonce = `Dans un repère orthonormé, on considère les points $A(${xa}\\;;\\; ${ya})$, $B(${xb}\\;;\\;${yb})$, $C(${xc}\\;;\\;${yc})$ et $D(${texNombre(xd)}\\;;\\;${yd})$.<br>
-        Déterminer si le quadrilatère $ABCD$ est un trapèze.`
+        Le quadrilatère $ABCD$ est un trapèze.`
           this.autoCorrection[i] = {
             enonce: texte,
             propositions: [
@@ -137,7 +137,7 @@ export default class TrapezeVF extends Exercice {
             &=${abx * (yd - yc)}-${ecritureParentheseSiNegatif(aby * (xd - xc))}\\\\
             &=${abx * (yd - yc) - aby * (xd - xc)}\\end{aligned}$.<br>`
           if (trapeze === 'true') {
-            texteCorr += `Le déterminant étant nul, on peut en déduire que les deux vecteurs sont colinéaires, donc les droites $(AB)$ et $(CD)$ sont parallèles. <br>
+            texteCorr += `Le déterminant étant nul, on peut en déduire que les deux vecteurs sont colinéaires, donc les côtés $[AB]$ et $[CD]$ sont parallèles. <br>
               Le quadrilatère $ABCD$ forme bien un trapèze. <br>
               Il fallait donc cocher ${texteEnCouleurEtGras('Vrai')}.`
           } else {
@@ -226,7 +226,7 @@ $\\begin{aligned}
             &=${adx * bcy}-${ecritureParentheseSiNegatif(ady * bcx)}\\\\
             &=${adx * bcy - ady * bcx}\\end{aligned}$.<br>`
           if (trapeze === 'true') {
-            texteCorr += `Le déterminant étant nul, on peut en déduire que les deux vecteurs sont colinéaires, donc les droites $(AD)$ et $(BC)$ sont parallèles. <br>
+            texteCorr += `Le déterminant étant nul, on peut en déduire que les deux vecteurs sont colinéaires, donc les côtés $[AD]$ et $[BC]$ sont parallèles. <br>
               Le quadrilatère $ABCD$ forme bien un trapèze. <br>
               Il fallait donc cocher ${texteEnCouleurEtGras('Vrai')}.`
           } else {
