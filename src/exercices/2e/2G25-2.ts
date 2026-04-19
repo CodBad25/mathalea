@@ -88,7 +88,7 @@ export default class DroitesParallelesVF extends Exercice {
             ${abx}\\times ${ecritureParentheseSiNegatif(yd - yc)}-${ecritureParentheseSiNegatif(aby)}\\times ${ecritureParentheseSiNegatif(xd - xc)}\\\\
             &=${abx * (yd - yc)}-${ecritureParentheseSiNegatif(aby * (xd - xc))}\\\\
             &=${abx * (yd - yc) - aby * (xd - xc)}\\end{aligned}$.<br>
-            Le déterminant étant nul, on peut en déduire que les deux vecteurs sont colinéaires, donc les droites $(AB)$ et $(CD)$ sont parallèles. \\
+            Le déterminant étant nul, on peut en déduire que les deux vecteurs sont colinéaires, donc les droites $(AB)$ et $(CD)$ sont parallèles. <br>
             Il fallait donc cocher "${texteEnCouleurEtGras('Vrai')}".`
           break
         case 2:
