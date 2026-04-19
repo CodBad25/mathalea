@@ -248,10 +248,8 @@ export default class ProblemesFractions extends Exercice {
         texte += addMultiMathfield(this, i, {
           dataTemplate: `a) ${situation.question1
             .replace('%prénom1%', personne.prenom)
-            .replace(
-              '%prénom2%',
-              personne2.prenom,
-            )} %{champ1}\nb) ${situation.question2} %{champ2}`,
+            .replace('%prénom2%', personne2.prenom)} %{champ1}
+            b) ${situation.question2} %{champ2}`,
           dataOptions: {
             champ1: { keyboard: KeyboardType.clavierDeBaseAvecFraction },
             champ2: { keyboard: KeyboardType.clavierDeBaseAvecFraction },
@@ -364,10 +362,8 @@ export default class ProblemesFractions extends Exercice {
         texte += addMultiMathfield(this, i, {
           dataTemplate: `a) ${situation.question1
             .replace('%prénom%', personne.prenom)
-            .replace(
-              '%pronom%',
-              personne.pronom,
-            )} %{champ1}\nb) ${situation.question2} %{champ2}`,
+            .replace('%pronom%', personne.pronom)} %{champ1}<br>
+            b) ${situation.question2} %{champ2}`,
           dataOptions: {
             champ1: { keyboard: KeyboardType.clavierDeBaseAvecFraction },
             champ2: { keyboard: KeyboardType.clavierDeBaseAvecFraction },

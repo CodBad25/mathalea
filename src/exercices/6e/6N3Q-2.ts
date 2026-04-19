@@ -208,7 +208,8 @@ export default class AugmenterEtReduireDunPourcentage extends Exercice {
             const enonce =
               this.interactif && context.isHtml
                 ? addMultiMathfield(this, i, {
-                    dataTemplate: `a) Le montant de la réduction est : %{champ1} €.\nb) Finalement, ${prenom1} paiera ${situation.quoiReponse} : %{champ2} €.`,
+                    dataTemplate: `a) Le montant de la réduction est : %{champ1} €.
+                    b) Finalement, ${prenom1} paiera ${situation.quoiReponse} : %{champ2} €.`,
                     dataOptions: {
                       champ1: {
                         keyboard: KeyboardType.clavierNumbers,
@@ -305,7 +306,8 @@ export default class AugmenterEtReduireDunPourcentage extends Exercice {
             const enonce =
               this.interactif && context.isHtml
                 ? addMultiMathfield(this, i, {
-                    dataTemplate: `a) Le montant de l'augmentation est : %{champ1} €.\nb) Au 1er janvier, ${prenom2} paiera ${situation.quoiReponse} : %{champ2} €.`,
+                    dataTemplate: `a) Le montant de l'augmentation est : %{champ1} €<br>.
+                    b) Au 1er janvier, ${prenom2} paiera ${situation.quoiReponse} : %{champ2} €.`,
                     dataOptions: {
                       champ1: {
                         keyboard: KeyboardType.clavierNumbers,

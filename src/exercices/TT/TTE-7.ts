@@ -104,7 +104,7 @@ export default class EquationsLog extends Exercice {
         // log(ax+b)=n
         texte = `On demande de résoudre l'équation suivante : $${logString}(${reduireAxPlusB(a, b)})=${n}$.<br>`
         texte += addMultiMathfield(this, i, {
-          dataTemplate: `a) Déterminer le domaine sur lequel on peut résoudre cette équation. %{champ1}
+          dataTemplate: `a) Déterminer le domaine sur lequel on peut résoudre cette équation. %{champ1}<br>
   b)  Donner la solution de cette équation. %{champ2}`,
           dataOptions: {
             champ1: { keyboard: KeyboardType.equationsTerminale },
@@ -159,7 +159,7 @@ export default class EquationsLog extends Exercice {
         // log(ax+b)=log(cx+d)
         texte = `On demande de résoudre l'équation suivante : $${logString}(${reduireAxPlusB(a, b)})=${logString}(${reduireAxPlusB(c, d)})$.<br>`
         texte += addMultiMathfield(this, i, {
-          dataTemplate: `a) Déterminer le domaine sur lequel on peut résoudre cette équation. %{champ1}
+          dataTemplate: `a) Déterminer le domaine sur lequel on peut résoudre cette équation. %{champ1}<br>
   b)  Donner la solution de cette équation. %{champ2}`,
           dataOptions: {
             champ1: { keyboard: KeyboardType.equationsTerminale },

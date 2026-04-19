@@ -21,7 +21,7 @@
   } from '../../../lib/stores/generalStore'
   import { globalOptions } from '../../../lib/stores/globalOptions'
   import { vendor } from '../../../lib/stores/vendorStore'
-  import { type IExercice } from '../../../lib/types'
+  import { type IExercice, type QuestionResult } from '../../../lib/types'
 
   import Keyboard from '../../keyboard/Keyboard.svelte'
   import { keyboardState } from '../../keyboard/stores/keyboardStore'
@@ -280,13 +280,6 @@
   function handleIndexChange_QPP(data: { currentIndex: number }) {
     currentIndex = data.currentIndex
   }
-  type QuestionScore = { nbBonnesReponses: number; nbReponses: number }
-  type DetailedQuestionResult = {
-    isOk: boolean
-    feedback: string
-    score: QuestionScore
-  }
-  type QuestionResult = boolean | DetailedQuestionResult
 
   function handleResultsChange(data: { resultsByQuestion: QuestionResult[] }) {
     resultsByQuestion = data.resultsByQuestion

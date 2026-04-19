@@ -324,10 +324,12 @@ export default class Quartiles extends Exercice {
         ),
         objetsCorr,
       )
-        let texte = `On donne ci-dessus la représentation graphique des fréquences cumulées croissante ${situation.label}.<br>Les réponses seront données avec la précision permise par le graphique entre deux interlignes verticales.<br>`
+      let texte = `On donne ci-dessus la représentation graphique des fréquences cumulées croissante ${situation.label}.<br>Les réponses seront données avec la précision permise par le graphique entre deux interlignes verticales.<br>`
       if (this.interactif) {
         texte += `${addMultiMathfield(this, i, {
-          dataTemplate: `a) Donner la valeur du premier quartile. %{champ1}\n b) Donner la valeur du troisième quartile. %{champ2}\n c) Donner la valeur de l'écart inter-quartile. %{champ3}`,
+          dataTemplate: `a) Donner la valeur du premier quartile. %{champ1}<br>
+          b) Donner la valeur du troisième quartile. %{champ2}<br>
+          c) Donner la valeur de l'écart inter-quartile. %{champ3}`,
           dataOptions: {
             champ1: { keyboard: KeyboardType.clavierNumbers },
             champ2: { keyboard: KeyboardType.clavierNumbers },
@@ -351,21 +353,26 @@ export default class Quartiles extends Exercice {
       const maxIntervalleq3 = Math.ceil(
         intervalle + Math.floor(q3Round / intervalle) * intervalle,
       )
-      handleAnswers(this, i, {
-        champ1: {
-          value: `[${minIntervalleq1};${maxIntervalleq1}]`,
-          options: { estDansIntervalle: true },
+      handleAnswers(
+        this,
+        i,
+        {
+          champ1: {
+            value: `[${minIntervalleq1};${maxIntervalleq1}]`,
+            options: { estDansIntervalle: true },
+          },
+          champ2: {
+            value: `[${minIntervalleq3};${maxIntervalleq3}]`,
+            options: { estDansIntervalle: true },
+          },
+          champ3: {
+            value: `[${minIntervalleq3 - maxIntervalleq1};${maxIntervalleq3 - minIntervalleq1}]`,
+            options: { estDansIntervalle: true },
+          },
+          bareme: toutAUnPoint,
         },
-        champ2: {
-          value: `[${minIntervalleq3};${maxIntervalleq3}]`,
-          options: { estDansIntervalle: true },
-        },
-        champ3: {
-          value: `[${minIntervalleq3 - maxIntervalleq1};${maxIntervalleq3 - minIntervalleq1}]`,
-          options: { estDansIntervalle: true },
-        },
-        bareme: toutAUnPoint,
-      }, { formatInteractif: 'multiMathfield' })
+        { formatInteractif: 'multiMathfield' },
+      )
 
       let texteCorr = 'Par lecture graphique, on trouve :<br>'
       texteCorr += `${numAlpha(0)} La valeur du premier quartile est environ $${miseEnEvidence(texNombre(q1Round, 0))}$. Par la précision du graphique, serait acceptée toute valeur entre $${miseEnEvidence(minIntervalleq1, bleuMathalea)}$ et $${miseEnEvidence(maxIntervalleq1, bleuMathalea)}$.`

@@ -241,7 +241,9 @@ export default class ProbaConcret extends Exercice {
                C : « la personne choisie fait partie des cadres » ;
                F : « la personne choisie est une femme ».<br>`
       texte += `${addMultiMathfield(this, i, {
-        dataTemplate: `a) Calculer la probabilité de l'événement ${choix1 ? `$${EvInter[0]}$` : `: « ${EvInter[1]} »`}. %{champ1}\nb) Calculer la probabilité de l'événement ${choix2 ? `$${EvUnion[0]}$` : `: « ${EvUnion[7]} »`}. %{champ2}\nc) On sait que la personne choisie ${EvCond[0]}. Quelle est la probabilité ${EvCond[1]} ? %{champ3}`,
+        dataTemplate: `a) Calculer la probabilité de l'événement ${choix1 ? `$${EvInter[0]}$` : `: « ${EvInter[1]} »`}. %{champ1}<br>
+        b) Calculer la probabilité de l'événement ${choix2 ? `$${EvUnion[0]}$` : `: « ${EvUnion[7]} »`}. %{champ2}<br>
+        c) On sait que la personne choisie ${EvCond[0]}. Quelle est la probabilité ${EvCond[1]} ? %{champ3}`,
         dataOptions: {
           champ1: { keyboard: KeyboardType.clavierDeBaseAvecFraction },
           champ2: { keyboard: KeyboardType.clavierDeBaseAvecFraction },

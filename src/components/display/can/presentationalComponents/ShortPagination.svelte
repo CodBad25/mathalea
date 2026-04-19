@@ -1,10 +1,11 @@
 <script lang="ts">
   import { canOptions } from '../../../../lib/stores/canStore'
+  import type { QuestionResult } from '../../../../lib/types'
   import type { CanState } from '../../../../lib/types/can'
 
   export let current: number
   export let state: CanState
-  export let resultsByQuestion: boolean[]
+  export let resultsByQuestion: QuestionResult[]
 </script>
 
 <div

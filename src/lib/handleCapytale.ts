@@ -4,7 +4,11 @@ import { tick } from 'svelte'
 // eslint-disable-next-line import-x/no-duplicates
 import { get } from 'svelte/store'
 
-import type { Activity, InterfaceResultExercice } from '../lib/types'
+import type {
+  Activity,
+  InterfaceResultExercice,
+  QuestionResult,
+} from '../lib/types'
 import {
   mathaleaGoToView,
   mathaleaWriteStudentPreviousAnswers,
@@ -23,7 +27,7 @@ import type { CanState } from './types/can'
 
 interface AssignmentData {
   duration?: number
-  resultsByQuestion?: boolean[]
+  resultsByQuestion?: QuestionResult[]
 }
 
 interface ActivityParams {
