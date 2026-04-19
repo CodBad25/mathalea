@@ -1,4 +1,4 @@
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { vecteur } from '../../lib/2d/Vecteur'
 import { cercle } from '../../lib/2d/cercle'
 import { colorToLatexOrHTML } from '../../lib/2d/colorToLatexOrHtml'
@@ -51,7 +51,7 @@ export default class EncadrerAireDisque extends Exercice {
     this.listeCorrections = [''] // Liste de questions corrigées
     let objets: NestedObjetMathalea2dArray = []
 
-    const centre = point(0, 0)
+    const centre = pointAbstrait(0, 0)
     const rayon = this.sup2
     const paramsEnonce = {
       xmin: -rayon - 1,
@@ -121,7 +121,7 @@ export default class EncadrerAireDisque extends Exercice {
           Kre = polygone([A, B, C, D], 'green')
           Kre2 = symetrieAxiale(
             Kre,
-            droite(centre, point(centre.x, centre.y + 1)),
+            droite(centre, pointAbstrait(centre.x, centre.y + 1)),
           )
           Kre.couleurDeRemplissage = colorToLatexOrHTML('green')
           Kre.opaciteDeRemplissage = 0.5
@@ -131,11 +131,11 @@ export default class EncadrerAireDisque extends Exercice {
           objets.push(Kre, Kre2)
           Kre = symetrieAxiale(
             Kre,
-            droite(centre, point(centre.x + 1, centre.y)),
+            droite(centre, pointAbstrait(centre.x + 1, centre.y)),
           )
           Kre2 = symetrieAxiale(
             Kre2,
-            droite(centre, point(centre.x + 1, centre.y)),
+            droite(centre, pointAbstrait(centre.x + 1, centre.y)),
           )
           compteurExterieur = compteurExterieur + 4
           Kre.color = colorToLatexOrHTML('green')
@@ -189,7 +189,7 @@ export default class EncadrerAireDisque extends Exercice {
           Kre = polygone([A, B, C, D], bleuMathalea)
           Kre2 = symetrieAxiale(
             Kre,
-            droite(centre, point(centre.x, centre.y + 1)),
+            droite(centre, pointAbstrait(centre.x, centre.y + 1)),
           )
           Kre.couleurDeRemplissage = colorToLatexOrHTML(bleuMathalea)
           Kre.opaciteDeRemplissage = 0.5
@@ -199,11 +199,11 @@ export default class EncadrerAireDisque extends Exercice {
           objets.push(Kre, Kre2)
           Kre = symetrieAxiale(
             Kre,
-            droite(centre, point(centre.x + 1, centre.y)),
+            droite(centre, pointAbstrait(centre.x + 1, centre.y)),
           )
           Kre2 = symetrieAxiale(
             Kre2,
-            droite(centre, point(centre.x + 1, centre.y)),
+            droite(centre, pointAbstrait(centre.x + 1, centre.y)),
           )
           compteurInterieur = compteurInterieur + 4
           Kre.color = colorToLatexOrHTML(bleuMathalea)

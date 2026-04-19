@@ -1,6 +1,6 @@
 import { cercle } from '../../lib/2d/cercle'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { polyline } from '../../lib/2d/Polyline'
 import { tableauColonneLigne } from '../../lib/2d/tableau'
 import { texteParPosition } from '../../lib/2d/textes'
@@ -55,15 +55,15 @@ export default class ExercicePolynesie462024 extends ExerciceBrevetA {
     resultat2: number,
     facteur: number,
   ): void {
-    const urne1 = polyline(point(0, 3), point(0, 0), point(6, 0), point(6, 3))
+    const urne1 = polyline(pointAbstrait(0, 3), pointAbstrait(0, 0), pointAbstrait(6, 0), pointAbstrait(6, 3))
     urne1.epaisseur = 2
-    const urne2 = polyline(point(7, 3), point(7, 0), point(13, 0), point(13, 3))
+    const urne2 = polyline(pointAbstrait(7, 3), pointAbstrait(7, 0), pointAbstrait(13, 0), pointAbstrait(13, 3))
     urne2.epaisseur = 2
-    const b2U1 = cercle(point(3, 1), 0.5)
-    const b1U1 = cercle(point(1.5, 1), 0.5)
-    const b3U1 = cercle(point(4.5, 1), 0.5)
-    const b1U2 = cercle(point(9, 1), 0.5)
-    const b2U2 = cercle(point(11, 1), 0.5)
+    const b2U1 = cercle(pointAbstrait(3, 1), 0.5)
+    const b1U1 = cercle(pointAbstrait(1.5, 1), 0.5)
+    const b3U1 = cercle(pointAbstrait(4.5, 1), 0.5)
+    const b1U2 = cercle(pointAbstrait(9, 1), 0.5)
+    const b2U2 = cercle(pointAbstrait(11, 1), 0.5)
     const n1U1 = texteParPosition(String(u1B1), 1.5, 1)
     const n2U1 = texteParPosition(String(u1B2), 3, 1)
     const n3U1 = texteParPosition(String(u1B3), 4.5, 1)

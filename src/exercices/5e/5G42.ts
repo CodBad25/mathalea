@@ -1,6 +1,6 @@
 import { codageAngleDroit } from '../../lib/2d/CodageAngleDroit'
 import { codageSegments } from '../../lib/2d/CodageSegment'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { polygoneAvecNom } from '../../lib/2d/polygones'
 import { segment } from '../../lib/2d/segmentsVecteurs'
 import { labelPoint } from '../../lib/2d/textes'
@@ -93,8 +93,8 @@ export default class DemonstrationsParallelogrammes extends Exercice {
       noms = lesNoms[i]
       nom = `$${noms[0] + noms[1] + noms[2] + noms[3]}$`
       objets = []
-      O = point(0, 0, noms[4], 'above left')
-      A = rotation(point(3, 0), O, randint(0, 90), noms[0])
+      O = pointAbstrait(0, 0, noms[4], 'above left')
+      A = rotation(pointAbstrait(3, 0), O, randint(0, 90), noms[0])
       B = similitude(
         A,
         O,

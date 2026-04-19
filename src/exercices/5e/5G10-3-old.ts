@@ -1,7 +1,7 @@
 import { afficheLongueurSegment } from '../../lib/2d/afficheLongueurSegment'
 import { distancePointDroite, droite } from '../../lib/2d/droites'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
-import { point, pointAbstrait } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { nommePolygone, polygone } from '../../lib/2d/polygones'
 import { segmentAvecExtremites } from '../../lib/2d/segmentsVecteurs'
 import { labelPoint, latexParPoint } from '../../lib/2d/textes'
@@ -140,18 +140,18 @@ export default class SymetrieAxialeProprietes extends Exercice {
         case 1:
           nbpoints = 4
           noms = choisitLettresDifferentes(nbpoints, 'QWXO', true)
-          A = point(
+          A = pointAbstrait(
             arrondi(randint(-80, 80, 0) / 10),
             arrondi(randint(-80, 80, 0) / 10),
             noms[0],
           )
           while (distancePointDroite(A, d) < 1)
-            A = point(
+            A = pointAbstrait(
               arrondi(randint(-80, 80, 0) / 10),
               arrondi(randint(-80, 80, 0) / 10),
               noms[0],
             )
-          B = point(
+          B = pointAbstrait(
             arrondi(randint(-80, 80, 0) / 10),
             arrondi(randint(-80, 80, 0) / 10),
             noms[1],
@@ -161,7 +161,7 @@ export default class SymetrieAxialeProprietes extends Exercice {
             longueur(A, B) < 1 ||
             longueur(symetrieAxiale(A, d), B) < 1
           )
-            B = point(
+            B = pointAbstrait(
               arrondi(randint(-80, 80, 0) / 10),
               arrondi(randint(-80, 80, 0) / 10),
               noms[1],
@@ -208,18 +208,18 @@ export default class SymetrieAxialeProprietes extends Exercice {
         case 3:
           nbpoints = 6
           noms = choisitLettresDifferentes(nbpoints, 'QWX', true)
-          A = point(
+          A = pointAbstrait(
             arrondi(randint(-80, 80, 0) / 10),
             arrondi(randint(-80, 80, 0) / 10),
             noms[0],
           )
           while (distancePointDroite(A, d) < 1)
-            A = point(
+            A = pointAbstrait(
               arrondi(randint(-80, 80, 0) / 10),
               arrondi(randint(-80, 80, 0) / 10),
               noms[0],
             )
-          B = point(
+          B = pointAbstrait(
             arrondi(randint(-80, 80, 0) / 10),
             arrondi(randint(-80, 80, 0) / 10),
             noms[1],
@@ -229,7 +229,7 @@ export default class SymetrieAxialeProprietes extends Exercice {
             longueur(A, B) < 1 ||
             longueur(symetrieAxiale(A, d), B) < 1
           )
-            B = point(
+            B = pointAbstrait(
               arrondi(randint(-80, 80, 0) / 10),
               arrondi(randint(-80, 80, 0) / 10),
               noms[1],
@@ -270,18 +270,18 @@ export default class SymetrieAxialeProprietes extends Exercice {
         case 2:
           nbpoints = 6
           noms = choisitLettresDifferentes(nbpoints, 'QWX', true)
-          A = point(
+          A = pointAbstrait(
             arrondi(randint(-80, 80, 0) / 10),
             arrondi(randint(-80, 80, 0) / 10),
             noms[0],
           )
           while (distancePointDroite(A, d) < 1)
-            A = point(
+            A = pointAbstrait(
               arrondi(randint(-80, 80, 0) / 10),
               arrondi(randint(-80, 80, 0) / 10),
               noms[0],
             )
-          B = point(
+          B = pointAbstrait(
             arrondi(randint(-80, 80, 0) / 10),
             arrondi(randint(-80, 80, 0) / 10),
             noms[1],
@@ -291,12 +291,12 @@ export default class SymetrieAxialeProprietes extends Exercice {
             longueur(A, B) < 1 ||
             longueur(symetrieAxiale(A, d), B) < 1
           )
-            B = point(
+            B = pointAbstrait(
               arrondi(randint(-80, 80, 0) / 10),
               arrondi(randint(-80, 80, 0) / 10),
               noms[1],
             )
-          C = point(
+          C = pointAbstrait(
             arrondi(randint(-80, 80, 0) / 10),
             arrondi(randint(-80, 80, 0) / 10),
             noms[2],
@@ -311,7 +311,7 @@ export default class SymetrieAxialeProprietes extends Exercice {
             angle(B, A, C) < 30 ||
             angle(A, C, B) < 30
           )
-            C = point(
+            C = pointAbstrait(
               arrondi(randint(-80, 80, 0) / 10),
               arrondi(randint(-80, 80, 0) / 10),
               noms[2],
@@ -373,18 +373,18 @@ export default class SymetrieAxialeProprietes extends Exercice {
         case 4:
           nbpoints = 6
           noms = choisitLettresDifferentes(nbpoints, 'QWX', true)
-          A = point(
+          A = pointAbstrait(
             arrondi(randint(-80, 80, 0) / 10),
             arrondi(randint(-80, 80, 0) / 10),
             noms[0],
           )
           while (distancePointDroite(A, d) < 1)
-            A = point(
+            A = pointAbstrait(
               arrondi(randint(-80, 80, 0) / 10),
               arrondi(randint(-80, 80, 0) / 10),
               noms[0],
             )
-          B = point(
+          B = pointAbstrait(
             arrondi(randint(-80, 80, 0) / 10),
             arrondi(randint(-80, 80, 0) / 10),
             noms[1],
@@ -394,12 +394,12 @@ export default class SymetrieAxialeProprietes extends Exercice {
             longueur(A, B) < 6 ||
             longueur(symetrieAxiale(A, d), B) < 1
           )
-            B = point(
+            B = pointAbstrait(
               arrondi(randint(-80, 80, 0) / 10),
               arrondi(randint(-80, 80, 0) / 10),
               noms[1],
             )
-          C = point(
+          C = pointAbstrait(
             arrondi(randint(-80, 80, 0) / 10),
             arrondi(randint(-80, 80, 0) / 10),
             noms[2],
@@ -414,7 +414,7 @@ export default class SymetrieAxialeProprietes extends Exercice {
             angle(B, A, C) < 30 ||
             angle(A, C, B) < 30
           )
-            C = point(
+            C = pointAbstrait(
               arrondi(randint(-80, 80, 0) / 10),
               arrondi(randint(-80, 80, 0) / 10),
               noms[2],

@@ -1,5 +1,5 @@
 import { codageSegment } from '../../lib/2d/CodageSegment'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { codageAngle } from '../../lib/2d/angles'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { nommePolygone, polygone } from '../../lib/2d/polygones'
@@ -51,10 +51,10 @@ export default class ParallelogrammeAPartirDUneFigure extends Exercice {
         ? 'Pour la figure suivante, tracée '
         : 'Pour chacune des figures suivantes, tracées '
     this.consigne += "à main levée, préciser s'il s'agit d'un parallélogramme."
-    const A = point(0, 0)
-    const B = point(5, 0)
-    const C = point(6.5, -3)
-    const D = point(1.5, -3)
+    const A = pointAbstrait(0, 0)
+    const B = pointAbstrait(5, 0)
+    const C = pointAbstrait(6.5, -3)
+    const D = pointAbstrait(1.5, -3)
     const O = milieu(A, C)
     O.nom = 'O'
     const p = polygone(A, B, C, D)
@@ -169,10 +169,10 @@ export default class ParallelogrammeAPartirDUneFigure extends Exercice {
           ])
           texteCorr = `Les côtés consécutifs de $${nom}$ sont de même longueur deux par deux, $${miseEnEvidence(nom)}$ ${texteEnCouleurEtGras("n'est donc pas forcément un parallélogramme")} comme le montre le contre-exemple suivant (il s'agit d'un cerf-volant).`
           // Cerf-volant
-          M1 = point(0, 0)
-          N1 = point(-1, -2)
-          O1 = point(0, -6)
-          P1 = point(1, -2)
+          M1 = pointAbstrait(0, 0)
+          N1 = pointAbstrait(-1, -2)
+          O1 = pointAbstrait(0, -6)
+          P1 = pointAbstrait(1, -2)
           p1 = polygone(M1, N1, O1, P1)
           s1 = codageSegment(M1, N1, 'X', bleuMathalea, 1.5)
           s2 = codageSegment(M1, P1, 'X', bleuMathalea, 1.5)
@@ -219,10 +219,10 @@ export default class ParallelogrammeAPartirDUneFigure extends Exercice {
             nommePolygone(p, nom),
           ])
           // Contre-Exemple
-          M1 = point(0, 0)
-          N1 = point(5, 0)
-          O1 = point(-1, -6)
-          P1 = point(-1, -1)
+          M1 = pointAbstrait(0, 0)
+          N1 = pointAbstrait(5, 0)
+          O1 = pointAbstrait(-1, -6)
+          P1 = pointAbstrait(-1, -1)
           p1 = polygone(M1, N1, O1, P1)
           s1 = codageSegment(M1, N1, 'X', bleuMathalea, 1.5)
           s2 = codageSegment(O1, P1, 'X', bleuMathalea, 1.5)
@@ -244,10 +244,10 @@ export default class ParallelogrammeAPartirDUneFigure extends Exercice {
             nommePolygone(p, nom),
           ])
           // Contre-Exemple
-          M1 = point(0, 0)
-          N1 = point(5, 0)
-          O1 = point(6, -4)
-          P1 = point(-1, -4)
+          M1 = pointAbstrait(0, 0)
+          N1 = pointAbstrait(5, 0)
+          O1 = pointAbstrait(6, -4)
+          P1 = pointAbstrait(-1, -4)
           p1 = polygone(M1, N1, O1, P1)
           s1 = codageSegment(O1, N1, 'O', bleuMathalea, 1.5)
           s2 = codageSegment(M1, P1, 'O', bleuMathalea, 1.5)
@@ -297,10 +297,10 @@ export default class ParallelogrammeAPartirDUneFigure extends Exercice {
             mathalea2d(paramsEnonce, [p, sAB, sCD, nommePolygone(p, nom)]) +
             `$(${A.nom + B.nom}) // (${C.nom + D.nom})$`
           // Contre-Exemple
-          M1 = point(0, 0)
-          N1 = point(5, 0)
-          O1 = point(8, -4)
-          P1 = point(-1, -4)
+          M1 = pointAbstrait(0, 0)
+          N1 = pointAbstrait(5, 0)
+          O1 = pointAbstrait(8, -4)
+          P1 = pointAbstrait(-1, -4)
           p1 = polygone(M1, N1, O1, P1)
           s1 = segment(O1, P1, bleuMathalea)
           s2 = segment(M1, N1, bleuMathalea)

@@ -8,7 +8,7 @@ import {
   positionLabelDroite,
 } from '../../lib/2d/droites'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
-import { point, pointAbstrait } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { polygoneAvecNom } from '../../lib/2d/polygones'
 import { representant } from '../../lib/2d/representantVecteur'
 import { segment } from '../../lib/2d/segmentsVecteurs'
@@ -181,8 +181,8 @@ export default class ConservationTransformation extends Exercice {
             objetsCorrectionOnly.push(
               ...droiteAvecNomLatex(
                 droite(
-                  symetrieAxiale(point(d1.x1, d1.y1), d),
-                  symetrieAxiale(point(d1.x2, d1.y2), d),
+                  symetrieAxiale(pointAbstrait(d1.x1, d1.y1), d),
+                  symetrieAxiale(pointAbstrait(d1.x2, d1.y2), d),
                 ),
                 "(d_1')",
                 orangeMathalea,
@@ -208,8 +208,8 @@ export default class ConservationTransformation extends Exercice {
           if (listeTypeDeQuestions[i] === 'parallelisme') {
             objetsCorrectionOnly.push(
               droite(
-                rotation(point(d1.x1, d1.y1), O, 180),
-                rotation(point(d1.x2, d1.y2), O, 180),
+                rotation(pointAbstrait(d1.x1, d1.y1), O, 180),
+                rotation(pointAbstrait(d1.x2, d1.y2), O, 180),
                 '',
                 orangeMathalea,
               ),
@@ -242,8 +242,8 @@ export default class ConservationTransformation extends Exercice {
           if (listeTypeDeQuestions[i] === 'parallelisme') {
             objetsCorrectionOnly.push(
               droite(
-                translation2Points(point(d1.x1, d1.y1), D, E),
-                translation2Points(point(d1.x2, d1.y2), D, E),
+                translation2Points(pointAbstrait(d1.x1, d1.y1), D, E),
+                translation2Points(pointAbstrait(d1.x2, d1.y2), D, E),
                 '',
                 orangeMathalea,
               ),

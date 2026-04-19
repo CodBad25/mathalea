@@ -1,5 +1,5 @@
 import { fixeBordures } from '../../lib/2d/fixeBordures'
-import { point, PointAbstrait } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait, PointAbstrait } from '../../lib/2d/PointAbstrait'
 import { segmentAvecExtremites } from '../../lib/2d/segmentsVecteurs'
 import { labelPoint } from '../../lib/2d/textes'
 import { texteSurSegment } from '../../lib/2d/texteSurSegment'
@@ -289,14 +289,14 @@ export default class CalculsHomothetie extends Exercice {
       let figure: {
         [key: string]: PointAbstrait
       } = {
-        O: point(0, 0, `${O}`, 'below'),
-        A: point(
+        O: pointAbstrait(0, 0, `${O}`, 'below'),
+        A: pointAbstrait(
           correctionOA.produitFraction(largeurFigure).valeurDecimale,
           0,
           `${A}`,
           'below',
         ),
-        hA: point(
+        hA: pointAbstrait(
           correctionOhA.produitFraction(largeurFigure).valeurDecimale,
           0,
           `${hA}`,

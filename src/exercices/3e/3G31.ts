@@ -1,5 +1,5 @@
 import { codageAngleDroit } from '../../lib/2d/CodageAngleDroit'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { codageAngle } from '../../lib/2d/angles'
 import { barycentre, nommePolygone, polygone } from '../../lib/2d/polygones'
 import { segment } from '../../lib/2d/segmentsVecteurs'
@@ -108,11 +108,11 @@ export default class CalculDAngle extends Exercice {
       }
 
       const ratioerreur = randint(80, 120, 100) / 100
-      const a = point(0, 0)
-      const b = point(ab * ratioerreur, 0)
-      const bb = point(ab, 0)
-      const c = point(0, ac / ratioerreur)
-      const cb = point(0, ac)
+      const a = pointAbstrait(0, 0)
+      const b = pointAbstrait(ab * ratioerreur, 0)
+      const bb = pointAbstrait(ab, 0)
+      const c = pointAbstrait(0, ac / ratioerreur)
+      const cb = pointAbstrait(0, ac)
       const p1 = polygone(a, b, c)
       const p3 = polygone(a, bb, cb)
       const alpha = randint(0, 360)

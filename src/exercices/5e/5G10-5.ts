@@ -1,6 +1,6 @@
 import { codageAngleDroit } from '../../lib/2d/CodageAngleDroit'
 import { codageSegments } from '../../lib/2d/CodageSegment'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { polygone } from '../../lib/2d/polygones'
 import { segment } from '../../lib/2d/segmentsVecteurs'
 import { propositionsQcm } from '../../lib/interactif/qcm'
@@ -193,11 +193,11 @@ export default class ReconnaitreQuadrilatereParticulier extends Exercice {
         case 'losange1':
           texte =
             "Quelle est la nature d'un quadrilatère ayant 4 côtés de même longueur ?"
-          A = point(0, 0)
-          B = point(2, 3)
-          C = point(0, 6)
-          D = point(-2, 3)
-          O = point(0, 3)
+          A = pointAbstrait(0, 0)
+          B = pointAbstrait(2, 3)
+          C = pointAbstrait(0, 6)
+          D = pointAbstrait(-2, 3)
+          O = pointAbstrait(0, 3)
           ABCD = polygone(A, B, C, D)
           marquesCotes = codageSegments('||', bleuMathalea, A, B, B, C, C, D, D, A)
           if (this.correctionDetaillee) {
@@ -213,11 +213,11 @@ export default class ReconnaitreQuadrilatereParticulier extends Exercice {
         case 'losange2':
           texte =
             "Quelle est la nature d'un quadrilatère ayant ses diagonales perpendiculaires et sécantes en leur milieu ?"
-          A = point(0, 0)
-          B = point(2, 3)
-          C = point(0, 6)
-          D = point(-2, 3)
-          O = point(0, 3)
+          A = pointAbstrait(0, 0)
+          B = pointAbstrait(2, 3)
+          C = pointAbstrait(0, 6)
+          D = pointAbstrait(-2, 3)
+          O = pointAbstrait(0, 3)
           ABCD = polygone(A, B, C, D)
           codage = codageAngleDroit(C, O, B)
           sAC = segment(A, C)
@@ -243,11 +243,11 @@ export default class ReconnaitreQuadrilatereParticulier extends Exercice {
         case 'rectangle1':
           texte =
             "Quelle est la nature d'un quadrilatère ayant 4 angles droits ?"
-          A = point(0, 0)
-          B = point(5, 0)
-          C = point(5, 3)
-          D = point(0, 3)
-          O = point(2.5, 1.5)
+          A = pointAbstrait(0, 0)
+          B = pointAbstrait(5, 0)
+          C = pointAbstrait(5, 3)
+          D = pointAbstrait(0, 3)
+          O = pointAbstrait(2.5, 1.5)
           ABCD = polygone(A, B, C, D)
           codage1 = codageAngleDroit(A, B, C)
           codage2 = codageAngleDroit(B, C, D)
@@ -269,11 +269,11 @@ export default class ReconnaitreQuadrilatereParticulier extends Exercice {
         case 'rectangle2':
           texte =
             "Quelle est la nature d'un quadrilatère ayant ses diagonales de même longueur et sécantes en leur milieu ?"
-          A = point(0, 0)
-          B = point(5, 0)
-          C = point(5, 3)
-          D = point(0, 3)
-          O = point(2.5, 1.5)
+          A = pointAbstrait(0, 0)
+          B = pointAbstrait(5, 0)
+          C = pointAbstrait(5, 3)
+          D = pointAbstrait(0, 3)
+          O = pointAbstrait(2.5, 1.5)
           ABCD = polygone(A, B, C, D)
           sAC = segment(A, C)
           sBD = segment(B, D)
@@ -304,11 +304,11 @@ export default class ReconnaitreQuadrilatereParticulier extends Exercice {
         case 'rectangle3':
           texte =
             "Quelle est la nature d'un quadrilatère ayant 3 angles droits ?"
-          A = point(0, 0)
-          B = point(5, 0)
-          C = point(5, 3)
-          D = point(0, 3)
-          O = point(2.5, 1.5)
+          A = pointAbstrait(0, 0)
+          B = pointAbstrait(5, 0)
+          C = pointAbstrait(5, 3)
+          D = pointAbstrait(0, 3)
+          O = pointAbstrait(2.5, 1.5)
           ABCD = polygone(A, B, C, D)
           codage1 = codageAngleDroit(A, B, C)
           codage2 = codageAngleDroit(B, C, D)
@@ -329,11 +329,11 @@ export default class ReconnaitreQuadrilatereParticulier extends Exercice {
         case 'carre1':
           texte =
             "Quelle est la nature d'un quadrilatère ayant ses 4 côtés de même longueur et 4 angles droits ?"
-          A = point(0, 0)
-          B = point(3, 0)
-          C = point(3, 3)
-          D = point(0, 3)
-          O = point(1.5, 1.5)
+          A = pointAbstrait(0, 0)
+          B = pointAbstrait(3, 0)
+          C = pointAbstrait(3, 3)
+          D = pointAbstrait(0, 3)
+          O = pointAbstrait(1.5, 1.5)
           ABCD = polygone(A, B, C, D)
           codage1 = codageAngleDroit(A, B, C)
           codage2 = codageAngleDroit(B, C, D)
@@ -355,11 +355,11 @@ export default class ReconnaitreQuadrilatereParticulier extends Exercice {
         case 'carre2':
           texte =
             "Quelle est la nature d'un quadrilatère ayant ses diagonales perpendiculaires, de même longueur et sécantes en leur milieu ?"
-          A = point(0, 0)
-          B = point(3, 0)
-          C = point(3, 3)
-          D = point(0, 3)
-          O = point(1.5, 1.5)
+          A = pointAbstrait(0, 0)
+          B = pointAbstrait(3, 0)
+          C = pointAbstrait(3, 3)
+          D = pointAbstrait(0, 3)
+          O = pointAbstrait(1.5, 1.5)
           ABCD = polygone(A, B, C, D)
           codage = codageAngleDroit(C, O, D)
           sAC = segment(A, C)
@@ -394,11 +394,11 @@ export default class ReconnaitreQuadrilatereParticulier extends Exercice {
         case 'carre3':
           texte =
             "Quelle est la nature d'un quadrilatère ayant ses 4 côtés de même longueur et un angle droit ?"
-          A = point(0, 0)
-          B = point(3, 0)
-          C = point(3, 3)
-          D = point(0, 3)
-          O = point(1.5, 1.5)
+          A = pointAbstrait(0, 0)
+          B = pointAbstrait(3, 0)
+          C = pointAbstrait(3, 3)
+          D = pointAbstrait(0, 3)
+          O = pointAbstrait(1.5, 1.5)
           ABCD = polygone(A, B, C, D)
           codage = codageAngleDroit(A, B, C)
           marquesCotes = codageSegments('||', bleuMathalea, A, B, B, C, C, D, D, A)

@@ -1,6 +1,6 @@
 import { arcPointPointAngle } from '../../lib/2d/Arc'
 import { cibleCarree, dansLaCibleCarree } from '../../lib/2d/cibles'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { labelPoint } from '../../lib/2d/textes'
 import { tracePoint } from '../../lib/2d/TracePoint'
 import { rotation } from '../../lib/2d/transformations'
@@ -52,7 +52,7 @@ export default class ConstruireRotationPoint3e extends Exercice {
       return lettre + chiffre
     }
     // On prépare la figure...
-    const O = point(0, 0, 'O')
+    const O = pointAbstrait(0, 0, 'O')
     const noms = choisitLettresDifferentes(nbpoints, 'QO', true)
     this.consigne = `Construire l'image des points $${noms[0]}$`
     for (let i = 1; i < nbpoints - 1; i++) {
@@ -76,7 +76,7 @@ export default class ConstruireRotationPoint3e extends Exercice {
     for (let i = 0; i < nbpoints; i++) {
       // On place les cibles.
       N.push(
-        point(
+        pointAbstrait(
           randint(-80, 80, 0) / 10,
           randint(-80, 80, 0) / 10,
           noms[i] + "'",

@@ -26,7 +26,7 @@ import {
 } from '../../lib/2d/patterns/patternsPreDef'
 import { VisualPattern } from '../../lib/2d/patterns/VisualPattern'
 import { VisualPattern3D } from '../../lib/2d/patterns/VisualPattern3D'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { polygone } from '../../lib/2d/polygones'
 import { texteParPosition } from '../../lib/2d/textes'
 import { choice } from '../../lib/outils/arrayOutils'
@@ -316,10 +316,10 @@ L'expression donnée entre crochets est la formule qui permet de calculer le nom
             ),
           )
           const cadre = polygone(
-            point(xmin - 2, -2),
-            point(xmax + 2, -2),
-            point(xmax + 2, ymax + 2),
-            point(xmin - 2, ymax + 2),
+            pointAbstrait(xmin - 2, -2),
+            pointAbstrait(xmax + 2, -2),
+            pointAbstrait(xmax + 2, ymax + 2),
+            pointAbstrait(xmin - 2, ymax + 2),
           )
           cadre.pointilles = 4
           figures[j].push(cadre)

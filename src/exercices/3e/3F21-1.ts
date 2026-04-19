@@ -2,7 +2,7 @@ import {
   droiteParPointEtPente,
   positionLabelDroite,
 } from '../../lib/2d/droites'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { repere } from '../../lib/2d/reperes'
 import { latexParPoint } from '../../lib/2d/textes'
 import { Vide2d } from '../../lib/2d/Vide2d'
@@ -133,7 +133,7 @@ export default class LectureExpressionFonctionsAffines extends Exercice {
     objets2d.push(r)
     for (let i = 0; i < nbDroites; i++) {
       d[i] = droiteParPointEtPente(
-        point(0, listeDroites[i][0]),
+        pointAbstrait(0, listeDroites[i][0]),
         listeDroites[i][1],
         '',
         colors[i],

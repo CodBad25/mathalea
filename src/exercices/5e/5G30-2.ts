@@ -2,7 +2,7 @@ import { Arc, arcPointPointAngle } from '../../lib/2d/Arc'
 import { colorToLatexOrHTML } from '../../lib/2d/colorToLatexOrHtml'
 import { droite } from '../../lib/2d/droites'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
-import { PointAbstrait, point } from '../../lib/2d/PointAbstrait'
+import { PointAbstrait, pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { labelPoint } from '../../lib/2d/textes'
 import { TexteSurArc, texteSurArc } from '../../lib/2d/TexteSurArc'
 import { homothetie, rotation, translation } from '../../lib/2d/transformations'
@@ -220,13 +220,13 @@ export default class ExercicesAnglesAIC extends Exercice {
               abs(param.O - abs(param.B)) > 30
             )
           )
-          const O = point(0, 0)
+          const O = pointAbstrait(0, 0)
           const anglesA = anglesSecantes(
-            homothetie(rotation(point(1, 0), O, param.O), O, param.r1),
+            homothetie(rotation(pointAbstrait(1, 0), O, param.O), O, param.r1),
             { O: param.O, A: param.A },
           )
           const anglesB = anglesSecantes(
-            homothetie(rotation(point(1, 0), O, param.O + 180), O, param.r2),
+            homothetie(rotation(pointAbstrait(1, 0), O, param.O + 180), O, param.r2),
             { O: param.O, A: param.B },
           )
           const secante = droite(anglesA.A, anglesB.A)
@@ -353,13 +353,13 @@ export default class ExercicesAnglesAIC extends Exercice {
             )
           )
 
-          const O = point(0, 0)
+          const O = pointAbstrait(0, 0)
           const anglesA = anglesSecantes(
-            homothetie(rotation(point(1, 0), O, param.O), O, param.r1),
+            homothetie(rotation(pointAbstrait(1, 0), O, param.O), O, param.r1),
             { O: param.O, A: param.A },
           )
           const anglesB = anglesSecantes(
-            homothetie(rotation(point(1, 0), O, param.O + 180), O, param.r2),
+            homothetie(rotation(pointAbstrait(1, 0), O, param.O + 180), O, param.r2),
             { O: param.O, A: param.B },
           )
           const secante = droite(anglesA.A, anglesB.A)
@@ -631,13 +631,13 @@ export default class ExercicesAnglesAIC extends Exercice {
             )
           )
 
-          const O = point(0, 0)
+          const O = pointAbstrait(0, 0)
           const anglesA = anglesSecantes(
-            homothetie(rotation(point(1, 0), O, param.O), O, param.r1),
+            homothetie(rotation(pointAbstrait(1, 0), O, param.O), O, param.r1),
             { O: param.O, A: param.A },
           )
           const anglesB = anglesSecantes(
-            homothetie(rotation(point(1, 0), O, param.O + 180), O, param.r2),
+            homothetie(rotation(pointAbstrait(1, 0), O, param.O + 180), O, param.r2),
             { O: param.O, A: param.B },
           )
           const secante = droite(anglesA.A, anglesB.A)
@@ -938,13 +938,13 @@ export default class ExercicesAnglesAIC extends Exercice {
             )
           )
 
-          const O = point(0, 0)
+          const O = pointAbstrait(0, 0)
           const anglesA = anglesSecantes(
-            homothetie(rotation(point(1, 0), O, param.O), O, param.r1),
+            homothetie(rotation(pointAbstrait(1, 0), O, param.O), O, param.r1),
             { O: param.O, A: param.A },
           )
           const anglesB = anglesSecantes(
-            homothetie(rotation(point(1, 0), O, param.O + 180), O, param.r2),
+            homothetie(rotation(pointAbstrait(1, 0), O, param.O + 180), O, param.r2),
             { O: param.O, A: param.B },
           )
           const secante = droite(anglesA.A, anglesB.A)
@@ -1169,13 +1169,13 @@ export default class ExercicesAnglesAIC extends Exercice {
             )
           )
 
-          const O = point(0, 0)
+          const O = pointAbstrait(0, 0)
           const anglesA = anglesSecantes(
-            homothetie(rotation(point(1, 0), O, param.O), O, param.r1),
+            homothetie(rotation(pointAbstrait(1, 0), O, param.O), O, param.r1),
             { O: param.O, A: param.A },
           )
           const anglesB = anglesSecantes(
-            homothetie(rotation(point(1, 0), O, param.O + 180), O, param.r2),
+            homothetie(rotation(pointAbstrait(1, 0), O, param.O + 180), O, param.r2),
             { O: param.O, A: param.B },
           )
           const secante = droite(anglesA.A, anglesB.A)
@@ -1353,13 +1353,13 @@ export default class ExercicesAnglesAIC extends Exercice {
             )
           )
 
-          const O = point(0, 0)
+          const O = pointAbstrait(0, 0)
           const anglesA = anglesSecantes(
-            homothetie(rotation(point(1, 0), O, param.O), O, param.r1),
+            homothetie(rotation(pointAbstrait(1, 0), O, param.O), O, param.r1),
             { O: param.O, A: param.A },
           )
           const anglesB = anglesSecantes(
-            homothetie(rotation(point(1, 0), O, param.O + 180), O, param.r2),
+            homothetie(rotation(pointAbstrait(1, 0), O, param.O + 180), O, param.r2),
             { O: param.O, A: param.B },
           )
           const secante = droite(anglesA.A, anglesB.A)
@@ -1680,13 +1680,13 @@ export default class ExercicesAnglesAIC extends Exercice {
             )
           )
 
-          const O = point(0, 0)
+          const O = pointAbstrait(0, 0)
           const anglesA = anglesSecantes(
-            homothetie(rotation(point(1, 0), O, param.O), O, param.r1),
+            homothetie(rotation(pointAbstrait(1, 0), O, param.O), O, param.r1),
             { O: param.O, A: param.A },
           )
           const anglesB = anglesSecantes(
-            homothetie(rotation(point(1, 0), O, param.O + 180), O, param.r2),
+            homothetie(rotation(pointAbstrait(1, 0), O, param.O + 180), O, param.r2),
             { O: param.O, A: param.B },
           )
           const secante = droite(anglesA.A, anglesB.A)

@@ -2,7 +2,7 @@ import { arc } from '../../lib/2d/Arc'
 import { codageSegments } from '../../lib/2d/CodageSegment'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { placeLatexSurSegment } from '../../lib/2d/placeLatexSurSegment'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { rotation } from '../../lib/2d/transformations'
 import { pointAdistance } from '../../lib/2d/utilitairesPoint'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
@@ -86,7 +86,7 @@ export default class PerimetreAireEtPortionsDeDisques extends Exercice {
     for (let i = 0, cpt = 0, texteCorr; i < this.nbQuestions && cpt < 50; ) {
       texteCorr = ''
       const objetsEnonce = []
-      const C = point(0, 0)
+      const C = pointAbstrait(0, 0)
       let r = randint(2, 10)
 
       const A = pointAdistance(C, listeTypeQuestions[i] === 3 ? 3 : 6, 0)

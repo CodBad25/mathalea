@@ -1,7 +1,7 @@
 import { colorToLatexOrHTML } from '../../lib/2d/colorToLatexOrHtml'
 import { courbeInterpolee } from '../../lib/2d/CourbeInterpolee.1'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { repere } from '../../lib/2d/reperes'
 import { tracePoint } from '../../lib/2d/TracePoint'
 import { mathalea2d } from '../../modules/mathalea2d'
@@ -121,7 +121,7 @@ export default class TraceCourbeInterpolee1 extends Exercice {
     objets.push(r, c)
     if (this.sup2) {
       for (let i = 0, p; i < points.length; i++) {
-        p = tracePoint(point(points[i][0], points[i][1]))
+        p = tracePoint(pointAbstrait(points[i][0], points[i][1]))
         p.style = '+'
         p.epaisseur = 2
         p.color = colorToLatexOrHTML(couleurs[parseInt(this.sup3) - 1].colPoint)

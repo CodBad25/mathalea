@@ -1,5 +1,5 @@
 import { droiteGraduee } from '../../lib/2d/DroiteGraduee'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { labelPoint } from '../../lib/2d/textes'
 import { tracePoint } from '../../lib/2d/TracePoint'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
@@ -200,9 +200,9 @@ export default class LireAbscisseRelative extends Exercice {
         }),
       )
 
-      const A = point(changeCoord(abs1, abs0, pas1), 0, l1, 'above')
-      const B = point(changeCoord(abs2, abs0, pas1), 0, l2, 'above')
-      const C = point(changeCoord(abs3, abs0, pas1), 0, l3, 'above')
+      const A = pointAbstrait(changeCoord(abs1, abs0, pas1), 0, l1, 'above')
+      const B = pointAbstrait(changeCoord(abs2, abs0, pas1), 0, l2, 'above')
+      const C = pointAbstrait(changeCoord(abs3, abs0, pas1), 0, l3, 'above')
       objets.push(tracePoint(A, B, C), labelPoint(A, B, C))
 
       let texte = mathalea2d(

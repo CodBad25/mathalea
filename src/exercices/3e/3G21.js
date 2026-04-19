@@ -1,5 +1,5 @@
 import Decimal from 'decimal.js'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { polygone } from '../../lib/2d/polygones'
 import { texteParPoint } from '../../lib/2d/textes'
 import { homothetie, rotation } from '../../lib/2d/transformations'
@@ -148,9 +148,9 @@ export default class ReciproqueThales extends Exercice {
       const s14 = texNombre(dist14, 3)
       const s24 = texNombre(dist24, 3)
       const s35 = texNombre(dist35, 3)
-      const A = point(0, 0)
-      const B = point(x2, y2)
-      const C = point(x3, y3)
+      const A = pointAbstrait(0, 0)
+      const B = pointAbstrait(x2, y2)
+      const C = pointAbstrait(x3, y3)
       const t1 = polygone(A, B, C)
       t1.id = `M2D_${numeroExercice}_Q${i}_t1`
       const M = homothetie(B, A, k)
