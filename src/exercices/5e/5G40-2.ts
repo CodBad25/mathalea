@@ -39,10 +39,10 @@ export const refs = {
 export default class ParallelogrammeAPartirDUneFigure extends Exercice {
   constructor() {
     super()
-
     this.nbCols = 2 // Uniquement pour la sortie LaTeX
-
     this.nbQuestions = 4
+    this.besoinFormulaireCaseACocher = ['Inclure les propriétés sur les angles']
+    this.sup = true
   }
 
   nouvelleVersion() {
@@ -120,7 +120,13 @@ export default class ParallelogrammeAPartirDUneFigure extends Exercice {
       '2cotesOpposesMemeLongueurEtParallelev2',
       '2cotesOpposesEtParalleles',
       'anglesOpposesEgaux',
-    ] // On créé 3 types de questions
+    ]
+    if (!this.sup) {
+      const idx = typeQuestionsDisponibles.indexOf('anglesOpposesEgaux')
+      if (idx !== -1) {
+        typeQuestionsDisponibles.splice(idx, 1)
+      }
+    }
     const listeTypeQuestions = combinaisonListes(
       typeQuestionsDisponibles,
       this.nbQuestions,
@@ -291,7 +297,23 @@ export default class ParallelogrammeAPartirDUneFigure extends Exercice {
             "<br>Or, « si un quadrilatère a deux côtés opposés parallèles et de même longueur, alors c'est un parallélogramme »."
           texteCorr += `<br>Donc $${miseEnEvidence(nom)}$ ${texteEnCouleurEtGras('est un parallélogramme')}.`
           break
+        case 'anglesOpposesEgaux':
+          nom = gestionNom(i)
+          texte = mathalea2d(paramsEnonce, [
+            p,
+            nommePolygone(p, nom),
+            aABCcodage,
+            aBCDcodage,
+            aCDAcodage,
+            aDABcodage,
+          ])
+          texteCorr = `On sait que $\\widehat{${A.nom + B.nom + C.nom}} = \\widehat{${C.nom + D.nom + A.nom}}$ et $\\widehat{${B.nom + C.nom + D.nom}} = \\widehat{${D.nom + A.nom + B.nom}}$.`
+          texteCorr +=
+            "<br>Or, « si un quadrilatère a ses angles opposés égaux, alors c'est un parallélogramme »."
+          texteCorr += `<br>Donc $${miseEnEvidence(nom)}$ ${texteEnCouleurEtGras('est un parallélogramme')}.`
+          break
         case '2cotesOpposesEtParalleles':
+        default:
           nom = gestionNom(i)
           texte =
             mathalea2d(paramsEnonce, [p, sAB, sCD, nommePolygone(p, nom)]) +
@@ -313,22 +335,6 @@ export default class ParallelogrammeAPartirDUneFigure extends Exercice {
               Object.assign(fixeBordures([nommePolygone(p1, nom), p1, s1, s2])),
               [nommePolygone(p1, nom), p1, s1, s2],
             )
-          break
-        case 'anglesOpposesEgaux':
-        default:
-          nom = gestionNom(i)
-          texte = mathalea2d(paramsEnonce, [
-            p,
-            nommePolygone(p, nom),
-            aABCcodage,
-            aBCDcodage,
-            aCDAcodage,
-            aDABcodage,
-          ])
-          texteCorr = `On sait que $\\widehat{${A.nom + B.nom + C.nom}} = \\widehat{${C.nom + D.nom + A.nom}}$ et $\\widehat{${B.nom + C.nom + D.nom}} = \\widehat{${D.nom + A.nom + B.nom}}$.`
-          texteCorr +=
-            "<br>Or, « si un quadrilatère a ses angles opposés égaux, alors c'est un parallélogramme »."
-          texteCorr += `<br>Donc $${miseEnEvidence(nom)}$ ${texteEnCouleurEtGras('est un parallélogramme')}.`
           break
       }
       this.autoCorrection[i] = {}

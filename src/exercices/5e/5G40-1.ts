@@ -35,9 +35,10 @@ export default class ProprietesDesParallelogrammes extends Exercice {
       3,
       "1 : Propriétés du parallélogramme (max. 4 questions)\n2 : Propriétés pour montrer qu'un quadrilatère est un parallélogramme (max. 5 questions)\n3 : Mélange (max. 9 questions)",
     ]
-
     this.sup = 3
     this.nbQuestions = 3
+    this.besoinFormulaire2CaseACocher = ['Inclure les propriétés sur les angles']
+    this.sup2 = true
   }
 
   nouvelleVersion() {
@@ -58,7 +59,13 @@ export default class ProprietesDesParallelogrammes extends Exercice {
         : this.sup === 2
           ? [5, 6, 7, 8, 9]
           : range1(9)
-
+    if (!this.sup2) { // on retire les propriétés sur les angles
+      for (let j = typeQuestionsDisponibles.length - 1; j >= 0; j--) {
+        if (typeQuestionsDisponibles[j] === 3 || typeQuestionsDisponibles[j] === 9) {
+          typeQuestionsDisponibles.splice(j, 1)
+        }
+      }
+    }
     const listeTypeQuestions = combinaisonListes(
       typeQuestionsDisponibles,
       this.nbQuestions,
