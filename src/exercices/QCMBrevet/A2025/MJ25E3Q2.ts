@@ -1,7 +1,7 @@
 import { droite } from '../../../lib/2d/droites'
 import { fixeBordures } from '../../../lib/2d/fixeBordures'
 import { grille } from '../../../lib/2d/Grille'
-import { point } from '../../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { polygone } from '../../../lib/2d/polygones'
 import { texteParPosition } from '../../../lib/2d/textes'
 import {
@@ -33,15 +33,15 @@ export const dateDePublication = '27/05/2025'
 
 export default class MetropoleJ25EX3Q2 extends ExerciceQcmA {
   private appliquerLesValeurs(transfo: number): void {
-    const point1 = point(1, 6)
-    const point2 = point(3, 6)
-    const point3 = point(4, 7)
-    const point4 = point(5, 6)
-    const point5 = point(5, 8)
-    const point7 = point(4, 9)
-    const point8 = point(5, 10)
-    const point9 = point(3, 10)
-    const point10 = point(3, 8)
+    const point1 = pointAbstrait(1, 6)
+    const point2 = pointAbstrait(3, 6)
+    const point3 = pointAbstrait(4, 7)
+    const point4 = pointAbstrait(5, 6)
+    const point5 = pointAbstrait(5, 8)
+    const point7 = pointAbstrait(4, 9)
+    const point8 = pointAbstrait(5, 10)
+    const point9 = pointAbstrait(3, 10)
+    const point10 = pointAbstrait(3, 8)
     const cocotte = polygone([
       point1,
       point2,
@@ -54,9 +54,9 @@ export default class MetropoleJ25EX3Q2 extends ExerciceQcmA {
       point10,
     ])
     cocotte.epaisseur = 2
-    const d = droite(point(1, 0), point(5, 4))
-    const C1 = point(6, 5)
-    const C2 = point(4, 3)
+    const d = droite(pointAbstrait(1, 0), pointAbstrait(5, 4))
+    const C1 = pointAbstrait(6, 5)
+    const C2 = pointAbstrait(4, 3)
 
     const cocotte2 = [
       symetrieAxiale(cocotte, d),

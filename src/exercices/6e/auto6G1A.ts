@@ -5,7 +5,7 @@ import { checkSegmentFromLabels } from 'apigeom/src/check/checkSegment'
 import { demiDroite } from '../../lib/2d/DemiDroite'
 import { droite } from '../../lib/2d/droites'
 import { grille, seyes } from '../../lib/2d/Grille'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { segment } from '../../lib/2d/segmentsVecteurs'
 import { labelPoint } from '../../lib/2d/textes'
 import { tracePoint } from '../../lib/2d/TracePoint'
@@ -71,26 +71,26 @@ export default class constructionElementaire extends Exercice {
       const objetsEnonce = []
       const objetsCorrection = []
       const indLettre = randint(1, 15)
-      const A = point(
+      const A = pointAbstrait(
         randint(0, 3),
         randint(-8, -3),
         lettreDepuisChiffre(indLettre),
         'above left',
       )
-      const B = point(
+      const B = pointAbstrait(
         randint(10, 11),
         randint(-4, 4, [-1, 0, 1]),
         lettreDepuisChiffre(indLettre + 1),
         'above right',
       )
       const d = droite(A, B, '', 'blue') // Ne pas mettre bleuMathalea quand il s'agit d'apigeom
-      const C = point(
+      const C = pointAbstrait(
         randint(2, 4, [A.x]),
         randint(3, 6, [A.y]),
         lettreDepuisChiffre(indLettre + 2),
         'above left',
       )
-      const D = point(
+      const D = pointAbstrait(
         randint(6, 8),
         randint(-7, -6, [A.y]),
         lettreDepuisChiffre(indLettre + 3),

@@ -4,7 +4,7 @@
 
 import { demiDroite } from '../../lib/2d/DemiDroite'
 import { droite } from '../../lib/2d/droites'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { segmentAvecExtremites } from '../../lib/2d/segmentsVecteurs'
 import { labelPoint } from '../../lib/2d/textes'
 import { vide2d } from '../../lib/2d/Vide2d'
@@ -59,8 +59,8 @@ export default class CliqueFigure extends Exercice {
       i < this.nbQuestions && cpt < 50;
     ) {
       const numeroLettre = randint(1, 20)
-      const A = point(0, 0)
-      const B = point(4, randint(-1, 3, 0))
+      const A = pointAbstrait(0, 0)
+      const B = pointAbstrait(4, randint(-1, 3, 0))
       A.nom = lettreDepuisChiffre(numeroLettre)
       B.nom = lettreDepuisChiffre(numeroLettre + 1)
       // context.pixelsParCm = 10

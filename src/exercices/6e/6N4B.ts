@@ -14,7 +14,7 @@ import {
 } from '../../lib/2d/patterns/patternsPreDef'
 import { VisualPattern } from '../../lib/2d/patterns/VisualPattern'
 import { VisualPattern3D } from '../../lib/2d/patterns/VisualPattern3D'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { polygone } from '../../lib/2d/polygones'
 import { tableauColonneLigne } from '../../lib/2d/tableau'
 import { texteParPosition } from '../../lib/2d/textes'
@@ -236,10 +236,10 @@ Si le nombre de questions est supérieur au nombre de patterns choisis, alors l'
         // On ajoute un cadre en Html à cause de la bordure car les éléments sont tous clonés à partir du même modèle centré à l'origine et en utilsant des href.
         if (context.isHtml) {
           const cadre = polygone(
-            point(xminCorr - 1, yminCorr - 2),
-            point(xmaxCorr + 2, yminCorr - 2),
-            point(xmaxCorr + 2, ymaxCorr + 2),
-            point(xminCorr - 1, ymaxCorr + 2),
+            pointAbstrait(xminCorr - 1, yminCorr - 2),
+            pointAbstrait(xmaxCorr + 2, yminCorr - 2),
+            pointAbstrait(xmaxCorr + 2, ymaxCorr + 2),
+            pointAbstrait(xminCorr - 1, ymaxCorr + 2),
           )
           objetsCorr.push(cadre)
         }
@@ -326,10 +326,10 @@ Si le nombre de questions est supérieur au nombre de patterns choisis, alors l'
           ),
         )
         const cadre = polygone(
-          point(xmin - 1, ymin - 2),
-          point(xmax + 2, ymin - 2),
-          point(xmax + 2, ymax + 2),
-          point(xmin - 1, ymax + 2),
+          pointAbstrait(xmin - 1, ymin - 2),
+          pointAbstrait(xmax + 2, ymin - 2),
+          pointAbstrait(xmax + 2, ymax + 2),
+          pointAbstrait(xmin - 1, ymax + 2),
         )
         cadre.pointilles = 4
         figures[j].push(cadre)

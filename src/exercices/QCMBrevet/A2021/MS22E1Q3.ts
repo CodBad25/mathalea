@@ -1,5 +1,5 @@
 import { fixeBordures } from '../../../lib/2d/fixeBordures'
-import { point } from '../../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { polygone } from '../../../lib/2d/polygones'
 import { latex2d } from '../../../lib/2d/textes'
 import { tracePoint } from '../../../lib/2d/TracePoint'
@@ -35,15 +35,15 @@ export default class MetropoleSeptembre21Exo1Q3 extends ExerciceQcmA {
     angle3: number,
   ): void {
     const nuage = [
-      point(0.5, 0.5),
-      point(1.6, 0.5),
-      point(1.6, 0.3),
-      point(2, 0.75),
-      point(1.6, 1.2),
-      point(1.6, 1),
-      point(0.5, 1),
+      pointAbstrait(0.5, 0.5),
+      pointAbstrait(1.6, 0.5),
+      pointAbstrait(1.6, 0.3),
+      pointAbstrait(2, 0.75),
+      pointAbstrait(1.6, 1.2),
+      pointAbstrait(1.6, 1),
+      pointAbstrait(0.5, 1),
     ]
-    const centre = point(0, 0, 'O', 'above right')
+    const centre = pointAbstrait(0, 0, 'O', 'above right')
 
     const traceO = tracePoint(centre)
     traceO.style = '+'

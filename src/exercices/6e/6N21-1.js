@@ -1,5 +1,5 @@
 import { droiteGraduee } from '../../lib/2d/DroiteGraduee'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { labelPoint } from '../../lib/2d/textes'
 import { tracePoint } from '../../lib/2d/TracePoint'
 import { bleuMathalea } from '../../lib/colors'
@@ -247,13 +247,13 @@ export default class PlacerPointsAbscissesFractionnairesComplexes extends Exerci
 
       let A, B, C, traceB, traceC, labels
       if (context.isHtml) {
-        A = point(
+        A = pointAbstrait(
           (num1 / den1 - origine) * tailleUnite,
           0,
           `$${lettreIndiceeDepuisChiffre(i + 1)}$`,
         )
       } else {
-        A = point(
+        A = pointAbstrait(
           (num1 / den1 - origine) * tailleUnite,
           0,
           lettreIndiceeDepuisChiffre(i + 1),
@@ -266,14 +266,14 @@ export default class PlacerPointsAbscissesFractionnairesComplexes extends Exerci
       if (!this.interactif) {
         if (context.isHtml) {
           A.nom = `$${lettreIndiceeDepuisChiffre(i * 3 + 1)}$`
-          B = point(
+          B = pointAbstrait(
             (num2 / den2 - origine) * tailleUnite,
             0,
             `$${lettreIndiceeDepuisChiffre(i * 3 + 2)}$`,
           )
         } else {
           A.nom = lettreIndiceeDepuisChiffre(i * 3 + 1)
-          B = point(
+          B = pointAbstrait(
             (num2 / den2 - origine) * tailleUnite,
             0,
             lettreIndiceeDepuisChiffre(i * 3 + 2),
@@ -283,13 +283,13 @@ export default class PlacerPointsAbscissesFractionnairesComplexes extends Exerci
         traceB.epaisseur = 2
         traceB.taille = 3
         if (context.isHtml) {
-          C = point(
+          C = pointAbstrait(
             (num3 / den3 - origine) * tailleUnite,
             0,
             `$${lettreIndiceeDepuisChiffre(i * 3 + 3)}$`,
           )
         } else {
-          C = point(
+          C = pointAbstrait(
             (num3 / den3 - origine) * tailleUnite,
             0,
             lettreIndiceeDepuisChiffre(i * 3 + 3),

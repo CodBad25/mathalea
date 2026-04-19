@@ -1,7 +1,7 @@
 import { colorToLatexOrHTML } from '../../../lib/2d/colorToLatexOrHtml'
 import { droite, labelOnLine } from '../../../lib/2d/droites'
 import { fixeBordures } from '../../../lib/2d/fixeBordures'
-import { point } from '../../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { Polygone, polygone } from '../../../lib/2d/polygones'
 import { rotation } from '../../../lib/2d/transformations'
 import { choice } from '../../../lib/outils/arrayOutils'
@@ -39,8 +39,8 @@ export default class MetropoleJuin24Exo4BisQ3 extends ExerciceQcmA {
     const angleRot = 360 / nbSecteurs
     const rosa = rose(nbSecteurs)
     const d = rotation(
-      droite(point(0, 0), point(-5, 0)),
-      point(0, 0),
+      droite(pointAbstrait(0, 0), pointAbstrait(-5, 0)),
+      pointAbstrait(0, 0),
       sens ? angleRot * nbSecteursRot : -angleRot * nbSecteursRot,
     )
     d.color = colorToLatexOrHTML('black')

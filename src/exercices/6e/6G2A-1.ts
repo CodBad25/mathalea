@@ -1,5 +1,5 @@
 import { codageSegments } from '../../lib/2d/CodageSegment'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { tracePoint } from '../../lib/2d/TracePoint'
 import { tracePointSurDroite } from '../../lib/2d/TracePointSurDroite'
 import { cercle } from '../../lib/2d/cercle'
@@ -80,9 +80,9 @@ export default class RayonDiametreMilieu extends Exercice {
             texte = `Si le rayon d'un cercle mesure $${longueurSegment}\\text{ cm}$, alors son diamètre mesure`
             texteCorr = `Si le rayon d'un cercle mesure $${longueurSegment}\\text{ cm}$ alors son diamètre mesure $${longueurSegment * 2}\\text{ cm}$.`
             reponse = longueurSegment * 2
-            const point1 = point(0, 0, lettre1, 'left')
+            const point1 = pointAbstrait(0, 0, lettre1, 'left')
             const point2 = rotation(
-              point(3, 0),
+              pointAbstrait(3, 0),
               point1,
               randint(-20, 20),
               lettre2,
@@ -106,9 +106,9 @@ export default class RayonDiametreMilieu extends Exercice {
             texte = `Si $${lettre1}$ est le milieu de $[${lettre2}${lettre3}]$ et $${lettre2}${lettre3}=${longueurSegment * 2}\\text{ cm}$, alors  $[${lettre2}${lettre1}]$ mesure`
             texteCorr = `Si $${lettre1}$ est le milieu de $[${lettre2}${lettre3}]$ et $${lettre2}${lettre3}=${longueurSegment * 2}\\text{ cm}$, alors  $[${lettre2}${lettre1}]$ mesure $${longueurSegment}\\text{ cm}$.`
             reponse = longueurSegment
-            const point1 = point(0, 0, lettre2, 'left')
+            const point1 = pointAbstrait(0, 0, lettre2, 'left')
             const point2 = rotation(
-              point(6, 0),
+              pointAbstrait(6, 0),
               point1,
               randint(-20, 20),
               lettre3,
@@ -138,9 +138,9 @@ export default class RayonDiametreMilieu extends Exercice {
             texte = `$${lettre1}$ est le milieu de $[${lettre2}${lettre3}]$ et $${lettre2}${lettre1}=${longueurSegment}\\text{ cm}$, alors $[${lettre2}${lettre3}]$ mesure`
             reponse = longueurSegment * 2
             texteCorr = `$${lettre1}$ est le milieu de $[${lettre2}${lettre3}]$ et $${lettre2}${lettre1}=${longueurSegment}\\text{ cm}$, alors $[${lettre2}${lettre3}]$ mesure $${longueurSegment * 2}\\text{ cm}$.`
-            const point1 = point(0, 0, lettre2, 'left')
+            const point1 = pointAbstrait(0, 0, lettre2, 'left')
             const point2 = rotation(
-              point(6, 0),
+              pointAbstrait(6, 0),
               point1,
               randint(-20, 20),
               lettre3,
@@ -177,9 +177,9 @@ export default class RayonDiametreMilieu extends Exercice {
             texte = `Si le diamètre d'un cercle mesure $${longueurSegment * 2}\\text{ cm}$, alors son rayon mesure`
             texteCorr = `Si le diamètre d'un cercle mesure $${longueurSegment * 2}\\text{ cm}$, alors son rayon mesure $${longueurSegment}\\text{ cm}$.`
             reponse = longueurSegment
-            const point1 = point(0, 0, lettre1, 'left')
+            const point1 = pointAbstrait(0, 0, lettre1, 'left')
             const point2 = rotation(
-              point(6, 0),
+              pointAbstrait(6, 0),
               point1,
               randint(-20, 20),
               lettre2,

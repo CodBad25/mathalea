@@ -1,14 +1,14 @@
 import { colorToLatexOrHTML } from '../../../lib/2d/colorToLatexOrHtml'
 import { fixeBordures } from '../../../lib/2d/fixeBordures'
 import { integrale } from '../../../lib/2d/Integrale'
-import { point } from '../../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { polygone } from '../../../lib/2d/polygones'
 import { repere } from '../../../lib/2d/reperes'
+import { bleuMathalea } from '../../../lib/colors'
 import { Spline } from '../../../lib/mathFonctions/Spline'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import ExerciceQcm from '../../ExerciceQcm'
-import { bleuMathalea } from '../../../lib/colors'
 
 export const uuid = '3ca11'
 export const refs = {
@@ -62,24 +62,24 @@ export default class PolynesieJuin2024Ex2Q2 extends ExerciceQcm {
       },
     ])
     const nuage = [
-      point(1, 0),
-      point(1, 3),
-      point(2, 3),
-      point(2, 2),
-      point(3, 2),
-      point(3, 0),
+      pointAbstrait(1, 0),
+      pointAbstrait(1, 3),
+      pointAbstrait(2, 3),
+      pointAbstrait(2, 2),
+      pointAbstrait(3, 2),
+      pointAbstrait(3, 0),
     ]
     const nuage2 = [
-      point(1, 0),
-      point(1, 4),
-      point(2, 4),
-      point(2, 3),
-      point(3, 3),
-      point(3, 2),
-      point(4, 2),
-      point(4, 1),
-      point(5, 1),
-      point(5, 0),
+      pointAbstrait(1, 0),
+      pointAbstrait(1, 4),
+      pointAbstrait(2, 4),
+      pointAbstrait(2, 3),
+      pointAbstrait(3, 3),
+      pointAbstrait(3, 2),
+      pointAbstrait(4, 2),
+      pointAbstrait(4, 1),
+      pointAbstrait(5, 1),
+      pointAbstrait(5, 0),
     ]
     const zoneGrise = integrale(maSpline.fonction, {
       repere: leRepere,

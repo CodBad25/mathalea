@@ -3,7 +3,7 @@ import { cercle } from '../../lib/2d/cercle'
 import { codageAngleDroit } from '../../lib/2d/CodageAngleDroit'
 import { codageSegments } from '../../lib/2d/CodageSegment'
 import { droite, droiteParPointEtPerpendiculaire } from '../../lib/2d/droites'
-import { Point, point } from '../../lib/2d/PointAbstrait'
+import { Point, pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { polygoneAvecNom } from '../../lib/2d/polygones'
 import { segment } from '../../lib/2d/segmentsVecteurs'
 import { labelPoint } from '../../lib/2d/textes'
@@ -146,7 +146,7 @@ export default class ConstruireUnTriangle extends Exercice {
       for (let i = 0; i < 3; i++) sommets.push(nom[i])
       sommets = shuffle(sommets)
       sommets.push(nom[3]) // milieu
-      A = point(0, 0, sommets[0], 'left')
+      A = pointAbstrait(0, 0, sommets[0], 'left')
       switch (listeTypeDeQuestions[i]) {
         case 1: // triangle donné par trois longueurs
           lAC = randint(35, 45)
@@ -159,7 +159,7 @@ export default class ConstruireUnTriangle extends Exercice {
           cB = cercle(B, lBC)
           C = pointIntersectionCC(cA, cB, sommets[2], 1)
           C.positionLabel = 'above'
-          CC = point(
+          CC = pointAbstrait(
             C.x + randint(-5, 5, 0) / 10,
             C.y + randint(-5, 5, 0) / 10,
             sommets[2],
@@ -201,7 +201,7 @@ export default class ConstruireUnTriangle extends Exercice {
           dAB = droite(A, B)
           dBC = droiteParPointEtPerpendiculaire(B, dAB)
           C = pointIntersectionLC(dBC, cA, sommets[2], 1)
-          CC = point(
+          CC = pointAbstrait(
             C.x + randint(-5, 5, 0) / 10,
             C.y + randint(-5, 5, 0) / 10,
             sommets[2],
@@ -274,7 +274,7 @@ export default class ConstruireUnTriangle extends Exercice {
           cB = cercle(B, lBC)
           C = pointIntersectionCC(cA, cB, sommets[2], 1)
           C.positionLabel = 'above'
-          CC = point(
+          CC = pointAbstrait(
             C.x + randint(-5, 5, 0) / 10,
             C.y + randint(-5, 5, 0) / 10,
             sommets[2],
@@ -385,7 +385,7 @@ export default class ConstruireUnTriangle extends Exercice {
           cB = cercle(B, lBC)
           C = pointIntersectionCC(cA, cB, sommets[2], 1)
           C.positionLabel = 'above'
-          CC = point(
+          CC = pointAbstrait(
             C.x + randint(-5, 5, 0) / 10,
             C.y + randint(-5, 5, 0) / 10,
             sommets[2],
@@ -492,7 +492,7 @@ export default class ConstruireUnTriangle extends Exercice {
           cB = cercle(B, lBC)
           C = pointIntersectionCC(cA, cB, sommets[2], 1)
           C.positionLabel = 'above'
-          CC = point(
+          CC = pointAbstrait(
             C.x + randint(-5, 5, 0) / 10,
             C.y + randint(-5, 5, 0) / 10,
             sommets[2],
@@ -601,7 +601,7 @@ export default class ConstruireUnTriangle extends Exercice {
           cB = cercle(B, lBC)
           C = pointIntersectionCC(cA, cB, sommets[2], 1)
           C.positionLabel = 'above'
-          CC = point(
+          CC = pointAbstrait(
             C.x + randint(-5, 5, 0) / 10,
             C.y + randint(-5, 5, 0) / 10,
             sommets[2],
@@ -711,7 +711,7 @@ export default class ConstruireUnTriangle extends Exercice {
           cB = cercle(B, lBC)
           C = pointIntersectionCC(cA, cB, sommets[2], 1)
           C.positionLabel = 'above'
-          CC = point(
+          CC = pointAbstrait(
             C.x + randint(-5, 5, 0) / 10,
             C.y + randint(-5, 5, 0) / 10,
             sommets[2],

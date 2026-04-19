@@ -1,5 +1,5 @@
 import { fixeBordures } from '../../lib/2d/fixeBordures'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { polygone } from '../../lib/2d/polygones'
 import { segment } from '../../lib/2d/segmentsVecteurs'
 import { texteParPosition } from '../../lib/2d/textes'
@@ -340,14 +340,14 @@ export default class ModelisationProblemes extends Exercice {
             }
             correctionSansSchema = `${b1}+${c1}`
             correctionSansSchemaLatex = `${b1} + ${c1}`
-            A1 = point(0, 0)
-            B1 = point(12, 0)
-            C1 = point(12, 4)
-            D1 = point(0, 4)
+            A1 = pointAbstrait(0, 0)
+            B1 = pointAbstrait(12, 0)
+            C1 = pointAbstrait(12, 4)
+            D1 = pointAbstrait(0, 4)
             p1 = polygone([A1, B1, C1, D1], colorA)
             p1.epaisseur = context.isHtml ? 3 : 2
-            traitHorizontal1 = segment(point(0, 2), point(12, 2))
-            traitVertical1 = segment(point(6, 2), point(6, 4))
+            traitHorizontal1 = segment(pointAbstrait(0, 2), pointAbstrait(12, 2))
+            traitVertical1 = segment(pointAbstrait(6, 2), pointAbstrait(6, 4))
             tb1 = texteParPosition('?', 6, 1)
             th1 = texteParPosition(b1, 3, 3)
             th12 = texteParPosition(c1, 9, 3)
@@ -392,18 +392,18 @@ export default class ModelisationProblemes extends Exercice {
 
             correctionSansSchema = `${b1 * c1}\\div${b1}`
             correctionSansSchemaLatex = `${b1 * c1} \\div ${b1}`
-            A2 = point(0, 0)
-            B2 = point(12, 0)
-            C2 = point(12, 4)
-            D2 = point(0, 4)
+            A2 = pointAbstrait(0, 0)
+            B2 = pointAbstrait(12, 0)
+            C2 = pointAbstrait(12, 4)
+            D2 = pointAbstrait(0, 4)
             p2 = polygone([A2, B2, C2, D2], colorA)
             p2.epaisseur = context.isHtml ? 3 : 2
-            traitHorizontal2 = segment(point(0, 2), point(12, 2))
-            traitHorizontal22 = segment(point(0, 4.5), point(12, 4.5))
+            traitHorizontal2 = segment(pointAbstrait(0, 2), pointAbstrait(12, 2))
+            traitHorizontal22 = segment(pointAbstrait(0, 4.5), pointAbstrait(12, 4.5))
             traitHorizontal22.styleExtremites = '<->'
-            traitVertical2 = segment(point(2, 2), point(2, 4))
-            traitVertical22 = segment(point(4, 2), point(4, 4))
-            traitVertical23 = segment(point(10, 2), point(10, 4))
+            traitVertical2 = segment(pointAbstrait(2, 2), pointAbstrait(2, 4))
+            traitVertical22 = segment(pointAbstrait(4, 2), pointAbstrait(4, 4))
+            traitVertical23 = segment(pointAbstrait(10, 2), pointAbstrait(10, 4))
             tb2 = texteParPosition(b1 * c1, 6, 1)
             th2 = texteParPosition(b1, 1, 3)
             th22 = texteParPosition(b1, 3, 3)
@@ -456,14 +456,14 @@ export default class ModelisationProblemes extends Exercice {
 
             correctionSansSchema = `${b5}-${c5}`
             correctionSansSchemaLatex = `${b5} - ${c5}`
-            A3 = point(0, 0)
-            B3 = point(12, 0)
-            C3 = point(12, 4)
-            D3 = point(0, 4)
+            A3 = pointAbstrait(0, 0)
+            B3 = pointAbstrait(12, 0)
+            C3 = pointAbstrait(12, 4)
+            D3 = pointAbstrait(0, 4)
             p3 = polygone([A3, B3, C3, D3], colorA)
             p3.epaisseur = context.isHtml ? 3 : 2
-            traitHorizontal3 = segment(point(0, 2), point(12, 2))
-            traitVertical3 = segment(point(6, 2), point(6, 4))
+            traitHorizontal3 = segment(pointAbstrait(0, 2), pointAbstrait(12, 2))
+            traitVertical3 = segment(pointAbstrait(6, 2), pointAbstrait(6, 4))
             tb3 = texteParPosition(b5, 6, 1)
             th3 = texteParPosition('?', 3, 3)
             th32 = texteParPosition(c5, 9, 3)
@@ -506,18 +506,18 @@ export default class ModelisationProblemes extends Exercice {
 
             correctionSansSchema = `${c5}\\times${b5}`
             correctionSansSchemaLatex = ` ${c5} \\times ${b5}`
-            A4 = point(0, 0)
-            B4 = point(12, 0)
-            C4 = point(12, 4)
-            D4 = point(0, 4)
+            A4 = pointAbstrait(0, 0)
+            B4 = pointAbstrait(12, 0)
+            C4 = pointAbstrait(12, 4)
+            D4 = pointAbstrait(0, 4)
             p4 = polygone([A4, B4, C4, D4], colorA)
             p4.epaisseur = context.isHtml ? 3 : 2
-            traitHorizontal4 = segment(point(0, 2), point(12, 2))
-            traitHorizontal42 = segment(point(0, 4.5), point(12, 4.5))
+            traitHorizontal4 = segment(pointAbstrait(0, 2), pointAbstrait(12, 2))
+            traitHorizontal42 = segment(pointAbstrait(0, 4.5), pointAbstrait(12, 4.5))
             traitHorizontal42.styleExtremites = '<->'
-            traitVertical4 = segment(point(2, 2), point(2, 4))
-            traitVertical42 = segment(point(4, 2), point(4, 4))
-            traitVertical43 = segment(point(10, 2), point(10, 4))
+            traitVertical4 = segment(pointAbstrait(2, 2), pointAbstrait(2, 4))
+            traitVertical42 = segment(pointAbstrait(4, 2), pointAbstrait(4, 4))
+            traitVertical43 = segment(pointAbstrait(10, 2), pointAbstrait(10, 4))
             tb4 = texteParPosition('?', 6, 1)
             th4 = texteParPosition(b5, 1, 3)
             th42 = texteParPosition(b5, 3, 3)
@@ -569,18 +569,18 @@ export default class ModelisationProblemes extends Exercice {
 
             correctionSansSchema = `${d3}\\div${c3}`
             correctionSansSchemaLatex = `${d3} \\div ${c3}`
-            A5 = point(0, 0)
-            B5 = point(12, 0)
-            C5 = point(12, 4)
-            D5 = point(0, 4)
+            A5 = pointAbstrait(0, 0)
+            B5 = pointAbstrait(12, 0)
+            C5 = pointAbstrait(12, 4)
+            D5 = pointAbstrait(0, 4)
             p5 = polygone([A5, B5, C5, D5], colorB)
             p5.epaisseur = context.isHtml ? 3 : 2
-            traitHorizontal5 = segment(point(0, 2), point(12, 2))
-            traitHorizontal52 = segment(point(0, 4.7), point(12, 4.7))
+            traitHorizontal5 = segment(pointAbstrait(0, 2), pointAbstrait(12, 2))
+            traitHorizontal52 = segment(pointAbstrait(0, 4.7), pointAbstrait(12, 4.7))
             traitHorizontal52.styleExtremites = '<->'
-            traitVertical5 = segment(point(2, 2), point(2, 4))
-            traitVertical52 = segment(point(4, 2), point(4, 4))
-            traitVertical53 = segment(point(10, 2), point(10, 4))
+            traitVertical5 = segment(pointAbstrait(2, 2), pointAbstrait(2, 4))
+            traitVertical52 = segment(pointAbstrait(4, 2), pointAbstrait(4, 4))
+            traitVertical53 = segment(pointAbstrait(10, 2), pointAbstrait(10, 4))
             tb5 = texteParPosition(d3, 6, 1)
             th5 = texteParPosition('?', 1, 3)
             th52 = texteParPosition('?', 3, 3)
@@ -632,14 +632,14 @@ export default class ModelisationProblemes extends Exercice {
 
             correctionSansSchema = `${a7}+${b7}`
             correctionSansSchemaLatex = `${b7} + ${a7}`
-            A6 = point(0, 0)
-            B6 = point(12, 0)
-            C6 = point(12, 4)
-            D6 = point(0, 4)
+            A6 = pointAbstrait(0, 0)
+            B6 = pointAbstrait(12, 0)
+            C6 = pointAbstrait(12, 4)
+            D6 = pointAbstrait(0, 4)
             p6 = polygone([A6, B6, C6, D6], colorB)
             p6.epaisseur = context.isHtml ? 3 : 2
-            traitHorizontal6 = segment(point(0, 2), point(12, 2))
-            traitVertical6 = segment(point(6, 2), point(6, 4))
+            traitHorizontal6 = segment(pointAbstrait(0, 2), pointAbstrait(12, 2))
+            traitVertical6 = segment(pointAbstrait(6, 2), pointAbstrait(6, 4))
             tb6 = texteParPosition('?', 6, 1)
             th6 = texteParPosition(b7, 3, 3)
             th62 = texteParPosition(a7, 9, 3)
@@ -682,18 +682,18 @@ export default class ModelisationProblemes extends Exercice {
 
             correctionSansSchema = `${d3}\\div${c3}`
             correctionSansSchemaLatex = `${d3} \\div ${c3}`
-            A7 = point(0, 0)
-            B7 = point(12, 0)
-            C7 = point(12, 4)
-            D7 = point(0, 4)
+            A7 = pointAbstrait(0, 0)
+            B7 = pointAbstrait(12, 0)
+            C7 = pointAbstrait(12, 4)
+            D7 = pointAbstrait(0, 4)
             p7 = polygone([A7, B7, C7, D7], colorB)
             p7.epaisseur = context.isHtml ? 3 : 2
-            traitHorizontal7 = segment(point(0, 2), point(12, 2))
-            traitHorizontal72 = segment(point(0, 4.7), point(12, 4.7))
+            traitHorizontal7 = segment(pointAbstrait(0, 2), pointAbstrait(12, 2))
+            traitHorizontal72 = segment(pointAbstrait(0, 4.7), pointAbstrait(12, 4.7))
             traitHorizontal72.styleExtremites = '<->'
-            traitVertical7 = segment(point(2, 2), point(2, 4))
-            traitVertical72 = segment(point(4, 2), point(4, 4))
-            traitVertical73 = segment(point(10, 2), point(10, 4))
+            traitVertical7 = segment(pointAbstrait(2, 2), pointAbstrait(2, 4))
+            traitVertical72 = segment(pointAbstrait(4, 2), pointAbstrait(4, 4))
+            traitVertical73 = segment(pointAbstrait(10, 2), pointAbstrait(10, 4))
             tb7 = texteParPosition(d3, 6, 1)
             th7 = texteParPosition(c3, 1, 3)
             th72 = texteParPosition(c3, 3, 3)
@@ -746,14 +746,14 @@ export default class ModelisationProblemes extends Exercice {
 
             correctionSansSchema = `${b7}-${a7}`
             correctionSansSchemaLatex = `${b7} - ${a7}`
-            A8 = point(0, 0)
-            B8 = point(12, 0)
-            C8 = point(12, 4)
-            D8 = point(0, 4)
+            A8 = pointAbstrait(0, 0)
+            B8 = pointAbstrait(12, 0)
+            C8 = pointAbstrait(12, 4)
+            D8 = pointAbstrait(0, 4)
             p8 = polygone([A8, B8, C8, D8], colorB)
             p8.epaisseur = context.isHtml ? 3 : 2
-            traitHorizontal8 = segment(point(0, 2), point(12, 2))
-            traitVertical8 = segment(point(6, 2), point(6, 4))
+            traitHorizontal8 = segment(pointAbstrait(0, 2), pointAbstrait(12, 2))
+            traitVertical8 = segment(pointAbstrait(6, 2), pointAbstrait(6, 4))
             tb8 = texteParPosition(b7, 6, 1)
             th8 = texteParPosition(a7, 3, 3)
             th82 = texteParPosition('?', 9, 3)

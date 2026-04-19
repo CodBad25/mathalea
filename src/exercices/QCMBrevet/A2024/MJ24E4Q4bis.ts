@@ -2,7 +2,7 @@ import { cercle } from '../../../lib/2d/cercle'
 
 import { colorToLatexOrHTML } from '../../../lib/2d/colorToLatexOrHtml'
 import { fixeBordures } from '../../../lib/2d/fixeBordures'
-import { point } from '../../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { Polygone, polygone } from '../../../lib/2d/polygones'
 import { polyline } from '../../../lib/2d/Polyline'
 import { latex2d } from '../../../lib/2d/textes'
@@ -33,9 +33,9 @@ export const dateDePublication = '05/01/2025'
 export function rose(nbSecteurs: number): NestedObjetMathalea2dArray {
   const rose: NestedObjetMathalea2dArray = []
   const angleRot = 360 / nbSecteurs
-  const O = point(0, 0, 'O', 'above right')
-  const A = point(-4, 0)
-  const B = rotation(point(-5, 0), O, -angleRot / 2)
+  const O = pointAbstrait(0, 0, 'O', 'above right')
+  const A = pointAbstrait(-4, 0)
+  const B = rotation(pointAbstrait(-5, 0), O, -angleRot / 2)
   const C = rotation(A, O, -angleRot)
   const enveloppe = cercle(O, 5)
   const poly = polygone([O, A, B, C])
@@ -80,7 +80,7 @@ export default class MetropoleJuin24Exo4BisQ4 extends ExerciceQcmA {
     poly.couleurDeRemplissage = colorToLatexOrHTML('lightgray')
     const polyAnim = rotationAnimee(
       [poly],
-      point(0, 0),
+      pointAbstrait(0, 0),
       angleRot * nbSecteursRot * (sens ? 1 : -1),
     )
     const lab = latex2d('O', -0.5, -0.5, {

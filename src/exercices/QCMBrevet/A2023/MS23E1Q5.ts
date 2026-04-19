@@ -1,5 +1,5 @@
 import { fixeBordures } from '../../../lib/2d/fixeBordures'
-import { point } from '../../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { nommePolygone, polygone } from '../../../lib/2d/polygones'
 import { latex2d } from '../../../lib/2d/textes'
 import { tracePoint } from '../../../lib/2d/TracePoint'
@@ -31,8 +31,12 @@ export const dateDePublication = '28/10/2024'
  */
 export default class MetropoleSeptembre23Exo1Q5 extends ExerciceQcmA {
   private appliquerLesValeurs(azimut: number, rapport: number): void {
-    const nuage = [point(-2, 0, 'A'), point(-1, -1, 'C'), point(-4, -1, 'B')]
-    const centre = point(0, 0, 'O', 'above right')
+    const nuage = [
+      pointAbstrait(-2, 0, 'A'),
+      pointAbstrait(-1, -1, 'C'),
+      pointAbstrait(-4, -1, 'B'),
+    ]
+    const centre = pointAbstrait(0, 0, 'O', 'above right')
     const traceO = tracePoint(centre)
     traceO.style = '+'
     traceO.taille = 3

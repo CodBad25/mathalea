@@ -1,6 +1,6 @@
 import { colorToLatexOrHTML } from '../../lib/2d/colorToLatexOrHtml'
 import { grille } from '../../lib/2d/Grille'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { polygone } from '../../lib/2d/polygones'
 import { texteParPosition } from '../../lib/2d/textes'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
@@ -181,10 +181,10 @@ export default class ColorierDeplacementOld extends Exercice {
 
     let p // carré gris représentant le lutin en position de départ
     p = polygone(
-      point(lstX[0], lstY[0]),
-      point(lstX[0] + 1, lstY[0]),
-      point(lstX[0] + 1, lstY[0] - 1),
-      point(lstX[0], lstY[0] - 1),
+      pointAbstrait(lstX[0], lstY[0]),
+      pointAbstrait(lstX[0] + 1, lstY[0]),
+      pointAbstrait(lstX[0] + 1, lstY[0] - 1),
+      pointAbstrait(lstX[0], lstY[0] - 1),
     )
     p.opacite = 0.5
     p.couleurDeRemplissage = colorToLatexOrHTML('black')
@@ -264,10 +264,10 @@ export default class ColorierDeplacementOld extends Exercice {
             break
           case 4:
             p = polygone(
-              point(xLutin, yLutin),
-              point(xLutin + 1, yLutin),
-              point(xLutin + 1, yLutin - 1),
-              point(xLutin, yLutin - 1),
+              pointAbstrait(xLutin, yLutin),
+              pointAbstrait(xLutin + 1, yLutin),
+              pointAbstrait(xLutin + 1, yLutin - 1),
+              pointAbstrait(xLutin, yLutin - 1),
             )
             p.couleurDeRemplissage = colorToLatexOrHTML(couleur)
             p.opaciteDeRemplissage = 0.25

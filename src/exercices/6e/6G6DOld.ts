@@ -2,7 +2,7 @@ import { codageAngle } from '../../lib/2d/angles'
 import { codageAngleDroit } from '../../lib/2d/CodageAngleDroit'
 import { codageSegments } from '../../lib/2d/CodageSegment'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { nommePolygone } from '../../lib/2d/polygones'
 import { segment } from '../../lib/2d/segmentsVecteurs'
 import { triangle2points2angles } from '../../lib/2d/triangles'
@@ -158,11 +158,11 @@ export default class ExerciceAnglesTrianglesOld extends Exercice {
       s2 = lettreDepuisChiffre(lettre2)
       lettre3 = randint(1, 24, [lettre1, lettre2])
       s3 = lettreDepuisChiffre(lettre3)
-      const A = point(randint(0, 2), 0, s1)
+      const A = pointAbstrait(randint(0, 2), 0, s1)
       const B =
         listeTypeDeQuestions[i] === 8
-          ? point(randint(1, 4), randint(4, 6), s2)
-          : point(randint(1, 5), randint(8, 10), s2)
+          ? pointAbstrait(randint(1, 4), randint(4, 6), s2)
+          : pointAbstrait(randint(1, 5), randint(8, 10), s2)
       let triangle, C, angleA, angleB, angleC
       texteCorrFinal = ''
       texteCorr = ''

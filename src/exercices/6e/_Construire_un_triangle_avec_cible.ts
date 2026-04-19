@@ -7,7 +7,7 @@ import { codageAngleDroit } from '../../lib/2d/CodageAngleDroit'
 import { codageSegments } from '../../lib/2d/CodageSegment'
 import { droite, droiteParPointEtPerpendiculaire } from '../../lib/2d/droites'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { polygoneAvecNom } from '../../lib/2d/polygones'
 import { segmentAvecExtremites } from '../../lib/2d/segmentsVecteurs'
 import { latexParPoint } from '../../lib/2d/textes'
@@ -138,7 +138,7 @@ export default class ConstruireUnTriangleAvecCible extends Exercice {
       listeDeNomsDePolygones.push(nom)
       sommets = []
       for (let i = 0; i < 3; i++) sommets.push(nom[i])
-      A = point(0, 0, sommets[0], 'left')
+      A = pointAbstrait(0, 0, sommets[0], 'left')
       switch (listeTypeDeQuestions[i]) {
         case 1: // triangle quelconque par ses trois longueurs
           lAC = randint(35, 45)
@@ -151,7 +151,7 @@ export default class ConstruireUnTriangleAvecCible extends Exercice {
           cB = cercle(B, lBC)
           C = pointIntersectionCC(cA, cB, sommets[2], 1)
           C.positionLabel = 'above'
-          CC = point(
+          CC = pointAbstrait(
             C.x + randint(-5, 5, [-2, -1, 0, 1, 2]) / 10,
             C.y + randint(-5, 5, [-2, -1, 0, 1, 2]) / 10,
             sommets[2],
@@ -204,7 +204,7 @@ export default class ConstruireUnTriangleAvecCible extends Exercice {
           dBC = droiteParPointEtPerpendiculaire(B, dAB)
           C = pointIntersectionLC(dBC, cB, sommets[2], 1)
           C.positionLabel = 'above'
-          CC = point(
+          CC = pointAbstrait(
             C.x + randint(-5, 5, [-2, -1, 0, 1, 2]) / 10,
             C.y + randint(-5, 5, [-2, -1, 0, 1, 2]) / 10,
             sommets[2],
@@ -259,7 +259,7 @@ export default class ConstruireUnTriangleAvecCible extends Exercice {
           cB = cercle(B, lBC)
           C = pointIntersectionCC(cA, cB, sommets[2], 1)
           C.positionLabel = 'above'
-          CC = point(
+          CC = pointAbstrait(
             C.x + randint(-5, 5, [-2, -1, 0, 1, 2]) / 10,
             C.y + randint(-5, 5, [-2, -1, 0, 1, 2]) / 10,
             sommets[2],
@@ -317,7 +317,7 @@ export default class ConstruireUnTriangleAvecCible extends Exercice {
           dBC = droiteParPointEtPerpendiculaire(B, dAB)
           C = pointIntersectionLC(dBC, cB, sommets[2], 1)
           C.positionLabel = 'above'
-          CC = point(
+          CC = pointAbstrait(
             C.x + randint(-5, 5, [-2, -1, 0, 1, 2]) / 10,
             C.y + randint(-5, 5, [-2, -1, 0, 1, 2]) / 10,
             sommets[2],
@@ -373,7 +373,7 @@ export default class ConstruireUnTriangleAvecCible extends Exercice {
           cB = cercle(B, lBC)
           C = pointIntersectionCC(cA, cB, sommets[2], 1)
           C.positionLabel = 'above'
-          CC = point(
+          CC = pointAbstrait(
             C.x + randint(-5, 5, [-2, -1, 0, 1, 2]) / 10,
             C.y + randint(-5, 5, [-2, -1, 0, 1, 2]) / 10,
             sommets[2],
@@ -426,7 +426,7 @@ export default class ConstruireUnTriangleAvecCible extends Exercice {
             sommets[2],
             'above',
           )
-          CC = point(
+          CC = pointAbstrait(
             C.x + randint(-5, 5, [-2, -1, 0, 1, 2]) / 10,
             C.y + randint(-5, 5, [-2, -1, 0, 1, 2]) / 10,
             sommets[2],
@@ -489,7 +489,7 @@ export default class ConstruireUnTriangleAvecCible extends Exercice {
           if (typeof C === 'boolean')
             throw new Error('(AB) et (BC) ne se coupent pas')
           C.positionLabel = 'above'
-          CC = point(
+          CC = pointAbstrait(
             C.x + randint(-5, 5, [-2, -1, 0, 1, 2]) / 10,
             C.y + randint(-5, 5, [-2, -1, 0, 1, 2]) / 10,
             sommets[2],
@@ -553,7 +553,7 @@ export default class ConstruireUnTriangleAvecCible extends Exercice {
           dBC = droiteParPointEtPerpendiculaire(B, dAB)
           C = pointIntersectionLC(dBC, cA, sommets[2], 1)
           C.positionLabel = 'above'
-          CC = point(
+          CC = pointAbstrait(
             C.x + randint(-5, 5, [-2, -1, 0, 1, 2]) / 10,
             C.y + randint(-5, 5, [-2, -1, 0, 1, 2]) / 10,
             sommets[2],
@@ -610,7 +610,7 @@ export default class ConstruireUnTriangleAvecCible extends Exercice {
             throw new Error('(AB) et (BC) ne se coupent pas')
           lAC = longueur(A, C)
           C.positionLabel = 'above'
-          CC = point(
+          CC = pointAbstrait(
             C.x + randint(-5, 5, [-2, -1, 0, 1, 2]) / 10,
             C.y + randint(-5, 5, [-2, -1, 0, 1, 2]) / 10,
             sommets[2],

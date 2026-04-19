@@ -1,7 +1,7 @@
 import { cercle } from '../../lib/2d/cercle'
 import { courbe } from '../../lib/2d/Courbe'
 import { droite } from '../../lib/2d/droites'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { repere } from '../../lib/2d/reperes'
 import { segment } from '../../lib/2d/segmentsVecteurs'
 import {
@@ -305,8 +305,8 @@ export default class Questions2023 extends Exercice {
             step: 0.1,
             epaisseur: 1,
           })
-          centre1 = point(0, 3.75, 'C', 'above right')
-          centre2 = point(0, 6.95, "C'", 'above left')
+          centre1 = pointAbstrait(0, 3.75, 'C', 'above right')
+          centre2 = pointAbstrait(0, 6.95, "C'", 'above left')
           c1 = cercle(centre1, 1.35, 'purple')
           c2 = cercle(centre2, 1.85, 'purple')
           axeX = segment(-3, 0, 3, 0)
@@ -317,12 +317,12 @@ export default class Questions2023 extends Exercice {
           x2 = 1.825
           rayon1 = segment(
             centre1,
-            rotation(point(x1, f(x1)), centre1, 160),
+            rotation(pointAbstrait(x1, f(x1)), centre1, 160),
             'red',
           )
           rayon2 = segment(
             centre2,
-            rotation(point(x2, f(x2)), centre2, 40),
+            rotation(pointAbstrait(x2, f(x2)), centre2, 40),
             'red',
           )
           texte1 = texteParPosition(
@@ -392,7 +392,7 @@ export default class Questions2023 extends Exercice {
             'milieu',
             true,
           )
-          d = droite(centre2, point(x2, f(x2)))
+          d = droite(centre2, pointAbstrait(x2, f(x2)))
           normale = texteParPosition(
             'normale',
             -2.5,

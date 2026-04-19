@@ -1,6 +1,6 @@
 import { codageSegments } from '../../../lib/2d/CodageSegment'
 import { fixeBordures } from '../../../lib/2d/fixeBordures'
-import { point } from '../../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { polygone } from '../../../lib/2d/polygones'
 import { segment } from '../../../lib/2d/segmentsVecteurs'
 import { labelPoint } from '../../../lib/2d/textes'
@@ -41,28 +41,33 @@ export default class NCDecembre23Exo1Q5 extends ExerciceQcmA {
   ): void {
     this.enonce = `$${noms.substring(0, 4)}$ est un parallélogramme de centre $${noms[4]}$.<br>`
     const nuage = [
-      point(0, 0, noms[0], ordonneeB > 0 ? 'below left' : 'above left'),
-      point(6, 0, noms[1], ordonneeB > 0 ? 'below right' : 'above right'),
-      point(
+      pointAbstrait(0, 0, noms[0], ordonneeB > 0 ? 'below left' : 'above left'),
+      pointAbstrait(
+        6,
+        0,
+        noms[1],
+        ordonneeB > 0 ? 'below right' : 'above right',
+      ),
+      pointAbstrait(
         6 + abscisseB,
         ordonneeB,
         noms[2],
         ordonneeB > 0 ? 'above right' : 'below right',
       ),
-      point(
+      pointAbstrait(
         abscisseB,
         ordonneeB,
         noms[3],
         ordonneeB > 0 ? 'above left' : 'below left',
       ),
-      point(
+      pointAbstrait(
         (6 + abscisseB) / 2,
         ordonneeB / 2,
         noms[4],
         ordonneeB > 0 ? 'above' : 'below',
       ),
-      point(abscisseB / 2, ordonneeB / 2, noms[5], 'left'),
-      point(3, 0, noms[6], ordonneeB > 0 ? 'below' : 'above'),
+      pointAbstrait(abscisseB / 2, ordonneeB / 2, noms[5], 'left'),
+      pointAbstrait(3, 0, noms[6], ordonneeB > 0 ? 'below' : 'above'),
     ]
     const parallelo = polygone(nuage[0], nuage[1], nuage[2], nuage[3])
     const diag1 = segment(nuage[1], nuage[3])

@@ -1,6 +1,6 @@
 import { demiDroite } from '../../lib/2d/DemiDroite'
 import { droite } from '../../lib/2d/droites'
-import { Point, point } from '../../lib/2d/PointAbstrait'
+import { Point, pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { polygoneAvecNom } from '../../lib/2d/polygones'
 import { segment } from '../../lib/2d/segmentsVecteurs'
 import {
@@ -44,24 +44,24 @@ export default class UtilerAppartientA extends Exercice {
     const lettres = choisitLettresDifferentes(6)
     let rayon = 6
     if (context.isHtml) rayon = 8
-    const A = point(0, 0, lettres[0])
-    let B = point(0, 0)
-    let C = point(0, 0)
-    let D = point(0, 0)
-    let E = point(0, 0)
+    const A = pointAbstrait(0, 0, lettres[0])
+    let B = pointAbstrait(0, 0)
+    let C = pointAbstrait(0, 0)
+    let D = pointAbstrait(0, 0)
+    let E = pointAbstrait(0, 0)
     let F: false | Point = false
     while (!F) {
       const angle = randint(0, 359)
       B = pointAdistance(A, rayon, angle, lettres[1])
       D = pointAdistance(A, rayon, angle + 60, lettres[3])
       const CentreBD = randint(4, 6) / 10
-      C = point(
+      C = pointAbstrait(
         B.x * CentreBD + D.x * (1 - CentreBD),
         B.y * CentreBD + D.y * (1 - CentreBD),
         lettres[2],
       )
       const EentreAC = randint(4, 6) / 10
-      E = point(
+      E = pointAbstrait(
         A.x * EentreAC + C.x * (1 - EentreAC),
         A.y * EentreAC + C.y * (1 - EentreAC),
         lettres[4],
