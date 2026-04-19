@@ -6,7 +6,9 @@ import { miseEnEvidence } from '../lib/outils/embellissements'
 import { texNombre } from '../lib/outils/texNombre'
 import { getLang } from '../lib/stores/languagesStore'
 import FractionEtendue from './FractionEtendue'
-
+/**
+ * @author Nathan Scheinmann
+ */
 class NombrePeriodique {
   partieEntiere: number
   partieDecimale: number

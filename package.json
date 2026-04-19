@@ -50,7 +50,7 @@
     "updateMenu": "pnpm makeJson",
     "updateMenuCH": "pnpm makeJson",
     "preview": "vite preview",
-    "check": "node --max-old-space-size=8192 svelte-check --tsconfig ./tsconfig.json",
+    "check": "NODE_OPTIONS=--max-old-space-size=8192 pnpm exec svelte-check --tsconfig ./tsconfig.json",
     "check:lib": "svelte-check --tsconfig ./tsconfig.check-lib.json",
     "check:components": "svelte-check --tsconfig ./tsconfig.check-components.json",
     "count:variants": "node tasks/count-variants.js",

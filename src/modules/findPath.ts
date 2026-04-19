@@ -1,3 +1,8 @@
+/**
+ * Représente un nœud dans une grille 2D.
+ * @author Mickaël Guironnet
+ */
+
 class Node2d {
   x: number
   y: number
@@ -115,6 +120,7 @@ function createGrid(rows: number, cols: number, rate: number) {
  * @param rowsEnd le numéro de la ligne d'arrivée
  * @param colsEnd le numéro de la colonne d'arrivée
  * @returns les chemins trouvés entre le point de départ et le point d'arrivée
+ * @author Mickaël Guironnet
  */
 export function runAStar(
   rows: number,

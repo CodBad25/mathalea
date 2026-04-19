@@ -36,7 +36,7 @@
   let questions: (string | IExercice)[] = []
   let consignes: string[] = []
   let corrections: string[] = []
-  let resultsByQuestion: boolean[] = []
+  let resultsByQuestion: QuestionResult[] = []
   let isCorrectionVisible: boolean[] = []
   let currentWindowWidth: number = document.body.clientWidth
   let eleveSection: HTMLElement
@@ -280,8 +280,15 @@
   function handleIndexChange_QPP(data: { currentIndex: number }) {
     currentIndex = data.currentIndex
   }
+  type QuestionScore = { nbBonnesReponses: number; nbReponses: number }
+  type DetailedQuestionResult = {
+    isOk: boolean
+    feedback: string
+    score: QuestionScore
+  }
+  type QuestionResult = boolean | DetailedQuestionResult
 
-  function handleResultsChange(data: { resultsByQuestion: boolean[] }) {
+  function handleResultsChange(data: { resultsByQuestion: QuestionResult[] }) {
     resultsByQuestion = data.resultsByQuestion
   }
 
