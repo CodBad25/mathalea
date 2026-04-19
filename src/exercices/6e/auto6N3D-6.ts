@@ -73,8 +73,8 @@ export default class nomExercice extends Exercice {
         )
         handleAnswers(this, i, {
           // bareme: (listePoints) => [listePoints[0] * listePoints[1] + listePoints[2], 2],
-          champ1: { value: '' },
-          champ2: { value: '' },
+          champ1: { value: a },
+          champ2: { value: b },
           callback: (exercice: IExercice, question: number) => {
             let feedback = ''
             const mfe = document.querySelector(

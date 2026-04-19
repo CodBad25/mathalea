@@ -1,10 +1,16 @@
-
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { ecritureAlgebrique, ecritureAlgebriqueSauf1, reduireAxPlusB, reduirePolynomeDegre3, rienSi1 } from '../../../lib/outils/ecritures'
+import {
+  ecritureAlgebrique,
+  ecritureAlgebriqueSauf1,
+  reduireAxPlusB,
+  reduirePolynomeDegre3,
+  rienSi1,
+} from '../../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { randint } from '../../../modules/outils'
 import ExerciceCan from '../../ExerciceCan'
-export const titre = 'Développer et réduire un produit de deux binômes du 1er degré'
+export const titre =
+  'Développer et réduire un produit de deux binômes du 1er degré'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const uuid = '3mq4t'
@@ -18,11 +24,11 @@ export const refs = {
 
 */
 export default class Can1a2022Q3 extends ExerciceCan {
-   constructor() {
+  constructor() {
     super()
     this.formatChampTexte = KeyboardType.clavierFullOperations
-     this.optionsDeComparaison = { expressionsForcementReduites: true }
-     this.optionsChampTexte = { texteAvant: '<br>' }
+    this.optionsDeComparaison = { expressionsForcementReduites: true }
+    this.optionsChampTexte = { texteAvant: '<br>' }
   }
 
   enonce(a?: number, b?: number, c?: number, d?: number) {
@@ -35,7 +41,9 @@ export default class Can1a2022Q3 extends ExerciceCan {
 
     this.question = `Développer et réduire l'expression $(${reduireAxPlusB(a, b)})(${reduireAxPlusB(c, d)})$.`
     this.correction = `$(${reduireAxPlusB(a, b)})(${reduireAxPlusB(c, d)})=${rienSi1(a * c)}x^2${ecritureAlgebriqueSauf1(a * d)}x${ecritureAlgebriqueSauf1(b * c)}x${ecritureAlgebrique(b * d)}=${miseEnEvidence(reduirePolynomeDegre3(0, a * c, b * c + a * d, b * d))}$`
-    this.reponse = [`${a * c}x^2+${b * c + a * d}x+${b * d}`]
+    this.reponse = [
+      `${rienSi1(a * c)}x^2${ecritureAlgebriqueSauf1(b * c + a * d)}x${ecritureAlgebrique(b * d)}`,
+    ]
   }
 
   nouvelleVersion() {

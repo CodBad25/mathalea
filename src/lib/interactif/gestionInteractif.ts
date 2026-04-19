@@ -1088,8 +1088,14 @@ export function handleAnswers(
   }
   let formatInteractif =
     params?.formatInteractif ??
-    exercice.autoCorrection[question]?.reponse?.param?.formatInteractif ??
-    'mathlive'
+    ('champ1' in reponses
+      ? 'fillInTheBlank'
+      : typeof reponses === 'object' &&
+          Object.keys(reponses).some((key) => key.match(/^L\d+C\d+$/))
+        ? 'tableauMathlive'
+        : (exercice.autoCorrection[question]?.reponse?.param
+            ?.formatInteractif ?? 'mathlive'))
+
   if (exercice.autoCorrection == null) exercice.autoCorrection = []
   if (!(reponses instanceof Object)) {
     window.notify(`handleAnswer() reponses doit être un objet : ${reponses}`, {

@@ -27,7 +27,7 @@ export function verifyComparisonOnly(
         'fillInTheBlank',
         'tableauMathlive',
         'MetaInteractif2d',
-        undefined,
+        'multiMathfield',
       ].includes(format)
     ) {
       results.push({

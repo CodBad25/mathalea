@@ -21,7 +21,7 @@ export type SkippedQuestion = {
   titre: string
   seed: string
   scenario?: string
-  strategy: 'comparison-only' | 'full-dom'
+  strategy: 'comparison-only' | 'full-dom' | 'qcm-verification'
   questionIndex: number
   format: string
   skipReason: string
@@ -62,6 +62,9 @@ export function writeSkippedQuestionsLogs(skippedQuestions: SkippedQuestion[]) {
   )
   const bothPath = resolve(
     'tests/integration/logs/interactivity_all_skipped_questions_both_results.json',
+  )
+  const skipReasonsSummaryPath = resolve(
+    'tests/integration/logs/interactivity_all_skipped_questions_by_reason.json',
   )
 
   const skippedInComparisonOnly = new Set<string>()
@@ -158,4 +161,33 @@ export function writeSkippedQuestionsLogs(skippedQuestions: SkippedQuestion[]) {
       2,
     ),
   )
+
+  const strategies = [
+    'comparison-only',
+    'full-dom',
+    'qcm-verification',
+  ] as const
+  const summary: Record<
+    string,
+    { totalSkipped: number; byReason: Record<string, number> }
+  > = {}
+
+  for (const strategy of strategies) {
+    const filtered = skippedQuestions.filter((q) => q.strategy === strategy)
+    const byReason: Record<string, number> = {}
+    for (const q of filtered) {
+      byReason[q.skipReason] = (byReason[q.skipReason] ?? 0) + 1
+    }
+    const sortedByReason = Object.fromEntries(
+      Object.keys(byReason)
+        .sort()
+        .map((k) => [k, byReason[k]]),
+    )
+    summary[strategy] = {
+      totalSkipped: filtered.length,
+      byReason: sortedByReason,
+    }
+  }
+
+  writeFileSync(skipReasonsSummaryPath, JSON.stringify(summary, null, 2))
 }
