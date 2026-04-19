@@ -250,7 +250,8 @@ export function verifQuestionQcm(exercice: IExercice, i: number) {
   } else {
     message = ''
   }
-  if (nbBonnesReponsesAttendues > nbBonnesReponses) {
+  const isRadio = exercice.autoCorrection[i].options?.radio === true
+  if (!isRadio && nbBonnesReponsesAttendues > nbBonnesReponses) {
     message += ` ${nbBonnesReponsesAttendues - nbBonnesReponses} bonne${nbBonnesReponsesAttendues - nbBonnesReponses > 1 ? 's' : ''} réponse${nbBonnesReponsesAttendues - nbBonnesReponses > 1 ? 's' : ''} manquante${nbBonnesReponsesAttendues - nbBonnesReponses > 1 ? 's' : ''}`
   }
   if (message !== '') {
