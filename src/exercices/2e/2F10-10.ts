@@ -21,6 +21,7 @@ import FractionEtendue from '../../modules/FractionEtendue'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 
 export const titre = 'Travailler sur les fonctions affines'
 export const dateDePublication = '18/04/2026'
@@ -195,7 +196,7 @@ Graphiquement, cela signifie que $\\mathcal{D}$ coupe l'axe des abscisses au poi
           },
           r,
           o,
-          courbe(F, { repere: r, color: 'blue', epaisseur: 2 }),
+          courbe(F, { repere: r, color: bleuMathalea, epaisseur: 2 }),
           s1,
           s2,
         latex2d('1', 1, m > 0 ? p - 0.4 : p + 0.4, { color: 'green' }),
@@ -320,7 +321,7 @@ $\\mathcal{D}$ coupe l'axe des abscisses au point de coordonnées $${miseEnEvide
           },
           r,
           o,
-          courbe(F, { repere: r, color: 'blue', epaisseur: 2 }),
+          courbe(F, { repere: r, color: bleuMathalea, epaisseur: 2 }),
           s1,
           s2,
           latex2d('1', 1, m > 0 ? p - 0.4 : p + 0.4, { color: 'green' }),
@@ -407,7 +408,7 @@ ${texteCentre(`$f(${valeur1})=${F(valeur1)}$ et $f(${valeur2})=${F(valeur2)}$`)}
           },
           r,
           o,
-          courbe(F, { repere: r, color: 'blue', epaisseur: 2 }),
+          courbe(F, { repere: r, color: bleuMathalea, epaisseur: 2 }),
         ),
 
         // Q2 : calcul du coefficient directeur
@@ -535,7 +536,7 @@ const ptA = pointAbstrait(valeur1, f1, 'A', 'above left')
           },
           r,
           o,
-          courbe(F, { repere: r, color: 'blue', epaisseur: 2 }),
+          courbe(F, { repere: r, color: bleuMathalea, epaisseur: 2 }),
           tA,
           tB,
           lectureImage(valeur1, f1, 1, 1, 'red'),

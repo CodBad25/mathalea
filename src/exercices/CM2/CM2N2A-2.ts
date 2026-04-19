@@ -9,6 +9,7 @@ import type CircleFractionDiagram from 'apigeom/src/elements/diagrams/CircleFrac
 import figureApigeom from '../../lib/figureApigeom'
 import { fraction } from '../../modules/fractions'
 import { representationFraction } from '../../modules/representationsFractions'
+import { bleuMathalea } from '../../lib/colors'
 export const titre = 'Représenter des fractions'
 export const amcReady = true
 export const interactifReady = true
@@ -96,7 +97,7 @@ export default class RepresenterUneFraction extends Exercice {
           width: 336,
           height: 95,
         })
-        figure.options.color = 'blue'
+        figure.options.color = bleuMathalea
         figure._scale = context.isHtml ? 1 : 0.6
         this.figures[i] = figure
         figure.create('CircleFractionDiagram', {
@@ -134,7 +135,7 @@ export default class RepresenterUneFraction extends Exercice {
           width: 600,
           height: 95,
         })
-        figureCorr.options.color = 'blue'
+        figureCorr.options.color = bleuMathalea
         const diagrammeCorr = figureCorr.create('CircleFractionDiagram', {
           denominator: den,
           numberOfCircle: 3,
@@ -152,7 +153,7 @@ export default class RepresenterUneFraction extends Exercice {
             2,
             randint(0, den - 1),
             'gateau',
-            'blue',
+            bleuMathalea,
           ),
         )
       }

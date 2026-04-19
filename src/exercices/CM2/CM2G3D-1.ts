@@ -27,6 +27,7 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
+import { bleuMathalea } from '../../lib/colors'
 export const titre = 'Tracer des carrés et des rectangles de longueurs données'
 
 export const dateDePublication = '10/09/2022'
@@ -429,8 +430,8 @@ export default class TracerQuadrilatèresParticuliers extends Exercice {
         typeDeQuestion === 'Losange2diag' || typeDeQuestion === 'Carré1diag'
           ? codageAngleDroit(C, milieu(A, C), D, 'red', 0.7, 1, 0.6, 'red', 0.2)
           : vide2d()
-      const segmentAC = segment(A, C, 'blue')
-      const segmentBC = segment(B, D, 'blue')
+      const segmentAC = segment(A, C, bleuMathalea)
+      const segmentBC = segment(B, D, bleuMathalea)
       const traces2 = tracePoint(A, B, C, D)
       const labels2 = labelPoint(A, B, C, D)
       figure.epaisseur = 2
@@ -457,7 +458,7 @@ export default class TracerQuadrilatèresParticuliers extends Exercice {
           `$${A.nom}${C.nom}\\approx${texNombre(segment(A, C).longueur, 1)}\\text{ cm}$`,
           milieu(A, C),
           C,
-          'blue',
+          bleuMathalea,
         )
         txt.mathOn = false
         txt.scale = 1.2
@@ -479,7 +480,7 @@ export default class TracerQuadrilatèresParticuliers extends Exercice {
           `$${D.nom}${C.nom}\\approx${texNombre(segment(D, C).longueur, 1)}\\text{ cm}$`,
           D,
           C,
-          'blue',
+          bleuMathalea,
         )
         txt3.mathOn = false
         txt3.scale = 1.2
@@ -496,7 +497,7 @@ export default class TracerQuadrilatèresParticuliers extends Exercice {
           `$${B.nom}${C.nom}\\approx${texNombre(segment(B, C).longueur, 1)}\\text{ cm}$`,
           C,
           B,
-          'blue',
+          bleuMathalea,
         )
         txt3.mathOn = false
         txt3.scale = 1.2
@@ -518,7 +519,7 @@ export default class TracerQuadrilatèresParticuliers extends Exercice {
           `$${B.nom}${D.nom}\\approx${texNombre(segment(B, D).longueur, 1)}\\text{ cm}$`,
           milieu(B, D),
           D,
-          'blue',
+          bleuMathalea,
         )
         txt2.mathOn = false
         txt2.scale = 1.2
@@ -540,7 +541,7 @@ export default class TracerQuadrilatèresParticuliers extends Exercice {
           `$${D.nom}${C.nom}\\approx${texNombre(segment(D, C).longueur, 1)}\\text{ cm}$`,
           D,
           C,
-          'blue',
+          bleuMathalea,
         )
         txt3.mathOn = false
         txt3.scale = 1.2
@@ -556,7 +557,7 @@ export default class TracerQuadrilatèresParticuliers extends Exercice {
           `$${B.nom}${D.nom}\\approx${texNombre(segment(B, D).longueur, 1)}\\text{ cm}$`,
           milieu(A, C),
           B,
-          'blue',
+          bleuMathalea,
         )
         txt2.mathOn = false
         txt2.scale = 1.2
