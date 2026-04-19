@@ -1,5 +1,5 @@
 import { grille } from '../../lib/2d/Grille'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import {
   representant,
   representantNomme,
@@ -150,24 +150,24 @@ export default class ImagePtParTranslation extends Exercice {
     ) {
       const objets = []
       const objetsCorr = []
-      const A = point(0, 4, 'A', 'above')
-      const B = point(2, 4, 'B', 'above')
-      const C = point(4, 4, 'C', 'above')
-      const D = point(6, 4, 'D', 'above')
-      const E = point(8, 4, 'E', 'above')
-      const F = point(10, 4, 'F', 'above')
-      const G = point(0, 2, 'G', 'left')
-      const H = point(2, 2, 'H', 'below left')
-      const I = point(4, 2, 'I', 'below left')
-      const J = point(6, 2, 'J', 'below left')
-      const K = point(8, 2, 'K', 'below left')
-      const L = point(10, 2, 'L', 'right')
-      const M = point(0, 0, 'M', 'below')
-      const N = point(2, 0, 'N', 'below')
-      const O = point(4, 0, 'O', 'below')
-      const P = point(6, 0, 'P', 'below')
-      const Q = point(8, 0, 'Q', 'below')
-      const R = point(10, 0, 'R', 'below')
+      const A = pointAbstrait(0, 4, 'A', 'above')
+      const B = pointAbstrait(2, 4, 'B', 'above')
+      const C = pointAbstrait(4, 4, 'C', 'above')
+      const D = pointAbstrait(6, 4, 'D', 'above')
+      const E = pointAbstrait(8, 4, 'E', 'above')
+      const F = pointAbstrait(10, 4, 'F', 'above')
+      const G = pointAbstrait(0, 2, 'G', 'left')
+      const H = pointAbstrait(2, 2, 'H', 'below left')
+      const I = pointAbstrait(4, 2, 'I', 'below left')
+      const J = pointAbstrait(6, 2, 'J', 'below left')
+      const K = pointAbstrait(8, 2, 'K', 'below left')
+      const L = pointAbstrait(10, 2, 'L', 'right')
+      const M = pointAbstrait(0, 0, 'M', 'below')
+      const N = pointAbstrait(2, 0, 'N', 'below')
+      const O = pointAbstrait(4, 0, 'O', 'below')
+      const P = pointAbstrait(6, 0, 'P', 'below')
+      const Q = pointAbstrait(8, 0, 'Q', 'below')
+      const R = pointAbstrait(10, 0, 'R', 'below')
       const CoorPt = [
         [0, 4],
         [2, 4],

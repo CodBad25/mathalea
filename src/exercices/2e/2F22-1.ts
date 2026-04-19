@@ -1,7 +1,7 @@
 import { droiteParPointEtPente } from '../../lib/2d/droites'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { lectureAntecedent } from '../../lib/2d/LectureAntecedent'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { repere } from '../../lib/2d/reperes'
 import { latex2d, texteParPosition } from '../../lib/2d/textes'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
@@ -206,12 +206,12 @@ export default class LecturesGraphiquesSurSplines extends Exercice {
           ? '\\emptyset'
           : `\\{${solutions1.join(';')}\\}`
       const horizontale1 = droiteParPointEtPente(
-        point(0, Number(y1)),
+        pointAbstrait(0, Number(y1)),
         0,
         '',
         '#009900',
       )
-      const horizontale2 = droiteParPointEtPente(point(0, y2), 0, '', '#009900')
+      const horizontale2 = droiteParPointEtPente(pointAbstrait(0, y2), 0, '', '#009900')
       const nomD1 = latex2d(`y=${y1}`, bornes.xMin - 0.5, Number(y1) + 0.4, {
         color: '#009900',
         letterSize: 'small',

@@ -1,5 +1,5 @@
 import { grille } from '../../lib/2d/Grille'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { representantNomme } from '../../lib/2d/representantVecteur'
 import { segment } from '../../lib/2d/segmentsVecteurs'
 import { vecteur } from '../../lib/2d/Vecteur'
@@ -78,8 +78,8 @@ export default class ReconnaitreVecteurs extends Exercice {
       } else {
         k2 = randint(-5, 5)
       } // pas de vecteur nul
-      const A = point(0, 0) // pt origine vecteur de base
-      const B = point(A.x + k1, A.y + k2) // pt extrémité vecteur de base
+      const A = pointAbstrait(0, 0) // pt origine vecteur de base
+      const B = pointAbstrait(A.x + k1, A.y + k2) // pt extrémité vecteur de base
 
       let xC = 0
       let yC = 0
@@ -91,12 +91,12 @@ export default class ReconnaitreVecteurs extends Exercice {
         d = Math.abs(k2 * xC - k1 * yC) / Math.sqrt(k1 ** 2 + k2 ** 2)
       }
 
-      const C = point(xC, yC) // pt origine second vecteur
-      const D = point(xC + k1, yC + k2) // pt extrémité vecteur égal
-      const E = point(xC - k1, yC - k2) // pt extrémité vecteur opposé
+      const C = pointAbstrait(xC, yC) // pt origine second vecteur
+      const D = pointAbstrait(xC + k1, yC + k2) // pt extrémité vecteur égal
+      const E = pointAbstrait(xC - k1, yC - k2) // pt extrémité vecteur opposé
 
       const k3 = choice([0.5, 0.75, 1.25, 1.5])
-      const F = point(xC + k1 * k3, yC + k2 * k3) // pt extrémité vecteur colinéaire de même sens mais pas égal
+      const F = pointAbstrait(xC + k1 * k3, yC + k2 * k3) // pt extrémité vecteur colinéaire de même sens mais pas égal
 
       const k4 = choice([-k1, k1])
       let k5
@@ -105,12 +105,12 @@ export default class ReconnaitreVecteurs extends Exercice {
       } else {
         k5 = k2
       }
-      const G = point(xC + k4, yC + k5) // pt extrémité vecteur quelconque avec norme égale et "même sens"
+      const G = pointAbstrait(xC + k4, yC + k5) // pt extrémité vecteur quelconque avec norme égale et "même sens"
 
       const k6 = choice([-0.5, -0.75, -1.25, -1.5])
-      const H = point(xC + k1 * k6, yC + k2 * k6) // pt extrémité vecteur colinéaire de sens contraire mais pas opposé
+      const H = pointAbstrait(xC + k1 * k6, yC + k2 * k6) // pt extrémité vecteur colinéaire de sens contraire mais pas opposé
 
-      const K = point(xC + k4 * k3, yC + k5 * k3) // pt extrémité vecteur quelconque avec norme différente et "même sens"
+      const K = pointAbstrait(xC + k4 * k3, yC + k5 * k3) // pt extrémité vecteur quelconque avec norme différente et "même sens"
 
       const AB = segment(A, B, bleuMathalea, '->') // vecteur de base
       AB.epaisseur = 2

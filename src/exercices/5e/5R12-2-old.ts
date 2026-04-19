@@ -1,4 +1,4 @@
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { repere } from '../../lib/2d/reperes'
 import { labelPoint } from '../../lib/2d/textes'
 import { tracePoint } from '../../lib/2d/TracePoint'
@@ -110,7 +110,7 @@ export default class ReperagePointDuPlan extends Exercice {
     }
     for (let j = 0; j < nbPoints; j++) {
       points.push(
-        point(listePoints[j][0], listePoints[j][1], nom[j], 'above left'),
+        pointAbstrait(listePoints[j][0], listePoints[j][1], nom[j], 'above left'),
       )
       if (points[j].x === 0) {
         X0 = true

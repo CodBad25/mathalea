@@ -1,4 +1,4 @@
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import {
   NommePolygone,
   Polygone,
@@ -160,10 +160,10 @@ export default class NaturePolygone extends Exercice {
       const yAdCarre = (yD - yA) * (yD - yA)
       const acCarre = xAcCarre + yAcCarre
       const bcCarre = xBcCarre + yBcCarre
-      const A = point(xA, yA, 'A')
-      const B = point(xB, yB, 'B')
-      const C = point(xC, yC, 'C')
-      const D = point(xD, yD, 'D')
+      const A = pointAbstrait(xA, yA, 'A')
+      const B = pointAbstrait(xB, yB, 'B')
+      const C = pointAbstrait(xC, yC, 'C')
+      const D = pointAbstrait(xD, yD, 'D')
       A.nom = nom[0]
       B.nom = nom[1]
       C.nom = nom[2]

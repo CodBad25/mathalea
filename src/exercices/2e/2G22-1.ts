@@ -2,7 +2,7 @@ import Figure from 'apigeom'
 import type VectorByPoints from 'apigeom/src/elements/vector/VectorByPoints'
 import { colorToLatexOrHTML } from '../../lib/2d/colorToLatexOrHtml'
 import { nomVecteurParPosition } from '../../lib/2d/NomVecteurParPosition'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { repere } from '../../lib/2d/reperes'
 import {
   representant,
@@ -195,8 +195,8 @@ export default class RepresenterUnVecteur extends Exercice {
         uy = randint(3, 8) * choice([-1, 1])
         this.yB[i] = this.yA[i] + uy
       }
-      const A = point(this.xA[i], this.yA[i])
-      const B = point(this.xB[i], this.yB[i])
+      const A = pointAbstrait(this.xA[i], this.yA[i])
+      const B = pointAbstrait(this.xB[i], this.yB[i])
       const AB = vecteur(A, B)
       const r = repere({ axesEpaisseur: 1 }) // On définit le repère
       const posLabelA = homothetie(B, A, -0.7 / longueur(A, B), '', 'center') // pour positionner les noms des points aux extrémités proprement
@@ -208,7 +208,7 @@ export default class RepresenterUnVecteur extends Exercice {
       const labelA = latexParPoint(nomPoint1, posLabelA, 'red', 10, 12, '')
       const labelB = latexParPoint(nomPoint2, posLabelB, 'red', 10, 12, '')
 
-      const H = point(this.xA[i] + ux, this.yA[i])
+      const H = pointAbstrait(this.xA[i] + ux, this.yA[i])
       const s = representant(AB, A) // On trace en rouge [AB]
       const h1 = representant(vecteur(A, H), A, bleuMathalea)
       const h2 = representant(vecteur(H, B), H, bleuMathalea)
@@ -224,7 +224,7 @@ export default class RepresenterUnVecteur extends Exercice {
         milieu(B, H).y,
         { color: bleuMathalea, letterSize: 'footnotesize' },
       )
-      const O = point(0, 0) // On définit et on trace le point O
+      const O = pointAbstrait(0, 0) // On définit et on trace le point O
       const o = texteParPosition(
         'O',
         -0.3,
@@ -235,8 +235,8 @@ export default class RepresenterUnVecteur extends Exercice {
         'milieu',
         true,
       )
-      const I = point(1, 0) // On définit sans tracer le point I
-      const J = point(0, 1) // On définit sans tracer le point J
+      const I = pointAbstrait(1, 0) // On définit sans tracer le point I
+      const J = pointAbstrait(0, 1) // On définit sans tracer le point J
       const k = representant(vecteur(O, I), O, bleuMathalea) // Variable qui trace [OI] en bleu
       const j = representant(vecteur(O, J), O, bleuMathalea) // Variable qui trace [OJ] en bleu
       s.epaisseur = 1.5 // Variable qui grossit le tracé du vecteur AB

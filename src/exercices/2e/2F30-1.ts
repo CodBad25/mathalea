@@ -1,6 +1,6 @@
 import { courbe } from '../../lib/2d/Courbe'
 import { courbeInterpolee } from '../../lib/2d/CourbeInterpolee.1'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { repere } from '../../lib/2d/reperes'
 import { latex2d } from '../../lib/2d/textes'
 import { tracePoint } from '../../lib/2d/TracePoint'
@@ -91,9 +91,9 @@ export default class VariationsCourbe extends Exercice {
             const y1 = randint(-1, 5) // max de y
             const x2 = randint(4, 5)
             const y2 = y1 - randint(1, 4)
-            const A0 = point(x0, y0)
-            const A1 = point(x1, y1)
-            const A2 = point(x2, y2)
+            const A0 = pointAbstrait(x0, y0)
+            const A1 = pointAbstrait(x1, y1)
+            const A2 = pointAbstrait(x2, y2)
             const Tk = tracePoint(A0, A1, A2)
             Tk.epaisseur = 1
 
@@ -197,9 +197,9 @@ export default class VariationsCourbe extends Exercice {
             const y1 = randint(-5, 1) // min de y
             const x2 = randint(4, 5)
             const y2 = y1 + randint(1, 4)
-            const A0 = point(x0, y0)
-            const A1 = point(x1, y1)
-            const A2 = point(x2, y2)
+            const A0 = pointAbstrait(x0, y0)
+            const A1 = pointAbstrait(x1, y1)
+            const A2 = pointAbstrait(x2, y2)
             const Tk = tracePoint(A0, A1, A2)
             Tk.epaisseur = 1
             const nom = choice(nomF)
@@ -304,10 +304,10 @@ export default class VariationsCourbe extends Exercice {
             const y2 = y1 + randint(2, 7)
             const x3 = randint(5, 6)
             const y3 = y2 - randint(1, 4)
-            const A0 = point(x0, y0)
-            const A1 = point(x1, y1)
-            const A2 = point(x2, y2)
-            const A3 = point(x3, y3)
+            const A0 = pointAbstrait(x0, y0)
+            const A1 = pointAbstrait(x1, y1)
+            const A2 = pointAbstrait(x2, y2)
+            const A3 = pointAbstrait(x3, y3)
             const Tk = tracePoint(A0, A1, A2, A3)
             Tk.epaisseur = 1
             const nom = choice(nomF)
@@ -414,10 +414,10 @@ export default class VariationsCourbe extends Exercice {
             const y2 = y1 - randint(2, 7)
             const x3 = randint(7, 9)
             const y3 = y2 + randint(1, 4)
-            const A0 = point(x0, y0)
-            const A1 = point(x1, y1)
-            const A2 = point(x2, y2)
-            const A3 = point(x3, y3)
+            const A0 = pointAbstrait(x0, y0)
+            const A1 = pointAbstrait(x1, y1)
+            const A2 = pointAbstrait(x2, y2)
+            const A3 = pointAbstrait(x3, y3)
             const Tk = tracePoint(A0, A1, A2, A3)
             Tk.epaisseur = 1
             const nom = choice(nomF)
@@ -526,11 +526,11 @@ export default class VariationsCourbe extends Exercice {
             const y3 = y2 + randint(1, 4)
             const x4 = randint(7, 9)
             const y4 = y3 - randint(1, 4)
-            const A0 = point(x0, y0)
-            const A1 = point(x1, y1)
-            const A2 = point(x2, y2)
-            const A3 = point(x3, y3)
-            const A4 = point(x4, y4)
+            const A0 = pointAbstrait(x0, y0)
+            const A1 = pointAbstrait(x1, y1)
+            const A2 = pointAbstrait(x2, y2)
+            const A3 = pointAbstrait(x3, y3)
+            const A4 = pointAbstrait(x4, y4)
             const Tk = tracePoint(A0, A1, A2, A3, A4)
             Tk.epaisseur = 1
             const nom = choice(nomF)
@@ -650,11 +650,11 @@ export default class VariationsCourbe extends Exercice {
             const y3 = y2 - randint(1, 4)
             const x4 = randint(7, 8)
             const y4 = y3 + randint(1, 5)
-            const A0 = point(x0, y0)
-            const A1 = point(x1, y1)
-            const A2 = point(x2, y2)
-            const A3 = point(x3, y3)
-            const A4 = point(x4, y4)
+            const A0 = pointAbstrait(x0, y0)
+            const A1 = pointAbstrait(x1, y1)
+            const A2 = pointAbstrait(x2, y2)
+            const A3 = pointAbstrait(x3, y3)
+            const A4 = pointAbstrait(x4, y4)
             const Tk = tracePoint(A0, A1, A2, A3, A4)
             Tk.epaisseur = 1
             const nom = choice(nomF)
@@ -779,8 +779,8 @@ export default class VariationsCourbe extends Exercice {
             const y1 = randint(-1, 5) // max de y
             const x2 = 8
             const y2 = -10
-            const A0 = point(x0, y0)
-            const A1 = point(x1, y1)
+            const A0 = pointAbstrait(x0, y0)
+            const A1 = pointAbstrait(x1, y1)
             const Tk = tracePoint(A0, A1)
             Tk.epaisseur = 1
             const nom = choice(nomF)
@@ -871,8 +871,8 @@ export default class VariationsCourbe extends Exercice {
             const y1 = randint(-3, 0) // min de y
             const x2 = randint(4, 5)
             const y2 = y1 + randint(1, 4)
-            const A1 = point(x1, y1)
-            const A2 = point(x2, y2)
+            const A1 = pointAbstrait(x1, y1)
+            const A2 = pointAbstrait(x2, y2)
             const Tk = tracePoint(A1, A2)
             Tk.epaisseur = 1
             const nom = choice(nomF)
@@ -963,9 +963,9 @@ export default class VariationsCourbe extends Exercice {
             const y2 = y1 + randint(2, 7)
             const x3 = 10
             const y3 = -10
-            const A0 = point(x0, y0)
-            const A1 = point(x1, y1)
-            const A2 = point(x2, y2)
+            const A0 = pointAbstrait(x0, y0)
+            const A1 = pointAbstrait(x1, y1)
+            const A2 = pointAbstrait(x2, y2)
             const Tk = tracePoint(A0, A1, A2)
             Tk.epaisseur = 1
             const nom = choice(nomF)
@@ -1077,9 +1077,9 @@ export default class VariationsCourbe extends Exercice {
             const y2 = y1 - randint(2, 7)
             const x3 = randint(7, 9)
             const y3 = y2 + randint(1, 4)
-            const A1 = point(x1, y1)
-            const A2 = point(x2, y2)
-            const A3 = point(x3, y3)
+            const A1 = pointAbstrait(x1, y1)
+            const A2 = pointAbstrait(x2, y2)
+            const A3 = pointAbstrait(x3, y3)
             const Tk = tracePoint(A1, A2, A3)
             Tk.epaisseur = 1
             const nom = choice(nomF)
@@ -1193,10 +1193,10 @@ export default class VariationsCourbe extends Exercice {
             const y3 = y2 + randint(1, 4)
             const x4 = 10
             const y4 = -10
-            const A0 = point(x0, y0)
-            const A1 = point(x1, y1)
-            const A2 = point(x2, y2)
-            const A3 = point(x3, y3)
+            const A0 = pointAbstrait(x0, y0)
+            const A1 = pointAbstrait(x1, y1)
+            const A2 = pointAbstrait(x2, y2)
+            const A3 = pointAbstrait(x3, y3)
 
             const Tk = tracePoint(A0, A1, A2, A3)
             Tk.epaisseur = 1
@@ -1313,10 +1313,10 @@ export default class VariationsCourbe extends Exercice {
             const y3 = y2 - randint(1, 4)
             const x4 = x3 + 3
             const y4 = 7
-            const A0 = point(x0, y0)
-            const A1 = point(x1, y1)
-            const A2 = point(x2, y2)
-            const A3 = point(x3, y3)
+            const A0 = pointAbstrait(x0, y0)
+            const A1 = pointAbstrait(x1, y1)
+            const A2 = pointAbstrait(x2, y2)
+            const A3 = pointAbstrait(x3, y3)
 
             const Tk = tracePoint(A0, A1, A2, A3)
             Tk.epaisseur = 1

@@ -1,6 +1,6 @@
 import Figure from 'apigeom'
 import type PointApigeom from 'apigeom/src/elements/points/Point'
-import { point, pointAbstrait } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { similitude } from '../../lib/2d/transformations'
 import { wrapperApigeomToMathalea } from '../../lib/apigeom/apigeomZoom'
 import figureApigeom, { isFigureArray } from '../../lib/figureApigeom'
@@ -115,13 +115,13 @@ export default class BetaReperage2e extends Exercice {
             {
               const o = pointAbstrait(0, 0)
               const I = similitude(
-                point(randint(6, 8) * 0.2, 0),
+                pointAbstrait(randint(6, 8) * 0.2, 0),
                 o,
                 randint(-20, 20),
                 1.5,
               )
               coordsI = [I.x, I.y]
-              const K = similitude(point(...coordsI), o, randint(60, 80), 1)
+              const K = similitude(pointAbstrait(...coordsI), o, randint(60, 80), 1)
               coordsK = [K.x, K.y]
             }
             break
@@ -131,7 +131,7 @@ export default class BetaReperage2e extends Exercice {
               const o = pointAbstrait(0, 0)
               coordsI = [2, randint(-4, 4, [0]) * 0.2]
               const K = similitude(
-                point(...coordsI),
+                pointAbstrait(...coordsI),
                 o,
                 randint(60, 80),
                 choice([1.25, 1.3, 1.4]),

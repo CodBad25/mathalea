@@ -1,7 +1,7 @@
 import { courbe } from '../../lib/2d/Courbe'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { MetaInteractif2d } from '../../lib/2d/interactif2d'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { repere } from '../../lib/2d/reperes'
 import { labelPoint, texteParPosition } from '../../lib/2d/textes'
 import { tracePoint } from '../../lib/2d/TracePoint'
@@ -281,7 +281,7 @@ ${a !== 1 ? `x& ${a < 0 ? `${miseEnEvidence(`${sp(1.5)}\\boldsymbol{<}${sp(1.5)}
               grilleSecondaireXMax: 8,
             })
             const maCourbe = courbe(f, { repere: monRepere, color: bleuMathalea })
-            const A = point(-b / a, 0, '')
+            const A = pointAbstrait(-b / a, 0, '')
 
             const lA = labelPoint(A, 'red')
             const tA = tracePoint(A, 'red') // Variable qui trace les points avec une croix
@@ -472,7 +472,7 @@ ${a !== 1 ? `x& ${a < 0 ? `${miseEnEvidence(`${sp(1.5)}\\boldsymbol{<}${sp(1.5)}
               grilleSecondaireXMax: 8,
             })
             const maCourbe = courbe(f, { repere: monRepere, color: bleuMathalea })
-            const A = point(-b / a.valeurDecimale, 0, '')
+            const A = pointAbstrait(-b / a.valeurDecimale, 0, '')
 
             const lA = labelPoint(A, 'red')
             const tA = tracePoint(A, 'red') // Variable qui trace les points avec une croix

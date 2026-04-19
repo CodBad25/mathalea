@@ -1,5 +1,5 @@
 import { fixeBordures } from '../../lib/2d/fixeBordures'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { Repere } from '../../lib/2d/reperes'
 import { Segment, segment } from '../../lib/2d/segmentsVecteurs'
 import { labelPoint, texteParPosition } from '../../lib/2d/textes'
@@ -216,17 +216,17 @@ export default class Calculercoordonneesvecteurs extends Exercice {
       const xDeB = xB instanceof FractionEtendue ? xB.valeurDecimale : xB // On récupère la valeur décimale de xB
       const yDeB = yB
 
-      const A = point(xDeA, yDeA, nomsPoints[0]) // On définit et on trace le point A
-      const B = point(xDeB, yDeB, nomsPoints[1]) // On définit et on trace le point B
+      const A = pointAbstrait(xDeA, yDeA, nomsPoints[0]) // On définit et on trace le point A
+      const B = pointAbstrait(xDeB, yDeB, nomsPoints[1]) // On définit et on trace le point B
       const traceAetB = tracePoint(A, B, 'red') // Variable qui trace les points avec une croix
       traceAetB.taille = 1.5
       const labelAetB = labelPoint(A, B, 'red') // Variable qui trace les noms A et B
       const vecteurAB = vecteur(A, B, 'red') // On créé le vecteur AB
       const vecteurABRep = representant(vecteurAB, A, 'red') as Segment // On trace le vecteur AB
-      const O = point(0, 0, 'O') // On définit et on trace le point O
+      const O = pointAbstrait(0, 0, 'O') // On définit et on trace le point O
       const nomO = texteParPosition('O', -0.3, -0.3, 0, 'black', 1)
-      const I = point(1, 0) // On définit sans tracer le point I
-      const J = point(0, 1) // On définit sans tracer le point J
+      const I = pointAbstrait(1, 0) // On définit sans tracer le point I
+      const J = pointAbstrait(0, 1) // On définit sans tracer le point J
       const vecteurOI = segment(O, I) // Variable qui trace [OI] en rouge
       const vecteurOJ = segment(O, J) // Variable qui trace [OJ] en rouge
       vecteurABRep.styleExtremites = '->' // Variable qui transforme [AB] en vecteur

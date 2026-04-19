@@ -1,7 +1,7 @@
 import { droite, Droite, droiteHorizontaleParPoint } from '../../lib/2d/droites'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { lectureAntecedent } from '../../lib/2d/LectureAntecedent'
-import { point, PointAbstrait } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait, PointAbstrait } from '../../lib/2d/PointAbstrait'
 import { polyline } from '../../lib/2d/Polyline'
 import RepereBuilder from '../../lib/2d/RepereBuilder'
 import { segment } from '../../lib/2d/segmentsVecteurs'
@@ -131,9 +131,9 @@ const trouveQuartiles = function (
     return [0, 0, 0]
   }
   if (d1 && d2 && d3) {
-    const D1 = droiteHorizontaleParPoint(point(0, 5))
-    const D2 = droiteHorizontaleParPoint(point(0, 10))
-    const D3 = droiteHorizontaleParPoint(point(0, 15))
+    const D1 = droiteHorizontaleParPoint(pointAbstrait(0, 5))
+    const D2 = droiteHorizontaleParPoint(pointAbstrait(0, 10))
+    const D3 = droiteHorizontaleParPoint(pointAbstrait(0, 15))
     const p1 = pointIntersectionDD(d1, D1)
     const p2 = pointIntersectionDD(d2, D2)
     const p3 = pointIntersectionDD(d3, D3)
@@ -201,7 +201,7 @@ export default class Quartiles extends Exercice {
             x[index] = pop[nbVal] * echelleX
             y[index] = (nbVal * 100 * echelleY) / effectif
           }
-          pts.push(point(x[index], y[index]))
+          pts.push(pointAbstrait(x[index], y[index]))
           do {
             nbVal += randint(
               Math.min(2, Math.round(effectif / nbPart)),
@@ -210,7 +210,7 @@ export default class Quartiles extends Exercice {
           } while (x[index] === pop[nbVal] * echelleX) // il faut éviter d'avoir deux points sur la même valeur
           index++
         }
-        pts.push(point(valeurMax * echelleX, 100 * echelleY))
+        pts.push(pointAbstrait(valeurMax * echelleX, 100 * echelleY))
         ;[q1, q2, q3] = trouveQuartiles(y, pts).map((el) =>
           Math.round(el / echelleX),
         )
@@ -277,15 +277,15 @@ export default class Quartiles extends Exercice {
       )
       const offset = Math.log10(q1Round) * 0.2 + 0.5
       const ecartIQ = segment(
-        point(q1Round * echelleX + offset, -1.5),
-        point(q3Round * echelleX - offset, -1.5),
+        pointAbstrait(q1Round * echelleX + offset, -1.5),
+        pointAbstrait(q3Round * echelleX - offset, -1.5),
         'red',
       )
       ecartIQ.styleExtremites = '<->'
       const iq = texteSurSegment(
         `$${texNombre(q3Round - q1Round, 0)}$$`,
-        point(q1Round * echelleX + offset, -1.5),
-        point(q3Round * echelleX - offset, -1.5),
+        pointAbstrait(q1Round * echelleX + offset, -1.5),
+        pointAbstrait(q3Round * echelleX - offset, -1.5),
         'red',
         -0.5,
       )

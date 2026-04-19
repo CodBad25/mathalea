@@ -1,6 +1,6 @@
 import { afficheLongueurSegment } from '../../lib/2d/afficheLongueurSegment'
 import { cercle } from '../../lib/2d/cercle'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { segment } from '../../lib/2d/segmentsVecteurs'
 import { latexParPoint } from '../../lib/2d/textes'
 import { tracePoint } from '../../lib/2d/TracePoint'
@@ -110,7 +110,7 @@ export default class PerimetreAireDisques extends Exercice {
       r = this.sup2
         ? randint(2, 9)
         : arrondi(randint(2, 8) + randint(1, 9) / 10, 1)
-      A = point(r + 0.5, r + 0.5)
+      A = pointAbstrait(r + 0.5, r + 0.5)
       C = cercle(A, r)
       M = pointAdistance(A, r)
       B = rotation(M, A, 180)

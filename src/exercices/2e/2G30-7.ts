@@ -16,7 +16,7 @@ import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { choice } from '../../lib/outils/arrayOutils'
 import { bleuMathalea } from '../../lib/colors'
@@ -74,8 +74,8 @@ export default class Lecturegraphiquedeaetb extends Exercice {
             : choice([d + 1, d - 1]) * choice([-1, 1]) // coefficient directeur
       } // On évite la situation de double nullité
       const coeffDir = new FractionEtendue(a, d)
-      const A = point(a, 5, 'A') // droite horizontale
-      const B = point(a, -5, 'B') // droite horizontale
+      const A = pointAbstrait(a, 5, 'A') // droite horizontale
+      const B = pointAbstrait(a, -5, 'B') // droite horizontale
       const droiteAB = droite(A, B) // droite horizontale
       droiteAB.color = colorToLatexOrHTML('red') // droite horizontale
       droiteAB.epaisseur = 2 // droite horizontale

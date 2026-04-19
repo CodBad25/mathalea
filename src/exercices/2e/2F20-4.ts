@@ -11,7 +11,7 @@ import { randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
 import { courbe } from '../../lib/2d/Courbe'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import RepereBuilder from '../../lib/2d/RepereBuilder'
 import { colorToLatexOrHTML } from '../../lib/2d/colorToLatexOrHtml'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
@@ -769,10 +769,10 @@ class resolutionEquationInequationGraphique extends Exercice {
     courbe2.color = colorToLatexOrHTML('red')
 
     courbe2.epaisseur = 1
-    const p1A = point(-7, 7)
-    const p1B = point(-6, 7)
-    const p2A = point(-7, 6)
-    const p2B = point(-6, 6)
+    const p1A = pointAbstrait(-7, 7)
+    const p1B = pointAbstrait(-6, 7)
+    const p2A = pointAbstrait(-7, 6)
+    const p2B = pointAbstrait(-6, 6)
     const trait1 = segment(p1A, p1B, bleuMathalea)
     const trait2 = segment(p2A, p2B, 'red')
     trait1.epaisseur = 1

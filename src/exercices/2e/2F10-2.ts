@@ -1,6 +1,6 @@
 import { colorToLatexOrHTML } from '../../lib/2d/colorToLatexOrHtml'
 import { droite } from '../../lib/2d/droites'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { repere } from '../../lib/2d/reperes'
 import { Segment, segment } from '../../lib/2d/segmentsVecteurs'
 import { Latex2d, latexParPoint, texteParPosition } from '../../lib/2d/textes'
@@ -277,7 +277,7 @@ export default class Lecturefonctionaffine extends Exercice {
               s1.epaisseur = 2
               s2.styleExtremites = '->'
               s1.styleExtremites = '->'
-              const A = point(0, b)
+              const A = pointAbstrait(0, b)
               const l = texteParPosition('A', -0.5, b + 0.5, 0, 'red', 1)
               const t = tracePoint(A, 'red') // Variable qui trace les nom s A et B
               t.taille = 3
@@ -567,7 +567,7 @@ export default class Lecturefonctionaffine extends Exercice {
             s1.epaisseur = 2
             s2.styleExtremites = '->'
             s1.styleExtremites = '->'
-            const A = point(0, b)
+            const A = pointAbstrait(0, b)
 
             const l = latexParPoint(
               'A',
