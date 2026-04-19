@@ -1,5 +1,5 @@
 import { fixeBordures } from '../../../lib/2d/fixeBordures'
-import { point } from '../../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { labelPoint } from '../../../lib/2d/textes'
 import { tracePoint } from '../../../lib/2d/TracePoint'
 import { shuffle } from '../../../lib/outils/arrayOutils'
@@ -37,18 +37,18 @@ export default class MetropoleJuin24Exo4Q3 extends ExerciceQcmA {
     listeLettres: string[][],
   ): void {
     const nuage = [
-      point(0, 0, listeLettres[0][0], 'above right'),
-      point(2, 0, listeLettres[0][1], 'above right'),
-      point(4, 0, listeLettres[0][2], 'above right'),
-      point(6, 0, listeLettres[0][3], 'above right'),
-      point(0, 2, listeLettres[1][0], 'above right'),
-      point(2, 2, listeLettres[1][1], 'above right'),
-      point(4, 2, listeLettres[1][2], 'above right'),
-      point(6, 2, listeLettres[1][3], 'above right'),
-      point(0, 4, listeLettres[2][0], 'above right'),
-      point(2, 4, listeLettres[2][1], 'above right'),
-      point(4, 4, listeLettres[2][2], 'above right'),
-      point(6, 4, listeLettres[2][3], 'above right'),
+      pointAbstrait(0, 0, listeLettres[0][0], 'above right'),
+      pointAbstrait(2, 0, listeLettres[0][1], 'above right'),
+      pointAbstrait(4, 0, listeLettres[0][2], 'above right'),
+      pointAbstrait(6, 0, listeLettres[0][3], 'above right'),
+      pointAbstrait(0, 2, listeLettres[1][0], 'above right'),
+      pointAbstrait(2, 2, listeLettres[1][1], 'above right'),
+      pointAbstrait(4, 2, listeLettres[1][2], 'above right'),
+      pointAbstrait(6, 2, listeLettres[1][3], 'above right'),
+      pointAbstrait(0, 4, listeLettres[2][0], 'above right'),
+      pointAbstrait(2, 4, listeLettres[2][1], 'above right'),
+      pointAbstrait(4, 4, listeLettres[2][2], 'above right'),
+      pointAbstrait(6, 4, listeLettres[2][3], 'above right'),
     ]
     this.reponses = [`$${E}$`, `$${H}$`, `$${D}$`]
 

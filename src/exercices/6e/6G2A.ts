@@ -1,5 +1,5 @@
 import { codageSegments } from '../../lib/2d/CodageSegment'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { tracePoint } from '../../lib/2d/TracePoint'
 import { cercle } from '../../lib/2d/cercle'
 import { droite } from '../../lib/2d/droites'
@@ -166,7 +166,7 @@ export default class VocabulaireDuCercle extends Exercice {
       texte = ''
       texteCorr = ''
       const nomsDesPoints = choisitLettresDifferentes(6)
-      const O = point(0, 0, nomsDesPoints[0])
+      const O = pointAbstrait(0, 0, nomsDesPoints[0])
       const leCercle = cercle(O, 3)
       const A = pointAdistance(O, 3, nomsDesPoints[1])
       texte += `Les points $${nomsDesPoints[3]}$, $${nomsDesPoints[0]}$ et $${nomsDesPoints[2]}$ sont alignés.`

@@ -2,7 +2,7 @@ import { afficheLongueurSegment } from '../../lib/2d/afficheLongueurSegment'
 import { cercle } from '../../lib/2d/cercle'
 import { codageAngleDroit } from '../../lib/2d/CodageAngleDroit'
 import { codageSegments } from '../../lib/2d/CodageSegment'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { polygoneAvecNom } from '../../lib/2d/polygones'
 import { rotation, similitude, translation } from '../../lib/2d/transformations'
 import {
@@ -74,17 +74,17 @@ export default class AireCarresRectanglesTrianglesSL extends Exercice {
       b = tmp
     }
     const d = randint(b - a, a + b, [b - a, a + b])
-    const A = point(0, 0, nom[0])
-    const B = rotation(point(c, 0), A, randint(-15, 15), nom[1])
+    const A = pointAbstrait(0, 0, nom[0])
+    const B = rotation(pointAbstrait(c, 0), A, randint(-15, 15), nom[1])
     const C = rotation(A, B, -90, nom[2])
     const D = rotation(B, A, 90, nom[3])
     const carre = polygoneAvecNom(A, B, C, D)
-    const E = point(8, 0, nom[4])
+    const E = pointAbstrait(8, 0, nom[4])
     const F = pointAdistance(E, L, randint(-15, 15), nom[5])
     const G = similitude(E, F, -90, l / L, nom[6])
     const H = translation(G, vecteur(F, E), nom[7])
     const rectangle = polygoneAvecNom(E, F, G, H)
-    const I = point(15, 0, nom[8])
+    const I = pointAbstrait(15, 0, nom[8])
     const J = pointAdistance(I, a, randint(-25, 25), nom[9])
     J.positionLabel = 'right'
     const cI = cercle(I, b)

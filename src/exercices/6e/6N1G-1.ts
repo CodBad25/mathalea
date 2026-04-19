@@ -1,6 +1,6 @@
 import { colorToLatexOrHTML } from '../../lib/2d/colorToLatexOrHtml'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { type Segment, segment } from '../../lib/2d/segmentsVecteurs'
 import { labelPoint, latex2d } from '../../lib/2d/textes'
 import { tracePoint } from '../../lib/2d/TracePoint'
@@ -219,8 +219,8 @@ class ReperageEntiersOuDecimaux extends Exercice {
           )
       // fabrication de la droite graduée (faudra peut-être factoriser ça dans un objetMathalea2d() on verra)
 
-      const A = point(0, 0)
-      const B = point(15, 0)
+      const A = pointAbstrait(0, 0)
+      const B = pointAbstrait(15, 0)
       const laDroite = segment(A, B)
       laDroite.styleExtremites = '->'
       // Les graduations principales
@@ -228,11 +228,11 @@ class ReperageEntiersOuDecimaux extends Exercice {
       for (let g = 0; g < 6; g++) {
         graduationsPrincipales.push(
           segment(
-            point(
+            pointAbstrait(
               decalagePremiereGrosseGraduation + g * distanceGrossesGraduations,
               -0.2,
             ),
-            point(
+            pointAbstrait(
               decalagePremiereGrosseGraduation + g * distanceGrossesGraduations,
               +0.2,
             ),
@@ -249,12 +249,12 @@ class ReperageEntiersOuDecimaux extends Exercice {
         ) {
           graduationsSecondaires.push(
             segment(
-              point(
+              pointAbstrait(
                 ((g - premiereGraduation) * distanceGrossesGraduations) /
                   pasPrincipal,
                 -0.1,
               ),
-              point(
+              pointAbstrait(
                 ((g - premiereGraduation) * distanceGrossesGraduations) /
                   pasPrincipal,
                 0.1,
@@ -272,7 +272,7 @@ class ReperageEntiersOuDecimaux extends Exercice {
             distanceGrossesGraduations
           if (xGraduation < B.x) {
             graduationsSecondaires.push(
-              segment(point(xGraduation, -0.1), point(xGraduation, 0.1)),
+              segment(pointAbstrait(xGraduation, -0.1), pointAbstrait(xGraduation, 0.1)),
             )
           }
         }
@@ -299,12 +299,12 @@ class ReperageEntiersOuDecimaux extends Exercice {
         -1.2,
         { color: orangeMathalea },
       )
-      const guide = segment(point(xPoint, -0.3), point(xPoint, -0.9))
+      const guide = segment(pointAbstrait(xPoint, -0.3), pointAbstrait(xPoint, -0.9))
       guide.styleExtremites = '->'
       guide.color = colorToLatexOrHTML(orangeMathalea)
       guide.epaisseur = 2
       guide.pointilles = 2
-      const pointATrouver = point(xPoint, 0, lettreDepuisChiffre(i + 1))
+      const pointATrouver = pointAbstrait(xPoint, 0, lettreDepuisChiffre(i + 1))
       const trace = tracePoint(pointATrouver)
       const label = labelPoint(pointATrouver)
       const laDroiteGraduee = [

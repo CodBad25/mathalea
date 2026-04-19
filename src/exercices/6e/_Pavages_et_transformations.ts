@@ -12,7 +12,7 @@ import {
 } from '../../lib/2d/droites'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { mediatrice } from '../../lib/2d/Mediatrice'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { barycentre, polygone } from '../../lib/2d/polygones'
 import { representant } from '../../lib/2d/representantVecteur'
 import { Segment, segment } from '../../lib/2d/segmentsVecteurs'
@@ -188,12 +188,12 @@ export default class PavagesEtTransformations extends Exercice {
     let yD = pave[7]
     const Zoom = pave[8]
     const Angle = pave[9]
-    const A = point(0, 0)
+    const A = pointAbstrait(0, 0)
     if (choixPave !== 0) {
       // } && choixPave !== 6 && choixPave !== 7) {
-      B = similitude(point(xB, yB), A, Angle, 22 / Zoom)
-      C = similitude(point(xC, yC), A, Angle, 22 / Zoom)
-      D = similitude(point(xD, yD), A, Angle, 22 / Zoom)
+      B = similitude(pointAbstrait(xB, yB), A, Angle, 22 / Zoom)
+      C = similitude(pointAbstrait(xC, yC), A, Angle, 22 / Zoom)
+      D = similitude(pointAbstrait(xD, yD), A, Angle, 22 / Zoom)
       xB = B.x
       yB = B.y
       xC = C.x
@@ -201,9 +201,9 @@ export default class PavagesEtTransformations extends Exercice {
       xD = D.x
       yD = D.y
     } else {
-      B = point(xB, yB)
-      C = point(xC, yC)
-      D = point(xD, yD)
+      B = pointAbstrait(xB, yB)
+      C = pointAbstrait(xC, yC)
+      D = pointAbstrait(xD, yD)
     }
     const xAI = xB + xC - xD
     const yAI = yB + yC - yD
@@ -364,20 +364,20 @@ export default class PavagesEtTransformations extends Exercice {
               xa = tabfigA[indexA][0]
               ya = tabfigA[indexA][1]
               mediatrice1 = mediatrice(
-                point(xa, ya),
-                point(punto[0], punto[1]),
+                pointAbstrait(xa, ya),
+                pointAbstrait(punto[0], punto[1]),
                 '',
                 context.isAmc ? 'black' : 'green',
               ) as Droite
               mediatrice1.epaisseur = 2
               segCorr11 = segment(
-                point(xa, ya),
-                milieu(point(xa, ya), point(punto[0], punto[1])),
+                pointAbstrait(xa, ya),
+                milieu(pointAbstrait(xa, ya), pointAbstrait(punto[0], punto[1])),
                 context.isAmc ? 'black' : 'green',
               )
               segCorr12 = segment(
-                point(punto[0], punto[1]),
-                milieu(point(xa, ya), point(punto[0], punto[1])),
+                pointAbstrait(punto[0], punto[1]),
+                milieu(pointAbstrait(xa, ya), pointAbstrait(punto[0], punto[1])),
                 context.isAmc ? 'black' : 'green',
               )
               segCorr11.epaisseur = 2
@@ -387,8 +387,8 @@ export default class PavagesEtTransformations extends Exercice {
               objetsCorrection.push(
                 codageAngleDroit(
                   pointSurDroite(mediatrice1, 1, ''),
-                  milieu(point(xa, ya), point(punto[0], punto[1])),
-                  point(xa, ya),
+                  milieu(pointAbstrait(xa, ya), pointAbstrait(punto[0], punto[1])),
+                  pointAbstrait(xa, ya),
                   context.isAmc ? 'black' : 'green',
                   0.8,
                   1,
@@ -451,20 +451,20 @@ export default class PavagesEtTransformations extends Exercice {
               xb = tabfigD[indexD][0]
               yb = tabfigD[indexD][1] - 4
               mediatrice2 = mediatrice(
-                point(xb, yb + 4),
-                point(punto[0], punto[1]),
+                pointAbstrait(xb, yb + 4),
+                pointAbstrait(punto[0], punto[1]),
                 '',
                 context.isAmc ? 'black' : 'red',
               ) as Droite
               mediatrice2.epaisseur = 2
               segCorr21 = segment(
-                point(xb, yb + 4),
-                milieu(point(xb, yb + 4), point(punto[0], punto[1])),
+                pointAbstrait(xb, yb + 4),
+                milieu(pointAbstrait(xb, yb + 4), pointAbstrait(punto[0], punto[1])),
                 context.isAmc ? 'black' : 'red',
               )
               segCorr22 = segment(
-                point(punto[0], punto[1]),
-                milieu(point(xb, yb + 4), point(punto[0], punto[1])),
+                pointAbstrait(punto[0], punto[1]),
+                milieu(pointAbstrait(xb, yb + 4), pointAbstrait(punto[0], punto[1])),
                 context.isAmc ? 'black' : 'red',
               )
               segCorr21.epaisseur = 2
@@ -474,8 +474,8 @@ export default class PavagesEtTransformations extends Exercice {
               objetsCorrection.push(
                 codageAngleDroit(
                   pointSurDroite(mediatrice2, 1, ''),
-                  milieu(point(xb, yb + 4), point(punto[0], punto[1])),
-                  point(xb, yb + 4),
+                  milieu(pointAbstrait(xb, yb + 4), pointAbstrait(punto[0], punto[1])),
+                  pointAbstrait(xb, yb + 4),
                   context.isAmc ? 'black' : 'red',
                   0.8,
                   1,
@@ -540,20 +540,20 @@ export default class PavagesEtTransformations extends Exercice {
               xc = tabfigC[indexC][0]
               yc = tabfigC[indexC][1]
               mediatrice3 = mediatrice(
-                point(xc, yc),
-                point(punto[0], punto[1]),
+                pointAbstrait(xc, yc),
+                pointAbstrait(punto[0], punto[1]),
                 '',
                 context.isAmc ? 'black' : bleuMathalea,
               ) as Droite
               mediatrice3.epaisseur = 2
               segCorr31 = segment(
-                point(xc, yc),
-                milieu(point(xc, yc), point(punto[0], punto[1])),
+                pointAbstrait(xc, yc),
+                milieu(pointAbstrait(xc, yc), pointAbstrait(punto[0], punto[1])),
                 context.isAmc ? 'black' : bleuMathalea,
               )
               segCorr32 = segment(
-                point(punto[0], punto[1]),
-                milieu(point(xc, yc), point(punto[0], punto[1])),
+                pointAbstrait(punto[0], punto[1]),
+                milieu(pointAbstrait(xc, yc), pointAbstrait(punto[0], punto[1])),
                 context.isAmc ? 'black' : bleuMathalea,
               )
               segCorr31.epaisseur = 2
@@ -563,8 +563,8 @@ export default class PavagesEtTransformations extends Exercice {
               objetsCorrection.push(
                 codageAngleDroit(
                   pointSurDroite(mediatrice3, 1, ''),
-                  milieu(point(xc, yc), point(punto[0], punto[1])),
-                  point(xc, yc),
+                  milieu(pointAbstrait(xc, yc), pointAbstrait(punto[0], punto[1])),
+                  pointAbstrait(xc, yc),
                   context.isAmc ? 'black' : bleuMathalea,
                   0.8,
                   1,
@@ -640,13 +640,13 @@ export default class PavagesEtTransformations extends Exercice {
         pt1 = pointIntersectionDD(
           mediatrice1,
           droiteHorizontaleParPoint(
-            point(context.fenetreMathalea2d[2], context.fenetreMathalea2d[3]),
+            pointAbstrait(context.fenetreMathalea2d[2], context.fenetreMathalea2d[3]),
           ),
         )
         pt2 = pointIntersectionDD(
           mediatrice1,
           droiteVerticaleParPoint(
-            point(context.fenetreMathalea2d[0], context.fenetreMathalea2d[1]),
+            pointAbstrait(context.fenetreMathalea2d[0], context.fenetreMathalea2d[1]),
           ),
         )
         if (pt1.x > pt2.x) {
@@ -704,13 +704,13 @@ export default class PavagesEtTransformations extends Exercice {
         pt1 = pointIntersectionDD(
           mediatrice2,
           droiteHorizontaleParPoint(
-            point(context.fenetreMathalea2d[0], context.fenetreMathalea2d[1]),
+            pointAbstrait(context.fenetreMathalea2d[0], context.fenetreMathalea2d[1]),
           ),
         )
         pt2 = pointIntersectionDD(
           mediatrice2,
           droiteVerticaleParPoint(
-            point(context.fenetreMathalea2d[0], context.fenetreMathalea2d[1]),
+            pointAbstrait(context.fenetreMathalea2d[0], context.fenetreMathalea2d[1]),
           ),
         )
         if (pt1.x > pt2.x) {
@@ -793,7 +793,7 @@ export default class PavagesEtTransformations extends Exercice {
         pt1 = pointIntersectionDD(
           mediatrice3,
           droiteVerticaleParPoint(
-            point(context.fenetreMathalea2d[2], context.fenetreMathalea2d[3]),
+            pointAbstrait(context.fenetreMathalea2d[2], context.fenetreMathalea2d[3]),
           ),
         )
         objetsEnonce.push(
@@ -932,7 +932,7 @@ export default class PavagesEtTransformations extends Exercice {
               num1 = tabfigB[j][2]
               xa = tabfigA[indexA][0]
               ya = tabfigA[indexA][1]
-              centre1 = point(xmil1, ymil1, s0, 'left')
+              centre1 = pointAbstrait(xmil1, ymil1, s0, 'left')
               quad[numA].couleurDeRemplissage = colorToLatexOrHTML(
                 context.isAmc ? 'black' : 'green',
               )
@@ -992,7 +992,7 @@ export default class PavagesEtTransformations extends Exercice {
               num2 = tabfigA[j][2]
               xb = tabfigA[indexD][0]
               yb = tabfigA[indexD][1]
-              centre2 = point(xmil2, ymil2, s1, 'left')
+              centre2 = pointAbstrait(xmil2, ymil2, s1, 'left')
               quad[numD].couleurDeRemplissage = colorToLatexOrHTML(
                 context.isAmc ? 'black' : 'red',
               )
@@ -1054,7 +1054,7 @@ export default class PavagesEtTransformations extends Exercice {
               num3 = tabfigD[j][2]
               xc = tabfigA[indexC][0]
               yc = tabfigA[indexC][1]
-              centre3 = point(xmil3, ymil3, s2, 'left')
+              centre3 = pointAbstrait(xmil3, ymil3, s2, 'left')
               quad[numC].couleurDeRemplissage = colorToLatexOrHTML(
                 context.isAmc ? 'black' : bleuMathalea,
               )
@@ -1182,27 +1182,27 @@ export default class PavagesEtTransformations extends Exercice {
           context.isAmc ? 'black' : bleuMathalea,
         )
         quad3.opaciteDeRemplissage = 0.3
-        arc1 = arc(point(tabfigA[indexA][0], tabfigA[indexA][1]), centre1, 180)
+        arc1 = arc(pointAbstrait(tabfigA[indexA][0], tabfigA[indexA][1]), centre1, 180)
         rayon11 = segment(
-          point(tabfigA[indexA][0], tabfigA[indexA][1]),
+          pointAbstrait(tabfigA[indexA][0], tabfigA[indexA][1]),
           centre1,
         )
         rayon12 = rotation(rayon11, centre1, 180)
         rayon11.pointilles = 2
         rayon12.pointilles = 2
         arc1.pointilles = 2
-        arc2 = arc(point(tabfigD[indexD][0], tabfigD[indexD][1]), centre2, 180)
+        arc2 = arc(pointAbstrait(tabfigD[indexD][0], tabfigD[indexD][1]), centre2, 180)
         rayon21 = segment(
-          point(tabfigD[indexD][0], tabfigD[indexD][1]),
+          pointAbstrait(tabfigD[indexD][0], tabfigD[indexD][1]),
           centre2,
         )
         rayon22 = rotation(rayon21, centre2, 180)
         rayon21.pointilles = 2
         rayon22.pointilles = 2
         arc2.pointilles = 2
-        arc3 = arc(point(tabfigC[indexC][0], tabfigC[indexC][1]), centre3, 180)
+        arc3 = arc(pointAbstrait(tabfigC[indexC][0], tabfigC[indexC][1]), centre3, 180)
         rayon31 = segment(
-          point(tabfigC[indexC][0], tabfigC[indexC][1]),
+          pointAbstrait(tabfigC[indexC][0], tabfigC[indexC][1]),
           centre3,
         )
         rayon32 = rotation(rayon31, centre3, 180)
@@ -1265,9 +1265,9 @@ export default class PavagesEtTransformations extends Exercice {
               num1 = tabfigA[j][2]
               xa = tabfigA[indexA][0]
               ya = tabfigA[indexA][1]
-              origine1 = point(tabfigB[iB1][0], tabfigB[iB1][1])
+              origine1 = pointAbstrait(tabfigB[iB1][0], tabfigB[iB1][1])
               vecteur1 = representant(
-                vecteur(origine1, point(tabfigB[iB2][0], tabfigB[iB2][1])),
+                vecteur(origine1, pointAbstrait(tabfigB[iB2][0], tabfigB[iB2][1])),
                 origine1,
               )
               vecteur1.color = colorToLatexOrHTML(
@@ -1337,9 +1337,9 @@ export default class PavagesEtTransformations extends Exercice {
               num2 = tabfigB[j][2]
               xb = tabfigD[indexD][0]
               yb = tabfigD[indexD][1]
-              origine2 = point(tabfigC[iC1][0], tabfigC[iC1][1])
+              origine2 = pointAbstrait(tabfigC[iC1][0], tabfigC[iC1][1])
               vecteur2 = representant(
-                vecteur(origine2, point(tabfigA[iA1][0], tabfigA[iA1][1])),
+                vecteur(origine2, pointAbstrait(tabfigA[iA1][0], tabfigA[iA1][1])),
                 origine2,
               )
               vecteur2.color = colorToLatexOrHTML(
@@ -1410,9 +1410,9 @@ export default class PavagesEtTransformations extends Exercice {
               num3 = tabfigA[j][2]
               xc = tabfigC[indexC][0]
               yc = tabfigC[indexC][1]
-              origine3 = point(tabfigC[iD1][0], tabfigC[iD1][1])
+              origine3 = pointAbstrait(tabfigC[iD1][0], tabfigC[iD1][1])
               vecteur3 = representant(
-                vecteur(origine3, point(tabfigA[iB3][0], tabfigA[iB3][1])),
+                vecteur(origine3, pointAbstrait(tabfigA[iB3][0], tabfigA[iB3][1])),
                 origine3,
               )
               vecteur3.color = colorToLatexOrHTML(
@@ -1523,19 +1523,19 @@ export default class PavagesEtTransformations extends Exercice {
         quad3.opaciteDeRemplissage = 0.3
         rayon11 = representant(
           vecteur(vecteur1.x2 - vecteur1.x1, vecteur1.y2 - vecteur1.y1),
-          point(xa, ya),
+          pointAbstrait(xa, ya),
         )
         rayon11.color = colorToLatexOrHTML(context.isAmc ? 'black' : 'green')
         rayon11.epaisseur = 2
         rayon21 = representant(
           vecteur(vecteur2.x2 - vecteur2.x1, vecteur2.y2 - vecteur2.y1),
-          point(xb, yb),
+          pointAbstrait(xb, yb),
         )
         rayon21.color = colorToLatexOrHTML(context.isAmc ? 'black' : 'red')
         rayon21.epaisseur = 2
         rayon31 = representant(
           vecteur(vecteur3.x2 - vecteur3.x1, vecteur3.y2 - vecteur3.y1),
-          point(xc, yc),
+          pointAbstrait(xc, yc),
         )
         rayon31.color = colorToLatexOrHTML(context.isAmc ? 'black' : bleuMathalea)
         rayon31.epaisseur = 2
@@ -1579,7 +1579,7 @@ export default class PavagesEtTransformations extends Exercice {
               num1 = tabfigD[j][2]
               xa = tabfigA[indexA][0]
               ya = tabfigA[indexA][1]
-              centre1 = point(xmil1, ymil1, s0, 'above left')
+              centre1 = pointAbstrait(xmil1, ymil1, s0, 'above left')
               quad[numA].couleurDeRemplissage = colorToLatexOrHTML(
                 context.isAmc ? 'black' : 'green',
               )
@@ -1642,7 +1642,7 @@ export default class PavagesEtTransformations extends Exercice {
               num2 = tabfigC[j][2]
               xb = tabfigA[indexD][0]
               yb = tabfigA[indexD][1]
-              centre2 = point(xmil2, ymil2, s1, 'above left')
+              centre2 = pointAbstrait(xmil2, ymil2, s1, 'above left')
               quad[numD].couleurDeRemplissage = colorToLatexOrHTML(
                 context.isAmc ? 'black' : 'red',
               )
@@ -1706,7 +1706,7 @@ export default class PavagesEtTransformations extends Exercice {
               num3 = tabfigD[j][2]
               xc = tabfigA[indexC][0]
               yc = tabfigA[indexC][1]
-              centre3 = point(xmil3, ymil3, s2, 'above left')
+              centre3 = pointAbstrait(xmil3, ymil3, s2, 'above left')
               quad[numC].couleurDeRemplissage = colorToLatexOrHTML(
                 context.isAmc ? 'black' : bleuMathalea,
               )
@@ -1832,9 +1832,9 @@ export default class PavagesEtTransformations extends Exercice {
           context.isAmc ? 'black' : bleuMathalea,
         )
         quad3.opaciteDeRemplissage = 0.3
-        arc1 = arc(point(tabfigA[indexA][0], tabfigA[indexA][1]), centre1, -90)
+        arc1 = arc(pointAbstrait(tabfigA[indexA][0], tabfigA[indexA][1]), centre1, -90)
         rayon11 = segment(
-          point(tabfigA[indexA][0], tabfigA[indexA][1]),
+          pointAbstrait(tabfigA[indexA][0], tabfigA[indexA][1]),
           centre1,
           context.isAmc ? 'black' : 'green',
         )
@@ -1845,9 +1845,9 @@ export default class PavagesEtTransformations extends Exercice {
         arc1.pointilles = 2
         arc1.epaisseur = 2
         arc1.color = colorToLatexOrHTML(context.isAmc ? 'black' : 'green')
-        arc2 = arc(point(tabfigD[indexD][0], tabfigD[indexD][1]), centre2, 90)
+        arc2 = arc(pointAbstrait(tabfigD[indexD][0], tabfigD[indexD][1]), centre2, 90)
         rayon21 = segment(
-          point(tabfigD[indexD][0], tabfigD[indexD][1]),
+          pointAbstrait(tabfigD[indexD][0], tabfigD[indexD][1]),
           centre2,
           context.isAmc ? 'black' : 'red',
         )
@@ -1858,9 +1858,9 @@ export default class PavagesEtTransformations extends Exercice {
         arc2.pointilles = 2
         arc2.epaisseur = 2
         arc2.color = colorToLatexOrHTML(context.isAmc ? 'black' : 'red')
-        arc3 = arc(point(tabfigC[indexC][0], tabfigC[indexC][1]), centre3, -90)
+        arc3 = arc(pointAbstrait(tabfigC[indexC][0], tabfigC[indexC][1]), centre3, -90)
         rayon31 = segment(
-          point(tabfigC[indexC][0], tabfigC[indexC][1]),
+          pointAbstrait(tabfigC[indexC][0], tabfigC[indexC][1]),
           centre3,
           context.isAmc ? 'black' : bleuMathalea,
         )
@@ -1885,10 +1885,10 @@ export default class PavagesEtTransformations extends Exercice {
           rayon31,
           rayon32,
           codageAngleDroit(
-            point(tabfigA[indexA][0], tabfigA[indexA][1]),
+            pointAbstrait(tabfigA[indexA][0], tabfigA[indexA][1]),
             centre1,
             rotation(
-              point(tabfigA[indexA][0], tabfigA[indexA][1]),
+              pointAbstrait(tabfigA[indexA][0], tabfigA[indexA][1]),
               centre1,
               -90,
             ),
@@ -1897,10 +1897,10 @@ export default class PavagesEtTransformations extends Exercice {
             1,
           ),
           codageAngleDroit(
-            point(tabfigD[indexD][0], tabfigD[indexD][1]),
+            pointAbstrait(tabfigD[indexD][0], tabfigD[indexD][1]),
             centre2,
             rotation(
-              point(tabfigD[indexD][0], tabfigD[indexD][1]),
+              pointAbstrait(tabfigD[indexD][0], tabfigD[indexD][1]),
               centre2,
               90,
             ),
@@ -1909,10 +1909,10 @@ export default class PavagesEtTransformations extends Exercice {
             1,
           ),
           codageAngleDroit(
-            point(tabfigC[indexC][0], tabfigC[indexC][1]),
+            pointAbstrait(tabfigC[indexC][0], tabfigC[indexC][1]),
             centre3,
             rotation(
-              point(tabfigC[indexC][0], tabfigC[indexC][1]),
+              pointAbstrait(tabfigC[indexC][0], tabfigC[indexC][1]),
               centre3,
               -90,
             ),

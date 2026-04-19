@@ -1,5 +1,5 @@
 import { cercle } from '../../lib/2d/cercle'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { polygoneAvecNom } from '../../lib/2d/polygones'
 import { pointSurCercle } from '../../lib/2d/utilitairesPoint'
 import { propositionsQcm } from '../../lib/interactif/qcm'
@@ -53,7 +53,7 @@ export default class VocabulaireDeBaseDesPolygones extends Exercice {
       this.nbQuestions,
     )
     const objets2d = []
-    const O = point(0, 0, 'O')
+    const O = pointAbstrait(0, 0, 'O')
     const points = []
 
     const nbSommets = randint(4, 6)

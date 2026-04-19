@@ -1,4 +1,4 @@
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { tracePoint } from '../../lib/2d/TracePoint'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { cone as cone2d, sphere2d } from '../../lib/2d/projections3d'
@@ -255,7 +255,7 @@ export default class ReconnaitreDesSolides extends Exercice {
             objets.push(...(cone.c2d as NestedObjetMathalea2dArray))
           } else {
             cone = cone2d({
-              centre: point(0, 0),
+              centre: pointAbstrait(0, 0),
               rx: randint(15, 30) / 10,
               hauteur: choice([3, 4, 5]),
             })
@@ -535,7 +535,7 @@ export default class ReconnaitreDesSolides extends Exercice {
           break
         }
         case 'sphère': // sphère
-          sphere = sphere2d({ centre: point(0, 0), rx: 2, color: 'black' })
+          sphere = sphere2d({ centre: pointAbstrait(0, 0), rx: 2, color: 'black' })
           objets.push(sphere)
           reponse = solide
           texteCorrection = premiereLettreEnMajuscule(solide) + '.'

@@ -1,5 +1,5 @@
 import { fixeBordures } from '../../lib/2d/fixeBordures'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { rapporteur } from '../../lib/2d/Rapporteur'
 import { segment } from '../../lib/2d/segmentsVecteurs'
 import { labelPoint } from '../../lib/2d/textes'
@@ -90,10 +90,10 @@ export default class MesurerUnAngleAvecRapporteurOld extends Exercice {
       const objetsCorrection = [] // Idem pour la correction
       const tailleRapporteur = contraindreValeur(7, 12, this.sup2, 12)
       // Mise en place des points encadrant l'espace pour le rapporteur. Utiles pour paramsEnonce car le rapporteur peut tourner et optimisons l'espace pour ce rapporteur.
-      sudOuest = point(-(tailleRapporteur + 3), 0)
-      nordOuest = point(-(tailleRapporteur + 3), tailleRapporteur + 3)
-      sudEst = point(tailleRapporteur + 3, 0)
-      nordEst = point(tailleRapporteur + 3, tailleRapporteur + 3)
+      sudOuest = pointAbstrait(-(tailleRapporteur + 3), 0)
+      nordOuest = pointAbstrait(-(tailleRapporteur + 3), tailleRapporteur + 3)
+      sudEst = pointAbstrait(tailleRapporteur + 3, 0)
+      nordEst = pointAbstrait(tailleRapporteur + 3, tailleRapporteur + 3)
 
       // Le centre du rapporteur est A.
       // Le point sur la ligne 0 est B. En fait, on construit B1 et B est entre A et B1 (afin que B ne soit pas toujours à X cm de A car cette distance n'a pas à être fixe pour un élève)
@@ -141,8 +141,8 @@ export default class MesurerUnAngleAvecRapporteurOld extends Exercice {
                   ? 'right'
                   : 'below'
       }
-      const A = point(0, 0, lettreDepuisChiffre(numA), posA)
-      const B1 = rotation(point(tailleRapporteur + 3, 0), A, angB)
+      const A = pointAbstrait(0, 0, lettreDepuisChiffre(numA), posA)
+      const B1 = rotation(pointAbstrait(tailleRapporteur + 3, 0), A, angB)
 
       const posB =
         angB > 135

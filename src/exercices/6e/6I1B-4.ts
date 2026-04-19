@@ -1,5 +1,5 @@
 import { colorToLatexOrHTML } from '../../lib/2d/colorToLatexOrHtml'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { polygone } from '../../lib/2d/polygones'
 import { segment } from '../../lib/2d/segmentsVecteurs'
 import { latex2d } from '../../lib/2d/textes'
@@ -600,10 +600,10 @@ function createDigramm(
   const gap = 0.8
   const objets = []
   for (let i = 0; i < nbre; i++) {
-    const A = point(i * longueur + i * gap, 0)
-    const B = point(A.x + longueur, 0)
-    const C = point(B.x, largeur)
-    const D = point(A.x, largeur)
+    const A = pointAbstrait(i * longueur + i * gap, 0)
+    const B = pointAbstrait(A.x + longueur, 0)
+    const C = pointAbstrait(B.x, largeur)
+    const D = pointAbstrait(A.x, largeur)
     const rect = rects[i]
     const rectangle = polygone(A, B, C, D)
     if (rect && rect.bg) {

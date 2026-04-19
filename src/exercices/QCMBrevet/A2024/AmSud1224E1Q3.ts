@@ -1,6 +1,6 @@
 import { cercle } from '../../../lib/2d/cercle'
 import { fixeBordures } from '../../../lib/2d/fixeBordures'
-import { point } from '../../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { polygoneAvecNom } from '../../../lib/2d/polygones'
 import { segment } from '../../../lib/2d/segmentsVecteurs'
 import { homothetie } from '../../../lib/2d/transformations'
@@ -50,9 +50,9 @@ export default class AmeriqueSud1224Ex1Q3 extends ExerciceQcmA {
       `$${texNombre(choix[1], 1)}\\text{ cm}$`,
     ]
     const objets = []
-    const B = point(0, 0, labels[2])
-    const D = point(BD, 0, labels[3])
-    const C = point(BC, 0, labels[4])
+    const B = pointAbstrait(0, 0, labels[2])
+    const D = pointAbstrait(BD, 0, labels[3])
+    const C = pointAbstrait(BC, 0, labels[4])
     const r = randint(AC - BC + 1, AC + BC - 1)
     const C1 = cercle(B, r)
     const C2 = cercle(C, AC)

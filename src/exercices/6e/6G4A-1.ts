@@ -1,6 +1,6 @@
 import { codageAngle } from '../../lib/2d/angles'
 import { demiDroite } from '../../lib/2d/DemiDroite'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { texteParPoint } from '../../lib/2d/textes'
 import { tracePoint } from '../../lib/2d/TracePoint'
 import { homothetie, rotation } from '../../lib/2d/transformations'
@@ -74,24 +74,24 @@ export default class VocabulaireDeBaseDesAngles extends Exercice {
       const indiceNomA = randint(1, 26)
       const indiceNomB = randint(1, 26, [indiceNomA])
       const indiceNomC = randint(1, 26, [indiceNomA, indiceNomB])
-      const A = point(
+      const A = pointAbstrait(
         randint(xMin, xMax),
         randint(yMin, yMax),
         lettreDepuisChiffre(indiceNomA),
       )
-      let B = point(
+      let B = pointAbstrait(
         randint(xMin, xMax),
         randint(yMin, yMax),
         lettreDepuisChiffre(indiceNomB),
       )
       while (longueur(A, B) < distanceMin) {
-        B = point(
+        B = pointAbstrait(
           randint(xMin, xMax),
           randint(yMin, yMax),
           lettreDepuisChiffre(indiceNomB),
         )
       }
-      let C = point(
+      let C = pointAbstrait(
         randint(xMin, xMax),
         randint(yMin, yMax),
         lettreDepuisChiffre(indiceNomC),
@@ -102,7 +102,7 @@ export default class VocabulaireDeBaseDesAngles extends Exercice {
         angle(A, B, C) < 10 ||
         angle(A, B, C) > 170
       ) {
-        C = point(
+        C = pointAbstrait(
           randint(xMin, xMax),
           randint(yMin, yMax),
           lettreDepuisChiffre(indiceNomC),

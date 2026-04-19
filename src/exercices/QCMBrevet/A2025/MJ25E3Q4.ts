@@ -1,7 +1,7 @@
 import { codageAngleDroit } from '../../../lib/2d/CodageAngleDroit'
 import { fixeBordures } from '../../../lib/2d/fixeBordures'
 import { placeLatexSurSegment } from '../../../lib/2d/placeLatexSurSegment'
-import { point } from '../../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { polygone } from '../../../lib/2d/polygones'
 import { labelPoint } from '../../../lib/2d/textes'
 import { choice } from '../../../lib/outils/arrayOutils'
@@ -28,9 +28,9 @@ export const dateDePublication = '27/05/2025'
 
 export default class MetropoleJ25EX3Q4 extends ExerciceQcmA {
   private appliquerLesValeurs(a: number, b: number, c: number): void {
-    const point1 = point(0, 0, 'A', 'left')
-    const point2 = point(7.5, 0, 'C', 'right')
-    const point3 = point(4.8, 3.6, 'B', 'above')
+    const point1 = pointAbstrait(0, 0, 'A', 'left')
+    const point2 = pointAbstrait(7.5, 0, 'C', 'right')
+    const point3 = pointAbstrait(4.8, 3.6, 'B', 'above')
     const tri = polygone([point1, point2, point3])
     tri.epaisseur = 1
     const ang = codageAngleDroit(point1, point3, point2)

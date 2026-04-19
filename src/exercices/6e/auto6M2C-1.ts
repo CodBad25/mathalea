@@ -1,6 +1,6 @@
 import { colorToLatexOrHTML } from '../../lib/2d/colorToLatexOrHtml'
 import { grille } from '../../lib/2d/Grille'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { polygone } from '../../lib/2d/polygones'
 import { carre } from '../../lib/2d/polygonesParticuliers'
 import { texteParPosition } from '../../lib/2d/textes'
@@ -206,25 +206,25 @@ export default class AireParComptage extends Exercice {
       const texFig2 = texteParPosition('Figure 2', a + 1 + a2 / 2, -0.5)
       const uniteAire =
         this.sup3 === 1
-          ? carre(point(xmax - 2, ymax - 2), point(xmax - 1, ymax - 2))
+          ? carre(pointAbstrait(xmax - 2, ymax - 2), pointAbstrait(xmax - 1, ymax - 2))
           : this.sup3 === 2
             ? polygone(
-                point(xmax - 2, ymax - 2),
-                point(xmax - 1, ymax - 2),
-                point(xmax - 1, ymax - 1.5),
-                point(xmax - 2, ymax - 1.5),
+                pointAbstrait(xmax - 2, ymax - 2),
+                pointAbstrait(xmax - 1, ymax - 2),
+                pointAbstrait(xmax - 1, ymax - 1.5),
+                pointAbstrait(xmax - 2, ymax - 1.5),
               )
             : this.sup3 === 3
               ? polygone(
-                  point(xmax - 2, ymax - 2),
-                  point(xmax - 1, ymax - 2),
-                  point(xmax - 2, ymax - 1),
+                  pointAbstrait(xmax - 2, ymax - 2),
+                  pointAbstrait(xmax - 1, ymax - 2),
+                  pointAbstrait(xmax - 2, ymax - 1),
                 )
               : polygone(
-                  point(xmax - 2, ymax - 2),
-                  point(xmax - 1.5, ymax - 2),
-                  point(xmax - 1.5, ymax - 1.5),
-                  point(xmax - 2, ymax - 1.5),
+                  pointAbstrait(xmax - 2, ymax - 2),
+                  pointAbstrait(xmax - 1.5, ymax - 2),
+                  pointAbstrait(xmax - 1.5, ymax - 1.5),
+                  pointAbstrait(xmax - 2, ymax - 1.5),
                 )
       uniteAire.couleurDeRemplissage = colorToLatexOrHTML('gray')
       const texteUniteAire = texteParPosition(
@@ -260,11 +260,11 @@ export default class AireParComptage extends Exercice {
   }
 
   questionCarre(a: number, a2: number): NestedObjetMathalea2dArray {
-    const A = point(0, 0)
-    const B = point(a, 0)
+    const A = pointAbstrait(0, 0)
+    const B = pointAbstrait(a, 0)
     const quad = carre(A, B)
-    const A2 = point(Math.ceil(a) + 1, 0)
-    const B2 = point(Math.ceil(a) + a2 + 1, 0)
+    const A2 = pointAbstrait(Math.ceil(a) + 1, 0)
+    const B2 = pointAbstrait(Math.ceil(a) + a2 + 1, 0)
     const quad2 = carre(A2, B2)
     quad.couleurDeRemplissage = colorToLatexOrHTML('orange')
     quad2.couleurDeRemplissage = colorToLatexOrHTML('orange')
@@ -277,15 +277,15 @@ export default class AireParComptage extends Exercice {
     a2: number,
     b2: number,
   ): NestedObjetMathalea2dArray {
-    const A = point(0, 0)
-    const B = point(a, 0)
-    const C = point(a, b)
-    const D = point(0, b)
+    const A = pointAbstrait(0, 0)
+    const B = pointAbstrait(a, 0)
+    const C = pointAbstrait(a, b)
+    const D = pointAbstrait(0, b)
     const rect = polygone(A, B, C, D)
-    const A2 = point(Math.ceil(a) + 1, 0)
-    const B2 = point(Math.ceil(a) + a2 + 1, 0)
-    const C2 = point(Math.ceil(a) + a2 + 1, b2)
-    const D2 = point(Math.ceil(a) + 1, b2)
+    const A2 = pointAbstrait(Math.ceil(a) + 1, 0)
+    const B2 = pointAbstrait(Math.ceil(a) + a2 + 1, 0)
+    const C2 = pointAbstrait(Math.ceil(a) + a2 + 1, b2)
+    const D2 = pointAbstrait(Math.ceil(a) + 1, b2)
     const rect2 = polygone(A2, B2, C2, D2)
     rect.couleurDeRemplissage = colorToLatexOrHTML('orange')
     rect2.couleurDeRemplissage = colorToLatexOrHTML('orange')
@@ -298,13 +298,13 @@ export default class AireParComptage extends Exercice {
     a2: number,
     b2: number,
   ): NestedObjetMathalea2dArray {
-    const A = point(0, 0)
-    const B = point(a, 0)
-    const C = point(0, b)
+    const A = pointAbstrait(0, 0)
+    const B = pointAbstrait(a, 0)
+    const C = pointAbstrait(0, b)
     const tri = polygone(A, B, C)
-    const A2 = point(Math.ceil(a) + 1, 0)
-    const B2 = point(Math.ceil(a) + a2 + 1, 0)
-    const C2 = point(Math.ceil(a) + a2 + 1, b2)
+    const A2 = pointAbstrait(Math.ceil(a) + 1, 0)
+    const B2 = pointAbstrait(Math.ceil(a) + a2 + 1, 0)
+    const C2 = pointAbstrait(Math.ceil(a) + a2 + 1, b2)
     const tri2 = polygone(A2, B2, C2)
     tri.couleurDeRemplissage = colorToLatexOrHTML('orange')
     tri2.couleurDeRemplissage = colorToLatexOrHTML('orange')

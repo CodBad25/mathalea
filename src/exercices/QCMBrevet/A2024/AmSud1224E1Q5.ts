@@ -1,6 +1,6 @@
 import { fixeBordures } from '../../../lib/2d/fixeBordures'
 import { grille } from '../../../lib/2d/Grille'
-import { point } from '../../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { polygone } from '../../../lib/2d/polygones'
 import { segment } from '../../../lib/2d/segmentsVecteurs'
 import { labelPoint } from '../../../lib/2d/textes'
@@ -39,20 +39,25 @@ export default class AmeriqueSud1224Ex1Q4 extends ExerciceQcmA {
     choix: boolean,
   ): void {
     const coef = sensDirect ? 1 : -1
-    const A = point(0, 0, noms[0], coef > 0 ? 'above left' : 'below right')
-    const G = point(
+    const A = pointAbstrait(
+      0,
+      0,
+      noms[0],
+      coef > 0 ? 'above left' : 'below right',
+    )
+    const G = pointAbstrait(
       rapport * coef,
       0,
       noms[1],
       coef > 0 ? 'above left' : 'below right',
     )
-    const F = point(
+    const F = pointAbstrait(
       rapport * coef,
       rapport * coef,
       noms[2],
       coef > 0 ? 'below left' : 'above right',
     )
-    const E = point(
+    const E = pointAbstrait(
       0,
       rapport * coef,
       noms[3],

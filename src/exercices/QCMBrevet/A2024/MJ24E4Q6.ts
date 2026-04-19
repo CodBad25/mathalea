@@ -1,7 +1,7 @@
 import { codageAngle } from '../../../lib/2d/angles'
 import { codageAngleDroit } from '../../../lib/2d/CodageAngleDroit'
 import { fixeBordures } from '../../../lib/2d/fixeBordures'
-import { point } from '../../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { polygone } from '../../../lib/2d/polygones'
 import { labelPoint, latex2d } from '../../../lib/2d/textes'
 import { choice } from '../../../lib/outils/arrayOutils'
@@ -47,9 +47,9 @@ export default class MetropoleJuin24Exo4Q3 extends ExerciceQcmA {
     ]
     this.enonce = `Dans le triangle ABC rectangle en A ci-contre, qui n'est pas en vraie grandeur, quelle est la valeur de $\\${f} \\alpha$ ?`
     const triangle = polygone([
-      point(0, 0, 'A', 'below left'),
-      point(0, 3, 'C', 'above left'),
-      point(4, 0, 'B', 'below right'),
+      pointAbstrait(0, 0, 'A', 'below left'),
+      pointAbstrait(0, 3, 'C', 'above left'),
+      pointAbstrait(4, 0, 'B', 'below right'),
     ])
     const angleDroit = codageAngleDroit(
       triangle.listePoints[1],

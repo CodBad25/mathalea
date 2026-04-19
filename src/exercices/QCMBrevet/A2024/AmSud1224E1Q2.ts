@@ -1,5 +1,5 @@
 import { fixeBordures } from '../../../lib/2d/fixeBordures'
-import { point } from '../../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { segment } from '../../../lib/2d/segmentsVecteurs'
 import { cube } from '../../../lib/3d/3dProjectionMathalea2d/CubeIso'
 import { shuffle } from '../../../lib/outils/arrayOutils'
@@ -69,7 +69,7 @@ export default class AmeriqueSud1224Ex1Q4 extends ExerciceQcmA {
         ).c2d,
       )
     }
-    const fleche = segment(point(4, 1.5), point(2, 2))
+    const fleche = segment(pointAbstrait(4, 1.5), pointAbstrait(2, 2))
     fleche.styleExtremites = '->'
     fleche.epaisseur = 2
     objets.push(fleche)

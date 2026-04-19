@@ -1,5 +1,5 @@
 import { afficheMesureAngle } from '../../lib/2d/AfficheMesureAngle'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { afficheLongueurSegment } from '../../lib/2d/afficheLongueurSegment'
 import { droite } from '../../lib/2d/droites'
 import { segment, segmentAvecExtremites } from '../../lib/2d/segmentsVecteurs'
@@ -128,14 +128,14 @@ export default class TracerTriangle2Angles extends Exercice {
       texte += `<br> Mesurer $${p[0] + p[2]}$,  $${p[1] + p[2]}$ et $\\widehat{${p[0] + p[2] + p[1]}}$.`
 
       // on construit le segment
-      const A0 = point(0, 0, p[0], 'left')
-      const B0 = point(loAC, 0, p[1], 'right')
+      const A0 = pointAbstrait(0, 0, p[0], 'left')
+      const B0 = pointAbstrait(loAC, 0, p[1], 'right')
       const s0 = segmentAvecExtremites(A0, B0)
       const t0 = afficheLongueurSegment(B0, A0)
 
       // on construit l'angle à gauche
-      const A1 = point(B0.x + 4, 0, p[0], 'left')
-      const B1 = point(A1.x + loAC, 0, p[1], 'right')
+      const A1 = pointAbstrait(B0.x + 4, 0, p[0], 'left')
+      const B1 = pointAbstrait(A1.x + loAC, 0, p[1], 'right')
       const s1 = segment(A1, B1)
       s1.styleExtremites = '-|'
       const c1 = rotation(B1, A1, angle1)
@@ -144,8 +144,8 @@ export default class TracerTriangle2Angles extends Exercice {
       const t1g = afficheMesureAngle(B1, A1, C1)
 
       // on construit l'angle à droite
-      const A2 = point(B1.x + 4, 0, p[0], 'left')
-      const B2 = point(A2.x + loAC, 0, p[1], 'right')
+      const A2 = pointAbstrait(B1.x + 4, 0, p[0], 'left')
+      const B2 = pointAbstrait(A2.x + loAC, 0, p[1], 'right')
       const s2 = segment(A2, B2)
       const c2g = rotation(B2, A2, angle1)
       const C2g = pointSurSegment(c2g, A2, -3)
@@ -156,8 +156,8 @@ export default class TracerTriangle2Angles extends Exercice {
       const s2d = segment(B2, C2d)
 
       // on construit le triangle
-      const A3 = point(B2.x + 4, 0, p[0], 'left')
-      const B3 = point(A3.x + loAC, 0, p[1], 'right')
+      const A3 = pointAbstrait(B2.x + 4, 0, p[0], 'left')
+      const B3 = pointAbstrait(A3.x + loAC, 0, p[1], 'right')
 
       const s3 = segment(A3, B3)
       const c3g = rotation(B3, A3, angle1)

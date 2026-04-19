@@ -2,16 +2,16 @@
 import { colorToLatexOrHTML } from '../../../lib/2d/colorToLatexOrHtml'
 import { courbe } from '../../../lib/2d/Courbe'
 import { droite } from '../../../lib/2d/droites'
-import { point } from '../../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { repere } from '../../../lib/2d/reperes'
 import { labelPoint, texteParPosition } from '../../../lib/2d/textes'
 import { tracePoint } from '../../../lib/2d/TracePoint'
+import { bleuMathalea } from '../../../lib/colors'
 import { ecritureParentheseSiMoins } from '../../../lib/outils/ecritures'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { nombreElementsDifferents } from '../../ExerciceQcm'
 import ExerciceQcmA from '../../ExerciceQcmA'
-import { bleuMathalea } from '../../../lib/colors'
 
 export const uuid = 'zert'
 export const refs = {
@@ -61,9 +61,9 @@ export default class MetropoleJuin24Exo4Q1 extends ExerciceQcmA {
     })
     const yA = 5
     const yB = 20
-    const A = point(0, 2, 'A')
-    const B = point(1, 8, 'B')
-    const C = point(-2.5, -0.64, 'C')
+    const A = pointAbstrait(0, 2, 'A')
+    const B = pointAbstrait(1, 8, 'B')
+    const C = pointAbstrait(-2.5, -0.64, 'C')
     const o = texteParPosition('$O$', 0.4, -0.4, 0, 'black', 1)
     const tA = tracePoint(A, 'red') // Variable qui trace les points avec une croix
     const tB = tracePoint(B, 'red') // Variable qui trace les points avec une croix

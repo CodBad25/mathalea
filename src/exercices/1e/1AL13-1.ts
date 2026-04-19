@@ -1,6 +1,6 @@
 import Decimal from 'decimal.js'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import RepereBuilder from '../../lib/2d/RepereBuilder'
 import { tracePoint } from '../../lib/2d/TracePoint'
 import { createList } from '../../lib/format/lists'
@@ -834,12 +834,12 @@ $\\begin{array}{|l|}\n
             c = choice([4, 5, 8]) // indice de la valeur du terme donné pour calculer la raison
             limite = arrondi((u0 + b * r) / 100, 0) * 100 + 100
             nbre = randint(9, 11) * 1000 // nbre d'abeilles pour produire du miel
-            point1 = point(0, u0 / 100)
-            point2 = point(4, u0 / 100 + 0.01 * r)
-            point3 = point(8, u0 / 100 + 0.02 * r)
-            point4 = point(12, u0 / 100 + 0.03 * r)
-            point5 = point(16, u0 / 100 + 0.04 * r)
-            point6 = point(20, u0 / 100 + 0.05 * r)
+            point1 = pointAbstrait(0, u0 / 100)
+            point2 = pointAbstrait(4, u0 / 100 + 0.01 * r)
+            point3 = pointAbstrait(8, u0 / 100 + 0.02 * r)
+            point4 = pointAbstrait(12, u0 / 100 + 0.03 * r)
+            point5 = pointAbstrait(16, u0 / 100 + 0.04 * r)
+            point6 = pointAbstrait(20, u0 / 100 + 0.05 * r)
             /* r1 = repere({
               xMin: 0,
               xMax: 6,
