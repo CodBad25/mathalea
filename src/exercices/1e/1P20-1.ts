@@ -18,7 +18,7 @@ import {
 import Exercice from '../Exercice'
 export const interactifReady = true
 
-export const titre = "Loi de probabilité d'une variable aléatoire discrète"
+export const titre = "Déterminer la loi de probabilité d'une variable aléatoire discrète"
 export const dateDePublication = '29/03/2026'
 /**
  *
