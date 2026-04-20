@@ -13,6 +13,12 @@ export default defineConfig({
     environment: 'jsdom',
     globals: true,
     testTimeout: 300000,
+    coverage: {
+      provider: 'v8',
+      reporter: ['text', 'html'],
+      reportsDirectory: './coverage',
+      exclude: ['tests/e2e/**', '.pnpm-store/**'],
+    },
     server: {
       deps: {
         inline: ['@cortex-js/compute-engine', '@scratch2latex/scratch-core'],

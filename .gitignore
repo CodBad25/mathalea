@@ -9,6 +9,7 @@ pnpm-lock.yaml
 vitetest.config.ts
 /test-results/
 /playwright-report/
+/coverage/
 /playwright/.cache/
 /public/assets/bac
 /public/assets/crpe

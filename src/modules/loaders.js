@@ -80,6 +80,28 @@ export function injectFontInMetaInteractif2d(mf) {
   }
 }
 
+function injectPromptStyles(mf) {
+  if (!mf.classList.contains('fillInTheBlanks')) return
+  const shadow = mf.shadowRoot
+  if (shadow && !shadow.getElementById('ml-prompt-styles')) {
+    const style = document.createElement('style')
+    style.id = 'ml-prompt-styles'
+    style.textContent = `
+    /ML__prompt {
+    min-height: 0.9em !important;
+    }
+    .ML__prompt-atom {
+    line-height: 0.9 !important;
+     vertical-align: 0.1em !important;
+    }
+      /* Prompt actif uniquement */
+      .ML__focused .ML__focusedPromptBox {
+        outline: 2px solid #3b82f6 !important;
+      }
+    `
+    shadow.appendChild(style)
+  }
+}
 /**
  * Charge MathLive et personnalise les réglages
  * MathLive est chargé dès qu'un tag math-field est créé
@@ -189,5 +211,6 @@ function setMathfield(mf) {
   if ('menuItems' in mf) mf.menuItems = []
   if ('virtualKeyboardMode' in mf) mf.virtualKeyboardMode = 'manual'
   injectFontInMetaInteractif2d(mf)
+  injectPromptStyles(mf)
   mf.removeEventListener('mount', setMathfield)
 }
