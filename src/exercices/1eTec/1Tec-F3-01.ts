@@ -13,7 +13,7 @@ import { propositionsQcm } from '../../lib/interactif/qcm'
 
 export const interactifReady = true
 export const interactifType = 'qcm'
-export const titre = "Tableau de signes d'un polynôme de degré 3"
+export const titre = "Déterminer le tableau de signes d'un polynôme de degré 3"
 export const dateDePublication = '12/04/2026'
 
 /**
@@ -23,7 +23,7 @@ export const dateDePublication = '12/04/2026'
 */
 export const uuid = '49fca'
 export const refs = {
-  'fr-fr': ['1Tec-F3-01'],
+  'fr-fr': ['1Tec-F301'],
   'fr-ch': [],
 }
 
@@ -73,17 +73,17 @@ export default class TableauSignePolyDegre3 extends Exercice {
           : []),
         {
           nom: `x${ecritureAlgebrique(-x1)}`,
-          fonction: (x) => x - x1,
+          fonction: (x: number) => x - x1,
           zero: x1,
         },
         {
           nom: `x${ecritureAlgebrique(-x2)}`,
-          fonction: (x) => x - x2,
+          fonction: (x: number) => x - x2,
           zero: x2,
         },
         {
           nom: `x${ecritureAlgebrique(-x3)}`,
-          fonction: (x) => x - x3,
+          fonction: (x: number) => x - x3,
           zero: x3,
         },
       ]
@@ -95,8 +95,7 @@ export default class TableauSignePolyDegre3 extends Exercice {
       })
 
       // Fonction correcte
-      const fCorrecte = (x) =>
-        a * (Number(x) - x1) * (Number(x) - x2) * (Number(x) - x3)
+      const fCorrecte = (x: number) => a * (x - x1) * (x - x2) * (x - x3)
 
       const tabCor = tableauSignesFonction(fCorrecte, xMin, xMax, {
         step: 1,
@@ -108,14 +107,11 @@ export default class TableauSignePolyDegre3 extends Exercice {
       })
 
       // Distracteurs
-      const fDis1 = (x) =>
-        -a * (Number(x) - x1) * (Number(x) - x2) * (Number(x) - x3)
+      const fDis1 = (x: number) => -a * (x - x1) * (x - x2) * (x - x3)
 
-      const fDis2 = (x) =>
-        a * (Number(x) + x1) * (Number(x) + x2) * (Number(x) + x3)
+      const fDis2 = (x: number) => a * (x + x1) * (x + x2) * (x + x3)
 
-      const fDis3 = (x) =>
-        -a * (Number(x) + x1) * (Number(x) + x2) * (Number(x) + x3)
+      const fDis3 = (x: number) => -a * (x + x1) * (x + x2) * (x + x3)
 
       const tabDis1 = tableauSignesFonction(fDis1, xMin, xMax, {
         step: 1,
@@ -181,12 +177,11 @@ export default class TableauSignePolyDegre3 extends Exercice {
 
       // CORRECTION
       texteCorr =
-        `
-      $\\begin{aligned}
-      ${rienSi1(a)}(x${ecritureAlgebrique(-x1)})(x${ecritureAlgebrique(-x2)})(x${ecritureAlgebrique(-x3)}) = 0 &
-      \\Leftrightarrow  x${ecritureAlgebrique(-x1)}=0 \\;\\text{ ou }\\; x${ecritureAlgebrique(-x2)}=0 \\;\\text{ ou }\\; x${ecritureAlgebrique(-x3)}=0 \\\\
-      & \\Leftrightarrow\\; x=${x1} \\;\\text{ ou }\\; x=${x2} \\;\\text{ ou }\\; x=${x3}
-      \\end{aligned}$ <br> On obtient donc le tableau de signes : <br>
+        `Pour étudier le signe de $f$, on va étudier le signe de ses facteurs.<br>
+        $x${ecritureAlgebrique(-x1)}>0 \\Leftrightarrow x > ${x1}$  <br>
+        $x${ecritureAlgebrique(-x2)}>0 \\Leftrightarrow x > ${x2}$<br>
+        $x${ecritureAlgebrique(-x3)}>0 \\Leftrightarrow x > ${x3}$<br>
+      On obtient donc le tableau de signes : <br>
       ` + tableau
 
       if (this.questionJamaisPosee(i, texte)) {
