@@ -2,7 +2,7 @@ import { mathalea2d } from '../../../modules/mathalea2d'
 import { colorToLatexOrHTML } from '../../2d/colorToLatexOrHtml'
 import { fixeBordures } from '../../2d/fixeBordures'
 import { ObjetMathalea2D } from '../../2d/ObjetMathalea2D'
-import { point } from '../../2d/PointAbstrait'
+import { pointAbstrait } from '../../2d/PointAbstrait'
 import { polygone } from '../../2d/polygones'
 
 /**
@@ -50,7 +50,7 @@ export class Cube extends ObjetMathalea2D {
       const sina = Math.sin((alpha * Math.PI) / 180)
       const cosb = Math.cos((beta * Math.PI) / 180)
       const sinb = Math.sin((beta * Math.PI) / 180)
-      return point(
+      return pointAbstrait(
         cosa * x - sina * y,
         -sina * sinb * x - cosa * sinb * y + cosb * z,
       )

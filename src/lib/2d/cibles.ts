@@ -1,3 +1,4 @@
+import { bleuMathalea } from '../../lib/colors'
 import { randint } from '../../modules/outils'
 import { arrondi } from '../outils/nombres'
 import { lettreDepuisChiffre } from '../outils/outilString'
@@ -7,13 +8,12 @@ import { cercle } from './cercle'
 import { colorToLatexOrHTML } from './colorToLatexOrHtml'
 import { grille } from './Grille'
 import { ObjetMathalea2D } from './ObjetMathalea2D'
-import { point } from './PointAbstrait'
+import { pointAbstrait } from './PointAbstrait'
 import { segment } from './segmentsVecteurs'
 import { TexteParPoint, texteParPoint, texteParPosition } from './textes'
 import { rotation, similitude } from './transformations'
 import { longueur } from './utilitairesGeometriques'
 import { milieu, pointSurSegment } from './utilitairesPoint'
-import { bleuMathalea } from '../../lib/colors'
 
 /**  Retourne un couple de coordonnées correspondant au centre d'une cible, connaissant les coordonnées du point réponse et de la cellule dans laquelle on veut qu'il soit
  * @param {number} x Abscisse du point réponse
@@ -304,7 +304,7 @@ export function dansLaCibleRonde(
   const dangle = randint(-7, 7)
   const angle = (chiffrelettre - 1) * 45 - 157.5 + dangle
   const rayon = taille / 2 + (chiffre - 1) * taille + drayon
-  const P = similitude(point(1, 0), point(0, 0), angle, rayon)
+  const P = similitude(pointAbstrait(1, 0), pointAbstrait(0, 0), angle, rayon)
   P.x += x
   P.y += y
   if (chiffre > rang || chiffrelettre > 8) {
@@ -369,8 +369,8 @@ export class CibleRonde extends ObjetMathalea2D {
     this.color = colorToLatexOrHTML(color)
     let c
     let rayon
-    const centre = point(this.x, this.y)
-    const azimut = point(this.x + this.rang * this.taille, this.y)
+    const centre = pointAbstrait(this.x, this.y)
+    const azimut = pointAbstrait(this.x + this.rang * this.taille, this.y)
     // objets.push(labelPoint(centre))
     const azimut2 = pointSurSegment(
       centre,
@@ -545,8 +545,12 @@ export class CibleCouronne extends ObjetMathalea2D {
     let azimut
     let rayon
     const arcPlein = semi ? 180 : 360
-    const centre = point(this.x, this.y)
-    azimut = rotation(point(this.x + this.taille, this.y), centre, this.depart)
+    const centre = pointAbstrait(this.x, this.y)
+    azimut = rotation(
+      pointAbstrait(this.x + this.taille, this.y),
+      centre,
+      this.depart,
+    )
     let azimut2 = pointSurSegment(
       centre,
       azimut,

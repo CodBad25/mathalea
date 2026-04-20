@@ -4,7 +4,7 @@ import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import { BoiteBuilder } from '../2d/BoiteBuilder'
 import { colorToLatexOrHTML } from '../2d/colorToLatexOrHtml'
 import { fixeBordures } from '../2d/fixeBordures'
-import { point } from '../2d/PointAbstrait'
+import { pointAbstrait } from '../2d/PointAbstrait'
 import { polygone } from '../2d/polygones'
 import { segment } from '../2d/segmentsVecteurs'
 import { latex2d } from '../2d/textes'
@@ -338,34 +338,34 @@ export default class Stat {
     const etendue = boxplotData.max - boxplotData.min
     const scale = etendue / size
 
-    const extremiteDroite = point(-1, 0)
-    const extremiteGauche = point(size + 1, 0)
-    const minPoint = point(0, 0)
-    const maxPoint = point(size, 0)
-    const q1Point = point(
+    const extremiteDroite = pointAbstrait(-1, 0)
+    const extremiteGauche = pointAbstrait(size + 1, 0)
+    const minPoint = pointAbstrait(0, 0)
+    const maxPoint = pointAbstrait(size, 0)
+    const q1Point = pointAbstrait(
       (size * (boxplotData.q1 - boxplotData.min)) / etendue,
       0,
     )
-    const q2Point = point(
+    const q2Point = pointAbstrait(
       (size * (boxplotData.q2 - boxplotData.min)) / etendue,
       0,
     )
-    const q3Point = point(
+    const q3Point = pointAbstrait(
       (size * (boxplotData.q3 - boxplotData.min)) / etendue,
       0,
     )
-    const minDownPoint = point(minPoint.x, echelle * 0.8)
-    const minUpPoint = point(minPoint.x, 2.4 * echelle)
-    const maxDownPoint = point(maxPoint.x, echelle * 0.8)
-    const maxUpPoint = point(maxPoint.x, 2.4 * echelle)
+    const minDownPoint = pointAbstrait(minPoint.x, echelle * 0.8)
+    const minUpPoint = pointAbstrait(minPoint.x, 2.4 * echelle)
+    const maxDownPoint = pointAbstrait(maxPoint.x, echelle * 0.8)
+    const maxUpPoint = pointAbstrait(maxPoint.x, 2.4 * echelle)
     const minMiddlePoint = milieu(minDownPoint, minUpPoint)
     const maxMiddlePoint = milieu(maxDownPoint, maxUpPoint)
-    const q1DownPoint = point(q1Point.x, echelle * 0.8)
-    const q1UpPoint = point(q1Point.x, 2.4 * echelle)
-    const q2DownPoint = point(q2Point.x, echelle * 0.8)
-    const q2UpPoint = point(q2Point.x, 2.4 * echelle)
-    const q3DownPoint = point(q3Point.x, echelle * 0.8)
-    const q3UpPoint = point(q3Point.x, 2.4 * echelle)
+    const q1DownPoint = pointAbstrait(q1Point.x, echelle * 0.8)
+    const q1UpPoint = pointAbstrait(q1Point.x, 2.4 * echelle)
+    const q2DownPoint = pointAbstrait(q2Point.x, echelle * 0.8)
+    const q2UpPoint = pointAbstrait(q2Point.x, 2.4 * echelle)
+    const q3DownPoint = pointAbstrait(q3Point.x, echelle * 0.8)
+    const q3UpPoint = pointAbstrait(q3Point.x, 2.4 * echelle)
     const q1MiddlePoint = milieu(q1DownPoint, q1UpPoint)
     const q3MiddlePoint = milieu(q3DownPoint, q3UpPoint)
     const lineMin = segment(minDownPoint, minUpPoint, bleuMathalea)
@@ -675,8 +675,8 @@ export default class Stat {
       }
       for (const yLabel of yLabelsAndOrdinate) {
         const line = segment(
-          point(0, yLabel[1]),
-          point((nbValeursDifferentes + 1) * 2, yLabel[1]),
+          pointAbstrait(0, yLabel[1]),
+          pointAbstrait((nbValeursDifferentes + 1) * 2, yLabel[1]),
           'lightgray',
         )
         line.opacite = gridOpacity
@@ -715,8 +715,8 @@ export default class Stat {
           yPosNext = yPos
         }
         const verticalLine = segment(
-          point(xPos, 0),
-          point(xPos, topCadre),
+          pointAbstrait(xPos, 0),
+          pointAbstrait(xPos, topCadre),
           'lightgray',
         )
         verticalLine.epaisseur = 1
@@ -741,8 +741,8 @@ export default class Stat {
         } else {
           if (i < pairs.length - 1) {
             const line = segment(
-              point(xPos, yPos),
-              point(xPosNext, yPosNext),
+              pointAbstrait(xPos, yPos),
+              pointAbstrait(xPosNext, yPosNext),
               bleuMathalea,
             )
             line.epaisseur = 2

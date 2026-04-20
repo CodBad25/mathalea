@@ -2,7 +2,7 @@ import { arc } from './Arc'
 import { colorToLatexOrHTML } from './colorToLatexOrHtml'
 import { fixeBordures } from './fixeBordures'
 import { ObjetMathalea2D } from './ObjetMathalea2D'
-import { point } from './PointAbstrait'
+import { pointAbstrait } from './PointAbstrait'
 import { segment } from './segmentsVecteurs'
 import { texteParPoint } from './textes'
 import { homothetie, rotation } from './transformations'
@@ -45,8 +45,8 @@ export class Rapporteur extends ObjetMathalea2D {
       nbDivisions = 36
     }
 
-    const centre = point(this.x, this.y)
-    azimut = rotation(point(this.x + 1, this.y), centre, depart)
+    const centre = pointAbstrait(this.x, this.y)
+    azimut = rotation(pointAbstrait(this.x + 1, this.y), centre, depart)
     let azimut2 = pointSurSegment(centre, azimut, this.taille)
     const arc1 = arc(azimut, centre, arcPlein - 0.1, false, 'none', color)
     const arc2 = arc(azimut2, centre, arcPlein - 0.1, false, 'none', color)

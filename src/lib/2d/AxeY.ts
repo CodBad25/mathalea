@@ -1,7 +1,7 @@
 import { stringNombre } from '../outils/texNombre'
 import { fixeBordures } from './fixeBordures'
 import { ObjetMathalea2D } from './ObjetMathalea2D'
-import { point } from './PointAbstrait'
+import { pointAbstrait } from './PointAbstrait'
 import { segment } from './segmentsVecteurs'
 import { texteParPoint } from './textes'
 
@@ -40,7 +40,7 @@ export class AxeY extends ObjetMathalea2D {
       this.objets.push(
         texteParPoint(
           titre,
-          point(-1 - thick - 0.1, ymax),
+          pointAbstrait(-1 - thick - 0.1, ymax),
           0,
           color,
           1,
@@ -156,7 +156,7 @@ export class LabelY extends ObjetMathalea2D {
       this.objets.push(
         texteParPoint(
           stringNombre(y * coeff, 3),
-          point(pos, y),
+          pointAbstrait(pos, y),
           0,
           color,
           1,

@@ -1,7 +1,7 @@
-import { Figure2D } from '../Figures2D'
-import { point } from '../PointAbstrait'
-import { Segment, segment } from '../segmentsVecteurs'
 import { bleuMathalea } from '../../../lib/colors'
+import { Figure2D } from '../Figures2D'
+import { pointAbstrait } from '../PointAbstrait'
+import { Segment, segment } from '../segmentsVecteurs'
 
 /**
  * Génère une figure représentant un panneau de route prioritaire.
@@ -48,7 +48,7 @@ export function panneauRoutePrioritaire(options?: {
     width: 2,
     height: 2,
     axes,
-    centre: point(0, 0),
+    centre: pointAbstrait(0, 0),
   })
 }
 
@@ -87,7 +87,7 @@ export function panneauFinDeRoutePrioritaire(options?: {
     width: 2,
     height: 2,
     axes,
-    centre: point(0, 0),
+    centre: pointAbstrait(0, 0),
   })
 }
 /**
@@ -132,7 +132,7 @@ export function panneauStationnementInterdit(options?: {
     width: 2,
     height: 2,
     axes,
-    centre: point(0, 0),
+    centre: pointAbstrait(0, 0),
   })
 }
 /**
@@ -838,7 +838,7 @@ export function panneauSensInterdit(options?: {
     width: 2,
     height: 2,
     axes,
-    centre: point(0, 0),
+    centre: pointAbstrait(0, 0),
   })
 }
 
@@ -892,7 +892,7 @@ export function panneauInterdictionDeCirculer(options?: {
     height: 2,
     nbAxes: Number.POSITIVE_INFINITY,
     axes,
-    centre: point(0, 0),
+    centre: pointAbstrait(0, 0),
   })
 }
 /**
@@ -935,7 +935,7 @@ export function panneauFinDeLimitation(options?: {
     width: 2,
     height: 2,
     axes,
-    centre: point(0, 0),
+    centre: pointAbstrait(0, 0),
   })
 }
 
@@ -988,6 +988,6 @@ export function panneauArretInterdit(options?: {
     width: 2,
     height: 2,
     axes,
-    centre: point(0, 0),
+    centre: pointAbstrait(0, 0),
   })
 }

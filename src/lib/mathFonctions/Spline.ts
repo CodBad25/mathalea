@@ -6,7 +6,7 @@ import { egal, randint } from '../../modules/outils'
 import { BezierPath } from '../2d/BezierPath'
 import { colorToLatexOrHTML } from '../2d/colorToLatexOrHtml'
 import { ObjetMathalea2D } from '../2d/ObjetMathalea2D'
-import { point } from '../2d/PointAbstrait'
+import { pointAbstrait } from '../2d/PointAbstrait'
 import { tracePoint } from '../2d/TracePoint'
 import { choice } from '../outils/arrayOutils'
 import { rangeMinMax, round } from '../outils/nombres'
@@ -948,7 +948,7 @@ export class Trace extends ObjetMathalea2D {
     if (ajouteNoeuds) {
       for (let i = 0; i < spline.n; i++) {
         if (spline.visibles[i]) {
-          const noeud = point(spline.x[i], spline.y[i])
+          const noeud = pointAbstrait(spline.x[i], spline.y[i])
           const traceNoeud = tracePoint(noeud)
           if (optionsNoeuds) {
             if (optionsNoeuds.color) {

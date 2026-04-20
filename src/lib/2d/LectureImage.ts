@@ -1,6 +1,6 @@
 import { context } from '../../modules/context'
 import { ObjetMathalea2D } from './ObjetMathalea2D'
-import { point } from './PointAbstrait'
+import { pointAbstrait } from './PointAbstrait'
 import { segment } from './segmentsVecteurs'
 import { texteParPosition } from './textes'
 import { vide2d } from './Vide2d'
@@ -38,9 +38,9 @@ export class LectureImage extends ObjetMathalea2D {
   svg(coeff: number) {
     const x0 = this.x / this.xscale
     const y0 = this.y / this.yscale
-    const M = point(x0, y0)
-    const X = point(x0, 0)
-    const Y = point(0, y0)
+    const M = pointAbstrait(x0, y0)
+    const X = pointAbstrait(x0, 0)
+    const Y = pointAbstrait(0, y0)
     const Sx =
       M.x === X.x && M.y === X.y ? vide2d() : segment(X, M, this.stringColor)
     const Sy =
@@ -81,9 +81,9 @@ export class LectureImage extends ObjetMathalea2D {
   tikz() {
     const x0 = this.x / this.xscale
     const y0 = this.y / this.yscale
-    const M = point(x0, y0)
-    const X = point(x0, 0)
-    const Y = point(0, y0)
+    const M = pointAbstrait(x0, y0)
+    const X = pointAbstrait(x0, 0)
+    const Y = pointAbstrait(0, y0)
     const Sx =
       M.x === X.x && M.y === X.y ? vide2d() : segment(X, M, this.stringColor)
     const Sy =
@@ -120,9 +120,9 @@ export class LectureImage extends ObjetMathalea2D {
   svgml(coeff: number, amp: number) {
     const x0 = this.x / this.xscale
     const y0 = this.y / this.yscale
-    const M = point(this.x, this.y)
-    const X = point(x0, 0)
-    const Y = point(0, y0)
+    const M = pointAbstrait(this.x, this.y)
+    const X = pointAbstrait(x0, 0)
+    const Y = pointAbstrait(0, y0)
     const Sx =
       M.x === X.x && M.y === X.y ? vide2d() : segment(X, M, this.stringColor)
     const Sy =
@@ -159,9 +159,9 @@ export class LectureImage extends ObjetMathalea2D {
   tikzml(amp: number) {
     const x0 = this.x / this.xscale
     const y0 = this.y / this.yscale
-    const M = point(this.x, this.y)
-    const X = point(x0, 0)
-    const Y = point(0, y0)
+    const M = pointAbstrait(this.x, this.y)
+    const X = pointAbstrait(x0, 0)
+    const Y = pointAbstrait(0, y0)
     const Sx =
       M.x === X.x && M.y === X.y ? vide2d() : segment(X, M, this.stringColor)
     const Sy =

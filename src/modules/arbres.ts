@@ -1,4 +1,4 @@
-import { point } from '../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../lib/2d/PointAbstrait'
 import { segment } from '../lib/2d/segmentsVecteurs'
 import { latex2d } from '../lib/2d/textes'
 import { homothetie, translation } from '../lib/2d/transformations'
@@ -243,13 +243,13 @@ export class Arbre {
   ): NestedObjetMathalea2dArray {
     tailleCaracteres = tailleCaracteres || 5
     const objets = []
-    const A = point(
+    const A = pointAbstrait(
       vertical ? xOrigine : xOrigine + decalage + (this.taille * echelle) / 2,
       vertical ? yOrigine + decalage - (this.taille * echelle) / 2 : yOrigine,
       '',
       'center',
     )
-    const B = point(
+    const B = pointAbstrait(
       vertical ? xOrigine - sens * 5 : xOrigine,
       vertical ? yOrigine : yOrigine - sens * 5,
     )

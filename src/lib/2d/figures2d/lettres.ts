@@ -1,5 +1,5 @@
 import { Figure2D } from '../Figures2D'
-import { point } from '../PointAbstrait'
+import { pointAbstrait } from '../PointAbstrait'
 import { segment } from '../segmentsVecteurs'
 
 /**
@@ -484,7 +484,7 @@ export function lettreH(options?: {
     height: hauteur,
     axes,
     opacite,
-    centre: point(0, 0),
+    centre: pointAbstrait(0, 0),
   })
 }
 /**
@@ -546,7 +546,7 @@ export function lettreI(options?: {
     height: hauteur,
     axes,
     opacite,
-    centre: point(0, 0),
+    centre: pointAbstrait(0, 0),
   })
 }
 /**
@@ -817,7 +817,7 @@ export function lettreN(options?: {
     width: largeur,
     height: hauteur,
     opacite,
-    centre: point(0, 0),
+    centre: pointAbstrait(0, 0),
     nonAxe: segment(0, -4, 0, 4),
   })
 }
@@ -877,7 +877,7 @@ export function lettreO(options?: {
     height: hauteur,
     axes,
     opacite,
-    centre: point(0, 0),
+    centre: pointAbstrait(0, 0),
   })
 }
 /**
@@ -1337,7 +1337,7 @@ export function lettreX(options?: {
     height: hauteur,
     axes,
     opacite,
-    centre: point(0, 0),
+    centre: pointAbstrait(0, 0),
   })
 }
 /**
@@ -1445,7 +1445,7 @@ export function lettreZ(options?: {
     width: largeur,
     height: hauteur,
     opacite,
-    centre: point(0, 0),
+    centre: pointAbstrait(0, 0),
     nonAxe: segment(1.2, 1.8, -1.2, -1.8),
   })
 }
@@ -1509,7 +1509,7 @@ export function lettreS(options?: {
     width: largeur,
     height: hauteur,
     opacite,
-    centre: point(0, 0),
+    centre: pointAbstrait(0, 0),
     nonAxe: segment(-largeur, 0, largeur, 0), // ce n'est pas un axe de symétrie, il sera utilisé dans la correction pour montrer que ce n'est pas symétrique
   })
 }

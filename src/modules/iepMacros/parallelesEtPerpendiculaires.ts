@@ -6,7 +6,7 @@ import {
   droiteParPointEtPerpendiculaire,
 } from '../../lib/2d/droites'
 import type { PointAbstrait } from '../../lib/2d/PointAbstrait'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import {
   homothetie,
   projectionOrtho,
@@ -184,7 +184,7 @@ export const perpendiculaireRegleEquerreDroitePoint = function (
     const A = rotation(P, H, 90)
     const B = rotation(A, H, 180)
     const P3 = homothetie(P, H, 1.2)
-    const alpha = angleOriente(point(10000, H.y), H, B)
+    const alpha = angleOriente(pointAbstrait(10000, H.y), H, B)
     if (options.description)
       this.textePosition(
         `1. Placer un côté de l'angle droit de l'équerre sur la droite ${d.nom} et l'autre côté de l'angle droit passant par le point ${P.nom}.`,
@@ -234,7 +234,7 @@ export const perpendiculaireRegleEquerreDroitePoint = function (
     const pointIntersectionDC = pointIntersectionLC(d, C)
     let P3 = rotation(pointIntersectionDC, P, 90)
     if (P3.y < P.y) P3 = rotation(P3, P, 180)
-    const alpha = angleOriente(point(10000, H.y), H, B)
+    const alpha = angleOriente(pointAbstrait(10000, H.y), H, B)
     if (options.description)
       this.textePosition(
         `1. Placer un côté de l'angle droit de l'équerre sur la droite ${d.nom} avec l'angle droit au point ${P.nom}.`,

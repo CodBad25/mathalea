@@ -4,7 +4,7 @@ import { stringNombre } from '../outils/texNombre'
 import { fixeBordures } from './fixeBordures'
 import { ObjetMathalea2D } from './ObjetMathalea2D'
 import { Plot, plot } from './Plot'
-import { point } from './PointAbstrait'
+import { pointAbstrait } from './PointAbstrait'
 import { segment } from './segmentsVecteurs'
 import { latex2d, texteParPosition } from './textes'
 
@@ -1325,5 +1325,5 @@ export function pointDansRepere(
   y: number,
   repere = { xUnite: 1, yUnite: 1 },
 ) {
-  return point(x * repere.xUnite, y * repere.yUnite)
+  return pointAbstrait(x * repere.xUnite, y * repere.yUnite)
 }

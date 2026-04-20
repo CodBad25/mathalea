@@ -1,7 +1,7 @@
 import { apparitionAnimee, translationAnimee } from '../../modules/2dAnimation'
 import { context } from '../../modules/context'
 import { ObjetMathalea2D } from './ObjetMathalea2D'
-import { point } from './PointAbstrait'
+import { pointAbstrait } from './PointAbstrait'
 import { segment } from './segmentsVecteurs'
 import { TexteParPoint, texteParPosition } from './textes'
 import { vecteur } from './Vecteur'
@@ -16,11 +16,11 @@ export class GlisseNombre extends ObjetMathalea2D {
     const hauteurPremiereLigne = 7.5
     const nbLignes = 3
     const nbColonnes = 12
-    const A = point(3, 5.5)
+    const A = pointAbstrait(3, 5.5)
     for (let i = 0; i < nbColonnes + 1; i++) {
       const trait = segment(
-        point(A.x + i * largeurColonne, A.y),
-        point(
+        pointAbstrait(A.x + i * largeurColonne, A.y),
+        pointAbstrait(
           A.x + i * largeurColonne,
           A.y - (nbLignes - 1) * hauteurLigne - hauteurPremiereLigne,
         ),
@@ -29,13 +29,13 @@ export class GlisseNombre extends ObjetMathalea2D {
     }
     const traitDuHaut = segment(
       A,
-      point(A.x + nbColonnes * largeurColonne, A.y),
+      pointAbstrait(A.x + nbColonnes * largeurColonne, A.y),
     )
     this.objets.push(traitDuHaut)
     for (let i = 1; i < nbLignes + 1; i++) {
       const trait = segment(
-        point(A.x, A.y - (i - 1) * hauteurLigne - hauteurPremiereLigne),
-        point(
+        pointAbstrait(A.x, A.y - (i - 1) * hauteurLigne - hauteurPremiereLigne),
+        pointAbstrait(
           A.x + nbColonnes * largeurColonne,
           A.y - (i - 1) * hauteurLigne - hauteurPremiereLigne,
         ),

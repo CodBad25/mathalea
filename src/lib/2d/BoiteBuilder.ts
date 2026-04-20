@@ -1,5 +1,5 @@
 import { colorToLatexOrHTML } from './colorToLatexOrHtml'
-import { point } from './PointAbstrait'
+import { pointAbstrait } from './PointAbstrait'
 import { Polygone, polygone } from './polygones'
 import {
   latex2d,
@@ -42,10 +42,10 @@ export class BoiteBuilder {
     this.yMin = yMin
     this.yMax = yMax
     this.forme = polygone([
-      point(xMin, yMin),
-      point(xMax, yMin),
-      point(xMax, yMax),
-      point(xMin, yMax),
+      pointAbstrait(xMin, yMin),
+      pointAbstrait(xMax, yMin),
+      pointAbstrait(xMax, yMax),
+      pointAbstrait(xMin, yMax),
     ])
   }
 

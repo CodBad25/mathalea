@@ -1,4 +1,4 @@
-import { point } from '../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../lib/2d/PointAbstrait'
 import { Segment, segment } from '../lib/2d/segmentsVecteurs'
 import {
   Latex2d,
@@ -9,12 +9,12 @@ import {
   texteParPointEchelle,
   texteParPositionEchelle,
 } from '../lib/2d/textes'
+import { bleuMathalea } from '../lib/colors'
 import { combinaisonListesSansChangerOrdre } from '../lib/outils/arrayOutils'
 import { nombreAvecEspace } from '../lib/outils/texNombre'
 import { runAStar } from './findPath'
 import type FractionEtendue from './FractionEtendue'
 import { randint } from './outils'
-import { bleuMathalea } from '../lib/colors'
 
 export type LabyrintheChemin = [number, number][] // Un chemin est un tableau de points [x, y] où x et y sont des entiers
 
@@ -39,6 +39,7 @@ export class Labyrinthe {
     chemin: LabyrintheChemin,
     taille?: number,
   ) => (Segment | TexteParPoint)[]
+
   traceChemin: (monchemin: LabyrintheChemin, color?: string) => Segment[]
   placeNombres: (
     monChemin: LabyrintheChemin,
@@ -46,6 +47,7 @@ export class Labyrinthe {
     mauvaisesReponses: (number | string | FractionEtendue)[],
     taille: number,
   ) => (TexteParPointEchelle | Latex2d)[]
+
   constructor({ nbLignes = 3, nbColonnes = 6, scaleFigure = 1 } = {}) {
     this.niveau = 1
     this.murs2d = []
@@ -266,37 +268,55 @@ export class Labyrinthe {
       for (let i = 0; i < nbColonnes; i++) {
         // Construction des T supérieurs et inférieurs
         // T inférieurs
-        s1 = segment(point(i * 3, 1), point(i * 3, 2))
+        s1 = segment(pointAbstrait(i * 3, 1), pointAbstrait(i * 3, 2))
         s1.epaisseur = 2
         objets.push(s1)
         // T supérieurs
-        s2 = segment(point(i * 3, 1 + 3 * nbLignes), point(i * 3, 3 * nbLignes))
+        s2 = segment(
+          pointAbstrait(i * 3, 1 + 3 * nbLignes),
+          pointAbstrait(i * 3, 3 * nbLignes),
+        )
         s2.epaisseur = 2
         objets.push(s2)
       }
 
       // Construction du bord gauche entre le départ et le labyrinthe
-      s1 = segment(point(0, 1 + 3 * nbLignes), point(0, 3 + choix * 3))
+      s1 = segment(
+        pointAbstrait(0, 1 + 3 * nbLignes),
+        pointAbstrait(0, 3 + choix * 3),
+      )
       s1.epaisseur = 3
       objets.push(s1)
-      s1 = segment(point(0, 1), point(0, 2 + choix * 3))
+      s1 = segment(pointAbstrait(0, 1), pointAbstrait(0, 2 + choix * 3))
       s1.epaisseur = 3
       objets.push(s1)
 
       // Construction case départ
-      s1 = segment(point(-3, 1 + choix * 3), point(0, 1 + choix * 3), 'green')
+      s1 = segment(
+        pointAbstrait(-3, 1 + choix * 3),
+        pointAbstrait(0, 1 + choix * 3),
+        'green',
+      )
       s1.epaisseur = 3
       objets.push(s1)
-      s1 = segment(point(-3, 1 + choix * 3), point(-3, 4 + choix * 3), 'green')
+      s1 = segment(
+        pointAbstrait(-3, 1 + choix * 3),
+        pointAbstrait(-3, 4 + choix * 3),
+        'green',
+      )
       s1.epaisseur = 3
       objets.push(s1)
-      s1 = segment(point(-3, 4 + choix * 3), point(0, 4 + choix * 3), 'green')
+      s1 = segment(
+        pointAbstrait(-3, 4 + choix * 3),
+        pointAbstrait(0, 4 + choix * 3),
+        'green',
+      )
       s1.epaisseur = 3
       objets.push(s1)
       objets.push(
         texteParPoint(
           'Départ',
-          point(-1.5, 2.5 + choix * 3),
+          pointAbstrait(-1.5, 2.5 + choix * 3),
           0,
           bleuMathalea,
           taille,
@@ -309,14 +329,14 @@ export class Labyrinthe {
       for (let i = 1; i < nbColonnes; i++) {
         for (let k = 0; k < nbLignes - 1; k++) {
           s1 = segment(
-            point(i * 3, 5 + 3 * k),
-            point(i * 3, 3 + 3 * k),
+            pointAbstrait(i * 3, 5 + 3 * k),
+            pointAbstrait(i * 3, 3 + 3 * k),
             'black',
           )
           s1.epaisseur = 2
           s2 = segment(
-            point(i * 3 - 0.5, 4 + 3 * k),
-            point(i * 3 + 0.5, 4 + 3 * k),
+            pointAbstrait(i * 3 - 0.5, 4 + 3 * k),
+            pointAbstrait(i * 3 + 0.5, 4 + 3 * k),
             'black',
           )
           s2.epaisseur = 2
@@ -325,21 +345,24 @@ export class Labyrinthe {
       }
       // le pourtour commun
       s1 = segment(
-        point(0, 1 + 3 * nbLignes),
-        point(3 * nbColonnes, 1 + 3 * nbLignes),
+        pointAbstrait(0, 1 + 3 * nbLignes),
+        pointAbstrait(3 * nbColonnes, 1 + 3 * nbLignes),
       )
       s1.epaisseur = 3
       objets.push(s1)
       s1 = segment(
-        point(3 * nbColonnes, 1 + 3 * nbLignes - 1),
-        point(3 * nbColonnes, 1 + 3 * nbLignes),
+        pointAbstrait(3 * nbColonnes, 1 + 3 * nbLignes - 1),
+        pointAbstrait(3 * nbColonnes, 1 + 3 * nbLignes),
       )
       s1.epaisseur = 3
       objets.push(s1)
-      s1 = segment(point(3 * nbColonnes, 1), point(3 * nbColonnes, 2))
+      s1 = segment(
+        pointAbstrait(3 * nbColonnes, 1),
+        pointAbstrait(3 * nbColonnes, 2),
+      )
       s1.epaisseur = 3
       objets.push(s1)
-      s1 = segment(point(0, 1), point(3 * nbColonnes, 1))
+      s1 = segment(pointAbstrait(0, 1), pointAbstrait(3 * nbColonnes, 1))
       s1.epaisseur = 3
       objets.push(s1)
 
@@ -347,8 +370,8 @@ export class Labyrinthe {
       // La partie verticale
       for (let i = 0; i < nbLignes - 1; i++) {
         s1 = segment(
-          point(3 * nbColonnes, 3 + i * 3),
-          point(3 * nbColonnes, 5 + i * 3),
+          pointAbstrait(3 * nbColonnes, 3 + i * 3),
+          pointAbstrait(3 * nbColonnes, 5 + i * 3),
         )
         s1.epaisseur = 3
         objets.push(s1)
@@ -356,13 +379,13 @@ export class Labyrinthe {
       // La partie horizontale
       for (let i = 0; i < nbLignes; i++) {
         s1 = segment(
-          point(3 * nbColonnes, 2 + i * 3),
-          point(3 * nbColonnes + 2, 2 + i * 3),
+          pointAbstrait(3 * nbColonnes, 2 + i * 3),
+          pointAbstrait(3 * nbColonnes + 2, 2 + i * 3),
         )
         s1.epaisseur = 3
         s2 = segment(
-          point(3 * nbColonnes, 3 + i * 3),
-          point(3 * nbColonnes + 2, 3 + i * 3),
+          pointAbstrait(3 * nbColonnes, 3 + i * 3),
+          pointAbstrait(3 * nbColonnes + 2, 3 + i * 3),
         )
         s2.epaisseur = 3
         objets.push(s1, s2)
@@ -372,7 +395,7 @@ export class Labyrinthe {
         objets.push(
           texteParPoint(
             `Sortie ${i}`,
-            point(3 * nbColonnes + 1.5, 2.5 + 3 * nbLignes - 3 * i),
+            pointAbstrait(3 * nbColonnes + 1.5, 2.5 + 3 * nbLignes - 3 * i),
             0,
             bleuMathalea,
             taille,
@@ -401,8 +424,8 @@ export class Labyrinthe {
       let s1
       for (let j = 0; j < monchemin.length; j++) {
         s1 = segment(
-          point(x * 3 - 1.5, y * 3 + 2.5),
-          point(monchemin[j][0] * 3 - 1.5, monchemin[j][1] * 3 + 2.5),
+          pointAbstrait(x * 3 - 1.5, y * 3 + 2.5),
+          pointAbstrait(monchemin[j][0] * 3 - 1.5, monchemin[j][1] * 3 + 2.5),
           color,
         )
         s1.pointilles = 5
@@ -414,8 +437,8 @@ export class Labyrinthe {
         y = monchemin[j][1]
       }
       s1 = segment(
-        point(x * 3 - 1.5, y * 3 + 2.5),
-        point(x * 3 + 1.5, y * 3 + 2.5),
+        pointAbstrait(x * 3 - 1.5, y * 3 + 2.5),
+        pointAbstrait(x * 3 + 1.5, y * 3 + 2.5),
         color,
       )
       s1.pointilles = 5
@@ -487,7 +510,7 @@ export class Labyrinthe {
             objets.push(
               texteParPointEchelle(
                 nombreAvecEspace(nombre),
-                point(-1.5 + a * 3, 2.5 + b * 3),
+                pointAbstrait(-1.5 + a * 3, 2.5 + b * 3),
                 0,
                 'black',
                 taille,

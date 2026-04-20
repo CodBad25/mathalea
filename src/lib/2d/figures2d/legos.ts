@@ -1,8 +1,8 @@
+import { bleuMathalea } from '../../../lib/colors'
 import { choice } from '../../outils/arrayOutils'
 import { Figure2D } from '../Figures2D'
-import { point } from '../PointAbstrait'
+import { pointAbstrait } from '../PointAbstrait'
 import { Segment, segment } from '../segmentsVecteurs'
-import { bleuMathalea } from '../../../lib/colors'
 /**
  * @author Jean-claude Lhote
  * @param nx nombre de studs en x
@@ -97,6 +97,6 @@ ${Array.from({ length: nx }, (_, i) =>
     width: nx / 2,
     height: ny / 2,
     axes,
-    centre: point(0, 0),
+    centre: pointAbstrait(0, 0),
   })
 }

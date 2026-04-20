@@ -1,7 +1,7 @@
 import type Hms from '../../modules/Hms'
 import { cercle } from './cercle'
 import { ObjetMathalea2D } from './ObjetMathalea2D'
-import { point } from './PointAbstrait'
+import { pointAbstrait } from './PointAbstrait'
 import { polygone } from './polygones'
 import { segment } from './segmentsVecteurs'
 import { latex2d } from './textes'
@@ -18,7 +18,7 @@ export default class Horloge extends ObjetMathalea2D {
   constructor(x = 0, y = 0, rayon = 2, heure?: Hms) {
     super()
     this.objets = []
-    const O = point(x, y)
+    const O = pointAbstrait(x, y)
     const C = cercle(O, rayon)
     C.opacite = 0.8
     this.objets.push(C)
@@ -55,11 +55,11 @@ export default class Horloge extends ObjetMathalea2D {
       const beta = 90 - m * 6
       const epissure = 3
       const point0 = translation(O, vecteur(0.2, 0))
-      const extTitAig = point(x + rayon - 1, y)
+      const extTitAig = pointAbstrait(x + rayon - 1, y)
       const m1TitAig = similitude(extTitAig, point0, epissure, 0.9)
       const m2TitAig = similitude(extTitAig, point0, -epissure, 0.9)
       const polyTitAig = polygone(point0, m1TitAig, extTitAig, m2TitAig)
-      const extGdeAig = point(x + rayon - 0.6, y)
+      const extGdeAig = pointAbstrait(x + rayon - 0.6, y)
       const m1GdeAig = similitude(extGdeAig, point0, epissure, 0.9)
       const m2GdeAig = similitude(extGdeAig, point0, -epissure, 0.9)
       const polyGdeAig = polygone(point0, m1GdeAig, extGdeAig, m2GdeAig)

@@ -1,7 +1,7 @@
-import { Figure2D } from '../Figures2D'
-import { point } from '../PointAbstrait'
-import { segment } from '../segmentsVecteurs'
 import { bleuMathalea } from '../../../lib/colors'
+import { Figure2D } from '../Figures2D'
+import { pointAbstrait } from '../PointAbstrait'
+import { segment } from '../segmentsVecteurs'
 
 /**
  * Génère une figure représentant une étoile à 5 branches.
@@ -362,7 +362,7 @@ export function hexagoneNonRegulier(options?: {
     width: rayonHorizontal * 2,
     height: rayonVertical * 2,
     axes,
-    centre: point(0, 0),
+    centre: pointAbstrait(0, 0),
     opacite,
   })
 }
@@ -645,7 +645,7 @@ export function parallelogramme(options?: {
     codeTikz,
     width: base + Math.abs(offsetX / 10),
     height: hauteur,
-    centre: point(0, 0),
+    centre: pointAbstrait(0, 0),
     nonAxe: segment(
       (-base / 2 + offsetX / 40) * 2.5,
       hauteur * 1.25,
@@ -775,7 +775,7 @@ export function ogive(options?: {
     width: base,
     height: hauteur,
     axes,
-    centre: point(0, 0),
+    centre: pointAbstrait(0, 0),
     opacite,
   })
 }
@@ -847,7 +847,7 @@ export function etoile4Branches(options?: {
     width: rayonExterieur * 2,
     height: rayonExterieur * 2,
     axes,
-    centre: point(0, 0),
+    centre: pointAbstrait(0, 0),
     opacite,
   })
 }
@@ -929,7 +929,7 @@ export function croixRouge(options?: {
     width: longueurBras * 2,
     height: longueurBras * 2,
     axes,
-    centre: point(0, 0),
+    centre: pointAbstrait(0, 0),
     opacite,
   })
 }
@@ -996,7 +996,7 @@ export function rectangle(options?: {
     width: largeur,
     height: hauteur,
     axes,
-    centre: point(0, 0),
+    centre: pointAbstrait(0, 0),
     angle,
     opacite,
   })
@@ -1064,7 +1064,7 @@ export function losange(options?: {
     width: base,
     height: hauteur,
     axes,
-    centre: point(0, 0),
+    centre: pointAbstrait(0, 0),
     angle,
     opacite,
   })
@@ -1229,6 +1229,6 @@ export function ovale(options?: {
     height: 2,
     opacite,
     axes: [segment(-2.2, 0, 2.2, 0), segment(0, -1.2, 0, 1.2)],
-    centre: point(0, 0),
+    centre: pointAbstrait(0, 0),
   })
 }
