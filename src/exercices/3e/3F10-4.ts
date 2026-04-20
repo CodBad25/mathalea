@@ -17,8 +17,8 @@ import Exercice from '../Exercice'
 
 import Figure from 'apigeom'
 import { lectureImage } from '../../lib/2d/LectureImage'
-import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { bleuMathalea } from '../../lib/colors'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 
 export const titre = "Lire graphiquement l'image d'un nombre par une fonction"
 export const dateDePublication = '29/10/2023'
@@ -189,48 +189,36 @@ class LireImageParApiGeom extends Exercice {
     const yGrecs: string[] = this.Y.map((el) => texNombre(el, 1))
     const xs = this.X.map((el) => texNombre(el, 1))
 
-    if (this.interactif) {
+    if (context.isHtml) {
       const tabMathlive = AddTabPropMathlive.create(
         this.numeroExercice ?? 0,
         0,
         { ligne1, ligne2: ligne2bis, nbColonnes },
         'clavierDeBase',
-        true,
+        this.interactif,
         {},
       )
       enonce += '<br>' + tabMathlive.output
     } else {
-      if (context.isHtml) {
-        const tabMathlive = AddTabPropMathlive.create(
-          this.numeroExercice ?? 0,
-          0,
-          { ligne1, ligne2: ligne2bis, nbColonnes },
-          'clavierDeBase',
-          false,
-          {},
-        )
-        enonce += tabMathlive.output
-      } else {
-        const tableauVideForLatex = new Tableau({
-          ligne1: ['x']
-            .concat(xs)
-            .map((el) => Object.assign({}, { texte: el, latex: true })),
-          ligne2: ['f(x)', '', '', ''].map((el) =>
-            el === ''
-              ? Object.assign({}, { texte: el })
-              : Object.assign({}, { texte: el, latex: true }),
-          ),
-          largeurTitre: 1,
-          nbColonnes: 4,
-          hauteur: 1,
-          largeur: 1,
-        })
-        const tabVideTex = mathalea2d(
-          Object.assign({}, fixeBordures([tableauVideForLatex])),
-          tableauVideForLatex,
-        )
-        enonce += tabVideTex
-      }
+      const tableauVideForLatex = new Tableau({
+        ligne1: ['x']
+          .concat(xs)
+          .map((el) => Object.assign({}, { texte: el, latex: true })),
+        ligne2: ['f(x)', '', '', ''].map((el) =>
+          el === ''
+            ? Object.assign({}, { texte: el })
+            : Object.assign({}, { texte: el, latex: true }),
+        ),
+        largeurTitre: 1,
+        nbColonnes: 4,
+        hauteur: 1,
+        largeur: 1,
+      })
+      const tabVideTex = mathalea2d(
+        Object.assign({}, fixeBordures([tableauVideForLatex])),
+        tableauVideForLatex,
+      )
+      enonce += tabVideTex
     }
     const tableauValeur = AddTabPropMathlive.create(
       this.numeroExercice ?? 0,
