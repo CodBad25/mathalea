@@ -1,7 +1,7 @@
 import { colorToLatexOrHTML } from './colorToLatexOrHtml'
 import { fixeBordures } from './fixeBordures'
 import { ObjetMathalea2D } from './ObjetMathalea2D'
-import { point } from './PointAbstrait'
+import { pointAbstrait } from './PointAbstrait'
 import { segment } from './segmentsVecteurs'
 import { latex2d, texteParPosition } from './textes'
 import { rotation, similitude, translation } from './transformations'
@@ -48,8 +48,8 @@ export class NomVecteurParPosition extends ObjetMathalea2D {
       'milieu',
       true,
     )
-    const M = point(this.x, this.y)
-    const P = point(M.x + 0.25 * this.nom.length, M.y)
+    const M = pointAbstrait(this.x, this.y)
+    const P = pointAbstrait(M.x + 0.25 * this.nom.length, M.y)
     const M0 = similitude(P, M, 90 + this.angle, 1.5)
     const M1 = rotation(translation(M0, vecteur(P, M)), M0, this.angle)
     const M2 = similitude(M1, M0, 180, 1.5)

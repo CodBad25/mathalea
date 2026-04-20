@@ -4,7 +4,7 @@ import { colorToLatexOrHTML } from './colorToLatexOrHtml'
 import type { IRepere } from './Interfaces'
 import { ObjetMathalea2D } from './ObjetMathalea2D'
 import { motifs } from './pattern'
-import { point } from './PointAbstrait'
+import { pointAbstrait } from './PointAbstrait'
 import { polygone } from './polygones'
 
 /**
@@ -79,7 +79,7 @@ export class Integrale extends ObjetMathalea2D {
       if (x > b) x = b // normalement x<xMax... mais inférieurouegal ne compare qu'à 0.0000001 près, on peut donc avoir xMax+epsilon qui sort de l'intervalle de déf
       if (isFinite(f(x))) {
         if (f(x) < ymax + 1 && f(x) > ymin - 1) {
-          points.push(point(x * xunite, f(x) * yunite))
+          points.push(pointAbstrait(x * xunite, f(x) * yunite))
         } else {
           window.notify(
             "Erreur dans Integrale : Il semble que la fonction ne soit pas continue sur l'intervalle",
@@ -95,9 +95,9 @@ export class Integrale extends ObjetMathalea2D {
       }
     }
     points.push(
-      point(b * xunite, f(b) * yunite),
-      point(b * xunite, 0),
-      point(a * xunite, 0),
+      pointAbstrait(b * xunite, f(b) * yunite),
+      pointAbstrait(b * xunite, 0),
+      pointAbstrait(a * xunite, 0),
     )
     const p = polygone([...points], color)
     p.epaisseur = epaisseur

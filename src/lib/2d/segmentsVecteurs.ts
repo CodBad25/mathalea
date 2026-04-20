@@ -2,7 +2,7 @@ import { context } from '../../modules/context'
 import { colorToLatexOrHTML } from './colorToLatexOrHtml'
 import MainLevee from './MainLevee'
 import { ObjetMathalea2D } from './ObjetMathalea2D'
-import { point, PointAbstrait } from './PointAbstrait'
+import { pointAbstrait, PointAbstrait } from './PointAbstrait'
 import {
   angleOriente,
   estSecant as estSecantUtil,
@@ -22,7 +22,7 @@ function rotationPoint(
   const sin = Math.sin(angleRad)
   const dx = M.x - O.x
   const dy = M.y - O.y
-  return point(O.x + dx * cos - dy * sin, O.y + dx * sin + dy * cos)
+  return pointAbstrait(O.x + dx * cos - dy * sin, O.y + dx * sin + dy * cos)
 }
 
 /**
@@ -40,7 +40,7 @@ function similitudePoint(
   const sin = Math.sin(angleRad)
   const dx = M.x - centre.x
   const dy = M.y - centre.y
-  return point(
+  return pointAbstrait(
     centre.x + rapport * (dx * cos - dy * sin),
     centre.y + rapport * (dx * sin + dy * cos),
   )
@@ -167,8 +167,8 @@ export class Segment extends ObjetMathalea2D {
       Number(Math.max(this.x1, this.x2)),
       Number(Math.max(this.y1, this.y2)),
     ]
-    this.extremite1 = point(this.x1, this.y1)
-    this.extremite2 = point(this.x2, this.y2)
+    this.extremite1 = pointAbstrait(this.x1, this.y1)
+    this.extremite2 = pointAbstrait(this.x2, this.y2)
     this.longueur = Math.sqrt(
       (this.x2 - this.x1) ** 2 + (this.y2 - this.y1) ** 2,
     )
@@ -177,7 +177,7 @@ export class Segment extends ObjetMathalea2D {
       this.longueur < 1e-8
         ? 0
         : angleOriente(
-            point(this.x1 + 1, this.y1),
+            pointAbstrait(this.x1 + 1, this.y1),
             this.extremite1,
             this.extremite2,
             5,
@@ -216,8 +216,8 @@ export class Segment extends ObjetMathalea2D {
       this.style += ` stroke-opacity="${this.opacite}" `
     }
     let code = this.codeExtremitesSVG(coeff)
-    const A = point(this.x1, this.y1)
-    const B = point(this.x2, this.y2)
+    const A = pointAbstrait(this.x1, this.y1)
+    const B = pointAbstrait(this.x2, this.y2)
 
     code += `\n\t<line x1="${A.xSVG(coeff)}" y1="${A.ySVG(coeff)}" x2="${B.xSVG(
       coeff,
@@ -306,8 +306,8 @@ export class Segment extends ObjetMathalea2D {
   svgml(coeff: number, amplitude: number) {
     const mainLevee = MainLevee.create() // mainLevee permet d'accéder aux méthodes pour créer les objets roughjs
     if (mainLevee != null) {
-      const A = point(this.x1, this.y1)
-      const B = point(this.x2, this.y2)
+      const A = pointAbstrait(this.x1, this.y1)
+      const B = pointAbstrait(this.x2, this.y2)
       let code = this.codeExtremitesSVG(coeff)
       code += mainLevee.line(
         A.xSVG(coeff),
@@ -331,8 +331,8 @@ export class Segment extends ObjetMathalea2D {
   }
 
   tikzml(amp: number) {
-    const A = point(this.x1, this.y1)
-    const B = point(this.x2, this.y2)
+    const A = pointAbstrait(this.x1, this.y1)
+    const B = pointAbstrait(this.x2, this.y2)
     let optionsDraw = ''
     const tableauOptions = []
     if (this.color[1].length > 1 && this.color[1] !== 'black') {
@@ -366,8 +366,8 @@ export class Segment extends ObjetMathalea2D {
 
   codeExtremitesSVG(coeff: number) {
     let code = ''
-    const A = point(this.x1, this.y1)
-    const B = point(this.x2, this.y2)
+    const A = pointAbstrait(this.x1, this.y1)
+    const B = pointAbstrait(this.x2, this.y2)
     // On ne peut pas coder des extrémités si le segment est de longueur nulle
     if (this.longueur < 1e-8) return code // éviter les divisions par zéro
     const h = this.tailleExtremites

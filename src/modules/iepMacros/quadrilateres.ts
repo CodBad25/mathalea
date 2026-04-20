@@ -1,5 +1,5 @@
 import type { PointAbstrait } from '../../lib/2d/PointAbstrait'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { polygoneAvecNom } from '../../lib/2d/polygones'
 import { rotation } from '../../lib/2d/transformations'
 import { pointAdistance, pointSurSegment } from '../../lib/2d/utilitairesPoint'
@@ -19,7 +19,7 @@ export const carre1point1longueur = function (
   c: number,
 ) {
   const interligne = 1
-  A = point(5, 0, nom[0])
+  A = pointAbstrait(5, 0, nom[0])
   const B = pointAdistance(A, c, randint(-20, 20), nom[1])
   const C = rotation(A, B, -90, nom[2])
   const D = rotation(B, A, 90, nom[3])

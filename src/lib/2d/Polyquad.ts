@@ -1,7 +1,7 @@
 import { randint } from '../../modules/outils'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import { colorToLatexOrHTML } from './colorToLatexOrHtml'
-import { point } from './PointAbstrait'
+import { pointAbstrait } from './PointAbstrait'
 import { Polygone, polygone } from './polygones'
 import { carre } from './polygonesParticuliers'
 import { translation } from './transformations'
@@ -164,7 +164,9 @@ export class Polyquad {
 
     this.poly = translation(
       polygone(
-        this.dots.map((el: { x: number; y: number }) => point(el.x, el.y)),
+        this.dots.map((el: { x: number; y: number }) =>
+          pointAbstrait(el.x, el.y),
+        ),
       ),
       vecteur(xOrigine, yOrigine),
     )
@@ -244,7 +246,9 @@ export class Polyquad {
 
     tetris2.poly = translation(
       polygone(
-        tetris2.dots.map((el: { x: number; y: number }) => point(el.x, el.y)),
+        tetris2.dots.map((el: { x: number; y: number }) =>
+          pointAbstrait(el.x, el.y),
+        ),
       ),
       vecteur(tetris2.xOrigine, tetris2.yOrigine),
     )
@@ -316,7 +320,9 @@ export class Polyquad {
 
     this.poly = translation(
       polygone(
-        this.dots.map((el: { x: number; y: number }) => point(el.x, el.y)),
+        this.dots.map((el: { x: number; y: number }) =>
+          pointAbstrait(el.x, el.y),
+        ),
       ),
       vecteur(this.xOrigine, this.yOrigine),
     )
@@ -364,8 +370,8 @@ export class Polyquad {
     const objets: NestedObjetMathalea2dArray = []
     for (const car of this.carresOccupes) {
       const quad = carre(
-        point(car.x + this.xOrigine, car.y + this.yOrigine),
-        point(car.x + this.xOrigine + 1, car.y + this.yOrigine),
+        pointAbstrait(car.x + this.xOrigine, car.y + this.yOrigine),
+        pointAbstrait(car.x + this.xOrigine + 1, car.y + this.yOrigine),
       )
       quad.couleurDeRemplissage = colorToLatexOrHTML('orange')
       quad.color = colorToLatexOrHTML('black')

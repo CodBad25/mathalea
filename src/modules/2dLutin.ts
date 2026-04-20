@@ -6,7 +6,7 @@
 
 import { colorToLatexOrHTML } from '../lib/2d/colorToLatexOrHtml'
 import { ObjetMathalea2D } from '../lib/2d/ObjetMathalea2D'
-import { point } from '../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../lib/2d/PointAbstrait'
 import { angleModulo } from '../lib/2d/utilitairesGeometriques'
 import { context } from './context'
 
@@ -106,8 +106,8 @@ export class ObjetLutin extends ObjetMathalea2D {
   svg(coeff: number) {
     let code = ''
     for (const trace of this.listeTraces) {
-      const A = point(trace[0], trace[1])
-      const B = point(trace[2], trace[3])
+      const A = pointAbstrait(trace[0], trace[1])
+      const B = pointAbstrait(trace[2], trace[3])
       const color = colorToLatexOrHTML(String(trace[4]))
       const epaisseur = trace[5]
       const pointilles = trace[6]
@@ -135,8 +135,8 @@ export class ObjetLutin extends ObjetMathalea2D {
   tikz() {
     let code = ''
     for (const trace of this.listeTraces) {
-      const A = point(trace[0], trace[1])
-      const B = point(trace[2], trace[3])
+      const A = pointAbstrait(trace[0], trace[1])
+      const B = pointAbstrait(trace[2], trace[3])
       const color = colorToLatexOrHTML(String(trace[4]))
       const epaisseur = trace[5]
       const pointilles = trace[6]

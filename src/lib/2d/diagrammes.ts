@@ -11,7 +11,7 @@ import type { IRepere } from './Interfaces'
 import { ObjetMathalea2D } from './ObjetMathalea2D'
 import { motifs } from './pattern'
 import type { PointAbstrait } from './PointAbstrait'
-import { point } from './PointAbstrait'
+import { pointAbstrait } from './PointAbstrait'
 import { Polygone, polygone } from './polygones'
 import { carre } from './polygonesParticuliers'
 import { polyline } from './Polyline'
@@ -193,10 +193,10 @@ export class TraceBarre extends ObjetMathalea2D {
       hauteur === 0
         ? vide2d(x, 0)
         : polygone([
-            point(x - epaisseur / 2, 0),
-            point(x - epaisseur / 2, hauteur * unite),
-            point(x + epaisseur / 2, hauteur * unite),
-            point(x + epaisseur / 2, 0),
+            pointAbstrait(x - epaisseur / 2, 0),
+            pointAbstrait(x - epaisseur / 2, hauteur * unite),
+            pointAbstrait(x + epaisseur / 2, hauteur * unite),
+            pointAbstrait(x + epaisseur / 2, 0),
           ])
     if (this.p instanceof Polygone) {
       this.p.couleurDeRemplissage = colorToLatexOrHTML(couleurDeRemplissage)
@@ -319,10 +319,10 @@ export class TraceBarreHorizontale extends ObjetMathalea2D {
       longueur === 0
         ? vide2d(0, y)
         : polygone([
-            point(0, y - epaisseur / 2),
-            point(0, y + epaisseur / 2),
-            point(unite * longueur, y + epaisseur / 2),
-            point(unite * longueur, y - epaisseur / 2),
+            pointAbstrait(0, y - epaisseur / 2),
+            pointAbstrait(0, y + epaisseur / 2),
+            pointAbstrait(unite * longueur, y + epaisseur / 2),
+            pointAbstrait(unite * longueur, y - epaisseur / 2),
           ])
     if (this.p instanceof Polygone) {
       this.p.couleurDeRemplissage = colorToLatexOrHTML(couleurDeRemplissage)
@@ -451,7 +451,7 @@ export class DiagrammeBarres extends ObjetMathalea2D {
           this.objets.push(
             texteParPoint(
               numberFormat(hauteursBarres[j]),
-              point(abscisseBarre, hauteurBarre + 0.5),
+              pointAbstrait(abscisseBarre, hauteurBarre + 0.5),
             ),
           ) // On écrit la valeur au dessus de la barre sauf pour une hauteur de 0
         }
@@ -503,7 +503,7 @@ export class DiagrammeBarres extends ObjetMathalea2D {
       this.objets.push(
         texteParPoint(
           titre,
-          point(-3, hauteurDiagramme + 1),
+          pointAbstrait(-3, hauteurDiagramme + 1),
           0,
           'black',
           1,
@@ -661,8 +661,11 @@ export class DiagrammeCirculaire extends ObjetMathalea2D {
     this.bordures = [1000, 1000, -1000, -1000]
     this.x = x
     this.y = y
-    const centre = point(this.x + rayon, this.y + (semi ? 0 : rayon))
-    const depart = point(this.x + 2 * rayon, semi ? this.y : this.y + rayon)
+    const centre = pointAbstrait(this.x + rayon, this.y + (semi ? 0 : rayon))
+    const depart = pointAbstrait(
+      this.x + 2 * rayon,
+      semi ? this.y : this.y + rayon,
+    )
     const contour = semi
       ? arc(
           translation(centre, vecteur(rayon, 0)),
@@ -689,7 +692,7 @@ export class DiagrammeCirculaire extends ObjetMathalea2D {
         positionLegende = { x: this.x, y: this.y - 1.5 }
         break
     }
-    let T = point(positionLegende.x, positionLegende.y)
+    let T = pointAbstrait(positionLegende.x, positionLegende.y)
     const angleTotal = semi ? 180 : 360
     const effectifTotal = effectifs.reduce(
       (somme: number, valeur: number) => somme + valeur,

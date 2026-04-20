@@ -2,7 +2,7 @@ import { inferieurouegal } from '../../modules/outils'
 import { colorToLatexOrHTML } from './colorToLatexOrHtml'
 import type { IRepere } from './Interfaces'
 import { ObjetMathalea2D } from './ObjetMathalea2D'
-import { point } from './PointAbstrait'
+import { pointAbstrait } from './PointAbstrait'
 import { polyline } from './Polyline'
 
 /**
@@ -132,7 +132,7 @@ export class Courbe extends ObjetMathalea2D {
       const y = Number(f(x))
       if (isFinite(y)) {
         if (y < ymax + 10 && y > ymin - 10) {
-          points.push(point(x * xunite, y * yunite))
+          points.push(pointAbstrait(x * xunite, y * yunite))
           lastFiniteX = x
           lastOutOfBoundsX = null // Réinitialiser car on est revenu dans les limites
         } else {
@@ -155,7 +155,7 @@ export class Courbe extends ObjetMathalea2D {
           while (xSmall < x) {
             const ySmall = Number(f(xSmall))
             if (isFinite(ySmall) && ySmall < ymax + 10 && ySmall > ymin - 10) {
-              points.push(point(xSmall * xunite, ySmall * yunite))
+              points.push(pointAbstrait(xSmall * xunite, ySmall * yunite))
               lastFiniteX = xSmall
             } else if (isFinite(ySmall)) {
               // Hors cadre mais fini

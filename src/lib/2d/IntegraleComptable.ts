@@ -4,7 +4,7 @@ import { tousDeMemeSigne } from '../outils/nombres'
 import { colorToLatexOrHTML } from './colorToLatexOrHtml'
 import { fixeBordures } from './fixeBordures'
 import { ObjetMathalea2D } from './ObjetMathalea2D'
-import { point, PointAbstrait, pointAbstrait } from './PointAbstrait'
+import { PointAbstrait, pointAbstrait } from './PointAbstrait'
 import { Polygone, polygone } from './polygones'
 import { elimineBinomesXYIntermediairesAlignes } from './Polyquad'
 
@@ -83,10 +83,10 @@ export class IntegraleComptable extends ObjetMathalea2D {
       if (tousDeMemeSigne(echantillonnage[k])) {
         const p = polygone(
           [
-            point(xk, 0),
-            point(xk, yk),
-            point(xk + pas, yk),
-            point(xk + pas, 0),
+            pointAbstrait(xk, 0),
+            pointAbstrait(xk, yk),
+            pointAbstrait(xk + pas, yk),
+            pointAbstrait(xk + pas, 0),
           ],
           yk > 0 ? colorPositif : colorNegatif,
         )
@@ -98,10 +98,10 @@ export class IntegraleComptable extends ObjetMathalea2D {
         const couleur = sup ? colorPositif : colorNegatif
         const p = polygone(
           [
-            point(xk, 0),
-            point(xk, yk),
-            point(xk + pas, yk),
-            point(xk + pas, 0),
+            pointAbstrait(xk, 0),
+            pointAbstrait(xk, yk),
+            pointAbstrait(xk + pas, yk),
+            pointAbstrait(xk + pas, 0),
           ],
           couleur,
         )
@@ -137,7 +137,7 @@ export class IntegraleComptable extends ObjetMathalea2D {
       if (rectangles.length === 0) {
         sommets.push(sommetFinal)
         const binomesXY = elimineBinomesXYIntermediairesAlignes(sommets)
-        const p = polygone(binomesXY.map((el) => point(el.x, el.y)))
+        const p = polygone(binomesXY.map((el) => pointAbstrait(el.x, el.y)))
         p.color =
           p.bordures[1] < 0 && p.bordures[3] === 0
             ? colorToLatexOrHTML(colorNegatif)
@@ -150,7 +150,7 @@ export class IntegraleComptable extends ObjetMathalea2D {
       // s'il reste qu'un seul rectangle alors on le pousse dans la liste des objets
       sommets.push(sommetFinal)
       const binomesXY = elimineBinomesXYIntermediairesAlignes(sommets)
-      const p = polygone(binomesXY.map((el) => point(el.x, el.y)))
+      const p = polygone(binomesXY.map((el) => pointAbstrait(el.x, el.y)))
       p.color =
         p.bordures[1] < 0 && p.bordures[3] === 0
           ? colorToLatexOrHTML(colorNegatif)
