@@ -13,9 +13,9 @@ type BinomesXY = BinomeXY[]
 /**
  * fonction utilitaire pour la classe Tetris
  * Détermine si deux points sont ceux d'un couple de points (dans l'ordre ou pas)
- * @param {Point} pt1
- * @param {Point} pt2
- * @param {[Point,Point]} couple
+ * @param {PointAbstrait} pt1
+ * @param {PointAbstrait} pt2
+ * @param {[PointAbstrait,PointAbstrait]} couple
  * @returns {boolean}
  * @author Jean-claude Lhote
  */
@@ -39,8 +39,8 @@ export function trouveCouple(
  * fonction utilitaire pour la classe Tetris
  * @description Détermine si le point passé en paramètre est l'un des deux points d'un couple de points
  * @description Si c'est le cas, il renvoie le couple de points et la liste des couples restants après avoir supprimé le couple trouvé
- * @param {Point} pt1
- * @param {[Point,Point][]} couplesPoints
+ * @param {PointAbstrait} pt1
+ * @param {[PointAbstrait,PointAbstrait][]} couplesPoints
  * @returns
  */
 export function TrouveExtremites(

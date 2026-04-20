@@ -1,6 +1,6 @@
 import { fixeBordures } from '../../../lib/2d/fixeBordures'
 import { grille } from '../../../lib/2d/Grille'
-import { Point } from '../../../lib/2d/PointAbstrait'
+import { PointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { segment } from '../../../lib/2d/segmentsVecteurs'
 import { latex2d } from '../../../lib/2d/textes'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
@@ -35,11 +35,11 @@ export default class Can2025CM2Q17 extends ExerciceSimple {
 
   nouvelleVersion() {
     const grillage = grille(0, 0, 8, 3, 'gray', 1, 1)
-    const A = new Point(1, 1)
-    const B = new Point(3, 1)
+    const A = new PointAbstrait(1, 1)
+    const B = new PointAbstrait(3, 1)
     const seg1 = segment(A, B)
-    const C = new Point(6, 2)
-    const D = new Point(1, 2)
+    const C = new PointAbstrait(6, 2)
+    const D = new PointAbstrait(1, 2)
     const seg2 = segment(C, D)
     const l1 = this.canOfficielle ? 20 : randint(2, 10) * 5
     const l2 = l1 * 0.4

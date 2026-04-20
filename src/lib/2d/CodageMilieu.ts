@@ -3,15 +3,14 @@ import { colorToLatexOrHTML } from './colorToLatexOrHtml'
 import { droite } from './droites'
 import { ObjetMathalea2D } from './ObjetMathalea2D'
 import type { PointAbstrait } from './PointAbstrait'
-import { Point } from './PointAbstrait'
 import { tracePointSurDroite } from './TracePointSurDroite'
 import { longueur } from './utilitairesGeometriques'
 import { milieu } from './utilitairesPoint'
 
 /**
  * Code le milieu d'un segment
- * @param {Point|PointAbstrait} A Première extrémité du segment
- * @param {Point|PointAbstrait} B Seconde extrémité du segment
+ * @param {PointAbstrait} A Première extrémité du segment
+ * @param {PointAbstrait} B Seconde extrémité du segment
  * @param {string} [color='black'] Couleur du codage : du type 'red', bleuMathalea ou du type '#a12345'.
  * @param {string} [mark='x'] Symbole posé sur les deux parties du segment
  * @param {boolean} [mil=true] Trace ou nom le point du milieu.
@@ -64,8 +63,8 @@ export class CodageMilieu extends ObjetMathalea2D {
 }
 /**
  * Code le milieu d'un segment
- * @param {Point} A Première extrémité du segment
- * @param {Point} B Seconde extrémité du segment
+ * @param {PointAbstrait} A Première extrémité du segment
+ * @param {PointAbstrait} B Seconde extrémité du segment
  * @param {string} [color = 'black'] Couleur du codage : du type 'red', bleuMathalea ou du type '#a12345'.
  * @param {string} [mark = 'x'] Symbole posé de part et d'autre du milieu du segment
  * @param {boolean} [mil = true] Trace ou nom le point du milieu.

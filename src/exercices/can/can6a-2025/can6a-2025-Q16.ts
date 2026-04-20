@@ -1,7 +1,7 @@
 import { colorToLatexOrHTML } from '../../../lib/2d/colorToLatexOrHtml'
 import { fixeBordures } from '../../../lib/2d/fixeBordures'
 import { grille } from '../../../lib/2d/Grille'
-import { Point } from '../../../lib/2d/PointAbstrait'
+import { PointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { Polygone } from '../../../lib/2d/polygones'
 import { latex2d } from '../../../lib/2d/textes'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
@@ -36,18 +36,18 @@ export default class Can2025N6Q16 extends ExerciceSimple {
 
   nouvelleVersion() {
     const grillage = grille(0, 0, 10, 5, 'gray', 1, 1)
-    const A = new Point(1, 1)
-    const B = new Point(4, 1)
-    const C = new Point(4, 4)
-    const D = new Point(1, 4)
-    const E = new Point(6, 1)
-    const F = new Point(9, 1)
-    const G = new Point(9, 2)
-    const H = new Point(8, 2)
-    const I = new Point(8, 3)
-    const J = new Point(9, 3)
-    const K = new Point(9, 4)
-    const L = new Point(6, 4)
+    const A = new PointAbstrait(1, 1)
+    const B = new PointAbstrait(4, 1)
+    const C = new PointAbstrait(4, 4)
+    const D = new PointAbstrait(1, 4)
+    const E = new PointAbstrait(6, 1)
+    const F = new PointAbstrait(9, 1)
+    const G = new PointAbstrait(9, 2)
+    const H = new PointAbstrait(8, 2)
+    const I = new PointAbstrait(8, 3)
+    const J = new PointAbstrait(9, 3)
+    const K = new PointAbstrait(9, 4)
+    const L = new PointAbstrait(6, 4)
     const poly1 = new Polygone([A, B, C, D])
     const poly2 = new Polygone([E, F, G, H, I, J, K, L])
     poly1.couleurDeRemplissage = colorToLatexOrHTML('gray')

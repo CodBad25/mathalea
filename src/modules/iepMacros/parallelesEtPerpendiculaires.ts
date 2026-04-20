@@ -34,9 +34,9 @@ import type {
 
 /**
  * Trace la parallèle à (AB) passant par C avec la règle et l'équerre. Peut prolonger le segment [AB] si le pied de la hauteur est trop éloigné des extrémités du segment
- * @param {Point} A
- * @param {Point} B
- * @param {Point} C
+ * @param {PointAbstrait} A
+ * @param {PointAbstrait} B
+ * @param {PointAbstrait} C
  * @param {*} [options]
  */
 export const paralleleRegleEquerre2points3epoint = function (
@@ -128,9 +128,9 @@ export const paralleleRegleEquerre2points3epoint = function (
 /**
  * Trace la perpendiculaire à (AB) passant par C avec la règle et l'équerre. Peut prolonger le segment [AB] si le pied de la hauteur est trop éloigné des extrémités du segment
  * Description désactivée par défaut.
- * @param {Point} A
- * @param {Point} B
- * @param {Point} C
+ * @param {PointAbstrait} A
+ * @param {PointAbstrait} B
+ * @param {PointAbstrait} C
  * @param {*} [options]
  */
 export const perpendiculaireRegleEquerre2points3epoint = function (
@@ -170,7 +170,7 @@ export const perpendiculaireRegleEquerre2points3epoint = function (
  * Construit à la règle et à l'équerre la perpendiculaire à une droite d passant par un point P n'appartenant pas à d.
  * description désactivable.
  * @param {Droite} d
- * @param {Point} P
+ * @param {PointAbstrait} P
  * @param {boolean} [description]
  */
 export const perpendiculaireRegleEquerreDroitePoint = function (
@@ -509,9 +509,9 @@ export const perpendiculaireCompasPoint = function (
 /**
  * Trace la parallèlee à (AB) passant par C avec la règle et l'équerre.
  * Cette macro réalise la construction en décrivant ce qu'elle fait à chaque étape
- * @param {Point} A
- * @param {Point} B
- * @param {Point} M
+ * @param {PointAbstrait} A
+ * @param {PointAbstrait} B
+ * @param {PointAbstrait} M
  * @param {boolean} dessus
  * @param {*} [options]
  */
@@ -630,9 +630,9 @@ export const paralleleRegleEquerreDroitePointAvecDescription = function (
 
 /**
  *
- * @param {Point} A
- * @param {Point} B
- * @param {Point} C
+ * @param {PointAbstrait} A
+ * @param {PointAbstrait} B
+ * @param {PointAbstrait} C
  * @param {boolean} description
  */
 export const paralleleAuCompasAvecDescription = function (
@@ -729,9 +729,9 @@ export const paralleleAuCompasAvecDescription = function (
 
 /**
  *
- * @param {Point} A
- * @param {Point} B
- * @param {Point} C
+ * @param {PointAbstrait} A
+ * @param {PointAbstrait} B
+ * @param {PointAbstrait} C
  * @param {boolean} description
  */
 export const paralleleAuCompas = function (

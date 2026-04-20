@@ -42,12 +42,12 @@ export function isTransformationsIndex(
  **8= translation coordonnées de O = vecteur de translation
  **9= homothétie. centre O rapport k
  **10= homothétie. centre O rapport 1/k
- * @param {any} pointA Point dont on cherche l'image
- * @param {any} pointO Centre du repère local pour les symétries, centre pour les rotations et les homothéties
- * @param {any} vecteur=[] Vecteur de la translation
+ * @param {[number, number]} pointA Point dont on cherche l'image
+ * @param {[number, number]} pointO Centre du repère local pour les symétries, centre pour les rotations et les homothéties
+ * @param {[number, number]} vecteur=[] Vecteur de la translation
  * @param {number} rapport=1 rapport d'homothétie
  * @author Jean-claude Lhote
- * @returns {number[]} Le point résultat
+ * @returns {[number, number]} Le point résultat
  */
 export function imagePointParTransformation(
   transformation: TransformationsIndex,

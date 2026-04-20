@@ -1,7 +1,7 @@
 import { colorToLatexOrHTML } from '../../lib/2d/colorToLatexOrHtml'
 import { Droite, droite } from '../../lib/2d/droites'
 import { grille } from '../../lib/2d/Grille'
-import { Point, pointAbstrait } from '../../lib/2d/PointAbstrait'
+import { PointAbstrait, pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { Polygone, polygone } from '../../lib/2d/polygones'
 import { segment } from '../../lib/2d/segmentsVecteurs'
 import { texteParPointEchelle } from '../../lib/2d/textes'
@@ -10,6 +10,7 @@ import { homothetie, translation } from '../../lib/2d/transformations'
 import { milieu } from '../../lib/2d/utilitairesPoint'
 import { vecteur, type Vecteur } from '../../lib/2d/Vecteur'
 import { vide2d, type Vide2d } from '../../lib/2d/Vide2d'
+import { bleuMathalea } from '../../lib/colors'
 import { centrage, deuxColonnes } from '../../lib/format/miseEnPage'
 import { texcolors } from '../../lib/format/style'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
@@ -39,7 +40,6 @@ import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
 import { transfoPoly } from './4G12-1'
 import { CHEMINS_PREDEFINIS } from './_4G12-paths'
-import { bleuMathalea } from '../../lib/colors'
 
 export const titre = 'Trouver une série de transformations'
 export const interactifReady = true
@@ -405,7 +405,7 @@ const motifs = [
     pointAbstrait(4, 1),
   ]),
 ]
-const noeuds: Point[] = []
+const noeuds: PointAbstrait[] = []
 const maGrille: NestedObjetMathalea2dArray = []
 const labels = []
 maGrille.push(grille(0, 0, 16, 16, 'black', 0.2, 0.4))
@@ -638,7 +638,7 @@ export default class SerieDeTransformations extends Exercice {
       const transfos: {
         texte: string
         axe?: Droite
-        centre?: Point
+        centre?: PointAbstrait
         sens?: boolean
         texteCorr: string
         texteInteractif: string

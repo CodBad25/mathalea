@@ -3,7 +3,7 @@ import { cercle } from '../../lib/2d/cercle'
 import { codageAngleDroit } from '../../lib/2d/CodageAngleDroit'
 import { codageSegments } from '../../lib/2d/CodageSegment'
 import { droite, droiteParPointEtPerpendiculaire } from '../../lib/2d/droites'
-import { Point, pointAbstrait } from '../../lib/2d/PointAbstrait'
+import { PointAbstrait, pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { polygoneAvecNom } from '../../lib/2d/polygones'
 import { segment } from '../../lib/2d/segmentsVecteurs'
 import { labelPoint } from '../../lib/2d/textes'
@@ -656,7 +656,7 @@ export default class ConstruireUnTriangle extends Exercice {
             lAB,
             lAC,
             { description: false },
-          ) as [Point, Point, Point]
+          ) as [PointAbstrait, PointAbstrait, PointAbstrait]
           IEP.regleMontrer(Ai)
           IEP.regleRotation(Ci)
           IEP.pointCreer(milieu(Ai, Ci), { dx: 0, dy: -0.5, label: sommets[3] })

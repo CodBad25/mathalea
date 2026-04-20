@@ -1,4 +1,4 @@
-import { Point, pointAbstrait } from '../../../lib/2d/PointAbstrait'
+import { PointAbstrait, pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import ExerciceSimple from '../../ExerciceSimple'
 
 import { codageSegments } from '../../../lib/2d/CodageSegment'
@@ -36,9 +36,9 @@ export default class Can2025CM2Q18 extends ExerciceSimple {
 
   nouvelleVersion() {
     const perimetre = this.canOfficielle ? 15 : randint(5, 12) * 3
-    const A = new Point(0, 0)
-    const B = new Point(4, 0)
-    const C = new Point(2, 3.5)
+    const A = new PointAbstrait(0, 0)
+    const B = new PointAbstrait(4, 0)
+    const C = new PointAbstrait(2, 3.5)
     const triangle = new Polygone([A, B, C])
     const codage = codageSegments('//', 'black', A, B, B, C, C, A)
     const horizontale = segment(pointAbstrait(0, -0.7), pointAbstrait(4, -0.7))

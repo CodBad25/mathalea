@@ -1,6 +1,6 @@
 import { demiDroite } from '../../lib/2d/DemiDroite'
 import { droite } from '../../lib/2d/droites'
-import { Point, pointAbstrait } from '../../lib/2d/PointAbstrait'
+import { PointAbstrait, pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { polygoneAvecNom } from '../../lib/2d/polygones'
 import { segment } from '../../lib/2d/segmentsVecteurs'
 import {
@@ -49,7 +49,7 @@ export default class UtilerAppartientA extends Exercice {
     let C = pointAbstrait(0, 0)
     let D = pointAbstrait(0, 0)
     let E = pointAbstrait(0, 0)
-    let F: false | Point = false
+    let F: false | PointAbstrait = false
     while (!F) {
       const angle = randint(0, 359)
       B = pointAdistance(A, rayon, angle, lettres[1])
@@ -194,7 +194,6 @@ export default class UtilerAppartientA extends Exercice {
     for (
       let i = 0, texte, texteCorr, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       if (possibilites[i] === undefined) break
       texte = ''

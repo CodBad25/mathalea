@@ -4,7 +4,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 import { colorToLatexOrHTML } from '../../../lib/2d/colorToLatexOrHtml'
 import { fixeBordures } from '../../../lib/2d/fixeBordures'
 import { grille } from '../../../lib/2d/Grille'
-import { Point } from '../../../lib/2d/PointAbstrait'
+import { PointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { Polygone } from '../../../lib/2d/polygones'
 import { latex2d } from '../../../lib/2d/textes'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
@@ -36,10 +36,10 @@ export default class Can2025CM1Q16 extends ExerciceSimple {
   nouvelleVersion() {
     const u = this.canOfficielle ? 2 : randint(2, 4)
     const grillage = grille(2, 0, 12, 5, 'gray', 1, 1)
-    const A = new Point(8, 4)
-    const B = new Point(8 + u, 4)
-    const C = new Point(8 + u, 5)
-    const D = new Point(8, 5)
+    const A = new PointAbstrait(8, 4)
+    const B = new PointAbstrait(8 + u, 4)
+    const C = new PointAbstrait(8 + u, 5)
+    const D = new PointAbstrait(8, 5)
 
     const poly1 = new Polygone([A, B, C, D])
     const a = this.canOfficielle ? 3 : randint(4, 6)

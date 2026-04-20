@@ -4,8 +4,8 @@ import { Latex2d, latex2d, type LetterSizeType } from './textes'
 
 /**
  * affiche du Latex 'sur' un segment orienté
- * @param {Point} A Première extrémité du segment
- * @param {Point} B Seconde extrémité du segment
+ * @param {PointAbstrait} A Première extrémité du segment
+ * @param {PointAbstrait} B Seconde extrémité du segment
  * @param {number} [distance = 0.5] Couleur du codage : du type 'red', bleuMathalea ou du type '#a12345'.
  * @author Olivier Mimeau
  * @return {Latex2d}
