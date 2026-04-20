@@ -119,9 +119,10 @@ function appendCell({
         spanApres.textContent = options.texteApres
         cell.appendChild(spanApres)
       }
-      const spanResultat = document.createElement('span')
+      /*  const spanResultat = document.createElement('span')
       spanResultat.id = `resultatCheckEx${NoEx}Q${NoQ}L${indexLine}C${indexCol}`
       cell.appendChild(spanResultat)
+      */
     } else {
       element = document.createElement('span')
       element.classList.add('tableauMathlive')

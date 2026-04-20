@@ -81,13 +81,31 @@ export function injectFontInMetaInteractif2d(mf) {
 }
 
 function injectPromptStyles(mf) {
-  if (!mf.classList.contains('fillInTheBlanks')) return
+  if (!mf.classList.contains('fillInTheBlanks')) {
+    if (mf.classList.contains('tableauMathlive')) {
+      const shadow = mf.shadowRoot
+      if (shadow && !shadow.getElementById('ml-cell-style')) {
+        const style = document.createElement('style')
+        style.id = 'ml-cell-style'
+        style.textContent = `
+        .ML__container {
+          "justify-content": center !important;
+        }
+          .ML__content {
+          "justify-content": center !important;
+          }
+    `
+        shadow.appendChild(style)
+      }
+    }
+    return
+  }
   const shadow = mf.shadowRoot
   if (shadow && !shadow.getElementById('ml-prompt-styles')) {
     const style = document.createElement('style')
     style.id = 'ml-prompt-styles'
     style.textContent = `
-    /ML__prompt {
+    .ML__prompt {
     min-height: 0.9em !important;
     }
     .ML__prompt-atom {
