@@ -97,7 +97,7 @@ function buildKutsumQuestionsFromAutoCorrection(exercise: IExercice): KutsumQues
       }
       if (!targetLatex) continue
       const numericValue = Number(targetLatex)
-      if (!isNaN(numericValue) && isFinite(numericValue)) {
+      if (!isNaN(numericValue) && isFinite(numericValue) && comparisons.length === 0) {
         questions.push({
           questionType: 'numeric',
           text,
