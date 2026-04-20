@@ -1014,6 +1014,16 @@ function handleDefaultValeur(reponse: Valeur): ValeurNormalized {
     if (val !== undefined) {
       if (val?.value !== undefined) {
         if (Array.isArray(val.value)) {
+          if (val.options?.estDansIntervalle) {
+            // Si c'est un intervalle, on s'assure que les bornes sont des nombres valides
+            if (
+              val.value.length === 2 &&
+              isValidNumber(val.value[0]) &&
+              isValidNumber(val.value[1])
+            ) {
+              val.value = `[${val.value.map(String).join(';')}]`
+            }
+          }
           for (let i = 0; i < val.value.length; i++) {
             if (typeof val.value[i] === 'string') continue
             if (
@@ -1336,10 +1346,15 @@ export function verifQuestionMultiMathfield(
     saisies[`${field}`] = saisie
     let result
     if (Array.isArray(reponse.value)) {
-      let ii = 0
-      while (!result?.isOk && ii < reponse.value.length) {
-        result = compareFunction(saisie, reponse.value[ii], options)
-        ii++
+      if (options.estDansIntervalle) {
+        // Si c'est un intervalle, on s'assure que les bornes sont des nombres valides
+        result = compareFunction(saisie, reponse.value, options)
+      } else {
+        let ii = 0
+        while (!result?.isOk && ii < reponse.value.length) {
+          result = compareFunction(saisie, reponse.value[ii], options)
+          ii++
+        }
       }
     } else {
       result = compareFunction(saisie, reponse.value, options)
