@@ -1,9 +1,10 @@
-import { point } from '../../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { repere } from '../../../lib/2d/reperes'
 import { representantNomme } from '../../../lib/2d/representantVecteur'
 import { segment } from '../../../lib/2d/segmentsVecteurs'
 import { texteParPosition } from '../../../lib/2d/textes'
 import { vecteur } from '../../../lib/2d/Vecteur'
+import { bleuMathalea } from '../../../lib/colors'
 import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
 import { remplisLesBlancs } from '../../../lib/interactif/questionMathLive'
 import { choice } from '../../../lib/outils/arrayOutils'
@@ -11,7 +12,6 @@ import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../../modules/outils'
 import Exercice from '../../Exercice'
-import { bleuMathalea } from '../../../lib/colors'
 
 export const titre =
   'Lire les coordonnées d’un vecteur représenté dans un repère'
@@ -64,8 +64,8 @@ export default class LectureGraphiqueVecteurRepere extends Exercice {
       ya = randint(-2, 2)
       k1 = randint(-6, 6, 0)
       k2 = randint(-6, 6)
-      A = point(xa, ya)
-      B = point(xa + k1, ya + k2)
+      A = pointAbstrait(xa, ya)
+      B = pointAbstrait(xa + k1, ya + k2)
       xmin = Math.min(A.x, B.x, -1) - 1
       ymin = Math.min(A.y, B.y, -1) - 1
       xmax = Math.max(A.x, B.x, 1) + 1

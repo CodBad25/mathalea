@@ -1,6 +1,6 @@
 import { codageAngleDroit } from '../../../lib/2d/CodageAngleDroit'
 import { droite } from '../../../lib/2d/droites'
-import { point } from '../../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { polygoneAvecNom } from '../../../lib/2d/polygones'
 import { labelPoint, texteParPosition } from '../../../lib/2d/textes'
 import { milieu } from '../../../lib/2d/utilitairesPoint'
@@ -849,9 +849,9 @@ export default class SujetCAN2022Seconde extends Exercice {
               [6, 8, 10],
             ]
             const a = choice(triplet)
-            const C = point(0, 0, 'C', 'below')
-            const A = point(2, 0, 'A', 'below')
-            const B = point(2, 3, 'B', 'above')
+            const C = pointAbstrait(0, 0, 'C', 'below')
+            const A = pointAbstrait(2, 0, 'A', 'below')
+            const B = pointAbstrait(2, 3, 'B', 'above')
             const pol = polygoneAvecNom(A, B, C)
             const objets = []
             choix = choice(['a', 'b', 'c'])
@@ -1199,11 +1199,11 @@ export default class SujetCAN2022Seconde extends Exercice {
             b = a + 1 // BE
             c = k * b // CE
             d = k * a // DE
-            const A = point(6, 0, 'A', 'above right')
-            const D = point(0.46, 2.92, 'D', 'above left')
-            const E = point(4, 1, 'E', 'below')
-            const B = point(6.22, 2, 'B', 'above right')
-            const C = point(0, -1, 'C', 'left')
+            const A = pointAbstrait(6, 0, 'A', 'above right')
+            const D = pointAbstrait(0.46, 2.92, 'D', 'above left')
+            const E = pointAbstrait(4, 1, 'E', 'below')
+            const B = pointAbstrait(6.22, 2, 'B', 'above right')
+            const C = pointAbstrait(0, -1, 'C', 'left')
             const xmin = -1
             const ymin = -1.5
             const xmax = 7.5

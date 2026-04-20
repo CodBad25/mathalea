@@ -1,5 +1,5 @@
 import { grille } from '../../../lib/2d/Grille'
-import { point } from '../../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { repere } from '../../../lib/2d/reperes'
 import {
   segment,
@@ -7,6 +7,7 @@ import {
 } from '../../../lib/2d/segmentsVecteurs'
 import { texteParPosition } from '../../../lib/2d/textes'
 import { milieu } from '../../../lib/2d/utilitairesPoint'
+import { bleuMathalea } from '../../../lib/colors'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
 import { propositionsQcm } from '../../../lib/interactif/qcm'
@@ -21,7 +22,6 @@ import { context } from '../../../modules/context'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { listeQuestionsToContenu } from '../../../modules/outils'
 import Exercice from '../../Exercice'
-import { bleuMathalea } from '../../../lib/colors'
 
 export const titre = 'Course aux nombres - 2nde - Mai 2024'
 export const dateDePublication = '7/5/2024'
@@ -274,16 +274,16 @@ export default class nomExercice extends Exercice {
     i = 20
     const objets = []
     objets.push(grille(-1, 0, 7, 4, 'gray', 1, 1))
-    const A = point(0, 3)
-    const B = point(0, 1)
-    const C = point(2, 1)
-    const D = point(2, 3)
-    const E = point(4, 3)
-    const F = point(4, 1)
-    const J = point(5, 1)
-    const K = point(5, 2)
-    const G = point(0, 4) // unite
-    const H = point(4, 4) // unite
+    const A = pointAbstrait(0, 3)
+    const B = pointAbstrait(0, 1)
+    const C = pointAbstrait(2, 1)
+    const D = pointAbstrait(2, 3)
+    const E = pointAbstrait(4, 3)
+    const F = pointAbstrait(4, 1)
+    const J = pointAbstrait(5, 1)
+    const K = pointAbstrait(5, 2)
+    const G = pointAbstrait(0, 4) // unite
+    const H = pointAbstrait(4, 4) // unite
     const s1 = segmentAvecExtremites(G, H)
     s1.epaisseur = 3
     const s2 = segment(A, B, bleuMathalea)
@@ -475,7 +475,12 @@ export default class nomExercice extends Exercice {
     const courbe1 = theSpline.courbe({
       epaisseur: 1.5,
       ajouteNoeuds: true,
-      optionsNoeuds: { color: bleuMathalea, taille: 2, style: 'x', epaisseur: 2 },
+      optionsNoeuds: {
+        color: bleuMathalea,
+        taille: 2,
+        style: 'x',
+        epaisseur: 2,
+      },
       color: bleuMathalea,
     })
     const objetsEnonce = [repere1, courbe1, textO]

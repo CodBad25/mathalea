@@ -1,9 +1,9 @@
-import { point, Point } from '../../../lib/2d/PointAbstrait'
 import ExerciceSimple from '../../ExerciceSimple'
 
 import { codageAngleDroit } from '../../../lib/2d/CodageAngleDroit'
 import { codageSegments } from '../../../lib/2d/CodageSegment'
 import { fixeBordures } from '../../../lib/2d/fixeBordures'
+import { PointAbstrait, pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { Polygone } from '../../../lib/2d/polygones'
 import { segment } from '../../../lib/2d/segmentsVecteurs'
 import { latex2d } from '../../../lib/2d/textes'
@@ -38,17 +38,17 @@ export default class Can2025N6Q18 extends ExerciceSimple {
 
   nouvelleVersion() {
     const perimetre = this.canOfficielle ? 18 : randint(2, 9) * 4 + 2
-    const A = new Point(0, 0)
-    const B = new Point(4, 0)
-    const C = new Point(4, 4)
-    const D = new Point(0, 4)
+    const A = new PointAbstrait(0, 0)
+    const B = new PointAbstrait(4, 0)
+    const C = new PointAbstrait(4, 4)
+    const D = new PointAbstrait(0, 4)
     const rectangle = new Polygone([A, B, C, D])
     const angle1 = codageAngleDroit(D, A, B)
     const angle2 = codageAngleDroit(A, B, C)
     const angle3 = codageAngleDroit(B, C, D)
     const angle4 = codageAngleDroit(C, D, A)
     const codage = codageSegments('//', 'black', A, B, B, C, C, D, D, A)
-    const horizontale = segment(point(0, -0.7), point(4, -0.7))
+    const horizontale = segment(pointAbstrait(0, -0.7), pointAbstrait(4, -0.7))
     horizontale.styleExtremites = '<->'
 
     const longueur = latex2d('\\ldots \\text{ cm}', 2, -1, {

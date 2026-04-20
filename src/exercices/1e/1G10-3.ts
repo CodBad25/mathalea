@@ -2,7 +2,7 @@ import Decimal from 'decimal.js'
 import { afficheLongueurSegment } from '../../lib/2d/afficheLongueurSegment'
 import { afficheMesureAngle } from '../../lib/2d/AfficheMesureAngle'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { polygone } from '../../lib/2d/polygones'
 import { labelPoint } from '../../lib/2d/textes'
 import { pointAdistance } from '../../lib/2d/utilitairesPoint'
@@ -161,7 +161,7 @@ export default class CalculProduitScalaireAngle extends Exercice {
 
         case 2: //
         default: {
-          const A = point(0, 0, 'A', 'below')
+          const A = pointAbstrait(0, 0, 'A', 'below')
           const a = randint(3, 6) //
           const b = randint(4, 8) //
           const d = new Decimal(a * b).div(2)

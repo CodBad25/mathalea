@@ -1,6 +1,6 @@
 import { afficheLongueurSegment } from '../../lib/2d/afficheLongueurSegment'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { polygoneAvecNom } from '../../lib/2d/polygones'
 import { segment } from '../../lib/2d/segmentsVecteurs'
 import { latex2d } from '../../lib/2d/textes'
@@ -246,12 +246,12 @@ export default class UtiliserProduitScalaire extends Exercice {
               xB = long[0]
               AE = new FractionEtendue(long[2], long[1]).simplifie()
               AF = new FractionEtendue(long[3], long[0]).simplifie()
-              A = point(0, 0, nomA)
-              B = point(xB, 0, nomB)
-              C = point(xB, yC, nomC)
-              D = point(0, yC, nomD)
-              E = point(0, long[2], nomE)
-              F = point(long[3], 0, nomF)
+              A = pointAbstrait(0, 0, nomA)
+              B = pointAbstrait(xB, 0, nomB)
+              C = pointAbstrait(xB, yC, nomC)
+              D = pointAbstrait(0, yC, nomD)
+              E = pointAbstrait(0, long[2], nomE)
+              F = pointAbstrait(long[3], 0, nomF)
               seg1 = segment(E, C)
               seg2 = segment(D, F)
               l1 = afficheLongueurSegment(C, B, 'black', 0.5, '', true)
@@ -318,12 +318,12 @@ export default class UtiliserProduitScalaire extends Exercice {
               xB = long[0]
               BE = new FractionEtendue(long[2], long[1]).simplifie()
               CF = new FractionEtendue(long[3], long[0]).simplifie()
-              A = point(0, 0, nomA)
-              B = point(xB, 0, nomB)
-              C = point(xB, yC, nomC)
-              D = point(0, yC, nomD)
-              E = point(xB, long[2], nomE)
-              F = point(long[0] - long[3], yC, nomF)
+              A = pointAbstrait(0, 0, nomA)
+              B = pointAbstrait(xB, 0, nomB)
+              C = pointAbstrait(xB, yC, nomC)
+              D = pointAbstrait(0, yC, nomD)
+              E = pointAbstrait(xB, long[2], nomE)
+              F = pointAbstrait(long[0] - long[3], yC, nomF)
               seg1 = segment(E, A)
               seg2 = segment(B, F)
               l1 = afficheLongueurSegment(B, A, 'black', 0.5, '', true)
@@ -400,12 +400,12 @@ export default class UtiliserProduitScalaire extends Exercice {
               xB = long[0]
               AE = new FractionEtendue(long[2], long[1]).simplifie()
               AF = new FractionEtendue(long[3], long[0]).simplifie()
-              A = point(0, 0, nomA)
-              B = point(xB, 0, nomB)
-              C = point(xB, yC, nomC)
-              D = point(0, yC, nomD)
-              E = point(0, long[2], nomE)
-              F = point(long[3], 0, nomF)
+              A = pointAbstrait(0, 0, nomA)
+              B = pointAbstrait(xB, 0, nomB)
+              C = pointAbstrait(xB, yC, nomC)
+              D = pointAbstrait(0, yC, nomD)
+              E = pointAbstrait(0, long[2], nomE)
+              F = pointAbstrait(long[3], 0, nomF)
               seg1 = segment(E, C)
               seg2 = segment(D, F)
               l1 = afficheLongueurSegment(C, B, 'black', 0.5, '', true)
@@ -477,12 +477,12 @@ export default class UtiliserProduitScalaire extends Exercice {
               xB = long[0]
               BE = new FractionEtendue(long[2], long[1]).simplifie()
               CF = new FractionEtendue(long[3], long[0]).simplifie()
-              A = point(0, 0, nomA)
-              B = point(xB, 0, nomB)
-              C = point(xB, yC, nomC)
-              D = point(0, yC, nomD)
-              E = point(xB, long[2], nomE)
-              F = point(long[0] - long[3], yC, nomF)
+              A = pointAbstrait(0, 0, nomA)
+              B = pointAbstrait(xB, 0, nomB)
+              C = pointAbstrait(xB, yC, nomC)
+              D = pointAbstrait(0, yC, nomD)
+              E = pointAbstrait(xB, long[2], nomE)
+              F = pointAbstrait(long[0] - long[3], yC, nomF)
               seg1 = segment(E, A)
               seg2 = segment(B, F)
               l1 = afficheLongueurSegment(B, A, 'black', 0.5, '', true)

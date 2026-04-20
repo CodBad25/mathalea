@@ -4,7 +4,7 @@ import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 
 import { courbe } from '../../lib/2d/Courbe'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { tracePoint } from '../../lib/2d/TracePoint'
 import { deuxColonnes } from '../../lib/format/miseEnPage'
 import { spline } from '../../lib/mathFonctions/Spline'
@@ -50,7 +50,7 @@ export default class auto1AF2 extends ExerciceQcmA {
         letterSize: 'normalsize',
       },
     )
-    const A = point(-3.5, 0.1 * (-3.5 - 4) * (-3.5 - 1) * (-3.5 + 3))
+    const A = pointAbstrait(-3.5, 0.1 * (-3.5 - 4) * (-3.5 - 1) * (-3.5 + 3))
 
     const TA = tracePoint(A)
     const labelA = latex2d(
@@ -62,11 +62,11 @@ export default class auto1AF2 extends ExerciceQcmA {
         letterSize: 'normalsize',
       },
     )
-    const B = point(-1, 0.1 * -5 * -2 * 2)
+    const B = pointAbstrait(-1, 0.1 * -5 * -2 * 2)
 
     const TB = tracePoint(B)
 
-    const R = point(0.5, 0.1 * (0.5 - 4) * (0.5 - 1) * (0.5 + 3))
+    const R = pointAbstrait(0.5, 0.1 * (0.5 - 4) * (0.5 - 1) * (0.5 + 3))
 
     const TR = tracePoint(R)
     const labelR = latex2d(
@@ -78,7 +78,7 @@ export default class auto1AF2 extends ExerciceQcmA {
         letterSize: 'normalsize',
       },
     )
-    const S = point(3.5, 0.1 * (3.5 - 4) * (3.5 - 1) * (3.5 + 3))
+    const S = pointAbstrait(3.5, 0.1 * (3.5 - 4) * (3.5 - 1) * (3.5 + 3))
 
     const TS = tracePoint(S)
     const labelS = latex2d(

@@ -1,7 +1,7 @@
 import { afficheLongueurSegment } from '../../../lib/2d/afficheLongueurSegment'
 import { codageAngleDroit } from '../../../lib/2d/CodageAngleDroit'
 import { fixeBordures } from '../../../lib/2d/fixeBordures'
-import { point } from '../../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { polygoneAvecNom } from '../../../lib/2d/polygones'
 import { segment } from '../../../lib/2d/segmentsVecteurs'
 import { rotation, similitude } from '../../../lib/2d/transformations'
@@ -57,7 +57,7 @@ export default class Trigo extends ExerciceSimple {
     const a = triplet[0]
     const b = triplet[1]
     const c = triplet[2]
-    const A = point(0, 0, nom[0])
+    const A = pointAbstrait(0, 0, nom[0])
     const alpha = randint(0, 135)
     const B = rotation(pointAdistance(A, a, 0), A, alpha, nom[1])
     const C = similitude(A, B, 90, b / a, nom[2])

@@ -1,4 +1,4 @@
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { tracePoint } from '../../lib/2d/TracePoint'
 import { vide2d } from '../../lib/2d/Vide2d'
 import { droite } from '../../lib/2d/droites'
@@ -47,9 +47,9 @@ export default class Auto1AF2p extends ExerciceQcmA {
       .produitFraction(new FractionEtendue(abs, 1))
       .ajouteEntier(ordOrigine)
     const o = latex2d('\\text{O}', -0.3, -0.3, { letterSize: 'scriptsize' })
-    const A = point(0, ordOrigine)
-    const B = point(fracDen, ordOrigine + fracNum)
-    const Bx = point(B.x, A.y)
+    const A = pointAbstrait(0, ordOrigine)
+    const B = pointAbstrait(fracDen, ordOrigine + fracNum)
+    const Bx = pointAbstrait(B.x, A.y)
     const sABx = A.x !== Bx.x || A.y !== Bx.y ? segment(A, Bx) : vide2d()
     const sBBx = B.x !== Bx.x || B.y !== Bx.y ? segment(B, Bx) : vide2d()
 

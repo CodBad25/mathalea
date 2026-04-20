@@ -1,6 +1,6 @@
 import { colorToLatexOrHTML } from '../../lib/2d/colorToLatexOrHtml'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { repere } from '../../lib/2d/reperes'
 import {
   representant,
@@ -222,13 +222,13 @@ export default class ProduitScalaireCoordonnees extends Exercice {
             objets = []
             const xA = randint(-3, -1)
             const yA = randint(-1, 1)
-            const A = point(xA, yA)
+            const A = pointAbstrait(xA, yA)
             const xu = randint(-2, 2, 0)
             const yu = randint(-5, 5)
             const u = vecteur(xu, yu)
             const xB = randint(1, 2)
             const yB = randint(-1, 0)
-            const B = point(xB, yB)
+            const B = pointAbstrait(xB, yB)
             const xv = randint(-2, 2)
             const yv = randint(-5, 5, 0)
             const v = vecteur(xv, yv)

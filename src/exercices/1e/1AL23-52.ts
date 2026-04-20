@@ -72,7 +72,7 @@ export default class EtudeParabole extends Exercice {
     correction1 += `<br><br> Le sommet du graphe de $f$ a donc pour coordonnées $${miseEnEvidence(`\\left(${pAlpha.simplifie().texFractionSimplifiee} \\,;\\, ${pPoly.evaluer({ x: pAlpha }).texFractionSimplifiee}\\right)`)}$.`
 
     let question2 = 'Déterminer les zéros de la fonction.'
-    question2 += `<br><br>${numAlpha(0)} Le graphe de $f$ intersecte-t-il l'axe des abscisses ? Si oui, déterminer les coordonnées de ce(s) point(s) d'intersection.`
+    question2 += `<br><br>${numAlpha(0)} Le graphe de $f$ intersecte-t-il l'axe des abscisses ? Si oui, déterminer les coordonnées de ce(s) pointAbstrait(s) d'intersection.`
     question2 += `<br><br>${numAlpha(1)} En déduire le tableau des signes de la fonction $f$.`
 
     let correction2 = `On résout l'équation $f(x)=0$, c'est-à-dire $${p.printToLatex()}$ en calculant le discriminant.`

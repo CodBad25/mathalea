@@ -1,4 +1,4 @@
-import { point } from '../../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { segment } from '../../../lib/2d/segmentsVecteurs'
 import { labelPoint, latexParCoordonnees } from '../../../lib/2d/textes'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
@@ -31,8 +31,8 @@ export default class NomExercice extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const A = point(0, 0, '', 'below')
-    const B = point(3, 0, '', 'below')
+    const A = pointAbstrait(0, 0, '', 'below')
+    const B = pointAbstrait(3, 0, '', 'below')
     const segAB = segment(A, B)
     segAB.styleExtremites = '->'
     const a = this.canOfficielle ? 2 : randint(1, 5) * 2

@@ -1,7 +1,7 @@
 import { codageSegments } from '../../../lib/2d/CodageSegment'
 import { courbeInterpolee } from '../../../lib/2d/CourbeInterpolee.1'
 import { demiDroite } from '../../../lib/2d/DemiDroite'
-import { point } from '../../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { droite } from '../../../lib/2d/droites'
 import { repere } from '../../../lib/2d/reperes'
 import {
@@ -33,11 +33,11 @@ import Exercice from '../../Exercice'
 import { grille } from '../../../lib/2d/Grille'
 import { polyline } from '../../../lib/2d/Polyline'
 import { tracePoint } from '../../../lib/2d/TracePoint'
+import { bleuMathalea } from '../../../lib/colors'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../../lib/interactif/questionMathLive'
 import type { NestedObjetMathalea2dArray } from '../../../types/2d'
-import { bleuMathalea } from '../../../lib/colors'
 
 export const titre = 'CAN Seconde sujet 2023'
 export const interactifReady = true
@@ -122,8 +122,8 @@ export default class SujetCAN2023Seconde extends Exercice {
     const xA26 = randint(2, 6)
     const yA26 = randint(2, 4)
     const yB26 = randint(0, 1)
-    const A26 = point(xA26, yA26)
-    const B26 = point(0, yB26)
+    const A26 = pointAbstrait(xA26, yA26)
+    const B26 = pointAbstrait(0, yB26)
     const x0 = randint(-6, -4)
     const y0 = randint(3, 5)
     const x1 = randint(-2, 1)
@@ -568,10 +568,10 @@ export default class SujetCAN2023Seconde extends Exercice {
           {
             a = randint(-12, -2)
             b = randint(3, 12)
-            const A = point(0, 0, '1', 'below')
-            const B = point(4, 0, 'M', 'below')
-            const C = point(8, 0)
-            const D = point(9, 0)
+            const A = pointAbstrait(0, 0, '1', 'below')
+            const B = pointAbstrait(4, 0, 'M', 'below')
+            const C = pointAbstrait(8, 0)
+            const D = pointAbstrait(9, 0)
             const s = segment(C, D)
             s.styleExtremites = '->'
             const objets: NestedObjetMathalea2dArray = []
@@ -925,22 +925,22 @@ export default class SujetCAN2023Seconde extends Exercice {
             b = k * a // longueur DC
             c = a + 1 // longueur AE
             d = k * c // longueur AD
-            const A = point(0, 0, 'A', 'below')
-            const B = point(2, -0.4, 'B', 'below')
-            const C = point(5, -1, 'C', 'below')
-            const D = point(4, 2, 'D', 'above')
-            const E = point(1.6, 0.8, 'E', 'above')
+            const A = pointAbstrait(0, 0, 'A', 'below')
+            const B = pointAbstrait(2, -0.4, 'B', 'below')
+            const C = pointAbstrait(5, -1, 'C', 'below')
+            const D = pointAbstrait(4, 2, 'D', 'above')
+            const E = pointAbstrait(1.6, 0.8, 'E', 'above')
             const xmin = -1
             const ymin = -2
             const xmax = 6
             const ymax = 4.5
             const sCote1 = segment(
-              point(A.x - 0.3, A.y + 0.5),
-              point(E.x - 0.2, E.y + 0.5),
+              pointAbstrait(A.x - 0.3, A.y + 0.5),
+              pointAbstrait(E.x - 0.2, E.y + 0.5),
             )
             const sCote2 = segment(
-              point(A.x - 0.8, A.y + 1.3),
-              point(D.x - 0.8, D.y + 1.3),
+              pointAbstrait(A.x - 0.8, A.y + 1.3),
+              pointAbstrait(D.x - 0.8, D.y + 1.3),
             )
             sCote1.styleExtremites = '<->'
             sCote2.styleExtremites = '<->'
@@ -1039,11 +1039,11 @@ export default class SujetCAN2023Seconde extends Exercice {
             b = k * a // BE
             c = randint(b, 22) // DC
             d = k * c // AD
-            const A = point(6, 0, 'A', 'below right')
-            const D = point(0.46, 2.92, 'D', 'above left')
-            const E = point(4, 1, 'E', 'below')
-            const B = point(6.22, 2, 'B', 'above right')
-            const C = point(0, -1, 'C', 'left')
+            const A = pointAbstrait(6, 0, 'A', 'below right')
+            const D = pointAbstrait(0.46, 2.92, 'D', 'above left')
+            const E = pointAbstrait(4, 1, 'E', 'below')
+            const B = pointAbstrait(6.22, 2, 'B', 'above right')
+            const C = pointAbstrait(0, -1, 'C', 'left')
             const xmin = -1
             const ymin = -1.5
             const xmax = 7.5
@@ -1233,8 +1233,8 @@ export default class SujetCAN2023Seconde extends Exercice {
               const grilleObj = grille(-2, ymin, xmax, ymax - 1, 'gray', 1, 1)
 
               // Créer le segment unité en haut
-              const G = point(0, 4, 'G', 'above')
-              const H = point(longueurUnite, 4, 'H', 'above')
+              const G = pointAbstrait(0, 4, 'G', 'above')
+              const H = pointAbstrait(longueurUnite, 4, 'H', 'above')
               const segmentUnite = segmentAvecExtremites(G, H)
               segmentUnite.epaisseur = 2
 
@@ -1247,7 +1247,7 @@ export default class SujetCAN2023Seconde extends Exercice {
 
               // Créer les points de la ligne brisée
               // On commence à (0, 2) et on crée des segments horizontaux et verticaux
-              const points = [point(0, 2)]
+              const points = [pointAbstrait(0, 2)]
               let xActuel = 0
               let yActuel = 2
               let longueurRestante = longueurLigneBrisee
@@ -1269,7 +1269,7 @@ export default class SujetCAN2023Seconde extends Exercice {
                   }
                   const longueur = Math.min(randint(1, 3), longueurMax)
                   xActuel += longueur
-                  points.push(point(xActuel, yActuel))
+                  points.push(pointAbstrait(xActuel, yActuel))
                   longueurRestante -= longueur
                   longueurReelle += longueur
                 } else {
@@ -1281,7 +1281,7 @@ export default class SujetCAN2023Seconde extends Exercice {
                   const yFinal = Math.max(0, Math.min(3, nouveauY))
                   const longueurEffective = Math.abs(yFinal - yActuel)
                   yActuel = yFinal
-                  points.push(point(xActuel, yActuel))
+                  points.push(pointAbstrait(xActuel, yActuel))
                   longueurRestante -= longueurEffective
                   longueurReelle += longueurEffective
                 }
@@ -1390,8 +1390,8 @@ export default class SujetCAN2023Seconde extends Exercice {
           break
         case 26:
           {
-            const A0 = point(xA26, 0)
-            const A1 = point(0, yA26)
+            const A0 = pointAbstrait(xA26, 0)
+            const A1 = pointAbstrait(0, yA26)
             const s26 = segment(A26, A0)
             const s26B = segment(A26, A1)
             s26.epaisseur = 1.5
@@ -1539,10 +1539,10 @@ export default class SujetCAN2023Seconde extends Exercice {
           break
         case 28:
           {
-            const A0 = point(x0, y0)
-            const A1 = point(x1, y1)
-            const A2 = point(x2, y2)
-            const A3 = point(x3, y3)
+            const A0 = pointAbstrait(x0, y0)
+            const A1 = pointAbstrait(x1, y1)
+            const A2 = pointAbstrait(x2, y2)
+            const A3 = pointAbstrait(x3, y3)
             const listeB = choice([
               [x0, y0],
               [x1, y1],

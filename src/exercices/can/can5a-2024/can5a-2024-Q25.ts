@@ -1,6 +1,6 @@
 import { codageAngle } from '../../../lib/2d/angles'
 import { fixeBordures } from '../../../lib/2d/fixeBordures'
-import { point } from '../../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { rapporteur } from '../../../lib/2d/Rapporteur'
 import { segment } from '../../../lib/2d/segmentsVecteurs'
 import { rotation } from '../../../lib/2d/transformations'
@@ -41,7 +41,7 @@ export default class NomExercice extends ExerciceSimple {
     // Commentaires pour Gilles concernant Q25 de la CAN officielle
 
     const posA = 'below' // posA est la position de A autour du point. Ici, 'below' (en dessous)
-    const A = point(0, 0, 'C', posA) // Le point A se nomme C dans ton cas.
+    const A = pointAbstrait(0, 0, 'C', posA) // Le point A se nomme C dans ton cas.
 
     const angRapporteurAvecHorizontale = this.canOfficielle
       ? 20
@@ -49,7 +49,7 @@ export default class NomExercice extends ExerciceSimple {
     const angB = this.canOfficielle
       ? 50
       : angRapporteurAvecHorizontale + choice([10, 20, 30, 40, 50, 70, 80]) // angB est l'angle de A avec l'horizontale.
-    const B1 = rotation(point(tailleRapporteur + 0.5, 0), A, angB)
+    const B1 = rotation(pointAbstrait(tailleRapporteur + 0.5, 0), A, angB)
     const posB = 'right'
     const B = pointSurSegment(A, B1, tailleRapporteur + 0.5, 'A', posB) // Le point B se nomme A dans ton cas
 

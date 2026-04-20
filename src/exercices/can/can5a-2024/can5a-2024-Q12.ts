@@ -1,6 +1,6 @@
 import { codageAngleDroit } from '../../../lib/2d/CodageAngleDroit'
 import { codageSegment } from '../../../lib/2d/CodageSegment'
-import { point } from '../../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { polygone } from '../../../lib/2d/polygones'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
@@ -29,14 +29,14 @@ export default class NomExercice extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const A1 = point(0, 0, 'A', 'below')
-    const B1 = point(5, 0, 'B', 'below')
-    const C1 = point(5, 3, 'C', 'above')
-    const D1 = point(0, 3, 'D', 'above')
-    const B2 = point(3, 0, 'B', 'below')
-    const C2 = point(3, 3, 'C', 'above')
-    const D2 = point(0, 3, 'D', 'above')
-    const C3 = point(1.5, 2.6, 'C', 'above')
+    const A1 = pointAbstrait(0, 0, 'A', 'below')
+    const B1 = pointAbstrait(5, 0, 'B', 'below')
+    const C1 = pointAbstrait(5, 3, 'C', 'above')
+    const D1 = pointAbstrait(0, 3, 'D', 'above')
+    const B2 = pointAbstrait(3, 0, 'B', 'below')
+    const C2 = pointAbstrait(3, 3, 'C', 'above')
+    const D2 = pointAbstrait(0, 3, 'D', 'above')
+    const C3 = pointAbstrait(1.5, 2.6, 'C', 'above')
     const P1 = polygone(A1, B1, C1, D1) // rectangle
     const P2 = polygone(A1, B2, C2, D2) // carré
     const P3 = polygone(A1, B2, C3) // triangle équi
