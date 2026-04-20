@@ -5,31 +5,27 @@ import { polyline } from '../../lib/2d/Polyline'
 import { repere } from '../../lib/2d/reperes'
 import { texteParPosition } from '../../lib/2d/textes'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import {
-  ajouteChampTexteMathLive,
-  ajouteQuestionMathlive,
-} from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
 import { prenomF } from '../../lib/outils/Personne'
 import { texNombre } from '../../lib/outils/texNombre'
 import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
-import { listeQuestionsToContenu, randint } from '../../modules/outils'
+import { gestionnaireFormulaireTexte, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
 import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { grille } from '../../lib/2d/Grille'
 import { vide2d } from '../../lib/2d/Vide2d'
-import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { toutPourUnPoint } from '../../lib/interactif/mathLive'
-import { miseEnEvidence } from '../../lib/outils/embellissements'
-import { sp } from '../../lib/outils/outilString'
-import Grandeur from '../../modules/Grandeur'
 import { bleuMathalea } from '../../lib/colors'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { toutAUnPoint } from '../../lib/interactif/mathLive'
+import { addMultiMathfield } from '../../lib/interactif/MultiMathfield/MultiMathfield'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { numAlpha, sp } from '../../lib/outils/outilString'
 
 export const titre =
   "Résoudre un problème s'appuyant sur la lecture d'une représentation graphique"
-export const interactifType = 'mathLive'
+export const interactifType = 'multiMathfield'
 export const interactifReady = true
 export const amcReady = true
 export const amcType = 'AMCHybride'
@@ -39,7 +35,7 @@ export const dateDeModifImportante = '28/12/2024' // Changements pour homogéné
  * Problème avec lecture de représentation graphique d'une fonction
  * @author Rémi Angot
  */
-export const uuid = 'b428f'
+export const uuid = 'b429f'
 
 export const refs = {
   'fr-fr': ['4F12', '3AutoP09-1'],
@@ -48,16 +44,14 @@ export const refs = {
 export default class ExploiterRepresentationGraphique extends Exercice {
   constructor() {
     super()
-    this.besoinFormulaireNumerique = [
-      'Choix des problèmes',
-      4,
-      '1 : Projectile\n2 : Trajet à vélo\n3 : Température\n4 : Au hasard',
+    this.besoinFormulaireTexte = [
+      'Choix des problèmes (nombres séparés par des tirets)',
+      '1 : Projectile\n2 : Trajet à vélo\n3 : Température\n4 : Mélange',
     ]
 
     this.nbQuestions = 1
 
-    this.nbQuestionsModifiable = false
-    this.sup = 4
+    this.sup = '4'
   }
 
   nouvelleVersion() {
@@ -76,55 +70,53 @@ export default class ExploiterRepresentationGraphique extends Exercice {
     let situation
     let repeRe
     let tempsPause
-    let periodeRapide
-    if (this.sup === 1) {
-      typeDeProbleme = choice(['projectile', 'projectile2'])
-    } else if (this.sup === 2) {
-      typeDeProbleme = 'velo'
-    } else if (this.sup === 3) {
-      typeDeProbleme = 'temperature'
-    } else {
-      typeDeProbleme = choice([
-        'temperature',
-        'projectile',
-        'projectile2',
-        'velo',
-      ])
-    }
-    let f, t1, l, g1, r, graphique
-    let indiceQuestion = 0
-    switch (typeDeProbleme) {
-      case 'projectile': // Courbe de l'altitude de vol en fonction du temps
-        {
-          const V0 = choice(vitessesInitiales)
-          t1 = Math.round((Math.sqrt(2) * V0) / 10)
-          xscale = 9 / t1
-          f = (x: number) =>
-            Math.max(-5 * x ** 2 + (V0 * Math.sqrt(2) * x) / 2, 0)
-          repeRe = repere({
-            yLegende: 'Hauteur (en m)',
-            xLegende: 'Temps (en s)',
-            xUnite: 1 * xscale,
-            yUnite: 0.1 * xscale,
-            xMin: 0,
-            yMin: 0,
-            xMax: t1 + 1,
-            yMax: f(t1 / 2) + 20,
-            xThickDistance: 1,
-            yThickDistance: 10,
-            grilleSecondaireY: true,
-            grilleSecondaireYDistance: 2,
-            grilleSecondaireYMin: 0,
-            grilleSecondaireYMax: f(t1 / 2) + 5,
-          }) // ()
-          graphique = courbe(f, { repere: repeRe, xMax: t1 + 1, step: 0.2 })
-          zero = texteParPosition('0', -0.5, 0, 0, 'black', 1, 'milieu', true)
-          this.introduction =
-            "On a représenté ci-dessous l'évolution de la hauteur d'un projectile lancé depuis le sol (en m) en fonction du temps (en secondes)."
+    const typesDeProblemes = gestionnaireFormulaireTexte({
+      saisie: this.sup,
+      min: 1,
+      max: 3,
+      melange: 4,
+      nbQuestions: this.nbQuestions,
+      defaut: 4,
+    }).map(Number)
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+      let texte = ''
+      let texteCorr = ''
+      if (typesDeProblemes[i] === 1) {
+        typeDeProbleme = 'projectile2' // choice(['projectile', 'projectile2'])
+      } else {
+        typeDeProbleme = typesDeProblemes[i] === 2 ? 'velo' : 'temperature'
+      }
 
-          this.introduction +=
-            '<br><br>' +
-            mathalea2d(
+      let f, t1, l, g1, r, graphique
+      switch (typeDeProbleme) {
+        case 'projectile': // Courbe de l'altitude de vol en fonction du temps
+          {
+            const V0 = choice(vitessesInitiales)
+            t1 = Math.round((Math.sqrt(2) * V0) / 10)
+            xscale = 9 / t1
+            f = (x: number) =>
+              Math.max(-5 * x ** 2 + (V0 * Math.sqrt(2) * x) / 2, 0)
+            repeRe = repere({
+              yLegende: 'Hauteur (en m)',
+              xLegende: 'Temps (en s)',
+              xUnite: 1 * xscale,
+              yUnite: 0.1 * xscale,
+              xMin: 0,
+              yMin: 0,
+              xMax: t1 + 1,
+              yMax: f(t1 / 2) + 20,
+              xThickDistance: 1,
+              yThickDistance: 10,
+              grilleSecondaireY: true,
+              grilleSecondaireYDistance: 2,
+              grilleSecondaireYMin: 0,
+              grilleSecondaireYMax: f(t1 / 2) + 5,
+            }) // ()
+            graphique = courbe(f, { repere: repeRe, xMax: t1 + 1, step: 0.2 })
+            zero = texteParPosition('0', -0.5, 0, 0, 'black', 1, 'milieu', true)
+            texte = `On a représenté ci-dessous l'évolution de la hauteur d'un projectile lancé depuis le sol (en m) en fonction du temps (en secondes).<br>
+
+            ${mathalea2d(
               Object.assign({}, fixeBordures([repeRe, graphique, zero]), {
                 pixelsParCm: 30,
                 scale: 1,
@@ -132,136 +124,125 @@ export default class ExploiterRepresentationGraphique extends Exercice {
               repeRe,
               graphique,
               zero,
+            )}<br><br>
+            À l'aide de ce graphique, répondre aux questions suivantes :<br><br>`
+            const introAMC = texte
+            texte += addMultiMathfield(this, i, {
+              dataTemplate: `a) Au bout de combien de temps le projectile retombe-t-il au sol ? %{champ1}\n
+              b) Quelle est la hauteur maximale atteinte par le projectile ? %{champ2}`,
+              dataOptions: {
+                champ1: { keyboard: KeyboardType.clavierHms },
+                champ2: {
+                  keyboard: KeyboardType.longueur,
+                  texteApres: "(Préciser l'unité.",
+                },
+              },
+            })
+
+            handleAnswers(
+              this,
+              i,
+              {
+                champ1: {
+                  value: texNombre(t1, 0) + 's',
+                  options: { HMS: true },
+                },
+                champ2: {
+                  value: `${Math.round(f(t1 / 2))}m`,
+                  options: { unite: true, precisionUnite: 0 },
+                },
+                bareme: toutAUnPoint,
+              },
+              { formatInteractif: 'multiMathfield' },
             )
-
-          this.introduction +=
-            '<br><br>' +
-            "À l'aide de ce graphique, répondre aux questions suivantes :"
-
-          this.listeQuestions.push(
-            'Au bout de combien de temps le projectile retombe-t-il au sol ?' +
-              ajouteChampTexteMathLive(
-                this,
-                indiceQuestion,
-                KeyboardType.clavierHms,
-              ),
-          )
-          handleAnswers(this, indiceQuestion, {
-            reponse: { value: texNombre(t1, 0) + 's', options: { HMS: true } },
-          })
-          indiceQuestion++
-          this.listeCorrections.push(
-            `Au bout de $${miseEnEvidence(
+            texteCorr = `${numAlpha(0)} Au bout de $${miseEnEvidence(
               texNombre(t1) + sp() + '\\text{s}',
             )}$, le projectile retombe au sol car la courbe passe par le point de coordonnées $(${texNombre(
               t1,
-            )}~;~0)$.`,
-          )
-          this.listeQuestions.push(
-            'Quelle est la hauteur maximale atteinte par le projectile ?' +
-              ajouteChampTexteMathLive(
-                this,
-                indiceQuestion,
-                KeyboardType.longueur,
-                {
-                  texteApres: ` (Préciser l'unité.)`,
-                },
-              ),
-          )
-          handleAnswers(this, indiceQuestion, {
-            reponse: {
-              value: `${Math.round(f(t1 / 2))}m`,
-              options: { unite: true, precisionUnite: 0 },
-            },
-          })
-          indiceQuestion++
-          this.listeCorrections.push(
-            `Le point le plus haut de la courbe a pour abscisse $${texNombre(
+            )}~;~0)$.<br>
+            ${numAlpha(1)} Le point le plus haut de la courbe a pour abscisse $${texNombre(
               t1 / 2,
-            )}$ et pour ordonnée $${Math.round(f(t1 / 2))}$ donc la hauteur maximale est de $${miseEnEvidence(Math.round(f(t1 / 2)) + sp() + '\\text{m}')}$.`,
-          )
-          if (context.isAmc) {
-            enonceAMC = this.introduction
-            for (let i = 0; i < this.listeQuestions.length; i++) {
-              enonceAMC += `${i + 1}) ${this.listeQuestions[i]}<br>`
-            }
-            this.autoCorrection[0] = {
-              enonce: enonceAMC,
-              propositions: [
-                {
-                  type: 'AMCNum',
-                  propositions: [
-                    {
-                      texte: this.listeCorrections[0],
-                      statut: '',
-                      reponse: {
-                        texte: '1)',
-                        valeur: t1,
-                        param: {
-                          digits: 2,
-                          decimals: 0,
-                          signe: false,
-                          approx: 0,
+            )}$ et pour ordonnée $${Math.round(f(t1 / 2))}$ donc la hauteur maximale est de $${miseEnEvidence(Math.round(f(t1 / 2)) + sp() + '\\text{m}')}$.`
+
+            if (context.isAmc) {
+              enonceAMC = introAMC
+              for (let i = 0; i < this.listeQuestions.length; i++) {
+                enonceAMC += `${i + 1}) ${this.listeQuestions[i]}<br>`
+              }
+              this.autoCorrection[0] = {
+                enonce: enonceAMC,
+                propositions: [
+                  {
+                    type: 'AMCNum',
+                    propositions: [
+                      {
+                        texte: this.listeCorrections[0],
+                        statut: '',
+                        reponse: {
+                          texte: '1)',
+                          valeur: t1,
+                          param: {
+                            digits: 2,
+                            decimals: 0,
+                            signe: false,
+                            approx: 0,
+                          },
                         },
                       },
-                    },
-                  ],
-                },
-                {
-                  type: 'AMCNum',
-                  propositions: [
-                    {
-                      texte: this.listeCorrections[1],
-                      statut: '',
-                      reponse: {
-                        texte: '1)',
-                        valeur: Math.round(f(t1 / 2)),
-                        param: {
-                          digits: 3,
-                          decimals: 0,
-                          signe: false,
-                          approx: 0,
+                    ],
+                  },
+                  {
+                    type: 'AMCNum',
+                    propositions: [
+                      {
+                        texte: this.listeCorrections[1],
+                        statut: '',
+                        reponse: {
+                          texte: '1)',
+                          valeur: Math.round(f(t1 / 2)),
+                          param: {
+                            digits: 3,
+                            decimals: 0,
+                            signe: false,
+                            approx: 0,
+                          },
                         },
                       },
-                    },
-                  ],
-                },
-              ],
+                    ],
+                  },
+                ],
+              }
             }
           }
-        }
-        break
-      case 'projectile2':
-        {
-          const V0 = choice(vitessesInitialesBis)
-          t1 = Math.round(V0 ** 2 / 10)
-          xscale = 52 / t1
-          f = (x: number) => Math.max((-10 * x ** 2) / V0 ** 2 + x, 0)
-          repeRe = repere({
-            yLegende: 'Hauteur (en m)',
-            xLegende: 'Distance (en m)',
-            xUnite: 0.25 * xscale,
-            yUnite: 0.5 * xscale,
-            xMin: 0,
-            yMin: 0,
-            xMax: t1 + 4,
-            yMax: f(t1 / 2) + 2.1,
-            xThickDistance: 4,
-            yThickDistance: 1,
-            grilleSecondaireY: true,
-            grilleSecondaireYDistance: 0.25,
-            grilleSecondaireYMin: 0,
-            grilleSecondaireYMax: f(t1 / 2) + 1,
-          }) // ()
-          graphique = courbe(f, { repere: repeRe, step: 0.5 })
-          zero = texteParPosition('0', -0.5, 0, 0, 'black', 1, 'milieu', true)
+          break
+        case 'projectile2':
+          {
+            const V0 = choice(vitessesInitialesBis)
+            t1 = Math.round(V0 ** 2 / 10)
+            xscale = 52 / t1
+            f = (x: number) => Math.max((-10 * x ** 2) / V0 ** 2 + x, 0)
+            repeRe = repere({
+              yLegende: 'Hauteur (en m)',
+              xLegende: 'Distance (en m)',
+              xUnite: 0.25 * xscale,
+              yUnite: 0.5 * xscale,
+              xMin: 0,
+              yMin: 0,
+              xMax: t1 + 4,
+              yMax: f(t1 / 2) + 2.1,
+              xThickDistance: 4,
+              yThickDistance: 1,
+              grilleSecondaireY: true,
+              grilleSecondaireYDistance: 0.25,
+              grilleSecondaireYMin: 0,
+              grilleSecondaireYMax: f(t1 / 2) + 1,
+            }) // ()
+            graphique = courbe(f, { repere: repeRe, step: 0.5 })
+            zero = texteParPosition('0', -0.5, 0, 0, 'black', 1, 'milieu', true)
 
-          this.introduction =
-            "On a représenté ci-dessous la trajectoire d'un projectile lancé depuis le sol."
+            const introAMC = `On a représenté ci-dessous la trajectoire d'un projectile lancé depuis le sol.<br>
 
-          this.introduction +=
-            '<br><br>' +
-            mathalea2d(
+            ${mathalea2d(
               Object.assign({}, fixeBordures([repeRe, graphique, zero]), {
                 pixelsParCm: 30,
                 scale: 1,
@@ -269,246 +250,212 @@ export default class ExploiterRepresentationGraphique extends Exercice {
               repeRe,
               graphique,
               zero,
-            )
-
-          this.introduction +=
-            '<br><br>' +
-            "À l'aide de ce graphique, répondre aux questions suivantes :"
-
-          this.listeQuestions.push(
-            'À quelle distance le projectile est-il retombé au sol ?' +
-              ajouteChampTexteMathLive(
-                this,
-                indiceQuestion,
-                KeyboardType.longueur,
-                {
-                  texteApres: ` (Préciser l'unité.)`,
+            )}
+            <br><br>
+             À l'aide de ce graphique, répondre aux questions suivantes :<br><br>`
+            texte = introAMC
+            texte += addMultiMathfield(this, i, {
+              dataTemplate: `a) À quelle distance le projectile est-il retombé au sol ? %{champ1}\n
+          b) Quelle est la hauteur maximale atteinte par le projectile ? %{champ2}`,
+              dataOptions: {
+                champ1: {
+                  keyboard: KeyboardType.longueur,
+                  texteApres: "(Préciser l'unité.)",
                 },
-              ),
-          )
-          handleAnswers(this, indiceQuestion, {
-            reponse: {
-              value: `${t1}m`,
-              options: { unite: true, precisionUnite: 0 },
-            },
-          })
-          indiceQuestion++
+                champ2: {
+                  keyboard: KeyboardType.longueur,
+                  texteApres: "(Préciser l'unité.)",
+                },
+              },
+            })
 
-          this.listeCorrections.push(
-            `Le projectile retombe au sol à une distance de $${miseEnEvidence(texNombre(t1) + sp() + '\\text{m}')}$, car la courbe passe par le point de coordonnées $(${texNombre(
+            handleAnswers(
+              this,
+              i,
+              {
+                champ1: {
+                  value: texNombre(t1, 0) + 'm',
+                  options: { unite: true, precisionUnite: 0 },
+                },
+                champ2: {
+                  value: `${Math.round(f(t1 / 2))}m`,
+                  options: { unite: true, precisionUnite: 0 },
+                },
+                bareme: toutAUnPoint,
+              },
+              { formatInteractif: 'multiMathfield' },
+            )
+            texteCorr = `${numAlpha(0)} Le projectile retombe au sol à une distance de $${miseEnEvidence(texNombre(t1) + sp() + '\\text{m}')}$, car la courbe passe par le point de coordonnées $(${texNombre(
               t1,
-            )}~;~0)$.`,
-          )
-
-          this.listeQuestions.push(
-            'Quelle est la hauteur maximale atteinte par le projectile ?' +
-              ajouteChampTexteMathLive(
-                this,
-                indiceQuestion,
-                KeyboardType.longueur,
-                {
-                  texteApres: ` (Préciser l'unité.)`,
-                },
-              ),
-          )
-          handleAnswers(this, indiceQuestion, {
-            reponse: {
-              value: `${Math.round(f(t1 / 2))}m`,
-              options: { unite: true, precisionUnite: 0 },
-            },
-          })
-          indiceQuestion++
-
-          this.listeCorrections.push(
-            `Le point le plus haut de la courbe a pour abscisse $${texNombre(t1 / 2)}$ et pour ordonnée $${Math.round(f(t1 / 2))}$ donc la hauteur maximale est de $${miseEnEvidence(Math.round(f(t1 / 2)) + sp() + '\\text{m}')}$.`,
-          )
-          if (context.isAmc) {
-            enonceAMC = this.introduction
-            for (let i = 0; i < this.listeQuestions.length; i++) {
-              enonceAMC += `${i + 1}) ${this.listeQuestions[i]}<br>`
-            }
-            this.autoCorrection[0] = {
-              enonce: enonceAMC,
-              propositions: [
-                {
-                  type: 'AMCNum',
-                  propositions: [
-                    {
-                      texte: this.listeCorrections[0],
-                      statut: '',
-                      reponse: {
-                        texte: '1)',
-                        valeur: t1,
-                        param: {
-                          digits: 2,
-                          decimals: 0,
-                          signe: false,
-                          approx: 0,
+            )}~;~0)$.<br>
+             ${numAlpha(1)} Le point le plus haut de la courbe a pour abscisse $${texNombre(t1 / 2)}$ et pour ordonnée $${Math.round(f(t1 / 2))}$ donc la hauteur maximale est de $${miseEnEvidence(Math.round(f(t1 / 2)) + sp() + '\\text{m}')}$.`
+            if (context.isAmc) {
+              enonceAMC = introAMC
+              for (let i = 0; i < this.listeQuestions.length; i++) {
+                enonceAMC += `${i + 1}) ${this.listeQuestions[i]}<br>`
+              }
+              this.autoCorrection[0] = {
+                enonce: enonceAMC,
+                propositions: [
+                  {
+                    type: 'AMCNum',
+                    propositions: [
+                      {
+                        texte: this.listeCorrections[0],
+                        statut: '',
+                        reponse: {
+                          texte: '1)',
+                          valeur: t1,
+                          param: {
+                            digits: 2,
+                            decimals: 0,
+                            signe: false,
+                            approx: 0,
+                          },
                         },
                       },
-                    },
-                  ],
-                },
-                {
-                  type: 'AMCNum',
-                  propositions: [
-                    {
-                      texte: this.listeCorrections[1],
-                      statut: '',
-                      reponse: {
-                        texte: '1)',
-                        valeur: Math.round(f(t1 / 2)),
-                        param: {
-                          digits: 3,
-                          decimals: 0,
-                          signe: false,
-                          approx: 0,
+                    ],
+                  },
+                  {
+                    type: 'AMCNum',
+                    propositions: [
+                      {
+                        texte: this.listeCorrections[1],
+                        statut: '',
+                        reponse: {
+                          texte: '1)',
+                          valeur: Math.round(f(t1 / 2)),
+                          param: {
+                            digits: 3,
+                            decimals: 0,
+                            signe: false,
+                            approx: 0,
+                          },
                         },
                       },
-                    },
-                  ],
-                },
-              ],
+                    ],
+                  },
+                ],
+              }
             }
           }
-        }
-        break
+          break
 
-      case 'velo':
-        {
-          const v1 = randint(1, 4)
-          const v2 = randint(1, 3, v1)
-          const v3 = v1 + v2
-          r = repere({
-            yLegende: 'Distance (en km)',
-            xLegende: 'Temps (en min)',
-            xMin: 0,
-            yMin: 0,
-            xMax: 60,
-            yMax: v3 + 1,
-            xUnite: 0.1,
-            yUnite: 1,
-            xThickDistance: 10,
-            yThickDistance: 1,
-            grilleSecondaireY: true,
-            grilleSecondaireX: true,
-            grilleSecondaireYDistance: 0.2,
-            grilleSecondaireXDistance: 2,
-            grilleSecondaireXMin: 0,
-            grilleSecondaireXMax: 60,
-            grilleSecondaireYMin: 0,
-            grilleSecondaireYMax: v3 + 1,
-          })
-          g1 = grille(-1, -1, 6, 8, 'black')
-          g1.opacite = 1
-          situation = randint(1, 3)
-          zero = texteParPosition('0', -0.7, 0, 0, 'black', 1, 'milieu', true)
+        case 'velo':
+          {
+            const v1 = randint(1, 4)
+            const v2 = randint(1, 3, v1)
+            const v3 = v1 + v2
+            r = repere({
+              yLegende: 'Distance (en km)',
+              xLegende: 'Temps (en min)',
+              xMin: 0,
+              yMin: 0,
+              xMax: 60,
+              yMax: v3 + 1,
+              xUnite: 0.1,
+              yUnite: 1,
+              xThickDistance: 10,
+              yThickDistance: 1,
+              grilleSecondaireY: true,
+              grilleSecondaireX: true,
+              grilleSecondaireYDistance: 0.2,
+              grilleSecondaireXDistance: 2,
+              grilleSecondaireXMin: 0,
+              grilleSecondaireXMax: 60,
+              grilleSecondaireYMin: 0,
+              grilleSecondaireYMax: v3 + 1,
+            })
+            g1 = grille(-1, -1, 6, 8, 'black')
+            g1.opacite = 1
+            situation = randint(1, 3)
+            zero = texteParPosition('0', -0.7, 0, 0, 'black', 1, 'milieu', true)
 
-          if (situation === 1) {
-            l = polyline(
-              [
-                pointAbstrait(0, 0),
-                pointAbstrait(1, v1),
-                pointAbstrait(2, v3),
-                pointAbstrait(3, v3),
-                pointAbstrait(4, 0),
-              ],
-              bleuMathalea,
-            )
-            tempsPause = 20
-            periodeRapide = 'de la 30e à la 40e minute'
-          } else if (situation === 2) {
-            l = polyline(
-              [
-                pointAbstrait(0, 0),
-                pointAbstrait(1, v3),
-                pointAbstrait(2, v3),
-                pointAbstrait(3, v2),
-                pointAbstrait(4, 0),
-              ],
-              bleuMathalea,
-            )
-            tempsPause = 10
-            periodeRapide = 'durant les 10 premières minutes'
-          } else {
-            l = polyline(
-              [
-                pointAbstrait(0, 0),
-                pointAbstrait(1, v3),
-                pointAbstrait(2, v2),
-                pointAbstrait(3, v2),
-                pointAbstrait(4, 0),
-              ],
-              bleuMathalea,
-            )
-            tempsPause = 20
-            periodeRapide = 'durant les 10 premières minutes'
-          }
-          l.epaisseur = 2
+            if (situation === 1) {
+              l = polyline(
+                [
+                  pointAbstrait(0, 0),
+                  pointAbstrait(1, v1),
+                  pointAbstrait(2, v3),
+                  pointAbstrait(3, v3),
+                  pointAbstrait(4, 0),
+                ],
+                bleuMathalea,
+              )
+              tempsPause = 20
+            } else if (situation === 2) {
+              l = polyline(
+                [
+                  pointAbstrait(0, 0),
+                  pointAbstrait(1, v3),
+                  pointAbstrait(2, v3),
+                  pointAbstrait(3, v2),
+                  pointAbstrait(4, 0),
+                ],
+                bleuMathalea,
+              )
+              tempsPause = 10
+            } else {
+              l = polyline(
+                [
+                  pointAbstrait(0, 0),
+                  pointAbstrait(1, v3),
+                  pointAbstrait(2, v2),
+                  pointAbstrait(3, v2),
+                  pointAbstrait(4, 0),
+                ],
+                bleuMathalea,
+              )
+              tempsPause = 20
+            }
+            l.epaisseur = 2
 
-          const fille = prenomF()
-          this.introduction = `${fille} fait du vélo avec son smartphone sur une voie-verte rectiligne qui part de chez elle. Une application lui permet de voir à quelle distance de chez elle, elle se trouve.`
-
-          this.introduction +=
-            '<br><br>' +
-            mathalea2d(
-              Object.assign({}, fixeBordures([r, l, zero]), {
-                pixelsParCm: 30,
-                scale: 1,
-              }),
-              zero,
-              r,
-              l,
-            )
-
-          this.introduction +=
-            '<br><br>' +
-            "À l'aide de ce graphique, répondre aux questions suivantes :"
-
-          this.listeQuestions.push(
-            `Que se passe-t-il après ${tempsPause} minutes de vélo ?`,
-          )
-          this.listeCorrections.push(
-            "La distance reste constante alors qu'elle est sur un chemin rectiligne. Elle a donc fait une pause.",
-          )
-
-          this.listeQuestions.push(
-            `Pendant combien de temps, ${fille}, a-t-elle fait réellement du vélo ?` +
-              ajouteQuestionMathlive({
-                exercice: this,
-                question: indiceQuestion++,
-                objetReponse: {
-                  reponse: {
-                    value: new Grandeur(30, 'min'),
-                    options: { HMS: true },
-                  },
+            const fille = prenomF()
+            const introAMC = `${fille} fait du vélo avec son smartphone sur une voie-verte rectiligne qui part de chez elle. Une application lui permet de voir à quelle distance de chez elle, elle se trouve.<br>
+${mathalea2d(
+  Object.assign({}, fixeBordures([r, l, zero]), {
+    pixelsParCm: 30,
+    scale: 1,
+  }),
+  zero,
+  r,
+  l,
+)}<br><br>
+À l'aide de ce graphique, répondre aux questions suivantes :<br><br>`
+            texte = introAMC
+            texte += addMultiMathfield(this, i, {
+              dataTemplate: `a) Que se passe-t-il après ${tempsPause} minutes de vélo ?\n
+b) Pendant combien de temps, ${fille}, a-t-elle fait réellement du vélo ? %{champ2}\n
+c) Quelle distance a-t-elle parcourue au total ? %{champ3}`,
+              dataOptions: {
+                champ2: { keyboard: KeyboardType.clavierHms },
+                champ3: {
+                  keyboard: KeyboardType.longueur,
+                  texteApres: "(Préciser l'unité.)",
                 },
-                typeInteractivite: 'mathlive',
-                classe: KeyboardType.clavierHms,
-              }),
-          )
-          this.listeCorrections.push(
-            `${fille} est partie 40 min et a fait une pause de 10 min donc elle a fait réellement du vélo pendant $${miseEnEvidence(texNombre(30) + sp() + '\\text{min}')}$.`,
-          )
+              },
+            })
 
-          this.listeQuestions.push(
-            'Quelle distance a-t-elle parcourue au total ?' +
-              ajouteQuestionMathlive({
-                exercice: this,
-                question: indiceQuestion++,
-                objetReponse: {
-                  reponse: {
-                    value: new Grandeur(2 * v3, 'km'),
-                    options: { unite: true },
-                  },
+            handleAnswers(
+              this,
+              i,
+              {
+                champ2: {
+                  value: '30 min',
+                  options: { HMS: true },
                 },
-                typeInteractivite: 'mathlive',
-                classe: KeyboardType.longueur,
-              }),
-          )
-          this.listeCorrections.push(
-            `Le point le plus loin de sa maison est à ${v3} $\\text{km}$ et ensuite elle revient chez elle, donc la distance totale est de $${miseEnEvidence(texNombre(2 * v3) + sp() + '\\text{km}')}$.`,
-          )
+                champ3: {
+                  value: `${2 * v3}km`,
+                  options: { unite: true, precisionUnite: 0 },
+                },
+                bareme: toutAUnPoint,
+              },
+              { formatInteractif: 'multiMathfield' },
+            )
+            texteCorr = `${numAlpha(0)} Après ${tempsPause} minutes de vélo, ${fille} fait une pause car la courbe devient horizontale.<br>`
+            texteCorr += `${numAlpha(1)} ${fille} est partie 40 min et a fait une pause de 10 min donc elle a fait réellement du vélo pendant $${miseEnEvidence(texNombre(30) + sp() + '\\text{min}')}$.<br>
+              ${numAlpha(2)} Le point le plus loin de sa maison est à ${v3} $\\text{km}$ et ensuite elle revient chez elle, donc la distance totale est de $${miseEnEvidence(texNombre(2 * v3) + sp() + '\\text{km}')}$.`
+            /*
 
           this.listeQuestions.push(
             'À quel moment a-t-elle été la plus rapide ?',
@@ -516,293 +463,264 @@ export default class ExploiterRepresentationGraphique extends Exercice {
           this.listeCorrections.push(
             `${fille} a été la plus rapide ${periodeRapide} où elle a effectué $${miseEnEvidence(texNombre(v3) + sp() + '\\text{km}')}$ en 10 minutes.`,
           )
-          if (context.isAmc) {
-            enonceAMC = this.introduction
-            for (let i = 0; i < this.listeQuestions.length; i++) {
-              enonceAMC += `${i + 1}) ${this.listeQuestions[i]}<br>`
-            }
-            this.autoCorrection[0] = {
-              enonce: enonceAMC,
-              propositions: [
-                {
-                  type: 'AMCNum',
-                  propositions: [
-                    {
-                      texte: this.listeCorrections[0],
-                      statut: '',
-                      reponse: {
-                        texte: '1)',
-                        valeur: 40,
-                        param: {
-                          digits: 2,
-                          decimals: 0,
-                          signe: false,
-                          approx: 0,
+            */
+            if (context.isAmc) {
+              enonceAMC = introAMC
+              for (let i = 0; i < this.listeQuestions.length; i++) {
+                enonceAMC += `${i + 1}) ${this.listeQuestions[i]}<br>`
+              }
+              this.autoCorrection[0] = {
+                enonce: enonceAMC,
+                propositions: [
+                  {
+                    type: 'AMCNum',
+                    propositions: [
+                      {
+                        texte: this.listeCorrections[0],
+                        statut: '',
+                        reponse: {
+                          texte: '1)',
+                          valeur: 40,
+                          param: {
+                            digits: 2,
+                            decimals: 0,
+                            signe: false,
+                            approx: 0,
+                          },
                         },
                       },
-                    },
-                  ],
-                },
-                {
-                  type: 'AMCNum',
-                  propositions: [
-                    {
-                      texte: this.listeCorrections[1],
-                      statut: '',
-                      reponse: {
-                        texte: '1)',
-                        valeur: 2 * v3,
-                        param: {
-                          digits: 2,
-                          decimals: 0,
-                          signe: false,
-                          approx: 0,
+                    ],
+                  },
+                  {
+                    type: 'AMCNum',
+                    propositions: [
+                      {
+                        texte: this.listeCorrections[1],
+                        statut: '',
+                        reponse: {
+                          texte: '1)',
+                          valeur: 2 * v3,
+                          param: {
+                            digits: 2,
+                            decimals: 0,
+                            signe: false,
+                            approx: 0,
+                          },
                         },
                       },
-                    },
-                  ],
-                },
-                {
-                  type: 'AMCOpen',
-                  propositions: [
-                    {
-                      texte: this.listeCorrections[2],
-                      statut: 2,
-                    },
-                  ],
-                },
-                {
-                  type: 'AMCOpen',
-                  propositions: [
-                    {
-                      texte: this.listeCorrections[3],
-                      statut: 2,
-                    },
-                  ],
-                },
-              ],
+                    ],
+                  },
+                  {
+                    type: 'AMCOpen',
+                    propositions: [
+                      {
+                        texte: this.listeCorrections[2],
+                        statut: 2,
+                      },
+                    ],
+                  },
+                  {
+                    type: 'AMCOpen',
+                    propositions: [
+                      {
+                        texte: this.listeCorrections[3],
+                        statut: 2,
+                      },
+                    ],
+                  },
+                ],
+              }
             }
           }
-        }
-        break
-      case 'temperature':
-      default:
-        {
-          const hmin = randint(2, 4)
-          const hmax = randint(12, 16)
-          const tmin = randint(-5, 15)
-          const tmax = tmin + randint(5, 12)
-          zero =
-            tmin < 0
-              ? texteParPosition('0', -0.5, 0, 0, 'black', 1, 'milieu', true)
-              : vide2d()
-          r = repere({
-            xMin: 0,
-            yMin: tmin - 1,
-            yMax: tmax + 2,
-            xMax: 24,
-            xUnite: 1,
-            yUnite: 1,
-            xLegende: 'Heure',
-            yLegende: 'Température (en °C)',
-          })
-          graphique = courbeInterpolee(
-            [
-              [-2, tmin + 2],
-              [hmin, tmin],
-              [hmax, tmax],
-              [26, tmin + 2],
-            ],
-            {
-              color: bleuMathalea,
-              epaisseur: 2,
-              repere: r,
+          break
+        case 'temperature':
+        default:
+          {
+            const hmin = randint(2, 4)
+            const hmax = randint(12, 16)
+            const tmin = randint(-5, 15)
+            const tmax = tmin + randint(5, 12)
+            zero =
+              tmin < 0
+                ? texteParPosition('0', -0.5, 0, 0, 'black', 1, 'milieu', true)
+                : vide2d()
+            r = repere({
               xMin: 0,
+              yMin: tmin - 1,
+              yMax: tmax + 2,
               xMax: 24,
-            },
-          )
-          this.introduction =
-            "On a représenté ci-dessous l'évolution de la température sur une journée."
-          this.introduction +=
-            '<br><br>' +
-            mathalea2d(
-              Object.assign({}, fixeBordures([r, graphique]), {
-                pixelsParCm: 20,
-                scale: 0.5,
-              }),
-              r,
-              zero,
-              graphique,
-            )
-
-          this.introduction +=
-            '<br><br>' +
-            "À l'aide de ce graphique, répondre aux questions suivantes :"
-          if (this.interactif && context.isHtml) {
-            this.listeQuestions.push(
-              'Quelle est la température la plus froide de la journée ? ' +
-                ajouteQuestionMathlive({
-                  exercice: this,
-                  question: indiceQuestion++,
-                  objetReponse: {
-                    champ1: {
-                      value: new Grandeur(tmin, '°C'),
-                      options: { unite: true, precisionUnite: 0 },
-                    },
-                    champ2: {
-                      value: new Grandeur(tmax, '°C'),
-                      options: { unite: true, precisionUnite: 0 },
-                    },
-                    bareme: toutPourUnPoint,
-                  },
-                  typeInteractivite: 'fillInTheBlank',
-                  classe: KeyboardType.nombresEtDegreCelsius,
-                  content: `%{champ1} \\text{ et la plus chaude ? }%{champ2}`,
-                }),
-            )
-            this.listeCorrections.push(
-              `La température la plus basse est $${miseEnEvidence(`${tmin}^\\circ\\text{C}`)}$ et la plus élevée est $${miseEnEvidence(`${tmax}^\\circ\\text{C}`)}$.`,
-            )
-          } else {
-            this.listeQuestions.push(
-              'Quelle est la température la plus froide de la journée ?',
-            )
-            this.listeQuestions.push(
-              'Quelle est la température la plus chaude de la journée ?',
-            )
-            this.listeCorrections.push(
-              `La température la plus basse est $${miseEnEvidence(`${tmin}^\\circ\\text{C}`)}$.`,
-              `La température la plus élevée est $${miseEnEvidence(`${tmax}^\\circ\\text{C}`)}$.`,
-            )
-          }
-
-          if (this.interactif && context.isHtml) {
-            this.listeQuestions.push(
-              'À quelle heure fait-il le plus chaud ?' +
-                ajouteQuestionMathlive({
-                  exercice: this,
-                  question: indiceQuestion++,
-                  objetReponse: {
-                    champ1: {
-                      value: new Grandeur(hmax, 'h'),
-                      options: { HMS: true },
-                    },
-                    champ2: {
-                      value: new Grandeur(hmin, 'h'),
-                      options: { HMS: true },
-                    },
-                    bareme: toutPourUnPoint,
-                  },
-                  typeInteractivite: 'fillInTheBlank',
-                  classe: KeyboardType.clavierHms,
-                  content: `\\text{À quelle heure fait-il le plus chaud ? }%{champ1} \\text{ et à quelle heure fait-il le plus froid ? }%{champ2}`,
-                }),
-            )
-            this.listeCorrections.push(
-              `Il fait le plus chaud à $${miseEnEvidence(hmax + sp() + '\\text{h}')}$ et le plus froid à $${miseEnEvidence(hmin + sp() + '\\text{h}')}$, car ce sont les abscisses des points les plus hauts et les plus bas de la courbe.`,
-            )
-          } else {
-            this.listeQuestions.push('À quelle heure fait-il le plus chaud ?')
-            this.listeCorrections.push(
-              `C'est à $${miseEnEvidence(hmax + sp() + '\\text{h}')}$ qu'il fait le plus chaud.`,
-            )
-            this.listeQuestions.push('À quelle heure fait-il le plus froid ?')
-            this.listeCorrections.push(
-              `C'est à $${miseEnEvidence(hmin + sp() + '\\text{h}')}$ qu'il fait le plus froid.`,
-            )
-          }
-          if (context.isAmc) {
-            enonceAMC = this.introduction
-            for (let i = 0; i < this.listeQuestions.length; i++) {
-              enonceAMC += `${i + 1}) ${this.listeQuestions[i]}<br>`
-            }
-            this.autoCorrection[0] = {
-              enonce: enonceAMC,
-              propositions: [
-                {
-                  type: 'AMCNum',
-                  propositions: [
-                    {
-                      texte: this.listeCorrections[0],
-                      statut: '',
-                      reponse: {
-                        texte: '1)',
-                        valeur: tmin,
-                        param: {
-                          digits: 2,
-                          decimals: 0,
-                          signe: false,
-                          approx: 0,
-                        },
-                      },
-                    },
-                  ],
-                },
-                {
-                  type: 'AMCNum',
-                  propositions: [
-                    {
-                      texte: this.listeCorrections[1],
-                      statut: '',
-                      reponse: {
-                        texte: '1)',
-                        valeur: tmax,
-                        param: {
-                          digits: 2,
-                          decimals: 0,
-                          signe: false,
-                          approx: 0,
-                        },
-                      },
-                    },
-                  ],
-                },
-                {
-                  type: 'AMCNum',
-                  propositions: [
-                    {
-                      texte: this.listeCorrections[2],
-                      statut: '',
-                      reponse: {
-                        texte: '1)',
-                        valeur: hmax,
-                        param: {
-                          digits: 2,
-                          decimals: 0,
-                          signe: false,
-                          approx: 0,
-                        },
-                      },
-                    },
-                  ],
-                },
-                {
-                  type: 'AMCNum',
-                  propositions: [
-                    {
-                      texte: this.listeCorrections[3],
-                      statut: '',
-                      reponse: {
-                        texte: '1)',
-                        valeur: hmin,
-                        param: {
-                          digits: 2,
-                          decimals: 0,
-                          signe: false,
-                          approx: 0,
-                        },
-                      },
-                    },
-                  ],
-                },
+              xUnite: 1,
+              yUnite: 1,
+              xLegende: 'Heure',
+              yLegende: 'Température (en °C)',
+            })
+            graphique = courbeInterpolee(
+              [
+                [-2, tmin + 2],
+                [hmin, tmin],
+                [hmax, tmax],
+                [26, tmin + 2],
               ],
+              {
+                color: bleuMathalea,
+                epaisseur: 2,
+                repere: r,
+                xMin: 0,
+                xMax: 24,
+              },
+            )
+            const introAMC = `On a représenté ci-dessous l'évolution de la température sur une journée.<br>
+
+           ${mathalea2d(
+             Object.assign({}, fixeBordures([r, graphique, zero]), {
+               pixelsParCm: 30,
+               scale: 1,
+             }),
+             r,
+             graphique,
+             zero,
+           )}
+           <br><br>
+            À l'aide de ce graphique, répondre aux questions suivantes :<br><br>`
+            texte = introAMC
+            texte += addMultiMathfield(this, i, {
+              dataTemplate: `a) Quelle est la température la plus froide de la journée ? %{champ1}\n
+  b) Quelle est la température la plus chaude de la journée ? %{champ2}\n
+  c) À quelle heure fait-il le plus chaud ? %{champ3}\n
+  d) À quelle heure fait-il le plus froid ? %{champ4}`,
+              dataOptions: {
+                champ1: { keyboard: KeyboardType.nombresEtDegreCelsius },
+                champ2: { keyboard: KeyboardType.nombresEtDegreCelsius },
+                champ3: { keyboard: KeyboardType.clavierHms },
+                champ4: { keyboard: KeyboardType.clavierHms },
+              },
+            })
+            handleAnswers(
+              this,
+              i,
+              {
+                champ1: {
+                  value: `${tmin}°C`,
+                  options: { unite: true, precisionUnite: 0 },
+                },
+                champ2: {
+                  value: `${tmax}°C`,
+                  options: { unite: true, precisionUnite: 0 },
+                },
+                champ3: {
+                  value: texNombre(hmax, 0) + 'h',
+                  options: { HMS: true },
+                },
+                champ4: {
+                  value: texNombre(hmin, 0) + 'h',
+                  options: { HMS: true },
+                },
+                bareme: toutAUnPoint,
+              },
+              { formatInteractif: 'multiMathfield' },
+            )
+
+            texteCorr = `${numAlpha(0)} La température la plus basse est $${miseEnEvidence(`${tmin}^\\circ\\text{C}`)}$.<br>
+            ${numAlpha(1)} La température la plus élevée est $${miseEnEvidence(`${tmax}^\\circ\\text{C}`)}$.<br>`
+            texteCorr += `${numAlpha(2)} La température la plus basse est $${miseEnEvidence(`${tmin}^\\circ\\text{C}`)}$.<br>
+            ${numAlpha(3)} La température la plus élevée est $${miseEnEvidence(`${tmax}^\\circ\\text{C}`)}$.`
+
+            if (context.isAmc) {
+              enonceAMC = introAMC
+              for (let i = 0; i < this.listeQuestions.length; i++) {
+                enonceAMC += `${i + 1}) ${this.listeQuestions[i]}<br>`
+              }
+              this.autoCorrection[0] = {
+                enonce: enonceAMC,
+                propositions: [
+                  {
+                    type: 'AMCNum',
+                    propositions: [
+                      {
+                        texte: this.listeCorrections[0],
+                        statut: '',
+                        reponse: {
+                          texte: '1)',
+                          valeur: tmin,
+                          param: {
+                            digits: 2,
+                            decimals: 0,
+                            signe: false,
+                            approx: 0,
+                          },
+                        },
+                      },
+                    ],
+                  },
+                  {
+                    type: 'AMCNum',
+                    propositions: [
+                      {
+                        texte: this.listeCorrections[1],
+                        statut: '',
+                        reponse: {
+                          texte: '1)',
+                          valeur: tmax,
+                          param: {
+                            digits: 2,
+                            decimals: 0,
+                            signe: false,
+                            approx: 0,
+                          },
+                        },
+                      },
+                    ],
+                  },
+                  {
+                    type: 'AMCNum',
+                    propositions: [
+                      {
+                        texte: this.listeCorrections[2],
+                        statut: '',
+                        reponse: {
+                          texte: '1)',
+                          valeur: hmax,
+                          param: {
+                            digits: 2,
+                            decimals: 0,
+                            signe: false,
+                            approx: 0,
+                          },
+                        },
+                      },
+                    ],
+                  },
+                  {
+                    type: 'AMCNum',
+                    propositions: [
+                      {
+                        texte: this.listeCorrections[3],
+                        statut: '',
+                        reponse: {
+                          texte: '1)',
+                          valeur: hmin,
+                          param: {
+                            digits: 2,
+                            decimals: 0,
+                            signe: false,
+                            approx: 0,
+                          },
+                        },
+                      },
+                    ],
+                  },
+                ],
+              }
             }
           }
-        }
-        break
-    }
-    if (!context.isAmc) {
-      listeQuestionsToContenu(this)
+          break
+      }
+      if (this.questionJamaisPosee(i, typeDeProbleme)) {
+        this.listeQuestions.push(texte)
+        this.listeCorrections.push(texteCorr)
+        i++
+      }
+      cpt++
     }
   }
 }
