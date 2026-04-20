@@ -398,7 +398,7 @@ export default class TesterSiUnNombreEstSolutionDUneEquation extends Exercice {
         default:
           if (this.sup === 1) {
             b = randint(2, 9)
-            a = randint(2, 9)
+            a = randint(2, 9, a)
             x3 = b
             x1 = a
             x2 = randint(1, 9, [x1, x3])
