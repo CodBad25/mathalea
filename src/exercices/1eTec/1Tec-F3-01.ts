@@ -13,7 +13,7 @@ import { propositionsQcm } from '../../lib/interactif/qcm'
 
 export const interactifReady = true
 export const interactifType = 'qcm'
-export const titre = "Tableau de signes d'un polynôme de degré 3"
+export const titre = "Déterminer le tableau de signes d'un polynôme de degré 3"
 export const dateDePublication = '12/04/2026'
 
 /**
