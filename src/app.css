@@ -283,7 +283,7 @@ math-field::part(virtual-keyboard-toggle) {
 }
 
 math-field:not(.fillInTheBlanks):not(.metaInteractif2d) {
-  font-size: '1em';
+  font-size: 1em;
   margin-left: 5px;
   display: inline-block;
   vertical-align: middle;
@@ -295,23 +295,32 @@ math-field:not(.fillInTheBlanks):not(.metaInteractif2d) {
 }
 math-field.fillInTheBlanks {
   /* @apply bg-coopmaths-canvas dark:bg-coopmathsdark-canvas text-coopmaths-corpus dark:text-coopmathsdark-corpus; */
-  border: 'none';
-  box-shadow: 'none';
-  font-size: '1em';
-  margin-top: '1px';
-  padding: '2px';
+  border: none;
+  box-shadow: none;
+  font-size: 1em;
+  margin-top: 1px;
+  padding: 2px;
   background-color: transparent;
 }
 math-field.fillInTheBlanks::part(prompt) {
-  min-height: 1.1em;
+  font-size: 1em; /* levier principal: réduit la boîte calculée */
+  line-height: 1;
+  min-height: 1em;
+  height: auto;
+  padding: 2px;
+  margin: 0;
+  border: none;
+  outline: solid;
+  outline-width: thin;
+  outline-color: var(--color-coopmathsdark-corpus-light);
 }
 
 math-field.metaInteractif2d {
-  border: 'none';
-  box-shadow: 'none';
-  font-size: '1em';
-  margin-top: '1px';
-  padding: '2px';
+  border: none;
+  box-shadow: none;
+  font-size: 1em;
+  margin-top: 1px;
+  padding: 2px;
   background-color: transparent;
 }
 math-field.metaInteractif2d::part(prompt) {
