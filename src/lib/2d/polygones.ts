@@ -1,4 +1,5 @@
 import earcut from 'earcut'
+import { bleuMathalea } from '../../lib/colors'
 import { context } from '../../modules/context'
 import { arrondi } from '../outils/nombres'
 import { colorToLatexOrHTML } from './colorToLatexOrHtml'
@@ -14,7 +15,6 @@ import { segment } from './segmentsVecteurs'
 import { texteParPoint } from './textes'
 import { longueur } from './utilitairesGeometriques'
 import { pointSurSegment } from './utilitairesPoint'
-import { bleuMathalea } from '../../lib/colors'
 
 type BinomeXY = { x: number; y: number }
 export type BinomesXY = BinomeXY[]
@@ -36,7 +36,7 @@ function aireTriangle(p: {
  * @example G = barycentre(pol) // Crée G, le barycentre du polygone pol, sans lui donner de nom
  * @example G = barycentre(pol,'G','below') // Crée G, le barycentre du polygone pol, en notant G sous le point, s'il est tracé et labellisé.
  * @author Jean-claude Lhote
- * @return {Point}
+ * @return {PointAbstrait}
  */
 // JSDOC Validee par EE Juin 2022
 export function barycentre(p: IPolygone, nom = '', positionLabel = 'above') {
@@ -62,7 +62,7 @@ export function barycentre(p: IPolygone, nom = '', positionLabel = 'above') {
  * polygone(A,B,C,D,E) //Trace ABCDE
  * polygone([A,B,C,D],"red", bleuMathalea) // Trace ABCD en bleu
  * polygone([A,B,C,D],"red", bleuMathalea,"red","green") // Trace ABCD en bleu, rempli en rouge et hachuré en vert.
- * @property {Point[]} listePoints
+ * @property {PointAbstrait[]} listePoints
  * @property {string[]} color
  * @property {string[]} couleurDeRemplissage
  * @property {string[]} couleurDesHachures
@@ -412,7 +412,7 @@ export function polygone(
  * @param  {...any} args
  * @return {array} [polygone,sommets]
  * Si le dernier argument est un nombre, celui-ci sera utilisé pour fixer la distance entre le sommet et le label (par défaut 0.5)
- * @exemple [poly, sommets] = polygoneAvecNom(A, B, C, D) // où A, B, C, D sont des objets Point
+ * @exemple [poly, sommets] = polygoneAvecNom(A, B, C, D) // où A, B, C, D sont des objets PointAbstrait
  */
 export function polygoneAvecNom(
   ...args: (PointAbstrait | number)[]

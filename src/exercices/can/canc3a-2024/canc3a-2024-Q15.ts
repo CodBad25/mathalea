@@ -4,7 +4,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 
 import { codageAngleDroit } from '../../../lib/2d/CodageAngleDroit'
 import { fixeBordures } from '../../../lib/2d/fixeBordures'
-import { Point, pointAbstrait } from '../../../lib/2d/PointAbstrait'
+import { PointAbstrait, pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { Polygone } from '../../../lib/2d/polygones'
 import { segment } from '../../../lib/2d/segmentsVecteurs'
 import { latexParCoordonnees } from '../../../lib/2d/textes'
@@ -39,10 +39,10 @@ export default class PerimetreRectangleCM2 extends ExerciceSimple {
       hauteur = randint(2, 4)
       grandeBase = randint(hauteur + 1, 4 + hauteur)
     }
-    const A = new Point(0, 0)
-    const B = new Point(grandeBase, 0)
-    const C = new Point(grandeBase, hauteur)
-    const D = new Point(0, hauteur)
+    const A = new PointAbstrait(0, 0)
+    const B = new PointAbstrait(grandeBase, 0)
+    const C = new PointAbstrait(grandeBase, hauteur)
+    const D = new PointAbstrait(0, hauteur)
     const rectangle = new Polygone([A, B, C, D])
     const angle1 = codageAngleDroit(D, A, B)
     const angle2 = codageAngleDroit(A, B, C)

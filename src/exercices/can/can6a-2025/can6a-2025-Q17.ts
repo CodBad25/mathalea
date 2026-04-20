@@ -1,4 +1,4 @@
-import { Point } from '../../../lib/2d/PointAbstrait'
+import { PointAbstrait } from '../../../lib/2d/PointAbstrait'
 import ExerciceSimple from '../../ExerciceSimple'
 
 import { fixeBordures } from '../../../lib/2d/fixeBordures'
@@ -36,11 +36,11 @@ export default class Can2025N6Q17 extends ExerciceSimple {
 
   nouvelleVersion() {
     const grillage = grille(0, 0, 8, 3, 'gray', 1, 1)
-    const A = new Point(1, 1)
-    const B = new Point(7, 1)
+    const A = new PointAbstrait(1, 1)
+    const B = new PointAbstrait(7, 1)
     const seg1 = segment(A, B)
-    const C = new Point(6, 2)
-    const D = new Point(1, 2)
+    const C = new PointAbstrait(6, 2)
+    const D = new PointAbstrait(1, 2)
     const seg2 = segment(C, D)
     const l1 = this.canOfficielle ? 20 : randint(1, 10) * 5
     const l2 = l1 * 1.2

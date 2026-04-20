@@ -9,9 +9,9 @@ import { pointSurSegment } from './utilitairesPoint'
 
 /**
  * Affiche la mesure de l'angle ABC arrondie au degré près
- * @param {Point} A Point sur un côté de l'angle
- * @param {Point} B Sommet de l'angle
- * @param {Point} C Point sur l'autre côté de l'angle
+ * @param {PointAbstrait} A Point sur un côté de l'angle
+ * @param {PointAbstrait} B Sommet de l'angle
+ * @param {PointAbstrait} C Point sur l'autre côté de l'angle
  * @param {string} [color='black'] Couleur de la mesure de l'angle : du type 'red', bleuMathalea ou du type '#a12345'.
  * @param {number} [distance=1.5] Taille de l'angle
  * @param {string} [label=''] Si vide, alors affiche la mesure de l'angle sinon affiche ce label.
@@ -26,9 +26,9 @@ import { pointSurSegment } from './utilitairesPoint'
  * @param {boolean} [parametres.mesureEnGras=false] True pour mettre en gras la mesure affichée
  * @property {string} svg Sortie au format vectoriel (SVG) que l’on peut afficher dans un navigateur
  * @property {string} tikz Sortie au format TikZ que l’on peut utiliser dans un fichier LaTeX
- * @property {Point} depart Point sur un côté de l'angle
- * @property {Point} sommet Sommet de l'angle
- * @property {Point} arrivee Point sur l'autre côté de l'angle
+ * @property {PointAbstrait} depart Point sur un côté de l'angle
+ * @property {PointAbstrait} sommet Sommet de l'angle
+ * @property {PointAbstrait} arrivee Point sur l'autre côté de l'angle
  * @property {number} distance Taille de l'angle
  * @property {number} ecart Distance entre l'arc et sa mesure
  * @property {boolean} saillant True si on veut l'angle saillant, false si on veut l'angle rentrant.
@@ -118,9 +118,9 @@ export class AfficheMesureAngle extends ObjetMathalea2D {
 }
 /**
  * Affiche la mesure de l'angle ABC arrondie au degré près
- * @param {Point} A Point sur un côté de l'angle
- * @param {Point} B Sommet de l'angle
- * @param {Point} C Point sur l'autre côté de l'angle
+ * @param {PointAbstrait} A Point sur un côté de l'angle
+ * @param {PointAbstrait} B Sommet de l'angle
+ * @param {PointAbstrait} C Point sur l'autre côté de l'angle
  * @param {string} [color='black'] Couleur de la mesure de l'angle : du type 'red', bleuMathalea ou du type '#a12345'.
  * @param {number} [distance=1.5] Rayon de l'arc de cercle.
  * @param {string} [label=''] Si vide, alors affiche la mesure de l'angle sinon affiche ce label.

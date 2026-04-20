@@ -113,8 +113,8 @@ export class TexteSurArc extends ObjetMathalea2D {
 /**
  * Écrit un texte au "milieu" de l'arc AB au dessus si A est le point le plus à gauche sinon en dessous
  * @param {string} texte Texte à afficher (éviter les $$ pour les affichages diaporama)
- * @param {Point} A Extrémité de l'arc
- * @param {Point} B Extrémité de l'arc
+ * @param {PointAbstrait} A Extrémité de l'arc
+ * @param {PointAbstrait} B Extrémité de l'arc
  * @param {number} angle Angle au centre
  * @param {string} [color='black'] Code couleur HTML accepté
  * @param {number} [d=0.5] Distance à la droite.

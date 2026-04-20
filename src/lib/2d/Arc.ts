@@ -38,9 +38,9 @@ export const rotationPoint = (
 }
 
 /** Trace un arc de cercle, connaissant une extrémité, son centre et la mesure de l'angle
- * @param {Point} M Extrémité de départ de l'arc
- * @param {Point} Omega Centre de l'arc
- * @param {number|Point} angle Mesure de l'angle compris entre -360 et 360 (valeur négative = sens indirect) ou bien point formant un angle avec M et Omega.
+ * @param {PointAbstrait} M Extrémité de départ de l'arc
+ * @param {PointAbstrait} Omega Centre de l'arc
+ * @param {number|PointAbstrait} angle Mesure de l'angle compris entre -360 et 360 (valeur négative = sens indirect) ou bien point formant un angle avec M et Omega.
  * @param {boolean} [rayon = false] Si true, les rayons délimitant l'arc sont ajoutés.
  * @param {string} [couleurDeRemplissage = 'none'] Couleur ou 'none' : du type 'red', bleuMathalea ou du type '#a12345'
  * @param {string} [color = 'black'] Couleur de l'arc ou 'none' : du type 'red', bleuMathalea ou du type '#a12345'
@@ -353,8 +353,8 @@ export class Arc extends ObjetMathalea2D {
 }
 
 /** Trace un arc de cercle, connaissant une extrémité, son centre et la mesure de l'angle
- * @param {Point} M Extrémité de départ de l'arc
- * @param {Point} Omega Centre de l'arc
+ * @param {PointAbstrait} M Extrémité de départ de l'arc
+ * @param {PointAbstrait} Omega Centre de l'arc
  * @param {number} angle Mesure de l'angle compris entre -360 et 360 (valeur négative = sens indirect)
  * @param {boolean} [rayon = false] Booléen. Si true, les rayons délimitant l'arc sont ajoutés.
  * @param {string} [couleurDeRemplissage = 'none'] Couleur ou 'none' : du type 'red', bleuMathalea ou du type '#a12345'
@@ -393,8 +393,8 @@ export function arc(
 }
 
 /** Trace un arc de cercle, connaissant deux extrémités et la mesure de l'angle
- * @param {Point} M Première extrémité de l'arc
- * @param {Point} N Deuxième extrémité de l'arc
+ * @param {PointAbstrait} M Première extrémité de l'arc
+ * @param {PointAbstrait} N Deuxième extrémité de l'arc
  * @param {number} angle Mesure de l'angle compris entre -360 et 360 (valeur négative = sens indirect)
  * @param {boolean} [rayon = false] Booléen. Si true, les rayons délimitant l'arc sont ajoutés.
  * @param {boolean|'none'} [couleurDeRemplissage = 'none'] Couleur ou 'none' : du type 'red', bleuMathalea ou du type '#a12345'

@@ -4,7 +4,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 import { colorToLatexOrHTML } from '../../../lib/2d/colorToLatexOrHtml'
 import { fixeBordures } from '../../../lib/2d/fixeBordures'
 import { grille } from '../../../lib/2d/Grille'
-import { Point, pointAbstrait } from '../../../lib/2d/PointAbstrait'
+import { PointAbstrait, pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { polygone } from '../../../lib/2d/polygones'
 import { texteParPoint } from '../../../lib/2d/textes'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
@@ -64,7 +64,7 @@ export default class AireTrapezeRectangle extends ExerciceSimple {
     trapeze.couleurDeRemplissage = colorToLatexOrHTML('gray')
     const figureA = texteParPoint(
       'Figure A',
-      new Point(2, 0.5),
+      new PointAbstrait(2, 0.5),
       0,
       'black',
       1,
@@ -72,7 +72,7 @@ export default class AireTrapezeRectangle extends ExerciceSimple {
     )
     const ua = texteParPoint(
       '1 ua',
-      new Point(grandeBase + 1.5, hauteur + 0.5),
+      new PointAbstrait(grandeBase + 1.5, hauteur + 0.5),
       0,
       'black',
       1,

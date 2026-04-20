@@ -5,7 +5,6 @@ import { colorToLatexOrHTML } from './colorToLatexOrHtml'
 import { DemiDroite, demiDroite } from './DemiDroite'
 import { droite } from './droites'
 import type { PointAbstrait } from './PointAbstrait'
-import { Point } from './PointAbstrait'
 import { segment } from './segmentsVecteurs'
 import { traceCompas } from './traceCompas'
 import { rotation, symetrieAxiale } from './transformations'
@@ -14,9 +13,9 @@ import { pointSurSegment } from './utilitairesPoint'
 
 /**
  * Trace la bissectrice d'un angle, en laissant éventuellement apparents les traits de construction au compas
- * @param {Point} A Point sur un côté de l'angle
- * @param {Point} O Sommet de l'angle
- * @param {Point} B Point sur l'autre côté de l'angle
+ * @param {PointAbstrait} A Point sur un côté de l'angle
+ * @param {PointAbstrait} O Sommet de l'angle
+ * @param {PointAbstrait} B Point sur l'autre côté de l'angle
  * @param {string} [couleurBissectrice = 'red'] Couleur de la médiatrice : du type 'red', bleuMathalea ou du type '#a12345'. Si 'none' ou '', pas de hachures.
  * @param {string} [color=bleuMathalea] Couleur du codage : du type 'red', bleuMathalea ou du type '#a12345'.
  * @param {string} [couleurConstruction = 'black'] Couleur de la médiatrice : du type 'red', bleuMathalea ou du type '#a12345'. Si 'none' ou '', pas de hachures.
@@ -89,7 +88,7 @@ export class Bissectrice extends DemiDroite {
     const M = pointSurSegment(O, A, this.tailleLosange)
     const N = pointSurSegment(O, B, this.tailleLosange)
     const dMN = droite(M, N)
-    const P = symetrieAxiale(O, dMN) as Point
+    const P = symetrieAxiale(O, dMN) as PointAbstrait
     if (construction || detail) {
       if (!pointEstSur(M, segment(O, A))) {
         const sOM = segment(O, M, this.couleurConstruction)
@@ -138,9 +137,9 @@ export class Bissectrice extends DemiDroite {
 }
 /**
  * Trace la bissectrice d'un angle, en laissant éventuellement apparents les traits de construction au compas
- * @param {Point} A Point sur un côté de l'angle
- * @param {Point} O Sommet de l'angle
- * @param {Point} B Point sur l'autre côté de l'angle
+ * @param {PointAbstrait} A Point sur un côté de l'angle
+ * @param {PointAbstrait} O Sommet de l'angle
+ * @param {PointAbstrait} B Point sur l'autre côté de l'angle
  * @param {string} [couleurBissectrice = 'red'] Couleur de la médiatrice : du type 'red', bleuMathalea ou du type '#a12345' Si 'none' ou '', pas de hachures.
  * @param {string} [color=bleuMathalea] Couleur du codage : du type 'red', bleuMathalea ou du type '#a12345'.
  * @param {string} [couleurConstruction = 'black'] Couleur de la médiatrice : du type 'red', bleuMathalea ou du type '#a12345' Si 'none' ou '', pas de hachures.

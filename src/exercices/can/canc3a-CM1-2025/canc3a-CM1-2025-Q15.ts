@@ -1,6 +1,6 @@
 import { fixeBordures } from '../../../lib/2d/fixeBordures'
 import { grille } from '../../../lib/2d/Grille'
-import { Point } from '../../../lib/2d/PointAbstrait'
+import { PointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { Polygone } from '../../../lib/2d/polygones'
 import { segment } from '../../../lib/2d/segmentsVecteurs'
 import { latex2d } from '../../../lib/2d/textes'
@@ -33,16 +33,16 @@ export default class Can2025CM1Q15 extends ExerciceSimple {
 
   nouvelleVersion() {
     const grillage = grille(3, 0, 10, 5, 'gray', 1, 1)
-    const A = new Point(4, 4)
-    const B = new Point(5, 4)
-    const E = new Point(6, 1)
-    const F = new Point(9, 1)
-    const G = new Point(9, 2)
-    const H = new Point(8, 2)
-    const I = new Point(8, 3)
-    const J = new Point(9, 3)
-    const K = new Point(9, 4)
-    const L = new Point(6, 4)
+    const A = new PointAbstrait(4, 4)
+    const B = new PointAbstrait(5, 4)
+    const E = new PointAbstrait(6, 1)
+    const F = new PointAbstrait(9, 1)
+    const G = new PointAbstrait(9, 2)
+    const H = new PointAbstrait(8, 2)
+    const I = new PointAbstrait(8, 3)
+    const J = new PointAbstrait(9, 3)
+    const K = new PointAbstrait(9, 4)
+    const L = new PointAbstrait(6, 4)
     const poly1 = new Polygone([E, F, G, H, I, J, K, L])
     const segU = segment(A, B)
     poly1.epaisseur = 3

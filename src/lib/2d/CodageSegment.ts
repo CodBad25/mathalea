@@ -1,5 +1,5 @@
 import { ObjetMathalea2D } from './ObjetMathalea2D'
-import { Point, PointAbstrait } from './PointAbstrait'
+import { PointAbstrait } from './PointAbstrait'
 import { segment, Segment } from './segmentsVecteurs'
 import { TexteParPoint } from './textes'
 import { milieu } from './utilitairesPoint'
@@ -40,7 +40,7 @@ export function codageSegment(
  * Code plusieurs segments de la même façon
  * @param {string} [mark = '||'] Symbole posé sur le segment
  * @param {string} [color = 'black'] Couleur du symbole : : du type 'red', bleuMathalea ou du type '#a12345'
- * @param  {Point[]|Segment|number} args Les segments différement codés + Taille relative du codage
+ * @param  {PointAbstrait[]|Segment|number} args Les segments différement codés + Taille relative du codage
  * @property {string} svg Sortie au format vectoriel (SVG) que l’on peut afficher dans un navigateur
  * @property {string} tikz Sortie au format TikZ que l’on peut utiliser dans un fichier LaTeX
  * @author Rémi Angot
@@ -53,7 +53,7 @@ export class CodageSegments extends ObjetMathalea2D {
   stringColor: string // Pour pouvoir passer une simple couleur aux autres constructeurs.
   mark: string
   isEchelle: boolean
-  args: (PointAbstrait | Point | Segment | number)[]
+  args: (PointAbstrait | Segment | number)[]
   constructor(mark = '||', color = 'black', ...args: any[]) {
     super()
     this.args = args
@@ -66,7 +66,7 @@ export class CodageSegments extends ObjetMathalea2D {
       ymin: number,
       xmax: number,
       ymax: number,
-      ...pointsOuSegment: (Point | Segment)[]
+      ...pointsOuSegment: (PointAbstrait | Segment)[]
     ): [number, number, number, number] {
       if (pointsOuSegment.length === 0) return [xmin, ymin, xmax, ymax]
       else {
@@ -77,7 +77,7 @@ export class CodageSegments extends ObjetMathalea2D {
           ymin = Math.min(ymin, premierElement.y1, premierElement.y2)
           ymax = Math.max(ymax, premierElement.y1, premierElement.y2)
           return trouveExtrem(xmin, ymin, xmax, ymax, ...pointsOuSegment)
-        } else if (premierElement instanceof Point) {
+        } else if (premierElement instanceof PointAbstrait) {
           xmin = Math.min(xmin, premierElement.x)
           xmax = Math.max(xmax, premierElement.x)
           ymin = Math.min(ymin, premierElement.y)
@@ -93,7 +93,7 @@ export class CodageSegments extends ObjetMathalea2D {
       1000,
       -1000,
       -1000,
-      ...(args as (Point | Segment)[]),
+      ...(args as (PointAbstrait | Segment)[]),
     ) as unknown as [number, number, number, number]
   }
 
@@ -145,12 +145,12 @@ export class CodageSegments extends ObjetMathalea2D {
       ) {
         if (
           [this.args[i], this.args[i + 1]].every(
-            (p) => p instanceof Point || p instanceof PointAbstrait,
+            (p) => p instanceof PointAbstrait,
           )
         ) {
           const codage = codageSegment(
             this.args[i] as PointAbstrait,
-            this.args[i + 1] as Point,
+            this.args[i + 1] as PointAbstrait,
             this.mark,
             this.stringColor,
             this.echelle,
@@ -201,7 +201,7 @@ export class CodageSegments extends ObjetMathalea2D {
       for (let i = 0; i < condition; i += 2) {
         if (
           [this.args[i], this.args[i + 1]].every(
-            (p) => p instanceof Point || p instanceof PointAbstrait,
+            (p) => p instanceof PointAbstrait,
           )
         ) {
           code += codageSegment(
@@ -222,7 +222,7 @@ export class CodageSegments extends ObjetMathalea2D {
  * Code plusieurs segments de la même façon
  * @param {string} [mark = '||'] Symbole posé sur le segment
  * @param {string} [color = 'black'] Couleur du symbole : : du type 'red', bleuMathalea ou du type '#a12345'
- * @param {Points|Point[]|Segments|number} args Les segments différement codés + Taille relative du codage. Voir exemples.
+ * @param {PointAbstrait[]|Segments|number} args Les segments différement codés + Taille relative du codage. Voir exemples.
  * @example codageSegments('×',bleuMathalea,A,B, B,C, C,D) // Code les segments [AB], [BC] et [CD] avec une croix bleue
  * @example codageSegments('×',bleuMathalea,A,B, B,C, C,D, 1.2) // Code les segments [AB], [BC] et [CD] avec une croix bleue et une taille de 1.2
  * @example codageSegments('×',bleuMathalea,[A,B,C,D]) // Code les segments [AB], [BC], [CD] et [DA] (attention, chemin fermé, pratique pour des polygones pas pour des lignes brisées)

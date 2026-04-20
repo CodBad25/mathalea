@@ -200,8 +200,8 @@ export class Mediatrice extends ObjetMathalea2D implements IDroite {
 }
 /**
  * Trace la médiatrice d'un segment, en laissant éventuellement apparents les traits de construction au compas
- * @param {Point} A Première extrémité du segment
- * @param {Point} B Seconde extrémité du segment
+ * @param {PointAbstrait} A Première extrémité du segment
+ * @param {PointAbstrait} B Seconde extrémité du segment
  * @param {string} [nom=''] Nom affiché de la droite
  * @param {string} [couleurMediatrice = 'red'] Couleur de la médiatrice : du type 'red', bleuMathalea ou du type '#a12345'
  * @param {string} [color=bleuMathalea] Couleur du codage : du type 'red', bleuMathalea ou du type '#a12345'.

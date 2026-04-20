@@ -13,9 +13,9 @@ import { pointSurSegment } from './utilitairesPoint'
 
 /**
  * Code un angle
- * @param {Point} debut Point sur un côté de l'angle
- * @param {Point} centre Sommet de l'angle
- * @param {number|Point} angle Mesure de l'angle ou nom d'un point sur l'autre côté de l'angle
+ * @param {PointAbstrait} debut Point sur un côté de l'angle
+ * @param {PointAbstrait} centre Sommet de l'angle
+ * @param {number|PointAbstrait} angle Mesure de l'angle ou nom d'un point sur l'autre côté de l'angle
  * @param {number} [taille=0.8] Taille de l'angle
  * @param {string} [mark=''] Marque sur l'angle
  * @param {string} [color='black'] Couleur de l'angle : du type 'red', bleuMathalea ou du type '#a12345'
@@ -28,9 +28,9 @@ import { pointSurSegment } from './utilitairesPoint'
  * @param {string} [texteACote=''] Pour mettre un texte à côté de l'angle à la place de la mesure de l'angle
  * @param {number} [tailleTexte=1] Pour choisir la taille du texte à côté de l'angle
  * @param {number} [echelleMark=1] Pour choisir la taille relative de la marque
- * @property {Point} debut Point sur un côté de l'angle
- * @property {Point} centre Sommet de l'angle
- * @property {number|Point} angle Mesure de l'angle ou nom d'un point sur l'autre côté de l'angle
+ * @property {PointAbstrait} debut Point sur un côté de l'angle
+ * @property {PointAbstrait} centre Sommet de l'angle
+ * @property {number|PointAbstrait} angle Mesure de l'angle ou nom d'un point sur l'autre côté de l'angle
  * @property {number} taille Taille de l'angle
  * @property {string} mark Marque sur l'angle
  * @property {string} color Couleur de l'angle. À associer obligatoirement à colorToLatexOrHTML().
