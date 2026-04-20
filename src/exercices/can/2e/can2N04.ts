@@ -1,7 +1,7 @@
 import { choice } from '../../../lib/outils/arrayOutils'
-import ExerciceSimple from '../../ExerciceSimple'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { randint } from '../../../modules/outils'
+import ExerciceSimple from '../../ExerciceSimple'
 
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 export const titre = 'Déterminer la réunion de deux intervalles'
@@ -27,7 +27,7 @@ export default class ReunionIntervalles extends ExerciceSimple {
     this.nbQuestions = 1
 
     this.formatChampTexte = KeyboardType.clavierEnsemble
-    this.optionsDeComparaison = { texteSansCasse: true, intervalle: true }
+    this.optionsDeComparaison = { intervalle: true }
   }
 
   nouvelleVersion() {

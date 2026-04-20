@@ -27,7 +27,7 @@ export default class IntersectionIntervalles extends ExerciceSimple {
     this.nbQuestions = 1
 
     this.formatChampTexte = KeyboardType.clavierEnsemble
-    this.optionsDeComparaison = { texteSansCasse: true, intervalle: true }
+    this.optionsDeComparaison = { intervalle: true }
   }
 
   nouvelleVersion() {

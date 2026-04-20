@@ -34,7 +34,7 @@ export default class SolutionInequation extends ExerciceSimple {
 
     this.spacing = 3
     this.formatChampTexte = KeyboardType.clavierEnsemble
-    this.optionsDeComparaison = { texteSansCasse: true, intervalle: true }
+    this.optionsDeComparaison = { intervalle: true }
     this.versionQcmDisponible = true
   }
 
