@@ -23,7 +23,7 @@ export const refs = {
 export default class mesureAngleCosSin extends ExerciceSimple {
   constructor() {
     super()
-
+    this.spacingCorr = 2.5
     this.typeExercice = 'simple'
     this.formatChampTexte = KeyboardType.grecTrigo
     this.nbQuestions = 1
@@ -32,9 +32,8 @@ export default class mesureAngleCosSin extends ExerciceSimple {
   nouvelleVersion() {
     const choix1 = choice(['[0\\,;\\,2\\pi[', ']-\\pi\\,;\\,\\pi]'])
     const choix2 = choice(['a', 'b', 'c', 'd'])
-    switch (
-      choice([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]) //
-    ) {
+    const choix3 = choice([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13])
+    switch (choix3) {
       case 1: // pi/6
         this.question = `$\\alpha$ est un réel de $${choix1}$ vérifiant $\\cos(\\alpha)=\\dfrac{\\sqrt{3}}{2}$ et $\\sin(\\alpha)=\\dfrac{1}{2}$. <br>
         
@@ -53,7 +52,6 @@ export default class mesureAngleCosSin extends ExerciceSimple {
         break
       case 3: // pi/3
         this.question = `$\\alpha$ est un réel de $${choix1}$ vérifiant $\\cos(\\alpha)=\\dfrac{1}{2}$ et $\\sin(\\alpha)=\\dfrac{\\sqrt{3}}{2}$. <br>
-       
         Quelle est la valeur de $\\alpha$ en radians ?`
         this.correction = `$\\cos \\dfrac{\\pi}{3}=\\dfrac{1}{2}$ et $\\sin \\dfrac{\\pi}{3}=\\dfrac{\\sqrt{3}}{2}$.<br>
           $\\dfrac{\\pi}{3}\\in ${choix1}$, donc $\\alpha=${miseEnEvidence('\\dfrac{\\pi}{3}')}$.`
@@ -176,25 +174,20 @@ export default class mesureAngleCosSin extends ExerciceSimple {
           this.correction = `$\\cos 0=1$.<br>
           $0\\in ${choix1}$, donc $\\alpha=0$.`
           this.reponse = '0'
-        }
-        if (choix2 === 'b') {
+        } else if (choix2 === 'b') {
           this.question = `$\\alpha$ est un réel de $${choix1}$ vérifiant $\\sin(\\alpha)=1$. <br>
         Quelle est la valeur de $\\alpha$ en radians ?`
           this.correction = ` $\\sin \\dfrac{\\pi}{2}=1$.<br>
           $\\dfrac{\\pi}{2}\\in ${choix1}$, donc $\\alpha=${miseEnEvidence('\\dfrac{\\pi}{2}')}$.`
           this.reponse = '\\dfrac{\\pi}{2}'
-        }
-
-        if (choix2 === 'c') {
+        } else if (choix2 === 'c') {
           this.question = `$\\alpha$ est un réel de $${choix1}$ vérifiant $\\cos(\\alpha)=-1$. <br>
        
           Quelle est la valeur de $\\alpha$ en radians ?`
           this.correction = `$\\cos \\pi=-1$.<br>
           $\\pi \\in ${choix1}$, donc $\\alpha=${miseEnEvidence('\\pi')}$.`
           this.reponse = '\\pi'
-        }
-
-        if (choix2 === 'd') {
+        } else {
           this.question = `$\\alpha$ est un réel de $${choix1}$ vérifiant $\\sin(\\alpha)=-1$. <br>
       
           Quelle est la valeur de $\\alpha$ en radians ?`
