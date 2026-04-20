@@ -1,7 +1,7 @@
 import { afficheMesureAngle } from '../../../lib/2d/AfficheMesureAngle'
 import { codageAngleDroit } from '../../../lib/2d/CodageAngleDroit'
 import { fixeBordures } from '../../../lib/2d/fixeBordures'
-import { point } from '../../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { polygone } from '../../../lib/2d/polygones'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { context } from '../../../modules/context'
@@ -27,15 +27,15 @@ export default class Can2025N5Q18 extends ExerciceCan {
     if (a == null) {
       a = randint(7, 12) * 5
     }
-    const A = point(0, 0)
+    const A = pointAbstrait(0, 0)
     const B =
       a > 45
-        ? point(0, 5 * Math.sin((a * Math.PI) / 180))
-        : point(5 * Math.cos((a * Math.PI) / 180), 0)
+        ? pointAbstrait(0, 5 * Math.sin((a * Math.PI) / 180))
+        : pointAbstrait(5 * Math.cos((a * Math.PI) / 180), 0)
     const C =
       a > 45
-        ? point(5 * Math.cos((a * Math.PI) / 180), 0)
-        : point(0, 5 * Math.sin((a * Math.PI) / 180))
+        ? pointAbstrait(5 * Math.cos((a * Math.PI) / 180), 0)
+        : pointAbstrait(0, 5 * Math.sin((a * Math.PI) / 180))
     const triangle1 = polygone(A, B, C)
     const ad = codageAngleDroit(B, A, C)
     const am1 = afficheMesureAngle(A, B, C, 'black', 0.8)

@@ -1,15 +1,15 @@
 import { codageAngleDroit } from '../../../lib/2d/CodageAngleDroit'
 import { codageSegments } from '../../../lib/2d/CodageSegment'
-import { point } from '../../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { segment } from '../../../lib/2d/segmentsVecteurs'
 import { texteParPosition } from '../../../lib/2d/textes'
 import { milieu } from '../../../lib/2d/utilitairesPoint'
+import { bleuMathalea } from '../../../lib/colors'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
-import { bleuMathalea } from '../../../lib/colors'
 export const titre =
   'Calculer une longueur/un périmètre/une aire (avec des entiers)'
 export const dateDePublication = '25/08/2022'
@@ -58,10 +58,10 @@ export default class ProblemesDeLongueursEtPerimetreCM extends ExerciceSimple {
         choix = choice([true, false])
         objets = []
         a = randint(3, 14)
-        A = point(0, 0, 'A', 'below')
-        B = point(6, 0, 'B', 'below')
-        C = point(6, 6, 'C', 'below')
-        D = point(0, 6, 'D', 'below')
+        A = pointAbstrait(0, 0, 'A', 'below')
+        B = pointAbstrait(6, 0, 'B', 'below')
+        C = pointAbstrait(6, 6, 'C', 'below')
+        D = pointAbstrait(0, 6, 'D', 'below')
         s1 = segment(A, B)
         s2 = segment(B, C)
         s3 = segment(C, D)
@@ -148,10 +148,10 @@ export default class ProblemesDeLongueursEtPerimetreCM extends ExerciceSimple {
         objets = []
         a = randint(6, 11)
         b = a - randint(1, 3)
-        A = point(0, 0, 'A', 'below')
-        B = point(8, 0, 'B', 'below')
-        C = point(8, 6, 'C', 'below')
-        D = point(0, 6, 'D', 'below')
+        A = pointAbstrait(0, 0, 'A', 'below')
+        B = pointAbstrait(8, 0, 'B', 'below')
+        C = pointAbstrait(8, 6, 'C', 'below')
+        D = pointAbstrait(0, 6, 'D', 'below')
         s1 = segment(A, B)
         s2 = segment(B, C)
         s3 = segment(C, D)
@@ -202,9 +202,9 @@ export default class ProblemesDeLongueursEtPerimetreCM extends ExerciceSimple {
       case 3: // périmètre/longueur triangle équi
         objets = []
         a = randint(3, 14)
-        A = point(0, 0, 'A', 'below')
-        B = point(6, 0, 'B', 'below')
-        C = point(3, 5.2, 'C', 'below')
+        A = pointAbstrait(0, 0, 'A', 'below')
+        B = pointAbstrait(6, 0, 'B', 'below')
+        C = pointAbstrait(3, 5.2, 'C', 'below')
         s1 = segment(A, B)
         s2 = segment(B, C)
         s3 = segment(A, C)
@@ -277,9 +277,9 @@ export default class ProblemesDeLongueursEtPerimetreCM extends ExerciceSimple {
           a = randint(3, 7)
           b = randint(8, 12)
         } while (2 * a <= b)
-        A = point(0, 0, 'A', 'below')
-        B = point(5, 0, 'B', 'below')
-        C = point(2.5, 2, 'C', 'below')
+        A = pointAbstrait(0, 0, 'A', 'below')
+        B = pointAbstrait(5, 0, 'B', 'below')
+        C = pointAbstrait(2.5, 2, 'C', 'below')
         s1 = segment(A, B)
         s2 = segment(B, C)
         s3 = segment(A, C)

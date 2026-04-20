@@ -1,5 +1,5 @@
 import Decimal from 'decimal.js'
-import { point } from '../../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { tracePoint } from '../../../lib/2d/TracePoint'
 import { cercle } from '../../../lib/2d/cercle'
 import { polygoneAvecNom } from '../../../lib/2d/polygones'
@@ -44,7 +44,7 @@ export default class Perimetre extends ExerciceSimple {
     const nom = creerNomDePolygone(4, ['QD'])
     const a = randint(3, 6) //
     const c = (randint(3, 5) * 10 + randint(3, 9)) / 10
-    const A = point(0, 0, nom[0])
+    const A = pointAbstrait(0, 0, nom[0])
     const B = pointAdistance(A, c, 0, nom[1])
     const C = pointAdistance(B, a, randint(7, 11) * 10, nom[2])
     const l = Math.ceil(longueur(A, C) + 1)

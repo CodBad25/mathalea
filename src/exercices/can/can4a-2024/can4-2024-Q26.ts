@@ -1,16 +1,16 @@
 import { codageSegments } from '../../../lib/2d/CodageSegment'
 import { droite } from '../../../lib/2d/droites'
-import { point } from '../../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { segmentAvecExtremites } from '../../../lib/2d/segmentsVecteurs'
 import { labelPoint, latexParCoordonnees } from '../../../lib/2d/textes'
 import { tracePointSurDroite } from '../../../lib/2d/TracePointSurDroite'
 import { milieu } from '../../../lib/2d/utilitairesPoint'
+import { bleuMathalea } from '../../../lib/colors'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import ExerciceSimple from '../../ExerciceSimple'
-import { bleuMathalea } from '../../../lib/colors'
 export const titre = 'Calculer une longueur'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -59,11 +59,11 @@ export default class NomExercice extends ExerciceSimple {
         options: { fonction: true, variable: 'x' },
       },
     }
-    const A = point(0, 0, 'A', 'below')
-    const B = point(16, 0, 'B', 'below')
-    const A3 = point(7, 1, 'A1', 'below')
-    const B3 = point(16, 1, 'A1', 'below')
-    const B2 = point(7, 0, 'B2', 'below')
+    const A = pointAbstrait(0, 0, 'A', 'below')
+    const B = pointAbstrait(16, 0, 'B', 'below')
+    const A3 = pointAbstrait(7, 1, 'A1', 'below')
+    const B3 = pointAbstrait(16, 1, 'A1', 'below')
+    const B2 = pointAbstrait(7, 0, 'B2', 'below')
     const AB = segmentAvecExtremites(A, B) // grand sement de départ
     const AB2 = segmentAvecExtremites(A, B2) // segment qui sera partagé
     AB2.tailleExtremites = 5
@@ -86,10 +86,13 @@ export default class NomExercice extends ExerciceSimple {
       '',
     )
     for (let i = 1; i < b; i++) {
-      pointsSurAB2.push(point((i * 7) / b, 0), point((i * 7) / b, 0))
+      pointsSurAB2.push(
+        pointAbstrait((i * 7) / b, 0),
+        pointAbstrait((i * 7) / b, 0),
+      )
       const Texte1 = latexParCoordonnees('x', 3 / b, 1.5, 'black', 0, 0, '')
-      const A4 = point(0, 1, 'A1', 'below')
-      const B4 = point(7 / b, 1, 'A1', 'below')
+      const A4 = pointAbstrait(0, 1, 'A1', 'below')
+      const B4 = pointAbstrait(7 / b, 1, 'A1', 'below')
       const A4B4 = segmentAvecExtremites(A4, B4)
       A4B4.styleExtremites = '<->'
       const maTrace = tracePointSurDroite(pointsSurAB2[2 * (i - 1)], d)

@@ -1,5 +1,5 @@
 import { colorToLatexOrHTML } from '../../../lib/2d/colorToLatexOrHtml'
-import { point } from '../../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { ellipse } from '../../../lib/2d/projections3d'
 import { segment } from '../../../lib/2d/segmentsVecteurs'
 import { latex2d } from '../../../lib/2d/textes'
@@ -36,16 +36,16 @@ export default class VolumeCylindre extends ExerciceSimple {
   nouvelleVersion() {
     const h = this.canOfficielle ? 7 : randint(5, 8) // longueur hauteur
     const aire = this.canOfficielle ? 21 : randint(15, 25)
-    const A = point(0, 0, 'A', 'below')
-    const B = point(-2, 0, 'B', 'below')
-    const C = point(2, 0, 'C', 'below')
-    const D = point(-2, -4, 'D', 'above')
-    const E = point(2, -4, 'D', 'above')
+    const A = pointAbstrait(0, 0, 'A', 'below')
+    const B = pointAbstrait(-2, 0, 'B', 'below')
+    const C = pointAbstrait(2, 0, 'C', 'below')
+    const D = pointAbstrait(-2, -4, 'D', 'above')
+    const E = pointAbstrait(2, -4, 'D', 'above')
     const c = ellipse(A, 2, 0.5)
     const c2 = ellipse(milieu(E, D), 2, 0.5)
-    const H1 = point(3, 0) // seg avec flèche hauteur
-    const H2 = point(3, -4) // seg avec flèche hauteur
-    const H3 = point(-3, -5) // seg avec flèche
+    const H1 = pointAbstrait(3, 0) // seg avec flèche hauteur
+    const H2 = pointAbstrait(3, -4) // seg avec flèche hauteur
+    const H3 = pointAbstrait(-3, -5) // seg avec flèche
     const s1 = segment(H1, H2)
     s1.styleExtremites = '<->'
     c2.couleurDeRemplissage = colorToLatexOrHTML('lightgray')

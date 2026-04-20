@@ -1,4 +1,4 @@
-import { point, Point } from '../../../lib/2d/PointAbstrait'
+import { Point, pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import ExerciceSimple from '../../ExerciceSimple'
 
 import { codageSegments } from '../../../lib/2d/CodageSegment'
@@ -41,7 +41,7 @@ export default class Can2025CM2Q18 extends ExerciceSimple {
     const C = new Point(2, 3.5)
     const triangle = new Polygone([A, B, C])
     const codage = codageSegments('//', 'black', A, B, B, C, C, A)
-    const horizontale = segment(point(0, -0.7), point(4, -0.7))
+    const horizontale = segment(pointAbstrait(0, -0.7), pointAbstrait(4, -0.7))
     horizontale.styleExtremites = '<->'
 
     const longueur = latex2d('\\ldots \\text{ cm}', 2, -1.5, {

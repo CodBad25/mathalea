@@ -3,7 +3,7 @@ import { afficheLongueurSegment } from '../../../lib/2d/afficheLongueurSegment'
 import { afficheMesureAngle } from '../../../lib/2d/AfficheMesureAngle'
 import { codageAngleDroit } from '../../../lib/2d/CodageAngleDroit'
 import { codageSegment } from '../../../lib/2d/CodageSegment'
-import { point } from '../../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { polygone } from '../../../lib/2d/polygones'
 import { segment } from '../../../lib/2d/segmentsVecteurs'
 import { labelPoint } from '../../../lib/2d/textes'
@@ -74,7 +74,7 @@ export default class ProduitScalaireFiguresClassiques extends ExerciceSimple {
     switch (choice([1, 2, 3, 4])) {
       case 1: // parallelogramme
         choix = choice(['a', 'b'])
-        A = point(0, 0, 'A', 'below')
+        A = pointAbstrait(0, 0, 'A', 'below')
         a = randint(4, 8) //
         b = randint(4, 8) //
         d = new Decimal(a * b).div(2)
@@ -205,7 +205,7 @@ export default class ProduitScalaireFiguresClassiques extends ExerciceSimple {
       case 2: // carré
         choixb = choice([true, false])
         choix = choice(['a', 'b', 'c', 'd', 'e'])
-        A = point(0, 0, 'A', 'below')
+        A = pointAbstrait(0, 0, 'A', 'below')
         a = choice([4, 6, 8, 10]) //
         sol = new Decimal(a * a).div(4)
         B = pointAdistance(A, a, 0, 'B', 'below')
@@ -377,7 +377,7 @@ export default class ProduitScalaireFiguresClassiques extends ExerciceSimple {
       case 3: // trapèze
         choixb = choice([true, false])
         choix = choice(['a', 'b', 'c'])
-        A = point(0, 0, 'A', 'below')
+        A = pointAbstrait(0, 0, 'A', 'below')
         a = randint(5, 10) //
         B = pointAdistance(A, a, 0, 'B', 'below')
         b = randint(2, 4) //
@@ -491,7 +491,7 @@ export default class ProduitScalaireFiguresClassiques extends ExerciceSimple {
       case 4: // hexagone
         choixb = choice([true, false])
         choix = choice(['a', 'b', 'c', 'd', 'e', 'f'])
-        A = point(0, 0, 'A', 'below')
+        A = pointAbstrait(0, 0, 'A', 'below')
         a = randint(3, 6) //
         B = pointAdistance(A, a, 0, 'B', 'below')
         C = pointAdistance(B, a, 60, 'C', 'right')

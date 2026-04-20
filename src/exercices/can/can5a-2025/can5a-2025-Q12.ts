@@ -2,7 +2,7 @@ import { cercle } from '../../../lib/2d/cercle'
 import { droite, droiteParPointEtPente } from '../../../lib/2d/droites'
 import { fixeBordures } from '../../../lib/2d/fixeBordures'
 import { placeLatexSurSegment } from '../../../lib/2d/placeLatexSurSegment'
-import { point } from '../../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { nommePolygone, polygone } from '../../../lib/2d/polygones'
 import { segment } from '../../../lib/2d/segmentsVecteurs'
 import { latex2d } from '../../../lib/2d/textes'
@@ -43,16 +43,19 @@ export default class Can2025N5Q12 extends ExerciceCan {
     }
     const point2 =
       alpha < 90
-        ? point(1, Math.tan((alpha * Math.PI) / 180))
-        : point(-1, -Math.tan((alpha * Math.PI) / 180))
-    const d = droite(point(0, 0), point2)
-    const dMin = droiteParPointEtPente(point(0, alpha < 90 ? -2 : -1), 0)
-    const dMax = droiteParPointEtPente(point(0, alpha > 90 ? 7 : 6), 0)
+        ? pointAbstrait(1, Math.tan((alpha * Math.PI) / 180))
+        : pointAbstrait(-1, -Math.tan((alpha * Math.PI) / 180))
+    const d = droite(pointAbstrait(0, 0), point2)
+    const dMin = droiteParPointEtPente(
+      pointAbstrait(0, alpha < 90 ? -2 : -1),
+      0,
+    )
+    const dMax = droiteParPointEtPente(pointAbstrait(0, alpha > 90 ? 7 : 6), 0)
     const pointSd1 = pointIntersectionDD(d, dMin)
     const pointSd2 = pointIntersectionDD(d, dMax)
     const sd = segment(pointSd1, pointSd2)
-    const A = point(-2, 0)
-    const Bprime = point(a - 2, 0)
+    const A = pointAbstrait(-2, 0)
+    const Bprime = pointAbstrait(a - 2, 0)
     const B = rotation(Bprime, A, alpha)
     const c1 = cercle(B, b)
     const c2 = cercle(A, c)

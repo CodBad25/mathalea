@@ -4,7 +4,7 @@
 
 import { afficheLongueurSegment } from '../../../lib/2d/afficheLongueurSegment'
 import { codageAngle } from '../../../lib/2d/angles'
-import { point } from '../../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { polygoneAvecNom } from '../../../lib/2d/polygones'
 import { pointAdistance } from '../../../lib/2d/utilitairesPoint'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
@@ -35,7 +35,7 @@ export default class NomExercice extends ExerciceSimple {
     let tri
     if (this.canOfficielle) {
       const objets = []
-      const A = point(0, 0)
+      const A = pointAbstrait(0, 0)
       const B = pointAdistance(A, 4, 0) // triplet[1] sera la longueur c
       const C = pointAdistance(B, 3, 90) // triplet[0] sera la longueur a
       const pol = polygoneAvecNom(A, B, C) // donc triplet[2] sera la longueur b

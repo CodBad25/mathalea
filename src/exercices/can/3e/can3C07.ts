@@ -1,13 +1,13 @@
 import { codageSegments } from '../../../lib/2d/CodageSegment'
-import { point } from '../../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { segmentAvecExtremites } from '../../../lib/2d/segmentsVecteurs'
 import { texteParPosition } from '../../../lib/2d/textes'
+import { bleuMathalea } from '../../../lib/colors'
 import { arrondi } from '../../../lib/outils/nombres'
 import { stringNombre, texNombre } from '../../../lib/outils/texNombre'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
-import { bleuMathalea } from '../../../lib/colors'
 export const titre = 'Calculer l’abscisse d’un milieu'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -36,9 +36,9 @@ export default class MilieuEntre1EtFraction extends ExerciceSimple {
     const a = randint(1, 5)
     const c = randint(1, 9)
     const b = arrondi(a + c + randint(1, 9, 5) / 5)
-    const A = point(0, 0, '1', 'below')
-    const B = point(4, 0, 'M', 'below')
-    const C = point(8, 0)
+    const A = pointAbstrait(0, 0, '1', 'below')
+    const B = pointAbstrait(4, 0, 'M', 'below')
+    const C = pointAbstrait(8, 0)
     const objets = []
     objets.push(
       segmentAvecExtremites(A, B),

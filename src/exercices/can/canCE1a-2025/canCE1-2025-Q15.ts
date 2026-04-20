@@ -1,4 +1,4 @@
-import { point } from '../../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { polygone } from '../../../lib/2d/polygones'
 import { latex2d } from '../../../lib/2d/textes'
 import { propositionsQcm } from '../../../lib/interactif/qcm'
@@ -24,23 +24,23 @@ export default class Can2025CE1Q15 extends ExerciceCan {
     if (a == null) {
       a = choice([0, 1, 2, 4])
     }
-    const A = point(0, 1, 'A')
-    const B = point(1, 0, 'B')
-    const C = point(2, 1, 'C')
-    const D = point(1, 2, 'D') // carré
-    const E = point(3, 2, 'E')
-    const F = point(6, 2, 'F')
-    const G = point(6, 3, 'G')
-    const H = point(3, 3, 'H') // rectangle
-    const I = point(5, -1, 'I')
-    const J = point(6, -1, 'J')
-    const K = point(6, 0, 'K')
-    const L = point(5.5, 1, 'L')
-    const M = point(5, 0, 'M') // maison
-    const N = point(2, -1, 'N')
-    const O = point(3.5, -1, 'O')
-    const P = point(4, 1, 'P')
-    const Q = point(2, 0, 'Q')
+    const A = pointAbstrait(0, 1, 'A')
+    const B = pointAbstrait(1, 0, 'B')
+    const C = pointAbstrait(2, 1, 'C')
+    const D = pointAbstrait(1, 2, 'D') // carré
+    const E = pointAbstrait(3, 2, 'E')
+    const F = pointAbstrait(6, 2, 'F')
+    const G = pointAbstrait(6, 3, 'G')
+    const H = pointAbstrait(3, 3, 'H') // rectangle
+    const I = pointAbstrait(5, -1, 'I')
+    const J = pointAbstrait(6, -1, 'J')
+    const K = pointAbstrait(6, 0, 'K')
+    const L = pointAbstrait(5.5, 1, 'L')
+    const M = pointAbstrait(5, 0, 'M') // maison
+    const N = pointAbstrait(2, -1, 'N')
+    const O = pointAbstrait(3.5, -1, 'O')
+    const P = pointAbstrait(4, 1, 'P')
+    const Q = pointAbstrait(2, 0, 'Q')
     const poly1 = polygone([A, B, C, D], 'black')
     const poly2 = polygone([E, F, G, H], 'black')
     const poly3 = polygone([I, J, K, L, M], 'black')

@@ -1,5 +1,5 @@
 import { fixeBordures } from '../../../lib/2d/fixeBordures'
-import { point } from '../../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { segment } from '../../../lib/2d/segmentsVecteurs'
 import { labelPoint, latex2d } from '../../../lib/2d/textes'
 import { milieu, pointAdistance } from '../../../lib/2d/utilitairesPoint'
@@ -45,7 +45,7 @@ export default class CalculLongueurThales2 extends ExerciceSimple {
       a = k * b
       c = randint(2, 6, b) //
 
-      A = point(0, 0, nom[0], 'above')
+      A = pointAbstrait(0, 0, nom[0], 'above')
       B = pointAdistance(A, b, -30, nom[1], 'below')
       C = pointAdistance(B, c, 110, nom[2], 'above')
 
@@ -92,7 +92,7 @@ export default class CalculLongueurThales2 extends ExerciceSimple {
       a = k * b
       c = randint(2, 6, b) //
 
-      A = point(0, 0, nom[0], 'above')
+      A = pointAbstrait(0, 0, nom[0], 'above')
       B = pointAdistance(A, c, -30, nom[1], 'below')
       C = pointAdistance(B, b, 110, nom[2], 'above')
 

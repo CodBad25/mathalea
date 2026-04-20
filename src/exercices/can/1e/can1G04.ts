@@ -1,10 +1,12 @@
 import Decimal from 'decimal.js'
 import { afficheMesureAngle } from '../../../lib/2d/AfficheMesureAngle'
-import { point } from '../../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { afficheLongueurSegment } from '../../../lib/2d/afficheLongueurSegment'
 import { segment } from '../../../lib/2d/segmentsVecteurs'
 import { labelPoint } from '../../../lib/2d/textes'
 import { pointAdistance } from '../../../lib/2d/utilitairesPoint'
+import { bleuMathalea } from '../../../lib/colors'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choisitLettresDifferentes } from '../../../lib/outils/aleatoires'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { texNombre } from '../../../lib/outils/texNombre'
@@ -12,8 +14,6 @@ import FractionEtendue from '../../../modules/FractionEtendue'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
-import { bleuMathalea } from '../../../lib/colors'
 export const titre =
   'Calculer un produit scalaire à l’aide de normes et d’un angle '
 export const interactifReady = true
@@ -36,14 +36,14 @@ export default class ProduitScalaireNormesAngles extends ExerciceSimple {
     super()
 
     this.typeExercice = 'simple'
-this.formatChampTexte = KeyboardType.clavierFullOperations
+    this.formatChampTexte = KeyboardType.clavierFullOperations
     this.nbQuestions = 1
   }
 
   nouvelleVersion() {
     const choix = choice([true, false])
     const nom = choisitLettresDifferentes(3, 'O', true)
-    const A = point(0, 0, nom[0], 'below')
+    const A = pointAbstrait(0, 0, nom[0], 'below')
     const a = randint(4, 8) //
     const B = pointAdistance(A, a, 0, nom[1], 'below')
     const b = randint(4, 8) //

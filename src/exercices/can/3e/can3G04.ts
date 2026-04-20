@@ -1,5 +1,5 @@
 import { fixeBordures } from '../../../lib/2d/fixeBordures'
-import { point } from '../../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { polygoneAvecNom } from '../../../lib/2d/polygones'
 import { segment } from '../../../lib/2d/segmentsVecteurs'
 import { latex2d } from '../../../lib/2d/textes'
@@ -45,9 +45,9 @@ export default class RechercheValeurPythagore extends ExerciceSimple {
       case 'a':
         nom = creerNomDePolygone(3, ['QD'])
         a = randint(1, 5) * 2 //
-        A = point(0, 0, nom[0])
-        B = point(4, 0, nom[1])
-        C = point(1.58, 3.7, nom[2])
+        A = pointAbstrait(0, 0, nom[0])
+        B = pointAbstrait(4, 0, nom[1])
+        C = pointAbstrait(1.58, 3.7, nom[2])
         pol = polygoneAvecNom(A, B, C)
         objets = []
         objets.push(segment(A, B), segment(B, C), segment(A, C))
@@ -82,9 +82,9 @@ export default class RechercheValeurPythagore extends ExerciceSimple {
       case 'b':
         nom = creerNomDePolygone(3, ['QD'])
         a = choice([8, 18, 32, 50, 72, 98, 128, 162, 200])
-        A = point(0, 0, nom[0])
-        B = point(4, 0, nom[1])
-        C = point(1.58, 3.7, nom[2])
+        A = pointAbstrait(0, 0, nom[0])
+        B = pointAbstrait(4, 0, nom[1])
+        C = pointAbstrait(1.58, 3.7, nom[2])
         pol = polygoneAvecNom(A, B, C)
         objets = []
         objets.push(pol[0], pol[1])

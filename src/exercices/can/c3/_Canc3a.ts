@@ -3,7 +3,7 @@ import { droiteGraduee } from '../../../lib/2d/DroiteGraduee'
 import { fixeBordures } from '../../../lib/2d/fixeBordures'
 import { grille } from '../../../lib/2d/Grille'
 import { plot } from '../../../lib/2d/Plot'
-import { point } from '../../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { polygone, polygoneAvecNom } from '../../../lib/2d/polygones'
 import {
   segment,
@@ -11,6 +11,7 @@ import {
 } from '../../../lib/2d/segmentsVecteurs'
 import { texteParPosition } from '../../../lib/2d/textes'
 import { milieu } from '../../../lib/2d/utilitairesPoint'
+import { bleuMathalea } from '../../../lib/colors'
 import { texPrix } from '../../../lib/format/style'
 import { choice, shuffle } from '../../../lib/outils/arrayOutils'
 import {
@@ -28,7 +29,6 @@ import { context } from '../../../modules/context'
 import FractionEtendue from '../../../modules/FractionEtendue'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { egal, randint } from '../../../modules/outils'
-import { bleuMathalea } from '../../../lib/colors'
 
 export const titre = 'Classe CAN C3'
 
@@ -776,18 +776,18 @@ export default class ClasseCan2023 {
     const f = randint(d, b)
     const A = polygone(
       [
-        point(0, 0),
-        point(c, 0),
-        point(c, d),
-        point(e, d),
-        point(e, f),
-        point(0, f),
+        pointAbstrait(0, 0),
+        pointAbstrait(c, 0),
+        pointAbstrait(c, d),
+        pointAbstrait(e, d),
+        pointAbstrait(e, f),
+        pointAbstrait(0, f),
       ],
       'black',
     )
     A.couleurDeRemplissage = colorToLatexOrHTML('lightgray')
     const C = grille(0, 0, a, b, 'black', 1, 1, 0)
-    // const D = point(1 + a, 4 - b)
+    // const D = pointAbstrait(1 + a, 4 - b)
     sortie.texte = `Quelle fraction de la surface totale représente la surface grisée ?
     <br>`
     sortie.texte += mathalea2d(
@@ -913,11 +913,11 @@ export default class ClasseCan2023 {
     if (choix === 'a') {
       a = grille(-2, 0, 7, 4, 'gray', 1, 1)
       b = choice([3, 4, 5, 6])
-      A = point(0, 2, 'A', 'below')
-      B = point(1, 2, 'B', 'below')
-      C = point(1, 1, 'C', 'above')
-      G = point(0, 4, 'C', 'above')
-      H = point(b, 4, 'D', 'above')
+      A = pointAbstrait(0, 2, 'A', 'below')
+      B = pointAbstrait(1, 2, 'B', 'below')
+      C = pointAbstrait(1, 1, 'C', 'above')
+      G = pointAbstrait(0, 4, 'C', 'above')
+      H = pointAbstrait(b, 4, 'D', 'above')
       s1 = segmentAvecExtremites(G, H)
       s1.epaisseur = 2
       s2 = segment(A, B)
@@ -967,12 +967,12 @@ export default class ClasseCan2023 {
     if (choix === 'b') {
       a = grille(-2, 0, 7, 4, 'gray', 1, 1)
       b = choice([2, 4, 5, 6])
-      A = point(0, 2, 'A', 'below')
-      B = point(1, 2, 'B', 'below')
-      C = point(1, 1, 'C', 'above')
-      D = point(2, 1, 'C', 'above')
-      G = point(0, 4, 'C', 'above')
-      H = point(b, 4, 'D', 'above')
+      A = pointAbstrait(0, 2, 'A', 'below')
+      B = pointAbstrait(1, 2, 'B', 'below')
+      C = pointAbstrait(1, 1, 'C', 'above')
+      D = pointAbstrait(2, 1, 'C', 'above')
+      G = pointAbstrait(0, 4, 'C', 'above')
+      H = pointAbstrait(b, 4, 'D', 'above')
       s1 = segmentAvecExtremites(G, H)
       s1.epaisseur = 2
       s2 = segment(A, B)
@@ -1026,13 +1026,13 @@ export default class ClasseCan2023 {
     if (choix === 'c') {
       a = grille(-2, 0, 7, 4, 'gray', 1, 1)
       b = choice([3, 5, 6])
-      A = point(0, 2, 'A', 'below')
-      B = point(1, 2, 'B', 'below')
-      C = point(1, 1, 'C', 'above')
-      D = point(2, 1, 'C', 'above')
-      E = point(2, 2, 'C', 'above')
-      G = point(0, 4, 'C', 'above')
-      H = point(b, 4, 'D', 'above')
+      A = pointAbstrait(0, 2, 'A', 'below')
+      B = pointAbstrait(1, 2, 'B', 'below')
+      C = pointAbstrait(1, 1, 'C', 'above')
+      D = pointAbstrait(2, 1, 'C', 'above')
+      E = pointAbstrait(2, 2, 'C', 'above')
+      G = pointAbstrait(0, 4, 'C', 'above')
+      H = pointAbstrait(b, 4, 'D', 'above')
       s1 = segmentAvecExtremites(G, H)
       s1.epaisseur = 2
       s2 = segment(A, B)
@@ -1303,13 +1303,18 @@ export default class ClasseCan2023 {
     if (choix) {
       prenom1 = prenomF()
       A = polygone(
-        [point(1, 5), point(11, 5), point(11, 4), point(1, 4)],
+        [
+          pointAbstrait(1, 5),
+          pointAbstrait(11, 5),
+          pointAbstrait(11, 4),
+          pointAbstrait(1, 4),
+        ],
         'black',
       )
       A.couleurDeRemplissage = colorToLatexOrHTML('lightgray')
       B = texteParPosition('1 uA', 6, 4.5, 0, 'black', 1, 'milieu', false)
       C = grille(0, 0, 12, 5, 'black', 1, 1, 0)
-      // D = point(1 + a, 4 - b)
+      // D = pointAbstrait(1 + a, 4 - b)
 
       sortie.texte = `${prenom1} veut construire une figure d'aire ${nombreDUnitesDAire} ${f[a][0] / f[a][1] >= 2 ? 'unités' : 'unité'} d'aire (uA).<br>
       Combien de petits carreaux doit-elle contenir ?<br>`
@@ -1337,7 +1342,12 @@ export default class ClasseCan2023 {
     } else {
       prenom1 = prenomF()
       A = polygone(
-        [point(1, 5), point(3, 5), point(3, 3), point(1, 3)],
+        [
+          pointAbstrait(1, 5),
+          pointAbstrait(3, 5),
+          pointAbstrait(3, 3),
+          pointAbstrait(1, 3),
+        ],
         'black',
       )
       A.couleurDeRemplissage = colorToLatexOrHTML('lightgray')
@@ -1509,14 +1519,14 @@ Combien coûtent $2$ cahiers ?`
         k = randint(2, 4)
         L = k * l
         l2 = l + randint(1, 3)
-        A = point(0, 0)
-        B = point(4, 0)
-        C = point(4, 1.5)
-        D = point(0, 1.5)
-        E = point(5, 0)
-        F = point(7.5, 0)
-        G = point(7.5, 1)
-        H = point(5, 1)
+        A = pointAbstrait(0, 0)
+        B = pointAbstrait(4, 0)
+        C = pointAbstrait(4, 1.5)
+        D = pointAbstrait(0, 1.5)
+        E = pointAbstrait(5, 0)
+        F = pointAbstrait(7.5, 0)
+        G = pointAbstrait(7.5, 1)
+        H = pointAbstrait(5, 1)
         xmin = -1.5
         ymin = -0.5
         xmax = 9.2
@@ -1582,14 +1592,14 @@ Elle est donc égale à $${l2}\\times ${k}=${miseEnEvidence(sortie.reponse)}\\te
         k = L - randint(1, 2)
         // L = k * l
         l2 = L / 2 // long petit
-        A = point(0, 0)
-        B = point(2.5, 0)
-        C = point(2.5, 1)
-        D = point(0, 1)
-        E = point(3, 0)
-        F = point(7, 0)
-        G = point(7, 2)
-        H = point(3, 2)
+        A = pointAbstrait(0, 0)
+        B = pointAbstrait(2.5, 0)
+        C = pointAbstrait(2.5, 1)
+        D = pointAbstrait(0, 1)
+        E = pointAbstrait(3, 0)
+        F = pointAbstrait(7, 0)
+        G = pointAbstrait(7, 2)
+        H = pointAbstrait(3, 2)
         xmin = -1
         ymin = -0.5
         xmax = 8.5

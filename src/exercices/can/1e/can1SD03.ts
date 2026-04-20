@@ -1,8 +1,9 @@
 import { courbe } from '../../../lib/2d/Courbe'
-import { point } from '../../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { repere } from '../../../lib/2d/reperes'
 import { texteParPosition } from '../../../lib/2d/textes'
 import { tracePoint } from '../../../lib/2d/TracePoint'
+import { bleuMathalea } from '../../../lib/colors'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { setReponse } from '../../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../../lib/interactif/questionMathLive'
@@ -11,7 +12,6 @@ import { rienSi1 } from '../../../lib/outils/ecritures'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../../modules/outils'
 import Exercice from '../../Exercice'
-import { bleuMathalea } from '../../../lib/colors'
 export const titre =
   'Déterminer graphiquement la valeur de $b$ avec une parabole'
 export const interactifReady = true
@@ -48,7 +48,7 @@ export default class LectureGraphiqueParabolebEtc extends Exercice {
       beta = randint(-2, 2)
       a = choice([-1, 1])
       o = texteParPosition('O', -0.3, -0.3, 0, 'black', 1, 'milieu')
-      A = point(alpha, beta)
+      A = pointAbstrait(alpha, beta)
 
       traceA = tracePoint(A, bleuMathalea) // Variable qui trace les points avec une croix
       f = (x: number): number => a * (x - alpha) ** 2 + beta

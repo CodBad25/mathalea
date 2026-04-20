@@ -1,17 +1,17 @@
 import { cercleCentrePoint } from '../../../lib/2d/cercle'
 import { grille } from '../../../lib/2d/Grille'
-import { point } from '../../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { polygoneAvecNom } from '../../../lib/2d/polygones'
 import { segment } from '../../../lib/2d/segmentsVecteurs'
 import { texteParPosition } from '../../../lib/2d/textes'
 import { pointSurCercle } from '../../../lib/2d/utilitairesPoint'
+import { bleuMathalea } from '../../../lib/colors'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
-import { bleuMathalea } from '../../../lib/colors'
 export const titre =
   "Associer une mesure d'angle à un  point du cercle trigonométrique "
 export const interactifReady = true
@@ -43,14 +43,14 @@ export default class PointSurCercleTrigo extends ExerciceSimple {
   nouvelleVersion() {
     let choix
     const r = 5
-    const O = point(0, 0, 'O', 'below left')
+    const O = pointAbstrait(0, 0, 'O', 'below left')
     const o = texteParPosition('O', -0.4, -0.4, 0, 'black', 1)
-    const I = point(r, 0, 'I', 'right')
-    const J = point(0, r, 'J', 'above')
-    const K = point(-r, 0, 'K', 'left')
-    const L = point(0, -r, 'L', 'below')
-    const I2 = point(-r, 0)
-    const J2 = point(0, -r)
+    const I = pointAbstrait(r, 0, 'I', 'right')
+    const J = pointAbstrait(0, r, 'J', 'above')
+    const K = pointAbstrait(-r, 0, 'K', 'left')
+    const L = pointAbstrait(0, -r, 'L', 'below')
+    const I2 = pointAbstrait(-r, 0)
+    const J2 = pointAbstrait(0, -r)
     const s1 = segment(I, I2)
     const s2 = segment(J, J2)
     const c = cercleCentrePoint(O, I)

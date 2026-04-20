@@ -1,7 +1,7 @@
 import { colorToLatexOrHTML } from '../../../lib/2d/colorToLatexOrHtml'
 import { fixeBordures } from '../../../lib/2d/fixeBordures'
 import { grille } from '../../../lib/2d/Grille'
-import { point } from '../../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { Polygone, polygone } from '../../../lib/2d/polygones'
 import { carre } from '../../../lib/2d/polygonesParticuliers'
 import { latex2d } from '../../../lib/2d/textes'
@@ -130,25 +130,28 @@ export default class AireUsuelleParComptageCan extends ExerciceSimple {
     const ymax = Math.ceil(b + 1)
     const uniteAire =
       this.sup3 === 1
-        ? carre(point(xmax - 2, ymax - 2), point(xmax - 1, ymax - 2))
+        ? carre(
+            pointAbstrait(xmax - 2, ymax - 2),
+            pointAbstrait(xmax - 1, ymax - 2),
+          )
         : this.sup3 === 2
           ? polygone(
-              point(xmax - 2, ymax - 2),
-              point(xmax - 1, ymax - 2),
-              point(xmax - 1, ymax - 1.5),
-              point(xmax - 2, ymax - 1.5),
+              pointAbstrait(xmax - 2, ymax - 2),
+              pointAbstrait(xmax - 1, ymax - 2),
+              pointAbstrait(xmax - 1, ymax - 1.5),
+              pointAbstrait(xmax - 2, ymax - 1.5),
             )
           : this.sup3 === 3
             ? polygone(
-                point(xmax - 2, ymax - 2),
-                point(xmax - 1, ymax - 2),
-                point(xmax - 2, ymax - 1),
+                pointAbstrait(xmax - 2, ymax - 2),
+                pointAbstrait(xmax - 1, ymax - 2),
+                pointAbstrait(xmax - 2, ymax - 1),
               )
             : polygone(
-                point(xmax - 2, ymax - 2),
-                point(xmax - 1.5, ymax - 2),
-                point(xmax - 1.5, ymax - 1.5),
-                point(xmax - 2, ymax - 1.5),
+                pointAbstrait(xmax - 2, ymax - 2),
+                pointAbstrait(xmax - 1.5, ymax - 2),
+                pointAbstrait(xmax - 1.5, ymax - 1.5),
+                pointAbstrait(xmax - 2, ymax - 1.5),
               )
     uniteAire.couleurDeRemplissage = colorToLatexOrHTML('gray')
     const texteUniteAire = latex2d('1 ' + unite, xmax - 1.5, ymax - 2.5, {
@@ -177,27 +180,27 @@ export default class AireUsuelleParComptageCan extends ExerciceSimple {
   }
 
   questionCarre(a: number): Polygone {
-    const A = point(0, 0)
-    const B = point(a, 0)
+    const A = pointAbstrait(0, 0)
+    const B = pointAbstrait(a, 0)
     const quad = carre(A, B)
     quad.couleurDeRemplissage = colorToLatexOrHTML('orange')
     return quad
   }
 
   questionRectangle(a: number, b: number): Polygone {
-    const A = point(0, 0)
-    const B = point(a, 0)
-    const C = point(a, b)
-    const D = point(0, b)
+    const A = pointAbstrait(0, 0)
+    const B = pointAbstrait(a, 0)
+    const C = pointAbstrait(a, b)
+    const D = pointAbstrait(0, b)
     const rect = polygone(A, B, C, D)
     rect.couleurDeRemplissage = colorToLatexOrHTML('orange')
     return rect
   }
 
   questionTriangle(a: number, b: number): Polygone {
-    const A = point(0, 0)
-    const B = point(a, 0)
-    const C = point(0, b)
+    const A = pointAbstrait(0, 0)
+    const B = pointAbstrait(a, 0)
+    const C = pointAbstrait(0, b)
     const tri = polygone(A, B, C)
     tri.couleurDeRemplissage = colorToLatexOrHTML('orange')
     return tri

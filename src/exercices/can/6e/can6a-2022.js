@@ -1,5 +1,5 @@
 import { codageAngleDroit } from '../../../lib/2d/CodageAngleDroit'
-import { point } from '../../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { segment } from '../../../lib/2d/segmentsVecteurs'
 import { labelPoint, texteParPosition } from '../../../lib/2d/textes'
 import { milieu } from '../../../lib/2d/utilitairesPoint'
@@ -21,6 +21,7 @@ import Exercice from '../../Exercice'
 import Decimal from 'decimal.js'
 import { droiteGraduee } from '../../../lib/2d/DroiteGraduee'
 import { grille } from '../../../lib/2d/Grille'
+import { bleuMathalea } from '../../../lib/colors'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import {
   handleAnswers,
@@ -28,7 +29,6 @@ import {
 } from '../../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../../lib/interactif/questionMathLive'
 import Grandeur from '../../../modules/Grandeur'
-import { bleuMathalea } from '../../../lib/colors'
 
 export const titre = 'CAN 6e sujet 2022'
 export const interactifReady = true
@@ -533,10 +533,10 @@ $${miseEnEvidence(a + 1)}$ h et $${miseEnEvidence(reponse)}$ min.`
           a = randint(7, 12) * 2 + 1
           b = randint(3, 6) * 2 + 1
           c = new Decimal(a).div(2)
-          A = point(0, 0, 'A', 'below')
-          B = point(4, 0, 'B', 'below')
-          C = point(4, 3, 'C', 'above')
-          D = point(0, 3, 'D', 'above')
+          A = pointAbstrait(0, 0, 'A', 'below')
+          B = pointAbstrait(4, 0, 'B', 'below')
+          C = pointAbstrait(4, 3, 'C', 'above')
+          D = pointAbstrait(0, 3, 'D', 'above')
           code1 = codageAngleDroit(A, B, C)
           code2 = codageAngleDroit(B, C, D)
           code3 = codageAngleDroit(C, D, A)
@@ -704,10 +704,10 @@ $${miseEnEvidence(a + 1)}$ h et $${miseEnEvidence(reponse)}$ min.`
 
             b = randint(1, 6, 4)
 
-            A = point(0, 0, 'A', 'below')
-            B = point(b, 0, 'B', 'below')
-            C = point(0, 2, 'C', 'above')
-            D = point(4, 2, 'D', 'above')
+            A = pointAbstrait(0, 0, 'A', 'below')
+            B = pointAbstrait(b, 0, 'B', 'below')
+            C = pointAbstrait(0, 2, 'C', 'above')
+            D = pointAbstrait(4, 2, 'D', 'above')
             s1 = segment(C, D)
             s1.epaisseur = 4
             s2 = segment(A, B)
@@ -748,10 +748,10 @@ $${miseEnEvidence(a + 1)}$ h et $${miseEnEvidence(reponse)}$ min.`
 
             b = randint(1, 9, 5)
 
-            A = point(0, 0, 'A', 'below')
-            B = point(b, 0, 'B', 'below')
-            C = point(0, 2, 'C', 'above')
-            D = point(5, 2, 'D', 'above')
+            A = pointAbstrait(0, 0, 'A', 'below')
+            B = pointAbstrait(b, 0, 'B', 'below')
+            C = pointAbstrait(0, 2, 'C', 'above')
+            D = pointAbstrait(5, 2, 'D', 'above')
             s1 = segment(C, D)
             s1.epaisseur = 4
             s2 = segment(A, B)
