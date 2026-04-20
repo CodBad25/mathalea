@@ -55,7 +55,7 @@ export default class ExprimerEnFonctionRac extends ExerciceSimple {
           this.question += choixQ
             ? `Donner l'expression permettant, à partir de cette formule, d'exprimer la vitesse $v$.`
             : `Donner l'expression permettant, à partir de cette formule, d'exprimer l'accélération $a$.`
-          this.reponse = choixQ ? '$\\sqrt{aR}$' : '$\\dfrac{v^2}{R}$'
+          this.reponse = choixQ ? '\\sqrt{aR}' : '\\dfrac{v^2}{R}'
         }
         if (this.versionQcm) {
           this.distracteurs = choixQ
@@ -95,8 +95,8 @@ Puis en isolant $a$, on obtient : $${miseEnEvidence('a = \\dfrac{v^2}{R}')}$.`
             ? `Donner l'expression permettant, à partir de cette formule, d'exprimer $y$.`
             : `Donner l'expression permettant, à partir de cette formule, d'exprimer $v$.`
           this.reponse = choixQ
-            ? '$\\dfrac{x}{v^2}$'
-            : '$\\dfrac{\\sqrt{y}-1}{x}$'
+            ? '\\dfrac{x}{v^2}'
+            : '\\dfrac{\\sqrt{y}-1}{x}'
         }
         if (this.versionQcm) {
           this.distracteurs = choixQ
@@ -135,7 +135,7 @@ Donc : $${miseEnEvidence('v = \\dfrac{\\sqrt{y} - 1}{x}')}$.`
           this.reponse = '$t=\\sqrt{C}-1$'
         } else {
           this.question = `On considère la relation $C = (1 + t)^2$.<br>Donner l'expression permettant, à partir de cette formule, d'exprimer $t$.`
-          this.reponse = '$\\sqrt{C}-1$'
+          this.reponse = '\\sqrt{C}-1'
         }
         if (this.versionQcm) {
           this.distracteurs = [
@@ -169,16 +169,16 @@ En isolant $t$, on obtient : $${miseEnEvidence('t = \\sqrt{C} - 1')}$.`
             : `Donner l'expression permettant, à partir de cette formule, d'exprimer le rayon $r$.`
           this.reponse = choixQ
             ? [
-                '$\\dfrac{V}{\\pi\\times r^2}$',
-                '$\\dfrac{V}{\\pi r^2}$',
-                '$\\dfrac{V}{r^2\\pi}$',
-                '$\\dfrac{V}{r^2\\times \\pi}$',
+                '\\dfrac{V}{\\pi\\times r^2}',
+                '\\dfrac{V}{\\pi r^2}',
+                '\\dfrac{V}{r^2\\pi}',
+                '\\dfrac{V}{r^2\\times \\pi}',
               ]
             : [
-                '$\\sqrt{\\dfrac{V}{\\pi\\times h}}$',
-                '$\\sqrt{\\dfrac{V}{\\pi h}}$',
-                '$\\sqrt{\\dfrac{V}{h\\pi}}$',
-                '$\\sqrt{\\dfrac{V}{h\\times \\pi}}$',
+                '\\sqrt{\\dfrac{V}{\\pi\\times h}}',
+                '\\sqrt{\\dfrac{V}{\\pi h}}',
+                '\\sqrt{\\dfrac{V}{h\\pi}}',
+                '\\sqrt{\\dfrac{V}{h\\times \\pi}}',
               ]
         }
         if (this.versionQcm) {
@@ -234,16 +234,16 @@ On cherche à isoler $h$. On a :`
             : `Donner l'expression permettant, à partir de cette formule, d'exprimer le rayon $r$.`
           this.reponse = choixQ
             ? [
-                '$\\dfrac{3V}{\\pi r^2}$',
-                '$\\dfrac{3V}{\\pi\\times r^2}$',
-                '$\\dfrac{3V}{r^2\\times \\pi}$',
-                '$\\dfrac{3V}{r^2\\pi}$',
+                '\\dfrac{3V}{\\pi r^2}',
+                '\\dfrac{3V}{\\pi\\times r^2}',
+                '\\dfrac{3V}{r^2\\times \\pi}',
+                '\\dfrac{3V}{r^2\\pi}',
               ]
             : [
-                '$\\sqrt{\\dfrac{3V}{\\pi h}}$',
-                '$\\sqrt{\\dfrac{3V}{\\pi\\times h}}$',
-                '$\\sqrt{\\dfrac{3V}{h\\pi}}$',
-                '$\\sqrt{\\dfrac{3V}{h\\times\\pi}}$',
+                '\\sqrt{\\dfrac{3V}{\\pi h}}',
+                '\\sqrt{\\dfrac{3V}{\\pi\\times h}}',
+                '\\sqrt{\\dfrac{3V}{h\\pi}}',
+                '\\sqrt{\\dfrac{3V}{h\\times\\pi}}',
               ]
         }
         if (this.versionQcm) {
@@ -296,8 +296,8 @@ Comme $r \\geqslant 0$, en prenant la racine carrée, on obtient : $${miseEnEvid
             ? `Donner l'expression permettant, à partir de cette formule, d'exprimer la masse $m$.`
             : `Donner l'expression permettant, à partir de cette formule, d'exprimer la vitesse $v$.`
           this.reponse = choixQ
-            ? ['$\\dfrac{2E}{v^2}$', '$\\dfrac{2E}{v^{2}}$']
-            : ['$\\sqrt{\\dfrac{2E}{m}}$', '$\\sqrt{\\dfrac{2\\times E}{m}}$']
+            ? ['\\dfrac{2E}{v^2}', '\\dfrac{2E}{v^{2}}']
+            : ['\\sqrt{\\dfrac{2E}{m}}', '\\sqrt{\\dfrac{2\\times E}{m}}']
         }
         if (this.versionQcm) {
           this.distracteurs = choixQ
