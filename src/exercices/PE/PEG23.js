@@ -1,4 +1,4 @@
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { milieu, pointAdistance } from '../../lib/2d/utilitairesPoint'
 import { texteGras } from '../../lib/format/style'
 import Alea2iep from '../../modules/Alea2iep'
@@ -24,48 +24,48 @@ export default class ProduitDeDeuxLongueurs extends Exercice {
     super()
     this.besoinFormulaireNumerique = ["Longueur de l'unité en cm", 10]
     this.besoinFormulaire2Numerique = [
-      'Longueur de a en cm',
+      'Longueur de a en cm (hasard si 0)',
       10,
-      'Valeur au hasard si laissé vide',
     ]
     this.besoinFormulaire3Numerique = [
-      'Longueur de b en cm',
+      'Longueur de b en cm (hasard si 0)',
       10,
-      'Valeur au hasard si laissé vide',
     ]
 
     this.nbQuestions = 1
     this.nbQuestionsModifiable = false
     this.sup = 1
+    this.sup2 = 0
+    this.sup3 = 0
   }
 
   nouvelleVersion(numeroExercice) {
     const anim = new Alea2iep()
     const unite = this.sup
-    const a = this.sup2 === undefined ? randint(2, 5) : this.sup2
-    const b = this.sup3 === undefined ? randint(2, 5, a) : this.sup3
+    const a = (this.sup2 < 1 || this.sup2 === this.sup) ? randint(2, 5, this.sup) : this.sup2
+    const b = (this.sup3 < 1 || this.sup3 === this.sup) ? randint(2, 5, [this.sup, a]) : this.sup3
     const monAngle = 40
-    const u1 = point(1, 5)
-    const u2 = point(u1.x + unite, u1.y)
+    const u1 = pointAbstrait(1, 5)
+    const u2 = pointAbstrait(u1.x + unite, u1.y)
     const um = milieu(u1, u2)
-    const u1y1 = point(u1.x, u1.y - 0.1)
-    const u1y2 = point(u1.x, u1.y + 0.1)
-    const u2y1 = point(u2.x, u2.y - 0.1)
-    const u2y2 = point(u2.x, u2.y + 0.1)
-    const a1 = point(1, 4)
-    const a2 = point(a1.x + a, a1.y)
+    const u1y1 = pointAbstrait(u1.x, u1.y - 0.1)
+    const u1y2 = pointAbstrait(u1.x, u1.y + 0.1)
+    const u2y1 = pointAbstrait(u2.x, u2.y - 0.1)
+    const u2y2 = pointAbstrait(u2.x, u2.y + 0.1)
+    const a1 = pointAbstrait(1, 4)
+    const a2 = pointAbstrait(a1.x + a, a1.y)
     const am = milieu(a1, a2)
-    const a1y1 = point(a1.x, a1.y - 0.1)
-    const a1y2 = point(a1.x, a1.y + 0.1)
-    const a2y1 = point(a2.x, a2.y - 0.1)
-    const a2y2 = point(a2.x, a2.y + 0.1)
-    const b1 = point(1, 3)
-    const b2 = point(b1.x + b, b1.y)
+    const a1y1 = pointAbstrait(a1.x, a1.y - 0.1)
+    const a1y2 = pointAbstrait(a1.x, a1.y + 0.1)
+    const a2y1 = pointAbstrait(a2.x, a2.y - 0.1)
+    const a2y2 = pointAbstrait(a2.x, a2.y + 0.1)
+    const b1 = pointAbstrait(1, 3)
+    const b2 = pointAbstrait(b1.x + b, b1.y)
     const bm = milieu(b1, b2)
-    const b1y1 = point(b1.x, b1.y - 0.1)
-    const b1y2 = point(b1.x, b1.y + 0.1)
-    const b2y1 = point(b2.x, b2.y - 0.1)
-    const b2y2 = point(b2.x, b2.y + 0.1)
+    const b1y1 = pointAbstrait(b1.x, b1.y - 0.1)
+    const b1y2 = pointAbstrait(b1.x, b1.y + 0.1)
+    const b2y1 = pointAbstrait(b2.x, b2.y - 0.1)
+    const b2y2 = pointAbstrait(b2.x, b2.y + 0.1)
     anim.traitRapide(u1, u2)
     anim.traitRapide(u1y1, u1y2)
     anim.traitRapide(u2y1, u2y2)
@@ -78,9 +78,9 @@ export default class ProduitDeDeuxLongueurs extends Exercice {
     anim.textePosition('u', um.x - 0.2, um.y + 0.8)
     anim.textePosition('a', am.x - 0.2, am.y + 0.8)
     anim.textePosition('b', bm.x - 0.2, bm.y + 0.8)
-    const O = point(1, -2, 'O')
-    const A = point(O.x + a, O.y, 'A')
-    const M = point(O.x + (a * b) / unite, O.y, 'M')
+    const O = pointAbstrait(1, -2, 'O')
+    const A = pointAbstrait(O.x + a, O.y, 'A')
+    const M = pointAbstrait(O.x + (a * b) / unite, O.y, 'M')
     anim.regleMasquerGraduations()
     anim.regleDemiDroiteOriginePoint(O, M)
     anim.regleMasquer()

@@ -1,11 +1,7 @@
 import { afficheLongueurSegment } from '../../lib/2d/afficheLongueurSegment'
 import { codageAngleDroit } from '../../lib/2d/CodageAngleDroit'
 import { droite, droiteParPointEtPerpendiculaire } from '../../lib/2d/droites'
-import {
-  point,
-  pointAbstrait,
-  type PointAbstrait,
-} from '../../lib/2d/PointAbstrait'
+import { pointAbstrait, type PointAbstrait } from '../../lib/2d/PointAbstrait'
 import { polygoneAvecNom } from '../../lib/2d/polygones'
 import { representant } from '../../lib/2d/representantVecteur'
 import { segment } from '../../lib/2d/segmentsVecteurs'
@@ -93,8 +89,8 @@ export default class nomExercice extends Exercice {
       )
 
       // Vecteur et image par translation
-      const D = point(B.x - 1, B.y + 7 + randint(-10, 10) / 10, lettres[3])
-      const E = point(B.x - 10, B.y + 7 + randint(-20, 20) / 10, lettres[4])
+      const D = pointAbstrait(B.x - 1, B.y + 7 + randint(-10, 10) / 10, lettres[3])
+      const E = pointAbstrait(B.x - 10, B.y + 7 + randint(-20, 20) / 10, lettres[4])
       const imageA = translation2Points(A, D, E, `${lettres[0]}'`)
       const imageB = translation2Points(B, D, E, `${lettres[1]}'`)
       const imageC = translation2Points(C, D, E, `${lettres[2]}'`)

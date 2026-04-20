@@ -1,5 +1,5 @@
 import { codageAngleDroit } from '../../../lib/2d/CodageAngleDroit'
-import { point } from '../../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { polygoneAvecNom } from '../../../lib/2d/polygones'
 import { segment } from '../../../lib/2d/segmentsVecteurs'
 import { labelPoint, texteParPosition } from '../../../lib/2d/textes'
@@ -605,10 +605,10 @@ export default class SujetCAN20214ieme extends Exercice {
         case 21:
           if (choice([true, false])) {
             L = randint(3, 9)
-            B = point(0, 0, 'B', 'below')
-            C = point(3, 0, 'C', 'below')
-            D = point(3, 3, 'D', 'above')
-            A = point(0, 3, 'A', 'above')
+            B = pointAbstrait(0, 0, 'B', 'below')
+            C = pointAbstrait(3, 0, 'C', 'below')
+            D = pointAbstrait(3, 3, 'D', 'above')
+            A = pointAbstrait(0, 3, 'A', 'above')
             xmin = -1
             ymin = -0.5
             xmax = 4.5
@@ -650,10 +650,10 @@ export default class SujetCAN20214ieme extends Exercice {
           } else {
             L = randint(2, 5)
             l2 = randint(7, 9)
-            B = point(0, 0, 'B', 'below')
-            C = point(4, 0, 'C', 'below')
-            D = point(4, 2.5, 'D', 'above')
-            A = point(0, 2.5, 'A', 'above')
+            B = pointAbstrait(0, 0, 'B', 'below')
+            C = pointAbstrait(4, 0, 'C', 'below')
+            D = pointAbstrait(4, 2.5, 'D', 'above')
+            A = pointAbstrait(0, 2.5, 'A', 'above')
             xmin = -1
             ymin = -0.8
             xmax = 6
@@ -842,9 +842,9 @@ export default class SujetCAN20214ieme extends Exercice {
           ]
           a = choice(triplet)
 
-          C = point(0, 0, 'C', 'below')
-          A = point(2, 0, 'A', 'below')
-          B = point(2, 3, 'B', 'above')
+          C = pointAbstrait(0, 0, 'C', 'below')
+          A = pointAbstrait(2, 0, 'A', 'below')
+          B = pointAbstrait(2, 3, 'B', 'above')
 
           xmin = -1
           ymin = -1

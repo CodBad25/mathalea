@@ -1,4 +1,4 @@
-import { point } from '../../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { segment } from '../../../lib/2d/segmentsVecteurs'
 import { texteParPosition } from '../../../lib/2d/textes'
 import { tracePoint } from '../../../lib/2d/TracePoint'
@@ -40,10 +40,10 @@ export default class QuestionsAiresEtPerimetres4 extends ExerciceSimple {
     const n = randint(7, 12)
     const c = randint(1, 6) + randint(3, 9) / 10
     const d = n - c
-    const A = point(0, 0, 'P')
-    const B = point(7, 1, 'Q', 'below')
-    const C = point(6.5, 4, 'R')
-    const D = point(2, 5, 'R')
+    const A = pointAbstrait(0, 0, 'P')
+    const B = pointAbstrait(7, 1, 'Q', 'below')
+    const C = pointAbstrait(6.5, 4, 'R')
+    const D = pointAbstrait(2, 5, 'R')
     const objets = []
     objets.push(
       segment(A, B),

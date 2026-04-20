@@ -1,6 +1,6 @@
 import { colorToLatexOrHTML } from '../../../lib/2d/colorToLatexOrHtml'
 import { fixeBordures } from '../../../lib/2d/fixeBordures'
-import { point } from '../../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { polygone, Polygone } from '../../../lib/2d/polygones'
 import { segment, Segment } from '../../../lib/2d/segmentsVecteurs'
 import { rotation, similitude } from '../../../lib/2d/transformations'
@@ -46,32 +46,41 @@ export default class FractionDeRectangle extends ExerciceSimple {
       factor = cas > 4 ? 4 : 2
     }
 
-    const A = point(0, 0)
-    const B = point(nbCase * hauteur, 0)
-    const C = point(nbCase * hauteur, hauteur)
-    const D = point(0, hauteur)
-    const O = point(hauteur / 2, hauteur / 2)
+    const A = pointAbstrait(0, 0)
+    const B = pointAbstrait(nbCase * hauteur, 0)
+    const C = pointAbstrait(nbCase * hauteur, hauteur)
+    const D = pointAbstrait(0, hauteur)
+    const O = pointAbstrait(hauteur / 2, hauteur / 2)
     let triangle: Polygone
-    const diag1 = segment(point(0, 0), point(hauteur, hauteur))
-    const diag2 = segment(point(hauteur, 0), point(0, hauteur))
+    const diag1 = segment(pointAbstrait(0, 0), pointAbstrait(hauteur, hauteur))
+    const diag2 = segment(pointAbstrait(hauteur, 0), pointAbstrait(0, hauteur))
     const rectangle = polygone([A, B, C, D], 'black')
     rectangle.epaisseur = 2
     const segments: Segment[] = []
     for (let i = 0; i < nbCase; i++) {
       const s = segment(
-        point((i + 1) * hauteur, 0),
-        point((i + 1) * hauteur, hauteur),
+        pointAbstrait((i + 1) * hauteur, 0),
+        pointAbstrait((i + 1) * hauteur, hauteur),
       )
       s.pointilles = 2
       segments.push(s)
     }
-    const triangle0 = polygone([point(0, 0), O, point(hauteur, 0)])
+    const triangle0 = polygone([
+      pointAbstrait(0, 0),
+      O,
+      pointAbstrait(hauteur, 0),
+    ])
     switch (cas) {
       case 1:
         triangle = similitude(triangle0, A, 45, Math.sqrt(2))
         break
       case 2:
-        triangle = similitude(triangle0, point(hauteur, 0), -45, Math.sqrt(2))
+        triangle = similitude(
+          triangle0,
+          pointAbstrait(hauteur, 0),
+          -45,
+          Math.sqrt(2),
+        )
         break
       case 3:
         triangle = rotation(similitude(triangle0, A, 45, Math.sqrt(2)), O, -90)

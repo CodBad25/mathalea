@@ -1,6 +1,6 @@
 import { Droite, droite } from '../../lib/2d/droites'
 import { mediatrice } from '../../lib/2d/Mediatrice'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import {
   nommePolygone,
   Polygone,
@@ -96,7 +96,7 @@ export default class TransformationsDeTriangle extends Exercice {
       xMax = 0
       yMin = 0
       yMax = 0
-      A = point(0, 0, 'A')
+      A = pointAbstrait(0, 0, 'A')
       B = pointAdistance(A, randint(40, 60) / 10, randint(70, 100), 'B')
       C = similitude(B, A, randint(20, 50), randint(8, 12) / 10, 'C')
       triangle0 = polygone(A, B, C)

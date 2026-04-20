@@ -4,7 +4,7 @@
 
 import { afficheLongueurSegment } from '../../lib/2d/afficheLongueurSegment'
 import { codageAngleDroit } from '../../lib/2d/CodageAngleDroit'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { nommePolygone, polygone } from '../../lib/2d/polygones'
 import { rotation, similitude } from '../../lib/2d/transformations'
 import { longueur } from '../../lib/2d/utilitairesGeometriques'
@@ -293,8 +293,8 @@ export default class Pythagore2D extends Exercice {
       texteCorr = ''
       const c1 = randint(22, 50) / 10
       const c2 = randint(22, 50) / 10
-      const A1 = point(0, 0)
-      const B1 = point(c1, 0)
+      const A1 = pointAbstrait(0, 0)
+      const B1 = pointAbstrait(c1, 0)
       const C1 = similitude(B1, A1, 90, c2 / longueur(A1, B1))
       const p1 = polygone(A1, B1, C1)
       p1.isVisible = false

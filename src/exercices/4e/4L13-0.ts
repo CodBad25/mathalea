@@ -1,7 +1,7 @@
 import { afficheCoteSegment } from '../../lib/2d/AfficheCoteSegment'
 import { codageCarre } from '../../lib/2d/CodageCarre'
 import { codageSegments } from '../../lib/2d/CodageSegment'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { nommePolygone } from '../../lib/2d/polygones'
 import { polygoneRegulierParCentreEtRayon } from '../../lib/2d/polygonesParticuliers'
 import { segment } from '../../lib/2d/segmentsVecteurs'
@@ -129,7 +129,7 @@ export default class MettreEnEquationSansResoudre extends Exercice {
       // on choisit une unité
       const unite = unites[randint(0, unites.length - 1)]
       // on prépare le polygone
-      const po = polygoneRegulierParCentreEtRayon(point(0, 0), 4, n)
+      const po = polygoneRegulierParCentreEtRayon(pointAbstrait(0, 0), 4, n)
       po.opacite = 0.5
       po.epaisseur = 2
       // on pépare la côte

@@ -1,6 +1,6 @@
 import { cercle } from '../../lib/2d/cercle'
 import { droite } from '../../lib/2d/droites'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { longueur } from '../../lib/2d/utilitairesGeometriques'
 import {
   milieu,
@@ -51,21 +51,21 @@ export default class RacineCarrAvecTheoremeHauteur extends Exercice {
     const r = a * b
     const distance = 1
     const anim = new Alea2iep()
-    const u1 = point(1, 5)
-    const u2 = point(u1.x + distance, u1.y)
-    const u1y1 = point(u1.x, u1.y - 0.1)
-    const u1y2 = point(u1.x, u1.y + 0.1)
-    const u2y1 = point(u2.x, u2.y - 0.1)
-    const u2y2 = point(u2.x, u2.y + 0.1)
+    const u1 = pointAbstrait(1, 5)
+    const u2 = pointAbstrait(u1.x + distance, u1.y)
+    const u1y1 = pointAbstrait(u1.x, u1.y - 0.1)
+    const u1y2 = pointAbstrait(u1.x, u1.y + 0.1)
+    const u2y1 = pointAbstrait(u2.x, u2.y - 0.1)
+    const u2y2 = pointAbstrait(u2.x, u2.y + 0.1)
     anim.traitRapide(u1, u2)
     anim.traitRapide(u1y1, u1y2)
     anim.traitRapide(u2y1, u2y2)
     anim.regleMasquerGraduations()
     anim.textePosition('u', u1.x + 0.4, u1.y + 0.8)
-    const A = point(3, 0, 'A')
-    const B = point(A.x + a + b, 0, 'B')
-    const H = point(A.x + a, 0, 'H')
-    const h = point(H.x, H.y + 1)
+    const A = pointAbstrait(3, 0, 'A')
+    const B = pointAbstrait(A.x + a + b, 0, 'B')
+    const H = pointAbstrait(A.x + a, 0, 'H')
+    const h = pointAbstrait(H.x, H.y + 1)
     const maHauteur = droite(H, h)
     const monCercle = cercle(milieu(A, B), longueur(A, B) / 2)
     const C = pointIntersectionLC(maHauteur, monCercle)

@@ -1,7 +1,7 @@
 import { cercle } from '../../../lib/2d/cercle'
 import { fixeBordures } from '../../../lib/2d/fixeBordures'
 import { placeLatexSurSegment } from '../../../lib/2d/placeLatexSurSegment'
-import { point } from '../../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { polygoneAvecNom } from '../../../lib/2d/polygones'
 import { pointIntersectionCC } from '../../../lib/2d/utilitairesPoint'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
@@ -29,8 +29,8 @@ export default class Can2025N4Q18 extends ExerciceCan {
       b = randint(3, 9, a)
       c = randint(Math.abs(b - a) + 1, a + b - 1)
     }
-    const A = point(0, 0, 'A', 'below left')
-    const B = point(c, 0, 'B', 'below right')
+    const A = pointAbstrait(0, 0, 'A', 'below left')
+    const B = pointAbstrait(c, 0, 'B', 'below right')
     const C1 = cercle(A, a)
     const C2 = cercle(B, b)
     const C = pointIntersectionCC(C1, C2, 'C', 1)

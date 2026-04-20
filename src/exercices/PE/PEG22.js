@@ -1,4 +1,4 @@
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { similitude } from '../../lib/2d/transformations'
 import { longueur } from '../../lib/2d/utilitairesGeometriques'
 import { pointAdistance, pointSurSegment } from '../../lib/2d/utilitairesPoint'
@@ -58,21 +58,21 @@ export default class RacineCarrAvecTheoremePythagore extends Exercice {
     }
     const anim = new Alea2iep()
     const distance = 1
-    const u1 = point(1, 5)
-    const u2 = point(u1.x + distance, u1.y)
-    const u1y1 = point(u1.x, u1.y - 0.1)
-    const u1y2 = point(u1.x, u1.y + 0.1)
-    const u2y1 = point(u2.x, u2.y - 0.1)
-    const u2y2 = point(u2.x, u2.y + 0.1)
+    const u1 = pointAbstrait(1, 5)
+    const u2 = pointAbstrait(u1.x + distance, u1.y)
+    const u1y1 = pointAbstrait(u1.x, u1.y - 0.1)
+    const u1y2 = pointAbstrait(u1.x, u1.y + 0.1)
+    const u2y1 = pointAbstrait(u2.x, u2.y - 0.1)
+    const u2y2 = pointAbstrait(u2.x, u2.y + 0.1)
     anim.traitRapide(u1, u2)
     anim.traitRapide(u1y1, u1y2)
     anim.traitRapide(u2y1, u2y2)
     anim.epaisseur = 1
     anim.regleMasquerGraduations()
     anim.textePosition('u', u1.x + 0.4, u1.y + 0.8)
-    const A = point(3, 0, 'A')
-    const B = point(A.x + AB * distance, 0, 'B')
-    const C = point(B.x, BC * distance, 'C')
+    const A = pointAbstrait(3, 0, 'A')
+    const B = pointAbstrait(A.x + AB * distance, 0, 'B')
+    const C = pointAbstrait(B.x, BC * distance, 'C')
     anim.regleMasquerGraduations()
     anim.regleDroite(A, B)
     anim.regleMasquer()

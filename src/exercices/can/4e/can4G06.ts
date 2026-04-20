@@ -1,5 +1,5 @@
 import { droite } from '../../../lib/2d/droites'
-import { point } from '../../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { polygoneAvecNom } from '../../../lib/2d/polygones'
 import {
   segment,
@@ -63,7 +63,7 @@ export default class CalculLongueurThales extends ExerciceSimple {
       a = k * b
       c = randint(2, 5, b) //
 
-      A = point(0, 0, nom[0], 'below right')
+      A = pointAbstrait(0, 0, nom[0], 'below right')
       B = pointAdistance(A, b, 40, nom[1])
       D = pointAdistance(A, a, 40, nom[3])
       C = pointAdistance(D, k * c, -40, nom[2], 'below right')
@@ -135,7 +135,7 @@ export default class CalculLongueurThales extends ExerciceSimple {
       a = randint(2, 5) //
       b = randint(2, 5, a) //
 
-      A = point(0, 0, nom[0], 'below right')
+      A = pointAbstrait(0, 0, nom[0], 'below right')
       B = pointAdistance(A, a, 40, nom[1])
       D = pointAdistance(A, k * a, 40, nom[3])
       C = pointAdistance(D, k * b, -40, nom[2], 'below right')

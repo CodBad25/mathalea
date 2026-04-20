@@ -7,13 +7,13 @@ import Decimal from 'decimal.js'
 import { codageAngleDroit } from '../../../lib/2d/CodageAngleDroit'
 import { codageSegments } from '../../../lib/2d/CodageSegment'
 import { fixeBordures } from '../../../lib/2d/fixeBordures'
-import { point } from '../../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { segment } from '../../../lib/2d/segmentsVecteurs'
 import { latex2d } from '../../../lib/2d/textes'
 import { milieu } from '../../../lib/2d/utilitairesPoint'
+import { bleuMathalea } from '../../../lib/colors'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { mathalea2d } from '../../../modules/mathalea2d'
-import { bleuMathalea } from '../../../lib/colors'
 export const titre = 'Calculer un périmètre'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -40,10 +40,10 @@ export default class perimetreCalcul2026 extends ExerciceSimple {
     const objets = []
     const diviseur = this.canOfficielle ? 1 : choice([1, 10, 100, 1000])
     const a = new Decimal(annee).div(diviseur)
-    const A = point(0, 0, 'A', 'below')
-    const B = point(6, 0, 'B', 'below')
-    const C = point(6, 6, 'C', 'below')
-    const D = point(0, 6, 'D', 'below')
+    const A = pointAbstrait(0, 0, 'A', 'below')
+    const B = pointAbstrait(6, 0, 'B', 'below')
+    const C = pointAbstrait(6, 6, 'C', 'below')
+    const D = pointAbstrait(0, 6, 'D', 'below')
     const s1 = segment(A, B)
     const s2 = segment(B, C)
     const s3 = segment(C, D)

@@ -2,7 +2,7 @@ import * as Blockly from 'blockly/core'
 import * as En from 'blockly/msg/en'
 import { afficheLongueurSegment } from '../../lib/2d/afficheLongueurSegment'
 import { codageAngleDroit } from '../../lib/2d/CodageAngleDroit'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { nommePolygone, polygone } from '../../lib/2d/polygones'
 import { rotation, similitude } from '../../lib/2d/transformations'
 import { longueur } from '../../lib/2d/utilitairesGeometriques'
@@ -87,8 +87,8 @@ export default class Pythagore2DBlockly extends Exercice {
     ) {
       texte = ''
       texteCorr = ''
-      const A1 = point(0, 0)
-      const B1 = point(randint(22, 50) / 10, 0)
+      const A1 = pointAbstrait(0, 0)
+      const B1 = pointAbstrait(randint(22, 50) / 10, 0)
       const C1 = similitude(B1, A1, 90, randint(22, 50) / 10 / longueur(A1, B1))
       const p1 = polygone(A1, B1, C1)
       const p2 = rotation(p1, A1, randint(0, 360))

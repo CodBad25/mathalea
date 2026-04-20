@@ -2,7 +2,7 @@ import { codageAngle } from '../../../lib/2d/angles'
 import { codageAngleDroit } from '../../../lib/2d/CodageAngleDroit'
 import { colorToLatexOrHTML } from '../../../lib/2d/colorToLatexOrHtml'
 import { fixeBordures } from '../../../lib/2d/fixeBordures'
-import { point } from '../../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { polygone } from '../../../lib/2d/polygones'
 import { segment } from '../../../lib/2d/segmentsVecteurs'
 import { labelPoint, texteParPosition } from '../../../lib/2d/textes'
@@ -278,9 +278,9 @@ export default class SujetCAN2023Quatrieme extends Exercice {
             ang1 = choice([
               20, 30, 40, 60, 70, 80, 100, 110, 120, 130, 140, 150, 160,
             ])
-            A = point(0, 0, 'A', 'below')
-            B = point(6, 0, 'B', 'below')
-            origine = point(3, 0, 'O', 'below')
+            A = pointAbstrait(0, 0, 'A', 'below')
+            B = pointAbstrait(6, 0, 'B', 'below')
+            origine = pointAbstrait(3, 0, 'O', 'below')
             C = rotation(B, origine, ang1)
             s1 = segment(A, B)
             s2 = segment(origine, C)
@@ -389,10 +389,10 @@ export default class SujetCAN2023Quatrieme extends Exercice {
              Ainsi, ?$=180-${ang1}=${miseEnEvidence(180 - ang1)}^\\circ$.`
           } else {
             ang1 = choice([30, 40, 60, 70, 110, 120, 130, 140, 150, 160])
-            A = point(0, 0, 'A', 'below')
-            B = point(2, 0, 'B', 'below')
-            origine = point(0, 0, 'O', 'below')
-            D = point(0, 2, 'D', 'right')
+            A = pointAbstrait(0, 0, 'A', 'below')
+            B = pointAbstrait(2, 0, 'B', 'below')
+            origine = pointAbstrait(0, 0, 'O', 'below')
+            D = pointAbstrait(0, 2, 'D', 'right')
             C = rotation(B, origine, ang1)
             traceD = tracePoint(D)
             traceD.taille = context.isHtml ? 2 : 1
@@ -820,11 +820,11 @@ export default class SujetCAN2023Quatrieme extends Exercice {
 
         case 15:
           if (choice([true, false])) {
-            A = point(0, 0, 'A', 'above')
-            B = point(1, -1, 'B', 'above')
-            C = point(2, -0.5, 'C', 'above')
-            D = point(2.3, 0.8, 'D', 'above')
-            E = point(1, 4, 'E', 'above')
+            A = pointAbstrait(0, 0, 'A', 'above')
+            B = pointAbstrait(1, -1, 'B', 'above')
+            C = pointAbstrait(2, -0.5, 'C', 'above')
+            D = pointAbstrait(2.3, 0.8, 'D', 'above')
+            E = pointAbstrait(1, 4, 'E', 'above')
             s1 = segment(A, D)
 
             s1.pointilles = 2
@@ -851,10 +851,10 @@ export default class SujetCAN2023Quatrieme extends Exercice {
             )
             texteCorr = `Ce solide a $${miseEnEvidence(5)}$ faces.`
           } else {
-            A = point(0, 0, 'A', 'above')
-            B = point(3, 0, 'B', 'above')
-            C = point(1, 1, 'C', 'above')
-            D = point(2, 4, 'D', 'above')
+            A = pointAbstrait(0, 0, 'A', 'above')
+            B = pointAbstrait(3, 0, 'B', 'above')
+            C = pointAbstrait(1, 1, 'C', 'above')
+            D = pointAbstrait(2, 4, 'D', 'above')
 
             s1 = segment(C, D)
             s2 = segment(A, C)
@@ -957,9 +957,9 @@ export default class SujetCAN2023Quatrieme extends Exercice {
             b = randint(4, 5)
             c = a * b
             b = b * 2
-            A = point(0, 0, 'A', 'below')
-            B = point(0, 4, 'B', 'above')
-            C = point(6, 0, 'C', 'below')
+            A = pointAbstrait(0, 0, 'A', 'below')
+            B = pointAbstrait(0, 4, 'B', 'above')
+            C = pointAbstrait(6, 0, 'C', 'below')
             poly = polygone([A, B, C], 'black')
             poly.couleurDeRemplissage = colorToLatexOrHTML('lightgray')
             d = texteParPosition(
@@ -1021,9 +1021,9 @@ export default class SujetCAN2023Quatrieme extends Exercice {
             a = triplet[0]
             b = triplet[1]
             c = triplet[2]
-            A = point(0, 0, 'A', 'below')
-            B = point(4, 0.5, 'B', 'below')
-            C = point(1, 2, 'C', 'above')
+            A = pointAbstrait(0, 0, 'A', 'below')
+            B = pointAbstrait(4, 0.5, 'B', 'below')
+            C = pointAbstrait(1, 2, 'C', 'above')
             poly = polygone([A, B, C], 'black')
             poly.couleurDeRemplissage = colorToLatexOrHTML('lightgray')
             d = texteParPosition(
@@ -1352,14 +1352,14 @@ export default class SujetCAN2023Quatrieme extends Exercice {
           b = randint(2, 3)
           c = randint(4, 5)
           v = a * b * c
-          A = point(0, 3, 'A', 'above')
-          B = point(1, 4, 'B', 'above')
-          C = point(6, 4, 'C', 'above')
-          D = point(5, 3, 'D', 'above')
-          I = point(0, 0, 'I', 'below')
-          J = point(1, 1, 'J', 'above right')
-          K = point(6, 1, 'K', 'above right')
-          L = point(5, 0, 'L', 'below')
+          A = pointAbstrait(0, 3, 'A', 'above')
+          B = pointAbstrait(1, 4, 'B', 'above')
+          C = pointAbstrait(6, 4, 'C', 'above')
+          D = pointAbstrait(5, 3, 'D', 'above')
+          I = pointAbstrait(0, 0, 'I', 'below')
+          J = pointAbstrait(1, 1, 'J', 'above right')
+          K = pointAbstrait(6, 1, 'K', 'above right')
+          L = pointAbstrait(5, 0, 'L', 'below')
           s1 = segment(I, J)
           s2 = segment(J, K)
           s3 = segment(J, B)

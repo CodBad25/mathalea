@@ -1,7 +1,7 @@
 import { codageAngle } from '../../lib/2d/angles'
 import { codageAngleDroit } from '../../lib/2d/CodageAngleDroit'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { Polygone, nommePolygone } from '../../lib/2d/polygones'
 import { segment } from '../../lib/2d/segmentsVecteurs'
 import { rotation } from '../../lib/2d/transformations'
@@ -60,9 +60,9 @@ export default class VocabulaireTriangleRectangle extends Exercice {
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 100; ) {
       const ab = randint(200, 500) / 100
       const ac = randint(300, Math.ceil(ab * 100)) / 100
-      const a = point(0, 0)
-      const b = point(ab, 0)
-      const c = point(0, ac)
+      const a = pointAbstrait(0, 0)
+      const b = pointAbstrait(ab, 0)
+      const c = pointAbstrait(0, ac)
       const p1 = new Polygone(a, b, c)
       // p1.isVisible = false
       const p2 = rotation(p1, a, randint(0, 360))

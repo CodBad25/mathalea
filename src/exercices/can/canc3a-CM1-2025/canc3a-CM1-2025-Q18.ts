@@ -1,4 +1,4 @@
-import { point, Point } from '../../../lib/2d/PointAbstrait'
+import { Point, pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import ExerciceSimple from '../../ExerciceSimple'
 
 import { fixeBordures } from '../../../lib/2d/fixeBordures'
@@ -40,9 +40,9 @@ export default class Can2025CM1Q18 extends ExerciceSimple {
     const B = new Point(6, 0)
     const C = new Point(2.5, 3.3)
     const triangle = new Polygone([A, B, C])
-    const cote1 = segment(point(0, -0.5), point(6, -0.5))
-    const cote2 = segment(point(6.4, 0.2), point(2.65, 3.6))
-    const cote3 = segment(point(2, 3.45), point(-0.3, 0.28))
+    const cote1 = segment(pointAbstrait(0, -0.5), pointAbstrait(6, -0.5))
+    const cote2 = segment(pointAbstrait(6.4, 0.2), pointAbstrait(2.65, 3.6))
+    const cote3 = segment(pointAbstrait(2, 3.45), pointAbstrait(-0.3, 0.28))
     cote1.styleExtremites = '<->'
     cote2.styleExtremites = '<->'
     cote3.styleExtremites = '<->'

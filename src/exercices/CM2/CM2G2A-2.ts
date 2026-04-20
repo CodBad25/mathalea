@@ -3,7 +3,7 @@ import { codageAngleDroit } from '../../lib/2d/CodageAngleDroit'
 import { codageSegment } from '../../lib/2d/CodageSegment'
 import { droite, droiteParPointEtPerpendiculaire } from '../../lib/2d/droites'
 import { grille, seyes } from '../../lib/2d/Grille'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { labelPoint, latexParPoint } from '../../lib/2d/textes'
 import { tracePoint } from '../../lib/2d/TracePoint'
 import { homothetie, rotation } from '../../lib/2d/transformations'
@@ -95,8 +95,8 @@ export default class constructionPerpendiculaires extends Exercice {
       const objetsEnonce = []
       const objetsCorrection = []
       const indLettre = randint(1, 15)
-      const A = point(0, 0, lettreDepuisChiffre(indLettre), 'above left')
-      let B = point(
+      const A = pointAbstrait(0, 0, lettreDepuisChiffre(indLettre), 'above left')
+      let B = pointAbstrait(
         20,
         randint(-4, 0, [-1, 0, 1]),
         lettreDepuisChiffre(indLettre + 1),
@@ -143,7 +143,7 @@ export default class constructionPerpendiculaires extends Exercice {
       const C1 = rotation(B, A, ang1)
       const C2 = rotation(A, B, -1 * ang2)
       const CC = pointIntersectionDD(droite(A, C1), droite(B, C2))
-      let C = point(
+      let C = pointAbstrait(
         Math.floor(CC.x),
         Math.floor(CC.y),
         lettreDepuisChiffre(indLettre + 2),
@@ -195,7 +195,7 @@ export default class constructionPerpendiculaires extends Exercice {
       context.fenetreMathalea2d = [Xmin, Ymin, Xmax, Ymax]
 
       let pHc = pointIntersectionDD(
-        droite(point(Xmin, Ymin), point(Xmax, Ymin)),
+        droite(pointAbstrait(Xmin, Ymin), pointAbstrait(Xmax, Ymin)),
         hC,
         '(d_1)',
         'above left',
@@ -210,7 +210,7 @@ export default class constructionPerpendiculaires extends Exercice {
         // pHc.x = pHc.x - 1
       }
       let pHb = pointIntersectionDD(
-        droite(point(Xmin, Ymin), point(Xmin, Ymax)),
+        droite(pointAbstrait(Xmin, Ymin), pointAbstrait(Xmin, Ymax)),
         hB,
         '(d_2)',
         'below right',
@@ -220,7 +220,7 @@ export default class constructionPerpendiculaires extends Exercice {
         pHb.x = pHb.x + 0.5
       } else {
         pHb = pointIntersectionDD(
-          droite(point(Xmin, Ymax), point(Xmax, Ymax)),
+          droite(pointAbstrait(Xmin, Ymax), pointAbstrait(Xmax, Ymax)),
           hB,
           '(d_2)',
           'below left',
@@ -231,7 +231,7 @@ export default class constructionPerpendiculaires extends Exercice {
         }
       }
       let pHa = pointIntersectionDD(
-        droite(point(Xmax, Ymin), point(Xmax, Ymax)),
+        droite(pointAbstrait(Xmax, Ymin), pointAbstrait(Xmax, Ymax)),
         hA,
         '(d_3)',
         'above left',
@@ -241,7 +241,7 @@ export default class constructionPerpendiculaires extends Exercice {
         pHa.x = pHa.x - 0.5
       } else {
         pHa = pointIntersectionDD(
-          droite(point(Xmin, Ymax), point(Xmax, Ymax)),
+          droite(pointAbstrait(Xmin, Ymax), pointAbstrait(Xmax, Ymax)),
           hA,
           '(d_3)',
           'below right',
