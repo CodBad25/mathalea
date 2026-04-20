@@ -1,6 +1,6 @@
 import { courbe } from '../../lib/2d/Courbe'
 import { courbeInterpolee } from '../../lib/2d/CourbeInterpolee.1'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { polyline } from '../../lib/2d/Polyline'
 import { repere } from '../../lib/2d/reperes'
 import { texteParPosition } from '../../lib/2d/textes'
@@ -401,11 +401,11 @@ export default class ExploiterRepresentationGraphique extends Exercice {
           if (situation === 1) {
             l = polyline(
               [
-                point(0, 0),
-                point(1, v1),
-                point(2, v3),
-                point(3, v3),
-                point(4, 0),
+                pointAbstrait(0, 0),
+                pointAbstrait(1, v1),
+                pointAbstrait(2, v3),
+                pointAbstrait(3, v3),
+                pointAbstrait(4, 0),
               ],
               bleuMathalea,
             )
@@ -414,11 +414,11 @@ export default class ExploiterRepresentationGraphique extends Exercice {
           } else if (situation === 2) {
             l = polyline(
               [
-                point(0, 0),
-                point(1, v3),
-                point(2, v3),
-                point(3, v2),
-                point(4, 0),
+                pointAbstrait(0, 0),
+                pointAbstrait(1, v3),
+                pointAbstrait(2, v3),
+                pointAbstrait(3, v2),
+                pointAbstrait(4, 0),
               ],
               bleuMathalea,
             )
@@ -427,11 +427,11 @@ export default class ExploiterRepresentationGraphique extends Exercice {
           } else {
             l = polyline(
               [
-                point(0, 0),
-                point(1, v3),
-                point(2, v2),
-                point(3, v2),
-                point(4, 0),
+                pointAbstrait(0, 0),
+                pointAbstrait(1, v3),
+                pointAbstrait(2, v2),
+                pointAbstrait(3, v2),
+                pointAbstrait(4, 0),
               ],
               bleuMathalea,
             )

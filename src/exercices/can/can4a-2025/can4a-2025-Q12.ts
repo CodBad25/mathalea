@@ -1,6 +1,6 @@
 import { fixeBordures } from '../../../lib/2d/fixeBordures'
 import { placeLatexSurSegment } from '../../../lib/2d/placeLatexSurSegment'
-import { point } from '../../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { segment } from '../../../lib/2d/segmentsVecteurs'
 import { labelPoint } from '../../../lib/2d/textes'
 import { homothetie, translation } from '../../../lib/2d/transformations'
@@ -33,8 +33,8 @@ export default class Can2025N4Q12 extends ExerciceCan {
         ? randint(4, Math.round(b / 2) - 1)
         : randint(Math.round(b / 2) - 1, b - 4)
     }
-    const A = point(0, 0, 'A', 'above')
-    const C = point(10, 0, 'C', 'above')
+    const A = pointAbstrait(0, 0, 'A', 'above')
+    const C = pointAbstrait(10, 0, 'C', 'above')
     const B = homothetie(C, A, a / b, 'B', 'above')
     const sB = segment(B.x, B.y - 0.2, B.x, B.y + 0.2)
     const s = segment(A, C)

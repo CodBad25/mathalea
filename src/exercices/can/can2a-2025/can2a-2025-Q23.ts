@@ -1,5 +1,5 @@
 import { grille } from '../../../lib/2d/Grille'
-import { point } from '../../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { labelPoint } from '../../../lib/2d/textes'
 import { tracePoint } from '../../../lib/2d/TracePoint'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
@@ -32,14 +32,14 @@ export default class VecteurEgal extends ExerciceSimple {
 
   nouvelleVersion() {
     const a = grille(0, 0, 7, 5, 'gray', 1, 1)
-    const A = point(1, 1, 'A', 'below')
-    const B = point(3, 2, 'B', 'above')
-    const C = point(3, 1, 'C', 'below')
-    const D = point(6, 4, 'D', 'above')
-    const E = point(2, 2, 'E', 'above')
-    const F = point(5, 2, 'F', 'above')
-    const G = point(5, 3, 'G', 'above') // unite
-    const H = point(4, 3, 'H', 'above') // unite
+    const A = pointAbstrait(1, 1, 'A', 'below')
+    const B = pointAbstrait(3, 2, 'B', 'above')
+    const C = pointAbstrait(3, 1, 'C', 'below')
+    const D = pointAbstrait(6, 4, 'D', 'above')
+    const E = pointAbstrait(2, 2, 'E', 'above')
+    const F = pointAbstrait(5, 2, 'F', 'above')
+    const G = pointAbstrait(5, 3, 'G', 'above') // unite
+    const H = pointAbstrait(4, 3, 'H', 'above') // unite
     const PositionPt = tracePoint(A, B, C, D, E, F, G, H)
     const LabelsPt = labelPoint(A, B, C, D, E, F, G, H)
     const xmin = -1

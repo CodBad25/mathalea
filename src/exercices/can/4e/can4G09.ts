@@ -1,6 +1,6 @@
 import { codageAngleDroit } from '../../../lib/2d/CodageAngleDroit'
 import { fixeBordures } from '../../../lib/2d/fixeBordures'
-import { point } from '../../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import {
   barycentre,
   polygone,
@@ -57,9 +57,9 @@ export default class TripletsPythagoriciens extends ExerciceSimple {
     const triplet = choice(listeTripletsPythagoriciens)
     const nom = Array.from(creerNomDePolygone(3, ['QD']))
     const scale = 4 / triplet[1]
-    const A = point(0, 0)
-    const B = point(triplet[1] * scale, 0)
-    const C = point(triplet[1] * scale, triplet[0] * scale)
+    const A = pointAbstrait(0, 0)
+    const B = pointAbstrait(triplet[1] * scale, 0)
+    const C = pointAbstrait(triplet[1] * scale, triplet[0] * scale)
     const abc = polygone(A, B, C)
     const O = barycentre(abc)
     const tri = rotation(abc, O, randint(0, 360))

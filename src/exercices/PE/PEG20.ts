@@ -1,4 +1,4 @@
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { pointAdistance } from '../../lib/2d/utilitairesPoint'
 import { texteGras } from '../../lib/format/style'
 import { texFractionFromString } from '../../lib/outils/deprecatedFractions'
@@ -33,7 +33,7 @@ export default class PartageSegmentCompasRegle extends Exercice {
     if (d === 4) n = randint(1, d + 2, [2, 4, 6])
     else n = randint(1, d + 2, d)
     const anim = new Alea2iep()
-    const A = point(1, -2, 'A')
+    const A = pointAbstrait(1, -2, 'A')
     const angleAvecHorizontale = randint(-10, 20)
     const B = pointAdistance(A, randint(4, 7), angleAvecHorizontale)
     B.nom = 'B'

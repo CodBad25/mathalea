@@ -1,5 +1,5 @@
 import { courbe } from '../../lib/2d/Courbe'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { repere } from '../../lib/2d/reperes'
 import { segment } from '../../lib/2d/segmentsVecteurs'
 import { texPrix, texteGras } from '../../lib/format/style'
@@ -157,8 +157,8 @@ export default class GraphiquesEtProportionnalite2 extends Exercice {
 
       // on prépare les appels supplémentaires pour la correction
       const mesAppelsCorr = mesAppels
-      const A = point(situation.qte_max, 0)
-      const B = point(
+      const A = pointAbstrait(situation.qte_max, 0)
+      const B = pointAbstrait(
         situation.qte_max,
         arrondi((situation.qte_max * situation.prix_unitaire) / yscale),
       )
@@ -166,7 +166,7 @@ export default class GraphiquesEtProportionnalite2 extends Exercice {
       s1.epaisseur = 2
       s1.pointilles = 5
       s1.styleExtremites = '->'
-      const C = point(
+      const C = pointAbstrait(
         0,
         arrondi((situation.qte_max * situation.prix_unitaire) / yscale),
       )
@@ -175,8 +175,8 @@ export default class GraphiquesEtProportionnalite2 extends Exercice {
       s2.pointilles = 5
       s2.styleExtremites = '->'
 
-      const D = point(situation.qte2, 0)
-      const E = point(
+      const D = pointAbstrait(situation.qte2, 0)
+      const E = pointAbstrait(
         situation.qte2,
         arrondi((situation.qte2 * situation.prix_unitaire) / yscale),
       )
@@ -184,7 +184,7 @@ export default class GraphiquesEtProportionnalite2 extends Exercice {
       s3.epaisseur = 2
       s3.pointilles = 5
       s3.styleExtremites = '->'
-      const F = point(
+      const F = pointAbstrait(
         0,
         arrondi((situation.qte2 * situation.prix_unitaire) / yscale),
       )

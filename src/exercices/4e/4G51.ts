@@ -1,7 +1,7 @@
 import { codageAngleDroit } from '../../lib/2d/CodageAngleDroit'
 import { colorToLatexOrHTML } from '../../lib/2d/colorToLatexOrHtml'
 import { grille, seyes } from '../../lib/2d/Grille'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { cone, semiEllipse } from '../../lib/2d/projections3d'
 import { segment } from '../../lib/2d/segmentsVecteurs'
 import { labelPoint } from '../../lib/2d/textes'
@@ -197,10 +197,10 @@ export default class RepresenterUnSolide4e extends Exercice {
 
       switch (listeTypeDeQuestions[i] % 2) {
         case 1:
-          A = point(6, 0, nom[0], 'left')
-          B = point(11, 0, nom[1], 'right')
-          C = point(11, 5, nom[2], 'right')
-          D = point(6, 5, nom[3], 'left')
+          A = pointAbstrait(6, 0, nom[0], 'left')
+          B = pointAbstrait(11, 0, nom[1], 'right')
+          C = pointAbstrait(11, 5, nom[2], 'right')
+          D = pointAbstrait(6, 5, nom[3], 'left')
           E = similitude(B, A, anglepersp, coeffpersp, nom[4], 'left')
           E.x = Math.round(E.x)
           E.y = Math.round(E.y)
@@ -208,10 +208,10 @@ export default class RepresenterUnSolide4e extends Exercice {
 
         case 0:
         default:
-          A = point(5, 0, nom[0], 'left')
-          B = point(9 + randint(1, 3), 0, nom[1], 'right')
-          C = point(B.x, randint(3, 7), nom[2], 'right')
-          D = point(A.x, C.y, nom[3], 'left')
+          A = pointAbstrait(5, 0, nom[0], 'left')
+          B = pointAbstrait(9 + randint(1, 3), 0, nom[1], 'right')
+          C = pointAbstrait(B.x, randint(3, 7), nom[2], 'right')
+          D = pointAbstrait(A.x, C.y, nom[3], 'left')
           E = similitude(
             B,
             A,

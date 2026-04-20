@@ -1,5 +1,5 @@
 import { codageAngleDroit } from '../../../lib/2d/CodageAngleDroit'
-import { point } from '../../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { polygoneAvecNom } from '../../../lib/2d/polygones'
 import { texteParPosition } from '../../../lib/2d/textes'
 import { similitude } from '../../../lib/2d/transformations'
@@ -43,7 +43,7 @@ export default class CalculHypotenusePythagore extends ExerciceSimple {
     const nom = creerNomDePolygone(3, ['QD'])
     a = randint(2, 7) //
     b = randint(3, 7) //
-    const A = point(0, 0, nom[0])
+    const A = pointAbstrait(0, 0, nom[0])
     const B = pointAdistance(A, a, randint(0, 45), nom[1])
     const C = similitude(A, B, 90, b / a, nom[2])
     const pol = polygoneAvecNom(A, B, C) // polygoneAvecNom s'occupe du placement des noms des sommets

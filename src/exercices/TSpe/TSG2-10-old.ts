@@ -1,5 +1,5 @@
 import { fixeBordures } from '../../lib/2d/fixeBordures'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { polygone } from '../../lib/2d/polygones'
 import { segment } from '../../lib/2d/segmentsVecteurs'
 import { labelPoint } from '../../lib/2d/textes'
@@ -47,15 +47,15 @@ export default class NomExercice extends Exercice {
       let texteCorr = ''
 
       // Points pour la figure
-      const A = point(0, 0, 'A', 'below left')
-      const B = point(4, 0, 'B', 'below')
-      const C = point(6, 1.6, 'C', 'below')
-      const D = point(2, 1.6, 'D', 'above left')
+      const A = pointAbstrait(0, 0, 'A', 'below left')
+      const B = pointAbstrait(4, 0, 'B', 'below')
+      const C = pointAbstrait(6, 1.6, 'C', 'below')
+      const D = pointAbstrait(2, 1.6, 'D', 'above left')
 
-      const E = point(A.x, A.y + 4, 'E', 'above left')
-      const F = point(B.x, B.y + 4, 'F', 'above')
-      const G = point(C.x, C.y + 4, 'G', 'above')
-      const H = point(D.x, D.y + 4, 'H', 'above left')
+      const E = pointAbstrait(A.x, A.y + 4, 'E', 'above left')
+      const F = pointAbstrait(B.x, B.y + 4, 'F', 'above')
+      const G = pointAbstrait(C.x, C.y + 4, 'G', 'above')
+      const H = pointAbstrait(D.x, D.y + 4, 'H', 'above left')
 
       const facesVisibles = [
         polygone([A, E, H, G, F, E], 'black'),

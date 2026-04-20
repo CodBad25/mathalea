@@ -2,7 +2,7 @@ import { afficheLongueurSegment } from '../../lib/2d/afficheLongueurSegment'
 import { cercle } from '../../lib/2d/cercle'
 import { codageAngleDroit } from '../../lib/2d/CodageAngleDroit'
 import { droite, droiteParPointEtPerpendiculaire } from '../../lib/2d/droites'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { polygone } from '../../lib/2d/polygones'
 import { polygoneRegulier } from '../../lib/2d/polygonesParticuliers'
 import { segment } from '../../lib/2d/segmentsVecteurs'
@@ -82,7 +82,7 @@ export default class TracerQuadrilatèresParticuliers extends Exercice {
       const typeDeQuestion = typesDeQuestionsDisponibles[listeQuestions[i]]
       const objetsCorrection = []
       const nomPoly = creerNomDePolygone(4, ['P', 'Q'])
-      const A = point(0, 0, nomPoly.charAt(0), 'below left')
+      const A = pointAbstrait(0, 0, nomPoly.charAt(0), 'below left')
       let B, C, D, naturePoly, figure
       switch (typeDeQuestion) {
         case 'Carré': {
@@ -108,15 +108,15 @@ export default class TracerQuadrilatèresParticuliers extends Exercice {
               }
             }
           }
-          B = point(disSave[1] / 10, 0, nomPoly.charAt(1), 'below right')
+          B = pointAbstrait(disSave[1] / 10, 0, nomPoly.charAt(1), 'below right')
           figure = polygoneRegulier(A, B, 4)
-          C = point(
+          C = pointAbstrait(
             figure.listePoints[2].x,
             figure.listePoints[2].y,
             nomPoly.charAt(2),
             'above right',
           )
-          D = point(
+          D = pointAbstrait(
             figure.listePoints[3].x,
             figure.listePoints[3].y,
             nomPoly.charAt(3),
@@ -147,15 +147,15 @@ export default class TracerQuadrilatèresParticuliers extends Exercice {
               }
             }
           }
-          B = point(disSave[1] / 10, 0, nomPoly.charAt(1), 'below right')
+          B = pointAbstrait(disSave[1] / 10, 0, nomPoly.charAt(1), 'below right')
           figure = polygoneRegulier(A, B, 4)
-          C = point(
+          C = pointAbstrait(
             figure.listePoints[2].x,
             figure.listePoints[2].y,
             nomPoly.charAt(2),
             'above right',
           )
-          D = point(
+          D = pointAbstrait(
             figure.listePoints[3].x,
             figure.listePoints[3].y,
             nomPoly.charAt(3),
@@ -193,7 +193,7 @@ export default class TracerQuadrilatèresParticuliers extends Exercice {
               }
             }
           }
-          B = point(disSave[0] / 10, 0, nomPoly.charAt(1), 'below right')
+          B = pointAbstrait(disSave[0] / 10, 0, nomPoly.charAt(1), 'below right')
           C = pointAdistance(B, disSave[1] / 10, 90, nomPoly.charAt(2))
           D = pointAdistance(C, disSave[0] / 10, 180, nomPoly.charAt(3))
           figure = polygone(A, B, C, D)
@@ -231,7 +231,7 @@ export default class TracerQuadrilatèresParticuliers extends Exercice {
           }
 
           const diagonale = disSave[1] / 10
-          B = point(disSave[0] / 10, 0, nomPoly.charAt(1), 'below right')
+          B = pointAbstrait(disSave[0] / 10, 0, nomPoly.charAt(1), 'below right')
 
           C = pointIntersectionLC(
             droiteParPointEtPerpendiculaire(B, droite(A, B)),

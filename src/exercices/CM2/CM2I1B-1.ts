@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 import { colorToLatexOrHTML } from '../../lib/2d/colorToLatexOrHtml'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { texteParPositionEchelle } from '../../lib/2d/textes'
 import { tracePoint } from '../../lib/2d/TracePoint'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
@@ -375,7 +375,7 @@ export default class NoteLaCouleurC3 extends Exercice {
         }
       } while (retour_a_la_case_depart)
       if (this.sup2) {
-        objetsEnonce.push(tracePoint(point(xdepart * 0.075, ydepart * 0.075)))
+        objetsEnonce.push(tracePoint(pointAbstrait(xdepart * 0.075, ydepart * 0.075)))
         for (let i = 1; i < 10; i++) {
           if (i !== 1) {
             objetsEnonce.push(
@@ -572,12 +572,12 @@ export default class NoteLaCouleurC3 extends Exercice {
     <animateMotion path="M ${lutin.listeTraces[0][0] * context.pixelsParCm} ${-lutin.listeTraces[0][1] * context.pixelsParCm} L`
 
       for (let i = 0; i < lutin.listeTraces.length; i++) {
-        const B = point(lutin.listeTraces[i][2], lutin.listeTraces[i][3])
+        const B = pointAbstrait(lutin.listeTraces[i][2], lutin.listeTraces[i][3])
         lutin.animation += ` ${B.xSVG(context.pixelsParCm)} ${B.ySVG(context.pixelsParCm)} `
       }
       lutin.animation +=
         '" begin="10s" dur="10s" repeatCount="indefinite" />; </circle>'
-      objetsCorrection.push(tracePoint(point(xdepart * 0.075, ydepart * 0.075)))
+      objetsCorrection.push(tracePoint(pointAbstrait(xdepart * 0.075, ydepart * 0.075)))
       if (this.sup2) {
         for (let i = 1; i < 10; i++) {
           if (i !== 1) {

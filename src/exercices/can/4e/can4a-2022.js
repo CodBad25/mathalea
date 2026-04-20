@@ -1,5 +1,5 @@
 import { codageAngleDroit } from '../../../lib/2d/CodageAngleDroit'
-import { point } from '../../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { polygone, polygoneAvecNom } from '../../../lib/2d/polygones'
 import { repere } from '../../../lib/2d/reperes'
 import { labelPoint, texteParPosition } from '../../../lib/2d/textes'
@@ -535,10 +535,10 @@ export default class SujetCAN2022quatrieme extends Exercice {
           a = randint(7, 10)
           b = randint(4, 6)
 
-          A = point(0, 0, 'A', 'below')
-          B = point(5, 1, 'B', 'below')
-          C = point(6, 4, 'C', 'above')
-          D = point(1, 3, 'D', 'above')
+          A = pointAbstrait(0, 0, 'A', 'below')
+          B = pointAbstrait(5, 1, 'B', 'below')
+          C = pointAbstrait(6, 4, 'C', 'above')
+          D = pointAbstrait(1, 3, 'D', 'above')
           poly = polygone([A, B, C, D], 'black')
           reponse = 2 * (a + b)
           d = texteParPosition(`${stringNombre(b)} cm`, 6.3, 2.5)
@@ -748,7 +748,7 @@ export default class SujetCAN2022quatrieme extends Exercice {
             axeYStyle: '->',
           })
 
-          A = point(a, b)
+          A = pointAbstrait(a, b)
           o = texteParPosition('O', -0.4, -0.6, 0, 'black') //, context.isHtml ? 1 : 0.7
           // o = latexParCoordonnees('\\text{O}', -0.3, -0.4, 'black', 15, 10, '', 7)
           lA = texteParPosition(
@@ -976,9 +976,9 @@ export default class SujetCAN2022quatrieme extends Exercice {
           ]
           a = choice(triplet)
 
-          C = point(0, 0, 'C', 'below')
-          A = point(2, 0, 'A', 'below')
-          B = point(2, 3, 'B', 'above')
+          C = pointAbstrait(0, 0, 'C', 'below')
+          A = pointAbstrait(2, 0, 'A', 'below')
+          B = pointAbstrait(2, 3, 'B', 'above')
 
           xmin = -1
           ymin = -1

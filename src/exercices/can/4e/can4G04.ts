@@ -1,9 +1,10 @@
 import { codageAngleDroit } from '../../../lib/2d/CodageAngleDroit'
 import { fixeBordures } from '../../../lib/2d/fixeBordures'
-import { point } from '../../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { polygoneAvecNom } from '../../../lib/2d/polygones'
 import { latex2d } from '../../../lib/2d/textes'
 import { milieu, pointAdistance } from '../../../lib/2d/utilitairesPoint'
+import { bleuMathalea } from '../../../lib/colors'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { extraireRacineCarree } from '../../../lib/outils/calculs'
 import {
@@ -15,7 +16,6 @@ import { texNombre, texRacineCarree } from '../../../lib/outils/texNombre'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
-import { bleuMathalea } from '../../../lib/colors'
 export const titre = 'Calculer un côté avec le théorème de Pythagore'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -43,7 +43,7 @@ export default class CalculCotePythagore extends ExerciceSimple {
     const a = randint(2, 5) //
     const b = randint(6, 10) //
     const c2 = b ** 2 - a ** 2
-    const A = point(0, 0, nom[0])
+    const A = pointAbstrait(0, 0, nom[0])
     const B = pointAdistance(A, a, -90, nom[1])
     const C = pointAdistance(B, Math.sqrt(c2), 0, nom[2])
     const pol = polygoneAvecNom(A, B, C) // polygoneAvecNom s'occupe du placement des noms des sommets
