@@ -1,4 +1,4 @@
-import { point } from '../../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { tracePoint } from '../../../lib/2d/TracePoint'
 import { vide2d } from '../../../lib/2d/Vide2d'
 import { droite } from '../../../lib/2d/droites'
@@ -6,6 +6,7 @@ import { repere } from '../../../lib/2d/reperes'
 import { segment } from '../../../lib/2d/segmentsVecteurs'
 import { latex2d } from '../../../lib/2d/textes'
 import { milieu } from '../../../lib/2d/utilitairesPoint'
+import { bleuMathalea } from '../../../lib/colors'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { ecritureAlgebrique, rienSi1 } from '../../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
@@ -14,7 +15,6 @@ import { context } from '../../../modules/context'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
-import { bleuMathalea } from '../../../lib/colors'
 export const titre = 'Déterminer une équation de droite (graphique)'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -49,8 +49,8 @@ export default class EquationDroite extends ExerciceSimple {
     const yB = randint(0, 4)
 
     const o = latex2d('\\text{O}', -0.3, -0.3, { letterSize: 'scriptsize' })
-    const A = point(xA, yA)
-    const B = point(xB, yB)
+    const A = pointAbstrait(xA, yA)
+    const B = pointAbstrait(xB, yB)
 
     // Pour l'affichage du coefficient directeur, on utilise toujours le point le plus à gauche
     let pointRef, pointCible
@@ -64,7 +64,7 @@ export default class EquationDroite extends ExerciceSimple {
       pointCible = A
     }
 
-    const pointHorizontal = point(pointCible.x, pointRef.y)
+    const pointHorizontal = pointAbstrait(pointCible.x, pointRef.y)
     const sHorizontal = segment(pointRef, pointHorizontal)
     const sVertical =
       pointCible.y === pointHorizontal.y

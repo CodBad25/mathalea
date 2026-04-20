@@ -1,11 +1,12 @@
 import { codageAngle } from '../../../lib/2d/angles'
 import { codageSegment } from '../../../lib/2d/CodageSegment'
 import { droiteGraduee } from '../../../lib/2d/DroiteGraduee'
-import { point } from '../../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { segment } from '../../../lib/2d/segmentsVecteurs'
 import { tableauColonneLigne } from '../../../lib/2d/tableau'
 import { labelPoint, texteParPosition } from '../../../lib/2d/textes'
 import { milieu } from '../../../lib/2d/utilitairesPoint'
+import { bleuMathalea } from '../../../lib/colors'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import {
   handleAnswers,
@@ -34,7 +35,6 @@ import Hms from '../../../modules/Hms'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../../modules/outils'
 import Exercice from '../../Exercice'
-import { bleuMathalea } from '../../../lib/colors'
 
 export const titre = 'CAN 5e sujet 2021'
 export const interactifReady = true
@@ -558,18 +558,18 @@ export default class SujetCAN20215ieme extends Exercice {
           choix = choice(['a', 'b', 'c'])
           if (choix === 'a') {
             a = randint(2, 6)
-            A = point(0, 0)
-            B = point(-1, 0)
-            C = point(-1, -1)
-            D = point(0, -1)
-            E = point(0, -2)
-            F = point(1, -2)
-            G = point(1, -1)
-            H = point(2, -1)
-            I = point(2, 0)
-            J = point(1, 0)
-            K = point(1, 1)
-            L = point(0, 1)
+            A = pointAbstrait(0, 0)
+            B = pointAbstrait(-1, 0)
+            C = pointAbstrait(-1, -1)
+            D = pointAbstrait(0, -1)
+            E = pointAbstrait(0, -2)
+            F = pointAbstrait(1, -2)
+            G = pointAbstrait(1, -1)
+            H = pointAbstrait(2, -1)
+            I = pointAbstrait(2, 0)
+            J = pointAbstrait(1, 0)
+            K = pointAbstrait(1, 1)
+            L = pointAbstrait(0, 1)
             s1 = segment(A, B)
             code1 = codageSegment(A, B, '|')
             s2 = segment(B, C)
@@ -653,13 +653,13 @@ export default class SujetCAN20215ieme extends Exercice {
             b = randint(6, 10)
             a = randint(1, 3)
             c = randint(4, 5)
-            A = point(0.13, 0.5)
-            B = point(1, 1)
-            C = point(2, 1)
-            D = point(3, 2)
-            E = point(3, -1)
-            F = point(2, 0)
-            G = point(1, 0)
+            A = pointAbstrait(0.13, 0.5)
+            B = pointAbstrait(1, 1)
+            C = pointAbstrait(2, 1)
+            D = pointAbstrait(3, 2)
+            E = pointAbstrait(3, -1)
+            F = pointAbstrait(2, 0)
+            G = pointAbstrait(1, 0)
             s1 = segment(A, B)
             code1 = codageSegment(A, B, '||')
             s2 = segment(B, C)
@@ -731,12 +731,12 @@ export default class SujetCAN20215ieme extends Exercice {
             b = randint(7, 10)
             a = randint(4, 5)
             c = randint(1, 3)
-            B = point(1, 1)
-            C = point(2, 1)
-            D = point(3, 2)
-            E = point(3, -1)
-            F = point(2, 0)
-            G = point(1, 0)
+            B = pointAbstrait(1, 1)
+            C = pointAbstrait(2, 1)
+            D = pointAbstrait(3, 2)
+            E = pointAbstrait(3, -1)
+            F = pointAbstrait(2, 0)
+            G = pointAbstrait(1, 0)
             s1 = segment(B, G)
             code1 = codageSegment(B, G, '||')
             s2 = segment(B, C)
@@ -1151,9 +1151,9 @@ export default class SujetCAN20215ieme extends Exercice {
           if (choice([true, false])) {
             a = choice([100, 110, 120])
             b = choice([10, 15, 20])
-            A = point(0, 0)
-            B = point(6, 0)
-            C = point(4, 2)
+            A = pointAbstrait(0, 0)
+            B = pointAbstrait(6, 0)
+            C = pointAbstrait(4, 2)
             s1 = segment(A, B)
             s2 = segment(A, C)
             s3 = segment(B, C)
@@ -1176,9 +1176,9 @@ export default class SujetCAN20215ieme extends Exercice {
           } else {
             a = choice([100, 110, 120])
             b = choice([45, 50, 55])
-            A = point(0, 0)
-            B = point(6, 0)
-            C = point(2, 2)
+            A = pointAbstrait(0, 0)
+            B = pointAbstrait(6, 0)
+            C = pointAbstrait(2, 2)
             s1 = segment(A, B)
             s2 = segment(A, C)
             s3 = segment(B, C)
@@ -1345,10 +1345,10 @@ export default class SujetCAN20215ieme extends Exercice {
         case 27:
           a = randint(1, 4) * 3
           b = randint(9, 15) * 3
-          A = point(0, 0, 'A', 'left')
-          E = point(3, -1, 'E', 'below')
-          D = point(4.73, 0, 'D', 'right')
-          C = point(3, 1, 'C', 'above')
+          A = pointAbstrait(0, 0, 'A', 'left')
+          E = pointAbstrait(3, -1, 'E', 'below')
+          D = pointAbstrait(4.73, 0, 'D', 'right')
+          C = pointAbstrait(3, 1, 'C', 'above')
           reponse = (b - 2 * a) / 2
           s1 = segment(A, E)
           code1 = codageSegment(A, E, '||')

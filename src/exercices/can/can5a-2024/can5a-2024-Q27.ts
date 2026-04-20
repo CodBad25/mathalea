@@ -1,5 +1,5 @@
 import { afficheLongueurSegment } from '../../../lib/2d/afficheLongueurSegment'
-import { point } from '../../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import {
   segment,
   segmentAvecExtremites,
@@ -7,13 +7,13 @@ import {
 import { labelPoint, texteParPosition } from '../../../lib/2d/textes'
 import { tracePoint } from '../../../lib/2d/TracePoint'
 import { milieu } from '../../../lib/2d/utilitairesPoint'
+import { bleuMathalea } from '../../../lib/colors'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
-import { bleuMathalea } from '../../../lib/colors'
 
 export const titre = "Déterminer la longueur d'un segment"
 export const interactifReady = true
@@ -39,11 +39,11 @@ export default class NomExercice extends ExerciceSimple {
     let reponse: number
     const a = this.canOfficielle ? 8 : randint(7, 11) // longueur AC
     const b = this.canOfficielle ? 5.1 : randint(19, 31, [20, 30]) / 10 // longueur AB
-    const A = point(0, 0, 'A', 'above')
-    const B = point(2.5, 0, 'B', 'above')
-    const C = point(a, 0, 'C', 'above')
-    const D = point(0, -1, 'D', 'above')
-    const E = point(a, -1, 'B', 'below')
+    const A = pointAbstrait(0, 0, 'A', 'above')
+    const B = pointAbstrait(2.5, 0, 'B', 'above')
+    const C = pointAbstrait(a, 0, 'C', 'above')
+    const D = pointAbstrait(0, -1, 'D', 'above')
+    const E = pointAbstrait(a, -1, 'B', 'below')
     const segAC = segment(A, C, bleuMathalea)
     const segDE = segmentAvecExtremites(D, E, 'black')
     segAC.epaisseur = 2

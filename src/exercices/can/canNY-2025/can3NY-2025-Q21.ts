@@ -6,7 +6,7 @@ import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
 
 import { codageAngleDroit } from '../../../lib/2d/CodageAngleDroit'
-import { point } from '../../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { segment } from '../../../lib/2d/segmentsVecteurs'
 import { labelPoint, latex2d } from '../../../lib/2d/textes'
 import { creerNomDePolygone } from '../../../lib/outils/outilString'
@@ -36,9 +36,9 @@ export default class calculerPythagore extends ExerciceSimple {
 
     const nom = creerNomDePolygone(3, ['QD'])
     const a = randint(1, 6)
-    const A = point(0, 0, nom[0], 'below')
-    const B = point(6, 0, nom[1], 'below')
-    const C = point(6, 2, nom[2], 'above')
+    const A = pointAbstrait(0, 0, nom[0], 'below')
+    const B = pointAbstrait(6, 0, nom[1], 'below')
+    const C = pointAbstrait(6, 2, nom[2], 'above')
     const objets = []
     if (choix === true) {
       objets.push(

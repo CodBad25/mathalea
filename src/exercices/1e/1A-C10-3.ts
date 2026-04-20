@@ -1,6 +1,6 @@
 import { courbe } from '../../lib/2d/Courbe'
 import { droite } from '../../lib/2d/droites'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { repere } from '../../lib/2d/reperes'
 import { segment } from '../../lib/2d/segmentsVecteurs'
 import { latex2d } from '../../lib/2d/textes'
@@ -94,14 +94,14 @@ export default class InequationsSecondDegre extends ExerciceQcmA {
     const racineValGraphique = Math.sqrt(valGraphique)
 
     // Points et segments verticaux
-    const A = point(racineValGraphique, valGraphique)
-    const Ax = point(A.x, 0)
+    const A = pointAbstrait(racineValGraphique, valGraphique)
+    const Ax = pointAbstrait(A.x, 0)
     const sAAx = segment(A, Ax)
     sAAx.epaisseur = 2
     sAAx.pointilles = 5
 
-    const B = point(-racineValGraphique, valGraphique)
-    const Bx = point(B.x, 0)
+    const B = pointAbstrait(-racineValGraphique, valGraphique)
+    const Bx = pointAbstrait(B.x, 0)
     const sBBx = segment(B, Bx)
     sBBx.epaisseur = 2
     sBBx.pointilles = 5
@@ -115,13 +115,13 @@ export default class InequationsSecondDegre extends ExerciceQcmA {
       sAxBx.tailleExtremites = 6
       segmentsSolution = [sAxBx]
     } else {
-      const BxI = point(-4, 0)
+      const BxI = pointAbstrait(-4, 0)
       const sBxBxI = segment(BxI, Bx, 'red')
       sBxBxI.epaisseur = 2
       sBxBxI.styleExtremites = estInegStrict ? '-[' : '-]'
       sBxBxI.tailleExtremites = 6
 
-      const AxI = point(4, 0)
+      const AxI = pointAbstrait(4, 0)
       const sAxAxI = segment(Ax, AxI, 'red')
       sAxAxI.epaisseur = 2
       sAxAxI.styleExtremites = estInegStrict ? ']-' : '[-'
@@ -180,8 +180,8 @@ export default class InequationsSecondDegre extends ExerciceQcmA {
 
     const f = (x: number) => Number(x) ** 2
     const Cg = droite(
-      point(-3, valGraphique),
-      point(3, valGraphique),
+      pointAbstrait(-3, valGraphique),
+      pointAbstrait(3, valGraphique),
       '',
       'green',
     )

@@ -1,6 +1,6 @@
 import { courbe } from '../../lib/2d/Courbe'
 import { droite } from '../../lib/2d/droites'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { repere } from '../../lib/2d/reperes'
 import { segment } from '../../lib/2d/segmentsVecteurs'
 import { latex2d } from '../../lib/2d/textes'
@@ -85,15 +85,15 @@ export default class Auto1AC10e extends ExerciceQcmA {
     typeInequation: 'inf' | 'sup',
   ) {
     const o = latex2d('\\text{O}', -0.2, -0.3, { letterSize: 'scriptsize' })
-    const O = point(0, 0)
+    const O = pointAbstrait(0, 0)
 
     // Droite horizontale fixe selon le signe de val
     const yDroite = val > 0 ? 1.5 : -1.5
 
     // Calcul de la position d'intersection sur l'hyperbole avec yDroite
     const xIntersection = 1 / yDroite
-    const A = point(xIntersection, yDroite)
-    const Ax = point(xIntersection, 0)
+    const A = pointAbstrait(xIntersection, yDroite)
+    const Ax = pointAbstrait(xIntersection, 0)
     const sAAx = segment(A, Ax)
     sAAx.epaisseur = 2
     sAAx.pointilles = 5
@@ -106,14 +106,14 @@ export default class Auto1AC10e extends ExerciceQcmA {
     if (typeInequation === 'inf') {
       if (val > 0) {
         // Pour 1/x < a avec a > 0 : ]-∞,0[ ∪ ]1/a,+∞[
-        const AxI = point(-4, 0)
+        const AxI = pointAbstrait(-4, 0)
         const sAxIO = segment(AxI, O, 'red')
         sAxIO.epaisseur = 2
         sAxIO.styleExtremites = '-['
         sAxIO.tailleExtremites = 6
 
-        const AxI2 = point(4, 0)
-        const bornePoint = point(1 / 1.5, 0)
+        const AxI2 = pointAbstrait(4, 0)
+        const bornePoint = pointAbstrait(1 / 1.5, 0)
         const sAxI2Ax = segment(bornePoint, AxI2, 'red')
         sAxI2Ax.epaisseur = 2
         sAxI2Ax.styleExtremites = estInegStrict ? ']-' : '[-'
@@ -122,7 +122,7 @@ export default class Auto1AC10e extends ExerciceQcmA {
         segmentsSolution = [sAxIO, sAxI2Ax]
       } else {
         // Pour 1/x < a avec a < 0 : ]1/a,0[
-        const bornePoint = point(-1 / 1.5, 0)
+        const bornePoint = pointAbstrait(-1 / 1.5, 0)
         const sAxO = segment(bornePoint, O, 'red')
         sAxO.epaisseur = 2
         sAxO.styleExtremites = estInegStrict ? ']-[' : '[-['
@@ -132,7 +132,7 @@ export default class Auto1AC10e extends ExerciceQcmA {
     } else {
       if (val > 0) {
         // Pour 1/x > a avec a > 0 : ]0,1/a[
-        const bornePoint = point(1 / 1.5, 0)
+        const bornePoint = pointAbstrait(1 / 1.5, 0)
         const sAxO = segment(O, bornePoint, 'red')
         sAxO.epaisseur = 2
         sAxO.styleExtremites = estInegStrict ? ']-[' : ']-]'
@@ -140,14 +140,14 @@ export default class Auto1AC10e extends ExerciceQcmA {
         segmentsSolution = [sAxO]
       } else {
         // Pour 1/x > a avec a < 0 : ]-∞,1/a[ ∪ ]0,+∞[
-        const bornePoint = point(-1 / 1.5, 0)
-        const AxI = point(-4, 0)
+        const bornePoint = pointAbstrait(-1 / 1.5, 0)
+        const AxI = pointAbstrait(-4, 0)
         const sAxIBx = segment(AxI, bornePoint, 'red')
         sAxIBx.epaisseur = 2
         sAxIBx.styleExtremites = estInegStrict ? '-[' : '-]'
         sAxIBx.tailleExtremites = 6
 
-        const AxI2 = point(4, 0)
+        const AxI2 = pointAbstrait(4, 0)
         const sOAxI2 = segment(O, AxI2, 'red')
         sOAxI2.epaisseur = 2
         sOAxI2.styleExtremites = ']-'
@@ -214,7 +214,7 @@ export default class Auto1AC10e extends ExerciceQcmA {
     const f = (x: number) => 1 / Number(x)
 
     // Droite horizontale fixe
-    const Cg = droite(point(-4, yDroite), point(4, yDroite), '', 'green')
+    const Cg = droite(pointAbstrait(-4, yDroite), pointAbstrait(4, yDroite), '', 'green')
     Cg.epaisseur = 2
 
     // Graphique simple pour l'énoncé

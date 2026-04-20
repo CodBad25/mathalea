@@ -5,7 +5,7 @@ import { droiteGraduee } from '../../../lib/2d/DroiteGraduee'
 import { droite } from '../../../lib/2d/droites'
 import { fixeBordures } from '../../../lib/2d/fixeBordures'
 import { grille } from '../../../lib/2d/Grille'
-import { point } from '../../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { polygone } from '../../../lib/2d/polygones'
 import { rapporteur } from '../../../lib/2d/Rapporteur'
 import { segment } from '../../../lib/2d/segmentsVecteurs'
@@ -16,6 +16,7 @@ import { rotation } from '../../../lib/2d/transformations'
 import { angleModulo } from '../../../lib/2d/utilitairesGeometriques'
 import { milieu, pointSurSegment } from '../../../lib/2d/utilitairesPoint'
 import { paveLPH3d } from '../../../lib/3d/3dProjectionMathalea2d/PaveEtPaveLPH3dPerspectiveCavaliere'
+import { bleuMathalea } from '../../../lib/colors'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import {
   handleAnswers,
@@ -35,7 +36,6 @@ import Hms from '../../../modules/Hms'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../../modules/outils'
 import Exercice from '../../Exercice'
-import { bleuMathalea } from '../../../lib/colors'
 
 export const titre = 'CAN 5e sujet 2022'
 export const interactifReady = true
@@ -633,14 +633,14 @@ export default class SujetCAN2022cinquieme extends Exercice {
           a = randint(20, 29) // mes angle E->H
           b = randint(70, 75) // mes angle C->F
           c = 180 - a - b // mes angle D ->G
-          A = point(4, 7, 'A', 'below') // axe
-          B = point(6, 4, 'B', 'below') // axe
-          C = point(1, 5, 'C', 'left')
-          D = point(3, 6, 'D', 'above')
-          E = point(4, 1, 'E', 'below')
-          F = point(5.3, 7.5, 'F', 'left')
-          G = point(7, 9, 'G', 'above')
-          H = point(9.5, 4.7, 'H', 'below')
+          A = pointAbstrait(4, 7, 'A', 'below') // axe
+          B = pointAbstrait(6, 4, 'B', 'below') // axe
+          C = pointAbstrait(1, 5, 'C', 'left')
+          D = pointAbstrait(3, 6, 'D', 'above')
+          E = pointAbstrait(4, 1, 'E', 'below')
+          F = pointAbstrait(5.3, 7.5, 'F', 'left')
+          G = pointAbstrait(7, 9, 'G', 'above')
+          H = pointAbstrait(9.5, 4.7, 'H', 'below')
           d = droite(A, B)
           poly1 = polygone([C, D, E], 'black')
           poly2 = polygone([F, G, H], 'black')
@@ -733,10 +733,10 @@ export default class SujetCAN2022cinquieme extends Exercice {
               `$${texNombre(2 * a + 6 * b)}\\text{ cm}$`,
               `$${texNombre(2 * a + 3 * b)}\\text{ cm}$`,
             ])
-            A = point(0, 0, 'A', 'below')
-            B = point(6, 0, 'B', 'below')
-            C = point(6, 4, 'C', 'left')
-            D = point(0, 4, 'D', 'above')
+            A = pointAbstrait(0, 0, 'A', 'below')
+            B = pointAbstrait(6, 0, 'B', 'below')
+            C = pointAbstrait(6, 4, 'C', 'left')
+            D = pointAbstrait(0, 4, 'D', 'above')
             codage1 = codageAngleDroit(B, A, D)
             codage2 = codageAngleDroit(A, B, C)
             codage3 = codageAngleDroit(B, C, D)
@@ -1052,10 +1052,16 @@ export default class SujetCAN2022cinquieme extends Exercice {
           a = randint(1, 17, 9)
           tailleRapporteur = 5
           // Mise en place des points encadrant l'espace pour le rapporteur. Utiles pour paramsEnonce car le rapporteur peut tourner et optimisons l'espace pour ce rapporteur.
-          sudOuest = point(-(tailleRapporteur + 0.5), 0)
-          nordOuest = point(-(tailleRapporteur + 0.5), tailleRapporteur + 0.5)
-          sudEst = point(tailleRapporteur + 0.5, 0)
-          nordEst = point(tailleRapporteur + 0.5, tailleRapporteur + 0.5)
+          sudOuest = pointAbstrait(-(tailleRapporteur + 0.5), 0)
+          nordOuest = pointAbstrait(
+            -(tailleRapporteur + 0.5),
+            tailleRapporteur + 0.5,
+          )
+          sudEst = pointAbstrait(tailleRapporteur + 0.5, 0)
+          nordEst = pointAbstrait(
+            tailleRapporteur + 0.5,
+            tailleRapporteur + 0.5,
+          )
 
           // Le centre du rapporteur est A.
           // Le point sur la ligne 0 est B. En fait, on construit B1 et B est entre A et B1 (afin que B ne soit pas toujours à X cm de A car cette distance n'a pas à être fixe pour un élève)
@@ -1096,8 +1102,8 @@ export default class SujetCAN2022cinquieme extends Exercice {
                       ? 'right'
                       : 'below'
           }
-          A = point(0, 0, lettreDepuisChiffre(numA), posA)
-          B1 = rotation(point(tailleRapporteur + 0.5, 0), A, angB)
+          A = pointAbstrait(0, 0, lettreDepuisChiffre(numA), posA)
+          B1 = rotation(pointAbstrait(tailleRapporteur + 0.5, 0), A, angB)
 
           posB =
             angB > 135
@@ -1253,13 +1259,13 @@ export default class SujetCAN2022cinquieme extends Exercice {
           c = randint(1, 6)
           d = randint(0, 1)
 
-          A = point(b, c, 'A', 'above')
-          B = point(0, 0, 'B', 'below')
-          C = point(4, 0, 'C', 'below')
+          A = pointAbstrait(b, c, 'A', 'above')
+          B = pointAbstrait(0, 0, 'B', 'below')
+          C = pointAbstrait(4, 0, 'C', 'below')
 
-          D = point(-1, 7, 'D', 'above')
-          E = point(d, 7, 'E', 'above')
-          H = point(b, 0, 'H', 'below')
+          D = pointAbstrait(-1, 7, 'D', 'above')
+          E = pointAbstrait(d, 7, 'E', 'above')
+          H = pointAbstrait(b, 0, 'H', 'below')
           s1 = segment(D, E)
           s1.epaisseur = 3
           s2 = segment(A, H)

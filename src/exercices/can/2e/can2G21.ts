@@ -1,4 +1,4 @@
-import { point } from '../../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { repere } from '../../../lib/2d/reperes'
 import { texteParPosition } from '../../../lib/2d/textes'
 import { tracePoint } from '../../../lib/2d/TracePoint'
@@ -62,7 +62,7 @@ export default class LectureCoordonnees extends ExerciceSimple {
       grilleSecondaireXMax: 3,
     })
 
-    const A = point(a, b)
+    const A = pointAbstrait(a, b)
     const o = texteParPosition('O', -0.2, -0.2, 0, 'black', 1)
     const traceA = tracePoint(A, 'red') // Variable qui trace les points avec une croix
     traceA.taille = 3

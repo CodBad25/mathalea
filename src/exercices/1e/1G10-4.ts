@@ -2,7 +2,7 @@ import { afficheLongueurSegment } from '../../lib/2d/afficheLongueurSegment'
 import { codageAngleDroit } from '../../lib/2d/CodageAngleDroit'
 import { codageSegment } from '../../lib/2d/CodageSegment'
 import { droite } from '../../lib/2d/droites'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { polygone } from '../../lib/2d/polygones'
 import { segment, segmentAvecExtremites } from '../../lib/2d/segmentsVecteurs'
 import { labelPoint } from '../../lib/2d/textes'
@@ -84,7 +84,7 @@ export default class CalculProduitScalaireProjection extends Exercice {
           // carré
           const choixb = choice([true, false])
           const choixa = choice([true, false])
-          const A = point(0, 0, 'A', 'below')
+          const A = pointAbstrait(0, 0, 'A', 'below')
           const a = randint(4, 8) //
           const b = a + randint(2, 7) //
           const B = pointAdistance(A, b, 0, 'B', 'below')
@@ -318,7 +318,7 @@ export default class CalculProduitScalaireProjection extends Exercice {
           //
           const choixb = choice([true, false])
           const choixa = choice([true, false])
-          const A = point(0, 0, 'A', 'below')
+          const A = pointAbstrait(0, 0, 'A', 'below')
           const a = randint(8, 15) //
           const h = a > 10 ? a - randint(2, 8) : a - randint(2, 5) //
           const b = randint(6, 10) //
@@ -430,19 +430,19 @@ export default class CalculProduitScalaireProjection extends Exercice {
           const choixb = choice([true, false])
           const choixa = choice([true, false])
           const k = randint(1, 2)
-          const A = point(0, 0, 'A', 'below')
+          const A = pointAbstrait(0, 0, 'A', 'below')
           const B = pointAdistance(A, 10, 0, 'B', 'below right')
           const C = pointAdistance(A, 3, 90, 'C', 'above')
-          const D = point(k * choice([2, 3]), 0, 'D', 'below')
-          const E = point(8, 4, 'E', 'above')
-          const F = point(8, -4, 'F', 'below')
-          const H = point(8, 0, 'H', 'below left')
+          const D = pointAbstrait(k * choice([2, 3]), 0, 'D', 'below')
+          const E = pointAbstrait(8, 4, 'E', 'above')
+          const F = pointAbstrait(8, -4, 'F', 'below')
+          const H = pointAbstrait(8, 0, 'H', 'below left')
           const AB = segmentAvecExtremites(A, B)
           const d = droite(A, B)
           const pointsSurAB = []
           const objets = []
           for (let i = 1; i < 10; i++) {
-            pointsSurAB.push(point(k * i, 0), point(k * i, 0))
+            pointsSurAB.push(pointAbstrait(k * i, 0), pointAbstrait(k * i, 0))
             objets.push(tracePointSurDroite(pointsSurAB[2 * (i - 1)], d))
           }
           const xmin = Math.min(A.x, B.x, C.x, E.x, F.x) - 1

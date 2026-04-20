@@ -2,7 +2,7 @@ import { codageAngle } from '../../../lib/2d/angles'
 import { codageAngleDroit } from '../../../lib/2d/CodageAngleDroit'
 import { droite } from '../../../lib/2d/droites'
 import { fixeBordures } from '../../../lib/2d/fixeBordures'
-import { point } from '../../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { polygone } from '../../../lib/2d/polygones'
 import { pave } from '../../../lib/2d/projections3d'
 import { segment } from '../../../lib/2d/segmentsVecteurs'
@@ -30,6 +30,7 @@ import Exercice from '../../Exercice'
 
 import Decimal from 'decimal.js'
 import { droiteGraduee } from '../../../lib/2d/DroiteGraduee'
+import { bleuMathalea } from '../../../lib/colors'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import {
   handleAnswers,
@@ -38,7 +39,6 @@ import {
 import { ajouteChampTexteMathLive } from '../../../lib/interactif/questionMathLive'
 import Hms from '../../../modules/Hms'
 import { representationFraction } from '../../../modules/representationsFractions'
-import { bleuMathalea } from '../../../lib/colors'
 
 export const titre = 'CAN 5e sujet 2023'
 export const interactifReady = true
@@ -274,9 +274,9 @@ export default class SujetCAN2023Cinquieme extends Exercice {
             ang1 = choice([
               20, 30, 40, 60, 70, 80, 100, 110, 120, 130, 140, 150, 160,
             ])
-            A = point(0, 0, 'A', 'below')
-            B = point(6, 0, 'B', 'below')
-            origine = point(3, 0, 'O', 'below')
+            A = pointAbstrait(0, 0, 'A', 'below')
+            B = pointAbstrait(6, 0, 'B', 'below')
+            origine = pointAbstrait(3, 0, 'O', 'below')
             C = rotation(B, origine, ang1)
             s1 = segment(A, B)
             s1.epaisseur = 1.5
@@ -387,10 +387,10 @@ export default class SujetCAN2023Cinquieme extends Exercice {
                  Ainsi, ? $=180-${ang1}=${miseEnEvidence(180 - ang1)}^\\circ$.`
           } else {
             ang1 = choice([30, 40, 60, 70, 110, 120, 130, 140, 150, 160])
-            A = point(0, 0, 'A', 'below')
-            B = point(2, 0, 'B', 'below')
-            origine = point(0, 0, 'O', 'below')
-            D = point(0, 2, 'D', 'right')
+            A = pointAbstrait(0, 0, 'A', 'below')
+            B = pointAbstrait(2, 0, 'B', 'below')
+            origine = pointAbstrait(0, 0, 'O', 'below')
+            D = pointAbstrait(0, 2, 'D', 'right')
             C = rotation(B, origine, ang1)
             traceD = tracePoint(D)
             traceD.taille = context.isHtml ? 2 : 1.5
@@ -984,9 +984,9 @@ export default class SujetCAN2023Cinquieme extends Exercice {
           if (choice([true, false])) {
             b = randint(11, 18)
             a = choice([115, 120, 125, 130, 135]) - b
-            A = point(0, 0)
-            B = point(6, 0)
-            C = point(4, 2)
+            A = pointAbstrait(0, 0)
+            B = pointAbstrait(6, 0)
+            C = pointAbstrait(4, 2)
             s1 = segment(A, B)
             s2 = segment(A, C)
             s3 = segment(B, C)
@@ -1032,9 +1032,9 @@ export default class SujetCAN2023Cinquieme extends Exercice {
             a = choice([140, 145, 150, 155, 160]) - b
             // a = choice([100, 110, 120])
             // b = choice([45, 50, 55])
-            A = point(0, 0)
-            B = point(6, 0)
-            C = point(2, 2)
+            A = pointAbstrait(0, 0)
+            B = pointAbstrait(6, 0)
+            C = pointAbstrait(2, 2)
             s1 = segment(A, B)
             s2 = segment(A, C)
             s3 = segment(B, C)
@@ -1316,18 +1316,18 @@ export default class SujetCAN2023Cinquieme extends Exercice {
         case 24:
           choix = choice(['a', 'b', 'c'])
           if (choix === 'a') {
-            A = point(0, 0)
-            B = point(-1, 0)
-            C = point(-1, -1)
-            D = point(0, -1)
-            E = point(0, -2)
-            F = point(1, -2)
-            G = point(1, -1)
-            H = point(2, -1)
-            I = point(2, 0)
-            J = point(1, 0)
-            K = point(1, 1)
-            L = point(0, 1)
+            A = pointAbstrait(0, 0)
+            B = pointAbstrait(-1, 0)
+            C = pointAbstrait(-1, -1)
+            D = pointAbstrait(0, -1)
+            E = pointAbstrait(0, -2)
+            F = pointAbstrait(1, -2)
+            G = pointAbstrait(1, -1)
+            H = pointAbstrait(2, -1)
+            I = pointAbstrait(2, 0)
+            J = pointAbstrait(1, 0)
+            K = pointAbstrait(1, 1)
+            L = pointAbstrait(0, 1)
             a = droite(J, D)
             b = droite(A, G)
             c = droite(milieu(E, F), milieu(L, K))
@@ -1376,10 +1376,10 @@ export default class SujetCAN2023Cinquieme extends Exercice {
               )
           }
           if (choix === 'b') {
-            A = point(0, 0)
-            E = point(3, -1)
-            D = point(4.73, 0)
-            C = point(3, 1)
+            A = pointAbstrait(0, 0)
+            E = pointAbstrait(3, -1)
+            D = pointAbstrait(4.73, 0)
+            C = pointAbstrait(3, 1)
             a = droite(A, D)
             pol = polygone([A, E, D, C], 'black')
             xmin = -1
@@ -1423,14 +1423,14 @@ export default class SujetCAN2023Cinquieme extends Exercice {
           }
 
           if (choix === 'c') {
-            A = point(0, 0)
-            B = point(-0.5, -1)
-            C = point(1.75, -0.5)
-            D = point(4, -1)
-            E = point(3.5, 0)
-            F = point(4, 1)
-            G = point(1.75, 0.5)
-            H = point(-0.5, 1)
+            A = pointAbstrait(0, 0)
+            B = pointAbstrait(-0.5, -1)
+            C = pointAbstrait(1.75, -0.5)
+            D = pointAbstrait(4, -1)
+            E = pointAbstrait(3.5, 0)
+            F = pointAbstrait(4, 1)
+            G = pointAbstrait(1.75, 0.5)
+            H = pointAbstrait(-0.5, 1)
 
             a = droite(A, E)
             b = droite(C, G)

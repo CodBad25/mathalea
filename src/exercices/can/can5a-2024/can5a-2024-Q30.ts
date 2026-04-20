@@ -1,7 +1,7 @@
 import { codageAngleDroit } from '../../../lib/2d/CodageAngleDroit'
 import { codageSegment } from '../../../lib/2d/CodageSegment'
 import { colorToLatexOrHTML } from '../../../lib/2d/colorToLatexOrHtml'
-import { point } from '../../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { polygone } from '../../../lib/2d/polygones'
 import { segment } from '../../../lib/2d/segmentsVecteurs'
 import { labelPoint, texteParPosition } from '../../../lib/2d/textes'
@@ -39,17 +39,17 @@ export default class NomExercice extends ExerciceSimple {
     const b = this.canOfficielle ? 4 : randint(2, 5)
     const c = this.canOfficielle ? 8 : a + b
     const f = (a * b) / 2
-    const A = point(0, 0, 'A', 'below')
-    const B = point(5, 0, 'B', 'below')
+    const A = pointAbstrait(0, 0, 'A', 'below')
+    const B = pointAbstrait(5, 0, 'B', 'below')
     const C = this.canOfficielle
-      ? point(5, 2.5, 'C', 'above')
-      : point(5, 3, 'C', 'above')
+      ? pointAbstrait(5, 2.5, 'C', 'above')
+      : pointAbstrait(5, 3, 'C', 'above')
     const D = this.canOfficielle
-      ? point(2.5, 2.5, 'D', 'above')
-      : point(2, 3, 'D', 'above')
+      ? pointAbstrait(2.5, 2.5, 'D', 'above')
+      : pointAbstrait(2, 3, 'D', 'above')
     const E = this.canOfficielle
-      ? point(0, 2.5, 'E', 'above')
-      : point(0, 3, 'E', 'above')
+      ? pointAbstrait(0, 2.5, 'E', 'above')
+      : pointAbstrait(0, 3, 'E', 'above')
     const poly = this.canOfficielle
       ? polygone([A, B, D, E], 'black')
       : polygone([A, B, C, D], 'black')

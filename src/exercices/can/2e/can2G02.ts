@@ -1,5 +1,5 @@
 import { codageAngleDroit } from '../../../lib/2d/CodageAngleDroit'
-import { point } from '../../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { polygoneAvecNom } from '../../../lib/2d/polygones'
 import { texteParPosition } from '../../../lib/2d/textes'
 import { milieu, pointAdistance } from '../../../lib/2d/utilitairesPoint'
@@ -38,7 +38,7 @@ export default class CalculCotePythagore extends ExerciceSimple {
     const nom = creerNomDePolygone(3, ['QD'])
     const a = randint(1, 5) //
     const b = randint(6, 10) //
-    const A = point(0, 0, nom[0])
+    const A = pointAbstrait(0, 0, nom[0])
     const B = pointAdistance(A, a, 90, nom[1])
     const C = pointAdistance(B, Math.sqrt(b ** 2 - a ** 2), 0, nom[2])
     const pol = polygoneAvecNom(A, B, C) // polygoneAvecNom s'occupe du placement des noms des sommets

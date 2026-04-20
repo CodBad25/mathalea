@@ -1,4 +1,4 @@
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { tracePoint } from '../../lib/2d/TracePoint'
 import { droite } from '../../lib/2d/droites'
 import { repere } from '../../lib/2d/reperes'
@@ -55,8 +55,8 @@ export default class Auto1AF2q extends ExerciceQcmA {
     }
 
     const o = latex2d('\\text{O}', -0.3, -0.3, { letterSize: 'scriptsize' })
-    const A = point(0, ordOrigine)
-    const B = point(denCoeff, ordOrigine + numCoeff)
+    const A = pointAbstrait(0, ordOrigine)
+    const B = pointAbstrait(denCoeff, ordOrigine + numCoeff)
 
     const traceA = tracePoint(A, 'black')
     traceA.taille = 3

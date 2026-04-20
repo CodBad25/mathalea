@@ -1,6 +1,6 @@
 import Decimal from 'decimal.js'
 import { codageAngleDroit } from '../../../lib/2d/CodageAngleDroit'
-import { point } from '../../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { colorToLatexOrHTML } from '../../../lib/2d/colorToLatexOrHtml'
 import { polygone, polygoneAvecNom } from '../../../lib/2d/polygones'
 import { labelPoint, texteParPosition } from '../../../lib/2d/textes'
@@ -637,9 +637,9 @@ export default class SujetCAN2022troisieme extends Exercice {
           b = randint(4, 5)
           c = a * b
           b = b * 2
-          A = point(0, 0, 'A', 'below')
-          B = point(0, 4, 'B', 'above')
-          C = point(6, 0, 'C', 'below')
+          A = pointAbstrait(0, 0, 'A', 'below')
+          B = pointAbstrait(0, 4, 'B', 'above')
+          C = pointAbstrait(6, 0, 'C', 'below')
           poly = polygone([A, B, C], 'black')
           poly.couleurDeRemplissage = colorToLatexOrHTML('lightgray')
           d = texteParPosition(`${stringNombre(c)} cm²`, 1.5, 1.5)
@@ -797,10 +797,10 @@ export default class SujetCAN2022troisieme extends Exercice {
           a = new Decimal(randint(1, 9)).div(10).plus(randint(3, 5))
           b = a.mul(-1).plus(randint(6, 10))
           c = b.mul(10)
-          A = point(0, 0, 'A', 'below')
-          B = point(5, 1, 'B', 'below')
-          C = point(6, 4, 'C', 'above')
-          D = point(1, 3, 'D', 'above')
+          A = pointAbstrait(0, 0, 'A', 'below')
+          B = pointAbstrait(5, 1, 'B', 'below')
+          C = pointAbstrait(6, 4, 'C', 'above')
+          D = pointAbstrait(1, 3, 'D', 'above')
           poly = polygone([A, B, C, D], 'black')
           reponse = a.plus(b).mul(2)
           d = texteParPosition(`${stringNombre(a)} cm`, 6.3, 2)
@@ -968,9 +968,9 @@ export default class SujetCAN2022troisieme extends Exercice {
           if (choice([true, false])) {
             a = randint(2, 6)
             b = randint(7, 10)
-            I = point(0, 0, 'I', 'below')
-            K = point(4, 0, 'K', 'below')
-            J = point(0, 6, 'J', 'above')
+            I = pointAbstrait(0, 0, 'I', 'below')
+            K = pointAbstrait(4, 0, 'K', 'below')
+            J = pointAbstrait(0, 6, 'J', 'above')
 
             xmin = -1.6
             ymin = -1
@@ -1024,9 +1024,9 @@ export default class SujetCAN2022troisieme extends Exercice {
           } else {
             a = randint(2, 6)
             b = randint(7, 10)
-            I = point(0, 0, 'K', 'below')
-            K = point(4, 0, 'I', 'below')
-            J = point(0, 6, 'J', 'above')
+            I = pointAbstrait(0, 0, 'K', 'below')
+            K = pointAbstrait(4, 0, 'I', 'below')
+            J = pointAbstrait(0, 6, 'J', 'above')
 
             xmin = -1.6
             ymin = -1

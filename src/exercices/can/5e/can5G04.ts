@@ -1,5 +1,5 @@
 import { colorToLatexOrHTML } from '../../../lib/2d/colorToLatexOrHtml'
-import { point } from '../../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { polygone } from '../../../lib/2d/polygones'
 import { segment } from '../../../lib/2d/segmentsVecteurs'
 import { latex2d } from '../../../lib/2d/textes'
@@ -46,11 +46,11 @@ export default class longueursRectPerimetre extends ExerciceSimple {
     ] // longueur-lageur
     const choix = choice(liste)
     const aire = choix[0] * choix[1]
-    const A = point(0, 0, 'A', 'below')
-    const B = point(5, 0, 'B', 'below')
-    const C = point(5, 3, 'C', 'above')
-    const D = point(0, 3, 'D', 'above')
-    const M = point(2, 3, 'M', 'above')
+    const A = pointAbstrait(0, 0, 'A', 'below')
+    const B = pointAbstrait(5, 0, 'B', 'below')
+    const C = pointAbstrait(5, 3, 'C', 'above')
+    const D = pointAbstrait(0, 3, 'D', 'above')
+    const M = pointAbstrait(2, 3, 'M', 'above')
     const poly = polygone([A, B, C, D], 'black')
     const segmentMD = segment(M, D)
     const segmentDA = segment(D, A)

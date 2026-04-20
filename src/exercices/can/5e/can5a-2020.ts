@@ -3,7 +3,7 @@ import { codageAngleDroit } from '../../../lib/2d/CodageAngleDroit'
 import { codageSegment } from '../../../lib/2d/CodageSegment'
 import { colorToLatexOrHTML } from '../../../lib/2d/colorToLatexOrHtml'
 import { traceBarre } from '../../../lib/2d/diagrammes'
-import { point } from '../../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { polygone, polygoneAvecNom } from '../../../lib/2d/polygones'
 import { pave } from '../../../lib/2d/projections3d'
 import { repere } from '../../../lib/2d/reperes'
@@ -569,19 +569,19 @@ Par exemple, en choisissant 20 questions, la course aux nombres sera composée d
           f = randint(d, b)
           A = polygone(
             [
-              point(0, 0),
-              point(c, 0),
-              point(c, d),
-              point(e, d),
-              point(e, f),
-              point(0, f),
+              pointAbstrait(0, 0),
+              pointAbstrait(c, 0),
+              pointAbstrait(c, d),
+              pointAbstrait(e, d),
+              pointAbstrait(e, f),
+              pointAbstrait(0, f),
             ],
             'black',
           )
           A.couleurDeRemplissage = colorToLatexOrHTML('gray')
 
           C = grille(0, 0, a, b, 'black', 1, 1)
-          D = point(1 + a, 4 - b)
+          D = pointAbstrait(1 + a, 4 - b)
 
           texte =
             'Quelle fraction de la surface totale représente la surface grisée ?<br>'
@@ -624,18 +624,18 @@ Par exemple, en choisissant 20 questions, la course aux nombres sera composée d
           b = new Decimal(1).add(partieDec1)
           c = new Decimal(b).mul(2)
 
-          A = point(0, 0)
-          B = point(1.7, 0)
-          C = point(1.7, 0.5)
-          D = point(1.2, 0.5)
-          E = point(1.2, 1)
-          F = point(0, 1)
-          G = point(2.7, 0)
-          H = point(6.1, 0)
-          I = point(6.1, 1)
-          J = point(5.1, 1)
-          K = point(5.1, 2)
-          L = point(2.7, 2)
+          A = pointAbstrait(0, 0)
+          B = pointAbstrait(1.7, 0)
+          C = pointAbstrait(1.7, 0.5)
+          D = pointAbstrait(1.2, 0.5)
+          E = pointAbstrait(1.2, 1)
+          F = pointAbstrait(0, 1)
+          G = pointAbstrait(2.7, 0)
+          H = pointAbstrait(6.1, 0)
+          I = pointAbstrait(6.1, 1)
+          J = pointAbstrait(5.1, 1)
+          K = pointAbstrait(5.1, 2)
+          L = pointAbstrait(2.7, 2)
           xmin = -1
           ymin = -0.5
           xmax = 6.5
@@ -1253,11 +1253,11 @@ Par exemple, en choisissant 20 questions, la course aux nombres sera composée d
           b = randint(2, 5)
           c = a + b
           f = new Decimal(a * b).div(2)
-          A = point(0, 0, 'A', 'below')
-          B = point(5, 0, 'B', 'below')
-          C = point(5, 3, 'C', 'above')
-          D = point(2, 3, 'D', 'above')
-          E = point(0, 3, 'E', 'above')
+          A = pointAbstrait(0, 0, 'A', 'below')
+          B = pointAbstrait(5, 0, 'B', 'below')
+          C = pointAbstrait(5, 3, 'C', 'above')
+          D = pointAbstrait(2, 3, 'D', 'above')
+          E = pointAbstrait(0, 3, 'E', 'above')
           poly = polygone([A, B, C, D], 'black')
 
           code1 = codageSegment(B, C, '||')

@@ -1,6 +1,6 @@
 import { codageSegment } from '../../../lib/2d/CodageSegment'
 import { courbe } from '../../../lib/2d/Courbe'
-import { point } from '../../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { repere } from '../../../lib/2d/reperes'
 import { segment } from '../../../lib/2d/segmentsVecteurs'
 import { labelPoint, texteParPosition } from '../../../lib/2d/textes'
@@ -653,11 +653,11 @@ export default class SujetCAN2021Seconde extends Exercice {
             b = k * a // AC
             c = randint(1, a - 1) // EB
             d = k * c // AD
-            const A = point(0, 4, 'A', 'above')
-            const D = point(3.75, 4, 'D', 'above')
-            const E = point(4, -1, 'E', 'below')
-            const B = point(6, -1, 'B', 'below')
-            const C = point(3.91, 0.74, 'C', 'left')
+            const A = pointAbstrait(0, 4, 'A', 'above')
+            const D = pointAbstrait(3.75, 4, 'D', 'above')
+            const E = pointAbstrait(4, -1, 'E', 'below')
+            const B = pointAbstrait(6, -1, 'B', 'below')
+            const C = pointAbstrait(3.91, 0.74, 'C', 'left')
             const xmin = -1
             const ymin = -2.5
             const xmax = 7
@@ -1010,10 +1010,10 @@ export default class SujetCAN2021Seconde extends Exercice {
           {
             a = randint(1, 10)
 
-            const A = point(0, 0, 'A', 'below')
-            const B = point(4, 0, 'B', 'below')
-            const C = point(4, 4, 'C', 'above')
-            const D = point(0, 4, 'D', 'above')
+            const A = pointAbstrait(0, 0, 'A', 'below')
+            const B = pointAbstrait(4, 0, 'B', 'below')
+            const C = pointAbstrait(4, 4, 'C', 'above')
+            const D = pointAbstrait(0, 4, 'D', 'above')
             const code1 = codageSegment(A, B, '|')
             const code2 = codageSegment(B, C, '|')
             const code3 = codageSegment(C, D, '|')

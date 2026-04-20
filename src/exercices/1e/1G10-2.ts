@@ -1,6 +1,6 @@
 import { demiDroite } from '../../lib/2d/DemiDroite'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
-import { point } from '../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { repere } from '../../lib/2d/reperes'
 import { latex2d } from '../../lib/2d/textes'
 import { tracePoint } from '../../lib/2d/TracePoint'
@@ -116,9 +116,9 @@ export default class AngleProduitScalaire extends Exercice {
         (xB - xA) * (yC - yA) - (yB - yA) * (xC - xA) === 0 ||
         (xB - xA) * (xC - xA) + (yB - yA) * (yC - yA) === 0
       )
-      A = point(xA, yA)
-      B = point(xB, yB)
-      C = point(xC, yC)
+      A = pointAbstrait(xA, yA)
+      B = pointAbstrait(xB, yB)
+      C = pointAbstrait(xC, yC)
       const demiDroiteAB = demiDroite(A, B, bleuMathalea)
       const demiDroiteAC = demiDroite(A, C, bleuMathalea)
       const labelA = latex2d('A', xA - 0.5, yA + 0.5, {

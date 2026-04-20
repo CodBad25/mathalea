@@ -1,6 +1,6 @@
 import { codageSegments } from '../../../lib/2d/CodageSegment'
 import { droite } from '../../../lib/2d/droites'
-import { point } from '../../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { segmentAvecExtremites } from '../../../lib/2d/segmentsVecteurs'
 import { labelPoint, latexParCoordonnees } from '../../../lib/2d/textes'
 import { tracePointSurDroite } from '../../../lib/2d/TracePointSurDroite'
@@ -41,8 +41,8 @@ export default class EnFonctionDe extends ExerciceSimple {
   nouvelleVersion() {
     const objets = []
     const pointsSurAB2 = []
-    const A = point(0, 0, 'A', 'below')
-    const B = point(16, 0, 'B', 'below')
+    const A = pointAbstrait(0, 0, 'A', 'below')
+    const B = pointAbstrait(16, 0, 'B', 'below')
     const AB = segmentAvecExtremites(A, B) // grand sement de départ
     AB.styleExtremites = '-|'
     AB.tailleExtremites = 5
@@ -68,9 +68,9 @@ export default class EnFonctionDe extends ExerciceSimple {
               options: { fonction: true, variable: 'x' },
             },
           }
-          const A3 = point(0, 1, 'A1', 'below')
-          const B3 = point(16, 1, 'A1', 'below')
-          const B2 = point(7, 0, 'A', 'below')
+          const A3 = pointAbstrait(0, 1, 'A1', 'below')
+          const B3 = pointAbstrait(16, 1, 'A1', 'below')
+          const B2 = pointAbstrait(7, 0, 'A', 'below')
           const AB2 = segmentAvecExtremites(A, B2) // segment qui sera partagé
           AB2.tailleExtremites = 5
           const A3B3 = segmentAvecExtremites(A3, B3) // pour avoir la longueur du  segment du dessus
@@ -88,7 +88,10 @@ export default class EnFonctionDe extends ExerciceSimple {
             '',
           )
           for (let i = 1; i < b; i++) {
-            pointsSurAB2.push(point((i * 7) / b, 0), point((i * 7) / b, 0))
+            pointsSurAB2.push(
+              pointAbstrait((i * 7) / b, 0),
+              pointAbstrait((i * 7) / b, 0),
+            )
             const Texte1 = latexParCoordonnees(
               'x \\text{ cm}',
               3 / b,
@@ -98,8 +101,8 @@ export default class EnFonctionDe extends ExerciceSimple {
               0,
               '',
             )
-            const A4 = point(0, -1, 'A1', 'below')
-            const B4 = point(7 / b, -1, 'A1', 'below')
+            const A4 = pointAbstrait(0, -1, 'A1', 'below')
+            const B4 = pointAbstrait(7 / b, -1, 'A1', 'below')
             const A4B4 = segmentAvecExtremites(A4, B4)
             A4B4.styleExtremites = '<->'
             const maTrace = tracePointSurDroite(pointsSurAB2[2 * (i - 1)], d)
@@ -158,9 +161,9 @@ export default class EnFonctionDe extends ExerciceSimple {
               options: { fonction: true, variable: 'x' },
             },
           }
-          const A3 = point(7, 1, 'A1', 'below')
-          const B3 = point(16, 1, 'A1', 'below')
-          const B2 = point(7, 0, 'B2', 'below')
+          const A3 = pointAbstrait(7, 1, 'A1', 'below')
+          const B3 = pointAbstrait(16, 1, 'A1', 'below')
+          const B2 = pointAbstrait(7, 0, 'B2', 'below')
           const AB2 = segmentAvecExtremites(A, B2) // segment qui sera partagé
           AB2.tailleExtremites = 5
           const A3B3 = segmentAvecExtremites(A3, B3) // pour avoir la longueur du  segment du dessus
@@ -178,7 +181,10 @@ export default class EnFonctionDe extends ExerciceSimple {
             '',
           )
           for (let i = 1; i < b; i++) {
-            pointsSurAB2.push(point((i * 7) / b, 0), point((i * 7) / b, 0))
+            pointsSurAB2.push(
+              pointAbstrait((i * 7) / b, 0),
+              pointAbstrait((i * 7) / b, 0),
+            )
             const Texte1 = latexParCoordonnees(
               'x',
               3 / b,
@@ -188,8 +194,8 @@ export default class EnFonctionDe extends ExerciceSimple {
               0,
               '',
             )
-            const A4 = point(0, 1, 'A1', 'below')
-            const B4 = point(7 / b, 1, 'A1', 'below')
+            const A4 = pointAbstrait(0, 1, 'A1', 'below')
+            const B4 = pointAbstrait(7 / b, 1, 'A1', 'below')
             const A4B4 = segmentAvecExtremites(A4, B4)
             A4B4.styleExtremites = '<->'
             const maTrace = tracePointSurDroite(pointsSurAB2[2 * (i - 1)], d)

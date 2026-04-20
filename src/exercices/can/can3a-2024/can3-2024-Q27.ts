@@ -1,5 +1,5 @@
 import { codageAngleDroit } from '../../../lib/2d/CodageAngleDroit'
-import { point } from '../../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { polygoneAvecNom } from '../../../lib/2d/polygones'
 import { labelPoint, latexParCoordonnees } from '../../../lib/2d/textes'
 import { milieu } from '../../../lib/2d/utilitairesPoint'
@@ -32,9 +32,9 @@ export default class NomExercice extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const A = point(0, 0, 'E', 'above')
-    const B = point(4, 0, 'F', 'above')
-    const C = point(4, -2, 'G', 'below')
+    const A = pointAbstrait(0, 0, 'E', 'above')
+    const B = pointAbstrait(4, 0, 'F', 'above')
+    const C = pointAbstrait(4, -2, 'G', 'below')
 
     const xmin = -1
     const ymin = -3
