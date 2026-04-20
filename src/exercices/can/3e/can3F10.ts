@@ -1,16 +1,16 @@
 import { courbe } from '../../../lib/2d/Courbe'
-import { point } from '../../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { repere } from '../../../lib/2d/reperes'
 import { segment } from '../../../lib/2d/segmentsVecteurs'
 import { latex2d } from '../../../lib/2d/textes'
 import { tracePoint } from '../../../lib/2d/TracePoint'
+import { bleuMathalea } from '../../../lib/colors'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
-import { bleuMathalea } from '../../../lib/colors'
 export const titre =
   'Déterminer une ordonnée/abscisse avec une fonction linéaire'
 export const interactifReady = true
@@ -59,9 +59,9 @@ export default class OrdonneeAbscisseFonctionLineaire extends ExerciceSimple {
       yB = randint(5, 10) * a
     }
     const o = latex2d('\\text{O}', -0.3, -0.3, { letterSize: 'scriptsize' })
-    const A = point(xA, 0.5 * yA)
-    const Ax = point(A.x, 0)
-    const Ay = point(0, A.y)
+    const A = pointAbstrait(xA, 0.5 * yA)
+    const Ax = pointAbstrait(A.x, 0)
+    const Ay = pointAbstrait(0, A.y)
     const sAAx = segment(A, Ax)
     sAAx.epaisseur = 2
     sAAx.pointilles = 5

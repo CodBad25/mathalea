@@ -1,16 +1,16 @@
 import { droite } from '../../../lib/2d/droites'
-import { point } from '../../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { repere } from '../../../lib/2d/reperes'
 import { segment } from '../../../lib/2d/segmentsVecteurs'
 import { labelPoint, texteParPosition } from '../../../lib/2d/textes'
 import { tracePoint } from '../../../lib/2d/TracePoint'
+import { bleuMathalea } from '../../../lib/colors'
 import { ecritureAlgebrique } from '../../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import FractionEtendue from '../../../modules/FractionEtendue'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
-import { bleuMathalea } from '../../../lib/colors'
 
 export const titre = 'Déterminer une équation réduite de droite'
 export const interactifReady = true
@@ -47,9 +47,9 @@ export default class EquationReduite extends ExerciceSimple {
       true,
       1,
     )
-    const A = point(xA, yA, 'A', 'above left')
-    const B = point(xB, yB, 'B')
-    const Bx = point(B.x, A.y)
+    const A = pointAbstrait(xA, yA, 'A', 'above left')
+    const B = pointAbstrait(xB, yB, 'B')
+    const Bx = pointAbstrait(B.x, A.y)
     const sABx = segment(A, Bx)
     const sBBx = segment(B, Bx)
     sBBx.epaisseur = 2

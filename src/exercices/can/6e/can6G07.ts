@@ -1,6 +1,6 @@
 import { colorToLatexOrHTML } from '../../../lib/2d/colorToLatexOrHtml'
 import { droite } from '../../../lib/2d/droites'
-import { point } from '../../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { papierPointe } from '../../../lib/2d/reperes'
 import { tracePoint } from '../../../lib/2d/TracePoint'
 import { symetrieAxiale } from '../../../lib/2d/transformations'
@@ -12,9 +12,9 @@ import { mathalea2d } from '../../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../../modules/outils'
 import Exercice from '../../Exercice'
 
+import { bleuMathalea } from '../../../lib/colors'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { setReponse } from '../../../lib/interactif/gestionInteractif'
-import { bleuMathalea } from '../../../lib/colors'
 
 export const titre = 'Compter les points symétriques manquants'
 export const dateDePublication = '18/12/2021'
@@ -88,11 +88,11 @@ export default class CompleterParSymetrieCan extends Exercice {
 
       switch (randint(1, 2)) {
         case 1:
-          d = droite(point(3, 0), point(3, 6))
+          d = droite(pointAbstrait(3, 0), pointAbstrait(3, 6))
           break
         case 2:
         default:
-          d = droite(point(0, 3), point(6, 3))
+          d = droite(pointAbstrait(0, 3), pointAbstrait(6, 3))
           break
       }
       d.epaisseur = 2
@@ -105,7 +105,7 @@ export default class CompleterParSymetrieCan extends Exercice {
       while (pointsPossibles.length > 1) {
         // si il n'en reste qu'un, on ne peut pas trouver de symétrique
         image = symetrieAxiale(
-          point(pointsPossibles[0][0], pointsPossibles[0][1]),
+          pointAbstrait(pointsPossibles[0][0], pointsPossibles[0][1]),
           d,
         )
         j = 1
@@ -115,7 +115,7 @@ export default class CompleterParSymetrieCan extends Exercice {
           if (
             longueur(
               image,
-              point(pointsPossibles[j][0], pointsPossibles[j][1]),
+              pointAbstrait(pointsPossibles[j][0], pointsPossibles[j][1]),
             ) < 0.5
           ) {
             trouve = true
@@ -144,15 +144,19 @@ export default class CompleterParSymetrieCan extends Exercice {
       for (let p = 0; p < pointsChoisis.length; p += 2) {
         if (p < nbCouplesComplets) {
           // On affiche un certains nombre de couples
-          pointsAffiches.push(point(pointsChoisis[p][0], pointsChoisis[p][1]))
           pointsAffiches.push(
-            point(pointsChoisis[p + 1][0], pointsChoisis[p + 1][1]),
+            pointAbstrait(pointsChoisis[p][0], pointsChoisis[p][1]),
+          )
+          pointsAffiches.push(
+            pointAbstrait(pointsChoisis[p + 1][0], pointsChoisis[p + 1][1]),
           )
         } else {
           // et on affiche un seul des points pour les couples restants
-          pointsAffiches.push(point(pointsChoisis[p][0], pointsChoisis[p][1]))
+          pointsAffiches.push(
+            pointAbstrait(pointsChoisis[p][0], pointsChoisis[p][1]),
+          )
           pointsEnPlusCorr.push(
-            point(pointsChoisis[p + 1][0], pointsChoisis[p + 1][1]),
+            pointAbstrait(pointsChoisis[p + 1][0], pointsChoisis[p + 1][1]),
           )
         }
       }

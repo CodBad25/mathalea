@@ -1,17 +1,17 @@
 import { grille } from '../../../lib/2d/Grille'
-import { point } from '../../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import {
   segment,
   segmentAvecExtremites,
 } from '../../../lib/2d/segmentsVecteurs'
 import { labelPoint, latex2d } from '../../../lib/2d/textes'
 import { tracePoint } from '../../../lib/2d/TracePoint'
+import { bleuMathalea } from '../../../lib/colors'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
-import { bleuMathalea } from '../../../lib/colors'
 export const titre = 'Calculer une longueur sur une grille'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -37,13 +37,13 @@ export default class CalculLongueurGrille extends ExerciceSimple {
 
   nouvelleVersion() {
     const a = grille(0, 0, 8, 5, 'gray', 1, 1)
-    const A = point(1, 4, 'A', 'above')
+    const A = pointAbstrait(1, 4, 'A', 'above')
     const B = this.canOfficielle
-      ? point(5, 1, 'B', 'below')
-      : point(randint(2, 5), 1, 'B', 'below')
+      ? pointAbstrait(5, 1, 'B', 'below')
+      : pointAbstrait(randint(2, 5), 1, 'B', 'below')
     const C = this.canOfficielle
-      ? point(5, 4, 'C', 'above')
-      : point(B.x, A.y, 'C', 'above')
+      ? pointAbstrait(5, 4, 'C', 'above')
+      : pointAbstrait(B.x, A.y, 'C', 'above')
     const s2 = segment(A, B, bleuMathalea)
     s2.epaisseur = 3
     const s3 = segment(A, C, bleuMathalea)
@@ -54,8 +54,8 @@ export default class CalculLongueurGrille extends ExerciceSimple {
     s4.pointilles = 5
     const PositionPt = tracePoint(A, B, C)
     const LabelsPt = labelPoint(A, B, C)
-    const U = point(6, 4) // unite
-    const V = point(7, 4) // unite
+    const U = pointAbstrait(6, 4) // unite
+    const V = pointAbstrait(7, 4) // unite
     const s1 = segmentAvecExtremites(U, V)
     s1.epaisseur = 2
     const Texte1 = latex2d('1 \\text{u.l.}', 6.5, 4.5, {

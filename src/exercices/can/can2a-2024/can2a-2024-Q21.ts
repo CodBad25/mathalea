@@ -3,13 +3,14 @@
  */
 
 import { grille } from '../../../lib/2d/Grille'
-import { point } from '../../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import {
   segment,
   segmentAvecExtremites,
 } from '../../../lib/2d/segmentsVecteurs'
 import { texteParPosition } from '../../../lib/2d/textes'
 import { milieu } from '../../../lib/2d/utilitairesPoint'
+import { bleuMathalea } from '../../../lib/colors'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
@@ -17,7 +18,6 @@ import { context } from '../../../modules/context'
 import { fraction } from '../../../modules/fractions'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import ExerciceSimple from '../../ExerciceSimple'
-import { bleuMathalea } from '../../../lib/colors'
 
 export const titre = "Déterminer la longueur d'une ligne brisée"
 export const interactifReady = true
@@ -69,16 +69,16 @@ export default class NomExercice extends ExerciceSimple {
         'Quelle est la longueur de la ligne brisée en unité de longueur (u.l.) ? <br>'
       a = grille(-1, 0, 7, 4, 'gray', 1, 1)
       b = choice([3, 4, 5, 6])
-      A = point(1, 1, 'A', 'below')
-      B = point(1, 3, 'B', 'below')
-      C = point(3, 1, 'C', 'above')
-      D = point(3, 2, 'D', 'above')
-      E = point(5, 2, 'C', 'above')
-      F = point(5, 1, 'D', 'above')
-      J = point(6, 1, 'C', 'above')
-      K = point(6, 2, 'D', 'above')
-      G = point(0, 4, 'C', 'above') // unite
-      H = point(4, 4, 'D', 'above') // unite
+      A = pointAbstrait(1, 1, 'A', 'below')
+      B = pointAbstrait(1, 3, 'B', 'below')
+      C = pointAbstrait(3, 1, 'C', 'above')
+      D = pointAbstrait(3, 2, 'D', 'above')
+      E = pointAbstrait(5, 2, 'C', 'above')
+      F = pointAbstrait(5, 1, 'D', 'above')
+      J = pointAbstrait(6, 1, 'C', 'above')
+      K = pointAbstrait(6, 2, 'D', 'above')
+      G = pointAbstrait(0, 4, 'C', 'above') // unite
+      H = pointAbstrait(4, 4, 'D', 'above') // unite
       s1 = segmentAvecExtremites(G, H)
       s1.epaisseur = 3
       s2 = segment(A, B, bleuMathalea)
@@ -161,14 +161,14 @@ export default class NomExercice extends ExerciceSimple {
       if (choix === 'a') {
         a = grille(-2, -2, 7, 4, 'gray', 1, 1)
         b = choice([3, 4, 5, 6])
-        A = point(0, 2, 'A', 'below')
-        B = point(1, 2, 'B', 'below')
-        C = point(1, 0, 'C', 'above')
-        D = point(2, 0, 'D', 'above')
-        E = point(2, 2, 'C', 'above')
-        F = point(3, 2, 'D', 'above')
-        G = point(0, 4, 'C', 'above')
-        H = point(b, 4, 'D', 'above')
+        A = pointAbstrait(0, 2, 'A', 'below')
+        B = pointAbstrait(1, 2, 'B', 'below')
+        C = pointAbstrait(1, 0, 'C', 'above')
+        D = pointAbstrait(2, 0, 'D', 'above')
+        E = pointAbstrait(2, 2, 'C', 'above')
+        F = pointAbstrait(3, 2, 'D', 'above')
+        G = pointAbstrait(0, 4, 'C', 'above')
+        H = pointAbstrait(b, 4, 'D', 'above')
         s1 = segmentAvecExtremites(G, H)
         s1.epaisseur = 2
         s2 = segment(A, B)
@@ -224,13 +224,13 @@ export default class NomExercice extends ExerciceSimple {
       if (choix === 'b') {
         a = grille(-2, -1, 7, 4, 'gray', 1, 1)
         b = choice([3, 4, 5, 6])
-        A = point(0, 2, 'A', 'below')
-        B = point(1, 2, 'B', 'below')
-        C = point(1, 0, 'C', 'above')
-        D = point(4, 0, 'D', 'above')
-        E = point(4, 1, 'C', 'above')
-        G = point(0, 4, 'C', 'above')
-        H = point(b, 4, 'D', 'above')
+        A = pointAbstrait(0, 2, 'A', 'below')
+        B = pointAbstrait(1, 2, 'B', 'below')
+        C = pointAbstrait(1, 0, 'C', 'above')
+        D = pointAbstrait(4, 0, 'D', 'above')
+        E = pointAbstrait(4, 1, 'C', 'above')
+        G = pointAbstrait(0, 4, 'C', 'above')
+        H = pointAbstrait(b, 4, 'D', 'above')
         s1 = segmentAvecExtremites(G, H)
         s1.epaisseur = 2
         s2 = segment(A, B)
@@ -284,13 +284,13 @@ export default class NomExercice extends ExerciceSimple {
       if (choix === 'c') {
         a = grille(-2, -1, 7, 4, 'gray', 1, 1)
         b = choice([3, 4, 5, 6])
-        A = point(0, 2, 'A', 'below')
-        B = point(1, 2, 'B', 'below')
-        C = point(1, 0, 'C', 'above')
-        D = point(3, 0, 'D', 'above')
-        E = point(3, 2, 'C', 'above')
-        G = point(0, 4, 'C', 'above')
-        H = point(b, 4, 'D', 'above')
+        A = pointAbstrait(0, 2, 'A', 'below')
+        B = pointAbstrait(1, 2, 'B', 'below')
+        C = pointAbstrait(1, 0, 'C', 'above')
+        D = pointAbstrait(3, 0, 'D', 'above')
+        E = pointAbstrait(3, 2, 'C', 'above')
+        G = pointAbstrait(0, 4, 'C', 'above')
+        H = pointAbstrait(b, 4, 'D', 'above')
         s1 = segmentAvecExtremites(G, H)
         s1.epaisseur = 2
         s2 = segment(A, B)
@@ -344,13 +344,13 @@ export default class NomExercice extends ExerciceSimple {
       if (choix === 'd') {
         a = grille(-2, -1, 7, 4, 'gray', 1, 1)
         b = choice([3, 4, 6])
-        A = point(0, 2, 'A', 'below')
-        B = point(1, 2, 'B', 'below')
-        C = point(1, 1, 'C', 'above')
-        D = point(3, 1, 'D', 'above')
-        E = point(3, 2, 'C', 'above')
-        G = point(0, 4, 'C', 'above')
-        H = point(b, 4, 'D', 'above')
+        A = pointAbstrait(0, 2, 'A', 'below')
+        B = pointAbstrait(1, 2, 'B', 'below')
+        C = pointAbstrait(1, 1, 'C', 'above')
+        D = pointAbstrait(3, 1, 'D', 'above')
+        E = pointAbstrait(3, 2, 'C', 'above')
+        G = pointAbstrait(0, 4, 'C', 'above')
+        H = pointAbstrait(b, 4, 'D', 'above')
         s1 = segmentAvecExtremites(G, H)
         s1.epaisseur = 2
         s2 = segment(A, B)
@@ -404,13 +404,13 @@ export default class NomExercice extends ExerciceSimple {
       if (choix === 'e') {
         a = grille(-2, -1, 7, 4, 'gray', 1, 1)
         b = choice([3, 4, 6])
-        A = point(0, 2, 'A', 'below')
-        B = point(1, 2, 'B', 'below')
-        C = point(2, 2, 'C', 'above')
-        D = point(2, 1, 'D', 'above')
-        E = point(4, 1, 'C', 'above')
-        G = point(0, 4, 'C', 'above')
-        H = point(b, 4, 'D', 'above')
+        A = pointAbstrait(0, 2, 'A', 'below')
+        B = pointAbstrait(1, 2, 'B', 'below')
+        C = pointAbstrait(2, 2, 'C', 'above')
+        D = pointAbstrait(2, 1, 'D', 'above')
+        E = pointAbstrait(4, 1, 'C', 'above')
+        G = pointAbstrait(0, 4, 'C', 'above')
+        H = pointAbstrait(b, 4, 'D', 'above')
         s1 = segmentAvecExtremites(G, H)
         s1.epaisseur = 2
         s2 = segment(A, B)

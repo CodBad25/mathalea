@@ -1,4 +1,4 @@
-import { point } from '../../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { segment } from '../../../lib/2d/segmentsVecteurs'
 import { labelPoint } from '../../../lib/2d/textes'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
@@ -37,11 +37,11 @@ export default class CalculLongueurThales extends ExerciceSimple {
     const b = k * a // longueur IS
     const c = a + 1 // longueur IQ
     const d = k * c // longueur IR
-    const A = point(0, 0, 'I', 'below')
-    const B = point(2.6, -0.29, 'Q', 'below')
-    const C = point(9, -1, 'R', 'below')
-    const D = point(7, 2, 'S', 'above')
-    const E = point(2.03, 0.58, 'T', 'above')
+    const A = pointAbstrait(0, 0, 'I', 'below')
+    const B = pointAbstrait(2.6, -0.29, 'Q', 'below')
+    const C = pointAbstrait(9, -1, 'R', 'below')
+    const D = pointAbstrait(7, 2, 'S', 'above')
+    const E = pointAbstrait(2.03, 0.58, 'T', 'above')
     const xmin = -1
     const ymin = -2
     const xmax = 10

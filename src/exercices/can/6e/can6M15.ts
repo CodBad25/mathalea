@@ -1,6 +1,6 @@
 import { fixeBordures } from '../../../lib/2d/fixeBordures'
 import { grille } from '../../../lib/2d/Grille'
-import { point } from '../../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { Polyquad } from '../../../lib/2d/Polyquad'
 import { segment } from '../../../lib/2d/segmentsVecteurs'
 import { texteParPosition } from '../../../lib/2d/textes'
@@ -59,8 +59,8 @@ export default class PerimetreParComptageCan extends ExerciceSimple {
     const ymax = tetris.rectangle.yMax
     const grid = grille(xmin, ymin, xmax, ymax)
     const uniteLongueur = segment(
-      point(xmax - 2, ymax - 1),
-      point(xmax - 1, ymax - 1),
+      pointAbstrait(xmax - 2, ymax - 1),
+      pointAbstrait(xmax - 1, ymax - 1),
     )
     uniteLongueur.epaisseur = 2
     uniteLongueur.styleExtremites = '|-|'

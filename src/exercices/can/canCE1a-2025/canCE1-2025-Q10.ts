@@ -1,6 +1,6 @@
 import { colorToLatexOrHTML } from '../../../lib/2d/colorToLatexOrHtml'
 import { fixeBordures } from '../../../lib/2d/fixeBordures'
-import { point } from '../../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { ellipse } from '../../../lib/2d/projections3d'
 import { segment } from '../../../lib/2d/segmentsVecteurs'
 import { milieu } from '../../../lib/2d/utilitairesPoint'
@@ -30,14 +30,14 @@ export default class VocabulaireSolide extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const A = point(0, 0, 'A', 'below')
-    const B = point(-2, 0, 'B', 'below')
-    const C = point(2, 0, 'C', 'below')
-    const D = point(-2, -1.5, 'D', 'above')
-    const E = point(2, -1.5, 'D', 'above')
+    const A = pointAbstrait(0, 0, 'A', 'below')
+    const B = pointAbstrait(-2, 0, 'B', 'below')
+    const C = pointAbstrait(2, 0, 'C', 'below')
+    const D = pointAbstrait(-2, -1.5, 'D', 'above')
+    const E = pointAbstrait(2, -1.5, 'D', 'above')
     const c = ellipse(A, 2, 0.5)
     const c2 = ellipse(milieu(E, D), 2, 0.5)
-    const H3 = point(-2.5, -2) // seg avec flèche
+    const H3 = pointAbstrait(-2.5, -2) // seg avec flèche
     c2.couleurDeRemplissage = colorToLatexOrHTML('lightgray')
     c2.opaciteDeRemplissage = 0.3
     const s2 = segment(milieu(E, D), H3) // seg pour l'aire base

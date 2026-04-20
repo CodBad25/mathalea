@@ -1,7 +1,7 @@
 import { codageAngleDroit } from '../../../lib/2d/CodageAngleDroit'
 import { codageSegment } from '../../../lib/2d/CodageSegment'
 import { demiDroite } from '../../../lib/2d/DemiDroite'
-import { point } from '../../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { polygoneAvecNom } from '../../../lib/2d/polygones'
 import { ellipse } from '../../../lib/2d/projections3d'
 import { segment } from '../../../lib/2d/segmentsVecteurs'
@@ -481,22 +481,22 @@ export default class SujetCAN20213ieme extends Exercice {
             b = k * a // longueur DC
             c = a + 1 // longueur AE
             d = k * c // longueur AD
-            A = point(0, 0, 'A', 'below')
-            B = point(2, -0.4, 'B', 'below')
-            C = point(5, -1, 'C', 'below')
-            D = point(4, 2, 'D', 'above')
-            E = point(1.6, 0.8, 'E', 'above')
+            A = pointAbstrait(0, 0, 'A', 'below')
+            B = pointAbstrait(2, -0.4, 'B', 'below')
+            C = pointAbstrait(5, -1, 'C', 'below')
+            D = pointAbstrait(4, 2, 'D', 'above')
+            E = pointAbstrait(1.6, 0.8, 'E', 'above')
             xmin = -1
             ymin = -2
             xmax = 6
             ymax = 4.5
             sCote1 = segment(
-              point(A.x - 0.3, A.y + 0.5),
-              point(E.x - 0.2, E.y + 0.5),
+              pointAbstrait(A.x - 0.3, A.y + 0.5),
+              pointAbstrait(E.x - 0.2, E.y + 0.5),
             )
             sCote2 = segment(
-              point(A.x - 0.8, A.y + 1.3),
-              point(D.x - 0.8, D.y + 1.3),
+              pointAbstrait(A.x - 0.8, A.y + 1.3),
+              pointAbstrait(D.x - 0.8, D.y + 1.3),
             )
             sCote1.styleExtremites = '<->'
             sCote2.styleExtremites = '<->'
@@ -645,10 +645,10 @@ export default class SujetCAN20213ieme extends Exercice {
           {
             b = randint(8, 15) // longueur hauteur
 
-            A = point(0, 0, 'A', 'below')
-            B = point(-2, 0, 'B', 'below')
-            C = point(2, 0, 'C', 'below')
-            D = point(0, -4, 'D', 'above')
+            A = pointAbstrait(0, 0, 'A', 'below')
+            B = pointAbstrait(-2, 0, 'B', 'below')
+            C = pointAbstrait(2, 0, 'C', 'below')
+            D = pointAbstrait(0, -4, 'D', 'above')
             c = ellipse(A, 2, 0.5)
             s1 = segment(D, A)
             s1.pointilles = 5
@@ -765,9 +765,9 @@ export default class SujetCAN20213ieme extends Exercice {
             ]
             a = choice(triplet)
 
-            C = point(0, 0, 'C', 'below')
-            A = point(2, 0, 'A', 'below')
-            B = point(2, 3, 'B', 'above')
+            C = pointAbstrait(0, 0, 'C', 'below')
+            A = pointAbstrait(2, 0, 'A', 'below')
+            B = pointAbstrait(2, 3, 'B', 'above')
 
             xmin = -1
             ymin = -1
@@ -996,13 +996,13 @@ export default class SujetCAN20213ieme extends Exercice {
             if (choix === 'a') {
               b = randint(7, 12)
               a = randint(2, 5)
-              A = point(0.13, 0.5)
-              B = point(1, 1)
-              C = point(2, 1)
-              D = point(3, 2)
-              E = point(3, -1)
-              F = point(2, 0)
-              G = point(1, 0)
+              A = pointAbstrait(0.13, 0.5)
+              B = pointAbstrait(1, 1)
+              C = pointAbstrait(2, 1)
+              D = pointAbstrait(3, 2)
+              E = pointAbstrait(3, -1)
+              F = pointAbstrait(2, 0)
+              G = pointAbstrait(1, 0)
               s1 = segment(A, B)
               code1 = codageSegment(A, B, '||')
               s2 = segment(B, C)
@@ -1077,13 +1077,13 @@ export default class SujetCAN20213ieme extends Exercice {
             } else if (choix === 'b') {
               b = randint(7, 12)
               a = randint(2, 5)
-              A = point(0.13, 0.5)
-              B = point(1, 1)
-              C = point(2, 1)
-              D = point(3, 2)
-              E = point(3, -1)
-              F = point(2, 0)
-              G = point(1, 0)
+              A = pointAbstrait(0.13, 0.5)
+              B = pointAbstrait(1, 1)
+              C = pointAbstrait(2, 1)
+              D = pointAbstrait(3, 2)
+              E = pointAbstrait(3, -1)
+              F = pointAbstrait(2, 0)
+              G = pointAbstrait(1, 0)
               s1 = segment(A, B)
               code1 = codageSegment(A, B, '||')
               s2 = segment(B, C)
@@ -1158,12 +1158,12 @@ export default class SujetCAN20213ieme extends Exercice {
             } else if (choix === 'c') {
               b = randint(7, 12)
               a = randint(2, 5)
-              B = point(1, 1)
-              C = point(2, 1)
-              D = point(3, 2)
-              E = point(3, -1)
-              F = point(2, 0)
-              G = point(1, 0)
+              B = pointAbstrait(1, 1)
+              C = pointAbstrait(2, 1)
+              D = pointAbstrait(3, 2)
+              E = pointAbstrait(3, -1)
+              F = pointAbstrait(2, 0)
+              G = pointAbstrait(1, 0)
               s1 = segment(B, G)
               code1 = codageSegment(B, G, '||')
               s2 = segment(B, C)
@@ -1234,12 +1234,12 @@ export default class SujetCAN20213ieme extends Exercice {
             } else {
               b = randint(7, 12)
               a = randint(2, 5)
-              B = point(1, 1)
-              C = point(2, 1)
-              D = point(3, 2)
-              E = point(3, -1)
-              F = point(2, 0)
-              G = point(1, 0)
+              B = pointAbstrait(1, 1)
+              C = pointAbstrait(2, 1)
+              D = pointAbstrait(3, 2)
+              E = pointAbstrait(3, -1)
+              F = pointAbstrait(2, 0)
+              G = pointAbstrait(1, 0)
               s1 = segment(B, G)
               code1 = codageSegment(B, G, '||')
               s2 = segment(B, C)

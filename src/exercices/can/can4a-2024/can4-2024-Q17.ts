@@ -1,5 +1,5 @@
 import { codageAngleDroit } from '../../../lib/2d/CodageAngleDroit'
-import { point } from '../../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { polygone } from '../../../lib/2d/polygones'
 import { latexParCoordonnees } from '../../../lib/2d/textes'
 import { milieu } from '../../../lib/2d/utilitairesPoint'
@@ -32,10 +32,10 @@ export default class NomExercice extends ExerciceSimple {
   }
 
   nouvelleVersion() {
-    const A = point(0, 0, 'A', 'below')
-    const B = point(4, 0, 'B', 'below')
-    const C = point(4, 3, 'C', 'above')
-    const D = point(0, 3, 'D', 'above')
+    const A = pointAbstrait(0, 0, 'A', 'below')
+    const B = pointAbstrait(4, 0, 'B', 'below')
+    const C = pointAbstrait(4, 3, 'C', 'above')
+    const D = pointAbstrait(0, 3, 'D', 'above')
     const P = polygone(A, B, C, D) // rectangle
     const code1 = codageAngleDroit(A, B, C)
     const code2 = codageAngleDroit(B, C, D)

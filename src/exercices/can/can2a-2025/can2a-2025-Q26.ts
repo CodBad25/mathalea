@@ -1,10 +1,11 @@
-import { point } from '../../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { tracePoint } from '../../../lib/2d/TracePoint'
 import { droite } from '../../../lib/2d/droites'
 import { repere } from '../../../lib/2d/reperes'
 import { segment } from '../../../lib/2d/segmentsVecteurs'
 import { latex2d } from '../../../lib/2d/textes'
 import { milieu } from '../../../lib/2d/utilitairesPoint'
+import { bleuMathalea } from '../../../lib/colors'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { ecritureParentheseSiNegatif } from '../../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
@@ -12,7 +13,6 @@ import FractionEtendue from '../../../modules/FractionEtendue'
 import { mathalea2d } from '../../../modules/mathalea2d'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
-import { bleuMathalea } from '../../../lib/colors'
 
 export const titre = "Déterminer le coefficient directeur d'une droite"
 export const interactifReady = true
@@ -47,9 +47,9 @@ export default class CoeffDirecteurGraphique extends ExerciceSimple {
       letterSize: 'scriptsize',
       backgroundColor: '',
     })
-    const A = point(xA, yA)
-    const B = point(xB, yB)
-    const Bx = point(B.x, A.y)
+    const A = pointAbstrait(xA, yA)
+    const B = pointAbstrait(xB, yB)
+    const Bx = pointAbstrait(B.x, A.y)
     const sABx = segment(A, Bx)
     const sBBx = segment(B, Bx)
     const m = new FractionEtendue(yB - yA, xB - xA)

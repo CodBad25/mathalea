@@ -1,6 +1,6 @@
 import { codageSegment } from '../../../lib/2d/CodageSegment'
 import { colorToLatexOrHTML } from '../../../lib/2d/colorToLatexOrHtml'
-import { point } from '../../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { polygone } from '../../../lib/2d/polygones'
 import { segment } from '../../../lib/2d/segmentsVecteurs'
 import { texteParPosition } from '../../../lib/2d/textes'
@@ -28,8 +28,8 @@ import Hms from '../../../modules/Hms'
 
 import { droiteGraduee } from '../../../lib/2d/DroiteGraduee'
 import { grille } from '../../../lib/2d/Grille'
-import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { bleuMathalea } from '../../../lib/colors'
+import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 
 export const titre = 'CAN 6e sujet 2021'
 export const interactifReady = true
@@ -480,7 +480,12 @@ Par exemple, en choisissant 20 questions, la course aux nombres sera composée d
             labelsSecondaires: false,
           })
           c = polygone(
-            [point(0, 0), point(13, 0), point(13, 2), point(0, 2)],
+            [
+              pointAbstrait(0, 0),
+              pointAbstrait(13, 0),
+              pointAbstrait(13, 2),
+              pointAbstrait(0, 2),
+            ],
             'black',
           )
           A = segment(0.5, 2.4, 0.5 + (6 * a[0]) / a[1], 2.4)
@@ -781,10 +786,10 @@ Par exemple, en choisissant 20 questions, la course aux nombres sera composée d
           a = arrondi(2 + randint(1, 5) / 10, 1)
           b = arrondi(2 + randint(1, 4) / 10, 1)
           c = arrondi(randint(5, 6) - b, 1)
-          A = point(0, 0, 'A', 'below')
-          B = point(2.8, 0, 'B', 'below')
-          C = point(3.4, 3.4, 'C', 'above')
-          D = point(-0.6, 3.4, 'D', 'above')
+          A = pointAbstrait(0, 0, 'A', 'below')
+          B = pointAbstrait(2.8, 0, 'B', 'below')
+          C = pointAbstrait(3.4, 3.4, 'C', 'above')
+          D = pointAbstrait(-0.6, 3.4, 'D', 'above')
           code1 = codageSegment(B, C, '|')
           code2 = codageSegment(A, D, '|')
           xmin = -2.5
@@ -935,21 +940,26 @@ Par exemple, en choisissant 20 questions, la course aux nombres sera composée d
           a = randint(1, 5)
           b = randint(2, 4)
           A = polygone(
-            [point(1, 7), point(11, 7), point(11, 6), point(1, 6)],
+            [
+              pointAbstrait(1, 7),
+              pointAbstrait(11, 7),
+              pointAbstrait(11, 6),
+              pointAbstrait(1, 6),
+            ],
             'black',
           )
           A.couleurDeRemplissage = colorToLatexOrHTML('lightgray')
           B = texteParPosition('1 uA', 6, 6.5, 0, 'black', 1, 'milieu', false)
           C = grille(0, 0, 12, 7, 'black', 1, 1, false)
-          D = point(1 + a, 4 - b)
+          D = pointAbstrait(1 + a, 4 - b)
           d = polygone(
             [
               D,
-              point(D.x, D.y + 1),
-              point(11, D.y + 1),
-              point(11, 5),
-              point(1, 5),
-              point(1, D.y),
+              pointAbstrait(D.x, D.y + 1),
+              pointAbstrait(11, D.y + 1),
+              pointAbstrait(11, 5),
+              pointAbstrait(1, 5),
+              pointAbstrait(1, D.y),
             ],
             'black',
           )

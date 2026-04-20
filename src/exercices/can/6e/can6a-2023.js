@@ -1,6 +1,6 @@
 import { colorToLatexOrHTML } from '../../../lib/2d/colorToLatexOrHtml'
 import { fixeBordures } from '../../../lib/2d/fixeBordures'
-import { point } from '../../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { polygone, polygoneAvecNom } from '../../../lib/2d/polygones'
 import {
   segment,
@@ -33,6 +33,7 @@ import Decimal from 'decimal.js'
 import { droiteGraduee } from '../../../lib/2d/DroiteGraduee'
 import { grille } from '../../../lib/2d/Grille'
 import { plot } from '../../../lib/2d/Plot'
+import { bleuMathalea } from '../../../lib/colors'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import {
   handleAnswers,
@@ -40,7 +41,6 @@ import {
 } from '../../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../../lib/interactif/questionMathLive'
 import Grandeur from '../../../modules/Grandeur'
-import { bleuMathalea } from '../../../lib/colors'
 
 export const titre = 'CAN 6e sujet 2023'
 export const interactifReady = true
@@ -145,7 +145,6 @@ Par exemple, en choisissant 20 questions, la course aux nombres sera composée d
         objets,
         cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       switch (typeQuestionsDisponibles[i]) {
         case 1:
@@ -826,7 +825,8 @@ Par exemple, en choisissant 20 questions, la course aux nombres sera composée d
           }
 
           this.listeCanEnonces.push('Complète.')
-          this.listeCanReponsesACompleter[i] = `$${texNombre(b, 1)}+\\ldots =${res}$`
+          this.listeCanReponsesACompleter[i] =
+            `$${texNombre(b, 1)}+\\ldots =${res}$`
           nbChamps = 1
 
           break
@@ -856,19 +856,19 @@ Par exemple, en choisissant 20 questions, la course aux nombres sera composée d
           f = randint(d, b)
           A = polygone(
             [
-              point(0, 0),
-              point(c, 0),
-              point(c, d),
-              point(e, d),
-              point(e, f),
-              point(0, f),
+              pointAbstrait(0, 0),
+              pointAbstrait(c, 0),
+              pointAbstrait(c, d),
+              pointAbstrait(e, d),
+              pointAbstrait(e, f),
+              pointAbstrait(0, f),
             ],
             'black',
           )
           A.couleurDeRemplissage = colorToLatexOrHTML('lightgray')
 
           C = grille(0, 0, a, b, 'black', 1, 1, false)
-          D = point(1 + a, 4 - b)
+          D = pointAbstrait(1 + a, 4 - b)
 
           texte = `Quelle fraction de la surface totale représente la surface grisée ?
           <br>`
@@ -938,7 +938,8 @@ Par exemple, en choisissant 20 questions, la course aux nombres sera composée d
             this.listeCanEnonces.push(
               `Si une pile de $${a}$ pièces de monnaie a une hauteur de $${2 * a}\\text{ mm}$, `,
             )
-            this.listeCanReponsesACompleter[i] = `alors une pile de $${texNombre(b, 0)}$ pièces a une hauteur de $\\ldots\\text{ mm}$.`
+            this.listeCanReponsesACompleter[i] =
+              `alors une pile de $${texNombre(b, 0)}$ pièces a une hauteur de $\\ldots\\text{ mm}$.`
           } else {
             a = randint(2, 6)
             k = randint(2, 4)
@@ -951,7 +952,8 @@ Par exemple, en choisissant 20 questions, la course aux nombres sera composée d
 
             setReponse(this, index, reponse, { formatInteractif: 'calcul' })
             this.listeCanEnonces.push(`Si $${a}$ cahiers coûtent $${b}$ €,`)
-            this.listeCanReponsesACompleter[i] = `alors $${b}$ cahiers coûtent $\\ldots$ €.`
+            this.listeCanReponsesACompleter[i] =
+              `alors $${b}$ cahiers coûtent $\\ldots$ €.`
             if (this.interactif) {
               texte += ajouteChampTexteMathLive(this, index, ' ', {
                 texteApres: '€',
@@ -971,11 +973,11 @@ Par exemple, en choisissant 20 questions, la course aux nombres sera composée d
           if (choix === 'a') {
             a = grille(-2, 0, 7, 4, 'gray', 1, 1)
             b = choice([3, 4, 5, 6])
-            A = point(0, 2, 'A', 'below')
-            B = point(1, 2, 'B', 'below')
-            C = point(1, 1, 'C', 'above')
-            G = point(0, 4, 'C', 'above')
-            H = point(b, 4, 'D', 'above')
+            A = pointAbstrait(0, 2, 'A', 'below')
+            B = pointAbstrait(1, 2, 'B', 'below')
+            C = pointAbstrait(1, 1, 'C', 'above')
+            G = pointAbstrait(0, 4, 'C', 'above')
+            H = pointAbstrait(b, 4, 'D', 'above')
             s1 = segmentAvecExtremites(G, H)
             s1.epaisseur = 2
             s2 = segment(A, B)
@@ -1025,12 +1027,12 @@ Par exemple, en choisissant 20 questions, la course aux nombres sera composée d
           if (choix === 'b') {
             a = grille(-2, 0, 7, 4, 'gray', 1, 1)
             b = choice([2, 4, 5, 6])
-            A = point(0, 2, 'A', 'below')
-            B = point(1, 2, 'B', 'below')
-            C = point(1, 1, 'C', 'above')
-            D = point(2, 1, 'C', 'above')
-            G = point(0, 4, 'C', 'above')
-            H = point(b, 4, 'D', 'above')
+            A = pointAbstrait(0, 2, 'A', 'below')
+            B = pointAbstrait(1, 2, 'B', 'below')
+            C = pointAbstrait(1, 1, 'C', 'above')
+            D = pointAbstrait(2, 1, 'C', 'above')
+            G = pointAbstrait(0, 4, 'C', 'above')
+            H = pointAbstrait(b, 4, 'D', 'above')
             s1 = segmentAvecExtremites(G, H)
             s1.epaisseur = 2
             s2 = segment(A, B)
@@ -1084,13 +1086,13 @@ Par exemple, en choisissant 20 questions, la course aux nombres sera composée d
           if (choix === 'c') {
             a = grille(-2, 0, 7, 4, 'gray', 1, 1)
             b = choice([3, 5, 6])
-            A = point(0, 2, 'A', 'below')
-            B = point(1, 2, 'B', 'below')
-            C = point(1, 1, 'C', 'above')
-            D = point(2, 1, 'C', 'above')
-            E = point(2, 2, 'C', 'above')
-            G = point(0, 4, 'C', 'above')
-            H = point(b, 4, 'D', 'above')
+            A = pointAbstrait(0, 2, 'A', 'below')
+            B = pointAbstrait(1, 2, 'B', 'below')
+            C = pointAbstrait(1, 1, 'C', 'above')
+            D = pointAbstrait(2, 1, 'C', 'above')
+            E = pointAbstrait(2, 2, 'C', 'above')
+            G = pointAbstrait(0, 4, 'C', 'above')
+            H = pointAbstrait(b, 4, 'D', 'above')
             s1 = segmentAvecExtremites(G, H)
             s1.epaisseur = 2
             s2 = segment(A, B)
@@ -1207,7 +1209,8 @@ Par exemple, en choisissant 20 questions, la course aux nombres sera composée d
           }
 
           this.listeCanEnonces.push(`Une voiture roule à $${c}\\text{ km/h}$.`)
-          this.listeCanReponsesACompleter[i] = `Elle parcourt $\\ldots\\text{ km}$ en $${b}$ min à cette vitesse.`
+          this.listeCanReponsesACompleter[i] =
+            `Elle parcourt $\\ldots\\text{ km}$ en $${b}$ min à cette vitesse.`
           nbChamps = 1
 
           break
@@ -1329,22 +1332,18 @@ Par exemple, en choisissant 20 questions, la course aux nombres sera composée d
             a = randint(0, 7)
             b = randint(2, 4)
             A = polygone(
-              [point(1, 5), point(11, 5), point(11, 4), point(1, 4)],
+              [
+                pointAbstrait(1, 5),
+                pointAbstrait(11, 5),
+                pointAbstrait(11, 4),
+                pointAbstrait(1, 4),
+              ],
               'black',
             )
             A.couleurDeRemplissage = colorToLatexOrHTML('lightgray')
-            B = texteParPosition(
-              '1 uA',
-              6,
-              4.5,
-              0,
-              'black',
-              1,
-              'milieu',
-              false,
-            )
+            B = texteParPosition('1 uA', 6, 4.5, 0, 'black', 1, 'milieu', false)
             C = grille(0, 0, 12, 5, 'black', 1, 1, false)
-            D = point(1 + a, 4 - b)
+            D = pointAbstrait(1 + a, 4 - b)
 
             texte = `${prenom1} veut construire une figure d'aire $\\dfrac{${f[a][0]}}{${f[a][1]}}$ ${f[a][0] > f[a][1] > 2 ? 'unités' : 'unité'} d'aire (uA).<br>
 
@@ -1384,20 +1383,16 @@ Par exemple, en choisissant 20 questions, la course aux nombres sera composée d
             a = randint(0, 6)
             b = randint(2, 4)
             A = polygone(
-              [point(1, 5), point(3, 5), point(3, 3), point(1, 3)],
+              [
+                pointAbstrait(1, 5),
+                pointAbstrait(3, 5),
+                pointAbstrait(3, 3),
+                pointAbstrait(1, 3),
+              ],
               'black',
             )
             A.couleurDeRemplissage = colorToLatexOrHTML('lightgray')
-            B = texteParPosition(
-              '1 uA',
-              2,
-              5.4,
-              0,
-              'black',
-              1,
-              'milieu',
-              false,
-            )
+            B = texteParPosition('1 uA', 2, 5.4, 0, 'black', 1, 'milieu', false)
             C = grille(0, 0, 12, 5, 'black', 1, 1, false)
 
             texte = `${prenom1} veut construire une figure d'aire $\\dfrac{${f[a][0]}}{${f[a][1]}}$ ${f[a][0] / f[a][1] > 2 ? 'unités' : 'unité'} d'aire (uA).<br>
@@ -1603,14 +1598,14 @@ Par exemple, en choisissant 20 questions, la course aux nombres sera composée d
             k = randint(2, 4)
             L = k * l
             l2 = l + randint(1, 3)
-            A = point(0, 0)
-            B = point(4, 0)
-            C = point(4, 1.5)
-            D = point(0, 1.5)
-            E = point(5, 0)
-            F = point(7.5, 0)
-            G = point(7.5, 1)
-            H = point(5, 1)
+            A = pointAbstrait(0, 0)
+            B = pointAbstrait(4, 0)
+            C = pointAbstrait(4, 1.5)
+            D = pointAbstrait(0, 1.5)
+            E = pointAbstrait(5, 0)
+            F = pointAbstrait(7.5, 0)
+            G = pointAbstrait(7.5, 1)
+            H = pointAbstrait(5, 1)
             xmin = -1.5
             ymin = -0.5
             xmax = 9.2
@@ -1681,14 +1676,14 @@ Par exemple, en choisissant 20 questions, la course aux nombres sera composée d
             k = L - randint(1, 2)
             // L = k * l
             l2 = L / 2 // long petit
-            A = point(0, 0)
-            B = point(2.5, 0)
-            C = point(2.5, 1)
-            D = point(0, 1)
-            E = point(3, 0)
-            F = point(7, 0)
-            G = point(7, 2)
-            H = point(3, 2)
+            A = pointAbstrait(0, 0)
+            B = pointAbstrait(2.5, 0)
+            C = pointAbstrait(2.5, 1)
+            D = pointAbstrait(0, 1)
+            E = pointAbstrait(3, 0)
+            F = pointAbstrait(7, 0)
+            G = pointAbstrait(7, 2)
+            H = pointAbstrait(3, 2)
             xmin = -1
             ymin = -0.5
             xmax = 8.5

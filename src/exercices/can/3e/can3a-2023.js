@@ -5,7 +5,7 @@ import { colorToLatexOrHTML } from '../../../lib/2d/colorToLatexOrHtml'
 import { demiDroite } from '../../../lib/2d/DemiDroite'
 import { droite } from '../../../lib/2d/droites'
 import { fixeBordures } from '../../../lib/2d/fixeBordures'
-import { point } from '../../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { polygone, polygoneAvecNom } from '../../../lib/2d/polygones'
 import { repere } from '../../../lib/2d/reperes'
 import {
@@ -46,6 +46,7 @@ import { listeQuestionsToContenu, randint } from '../../../modules/outils'
 
 import Decimal from 'decimal.js'
 import { droiteGraduee } from '../../../lib/2d/DroiteGraduee'
+import { bleuMathalea } from '../../../lib/colors'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import {
   handleAnswers,
@@ -53,7 +54,6 @@ import {
 } from '../../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../../lib/interactif/questionMathLive'
 import { representationFraction } from '../../../modules/representationsFractions'
-import { bleuMathalea } from '../../../lib/colors'
 
 export const titre = 'CAN 3e sujet 2023'
 export const interactifReady = true
@@ -320,9 +320,9 @@ export default class SujetCAN2023troisieme extends Exercice {
             ang1 = choice([
               20, 30, 40, 60, 70, 80, 100, 110, 120, 130, 140, 150, 160,
             ])
-            A = point(0, 0, 'A', 'below')
-            B = point(6, 0, 'B', 'below')
-            origine = point(3, 0, 'O', 'below')
+            A = pointAbstrait(0, 0, 'A', 'below')
+            B = pointAbstrait(6, 0, 'B', 'below')
+            origine = pointAbstrait(3, 0, 'O', 'below')
             C = rotation(B, origine, ang1)
             s1 = segment(A, B)
             s1.epaisseur = 1.5
@@ -433,10 +433,10 @@ export default class SujetCAN2023troisieme extends Exercice {
                Ainsi, ? $=180-${ang1}=${miseEnEvidence(180 - ang1)}^\\circ$.`
           } else {
             ang1 = choice([30, 40, 60, 70, 110, 120, 130, 140, 150, 160])
-            A = point(0, 0, 'A', 'below')
-            B = point(2, 0, 'B', 'below')
-            origine = point(0, 0, 'O', 'below')
-            D = point(0, 2, 'D', 'right')
+            A = pointAbstrait(0, 0, 'A', 'below')
+            B = pointAbstrait(2, 0, 'B', 'below')
+            origine = pointAbstrait(0, 0, 'O', 'below')
+            D = pointAbstrait(0, 2, 'D', 'right')
             C = rotation(B, origine, ang1)
             traceD = tracePoint(D)
             traceD.taille = context.isHtml ? 2 : 1.5
@@ -785,13 +785,13 @@ export default class SujetCAN2023troisieme extends Exercice {
       <br>`
             reponse = 180 - 2 * a
 
-            A = point(0, 0, nom[0])
+            A = pointAbstrait(0, 0, nom[0])
             if (a > 60) {
-              B = point(4, 0, nom[1])
-              C = point(2, 3.5, nom[2])
+              B = pointAbstrait(4, 0, nom[1])
+              C = pointAbstrait(2, 3.5, nom[2])
             } else {
-              B = point(6, 0, nom[1])
-              C = point(3, 2.1, nom[2])
+              B = pointAbstrait(6, 0, nom[1])
+              C = pointAbstrait(3, 2.1, nom[2])
             }
             pol = polygoneAvecNom(A, B, C)
 
@@ -848,13 +848,13 @@ export default class SujetCAN2023troisieme extends Exercice {
       <br>`
             reponse = arrondi((180 - a) / 2)
 
-            A = point(0, 0, nom[0])
+            A = pointAbstrait(0, 0, nom[0])
             if (a < 100) {
-              B = point(4, 0, nom[1])
-              C = point(2, 3.5, nom[2])
+              B = pointAbstrait(4, 0, nom[1])
+              C = pointAbstrait(2, 3.5, nom[2])
             } else {
-              B = point(6, 0, nom[1])
-              C = point(3, 2.1, nom[2])
+              B = pointAbstrait(6, 0, nom[1])
+              C = pointAbstrait(3, 2.1, nom[2])
             }
             pol = polygoneAvecNom(A, B, C)
 
@@ -984,9 +984,9 @@ export default class SujetCAN2023troisieme extends Exercice {
           ]
           a = choice(triplet)
 
-          C = point(0, 0, 'C', 'below')
-          A = point(2, 0, 'A', 'below')
-          B = point(2, 3, 'B', 'above')
+          C = pointAbstrait(0, 0, 'C', 'below')
+          A = pointAbstrait(2, 0, 'A', 'below')
+          B = pointAbstrait(2, 3, 'B', 'above')
 
           xmin = -1
           ymin = -1
@@ -1344,16 +1344,16 @@ export default class SujetCAN2023troisieme extends Exercice {
             b = randint(2, 4)
             a = randint(5, 9)
             c = 2 * a + b
-            A = point(0, 0)
-            B = point(10, 0)
-            C = point(10, 0.7)
-            D = point(0, 0.7)
-            E = point(4, 0.7)
-            F = point(4, 0)
-            G = point(8, 0.7)
-            H = point(8, 0)
-            I = point(0, 1)
-            J = point(10, 1)
+            A = pointAbstrait(0, 0)
+            B = pointAbstrait(10, 0)
+            C = pointAbstrait(10, 0.7)
+            D = pointAbstrait(0, 0.7)
+            E = pointAbstrait(4, 0.7)
+            F = pointAbstrait(4, 0)
+            G = pointAbstrait(8, 0.7)
+            H = pointAbstrait(8, 0)
+            I = pointAbstrait(0, 1)
+            J = pointAbstrait(10, 1)
 
             s1 = segmentAvecExtremites(I, J)
             s1.styleExtremites = '<->'
@@ -1462,18 +1462,18 @@ export default class SujetCAN2023troisieme extends Exercice {
             b = randint(7, 9)
             a = randint(2, 5)
             c = 3 * a + b
-            A = point(0, 0)
-            B = point(10, 0)
-            C = point(10, 0.7)
-            D = point(0, 0.7)
-            E = point(2, 0.7)
-            F = point(2, 0)
-            G = point(4, 0.7)
-            H = point(4, 0)
-            I = point(6, 0.7)
-            J = point(6, 0)
-            K = point(0, 1)
-            L = point(10, 1)
+            A = pointAbstrait(0, 0)
+            B = pointAbstrait(10, 0)
+            C = pointAbstrait(10, 0.7)
+            D = pointAbstrait(0, 0.7)
+            E = pointAbstrait(2, 0.7)
+            F = pointAbstrait(2, 0)
+            G = pointAbstrait(4, 0.7)
+            H = pointAbstrait(4, 0)
+            I = pointAbstrait(6, 0.7)
+            J = pointAbstrait(6, 0)
+            K = pointAbstrait(0, 1)
+            L = pointAbstrait(10, 1)
             s1 = segmentAvecExtremites(K, L)
             s1.styleExtremites = '<->'
             xmin = -1
@@ -1696,22 +1696,22 @@ export default class SujetCAN2023troisieme extends Exercice {
             b = k * a // longueur DC
             c = a + 1 // longueur AE
             d = k * c // longueur AD
-            A = point(0, 0, 'A', 'below')
-            B = point(2, -0.4, 'B', 'below')
-            C = point(5, -1, 'C', 'below')
-            D = point(4, 2, 'D', 'above')
-            E = point(1.6, 0.8, 'E', 'above')
+            A = pointAbstrait(0, 0, 'A', 'below')
+            B = pointAbstrait(2, -0.4, 'B', 'below')
+            C = pointAbstrait(5, -1, 'C', 'below')
+            D = pointAbstrait(4, 2, 'D', 'above')
+            E = pointAbstrait(1.6, 0.8, 'E', 'above')
             xmin = -1
             ymin = -2.5
             xmax = 6
             ymax = 4.5
             sCote1 = segment(
-              point(A.x - 0.3, A.y + 0.5),
-              point(E.x - 0.2, E.y + 0.5),
+              pointAbstrait(A.x - 0.3, A.y + 0.5),
+              pointAbstrait(E.x - 0.2, E.y + 0.5),
             )
             sCote2 = segment(
-              point(A.x - 0.8, A.y + 1.3),
-              point(D.x - 0.8, D.y + 1.3),
+              pointAbstrait(A.x - 0.8, A.y + 1.3),
+              pointAbstrait(D.x - 0.8, D.y + 1.3),
             )
             sCote1.styleExtremites = '<->'
             sCote2.styleExtremites = '<->'
@@ -1813,11 +1813,11 @@ export default class SujetCAN2023troisieme extends Exercice {
             b = k * a // BE
             c = randint(b, 22) // DC
             d = k * c // AD
-            A = point(6, 0, 'A', 'right', 'below')
-            D = point(0.46, 2.92, 'D', 'above left')
-            E = point(4, 1, 'E', 'below')
-            B = point(6.22, 2, 'B', 'above right')
-            C = point(0, -1, 'C', 'left')
+            A = pointAbstrait(6, 0, 'A', 'right', 'below')
+            D = pointAbstrait(0.46, 2.92, 'D', 'above left')
+            E = pointAbstrait(4, 1, 'E', 'below')
+            B = pointAbstrait(6.22, 2, 'B', 'above right')
+            C = pointAbstrait(0, -1, 'C', 'left')
             xmin = -1
             ymin = -2
             xmax = 7.5
@@ -1948,9 +1948,9 @@ export default class SujetCAN2023troisieme extends Exercice {
             //   labelPointTaille: context.isHtml ? 10 : 7
           })
           o = texteParPosition('O', -0.3, -0.3, 0, 'black', 1)
-          A = point(xA, yA, 'A', 'above')
-          B = point(xB, yB, 'B', 'below')
-          C = point(xC, yC, 'C', 'below left')
+          A = pointAbstrait(xA, yA, 'A', 'above')
+          B = pointAbstrait(xB, yB, 'B', 'below')
+          C = pointAbstrait(xC, yC, 'C', 'below left')
           traceA = tracePoint(A) // Variable qui trace les points avec une croix
           traceB = tracePoint(B)
           traceC = tracePoint(C)

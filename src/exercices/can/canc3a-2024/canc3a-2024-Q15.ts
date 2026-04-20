@@ -4,7 +4,7 @@ import ExerciceSimple from '../../ExerciceSimple'
 
 import { codageAngleDroit } from '../../../lib/2d/CodageAngleDroit'
 import { fixeBordures } from '../../../lib/2d/fixeBordures'
-import { point, Point } from '../../../lib/2d/PointAbstrait'
+import { Point, pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { Polygone } from '../../../lib/2d/polygones'
 import { segment } from '../../../lib/2d/segmentsVecteurs'
 import { latexParCoordonnees } from '../../../lib/2d/textes'
@@ -48,19 +48,25 @@ export default class PerimetreRectangleCM2 extends ExerciceSimple {
     const angle2 = codageAngleDroit(A, B, C)
     const angle3 = codageAngleDroit(B, C, D)
     const angle4 = codageAngleDroit(C, D, A)
-    const horizontale1 = segment(point(0, -0.5), point(grandeBase, -0.5))
+    const horizontale1 = segment(
+      pointAbstrait(0, -0.5),
+      pointAbstrait(grandeBase, -0.5),
+    )
     horizontale1.styleExtremites = '<->'
     const verticale1 = segment(
-      point(grandeBase + 0.5, 0),
-      point(grandeBase + 0.5, hauteur),
+      pointAbstrait(grandeBase + 0.5, 0),
+      pointAbstrait(grandeBase + 0.5, hauteur),
     )
     verticale1.styleExtremites = '<->'
     const horizontale2 = segment(
-      point(0, hauteur + 0.5),
-      point(grandeBase, hauteur + 0.5),
+      pointAbstrait(0, hauteur + 0.5),
+      pointAbstrait(grandeBase, hauteur + 0.5),
     )
     horizontale2.styleExtremites = '<->'
-    const verticale2 = segment(point(-0.5, 0), point(-0.5, hauteur))
+    const verticale2 = segment(
+      pointAbstrait(-0.5, 0),
+      pointAbstrait(-0.5, hauteur),
+    )
     verticale2.styleExtremites = '<->'
     const largeur01 = latexParCoordonnees(
       `\\text{${String(hauteur) + ' cm'}}`,

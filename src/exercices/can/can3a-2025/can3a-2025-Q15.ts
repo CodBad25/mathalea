@@ -1,5 +1,5 @@
 import { codageAngleDroit } from '../../../lib/2d/CodageAngleDroit'
-import { point } from '../../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { polygoneAvecNom } from '../../../lib/2d/polygones'
 import { latex2d } from '../../../lib/2d/textes'
 import { similitude } from '../../../lib/2d/transformations'
@@ -40,7 +40,7 @@ export default class hypoténusePythagore extends ExerciceSimple {
     const b = this.canOfficielle ? 3 : randint(3, 7) //
     const c2 = a ** 2 + b ** 2
 
-    const S = point(0, 0, 'S')
+    const S = pointAbstrait(0, 0, 'S')
     const R = pointAdistance(S, a, randint(0, 45), 'R')
     const T = similitude(S, R, 90, b / a, 'T')
     const pol = polygoneAvecNom(S, R, T) // polygoneAvecNom s'occupe du placement des noms des sommets

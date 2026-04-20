@@ -1,4 +1,4 @@
-import { point } from '../../../lib/2d/PointAbstrait'
+import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { repere } from '../../../lib/2d/reperes'
 import { labelPoint, latex2d } from '../../../lib/2d/textes'
 import { tracePoint } from '../../../lib/2d/TracePoint'
@@ -61,7 +61,7 @@ export default class Coordonnees extends ExerciceSimple {
       grilleSecondaire: false,
     })
 
-    const A = point(a, b, 'A', 'above')
+    const A = pointAbstrait(a, b, 'A', 'above')
     const o = latex2d('\\text{O}', -0.2, -0.3, {
       color: 'black',
       letterSize: 'scriptsize',
