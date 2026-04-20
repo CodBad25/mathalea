@@ -1,6 +1,11 @@
-import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
-import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
+import { fixeBordures } from '../../lib/2d/fixeBordures'
+import { Tableau } from '../../lib/2d/tableau'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { toutAUnPoint } from '../../lib/interactif/mathLive'
+import {
+  AddTabPropMathlive,
+  type Icell,
+} from '../../lib/interactif/tableaux/AjouteTableauMathlive'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import { texFractionReduite } from '../../lib/outils/deprecatedFractions'
 import {
@@ -10,9 +15,11 @@ import {
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { lettreMinusculeDepuisChiffre } from '../../lib/outils/outilString'
 import { pgcd } from '../../lib/outils/primalite'
+import { texNombre } from '../../lib/outils/texNombre'
 import { context } from '../../modules/context'
 import FractionEtendue from '../../modules/FractionEtendue'
 import { fraction } from '../../modules/fractions'
+import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
@@ -33,7 +40,7 @@ export const dateDeModifImportante = '20/02/2023'
  * * Niveau 5 : Mélange
  * @author Rémi Angot
  */
-export const uuid = 'afb2f'
+export const uuid = 'bfb2f'
 
 export const refs = {
   'fr-fr': ['3F12-3'],
@@ -101,7 +108,6 @@ export default class TableauDeValeurs extends Exercice {
       let c = 0
       let d = 0
       let expression = ''
-      let ligne2 = ''
       nomdef = lettreMinusculeDepuisChiffre(6 + i) // on commence par f puis on continue dans l'ordre alphabétique
       x1 = listeDeX[i][0]
       x2 = listeDeX[i][1]
@@ -112,7 +118,6 @@ export default class TableauDeValeurs extends Exercice {
           b = randint(-10, 10, [0])
           expression = `${a}x${ecritureAlgebrique(b)}`
           f = (x: number) => a * x + b
-          ligne2 = `${nomdef}(x) & ${a * listeDeX[i][0] + b} & ${a * listeDeX[i][1] + b} & ${a * listeDeX[i][2] + b} \\\\\n`
           calculs = `$${nomdef}(${x1})=${a}\\times${ecritureParentheseSiNegatif(x1)}${ecritureAlgebrique(b)}=${a * x1}${ecritureAlgebrique(b)}=${a * x1 + b}$<br>`
           calculs += `$${nomdef}(${x2})=${a}\\times${ecritureParentheseSiNegatif(x2)}${ecritureAlgebrique(b)}=${a * x2}${ecritureAlgebrique(b)}=${a * x2 + b}$<br>`
           calculs += `$${nomdef}(${x3})=${a}\\times${ecritureParentheseSiNegatif(x3)}${ecritureAlgebrique(b)}=${a * x3}${ecritureAlgebrique(b)}=${a * x3 + b}$<br>`
@@ -121,7 +126,6 @@ export default class TableauDeValeurs extends Exercice {
         case 'ax':
           a = randint(-10, 10, [0, -1, 1])
           expression = `${a}x`
-          ligne2 = `${nomdef}(x) & ${a * listeDeX[i][0]} & ${a * listeDeX[i][1]} & ${a * listeDeX[i][2]} \\\\\n`
           calculs = `$${nomdef}(${x1})=${a}\\times${ecritureParentheseSiNegatif(x1)}=${a * x1}$<br>`
           calculs += `$${nomdef}(${x2})=${a}\\times${ecritureParentheseSiNegatif(x2)}=${a * x2}$<br>`
           calculs += `$${nomdef}(${x3})=${a}\\times${ecritureParentheseSiNegatif(x3)}=${a * x3}$<br>`
@@ -133,7 +137,6 @@ export default class TableauDeValeurs extends Exercice {
           b = randint(-5, 5, [0, -1, 1])
           c = randint(-10, 10, [0])
           expression = `${a}x^2${ecritureAlgebrique(b)}x${ecritureAlgebrique(c)}`
-          ligne2 = `${nomdef}(x) & ${a * listeDeX[i][0] ** 2 + b * listeDeX[i][0] + c} & ${a * listeDeX[i][1] ** 2 + b * listeDeX[i][1] + c} & ${a * listeDeX[i][2] ** 2 + b * listeDeX[i][2] + c} \\\\\n`
           calculs = `$${nomdef}(${x1})=${a}\\times${ecritureParentheseSiNegatif(x1)}^2${ecritureAlgebrique(b)}\\times${ecritureParentheseSiNegatif(x1)}${ecritureAlgebrique(c)}=${a}\\times${x1 ** 2}${ecritureAlgebrique(b * x1)}${ecritureAlgebrique(c)}=${a * x1 ** 2 + b * x1 + c}$<br>`
           calculs += `$${nomdef}(${x2})=${a}\\times${ecritureParentheseSiNegatif(x2)}^2${ecritureAlgebrique(b)}\\times${ecritureParentheseSiNegatif(x2)}${ecritureAlgebrique(c)}=${a}\\times${x2 ** 2}${ecritureAlgebrique(b * x2)}${ecritureAlgebrique(c)}=${a * x2 ** 2 + b * x2 + c}$<br>`
           calculs += `$${nomdef}(${x3})=${a}\\times${ecritureParentheseSiNegatif(x3)}^2${ecritureAlgebrique(b)}\\times${ecritureParentheseSiNegatif(x3)}${ecritureAlgebrique(c)}=${a}\\times${x3 ** 2}${ecritureAlgebrique(b * x3)}${ecritureAlgebrique(c)}=${a * x3 ** 2 + b * x3 + c}$<br>`
@@ -144,7 +147,6 @@ export default class TableauDeValeurs extends Exercice {
           a = randint(-4, 4, [0, -1, 1])
           c = randint(-10, 10, [0])
           expression = `${a}x^2${ecritureAlgebrique(c)}`
-          ligne2 = `${nomdef}(x) & ${a * listeDeX[i][0] ** 2 + c} & ${a * listeDeX[i][1] ** 2 + c} & ${a * listeDeX[i][2] ** 2 + c} \\\\\n`
           calculs = `$${nomdef}(${x1})=${a}\\times${ecritureParentheseSiNegatif(x1)}^2${ecritureAlgebrique(c)}=${a}\\times${x1 ** 2}${ecritureAlgebrique(c)}=${a * x1 ** 2 + c}$<br>`
           calculs += `$${nomdef}(${x2})=${a}\\times${ecritureParentheseSiNegatif(x2)}^2${ecritureAlgebrique(c)}=${a}\\times${x2 ** 2}${ecritureAlgebrique(c)}=${a * x2 ** 2 + c}$<br>`
           calculs += `$${nomdef}(${x3})=${a}\\times${ecritureParentheseSiNegatif(x3)}^2${ecritureAlgebrique(c)}=${a}\\times${x3 ** 2}${ecritureAlgebrique(c)}=${a * x3 ** 2 + c}$<br>`
@@ -156,7 +158,6 @@ export default class TableauDeValeurs extends Exercice {
           b = randint(-5, 5, [0, -1, 1])
           c = randint(-10, 10, [0])
           expression = `${a}x^2${ecritureAlgebrique(b)}x`
-          ligne2 = `${nomdef}(x) & ${a * listeDeX[i][0] ** 2 + b * listeDeX[i][0]} & ${a * listeDeX[i][1] ** 2 + b * listeDeX[i][1]} & ${a * listeDeX[i][2] ** 2 + b * listeDeX[i][2]} \\\\\n`
           calculs = `$${nomdef}(${x1})=${a}\\times${ecritureParentheseSiNegatif(x1)}^2${ecritureAlgebrique(b)}\\times${ecritureParentheseSiNegatif(x1)}=${a}\\times${x1 ** 2}${ecritureAlgebrique(b * x1)}=${a * x1 ** 2 + b * x1}$<br>`
           calculs += `$${nomdef}(${x2})=${a}\\times${ecritureParentheseSiNegatif(x2)}^2${ecritureAlgebrique(b)}\\times${ecritureParentheseSiNegatif(x2)}=${a}\\times${x2 ** 2}${ecritureAlgebrique(b * x2)}=${a * x2 ** 2 + b * x2}$<br>`
           calculs += `$${nomdef}(${x3})=${a}\\times${ecritureParentheseSiNegatif(x3)}^2${ecritureAlgebrique(b)}\\times${ecritureParentheseSiNegatif(x3)}=${a}\\times${x3 ** 2}${ecritureAlgebrique(b * x3)}=${a * x3 ** 2 + b * x3}$<br>`
@@ -172,7 +173,6 @@ export default class TableauDeValeurs extends Exercice {
             c = randint(-10, 10, [0, -1, 1])
           }
           expression = `\\dfrac{${a}}{${c}x${ecritureAlgebrique(d)}}`
-          ligne2 = `${nomdef}(x) & ${texFractionReduite(a, c * listeDeX[i][0] + d)} & ${texFractionReduite(a, c * listeDeX[i][1] + d)} & ${texFractionReduite(a, c * listeDeX[i][2] + d)} \\\\\n`
           calculs = `$${nomdef}(${x1})=\\dfrac{${a}}{${c}\\times${ecritureParentheseSiNegatif(x1)}${ecritureAlgebrique(d)}}=\\dfrac{${a}}{${c * x1}${ecritureAlgebrique(d)}}=${fraction(a, c * x1 + d).texFSD}`
           if (pgcd(a, c * x1 + d) === 1) {
             calculs += '$<br>'
@@ -208,7 +208,6 @@ export default class TableauDeValeurs extends Exercice {
             c = randint(-10, 10, [0, -1, 1])
           }
           expression = `\\dfrac{${a}x${ecritureAlgebrique(b)}}{${c}x${ecritureAlgebrique(d)}}`
-          ligne2 = `${nomdef}(x) & ${texFractionReduite(a * listeDeX[i][0] + b, c * listeDeX[i][0] + d)} & ${texFractionReduite(a * listeDeX[i][1] + b, c * listeDeX[i][1] + d)} & ${texFractionReduite(a * listeDeX[i][2] + b, c * listeDeX[i][2] + d)} \\\\\n`
           calculs = `$${nomdef}(${x1})=\\dfrac{${a}\\times${ecritureParentheseSiNegatif(x1)}${ecritureAlgebrique(b)}}{${c}\\times${ecritureParentheseSiNegatif(x1)}${ecritureAlgebrique(d)}}=\\dfrac{${a * x1}${ecritureAlgebrique(b)}}{${c * x1}${ecritureAlgebrique(d)}}=\\dfrac{${a * x1 + b}}{${c * x1 + d}}`
           if (pgcd(a * x1 + b, c * x1 + d) === 1) {
             calculs += '$<br>'
@@ -246,7 +245,6 @@ export default class TableauDeValeurs extends Exercice {
             d = randint(1, 3)
           }
           expression = `(${a}x${ecritureAlgebrique(b)})(${c}x${ecritureAlgebrique(d)})`
-          ligne2 = `${nomdef}(x) & ${(a * listeDeX[i][0] + b) * (c * listeDeX[i][0] + d)} & ${(a * listeDeX[i][1] + b) * (c * listeDeX[i][1] + d)} & ${(a * listeDeX[i][2] + b) * (c * listeDeX[i][2] + d)} \\\\\n`
           calculs = `$${nomdef}(${x1})=\\left(${a}\\times${ecritureParentheseSiNegatif(x1)}${ecritureAlgebrique(b)}\\right)\\left(${c}\\times${ecritureParentheseSiNegatif(x1)}${ecritureAlgebrique(d)}\\right)=(${a * x1}${ecritureAlgebrique(b)})(${c * x1}${ecritureAlgebrique(d)})=${a * x1 + b}\\times ${ecritureParentheseSiNegatif(c * x1 + d)}=${(a * x1 + b) * (c * x1 + d)}$<br>`
           calculs += `$${nomdef}(${x2})=\\left(${a}\\times${ecritureParentheseSiNegatif(x2)}${ecritureAlgebrique(b)}\\right)\\left(${c}\\times${ecritureParentheseSiNegatif(x2)}${ecritureAlgebrique(d)}\\right)=(${a * x2}${ecritureAlgebrique(b)})(${c * x2}${ecritureAlgebrique(d)})=${a * x2 + b}\\times ${ecritureParentheseSiNegatif(c * x2 + d)}=${(a * x2 + b) * (c * x2 + d)}$<br>`
           calculs += `$${nomdef}(${x3})=\\left(${a}\\times${ecritureParentheseSiNegatif(x3)}${ecritureAlgebrique(b)}\\right)\\left(${c}\\times${ecritureParentheseSiNegatif(x3)}${ecritureAlgebrique(d)}\\right)=(${a * x3}${ecritureAlgebrique(b)})(${c * x3}${ecritureAlgebrique(d)})=${a * x3 + b}\\times ${ecritureParentheseSiNegatif(c * x3 + d)}=${(a * x3 + b) * (c * x3 + d)}$<br>`
@@ -257,7 +255,6 @@ export default class TableauDeValeurs extends Exercice {
           a = randint(-3, 3, [0, 1, -1])
           b = randint(-3, 3, [0])
           expression = `(${a}x${ecritureAlgebrique(b)})^2`
-          ligne2 = `${nomdef}(x) & ${(a * listeDeX[i][0] + b) ** 2} & ${(a * listeDeX[i][1] + b) ** 2} & ${(a * listeDeX[i][2] + b) ** 2} \\\\\n`
           calculs = `$${nomdef}(${x1})=\\left(${a}\\times${ecritureParentheseSiNegatif(x1)}${ecritureAlgebrique(b)}\\right)^2=(${a * x1}${ecritureAlgebrique(b)})^2=${ecritureParentheseSiNegatif(a * x1 + b)}^2=${(a * x1 + b) ** 2}$<br>`
           calculs += `$${nomdef}(${x2})=\\left(${a}\\times${ecritureParentheseSiNegatif(x2)}${ecritureAlgebrique(b)}\\right)^2=(${a * x2}${ecritureAlgebrique(b)})^2=${ecritureParentheseSiNegatif(a * x2 + b)}^2=${(a * x2 + b) ** 2}$<br>`
           calculs += `$${nomdef}(${x3})=\\left(${a}\\times${ecritureParentheseSiNegatif(x3)}${ecritureAlgebrique(b)}\\right)^2=(${a * x3}${ecritureAlgebrique(b)})^2=${ecritureParentheseSiNegatif(a * x3 + b)}^2=${(a * x3 + b) ** 2}$<br>`
@@ -265,30 +262,119 @@ export default class TableauDeValeurs extends Exercice {
           listeReponses = [f(x1), f(x2), f(x3)]
           break
       }
+      const yGrecs = listeReponses.map((el) => texNombre(el, 1))
       texte = `On considère la fonction $${nomdef}$ définie par $${nomdef}:x\\mapsto ${expression}$. ${this.interactif ? '<br>Calculer les images par $f$ suivantes.' : '<br>Compléter le tableau de valeurs suivant.<br><br>'}`
+      const ligne1: Icell[] = [
+        { texte: 'x', gras: true, color: 'black', latex: true },
+      ].concat(
+        [x1, x2, x3].map((el) =>
+          Object.assign(
+            {},
+            {
+              texte: texNombre(el, 1),
+              gras: false,
+              color: 'black',
+              latex: true,
+            },
+          ),
+        ),
+      )
+      const ligne2: Icell[] = [
+        { texte: `${nomdef}(x)`, gras: true, color: 'black', latex: true },
+      ].concat(
+        listeReponses.map((el) =>
+          Object.assign(
+            {},
+            {
+              texte: miseEnEvidence(texNombre(el, 1)),
+              gras: false,
+              color: 'black',
+              latex: true,
+            },
+          ),
+        ),
+      )
+      const ligne2bis: Icell[] = [
+        { texte: `${nomdef}(x)`, gras: true, color: 'black', latex: true },
+      ].concat(
+        listeReponses.map(() =>
+          Object.assign(
+            {},
+            { texte: '', gras: false, color: 'black', latex: true },
+          ),
+        ),
+      )
 
       if (context.isHtml) {
-        if (!this.interactif)
-          texte += '$\\def\\arraystretch{2.5}\\begin{array}{|l|c|c|c|}\n'
+        const tabMathlive = AddTabPropMathlive.create(
+          this.numeroExercice ?? 0,
+          0,
+          { ligne1, ligne2: ligne2bis, nbColonnes: 4 },
+          'clavierDeBase',
+          this.interactif,
+          {},
+        )
+        texte += '<br>' + tabMathlive.output
       } else {
-        texte += '$\\begin{array}{|l|c|c|c|}\n'
+        const tableauVideForLatex = new Tableau({
+          ligne1: ['x']
+            .concat([x1, x2, x3].map(String))
+            .map((el) => Object.assign({}, { texte: el, latex: true })),
+          ligne2: [`${nomdef}(x)`, '', '', ''].map((el) =>
+            el === ''
+              ? Object.assign({}, { texte: el })
+              : Object.assign({}, { texte: el, latex: true }),
+          ),
+          largeurTitre: 1,
+          nbColonnes: 4,
+          hauteur: 1,
+          largeur: 1,
+        })
+        const tabVideTex = mathalea2d(
+          Object.assign({}, fixeBordures([tableauVideForLatex])),
+          tableauVideForLatex,
+        )
+        texte += tabVideTex
       }
-      if (!this.interactif || !context.isHtml) {
-        texte += '\\hline\n'
-        texte += `x & ${listeDeX[i][0]} & ${listeDeX[i][1]} & ${listeDeX[i][2]} \\\\\n`
-        texte += '\\hline\n'
-        texte += `${nomdef}(x) & \\phantom{-10} & \\phantom{-10} & \\phantom{-10} \\\\\n`
-        texte += '\\hline\n'
-        texte += '\\end{array}\n$'
-      }
+      const tableauValeur = AddTabPropMathlive.create(
+        this.numeroExercice ?? 0,
+        0,
+        { ligne1, ligne2, nbColonnes: 4 },
+        'clavierDeBase',
+        false,
+        {},
+      )
 
-      texteCorr = context.isHtml ? '$\\def\\arraystretch{2.5}' : '$'
-      texteCorr += '\\begin{array}{|l|c|c|c|}\n'
+      const tableauValeursForLatex = new Tableau({
+        ligne1: ['x']
+          .concat([x1, x2, x3].map(String))
+          .map((el) => Object.assign({}, { texte: el, latex: true })),
+        ligne2: ['f(x)', ...yGrecs].map((el, index) =>
+          el === ''
+            ? Object.assign({}, { texte: '' })
+            : Object.assign(
+                {},
+                {
+                  texte: index === 0 ? el : miseEnEvidence(el.toString()),
+                  latex: true,
+                },
+              ),
+        ),
+        largeurTitre: 1,
+        nbColonnes: 4,
+        hauteur: 1,
+        largeur: 1,
+      })
+      const tabValeurTex = mathalea2d(
+        Object.assign({}, fixeBordures([tableauValeursForLatex])),
+        tableauValeursForLatex,
+      )
+      texteCorr = context.isHtml ? tableauValeur.output : tabValeurTex
 
       if (context.isAmc) {
         this.autoCorrection[i] = {
           enonce: `On considère la fonction $${nomdef}$ définie par $${nomdef}:x\\mapsto ${expression}$.\\\\ \n
-          Calculer :\\\\ \na) $f(${listeDeX[i][0]})$\\\\ \nb) $f(${listeDeX[i][1]})$\\\\ \nc) $f(${listeDeX[i][2]})$\\\\ \n
+          Calculer :\\\\ \na) $f(${x1})$\\\\ \nb) $f(${x2})$\\\\ \nc) $f(${x3})$\\\\ \n
           Utiliser le cadre pour les calculs si besoin puis coder les réponses.\\\\`,
           propositions: [
             {
@@ -307,7 +393,7 @@ export default class TableauDeValeurs extends Exercice {
                   texte: calculs.split('<br>')[0],
                   statut: '',
                   reponse: {
-                    texte: `a) $f(${listeDeX[i][0]})$`,
+                    texte: `a) $f(${x1})$`,
                     valeur: !(listeReponses[0] instanceof FractionEtendue)
                       ? listeReponses[0]
                       : listeReponses[0].d === 1
@@ -318,14 +404,6 @@ export default class TableauDeValeurs extends Exercice {
                       approx: 0,
                       decimals: 1,
                       digits: 2,
-                      /* formatInteractif: !(
-                        listeReponses[0] instanceof FractionEtendue
-                      )
-                        ? 'calcul'
-                        : listeReponses[0].d === 1
-                          ? 'calcul'
-                          : 'fractionEgale',
-                          */
                     },
                   },
                 },
@@ -338,7 +416,7 @@ export default class TableauDeValeurs extends Exercice {
                   texte: calculs.split('<br>')[1],
                   statut: '',
                   reponse: {
-                    texte: `b) $f(${listeDeX[i][1]})$`,
+                    texte: `b) $f(${x2})$`,
                     valeur: !(listeReponses[1] instanceof FractionEtendue)
                       ? listeReponses[1]
                       : listeReponses[1].d === 1
@@ -368,7 +446,7 @@ export default class TableauDeValeurs extends Exercice {
                   texte: calculs.split('<br>')[2],
                   statut: '',
                   reponse: {
-                    texte: `c) $f(${listeDeX[i][2]})$`,
+                    texte: `c) $f(${x3})$`,
                     valeur: !(listeReponses[2] instanceof FractionEtendue)
                       ? listeReponses[2] // number
                       : listeReponses[2].d === 1
@@ -379,13 +457,6 @@ export default class TableauDeValeurs extends Exercice {
                       approx: 0,
                       decimals: 1,
                       digits: 2,
-                      /* formatInteractif: !(
-                        listeReponses[2] instanceof FractionEtendue
-                      )
-                        ? 'calcul'
-                        : listeReponses[2].d === 1
-                          ? 'calcul'
-                          : 'fractionEgale', */
                     },
                   },
                 },
@@ -393,91 +464,20 @@ export default class TableauDeValeurs extends Exercice {
             },
           ],
         }
-        /* EE : Qu'est-ce que ce code fait dans AMC ?
-        if (listeReponses[0].type === 'Fraction') {
-          if (listeReponses[0].den === 1) setReponse(this, i * 3, listeReponses[0].num, { formatInteractif: 'calcul' })
-          else setReponse(this, i * 3, listeReponses[0], { formatInteractif: 'fractionEgale' })
-        } else setReponse(this, i * 3, listeReponses[0], { formatInteractif: 'calcul' })
-        if (listeReponses[1].type === 'Fraction') {
-          if (listeReponses[1].den === 1) setReponse(this, i * 3 + 1, listeReponses[1].num, { formatInteractif: 'calcul' })
-          else setReponse(this, i * 3 + 1, listeReponses[1], { formatInteractif: 'fractionEgale' })
-        } else setReponse(this, i * 3 + 1, listeReponses[1], { formatInteractif: 'calcul' })
-        if (listeReponses[2].type === 'Fraction') {
-          if (listeReponses[2].den === 1) setReponse(this, i * 3 + 2, listeReponses[2].num, { formatInteractif: 'calcul' })
-          else setReponse(this, i * 3 + 2, listeReponses[2], { formatInteractif: 'fractionEgale' })
-        } else setReponse(this, i * 3 + 2, listeReponses[2], { formatInteractif: 'calcul' })
-        */
       } else if (this.interactif) {
-        texte +=
-          `<br><br>$f(${listeDeX[i][0]}) = $` +
-          ajouteChampTexteMathLive(this, i * 3, KeyboardType.clavierDeBase)
-        texte +=
-          `<br><br>$f(${listeDeX[i][1]}) = $` +
-          ajouteChampTexteMathLive(this, i * 3 + 1, KeyboardType.clavierDeBase)
-        texte +=
-          `<br><br>$f(${listeDeX[i][2]}) = $` +
-          ajouteChampTexteMathLive(this, i * 3 + 2, KeyboardType.clavierDeBase)
-
-        if (listeReponses[0] instanceof FractionEtendue) {
-          if (listeReponses[0].den === 1)
-            setReponse(this, i * 3, listeReponses[0].num, {
-              formatInteractif: 'calcul',
-            })
-          else
-            setReponse(this, i * 3, listeReponses[0], {
-              formatInteractif: 'fractionEgale',
-            })
-        } else
-          setReponse(this, i * 3, listeReponses[0], {
-            formatInteractif: 'calcul',
-          })
-        if (listeReponses[1] instanceof FractionEtendue) {
-          if (listeReponses[1].den === 1)
-            setReponse(this, i * 3 + 1, listeReponses[1].num, {
-              formatInteractif: 'calcul',
-            })
-          else
-            setReponse(this, i * 3 + 1, listeReponses[1], {
-              formatInteractif: 'fractionEgale',
-            })
-        } else
-          setReponse(this, i * 3 + 1, listeReponses[1], {
-            formatInteractif: 'calcul',
-          })
-        if (listeReponses[2] instanceof FractionEtendue) {
-          if (listeReponses[2].den === 1)
-            setReponse(this, i * 3 + 2, listeReponses[2].num, {
-              formatInteractif: 'calcul',
-            })
-          else
-            setReponse(this, i * 3 + 2, listeReponses[2], {
-              formatInteractif: 'fractionEgale',
-            })
-        } else
-          setReponse(this, i * 3 + 2, listeReponses[2], {
-            formatInteractif: 'calcul',
-          })
+        const reponses = []
+        for (let i = 0; i < 3; i++) {
+          reponses.push([
+            `L1C${i + 1}`,
+            {
+              value: yGrecs[i],
+              options: { approximatelyCompare: true, tolerance: 0.11 },
+            },
+          ])
+        }
+        reponses.push(['bareme', toutAUnPoint])
+        handleAnswers(this, 0, Object.fromEntries(reponses))
       }
-
-      texteCorr += '\\hline\n'
-      texteCorr += `x & ${listeDeX[i][0]} & ${listeDeX[i][1]} & ${listeDeX[i][2]} \\\\\n`
-      texteCorr += '\\hline\n'
-
-      // EE : Mise en couleur de ligne2
-      const chaqueReponse = ligne2.split('&')
-      ligne2 =
-        chaqueReponse[0] +
-        '&' +
-        miseEnEvidence(chaqueReponse[1]) +
-        '&' +
-        miseEnEvidence(chaqueReponse[2]) +
-        '&' +
-        miseEnEvidence(chaqueReponse[3]).replace('\\\\\n', '') +
-        '\\\\\n'
-
-      texteCorr += ligne2
-      texteCorr += '\\hline\n'
-      texteCorr += '\\end{array}\n$'
 
       if (this.correctionDetaillee) {
         // EE : Permet en quelques lignes de mettre toutes les réponses attendues en couleur
