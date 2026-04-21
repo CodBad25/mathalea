@@ -1,4 +1,5 @@
 import { fixeBordures } from '../../lib/2d/fixeBordures'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
 import { Arbre } from '../../modules/arbres'
 import FractionEtendue from '../../modules/FractionEtendue'
@@ -81,7 +82,7 @@ export default class auto1AP3c extends ExerciceQcmA {
       Object.assign({ style: 'inline' }, fixeBordures(objets)),
       objets,
     )
-    this.enonce += '<br>$p_C(A)=\\ldots$'
+    this.enonce += '<br>$p_C(A)$ est égal à :'
     this.correction = `On sait que $ P_C(A)=\\dfrac{P(A \\cap C)}{P(C)}$<br>
         D'après la formule des probabilités totales :<br>
          $\\begin{aligned}P(C)&=p(A\\cap C)+p(\\bar A \\cap C)\\\\
@@ -94,7 +95,7 @@ export default class auto1AP3c extends ExerciceQcmA {
     P_C(A)&=\\dfrac{P(A \\cap C)}{P(C)}\\\\
     &=\\dfrac{P(A)\\times P_A(C)}{P(C)}\\\\
     &=\\dfrac{${texNombre(0.18)}}{${texNombre(0.46)}}\\\\
-   &=\\dfrac{9}{23}
+   &=${miseEnEvidence(`\\dfrac{9}{23}`)}
      \\end{aligned}$`
 
     this.reponses = [
@@ -181,7 +182,7 @@ export default class auto1AP3c extends ExerciceQcmA {
       Object.assign({ style: 'inline' }, fixeBordures(objets)),
       objets,
     )
-    this.enonce += '<br>$P_C(A)=\\ldots$'
+    this.enonce += '<br>$P_C(A)$ est égal à :'
 
     this.correction = `On sait que $ P_C(A)=\\dfrac{P(A \\cap C)}{P(C)}$<br>
         D'après la formule des probabilités totales :<br>
@@ -195,7 +196,7 @@ export default class auto1AP3c extends ExerciceQcmA {
     P_C(A)&=\\dfrac{P(A \\cap C)}{P(C)}\\\\
     &=\\dfrac{P(A)\\times P_A(C)}{P(C)}\\\\
     &=\\dfrac{${pC1.texFractionSimplifiee}}{${pC.texFractionSimplifiee}}\\\\
-    &=${Reponse.texFractionSimplifiee}\\\\
+    &=${miseEnEvidence(Reponse.texFractionSimplifiee)}\\\\
      \\end{aligned}$`
     // --- Distracteurs sûrs, distincts et ≠ bonne réponse --- Merci mon ami Chat GPT pour cette astuce, devenue trop lourde car j'ai viré un distracteur....
     const denom = Math.max(1, Reponse.denIrred) // garde-fou

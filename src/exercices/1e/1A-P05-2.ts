@@ -1,4 +1,5 @@
 import { fixeBordures } from '../../lib/2d/fixeBordures'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { Arbre } from '../../modules/arbres'
 import FractionEtendue from '../../modules/FractionEtendue'
 import { mathalea2d } from '../../modules/mathalea2d'
@@ -83,21 +84,21 @@ export default class auto1AP3b extends ExerciceQcmA {
       objets,
     )
     this.enonce += '<br>On sait que $P(A \\cap C)=\\dfrac{9}{50}$.'
-    this.enonce += '<br>$P_A(\\overline{C})=\\ldots$'
-    this.correction = `On déduit de l'énoncé<br>$\\begin{aligned}
+    this.enonce += '<br>$P_A(\\overline{C})$ est égal à :'
+    this.correction = `On déduit de l'énoncé :<br>$\\begin{aligned}
         P(A)&=1-P(\\overline{A})\\\\
         &=1-\\dfrac{7}{10}\\\\
-        &=\\dfrac{3}{10}.\\end{aligned}$<br>
+        &=\\dfrac{3}{10}\\end{aligned}$<br>
         Avec la donnée de $P(A \\cap C)=\\dfrac{9}{50}$ dans l'énoncé, on peut alors calculer : <br>$\\begin{aligned}
         P_A(C)&=\\dfrac{P(A \\cap C)}{P(A)}\\\\
         &=\\dfrac{ \\dfrac{9}{50}}{\\dfrac{3}{10}} \\\\
         &=\\dfrac{9}{50} \\times \\dfrac{10}{3} \\\\
-        &= \\dfrac{3}{5}.
+        &= \\dfrac{3}{5}
       \\end{aligned}$<br>
-        On sait alors que <br>$\\begin{aligned}
+        On sait alors que :<br>$\\begin{aligned}
         P_A(\\overline{C})&=1-P_A(C)\\\\
         &=1-\\dfrac{3}{5}\\\\
-        &=\\dfrac{2}{5}.\\end{aligned}$<br>`
+        &=${miseEnEvidence(`\\dfrac{2}{5}`)}\\end{aligned}$<br>`
 
     this.reponses = [
       '$\\dfrac{2}{5}$',
@@ -189,9 +190,9 @@ export default class auto1AP3b extends ExerciceQcmA {
       objets,
     )
     this.enonce += `<br>On sait que $P(A \\cap C)=${pC1.texFractionSimplifiee}$.<br>`
-    this.enonce += '$P_A(\\overline{C})=\\ldots$'
+    this.enonce += '$P_A(\\overline{C})$ est égal à :'
 
-    this.correction = `On déduit de l'énoncé<br>$\\begin{aligned}
+    this.correction = `On déduit de l'énoncé : <br>$\\begin{aligned}
         P(A)&=1-P(\\overline{A})\\\\
         &=1-${pA.entierMoinsFraction(1).texFractionSimplifiee}\\\\
         &=${pA.texFractionSimplifiee}.\\end{aligned}$<br>
@@ -199,12 +200,12 @@ export default class auto1AP3b extends ExerciceQcmA {
         P_A(C)&=\\dfrac{P(A \\cap C)}{P(A)}\\\\
         &=\\dfrac{ ${pC1.texFractionSimplifiee}}{ ${pA.texFractionSimplifiee}} \\\\
         &=${pC1.texFractionSimplifiee} \\times ${inversepA.texFractionSimplifiee} \\\\
-        &= ${pC1.diviseFraction(pA).texFractionSimplifiee}.
+        &= ${pC1.diviseFraction(pA).texFractionSimplifiee}
       \\end{aligned}$<br>
-        On sait alors que <br>$\\begin{aligned}
+        On sait alors que :<br>$\\begin{aligned}
         P_A(\\overline{C})&=1-P_A(C)\\\\
         &=1-${pAC.texFractionSimplifiee}\\\\
-        &=${pAC.entierMoinsFraction(1).texFractionSimplifiee} .\\end{aligned}$<br>`
+        &=${miseEnEvidence(pAC.entierMoinsFraction(1).texFractionSimplifiee)} \\end{aligned}$<br>`
 
     this.reponses = [
       `$${pAC.entierMoinsFraction(1).texFractionSimplifiee}$`,
