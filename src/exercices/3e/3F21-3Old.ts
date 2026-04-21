@@ -9,8 +9,7 @@ import { milieu } from '../../lib/2d/utilitairesPoint'
 import { bleuMathalea, orangeMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { toutAUnPoint } from '../../lib/interactif/mathLive'
-import { addMultiMathfield } from '../../lib/interactif/MultiMathfield/MultiMathfield'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
 import { ecritureAlgebrique, rienSi1 } from '../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
@@ -34,11 +33,11 @@ export const dateDeModifImportante = '28/05/2023'
  * @author Rémi Angot (modifié par EE pour l'ajout de paramètres)
 
  */
-export const uuid = '156fa'
+export const uuid = '056fa'
 
 export const refs = {
-  'fr-fr': ['3F21-3'],
-  'fr-ch': ['11FA8-12'],
+  'fr-fr': [],
+  'fr-ch': [],
 }
 export default class PenteEtOrdonneeOrigineDroite extends Exercice {
   constructor() {
@@ -75,13 +74,11 @@ export default class PenteEtOrdonneeOrigineDroite extends Exercice {
   }
 
   nouvelleVersion() {
-    const alternance = randint(0, 1)
+    let questionInteractif = 0
     for (
       let i = 0, texte, texteCorr, cpt = 0;
       i < this.nbQuestions && cpt < 50;
     ) {
-      let dataTemplate: string = ''
-      let dataOptions: Record<string, any> = {}
       const signeNum =
         this.sup2 === 3 ? choice([-1, 1]) : this.sup2 === 2 ? -1 : 1
       const num =
@@ -89,15 +86,11 @@ export default class PenteEtOrdonneeOrigineDroite extends Exercice {
       this.sup = contraindreValeur(1, 3, this.sup, 1)
       const den = this.sup === 3 ? randint(1, 2) : this.sup
       const a = num / den
-      const zeroOuUn = ((-1) ** (i + alternance) + 1) / 2
       const b =
         this.sup4 === 1
           ? 0
-          : (this.sup3 === 3
-              ? zeroOuUn * choice([1, -1])
-              : this.sup3 === 2
-                ? -zeroOuUn
-                : zeroOuUn) * randint(this.sup4 === 2 ? 1 : 0, 4)
+          : (this.sup3 === 3 ? choice([-1, 1]) : this.sup3 === 2 ? -1 : 1) *
+            randint(this.sup4 === 2 ? 1 : 0, 4)
       const vocabulaire = b === 0 ? 'linéaire' : 'affine'
       let xMin
       context.isHtml ? (xMin = -10) : (xMin = -8)
@@ -181,43 +174,48 @@ export default class PenteEtOrdonneeOrigineDroite extends Exercice {
         t1,
         t2,
       )
+      let question1
+      let question2
+      let question3
       let indice = 0
       let correction1, correction2, correction3
-      let question1
       if (vocabulaire === 'affine') {
-        question1 = `a) Quelle est l'ordonnée à l'origine de la fonction $${nomFonction}$ ?`
-
+        question1 =
+          numAlpha(indice) +
+          `Quelle est l'ordonnée à l'origine de la fonction $${nomFonction}$ ?`
+        question1 += ajouteChampTexteMathLive(
+          this,
+          questionInteractif,
+          KeyboardType.clavierDeBase,
+        )
         correction1 = consigneCorrection + '<br>'
         correction1 +=
           numAlpha(indice) +
           `La droite coupe l'axe des ordonnées au point de coordonnées $(0;${b})$. L'ordonnée de $${nomFonction}$ à l'origine est donc $${miseEnEvidence(b)}$.`
         indice++
       }
-      const question2 = `${vocabulaire === 'affine' ? 'b)' : 'a)'} Quel est le coefficient directeur de $${nomFonction}$ ?`
-
+      question2 =
+        numAlpha(indice) +
+        `Quel est le coefficient directeur de $${nomFonction}$ ?`
+      question2 += ajouteChampTexteMathLive(
+        this,
+        (vocabulaire === 'affine' ? 1 : 0) + questionInteractif,
+        KeyboardType.clavierDeBase,
+      )
       correction2 =
         numAlpha(indice) +
         `À chaque fois que l'on avance de 1 unité d'abscisses, on ${a > 0 ? 'monte' : 'descend'} de $${texNombre(Math.abs(a))}$ unité${Math.abs(a) >= 2 ? 's' : ''} d'ordonnées. `
       correction2 += `Le coefficient directeur de $${nomFonction}$ est donc $${miseEnEvidence(texNombre(a))}$.`
       indice++
-      const question3 = `${vocabulaire === 'affine' ? 'c)' : 'b)'} En déduire l'expression algébrique de $${nomFonction}$.`
-
-      dataTemplate =
-        vocabulaire === 'affine'
-          ? `${question1} %{champ1}\n${question2} %{champ2}\n${question3} ${this.interactif ? `$${sp(10)}${nomFonction} : x \\mapsto $` : ''}%{champ3}`
-          : `${question2} %{champ1}\n${question3} ${this.interactif ? `$${sp(10)}${nomFonction} : x \\mapsto $` : ''}%{champ2}`
-      dataOptions =
-        vocabulaire === 'affine'
-          ? {
-              champ1: { keyboard: KeyboardType.clavierNumbers },
-              champ2: { keyboard: KeyboardType.clavierNumbers },
-              champ3: { keyboard: KeyboardType.clavierDeBaseAvecX },
-            }
-          : {
-              champ1: { keyboard: KeyboardType.clavierNumbers },
-              champ2: { keyboard: KeyboardType.clavierDeBaseAvecX },
-            }
-
+      question3 =
+        numAlpha(indice) +
+        `En déduire l'expression algébrique de $${nomFonction}$.`
+      question3 += ajouteChampTexteMathLive(
+        this,
+        (vocabulaire === 'affine' ? 2 : 1) + questionInteractif,
+        KeyboardType.clavierDeBaseAvecX,
+        { texteAvant: `$${sp(10)}${nomFonction} : x \\mapsto $` },
+      )
       correction3 =
         numAlpha(indice) +
         `$${nomFonction}$ étant une fonction ${vocabulaire}, on a $${nomFonction} : x \\mapsto $` +
@@ -230,37 +228,30 @@ export default class PenteEtOrdonneeOrigineDroite extends Exercice {
           ? `$${miseEnEvidence(ecritureAlgebrique(b))}$.`
           : '.')
 
+      if (vocabulaire === 'affine')
+        handleAnswers(this, questionInteractif, { reponse: { value: b } })
       handleAnswers(
         this,
-        i,
+        (vocabulaire === 'affine' ? 1 : 0) + questionInteractif,
+        { reponse: { value: `\\frac{${num}}{${den}}` } },
+      )
+      handleAnswers(
+        this,
+        (vocabulaire === 'affine' ? 2 : 1) + questionInteractif,
         {
-          bareme: toutAUnPoint,
-          ...Object.assign(
-            {},
-            vocabulaire === 'affine'
-              ? {
-                  champ1: { value: b },
-                  champ2: { value: a },
-                  champ3: {
-                    value: `\\frac{${num}}{${den}}x+${b}`,
-                    options: { fonction: true, variable: 'x' },
-                  },
-                }
-              : {
-                  champ1: { value: a },
-                  champ2: {
-                    value: `\\frac{${num}}{${den}}x`,
-                    options: { fonction: true, variable: 'x' },
-                  },
-                },
-          ),
+          reponse: {
+            value: `\\frac{${num}}{${den}}x+${b}`,
+            options: { fonction: true, variable: 'x' },
+          },
         },
-        { formatInteractif: 'multiMathfield' },
       )
 
       texte =
-        introduction + addMultiMathfield(this, i, { dataOptions, dataTemplate })
-
+        introduction +
+        (vocabulaire === 'affine' ? question1 + '<br>' : '') +
+        question2 +
+        '<br>' +
+        question3
       texteCorr =
         (vocabulaire === 'affine' ? correction1 + '<br>' : '') +
         correction2 +
@@ -329,6 +320,7 @@ export default class PenteEtOrdonneeOrigineDroite extends Exercice {
           )
         }
         i++
+        questionInteractif += vocabulaire === 'linéaire' ? 2 : 3
       }
       cpt++
     }
