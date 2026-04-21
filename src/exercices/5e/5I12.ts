@@ -169,16 +169,14 @@ export default class CalculsAvecPriorité extends Exercice {
         [
           'bareme',
           (listePoints: number[]) => {
-            const result = listePoints.reduce<number>((acc, _, index, arr) => {
-              if (index % 2 === 0) {
-                acc +=
-                  arr[index] + (arr[listePoints.length / 2 + index] || 0) > 1
-                    ? 1
-                    : 0
+            const n = listePoints.length / 2
+            let result = 0
+            for (let i = 0; i < n; i++) {
+              if (listePoints[i] + (listePoints[n + i] || 0) === 2) {
+                result++
               }
-              return acc
-            }, 0)
-            return [result, listePoints.length / 2]
+            }
+            return [result, n]
           },
         ],
       ])
