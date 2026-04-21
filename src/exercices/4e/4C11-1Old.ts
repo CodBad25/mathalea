@@ -3,9 +3,9 @@ import { ecritureParentheseSiNegatif } from '../../lib/outils/ecritures'
 import { numAlpha } from '../../lib/outils/outilString'
 import Exercice from '../Exercice'
 
-import { addMultiMathfield } from '../../lib/interactif/MultiMathfield/MultiMathfield'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif' // fonction qui va préparer l'analyse de la saisie
-import { toutAUnPoint } from '../../lib/interactif/mathLive'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { listeQuestionsToContenu } from '../../modules/outils'
 /**
@@ -19,12 +19,12 @@ export const dateDePublication = '05/10/2024' // fonctions de mise en place des 
 export const dateDeModifImportante = '13/10/2024'
 
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'mathLive'
 
-export const uuid = 'a33ba'
+export const uuid = 'a33b9'
 export const refs = {
-  'fr-fr': ['4C11-1'],
-  'fr-ch': ['9NO9-17'],
+  'fr-fr': [],
+  'fr-ch': [],
 }
 
 export default class resoudreProblemeRelatifs extends Exercice {
@@ -85,49 +85,11 @@ export default class resoudreProblemeRelatifs extends Exercice {
 
       let texteCorr = ''
 
-      texte += addMultiMathfield(this, i, {
-        dataTemplate:
-          'a) Quel est le score maximal à ce jeu ? %{champ1}\n' +
-          'b) Quel est le score minimal à ce jeu ? %{champ2}\n' +
-          `c) ${candidats[0][0]} a répondu à toutes les questions, dont ${nombreQuestions * 0.6} correctement.\nQuel est son score ? %{champ3}\n` +
-          `d) ${candidats[1][0]} n'a répondu qu'à ${nombreQuestions * 0.5} questions et ${nombreQuestions * 0.2} de ses réponses sont fausses.\nQuel est son score ? %{champ4}\n` +
-          `e) ${candidats[2][0]} a donné ${nombreQuestions * 0.7} mauvaises réponses et ${
-            candidats[2][1] === 1
-              ? "il n'a pas répondu"
-              : "elle n'a pas répondu"
-          } aux autres questions.\nQuel est son score ? %{champ5}\n`,
-        dataOptions: {},
+      texte += numAlpha(0) + 'Quel est le score maximal à ce jeu ? '
+      texte += ajouteChampTexteMathLive(this, 8 * i, KeyboardType.clavierDeBase)
+      handleAnswers(this, 8 * i, {
+        reponse: { value: String(nombreQuestions * nombresPoints[0]) },
       })
-      handleAnswers(
-        this,
-        i,
-        {
-          bareme: toutAUnPoint,
-          champ1: { value: String(nombreQuestions * nombresPoints[0]) },
-          champ2: { value: String(-nombreQuestions * nombresPoints[1]) },
-          champ3: {
-            value: String(
-              nombreQuestions * 0.6 * nombresPoints[0] -
-                nombreQuestions * 0.4 * nombresPoints[1],
-            ),
-          },
-          champ4: {
-            value: String(
-              nombreQuestions * 0.3 * nombresPoints[0] -
-                nombreQuestions * 0.2 * nombresPoints[1] -
-                nombreQuestions * 0.5 * nombresPoints[2],
-            ),
-          },
-          champ5: {
-            value: String(
-              -nombreQuestions * 0.7 * nombresPoints[1] -
-                nombreQuestions * 0.3 * nombresPoints[2],
-            ),
-          },
-        },
-        { formatInteractif: 'multiMathfield' },
-      )
-
       texteCorr =
         numAlpha(0) +
         `On obtient le score maximal en répondant 
@@ -135,7 +97,15 @@ export default class resoudreProblemeRelatifs extends Exercice {
           à chaque fois. <br>
           Score maximal $ = ${nombreQuestions} \\times ${nombresPoints[0]}$<br>
           $\\phantom{\\text{Score maxima}} = ${miseEnEvidence(String(nombreQuestions * nombresPoints[0]))}$`
-
+      texte += '<br>' + numAlpha(1) + 'Quel est le score minimal à ce jeu ? '
+      texte += ajouteChampTexteMathLive(
+        this,
+        8 * i + 1,
+        KeyboardType.clavierDeBase,
+      )
+      handleAnswers(this, 8 * i + 1, {
+        reponse: { value: String(-nombreQuestions * nombresPoints[1]) },
+      })
       texteCorr +=
         '<br>' +
         numAlpha(1) +
@@ -144,7 +114,24 @@ export default class resoudreProblemeRelatifs extends Exercice {
           à chaque fois. <br>
           Score minimal $ = ${nombreQuestions} \\times ${ecritureParentheseSiNegatif(-nombresPoints[1])}$<br>
           $\\phantom{\\text{Score minima}} = ${miseEnEvidence(String(-nombreQuestions * nombresPoints[1]))}$`
-
+      texte +=
+        '<br>' +
+        numAlpha(2) +
+        `${candidats[0][0]} a répondu à toutes les questions, dont ${nombreQuestions * 0.6} correctement.<br>
+           Quel est son score ? `
+      texte += ajouteChampTexteMathLive(
+        this,
+        8 * i + 2,
+        KeyboardType.clavierDeBase,
+      )
+      handleAnswers(this, 8 * i + 2, {
+        reponse: {
+          value: String(
+            nombreQuestions * 0.6 * nombresPoints[0] -
+              nombreQuestions * 0.4 * nombresPoints[1],
+          ),
+        },
+      })
       texteCorr +=
         '<br>' +
         numAlpha(2) +
@@ -156,7 +143,26 @@ export default class resoudreProblemeRelatifs extends Exercice {
         ` $= ${nombreQuestions * 0.6} \\times  ${nombresPoints[0]} + ${nombreQuestions * 0.4} \\times ${ecritureParentheseSiNegatif(-nombresPoints[1])}$<br>
           $\\phantom{\\text{Score d ${candidats[0][0]}} }= ${nombreQuestions * 0.6 * nombresPoints[0]} + ${ecritureParentheseSiNegatif(-nombreQuestions * 0.4 * nombresPoints[1])}$<br>
           $\\phantom{\\text{Score d ${candidats[0][0]}} }= ${miseEnEvidence(String(nombreQuestions * 0.6 * nombresPoints[0] - nombreQuestions * 0.4 * nombresPoints[1]))}$`
-
+      texte +=
+        '<br>' +
+        numAlpha(3) +
+        `${candidats[1][0]} n'a répondu qu'à ${nombreQuestions * 0.5} questions et ${nombreQuestions * 0.2}
+      de ses réponses sont fausses.<br>
+          Quel est son score ? `
+      texte += ajouteChampTexteMathLive(
+        this,
+        8 * i + 3,
+        KeyboardType.clavierDeBase,
+      )
+      handleAnswers(this, 8 * i + 3, {
+        reponse: {
+          value: String(
+            nombreQuestions * 0.3 * nombresPoints[0] -
+              nombreQuestions * 0.2 * nombresPoints[1] -
+              nombreQuestions * 0.5 * nombresPoints[2],
+          ),
+        },
+      })
       texteCorr +=
         '<br>' +
         numAlpha(3) +
@@ -168,6 +174,31 @@ export default class resoudreProblemeRelatifs extends Exercice {
          $\\phantom{\\text{Score d ${candidats[1][0]}}} = ${nombreQuestions * 0.3 * nombresPoints[0]} + ${ecritureParentheseSiNegatif(-nombreQuestions * 0.2 * nombresPoints[1])} + ${ecritureParentheseSiNegatif(-nombreQuestions * 0.5 * nombresPoints[2])}$<br>
          $\\phantom{\\text{Score d ${candidats[1][0]}}} = ${miseEnEvidence(String(nombreQuestions * 0.3 * nombresPoints[0] - nombreQuestions * 0.2 * nombresPoints[1] - nombreQuestions * 0.5 * nombresPoints[2]))}$`
 
+      if (candidats[2][1] === 1) {
+        texte +=
+          '<br>' +
+          numAlpha(4) +
+          `${candidats[2][0]} a donné ${nombreQuestions * 0.7} mauvaises réponses et il n'a pas répondu aux autres questions.`
+      } else {
+        texte +=
+          '<br>' +
+          numAlpha(4) +
+          `${candidats[2][0]} a donné ${nombreQuestions * 0.7} mauvaises réponses et elle n'a pas répondu aux autres questions.<br>
+      Quel est son score ? `
+      }
+      texte += ajouteChampTexteMathLive(
+        this,
+        8 * i + 4,
+        KeyboardType.clavierDeBase,
+      )
+      handleAnswers(this, 8 * i + 4, {
+        reponse: {
+          value: String(
+            -nombreQuestions * 0.7 * nombresPoints[1] -
+              nombreQuestions * 0.3 * nombresPoints[2],
+          ),
+        },
+      })
       texteCorr +=
         '<br>' +
         numAlpha(4) +
@@ -184,6 +215,7 @@ export default class resoudreProblemeRelatifs extends Exercice {
         // Remi m'a suggéré de tenter quelque chose avec "Remplis les blancs" mais je préfère faire une MR en l'état : c'est utilisable.
       } else {
         texte +=
+          '<br>' +
           numAlpha(5) +
           "Est-il possible d'obtenir un score nul à ce jeu ? Si oui, comment ?<br>"
         Solutions = solutionsScoreNul(nombreQuestions, nombresPoints)
