@@ -1,28 +1,29 @@
-import ConvertirDuree from '../ch/10GM3-10'
+import ConvertirDuree from '../ch/10GM3-10Old'
 export const titre = 'Convertir des durées en heures décimales ou en minutes'
 export const dateDePublication = '24/09/2025'
 export const dateDeModifImportante = '19/03/2026'
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
-export const uuid = '185f8'
+export const interactifType = 'mathLive'
+export const uuid = '8013d'
 export const refs = {
-  'fr-fr': ['6M4C-3'],
-  'fr-ch': ['10GM3-13'],
+  'fr-fr': [],
+  'fr-ch': [],
 }
 /**
  * Exercice de conversion de durées
  * @author Éric Elter
  */
-export default class ConvertirDuree6eV1 extends ConvertirDuree {
+export default class ConvertirDuree6eV2 extends ConvertirDuree {
   // ConvertirDuree6eV1 et ConvertirDuree6eV2 diffère à cause du nb différent de questions dans l'interactif
   constructor() {
     super()
-    this.version = '6M4C-3'
+    this.version = '6M4C-4'
     this.besoinFormulaireNumerique = [
       'Type de conversions',
-      4,
-      '1 : De heures-minutes vers heures décimales\n2 : De heures-minutes vers minutes\n3 : De minutes vers heures décimales\n4 : Mélange',
+      3,
+      '1 : De heures décimales vers heures-minutes-secondes\n2 : De minutes décimales vers heures-minutes-secondes\n3 : Mélange',
     ]
+
     this.sup2 = true
     this.sup3 = false
   }
