@@ -123,10 +123,13 @@ export function verifQuestionMathLive(
               el.id === `champTexteEx${exercice.numeroExercice}Q${i}${key}`,
           ) as MathfieldElement
           let result
-          const spanFedback = table.querySelector(
-            `span#resultatCheckEx${exercice.numeroExercice}Q${i}${key}`,
-          )
-          if (input == null || input.value === '') {
+          const shadow = input.shadowRoot
+          const spanFeedback = document.createElement('span')
+          spanFeedback.id = `resultatCheckEx${exercice.numeroExercice}Q${i}${key}`
+          const content = shadow!.querySelector('span.ML__content')
+          content!.appendChild(spanFeedback)
+
+          if (input.value === '') {
             result = {
               isOk: false,
               feedback: noFeedback
@@ -151,11 +154,11 @@ export function verifQuestionMathLive(
           // On ne nettoie plus les input et les réponses, c'est la fonction de comparaison qui doit s'en charger !
           if (result.isOk) {
             points.push(1)
-            if (spanFedback != null) spanFedback.innerHTML = '😎'
+            if (spanFeedback != null) spanFeedback.innerHTML = '😎'
           } else {
             points.push(0)
             resultat = 'KO'
-            if (spanFedback != null) spanFedback.innerHTML = '☹️'
+            if (spanFeedback != null) spanFeedback.innerHTML = '☹️'
           }
           if (input.value.length > 0 && typeof exercice.answers === 'object') {
             exercice.answers[`Ex${exercice.numeroExercice}Q${i}${key}`] =

@@ -336,6 +336,13 @@ math-field.schemaEnBoite {
   min-width: 30px;
 }
 
+math-field.tableauMathlive::part(container) {
+  justify-content: center !important;
+}
+math-field.tableauMathlive::part(content) {
+  justify-content: center !important;
+}
+
 @media print {
   body {
     font-size: 10pt !important;
