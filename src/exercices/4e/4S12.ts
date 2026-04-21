@@ -1,11 +1,12 @@
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
+import { toutAUnPoint } from '../../lib/interactif/mathLive'
+import { addMultiMathfield } from '../../lib/interactif/MultiMathfield/MultiMathfield'
 import { ecritureParentheseSiNegatif } from '../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { arrondi } from '../../lib/outils/nombres'
 import { texNombre } from '../../lib/outils/texNombre'
-import { listeQuestionsToContenu, randint } from '../../modules/outils'
+import { randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 export const titre =
   "Déterminer la moyenne et la médiane d'une série statistique"
@@ -14,7 +15,7 @@ export const interactifType = 'mathLive'
 
 export const dateDePublication = '6/1/2022'
 
-export const uuid = '9a574'
+export const uuid = '9a575'
 export const refs = {
   'fr-fr': ['4S12'],
   'fr-ch': [],
@@ -24,11 +25,11 @@ export const refs = {
  * @author Rémi Angot
  */
 export default class MoyenneEtMediane extends Exercice {
-  onlyMoyenne = false
+  onlyMoyenne: boolean = false
   constructor() {
     super()
-    this.nbQuestionsModifiable = false
     this.sup = 1
+    this.nbQuestions = 1
     this.besoinFormulaireNumerique = [
       'Effectif total',
       2,
@@ -43,96 +44,98 @@ export default class MoyenneEtMediane extends Exercice {
   }
 
   nouvelleVersion() {
-    const nbTemperatures = 2 * randint(3, 5) + this.sup
-    const temperatures = generateTemperatures(nbTemperatures)
-    this.consigne = `Voici les températures, en degré Celsius, relevées sur une période de ${nbTemperatures} jours : ${stringList(temperatures)}.`
-    const moyenne = getMoyenne(temperatures)
-    let isExact = false
-    if ((moyenne * 10) % 1 === 0) {
-      isExact = true
-    }
-    let question1 = `Calculer la température moyenne ${isExact ? '' : ', au dixième près, '} de cette série.`
-    if (this.interactif) {
-      question1 +=
-        '<br>' +
-        ajouteChampTexteMathLive(this, 0, KeyboardType.clavierDeBase, {
-          texteAvant: `$M ${isExact ? '=' : '\\approx'} $`,
-          texteApres: '°C',
-        })
-      handleAnswers(this, 0, {
-        reponse: {
-          value: arrondi(moyenne, 1),
-          options: { nombreDecimalSeulement: true },
-        },
-      })
-    }
-    let correction1 = stringCalculMoyenne(temperatures)
-    correction1 += `<br><br> La température moyenne est de $${miseEnEvidence(texNombre(getMoyenne(temperatures), 1))}$°C.`
+    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+      let texteCorr = ''
+      let mediane = 0
+      const nbTemperatures = 2 * randint(3, 5) + this.sup
+      const temperatures = generateTemperatures(nbTemperatures)
+      let texte = `Voici les températures, en degré Celsius, relevées sur une période de ${nbTemperatures} jours : ${stringList(temperatures)}.<br>`
+      const moyenne = getMoyenne(temperatures)
+      let isExact = false
+      if ((moyenne * 10) % 1 === 0) {
+        isExact = true
+      }
+      const question1 = `Calculer la température moyenne ${isExact ? '' : ', au dixième près, '} de cette série. `
+      let correction1 = stringCalculMoyenne(temperatures)
+      correction1 += `<br><br> La température moyenne est de $${miseEnEvidence(texNombre(getMoyenne(temperatures), 1))}$°C.`
 
-    let question2 = ''
-    let correction2 = ''
-    if (this.onlyMoyenne === false) {
-      question2 += 'Calculer la température médiane de cette série'
-      if (this.sup2 && !this.interactif) {
-        question2 += ' et interpréter le résultat.'
-      } else {
-        question2 += '.'
-      }
-      correction2 = `On réordonne les températures par ordre croissant : ${sortedStringList(temperatures)}.<br>`
-      const mediane = getMedianne(temperatures)
-      correction2 +=
-        stringCalculMediane(temperatures) +
-        `$${miseEnEvidence(texNombre(mediane))}$°C.`
-      if (this.sup2 && !this.interactif) {
-        correction2 += `<br>Cela signifie que la moitié au moins des températures est supérieure ou égale à $${texNombre(mediane)}$°C.`
-      }
-      if (this.interactif) {
-        question2 +=
-          '<br>' +
-          ajouteChampTexteMathLive(this, 1, KeyboardType.clavierDeBase, {
-            texteAvant: 'Médiane : ',
-            texteApres: '°C',
-          })
-        const sortedList = temperatures.sort((a, b) => a - b)
-        const n = sortedList.length
-        if (n % 2 === 0) {
-          if (sortedList[n / 2 - 1] !== sortedList[n / 2]) {
-            handleAnswers(this, 1, {
-              reponse: {
-                value: `]${sortedList[n / 2 - 1]};${sortedList[n / 2]}[`,
-                options: { estDansIntervalle: true },
-              },
-            })
-          } else {
-            handleAnswers(this, 1, {
-              reponse: {
-                value: mediane,
-                options: { nombreDecimalSeulement: true },
-              },
-            })
-          }
+      let question2 = ''
+      let correction2 = ''
+      if (this.onlyMoyenne === false) {
+        question2 += 'Calculer la température médiane de cette série'
+        if (this.sup2 && !this.interactif) {
+          question2 += ' et interpréter le résultat. '
         } else {
-          handleAnswers(this, 1, {
-            reponse: {
-              value: mediane,
-              options: { nombreDecimalSeulement: true },
-            },
-          })
+          question2 += '. '
+        }
+        correction2 = `On réordonne les températures par ordre croissant : ${sortedStringList(temperatures)}.<br>`
+        mediane = getMedianne(temperatures)
+        correction2 +=
+          stringCalculMediane(temperatures) +
+          `$${miseEnEvidence(texNombre(mediane))}$°C.`
+        if (this.sup2 && !this.interactif) {
+          correction2 += `<br>Cela signifie que la moitié au moins des températures est supérieure ou égale à $${texNombre(mediane)}$°C.`
         }
       }
-    }
+      texte += addMultiMathfield(this, i, {
+        dataTemplate: `a) ${question1} ${this.interactif ? ` $M ${isExact ? '=' : '\\approx'} $` : ''} %{champ1}\n${!this.onlyMoyenne ? `b) ${question2}${this.interactif ? ' Médiane : ' : ''} %{champ2}` : ''}`,
+        dataOptions: {
+          champ1: {
+            keyboard: KeyboardType.clavierDeBase,
+            texteApres: '°C',
+            ldots: false,
+          },
+          champ2: {
+            keyboard: KeyboardType.clavierDeBase,
+            texteApres: '°C',
+            ldots: false,
+          },
+        },
+      })
+      const sortedList = temperatures.sort((a, b) => a - b)
+      const n = sortedList.length
 
-    if (this.onlyMoyenne) {
-      this.listeQuestions = [question1]
-      this.listeCorrections = [correction1]
-      this.nbQuestions = 1
-    } else {
-      this.nbQuestions = 2
-      this.listeQuestions.push(question1, question2)
-      this.listeCorrections.push(correction1, correction2)
+      handleAnswers(
+        this,
+        i,
+        {
+          bareme: toutAUnPoint,
+          ...Object.assign(
+            {
+              champ1: {
+                value: arrondi(moyenne, 1),
+                options: { nombreDecimalSeulement: true },
+              },
+            },
+            !this.onlyMoyenne
+              ? {
+                  champ2:
+                    n % 2 === 0 && sortedList[n / 2 - 1] !== sortedList[n / 2]
+                      ? {
+                          value: `]${sortedList[n / 2 - 1]};${sortedList[n / 2]}[`,
+                          options: { estDansIntervalle: true },
+                        }
+                      : {
+                          value: mediane,
+                          options: { nombreDecimalSeulement: true },
+                        },
+                }
+              : {},
+          ),
+        },
+        { formatInteractif: 'multiMathfield' },
+      )
+      texteCorr += correction1
+      if (!this.onlyMoyenne) {
+        texteCorr += '<br><br>' + correction2
+      }
+      if (this.questionJamaisPosee(i, moyenne, mediane)) {
+        this.listeQuestions.push(texte)
+        this.listeCorrections.push(texteCorr)
+        i++
+      }
+      cpt++
     }
-
-    listeQuestionsToContenu(this)
   }
 }
 
