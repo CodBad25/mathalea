@@ -94,7 +94,10 @@ export class MultiMathfieldElement extends HTMLElement {
   }
 
   render() {
-    const template = this.getAttribute('data-template') || ''
+    const template = (this.getAttribute('data-template') || '').replaceAll(
+      '<br>',
+      '\n',
+    )
     const rawOptionsAttr = this.getAttribute('data-options') || '%7B%7D'
     let options
     try {
