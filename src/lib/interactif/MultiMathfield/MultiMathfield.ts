@@ -6,16 +6,48 @@ import { bleuMathalea } from '../../colors'
 import type { IExercice, ValeurNames } from '../../types'
 import { buildDataKeyboardFromStyle, KeyboardType } from '../claviers/keyboard'
 import { setMathfield, setMathfieldListener } from './setMathfield'
-function stylizeItems(text: string): string {
-  const itemRegex = /(^|\s)([a-z]\))/g
-  return text.replace(itemRegex, (match, p1, p2) => {
+
+function stylizeItems(text: string, output: 'html' | 'latex' = 'html'): string {
+  const itemRegex = /(^|\s+)([a-z]\))/g
+  return text.replace(itemRegex, (_match, prefix, item, offset) => {
+    const isAtLineStart = text.slice(0, offset).trim() === ''
+
+    if (output === 'latex') {
+      return (prefix || '') + `$\\textbf{${item}}$`
+    }
+
+    const styles = [`color:${bleuMathalea}`, 'font-weight:bold']
+    if (isAtLineStart) {
+      styles.push('display:inline-block', 'margin-left:0.75em')
+    }
+
     return (
-      (p1 || '') +
-      `<span style="color:${bleuMathalea}; font-weight:bold">` +
-      p2 +
-      '</span>'
+      (prefix || '') + `<span style="${styles.join('; ')}">` + item + '</span>'
     )
   })
+}
+
+function buildLatexEnumitemBlock(lines: string[]): string | null {
+  const itemLineRegex = /^\s*([a-z])\)\s*(.*)$/
+  const nonEmptyLines = lines.filter((line) => line.trim() !== '')
+
+  if (
+    nonEmptyLines.length === 0 ||
+    !nonEmptyLines.every((line) => itemLineRegex.test(line))
+  ) {
+    return null
+  }
+
+  const items = nonEmptyLines.map((line) => {
+    const match = line.match(itemLineRegex)
+    return `\\item ${match?.[2] ?? ''}`
+  })
+
+  return [
+    '\\begin{enumerate}[label=\\alph*)]',
+    ...items,
+    '\\end{enumerate}',
+  ].join('\n')
 }
 
 export type DataOptionsMultiMathfield = Partial<
@@ -24,7 +56,6 @@ export type DataOptionsMultiMathfield = Partial<
     {
       keyboard?: string
       placeholder?: string
-      maxWidth?: number
       minWidth?: number
       texteApres?: string
       ldots?: boolean
@@ -371,11 +402,9 @@ export function addMultiMathfield(
   } else {
     // On traite ligne par ligne pour détecter les items a), b), ... en début de ligne
     const lines = dataTemplate.split('\n')
-    const itemRegex = /(^|\s)([a-z]\))/g
     const fieldRegex = /%\{[^}]+\}/g
-    let result = ''
-    for (let i = 0; i < lines.length; i++) {
-      let line = lines[i]
+    const processedLines = lines.map((rawLine) => {
+      let line = rawLine
       // Remplace les champs %{...} par $\ldots\ldots$ uniquement si ldots est à true
       line = line.replace(fieldRegex, (match) => {
         const fieldMatch = match.match(/%\{([^}]+)\}/)
@@ -389,25 +418,21 @@ export function addMultiMathfield(
         }
         return match
       })
-      // Stylise les items a), b), ... en début de ligne ou après un espace
-      line = line.replace(itemRegex, (match, p1, p2) => {
-        if (context.isHtml) {
-          return (
-            (p1 || '') +
-            `<span style="color:${bleuMathalea}; font-weight:bold">` +
-            p2 +
-            '</span>'
-          )
-        } else {
-          return (p1 || '') + '$\\textbf{' + p2 + '}$'
-        }
-      })
-      result += line
-      if (i < lines.length - 1) {
-        result += '<br>'
+      return line
+    })
+
+    if (!context.isHtml) {
+      const enumitemBlock = buildLatexEnumitemBlock(processedLines)
+      if (enumitemBlock) {
+        return enumitemBlock
       }
     }
-    return result
+
+    const renderedLines = processedLines.map((line) =>
+      stylizeItems(line, context.isHtml ? 'html' : 'latex'),
+    )
+
+    return renderedLines.join('<br>')
   }
 }
 
