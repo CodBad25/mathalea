@@ -221,19 +221,21 @@ export default class TesterSiUnNombreEstSolutionDUneEquation extends Exercice {
           )}`
           break
         case 4: // ax+b=(a+1)x-c => x=b+c
-          if (this.sup === 1) {
-            a = randint(2, 9)
-            b = randint(2, 9)
-            c = randint(1, 3)
-            x1 = b + c
-            x2 = randint(2, 10, x1)
-          } else {
-            a = randint(2, 9)
-            b = randint(2, 9) * randint(-1, 1, 0)
-            c = randint(1, 3) * randint(-1, 1, 0)
-            x1 = b + c
-            x2 = randint(2, 10, x1) * randint(-1, 1, 0)
-          }
+          do {
+            if (this.sup === 1) {
+              a = randint(2, 9)
+              b = randint(2, 9)
+              c = randint(1, 3)
+              x1 = b + c
+              x2 = randint(2, 10, x1)
+            } else {
+              a = randint(2, 9)
+              b = randint(2, 9) * randint(-1, 1, 0)
+              c = randint(1, 3) * randint(-1, 1, 0)
+              x1 = b + c
+              x2 = randint(2, 10, x1) * randint(-1, 1, 0)
+            }
+          } while (x1 === x2)
 
           texte = `$${ecritureParentheseSiNegatif(
             a,
