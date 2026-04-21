@@ -1,5 +1,6 @@
 import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { aLeBonNombreDePropsDifferentes } from '../../lib/interactif/qcm'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { Arbre } from '../../modules/arbres'
 import FractionEtendue from '../../modules/FractionEtendue'
 import { mathalea2d } from '../../modules/mathalea2d'
@@ -82,12 +83,12 @@ export default class auto1AP3a extends ExerciceQcmA {
       Object.assign({ style: 'inline' }, fixeBordures(objets)),
       objets,
     )
-    this.enonce += '<br>$P(A \\cap C)=\\ldots$'
+    this.enonce += '<br>$P(A \\cap C)$ est égal à :'
     this.correction = `On sait que <br>$\\begin{aligned}
         P(A \\cap C) &= P(A) \\times P_A(C)\\\\
         &= \\dfrac{3}{10} \\times \\dfrac{6}{10} \\\\
         &= \\dfrac{18}{100}\\\\
-        &= \\dfrac{9}{50}
+        &= ${miseEnEvidence(`\\dfrac{9}{50}`)}
         \\end{aligned}$`
 
     this.reponses = [
@@ -176,12 +177,12 @@ export default class auto1AP3a extends ExerciceQcmA {
         Object.assign({ style: 'inline' }, fixeBordures(objets)),
         objets,
       )
-      this.enonce += '<br>$P(A \\cap C)=\\ldots$'
+      this.enonce += '<br>$P(A \\cap C)$ est égal à :'
 
-      this.correction = `On sait que <br>$\\begin{aligned}
+      this.correction = `On sait que :<br>$\\begin{aligned}
         P(A \\cap C) &= P(A) \\times P_A(C)\\\\
         &= ${pA.texFractionSimplifiee} \\times ${pAC.texFractionSimplifiee} \\\\
-        &= ${pC1.texFractionSimplifiee}
+        &= ${miseEnEvidence(pC1.texFractionSimplifiee)}
         \\end{aligned}$`
 
       this.reponses = [
