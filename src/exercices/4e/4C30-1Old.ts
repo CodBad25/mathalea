@@ -1,7 +1,6 @@
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { toutAUnPoint } from '../../lib/interactif/mathLive'
-import { addMultiMathfield } from '../../lib/interactif/MultiMathfield/MultiMathfield'
+import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { sp } from '../../lib/outils/outilString'
@@ -16,7 +15,7 @@ import Exercice from '../Exercice'
 
 export const dateDeModifImportante = '06/10/2025'
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'mathLive'
 export const amcReady = true
 export const amcType = 'AMCHybride'
 export const titre = 'Encadrer des nombres positifs avec des puissances de 10'
@@ -25,11 +24,11 @@ export const titre = 'Encadrer des nombres positifs avec des puissances de 10'
  * Encadrer par des puissances de 10
  * @author Sébastien Lozano (Modifications apportées par Éric Elter)
  */
-export const uuid = '760d8'
+export const uuid = '760d7'
 
 export const refs = {
-  'fr-fr': ['4C30-1', 'BP2AutoE6'],
-  'fr-ch': ['9NO5-1'],
+  'fr-fr': [],
+  'fr-ch': [],
 }
 export default class PuissancesEncadrement extends Exercice {
   classe = 4
@@ -174,121 +173,97 @@ export default class PuissancesEncadrement extends Exercice {
       if (listeTypeDeQuestions[i] < 7) {
         // nombre entier positif
         consigneAMC = `$\\dots\\dots\\dots${sp(1)}\\leqslant ${entPos[listeTypeDeQuestions[i] - 1].val}\\leqslant${sp(1)}\\dots\\dots\\dots$`
-        texte = addMultiMathfield(this, i, {
-          dataTemplate: `%{champ1} $\\leqslant ${entPos[listeTypeDeQuestions[i] - 1].val} \\leqslant$ %{champ2}`,
-          dataOptions: {
-            champ1: {
-              keyboard: KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets,
-              ldots: true,
-              minWidth: 50,
-            },
-            champ2: {
-              keyboard: KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets,
-              ldots: true,
-              minWidth: 50,
-            },
-          },
-        })
-
+        texte = this.interactif
+          ? ajouteChampTexteMathLive(
+              this,
+              2 * i,
+              KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets,
+            ) +
+            `$\\leqslant ${entPos[listeTypeDeQuestions[i] - 1].val}\\leqslant $` +
+            ajouteChampTexteMathLive(
+              this,
+              2 * i + 1,
+              KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets,
+            )
+          : consigneAMC
         exposantInf = entPos[listeTypeDeQuestions[i] - 1].exposantInf
         exposantSup = entPos[listeTypeDeQuestions[i] - 1].exposantSup
-        handleAnswers(
+        setReponse(
           this,
-          i,
-          {
-            bareme: toutAUnPoint,
-            champ1: {
-              value: entPos[listeTypeDeQuestions[i] - 1].puissance_inf,
-              options: { puissance: true },
-            },
-            champ2: {
-              value: entPos[listeTypeDeQuestions[i] - 1].puissance_sup,
-              options: { puissance: true },
-            },
-          },
-          { formatInteractif: 'multiMathfield' },
+          2 * i,
+          entPos[listeTypeDeQuestions[i] - 1].puissance_inf,
+          { formatInteractif: 'puissance' },
         )
-
+        setReponse(
+          this,
+          2 * i + 1,
+          entPos[listeTypeDeQuestions[i] - 1].puissance_sup,
+          { formatInteractif: 'puissance' },
+        )
         texteCorr = `$${miseEnEvidence(entPos[listeTypeDeQuestions[i] - 1].puissance_inf)} \\leqslant ${entPos[listeTypeDeQuestions[i] - 1].val} \\leqslant ${miseEnEvidence(entPos[listeTypeDeQuestions[i] - 1].puissance_sup)}$`
         texteCorr += ` car $${entPos[listeTypeDeQuestions[i] - 1].puissance_inf} = ${entPos[listeTypeDeQuestions[i] - 1].puissance_inf_num}$ et $${entPos[listeTypeDeQuestions[i] - 1].puissance_sup} = ${entPos[listeTypeDeQuestions[i] - 1].puissance_sup_num}.$`
       } else if (listeTypeDeQuestions[i] < 11) {
         // nombre décimal positif
         consigneAMC = `$\\dots\\dots\\dots${sp(1)}\\leqslant ${decPos[listeTypeDeQuestions[i] - 7].val}\\leqslant${sp(1)}\\dots\\dots\\dots$`
-        texte = addMultiMathfield(this, i, {
-          dataTemplate: `%{champ1} $\\leqslant ${decPos[listeTypeDeQuestions[i] - 7].val} \\leqslant$ %{champ2}`,
-          dataOptions: {
-            champ1: {
-              keyboard: KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets,
-              ldots: true,
-              minWidth: 50,
-            },
-            champ2: {
-              keyboard: KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets,
-              ldots: true,
-              minWidth: 50,
-            },
-          },
-        })
-
+        texte = this.interactif
+          ? ajouteChampTexteMathLive(
+              this,
+              2 * i,
+              KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets,
+            ) +
+            `$\\leqslant ${decPos[listeTypeDeQuestions[i] - 7].val}\\leqslant $` +
+            ajouteChampTexteMathLive(
+              this,
+              2 * i + 1,
+              KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets,
+            )
+          : consigneAMC
         exposantInf = decPos[listeTypeDeQuestions[i] - 7].exposantInf
         exposantSup = decPos[listeTypeDeQuestions[i] - 7].exposantSup
-        handleAnswers(
+        setReponse(
           this,
-          i,
-          {
-            bareme: toutAUnPoint,
-            champ1: {
-              value: decPos[listeTypeDeQuestions[i] - 7].puissance_inf,
-              options: { puissance: true },
-            },
-            champ2: {
-              value: decPos[listeTypeDeQuestions[i] - 7].puissance_sup,
-              options: { puissance: true },
-            },
-          },
-          { formatInteractif: 'multiMathfield' },
+          2 * i,
+          decPos[listeTypeDeQuestions[i] - 7].puissance_inf,
+          { formatInteractif: 'puissance' },
         )
-
+        setReponse(
+          this,
+          2 * i + 1,
+          decPos[listeTypeDeQuestions[i] - 7].puissance_sup,
+          { formatInteractif: 'puissance' },
+        )
         texteCorr = `$${miseEnEvidence(decPos[listeTypeDeQuestions[i] - 7].puissance_inf)} \\leqslant ${decPos[listeTypeDeQuestions[i] - 7].val} \\leqslant ${miseEnEvidence(decPos[listeTypeDeQuestions[i] - 7].puissance_sup)}$`
         texteCorr += ` car $${decPos[listeTypeDeQuestions[i] - 7].puissance_inf} = ${decPos[listeTypeDeQuestions[i] - 7].puissance_inf_num}$ et $${decPos[listeTypeDeQuestions[i] - 7].puissance_sup} = ${decPos[listeTypeDeQuestions[i] - 7].puissance_sup_num}.$`
       } else {
         // nombre décimal positif inferieur à 1
         consigneAMC = `$\\dots\\dots\\dots${sp(1)}\\leqslant ${decPosInfUn[listeTypeDeQuestions[i] - 11].val}\\leqslant${sp(1)}\\dots\\dots\\dots$`
-        texte = addMultiMathfield(this, i, {
-          dataTemplate: `%{champ1} $\\leqslant ${decPosInfUn[listeTypeDeQuestions[i] - 11].val} \\leqslant$ %{champ2}`,
-          dataOptions: {
-            champ1: {
-              keyboard: KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets,
-              ldots: true,
-              minWidth: 50,
-            },
-            champ2: {
-              keyboard: KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets,
-              ldots: true,
-              minWidth: 50,
-            },
-          },
-        })
-
+        texte = this.interactif
+          ? ajouteChampTexteMathLive(
+              this,
+              2 * i,
+              KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets,
+            ) +
+            `$\\leqslant ${decPosInfUn[listeTypeDeQuestions[i] - 11].val}\\leqslant $` +
+            ajouteChampTexteMathLive(
+              this,
+              2 * i + 1,
+              KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets,
+            )
+          : consigneAMC
         exposantInf = decPosInfUn[listeTypeDeQuestions[i] - 11].exposantInf
         exposantSup = decPosInfUn[listeTypeDeQuestions[i] - 11].exposantSup
-        handleAnswers(
+        setReponse(
           this,
-          i,
-          {
-            bareme: toutAUnPoint,
-            champ1: {
-              value: decPosInfUn[listeTypeDeQuestions[i] - 11].puissance_inf,
-              options: { puissance: true },
-            },
-            champ2: {
-              value: decPosInfUn[listeTypeDeQuestions[i] - 11].puissance_sup,
-              options: { puissance: true },
-            },
-          },
-          { formatInteractif: 'multiMathfield' },
+          2 * i,
+          decPosInfUn[listeTypeDeQuestions[i] - 11].puissance_inf,
+          { formatInteractif: 'puissance' },
         )
-
+        setReponse(
+          this,
+          2 * i + 1,
+          decPosInfUn[listeTypeDeQuestions[i] - 11].puissance_sup,
+          { formatInteractif: 'puissance' },
+        )
         texteCorr = `$${miseEnEvidence(decPosInfUn[listeTypeDeQuestions[i] - 11].puissance_inf)} \\leqslant ${decPosInfUn[listeTypeDeQuestions[i] - 11].val} \\leqslant ${miseEnEvidence(decPosInfUn[listeTypeDeQuestions[i] - 11].puissance_sup)}$`
         texteCorr += ` car $${decPosInfUn[listeTypeDeQuestions[i] - 11].puissance_inf} = ${decPosInfUn[listeTypeDeQuestions[i] - 11].puissance_inf_num}$ et $${decPosInfUn[listeTypeDeQuestions[i] - 11].puissance_sup} = ${decPosInfUn[listeTypeDeQuestions[i] - 11].puissance_sup_num}.$`
       }
