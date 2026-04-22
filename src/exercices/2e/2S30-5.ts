@@ -783,21 +783,25 @@ export default class FonctionsProbabilite2 extends Exercice {
             } else {
               const QuidamGagne = probaDiffs[desQuidam[0] - 1] < 0
 
-              texte = addMultiMathfield(this, i, {
-                dataTemplate: `${quidam} dispose d'un dé à ${desQuidam[0]} faces numérotées de 1 à ${desQuidam[0]} et d'un dé à ${desQuidam[1]} faces numérotées de 1 à ${desQuidam[1]}.
-              Il lance ses deux dés et en fait la somme.
-              a) Quelle sont les différentes issues de l'expérience de ${quidam} ? %{champ1}\nb) Quelle est la probabilité de l'issue ${desQuidam[0] + 1} ? %{champ2}\n
-              ${quidame} dispose d'un dé à ${desQuidame[0]} faces numérotées de 1 à ${desQuidame[0]} et d'un dé à ${desQuidame[1]} faces numérotées de 1 à ${desQuidame[1]}.
-              Elle décide de proposer un défi à ${quidam} : "On choisit un nombre cible entre 2 et ${r}, on lance nos deux dés en même temps. Le premier dont la somme des dés est la cible a gagné."
-              c) ${quidam} qui connaît les probabilités calculées à la question a. propose alors de choisir ${desQuidam[0] + 1} comme nombre cible. A-t-il raison ? %{champ3}\nd) Si oui, quel nombre doit choisir ${quidame} pour avoir un défi qui lui soit favorable et si non, donne un meilleur choix pour ${quidam} sachant que le nombre cible doit être faisable par chacun ?\nSi il n'y en a pas, répondre $\\emptyset$ %{champ4}\ne) Y a-t-il un nombre cible qui donne un jeu équitable où chacun aura la même probabilité de gagner ?\nSi oui, quel est ce nombre ? si non répondre $\\emptyset$ %{champ5}\n`,
-                dataOptions: {
-                  champ1: { keyboard: KeyboardType.clavierDeBase },
-                  champ2: { keyboard: KeyboardType.clavierDeBaseAvecFraction },
-                  champ3: { keyboard: KeyboardType.vFON },
-                  champ4: { keyboard: KeyboardType.clavierEnsemble },
-                  champ5: { keyboard: KeyboardType.clavierEnsemble },
+              texte = `${quidam} dispose d'un dé à ${desQuidam[0]} faces numérotées de 1 à ${desQuidam[0]} et d'un dé à ${desQuidam[1]} faces numérotées de 1 à ${desQuidam[1]}.
+              Il lance ses deux dés et en fait la somme.<br>${addMultiMathfield(
+                this,
+                i,
+                {
+                  dataTemplate: `a) Quelle sont les différentes issues de l'expérience de ${quidam} ? %{champ1}\nb) Quelle est la probabilité de l'issue ${desQuidam[0] + 1} ? %{champ2}\n${quidame} dispose d'un dé à ${desQuidame[0]} faces numérotées de 1 à ${desQuidame[0]} et d'un dé à ${desQuidame[1]} faces numérotées de 1 à ${desQuidame[1]}.
+              Elle décide de proposer un défi à ${quidam} : "On choisit un nombre cible entre 2 et ${r}. On lance nos deux dés en même temps. Le premier dont la somme des dés est la cible a gagné."
+              c) ${quidam}, qui connaît les probabilités des différentes issues avec son jeu de dés, propose alors de choisir ${desQuidam[0] + 1} comme nombre cible. A-t-il raison (O ou N)? %{champ3}\nd) Si oui, quel nombre doit choisir ${quidame} pour avoir un défi qui lui soit favorable ? Et si non, donner un meilleur choix pour ${quidam} (sachant que le nombre cible doit être faisable par chacun). S'il n'y en a pas, répondre $\\emptyset$. %{champ4}\ne) Y a-t-il un nombre cible qui donne un jeu équitable où chacun aura la même probabilité de gagner ? Si oui, quel est ce nombre ? Si non, répondre $\\emptyset$. %{champ5}\n`,
+                  dataOptions: {
+                    champ1: { keyboard: KeyboardType.clavierDeBase },
+                    champ2: {
+                      keyboard: KeyboardType.clavierDeBaseAvecFraction,
+                    },
+                    champ3: { keyboard: KeyboardType.vFON },
+                    champ4: { keyboard: KeyboardType.clavierEnsemble },
+                    champ5: { keyboard: KeyboardType.clavierEnsemble },
+                  },
                 },
-              })
+              )}`
               handleAnswers(
                 this,
                 i,
