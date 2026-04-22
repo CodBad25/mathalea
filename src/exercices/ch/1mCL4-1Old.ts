@@ -15,19 +15,18 @@ import {
 import Exercice from '../Exercice'
 
 import { bleuMathalea } from '../../lib/colors'
-import { addMultiMathfield } from '../../lib/interactif/MultiMathfield/MultiMathfield'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { toutAUnPoint } from '../../lib/interactif/mathLive'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 
 export const titre =
   "Résoudre une équation à l'aide de la méthode de complétion du carré"
 export const dateDePublication = '31/10/2024'
-export const interactifReady = true
-export const interactifType = 'multiMathfield'
-export const uuid = '7f0dd'
+export const interactifReady = false
+export const interactifType = 'mathLive'
+export const uuid = '7f0dc'
 export const refs = {
   'fr-fr': [],
-  'fr-ch': ['1mCL4-1'],
+  'fr-ch': [],
 }
 
 /**
@@ -239,39 +238,38 @@ export default class ExerciceEquationSecondDegre extends Exercice {
       }
 
       texteCorr += '\\end{aligned}$'
-
-      if (this.interactif) {
-        texte +=
-          '<br>' +
-          addMultiMathfield(this, i, {
-            dataTemplate: `a) Donner sous forme d'un entier ou d'une fraction irréductible le nombre qui permet de compléter le carré : %{champ1}\n
-        b) Donner l'ensemble des solutions en séparant chaque solution par un point-virgule : $S=$ %{champ2}`,
-            dataOptions: {
-              champ1: { keyboard: KeyboardType.clavierFullOperations },
-              champ2: { keyboard: KeyboardType.clavierFullOperations },
-            },
-          })
-
-        handleAnswers(
+      texte += ajouteChampTexteMathLive(
+        this,
+        2 * i,
+        KeyboardType.clavierFullOperations,
+        {
+          texteAvant:
+            "<br><br> Donner sous forme d'un entier ou d'une fraction irréductible le nombre qui permet de compléter le carré :",
+        },
+      )
+      handleAnswers(this, 2 * i, {
+        reponse: {
+          value: termeCompletion.texFractionSimplifiee,
+          options: { fractionIrreductible: true },
+        },
+      })
+      texte +=
+        '<br><br>' +
+        ajouteChampTexteMathLive(
           this,
-          i,
+          2 * i + 1,
+          KeyboardType.clavierFullOperations,
           {
-            bareme: toutAUnPoint,
-            champ1: {
-              value: termeCompletion.texFractionSimplifiee,
-              options: { fractionIrreductible: true },
-            },
-            champ2: {
-              value: `\\{${reponse1};${reponse2}\\}`,
-              options: { ensembleDeNombres: true },
-            },
-          },
-          {
-            formatInteractif: 'multiMathfield',
+            texteAvant:
+              "Donner l'ensemble des solutions en séparant chaque solution par un point-virgule $S=$",
           },
         )
-      }
-
+      handleAnswers(this, 2 * i + 1, {
+        reponse: {
+          value: `\\{${reponse1};${reponse2}\\}`,
+          options: { ensembleDeNombres: true },
+        },
+      })
       if (
         this.questionJamaisPosee(
           i,
