@@ -1,6 +1,6 @@
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { toutAUnPoint } from '../../lib/interactif/mathLive'
-import { addMultiMathfield } from '../../lib/interactif/MultiMathfield/MultiMathfield'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import {
   combinaisonListes,
   compteOccurences,
@@ -19,10 +19,10 @@ export const titre =
 export const dateDePublication = '19/08/2025'
 export const dateDeModifImportante = '19/03/2026'
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
-export const uuid = '31e62'
+export const interactifType = 'mathLive'
+export const uuid = '31e61'
 export const refs = {
-  'fr-ch': ['10GM3-10'],
+  'fr-ch': [],
   'fr-fr': [''],
 }
 
@@ -141,7 +141,11 @@ export default class ConvertirDuree extends Exercice {
           }` +
           '.'
     }`
-    for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
+    for (
+      let i = 0, cpt = 0, champIndex = 0;
+      i < this.nbQuestions && cpt < 50;
+      i++
+    ) {
       let texte: string
       let texteCorr: string
       const typeDeQuestion = listeTypeDeQuestions[i]
@@ -372,29 +376,50 @@ export default class ConvertirDuree extends Exercice {
           break
       }
 
-      texte = `Convertir ${valeurAffichee} ${uniteDepart === 'hhmmss' ? '' : uniteAffichageDepart} en ${uniteAffichageArrivee}.<br><br>`
+      texte = `Convertir ${valeurAffichee} ${uniteDepart === 'hhmmss' ? '' : uniteAffichageDepart} en ${uniteAffichageArrivee}.`
 
       // Ajouter le champ de réponse si interactif
       if (this.interactif) {
         if (uniteArrivee === 'hhmmss') {
-          texte += addMultiMathfield(this, i, {
-            dataTemplate: `%{champ1} h %{champ2} min ${!this.sup2 && !this.sup3 ? '%{champ3} s' : ''}`,
-            dataOptions: {},
-          })
+          texte +=
+            '<br>' +
+            ajouteChampTexteMathLive(
+              this,
+              champIndex,
+              KeyboardType.clavierNumbers,
+              { texteApres: ' h ' },
+            )
+          texte += ajouteChampTexteMathLive(
+            this,
+            champIndex + 1,
+            KeyboardType.clavierNumbers,
+            { texteApres: ' min ' },
+          )
+          if (!this.sup2 && !this.sup3)
+            texte += ajouteChampTexteMathLive(
+              this,
+              champIndex + 2,
+              KeyboardType.clavierNumbers,
+              { texteApres: ' s' },
+            )
         } else {
-          texte += addMultiMathfield(this, i, {
-            dataTemplate: `%{champ1} ${uniteAffichageArrivee}`,
-            dataOptions: {},
-          })
+          texte +=
+            '<br>' +
+            ajouteChampTexteMathLive(
+              this,
+              champIndex,
+              KeyboardType.clavierNumbers,
+              { texteAvant: ' ', texteApres: ` ${uniteAffichageArrivee}` },
+            )
         }
       } else {
         if (uniteArrivee === 'hhmmss') {
-          texte += '$\\ldots \\ldots$' + ' h '
+          texte += '<br><br>' + '$\\ldots \\ldots$' + ' h '
           texte += '$\\ldots \\ldots$' + ' min '
           if ((reponse as string).includes('s'))
             texte += '$\\ldots \\ldots$' + ' s '
         } else {
-          texte += `$\\ldots \\ldots$ ${uniteAffichageArrivee}`
+          texte += '<br><br>' + `$\\ldots \\ldots$ ${uniteAffichageArrivee}`
         }
       }
 
@@ -439,54 +464,41 @@ export default class ConvertirDuree extends Exercice {
               secondes = parseInt(part.replace(/[^\d]/g, ''))
             }
           })
-          handleAnswers(
-            this,
-            i,
-            {
-              bareme: toutAUnPoint,
-              ...Object.assign(
-                {
-                  champ1: {
-                    value: arrondi(heures, 2),
-                    options: {
-                      nombreDecimalSeulement: true,
-                    },
-                  },
-                  champ2: {
-                    value: minutes,
-                    options: {
-                      nombreDecimalSeulement: true,
-                    },
-                  },
-                },
-                !this.sup2 && !this.sup3
-                  ? {
-                      champ3: {
-                        value: secondes,
-                        options: {
-                          nombreDecimalSeulement: true,
-                        },
-                      },
-                    }
-                  : {},
-              ),
+
+          handleAnswers(this, champIndex, {
+            reponse: {
+              value: arrondi(heures, 2),
+              options: {
+                nombreDecimalSeulement: true,
+              },
             },
-            { formatInteractif: 'multiMathfield' },
-          )
-        } else {
-          handleAnswers(
-            this,
-            i,
-            {
-              champ1: {
-                value: arrondi(reponse as number, 2),
+          })
+          handleAnswers(this, champIndex + 1, {
+            reponse: {
+              value: minutes,
+              options: {
+                nombreDecimalSeulement: true,
+              },
+            },
+          })
+          if (!this.sup2 && !this.sup3)
+            handleAnswers(this, champIndex + 2, {
+              reponse: {
+                value: secondes,
                 options: {
                   nombreDecimalSeulement: true,
                 },
               },
+            })
+        } else {
+          handleAnswers(this, champIndex, {
+            reponse: {
+              value: arrondi(reponse as number, 2),
+              options: {
+                nombreDecimalSeulement: true,
+              },
             },
-            { formatInteractif: 'multiMathfield' },
-          )
+          })
         }
       }
 
@@ -494,9 +506,13 @@ export default class ConvertirDuree extends Exercice {
         this.listeQuestions.push(texte)
         this.listeCorrections.push(texteCorr)
         // Incrémenter champIndex selon le type de réponse
-        i++
+        champIndex +=
+          uniteArrivee === 'hhmmss' ? (this.sup2 || this.sup3 ? 2 : 3) : 1
+        cpt++
+      } else {
+        cpt++
+        i--
       }
-      cpt++
     }
 
     listeQuestionsToContenu(this)

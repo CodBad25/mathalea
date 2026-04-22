@@ -1,7 +1,6 @@
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { toutAUnPoint } from '../../lib/interactif/mathLive'
-import { addMultiMathfield } from '../../lib/interactif/MultiMathfield/MultiMathfield'
+import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { nombreDeChiffresDansLaPartieEntiere } from '../../lib/outils/nombres'
@@ -12,7 +11,7 @@ import Exercice from '../Exercice'
 
 export const titre = 'Encadrer une racine carrée et en donner un arrondi'
 export const interactifReady = true
-export const interactifType = 'multiMathfield'
+export const interactifType = 'mathLive'
 export const amcReady = true
 export const amcType = 'AMCHybride'
 
@@ -22,11 +21,11 @@ export const amcType = 'AMCHybride'
 
  * Date de publication : 08/08/2021
  */
-export const uuid = '516d2'
+export const uuid = '516d1'
 
 export const refs = {
-  'fr-fr': ['4G20-6', 'BP2AutoS4'],
-  'fr-ch': ['10NO3-4'],
+  'fr-fr': [],
+  'fr-ch': [],
 }
 export default class CalculValeurApprocheeRacineCarree extends Exercice {
   constructor() {
@@ -74,6 +73,7 @@ export default class CalculValeurApprocheeRacineCarree extends Exercice {
       let i = 0,
         texte,
         texteCorr,
+        indexRep = 0,
         type,
         a,
         nbDec,
@@ -99,6 +99,7 @@ export default class CalculValeurApprocheeRacineCarree extends Exercice {
             reponse = texNombre(Math.sqrt(a), 0)
             reponseG = texNombre(Math.floor(Math.sqrt(a)), 0)
             reponseD = texNombre(Math.ceil(Math.sqrt(a)), 0)
+            setReponse(this, indexRep, Math.round(Math.sqrt(a)))
             nbDec = 0
             break
           case 'dixieme':
@@ -106,6 +107,7 @@ export default class CalculValeurApprocheeRacineCarree extends Exercice {
             reponse = texNombre(Math.sqrt(a), 1)
             reponseG = texNombre(Math.floor(Math.sqrt(a) * 10) / 10, 1)
             reponseD = texNombre(Math.ceil(Math.sqrt(a) * 10) / 10, 1)
+            setReponse(this, indexRep, Math.sqrt(a).toFixed(1))
             nbDec = 1
             break
           case 'centieme':
@@ -114,6 +116,7 @@ export default class CalculValeurApprocheeRacineCarree extends Exercice {
             reponse = texNombre(Math.sqrt(a), 2)
             reponseG = texNombre(Math.floor(Math.sqrt(a) * 100) / 100, 2)
             reponseD = texNombre(Math.ceil(Math.sqrt(a) * 100) / 100, 2)
+            setReponse(this, indexRep, Math.sqrt(a).toFixed(2))
             nbDec = 2
             break
         }
@@ -122,27 +125,13 @@ export default class CalculValeurApprocheeRacineCarree extends Exercice {
         if (!this.interactif) {
           texte = `Encadrer $\\sqrt{${a}}$ ${type} près et en donner un arrondi ${type} près.`
         } else {
-          texte = addMultiMathfield(this, i, {
-            dataTemplate: `Donner la valeur arrondie ${type} près de $\\sqrt{${a}}$ : %{champ1}`,
-            dataOptions: {
-              champ1: {
-                keyboard: KeyboardType.clavierNumbers,
-                ldots: false,
-              },
-            },
-          })
+          texte = `Donner la valeur arrondie de $\\sqrt{${a}}$ ${type} près : `
+          texte += ajouteChampTexteMathLive(
+            this,
+            indexRep,
+            KeyboardType.clavierNumbers,
+          )
         }
-        handleAnswers(
-          this,
-          i,
-          {
-            bareme: toutAUnPoint,
-            champ1: {
-              value: parseFloat(reponse.replaceAll(',', '.')),
-            },
-          },
-          { formatInteractif: 'multiMathfield' },
-        )
         texteCorr = `$\\sqrt{${a}} \\approx ${texNombre(Math.sqrt(a), 6)}$.<br>`
         texteCorr += `Or $${reponseG} < ${texNombre(Math.sqrt(a), 6)} < ${reponseD}$,<br>`
         texteCorr += `et $${texNombre(Math.sqrt(a), 6)}$ est plus proche de $${reponse}$ que de $${pasReponse}$.<br>`
@@ -154,30 +143,21 @@ export default class CalculValeurApprocheeRacineCarree extends Exercice {
         reponse = '' // C'est pour éviter un warning
         nbDec = 0 // idem
         texte = `Sans utiliser de calculatrice, encadrer $\\sqrt{${a}}$ entre deux nombres entiers consécutifs.<br>`
-        texte += addMultiMathfield(this, i, {
-          dataTemplate: `%{champ1}$<\\sqrt{${a}}<$%{champ2}`,
-          dataOptions: {
-            champ1: {
-              keyboard: KeyboardType.clavierNumbers,
-              ldots: true,
-            },
-            champ2: {
-              keyboard: KeyboardType.clavierNumbers,
-              ldots: true,
-            },
-          },
-        })
-        handleAnswers(
-          this,
-          i,
-          {
-            bareme: toutAUnPoint,
-            champ1: { value: reponseG },
-            champ2: { value: reponseD },
-          },
-          { formatInteractif: 'multiMathfield' },
-        )
-
+        if (this.interactif) {
+          texte += ajouteChampTexteMathLive(
+            this,
+            indexRep,
+            KeyboardType.clavierNumbers,
+          )
+          texte += ` $< \\sqrt{${a}} <$ `
+          texte += ajouteChampTexteMathLive(
+            this,
+            indexRep + 1,
+            KeyboardType.clavierNumbers,
+          )
+          setReponse(this, indexRep, reponseG)
+          setReponse(this, indexRep + 1, reponseD)
+        }
         texteCorr = `$${reponseG}^2 = ${reponseG ** 2}$ et $${reponseD}^2 = ${reponseD ** 2}$.<br>`
         texteCorr += `Or $${reponseG ** 2} < ${a} < ${reponseD ** 2}$,<br>`
         if (this.sup2 === 1) {
@@ -291,6 +271,12 @@ export default class CalculValeurApprocheeRacineCarree extends Exercice {
         }
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr
+
+        if (listeAvecOuSansCalculatrice[i] === 'avec') {
+          indexRep++
+        } else {
+          indexRep += 2
+        }
 
         i++
       }
