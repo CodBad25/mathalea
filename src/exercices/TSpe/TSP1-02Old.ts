@@ -24,7 +24,7 @@ export const interactifReady = true
 export const interactifType = 'mathLive'
 export const dateDePublication = '18/11/2024'
 export const dateDeModifImportante = '10/12/2025'
-export const uuid = 'daabf'
+export const uuid = 'dabbf'
 
 /**
  * @author Stéphane Guyon

@@ -1,14 +1,11 @@
 import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
-import {
-  compteOccurences,
-  enleveDoublonNum,
-} from '../../lib/outils/arrayOutils'
+import { addMultiMathfield } from '../../lib/interactif/MultiMathfield/MultiMathfield'
+import { enleveDoublonNum } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { arrondi } from '../../lib/outils/nombres'
-import { numAlpha, sp } from '../../lib/outils/outilString'
+import { numAlpha } from '../../lib/outils/outilString'
 import { texNombre } from '../../lib/outils/texNombre'
 import FractionEtendue from '../../modules/FractionEtendue'
 import {
@@ -65,11 +62,10 @@ export default class LoiBinomialeUrne extends Exercice {
     }).map(Number)
     typesDeQuestionsDisponibles = enleveDoublonNum(typesDeQuestionsDisponibles)
 
-    let nbDeQuestions = typesDeQuestionsDisponibles.length
-    if (compteOccurences(typesDeQuestionsDisponibles, 1) > 0) nbDeQuestions++
-
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
       let r, b, n, k, p, q, Xzero
+      let texte = ''
+
       do {
         r = randint(4, 11) // nombre de boules rouges
         b = randint(4, 11, r) // nombre de boules bleues
@@ -80,136 +76,155 @@ export default class LoiBinomialeUrne extends Exercice {
         q = new FractionEtendue(b, r + b)
         Xzero = new FractionEtendue(b ** n, (r + b) ** n)
       } while (Xzero.valeurDecimale < 0.01)
-      if (this.questionJamaisPosee(i, r, b, n, k)) {
-        const esp = p.multiplieEntier(n)
+      const esp = p.multiplieEntier(n)
 
-        let texte = `Une urne contient ${r} boules rouges et ${b} boules bleues. On effectue ${n} tirages successifs avec remise.`
-        texte +=
-          '<br>On note $X$ la variable aléatoire qui compte le nombre de boules rouges obtenues.<br>'
-        texte +=
-          numAlpha(0) +
-          ' Déterminer la loi de probabilité suivie par la variable aléatoire $X$.<br>'
-        // let texteCorr = `${texteGras('1. Déterminer la loi de probabilité suivie par la variable aléatoire $X$.<br>')}`
-        let texteCorr = ''
-        texteCorr +=
-          numAlpha(0) +
-          `Les tirages sont identiques et indépendants puisque chaque tirage est effectué avec remise.<br>
+      texte = `Une urne contient ${r} boules rouges et ${b} boules bleues. On effectue ${n} tirages successifs avec remise.`
+      const questions: string[] = []
+      const texteApres = '(Arrondir au centième.)'
+
+      const champsOptions: object[] = [
+        {
+          champ1: { keyboard: KeyboardType.clavierFullOperations },
+        },
+      ]
+
+      questions.push(
+        this.interactif
+          ? `On admet que X suit une loi binomiale de paramètres $n$ et $p$. Quelle sont les valeurs de $n$ et $p$ ?\n$n=$`
+          : `Déterminer la loi de probabilité suivie par la variable aléatoire $X$ qui compte le nombre de boules rouges obtenues.`,
+      )
+      if (this.interactif) {
+        questions.push(`$p=$`)
+      }
+      champsOptions.push(
+        {
+          keyboard: KeyboardType.clavierDeBaseAvecFraction,
+        },
+        {
+          keyboard: KeyboardType.clavierDeBaseAvecFraction,
+        },
+      )
+      if (typesDeQuestionsDisponibles.includes(1)) {
+        questions.push(
+          `Calculer $P(X=0)$.${this.interactif ? '\n$P(X=0)\\approx$' : ''}`,
+        )
+        questions.push(
+          `En déduire $P(X>0)$.${this.interactif ? '\n$P(X>0)\\approx$' : ''}`,
+        )
+        champsOptions.push(
+          { keyboard: KeyboardType.clavierNumbers, texteApres },
+          { keyboard: KeyboardType.clavierNumbers, texteApres },
+        )
+      }
+      if (typesDeQuestionsDisponibles.includes(2)) {
+        questions.push(
+          `Calculer $P(X=k)$.${this.interactif ? '\n$P(X=k)\\approx$' : ''}`,
+        )
+        champsOptions.push({
+          keyboard: KeyboardType.clavierNumbers,
+          texteApres,
+        })
+      }
+      if (typesDeQuestionsDisponibles.includes(3)) {
+        questions.push(
+          `Calculer l'espérance $E(X)$.${this.interactif ? '\n$E(X)=$' : ''}`,
+        )
+        champsOptions.push({
+          keyboard: KeyboardType.clavierNumbers,
+        })
+      }
+      const dataTemplate =
+        `a) ${questions[0]} %{champ1}\n${questions[1]} %{champ2}\n` +
+        questions
+          .slice(2)
+          .map(
+            (q, index) =>
+              `${String.fromCharCode(98 + index)}) ${q} %{champ${index + 3}}`,
+          )
+          .join('\n')
+      const dataOptions = champsOptions.reduce(
+        (acc, options, index) =>
+          Object.assign(acc, { [`champ${index + 1}`]: options }),
+        {},
+      )
+      texte +=
+        '<br>On note $X$ la variable aléatoire qui compte le nombre de boules rouges obtenues.<br>'
+      texte += addMultiMathfield(this, i, {
+        dataTemplate,
+        dataOptions,
+      })
+
+      const corrections: string[] = [
+        `Les tirages sont identiques et indépendants puisque chaque tirage est effectué avec remise.<br>
       Il y a ${r} boules rouges pour un total de ${r + b} boules dans l'urne.<br>
       La probabilité d'obtenir une boule rouge lors d'un tirage est donc $p = ${p.texFractionSimplifiee}$ .<br>
-      Si on appelle succès le fait d'obtenir une boule rouge, l'expérience consiste à répéter ${n} fois une épreuve de Bernoulli de paramètre $p = ${p.texFractionSimplifiee}$.`
-        texteCorr += `<br>On a donc $${miseEnEvidence(`X \\sim \\mathcal B\\left(${n}\\,;\\,${p.texFractionSimplifiee}\\right)`, bleuMathalea)}$.<br>`
-        let texteApres = sp(5) + '(Arrondir au centième.)'
-        let indiceInteractif = 0
-        for (let j = 0; j < typesDeQuestionsDisponibles.length; j++) {
-          texte += numAlpha(j + 1)
-          texteCorr += numAlpha(j + 1)
-          switch (typesDeQuestionsDisponibles[j]) {
-            case 1:{
-              texte += 'Calculer $P(X=0)$ et en déduire $P(X>0)$.<br>'
-              // texteCorr += `${texteGras('2. Calculer $P(X=0)$ puis $P(X>0)$.<br>')}`
-              const reponseNum0 = arrondi(Xzero.valeurDecimale, 2)
-              const reponseNum1 = arrondi(1 - Xzero.valeurDecimale, 2)
-              texteCorr += `On sait que la probabilité d'avoir $k$ succès quand $X$ suit une loi binomiale de paramètre $n$ et $p$ est :<br>
+      Si on appelle succès le fait d'obtenir une boule rouge, l'expérience consiste à répéter ${n} fois une épreuve de Bernoulli de paramètre $p = ${p.texFractionSimplifiee}$.<br>
+      On a donc $${miseEnEvidence(`X \\sim \\mathcal B\\left(${n}\\,;\\,${p.texFractionSimplifiee}\\right)`, bleuMathalea)}$.<br>
+      Donc $n=${miseEnEvidence(n)}$ et $p=${miseEnEvidence(p.texFractionSimplifiee)}$.`,
+      ]
+      const reponseNum0 = arrondi(Xzero.valeurDecimale, 2)
+      const reponseNum1 = arrondi(1 - Xzero.valeurDecimale, 2)
+      if (typesDeQuestionsDisponibles.includes(1)) {
+        corrections.push(`On sait que la probabilité d'avoir $k$ succès quand $X$ suit une loi binomiale de paramètre $n$ et $p$ est :<br>
       $\\mathrm{P}(X=k)=\\displaystyle\\binom{n}{k}\\times p^k\\times (1-p)^{n-k}$.<br> 
       ce qui donne dans notre situation : $\\mathrm{P}(X=k)=\\displaystyle\\binom{${n}}{k}\\times \\left(${p.texFractionSimplifiee}\\right)^k\\times \\left(${q.texFractionSimplifiee}\\right)^{${n}-k}\\quad$ (pour $0\\leqslant k\\leqslant ${n}$).<br> 
       Pour $k=0$, on a $\\mathrm{P}(X=0) = \\displaystyle\\binom{${n}}{0}\\times \\left(${p.texFractionSimplifiee}\\right)^0\\times \\left(${q.texFractionSimplifiee}\\right)^{${n}}$.
-      <br>Par calcul, on obtient que $\\mathrm{P}(X=0)\\approx ${miseEnEvidence(texNombre(reponseNum0))}$.<br>`
-              texteCorr += `Et comme $\\mathrm{P}(X>0) = 1 - \\mathrm{P}(X=0)$, on en déduit que $\\mathrm{P}(X>0) \\approx ${miseEnEvidence(texNombre(reponseNum1))}$.<br>`
-              if (this.interactif) {
-                texte += ajouteChampTexteMathLive(
-                  this,
-                  i * nbDeQuestions + indiceInteractif,
-                  KeyboardType.clavierNumbers,
-                  { texteAvant: `$P(X=0)=$`, texteApres },
-                )
-                texte += '<br>'
-                texte += ajouteChampTexteMathLive(
-                  this,
-                  i * nbDeQuestions + indiceInteractif + 1,
-                  KeyboardType.clavierNumbers,
-                  { texteAvant: `$P(X>0)=$`, texteApres },
-                )
-                texte += '<br>'
-                handleAnswers(this, i * nbDeQuestions + indiceInteractif, {
-                  reponse: {
-                    value: reponseNum0,
-                    options: {
-                      nombreDecimalSeulement: true,
-                    },
-                  },
-                })
-                handleAnswers(this, i * nbDeQuestions + indiceInteractif + 1, {
-                  reponse: {
-                    value: reponseNum1,
-                    options: {
-                      nombreDecimalSeulement: true,
-                    },
-                  },
-                })
-              }
-              indiceInteractif = indiceInteractif + 2
-            }break
-            case 2:{
-              texte += `Calculer $P(X=${k})$.<br>`
-              // texteCorr += `${texteGras(`3. Calculer $P(X=${k})$.<br>`)}`
-              texteCorr += `On sait que  $P(X=${k}) = \\displaystyle\\binom{${n}}{${k}}\\times \\left(${p.texFractionSimplifiee}\\right)^{${k}}\\times \\left(${q.texFractionSimplifiee}\\right)^{${n - k}}$.<br>`
-              const bino =
-                factorielle(n) / (factorielle(k) * factorielle(n - k))
-              const reponseNum = arrondi(bino * p.valeurDecimale ** k * q.valeurDecimale ** (n - k), 2)
-              texteCorr += `Par calcul, on obtient que $P(X=${k})\\approx ${miseEnEvidence(texNombre(arrondi(reponseNum, 2)))}$.<br>`
-              if (this.interactif) {
-                texte += ajouteChampTexteMathLive(
-                  this,
-                  i * nbDeQuestions + indiceInteractif,
-                  KeyboardType.clavierNumbers,
-                  { texteAvant: `$P(X=${k})=$`, texteApres },
-                )
-                texte += '<br>'
-                handleAnswers(this, i * nbDeQuestions + indiceInteractif, {
-                  reponse: {
-                    value: reponseNum,
-                    options: {
-                      nombreDecimalSeulement: true,
-                    },
-                  },
-                })
-              }
-              indiceInteractif++
-            }break
-            default:{
-              // texte += "Calculer l'espérance $E(X)$ et interpréter ce résultat."
-              texte += "Calculer l'espérance $\\mathrm{E}(X)$.<br>"
-              // texteCorr += `${texteGras("4. Calculer l'espérance $E(X)$ et interprétez ce résultat.<br>")}`
-              const reponse = esp.texFractionSimplifiee
-              texteCorr += `On sait que l'espérance de $X \\sim \\mathcal B\\left(n\\,;\\,p\\right)$ est donnée par $\\mathrm{E}(X) = n\\,p $.
-      <br>On obtient donc $\\mathrm{E}(X)= ${n}\\times ${p.texFractionSimplifiee}$ et finalement $\\mathrm{E}(X) = ${miseEnEvidence(reponse)}$.<br>`
-              texteApres = sp(5) + '(Saisir la valeur exacte.)'
-              if (this.interactif) {
-                texte += ajouteChampTexteMathLive(
-                  this,
-                  i * nbDeQuestions + indiceInteractif,
-                  KeyboardType.clavierNumbers,
-                  { texteAvant: `$E(X)=$`, texteApres },
-                )
-                texte += '<br>'
-                handleAnswers(this, i * nbDeQuestions + indiceInteractif, {
-                  reponse: {
-                    value: reponse,
-                    options: {
-                      nombreDecimalSeulement: true,
-                      fractionEgale: true,
-                    },
-                  },
-                })
-              }
-              indiceInteractif++
-            }
-            break
-          }
-        }
+      <br>Par calcul, on obtient que $\\mathrm{P}(X=0)\\approx ${miseEnEvidence(texNombre(reponseNum0))}$.`)
+      }
+      const bino = factorielle(n) / (factorielle(k) * factorielle(n - k))
+      const reponseNum = arrondi(
+        bino * p.valeurDecimale ** k * q.valeurDecimale ** (n - k),
+        2,
+      )
+      if (typesDeQuestionsDisponibles.includes(1)) {
+        corrections.push(
+          `Et comme $\\mathrm{P}(X>0) = 1 - \\mathrm{P}(X=0)$, on en déduit que $\\mathrm{P}(X>0) \\approx ${miseEnEvidence(texNombre(reponseNum1))}$.`,
+        )
+      }
+      if (typesDeQuestionsDisponibles.includes(2)) {
+        corrections.push(`On sait que  $P(X=${k}) = \\displaystyle\\binom{${n}}{${k}}\\times \\left(${p.texFractionSimplifiee}\\right)^{${k}}\\times \\left(${q.texFractionSimplifiee}\\right)^{${n - k}}$.<br>
+          Par calcul, on obtient que $P(X=${k})\\approx ${miseEnEvidence(texNombre(arrondi(reponseNum, 2)))}$.`)
+      }
+      if (typesDeQuestionsDisponibles.includes(3)) {
+        corrections.push(`On sait que l'espérance de $X \\sim \\mathcal B\\left(n\\,;\\,p\\right)$ est donnée par $\\mathrm{E}(X) = n\\,p $.
+      <br>On obtient donc $\\mathrm{E}(X)= ${n}\\times ${p.texFractionSimplifiee}$ et finalement $\\mathrm{E}(X) = ${miseEnEvidence(esp.texFractionSimplifiee)}$.`)
+      }
 
-        this.listeQuestions[i] = texte
-        this.listeCorrections[i] = texteCorr
+      const reponses: (string | number)[] = [n, p.texFractionSimplifiee]
+      if (typesDeQuestionsDisponibles.includes(1)) {
+        reponses.push(reponseNum0, reponseNum1)
+      }
+      if (typesDeQuestionsDisponibles.includes(2)) {
+        reponses.push(reponseNum)
+      }
+      if (typesDeQuestionsDisponibles.includes(3)) {
+        reponses.push(esp.texFractionSimplifiee)
+      }
+      const bareme = (listePoints: number[]) => {
+        const petitA = Math.min(listePoints[0], listePoints[1])
+        const nbPoints = listePoints.length
+        let somme = petitA
+        for (let k = 2; k < nbPoints; k++) {
+          somme += listePoints[k]
+        }
+        return [somme, nbPoints - 1]
+      }
+
+      const objetsReponses = Object.assign(
+        { bareme },
+        ...reponses.map((r, index) => ({
+          [`champ${index + 1}`]: { value: r },
+        })),
+      )
+      handleAnswers(this, i, objetsReponses, {
+        formatInteractif: 'multiMathfield',
+      })
+
+      if (this.questionJamaisPosee(i, r, b, n, k)) {
+        this.listeQuestions.push(texte)
+        this.listeCorrections.push(
+          corrections.map((c, index) => `${numAlpha(index)} ${c}`).join('<br>'),
+        )
         i++
       }
       cpt++
