@@ -24,7 +24,7 @@ export const dateDePublication = '21/06/2022' // La date de publication initiale
 export const uuid = '0e984'
 
 export const refs = {
-  'fr-fr': ['can1D03', '1Tec-D101'],
+  'fr-fr': ['can1D03', '1Tec-D11'],
   'fr-ch': ['NR'],
 }
 export default class LectureGraphiqueNombreDerivee extends ExerciceSimple {

@@ -22,7 +22,7 @@ export const dateDePublication = '20/06/2022'
 export const uuid = 'a1ba2'
 
 export const refs = {
-  'fr-fr': ['can1D02', '1Tec-D203'],
+  'fr-fr': ['can1D02', ],
   'fr-ch': [],
 }
 export default class NombreDerivee extends ExerciceSimple {

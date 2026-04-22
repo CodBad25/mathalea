@@ -2,7 +2,11 @@ import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { Polynome } from '../../lib/mathFonctions/Polynome'
-import { combinaisonListes } from '../../lib/outils/arrayOutils'
+import {
+  combinaisonListes,
+  enleveElement,
+  remplaceDansTableau,
+} from '../../lib/outils/arrayOutils'
 import {
   ecritureAlgebrique,
   ecritureParentheseSiNegatif,
@@ -38,8 +42,11 @@ export const refs = {
   'fr-ch': [],
 }
 export default class Equationdetangente extends Exercice {
+  version: string
+
   constructor() {
     super()
+    this.version = '1e' // Version par défaut
     this.besoinFormulaireTexte = [
       'Type de questions',
       [
@@ -69,10 +76,22 @@ export default class Equationdetangente extends Exercice {
       defaut: 5,
       nbQuestions: this.nbQuestions,
     })
-    const listeTypeQuestions = combinaisonListes(
+    let listeTypeQuestions = combinaisonListes(
       typesDeQuestionsDisponibles,
       this.nbQuestions,
     ) // Tous les types de questions sont posés mais l'ordre diffère à chaque "cycle"
+    if (this.version === '1Tec') {
+      enleveElement(listeTypeQuestions, 3) // Enlève la question 1
+      enleveElement(listeTypeQuestions, 4) // Enlève la question 4
+      listeTypeQuestions = remplaceDansTableau(listeTypeQuestions, 2, 3)
+      listeTypeQuestions = remplaceDansTableau(listeTypeQuestions, 1, 2)
+
+      if (listeTypeQuestions.length === 0) listeTypeQuestions = [2,3]
+      listeTypeQuestions = combinaisonListes(
+        listeTypeQuestions,
+        this.nbQuestions,
+      )
+    }
 
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
       let texte = ''
@@ -154,7 +173,7 @@ export default class Equationdetangente extends Exercice {
           $f'(${d})=${2 * a}\\times${ecritureParentheseSiNegatif(d)}${b === 0 ? `` : `${ecritureAlgebrique(b)}`}=${deriveeEnD}$<br><br>
           $\\bullet$ Calcul de $f(${d})$ :<br>
           $f(${d})=${valeurEnD}$<br><br>
-      
+
           Le coefficient directeur de la tangente est le nombre dérivé. <br>
           Ainsi, $m=f'(${d})=${deriveeEnD}$.<br><br>
           On obtient alors $(T) : y=${deriveeEnD}x+p$.<br><br>
@@ -223,7 +242,7 @@ export default class Equationdetangente extends Exercice {
           $f'(${e})=${calculFPrimaE}=${deriveeEnE}$<br><br>
           $\\bullet$ Calcul de $f(${e})$ :<br>
           $f(${e})=${calculFE}=${imageE}$<br><br>
-        
+
           Le coefficient directeur de la tangente est le nombre dérivé.<br>
           Ainsi, $m=f'(${e})=${deriveeEnE}$.<br><br>
           On obtient alors $(T) : y=${deriveeEnE}x+p$.<br><br>

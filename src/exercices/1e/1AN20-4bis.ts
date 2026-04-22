@@ -14,7 +14,7 @@ export const dateDeModifImportante = '08/06/2025'
 export const interactifReady = false
 export const uuid = '73d34'
 export const refs = {
-  'fr-fr': ['1AN20-4bis'],
+  'fr-fr': ['1AN20-4bis', '1Tec-D25'],
   // 'fr-ch': ['3mA3-1'] // TODO
 }
 

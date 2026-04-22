@@ -28,7 +28,7 @@ export const amcType = 'AMCNum'
 export const uuid = '0f776'
 
 export const refs = {
-  'fr-fr': ['can1P08'],
+  'fr-fr': ['can1P08', '1Tec-P42'],
   'fr-ch': ['4mProbStat-7'],
 }
 export default class ProbaLoiVA extends Exercice {

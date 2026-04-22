@@ -18,7 +18,7 @@ export const dateDeModifImportante = '08/10/2025'
 export const uuid = 'ad915'
 
 export const refs = {
-  'fr-fr': ['can1D25'],
+  'fr-fr': ['can1D25', '1Tec-D23'],
   'fr-ch': [],
 }
 // une liste de nœuds pour définir une fonction Spline
@@ -146,7 +146,12 @@ export default class SignesTabGSpline extends Exercice {
       const courbe1 = maSpline.courbe({
         epaisseur: 1.5,
         ajouteNoeuds: true,
-        optionsNoeuds: { color: bleuMathalea, taille: 2, style: 'x', epaisseur: 2 },
+        optionsNoeuds: {
+          color: bleuMathalea,
+          taille: 2,
+          style: 'x',
+          epaisseur: 2,
+        },
         color: bleuMathalea,
       })
       const objetsEnonce = [repere1, courbe1]
