@@ -22,7 +22,7 @@ export function maxDesPoints(listePoints: number[]) {
   return [Math.max(...listePoints), 1] as [number, number]
 }
 // C'est la même chose que toutPourUnPoint, mais c'est moins ambigu avec ce nom.
-export function pointsSiToutJuste(listePoints: number[]) {
+export function pointSiToutJuste(listePoints: number[]) {
   return toutPourUnPoint(listePoints)
 }
 // Une erreur emporte tout... Pas très pédagogique !
