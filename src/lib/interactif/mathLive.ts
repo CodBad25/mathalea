@@ -1,18 +1,8 @@
 import type { MathfieldElement } from 'mathlive'
 import type { IExercice } from '../../lib/types'
 import { fonctionComparaison } from './comparisonFunctions'
-
-// Un barème qui ne met qu'un point si tout est juste
-export function toutPourUnPoint(listePoints: number[]): [number, number] {
-  return [Math.min(...listePoints), 1]
-}
-// le barème par défaut un point pour chaque réponse
-export function toutAUnPoint(listePoints: number[]) {
-  return [
-    listePoints.reduce((prev, current) => prev + current),
-    listePoints.length,
-  ] as [number, number]
-}
+import { toutPourUnPoint } from './fonctionsBaremes'
+export { toutAUnPoint, toutPourUnPoint } from './fonctionsBaremes'
 
 /**
  * fonction générale de vérification qui utilise le contenu de exercice.autoCorrection pour comparer la saisie utilisateur avec la réponse attendue
