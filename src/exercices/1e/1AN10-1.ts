@@ -3,7 +3,12 @@ import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { toutAUnPoint } from '../../lib/interactif/mathLive'
 import { addMultiMathfield } from '../../lib/interactif/MultiMathfield/MultiMathfield'
-import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
+import {
+  choice,
+  combinaisonListes,
+  enleveElement,
+  remplaceDansTableau,
+} from '../../lib/outils/arrayOutils'
 import {
   ecritureAlgebrique,
   ecritureAlgebriqueSauf1,
@@ -41,8 +46,11 @@ export const refs = {
 }
 
 export default class Tauxvariation extends Exercice {
+  version: string
+
   constructor() {
     super()
+    this.version = '1e'
     this.correctionDetaillee = false
     this.correctionDetailleeDisponible = true
     this.spacingCorr = 1.5
@@ -64,7 +72,7 @@ export default class Tauxvariation extends Exercice {
 
     this.nbQuestions = 1 // Nombre de questions par défaut
 
-    this.sup = '9'
+    this.sup = '5'
   }
 
   nouvelleVersion() {
@@ -76,11 +84,24 @@ export default class Tauxvariation extends Exercice {
       defaut: 9,
       nbQuestions: this.nbQuestions,
     })
-    const listeTypeQuestions = combinaisonListes(
+    let listeTypeQuestions = combinaisonListes(
       typesDeQuestionsDisponibles,
       this.nbQuestions,
     ) // Tous les types de questions sont posés mais l'ordre diffère à chaque "cycle"
+    if (this.version === '1Tec') {
+      enleveElement(listeTypeQuestions, 5) // Enlève la question 3
+      enleveElement(listeTypeQuestions, 6) // Enlève la question 4
+      enleveElement(listeTypeQuestions, 7) // Enlève la question 7
+      enleveElement(listeTypeQuestions, 8) // Enlève la question 8
+      listeTypeQuestions = remplaceDansTableau(listeTypeQuestions, 3, 5)
+      listeTypeQuestions = remplaceDansTableau(listeTypeQuestions, 4, 6)
 
+      if (listeTypeQuestions.length === 0) listeTypeQuestions = [1, 2, 5, 6]
+      listeTypeQuestions = combinaisonListes(
+        listeTypeQuestions,
+        this.nbQuestions,
+      )
+    }
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
       // Boucle principale où i+1 correspond au numéro de la question
       let a: number, b: number, c: number, m: number, p: number

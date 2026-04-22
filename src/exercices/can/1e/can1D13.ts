@@ -21,7 +21,7 @@ export const dateDePublication = '21/06/2022'
 export const uuid = 'ffbf6'
 
 export const refs = {
-  'fr-fr': ['can1D13', '1Tec-D202'],
+  'fr-fr': ['can1D13', '1Tec-D22'],
   'fr-ch': ['3mA2-7'],
 }
 export default class DeriveePoly3 extends ExerciceSimple {
