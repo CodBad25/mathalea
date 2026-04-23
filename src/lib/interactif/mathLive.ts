@@ -431,6 +431,8 @@ export function addSmiley(
   mf: MathfieldElement | HTMLInputElement,
   isCorrect: boolean,
 ) {
+  const feedbackChar = isCorrect ? '😎' : '☹️'
+
   if (mf instanceof HTMLInputElement) {
     // pour les champs de texte classiques, on ajoute le smiley à côté du champ
     let spanSmiley = document.querySelector(
@@ -442,9 +444,10 @@ export function addSmiley(
       spanSmiley.style.fontSize = 'large'
       mf.parentNode?.insertBefore(spanSmiley, mf.nextSibling)
     }
-    spanSmiley.textContent = isCorrect ? '😎' : '☹️'
+    spanSmiley.textContent = feedbackChar
     return
   }
+
   let spanSmiley = mf.shadowRoot?.querySelector(
     '.feedback-smiley',
   ) as HTMLSpanElement
@@ -466,7 +469,7 @@ export function addSmiley(
       }
     }
   }
-  spanSmiley.textContent = isCorrect ? '😎' : '☹️'
+  spanSmiley.textContent = feedbackChar
   mf.style.border = 'none'
 }
 
