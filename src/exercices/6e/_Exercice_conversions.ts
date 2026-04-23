@@ -225,7 +225,7 @@ export default class ExerciceConversions extends Exercice {
           texTexte(prefixeDiv[k][0] + unite) +
           ' = ' +
           (this.interactif && context.isHtml
-            ? `$ ${ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers, { texteApres: ' $' + texTexte(unite) + '$' })}`
+            ? `$ ${ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers, { texteApres: '$' + texTexte(unite) + '$' })}`
             : ` \\dotfill ${texTexte(unite)}$`)
         texteCorr =
           '$ ' +
@@ -246,7 +246,7 @@ export default class ExerciceConversions extends Exercice {
           texTexte(prefixeDiv[k][0] + unite) +
           ' = ' +
           (this.interactif && context.isHtml
-            ? `$ ${ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers, { texteApres: ' $' + texTexte(unite) + '$' })}`
+            ? `$ ${ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers, { texteApres: '$' + texTexte(unite) + '$' })}`
             : ` \\dotfill ${texTexte(unite)}$`)
         texteCorr =
           '$ ' +
@@ -289,7 +289,7 @@ export default class ExerciceConversions extends Exercice {
             texTexte(listeUniteInfo[unite2]) +
             ' = ' +
             (this.interactif && context.isHtml
-              ? `$ ${ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers, { texteApres: ' $' + texTexte(unite) + '$' })}`
+              ? `$ ${ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers, { texteApres: '$' + texTexte(unite) + '$' })}`
               : ` \\dotfill ${texTexte(unite)}$`)
           texteCorr =
             '$ ' +
@@ -313,7 +313,7 @@ export default class ExerciceConversions extends Exercice {
             texTexte(listeUniteInfo[unite2]) +
             ' = ' +
             (this.interactif && context.isHtml
-              ? `$ ${ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers, { texteApres: ' $' + texTexte(unite) + '$' })}`
+              ? `$ ${ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers, { texteApres: '$' + texTexte(unite) + '$' })}`
               : ` \\dotfill ${texTexte(unite)}$`)
           texteCorr =
             '$ ' +

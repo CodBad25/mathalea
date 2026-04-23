@@ -144,12 +144,11 @@ export function verifQuestionMathLive(
           // On ne nettoie plus les input et les réponses, c'est la fonction de comparaison qui doit s'en charger !
           if (result.isOk) {
             points.push(1)
-            if (spanFeedback != null) spanFeedback.innerHTML = '😎'
           } else {
             points.push(0)
             resultat = 'KO'
-            if (spanFeedback != null) spanFeedback.innerHTML = '☹️'
           }
+          addSmiley(input, result.isOk)
           if (input.value.length > 0 && typeof exercice.answers === 'object') {
             exercice.answers[`Ex${exercice.numeroExercice}Q${i}${key}`] =
               input.value
@@ -296,10 +295,8 @@ export function verifQuestionMathLive(
          */
           exercice.answers[`Ex${exercice.numeroExercice}Q${i}`] = mfe.getValue()
         }
-        if (spanReponseLigne != null) {
-          spanReponseLigne.innerHTML =
-            nbBonnesReponses === nbReponses ? '😎' : '☹️'
-        }
+        addSmiley(mfe, nbBonnesReponses === nbReponses)
+
         // le feedback est déjà assuré par la fonction feedback(), donc on le met à ''
         return {
           isOk: nbBonnesReponses === nbReponses,
@@ -384,8 +381,7 @@ export function verifQuestionMathLive(
         feedback = `${feedback} ${feedback.length > 0 ? '<br>' : ''} ${customFeedback}`
       }
       if (isOk) {
-        spanReponseLigne.innerHTML = '😎'
-        spanReponseLigne.style.fontSize = 'large'
+        addSmiley(champTexte, true)
         champTexte.readOnly = true
         return {
           isOk,
@@ -394,8 +390,7 @@ export function verifQuestionMathLive(
         }
       }
       if (writeResult) {
-        spanReponseLigne.innerHTML = '☹️'
-        spanReponseLigne.style.fontSize = 'large'
+        addSmiley(champTexte, false)
         champTexte.readOnly = true
         return {
           isOk,
@@ -431,6 +426,46 @@ export function verifQuestionMathLive(
       score: { nbBonnesReponses: 0, nbReponses: 1 },
     }
   }
+}
+export function addSmiley(
+  mf: MathfieldElement | HTMLInputElement,
+  isCorrect: boolean,
+) {
+  if (mf instanceof HTMLInputElement) {
+    // pour les champs de texte classiques, on ajoute le smiley à côté du champ
+    let spanSmiley = document.querySelector(
+      `#resultatCheckEx${mf.dataset.exercice}Q${mf.dataset.question}`,
+    ) as HTMLSpanElement
+    if (!spanSmiley) {
+      spanSmiley = document.createElement('span')
+      spanSmiley.style.marginRight = '0.3em'
+      spanSmiley.style.fontSize = 'large'
+      mf.parentNode?.insertBefore(spanSmiley, mf.nextSibling)
+    }
+    spanSmiley.textContent = isCorrect ? '😎' : '☹️'
+    return
+  }
+  let spanSmiley = mf.shadowRoot?.querySelector(
+    '.feedback-smiley',
+  ) as HTMLSpanElement
+  if (!spanSmiley) {
+    spanSmiley = document.createElement('span')
+    spanSmiley.style.display = 'inline-block'
+    spanSmiley.style.marginLeft = '0.3em'
+    spanSmiley.className = 'feedback-smiley'
+    spanSmiley.style.fontSize = 'large'
+    const spanContainer = mf.shadowRoot?.querySelector('.ML__container')
+    if (spanContainer) {
+      spanContainer.parentNode?.appendChild(spanSmiley)
+    } else {
+      const spanContent = mf.shadowRoot?.querySelector('span.ML__content')
+      if (spanContent) {
+        spanContent.parentNode?.appendChild(spanSmiley)
+      }
+    }
+  }
+  spanSmiley.textContent = isCorrect ? '😎' : '☹️'
+  mf.style.border = 'none'
 }
 
 // # sourceMappingURL=mathLive.js.map

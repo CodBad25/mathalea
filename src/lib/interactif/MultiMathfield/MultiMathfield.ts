@@ -5,6 +5,8 @@ import { context } from '../../../modules/context'
 import { bleuMathalea } from '../../colors'
 import type { IExercice, ValeurNames } from '../../types'
 import { buildDataKeyboardFromStyle, KeyboardType } from '../claviers/keyboard'
+// Cet import enregistre le custom element <math-input> s'il ne l'est pas encore
+import '../../MathInput'
 import { setMathfield, setMathfieldListener } from './setMathfield'
 
 function stylizeItems(text: string, output: 'html' | 'latex' = 'html'): string {
@@ -196,37 +198,36 @@ export class MultiMathfieldElement extends HTMLElement {
         div.style.paddingBottom = '0'
         div.style.paddingLeft = '0'
         div.style.paddingRight = '0'
-        const mathfield = new MathfieldElement()
-
-        mathfield.classList.add('ml-1')
+        // Création du MathInput encapsulant un MathfieldElement
+        const mathInput = document.createElement('math-input')
+        mathInput.setAttribute('data-type', 'mathlive')
+        const mathfieldId = (this.id ? this.id : 'multi-mathfield') + '-' + name
+        mathInput.setAttribute('data-id', mathfieldId)
+        mathInput.setAttribute('data-name', name)
         if (options[name]) {
+          if (options[name].texteApres) {
+            mathInput.setAttribute('data-texte-apres', options[name].texteApres)
+          }
           const style = options[name].keyboard ? options[name].keyboard : ''
           const placeHolder = options[name].placeholder
             ? options[name].placeholder
             : ''
           const maxWidth = options[name].maxWidth ? options[name].maxWidth : 100
-          mathfield.style.maxWidth = `${maxWidth}px`
+          mathInput.setAttribute('data-max-width', String(maxWidth))
           const minWidth = options[name].minWidth ? options[name].minWidth : 30
-          mathfield.style.minWidth = `${minWidth}px`
+          mathInput.setAttribute('data-min-width', String(minWidth))
           const dataKeyboard = buildDataKeyboardString(
             typeof style === 'string' ? style : '',
           )
-          mathfield.setAttribute('data-keyboard', dataKeyboard)
+          if (dataKeyboard)
+            mathInput.setAttribute('data-keyboard', dataKeyboard)
           if (placeHolder !== '') {
-            mathfield.setAttribute('placeholder', placeHolder)
+            mathInput.setAttribute('placeholder', placeHolder)
           }
         }
-        // On donne comme id la concaténation de l'id du MultiMathfield (this.id) et du name du champ pour être sûr d'avoir un id unique
-        mathfield.id = (this.id ? this.id : 'multi-mathfield') + '-' + name
-        mathfield.setAttribute('data-name', name)
-        mathfield.style.border = 'none'
-
-        // mathfield.style.verticalAlign = 'middle'
-        // mathfield.style.boxShadow =
-        //   'inset 2px 2px 6px #ccc, inset -2px -2px 6px #fff'
 
         // Ajout gestionnaire TAB pour navigation globale entre tous les mathfields du DOM (y compris dans les shadowRoots)
-        mathfield.addEventListener('keydown', (e) => {
+        mathInput.addEventListener('keydown', (e) => {
           if (e.key === 'Tab') {
             e.preventDefault()
             // Fonction utilitaire pour collecter tous les mathfields du DOM et des shadowRoots
@@ -267,31 +268,11 @@ export class MultiMathfieldElement extends HTMLElement {
             }
           }
         })
-        div.appendChild(mathfield)
-        let texteApres: HTMLElement | null = null
-        if (options[name] && options[name].texteApres) {
-          texteApres = document.createElement('span')
-          texteApres.style.marginLeft = '0'
-          texteApres.textContent = options[name].texteApres // On met le LaTeX brut dans le span, renderMathInElement va le transformer
-        }
-
-        // Ajoute un span de vérification après chaque Mathfield
-
-        const checkSpan = document.createElement('span')
-        checkSpan.id = 'check-' + mathfield.id
+        div.appendChild(mathInput)
         currentSpan.appendChild(div)
-        if (texteApres) {
-          currentSpan.appendChild(texteApres)
-        }
-        currentSpan.appendChild(checkSpan)
 
-        if (mathfield.isConnected) {
-          setMathfield(mathfield)
-        } else {
-          mathfield.addEventListener('mount', setMathfieldListener, {
-            once: true,
-          })
-        }
+        // L'initialisation du MathfieldElement encapsulé est faite après
+        // l'insertion dans le DOM (voir après replaceChildren ci-dessous).
       } else if (token.startsWith('$')) {
         const span = document.createElement('span')
         span.textContent = token // On met le LaTeX brut dans le span, renderMathInElement va le transformer
@@ -315,6 +296,21 @@ export class MultiMathfieldElement extends HTMLElement {
 
     // On ne remplace que le contenu, les styles du shadowRoot restent en place.
     this.contentHost.replaceChildren(container)
+
+    // Après insertion dans le DOM, les MathInput ont créé leurs MathfieldElement internes.
+    // On les initialise ici : si déjà monté, on appelle setMathfield directement,
+    // sinon on attend l'événement 'mount' du MathfieldElement interne.
+    this.contentHost
+      .querySelectorAll('math-input[data-type="mathlive"]')
+      .forEach((mi) => {
+        const mf = mi.querySelector('math-field') as MathfieldElement | null
+        if (!mf) return
+        if (mf.isConnected) {
+          setMathfield(mf)
+        } else {
+          mf.addEventListener('mount', setMathfieldListener, { once: true })
+        }
+      })
   }
 
   getValue() {

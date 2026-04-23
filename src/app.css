@@ -308,7 +308,6 @@ math-field.fillInTheBlanks::part(prompt) {
   min-height: 1em;
   height: auto;
   padding: 2px;
-  margin: 0;
   border: none;
   outline: solid;
   outline-width: thin;
@@ -341,6 +340,10 @@ math-field.tableauMathlive::part(container) {
 }
 math-field.tableauMathlive::part(content) {
   justify-content: center !important;
+}
+
+span.feedback-smiley {
+  padding-right: 1em;
 }
 
 @media print {
