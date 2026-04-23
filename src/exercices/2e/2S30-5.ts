@@ -844,11 +844,6 @@ export default class FonctionsProbabilite2 extends Exercice {
                 { formatInteractif: 'multiMathfield' },
               )
             }
-            if (this.interactif) {
-              console.log(this.autoCorrection[i].reponse?.valeur?.champ4?.value)
-              console.log(ciblesPourQuidameGagne)
-              console.log(JSON.stringify(probaDiffs))
-            }
           }
           break
       }
