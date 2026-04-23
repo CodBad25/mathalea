@@ -123,6 +123,7 @@ export class MathInput extends HTMLElement {
 
     if (type === 'mathlive') {
       const mf = document.createElement('math-field') as MathfieldElement
+      mf.classList.add('ml-1')
       mf.id = id
       if (this.hasAttribute('placeholder'))
         mf.setAttribute('placeholder', this.getAttribute('placeholder')!)

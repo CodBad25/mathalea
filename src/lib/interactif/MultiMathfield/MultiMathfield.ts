@@ -185,21 +185,19 @@ export class MultiMathfieldElement extends HTMLElement {
       } else if (token.startsWith('%{')) {
         // Champ éditable
         const name = token.slice(2, -1)
-        const div = document.createElement('DIV')
-        div.style.display = 'inline-block'
-        div.style.border = '1px solid #ccc'
-        div.style.borderRadius = '4px'
-        div.classList.add('ml-1')
-        div.style.marginLeft = '2px'
-        div.style.marginRight = '2px'
-        div.style.marginTop = '0'
-        div.style.marginBottom = '0'
-        div.style.paddingTop = '0'
-        div.style.paddingBottom = '0'
-        div.style.paddingLeft = '0'
-        div.style.paddingRight = '0'
         // Création du MathInput encapsulant un MathfieldElement
         const mathInput = document.createElement('math-input')
+        mathInput.style.display = 'inline-block'
+        mathInput.style.border = '1px solid #ACACAC'
+        mathInput.style.borderRadius = '4px'
+        mathInput.style.marginLeft = '2px'
+        mathInput.style.marginRight = '2px'
+        mathInput.style.marginTop = '0'
+        mathInput.style.marginBottom = '0'
+        mathInput.style.paddingTop = '0'
+        mathInput.style.paddingBottom = '0'
+        mathInput.style.paddingLeft = '0'
+        mathInput.style.paddingRight = '0'
         mathInput.setAttribute('data-type', 'mathlive')
         const mathfieldId = (this.id ? this.id : 'multi-mathfield') + '-' + name
         mathInput.setAttribute('data-id', mathfieldId)
@@ -268,8 +266,7 @@ export class MultiMathfieldElement extends HTMLElement {
             }
           }
         })
-        div.appendChild(mathInput)
-        currentSpan.appendChild(div)
+        currentSpan.appendChild(mathInput)
 
         // L'initialisation du MathfieldElement encapsulé est faite après
         // l'insertion dans le DOM (voir après replaceChildren ci-dessous).
