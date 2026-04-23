@@ -90,6 +90,9 @@ export class MultiMathfieldElement extends HTMLElement {
       math-field {
         text-align: center;
       }
+      math-field:not(.fillInTheBlanks):not(.metaInteractif2d) {
+        border-radius: 4px;
+      }
       math-field::part(content) {
         justify-content: start;
       }
@@ -157,9 +160,19 @@ export class MultiMathfieldElement extends HTMLElement {
     const regex = /(\$[^$]+\$|%\{[^}]+\}|\n)/g
     let lastIndex = 0
     let match
+    const computedStyle = getComputedStyle(this)
+    const computedLineHeight = parseFloat(computedStyle.lineHeight)
+    const computedFontSize = parseFloat(computedStyle.fontSize)
+    const spacingFactor =
+      Number.isFinite(computedLineHeight) &&
+      Number.isFinite(computedFontSize) &&
+      computedFontSize > 0
+        ? computedLineHeight / computedFontSize
+        : 1
+    const lineMarginBottom = `${4 * spacingFactor}px`
     // On commence avec un span courant
     let currentSpan = document.createElement('span')
-    currentSpan.style.display = 'inline-block'
+    currentSpan.style.display = 'block'
     const container = document.createElement('span')
     container.style.display = 'inline-block'
     while ((match = regex.exec(template)) !== null) {
@@ -175,21 +188,19 @@ export class MultiMathfieldElement extends HTMLElement {
       }
       const token = match[0]
       if (token === '\n') {
-        // On ferme le span courant, ajoute <br>, puis nouveau span
+        // On ferme la ligne courante puis on démarre une nouvelle ligne.
         if (currentSpan.childNodes.length > 0) {
+          currentSpan.style.marginBottom = lineMarginBottom
           container.appendChild(currentSpan)
         }
-        container.appendChild(document.createElement('br'))
         currentSpan = document.createElement('span')
-        currentSpan.style.display = 'inline-block'
+        currentSpan.style.display = 'block'
       } else if (token.startsWith('%{')) {
         // Champ éditable
         const name = token.slice(2, -1)
         // Création du MathInput encapsulant un MathfieldElement
         const mathInput = document.createElement('math-input')
         mathInput.style.display = 'inline-block'
-        mathInput.style.border = '1px solid #ACACAC'
-        mathInput.style.borderRadius = '4px'
         mathInput.style.marginLeft = '2px'
         mathInput.style.marginRight = '2px'
         mathInput.style.marginTop = '0'

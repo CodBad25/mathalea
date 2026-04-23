@@ -38,7 +38,7 @@ export const refs = {
 export default class convertirAiresVersion2025 extends Exercice {
   constructor() {
     super()
-
+    this.spacing = 2
     this.nbQuestions = 4
     this.besoinFormulaireTexte = [
       'Type de conversions',
