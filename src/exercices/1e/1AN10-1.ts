@@ -478,23 +478,26 @@ $\\lim\\limits_{h \\rightarrow 0} \\dfrac{${coefNumOppose}}{(h${ecritureAlgebriq
           }
           break
       }
-      texte += addMultiMathfield(this, i, {
-        dataTemplate: `$t(h)=$ %{champ1} $f'(${a})=$ %{champ2}`,
-        dataOptions: {
-          champ1: { keyboard: KeyboardType.lycee, minWidth: 100 },
-          champ2: { keyboard: KeyboardType.lycee },
-        },
-      })
-      handleAnswers(
-        this,
-        i,
-        {
-          bareme: toutAUnPoint,
-          champ1: { value: reponse1, options: { calculFormel: true } },
-          champ2: { value: reponse2 },
-        },
-        { formatInteractif: 'multiMathfield' },
-      )
+      if (this.interactif) {
+        texte += addMultiMathfield(this, i, {
+          dataTemplate: `$t(h)=$ %{champ1} $f'(${a})=$ %{champ2}`,
+          dataOptions: {
+            champ1: { keyboard: KeyboardType.lycee, minWidth: 100 },
+            champ2: { keyboard: KeyboardType.lycee },
+          },
+        })
+        handleAnswers(
+          this,
+          i,
+          {
+            bareme: toutAUnPoint,
+            champ1: { value: reponse1, options: { calculFormel: true } },
+            champ2: { value: reponse2 },
+          },
+          { formatInteractif: 'multiMathfield' },
+        )
+      }
+
       if (this.questionJamaisPosee(i, typeDeQuestion, a)) {
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr
