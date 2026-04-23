@@ -223,7 +223,7 @@ export class MultiMathfieldElement extends HTMLElement {
             : ''
           const maxWidth = options[name].maxWidth ? options[name].maxWidth : 100
           mathInput.setAttribute('data-max-width', String(maxWidth))
-          const minWidth = options[name].minWidth ? options[name].minWidth : 30
+          const minWidth = options[name].minWidth ? options[name].minWidth : 50
           mathInput.setAttribute('data-min-width', String(minWidth))
           const dataKeyboard = buildDataKeyboardString(
             typeof style === 'string' ? style : '',

@@ -290,7 +290,7 @@ math-field:not(.fillInTheBlanks):not(.metaInteractif2d) {
   padding-left: 5px;
   padding-right: 5px;
   border-radius: 4px;
-  min-width: 80px;
+  min-width: 50px;
   @apply border border-[#ACACAC];
 }
 math-field.fillInTheBlanks {
