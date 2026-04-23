@@ -37,7 +37,7 @@ export const interactifType = 'cliqueFigure'
 
 export default class ExpressionAParabole extends Exercice {
   // Type d'expressions fournie par le menu
-  private typePolynome = {
+  public typePolynome = {
     monome: 1,
     monomeEtConstante: 2,
     deuxRacines: 3,
@@ -51,37 +51,36 @@ export default class ExpressionAParabole extends Exercice {
 
   constructor() {
     super()
-    this.nbQuestionsModifiable = true
     this.nbQuestions = 1
-    this.besoinFormulaireCaseACocher = false
-    this.besoinFormulaire2CaseACocher = false
-    this.besoinFormulaire4CaseACocher = false
-    this.besoinFormulaire3Texte = [
+    this.besoinFormulaireTexte = [
       "Types d'expression",
       `Nombres séparés par des tirets\n1 : $ax^2$\n2 : $ax^2 + c$\n3 : $a(x-r_1)(x-r_2)$\n4 : Mélange`,
     ]
-    this.sup3 = 4
+    this.sup = 4
   }
 
   nouvelleVersion() {
     this.figures = []
 
+    // Gestion du choix du type d'expression
+    const expressionsPossibles = gestionnaireFormulaireTexte({
+      saisie: this.sup,
+      min: 1,
+      max: 3,
+      defaut: 1,
+      melange: 4,
+      nbQuestions: this.nbQuestions,
+    })
+
     for (
       let i = 0, texte, texteCorr, cpt = 0;
       i < this.nbQuestions && cpt < 50;
     ) {
-      // Gestion du choix du type d'expression
-      const expressionsPossibles = gestionnaireFormulaireTexte({
-        saisie: this.sup3,
-        min: 1,
-        max: 3,
-        defaut: 1,
-        melange: 4,
-        nbQuestions: 0,
-      })
-      const choixExpression = choice(expressionsPossibles)
+      const choixExpression = expressionsPossibles[i]
       // Coef dominant
-      const coefDominant = new Decimal(randint(-12, 12, [0])).div(10).toNumber()
+      const coefDominant = new Decimal(randint(-12, 12, [0, 1, 2]))
+        .div(10)
+        .toNumber()
       const coefDominantTexte = texNombre(coefDominant)
       const finId = `Ex${this.numeroExercice}Q${i}`
       const id0 = `cliquefigure0` + finId
@@ -90,6 +89,7 @@ export default class ExpressionAParabole extends Exercice {
       const id3 = `cliquefigure3` + finId
       let expressionLatex = ''
       let grapheCorrect = ''
+      let graphePourCorrection = ''
       let grapheErr2 = ''
       let grapheErr3 = ''
       texteCorr = ''
@@ -105,10 +105,12 @@ export default class ExpressionAParabole extends Exercice {
         case this.typePolynome.monome: {
           polynome = new Polynome({ coeffs: [0, 0, coefDominant] })
           expressionLatex = polynome.toLatex()
+          const fenetre = this.reglerFenetrePoly2(coefDominant, 0, 0)
           grapheCorrect = this.genererGraphique(
-            polynome.fonction,
-            this.reglerFenetrePoly2(coefDominant, 0, 0),
-            id0,
+            Object.assign({ fonction: polynome.fonction, id: id0 }, fenetre),
+          )
+          graphePourCorrection = this.genererGraphique(
+            Object.assign({ fonction: polynome.fonction }, fenetre),
           )
           // Gestion du graphe erroné 2 : signe du coefficient dominant mal interprété
           const erreur2 = this.erreurCoefDominantOpposé({
@@ -137,7 +139,8 @@ export default class ExpressionAParabole extends Exercice {
             minMax = texteGras('maximum')
           }
           texteCorr += `Le coefficient dominant est ${signeCoef} : $${miseEnEvidence(coefDominantTexte)}$. Les branches de la parabole sont donc orientées vers le ${orientation}.<br>`
-          texteCorr += `Le ${minMax} de $f$ est atteint en $0$ et vaut $${miseEnEvidence(0)}$.`
+          texteCorr += `Le ${minMax} de $f$ est atteint en $0$ et vaut $${miseEnEvidence(0)}$.<br>`
+          texteCorr += `La bonne représentation graphique est :<br>${graphePourCorrection}`
           break
         }
         // Cas /ax²+c
@@ -147,10 +150,12 @@ export default class ExpressionAParabole extends Exercice {
             coeffs: [coefConstant, 0, coefDominant],
           })
           expressionLatex = polynome.toLatex()
+          const fenetre = this.reglerFenetrePoly2(coefDominant, 0, coefConstant)
           grapheCorrect = this.genererGraphique(
-            polynome.fonction,
-            this.reglerFenetrePoly2(coefDominant, 0, coefConstant),
-            id0,
+            Object.assign({ fonction: polynome.fonction, id: id0 }, fenetre),
+          )
+          graphePourCorrection = this.genererGraphique(
+            Object.assign({ fonction: polynome.fonction }, fenetre),
           )
           // Gestion du graphe erroné 2 : signe du coefficient dominant mal interprété
           const erreur2 = this.erreurCoefDominantOpposé({
@@ -180,7 +185,8 @@ export default class ExpressionAParabole extends Exercice {
             minMax = texteGras('maximum')
           }
           texteCorr += `Le coefficient dominant est ${signeCoef} : $${miseEnEvidence(coefDominantTexte)}$. Les branches de la parabole sont donc orientées vers le ${orientation}.<br>`
-          texteCorr += `Le ${minMax} de $f$ est atteint en $0$ et vaut $${miseEnEvidence(coefConstant)}$.`
+          texteCorr += `Le ${minMax} de $f$ est atteint en $0$ et vaut $${miseEnEvidence(coefConstant)}$.<br>`
+          texteCorr += `La bonne représentation graphique est :<br>${graphePourCorrection}`
           break
         }
         // Cas a(x-r_1)(r-r_2)
@@ -200,10 +206,16 @@ export default class ExpressionAParabole extends Exercice {
           // Graphe
           const absSommet = new Decimal(racine1 + racine2).div(2).toNumber()
           const extremum = polynome.fonction(absSommet)
+          const fenetre = this.reglerFenetrePoly2(
+            coefDominant,
+            absSommet,
+            extremum,
+          )
           grapheCorrect = this.genererGraphique(
-            polynome.fonction,
-            this.reglerFenetrePoly2(coefDominant, absSommet, extremum),
-            id0,
+            Object.assign({ fonction: polynome.fonction, id: id0 }, fenetre),
+          )
+          graphePourCorrection = this.genererGraphique(
+            Object.assign({ fonction: polynome.fonction }, fenetre),
           )
           // Gestion du graphe erroné 2 : signe du coefficient dominant mal interprété
           const erreur2 = this.erreurCoefDominantOpposé({
@@ -235,12 +247,13 @@ export default class ExpressionAParabole extends Exercice {
           texteCorr +=
             racine1 === racine2
               ? `Le polynôme admet une racine double : $${miseEnEvidence(racine1)}$. La parabole passe donc par le point $(${texNombre(racine1)};0)$.`
-              : `Le polynôme possède deux racines distinctes : $${miseEnEvidence(racine1)}$ et $${miseEnEvidence(racine2)}$. La parabole passe donc par les points $(${texNombre(racine1)};0)$ et $(${texNombre(racine2)};0)$.`
+              : `Le polynôme possède deux racines distinctes : $${miseEnEvidence(racine1)}$ et $${miseEnEvidence(racine2)}$. La parabole passe donc par les points $(${texNombre(racine1)};0)$ et $(${texNombre(racine2)};0)$.<br>`
+          texteCorr += `La bonne représentation graphique est :<br>${graphePourCorrection}`
           break
         }
       }
 
-      texte = `Choisir la représentation graphique de la fonction $f$ définie sur $\\mathbb{R}$
+      texte = `${this.interactif ? 'Cliquer sur' : 'Choisir'} la représentation graphique de la fonction $f$ définie sur $\\mathbb{R}$
     par $f(x) = ${expressionLatex}$.<br>`
       const graphes = [grapheCorrect, grapheErr1, grapheErr2, grapheErr3]
       const ordre = shuffle(range(3))
@@ -272,63 +285,65 @@ export default class ExpressionAParabole extends Exercice {
       cpt++
     }
     listeQuestionsToContenu(this)
-    // this.creerQuestion(choixExpression)
   }
 
   // Renvoie les valeurs xMin, xMax, yMin et yMax pour une fenetre adaptée à une fonction polynôme de degré 2, à partir du coefficient dominant,de l'extremum et de son abscisse
-  private reglerFenetrePoly2(
+  public reglerFenetrePoly2(
     coefDominant: number,
     absSommet: number,
     extremum: number,
-  ): { xMin: number; xMax: number; yMin: number; yMax: number } {
-    let yMin, yMax
+  ): { xmin: number; xmax: number; ymin: number; ymax: number } {
+    let ymin, ymax
     // Gestion de yMin/Max selon l'orientatin de la parabole, donc selon le signe du coefficient dominant
     if (coefDominant > 0) {
-      yMin = Math.min(extremum - 2, -2)
-      yMax = yMin + 2 * this.amplitude.y
+      ymin = Math.min(extremum - 2, -2)
+      ymax = ymin + 2 * this.amplitude.y
     } else {
-      yMax = Math.max(extremum + 2, 2)
-      yMin = yMax - 2 * this.amplitude.y
+      ymax = Math.max(extremum + 2, 2)
+      ymin = ymax - 2 * this.amplitude.y
     }
     return {
-      xMin: absSommet - this.amplitude.x,
-      xMax: absSommet + this.amplitude.x,
-      yMin,
-      yMax,
+      xmin: absSommet - this.amplitude.x,
+      xmax: absSommet + this.amplitude.x,
+      ymin,
+      ymax,
     }
   }
 
   // Génère un graphique pour la fonction fournie et avec la fenêtre donnée
-  private genererGraphique(
-    fonction: (x: number) => number,
-    fenetre: {
-      xMin?: number
-      xMax?: number
-      yMin?: number
-      yMax?: number
-    },
-    id?: string,
-  ): string {
-    const {
-      xMin = -this.amplitude.x,
-      xMax = this.amplitude.x,
-      yMin = -this.amplitude.y,
-      yMax = this.amplitude.y,
-    } = fenetre
+  public genererGraphique({
+    fonction,
+    xmin = -this.amplitude.x,
+    xmax = this.amplitude.x,
+    ymin = -this.amplitude.y,
+    ymax = this.amplitude.y,
+    id,
+    pixelsParCm,
+  }: {
+    fonction: (x: number) => number
+    xmin?: number
+    xmax?: number
+    ymin?: number
+    ymax?: number
+    id?: string
+    pixelsParCm?: number
+  }): string {
     const rapportY = 2
     const optionsFenetre = {
-      xmin: xMin * 1.1,
-      xmax: xMax * 1.1,
-      ymin: new Decimal(yMin).div(rapportY).toNumber(),
-      ymax: new Decimal(yMax).div(rapportY).toNumber(),
+      xmin: xmin * 1.1,
+      xmax: xmax * 1.1,
+      ymin: new Decimal(ymin).div(rapportY).toNumber(),
+      ymax: new Decimal(ymax).div(rapportY).toNumber(),
       style: 'display: inline-block',
     }
     if (id !== undefined) Object.assign(optionsFenetre, { id })
+    if (pixelsParCm !== undefined)
+      Object.assign(optionsFenetre, { pixelsParCm })
     const r1 = repere({
-      xMin,
-      yMin,
-      yMax,
-      xMax,
+      xMin: xmin,
+      yMin: ymin,
+      yMax: ymax,
+      xMax: xmax,
       xUnite: 1,
       yUnite: new Decimal(1).div(rapportY).toNumber(),
       yThickDistance: rapportY,
@@ -346,7 +361,7 @@ export default class ExpressionAParabole extends Exercice {
   }
 
   // Gère le cas particulier de l'expression Latex avec deux racines
-  private gererExpressionDeuxRacines(
+  public gererExpressionDeuxRacines(
     coefDominant: number,
     racine1: number,
     racine2: number,
@@ -389,11 +404,12 @@ export default class ExpressionAParabole extends Exercice {
   public affineOuPoly3({
     avecGraphe = true,
     id,
-  }: { avecGraphe?: boolean; id?: string } = {}): {
-    polynome: Polynome | undefined
+    pixelsParCm,
+  }: { avecGraphe?: boolean; id?: string; pixelsParCm?: number } = {}): {
+    polynome: Polynome
     graphe: string
   } {
-    let polynome
+    let polynome = new Polynome({ coeffs: [0] })
     let graphe = ''
     const typeFonction = choice(['affine', 'deg3'])
     switch (typeFonction) {
@@ -403,14 +419,13 @@ export default class ExpressionAParabole extends Exercice {
         polynome = new Polynome({ coeffs: [coefConstant, coefDominant] })
         const yMin = polynome.fonction(0) - this.amplitude.y
         graphe = avecGraphe
-          ? this.genererGraphique(
-              polynome.fonction,
-              {
-                yMin,
-                yMax: yMin + 2 * this.amplitude.y,
-              },
+          ? this.genererGraphique({
+              fonction: polynome.fonction,
+              ymin: yMin,
+              ymax: yMin + 2 * this.amplitude.y,
               id,
-            )
+              pixelsParCm,
+            })
           : ''
         break
       }
@@ -435,7 +450,11 @@ export default class ExpressionAParabole extends Exercice {
           .toNumber()
         polynome = polynome.multiply(amplitudeMax)
         graphe = avecGraphe
-          ? this.genererGraphique(polynome.fonction, {}, id)
+          ? this.genererGraphique({
+              fonction: polynome.fonction,
+              id,
+              pixelsParCm,
+            })
           : ''
         break
       }
@@ -457,7 +476,7 @@ export default class ExpressionAParabole extends Exercice {
     avecGraphe?: boolean
     id?: string
   }): {
-    polynome: Polynome | undefined
+    polynome: Polynome
     graphe: string
   } {
     let graphe = ''
@@ -473,13 +492,14 @@ export default class ExpressionAParabole extends Exercice {
       )
         coefDominant = coefDominant.toNumber()
       graphe = this.genererGraphique(
-        erreurPolynome.fonction,
-        this.reglerFenetrePoly2(
-          coefDominant,
-          absSommet,
-          erreurPolynome.fonction(absSommet),
+        Object.assign(
+          { fonction: erreurPolynome.fonction, id },
+          this.reglerFenetrePoly2(
+            coefDominant,
+            absSommet,
+            erreurPolynome.fonction(absSommet),
+          ),
         ),
-        id,
       )
     }
     return { polynome: erreurPolynome, graphe }
@@ -496,7 +516,7 @@ export default class ExpressionAParabole extends Exercice {
     decalage: number
     avecGraphe?: boolean
     id?: string
-  }): { polynome: Polynome | undefined; graphe: string } {
+  }): { polynome: Polynome; graphe: string } {
     let graphe = ''
     const coeffs = polynome.monomes.map(function (monome) {
       if (monome instanceof Decimal || monome instanceof FractionEtendue)
@@ -507,9 +527,10 @@ export default class ExpressionAParabole extends Exercice {
     const erreurPolynome = new Polynome({ coeffs, letter: polynome.letter })
     graphe = avecGraphe
       ? this.genererGraphique(
-          erreurPolynome.fonction,
-          this.reglerFenetrePoly2(coeffs[polynome.deg], 0, decalage),
-          id,
+          Object.assign(
+            { fonction: erreurPolynome.fonction, id },
+            this.reglerFenetrePoly2(coeffs[polynome.deg], 0, decalage),
+          ),
         )
       : ''
     return { polynome: erreurPolynome, graphe }
@@ -526,7 +547,7 @@ export default class ExpressionAParabole extends Exercice {
     decalage: number
     avecGraphe?: boolean
     id?: string
-  }): { polynome: Polynome | undefined; graphe: string } {
+  }): { polynome: Polynome; graphe: string } {
     let graphe = ''
     const coeffs = polynome.monomes.map(function (monome) {
       if (monome instanceof Decimal || monome instanceof FractionEtendue)
@@ -534,7 +555,7 @@ export default class ExpressionAParabole extends Exercice {
       return monome
     })
     const coefDominant = coeffs[polynome.deg]
-    let erreurPolynome
+    let erreurPolynome = new Polynome({ coeffs: [0] })
     const typeDecalage = choice(['horizontal', 'vertical'])
     switch (typeDecalage) {
       case 'horizontal': {
@@ -557,13 +578,14 @@ export default class ExpressionAParabole extends Exercice {
         }
         graphe = avecGraphe
           ? this.genererGraphique(
-              erreurPolynome.fonction,
-              this.reglerFenetrePoly2(
-                coefDominant,
-                decalage,
-                erreurPolynome.fonction(decalage),
+              Object.assign(
+                { fonction: erreurPolynome.fonction, id },
+                this.reglerFenetrePoly2(
+                  coefDominant,
+                  decalage,
+                  erreurPolynome.fonction(decalage),
+                ),
               ),
-              id,
             )
           : ''
         break
@@ -573,9 +595,10 @@ export default class ExpressionAParabole extends Exercice {
         erreurPolynome = new Polynome({ coeffs, letter: polynome.letter })
         graphe = avecGraphe
           ? this.genererGraphique(
-              erreurPolynome.fonction,
-              this.reglerFenetrePoly2(coefDominant, 0, decalage),
-              id,
+              Object.assign(
+                { fonction: erreurPolynome.fonction, id },
+                this.reglerFenetrePoly2(coefDominant, 0, decalage),
+              ),
             )
           : ''
         break
@@ -597,7 +620,7 @@ export default class ExpressionAParabole extends Exercice {
     racine2: number
     avecGraphe?: boolean
     id?: string
-  }): { polynome: Polynome | undefined; graphe: string } {
+  }): { polynome: Polynome; graphe: string } {
     let graphe = ''
     if (racine1 === -racine2) {
       racine1 = randint(-4, 4, [racine2, -racine2])
@@ -618,13 +641,14 @@ export default class ExpressionAParabole extends Exercice {
         coefDominant = coefDominant.toNumber()
       const absSommet = new Decimal(racine1 + racine2).div(2).toNumber()
       graphe = this.genererGraphique(
-        erreurPolynome.fonction,
-        this.reglerFenetrePoly2(
-          coefDominant,
-          absSommet,
-          erreurPolynome.fonction(absSommet),
+        Object.assign(
+          { fonction: erreurPolynome.fonction, id },
+          this.reglerFenetrePoly2(
+            coefDominant,
+            absSommet,
+            erreurPolynome.fonction(absSommet),
+          ),
         ),
-        id,
       )
     }
     return { polynome: erreurPolynome, graphe }
