@@ -9,7 +9,6 @@ import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { context } from '../../modules/context'
 import {
   handleAnswers,
-  setReponse,
 } from '../../lib/interactif/gestionInteractif'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
@@ -143,7 +142,6 @@ export default class NotationPuissance extends Exercice {
         puissances,
         cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       this.autoCorrection[i] = {}
       mantisse = randint(2, 10)
@@ -214,8 +212,11 @@ export default class NotationPuissance extends Exercice {
           texteCorr = `$${puissance} = `
           if (exposant === 0) {
             texteCorr += listeSignes[i] + 1 + '$'
-            setReponse(this, i, listeSignes[i] + 1, {
-              formatInteractif: 'ignorerCasse',
+            handleAnswers(this, i, {
+              reponse: {
+                value: listeSignes[i] + 1,
+                options: { texteSansCasse: true },
+              },
             })
           } else if (exposant === 1) {
             if (listeSignes[i] === '') {
@@ -223,40 +224,47 @@ export default class NotationPuissance extends Exercice {
               pr = ''
             }
             texteCorr += `${listeSignes[i] + pl + mantisse + pr}$`
-            setReponse(this, i, listeSignes[i] + pl + mantisse + pr, {
-              formatInteractif: 'ignorerCasse',
+
+            handleAnswers(this, i, {
+              reponse: {
+                value: listeSignes[i] + pl + mantisse + pr,
+                options: { texteSansCasse: true },
+              },
             })
           } else if (exposant > 1) {
             texteCorr += listeSignes[i] + produit + '$'
-            setReponse(
-              this,
-              i,
-              [
-                listeSignes[i] + produit,
-                listeSignes[i] + produitAlt,
-                listeSignes[i] + produitSansParenthesesInitiales,
-                listeSignes[i] + produitSansParenthesesInitialesEtSansFois,
-              ],
-              { formatInteractif: 'ignorerCasse' },
-            )
+            handleAnswers(this, i, {
+              reponse: {
+                value: [
+                  listeSignes[i] + produit,
+                  listeSignes[i] + produitAlt,
+                  listeSignes[i] + produitSansParenthesesInitiales,
+                  listeSignes[i] + produitSansParenthesesInitialesEtSansFois,
+                ],
+                options: { texteSansCasse: true },
+              },
+            })
           } else if (exposant === -1) {
             texteCorr += `${listeSignes[i]}\\dfrac{1}{${mantisse}}$`
-            setReponse(this, i, `${listeSignes[i]}\\frac{1}{${mantisse}}`, {
-              formatInteractif: 'ignorerCasse',
+            handleAnswers(this, i, {
+              reponse: {
+                value: `${listeSignes[i]}\\frac{1}{${mantisse}}`,
+                options: { texteSansCasse: true },
+              },
             })
           } else if (exposant < -1) {
             texteCorr += `${listeSignes[i]}\\dfrac{1}{${produit}}$`
-            setReponse(
-              this,
-              i,
-              [
-                `${listeSignes[i]}\\frac{1}{${produit}}`,
-                `${listeSignes[i]}\\frac{1}{${produitAlt}}`,
-                `${listeSignes[i]}\\frac{1}{${produitSansParenthesesInitiales}}`,
-                `${listeSignes[i]}\\frac{1}{${produitSansParenthesesInitialesEtSansFois}}`,
-              ],
-              { formatInteractif: 'ignorerCasse' },
-            )
+            handleAnswers(this, i, {
+              reponse: {
+                value: [
+                  `${listeSignes[i]}\\frac{1}{${produit}}`,
+                  `${listeSignes[i]}\\frac{1}{${produitAlt}}`,
+                  `${listeSignes[i]}\\frac{1}{${produitSansParenthesesInitiales}}`,
+                  `${listeSignes[i]}\\frac{1}{${produitSansParenthesesInitialesEtSansFois}}`,
+                ],
+                options: { texteSansCasse: true },
+              },
+            })
           }
           break
         case 'puissance':
