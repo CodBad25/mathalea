@@ -377,7 +377,7 @@ export function addMultiMathfield(
     if (!(name in enrichedOptions)) {
       enrichedOptions[name] = {
         placeholder: '',
-        minWidth: 30,
+        minWidth: 50,
         keyboard: KeyboardType.clavierNumbers,
         ldots: false,
       }

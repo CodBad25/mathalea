@@ -141,16 +141,15 @@ export class MathInput extends HTMLElement {
       if (this.hasAttribute('value')) mf.value = this.getAttribute('value')!
       this.inputEl = mf
       this.appendChild(mf)
-      if (texteApres) {
-        // Injection dans le shadowRoot du math-field une fois qu'il est connecté au DOM
-        mf.addEventListener(
-          'mount',
-          () => {
-            requestAnimationFrame(() => {
-              if (!mf.shadowRoot?.querySelector('style[data-katex-style]')) {
-                const style = document.createElement('style')
-                style.setAttribute('data-katex-style', 'true')
-                style.textContent = `${katexCss}
+      // Injection dans le shadowRoot du math-field une fois qu'il est connecté au DOM
+      mf.addEventListener(
+        'mount',
+        () => {
+          requestAnimationFrame(() => {
+            if (!mf.shadowRoot?.querySelector('style[data-katex-style]')) {
+              const style = document.createElement('style')
+              style.setAttribute('data-katex-style', 'true')
+              style.textContent = `${katexCss}
 .texte-apres-host { 
   display: inline-block !important;
   vertical-align: middle;
@@ -168,12 +167,23 @@ span.ML__container::after {
 /* Force le parent pour alignement horizontal */
 .math-input-parent {
   display: inline-flex !important;
+  flex-direction: row !important;
   align-items: center !important;
   flex-wrap: nowrap !important;
 }`
-                mf.shadowRoot?.appendChild(style)
-              }
+              mf.shadowRoot?.appendChild(style)
+            }
 
+            const mlContainer = mf.shadowRoot?.querySelector(
+              'span.ML__container',
+            ) as HTMLElement
+            const mlContainerParent = mlContainer?.parentElement
+            if (mlContainerParent && mlContainer) {
+              // Toujours forcer l'alignement horizontal pour éviter les décalages verticaux.
+              mlContainerParent.classList.add('math-input-parent')
+            }
+
+            if (texteApres) {
               const existing = mf.shadowRoot?.querySelector('.texte-apres-host')
               existing?.remove()
 
@@ -181,13 +191,7 @@ span.ML__container::after {
               texteApresHost.className = 'texte-apres-host'
               appendTexteApresWithKatex(texteApresHost, texteApres)
 
-              const mlContainer = mf.shadowRoot?.querySelector(
-                'span.ML__container',
-              ) as HTMLElement
-
-              const mlContainerParent = mlContainer?.parentElement
               if (mlContainerParent && mlContainer) {
-                mlContainerParent.classList.add('math-input-parent')
                 mlContainerParent.insertBefore(
                   texteApresHost,
                   mlContainer.nextSibling,
@@ -195,11 +199,11 @@ span.ML__container::after {
               } else {
                 mf.shadowRoot?.appendChild(texteApresHost)
               }
-            })
-          },
-          { once: true },
-        )
-      }
+            }
+          })
+        },
+        { once: true },
+      )
     } else {
       const input = document.createElement('input')
       input.id = id

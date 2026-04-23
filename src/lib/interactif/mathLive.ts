@@ -454,6 +454,8 @@ export function addSmiley(
     spanSmiley.style.marginLeft = '0.3em'
     spanSmiley.className = 'feedback-smiley'
     spanSmiley.style.fontSize = 'large'
+    spanSmiley.style.lineHeight = '1'
+    spanSmiley.style.verticalAlign = 'middle'
     const spanContainer = mf.shadowRoot?.querySelector('.ML__container')
     if (spanContainer) {
       spanContainer.parentNode?.appendChild(spanSmiley)

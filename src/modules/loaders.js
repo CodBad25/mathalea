@@ -116,7 +116,7 @@ function injectPromptStyles(mf) {
         style.textContent = `
         .ML__container {
     "display": inline-block;
-    "width": 70%;
+    "width": 100%;
           "justify-content": center !important;
         }
           .ML__content {

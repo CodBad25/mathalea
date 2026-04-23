@@ -293,6 +293,15 @@ math-field:not(.fillInTheBlanks):not(.metaInteractif2d) {
   min-width: 50px;
   @apply border border-[#ACACAC];
 }
+
+math-field:not(.fillInTheBlanks):not(.metaInteractif2d)::part(container) {
+  display: inline-block;
+  width: 100%;
+  justify-content: center;
+}
+math-field:not(.fillInTheBlanks):not(.metaInteractif2d)::part(content) {
+  justify-content: center;
+}
 math-field.fillInTheBlanks {
   /* @apply bg-coopmaths-canvas dark:bg-coopmathsdark-canvas text-coopmaths-corpus dark:text-coopmathsdark-corpus; */
   border: none;
