@@ -7,9 +7,7 @@ import Exercice from '../Exercice'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { context } from '../../modules/context'
-import {
-  handleAnswers,
-} from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 
@@ -20,7 +18,7 @@ export const amcReady = true
 export const amcType = 'AMCOpen'
 
 export const dateDePublication = '21/11/2021' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
-export const dateDeModifImportante = '24/09/2023'
+export const dateDeModifImportante = '23/04/2025' // Ajout par Rémi Angot du choix des exposants
 /**
  * Passer d'un produit à la notation puissance et inversement
  * @author Guillaume Valmont
@@ -58,6 +56,12 @@ export default class NotationPuissance extends Exercice {
     ]
     this.sup4 = 3
     this.classe = 4
+    this.besoinFormulaire5Numerique = [
+      'Exposant',
+      4,
+      '1 : Carrés\n2 : Cubes\n3 : Exposant supérieur ou égal à 4\n4 : Mélange',
+    ]
+    this.sup5 = 4
   }
 
   nouvelleVersion() {
@@ -146,10 +150,18 @@ export default class NotationPuissance extends Exercice {
       this.autoCorrection[i] = {}
       mantisse = randint(2, 10)
       if (listeSignesMantisse[i] === '-') mantisse = -mantisse
-      if (listeTypeDeQuestions[i] === 'puissance') {
-        exposant = randint(2, 8)
+      if (this.sup5 === 1) {
+        exposant = 2
+      } else if (this.sup5 === 2) {
+        exposant = 3
+      } else if (this.sup5 === 3) {
+        exposant = randint(4, 8)
       } else {
-        exposant = randint(this.classe > 2 ? 2 : 0, 5)
+        if (listeTypeDeQuestions[i] === 'puissance') {
+          exposant = randint(2, 8)
+        } else {
+          exposant = randint(this.classe > 2 ? 2 : 0, 5)
+        }
       }
       if (mantisse < 0) {
         pl = '('
