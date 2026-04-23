@@ -471,9 +471,9 @@ function testOneValueForCase7(
         ${a * d}\\times ${ecritureParentheseSiNegatif(x1)}${ecritureAlgebrique(-1 * b * d)}=${a * d * x1 - d * b}$ <br>`
   texteCorr += `$${a * c}x^2${ecritureAlgebrique(-1 * b * c)}x=
         ${a * c}\\times ${ecritureParentheseSiNegatif(x1)}^2${ecritureAlgebrique(-1 * b * c)}\\times ${ecritureParentheseSiNegatif(x1)}=
-        ${a * c * x1 * x1}${ecritureAlgebrique(b * c * x1)}=${a * c * x1 * x1 - b * c * x1}$<br>`
+        ${a * c * x1 * x1}${ecritureAlgebrique(b * c * x1)}=${a * c * x1 * x1 + b * c * x1}$<br>`
 
-  if (a * d * x1 - d * b === a * c * x1 * x1 - b * c * x1) {
+  if (a * d * x1 - d * b === a * c * x1 * x1 + b * c * x1) {
     texteCorr +=
       "On trouve le même résultat pour le membre de gauche et pour le membre de droite donc l'égalité est vraie.<br>"
 
@@ -481,7 +481,7 @@ function testOneValueForCase7(
       `$x=${x1}$ est donc solution de l'équation $${a * d}x${ecritureAlgebrique(-1 * b * d)}=${a * c}x^2${ecritureAlgebrique(-1 * b * c)}x~$`,
     )}<br><br>`
   } else {
-    texteCorr += `$${a * d * x1 - d * b}\\not=${a * c * x1 * x1 - b * c * x1}$ donc l'égalité n'est pas vraie.<br>`
+    texteCorr += `$${a * d * x1 - d * b}\\not=${a * c * x1 * x1 + b * c * x1}$ donc l'égalité n'est pas vraie.<br>`
 
     texteCorr += `${texteEnCouleur(
       `$x=${x1}$ n'est donc pas solution de l'équation $${a * d}x${ecritureAlgebrique(-1 * b * d)}=${a * c}x^2${ecritureAlgebrique(-1 * b * c)}x~$`,
