@@ -1,5 +1,5 @@
 import AppliquerPourcentage from '../6e/6N3Q'
-export const titre = 'Appliquer un pourcentage'
+export const titre = 'Appliquer un pourcentage avec 10%, 20%, ...'
 export const dateDePublication = '19/06/2022'
 export const amcReady = true
 export const amcType = 'AMCNum'
@@ -14,7 +14,7 @@ export const interactifType = 'mathLive'
 export const uuid = 'eb1e8'
 
 export const refs = {
-  'fr-fr': ['1A-R01-02', 'BP2SP10'],
+  'fr-fr': ['2S10-6', 'BP2SP10'],
   'fr-ch': [],
 }
 export default class AppliquerPourcentage1 extends AppliquerPourcentage {
