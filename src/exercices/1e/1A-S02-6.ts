@@ -16,9 +16,10 @@ export const interactifType = 'qcm'
 export const amcReady = 'true'
 export const amcType = 'qcmMono'
 export const titre =
-  'Comparer médianes et moyennes de deux séries à faible effectifs'
+  'Comparer médianes et moyennes de deux séries à faible effectif'
 export const dateDePublication = '01/08/2025'
-// Ceci est un exemple de QCM avec version originale et version aléatoire
+export const dateDeModificationImportante = '24/04/2026'
+
 /**
  *
  * @author Stéphane Guyon
@@ -33,42 +34,32 @@ export default class MedianeMoyenneQCM extends ExerciceQcmA {
     const alea = randint(1, 4) // Pour choisir entre deux versions de l'énoncé
     const a1 = randint(1, 5)
     const a2 = randint(a1 + 1, a1 + 8)
-    const b1 = randint(1, 5, a1) + randint(-1, 1) / 2
     const a3 = randint(a2 + 1, a2 + 8)
-    const moyenneA = (a1 + a2 + a3) / 3
-    let moyenneB = (b1 + a2 + a3) / 3 // b2 et b3 seront calculées plus tard
-    let A = []
-    let B = []
+    let b1
     let b2 = a2
+    let b3
 
-    let b3 = a1 + a2 + a3 - b1 - b2
-
-    let medianeA = 0
-    let medianeB = 0
     if (alea === 1) {
-      b2 = a2
+      do {
+        b1 = randint(1, 5, a1) + randint(-3, -1) / 2
+        b3 = a1 + a2 + a3 - b1 - b2
+      } while (b1 <= 0 || b3 < b2 || a1 === b1)
 
-      b3 = moyenneA * 3 - b1 - b2
-      medianeA = a2
-      medianeB = medianeA
       this.reponses = [
         'Les deux séries ont la même moyenne et la même médiane.',
         'Les deux séries ont la même médiane mais pas la même moyenne.',
         'Les deux séries ont la même moyenne mais pas la même médiane.',
         "Les deux séries n'ont ni la même moyenne, ni la même médiane.",
       ]
-    }
-    if (alea === 2) {
+    } else if (alea === 2) {
       // même médiane mais moyennes différentes
-      b2 = a2
-
-      b3 = moyenneA * 3 - b1 - b2 + 1
-
-      if (b3 === a3) {
-        b3 += 1 // On s'assure que b3 est différent de a3
-      }
-      medianeA = a2
-      medianeB = medianeA
+      do {
+        b1 = randint(1, 5, a1) + randint(-3, -1) / 2
+        b3 = a1 + a2 + a3 - b1 - b2 + 1
+        if (b3 === a3) {
+          b3 += 1 // On s'assure que b3 est différent de a3
+        }
+      } while (b1 <= 0 || b1 > b2 || b3 < b2 || a1 === b1)
 
       this.reponses = [
         'Les deux séries ont la même médiane mais pas la même moyenne.',
@@ -76,30 +67,28 @@ export default class MedianeMoyenneQCM extends ExerciceQcmA {
         'Les deux séries ont la même moyenne mais pas la même médiane.',
         "Les deux séries n'ont ni la même moyenne, ni la même médiane.",
       ]
-    }
-    if (alea === 3) {
+    } else if (alea === 3) {
       //  moyennes et médianes différentes
-      b2 = randint(Math.floor(b1 + 1), Math.floor(b1 + 4), a2)
+      do {
+        b1 = randint(1, 5, a1) + randint(-1, 1) / 2
+        b2 = randint(Math.floor(b1 + 1), Math.floor(b1 + 4), a2)
+        b3 = a1 + a2 + a3 - b1 - b2 + 1
+      } while (b1 <= 0 || b1 > b2 || b3 < b2 || a1 === b1)
 
-      b3 = moyenneA * 3 - b1 - b2 + 1
-
-      medianeA = a2
-      medianeB = b2
       this.reponses = [
         "Les deux séries n'ont ni la même moyenne, ni la même médiane.",
         'Les deux séries ont la même médiane mais pas la même moyenne.',
         'Les deux séries ont la même moyenne et la même médiane.',
         'Les deux séries ont la même moyenne mais pas la même médiane.',
       ]
-    }
-    if (alea === 4) {
+    } else {
+      // if (alea === 4) {
       // même moyenne mais médianes différentes
-      b2 = randint(Math.floor(b1 + 1), Math.floor(b1 + 5), a2)
-      medianeB = b2
-
-      b3 = moyenneA * 3 - b1 - b2
-
-      medianeA = a2
+      do {
+        b1 = randint(1, 5, a1) + randint(-1, 1) / 2
+        b2 = randint(Math.floor(b1 + 1), Math.floor(b1 + 5), a2)
+        b3 = a1 + a2 + a3 - b1 - b2
+      } while (b1 <= 0 || b1 > b2 || b3 < b2 || a1 === b1)
 
       this.reponses = [
         'Les deux séries ont la même moyenne mais pas la même médiane.',
@@ -109,42 +98,41 @@ export default class MedianeMoyenneQCM extends ExerciceQcmA {
         'Les deux séries ont la même moyenne et la même médiane.',
       ]
     }
-    A = shuffle([a1, a2, a3])
-    B = shuffle([b1, b2, b3])
+    const medianeA = a2
+    const medianeB = b2
+    const A = shuffle([a1, a2, a3])
+    const B = shuffle([b1, b2, b3])
 
     this.enonce = `Voici deux séries de valeurs :<br>
-${texteGras('série A :')} $~~${A[0]}~~; ~~${A[1]}~~; ~~${A[2]}~~$.<br>
-${texteGras('série B :')} $~~${texNombre(B[0])}~~; ~~${texNombre(B[1])}~~; ~~${texNombre(B[2])}~~$.<br>
+${texteGras('série A :')} $~~${A[0]}~~; ~~${A[1]}~~; ~~${A[2]}$<br>
+${texteGras('série B :')} $~~${texNombre(B[0])}~~; ~~${texNombre(B[1])}~~; ~~${texNombre(B[2])}$<br>
 Laquelle des ces 4 propositions est vraie ?`
     const moyA = new FractionEtendue(a1 + a2 + a3, 3)
     const moyB = new FractionEtendue(b1 + b2 + b3, 3)
-    moyenneB = (b1 + b2 + b3) / 3
     this.correction = `On calcule la moyenne de la série A :
     $\\overline{x}_A=\\dfrac{${a1} + ${a2} + ${texNombre(a3)}}{3} = ${moyA.texFraction}$`
-    if (Number.isInteger(moyenneA)) {
+    if (moyA.estEntiere) {
       this.correction += ` $= ${moyA.texFractionSimplifiee}$`
     }
     this.correction += `<br>et sa médiane, qui est la valeur centrale de la série classée : $\\mathrm{m_A}=${medianeA}$ .<br>
-    On calcule la moyenne de la série B :`
+    On calcule la moyenne de la série B : `
 
     this.correction += `$\\overline{x}_B=\\dfrac{${texNombre(b1)} + ${texNombre(b2)} + ${texNombre(Number(b3))}}{3} = ${moyB.texFraction} $`
-    if (Number.isInteger(moyenneB)) {
+    if (moyB.estEntiere) {
       this.correction += ` $= ${moyB.texFractionSimplifiee}$`
     }
     this.correction += `<br>et sa médiane, qui est aussi la valeur centrale de la série classée : $\\mathrm{m_B}=${medianeB}$ .`
     if (alea === 1) {
       this.correction +=
         '<br>On constate que les deux séries ont la même moyenne et la même médiane. '
-    }
-    if (alea === 2) {
+    } else if (alea === 2) {
       this.correction +=
         '<br>On constate que les deux séries ont la même médiane mais pas la même moyenne. '
-    }
-    if (alea === 4) {
+    } else if (alea === 4) {
       this.correction +=
         '<br>On constate que les deux séries ont la même moyenne mais pas la même médiane. '
-    }
-    if (alea === 3) {
+    } else {
+      // if (alea === 3) {
       this.correction +=
         "<br>On constate que les deux séries n'ont ni la même moyenne, ni la même médiane. "
     }
