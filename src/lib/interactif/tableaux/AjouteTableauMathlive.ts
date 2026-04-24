@@ -1,5 +1,4 @@
 import { notify } from '../../../bugsnag'
-import '../../MathInput'
 import { buildDataKeyboardFromStyle } from '../claviers/keyboard'
 import './tableauMathlive.scss'
 export interface Icell {
@@ -82,26 +81,44 @@ function appendCell({
   const options = icell.options || {}
   if (icell.texte === '') {
     if (isInteractif) {
-      element = document.createElement('math-input')
-      element.setAttribute('data-type', 'mathlive')
-      element.setAttribute('data-mathfield-class', 'tableauMathlive')
       if (options.texteAvant != null && options.texteAvant !== '') {
-        element.setAttribute('data-texte-avant', options.texteAvant)
+        const spanAvant = document.createElement('span')
+        spanAvant.classList.add('tableauMathlive')
+        spanAvant.textContent = options.texteAvant
+        cell.appendChild(spanAvant)
       }
-      if (options.texteApres != null && options.texteApres !== '') {
-        element.setAttribute('data-texte-apres', options.texteApres)
-      }
+      element = document.createElement('math-field')
       if (options.espace) {
         element.setAttribute('data-space', 'true')
       }
+      element.classList.add('tableauMathlive')
 
       const classeString = buildDataKeyboardFromStyle(classes).join(' ')
-
+      /*  for (const classe of classes.split(' ')) {
+        // if (classe === 'clavierDeBase') element.setAttribute('data-keyboard', 'numbersOperations')
+        // else if (classe === 'clavierDeBaseAvecFraction') element.setAttribute('data-keyboard', 'numbers basicOperations')
+        if (classe === 'angles') element.setAttribute('data-keyboard', 'angles')
+        else if (classe === 'clavierDeBaseAvecFraction')
+          element.setAttribute('data-keyboard', 'numbers basicOperations')
+        else if (classe === 'clavierDeBaseAvecVariable')
+          element.setAttribute(
+            'data-keyboard',
+            'numbers basicOperations variables',
+          )
+        else if (classe === 'clavierDeBaseAvecEgal')
+          element.setAttribute('data-keyboard', 'numbers2 basicOperations')
+        else element.setAttribute('data-keyboard', 'numbersOperations')
+      }
+        */
       element.setAttribute('data-keyboard', classeString)
-      const fieldId = `champTexteEx${NoEx}Q${NoQ}L${indexLine}C${indexCol}`
-      element.setAttribute('data-id', fieldId)
-      element.id = `${fieldId}-wrapper`
+      element.id = `champTexteEx${NoEx}Q${NoQ}L${indexLine}C${indexCol}`
+      element.setAttribute('virtual-keyboard-mode', 'manual')
       cell.appendChild(element)
+      if (options.texteApres != null && options.texteApres !== '') {
+        const spanApres = document.createElement('span')
+        spanApres.textContent = options.texteApres
+        cell.appendChild(spanApres)
+      }
       /*  const spanResultat = document.createElement('span')
       spanResultat.id = `resultatCheckEx${NoEx}Q${NoQ}L${indexLine}C${indexCol}`
       cell.appendChild(spanResultat)

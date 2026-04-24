@@ -1,10 +1,7 @@
 import type { MathfieldElement } from 'mathlive'
 import ListeDeroulanteElement from '../../../src/lib/interactif/listeDeroulante/ListeDeroulanteElement'
+import type { GoodAnswersFormulas, SheetTestDatas } from '../../../src/lib/types'
 import { MySpreadsheetElement } from '../../../src/lib/tableur/MySpreadSheet'
-import type {
-  GoodAnswersFormulas,
-  SheetTestDatas,
-} from '../../../src/lib/types'
 
 function createFakeMfe(
   id: string,
@@ -18,17 +15,6 @@ function createFakeMfe(
   el.getPrompts = () => Object.keys(champValues)
   el.getPromptValue = (key: string) => champValues[key] ?? ''
   el.setPromptState = () => {}
-
-  // Attach a minimal shadow DOM so that verifQuestionMathLive and addSmiley can
-  // query '.ML__content' / '.ML__container' without crashing in JSDOM.
-  const shadow = (el as unknown as HTMLElement).attachShadow({ mode: 'open' })
-  const container = document.createElement('div')
-  container.className = 'ML__container'
-  const content = document.createElement('span')
-  content.className = 'ML__content'
-  container.appendChild(content)
-  shadow.appendChild(container)
-
   return el
 }
 

@@ -1,4 +1,5 @@
 import Decimal from 'decimal.js'
+import { texTexte } from '../../lib/format/texTexte'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -7,7 +8,7 @@ import {
   combinaisonListes,
   compteOccurences,
 } from '../../lib/outils/arrayOutils'
-import { miseEnEvidence, texTexte } from '../../lib/outils/embellissements'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { rangeMinMax } from '../../lib/outils/nombres'
 import { texNombre } from '../../lib/outils/texNombre'
 import { context } from '../../modules/context'
@@ -225,7 +226,7 @@ export default class ExerciceConversions extends Exercice {
           texTexte(prefixeDiv[k][0] + unite) +
           ' = ' +
           (this.interactif && context.isHtml
-            ? `$ ${ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers, { texteApres: '$' + texTexte(unite) + '$' })}`
+            ? `$ ${ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers, { texteApres: ' $' + texTexte(unite) + '$' })}`
             : ` \\dotfill ${texTexte(unite)}$`)
         texteCorr =
           '$ ' +
@@ -246,7 +247,7 @@ export default class ExerciceConversions extends Exercice {
           texTexte(prefixeDiv[k][0] + unite) +
           ' = ' +
           (this.interactif && context.isHtml
-            ? `$ ${ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers, { texteApres: '$' + texTexte(unite) + '$' })}`
+            ? `$ ${ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers, { texteApres: ' $' + texTexte(unite) + '$' })}`
             : ` \\dotfill ${texTexte(unite)}$`)
         texteCorr =
           '$ ' +
@@ -289,7 +290,7 @@ export default class ExerciceConversions extends Exercice {
             texTexte(listeUniteInfo[unite2]) +
             ' = ' +
             (this.interactif && context.isHtml
-              ? `$ ${ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers, { texteApres: '$' + texTexte(unite) + '$' })}`
+              ? `$ ${ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers, { texteApres: ' $' + texTexte(unite) + '$' })}`
               : ` \\dotfill ${texTexte(unite)}$`)
           texteCorr =
             '$ ' +
@@ -313,7 +314,7 @@ export default class ExerciceConversions extends Exercice {
             texTexte(listeUniteInfo[unite2]) +
             ' = ' +
             (this.interactif && context.isHtml
-              ? `$ ${ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers, { texteApres: '$' + texTexte(unite) + '$' })}`
+              ? `$ ${ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers, { texteApres: ' $' + texTexte(unite) + '$' })}`
               : ` \\dotfill ${texTexte(unite)}$`)
           texteCorr =
             '$ ' +

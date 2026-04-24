@@ -1,8 +1,9 @@
 import { context } from '../../modules/context'
 import type { IFractionEtendue } from '../../modules/FractionEtendue.type'
-import { bleuMathalea, orangeMathalea } from '../colors'
+import { orangeMathalea } from '../colors'
 import { Complexe } from '../mathFonctions/Complexe'
 import { choice } from './arrayOutils'
+import { bleuMathalea } from '../../lib/colors'
 
 // Garde structurel pour détecter une FractionEtendue
 const isFractionEtendue = (x: unknown): x is IFractionEtendue =>
@@ -371,12 +372,4 @@ export function texteEnBoite(texte: string) {
     return `<div style="display: inline-block; max-width: fit-content; border: 2px solid #444; border-radius: 4px; padding: 10px;">${texte}</div>`
   }
   return `\\fbox{\\parbox{0.5\\linewidth}{\\setlength{\\parskip}{.5cm}${texte}}}\\newline`
-}
-
-/**
- * Écrit du texte en mode mathématiques
- * @author Rémi Angot
- */
-export function texTexte(texte: string): string {
-  return '~\\text{' + texte + '}'
 }

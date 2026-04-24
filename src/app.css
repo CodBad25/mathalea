@@ -290,17 +290,8 @@ math-field:not(.fillInTheBlanks):not(.metaInteractif2d) {
   padding-left: 5px;
   padding-right: 5px;
   border-radius: 4px;
-  min-width: 50px;
+  min-width: 80px;
   @apply border border-[#ACACAC];
-}
-
-math-field:not(.fillInTheBlanks):not(.metaInteractif2d)::part(container) {
-  display: inline-block;
-  width: 100%;
-  justify-content: center;
-}
-math-field:not(.fillInTheBlanks):not(.metaInteractif2d)::part(content) {
-  justify-content: center;
 }
 math-field.fillInTheBlanks {
   /* @apply bg-coopmaths-canvas dark:bg-coopmathsdark-canvas text-coopmaths-corpus dark:text-coopmathsdark-corpus; */
@@ -317,6 +308,7 @@ math-field.fillInTheBlanks::part(prompt) {
   min-height: 1em;
   height: auto;
   padding: 2px;
+  margin: 0;
   border: none;
   outline: solid;
   outline-width: thin;
@@ -349,10 +341,6 @@ math-field.tableauMathlive::part(container) {
 }
 math-field.tableauMathlive::part(content) {
   justify-content: center !important;
-}
-
-span.feedback-smiley {
-  padding-right: 1em;
 }
 
 @media print {

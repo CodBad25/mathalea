@@ -363,30 +363,6 @@ async function addFeedbacks(page: Page, questions: Question[]) {
 }
 
 async function getFeedback(page: Page, id: string) {
-  const mathfieldSelector = `math-field#champTexteEx${id}`
-  const hasMathfield = (await page.locator(mathfieldSelector).count()) > 0
-
-  if (hasMathfield) {
-    await page.waitForFunction((selector) => {
-      const mf = document.querySelector(selector)
-      if (!(mf instanceof HTMLElement)) return false
-      const shadow = (mf as HTMLElement & { shadowRoot: ShadowRoot | null })
-        .shadowRoot
-      const smiley = shadow?.querySelector('.feedback-smiley')?.textContent
-      return smiley === '☹️' || smiley === '😎'
-    }, mathfieldSelector)
-
-    const feedback = await page.locator(mathfieldSelector).evaluate((el) => {
-      return (
-        el as HTMLElement & { shadowRoot: ShadowRoot | null }
-      ).shadowRoot?.querySelector('.feedback-smiley')?.textContent
-    })
-
-    if (feedback?.includes('☹️')) return 'KO'
-    if (feedback?.includes('😎')) return 'OK'
-    throw Error('Un feedback autre que ☹️ et 😎 a été trouvé')
-  }
-
   const feedbackSelector = `#resultatCheckEx${id}`
   await page.waitForSelector(feedbackSelector)
   const feedback = await page.locator(feedbackSelector).innerText()

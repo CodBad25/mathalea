@@ -6,7 +6,6 @@ import type {
   Valeur,
 } from '../../lib/types'
 import { context } from '../../modules/context'
-import { addMathInput } from '../MathInput'
 import { sp } from '../outils/outilString'
 import './champTexte.scss'
 import { buildDataKeyboardFromStyle } from './claviers/keyboard'
@@ -211,8 +210,14 @@ type ParamsChamp = {
 }
 
 function ajouteChamp(params: ParamsChamp, options: OptionsChamp = {}) {
-  const { exercice, i, style = '' } = params
-  let { texteApres = '', blocCenter = false } = options
+  const { type, exercice, i, style = '' } = params
+  let {
+    texteAvant = '',
+    texteApres = '',
+    blocCenter = false,
+    espace = false,
+    placeholder = '',
+  } = options
   if (texteApres !== '') texteApres = sp() + texteApres
   if (!context.isHtml || !exercice.interactif || style === 'none') return ''
   if (typeof style !== 'string') {
@@ -222,19 +227,11 @@ function ajouteChamp(params: ParamsChamp, options: OptionsChamp = {}) {
     )
   }
   if (style.includes('blocCenter')) blocCenter = true
-
-  // Utilisation du nouveau custom element MathInput
-  let html = addMathInput(params, options)
-
-  // ANCIEN CODE - A supprimer une fois le test complété :
-  /* 
   const dataKeyboard = buildDataKeyboardString(
     typeof style === 'string' ? style : '',
   )
   const balise = type === 'mathlive' ? 'math-field' : 'input'
   let html = `<label>${texteAvant}</label><${balise} data-keyboard="${dataKeyboard}" ${espace ? 'data-space="true"' : ''} ${placeholder ? `placeholder="${placeholder}"` : ''} virtual-keyboard-mode=manual class="${style}" id="champTexteEx${exercice.numeroExercice}Q${i}"></${balise}>${texteApres ? `<span>${texteApres}</span>` : ''} <span id="resultatCheckEx${exercice.numeroExercice}Q${i}"></span>`
-  */
-
   if (blocCenter) {
     html = `<div style='display: flex;justify-content: center; margin:5px;'>${html}<div>`
   }
