@@ -19,7 +19,7 @@ export const refs = {
   'fr-2016': ['6N13', 'BP2AutoQ2'],
   'fr-ch': ['10GM3-7'],
 }
-export default class Exercice6N13 extends ExerciceConversions {
+export default class Exercice5N152 extends ExerciceConversions {
   constructor() {
     super()
     this.sup = 1

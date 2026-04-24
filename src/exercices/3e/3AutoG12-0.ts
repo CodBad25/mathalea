@@ -11,6 +11,7 @@ import { choisitLettresDifferentes } from '../../lib/outils/aleatoires'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
+import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import ExerciceSimple from '../ExerciceSimple'
 
@@ -28,7 +29,7 @@ export const refs = {
   'fr-ch': [],
 }
 /**
- * @author Jean-claude Lhote
+ * @author Jean-Claude Lhote
  */
 export default class AutoTheoremeThales extends ExerciceSimple {
   constructor() {
@@ -40,7 +41,6 @@ export default class AutoTheoremeThales extends ExerciceSimple {
     this.nbQuestions = 1
     this.nbQuestionsModifiable = false
     this.formatChampTexte = KeyboardType.alphanumeric
-    this.formatInteractif = 'fillInTheBlank'
   }
 
   nouvelleVersion() {
@@ -124,13 +124,23 @@ export default class AutoTheoremeThales extends ExerciceSimple {
       },
       champ4: { value: [D.nom + E.nom, String(longueurDE)] },
     }
-
-    this.consigne =
-      figure +
-      `Sur la figure ci-dessus, les droites $(${nomPara1})$ et $(${nomPara2})$ sont parallèles.<br><br>
-      Écrire une égalité de rapports permettant de déterminer la longueur$${nomTriangle.slice(0, 2)}$.`
-    this.question =
-      '\\dfrac{%{champ1}}{%{champ2}} = \\dfrac{%{champ3}}{%{champ4}}'
+    if (context.isHtml) {
+      this.formatInteractif = 'fillInTheBlank'
+      this.consigne = // this.consigne n'admet pas de figure en LaTeX
+        figure +
+        `Sur la figure ci-dessus, les droites $(${nomPara1})$ et $(${nomPara2})$ sont parallèles.<br><br>
+      Écrire une égalité de rapports permettant de déterminer la longueur$${nomTriangle.slice(0, 2)}$.<br>`
+      this.question =
+        '\\dfrac{%{champ1}}{%{champ2}} = \\dfrac{%{champ3}}{%{champ4}}'
+      this.canEnonce = this.consigne
+    } else {
+      this.question =
+        figure +
+        `Sur la figure ci-dessus, les droites $(${nomPara1})$ et $(${nomPara2})$ sont parallèles.<br><br>
+      Écrire une égalité de rapports permettant de déterminer la longueur$${nomTriangle.slice(0, 2)}$.<br>`
+      this.question += '$\\dfrac{\\ldots}{\\ldots} = \\dfrac{\\ldots}{\\ldots}$'
+      this.canEnonce = this.question
+    }
     this.correction = `Pour déterminer la longueur $${nomTriangle.slice(0, 2)}$, on utilise le théorème de Thalès qui s'applique ici car les droites $(${nomPara1})$ et $(${nomPara2})$ sont parallèles.<br>
 On écrit l'égalité des rapports :<br>
 $\\dfrac{${miseEnEvidence(
@@ -143,7 +153,6 @@ $\\dfrac{${miseEnEvidence(
     )}}{${miseEnEvidence(longueurBD)}} = \\dfrac{${miseEnEvidence(
       texNombre(longueurAC, 1),
     )}}{${miseEnEvidence(longueurDE)}}$`
-    this.canEnonce = this.consigne
   }
 
   correctionInteractive(i: number): string | string[] {

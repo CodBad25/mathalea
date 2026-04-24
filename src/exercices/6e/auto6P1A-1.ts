@@ -29,7 +29,7 @@ export const amcType = 'AMCHybride'
 
 /**
  * Lecture de diagrammes
- * @author Jean-claude Lhote
+ * @author Jean-Claude Lhote
  */
 export const uuid = 'adac4'
 
@@ -457,19 +457,19 @@ export default class LireUnDiagramme extends Exercice {
           `${numAlpha(0)} Quelle est l'espèce la moins nombreuse ?` +
           monQcm1.texte
         texte +=
-          `<br>${numAlpha(1)} Quelle est l'espèce la plus nombreuse ?` +
+          `<br>${!context.isHtml ? '<br>' : ''}${numAlpha(1)} Quelle est l'espèce la plus nombreuse ?` +
           monQcm2.texte
         texte +=
-          `<br>${numAlpha(2)} L'espèce la plus nombreuse représente ...` +
+          `<br>${!context.isHtml ? '<br>' : ''}${numAlpha(2)} L'espèce la plus nombreuse représente ...` +
           monQcm3.texte
         texteCorr =
-          `${context.isHtml ? '<br>' : ''}${numAlpha(0)} L'animal le moins nombreux parmi ces espèces est : ` +
+          `${numAlpha(0)} L'animal le moins nombreux parmi ces espèces est : ` +
           monQcm1.texteCorr
         texteCorr +=
-          `<br>${numAlpha(1)} L'animal le plus nombreux parmi ces espèces est : ` +
+          `<br>${!context.isHtml ? '<br>' : ''}${numAlpha(1)} L'animal le plus nombreux parmi ces espèces est : ` +
           monQcm2.texteCorr
         texteCorr +=
-          `<br>${numAlpha(2)} L'animal le plus nombreux parmi ces espèces représente : ` +
+          `<br>${!context.isHtml ? '<br>' : ''}${numAlpha(2)} L'animal le plus nombreux parmi ces espèces représente : ` +
           monQcm3.texteCorr
       } else {
         // en AMC

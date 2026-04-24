@@ -66,7 +66,10 @@ export function generateLatex(
   itemsWithExercises: itemsWithExercises,
   documentTitle = 'Évaluation à la carte',
 ) {
-  let output = preambuleLight.replace('DOCUMENT_TITLE_PLACEHOLDER', documentTitle)
+  let output = preambuleLight.replace(
+    'DOCUMENT_TITLE_PLACEHOLDER',
+    documentTitle,
+  )
   let outputCorr = '\n\n%%%%%%%%%%%%%%%%%%%%'
   outputCorr += '\n%%%  CORRECTION  %%%'
   outputCorr += '\n%%%%%%%%%%%%%%%%%%%%'
@@ -130,8 +133,10 @@ export function generateLatex(
 const preambuleLight = `
 \\documentclass[12pt]{article}
 \\usepackage[left=1.5cm,right=1.5cm,top=2cm,bottom=2cm]{geometry}
-\\usepackage[utf8]{inputenc}        
-\\usepackage[T1]{fontenc}
+%%% EE (24/04/2026) : Les modifs ci-dessous sont nécessaires pour accepter ’ comme apostrophe.
+% \\usepackage[utf8]{inputenc}  % Inutile en LuaLaTeX : l'UTF-8 est natif, géré par fontspec
+% \\usepackage[T1]{fontenc}     % Réservé à pdfLaTeX, à remplacer par fontspec en LuaLaTeX
+\\usepackage{fontspec}
 \\usepackage[french]{babel}
 \\usepackage{multicol} 
 \\usepackage{calc} 
