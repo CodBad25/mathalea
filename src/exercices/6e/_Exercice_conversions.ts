@@ -1,5 +1,5 @@
 import Decimal from 'decimal.js'
-import { texTexte } from '../../lib/format/texTexte'
+import { texTexte, texTexteGras } from '../../lib/format/texTexte'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -333,13 +333,12 @@ export default class ExerciceConversions extends Exercice {
       }
 
       // EE : Mise en couleur de la réponse interactive
-      const aMettreEnCouleur: string =
-        miseEnEvidence((texteCorr.split('=').pop() ?? '').replaceAll('$', '')) +
-        '$'
+      const aMettreEnCouleur: string = miseEnEvidence(
+        (texteCorr.split('=').pop() ?? '').replaceAll('$', ''),
+      )
       texteCorr =
         texteCorr.replace(String(texteCorr.split('=').pop()), '') +
-        aMettreEnCouleur.replace(texTexte(unite), '') +
-        '$' +
+        aMettreEnCouleur.replace(texTexteGras(unite), '') +
         texTexte(unite) +
         '$'
       if (this.correctionDetaillee && listeDesProblemes[i] !== 4) {

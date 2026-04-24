@@ -1079,8 +1079,8 @@ export function creerDocumentAmc({
   \\RequirePackage{etex}\t  % pour avoir plus de "registres" mémoires / tikz...
   %%%%% PACKAGES LANGUE %%%%%
   \\usepackage{babel} % sans option => langue définie dans la classe du document
-   \\usepackage[T1]{fontenc}
-   \\usepackage[utf8x]{inputenc}
+   \\usepackage[T1]{fontenc} % pour de la compilation en luaLaTex, faudra changer : voir alacarte.ts
+   \\usepackage[utf8x]{inputenc} % pour de la compilation en luaLaTex, faudra changer : voir alacarte.ts
    \\usepackage{lmodern}\t        \t% Choix de la fonte (Latin Modern de D. Knuth)
    \\usepackage{fp}
    \\usepackage{ProfCollege}

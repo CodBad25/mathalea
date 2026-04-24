@@ -156,14 +156,14 @@ export default class LireUnGraphiqueCartesien extends ExerciceSimple {
     ]
     this.reponse = texNombre(temperatureApresMidi - temperatureMatin, 1)
 
-    this.question = `Le graphique ci-dessous donne l’évolution de la température (en degrés Celsius) en
-fonction de l’horaire (en heures).<br>
+    this.question = `Le graphique ci-dessous donne l'évolution de la température (en degrés Celsius) en
+fonction de l'horaire (en heures).<br>
 Entre $${heureMatin}$h et $${heureApresMidi}$h, de combien de degrés la température a-t-elle augmenté ?<br>
 ${mathalea2d(Object.assign({ scale: 0.5 }, fixeBordures(objets)), objets)}`
-    this.correction = `D’après le graphique, à $${heureMatin}$h, la température est de $${texNombre(temperatureMatin, 1)}$°C et à $${heureApresMidi}$h, elle est de $${texNombre(temperatureApresMidi, 1)}$°C.<br>
-    L’augmentation de la température entre $${heureMatin}$h et $${heureApresMidi}$h est donc de : $${texNombre(temperatureApresMidi, 1)}-${ecritureParentheseSiNegatif(temperatureMatin)}=`
+    this.correction = `D’après le graphique, à $${heureMatin}$h, la température est de $${texNombre(temperatureMatin, 1)}^\\circ$C et à $${heureApresMidi}$h, elle est de $${texNombre(temperatureApresMidi, 1)}^\\circ$C.<br>
+    L'augmentation de la température entre $${heureMatin}$h et $${heureApresMidi}$h est donc de : $${texNombre(temperatureApresMidi, 1)}-${ecritureParentheseSiNegatif(temperatureMatin)}=`
     if (changementDeRepere && temperatureMatin < 0)
       this.correction += `${texNombre(temperatureApresMidi, 1)}+${-temperatureMatin}=`
-    this.correction += `${miseEnEvidence(texNombre(temperatureApresMidi - temperatureMatin, 1))}$°C.`
+    this.correction += `${miseEnEvidence(texNombre(temperatureApresMidi - temperatureMatin, 1))}^\\circ$C.`
   }
 }
