@@ -1,5 +1,5 @@
 import EcritureFractionnaire from '../5e/5N11-3'
-export const titre = 'Écriture fractionnaire, écriture décimale, pourcentage'
+export const titre = 'Écrire avec fraction, écriture décimale, pourcentage'
 export const dateDePublication = '19/06/2022'
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -14,7 +14,7 @@ export const amcReady = true
 export const uuid = 'c988f'
 
 export const refs = {
-  'fr-fr': ['1A-R01-01', 'BP2AutoC5'],
+  'fr-fr': ['2S10-5', 'BP2AutoC5'],
   'fr-ch': [],
 }
 export default class EcritureFractionnaire1T extends EcritureFractionnaire {

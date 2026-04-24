@@ -16,7 +16,7 @@ export const amcType = 'AMCNum'
 export const uuid = '5b5c0'
 
 export const refs = {
-  'fr-fr': ['1A-R02-01'],
+  'fr-fr': ['2S10-10'],
   'fr-ch': [],
 }
 export default class Effectif extends ExerciceSimple {

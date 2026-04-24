@@ -21,7 +21,7 @@ export const dateDeModifImportante = '' // Une date de modification importante a
 export const uuid = '86f71'
 
 export const refs = {
-  'fr-fr': ['1A-R01-04'],
+  'fr-fr': ['2S10-8'],
   'fr-ch': [],
 }
 export default class nomExercice extends Exercice {

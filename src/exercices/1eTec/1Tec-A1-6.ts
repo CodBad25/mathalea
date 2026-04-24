@@ -17,7 +17,7 @@ export const dateDeModifImportante = '09/05/2023'
 export const uuid = 'f0c23'
 
 export const refs = {
-  'fr-fr': ['1A-R03-01'],
+  'fr-fr': ['2S10-11'],
   'fr-ch': [],
 }
 export default class ProportiondeProportion extends ExerciceSimple {

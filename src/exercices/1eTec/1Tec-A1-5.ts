@@ -16,7 +16,7 @@ export const amcType = 'AMCNum'
 export const uuid = 'c7270'
 
 export const refs = {
-  'fr-fr': ['1A-R01-05'],
+  'fr-fr': ['2S10-9'],
   'fr-ch': [],
 }
 export default class Proportion extends ExerciceSimple {
