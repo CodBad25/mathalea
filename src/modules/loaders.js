@@ -65,26 +65,6 @@ export function loadScratchblocks() {
   return load('scratchblocks')
 }
 
-export function injectStyleForCells(mf) {
-  if (!mf.classList.contains('tableauMathlive')) return
-  const shadow = mf.shadowRoot
-  const container = shadow.querySelector('.ML__container')
-  if (container) {
-    const span = container.parentElement
-    span.style.display = 'inline-block'
-    if (shadow && !shadow.getElementById('mathlive-cell')) {
-      const style = document.createElement('style')
-      style.id = 'mathlive-cell'
-      style.textContent = `
-    .ML__container {
-    "display": inline-block;
-    "width": 70%;
-    }`
-      shadow.appendChild(style)
-    }
-  }
-}
-
 export function injectFontInMetaInteractif2d(mf) {
   const shadow = mf.shadowRoot
   if (shadow && !shadow.getElementById('katex-main-font')) {
@@ -104,19 +84,11 @@ function injectPromptStyles(mf) {
   if (!mf.classList.contains('fillInTheBlanks')) {
     if (mf.classList.contains('tableauMathlive')) {
       const shadow = mf.shadowRoot
-      const container = shadow.querySelector('.ML__container')
-      if (container) {
-        const span = container.parentElement
-        span.style.display = 'flex'
-        span.style.flexDirection = 'row'
-      }
       if (shadow && !shadow.getElementById('ml-cell-style')) {
         const style = document.createElement('style')
         style.id = 'ml-cell-style'
         style.textContent = `
         .ML__container {
-    "display": inline-block;
-    "width": 100%;
           "justify-content": center !important;
         }
           .ML__content {
@@ -133,17 +105,16 @@ function injectPromptStyles(mf) {
     const style = document.createElement('style')
     style.id = 'ml-prompt-styles'
     style.textContent = `
-    .ML__prompt:not(.ML__lockedPromptBox) {
+    .ML__prompt {
     min-height: 0.9em !important;
-   
     }
     .ML__prompt-atom {
     line-height: 0.9 !important;
      vertical-align: 0.1em !important;
     }
       /* Prompt actif uniquement */
-     .ML__prompt.ML__focused .ML__focusedPromptBox {
-        outline: 2px solid #3b82f6;
+      .ML__focused .ML__focusedPromptBox {
+        outline: 2px solid #3b82f6 !important;
       }
     `
     shadow.appendChild(style)
