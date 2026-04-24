@@ -125,13 +125,21 @@ export default class ProgrammesDeCalculsEquivalent extends Exercice {
         ${prog2.program.join('<br>')}<br><br>
         ${addMultiMathfield(this, i, {
           dataTemplate: `a) Tester ces programmes avec les nombres $${x1}$ et $${x2}$.<br>
-          Pour le ${texteGras('Programme A')} si $x=${x1}$ on a: %{champ1}<br>
-          Pour le ${texteGras('Programme A')} si $x=${x2}$ on a: %{champ2}<br>
-          Pour le ${texteGras('Programme B')} si $x=${x1}$ on a: %{champ3}<br>
-          Pour le ${texteGras('Programme B')} si $x=${x2}$ on a: %{champ4}<br><br>
+          ${
+            this.interactif
+              ? `Pour le ${texteGras('Programme A')}, si $x=${x1}$, alors on a : %{champ1}.<br>
+          Pour le ${texteGras('Programme A')}, si $x=${x2}$, alors on a : %{champ2}.<br>
+          Pour le ${texteGras('Programme B')}, si $x=${x1}$, alors on a : %{champ3}.<br>
+          Pour le ${texteGras('Programme B')}, si $x=${x2}$, alors on a : %{champ4}.<br><br>`
+              : ''
+          }
           b) Prouver que les deux programmes donnent les mêmes résultats quel que soit le nombre choisi.<br><br>
-          Pour le ${texteGras('Programme A')}, <br> donner l'expression littérale sans la développer : %{champ5}<br>
-          Pour le ${texteGras('Programme B')}, <br> donner l'expression littérale sans la développer : %{champ6}`,
+          ${
+            this.interactif
+              ? `Pour le ${texteGras('Programme A')}, <br> donner l'expression littérale sans la développer : %{champ5}.<br>
+          Pour le ${texteGras('Programme B')}, <br> donner l'expression littérale sans la développer : %{champ6}.`
+              : ''
+          }`,
           dataOptions: {
             champ1: { keyboard: KeyboardType.clavierDeBaseAvecX },
             champ2: { keyboard: KeyboardType.clavierDeBase },

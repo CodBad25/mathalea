@@ -58,13 +58,13 @@ export function generateProgram(
         solutionX: [
           '- Choisir un nombre $ \\rightarrow x$',
           `- Le multiplier par $${a}$ $ \\rightarrow ${a}x$`,
-          `- ${b >= 0 ? 'Ajouter' : 'Soustraire'} $${Math.abs(b)} \\rightarrow ${miseEnEvidence(`${a}x ${sign(b)}`)}$.`,
+          `- ${b >= 0 ? 'Ajouter' : 'Soustraire'} $${Math.abs(b)} \\rightarrow ${miseEnEvidence(`${a}x ${sign(b)}`)}$`,
         ],
         solutionV: function (value: number): string[] {
           return [
             `- Choisir un nombre $ \\rightarrow ${value}$`,
             `- Le multiplier par $${a}$ $ \\rightarrow ${value} \\times ${parNeg(a)} = ${value * a}$`,
-            `- ${b >= 0 ? 'Ajouter' : 'Soustraire'} $${Math.abs(b)} \\rightarrow ${value * a} ${sign(b)} = ${miseEnEvidence(value * a + b)}$.`,
+            `- ${b >= 0 ? 'Ajouter' : 'Soustraire'} $${Math.abs(b)} \\rightarrow ${value * a} ${sign(b)} = ${miseEnEvidence(value * a + b)}$`,
           ]
         },
         testV: function (value: number): number {
@@ -84,8 +84,8 @@ export function generateProgram(
         ],
         solutionX: [
           '- Choisir un nombre $ \\rightarrow x$',
-          `- ${b >= 0 ? 'Ajouter' : 'Soustraire'} $${Math.abs(b)}$ $ \\rightarrow x ${sign(b)}$.`,
-          `- Le multiplier par $${a}$ $ \\rightarrow ${a}(x ${sign(b)})$.`,
+          `- ${b >= 0 ? 'Ajouter' : 'Soustraire'} $${Math.abs(b)}$ $ \\rightarrow x ${sign(b)}$`,
+          `- Multiplier le résultat par $${a}$ $ \\rightarrow ${a}(x ${sign(b)})$`,
         ],
         simplify: [
           '- Développer :',
@@ -97,10 +97,10 @@ export function generateProgram(
           return [
             `- Choisir un nombre $ \\rightarrow ${value}$`,
             `- ${b >= 0 ? 'Ajouter' : 'Soustraire'} $${Math.abs(b)}$ $ \\rightarrow ${value} ${sign(b)} 
-               = ${value + b}$.`,
-            `- Le multiplier par $${a}$ $ \\rightarrow ${a} \\times ${
-              value + b
-            } = ${miseEnEvidence(a * (value + b))}$.`,
+               = ${value + b}$`,
+            `- Multiplier le résultat par $${a}$ $ \\rightarrow ${a} \\times ${parNeg(
+              value + b,
+            )} = ${miseEnEvidence(a * (value + b))}$`,
           ]
         },
         testV: function (value: number): number {
@@ -120,8 +120,8 @@ export function generateProgram(
         ],
         solutionX: [
           '- Choisir un nombre $ \\rightarrow x$',
-          `- ${a >= 0 ? 'Ajouter' : 'Soustraire'} $${Math.abs(a)}$ $ \\rightarrow x ${sign(a)}$.`,
-          `- Multiplier le nombre choisi par ce résultat $ \\rightarrow x(x ${sign(a)})$.`,
+          `- ${a >= 0 ? 'Ajouter' : 'Soustraire'} $${Math.abs(a)}$ $ \\rightarrow x ${sign(a)}$`,
+          `- Multiplier le nombre choisi par ce résultat $ \\rightarrow x(x ${sign(a)})$`,
         ],
         simplify: [
           '- Développer :',
@@ -132,8 +132,8 @@ export function generateProgram(
         solutionV: function (value: number): string[] {
           return [
             `- Choisir un nombre $ \\rightarrow ${value}$`,
-            `- ${a >= 0 ? 'Ajouter' : 'Soustraire'} $${Math.abs(a)}$ $ \\rightarrow ${value} ${sign(a)} = ${value + a}$.`,
-            `- Multiplier le nombre choisi par ce résultat $ \\rightarrow ${parNeg(value)} \\times ${parNeg(value + a)} = ${miseEnEvidence(value * (value + a))}$.`,
+            `- ${a >= 0 ? 'Ajouter' : 'Soustraire'} $${Math.abs(a)}$ $ \\rightarrow ${value} ${sign(a)} = ${value + a}$`,
+            `- Multiplier le nombre choisi par ce résultat $ \\rightarrow ${value} \\times ${parNeg(value + a)} = ${miseEnEvidence(value * (value + a))}$`,
           ]
         },
         testV: function (value: number): number {
@@ -154,13 +154,13 @@ export function generateProgram(
         solutionX: [
           '- Choisir un nombre $ \\rightarrow x$',
           "- L'élever au carré $ \\rightarrow x^2$",
-          `- Soustraire $${Math.abs(a)}$ $ \\rightarrow ${miseEnEvidence(`x^{2} ${sign(-Math.abs(a))}`)}$.`,
+          `- Soustraire $${Math.abs(a)}$ $ \\rightarrow ${miseEnEvidence(`x^{2} ${sign(-Math.abs(a))}`)}$`,
         ],
         solutionV: function (value: number): string[] {
           return [
             `- Choisir un nombre $ \\rightarrow ${value}$`,
             `- L'élever au carré  $\\rightarrow ${parNeg(value)}^2 = ${value ** 2}$`,
-            `- Soustraire $${Math.abs(a)}$  $ \\rightarrow${value ** 2} ${sign(-Math.abs(a))} = ${miseEnEvidence(value ** 2 - Math.abs(a))}$.`,
+            `- Soustraire $${Math.abs(a)}$  $ \\rightarrow${value ** 2} ${sign(-Math.abs(a))} = ${miseEnEvidence(value ** 2 - Math.abs(a))}$`,
           ]
         },
         testV: function (value: number): number {
@@ -177,13 +177,13 @@ export function generateProgram(
           '- Choisir un nombre.',
           `- ${a >= 0 ? 'Ajouter' : 'Soustraire'} $${Math.abs(a)}$ au nombre choisi.`,
           `- ${a >= 0 ? 'Soustraire' : 'Ajouter'} $${Math.abs(a)}$ au nombre choisi.`,
-          ' - Multiplier les deux résultats précédent.',
+          ' - Multiplier les deux résultats précédents.',
         ],
         solutionX: [
           '- Choisir un nombre $ \\rightarrow x$',
-          `- ${a >= 0 ? 'Ajouter' : 'Soustraire'} $${Math.abs(a)}$ $ \\rightarrow x ${sign(a)}$.`,
-          `- ${a >= 0 ? 'Soustraire' : 'Ajouter'} $${Math.abs(a)}$ $ \\rightarrow x ${sign(-a)}$.`,
-          `- Multiplier les deux résultats précédent $ \\rightarrow (x ${sign(a)})(x ${sign(-a)})$.`,
+          `- ${a >= 0 ? 'Ajouter' : 'Soustraire'} $${Math.abs(a)}$ $ \\rightarrow x ${sign(a)}$`,
+          `- ${a >= 0 ? 'Soustraire' : 'Ajouter'} $${Math.abs(a)}$ $ \\rightarrow x ${sign(-a)}$`,
+          `- Multiplier les deux résultats précédents $ \\rightarrow (x ${sign(a)})(x ${sign(-a)})$`,
         ],
         simplify: [
           '- Développer :',
@@ -197,11 +197,11 @@ export function generateProgram(
             `- Choisir un nombre $ \\rightarrow ${value}$`,
             `- ${a >= 0 ? 'Ajouter' : 'Soustraire'} $${Math.abs(a)}$ $ \\rightarrow ${value} ${sign(a)} = ${
               value + a
-            }$.`,
+            }$`,
             `- ${a >= 0 ? 'Soustraire' : 'Ajouter'} $${Math.abs(a)}$ $ \\rightarrow ${value} ${sign(-a)} = ${
               value - a
-            }$.`,
-            `- Multiplier les deux résultats précédent $ \\rightarrow ${parNeg(value + a)} \\times ${parNeg(value - a)} = ${miseEnEvidence((value + a) * (value - a))}$.`,
+            }$`,
+            `- Multiplier les deux résultats précédents $ \\rightarrow ${value + a} \\times ${parNeg(value - a)} = ${miseEnEvidence((value + a) * (value - a))}$`,
           ]
         },
         testV: function (value: number): number {
@@ -222,9 +222,9 @@ export function generateProgram(
         ],
         solutionX: [
           '- Choisir un nombre  $\\rightarrow x$',
-          `- ${b >= 0 ? 'Ajouter' : 'Soustraire'} $${Math.abs(b)}$ $ \\rightarrow x ${b >= 0 ? '+' : '-'} ${Math.abs(b)}$.`,
-          `- Le multiplier par $${a}$ $\\rightarrow ${a}(x ${b >= 0 ? '+' : '-'} ${Math.abs(b)})$.`,
-          `- ${b >= 0 ? 'Ajouter' : 'Soustraire'} $${Math.abs(b)}$ fois le nombre choisi  $ \\rightarrow ${a}(x ${b >= 0 ? '+' : '-'} ${Math.abs(b)}) ${b >= 0 ? '+' : '-'} ${Math.abs(b)}x$.`,
+          `- ${b >= 0 ? 'Ajouter' : 'Soustraire'} $${Math.abs(b)}$ $ \\rightarrow x ${b >= 0 ? '+' : '-'} ${Math.abs(b)}$`,
+          `- Le multiplier par $${a}$ $\\rightarrow ${a}(x ${b >= 0 ? '+' : '-'} ${Math.abs(b)})$`,
+          `- ${b >= 0 ? 'Ajouter' : 'Soustraire'} $${Math.abs(b)}$ fois le nombre choisi  $ \\rightarrow ${a}(x ${b >= 0 ? '+' : '-'} ${Math.abs(b)}) ${b >= 0 ? '+' : '-'} ${Math.abs(b)}x$`,
         ],
         simplify: [
           '- Développer :',
@@ -236,10 +236,10 @@ export function generateProgram(
         solutionV: function (value: number): string[] {
           return [
             `- Choisir un nombre  $\\rightarrow ${value}$`,
-            `- ${b >= 0 ? 'Ajouter' : 'Soustraire'} $${Math.abs(b)}$ $\\rightarrow ${value} ${sign(b)} = ${value + b}$.`,
-            `- Le multiplier par $${a}$ $\\rightarrow ${a} \\times  ${parNeg(value + b)} = ${a * (value + b)}$.`,
+            `- ${b >= 0 ? 'Ajouter' : 'Soustraire'} $${Math.abs(b)}$ $\\rightarrow ${value} ${sign(b)} = ${value + b}$`,
+            `- Le multiplier par $${a}$ $\\rightarrow ${a} \\times  ${parNeg(value + b)} = ${a * (value + b)}$`,
             `- ${b >= 0 ? 'Ajouter' : 'Soustraire'} ${Math.abs(b)} fois le nombre choisi $ \\rightarrow 
-              ${a * (value + b)}  ${sign(b)} \\times ${parNeg(value)} = ${miseEnEvidence(a * (value + b) + b * value)}$.`,
+              ${a * (value + b)}  ${sign(b)} \\times ${parNeg(value)} = ${miseEnEvidence(a * (value + b) + b * value)}$`,
           ]
         },
         testV: function (value: number): number {
@@ -259,9 +259,9 @@ export function generateProgram(
         ],
         solutionX: [
           '- Choisir un nombre $ \\rightarrow x$',
-          `- ${a >= 0 ? 'Ajouter' : 'Soustraire'} ${Math.abs(a)} $ \\rightarrow x ${sign(a)}$.`,
-          `- Élever le résultat au carré $  \\rightarrow (x ${sign(a)})^{2} $.`,
-          `- Soustraire le carré du nombre choisi $ \\rightarrow (x ${sign(a)})^{2} - x^{2} $.`,
+          `- ${a >= 0 ? 'Ajouter' : 'Soustraire'} ${Math.abs(a)} $ \\rightarrow x ${sign(a)}$`,
+          `- Élever le résultat au carré $  \\rightarrow (x ${sign(a)})^{2} $`,
+          `- Soustraire le carré du nombre choisi $ \\rightarrow (x ${sign(a)})^{2} - x^{2} $`,
         ],
         simplify: [
           '- Développer :',
@@ -274,9 +274,9 @@ export function generateProgram(
         solutionV: function (value: number): string[] {
           return [
             `- Choisir un nombre : $${value}$`,
-            `- ${a >= 0 ? 'Ajouter' : 'Soustraire'} ${Math.abs(a)} $ \\rightarrow ${value} ${sign(a)} = ${value + a}$.`,
-            `- Élever le résultat au carré $ \\rightarrow ${parNeg(value + a)}^2 = ${(value + a) ** 2} $.`,
-            `- Soustraire le carré du nombre choisi $ \\rightarrow ${(value + a) ** 2} - ${parNeg(value)}^{2} = ${miseEnEvidence((value + a) ** 2 - value ** 2)} $.`,
+            `- ${a >= 0 ? 'Ajouter' : 'Soustraire'} ${Math.abs(a)} $ \\rightarrow ${value} ${sign(a)} = ${value + a}$`,
+            `- Élever le résultat au carré $ \\rightarrow ${parNeg(value + a)}^2 = ${(value + a) ** 2} $`,
+            `- Soustraire le carré du nombre choisi $ \\rightarrow ${(value + a) ** 2} - ${parNeg(value)}^{2} = ${miseEnEvidence((value + a) ** 2 - value ** 2)} $`,
           ]
         },
         testV: function (value: number): number {
@@ -296,9 +296,9 @@ export function generateProgram(
         ],
         solutionX: [
           '- Choisir un nombre $ \\rightarrow x$',
-          `- ${a >= 0 ? 'Ajouter' : 'Soustraire'} $${Math.abs(a)}$ $ \\rightarrow x ${sign(a)}$.`,
-          `- Élever le résultat au carré $  \\rightarrow (x ${sign(a)})^{2} $.`,
-          `- ${b >= 0 ? 'Ajouter' : 'Soustraire'} $${Math.abs(b)}$ $ \\rightarrow (x ${sign(a)})^{2} ${sign(b)} $.`,
+          `- ${a >= 0 ? 'Ajouter' : 'Soustraire'} $${Math.abs(a)}$ $ \\rightarrow x ${sign(a)}$`,
+          `- Élever le résultat au carré $  \\rightarrow (x ${sign(a)})^{2} $`,
+          `- ${b >= 0 ? 'Ajouter' : 'Soustraire'} $${Math.abs(b)}$ $ \\rightarrow (x ${sign(a)})^{2} ${sign(b)} $`,
         ],
         simplify: [
           '- Développer :',
@@ -311,9 +311,9 @@ export function generateProgram(
         solutionV: function (value: number): string[] {
           return [
             `- Choisir un nombre : $${value}$`,
-            `- ${a >= 0 ? 'Ajouter' : 'Soustraire'} $${Math.abs(a)}$ $ \\rightarrow ${value} ${sign(a)} = ${value + a}$.`,
-            `- Élever le résultat au carré $ \\rightarrow ${parNeg(value + a)}^2 = ${(value + a) ** 2} $.`,
-            `- ${b >= 0 ? 'Ajouter' : 'Soustraire'} $${Math.abs(b)}$ $ \\rightarrow ${(value + a) ** 2} ${sign(b)} = ${miseEnEvidence((value + a) ** 2 + b)} $.`,
+            `- ${a >= 0 ? 'Ajouter' : 'Soustraire'} $${Math.abs(a)}$ $ \\rightarrow ${value} ${sign(a)} = ${value + a}$`,
+            `- Élever le résultat au carré $ \\rightarrow ${parNeg(value + a)}^2 = ${(value + a) ** 2} $`,
+            `- ${b >= 0 ? 'Ajouter' : 'Soustraire'} $${Math.abs(b)}$ $ \\rightarrow ${(value + a) ** 2} ${sign(b)} = ${miseEnEvidence((value + a) ** 2 + b)} $`,
           ]
         },
         testV: function (value: number): number {
@@ -332,8 +332,8 @@ export function generateProgram(
         ],
         solutionX: [
           '- Choisir un nombre $ \\rightarrow x$',
-          `- ${a >= 0 ? 'Ajouter' : 'Soustraire'} ${Math.abs(a)} $ \\rightarrow x ${sign(a)}$.`,
-          `- Élever le résultat au carré $  \\rightarrow (x ${sign(a)})^{2} $.`,
+          `- ${a >= 0 ? 'Ajouter' : 'Soustraire'} ${Math.abs(a)} $ \\rightarrow x ${sign(a)}$`,
+          `- Élever le résultat au carré $  \\rightarrow (x ${sign(a)})^{2} $`,
         ],
         simplify: [
           '- Développer :',
@@ -346,8 +346,8 @@ export function generateProgram(
         solutionV: function (value: number): string[] {
           return [
             `- Choisir un nombre : $${value}$`,
-            `- ${a >= 0 ? 'Ajouter' : 'Soustraire'} ${Math.abs(a)} $ \\rightarrow ${value} ${sign(a)} = ${value + a}$.`,
-            `- Élever le résultat au carré $ \\rightarrow ${parNeg(value + a)}^2 = ${miseEnEvidence((value + a) ** 2)} $.`,
+            `- ${a >= 0 ? 'Ajouter' : 'Soustraire'} ${Math.abs(a)} $ \\rightarrow ${value} ${sign(a)} = ${value + a}$`,
+            `- Élever le résultat au carré $ \\rightarrow ${parNeg(value + a)}^2 = ${miseEnEvidence((value + a) ** 2)} $`,
           ]
         },
         testV: function (value: number): number {
@@ -369,19 +369,19 @@ export function generateProgram(
         ],
         solutionX: [
           '- Choisir un nombre $ \\rightarrow x$',
-          `- Le multiplier par $${a}$ $\\rightarrow ${a}x$.`,
-          `- ${b >= 0 ? 'Ajouter' : 'Soustraire'} ${Math.abs(b)} $\\rightarrow ${a}x ${sign(b)}$.`,
-          `- Élever le résultat au carré $\\rightarrow ${miseEnEvidence(`({a}x ${sign(b)})^{2}`)} $.`,
+          `- Le multiplier par $${a}$ $\\rightarrow ${a}x$`,
+          `- ${b >= 0 ? 'Ajouter' : 'Soustraire'} ${Math.abs(b)} $\\rightarrow ${a}x ${sign(b)}$`,
+          `- Élever le résultat au carré $\\rightarrow ${miseEnEvidence(`({a}x ${sign(b)})^{2}`)} $`,
         ],
         solutionV: function (value: number): string[] {
           return [
             `- Choisir un nombre $ \\rightarrow ${value}$`,
             `- Le multiplier par $${a}$ $\\rightarrow ${value} \\times ${parNeg(a)} = ${value * a}$`,
             `- ${b >= 0 ? 'Ajouter' : 'Soustraire'} ${Math.abs(b)} $\\rightarrow 
-               ${value * a} ${sign(b)} = ${value * a + b}$.`,
+               ${value * a} ${sign(b)} = ${value * a + b}$`,
             `- Élever le résultat au carré $\\rightarrow (${value * a + b})^{2} = ${miseEnEvidence(
               (value * a + b) ** 2,
-            )} $.`,
+            )} $`,
           ]
         },
         testV: function (value: number): number {
@@ -405,7 +405,7 @@ export function generateProgram(
           '- Choisir un nombre $ \\rightarrow x$',
           "- L'élever au carré $ \\rightarrow x^2$",
           `- ${a >= 0 ? 'Ajouter' : 'Soustraire'} $${Math.abs(a)}$ fois le nombre choisi  $ \\rightarrow x^2 ${sign(a)}x$`,
-          `- ${b >= 0 ? 'Ajouter' : 'Soustraire'} $${Math.abs(b)}$ $ \\rightarrow ${miseEnEvidence(`x^2 ${sign(a)}x ${sign(b)}`)}$.`,
+          `- ${b >= 0 ? 'Ajouter' : 'Soustraire'} $${Math.abs(b)}$ $ \\rightarrow ${miseEnEvidence(`x^2 ${sign(a)}x ${sign(b)}`)}$`,
         ],
         solutionV: function (value: number): string[] {
           return [
@@ -413,10 +413,10 @@ export function generateProgram(
             `- L'élever au carré  $\\rightarrow ${parNeg(value)}^2 = ${value ** 2}$`,
             `- ${a >= 0 ? 'Ajouter' : 'Soustraire'} $${Math.abs(a)}$ fois le nombre choisi $ \\rightarrow${value ** 2} ${sign(a)} \\times ${parNeg(value)} = ${
               value ** 2 + a * value
-            }$.`,
+            }$`,
             `- ${b >= 0 ? 'Ajouter' : 'Soustraire'} $${Math.abs(b)}$  $ \\rightarrow${
               value ** 2 + a * value
-            } ${sign(b)} = ${miseEnEvidence(value ** 2 + a * value + b)}$.`,
+            } ${sign(b)} = ${miseEnEvidence(value ** 2 + a * value + b)}$`,
           ]
         },
         testV: function (value: number): number {
