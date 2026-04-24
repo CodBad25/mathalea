@@ -8,14 +8,12 @@ import { segment } from '../../lib/2d/segmentsVecteurs'
 import { texteParPosition } from '../../lib/2d/textes'
 import { tracePoint } from '../../lib/2d/TracePoint'
 import { milieu, pointIntersectionLC } from '../../lib/2d/utilitairesPoint'
+import { bleuMathalea } from '../../lib/colors'
 import { deuxColonnes } from '../../lib/format/miseEnPage'
 import { texteGras } from '../../lib/format/style'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
-import {
-  ajouteChampTexte,
-  ajouteChampTexteMathLive,
-} from '../../lib/interactif/questionMathLive'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import { extraireRacineCarree } from '../../lib/outils/calculs'
 import { ecritureParentheseSiNegatif } from '../../lib/outils/ecritures'
@@ -25,12 +23,11 @@ import { texNombre, texRacineCarree } from '../../lib/outils/texNombre'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { bleuMathalea } from '../../lib/colors'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const titre =
   'Calculer et utiliser la distance entre deux points dans un repère'
-export const dateDeModifImportante = '23/11/2023'
+export const dateDeModifImportante = '24/04/2026'
 
 /**
  * @author Stéphane Guyon + Gilles Mora (interactif + bricoles)
@@ -51,7 +48,7 @@ export default class Distance extends Exercice {
     ]
 
     this.nbQuestions = 1
-
+    this.spacing = 1.5
     this.sup = 1 //
     this.correctionDetaillee = false
     this.correctionDetailleeDisponible = true
@@ -99,16 +96,15 @@ export default class Distance extends Exercice {
             A.nom = nom[0]
             B.nom = nom[1]
             if (extraireRacineCarree(AB)[0] === 1) {
-              setReponse(this, i, `\\sqrt{${XAB + YAB}}`, {
-                formatInteractif: 'calcul',
+              handleAnswers(this, i, {
+                reponse: { value: `\\sqrt{${XAB + YAB}}` },
               })
             } else {
-              setReponse(
-                this,
-                i,
-                [`\\sqrt{${XAB + YAB}}`, `${texRacineCarree(AB)}`],
-                { formatInteractif: 'calcul' },
-              )
+              handleAnswers(this, i, {
+                reponse: {
+                  value: [`\\sqrt{${XAB + YAB}}`, `${texRacineCarree(AB)}`],
+                },
+              })
             }
             texte =
               'Dans un repère orthonormé $(O\\,;\\,I\\,,\\,J)$, on donne les points suivants :'
@@ -120,9 +116,7 @@ export default class Distance extends Exercice {
                   this,
                   i,
                   KeyboardType.clavierFullOperations,
-                  {
-                    texteAvant: `$${A.nom}${B.nom}=$`,
-                  },
+                  { texteAvant: `$${A.nom}${B.nom}=$` },
                 )
               : ''
             if (this.correctionDetaillee) {
@@ -165,8 +159,11 @@ export default class Distance extends Exercice {
             A.nom = nom[0]
             B.nom = nom[1]
             C.nom = nom[2]
-            setReponse(this, i, ['OUI', 'oui', 'Oui'], {
-              formatInteractif: 'texte',
+            handleAnswers(this, i, {
+              reponse: {
+                value: ['OUI', 'oui', 'Oui', 'O'],
+                options: { texteSansCasse: true },
+              },
             })
             texte =
               'Dans un repère orthonormé $(O\\,;\\,I\\,,\\,J)$, on donne les points suivants :'
@@ -174,7 +171,9 @@ export default class Distance extends Exercice {
             texte += `<br>Le point $${C.nom}\\left(${xC}\\,;\\,${yC}\\right)$ appartient-il au cercle de centre $${A.nom}$ passant par $${B.nom}$ ?`
             if (this.interactif) {
               texte +=
-                '<br>Répondre par "oui" ou "non". ' + ajouteChampTexte(this, i)
+                '<br>Répondre par O (pour Oui) ou N (pour Non). ' +
+                '<br>' +
+                ajouteChampTexteMathLive(this, i, KeyboardType.vFON)
             }
             texteCorr = `Le point $${C.nom}$ appartient au cercle de centre $${A.nom}$ passant par $${B.nom}$ si et seulement si $${A.nom}${B.nom}=${A.nom}${C.nom}$.`
             texteCorr += `<br>${texteGras('Conseil :')} Faites un croquis pour visualiser la situation.<br>`
@@ -223,8 +222,11 @@ export default class Distance extends Exercice {
             A.nom = nom[0]
             B.nom = nom[1]
             C.nom = nom[2]
-            setReponse(this, i, ['NON', 'non', 'Non'], {
-              formatInteractif: 'texte',
+            handleAnswers(this, i, {
+              reponse: {
+                value: ['NON', 'non', 'Non', 'N'],
+                options: { texteSansCasse: true },
+              },
             })
             texte =
               'Dans un repère orthonormé $(O\\,;\\,I\\,,\\,J)$, on donne les points suivants :'
@@ -232,7 +234,9 @@ export default class Distance extends Exercice {
             texte += `<br>Le point $${C.nom}\\left(${xC}\\,;\\,${yC}\\right)$ appartient-il au cercle de centre $${A.nom}$ passant par $${B.nom}$ ?`
             if (this.interactif) {
               texte +=
-                '<br>Répondre par "oui" ou "non". ' + ajouteChampTexte(this, i)
+                '<br>Répondre par "O" (pour Oui) ou "N" (pour Non). ' +
+                '<br>' +
+                ajouteChampTexteMathLive(this, i, KeyboardType.vFON)
             }
             texteCorr = `Le point $${C.nom}$ appartient au cercle de centre $${A.nom}$ passant par $${B.nom}$ si et seulement si $${A.nom}${B.nom}=${A.nom}${C.nom}$.`
             texteCorr += `<br>${texteGras('Conseil :')} Faites un croquis pour visualiser la situation.<br>`
@@ -295,8 +299,11 @@ export default class Distance extends Exercice {
             const s2 = segment(M2, M3, 'black')
             s2.pointilles = 5
             const s3 = segment(M2, M1, bleuMathalea)
-            setReponse(this, i, ['OUI', 'oui', 'Oui'], {
-              formatInteractif: 'texte',
+            handleAnswers(this, i, {
+              reponse: {
+                value: ['OUI', 'oui', 'Oui', 'O'],
+                options: { texteSansCasse: true },
+              },
             })
             texte =
               'Dans un repère orthonormé $(O\\,;\\,I\\,,\\,J)$, on donne les points suivants :'
@@ -304,7 +311,9 @@ export default class Distance extends Exercice {
             texte += `<br>Le point $${C.nom}\\left(${xC}\\,;\\,${yC}\\right)$ appartient-il à la médiatrice du segment  $[${A.nom}${B.nom}]$ ?`
             if (this.interactif) {
               texte +=
-                '<br>Répondre par "oui" ou "non".' + ajouteChampTexte(this, i)
+                '<br>Répondre par "O" (pour Oui) ou "N" (pour Non). ' +
+                '<br>' +
+                ajouteChampTexteMathLive(this, i, KeyboardType.vFON)
             }
             const colonne1 = mathalea2d(
               {
@@ -406,8 +415,11 @@ export default class Distance extends Exercice {
             const s2 = segment(M2, M3, 'black')
             s2.pointilles = 5
             const s3 = segment(M2, M1, bleuMathalea)
-            setReponse(this, i, ['NON', 'non', 'Non'], {
-              formatInteractif: 'texte',
+            handleAnswers(this, i, {
+              reponse: {
+                value: ['NON', 'non', 'Non', 'N'],
+                options: { texteSansCasse: true },
+              },
             })
             texte =
               'Dans un repère orthonormé $(O\\,;\\,I\\,,\\,J)$, on donne les points suivants :'
@@ -415,7 +427,9 @@ export default class Distance extends Exercice {
             texte += `<br>Le point $${C.nom}\\left(${xC}\\,;\\,${yC}\\right)$ appartient-il à la médiatrice du segment  $[${A.nom}${B.nom}]$ ?`
             if (this.interactif) {
               texte +=
-                '<br>Répondre par "oui" ou "non".' + ajouteChampTexte(this, i)
+                '<br>Répondre par "O" (pour Oui) ou "N" (pour Non). ' +
+                '<br>' +
+                ajouteChampTexteMathLive(this, i, KeyboardType.vFON)
             }
             const colonne1 = mathalea2d(
               {
