@@ -38,7 +38,7 @@ export const refs = {
 export default class convertirAiresVersion2025 extends Exercice {
   constructor() {
     super()
-
+    this.spacing = 2
     this.nbQuestions = 4
     this.besoinFormulaireTexte = [
       'Type de conversions',
@@ -82,16 +82,16 @@ export default class convertirAiresVersion2025 extends Exercice {
       let unite2 = ''
       switch (typesDeConversions[i]) {
         case 1:
-          unite1 = '\\text{ m}^2'
+          unite1 = '~\\text{ m}^2'
           unite2 = '~\\text{dm}^2'
           break
         case 2:
           unite1 = '~\\text{dm}^2'
-          unite2 = '\\text{ m}^2'
+          unite2 = '~\\text{m}^2'
           break
         case 3:
           unite1 = '~\\text{dm}^2'
-          unite2 = '\\text{ cm}^2'
+          unite2 = '~\\text{cm}^2'
           break
         case 4:
           unite1 = '\\text{ cm}^2'
@@ -123,7 +123,7 @@ export default class convertirAiresVersion2025 extends Exercice {
       if (this.interactif) {
         texte += `$${texNombre(val)} ${unite1} = $`
         texte += ajouteChampTexteMathLive(this, i, KeyboardType.clavierDeBase, {
-          texteApres: ` $${unite2}$`,
+          texteApres: `$${unite2}$`,
         })
         handleAnswers(this, i, {
           reponse: {

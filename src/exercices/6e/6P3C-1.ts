@@ -227,7 +227,7 @@ export default class ProportionnaliteParLineariteBis extends Exercice {
       })
       enonceAMC = `${numAlpha(k)} Quel est le nombre maximum de ${situation.achat_plur} que ${prenomliste[5]} peut acheter avec $${texPrix(nMax * situation.pu)}$${sp()}€ ? `
 
-      const enonceQ4 = `${String.fromCharCode(97 + k)}) Quel est le nombre maximum de ${situation.achat_plur} que ${prenomliste[5]} peut acheter avec $${texPrix(nMax * situation.pu)}$${sp()}€ ? %{champ${k + 1}} ${situation.achat_plur}\n`
+      const enonceQ4 = `${String.fromCharCode(97 + k)}) Quel est le nombre maximum de ${situation.achat_plur} que ${prenomliste[5]} peut acheter avec $${texPrix(nMax * situation.pu)}$${sp()}€ ? %{champ${k + 1}} ${situation.achat_plur}.`
       k++
       propositionsAMC.push({
         type: 'AMCNum',

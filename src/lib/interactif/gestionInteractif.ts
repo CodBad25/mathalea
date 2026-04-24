@@ -24,6 +24,7 @@ import { afficheScore } from './afficheScore'
 import { fonctionComparaison } from './comparisonFunctions'
 import { verifDragAndDrop } from './DragAndDrop'
 import {
+  addSmiley,
   toutAUnPoint,
   toutPourUnPoint,
   verifQuestionMathLive,
@@ -1363,10 +1364,8 @@ export function verifQuestionMultiMathfield(
     if (result.isOk) {
       compteurBonnesReponses++
       points.push(1)
-      eltFeedback.innerHTML = '😎'
     } else {
       points.push(0)
-      eltFeedback.innerHTML = '☹️'
       if (result.feedback === 'saisieVide') result.feedback = ''
       else {
         result = {
@@ -1375,6 +1374,7 @@ export function verifQuestionMultiMathfield(
         }
       }
     }
+    addSmiley(mf, result.isOk)
     mf.classList.add('corrected')
 
     if (result.feedback != null)

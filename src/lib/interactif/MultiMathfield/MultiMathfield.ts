@@ -5,6 +5,8 @@ import { context } from '../../../modules/context'
 import { bleuMathalea } from '../../colors'
 import type { IExercice, ValeurNames } from '../../types'
 import { buildDataKeyboardFromStyle, KeyboardType } from '../claviers/keyboard'
+// Cet import enregistre le custom element <math-input> s'il ne l'est pas encore
+import '../../MathInput'
 import { setMathfield, setMathfieldListener } from './setMathfield'
 
 function stylizeItems(text: string, output: 'html' | 'latex' = 'html'): string {
@@ -88,6 +90,9 @@ export class MultiMathfieldElement extends HTMLElement {
       math-field {
         text-align: center;
       }
+      math-field:not(.fillInTheBlanks):not(.metaInteractif2d) {
+        border-radius: 4px;
+      }
       math-field::part(content) {
         justify-content: start;
       }
@@ -155,9 +160,19 @@ export class MultiMathfieldElement extends HTMLElement {
     const regex = /(\$[^$]+\$|%\{[^}]+\}|\n)/g
     let lastIndex = 0
     let match
+    const computedStyle = getComputedStyle(this)
+    const computedLineHeight = parseFloat(computedStyle.lineHeight)
+    const computedFontSize = parseFloat(computedStyle.fontSize)
+    const spacingFactor =
+      Number.isFinite(computedLineHeight) &&
+      Number.isFinite(computedFontSize) &&
+      computedFontSize > 0
+        ? computedLineHeight / computedFontSize
+        : 1
+    const lineMarginBottom = `${4 * spacingFactor}px`
     // On commence avec un span courant
     let currentSpan = document.createElement('span')
-    currentSpan.style.display = 'inline-block'
+    currentSpan.style.display = 'block'
     const container = document.createElement('span')
     container.style.display = 'inline-block'
     while ((match = regex.exec(template)) !== null) {
@@ -173,60 +188,55 @@ export class MultiMathfieldElement extends HTMLElement {
       }
       const token = match[0]
       if (token === '\n') {
-        // On ferme le span courant, ajoute <br>, puis nouveau span
+        // On ferme la ligne courante puis on démarre une nouvelle ligne.
         if (currentSpan.childNodes.length > 0) {
+          currentSpan.style.marginBottom = lineMarginBottom
           container.appendChild(currentSpan)
         }
-        container.appendChild(document.createElement('br'))
         currentSpan = document.createElement('span')
-        currentSpan.style.display = 'inline-block'
+        currentSpan.style.display = 'block'
       } else if (token.startsWith('%{')) {
         // Champ éditable
         const name = token.slice(2, -1)
-        const div = document.createElement('DIV')
-        div.style.display = 'inline-block'
-        div.style.border = '1px solid #ccc'
-        div.style.borderRadius = '4px'
-        div.classList.add('ml-1')
-        div.style.marginLeft = '2px'
-        div.style.marginRight = '2px'
-        div.style.marginTop = '0'
-        div.style.marginBottom = '0'
-        div.style.paddingTop = '0'
-        div.style.paddingBottom = '0'
-        div.style.paddingLeft = '0'
-        div.style.paddingRight = '0'
-        const mathfield = new MathfieldElement()
-
-        mathfield.classList.add('ml-1')
+        // Création du MathInput encapsulant un MathfieldElement
+        const mathInput = document.createElement('math-input')
+        mathInput.style.display = 'inline-block'
+        mathInput.style.marginLeft = '2px'
+        mathInput.style.marginRight = '2px'
+        mathInput.style.marginTop = '0'
+        mathInput.style.marginBottom = '0'
+        mathInput.style.paddingTop = '0'
+        mathInput.style.paddingBottom = '0'
+        mathInput.style.paddingLeft = '0'
+        mathInput.style.paddingRight = '0'
+        mathInput.setAttribute('data-type', 'mathlive')
+        const mathfieldId = (this.id ? this.id : 'multi-mathfield') + '-' + name
+        mathInput.setAttribute('data-id', mathfieldId)
+        mathInput.setAttribute('data-name', name)
         if (options[name]) {
+          if (options[name].texteApres) {
+            mathInput.setAttribute('data-texte-apres', options[name].texteApres)
+          }
           const style = options[name].keyboard ? options[name].keyboard : ''
           const placeHolder = options[name].placeholder
             ? options[name].placeholder
             : ''
           const maxWidth = options[name].maxWidth ? options[name].maxWidth : 100
-          mathfield.style.maxWidth = `${maxWidth}px`
-          const minWidth = options[name].minWidth ? options[name].minWidth : 30
-          mathfield.style.minWidth = `${minWidth}px`
+          mathInput.setAttribute('data-max-width', String(maxWidth))
+          const minWidth = options[name].minWidth ? options[name].minWidth : 50
+          mathInput.setAttribute('data-min-width', String(minWidth))
           const dataKeyboard = buildDataKeyboardString(
             typeof style === 'string' ? style : '',
           )
-          mathfield.setAttribute('data-keyboard', dataKeyboard)
+          if (dataKeyboard)
+            mathInput.setAttribute('data-keyboard', dataKeyboard)
           if (placeHolder !== '') {
-            mathfield.setAttribute('placeholder', placeHolder)
+            mathInput.setAttribute('placeholder', placeHolder)
           }
         }
-        // On donne comme id la concaténation de l'id du MultiMathfield (this.id) et du name du champ pour être sûr d'avoir un id unique
-        mathfield.id = (this.id ? this.id : 'multi-mathfield') + '-' + name
-        mathfield.setAttribute('data-name', name)
-        mathfield.style.border = 'none'
-
-        // mathfield.style.verticalAlign = 'middle'
-        // mathfield.style.boxShadow =
-        //   'inset 2px 2px 6px #ccc, inset -2px -2px 6px #fff'
 
         // Ajout gestionnaire TAB pour navigation globale entre tous les mathfields du DOM (y compris dans les shadowRoots)
-        mathfield.addEventListener('keydown', (e) => {
+        mathInput.addEventListener('keydown', (e) => {
           if (e.key === 'Tab') {
             e.preventDefault()
             // Fonction utilitaire pour collecter tous les mathfields du DOM et des shadowRoots
@@ -267,31 +277,10 @@ export class MultiMathfieldElement extends HTMLElement {
             }
           }
         })
-        div.appendChild(mathfield)
-        let texteApres: HTMLElement | null = null
-        if (options[name] && options[name].texteApres) {
-          texteApres = document.createElement('span')
-          texteApres.style.marginLeft = '0'
-          texteApres.textContent = options[name].texteApres // On met le LaTeX brut dans le span, renderMathInElement va le transformer
-        }
+        currentSpan.appendChild(mathInput)
 
-        // Ajoute un span de vérification après chaque Mathfield
-
-        const checkSpan = document.createElement('span')
-        checkSpan.id = 'check-' + mathfield.id
-        currentSpan.appendChild(div)
-        if (texteApres) {
-          currentSpan.appendChild(texteApres)
-        }
-        currentSpan.appendChild(checkSpan)
-
-        if (mathfield.isConnected) {
-          setMathfield(mathfield)
-        } else {
-          mathfield.addEventListener('mount', setMathfieldListener, {
-            once: true,
-          })
-        }
+        // L'initialisation du MathfieldElement encapsulé est faite après
+        // l'insertion dans le DOM (voir après replaceChildren ci-dessous).
       } else if (token.startsWith('$')) {
         const span = document.createElement('span')
         span.textContent = token // On met le LaTeX brut dans le span, renderMathInElement va le transformer
@@ -315,6 +304,21 @@ export class MultiMathfieldElement extends HTMLElement {
 
     // On ne remplace que le contenu, les styles du shadowRoot restent en place.
     this.contentHost.replaceChildren(container)
+
+    // Après insertion dans le DOM, les MathInput ont créé leurs MathfieldElement internes.
+    // On les initialise ici : si déjà monté, on appelle setMathfield directement,
+    // sinon on attend l'événement 'mount' du MathfieldElement interne.
+    this.contentHost
+      .querySelectorAll('math-input[data-type="mathlive"]')
+      .forEach((mi) => {
+        const mf = mi.querySelector('math-field') as MathfieldElement | null
+        if (!mf) return
+        if (mf.isConnected) {
+          setMathfield(mf)
+        } else {
+          mf.addEventListener('mount', setMathfieldListener, { once: true })
+        }
+      })
   }
 
   getValue() {
@@ -373,7 +377,7 @@ export function addMultiMathfield(
     if (!(name in enrichedOptions)) {
       enrichedOptions[name] = {
         placeholder: '',
-        minWidth: 30,
+        minWidth: 50,
         keyboard: KeyboardType.clavierNumbers,
         ldots: false,
       }
