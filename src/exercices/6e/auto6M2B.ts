@@ -88,7 +88,7 @@ export default class FormulesAireCarreRectangle extends Exercice {
       melange: 4,
       nbQuestions: this.nbQuestions,
       saisie: this.sup2,
-      listeOfCase: ['$\\text{cm}$', '$\\text{dm}$', '$\\text{m}$'],
+      listeOfCase: ['cm', 'dm', 'm'], // Ne pas mettre \\text{....}
     }).map(String)
     unitesChoisies = combinaisonListes(unitesChoisies, 50)
 
@@ -124,10 +124,10 @@ export default class FormulesAireCarreRectangle extends Exercice {
         { label: '1 m', value: 'm' },
       ],
       [
-        { label: '1 mm²', value: 'mm2' },
-        { label: '1 cm²', value: 'cm2' },
-        { label: '1 dm²', value: 'dm2' },
-        { label: '1 m²', value: 'm2' },
+        { label: 'mm²', value: 'mm2' },
+        { label: 'cm²', value: 'cm2' },
+        { label: 'dm²', value: 'dm2' },
+        { label: 'm²', value: 'm2' },
       ],
     ]
 
@@ -147,44 +147,50 @@ export default class FormulesAireCarreRectangle extends Exercice {
           choixPossibilites = randint(1, 4)
           switch (choixPossibilites) {
             case 1:
-              texteFixe.push(`$1$ ${unite}$^2$ est `)
-              texteFixe.push(` d'un carré de $1$ ${unite} de côté.`)
+              texteFixe.push(`$1 \\text{${unite}}^2$ est `)
+              texteFixe.push(
+                ` d'un carré de $1~${miseEnEvidence(`\\text{${unite}}`)}$ de côté.`,
+              )
               this.listeReponses[i] = ['aire']
               choixListeDeroulantePourCeCas.push([
                 { label: 'Choisir une proposition', value: '' },
                 ...shuffle(choixListeDeroulante[0]),
               ])
-              texteCorr = `$1$ ${unite}$^2$ est ${texteEnCouleurEtGras("l'aire")} d'un carré de $1$ ${unite} de côté.`
+              texteCorr = `$1~\\text{${unite}}^2$ est ${texteEnCouleurEtGras("l'aire")} d'un carré de $1~${miseEnEvidence(`\\text{${unite}}`)}$ de côté.`
               break
             case 2:
-              texteFixe.push(`$1$ ${unite}$^2$ est l'aire d'un carré de `)
+              texteFixe.push(`$1~\\text{${unite}}^2$ est l'aire d'un carré de `)
               texteFixe.push(' de côté.')
               this.listeReponses[i] = [unite]
               choixListeDeroulantePourCeCas.push([
                 { label: 'Choisir une proposition', value: '' },
                 ...shuffle(choixListeDeroulante[2]),
               ])
-              texteCorr = `$1$ ${unite}$^2$ est l'aire d'un carré de ${texteEnCouleurEtGras('1 ' + unite)} de côté.`
+              texteCorr = `$1~\\text{${unite}}^2$ est l'aire d'un carré de ${texteEnCouleurEtGras('1 ' + unite)} de côté.`
               break
             case 3:
-              texteFixe.push(`$1$ ${unite}$^2$ est l'aire d'un `)
-              texteFixe.push(` de $1$ ${unite} de côté.`)
+              texteFixe.push(`$1~\\text{${unite}}^2$ est l'aire d'un `)
+              texteFixe.push(
+                ` de $1~${miseEnEvidence(`\\text{${unite}}`)}$ de côté.`,
+              )
               this.listeReponses[i] = ['carre']
               choixListeDeroulantePourCeCas.push([
                 { label: 'Choisir une proposition', value: '' },
                 ...shuffle(choixListeDeroulante[1]),
               ])
-              texteCorr = `$1$ ${unite}$^2$ est l'aire d'un ${texteEnCouleurEtGras('carré')} de $1$ ${unite} de côté.`
+              texteCorr = `$1~\\text{${unite}}^2$ est l'aire d'un ${texteEnCouleurEtGras('carré')} de $1~${miseEnEvidence(`\\text{${unite}}`)}$ de côté.`
               break
             case 4:
               texteFixe.push('$1$ ')
-              texteFixe.push(` est l'aire d'un carré de $1$ ${unite} de côté.`)
+              texteFixe.push(
+                ` est l'aire d'un carré de $1~${miseEnEvidence(`\\text{${unite}}`)}$ de côté.`,
+              )
               this.listeReponses[i] = [unite + '2']
               choixListeDeroulantePourCeCas.push([
                 { label: 'Choisir une proposition', value: '' },
                 ...shuffle(choixListeDeroulante[3]),
               ])
-              texteCorr = `1 ${texteEnCouleurEtGras(unite)}$${miseEnEvidence('^2')}$ est l'aire d'un carré de $1$ ${unite} de côté.`
+              texteCorr = `$1~${miseEnEvidence(`\\text{${unite}}^2`)}$ est l'aire d'un carré de $1~${miseEnEvidence(`\\text{${unite}}`)}$ de côté.`
               break
           }
           texte = texteFixe[0]
@@ -201,9 +207,11 @@ export default class FormulesAireCarreRectangle extends Exercice {
           choixPossibilites = randint(1, 5)
           switch (choixPossibilites) {
             case 1:
-              texteFixe.push(`$1$ ${unite}$^2$ est `)
+              texteFixe.push(`$1~\\text{${unite}}^2$ est `)
               texteFixe.push(" d'un ")
-              texteFixe.push(` de $1$ ${unite} de côté.`)
+              texteFixe.push(
+                ` de $1~${miseEnEvidence(`\\text{${unite}}`)}$ de côté.`,
+              )
               this.listeReponses[i] = ['aire', 'carre']
               choixListeDeroulantePourCeCas.push([
                 { label: 'Choisir une proposition', value: '' },
@@ -213,10 +221,10 @@ export default class FormulesAireCarreRectangle extends Exercice {
                 { label: 'Choisir une proposition', value: '' },
                 ...shuffle(choixListeDeroulante[1]),
               ])
-              texteCorr = `$1$ ${unite}$^2$ est ${texteEnCouleurEtGras("l'aire")} d'un ${texteEnCouleurEtGras('carré')} de $1$ ${unite} de côté.`
+              texteCorr = `$1~\\text{${unite}}^2$ est ${texteEnCouleurEtGras("l'aire")} d'un ${texteEnCouleurEtGras('carré')} de $1~${miseEnEvidence(`\\text{${unite}}`)}$ de côté.`
               break
             case 2:
-              texteFixe.push(`$1$ ${unite}$^2$ est `)
+              texteFixe.push(`$1~\\text{${unite}}^2$ est `)
               texteFixe.push(" d'un carré de ")
               texteFixe.push(' de côté.')
               this.listeReponses[i] = ['aire', unite]
@@ -228,10 +236,10 @@ export default class FormulesAireCarreRectangle extends Exercice {
                 { label: 'Choisir une proposition', value: '' },
                 ...shuffle(choixListeDeroulante[2]),
               ])
-              texteCorr = `$1$ ${unite}$^2$ est ${texteEnCouleurEtGras("l'aire")} d'un carré de ${texteEnCouleurEtGras('1 ' + unite)} de côté.`
+              texteCorr = `$1~\\text{${unite}}^2$ est ${texteEnCouleurEtGras("l'aire")} d'un carré de ${texteEnCouleurEtGras('1 ' + unite)} de côté.`
               break
             case 3:
-              texteFixe.push(`$1$ ${unite}$^2$ est l'aire d'un `)
+              texteFixe.push(`$1~\\text{${unite}}^2$ est l'aire d'un `)
               texteFixe.push(' de ')
               texteFixe.push(' de côté.')
               this.listeReponses[i] = ['carre', unite]
@@ -243,12 +251,14 @@ export default class FormulesAireCarreRectangle extends Exercice {
                 { label: 'Choisir une proposition', value: '' },
                 ...shuffle(choixListeDeroulante[2]),
               ])
-              texteCorr = `$1$ ${unite}$^2$ est l'aire d'un ${texteEnCouleurEtGras('carré')} de ${texteEnCouleurEtGras('1 ' + unite)} de côté.`
+              texteCorr = `$1~\\text{${unite}}^2$ est l'aire d'un ${texteEnCouleurEtGras('carré')} de ${texteEnCouleurEtGras('1 ' + unite)} de côté.`
               break
             case 4:
               texteFixe.push('$1$ ')
               texteFixe.push(' est ')
-              texteFixe.push(` d'un carré de $1$ ${unite} de côté.`)
+              texteFixe.push(
+                ` d'un carré de $1~${miseEnEvidence(`\\text{${unite}}`)}$ de côté.`,
+              )
               this.listeReponses[i] = [unite + '2', 'aire']
               choixListeDeroulantePourCeCas.push([
                 { label: 'Choisir une proposition', value: '' },
@@ -258,12 +268,14 @@ export default class FormulesAireCarreRectangle extends Exercice {
                 { label: 'Choisir une proposition', value: '' },
                 ...shuffle(choixListeDeroulante[0]),
               ])
-              texteCorr = `1 ${texteEnCouleurEtGras(unite)}$${miseEnEvidence('^2')}$ est ${texteEnCouleurEtGras("l'aire")} d'un carré de $1$ ${unite} de côté.`
+              texteCorr = `$1~${miseEnEvidence(`\\text{${unite}}^2`)}$ est ${texteEnCouleurEtGras("l'aire")} d'un carré de $1~${miseEnEvidence(`\\text{${unite}}`)}$ de côté.`
               break
             case 5:
               texteFixe.push('$1$ ')
               texteFixe.push(" est l'aire d'un ")
-              texteFixe.push(` de $1$ ${unite} de côté.`)
+              texteFixe.push(
+                ` de $1~${miseEnEvidence(`\\text{${unite}}`)}$ de côté.`,
+              )
               this.listeReponses[i] = [unite + '2', 'carre']
               choixListeDeroulantePourCeCas.push([
                 { label: 'Choisir une proposition', value: '' },
@@ -273,7 +285,7 @@ export default class FormulesAireCarreRectangle extends Exercice {
                 { label: 'Choisir une proposition', value: '' },
                 ...shuffle(choixListeDeroulante[1]),
               ])
-              texteCorr = `1 ${texteEnCouleurEtGras(unite)}$${miseEnEvidence('^2')}$ est l'aire d'un ${texteEnCouleurEtGras('carré')} de $1$ ${unite} de côté.`
+              texteCorr = `$1~${miseEnEvidence(`\\text{${unite}}^2`)}$ est l'aire d'un ${texteEnCouleurEtGras('carré')} de $1~${miseEnEvidence(`\\text{${unite}}`)}$ de côté.`
               break
           }
           texte = texteFixe[0]
@@ -298,7 +310,7 @@ export default class FormulesAireCarreRectangle extends Exercice {
           choixPossibilites = randint(1, 2)
           switch (choixPossibilites) {
             case 1:
-              texteFixe.push(`$1$ ${unite}$^2$ est `)
+              texteFixe.push(`$1~\\text{${unite}}^2$ est `)
               texteFixe.push(" d'un ")
               texteFixe.push(' de ')
               texteFixe.push(' de côté.')
@@ -321,7 +333,9 @@ export default class FormulesAireCarreRectangle extends Exercice {
               texteFixe.push('$1$ ')
               texteFixe.push(' est ')
               texteFixe.push(" d'un ")
-              texteFixe.push(` de $1$ ${unite} de côté.`)
+              texteFixe.push(
+                ` de $1~${miseEnEvidence(`\\text{${unite}}`)}$ de côté.`,
+              )
               texteFixe.push('')
               this.listeReponses[i] = [unite + '2', 'aire', 'carre']
               choixListeDeroulantePourCeCas.push([
@@ -336,7 +350,7 @@ export default class FormulesAireCarreRectangle extends Exercice {
                 { label: 'Choisir une proposition', value: '' },
                 ...shuffle(choixListeDeroulante[1]),
               ])
-              texteCorr = `1 ${texteEnCouleurEtGras(unite)}$${miseEnEvidence('^2')}$ est ${texteEnCouleurEtGras("l'aire")} d'un ${texteEnCouleurEtGras('carré')} de $1$ ${unite} de côté.`
+              texteCorr = `$1~${miseEnEvidence(`\\text{${unite}}^2`)}$ est ${texteEnCouleurEtGras("l'aire")} d'un ${texteEnCouleurEtGras('carré')} de $1~${miseEnEvidence(`\\text{${unite}}`)}$ de côté.`
               break
           }
 
