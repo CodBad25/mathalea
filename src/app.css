@@ -871,14 +871,8 @@ div[id^='title-lampeMessage'] {
   @apply dark:bg-coopmathsdark-canvas-light;
 }
 
-input[type='checkbox'] {
-  @apply cursor-pointer border-coopmaths-action text-coopmaths-action dark:border-coopmathsdark-action dark:text-coopmathsdark-action focus:ring-coopmaths-action dark:focus:ring-coopmathsdark-action h-4 w-4 rounded;
-}
 input[type='checkbox'][id^='checkEx'] {
   @apply cursor-pointer border-coopmaths-action text-coopmaths-action dark:border-coopmathsdark-action dark:text-coopmathsdark-action focus:ring-coopmaths-action dark:focus:ring-coopmathsdark-action h-4 w-4 rounded;
-}
-input[type='radio'] {
-  @apply cursor-pointer border-coopmaths-action text-coopmaths-action dark:border-coopmathsdark-action dark:text-coopmathsdark-action focus:ring-coopmaths-action dark:focus:ring-coopmathsdark-action h-4 w-4 rounded-full;
 }
 input[type='radio'][id^='checkEx'] {
   @apply cursor-pointer border-coopmaths-action text-coopmaths-action dark:border-coopmathsdark-action dark:text-coopmathsdark-action focus:ring-coopmaths-action dark:focus:ring-coopmathsdark-action h-4 w-4 rounded-full;
