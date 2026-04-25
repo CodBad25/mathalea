@@ -2545,9 +2545,11 @@ function handleEnsembleNombres(
   const sqrt = '-?\\\\sqrt(?:\\[\\d+\\])?(?:\\{.+\\}|\\d+)'
   const frac = '-?\\\\d?frac(?:\\{.+\\}|\\d+)(?:\\{.+\\}|\\d+)'
 
-  const singleExpression = new RegExp(
-    `^(?:${number}|${power}|${sqrt}|${frac})$`,
-  )
+  const atom = `(?:${power}|${sqrt}|${frac})`
+  const term = `(?:${number}|${atom}|${number}${atom})`
+  const expr = `^[+-]?${term}(?:[+-]${term})*$`
+
+  const singleExpression = new RegExp(expr)
 
   /**
    * Vérifie que les accolades { } sont correctement équilibrées.

@@ -3045,6 +3045,51 @@ describe('fonctionComparaison', () => {
     })
     expect(result.isOk).toBe(true)
 
+    result = fonctionComparaison(
+      '\\{-2+\\sqrt{2};-2-\\sqrt{2}\\}',
+      '\\{-2+\\sqrt{2};-2-\\sqrt{2}\\}',
+      {
+        ensembleDeNombres: true,
+      },
+    )
+    expect(result.isOk).toBe(true)
+
+    result = fonctionComparaison(
+      '\\{-2+\\sqrt2;-2-\\sqrt2\\}',
+      '\\{-2+\\sqrt{2};-2-\\sqrt{2}\\}',
+      {
+        ensembleDeNombres: true,
+      },
+    )
+    expect(result.isOk).toBe(true)
+
+    result = fonctionComparaison(
+      '\\{-2+\\sqrt{2};-2-\\sqrt{2}\\}',
+      '\\{-2+\\sqrt2;-2-\\sqrt2\\}',
+      {
+        ensembleDeNombres: true,
+      },
+    )
+    expect(result.isOk).toBe(true)
+
+    result = fonctionComparaison(
+      '\\{-2-\\sqrt{2};-2+\\sqrt{2}\\}',
+      '\\{-2+\\sqrt2;-2-\\sqrt2\\}',
+      {
+        ensembleDeNombres: true,
+      },
+    )
+    expect(result.isOk).toBe(true)
+
+    result = fonctionComparaison(
+      '\\{-2-3\\sqrt{2};-2+3\\sqrt{2}\\}',
+      '\\{-2+3\\sqrt2;-2-3\\sqrt2\\}',
+      {
+        ensembleDeNombres: true,
+      },
+    )
+    expect(result.isOk).toBe(true)
+
     result = fonctionComparaison('4;-5;10.2}', '{-5;4;10.2}', {
       ensembleDeNombres: true,
     })
@@ -3491,6 +3536,21 @@ describe('fonctionComparaison', () => {
       suiteRangeeDeNombres: true,
     })
     expect(result.isOk).toBe(false)
+
+    result = fonctionComparaison('1;\\sqrt7', '1;\\sqrt7', {
+      suiteRangeeDeNombres: true,
+    })
+    expect(result.isOk).toBe(true)
+
+    result = fonctionComparaison('7;\\dfrac23', '7;\\dfrac23', {
+      suiteRangeeDeNombres: true,
+    })
+    expect(result.isOk).toBe(true)
+
+    result = fonctionComparaison('2;10^2', '2;10^{2}', {
+      suiteRangeeDeNombres: true,
+    })
+    expect(result.isOk).toBe(true)
 
     result = fonctionComparaison(
       '\\sqrt7;\\dfrac23;10^2',
