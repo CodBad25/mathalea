@@ -30,9 +30,9 @@ export const interactifType = 'multiMathfield'
 export const interactifReady = true
 
 export const dateDePublication = '16/12/2021'
-export const dateDeModifImportante = '29/11/2025'
+export const dateDeModifImportante = '25/04/2026'
 
-/*
+/**
  * @author Gilles Mora
  * Calculer un taux de variation. chgt de titre Stéphane Guyon (retravaillé par Gilles Mora)
  * Passage en typescript le 06/02/2025 + ajout des miseEnEvidence + interactivité Jean-claude Lhote
@@ -121,8 +121,6 @@ export default class Tauxvariation extends Exercice {
       } else {
         a = randint(-5, 8, [0])
       }
-      const Q1 = `Calculer le taux de variation $t(h)$ de $f$ entre $${a}$ et $${a}+h$, où $h$ est un réel non nul.`
-      const Q2 = `En déduire que $f$ est dérivable en $${a}$ et déterminer $f'(${a})$.`
       const IntroCorrection = `Pour déterminer le taux de variation de $f$ entre $${a}$ et $${a}+h$, on applique la définition (avec $h\\neq 0$) :<br>`
       const Conclusion =
         'Comme la limite existe et est finie, on peut en conclure que $f$ est dérivable en '
@@ -146,10 +144,6 @@ export default class Tauxvariation extends Exercice {
           texteApp = `\\text{Application à la fonction } f(x)=${reduireAxPlusB(m, p)}`
 
           texte = `Soit $f$ la fonction définie pour tout $x$ de $\\mathbb{R}$ par $f(x)=${reduireAxPlusB(m, p)} $.<br>`
-          texte += createList({
-            items: [Q1, Q2],
-            style: 'nombres',
-          })
           texteCorr = createList({
             items: [
               IntroCorrection +
@@ -184,10 +178,6 @@ La pente entre deux points de la droite est donc toujours égale au coefficient 
 
           texte =
             'Soit $f$ la fonction définie pour tout $x$ de $\\mathbb{R}$ par $f(x)=x^2$.<br>'
-          texte += createList({
-            items: [Q1, Q2],
-            style: 'nombres',
-          })
           texteCorr = createList({
             items: [
               IntroCorrection +
@@ -216,10 +206,6 @@ $\\lim\\limits_{h \\rightarrow 0} ${2 * a} +h=${2 * a}$ <br>` +
 
           texte =
             'Soit $f$ la fonction définie pour tout $x$ de $\\mathbb{R}^{*}$ par $f(x)=\\dfrac{1}{x}$.<br>'
-          texte += createList({
-            items: [Q1, Q2],
-            style: 'nombres',
-          })
           texteCorr = createList({
             items: [
               IntroCorrection +
@@ -255,10 +241,6 @@ $\\lim\\limits_{h \\rightarrow 0} \\dfrac{-1}{(${a}+h)\\times ${ecritureParenthe
           texteApp = `\\text{Application à la fonction racine carrée}`
           texte =
             'Soit $f$ la fonction définie pour tout $x$ de $\\mathbb{R}_{+}$ par $f(x)=\\sqrt{x}$.<br>'
-          texte += createList({
-            items: [Q1, Q2],
-            style: 'nombres',
-          })
           texteCorr = createList({
             items: [
               IntroCorrection +
@@ -312,10 +294,6 @@ $\\lim\\limits_{h \\rightarrow 0} \\dfrac{1}{\\sqrt{${a}+h}+\\sqrt{${a}}}=\\dfra
             texteApp = `\\text{Application à  } f(x)=${poly.tex}`
 
             texte = ` Soit $f$ la fonction définie pour tout $x$ de $\\mathbb{R}$ par $f(x)=${poly.tex}$.<br>`
-            texte += createList({
-              items: [Q1, Q2],
-              style: 'nombres',
-            })
             texteCorr = createList({
               items: [
                 IntroCorrection +
@@ -356,10 +334,6 @@ $\\lim\\limits_{h \\rightarrow 0} ${2 * a + b}+h=${2 * a + b}$<br>
             texteApp = `\\text{Application à } f(x)=${poly6.tex}`
 
             texte = `Soit $f$ la fonction définie pour tout $x$ de $\\mathbb{R}$ par $f(x)=${poly6.tex}$.<br>`
-            texte += createList({
-              items: [Q1, Q2],
-              style: 'nombres',
-            })
             texteCorr = createList({
               items: [
                 IntroCorrection +
@@ -392,17 +366,10 @@ $\\lim\\limits_{h \\rightarrow 0} ${2 * coefA * a + b}${ecritureAlgebriqueSauf1(
             // S'assurer que le point où on calcule la dérivée est différent du coefficient
             // et qu'il n'y a pas de simplification facile
             const pointA7 = coefNum7 + choice([-1, 1])
-
-            const Q1cas7 = `Calculer le taux de variation $t(h)$ de $f$ entre $${pointA7}$ et $${pointA7}+h$, où $h$ est un réel non nul.`
-            const Q2cas7 = `En déduire que $f$ est dérivable en $${pointA7}$ et déterminer $f'(${pointA7})$.`
-
+            a = pointA7
             texteApp = `\\text{Application à } f(x)=\\dfrac{${coefNum7}}{x}`
 
             texte = `Soit $f$ la fonction définie pour tout $x$ de $\\mathbb{R}^*$ par $f(x)=\\dfrac{${coefNum7}}{x}$.<br>`
-            texte += createList({
-              items: [Q1cas7, Q2cas7],
-              style: 'nombres',
-            })
             texteCorr = createList({
               items: [
                 IntroCorrection +
@@ -438,10 +405,6 @@ $\\lim\\limits_{h \\rightarrow 0} \\dfrac{${-coefNum7}}{${pointA7}(${pointA7}+h)
 
             a = coefNum + 1 - coefDenom
 
-            // Redéclarer Q1 et Q2 avec la nouvelle valeur de a
-            const Q1cas8 = `Calculer le taux de variation $t(h)$ de $f$ entre $${a}$ et $${a}+h$, où $h$ est un réel non nul.`
-            const Q2cas8 = `En déduire que $f$ est dérivable en $${a}$ et déterminer $f'(${a})$.`
-
             // Texte spécifique pour la correction détaillée
             texteApp = `\\text{Application à } f(x)=\\dfrac{${coefNum}}{x${ecritureAlgebrique(coefDenom)}}`
 
@@ -451,10 +414,6 @@ $\\lim\\limits_{h \\rightarrow 0} \\dfrac{${-coefNum7}}{${pointA7}(${pointA7}+h)
             reponse1 = `\\frac{${coefNumOppose}}{${denominateurEnA}(${reduireAxPlusB(1, denominateurEnA, 'h')}) }`
             reponse2 = `\\frac{${coefNumOppose}}{${denominateurEnA * denominateurEnA}}`
             texte = `Soit $f$ la fonction définie pour tout $x$ de $\\mathbb{R} \\smallsetminus \\{${-coefDenom}\\}$ par $f(x)=\\dfrac{${coefNum}}{x${ecritureAlgebrique(coefDenom)}}$.<br>`
-            texte += createList({
-              items: [Q1cas8, Q2cas8],
-              style: 'nombres',
-            })
             texteCorr = createList({
               items: [
                 `Pour déterminer le taux de variation de $f$ entre $${xA}$ et $${xA}+h$, on applique la définition :<br>
@@ -478,21 +437,33 @@ $\\lim\\limits_{h \\rightarrow 0} \\dfrac{${coefNumOppose}}{(h${ecritureAlgebriq
           }
           break
       }
+      const Q1 = `Calculer le taux de variation $t(h)$ de $f$ entre $${a}$ et $${a}+h$, où $h$ est un réel non nul.`
+      const Q2 = this.interactif
+        ? `Sachant que $f$ est dérivable en $${a}$, déterminer $f'(${a})$.`
+        : `En déduire que $f$ est dérivable en $${a}$ et déterminer $f'(${a})$.`
+      texte += this.interactif
+        ? addMultiMathfield(this, i, {
+            dataTemplate: `a) ${Q1}<br>$t(h)=$ %{champ1}<br><br> b) ${Q2}<br>$f'(${a})=$ %{champ2}<br>`,
+            dataOptions: {
+              champ1: { keyboard: KeyboardType.lycee },
+              champ2: { keyboard: KeyboardType.lycee },
+            },
+          })
+        : createList({
+            items: [Q1, Q2],
+            style: 'alpha',
+          })
+
       if (this.interactif) {
-        texte += addMultiMathfield(this, i, {
-          dataTemplate: `$t(h)=$ %{champ1} $f'(${a})=$ %{champ2}`,
-          dataOptions: {
-            champ1: { keyboard: KeyboardType.lycee, minWidth: 100 },
-            champ2: { keyboard: KeyboardType.lycee },
-          },
-        })
         handleAnswers(
           this,
           i,
           {
             bareme: toutAUnPoint,
             champ1: { value: reponse1, options: { calculFormel: true } },
-            champ2: { value: reponse2 },
+            champ2: {
+              value: reponse2,
+            },
           },
           { formatInteractif: 'multiMathfield' },
         )
