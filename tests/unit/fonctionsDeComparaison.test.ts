@@ -653,7 +653,16 @@ describe('fonctionComparaison', () => {
     expect(result.feedback).toBe(
       `C'est bien une fraction irréductible mais pas égale à celle attendue.`,
     )
+
+    result = fonctionComparaison('\\dfrac{1}{1+1}', '\\dfrac{1}{2}', {
+      fractionIrreductible: true,
+    })
+    expect(result.isOk).toBe(false)
+    expect(result.feedback).toBe(
+      `Résultat incorrect car dénominateur et numérateur doivent être entiers.`,
+    )
   })
+
   //     ██████  ██████  ████████ ██  ██████  ███    ██
   //    ██    ██ ██   ██    ██    ██ ██    ██ ████   ██
   //    ██    ██ ██████     ██    ██ ██    ██ ██ ██  ██
@@ -717,6 +726,14 @@ describe('fonctionComparaison', () => {
     expect(result.isOk).toBe(false)
     expect(result.feedback).toBe(
       `Cette fraction est bien égale à celle attendue mais n'est pas simplifiée.`,
+    )
+
+    result = fonctionComparaison('\\dfrac{1}{1+1}', '\\dfrac{8}{16}', {
+      fractionSimplifiee: true,
+    })
+    expect(result.isOk).toBe(false)
+    expect(result.feedback).toBe(
+      `Résultat incorrect car dénominateur et numérateur doivent être entiers.`,
     )
   })
 
@@ -807,6 +824,14 @@ describe('fonctionComparaison', () => {
     expect(result.feedback).toBe(
       `Cette fraction est bien égale à celle attendue mais n'est pas réduite.`,
     )
+
+    result = fonctionComparaison('\\dfrac{1}{1+1}', '\\dfrac{8}{16}', {
+      fractionReduite: true,
+    })
+    expect(result.isOk).toBe(false)
+    expect(result.feedback).toBe(
+      `Résultat incorrect car dénominateur et numérateur doivent être entiers.`,
+    )
   })
 
   //     ██████  ██████  ████████ ██  ██████  ███    ██
@@ -861,6 +886,14 @@ describe('fonctionComparaison', () => {
     expect(result.isOk).toBe(false)
     expect(result.feedback).toBe(
       'Résultat incorrect car une fraction est attendue.',
+    )
+
+    result = fonctionComparaison('\\frac{4}{2\\times5}', '0.4', {
+      fractionDecimale: true,
+    })
+    expect(result.isOk).toBe(false)
+    expect(result.feedback).toBe(
+      'Résultat incorrect car dénominateur et numérateur doivent être entiers.',
     )
   })
 
@@ -951,6 +984,18 @@ describe('fonctionComparaison', () => {
     expect(result.feedback).toBe(
       'Incorrect car la réponse attendue est une fraction.',
     )
+
+    result = fonctionComparaison(
+      '-\\frac{\\sqrt[1+1}}{2}',
+      '\\dfrac{-1}{\\sqrt{2}}',
+      {
+        fractionSansRacineCarree: true,
+      },
+    )
+    expect(result.isOk).toBe(false)
+    expect(result.feedback).toBe(
+      'Incorrect car la réponse attendue est une fraction.',
+    )
   })
 
   //     ██████  ██████  ████████ ██  ██████  ███    ██
@@ -1008,6 +1053,30 @@ describe('fonctionComparaison', () => {
       fractionEgale: true,
     })
     expect(result.isOk).toBe(true)
+
+    result = fonctionComparaison('\\dfrac{-3*10}{40}', '-\\dfrac{30}{40}', {
+      fractionEgale: true,
+    })
+    expect(result.isOk).toBe(false)
+    expect(result.feedback).toBe(
+      'Résultat incorrect car dénominateur et numérateur doivent être entiers.',
+    )
+
+    result = fonctionComparaison('-\\dfrac{20+10}{40}', '-\\dfrac{30}{40}', {
+      fractionEgale: true,
+    })
+    expect(result.isOk).toBe(false)
+    expect(result.feedback).toBe(
+      'Résultat incorrect car dénominateur et numérateur doivent être entiers.',
+    )
+
+    result = fonctionComparaison('\\dfrac{10-40}{40}', '-\\dfrac{30}{40}', {
+      fractionEgale: true,
+    })
+    expect(result.isOk).toBe(false)
+    expect(result.feedback).toBe(
+      'Résultat incorrect car dénominateur et numérateur doivent être entiers.',
+    )
   })
 
   //     ██████  ██████  ████████ ██  ██████  ███    ██
@@ -1064,7 +1133,44 @@ describe('fonctionComparaison', () => {
     expect(result.feedback).toBe(
       `Résultat incorrect car la fraction n'est pas identique à celle attendue.`,
     )
+
+    result = fonctionComparaison('\\dfrac{1}{1+1}', '\\dfrac{1}{2}', {
+      fractionIdentique: true,
+    })
+    expect(result.isOk).toBe(false)
+    expect(result.feedback).toBe(
+      `Résultat incorrect car dénominateur et numérateur doivent être entiers.`,
+    )
   })
+
+  //     ██████  ██████  ████████ ██  ██████  ███    ██
+  //    ██    ██ ██   ██    ██    ██ ██    ██ ████   ██
+  //    ██    ██ ██████     ██    ██ ██    ██ ██ ██  ██
+  //    ██    ██ ██         ██    ██ ██    ██ ██  ██ ██
+  //     ██████  ██         ██    ██  ██████  ██   ████
+  //
+  //
+  //    ███    ██  ██████  ███    ███ ██████  ██████  ███████
+  //    ████   ██ ██    ██ ████  ████ ██   ██ ██   ██ ██
+  //    ██ ██  ██ ██    ██ ██ ████ ██ ██████  ██████  █████
+  //    ██  ██ ██ ██    ██ ██  ██  ██ ██   ██ ██   ██ ██
+  //    ██   ████  ██████  ██      ██ ██████  ██   ██ ███████
+  //
+  //
+  //    ██████  ███████  ██████ ██ ███    ███  █████  ██
+  //    ██   ██ ██      ██      ██ ████  ████ ██   ██ ██
+  //    ██   ██ █████   ██      ██ ██ ████ ██ ███████ ██
+  //    ██   ██ ██      ██      ██ ██  ██  ██ ██   ██ ██
+  //    ██████  ███████  ██████ ██ ██      ██ ██   ██ ███████
+  //
+  //
+  //    ███████ ███████ ██    ██ ██      ███████ ███    ███ ███████ ███    ██ ████████
+  //    ██      ██      ██    ██ ██      ██      ████  ████ ██      ████   ██    ██
+  //    ███████ █████   ██    ██ ██      █████   ██ ████ ██ █████   ██ ██  ██    ██
+  //         ██ ██      ██    ██ ██      ██      ██  ██  ██ ██      ██  ██ ██    ██
+  //    ███████ ███████  ██████  ███████ ███████ ██      ██ ███████ ██   ████    ██
+  //
+  //
 
   it("Vérifie le fonctionnement de l'option nombreDecimalSeulement", () => {
     let result = fonctionComparaison('0.5', '0.5', {
