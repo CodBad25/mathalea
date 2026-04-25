@@ -101,6 +101,8 @@ span.listeDeroulante ul {
   z-index: 100;
   box-shadow: 0 6px 16px rgba(0,0,0,0.12);
   animation: fadeIn 0.15s ease-out;
+  max-height: 60vh;
+  overflow-y: auto;
 }
 
 span.listeDeroulante ul.visible {

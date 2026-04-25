@@ -105,6 +105,7 @@ class ListeDeroulante {
   private _elts: HTMLLIElement[] = [] // Liste des elts contenant les choix (les &lt;li&gt;)
   private _clickListener?: EventListener
   private _keydownListener?: KeyboardEventListener
+  private _scrollListener?: () => void
 
   container?: HTMLElement
   spanSelected?: HTMLSpanElement
@@ -289,6 +290,9 @@ class ListeDeroulante {
       this.ulContainer.style.top = `${rect.bottom}px`
       this.ulContainer.style.left = `${rect.left}px`
       this.ulContainer.style.minWidth = `${rect.width}px`
+      const availableHeight = window.innerHeight - rect.bottom - 10
+      this.ulContainer.style.maxHeight = `${Math.max(availableHeight, 100)}px`
+      this.ulContainer.style.overflowY = 'auto'
     }
   }
 
@@ -375,6 +379,10 @@ class ListeDeroulante {
 
   hide() {
     if (this.ulContainer) this.ulContainer.classList.remove('visible')
+    if (this._scrollListener) {
+      window.removeEventListener('scroll', this._scrollListener, { capture: true } as EventListenerOptions)
+      this._scrollListener = undefined
+    }
   }
 
   show() {
@@ -389,6 +397,8 @@ class ListeDeroulante {
       this.width = this.ulContainer?.offsetWidth
     }
     this._replace()
+    this._scrollListener = () => this._replace()
+    window.addEventListener('scroll', this._scrollListener, { passive: true, capture: true } as AddEventListenerOptions)
     this.focus() // pour usage au clavier
   }
 
