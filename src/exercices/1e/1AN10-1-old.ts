@@ -35,11 +35,11 @@ export const dateDeModifImportante = '29/11/2025'
 export const uuid = '29202'
 
 export const refs = {
-  'fr-fr': ['1AN10-1'],
-  'fr-ch': ['3mA2-1'],
+  'fr-fr': [],
+  'fr-ch': [],
 }
 
-export default class Tauxvariation extends Exercice {
+export default class TauxVariationOld extends Exercice {
   constructor() {
     super()
     this.correctionDetaillee = false
