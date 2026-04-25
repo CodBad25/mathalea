@@ -7,23 +7,23 @@ import FractionEtendue from '../../modules/FractionEtendue'
 import { gestionnaireFormulaireTexte, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
+import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { context } from '../../modules/context'
-import { bleuMathalea } from '../../lib/colors'
 export const titre = 'Résoudre des équations différentielles'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 
 export const uuid = 'debc6'
 export const refs = {
-  'fr-fr': ['TSA7-20'],
+  'fr-fr': [''],
   'fr-ch': [],
 }
 export const dateDePublication = '16/06/2024'
 
 /**
  * Un premier exercice de résolution d'équations différentielles
- * @author Jean-claude Lhote
+ * @author Jean-claude Lhote et Stéphane Guyon
  *
  */
 class EquaDiffs extends Exercice {
