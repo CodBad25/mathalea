@@ -247,8 +247,10 @@ export default class ExerciceEquationSecondDegre extends Exercice {
             dataTemplate: `a) Donner sous forme d'un entier ou d'une fraction irréductible le nombre qui permet de compléter le carré : %{champ1}\n
         b) Donner l'ensemble des solutions en séparant chaque solution par un point-virgule : $S=$ %{champ2}`,
             dataOptions: {
-              champ1: { keyboard: KeyboardType.clavierFullOperations },
-              champ2: { keyboard: KeyboardType.clavierFullOperations },
+              champ1: { keyboard: KeyboardType.clavierDeBaseAvecFraction },
+              champ2: {
+                keyboard: KeyboardType.clavierEnsemble,
+              },
             },
           })
 
