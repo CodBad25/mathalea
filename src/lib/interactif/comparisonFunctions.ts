@@ -128,19 +128,19 @@ function parseFractionLatex(latex: string): {
   const match = trimmed.match(
     /^(-?)\s*\\[dtc]?frac\{((?:[^{}]|\{[^{}]*\})+)\}\{((?:[^{}]|\{[^{}]*\})+)\}$/,
   )
-
   if (!match) return null
 
   const leadingMinus = match[1] === '-'
   const numRaw = match[2]
   const denRaw = match[3]
 
-  const evaluate = (expr: string): number | null => {
+  // Le boolean de la reponse finale permet de savoir si le nombre est sous forme acceptée d'un entier, d'une puissance ou sous la forme non acceptée d'une expression numérique.
+  const evaluate = (expr: string): [number | null, boolean] => {
     const cleaned = expr.replace(/\s+/g, '')
 
     // nombre simple
     if (/^-?\d+(\.\d+)?$/.test(cleaned)) {
-      return Number(cleaned)
+      return [Number(cleaned), true]
     }
 
     // puissance simple a^b ou a^{b}
@@ -149,18 +149,22 @@ function parseFractionLatex(latex: string): {
     if (powerMatch) {
       const base = Number(powerMatch[1])
       const exponent = Number(powerMatch[3])
-      return base ** exponent
+      return [base ** exponent, true]
     }
 
-    return null
+    return [ce.parse(cleaned).isConstant ? ce.parse(cleaned).re : null, false] // Peu importe la valeur. Ici, c'est le false qui est important.
   }
 
-  const num = evaluate(numRaw)
-  const den = evaluate(denRaw)
+  const num = evaluate(numRaw)[0]
+  const den = evaluate(denRaw)[0]
 
   if (num === null || den === null || den === 0) return null
 
-  const bothIntegers = Number.isInteger(num) && Number.isInteger(den)
+  const bothIntegers =
+    Number.isInteger(num) &&
+    Number.isInteger(den) &&
+    evaluate(numRaw)[1] &&
+    evaluate(denRaw)[1]
 
   const negative = leadingMinus !== num < 0
 
