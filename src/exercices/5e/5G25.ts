@@ -1,4 +1,6 @@
 import Exercice from '../Exercice'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { choixDeroulant } from '../../lib/interactif/questionListeDeroulante'
 import {
   gestionnaireFormulaireTexte,
   listeQuestionsToContenu,
@@ -8,7 +10,12 @@ import { combinaisonListes } from '../../lib/outils/arrayOutils'
 export const titre =
   'Connaitre les définitions et propriétés du triangle et des droites remarquables'
 
+export const interactifReady = true
+export const interactifType = 'listeDeroulante'
+
 export const dateDePublication = '18/1/2025'
+export const dateDeModifImportante = '25/04/2026' // Rémi Angot ajout interactivité
+
 
 export const uuid = '043ca'
 export const refs = {
@@ -53,6 +60,16 @@ export default class DefinitionProprietesTriangles extends Exercice {
       typesDeQuestionsDisponibles,
       this.nbQuestions,
     )
+    const choix = [
+      { label: 'Choisir une réponse :', value: '' },
+      { label: 'une droite passant par un sommet et perpendiculaire au côté opposé.', value: '1' },
+      { label: 'la droite perpendiculaire à ce segment et passant par son milieu.', value: '2' },
+      { label: "il est à égale distance des extrémités du segment.", value: '3' },
+      { label: "il est sur la médiatrice de ce segment.", value: '4' },
+      { label: "égale à 180°.", value: '5' },
+      { label: "égale à 90°.", value: '6' },
+      { label: "inférieure à la somme des longueurs des deux autres côtés.", value: '7' },
+    ]
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
       let texte = ''
       let texteCorr = ''
@@ -92,6 +109,15 @@ export default class DefinitionProprietesTriangles extends Exercice {
           texteCorr =
             "Dans un triangle, la longueur d'un côté est inférieure à la somme des longueurs des deux autres côtés."
           break
+      }
+      if (this.interactif) {
+        texte += choixDeroulant(this, i, choix)
+        handleAnswers(
+          this,
+          i,
+          { reponse: { value: String(listeTypeQuestions[i]), options: { texteSansCasse: true } } },
+          { formatInteractif: 'listeDeroulante' },
+        )
       }
       if (this.questionJamaisPosee(i, texte)) {
         this.listeQuestions[i] = texte

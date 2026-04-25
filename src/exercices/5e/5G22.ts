@@ -15,6 +15,8 @@ import {
   medianeTriangle,
 } from '../../lib/2d/utilitairesTriangle'
 import { bleuMathalea } from '../../lib/colors'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { choixDeroulant } from '../../lib/interactif/questionListeDeroulante'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
@@ -22,6 +24,9 @@ import { Triangle } from '../../modules/Triangle'
 import Exercice from '../Exercice'
 
 export const titre = "Déterminer la nature d'une droite remarquable"
+export const interactifReady = true
+export const interactifType = 'listeDeroulante'
+export const dateDeModifImportante = '25/04/2026' // Rémi Angot ajout interactivité
 
 /**
  * 5G22
@@ -92,6 +97,14 @@ export default class DroiteRemarquableDuTriangle extends Exercice {
         t[i],
         `${sommets[i][0]}${sommets[i][1]}${sommets[i][2]}`,
       )
+      const choix = [
+        { label: 'Choisir une réponse :', value: '' },
+        { label: 'une hauteur', value: 'hauteur' },
+        { label: 'une médiatrice', value: 'mediatrice' },
+        { label: 'une médiane', value: 'mediane' },
+        { label: 'une bissectrice', value: 'bissectrice' },
+      ]
+      let rep: string
       switch (listeTypeDeQuestions[i]) {
         case 1:
           d[i] = hauteurTriangle(C[i], B[i], A[i], bleuMathalea)
@@ -99,7 +112,7 @@ export default class DroiteRemarquableDuTriangle extends Exercice {
           c[i] = codageHauteurTriangle(C[i], B[i], A[i])
           objets[i] = [t[i], d[i], n[i], c[i]]
           texteCorr = `La droite tracée est la hauteur issue de $${sommets[i][2]}$ dans le triangle ${triangles[i].getNom()}.<br>`
-          // texteCorr += mathalea2d({ xmin: -3, ymin: -3, xmax: 8, ymax: 8, scale: 0.5, pixelsParCm: 20 }, ...objets[i])
+          rep = 'hauteur'
           break
         case 2:
           d[i] = mediatrice(A[i], B[i], '', bleuMathalea)
@@ -107,7 +120,7 @@ export default class DroiteRemarquableDuTriangle extends Exercice {
           c[i] = codageMediatrice(A[i], B[i])
           objets[i] = [t[i], d[i], n[i], c[i]]
           texteCorr = `La droite tracée est la médiatrice du segment [$${sommets[i][0]}${sommets[i][1]}]$.<br>`
-          // texteCorr += mathalea2d({ xmin: -3, ymin: -3, xmax: 8, ymax: 8, scale: 0.5, pixelsParCm: 20 }, ...objets[i], mediatrice(A[i], B[i], '', bleuMathalea, 'gray', 'green', true, true, '×', '||', 1))
+          rep = 'mediatrice'
           break
         case 3:
           d[i] = medianeTriangle(C[i], B[i], A[i], bleuMathalea)
@@ -115,7 +128,7 @@ export default class DroiteRemarquableDuTriangle extends Exercice {
           c[i] = codageMedianeTriangle(B[i], A[i], 'black', '//')
           objets[i] = [t[i], d[i], n[i], c[i]]
           texteCorr = `La droite tracée est la médiane issue de $${sommets[i][2]}$ dans le triangle ${triangles[i].getNom()}.<br>`
-          // texteCorr += mathalea2d({ xmin: -3, ymin: -3, xmax: 8, ymax: 8, scale: 0.5, pixelsParCm: 20 }, ...objets[i])
+          rep = 'mediane'
           break
         case 4:
         default:
@@ -124,7 +137,7 @@ export default class DroiteRemarquableDuTriangle extends Exercice {
           c[i] = codageBissectrice(A[i], B[i], C[i])
           objets[i] = [t[i], d[i], n[i], c[i]]
           texteCorr = `La droite tracée est la bissectrice de l'angle $\\widehat{${sommets[i][0]}${sommets[i][1]}${sommets[i][2]}}$.<br>`
-          // texteCorr += mathalea2d({ xmin: -3, ymin: -3, xmax: 8, ymax: 8, scale: 0.5, pixelsParCm: 20 }, ...objets[i], bissectrice(A[i], B[i], C[i], bleuMathalea, 'red', 'green', true, true, '×', 3, 1))
+          rep = 'bissectrice'
           break
       }
 
@@ -141,6 +154,15 @@ export default class DroiteRemarquableDuTriangle extends Exercice {
           },
           ...objets[i],
         )
+      if (this.interactif) {
+        texte += '<br>La droite tracée en bleu est ' + choixDeroulant(this, i, choix) + '.'
+        handleAnswers(
+          this,
+          i,
+          { reponse: { value: rep, options: { texteSansCasse: true } } },
+          { formatInteractif: 'listeDeroulante' },
+        )
+      }
 
       if (this.questionJamaisPosee(i, angle, rapport, a)) {
         // Si la question n'a jamais été posée, on en créé une autre
