@@ -5,21 +5,18 @@ import { powerTemplate } from './templates/question/power'
 import { qcmTemplate } from './templates/question/qcmTemplates'
 import type { AMCNumNormalized, QCMNormalized } from './types'
 
-nunjucks.configure('templates', {
-  autoescape: false,
-})
+nunjucks.configure('templates', { autoescape: false })
 
 export function renderQcm(data: QCMNormalized) {
   return nunjucks.renderString(qcmTemplate, data)
 }
 
-const templates = {
-  decimal: decimalTemplate,
-  fraction: fractionTemplate,
-  power: powerTemplate,
-}
-
 export function renderAMCNum(data: AMCNumNormalized) {
+  const templates = {
+    decimal: decimalTemplate,
+    fraction: fractionTemplate,
+    power: powerTemplate,
+  }
   const template = templates[data.mode]
 
   if (!template) {
