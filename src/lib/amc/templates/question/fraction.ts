@@ -1,9 +1,9 @@
-\element{ {{ ref }} }{
-\begin{questionmultx}{ {{ id }} }
+export const fractionTemplate = `\\element{ {{ ref }} }{
+\\begin{questionmultx}{ {{ id }} }
 
 {{ enonce }}
 
-\AMCnumericChoices{ {{ valueAMC }} }{
+\\AMCnumericChoices{ {{ valueAMC }} }{
 digits={{ digitsNum + digitsDen }},
 decimals={{ digitsDen }},
 sign={{ sign }},
@@ -12,5 +12,5 @@ alsocorrect={{ alsoCorrect }},
 borderwidth=0pt,backgroundcol=lightgray,scoreexact=1
 }
 
-\end{questionmultx}
-}
+\\end{questionmultx}
+}`

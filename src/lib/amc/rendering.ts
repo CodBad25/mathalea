@@ -1,8 +1,30 @@
 import nunjucks from 'nunjucks'
-import type { QCMNormalized } from './types'
+import { decimalTemplate } from './templates/question/decimal'
+import { fractionTemplate } from './templates/question/fraction'
+import { powerTemplate } from './templates/question/power'
+import { qcmTemplate } from './templates/question/qcmTemplates'
+import type { AMCNumNormalized, QCMNormalized } from './types'
 
-nunjucks.configure('templates')
+nunjucks.configure('templates', {
+  autoescape: false,
+})
 
-export function renderQcmMono(data: QCMNormalized) {
-  return nunjucks.render('question/qcmMono.njk', data)
+export function renderQcm(data: QCMNormalized) {
+  return nunjucks.renderString(qcmTemplate, data)
+}
+
+const templates = {
+  decimal: decimalTemplate,
+  fraction: fractionTemplate,
+  power: powerTemplate,
+}
+
+export function renderAMCNum(data: AMCNumNormalized) {
+  const template = templates[data.mode]
+
+  if (!template) {
+    throw new Error(`Unknown AMCNum mode: ${data.mode}`)
+  }
+
+  return nunjucks.renderString(template, data)
 }

@@ -1,13 +1,13 @@
-\element{ {{ ref }} }{
-\begin{questionmultx}{ {{ id }} }
+export const decimalTemplate = `\\element{ {{ ref }} }{
+\\begin{questionmultx}{ {{ id }} }
 
 {{ enonce }}
 
 {% if explain %}
-\explain{ {{ explain }} }
+\\explain{ {{ explain }} }
 {% endif %}
 
-\AMCnumericChoices{ {{ value }} }{
+\\AMCnumericChoices{ {{ value }} }{
 digits={{ digits }},
 decimals={{ decimals }},
 sign={{ sign }},
@@ -17,5 +17,5 @@ approx={{ approx }},
 borderwidth=0pt,backgroundcol=lightgray,scoreexact=1
 }
 
-\end{questionmultx}
-}
+\\end{questionmultx}
+}`

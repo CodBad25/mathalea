@@ -9,6 +9,8 @@ import {
 } from '../outils/nombres'
 import { lettreDepuisChiffre } from '../outils/outilString'
 import { decimalToScientifique } from '../outils/texNombre'
+import { normalizeQcm } from './normalisation/normalizeQcm'
+import { renderQcm } from './rendering'
 
 /**
  *
@@ -59,8 +61,20 @@ export function exportQcmAmc(exercice, idExo) {
     }
     switch (type) {
       case 'qcmMono': // question QCM 1 bonne réponse
-      case 'qcmMult':
-        if (elimineDoublons(autoCorrection[j].propositions)) {
+      case 'qcmMult': {
+        const normalized = normalizeQcm(autoCorrection[j], {
+          type,
+          ref,
+          id: `${ref}/${lettreDepuisChiffre(idExo + 1)}${id + 10}`,
+          exercice,
+          index: j,
+        })
+        texQr += renderQcm(normalized)
+
+        id++
+        break
+      }
+      /*  if (elimineDoublons(autoCorrection[j].propositions)) {
           console.error('doublons trouvés')
         }
         if (autoCorrection[j].enonce === undefined) {
@@ -87,7 +101,7 @@ export function exportQcmAmc(exercice, idExo) {
         texQr += `\t\\end{${horizontalite}}\n `
         texQr += `\\end{${type === 'qcmMono' ? 'question' : 'questionmult'}}\n }\n `
         id++
-        break
+        */
 
       case 'AMCOpen': // AMCOpen question ouverte corrigée par l'enseignant
         if (autoCorrection[j].enonce === undefined) {
