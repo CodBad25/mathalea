@@ -38,7 +38,7 @@ export default class ParaboleAExpression extends ExpressionAParabole {
     ]
     this.sup = 4
     this.besoinFormulaire2Texte = [
-      `Probabilité de degré 1 ou degré 3`,
+      `Probabilité qu'aucune expression ne corresponde`,
       `Écriture décimale`,
     ]
     this.sup2 = '0'
