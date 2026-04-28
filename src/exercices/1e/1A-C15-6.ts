@@ -49,10 +49,10 @@ $a = ${texNombre(abo + nbreSeance1 * prixH)} - ${nbreSeance1} \\times ${prixH} =
 Le montant de l'abonnement mensuel est donc de $${miseEnEvidence(abo + sp(1) + '€')}$.`
 
     this.reponses = [
-      `$${abo}\\text{ €} `,
-      `$${prixH}\\text{ €}`,
-      `$${abo + 1}\\text{ €}`,
-      `$${nbreSeance2}\\text{ €}`,
+      `$${abo}\\text{ €}$`,
+      `$${prixH}\\text{ €}$`,
+      `$${abo + 1}\\text{ €}$`,
+      `$${nbreSeance2}\\text{ €}$`,
     ]
   }
 
@@ -73,7 +73,10 @@ Le montant de l'abonnement mensuel est donc de $${miseEnEvidence(abo + sp(1) + '
       compteur++
     } while (
       compteur < 100 &&
-      !aLeBonNombreDePropsDifferentes(this, 4, false, { unite: true })
+      !aLeBonNombreDePropsDifferentes(this, 4, false, {
+        unite: true,
+        precisionUnite: 0,
+      })
     ) // On s'assure d'avoir 4 réponses différentes, sinon on régénère
   }
 
