@@ -1,4 +1,20 @@
-import type { ReponseParams } from '../types'
+import type { IExercice, ReponseParams } from '../types'
+
+export type AMCExportType =
+  | 'qcmMono'
+  | 'qcmMult'
+  | 'AMCOpen'
+  | 'AMCNum'
+  | 'AMCHybride'
+
+/**
+ * Extension d'IExercice réservée au rendu AMC.
+ * autoCorrection est ici typé avec AutoCorrectionAMC (structures AMC) au lieu de AutoCorrection (structures interactif HTML).
+ */
+export type IExerciceAMC = Omit<IExercice, 'autoCorrection'> & {
+  autoCorrection: AutoCorrectionAMC[]
+  amcType?: AMCExportType | string
+}
 
 export type AMCStatut = number | boolean | string
 

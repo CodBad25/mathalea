@@ -1,7 +1,8 @@
 <script lang="ts">
   import seedrandom from 'seedrandom'
   import { onMount } from 'svelte'
-  import { creerDocumentAmc } from '../../../lib/amc/creerDocumentAmc.js'
+  import { creerDocumentAmc } from '../../../lib/amc/creerDocumentAmc'
+  import type { IExerciceAMC } from '../../../lib/amc/types'
   import {
     mathaleaGenerateSeed,
     mathaleaGetExercicesFromParams,
@@ -27,6 +28,14 @@
 
   const isSettingsVisible: boolean[] = []
   let exercices: IExercice[] = []
+
+  /**
+   * Cast documenté : les exercices AMC-ready ont été générés avec autoCorrection de type AMCCorrection.
+   * C'est la frontière explicite entre le monde interactif HTML et le monde AMC.
+   */
+  function asAMCExercices(exos: IExercice[]): IExerciceAMC[] {
+    return exos as unknown as IExerciceAMC[]
+  }
   let content = ''
   let entete = 'AMCcodeGrid'
   let format = 'A4'
@@ -124,7 +133,7 @@
     }
     const nbQuestionsParGroupe: number[] = nbQuestions.map((elt) => elt.nombre)
     content = creerDocumentAmc({
-      exercices,
+      exercices: asAMCExercices(exercices),
       typeEntete: entete,
       format,
       matiere,

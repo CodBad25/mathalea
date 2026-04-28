@@ -1,15 +1,20 @@
-import { elimineDoublons } from '../../lib/interactif/qcm'
 import { randint } from '../../modules/outils'
 import { format as formatLatex } from '../Latex'
-import {
-  arrondi,
-  nombreDeChiffresDansLaPartieDecimale,
-  nombreDeChiffresDansLaPartieEntiere,
-  nombreDeChiffresDe,
-} from '../outils/nombres'
 import { lettreDepuisChiffre } from '../outils/outilString'
-import { decimalToScientifique } from '../outils/texNombre'
 import { renderAMCNum, renderQcm } from './amcEngine'
+import type { IExerciceAMC } from './types'
+
+type ExportQcmAmcResult = [string, string, number, string, boolean]
+
+export type CreerDocumentAmcOptions = {
+  exercices: IExerciceAMC[]
+  nbQuestions?: number[]
+  nbExemplaires?: number
+  matiere?: string
+  titre?: string
+  typeEntete?: string
+  format?: string
+}
 
 /**
  *
@@ -17,7 +22,10 @@ import { renderAMCNum, renderQcm } from './amcEngine'
  * @param {number} idExo c'est un numéro unique pour gérer les noms des éléments d'un groupe de question, il est incrémenté par creerDocumentAmc()
  */
 
-export function exportQcmAmc(exercice, idExo) {
+export function exportQcmAmc(
+  exercice: IExerciceAMC,
+  idExo: number,
+): ExportQcmAmcResult {
   let ref = `${exercice.id}/${exercice.sup ? 'S:' + exercice.sup : ''}${exercice.sup2 ? 'S2:' + exercice.sup2 : ''}${exercice.sup3 ? 'S3:' + exercice.sup3 : ''}${exercice.sup4 ? 'S4:' + exercice.sup4 : ''}${exercice.sup5 ? 'S5:' + exercice.sup5 : ''}`
   if (ref[ref.length - 1] === '/') ref = ref.slice(0, -1)
   const autoCorrection = exercice.autoCorrection
@@ -62,7 +70,7 @@ export function exportQcmAmc(exercice, idExo) {
       case 'qcmMono': // question QCM 1 bonne réponse
       case 'qcmMult':
         texQr += renderQcm(autoCorrection[j], {
-          type,
+          type: type === 'qcmMono' ? 'qcm' : 'qcmMult',
           ref,
           id: `${ref}/${lettreDepuisChiffre(idExo + 1)}${id + 10}`,
           exercice,
@@ -141,7 +149,6 @@ export function exportQcmAmc(exercice, idExo) {
         /********************************************************************/
 
         texQr += renderAMCNum(autoCorrection[j], {
-          type,
           ref,
           id: `${ref}/${lettreDepuisChiffre(idExo + 1)}${id + 10}`,
           exercice,
@@ -402,7 +409,9 @@ export function exportQcmAmc(exercice, idExo) {
         break
       default: // Si on arrive ici, c'est que le type est AMCHybride
         if (type !== 'AMCHybride') {
-          window.notify(
+          ;(
+            window as { notify?: (message: string, payload?: unknown) => void }
+          ).notify?.(
             'exportQcmAMC : Il doit y avoir une erreur de type AMC, je ne connais pas le type : ',
             { type },
           )
@@ -1015,31 +1024,31 @@ export function exportQcmAmc(exercice, idExo) {
  *   format?: string
  * }} options
  */
-export function creerDocumentAmc({
-  exercices,
-  nbQuestions = [],
-  nbExemplaires = 1,
-  matiere = 'Mathématiques',
-  titre = 'Evaluation',
-  typeEntete = 'AMCcodeGrid',
-  format = 'A4',
-}) {
+export function creerDocumentAmc(options: CreerDocumentAmcOptions): string {
+  const {
+    exercices,
+    nbQuestions = [] as number[],
+    nbExemplaires = 1,
+    matiere = 'Mathématiques',
+    titre = 'Evaluation',
+    typeEntete = 'AMCcodeGrid',
+    format = 'A4',
+  } = options
   // Attention exercices est maintenant un tableau de tous les exercices.
   // Dans cette partie, la fonction récupère toutes les exercices et les trie pour les rassembler par groupe
   // Toutes les questions d'un même exercice seront regroupées ce qui permet éventuellement de les récupérer dans des fichiers individuels pour se constituer une base
   let idExo = 0
-  let code
   let indexOfCode
-  const nombreDeQuestionsIndefinie = []
+  const nombreDeQuestionsIndefinie: boolean[] = []
   const graine = randint(1, 100000)
-  const groupeDeQuestions = []
-  const texQuestions = [[]]
-  const titreQuestion = []
-  const melangeQuestion = []
+  const groupeDeQuestions: string[] = []
+  const texQuestions: string[] = ['']
+  const titreQuestion: string[] = []
+  const melangeQuestion: boolean[] = []
   const nombreExoAmc = exercices.filter((el) => el.amcReady).length
   if (nombreExoAmc === 0) return ''
   for (const exercice of exercices) {
-    code = exportQcmAmc(exercice, idExo)
+    const code = exportQcmAmc(exercice, idExo)
     idExo++
     indexOfCode = groupeDeQuestions.indexOf(code[1])
     if (indexOfCode === -1) {
@@ -1075,7 +1084,7 @@ export function creerDocumentAmc({
   let isImpressionRectoVerso = false
   const checkBoxImpressionRectoVerso = document.getElementById(
     'impression_recto_verso',
-  )
+  ) as HTMLInputElement | null
   if (checkBoxImpressionRectoVerso !== null)
     isImpressionRectoVerso = checkBoxImpressionRectoVerso.checked
   // variable qui contiendra le code LaTeX pour AMC
