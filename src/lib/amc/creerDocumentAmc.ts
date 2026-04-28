@@ -1,7 +1,7 @@
 import { randint } from '../../modules/outils'
 import { format as formatLatex } from '../Latex'
 import { lettreDepuisChiffre } from '../outils/outilString'
-import { renderAMCHybride, renderElement } from './amcEngine'
+import { renderAMCHybride, renderElement } from './amcRender'
 import type { IExerciceAMC } from './amcTypes'
 
 type ExportQcmAmcResult = [string, string, number, string, boolean]
@@ -41,7 +41,7 @@ export function exportQcmAmc(
       autoCorrection[j] = {}
     }
     switch (type) {
-      case 'qcmMono': // question QCM 1 bonne réponse
+      case 'qcmMono': // question QCM
       case 'qcmMult':
         texQr += renderElement(
           { type: 'qcm', data: autoCorrection[j] },
@@ -67,15 +67,6 @@ export function exportQcmAmc(
         id++
         break
       case 'AMCNum':
-        // AMCNum avec encodage numérique de la réponse
-        /********************************************************************/
-        // On pourra rajouter des options : les paramètres sont nommés.
-        // {digits=0,digitsDen=0,digitsNum=0,decimals=0,vertical=false,signe=false,exposantNbChiffres=0,exposantSigne=false,approx=0}
-        // si digits=0 alors la fonction va analyser le nombre décimal (ou entier) pour déterminer digits et decimals
-        // signe et exposantSigne sont des booléens
-        // approx est un entier : on enlève la virgule pour comparer la réponse avec la valeur : approx est le seuil de cette différence.
-        /********************************************************************/
-
         texQr += renderElement(
           { type: 'num', data: autoCorrection[j] },
           {
