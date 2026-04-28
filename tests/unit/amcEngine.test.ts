@@ -4,6 +4,7 @@ import {
   createIdGenerator,
   normalizeAMCNum,
   normalizeAMCOpen,
+  renderAMCHybride,
   renderAMCNum,
   renderElement,
   renderQcm,
@@ -211,5 +212,115 @@ describe('amcEngine', () => {
         exercice: exerciceMock,
       }),
     ).toThrow(/parseAggregate/)
+  })
+
+  it('rend un AMCHybride avec bloc QCM', () => {
+    const hybride = renderAMCHybride({
+      type: 'AMCHybride',
+      autoCorrectionItem: {
+        enonce: 'Enonce hybride',
+        propositions: [
+          {
+            type: 'qcmMono',
+            enonce: 'Sous-question QCM',
+            propositions: [
+              { texte: 'A', statut: false },
+              { texte: 'B', statut: true },
+            ],
+            options: { ordered: true, lastChoice: 1 },
+          },
+        ],
+      },
+      exercice: exerciceMock,
+      ref: 'REF',
+      idExo: 0,
+      questionIndex: 0,
+      currentId: 0,
+      melange: true,
+    })
+
+    expect(hybride.texQr).toContain('Enonce hybride')
+    expect(hybride.texQr).toContain('Sous-question QCM')
+    expect(hybride.texQr).toContain('\\bonne{B}')
+    expect(hybride.texQr).toContain('\\mauvaise{A}')
+    expect(hybride.nextId).toBe(1)
+    expect(hybride.melange).toBe(true)
+  })
+
+  it('rend un AMCHybride avec bloc AMCOpen', () => {
+    const hybride = renderAMCHybride({
+      type: 'AMCHybride',
+      autoCorrectionItem: {
+        enonce: 'Enonce open hybride',
+        propositions: [
+          {
+            type: 'AMCOpen',
+            propositions: [
+              {
+                texte: 'Correction open hybride',
+                statut: 2,
+                numQuestionVisible: false,
+                sanscadre: 0,
+                pointilles: 1,
+              },
+            ],
+          },
+        ],
+      },
+      exercice: exerciceMock,
+      ref: 'REF',
+      idExo: 0,
+      questionIndex: 0,
+      currentId: 0,
+      melange: true,
+    })
+
+    expect(hybride.texQr).toContain('\\QuestionIndicative')
+    expect(hybride.texQr).toContain('Correction open hybride')
+    expect(hybride.texQr).toContain('\\notation{ 2 }[0][1]')
+    expect(hybride.nextId).toBe(1)
+  })
+
+  it('rend un AMCHybride avec bloc AMCNum puissance et met a jour nextId/melange', () => {
+    const hybride = renderAMCHybride({
+      type: 'AMCHybride',
+      autoCorrectionItem: {
+        enonce: 'Enonce num hybride',
+        melange: false,
+        propositions: [
+          {
+            type: 'AMCNum',
+            propositions: [
+              {
+                texte: 'Corr num',
+                reponse: {
+                  texte: 'Ecrire sous forme de puissance',
+                  valeur: 0,
+                  param: {
+                    basePuissance: 5,
+                    exposantPuissance: 3,
+                    baseNbChiffres: 1,
+                    exposantNbChiffres: 1,
+                  },
+                },
+              },
+            ],
+          },
+        ],
+      },
+      exercice: exerciceMock,
+      ref: 'REF',
+      idExo: 0,
+      questionIndex: 0,
+      currentId: 0,
+      melange: true,
+    })
+
+    expect(hybride.texQr).toContain('Base')
+    expect(hybride.texQr).toContain('Exposant')
+    expect(hybride.texQr).toContain('\\AMCnumericChoices{ 5 }')
+    expect(hybride.texQr).toContain('\\AMCnumericChoices{ 3 }')
+    expect(hybride.nextId).toBe(2)
+    expect(hybride.melange).toBe(false)
   })
 })
