@@ -1,4 +1,5 @@
 import { ecritureParentheseSiNegatif } from './ecritures'
+import { miseEnEvidence } from './embellissements'
 import { arrondi } from './nombres'
 
 /**
@@ -100,13 +101,13 @@ export function eclatePuissance(
   let str
   switch (e) {
     case 0:
-      return `\\mathbf{\\color{${couleur}}{1}}`
+      return `${miseEnEvidence(1, couleur)}`
     case 1:
-      return `\\mathbf{\\color{${couleur}}{${b}}}`
+      return `${miseEnEvidence(b, couleur)}`
     default:
-      str = `\\mathbf{\\color{${couleur}}{${b}}} `
+      str = `${miseEnEvidence(b, couleur)} `
       for (let i = 1; i < e; i++) {
-        str = str + `\\times \\mathbf{\\color{${couleur}}{${b}}}`
+        str = str + `\\times ${miseEnEvidence(b, couleur)} `
       }
       return str
   }
