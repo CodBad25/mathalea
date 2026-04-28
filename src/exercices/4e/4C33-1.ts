@@ -17,9 +17,9 @@ import {
 } from '../../modules/outils'
 import Exercice from '../Exercice'
 
+import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { ecritureParentheseSiNegatif } from '../../lib/outils/ecritures'
-import { bleuMathalea } from '../../lib/colors'
 
 export const titre = 'Effectuer des calculs avec des puissances'
 export const interactifReady = true
@@ -84,13 +84,13 @@ export function reorganiseProduitPuissance(
     case 0:
       return '1'
     case 1:
-      return `\\mathbf{\\color{${couleur1}}{${b1}}} \\times \\mathbf{\\color{${couleur2}}{${b2}}}`
+      return `${miseEnEvidence(b1, couleur1)} \\times ${miseEnEvidence(b2, couleur2)}`
     default:
-      str = `\\mathbf{(\\color{${couleur1}}{${b1}}} \\times \\mathbf{\\color{${couleur2}}{${b2}}}) `
+      str = `(${miseEnEvidence(b1, couleur1)} \\times ${miseEnEvidence(b2, couleur2)}) `
       for (let i = 1; i < e; i++) {
         str =
           str +
-          `\\times (\\mathbf{\\color{${couleur1}}{${b1}}} \\times \\mathbf{\\color{${couleur2}}{${b2}}})`
+          `\\times (${miseEnEvidence(b1, couleur1)} \\times ${miseEnEvidence(b2, couleur2)}) `
       }
       return str
   }
@@ -112,7 +112,7 @@ export default class PuissancesDunRelatif1 extends Exercice {
     ]
     this.consigne = 'Écrire sous la forme $a^n$.'
     context.isHtml ? (this.spacing = 3) : (this.spacing = 2)
-    context.isHtml ? (this.spacingCorr = 2) : (this.spacingCorr = 1)
+    context.isHtml ? (this.spacingCorr = 3) : (this.spacingCorr = 2)
     this.nbQuestions = 5
     this.correctionDetailleeDisponible = true
     this.sup = '1-2-3-4'
@@ -137,6 +137,7 @@ export default class PuissancesDunRelatif1 extends Exercice {
 
     // pour pouvoir adapter les couleurs en cas de besoin
     const coul0 = 'green'
+
     const coul1 = bleuMathalea
 
     for (
@@ -187,7 +188,7 @@ export default class PuissancesDunRelatif1 extends Exercice {
               coul0,
             )} \\times ${eclatePuissance(baseUtile, exp[1], coul1)}$`
             texteCorr += '<br>'
-            texteCorr += `Il y a donc $\\mathbf{\\color{${coul0}}{${exp[0]}}~\\color{black}{+}~\\color{${coul1}}{${exp[1]}}}$ facteurs tous égaux à $${baseUtile}$.`
+            texteCorr += `Il y a donc $${miseEnEvidence(exp[0], coul0)}~\\times~${miseEnEvidence(exp[1], coul1)}$ facteurs tous égaux à $${baseUtile}$.`
             texteCorr += '<br>'
           }
           if (base < 0 && (exp[1] + exp[0]) % 2 === 0) {
@@ -211,18 +212,17 @@ export default class PuissancesDunRelatif1 extends Exercice {
           // Pour que la couleur de la base associée à l'exposant max soit toujours rouge.
           if (Math.max(exp[0], exp[1]) === exp[0]) {
             couleurExp0 = coul0
-            couleurExp1 = coul1
           } else {
             couleurExp0 = coul1
-            couleurExp1 = coul0
           }
 
+          couleurExp1 = coul0
           texte = `$${lettre}=\\dfrac{${baseUtile}^{${exp[0]}}}{${baseUtile}^{${exp[1]}}}$`
 
           if (this.correctionDetaillee) {
             texteCorr += `$${lettre}=\\dfrac{${eclatePuissance(baseUtile, exp[0], couleurExp0)}}{${eclatePuissance(baseUtile, exp[1], couleurExp1)}}$`
             texteCorr += '<br>'
-            texteCorr += `Il y a donc $\\mathbf{\\color{${coul1}}{${Math.min(exp[0], exp[1])}}}$ simplification${Math.min(exp[0], exp[1]) === 1 ? '' : 's'} par $${baseUtile}$ possibles.`
+            texteCorr += `$${miseEnEvidence(Math.min(exp[0], exp[1]), coul1)}$ simplification${Math.min(exp[0], exp[1]) === 1 ? '' : 's'} par $${baseUtile}$ possibles.`
             texteCorr += '<br>'
           }
           if (exp[0] - exp[1] === 0) {
@@ -306,26 +306,30 @@ export default class PuissancesDunRelatif1 extends Exercice {
           texte = `$${lettre}=(${baseUtile}^{${exp[0]}})^{${exp[1]}}$`
 
           if (this.correctionDetaillee) {
-            texteCorr += `$${lettre}=\\color{${coul0}}{\\underbrace{${eclatePuissance(
-              `(${baseUtile}^{${exp[0]}})`,
-              exp[1],
+            texteCorr += `$${lettre}=${miseEnEvidence(
+              `\\underbrace{${eclatePuissance(
+                `(${baseUtile}^{${exp[0]}})`,
+                exp[1],
+                coul0,
+              )}}_{${exp[1]}\\thickspace\\text{facteurs}}`,
               coul0,
-            )}}_{${exp[1]}\\thickspace\\text{facteurs}}}$`
+            )}$`
             texteCorr += '<br>'
-            texteCorr += `$${lettre}=\\color{${coul0}}{\\underbrace{${eclatePuissance(
-              `(\\color{${coul1}}{\\underbrace{${eclatePuissance(
+            const sousAccolade = `${miseEnEvidence(
+              `\\underbrace{${eclatePuissance(
                 baseUtile,
                 exp[0],
                 coul1,
-              )}}_{${exp[0]}\\thickspace\\text{facteurs}}}\\color{${coul0}})`,
-              exp[1],
+              )}}_{${exp[0]}\\thickspace\\text{facteurs}}`,
+              coul1,
+            )}`
+            texteCorr += `$${miseEnEvidence(
+              `\\underbrace{${eclatePuissance(sousAccolade, exp[1], coul0)}}_{${exp[1]}\\times${exp[0]}~facteurs}`,
               coul0,
-            )}}_{${exp[1]}\\times\\color{${coul1}}{${
-              exp[0]
-            }}\\thickspace\\color{black}{\\text{facteurs}}}}$`
+            )}$`
             texteCorr += '<br>'
           }
-          texteCorr += `Il y a donc $\\mathbf{\\color{${coul0}}{${exp[1]}}~\\color{black}{\\times}~\\color{${coul1}}{${exp[0]}}}$ facteurs tous égaux à $${baseUtile}$.`
+          texteCorr += `Il y a donc $${miseEnEvidence(exp[1], coul0)}~\\times~${miseEnEvidence(exp[0], coul0)}$ facteurs tous égaux à $${baseUtile}$.`
           texteCorr += '<br>'
           texteCorr += `$${lettre}=${baseUtile}^{${exp[0]}\\times${exp[1]}} `
           if (base < 0 && (exp[1] * exp[0]) % 2 === 0) {
@@ -422,14 +426,15 @@ export default class PuissancesDunRelatif1 extends Exercice {
             const fractions = []
             for (let i = 0; i < exp; i++) {
               fractions.push(
-                `\\dfrac{\\color{${coul0}}{${base0}}}{\\color{${coul1}}{${base1}}}`,
+                `\\dfrac{${miseEnEvidence(base0, coul0)}}{${miseEnEvidence(base1, coul1)}}`,
               )
             }
             texteCorr += `$${lettre}=${fractions.join(' \\times ')}$`
+            // texteCorr += `$${lettre}=${fractions.join('  ')}$`
           }
 
           texteCorr += '<br>'
-          texteCorr += `$${lettre}= \\left(\\dfrac{\\color{${coul0}}{${base0}}}{\\color{${coul1}}{${base1}}}\\right)^{${exp}}=${miseEnEvidence(`${ecritureParentheseSiNegatif(base0 / base1)}^{${exp}}`)}$`
+          texteCorr += `$${lettre}= \\left(\\dfrac{${miseEnEvidence(base0, coul0)}}{${miseEnEvidence(base1, coul1)}}\\right)^{${exp}}=${miseEnEvidence(`${ecritureParentheseSiNegatif(base0 / base1)}^{${exp}}`)}$`
 
           reponseInteractive =
             base0 / base1 > 0
