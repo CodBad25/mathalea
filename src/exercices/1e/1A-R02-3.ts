@@ -2,7 +2,7 @@ import CalculToutAvecPartie from '../can/2e/can2C23'
 export const titre = 'Calculer le tout connaissant une partie'
 export const dateDePublication = '22/07/2025'
 export const amcReady = true
-export const amcType = 'AMCNum'
+export const amcType = 'qcmMono'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 

@@ -2,7 +2,7 @@ import seuilFctAff from '../can/2e/can2F21'
 export const titre = 'Déterminer un seuil avec une fonction affine'
 export const dateDePublication = '27/08/2025'
 export const amcReady = true
-export const amcType = 'AMCNum'
+export const amcType = 'qcmMono'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 

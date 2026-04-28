@@ -3,7 +3,7 @@ export const titre =
   'Calculer les coordonnées du point d’intersection entre l’axe des abscisses et une droite'
 export const dateDePublication = '26/07/2025'
 export const amcReady = true
-export const amcType = 'AMCNum'
+export const amcType = 'qcmMono'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 

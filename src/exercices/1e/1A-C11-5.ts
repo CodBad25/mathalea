@@ -1,9 +1,10 @@
 import ExprimerEnFonctionRac from '../can/2e/can2L22'
-export const titre = 'Exprimer une variable en fonction des autres (formules avec carrés/racines carrées)'
+export const titre =
+  'Exprimer une variable en fonction des autres (formules avec carrés/racines carrées)'
 export const dateDePublication = '13/01/2026'
 export const dateDeModifImportante = '14/02/2026'
 export const amcReady = true
-export const amcType = 'AMCNum'
+export const amcType = 'qcmMono'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 

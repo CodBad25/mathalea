@@ -2,7 +2,7 @@ import CalculPartieAvecTout from '../can/5e/can5P11'
 export const titre = 'Déterminer un pourcentage de proportion'
 export const dateDePublication = '22/07/2025'
 export const amcReady = true
-export const amcType = 'AMCNum'
+export const amcType = 'qcmMono'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 

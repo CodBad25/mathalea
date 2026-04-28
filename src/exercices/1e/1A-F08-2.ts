@@ -3,7 +3,7 @@ export const titre =
   'Déterminer un coefficient directeur à partir des coordonnées'
 export const dateDePublication = '22/07/2025'
 export const amcReady = true
-export const amcType = 'AMCNum'
+export const amcType = 'qcmMono'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 

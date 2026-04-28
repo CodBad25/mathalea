@@ -2,7 +2,7 @@ import CalculComplexeFraction from '../can/3e/can3C19'
 export const titre = 'Effectuer un calcul complexe avec des fractions'
 export const dateDePublication = '06/08/2025'
 export const amcReady = true
-export const amcType = 'AMCNum'
+export const amcType = 'qcmMono'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 

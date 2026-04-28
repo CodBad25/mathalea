@@ -1,8 +1,9 @@
 import ProbaCond from '../can/1e/can1P11'
-export const titre = 'Calculer une probabilité conditionnelle (tirage sans remise dans une urne)'
+export const titre =
+  'Calculer une probabilité conditionnelle (tirage sans remise dans une urne)'
 export const dateDePublication = '20/02/2026'
 export const amcReady = true
-export const amcType = 'AMCNum'
+export const amcType = 'qcmMono'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 /**

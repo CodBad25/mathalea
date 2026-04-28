@@ -2,7 +2,7 @@ import DeveloppementNiveau1 from '../can/4e/can4L05'
 export const titre = 'Développer avec la simple distributivité'
 export const dateDePublication = '23/07/2025'
 export const amcReady = true
-export const amcType = 'AMCNum'
+export const amcType = 'qcmMono'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 

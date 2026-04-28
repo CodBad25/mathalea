@@ -2,7 +2,7 @@ import calculPuissancesAvecn from '../can/2e/can2C30'
 export const titre = 'Déterminer une puissance dans une égalité'
 export const dateDePublication = '23/03/2026'
 export const amcReady = true
-export const amcType = 'AMCNum'
+export const amcType = 'qcmMono'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 
