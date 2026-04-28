@@ -43,6 +43,12 @@ export type AMCQcmChoice = {
   multicolsEnd?: boolean
   numQuestionVisible?: boolean
   pointilles?: boolean | number
+  reponse?: {
+    texte?: string
+    valeur?: AMCReponseValue | AMCReponseValue[]
+    alignement?: string
+    param?: ReponseParams
+  }
 }
 
 export type AMCUneProposition = {

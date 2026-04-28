@@ -72,6 +72,14 @@ type AMCNumNormalized = {
   blocks: AMCNumBlock[]
 }
 
+const AMCOpenTemplate = `\\element{ {{ ref }} }{
+\\begin{question}{ {{ id }} }
+{{ enonce }}
+\\explain{ {{ correction }} }
+\\notation{ {{ notation }} }[{{ sanscadre }}][{{ pointilles }}]
+\\end{question}
+}`
+
 const AMCNumTemplate = `\\element{ {{ ref }} }{
 \\begin{questionmultx}{ {{ id }} }
 {{ enonce }}
@@ -279,25 +287,22 @@ function normalizeQcm(
   })
 }
 export function normalizeAMCOpen(
-  autoCorrectionItem: AutoCorrectionAMC,
+  autoCorrectionItem: AMCUneProposition,
   contexte: QuestionContext,
 ) {
-  const { exercice, index, ref, id } = contexte
+  const { ref, id, exercice, index } = contexte
   const enonce = autoCorrectionItem.enonce ?? exercice.listeQuestions[index]
-  const prop: AMCUneProposition = autoCorrectionItem.propositions?.[0] ?? {
-    texte: exercice.listeCorrections[index],
-    statut: 3,
-  }
+  const firstProp = autoCorrectionItem.propositions?.[0]
 
   return {
-    type: 'amcopen',
+    type: 'amcopen' as const,
     id: `${ref}/${id}`,
     ref,
     enonce,
-    correction: prop.texte,
-    notation: prop.statut,
-    sanscadre: prop.sanscadre ?? false,
-    pointilles: prop.pointilles ?? true,
+    correction: firstProp?.texte ?? exercice.listeCorrections[index],
+    notation: firstProp?.statut ?? 3,
+    sanscadre: firstProp?.sanscadre ?? false,
+    pointilles: firstProp?.pointilles ?? true,
   }
 }
 
@@ -450,6 +455,13 @@ export function renderAMCNum(
   })
 }
 
+export function renderOpen(item: AMCUneProposition, contexte: QuestionContext) {
+  const data = normalizeAMCOpen(item, contexte)
+  return nunjucks.renderString(AMCOpenTemplate, {
+    ...data,
+  })
+}
+
 export function renderElement(
   element: AMCElement,
   contexte: QuestionContext | QuestionQcmContext,
@@ -460,6 +472,6 @@ export function renderElement(
     case 'num':
       return renderAMCNum(element.data, contexte)
     case 'open':
-    // return renderOpen(element.data, contexte)
+      return renderOpen(element.data, contexte)
   }
 }

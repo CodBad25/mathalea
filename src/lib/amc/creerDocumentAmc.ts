@@ -1,7 +1,15 @@
 import { randint } from '../../modules/outils'
 import { format as formatLatex } from '../Latex'
+import { elimineDoublons } from '../interactif/qcm'
+import {
+  arrondi,
+  nombreDeChiffresDansLaPartieDecimale,
+  nombreDeChiffresDansLaPartieEntiere,
+  nombreDeChiffresDe,
+} from '../outils/nombres'
 import { lettreDepuisChiffre } from '../outils/outilString'
-import { renderAMCNum, renderQcm } from './amcEngine'
+import { decimalToScientifique } from '../outils/texNombre'
+import { renderElement } from './amcEngine'
 import type { IExerciceAMC } from './types'
 
 type ExportQcmAmcResult = [string, string, number, string, boolean]
@@ -28,13 +36,14 @@ export function exportQcmAmc(
 ): ExportQcmAmcResult {
   let ref = `${exercice.id}/${exercice.sup ? 'S:' + exercice.sup : ''}${exercice.sup2 ? 'S2:' + exercice.sup2 : ''}${exercice.sup3 ? 'S3:' + exercice.sup3 : ''}${exercice.sup4 ? 'S4:' + exercice.sup4 : ''}${exercice.sup5 ? 'S5:' + exercice.sup5 : ''}`
   if (ref[ref.length - 1] === '/') ref = ref.slice(0, -1)
-  const autoCorrection = exercice.autoCorrection
+  // Compatibilite transitoire: la structure historique AMCHybride est plus large que le typage strict actuel.
+  const autoCorrection = exercice.autoCorrection as any[]
   const titre = exercice.titre
   const type = exercice.amcType
   let texQr = ''
   let id = 0
   let horizontalite = 'reponseshoriz'
-  let lastchoice = false
+  let lastchoice = 0
   let ordered = false
   let nbChiffresPd, nbChiffresPe
   let melange = true
@@ -57,7 +66,7 @@ export function exportQcmAmc(
         lastchoice = autoCorrection[j].options.lastChoice
       }
     }
-    let valeurAMCNum = 0
+    let valeurAMCNum: any = 0
     if (autoCorrection[j].reponse !== undefined) {
       if (!Array.isArray(autoCorrection[j].reponse.valeur))
         autoCorrection[j].reponse.valeur = [autoCorrection[j].reponse.valeur]
@@ -69,73 +78,27 @@ export function exportQcmAmc(
     switch (type) {
       case 'qcmMono': // question QCM 1 bonne réponse
       case 'qcmMult':
-        texQr += renderQcm(autoCorrection[j], {
-          type: type === 'qcmMono' ? 'qcm' : 'qcmMult',
-          ref,
-          id: `${ref}/${lettreDepuisChiffre(idExo + 1)}${id + 10}`,
-          exercice,
-          index: j,
-        })
+        texQr += renderElement(
+          { type: 'qcm', data: autoCorrection[j] },
+          {
+            ref,
+            id: `${ref}/${lettreDepuisChiffre(idExo + 1)}${id + 10}`,
+            exercice,
+            index: j,
+          },
+        )
         id++
         break
-      /*  if (elimineDoublons(autoCorrection[j].propositions)) {
-          console.error('doublons trouvés')
-        }
-        if (autoCorrection[j].enonce === undefined) {
-          autoCorrection[j].enonce = exercice.listeQuestions[j]
-        }
-        texQr += `\\element{${ref}}{\n `
-        texQr += `\\begin{${type === 'qcmMono' ? 'question' : 'questionmult'}}{${ref}/${lettreDepuisChiffre(idExo + 1)}${id + 10}} \n `
-        texQr += `${autoCorrection[j].enonce} \n `
-        texQr += `\t\\begin{${horizontalite}}`
-        if (ordered) {
-          texQr += '[o]'
-        }
-        texQr += '\n '
-        for (let i = 0; i < autoCorrection[j].propositions.length; i++) {
-          if (lastchoice > 0 && i === lastchoice) {
-            texQr += '\t\t\\lastchoices\n'
-          }
-          if (autoCorrection[j].propositions[i].statut) {
-            texQr += `\t\t\\bonne{${autoCorrection[j].propositions[i].texte}}\n `
-          } else {
-            texQr += `\t\t\\mauvaise{${autoCorrection[j].propositions[i].texte}}\n `
-          }
-        }
-        texQr += `\t\\end{${horizontalite}}\n `
-        texQr += `\\end{${type === 'qcmMono' ? 'question' : 'questionmult'}}\n }\n `
-        id++
-        */
-
       case 'AMCOpen': // AMCOpen question ouverte corrigée par l'enseignant
-        if (autoCorrection[j].enonce === undefined) {
-          autoCorrection[j].enonce = exercice.listeQuestions[j]
-        }
-        if (autoCorrection[j].propositions === undefined) {
-          autoCorrection[j].propositions = [
-            {
-              texte: exercice.listeCorrections[j],
-              statut: '3',
-            },
-          ]
-        }
-        texQr += `\\element{${ref}}{\n `
-        texQr += `\t\\begin{question}{${ref}/${lettreDepuisChiffre(idExo + 1)}-${id + 10}} \n `
-        texQr += `\t\t${autoCorrection[j].enonce} \n `
-        texQr += `\t\t\\explain{${autoCorrection[j].propositions[0].texte}}\n`
-        texQr += `\t\t\\notation{${autoCorrection[j].propositions[0].statut}}`
-        if (autoCorrection[j].propositions[0].sanscadre !== undefined) {
-          texQr += `[${autoCorrection[j].propositions[0].sanscadre}]` // le statut contiendra si on a un cadre ou pas
-        } else {
-          texQr += '[false]'
-        }
-        if (autoCorrection[j].propositions[0].pointilles !== undefined) {
-          texQr += `[${autoCorrection[j].propositions[0].pointilles}]` // // le statut contiendra les lignes sont des pointillés ou vierges
-        } else {
-          texQr += '[true]'
-        }
-
-        texQr += '\n\t\\end{question}\n }\n'
+        texQr += renderElement(
+          { type: 'open', data: autoCorrection[j] },
+          {
+            ref,
+            id: `${ref}/${lettreDepuisChiffre(idExo + 1)}${id + 10}`,
+            exercice,
+            index: j,
+          },
+        )
         id++
         break
       case 'AMCNum':
@@ -148,264 +111,16 @@ export function exportQcmAmc(
         // approx est un entier : on enlève la virgule pour comparer la réponse avec la valeur : approx est le seuil de cette différence.
         /********************************************************************/
 
-        texQr += renderAMCNum(autoCorrection[j], {
-          ref,
-          id: `${ref}/${lettreDepuisChiffre(idExo + 1)}${id + 10}`,
-          exercice,
-          index: j,
-        })
+        texQr += renderElement(
+          { type: 'num', data: autoCorrection[j] },
+          {
+            ref,
+            id: `${ref}/${lettreDepuisChiffre(idExo + 1)}${id + 10}`,
+            exercice,
+            index: j,
+          },
+        )
         id++
-
-        /*      if (autoCorrection[j].enonce === undefined) {
-          autoCorrection[j].enonce = exercice.listeQuestions[j]
-        }
-        if (autoCorrection[j].propositions === undefined) {
-          autoCorrection[j].propositions = [
-            {
-              texte: exercice.listeCorrections[j],
-              statut: '',
-            },
-          ]
-        }
-        if (!Array.isArray(autoCorrection[j].reponse.valeur)) {
-          autoCorrection[j].reponse.valeur = [autoCorrection[j].reponse.valeur]
-        }
-        if (autoCorrection[j].reponse.param.basePuissance !== undefined) {
-          if (autoCorrection[j].reponse.param.exposantPuissance === undefined) {
-            autoCorrection[j].reponse.param.exposantPuissance = 1000 // Nb volontairement grand pour faire comprendre à l'utilisateur AMC qu'il y a eu une erreur de programmation lors de la conception de l'exercice.
-          }
-          texQr += `\\element{${ref}}{\n`
-          texQr += '\\begin{multicols}{2}\n'
-          texQr += `\\begin{questionmultx}{${ref}/${lettreDepuisChiffre(idExo + 1)}-${id + 10}} \n `
-          texQr += `${autoCorrection[j].enonce} \n \\vspace{0.25cm} \n`
-          if (autoCorrection[j].propositions !== undefined) {
-            texQr += `\\explain{${autoCorrection[j].propositions[0].texte}}\n`
-          }
-          let digitsBase = 0
-          if (autoCorrection[j].reponse.param.baseNbChiffres !== undefined) {
-            digitsBase = Math.max(
-              autoCorrection[j].reponse.param.baseNbChiffres,
-              nombreDeChiffresDansLaPartieEntiere(
-                autoCorrection[j].reponse.param.basePuissance,
-              ),
-            )
-          } else {
-            digitsBase = nombreDeChiffresDansLaPartieEntiere(
-              autoCorrection[j].reponse.param.basePuissance,
-            )
-          }
-          let digitsExposant = 0
-          if (
-            autoCorrection[j].reponse.param.exposantNbChiffres !== undefined
-          ) {
-            digitsExposant = Math.max(
-              autoCorrection[j].reponse.param.exposantNbChiffres,
-              nombreDeChiffresDansLaPartieEntiere(
-                autoCorrection[j].reponse.param.exposantPuissance,
-              ),
-            )
-          } else {
-            digitsExposant = nombreDeChiffresDansLaPartieEntiere(
-              autoCorrection[j].reponse.param.exposantPuissance,
-            )
-          }
-          texQr += '\n'
-          texQr += `Base\n \\AMCnumericChoices{${autoCorrection[j].reponse.param.basePuissance}}{digits=${digitsBase},decimals=0,sign=${autoCorrection[j].reponse.param.basePuissance < 0 || autoCorrection[j].reponse.param.signe ? 'true' : 'false'},approx=0,`
-          if (autoCorrection[j].reponse.param.aussiCorrect !== undefined)
-            texQr += `alsocorrect=${autoCorrection[j].reponse.param.aussiCorrect},`
-          texQr += `borderwidth=0pt,backgroundcol=lightgray,scoreapprox=${autoCorrection[j].reponse.param.scoreapprox || 0.667},scoreexact=1,Tpoint={,}}\n`
-          texQr += '\\end{questionmultx}\n'
-          texQr += '\\AMCquestionNumberfalse\\def\\AMCbeginQuestion#1#2{}'
-          texQr += `\\begin{questionmultx}{${ref}/${lettreDepuisChiffre(idExo + 1)}-${id + 1}} \n `
-          texQr += '\\vspace{18pt}'
-          // texQr += `Exposant\n \\AMCnumericChoices{${autoCorrection[j].reponse.param.exposantPuissance}}{digits=${digitsExposant},decimals=0,sign=${autoCorrection[j].reponse.param.exposantPuissance < 0 ? 'true' : 'false'},approx=0,`
-          texQr += `Exposant\n \\AMCnumericChoices{${autoCorrection[j].reponse.param.exposantPuissance}}{digits=${digitsExposant},decimals=0,sign=true,approx=0,`
-          texQr += `borderwidth=0pt,backgroundcol=lightgray,scoreapprox=${autoCorrection[j].reponse.param.scoreapprox || 0.667},scoreexact=1,Tpoint={,}}\n`
-          texQr += '\\end{questionmultx}\n\\end{multicols}\n}\n\n'
-          id += 2
-        } else if (
-          valeurAMCNum !== undefined &&
-          valeurAMCNum.num !== undefined
-        ) {
-          // Si une fraction a été passée à AMCNum, on met un seul AMCNumericChoice particulier
-          texQr += `\\element{${ref}}{\n`
-          texQr += `\\begin{questionmultx}{${ref}/${lettreDepuisChiffre(idExo + 1)}-${id + 10}} \n `
-          texQr += `${autoCorrection[j].enonce} \n`
-          if (autoCorrection[j].propositions !== undefined) {
-            texQr += `\\explain{${autoCorrection[j].propositions[0].texte}}\n`
-          }
-          let digitsNum = 0
-          if (autoCorrection[j].reponse.param.digitsNum !== undefined) {
-            digitsNum = Math.max(
-              autoCorrection[j].reponse.param.digitsNum,
-              nombreDeChiffresDansLaPartieEntiere(valeurAMCNum.num),
-            )
-          } else if (autoCorrection[j].reponse.param.digits !== undefined) {
-            digitsNum = Math.max(
-              autoCorrection[j].reponse.param.digits,
-              nombreDeChiffresDansLaPartieEntiere(valeurAMCNum.num),
-            )
-          } else {
-            digitsNum = nombreDeChiffresDansLaPartieEntiere(valeurAMCNum.num)
-          }
-          let digitsDen = 0
-          if (autoCorrection[j].reponse.param.digitsDen !== undefined) {
-            digitsDen = Math.max(
-              autoCorrection[j].reponse.param.digitsDen ?? 0,
-              nombreDeChiffresDansLaPartieEntiere(valeurAMCNum.den),
-            )
-          } else if (autoCorrection[j].reponse.param.digits !== undefined) {
-            digitsDen = Math.max(
-              autoCorrection[j].reponse.param.digits,
-              nombreDeChiffresDansLaPartieEntiere(valeurAMCNum.den),
-            )
-          } else {
-            digitsDen = nombreDeChiffresDansLaPartieEntiere(valeurAMCNum.den)
-          }
-          let signeNum = true
-          if (autoCorrection[j].reponse.param.signe !== undefined) {
-            signeNum = autoCorrection[j].reponse.param.signe
-          } else {
-            signeNum = valeurAMCNum.signe === -1
-          }
-          let reponseF
-          let reponseAlsoCorrect
-          if (valeurAMCNum.num > 0) {
-            reponseF = arrondi(
-              valeurAMCNum.num + valeurAMCNum.den / 10 ** digitsDen,
-              8,
-            )
-            reponseAlsoCorrect = arrondi(
-              valeurAMCNum.num +
-                valeurAMCNum.den /
-                  10 ** nombreDeChiffresDansLaPartieEntiere(valeurAMCNum.den),
-              8,
-            )
-          } else {
-            reponseF = arrondi(
-              valeurAMCNum.num - valeurAMCNum.den / 10 ** digitsDen,
-              8,
-            )
-            reponseAlsoCorrect = arrondi(
-              valeurAMCNum.num -
-                valeurAMCNum.den /
-                  10 ** nombreDeChiffresDansLaPartieEntiere(valeurAMCNum.den),
-              8,
-            )
-          }
-          texQr += `\\AMCnumericChoices{${reponseF}}{digits=${digitsNum + digitsDen},decimals=${digitsDen},sign=${signeNum},approx=0,`
-          texQr += `borderwidth=0pt,backgroundcol=lightgray,scoreexact=1,Tpoint={\\vspace{0.5cm} \\vrule height 0.4pt width 5.5cm },alsocorrect=${reponseAlsoCorrect}}\n`
-          texQr += '\\end{questionmultx}\n}\n\n'
-          id += 2
-        } else {
-          let nbChiffresExpo
-          if (
-            autoCorrection[j].reponse.param.exposantNbChiffres !== undefined &&
-            autoCorrection[j].reponse.param.exposantNbChiffres !== 0
-          ) {
-            nbChiffresPd = Math.max(
-              nombreDeChiffresDansLaPartieDecimale(
-                decimalToScientifique(valeurAMCNum)[0],
-              ),
-              autoCorrection[j].reponse.param.decimals ?? 0,
-            )
-            nbChiffresPe = Math.max(
-              nombreDeChiffresDansLaPartieEntiere(
-                decimalToScientifique(valeurAMCNum)[0],
-              ),
-              isNaN(autoCorrection[j].reponse.param.digits - nbChiffresPd)
-                ? 0
-                : autoCorrection[j].reponse.param.digits - nbChiffresPd,
-            )
-            nbChiffresExpo = Math.max(
-              nombreDeChiffresDansLaPartieEntiere(
-                decimalToScientifique(valeurAMCNum)[1],
-              ),
-              autoCorrection[j].reponse.param.exposantNbChiffres ?? 1,
-            )
-          } else {
-            nbChiffresPd = Math.max(
-              nombreDeChiffresDansLaPartieDecimale(valeurAMCNum),
-              autoCorrection[j].reponse.param.decimals ?? 0,
-            )
-            nbChiffresPe = Math.max(
-              nombreDeChiffresDansLaPartieEntiere(valeurAMCNum),
-              isNaN(autoCorrection[j].reponse.param.digits - nbChiffresPd)
-                ? 0
-                : autoCorrection[j].reponse.param.digits - nbChiffresPd,
-            )
-          }
-          if (autoCorrection[j].reponse.param.milieuIntervalle !== undefined) {
-            const demiMediane =
-              autoCorrection[j].reponse.param.milieuIntervalle - valeurAMCNum
-            nbChiffresPd = Math.max(
-              nbChiffresPd,
-              nombreDeChiffresDansLaPartieDecimale(demiMediane),
-            )
-            valeurAMCNum = autoCorrection[j].reponse.param.milieuIntervalle
-            autoCorrection[j].reponse.param.approx =
-              autoCorrection[j].reponse.param.approx === 'intervalleStrict'
-                ? demiMediane * 10 ** nbChiffresPd - 1
-                : demiMediane * 10 ** nbChiffresPd
-          }
-          texQr += `\\element{${ref}}{\n `
-          texQr += `\\begin{questionmultx}{${ref}/${lettreDepuisChiffre(idExo + 1)}-${id + 10}} \n `
-          texQr += `${autoCorrection[j].enonce} \n `
-          if (autoCorrection[j].propositions !== undefined) {
-            texQr += `\\explain{${autoCorrection[j].propositions[0].texte}}\n`
-          }
-          if (autoCorrection[j].reponse.textePosition === 'left')
-            texQr += `${autoCorrection[j].reponse.texte} `
-          texQr += `\\AMCnumericChoices{${valeurAMCNum}}{digits=${nbChiffresPe + nbChiffresPd},decimals=${nbChiffresPd},sign=${autoCorrection[j].reponse.param.signe},`
-          if (autoCorrection[j].reponse.param.aussiCorrect !== undefined)
-            texQr += `alsocorrect=${autoCorrection[j].reponse.param.aussiCorrect},`
-          if (
-            autoCorrection[j].reponse.param.exposantNbChiffres !== undefined &&
-            autoCorrection[j].reponse.param.exposantNbChiffres !== 0
-          ) {
-            // besoin d'un champ pour la puissance de 10. (notation scientifique)
-            texQr += `exponent=${nbChiffresExpo},exposign=${autoCorrection[j].reponse.param.exposantSigne},`
-          }
-          if (
-            autoCorrection[j].reponse.param.approx !== undefined &&
-            autoCorrection[j].reponse.param.approx !== 0
-          ) {
-            texQr += `approx=${autoCorrection[j].reponse.param.approx},`
-            texQr += `scoreapprox=${autoCorrection[j].reponse.param.scoreapprox || 0.667},`
-          }
-          if (
-            autoCorrection[j].reponse.param.vertical !== undefined &&
-            autoCorrection[j].reponse.param.vertical
-          ) {
-            texQr += `vertical=${autoCorrection[j].reponse.param.vertical},`
-          }
-          if (
-            autoCorrection[j].reponse.param.strict !== undefined &&
-            autoCorrection[j].reponse.param.strict
-          ) {
-            texQr += `strict=${autoCorrection[j].reponse.param.strict},`
-          }
-          if (
-            autoCorrection[j].reponse.param.vhead !== undefined &&
-            autoCorrection[j].reponse.param.vhead
-          ) {
-            texQr += `vhead=${autoCorrection[j].reponse.param.vhead},`
-          }
-          if (
-            autoCorrection[j].reponse.param.tpoint !== undefined &&
-            autoCorrection[j].reponse.param.tpoint
-          ) {
-            texQr += `Tpoint={${autoCorrection[j].reponse.param.tpoint}},`
-          } else {
-            texQr += 'Tpoint={,},'
-          }
-          texQr += 'borderwidth=0pt,backgroundcol=lightgray,scoreexact=1} '
-          if (autoCorrection[j].reponse.textePosition === 'right')
-            texQr += `${autoCorrection[j].reponse.texte}\n`
-          texQr += '\\end{questionmultx}\n }\n\n'
-          id++
-        }
-          */
         break
       default: // Si on arrive ici, c'est que le type est AMCHybride
         if (type !== 'AMCHybride') {
