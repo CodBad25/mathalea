@@ -9,9 +9,7 @@ import {
 } from '../outils/nombres'
 import { lettreDepuisChiffre } from '../outils/outilString'
 import { decimalToScientifique } from '../outils/texNombre'
-import { normalizeAMCNum } from './normalisation/normalizeAMCNum'
-import { normalizeQcm } from './normalisation/normalizeQcm'
-import { renderAMCNum, renderQcm } from './rendering'
+import { renderAMCNum, renderQcm } from './amcEngine'
 
 /**
  *
@@ -62,19 +60,16 @@ export function exportQcmAmc(exercice, idExo) {
     }
     switch (type) {
       case 'qcmMono': // question QCM 1 bonne réponse
-      case 'qcmMult': {
-        const normalized = normalizeQcm(autoCorrection[j], {
+      case 'qcmMult':
+        texQr += renderQcm(autoCorrection[j], {
           type,
           ref,
           id: `${ref}/${lettreDepuisChiffre(idExo + 1)}${id + 10}`,
           exercice,
           index: j,
         })
-        texQr += renderQcm(normalized)
-
         id++
         break
-      }
       /*  if (elimineDoublons(autoCorrection[j].propositions)) {
           console.error('doublons trouvés')
         }
@@ -136,27 +131,25 @@ export function exportQcmAmc(exercice, idExo) {
         id++
         break
       case 'AMCNum':
-        {
-          // AMCNum avec encodage numérique de la réponse
-          /********************************************************************/
-          // On pourra rajouter des options : les paramètres sont nommés.
-          // {digits=0,digitsDen=0,digitsNum=0,decimals=0,vertical=false,signe=false,exposantNbChiffres=0,exposantSigne=false,approx=0}
-          // si digits=0 alors la fonction va analyser le nombre décimal (ou entier) pour déterminer digits et decimals
-          // signe et exposantSigne sont des booléens
-          // approx est un entier : on enlève la virgule pour comparer la réponse avec la valeur : approx est le seuil de cette différence.
-          /********************************************************************/
+        // AMCNum avec encodage numérique de la réponse
+        /********************************************************************/
+        // On pourra rajouter des options : les paramètres sont nommés.
+        // {digits=0,digitsDen=0,digitsNum=0,decimals=0,vertical=false,signe=false,exposantNbChiffres=0,exposantSigne=false,approx=0}
+        // si digits=0 alors la fonction va analyser le nombre décimal (ou entier) pour déterminer digits et decimals
+        // signe et exposantSigne sont des booléens
+        // approx est un entier : on enlève la virgule pour comparer la réponse avec la valeur : approx est le seuil de cette différence.
+        /********************************************************************/
 
-          const normalized = normalizeAMCNum(autoCorrection[j], {
-            type,
-            ref,
-            id: `${ref}/${lettreDepuisChiffre(idExo + 1)}${id + 10}`,
-            exercice,
-            index: j,
-          })
-          texQr += renderAMCNum(normalized)
-          id++
+        texQr += renderAMCNum(autoCorrection[j], {
+          type,
+          ref,
+          id: `${ref}/${lettreDepuisChiffre(idExo + 1)}${id + 10}`,
+          exercice,
+          index: j,
+        })
+        id++
 
-          /*      if (autoCorrection[j].enonce === undefined) {
+        /*      if (autoCorrection[j].enonce === undefined) {
           autoCorrection[j].enonce = exercice.listeQuestions[j]
         }
         if (autoCorrection[j].propositions === undefined) {
@@ -406,7 +399,6 @@ export function exportQcmAmc(exercice, idExo) {
           id++
         }
           */
-        }
         break
       default: // Si on arrive ici, c'est que le type est AMCHybride
         if (type !== 'AMCHybride') {

@@ -51,7 +51,6 @@ type AMCNumFraction = AMCNumBase & {
   sign: boolean
   approx: number
   valueAMC: number
-  alsoCorrect: number
 }
 
 type AMCNumPower = AMCNumBase & {
@@ -71,4 +70,6 @@ export type AMCNumBase = {
   ref: string
   enonce: string
   explain?: string
+  alsoCorrect: number
+  Tpoint: string
 }
