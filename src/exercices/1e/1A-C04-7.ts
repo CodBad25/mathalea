@@ -2,7 +2,7 @@ import ProgrammeCalcul2 from '../can/5e/can5C14'
 export const titre = 'Écrire une fraction avec un nombre décimal'
 export const dateDePublication = '05/01/2026'
 export const amcReady = true
-export const amcType = 'AMCNum'
+export const amcType = 'qcmMono'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 

@@ -1,8 +1,9 @@
 import EvolSuccessives from '../can/2e/can2C25'
-export const titre = 'Déterminer une évolution globale après deux évolutions successives'
+export const titre =
+  'Déterminer une évolution globale après deux évolutions successives'
 export const dateDePublication = '22/07/2025'
 export const amcReady = true
-export const amcType = 'AMCNum'
+export const amcType = 'qcmMono'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 

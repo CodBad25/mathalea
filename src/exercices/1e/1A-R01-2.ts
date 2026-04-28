@@ -2,7 +2,7 @@ import PourcentageARetrouver from '../can/4e/can4P07'
 export const titre = 'Retrouver un pourcentage'
 export const dateDePublication = '22/07/2025'
 export const amcReady = true
-export const amcType = 'AMCNum'
+export const amcType = 'qcmMono'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 

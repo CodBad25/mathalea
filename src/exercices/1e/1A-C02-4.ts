@@ -2,7 +2,7 @@ import NombreInverse from '../can/2e/can2C15'
 export const titre = 'Calculer un nombre connaissant son inverse'
 export const dateDePublication = '04/08/2025'
 export const amcReady = true
-export const amcType = 'AMCNum'
+export const amcType = 'qcmMono'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 

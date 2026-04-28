@@ -3,7 +3,7 @@ export const titre =
   "Calculer un produit ou une somme d'images par une fonction affine"
 export const dateDePublication = '23/07/2025'
 export const amcReady = true
-export const amcType = 'AMCNum'
+export const amcType = 'qcmMono'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 

@@ -2,7 +2,7 @@ import CalculAstucieuxAvecDifferenceCarre from '../can/2e/can2C02'
 export const titre = 'Utiliser une égalité remarquable pour calculer'
 export const dateDePublication = '14/10/2025'
 export const amcReady = true
-export const amcType = 'AMCNum'
+export const amcType = 'qcmMono'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 

@@ -2,7 +2,7 @@ import ImageSpline from '../can/3e/can3F12'
 export const titre = 'Déterminer des antécédents graphiquement'
 export const dateDePublication = '02/11/2025'
 export const amcReady = true
-export const amcType = 'AMCNum'
+export const amcType = 'qcmMono'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 

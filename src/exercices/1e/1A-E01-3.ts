@@ -2,7 +2,7 @@ import CoeffMul from '../can/2e/can2C24'
 export const titre = 'Calculer un coefficient multiplicateur'
 export const dateDePublication = '22/07/2025'
 export const amcReady = true
-export const amcType = 'AMCNum'
+export const amcType = 'qcmMono'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 

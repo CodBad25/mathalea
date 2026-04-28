@@ -1,9 +1,10 @@
 import ExprimerEnFonction from '../can/2e/can2L19'
-export const titre = 'Exprimer une variable en fonction des autres (formules avec sommes/produits/quotients)'
+export const titre =
+  'Exprimer une variable en fonction des autres (formules avec sommes/produits/quotients)'
 export const dateDePublication = '23/07/2025'
 export const dateDeModifImportante = '14/02/2026'
 export const amcReady = true
-export const amcType = 'AMCNum'
+export const amcType = 'qcmMono'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 

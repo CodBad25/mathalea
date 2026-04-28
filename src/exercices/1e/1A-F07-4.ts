@@ -2,7 +2,7 @@ import EquationDroite from '../can/2e/can2G20'
 export const titre = 'Déterminer une équation de droite (graphique)'
 export const dateDePublication = '22/07/2025'
 export const amcReady = true
-export const amcType = 'AMCNum'
+export const amcType = 'qcmMono'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 

@@ -2,7 +2,7 @@ import CalculProbaSimple from '../can/3e/can3S01'
 export const titre = 'Calculer une probabilité dans un cas simple'
 export const dateDePublication = '06/01/2026'
 export const amcReady = true
-export const amcType = 'AMCNum'
+export const amcType = 'qcmMono'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 

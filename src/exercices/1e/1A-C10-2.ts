@@ -2,7 +2,7 @@ import EquationsCarree from '../can/2e/can2L14'
 export const titre = 'Résoudre une équation du type $(x+a)^2=k$'
 export const dateDePublication = '27/07/2025'
 export const amcReady = true
-export const amcType = 'AMCNum'
+export const amcType = 'qcmMono'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 

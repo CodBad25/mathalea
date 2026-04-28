@@ -3,7 +3,7 @@ export const titre =
   "Déterminer le nombre de solutions d'une équation (graphique)"
 export const dateDePublication = '29/07/2025'
 export const amcReady = true
-export const amcType = 'AMCNum'
+export const amcType = 'qcmMono'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 
