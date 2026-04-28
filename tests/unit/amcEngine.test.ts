@@ -8,7 +8,10 @@ import {
   renderElement,
   renderQcm,
 } from '../../src/lib/amc/amcEngine'
-import type { AutoCorrection, UneProposition } from '../../src/lib/types'
+import type {
+  AMCUneProposition,
+  AutoCorrectionAMC,
+} from '../../src/lib/amc/types'
 
 const exerciceMock = {
   listeQuestions: ['Question 0', 'Question 1', 'Question 2'],
@@ -25,7 +28,7 @@ describe('amcEngine', () => {
   })
 
   it('normalise une question AMC open', () => {
-    const item: AutoCorrection = {
+    const item: AutoCorrectionAMC = {
       enonce: 'Enonce open',
       propositions: [{ texte: 'Ma correction', statut: 2, pointilles: false }],
     }
@@ -50,7 +53,7 @@ describe('amcEngine', () => {
   })
 
   it('normalise AMCNum en mode puissance', () => {
-    const item: AutoCorrection = {
+    const item: AutoCorrectionAMC = {
       enonce: 'Ecrire en puissance',
       reponse: {
         valeur: 125,
@@ -89,7 +92,7 @@ describe('amcEngine', () => {
   })
 
   it('normalise AMCNum en mode fraction avec Tpoint specifique', () => {
-    const item: AutoCorrection = {
+    const item: AutoCorrectionAMC = {
       reponse: {
         valeur: { num: 3, den: 4 },
         param: {
@@ -112,7 +115,7 @@ describe('amcEngine', () => {
   })
 
   it('normalise AMCNum en mode decimal', () => {
-    const item: AutoCorrection = {
+    const item: AutoCorrectionAMC = {
       reponse: {
         valeur: 12.5,
         param: {
@@ -142,7 +145,7 @@ describe('amcEngine', () => {
   })
 
   it('rend un QCM mono avec renderQcm', () => {
-    const item: UneProposition = {
+    const item: AMCUneProposition = {
       enonce: 'Choisir la bonne reponse',
       propositions: [
         { texte: 'A', statut: false },
@@ -168,7 +171,7 @@ describe('amcEngine', () => {
   })
 
   it('dispatch correctement via renderElement', () => {
-    const item: UneProposition = {
+    const item: AMCUneProposition = {
       enonce: 'Question dispatch QCM',
       propositions: [
         { texte: 'Vrai', statut: true },
@@ -192,7 +195,7 @@ describe('amcEngine', () => {
   })
 
   it('leve une erreur de template sur renderAMCNum (comportement actuel)', () => {
-    const item: AutoCorrection = {
+    const item: AutoCorrectionAMC = {
       enonce: 'Calculer',
       reponse: {
         valeur: 9,

@@ -1,7 +1,13 @@
 import nunjucks from 'nunjucks'
 import FractionEtendue from '../../modules/FractionEtendue'
 import { lettreDepuisChiffre } from '../outils/outilString'
-import type { AutoCorrection, ReponseParams, UneProposition } from '../types'
+import type { ReponseParams } from '../types'
+import type {
+  AMCFractionValue,
+  AMCReponseValue,
+  AMCUneProposition,
+  AutoCorrectionAMC,
+} from './types'
 
 nunjucks.configure('templates', { autoescape: false })
 
@@ -136,9 +142,35 @@ function normalizeTexte(s: string): string {
   return s.replace(/\s+/g, ' ').trim().toLowerCase()
 }
 
-function computeDecimalAMC(rep: any) {
-  let value = rep.valeur[0]
-  const param = rep.param as ReponseParams
+function isFractionValue(value: unknown): value is AMCFractionValue {
+  return (
+    typeof value === 'object' &&
+    value !== null &&
+    typeof (value as AMCFractionValue).num === 'number' &&
+    typeof (value as AMCFractionValue).den === 'number'
+  )
+}
+
+function getDecimalValue(value: AMCReponseValue | undefined): number {
+  if (typeof value === 'number') return value
+  if (
+    typeof value === 'object' &&
+    value !== null &&
+    'valeurDecimale' in value &&
+    typeof value.valeurDecimale === 'number'
+  ) {
+    return value.valeurDecimale
+  }
+  return 0
+}
+
+function computeDecimalAMC(rep?: {
+  valeur?: AMCReponseValue | AMCReponseValue[]
+  param?: ReponseParams
+}) {
+  const rawValue = Array.isArray(rep?.valeur) ? rep?.valeur[0] : rep?.valeur
+  let value = getDecimalValue(rawValue)
+  const param = rep?.param ?? {}
   let decimals = Math.max(countDecimals(value), param.decimals ?? 0)
   let approx: number
   const alsocorrect =
@@ -221,7 +253,7 @@ function validateQCM(qcm: QCMNormalized): QCMNormalized {
 
 // normalization and rendering
 function normalizeQcm(
-  autoCorrectionItem: UneProposition,
+  autoCorrectionItem: AMCUneProposition,
   contexte: QuestionQcmContext,
 ): QCMNormalized {
   const { ref, id, exercice, index } = contexte
@@ -229,7 +261,7 @@ function normalizeQcm(
   const options = autoCorrectionItem.options || {}
   const propositions = deduplicatePropositions(
     (autoCorrectionItem.propositions || []).map((p) => ({
-      texte: p.texte,
+      texte: p.texte ?? '',
       correct: !!p.statut,
     })),
   )
@@ -247,12 +279,12 @@ function normalizeQcm(
   })
 }
 export function normalizeAMCOpen(
-  autoCorrectionItem: AutoCorrection,
+  autoCorrectionItem: AutoCorrectionAMC,
   contexte: QuestionContext,
 ) {
   const { exercice, index, ref, id } = contexte
   const enonce = autoCorrectionItem.enonce ?? exercice.listeQuestions[index]
-  const prop: UneProposition = autoCorrectionItem.propositions?.[0] ?? {
+  const prop: AMCUneProposition = autoCorrectionItem.propositions?.[0] ?? {
     texte: exercice.listeCorrections[index],
     statut: 3,
   }
@@ -270,7 +302,7 @@ export function normalizeAMCOpen(
 }
 
 export function normalizeAMCNum(
-  autoCorrectionItem: AutoCorrection,
+  autoCorrectionItem: AutoCorrectionAMC,
   contexte: QuestionContext,
 ): AMCNumNormalized {
   const idBase = contexte.id
@@ -328,7 +360,7 @@ export function normalizeAMCNum(
   // =========================
   // 🔹 CAS FRACTION
   // =========================
-  if (valeur?.num !== undefined) {
+  if (isFractionValue(valeur)) {
     const num = valeur.num
     const den = valeur.den
 
@@ -377,7 +409,7 @@ export function normalizeAMCNum(
 
   const digits = Math.max(countDecimals(value), param.digits ?? 0)
   const block: AMCNumBlock = {
-    value: valeur,
+    value,
     digits,
     decimals,
     sign: param.signe ?? false,
@@ -401,14 +433,17 @@ export function normalizeAMCNum(
 }
 
 export function renderQcm(
-  autoCorrectionItem: UneProposition,
+  autoCorrectionItem: AMCUneProposition,
   contexte: QuestionQcmContext,
 ) {
   const data = normalizeQcm(autoCorrectionItem, contexte)
   return nunjucks.renderString(qcmTemplate, data)
 }
 
-export function renderAMCNum(item: AutoCorrection, contexte: QuestionContext) {
+export function renderAMCNum(
+  item: AutoCorrectionAMC,
+  contexte: QuestionContext,
+) {
   const data = normalizeAMCNum(item, contexte)
   return nunjucks.renderString(AMCNumTemplate, {
     ...data,

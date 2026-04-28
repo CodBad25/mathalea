@@ -1,3 +1,106 @@
+import type { ReponseParams } from '../types'
+
+export type AMCStatut = number | boolean | string
+
+export type AMCFractionValue = {
+  num: number
+  den: number
+}
+
+export type AMCReponseValue =
+  | number
+  | AMCFractionValue
+  | {
+      num?: number
+      den?: number
+      valeurDecimale?: number
+      [key: string]: unknown
+    }
+
+export type AMCQcmChoice = {
+  texte?: string
+  statut?: AMCStatut
+  sanscadre?: boolean | number
+  enonce?: string
+  feedback?: string
+  multicolsBegin?: boolean
+  multicolsEnd?: boolean
+  numQuestionVisible?: boolean
+  pointilles?: boolean | number
+}
+
+export type AMCUneProposition = {
+  texte?: string
+  statut?: AMCStatut
+  sanscadre?: boolean | number
+  multicolsBegin?: boolean
+  multicolsEnd?: boolean
+  numQuestionVisible?: boolean
+  type?: string
+  feedback?: string
+  pointilles?: boolean | number
+  enonce?: string
+  propositions?: AMCQcmChoice[]
+  options?: {
+    ordered?: boolean
+    vertical?: boolean
+    lastChoice?: number
+    barreseparation?: boolean
+    multicols?: boolean
+    nbCols?: number
+    digits?: number
+    decimals?: number
+    signe?: boolean
+    exposantNbChiffres?: number
+    exposantSigne?: boolean
+    approx?: number
+    multicolsAll?: boolean
+    numerotationEnonce?: boolean
+    avecSymboleMult?: boolean
+  }
+  reponse?: {
+    valeur?: AMCReponseValue | AMCReponseValue[]
+    param?: ReponseParams
+    textePosition?: string
+    texte?: string
+    alignement?: string
+  }
+}
+
+export interface AutoCorrectionAMC {
+  enonce?: string
+  enonceAvant?: boolean
+  melange?: boolean
+  enonceAGauche?: boolean | [number, number]
+  enonceAvantUneFois?: boolean
+  enonceCentre?: boolean
+  enonceApresNumQuestion?: boolean
+  propositions?: AMCUneProposition[]
+  reponse?: {
+    valeur?: AMCReponseValue | AMCReponseValue[]
+    param?: ReponseParams
+    textePosition?: string
+    texte?: string
+  }
+  options?: {
+    radio?: boolean
+    ordered?: boolean
+    vertical?: boolean
+    lastChoice?: number
+    barreseparation?: boolean
+    multicols?: boolean
+    nbCols?: number
+    digits?: number
+    decimals?: number
+    signe?: boolean
+    exposantNbChiffres?: number
+    exposantSigne?: boolean
+    approx?: number
+    multicolsAll?: boolean
+    numerotationEnonce?: boolean
+    avecSymboleMult?: boolean
+  }
+}
 export type QuestionContext = {
   ref: string
   id: string
