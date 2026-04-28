@@ -1,4 +1,4 @@
-import type { MathfieldElement } from 'mathlive'
+import { MathfieldElement } from 'mathlive'
 import type { IExercice } from '../../lib/types'
 import { fonctionComparaison } from './comparisonFunctions'
 import { toutPourUnPoint } from './fonctionsBaremes'
@@ -113,10 +113,16 @@ export function verifQuestionMathLive(
               el.id === `champTexteEx${exercice.numeroExercice}Q${i}${key}`,
           ) as MathfieldElement
           let result
-          const shadow = input.shadowRoot
+          const shadow =
+            input instanceof HTMLDivElement
+              ? input // ça c'est pour les tests avec le fakeMFE
+              : input.shadowRoot
           const spanFeedback = document.createElement('span')
           spanFeedback.id = `resultatCheckEx${exercice.numeroExercice}Q${i}${key}`
-          const content = shadow!.querySelector('span.ML__content')
+          const content =
+            shadow instanceof HTMLDivElement
+              ? input // ça c'est pour les tests avec le fakeMFE
+              : shadow!.querySelector('span.ML__content')
           content!.appendChild(spanFeedback)
 
           if (input.value === '') {
