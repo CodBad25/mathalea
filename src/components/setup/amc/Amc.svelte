@@ -1,8 +1,8 @@
 <script lang="ts">
   import seedrandom from 'seedrandom'
   import { onMount } from 'svelte'
+  import type { IExerciceAMC } from '../../../lib/amc/amcTypes'
   import { creerDocumentAmc } from '../../../lib/amc/creerDocumentAmc'
-  import type { IExerciceAMC } from '../../../lib/amc/types'
   import {
     mathaleaGenerateSeed,
     mathaleaGetExercicesFromParams,

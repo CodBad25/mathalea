@@ -12,7 +12,7 @@ import {
 import type {
   AMCUneProposition,
   AutoCorrectionAMC,
-} from '../../src/lib/amc/types'
+} from '../../src/lib/amc/amcTypes'
 
 const exerciceMock = {
   listeQuestions: ['Question 0', 'Question 1', 'Question 2'],

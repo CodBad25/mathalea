@@ -2,7 +2,7 @@ import { randint } from '../../modules/outils'
 import { format as formatLatex } from '../Latex'
 import { lettreDepuisChiffre } from '../outils/outilString'
 import { renderAMCHybride, renderElement } from './amcEngine'
-import type { IExerciceAMC } from './types'
+import type { IExerciceAMC } from './amcTypes'
 
 type ExportQcmAmcResult = [string, string, number, string, boolean]
 
