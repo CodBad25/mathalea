@@ -9,6 +9,7 @@ import {
 } from '../outils/nombres'
 import { lettreDepuisChiffre } from '../outils/outilString'
 import { decimalToScientifique } from '../outils/texNombre'
+import { normalizeAMCNum } from './normalisation/normalizeAMCNum'
 import { normalizeQcm } from './normalisation/normalizeQcm'
 import { renderQcm } from './rendering'
 
@@ -134,15 +135,28 @@ export function exportQcmAmc(exercice, idExo) {
         texQr += '\n\t\\end{question}\n }\n'
         id++
         break
-      case 'AMCNum': // AMCNum avec encodage numérique de la réponse
-        /********************************************************************/
-        // On pourra rajouter des options : les paramètres sont nommés.
-        // {digits=0,digitsDen=0,digitsNum=0,decimals=0,vertical=false,signe=false,exposantNbChiffres=0,exposantSigne=false,approx=0}
-        // si digits=0 alors la fonction va analyser le nombre décimal (ou entier) pour déterminer digits et decimals
-        // signe et exposantSigne sont des booléens
-        // approx est un entier : on enlève la virgule pour comparer la réponse avec la valeur : approx est le seuil de cette différence.
-        /********************************************************************/
-        if (autoCorrection[j].enonce === undefined) {
+      case 'AMCNum':
+        {
+          // AMCNum avec encodage numérique de la réponse
+          /********************************************************************/
+          // On pourra rajouter des options : les paramètres sont nommés.
+          // {digits=0,digitsDen=0,digitsNum=0,decimals=0,vertical=false,signe=false,exposantNbChiffres=0,exposantSigne=false,approx=0}
+          // si digits=0 alors la fonction va analyser le nombre décimal (ou entier) pour déterminer digits et decimals
+          // signe et exposantSigne sont des booléens
+          // approx est un entier : on enlève la virgule pour comparer la réponse avec la valeur : approx est le seuil de cette différence.
+          /********************************************************************/
+
+          const normalized = normalizeAMCNum(autoCorrection[j], {
+            type,
+            ref,
+            id: `${ref}/${lettreDepuisChiffre(idExo + 1)}${id + 10}`,
+            exercice,
+            index: j,
+          })
+          texQr += renderQcm(normalized)
+          id++
+
+          /*      if (autoCorrection[j].enonce === undefined) {
           autoCorrection[j].enonce = exercice.listeQuestions[j]
         }
         if (autoCorrection[j].propositions === undefined) {
@@ -390,6 +404,8 @@ export function exportQcmAmc(exercice, idExo) {
             texQr += `${autoCorrection[j].reponse.texte}\n`
           texQr += '\\end{questionmultx}\n }\n\n'
           id++
+        }
+          */
         }
         break
       default: // Si on arrive ici, c'est que le type est AMCHybride
