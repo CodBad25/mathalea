@@ -11,7 +11,7 @@ import { lettreDepuisChiffre } from '../outils/outilString'
 import { decimalToScientifique } from '../outils/texNombre'
 import { normalizeAMCNum } from './normalisation/normalizeAMCNum'
 import { normalizeQcm } from './normalisation/normalizeQcm'
-import { renderQcm } from './rendering'
+import { renderAMCNum, renderQcm } from './rendering'
 
 /**
  *
@@ -153,7 +153,7 @@ export function exportQcmAmc(exercice, idExo) {
             exercice,
             index: j,
           })
-          texQr += renderQcm(normalized)
+          texQr += renderAMCNum(normalized)
           id++
 
           /*      if (autoCorrection[j].enonce === undefined) {

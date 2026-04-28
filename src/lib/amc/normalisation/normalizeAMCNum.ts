@@ -59,9 +59,9 @@ export function normalizeAMCNum(
   }
 
   // 🧮 CAS FRACTION
-  if (valeur[0]?.num !== undefined) {
-    const num = valeur[0].num
-    const den = valeur[0].den
+  if (valeur?.num !== undefined) {
+    const num = valeur.num
+    const den = valeur.den
 
     const digitsNum = Math.max(
       param.digitsNum ?? param.digits ?? 0,
@@ -102,7 +102,7 @@ export function normalizeAMCNum(
   }
 
   // 🔢 CAS DECIMAL
-  let v = valeur[0]
+  let v = valeur
   if (typeof v === 'string') {
     v = Number(v.replace(/\s/g, '').replace(',', '.'))
   }
