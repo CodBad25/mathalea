@@ -665,7 +665,7 @@ export default class ÉcrireUneExpressionLitterale extends Exercice {
           ]
           break
         case 13: // xy
-          texte = `Comment peut se noter le produit de $${x}$ par $${y}$ ?`
+          texte = `Exprimer le produit de $${x}$ par $${y}$ ?`
           texteCorr = `Le produit de $${x}$ par $${y}$ peut se noter : $${miseEnEvidence(`${x}${y}`)}$, $${miseEnEvidence(`${y}${x}`)}$, ou $${miseEnEvidence(`${x}\\times ${y}`)}$.`
           this.autoCorrection[i].propositions = [
             {
