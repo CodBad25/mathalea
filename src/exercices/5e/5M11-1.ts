@@ -171,10 +171,7 @@ export default class PerimetreOuAireDeCarresRectanglesTriangles extends Exercice
         switch (questionsDisponibles[indiceSousQuestion]) {
           case 1: // Carré
             if (this.sup2 !== 2) {
-              texteAMC =
-                (this.sup2 === 3 ? numAlpha(nbPuces) : '') +
-                'Calculer le périmètre' +
-                (context.isAmc ? ', en cm, ' : ' ')
+              texteAMC = `${this.sup2 === 3 ? numAlpha(nbPuces) : ''}Calculer le périmètre${context.isAmc ? ', en cm, ' : ' '}`
               texteAMC += this.sup3
                 ? 'du carré ci-dessus.'
                 : `d'un carré de côté${sp()}$${texNombre(c)}\\text{ cm}$.`
@@ -208,7 +205,13 @@ export default class PerimetreOuAireDeCarresRectanglesTriangles extends Exercice
                   ],
                 })
               } else {
-                questions.push(texteAMC)
+                questions.push(
+                  `Calculer le périmètre ${
+                    this.sup3
+                      ? 'du carré ci-dessus.'
+                      : `d'un carré de côté${sp()}$${texNombre(c)}\\text{ cm}$.`
+                  }`,
+                )
                 reponses.push({
                   value: new Grandeur(c * 4, 'cm'),
                   options: { unite: true },
@@ -252,7 +255,9 @@ export default class PerimetreOuAireDeCarresRectanglesTriangles extends Exercice
                   ],
                 })
               } else {
-                questions.push(texteAMC)
+                questions.push(
+                  `Calculer l'aire ${this.sup3 ? 'du carré ci-dessus.' : `d'un carré de côté${sp()}$${texNombre(c)}\\text{ cm}$.`}`,
+                )
                 reponses.push({
                   value: new Grandeur(c * c, 'cm^2'),
                   options: { unite: true },
@@ -263,10 +268,7 @@ export default class PerimetreOuAireDeCarresRectanglesTriangles extends Exercice
             break
           case 2: // Rectangle
             if (this.sup2 !== 2) {
-              texteAMC =
-                (this.sup2 === 3 ? numAlpha(nbPuces) : '') +
-                'Calculer le périmètre' +
-                (context.isAmc ? ', en cm, ' : ' ')
+              texteAMC = `${this.sup2 === 3 ? numAlpha(nbPuces) : ''}Calculer le périmètre${context.isAmc ? ', en cm, ' : ' '}`
               texteAMC += this.sup3
                 ? 'du rectangle ci-dessus.'
                 : `d'un rectangle de longueur${sp()}$${texNombre(L > l ? L : l)}\\text{ cm}$ et de largeur${sp()}$${texNombre(L > l ? l : L)}\\text{ cm}$.`
@@ -300,7 +302,9 @@ export default class PerimetreOuAireDeCarresRectanglesTriangles extends Exercice
                   ],
                 })
               } else {
-                questions.push(texteAMC)
+                questions.push(
+                  `Calculer le périmètre${context.isAmc ? ', en cm, ' : ' '} ${this.sup3 ? 'du rectangle ci-dessus.' : `d'un rectangle de longueur${sp()}$${texNombre(L > l ? L : l)}\\text{ cm}$ et de largeur${sp()}$${texNombre(L > l ? l : L)}\\text{ cm}$.`}`,
+                )
                 reponses.push({
                   value: new Grandeur((L + l) * 2, 'cm'),
                   options: { unite: true },
@@ -309,10 +313,7 @@ export default class PerimetreOuAireDeCarresRectanglesTriangles extends Exercice
               nbPuces++
             }
             if (this.sup2 !== 1) {
-              texteAMC =
-                (this.sup2 === 3 ? numAlpha(nbPuces) : '') +
-                "Calculer l'aire" +
-                (context.isAmc ? ', en $\\text{cm}^2$, ' : ' ')
+              texteAMC = `${this.sup2 === 3 ? numAlpha(nbPuces) : ''}Calculer l'aire${context.isAmc ? ', en $\\text{cm}^2$, ' : ' '}`
               texteAMC += this.sup3
                 ? 'du rectangle ci-dessus.'
                 : `d'un rectangle de longueur${sp()}$${texNombre(L > l ? L : l)}\\text{ cm}$ et de largeur${sp()}$${texNombre(L > l ? l : L)}\\text{ cm}$.`
@@ -346,7 +347,9 @@ export default class PerimetreOuAireDeCarresRectanglesTriangles extends Exercice
                   ],
                 })
               } else {
-                questions.push(texteAMC)
+                questions.push(
+                  `Calculer l'aire${context.isAmc ? ', en $\\text{cm}^2$, ' : ' '} ${this.sup3 ? 'du rectangle ci-dessus.' : `d'un rectangle de longueur${sp()}$${texNombre(L > l ? L : l)}\\text{ cm}$ et de largeur${sp()}$${texNombre(L > l ? l : L)}\\text{ cm}$.`}`,
+                )
                 reponses.push({
                   value: new Grandeur(L * l, 'cm^2'),
                   options: { unite: true },
@@ -357,10 +360,7 @@ export default class PerimetreOuAireDeCarresRectanglesTriangles extends Exercice
             break
           case 3: // Triangle rectangle
             if (this.sup2 !== 2) {
-              texteAMC =
-                (this.sup2 === 3 ? numAlpha(nbPuces) : '') +
-                'Calculer le périmètre' +
-                (context.isAmc ? ', en cm, ' : ' ')
+              texteAMC = `${this.sup2 === 3 ? numAlpha(nbPuces) : ''}Calculer le périmètre${context.isAmc ? ', en cm, ' : ' '}`
               texteAMC += this.sup3
                 ? 'du triangle rectangle ci-dessus.'
                 : `d'un triangle rectangle dont l'hypoténuse mesure $${texNombre(c2, 1)}\\text{ cm}$ et les côtés de l'angle droit mesurent respectivement $${texNombre(a)}\\text{ cm}$ et $${texNombre(b)}\\text{ cm}$.`
@@ -392,7 +392,9 @@ export default class PerimetreOuAireDeCarresRectanglesTriangles extends Exercice
                   ],
                 })
               } else {
-                questions.push(texteAMC)
+                questions.push(
+                  `Calculer le périmètre${context.isAmc ? ', en cm, ' : ' '} ${this.sup3 ? 'du triangle rectangle ci-dessus.' : `d'un triangle rectangle dont l'hypoténuse mesure $${texNombre(c2, 1)}\\text{ cm}$ et les côtés de l'angle droit mesurent respectivement $${texNombre(a)}\\text{ cm}$ et $${texNombre(b)}\\text{ cm}$.`}`,
+                )
                 reponses.push({
                   value: new Grandeur(pIJK, 'cm'),
                   options: { unite: true },
@@ -401,10 +403,7 @@ export default class PerimetreOuAireDeCarresRectanglesTriangles extends Exercice
               nbPuces++
             }
             if (this.sup2 !== 1) {
-              texteAMC =
-                (this.sup2 === 3 ? numAlpha(nbPuces) : '') +
-                "Calculer l'aire" +
-                (context.isAmc ? ', en $\\text{cm}^2$, ' : ' ')
+              texteAMC = `${this.sup2 === 3 ? numAlpha(nbPuces) : ''}Calculer l'aire${context.isAmc ? ', en $\\text{cm}^2$, ' : ' '}`
               texteAMC += this.sup3
                 ? 'du triangle rectangle ci-dessus.'
                 : `d'un triangle rectangle dont l'hypoténuse mesure $${texNombre(c2, 1)}\\text{ cm}$ et les côtés de l'angle droit mesurent respectivement $${texNombre(a)}\\text{ cm}$ et $${texNombre(b)}\\text{ cm}$.`
@@ -436,7 +435,13 @@ export default class PerimetreOuAireDeCarresRectanglesTriangles extends Exercice
                   ],
                 })
               } else {
-                questions.push(texteAMC)
+                questions.push(
+                  `Calculer l'aire${context.isAmc ? ', en $\\text{cm}^2$, ' : ' '} ${
+                    this.sup3
+                      ? 'du triangle rectangle ci-dessus.'
+                      : `d'un triangle rectangle dont l'hypoténuse mesure $${texNombre(c2, 1)}\\text{ cm}$ et les côtés de l'angle droit mesurent respectivement $${texNombre(a)}\\text{ cm}$ et $${texNombre(b)}\\text{ cm}$.`
+                  }`,
+                )
                 reponses.push({
                   value: new Grandeur((a * b) / 2, 'cm^2'),
                   options: { unite: true },
@@ -452,7 +457,7 @@ export default class PerimetreOuAireDeCarresRectanglesTriangles extends Exercice
           dataTemplate: questions
             .map(
               (question, index) =>
-                `${String.fromCharCode(97 + index)}) ${question.slice(48)} %{champ${index}}`,
+                `${String.fromCharCode(97 + index)}) ${question} %{champ${index}}`,
             )
             .join('\n'),
           dataOptions: {
