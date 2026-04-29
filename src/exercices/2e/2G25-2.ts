@@ -21,7 +21,7 @@ export const uuid = '2ba43'
 
 export const refs = {
   'fr-fr': ['2G25-2'],
-  'fr-ch': [],
+  'fr-ch': ['3G93-7'],
 }
 export default class DroitesParallelesVF extends Exercice {
   constructor() {

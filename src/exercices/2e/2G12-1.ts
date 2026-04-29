@@ -36,7 +36,7 @@ export const uuid = 'c5480'
 
 export const refs = {
   'fr-fr': ['2G12-1'],
-  'fr-ch': [],
+  'fr-ch': ['3G90-3'],
 }
 export default class Distance extends Exercice {
   constructor() {

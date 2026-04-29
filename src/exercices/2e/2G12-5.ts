@@ -40,7 +40,7 @@ export const uuid = 'b77cc'
 
 export const refs = {
   'fr-fr': ['2G12-5'],
-  'fr-ch': ['11GM1-8'],
+  'fr-ch': ['11GM1-8', '3G90-7'],
 }
 export default class ParallélogrammeSommet extends Exercice {
   constructor() {

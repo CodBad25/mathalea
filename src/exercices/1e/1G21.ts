@@ -22,7 +22,7 @@ export const uuid = '8472c'
 
 export const refs = {
   'fr-fr': ['1G21'],
-  'fr-ch': [],
+  'fr-ch': ['3G97-3'],
 }
 
 function pointVersTex(A: PointAbstrait): string {

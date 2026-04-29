@@ -40,7 +40,7 @@ export const uuid = '747df'
 
 export const refs = {
   'fr-fr': ['1G10-5'],
-  'fr-ch': ['3G93-1'],
+  'fr-ch': ['3G95-5'],
 }
 
 export default class ProduitScalaireCoordonnees extends Exercice {

@@ -33,7 +33,7 @@ export const uuid = '867cd'
 
 export const refs = {
   'fr-fr': ['1G10-3'],
-  'fr-ch': ['3G93-3'],
+  'fr-ch': ['3G95-3'],
 }
 
 export default class CalculProduitScalaireAngle extends Exercice {

@@ -36,7 +36,7 @@ export const uuid = 'd2b57'
 
 export const refs = {
   'fr-fr': ['2G23-1'],
-  'fr-ch': ['3G91-9'],
+  'fr-ch': ['3G91-7'],
 }
 
 // Une fonction pour créer la liste des noms possibles pour un triangle

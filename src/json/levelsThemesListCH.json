@@ -306,19 +306,34 @@
     "titre": "Géométrie vectorielle"
   },
   "3G90": {
-    "titre": "Coordonnées, normes et colinéarité"
+    "titre": "Repérage"
   },
   "3G91": {
-    "titre": "Opérations, égalités, translations et parallélogrammes"
+    "titre": "Définitions et représentation"
   },
   "3G92": {
-    "titre": "Droites, projections, vecteurs directeurs et normaux"
+    "titre": "Combinaisons linéaires"
   },
   "3G93": {
-    "titre": "Produit scalaire"
+    "titre": "Colinéarité"
   },
   "3G94": {
-    "titre": "Espace"
+    "titre": "Norme"
+  },
+  "3G95": {
+    "titre": "Produit scalaire"
+  },
+  "3G96": {
+    "titre": "Projection orthogonale"
+  },
+  "3G97": {
+    "titre": "Droite dans le plan"
+  },
+  "3G98": {
+    "titre": "Droite dans ℝ³"
+  },
+  "3G99": {
+    "titre": "Plan dans ℝ³"
   },
   "3mNC": {
     "titre": "Nombres complexes"

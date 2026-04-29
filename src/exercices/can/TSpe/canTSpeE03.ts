@@ -24,7 +24,7 @@ export const interactifType = 'mathLive'
 export const uuid = '58bb7'
 export const refs = {
   'fr-fr': ['canTSpeE03'],
-  'fr-ch': ['3G92-5'],
+  'fr-ch': ['3G98-1'],
 }
 
 export default class RepresentationParametrique extends Exercice {
