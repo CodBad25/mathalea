@@ -32,7 +32,7 @@ export const uuid = '816d5'
 
 export const refs = {
   'fr-fr': ['1G13'],
-  'fr-ch': ['3G92-2'],
+  'fr-ch': ['3G97-2'],
 }
 
 class EqCartDroite extends Exercice {

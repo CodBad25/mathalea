@@ -16,7 +16,7 @@ export const dateDePublication = '29/01/2025' // La date de publication initiale
 export const uuid = '34648'
 export const refs = {
   'fr-fr': ['TSG2-34'],
-  'fr-ch': [],
+  'fr-ch': ['3G98-4'],
 }
 
 // La fonction qui aléatoirise la situation en fonction de ortho true or false. Elle retourne toutes les variables dont a besoin l'exo.

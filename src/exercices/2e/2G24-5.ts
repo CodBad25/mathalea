@@ -31,7 +31,7 @@ export const uuid = '222f6'
 
 export const refs = {
   'fr-fr': ['2G24-5'],
-  'fr-ch': ['3G91-8'],
+  'fr-ch': ['3G92-7'],
 }
 export default class Calculercoordonneesegalitevecteurs extends Exercice {
   constructor() {

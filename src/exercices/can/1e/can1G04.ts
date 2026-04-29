@@ -29,7 +29,7 @@ export const uuid = 'df08a'
 
 export const refs = {
   'fr-fr': ['can1G04'],
-  'fr-ch': ['3G93-8'],
+  'fr-ch': ['3G95-9'],
 }
 export default class ProduitScalaireNormesAngles extends ExerciceSimple {
   constructor() {

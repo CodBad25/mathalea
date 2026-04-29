@@ -30,7 +30,7 @@ export const uuid = 'e791a'
 
 export const refs = {
   'fr-fr': ['can1G08'],
-  'fr-ch': ['3G92-4'],
+  'fr-ch': ['3G97-5'],
 }
 export default class VecteurNormEqCart extends Exercice {
   constructor() {

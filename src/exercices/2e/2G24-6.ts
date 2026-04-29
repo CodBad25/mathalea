@@ -19,7 +19,7 @@ export const uuid = '6b705'
 
 export const refs = {
   'fr-fr': ['2G24-6'],
-  'fr-ch': ['3G91-12'],
+  'fr-ch': ['3G92-8'],
 }
 
 class CoordonneesParallelogramme extends ExerciceSimple {

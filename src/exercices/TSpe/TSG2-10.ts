@@ -24,7 +24,7 @@ export const uuid = 'b4e87'
 
 export const refs = {
   'fr-fr': ['TSG2-10'],
-  'fr-ch': [],
+  'fr-ch': ['3G90-8'],
 }
 export const interactifReady = true // pour définir qu'exercice peut s'afficher en mode interactif.
 export const interactifType = 'multiMathfield'

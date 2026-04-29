@@ -21,7 +21,7 @@ export const uuid = 'c0d5f'
 
 export const refs = {
   'fr-fr': ['can2G16'],
-  'fr-ch': ['3G90-13'],
+  'fr-ch': ['3G93-5'],
 }
 export default class VecteursCol extends ExerciceSimple {
   constructor() {

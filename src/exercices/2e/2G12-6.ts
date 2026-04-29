@@ -23,7 +23,7 @@ export const titre =
   'Lire des coordonnées en repère orthogonal, normé ou quelconque'
 export const refs = {
   'fr-fr': ['2G12-6'],
-  'fr-ch': ['9FA1-10', '10FA5-21'],
+  'fr-ch': ['9FA1-10', '10FA5-21', '3G90-1'],
 }
 
 /**

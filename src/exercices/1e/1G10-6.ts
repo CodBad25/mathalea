@@ -38,7 +38,7 @@ export const uuid = 'e9e66'
 
 export const refs = {
   'fr-fr': ['1G10-6'],
-  'fr-ch': ['3G93-2'],
+  'fr-ch': ['3G95-6'],
 }
 
 export default class ProduitScalaireNormes extends Exercice {

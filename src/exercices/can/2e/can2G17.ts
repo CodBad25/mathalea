@@ -23,7 +23,7 @@ export const uuid = 'dacc1'
 
 export const refs = {
   'fr-fr': ['can2G17'],
-  'fr-ch': ['3G92-3'],
+  'fr-ch': ['3G97-4'],
 }
 export default class VecteurDirEqCart extends ExerciceSimple {
   constructor() {

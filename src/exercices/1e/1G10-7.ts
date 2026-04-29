@@ -35,7 +35,7 @@ export const uuid = '9774f'
 
 export const refs = {
   'fr-fr': ['1G10-7'],
-  'fr-ch': [],
+  'fr-ch': ['3G95-7'],
 }
 
 export default class ProduitScalaireAlKashi extends Exercice {

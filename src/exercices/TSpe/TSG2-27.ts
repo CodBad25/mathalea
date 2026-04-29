@@ -23,7 +23,7 @@ export const uuid = '3c811'
 
 export const refs = {
   'fr-fr': ['TSG2-27'],
-  'fr-ch': [],
+  'fr-ch': ['3G99-10'],
 }
 
 /**

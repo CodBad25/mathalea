@@ -35,7 +35,7 @@ export const uuid = '4b25a'
 
 export const refs = {
   'fr-fr': ['2G12-2'],
-  'fr-ch': ['11GM1-5'],
+  'fr-ch': ['11GM1-5', '3G90-4'],
 }
 export default class Milieu extends Exercice {
   constructor() {

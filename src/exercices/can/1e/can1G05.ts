@@ -20,7 +20,7 @@ export const uuid = 'e20cc'
 
 export const refs = {
   'fr-fr': ['can1G05'],
-  'fr-ch': ['3G93-7'],
+  'fr-ch': ['3G95-10'],
 }
 export default class ProduitScalaireCoordonnees extends ExerciceSimple {
   constructor() {

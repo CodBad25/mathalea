@@ -22,7 +22,7 @@ export const uuid = '49570'
 
 export const refs = {
   'fr-fr': ['2G24-2'],
-  'fr-ch': ['3G91-1'],
+  'fr-ch': ['3G92-4'],
 }
 export default class Calculercoordonneessommevecteurs extends Exercice {
   constructor() {

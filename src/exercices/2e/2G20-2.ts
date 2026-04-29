@@ -23,7 +23,7 @@ export const uuid = '2d848'
 
 export const refs = {
   'fr-fr': [],
-  'fr-ch': ['3G90-9'],
+  'fr-ch': ['3G93-1'],
 }
 
 const BORNES = {

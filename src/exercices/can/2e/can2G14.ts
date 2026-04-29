@@ -21,7 +21,7 @@ export const uuid = '0dfad'
 
 export const refs = {
   'fr-fr': ['can2G14'],
-  'fr-ch': ['3G91-11'],
+  'fr-ch': ['3G91-9'],
 }
 export default class TranslationVecteur extends ExerciceSimple {
   constructor() {

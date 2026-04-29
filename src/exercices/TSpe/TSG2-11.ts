@@ -15,7 +15,7 @@ export const uuid = 'a85e7'
 
 export const refs = {
   'fr-fr': ['TSG2-11'],
-  'fr-ch': [],
+  'fr-ch': ['3G90-9'],
 }
 export default class EspaceMilieu extends MilieuSegment {
 }

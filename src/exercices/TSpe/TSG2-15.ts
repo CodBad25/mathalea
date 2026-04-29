@@ -15,7 +15,7 @@ export const uuid = '748e6'
 
 export const refs = {
   'fr-fr': ['TSG2-15'],
-  'fr-ch': [],
+  'fr-ch': ['3G93-10'],
 }
 /**
  * @author Stéphane Guyon

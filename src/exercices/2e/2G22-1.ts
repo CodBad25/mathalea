@@ -47,7 +47,7 @@ export const uuid = '3a3ec'
 
 export const refs = {
   'fr-fr': ['2G22-1'],
-  'fr-ch': ['3G90-1'],
+  'fr-ch': ['3G91-4'],
 }
 
 export default class RepresenterUnVecteur extends Exercice {

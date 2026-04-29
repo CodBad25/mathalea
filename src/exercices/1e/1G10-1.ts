@@ -28,7 +28,7 @@ export const uuid = 'c88fa'
 export const ref = '1G10-1'
 export const refs = {
   'fr-fr': [],
-  'fr-ch': [],
+  'fr-ch': ['3G95-1'],
 }
 /**
  * Stephan Grignon

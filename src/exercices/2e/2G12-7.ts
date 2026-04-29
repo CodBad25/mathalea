@@ -20,7 +20,7 @@ export const titre =
   'Placer un point dans un repère orthogonal, normé ou quelconque'
 export const refs = {
   'fr-fr': ['2G12-7'],
-  'fr-ch': [],
+  'fr-ch': ['3G90-2'],
 }
 
 /**

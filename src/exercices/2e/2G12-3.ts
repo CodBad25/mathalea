@@ -29,7 +29,7 @@ export const uuid = '31760'
 
 export const refs = {
   'fr-fr': ['2G12-3'],
-  'fr-ch': ['11GM1-6'],
+  'fr-ch': ['11GM1-6', '3G90-5'],
 }
 export default class Parallélogramme extends Exercice {
   constructor() {

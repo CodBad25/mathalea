@@ -20,7 +20,7 @@ export const uuid = 'eaebb'
 
 export const refs = {
   'fr-fr': ['can2G08'],
-  'fr-ch': ['3G90-5'],
+  'fr-ch': ['3G92-3'],
 }
 export default class CoordonneesVecteur2 extends ExerciceSimple {
   constructor() {

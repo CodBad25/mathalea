@@ -22,7 +22,7 @@ export const uuid = '2ba45'
 
 export const refs = {
   'fr-fr': ['2G25-4'],
-  'fr-ch': [],
+  'fr-ch': ['3G93-9'],
 }
 export default class TrapezeVF extends Exercice {
   constructor() {

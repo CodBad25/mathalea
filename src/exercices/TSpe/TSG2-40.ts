@@ -19,7 +19,7 @@ export const interactifReady = true
 export const interactifType = 'mathLive'
 export const refs = {
   'fr-fr': ['TSG2-40'],
-  'fr-ch': [],
+  'fr-ch': ['3G99-2'],
 }
 
 /**
