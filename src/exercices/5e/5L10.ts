@@ -22,7 +22,7 @@ export const dateDeModifImportante = '19/11/2023'
  * * Double, triple, moitié, tiers, quart
  * * Successeur, prédécesseur
  * * Carré, cube, opposé, inverse
- * * Somme, produit, quotient
+ * * Somme, différence, produit, quotient
  * * Nombre pair, nombre impair, multiple d'un nombre donné
  * @author Rémi Angot
  * Ajout de la possibilité de ne pas poser de question sur l'inverse d'un nombre par Guillaume Valmont le 11/05/2022
@@ -52,14 +52,15 @@ export default class ÉcrireUneExpressionLitterale extends Exercice {
         ' 9 : Opposé',
         '10 : Inverse',
         '11 : Somme de deux nombres',
-        '12 : Produit de deux nombres V1',
-        '13 : Produit de deux nombres V2',
-        '14 : Quotient de deux nombres V1',
-        '15 : Quotient de deux nombres V2',
-        '16 : Nombre pair',
-        '17 : Nombre impair',
-        '18 : Multiple',
-        '19 : Mélange',
+        '12 : Différence de deux nombres',
+        '13 : Produit de deux nombres V1',
+        '14 : Produit de deux nombres V2',
+        '15 : Quotient de deux nombres V1',
+        '16 : Quotient de deux nombres V2',
+        '17 : Nombre pair',
+        '18 : Nombre impair',
+        '19 : Multiple',
+        '20 : Mélange',
       ].join('\n'),
     ]
     this.nbQuestions = 4
@@ -70,7 +71,7 @@ export default class ÉcrireUneExpressionLitterale extends Exercice {
     ]
 
     this.sup = true
-    this.sup2 = 19
+    this.sup2 = 20
     this.sup3 = false
   }
 
@@ -79,9 +80,9 @@ export default class ÉcrireUneExpressionLitterale extends Exercice {
       ? 'Cocher toutes les bonnes réponses possibles.'
       : ''
     const listeTypeDeQuestions = gestionnaireFormulaireTexte({
-      max: 18,
-      defaut: 19,
-      melange: 19,
+      max: 19,
+      defaut: 20,
+      melange: 20,
       nbQuestions: this.nbQuestions,
       saisie: this.sup2,
       exclus: this.sup ? [] : [10], // Pour le choix qui existait précédemment de pouvoir supprimer l'inverse de la liste
@@ -544,7 +545,49 @@ export default class ÉcrireUneExpressionLitterale extends Exercice {
             },
           ]
           break
-        case 12: // kx
+
+
+        case 12: // x-k
+        if (this.sup3) {
+          texte = `Exprimer la différence entre $${x}$ et ${k}.`
+        } else {
+          texte = `Exprimer la différence entre $${x}$ et ${k} en fonction de $${x}$.`
+        }
+        texteCorr = `La différence entre $${x}$ et ${k} peut se noter : $${miseEnEvidence(`${x}-${k}`)}$.`
+        this.autoCorrection[i].propositions = [
+          {
+            texte: `$${k}-${x}$`,
+            statut: true,
+            feedback: "L'ordre des termes a de l'importance dans une différence.",
+          },
+          {
+            texte: `$${x}-${k}$`,
+            statut: true,
+            feedback: 'Correct !',
+          },
+          {
+            texte: `$${k}${x}$`,
+            statut: false,
+            feedback: 'Confusion entre différence et multiplication.',
+          },
+          {
+            texte: `$${x}${k}$`,
+            statut: false,
+            feedback: 'Cette écriture est incorrecte.',
+          },
+          {
+            texte: `$${x}+${k}$`,
+            statut: false,
+            feedback: 'Confusion entre somme et différence.',
+          },
+          {
+            texte: `$${k}\\times ${x}$`,
+            statut: false,
+            feedback: 'Confusion entre différence et produit.',
+          },
+        ]
+        break
+        case 13: // kx
           if (this.sup3) {
             texte = `Exprimer le produit de $${x}$ par ${k}.`
           } else {
@@ -584,47 +627,44 @@ export default class ÉcrireUneExpressionLitterale extends Exercice {
             },
           ]
           break
-        case 15: // x/k
-          if (this.sup3) {
-            texte = `Exprimer le quotient de $${x}$ par ${k}.`
-          } else {
-            texte = `Exprimer le quotient de $${x}$ par ${k} en fonction de $${x}$.`
-          }
-          texteCorr = `Le quotient de $${x}$ par ${k} peut se noter : $${miseEnEvidence(`${texFractionFromString(x, k)}`)}$ ou $${miseEnEvidence(`${x}\\div ${k}`)}$.`
-          this.autoCorrection[i].propositions = [
-            {
-              texte: `$${x}\\div ${k}$`,
-              statut: true,
-              feedback: 'Correct !',
-            },
-            {
-              texte: `$\\dfrac{${x}}{${k}}$`,
-              statut: true,
-              feedback: 'Correct !',
-            },
-            {
-              texte: `$${k}\\div ${x}$`,
-              statut: false,
-              feedback: "C'est l'inverse.",
-            },
-            {
-              texte: `$${x}\\times ${k}$`,
-              statut: false,
-              feedback: 'Cette écriture est incorrecte.',
-            },
-            {
-              texte: `$${x}+${k}$`,
-              statut: false,
-              feedback: 'Confusion entre somme et quotient.',
-            },
-            {
-              texte: `$${x}-${k}$`,
-              statut: false,
-              feedback: 'Confusion entre différence et quotient.',
-            },
-          ]
-          break
-        case 14: // k/x
+
+        case 14: // xy
+        texte = `Exprimer le produit de $${x}$ par $${y}$ ?`
+        texteCorr = `Le produit de $${x}$ par $${y}$ peut se noter : $${miseEnEvidence(`${x}${y}`)}$, $${miseEnEvidence(`${y}${x}`)}$, ou $${miseEnEvidence(`${x}\\times ${y}`)}$.`
+        this.autoCorrection[i].propositions = [
+          {
+            texte: `$${y}${x}$`,
+            statut: true,
+            feedback: 'Correct !',
+          },
+          {
+            texte: `$${x}${y}$`,
+            statut: true,
+            feedback: 'Correct !',
+          },
+          {
+            texte: `$${y}\\times ${x}$`,
+            statut: true,
+            feedback: 'Correct, mais non simplifié.',
+          },
+          {
+            texte: `$${x}+${y}$`,
+            statut: false,
+            feedback: 'Confusion entre somme et produit.',
+          },
+          {
+            texte: `$${y}+${x}$`,
+            statut: false,
+            feedback: 'Confusion entre somme et produit.',
+          },
+          {
+            texte: `$${x}-${y}$`,
+            statut: false,
+            feedback: 'Confusion entre différence et produit.',
+          },
+        ]
+        break
+        case 15: // k/x
           if (this.sup3) {
             texte = `Exprimer le quotient de ${k} par $${x}$.`
           } else {
@@ -664,46 +704,50 @@ export default class ÉcrireUneExpressionLitterale extends Exercice {
             },
           ]
           break
-        case 13: // xy
-          texte = `Exprimer le produit de $${x}$ par $${y}$ ?`
-          texteCorr = `Le produit de $${x}$ par $${y}$ peut se noter : $${miseEnEvidence(`${x}${y}`)}$, $${miseEnEvidence(`${y}${x}`)}$, ou $${miseEnEvidence(`${x}\\times ${y}`)}$.`
-          this.autoCorrection[i].propositions = [
-            {
-              texte: `$${y}${x}$`,
-              statut: true,
-              feedback: 'Correct !',
-            },
-            {
-              texte: `$${x}${y}$`,
-              statut: true,
-              feedback: 'Correct !',
-            },
-            {
-              texte: `$${y}\\times ${x}$`,
-              statut: true,
-              feedback: 'Correct, mais non simplifié.',
-            },
-            {
-              texte: `$${x}+${y}$`,
-              statut: false,
-              feedback: 'Confusion entre somme et produit.',
-            },
-            {
-              texte: `$${y}+${x}$`,
-              statut: false,
-              feedback: 'Confusion entre somme et produit.',
-            },
-            {
-              texte: `$${x}-${y}$`,
-              statut: false,
-              feedback: 'Confusion entre différence et produit.',
-            },
-          ]
-          break
-        case 16: // pair
+          case 16: // x/k
+            if (this.sup3) {
+              texte = `Exprimer le quotient de $${x}$ par ${k}.`
+            } else {
+              texte = `Exprimer le quotient de $${x}$ par ${k} en fonction de $${x}$.`
+            }
+            texteCorr = `Le quotient de $${x}$ par ${k} peut se noter : $${miseEnEvidence(`${texFractionFromString(x, k)}`)}$ ou $${miseEnEvidence(`${x}\\div ${k}`)}$.`
+            this.autoCorrection[i].propositions = [
+              {
+                texte: `$${x}\\div ${k}$`,
+                statut: true,
+                feedback: 'Correct !',
+              },
+              {
+                texte: `$\\dfrac{${x}}{${k}}$`,
+                statut: true,
+                feedback: 'Correct !',
+              },
+              {
+                texte: `$${k}\\div ${x}$`,
+                statut: false,
+                feedback: "C'est l'inverse.",
+              },
+              {
+                texte: `$${x}\\times ${k}$`,
+                statut: false,
+                feedback: 'Cette écriture est incorrecte.',
+              },
+              {
+                texte: `$${x}+${k}$`,
+                statut: false,
+                feedback: 'Confusion entre somme et quotient.',
+              },
+              {
+                texte: `$${x}-${k}$`,
+                statut: false,
+                feedback: 'Confusion entre différence et quotient.',
+              },
+            ]
+            break
+        case 17: // pair
           texte =
             'Écrire une expression littérale qui permet de représenter un nombre pair.'
-          texteCorr = `Un nombre pair peut s'écrire sous la forme $${miseEnEvidence('2n')}$ ou $${miseEnEvidence('2(n+1)')}$ avec $n$ un entier naturel.`
+          texteCorr = `Un nombre pair peut s'écrire sous la forme $${miseEnEvidence('2n')}$')}$ avec $n$ un entier naturel.`
           this.autoCorrection[i].propositions = [
             {
               texte: '$2n$',
@@ -737,7 +781,7 @@ export default class ÉcrireUneExpressionLitterale extends Exercice {
             },
           ]
           break
-        case 17: // impair
+        case 18: // impair
           texte =
             'Écrire une expression littérale qui permet de représenter un nombre impair.'
           texteCorr = `Un nombre impair peut s'écrire sous la forme $${miseEnEvidence('2n+1')}$ avec $n$ un entier naturel.`
@@ -774,7 +818,7 @@ export default class ÉcrireUneExpressionLitterale extends Exercice {
             },
           ]
           break
-        case 18: // multiple de k
+        case 19: // multiple de k
         default:
           texte = `Écrire une expression littérale qui permet de représenter un multiple de ${k}.`
           texteCorr = `Un multiple de ${k} peut s'écrire sous la forme $${miseEnEvidence(`${k}n`)}$ ou $${miseEnEvidence(`${k}\\times n`)}$ avec $n$ un entier naturel.`
