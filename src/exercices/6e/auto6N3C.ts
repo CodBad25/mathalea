@@ -14,7 +14,7 @@ import { listeQuestionsToContenu } from '../../modules/outils'
 import Exercice from '../Exercice'
 
 export const titre =
-  "Passer, de façon automatique, d'une valeur décimale à une valeur fractionnaire (et réciproquement) sur des valeurs simples"
+  "Passer, de façon automatique, d'une valeur décimale à une valeur fractionnaire et réciproquement avec demis et quarts"
 export const dateDePublication = '10/07/2025'
 export const interactifReady = true
 export const interactifType = 'mathLive'
