@@ -1,18 +1,22 @@
 <script lang="ts">
+  import { saveAs } from 'file-saver'
+  import JSZip from 'jszip'
   import {
     mathaleaGetExercicesFromParams,
     mathaleaUpdateExercicesParamsFromUrl,
   } from '../../../lib/mathalea'
   import { darkMode, exercicesParams } from '../../../lib/stores/generalStore'
   import { referentielLocale } from '../../../lib/stores/languagesStore'
-  import { isIExercice, type IExercice, type IExerciceStatique } from '../../../lib/types'
+  import {
+    isIExercice,
+    type IExercice,
+    type IExerciceStatique,
+  } from '../../../lib/types'
   import Footer from '../../Footer.svelte'
   import ButtonToggleAlt from '../../shared/forms/ButtonToggleAlt.svelte'
   import FormRadio from '../../shared/forms/FormRadio.svelte'
   import NavBar from '../../shared/header/NavBar.svelte'
   import Tabs from '../../shared/ui/Tabs.svelte'
-  import { saveAs } from 'file-saver'
-  import JSZip from 'jszip'
 
   const copyCode = async () => {
     const preElt = document.querySelector('pre')
@@ -269,11 +273,21 @@
   let tab = 'gift'
 
   $: moodleTabs = justBookmarklet
-    ? [{ id: 'bookmarklet', label: 'Marque-page magique', ariaControls: 'tabs-bookmarklet' }]
+    ? [
+        {
+          id: 'bookmarklet',
+          label: 'Marque-page magique',
+          ariaControls: 'tabs-bookmarklet',
+        },
+      ]
     : [
         { id: 'gift', label: 'Export Gift (Quiz)', ariaControls: 'tabs-gift' },
         { id: 'scorm', label: 'Export SCORM', ariaControls: 'tabs-scorm' },
-        { id: 'bookmarklet', label: 'Marque-page magique', ariaControls: 'tabs-bookmarklet' },
+        {
+          id: 'bookmarklet',
+          label: 'Marque-page magique',
+          ariaControls: 'tabs-bookmarklet',
+        },
       ]
 
   function handleTabChange(e: CustomEvent<string>) {
@@ -314,7 +328,9 @@
       <!-- Pages des réglages -->
       <div class="pb-6 pt-4 bg-coopmaths-canvas dark:bg-coopmathsdark-canvas">
         <div
-          class="transition-opacity duration-150 ease-linear {tab === 'gift' ? 'block opacity-100' : 'hidden opacity-0'}"
+          class="transition-opacity duration-150 ease-linear {tab === 'gift'
+            ? 'block opacity-100'
+            : 'hidden opacity-0'}"
           id="tabs-gift"
           role="tabpanel"
           aria-labelledby="tabs-gift-btn"
@@ -388,8 +404,8 @@
                     title={'Afficher le titre'}
                     bind:value={showTitle}
                     explanations={[
-                      "Le titre de l'exercice sera affiché",
-                      "Le titre de l'exercice ne sera pas affiché",
+                      "Le titre et la référence de l'exercice sera affiché",
+                      "Le titre et la référence de l'exercice ne sera pas affiché",
                     ]}
                   />
                 </div>
@@ -421,7 +437,9 @@
           </div>
         </div>
         <div
-          class="transition-opacity duration-150 ease-linear {tab === 'scorm' ? 'block opacity-100' : 'hidden opacity-0'}"
+          class="transition-opacity duration-150 ease-linear {tab === 'scorm'
+            ? 'block opacity-100'
+            : 'hidden opacity-0'}"
           id="tabs-scorm"
           role="tabpanel"
           aria-labelledby="tabs-scorm-btn"
@@ -491,7 +509,10 @@
           </div>
         </div>
         <div
-          class="transition-opacity duration-150 ease-linear {tab === 'bookmarklet' ? 'block opacity-100' : 'hidden opacity-0'}"
+          class="transition-opacity duration-150 ease-linear {tab ===
+          'bookmarklet'
+            ? 'block opacity-100'
+            : 'hidden opacity-0'}"
           id="tabs-bookmarklet"
           role="tabpanel"
           aria-labelledby="tabs-bookmarklet-btn"
