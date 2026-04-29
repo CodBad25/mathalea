@@ -17,7 +17,7 @@ export const AMCNumTemplate = `\\element{ {{ ref }} }{
 {%- if b.label %}
     {{ b.label }}
 {%- endif %}
-    \\AMCnumericChoices{ {{ b.value }} }{
+  \\AMCnumericChoices{ {{- b.value -}} }{
       digits={{ b.digits }},
       decimals={{ b.decimals }},
       sign={{ b.sign }},

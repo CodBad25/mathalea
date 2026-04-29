@@ -1,6 +1,5 @@
 import {
   computeDecimalAMC,
-  countDecimals,
   countDigits,
   isFractionValue,
   normalizeTexte,
@@ -189,7 +188,7 @@ export function normalizeAMCNum(
   }
 
   const { value, decimals, approx, alsocorrect } = computeDecimalAMC(rep)
-  const digits = Math.max(countDecimals(value), param.digits ?? 0)
+  const digits = Math.max(countDigits(value) + decimals, param.digits ?? 0)
 
   blocks.push({
     value,

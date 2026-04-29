@@ -145,6 +145,32 @@ describe('amcEngine', () => {
     expect(normalized.blocks[0].options?.Tpoint).toBe(',')
   })
 
+  it('normalise AMCNum entier avec un nombre de digits coherent par defaut', () => {
+    const item: AutoCorrectionAMC = {
+      reponse: {
+        valeur: 53,
+        param: {
+          decimals: 0,
+          tpoint: ',',
+        },
+      },
+    }
+
+    const normalized = normalizeAMCNum(item, {
+      ref: 'REF',
+      id: 'Q',
+      index: 0,
+      exercice: exerciceMock,
+    })
+
+    expect(normalized.blocks).toHaveLength(1)
+    expect(normalized.blocks[0]).toMatchObject({
+      value: 53,
+      digits: 2,
+      decimals: 0,
+    })
+  })
+
   it('rend un QCM mono avec renderQcm', () => {
     const item: AMCUneProposition = {
       enonce: 'Choisir la bonne reponse',
@@ -214,7 +240,7 @@ describe('amcEngine', () => {
 
     expect(latex).toContain('\\element{REF}')
     expect(latex).toContain('\\begin{questionmultx}{Q}')
-    expect(latex).toContain('\\AMCnumericChoices{ 9 }')
+    expect(latex).toContain('\\AMCnumericChoices{9}')
   })
 
   it('rend un AMCHybride avec bloc QCM', () => {
@@ -321,8 +347,8 @@ describe('amcEngine', () => {
 
     expect(hybride.texQr).toContain('Base')
     expect(hybride.texQr).toContain('Exposant')
-    expect(hybride.texQr).toContain('\\AMCnumericChoices{ 5 }')
-    expect(hybride.texQr).toContain('\\AMCnumericChoices{ 3 }')
+    expect(hybride.texQr).toContain('\\AMCnumericChoices{5}')
+    expect(hybride.texQr).toContain('\\AMCnumericChoices{3}')
     expect(hybride.texQr).toContain('\\begin{questionmultx}{REF/A-10}')
     expect(hybride.nextId).toBe(1)
     expect(hybride.melange).toBe(false)
@@ -360,7 +386,7 @@ describe('amcEngine', () => {
     expect(hybride.texQr).toContain('Contexte principal')
     expect(hybride.texQr).toContain('\\explain{Explication principale}')
     expect(hybride.texQr).toContain('Sous-question numerique')
-    expect(hybride.texQr).toContain('\\AMCnumericChoices{ 35 }')
+    expect(hybride.texQr).toContain('\\AMCnumericChoices{35}')
   })
 
   it('ne remplace pas $1 dans explain AMCNum hybride', () => {
