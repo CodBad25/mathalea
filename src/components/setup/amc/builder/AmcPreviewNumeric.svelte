@@ -56,15 +56,13 @@
       <div class="space-y-1">
         {#each Array(digits) as _, i}
           <div class="flex items-center gap-1">
-            <span
-              class="w-14 text-[10px] text-coopmaths-corpus/80 dark:text-coopmathsdark-corpus/80"
-            >
-              Chiffre {i + 1}{#if i === digits - decimals && decimals > 0}
-                (virgule){/if}
-            </span>
+            {#if i === digits - decimals && decimals > 0}
+              <div>,</div>
+            {/if}
+
             {#each digitChoices as digit}
               <span
-                class="inline-flex h-6 w-6 items-center justify-center rounded border border-coopmaths-struct-light/70 bg-white text-[10px] dark:border-coopmathsdark-struct-light/60 dark:bg-coopmathsdark-canvas"
+                class="inline-flex h-4 w-4 items-center justify-center rounded border border-coopmaths-struct-light/70 bg-white text-[8px] dark:border-coopmathsdark-struct-light/60 dark:bg-coopmathsdark-canvas"
                 >{digit}</span
               >
             {/each}

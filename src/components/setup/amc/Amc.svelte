@@ -38,6 +38,7 @@
   type GroupSetting = {
     seed: string
     questionCount: number
+    restitueCount: number
   }
 
   let exercices: IExercice[] = []
@@ -177,6 +178,9 @@
       questionCount:
         previousSettings[index]?.questionCount ??
         Math.max(1, exercice.nbQuestions),
+      restitueCount:
+        previousSettings[index]?.restitueCount ??
+        Math.max(1, exercice.nbQuestions),
     }))
 
     if (
@@ -223,7 +227,13 @@
 
   function updateLatexPreview() {
     const nbQuestions = groupSettings.map((setting) =>
-      Math.max(1, Number(setting.questionCount) || 1),
+      Math.max(
+        1,
+        Math.min(
+          Number(setting.restitueCount) || 1,
+          Number(setting.questionCount) || 1,
+        ),
+      ),
     )
 
     latexContent = creerDocumentAmc({
@@ -445,6 +455,112 @@
     if (!target) return
     target.options = target.options ?? {}
     target.options[key] = value
+    exercices = [...exercices]
+    updateLatexPreview()
+  }
+
+  function appliquerParametresQuestionAuGroupe() {
+    if (!selectedRef) return
+
+    const exercise = exercices[selectedRef.exerciseIndex] as any
+    if (!exercise) return
+
+    const autoCorrection = Array.isArray(exercise.autoCorrection)
+      ? exercise.autoCorrection
+      : []
+    const isHybrid = exercise.amcType === 'AMCHybride'
+
+    if (selectedRef.kind === 'num') {
+      if (isHybrid) {
+        const sourceParam =
+          autoCorrection[selectedRef.questionIndex]?.propositions?.[
+            selectedRef.propositionIndex
+          ]?.propositions?.[0]?.reponse?.param
+        if (!sourceParam) return
+        const copied = JSON.parse(JSON.stringify(sourceParam))
+        for (const item of autoCorrection) {
+          const propositions = Array.isArray(item?.propositions)
+            ? item.propositions
+            : []
+          for (const prop of propositions) {
+            if (prop?.type !== 'AMCNum') continue
+            const target = prop?.propositions?.[0]?.reponse
+            if (!target) continue
+            target.param = JSON.parse(JSON.stringify(copied))
+          }
+        }
+      } else {
+        const sourceParam =
+          autoCorrection[selectedRef.questionIndex]?.reponse?.param
+        if (!sourceParam) return
+        const copied = JSON.parse(JSON.stringify(sourceParam))
+        for (const item of autoCorrection) {
+          if (!item?.reponse) continue
+          item.reponse.param = JSON.parse(JSON.stringify(copied))
+        }
+      }
+    }
+
+    if (selectedRef.kind === 'open') {
+      if (isHybrid) {
+        const source =
+          autoCorrection[selectedRef.questionIndex]?.propositions?.[
+            selectedRef.propositionIndex
+          ]?.propositions?.[0]
+        if (!source) return
+        for (const item of autoCorrection) {
+          const propositions = Array.isArray(item?.propositions)
+            ? item.propositions
+            : []
+          for (const prop of propositions) {
+            if (prop?.type !== 'AMCOpen') continue
+            const target = prop?.propositions?.[0]
+            if (!target) continue
+            target.statut = source.statut
+            target.pointilles = source.pointilles
+            target.sanscadre = source.sanscadre
+          }
+        }
+      } else {
+        const source =
+          autoCorrection[selectedRef.questionIndex]?.propositions?.[0]
+        if (!source) return
+        for (const item of autoCorrection) {
+          const target = item?.propositions?.[0]
+          if (!target) continue
+          target.statut = source.statut
+          target.pointilles = source.pointilles
+          target.sanscadre = source.sanscadre
+        }
+      }
+    }
+
+    if (selectedRef.kind === 'qcm') {
+      if (isHybrid) {
+        const sourceOptions =
+          autoCorrection[selectedRef.questionIndex]?.propositions?.[
+            selectedRef.propositionIndex
+          ]?.options ?? {}
+        const copied = JSON.parse(JSON.stringify(sourceOptions))
+        for (const item of autoCorrection) {
+          const propositions = Array.isArray(item?.propositions)
+            ? item.propositions
+            : []
+          for (const prop of propositions) {
+            if (prop?.type !== 'qcmMono' && prop?.type !== 'qcmMult') continue
+            prop.options = JSON.parse(JSON.stringify(copied))
+          }
+        }
+      } else {
+        const sourceOptions =
+          autoCorrection[selectedRef.questionIndex]?.options ?? {}
+        const copied = JSON.parse(JSON.stringify(sourceOptions))
+        for (const item of autoCorrection) {
+          item.options = JSON.parse(JSON.stringify(copied))
+        }
+      }
+    }
+
     exercices = [...exercices]
     updateLatexPreview()
   }
@@ -709,6 +825,10 @@
                 groupSettings[idx] = {
                   ...groupSettings[idx],
                   questionCount: value,
+                  restitueCount: Math.min(
+                    value,
+                    groupSettings[idx]?.restitueCount ?? value,
+                  ),
                 }
                 groupSettings = [...groupSettings]
                 const exercice = exercices[idx] as any
@@ -719,8 +839,45 @@
               }}
             />
 
+            <label for="amc-group-restitue-count" class="block text-xs"
+              >Nombre de questions a restituer (\restituegroupe)</label
+            >
+            <input
+              id="amc-group-restitue-count"
+              type="number"
+              min="1"
+              max={Math.max(
+                1,
+                Number(groupSettings[selectedExerciseIndex]?.questionCount) ||
+                  1,
+              )}
+              class="w-full rounded border px-2 py-1 text-sm"
+              value={groupSettings[selectedExerciseIndex]?.restitueCount}
+              on:input={(event) => {
+                const idx = selectedExerciseIndex!
+                const maxAllowed = Math.max(
+                  1,
+                  Number(groupSettings[idx]?.questionCount) || 1,
+                )
+                const value = Math.max(
+                  1,
+                  Math.min(
+                    Number((event.currentTarget as HTMLInputElement).value) ||
+                      1,
+                    maxAllowed,
+                  ),
+                )
+                groupSettings[idx] = {
+                  ...groupSettings[idx],
+                  restitueCount: value,
+                }
+                groupSettings = [...groupSettings]
+                updateLatexPreview()
+              }}
+            />
+
             <label for="amc-group-seed" class="block text-xs"
-              >Seed de génération</label
+              >Graine de génération aléatoire</label
             >
             <input
               id="amc-group-seed"
@@ -746,7 +903,7 @@
                   )
                 }}
               >
-                Appliquer la seed
+                Appliquer la graine
               </button>
               <button
                 type="button"
@@ -755,7 +912,7 @@
                   void regenerateExercise(selectedExerciseIndex!)
                 }}
               >
-                Nouvelle seed
+                Nouvelle graine
               </button>
             </div>
             <button
@@ -851,6 +1008,13 @@
               />
               Affichage vertical
             </label>
+            <button
+              type="button"
+              class="mt-2 w-full rounded border px-3 py-1 text-xs"
+              on:click={appliquerParametresQuestionAuGroupe}
+            >
+              Appliquer ces parametres a tout le groupe
+            </button>
           </div>
         {:else if selectedRef.kind === 'open'}
           <div class="mt-4 space-y-2">
@@ -896,6 +1060,13 @@
               />
               Sans cadre
             </label>
+            <button
+              type="button"
+              class="mt-2 w-full rounded border px-3 py-1 text-xs"
+              on:click={appliquerParametresQuestionAuGroupe}
+            >
+              Appliquer ces parametres a tout le groupe
+            </button>
           </div>
         {:else}
           <div class="mt-4 space-y-2">
@@ -940,6 +1111,13 @@
                   ),
                 )}
             />
+            <button
+              type="button"
+              class="mt-2 w-full rounded border px-3 py-1 text-xs"
+              on:click={appliquerParametresQuestionAuGroupe}
+            >
+              Appliquer ces parametres a tout le groupe
+            </button>
           </div>
         {/if}
 
