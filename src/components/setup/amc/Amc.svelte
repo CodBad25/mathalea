@@ -8,6 +8,7 @@
     type AMCGroupConsistencyReport,
   } from '../../../lib/amc/creerDocumentAmc'
   import {
+    mathaleaEnsureAMCCompatibility,
     mathaleaGenerateSeed,
     mathaleaGetExercicesFromParams,
     mathaleaHandleExerciceSimple,
@@ -79,6 +80,7 @@
         if (exercice.nouvelleVersionWrapper != null)
           exercice.nouvelleVersionWrapper()
       }
+      mathaleaEnsureAMCCompatibility(exercice)
       if (exercice.amcType == null) {
         // l'exercice n'est pas disponible AMC
         exercicesARetirer.push(exercice.uuid)
@@ -133,8 +135,12 @@
           } else {
             if (exo.nouvelleVersionWrapper != null) exo.nouvelleVersionWrapper()
           }
+          mathaleaEnsureAMCCompatibility(exo)
         }
       }
+    }
+    for (const exo of exercices) {
+      mathaleaEnsureAMCCompatibility(exo)
     }
     const nbQuestionsParGroupe: number[] = nbQuestions.map((elt) => elt.nombre)
     content = creerDocumentAmc({

@@ -1295,6 +1295,164 @@ export function mathaleaHandleExerciceSimple(
   }
 }
 
+/**
+ * Applique une compatibilité AMC par défaut quand un exercice n'est pas paramétré finement.
+ * Cette fonction privilégie un export possible (fallback AMCOpen) plutôt qu'un rejet.
+ */
+export function mathaleaEnsureAMCCompatibility(exercice: IExercice): IExercice {
+  const extractAMCValue = (reponse: unknown): unknown => {
+    const unwrap = (value: unknown): unknown => {
+      if (Array.isArray(value)) return unwrap(value[0])
+
+      if (isValeur(value)) return unwrap(value.reponse?.value)
+
+      if (typeof value === 'object' && value !== null) {
+        if ('reponse' in value) {
+          return unwrap(
+            (value as { reponse?: { value?: unknown } }).reponse?.value,
+          )
+        }
+        if ('value' in value) {
+          return unwrap((value as { value?: unknown }).value)
+        }
+      }
+
+      return value
+    }
+
+    const value = unwrap(reponse)
+    if (typeof value === 'string') {
+      const parsed = Number(value.replace(',', '.'))
+      return Number.isFinite(parsed) ? parsed : undefined
+    }
+    if (typeof value === 'number')
+      return Number.isFinite(value) ? value : undefined
+    if (value instanceof FractionEtendue)
+      return { num: value.num, den: value.den }
+    return value
+  }
+
+  const ensureAMCOpenAutoCorrection = () => {
+    const questionCount = Math.max(
+      exercice.autoCorrection.length,
+      exercice.listeQuestions.length,
+      exercice.listeCorrections.length,
+      exercice.question != null ? 1 : 0,
+      1,
+    )
+
+    for (let i = 0; i < questionCount; i++) {
+      const existing = exercice.autoCorrection[i] as
+        | {
+            enonce?: string
+            propositions?: Array<{
+              texte?: string
+              statut?: number
+              sanscadre?: boolean
+              pointilles?: boolean
+            }>
+          }
+        | undefined
+
+      const enonce =
+        existing?.enonce ??
+        exercice.listeQuestions[i] ??
+        (i === 0 ? (exercice.question ?? '') : '')
+      const correction =
+        exercice.listeCorrections[i] ??
+        (i === 0 ? (exercice.correction ?? '') : '')
+
+      if (existing == null) {
+        exercice.autoCorrection[i] = {
+          enonce,
+          propositions: [
+            {
+              texte: correction,
+              statut: 3,
+              sanscadre: false,
+              pointilles: true,
+            },
+          ],
+        }
+        continue
+      }
+
+      if (existing.enonce == null) existing.enonce = enonce
+      if ((existing.propositions?.length ?? 0) === 0) {
+        existing.propositions = [
+          {
+            texte: correction,
+            statut: 3,
+            sanscadre: false,
+            pointilles: true,
+          },
+        ]
+      }
+    }
+  }
+
+  const firstAutoCorrection = exercice.autoCorrection.find(
+    (item) => item != null,
+  ) as
+    | {
+        reponse?: { valeur?: unknown }
+        propositions?: Array<{ statut?: unknown }>
+      }
+    | undefined
+
+  if (exercice.amcType == null) {
+    if (firstAutoCorrection?.reponse?.valeur !== undefined) {
+      exercice.amcType = 'AMCNum'
+    } else if ((firstAutoCorrection?.propositions?.length ?? 0) > 0) {
+      const goodAnswersCount = firstAutoCorrection!.propositions!.filter((p) =>
+        Boolean(p.statut),
+      ).length
+      exercice.amcType = goodAnswersCount > 1 ? 'qcmMult' : 'qcmMono'
+    } else {
+      exercice.amcType = 'AMCOpen'
+    }
+  }
+
+  if (exercice.amcReady !== true) exercice.amcReady = true
+
+  if (exercice.amcType === 'AMCNum') {
+    const first = exercice.autoCorrection[0] as
+      | {
+          reponse?: { valeur?: unknown; param?: Record<string, unknown> }
+          enonce?: string
+        }
+      | undefined
+
+    const numericValue = extractAMCValue(
+      first?.reponse?.valeur ?? exercice.reponse,
+    )
+    if (numericValue !== undefined) {
+      exercice.autoCorrection[0] = {
+        ...(first ?? {}),
+        enonce:
+          first?.enonce ??
+          exercice.question ??
+          exercice.listeQuestions[0] ??
+          '',
+        reponse: {
+          ...(first?.reponse ?? {}),
+          valeur: numericValue,
+          param: first?.reponse?.param ?? { tpoint: ',' },
+        },
+      }
+    } else {
+      // Impossible de construire une réponse numérique fiable : fallback ouvert.
+      exercice.amcType = 'AMCOpen'
+    }
+  }
+
+  if (exercice.amcType === 'AMCOpen') {
+    ensureAMCOpenAutoCorrection()
+  }
+
+  return exercice
+}
+
 export function getDistracteurs(
   exerciceSimple: ExerciceSimple,
 ): (string | number)[] {

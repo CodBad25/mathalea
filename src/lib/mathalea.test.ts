@@ -4,7 +4,11 @@ import ExerciceSimple from '../../src/exercices/ExerciceSimple'
 import FractionEtendue from '../modules/FractionEtendue'
 import Grandeur from '../modules/Grandeur'
 import Hms from '../modules/Hms'
-import { getDistracteurs, mathaleaHandleExerciceSimple } from './mathalea'
+import {
+  getDistracteurs,
+  mathaleaEnsureAMCCompatibility,
+  mathaleaHandleExerciceSimple,
+} from './mathalea'
 
 // Mock avant l'import
 vi.mock('../../src/lib/renderScratch', () => ({
@@ -237,5 +241,53 @@ describe('mathaleaHandleExerciceSimple', () => {
     expect(exercice.autoCorrection[0].propositions?.[0].texte).toContain(
       'deux et deux',
     )
+  })
+})
+
+describe('mathaleaEnsureAMCCompatibility', () => {
+  it('applique un fallback AMCOpen par defaut', () => {
+    const exercice = new ExerciceSimple()
+    exercice.question = 'Question sans parametrage AMC'
+    exercice.correction = 'Correction par defaut'
+    exercice.autoCorrection = []
+    exercice.amcType = undefined
+    exercice.amcReady = undefined
+
+    mathaleaEnsureAMCCompatibility(exercice)
+
+    expect(exercice.amcReady).toBe(true)
+    expect(exercice.amcType).toBe('AMCOpen')
+    expect(exercice.autoCorrection[0]).toBeDefined()
+    expect(exercice.autoCorrection[0].propositions?.[0].texte).toContain(
+      'Correction par defaut',
+    )
+  })
+
+  it('inference qcmMono et qcmMult depuis autoCorrection', () => {
+    const mono = new ExerciceSimple()
+    mono.autoCorrection = [
+      {
+        propositions: [
+          { texte: 'A', statut: false },
+          { texte: 'B', statut: true },
+        ],
+      } as any,
+    ]
+
+    mathaleaEnsureAMCCompatibility(mono)
+    expect(mono.amcType).toBe('qcmMono')
+
+    const mult = new ExerciceSimple()
+    mult.autoCorrection = [
+      {
+        propositions: [
+          { texte: 'A', statut: true },
+          { texte: 'B', statut: true },
+        ],
+      } as any,
+    ]
+
+    mathaleaEnsureAMCCompatibility(mult)
+    expect(mult.amcType).toBe('qcmMult')
   })
 })
