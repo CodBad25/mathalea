@@ -7,7 +7,10 @@ import {
   renderAMCHeader,
   renderAMCPreamble,
 } from '../../src/lib/amc/amcDocumentTemplates'
-import { creerDocumentAmc } from '../../src/lib/amc/creerDocumentAmc'
+import {
+  checkAMCGroupConsistency,
+  creerDocumentAmc,
+} from '../../src/lib/amc/creerDocumentAmc'
 
 describe('creerDocumentAmc templates', () => {
   it('rend un preambule AMC parametrable', () => {
@@ -91,8 +94,9 @@ describe('creerDocumentAmc templates', () => {
     })
 
     expect(groupSection).toContain('\\bf\\Large Titre Groupe')
-    expect(groupSection).toContain('\\setgroupmode{ G1 }{cyclic}')
-    expect(groupSection).toContain('\\restituegroupe[2]{ G1 }')
+    expect(groupSection).toContain('\\setgroupmode{G1}{cyclic}')
+    expect(groupSection).toContain('\\restituegroupe[2]{G1}')
+    expect(groupSection).not.toContain('\\restituegroupe[2]{ G1 }')
   })
 
   it('propage les options de format et recto-verso au preambule du document', () => {
@@ -132,6 +136,132 @@ describe('creerDocumentAmc templates', () => {
     expect(latex).toContain('\\newcommand{\\sujet}{')
     expect(latex).toContain('\\begin{multicols}{2}')
     expect(latex).toContain('\\restituegroupe')
+
+    vi.unstubAllGlobals()
+  })
+
+  it('ignore les exercices non amcReady lors de la restitution des groupes', () => {
+    vi.stubGlobal('document', {
+      getElementById: vi.fn(() => ({ checked: false })),
+    })
+
+    const latex = creerDocumentAmc({
+      exercices: [
+        {
+          amcReady: true,
+          amcType: 'AMCNum',
+          autoCorrection: [
+            {
+              enonce: 'Question valide',
+              reponse: {
+                valeur: 7,
+                param: { digits: 1, decimals: 0, tpoint: ',' },
+              },
+            },
+          ],
+          id: 'READY',
+          nbQuestions: 1,
+          titre: 'Titre prêt',
+          listeQuestions: ['Question valide'],
+          listeCorrections: ['Correction valide'],
+        } as any,
+        {
+          amcReady: false,
+          amcType: 'AMCNum',
+          autoCorrection: [
+            {
+              enonce: 'Question ignorée',
+              reponse: {
+                valeur: 3,
+                param: { digits: 1, decimals: 0, tpoint: ',' },
+              },
+            },
+          ],
+          id: 'NOT_READY',
+          nbQuestions: 1,
+          titre: 'Titre ignoré',
+          listeQuestions: ['Question ignorée'],
+          listeCorrections: ['Correction ignorée'],
+        } as any,
+      ],
+    })
+
+    expect(latex).toContain('\\element{READY}')
+    expect(latex).toContain('\\restituegroupe')
+    expect(latex).toContain('READY')
+    expect(latex).not.toContain('\\element{NOT_READY}')
+    expect(latex).not.toContain('\\restituegroupe{NOT_READY}')
+
+    vi.unstubAllGlobals()
+  })
+
+  it('ne restitue pas un groupe sans element AMC genere', () => {
+    vi.stubGlobal('document', {
+      getElementById: vi.fn(() => ({ checked: false })),
+    })
+
+    const latex = creerDocumentAmc({
+      exercices: [
+        {
+          amcReady: true,
+          amcType: 'AMCNum',
+          autoCorrection: [],
+          id: 'EMPTY_READY',
+          nbQuestions: 0,
+          titre: 'Vide',
+          listeQuestions: [],
+          listeCorrections: [],
+        } as any,
+      ],
+    })
+
+    expect(latex).not.toContain('\\element{EMPTY_READY}')
+    expect(latex).not.toContain('\\restituegroupe{EMPTY_READY}')
+
+    vi.unstubAllGlobals()
+  })
+
+  it('detecte les groupes restitues sans element correspondant', () => {
+    const report = checkAMCGroupConsistency(`
+      \\element{A}{\\begin{question}{A1}X\\end{question}}
+      \\restituegroupe{A}
+      \\restituegroupe{B}
+    `)
+
+    expect(report.missingGroupDefinitions).toContain('B')
+    expect(report.missingGroupDefinitions).not.toContain('A')
+  })
+
+  it('ne signale pas d incoherence sur un document AMC coherent', () => {
+    vi.stubGlobal('document', {
+      getElementById: vi.fn(() => ({ checked: false })),
+    })
+
+    const latex = creerDocumentAmc({
+      exercices: [
+        {
+          amcReady: true,
+          amcType: 'AMCNum',
+          autoCorrection: [
+            {
+              enonce: 'Question',
+              reponse: {
+                valeur: 9,
+                param: { digits: 1, decimals: 0, tpoint: ',' },
+              },
+            },
+          ],
+          id: 'COHERENT',
+          nbQuestions: 1,
+          titre: 'Cohérent',
+          listeQuestions: ['Question'],
+          listeCorrections: ['Correction'],
+        } as any,
+      ],
+    })
+
+    const report = checkAMCGroupConsistency(latex)
+    expect(report.missingGroupDefinitions).toHaveLength(0)
 
     vi.unstubAllGlobals()
   })

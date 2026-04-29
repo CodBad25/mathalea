@@ -2,7 +2,11 @@
   import seedrandom from 'seedrandom'
   import { onMount } from 'svelte'
   import type { IExerciceAMC } from '../../../lib/amc/amcTypes'
-  import { creerDocumentAmc } from '../../../lib/amc/creerDocumentAmc'
+  import {
+    checkAMCGroupConsistency,
+    creerDocumentAmc,
+    type AMCGroupConsistencyReport,
+  } from '../../../lib/amc/creerDocumentAmc'
   import {
     mathaleaGenerateSeed,
     mathaleaGetExercicesFromParams,
@@ -56,6 +60,7 @@
   let textForOverleaf: HTMLInputElement
   let isNonAMCModaleDisplayed = false
   let isOverleafModalDisplayed = false
+  let groupConsistencyReport: AMCGroupConsistencyReport | null = null
 
   async function initExercices() {
     exercicesARetirer.length = 0
@@ -141,6 +146,7 @@
       nbQuestions: nbQuestionsParGroupe,
       nbExemplaires,
     })
+    groupConsistencyReport = checkAMCGroupConsistency(content)
   }
 
   /* =======================================================
@@ -361,6 +367,41 @@
         text="Compiler sur OverLeaf"
       />
     </div>
+
+    {#if groupConsistencyReport && groupConsistencyReport.missingGroupDefinitions.length > 0}
+      <div
+        class="my-6 rounded-md border border-coopmaths-action bg-coopmaths-canvas-dark p-4 text-coopmaths-corpus dark:text-coopmathsdark-corpus"
+      >
+        <p class="font-bold">Alerte cohérence AMC</p>
+        <p class="mt-1">
+          Des groupes sont restitués sans élément correspondant. La compilation
+          AMC peut échouer avec "No group mode".
+        </p>
+        <ul class="list-inside list-disc text-left text-base mt-2">
+          {#each groupConsistencyReport.missingGroupDefinitions as groupName}
+            <li>{groupName}</li>
+          {/each}
+        </ul>
+      </div>
+    {/if}
+
+    {#if groupConsistencyReport && groupConsistencyReport.unusedGroupDefinitions.length > 0}
+      <div
+        class="my-6 rounded-md border border-coopmaths-struct-light bg-coopmaths-canvas-dark p-4 text-coopmaths-corpus dark:text-coopmathsdark-corpus"
+      >
+        <p class="font-bold">Information cohérence AMC</p>
+        <p class="mt-1">
+          Certains groupes sont définis dans le document mais ne sont jamais
+          restitués dans la copie finale.
+        </p>
+        <ul class="list-inside list-disc text-left text-base mt-2">
+          {#each groupConsistencyReport.unusedGroupDefinitions as groupName}
+            <li>{groupName}</li>
+          {/each}
+        </ul>
+      </div>
+    {/if}
+
     <pre
       class="my-10 shadow-md bg-coopmaths-canvas-dark dark:bg-coopmathsdark-canvas-dark text-coopmaths-corpus dark:text-coopmathsdark-corpus p-4 w-full overflow-auto">
       {content}

@@ -280,11 +280,11 @@ export const AMCGroupSectionTemplate = `
     \\vspace{1mm}
     \\hrule
   \\end{center}
-{% if not isMixed %}\\setgroupmode{ {{ groupName }} }{cyclic}
+{% if not isMixed %}\\setgroupmode{ {{- groupName -}} }{cyclic}
 
-{% endif %}{% if questionsToRestore > 0 %}\\restituegroupe[{{ questionsToRestore }}]{ {{ groupName }} }
+{% endif %}{% if questionsToRestore > 0 %}\\restituegroupe[{{ questionsToRestore }}]{ {{- groupName -}} }
 
-{% else %}\\restituegroupe{ {{ groupName }} }
+{% else %}\\restituegroupe{ {{- groupName -}} }
 
 {% endif %}`
 

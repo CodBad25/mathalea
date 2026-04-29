@@ -190,4 +190,52 @@ describe('mathaleaHandleExerciceSimple', () => {
       'La bonne réponse est la réponse',
     )
   })
+
+  it('genere une autoCorrection AMCNum pour un exercice simple amcReady', () => {
+    class ExerciceSimpleAMCNum extends ExerciceSimple {
+      constructor() {
+        super()
+        this.nbQuestions = 1
+        this.amcReady = true
+        this.amcType = 'AMCNum'
+      }
+
+      nouvelleVersion() {
+        this.question = 'Calculer 7 + 5.'
+        this.reponse = 12
+        this.correction = '7 + 5 = 12.'
+      }
+    }
+
+    const exercice = new ExerciceSimpleAMCNum()
+    mathaleaHandleExerciceSimple(exercice, false, 0, 'seed')
+
+    expect(exercice.autoCorrection[0]).toBeDefined()
+    expect(exercice.autoCorrection[0].reponse?.valeur).toBe(12)
+  })
+
+  it('genere une autoCorrection AMCOpen pour un exercice simple amcReady', () => {
+    class ExerciceSimpleAMCOpen extends ExerciceSimple {
+      constructor() {
+        super()
+        this.nbQuestions = 1
+        this.amcReady = true
+        this.amcType = 'AMCOpen'
+      }
+
+      nouvelleVersion() {
+        this.question = 'Expliquer pourquoi 2 + 2 = 4.'
+        this.reponse = 'Réponse libre'
+        this.correction = 'Parce que l’addition de deux et deux donne quatre.'
+      }
+    }
+
+    const exercice = new ExerciceSimpleAMCOpen()
+    mathaleaHandleExerciceSimple(exercice, false, 0, 'seed')
+
+    expect(exercice.autoCorrection[0]).toBeDefined()
+    expect(exercice.autoCorrection[0].propositions?.[0].texte).toContain(
+      'deux et deux',
+    )
+  })
 })

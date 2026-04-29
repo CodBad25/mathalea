@@ -23,6 +23,49 @@ export type CreerDocumentAmcOptions = {
   format?: string
 }
 
+export type AMCGroupConsistencyReport = {
+  declaredGroups: string[]
+  restitutedGroups: string[]
+  missingGroupDefinitions: string[]
+  unusedGroupDefinitions: string[]
+}
+
+export function checkAMCGroupConsistency(
+  latexCode: string,
+): AMCGroupConsistencyReport {
+  const declaredSet = new Set<string>()
+  const restitutedSet = new Set<string>()
+
+  const elementRegex = /\\element\{([^}]+)\}\{/g
+  const restitueRegex = /\\restituegroupe(?:\[[^\]]*\])?\{([^}]+)\}/g
+
+  let match: RegExpExecArray | null
+  while ((match = elementRegex.exec(latexCode)) !== null) {
+    declaredSet.add(match[1])
+  }
+
+  while ((match = restitueRegex.exec(latexCode)) !== null) {
+    restitutedSet.add(match[1])
+  }
+
+  const declaredGroups = Array.from(declaredSet)
+  const restitutedGroups = Array.from(restitutedSet)
+
+  const missingGroupDefinitions = restitutedGroups.filter(
+    (group) => !declaredSet.has(group),
+  )
+  const unusedGroupDefinitions = declaredGroups.filter(
+    (group) => !restitutedSet.has(group),
+  )
+
+  return {
+    declaredGroups,
+    restitutedGroups,
+    missingGroupDefinitions,
+    unusedGroupDefinitions,
+  }
+}
+
 /**
  * Exporte un exercice au format AMC (LaTeX) avec ses métadonnées de regroupement.
  * @param {IExerciceAMC} exercise Exercice à exporter.
@@ -157,6 +200,8 @@ export function creerDocumentAmc(options: CreerDocumentAmcOptions): string {
   const amcExerciseCount = exercises.filter((el) => el.amcReady).length
   if (amcExerciseCount === 0) return ''
   for (const exercise of exercises) {
+    if (!exercise.amcReady) continue
+
     const [
       exerciseTex,
       groupRef,
@@ -218,8 +263,15 @@ export function creerDocumentAmc(options: CreerDocumentAmcOptions): string {
     documentClassOptions,
   })
 
-  let groupsContent = ''
+  const activeGroupIndexes: number[] = []
   for (let i = 0; i < groupRefs.length; i++) {
+    if (groupTexBlocks[i].includes('\\element{')) {
+      activeGroupIndexes.push(i)
+    }
+  }
+
+  let groupsContent = ''
+  for (const i of activeGroupIndexes) {
     groupsContent += groupTexBlocks[i]
   }
 
@@ -238,7 +290,7 @@ export function creerDocumentAmc(options: CreerDocumentAmcOptions): string {
   })
 
   let groupsSections = ''
-  for (let i = 0; i < groupRefs.length; i++) {
+  for (const i of activeGroupIndexes) {
     const groupName = groupRefs[i]
     groupsSections += renderAMCGroupSection({
       groupTitle: groupTitles[i],
@@ -260,5 +312,14 @@ export function creerDocumentAmc(options: CreerDocumentAmcOptions): string {
       '\n \n \\csvreader[head to column names]{liste.csv}{}{\\sujet}\n'
   }
   latexCode += '\\end{document}\n'
+
+  const consistencyReport = checkAMCGroupConsistency(latexCode)
+  if (consistencyReport.missingGroupDefinitions.length > 0) {
+    console.warn(
+      '[AMC] Group consistency issue: groups restituted without element definitions',
+      consistencyReport,
+    )
+  }
+
   return latexCode
 }

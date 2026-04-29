@@ -908,6 +908,115 @@ export function mathaleaHandleExerciceSimple(
   numeroExercice?: number,
   seed?: string,
 ) {
+  const extractSimpleAMCValue = (reponse: unknown): unknown => {
+    const unwrap = (value: unknown): unknown => {
+      if (Array.isArray(value)) return unwrap(value[0])
+
+      if (isValeur(value)) {
+        return unwrap(value.reponse?.value)
+      }
+
+      if (typeof value === 'object' && value !== null) {
+        if ('reponse' in value) {
+          return unwrap(
+            (value as { reponse?: { value?: unknown } }).reponse?.value,
+          )
+        }
+        if ('value' in value) {
+          return unwrap((value as { value?: unknown }).value)
+        }
+      }
+
+      return value
+    }
+
+    const value = unwrap(reponse)
+
+    if (typeof value === 'string') {
+      const normalized = value.replace(',', '.')
+      const parsed = Number(normalized)
+      return Number.isFinite(parsed) ? parsed : undefined
+    }
+
+    if (typeof value === 'number') {
+      return Number.isFinite(value) ? value : undefined
+    }
+
+    if (value instanceof FractionEtendue) {
+      return { num: value.num, den: value.den }
+    }
+
+    return value
+  }
+
+  const ensureSimpleAMCAutoCorrection = (index: number) => {
+    if (!exercice.amcReady) return
+
+    const currentAutoCorrection = exercice.autoCorrection[index] as
+      | {
+          reponse?: { valeur?: unknown }
+          propositions?: unknown[]
+        }
+      | undefined
+
+    const enonceAMC = exercice.question ?? exercice.listeQuestions[index] ?? ''
+
+    if (exercice.amcType === 'AMCNum') {
+      const existingValue = currentAutoCorrection?.reponse?.valeur
+      const normalizedExistingValue = extractSimpleAMCValue(existingValue)
+
+      if (
+        normalizedExistingValue !== undefined &&
+        currentAutoCorrection?.reponse
+      ) {
+        exercice.autoCorrection[index] = {
+          ...(exercice.autoCorrection[index] as Record<string, unknown>),
+          enonce:
+            (exercice.autoCorrection[index] as { enonce?: string })?.enonce ??
+            enonceAMC,
+          reponse: {
+            ...currentAutoCorrection.reponse,
+            valeur: normalizedExistingValue,
+            param: (
+              currentAutoCorrection.reponse as {
+                param?: Record<string, unknown>
+              }
+            ).param ?? { tpoint: ',' },
+          },
+        }
+        return
+      }
+
+      const valeurAMC = extractSimpleAMCValue(exercice.reponse)
+      if (valeurAMC === undefined) return
+      exercice.autoCorrection[index] = {
+        enonce: enonceAMC,
+        reponse: {
+          valeur: valeurAMC,
+          param: {
+            tpoint: ',',
+          },
+        },
+      }
+      return
+    }
+
+    if (exercice.amcType === 'AMCOpen') {
+      if ((currentAutoCorrection?.propositions?.length ?? 0) > 0) return
+      exercice.autoCorrection[index] = {
+        enonce: enonceAMC,
+        propositions: [
+          {
+            texte: exercice.correction ?? '',
+            statut: 3,
+            sanscadre: false,
+            pointilles: true,
+          },
+        ],
+      }
+    }
+  }
+
   if (numeroExercice !== undefined) exercice.numeroExercice = numeroExercice
   exercice.reinit()
   exercice.interactif = isInteractif
@@ -1169,6 +1278,7 @@ export function mathaleaHandleExerciceSimple(
           }
         }
       }
+      ensureSimpleAMCAutoCorrection(i)
       exercice.listeCorrections.push(exercice.correction ?? '')
       exercice.listeCanEnonces?.push(exercice.canEnonce ?? '')
       exercice.listeCanReponsesACompleter?.push(
