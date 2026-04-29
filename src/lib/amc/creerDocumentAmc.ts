@@ -1,7 +1,10 @@
 import { randint } from '../../modules/outils'
 import { format as formatLatex } from '../Latex'
+import { loadPackagesFromContent } from '../latex/preambuleTex'
+import type { contentsType } from '../LatexTypes'
 import { lettreDepuisChiffre } from '../outils/outilString'
 import {
+  AMCPreambleTemplate,
   renderAMCCopyContent,
   renderAMCDocumentStart,
   renderAMCGroupSection,
@@ -28,6 +31,101 @@ export type AMCGroupConsistencyReport = {
   restitutedGroups: string[]
   missingGroupDefinitions: string[]
   unusedGroupDefinitions: string[]
+}
+
+function escapeRegExp(value: string): string {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+}
+
+function hasPackageInLatex(latex: string, packageName: string): boolean {
+  const escaped = escapeRegExp(packageName)
+  const packageRegex = new RegExp(
+    String.raw`\\usepackage(?:\[[^\]]*\])?\{[^}]*\b${escaped}\b[^}]*\}`,
+  )
+  return packageRegex.test(latex)
+}
+
+function buildDynamicAMCPreamble(
+  exercises: IExerciceAMC[],
+  groupsContent: string,
+): string {
+  const dynamicContents: contentsType = {
+    preamble: '',
+    intro: '',
+    content: groupsContent,
+    contentCorr: '',
+  }
+
+  loadPackagesFromContent(dynamicContents)
+
+  const additions: string[] = []
+  const seenLines = new Set<string>()
+  const pushIfNew = (line: string) => {
+    const trimmed = line.trim()
+    if (trimmed === '' || seenLines.has(trimmed)) return
+    additions.push(trimmed)
+    seenLines.add(trimmed)
+  }
+
+  const detectedLines = dynamicContents.preamble
+    .split('\n')
+    .map((line) => line.trim())
+    .filter((line) => line.length > 0 && !line.startsWith('%'))
+
+  for (const line of detectedLines) {
+    const packageMatch = line.match(/^\\usepackage(?:\[[^\]]*\])?\{([^}]+)\}$/)
+    if (packageMatch) {
+      const packageNames = packageMatch[1]
+        .split(',')
+        .map((part) => part.trim())
+        .filter(Boolean)
+      if (
+        packageNames.every((packageName) =>
+          hasPackageInLatex(AMCPreambleTemplate, packageName),
+        )
+      ) {
+        continue
+      }
+    }
+    pushIfNew(line)
+  }
+
+  const exercisePackages = new Set<string>()
+  const exerciseCommands = new Set<string>()
+
+  for (const exercise of exercises) {
+    const maybePackages = (exercise as any).listePackages
+    const packageList = Array.isArray(maybePackages)
+      ? maybePackages
+      : typeof maybePackages === 'string'
+        ? [maybePackages]
+        : []
+    for (const entry of packageList) {
+      if (typeof entry !== 'string') continue
+      const trimmed = entry.trim()
+      if (trimmed === '') continue
+      if (trimmed.startsWith('cmd')) {
+        exerciseCommands.add(trimmed.replace(/^cmd/, ''))
+      } else {
+        exercisePackages.add(trimmed)
+      }
+    }
+  }
+
+  for (const packageName of exercisePackages) {
+    if (hasPackageInLatex(AMCPreambleTemplate, packageName)) continue
+    if (packageName === 'bclogo') {
+      pushIfNew('\\usepackage[tikz]{bclogo}')
+    } else {
+      pushIfNew(`\\usepackage{${packageName}}`)
+    }
+  }
+
+  for (const command of exerciseCommands) {
+    pushIfNew(command)
+  }
+
+  return additions.join('\n')
 }
 
 export function checkAMCGroupConsistency(
@@ -259,10 +357,6 @@ export function creerDocumentAmc(options: CreerDocumentAmcOptions): string {
     .filter(Boolean)
     .join(',')
 
-  const preambule = renderAMCPreamble({
-    documentClassOptions,
-  })
-
   const activeGroupIndexes: number[] = []
   for (let i = 0; i < groupRefs.length; i++) {
     if (groupTexBlocks[i].includes('\\element{')) {
@@ -274,6 +368,11 @@ export function creerDocumentAmc(options: CreerDocumentAmcOptions): string {
   for (const i of activeGroupIndexes) {
     groupsContent += groupTexBlocks[i]
   }
+
+  const preambule = renderAMCPreamble({
+    documentClassOptions,
+    dynamicPreamble: buildDynamicAMCPreamble(exercises, groupsContent),
+  })
 
   const documentStart = renderAMCDocumentStart({
     seed,

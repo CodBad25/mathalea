@@ -266,4 +266,72 @@ describe('creerDocumentAmc templates', () => {
 
     vi.unstubAllGlobals()
   })
+
+  it('injecte des packages dynamiques detectes depuis le contenu AMC', () => {
+    vi.stubGlobal('document', {
+      getElementById: vi.fn(() => ({ checked: false })),
+    })
+
+    const latex = creerDocumentAmc({
+      exercices: [
+        {
+          amcReady: true,
+          amcType: 'AMCNum',
+          autoCorrection: [
+            {
+              enonce: 'Mesure : $\\ang{30}$',
+              reponse: {
+                valeur: 9,
+                param: { digits: 1, decimals: 0, tpoint: ',' },
+              },
+            },
+          ],
+          id: 'DYN_CONTENT',
+          nbQuestions: 1,
+          titre: 'Dynamique contenu',
+          listeQuestions: ['Mesure : $\\ang{30}$'],
+          listeCorrections: ['Correction'],
+        } as any,
+      ],
+    })
+
+    expect(latex).toContain('\\usepackage{siunitx}')
+
+    vi.unstubAllGlobals()
+  })
+
+  it('injecte les listePackages et commandes latex des exercices dans le preambule AMC', () => {
+    vi.stubGlobal('document', {
+      getElementById: vi.fn(() => ({ checked: false })),
+    })
+
+    const latex = creerDocumentAmc({
+      exercices: [
+        {
+          amcReady: true,
+          amcType: 'AMCNum',
+          autoCorrection: [
+            {
+              enonce: 'Question',
+              reponse: {
+                valeur: 2,
+                param: { digits: 1, decimals: 0, tpoint: ',' },
+              },
+            },
+          ],
+          listePackages: ['siunitx', 'cmd\\newcommand{\\AMCSpec}{ok}'],
+          id: 'DYN_PACKAGES',
+          nbQuestions: 1,
+          titre: 'Dynamique packages',
+          listeQuestions: ['Question'],
+          listeCorrections: ['Correction'],
+        } as any,
+      ],
+    })
+
+    expect(latex).toContain('\\usepackage{siunitx}')
+    expect(latex).toContain('\\newcommand{\\AMCSpec}{ok}')
+
+    vi.unstubAllGlobals()
+  })
 })

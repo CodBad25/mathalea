@@ -2,6 +2,7 @@ import { renderTemplate } from './amcTemplates'
 
 export type AMCPreambleRenderData = {
   documentClassOptions: string
+  dynamicPreamble?: string
 }
 
 export type AMCHeaderRenderData = {
@@ -180,6 +181,9 @@ export const AMCPreambleTemplate = `%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   
   %%%%%%%%% Paramètres pour réponses à construire
   \\AMCinterIrep=0pt \\AMCinterBrep=.5ex \\AMCinterIquest=0pt \\AMCinterBquest=3ex \\AMCpostOquest=7mm \\setlength{\\AMChorizAnswerSep}{3em plus 4em} \\setlength{\\AMChorizBoxSep}{1em}
+{% if dynamicPreamble %}
+{{ dynamicPreamble | safe }}
+{% endif %}
   %%%%% Fin du préambule %%%%%%%
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 `
