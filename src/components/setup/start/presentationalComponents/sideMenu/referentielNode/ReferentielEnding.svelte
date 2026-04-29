@@ -18,9 +18,9 @@
   import { globalOptions } from '../../../../../../lib/stores/globalOptions'
   import type { InterfaceParams } from '../../../../../../lib/types'
   import { isLessThan1Month } from '../../../../../../lib/types/dates'
+  import SelectedIndicator from '../../../../../shared/forms/SelectedIndicator.svelte'
   import NoInteractivityIcon from '../../../../../shared/icons/NoInteractivityIcon.svelte'
   import QcmCamIcon from '../../../../../shared/icons/QcmCamIcon.svelte'
-  import SelectedIndicator from '../../../../../shared/forms/SelectedIndicator.svelte'
 
   export let ending: JSONReferentielEnding
   export let nestedLevelCount: number
@@ -109,6 +109,20 @@
     ])
     $changes--
   }
+
+  function handleDragStart(event: DragEvent) {
+    if (!(isExerciceItemInReferentiel(ending) || isTool(ending))) return
+    if (!event.dataTransfer) return
+
+    const payload = JSON.stringify({
+      uuid: ending.uuid,
+      id: ending.id,
+    })
+
+    event.dataTransfer.effectAllowed = 'copy'
+    event.dataTransfer.setData('application/x-mathalea-exercise', payload)
+    event.dataTransfer.setData('text/plain', payload)
+  }
 </script>
 
 <!--
@@ -129,7 +143,9 @@
     <button
       type="button"
       on:click={addToList}
-      class="ml-[3px] pl-2 pr-4 bg-coopmaths-canvas-dark dark:bg-coopmathsdark-canvas-dark hover:bg-coopmaths-canvas dark:hover:bg-coopmathsdark-canvas-darkest flex-1"
+      draggable="true"
+      on:dragstart={handleDragStart}
+      class="ml-0.75 pl-2 pr-4 bg-coopmaths-canvas-dark dark:bg-coopmathsdark-canvas-dark hover:bg-coopmaths-canvas dark:hover:bg-coopmathsdark-canvas-darkest flex-1"
     >
       <div bind:this={nomDeExercice} class="flex flex-row justify-start">
         {#if isExerciceItemInReferentiel(ending)}

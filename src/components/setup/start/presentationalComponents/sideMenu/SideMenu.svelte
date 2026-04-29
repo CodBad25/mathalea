@@ -27,6 +27,7 @@
   import type { Language } from '../../../../../lib/types/languages'
 
   export let excludedReferentiels: ActivationName[] = []
+  export let hideThirdAppsButton = false
   export let addExercise: (uuid: string, id: string) => void
 
   let searchBlock: { triggerUpdateFromSearchBlock: () => void } | undefined
@@ -183,6 +184,8 @@
       />
     {/each}
     <!-- Bouton spécial pour les applications tierces -->
-    <SideMenuApps class="text-start p-6 w-full" />
+    {#if !hideThirdAppsButton}
+      <SideMenuApps class="text-start p-6 w-full" />
+    {/if}
   </div>
 </aside>
