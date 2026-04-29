@@ -17,6 +17,8 @@
   $: vertical = Boolean(param?.vertical)
   $: approx = Number(param?.approx ?? 0)
   $: digitChoices = Array.from({ length: 10 }, (_, i) => i)
+  $: integerDigits = Math.max(0, digits - decimals)
+  $: hasDecimalSeparator = decimals > 0
 </script>
 
 <div
@@ -41,11 +43,11 @@
         </p>
         <div class={vertical ? 'flex flex-col gap-1' : 'flex flex-col gap-1'}>
           <span
-            class="inline-flex h-6 w-6 items-center justify-center rounded border border-coopmaths-struct-light/70 bg-white text-xs dark:border-coopmathsdark-struct-light/60 dark:bg-coopmathsdark-canvas"
+            class="inline-flex h-4 w-4 items-center justify-center rounded border border-coopmaths-struct-light/70 bg-white text-xs dark:border-coopmathsdark-struct-light/60 dark:bg-coopmathsdark-canvas"
             >+</span
           >
           <span
-            class="inline-flex h-6 w-6 items-center justify-center rounded border border-coopmaths-struct-light/70 bg-white text-xs dark:border-coopmathsdark-struct-light/60 dark:bg-coopmathsdark-canvas"
+            class="inline-flex h-4 w-4 items-center justify-center rounded border border-coopmaths-struct-light/70 bg-white text-xs dark:border-coopmathsdark-struct-light/60 dark:bg-coopmathsdark-canvas"
             >-</span
           >
         </div>
@@ -54,38 +56,97 @@
 
     {#if !vertical}
       <div class="space-y-1">
-        {#each Array(digits) as _, i}
-          <div class="flex items-center gap-1">
-            {#if i === digits - decimals && decimals > 0}
-              <div>,</div>
-            {/if}
+        {#if hasDecimalSeparator}
+          {#each Array(integerDigits) as _}
+            <div class="flex items-center gap-1">
+              {#each digitChoices as digit}
+                <span
+                  class="inline-flex h-4 w-4 items-center justify-center rounded border border-coopmaths-struct-light/70 bg-white text-[6px] dark:border-coopmathsdark-struct-light/60 dark:bg-coopmathsdark-canvas"
+                  >{digit}</span
+                >
+              {/each}
+            </div>
+          {/each}
 
-            {#each digitChoices as digit}
-              <span
-                class="inline-flex h-4 w-4 items-center justify-center rounded border border-coopmaths-struct-light/70 bg-white text-[8px] dark:border-coopmathsdark-struct-light/60 dark:bg-coopmathsdark-canvas"
-                >{digit}</span
-              >
-            {/each}
+          <div class="flex justify-start py-0.5">
+            <span class="text-xs font-semibold">,</span>
           </div>
-        {/each}
+
+          {#each Array(decimals) as _}
+            <div class="flex items-center gap-1">
+              {#each digitChoices as digit}
+                <span
+                  class="inline-flex h-4 w-4 items-center justify-center rounded border border-coopmaths-struct-light/70 bg-white text-[6px] dark:border-coopmathsdark-struct-light/60 dark:bg-coopmathsdark-canvas"
+                  >{digit}</span
+                >
+              {/each}
+            </div>
+          {/each}
+        {:else}
+          {#each Array(digits) as _}
+            <div class="flex items-center gap-1">
+              {#each digitChoices as digit}
+                <span
+                  class="inline-flex h-4 w-4 items-center justify-center rounded border border-coopmaths-struct-light/70 bg-white text-[6px] dark:border-coopmathsdark-struct-light/60 dark:bg-coopmathsdark-canvas"
+                  >{digit}</span
+                >
+              {/each}
+            </div>
+          {/each}
+        {/if}
       </div>
     {:else}
       <div class="flex items-start gap-2">
-        {#each Array(digits) as _, i}
-          <div class="space-y-1">
-            <span
-              class="block text-center text-[10px] text-coopmaths-corpus/80 dark:text-coopmathsdark-corpus/80"
-            >
-              {i + 1}
-            </span>
-            {#each digitChoices as digit}
+        {#if hasDecimalSeparator}
+          {#each Array(integerDigits) as _}
+            <div class="space-y-1">
               <span
-                class="inline-flex h-6 w-6 items-center justify-center rounded border border-coopmaths-struct-light/70 bg-white text-[10px] dark:border-coopmathsdark-struct-light/60 dark:bg-coopmathsdark-canvas"
-                >{digit}</span
+                class="block text-center text-[10px] text-coopmaths-corpus/80 dark:text-coopmathsdark-corpus/80"
               >
-            {/each}
+              </span>
+              {#each digitChoices as digit}
+                <span
+                  class="inline-flex h-4 w-4 items-center justify-center rounded border border-coopmaths-struct-light/70 bg-white text-[6px] dark:border-coopmathsdark-struct-light/60 dark:bg-coopmathsdark-canvas"
+                  >{digit}</span
+                >
+              {/each}
+            </div>
+          {/each}
+
+          <div class="flex h-full items-center">
+            <span class="text-xs font-semibold">,</span>
           </div>
-        {/each}
+
+          {#each Array(decimals) as _}
+            <div class="space-y-1">
+              <span
+                class="block text-center text-[10px] text-coopmaths-corpus/80 dark:text-coopmathsdark-corpus/80"
+              >
+              </span>
+              {#each digitChoices as digit}
+                <span
+                  class="inline-flex h-4 w-4 items-center justify-center rounded border border-coopmaths-struct-light/70 bg-white text-[6px] dark:border-coopmathsdark-struct-light/60 dark:bg-coopmathsdark-canvas"
+                  >{digit}</span
+                >
+              {/each}
+            </div>
+          {/each}
+        {:else}
+          {#each Array(digits) as _}
+            <div class="space-y-1">
+              <span
+                class="block text-center text-[10px] text-coopmaths-corpus/80 dark:text-coopmathsdark-corpus/80"
+              >
+              </span>
+              {#each digitChoices as digit}
+                <span
+                  class="inline-flex h-4 w-4 items-center justify-center rounded border border-coopmaths-struct-light/70 bg-white text-[6px] dark:border-coopmathsdark-struct-light/60 dark:bg-coopmathsdark-canvas"
+                  >{digit}</span
+                >
+              {/each}
+            </div>
+          {/each}
+        {/if}
       </div>
     {/if}
   </div>

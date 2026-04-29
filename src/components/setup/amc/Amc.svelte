@@ -83,8 +83,86 @@
     }
 
     mathaleaEnsureAMCCompatibility(exercice)
+    ;(exercice as any).amcHtmlQuestions =
+      extractAMCQuestionsFromAutoCorrection(exercice)
     exercices = [...exercices]
     updateLatexPreview()
+  }
+
+  function extractAMCQuestionsFromAutoCorrection(
+    exercice: IExercice,
+  ): string[] {
+    const ex = exercice as any
+    const htmlQuestions: string[] = ex.htmlQuestions ?? []
+    const autoCorrection = Array.isArray(exercice.autoCorrection)
+      ? exercice.autoCorrection
+      : []
+
+    const figureEnvRegex =
+      /\\begin\{(?:tikzpicture|pspicture|picture|circuitikz)\}[\s\S]*?\\end\{(?:tikzpicture|pspicture|picture|circuitikz)\}/gi
+
+    const extractSvgBlocks = (html: string): string[] => {
+      const matches = html.match(/<svg[\s\S]*?<\/svg>/gi)
+      return matches ?? []
+    }
+
+    const replaceFigureEnvsWithSvg = (
+      amcText: string,
+      htmlText: string,
+    ): string => {
+      const svgBlocks = extractSvgBlocks(htmlText)
+      const hasFigureEnv =
+        /\\begin\{(?:tikzpicture|pspicture|picture|circuitikz)\}/i.test(amcText)
+      let svgIndex = 0
+      const replaced = amcText.replace(figureEnvRegex, () => {
+        const svg = svgBlocks[svgIndex]
+        svgIndex++
+        return svg ?? ''
+      })
+
+      // Si aucun SVG n'a pu être injecté alors qu'il y a des environnements figure,
+      // on retombe sur la version HTML pour ne pas afficher du LaTeX brut.
+      if (hasFigureEnv && svgBlocks.length === 0) {
+        return htmlText
+      }
+
+      return replaced
+    }
+
+    const pickPreviewText = (candidate: string, fallback: string): string => {
+      const previewSource =
+        candidate.trim().length === 0
+          ? fallback
+          : replaceFigureEnvsWithSvg(candidate, fallback)
+      return previewSource.replaceAll('\\\\', '<br>')
+    }
+
+    return autoCorrection.map((item: any, i: number) => {
+      const fallback = htmlQuestions[i] ?? ''
+
+      const enonce = typeof item?.enonce === 'string' ? item.enonce.trim() : ''
+      if (enonce.length > 0) return pickPreviewText(enonce, fallback)
+
+      const propositions = Array.isArray(item?.propositions)
+        ? item.propositions
+        : []
+      for (const prop of propositions) {
+        if (prop?.type === 'AMCNum') {
+          const texte = prop?.propositions?.[0]?.reponse?.texte
+          if (typeof texte === 'string' && texte.trim().length > 0) {
+            return pickPreviewText(texte, fallback)
+          }
+        }
+        if (prop?.type === 'AMCOpen') {
+          const texte = prop?.propositions?.[0]?.texte
+          if (typeof texte === 'string' && texte.trim().length > 0) {
+            return pickPreviewText(texte, fallback)
+          }
+        }
+      }
+
+      return fallback
+    })
   }
 
   function generateHtmlQuestionsForExercise(
@@ -93,6 +171,8 @@
   ): void {
     const ex = exercice as any
     const originalInteractif = exercice.interactif
+    const originalIsAmc = context.isAmc
+    const originalIsHtml = context.isHtml
 
     const runHtmlGeneration = (isInteractif: boolean) => {
       ex.lastCallback = ''
@@ -110,7 +190,7 @@
       }
     }
 
-    // 1. Passe interactive HTML : permet a handleAnswers de remplir autoCorrection.
+    // 1. Passe interactive HTML hors AMC : permet a handleAnswers de remplir autoCorrection.
     runHtmlGeneration(true)
     ex.interactiveAutoCorrectionForAMC = exercice.autoCorrection.map(
       (item) => ({
@@ -124,7 +204,7 @@
       }),
     )
 
-    // 2. Passe HTML non interactive : conserve un apercu papier dans la preview.
+    // 2. Passe HTML non interactive hors AMC : apercu papier avec SVG.
     runHtmlGeneration(false)
     if (exercice.typeExercice === 'simple') {
       ex.htmlQuestions =
@@ -134,6 +214,8 @@
     }
 
     exercice.interactif = originalInteractif
+    context.isAmc = originalIsAmc
+    context.isHtml = originalIsHtml
     // Le contexte (isHtml/isAmc) est restauré par la passe AMC qui suit.
   }
 
@@ -166,6 +248,8 @@
       }
 
       mathaleaEnsureAMCCompatibility(exercice)
+      ;(exercice as any).amcHtmlQuestions =
+        extractAMCQuestionsFromAutoCorrection(exercice)
       if (exercice.amcType != null) {
         amcReadyExercices.push(exercice)
       }
@@ -264,10 +348,12 @@
       : []
 
     const htmlQuestions: string[] = (exercise as any).htmlQuestions ?? []
+    const amcHtmlQuestions: string[] = (exercise as any).amcHtmlQuestions ?? []
 
     autoCorrection.forEach((item, questionIndex) => {
       const type = (exercise as any).amcType
-      const htmlContent = htmlQuestions[questionIndex] ?? ''
+      const htmlContent =
+        amcHtmlQuestions[questionIndex] ?? htmlQuestions[questionIndex] ?? ''
 
       if (type === 'AMCHybride') {
         const propositions = Array.isArray(item?.propositions)
