@@ -3,64 +3,87 @@ import nunjucks from 'nunjucks'
 nunjucks.configure('templates', { autoescape: false })
 
 export const AMCOpenTemplate = `\\element{ {{ ref }} }{
-\\begin{question}{ {{ id }} }
-{{ enonce }}
-\\explain{ {{ correction }} }
-\\notation{ {{ notation }} }[{{ sanscadre }}][{{ pointilles }}]
-\\end{question}
+  \\begin{question}{ {{ id }} }
+    {{ enonce }}
+    \\explain{ {{ correction }} }
+    \\notation{ {{ notation }} }[{{ sanscadre }}][{{ pointilles }}]
+  \\end{question}
 }`
 
 export const AMCNumTemplate = `\\element{ {{ ref }} }{
-\\begin{questionmultx}{ {{ id }} }
-{{ enonce }}
-{% for b in blocks %}
-{% if b.label %}{{ b.label }}{% endif %}
-\\AMCnumericChoices{ {{ b.value }} }{
-digits={{ b.digits }},
-decimals={{ b.decimals }},
-sign={{ b.sign }},
-{% if b.options.approx %}approx={{ b.options.approx }},{% endif %}
-{% if b.options.exponent %}exponent={{ b.options.exponent }},{% endif %}
-{% if b.options.exposign %}exposign={{ b.options.exposign }},{% endif %}
-{% if b.options.alsocorrect %}alsocorrect={{ b.options.alsocorrect }},{% endif %}
-{% if b.options.strict %}strict={{ b.options.strict }},{% endif %}
-{% if b.options.vertical %}vertical={{ b.options.vertical }},{% endif %}
-Tpoint={{{ b.options.Tpoint or "," }}},
-borderwidth=0pt,backgroundcol=lightgray,scoreexact=1
-}
-{% endfor %}
-\\end{questionmultx}
+  \\begin{questionmultx}{ {{ id }} }
+    {{ enonce }}
+{%- for b in blocks %}
+{%- if b.label %}
+    {{ b.label }}
+{%- endif %}
+    \\AMCnumericChoices{ {{ b.value }} }{
+      digits={{ b.digits }},
+      decimals={{ b.decimals }},
+      sign={{ b.sign }},
+{%- if b.options.approx %}
+      approx={{ b.options.approx }},
+{%- endif %}
+{%- if b.options.exponent %}
+      exponent={{ b.options.exponent }},
+{%- endif %}
+{%- if b.options.exposign %}
+      exposign={{ b.options.exposign }},
+{%- endif %}
+{%- if b.options.alsocorrect %}
+      alsocorrect={{ b.options.alsocorrect }},
+{%- endif %}
+{%- if b.options.strict %}
+      strict={{ b.options.strict }},
+{%- endif %}
+{%- if b.options.vertical %}
+      vertical={{ b.options.vertical }},
+{%- endif %}
+      Tpoint={{ "{" }}{{ b.options.Tpoint or "," }}{{ "}" }},
+      borderwidth=0pt,backgroundcol=lightgray,scoreexact=1
+    }
+{%- endfor %}
+  \\end{questionmultx}
 }`
 
 export const qcmTemplate = `\\element{ {{ ref }} }{
-\\begin{ {{ "questionmult" if mode == "mult" else "question" }} }{ {{ id }} }
-{{ enonce | safe }}
-\\begin{ {{ layout }} }{% if ordered %}[o]{% endif %}
-{% for p in propositions %}
-  {% if lastChoice is defined and lastChoice is not none and loop.index0 == lastChoice %}\\lastchoices{% endif %}{% if p.correct %}\\bonne{ {{- p.texte | safe -}} }{% else %}\\mauvaise{ {{- p.texte | safe -}} }{% endif %}
-{% endfor %}
-\\end{ {{ layout }} }
-\\end{ {{ "questionmult" if mode == "mult" else "question" }} }
+  \\begin{ {{ "questionmult" if mode == "mult" else "question" }} }{ {{ id }} }
+    {{ enonce | safe }}
+    \\begin{ {{ layout }} }{% if ordered %}[o]{% endif %}
+{%- for p in propositions %}
+      {% if lastChoice is defined and lastChoice is not none and loop.index0 == lastChoice %}\\lastchoices{% endif %}{% if p.correct %}\\bonne{ {{- p.texte | safe -}} }{% else %}\\mauvaise{ {{- p.texte | safe -}} }{% endif %}
+{%- endfor %}
+    \\end{ {{ layout }} }
+  \\end{ {{ "questionmult" if mode == "mult" else "question" }} }
 }`
 
 export const AMCHybrideContainerTemplate = `\\element{ {{ ref }} }{
-{% if multicolsAll %}\\setlength{\\columnseprule}{ {{ "0.5" if barreseparation else "0" }}pt}\\begin{multicols}{2}
-{% endif %}
-{% if numerotationEnonce %}\\begin{question}{ {{ enonceId }} } \\QuestionIndicative {% endif %}
-{% if enonceAGauche %}\\noindent\\fbox{\\begin{minipage}{ {{ enonceAGaucheLeft }}\\linewidth }
-{% endif %}
-{% if enonceCentre %}\\begin{center}{% endif %}{{ enonceTexte | safe }}{% if enonceCentre %}\\end{center}{% endif %}
-{% if enonceAGauche %}\\end{minipage}}\\noindent\\begin{minipage}[t]{ {{ enonceAGaucheRight }}\\linewidth }
-{% endif %}
-{% if numerotationEnonce %}\\end{question}
-{% endif %}
-{% if multicols %}\\setlength{\\columnseprule}{ {{ "0.5" if barreseparation else "0" }}pt}\\begin{multicols}{2}
-{% endif %}
+{%- if multicolsAll %}
+  \\setlength{\\columnseprule}{ {{ "0.5" if barreseparation else "0" }}pt}\\begin{multicols}{2}
+{%- endif %}
+{%- if numerotationEnonce %}
+  \\begin{question}{ {{ enonceId }} } \\QuestionIndicative
+{%- endif %}
+{%- if enonceAGauche %}
+  \\noindent\\fbox{\\begin{minipage}{ {{ enonceAGaucheLeft }}\\linewidth }
+{%- endif %}
+{%- if enonceCentre %}\\begin{center}{%- endif %}{{ enonceTexte | safe }}{%- if enonceCentre %}\\end{center}{%- endif %}
+{%- if enonceAGauche %}
+  \\end{minipage}}\\noindent\\begin{minipage}[t]{ {{ enonceAGaucheRight }}\\linewidth }
+{%- endif %}
+{%- if numerotationEnonce %}
+  \\end{question}
+{%- endif %}
+{%- if multicols %}
+  \\setlength{\\columnseprule}{ {{ "0.5" if barreseparation else "0" }}pt}\\begin{multicols}{2}
+{%- endif %}
 {{ content | safe }}
-{% if closeMulticols %}\\end{multicols}
-{% endif %}
-{% if enonceAGauche %}\\end{minipage}
-{% endif %}
+{%- if closeMulticols %}
+  \\end{multicols}
+{%- endif %}
+{%- if enonceAGauche %}
+  \\end{minipage}
+{%- endif %}
 }`
 
 export const AMCHybrideQcmTemplate = `{% if disableNumber %}\\def\\AMCbeginQuestion#1#2{}\\AMCquestionNumberfalse{% endif %}
@@ -132,7 +155,7 @@ export const AMCHybrideNumDecimalTemplate = `{% if enonceApresNumQuestion %}\\be
 {% if explain %}\\explain{ {{ explain | safe }} }{% endif %}
 {{ texte | safe }}
 {% if alignement %}\\begin{ {{ alignement }} }{% endif %}
-\\AMCnumericChoices{ {{ value }} }{digits={{ digits }},decimals={{ decimals }},sign={{ sign }},{% if exponent is not none %}exponent={{ exponent }},exposign={{ exposign }},{% endif %}{% if approx %}approx={{ approx }},{% endif %}{% if vertical %}vertical={{ vertical }},{% endif %}{% if strict %}strict={{ strict }},{% endif %}{% if vhead %}vhead={{ vhead }},{% endif %}{% if alsoCorrect %}alsocorrect={{ alsoCorrect }},{% endif %}Tpoint={{{ tpoint }}},borderwidth=0pt,backgroundcol=lightgray,scoreexact=1}
+\\AMCnumericChoices{ {{ value }} }{digits={{ digits }},decimals={{ decimals }},sign={{ sign }},{% if exponent is not none %}exponent={{ exponent }},exposign={{ exposign }},{% endif %}{% if approx %}approx={{ approx }},{% endif %}{% if vertical %}vertical={{ vertical }},{% endif %}{% if strict %}strict={{ strict }},{% endif %}{% if vhead %}vhead={{ vhead }},{% endif %}{% if alsoCorrect %}alsocorrect={{ alsoCorrect }},{% endif %}Tpoint={{ "{" }}{{ tpoint }}{{ "}" }},borderwidth=0pt,backgroundcol=lightgray,scoreexact=1}
 {% if alignement %}\\end{ {{ alignement }} }{% endif %}
 \\end{questionmultx}
 {% if multicolsEnd %}\\end{multicols}
@@ -143,5 +166,13 @@ export function renderTemplate(
   template: string,
   data: Record<string, unknown>,
 ) {
-  return nunjucks.renderString(template, data)
+  return nunjucks
+    .renderString(template, data)
+    .replace(/\\element\{\s*([^}]+?)\s*\}\s*\{/g, '\\element{$1}{')
+    .replace(
+      /\\begin\{\s*([^}]+?)\s*\}\s*\{\s*([^}]+?)\s*\}/g,
+      '\\begin{$1}{$2}',
+    )
+    .replace(/\\begin\{\s*([^}]+?)\s*\}/g, '\\begin{$1}')
+    .replace(/\\end\{\s*([^}]+?)\s*\}/g, '\\end{$1}')
 }

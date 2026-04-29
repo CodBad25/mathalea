@@ -43,7 +43,7 @@ describe('amcEngine', () => {
 
     expect(normalized).toEqual({
       type: 'amcopen',
-      id: 'REF/Q1',
+      id: 'Q1',
       ref: 'REF',
       enonce: 'Enonce open',
       correction: 'Ma correction',
@@ -74,7 +74,7 @@ describe('amcEngine', () => {
       exercice: exerciceMock,
     })
 
-    expect(normalized.id).toBe('REF/Q0')
+    expect(normalized.id).toBe('Q')
     expect(normalized.blocks).toHaveLength(2)
     expect(normalized.blocks[0]).toMatchObject({
       label: 'Base',
@@ -166,7 +166,8 @@ describe('amcEngine', () => {
       exercice: exerciceMock,
     })
 
-    expect(latex).toContain('\\begin{ question }{ QCM1 }')
+    expect(latex).toContain('\\element{REF}{')
+    expect(latex).toContain('\\begin{question}{QCM1}')
     expect(latex).toContain('\\bonne{B}')
     expect(latex).toContain('\\mauvaise{A}')
   })
@@ -195,7 +196,7 @@ describe('amcEngine', () => {
     expect(latex).toContain('\\bonne{Vrai}')
   })
 
-  it('leve une erreur de template sur renderAMCNum (comportement actuel)', () => {
+  it('rend AMCNum sans erreur de template', () => {
     const item: AutoCorrectionAMC = {
       enonce: 'Calculer',
       reponse: {
@@ -204,14 +205,16 @@ describe('amcEngine', () => {
       },
     }
 
-    expect(() =>
-      renderAMCNum(item, {
-        ref: 'REF',
-        id: 'Q',
-        index: 0,
-        exercice: exerciceMock,
-      }),
-    ).toThrow(/parseAggregate/)
+    const latex = renderAMCNum(item, {
+      ref: 'REF',
+      id: 'Q',
+      index: 0,
+      exercice: exerciceMock,
+    })
+
+    expect(latex).toContain('\\element{REF}')
+    expect(latex).toContain('\\begin{questionmultx}{Q}')
+    expect(latex).toContain('\\AMCnumericChoices{ 9 }')
   })
 
   it('rend un AMCHybride avec bloc QCM', () => {
@@ -320,7 +323,111 @@ describe('amcEngine', () => {
     expect(hybride.texQr).toContain('Exposant')
     expect(hybride.texQr).toContain('\\AMCnumericChoices{ 5 }')
     expect(hybride.texQr).toContain('\\AMCnumericChoices{ 3 }')
-    expect(hybride.nextId).toBe(2)
+    expect(hybride.texQr).toContain('\\begin{questionmultx}{REF/A-10}')
+    expect(hybride.nextId).toBe(1)
     expect(hybride.melange).toBe(false)
+  })
+
+  it('preserve enonce principal, explain et enonce de sous-question pour AMCNum hybride', () => {
+    const hybride = renderAMCHybride({
+      type: 'AMCHybride',
+      autoCorrectionItem: {
+        enonce: 'Contexte principal',
+        propositions: [
+          {
+            type: 'AMCNum',
+            texte: 'Explication principale',
+            propositions: [
+              {
+                reponse: {
+                  texte: 'Sous-question numerique',
+                  valeur: 35,
+                  param: { digits: 2, decimals: 0, tpoint: ',' },
+                },
+              },
+            ],
+          },
+        ],
+      },
+      exercice: exerciceMock,
+      ref: 'REF',
+      idExo: 0,
+      questionIndex: 0,
+      currentId: 0,
+      melange: true,
+    })
+
+    expect(hybride.texQr).toContain('Contexte principal')
+    expect(hybride.texQr).toContain('\\explain{Explication principale}')
+    expect(hybride.texQr).toContain('Sous-question numerique')
+    expect(hybride.texQr).toContain('\\AMCnumericChoices{ 35 }')
+  })
+
+  it('ne remplace pas $1 dans explain AMCNum hybride', () => {
+    const hybride = renderAMCHybride({
+      type: 'AMCHybride',
+      autoCorrectionItem: {
+        enonce: 'Contexte principal',
+        propositions: [
+          {
+            type: 'AMCNum',
+            texte: 'Les diviseurs sont : $1, 5, 7$.',
+            propositions: [
+              {
+                reponse: {
+                  texte: 'Sous-question numerique',
+                  valeur: 35,
+                  param: { digits: 2, decimals: 0, tpoint: ',' },
+                },
+              },
+            ],
+          },
+        ],
+      },
+      exercice: exerciceMock,
+      ref: 'REF',
+      idExo: 0,
+      questionIndex: 0,
+      currentId: 0,
+      melange: true,
+    })
+
+    expect(hybride.texQr).toContain('Les diviseurs sont : $1, 5, 7$.')
+    expect(hybride.texQr).not.toContain(
+      'Les diviseurs sont : \\begin{questionmultx}',
+    )
+  })
+
+  it('supprime un prefixe undefined dans le texte de sous-question AMCNum hybride', () => {
+    const hybride = renderAMCHybride({
+      type: 'AMCHybride',
+      autoCorrectionItem: {
+        enonce: '',
+        propositions: [
+          {
+            type: 'AMCNum',
+            propositions: [
+              {
+                reponse: {
+                  texte: 'undefined<br>Nombre maximal de bouquets :',
+                  valeur: 35,
+                  param: { digits: 2, decimals: 0, tpoint: ',' },
+                },
+              },
+            ],
+          },
+        ],
+      },
+      exercice: exerciceMock,
+      ref: 'REF',
+      idExo: 0,
+      questionIndex: 0,
+      currentId: 0,
+      melange: true,
+    })
+
+    expect(hybride.texQr).toContain('Nombre maximal de bouquets :')
+    expect(hybride.texQr).not.toContain('undefined<br>')
+    expect(hybride.texQr).not.toContain('undefined\\')
   })
 })

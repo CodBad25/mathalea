@@ -90,7 +90,7 @@ export function normalizeAMCOpen(
 
   return {
     type: 'amcopen' as const,
-    id: `${ref}/${id}`,
+    id,
     ref,
     enonce,
     correction: firstProp?.texte ?? exercice.listeCorrections[index],
@@ -109,7 +109,7 @@ export function normalizeAMCNum(
   const ref = contexte.ref
   const exercice = contexte.exercice
 
-  const id = `${ref}/${idBase + index}`
+  const id = idBase
   const enonce = autoCorrectionItem.enonce ?? exercice.listeQuestions[index]
   const rep = autoCorrectionItem.reponse
   const param = rep?.param ?? {}
