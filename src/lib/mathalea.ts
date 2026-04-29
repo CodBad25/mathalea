@@ -19,6 +19,7 @@ import {
   type InterfaceGlobalOptions,
   type InterfaceParams,
   type Valeur,
+  type ValeurNormalized,
   isAnswerValueType,
   isValeur,
 } from '../lib/types'
@@ -908,7 +909,9 @@ export function mathaleaHandleExerciceSimple(
   numeroExercice?: number,
   seed?: string,
 ) {
-  const extractSimpleAMCValue = (reponse: unknown): unknown => {
+  const extractSimpleAMCValue = (
+    reponse: unknown,
+  ): number | { num: number; den: number } | undefined => {
     const unwrap = (value: unknown): unknown => {
       if (Array.isArray(value)) return unwrap(value[0])
 
@@ -946,7 +949,7 @@ export function mathaleaHandleExerciceSimple(
       return { num: value.num, den: value.den }
     }
 
-    return value
+    return undefined
   }
 
   const ensureSimpleAMCAutoCorrection = (index: number) => {
@@ -976,7 +979,7 @@ export function mathaleaHandleExerciceSimple(
             enonceAMC,
           reponse: {
             ...currentAutoCorrection.reponse,
-            valeur: normalizedExistingValue,
+            valeur: normalizedExistingValue as unknown as ValeurNormalized,
             param: (
               currentAutoCorrection.reponse as {
                 param?: Record<string, unknown>
@@ -992,7 +995,7 @@ export function mathaleaHandleExerciceSimple(
       exercice.autoCorrection[index] = {
         enonce: enonceAMC,
         reponse: {
-          valeur: valeurAMC,
+          valeur: valeurAMC as unknown as ValeurNormalized,
           param: {
             tpoint: ',',
           },
@@ -1308,7 +1311,9 @@ export function mathaleaEnsureAMCCompatibility(exercice: IExercice): IExercice {
       }>)
     : []
 
-  const extractAMCValue = (reponse: unknown): unknown => {
+  const extractAMCValue = (
+    reponse: unknown,
+  ): number | { num: number; den: number } | undefined => {
     const unwrap = (value: unknown): unknown => {
       if (Array.isArray(value)) return unwrap(value[0])
 
@@ -1337,11 +1342,13 @@ export function mathaleaEnsureAMCCompatibility(exercice: IExercice): IExercice {
       return Number.isFinite(value) ? value : undefined
     if (value instanceof FractionEtendue)
       return { num: value.num, den: value.den }
-    return value
+    return undefined
   }
 
-  const isPlainNumericInteractiveAnswer = (reponse: unknown): boolean => {
-    if (!isValeur(reponse) || !('reponse' in reponse)) return false
+  const getPlainNumericRawValue = (
+    reponse: unknown,
+  ): string | number | null => {
+    if (!isValeur(reponse) || !('reponse' in reponse)) return null
 
     const normalized = (
       reponse as {
@@ -1349,18 +1356,49 @@ export function mathaleaEnsureAMCCompatibility(exercice: IExercice): IExercice {
       }
     ).reponse
     const rawValue = normalized?.value
-    const numericValue = extractAMCValue(reponse)
-    if (numericValue === undefined) return false
-
     const options = normalized?.options ?? {}
     const optionKeys = Object.keys(options)
+    const isPlainNumericContext =
+      optionKeys.length === 0 ||
+      (optionKeys.length === 1 && options.nombreDecimalSeulement === true)
 
-    // handleAnswers injecte par defaut nombreDecimalSeulement=true pour un nombre simple.
-    return (
-      rawValue !== undefined &&
-      (optionKeys.length === 0 ||
-        (optionKeys.length === 1 && options.nombreDecimalSeulement === true))
-    )
+    if (!isPlainNumericContext) return null
+
+    if (typeof rawValue === 'number') return rawValue
+    if (typeof rawValue !== 'string') return null
+
+    const trimmed = rawValue.trim()
+    if (/^-?\d+(?:[.,]\d+)?$/.test(trimmed)) return trimmed
+    return null
+  }
+
+  const inferNumericLayout = (
+    reponse: unknown,
+  ): { digits: number; decimals: number } | null => {
+    const raw = getPlainNumericRawValue(reponse)
+    if (raw == null) return null
+
+    if (typeof raw === 'number') {
+      const normalized = raw.toString()
+      const [intPart, decPart = ''] = normalized.split('.')
+      const integerDigits = intPart.replace('-', '').length
+      return {
+        digits: integerDigits + decPart.length,
+        decimals: decPart.length,
+      }
+    }
+
+    const normalized = raw.replace(',', '.')
+    const [intPart, decPart = ''] = normalized.split('.')
+    const integerDigits = intPart.replace('-', '').length
+    return {
+      digits: integerDigits + decPart.length,
+      decimals: decPart.length,
+    }
+  }
+
+  const isPlainNumericInteractiveAnswer = (reponse: unknown): boolean => {
+    return getPlainNumericRawValue(reponse) != null
   }
 
   const ensureAMCOpenAutoCorrection = () => {
@@ -1490,6 +1528,12 @@ export function mathaleaEnsureAMCCompatibility(exercice: IExercice): IExercice {
         break
       }
 
+      const inferredLayout = inferNumericLayout(candidateValue)
+      const existingParam =
+        (existing?.reponse?.param as Record<string, unknown> | undefined) ?? {}
+      const tpoint =
+        typeof existingParam.tpoint === 'string' ? existingParam.tpoint : ','
+
       exercice.autoCorrection[i] = {
         ...(existing ?? {}),
         enonce:
@@ -1498,8 +1542,17 @@ export function mathaleaEnsureAMCCompatibility(exercice: IExercice): IExercice {
           (i === 0 ? (exercice.question ?? '') : ''),
         reponse: {
           ...(existing?.reponse ?? {}),
-          valeur: numericValue,
-          param: existing?.reponse?.param ?? { tpoint: ',' },
+          valeur: numericValue as unknown as ValeurNormalized,
+          param: {
+            ...existingParam,
+            tpoint,
+            ...(inferredLayout && existingParam.digits === undefined
+              ? { digits: inferredLayout.digits }
+              : {}),
+            ...(inferredLayout && existingParam.decimals === undefined
+              ? { decimals: inferredLayout.decimals }
+              : {}),
+          },
         },
       }
     }
