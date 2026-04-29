@@ -189,7 +189,7 @@ export function renderAMCHybride(params: AMCHybrideRenderParams): {
         typeof p0.reponse?.texte === 'string' ? p0.reponse.texte : ''
 
       const delegatedNum = {
-        enonce: p0.enonce ?? prop.enonce ?? item.enonce,
+        enonce: p0.enonce ?? prop.enonce ?? '',
         reponse: p0.reponse,
       }
 

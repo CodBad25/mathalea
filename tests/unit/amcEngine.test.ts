@@ -389,6 +389,54 @@ describe('amcEngine', () => {
     expect(hybride.texQr).toContain('\\AMCnumericChoices{35}')
   })
 
+  it('n affiche l enonce principal qu une seule fois pour plusieurs blocs AMCNum hybrides', () => {
+    const hybride = renderAMCHybride({
+      type: 'AMCHybride',
+      autoCorrectionItem: {
+        enonce: 'Contexte principal',
+        propositions: [
+          {
+            type: 'AMCNum',
+            texte: 'Explication 1',
+            propositions: [
+              {
+                reponse: {
+                  texte: 'Numerateur',
+                  valeur: 1,
+                  param: { digits: 1, decimals: 0, tpoint: ',' },
+                },
+              },
+            ],
+          },
+          {
+            type: 'AMCNum',
+            propositions: [
+              {
+                reponse: {
+                  texte: 'Denominateur',
+                  valeur: 3,
+                  param: { digits: 1, decimals: 0, tpoint: ',' },
+                },
+              },
+            ],
+          },
+        ],
+      },
+      exercice: exerciceMock,
+      ref: 'REF',
+      idExo: 0,
+      questionIndex: 0,
+      currentId: 0,
+      melange: true,
+    })
+
+    expect(hybride.texQr.match(/Contexte principal/g)).toHaveLength(1)
+    expect(hybride.texQr).toContain('Numerateur')
+    expect(hybride.texQr).toContain('Denominateur')
+    expect(hybride.texQr).toContain('\\AMCnumericChoices{1}')
+    expect(hybride.texQr).toContain('\\AMCnumericChoices{3}')
+  })
+
   it('ne remplace pas $1 dans explain AMCNum hybride', () => {
     const hybride = renderAMCHybride({
       type: 'AMCHybride',
