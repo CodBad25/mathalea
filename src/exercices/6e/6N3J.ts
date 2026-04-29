@@ -7,7 +7,6 @@ import {
   shuffle,
 } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
-import { abs } from '../../lib/outils/nombres'
 import { sp } from '../../lib/outils/outilString'
 import FractionEtendue from '../../modules/FractionEtendue'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
@@ -194,7 +193,6 @@ export default class ComparerFractionsNombresMixtes extends Exercice {
           fractionsTrieesFinales.reverse()
         }
 
-        const indiceBase0 = listeTypeDeSignes[i] - 1
         handleAnswers(
           this,
           i,
@@ -211,19 +209,19 @@ export default class ComparerFractionsNombresMixtes extends Exercice {
               3,
             ],
             champ1: {
-              value: fractionsTrieesFinales[4 * indiceBase0],
+              value: fractionsTrieesFinales[0],
             },
             champ2: {
-              value: fractionsTrieesFinales[abs(4 * indiceBase0 - 1)],
+              value: fractionsTrieesFinales[1],
             },
             champ3: {
-              value: fractionsTrieesFinales[abs(4 * indiceBase0 - 2)],
+              value: fractionsTrieesFinales[2],
             },
             champ4: {
-              value: fractionsTrieesFinales[abs(4 * indiceBase0 - 3)],
+              value: fractionsTrieesFinales[3],
             },
             champ5: {
-              value: fractionsTrieesFinales[abs(4 * indiceBase0 - 4)],
+              value: fractionsTrieesFinales[4],
             },
           },
           { formatInteractif: 'multiMathfield' },
