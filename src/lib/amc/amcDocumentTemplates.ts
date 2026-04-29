@@ -83,6 +83,12 @@ export const AMCPreambleTemplate = `%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
    \\usepackage{amsmath}
    \\usepackage{amsfonts}
    \\usepackage{amssymb}
+  % Alias robustes pour les ensembles usuels, fréquents dans les énoncés.
+  \\providecommand{\\R}{\\mathbb{R}}
+  \\providecommand{\\N}{\\mathbb{N}}
+  \\providecommand{\\Z}{\\mathbb{Z}}
+  \\providecommand{\\Q}{\\mathbb{Q}}
+  \\providecommand{\\C}{\\mathbb{C}}
    \\usepackage{gensymb}
    \\usepackage{eurosym}
    \\usepackage{frcursive}

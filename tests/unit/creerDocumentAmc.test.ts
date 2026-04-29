@@ -24,6 +24,7 @@ describe('creerDocumentAmc templates', () => {
     expect(preambule).toContain(
       '\\usepackage[francais,bloc,insidebox,nowatermark]{automultiplechoice}',
     )
+    expect(preambule).toContain('\\providecommand{\\R}{\\mathbb{R}}')
   })
 
   it('rend un entete AMC code grid parametrable', () => {
