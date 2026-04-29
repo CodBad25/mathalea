@@ -334,4 +334,41 @@ describe('creerDocumentAmc templates', () => {
 
     vi.unstubAllGlobals()
   })
+
+  it('nettoie les collisions de packages pour eviter les option clash dans le preambule AMC dynamique', () => {
+    vi.stubGlobal('document', {
+      getElementById: vi.fn(() => ({ checked: false })),
+    })
+
+    const latex = creerDocumentAmc({
+      exercices: [
+        {
+          amcReady: true,
+          amcType: 'AMCNum',
+          autoCorrection: [
+            {
+              enonce: 'Tracer \\draw[color={red}] (0,0)--(1,1) puis \\ang{45}.',
+              reponse: {
+                valeur: 1,
+                param: { digits: 1, decimals: 0, tpoint: ',' },
+              },
+            },
+          ],
+          listePackages: ['xcolor', 'siunitx', 'siunitx'],
+          id: 'DYN_CLASH',
+          nbQuestions: 1,
+          titre: 'Dynamique collisions',
+          listeQuestions: [
+            'Tracer \\draw[color={red}] (0,0)--(1,1) puis \\ang{45}.',
+          ],
+          listeCorrections: ['Correction'],
+        } as any,
+      ],
+    })
+
+    expect(latex).not.toContain('\\usepackage[table,svgnames]{xcolor}')
+    expect((latex.match(/\\usepackage\{siunitx\}/g) ?? []).length).toBe(1)
+
+    vi.unstubAllGlobals()
+  })
 })

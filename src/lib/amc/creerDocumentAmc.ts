@@ -45,6 +45,81 @@ function hasPackageInLatex(latex: string, packageName: string): boolean {
   return packageRegex.test(latex)
 }
 
+function parseUsepackageLine(line: string): {
+  options: string | null
+  packages: string[]
+} | null {
+  const match = line.match(/^\\usepackage(?:\[([^\]]*)\])?\{([^}]+)\}$/)
+  if (!match) return null
+  const options = match[1]?.trim() ? match[1].trim() : null
+  const packages = match[2]
+    .split(',')
+    .map((part) => part.trim())
+    .filter(Boolean)
+  if (packages.length === 0) return null
+  return { options, packages }
+}
+
+function collectStaticAMCPackages(): Set<string> {
+  const packages = new Set<string>()
+  const regex = /\\usepackage(?:\[[^\]]*\])?\{([^}]+)\}/g
+  let match: RegExpExecArray | null
+  while ((match = regex.exec(AMCPreambleTemplate)) !== null) {
+    const names = match[1]
+      .split(',')
+      .map((part) => part.trim())
+      .filter(Boolean)
+    for (const name of names) packages.add(name)
+  }
+  return packages
+}
+
+function normalizeDynamicPreambleLines(lines: string[]): string[] {
+  const staticPackages = collectStaticAMCPackages()
+  const dynamicPackages = new Map<string, string | null>()
+  const packageOrder: string[] = []
+  const otherLines: string[] = []
+  const otherSeen = new Set<string>()
+
+  for (const line of lines) {
+    const trimmed = line.trim()
+    if (trimmed.length === 0 || trimmed.startsWith('%')) continue
+
+    const packageDecl = parseUsepackageLine(trimmed)
+    if (!packageDecl) {
+      if (!otherSeen.has(trimmed)) {
+        otherSeen.add(trimmed)
+        otherLines.push(trimmed)
+      }
+      continue
+    }
+
+    for (const packageName of packageDecl.packages) {
+      if (staticPackages.has(packageName)) continue
+
+      if (!dynamicPackages.has(packageName)) {
+        dynamicPackages.set(packageName, packageDecl.options)
+        packageOrder.push(packageName)
+        continue
+      }
+
+      const existingOptions = dynamicPackages.get(packageName)
+      if (!existingOptions && packageDecl.options) {
+        dynamicPackages.set(packageName, packageDecl.options)
+      }
+    }
+  }
+
+  const packageLines = packageOrder.map((packageName) => {
+    const options = dynamicPackages.get(packageName)
+    return options
+      ? `\\usepackage[${options}]{${packageName}}`
+      : `\\usepackage{${packageName}}`
+  })
+
+  return [...packageLines, ...otherLines]
+}
+
 function buildDynamicAMCPreamble(
   exercises: IExerciceAMC[],
   groupsContent: string,
@@ -58,37 +133,12 @@ function buildDynamicAMCPreamble(
 
   loadPackagesFromContent(dynamicContents)
 
-  const additions: string[] = []
-  const seenLines = new Set<string>()
-  const pushIfNew = (line: string) => {
-    const trimmed = line.trim()
-    if (trimmed === '' || seenLines.has(trimmed)) return
-    additions.push(trimmed)
-    seenLines.add(trimmed)
-  }
-
   const detectedLines = dynamicContents.preamble
     .split('\n')
     .map((line) => line.trim())
     .filter((line) => line.length > 0 && !line.startsWith('%'))
 
-  for (const line of detectedLines) {
-    const packageMatch = line.match(/^\\usepackage(?:\[[^\]]*\])?\{([^}]+)\}$/)
-    if (packageMatch) {
-      const packageNames = packageMatch[1]
-        .split(',')
-        .map((part) => part.trim())
-        .filter(Boolean)
-      if (
-        packageNames.every((packageName) =>
-          hasPackageInLatex(AMCPreambleTemplate, packageName),
-        )
-      ) {
-        continue
-      }
-    }
-    pushIfNew(line)
-  }
+  const dynamicRawLines: string[] = [...detectedLines]
 
   const exercisePackages = new Set<string>()
   const exerciseCommands = new Set<string>()
@@ -115,14 +165,20 @@ function buildDynamicAMCPreamble(
   for (const packageName of exercisePackages) {
     if (hasPackageInLatex(AMCPreambleTemplate, packageName)) continue
     if (packageName === 'bclogo') {
-      pushIfNew('\\usepackage[tikz]{bclogo}')
+      dynamicRawLines.push('\\usepackage[tikz]{bclogo}')
     } else {
-      pushIfNew(`\\usepackage{${packageName}}`)
+      dynamicRawLines.push(`\\usepackage{${packageName}}`)
     }
   }
 
+  const additions = normalizeDynamicPreambleLines(dynamicRawLines)
+  const seenLines = new Set(additions)
+
   for (const command of exerciseCommands) {
-    pushIfNew(command)
+    const trimmed = command.trim()
+    if (trimmed === '' || seenLines.has(trimmed)) continue
+    additions.push(trimmed)
+    seenLines.add(trimmed)
   }
 
   return additions.join('\n')
