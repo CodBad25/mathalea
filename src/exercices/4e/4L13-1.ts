@@ -1,8 +1,9 @@
-import { texteEnCouleur } from '../../lib/outils/embellissements'
-import { prenom } from '../../lib/outils/Personne'
-import Exercice from '../Exercice'
-import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import { ajouteQuestionMathlive } from '../../lib/interactif/questionMathLive'
+import { choice } from '../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { prenom } from '../../lib/outils/Personne'
+import { listeQuestionsToContenu, randint } from '../../modules/outils'
+import Exercice from '../Exercice'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const titre =
@@ -281,19 +282,25 @@ export default class FormeLitteraleIntroduireUneLettre extends Exercice {
       const n = randint(1, 6)
       const p = randint(1, 6)
       const situation = situations[randint(0, situations.length - 1)]
+      const lettre1 = this.interactif
+        ? choice(['x', 'y', 'a', 'z', 'b', 'c', 'h', 'k', 'n'])
+        : situation.elt1.lettre
+      const lettre2 = this.interactif
+        ? choice(['x', 'y', 'a', 'z', 'b', 'c', 'h', 'k', 'n'], lettre1)
+        : situation.elt2.lettre
       enonces.push({
         enonce: `${situation.prenom} veut acheter ${n} ${pluriel(n, situation.elt1)} et ${p} ${pluriel(p, situation.elt2)}.
-<br>On note $${situation.elt1.lettre}$ le prix d'${situation.elt1.article} ${situation.elt1.sing} et $${situation.elt2.lettre}$ le prix d'${situation.elt2.article} ${situation.elt2.sing}.`,
+<br>On note $${lettre1}$ le prix d'${situation.elt1.article} ${situation.elt1.sing} et $${lettre2}$ le prix d'${situation.elt2.article} ${situation.elt2.sing}.`,
         question: '',
         correction: `
         ${situation.prenom} va payer $${n}$ fois le prix d'${situation.elt1.article} ${situation.elt1.sing} et $${p}$ fois le prix d'${situation.elt2.article} ${situation.elt2.sing}.
-        <br> C'est-à-dire $${n}\\times ${situation.elt1.lettre} + ${p}\\times ${situation.elt2.lettre} = ${sliceUn(n)}${situation.elt1.lettre} + ${sliceUn(p)}${situation.elt2.lettre}$.
-        <br>${texteEnCouleur(`Donc le prix total de l'achat est  $${sliceUn(n)}${situation.elt1.lettre} + ${sliceUn(p)}${situation.elt2.lettre}$.`)}
+        <br> C'est-à-dire $${n}\\times ${lettre1} + ${p}\\times ${lettre2} = ${sliceUn(n)}${lettre1} + ${sliceUn(p)}${lettre2}$.
+        <br>Donc le prix total de l'achat est $${miseEnEvidence(`${sliceUn(n)}${lettre1} + ${sliceUn(p)}${lettre2}`)}$.
         `,
       })
       texte = `${enonces[0].enonce}`
       texteCorr = `${enonces[0].correction}`
-      const formule = `${sliceUn(n)}${situation.elt1.lettre} + ${sliceUn(p)}${situation.elt2.lettre}`
+      const formule = `${sliceUn(n)}${lettre1} + ${sliceUn(p)}${lettre2}`
 
       if (
         this.questionJamaisPosee(i, situation.elt1.sing, situation.elt2.sing)
