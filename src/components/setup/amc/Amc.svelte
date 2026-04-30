@@ -621,9 +621,11 @@
     const dims = getSelectedQuestionClipDimensionsCm()
     if (!dims) return 'Dimensions de figure: clip non détecté'
 
+    const baseWidth = dims.widthCm
+    const baseHeight = dims.heightCm
     const width = dims.widthCm * factor
     const height = dims.heightCm * factor
-    return `Dimensions de figure: ${formatCm(width)} x ${formatCm(height)} cm`
+    return `Dimensions de figure: ${formatCm(baseWidth)} x ${formatCm(baseHeight)} cm -> ${formatCm(width)} x ${formatCm(height)} cm`
   }
 
   async function copyLatexToClipboard() {
