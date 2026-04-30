@@ -9,6 +9,7 @@ import { Segment, segment } from '../../lib/2d/segmentsVecteurs'
 import { texteParPosition } from '../../lib/2d/textes'
 import type { TracePoint } from '../../lib/2d/TracePoint'
 import { tracePoint } from '../../lib/2d/TracePoint'
+import { bleuMathalea } from '../../lib/colors'
 import { texteGras } from '../../lib/format/style'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import { extraireRacineCarree } from '../../lib/outils/calculs'
@@ -16,10 +17,13 @@ import { ecritureParentheseSiNegatif } from '../../lib/outils/ecritures'
 import { creerNomDePolygone } from '../../lib/outils/outilString'
 import { texNombre, texRacineCarree } from '../../lib/outils/texNombre'
 import { mathalea2d } from '../../modules/mathalea2d'
-import { listeQuestionsToContenu, randint } from '../../modules/outils'
+import {
+  gestionnaireFormulaireTexte,
+  listeQuestionsToContenu,
+  randint,
+} from '../../modules/outils'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
-import { bleuMathalea } from '../../lib/colors'
 export const titre = "Déterminer la nature d'un polygone avec les coordonnées"
 export const dateDeModifImportante = '30/11/2023'
 /**
@@ -35,10 +39,17 @@ export const refs = {
 export default class NaturePolygone extends Exercice {
   constructor() {
     super()
-    this.besoinFormulaireNumerique = [
-      'Situations',
-      3,
-      '1 : Triangles \n2 : Quadrilatères\n3 : Mélange ',
+    this.besoinFormulaireTexte = [
+      'Type de figure',
+      [
+        'Nombres séparés par des tirets  :',
+        '1 : Triangle isocèle ou équilatéral',
+        '2 : Triangle isocèle rectangle',
+        '3 : Losange',
+        '4 : Rectangle',
+        '5 : Carré',
+        '6 : Mélange',
+      ].join('\n'),
     ]
 
     this.nbQuestions = 1
@@ -49,14 +60,14 @@ export default class NaturePolygone extends Exercice {
   nouvelleVersion() {
     let XMIN, XMAX, YMIN, YMAX
 
-    let typesDeQuestionsDisponibles = [1, 2, 3, 4, 5]
-    if (this.sup === 1) {
-      typesDeQuestionsDisponibles = [1, 2]
-    } else if (this.sup === 2) {
-      typesDeQuestionsDisponibles = [3, 4, 5]
-    } else {
-      typesDeQuestionsDisponibles = [1, 2, 3, 4, 5]
-    }
+    const typesDeQuestionsDisponibles = gestionnaireFormulaireTexte({
+      saisie: this.sup,
+      min: 1,
+      max: 5,
+      melange: 6,
+      nbQuestions: this.nbQuestions,
+      defaut: 6,
+    })
 
     const listeTypeDeQuestions = combinaisonListes(
       typesDeQuestionsDisponibles,

@@ -19,7 +19,7 @@ import { homothetie } from '../../lib/2d/transformations'
 import { longueur } from '../../lib/2d/utilitairesGeometriques'
 import { milieu } from '../../lib/2d/utilitairesPoint'
 import { vecteur } from '../../lib/2d/Vecteur'
-import { orangeMathalea, bleuMathalea } from '../../lib/colors'
+import { bleuMathalea, orangeMathalea } from '../../lib/colors'
 import figureApigeom, { isFigureArray } from '../../lib/figureApigeom'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import {
@@ -253,8 +253,7 @@ export default class RepresenterUnVecteur extends Exercice {
         l = labelPoint(A, 'red') as TexteParPoint[] // Variable qui trace les nom s A et B
 
         // texte = ` Dans un repère orthonormé $\\big(O ; \\vec i,\\vec j\\big)$, représenter le vecteur $\\vec{u}\\begin{pmatrix}${ux} \\\\${uy}\\end{pmatrix}$, `
-        texte = ` Dans un repère orthonormé $\\big(O ; \\vec i,\\vec j\\big)$, représenter le vecteur de coordonnées $\\begin{pmatrix}${ux} \\\\${uy}\\end{pmatrix}$, `
-        texte += `ayant pour origine le point $${nomPoint1}\\left(${this.xA[i]};${this.yA[i]}\\right)$.`
+        texte = ` Dans un repère orthonormé $\\big(O ; \\vec i,\\vec j\\big)$, représenter le vecteur $\\begin{pmatrix}${ux} \\\\${uy}\\end{pmatrix}$ ayant pour origine le point $${nomPoint1}\\left(${this.xA[i]};${this.yA[i]}\\right)$.`
         this.figuresApiGeom[i].create('Point', {
           x: this.xA[i],
           y: this.yA[i],
@@ -267,8 +266,7 @@ export default class RepresenterUnVecteur extends Exercice {
         texteCorr += `<br> À partir du point $${nomPoint1}$,  on trace donc le déplacement correspondant à $${ux}$ unités horizontalement puis $${uy}$ unités verticalement pour arriver au point $${nomPoint2}$, extrémité du vecteur $\\vec{u}$.`
       } else {
         // texte = ` Dans un repère orthonormé $\\big(O ; \\vec i,\\vec j\\big)$, représenter le vecteur $\\vec{u}\\begin{pmatrix}${ux} \\\\${uy}\\end{pmatrix}$, `
-        texte = ` Dans un repère orthonormé $\\big(O ; \\vec i,\\vec j\\big)$, représenter le vecteur de coordonnées $\\begin{pmatrix}${ux} \\\\${uy}\\end{pmatrix}$, `
-        texte += `ayant pour extrémité le point $${nomPoint2}\\left(${this.xB[i]};${this.yB[i]}\\right)$.`
+        texte = ` Dans un repère orthonormé $\\big(O ; \\vec i,\\vec j\\big)$, représenter le vecteur $\\begin{pmatrix}${ux} \\\\${uy}\\end{pmatrix}$ ayant pour extrémité le point $${nomPoint2}\\left(${this.xB[i]};${this.yB[i]}\\right)$.`
         this.figuresApiGeom[i].create('Point', {
           x: this.xB[i],
           y: this.yB[i],

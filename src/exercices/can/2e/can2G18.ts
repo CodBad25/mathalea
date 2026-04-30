@@ -1,6 +1,10 @@
+import { nomVecteurParPosition } from '../../../lib/2d/NomVecteurParPosition'
 import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { repere } from '../../../lib/2d/reperes'
-import { representantNomme } from '../../../lib/2d/representantVecteur'
+import {
+  representant,
+  representantNomme,
+} from '../../../lib/2d/representantVecteur'
 import { segment } from '../../../lib/2d/segmentsVecteurs'
 import { texteParPosition } from '../../../lib/2d/textes'
 import { vecteur } from '../../../lib/2d/Vecteur'
@@ -24,8 +28,7 @@ export const dateDePublication = '29/06/2022' // La date de publication initiale
 
 /**
  * Modèle d'exercice très simple pour la course aux nombres
- * @author Gilles Mora modifié Stéphan Grignon (titre, vecteur colonne, noms vecteur)
-
+ * @author Gilles Mora modifié Stéphan Grignon (titre, vecteur colonne, noms vecteur), modifié par Nathan Scheinmann (ajout du repère)
  */
 export const uuid = '8a0ce'
 
@@ -61,6 +64,15 @@ export default class LectureGraphiqueVecteurRepere extends Exercice {
       const nomVecteur = ['u', 'v', 'w', 'AB', 'HG', 'KL']
       const vec = choice(nomVecteur)
       xa = randint(-2, 2)
+      const O = pointAbstrait(0, 0) // On définit et on trace le point O
+      const I = pointAbstrait(1, 0) // On définit sans tracer le point I
+      const J = pointAbstrait(0, 1) // On définit sans tracer le point J
+      const nomi = nomVecteurParPosition('$\\vec \\imath$', 0.5, -0.7, 1.5, 0)
+      const nomj = nomVecteurParPosition('$\\vec \\jmath$', -0.7, 0.5, 1.5, 0)
+      const vi = vecteur(O, I) // Variable qui définit vecteur OI
+      const vj = vecteur(O, J) // Variable qui définit vecteur OJ
+      const ti = representant(vi, O)
+      const tj = representant(vj, O)
       ya = randint(-2, 2)
       k1 = randint(-6, 6, 0)
       k2 = randint(-6, 6)
@@ -100,7 +112,7 @@ export default class LectureGraphiqueVecteurRepere extends Exercice {
         grilleSecondaireXMax: xmax,
       })
 
-      texte = `Lire les coordonnées du vecteur $\\overrightarrow{${vec}}$.<br><br>`
+      texte = `Dans un repère $\\big(O ; \\vec \\imath,\\vec \\jmath\\big)$, lire les coordonnées du vecteur $\\overrightarrow{${vec}}$.<br><br>`
       texte += mathalea2d(
         {
           xmin,
@@ -115,6 +127,10 @@ export default class LectureGraphiqueVecteurRepere extends Exercice {
         o,
         AB,
         nomvAB,
+        ti,
+        tj,
+        nomi,
+        nomj,
       )
       texte += ''
 

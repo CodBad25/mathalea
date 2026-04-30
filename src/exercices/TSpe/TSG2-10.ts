@@ -8,6 +8,7 @@ import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
+import { tracePoint } from '../../lib/2d/TracePoint'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif' // fonction qui va préparer l'analyse de la saisie
 import { addMultiMathfield } from '../../lib/interactif/MultiMathfield/MultiMathfield'
@@ -73,6 +74,14 @@ export default class NomExercice extends Exercice {
         polygone([B, C, G, F, E, A], 'black'),
         segment(B, F, 'black'),
       ]
+      const traceA = tracePoint(A)
+      const traceB = tracePoint(B)
+      const traceC = tracePoint(C)
+      const traceD = tracePoint(D)
+      const traceE = tracePoint(E)
+      const traceF = tracePoint(F)
+      const traceG = tracePoint(G)
+      const traceH = tracePoint(H)
 
       const aretesCachees = [segment(A, D), segment(C, D), segment(D, H)]
       aretesCachees.forEach((s) => (s.pointilles = 3))
@@ -192,6 +201,14 @@ export default class NomExercice extends Exercice {
         mathalea2d(
           Object.assign({ scale: 0.6, style: 'inline' }, fixeBordures(objets)),
           objets,
+          traceA,
+          traceB,
+          traceC,
+          traceD,
+          traceE,
+          traceF,
+          traceG,
+          traceH,
         ) +
         '<br>' +
         `Donner les coordonnées des points $${Point1}$, $${Point2}$, $${Point3}$ et $${Point4}$ dans le repère ${rep}.<br>`
