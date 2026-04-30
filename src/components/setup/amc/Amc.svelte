@@ -22,6 +22,7 @@
   import NavBar from '../../shared/header/NavBar.svelte'
   import SetupShell from '../SetupShell.svelte'
   import SideMenu from '../start/presentationalComponents/sideMenu/SideMenu.svelte'
+  import AmcEnonceHtml from './builder/AmcEnonceHtml.svelte'
   import AmcPreviewNumeric from './builder/AmcPreviewNumeric.svelte'
   import AmcPreviewOpen from './builder/AmcPreviewOpen.svelte'
   import AmcPreviewQcm from './builder/AmcPreviewQcm.svelte'
@@ -35,6 +36,27 @@
     kind: BlockKind
   }
 
+  type PreviewBlock = {
+    key: string
+    label: string
+    ref: BlockRef | null
+    enonce: string
+    htmlContent: string
+    data: any
+    previewKind: 'qcm' | 'num' | 'open' | 'hybridHeader'
+  }
+
+  type PreviewDisplayItem =
+    | {
+        kind: 'single'
+        block: PreviewBlock
+      }
+    | {
+        kind: 'hybridContainer'
+        header: PreviewBlock
+        children: PreviewBlock[]
+      }
+
   type GroupSetting = {
     seed: string
     questionCount: number
@@ -47,12 +69,33 @@
   let groupSettings: GroupSetting[] = []
   let selectedRef: BlockRef | null = null
   let selectedExerciseIndex: number | null = null
+  let tikzScaleFactorsByQuestion: Record<string, number> = {}
+  let tikzScaleSliderValue = 1
+  let selectedQuestionKey = ''
+  let selectedQuestionTikzScaleFactor = 1
+  let selectedQuestionClipDimensionsLabel =
+    'Dimensions de figure: clip non détecté'
   let latexContent = ''
   let latexExportStatus = ''
   let groupConsistencyReport: AMCGroupConsistencyReport | null = null
   let isDropTargetActive = false
 
   let unsubscribeExercicesParams: (() => void) | null = null
+
+  $: selectedQuestionKey =
+    selectedRef == null
+      ? ''
+      : getQuestionKey(selectedRef.exerciseIndex, selectedRef.questionIndex)
+  $: selectedQuestionTikzScaleFactor = clampTikzScaleFactor(
+    selectedQuestionKey === ''
+      ? 1
+      : (tikzScaleFactorsByQuestion[selectedQuestionKey] ?? 1),
+  )
+  $: tikzScaleSliderValue = selectedQuestionTikzScaleFactor
+  $: selectedQuestionClipDimensionsLabel =
+    getSelectedQuestionScaledClipDimensionsLabel(
+      selectedQuestionTikzScaleFactor,
+    )
 
   function asAMCExercices(exos: IExercice[]): IExerciceAMC[] {
     return exos as unknown as IExerciceAMC[]
@@ -323,6 +366,12 @@
   }
 
   function updateLatexPreview() {
+    const exercicesForLatex = asAMCExercices(
+      exercices.map((exercice) => JSON.parse(JSON.stringify(exercice))),
+    )
+
+    applyTikzScaleFactors(exercicesForLatex)
+
     const nbQuestions = groupSettings.map((setting) =>
       Math.max(
         1,
@@ -334,7 +383,7 @@
     )
 
     latexContent = creerDocumentAmc({
-      exercices: asAMCExercices(exercices),
+      exercices: exercicesForLatex,
       nbQuestions,
       groupLayouts: groupSettings.map((setting) => ({
         pageBreakBefore: setting.pageBreakBefore,
@@ -348,6 +397,233 @@
     })
 
     groupConsistencyReport = checkAMCGroupConsistency(latexContent)
+  }
+
+  function getQuestionKey(
+    exerciseIndex: number,
+    questionIndex: number,
+  ): string {
+    return `${exerciseIndex}:${questionIndex}`
+  }
+
+  function clampTikzScaleFactor(value: number): number {
+    return Math.max(0.5, Math.min(1.2, value))
+  }
+
+  function setSelectedQuestionTikzScaleFactor(value: number) {
+    if (selectedQuestionKey === '') return
+    const factor = clampTikzScaleFactor(value)
+    tikzScaleFactorsByQuestion = {
+      ...tikzScaleFactorsByQuestion,
+      [selectedQuestionKey]: factor,
+    }
+    updateLatexPreview()
+  }
+
+  function formatTikzScale(value: number): string {
+    return value
+      .toFixed(3)
+      .replace(/\.0+$/, '')
+      .replace(/(\.\d*[1-9])0+$/, '$1')
+  }
+
+  function applyTikzScaleToLatexText(latex: string, factor: number): string {
+    if (typeof latex !== 'string' || latex.trim() === '') return latex
+
+    return latex.replace(
+      /\\begin\{tikzpicture\}(\[[^\]]*\])?/g,
+      (_match, rawOptions: string | undefined) => {
+        if (!rawOptions) {
+          if (factor === 1) return '\\begin{tikzpicture}'
+          return `\\begin{tikzpicture}[scale=${formatTikzScale(factor)}]`
+        }
+
+        const options = rawOptions.slice(1, -1)
+        const scaleRegex = /(^|,)\s*scale\s*=\s*([+-]?\d*\.?\d+)\s*(?=,|$)/
+        const scaleMatch = options.match(scaleRegex)
+
+        if (scaleMatch) {
+          const currentScale = Number(scaleMatch[2])
+          const nextScale = Number.isFinite(currentScale)
+            ? currentScale * factor
+            : factor
+          const replaced = options.replace(
+            scaleRegex,
+            `$1 scale=${formatTikzScale(nextScale)}`,
+          )
+          return `\\begin{tikzpicture}[${replaced.trim()}]`
+        }
+
+        if (factor === 1) return `\\begin{tikzpicture}[${options}]`
+        const separator = options.trim().length > 0 ? ', ' : ''
+        return `\\begin{tikzpicture}[${options}${separator}scale=${formatTikzScale(
+          factor,
+        )}]`
+      },
+    )
+  }
+
+  function transformQuestionLatexWithTikzScale(
+    item: any,
+    factor: number,
+  ): void {
+    const apply = (text: unknown): unknown =>
+      typeof text === 'string' ? applyTikzScaleToLatexText(text, factor) : text
+
+    item.enonce = apply(item.enonce)
+
+    const propositions = Array.isArray(item.propositions)
+      ? item.propositions
+      : []
+    for (const prop of propositions) {
+      prop.enonce = apply(prop.enonce)
+      prop.texte = apply(prop.texte)
+      const subProps = Array.isArray(prop.propositions) ? prop.propositions : []
+      for (const sub of subProps) {
+        sub.texte = apply(sub.texte)
+        if (sub.reponse) {
+          sub.reponse.texte = apply(sub.reponse.texte)
+        }
+      }
+    }
+  }
+
+  function applyTikzScaleFactors(exercicesForLatex: IExerciceAMC[]) {
+    for (const [key, factor] of Object.entries(tikzScaleFactorsByQuestion)) {
+      if (!Number.isFinite(factor)) continue
+      const [exerciseIndexText, questionIndexText] = key.split(':')
+      const exerciseIndex = Number(exerciseIndexText)
+      const questionIndex = Number(questionIndexText)
+      if (
+        !Number.isInteger(exerciseIndex) ||
+        !Number.isInteger(questionIndex)
+      ) {
+        continue
+      }
+
+      const exercice = exercicesForLatex[exerciseIndex] as any
+      const item = exercice?.autoCorrection?.[questionIndex]
+      if (!item) continue
+      transformQuestionLatexWithTikzScale(item, clampTikzScaleFactor(factor))
+    }
+  }
+
+  function selectedQuestionHasTikzPicture(): boolean {
+    if (!selectedRef) return false
+    const exercise = exercices[selectedRef.exerciseIndex] as any
+    const item = exercise?.autoCorrection?.[selectedRef.questionIndex]
+    if (!item) return false
+
+    const regex = /\\begin\{tikzpicture\}/
+    const containsTikz = (value: unknown): boolean =>
+      typeof value === 'string' && regex.test(value)
+
+    if (containsTikz(item.enonce)) return true
+    const propositions = Array.isArray(item.propositions)
+      ? item.propositions
+      : []
+    for (const prop of propositions) {
+      if (containsTikz(prop?.enonce) || containsTikz(prop?.texte)) return true
+      const subProps = Array.isArray(prop?.propositions)
+        ? prop.propositions
+        : []
+      for (const sub of subProps) {
+        if (containsTikz(sub?.texte) || containsTikz(sub?.reponse?.texte)) {
+          return true
+        }
+      }
+    }
+
+    return false
+  }
+
+  function getSelectedQuestionItem(): any | null {
+    if (!selectedRef) return null
+    const exercise = exercices[selectedRef.exerciseIndex] as any
+    return exercise?.autoCorrection?.[selectedRef.questionIndex] ?? null
+  }
+
+  function toCm(value: number, unit: string | undefined): number {
+    const normalized = (unit ?? 'cm').toLowerCase()
+    if (normalized === 'cm') return value
+    if (normalized === 'mm') return value / 10
+    if (normalized === 'in') return value * 2.54
+    if (normalized === 'pt') return value * 0.0352778
+    return value
+  }
+
+  function extractClipDimensionsCmFromText(
+    latex: string,
+  ): { widthCm: number; heightCm: number } | null {
+    const clipRegex =
+      /\\clip\s*\(\s*([+-]?\d*\.?\d+)\s*(cm|mm|pt|in)?\s*,\s*([+-]?\d*\.?\d+)\s*(cm|mm|pt|in)?\s*\)\s*rectangle\s*\(\s*([+-]?\d*\.?\d+)\s*(cm|mm|pt|in)?\s*,\s*([+-]?\d*\.?\d+)\s*(cm|mm|pt|in)?\s*\)\s*;/i
+    const match = latex.match(clipRegex)
+    if (!match) return null
+
+    const x1 = toCm(Number(match[1]), match[2])
+    const y1 = toCm(Number(match[3]), match[4])
+    const x2 = toCm(Number(match[5]), match[6])
+    const y2 = toCm(Number(match[7]), match[8])
+
+    if (![x1, y1, x2, y2].every((v) => Number.isFinite(v))) return null
+
+    return {
+      widthCm: Math.abs(x2 - x1),
+      heightCm: Math.abs(y2 - y1),
+    }
+  }
+
+  function getSelectedQuestionClipDimensionsCm(): {
+    widthCm: number
+    heightCm: number
+  } | null {
+    const item = getSelectedQuestionItem()
+    if (!item) return null
+
+    const candidates: string[] = []
+    const pushIfString = (value: unknown) => {
+      if (typeof value === 'string' && value.trim().length > 0) {
+        candidates.push(value)
+      }
+    }
+
+    pushIfString(item.enonce)
+    const propositions = Array.isArray(item.propositions)
+      ? item.propositions
+      : []
+    for (const prop of propositions) {
+      pushIfString(prop?.enonce)
+      pushIfString(prop?.texte)
+      const subProps = Array.isArray(prop?.propositions)
+        ? prop.propositions
+        : []
+      for (const sub of subProps) {
+        pushIfString(sub?.texte)
+        pushIfString(sub?.reponse?.texte)
+      }
+    }
+
+    for (const text of candidates) {
+      const dims = extractClipDimensionsCmFromText(text)
+      if (dims) return dims
+    }
+
+    return null
+  }
+
+  function formatCm(value: number): string {
+    return value.toFixed(1).replace(/\.0$/, '')
+  }
+
+  function getSelectedQuestionScaledClipDimensionsLabel(
+    factor: number,
+  ): string {
+    const dims = getSelectedQuestionClipDimensionsCm()
+    if (!dims) return 'Dimensions de figure: clip non détecté'
+
+    const width = dims.widthCm * factor
+    const height = dims.heightCm * factor
+    return `Dimensions de figure: ${formatCm(width)} x ${formatCm(height)} cm`
   }
 
   async function copyLatexToClipboard() {
@@ -393,14 +669,7 @@
   }
 
   function getBlocks(exercise: IExercice, exerciseIndex: number) {
-    const blocks: Array<{
-      key: string
-      label: string
-      ref: BlockRef
-      enonce: string
-      htmlContent: string
-      data: any
-    }> = []
+    const blocks: PreviewBlock[] = []
 
     const autoCorrection = Array.isArray((exercise as any).autoCorrection)
       ? ((exercise as any).autoCorrection as any[])
@@ -418,8 +687,20 @@
         const propositions = Array.isArray(item?.propositions)
           ? item.propositions
           : []
+
+        blocks.push({
+          key: `${exerciseIndex}-${questionIndex}-hybrid-header`,
+          label: `AMCHybride ${questionIndex + 1}`,
+          ref: null,
+          enonce: item?.enonce ?? '',
+          htmlContent,
+          data: item,
+          previewKind: 'hybridHeader',
+        })
+
         propositions.forEach((prop: any, propositionIndex: number) => {
           const propType = prop?.type
+          const propEnonce = typeof prop?.enonce === 'string' ? prop.enonce : ''
           const figureEnvRegex =
             /\\begin\{(?:tikzpicture|pspicture|picture|circuitikz)\}[\s\S]*?\\end\{(?:tikzpicture|pspicture|picture|circuitikz)\}/i
           const propSpecificText =
@@ -427,13 +708,13 @@
               ? prop?.propositions?.[0]?.reponse?.texte
               : propType === 'AMCOpen'
                 ? prop?.propositions?.[0]?.texte
-                : item?.enonce
+                : propEnonce
           const propHtmlContent = (() => {
             const raw =
               typeof propSpecificText === 'string'
                 ? propSpecificText.trim()
                 : ''
-            if (raw.length === 0) return htmlContent
+            if (raw.length === 0) return ''
             // Si le texte contient encore une figure LaTeX, on garde le fallback HTML
             // (qui contient déjà le SVG substitué).
             const source = figureEnvRegex.test(raw) ? htmlContent : raw
@@ -449,9 +730,10 @@
                 propositionIndex,
                 kind: 'qcm',
               },
-              enonce: item?.enonce ?? '',
+              enonce: propEnonce,
               htmlContent: propHtmlContent,
               data: prop,
+              previewKind: 'qcm',
             })
           }
           if (propType === 'AMCNum') {
@@ -464,9 +746,10 @@
                 propositionIndex,
                 kind: 'num',
               },
-              enonce: item?.enonce ?? '',
+              enonce: propEnonce,
               htmlContent: propHtmlContent,
               data: prop,
+              previewKind: 'num',
             })
           }
           if (propType === 'AMCOpen') {
@@ -479,9 +762,10 @@
                 propositionIndex,
                 kind: 'open',
               },
-              enonce: item?.enonce ?? '',
+              enonce: propEnonce,
               htmlContent: propHtmlContent,
               data: prop,
+              previewKind: 'open',
             })
           }
         })
@@ -501,6 +785,7 @@
           enonce: item?.enonce ?? '',
           htmlContent,
           data: item,
+          previewKind: 'qcm',
         })
       }
 
@@ -517,6 +802,7 @@
           enonce: item?.enonce ?? '',
           htmlContent,
           data: item,
+          previewKind: 'num',
         })
       }
 
@@ -533,11 +819,40 @@
           enonce: item?.enonce ?? '',
           htmlContent,
           data: item,
+          previewKind: 'open',
         })
       }
     })
 
     return blocks
+  }
+
+  function getPreviewDisplayItems(
+    exercise: IExercice,
+    exerciseIndex: number,
+  ): PreviewDisplayItem[] {
+    const blocks = getBlocks(exercise, exerciseIndex)
+    const displayItems: PreviewDisplayItem[] = []
+
+    for (let i = 0; i < blocks.length; i++) {
+      const block = blocks[i]
+      if (block.previewKind !== 'hybridHeader') {
+        displayItems.push({ kind: 'single', block })
+        continue
+      }
+
+      const children: PreviewBlock[] = []
+      let j = i + 1
+      while (j < blocks.length && blocks[j].previewKind !== 'hybridHeader') {
+        children.push(blocks[j])
+        j++
+      }
+
+      displayItems.push({ kind: 'hybridContainer', header: block, children })
+      i = j - 1
+    }
+
+    return displayItems
   }
 
   function isSelected(ref: BlockRef): boolean {
@@ -768,6 +1083,24 @@
     ) {
       selectedRef = null
     }
+
+    const nextFactors: Record<string, number> = {}
+    for (const [key, value] of Object.entries(tikzScaleFactorsByQuestion)) {
+      const [exText, qText] = key.split(':')
+      const ex = Number(exText)
+      const q = Number(qText)
+      if (ex !== exerciseIndex) {
+        nextFactors[key] = value
+        continue
+      }
+      if (q < questionIndex) {
+        nextFactors[key] = value
+      } else if (q > questionIndex) {
+        nextFactors[getQuestionKey(ex, q - 1)] = value
+      }
+    }
+    tikzScaleFactorsByQuestion = nextFactors
+
     exercices = [...exercices]
     updateLatexPreview()
   }
@@ -790,6 +1123,20 @@
       selectedExerciseIndex--
     }
     exercicesParams.update((list) => list.filter((_, i) => i !== index))
+
+    const nextFactors: Record<string, number> = {}
+    for (const [key, value] of Object.entries(tikzScaleFactorsByQuestion)) {
+      const [exText, qText] = key.split(':')
+      const ex = Number(exText)
+      const q = Number(qText)
+      if (ex < index) {
+        nextFactors[key] = value
+      } else if (ex > index) {
+        nextFactors[getQuestionKey(ex - 1, q)] = value
+      }
+    }
+    tikzScaleFactorsByQuestion = nextFactors
+
     mathaleaUpdateUrlFromExercicesParams()
   }
 
@@ -917,70 +1264,194 @@
               </header>
 
               <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-3">
-                {#each getBlocks(exercice, exerciseIndex) as block}
-                  <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
-                  <div
-                    role="button"
-                    tabindex="0"
-                    class="rounded-xl p-1 text-left transition-colors cursor-pointer {isSelected(
-                      block.ref,
-                    )
-                      ? 'ring-2 ring-coopmaths-action'
-                      : 'hover:bg-coopmaths-canvas/40 dark:hover:bg-coopmathsdark-canvas/40'}"
-                    on:click={() => selectBlock(block.ref)}
-                    on:keydown={(e) => {
-                      if (e.key === 'Enter' || e.key === ' ')
-                        selectBlock(block.ref)
-                    }}
-                  >
-                    <div class="mb-1 flex items-center justify-between gap-1">
-                      <p
-                        class="text-xs font-semibold uppercase tracking-wide text-coopmaths-action dark:text-coopmathsdark-action"
-                      >
-                        {block.label}
-                      </p>
-                      <button
-                        type="button"
-                        class="shrink-0 rounded px-1 text-xs text-coopmaths-corpus/60 hover:bg-red-100 hover:text-red-600 dark:hover:bg-red-900/40 dark:hover:text-red-400"
-                        aria-label="Supprimer la question"
-                        on:click|stopPropagation={() =>
-                          deleteQuestion(
-                            block.ref.exerciseIndex,
-                            block.ref.questionIndex,
-                          )}>×</button
-                      >
-                    </div>
+                {#each getPreviewDisplayItems(exercice, exerciseIndex) as item}
+                  {#if item.kind === 'hybridContainer'}
+                    <div
+                      class="md:col-span-2 rounded-xl border-2 border-coopmaths-action/50 bg-coopmaths-canvas/25 p-3 dark:bg-coopmathsdark-canvas/25"
+                    >
+                      <div class="mb-1 flex items-center justify-between gap-1">
+                        <p
+                          class="text-xs font-semibold uppercase tracking-wide text-coopmaths-struct dark:text-coopmathsdark-struct"
+                        >
+                          {item.header.label}
+                        </p>
+                      </div>
 
-                    {#if block.ref.kind === 'qcm'}
-                      <AmcPreviewQcm
-                        enonce={block.enonce}
-                        htmlContent={block.htmlContent}
-                        mode={block.data?.type === 'qcmMult' ||
-                        exercice.amcType === 'qcmMult'
-                          ? 'qcmMult'
-                          : 'qcmMono'}
-                        choix={block.data?.propositions ?? []}
-                      />
-                    {:else if block.ref.kind === 'num'}
-                      <AmcPreviewNumeric
-                        enonce={block.enonce}
-                        htmlContent={block.htmlContent}
-                        param={block.data?.propositions?.[0]?.reponse?.param ??
-                          block.data?.reponse?.param ??
-                          {}}
-                      />
-                    {:else}
-                      <AmcPreviewOpen
-                        enonce={block.enonce}
-                        htmlContent={block.htmlContent}
-                        lignes={block.data?.propositions?.[0]?.statut ??
-                          block.data?.propositions?.[0]?.pointilles ??
-                          3}
-                        pointilles={block.data?.propositions?.[0]?.pointilles}
-                        sanscadre={block.data?.propositions?.[0]?.sanscadre}
-                      />
-                    {/if}
-                  </div>
+                      <div
+                        class="amc-hybrid-header-card rounded-xl border border-coopmaths-struct-light/40 bg-white/80 p-4 dark:bg-coopmathsdark-canvas-dark/70 dark:border-coopmathsdark-struct-light/30"
+                      >
+                        <p
+                          class="text-base font-semibold text-coopmaths-struct dark:text-coopmathsdark-struct"
+                        >
+                          Énoncé commun
+                        </p>
+                        {#if item.header.htmlContent || item.header.enonce}
+                          <div class="mt-2">
+                            <AmcEnonceHtml
+                              content={item.header.htmlContent ||
+                                item.header.enonce}
+                            />
+                          </div>
+                        {/if}
+                      </div>
+
+                      <div
+                        class="amc-hybrid-children mt-3 grid grid-cols-1 md:grid-cols-2 gap-3"
+                      >
+                        {#each item.children as block}
+                          <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
+                          <div
+                            role={block.ref ? 'button' : undefined}
+                            tabindex={block.ref ? 0 : undefined}
+                            class="amc-hybrid-child rounded-xl p-1 text-left transition-colors {block.ref
+                              ? `cursor-pointer ${
+                                  isSelected(block.ref)
+                                    ? 'ring-2 ring-coopmaths-action'
+                                    : 'hover:bg-coopmaths-canvas/40 dark:hover:bg-coopmathsdark-canvas/40'
+                                }`
+                              : 'bg-coopmaths-canvas/20 dark:bg-coopmathsdark-canvas/20'}"
+                            on:click={() => {
+                              if (block.ref) selectBlock(block.ref)
+                            }}
+                            on:keydown={(e) => {
+                              if (
+                                block.ref &&
+                                (e.key === 'Enter' || e.key === ' ')
+                              )
+                                selectBlock(block.ref)
+                            }}
+                          >
+                            <div
+                              class="mb-1 flex items-center justify-between gap-1"
+                            >
+                              <p
+                                class="text-xs font-semibold uppercase tracking-wide text-coopmaths-action dark:text-coopmathsdark-action"
+                              >
+                                {block.label}
+                              </p>
+                              {#if block.ref}
+                                <button
+                                  type="button"
+                                  class="shrink-0 rounded px-1 text-xs text-coopmaths-corpus/60 hover:bg-red-100 hover:text-red-600 dark:hover:bg-red-900/40 dark:hover:text-red-400"
+                                  aria-label="Supprimer la question"
+                                  on:click|stopPropagation={() =>
+                                    deleteQuestion(
+                                      block.ref!.exerciseIndex,
+                                      block.ref!.questionIndex,
+                                    )}>×</button
+                                >
+                              {/if}
+                            </div>
+
+                            {#if block.previewKind === 'qcm'}
+                              <AmcPreviewQcm
+                                enonce={block.enonce}
+                                htmlContent={block.htmlContent}
+                                mode={block.data?.type === 'qcmMult' ||
+                                exercice.amcType === 'qcmMult'
+                                  ? 'qcmMult'
+                                  : 'qcmMono'}
+                                choix={block.data?.propositions ?? []}
+                              />
+                            {:else if block.previewKind === 'num'}
+                              <AmcPreviewNumeric
+                                enonce={block.enonce}
+                                htmlContent={block.htmlContent}
+                                param={block.data?.propositions?.[0]?.reponse
+                                  ?.param ??
+                                  block.data?.reponse?.param ??
+                                  {}}
+                              />
+                            {:else if block.previewKind === 'open'}
+                              <AmcPreviewOpen
+                                enonce={block.enonce}
+                                htmlContent={block.htmlContent}
+                                lignes={block.data?.propositions?.[0]?.statut ??
+                                  block.data?.propositions?.[0]?.pointilles ??
+                                  3}
+                                pointilles={block.data?.propositions?.[0]
+                                  ?.pointilles}
+                                sanscadre={block.data?.propositions?.[0]
+                                  ?.sanscadre}
+                              />
+                            {/if}
+                          </div>
+                        {/each}
+                      </div>
+                    </div>
+                  {:else}
+                    {@const block = item.block}
+                    <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
+                    <div
+                      role={block.ref ? 'button' : undefined}
+                      tabindex={block.ref ? 0 : undefined}
+                      class="rounded-xl p-1 text-left transition-colors {block.ref
+                        ? `cursor-pointer ${
+                            isSelected(block.ref)
+                              ? 'ring-2 ring-coopmaths-action'
+                              : 'hover:bg-coopmaths-canvas/40 dark:hover:bg-coopmathsdark-canvas/40'
+                          }`
+                        : 'bg-coopmaths-canvas/20 dark:bg-coopmathsdark-canvas/20'}"
+                      on:click={() => {
+                        if (block.ref) selectBlock(block.ref)
+                      }}
+                      on:keydown={(e) => {
+                        if (block.ref && (e.key === 'Enter' || e.key === ' '))
+                          selectBlock(block.ref)
+                      }}
+                    >
+                      <div class="mb-1 flex items-center justify-between gap-1">
+                        <p
+                          class="text-xs font-semibold uppercase tracking-wide text-coopmaths-action dark:text-coopmathsdark-action"
+                        >
+                          {block.label}
+                        </p>
+                        {#if block.ref}
+                          <button
+                            type="button"
+                            class="shrink-0 rounded px-1 text-xs text-coopmaths-corpus/60 hover:bg-red-100 hover:text-red-600 dark:hover:bg-red-900/40 dark:hover:text-red-400"
+                            aria-label="Supprimer la question"
+                            on:click|stopPropagation={() =>
+                              deleteQuestion(
+                                block.ref!.exerciseIndex,
+                                block.ref!.questionIndex,
+                              )}>×</button
+                          >
+                        {/if}
+                      </div>
+
+                      {#if block.previewKind === 'qcm'}
+                        <AmcPreviewQcm
+                          enonce={block.enonce}
+                          htmlContent={block.htmlContent}
+                          mode={block.data?.type === 'qcmMult' ||
+                          exercice.amcType === 'qcmMult'
+                            ? 'qcmMult'
+                            : 'qcmMono'}
+                          choix={block.data?.propositions ?? []}
+                        />
+                      {:else if block.previewKind === 'num'}
+                        <AmcPreviewNumeric
+                          enonce={block.enonce}
+                          htmlContent={block.htmlContent}
+                          param={block.data?.propositions?.[0]?.reponse
+                            ?.param ??
+                            block.data?.reponse?.param ??
+                            {}}
+                        />
+                      {:else if block.previewKind === 'open'}
+                        <AmcPreviewOpen
+                          enonce={block.enonce}
+                          htmlContent={block.htmlContent}
+                          lignes={block.data?.propositions?.[0]?.statut ??
+                            block.data?.propositions?.[0]?.pointilles ??
+                            3}
+                          pointilles={block.data?.propositions?.[0]?.pointilles}
+                          sanscadre={block.data?.propositions?.[0]?.sanscadre}
+                        />
+                      {/if}
+                    </div>
+                  {/if}
                 {/each}
               </div>
             </article>
@@ -1214,232 +1685,271 @@
             Sélectionne un bloc dans la zone centrale pour éditer ses paramètres
             fins.
           </p>
-        {:else if selectedRef.kind === 'num'}
-          <div class="mt-4 space-y-2">
-            <p class="text-sm font-semibold">AMCnumericChoices</p>
-            <label for="amc-num-digits" class="block text-xs">Digits</label>
+        {:else if selectedQuestionHasTikzPicture()}
+          <div
+            class="mt-4 space-y-2 rounded-xl border border-coopmaths-struct-light/30 p-3"
+          >
+            <p class="text-sm font-semibold">
+              Figure TikZ (question sélectionnée)
+            </p>
+            <label for="amc-tikz-scale" class="block text-xs"
+              >{selectedQuestionClipDimensionsLabel}</label
+            >
             <input
-              id="amc-num-digits"
-              type="number"
-              min="1"
-              class="w-full rounded border px-2 py-1 text-sm"
+              id="amc-tikz-scale"
+              type="range"
+              min="0.5"
+              max="1.2"
+              step="0.05"
+              bind:value={tikzScaleSliderValue}
               on:input={(event) =>
-                updateSelectedNumericParam(
-                  'digits',
-                  Math.max(
+                setSelectedQuestionTikzScaleFactor(
+                  Number((event.currentTarget as HTMLInputElement).value) ||
+                    tikzScaleSliderValue ||
                     1,
-                    Number((event.currentTarget as HTMLInputElement).value) ||
-                      1,
-                  ),
                 )}
             />
+            <p
+              class="text-xs text-coopmaths-corpus dark:text-coopmathsdark-corpus"
+            >
+              Facteur courant: {formatTikzScale(
+                selectedQuestionTikzScaleFactor,
+              )}
+              (plage 0.5 à 1.2)
+            </p>
+          </div>
+        {/if}
 
-            <label for="amc-num-decimals" class="block text-xs">Decimals</label>
-            <input
-              id="amc-num-decimals"
-              type="number"
-              min="0"
-              class="w-full rounded border px-2 py-1 text-sm"
-              on:input={(event) =>
-                updateSelectedNumericParam(
-                  'decimals',
-                  Math.max(
-                    0,
-                    Number((event.currentTarget as HTMLInputElement).value) ||
-                      0,
-                  ),
-                )}
-            />
-
-            <label for="amc-num-approx" class="block text-xs">Approx</label>
-            <input
-              id="amc-num-approx"
-              type="number"
-              min="0"
-              class="w-full rounded border px-2 py-1 text-sm"
-              on:input={(event) =>
-                updateSelectedNumericParam(
-                  'approx',
-                  Math.max(
-                    0,
-                    Number((event.currentTarget as HTMLInputElement).value) ||
-                      0,
-                  ),
-                )}
-            />
-
-            <label class="mt-2 inline-flex items-center gap-2 text-xs">
+        {#if selectedRef != null}
+          {#if selectedRef.kind === 'num'}
+            <div class="mt-4 space-y-2">
+              <p class="text-sm font-semibold">AMCnumericChoices</p>
+              <label for="amc-num-digits" class="block text-xs">Digits</label>
               <input
-                type="checkbox"
-                on:change={(event) =>
+                id="amc-num-digits"
+                type="number"
+                min="1"
+                class="w-full rounded border px-2 py-1 text-sm"
+                on:input={(event) =>
                   updateSelectedNumericParam(
-                    'signe',
-                    (event.currentTarget as HTMLInputElement).checked,
-                  )}
-              />
-              Autoriser le signe
-            </label>
-            <label class="mt-2 inline-flex items-center gap-2 text-xs">
-              <input
-                type="checkbox"
-                on:change={(event) =>
-                  updateSelectedNumericParam(
-                    'vertical',
-                    (event.currentTarget as HTMLInputElement).checked,
-                  )}
-              />
-              Affichage vertical
-            </label>
-            <label class="mt-2 inline-flex items-center gap-2 text-xs">
-              <input
-                type="checkbox"
-                checked={isSelectedBlockMulticolsEnabled()}
-                on:change={(event) =>
-                  updateSelectedBlockMulticols(
-                    (event.currentTarget as HTMLInputElement).checked,
-                  )}
-              />
-              {exercices[selectedRef.exerciseIndex]?.amcType === 'AMCHybride'
-                ? 'Bloc hybride en multicolonnes (2)'
-                : 'Question en multicolonnes (2)'}
-            </label>
-            <button
-              type="button"
-              class="mt-2 w-full rounded border px-3 py-1 text-xs"
-              on:click={appliquerParametresQuestionAuGroupe}
-            >
-              Appliquer ces parametres a tout le groupe
-            </button>
-          </div>
-        {:else if selectedRef.kind === 'open'}
-          <div class="mt-4 space-y-2">
-            <p class="text-sm font-semibold">AMCOpen</p>
-            <label for="amc-open-lines" class="block text-xs"
-              >Nombre de lignes (statut)</label
-            >
-            <input
-              id="amc-open-lines"
-              type="number"
-              min="1"
-              class="w-full rounded border px-2 py-1 text-sm"
-              on:input={(event) =>
-                updateSelectedOpenParam(
-                  'statut',
-                  Math.max(
-                    1,
-                    Number((event.currentTarget as HTMLInputElement).value) ||
+                    'digits',
+                    Math.max(
                       1,
-                  ),
-                )}
-            />
+                      Number((event.currentTarget as HTMLInputElement).value) ||
+                        1,
+                    ),
+                  )}
+              />
 
-            <label class="mt-2 inline-flex items-center gap-2 text-xs">
+              <label for="amc-num-decimals" class="block text-xs"
+                >Decimals</label
+              >
               <input
-                type="checkbox"
-                on:change={(event) =>
-                  updateSelectedOpenParam(
-                    'pointilles',
-                    (event.currentTarget as HTMLInputElement).checked,
-                  )}
-              />
-              Pointillés
-            </label>
-            <label class="mt-2 inline-flex items-center gap-2 text-xs">
-              <input
-                type="checkbox"
-                on:change={(event) =>
-                  updateSelectedOpenParam(
-                    'sanscadre',
-                    (event.currentTarget as HTMLInputElement).checked,
-                  )}
-              />
-              Sans cadre
-            </label>
-            <label class="mt-2 inline-flex items-center gap-2 text-xs">
-              <input
-                type="checkbox"
-                checked={isSelectedBlockMulticolsEnabled()}
-                on:change={(event) =>
-                  updateSelectedBlockMulticols(
-                    (event.currentTarget as HTMLInputElement).checked,
-                  )}
-              />
-              {exercices[selectedRef.exerciseIndex]?.amcType === 'AMCHybride'
-                ? 'Bloc hybride en multicolonnes (2)'
-                : 'Question en multicolonnes (2)'}
-            </label>
-            <button
-              type="button"
-              class="mt-2 w-full rounded border px-3 py-1 text-xs"
-              on:click={appliquerParametresQuestionAuGroupe}
-            >
-              Appliquer ces parametres a tout le groupe
-            </button>
-          </div>
-        {:else}
-          <div class="mt-4 space-y-2">
-            <p class="text-sm font-semibold">QCM</p>
-            <label class="mt-2 inline-flex items-center gap-2 text-xs">
-              <input
-                type="checkbox"
-                on:change={(event) =>
-                  updateSelectedQcmOption(
-                    'ordered',
-                    (event.currentTarget as HTMLInputElement).checked,
-                  )}
-              />
-              Réponses ordonnées
-            </label>
-            <label class="mt-2 inline-flex items-center gap-2 text-xs">
-              <input
-                type="checkbox"
-                on:change={(event) =>
-                  updateSelectedQcmOption(
-                    'vertical',
-                    (event.currentTarget as HTMLInputElement).checked,
-                  )}
-              />
-              Affichage vertical
-            </label>
-            <label for="amc-qcm-last-choice" class="block text-xs"
-              >Index de lastChoice</label
-            >
-            <input
-              id="amc-qcm-last-choice"
-              type="number"
-              min="0"
-              class="w-full rounded border px-2 py-1 text-sm"
-              on:input={(event) =>
-                updateSelectedQcmOption(
-                  'lastChoice',
-                  Math.max(
-                    0,
-                    Number((event.currentTarget as HTMLInputElement).value) ||
+                id="amc-num-decimals"
+                type="number"
+                min="0"
+                class="w-full rounded border px-2 py-1 text-sm"
+                on:input={(event) =>
+                  updateSelectedNumericParam(
+                    'decimals',
+                    Math.max(
                       0,
-                  ),
-                )}
-            />
-            <label class="mt-2 inline-flex items-center gap-2 text-xs">
-              <input
-                type="checkbox"
-                checked={isSelectedBlockMulticolsEnabled()}
-                on:change={(event) =>
-                  updateSelectedBlockMulticols(
-                    (event.currentTarget as HTMLInputElement).checked,
+                      Number((event.currentTarget as HTMLInputElement).value) ||
+                        0,
+                    ),
                   )}
               />
-              {exercices[selectedRef.exerciseIndex]?.amcType === 'AMCHybride'
-                ? 'Bloc hybride en multicolonnes (2)'
-                : 'Question en multicolonnes (2)'}
-            </label>
-            <button
-              type="button"
-              class="mt-2 w-full rounded border px-3 py-1 text-xs"
-              on:click={appliquerParametresQuestionAuGroupe}
-            >
-              Appliquer ces parametres a tout le groupe
-            </button>
-          </div>
+
+              <label for="amc-num-approx" class="block text-xs">Approx</label>
+              <input
+                id="amc-num-approx"
+                type="number"
+                min="0"
+                class="w-full rounded border px-2 py-1 text-sm"
+                on:input={(event) =>
+                  updateSelectedNumericParam(
+                    'approx',
+                    Math.max(
+                      0,
+                      Number((event.currentTarget as HTMLInputElement).value) ||
+                        0,
+                    ),
+                  )}
+              />
+
+              <label class="mt-2 inline-flex items-center gap-2 text-xs">
+                <input
+                  type="checkbox"
+                  on:change={(event) =>
+                    updateSelectedNumericParam(
+                      'signe',
+                      (event.currentTarget as HTMLInputElement).checked,
+                    )}
+                />
+                Autoriser le signe
+              </label>
+              <label class="mt-2 inline-flex items-center gap-2 text-xs">
+                <input
+                  type="checkbox"
+                  on:change={(event) =>
+                    updateSelectedNumericParam(
+                      'vertical',
+                      (event.currentTarget as HTMLInputElement).checked,
+                    )}
+                />
+                Affichage vertical
+              </label>
+              <label class="mt-2 inline-flex items-center gap-2 text-xs">
+                <input
+                  type="checkbox"
+                  checked={isSelectedBlockMulticolsEnabled()}
+                  on:change={(event) =>
+                    updateSelectedBlockMulticols(
+                      (event.currentTarget as HTMLInputElement).checked,
+                    )}
+                />
+                {exercices[selectedRef.exerciseIndex]?.amcType === 'AMCHybride'
+                  ? 'Bloc hybride en multicolonnes (2)'
+                  : 'Question en multicolonnes (2)'}
+              </label>
+              <button
+                type="button"
+                class="mt-2 w-full rounded border px-3 py-1 text-xs"
+                on:click={appliquerParametresQuestionAuGroupe}
+              >
+                Appliquer ces parametres a tout le groupe
+              </button>
+            </div>
+          {:else if selectedRef.kind === 'open'}
+            <div class="mt-4 space-y-2">
+              <p class="text-sm font-semibold">AMCOpen</p>
+              <label for="amc-open-lines" class="block text-xs"
+                >Nombre de lignes (statut)</label
+              >
+              <input
+                id="amc-open-lines"
+                type="number"
+                min="1"
+                class="w-full rounded border px-2 py-1 text-sm"
+                on:input={(event) =>
+                  updateSelectedOpenParam(
+                    'statut',
+                    Math.max(
+                      1,
+                      Number((event.currentTarget as HTMLInputElement).value) ||
+                        1,
+                    ),
+                  )}
+              />
+
+              <label class="mt-2 inline-flex items-center gap-2 text-xs">
+                <input
+                  type="checkbox"
+                  on:change={(event) =>
+                    updateSelectedOpenParam(
+                      'pointilles',
+                      (event.currentTarget as HTMLInputElement).checked,
+                    )}
+                />
+                Pointillés
+              </label>
+              <label class="mt-2 inline-flex items-center gap-2 text-xs">
+                <input
+                  type="checkbox"
+                  on:change={(event) =>
+                    updateSelectedOpenParam(
+                      'sanscadre',
+                      (event.currentTarget as HTMLInputElement).checked,
+                    )}
+                />
+                Sans cadre
+              </label>
+              <label class="mt-2 inline-flex items-center gap-2 text-xs">
+                <input
+                  type="checkbox"
+                  checked={isSelectedBlockMulticolsEnabled()}
+                  on:change={(event) =>
+                    updateSelectedBlockMulticols(
+                      (event.currentTarget as HTMLInputElement).checked,
+                    )}
+                />
+                {exercices[selectedRef.exerciseIndex]?.amcType === 'AMCHybride'
+                  ? 'Bloc hybride en multicolonnes (2)'
+                  : 'Question en multicolonnes (2)'}
+              </label>
+              <button
+                type="button"
+                class="mt-2 w-full rounded border px-3 py-1 text-xs"
+                on:click={appliquerParametresQuestionAuGroupe}
+              >
+                Appliquer ces parametres a tout le groupe
+              </button>
+            </div>
+          {:else}
+            <div class="mt-4 space-y-2">
+              <p class="text-sm font-semibold">QCM</p>
+              <label class="mt-2 inline-flex items-center gap-2 text-xs">
+                <input
+                  type="checkbox"
+                  on:change={(event) =>
+                    updateSelectedQcmOption(
+                      'ordered',
+                      (event.currentTarget as HTMLInputElement).checked,
+                    )}
+                />
+                Réponses ordonnées
+              </label>
+              <label class="mt-2 inline-flex items-center gap-2 text-xs">
+                <input
+                  type="checkbox"
+                  on:change={(event) =>
+                    updateSelectedQcmOption(
+                      'vertical',
+                      (event.currentTarget as HTMLInputElement).checked,
+                    )}
+                />
+                Affichage vertical
+              </label>
+              <label for="amc-qcm-last-choice" class="block text-xs"
+                >Index de lastChoice</label
+              >
+              <input
+                id="amc-qcm-last-choice"
+                type="number"
+                min="0"
+                class="w-full rounded border px-2 py-1 text-sm"
+                on:input={(event) =>
+                  updateSelectedQcmOption(
+                    'lastChoice',
+                    Math.max(
+                      0,
+                      Number((event.currentTarget as HTMLInputElement).value) ||
+                        0,
+                    ),
+                  )}
+              />
+              <label class="mt-2 inline-flex items-center gap-2 text-xs">
+                <input
+                  type="checkbox"
+                  checked={isSelectedBlockMulticolsEnabled()}
+                  on:change={(event) =>
+                    updateSelectedBlockMulticols(
+                      (event.currentTarget as HTMLInputElement).checked,
+                    )}
+                />
+                {exercices[selectedRef.exerciseIndex]?.amcType === 'AMCHybride'
+                  ? 'Bloc hybride en multicolonnes (2)'
+                  : 'Question en multicolonnes (2)'}
+              </label>
+              <button
+                type="button"
+                class="mt-2 w-full rounded border px-3 py-1 text-xs"
+                on:click={appliquerParametresQuestionAuGroupe}
+              >
+                Appliquer ces parametres a tout le groupe
+              </button>
+            </div>
+          {/if}
         {/if}
 
         {#if groupConsistencyReport && groupConsistencyReport.missingGroupDefinitions.length > 0}
@@ -1456,3 +1966,24 @@
     </div>
   </div>
 </SetupShell>
+
+<style>
+  .amc-hybrid-header-card :global(.text-sm) {
+    font-size: 0.92rem !important;
+    line-height: 1.3rem !important;
+  }
+
+  .amc-hybrid-children :global(.text-sm) {
+    font-size: 0.76rem !important;
+    line-height: 1.05rem !important;
+  }
+
+  .amc-hybrid-children :global(.text-xs) {
+    font-size: 0.66rem !important;
+    line-height: 0.9rem !important;
+  }
+
+  .amc-hybrid-children :global(.p-3) {
+    padding: 0.55rem !important;
+  }
+</style>
