@@ -92,10 +92,16 @@
       : (tikzScaleFactorsByQuestion[selectedQuestionKey] ?? 1),
   )
   $: tikzScaleSliderValue = selectedQuestionTikzScaleFactor
-  $: selectedQuestionClipDimensionsLabel =
-    getSelectedQuestionScaledClipDimensionsLabel(
-      selectedQuestionTikzScaleFactor,
-    )
+  $: {
+    // Dépend explicitement de la question sélectionnée pour forcer la MAJ
+    // même si le facteur reste inchangé (ex: 1 -> 1).
+    selectedQuestionKey
+    exercices
+    selectedQuestionClipDimensionsLabel =
+      getSelectedQuestionScaledClipDimensionsLabel(
+        selectedQuestionTikzScaleFactor,
+      )
+  }
 
   function asAMCExercices(exos: IExercice[]): IExerciceAMC[] {
     return exos as unknown as IExerciceAMC[]
