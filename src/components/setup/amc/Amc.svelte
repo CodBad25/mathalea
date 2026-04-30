@@ -413,7 +413,7 @@
   }
 
   function clampTikzScaleFactor(value: number): number {
-    return Math.max(0.5, Math.min(1.2, value))
+    return Math.max(0.5, Math.min(1.5, value))
   }
 
   function setSelectedQuestionTikzScaleFactor(value: number) {
@@ -1707,7 +1707,7 @@
               id="amc-tikz-scale"
               type="range"
               min="0.5"
-              max="1.2"
+              max="1.5"
               step="0.05"
               bind:value={tikzScaleSliderValue}
               on:input={(event) =>
@@ -1723,7 +1723,7 @@
               Facteur courant: {formatTikzScale(
                 selectedQuestionTikzScaleFactor,
               )}
-              (plage 0.5 à 1.2)
+              (plage 0.5 à 1.5)
             </p>
           </div>
         {/if}
