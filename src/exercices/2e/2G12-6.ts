@@ -145,7 +145,7 @@ export default class Reperage2e extends Exercice {
       const pointK = pointAbstrait(coordsK[0], coordsK[1], labelK, 'left')
       const traceRep = tracePoint(pointO, pointI, pointK)
       traceRep.style = '.'
-      traceRep.epaisseur = 1
+      traceRep.epaisseur = 2
       const IPrime = homothetie(pointI, pointO, 4)
       const KPrime = homothetie(pointK, pointO, 3)
       const INeg = rotation(IPrime, pointO, 180)
