@@ -75,8 +75,8 @@ const callback = async (
       throw new Error('LaTeX or AMC callback called with invalid variation')
     if (view === 'LaTeX' && !isLatexVariation(variation))
       throw new Error('LaTeX invalid variation')
-    if (view === 'AMC' && !isAMCVariation(variation))
-      throw new Error('AMC invalid variation')
+    // if (view === 'AMC' && !isAMCVariation(variation))
+    //   throw new Error('AMC invalid variation')
     await LatexStatePush(page, view, variation)
   } else {
     if (view === 'eleve' && !isStudentVariation(variation))

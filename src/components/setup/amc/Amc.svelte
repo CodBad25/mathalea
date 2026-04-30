@@ -361,6 +361,25 @@
           : []
         propositions.forEach((prop: any, propositionIndex: number) => {
           const propType = prop?.type
+          const figureEnvRegex =
+            /\\begin\{(?:tikzpicture|pspicture|picture|circuitikz)\}[\s\S]*?\\end\{(?:tikzpicture|pspicture|picture|circuitikz)\}/i
+          const propSpecificText =
+            propType === 'AMCNum'
+              ? prop?.propositions?.[0]?.reponse?.texte
+              : propType === 'AMCOpen'
+                ? prop?.propositions?.[0]?.texte
+                : item?.enonce
+          const propHtmlContent = (() => {
+            const raw =
+              typeof propSpecificText === 'string'
+                ? propSpecificText.trim()
+                : ''
+            if (raw.length === 0) return htmlContent
+            // Si le texte contient encore une figure LaTeX, on garde le fallback HTML
+            // (qui contient déjà le SVG substitué).
+            const source = figureEnvRegex.test(raw) ? htmlContent : raw
+            return source.replaceAll('\\\\', '<br>')
+          })()
           if (propType === 'qcmMono' || propType === 'qcmMult') {
             blocks.push({
               key: `${exerciseIndex}-${questionIndex}-${propositionIndex}-qcm`,
@@ -372,7 +391,7 @@
                 kind: 'qcm',
               },
               enonce: item?.enonce ?? '',
-              htmlContent,
+              htmlContent: propHtmlContent,
               data: prop,
             })
           }
@@ -387,7 +406,7 @@
                 kind: 'num',
               },
               enonce: item?.enonce ?? '',
-              htmlContent,
+              htmlContent: propHtmlContent,
               data: prop,
             })
           }
@@ -402,7 +421,7 @@
                 kind: 'open',
               },
               enonce: item?.enonce ?? '',
-              htmlContent,
+              htmlContent: propHtmlContent,
               data: prop,
             })
           }
