@@ -18,7 +18,6 @@ import type {
 import { context } from '../../modules/context'
 import Grandeur, { USI } from '../../modules/Grandeur'
 import { messageFeedback } from '../../modules/messages'
-import { shuffleJusquaWithIndexes } from '../amc/qcmCam'
 import { get } from '../html/dom'
 import {
   barreTexte,
@@ -27,6 +26,7 @@ import {
   texteGras,
 } from '../outils/embellissements'
 import { lettreDepuisChiffre } from '../outils/outilString'
+import { shuffleJusquaWithIndexes } from '../qcmCam'
 import type { ButtonWithMathaleaListener } from '../types/can'
 import { afficheScore } from './afficheScore'
 import { generateCleaner } from './cleaners'

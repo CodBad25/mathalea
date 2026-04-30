@@ -1,6 +1,10 @@
 <script>
   import { getContext } from 'svelte'
-  const { toggleThirdAppsChoiceDialog } = getContext('thirdAppsChoiceContext')
+  const context = getContext('thirdAppsChoiceContext')
+  const toggleThirdAppsChoiceDialog =
+    typeof context?.toggleThirdAppsChoiceDialog === 'function'
+      ? context.toggleThirdAppsChoiceDialog
+      : () => {}
 </script>
 
 <button

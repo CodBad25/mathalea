@@ -287,7 +287,7 @@ export default class PerimetreAireDisques extends Exercice {
                   type: 'AMCNum',
                   propositions: [
                     {
-                      texte: texteCorr,
+                      texte: '',
                       reponse: {
                         texte: 'Périmètre en cm (valeur approchée à 0,1 près)',
                         valeur: [reponseL2],
@@ -381,7 +381,7 @@ export default class PerimetreAireDisques extends Exercice {
                   type: 'AMCNum',
                   propositions: [
                     {
-                      texte: texteCorr,
+                      texte: '',
                       reponse: {
                         texte:
                           'Aire en cm\\up{2} (valeur approchée à 0,1 près)',

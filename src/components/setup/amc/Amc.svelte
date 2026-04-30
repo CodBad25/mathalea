@@ -1,415 +1,1242 @@
 <script lang="ts">
   import seedrandom from 'seedrandom'
-  import { onMount } from 'svelte'
-  import { creerDocumentAmc } from '../../../lib/amc/creerDocumentAmc.js'
+  import { onDestroy, onMount } from 'svelte'
+  import type { IExerciceAMC } from '../../../lib/amc/amcTypes'
   import {
+    checkAMCGroupConsistency,
+    creerDocumentAmc,
+    type AMCGroupConsistencyReport,
+  } from '../../../lib/amc/creerDocumentAmc'
+  import {
+    mathaleaEnsureAMCCompatibility,
     mathaleaGenerateSeed,
     mathaleaGetExercicesFromParams,
     mathaleaHandleExerciceSimple,
     mathaleaUpdateExercicesParamsFromUrl,
     mathaleaUpdateUrlFromExercicesParams,
-  } from '../../../lib/mathalea.js'
-  import {
-    darkMode,
-    exercicesParams,
-  } from '../../../lib/stores/generalStore.js'
-  import { referentielLocale } from '../../../lib/stores/languagesStore.js'
-  import type { IExercice } from '../../../lib/types'
-  import { context } from '../../../modules/context.js'
-  import Footer from '../../Footer.svelte'
-  import ButtonActionInfo from '../../shared/forms/ButtonActionInfo.svelte'
-  import ButtonTextAction from '../../shared/forms/ButtonTextAction.svelte'
-  import FormRadio from '../../shared/forms/FormRadio.svelte'
-  import InputNumber from '../../shared/forms/InputNumber.svelte'
-  import InputText from '../../shared/forms/InputText.svelte'
+  } from '../../../lib/mathalea'
+  import { darkMode, exercicesParams } from '../../../lib/stores/generalStore'
+  import { referentielLocale } from '../../../lib/stores/languagesStore'
+  import type { IExercice, InterfaceParams } from '../../../lib/types'
+  import { context } from '../../../modules/context'
   import NavBar from '../../shared/header/NavBar.svelte'
-  import BasicClassicModal from '../../shared/modal/BasicClassicModal.svelte'
+  import SetupShell from '../SetupShell.svelte'
+  import SideMenu from '../start/presentationalComponents/sideMenu/SideMenu.svelte'
+  import AmcPreviewNumeric from './builder/AmcPreviewNumeric.svelte'
+  import AmcPreviewOpen from './builder/AmcPreviewOpen.svelte'
+  import AmcPreviewQcm from './builder/AmcPreviewQcm.svelte'
 
-  const isSettingsVisible: boolean[] = []
+  type BlockKind = 'qcm' | 'num' | 'open'
+
+  type BlockRef = {
+    exerciseIndex: number
+    questionIndex: number
+    propositionIndex: number
+    kind: BlockKind
+  }
+
+  type GroupSetting = {
+    seed: string
+    questionCount: number
+    restitueCount: number
+  }
+
   let exercices: IExercice[] = []
-  let content = ''
-  let entete = 'AMCcodeGrid'
-  let format = 'A4'
-  let matiere = ''
-  let titre = ''
-  const nbQuestionsModif: number[] = []
-  const exercicesARetirer: string[] = []
-  let refsExercicesARetirer: string[]
-  $: refsExercicesARetirer = []
+  let groupSettings: GroupSetting[] = []
+  let selectedRef: BlockRef | null = null
+  let selectedExerciseIndex: number | null = null
+  let latexContent = ''
+  let groupConsistencyReport: AMCGroupConsistencyReport | null = null
+  let isDropTargetActive = false
 
-  type NbQuestionsIndexees = {
-    indexExercice: number
-    nombre: number
+  let unsubscribeExercicesParams: (() => void) | null = null
+
+  function asAMCExercices(exos: IExercice[]): IExerciceAMC[] {
+    return exos as unknown as IExerciceAMC[]
   }
 
-  let nbQuestions: Array<NbQuestionsIndexees> = []
-  let nbExemplaires = 1
-  let textForOverleaf: HTMLInputElement
-  let isNonAMCModaleDisplayed = false
-  let isOverleafModalDisplayed = false
+  async function regenerateExercise(index: number, forcedSeed?: string) {
+    const exercice = exercices[index]
+    if (!exercice) return
 
-  async function initExercices() {
-    exercicesARetirer.length = 0
-    await mathaleaUpdateExercicesParamsFromUrl()
-    exercices = (await mathaleaGetExercicesFromParams($exercicesParams)).filter(
-      (exercice): exercice is IExercice => exercice.typeExercice !== 'statique',
-    )
-    for (const exercice of exercices) {
-      isSettingsVisible.push(false)
-      context.isHtml = false
-      context.isAmc = true
-      seedrandom(exercice.seed, { global: true })
-      if (exercice.typeExercice === 'simple') {
-        mathaleaHandleExerciceSimple(exercice, false)
-      } else {
-        if (exercice.nouvelleVersionWrapper != null)
-          exercice.nouvelleVersionWrapper()
+    const nextSeed = forcedSeed?.trim() || mathaleaGenerateSeed()
+    exercice.seed = nextSeed
+    groupSettings[index] = {
+      ...groupSettings[index],
+      seed: nextSeed,
+    }
+
+    // 1. Passe HTML : génère les SVG dans listeQuestions
+    generateHtmlQuestionsForExercise(exercice, nextSeed)
+
+    // 2. Passe AMC : génère autoCorrection
+    const ex = exercice as any
+    ex.lastCallback = ''
+    context.isHtml = false
+    context.isAmc = true
+    seedrandom(nextSeed, { global: true })
+
+    if (exercice.typeExercice === 'simple') {
+      mathaleaHandleExerciceSimple(exercice, false)
+    } else if (typeof exercice.nouvelleVersionWrapper === 'function') {
+      exercice.nouvelleVersionWrapper()
+    }
+
+    mathaleaEnsureAMCCompatibility(exercice)
+    ;(exercice as any).amcHtmlQuestions =
+      extractAMCQuestionsFromAutoCorrection(exercice)
+    exercices = [...exercices]
+    updateLatexPreview()
+  }
+
+  function extractAMCQuestionsFromAutoCorrection(
+    exercice: IExercice,
+  ): string[] {
+    const ex = exercice as any
+    const htmlQuestions: string[] = ex.htmlQuestions ?? []
+    const autoCorrection = Array.isArray(exercice.autoCorrection)
+      ? exercice.autoCorrection
+      : []
+
+    const figureEnvRegex =
+      /\\begin\{(?:tikzpicture|pspicture|picture|circuitikz)\}[\s\S]*?\\end\{(?:tikzpicture|pspicture|picture|circuitikz)\}/gi
+
+    const extractSvgBlocks = (html: string): string[] => {
+      const matches = html.match(/<svg[\s\S]*?<\/svg>/gi)
+      return matches ?? []
+    }
+
+    const replaceFigureEnvsWithSvg = (
+      amcText: string,
+      htmlText: string,
+    ): string => {
+      const svgBlocks = extractSvgBlocks(htmlText)
+      const hasFigureEnv =
+        /\\begin\{(?:tikzpicture|pspicture|picture|circuitikz)\}/i.test(amcText)
+      let svgIndex = 0
+      const replaced = amcText.replace(figureEnvRegex, () => {
+        const svg = svgBlocks[svgIndex]
+        svgIndex++
+        return svg ?? ''
+      })
+
+      // Si aucun SVG n'a pu être injecté alors qu'il y a des environnements figure,
+      // on retombe sur la version HTML pour ne pas afficher du LaTeX brut.
+      if (hasFigureEnv && svgBlocks.length === 0) {
+        return htmlText
       }
-      if (exercice.amcType == null) {
-        // l'exercice n'est pas disponible AMC
-        exercicesARetirer.push(exercice.uuid)
-        if (exercice.id != null) {
-          refsExercicesARetirer.push(exercice.id)
-        } else {
-          const proprietes: string[] = Object.values(exercice)
-          proprietes.shift()
-          refsExercicesARetirer.push(proprietes.join(' '))
+
+      return replaced
+    }
+
+    const pickPreviewText = (candidate: string, fallback: string): string => {
+      const previewSource =
+        candidate.trim().length === 0
+          ? fallback
+          : replaceFigureEnvsWithSvg(candidate, fallback)
+      return previewSource.replaceAll('\\\\', '<br>')
+    }
+
+    return autoCorrection.map((item: any, i: number) => {
+      const fallback = htmlQuestions[i] ?? ''
+
+      const enonce = typeof item?.enonce === 'string' ? item.enonce.trim() : ''
+      if (enonce.length > 0) return pickPreviewText(enonce, fallback)
+
+      const propositions = Array.isArray(item?.propositions)
+        ? item.propositions
+        : []
+      for (const prop of propositions) {
+        if (prop?.type === 'AMCNum') {
+          const texte = prop?.propositions?.[0]?.reponse?.texte
+          if (typeof texte === 'string' && texte.trim().length > 0) {
+            return pickPreviewText(texte, fallback)
+          }
         }
-      }
-    }
-    exercices = exercices.filter(
-      (exercice) => !exercicesARetirer.includes(exercice.uuid),
-    )
-
-    refsExercicesARetirer = refsExercicesARetirer
-    // afficher le modal pour les exercices non AMC ?
-    isNonAMCModaleDisplayed = refsExercicesARetirer.length !== 0
-  }
-
-  initExercices()
-
-  $: {
-    // ToDo vérifier la saisie utilisateur
-    // Si les copies sont préremplies, c'est un seul exemplaire pour ne pas avoir plusieurs sujets avec le même nom
-    if (entete === 'AMCassociation') nbExemplaires = 1
-    // On récupère les nombres de questions par groupe indexé sur l'index d'exercice dans exercices
-    // la ligne suivante lève une erreur
-    // nbQuestions = nbQuestionsModif.map((elt, i) => {
-    //   if (elt !== null) return { indexExercice: i, nombre: elt }
-    // })
-    // on la remplace par une boucle classique
-    nbQuestions.length = 0
-    for (let i = 0; i < nbQuestionsModif.length; i++) {
-      nbQuestions.push({ indexExercice: i, nombre: nbQuestionsModif[i] })
-    }
-    nbQuestions = nbQuestions
-    // on blinde le nbExemplaires qui ne peut être 0 ou undefined
-    if (nbExemplaires == null) nbExemplaires = 1
-    for (let i = 0; i < exercices.length; i++) {
-      const exo = exercices[i]
-      const nbQ = nbQuestions.find((elt, i) => elt.indexExercice === i)
-      if (nbQ != null) {
-        if (exo.nbQuestions < nbQ.nombre) {
-          exo.nbQuestions = nbQ.nombre * nbExemplaires
-          context.isHtml = false
-          context.isAmc = true
-          seedrandom(exo.seed, { global: true })
-          if (exo.typeExercice === 'simple') {
-            mathaleaHandleExerciceSimple(exo, false)
-          } else {
-            if (exo.nouvelleVersionWrapper != null) exo.nouvelleVersionWrapper()
+        if (prop?.type === 'AMCOpen') {
+          const texte = prop?.propositions?.[0]?.texte
+          if (typeof texte === 'string' && texte.trim().length > 0) {
+            return pickPreviewText(texte, fallback)
           }
         }
       }
-    }
-    const nbQuestionsParGroupe: number[] = nbQuestions.map((elt) => elt.nombre)
-    content = creerDocumentAmc({
-      exercices,
-      typeEntete: entete,
-      format,
-      matiere,
-      titre,
-      nbQuestions: nbQuestionsParGroupe,
-      nbExemplaires,
+
+      return fallback
     })
   }
 
-  /* =======================================================
-   *
-   * Mécanismes de gestion du modal d'infos sur OverLeaf
-   *
-   */
-  let overleafForm: HTMLFormElement | undefined
-  // $: isNonAmcModal Visible = false
-  onMount(async () => {
-    const form = document.getElementById('overleaf-form')
-    if (form instanceof HTMLFormElement) {
-      overleafForm = form
-    }
-  })
+  function generateHtmlQuestionsForExercise(
+    exercice: IExercice,
+    seed: string,
+  ): void {
+    const ex = exercice as any
+    const originalInteractif = exercice.interactif
+    const originalIsAmc = context.isAmc
+    const originalIsHtml = context.isHtml
 
-  /**
-   * Gérer le POST pour Overleaf
-   */
-  function handleOverLeaf() {
-    if (overleafForm == null) return
-    textForOverleaf.value =
-      'data:text/plain;base64,' + btoa(unescape(encodeURIComponent(content)))
-    overleafForm.submit()
-    isOverleafModalDisplayed = false
+    const runHtmlGeneration = (isInteractif: boolean) => {
+      ex.lastCallback = ''
+      exercice.interactif = isInteractif
+      context.isHtml = true
+      context.isAmc = false
+      seedrandom(seed, { global: true })
+
+      if (exercice.typeExercice === 'simple') {
+        if (typeof exercice.nouvelleVersionWrapper === 'function') {
+          exercice.nouvelleVersionWrapper()
+        }
+      } else if (typeof exercice.nouvelleVersionWrapper === 'function') {
+        exercice.nouvelleVersionWrapper()
+      }
+    }
+
+    // 1. Passe interactive HTML hors AMC : permet a handleAnswers de remplir autoCorrection.
+    runHtmlGeneration(true)
+    ex.interactiveAutoCorrectionForAMC = exercice.autoCorrection.map(
+      (item) => ({
+        ...item,
+        reponse: item?.reponse
+          ? {
+              ...item.reponse,
+              valeur: item.reponse.valeur,
+            }
+          : undefined,
+      }),
+    )
+
+    // 2. Passe HTML non interactive hors AMC : apercu papier avec SVG.
+    runHtmlGeneration(false)
+    if (exercice.typeExercice === 'simple') {
+      ex.htmlQuestions =
+        exercice.question != null ? [String(exercice.question)] : []
+    } else {
+      ex.htmlQuestions = [...exercice.listeQuestions]
+    }
+
+    exercice.interactif = originalInteractif
+    context.isAmc = originalIsAmc
+    context.isHtml = originalIsHtml
+    // Le contexte (isHtml/isAmc) est restauré par la passe AMC qui suit.
   }
 
-  // =======================================================
+  async function refreshExercicesFromStore() {
+    const loaded = (
+      await mathaleaGetExercicesFromParams($exercicesParams)
+    ).filter(
+      (exercice): exercice is IExercice => exercice.typeExercice !== 'statique',
+    )
+
+    const amcReadyExercices: IExercice[] = []
+
+    for (const exercice of loaded) {
+      const seed = exercice.seed ?? ''
+
+      // 1. Passe HTML : génère les SVG dans listeQuestions
+      generateHtmlQuestionsForExercise(exercice, seed)
+
+      // 2. Passe AMC : génère autoCorrection
+      const ex = exercice as any
+      ex.lastCallback = ''
+      context.isHtml = false
+      context.isAmc = true
+      seedrandom(seed, { global: true })
+
+      if (exercice.typeExercice === 'simple') {
+        mathaleaHandleExerciceSimple(exercice, false)
+      } else if (typeof exercice.nouvelleVersionWrapper === 'function') {
+        exercice.nouvelleVersionWrapper()
+      }
+
+      mathaleaEnsureAMCCompatibility(exercice)
+      ;(exercice as any).amcHtmlQuestions =
+        extractAMCQuestionsFromAutoCorrection(exercice)
+      if (exercice.amcType != null) {
+        amcReadyExercices.push(exercice)
+      }
+    }
+
+    const previousSettings = groupSettings
+    exercices = amcReadyExercices
+    groupSettings = exercices.map((exercice, index) => ({
+      seed: previousSettings[index]?.seed ?? exercice.seed,
+      questionCount:
+        previousSettings[index]?.questionCount ??
+        Math.max(1, exercice.nbQuestions),
+      restitueCount:
+        previousSettings[index]?.restitueCount ??
+        Math.max(1, exercice.nbQuestions),
+    }))
+
+    if (
+      selectedExerciseIndex != null &&
+      (selectedExerciseIndex < 0 || selectedExerciseIndex >= exercices.length)
+    ) {
+      selectedExerciseIndex = null
+      selectedRef = null
+    }
+
+    updateLatexPreview()
+  }
+
+  function addExercise(uuid: string, id: string) {
+    const newExercise: InterfaceParams = {
+      uuid,
+      id,
+      alea: mathaleaGenerateSeed(),
+      interactif: '0',
+    }
+    exercicesParams.update((list) => [...list, newExercise])
+    mathaleaUpdateUrlFromExercicesParams()
+  }
+
+  function handleDrop(event: DragEvent) {
+    event.preventDefault()
+    isDropTargetActive = false
+
+    const payload =
+      event.dataTransfer?.getData('application/x-mathalea-exercise') ||
+      event.dataTransfer?.getData('text/plain')
+
+    if (!payload) return
+
+    try {
+      const parsed = JSON.parse(payload) as { uuid?: string; id?: string }
+      if (typeof parsed.uuid === 'string' && typeof parsed.id === 'string') {
+        addExercise(parsed.uuid, parsed.id)
+      }
+    } catch {
+      // Zone permissive: d'autres drag/drop peuvent être ignorés.
+    }
+  }
+
+  function updateLatexPreview() {
+    const nbQuestions = groupSettings.map((setting) =>
+      Math.max(
+        1,
+        Math.min(
+          Number(setting.restitueCount) || 1,
+          Number(setting.questionCount) || 1,
+        ),
+      ),
+    )
+
+    latexContent = creerDocumentAmc({
+      exercices: asAMCExercices(exercices),
+      nbQuestions,
+      typeEntete: 'AMCcodeGrid',
+      format: 'A4',
+      matiere: 'Mathématiques',
+      titre: 'Aperçu AMC',
+      nbExemplaires: 1,
+    })
+
+    groupConsistencyReport = checkAMCGroupConsistency(latexContent)
+  }
+
+  function getBlocks(exercise: IExercice, exerciseIndex: number) {
+    const blocks: Array<{
+      key: string
+      label: string
+      ref: BlockRef
+      enonce: string
+      htmlContent: string
+      data: any
+    }> = []
+
+    const autoCorrection = Array.isArray((exercise as any).autoCorrection)
+      ? ((exercise as any).autoCorrection as any[])
+      : []
+
+    const htmlQuestions: string[] = (exercise as any).htmlQuestions ?? []
+    const amcHtmlQuestions: string[] = (exercise as any).amcHtmlQuestions ?? []
+
+    autoCorrection.forEach((item, questionIndex) => {
+      const type = (exercise as any).amcType
+      const htmlContent =
+        amcHtmlQuestions[questionIndex] ?? htmlQuestions[questionIndex] ?? ''
+
+      if (type === 'AMCHybride') {
+        const propositions = Array.isArray(item?.propositions)
+          ? item.propositions
+          : []
+        propositions.forEach((prop: any, propositionIndex: number) => {
+          const propType = prop?.type
+          const figureEnvRegex =
+            /\\begin\{(?:tikzpicture|pspicture|picture|circuitikz)\}[\s\S]*?\\end\{(?:tikzpicture|pspicture|picture|circuitikz)\}/i
+          const propSpecificText =
+            propType === 'AMCNum'
+              ? prop?.propositions?.[0]?.reponse?.texte
+              : propType === 'AMCOpen'
+                ? prop?.propositions?.[0]?.texte
+                : item?.enonce
+          const propHtmlContent = (() => {
+            const raw =
+              typeof propSpecificText === 'string'
+                ? propSpecificText.trim()
+                : ''
+            if (raw.length === 0) return htmlContent
+            // Si le texte contient encore une figure LaTeX, on garde le fallback HTML
+            // (qui contient déjà le SVG substitué).
+            const source = figureEnvRegex.test(raw) ? htmlContent : raw
+            return source.replaceAll('\\\\', '<br>')
+          })()
+          if (propType === 'qcmMono' || propType === 'qcmMult') {
+            blocks.push({
+              key: `${exerciseIndex}-${questionIndex}-${propositionIndex}-qcm`,
+              label: `QCM ${questionIndex + 1}.${propositionIndex + 1}`,
+              ref: {
+                exerciseIndex,
+                questionIndex,
+                propositionIndex,
+                kind: 'qcm',
+              },
+              enonce: item?.enonce ?? '',
+              htmlContent: propHtmlContent,
+              data: prop,
+            })
+          }
+          if (propType === 'AMCNum') {
+            blocks.push({
+              key: `${exerciseIndex}-${questionIndex}-${propositionIndex}-num`,
+              label: `Numérique ${questionIndex + 1}.${propositionIndex + 1}`,
+              ref: {
+                exerciseIndex,
+                questionIndex,
+                propositionIndex,
+                kind: 'num',
+              },
+              enonce: item?.enonce ?? '',
+              htmlContent: propHtmlContent,
+              data: prop,
+            })
+          }
+          if (propType === 'AMCOpen') {
+            blocks.push({
+              key: `${exerciseIndex}-${questionIndex}-${propositionIndex}-open`,
+              label: `Ouverte ${questionIndex + 1}.${propositionIndex + 1}`,
+              ref: {
+                exerciseIndex,
+                questionIndex,
+                propositionIndex,
+                kind: 'open',
+              },
+              enonce: item?.enonce ?? '',
+              htmlContent: propHtmlContent,
+              data: prop,
+            })
+          }
+        })
+        return
+      }
+
+      if (type === 'qcmMono' || type === 'qcmMult') {
+        blocks.push({
+          key: `${exerciseIndex}-${questionIndex}-0-qcm`,
+          label: `QCM ${questionIndex + 1}`,
+          ref: {
+            exerciseIndex,
+            questionIndex,
+            propositionIndex: 0,
+            kind: 'qcm',
+          },
+          enonce: item?.enonce ?? '',
+          htmlContent,
+          data: item,
+        })
+      }
+
+      if (type === 'AMCNum') {
+        blocks.push({
+          key: `${exerciseIndex}-${questionIndex}-0-num`,
+          label: `Numérique ${questionIndex + 1}`,
+          ref: {
+            exerciseIndex,
+            questionIndex,
+            propositionIndex: 0,
+            kind: 'num',
+          },
+          enonce: item?.enonce ?? '',
+          htmlContent,
+          data: item,
+        })
+      }
+
+      if (type === 'AMCOpen') {
+        blocks.push({
+          key: `${exerciseIndex}-${questionIndex}-0-open`,
+          label: `Ouverte ${questionIndex + 1}`,
+          ref: {
+            exerciseIndex,
+            questionIndex,
+            propositionIndex: 0,
+            kind: 'open',
+          },
+          enonce: item?.enonce ?? '',
+          htmlContent,
+          data: item,
+        })
+      }
+    })
+
+    return blocks
+  }
+
+  function isSelected(ref: BlockRef): boolean {
+    return (
+      selectedRef?.exerciseIndex === ref.exerciseIndex &&
+      selectedRef?.questionIndex === ref.questionIndex &&
+      selectedRef?.propositionIndex === ref.propositionIndex &&
+      selectedRef?.kind === ref.kind
+    )
+  }
+
+  function selectBlock(ref: BlockRef) {
+    selectedRef = ref
+    selectedExerciseIndex = ref.exerciseIndex
+  }
+
+  function updateSelectedNumericParam(
+    key: 'digits' | 'decimals' | 'approx' | 'signe' | 'vertical',
+    value: number | boolean,
+  ) {
+    if (!selectedRef || selectedRef.kind !== 'num') return
+
+    const exercise = exercices[selectedRef.exerciseIndex] as any
+    if (!exercise) return
+    const item = exercise.autoCorrection?.[selectedRef.questionIndex]
+    if (!item) return
+
+    const isHybrid = exercise.amcType === 'AMCHybride'
+    const target = isHybrid
+      ? item?.propositions?.[selectedRef.propositionIndex]?.propositions?.[0]
+          ?.reponse
+      : item?.reponse
+
+    if (!target) return
+    target.param = target.param ?? {}
+    target.param[key] = value
+    exercices = [...exercices]
+    updateLatexPreview()
+  }
+
+  function updateSelectedOpenParam(
+    key: 'statut' | 'pointilles' | 'sanscadre',
+    value: number | boolean,
+  ) {
+    if (!selectedRef || selectedRef.kind !== 'open') return
+
+    const exercise = exercices[selectedRef.exerciseIndex] as any
+    if (!exercise) return
+    const item = exercise.autoCorrection?.[selectedRef.questionIndex]
+    if (!item) return
+
+    const isHybrid = exercise.amcType === 'AMCHybride'
+    const target = isHybrid
+      ? item?.propositions?.[selectedRef.propositionIndex]?.propositions?.[0]
+      : item?.propositions?.[0]
+
+    if (!target) return
+    target[key] = value
+    exercices = [...exercices]
+    updateLatexPreview()
+  }
+
+  function updateSelectedQcmOption(
+    key: 'ordered' | 'vertical' | 'lastChoice',
+    value: number | boolean,
+  ) {
+    if (!selectedRef || selectedRef.kind !== 'qcm') return
+
+    const exercise = exercices[selectedRef.exerciseIndex] as any
+    if (!exercise) return
+    const item = exercise.autoCorrection?.[selectedRef.questionIndex]
+    if (!item) return
+
+    const isHybrid = exercise.amcType === 'AMCHybride'
+    const target = isHybrid
+      ? item?.propositions?.[selectedRef.propositionIndex]
+      : item
+
+    if (!target) return
+    target.options = target.options ?? {}
+    target.options[key] = value
+    exercices = [...exercices]
+    updateLatexPreview()
+  }
+
+  function appliquerParametresQuestionAuGroupe() {
+    if (!selectedRef) return
+
+    const exercise = exercices[selectedRef.exerciseIndex] as any
+    if (!exercise) return
+
+    const autoCorrection = Array.isArray(exercise.autoCorrection)
+      ? exercise.autoCorrection
+      : []
+    const isHybrid = exercise.amcType === 'AMCHybride'
+
+    if (selectedRef.kind === 'num') {
+      if (isHybrid) {
+        const sourceParam =
+          autoCorrection[selectedRef.questionIndex]?.propositions?.[
+            selectedRef.propositionIndex
+          ]?.propositions?.[0]?.reponse?.param
+        if (!sourceParam) return
+        const copied = JSON.parse(JSON.stringify(sourceParam))
+        for (const item of autoCorrection) {
+          const propositions = Array.isArray(item?.propositions)
+            ? item.propositions
+            : []
+          for (const prop of propositions) {
+            if (prop?.type !== 'AMCNum') continue
+            const target = prop?.propositions?.[0]?.reponse
+            if (!target) continue
+            target.param = JSON.parse(JSON.stringify(copied))
+          }
+        }
+      } else {
+        const sourceParam =
+          autoCorrection[selectedRef.questionIndex]?.reponse?.param
+        if (!sourceParam) return
+        const copied = JSON.parse(JSON.stringify(sourceParam))
+        for (const item of autoCorrection) {
+          if (!item?.reponse) continue
+          item.reponse.param = JSON.parse(JSON.stringify(copied))
+        }
+      }
+    }
+
+    if (selectedRef.kind === 'open') {
+      if (isHybrid) {
+        const source =
+          autoCorrection[selectedRef.questionIndex]?.propositions?.[
+            selectedRef.propositionIndex
+          ]?.propositions?.[0]
+        if (!source) return
+        for (const item of autoCorrection) {
+          const propositions = Array.isArray(item?.propositions)
+            ? item.propositions
+            : []
+          for (const prop of propositions) {
+            if (prop?.type !== 'AMCOpen') continue
+            const target = prop?.propositions?.[0]
+            if (!target) continue
+            target.statut = source.statut
+            target.pointilles = source.pointilles
+            target.sanscadre = source.sanscadre
+          }
+        }
+      } else {
+        const source =
+          autoCorrection[selectedRef.questionIndex]?.propositions?.[0]
+        if (!source) return
+        for (const item of autoCorrection) {
+          const target = item?.propositions?.[0]
+          if (!target) continue
+          target.statut = source.statut
+          target.pointilles = source.pointilles
+          target.sanscadre = source.sanscadre
+        }
+      }
+    }
+
+    if (selectedRef.kind === 'qcm') {
+      if (isHybrid) {
+        const sourceOptions =
+          autoCorrection[selectedRef.questionIndex]?.propositions?.[
+            selectedRef.propositionIndex
+          ]?.options ?? {}
+        const copied = JSON.parse(JSON.stringify(sourceOptions))
+        for (const item of autoCorrection) {
+          const propositions = Array.isArray(item?.propositions)
+            ? item.propositions
+            : []
+          for (const prop of propositions) {
+            if (prop?.type !== 'qcmMono' && prop?.type !== 'qcmMult') continue
+            prop.options = JSON.parse(JSON.stringify(copied))
+          }
+        }
+      } else {
+        const sourceOptions =
+          autoCorrection[selectedRef.questionIndex]?.options ?? {}
+        const copied = JSON.parse(JSON.stringify(sourceOptions))
+        for (const item of autoCorrection) {
+          item.options = JSON.parse(JSON.stringify(copied))
+        }
+      }
+    }
+
+    exercices = [...exercices]
+    updateLatexPreview()
+  }
+
+  function deleteQuestion(exerciseIndex: number, questionIndex: number) {
+    const exercice = exercices[exerciseIndex] as any
+    if (!exercice?.autoCorrection) return
+    exercice.autoCorrection = (exercice.autoCorrection as any[]).filter(
+      (_: any, i: number) => i !== questionIndex,
+    )
+    if (
+      selectedRef?.exerciseIndex === exerciseIndex &&
+      selectedRef?.questionIndex === questionIndex
+    ) {
+      selectedRef = null
+    }
+    exercices = [...exercices]
+    updateLatexPreview()
+  }
+
+  function deleteExercise(index: number) {
+    if (selectedRef?.exerciseIndex === index) {
+      selectedRef = null
+      selectedExerciseIndex = null
+    } else if (selectedRef != null && selectedRef.exerciseIndex > index) {
+      selectedRef = {
+        ...selectedRef,
+        exerciseIndex: selectedRef.exerciseIndex - 1,
+      }
+      if (selectedExerciseIndex != null && selectedExerciseIndex > index) {
+        selectedExerciseIndex--
+      }
+    } else if (selectedExerciseIndex === index) {
+      selectedExerciseIndex = null
+    } else if (selectedExerciseIndex != null && selectedExerciseIndex > index) {
+      selectedExerciseIndex--
+    }
+    exercicesParams.update((list) => list.filter((_, i) => i !== index))
+    mathaleaUpdateUrlFromExercicesParams()
+  }
+
+  onMount(async () => {
+    await mathaleaUpdateExercicesParamsFromUrl()
+    await refreshExercicesFromStore()
+    unsubscribeExercicesParams = exercicesParams.subscribe(() => {
+      void refreshExercicesFromStore()
+    })
+  })
+
+  onDestroy(() => {
+    if (unsubscribeExercicesParams) unsubscribeExercicesParams()
+  })
 </script>
 
-<main
-  class="bg-coopmaths-canvas dark:bg-coopmathsdark-canvas {$darkMode.isActive
-    ? 'dark'
-    : ''}"
->
-  <NavBar
-    subtitle="AMC"
-    subtitleType="export"
-    handleLanguage={() => {}}
-    locale={$referentielLocale}
-  />
+<SetupShell id="amcBuilder" mobileSidebarTitle="Bibliothèque d'exercices AMC">
+  <div slot="header" class="print-hidden">
+    <NavBar
+      subtitle="AMC Builder"
+      subtitleType="export"
+      handleLanguage={() => {}}
+      locale={$referentielLocale}
+    />
+  </div>
 
-  <section
-    class="px-10 py-10 bg-coopmaths-canvas dark:bg-coopmathsdark-canvas text-coopmaths-struct-lightest dark:text-coopmathsdark-struct-lightest"
+  <div
+    slot="sidebar"
+    class="w-full bg-coopmaths-canvas-dark dark:bg-coopmathsdark-canvas-dark"
   >
-    <div
-      class="flex flex-col md:flex-row justify-start items-start my-4 space-y-5 md:space-y-0 md:space-x-10"
-    >
-      <div>
-        <div class="pb-2 font-bold">Type d'entête</div>
-        <FormRadio
-          bind:valueSelected={entete}
-          labelsValues={[
-            { label: 'Grille de codage', value: 'AMCcodeGrid' },
-            { label: 'Copies pré-remplies', value: 'AMCassociation' },
-            { label: 'Noms et prénoms manuscrits', value: 'manuscrits' },
-          ]}
-          title="entete"
-        />
-      </div>
-      <div>
+    <SideMenu
+      {addExercise}
+      hideThirdAppsButton={true}
+      excludedReferentiels={['geometrieDynamique', 'ressources', 'outils']}
+    />
+  </div>
+
+  <div class="w-full pb-8 {$darkMode.isActive ? 'dark' : ''}">
+    <div class="grid grid-cols-1 xl:grid-cols-[minmax(0,1fr)_22rem] gap-4 mt-4">
+      <section class="space-y-4">
         <div
-          class="pb-2 font-bold text-coopmaths-struct-light dark:text-coopmathsdark-struct-light"
+          class="rounded-xl border-2 border-dashed p-4 transition-colors {isDropTargetActive
+            ? 'border-coopmaths-action bg-coopmaths-action/10'
+            : 'border-coopmaths-struct-light/40 bg-coopmaths-canvas-dark/40 dark:bg-coopmathsdark-canvas-dark/50'}"
+          role="region"
+          aria-label="Zone de dépôt d'exercices AMC"
+          on:dragenter|preventDefault={() => {
+            isDropTargetActive = true
+          }}
+          on:dragover|preventDefault
+          on:dragleave|preventDefault={() => {
+            isDropTargetActive = false
+          }}
+          on:drop={handleDrop}
         >
-          Format
-        </div>
-        <FormRadio
-          bind:valueSelected={format}
-          labelsValues={[
-            { label: 'Format A4 portrait', value: 'A4' },
-            { label: 'Format A3 paysage 2 colonnes', value: 'A3' },
-          ]}
-          title="format"
-        />
-      </div>
-    </div>
-    <div
-      class="flex flex-col md:flex-row justify-start items-start my-4 space-y-5 md:space-y-0 md:space-x-10"
-    >
-      <div>
-        <div
-          class="pb-2 font-bold text-coopmaths-struct-light dark:text-coopmathsdark-struct-light"
-        >
-          Matière
-        </div>
-        <InputText
-          inputID="amc-export-matiere-input"
-          bind:value={matiere}
-          showTitle={false}
-          classAddenda="ml-4 md:ml-0"
-        />
-      </div>
-      <div>
-        <div
-          class="pb-2 font-bold text-coopmaths-struct-light dark:text-coopmathsdark-struct-light"
-        >
-          Titre
-        </div>
-        <InputText
-          inputID="amc-export-titre-input"
-          bind:value={titre}
-          showTitle={false}
-          classAddenda="ml-4 md:ml-0"
-        />
-      </div>
-      <div>
-        <div
-          class="pb-2 font-bold text-coopmaths-struct-light dark:text-coopmathsdark-struct-light"
-        >
-          Nombre de questions par groupe
-        </div>
-        {#each exercices as exercice, i}
-          <div>
-            {exercice.id}{exercice.sup
-              ? `-S:${exercice.sup}`
-              : ''}{exercice.sup2 ? `-S2:${exercice.sup2}` : ''}{exercice.sup3
-              ? `-S3:${exercice.sup3}`
-              : ''}
-            <InputText
-              inputID="amc-export-nb-questions-gr{i}-input"
-              placeholder={exercice.nbQuestions.toString()}
-              bind:value={nbQuestionsModif[i]}
-              showTitle={false}
-              classAddenda="ml-4 md:ml-0"
-            />
-            <span>{exercice.amcType ? exercice.amcType : 'not amcReady'}</span>
-            <button
-              class="mx-2 tooltip tooltip-left"
-              data-tip="Nouvel énoncé"
-              id="amc-export-new-enonce-button"
-              type="button"
-              aria-label="Nouvel énoncé"
-              on:click={() => {
-                exercice.seed = mathaleaGenerateSeed()
-                seedrandom(exercice.seed, { global: true })
-                if (exercice.nouvelleVersionWrapper != null)
-                  exercice.nouvelleVersionWrapper()
-                $exercicesParams[i].alea = exercice.seed
-                mathaleaUpdateUrlFromExercicesParams()
-              }}
-              ><i
-                class="text-coopmaths-action hover:text-coopmaths-action-lightest dark:text-coopmathsdark-action dark:hover:text-coopmathsdark-action-lightest bx bx-refresh"
-              ></i>
-            </button>
-            <!-- <button
-               class="tooltip tooltip-left tooltip-neutral"
-               data-tip="Changer les paramètres de l'exercice"
-               type="button"
-               on:click={() => {
-    isSettingsVisible[i] = !isSettingsVisible[i]
-  }}
-             >
-               <i
-                 class="text-coopmaths-action hover:text-coopmaths-action-lightest dark:text-coopmathsdark-action dark:hover:text-coopmathsdark-action-lightest bx {isSettingsVisible
-        ? 'bxs-cog'
-        : 'bx-cog'}"
-               />
-             </button>
-            <div class="{isSettingsVisible[i] ? 'flex': 'hidden'} flex-col ...">
-              <SettingsAmc {exercice}/>
-            </div>
-                         -->
-          </div>
-        {/each}
-        <div>
-          <BasicClassicModal
-            bind:isDisplayed={isNonAMCModaleDisplayed}
-            icon="bxs-error"
+          <p
+            class="font-semibold text-coopmaths-struct dark:text-coopmathsdark-struct"
           >
-            <span slot="header"></span>
-            <div slot="content" class="text-justify">
-              Les exercices suivants n'ayant pas de version AMC, ils ont été
-              retirés de la liste.
-              <ul class="list-inside list-disc text-left text-base mt-1">
-                {#each refsExercicesARetirer as reference}
-                  <li>{reference}</li>
-                {/each}
-              </ul>
-            </div>
-          </BasicClassicModal>
+            Zone centrale de composition AMC
+          </p>
+          <p
+            class="text-sm text-coopmaths-corpus dark:text-coopmathsdark-corpus mt-1"
+          >
+            Dépose un exercice depuis la colonne de gauche, ou clique simplement
+            sur un exercice du référentiel.
+          </p>
         </div>
-      </div>
-      <div>
-        <div
-          class="pb-2 font-bold text-coopmaths-struct-light dark:text-coopmathsdark-struct-light"
-        >
-          Nombre d'exemplaires distincts
-        </div>
-        <InputNumber
-          id="amc-nb-exemplaires"
-          min={1}
-          max={100}
-          bind:value={nbExemplaires}
-        />
-      </div>
-    </div>
 
-    <div
-      class="flex flex-col md:flex-row justify-start items-start my-4 space-y-5 md:space-y-0 md:space-x-10 mt-8"
-    >
-      <ButtonActionInfo
-        action="copy"
-        textToCopy={content}
-        tooltip="Copier le code LaTeX dans le presse-papier"
-        text="Copier le code LaTeX"
-        inverted={false}
-        successMessage="Le code LaTeX a été copié dans le presse-papier"
-        errorMessage="Impossible de copier le code dans le presse-papier !"
-        displayDuration={3000}
-        class="px-2 py-1 rounded-md"
-      />
-      <ButtonTextAction
-        class="px-2 py-1 rounded-md"
-        id="open-btn"
-        on:click={() => {
-          isOverleafModalDisplayed = true
-        }}
-        text="Compiler sur OverLeaf"
-      />
+        {#if exercices.length === 0}
+          <div
+            class="rounded-xl border p-6 text-sm text-coopmaths-corpus dark:text-coopmathsdark-corpus"
+          >
+            Aucun exercice sélectionné pour AMC.
+          </div>
+        {:else}
+          {#each exercices as exercice, exerciseIndex}
+            <article
+              class="rounded-2xl border border-coopmaths-struct-light/40 bg-coopmaths-canvas-dark/30 p-4 dark:bg-coopmathsdark-canvas-dark/40 dark:border-coopmathsdark-struct-light/30"
+            >
+              <header
+                class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2"
+              >
+                <h2
+                  class="font-semibold text-coopmaths-struct dark:text-coopmathsdark-struct"
+                >
+                  {exercice.id} - {exercice.titre}
+                </h2>
+                <div class="flex items-center gap-2 text-xs">
+                  <span
+                    class="rounded bg-coopmaths-canvas px-2 py-1 dark:bg-coopmathsdark-canvas"
+                  >
+                    Type: {exercice.amcType}
+                  </span>
+                  <span
+                    class="rounded bg-coopmaths-canvas px-2 py-1 dark:bg-coopmathsdark-canvas"
+                  >
+                    Seed: {groupSettings[exerciseIndex]?.seed}
+                  </span>
+                  <button
+                    type="button"
+                    class="rounded border px-2 py-1"
+                    on:click={() => {
+                      selectedExerciseIndex = exerciseIndex
+                    }}
+                  >
+                    Sélectionner le groupe
+                  </button>
+                </div>
+              </header>
+
+              <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-3">
+                {#each getBlocks(exercice, exerciseIndex) as block}
+                  <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
+                  <div
+                    role="button"
+                    tabindex="0"
+                    class="rounded-xl p-1 text-left transition-colors cursor-pointer {isSelected(
+                      block.ref,
+                    )
+                      ? 'ring-2 ring-coopmaths-action'
+                      : 'hover:bg-coopmaths-canvas/40 dark:hover:bg-coopmathsdark-canvas/40'}"
+                    on:click={() => selectBlock(block.ref)}
+                    on:keydown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ')
+                        selectBlock(block.ref)
+                    }}
+                  >
+                    <div class="mb-1 flex items-center justify-between gap-1">
+                      <p
+                        class="text-xs font-semibold uppercase tracking-wide text-coopmaths-action dark:text-coopmathsdark-action"
+                      >
+                        {block.label}
+                      </p>
+                      <button
+                        type="button"
+                        class="shrink-0 rounded px-1 text-xs text-coopmaths-corpus/60 hover:bg-red-100 hover:text-red-600 dark:hover:bg-red-900/40 dark:hover:text-red-400"
+                        aria-label="Supprimer la question"
+                        on:click|stopPropagation={() =>
+                          deleteQuestion(
+                            block.ref.exerciseIndex,
+                            block.ref.questionIndex,
+                          )}>×</button
+                      >
+                    </div>
+
+                    {#if block.ref.kind === 'qcm'}
+                      <AmcPreviewQcm
+                        enonce={block.enonce}
+                        htmlContent={block.htmlContent}
+                        mode={block.data?.type === 'qcmMult' ||
+                        exercice.amcType === 'qcmMult'
+                          ? 'qcmMult'
+                          : 'qcmMono'}
+                        choix={block.data?.propositions ?? []}
+                      />
+                    {:else if block.ref.kind === 'num'}
+                      <AmcPreviewNumeric
+                        enonce={block.enonce}
+                        htmlContent={block.htmlContent}
+                        param={block.data?.propositions?.[0]?.reponse?.param ??
+                          block.data?.reponse?.param ??
+                          {}}
+                      />
+                    {:else}
+                      <AmcPreviewOpen
+                        enonce={block.enonce}
+                        htmlContent={block.htmlContent}
+                        lignes={block.data?.propositions?.[0]?.statut ??
+                          block.data?.propositions?.[0]?.pointilles ??
+                          3}
+                        pointilles={block.data?.propositions?.[0]?.pointilles}
+                        sanscadre={block.data?.propositions?.[0]?.sanscadre}
+                      />
+                    {/if}
+                  </div>
+                {/each}
+              </div>
+            </article>
+          {/each}
+        {/if}
+
+        <details
+          class="rounded-xl border border-coopmaths-struct-light/40 bg-coopmaths-canvas-dark/20 p-3 dark:border-coopmathsdark-struct-light/30 dark:bg-coopmathsdark-canvas-dark/30"
+        >
+          <summary
+            class="cursor-pointer font-semibold text-coopmaths-struct dark:text-coopmathsdark-struct"
+          >
+            LaTeX AMC généré en temps réel
+          </summary>
+          <pre
+            class="mt-3 max-h-72 overflow-auto text-xs whitespace-pre-wrap">{latexContent}</pre>
+        </details>
+      </section>
+
+      <aside
+        class="rounded-2xl border border-coopmaths-struct-light/40 bg-coopmaths-canvas-dark/30 p-4 dark:bg-coopmathsdark-canvas-dark/40 dark:border-coopmathsdark-struct-light/30 h-fit xl:sticky xl:top-4"
+      >
+        <h3
+          class="font-semibold text-coopmaths-struct dark:text-coopmathsdark-struct"
+        >
+          Paramétrage
+        </h3>
+
+        {#if selectedExerciseIndex != null}
+          <div
+            class="mt-4 space-y-3 rounded-xl border border-coopmaths-struct-light/30 p-3"
+          >
+            <p class="text-sm font-semibold">Groupe d'exercice</p>
+            <label for="amc-group-question-count" class="block text-xs"
+              >Nombre de questions générées</label
+            >
+            <input
+              id="amc-group-question-count"
+              type="number"
+              min="1"
+              class="w-full rounded border px-2 py-1 text-sm"
+              value={groupSettings[selectedExerciseIndex]?.questionCount}
+              on:input={async (event) => {
+                const value = Math.max(
+                  1,
+                  Number((event.currentTarget as HTMLInputElement).value) || 1,
+                )
+                const idx = selectedExerciseIndex!
+                groupSettings[idx] = {
+                  ...groupSettings[idx],
+                  questionCount: value,
+                  restitueCount: Math.min(
+                    value,
+                    groupSettings[idx]?.restitueCount ?? value,
+                  ),
+                }
+                groupSettings = [...groupSettings]
+                const exercice = exercices[idx] as any
+                if (exercice) {
+                  exercice.nbQuestions = value
+                }
+                await regenerateExercise(idx, groupSettings[idx]?.seed)
+              }}
+            />
+
+            <label for="amc-group-restitue-count" class="block text-xs"
+              >Nombre de questions a restituer (\restituegroupe)</label
+            >
+            <input
+              id="amc-group-restitue-count"
+              type="number"
+              min="1"
+              max={Math.max(
+                1,
+                Number(groupSettings[selectedExerciseIndex]?.questionCount) ||
+                  1,
+              )}
+              class="w-full rounded border px-2 py-1 text-sm"
+              value={groupSettings[selectedExerciseIndex]?.restitueCount}
+              on:input={(event) => {
+                const idx = selectedExerciseIndex!
+                const maxAllowed = Math.max(
+                  1,
+                  Number(groupSettings[idx]?.questionCount) || 1,
+                )
+                const value = Math.max(
+                  1,
+                  Math.min(
+                    Number((event.currentTarget as HTMLInputElement).value) ||
+                      1,
+                    maxAllowed,
+                  ),
+                )
+                groupSettings[idx] = {
+                  ...groupSettings[idx],
+                  restitueCount: value,
+                }
+                groupSettings = [...groupSettings]
+                updateLatexPreview()
+              }}
+            />
+
+            <label for="amc-group-seed" class="block text-xs"
+              >Graine de génération aléatoire</label
+            >
+            <input
+              id="amc-group-seed"
+              type="text"
+              class="w-full rounded border px-2 py-1 text-sm"
+              value={groupSettings[selectedExerciseIndex]?.seed}
+              on:input={(event) => {
+                groupSettings[selectedExerciseIndex!] = {
+                  ...groupSettings[selectedExerciseIndex!],
+                  seed: (event.currentTarget as HTMLInputElement).value,
+                }
+                groupSettings = [...groupSettings]
+              }}
+            />
+            <div class="flex gap-2">
+              <button
+                type="button"
+                class="rounded bg-coopmaths-action px-3 py-1 text-xs text-white"
+                on:click={() => {
+                  void regenerateExercise(
+                    selectedExerciseIndex!,
+                    groupSettings[selectedExerciseIndex!]?.seed,
+                  )
+                }}
+              >
+                Appliquer la graine
+              </button>
+              <button
+                type="button"
+                class="rounded border px-3 py-1 text-xs"
+                on:click={() => {
+                  void regenerateExercise(selectedExerciseIndex!)
+                }}
+              >
+                Nouvelle graine
+              </button>
+            </div>
+            <button
+              type="button"
+              class="mt-2 w-full rounded border border-red-400 px-3 py-1 text-xs text-red-600 hover:bg-red-50 dark:border-red-600 dark:text-red-400 dark:hover:bg-red-900/30"
+              on:click={() => deleteExercise(selectedExerciseIndex!)}
+            >
+              Supprimer le groupe
+            </button>
+          </div>
+        {/if}
+
+        {#if selectedRef == null}
+          <p
+            class="mt-4 text-sm text-coopmaths-corpus dark:text-coopmathsdark-corpus"
+          >
+            Sélectionne un bloc dans la zone centrale pour éditer ses paramètres
+            fins.
+          </p>
+        {:else if selectedRef.kind === 'num'}
+          <div class="mt-4 space-y-2">
+            <p class="text-sm font-semibold">AMCnumericChoices</p>
+            <label for="amc-num-digits" class="block text-xs">Digits</label>
+            <input
+              id="amc-num-digits"
+              type="number"
+              min="1"
+              class="w-full rounded border px-2 py-1 text-sm"
+              on:input={(event) =>
+                updateSelectedNumericParam(
+                  'digits',
+                  Math.max(
+                    1,
+                    Number((event.currentTarget as HTMLInputElement).value) ||
+                      1,
+                  ),
+                )}
+            />
+
+            <label for="amc-num-decimals" class="block text-xs">Decimals</label>
+            <input
+              id="amc-num-decimals"
+              type="number"
+              min="0"
+              class="w-full rounded border px-2 py-1 text-sm"
+              on:input={(event) =>
+                updateSelectedNumericParam(
+                  'decimals',
+                  Math.max(
+                    0,
+                    Number((event.currentTarget as HTMLInputElement).value) ||
+                      0,
+                  ),
+                )}
+            />
+
+            <label for="amc-num-approx" class="block text-xs">Approx</label>
+            <input
+              id="amc-num-approx"
+              type="number"
+              min="0"
+              class="w-full rounded border px-2 py-1 text-sm"
+              on:input={(event) =>
+                updateSelectedNumericParam(
+                  'approx',
+                  Math.max(
+                    0,
+                    Number((event.currentTarget as HTMLInputElement).value) ||
+                      0,
+                  ),
+                )}
+            />
+
+            <label class="mt-2 inline-flex items-center gap-2 text-xs">
+              <input
+                type="checkbox"
+                on:change={(event) =>
+                  updateSelectedNumericParam(
+                    'signe',
+                    (event.currentTarget as HTMLInputElement).checked,
+                  )}
+              />
+              Autoriser le signe
+            </label>
+            <label class="mt-2 inline-flex items-center gap-2 text-xs">
+              <input
+                type="checkbox"
+                on:change={(event) =>
+                  updateSelectedNumericParam(
+                    'vertical',
+                    (event.currentTarget as HTMLInputElement).checked,
+                  )}
+              />
+              Affichage vertical
+            </label>
+            <button
+              type="button"
+              class="mt-2 w-full rounded border px-3 py-1 text-xs"
+              on:click={appliquerParametresQuestionAuGroupe}
+            >
+              Appliquer ces parametres a tout le groupe
+            </button>
+          </div>
+        {:else if selectedRef.kind === 'open'}
+          <div class="mt-4 space-y-2">
+            <p class="text-sm font-semibold">AMCOpen</p>
+            <label for="amc-open-lines" class="block text-xs"
+              >Nombre de lignes (statut)</label
+            >
+            <input
+              id="amc-open-lines"
+              type="number"
+              min="1"
+              class="w-full rounded border px-2 py-1 text-sm"
+              on:input={(event) =>
+                updateSelectedOpenParam(
+                  'statut',
+                  Math.max(
+                    1,
+                    Number((event.currentTarget as HTMLInputElement).value) ||
+                      1,
+                  ),
+                )}
+            />
+
+            <label class="mt-2 inline-flex items-center gap-2 text-xs">
+              <input
+                type="checkbox"
+                on:change={(event) =>
+                  updateSelectedOpenParam(
+                    'pointilles',
+                    (event.currentTarget as HTMLInputElement).checked,
+                  )}
+              />
+              Pointillés
+            </label>
+            <label class="mt-2 inline-flex items-center gap-2 text-xs">
+              <input
+                type="checkbox"
+                on:change={(event) =>
+                  updateSelectedOpenParam(
+                    'sanscadre',
+                    (event.currentTarget as HTMLInputElement).checked,
+                  )}
+              />
+              Sans cadre
+            </label>
+            <button
+              type="button"
+              class="mt-2 w-full rounded border px-3 py-1 text-xs"
+              on:click={appliquerParametresQuestionAuGroupe}
+            >
+              Appliquer ces parametres a tout le groupe
+            </button>
+          </div>
+        {:else}
+          <div class="mt-4 space-y-2">
+            <p class="text-sm font-semibold">QCM</p>
+            <label class="mt-2 inline-flex items-center gap-2 text-xs">
+              <input
+                type="checkbox"
+                on:change={(event) =>
+                  updateSelectedQcmOption(
+                    'ordered',
+                    (event.currentTarget as HTMLInputElement).checked,
+                  )}
+              />
+              Réponses ordonnées
+            </label>
+            <label class="mt-2 inline-flex items-center gap-2 text-xs">
+              <input
+                type="checkbox"
+                on:change={(event) =>
+                  updateSelectedQcmOption(
+                    'vertical',
+                    (event.currentTarget as HTMLInputElement).checked,
+                  )}
+              />
+              Affichage vertical
+            </label>
+            <label for="amc-qcm-last-choice" class="block text-xs"
+              >Index de lastChoice</label
+            >
+            <input
+              id="amc-qcm-last-choice"
+              type="number"
+              min="0"
+              class="w-full rounded border px-2 py-1 text-sm"
+              on:input={(event) =>
+                updateSelectedQcmOption(
+                  'lastChoice',
+                  Math.max(
+                    0,
+                    Number((event.currentTarget as HTMLInputElement).value) ||
+                      0,
+                  ),
+                )}
+            />
+            <button
+              type="button"
+              class="mt-2 w-full rounded border px-3 py-1 text-xs"
+              on:click={appliquerParametresQuestionAuGroupe}
+            >
+              Appliquer ces parametres a tout le groupe
+            </button>
+          </div>
+        {/if}
+
+        {#if groupConsistencyReport && groupConsistencyReport.missingGroupDefinitions.length > 0}
+          <div class="mt-4 rounded border border-coopmaths-action p-3 text-xs">
+            <p class="font-semibold">Alerte cohérence AMC</p>
+            <ul class="mt-2 list-disc list-inside">
+              {#each groupConsistencyReport.missingGroupDefinitions as name}
+                <li>{name}</li>
+              {/each}
+            </ul>
+          </div>
+        {/if}
+      </aside>
     </div>
-    <pre
-      class="my-10 shadow-md bg-coopmaths-canvas-dark dark:bg-coopmathsdark-canvas-dark text-coopmaths-corpus dark:text-coopmathsdark-corpus p-4 w-full overflow-auto">
-      {content}
-    </pre>
-  </section>
-  <!-- Message avant envoi sur Overleaf -->
-  <BasicClassicModal
-    bind:isDisplayed={isOverleafModalDisplayed}
-    icon="bxs-error"
-  >
-    <span slot="header">Attention !</span>
-    <ul class="list-inside list-disc text-left text-base" slot="content">
-      <li>Le fichier sorti d'Overleaf ne constitue qu'un aperçu.</li>
-      <li>
-        Le fichier doit être compilé sous AMC impérativement pour que le fichier
-        soit fonctionnel.
-      </li>
-    </ul>
-    <div slot="footer">
-      <ButtonTextAction
-        text="Compiler sur OverLeaf"
-        on:click={handleOverLeaf}
-      />
-    </div>
-  </BasicClassicModal>
-  <!-- Formulaire pour Overleaf -->
-  <form
-    action="https://www.overleaf.com/docs"
-    id="overleaf-form"
-    method="POST"
-    target="_blank"
-  >
-    <input
-      type="hidden"
-      name="snip_uri[]"
-      value="https://coopmaths.fr/alea/static/amc/automultiplechoice.sty"
-      autocomplete="off"
-    />
-    <input
-      type="hidden"
-      name="snip_name[]"
-      value="automultiplechoice.sty"
-      autocomplete="off"
-    />
-    <input
-      autocomplete="off"
-      bind:this={textForOverleaf}
-      name="snip_uri[]"
-      type="hidden"
-      value=""
-    />
-    <input
-      autocomplete="off"
-      name="snip_name[]"
-      type="hidden"
-      value="coopmaths.tex"
-    />
-    <input autocomplete="off" name="engine" type="hidden" value="lualatex" />
-  </form>
-  <Footer />
-</main>
+  </div>
+</SetupShell>

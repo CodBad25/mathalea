@@ -4,7 +4,11 @@ import ExerciceSimple from '../../src/exercices/ExerciceSimple'
 import FractionEtendue from '../modules/FractionEtendue'
 import Grandeur from '../modules/Grandeur'
 import Hms from '../modules/Hms'
-import { getDistracteurs, mathaleaHandleExerciceSimple } from './mathalea'
+import {
+  getDistracteurs,
+  mathaleaEnsureAMCCompatibility,
+  mathaleaHandleExerciceSimple,
+} from './mathalea'
 
 // Mock avant l'import
 vi.mock('../../src/lib/renderScratch', () => ({
@@ -189,5 +193,101 @@ describe('mathaleaHandleExerciceSimple', () => {
     expect(exercice.listeCorrections[0]).toContain(
       'La bonne réponse est la réponse',
     )
+  })
+
+  it('genere une autoCorrection AMCNum pour un exercice simple amcReady', () => {
+    class ExerciceSimpleAMCNum extends ExerciceSimple {
+      constructor() {
+        super()
+        this.nbQuestions = 1
+        this.amcReady = true
+        this.amcType = 'AMCNum'
+      }
+
+      nouvelleVersion() {
+        this.question = 'Calculer 7 + 5.'
+        this.reponse = 12
+        this.correction = '7 + 5 = 12.'
+      }
+    }
+
+    const exercice = new ExerciceSimpleAMCNum()
+    mathaleaHandleExerciceSimple(exercice, false, 0, 'seed')
+
+    expect(exercice.autoCorrection[0]).toBeDefined()
+    expect(exercice.autoCorrection[0].reponse?.valeur).toBe(12)
+  })
+
+  it('genere une autoCorrection AMCOpen pour un exercice simple amcReady', () => {
+    class ExerciceSimpleAMCOpen extends ExerciceSimple {
+      constructor() {
+        super()
+        this.nbQuestions = 1
+        this.amcReady = true
+        this.amcType = 'AMCOpen'
+      }
+
+      nouvelleVersion() {
+        this.question = 'Expliquer pourquoi 2 + 2 = 4.'
+        this.reponse = 'Réponse libre'
+        this.correction = 'Parce que l’addition de deux et deux donne quatre.'
+      }
+    }
+
+    const exercice = new ExerciceSimpleAMCOpen()
+    mathaleaHandleExerciceSimple(exercice, false, 0, 'seed')
+
+    expect(exercice.autoCorrection[0]).toBeDefined()
+    expect(exercice.autoCorrection[0].propositions?.[0].texte).toContain(
+      'deux et deux',
+    )
+  })
+})
+
+describe('mathaleaEnsureAMCCompatibility', () => {
+  it('applique un fallback AMCOpen par defaut', () => {
+    const exercice = new ExerciceSimple()
+    exercice.question = 'Question sans parametrage AMC'
+    exercice.correction = 'Correction par defaut'
+    exercice.autoCorrection = []
+    exercice.amcType = undefined
+    exercice.amcReady = undefined
+
+    mathaleaEnsureAMCCompatibility(exercice)
+
+    expect(exercice.amcReady).toBe(true)
+    expect(exercice.amcType).toBe('AMCOpen')
+    expect(exercice.autoCorrection[0]).toBeDefined()
+    expect(exercice.autoCorrection[0].propositions?.[0].texte).toContain(
+      'Correction par defaut',
+    )
+  })
+
+  it('inference qcmMono et qcmMult depuis autoCorrection', () => {
+    const mono = new ExerciceSimple()
+    mono.autoCorrection = [
+      {
+        propositions: [
+          { texte: 'A', statut: false },
+          { texte: 'B', statut: true },
+        ],
+      } as any,
+    ]
+
+    mathaleaEnsureAMCCompatibility(mono)
+    expect(mono.amcType).toBe('qcmMono')
+
+    const mult = new ExerciceSimple()
+    mult.autoCorrection = [
+      {
+        propositions: [
+          { texte: 'A', statut: true },
+          { texte: 'B', statut: true },
+        ],
+      } as any,
+    ]
+
+    mathaleaEnsureAMCCompatibility(mult)
+    expect(mult.amcType).toBe('qcmMult')
   })
 })

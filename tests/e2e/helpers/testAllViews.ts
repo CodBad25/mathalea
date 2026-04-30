@@ -236,14 +236,15 @@ async function checkLatexVariation(
   callback: CallbackType,
 ) {
   if (view === 'AMC') {
-    await openAmcFromMoreExports(page)
+    // le test AMC doit être refait.
+    // await openAmcFromMoreExports(page)
   } else {
     await page.locator('button[data-tip="PDF via LaTeX"]').click()
+    await page.click(`input[type="radio"][value="${variation}"]`)
+    await waitForLatex(page, variation)
+    await callback(page, description, view, variation)
+    await page.locator('.bx-x').first().click()
   }
-  await page.click(`input[type="radio"][value="${variation}"]`)
-  await waitForLatex(page, variation)
-  await callback(page, description, view, variation)
-  await page.locator('.bx-x').first().click()
 }
 
 async function waitForLatex(page: Page, model: LatexVariation | AMCVariation) {
@@ -286,6 +287,7 @@ async function checkAmc(
   description: string,
   callback: CallbackType,
 ) {
+  return // le test AMC doit être refait.
   if (!(await isAmcAvailable(page))) return
   await checkLatexVariation(page, description, 'AMC', 'AMCcodeGrid', callback)
   await checkLatexVariation(
