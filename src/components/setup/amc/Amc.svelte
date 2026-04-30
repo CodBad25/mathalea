@@ -39,6 +39,8 @@
     seed: string
     questionCount: number
     restitueCount: number
+    pageBreakBefore: boolean
+    multicols: boolean
   }
 
   let exercices: IExercice[] = []
@@ -46,6 +48,7 @@
   let selectedRef: BlockRef | null = null
   let selectedExerciseIndex: number | null = null
   let latexContent = ''
+  let latexExportStatus = ''
   let groupConsistencyReport: AMCGroupConsistencyReport | null = null
   let isDropTargetActive = false
 
@@ -53,6 +56,14 @@
 
   function asAMCExercices(exos: IExercice[]): IExerciceAMC[] {
     return exos as unknown as IExerciceAMC[]
+  }
+
+  function getAMCGroupName(exercise: IExercice | undefined): string {
+    if (!exercise) return ''
+    const ex = exercise as any
+    let ref = `${exercise.id}/${ex.sup ? 'S:' + ex.sup : ''}${ex.sup2 ? 'S2:' + ex.sup2 : ''}${ex.sup3 ? 'S3:' + ex.sup3 : ''}${ex.sup4 ? 'S4:' + ex.sup4 : ''}${ex.sup5 ? 'S5:' + ex.sup5 : ''}`
+    if (ref.endsWith('/')) ref = ref.slice(0, -1)
+    return ref
   }
 
   async function regenerateExercise(index: number, forcedSeed?: string) {
@@ -265,6 +276,8 @@
       restitueCount:
         previousSettings[index]?.restitueCount ??
         Math.max(1, exercice.nbQuestions),
+      pageBreakBefore: previousSettings[index]?.pageBreakBefore ?? index > 0,
+      multicols: previousSettings[index]?.multicols ?? false,
     }))
 
     if (
@@ -323,6 +336,10 @@
     latexContent = creerDocumentAmc({
       exercices: asAMCExercices(exercices),
       nbQuestions,
+      groupLayouts: groupSettings.map((setting) => ({
+        pageBreakBefore: setting.pageBreakBefore,
+        multicols: setting.multicols,
+      })),
       typeEntete: 'AMCcodeGrid',
       format: 'A4',
       matiere: 'Mathématiques',
@@ -331,6 +348,48 @@
     })
 
     groupConsistencyReport = checkAMCGroupConsistency(latexContent)
+  }
+
+  async function copyLatexToClipboard() {
+    if (!latexContent.trim()) return
+
+    try {
+      await navigator.clipboard.writeText(latexContent)
+      latexExportStatus = 'LaTeX copié dans le presse-papier.'
+    } catch {
+      // Fallback pour navigateurs sans permission clipboard.
+      const textarea = document.createElement('textarea')
+      textarea.value = latexContent
+      textarea.style.position = 'fixed'
+      textarea.style.opacity = '0'
+      document.body.appendChild(textarea)
+      textarea.focus()
+      textarea.select()
+      const copied = document.execCommand('copy')
+      document.body.removeChild(textarea)
+      latexExportStatus = copied
+        ? 'LaTeX copié dans le presse-papier.'
+        : 'Impossible de copier automatiquement le LaTeX.'
+    }
+  }
+
+  function downloadLatexFile() {
+    if (!latexContent.trim()) return
+
+    const blob = new Blob([latexContent], { type: 'text/x-tex;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    const seed = exercices[0]?.seed ?? 'amc'
+
+    link.href = url
+    link.download = `amc-${seed}.tex`
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    URL.revokeObjectURL(url)
+
+    latexExportStatus =
+      'Téléchargement lancé (dossier selon les réglages du navigateur).'
   }
 
   function getBlocks(exercise: IExercice, exerciseIndex: number) {
@@ -564,6 +623,33 @@
     updateLatexPreview()
   }
 
+  function updateSelectedBlockMulticols(value: boolean) {
+    if (!selectedRef) return
+
+    const exercise = exercices[selectedRef.exerciseIndex] as any
+    if (!exercise) return
+    const item = exercise.autoCorrection?.[selectedRef.questionIndex]
+    if (!item) return
+
+    if (exercise.amcType === 'AMCHybride') {
+      item.options = item.options ?? {}
+      item.options.multicols = value
+    } else {
+      item.options = item.options ?? {}
+      item.options.multicols = value
+    }
+
+    exercices = [...exercices]
+    updateLatexPreview()
+  }
+
+  function isSelectedBlockMulticolsEnabled(): boolean {
+    if (!selectedRef) return false
+    const exercise = exercices[selectedRef.exerciseIndex] as any
+    const item = exercise?.autoCorrection?.[selectedRef.questionIndex]
+    return Boolean(item?.options?.multicols)
+  }
+
   function appliquerParametresQuestionAuGroupe() {
     if (!selectedRef) return
 
@@ -707,6 +793,12 @@
     mathaleaUpdateUrlFromExercicesParams()
   }
 
+  function selectNextExercise() {
+    if (exercices.length === 0 || selectedExerciseIndex == null) return
+    selectedExerciseIndex = (selectedExerciseIndex + 1) % exercices.length
+    selectedRef = null
+  }
+
   onMount(async () => {
     await mathaleaUpdateExercicesParamsFromUrl()
     await refreshExercicesFromStore()
@@ -723,7 +815,7 @@
 <SetupShell id="amcBuilder" mobileSidebarTitle="Bibliothèque d'exercices AMC">
   <div slot="header" class="print-hidden">
     <NavBar
-      subtitle="AMC Builder"
+      subtitle="Constructeur d'évaluation AMC"
       subtitleType="export"
       handleLanguage={() => {}}
       locale={$referentielLocale}
@@ -786,11 +878,21 @@
               <header
                 class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2"
               >
-                <h2
-                  class="font-semibold text-coopmaths-struct dark:text-coopmathsdark-struct"
-                >
-                  {exercice.id} - {exercice.titre}
-                </h2>
+                <div class="flex items-center gap-2">
+                  <h2
+                    class="font-semibold text-coopmaths-struct dark:text-coopmathsdark-struct"
+                  >
+                    {exercice.id} - {exercice.titre}
+                  </h2>
+                  <button
+                    type="button"
+                    class="rounded border border-red-400 px-2 py-1 text-xs text-red-600 hover:bg-red-50 dark:border-red-600 dark:text-red-400 dark:hover:bg-red-900/30"
+                    aria-label="Supprimer le groupe"
+                    on:click={() => deleteExercise(exerciseIndex)}
+                  >
+                    Supprimer
+                  </button>
+                </div>
                 <div class="flex items-center gap-2 text-xs">
                   <span
                     class="rounded bg-coopmaths-canvas px-2 py-1 dark:bg-coopmathsdark-canvas"
@@ -893,6 +995,31 @@
           >
             LaTeX AMC généré en temps réel
           </summary>
+          <div class="mt-3 flex flex-wrap gap-2">
+            <button
+              type="button"
+              class="rounded border px-3 py-1 text-xs"
+              on:click={copyLatexToClipboard}
+              disabled={!latexContent.trim()}
+            >
+              Copier le LaTeX
+            </button>
+            <button
+              type="button"
+              class="rounded border px-3 py-1 text-xs"
+              on:click={downloadLatexFile}
+              disabled={!latexContent.trim()}
+            >
+              Télécharger le .tex
+            </button>
+          </div>
+          {#if latexExportStatus}
+            <p
+              class="mt-2 text-xs text-coopmaths-corpus dark:text-coopmathsdark-corpus"
+            >
+              {latexExportStatus}
+            </p>
+          {/if}
           <pre
             class="mt-3 max-h-72 overflow-auto text-xs whitespace-pre-wrap">{latexContent}</pre>
         </details>
@@ -911,7 +1038,21 @@
           <div
             class="mt-4 space-y-3 rounded-xl border border-coopmaths-struct-light/30 p-3"
           >
-            <p class="text-sm font-semibold">Groupe d'exercice</p>
+            <div class="flex items-center justify-between gap-2">
+              <p class="text-sm font-semibold">
+                Groupe d'exercice ({getAMCGroupName(
+                  exercices[selectedExerciseIndex],
+                )})
+              </p>
+              <button
+                type="button"
+                class="rounded border px-3 py-1 text-xs"
+                on:click={selectNextExercise}
+                disabled={exercices.length < 2}
+              >
+                Groupe suivant
+              </button>
+            </div>
             <label for="amc-group-question-count" class="block text-xs"
               >Nombre de questions générées</label
             >
@@ -980,6 +1121,42 @@
                 updateLatexPreview()
               }}
             />
+
+            <label class="mt-2 inline-flex items-center gap-2 text-xs">
+              <input
+                type="checkbox"
+                checked={groupSettings[selectedExerciseIndex]?.pageBreakBefore}
+                on:change={(event) => {
+                  const idx = selectedExerciseIndex!
+                  groupSettings[idx] = {
+                    ...groupSettings[idx],
+                    pageBreakBefore: (event.currentTarget as HTMLInputElement)
+                      .checked,
+                  }
+                  groupSettings = [...groupSettings]
+                  updateLatexPreview()
+                }}
+              />
+              Saut de page avant ce restituegroupe
+            </label>
+
+            <label class="mt-2 inline-flex items-center gap-2 text-xs">
+              <input
+                type="checkbox"
+                checked={groupSettings[selectedExerciseIndex]?.multicols}
+                on:change={(event) => {
+                  const idx = selectedExerciseIndex!
+                  groupSettings[idx] = {
+                    ...groupSettings[idx],
+                    multicols: (event.currentTarget as HTMLInputElement)
+                      .checked,
+                  }
+                  groupSettings = [...groupSettings]
+                  updateLatexPreview()
+                }}
+              />
+              Restituegroupe en multicolonnes (2)
+            </label>
 
             <label for="amc-group-seed" class="block text-xs"
               >Graine de génération aléatoire</label
@@ -1113,6 +1290,19 @@
               />
               Affichage vertical
             </label>
+            <label class="mt-2 inline-flex items-center gap-2 text-xs">
+              <input
+                type="checkbox"
+                checked={isSelectedBlockMulticolsEnabled()}
+                on:change={(event) =>
+                  updateSelectedBlockMulticols(
+                    (event.currentTarget as HTMLInputElement).checked,
+                  )}
+              />
+              {exercices[selectedRef.exerciseIndex]?.amcType === 'AMCHybride'
+                ? 'Bloc hybride en multicolonnes (2)'
+                : 'Question en multicolonnes (2)'}
+            </label>
             <button
               type="button"
               class="mt-2 w-full rounded border px-3 py-1 text-xs"
@@ -1165,6 +1355,19 @@
               />
               Sans cadre
             </label>
+            <label class="mt-2 inline-flex items-center gap-2 text-xs">
+              <input
+                type="checkbox"
+                checked={isSelectedBlockMulticolsEnabled()}
+                on:change={(event) =>
+                  updateSelectedBlockMulticols(
+                    (event.currentTarget as HTMLInputElement).checked,
+                  )}
+              />
+              {exercices[selectedRef.exerciseIndex]?.amcType === 'AMCHybride'
+                ? 'Bloc hybride en multicolonnes (2)'
+                : 'Question en multicolonnes (2)'}
+            </label>
             <button
               type="button"
               class="mt-2 w-full rounded border px-3 py-1 text-xs"
@@ -1216,6 +1419,19 @@
                   ),
                 )}
             />
+            <label class="mt-2 inline-flex items-center gap-2 text-xs">
+              <input
+                type="checkbox"
+                checked={isSelectedBlockMulticolsEnabled()}
+                on:change={(event) =>
+                  updateSelectedBlockMulticols(
+                    (event.currentTarget as HTMLInputElement).checked,
+                  )}
+              />
+              {exercices[selectedRef.exerciseIndex]?.amcType === 'AMCHybride'
+                ? 'Bloc hybride en multicolonnes (2)'
+                : 'Question en multicolonnes (2)'}
+            </label>
             <button
               type="button"
               class="mt-2 w-full rounded border px-3 py-1 text-xs"

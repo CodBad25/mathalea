@@ -75,6 +75,7 @@ export function normalizeQcm(
     layout: options.vertical ? 'reponses' : 'reponseshoriz',
     ordered: !!options.ordered,
     lastChoice: options.lastChoice ?? null,
+    multicols: !!options.multicols,
     propositions,
   })
 }
@@ -96,6 +97,7 @@ export function normalizeAMCOpen(
     notation: firstProp?.statut ?? 3,
     sanscadre: firstProp?.sanscadre ?? false,
     pointilles: firstProp?.pointilles ?? true,
+    multicols: !!(autoCorrectionItem as any)?.options?.multicols,
   }
 }
 
@@ -209,5 +211,11 @@ export function normalizeAMCNum(
     },
   })
 
-  return { id, ref, enonce, blocks }
+  return {
+    id,
+    ref,
+    enonce,
+    multicols: !!(autoCorrectionItem as any)?.options?.multicols,
+    blocks,
+  }
 }

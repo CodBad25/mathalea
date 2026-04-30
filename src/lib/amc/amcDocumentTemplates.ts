@@ -31,6 +31,8 @@ export type AMCGroupSectionRenderData = {
   groupName: string
   isMixed: boolean
   questionsToRestore: number
+  pageBreakBefore?: boolean
+  multicols?: boolean
 }
 
 export const AMCPreambleTemplate = `%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -283,6 +285,8 @@ export const AMCCopyContentTemplate = `{% if isCodeGrid %}	 \\def\\AMCchoiceLabe
 {% endif %}`
 
 export const AMCGroupSectionTemplate = `
+{% if pageBreakBefore %}\\clearpage
+{% endif %}
   \\begin{center}
     \\hrule
     \\vspace{2mm}

@@ -19,6 +19,10 @@ type ExportQcmAmcResult = [string, string, number, string, boolean]
 export type CreerDocumentAmcOptions = {
   exercices: IExerciceAMC[]
   nbQuestions?: number[]
+  groupLayouts?: Array<{
+    pageBreakBefore?: boolean
+    multicols?: boolean
+  }>
   nbExemplaires?: number
   matiere?: string
   titre?: string
@@ -334,6 +338,7 @@ export function creerDocumentAmc(options: CreerDocumentAmcOptions): string {
   const {
     exercices: exercises,
     nbQuestions = [] as number[],
+    groupLayouts = [],
     nbExemplaires: copiesCount = 1,
     matiere: subject = 'Mathématiques',
     titre: title = 'Evaluation',
@@ -452,6 +457,8 @@ export function creerDocumentAmc(options: CreerDocumentAmcOptions): string {
       groupName,
       isMixed: groupShuffleFlags[i],
       questionsToRestore: nbQuestions[i],
+      pageBreakBefore: groupLayouts[i]?.pageBreakBefore,
+      multicols: groupLayouts[i]?.multicols,
     })
   }
   const copyContent = renderAMCCopyContent({
@@ -467,6 +474,13 @@ export function creerDocumentAmc(options: CreerDocumentAmcOptions): string {
       '\n \n \\csvreader[head to column names]{liste.csv}{}{\\sujet}\n'
   }
   latexCode += '\\end{document}\n'
+
+  // AMC 1.5 + bm can choke on nested \boldsymbol{\boldsymbol{...}} patterns
+  // produced by some exercise corrections, causing cascading compile errors.
+  latexCode = latexCode.replace(
+    /\\boldsymbol\{\\boldsymbol\{([^{}]+)\}\}/g,
+    '\\boldsymbol{$1}',
+  )
 
   const consistencyReport = checkAMCGroupConsistency(latexCode)
   if (consistencyReport.missingGroupDefinitions.length > 0) {
