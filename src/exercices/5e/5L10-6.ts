@@ -1104,6 +1104,7 @@ Pour calculer le périmètre d'une figure, on additionne les longueurs de tous l
             exercice: this, // ça, c'est pour que la fonction récupère un pointeur sur ton exo
             question: i, // ça, c'est pour qu'il numérote correctement l'input
             typeInteractivite: 'mathlive', // ça, c'est l'input le plus souvent utilisé
+            classe: 'clavierMinuscules',
             objetReponse: {
               // ça c'est ce qui définit la réponse attendue et la façon dont elle doit être vérifiée
               reponse: {
