@@ -12,6 +12,9 @@ export type AMCHeaderRenderData = {
   matiere: string
   titre: string
   nbExemplaires: number
+  collectCorrectionsAtEnd?: boolean
+  showWarningMessage?: boolean
+  warningMessage?: string
 }
 
 export type AMCDocumentStartRenderData = {
@@ -24,6 +27,7 @@ export type AMCCopyContentRenderData = {
   groupsSections: string
   isA3: boolean
   isAssociation: boolean
+  collectCorrectionsAtEnd?: boolean
 }
 
 export type AMCGroupSectionRenderData = {
@@ -31,6 +35,8 @@ export type AMCGroupSectionRenderData = {
   groupName: string
   isMixed: boolean
   questionsToRestore: number
+  pageBreakBefore?: boolean
+  multicols?: boolean
 }
 
 export const AMCPreambleTemplate = `%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -136,6 +142,36 @@ export const AMCPreambleTemplate = `%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   \\usepackage{textcomp}
   
   %%%%% PERSONNALISATION %%%%%
+
+%%% Explications %%%
+  \\ExplSyntaxOn
+\\tl_new:N \\explicatons
+\\cs_new:Nn \\expl_vide: {
+  \\tl_gset:Nn \\explications { \\debutexplications }
+}
+\\cs_new:Npn \\expl_ajoute:n #1 {
+  \\tl_gput_right:Nn \\explications { #1 }
+}
+\\cs_new:Nn \\expl_ecrit: {
+  \\tl_use:N \\explications
+}
+\\cs_new_eq:NN \\AMCexpliqueNouvelleCopie \\expl_vide:
+\\cs_new_eq:NN \\AMCexpliqueAjoute \\expl_ajoute:n
+\\cs_new_eq:NN \\AMCexpliqueTout \\expl_ecrit:
+\\ExplSyntaxOff
+\\def\\debutexplications{
+  \\vspace{1ex}\\par\\noindent\\textbf{Élément de correction et d'explication :}\\vspace{.5ex}
+}
+{% raw %}
+\\def\\laquestion#1{
+  \\par\\noindent\\textbf{Question \\AMCref{#1}}
+}
+\\long\\def\\expliqueplustard#1#2{
+  \\AMCexpliqueAjoute{\\laquestion{#1} #2 \\bigskip}
+}
+{% endraw %}
+  %%% Fin des explications %%%
+
   \\renewcommand{\\multiSymbole}{$\\begin{smallmatrix}\\circ\\bullet\\bullet \\\\
            \\circ\\bullet\\circ \\end{smallmatrix}$\\noindent} % par défaut $\\clubsuit$
   %\\renewcommand{\\multiSymbole}{\\textbf{(! Évent. plusieurs réponses !)}\\noindent} % par défaut $\\clubsuit$
@@ -197,6 +233,9 @@ export const AMCHeaderTemplate = `{% if isAssociation %}\\newcommand{\\sujet}{
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   \\exemplaire{ {{ nbExemplaires }} }{   % <======  /!\\ PENSER À ADAPTER /!\\  ===  %
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+{% if collectCorrectionsAtEnd %}
+  \\AMCexpliqueNouvelleCopie
+{% endif %}
 {% if isA3 %}\\begin{multicols}{2}
 {% endif %}
   %%%%% EN-TÊTE, IDENTIFICATION AUTOMATIQUE DE L'ÉLÈVE %%%%%
@@ -250,11 +289,8 @@ export const AMCHeaderTemplate = `{% if isAssociation %}\\newcommand{\\sujet}{
   %\\\\
   \\vspace{2mm}
 {% endif %}
-{\\footnotesize REMPLIR avec un stylo NOIR la ou les cases pour chaque question. Si vous devez modifier un choix, NE PAS chercher à redessiner la case cochée par erreur, mettez simplement un coup de "blanc" dessus.
-  
-  Les questions précédées de \\multiSymbole peuvent avoir plusieurs réponses.\\\\ Les questions qui commencent par \\TT ne doivent pas être faites par les élèves disposant d'un tiers temps.
-  
-   Il est fortement conseillé de faire les calculs dans sa tête ou sur la partie blanche de la feuille sans regarder les solutions proposées avant de remplir la bonne case plutôt que d'essayer de choisir entre les propositions (ce qui demande de toutes les examiner et prend donc plus de temps) }
+{% if showWarningMessage %}{\\footnotesize {{ warningMessage | safe }} }
+{% endif %}
   
 `
 
@@ -276,6 +312,8 @@ export const AMCDocumentStartTemplate = `%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 export const AMCCopyContentTemplate = `{% if isCodeGrid %}	 \\def\\AMCchoiceLabel##1{}{% endif %}
 {{ groupsSections | safe }}{% if isA3 %}\\end{multicols}
+{% endif %}
+{% if collectCorrectionsAtEnd %}\\explaincontext{\\AMCexpliqueTout}
 {% endif %}{% if isAssociation %}\\AMCassociation{\\id}
     }
   }
@@ -283,6 +321,8 @@ export const AMCCopyContentTemplate = `{% if isCodeGrid %}	 \\def\\AMCchoiceLabe
 {% endif %}`
 
 export const AMCGroupSectionTemplate = `
+{% if pageBreakBefore %}\\clearpage
+{% endif %}
   \\begin{center}
     \\hrule
     \\vspace{2mm}

@@ -42,6 +42,7 @@ describe('amcEngine', () => {
     })
 
     expect(normalized).toEqual({
+      multicols: false,
       type: 'amcopen',
       id: 'Q1',
       ref: 'REF',

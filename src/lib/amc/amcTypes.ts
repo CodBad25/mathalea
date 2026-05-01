@@ -145,6 +145,7 @@ export type QCMNormalized = {
   layout: 'reponses' | 'reponseshoriz'
   ordered: boolean
   lastChoice: number | null
+  multicols?: boolean
   propositions: QCMProposition[]
 }
 
@@ -170,6 +171,7 @@ export type AMCNumNormalized = {
   ref: string
   id: string
   enonce: string
+  multicols?: boolean
   blocks: AMCNumBlock[]
 }
 

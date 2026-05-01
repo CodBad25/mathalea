@@ -3,14 +3,20 @@ import nunjucks from 'nunjucks'
 nunjucks.configure('templates', { autoescape: false })
 
 export const AMCOpenTemplate = `\\element{ {{ ref }} }{
+{% if multicols %}\\begin{multicols}{2}
+{% endif %}
   \\begin{question}{ {{ id }} }
     {{ enonce }}
     \\explain{ {{ correction }} }
     \\notation{ {{ notation }} }[{{ sanscadre }}][{{ pointilles }}]
   \\end{question}
+{% if multicols %}\\end{multicols}
+{% endif %}
 }`
 
 export const AMCNumTemplate = `\\element{ {{ ref }} }{
+{% if multicols %}\\begin{multicols}{2}
+{% endif %}
   \\begin{questionmultx}{ {{ id }} }
     {{ enonce }}
 {%- for b in blocks %}
@@ -44,9 +50,13 @@ export const AMCNumTemplate = `\\element{ {{ ref }} }{
     }
 {%- endfor %}
   \\end{questionmultx}
+{% if multicols %}\\end{multicols}
+{% endif %}
 }`
 
 export const qcmTemplate = `\\element{ {{ ref }} }{
+{% if multicols %}\\begin{multicols}{2}
+{% endif %}
   \\begin{ {{ "questionmult" if mode == "mult" else "question" }} }{ {{ id }} }
     {{ enonce | safe }}
     \\begin{ {{ layout }} }{% if ordered %}[o]{% endif %}
@@ -55,6 +65,8 @@ export const qcmTemplate = `\\element{ {{ ref }} }{
 {%- endfor %}
     \\end{ {{ layout }} }
   \\end{ {{ "questionmult" if mode == "mult" else "question" }} }
+{% if multicols %}\\end{multicols}
+{% endif %}
 }`
 
 export const AMCHybrideContainerTemplate = `\\element{ {{ ref }} }{
