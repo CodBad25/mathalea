@@ -113,6 +113,18 @@ export function normalizeAMCNum(
   const id = idBase
   const enonce = autoCorrectionItem.enonce ?? exercice.listeQuestions[index]
   const rep = autoCorrectionItem.reponse
+  const blocks = normalizeAMCNumBlocks(rep)
+
+  return {
+    id,
+    ref,
+    enonce,
+    multicols: !!(autoCorrectionItem as any)?.options?.multicols,
+    blocks,
+  }
+}
+
+export function normalizeAMCNumBlocks(rep?: AutoCorrectionAMC['reponse']) {
   const param = rep?.param ?? {}
   const valeur = Array.isArray(rep?.valeur) ? rep?.valeur[0] : rep?.valeur
   const blocks: AMCNumBlock[] = []
@@ -147,12 +159,30 @@ export function normalizeAMCNum(
       },
     })
 
-    return { id, ref, enonce, blocks }
+    return blocks
   }
 
   if (isFractionValue(valeur)) {
-    const num = valeur.num
-    const den = valeur.den
+    let num: number
+    let den: number
+
+    if (typeof valeur === 'string') {
+      const match = String(valeur).match(
+        /^\s*(-?\+?)\s*\\(frac|dfrac)\s*{([^}]*)}\s*{([^}]*)}/,
+      )
+      if (!match) {
+        console.warn(
+          `Valeur de fraction au format LaTeX invalide : "${valeur}"`,
+        )
+        return blocks
+      }
+      num = parseFloat(match[1] + match[3])
+      den = parseFloat(match[4])
+    } else {
+      num = valeur.num
+      den = valeur.den
+    }
+
     const digitsNum = Math.max(
       param.digitsNum ?? param.digits ?? 0,
       countDigits(num),
@@ -163,8 +193,8 @@ export function normalizeAMCNum(
     )
     const sign = param.signe !== undefined ? param.signe : num * den < 0
 
-    let valueAMC
-    let alsoCorrect
+    let valueAMC: number
+    let alsoCorrect: number
 
     if (num > 0) {
       valueAMC = num + den / 10 ** digitsDen
@@ -186,7 +216,7 @@ export function normalizeAMCNum(
       },
     })
 
-    return { id, ref, enonce, blocks }
+    return blocks
   }
 
   const { value, decimals, approx, alsocorrect } = computeDecimalAMC(rep)
@@ -211,11 +241,5 @@ export function normalizeAMCNum(
     },
   })
 
-  return {
-    id,
-    ref,
-    enonce,
-    multicols: !!(autoCorrectionItem as any)?.options?.multicols,
-    blocks,
-  }
+  return blocks
 }

@@ -153,6 +153,7 @@ describe('amcEngine', () => {
         param: {
           decimals: 0,
           tpoint: ',',
+          digits: 2,
         },
       },
     }

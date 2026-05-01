@@ -1,93 +1,42 @@
 <script lang="ts">
+  import { normalizeAMCNumBlocks } from '../../../../lib/amc/amcNormalize'
+  import type { ReponseParams } from '../../../../lib/types'
   import AmcEnonceHtml from './AmcEnonceHtml.svelte'
 
   export let enonce = ''
   export let htmlContent = ''
   export let value: unknown = undefined
-  export let param: {
-    digits?: number
-    decimals?: number
-    signe?: boolean
-    exposantNbChiffres?: number
-    exposantSigne?: boolean
-    approx?: number
-    vertical?: boolean
-    tpoint?: string
-  } = {}
+  export let param: ReponseParams = {}
 
-  function countDecimals(value: number): number {
-    if (!Number.isFinite(value)) return 0
+  $: blocks = normalizeAMCNumBlocks({
+    valeur: value as any,
+    param,
+  })
+  $: mainBlock = blocks[0]
+  $: exponentBlock = blocks.find((block) => block.label === 'Exposant')
 
-    const rounded = Number(value.toFixed(10))
-    const s = rounded.toString()
-
-    if (s.includes('e-')) {
-      const [, exp] = s.split('e-')
-      return parseInt(exp, 10)
-    }
-
-    const parts = s.split('.')
-    return parts[1] ? parts[1].length : 0
-  }
-
-  function countDigits(value: number): number {
-    return Math.abs(Math.trunc(value)).toString().length
-  }
-
-  function getDecimalValue(raw: unknown): number | null {
-    if (typeof raw === 'number' && Number.isFinite(raw)) return raw
-
-    if (typeof raw === 'object' && raw !== null) {
-      if (
-        'valeurDecimale' in raw &&
-        typeof (raw as { valeurDecimale?: unknown }).valeurDecimale === 'number'
-      ) {
-        return (raw as { valeurDecimale: number }).valeurDecimale
-      }
-
-      if (
-        'num' in raw &&
-        'den' in raw &&
-        typeof (raw as { num?: unknown }).num === 'number' &&
-        typeof (raw as { den?: unknown }).den === 'number' &&
-        (raw as { den: number }).den !== 0
-      ) {
-        const fraction = raw as { num: number; den: number }
-        return fraction.num / fraction.den
-      }
-    }
-
-    if (typeof raw === 'string') {
-      const normalized = raw.replace(',', '.')
-      const parsed = Number(normalized)
-      return Number.isFinite(parsed) ? parsed : null
-    }
-
-    return null
-  }
-
-  $: rawValue = Array.isArray(value) ? value[0] : value
-  $: decimalValue = getDecimalValue(rawValue)
-  $: inferredDecimals =
-    decimalValue !== null
-      ? countDecimals(decimalValue)
-      : Number(param?.decimals ?? 0)
-  $: inferredDigits =
-    decimalValue !== null
-      ? countDigits(decimalValue) + inferredDecimals
-      : Number(param?.digits ?? 1)
-
-  $: digits = Math.max(1, Number(param?.digits ?? inferredDigits ?? 1))
-  $: decimals = Math.max(0, Number(param?.decimals ?? inferredDecimals ?? 0))
-  $: signe = Boolean(param?.signe)
-  $: exposantNbChiffres = Math.max(0, Number(param?.exposantNbChiffres ?? 0))
-  $: exposantSigne = Boolean(param?.exposantSigne)
-  $: vertical = Boolean(param?.vertical)
-  $: approx = Number(param?.approx ?? 0)
+  $: digits = Math.max(1, Number(mainBlock?.digits ?? param?.digits ?? 1))
+  $: decimals = Math.max(0, Number(mainBlock?.decimals ?? param?.decimals ?? 0))
+  $: signe = Boolean(mainBlock?.sign ?? param?.signe)
+  $: exposantNbChiffres = Math.max(
+    0,
+    Number(
+      mainBlock?.options?.exponent ??
+        exponentBlock?.digits ??
+        param?.exposantNbChiffres ??
+        0,
+    ),
+  )
+  $: exposantSigne = Boolean(
+    mainBlock?.options?.exposign ?? exponentBlock?.sign ?? param?.exposantSigne,
+  )
+  $: vertical = Boolean(mainBlock?.options?.vertical ?? param?.vertical)
+  $: approx = Number(mainBlock?.options?.approx ?? param?.approx ?? 0)
   $: digitChoices = Array.from({ length: 10 }, (_, i) => i)
   $: integerDigits = Math.max(0, digits - decimals)
   $: hasDecimalSeparator = decimals > 0
-  $: decimalSeparator = param?.tpoint === '.' ? '.' : ','
+  $: decimalSeparator =
+    (mainBlock?.options?.Tpoint ?? param?.tpoint) === '.' ? '.' : ','
 </script>
 
 <div
