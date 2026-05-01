@@ -18,7 +18,7 @@ import {
   texteEnCouleurEtGras,
 } from '../../lib/outils/embellissements'
 import { arrondi } from '../../lib/outils/nombres'
-import { creerNomDePolygone, numAlpha, sp } from '../../lib/outils/outilString'
+import { creerNomDePolygone, numAlpha } from '../../lib/outils/outilString'
 import { texNombre } from '../../lib/outils/texNombre'
 import { context } from '../../modules/context'
 import Grandeur from '../../modules/Grandeur'

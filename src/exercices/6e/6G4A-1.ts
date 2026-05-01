@@ -316,7 +316,7 @@ export default class VocabulaireDeBaseDesAngles extends Exercice {
     }
     listeQuestionsToContenu(this)
     this.besoinFormulaireTexte = [
-      'Cas à traiter ',
+      'Réponses possibles ',
       "Nombres séparés par des tirets :\n1 : Nom de l'angle\n2 : Sommet de l'angle\n3 : Côté de l'angle\n4 : Rien de cela\n5 : Mélange",
     ]
   }
