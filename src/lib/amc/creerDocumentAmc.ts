@@ -28,6 +28,11 @@ export type CreerDocumentAmcOptions = {
   titre?: string
   typeEntete?: string
   format?: string
+  fontSize?: '10pt' | '11pt' | '12pt'
+  showWarningMessage?: boolean
+  warningMessage?: string
+  associationRoster?: string
+  collectCorrectionsAtEnd?: boolean
 }
 
 export type AMCGroupConsistencyReport = {
@@ -35,6 +40,129 @@ export type AMCGroupConsistencyReport = {
   restitutedGroups: string[]
   missingGroupDefinitions: string[]
   unusedGroupDefinitions: string[]
+}
+
+const DEFAULT_WARNING_MESSAGE =
+  'REMPLIR avec un stylo NOIR la ou les cases pour chaque question. Si vous devez modifier un choix, NE PAS chercher à redessiner la case cochée par erreur, mettez simplement un coup de "blanc" dessus.\\\\\n\nLes questions précédées de \\multiSymbole peuvent avoir plusieurs réponses.\\\\ Les questions qui commencent par \\TT ne doivent pas être faites par les élèves disposant d\'un tiers temps.\\\\\n\nIl est fortement conseillé de faire les calculs dans sa tête ou sur la partie blanche de la feuille sans regarder les solutions proposées avant de remplir la bonne case plutôt que d\'essayer de choisir entre les propositions (ce qui demande de toutes les examiner et prend donc plus de temps).'
+
+function escapeLatexText(value: string): string {
+  return value
+    .replace(/\\/g, '\\textbackslash{}')
+    .replace(/([#%&_$])/g, '\\$1')
+    .replace(/\{/g, '\\{')
+    .replace(/\}/g, '\\}')
+}
+
+function buildAssociationSubjectsFromRoster(roster: string): string {
+  const lines = roster
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter(Boolean)
+
+  const rendered: string[] = []
+  let index = 1
+
+  for (const line of lines) {
+    const parts = line
+      .split(/[;\t,]/)
+      .map((part) => part.trim())
+      .filter(Boolean)
+    if (parts.length < 2) continue
+
+    const first = parts[0].toLowerCase()
+    const second = parts[1].toLowerCase()
+    if (
+      (first === 'nom' || first === 'lastname') &&
+      (second === 'prenom' || second === 'prénom' || second === 'firstname')
+    ) {
+      continue
+    }
+
+    const nom = escapeLatexText(parts[0])
+    const prenom = escapeLatexText(parts[1])
+    const id = escapeLatexText(parts[2] ?? String(index))
+    rendered.push(
+      `\\def\\nom{${nom}}\\def\\prenom{${prenom}}\\def\\id{${id}}\\sujet`,
+    )
+    index++
+  }
+
+  return rendered.join('\n')
+}
+
+function findMatchingBrace(content: string, openBraceIndex: number): number {
+  let depth = 0
+  for (let i = openBraceIndex; i < content.length; i++) {
+    const char = content[i]
+    if (char === '{') depth++
+    if (char === '}') {
+      depth--
+      if (depth === 0) return i
+    }
+  }
+  return -1
+}
+
+function rewriteExplainCommandsInQuestionBlock(
+  block: string,
+  questionId: string,
+): string {
+  const explainToken = '\\explain{'
+  let i = 0
+  let rewritten = ''
+
+  while (i < block.length) {
+    const explainIndex = block.indexOf(explainToken, i)
+    if (explainIndex === -1) {
+      rewritten += block.slice(i)
+      break
+    }
+
+    rewritten += block.slice(i, explainIndex)
+
+    const openBraceIndex = explainIndex + explainToken.length - 1
+    const closeBraceIndex = findMatchingBrace(block, openBraceIndex)
+    if (closeBraceIndex === -1) {
+      rewritten += block.slice(explainIndex)
+      break
+    }
+
+    const explanation = block.slice(openBraceIndex + 1, closeBraceIndex)
+    rewritten += `\\expliqueplustard{${questionId}}{${explanation}}`
+    i = closeBraceIndex + 1
+  }
+
+  return rewritten
+}
+
+function rewriteExplainToDeferred(latexCode: string): string {
+  const beginRegex =
+    /\\begin\{(question|questionmult|questionmultx)\}\{([^}]*)\}/g
+  let match: RegExpExecArray | null
+  let currentIndex = 0
+  let result = ''
+
+  while ((match = beginRegex.exec(latexCode)) !== null) {
+    const fullMatch = match[0]
+    const env = match[1]
+    const questionId = match[2].trim()
+    const blockStart = match.index
+    const contentStart = blockStart + fullMatch.length
+    const endToken = `\\end{${env}}`
+    const blockEnd = latexCode.indexOf(endToken, contentStart)
+
+    if (blockEnd === -1) continue
+
+    result += latexCode.slice(currentIndex, contentStart)
+    const blockBody = latexCode.slice(contentStart, blockEnd)
+    result += rewriteExplainCommandsInQuestionBlock(blockBody, questionId)
+    result += endToken
+    currentIndex = blockEnd + endToken.length
+    beginRegex.lastIndex = currentIndex
+  }
+
+  result += latexCode.slice(currentIndex)
+  return result
 }
 
 function escapeRegExp(value: string): string {
@@ -344,6 +472,11 @@ export function creerDocumentAmc(options: CreerDocumentAmcOptions): string {
     titre: title = 'Evaluation',
     typeEntete: headerType = 'AMCcodeGrid',
     format = 'A4',
+    fontSize = '10pt',
+    showWarningMessage = true,
+    warningMessage = DEFAULT_WARNING_MESSAGE,
+    associationRoster = '',
+    collectCorrectionsAtEnd = false,
   } = options
   // Attention exercises est maintenant un tableau de tous les exercices.
   // Dans cette partie, la fonction récupère tous les exercices et les trie pour les rassembler par groupe.
@@ -409,7 +542,7 @@ export function creerDocumentAmc(options: CreerDocumentAmcOptions): string {
 
   const documentClassOptions = [
     isDuplexPrinting ? 'twoside' : null,
-    '10pt',
+    fontSize,
     format === 'A3' ? 'a3paper' : 'a4paper',
     format === 'A3' ? 'landscape' : null,
     'french',
@@ -447,6 +580,9 @@ export function creerDocumentAmc(options: CreerDocumentAmcOptions): string {
     matiere: subject,
     titre: title,
     nbExemplaires: copiesCount,
+    collectCorrectionsAtEnd,
+    showWarningMessage,
+    warningMessage,
   })
 
   let groupsSections = ''
@@ -466,12 +602,18 @@ export function creerDocumentAmc(options: CreerDocumentAmcOptions): string {
     groupsSections,
     isA3: format === 'A3',
     isAssociation: headerType === 'AMCassociation',
+    collectCorrectionsAtEnd,
   })
 
   latexCode = preambule + '\n' + documentStart + '\n' + copyHeader + copyContent
   if (headerType === 'AMCassociation') {
-    latexCode +=
-      '\n \n \\csvreader[head to column names]{liste.csv}{}{\\sujet}\n'
+    const renderedRoster = buildAssociationSubjectsFromRoster(associationRoster)
+    if (renderedRoster.length > 0) {
+      latexCode += `\n${renderedRoster}\n`
+    } else {
+      latexCode +=
+        '\n \n \\csvreader[head to column names]{liste.csv}{}{\\sujet}\n'
+    }
   }
   latexCode += '\\end{document}\n'
 
@@ -481,6 +623,10 @@ export function creerDocumentAmc(options: CreerDocumentAmcOptions): string {
     /\\boldsymbol\{\\boldsymbol\{([^{}]+)\}\}/g,
     '\\boldsymbol{$1}',
   )
+
+  if (collectCorrectionsAtEnd) {
+    latexCode = rewriteExplainToDeferred(latexCode)
+  }
 
   const consistencyReport = checkAMCGroupConsistency(latexCode)
   if (consistencyReport.missingGroupDefinitions.length > 0) {

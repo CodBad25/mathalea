@@ -67,6 +67,20 @@
 
   let exercices: IExercice[] = []
   let groupSettings: GroupSetting[] = []
+  let documentSettings = {
+    correctionsDisplayMode: 'per-question' as 'per-question' | 'end-of-copy',
+    nbExemplaires: 1,
+    format: 'A4' as 'A4' | 'A3',
+    identificationMode: 'AMCcodeGrid' as
+      | 'AMCcodeGrid'
+      | 'AMCassociation'
+      | 'AMCnom',
+    associationRoster: '',
+    showWarningMessage: true,
+    warningMessage:
+      'REMPLIR avec un stylo NOIR la ou les cases pour chaque question. Si vous devez modifier un choix, NE PAS chercher a redessiner la case cochee par erreur, mettez simplement un coup de "blanc" dessus.\\\\ Les questions precedees de \\multiSymbole peuvent avoir plusieurs reponses.\\\\ Les questions qui commencent par \\TT ne doivent pas etre faites par les eleves disposant d\'un tiers temps.\\\\ Il est fortement conseille de faire les calculs dans sa tete ou sur la partie blanche de la feuille sans regarder les solutions proposees avant de remplir la bonne case plutot que d\'essayer de choisir entre les propositions (ce qui demande de toutes les examiner et prend donc plus de temps).',
+    fontSize: '10pt' as '10pt' | '11pt' | '12pt',
+  }
   let selectedRef: BlockRef | null = null
   let selectedExerciseIndex: number | null = null
   let tikzScaleFactorsByQuestion: Record<string, number> = {}
@@ -77,8 +91,11 @@
     'Dimensions de figure: clip non détecté'
   let latexContent = ''
   let latexExportStatus = ''
+  let latexExportStatusTimeout: ReturnType<typeof setTimeout> | null = null
+  let isLatexExportError = false
   let groupConsistencyReport: AMCGroupConsistencyReport | null = null
   let isDropTargetActive = false
+  let isDocumentSettingsOpen = true
 
   let unsubscribeExercicesParams: (() => void) | null = null
 
@@ -92,6 +109,7 @@
       : (tikzScaleFactorsByQuestion[selectedQuestionKey] ?? 1),
   )
   $: tikzScaleSliderValue = selectedQuestionTikzScaleFactor
+  $: isLatexExportError = /impossible|erreur/i.test(latexExportStatus)
   $: {
     // Dépend explicitement de la question sélectionnée pour forcer la MAJ
     // même si le facteur reste inchangé (ex: 1 -> 1).
@@ -279,39 +297,42 @@
     // Le contexte (isHtml/isAmc) est restauré par la passe AMC qui suit.
   }
 
-  async function refreshExercicesFromStore() {
-    const loaded = (
-      await mathaleaGetExercicesFromParams($exercicesParams)
-    ).filter(
+  async function refreshExercicesFromStore(params: InterfaceParams[]) {
+    const loaded = (await mathaleaGetExercicesFromParams(params)).filter(
       (exercice): exercice is IExercice => exercice.typeExercice !== 'statique',
     )
 
     const amcReadyExercices: IExercice[] = []
 
     for (const exercice of loaded) {
-      const seed = exercice.seed ?? ''
+      try {
+        const seed = exercice.seed ?? ''
 
-      // 1. Passe HTML : génère les SVG dans listeQuestions
-      generateHtmlQuestionsForExercise(exercice, seed)
+        // 1. Passe HTML : génère les SVG dans listeQuestions
+        generateHtmlQuestionsForExercise(exercice, seed)
 
-      // 2. Passe AMC : génère autoCorrection
-      const ex = exercice as any
-      ex.lastCallback = ''
-      context.isHtml = false
-      context.isAmc = true
-      seedrandom(seed, { global: true })
+        // 2. Passe AMC : génère autoCorrection
+        const ex = exercice as any
+        ex.lastCallback = ''
+        context.isHtml = false
+        context.isAmc = true
+        seedrandom(seed, { global: true })
 
-      if (exercice.typeExercice === 'simple') {
-        mathaleaHandleExerciceSimple(exercice, false)
-      } else if (typeof exercice.nouvelleVersionWrapper === 'function') {
-        exercice.nouvelleVersionWrapper()
-      }
+        if (exercice.typeExercice === 'simple') {
+          mathaleaHandleExerciceSimple(exercice, false)
+        } else if (typeof exercice.nouvelleVersionWrapper === 'function') {
+          exercice.nouvelleVersionWrapper()
+        }
 
-      mathaleaEnsureAMCCompatibility(exercice)
-      ;(exercice as any).amcHtmlQuestions =
-        extractAMCQuestionsFromAutoCorrection(exercice)
-      if (exercice.amcType != null) {
-        amcReadyExercices.push(exercice)
+        mathaleaEnsureAMCCompatibility(exercice)
+        ;(exercice as any).amcHtmlQuestions =
+          extractAMCQuestionsFromAutoCorrection(exercice)
+        if (exercice.amcType != null) {
+          amcReadyExercices.push(exercice)
+        }
+      } catch (error) {
+        // On ignore un exercice invalide pour ne pas bloquer l'ajout des suivants.
+        console.warn('[AMC] Exercice ignoré pendant le chargement:', error)
       }
     }
 
@@ -395,11 +416,17 @@
         pageBreakBefore: setting.pageBreakBefore,
         multicols: setting.multicols,
       })),
-      typeEntete: 'AMCcodeGrid',
-      format: 'A4',
+      typeEntete: documentSettings.identificationMode,
+      format: documentSettings.format,
       matiere: 'Mathématiques',
       titre: 'Aperçu AMC',
-      nbExemplaires: 1,
+      nbExemplaires: Math.max(1, Number(documentSettings.nbExemplaires) || 1),
+      fontSize: documentSettings.fontSize,
+      showWarningMessage: documentSettings.showWarningMessage,
+      warningMessage: documentSettings.warningMessage,
+      associationRoster: documentSettings.associationRoster,
+      collectCorrectionsAtEnd:
+        documentSettings.correctionsDisplayMode === 'end-of-copy',
     })
 
     groupConsistencyReport = checkAMCGroupConsistency(latexContent)
@@ -634,12 +661,23 @@
     return `Dimensions de figure: ${formatCm(baseWidth)} x ${formatCm(baseHeight)} cm -> ${formatCm(width)} x ${formatCm(height)} cm`
   }
 
+  function setLatexExportStatus(message: string) {
+    latexExportStatus = message
+    if (latexExportStatusTimeout != null) {
+      clearTimeout(latexExportStatusTimeout)
+    }
+    latexExportStatusTimeout = setTimeout(() => {
+      latexExportStatus = ''
+      latexExportStatusTimeout = null
+    }, 3000)
+  }
+
   async function copyLatexToClipboard() {
     if (!latexContent.trim()) return
 
     try {
       await navigator.clipboard.writeText(latexContent)
-      latexExportStatus = 'LaTeX copié dans le presse-papier.'
+      setLatexExportStatus('LaTeX copié dans le presse-papier.')
     } catch {
       // Fallback pour navigateurs sans permission clipboard.
       const textarea = document.createElement('textarea')
@@ -651,9 +689,11 @@
       textarea.select()
       const copied = document.execCommand('copy')
       document.body.removeChild(textarea)
-      latexExportStatus = copied
-        ? 'LaTeX copié dans le presse-papier.'
-        : 'Impossible de copier automatiquement le LaTeX.'
+      setLatexExportStatus(
+        copied
+          ? 'LaTeX copié dans le presse-papier.'
+          : 'Impossible de copier automatiquement le LaTeX.',
+      )
     }
   }
 
@@ -672,8 +712,9 @@
     document.body.removeChild(link)
     URL.revokeObjectURL(url)
 
-    latexExportStatus =
-      'Téléchargement lancé (dossier selon les réglages du navigateur).'
+    setLatexExportStatus(
+      'Téléchargement lancé (dossier selon les réglages du navigateur).',
+    )
   }
 
   function getBlocks(exercise: IExercice, exerciseIndex: number) {
@@ -875,6 +916,7 @@
   function selectBlock(ref: BlockRef) {
     selectedRef = ref
     selectedExerciseIndex = ref.exerciseIndex
+    isDocumentSettingsOpen = false
   }
 
   function updateSelectedNumericParam(
@@ -1152,17 +1194,21 @@
     if (exercices.length === 0 || selectedExerciseIndex == null) return
     selectedExerciseIndex = (selectedExerciseIndex + 1) % exercices.length
     selectedRef = null
+    isDocumentSettingsOpen = false
   }
 
   onMount(async () => {
     await mathaleaUpdateExercicesParamsFromUrl()
-    await refreshExercicesFromStore()
-    unsubscribeExercicesParams = exercicesParams.subscribe(() => {
-      void refreshExercicesFromStore()
+    await refreshExercicesFromStore($exercicesParams)
+    unsubscribeExercicesParams = exercicesParams.subscribe((params) => {
+      void refreshExercicesFromStore(params)
     })
   })
 
   onDestroy(() => {
+    if (latexExportStatusTimeout != null) {
+      clearTimeout(latexExportStatusTimeout)
+    }
     if (unsubscribeExercicesParams) unsubscribeExercicesParams()
   })
 </script>
@@ -1189,8 +1235,12 @@
   </div>
 
   <div class="w-full pb-8 {$darkMode.isActive ? 'dark' : ''}">
-    <div class="grid grid-cols-1 xl:grid-cols-[minmax(0,1fr)_22rem] gap-4 mt-4">
-      <section class="space-y-4">
+    <div
+      class="grid grid-cols-1 xl:grid-cols-[minmax(0,1fr)_22rem] gap-4 mt-4 xl:h-[calc(100vh-10rem)] xl:overflow-hidden"
+    >
+      <section
+        class="space-y-4 xl:h-full xl:min-h-0 xl:overflow-y-auto xl:pr-2"
+      >
         <div
           class="rounded-xl border-2 border-dashed p-4 transition-colors {isDropTargetActive
             ? 'border-coopmaths-action bg-coopmaths-action/10'
@@ -1264,6 +1314,7 @@
                     class="rounded border px-2 py-1"
                     on:click={() => {
                       selectedExerciseIndex = exerciseIndex
+                      isDocumentSettingsOpen = false
                     }}
                   >
                     Sélectionner le groupe
@@ -1477,7 +1528,7 @@
           <div class="mt-3 flex flex-wrap gap-2">
             <button
               type="button"
-              class="rounded border px-3 py-1 text-xs"
+              class="rounded border border-coopmaths-struct-light/60 bg-white/70 px-3 py-1 text-xs font-medium text-coopmaths-struct transition-all duration-150 hover:border-blue-500 hover:text-blue-700 hover:shadow-sm active:scale-[0.97] active:border-blue-600 active:bg-blue-50 disabled:cursor-not-allowed disabled:opacity-45 dark:bg-coopmathsdark-canvas-dark/40 dark:text-coopmathsdark-struct dark:hover:border-blue-400 dark:hover:text-blue-300 dark:active:bg-blue-900/20"
               on:click={copyLatexToClipboard}
               disabled={!latexContent.trim()}
             >
@@ -1485,7 +1536,7 @@
             </button>
             <button
               type="button"
-              class="rounded border px-3 py-1 text-xs"
+              class="rounded border border-coopmaths-struct-light/60 bg-white/70 px-3 py-1 text-xs font-medium text-coopmaths-struct transition-all duration-150 hover:border-blue-500 hover:text-blue-700 hover:shadow-sm active:scale-[0.97] active:border-blue-600 active:bg-blue-50 disabled:cursor-not-allowed disabled:opacity-45 dark:bg-coopmathsdark-canvas-dark/40 dark:text-coopmathsdark-struct dark:hover:border-blue-400 dark:hover:text-blue-300 dark:active:bg-blue-900/20"
               on:click={downloadLatexFile}
               disabled={!latexContent.trim()}
             >
@@ -1493,11 +1544,15 @@
             </button>
           </div>
           {#if latexExportStatus}
-            <p
-              class="mt-2 text-xs text-coopmaths-corpus dark:text-coopmathsdark-corpus"
+            <div
+              class="mt-3 rounded-md border px-3 py-2 text-xs font-medium {isLatexExportError
+                ? 'border-red-300 bg-red-50 text-red-800 dark:border-red-700/60 dark:bg-red-900/20 dark:text-red-200'
+                : 'border-emerald-300 bg-emerald-50 text-emerald-800 dark:border-emerald-700/60 dark:bg-emerald-900/20 dark:text-emerald-200'}"
+              role="status"
+              aria-live="polite"
             >
               {latexExportStatus}
-            </p>
+            </div>
           {/if}
           <pre
             class="mt-3 max-h-72 overflow-auto text-xs whitespace-pre-wrap">{latexContent}</pre>
@@ -1505,13 +1560,232 @@
       </section>
 
       <aside
-        class="rounded-2xl border border-coopmaths-struct-light/40 bg-coopmaths-canvas-dark/30 p-4 dark:bg-coopmathsdark-canvas-dark/40 dark:border-coopmathsdark-struct-light/30 h-fit xl:sticky xl:top-4"
+        class="rounded-2xl border border-coopmaths-struct-light/40 bg-coopmaths-canvas-dark/30 p-4 dark:bg-coopmathsdark-canvas-dark/40 dark:border-coopmathsdark-struct-light/30 h-fit xl:h-[calc(100vh-10rem)] xl:overflow-y-auto xl:self-start"
       >
         <h3
           class="font-semibold text-coopmaths-struct dark:text-coopmathsdark-struct"
         >
           Paramétrage
         </h3>
+
+        <details
+          class="mt-4 rounded-xl border border-coopmaths-struct-light/30 p-3"
+          bind:open={isDocumentSettingsOpen}
+        >
+          <summary class="cursor-pointer text-sm font-semibold">
+            Paramétrage du document
+          </summary>
+
+          <div class="mt-3 space-y-2">
+            <label for="amc-doc-format" class="block text-xs">Format</label>
+            <select
+              id="amc-doc-format"
+              class="w-full rounded border px-2 py-1 text-sm"
+              value={documentSettings.format}
+              on:change={(event) => {
+                documentSettings = {
+                  ...documentSettings,
+                  format: (event.currentTarget as HTMLSelectElement).value as
+                    | 'A4'
+                    | 'A3',
+                }
+                updateLatexPreview()
+              }}
+            >
+              <option value="A4">A4</option>
+              <option value="A3">A3 (multicols 2)</option>
+            </select>
+
+            <label for="amc-doc-font-size" class="block text-xs"
+              >Taille de police</label
+            >
+            <select
+              id="amc-doc-font-size"
+              class="w-full rounded border px-2 py-1 text-sm"
+              value={documentSettings.fontSize}
+              on:change={(event) => {
+                documentSettings = {
+                  ...documentSettings,
+                  fontSize: (event.currentTarget as HTMLSelectElement).value as
+                    | '10pt'
+                    | '11pt'
+                    | '12pt',
+                }
+                updateLatexPreview()
+              }}
+            >
+              <option value="10pt">10pt</option>
+              <option value="11pt">11pt</option>
+              <option value="12pt">12pt</option>
+            </select>
+
+            <p class="mt-2 text-xs font-semibold">Identification élève</p>
+            <label class="inline-flex items-center gap-2 text-xs">
+              <input
+                type="radio"
+                name="amc-identification-mode"
+                checked={documentSettings.identificationMode === 'AMCcodeGrid'}
+                on:change={(event) => {
+                  if (!(event.currentTarget as HTMLInputElement).checked) return
+                  documentSettings = {
+                    ...documentSettings,
+                    identificationMode: 'AMCcodeGrid',
+                  }
+                  updateLatexPreview()
+                }}
+              />
+              AMCCodeGrid
+            </label>
+            <label class="inline-flex items-center gap-2 text-xs">
+              <input
+                type="radio"
+                name="amc-identification-mode"
+                checked={documentSettings.identificationMode ===
+                  'AMCassociation'}
+                on:change={(event) => {
+                  if (!(event.currentTarget as HTMLInputElement).checked) return
+                  documentSettings = {
+                    ...documentSettings,
+                    identificationMode: 'AMCassociation',
+                  }
+                  updateLatexPreview()
+                }}
+              />
+              Association
+            </label>
+            <label class="inline-flex items-center gap-2 text-xs">
+              <input
+                type="radio"
+                name="amc-identification-mode"
+                checked={documentSettings.identificationMode === 'AMCnom'}
+                on:change={(event) => {
+                  if (!(event.currentTarget as HTMLInputElement).checked) return
+                  documentSettings = {
+                    ...documentSettings,
+                    identificationMode: 'AMCnom',
+                  }
+                  updateLatexPreview()
+                }}
+              />
+              Juste champNom
+            </label>
+
+            {#if documentSettings.identificationMode === 'AMCassociation'}
+              <label for="amc-doc-roster" class="block text-xs"
+                >Liste eleves (nom, prenom[, id])</label
+              >
+              <textarea
+                id="amc-doc-roster"
+                class="w-full rounded border px-2 py-1 text-xs min-h-20"
+                value={documentSettings.associationRoster}
+                on:keydown={(event) => {
+                  event.stopPropagation()
+                }}
+                on:input={(event) => {
+                  documentSettings = {
+                    ...documentSettings,
+                    associationRoster: (
+                      event.currentTarget as HTMLTextAreaElement
+                    ).value,
+                  }
+                  updateLatexPreview()
+                }}
+              ></textarea>
+            {/if}
+
+            <label for="amc-doc-copies-count" class="block text-xs"
+              >Nombre d'exemplaires (\exemplaire)</label
+            >
+            <input
+              id="amc-doc-copies-count"
+              type="number"
+              min="1"
+              class="w-full rounded border px-2 py-1 text-sm"
+              value={documentSettings.nbExemplaires}
+              on:input={(event) => {
+                const value = Math.max(
+                  1,
+                  Number((event.currentTarget as HTMLInputElement).value) || 1,
+                )
+                documentSettings = {
+                  ...documentSettings,
+                  nbExemplaires: value,
+                }
+                updateLatexPreview()
+              }}
+            />
+
+            <label class="mt-2 inline-flex items-center gap-2 text-xs">
+              <input
+                type="checkbox"
+                checked={documentSettings.showWarningMessage}
+                on:change={(event) => {
+                  documentSettings = {
+                    ...documentSettings,
+                    showWarningMessage: (
+                      event.currentTarget as HTMLInputElement
+                    ).checked,
+                  }
+                  updateLatexPreview()
+                }}
+              />
+              Afficher le message d'avertissement
+            </label>
+            {#if documentSettings.showWarningMessage}
+              <label for="amc-doc-warning" class="block text-xs"
+                >Message d'avertissement</label
+              >
+              <textarea
+                id="amc-doc-warning"
+                class="w-full rounded border px-2 py-1 text-xs min-h-24"
+                value={documentSettings.warningMessage}
+                on:input={(event) => {
+                  documentSettings = {
+                    ...documentSettings,
+                    warningMessage: (event.currentTarget as HTMLTextAreaElement)
+                      .value,
+                  }
+                  updateLatexPreview()
+                }}
+              ></textarea>
+            {/if}
+
+            <label class="inline-flex items-center gap-2 text-xs">
+              <input
+                type="radio"
+                name="amc-corrections-display-mode"
+                checked={documentSettings.correctionsDisplayMode ===
+                  'per-question'}
+                on:change={(event) => {
+                  if (!(event.currentTarget as HTMLInputElement).checked) return
+                  documentSettings = {
+                    ...documentSettings,
+                    correctionsDisplayMode: 'per-question',
+                  }
+                  updateLatexPreview()
+                }}
+              />
+              Afficher les explications dans chaque question
+            </label>
+            <label class="inline-flex items-center gap-2 text-xs">
+              <input
+                type="radio"
+                name="amc-corrections-display-mode"
+                checked={documentSettings.correctionsDisplayMode ===
+                  'end-of-copy'}
+                on:change={(event) => {
+                  if (!(event.currentTarget as HTMLInputElement).checked) return
+                  documentSettings = {
+                    ...documentSettings,
+                    correctionsDisplayMode: 'end-of-copy',
+                  }
+                  updateLatexPreview()
+                }}
+              />
+              Regrouper toutes les explications en fin de copie corrigée
+            </label>
+          </div>
+        </details>
 
         {#if selectedExerciseIndex != null}
           <div
