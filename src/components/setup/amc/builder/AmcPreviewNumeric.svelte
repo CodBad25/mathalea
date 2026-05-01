@@ -35,8 +35,8 @@
   $: digitChoices = Array.from({ length: 10 }, (_, i) => i)
   $: integerDigits = Math.max(0, digits - decimals)
   $: hasDecimalSeparator = decimals > 0
-  $: decimalSeparator =
-    (mainBlock?.options?.Tpoint ?? param?.tpoint) === '.' ? '.' : ','
+  $: tpointRaw = String(mainBlock?.options?.Tpoint ?? param?.tpoint ?? ',')
+  $: isFractionSeparator = tpointRaw.includes('\\vrule')
 </script>
 
 <div
@@ -87,7 +87,14 @@
           {/each}
 
           <div class="flex justify-start py-0.5">
-            <span class="text-xs font-semibold">{decimalSeparator}</span>
+            {#if !isFractionSeparator}
+              <span class="text-xs font-semibold">,</span>
+            {:else}
+              <div
+                class="h-px bg-coopmaths-corpus dark:bg-coopmathsdark-corpus"
+                style="width: 100%; min-width: 50px"
+              ></div>
+            {/if}
           </div>
 
           {#each Array(decimals) as _}
@@ -132,7 +139,14 @@
           {/each}
 
           <div class="flex h-full items-center">
-            <span class="text-xs font-semibold">{decimalSeparator}</span>
+            {#if !isFractionSeparator}
+              <span class="text-xs font-semibold">,</span>
+            {:else}
+              <div
+                class="h-px bg-coopmaths-corpus dark:bg-coopmathsdark-corpus"
+                style="width: 5.5cm"
+              ></div>
+            {/if}
           </div>
 
           {#each Array(decimals) as _}

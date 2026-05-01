@@ -1,6 +1,8 @@
 <script lang="ts">
   import seedrandom from 'seedrandom'
   import { onDestroy, onMount } from 'svelte'
+  import { mathaleaEnsureAMCCompatibility } from '../../../lib/amc/amcInference'
+  import { normalizeAMCNumBlocks } from '../../../lib/amc/amcNormalize'
   import type { IExerciceAMC } from '../../../lib/amc/amcTypes'
   import {
     checkAMCGroupConsistency,
@@ -8,7 +10,6 @@
     type AMCGroupConsistencyReport,
   } from '../../../lib/amc/creerDocumentAmc'
   import {
-    mathaleaEnsureAMCCompatibility,
     mathaleaGenerateSeed,
     mathaleaGetExercicesFromParams,
     mathaleaHandleExerciceSimple,
@@ -149,7 +150,11 @@
       ...groupSettings[index],
       seed: nextSeed,
     }
-
+    if (exercice.typeExercice === 'simple') {
+      mathaleaHandleExerciceSimple(exercice, false)
+    } else if (typeof exercice.nouvelleVersionWrapper === 'function') {
+      exercice.nouvelleVersionWrapper()
+    }
     // 1. Passe HTML : génère les SVG dans listeQuestions
     generateHtmlQuestionsForExercise(exercice, nextSeed)
 
@@ -159,12 +164,6 @@
     context.isHtml = false
     context.isAmc = true
     seedrandom(nextSeed, { global: true })
-
-    if (exercice.typeExercice === 'simple') {
-      mathaleaHandleExerciceSimple(exercice, false)
-    } else if (typeof exercice.nouvelleVersionWrapper === 'function') {
-      exercice.nouvelleVersionWrapper()
-    }
 
     mathaleaEnsureAMCCompatibility(exercice)
     ;(exercice as any).amcHtmlQuestions =
@@ -1073,82 +1072,35 @@
     return target?.param?.[key]
   }
 
-  function countNumericPreviewDecimals(value: number): number {
-    if (!Number.isFinite(value)) return 0
-
-    const rounded = Number(value.toFixed(10))
-    const s = rounded.toString()
-
-    if (s.includes('e-')) {
-      const [, exp] = s.split('e-')
-      return parseInt(exp, 10)
-    }
-
-    const parts = s.split('.')
-    return parts[1] ? parts[1].length : 0
-  }
-
-  function countNumericPreviewDigits(value: number): number {
-    return Math.abs(Math.trunc(value)).toString().length
-  }
-
-  function getNumericPreviewDecimalValue(raw: unknown): number | null {
-    if (typeof raw === 'number' && Number.isFinite(raw)) return raw
-
-    if (typeof raw === 'object' && raw !== null) {
-      if (
-        'valeurDecimale' in raw &&
-        typeof (raw as { valeurDecimale?: unknown }).valeurDecimale === 'number'
-      ) {
-        return (raw as { valeurDecimale: number }).valeurDecimale
-      }
-
-      if (
-        'num' in raw &&
-        'den' in raw &&
-        typeof (raw as { num?: unknown }).num === 'number' &&
-        typeof (raw as { den?: unknown }).den === 'number' &&
-        (raw as { den: number }).den !== 0
-      ) {
-        const fraction = raw as { num: number; den: number }
-        return fraction.num / fraction.den
-      }
-    }
-
-    if (typeof raw === 'string') {
-      const normalized = raw.replace(',', '.')
-      const parsed = Number(normalized)
-      return Number.isFinite(parsed) ? parsed : null
-    }
-
-    return null
-  }
-
-  function getSelectedNumericRawValue(): unknown {
+  function getSelectedNumericMainBlock() {
     const target = getSelectedNumericResponseTarget()
-    const rawValue = target?.valeur
-    return Array.isArray(rawValue) ? rawValue[0] : rawValue
+    if (!target) return undefined
+
+    const blocks = normalizeAMCNumBlocks({
+      valeur: target.valeur as any,
+      param: target.param ?? {},
+    })
+
+    return blocks[0]
   }
 
   function getSelectedNumericInferredValues(): {
     digits: number
     decimals: number
   } {
-    const rawValue = getSelectedNumericRawValue()
-    const decimalValue = getNumericPreviewDecimalValue(rawValue)
+    const mainBlock = getSelectedNumericMainBlock()
     const paramDigits = Number(getSelectedNumericParamValue('digits') ?? 1)
     const paramDecimals = Number(getSelectedNumericParamValue('decimals') ?? 0)
 
-    if (decimalValue === null) {
+    if (!mainBlock) {
       return {
         digits: Math.max(1, paramDigits),
         decimals: Math.max(0, paramDecimals),
       }
     }
 
-    const inferredDecimals = countNumericPreviewDecimals(decimalValue)
-    const inferredDigits =
-      countNumericPreviewDigits(decimalValue) + inferredDecimals
+    const inferredDigits = Number(mainBlock.digits ?? paramDigits)
+    const inferredDecimals = Number(mainBlock.decimals ?? paramDecimals)
 
     return {
       digits: Math.max(

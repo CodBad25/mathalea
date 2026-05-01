@@ -183,14 +183,23 @@ export function normalizeAMCNumBlocks(rep?: AutoCorrectionAMC['reponse']) {
       den = valeur.den
     }
 
-    const digitsNum = Math.max(
-      param.digitsNum ?? param.digits ?? 0,
-      countDigits(num),
-    )
-    const digitsDen = Math.max(
-      param.digitsDen ?? param.digits ?? 0,
-      countDigits(den),
-    )
+    const requestedTotalDigits = Number(param.digits ?? 0)
+    const requestedDecimals = Number(param.decimals ?? 0)
+
+    // When digits/decimals are provided, they describe AMCnumericChoices as a
+    // whole (total digits + decimal part). Keep digitsNum/digitsDen as explicit
+    // overrides when present.
+    const requestedDigitsNum =
+      param.digitsNum ??
+      (param.decimals !== undefined
+        ? Math.max(0, requestedTotalDigits - requestedDecimals)
+        : requestedTotalDigits)
+    const requestedDigitsDen =
+      param.digitsDen ??
+      (param.decimals !== undefined ? requestedDecimals : requestedTotalDigits)
+
+    const digitsNum = Math.max(requestedDigitsNum, countDigits(num))
+    const digitsDen = Math.max(requestedDigitsDen, countDigits(den))
     const sign = param.signe !== undefined ? param.signe : num * den < 0
 
     let valueAMC: number
