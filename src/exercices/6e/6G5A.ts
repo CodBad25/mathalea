@@ -117,6 +117,7 @@ export default class QuestionBissectrice extends Exercice {
         })}` +
           ajouteChampTexteMathLive(this, i, KeyboardType.nombresEtDegre, {
             texteAvant: `$\\widehat{${A}${B}${I}}=$`,
+            texteApres: '<em class="ml-2">(Une unité est attendue.)</em>',
           })
         handleAnswers(this, i, {
           reponse: { value: `${alpha}^\\circ`, options: { unite: true } },
@@ -152,6 +153,7 @@ export default class QuestionBissectrice extends Exercice {
         })}` +
           ajouteChampTexteMathLive(this, i, KeyboardType.nombresEtDegre, {
             texteAvant: `$\\widehat{${A}${B}${C}}=$`,
+            texteApres: '<em class="ml-2">(Une unité est attendue.)</em>',
           })
         handleAnswers(this, i, {
           reponse: { value: `${alpha2}^\\circ`, options: { unite: true } },

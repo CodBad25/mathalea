@@ -181,8 +181,7 @@ export default class PerimetreOuAireDeCarresRectanglesTriangles extends Exercice
                   KeyboardType.longueur + ' ' + KeyboardType.aire,
                   {
                     texteApres:
-                      sp(5) +
-                      "  Il faut penser à préciser l'unité dans la réponse.",
+                      '<em class="ml-2">(Une unité est attendue.)</em>',
                   },
                 ) +
                 '<br>'
@@ -239,8 +238,7 @@ export default class PerimetreOuAireDeCarresRectanglesTriangles extends Exercice
                   KeyboardType.longueur + ' ' + KeyboardType.aire,
                   {
                     texteApres:
-                      sp(5) +
-                      "  Il faut penser à préciser l'unité dans la réponse.",
+                      '<em class="ml-2">(Une unité est attendue.)</em>',
                   },
                 ) +
                 '<br>'
@@ -297,8 +295,7 @@ export default class PerimetreOuAireDeCarresRectanglesTriangles extends Exercice
                   KeyboardType.longueur + ' ' + KeyboardType.aire,
                   {
                     texteApres:
-                      sp(5) +
-                      "  Il faut penser à préciser l'unité dans la réponse.",
+                      '<em class="ml-2">(Une unité est attendue.)</em>',
                   },
                 ) +
                 '<br>'
@@ -355,8 +352,7 @@ export default class PerimetreOuAireDeCarresRectanglesTriangles extends Exercice
                   KeyboardType.longueur + ' ' + KeyboardType.aire,
                   {
                     texteApres:
-                      sp(5) +
-                      "  Il faut penser à préciser l'unité dans la réponse.",
+                      '<em class="ml-2">(Une unité est attendue.)</em>',
                   },
                 ) +
                 '<br>'
@@ -415,8 +411,7 @@ export default class PerimetreOuAireDeCarresRectanglesTriangles extends Exercice
                   KeyboardType.longueur + ' ' + KeyboardType.aire,
                   {
                     texteApres:
-                      sp(5) +
-                      "  Il faut penser à préciser l'unité dans la réponse.",
+                      '<em class="ml-2">(Une unité est attendue.)</em>',
                   },
                 ) +
                 '<br>'
@@ -471,8 +466,7 @@ export default class PerimetreOuAireDeCarresRectanglesTriangles extends Exercice
                   KeyboardType.longueur + ' ' + KeyboardType.aire,
                   {
                     texteApres:
-                      sp(5) +
-                      "  Il faut penser à préciser l'unité dans la réponse.",
+                      '<em class="ml-2">(Une unité est attendue.)</em>',
                   },
                 ) +
                 '<br>'

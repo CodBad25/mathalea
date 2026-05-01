@@ -17,7 +17,7 @@ import {
 } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { arrondi } from '../../lib/outils/nombres'
-import { creerNomDePolygone, sp } from '../../lib/outils/outilString'
+import { creerNomDePolygone } from '../../lib/outils/outilString'
 import { stringNombre, texNombre } from '../../lib/outils/texNombre'
 import { context } from '../../modules/context'
 import Grandeur from '../../modules/Grandeur'
@@ -214,7 +214,7 @@ export default class AireDeTriangles extends Exercice {
       )
       texte += ajouteChampTexteMathLive(this, i, KeyboardType.aire, {
         texteAvant: `Aire du triangle ${A.nom}${B.nom}${C.nom} :`,
-        texteApres: sp(6) + "Il faut penser à indiquer l'unité à la réponse.",
+        texteApres: '<em class="ml-2">(Une unité est attendue.)</em>',
       })
       if (context.isAmc) {
         this.autoCorrection[i] = {

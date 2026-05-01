@@ -137,8 +137,7 @@ export default class AireDuParallelogramme extends Exercice {
       texte = mathalea2d(Object.assign({}, fixeBordures(objets)), objets)
       texte += ajouteChampTexteMathLive(this, i, KeyboardType.aire, {
         texteAvant: `Aire de $${nom.slice(i * 4, i * 4 + 4)}$ : `,
-        texteApres:
-          sp(5) + "  Il faut penser à préciser l'unité dans la réponse.",
+        texteApres: '<em class="ml-2">(Une unité est attendue.)</em>',
       })
       handleAnswers(this, i, {
         reponse: {

@@ -284,6 +284,7 @@ export default class SujetCAN2023CM2 extends Exercice {
                 this,
                 index,
                 KeyboardType.longueur,
+                { texteApres: '<em class="ml-2">(Une unité est attendue.)</em>' },
               )
             }
             nbChamps = 1

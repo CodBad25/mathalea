@@ -590,10 +590,7 @@ export default class CalculDeVolumes extends Exercice {
           { formatInteractif: 'mathlive' },
         )
         texte += ajouteChampTexteMathLive(this, i, KeyboardType.volume, {
-          texteAvant:
-            '<br>' +
-            sp(12) +
-            "Il faut penser à indiquer l'unité au volume-réponse : ",
+          texteApres: '<em class="ml-2">(Une unité est attendue.)</em>',
         })
       }
       if (context.isAmc) {

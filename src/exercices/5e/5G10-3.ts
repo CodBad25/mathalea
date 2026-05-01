@@ -608,7 +608,9 @@ export default class SymetrieAxialeProprietes extends Exercice {
         // Si la question n'a jamais été posée, on en crée une autre
         if (this.interactif) {
           handleAnswers(this, i, objetReponse)
-          texte += ajouteChampTexteMathLive(this, i, optionKeyboard)
+          texte += ajouteChampTexteMathLive(this, i, optionKeyboard, {
+            texteApres: '<em class="ml-2">(Une unité est attendue.)</em>',
+          })
         }
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr

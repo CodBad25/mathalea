@@ -281,7 +281,7 @@ export default class OrganiserDonneesDepuisTexte extends Exercice {
     // fin correction
 
     if (this.sup) {
-      texte += `${numAlpha(1)} Quelle est la masse totale de fruits achetés par les amis ?${ajouteChampTexteMathLive(this, 1, KeyboardType.masse)}<br>`
+      texte += `${numAlpha(1)} Quelle est la masse totale de fruits achetés par les amis ?${ajouteChampTexteMathLive(this, 1, KeyboardType.masse, { texteApres: '<em class="ml-2">(Une unité est attendue.)</em>' })}<br>`
     } else {
       texte += `${numAlpha(1)} Quel est le nombre total de fruits achetés par les amis ?${ajouteChampTexteMathLive(this, 1, KeyboardType.clavierNumbers)}<br>`
     }

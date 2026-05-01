@@ -354,7 +354,7 @@ export default class EchellesProblemes extends Exercice {
           texte += ', ce segment correspond-il ?'
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(this, i, KeyboardType.longueur, {
-              texteAvant: ' (Il faut penser à indiquer une unité.)',
+              texteApres: '<em class="ml-2">(Une unité est attendue.)</em>',
             })
             handleAnswers(this, i, {
               reponse: {
@@ -524,7 +524,7 @@ export default class EchellesProblemes extends Exercice {
           texte += ` du segment tracé sur le plan par ${quidam2} ?`
           if (this.interactif) {
             texte += ajouteChampTexteMathLive(this, i, KeyboardType.longueur, {
-              texteAvant: ' (Il faut penser à indiquer une unité.)',
+              texteApres: '<em class="ml-2">(Une unité est attendue.)</em>',
             })
             handleAnswers(this, i, {
               reponse: {
