@@ -695,9 +695,12 @@
     const item = exercise?.autoCorrection?.[selectedRef.questionIndex]
     if (!item) return false
 
-    const regex = /\\begin\{tikzpicture\}/
-    const containsTikz = (value: unknown): boolean =>
-      typeof value === 'string' && regex.test(value)
+    const regex = /\\+begin\s*\{\s*(?:tikzpicture|circuitikz)\s*\}/i
+    const containsTikz = (value: unknown): boolean => {
+      if (typeof value !== 'string') return false
+      const normalized = value.replace(/\r\n?/g, '\n')
+      return regex.test(normalized)
+    }
 
     if (containsTikz(item.enonce)) return true
     const propositions = Array.isArray(item.propositions)
