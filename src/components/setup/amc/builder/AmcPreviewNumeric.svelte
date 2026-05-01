@@ -3,22 +3,91 @@
 
   export let enonce = ''
   export let htmlContent = ''
+  export let value: unknown = undefined
   export let param: {
     digits?: number
     decimals?: number
     signe?: boolean
+    exposantNbChiffres?: number
+    exposantSigne?: boolean
     approx?: number
     vertical?: boolean
+    tpoint?: string
   } = {}
 
-  $: digits = Math.max(1, Number(param?.digits ?? 1))
-  $: decimals = Math.max(0, Number(param?.decimals ?? 0))
+  function countDecimals(value: number): number {
+    if (!Number.isFinite(value)) return 0
+
+    const rounded = Number(value.toFixed(10))
+    const s = rounded.toString()
+
+    if (s.includes('e-')) {
+      const [, exp] = s.split('e-')
+      return parseInt(exp, 10)
+    }
+
+    const parts = s.split('.')
+    return parts[1] ? parts[1].length : 0
+  }
+
+  function countDigits(value: number): number {
+    return Math.abs(Math.trunc(value)).toString().length
+  }
+
+  function getDecimalValue(raw: unknown): number | null {
+    if (typeof raw === 'number' && Number.isFinite(raw)) return raw
+
+    if (typeof raw === 'object' && raw !== null) {
+      if (
+        'valeurDecimale' in raw &&
+        typeof (raw as { valeurDecimale?: unknown }).valeurDecimale === 'number'
+      ) {
+        return (raw as { valeurDecimale: number }).valeurDecimale
+      }
+
+      if (
+        'num' in raw &&
+        'den' in raw &&
+        typeof (raw as { num?: unknown }).num === 'number' &&
+        typeof (raw as { den?: unknown }).den === 'number' &&
+        (raw as { den: number }).den !== 0
+      ) {
+        const fraction = raw as { num: number; den: number }
+        return fraction.num / fraction.den
+      }
+    }
+
+    if (typeof raw === 'string') {
+      const normalized = raw.replace(',', '.')
+      const parsed = Number(normalized)
+      return Number.isFinite(parsed) ? parsed : null
+    }
+
+    return null
+  }
+
+  $: rawValue = Array.isArray(value) ? value[0] : value
+  $: decimalValue = getDecimalValue(rawValue)
+  $: inferredDecimals =
+    decimalValue !== null
+      ? countDecimals(decimalValue)
+      : Number(param?.decimals ?? 0)
+  $: inferredDigits =
+    decimalValue !== null
+      ? countDigits(decimalValue) + inferredDecimals
+      : Number(param?.digits ?? 1)
+
+  $: digits = Math.max(1, Number(param?.digits ?? inferredDigits ?? 1))
+  $: decimals = Math.max(0, Number(param?.decimals ?? inferredDecimals ?? 0))
   $: signe = Boolean(param?.signe)
+  $: exposantNbChiffres = Math.max(0, Number(param?.exposantNbChiffres ?? 0))
+  $: exposantSigne = Boolean(param?.exposantSigne)
   $: vertical = Boolean(param?.vertical)
   $: approx = Number(param?.approx ?? 0)
   $: digitChoices = Array.from({ length: 10 }, (_, i) => i)
   $: integerDigits = Math.max(0, digits - decimals)
   $: hasDecimalSeparator = decimals > 0
+  $: decimalSeparator = param?.tpoint === '.' ? '.' : ','
 </script>
 
 <div
@@ -69,7 +138,7 @@
           {/each}
 
           <div class="flex justify-start py-0.5">
-            <span class="text-xs font-semibold">,</span>
+            <span class="text-xs font-semibold">{decimalSeparator}</span>
           </div>
 
           {#each Array(decimals) as _}
@@ -114,7 +183,7 @@
           {/each}
 
           <div class="flex h-full items-center">
-            <span class="text-xs font-semibold">,</span>
+            <span class="text-xs font-semibold">{decimalSeparator}</span>
           </div>
 
           {#each Array(decimals) as _}
@@ -146,6 +215,67 @@
               {/each}
             </div>
           {/each}
+        {/if}
+      </div>
+    {/if}
+
+    {#if exposantNbChiffres > 0}
+      <div class="flex items-start gap-2 pl-2">
+        <div class={vertical ? 'pt-6' : 'pt-6'}>
+          <p class="mb-1 text-[10px] font-semibold uppercase tracking-wide">
+            Exposant
+          </p>
+          <div class="text-xs font-semibold">× 10^</div>
+        </div>
+
+        {#if exposantSigne}
+          <div class={vertical ? 'pt-6' : 'pt-6'}>
+            <p class="mb-1 text-[10px] font-semibold uppercase tracking-wide">
+              Signe
+            </p>
+            <div class="flex flex-col gap-1">
+              <span
+                class="inline-flex h-4 w-4 items-center justify-center rounded border border-coopmaths-struct-light/70 bg-white text-xs dark:border-coopmathsdark-struct-light/60 dark:bg-coopmathsdark-canvas"
+                >+</span
+              >
+              <span
+                class="inline-flex h-4 w-4 items-center justify-center rounded border border-coopmaths-struct-light/70 bg-white text-xs dark:border-coopmathsdark-struct-light/60 dark:bg-coopmathsdark-canvas"
+                >-</span
+              >
+            </div>
+          </div>
+        {/if}
+
+        {#if !vertical}
+          <div class="space-y-1">
+            {#each Array(exposantNbChiffres) as _}
+              <div class="flex items-center gap-1">
+                {#each digitChoices as digit}
+                  <span
+                    class="inline-flex h-4 w-4 items-center justify-center rounded border border-coopmaths-struct-light/70 bg-white text-[6px] dark:border-coopmathsdark-struct-light/60 dark:bg-coopmathsdark-canvas"
+                    >{digit}</span
+                  >
+                {/each}
+              </div>
+            {/each}
+          </div>
+        {:else}
+          <div class="flex items-start gap-2">
+            {#each Array(exposantNbChiffres) as _}
+              <div class="space-y-1">
+                <span
+                  class="block text-center text-[10px] text-coopmaths-corpus/80 dark:text-coopmathsdark-corpus/80"
+                >
+                </span>
+                {#each digitChoices as digit}
+                  <span
+                    class="inline-flex h-4 w-4 items-center justify-center rounded border border-coopmaths-struct-light/70 bg-white text-[6px] dark:border-coopmathsdark-struct-light/60 dark:bg-coopmathsdark-canvas"
+                    >{digit}</span
+                  >
+                {/each}
+              </div>
+            {/each}
+          </div>
         {/if}
       </div>
     {/if}

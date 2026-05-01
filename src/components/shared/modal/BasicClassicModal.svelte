@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { createEventDispatcher } from 'svelte'
+  import { createEventDispatcher, onMount, tick } from 'svelte'
   import ButtonIcon from '../forms/ButtonIcon.svelte'
 
   export let isDisplayed: boolean // à bind avec le parent
@@ -10,8 +10,34 @@
 
   let dialog: HTMLDialogElement
 
-  $: if (dialog && isDisplayed) dialog.showModal()
-  $: if (dialog && !isDisplayed) dialog.close()
+  onMount(async () => {
+    console.log(
+      '[DEBUG BasicClassicModal] onMount — dialog:',
+      dialog,
+      'isDisplayed:',
+      isDisplayed,
+    )
+    await tick() // Attendre que tous les bindings soient appliqués
+    console.log(
+      '[DEBUG BasicClassicModal] after tick() — isDisplayed:',
+      isDisplayed,
+    )
+    if (dialog && isDisplayed) {
+      console.log('[DEBUG BasicClassicModal] onMount → showModal()')
+      dialog.showModal()
+    }
+  })
+
+  $: {
+    console.log(
+      '[DEBUG BasicClassicModal] réactif — dialog:',
+      !!dialog,
+      'isDisplayed:',
+      isDisplayed,
+    )
+    if (dialog && isDisplayed) dialog.showModal()
+    else if (dialog && !isDisplayed) dialog.close()
+  }
 </script>
 
 <div class="flex justify-center">
