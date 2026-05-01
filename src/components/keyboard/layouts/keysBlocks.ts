@@ -806,6 +806,19 @@ const majusculesCaps: CompleteKeysList = {
   ],
 }
 
+const minusculesCaps: CompleteKeysList = {
+  inline: [
+    'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
+    'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+  ],
+  block: [
+    'a', 'b', 'c', 'd', 'e', 'f', 'g',
+    'h', 'i', 'j', 'k', 'l', 'm', 'n',
+    'o', 'p', 'q', 'r', 's', 't', 'u',
+    'v', 'w', 'x', 'y', 'z',
+  ],
+}
+
 const lengthUnitsKeys = Object.keys(keys)
   .filter((k) => k.includes('LENGTH'))
   .reduce(
@@ -1110,6 +1123,13 @@ export const majuscules: KeyboardBlock = {
   isUnits: false,
 }
 
+export const minuscules: KeyboardBlock = {
+  keycaps: minusculesCaps,
+  cols: 7,
+  title: 'Minuscules',
+  isUnits: false,
+}
+
 export const angles: KeyboardBlock = {
   keycaps: anglesCaps,
   cols: 1,
@@ -1177,6 +1197,7 @@ export const keyboardBlocks: {
   lengths,
   clavierFonctionsTerminales,
   majuscules,
+  minuscules,
   masses,
   numbers,
   numbersSpace,
