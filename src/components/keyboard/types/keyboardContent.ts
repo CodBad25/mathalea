@@ -27,6 +27,7 @@ export type BlockForKeyboard =
   | 'lengths'
   | 'clavierFonctionsTerminales'
   | 'majuscules'
+  | 'minuscules'
   | 'masses'
   | 'numbers'
   | 'numbersX'

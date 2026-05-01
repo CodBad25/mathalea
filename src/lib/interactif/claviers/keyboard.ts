@@ -22,6 +22,7 @@ const KEYBOARD_CATEGORIES = [
   'equationsTerminale',
   'clavierFullOperations',
   'clavierMajuscules',
+  'clavierMinuscules',
   'clavierNumbers',
   'clavierProbabilite',
   'clavierSuite',
@@ -153,6 +154,8 @@ export const convertKeyboardTypeToBlocks = (
       return ['numbers', 'fullOperations']
     case KeyboardType.clavierMajuscules:
       return ['majuscules']
+    case KeyboardType.clavierMinuscules:
+      return ['basicOperations', 'numbers', 'minuscules']
     case KeyboardType.clavierProbabilite:
       return [
         'numbers',
