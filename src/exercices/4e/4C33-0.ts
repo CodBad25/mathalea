@@ -59,9 +59,9 @@ export default class NotationPuissance extends Exercice {
     this.besoinFormulaire5Numerique = [
       'Exposant',
       4,
-      '1 : Carrés\n2 : Cubes\n3 : Exposant supérieur ou égal à 4\n4 : Mélange',
+      '1 : Carrés ou cubes\n2 : Exposants quelconques',
     ]
-    this.sup5 = 4
+    this.sup5 = 2
   }
 
   nouvelleVersion() {
@@ -123,6 +123,7 @@ export default class NotationPuissance extends Exercice {
         listeSignesMantisse = ['', '-']
         break
     }
+    const alternance2Et3 = combinaisonListes([2,3], this.nbQuestions)
     listeSignesMantisse = combinaisonListes(
       listeSignesMantisse,
       this.nbQuestions,
@@ -151,11 +152,7 @@ export default class NotationPuissance extends Exercice {
       mantisse = randint(2, 10)
       if (listeSignesMantisse[i] === '-') mantisse = -mantisse
       if (this.sup5 === 1) {
-        exposant = 2
-      } else if (this.sup5 === 2) {
-        exposant = 3
-      } else if (this.sup5 === 3) {
-        exposant = randint(4, 8)
+        exposant = alternance2Et3[i]
       } else {
         if (listeTypeDeQuestions[i] === 'puissance') {
           exposant = randint(2, 8)

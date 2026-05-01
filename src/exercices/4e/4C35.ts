@@ -28,11 +28,9 @@ export const refs = {
   'fr-ch': ['10NO2-12'],
 }
 export default class PuissanceDecimaleOuFractionnaire extends Exercice {
+  classe: 5 | 4 = 4
   constructor() {
     super()
-
-    this.consigne =
-      "Calculer de tête l'écriture décimale ou fractionnaire des nombres suivants."
     this.nbQuestions = 8
     this.nbCols = 2
     this.nbColsCorr = 2
@@ -44,6 +42,7 @@ export default class PuissanceDecimaleOuFractionnaire extends Exercice {
   }
 
   nouvelleVersion() {
+    this.consigne = `Calculer de tête l'écriture décimale ${this.classe === 4 ? 'ou fractionnaire' : ''} des nombres suivants.`
     const typeQuestionsDisponibles = [
       'puissancePos',
       'puissanceNeg',
@@ -90,7 +89,7 @@ export default class PuissanceDecimaleOuFractionnaire extends Exercice {
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
       switch (listeTypeQuestions[i]) {
         case 'puissancePos':
-          a = choice([2, 3, randint(4, 9)])
+          a = this.classe === 5 ? randint(2, 3) : choice([2, 3, randint(4, 9)])
           n = a === 2 ? randint(2, 8) : a < 4 ? randint(2, 3) : 2
           texte = `$${a}^{${n}} = $`
           texteCorr = `$${a}^{${n}} = ${puissanceEnProduit(a, n)} = ${a ** n}$`
