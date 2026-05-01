@@ -272,9 +272,7 @@
       seedrandom(seed, { global: true })
 
       if (exercice.typeExercice === 'simple') {
-        if (typeof exercice.nouvelleVersionWrapper === 'function') {
-          exercice.nouvelleVersionWrapper()
-        }
+        mathaleaHandleExerciceSimple(exercice, false)
       } else if (typeof exercice.nouvelleVersionWrapper === 'function') {
         exercice.nouvelleVersionWrapper()
       }
@@ -319,6 +317,11 @@
     for (const exercice of loaded) {
       try {
         const seed = exercice.seed ?? ''
+        if (exercice.typeExercice === 'simple') {
+          mathaleaHandleExerciceSimple(exercice, false)
+        } else if (typeof exercice.nouvelleVersionWrapper === 'function') {
+          exercice.nouvelleVersionWrapper()
+        }
 
         // 1. Passe HTML : génère les SVG dans listeQuestions
         generateHtmlQuestionsForExercise(exercice, seed)
@@ -329,12 +332,6 @@
         context.isHtml = false
         context.isAmc = true
         seedrandom(seed, { global: true })
-
-        if (exercice.typeExercice === 'simple') {
-          mathaleaHandleExerciceSimple(exercice, false)
-        } else if (typeof exercice.nouvelleVersionWrapper === 'function') {
-          exercice.nouvelleVersionWrapper()
-        }
 
         mathaleaEnsureAMCCompatibility(exercice)
         ;(exercice as any).amcHtmlQuestions =
