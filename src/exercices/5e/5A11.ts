@@ -34,6 +34,7 @@ export default class TableauCriteresDeDivisibilite extends Exercice {
     this.nbQuestions = 5
 
     this.sup = false // nombres plus grands pour les élèves de "sup"
+    this.correctionDetailleeDisponible = true
   }
 
   nouvelleVersion() {
@@ -573,6 +574,81 @@ export default class TableauCriteresDeDivisibilite extends Exercice {
         texteCorr += '\\hline\n'
       }
       texteCorr += '\\end{array}$\n'
+
+      // Rappel des critères de divisibilité avec explications détaillées
+      if (this.correctionDetaillee) {
+        const digitSum = (n: number): number =>
+          n
+            .toString()
+            .split('')
+            .reduce((acc, d) => acc + Number(d), 0)
+        const digitSumExpr = (n: number): string =>
+          n.toString().split('').join(' + ') + ' = ' + digitSum(n)
+        const joinAnd = (arr: string[]): string => {
+          if (arr.length === 0) return ''
+          if (arr.length === 1) return arr[0]
+          return arr.slice(0, -1).join(', ') + ' et ' + arr[arr.length - 1]
+        }
+        const nums = tableauDeNombres.slice(0, this.nbQuestions)
+        const fmt = (n: number) => `$${texNombre2(n)}$`
+        const conclusionSimple = (d: number): string => {
+          const yes = nums.filter((n) => n % d === 0).map(fmt)
+          const no = nums.filter((n) => n % d !== 0).map(fmt)
+          const parts: string[] = []
+          if (yes.length > 0) {
+            parts.push(
+              `${joinAnd(yes)} ${yes.length > 1 ? 'sont divisibles' : 'est divisible'} par ${d}`,
+            )
+          }
+          if (no.length > 0) {
+            parts.push(
+              `${joinAnd(no)} ne ${no.length > 1 ? 'sont' : 'est'} pas divisible${no.length > 1 ? 's' : ''} par ${d}`,
+            )
+          }
+          return 'donc ' + parts.join(' et ') + '.'
+        }
+
+        if (context.isHtml) {
+          texteCorr += `<br><br><b>Rappel des critères de divisibilité :</b><br>\n<ul>\n`
+          texteCorr += `<li style="margin-top:0.6em"><b>Par 2 :</b> un nombre est divisible par 2 si son chiffre des unités est 0, 2, 4, 6 ou 8, ${conclusionSimple(2)}</li>\n`
+          texteCorr += `<li style="margin-top:0.6em"><b>Par 3 :</b> un nombre est divisible par 3 si la somme de ses chiffres est divisible par 3.\n<ul>\n`
+          for (const n of nums) {
+            const s = digitSum(n)
+            const div = n % 3 === 0
+            texteCorr += `<li>Pour $${texNombre2(n)}$ : $${digitSumExpr(n)}$, $${s}$ ${div ? 'est' : "n'est pas"} divisible par 3 donc $${texNombre2(n)}$ ${div ? 'est' : "n'est pas"} divisible par 3.</li>\n`
+          }
+          texteCorr += `</ul></li>\n`
+          texteCorr += `<li style="margin-top:0.6em"><b>Par 5 :</b> un nombre est divisible par 5 si son chiffre des unités est 0 ou 5, ${conclusionSimple(5)}</li>\n`
+          texteCorr += `<li style="margin-top:0.6em"><b>Par 9 :</b> un nombre est divisible par 9 si la somme de ses chiffres est divisible par 9.\n<ul>\n`
+          for (const n of nums) {
+            const s = digitSum(n)
+            const div = n % 9 === 0
+            texteCorr += `<li>Pour $${texNombre2(n)}$ : $${digitSumExpr(n)}$, $${s}$ ${div ? 'est' : "n'est pas"} divisible par 9 donc $${texNombre2(n)}$ ${div ? 'est' : "n'est pas"} divisible par 9.</li>\n`
+          }
+          texteCorr += `</ul></li>\n`
+          texteCorr += `</ul>\n`
+        } else {
+          texteCorr += `\n\\medskip\n{\\bfseries Rappel des critères de divisibilité :}\n\\begin{itemize}\n`
+          texteCorr += `\\vspace{0.4em}\\item {\\bfseries Par 2 :} un nombre est divisible par 2 si son chiffre des unités est 0, 2, 4, 6 ou 8, ${conclusionSimple(2)}\n`
+          texteCorr += `\\vspace{0.4em}\\item {\\bfseries Par 3 :} un nombre est divisible par 3 si la somme de ses chiffres est divisible par 3.\n\\begin{itemize}\n`
+          for (const n of nums) {
+            const s = digitSum(n)
+            const div = n % 3 === 0
+            texteCorr += `\\item Pour $${texNombre2(n)}$ : $${digitSumExpr(n)}$, $${s}$ ${div ? 'est' : "n'est pas"} divisible par 3 donc $${texNombre2(n)}$ ${div ? 'est' : "n'est pas"} divisible par 3.\n`
+          }
+          texteCorr += `\\end{itemize}\n`
+          texteCorr += `\\vspace{0.4em}\\item {\\bfseries Par 5 :} un nombre est divisible par 5 si son chiffre des unités est 0 ou 5, ${conclusionSimple(5)}\n`
+          texteCorr += `\\vspace{0.4em}\\item {\\bfseries Par 9 :} un nombre est divisible par 9 si la somme de ses chiffres est divisible par 9.\n\\begin{itemize}\n`
+          for (const n of nums) {
+            const s = digitSum(n)
+            const div = n % 9 === 0
+            texteCorr += `\\item Pour $${texNombre2(n)}$ : $${digitSumExpr(n)}$, $${s}$ ${div ? 'est' : "n'est pas"} divisible par 9 donc $${texNombre2(n)}$ ${div ? 'est' : "n'est pas"} divisible par 9.\n`
+          }
+          texteCorr += `\\end{itemize}\n`
+          texteCorr += `\\end{itemize}\n`
+        }
+      }
+
       this.listeCorrections.push(texteCorr)
     }
   }
