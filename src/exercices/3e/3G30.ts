@@ -627,7 +627,7 @@ export default class CalculDeLongueur extends Exercice {
       }
       if (context.isHtml && !context.isAmc) {
         texte += ajouteChampTexteMathLive(this, i, KeyboardType.longueur, {
-          texteApres: sp(2) + "(Préciser l'unité de longueur.)",
+          texteApres: '<em class="ml-2">(Une unité est attendue.)</em>',
         })
         handleAnswers(this, i, {
           reponse: {

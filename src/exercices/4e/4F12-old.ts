@@ -158,7 +158,7 @@ export default class ExploiterRepresentationGraphique extends Exercice {
                 indiceQuestion,
                 KeyboardType.longueur,
                 {
-                  texteApres: ` (Préciser l'unité.)`,
+                  texteApres: '<em class="ml-2">(Une unité est attendue.)</em>',
                 },
               ),
           )
@@ -276,7 +276,7 @@ export default class ExploiterRepresentationGraphique extends Exercice {
                 indiceQuestion,
                 KeyboardType.longueur,
                 {
-                  texteApres: ` (Préciser l'unité.)`,
+                  texteApres: '<em class="ml-2">(Une unité est attendue.)</em>',
                 },
               ),
           )
@@ -301,7 +301,7 @@ export default class ExploiterRepresentationGraphique extends Exercice {
                 indiceQuestion,
                 KeyboardType.longueur,
                 {
-                  texteApres: ` (Préciser l'unité.)`,
+                  texteApres: '<em class="ml-2">(Une unité est attendue.)</em>',
                 },
               ),
           )
@@ -615,6 +615,7 @@ export default class ExploiterRepresentationGraphique extends Exercice {
                 this,
                 indiceQuestion,
                 KeyboardType.nombresEtDegreCelsius,
+                { texteApres: '<em class="ml-2">(Une unité est attendue.)</em>' },
               ),
           )
           handleAnswers(this, indiceQuestion, {
@@ -635,6 +636,7 @@ export default class ExploiterRepresentationGraphique extends Exercice {
                 this,
                 indiceQuestion,
                 KeyboardType.nombresEtDegreCelsius,
+                { texteApres: '<em class="ml-2">(Une unité est attendue.)</em>' },
               ),
           )
           handleAnswers(this, indiceQuestion, {

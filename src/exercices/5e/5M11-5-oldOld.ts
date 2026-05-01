@@ -1064,8 +1064,7 @@ export default class PerimetreOuAireDeFiguresComposees extends Exercice {
                 ? `(valeur approchée au ${this.sup3 === 2 ? 'dixième de' : ''} cm près)`
                 : '') +
               ' : ',
-            texteApres:
-              sp(12) + "Il faut penser à préciser l'unité dans la réponse.",
+            texteApres: '<em class="ml-2">(Une unité est attendue.)</em>',
           },
         )
       }
@@ -1081,8 +1080,7 @@ export default class PerimetreOuAireDeFiguresComposees extends Exercice {
                 ? `(valeur approchée au ${this.sup3 === 2 ? 'dixième de' : ''} cm$^2$ près)`
                 : '') +
               ' : ',
-            texteApres:
-              sp(12) + "Il faut penser à préciser l'unité dans la réponse.",
+            texteApres: '<em class="ml-2">(Une unité est attendue.)</em>',
           },
         )
       }

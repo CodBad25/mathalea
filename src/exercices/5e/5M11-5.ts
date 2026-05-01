@@ -1356,7 +1356,7 @@ export default class PerimetreOuAireDeFiguresComposees extends Exercice {
                   ? KeyboardType.longueur
                   : KeyboardType.aire,
                 ldots: true,
-                texteApres: "(l'unité est requise)",
+                texteApres: '<em class="ml-2">(Une unité est attendue.)</em>',
               },
             ]),
           )

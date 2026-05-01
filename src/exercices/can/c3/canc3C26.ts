@@ -39,14 +39,17 @@ export default class TestMultiMatfield extends Exercice {
              champ2: {
                keyboard: KeyboardType.longueur,
                placeholder: '123\\text{ cm}',
+               texteApres: '<em class="ml-2">(Une unité est attendue.)</em>',
              },
              champ3: {
                keyboard: KeyboardType.longueur,
                placeholder: '123\\text{ cm }',
+               texteApres: '<em class="ml-2">(Une unité est attendue.)</em>',
              },
              champ4: {
                keyboard: KeyboardType.longueur,
                placeholder: '123\\text{ cm }',
+               texteApres: '<em class="ml-2">(Une unité est attendue.)</em>',
              },
            },
          })}`

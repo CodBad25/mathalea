@@ -251,12 +251,12 @@ export default class ResoudreDesProblemes extends Exercice {
       )
       texte += `<br>Quelle est la masse  d'${shape1.articleSingulier} ${shape1.nomSingulier} ${
         this.interactif
-          ? `${ajouteChampTexteMathLive(this, 2 * i, KeyboardType.masse)}<br>`
+          ? `${ajouteChampTexteMathLive(this, 2 * i, KeyboardType.masse, { texteApres: '<em class="ml-2">(Une unité est attendue.)</em>' })}<br>`
           : ''
       }
       et celle d'${shape2.articleSingulier} ${shape2.nomSingulier} ${
         this.interactif
-          ? ajouteChampTexteMathLive(this, 2 * i + 1, KeyboardType.masse)
+          ? ajouteChampTexteMathLive(this, 2 * i + 1, KeyboardType.masse, { texteApres: '<em class="ml-2">(Une unité est attendue.)</em>' })
           : ''
       }?`
       handleAnswers(this, 2 * i, {

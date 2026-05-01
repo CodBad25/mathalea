@@ -288,7 +288,6 @@ export default class Thales2D extends Exercice {
       }
 
       if (this.interactif && context.isHtml) {
-        texte += '<br><br><em>Il faut saisir une unité.</em>'
         texte += `<br><br>$${nomM + nomN} = $`
         handleAnswers(this, i * 2, {
           reponse: {
@@ -296,12 +295,15 @@ export default class Thales2D extends Exercice {
             options: { unite: true },
           },
         }) // 2 réponses par question donc 2i et 2i + 1 ainsi elles restent ordonnées
-        texte += ajouteChampTexteMathLive(this, i * 2, KeyboardType.longueur)
+        texte += ajouteChampTexteMathLive(this, i * 2, KeyboardType.longueur, {
+          texteApres: '<em class="ml-2">(Une unité est attendue.)</em>',
+        })
         texte += `<br>$${nomC + nomB} = $`
         texte += ajouteChampTexteMathLive(
           this,
           i * 2 + 1,
           KeyboardType.longueur,
+          { texteApres: '<em class="ml-2">(Une unité est attendue.)</em>' },
         )
         handleAnswers(this, i * 2 + 1, {
           reponse: { value: new Grandeur(bc, 'cm'), options: { unite: true } },

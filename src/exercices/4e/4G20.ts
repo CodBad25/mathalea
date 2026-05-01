@@ -391,7 +391,7 @@ export default class Pythagore2D extends Exercice {
           ? `$${nomCote} ${redaction[1]}$` +
             ajouteChampTexteMathLive(this, i, KeyboardType.longueur, {
               texteApres:
-                '<em class="ml-2">(Une unité de longueur est attendue.)</em>',
+                '<em class="ml-2">(Une unité est attendue.)</em>',
             })
           : ''
         handleAnswers(this, i, {

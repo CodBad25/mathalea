@@ -470,6 +470,7 @@ export default class PerimetreOuAireDeCarresRectanglesTriangles extends Exercice
                     : KeyboardType.aire,
                   ldots: false,
                   minWidth: 50,
+                  texteApres: ' (Une unité est attendue.)'
                 },
               ]),
             ),

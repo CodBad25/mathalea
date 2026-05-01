@@ -134,6 +134,7 @@ export default class AnglesEtVocabulaire extends Exercice {
             this,
             i,
             ` ${KeyboardType.nombresEtDegre}`,
+            { texteApres: '<em class="ml-2">(Une unité est attendue.)</em>' },
           )
         }
         this.listeQuestions[i] = texte

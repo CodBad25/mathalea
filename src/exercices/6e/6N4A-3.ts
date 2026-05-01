@@ -254,8 +254,8 @@ export default class ResoudreDesProblemes extends Exercice {
         dataTemplate: `Quelle est la masse  d'${shape1.articleSingulier} ${shape1.nomSingulier} ? %{champ1}<br>
         Quelle est la masse d'${shape2.articleSingulier} ${shape2.nomSingulier} ? %{champ2}`,
         dataOptions: {
-          champ1: { keyboard: KeyboardType.masse },
-          champ2: { keyboard: KeyboardType.masse },
+          champ1: { keyboard: KeyboardType.masse, texteApres: '<em class="ml-2">(Une unité est attendue.)</em>' },
+          champ2: { keyboard: KeyboardType.masse, texteApres: '<em class="ml-2">(Une unité est attendue.)</em>' },
         },
       }).replaceAll(': $\\ldots\\ldots$', '')
 
