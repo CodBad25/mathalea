@@ -11,30 +11,13 @@
   let dialog: HTMLDialogElement
 
   onMount(async () => {
-    console.log(
-      '[DEBUG BasicClassicModal] onMount — dialog:',
-      dialog,
-      'isDisplayed:',
-      isDisplayed,
-    )
     await tick() // Attendre que tous les bindings soient appliqués
-    console.log(
-      '[DEBUG BasicClassicModal] after tick() — isDisplayed:',
-      isDisplayed,
-    )
     if (dialog && isDisplayed) {
-      console.log('[DEBUG BasicClassicModal] onMount → showModal()')
       dialog.showModal()
     }
   })
 
   $: {
-    console.log(
-      '[DEBUG BasicClassicModal] réactif — dialog:',
-      !!dialog,
-      'isDisplayed:',
-      isDisplayed,
-    )
     if (dialog && isDisplayed) dialog.showModal()
     else if (dialog && !isDisplayed) dialog.close()
   }

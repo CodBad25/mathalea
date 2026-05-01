@@ -352,24 +352,12 @@
     const previousSettings = groupSettings
     exercices = amcReadyExercices
 
-    // Détector quand un nouvel exercice est ajouté (depuis ReferentielEnding ou ailleurs)
+    // Détecte quand un nouvel exercice est ajouté (depuis ReferentielEnding ou ailleurs)
     if (exercices.length > previousExercicesCount && exercices.length > 0) {
-      console.log(
-        '[DEBUG] Nouvel exercice détecté — longueur:',
-        exercices.length,
-        '→',
-        previousExercicesCount,
-      )
       const newExerciseIndex = exercices.length - 1
       exerciseSettingsTargetIndex = newExerciseIndex
       isExerciseSettingsModalOpen = true
       isDocumentSettingsOpen = false
-      console.log(
-        '[DEBUG] Modale ouverte pour exercice index:',
-        newExerciseIndex,
-        'id:',
-        exercices[newExerciseIndex]?.id,
-      )
     }
     previousExercicesCount = exercices.length
 
@@ -397,28 +385,12 @@
       const targetIndex = exercices.findIndex(
         (exercise) => exercise.seed === pendingSettingsSeed,
       )
-      console.log(
-        '[DEBUG pendingSettingsSeed]',
-        pendingSettingsSeed,
-        '→ targetIndex:',
-        targetIndex,
-        '— exercices seeds:',
-        exercices.map((e) => e.seed),
-      )
       pendingSettingsSeed = null
       if (targetIndex >= 0) {
         selectedExerciseIndex = targetIndex
         exerciseSettingsTargetIndex = targetIndex
         isExerciseSettingsModalOpen = true
         isDocumentSettingsOpen = false
-        console.log(
-          '[DEBUG] isExerciseSettingsModalOpen=true, targetIndex:',
-          targetIndex,
-        )
-      } else {
-        console.warn(
-          '[DEBUG] exercice non trouvé dans la liste, modale non ouverte',
-        )
       }
     }
 
@@ -427,7 +399,6 @@
 
   function addExercise(uuid: string, id: string) {
     const alea = mathaleaGenerateSeed()
-    console.log('[DEBUG addExercise] uuid:', uuid, 'id:', id, 'alea:', alea)
     const newExercise: InterfaceParams = {
       uuid,
       id,
@@ -435,11 +406,6 @@
       interactif: '0',
     }
     pendingSettingsSeed = alea
-    console.log(
-      '[DEBUG addExercise] pendingSettingsSeed défini à',
-      alea,
-      '— update du store',
-    )
     exercicesParams.update((list) => [...list, newExercise])
     mathaleaUpdateUrlFromExercicesParams()
   }
@@ -2640,43 +2606,7 @@
   </div>
 </SetupShell>
 
-<!-- DEBUG: conditions du {#if} modale -->
-{#if true}
-  {@const debugCondition1 = isExerciseSettingsModalOpen}
-  {@const debugCondition2 = exerciseSettingsTargetIndex != null}
-  {@const debugCondition3 =
-    exerciseSettingsTargetIndex != null
-      ? exercices[exerciseSettingsTargetIndex] != null
-      : false}
-  {@const debugExercice =
-    exerciseSettingsTargetIndex != null
-      ? exercices[exerciseSettingsTargetIndex]
-      : undefined}
-  {console.log(
-    '[DEBUG condition] isExerciseSettingsModalOpen:',
-    debugCondition1,
-    'targetIndex != null:',
-    debugCondition2,
-    'targetIndex value:',
-    exerciseSettingsTargetIndex,
-    'exercice exists:',
-    debugCondition3,
-    'exercice:',
-    debugExercice,
-    'exercices.length:',
-    exercices.length,
-  )}
-{/if}
-
 {#if isExerciseSettingsModalOpen && exerciseSettingsTargetIndex != null && exercices[exerciseSettingsTargetIndex]}
-  {console.log(
-    '[DEBUG] {#if} rendu modale — isExerciseSettingsModalOpen:',
-    isExerciseSettingsModalOpen,
-    'targetIndex:',
-    exerciseSettingsTargetIndex,
-    'exercice:',
-    exercices[exerciseSettingsTargetIndex]?.id,
-  )}
   <BasicClassicModal
     bind:isDisplayed={isExerciseSettingsModalOpen}
     on:close={() => {
