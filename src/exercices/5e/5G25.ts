@@ -57,7 +57,7 @@ export default class DefinitionProprietesTriangles extends Exercice {
       nbQuestions: 7,
     })
     const listeTypeQuestions = combinaisonListes(
-      typesDeQuestionsDisponibles,
+      [...new Set(typesDeQuestionsDisponibles)],
       this.nbQuestions,
     )
     const choix = [
