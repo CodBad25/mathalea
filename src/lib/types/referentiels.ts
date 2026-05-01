@@ -6,7 +6,7 @@ import referentielsActivationList from '../../json/referentielsActivation.json'
 //    Types des bouts de chaînes des référentiels (les données des exercices)
 //
 // ===========================================================================
-export const EXAMS = ['dnb', 'dnbpro', 'bac', 'crpe', 'e3c', 'evacom']
+export const EXAMS = ['dnb', 'dnbpro', 'bac', 'crpe', 'e3c', 'evacom', 'eam']
 export type Level = keyof typeof codeList | 'alea'
 export type ActivationName = keyof typeof referentielsActivationList
 /**
