@@ -27,8 +27,7 @@
     "src/**/*.svelte",
     ".eslintrc.cjs",
     "src/global.d.ts",
-    "src/vite-env.d.ts",, "tests/unit/mathalea.test.ts"
-    "tests/unit/mathalea.test.ts"
+    "src/vite-env.d.ts"
   ],
   "exclude": ["./built/**/*"],
   "references": [{ "path": "./tsconfig.node.json" }]
