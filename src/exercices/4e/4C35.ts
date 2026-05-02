@@ -55,7 +55,7 @@ export default class PuissanceDecimaleOuFractionnaire extends Exercice {
       'negParenthesePuissancePaireNeg',
       'negParenthesePuissanceImpaireNeg',
     ] // On créé 3 types de questions
-    const typesDeQuestions =
+    let typesDeQuestions =
       this.sup2 || context.isAmc // Ici on ne prends que les exposants positifs pour ne pas influencer par le format de réponse AMC
         ? [
             'puissance0',
@@ -79,6 +79,7 @@ export default class PuissanceDecimaleOuFractionnaire extends Exercice {
               'puissancePos',
               'puissanceNeg',
             ]
+    if (this.classe === 5) typesDeQuestions = ['puissancePos']
     const listeTypeQuestions = combinaisonListes(
       typesDeQuestions,
       this.nbQuestions,
@@ -86,11 +87,16 @@ export default class PuissanceDecimaleOuFractionnaire extends Exercice {
     let texte /** string */, texteCorr
     /** string */
     let a /** number */, n /** number */, reponse /** any */
+    const alternance2Et3 = combinaisonListes([2, 3], this.nbQuestions)
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
       switch (listeTypeQuestions[i]) {
         case 'puissancePos':
-          a = this.classe === 5 ? randint(2, 3) : choice([2, 3, randint(4, 9)])
+          a = choice([2, 3, randint(4, 9)])
           n = a === 2 ? randint(2, 8) : a < 4 ? randint(2, 3) : 2
+          if (this.classe === 5) {
+            n = alternance2Et3[i]
+            a = n === 2 ? randint(1, 10) : choice([1, 2, 3, 5, 10])
+          }
           texte = `$${a}^{${n}} = $`
           texteCorr = `$${a}^{${n}} = ${puissanceEnProduit(a, n)} = ${a ** n}$`
           reponse = new FractionEtendue(a ** n, 1)
