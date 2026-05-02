@@ -1,4 +1,4 @@
-import { type IExercice } from '../types'
+import { type IExercice, type ReponseParams } from '../types'
 import {
   ensureAMCOpenAutoCorrection,
   extractAMCOptions,
@@ -16,12 +16,40 @@ import type { IExerciceAMC } from './amcTypes'
 export function mathaleaEnsureAMCCompatibility(
   exercice: IExercice | IExerciceAMC,
 ): IExerciceAMC {
+  type InferenceAutoCorrectionItem = {
+    enonce?: string
+    propositions?: Array<{ statut?: unknown; [key: string]: unknown }>
+    reponse?: {
+      valeur?: unknown
+      param?: ReponseParams
+      [key: string]: unknown
+    }
+    [key: string]: unknown
+  }
+
+  const exerciseAny = exercice as any
+  const interactiveAutoCorrection = Array.isArray(
+    exerciseAny.interactiveAutoCorrectionForAMC,
+  )
+    ? exerciseAny.interactiveAutoCorrectionForAMC
+    : []
+  const amcAutoCorrection = Array.isArray(exerciseAny.autoCorrectionAMC)
+    ? exerciseAny.autoCorrectionAMC
+    : []
+  const autoCorrectionSource: InferenceAutoCorrectionItem[] =
+    interactiveAutoCorrection.length > 0
+      ? interactiveAutoCorrection
+      : exercice.autoCorrection
+
   // Ici on débute l'inférence du type AMC de l'exercice.
   // Si l'exercice est déja amcReady, on suppose que le type AMC est correctement défini et on ne fait rien.
   // Ensuite, si le type AMC n'est pas défini, on va essayer de l'inférer à partir des données disponibles dans les autoCorrections, les réponses interactives mises en cache, et la réponse de l'exercice lui-même.
 
   if (exercice.amcReady) {
     // L'exercice est déjà prêt pour AMC, on suppose que tout est en ordre.
+    if (amcAutoCorrection.length === 0) {
+      exerciseAny.autoCorrectionAMC = [...exercice.autoCorrection]
+    }
     return exercice as IExerciceAMC
   }
 
@@ -35,6 +63,8 @@ export function mathaleaEnsureAMCCompatibility(
     // Si l'exercice n'est pas interactif, on suppose que c'est un exercice ouvert compatible avec AMC.
     exercice.amcType = 'AMCOpen'
     exercice.amcReady = true
+    ensureAMCOpenAutoCorrection(exercice, amcAutoCorrection)
+    exerciseAny.autoCorrectionAMC = amcAutoCorrection
     return exercice as IExerciceAMC
   }
 
@@ -56,13 +86,16 @@ export function mathaleaEnsureAMCCompatibility(
     exercice.amcType = 'AMCOpen'
     exercice.amcReady = true
     ensureAMCOpenAutoCorrection(exercice)
+    exerciseAny.autoCorrectionAMC = exercice.autoCorrection.map((item) => ({
+      ...item,
+    }))
     return exercice as IExerciceAMC
   }
 
   if (exercice.interactifType === 'qcm') {
     // Si l'exercice est de type QCM interactif, alors il est compatible avec AMC, et on peut inférer le type AMC à partir du nombre de bonnes réponses dans la première autoCorrection.
-    const firstAutoCorrection = exercice.autoCorrection.find(
-      (item) => item != null,
+    const firstAutoCorrection = autoCorrectionSource.find(
+      (item: InferenceAutoCorrectionItem) => item != null,
     ) as
       | {
           propositions?: Array<{ statut?: unknown }>
@@ -79,6 +112,12 @@ export function mathaleaEnsureAMCCompatibility(
       exercice.amcType = 'qcmMono'
     }
     exercice.amcReady = true
+    exerciseAny.autoCorrectionAMC =
+      autoCorrectionSource.length > 0
+        ? autoCorrectionSource.map((item: InferenceAutoCorrectionItem) => ({
+            ...item,
+          }))
+        : [...exercice.autoCorrection]
     return exercice as IExerciceAMC
   }
 
@@ -95,6 +134,9 @@ export function mathaleaEnsureAMCCompatibility(
     exercice.amcType = 'AMCOpen'
     exercice.amcReady = true
     ensureAMCOpenAutoCorrection(exercice)
+    exerciseAny.autoCorrectionAMC = exercice.autoCorrection.map((item) => ({
+      ...item,
+    }))
     return exercice as IExerciceAMC
   }
 
@@ -103,6 +145,9 @@ export function mathaleaEnsureAMCCompatibility(
     exercice.amcType = 'AMCOpen'
     exercice.amcReady = true
     ensureAMCOpenAutoCorrection(exercice)
+    exerciseAny.autoCorrectionAMC = exercice.autoCorrection.map((item) => ({
+      ...item,
+    }))
     return exercice as IExerciceAMC
   }
 
@@ -110,8 +155,8 @@ export function mathaleaEnsureAMCCompatibility(
   // à priori, les données pour AMC n'ont pas été renseignées sinon on peut espérer que amcReady serait true et amcType défini
   // On va essayer d'inférer un type AMCNum à partir des réponses numériques présentes dans les autoCorrections ou les réponses interactives mises en cache.
 
-  const cachedInteractiveAutoCorrection = exercice.autoCorrection.filter(
-    (item) => item?.reponse?.valeur !== undefined,
+  const cachedInteractiveAutoCorrection = autoCorrectionSource.filter(
+    (item: InferenceAutoCorrectionItem) => item?.reponse?.valeur !== undefined,
   )
   if (cachedInteractiveAutoCorrection.length === 0) {
     window.notify(
@@ -123,9 +168,9 @@ export function mathaleaEnsureAMCCompatibility(
     )
   }
   const autoCorrectionAmc = []
-  let canInferAMCNum = exercice.autoCorrection.length > 0
+  let canInferAMCNum = autoCorrectionSource.length > 0
 
-  for (const [index, item] of exercice.autoCorrection.entries()) {
+  for (const [index, item] of autoCorrectionSource.entries()) {
     if (item == null) {
       canInferAMCNum = false
       break
@@ -163,6 +208,7 @@ export function mathaleaEnsureAMCCompatibility(
 
   if (canInferAMCNum) {
     exercice.autoCorrection = autoCorrectionAmc as any
+    exerciseAny.autoCorrectionAMC = autoCorrectionAmc as any
     exercice.amcType = 'AMCNum'
     exercice.amcReady = true
     return exercice as IExerciceAMC
@@ -178,5 +224,8 @@ export function mathaleaEnsureAMCCompatibility(
   exercice.amcType = 'AMCOpen'
   exercice.amcReady = true
   ensureAMCOpenAutoCorrection(exercice)
+  exerciseAny.autoCorrectionAMC = exercice.autoCorrection.map((item) => ({
+    ...item,
+  }))
   return exercice as IExerciceAMC
 }

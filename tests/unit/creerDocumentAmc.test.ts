@@ -371,4 +371,57 @@ describe('creerDocumentAmc templates', () => {
 
     vi.unstubAllGlobals()
   })
+
+  it('prefere autoCorrectionAMC latex et exclut les balises html/svg du document exporte', () => {
+    vi.stubGlobal('document', {
+      getElementById: vi.fn(() => ({ checked: false })),
+    })
+
+    const latex = creerDocumentAmc({
+      exercices: [
+        {
+          amcReady: true,
+          amcType: 'AMCOpen',
+          autoCorrection: [
+            {
+              enonce: '<ul><li>Enonce HTML</li></ul><svg><circle /></svg>',
+              propositions: [
+                {
+                  texte: '<li>Correction HTML</li>',
+                  statut: 3,
+                  pointilles: true,
+                },
+              ],
+            },
+          ],
+          autoCorrectionAMC: [
+            {
+              enonce: '\\begin{itemize}\\item Enonce LaTeX\\end{itemize}',
+              propositions: [
+                {
+                  texte: 'Correction LaTeX',
+                  statut: 3,
+                  pointilles: true,
+                },
+              ],
+            },
+          ],
+          id: 'AMCOPEN_LATEX',
+          nbQuestions: 1,
+          titre: 'AMCOpen LaTeX prioritaire',
+          listeQuestions: ['Question'],
+          listeCorrections: ['Correction'],
+        } as any,
+      ],
+      assumeAmcPrepared: true,
+    })
+
+    expect(latex).toContain('Enonce LaTeX')
+    expect(latex).toContain('Correction LaTeX')
+    expect(latex).not.toContain('<ul>')
+    expect(latex).not.toContain('<li>')
+    expect(latex).not.toContain('<svg')
+
+    vi.unstubAllGlobals()
+  })
 })

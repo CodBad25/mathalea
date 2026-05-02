@@ -142,9 +142,12 @@ export function extractAMCOptions(
 
 export function ensureAMCOpenAutoCorrection(
   exercice: IExercice | IExerciceAMC,
+  targetAutoCorrection?: Array<any>,
 ) {
+  const autoCorrection = targetAutoCorrection ?? exercice.autoCorrection
+
   const questionCount = Math.max(
-    exercice.autoCorrection.length,
+    autoCorrection.length,
     exercice.listeQuestions.length,
     exercice.listeCorrections.length,
     exercice.question != null ? 1 : 0,
@@ -152,7 +155,7 @@ export function ensureAMCOpenAutoCorrection(
   )
 
   for (let i = 0; i < questionCount; i++) {
-    const existing = exercice.autoCorrection[i] as
+    const existing = autoCorrection[i] as
       | {
           enonce?: string
           propositions?: Array<{
@@ -173,7 +176,7 @@ export function ensureAMCOpenAutoCorrection(
       (i === 0 ? (exercice.correction ?? '') : '')
 
     if (existing == null) {
-      exercice.autoCorrection[i] = {
+      autoCorrection[i] = {
         enonce,
         propositions: [
           {

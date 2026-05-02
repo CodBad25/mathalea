@@ -12,7 +12,6 @@ import {
   renderAMCHeader,
   renderAMCPreamble,
 } from './amcDocumentTemplates'
-import { mathaleaEnsureAMCCompatibility } from './amcInference'
 import { renderAMCHybride, renderElement } from './amcRender'
 import type { IExerciceAMC } from './amcTypes'
 
@@ -35,6 +34,7 @@ export type CreerDocumentAmcOptions = {
   warningMessage?: string
   associationRoster?: string
   collectCorrectionsAtEnd?: boolean
+  assumeAmcPrepared?: boolean
 }
 
 export type AMCGroupConsistencyReport = {
@@ -367,8 +367,13 @@ export function exportQcmAmc(
 ): ExportQcmAmcResult {
   let ref = `${exercise.id}/${exercise.sup ? 'S:' + exercise.sup : ''}${exercise.sup2 ? 'S2:' + exercise.sup2 : ''}${exercise.sup3 ? 'S3:' + exercise.sup3 : ''}${exercise.sup4 ? 'S4:' + exercise.sup4 : ''}${exercise.sup5 ? 'S5:' + exercise.sup5 : ''}`
   if (ref[ref.length - 1] === '/') ref = ref.slice(0, -1)
-  // Compatibilité transitoire : la structure historique AMCHybride est plus large que le typage strict actuel.
-  const autoCorrection = exercise.autoCorrection as any[]
+  // Compatibilité transitoire : priorité à la structure AMC dédiée quand disponible.
+  const exerciseAny = exercise as IExerciceAMC & {
+    autoCorrectionAMC?: any[]
+  }
+  const autoCorrection = Array.isArray(exerciseAny.autoCorrectionAMC)
+    ? exerciseAny.autoCorrectionAMC
+    : (exercise.autoCorrection as any[])
   const title = exercise.titre
   const type = exercise.amcType
   let texQr = ''
@@ -479,6 +484,7 @@ export function creerDocumentAmc(options: CreerDocumentAmcOptions): string {
     warningMessage = DEFAULT_WARNING_MESSAGE,
     associationRoster = '',
     collectCorrectionsAtEnd = false,
+    assumeAmcPrepared = false,
   } = options
   // Attention exercises est maintenant un tableau de tous les exercices.
   // Dans cette partie, la fonction récupère tous les exercices et les trie pour les rassembler par groupe.
@@ -491,9 +497,13 @@ export function creerDocumentAmc(options: CreerDocumentAmcOptions): string {
   const groupTexBlocks: string[] = ['']
   const groupTitles: string[] = []
   const groupShuffleFlags: boolean[] = []
-  exercises.forEach((exercise) => {
-    mathaleaEnsureAMCCompatibility(exercise)
-  })
+  // En mode setup AMC, les exercices sont déjà préparés (inférence + fallback)
+  // dans Amc.svelte. On évite ici toute ré-inférence/régénération pour ne pas
+  // réinjecter un état HTML dans le LaTeX final.
+  if (!assumeAmcPrepared) {
+    // Compatibilité: si l'appelant ne prépare pas en amont, on exporte seulement
+    // les exercices explicitement marqués amcReady.
+  }
   const amcExerciseCount = exercises.filter((el) => el.amcReady).length
   if (amcExerciseCount === 0) return ''
   for (const exercise of exercises) {

@@ -166,6 +166,7 @@
     seedrandom(nextSeed, { global: true })
 
     mathaleaEnsureAMCCompatibility(exercice)
+    populateAmcAutoCorrectionTextsFromLatex(exercice, nextSeed)
     ;(exercice as any).amcHtmlQuestions =
       extractAMCQuestionsFromAutoCorrection(exercice)
     exercices = [...exercices]
@@ -177,9 +178,11 @@
   ): string[] {
     const ex = exercice as any
     const htmlQuestions: string[] = ex.htmlQuestions ?? []
-    const autoCorrection = Array.isArray(exercice.autoCorrection)
-      ? exercice.autoCorrection
-      : []
+    const autoCorrection = Array.isArray(ex.autoCorrectionAMC)
+      ? ex.autoCorrectionAMC
+      : Array.isArray(exercice.autoCorrection)
+        ? exercice.autoCorrection
+        : []
 
     const figureEnvRegex =
       /\\begin\{(?:tikzpicture|pspicture|picture|circuitikz)\}[\s\S]*?\\end\{(?:tikzpicture|pspicture|picture|circuitikz)\}/gi
@@ -230,6 +233,10 @@
         item?.enonceAvant === false && !(showOnlyOnce && i === 0)
       if (shouldHideHeader) return ''
 
+      // La preview doit rester HTML : si on a une version HTML de la question,
+      // on l'utilise prioritairement et on n'affiche pas le LaTeX AMC brut.
+      if (fallback.trim().length > 0) return fallback
+
       const enonce = typeof item?.enonce === 'string' ? item.enonce.trim() : ''
       if (enonce.length > 0) return pickPreviewText(enonce, fallback)
 
@@ -253,6 +260,62 @@
 
       return fallback
     })
+  }
+
+  function getAmcAutoCorrection(exercise: IExercice): any[] {
+    const ex = exercise as any
+    if (Array.isArray(ex.autoCorrectionAMC)) return ex.autoCorrectionAMC
+    if (Array.isArray(exercise.autoCorrection)) return exercise.autoCorrection
+    return []
+  }
+
+  function ensureAmcAutoCorrectionFallback(exercice: IExercice): void {
+    const ex = exercice as any
+    const current = getAmcAutoCorrection(exercice)
+    if (current.length > 0) return
+
+    const htmlQuestions: string[] = Array.isArray(ex.htmlQuestions)
+      ? ex.htmlQuestions
+      : []
+    const sourceQuestions =
+      exercice.listeQuestions.length > 0
+        ? exercice.listeQuestions
+        : exercice.question != null
+          ? [String(exercice.question)]
+          : htmlQuestions
+
+    if (sourceQuestions.length === 0) return
+
+    const sourceCorrections =
+      exercice.listeCorrections.length > 0
+        ? exercice.listeCorrections
+        : exercice.correction != null
+          ? [String(exercice.correction)]
+          : []
+
+    const fallbackAutoCorrection = sourceQuestions.map((enonce, i) => ({
+      enonce,
+      propositions: [
+        {
+          texte: sourceCorrections[i] ?? sourceCorrections[0] ?? '',
+          statut: 3,
+          sanscadre: false,
+          pointilles: true,
+        },
+      ],
+    }))
+
+    ex.autoCorrectionAMC = fallbackAutoCorrection
+    if (
+      !Array.isArray(exercice.autoCorrection) ||
+      exercice.autoCorrection.length === 0
+    ) {
+      exercice.autoCorrection = fallbackAutoCorrection.map((item) => ({
+        ...item,
+      }))
+    }
+    exercice.amcType = 'AMCOpen'
+    exercice.amcReady = true
   }
 
   function generateHtmlQuestionsForExercise(
@@ -307,6 +370,231 @@
     // Le contexte (isHtml/isAmc) est restauré par la passe AMC qui suit.
   }
 
+  function cloneDeep<T>(value: T): T {
+    return JSON.parse(JSON.stringify(value)) as T
+  }
+
+  function buildLatexSnapshotForAmc(
+    exercice: IExercice,
+    seed: string,
+  ): {
+    autoCorrection: any[]
+    listeQuestions: string[]
+    listeCorrections: string[]
+  } {
+    const ex = exercice as any
+    const originalInteractif = exercice.interactif
+    const originalIsAmc = context.isAmc
+    const originalIsHtml = context.isHtml
+    const originalLastCallback = ex.lastCallback
+
+    const savedAutoCorrection = cloneDeep(exercice.autoCorrection ?? [])
+    const savedListeQuestions = [...exercice.listeQuestions]
+    const savedListeCorrections = [...exercice.listeCorrections]
+    const savedQuestion = exercice.question
+    const savedCorrection = exercice.correction
+
+    ex.lastCallback = ''
+    exercice.interactif = false
+    context.isHtml = false
+    context.isAmc = true
+    seedrandom(seed, { global: true })
+
+    if (exercice.typeExercice === 'simple') {
+      mathaleaHandleExerciceSimple(exercice, false)
+    } else if (typeof ex.nouvelleVersionWrapper === 'function') {
+      ex.nouvelleVersionWrapper()
+    }
+
+    const snapshot = {
+      autoCorrection: cloneDeep(
+        Array.isArray(exercice.autoCorrection) ? exercice.autoCorrection : [],
+      ),
+      listeQuestions: [...exercice.listeQuestions],
+      listeCorrections: [...exercice.listeCorrections],
+    }
+
+    exercice.autoCorrection = savedAutoCorrection
+    exercice.listeQuestions = savedListeQuestions
+    exercice.listeCorrections = savedListeCorrections
+    exercice.question = savedQuestion
+    exercice.correction = savedCorrection
+
+    ex.lastCallback = originalLastCallback
+    exercice.interactif = originalInteractif
+    context.isAmc = originalIsAmc
+    context.isHtml = originalIsHtml
+
+    return snapshot
+  }
+
+  function copyLatexTextsOnPropositions(target: any, source: any): void {
+    if (!target || !source) return
+
+    if (typeof source.enonce === 'string') target.enonce = source.enonce
+    if (typeof source.texte === 'string') target.texte = source.texte
+
+    if (target.reponse == null && source.reponse != null) {
+      target.reponse = {}
+    }
+    if (
+      target.reponse != null &&
+      source.reponse != null &&
+      typeof source.reponse.texte === 'string'
+    ) {
+      target.reponse.texte = source.reponse.texte
+    }
+
+    const targetSubProps = Array.isArray(target.propositions)
+      ? target.propositions
+      : []
+    const sourceSubProps = Array.isArray(source.propositions)
+      ? source.propositions
+      : []
+    const length = Math.min(targetSubProps.length, sourceSubProps.length)
+    for (let i = 0; i < length; i++) {
+      copyLatexTextsOnPropositions(targetSubProps[i], sourceSubProps[i])
+    }
+  }
+
+  function populateAmcAutoCorrectionTextsFromLatex(
+    exercice: IExercice,
+    seed: string,
+  ): void {
+    const ex = exercice as any
+    const targetAutoCorrection = getAmcAutoCorrection(exercice)
+    const latexSnapshot = buildLatexSnapshotForAmc(exercice, seed)
+    const latexAutoCorrection = latexSnapshot.autoCorrection
+    const latexQuestions = latexSnapshot.listeQuestions
+    const latexCorrections = latexSnapshot.listeCorrections
+
+    if (targetAutoCorrection.length === 0) {
+      const count = Math.max(
+        latexAutoCorrection.length,
+        latexQuestions.length,
+        latexCorrections.length,
+        exercice.question != null ? 1 : 0,
+        1,
+      )
+
+      const built = Array.from({ length: count }, (_, i) => {
+        const sourceItem = latexAutoCorrection[i] ?? {}
+        const enonce =
+          typeof sourceItem.enonce === 'string'
+            ? sourceItem.enonce
+            : (latexQuestions[i] ?? (i === 0 ? (exercice.question ?? '') : ''))
+
+        const sourceProps = Array.isArray(sourceItem.propositions)
+          ? cloneDeep(sourceItem.propositions)
+          : []
+
+        const propositions =
+          sourceProps.length > 0
+            ? sourceProps
+            : [
+                {
+                  texte:
+                    latexCorrections[i] ??
+                    latexCorrections[0] ??
+                    (i === 0 ? (exercice.correction ?? '') : ''),
+                  statut: 3,
+                  sanscadre: false,
+                  pointilles: true,
+                },
+              ]
+
+        return {
+          ...sourceItem,
+          enonce,
+          propositions,
+        }
+      })
+
+      ex.autoCorrectionAMC = built
+      if (
+        !Array.isArray(exercice.autoCorrection) ||
+        exercice.autoCorrection.length === 0
+      ) {
+        exercice.autoCorrection = cloneDeep(built)
+      }
+      if (exercice.amcType == null) exercice.amcType = 'AMCOpen'
+      exercice.amcReady = true
+      return
+    }
+
+    const merged = cloneDeep(targetAutoCorrection)
+    const count = Math.max(
+      merged.length,
+      latexAutoCorrection.length,
+      latexQuestions.length,
+    )
+
+    for (let i = 0; i < count; i++) {
+      if (merged[i] == null) merged[i] = {}
+
+      const targetItem = merged[i]
+      const sourceItem = latexAutoCorrection[i]
+      const sourceQuestion = latexQuestions[i]
+      const sourceCorrection =
+        latexCorrections[i] ??
+        latexCorrections[0] ??
+        (i === 0 ? (exercice.correction ?? '') : '')
+
+      if (sourceItem && typeof sourceItem.enonce === 'string') {
+        targetItem.enonce = sourceItem.enonce
+      } else if (
+        typeof sourceQuestion === 'string' &&
+        sourceQuestion.length > 0
+      ) {
+        targetItem.enonce = sourceQuestion
+      }
+
+      const targetProps = Array.isArray(targetItem.propositions)
+        ? targetItem.propositions
+        : []
+      const sourceProps = Array.isArray(sourceItem?.propositions)
+        ? sourceItem.propositions
+        : []
+
+      const min = Math.min(targetProps.length, sourceProps.length)
+      for (let j = 0; j < min; j++) {
+        copyLatexTextsOnPropositions(targetProps[j], sourceProps[j])
+      }
+
+      if (targetProps.length === 0 && sourceProps.length > 0) {
+        targetItem.propositions = cloneDeep(sourceProps)
+      }
+
+      // Cas AMCOpen inféré : on force le texte de correction depuis la version
+      // LaTeX de listeCorrections quand le snapshot ne porte pas de propositions.
+      if (
+        exercice.amcType === 'AMCOpen' &&
+        typeof sourceCorrection === 'string' &&
+        sourceCorrection.length > 0 &&
+        sourceProps.length === 0
+      ) {
+        if (!Array.isArray(targetItem.propositions)) {
+          targetItem.propositions = []
+        }
+        if (targetItem.propositions.length === 0) {
+          targetItem.propositions.push({
+            texte: sourceCorrection,
+            statut: 3,
+            sanscadre: false,
+            pointilles: true,
+          })
+        } else {
+          targetItem.propositions[0] = {
+            ...targetItem.propositions[0],
+            texte: sourceCorrection,
+          }
+        }
+      }
+    }
+
+    ex.autoCorrectionAMC = merged
+  }
+
   async function refreshExercicesFromStore(params: InterfaceParams[]) {
     const loaded = (await mathaleaGetExercicesFromParams(params)).filter(
       (exercice): exercice is IExercice => exercice.typeExercice !== 'statique',
@@ -334,6 +622,7 @@
         seedrandom(seed, { global: true })
 
         mathaleaEnsureAMCCompatibility(exercice)
+        populateAmcAutoCorrectionTextsFromLatex(exercice, seed)
         ;(exercice as any).amcHtmlQuestions =
           extractAMCQuestionsFromAutoCorrection(exercice)
         if (exercice.amcType != null) {
@@ -521,6 +810,7 @@
 
     latexContent = creerDocumentAmc({
       exercices: exercicesForLatex,
+      assumeAmcPrepared: true,
       nbQuestions,
       groupLayouts: groupSettings.map((setting) => ({
         pageBreakBefore: setting.pageBreakBefore,
@@ -645,7 +935,10 @@
       }
 
       const exercice = exercicesForLatex[exerciseIndex] as any
-      const item = exercice?.autoCorrection?.[questionIndex]
+      const autoCorrection = Array.isArray(exercice?.autoCorrectionAMC)
+        ? exercice.autoCorrectionAMC
+        : exercice?.autoCorrection
+      const item = autoCorrection?.[questionIndex]
       if (!item) continue
       transformQuestionLatexWithTikzScale(item, clampTikzScaleFactor(factor))
     }
@@ -654,7 +947,10 @@
   function selectedQuestionHasTikzPicture(): boolean {
     if (!selectedRef) return false
     const exercise = exercices[selectedRef.exerciseIndex] as any
-    const item = exercise?.autoCorrection?.[selectedRef.questionIndex]
+    const autoCorrection = Array.isArray(exercise?.autoCorrectionAMC)
+      ? exercise.autoCorrectionAMC
+      : exercise?.autoCorrection
+    const item = autoCorrection?.[selectedRef.questionIndex]
     if (!item) return false
 
     const regex = /\\+begin\s*\{\s*(?:tikzpicture|circuitikz)\s*\}/i
@@ -685,8 +981,9 @@
 
   function getSelectedQuestionItem(): any | null {
     if (!selectedRef) return null
-    const exercise = exercices[selectedRef.exerciseIndex] as any
-    return exercise?.autoCorrection?.[selectedRef.questionIndex] ?? null
+    const exercise = exercices[selectedRef.exerciseIndex]
+    const autoCorrection = getAmcAutoCorrection(exercise)
+    return autoCorrection[selectedRef.questionIndex] ?? null
   }
 
   function toCm(value: number, unit: string | undefined): number {
@@ -833,9 +1130,7 @@
   function getBlocks(exercise: IExercice, exerciseIndex: number) {
     const blocks: PreviewBlock[] = []
 
-    const autoCorrection = Array.isArray((exercise as any).autoCorrection)
-      ? ((exercise as any).autoCorrection as any[])
-      : []
+    const autoCorrection = getAmcAutoCorrection(exercise)
 
     const htmlQuestions: string[] = (exercise as any).htmlQuestions ?? []
     const amcHtmlQuestions: string[] = (exercise as any).amcHtmlQuestions ?? []
@@ -1044,7 +1339,10 @@
 
     const exercise = exercices[selectedRef.exerciseIndex] as any
     if (!exercise) return null
-    const item = exercise.autoCorrection?.[selectedRef.questionIndex]
+    const autoCorrection = Array.isArray(exercise.autoCorrectionAMC)
+      ? exercise.autoCorrectionAMC
+      : exercise.autoCorrection
+    const item = autoCorrection?.[selectedRef.questionIndex]
     if (!item) return null
 
     const isHybrid = exercise.amcType === 'AMCHybride'

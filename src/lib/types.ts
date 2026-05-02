@@ -911,6 +911,7 @@ export interface IExercice {
   contenu?: string
   contenuCorrection?: string
   autoCorrection: AutoCorrection[]
+  autoCorrectionAMC?: AutoCorrection[]
   figures?: Figure[] | ClickFigures[]
   amcReady?: boolean
   amcType?: string
