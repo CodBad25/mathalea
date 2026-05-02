@@ -6,7 +6,7 @@ export const amcReady = true
 export const amcType = 'AMCOpen'
 export const dateDeModifImportante = '14/11/2021'
 /**
- * @author Jean-claude Lhote
+ * @author Jean-Claude Lhote
  */
 export const uuid = 'ce9ef'
 
@@ -19,6 +19,7 @@ export default class SymetrieAxialePoint5e extends ConstruireParSymetrie {
     super()
     this.figure = false
     this.sup = 4
+    this.sup2 = 3
     this.besoinFormulaireNumerique = [
       'Type de questions',
       4,
