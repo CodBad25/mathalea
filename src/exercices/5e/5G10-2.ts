@@ -20,6 +20,7 @@ export default class SymetrieAxialeFigure5e extends ConstruireParSymetrie {
     super()
     this.figure = true
     this.sup = 4
+    this.sup2 = 3
     this.besoinFormulaireNumerique = [
       'Type de questions',
       4,

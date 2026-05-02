@@ -30,6 +30,7 @@ import { pointSurDroite } from '../../lib/2d/utilitairesPoint'
 import { aireTriangle } from '../../lib/2d/utilitairesTriangle'
 import { vecteur, type Vecteur } from '../../lib/2d/Vecteur'
 import { vide2d } from '../../lib/2d/Vide2d'
+import { bleuMathalea } from '../../lib/colors'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import { creerNomDePolygone, numAlpha } from '../../lib/outils/outilString'
 import { context } from '../../modules/context'
@@ -41,7 +42,6 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { bleuMathalea } from '../../lib/colors'
 export const dateDeModifImportante = '14/11/2021'
 export const amcReady = true
 export const amcType = 'AMCOpen'
@@ -212,7 +212,7 @@ export default class ConstruireParSymetrie extends Exercice {
     ]
     this.besoinFormulaire3Texte = [
       'Niveau de difficulté pour la symétrie axiale',
-      "Nombres séparés par des tirets\n1 : Tous les points du même côté de l'axe\n2 : Deux points du même côté et le troisième sur l'axe\n3 : Un point sur l'axe et un de chaque côté\n4 : Deux points d'un côté de l'axe et le troisième de l'autre côté\n0 : Mélange",
+      "Nombres séparés par des tirets :\n1 : Tous les points du même côté de l'axe\n2 : Deux points du même côté et le troisième sur l'axe\n3 : Un point sur l'axe et un de chaque côté\n4 : Deux points d'un côté de l'axe et le troisième de l'autre côté\n0 : Mélange",
     ]
     this.besoinFormulaire4CaseACocher = [
       "Avec les quadrillages, décentrer l'axe ou le centre",
@@ -389,7 +389,9 @@ export default class ConstruireParSymetrie extends Exercice {
           DD = symetrieAxiale(D, d, `${p1nom[3]}'`, 'above')
           EE = symetrieAxiale(E, d, `${p1nom[4]}'`, 'above')
           cC = pointEstSur(C, d) ? C : codageMediatrice(C, CC, 'red', '|')
-          cD = pointEstSur(D, d) ? D : codageMediatrice(D, DD, bleuMathalea, 'X')
+          cD = pointEstSur(D, d)
+            ? D
+            : codageMediatrice(D, DD, bleuMathalea, 'X')
           cE = pointEstSur(E, d) ? E : codageMediatrice(E, EE, 'green', 'O')
           sC = pointEstSur(C, d) ? vide2d() : segment(C, CC)
           sD = pointEstSur(D, d) ? vide2d() : segment(D, DD)
@@ -473,7 +475,9 @@ export default class ConstruireParSymetrie extends Exercice {
           DD = symetrieAxiale(D, d, `${p1nom[3]}'`, 'above')
           EE = symetrieAxiale(E, d, `${p1nom[4]}'`, 'above')
           cC = pointEstSur(C, d) ? C : codageMediatrice(C, CC, 'red', '|')
-          cD = pointEstSur(D, d) ? D : codageMediatrice(D, DD, bleuMathalea, 'X')
+          cD = pointEstSur(D, d)
+            ? D
+            : codageMediatrice(D, DD, bleuMathalea, 'X')
           cE = pointEstSur(E, d) ? E : codageMediatrice(E, EE, 'green', 'O')
           sC = pointEstSur(C, d) ? vide2d() : segment(C, CC)
           sD = pointEstSur(D, d) ? vide2d() : segment(D, DD)
@@ -555,7 +559,9 @@ export default class ConstruireParSymetrie extends Exercice {
           DD = symetrieAxiale(D, d, `${p1nom[3]}'`, 'above')
           EE = symetrieAxiale(E, d, `${p1nom[4]}'`, 'above')
           cC = pointEstSur(C, d) ? C : codageMediatrice(C, CC, 'red', '|')
-          cD = pointEstSur(D, d) ? D : codageMediatrice(D, DD, bleuMathalea, 'X')
+          cD = pointEstSur(D, d)
+            ? D
+            : codageMediatrice(D, DD, bleuMathalea, 'X')
           cE = pointEstSur(E, d) ? E : codageMediatrice(E, EE, 'green', 'O')
           sC = pointEstSur(C, d) ? vide2d() : segment(C, CC)
           sD = pointEstSur(D, d) ? vide2d() : segment(D, DD)
@@ -1059,7 +1065,12 @@ export default class ConstruireParSymetrie extends Exercice {
         case 6: // 3 symétries centrales de points
           p1nom = creerNomDePolygone(5, listeDeNomsDePolygones)
           listeDeNomsDePolygones.push(p1nom)
-          B = pointAbstrait(randint(-8, 8), randint(-3, 3), `${p1nom[1]}`, 'above')
+          B = pointAbstrait(
+            randint(-8, 8),
+            randint(-3, 3),
+            `${p1nom[1]}`,
+            'above',
+          )
           d = droiteParPointEtPente(B, 0)
           ;[A, C, D] = choisi3Points(
             d,
@@ -1122,7 +1133,12 @@ export default class ConstruireParSymetrie extends Exercice {
         default:
           p1nom = creerNomDePolygone(5, listeDeNomsDePolygones)
           listeDeNomsDePolygones.push(p1nom)
-          B = pointAbstrait(randint(-8, 8), randint(-3, 3), `${p1nom[1]}`, 'above')
+          B = pointAbstrait(
+            randint(-8, 8),
+            randint(-3, 3),
+            `${p1nom[1]}`,
+            'above',
+          )
           d = droiteParPointEtPente(B, 0)
           ;[A, C, D] = choisi3Points(
             d,
