@@ -1,388 +1,176 @@
-import FractionEtendue from '../../modules/FractionEtendue'
-import { isValeur, type IExercice, type ValeurNormalized } from '../types'
+import { type IExercice } from '../types'
+import {
+  ensureAMCOpenAutoCorrection,
+  extractAMCOptions,
+  extractAMCValue,
+  inferNumericValueForAMC,
+  mergeNumericParamsFromOptions,
+} from './amcInferenceHelpers'
+import { normalizeAMCNumBlocks } from './amcNormalize'
+import type { IExerciceAMC } from './amcTypes'
 
 /**
  * Applique une compatibilité AMC par défaut quand un exercice n'est pas paramétré finement.
  * Cette fonction privilégie un export possible (fallback AMCOpen) plutôt qu'un rejet.
  */
-export function mathaleaEnsureAMCCompatibility(exercice: IExercice): IExercice {
-  const cachedInteractiveAutoCorrection = Array.isArray(
-    (exercice as any).interactiveAutoCorrectionForAMC,
-  )
-    ? ((exercice as any).interactiveAutoCorrectionForAMC as Array<{
-        reponse?: { valeur?: unknown }
-      }>)
-    : []
+export function mathaleaEnsureAMCCompatibility(
+  exercice: IExercice | IExerciceAMC,
+): IExerciceAMC {
+  // Ici on débute l'inférence du type AMC de l'exercice.
+  // Si l'exercice est déja amcReady, on suppose que le type AMC est correctement défini et on ne fait rien.
+  // Ensuite, si le type AMC n'est pas défini, on va essayer de l'inférer à partir des données disponibles dans les autoCorrections, les réponses interactives mises en cache, et la réponse de l'exercice lui-même.
 
-  const extractAMCValue = (
-    reponse: unknown,
-  ): number | { num: number; den: number } | undefined => {
-    const unwrap = (value: unknown): unknown => {
-      if (Array.isArray(value)) return unwrap(value[0])
+  if (exercice.amcReady) {
+    // L'exercice est déjà prêt pour AMC, on suppose que tout est en ordre.
+    return exercice as IExerciceAMC
+  }
 
-      if (isValeur(value)) return unwrap(value.reponse?.value)
+  if (exercice.interactifType == null) {
+    // Si l'exercice n'est pas interactif, on suppose que c'est un exercice ouvert compatible avec AMC.
+    exercice.amcType = 'AMCOpen'
+    exercice.amcReady = true
+    return exercice as IExerciceAMC
+  }
 
-      if (typeof value === 'object' && value !== null) {
-        if ('reponse' in value) {
-          return unwrap(
-            (value as { reponse?: { value?: unknown } }).reponse?.value,
-          )
+  // type interactifs non supportés par AMC : svgSelection, cliqueFigure, DragAndDrop, apiGeom, tableur, MetaInteractif2d : on les considère comme des AMCOpen car ils ne sont pas incompatibles avec AMC, mais ils nécessitent une correction personnalisée.
+  if (
+    [
+      'svgSelection', // inadapté clairement pour AMC
+      'cliqueFigure', // inadapté clairement pour AMC
+      'dnd', // inadapté clairement pour AMC
+      'tableur', // Difficile à faire rentrer dans AMC
+      'MetaInteractif2d', // Difficile à faire rentrer dans AMC
+      'multiMathfield', // On pourra essayer de faire mieux qu'AmcOpen
+      'tableauMathlive', // On pourra essayer de faire mieux qu'AmcOpen
+      'fillInTheBlank', // On pourra essayer de faire mieux qu'AmcOpen
+      'texte', // inadapté pour AMC, mais on peut faire du AMCOpen
+      'custom', // inadapté pour AMC (contient du apiGeom et autres), mais on peut faire du AMCOpen
+    ].includes(exercice.interactifType)
+  ) {
+    exercice.amcType = 'AMCOpen'
+    exercice.amcReady = true
+    ensureAMCOpenAutoCorrection(exercice)
+    return exercice as IExerciceAMC
+  }
+
+  if (exercice.interactifType === 'qcm') {
+    // Si l'exercice est de type QCM interactif, alors il est compatible avec AMC, et on peut inférer le type AMC à partir du nombre de bonnes réponses dans la première autoCorrection.
+    const firstAutoCorrection = exercice.autoCorrection.find(
+      (item) => item != null,
+    ) as
+      | {
+          propositions?: Array<{ statut?: unknown }>
         }
-        if ('value' in value) {
-          return unwrap((value as { value?: unknown }).value)
-        }
-      }
+      | undefined
 
-      return value
-    }
-
-    const value = unwrap(reponse)
-    if (typeof value === 'string') {
-      const parsed = Number(value.replace(',', '.'))
-      return Number.isFinite(parsed) ? parsed : undefined
-    }
-    if (typeof value === 'number')
-      return Number.isFinite(value) ? value : undefined
-    if (value instanceof FractionEtendue)
-      return { num: value.num, den: value.den }
-    return undefined
-  }
-
-  const getPlainNumericRawValue = (
-    reponse: unknown,
-  ): string | number | null => {
-    if (!isValeur(reponse) || !('reponse' in reponse)) return null
-
-    const normalized = (
-      reponse as {
-        reponse?: { value?: unknown; options?: Record<string, unknown> }
-      }
-    ).reponse
-    const rawValue = normalized?.value
-    const options = normalized?.options ?? {}
-    const optionKeys = Object.keys(options)
-    const isPlainNumericContext =
-      optionKeys.length === 0 ||
-      (optionKeys.length === 1 && options.nombreDecimalSeulement === true)
-
-    if (!isPlainNumericContext) return null
-
-    if (typeof rawValue === 'number') return rawValue
-    if (typeof rawValue !== 'string') return null
-
-    const trimmed = rawValue.trim()
-    if (/^-?\d+(?:[.,]\d+)?$/.test(trimmed)) return trimmed
-    return null
-  }
-
-  const inferNumericLayout = (
-    reponse: unknown,
-  ): { digits: number; decimals: number } | null => {
-    const raw = getPlainNumericRawValue(reponse)
-    if (raw == null) return null
-
-    if (typeof raw === 'number') {
-      const normalized = raw.toString()
-      const [intPart, decPart = ''] = normalized.split('.')
-      const integerDigits = intPart.replace('-', '').length
-      return {
-        digits: integerDigits + decPart.length,
-        decimals: decPart.length,
-      }
-    }
-
-    const normalized = raw.replace(',', '.')
-    const [intPart, decPart = ''] = normalized.split('.')
-    const integerDigits = intPart.replace('-', '').length
-    return {
-      digits: integerDigits + decPart.length,
-      decimals: decPart.length,
-    }
-  }
-
-  const isPlainNumericInteractiveAnswer = (reponse: unknown): boolean => {
-    return getPlainNumericRawValue(reponse) != null
-  }
-
-  const ensureAMCOpenAutoCorrection = () => {
-    const questionCount = Math.max(
-      exercice.autoCorrection.length,
-      exercice.listeQuestions.length,
-      exercice.listeCorrections.length,
-      exercice.question != null ? 1 : 0,
-      1,
-    )
-
-    for (let i = 0; i < questionCount; i++) {
-      const existing = exercice.autoCorrection[i] as
-        | {
-            enonce?: string
-            propositions?: Array<{
-              texte?: string
-              statut?: number
-              sanscadre?: boolean
-              pointilles?: boolean
-            }>
-          }
-        | undefined
-
-      const enonce =
-        existing?.enonce ??
-        exercice.listeQuestions[i] ??
-        (i === 0 ? (exercice.question ?? '') : '')
-      const correction =
-        exercice.listeCorrections[i] ??
-        (i === 0 ? (exercice.correction ?? '') : '')
-
-      if (existing == null) {
-        exercice.autoCorrection[i] = {
-          enonce,
-          propositions: [
-            {
-              texte: correction,
-              statut: 3,
-              sanscadre: false,
-              pointilles: true,
-            },
-          ],
-        }
-        continue
-      }
-
-      if (existing.enonce == null) existing.enonce = enonce
-      if ((existing.propositions?.length ?? 0) === 0) {
-        existing.propositions = [
-          {
-            texte: correction,
-            statut: 3,
-            sanscadre: false,
-            pointilles: true,
-          },
-        ]
-      }
-    }
-  }
-
-  const firstAutoCorrection = exercice.autoCorrection.find(
-    (item) => item != null,
-  ) as
-    | {
-        reponse?: { valeur?: unknown }
-        propositions?: Array<{ statut?: unknown }>
-      }
-    | undefined
-
-  const firstCachedInteractiveAnswer = cachedInteractiveAutoCorrection.find(
-    (item) => item?.reponse?.valeur !== undefined,
-  )
-
-  if (exercice.amcType == null) {
-    if (firstAutoCorrection?.reponse?.valeur !== undefined) {
-      exercice.amcType = 'AMCNum'
-    } else if (
-      isPlainNumericInteractiveAnswer(
-        firstCachedInteractiveAnswer?.reponse?.valeur,
-      )
-    ) {
-      exercice.amcType = 'AMCNum'
-    } else if ((firstAutoCorrection?.propositions?.length ?? 0) > 0) {
-      const goodAnswersCount = firstAutoCorrection!.propositions!.filter((p) =>
+    if (firstAutoCorrection?.propositions) {
+      const goodAnswersCount = firstAutoCorrection.propositions.filter((p) =>
         Boolean(p.statut),
       ).length
       exercice.amcType = goodAnswersCount > 1 ? 'qcmMult' : 'qcmMono'
     } else {
-      exercice.amcType = 'AMCOpen'
+      // Si on ne trouve pas d'autoCorrection avec des propositions, on suppose que c'est un QCM à une seule bonne réponse par défaut.
+      exercice.amcType = 'qcmMono'
     }
+    exercice.amcReady = true
+    return exercice as IExerciceAMC
   }
 
-  if (exercice.amcReady !== true) exercice.amcReady = true
-
-  if (exercice.amcType === 'AMCNum') {
-    const questionCount = Math.max(
-      exercice.autoCorrection.length,
-      cachedInteractiveAutoCorrection.length,
-      exercice.listeQuestions.length,
-      exercice.question != null ? 1 : 0,
-      1,
+  // Si c'est un exercice de type liste déroulante interactif, on transforme la liste déroulante en propositions de type QCM pour l'autoCorrection AMC.
+  // On le signale car l'exo peut avoir un export AMC qcmMono en utilisant la fonction listeDeroulanteToQcm.
+  if (exercice.interactifType === 'listeDeroulante') {
+    exercice.amcType = 'qcmMono'
+    exercice.amcReady = true
+    window.notify(
+      "Cet exercice utilise une liste déroulante interactive, il est donc compatible avec AMC, veuillez modifier l'exo avec listeDeroulanteToQcm pour avoir un export AMC opérationnel.",
+      { uuidExercice: JSON.stringify(exercice.uuid), titre: exercice.titre },
     )
-
-    let canBuildNumericAutoCorrection = true
-
-    for (let i = 0; i < questionCount; i++) {
-      const existing = exercice.autoCorrection[i] as
-        | {
-            reponse?: { valeur?: unknown; param?: Record<string, unknown> }
-            enonce?: string
-          }
-        | undefined
-
-      const cached = cachedInteractiveAutoCorrection[i] as
-        | { reponse?: { valeur?: unknown } }
-        | undefined
-
-      const candidateValue =
-        existing?.reponse?.valeur ??
-        cached?.reponse?.valeur ??
-        (i === 0 ? exercice.reponse : undefined)
-
-      const numericValue = extractAMCValue(candidateValue)
-      if (numericValue === undefined) {
-        canBuildNumericAutoCorrection = false
-        break
-      }
-
-      const inferredLayout = inferNumericLayout(candidateValue)
-      const existingParam =
-        (existing?.reponse?.param as Record<string, unknown> | undefined) ?? {}
-      const tpoint =
-        typeof existingParam.tpoint === 'string' ? existingParam.tpoint : ','
-
-      exercice.autoCorrection[i] = {
-        ...(existing ?? {}),
-        enonce:
-          existing?.enonce ??
-          exercice.listeQuestions[i] ??
-          (i === 0 ? (exercice.question ?? '') : ''),
-        reponse: {
-          ...(existing?.reponse ?? {}),
-          valeur: numericValue as unknown as ValeurNormalized,
-          param: {
-            ...existingParam,
-            tpoint,
-            ...(inferredLayout && existingParam.digits === undefined
-              ? { digits: inferredLayout.digits }
-              : {}),
-            ...(inferredLayout && existingParam.decimals === undefined
-              ? { decimals: inferredLayout.decimals }
-              : {}),
-          },
-        },
-      }
-    }
-
-    if (!canBuildNumericAutoCorrection) {
-      // Impossible de construire une réponse numérique fiable : fallback ouvert.
-      exercice.amcType = 'AMCOpen'
-    }
+    // En attendant, on infère en amcOpen pour éviter de bloquer l'exercice.
+    exercice.amcType = 'AMCOpen'
+    exercice.amcReady = true
+    ensureAMCOpenAutoCorrection(exercice)
+    return exercice as IExerciceAMC
   }
 
-  if (exercice.amcType === 'AMCOpen') {
-    ensureAMCOpenAutoCorrection()
+  if (exercice.interactifType !== 'mathlive') {
+    // Pour ce qui ne rentre pas dans les cas précédents : fallback AMCOpen.
+    exercice.amcType = 'AMCOpen'
+    exercice.amcReady = true
+    ensureAMCOpenAutoCorrection(exercice)
+    return exercice as IExerciceAMC
   }
 
-  return exercice
-}
+  // Cas Mathlive à détailler
+  // à priori, les données pour AMC n'ont pas été renseignées sinon on peut espérer que amcReady serait true et amcType défini
+  // On va essayer d'inférer un type AMCNum à partir des réponses numériques présentes dans les autoCorrections ou les réponses interactives mises en cache.
 
-export const extractSimpleAMCValue = (
-  reponse: unknown,
-): number | { num: number; den: number } | undefined => {
-  const unwrap = (value: unknown): unknown => {
-    if (Array.isArray(value)) return unwrap(value[0])
-
-    if (isValeur(value)) {
-      return unwrap(value.reponse?.value)
-    }
-
-    if (typeof value === 'object' && value !== null) {
-      if ('reponse' in value) {
-        return unwrap(
-          (value as { reponse?: { value?: unknown } }).reponse?.value,
-        )
-      }
-      if ('value' in value) {
-        return unwrap((value as { value?: unknown }).value)
-      }
-    }
-
-    return value
-  }
-
-  const value = unwrap(reponse)
-
-  if (typeof value === 'string') {
-    const normalized = value.replace(',', '.')
-    const parsed = Number(normalized)
-    return Number.isFinite(parsed) ? parsed : undefined
-  }
-
-  if (typeof value === 'number') {
-    return Number.isFinite(value) ? value : undefined
-  }
-
-  if (value instanceof FractionEtendue) {
-    return { num: value.num, den: value.den }
-  }
-
-  return undefined
-}
-
-export const ensureSimpleAMCAutoCorrection = (
-  exercice: IExercice,
-  index: number,
-) => {
-  if (!exercice.amcReady) return
-
-  const currentAutoCorrection = exercice.autoCorrection[index] as
-    | {
-        reponse?: { valeur?: unknown }
-        propositions?: unknown[]
-      }
-    | undefined
-
-  const enonceAMC = exercice.question ?? exercice.listeQuestions[index] ?? ''
-
-  if (exercice.amcType === 'AMCNum') {
-    const existingValue = currentAutoCorrection?.reponse?.valeur
-    const normalizedExistingValue = extractSimpleAMCValue(existingValue)
-
-    if (
-      normalizedExistingValue !== undefined &&
-      currentAutoCorrection?.reponse
-    ) {
-      exercice.autoCorrection[index] = {
-        ...(exercice.autoCorrection[index] as Record<string, unknown>),
-        enonce:
-          (exercice.autoCorrection[index] as { enonce?: string })?.enonce ??
-          enonceAMC,
-        reponse: {
-          ...currentAutoCorrection.reponse,
-          valeur: normalizedExistingValue as unknown as ValeurNormalized,
-          param: (
-            currentAutoCorrection.reponse as {
-              param?: Record<string, unknown>
-            }
-          ).param ?? { tpoint: ',' },
-        },
-      }
-      return
-    }
-
-    const valeurAMC = extractSimpleAMCValue(exercice.reponse)
-    if (valeurAMC === undefined) return
-    exercice.autoCorrection[index] = {
-      enonce: enonceAMC,
-      reponse: {
-        valeur: valeurAMC as unknown as ValeurNormalized,
-        param: {
-          tpoint: ',',
-        },
+  const cachedInteractiveAutoCorrection = exercice.autoCorrection.filter(
+    (item) => item?.reponse?.valeur !== undefined,
+  )
+  if (cachedInteractiveAutoCorrection.length === 0) {
+    window.notify(
+      "amcInference n'a pas de réponse interactive valide pour cet exercice 'mathLive', l'exercice sera considéré comme un AMCOpen.",
+      {
+        uuidExercice: JSON.stringify(exercice.uuid),
+        titre: exercice.titre,
       },
+    )
+  }
+  const autoCorrectionAmc = []
+  let canInferAMCNum = exercice.autoCorrection.length > 0
+
+  for (const [index, item] of exercice.autoCorrection.entries()) {
+    if (item == null) {
+      canInferAMCNum = false
+      break
     }
-    return
+
+    const valeur = inferNumericValueForAMC(extractAMCValue(item.reponse))
+    const options = extractAMCOptions(item.reponse)
+    const param = mergeNumericParamsFromOptions(item.reponse?.param, options)
+
+    if (valeur === undefined) {
+      canInferAMCNum = false
+      break
+    }
+
+    const blocks = normalizeAMCNumBlocks({
+      valeur,
+      param,
+    })
+
+    if (blocks.length === 0) {
+      canInferAMCNum = false
+      break
+    }
+
+    autoCorrectionAmc.push({
+      ...item,
+      enonce: item.enonce ?? exercice.listeQuestions[index],
+      reponse: {
+        ...item.reponse,
+        valeur,
+        param,
+      },
+    })
   }
 
-  if (exercice.amcType === 'AMCOpen') {
-    if ((currentAutoCorrection?.propositions?.length ?? 0) > 0) return
-    exercice.autoCorrection[index] = {
-      enonce: enonceAMC,
-      propositions: [
-        {
-          texte: exercice.correction ?? '',
-          statut: 3,
-          sanscadre: false,
-          pointilles: true,
-        },
-      ],
-    }
+  if (canInferAMCNum) {
+    exercice.autoCorrection = autoCorrectionAmc as any
+    exercice.amcType = 'AMCNum'
+    exercice.amcReady = true
+    return exercice as IExerciceAMC
   }
+
+  window.notify(
+    "amcInference n'a pas pu inférer un AMCNum fiable pour cet exercice 'mathLive', fallback AMCOpen.",
+    {
+      uuidExercice: JSON.stringify(exercice.uuid),
+      titre: exercice.titre,
+    },
+  )
+  exercice.amcType = 'AMCOpen'
+  exercice.amcReady = true
+  ensureAMCOpenAutoCorrection(exercice)
+  return exercice as IExerciceAMC
 }

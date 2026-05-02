@@ -3,6 +3,7 @@ import { format as formatLatex } from '../Latex'
 import { loadPackagesFromContent } from '../latex/preambuleTex'
 import type { contentsType } from '../LatexTypes'
 import { lettreDepuisChiffre } from '../outils/outilString'
+import type { IExercice } from '../types'
 import {
   AMCPreambleTemplate,
   renderAMCCopyContent,
@@ -11,13 +12,14 @@ import {
   renderAMCHeader,
   renderAMCPreamble,
 } from './amcDocumentTemplates'
+import { mathaleaEnsureAMCCompatibility } from './amcInference'
 import { renderAMCHybride, renderElement } from './amcRender'
 import type { IExerciceAMC } from './amcTypes'
 
 type ExportQcmAmcResult = [string, string, number, string, boolean]
 
 export type CreerDocumentAmcOptions = {
-  exercices: IExerciceAMC[]
+  exercices: (IExerciceAMC | IExercice)[]
   nbQuestions?: number[]
   groupLayouts?: Array<{
     pageBreakBefore?: boolean
@@ -453,7 +455,7 @@ export function exportQcmAmc(
  * nbExemplaires est le nombre de copies à générer.
  * matiere et titre se passent de commentaires : ils renseignent l'entête du sujet.
  * @param {{
- *   exercices: import('../types').IExercice[],
+ *   exercices: (IExercice|IExerciceAMC)[],
  *   nbQuestions?: number[],
  *   nbExemplaires?: number,
  *   matiere?: string,
@@ -489,6 +491,9 @@ export function creerDocumentAmc(options: CreerDocumentAmcOptions): string {
   const groupTexBlocks: string[] = ['']
   const groupTitles: string[] = []
   const groupShuffleFlags: boolean[] = []
+  exercises.forEach((exercise) => {
+    mathaleaEnsureAMCCompatibility(exercise)
+  })
   const amcExerciseCount = exercises.filter((el) => el.amcReady).length
   if (amcExerciseCount === 0) return ''
   for (const exercise of exercises) {
@@ -500,7 +505,7 @@ export function creerDocumentAmc(options: CreerDocumentAmcOptions): string {
       exerciseQuestionCount,
       exerciseTitle,
       exerciseIsShuffled,
-    ] = exportQcmAmc(exercise, exerciseIndex)
+    ] = exportQcmAmc(exercise as IExerciceAMC, exerciseIndex)
     exerciseIndex++
     groupIndex = groupRefs.indexOf(groupRef)
     if (groupIndex === -1) {
@@ -565,7 +570,10 @@ export function creerDocumentAmc(options: CreerDocumentAmcOptions): string {
 
   const preambule = renderAMCPreamble({
     documentClassOptions,
-    dynamicPreamble: buildDynamicAMCPreamble(exercises, groupsContent),
+    dynamicPreamble: buildDynamicAMCPreamble(
+      exercises as IExerciceAMC[],
+      groupsContent,
+    ),
   })
 
   const documentStart = renderAMCDocumentStart({
