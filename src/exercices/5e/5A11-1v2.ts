@@ -19,50 +19,36 @@ export const refs = {
 
 export default class ExerciceLabyrintheMultiplesDe2a9 extends ExerciceLabyrinthe {
   k!: number
-  version: string
   constructor() {
     super()
     this.cols = 7
     this.rows = 5
     this.orientation = 'horizontal'
-    this.sup = 5
+    this.sup = choice([3, 9])
     this.besoinFormulaireNumerique = [
       'Critère de divisibilité',
       5,
       '1 : Par 2\n2 : Par 3\n3 : Par 5\n4 : Par 9\n5 : Au hasard',
     ]
-    this.version = 'Diviseurs2,3,5ou9'
   }
 
   nouvelleVersion(): void {
-    if (this.version === 'Diviseurs2,3,5ou9')
-      switch (this.sup) {
-        case 1:
-          this.k = 2
-          break
-        case 2:
-          this.k = 3
-          break
-        case 3:
-          this.k = 5
-          break
-        case 4:
-          this.k = 9
-          break
-        default:
-          this.k = choice([2, 3, 5, 9])
-      }
-    else
-      switch (this.sup) {
-        case 1:
-          this.k = 3
-          break
-        case 2:
-          this.k = 9
-          break
-        default:
-          this.k = choice([3, 9])
-      }
+    switch (this.sup) {
+      case 1:
+        this.k = 2
+        break
+      case 2:
+        this.k = 3
+        break
+      case 3:
+        this.k = 5
+        break
+      case 4:
+        this.k = 9
+        break
+      default:
+        this.k = choice([2, 3, 5, 9])
+    }
 
     super.nouvelleVersion()
     this.consigne = `Trouver le chemin qui passe par des multiples de ${this.k}.`

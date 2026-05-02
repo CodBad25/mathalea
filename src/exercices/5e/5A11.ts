@@ -8,8 +8,7 @@ export const amcType = 'qcmMult'
 export const interactifReady = true
 export const interactifType = 'qcm'
 
-export const titre =
-  'Utiliser les critères de divisibilité (plusieurs possibles)'
+export const titre = 'Utiliser des critères de divisibilité dans un tableau'
 
 /**
  * Un nombre est-il divisible par 2, 3, 5, 9 ?

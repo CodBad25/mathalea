@@ -16,7 +16,7 @@ import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
 
-export const titre = "Écrire la liste de tous les diviseurs d'un entier"
+export const titre = "Écrire la liste de tous les diviseurs d'un entier - V2"
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const dateDeModifImportante = '03/10/2023'

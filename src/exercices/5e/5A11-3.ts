@@ -1,9 +1,9 @@
+import { propositionsQcm } from '../../lib/interactif/qcm'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import { sommeDesChiffres } from '../../lib/outils/nombres'
 import { texNombre } from '../../lib/outils/texNombre'
-import Exercice from '../Exercice'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
-import { propositionsQcm } from '../../lib/interactif/qcm'
+import Exercice from '../Exercice'
 export const amcReady = true
 export const amcType = 'qcmMono'
 export const interactifReady = true
@@ -37,7 +37,7 @@ export default class CriteresDeDivisibilite extends Exercice {
       '1 : Critères de divisibilité par 2, 5 et10\n2 : Critères de divisibilité par 3 et 9\n3 : Critères de divisibilité par 2, 3, 5, 9 et 10\n4 : Avec ou sans critère de divisibilité',
     ]
 
-    this.sup = 4 // Correspond au facteur commun
+    this.sup = 2 // Correspond au facteur commun
     this.consigne = 'Répondre aux questions suivantes en justifiant.'
     this.spacing = 2
 
@@ -62,7 +62,6 @@ export default class CriteresDeDivisibilite extends Exercice {
     for (
       let i = 0, n, u, texte, texteCorr, sommeString, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       this.autoCorrection[i] = {}
       this.autoCorrection[i].propositions = [
