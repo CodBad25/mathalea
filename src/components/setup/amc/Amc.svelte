@@ -433,6 +433,7 @@
 
     if (typeof source.enonce === 'string') target.enonce = source.enonce
     if (typeof source.texte === 'string') target.texte = source.texte
+    if (typeof source.feedback === 'string') target.feedback = source.feedback
 
     if (target.reponse == null && source.reponse != null) {
       target.reponse = {}

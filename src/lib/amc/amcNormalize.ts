@@ -63,6 +63,7 @@ export function normalizeQcm(
     (autoCorrectionItem.propositions || []).map((p) => ({
       texte: p.texte ?? '',
       correct: !!p.statut,
+      feedback: p.feedback,
     })),
   )
 
