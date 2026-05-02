@@ -10,35 +10,37 @@ import {
   texteGras,
 } from '../../lib/outils/embellissements'
 
-export const titre = "Écrire la liste de tous les diviseurs d'un entier"
+export const titre = "Écrire la liste des premiers multiples d'un entier"
 export const interactifReady = true
 export const interactifType = 'mathLive'
-export const dateDePublication = '13/12/2024'
+export const dateDePublication = '02/05/2026'
 
-export const uuid = '108ab'
+export const uuid = 'd2d85'
 export const refs = {
-  'fr-fr': ['5A10-1'],
-  'fr-ch': ['9NO4-31'],
+  'fr-fr': ['5A10-2'],
+  'fr-ch': [''],
 }
 /**
- * Donner la liste de tous les diviseurs de tête pour des nombres simples
- * @author Rémi Angot
+ * @author Éric Elter
  */
-export default class ListeDiviseurs extends Exercice {
+export default class ListeMultiples extends Exercice {
   constructor() {
     super()
     this.nbQuestions = 3
+    this.correctionDetailleeDisponible = true
+    this.correctionDetaillee = true
   }
 
   nouvelleVersion() {
-    this.consigne = 'Donner la liste de tous les diviseurs '
+    this.consigne = 'Donner la liste des 5 premiers multiples non nuls '
     this.consigne +=
       this.nbQuestions > 1 ? 'des nombres suivants.' : 'du nombre suivant.'
     const typeQuestionsDisponibles = [
       'multipleDe10',
-      'Premier',
-      'Pair',
-      'ImpairMultipleDe3',
+      'multipleDe6',
+      'multipleDe4',
+      'multipleDe25',
+      'multipleDe100',
     ]
     const listeTypeQuestions = combinaisonListes(
       typeQuestionsDisponibles,
@@ -48,27 +50,33 @@ export default class ListeDiviseurs extends Exercice {
       let n = 0
       switch (listeTypeQuestions[i]) {
         case 'multipleDe10':
-          n = 10 * randint(1, 6)
+          n = 10 * randint(1, 9)
           break
-        case 'Premier':
-          n = choice([11, 13, 17, 19, 23, 29])
+        case 'multipleDe6':
+          n = 6 * choice([1, 2, 5])
           break
-        case 'Pair':
-          n = 2 * randint(6, 14, [10])
+        case 'multipleDe4':
+          n = 4 * randint(1, 6)
           break
-        case 'ImpairMultipleDe3':
-          n = choice([15, 21, 27, 33, 39, 45])
+        case 'multipleDe25':
+          n = 25 * randint(1, 3)
+          break
+        case 'multipleDe100':
+        default:
+          n = 100 * randint(1, 9)
           break
       }
-      // Get all divisors of n
-      const divisors = []
-      for (let i = 1; i <= n; i++) {
-        if (n % i === 0) {
-          divisors.push(i)
-        }
+      // Get all multiples of n
+      const multiples = []
+      for (let i = 1; i <= 5; i++) {
+        multiples.push(i * n)
       }
-      let texte = `Diviseurs de $${n}$ :`
-      const texteCorr = `${texte} ${texteEnCouleurEtGras(divisors.join(' ; '))}.`
+      let texte = `Premiers multiples non nuls de $${n}$ :`
+      let texteCorr = this.correctionDetaillee
+        ? `Les premiers multiples nons nuls de $${n}$ sont 
+$${n} \\times 1,\\ ${n} \\times 2,\\ ${n} \\times 3,\\ ${n} \\times 4$ et $${n} \\times 5$.<br>`
+        : ''
+      texteCorr += `${texte} ${texteEnCouleurEtGras(multiples.join(' ; '))}.`
       if (this.questionJamaisPosee(i, texte)) {
         if (this.interactif) {
           texte += ajouteChampTexteMathLive(
@@ -76,14 +84,14 @@ export default class ListeDiviseurs extends Exercice {
             i,
             KeyboardType.clavierDeBaseAvecFractionPuissanceCrochets,
           )
-          this.consigne = `Donner la liste de tous les diviseurs (${texteGras('séparés par un point-virgule')}) `
+          this.consigne = `Donner la liste des premiers multiples non nuls (${texteGras('séparés par un point-virgule')}) `
           this.consigne +=
             this.nbQuestions > 1
               ? 'des nombres suivants.'
               : 'du nombre suivant.'
           handleAnswers(this, i, {
             reponse: {
-              value: divisors.join(';'),
+              value: multiples.join(';'),
               options: { suiteDeNombres: true },
             },
           })
