@@ -10,7 +10,7 @@ import {
   texteGras,
 } from '../../lib/outils/embellissements'
 
-export const titre = "Écrire la liste de tous les diviseurs d'un entier (bis)"
+export const titre = "Écrire la liste de tous les diviseurs d'un entier"
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const dateDePublication = '13/12/2024'

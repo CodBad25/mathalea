@@ -4,7 +4,7 @@ export const interactifReady = true
 export const interactifType = 'multiMathField'
 
 export const titre =
-  'Parcourir un labyrinthe de multiples basé sur les critères de divisibilité 3 et 9 - V1'
+  'Parcourir un labyrinthe de multiples basé sur les critères de divisibilité par 3 et par 9'
 
 /**
  * @author Éric Elter
