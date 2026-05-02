@@ -46,10 +46,12 @@ export function normalizeTexte(s: string): string {
 
 export function isFractionValue(value: unknown): value is AMCFractionValue {
   return (
-    typeof value === 'object' &&
-    value !== null &&
-    typeof (value as AMCFractionValue).num === 'number' &&
-    typeof (value as AMCFractionValue).den === 'number'
+    (typeof value === 'object' &&
+      value !== null &&
+      typeof (value as AMCFractionValue).num === 'number' &&
+      typeof (value as AMCFractionValue).den === 'number') ||
+    (typeof value === 'string' &&
+      value.match(/^\s*-?\+?(\\frac|\\dfrac)/) !== null)
   )
 }
 

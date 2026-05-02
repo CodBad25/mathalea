@@ -1,6 +1,8 @@
 <script lang="ts">
   import seedrandom from 'seedrandom'
   import { onDestroy, onMount } from 'svelte'
+  import { mathaleaEnsureAMCCompatibility } from '../../../lib/amc/amcInference'
+  import { normalizeAMCNumBlocks } from '../../../lib/amc/amcNormalize'
   import type { IExerciceAMC } from '../../../lib/amc/amcTypes'
   import {
     checkAMCGroupConsistency,
@@ -8,10 +10,10 @@
     type AMCGroupConsistencyReport,
   } from '../../../lib/amc/creerDocumentAmc'
   import {
-    mathaleaEnsureAMCCompatibility,
     mathaleaGenerateSeed,
     mathaleaGetExercicesFromParams,
     mathaleaHandleExerciceSimple,
+    mathaleaHandleSup,
     mathaleaUpdateExercicesParamsFromUrl,
     mathaleaUpdateUrlFromExercicesParams,
   } from '../../../lib/mathalea'
@@ -19,7 +21,9 @@
   import { referentielLocale } from '../../../lib/stores/languagesStore'
   import type { IExercice, InterfaceParams } from '../../../lib/types'
   import { context } from '../../../modules/context'
+  import Settings from '../../shared/exercice/exerciceMathalea/exerciceMathaleaVueProf/presentationalComponents/Settings.svelte'
   import NavBar from '../../shared/header/NavBar.svelte'
+  import BasicClassicModal from '../../shared/modal/BasicClassicModal.svelte'
   import SetupShell from '../SetupShell.svelte'
   import SideMenu from '../start/presentationalComponents/sideMenu/SideMenu.svelte'
   import AmcEnonceHtml from './builder/AmcEnonceHtml.svelte'
@@ -94,8 +98,11 @@
   let latexExportStatusTimeout: ReturnType<typeof setTimeout> | null = null
   let isLatexExportError = false
   let groupConsistencyReport: AMCGroupConsistencyReport | null = null
-  let isDropTargetActive = false
   let isDocumentSettingsOpen = true
+  let isExerciseSettingsModalOpen = false
+  let exerciseSettingsTargetIndex: number | null = null
+  let pendingSettingsSeed: string | null = null
+  let previousExercicesCount = 0 // Pour détecter les nouveaux exercices
 
   let unsubscribeExercicesParams: (() => void) | null = null
 
@@ -143,7 +150,11 @@
       ...groupSettings[index],
       seed: nextSeed,
     }
-
+    if (exercice.typeExercice === 'simple') {
+      mathaleaHandleExerciceSimple(exercice, false)
+    } else if (typeof exercice.nouvelleVersionWrapper === 'function') {
+      exercice.nouvelleVersionWrapper()
+    }
     // 1. Passe HTML : génère les SVG dans listeQuestions
     generateHtmlQuestionsForExercise(exercice, nextSeed)
 
@@ -154,13 +165,8 @@
     context.isAmc = true
     seedrandom(nextSeed, { global: true })
 
-    if (exercice.typeExercice === 'simple') {
-      mathaleaHandleExerciceSimple(exercice, false)
-    } else if (typeof exercice.nouvelleVersionWrapper === 'function') {
-      exercice.nouvelleVersionWrapper()
-    }
-
     mathaleaEnsureAMCCompatibility(exercice)
+    populateAmcAutoCorrectionTextsFromLatex(exercice, nextSeed)
     ;(exercice as any).amcHtmlQuestions =
       extractAMCQuestionsFromAutoCorrection(exercice)
     exercices = [...exercices]
@@ -172,9 +178,11 @@
   ): string[] {
     const ex = exercice as any
     const htmlQuestions: string[] = ex.htmlQuestions ?? []
-    const autoCorrection = Array.isArray(exercice.autoCorrection)
-      ? exercice.autoCorrection
-      : []
+    const autoCorrection = Array.isArray(ex.autoCorrectionAMC)
+      ? ex.autoCorrectionAMC
+      : Array.isArray(exercice.autoCorrection)
+        ? exercice.autoCorrection
+        : []
 
     const figureEnvRegex =
       /\\begin\{(?:tikzpicture|pspicture|picture|circuitikz)\}[\s\S]*?\\end\{(?:tikzpicture|pspicture|picture|circuitikz)\}/gi
@@ -218,6 +226,17 @@
     return autoCorrection.map((item: any, i: number) => {
       const fallback = htmlQuestions[i] ?? ''
 
+      // En AMCHybride, enonceAvant=false signifie qu'il ne faut pas afficher
+      // d'enonce "chapeau" en preview, ni via substitution/fallback.
+      const showOnlyOnce = Boolean(item?.enonceAvantUneFois)
+      const shouldHideHeader =
+        item?.enonceAvant === false && !(showOnlyOnce && i === 0)
+      if (shouldHideHeader) return ''
+
+      // La preview doit rester HTML : si on a une version HTML de la question,
+      // on l'utilise prioritairement et on n'affiche pas le LaTeX AMC brut.
+      if (fallback.trim().length > 0) return fallback
+
       const enonce = typeof item?.enonce === 'string' ? item.enonce.trim() : ''
       if (enonce.length > 0) return pickPreviewText(enonce, fallback)
 
@@ -243,6 +262,62 @@
     })
   }
 
+  function getAmcAutoCorrection(exercise: IExercice): any[] {
+    const ex = exercise as any
+    if (Array.isArray(ex.autoCorrectionAMC)) return ex.autoCorrectionAMC
+    if (Array.isArray(exercise.autoCorrection)) return exercise.autoCorrection
+    return []
+  }
+
+  function ensureAmcAutoCorrectionFallback(exercice: IExercice): void {
+    const ex = exercice as any
+    const current = getAmcAutoCorrection(exercice)
+    if (current.length > 0) return
+
+    const htmlQuestions: string[] = Array.isArray(ex.htmlQuestions)
+      ? ex.htmlQuestions
+      : []
+    const sourceQuestions =
+      exercice.listeQuestions.length > 0
+        ? exercice.listeQuestions
+        : exercice.question != null
+          ? [String(exercice.question)]
+          : htmlQuestions
+
+    if (sourceQuestions.length === 0) return
+
+    const sourceCorrections =
+      exercice.listeCorrections.length > 0
+        ? exercice.listeCorrections
+        : exercice.correction != null
+          ? [String(exercice.correction)]
+          : []
+
+    const fallbackAutoCorrection = sourceQuestions.map((enonce, i) => ({
+      enonce,
+      propositions: [
+        {
+          texte: sourceCorrections[i] ?? sourceCorrections[0] ?? '',
+          statut: 3,
+          sanscadre: false,
+          pointilles: true,
+        },
+      ],
+    }))
+
+    ex.autoCorrectionAMC = fallbackAutoCorrection
+    if (
+      !Array.isArray(exercice.autoCorrection) ||
+      exercice.autoCorrection.length === 0
+    ) {
+      exercice.autoCorrection = fallbackAutoCorrection.map((item) => ({
+        ...item,
+      }))
+    }
+    exercice.amcType = 'AMCOpen'
+    exercice.amcReady = true
+  }
+
   function generateHtmlQuestionsForExercise(
     exercice: IExercice,
     seed: string,
@@ -260,9 +335,7 @@
       seedrandom(seed, { global: true })
 
       if (exercice.typeExercice === 'simple') {
-        if (typeof exercice.nouvelleVersionWrapper === 'function') {
-          exercice.nouvelleVersionWrapper()
-        }
+        mathaleaHandleExerciceSimple(exercice, false)
       } else if (typeof exercice.nouvelleVersionWrapper === 'function') {
         exercice.nouvelleVersionWrapper()
       }
@@ -297,6 +370,232 @@
     // Le contexte (isHtml/isAmc) est restauré par la passe AMC qui suit.
   }
 
+  function cloneDeep<T>(value: T): T {
+    return JSON.parse(JSON.stringify(value)) as T
+  }
+
+  function buildLatexSnapshotForAmc(
+    exercice: IExercice,
+    seed: string,
+  ): {
+    autoCorrection: any[]
+    listeQuestions: string[]
+    listeCorrections: string[]
+  } {
+    const ex = exercice as any
+    const originalInteractif = exercice.interactif
+    const originalIsAmc = context.isAmc
+    const originalIsHtml = context.isHtml
+    const originalLastCallback = ex.lastCallback
+
+    const savedAutoCorrection = cloneDeep(exercice.autoCorrection ?? [])
+    const savedListeQuestions = [...exercice.listeQuestions]
+    const savedListeCorrections = [...exercice.listeCorrections]
+    const savedQuestion = exercice.question
+    const savedCorrection = exercice.correction
+
+    ex.lastCallback = ''
+    exercice.interactif = false
+    context.isHtml = false
+    context.isAmc = true
+    seedrandom(seed, { global: true })
+
+    if (exercice.typeExercice === 'simple') {
+      mathaleaHandleExerciceSimple(exercice, false)
+    } else if (typeof ex.nouvelleVersionWrapper === 'function') {
+      ex.nouvelleVersionWrapper()
+    }
+
+    const snapshot = {
+      autoCorrection: cloneDeep(
+        Array.isArray(exercice.autoCorrection) ? exercice.autoCorrection : [],
+      ),
+      listeQuestions: [...exercice.listeQuestions],
+      listeCorrections: [...exercice.listeCorrections],
+    }
+
+    exercice.autoCorrection = savedAutoCorrection
+    exercice.listeQuestions = savedListeQuestions
+    exercice.listeCorrections = savedListeCorrections
+    exercice.question = savedQuestion
+    exercice.correction = savedCorrection
+
+    ex.lastCallback = originalLastCallback
+    exercice.interactif = originalInteractif
+    context.isAmc = originalIsAmc
+    context.isHtml = originalIsHtml
+
+    return snapshot
+  }
+
+  function copyLatexTextsOnPropositions(target: any, source: any): void {
+    if (!target || !source) return
+
+    if (typeof source.enonce === 'string') target.enonce = source.enonce
+    if (typeof source.texte === 'string') target.texte = source.texte
+    if (typeof source.feedback === 'string') target.feedback = source.feedback
+
+    if (target.reponse == null && source.reponse != null) {
+      target.reponse = {}
+    }
+    if (
+      target.reponse != null &&
+      source.reponse != null &&
+      typeof source.reponse.texte === 'string'
+    ) {
+      target.reponse.texte = source.reponse.texte
+    }
+
+    const targetSubProps = Array.isArray(target.propositions)
+      ? target.propositions
+      : []
+    const sourceSubProps = Array.isArray(source.propositions)
+      ? source.propositions
+      : []
+    const length = Math.min(targetSubProps.length, sourceSubProps.length)
+    for (let i = 0; i < length; i++) {
+      copyLatexTextsOnPropositions(targetSubProps[i], sourceSubProps[i])
+    }
+  }
+
+  function populateAmcAutoCorrectionTextsFromLatex(
+    exercice: IExercice,
+    seed: string,
+  ): void {
+    const ex = exercice as any
+    const targetAutoCorrection = getAmcAutoCorrection(exercice)
+    const latexSnapshot = buildLatexSnapshotForAmc(exercice, seed)
+    const latexAutoCorrection = latexSnapshot.autoCorrection
+    const latexQuestions = latexSnapshot.listeQuestions
+    const latexCorrections = latexSnapshot.listeCorrections
+
+    if (targetAutoCorrection.length === 0) {
+      const count = Math.max(
+        latexAutoCorrection.length,
+        latexQuestions.length,
+        latexCorrections.length,
+        exercice.question != null ? 1 : 0,
+        1,
+      )
+
+      const built = Array.from({ length: count }, (_, i) => {
+        const sourceItem = latexAutoCorrection[i] ?? {}
+        const enonce =
+          typeof sourceItem.enonce === 'string'
+            ? sourceItem.enonce
+            : (latexQuestions[i] ?? (i === 0 ? (exercice.question ?? '') : ''))
+
+        const sourceProps = Array.isArray(sourceItem.propositions)
+          ? cloneDeep(sourceItem.propositions)
+          : []
+
+        const propositions =
+          sourceProps.length > 0
+            ? sourceProps
+            : [
+                {
+                  texte:
+                    latexCorrections[i] ??
+                    latexCorrections[0] ??
+                    (i === 0 ? (exercice.correction ?? '') : ''),
+                  statut: 3,
+                  sanscadre: false,
+                  pointilles: true,
+                },
+              ]
+
+        return {
+          ...sourceItem,
+          enonce,
+          propositions,
+        }
+      })
+
+      ex.autoCorrectionAMC = built
+      if (
+        !Array.isArray(exercice.autoCorrection) ||
+        exercice.autoCorrection.length === 0
+      ) {
+        exercice.autoCorrection = cloneDeep(built)
+      }
+      if (exercice.amcType == null) exercice.amcType = 'AMCOpen'
+      exercice.amcReady = true
+      return
+    }
+
+    const merged = cloneDeep(targetAutoCorrection)
+    const count = Math.max(
+      merged.length,
+      latexAutoCorrection.length,
+      latexQuestions.length,
+    )
+
+    for (let i = 0; i < count; i++) {
+      if (merged[i] == null) merged[i] = {}
+
+      const targetItem = merged[i]
+      const sourceItem = latexAutoCorrection[i]
+      const sourceQuestion = latexQuestions[i]
+      const sourceCorrection =
+        latexCorrections[i] ??
+        latexCorrections[0] ??
+        (i === 0 ? (exercice.correction ?? '') : '')
+
+      if (sourceItem && typeof sourceItem.enonce === 'string') {
+        targetItem.enonce = sourceItem.enonce
+      } else if (
+        typeof sourceQuestion === 'string' &&
+        sourceQuestion.length > 0
+      ) {
+        targetItem.enonce = sourceQuestion
+      }
+
+      const targetProps = Array.isArray(targetItem.propositions)
+        ? targetItem.propositions
+        : []
+      const sourceProps = Array.isArray(sourceItem?.propositions)
+        ? sourceItem.propositions
+        : []
+
+      const min = Math.min(targetProps.length, sourceProps.length)
+      for (let j = 0; j < min; j++) {
+        copyLatexTextsOnPropositions(targetProps[j], sourceProps[j])
+      }
+
+      if (targetProps.length === 0 && sourceProps.length > 0) {
+        targetItem.propositions = cloneDeep(sourceProps)
+      }
+
+      // Cas AMCOpen inféré : on force le texte de correction depuis la version
+      // LaTeX de listeCorrections quand le snapshot ne porte pas de propositions.
+      if (
+        exercice.amcType === 'AMCOpen' &&
+        typeof sourceCorrection === 'string' &&
+        sourceCorrection.length > 0 &&
+        sourceProps.length === 0
+      ) {
+        if (!Array.isArray(targetItem.propositions)) {
+          targetItem.propositions = []
+        }
+        if (targetItem.propositions.length === 0) {
+          targetItem.propositions.push({
+            texte: sourceCorrection,
+            statut: 3,
+            sanscadre: false,
+            pointilles: true,
+          })
+        } else {
+          targetItem.propositions[0] = {
+            ...targetItem.propositions[0],
+            texte: sourceCorrection,
+          }
+        }
+      }
+    }
+
+    ex.autoCorrectionAMC = merged
+  }
+
   async function refreshExercicesFromStore(params: InterfaceParams[]) {
     const loaded = (await mathaleaGetExercicesFromParams(params)).filter(
       (exercice): exercice is IExercice => exercice.typeExercice !== 'statique',
@@ -307,6 +606,11 @@
     for (const exercice of loaded) {
       try {
         const seed = exercice.seed ?? ''
+        if (exercice.typeExercice === 'simple') {
+          mathaleaHandleExerciceSimple(exercice, false)
+        } else if (typeof exercice.nouvelleVersionWrapper === 'function') {
+          exercice.nouvelleVersionWrapper()
+        }
 
         // 1. Passe HTML : génère les SVG dans listeQuestions
         generateHtmlQuestionsForExercise(exercice, seed)
@@ -318,13 +622,8 @@
         context.isAmc = true
         seedrandom(seed, { global: true })
 
-        if (exercice.typeExercice === 'simple') {
-          mathaleaHandleExerciceSimple(exercice, false)
-        } else if (typeof exercice.nouvelleVersionWrapper === 'function') {
-          exercice.nouvelleVersionWrapper()
-        }
-
         mathaleaEnsureAMCCompatibility(exercice)
+        populateAmcAutoCorrectionTextsFromLatex(exercice, seed)
         ;(exercice as any).amcHtmlQuestions =
           extractAMCQuestionsFromAutoCorrection(exercice)
         if (exercice.amcType != null) {
@@ -338,6 +637,16 @@
 
     const previousSettings = groupSettings
     exercices = amcReadyExercices
+
+    // Détecte quand un nouvel exercice est ajouté (depuis ReferentielEnding ou ailleurs)
+    if (exercices.length > previousExercicesCount && exercices.length > 0) {
+      const newExerciseIndex = exercices.length - 1
+      exerciseSettingsTargetIndex = newExerciseIndex
+      isExerciseSettingsModalOpen = true
+      isDocumentSettingsOpen = false
+    }
+    previousExercicesCount = exercices.length
+
     groupSettings = exercices.map((exercice, index) => ({
       seed: previousSettings[index]?.seed ?? exercice.seed,
       questionCount:
@@ -358,38 +667,129 @@
       selectedRef = null
     }
 
+    if (pendingSettingsSeed != null) {
+      const targetIndex = exercices.findIndex(
+        (exercise) => exercise.seed === pendingSettingsSeed,
+      )
+      pendingSettingsSeed = null
+      if (targetIndex >= 0) {
+        selectedExerciseIndex = targetIndex
+        exerciseSettingsTargetIndex = targetIndex
+        isExerciseSettingsModalOpen = true
+        isDocumentSettingsOpen = false
+      }
+    }
+
     updateLatexPreview()
   }
 
   function addExercise(uuid: string, id: string) {
+    const alea = mathaleaGenerateSeed()
     const newExercise: InterfaceParams = {
       uuid,
       id,
-      alea: mathaleaGenerateSeed(),
+      alea,
       interactif: '0',
     }
+    pendingSettingsSeed = alea
     exercicesParams.update((list) => [...list, newExercise])
     mathaleaUpdateUrlFromExercicesParams()
   }
 
-  function handleDrop(event: DragEvent) {
-    event.preventDefault()
-    isDropTargetActive = false
+  function openExerciseSettingsModal(index: number) {
+    if (index < 0 || index >= exercices.length) return
+    selectedExerciseIndex = index
+    exerciseSettingsTargetIndex = index
+    isExerciseSettingsModalOpen = true
+    isDocumentSettingsOpen = false
+  }
 
-    const payload =
-      event.dataTransfer?.getData('application/x-mathalea-exercise') ||
-      event.dataTransfer?.getData('text/plain')
+  function findParamsIndexForExercise(exercise: IExercice): number {
+    return $exercicesParams.findIndex((entry) => {
+      return (
+        entry.uuid === exercise.uuid &&
+        (entry.id ?? '') === (exercise.id ?? '') &&
+        (entry.alea ?? '') === (exercise.seed ?? '')
+      )
+    })
+  }
 
-    if (!payload) return
+  function handleExerciseSettings(event: CustomEvent) {
+    const index = exerciseSettingsTargetIndex
+    if (index == null) return
+    const exercise = exercices[index]
+    if (!exercise) return
 
-    try {
-      const parsed = JSON.parse(payload) as { uuid?: string; id?: string }
-      if (typeof parsed.uuid === 'string' && typeof parsed.id === 'string') {
-        addExercise(parsed.uuid, parsed.id)
+    const paramsIndex = findParamsIndexForExercise(exercise)
+    if (paramsIndex < 0) return
+
+    const detail = event.detail ?? {}
+    let forcedSeed: string | undefined
+
+    exercicesParams.update((list) => {
+      const next = [...list]
+      const current = { ...next[paramsIndex] }
+
+      if (detail.nbQuestions != null) {
+        const nbQuestions = Math.max(1, Number(detail.nbQuestions) || 1)
+        exercise.nbQuestions = nbQuestions
+        current.nbQuestions = nbQuestions
+        groupSettings[index] = {
+          ...groupSettings[index],
+          questionCount: nbQuestions,
+          restitueCount: Math.min(
+            nbQuestions,
+            groupSettings[index]?.restitueCount ?? nbQuestions,
+          ),
+        }
+        groupSettings = [...groupSettings]
       }
-    } catch {
-      // Zone permissive: d'autres drag/drop peuvent être ignorés.
-    }
+      if (detail.duration != null) {
+        current.duration = Math.max(1, Number(detail.duration) || 1)
+      }
+      if (detail.sup !== undefined) {
+        exercise.sup = detail.sup
+        current.sup = mathaleaHandleSup(detail.sup)
+      }
+      if (detail.sup2 !== undefined) {
+        exercise.sup2 = detail.sup2
+        current.sup2 = mathaleaHandleSup(detail.sup2)
+      }
+      if (detail.sup3 !== undefined) {
+        exercise.sup3 = detail.sup3
+        current.sup3 = mathaleaHandleSup(detail.sup3)
+      }
+      if (detail.sup4 !== undefined) {
+        exercise.sup4 = detail.sup4
+        current.sup4 = mathaleaHandleSup(detail.sup4)
+      }
+      if (detail.sup5 !== undefined) {
+        exercise.sup5 = detail.sup5
+        current.sup5 = mathaleaHandleSup(detail.sup5)
+      }
+      if (detail.versionQcm !== undefined) {
+        current.versionQcm = detail.versionQcm ? '1' : '0'
+      }
+      if (detail.alea !== undefined) {
+        forcedSeed = String(detail.alea)
+        exercise.seed = forcedSeed
+        current.alea = forcedSeed
+        groupSettings[index] = {
+          ...groupSettings[index],
+          seed: forcedSeed,
+        }
+        groupSettings = [...groupSettings]
+      }
+      if (detail.correctionDetaillee !== undefined) {
+        current.cd = detail.correctionDetaillee ? '1' : '0'
+      }
+
+      next[paramsIndex] = current
+      return next
+    })
+
+    mathaleaUpdateUrlFromExercicesParams()
+    void regenerateExercise(index, forcedSeed)
   }
 
   function updateLatexPreview() {
@@ -411,6 +811,7 @@
 
     latexContent = creerDocumentAmc({
       exercices: exercicesForLatex,
+      assumeAmcPrepared: true,
       nbQuestions,
       groupLayouts: groupSettings.map((setting) => ({
         pageBreakBefore: setting.pageBreakBefore,
@@ -535,7 +936,10 @@
       }
 
       const exercice = exercicesForLatex[exerciseIndex] as any
-      const item = exercice?.autoCorrection?.[questionIndex]
+      const autoCorrection = Array.isArray(exercice?.autoCorrectionAMC)
+        ? exercice.autoCorrectionAMC
+        : exercice?.autoCorrection
+      const item = autoCorrection?.[questionIndex]
       if (!item) continue
       transformQuestionLatexWithTikzScale(item, clampTikzScaleFactor(factor))
     }
@@ -544,12 +948,18 @@
   function selectedQuestionHasTikzPicture(): boolean {
     if (!selectedRef) return false
     const exercise = exercices[selectedRef.exerciseIndex] as any
-    const item = exercise?.autoCorrection?.[selectedRef.questionIndex]
+    const autoCorrection = Array.isArray(exercise?.autoCorrectionAMC)
+      ? exercise.autoCorrectionAMC
+      : exercise?.autoCorrection
+    const item = autoCorrection?.[selectedRef.questionIndex]
     if (!item) return false
 
-    const regex = /\\begin\{tikzpicture\}/
-    const containsTikz = (value: unknown): boolean =>
-      typeof value === 'string' && regex.test(value)
+    const regex = /\\+begin\s*\{\s*(?:tikzpicture|circuitikz)\s*\}/i
+    const containsTikz = (value: unknown): boolean => {
+      if (typeof value !== 'string') return false
+      const normalized = value.replace(/\r\n?/g, '\n')
+      return regex.test(normalized)
+    }
 
     if (containsTikz(item.enonce)) return true
     const propositions = Array.isArray(item.propositions)
@@ -572,8 +982,9 @@
 
   function getSelectedQuestionItem(): any | null {
     if (!selectedRef) return null
-    const exercise = exercices[selectedRef.exerciseIndex] as any
-    return exercise?.autoCorrection?.[selectedRef.questionIndex] ?? null
+    const exercise = exercices[selectedRef.exerciseIndex]
+    const autoCorrection = getAmcAutoCorrection(exercise)
+    return autoCorrection[selectedRef.questionIndex] ?? null
   }
 
   function toCm(value: number, unit: string | undefined): number {
@@ -720,9 +1131,7 @@
   function getBlocks(exercise: IExercice, exerciseIndex: number) {
     const blocks: PreviewBlock[] = []
 
-    const autoCorrection = Array.isArray((exercise as any).autoCorrection)
-      ? ((exercise as any).autoCorrection as any[])
-      : []
+    const autoCorrection = getAmcAutoCorrection(exercise)
 
     const htmlQuestions: string[] = (exercise as any).htmlQuestions ?? []
     const amcHtmlQuestions: string[] = (exercise as any).amcHtmlQuestions ?? []
@@ -904,6 +1313,13 @@
     return displayItems
   }
 
+  function hasHybridHeaderContent(header: PreviewBlock): boolean {
+    const html =
+      typeof header.htmlContent === 'string' ? header.htmlContent.trim() : ''
+    const enonce = typeof header.enonce === 'string' ? header.enonce.trim() : ''
+    return html.length > 0 || enonce.length > 0
+  }
+
   function isSelected(ref: BlockRef): boolean {
     return (
       selectedRef?.exerciseIndex === ref.exerciseIndex &&
@@ -919,22 +1335,107 @@
     isDocumentSettingsOpen = false
   }
 
-  function updateSelectedNumericParam(
-    key: 'digits' | 'decimals' | 'approx' | 'signe' | 'vertical',
-    value: number | boolean,
-  ) {
-    if (!selectedRef || selectedRef.kind !== 'num') return
+  function getSelectedNumericResponseTarget(): any | null {
+    if (!selectedRef || selectedRef.kind !== 'num') return null
 
     const exercise = exercices[selectedRef.exerciseIndex] as any
-    if (!exercise) return
-    const item = exercise.autoCorrection?.[selectedRef.questionIndex]
-    if (!item) return
+    if (!exercise) return null
+    const autoCorrection = Array.isArray(exercise.autoCorrectionAMC)
+      ? exercise.autoCorrectionAMC
+      : exercise.autoCorrection
+    const item = autoCorrection?.[selectedRef.questionIndex]
+    if (!item) return null
 
     const isHybrid = exercise.amcType === 'AMCHybride'
-    const target = isHybrid
+    return isHybrid
       ? item?.propositions?.[selectedRef.propositionIndex]?.propositions?.[0]
           ?.reponse
       : item?.reponse
+  }
+
+  function getSelectedNumericParamValue(
+    key:
+      | 'digits'
+      | 'decimals'
+      | 'approx'
+      | 'signe'
+      | 'vertical'
+      | 'exposantNbChiffres'
+      | 'exposantSigne'
+      | 'tpoint',
+  ) {
+    const target = getSelectedNumericResponseTarget()
+    return target?.param?.[key]
+  }
+
+  function getSelectedNumericMainBlock() {
+    const target = getSelectedNumericResponseTarget()
+    if (!target) return undefined
+
+    const blocks = normalizeAMCNumBlocks({
+      valeur: target.valeur as any,
+      param: target.param ?? {},
+    })
+
+    return blocks[0]
+  }
+
+  function getSelectedNumericInferredValues(): {
+    digits: number
+    decimals: number
+  } {
+    const mainBlock = getSelectedNumericMainBlock()
+    const paramDigits = Number(getSelectedNumericParamValue('digits') ?? 1)
+    const paramDecimals = Number(getSelectedNumericParamValue('decimals') ?? 0)
+
+    if (!mainBlock) {
+      return {
+        digits: Math.max(1, paramDigits),
+        decimals: Math.max(0, paramDecimals),
+      }
+    }
+
+    const inferredDigits = Number(mainBlock.digits ?? paramDigits)
+    const inferredDecimals = Number(mainBlock.decimals ?? paramDecimals)
+
+    return {
+      digits: Math.max(
+        1,
+        Number(getSelectedNumericParamValue('digits') ?? inferredDigits ?? 1),
+      ),
+      decimals: Math.max(
+        0,
+        Number(
+          getSelectedNumericParamValue('decimals') ?? inferredDecimals ?? 0,
+        ),
+      ),
+    }
+  }
+
+  function isSelectedNumericParamExplicit(
+    key: 'digits' | 'decimals' | 'approx' | 'exposantNbChiffres',
+  ): boolean {
+    const target = getSelectedNumericResponseTarget()
+    const param = target?.param
+    if (param == null || typeof param !== 'object') return false
+    return Object.prototype.hasOwnProperty.call(param, key)
+  }
+
+  function updateSelectedNumericParam(
+    key:
+      | 'digits'
+      | 'decimals'
+      | 'approx'
+      | 'signe'
+      | 'vertical'
+      | 'exposantNbChiffres'
+      | 'exposantSigne'
+      | 'tpoint',
+    value: number | boolean | string,
+  ) {
+    if (!selectedRef || selectedRef.kind !== 'num') return
+
+    const target = getSelectedNumericResponseTarget()
 
     if (!target) return
     target.param = target.param ?? {}
@@ -1242,19 +1743,9 @@
         class="space-y-4 xl:h-full xl:min-h-0 xl:overflow-y-auto xl:pr-2"
       >
         <div
-          class="rounded-xl border-2 border-dashed p-4 transition-colors {isDropTargetActive
-            ? 'border-coopmaths-action bg-coopmaths-action/10'
-            : 'border-coopmaths-struct-light/40 bg-coopmaths-canvas-dark/40 dark:bg-coopmathsdark-canvas-dark/50'}"
+          class="rounded-xl border border-coopmaths-struct-light/40 bg-coopmaths-canvas-dark/40 p-4 dark:bg-coopmathsdark-canvas-dark/50"
           role="region"
-          aria-label="Zone de dépôt d'exercices AMC"
-          on:dragenter|preventDefault={() => {
-            isDropTargetActive = true
-          }}
-          on:dragover|preventDefault
-          on:dragleave|preventDefault={() => {
-            isDropTargetActive = false
-          }}
-          on:drop={handleDrop}
+          aria-label="Zone centrale de composition AMC"
         >
           <p
             class="font-semibold text-coopmaths-struct dark:text-coopmathsdark-struct"
@@ -1264,8 +1755,8 @@
           <p
             class="text-sm text-coopmaths-corpus dark:text-coopmathsdark-corpus mt-1"
           >
-            Dépose un exercice depuis la colonne de gauche, ou clique simplement
-            sur un exercice du référentiel.
+            Clique sur un exercice du référentiel à gauche pour l'ajouter, puis
+            règle ses paramètres via le bouton Paramétrer l'exercice.
           </p>
         </div>
 
@@ -1325,6 +1816,9 @@
               <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-3">
                 {#each getPreviewDisplayItems(exercice, exerciseIndex) as item}
                   {#if item.kind === 'hybridContainer'}
+                    {@const hasCommonHeader = hasHybridHeaderContent(
+                      item.header,
+                    )}
                     <div
                       class="md:col-span-2 rounded-xl border-2 border-coopmaths-action/50 bg-coopmaths-canvas/25 p-3 dark:bg-coopmathsdark-canvas/25"
                     >
@@ -1336,26 +1830,27 @@
                         </p>
                       </div>
 
-                      <div
-                        class="amc-hybrid-header-card rounded-xl border border-coopmaths-struct-light/40 bg-white/80 p-4 dark:bg-coopmathsdark-canvas-dark/70 dark:border-coopmathsdark-struct-light/30"
-                      >
-                        <p
-                          class="text-base font-semibold text-coopmaths-struct dark:text-coopmathsdark-struct"
+                      {#if hasCommonHeader}
+                        <div
+                          class="amc-hybrid-header-card rounded-xl border border-coopmaths-struct-light/40 bg-white/80 p-4 dark:bg-coopmathsdark-canvas-dark/70 dark:border-coopmathsdark-struct-light/30"
                         >
-                          Énoncé commun
-                        </p>
-                        {#if item.header.htmlContent || item.header.enonce}
+                          <p
+                            class="text-base font-semibold text-coopmaths-struct dark:text-coopmathsdark-struct"
+                          >
+                            Énoncé commun
+                          </p>
                           <div class="mt-2">
                             <AmcEnonceHtml
                               content={item.header.htmlContent ||
                                 item.header.enonce}
                             />
                           </div>
-                        {/if}
-                      </div>
+                        </div>
+                      {/if}
 
                       <div
-                        class="amc-hybrid-children mt-3 grid grid-cols-1 md:grid-cols-2 gap-3"
+                        class="amc-hybrid-children grid grid-cols-1 md:grid-cols-2 gap-3"
+                        class:mt-3={hasCommonHeader}
                       >
                         {#each item.children as block}
                           <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
@@ -1416,6 +1911,8 @@
                               <AmcPreviewNumeric
                                 enonce={block.enonce}
                                 htmlContent={block.htmlContent}
+                                value={block.data?.propositions?.[0]?.reponse
+                                  ?.valeur ?? block.data?.reponse?.valeur}
                                 param={block.data?.propositions?.[0]?.reponse
                                   ?.param ??
                                   block.data?.reponse?.param ??
@@ -1493,6 +1990,8 @@
                         <AmcPreviewNumeric
                           enonce={block.enonce}
                           htmlContent={block.htmlContent}
+                          value={block.data?.propositions?.[0]?.reponse
+                            ?.valeur ?? block.data?.reponse?.valeur}
                           param={block.data?.propositions?.[0]?.reponse
                             ?.param ??
                             block.data?.reponse?.param ??
@@ -1797,14 +2296,24 @@
                   exercices[selectedExerciseIndex],
                 )})
               </p>
-              <button
-                type="button"
-                class="rounded border px-3 py-1 text-xs"
-                on:click={selectNextExercise}
-                disabled={exercices.length < 2}
-              >
-                Groupe suivant
-              </button>
+              <div class="flex items-center gap-2">
+                <button
+                  type="button"
+                  class="rounded border px-3 py-1 text-xs"
+                  on:click={() =>
+                    openExerciseSettingsModal(selectedExerciseIndex!)}
+                >
+                  Paramétrer l'exercice
+                </button>
+                <button
+                  type="button"
+                  class="rounded border px-3 py-1 text-xs"
+                  on:click={selectNextExercise}
+                  disabled={exercices.length < 2}
+                >
+                  Groupe suivant
+                </button>
+              </div>
             </div>
             <label for="amc-group-question-count" class="block text-xs"
               >Nombre de questions générées</label
@@ -2006,11 +2515,21 @@
           {#if selectedRef.kind === 'num'}
             <div class="mt-4 space-y-2">
               <p class="text-sm font-semibold">AMCnumericChoices</p>
-              <label for="amc-num-digits" class="block text-xs">Digits</label>
+              <div class="flex items-center justify-between">
+                <label for="amc-num-digits" class="block text-xs">Digits</label>
+                {#if !isSelectedNumericParamExplicit('digits')}
+                  <span
+                    class="rounded-full border border-amber-300/70 bg-amber-100/70 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-amber-700 dark:border-amber-500/50 dark:bg-amber-900/30 dark:text-amber-200"
+                  >
+                    inféré
+                  </span>
+                {/if}
+              </div>
               <input
                 id="amc-num-digits"
                 type="number"
                 min="1"
+                value={getSelectedNumericInferredValues().digits}
                 class="w-full rounded border px-2 py-1 text-sm"
                 on:input={(event) =>
                   updateSelectedNumericParam(
@@ -2023,13 +2542,23 @@
                   )}
               />
 
-              <label for="amc-num-decimals" class="block text-xs"
-                >Decimals</label
-              >
+              <div class="flex items-center justify-between">
+                <label for="amc-num-decimals" class="block text-xs"
+                  >Decimals</label
+                >
+                {#if !isSelectedNumericParamExplicit('decimals')}
+                  <span
+                    class="rounded-full border border-amber-300/70 bg-amber-100/70 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-amber-700 dark:border-amber-500/50 dark:bg-amber-900/30 dark:text-amber-200"
+                  >
+                    inféré
+                  </span>
+                {/if}
+              </div>
               <input
                 id="amc-num-decimals"
                 type="number"
                 min="0"
+                value={getSelectedNumericInferredValues().decimals}
                 class="w-full rounded border px-2 py-1 text-sm"
                 on:input={(event) =>
                   updateSelectedNumericParam(
@@ -2042,11 +2571,21 @@
                   )}
               />
 
-              <label for="amc-num-approx" class="block text-xs">Approx</label>
+              <div class="flex items-center justify-between">
+                <label for="amc-num-approx" class="block text-xs">Approx</label>
+                {#if !isSelectedNumericParamExplicit('approx')}
+                  <span
+                    class="rounded-full border border-amber-300/70 bg-amber-100/70 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-amber-700 dark:border-amber-500/50 dark:bg-amber-900/30 dark:text-amber-200"
+                  >
+                    inféré
+                  </span>
+                {/if}
+              </div>
               <input
                 id="amc-num-approx"
                 type="number"
                 min="0"
+                value={Number(getSelectedNumericParamValue('approx') ?? 0)}
                 class="w-full rounded border px-2 py-1 text-sm"
                 on:input={(event) =>
                   updateSelectedNumericParam(
@@ -2062,6 +2601,7 @@
               <label class="mt-2 inline-flex items-center gap-2 text-xs">
                 <input
                   type="checkbox"
+                  checked={Boolean(getSelectedNumericParamValue('signe'))}
                   on:change={(event) =>
                     updateSelectedNumericParam(
                       'signe',
@@ -2073,6 +2613,7 @@
               <label class="mt-2 inline-flex items-center gap-2 text-xs">
                 <input
                   type="checkbox"
+                  checked={Boolean(getSelectedNumericParamValue('vertical'))}
                   on:change={(event) =>
                     updateSelectedNumericParam(
                       'vertical',
@@ -2081,6 +2622,70 @@
                 />
                 Affichage vertical
               </label>
+
+              <div class="flex items-center justify-between">
+                <label for="amc-num-exp-digits" class="block text-xs"
+                  >Exposant: nombre de chiffres</label
+                >
+                {#if !isSelectedNumericParamExplicit('exposantNbChiffres')}
+                  <span
+                    class="rounded-full border border-amber-300/70 bg-amber-100/70 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-amber-700 dark:border-amber-500/50 dark:bg-amber-900/30 dark:text-amber-200"
+                  >
+                    inféré
+                  </span>
+                {/if}
+              </div>
+              <input
+                id="amc-num-exp-digits"
+                type="number"
+                min="0"
+                value={Number(
+                  getSelectedNumericParamValue('exposantNbChiffres') ?? 0,
+                )}
+                class="w-full rounded border px-2 py-1 text-sm"
+                on:input={(event) =>
+                  updateSelectedNumericParam(
+                    'exposantNbChiffres',
+                    Math.max(
+                      0,
+                      Number((event.currentTarget as HTMLInputElement).value) ||
+                        0,
+                    ),
+                  )}
+              />
+
+              <label class="mt-2 inline-flex items-center gap-2 text-xs">
+                <input
+                  type="checkbox"
+                  checked={Boolean(
+                    getSelectedNumericParamValue('exposantSigne'),
+                  )}
+                  on:change={(event) =>
+                    updateSelectedNumericParam(
+                      'exposantSigne',
+                      (event.currentTarget as HTMLInputElement).checked,
+                    )}
+                />
+                Exposant avec signe
+              </label>
+
+              <label for="amc-num-dec-sep" class="block text-xs"
+                >Separateur decimal</label
+              >
+              <select
+                id="amc-num-dec-sep"
+                class="w-full rounded border px-2 py-1 text-sm"
+                value={String(getSelectedNumericParamValue('tpoint') ?? ',')}
+                on:change={(event) =>
+                  updateSelectedNumericParam(
+                    'tpoint',
+                    (event.currentTarget as HTMLSelectElement).value,
+                  )}
+              >
+                <option value=",">Virgule (,)</option>
+                <option value=".">Point (.)</option>
+              </select>
+
               <label class="mt-2 inline-flex items-center gap-2 text-xs">
                 <input
                   type="checkbox"
@@ -2248,6 +2853,30 @@
     </div>
   </div>
 </SetupShell>
+
+{#if isExerciseSettingsModalOpen && exerciseSettingsTargetIndex != null && exercices[exerciseSettingsTargetIndex]}
+  <BasicClassicModal
+    bind:isDisplayed={isExerciseSettingsModalOpen}
+    on:close={() => {
+      exerciseSettingsTargetIndex = null
+    }}
+  >
+    <span slot="header">Paramétrage de l'exercice</span>
+    <div slot="content" class="text-left">
+      <Settings
+        exercice={exercices[exerciseSettingsTargetIndex]}
+        exerciceIndex={exerciseSettingsTargetIndex}
+        isVisible={true}
+        inModal={true}
+        on:settings={handleExerciseSettings}
+        on:clickSettings={() => {
+          isExerciseSettingsModalOpen = false
+          exerciseSettingsTargetIndex = null
+        }}
+      />
+    </div>
+  </BasicClassicModal>
+{/if}
 
 <style>
   .amc-hybrid-header-card :global(.text-sm) {

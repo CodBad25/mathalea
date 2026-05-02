@@ -174,8 +174,8 @@ export default class SimplifierFractions extends Exercice {
                       texte: 'Rendre irréductible la fraction ' + texte + '.',
                       valeur: f.simplifie(),
                       param: {
-                        digits: 2,
-                        decimals: 0,
+                        digits: 4,
+                        decimals: 2,
                         signe: false,
                         approx: 0,
                       },

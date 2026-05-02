@@ -3,6 +3,7 @@ import { format as formatLatex } from '../Latex'
 import { loadPackagesFromContent } from '../latex/preambuleTex'
 import type { contentsType } from '../LatexTypes'
 import { lettreDepuisChiffre } from '../outils/outilString'
+import type { IExercice } from '../types'
 import {
   AMCPreambleTemplate,
   renderAMCCopyContent,
@@ -17,7 +18,7 @@ import type { IExerciceAMC } from './amcTypes'
 type ExportQcmAmcResult = [string, string, number, string, boolean]
 
 export type CreerDocumentAmcOptions = {
-  exercices: IExerciceAMC[]
+  exercices: (IExerciceAMC | IExercice)[]
   nbQuestions?: number[]
   groupLayouts?: Array<{
     pageBreakBefore?: boolean
@@ -33,6 +34,7 @@ export type CreerDocumentAmcOptions = {
   warningMessage?: string
   associationRoster?: string
   collectCorrectionsAtEnd?: boolean
+  assumeAmcPrepared?: boolean
 }
 
 export type AMCGroupConsistencyReport = {
@@ -365,8 +367,13 @@ export function exportQcmAmc(
 ): ExportQcmAmcResult {
   let ref = `${exercise.id}/${exercise.sup ? 'S:' + exercise.sup : ''}${exercise.sup2 ? 'S2:' + exercise.sup2 : ''}${exercise.sup3 ? 'S3:' + exercise.sup3 : ''}${exercise.sup4 ? 'S4:' + exercise.sup4 : ''}${exercise.sup5 ? 'S5:' + exercise.sup5 : ''}`
   if (ref[ref.length - 1] === '/') ref = ref.slice(0, -1)
-  // Compatibilité transitoire : la structure historique AMCHybride est plus large que le typage strict actuel.
-  const autoCorrection = exercise.autoCorrection as any[]
+  // Compatibilité transitoire : priorité à la structure AMC dédiée quand disponible.
+  const exerciseAny = exercise as IExerciceAMC & {
+    autoCorrectionAMC?: any[]
+  }
+  const autoCorrection = Array.isArray(exerciseAny.autoCorrectionAMC)
+    ? exerciseAny.autoCorrectionAMC
+    : (exercise.autoCorrection as any[])
   const title = exercise.titre
   const type = exercise.amcType
   let texQr = ''
@@ -453,7 +460,7 @@ export function exportQcmAmc(
  * nbExemplaires est le nombre de copies à générer.
  * matiere et titre se passent de commentaires : ils renseignent l'entête du sujet.
  * @param {{
- *   exercices: import('../types').IExercice[],
+ *   exercices: (IExercice|IExerciceAMC)[],
  *   nbQuestions?: number[],
  *   nbExemplaires?: number,
  *   matiere?: string,
@@ -477,6 +484,7 @@ export function creerDocumentAmc(options: CreerDocumentAmcOptions): string {
     warningMessage = DEFAULT_WARNING_MESSAGE,
     associationRoster = '',
     collectCorrectionsAtEnd = false,
+    assumeAmcPrepared = false,
   } = options
   // Attention exercises est maintenant un tableau de tous les exercices.
   // Dans cette partie, la fonction récupère tous les exercices et les trie pour les rassembler par groupe.
@@ -489,6 +497,13 @@ export function creerDocumentAmc(options: CreerDocumentAmcOptions): string {
   const groupTexBlocks: string[] = ['']
   const groupTitles: string[] = []
   const groupShuffleFlags: boolean[] = []
+  // En mode setup AMC, les exercices sont déjà préparés (inférence + fallback)
+  // dans Amc.svelte. On évite ici toute ré-inférence/régénération pour ne pas
+  // réinjecter un état HTML dans le LaTeX final.
+  if (!assumeAmcPrepared) {
+    // Compatibilité: si l'appelant ne prépare pas en amont, on exporte seulement
+    // les exercices explicitement marqués amcReady.
+  }
   const amcExerciseCount = exercises.filter((el) => el.amcReady).length
   if (amcExerciseCount === 0) return ''
   for (const exercise of exercises) {
@@ -500,7 +515,7 @@ export function creerDocumentAmc(options: CreerDocumentAmcOptions): string {
       exerciseQuestionCount,
       exerciseTitle,
       exerciseIsShuffled,
-    ] = exportQcmAmc(exercise, exerciseIndex)
+    ] = exportQcmAmc(exercise as IExerciceAMC, exerciseIndex)
     exerciseIndex++
     groupIndex = groupRefs.indexOf(groupRef)
     if (groupIndex === -1) {
@@ -565,7 +580,10 @@ export function creerDocumentAmc(options: CreerDocumentAmcOptions): string {
 
   const preambule = renderAMCPreamble({
     documentClassOptions,
-    dynamicPreamble: buildDynamicAMCPreamble(exercises, groupsContent),
+    dynamicPreamble: buildDynamicAMCPreamble(
+      exercises as IExerciceAMC[],
+      groupsContent,
+    ),
   })
 
   const documentStart = renderAMCDocumentStart({

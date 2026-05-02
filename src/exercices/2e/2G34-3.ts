@@ -386,7 +386,7 @@ export default class systemeEquationsPremDegSol extends Exercice {
         )
       } else {
         const options = { ordered: true, vertical: true }
-        listeDeroulanteToQcm(this, i, choix, rep, options)
+        listeDeroulanteToQcm(this, i, choix, rep, options, texteCorr)
       }
       if (this.questionJamaisPosee(i, solX, solY)) {
         this.listeQuestions[i] = texte

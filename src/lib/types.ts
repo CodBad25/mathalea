@@ -326,19 +326,19 @@ export type CleaningOperation =
   | 'accolades'
 
 export type InteractivityType =
-  | 'qcm'
-  | 'mathlive'
-  | 'fillInTheBlank'
-  | 'tableauMathlive'
-  | 'texte'
-  | 'cliqueFigure'
-  | 'dnd'
-  | 'listeDeroulante'
-  | 'custom'
-  | 'tableur'
-  | 'MetaInteractif2d'
-  | 'svgSelection'
-  | 'multiMathfield'
+  | 'qcm' // AMC compatible
+  | 'mathlive' // Cas complexe pour AMC à analyser au cas par cas
+  | 'fillInTheBlank' // Idem Mathlive avec des cas non compatibles comme ceux avec des corrections custom type vecteur colinéaire, ou égalité de fractions...
+  | 'tableauMathlive' // On pourra essayer de faire mieux qu'AmcOpen si la correction n'est pas custom mais numérique simple
+  | 'texte' // à priori non compatible AMC
+  | 'cliqueFigure' // Non compatible AMC
+  | 'dnd' // Non compatible AMC
+  | 'listeDeroulante' // Compatible AMC si on remplace par un qcm
+  | 'custom' // Non compatible AMC
+  | 'tableur' // Difficile à faire rentrer dans AMC
+  | 'MetaInteractif2d' // Difficile à faire rentrer dans AMC
+  | 'svgSelection' // inadapté clairement pour AMC
+  | 'multiMathfield' // On pourra essayer de faire mieux qu'AmcOpen
 export function isInteractivityType(
   value: unknown,
 ): value is InteractivityType {
@@ -911,6 +911,7 @@ export interface IExercice {
   contenu?: string
   contenuCorrection?: string
   autoCorrection: AutoCorrection[]
+  autoCorrectionAMC?: AutoCorrection[]
   figures?: Figure[] | ClickFigures[]
   amcReady?: boolean
   amcType?: string

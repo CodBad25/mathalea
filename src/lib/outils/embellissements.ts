@@ -1,9 +1,8 @@
 import { context } from '../../modules/context'
 import type { IFractionEtendue } from '../../modules/FractionEtendue.type'
-import { orangeMathalea } from '../colors'
+import { bleuMathalea, orangeMathalea } from '../colors'
 import { Complexe } from '../mathFonctions/Complexe'
 import { choice } from './arrayOutils'
-import { bleuMathalea } from '../../lib/colors'
 
 // Garde structurel pour détecter une FractionEtendue
 const isFractionEtendue = (x: unknown): x is IFractionEtendue =>

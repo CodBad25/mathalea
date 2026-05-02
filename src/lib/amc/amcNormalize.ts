@@ -63,6 +63,7 @@ export function normalizeQcm(
     (autoCorrectionItem.propositions || []).map((p) => ({
       texte: p.texte ?? '',
       correct: !!p.statut,
+      feedback: p.feedback,
     })),
   )
 
@@ -113,6 +114,18 @@ export function normalizeAMCNum(
   const id = idBase
   const enonce = autoCorrectionItem.enonce ?? exercice.listeQuestions[index]
   const rep = autoCorrectionItem.reponse
+  const blocks = normalizeAMCNumBlocks(rep)
+
+  return {
+    id,
+    ref,
+    enonce,
+    multicols: !!(autoCorrectionItem as any)?.options?.multicols,
+    blocks,
+  }
+}
+
+export function normalizeAMCNumBlocks(rep?: AutoCorrectionAMC['reponse']) {
   const param = rep?.param ?? {}
   const valeur = Array.isArray(rep?.valeur) ? rep?.valeur[0] : rep?.valeur
   const blocks: AMCNumBlock[] = []
@@ -147,24 +160,51 @@ export function normalizeAMCNum(
       },
     })
 
-    return { id, ref, enonce, blocks }
+    return blocks
   }
 
   if (isFractionValue(valeur)) {
-    const num = valeur.num
-    const den = valeur.den
-    const digitsNum = Math.max(
-      param.digitsNum ?? param.digits ?? 0,
-      countDigits(num),
-    )
-    const digitsDen = Math.max(
-      param.digitsDen ?? param.digits ?? 0,
-      countDigits(den),
-    )
+    let num: number
+    let den: number
+
+    if (typeof valeur === 'string') {
+      const match = String(valeur).match(
+        /^\s*(-?\+?)\s*\\(frac|dfrac)\s*{([^}]*)}\s*{([^}]*)}/,
+      )
+      if (!match) {
+        console.warn(
+          `Valeur de fraction au format LaTeX invalide : "${valeur}"`,
+        )
+        return blocks
+      }
+      num = parseFloat(match[1] + match[3])
+      den = parseFloat(match[4])
+    } else {
+      num = valeur.num
+      den = valeur.den
+    }
+
+    const requestedTotalDigits = Number(param.digits ?? 0)
+    const requestedDecimals = Number(param.decimals ?? 0)
+
+    // When digits/decimals are provided, they describe AMCnumericChoices as a
+    // whole (total digits + decimal part). Keep digitsNum/digitsDen as explicit
+    // overrides when present.
+    const requestedDigitsNum =
+      param.digitsNum ??
+      (param.decimals !== undefined
+        ? Math.max(0, requestedTotalDigits - requestedDecimals)
+        : requestedTotalDigits)
+    const requestedDigitsDen =
+      param.digitsDen ??
+      (param.decimals !== undefined ? requestedDecimals : requestedTotalDigits)
+
+    const digitsNum = Math.max(requestedDigitsNum, countDigits(num))
+    const digitsDen = Math.max(requestedDigitsDen, countDigits(den))
     const sign = param.signe !== undefined ? param.signe : num * den < 0
 
-    let valueAMC
-    let alsoCorrect
+    let valueAMC: number
+    let alsoCorrect: number
 
     if (num > 0) {
       valueAMC = num + den / 10 ** digitsDen
@@ -186,7 +226,7 @@ export function normalizeAMCNum(
       },
     })
 
-    return { id, ref, enonce, blocks }
+    return blocks
   }
 
   const { value, decimals, approx, alsocorrect } = computeDecimalAMC(rep)
@@ -211,11 +251,5 @@ export function normalizeAMCNum(
     },
   })
 
-  return {
-    id,
-    ref,
-    enonce,
-    multicols: !!(autoCorrectionItem as any)?.options?.multicols,
-    blocks,
-  }
+  return blocks
 }

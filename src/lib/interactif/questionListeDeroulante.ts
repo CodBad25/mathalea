@@ -120,6 +120,7 @@ export function listeDeroulanteToQcm(
   choix: AllChoicesType,
   reponse: string,
   options: any,
+  correction: string,
 ) {
   if (exercice == null || choix == null || reponse == null) {
     window.notify(
@@ -148,17 +149,29 @@ export function listeDeroulanteToQcm(
   exercice.autoCorrection[question] = {}
   exercice.autoCorrection[question].options = { vertical, ordered, ...options }
   exercice.autoCorrection[question].propositions = []
+  let feedbackAttached = false
+
+  const getFeedback = () => {
+    if (!feedbackAttached) {
+      feedbackAttached = true
+      return correction
+    }
+    return undefined
+  }
+
   for (let j = 0; j < choix.length; j++) {
     if (choix[j].value === '') continue
     if (choix[j].label != null) {
       exercice.autoCorrection[question].propositions.push({
         texte: choix[j].label,
         statut: choix[j].value === reponse, // il n'y a qu'une bonne réponse, et elle doit correspondre à l'un des choix.
+        feedback: getFeedback(), // on met la correction uniquement sur la première proposition valide
       })
     } else if (choix[j].latex != null) {
       exercice.autoCorrection[question].propositions.push({
         texte: `$${choix[j].latex}$`,
         statut: choix[j].value === reponse, // il n'y a qu'une bonne réponse, et elle doit correspondre à l'un des choix.
+        feedback: getFeedback(), // on met la correction uniquement sur la première proposition valide
       })
     } else if (choix[j].svg != null) {
       const body = document.querySelector('body')
@@ -181,6 +194,7 @@ export function listeDeroulanteToQcm(
       exercice.autoCorrection[question].propositions.push({
         texte: svg.outerHTML,
         statut: choix[j].value === reponse,
+        feedback: getFeedback(), // on met la correction uniquement sur la première proposition valide
       })
       setTimeout(() => {
         if (svg) body.removeChild(svg)
@@ -193,6 +207,7 @@ export function listeDeroulanteToQcm(
       exercice.autoCorrection[question].propositions.push({
         texte: image.outerHTML,
         statut: choix[j].value === reponse,
+        feedback: getFeedback(),
       })
     } else {
       console.warn(

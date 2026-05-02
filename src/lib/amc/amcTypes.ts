@@ -115,8 +115,12 @@ export interface AutoCorrectionAMC {
   }
 }
 
-export type IExerciceAMC = Omit<IExercice, 'autoCorrection'> & {
+export type IExerciceAMC = Omit<
+  IExercice,
+  'autoCorrection' | 'autoCorrectionAMC'
+> & {
   autoCorrection: AutoCorrectionAMC[]
+  autoCorrectionAMC?: AutoCorrectionAMC[]
   amcType?: AMCExportType | string
 }
 

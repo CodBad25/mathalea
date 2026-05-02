@@ -10,6 +10,7 @@
   export let exercice: IExercice
   export let exerciceIndex: number
   export let isVisible: boolean = true
+  export let inModal: boolean = false
 
   const dispatch = createEventDispatcher()
 
@@ -157,9 +158,11 @@
 
 <div
   id="settings{exerciceIndex}"
-  class="relative text-coopmaths-struct dark:text-coopmathsdark-struct bg-coopmaths-canvas-dark dark:bg-coopmathsdark-canvas-dark z-20 {isVisible
-    ? 'visible lg:w-1/4'
-    : 'hidden lg:w-0'} flex flex-col duration-500"
+  class="relative text-coopmaths-struct dark:text-coopmathsdark-struct bg-coopmaths-canvas-dark dark:bg-coopmathsdark-canvas-dark z-20 {inModal
+    ? 'visible w-full'
+    : isVisible
+      ? 'visible lg:w-1/4'
+      : 'hidden lg:w-0'} flex flex-col duration-500"
 >
   <div class="absolute top-2 right-3">
     <button
