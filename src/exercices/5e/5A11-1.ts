@@ -1,8 +1,13 @@
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { addMultiMathfield } from '../../lib/interactif/MultiMathfield/MultiMathfield'
-import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
+import {
+  choice,
+  combinaisonListes,
+  enleveElement,
+} from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { context } from '../../modules/context'
 import { labyrinthe } from '../../modules/Labyrinthe'
 import { mathalea2d } from '../../modules/mathalea2d'
 import {
@@ -18,8 +23,7 @@ export const dateDeModifImportante = '29/10/2024'
 export const interactifReady = true
 export const interactifType = 'multiMathField'
 
-export const titre =
-  'Parcourir un labyrinthe de multiples basé sur les critères de divisibilité'
+export const titre = 'Parcourir un labyrinthe de multiples'
 
 /**
  * @author Jean-claude Lhote (remaniée par Éric Elter pour la prise en compte du nb de lignes et de colonnes du labyrinthe)
@@ -32,12 +36,12 @@ export const refs = {
   'fr-fr': ['5A11-1'],
   'fr-ch': ['9NO4-11'],
 }
-export default class ExerciceLabyrintheDivisibilite1 extends Exercice {
-  niveau: string
+export default class ExerciceLabyrintheDivisibilite extends Exercice {
+  version: string
   constructor() {
     super()
     this.besoinFormulaireTexte = [
-      'Critères de divisibilité pour chaque question',
+      'Critères de divisibilité pour chaque question (entre 2 et 20)',
       'Nombres séparés par des tirets :',
     ]
     this.besoinFormulaire2Numerique = [
@@ -54,24 +58,23 @@ export default class ExerciceLabyrintheDivisibilite1 extends Exercice {
       8,
     ]
 
-    this.niveau = '5e'
-    this.nbQuestions = 5
+    this.nbQuestions = 1
 
     this.sup = '2-5-10'
     this.sup3 = 1
     this.sup4 = 1
-    this.sup2 = this.niveau === 'CM' ? 3 : 4
-    // this.consigne=`Trouver la sortie en ne passant que par les cases contenant un nombre divisible par $${parseInt(this.sup)}$.`
+    this.sup2 = 4
+    this.version = 'De2a20'
   }
 
   nouvelleVersion() {
-    const tailleChiffre = 0.8
+    const tailleChiffre = context.isHtml ? 1.2 : 0.8
 
     let texte, texteCorr
 
     let monChemin
 
-    const tables = gestionnaireFormulaireTexte({
+    const tablesPossibles = gestionnaireFormulaireTexte({
       min: 2,
       max: 20,
       defaut: choice([2, 5, 10]),
@@ -80,6 +83,16 @@ export default class ExerciceLabyrintheDivisibilite1 extends Exercice {
       shuffle: false,
       melange: 0,
     }).map(Number)
+
+    if (this.version === 'Que3et9') {
+      for (let i = 2; i <= 20; i++) {
+        if (i === 3 || i === 9) i++
+        enleveElement(tablesPossibles, i)
+      }
+      if (tablesPossibles.length === 0) tablesPossibles.push(3, 9)
+    }
+
+    const tables = combinaisonListes(tablesPossibles, this.nbQuestions)
 
     for (let i = 0; i < this.nbQuestions; ) {
       const nbL = this.sup3 === 1 ? randint(2, 8) : Math.max(2, this.sup3)
