@@ -1,7 +1,8 @@
 import { choice } from '../../lib/outils/arrayOutils'
 import { randint } from '../../modules/outils'
 import ExerciceLabyrinthe from '../_Exercice_labyrinthe'
-export const titre = 'Parcourir un labyrinthe des multiples'
+export const titre =
+  'Parcourir un labyrinthe des multiples basé sur des critères de divisibilité'
 
 export const dateDePublication = '30/10/2026'
 export const interactifReady = true
@@ -16,9 +17,9 @@ export const refs = {
  * @author Rémi Angot
  */
 
-export default class ExerciceLabyrintheMultiplesDe3 extends ExerciceLabyrinthe {
+export default class ExerciceLabyrintheMultiplesDe2a9 extends ExerciceLabyrinthe {
   k!: number
-
+  version: string
   constructor() {
     super()
     this.cols = 7
@@ -30,25 +31,39 @@ export default class ExerciceLabyrintheMultiplesDe3 extends ExerciceLabyrinthe {
       5,
       '1 : Par 2\n2 : Par 3\n3 : Par 5\n4 : Par 9\n5 : Au hasard',
     ]
+    this.version = 'Diviseurs2,3,5ou9'
   }
 
   nouvelleVersion(): void {
-    switch (this.sup) {
-      case 1:
-        this.k = 2
-        break
-      case 2:
-        this.k = 3
-        break
-      case 3:
-        this.k = 5
-        break
-      case 4:
-        this.k = 9
-        break
-      default:
-        this.k = choice([2, 3, 5, 9])
-    }
+    if (this.version === 'Diviseurs2,3,5ou9')
+      switch (this.sup) {
+        case 1:
+          this.k = 2
+          break
+        case 2:
+          this.k = 3
+          break
+        case 3:
+          this.k = 5
+          break
+        case 4:
+          this.k = 9
+          break
+        default:
+          this.k = choice([2, 3, 5, 9])
+      }
+    else
+      switch (this.sup) {
+        case 1:
+          this.k = 3
+          break
+        case 2:
+          this.k = 9
+          break
+        default:
+          this.k = choice([3, 9])
+      }
+
     super.nouvelleVersion()
     this.consigne = `Trouver le chemin qui passe par des multiples de ${this.k}.`
     this.consigne += this.consigneDeplacement
