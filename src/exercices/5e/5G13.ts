@@ -24,6 +24,7 @@ import { triangle2points2longueurs } from '../../lib/2d/triangles'
 import { angle, longueur } from '../../lib/2d/utilitairesGeometriques'
 import { pointAdistance } from '../../lib/2d/utilitairesPoint'
 import { vecteur } from '../../lib/2d/Vecteur'
+import { orangeMathalea } from '../../lib/colors'
 import { choisitLettresDifferentes } from '../../lib/outils/aleatoires'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import { texNombre } from '../../lib/outils/texNombre'
@@ -31,7 +32,6 @@ import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { orangeMathalea } from '../../lib/colors'
 export const titre =
   'Utiliser les propriétés de conservation du parallélisme, des longueurs et des angles'
 
@@ -66,7 +66,7 @@ export default class ConservationTransformation extends Exercice {
       3,
       '1 : Parallélisme\n2 : Longueurs et Angles\n3 : Mélange',
     ]
-    this.sup = 1
+    this.sup = 2
     this.sup2 = 3
   }
 
@@ -139,7 +139,6 @@ export default class ConservationTransformation extends Exercice {
         imPoly,
         cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       objetsEnonceOnly = []
       objetsCorrectionOnly = []
