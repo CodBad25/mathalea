@@ -1,5 +1,5 @@
-import { randint } from "../../modules/outils"
-import ExerciceLabyrinthe from "../_Exercice_labyrinthe"
+import { randint } from '../../modules/outils'
+import ExerciceLabyrinthe from '../_Exercice_labyrinthe'
 export const titre = 'Parcourir un labyrinthe de fractions égales'
 
 export const dateDePublication = '30/10/2026'
@@ -14,27 +14,29 @@ export const refs = {
 /**
  * @author Rémi Angot
  */
- 
-export default class ExerciceLabyrintheMultiplesDe3 extends ExerciceLabyrinthe {
-  
-  consigne = 'Trouver le chemin qui passe par des fractions égales.' + this.consigneDeplacement
+
+export default class ExerciceLabyrintheFractionsEgales extends ExerciceLabyrinthe {
+  consigne =
+    'Trouver le chemin qui passe par des fractions égales.' +
+    this.consigneDeplacement
+
   cols = 6
   rows = 4
-  orientation?: "horizontal" | "vertical" = 'horizontal'
-  
+  orientation?: 'horizontal' | 'vertical' = 'horizontal'
+
   num!: number
   den!: number
-  
+
   init(): void {
     this.den = randint(2, 5)
     this.num = randint(1, this.den - 1)
   }
-  
+
   generateGoodAnswers() {
     const k = randint(1, 9)
     return `$\\dfrac{${this.num * k}}{${this.den * k}}$`
   }
-  
+
   generateBadAnswers() {
     const k = randint(1, 9)
     switch (randint(1, 3)) {

@@ -16,8 +16,11 @@ export const refs = {
  * @author Rémi Angot
  */
 
-export default class ExerciceLabyrintheMultiplesDe3 extends ExerciceLabyrinthe {
-  consigne = 'Trouver le chemin qui passe par des nombres premiers.' + this.consigneDeplacement
+export default class ExerciceLabyrintheNombrePremiers extends ExerciceLabyrinthe {
+  consigne =
+    'Trouver le chemin qui passe par des nombres premiers.' +
+    this.consigneDeplacement
+
   cols = 6
   rows = 6
   primesBelow100 = [
