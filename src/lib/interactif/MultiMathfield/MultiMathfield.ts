@@ -272,7 +272,7 @@ export class MultiMathfieldElement extends HTMLElement {
         if (options[name] && options[name].texteApres) {
           texteApres = document.createElement('span')
           texteApres.style.marginLeft = '0'
-          texteApres.textContent = options[name].texteApres // On met le LaTeX brut dans le span, renderMathInElement va le transformer
+          texteApres.innerHTML = options[name].texteApres // On met le LaTeX brut dans le span, renderMathInElement va le transformer
         }
 
         // Ajoute un span de vérification après chaque Mathfield

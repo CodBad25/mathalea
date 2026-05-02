@@ -81,9 +81,7 @@
   let boutonInteractiviteUrlFlag = true
 
   let title: string
-  const ref = exercise.id
-    ? exercise.id.replace('.js', '').replace('.ts', '')
-    : ''
+  const ref = ''
   if ($globalOptions.isTitleDisplayed && $globalOptions.isReferenceDisplayed) {
     title = ref ? `${ref} - ${exercise.titre}` : exercise.titre
   } else if ($globalOptions.isTitleDisplayed) {
