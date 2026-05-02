@@ -25,6 +25,12 @@ export function mathaleaEnsureAMCCompatibility(
     return exercice as IExerciceAMC
   }
 
+  // Respecte un marquage explicite "non prêt AMC" quand un type AMC est déjà posé.
+  // Cela permet d'exclure volontairement un exercice de l'export sans qu'un fallback le réactive.
+  if (exercice.amcReady === false && exercice.amcType != null) {
+    return exercice as IExerciceAMC
+  }
+
   if (exercice.interactifType == null) {
     // Si l'exercice n'est pas interactif, on suppose que c'est un exercice ouvert compatible avec AMC.
     exercice.amcType = 'AMCOpen'
