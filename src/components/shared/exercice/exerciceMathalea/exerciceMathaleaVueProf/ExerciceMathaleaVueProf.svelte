@@ -62,7 +62,7 @@
   let id: string =
     interfaceParams && interfaceParams.id
       ? interfaceParams.id
-      : (exercise.id ?? '')
+      : ''
 
   const subscribeExercicesParamsStore = exercicesParams.subscribe((value) => {
     log('new interface')
