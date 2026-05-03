@@ -126,7 +126,7 @@ export default class ExtremumsTableau extends Exercice {
                 champ2: { value: x1 },
               })
             } else {
-              this.autoCorrection[i] = {
+              this.autoCorrectionAMC[i] = {
                 enonce: texte,
                 propositions: [
                   {
@@ -180,7 +180,7 @@ export default class ExtremumsTableau extends Exercice {
                 champ2: { value: x3 },
               })
             } else {
-              this.autoCorrection[i] = {
+              this.autoCorrectionAMC[i] = {
                 enonce: texte,
                 propositions: [
                   {
@@ -235,7 +235,7 @@ export default class ExtremumsTableau extends Exercice {
                 champ2: { value: x2 },
               })
             } else {
-              this.autoCorrection[i] = {
+              this.autoCorrectionAMC[i] = {
                 enonce: texte,
                 propositions: [
                   {
@@ -288,7 +288,7 @@ export default class ExtremumsTableau extends Exercice {
                 champ2: { value: x4 },
               })
             } else {
-              this.autoCorrection[i] = {
+              this.autoCorrectionAMC[i] = {
                 enonce: texte,
                 propositions: [
                   {
@@ -356,7 +356,7 @@ export default class ExtremumsTableau extends Exercice {
                 champ2: { value: x2 },
               })
             } else {
-              this.autoCorrection[i] = {
+              this.autoCorrectionAMC[i] = {
                 enonce: texte,
                 propositions: [
                   {
@@ -409,7 +409,7 @@ export default class ExtremumsTableau extends Exercice {
                 champ2: { value: x4 },
               })
             } else {
-              this.autoCorrection[i] = {
+              this.autoCorrectionAMC[i] = {
                 enonce: texte,
                 propositions: [
                   {
@@ -464,7 +464,7 @@ export default class ExtremumsTableau extends Exercice {
                 champ2: { value: x1 },
               })
             } else {
-              this.autoCorrection[i] = {
+              this.autoCorrectionAMC[i] = {
                 enonce: texte,
                 propositions: [
                   {
@@ -517,7 +517,7 @@ export default class ExtremumsTableau extends Exercice {
                 champ2: { value: x3 },
               })
             } else {
-              this.autoCorrection[i] = {
+              this.autoCorrectionAMC[i] = {
                 enonce: texte,
                 propositions: [
                   {

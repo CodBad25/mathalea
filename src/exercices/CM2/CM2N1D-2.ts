@@ -349,7 +349,7 @@ export default class RecomposerEntierC3 extends Exercice {
           break
       }
       if (context.isAmc) {
-        this.autoCorrection[i] = {
+        this.autoCorrectionAMC[i] = {
           enonce: '$texte<br>',
           propositions: [
             {

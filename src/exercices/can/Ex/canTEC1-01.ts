@@ -35,7 +35,7 @@ export default class SommeDeComplexes extends ExerciceSimple {
     this.correction = `$${z1.toString()} + ${z2.toString()} = ${z1.add(z2).tex()}$`
     this.reponse = z1.add(z2)
     if (context.isAmc)
-      this.autoCorrection[0] = {
+      this.autoCorrectionAMC[0] = {
         enonce: this.question,
         propositions: [
           {

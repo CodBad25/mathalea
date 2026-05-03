@@ -111,9 +111,15 @@ export default class ExerciceDifferentesEcrituresNombresDecimaux extends Exercic
         case 1: // n/100 = .... + .../10 + .../100=...
           ecritureDecimale = texNombre(arrondi(u + d / 10 + c / 100, 2))
           texteCorr = `$${fraction(n, 100).texFraction}=${u}+${fraction(d, 10).texFraction}+${fraction(c, 100).texFraction}=${ecritureDecimale}$`
-          if (this.interactif && !context.isAmc) {
+          if (!context.isAmc) {
             const content = `${fraction(n, 100).texFraction}~=~ %{champ1} + \\dfrac{%{champ2}}{10} + \\dfrac{%{champ3}}{100}~=~%{champ4}`
-            texte = remplisLesBlancs(this, i, content)
+            texte = remplisLesBlancs(
+              this,
+              i,
+              content,
+              'fillInTheBlank',
+              '\\ldots\\ldots',
+            )
             handleAnswers(this, i, {
               bareme: (listePoints) => [
                 listePoints[0] * listePoints[1] * listePoints[2] +
@@ -128,7 +134,7 @@ export default class ExerciceDifferentesEcrituresNombresDecimaux extends Exercic
           } else {
             texte = `$${fraction(n, 100).texFraction}=${context.isAmc ? 'a' : '\\ldots\\ldots'}+${texFraction(context.isAmc ? 'b' : '\\ldots\\ldots', '10')}+${texFraction(context.isAmc ? 'c' : '\\ldots\\ldots', '100')}=${context.isAmc ? 'd' : '\\ldots\\ldots'}$`
             texteCorr = `$${fraction(n, 100).texFraction}=${miseEnEvidence(u)}+${texFraction(miseEnEvidence(d), '10')}+${texFraction(miseEnEvidence(c), '100')}=${miseEnEvidence(ecritureDecimale)}$`
-            this.autoCorrection[i] = {
+            this.autoCorrectionAMC[i] = {
               enonceAvant: false,
               options: { multicols: true },
               propositions: [
@@ -214,9 +220,15 @@ export default class ExerciceDifferentesEcrituresNombresDecimaux extends Exercic
             miseEnEvidence(c),
             100,
           )}+${texFraction(miseEnEvidence(d), 10)}=${miseEnEvidence(ecritureDecimale)}$`
-          if (this.interactif && !context.isAmc) {
+          if (!context.isAmc) {
             const content = `${fraction(n, 100).texFraction}~=~ %{champ1} + \\dfrac{%{champ2}}{100} + \\dfrac{%{champ3}}{10}~=~%{champ4}`
-            texte = remplisLesBlancs(this, i, content)
+            texte = remplisLesBlancs(
+              this,
+              i,
+              content,
+              'fillInTheBlank',
+              '\\ldots\\ldots',
+            )
             handleAnswers(this, i, {
               bareme: (listePoints) => [
                 listePoints[0] * listePoints[1] * listePoints[2] +
@@ -233,7 +245,7 @@ export default class ExerciceDifferentesEcrituresNombresDecimaux extends Exercic
               context.isAmc ? 'b' : '\\ldots\\ldots',
               100,
             )}+${texFraction(context.isAmc ? 'c' : '\\ldots\\ldots', 10)}=${context.isAmc ? 'd' : '\\ldots\\ldots'}$`
-            this.autoCorrection[i] = {
+            this.autoCorrectionAMC[i] = {
               options: { multicols: true },
               enonceAvant: false,
               propositions: [
@@ -320,9 +332,15 @@ export default class ExerciceDifferentesEcrituresNombresDecimaux extends Exercic
             d,
             '10',
           )}+${texFraction(c, '100')}=${miseEnEvidence(ecritureDecimale)}$`
-          if (this.interactif && !context.isAmc) {
+          if (!context.isAmc) {
             const content = `\\dfrac{%{champ1}}{%{champ2}}~=~ ${u} + \\dfrac{${d}}{10} + \\dfrac{${c}}{100}~=~%{champ3}`
-            texte = remplisLesBlancs(this, i, content)
+            texte = remplisLesBlancs(
+              this,
+              i,
+              content,
+              'fillInTheBlank',
+              '\\ldots\\ldots',
+            )
             handleAnswers(this, i, {
               bareme: (listePoints) => [
                 listePoints[0] * listePoints[1] + listePoints[2],
@@ -337,7 +355,7 @@ export default class ExerciceDifferentesEcrituresNombresDecimaux extends Exercic
               d,
               '10',
             )}+${texFraction(c, '100')}=${context.isAmc ? 'b' : '\\ldots\\ldots'}$`
-            this.autoCorrection[i] = {
+            this.autoCorrectionAMC[i] = {
               options: { multicols: true },
               enonceAvant: false,
               propositions: [
@@ -383,16 +401,22 @@ export default class ExerciceDifferentesEcrituresNombresDecimaux extends Exercic
           break
         case 4: // u = .../10
           texteCorr = `$${u}=${texFraction(miseEnEvidence(10 * u), '10')}$`
-          if (this.interactif && !context.isAmc) {
+          if (!context.isAmc) {
             const content = `${u}~=~\\dfrac{%{champ1}}{10}`
-            texte = remplisLesBlancs(this, i, content)
+            texte = remplisLesBlancs(
+              this,
+              i,
+              content,
+              'fillInTheBlank',
+              '\\ldots\\ldots',
+            )
             handleAnswers(this, i, {
               bareme: (listePoints) => [listePoints[0] * 2, 2],
               champ1: { value: u * 10 },
             })
           } else {
             texte = `$${u}=${texFraction(context.isAmc ? 'a' : '\\ldots\\ldots', '10')}$`
-            this.autoCorrection[i] = {
+            this.autoCorrectionAMC[i] = {
               enonceAvant: false,
               propositions: [
                 {
@@ -420,16 +444,22 @@ export default class ExerciceDifferentesEcrituresNombresDecimaux extends Exercic
           break
         case 5: // u = .../100
           texteCorr = `$${u}=${texFraction(miseEnEvidence(100 * u), '100')}$`
-          if (this.interactif && !context.isAmc) {
+          if (!context.isAmc) {
             const content = `${u}~=~\\dfrac{%{champ1}}{100}`
-            texte = remplisLesBlancs(this, i, content)
+            texte = remplisLesBlancs(
+              this,
+              i,
+              content,
+              'fillInTheBlank',
+              '\\ldots\\ldots',
+            )
             handleAnswers(this, i, {
               bareme: (listePoints) => [listePoints[0] * 2, 2],
               champ1: { value: u * 100 },
             })
           } else {
             texte = `$${u}=${texFraction(context.isAmc ? 'a' : '\\ldots\\ldots', '100')}$`
-            this.autoCorrection[i] = {
+            this.autoCorrectionAMC[i] = {
               enonceAvant: false,
               propositions: [
                 {
@@ -457,9 +487,15 @@ export default class ExerciceDifferentesEcrituresNombresDecimaux extends Exercic
         case 6: // n/10 = ... + .../10 + .../100 = ...
           ecritureDecimale = texNombre(arrondi(n / 10, 1))
           texteCorr = `$${texFraction(n, 10)}=${miseEnEvidence(u * 10 + d)}+${texFraction(miseEnEvidence(c), 10)}+${texFraction(miseEnEvidence(0), 100)}=${miseEnEvidence(ecritureDecimale)}$`
-          if (this.interactif && !context.isAmc) {
+          if (!context.isAmc) {
             const content = `\\dfrac{${n}}{10}~=~ %{champ1} + \\dfrac{%{champ2}}{10} + \\dfrac{%{champ3}}{100}~=~%{champ4}`
-            texte = remplisLesBlancs(this, i, content)
+            texte = remplisLesBlancs(
+              this,
+              i,
+              content,
+              'fillInTheBlank',
+              '\\ldots\\ldots',
+            )
             handleAnswers(this, i, {
               bareme: (listePoints) => [
                 listePoints[0] * listePoints[1] * listePoints[2] +
@@ -473,7 +509,7 @@ export default class ExerciceDifferentesEcrituresNombresDecimaux extends Exercic
             })
           } else {
             texte = `$${texFraction(n, 10)}=${context.isAmc ? 'a' : '\\ldots\\ldots'}+${texFraction(context.isAmc ? 'b' : '\\ldots\\ldots', 10)}+${texFraction(context.isAmc ? 'c' : '\\ldots\\ldots', 100)}=${context.isAmc ? 'd' : '\\ldots\\ldots'}$`
-            this.autoCorrection[i] = {
+            this.autoCorrectionAMC[i] = {
               options: { multicols: true },
               enonceAvant: false,
               propositions: [
@@ -557,9 +593,15 @@ export default class ExerciceDifferentesEcrituresNombresDecimaux extends Exercic
         default:
           ecritureDecimale = texNombre(arrondi(u + d / 10, 1))
           texteCorr = `$${texFraction(miseEnEvidence(n), '100')}=${u}+${texFraction(d, '10')}=${miseEnEvidence(ecritureDecimale)}$`
-          if (this.interactif && !context.isAmc) {
+          if (!context.isAmc) {
             const content = `\\dfrac{%{champ1}}{100}~=~ ${u} + \\dfrac{${d}}{10}~=~%{champ2}`
-            texte = remplisLesBlancs(this, i, content)
+            texte = remplisLesBlancs(
+              this,
+              i,
+              content,
+              'fillInTheBlank',
+              '\\ldots\\ldots',
+            )
             handleAnswers(this, i, {
               bareme: (listePoints) => [listePoints[0] + listePoints[1], 2],
               champ1: { value: n },
@@ -567,7 +609,7 @@ export default class ExerciceDifferentesEcrituresNombresDecimaux extends Exercic
             })
           } else {
             texte = `$${texFraction(context.isAmc ? 'a' : '\\ldots\\ldots', '100')}=${u}+${texFraction(d, '10')}=${context.isAmc ? 'b' : '\\ldots\\ldots'}$`
-            this.autoCorrection[i] = {
+            this.autoCorrectionAMC[i] = {
               options: { multicols: true },
               enonceAvant: false,
               propositions: [

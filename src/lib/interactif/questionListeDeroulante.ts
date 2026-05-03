@@ -114,8 +114,9 @@ export function listeDeroulanteToQcm(
   choix: AllChoicesType,
   reponse: string,
   options: any,
-  correction = '',
+  correction?: string,
 ) {
+  if (correction == null) correction = ''
   if (exercice == null || choix == null || reponse == null) {
     window.notify(
       'Il manque des paramètres pour transformer la liste déroulante en qcm',
@@ -157,7 +158,7 @@ export function listeDeroulanteToQcm(
     if (choix[j].value === '') continue
     if (choix[j].label != null) {
       exercice.autoCorrection[question].propositions.push({
-        texte: choix[j].label,
+        texte: String(choix[j].label),
         statut: choix[j].value === reponse, // il n'y a qu'une bonne réponse, et elle doit correspondre à l'un des choix.
         feedback: getFeedback(), // on met la correction uniquement sur la première proposition valide
       })

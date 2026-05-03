@@ -49,7 +49,6 @@ export default class ExerciceInteractiveClock extends Exercice {
     for (
       let i = numeroQuestion ?? 0, cpt = 0;
       i < (numeroQuestion ? numeroQuestion + 1 : this.nbQuestions) && cpt < 50;
-
     ) {
       let hour = randint(isAfter12[i] ? 13 : 1, isAfter12[i] ? 23 : 12)
       let minute = randint(1, 11) * 5
@@ -102,12 +101,10 @@ export default class ExerciceInteractiveClock extends Exercice {
           minute: minute.toString(),
         }
         this.autoCorrection[i] = {
-          reponse: {
-            valeur: {
-              reponse: { value: hour.toString() + 'h' + minute.toString() },
-            },
-            param: { formatInteractif: 'custom' },
+          valeur: {
+            reponse: { value: hour.toString() + 'h' + minute.toString() },
           },
+          formatInteractif: 'custom',
         }
         i++
       }
