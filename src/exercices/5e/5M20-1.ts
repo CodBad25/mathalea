@@ -11,7 +11,6 @@ import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import { texFractionFromString } from '../../lib/outils/deprecatedFractions'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { nombreDeChiffresDansLaPartieEntiere } from '../../lib/outils/nombres'
-import { sp } from '../../lib/outils/outilString'
 import { texNombre } from '../../lib/outils/texNombre'
 import { context } from '../../modules/context'
 import Grandeur from '../../modules/Grandeur'
@@ -595,7 +594,7 @@ export default class CalculDeVolumes extends Exercice {
       }
       if (context.isAmc) {
         if (this.sup3 === 1) {
-          this.autoCorrection[i] = {
+          this.autoCorrectionAMC[i] = {
             enonce: '',
             enonceAvant: false,
             propositions: [
@@ -627,7 +626,7 @@ export default class CalculDeVolumes extends Exercice {
             ],
           }
         } else {
-          this.autoCorrection[i] = {
+          this.autoCorrectionAMC[i] = {
             enonce: texte + '\\\\Écrire le calcul:',
             enonceAvant: true,
             options: {

@@ -8,6 +8,7 @@ import {
   pointIntersectionDD,
   pointSurSegment,
 } from '../../lib/2d/utilitairesPoint'
+import { bleuMathalea, orangeMathalea } from '../../lib/colors'
 import { choisitLettresDifferentes } from '../../lib/outils/aleatoires'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import {
@@ -21,7 +22,6 @@ import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
-import { orangeMathalea, bleuMathalea } from '../../lib/colors'
 
 export const titre = "Déterminer des angles en utilisant les cas d'égalité"
 export const amcReady = true
@@ -130,7 +130,17 @@ export default class EgaliteDAngles extends Exercice {
         )
         const l1 = labelPoint(A, B, C, D, E)
         const c1 = codageAngle(D, B, A, 1, '', bleuMathalea, 2, 1, bleuMathalea)
-        const c2 = codageAngle(B, D, E, 1, '', orangeMathalea, 2, 1, orangeMathalea)
+        const c2 = codageAngle(
+          B,
+          D,
+          E,
+          1,
+          '',
+          orangeMathalea,
+          2,
+          1,
+          orangeMathalea,
+        )
         const c3 = codageAngle(D, E, A, 1, '', 'green', 2, 1, 'green')
         const c4 = codageAngle(D, B, C, 1, '', 'pink', 2, 1, 'pink')
         const c5 = codageAngle(C, D, B, 1, '', 'red', 2, 1, 'red')
@@ -224,9 +234,32 @@ export default class EgaliteDAngles extends Exercice {
           true,
         )
         const cD = codageAngle(C, D, B, 1, '', 'red', 2, 1, 'red', 0.2, true)
-        const cE = codageAngle(D, E, B, 1, '', bleuMathalea, 2, 1, bleuMathalea, 0.2, true)
+        const cE = codageAngle(
+          D,
+          E,
+          B,
+          1,
+          '',
+          bleuMathalea,
+          2,
+          1,
+          bleuMathalea,
+          0.2,
+          true,
+        )
         const c4 = codageAngle(A, C, D, 1, '', 'green', 2, 1, 'green', 0.2)
-        const c5 = codageAngle(B, D, E, 1, '', orangeMathalea, 2, 1, orangeMathalea, 0.2)
+        const c5 = codageAngle(
+          B,
+          D,
+          E,
+          1,
+          '',
+          orangeMathalea,
+          2,
+          1,
+          orangeMathalea,
+          0.2,
+        )
         const c6 = codageAngle(E, B, D, 1, '', 'pink', 2, 1, 'pink', 0.2)
         const c3 = codageAngle(A, D, C, 1, '', 'gray', 2, 1, 'gray', 0.2)
         const l1 = labelPoint(A, B, C, D, E)
@@ -273,7 +306,7 @@ export default class EgaliteDAngles extends Exercice {
 
       if (context.isAmc) {
         choix[i] === 1 // Cas du trapèze
-          ? (this.autoCorrection[i] = {
+          ? (this.autoCorrectionAMC[i] = {
               enonce: figure[3][0] + mathalea2d(figure[1], figure[0]),
               options: { barreseparation: true, numerotationEnonce: true }, // facultatif.
               propositions: [
@@ -412,7 +445,7 @@ export default class EgaliteDAngles extends Exercice {
                 },
               ],
             })
-          : (this.autoCorrection[i] = {
+          : (this.autoCorrectionAMC[i] = {
               // Cas du papillon
               enonce:
                 figure[3][0] +

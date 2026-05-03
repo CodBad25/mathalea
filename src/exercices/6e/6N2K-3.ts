@@ -130,7 +130,7 @@ export default class DivisionsEuclidiennesEgalite2 extends Exercice {
         },
       )
       if (context.isAmc) {
-        this.autoCorrection[i] = {
+        this.autoCorrectionAMC[i] = {
           enonce: texte,
           enonceAvant: false,
           options: { multicols: true, barreseparation: true },

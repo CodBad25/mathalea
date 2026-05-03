@@ -8,6 +8,7 @@ import { labelPoint } from '../../lib/2d/textes'
 import { texteSurSegment } from '../../lib/2d/texteSurSegment'
 import { similitude } from '../../lib/2d/transformations'
 import { angle, longueur } from '../../lib/2d/utilitairesGeometriques'
+import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { toutAUnPoint } from '../../lib/interactif/mathLive'
@@ -21,7 +22,6 @@ import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
-import { bleuMathalea } from '../../lib/colors'
 
 /**
  * Convertit un angle en degrés vers des radians
@@ -330,7 +330,7 @@ export default class CalculDAngleFigureComplexe extends Exercice {
       }
       texte += '<br>'
       if (context.isAmc) {
-        this.autoCorrection.push({
+        this.autoCorrectionAMC.push({
           enonce: texte,
           enonceAvant: false,
           enonceApresNumQuestion: true,
