@@ -12,6 +12,9 @@
   export let supValue: any
   export let formNum: { titre: string; champs: string[] | number } | undefined =
     undefined
+  export let categoriesForm:
+    | { titre: string; categories: { label: string; max: number }[]; defaut: number[] }
+    | undefined = undefined
 
   const dispatch = createEventDispatcher()
 
@@ -20,6 +23,27 @@
   $: caseACocher =
     exercice[`besoinFormulaire${suffix}CaseACocher` as keyof IExercice]
   $: texte = exercice[`besoinFormulaire${suffix}Texte` as keyof IExercice]
+
+  // Pour categoriesForm : tableau de counts synchronisé avec supValue
+  let counts: number[] = []
+  $: if (categoriesForm) {
+    const parsed = String(supValue || '')
+      .split('-')
+      .map((s, i) => {
+        const n = parseInt(s)
+        return isNaN(n) ? (categoriesForm!.defaut[i] ?? 0) : n
+      })
+    // Ne mettre à jour que si la sérialisation diffère (évite boucle réactive)
+    const serialized = parsed.join('-')
+    if (serialized !== counts.join('-')) {
+      counts = parsed
+    }
+  }
+
+  function handleCountsChange() {
+    supValue = counts.join('-')
+    dispatch('change')
+  }
 
   $: formNumOptions = Array.isArray(formNum?.champs)
     ? formNum.champs.map((entree, i) => ({ label: entree, value: i + 1 }))
@@ -81,6 +105,30 @@
       />
     </div>
   {/if}
+{/if}
+
+{#if categoriesForm}
+  <div class="flex flex-col gap-1">
+    <div class="text-sm md:text-normal text-coopmaths-struct dark:text-coopmathsdark-struct font-light">
+      {categoriesForm.titre} :
+    </div>
+    {#each categoriesForm.categories as cat, i}
+      <div class="flex items-center gap-2">
+        <label
+          class="w-36 text-sm text-coopmaths-struct dark:text-coopmathsdark-struct font-light"
+          for="settings-cat{supIndex}-{i}-{exerciceIndex}"
+        >{cat.label}</label>
+        <InputNumber
+          id="settings-cat{supIndex}-{i}-{exerciceIndex}"
+          min={0}
+          max={cat.max}
+          bind:value={counts[i]}
+          on:change={handleCountsChange}
+          darkBackground={true}
+        />
+      </div>
+    {/each}
+  </div>
 {/if}
 
 {#if texte}

@@ -754,6 +754,9 @@
                     id="exercice{exerciseIndex}Q{i}"
                     style="line-height: {exercise.spacing || 1}"
                   >
+                    {#if exercise.questionRefs?.[i]}
+                      <span class="text-xs font-mono text-coopmaths-struct dark:text-coopmathsdark-struct mr-2">{exercise.questionRefs[i]}</span><br>
+                    {/if}
                     <!-- eslint-disable-next-line svelte/no-at-html-tags -->
                     {@html mathaleaFormatExercice(item)}
                   </li>
@@ -797,7 +800,7 @@
                       et cela posait problème au changement des paramètres avec la correction visible -->
                       <!-- <div class="absolute border-coopmaths-struct dark:border-coopmathsdark-struct top-0 left-0 border-b-[3px] w-10" /> -->
                       <div
-                        class="absolute flex flex-row py-[1.5px] px-3 rounded-t-md justify-center items-center -left-[3px] -top-[15px] bg-coopmaths-struct dark:bg-coopmathsdark-struct font-semibold text-xs text-coopmaths-canvas dark:text-coopmathsdark-canvas"
+                        class="absolute flex flex-row py-[1.5px] px-3 rounded-t-md justify-center items-center -left-0.75 -top-3.75 bg-coopmaths-struct dark:bg-coopmathsdark-struct font-semibold text-xs text-coopmaths-canvas dark:text-coopmathsdark-canvas"
                       >
                         Correction
                       </div>

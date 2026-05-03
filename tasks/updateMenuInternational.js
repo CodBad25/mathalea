@@ -448,6 +448,13 @@ const createFiles = (
       }
     }
   }
+  // Exercices placés directement sous leur niveau parent (sans conteneur intermédiaire), en premier
+  if (codePays === 'FR' && referentiel['1e']?.['1A'] && exercices['1a-auto']) {
+    referentiel['1e']['1A'] = {
+      '1a-auto': exercices['1a-auto'],
+      ...referentiel['1e']['1A'],
+    }
+  }
   if (codePays === 'FR') {
     fs.writeFile(
       'src/json/referentielGeometrieDynamique.json',

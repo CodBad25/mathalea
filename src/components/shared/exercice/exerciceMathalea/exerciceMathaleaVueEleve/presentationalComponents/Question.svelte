@@ -17,6 +17,9 @@
     id="exercice{exerciseIndex}Q{questionIndex}"
     style="line-height: {exercise.spacing || 1}"
   >
+    {#if exercise.questionRefs?.[questionIndex]}
+      <span class="text-xs font-mono text-coopmaths-struct dark:text-coopmathsdark-struct mr-2">{exercise.questionRefs[questionIndex]}</span><br>
+    {/if}
     <!-- eslint-disable-next-line svelte/no-at-html-tags -->
     {@html mathaleaFormatExercice(exercise.listeQuestions[questionIndex])}
   </li>
@@ -52,7 +55,7 @@
         {@html mathaleaFormatExercice(exercise.listeCorrections[questionIndex])}
       </div>
       <div
-        class="absolute flex flex-row py-[1.5px] px-3 rounded-t-md justify-center items-center -left-[3px] -top-[15px] bg-coopmaths-struct dark:bg-coopmathsdark-struct font-semibold text-xs text-coopmaths-canvas dark:text-coopmathsdark-canvas"
+        class="absolute flex flex-row py-[1.5px] px-3 rounded-t-md justify-center items-center -left-0.75 -top-3.75 bg-coopmaths-struct dark:bg-coopmathsdark-struct font-semibold text-xs text-coopmaths-canvas dark:text-coopmathsdark-canvas"
       >
         Correction
       </div>
