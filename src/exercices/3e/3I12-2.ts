@@ -315,8 +315,7 @@ export default class ComprendreScriptMultiples extends Exercice {
           texteCorr += numAlpha(i) + choixQuestions[i][1] + '<br>'
         }
         if (context.isAmc) {
-          // @ts-expect-error
-          this.autoCorrection[0].propositions[i] = {
+          this.autoCorrectionAMC![0].propositions![i] = {
             type: 'AMCOpen',
             propositions: [
               {

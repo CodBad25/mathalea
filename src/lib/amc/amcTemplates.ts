@@ -19,6 +19,12 @@ export const AMCNumTemplate = `\\element{ {{ ref }} }{
 {% endif %}
   \\begin{questionmultx}{ {{ id }} }
     {{ enonce }}
+{%- if display and display.align %}
+  \\begin{ {{ display.align }} }
+{%- endif %}
+{%- if display and display.label and display.labelPosition == "left" %}
+  {{ display.label | safe }}
+{%- endif %}
 {%- for b in blocks %}
 {%- if b.label %}
     {{ b.label }}
@@ -49,6 +55,12 @@ export const AMCNumTemplate = `\\element{ {{ ref }} }{
       borderwidth=0pt,backgroundcol=lightgray,scoreexact=1
     }
 {%- endfor %}
+{%- if display and display.label and display.labelPosition == "right" %}
+    {{ display.label | safe }}
+{%- endif %}
+{%- if display and display.align %}
+    \\end{ {{ display.align }} }
+{%- endif %}
   \\end{questionmultx}
 {% if multicols %}\\end{multicols}
 {% endif %}

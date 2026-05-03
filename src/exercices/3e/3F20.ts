@@ -529,8 +529,7 @@ Le choix a été fait d'un antécédent primaire entier positif, le coefficient 
             '\\\\'
           elementAmc.enonceAvant = false
           elementAmc.enonceApresNumQuestion = true
-          //  @ts-expect-error : pourquoi cette erreur ?
-          elementAmc.propositions[0].propositions[0].texte = texteCorr
+          elementAmc.propositions![0].propositions![0].texte = texteCorr
           elementAmc.options = { multicolsAll: true }
           this.autoCorrection[i] = elementAmc
         }

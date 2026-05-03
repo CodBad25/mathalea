@@ -14,6 +14,7 @@ import { context } from '../../modules/context'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
+import { ensureAmcParam } from '../../lib/amc/amcHelpers'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import {
   handleAnswers,
@@ -210,23 +211,24 @@ export default class NotationScientifique extends Exercice {
 
         if (context.isAmc) {
           texteAMC += '.'
-          // @ts-expect-error
-          this.autoCorrection[i].reponse.valeur = [
-            mantisse.mul(Decimal.pow(10, exp)).toString(),
-          ]
+          ensureAmcParam(this, i)
+          this.autoCorrectionAMC[i].reponse!.valeur = mantisse
+            .mul(Decimal.pow(10, exp))
+            .toNumber()
+
           if (this.sup === 1) {
             this.amcType = 'AMCNum'
-            this.autoCorrection[i].enonce =
+            this.autoCorrectionAMC[i].enonce =
               'Donner la notation scientifique du nombre ' + texteAMC
           } else {
             this.amcType = 'qcmMono'
-            this.autoCorrection[i].enonce =
+            this.autoCorrectionAMC[i].enonce =
               "Donner l'écriture décimale du nombre " + texteAMC
-            this.autoCorrection[i].options = {
+            this.autoCorrectionAMC[i].options = {
               ordered: false,
               lastChoice: 5,
             }
-            this.autoCorrection[i].propositions = [
+            this.autoCorrectionAMC[i].propositions = [
               {
                 texte: `$${decimalstring}$`,
                 statut: true,

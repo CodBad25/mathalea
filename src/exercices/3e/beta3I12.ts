@@ -53,8 +53,13 @@ export default class ExosScratch extends Exercice {
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
       const choix = i % 4
       const exo = new listeExos[choix]()
-      const paramExo = choice(listeParams[choix])
-      // @ts-expect-error Pas envie de typer ce truc
+      const paramExo = choice(listeParams[choix]) as [
+        string,
+        string,
+        string,
+        string | boolean,
+        number,
+      ]
       ;[exo.sup, exo.sup2, exo.sup3, exo.sup4, exo.nbQuestions] = paramExo
       exo.nouvelleVersion()
 

@@ -708,6 +708,7 @@ export type ChoixQcm = {
     texte?: string
     valeur?: number | number[] | FractionEtendue
     alignement?: string
+    display?: ReponseDisplay
     param?: {
       digits?: number
       decimals?: number
@@ -759,9 +760,16 @@ export type UnePropositionOptionsAMC = UnePropositionOptionsInteractif & {
   approx?: number
 }
 
+export type ReponseDisplay = {
+  label?: string
+  labelPosition?: 'left' | 'right'
+  align?: 'flushleft' | 'center' | 'flushright'
+}
+
 export type ReponseUnePropositionAMC = {
   value: number | number[] | FractionEtendue
   params?: ReponseParams
+  display?: ReponseDisplay
   textePosition?: string
   texte?: string
   alignement?: string

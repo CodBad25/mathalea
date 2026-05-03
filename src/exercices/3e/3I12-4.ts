@@ -309,8 +309,7 @@ export default class ComprendreScriptListeMultiples extends Exercice {
           texteCorr += numAlpha(i) + choixQuestions[i][1] + '<br>'
         }
         if (context.isAmc) {
-          // @ts-expect-error
-          this.autoCorrection[0].propositions[i] = {
+          this.autoCorrection![0].propositions![i] = {
             type: 'AMCOpen',
             propositions: [
               {

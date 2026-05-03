@@ -24,6 +24,14 @@ export type AMCReponseValue =
       [key: string]: unknown
     }
 
+export type AMCDisplayAlignment = 'flushleft' | 'center' | 'flushright'
+
+export type AMCReponseDisplay = {
+  label?: string
+  labelPosition?: 'left' | 'right'
+  align?: AMCDisplayAlignment
+}
+
 export type AMCQcmChoice = {
   texte?: string
   statut?: AMCStatut
@@ -39,6 +47,7 @@ export type AMCQcmChoice = {
     valeur?: AMCReponseValue | AMCReponseValue[]
     alignement?: string
     param?: ReponseParams
+    display?: AMCReponseDisplay
   }
 }
 
@@ -71,6 +80,8 @@ export type AMCUneProposition = {
   reponse?: {
     valeur?: AMCReponseValue | AMCReponseValue[]
     param?: ReponseParams
+    display?: AMCReponseDisplay
+    // Compat legacy
     textePosition?: string
     texte?: string
     alignement?: string
@@ -89,8 +100,11 @@ export interface AutoCorrectionAMC {
   reponse?: {
     valeur?: AMCReponseValue | AMCReponseValue[]
     param?: ReponseParams
+    display?: AMCReponseDisplay
+    // Compat legacy
     textePosition?: string
     texte?: string
+    alignement?: string
   }
   options?: AMCLayoutOptions
 }
@@ -152,6 +166,7 @@ export type AMCNumNormalized = {
   id: string
   enonce: string
   multicols?: boolean
+  display?: AMCReponseDisplay
   blocks: AMCNumBlock[]
 }
 
