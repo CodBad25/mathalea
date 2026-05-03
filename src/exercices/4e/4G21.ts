@@ -138,10 +138,10 @@ export default class ReciproquePythagore extends Exercice {
       i < this.nbQuestions && cpt < 50;
     ) {
       if (!context.isAmc) {
-        this.autoCorrectionAMC[i] = {}
+        this.autoCorrection[i] = {}
 
-        this.autoCorrectionAMC[i].options = { ordered: true, radio: true }
-        this.autoCorrectionAMC[i].propositions = [
+        this.autoCorrection[i].options = { ordered: true, radio: true }
+        this.autoCorrection[i].propositions = [
           {
             texte: 'Oui',
             statut: false,

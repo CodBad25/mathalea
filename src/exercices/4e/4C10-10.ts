@@ -106,9 +106,9 @@ export default class ExerciceMultiplicationsRelatifsATrou extends Exercice {
           ' $'
       }
 
-      this.autoCorrectionAMC[i] = {}
-      this.autoCorrectionAMC[i].enonce = `${texte}\n`
-      this.autoCorrectionAMC[i].propositions = [
+      this.autoCorrection[i] = {}
+      this.autoCorrection[i].enonce = `${texte}\n`
+      this.autoCorrection[i].propositions = [
         {
           texte: `$${b}$`,
           statut: true,

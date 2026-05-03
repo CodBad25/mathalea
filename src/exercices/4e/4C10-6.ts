@@ -283,7 +283,7 @@ export default class ExerciceTableauMultiplicationsRelatifs extends Exercice {
           }
           break
       }
-      this.autoCorrectionAMC[i] = {
+      this.autoCorrection[i] = {
         enonce: texte,
         options: { ordered: true },
         propositions: [

@@ -2052,7 +2052,7 @@ export default class ExercicesAnglesAIC extends Exercice {
             ],
           }
         } else {
-          this.autoCorrectionAMC[i] = {
+          this.autoCorrection[i] = {
             enonce: exercice.texte,
             propositions,
             options,

@@ -328,7 +328,7 @@ export default class SigneProduitQuotientRelatifs extends Exercice {
           )
           break
       }
-      this.autoCorrectionAMC[i] = {
+      this.autoCorrection[i] = {
         enonce: texte,
         options: { ordered: true },
         propositions: [
