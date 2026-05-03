@@ -1,5 +1,6 @@
 import type Figure from 'apigeom/src/Figure'
 import type Decimal from 'decimal.js'
+import type { AutoCorrectionAMC } from '../lib/amc/amcTypes'
 import {
   KeyboardType,
   type PartialKbType,
@@ -81,6 +82,7 @@ export default class Exercice implements IExercice {
   contenu?: string
   contenuCorrection?: string
   autoCorrection: AutoCorrection[]
+  autoCorrectionAMC: AutoCorrectionAMC[]
   figures?: Figure[] | ClickFigures[]
   amcReady?: boolean
   amcType?: string
@@ -187,7 +189,9 @@ export default class Exercice implements IExercice {
     this.listeCorrections = [] // Idem avec la correction.
     this.contenu = '' // Chaîne de caractères avec tout l'énoncé de l'exercice construit à partir de `this.listeQuestions` suivant le `context`
     this.contenuCorrection = '' // Idem avec la correction
-    this.autoCorrection = [] // Liste des objets par question pour correction interactive || export AMC.
+    this.autoCorrection = [] // Liste des objets par question pour correction interactive
+    this.autoCorrectionAMC = [] // Liste des objets par question pour correction interactive de type AMC
+
     this.tableauSolutionsDuQcm = [] // Pour sauvegarder les solutions des QCM.
 
     // ///////////////////////////////////////////////

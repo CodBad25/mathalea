@@ -1,3 +1,4 @@
+import { ensureAmcParam } from '../../lib/amc/amcHelpers'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { setReponse } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -422,13 +423,10 @@ export default class CalculsImagesFonctions extends Exercice {
         }
       }
       for (let i = 0; i < this.nbQuestions; i++) {
-        // @ts-expect-error
-        this.autoCorrection[i].reponse.param.digits =
-          maxNbChiffresAvantLaVirgule + maxNbDecimals
-        // @ts-expect-error
-        this.autoCorrection[i].reponse.param.decimals = maxNbDecimals
-        // @ts-expect-error
-        this.autoCorrection[i].reponse.param.signe = true
+        const amcParam = ensureAmcParam(this, i)
+        amcParam.digits = maxNbChiffresAvantLaVirgule + maxNbDecimals
+        amcParam.decimals = maxNbDecimals
+        amcParam.signe = true
       }
     }
   }

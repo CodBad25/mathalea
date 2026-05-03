@@ -49,6 +49,7 @@ export function exportedReinit(this: IExerciceSimple) {
   this.listeCanNumerosLies = []
   this.listeArguments = []
   this.autoCorrection = []
+  this.autoCorrectionAMC = []
   this.distracteurs = []
   this.checkSum = undefined
   if (this.figures) {

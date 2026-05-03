@@ -1,4 +1,5 @@
 import Decimal from 'decimal.js'
+import { ensureAmcParam } from '../../lib/amc/amcHelpers'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import {
@@ -7,6 +8,7 @@ import {
 } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
 import { stringNombre, texNombre } from '../../lib/outils/texNombre'
+import type { ReponseParams } from '../../lib/types'
 import {
   gestionnaireFormulaireTexte,
   listeQuestionsToContenu,
@@ -74,6 +76,7 @@ export default class ExerciceEcritureDecimaleOuFractionDecimale extends Exercice
       let i = 0, a, b, n, typesDeQuestions, texte, texteCorr, cpt = 0;
       i < this.nbQuestions && cpt < 50;
     ) {
+      let amcParam: ReponseParams
       typesDeQuestions = listeTypeDeQuestions[i]
       a = choice([
         randint(2, 9),
@@ -101,10 +104,9 @@ export default class ExerciceEcritureDecimaleOuFractionDecimale extends Exercice
             ' = ' +
             texNombre(n, 3) +
             ' $'
-          // @ts-expect-error
-          this.autoCorrection[i].reponse.param.digits = 5
-          // @ts-expect-error
-          this.autoCorrection[i].reponse.param.decimals = 3
+          amcParam = ensureAmcParam(this, i)
+          amcParam.digits = 5
+          amcParam.decimals = 3
           break
         case 1:
         default: {
@@ -160,10 +162,9 @@ export default class ExerciceEcritureDecimaleOuFractionDecimale extends Exercice
             ' = ' +
             texFraction(texNombre(a), texNombre(b)) +
             ' $'
-          // @ts-expect-error
-          this.autoCorrection[i].reponse.param.digits = 6
-          // @ts-expect-error
-          this.autoCorrection[i].reponse.param.decimals = 0
+          amcParam = ensureAmcParam(this, i)
+          amcParam.digits = 6
+          amcParam.decimals = 0
           break
         }
       }

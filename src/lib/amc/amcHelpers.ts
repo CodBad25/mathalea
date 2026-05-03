@@ -1,7 +1,24 @@
 import FractionEtendue from '../../modules/FractionEtendue'
 import { lettreDepuisChiffre } from '../outils/outilString'
-import type { ReponseParams } from '../types'
+import type { IExercice, ReponseParams } from '../types'
 import type { AMCFractionValue, AMCReponseValue } from './amcTypes'
+
+export function ensureAmcParam(exerciseAny: IExercice, i: number) {
+  let autoCorrectionAMC = exerciseAny.autoCorrectionAMC
+  if (!Array.isArray(autoCorrectionAMC)) {
+    autoCorrectionAMC = []
+  }
+  if (autoCorrectionAMC[i] == null) {
+    autoCorrectionAMC[i] = {}
+  }
+  if (autoCorrectionAMC[i].reponse == null) {
+    autoCorrectionAMC[i].reponse = {}
+  }
+  if (autoCorrectionAMC[i].reponse?.param == null) {
+    autoCorrectionAMC[i].reponse.param = {}
+  }
+  return autoCorrectionAMC[i].reponse.param
+}
 
 export function buildAMCId(
   ref: string,
