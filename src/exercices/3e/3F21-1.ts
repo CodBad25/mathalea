@@ -6,6 +6,7 @@ import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { repere } from '../../lib/2d/reperes'
 import { latexParPoint } from '../../lib/2d/textes'
 import { Vide2d } from '../../lib/2d/Vide2d'
+import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -18,7 +19,6 @@ import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { bleuMathalea } from '../../lib/colors'
 
 export const titre = 'Déterminer une fonction affine'
 export const amcReady = true
@@ -213,7 +213,7 @@ export default class LectureExpressionFonctionsAffines extends Exercice {
         this.contenuCorrection
     }
     if (context.isAmc) {
-      this.autoCorrection[0] = {
+      this.autoCorrectionAMC[0] = {
         enonce: '',
         enonceAvant: false,
         options: { multicolsAll: true },

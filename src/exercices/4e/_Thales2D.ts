@@ -313,7 +313,7 @@ export default class Thales2D extends Exercice {
       if (this.listeQuestions.indexOf(texte) === -1) {
         // Il n'y a qu'une seule question donc test inutile...
         if (context.isAmc) {
-          this.autoCorrection[i] = {
+          this.autoCorrectionAMC[i] = {
             enonce: '',
             enonceAvant: false,
             options: { multicolsAll: true },

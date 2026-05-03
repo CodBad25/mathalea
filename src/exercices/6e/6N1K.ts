@@ -109,7 +109,6 @@ export default class ArrondirUneValeur6e extends Exercice {
     for (
       let i = 0, texte = '', texteCorr = '', cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       const tabrep = []
       const tabicone = []
@@ -315,7 +314,7 @@ export default class ArrondirUneValeur6e extends Exercice {
         }
       } */
       if (context.isAmc && this.sup2 !== 1) {
-        this.autoCorrection[i] = {
+        this.autoCorrectionAMC[i] = {
           enonce: 'On s en moque !',
           enonceAvant: false,
           propositions: [

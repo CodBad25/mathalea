@@ -873,7 +873,7 @@ export default class SerieDeTransformations extends Exercice {
           '.'
         : ''
       if (context.isAmc) {
-        this.autoCorrection = [
+        this.autoCorrectionAMC = [
           {
             enonce: texte,
             propositions: [

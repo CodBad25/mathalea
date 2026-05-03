@@ -1,5 +1,6 @@
 import { graphiqueInterpole } from '../../lib/2d/GraphiqueInterpole'
 import { repere } from '../../lib/2d/reperes'
+import { bleuMathalea } from '../../lib/colors'
 import { deuxColonnes } from '../../lib/format/miseEnPage'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
@@ -11,7 +12,6 @@ import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { randint, texConsigne } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { bleuMathalea } from '../../lib/colors'
 
 export const titre = 'Lire graphiquement images et antécédents'
 export const interactifReady = true
@@ -100,7 +100,7 @@ export default class AntecedentEtImageGraphique extends Exercice {
     this.contenu =
       'Ci-dessous, on a tracé la courbe représentative de la fonction $f$.'
     if (context.isAmc) {
-      this.autoCorrection[0] = {
+      this.autoCorrectionAMC[0] = {
         enonce:
           this.contenu +
           '<br>' +
@@ -138,7 +138,7 @@ export default class AntecedentEtImageGraphique extends Exercice {
       cont1 = `${numAlpha(lettreQuestion[0])} ${activeOuPassive1 ? `Quelle est l'image de $${x0}$ ?` : `Quel nombre $${x0}$ a-t-il comme image ?`}`
       cont1 += ajouteChampTexteMathLive(this, 0, KeyboardType.clavierDeBase)
       if (context.isAmc) {
-        this.autoCorrection[0].propositions?.push({
+        this.autoCorrectionAMC[0].propositions?.push({
           type: 'AMCNum', // on donne le type de la première question-réponse qcmMono, qcmMult, AMCNum, AMCOpen
           propositions: [
             // une ou plusieurs (Qcms) 'propositions'
@@ -167,7 +167,7 @@ export default class AntecedentEtImageGraphique extends Exercice {
       cont1 += '<br>' + enonceAMC
       cont1 += ajouteChampTexteMathLive(this, 1, KeyboardType.clavierDeBase)
       if (context.isAmc) {
-        this.autoCorrection[0].propositions?.push({
+        this.autoCorrectionAMC[0].propositions?.push({
           type: 'AMCNum', // on donne le type de la première question-réponse qcmMono, qcmMult, AMCNum, AMCOpen
           propositions: [
             // une ou plusieurs (Qcms) 'propositions'
@@ -222,7 +222,7 @@ export default class AntecedentEtImageGraphique extends Exercice {
         )
       }
       if (context.isAmc) {
-        this.autoCorrection[0].propositions?.push({
+        this.autoCorrectionAMC[0].propositions?.push({
           type: 'AMCNum', // on donne le type de la première question-réponse qcmMono, qcmMult, AMCNum, AMCOpen
           propositions: [
             // une ou plusieurs (Qcms) 'propositions'
@@ -243,7 +243,7 @@ export default class AntecedentEtImageGraphique extends Exercice {
             },
           ],
         })
-        this.autoCorrection[0].propositions?.push({
+        this.autoCorrectionAMC[0].propositions?.push({
           type: 'AMCNum', // on donne le type de la première question-réponse qcmMono, qcmMult, AMCNum, AMCOpen
           propositions: [
             // une ou plusieurs (Qcms) 'propositions'

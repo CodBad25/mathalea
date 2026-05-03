@@ -23,6 +23,7 @@ import { translation } from '../../lib/2d/transformations'
 import { milieu, pointSurDroite } from '../../lib/2d/utilitairesPoint'
 import { vecteur } from '../../lib/2d/Vecteur'
 import { vide2d } from '../../lib/2d/Vide2d'
+import { bleuMathalea, orangeMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -51,7 +52,6 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { orangeMathalea, bleuMathalea } from '../../lib/colors'
 
 export const dateDeModifImportante = '11/04/2025'
 export const interactifReady = true
@@ -153,7 +153,10 @@ export default class Transformations extends Exercice {
           croix.opacite = 1
           objetsEnonce.push(croix)
           objetsCorrection.push(
-            tracePoint(pointAbstrait(j - 4, i - 4), assombrirOuEclaircir('gray', 50)),
+            tracePoint(
+              pointAbstrait(j - 4, i - 4),
+              assombrirOuEclaircir('gray', 50),
+            ),
           )
           objetsEnonce.push(
             texteParPositionEchelle(
@@ -1178,7 +1181,7 @@ export default class Transformations extends Exercice {
 
       if (context.isAmc) {
         if (this.can) {
-          this.autoCorrection[0] = {
+          this.autoCorrectionAMC[0] = {
             enonce: texte,
             enonceAGauche: [0.5, 0.5],
             propositions: [
@@ -1204,7 +1207,7 @@ export default class Transformations extends Exercice {
             ],
           }
         } else {
-          this.autoCorrection[0] = {
+          this.autoCorrectionAMC[0] = {
             enonce: '<br>\\begin{center}' + graphique + '\\end{center}',
             enonceAvant: false,
             enonceApresNumQuestion: true,

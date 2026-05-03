@@ -333,7 +333,7 @@ export default class CalculEffectifFrequence extends Exercice {
       )
 
       if (context.isAmc) {
-        this.autoCorrection[ee] = {
+        this.autoCorrectionAMC[ee] = {
           enonce: texteAMC,
           enonceAvant: false,
           enonceApresNumQuestion: true,

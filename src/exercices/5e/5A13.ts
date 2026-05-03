@@ -1,14 +1,14 @@
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { compareNombres } from '../../lib/outils/nombres'
+import { sp } from '../../lib/outils/outilString'
 import { texFactorisation } from '../../lib/outils/primalite'
 import { texNombre } from '../../lib/outils/texNombre'
-import Exercice from '../Exercice'
 import { context } from '../../modules/context'
 import { listeQuestionsToContenu } from '../../modules/outils'
-import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
-import { sp } from '../../lib/outils/outilString'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import Exercice from '../Exercice'
 
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 
@@ -104,7 +104,6 @@ export default class ExerciceDecomposerEnFacteursPremiers extends Exercice {
         texteCorr,
         cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       // On limite le nombre d'essais pour chercher des valeurs nouvelles
       facteurs = []
@@ -202,7 +201,7 @@ export default class ExerciceDecomposerEnFacteursPremiers extends Exercice {
       reponse += facteurs[facteurs.length - 1]
 
       if (context.isAmc) {
-        this.autoCorrection[i] = {
+        this.autoCorrectionAMC[i] = {
           enonce: texte + '\n',
           propositions: [
             {

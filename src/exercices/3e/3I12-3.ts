@@ -300,7 +300,7 @@ export default class CompleterScriptDiviseurs extends Exercice {
           : 'problème avec texteCorr'
 
       if (context.isAmc) {
-        this.autoCorrection = [
+        this.autoCorrectionAMC = [
           {
             enonce: this.consigne + '<br>' + texte + '<br>',
             propositions: [{ statut: 3, sanscadre: true }],

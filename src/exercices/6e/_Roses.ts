@@ -195,7 +195,7 @@ export default class ExoRose extends Exercice {
         this.listeCorrections[i] = texteCorr
 
         if (context.isAmc) {
-          this.autoCorrection[i] = {
+          this.autoCorrectionAMC[i] = {
             enonce: this.introduction + '<br>' + texte,
             propositions: [
               {

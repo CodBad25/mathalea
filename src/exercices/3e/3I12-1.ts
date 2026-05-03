@@ -295,7 +295,7 @@ export default class CompleterScriptMultiple extends Exercice {
         texteCorr = 'Il y a un problème avec texteSansTrou' // Provide a default string value
       }
       if (context.isAmc) {
-        this.autoCorrection = [
+        this.autoCorrectionAMC = [
           {
             enonce: this.consigne + '<br>' + texteScratch + '<br>',
             propositions: [{ statut: 3, sanscadre: true }],
