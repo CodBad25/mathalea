@@ -730,9 +730,11 @@ export type ChoixQcm = {
   }
 }
 
-export type UneProposition = {
+type StatutProposition = number | boolean | string
+
+type UnePropositionBase = {
   texte?: string
-  statut?: number | boolean | string
+  statut?: StatutProposition
   sanscadre?: boolean | number
   multicolsBegin?: boolean
   multicolsEnd?: boolean
@@ -742,49 +744,86 @@ export type UneProposition = {
   pointilles?: boolean | number
   enonce?: string
   propositions?: ChoixQcm[]
-  options?: {
-    ordered?: boolean
-    vertical?: boolean
-    lastChoice?: number
-    barreseparation?: boolean
-    multicols?: boolean
-    nbCols?: number
-    digits?: number
-    decimals?: number
-    signe?: boolean
-    exposantNbChiffres?: number
-    exposantSigne?: boolean
-    approx?: number
-    multicolsAll?: boolean
-    numerotationEnonce?: boolean
-    avecSymboleMult?: boolean
-  }
-  reponse?: {
-    valeur?:
-      | ValeurNormalized
-      | ValeurNormalized[]
-      | number
-      | number[]
-      | IFractionEtendue
-      | Decimal
-      | IFractionEtendue[]
-      | Decimal[]
-      | string
-      | string[]
-    param?: ReponseParams
-    textePosition?: string
-    texte?: string
-    alignement?: string
-  }
 }
 
-export type LegacyReponse =
-  | string
-  | IFractionEtendue
-  | Decimal
-  | number
-  | IGrandeur
-export type LegacyReponses = LegacyReponse[] | LegacyReponse
+export type UnePropositionOptionsInteractif = {
+  ordered?: boolean
+  vertical?: boolean
+  lastChoice?: number
+  barreseparation?: boolean
+  multicols?: boolean
+  nbCols?: number
+  multicolsAll?: boolean
+  numerotationEnonce?: boolean
+  avecSymboleMult?: boolean
+}
+
+export type UnePropositionOptionsAMC = UnePropositionOptionsInteractif & {
+  digits?: number
+  decimals?: number
+  signe?: boolean
+  exposantNbChiffres?: number
+  exposantSigne?: boolean
+  approx?: number
+}
+
+export type ReponseUnePropositionAMC = {
+  valeur?:
+    | ValeurNormalized
+    | ValeurNormalized[]
+    | number
+    | number[]
+    | IFractionEtendue
+    | Decimal
+    | IFractionEtendue[]
+    | Decimal[]
+    | string
+    | string[]
+  param?: ReponseParams
+  textePosition?: string
+  texte?: string
+  alignement?: string
+}
+
+export type UnePropositionInteractif = UnePropositionBase & {
+  options?: UnePropositionOptionsInteractif
+  reponse?: never
+}
+
+export type UnePropositionAMC = UnePropositionBase & {
+  options?: UnePropositionOptionsAMC
+  reponse?: ReponseUnePropositionAMC
+}
+
+// Compatibilite historique progressive: garder `UneProposition`
+// comme union tant que le code n'est pas migre partout.
+export type UneProposition = UnePropositionInteractif | UnePropositionAMC
+
+export interface AutoCorrectionOptions {
+  radio?: boolean
+  ordered?: boolean
+  vertical?: boolean
+  lastChoice?: number
+  barreseparation?: boolean
+  multicols?: boolean
+  nbCols?: number
+  digits?: number
+  decimals?: number
+  signe?: boolean
+  exposantNbChiffres?: number
+  exposantSigne?: boolean
+  approx?: number
+  multicolsAll?: boolean
+  numerotationEnonce?: boolean
+  avecSymboleMult?: boolean
+}
+
+export interface AutoCorrectionReponse {
+  valeur?: ValeurNormalized
+  param?: ReponseParams
+  textePosition?: string
+  texte?: string
+}
 
 export interface AutoCorrection {
   enonce?: string
@@ -795,31 +834,17 @@ export interface AutoCorrection {
   enonceCentre?: boolean
   enonceApresNumQuestion?: boolean
   propositions?: UneProposition[]
-  reponse?: {
-    valeur?: ValeurNormalized
-    param?: ReponseParams
-    textePosition?: string
-    texte?: string
-  }
-  options?: {
-    radio?: boolean
-    ordered?: boolean
-    vertical?: boolean
-    lastChoice?: number
-    barreseparation?: boolean
-    multicols?: boolean
-    nbCols?: number
-    digits?: number
-    decimals?: number
-    signe?: boolean
-    exposantNbChiffres?: number
-    exposantSigne?: boolean
-    approx?: number
-    multicolsAll?: boolean
-    numerotationEnonce?: boolean
-    avecSymboleMult?: boolean
-  }
+  reponse?: AutoCorrectionReponse
+  options?: AutoCorrectionOptions
 }
+
+export type LegacyReponse =
+  | string
+  | IFractionEtendue
+  | Decimal
+  | number
+  | IGrandeur
+export type LegacyReponses = LegacyReponse[] | LegacyReponse
 
 export interface MathaleaSVG extends SVGSVGElement {
   etat: boolean
