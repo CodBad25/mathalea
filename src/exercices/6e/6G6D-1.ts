@@ -87,7 +87,11 @@ export default class AnglesTrianglesTableau extends Exercice {
   }
 
   // Une fonction pour factoriser
-  affichageFactorise(triangle: Triangle, type: string, choix: number): SortieAffichageFactorise {
+  affichageFactorise(
+    triangle: Triangle,
+    type: string,
+    choix: number,
+  ): SortieAffichageFactorise {
     const sortie: SortieAffichageFactorise = {
       enonce: { valeurs: [], noms: [], tableau: '' },
       correction: { valeurs: [], noms: [], tableau: '', details: '' },
@@ -103,13 +107,16 @@ export default class AnglesTrianglesTableau extends Exercice {
       triangle.getAngles()[1],
       triangle.getAngles()[2],
     ]
+    let sommeAnglesConnus = 0
     switch (choix) {
       case 0:
+        sommeAnglesConnus =
+          sortie.correction.valeurs[1] + sortie.correction.valeurs[2]
         sortie.enonce.valeurs = ['\\ldots', triangle.a2, triangle.a3]
         sortie.correction.details = `Donc ${sortie.enonce.noms[0]} $=180^\\circ-($ ${sortie.enonce.noms[1]} $+$ ${sortie.enonce.noms[2]} $)$.<br>`
         sortie.correction.details += `Donc ${sortie.enonce.noms[0]} $=180^\\circ-( ${sortie.enonce.valeurs[1]}^\\circ + ${sortie.enonce.valeurs[2]}^\\circ )$.<br>`
-        sortie.correction.details += `Donc ${sortie.enonce.noms[0]} $=180^\\circ-${sortie.enonce.valeurs[1] + sortie.enonce.valeurs[2]}^\\circ$.<br>`
-        sortie.correction.details += `Donc ${sortie.enonce.noms[0]} $=${180 - sortie.enonce.valeurs[1] - sortie.enonce.valeurs[2]}^\\circ$.<br>`
+        sortie.correction.details += `Donc ${sortie.enonce.noms[0]} $=180^\\circ-${sommeAnglesConnus}^\\circ$.<br>`
+        sortie.correction.details += `Donc ${sortie.enonce.noms[0]} $=${180 - sommeAnglesConnus}^\\circ$.<br>`
         sortie.correction.tableau = `${tableauColonneLigne(
           [
             `\\text{${sortie.enonce.noms[0]}}`,
@@ -126,11 +133,13 @@ export default class AnglesTrianglesTableau extends Exercice {
         )}`
         break
       case 1:
+        sommeAnglesConnus =
+          sortie.correction.valeurs[0] + sortie.correction.valeurs[2]
         sortie.enonce.valeurs = [triangle.a1, '\\ldots', triangle.a3]
         sortie.correction.details = `Donc ${sortie.enonce.noms[1]} $=180^\\circ-($ ${sortie.enonce.noms[0]} $+$ ${sortie.enonce.noms[2]} $)$.<br>`
         sortie.correction.details += `Donc ${sortie.enonce.noms[1]} $=180^\\circ-( ${sortie.enonce.valeurs[0]}^\\circ + ${sortie.enonce.valeurs[2]}^\\circ )$.<br>`
-        sortie.correction.details += `Donc ${sortie.enonce.noms[1]} $=180^\\circ-${sortie.enonce.valeurs[0] + sortie.enonce.valeurs[2]}^\\circ$.<br>`
-        sortie.correction.details += `Donc ${sortie.enonce.noms[1]} $=${180 - sortie.enonce.valeurs[0] - sortie.enonce.valeurs[2]}^\\circ$.<br>`
+        sortie.correction.details += `Donc ${sortie.enonce.noms[1]} $=180^\\circ-${sommeAnglesConnus}^\\circ$.<br>`
+        sortie.correction.details += `Donc ${sortie.enonce.noms[1]} $=${180 - sommeAnglesConnus}^\\circ$.<br>`
         sortie.correction.tableau = `${tableauColonneLigne(
           [
             `\\text{${sortie.enonce.noms[0]}}`,
@@ -147,11 +156,13 @@ export default class AnglesTrianglesTableau extends Exercice {
         )}`
         break
       case 2:
+        sommeAnglesConnus =
+          sortie.correction.valeurs[1] + sortie.correction.valeurs[0]
         sortie.enonce.valeurs = [triangle.a1, triangle.a2, '\\ldots']
         sortie.correction.details = `Donc ${sortie.enonce.noms[2]} $=180^\\circ-($ ${sortie.enonce.noms[1]} $+$ ${sortie.enonce.noms[0]} $)$.<br>`
         sortie.correction.details += `Donc ${sortie.enonce.noms[2]} $=180^\\circ-( ${sortie.enonce.valeurs[1]}^\\circ + ${sortie.enonce.valeurs[0]}^\\circ )$.<br>`
-        sortie.correction.details += `Donc ${sortie.enonce.noms[2]} $=180^\\circ-${sortie.enonce.valeurs[1] + sortie.enonce.valeurs[0]}^\\circ$.<br>`
-        sortie.correction.details += `Donc ${sortie.enonce.noms[2]} $=${180 - sortie.enonce.valeurs[1] - sortie.enonce.valeurs[0]}^\\circ$.<br>`
+        sortie.correction.details += `Donc ${sortie.enonce.noms[2]} $=180^\\circ-${sommeAnglesConnus}^\\circ$.<br>`
+        sortie.correction.details += `Donc ${sortie.enonce.noms[2]} $=${180 - sommeAnglesConnus}^\\circ$.<br>`
         sortie.correction.tableau = `${tableauColonneLigne(
           [
             `\\text{${sortie.enonce.noms[0]}}`,
@@ -188,7 +199,11 @@ export default class AnglesTrianglesTableau extends Exercice {
 
   // Une fonction pour le controle de tous les cas
   typeTriangle(type: string): SortieTypeTriangle {
-    const sortie: SortieTypeTriangle = { texte: '', texteCorr: '', natureTriangleCorr: '' }
+    const sortie: SortieTypeTriangle = {
+      texte: '',
+      texteCorr: '',
+      natureTriangleCorr: '',
+    }
     // On crée le triangle
     const triangle = new Triangle()
     switch (type) {
@@ -291,7 +306,7 @@ export default class AnglesTrianglesTableau extends Exercice {
           "Compléter les tableaux suivants avec la mesure de l'angle manquant et la nature du triangle.")
 
     for (
-      let i = 0, texte: string, texteCorr: string, cpt = 0;
+      let i = 0, texte = '', texteCorr = '', cpt = 0;
       i < this.nbQuestions && cpt < 50;
     ) {
       if (this.correctionDetaillee) {
