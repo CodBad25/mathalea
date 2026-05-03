@@ -5,7 +5,7 @@ export const canOptions = writable<CanOptions>({
   title: 'Course aux Nombres',
   subTitle: new Date().getFullYear().toString(),
   isChoosen: false,
-  solutionsAccess: false,
+  solutionsAccess: true,
   solutionsMode: 'gathered',
   isInteractive: false,
   remainingTimeInSeconds: 0,
