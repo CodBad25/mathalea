@@ -1,7 +1,11 @@
 <script lang="ts">
   import { afterUpdate, beforeUpdate, onDestroy, onMount } from 'svelte'
   import { get } from 'svelte/store'
-  import { downloadTexWithImagesZip, downloadZip } from '../../../lib/files'
+  import {
+    downloadFile,
+    downloadTexWithImagesZip,
+    downloadZip,
+  } from '../../../lib/files'
   import Latex, {
     doesLatexNeedsPics,
     getExosContentList,
@@ -271,6 +275,15 @@
     isDownloadPicsModalDisplayed = true
   }
 
+  async function handleDownloadLatexMaterial() {
+    await promise
+    if (picsWanted) {
+      downloadTexWithImagesZip('coopmaths', latexFile, exercices)
+    } else {
+      downloadFile(latexFile.latexWithPreamble, 'coopmaths.tex')
+    }
+  }
+
   /**
    * Construction d'un message contextualisé indiquant le besoin de télécharger les images si besoin
    */
@@ -473,27 +486,21 @@
               <ButtonTextAction
                 class="px-2 py-1 rounded-md"
                 id="downloadFullArchive"
-                on:click={async () => {
-                  await promise
-                  downloadTexWithImagesZip('coopmaths', latexFile, exercices)
-                }}
-                text="Archive complète"
+                on:click={handleDownloadLatexMaterial}
+                text={picsWanted ? 'Archive complète' : 'Fichier LaTeX complet'}
               />
             </div>
             <div slot="button2">
-              {#await promise}
-                <p></p>
-              {:then}
+              {#if picsWanted}
                 <div>
                   <ButtonTextAction
                     class="inline-block px-2 py-1 rounded-md"
                     id="downloadPicsButton"
                     on:click={handleDownloadPicsModalDisplay}
                     text="Uniquement les figures"
-                    disabled={!picsWanted}
                   />
                 </div>
-              {/await}
+              {/if}
             </div>
           </SimpleCard>
           <SimpleCard title={'Basculer vers la vue PDF'} icon={'bx-download'}>
