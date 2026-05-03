@@ -96,7 +96,7 @@ export default class Reductionaxbx extends Exercice {
         this.listeCorrections[i] = texteCorr
 
         if (context.isAmc) {
-          this.autoCorrection[i] = {
+          this.autoCorrectionAMC[i] = {
             // enonce: 'Réduire l\'expression ' + '$' + texte.split('=')[1] + '.',
             enonce: "Réduire l'expression " + texte + '.',
             propositions: [

@@ -154,7 +154,7 @@ export default class PerimetreOuAireDeCarresRectanglesTriangles extends Exercice
       const reponses: { value: Grandeur; options?: { unite: boolean } }[] = []
 
       if (context.isAmc) {
-        this.autoCorrection[i] = {
+        this.autoCorrectionAMC[i] = {
           enonce: texte,
           options: { barreseparation: true, numerotationEnonce: true },
           propositions: [],
@@ -184,7 +184,7 @@ export default class PerimetreOuAireDeCarresRectanglesTriangles extends Exercice
 
               if (context.isAmc) {
                 texte += texteAMC
-                this.autoCorrection[i].propositions!.push({
+                this.autoCorrectionAMC[i].propositions!.push({
                   type: 'AMCNum',
                   propositions: [
                     {
@@ -234,7 +234,7 @@ export default class PerimetreOuAireDeCarresRectanglesTriangles extends Exercice
 
               if (context.isAmc) {
                 texte += texteAMC
-                this.autoCorrection[i].propositions!.push({
+                this.autoCorrectionAMC[i].propositions!.push({
                   type: 'AMCNum',
                   propositions: [
                     {
@@ -281,7 +281,7 @@ export default class PerimetreOuAireDeCarresRectanglesTriangles extends Exercice
 
               if (context.isAmc) {
                 texte += texteAMC
-                this.autoCorrection[i].propositions!.push({
+                this.autoCorrectionAMC[i].propositions!.push({
                   type: 'AMCNum',
                   propositions: [
                     {
@@ -326,7 +326,7 @@ export default class PerimetreOuAireDeCarresRectanglesTriangles extends Exercice
 
               if (context.isAmc) {
                 texte += texteAMC
-                this.autoCorrection[i].propositions!.push({
+                this.autoCorrectionAMC[i].propositions!.push({
                   type: 'AMCNum',
                   propositions: [
                     {
@@ -371,7 +371,7 @@ export default class PerimetreOuAireDeCarresRectanglesTriangles extends Exercice
 
               if (context.isAmc) {
                 texte += texteAMC
-                this.autoCorrection[i].propositions!.push({
+                this.autoCorrectionAMC[i].propositions!.push({
                   type: 'AMCNum',
                   propositions: [
                     {
@@ -414,7 +414,7 @@ export default class PerimetreOuAireDeCarresRectanglesTriangles extends Exercice
 
               if (context.isAmc) {
                 texte += texteAMC
-                this.autoCorrection[i].propositions!.push({
+                this.autoCorrectionAMC[i].propositions!.push({
                   type: 'AMCNum',
                   propositions: [
                     {
@@ -470,7 +470,7 @@ export default class PerimetreOuAireDeCarresRectanglesTriangles extends Exercice
                     : KeyboardType.aire,
                   ldots: false,
                   minWidth: 50,
-                  texteApres: ' (Une unité est attendue.)'
+                  texteApres: ' (Une unité est attendue.)',
                 },
               ]),
             ),

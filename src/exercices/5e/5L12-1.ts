@@ -188,7 +188,7 @@ export default class ReduireDinstinctionSommeProduit extends Exercice {
         this.listeCorrections[i] = texteCorr
 
         if (context.isAmc) {
-          this.autoCorrection[i] = {
+          this.autoCorrectionAMC[i] = {
             enonce: texte + '<br>',
             propositions: [
               {
