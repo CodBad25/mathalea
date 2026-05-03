@@ -50,7 +50,6 @@ export async function downloadTexWithImagesZip(
   zip.file('main.tex', latexFile.latexWithPreamble)
   if (withImages) {
     const urls = buildImagesUrlsList(exosContentList, picsNames)
-    const imagesFolder = zip.folder('images')
     let count = 0
     urls.forEach((url) => {
       JSZipUtils.getBinaryContent(url, (err: Error | null, data: ArrayBuffer | null) => {
@@ -59,7 +58,7 @@ export async function downloadTexWithImagesZip(
         }
         const splitUrl = url.split('/')
         const fileName = splitUrl[splitUrl.length - 1]
-        imagesFolder?.file(fileName, data ?? '', { binary: true })
+        zip.file(fileName, data ?? '', { binary: true })
         count++
         if (count === urls.length) {
           zip.generateAsync({ type: 'blob' }).then((content) => {
