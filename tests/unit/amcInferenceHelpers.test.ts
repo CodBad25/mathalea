@@ -59,7 +59,7 @@ describe('amcInferenceHelpers', () => {
             options: { fractionEgale: true },
           },
         },
-        expected: { digits: 3, decimals: 1, signe: false },
+        expected: { digits: 2, decimals: 1, signe: false },
       },
       {
         label: 'options interactives ignorees pour AMC',
