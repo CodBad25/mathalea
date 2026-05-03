@@ -3,7 +3,8 @@ import { texNombre } from '../../lib/outils/texNombre'
 import { context } from '../../modules/context'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-export const titre = 'Résoudre des problèmes avec des  puissances de 10 et des conversions'
+export const titre =
+  'Résoudre des problèmes avec des  puissances de 10 et des conversions'
 export const amcReady = true
 export const amcType = 'AMCOpen'
 
@@ -41,7 +42,6 @@ export default class ProblemesPuissancesDe10EtConversions extends Exercice {
     for (
       let i = 0, texte, texteCorr, a, a1, b, b1, c, c1, u, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       // Boucle principale où i+1 correspond au numéro de la question
       switch (
@@ -101,7 +101,7 @@ export default class ProblemesPuissancesDe10EtConversions extends Exercice {
           break
       }
       if (context.isAmc) {
-        this.autoCorrection[i] = {
+        this.autoCorrectionAMC[i] = {
           enonce:
             texte +
             '<br>Indiquer votre raisonnement, vos calculs et votre réponse ci-dessous.',

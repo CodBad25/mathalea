@@ -300,7 +300,7 @@ export default class ListeDesDiviseurs5e extends Exercice {
       })
 
       if (context.isAmc) {
-        this.autoCorrection[i] = {
+        this.autoCorrectionAMC[i] = {
           enonce: texte + '\n',
           propositions: [
             {

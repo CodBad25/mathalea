@@ -6,6 +6,7 @@ import {
   arete3d,
   point3d,
 } from '../../lib/3d/3dProjectionMathalea2d/elementsEtTransformations3d'
+import { bleuMathalea } from '../../lib/colors'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { lettreDepuisChiffre } from '../../lib/outils/outilString'
@@ -14,7 +15,6 @@ import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
-import { bleuMathalea } from '../../lib/colors'
 
 /**
  * Convertit un angle en degrés vers des radians
@@ -385,7 +385,7 @@ export default class ReperagePaveDroit extends Exercice {
         ]
       }
       if (context.isAmc) {
-        this.autoCorrection[i] = {
+        this.autoCorrectionAMC[i] = {
           enonce: '',
           enonceAvant: false,
           enonceAvantUneFois: this.nbQuestions > 1,

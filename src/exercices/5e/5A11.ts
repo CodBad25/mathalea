@@ -524,7 +524,7 @@ export default class TableauCriteresDeDivisibilite extends Exercice {
         lastChoice: 4,
       }
 
-      if (this.interactif) {
+      if (this.interactif || context.isAmc) {
         const props = propositionsQcm(this, i)
         this.listeQuestions[i] =
           `$${texNombre2(tableauDeNombres[i])}$ est divisible par : ` +

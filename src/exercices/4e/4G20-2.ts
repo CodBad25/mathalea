@@ -201,17 +201,17 @@ export default class RacineCareeDeCarresParfaits extends Exercice {
         if (context.isAmc) {
           setReponse(this, i, a)
           if (listeQuestions[i] === 1) {
-            this.autoCorrection[i].enonce = `$\\sqrt{${c}}=\\dots$`
-            this.autoCorrection[i].propositions = [
+            this.autoCorrectionAMC[i].enonce = `$\\sqrt{${c}}=\\dots$`
+            this.autoCorrectionAMC[i].propositions = [
               { texte: `$\\sqrt{${c}}=${a}$`, statut: false },
             ]
           } else {
-            this.autoCorrection[i].enonce = `$${c} = \\dots^2$`
-            this.autoCorrection[i].propositions = [
+            this.autoCorrectionAMC[i].enonce = `$${c} = \\dots^2$`
+            this.autoCorrectionAMC[i].propositions = [
               { texte: `$${c}=${a}^2$`, statut: false },
             ]
           }
-          this.autoCorrection[i].reponse!.param = {
+          this.autoCorrectionAMC[i].reponse!.param = {
             digits: 2,
             decimals: 0,
             exposantNbChiffres: 0,

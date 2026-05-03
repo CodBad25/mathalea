@@ -1,3 +1,4 @@
+import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { setReponse } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -19,7 +20,6 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { bleuMathalea } from '../../lib/colors'
 
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -149,7 +149,7 @@ export default class PrioritesEtRelatifsEtPuissances extends Exercice {
         n *= choice([-1, 1])
       }
       p = randint(2, 3)
-      this.autoCorrection[i] = {}
+      this.autoCorrectionAMC[i] = {}
       switch (listeTypeDeQuestions[i]) {
         case 1: // a² + b*c
           texte = `$${lettreDepuisChiffre(i + 1)} = ${ecritureParentheseSiNegatif(a)}${affichePuissance(typeDePuissances[i])} +  ${ecritureParentheseSiNegatif(b)} \\times ${ecritureParentheseSiNegatif(c)}$`
@@ -270,7 +270,7 @@ export default class PrioritesEtRelatifsEtPuissances extends Exercice {
           texte +=
             ' =' + ajouteChampTexteMathLive(this, i, KeyboardType.clavierDeBase)
         } else if (context.isAmc) {
-          this.autoCorrection[i] = {
+          this.autoCorrectionAMC[i] = {
             enonce: texte,
             enonceAvant: false,
             propositions: [
