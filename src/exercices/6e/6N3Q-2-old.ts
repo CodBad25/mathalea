@@ -401,7 +401,7 @@ export default class AugmenterEtReduireDunPourcentage extends Exercice {
       if (this.questionJamaisPosee(i, prixIntial, prixFinal)) {
         // Si la question n'a jamais été posée, on en crée une autre
         if (context.isAmc) {
-          this.autoCorrection[i] = {
+          this.autoCorrectionAMC[i] = {
             enonce: '',
             options: { multicols: true, barreseparation: true }, // facultatif. Par défaut, multicols est à false. Ce paramètre provoque un multicolonnage (sur 2 colonnes par défaut) : pratique quand on met plusieurs AMCNum. !!! Attention, cela ne fonctionne pas, nativement, pour AMCOpen. !!!
             // @ts-expect-error

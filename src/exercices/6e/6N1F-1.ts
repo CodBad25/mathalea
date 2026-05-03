@@ -1,5 +1,6 @@
 import Decimal from 'decimal.js'
 import { ensureAmcParam } from '../../lib/amc/amcHelpers'
+import type { ReponseParams } from '../../lib/amc/amcTypes'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import {
@@ -8,7 +9,6 @@ import {
 } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
 import { stringNombre, texNombre } from '../../lib/outils/texNombre'
-import type { ReponseParams } from '../../lib/types'
 import {
   gestionnaireFormulaireTexte,
   listeQuestionsToContenu,

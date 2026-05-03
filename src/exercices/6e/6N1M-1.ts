@@ -87,7 +87,6 @@ export default class IntercalerDecimalEntre2Decimaux extends Exercice {
     for (
       let i = 0, texte, texteCorr, a, b, r, u, d1, c1, c2, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       switch (listeTypeDeQuestions[i]) {
         case 'a,b1': // 1 : b-a > 0,1
@@ -180,7 +179,7 @@ export default class IntercalerDecimalEntre2Decimaux extends Exercice {
       texteCorr = `$${texNombre(a)}<${texNombre(r)}<${texNombre(b)}$`
 
       if (context.isAmc) {
-        this.autoCorrection[i] = {
+        this.autoCorrectionAMC[i] = {
           enonce: texte,
           propositions: [
             { texte: texteCorr, statut: 3, feedback: '', sanscadre: true },

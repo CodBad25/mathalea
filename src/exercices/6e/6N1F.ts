@@ -320,7 +320,7 @@ export default class SommeFractionsDecimales extends Exercice {
       switch (casSolutionsAttendues) {
         case 1: // Nombre décimal
           if (context.isAmc) {
-            this.autoCorrection[i] = {
+            this.autoCorrectionAMC[i] = {
               enonce: texte, // Si vide, l'énoncé est celui de l'exercice.
               propositions: [
                 {
@@ -354,13 +354,13 @@ export default class SommeFractionsDecimales extends Exercice {
           break
         case 2: // Fraction décimale
           if (context.isAmc) {
-            this.autoCorrection[i] = {
+            this.autoCorrectionAMC[i] = {
               enonce: texte, // Si vide, l'énoncé est celui de l'exercice.
               propositions: [
                 {
                   texte: '', // Si vide, le texte est la correction de l'exercice.
                   reponse: {
-                    valeur: [new FractionEtendue(numAMC, denAMC).texFraction], // obligatoire (la réponse numérique à comparer à celle de l'élève), NE PAS METTRE DE STRING à virgule ! 4.9 et non pas 4,9. Cette valeur doit être passée dans un tableau d'où la nécessité des crochets.
+                    valeur: [new FractionEtendue(numAMC, denAMC)], // obligatoire (la réponse numérique à comparer à celle de l'élève), NE PAS METTRE DE STRING à virgule ! 4.9 et non pas 4,9. Cette valeur doit être passée dans un tableau d'où la nécessité des crochets.
                     param: {
                       digitsNum: nombreDeChiffresDe(numAMC),
                       digitsDen: nombreDeChiffresDe(denAMC) + 1,
@@ -382,7 +382,7 @@ export default class SommeFractionsDecimales extends Exercice {
           break
         case 3: // Pourcentage
           if (context.isAmc) {
-            this.autoCorrection[i] = {
+            this.autoCorrectionAMC[i] = {
               enonce: texte, // Si vide, l'énoncé est celui de l'exercice.
               propositions: [
                 {
@@ -414,7 +414,7 @@ export default class SommeFractionsDecimales extends Exercice {
         case 4: // Nombre décimal ET fraction décimale
           if (context.isAmc) {
             if (choice([0, 1]) === 0) {
-              this.autoCorrection[i] = {
+              this.autoCorrectionAMC[i] = {
                 enonce: texte, // Si vide, l'énoncé est celui de l'exercice.
                 propositions: [
                   {
@@ -431,7 +431,7 @@ export default class SommeFractionsDecimales extends Exercice {
                 ],
               }
             } else {
-              this.autoCorrection[i] = {
+              this.autoCorrectionAMC[i] = {
                 enonce: texte, // Si vide, l'énoncé est celui de l'exercice.
                 propositions: [
                   {
@@ -472,7 +472,7 @@ export default class SommeFractionsDecimales extends Exercice {
         case 5: // nombre décimal ET pourcentage
           if (context.isAmc) {
             if (choice([0, 1]) === 0) {
-              this.autoCorrection[i] = {
+              this.autoCorrectionAMC[i] = {
                 enonce: texte, // Si vide, l'énoncé est celui de l'exercice.
                 propositions: [
                   {
@@ -493,7 +493,7 @@ export default class SommeFractionsDecimales extends Exercice {
                 ],
               }
             } else {
-              this.autoCorrection[i] = {
+              this.autoCorrectionAMC[i] = {
                 enonce: texte, // Si vide, l'énoncé est celui de l'exercice.
                 propositions: [
                   {
@@ -532,7 +532,7 @@ export default class SommeFractionsDecimales extends Exercice {
         case 6: // fraction décimale ET pourcentage
           if (context.isAmc) {
             if (choice([0, 1]) === 0) {
-              this.autoCorrection[i] = {
+              this.autoCorrectionAMC[i] = {
                 enonce: texte, // Si vide, l'énoncé est celui de l'exercice.
                 propositions: [
                   {
@@ -549,7 +549,7 @@ export default class SommeFractionsDecimales extends Exercice {
                 ],
               }
             } else {
-              this.autoCorrection[i] = {
+              this.autoCorrectionAMC[i] = {
                 enonce: texte, // Si vide, l'énoncé est celui de l'exercice.
                 propositions: [
                   {
@@ -589,7 +589,7 @@ export default class SommeFractionsDecimales extends Exercice {
           if (context.isAmc) {
             const choix = randint(0, 2)
             if (choix === 0) {
-              this.autoCorrection[i] = {
+              this.autoCorrectionAMC[i] = {
                 enonce: texte, // Si vide, l'énoncé est celui de l'exercice.
                 propositions: [
                   {
@@ -606,7 +606,7 @@ export default class SommeFractionsDecimales extends Exercice {
                 ],
               }
             } else if (choix === 1) {
-              this.autoCorrection[i] = {
+              this.autoCorrectionAMC[i] = {
                 enonce: texte, // Si vide, l'énoncé est celui de l'exercice.
                 propositions: [
                   {
@@ -625,7 +625,7 @@ export default class SommeFractionsDecimales extends Exercice {
                 ],
               }
             } else {
-              this.autoCorrection[i] = {
+              this.autoCorrectionAMC[i] = {
                 enonce: texte, // Si vide, l'énoncé est celui de l'exercice.
                 propositions: [
                   {

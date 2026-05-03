@@ -425,7 +425,7 @@ export default class QuestionsPrix extends Exercice {
       }
       if (this.questionJamaisPosee(i, PrixUnitaire)) {
         if (context.isAmc) {
-          this.autoCorrection[i] = {
+          this.autoCorrectionAMC[i] = {
             propositions: propositionsAMC,
             enonceAvant: false,
           }

@@ -336,7 +336,7 @@ export default class AdditionsSoustractionsMultiplicationsPosees extends Exercic
         if (!context.isAmc) {
           setReponse(this, i, reponse, { digits: 0 }) // fonction qui va renseigner this.autocorrection[i]
         } else {
-          this.autoCorrection[i] = {
+          this.autoCorrectionAMC[i] = {
             enonce: '',
             enonceAvant: false,
             propositions: [

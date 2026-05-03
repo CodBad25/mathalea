@@ -17,9 +17,9 @@ import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
 import { droiteGraduee } from '../../lib/2d/DroiteGraduee'
+import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
-import { bleuMathalea } from '../../lib/colors'
 
 export const titre = 'Lire des abscisses décimales sous trois formes'
 export const interactifReady = true
@@ -282,7 +282,7 @@ export default class LireAbscisseDecimaleTroisFormes extends Exercice {
           },
         })
       } else {
-        this.autoCorrection[i] = {
+        this.autoCorrectionAMC[i] = {
           enonce: '', // on le remplira à la fin.
           options: { multicols: true, barreseparation: true },
           propositions: [

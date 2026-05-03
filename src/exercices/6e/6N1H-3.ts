@@ -12,10 +12,10 @@ import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
 import { droiteGraduee } from '../../lib/2d/DroiteGraduee'
+import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { toutAUnPoint } from '../../lib/interactif/mathLive'
 import { addMultiMathfield } from '../../lib/interactif/MultiMathfield/MultiMathfield'
-import { bleuMathalea } from '../../lib/colors'
 
 export const titre = 'Lire une abscisse décimale grâce à des zooms successifs'
 
@@ -739,7 +739,7 @@ export default class LireUneAbscisseAvecZoom extends Exercice {
           },
         })
       } else if (context.isAmc) {
-        this.autoCorrection[i] = {
+        this.autoCorrectionAMC[i] = {
           enonce: texte,
           // melange: false, // EE : ce champ est facultatif et permet (si false) de ne pas provoquer le mélange des questions.
           options: {

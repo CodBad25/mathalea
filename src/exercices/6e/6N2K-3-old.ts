@@ -117,7 +117,7 @@ export default class DivisionsEuclidiennesEgalite2 extends Exercice {
       setReponse(this, 2 * i, q)
       setReponse(this, 2 * i + 1, r)
       if (context.isAmc) {
-        this.autoCorrection[i] = {
+        this.autoCorrectionAMC[i] = {
           enonce: texte,
           enonceAvant: false,
           options: { multicols: true, barreseparation: true },

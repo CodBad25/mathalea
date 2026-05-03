@@ -196,7 +196,7 @@ export default class EncadrerUnDecimal extends Exercice {
         }
       }
       if (context.isAmc) {
-        this.autoCorrection[i] = {
+        this.autoCorrectionAMC[i] = {
           enonceAvant: false,
           options: { multicols: true },
           propositions: [

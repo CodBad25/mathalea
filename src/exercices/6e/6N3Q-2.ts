@@ -8,6 +8,7 @@ import { context } from '../../modules/context'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
+import type { AMCUneProposition } from '../../lib/amc/amcTypes'
 import { createList } from '../../lib/format/lists'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
@@ -16,7 +17,6 @@ import { addMultiMathfield } from '../../lib/interactif/MultiMathfield/MultiMath
 import { egalOuApprox } from '../../lib/outils/ecritures'
 import { arrondi } from '../../lib/outils/nombres'
 import { texNombre } from '../../lib/outils/texNombre'
-import type { UnePropositionAMC } from '../../lib/types'
 
 export const titre = "Augmenter ou diminuer d'un pourcentage"
 export const interactifReady = true
@@ -185,7 +185,7 @@ export default class AugmenterEtReduireDunPourcentage extends Exercice {
       const prenom1 = prenomM()
       const prenom2 = prenomF()
       let prixIntial, prixFinal
-      let propositionsAMC: UnePropositionAMC[] = []
+      let propositionsAMC: AMCUneProposition[] = []
       let texte = ''
       let enonceInit = ''
       let enonceAMC = ''

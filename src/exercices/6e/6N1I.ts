@@ -186,7 +186,7 @@ export default class ComparerDecimaux extends Exercice {
         }
       }
       if (context.isAmc) {
-        this.autoCorrection[i] = {
+        this.autoCorrectionAMC[i] = {
           enonce: texte,
           propositions: [
             { texte: texteCorr, statut: 3, feedback: '', sanscadre: true },
