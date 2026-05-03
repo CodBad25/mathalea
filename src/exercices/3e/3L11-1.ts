@@ -171,7 +171,7 @@ export default class DoubleDistributivite extends Exercice {
           { texteAvant: ' $=$' },
         )
       } else {
-        this.autoCorrection[i] = {
+        this.autoCorrectionAMC[i] = {
           enonce: '',
           enonceAvant: false,
           options: { multicols: true, barreseparation: true },

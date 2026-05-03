@@ -432,7 +432,7 @@ export default class ResoudreUneEquationProduitNul extends Exercice {
         this.listeCorrections[i] = texteCorr
 
         if (context.isAmc) {
-          this.autoCorrection[i] = {
+          this.autoCorrectionAMC[i] = {
             enonce:
               "Résoudre l'équation : " +
               texte +

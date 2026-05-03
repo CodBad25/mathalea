@@ -257,7 +257,7 @@ export default class ExerciceDevelopperEnJS extends Exercice {
             )
           : ''
       } else {
-        this.autoCorrection[i] = {
+        this.autoCorrectionAMC[i] = {
           enonce: '',
           enonceAvant: false,
           options: { multicols: true, barreseparation: true },

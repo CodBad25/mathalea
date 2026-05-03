@@ -7,6 +7,7 @@ import { latexParPoint } from '../../lib/2d/textes'
 import { homothetie, rotation, similitude } from '../../lib/2d/transformations'
 import { angleOriente, longueur } from '../../lib/2d/utilitairesGeometriques'
 import { milieu } from '../../lib/2d/utilitairesPoint'
+import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { setReponse } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -21,7 +22,6 @@ import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
-import { bleuMathalea } from '../../lib/colors'
 
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -84,7 +84,7 @@ export default class CalculDAngle extends Exercice {
           angleABC = Math.round((Math.acos(ab / bc) * 180) / Math.PI)
           ac = bc * Math.sin(Math.acos(ab / bc))
           if (this.level === 4 || this.sup) {
-            ac = arrondi(ac,1)
+            ac = arrondi(ac, 1)
             texte += `Le triangle $${nom}$ est rectangle en $${nom[0]}$ tel que $${nom[1] + nom[2]}=${texNombre2(bc)}\\text{ cm}$, $${nom[0] + nom[1]}=${texNombre2(ab)}\\text{ cm}$ et $${nom[0] + nom[2]}=${texNombre2(ac)}\\text{ cm}$.<br>`
           } else {
             texte += `Le triangle $${nom}$ est rectangle en $${nom[0]}$ tel que $${nom[1] + nom[2]}=${texNombre2(bc)}\\text{ cm}$ et $${nom[0] + nom[1]}=${texNombre2(ab)}\\text{ cm}$.<br>`
@@ -183,17 +183,18 @@ export default class CalculDAngle extends Exercice {
             12,
             '',
           )
-if (this.level === 4 && this.sup){
-              const pLabelAC = homothetie(mAC, mBC, 1 + 1.5 / longueur(mBC, mAC));
-            pLabelAC.positionLabel = 'center';
+          if (this.level === 4 && this.sup) {
+            const pLabelAC = homothetie(mAC, mBC, 1 + 1.5 / longueur(mBC, mAC))
+            pLabelAC.positionLabel = 'center'
             texteAC = latexParPoint(
-              `${texNombre2(ac)} \\text{ cm}`, 
-              pLabelAC, 
-              'black', 
-              120, 
-              12, 
-              '');
-        }
+              `${texNombre2(ac)} \\text{ cm}`,
+              pLabelAC,
+              'black',
+              120,
+              12,
+              '',
+            )
+          }
 
           pLabelAngle = similitude(
             A,
@@ -227,8 +228,8 @@ if (this.level === 4 && this.sup){
           )
           m4b.positionLabel = 'center'
           t1b = latexParPoint('?', m4b, 'black', 50, 12, '')
-          if (texteAC) objetsEnonce.push(texteAC);
-           break
+          if (texteAC) objetsEnonce.push(texteAC)
+          break
         case 'Asin':
           texteBC = latexParPoint(
             `${texNombre2(bc)} \\text{ cm}`,
@@ -305,7 +306,7 @@ if (this.level === 4 && this.sup){
           )
           pLabelAngle.positionLabel = 'center'
           texteBC = latexParPoint('?', pLabelAngle, 'black', 100, 12, '')
-          
+
           t1b = latexParPoint(
             `${texNombre2(ab)} \\text{ cm}`,
             m1b,
@@ -352,7 +353,7 @@ if (this.level === 4 && this.sup){
         hypo,
         codageDeAngleB,
       )
-    
+
       const paramsEnonce = {
         xmin: Math.min(A.x, B.x, C.x) - 2,
         ymin: Math.min(A.y, B.y, C.y) - 2,
@@ -424,7 +425,7 @@ if (this.level === 4 && this.sup){
 
       // Pour AMC
       if (context.isAmc) {
-        this.autoCorrection[i] = {
+        this.autoCorrectionAMC[i] = {
           enonce: '',
           enonceAvant: false,
           propositions: [

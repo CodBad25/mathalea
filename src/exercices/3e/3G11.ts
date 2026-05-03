@@ -7,6 +7,7 @@ import { labelPoint } from '../../lib/2d/textes'
 import { tracePoint } from '../../lib/2d/TracePoint'
 import { homothetie } from '../../lib/2d/transformations'
 import { longueur } from '../../lib/2d/utilitairesGeometriques'
+import { orangeMathalea } from '../../lib/colors'
 import { arcenciel, texteGras } from '../../lib/format/style'
 import { choisitLettresDifferentes } from '../../lib/outils/aleatoires'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
@@ -18,7 +19,6 @@ import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { orangeMathalea } from '../../lib/colors'
 export const titre =
   "Construire l'image d'un point par une homothétie avec cible auto-corrective"
 export const amcReady = true
@@ -58,7 +58,6 @@ export default class ConstruireHomothetiePoint3e extends Exercice {
     for (
       let i = 0, s, cpt = 0, texte, texteCorr;
       i < this.nbQuestions && cpt < 100;
-
     ) {
       let borduresEnonce
       let borduresCorrection
@@ -403,7 +402,7 @@ export default class ConstruireHomothetiePoint3e extends Exercice {
         texteCorr += context.isHtml ? anim.html(numeroExercice, i) : ''
 
         if (context.isAmc) {
-          this.autoCorrection[i] = {
+          this.autoCorrectionAMC[i] = {
             enonce: '',
             enonceAvant: false,
             enonceAvantUneFois: true,

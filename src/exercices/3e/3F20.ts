@@ -531,7 +531,7 @@ Le choix a été fait d'un antécédent primaire entier positif, le coefficient 
           elementAmc.enonceApresNumQuestion = true
           elementAmc.propositions![0].propositions![0].texte = texteCorr
           elementAmc.options = { multicolsAll: true }
-          this.autoCorrection[i] = elementAmc
+          this.autoCorrectionAMC[i] = elementAmc
         }
         // Uniformisation : Mise en place de la réponse attendue en interactif en orange et gras
         const textCorrSplit = texteCorr.split('=')

@@ -156,7 +156,7 @@ export default class MultipleDistributivite extends Exercice {
       )
 
       if (context.isAmc) {
-        this.autoCorrection[i] = {
+        this.autoCorrectionAMC[i] = {
           enonce: '',
           enonceAvant: false,
           options: { multicols: true, barreseparation: true },

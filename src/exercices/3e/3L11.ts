@@ -2,6 +2,7 @@
  * ⚠️ Cet exercice est utilisé dans le test : tests/e2e/tests/interactivity/mathLive.calcul.test.ts ⚠️
  */
 
+import { bleuMathalea, orangeMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -22,7 +23,6 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { orangeMathalea, bleuMathalea } from '../../lib/colors'
 
 export const titre = 'Utiliser la simple distributivité'
 
@@ -130,7 +130,9 @@ export default class ExerciceDevelopper extends Exercice {
     )
 
     const couleurCorrection =
-      this.sup2 === 1 ? [orangeMathalea, bleuMathalea] : [bleuMathalea, orangeMathalea]
+      this.sup2 === 1
+        ? [orangeMathalea, bleuMathalea]
+        : [bleuMathalea, orangeMathalea]
 
     for (
       let i = 0,
@@ -256,7 +258,7 @@ export default class ExerciceDevelopper extends Exercice {
             )
           : ''
       } else {
-        this.autoCorrection[i] = {
+        this.autoCorrectionAMC[i] = {
           enonce: '',
           enonceAvant: false,
           options: { multicols: true, barreseparation: true },

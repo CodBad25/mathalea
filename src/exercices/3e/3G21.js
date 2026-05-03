@@ -463,7 +463,7 @@ export default class ReciproqueThales extends Exercice {
           }
           texteCorr += `Donc d'après la réciproque du théorème de Thalès, les droites $(${s2 + s3})$ et $(${s4 + s5})$ sont parallèles.<br>`
         }
-        this.autoCorrection[i] = {
+        this.autoCorrectionAMC[i] = {
           enonce: '',
           enonceAvant: false,
           propositions: [

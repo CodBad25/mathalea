@@ -272,7 +272,7 @@ export default class PenteEtOrdonneeOrigineDroite extends Exercice {
         this.listeCorrections[i] = texteCorr
 
         if (context.isAmc) {
-          this.autoCorrection[i] = {
+          this.autoCorrectionAMC[i] = {
             enonce: introduction + '<br>',
             enonceAvant: false,
             // enonceAvantUneFois: true, // EE : ce champ est facultatif et permet (si true) d'afficher l'énoncé ci-dessus une seule fois avant la numérotation de la première question de l'exercice. Ne fonctionne correctement que si l'option melange est à false.
@@ -282,7 +282,7 @@ export default class PenteEtOrdonneeOrigineDroite extends Exercice {
             propositions: [],
           }
           if (vocabulaire === 'affine') {
-            this.autoCorrection[i].propositions?.push({
+            this.autoCorrectionAMC[i].propositions?.push({
               type: 'AMCNum',
               propositions: [
                 {
@@ -299,7 +299,7 @@ export default class PenteEtOrdonneeOrigineDroite extends Exercice {
               ],
             })
           }
-          this.autoCorrection[i].propositions?.push(
+          this.autoCorrectionAMC[i].propositions?.push(
             {
               type: 'AMCNum',
               propositions: [

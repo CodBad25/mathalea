@@ -182,7 +182,7 @@ export default class ImageGraphique extends Exercice {
       )
 
       if (context.isAmc) {
-        this.autoCorrection[i] = {
+        this.autoCorrectionAMC[i] = {
           enonce: texte + '<br>',
           options: {
             multicols: true,
@@ -231,7 +231,7 @@ export default class ImageGraphique extends Exercice {
           ],
         }
         if (this.sup !== 1) {
-          this.autoCorrection[i].propositions?.push({
+          this.autoCorrectionAMC[i].propositions?.push({
             type: 'AMCNum',
             propositions: [
               {
