@@ -1,7 +1,7 @@
 import FractionEtendue from '../../modules/FractionEtendue'
 import { generateCleaner } from '../interactif/cleaners'
 import { isValeur, type IExercice, type ReponseParams } from '../types'
-import { isFractionValue } from './amcHelpers'
+import { countDecimals, countDigits, isFractionValue } from './amcHelpers'
 import type { IExerciceAMC } from './amcTypes'
 
 const mathliveNumericCleaner = generateCleaner(['latex', 'virgules', 'espaces'])
@@ -60,11 +60,29 @@ export function inferNumericValueForAMC(
   ) {
     return value
   }
+  // Gérer le cas Decimal
+  if (
+    typeof value === 'object' &&
+    value !== null &&
+    typeof (value as any).toNumber === 'function'
+  ) {
+    const decimalValue = (value as any).toNumber()
+    return Number.isFinite(decimalValue) ? decimalValue : undefined
+  }
 
-  if (typeof value !== 'string') return undefined
+  if (typeof value !== 'string') {
+    window.notify(
+      'inferNumericValueForAMC a reçu une valeur de type inattendu, elle doit être une chaîne de caractères, un nombre ou un objet fractionnaire.',
+      { value: JSON.stringify(value) },
+    )
+    return undefined
+  }
 
+  // à partir d'ici, on considère que value est une chaine de caractères
   const trimmed = value.trim()
   if (trimmed.length === 0) return undefined
+
+  // On teste le cas fractionnaire
   if (isFractionValue(trimmed)) {
     const match = trimmed.match(
       /^\s*([+-]?)\s*\\(?:d?frac)\s*{([^}]*)}\s*{([^}]*)}\s*$/,
@@ -90,13 +108,19 @@ export function inferNumericValueForAMC(
   if (/^\\?sqrt/.test(trimmed)) return undefined
 
   const cleaned = mathliveNumericCleaner(trimmed)
-  const parsed = Number.parseFloat(cleaned.replace(',', '.'))
-  return Number.isFinite(parsed) ? parsed : undefined
+  const parsed = Number.parseFloat(cleaned)
+  if (Number.isFinite(parsed)) {
+    return parsed
+
+    // Si le parsing a échoué jusqu'ici, on a sans doute à faire à une expression mathématique plus complexe, on ne peut pas l'inférer en tant que nombre ou fraction simple.
+  } else {
+    return undefined
+  }
 }
 
 export function mergeNumericParamsFromOptions(
   baseParam: ReponseParams | undefined,
-  options: { [key: string]: unknown } | undefined,
+  options: ReponseParams | undefined,
 ): ReponseParams {
   const merged: ReponseParams = { ...(baseParam ?? {}) }
   if (options == null) return merged
@@ -115,8 +139,8 @@ export function mergeNumericParamsFromOptions(
   ]
 
   for (const key of supportedOptionKeys) {
-    const optionValue = options[key as string]
-    if (optionValue !== undefined) {
+    const optionValue = options[key]
+    if (optionValue !== undefined && merged[key] === undefined) {
       ;(merged as Record<string, unknown>)[key] = optionValue
     }
   }
@@ -124,12 +148,97 @@ export function mergeNumericParamsFromOptions(
   return merged
 }
 
-export function extractAMCOptions(
+type InteractiveAnswerCandidate = {
+  value: unknown
+}
+
+function extractInteractiveAnswerCandidate(
+  source: unknown,
+): InteractiveAnswerCandidate | undefined {
+  if (typeof source !== 'object' || source == null) return undefined
+
+  const record = source as Record<string, unknown>
+
+  if ('value' in record) {
+    return {
+      value: record.value,
+    }
+  }
+
+  if ('reponse' in record) {
+    return extractInteractiveAnswerCandidate(record.reponse)
+  }
+
+  if ('valeur' in record) {
+    return extractInteractiveAnswerCandidate(record.valeur)
+  }
+
+  return undefined
+}
+
+/**
+ * Infère des options AMCNum à partir d'une réponse interactive de type
+ * `{ reponse: { value, options, compare } }`.
+ *
+ * Cette fonction ne remplace pas des options AMC explicites (`reponse.param`),
+ * elle produit seulement une base à fusionner ensuite à partir de `value`.
+ * Les options de comparaison interactive (`options`, `compare`) ne servent
+ * pas à inférer les paramètres AMC.
+ */
+export function inferAmcOptionsFromAnswerType(
+  source: unknown,
+): ReponseParams | undefined {
+  const candidate = extractInteractiveAnswerCandidate(source)
+  if (candidate == null) return undefined
+
+  const answerValues = Array.isArray(candidate.value)
+    ? candidate.value
+    : [candidate.value]
+
+  let hasNumericCandidate = false
+  let inferredDigits = 0
+  let inferredDecimals = 0
+  let inferredSign = false
+
+  for (const answerValue of answerValues) {
+    const numericValue = inferNumericValueForAMC(extractAMCValue(answerValue))
+    if (numericValue === undefined) continue
+
+    hasNumericCandidate = true
+
+    if (typeof numericValue === 'number') {
+      const decimals = countDecimals(numericValue)
+      const digits = countDigits(numericValue) + decimals
+      inferredDigits = Math.max(inferredDigits, digits)
+      inferredDecimals = Math.max(inferredDecimals, decimals)
+      inferredSign ||= numericValue < 0
+      continue
+    }
+
+    const digitsNum = countDigits(numericValue.num)
+    const digitsDen = countDigits(numericValue.den)
+    inferredDigits = Math.max(inferredDigits, digitsNum + digitsDen)
+    inferredDecimals = Math.max(inferredDecimals, digitsDen)
+    inferredSign ||= numericValue.num * numericValue.den < 0
+  }
+
+  if (!hasNumericCandidate) return undefined
+
+  const inferred: ReponseParams = {
+    digits: inferredDigits,
+    decimals: inferredDecimals,
+    signe: inferredSign,
+  }
+
+  return inferred
+}
+
+export function extractInteractifOptions(
   reponse: unknown,
 ): { [key: string]: unknown } | undefined {
   if (typeof reponse === 'object' && reponse !== null) {
     if ('reponse' in reponse) {
-      return extractAMCOptions(
+      return extractInteractifOptions(
         (reponse as { reponse?: { value?: unknown; param?: unknown } }).reponse,
       )
     }

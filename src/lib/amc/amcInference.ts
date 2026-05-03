@@ -1,8 +1,8 @@
 import { type IExercice, type ReponseParams } from '../types'
 import {
   ensureAMCOpenAutoCorrection,
-  extractAMCOptions,
   extractAMCValue,
+  inferAmcOptionsFromAnswerType,
   inferNumericValueForAMC,
   mergeNumericParamsFromOptions,
 } from './amcInferenceHelpers'
@@ -46,9 +46,43 @@ export function mathaleaEnsureAMCCompatibility(
   // Ensuite, si le type AMC n'est pas défini, on va essayer de l'inférer à partir des données disponibles dans les autoCorrections, les réponses interactives mises en cache, et la réponse de l'exercice lui-même.
 
   if (exercice.amcReady) {
-    // L'exercice est déjà prêt pour AMC, on suppose que tout est en ordre.
-    if (amcAutoCorrection.length === 0) {
-      exerciseAny.autoCorrectionAMC = [...exercice.autoCorrection]
+    // L'exercice est déjà prêt pour AMC, on suppose que tout est en ordre, mais c'est faux.
+    // On doit pour les AMCNum s'assurer que les données dans autoCorrectionAMC comme digits, decimals, signe, etc sont bien renseignées
+    if (exercice.amcType === 'AMCNum') {
+      const autoCorrectionAmc = []
+      for (const [index, item] of autoCorrectionSource.entries()) {
+        if (item == null) continue
+
+        const valeur = inferNumericValueForAMC(
+          extractAMCValue(item.reponse?.valeur),
+        )
+        if (valeur === undefined) continue
+
+        const options = inferAmcOptionsFromAnswerType(item.reponse?.valeur)
+        const param = mergeNumericParamsFromOptions(
+          item.reponse?.param,
+          options,
+        )
+
+        const blocks = normalizeAMCNumBlocks({
+          valeur,
+          param,
+        })
+
+        if (blocks.length === 0) continue
+
+        autoCorrectionAmc.push({
+          ...item,
+          enonce: item.enonce ?? exercice.listeQuestions[index],
+          reponse: {
+            ...item.reponse,
+            valeur,
+            param,
+          },
+        })
+      }
+      exercice.autoCorrection = autoCorrectionAmc as any
+      exerciseAny.autoCorrectionAMC = autoCorrectionAmc as any
     }
     return exercice as IExerciceAMC
   }
@@ -177,13 +211,16 @@ export function mathaleaEnsureAMCCompatibility(
     }
 
     const valeur = inferNumericValueForAMC(extractAMCValue(item.reponse))
-    const options = extractAMCOptions(item.reponse)
-    const param = mergeNumericParamsFromOptions(item.reponse?.param, options)
-
     if (valeur === undefined) {
       canInferAMCNum = false
       break
     }
+
+    // On infère des options AMCNum à partir de la réponse interactive
+    // ({ value, options, compare }) au lieu de réutiliser directement
+    // les options de comparaison interactive.
+    const options = inferAmcOptionsFromAnswerType(item.reponse)
+    const param = mergeNumericParamsFromOptions(item.reponse?.param, options)
 
     const blocks = normalizeAMCNumBlocks({
       valeur,
