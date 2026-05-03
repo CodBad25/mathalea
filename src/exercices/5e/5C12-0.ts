@@ -1,3 +1,4 @@
+import { ensureAmcParam } from '../../lib/amc/amcHelpers'
 import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { setReponse } from '../../lib/interactif/gestionInteractif'
@@ -425,21 +426,21 @@ export default class Priorites extends Exercice {
           texte.substring(0, texte.length - 1) +
           '~=$' +
           ajouteChampTexteMathLive(this, i, KeyboardType.clavierDeBase)
-      if (this.listeQuestions.indexOf(texte) === -1) {
+      if (this.questionJamaisPosee(i, a, b, c)) {
         if (context.isAmc) {
           this.autoCorrection[i].enonce =
             texte.substring(0, texte.length - 1) + '~=$'
           this.autoCorrection[i].propositions = [{ texte: texteCorr }]
           const reponse = this.autoCorrection[i].reponse
+          const amcParam = ensureAmcParam(this, i)
           if (reponse != null) {
-            const param = reponse.param
-            if (param && Array.isArray(reponse.valeur)) {
-              param.digits =
+            if (Array.isArray(reponse.valeur)) {
+              amcParam.digits =
                 nombreDeChiffresDansLaPartieEntiere(reponse.valeur[0]) + 1
             }
           }
-          // @ts-expect-error Trop compliqué à type
-          this.autoCorrection[i].reponse.param.decimals = 0
+
+          amcParam.decimals = 0
         }
         // Si la question n'a jamais été posée, on en crée une autre
         this.listeQuestions[i] = texte

@@ -1,3 +1,4 @@
+import { ensureAmcParam } from '../../lib/amc/amcHelpers'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import {
   handleAnswers,
@@ -109,14 +110,13 @@ export default class DernierChiffreProduitDécimaux extends Exercice {
       }
       if (context.isAmc) {
         setReponse(this, i, resultat)
-        this.autoCorrection[i].enonce =
-          texte.substring(0, texte.length - 1) +
-          '~=$<br>Le chiffre des unités est : '
-        this.autoCorrection[i].propositions = [{ texte: texteCorr }]
-        // @ts-expect-error trop compliqué à typer
-        this.autoCorrection[i].reponse.param.digits = 1
-        // @ts-expect-error trop compliqué à typer
-        this.autoCorrection[i].reponse.param.decimals = 0
+        this.autoCorrectionAMC[i] = {
+          enonce: texte,
+          propositions: [{ texte: texteCorr }],
+        }
+        const amcParam = ensureAmcParam(this, i)
+        amcParam.digits = 1
+        amcParam.decimals = 0
       }
       if (this.questionJamaisPosee(i, a, b)) {
         // Si la question n'a jamais été posée, on la stocke dans la liste des questions

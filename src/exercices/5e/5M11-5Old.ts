@@ -19,6 +19,7 @@ import {
   pointIntersectionDD,
   pointSurCercle,
 } from '../../lib/2d/utilitairesPoint'
+import { bleuMathalea } from '../../lib/colors'
 import { texTexte } from '../../lib/format/texTexte'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
@@ -39,7 +40,6 @@ import {
 } from '../../modules/outils'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
-import { bleuMathalea } from '../../lib/colors'
 
 export const titre = 'Calculer périmètre et aire de figures composées'
 export const interactifReady = true
@@ -1272,7 +1272,7 @@ export default class PerimetreOuAireDeFiguresComposees extends Exercice {
         )
       }
       if (context.isAmc) {
-        this.autoCorrection[i] = {
+        this.autoCorrectionAMC[i] = {
           enonce: this.consigne + '\\\\' + texte,
           options: {
             multicols: true,
@@ -1295,8 +1295,7 @@ export default class PerimetreOuAireDeFiguresComposees extends Exercice {
           ],
         }
         if (this.sup4 === 1 || this.sup4 === 3) {
-          // @ts-expect-error
-          this.autoCorrection[i].propositions.push({
+          this.autoCorrectionAMC[i].propositions!.push({
             type: 'AMCNum',
             propositions: [
               {
@@ -1322,8 +1321,7 @@ export default class PerimetreOuAireDeFiguresComposees extends Exercice {
           })
         }
         if (this.sup4 === 2 || this.sup4 === 3) {
-          // @ts-expect-error
-          this.autoCorrection[i].propositions.push({
+          this.autoCorrectionAMC[i].propositions!.push({
             type: 'AMCNum',
             propositions: [
               {

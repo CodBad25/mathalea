@@ -6,7 +6,7 @@ import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { nommePolygone } from '../../lib/2d/polygones'
 import { segment } from '../../lib/2d/segmentsVecteurs'
 import { triangle2points2angles } from '../../lib/2d/triangles'
-import { orangeMathalea, bleuMathalea } from '../../lib/colors'
+import { bleuMathalea, orangeMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { toutPourUnPoint } from '../../lib/interactif/mathLive'
@@ -19,7 +19,7 @@ import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { arrondi } from '../../lib/outils/nombres'
 import { lettreDepuisChiffre } from '../../lib/outils/outilString'
 import { texNombre } from '../../lib/outils/texNombre'
-import type { ValeurNames } from '../../lib/types'
+import type { Valeur, ValeurFieldNames, ValeurNames } from '../../lib/types'
 import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import {
@@ -1356,16 +1356,12 @@ export default class ExerciceAnglesTriangles extends Exercice {
           dataOptions: options,
         })}`
 
-        type AnswerType = Partial<Record<ValeurNames, { value: number }>> & {
-          bareme: typeof toutPourUnPoint
-        }
-
-        const answers: AnswerType = {
+        const answers: Valeur = {
           bareme: toutPourUnPoint, // EE : Si ce n'est pas ce barème, alors les points diffèrent selon les paramètres et rend non fonctionnel cet exercice dans Capytale
         }
 
         for (let j = 0; j < reponseInteractive.length; j++) {
-          const champName = `champ${j + 1}` as ValeurNames
+          const champName = `champ${j + 1}` as ValeurFieldNames
 
           answers[champName] = {
             value: reponseInteractive[choixAngle[j]],
@@ -1410,7 +1406,7 @@ export default class ExerciceAnglesTriangles extends Exercice {
         )
 
       if (context.isAmc) {
-        this.autoCorrection[i] = {
+        this.autoCorrectionAMC[i] = {
           enonce: '',
           enonceAvant: false,
           options: { barreseparation: true },
@@ -1439,12 +1435,10 @@ export default class ExerciceAnglesTriangles extends Exercice {
           ],
         }
         if (reponseInteractive.length > 1) {
-          // @ts-expect-error
-          this.autoCorrection[
+          this.autoCorrectionAMC[
             i
-          ].propositions[0].propositions[0].multicolsBegin = true
-          // @ts-expect-error
-          this.autoCorrection[i].propositions.push({
+          ].propositions![0].propositions![0].multicolsBegin = true
+          this.autoCorrectionAMC[i].propositions!.push({
             type: 'AMCNum',
             propositions: [
               {
@@ -1466,8 +1460,7 @@ export default class ExerciceAnglesTriangles extends Exercice {
           })
         }
         if (reponseInteractive.length > 2) {
-          // @ts-expect-error
-          this.autoCorrection[i].propositions.push({
+          this.autoCorrectionAMC[i].propositions!.push({
             type: 'AMCNum',
             propositions: [
               {

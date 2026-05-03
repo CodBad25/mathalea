@@ -1,6 +1,7 @@
 import Decimal from 'decimal.js'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { Tableau } from '../../lib/2d/tableau'
+import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { setReponse } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -17,7 +18,6 @@ import FractionEtendue from '../../modules/FractionEtendue'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { bleuMathalea } from '../../lib/colors'
 
 export const titre = 'Calculer le coefficient de proportionnalité'
 export const interactifReady = true
@@ -455,7 +455,7 @@ export default class CalculerCoeffPropo extends Exercice {
         }
         texte += '\n\\FlechesPD{1}{2}{$\\times$\\ldots}\n'
         if (context.isAmc) {
-          this.autoCorrection[i] = {
+          this.autoCorrectionAMC[i] = {
             enonce: '',
             options: { multicols: true, barreseparation: true }, // facultatif. Par défaut, multicols est à false. Ce paramètre provoque un multicolonnage (sur 2 colonnes par défaut) : pratique quand on met plusieurs AMCNum. !!! Attention, cela ne fonctionne pas, nativement, pour AMCOpen. !!!
             propositions: [
@@ -612,8 +612,7 @@ export default class CalculerCoeffPropo extends Exercice {
         }
         texteCorr += `\\FlechesPD{1}{2}{$\\times ${coefficientTex}$}`
         if (context.isAmc) {
-          // @ts-expect-error
-          this.autoCorrection[i].propositions[0].propositions[0].texte =
+          this.autoCorrectionAMC[i].propositions![0].propositions![0].texte =
             texteCorr
         }
       }

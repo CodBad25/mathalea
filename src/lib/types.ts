@@ -472,6 +472,18 @@ export interface Valeur {
 }
 
 export type ValeurNames = keyof Valeur
+export type ValeurNamesWithoutFunctions = Exclude<
+  ValeurNames,
+  'bareme' | 'feedback' | 'callback'
+>
+export type ValeurFunctionNames = Extract<
+  ValeurNames,
+  'bareme' | 'feedback' | 'callback'
+>
+export type ValeurFieldNames = Exclude<
+  ValeurNamesWithoutFunctions,
+  'sheetAnswer'
+>
 
 export interface ValeurNormalized {
   bareme?: (listePoints: number[]) => [number, number]

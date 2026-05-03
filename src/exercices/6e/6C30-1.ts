@@ -1,3 +1,4 @@
+import { ensureAmcParam } from '../../lib/amc/amcHelpers'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import {
@@ -672,10 +673,10 @@ export default class MultiplierDecimauxPar101001000 extends Exercice {
       }
 
       if (context.isAmc) {
-        this.autoCorrection[i].enonce = texte
-        this.autoCorrection[i].propositions = [{ texte: texteCorr }]
-        // @ts-expect-error trop compliqué à typer
-        this.autoCorrection[i].reponse.param = {
+        this.autoCorrectionAMC[i].enonce = texte
+        this.autoCorrectionAMC[i].propositions = [{ texte: texteCorr }]
+        ensureAmcParam(this, i)
+        this.autoCorrectionAMC[i].reponse!.param = {
           digits:
             nombreDeChiffresDansLaPartieEntiere(reponseAMC) +
             nombreDeChiffresDansLaPartieDecimale(reponseAMC) +
