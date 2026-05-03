@@ -973,6 +973,14 @@ export interface IExercice {
     | [titre: string, max: number]
   besoinFormulaire5Texte: boolean | [string, string]
   besoinFormulaire5CaseACocher: boolean | [string] | [string, boolean]
+  besoinFormulaireNombresCategories:
+    | false
+    | {
+        titre: string
+        categories: { label: string; max: number }[]
+        defaut: number[]
+      }
+  questionRefs?: string[]
   listeArguments: string[]
   lastCallback: string
   checkSum?: string

@@ -144,6 +144,15 @@ export default class Exercice implements IExercice {
 
   besoinFormulaire5Texte: boolean | [string, string]
   besoinFormulaire5CaseACocher: boolean | [string] | [string, boolean]
+  besoinFormulaireNombresCategories:
+    | false
+    | {
+        titre: string
+        categories: { label: string; max: number }[]
+        defaut: number[]
+    }
+  
+  questionRefs?: string[] // Affiche la référence de l'exercice en en-tête de la question (utile pour MetaExerciceCan)
   listeArguments: string[] // Variable servant à comparer les exercices pour ne pas avoir deux exercices identiques
   lastCallback: string // La dernière signature de listeArguments afin de comparaison : permet d'éviter un nouvelleVersionWrapper inutile
   checkSum?: string // Empreinte CRC32 des questions de l'exercice pour comparaison rapide
@@ -238,6 +247,7 @@ export default class Exercice implements IExercice {
     this.besoinFormulaire5Numerique = false // Sinon this.besoinFormulaire5Numerique = [texte, max, tooltip facultatif]
     this.besoinFormulaire5Texte = false // Sinon this.besoinFormulaire5Texte = [texte, tooltip]
     this.besoinFormulaire5CaseACocher = false // Sinon this.besoinFormulaire5CaseACocher = [texte]
+    this.besoinFormulaireNombresCategories = false // Sinon { titre, categories: [{label, max}], defaut: [] }
 
     // ///////////////////////////////////////////////
     // Exercice avec des dépendances particulières

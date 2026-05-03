@@ -39,6 +39,13 @@
   let formNum4: FormNumerique
   let formNum5: FormNumerique
 
+  type CategoriesForm = {
+    titre: string
+    categories: { label: string; max: number }[]
+    defaut: number[]
+  }
+  let categoriesForm: CategoriesForm | undefined = undefined
+
   let previousSeed: string | undefined
   $: {
     // Pour que la série dans le formulaire se mette à jour lorsqu'on clique sur "Nouvel énoncé"
@@ -91,6 +98,9 @@
       exercice.besoinFormulaire5Numerique.length > 0
     ) {
       formNum5 = parseFormNumerique(exercice.besoinFormulaire5Numerique)
+    }
+    if (exercice.besoinFormulaireNombresCategories) {
+      categoriesForm = exercice.besoinFormulaireNombresCategories as CategoriesForm
     }
   })
 
@@ -229,6 +239,7 @@
       {exerciceIndex}
       bind:supValue={sup}
       formNum={formNum1}
+      {categoriesForm}
       on:change={dispatchNewSettings}
     />
 
@@ -295,7 +306,7 @@
       />
     {/if}
 
-    {#if exercice.comment !== undefined}
+    {#if exercice.comment !== undefined && exercice.comment !== ''}
       <div class="flex flex-col justify-start items-start p-2">
         <button
           type="button"
