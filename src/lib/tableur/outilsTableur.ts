@@ -191,7 +191,7 @@ export function verifQuestionTableur(
   feedback: string
   score: { nbBonnesReponses: number; nbReponses: number }
 } {
-  if (exercice.autoCorrection[questionIndex]?.reponse == null) {
+  if (exercice.autoCorrection[questionIndex]?.valeur == null) {
     throw Error(
       `verifQuestionMathlive appelé sur une question sans réponse: ${JSON.stringify(
         {
@@ -202,13 +202,13 @@ export function verifQuestionTableur(
       )}`,
     )
   }
-  if (exercice.autoCorrection[questionIndex].reponse.param == null) {
+  if (exercice.autoCorrection[questionIndex].options == null) {
     window.notify(
       `verifQuestionTableur appelé sur une question sans param : ${JSON.stringify(
         {
           exercice,
           question: questionIndex,
-          param: exercice.autoCorrection[questionIndex].reponse,
+          param: exercice.autoCorrection[questionIndex].options,
         },
       )}`,
       { exercice, questionIndex },

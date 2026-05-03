@@ -677,7 +677,7 @@ export type UneProposition = {
 export type AutoCorrection = {
   enonce?: string
   // Contrat cible interactif
-  valeur?: Valeur
+  valeur?: ValeurNormalized
   formatInteractif?: InteractivityType
   options?: ParamForQcmInteractif
   propositions?: UneProposition[]

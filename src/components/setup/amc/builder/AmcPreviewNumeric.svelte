@@ -1,6 +1,6 @@
 <script lang="ts">
   import { normalizeAMCNumBlocks } from '../../../../lib/amc/amcNormalize'
-  import type { ReponseParams } from '../../../../lib/types'
+  import type { ReponseParams } from '../../../../lib/amc/amcTypes'
   import AmcEnonceHtml from './AmcEnonceHtml.svelte'
 
   export let enonce = ''

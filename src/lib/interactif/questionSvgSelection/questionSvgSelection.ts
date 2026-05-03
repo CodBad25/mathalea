@@ -36,7 +36,7 @@ export function verifQuestionSvgSelection(exercice: IExercice, i: number) {
   if (selection) {
     value = String(selection.value) // Convertir en string pour comparaison
   }
-  const reponse = exercice.autoCorrection[i]?.valeur?.reponse?.value
+  const repValue = exercice.autoCorrection[i]?.valeur?.reponse?.value
   // Sauvegarde pour les exports Moodle, Capytale...
   if (exercice.answers === undefined) {
     exercice.answers = {}
@@ -44,11 +44,11 @@ export function verifQuestionSvgSelection(exercice: IExercice, i: number) {
   if (selection) {
     exercice.answers[selection.id] = String(selection.value)
   }
-  const resultat = Array.isArray(reponse)
-    ? reponse.includes(value)
+  const resultat = Array.isArray(repValue)
+    ? repValue.map(String).includes(value)
       ? 'OK'
       : 'KO'
-    : value === reponse
+    : value === String(repValue)
       ? 'OK'
       : 'KO'
   if (resultat === 'OK') {

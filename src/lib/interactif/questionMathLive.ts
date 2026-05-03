@@ -1,11 +1,11 @@
 import type {
   IExercice,
   InteractivityType,
-  ReponseParams,
   TableauMathliveType,
   Valeur,
 } from '../../lib/types'
 import { context } from '../../modules/context'
+import type { ReponseParams } from '../amc/amcTypes'
 import { sp } from '../outils/outilString'
 import './champTexte.scss'
 import { buildDataKeyboardFromStyle } from './claviers/keyboard'

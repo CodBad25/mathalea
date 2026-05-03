@@ -940,7 +940,7 @@ export function setReponse(
   }
   exercice.autoCorrection[i].valeur = handleDefaultValeur({
     reponse: { value: reponses as unknown as AnswerValueType },
-  }) as Valeur
+  }) as ValeurNormalized
 }
 
 // La solution est-elle un nombre ? Si oui, on force l'option nombreDecimalSeulement.
@@ -1080,7 +1080,7 @@ export function handleAnswers(
     Object.keys(param).length > 0 ? param : undefined
   questionAutoCorrection.valeur = handleDefaultValeur(
     reponses,
-  ) as unknown as Valeur
+  ) as unknown as ValeurNormalized
 
   const url = new URL(window.location.href)
 
