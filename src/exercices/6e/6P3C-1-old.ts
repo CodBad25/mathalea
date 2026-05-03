@@ -423,7 +423,7 @@ export default class ProportionnaliteParLineariteBis extends Exercice {
           )
           setReponse(this, 4 * i + 3, nMax)
         } else {
-          this.autoCorrection[i] = {
+          this.autoCorrectionAMC[i] = {
             enonce: '',
             enonceAvant: false,
             options: { barreseparation: true, multicolsAll: true }, // facultatif. Par défaut, multicols est à false. Ce paramètre provoque un multicolonnage (sur 2 colonnes par défaut) : pratique quand on met plusieurs AMCNum. !!! Attention, cela ne fonctionne pas, nativement, pour AMCOpen. !!!

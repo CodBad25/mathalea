@@ -274,12 +274,12 @@ export default class constructionElementaire extends Exercice {
 
       if (context.isAmc) {
         /** ********************** AMC Hybride *****************************/
-        this.autoCorrection[i] = {
+        this.autoCorrectionAMC[i] = {
           enonce: enonce + '<br>',
           enonceAvant: false,
         }
 
-        this.autoCorrection[i].propositions = [
+        this.autoCorrectionAMC[i].propositions = [
           {
             type: 'AMCOpen',
             propositions: [

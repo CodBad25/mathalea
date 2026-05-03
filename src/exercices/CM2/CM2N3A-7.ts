@@ -3,7 +3,6 @@ import { setReponse } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
-import { nombreDeChiffresDansLaPartieEntiere } from '../../lib/outils/nombres'
 import { context } from '../../modules/context'
 import {
   contraindreValeur,
@@ -159,24 +158,11 @@ export default class TablesAdditionsSoustractions extends Exercice {
           setReponse(this, i, b, { formatInteractif: 'calcul' })
           break
       }
-      const autoCorr = this.autoCorrection[i]
-      if (autoCorr && autoCorr.reponse && autoCorr.reponse.valeur) {
-        const value = autoCorr.reponse.valeur.reponse?.value
 
-        autoCorr.reponse.param = {
-          digits: nombreDeChiffresDansLaPartieEntiere(Number(value)),
-          decimals: 0,
-          signe: false,
-          exposantNbChiffres: 0,
-          exposantSigne: false,
-          approx: 0,
-          formatInteractif: 'calcul',
-        }
-        this.autoCorrection[i].enonce = texte
-        this.listeQuestions.push(texte)
-        this.listeCorrections.push(texteCorr)
-      }
-      listeQuestionsToContenu(this)
+      this.autoCorrection[i].enonce = texte
+      this.listeQuestions.push(texte)
+      this.listeCorrections.push(texteCorr)
     }
+    listeQuestionsToContenu(this)
   }
 }

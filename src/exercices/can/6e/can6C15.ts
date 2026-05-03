@@ -45,7 +45,7 @@ export default class FractionCommeFacteurManquant extends ExerciceSimple {
     On a bien : $ ${b} \\times${c.texFraction}= ${a}$`
 
     if (context.isAmc) {
-      this.autoCorrection[0] = {
+      this.autoCorrectionAMC[0] = {
         enonce: this.question,
         options: { multicols: true },
         propositions: [

@@ -30,10 +30,10 @@ import {
   randint,
 } from '../../modules/outils'
 
+import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import Exercice from '../Exercice'
-import { bleuMathalea } from '../../lib/colors'
 
 export const amcReady = true
 export const amcType = 'AMCHybride'
@@ -176,7 +176,7 @@ export default class ExerciceInformationsProblemes extends Exercice {
               break
           }
           if (context.isAmc) {
-            this.autoCorrection[i] = {
+            this.autoCorrectionAMC[i] = {
               enonceAvant: false,
               propositions: [
                 {
@@ -253,7 +253,7 @@ export default class ExerciceInformationsProblemes extends Exercice {
                 handleAnswers(this, i, { reponse: { value: reponse1 } })
               }
               if (context.isAmc) {
-                this.autoCorrection[i] = {
+                this.autoCorrectionAMC[i] = {
                   enonceAvant: false,
                   propositions: [
                     {
@@ -316,7 +316,7 @@ export default class ExerciceInformationsProblemes extends Exercice {
                 handleAnswers(this, i, { reponse: { value: reponse2 } })
               }
               if (context.isAmc) {
-                this.autoCorrection[i] = {
+                this.autoCorrectionAMC[i] = {
                   enonceAvant: false,
                   propositions: [
                     {
@@ -421,7 +421,7 @@ export default class ExerciceInformationsProblemes extends Exercice {
               break
           }
           if (context.isAmc) {
-            this.autoCorrection[i] = {
+            this.autoCorrectionAMC[i] = {
               enonceAvant: false,
               propositions: [
                 {
@@ -499,7 +499,7 @@ export default class ExerciceInformationsProblemes extends Exercice {
                 handleAnswers(this, i, { reponse: { value: reponse1 } })
               }
               if (context.isAmc) {
-                this.autoCorrection[i] = {
+                this.autoCorrectionAMC[i] = {
                   enonceAvant: false,
                   propositions: [
                     {
@@ -564,7 +564,7 @@ export default class ExerciceInformationsProblemes extends Exercice {
                 handleAnswers(this, i, { reponse: { value: reponse2 } })
               }
               if (context.isAmc) {
-                this.autoCorrection[i] = {
+                this.autoCorrectionAMC[i] = {
                   enonceAvant: false,
                   propositions: [
                     {
@@ -668,7 +668,7 @@ export default class ExerciceInformationsProblemes extends Exercice {
                 })
               }
               if (context.isAmc) {
-                this.autoCorrection[i] = {
+                this.autoCorrectionAMC[i] = {
                   enonceAvant: false,
                   propositions: [
                     {
@@ -759,7 +759,7 @@ export default class ExerciceInformationsProblemes extends Exercice {
                 })
               }
               if (context.isAmc) {
-                this.autoCorrection[i] = {
+                this.autoCorrectionAMC[i] = {
                   enonceAvant: false,
                   propositions: [
                     {
@@ -861,7 +861,7 @@ export default class ExerciceInformationsProblemes extends Exercice {
                 handleAnswers(this, i, { reponse: { value: reponse1 } })
               }
               if (context.isAmc) {
-                this.autoCorrection[i] = {
+                this.autoCorrectionAMC[i] = {
                   enonceAvant: false,
                   propositions: [
                     {
@@ -926,7 +926,7 @@ export default class ExerciceInformationsProblemes extends Exercice {
                 handleAnswers(this, i, { reponse: { value: reponse2 } })
               }
               if (context.isAmc) {
-                this.autoCorrection[i] = {
+                this.autoCorrectionAMC[i] = {
                   enonceAvant: false,
                   propositions: [
                     {
@@ -1008,7 +1008,7 @@ export default class ExerciceInformationsProblemes extends Exercice {
                 handleAnswers(this, i, { reponse: { value: reponse1 } })
               }
               if (context.isAmc) {
-                this.autoCorrection[i] = {
+                this.autoCorrectionAMC[i] = {
                   enonceAvant: false,
                   propositions: [
                     {
@@ -1077,7 +1077,7 @@ export default class ExerciceInformationsProblemes extends Exercice {
                 handleAnswers(this, i, { reponse: { value: reponse2 } })
               }
               if (context.isAmc) {
-                this.autoCorrection[i] = {
+                this.autoCorrectionAMC[i] = {
                   enonceAvant: false,
                   propositions: [
                     {
@@ -1157,7 +1157,7 @@ export default class ExerciceInformationsProblemes extends Exercice {
                 handleAnswers(this, i, { reponse: { value: reponse1 } })
               }
               if (context.isAmc) {
-                this.autoCorrection[i] = {
+                this.autoCorrectionAMC[i] = {
                   enonceAvant: false,
                   propositions: [
                     {
@@ -1229,7 +1229,7 @@ export default class ExerciceInformationsProblemes extends Exercice {
                 })
               }
               if (context.isAmc) {
-                this.autoCorrection[i] = {
+                this.autoCorrectionAMC[i] = {
                   enonceAvant: false,
                   propositions: [
                     {
@@ -1356,7 +1356,7 @@ export default class ExerciceInformationsProblemes extends Exercice {
               break
           }
           if (context.isAmc) {
-            this.autoCorrection[i] = {
+            this.autoCorrectionAMC[i] = {
               enonceAvant: false,
               propositions: [
                 {
@@ -1451,7 +1451,7 @@ export default class ExerciceInformationsProblemes extends Exercice {
                 handleAnswers(this, i, { reponse: { value: reponse1 } })
               }
               if (context.isAmc) {
-                this.autoCorrection[i] = {
+                this.autoCorrectionAMC[i] = {
                   enonceAvant: false,
                   propositions: [
                     {
@@ -1516,7 +1516,7 @@ export default class ExerciceInformationsProblemes extends Exercice {
                 handleAnswers(this, i, { reponse: { value: reponse } })
               }
               if (context.isAmc) {
-                this.autoCorrection[i] = {
+                this.autoCorrectionAMC[i] = {
                   enonceAvant: false,
                   propositions: [
                     {

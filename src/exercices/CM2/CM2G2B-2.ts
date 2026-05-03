@@ -17,6 +17,7 @@ import {
   pointSurDroite,
 } from '../../lib/2d/utilitairesPoint'
 import { vide2d } from '../../lib/2d/Vide2d'
+import { bleuMathalea } from '../../lib/colors'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import { texteEnCouleur } from '../../lib/outils/embellissements'
 import { arrondi } from '../../lib/outils/nombres'
@@ -27,7 +28,6 @@ import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { bleuMathalea } from '../../lib/colors'
 
 export const dateDeModifImportante = '17/02/2025'
 export const amcReady = true
@@ -594,10 +594,10 @@ export default class ParalleleEtPerpendiculaires extends Exercice {
         objetsCorrection,
       )
       /** ********************** AMC Open *****************************/
-      this.autoCorrection[i] = {}
-      this.autoCorrection[i].options = { ordered: false }
-      this.autoCorrection[i].enonce = enonce + '<br>'
-      this.autoCorrection[i].propositions = [
+      this.autoCorrectionAMC[i] = {}
+      this.autoCorrectionAMC[i].options = { ordered: false }
+      this.autoCorrectionAMC[i].enonce = enonce + '<br>'
+      this.autoCorrectionAMC[i].propositions = [
         {
           texte: correction,
           statut: 3,
