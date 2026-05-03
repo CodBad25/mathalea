@@ -120,7 +120,7 @@ export function listeDeroulanteToQcm(
   choix: AllChoicesType,
   reponse: string,
   options: any,
-  correction: string,
+  correction = '',
 ) {
   if (exercice == null || choix == null || reponse == null) {
     window.notify(
