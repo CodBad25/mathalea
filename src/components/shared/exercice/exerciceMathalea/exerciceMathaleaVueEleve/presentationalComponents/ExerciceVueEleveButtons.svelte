@@ -3,7 +3,10 @@
   import type TypeExercice from '../../../../../../exercices/Exercice'
   import ButtonTextAction from '../../../../forms/ButtonTextAction.svelte'
   import InteractivityIcon from '../../../../icons/TwoStatesIcon.svelte'
+  import BasicClassicModal from '../../../../modal/BasicClassicModal.svelte'
   export let exercise: TypeExercice
+
+  let isIndiceModalDisplayed = false
   export let indiceLastExercice: number
   export let globalOptions: InterfaceGlobalOptions
   export let newData: () => void
@@ -26,6 +29,24 @@
     ? 'hidden'
     : 'flex'}"
 >
+  {#if exercise.tip && exercise.tip.length > 0 && exercise.tipAvailable !== false}
+    <div class="flex mr-2">
+      <ButtonTextAction
+        text="Indice"
+        icon="bx-help-circle"
+        class="py-0.5 px-2 text-[0.7rem]"
+        inverted={false}
+        on:click={() => {
+          isIndiceModalDisplayed = true
+        }}
+      />
+    </div>
+    <BasicClassicModal bind:isDisplayed={isIndiceModalDisplayed} icon="bx-help-circle">
+      <span slot="header">Indice</span>
+      <!-- eslint-disable-next-line svelte/no-at-html-tags -->
+      <div slot="content" class="text-left">{@html exercise.tip}</div>
+    </BasicClassicModal>
+  {/if}
   <div
     class={!globalOptions.oneShot && globalOptions.done !== '1'
       ? 'flex'

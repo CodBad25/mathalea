@@ -29,8 +29,12 @@ export default class ComparerAvecFctCarre extends Exercice {
     super()
 
     this.nbQuestions = 1
-
     this.spacing = 1.2
+    this.tip = `La fonction carré est :<br>
+      <ul style="list-style-type: disc; padding-left: 1.5em;">
+        <li>strictement <strong>décroissante</strong> sur $]-\\infty\\,;\\,0]$</li>
+        <li>strictement <strong>croissante</strong> sur $[0\\,;\\,+\\infty[$</li>
+      </ul>`
   }
 
   nouvelleVersion() {

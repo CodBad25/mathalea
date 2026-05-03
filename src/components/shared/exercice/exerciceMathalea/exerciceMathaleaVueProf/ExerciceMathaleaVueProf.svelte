@@ -37,6 +37,11 @@
   import { handleCorrectionAffichee } from '../../handleCorrection'
   import HeaderExerciceVueProf from '../../shared/headerExerciceVueProf/HeaderExerciceVueProf.svelte'
   import Settings from './presentationalComponents/Settings.svelte'
+  import BasicClassicModal from '../../../modal/BasicClassicModal.svelte'
+  import ButtonTextAction from '../../../forms/ButtonTextAction.svelte'
+
+  let isIndiceModalDisplayed = false
+  let isTipAvailable: boolean
 
   export let exercise: IExercice | IExerciceSimple
   export let exerciseIndex: number
@@ -100,7 +105,9 @@
     !exercise.besoinFormulaire4Texte &&
     !exercise.besoinFormulaire5CaseACocher &&
     !exercise.besoinFormulaire5Numerique &&
-    !exercise.besoinFormulaire5Texte
+    !exercise.besoinFormulaire5Texte &&
+    !(exercise.tip && exercise.tip.length > 0)
+  isTipAvailable = exercise.tipAvailable !== false
   let isExerciceChecked = false
   const generateTitleAddendum = (): string => {
     const ranks = exercisesUuidRanking(get(exercicesParams))
@@ -343,6 +350,11 @@
     if (event.detail.correctionDetaillee !== undefined) {
       exercise.correctionDetaillee = event.detail.correctionDetaillee
       interfaceParams.cd = exercise.correctionDetaillee ? '1' : '0'
+    }
+    if (event.detail.tipAvailable !== undefined) {
+      exercise.tipAvailable = event.detail.tipAvailable
+      isTipAvailable = event.detail.tipAvailable
+      interfaceParams.tip = exercise.tipAvailable ? '1' : '0'
     }
     exercicesParams.update((list) => {
       // interfaceParams a été mis à jour donc le store est à jour
@@ -680,6 +692,24 @@
             $globalOptions.z || 1
           ).toString()}rem; line-height: calc({$globalOptions.z || 1});"
         >
+          {#if exercise.tip && exercise.tip.length > 0 && isTipAvailable}
+            <div class="ml-2 lg:ml-5 mt-4">
+              <ButtonTextAction
+                text="Indice"
+                icon="bx-help-circle"
+                class="py-[2px] px-2 text-[0.7rem]"
+                inverted={true}
+                on:click={() => {
+                  isIndiceModalDisplayed = true
+                }}
+              />
+            </div>
+            <BasicClassicModal bind:isDisplayed={isIndiceModalDisplayed} icon="bx-help-circle">
+              <span slot="header">Indice</span>
+              <!-- eslint-disable-next-line svelte/no-at-html-tags -->
+              <div slot="content" class="text-left">{@html exercise.tip}</div>
+            </BasicClassicModal>
+          {/if}
           <div class="mt-6 mb-4">
             {#key exercise.key + '-' + exerciseIndex}
               {#if typeof exercise.consigne !== 'undefined' && exercise.consigne.length !== 0}

@@ -70,6 +70,7 @@ export interface InterfaceParams extends Partial<
   alea?: string
   interactif?: '0' | '1'
   cd?: '0' | '1'
+  tip?: '0' | '1'
   sup?: string
   sup2?: string
   sup3?: string
@@ -892,6 +893,8 @@ export interface IExercice {
   correction?: string
   canOfficielle?: boolean
   canEnonce?: string
+  tip?: string
+  tipAvailable?: boolean
   canReponseACompleter: string
   canNumeroLie: number
   canLiee: number[]
