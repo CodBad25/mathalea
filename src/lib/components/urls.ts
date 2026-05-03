@@ -44,6 +44,7 @@ export class MathAleaURL extends URL {
       if (ex.alea != null) url.searchParams.append('alea', ex.alea)
       if (ex.interactif === '1') url.searchParams.append('i', '1')
       if (ex.cd != null) url.searchParams.append('cd', ex.cd)
+      if (ex.tip != null) url.searchParams.append('tip', ex.tip)
       if (ex.cols != null) url.searchParams.append('cols', ex.cols.toString())
     }
     return new MathAleaURL(url.toString())

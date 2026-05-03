@@ -22,6 +22,7 @@ export function createURL(params: InterfaceParams[]) {
     if (ex.versionQcm != null) url.searchParams.append('qcm', ex.versionQcm)
     if (ex.interactif === '1') url.searchParams.append('i', '1')
     if (ex.cd != null) url.searchParams.append('cd', ex.cd)
+    if (ex.tip != null) url.searchParams.append('tip', String(ex.tip))
     if (ex.cols != null) url.searchParams.append('cols', ex.cols.toString())
     if (ex.alea != null) url.searchParams.append('alea', ex.alea)
   }

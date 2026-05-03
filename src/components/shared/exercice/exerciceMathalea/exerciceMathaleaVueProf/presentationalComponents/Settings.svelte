@@ -29,6 +29,7 @@
   let versionQcm: boolean
   let alea: string
   let correctionDetaillee: boolean
+  let tipAvailable: boolean
 
   let isCommentDisplayed: boolean = false
 
@@ -59,6 +60,7 @@
     versionQcm =
       exercice instanceof ExerciceSimple ? exercice.versionQcm || false : false
     correctionDetaillee = exercice.correctionDetaillee
+    tipAvailable = exercice.tipAvailable ?? !!(exercice.tip?.length)
 
     if (
       Array.isArray(exercice.besoinFormulaireNumerique) &&
@@ -152,6 +154,7 @@
       versionQcm,
       alea,
       correctionDetaillee,
+      tipAvailable,
     })
   }
 </script>
@@ -264,6 +267,15 @@
       formNum={formNum5}
       on:change={dispatchNewSettings}
     />
+
+    {#if exercice.tip && exercice.tip.length > 0}
+      <CheckboxWithLabel
+        id="settings-indice-disponible-{exerciceIndex}"
+        bind:isChecked={tipAvailable}
+        label="Indice disponible pour les élèves"
+        on:change={dispatchNewSettings}
+      />
+    {/if}
 
     {#if exercice.correctionDetailleeDisponible}
       <CheckboxWithLabel
