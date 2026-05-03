@@ -317,7 +317,7 @@
     <Banner {brandImagePath} {productImagePath} />
   {/if}
   <div
-    class="fixed z-20 h-16 bottom-4 right-2 {(typeof $globalOptions.title ===
+    class="fixed z-20 h-16 bottom-4 right-2 pointer-events-none {(typeof $globalOptions.title ===
       'string' &&
       $globalOptions.title.length === 0 &&
       $globalOptions.presMode === 'liste_exos') ||
@@ -326,7 +326,7 @@
       : 'lg:top-20'}  lg:right-6"
   >
     <div
-      class="flex flex-col-reverse lg:flex-row space-y-reverse space-y-4 lg:space-y-0 lg:space-x-4 scale-75 lg:scale-100
+      class="flex flex-col-reverse lg:flex-row space-y-reverse space-y-4 lg:space-y-0 lg:space-x-4 scale-75 lg:scale-100 pointer-events-auto
       {$globalOptions.v === 'myriade' || $globalOptions.v === 'indices'
         ? 'translate-y-16'
         : ''}"
