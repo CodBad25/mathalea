@@ -325,13 +325,7 @@ export function propositionsQcm(
   elimineDoublons(exercice.autoCorrection[i].propositions)
   if (context.isHtml) {
     espace = '&emsp;'
-    if (exercice?.autoCorrection[i].reponse == null) {
-      exercice.autoCorrection[i].reponse = {}
-    }
-    if (exercice.autoCorrection[i].reponse.param == null) {
-      exercice.autoCorrection[i].reponse.param = {}
-    }
-    exercice.autoCorrection[i].reponse.param.formatInteractif = 'qcm'
+    exercice.autoCorrection[i].formatInteractif = 'qcm'
   } else {
     espace = '\\qquad '
   }

@@ -10,6 +10,7 @@ import type Decimal from 'decimal.js'
 import type FractionEtendue from '../modules/FractionEtendue'
 import Hms from '../modules/Hms'
 import type { VueType } from './VueType'
+import type { AutoCorrectionAMC } from './amc/amcTypes'
 import { Complexe } from './mathFonctions/Complexe'
 
 /**
@@ -408,47 +409,6 @@ export type AnswerNormalizedType = {
   options?: OptionsComparaisonType
 }
 
-export type ValeurNames =
-  | 'reponse'
-  | 'champ1'
-  | 'champ2'
-  | 'champ3'
-  | 'champ4'
-  | 'champ5'
-  | 'champ6'
-  | 'rectangle1'
-  | 'rectangle2'
-  | 'rectangle3'
-  | 'rectangle4'
-  | 'rectangle5'
-  | 'rectangle6'
-  | 'rectangle7'
-  | 'rectangle8'
-  | 'field0'
-  | 'field1'
-  | 'field2'
-  | 'field3'
-  | 'field4'
-  | 'field5'
-  | 'field6'
-  | 'field7'
-  | 'field8'
-  | 'L1C1'
-  | 'L1C2'
-  | 'L1C3'
-  | 'L1C4'
-  | 'L1C5'
-  | 'L2C1'
-  | 'L2C2'
-  | 'L2C3'
-  | 'L2C4'
-  | 'L2C5'
-  | 'L3C1'
-  | 'L3C2'
-  | 'L3C3'
-  | 'L3C4'
-  | 'L3C5'
-
 /**
  * Type pour une valeur de réponse avec ses options
  */
@@ -510,6 +470,8 @@ export interface Valeur {
     score: { nbBonnesReponses: number; nbReponses: number }
   }
 }
+
+export type ValeurNames = keyof Valeur
 
 export interface ValeurNormalized {
   bareme?: (listePoints: number[]) => [number, number]
@@ -700,10 +662,40 @@ export function isReponseComplexe(value: unknown): value is ReponseComplexe {
   return isAnswerValueType(value) || isValeur(value)
 }
 
+export type AutoCorrectionInteractifQuestion = {
+  // Contrat cible interactif
+  valeur?: Valeur
+  formatInteractif?: InteractivityType
+  param?: ParamForQcmInteractif
+  propositions?: UneProposition[]
+  // Compatibilite transitoire avec l'ancien schema
+  enonce?: string
+  enonceAvant?: boolean
+  melange?: boolean
+  enonceAGauche?: boolean | [number, number]
+  enonceAvantUneFois?: boolean
+  enonceCentre?: boolean
+  enonceApresNumQuestion?: boolean
+  options?: AutoCorrectionOptions
+  reponse?: {
+    valeur?: ValeurNormalized
+    param?: ReponseParams
+    textePosition?: string
+    texte?: string
+  }
+}
+
+export type ParamForQcmInteractif = {
+  radio?: boolean
+  ordered?: boolean
+  vertical?: boolean
+  lastChoice?: number
+  format?: 'lettre' | 'case'
+}
 // Ajout d'un type dédié pour les choix de QCM
 export type ChoixQcm = {
-  texte: string // obligatoire pour les QCM interactif mais facultatif pour les QCM AMC (le forcer à vide si besoin)
-  statut?: boolean | string | number // boolean pour les QCM interacif et string | number pour les QCM AMC
+  texte: string
+  statut?: boolean | string | number
   // Ci-dessous, utile que pour AMC
   sanscadre?: boolean
   enonce?: string
@@ -768,18 +760,8 @@ export type UnePropositionOptionsAMC = UnePropositionOptionsInteractif & {
 }
 
 export type ReponseUnePropositionAMC = {
-  valeur?:
-    | ValeurNormalized
-    | ValeurNormalized[]
-    | number
-    | number[]
-    | IFractionEtendue
-    | Decimal
-    | IFractionEtendue[]
-    | Decimal[]
-    | string
-    | string[]
-  param?: ReponseParams
+  value: number | number[] | FractionEtendue
+  params?: ReponseParams
   textePosition?: string
   texte?: string
   alignement?: string
@@ -818,25 +800,8 @@ export interface AutoCorrectionOptions {
   avecSymboleMult?: boolean
 }
 
-export interface AutoCorrectionReponse {
-  valeur?: ValeurNormalized
-  param?: ReponseParams
-  textePosition?: string
-  texte?: string
-}
-
-export interface AutoCorrection {
-  enonce?: string
-  enonceAvant?: boolean
-  melange?: boolean
-  enonceAGauche?: boolean | [number, number]
-  enonceAvantUneFois?: boolean
-  enonceCentre?: boolean
-  enonceApresNumQuestion?: boolean
-  propositions?: UneProposition[]
-  reponse?: AutoCorrectionReponse
-  options?: AutoCorrectionOptions
-}
+// Alias de compatibilite.
+export type AutoCorrection = AutoCorrectionInteractifQuestion
 
 export type LegacyReponse =
   | string
@@ -939,7 +904,7 @@ export interface IExercice {
   contenu?: string
   contenuCorrection?: string
   autoCorrection: AutoCorrection[]
-  autoCorrectionAMC?: AutoCorrection[]
+  autoCorrectionAMC?: AutoCorrectionAMC[]
   figures?: Figure[] | ClickFigures[]
   amcReady?: boolean
   amcType?: string

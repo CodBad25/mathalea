@@ -119,7 +119,10 @@ export default class MultiplierDecimaux extends Exercice {
           '$~=$' +
           ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers)
       setReponse(this, i, reponse)
-      this.autoCorrection[i].options = {
+      if (this.autoCorrection[i].reponse == null) {
+        this.autoCorrection[i].reponse = {}
+      }
+      this.autoCorrection[i].reponse.param = {
         digits: 0,
         decimals: 0,
         signe: false,

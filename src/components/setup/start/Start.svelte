@@ -386,7 +386,7 @@
       exercise.nouvelleVersion()
       const questionsQcm = exercise.autoCorrection.filter(
         (el) =>
-          el.reponse?.param?.formatInteractif === 'qcm' &&
+          el.formatInteractif === 'qcm' &&
           el.propositions != null &&
           el.propositions?.length > 1,
       ).length

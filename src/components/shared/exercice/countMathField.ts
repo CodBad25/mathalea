@@ -8,15 +8,10 @@ export function countMathField(exercise: IExercice): number {
       return 0
     }
     for (const autoCorr of exercise.autoCorrection) {
-      if (
-        autoCorr != null &&
-        autoCorr.reponse != null &&
-        autoCorr.reponse.param != null &&
-        autoCorr.reponse.param.formatInteractif != null
-      ) {
+      if (autoCorr?.formatInteractif != null) {
         if (
-          autoCorr.reponse?.param?.formatInteractif === 'mathlive' ||
-          autoCorr.reponse?.param?.formatInteractif === 'qcm'
+          autoCorr.formatInteractif === 'mathlive' ||
+          autoCorr.formatInteractif === 'qcm'
         ) {
           numbOfAnswerFields++
         }

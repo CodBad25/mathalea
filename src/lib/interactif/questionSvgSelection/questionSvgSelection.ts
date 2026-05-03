@@ -36,7 +36,7 @@ export function verifQuestionSvgSelection(exercice: IExercice, i: number) {
   if (selection) {
     value = String(selection.value) // Convertir en string pour comparaison
   }
-  const reponse = exercice.autoCorrection[i]?.reponse?.valeur?.reponse?.value
+  const reponse = exercice.autoCorrection[i]?.valeur?.reponse?.value
   // Sauvegarde pour les exports Moodle, Capytale...
   if (exercice.answers === undefined) {
     exercice.answers = {}
@@ -97,16 +97,11 @@ export function selectionSvg(
   if (itemPadding) gapAttrs += ` item-padding="${itemPadding}"`
   if (
     context.isHtml &&
-    exercice?.autoCorrection[i]?.reponse?.param?.formatInteractif !==
-      'svgSelection'
+    exercice?.autoCorrection[i]?.formatInteractif !== 'svgSelection'
   ) {
     if (exercice?.autoCorrection == null) exercice.autoCorrection = []
     if (exercice?.autoCorrection[i] == null) exercice.autoCorrection[i] = {}
-    if (exercice?.autoCorrection[i].reponse == null)
-      exercice.autoCorrection[i].reponse = {}
-    if (exercice.autoCorrection[i].reponse.param == null)
-      exercice.autoCorrection[i].reponse.param = {}
-    exercice.autoCorrection[i].reponse.param.formatInteractif = 'svgSelection'
+    exercice.autoCorrection[i].formatInteractif = 'svgSelection'
   }
   let result =
     `<svg-selection class="mx-2 svgSelection" id="svgSelectionEx${exercice.numeroExercice}Q${i}"${styleStr}${gapAttrs} svgs="` +

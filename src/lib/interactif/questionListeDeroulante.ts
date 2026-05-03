@@ -32,7 +32,7 @@ export function verifQuestionListeDeroulante(exercice: IExercice, i: number) {
   if (liste) {
     value = (liste as any).value
   }
-  const reponse = exercice.autoCorrection[i]?.reponse?.valeur?.reponse?.value
+  const reponse = exercice.autoCorrection[i]?.valeur?.reponse?.value
   // Sauvegarde pour les exports Moodle, Capytale...
   if (exercice.answers === undefined) {
     exercice.answers = {}
@@ -78,17 +78,11 @@ export function choixDeroulant(
   style = style ? ` style="${style}"` : ''
   if (
     context.isHtml &&
-    exercice?.autoCorrection[i]?.reponse?.param?.formatInteractif !==
-      'listeDeroulante'
+    exercice?.autoCorrection[i]?.formatInteractif !== 'listeDeroulante'
   ) {
     if (exercice?.autoCorrection == null) exercice.autoCorrection = []
     if (exercice?.autoCorrection[i] == null) exercice.autoCorrection[i] = {}
-    if (exercice?.autoCorrection[i].reponse == null)
-      exercice.autoCorrection[i].reponse = {}
-    if (exercice.autoCorrection[i].reponse.param == null)
-      exercice.autoCorrection[i].reponse.param = {}
-    exercice.autoCorrection[i].reponse.param.formatInteractif =
-      'listeDeroulante'
+    exercice.autoCorrection[i].formatInteractif = 'listeDeroulante'
   }
   let result =
     `<liste-deroulante class="mx-2 listeDeroulante" id="ex${exercice.numeroExercice}Q${i}"${style} choices="` +

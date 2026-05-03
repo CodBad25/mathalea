@@ -42,6 +42,19 @@ export type AMCQcmChoice = {
   }
 }
 
+export type AMCLayoutOptions = {
+  radio?: boolean
+  ordered?: boolean
+  vertical?: boolean
+  lastChoice?: number
+  barreseparation?: boolean
+  multicols?: boolean
+  nbCols?: number
+  multicolsAll?: boolean
+  numerotationEnonce?: boolean
+  avecSymboleMult?: boolean
+}
+
 export type AMCUneProposition = {
   texte?: string
   statut?: AMCStatut
@@ -54,23 +67,7 @@ export type AMCUneProposition = {
   pointilles?: boolean | number
   enonce?: string
   propositions?: AMCQcmChoice[]
-  options?: {
-    ordered?: boolean
-    vertical?: boolean
-    lastChoice?: number
-    barreseparation?: boolean
-    multicols?: boolean
-    nbCols?: number
-    digits?: number
-    decimals?: number
-    signe?: boolean
-    exposantNbChiffres?: number
-    exposantSigne?: boolean
-    approx?: number
-    multicolsAll?: boolean
-    numerotationEnonce?: boolean
-    avecSymboleMult?: boolean
-  }
+  options?: AMCLayoutOptions
   reponse?: {
     valeur?: AMCReponseValue | AMCReponseValue[]
     param?: ReponseParams
@@ -95,32 +92,11 @@ export interface AutoCorrectionAMC {
     textePosition?: string
     texte?: string
   }
-  options?: {
-    radio?: boolean
-    ordered?: boolean
-    vertical?: boolean
-    lastChoice?: number
-    barreseparation?: boolean
-    multicols?: boolean
-    nbCols?: number
-    digits?: number
-    decimals?: number
-    signe?: boolean
-    exposantNbChiffres?: number
-    exposantSigne?: boolean
-    approx?: number
-    multicolsAll?: boolean
-    numerotationEnonce?: boolean
-    avecSymboleMult?: boolean
-  }
+  options?: AMCLayoutOptions
 }
 
-export type IExerciceAMC = Omit<
-  IExercice,
-  'autoCorrection' | 'autoCorrectionAMC'
-> & {
-  autoCorrection: AutoCorrectionAMC[]
-  autoCorrectionAMC?: AutoCorrectionAMC[]
+export type IExerciceAMC = Omit<IExercice, 'autoCorrectionAMC'> & {
+  autoCorrectionAMC: AutoCorrectionAMC[]
   amcType?: AMCExportType | string
 }
 

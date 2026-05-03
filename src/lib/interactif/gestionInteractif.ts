@@ -1,17 +1,18 @@
 import type Figure from 'apigeom/src/Figure'
 import Decimal from 'decimal.js'
 import type { MathfieldElement } from 'mathlive'
-import type {
-  AutoCorrection,
-  ClickFigures,
-  IExercice,
-  LegacyReponse,
-  LegacyReponses,
-  MathaleaSVG,
-  ReponseParams,
-  ResultOfExerciceInteractif,
-  Valeur,
-  ValeurNormalized,
+import {
+  isInteractivityType,
+  type AutoCorrection,
+  type ClickFigures,
+  type IExercice,
+  type LegacyReponse,
+  type LegacyReponses,
+  type MathaleaSVG,
+  type ReponseParams,
+  type ResultOfExerciceInteractif,
+  type Valeur,
+  type ValeurNormalized,
 } from '../../lib/types'
 import { context } from '../../modules/context'
 import FractionEtendue from '../../modules/FractionEtendue'
@@ -45,10 +46,7 @@ export function isClickFiguresArray(
  * @param objetReponse
  */
 export function setCliqueFigure(objetReponse: AutoCorrection) {
-  objetReponse.reponse = {
-    ...objetReponse.reponse,
-    param: { formatInteractif: 'cliqueFigure' },
-  }
+  objetReponse.formatInteractif = 'cliqueFigure'
 }
 /**
  * Pour positionner le formatInteractif d'une question sur 'qcm'
@@ -57,10 +55,7 @@ export function setCliqueFigure(objetReponse: AutoCorrection) {
  * @param objetReponse
  */
 export function setQcm(objetReponse: AutoCorrection) {
-  objetReponse.reponse = {
-    ...objetReponse.reponse,
-    param: { formatInteractif: 'qcm' },
-  }
+  objetReponse.formatInteractif = 'qcm'
 }
 /**
  * Pour positionner le formatInteractif d'une question sur 'listeDeroulante'
@@ -69,10 +64,7 @@ export function setQcm(objetReponse: AutoCorrection) {
  * @param objetReponse
  */
 export function setListeDeroulante(objetReponse: AutoCorrection) {
-  objetReponse.reponse = {
-    ...objetReponse.reponse,
-    param: { formatInteractif: 'listeDeroulante' },
-  }
+  objetReponse.formatInteractif = 'listeDeroulante'
 }
 // Garde structurel pour éviter d'importer MetaExercice et créer un cycle
 const isMetaExercice = (
@@ -106,7 +98,7 @@ export function exerciceInteractif(
   }
 
   for (let i = 0; i < exercice.autoCorrection.length; i++) {
-    const format = exercice.autoCorrection[i]?.reponse?.param?.formatInteractif
+    const format = exercice.autoCorrection[i]?.formatInteractif
     let resultat: string
     switch (format) {
       case 'svgSelection':
@@ -707,16 +699,16 @@ export function setReponse(
       case 'listeDeroulante': {
         if (exercice.autoCorrection == null) exercice.autoCorrection = []
         if (exercice.autoCorrection[i] == null) exercice.autoCorrection[i] = {}
-        if (exercice.autoCorrection[i].reponse == null) {
-          exercice.autoCorrection[i].reponse = {}
-        }
-        const rep = exercice.autoCorrection[i].reponse
-        if (rep != null) {
-          if (rep.valeur == null) rep.valeur = {}
-          if (rep.valeur.reponse == null) rep.valeur.reponse = { value: '' }
-          if (rep.param == null) rep.param = {}
-          rep.param.formatInteractif = 'listeDeroulante'
-          Object.assign(rep.valeur.reponse.value, reponses)
+
+        const questionAutoCorrection = exercice.autoCorrection[i]
+        questionAutoCorrection.formatInteractif = 'listeDeroulante'
+        questionAutoCorrection.param = undefined
+        questionAutoCorrection.valeur = {
+          reponse: {
+            value: Array.isArray(reponses)
+              ? reponses.map((value) => String(value))
+              : String(reponses),
+          },
         }
         return
       }
@@ -1103,8 +1095,7 @@ export function handleAnswers(
       : typeof reponses === 'object' &&
           Object.keys(reponses).some((key) => key.match(/^L\d+C\d+$/))
         ? 'tableauMathlive'
-        : (exercice.autoCorrection[question]?.reponse?.param
-            ?.formatInteractif ?? 'mathlive'))
+        : (exercice.autoCorrection[question]?.formatInteractif ?? 'mathlive'))
 
   if (exercice.autoCorrection == null) exercice.autoCorrection = []
   if (!(reponses instanceof Object)) {
@@ -1117,22 +1108,29 @@ export function handleAnswers(
   if (exercice.autoCorrection[question] === undefined) {
     exercice.autoCorrection[question] = {}
   }
-  if (exercice.autoCorrection[question].reponse === undefined) {
-    exercice.autoCorrection[question].reponse = {}
-  }
-  const rep = exercice.autoCorrection[question].reponse
-  if (rep != null) {
-    rep.param = params ?? { formatInteractif }
-    if (formatInteractif === undefined) formatInteractif = 'mathlive'
-    rep.param.formatInteractif = formatInteractif
-    rep.valeur = handleDefaultValeur(reponses)
-  }
+
+  if (formatInteractif === undefined) formatInteractif = 'mathlive'
+
+  const questionAutoCorrection = exercice.autoCorrection[question]
+  const param = { ...(params ?? {}) }
+  delete param.formatInteractif
+  const normalizedFormatInteractif = isInteractivityType(formatInteractif)
+    ? formatInteractif
+    : 'mathlive'
+
+  questionAutoCorrection.formatInteractif = normalizedFormatInteractif
+  questionAutoCorrection.param =
+    Object.keys(param).length > 0 ? param : undefined
+  questionAutoCorrection.valeur = handleDefaultValeur(
+    reponses,
+  ) as unknown as Valeur
+
   const url = new URL(window.location.href)
 
   if (url.hostname === 'localhost' && url.searchParams.has('triche')) {
     console.info(
       `Réponses de l'exercice ${(exercice.numeroExercice ?? 0) + 1} - question ${question + 1} : `,
-      rep.valeur,
+      questionAutoCorrection.valeur,
     )
   }
 }
@@ -1163,7 +1161,7 @@ export function verifQuestionMetaInteractif2d(
       )}`,
     )
   }
-  const reponses = exercice.autoCorrection[i].reponse.valeur
+  const reponses = exercice.autoCorrection[i].valeur
   if (reponses == null) {
     window.notify(
       `verifQuestionMetaInteractif2d: reponses est null pour la question ${i} de l'exercice ${exercice.id}`,
@@ -1285,7 +1283,7 @@ export function verifQuestionMultiMathfield(
     `multiMathfieldEx${exercice.numeroExercice}Q${i}`,
   ) as HTMLElement
   const template = multi?.getAttribute('data-template')
-  const reponses = exercice.autoCorrection[i].reponse.valeur
+  const reponses = exercice.autoCorrection[i].valeur
   if (reponses == null) {
     window.notify(
       `verifQuestionMultiMathfield: reponses est null pour la question ${i} de l'exercice ${exercice.id}`,
