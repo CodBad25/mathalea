@@ -1,10 +1,10 @@
+import { tableauColonneLigne } from '../../lib/2d/tableau'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
-import { Triangle } from '../../modules/Triangle'
-import Exercice from '../Exercice'
 import { context } from '../../modules/context'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
-import { tableauColonneLigne } from '../../lib/2d/tableau'
+import { Triangle } from '../../modules/Triangle'
+import Exercice from '../Exercice'
 
 export const titre = 'Déterminer un angle dans un triangle et sa nature'
 export const dateDePublication = '11/01/2023'
@@ -349,6 +349,7 @@ export default class AnglesTrianglesTableau extends Exercice {
           }
           break
         case 5:
+        default:
           {
             // triangle équilatéral
             const currentTriangle = this.typeTriangle('équilatéral')

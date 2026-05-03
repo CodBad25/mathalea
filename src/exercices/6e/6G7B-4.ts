@@ -5,13 +5,13 @@ import { papierPointe } from '../../lib/2d/reperes'
 import { TracePoint } from '../../lib/2d/TracePoint'
 import { symetrieAxiale } from '../../lib/2d/transformations'
 import { longueur } from '../../lib/2d/utilitairesGeometriques'
+import { bleuMathalea } from '../../lib/colors'
 import { choice, shuffle } from '../../lib/outils/arrayOutils'
 import { PointCliquable, pointCliquable } from '../../modules/2dinteractif'
 import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { bleuMathalea } from '../../lib/colors'
 export const titre = 'Compléter un nuage de points symétriques'
 export const dateDePublication = '18/12/2021'
 export const interactifReady = false
@@ -87,7 +87,6 @@ export default class CompleterParSymetrie6e extends Exercice {
         texteCorr,
         nbCouplesComplets;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       typeDePapier[0] = typeDePapier[1 + (i % 3)]
       // on remet à vide tous les tableaux utilisés pour la question suivante
@@ -141,7 +140,10 @@ export default class CompleterParSymetrie6e extends Exercice {
           break
         case 3:
           if (typeDePapier[this.sup2 === 4 ? 0 : this.sup2] === 'quad') {
-            d = droite(pointAbstrait(0, 1 + changeAxe[i]), pointAbstrait(9 - changeAxe[i], 10))
+            d = droite(
+              pointAbstrait(0, 1 + changeAxe[i]),
+              pointAbstrait(9 - changeAxe[i], 10),
+            )
           } else {
             d = droite(
               pointAbstrait(0, 3 + changeAxe[i]),
@@ -152,7 +154,10 @@ export default class CompleterParSymetrie6e extends Exercice {
         case 4:
         default:
           if (typeDePapier[this.sup2 === 4 ? 0 : this.sup2] === 'quad') {
-            d = droite(pointAbstrait(0, 10 - changeAxe[i]), pointAbstrait(10 - changeAxe[i], 0))
+            d = droite(
+              pointAbstrait(0, 10 - changeAxe[i]),
+              pointAbstrait(10 - changeAxe[i], 0),
+            )
           } else {
             d = droite(
               pointAbstrait(0, 8 + changeAxe[i]),
@@ -223,13 +228,17 @@ export default class CompleterParSymetrie6e extends Exercice {
       for (let p = 0; p < pointsChoisis.length; p += 2) {
         if (p < nbCouplesComplets) {
           // On affiche un certains nombre de couples
-          pointsAffiches.push(pointAbstrait(pointsChoisis[p][0], pointsChoisis[p][1]))
+          pointsAffiches.push(
+            pointAbstrait(pointsChoisis[p][0], pointsChoisis[p][1]),
+          )
           pointsAffiches.push(
             pointAbstrait(pointsChoisis[p + 1][0], pointsChoisis[p + 1][1]),
           )
         } else {
           // et on affiche un seul des points pour les couples restants
-          pointsAffiches.push(pointAbstrait(pointsChoisis[p][0], pointsChoisis[p][1]))
+          pointsAffiches.push(
+            pointAbstrait(pointsChoisis[p][0], pointsChoisis[p][1]),
+          )
           pointsEnPlusCorr.push(
             pointAbstrait(pointsChoisis[p + 1][0], pointsChoisis[p + 1][1]),
           )
@@ -284,7 +293,7 @@ export default class CompleterParSymetrie6e extends Exercice {
         )
       ) {
         if (context.isAmc) {
-          this.autoCorrection[i] = {
+          this.autoCorrectionAMC[i] = {
             enonce: '',
             enonceAGauche: true,
             enonceAvant: false,

@@ -289,7 +289,7 @@ export default class CalculsDeDureesOuHoraires extends Exercice {
       }
       texteCorr += texteCorrPerso
       if (context.isAmc) {
-        this.autoCorrection[i] = {
+        this.autoCorrectionAMC[i] = {
           enonce:
             'Dans chacun des encadrés, montrer une démarche ou un calcul et répondre par une phrase.<br>',
           enonceAvant: false,
