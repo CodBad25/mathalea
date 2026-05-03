@@ -2,6 +2,7 @@ import { propositionsQcm } from '../../lib/interactif/qcm'
 import { choice } from '../../lib/outils/arrayOutils'
 import { texFractionFromString } from '../../lib/outils/deprecatedFractions'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { arrondi } from '../../lib/outils/nombres'
 import { sp } from '../../lib/outils/outilString'
 import { texNombre2 } from '../../lib/outils/texNombre'
 import {
@@ -61,7 +62,7 @@ export default class MultiplierPar001 extends Exercice {
       melange: 4,
       defaut: 4,
       nbQuestions: this.nbQuestions,
-    })
+    }).map(Number)
 
     const rang = ['millièmes', 'centièmes', 'dixièmes']
 
@@ -76,7 +77,6 @@ export default class MultiplierPar001 extends Exercice {
         exposant,
         cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       texte = '' // Nous utilisons souvent cette variable pour construire le texte de la question.
       texteCorr = '' // Idem pour le texte de la correction.
@@ -87,7 +87,10 @@ export default class MultiplierPar001 extends Exercice {
         exposant = 0
       }
       nombreentier = randint(10, 1000) + randint(10, 999) * choice([0, 1000])
-      nombre = nombreentier * 10 ** exposant
+      nombre = arrondi(
+        nombreentier * 10 ** exposant,
+        Math.max(0, -coef - exposant),
+      )
       resultat = nombre * 10 ** coef
 
       switch (
