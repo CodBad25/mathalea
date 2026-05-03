@@ -84,7 +84,7 @@ export default class MultiplesOuDiviseurs extends Exercice {
         }
       }
       this.autoCorrection[i] = {}
-      this.autoCorrection[i].options = { ordered: false }
+      this.autoCorrection[i].options = { ordered: false, radio: true }
       // this.autoCorrection[i].enonce = `${texte}\n`
       this.autoCorrection[i].propositions = [
         {

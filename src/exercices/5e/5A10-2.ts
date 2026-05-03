@@ -71,9 +71,9 @@ export default class ListeMultiples extends Exercice {
       for (let i = 1; i <= 5; i++) {
         multiples.push(i * n)
       }
-      let texte = `Premiers multiples non nuls de $${n}$ :`
+      let texte = `5 premiers multiples non nuls de $${n}$ :`
       let texteCorr = this.correctionDetaillee
-        ? `Les premiers multiples nons nuls de $${n}$ sont 
+        ? `Les 5 premiers multiples nons nuls de $${n}$ sont 
 $${n} \\times 1,\\ ${n} \\times 2,\\ ${n} \\times 3,\\ ${n} \\times 4$ et $${n} \\times 5$.<br>`
         : ''
       texteCorr += `${texte} ${texteEnCouleurEtGras(multiples.join(' ; '))}.`
