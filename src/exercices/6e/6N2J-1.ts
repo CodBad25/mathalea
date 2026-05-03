@@ -219,17 +219,14 @@ export default class DivisionsEuclidiennesEgaliteFondamentale extends Exercice {
       )
       // Pour AMC question AmcOpen
       if (context.isAmc) {
-        this.autoCorrection[i].enonce =
+        this.autoCorrectionAMC[i].enonce =
           "Poser et effectuer la division euclidienne suivante puis donner l'égalité fondamentale correspondante.<br>" +
           texte
-        // @ts-expect-error Trop compliqué à typer
-        this.autoCorrection[i].propositions[0].texte = texteCorr
-        // @ts-expect-error Trop compliqué à typer
-        this.autoCorrection[i].propositions[0].sanscadre = false
-        // @ts-expect-error Trop compliqué à typer
-        this.autoCorrection[i].propositions[0].statut = 3
-        // @ts-expect-error Trop compliqué à typer
-        this.autoCorrection[i].propositions[0].pointilles = false
+        this.autoCorrectionAMC[i].propositions = []
+        this.autoCorrectionAMC[i].propositions![0].texte = texteCorr
+        this.autoCorrectionAMC[i].propositions![0].sanscadre = false
+        this.autoCorrectionAMC[i].propositions![0].statut = 3
+        this.autoCorrectionAMC[i].propositions![0].pointilles = false
       }
       if (this.questionJamaisPosee(i, a, b)) {
         // Si la question n'a jamais été posée, on en crée une autre

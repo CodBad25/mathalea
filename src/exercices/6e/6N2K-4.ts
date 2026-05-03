@@ -78,7 +78,14 @@ export default class APartirDeDivisionsEuclidiennes extends Exercice {
     ) // Tous les types de questions sont posées mais l'ordre diffère à chaque "cycle"
 
     for (
-      let i = 0, texte = '', texteCorr = '', cpt = 0, a, b, q, r;
+      let i = 0,
+        texte = '',
+        texteCorr = '',
+        cpt = 0,
+        a = 0,
+        b = 0,
+        q = 0,
+        r = 0;
       i < this.nbQuestions && cpt < 50;
     ) {
       // La ligne suivante ne doit pas être mise après les setReponses car sinon elle les efface
@@ -164,15 +171,14 @@ export default class APartirDeDivisionsEuclidiennes extends Exercice {
       )
       // Pour AMC question AmcOpen
       if (context.isAmc) {
-        this.autoCorrection[i].enonce =
+        this.autoCorrectionAMC[i].enonce =
           'Indiquer une égalité à partir de la  division euclidienne suivante : <br><br>' +
           texte
-        // @ts-expect-error Trop compliqué à typer
-        this.autoCorrection[i].propositions[0].texte = texteCorr
-        // @ts-expect-error Trop compliqué à typer
-        this.autoCorrection[i].propositions[0].statut = 1
+        this.autoCorrectionAMC[i].propositions = []
+        this.autoCorrectionAMC[i].propositions![0].texte = texteCorr
+        this.autoCorrectionAMC[i].propositions![0].statut = 1
       }
-      if (this.listeQuestions.indexOf(texte) === -1) {
+      if (this.questionJamaisPosee(i, a, b, q, r)) {
         // Si la question n'a jamais été posée, on en crée une autre
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr

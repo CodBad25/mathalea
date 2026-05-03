@@ -1,3 +1,4 @@
+import { ensureAmcParam } from '../../lib/amc/amcHelpers'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import {
   handleAnswers,
@@ -91,9 +92,9 @@ export default class ÉcrireNombresDecimal extends Exercice {
       let i = 0,
         texte,
         texteCorr,
-        a,
-        b,
-        c,
+        a = 0,
+        b = 0,
+        c = 0,
         type,
         nombre,
         tranche,
@@ -168,12 +169,11 @@ export default class ÉcrireNombresDecimal extends Exercice {
       texte = texte.replace('et-un unités', 'et-une unités')
       texteCorr = texteCorr.replace('et-un unités', 'et-une unités')
       if (context.isAmc) {
-        // @ts-expect-error
-        this.autoCorrection[i].reponse.param.digits = 6
-        // @ts-expect-error
-        this.autoCorrection[i].reponse.param.decimals = 3
+        const amcParam = ensureAmcParam(this, i)
+        amcParam.digits = 6
+        amcParam.decimals = 3
       }
-      if (this.listeQuestions.indexOf(texte) === -1) {
+      if (this.questionJamaisPosee(i, a, b, c)) {
         // Si la question n'a jamais été posée, on en crée une autre
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr

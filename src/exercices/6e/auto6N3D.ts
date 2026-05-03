@@ -162,62 +162,54 @@ export default class ExerciceVraiFauxDivisibleMultipleDiviseur extends Exercice 
           texte = `$${N}$ est un diviseur de $${texNombre(a)}$.`
           texteCorr = texte.replace('.', ' ') + ' : Vrai'
           texteCorr += justification(N, a, true)
-          // @ts-expect-error
-          this.autoCorrection[i].propositions[0].statut = true
+          this.autoCorrection[i].propositions![0].statut = true
           break
         case 'divisibleParN':
           texte = `$${texNombre(a)}$ est divisible par $${N}$.`
           texteCorr = texte.replace('.', ' ') + ' : Vrai'
           texteCorr += justification(N, a, true)
-          // @ts-expect-error
-          this.autoCorrection[i].propositions[0].statut = true
+          this.autoCorrection[i].propositions![0].statut = true
           break
         case 'multipleDeN':
           texte = `$${texNombre(a)}$ est un multiple de $${N}$.`
           texteCorr = texte.replace('.', ' ') + ' : Vrai'
           texteCorr += justification(N, a, true)
-          // @ts-expect-error
-          this.autoCorrection[i].propositions[0].statut = true
+          this.autoCorrection[i].propositions![0].statut = true
           break
         case 'NdiviseurF':
           a += randint(1, N - 1)
           texte = `$${N}$ est un diviseur de $${texNombre(a)}$.`
           texteCorr = texte.replace('.', ' ') + ' : Faux'
           texteCorr += justification(N, a, false)
-          // @ts-expect-error
-          this.autoCorrection[i].propositions[1].statut = true
+          this.autoCorrection[i].propositions![1].statut = true
           break
         case 'divisibleParNF':
           a += randint(1, N - 1)
           texte = `$${texNombre(a)}$ est divisible par $${N}$.`
           texteCorr = texte.replace('.', ' ') + ' : Faux'
           texteCorr += justification(N, a, false)
-          // @ts-expect-error
-          this.autoCorrection[i].propositions[1].statut = true
+          this.autoCorrection[i].propositions![1].statut = true
           break
         case 'multipleDeNF':
           a += randint(1, N - 1)
           texte = `$${texNombre(a)}$ est un multiple de $${N}$.`
           texteCorr = texte.replace('.', ' ') + ' : Faux'
           texteCorr += justification(N, a, false)
-          // @ts-expect-error
-          this.autoCorrection[i].propositions[1].statut = true
+          this.autoCorrection[i].propositions![1].statut = true
           break
         case 'NdiviseurEnvers':
           texte = `$${texNombre(a)}$ est un diviseur de $${N}$.`
           texteCorr = texte.replace('.', ' ') + ' : Faux'
           texteCorr += `, il faudrait plutôt dire $${N}$ est un diviseur de $${texNombre(a)}$`
           texteCorr += justification(N, a, true)
-          // @ts-expect-error
-          this.autoCorrection[i].propositions[1].statut = true
+          this.autoCorrection[i].propositions![1].statut = true
           break
         case 'divisibleParNEnvers':
           texte = `$${N}$ est divisible par $${texNombre(a)}$.`
           texteCorr = texte.replace('.', ' ') + ' : Faux'
           texteCorr += `, il faudrait plutôt dire $${texNombre(a)}$ est divisible par $${N}$`
           texteCorr += justification(N, a, true)
-          // @ts-expect-error
-          this.autoCorrection[i].propositions[1].statut = true
+          this.autoCorrection[i].propositions![1].statut = true
           break
         case 'multipleDeNEnvers':
         default:
@@ -225,8 +217,7 @@ export default class ExerciceVraiFauxDivisibleMultipleDiviseur extends Exercice 
           texteCorr = texte.replace('.', ' ') + ' : Faux'
           texteCorr += `, il faudrait plutôt dire $${a}$ est un multiple de $${N}$`
           texteCorr += justification(N, a, true)
-          // @ts-expect-error
-          this.autoCorrection[i].propositions[1].statut = true
+          this.autoCorrection[i].propositions![1].statut = true
           break
       }
       const props = propositionsQcm(this, i)

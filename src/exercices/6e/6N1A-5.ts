@@ -173,7 +173,7 @@ export default class ExerciceNumerationEntier extends Exercice {
 
       if (context.isAmc) {
         const nbDigitsSupplementaires = randint(0, 2)
-        this.autoCorrection[i] = {
+        this.autoCorrectionAMC[i] = {
           enonce: texte, // Si vide, l'énoncé est celui de l'exercice.
           propositions: [
             {
@@ -182,8 +182,7 @@ export default class ExerciceNumerationEntier extends Exercice {
           ],
           reponse: {
             texte: 'AMC', // facultatif
-            // @ts-expect-error
-            valeur: [reponse], // obligatoire (la réponse numérique à comparer à celle de l'élève), NE PAS METTRE DE STRING à virgule ! 4.9 et non pas 4,9. Cette valeur doit être passée dans un tableau d'où la nécessité des crochets.
+            valeur: Number(reponse), // obligatoire (la réponse numérique à comparer à celle de l'élève), NE PAS METTRE DE STRING à virgule ! 4.9 et non pas 4,9. Cette valeur doit être passée dans un tableau d'où la nécessité des crochets.
             alignement: 'flushleft', // EE : ce champ est facultatif et n'est fonctionnel que pour l'hybride. Il permet de choisir où les cases sont disposées sur la feuille. Par défaut, c'est comme le texte qui le précède. Pour mettre à gauche, au centre ou à droite, choisir parmi ('flushleft', 'center', 'flushright').
             param: {
               digits:

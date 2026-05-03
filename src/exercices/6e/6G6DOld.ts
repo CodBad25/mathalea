@@ -6,7 +6,7 @@ import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { nommePolygone } from '../../lib/2d/polygones'
 import { segment } from '../../lib/2d/segmentsVecteurs'
 import { triangle2points2angles } from '../../lib/2d/triangles'
-import { orangeMathalea, bleuMathalea } from '../../lib/colors'
+import { bleuMathalea, orangeMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { setReponse } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -1420,7 +1420,7 @@ export default class ExerciceAnglesTrianglesOld extends Exercice {
         )
 
       if (context.isAmc) {
-        this.autoCorrection[i] = {
+        this.autoCorrectionAMC[i] = {
           enonce: '',
           enonceAvant: false,
           // options: { multicols: true, barreseparation: true },
@@ -1451,12 +1451,10 @@ export default class ExerciceAnglesTrianglesOld extends Exercice {
           ],
         }
         if (reponseInteractive.length > 1) {
-          // @ts-expect-error
-          this.autoCorrection[
+          this.autoCorrectionAMC[
             i
-          ].propositions[0].propositions[0].multicolsBegin = true
-          // @ts-expect-error
-          this.autoCorrection[i].propositions.push({
+          ].propositions![0].propositions![0].multicolsBegin = true
+          this.autoCorrectionAMC[i].propositions!.push({
             type: 'AMCNum',
             propositions: [
               {
@@ -1478,8 +1476,7 @@ export default class ExerciceAnglesTrianglesOld extends Exercice {
           })
         }
         if (reponseInteractive.length > 2) {
-          // @ts-expect-error
-          this.autoCorrection[i].propositions.push({
+          this.autoCorrectionAMC[i].propositions!.push({
             type: 'AMCNum',
             propositions: [
               {
