@@ -1,5 +1,8 @@
 import seedrandom from 'seedrandom'
-import { getExercisesFromExercicesParams, mathaleaHandleExerciceSimple } from './mathalea'
+import {
+  getExercisesFromExercicesParams,
+  mathaleaHandleExerciceSimple,
+} from './mathalea'
 import type { IExercice } from './types'
 
 const KUTSUM_API_URL = 'https://app.kutsum.org/api/v1/external-drafts'
@@ -55,15 +58,26 @@ type KutsumPayload = {
   exercises: KutsumExercise[]
 }
 
-function buildKutsumQuestionsFromAutoCorrection(exercise: IExercice): KutsumQuestion[] {
+function buildKutsumQuestionsFromAutoCorrection(
+  exercise: IExercice,
+): KutsumQuestion[] {
   const questions: KutsumQuestion[] = []
   for (const [index, autoCorrection] of exercise.autoCorrection.entries()) {
-    const formatInteractif = autoCorrection.reponse?.param?.formatInteractif ?? exercise.formatInteractif
+    const autoCorrectionAMC = exercise.autoCorrectionAMC?.[index]
+    const formatInteractif =
+      autoCorrection.formatInteractif ?? exercise.formatInteractif
     const text = autoCorrection.enonce || exercise.listeQuestions[index] || ''
 
-    if (formatInteractif === 'qcm' && autoCorrection.propositions && autoCorrection.propositions.length >= 2) {
+    if (
+      formatInteractif === 'qcm' &&
+      autoCorrection.propositions &&
+      autoCorrection.propositions.length >= 2
+    ) {
       const choices = autoCorrection.propositions
-        .filter((p): p is { texte: string; statut?: boolean | string | number } => p.texte != null)
+        .filter(
+          (p): p is { texte: string; statut?: boolean | string | number } =>
+            p.texte != null,
+        )
         .map((p) => ({
           text: p.texte ?? '',
           isCorrect: p.statut === true || p.statut === 1,
@@ -77,19 +91,29 @@ function buildKutsumQuestionsFromAutoCorrection(exercise: IExercice): KutsumQues
         answerOptions: choices.map((c) => c.text),
         correctAnswers: choices.map((c) => c.isCorrect),
       })
-    } else if (formatInteractif === 'mathlive' || formatInteractif === 'calcul') {
-      const options = autoCorrection.reponse?.valeur?.reponse?.options
+    } else if (
+      formatInteractif === 'mathlive' ||
+      formatInteractif === 'calcul'
+    ) {
+      const options = autoCorrection.valeur?.reponse?.options
       const comparisons: string[] = []
       if (options && typeof options === 'object') {
-        for (const [key, value] of Object.entries(options as Record<string, unknown>)) {
+        for (const [key, value] of Object.entries(
+          options as Record<string, unknown>,
+        )) {
           if (value === true) comparisons.push(key)
         }
       }
-      const valeur = autoCorrection.reponse?.valeur
+      const valeur = autoCorrection.valeur
       let targetLatex = ''
-      if (valeur && typeof valeur === 'object' && 'reponse' in valeur && valeur.reponse) {
+      if (
+        valeur &&
+        typeof valeur === 'object' &&
+        'reponse' in valeur &&
+        valeur.reponse
+      ) {
         const rep = valeur.reponse.value
-        targetLatex = Array.isArray(rep) ? rep[0] : String(rep)
+        targetLatex = Array.isArray(rep) ? String(rep[0]) : String(rep)
       } else if (typeof valeur === 'number') {
         targetLatex = String(valeur)
       } else if (typeof valeur === 'string') {
@@ -97,14 +121,19 @@ function buildKutsumQuestionsFromAutoCorrection(exercise: IExercice): KutsumQues
       }
       if (!targetLatex) continue
       const numericValue = Number(targetLatex)
-      if (!isNaN(numericValue) && isFinite(numericValue) && comparisons.length === 0) {
+      if (
+        !isNaN(numericValue) &&
+        isFinite(numericValue) &&
+        comparisons.length === 0
+      ) {
         questions.push({
           questionType: 'numeric',
           text,
           correctAnswer: numericValue,
           tolerance:
-            autoCorrection.reponse?.param?.approx != null && typeof autoCorrection.reponse.param.approx === 'number'
-              ? autoCorrection.reponse.param.approx
+            autoCorrectionAMC?.reponse?.param?.approx != null &&
+            typeof autoCorrectionAMC.reponse.param.approx === 'number'
+              ? autoCorrectionAMC.reponse.param.approx
               : 0,
           unit: null,
         })
@@ -113,7 +142,7 @@ function buildKutsumQuestionsFromAutoCorrection(exercise: IExercice): KutsumQues
           questionType: 'math',
           text,
           targetLatex,
-          validationConfig: comparisons
+          validationConfig: comparisons,
         })
       }
     }
@@ -131,8 +160,14 @@ export function buildKutsumPayload(exercises: IExercice[]): KutsumPayload {
     seedrandom(exercise.seed, { global: true })
     if (exercise.typeExercice === 'simple') {
       mathaleaHandleExerciceSimple(exercise, false, i)
-    } else if (typeof (exercise as IExercice & { nouvelleVersionWrapper?: (i: number) => void }).nouvelleVersionWrapper === 'function') {
-      ;(exercise as IExercice & { nouvelleVersionWrapper: (i: number) => void }).nouvelleVersionWrapper(i)
+    } else if (
+      typeof (
+        exercise as IExercice & { nouvelleVersionWrapper?: (i: number) => void }
+      ).nouvelleVersionWrapper === 'function'
+    ) {
+      ;(
+        exercise as IExercice & { nouvelleVersionWrapper: (i: number) => void }
+      ).nouvelleVersionWrapper(i)
     }
     const questions = buildKutsumQuestionsFromAutoCorrection(exercise)
     if (questions.length > 0) {
@@ -170,7 +205,8 @@ export async function sendToKutsum(payload: KutsumPayload): Promise<string> {
   }
 
   const data = await response.json()
-  if (!data.draftId) throw new Error('Réponse inattendue de Kutsum (pas de draftId)')
+  if (!data.draftId)
+    throw new Error('Réponse inattendue de Kutsum (pas de draftId)')
   return data.draftId
 }
 
@@ -193,7 +229,7 @@ export async function exportKutsum(): Promise<void> {
     if (payload.exercises.length === 0) {
       tab?.close()
       alert(
-        "Aucun exercice compatible avec Kutsum parmi les exercices sélectionnés (seuls les QCM et les exercices interactifs sont supportés)",
+        'Aucun exercice compatible avec Kutsum parmi les exercices sélectionnés (seuls les QCM et les exercices interactifs sont supportés)',
       )
       return
     }
@@ -205,6 +241,8 @@ export async function exportKutsum(): Promise<void> {
     }
   } catch (e) {
     tab?.close()
-    alert(`Impossible de contacter Kutsum : ${e instanceof Error ? e.message : String(e)}`)
+    alert(
+      `Impossible de contacter Kutsum : ${e instanceof Error ? e.message : String(e)}`,
+    )
   }
 }
