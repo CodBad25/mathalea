@@ -1119,7 +1119,7 @@ export function doesLatexNeedsPics(contents: {
 }) {
   const exos: ExoContent = {
     content: contents.content,
-    contentCorr: contents.content,
+    contentCorr: contents.contentCorr,
   }
   const imas = getPicsNames([exos])
   return imas.some((e) => e.length > 0)
