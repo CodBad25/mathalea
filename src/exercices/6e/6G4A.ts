@@ -555,7 +555,7 @@ export default class NommerUnAngle extends Exercice {
       texte += '<br>' + figureExo
       texteCorr += '<br>' + mathalea2d(params, objetsCorrection)
       if (context.isAmc) {
-        this.autoCorrection[i] = {
+        this.autoCorrectionAMC[i] = {
           enonce: figureExo,
           enonceAvant: true, // EE : ce champ est facultatif et permet (si false) de supprimer l'énoncé ci-dessus avant la numérotation de chaque question.
           enonceCentre: true, // EE : ce champ est facultatif et permet (si true) de centrer le champ 'enonce' ci-dessus.

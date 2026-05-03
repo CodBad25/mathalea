@@ -158,7 +158,7 @@ class ReperagePointDuPlan extends ExerciceSimple {
         }}`
     }
     if (context.isAmc) {
-      this.autoCorrection[0] = {
+      this.autoCorrectionAMC[0] = {
         enonce: this.question,
         propositions: [
           {

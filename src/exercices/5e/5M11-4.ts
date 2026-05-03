@@ -5,6 +5,7 @@ import { placeLatexSurSegment } from '../../lib/2d/placeLatexSurSegment'
 import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { rotation } from '../../lib/2d/transformations'
 import { pointAdistance } from '../../lib/2d/utilitairesPoint'
+import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { toutAUnPoint } from '../../lib/interactif/mathLive'
@@ -20,7 +21,6 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { bleuMathalea } from '../../lib/colors'
 
 export const interactifReady = true
 export const interactifType = 'multiMathfield'
@@ -279,7 +279,7 @@ export default class PerimetreAireEtPortionsDeDisques extends Exercice {
 
         if (context.isAmc) {
           if (this.sup === 1) {
-            this.autoCorrection[i] = {
+            this.autoCorrectionAMC[i] = {
               enonce: '',
               propositions: [
                 {
@@ -307,7 +307,7 @@ export default class PerimetreAireEtPortionsDeDisques extends Exercice {
               ],
             }
           } else if (this.sup === 2) {
-            this.autoCorrection[i] = {
+            this.autoCorrectionAMC[i] = {
               enonce: '',
               propositions: [
                 {
@@ -335,7 +335,7 @@ export default class PerimetreAireEtPortionsDeDisques extends Exercice {
               ],
             }
           } else {
-            this.autoCorrection[i] = {
+            this.autoCorrectionAMC[i] = {
               enonce:
                 'Calculer le périmètre de la figure suivante.<br>' + figure,
               enonceAvant: false,

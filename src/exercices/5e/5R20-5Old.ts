@@ -97,7 +97,7 @@ export default class ExerciceTableauAdditionsRelatifs extends Exercice {
     this.listeCorrections.push(texteCorr)
 
     if (context.isAmc) {
-      this.autoCorrection[0] = {
+      this.autoCorrectionAMC[0] = {
         enonce: this.question,
         propositions: [
           {

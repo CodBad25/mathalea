@@ -5,7 +5,6 @@ import { tracePoint } from '../../lib/2d/TracePoint'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { remplisLesBlancs } from '../../lib/interactif/questionMathLive'
-import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import {
   arrondi,
   nombreDeChiffresDansLaPartieDecimale,
@@ -20,6 +19,7 @@ import {
   listeQuestionsToContenu,
   randint,
 } from '../../modules/outils'
+import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
 
 export const titre = "Lire l'abscisse relative d'un point"
@@ -235,7 +235,7 @@ export default class LireAbscisseRelative extends Exercice {
           champ3: { value: String(abs3) },
         })
       } else {
-        this.autoCorrection[i] = {
+        this.autoCorrectionAMC[i] = {
           enonce: '',
           options: { barreseparation: false },
           propositions: [

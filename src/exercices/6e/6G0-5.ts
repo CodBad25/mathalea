@@ -5,6 +5,7 @@ import { labelPoint } from '../../lib/2d/textes'
 import { tracePoint } from '../../lib/2d/TracePoint'
 import { pointSurDroite } from '../../lib/2d/utilitairesPoint'
 import { vide2d } from '../../lib/2d/Vide2d'
+import { bleuMathalea } from '../../lib/colors'
 import { deuxColonnesResp } from '../../lib/format/miseEnPage'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { choixDeroulant } from '../../lib/interactif/questionListeDeroulante'
@@ -14,7 +15,6 @@ import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { bleuMathalea } from '../../lib/colors'
 export const titre = 'Appartenir ou ne pas appartenir'
 export const dateDePublication = '05/10/2022'
 export const dateDeModifImportante = '4/10/2023'
@@ -55,13 +55,17 @@ export default class constructionElementaire extends Exercice {
     for (
       let i = 0, colonne1, colonne2, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       const objetsEnonce = []
       const objetsCorrection = []
       const propositionsAMC = []
       const indLettre = randint(1, 15)
-      const A = pointAbstrait(0, 0, lettreDepuisChiffre(indLettre), 'above left')
+      const A = pointAbstrait(
+        0,
+        0,
+        lettreDepuisChiffre(indLettre),
+        'above left',
+      )
       const B = pointAbstrait(
         randint(10, 11),
         randint(-4, 4, [-1, 0, 1]),
@@ -268,7 +272,7 @@ export default class constructionElementaire extends Exercice {
         this.listeCorrections[i] = correction + '<br>'
 
         if (context.isAmc) {
-          this.autoCorrection[i] = {
+          this.autoCorrectionAMC[i] = {
             enonce:
               figure +
               'À partir de la figure ci-dessus, compléter les phrases suivantes par $\\notin$ ou $\\in$.',
