@@ -202,18 +202,6 @@ export function verifQuestionTableur(
       )}`,
     )
   }
-  if (exercice.autoCorrection[questionIndex].options == null) {
-    window.notify(
-      `verifQuestionTableur appelé sur une question sans param : ${JSON.stringify(
-        {
-          exercice,
-          question: questionIndex,
-          param: exercice.autoCorrection[questionIndex].options,
-        },
-      )}`,
-      { exercice, questionIndex },
-    )
-  }
 
   if (exercice.answers === undefined) exercice.answers = {}
   const reponses = exercice.autoCorrection[questionIndex].valeur
