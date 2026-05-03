@@ -1,3 +1,4 @@
+import { ensureAmcParam } from '../../lib/amc/amcHelpers'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { setReponse } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -122,10 +123,9 @@ $${p}~\\%~\\text{de }${n}= ${p / 10} \\times ${n}\\div${10} =  ${texNombre((p * 
         this.autoCorrection[i].propositions = [
           { texte: texteCorr, statut: false },
         ]
-        // @ts-expect-error
-        this.autoCorrection[i].reponse.param.digits = 3
-        // @ts-expect-error
-        this.autoCorrection[i].reponse.param.decimals = 1
+        const amcParam = ensureAmcParam(this, i)
+        amcParam.digits = 3
+        amcParam.decimals = 1
       }
 
       // Uniformisation : Mise en place de la réponse attendue en interactif en orange et gras

@@ -410,7 +410,7 @@ export default class CalculsImagesFonctions extends Exercice {
     let maxNbDecimals = 0
     if (context.isAmc) {
       for (let i = 0; i < this.nbQuestions; i++) {
-        const valeur = this.autoCorrection[i].reponse?.valeur
+        const valeur = this.autoCorrection[i].valeur
         if (valeur != null && Array.isArray(valeur)) {
           maxNbChiffresAvantLaVirgule = Math.max(
             maxNbChiffresAvantLaVirgule,

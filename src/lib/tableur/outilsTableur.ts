@@ -216,7 +216,7 @@ export function verifQuestionTableur(
   }
 
   if (exercice.answers === undefined) exercice.answers = {}
-  const reponses = exercice.autoCorrection[questionIndex].reponse.valeur
+  const reponses = exercice.autoCorrection[questionIndex].valeur
   if (reponses == null) {
     window.notify(
       `verifQuestionTableur: reponses est null pour la question ${questionIndex} de l'exercice ${exercice.id}`,

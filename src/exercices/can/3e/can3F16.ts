@@ -109,7 +109,7 @@ export default class ImageAntecedentDepuisTableau extends Exercice {
           "<br><br> <em>S'il y a plusieurs réponses, les séparer avec le point-virgule</em>.<br>"
 
       if (context.isAmc) {
-        this.autoCorrection[i] = {
+        this.autoCorrectionAMC[i] = {
           enonce: texte,
           enonceAvant: true, // EE : ce champ est facultatif et permet (si false) de supprimer l'énoncé ci-dessus avant la numérotation de chaque question.
           enonceAvantUneFois: false, // EE : ce champ est facultatif et permet (si true) d'afficher l'énoncé ci-dessus une seule fois avant la numérotation de la première question de l'exercice. Ne fonctionne correctement que si l'option melange est à false.
@@ -133,7 +133,7 @@ export default class ImageAntecedentDepuisTableau extends Exercice {
       })
       texte += ajouteChampTexteMathLive(this, i, KeyboardType.clavierDeBase)
       if (context.isAmc) {
-        this.autoCorrection[i].propositions?.push(
+        this.autoCorrectionAMC[i].propositions?.push(
           ajouteProposition(question, b),
         )
       }

@@ -1,4 +1,4 @@
-import { orangeMathalea, bleuMathalea } from '../../lib/colors'
+import { bleuMathalea, orangeMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { setReponse } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -154,7 +154,7 @@ export default class DivisionEuclidienneEtAjout extends Exercice {
           ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers)
       }
       if (context.isAmc) {
-        this.autoCorrection[i] = this.sup
+        this.autoCorrectionAMC[i] = this.sup
           ? {
               enonce: '',
               enonceAvant: false,

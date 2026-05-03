@@ -1,19 +1,19 @@
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import { ecritureParentheseSiNegatif } from '../../lib/outils/ecritures'
-import { unSiPositifMoinsUnSinon } from '../../lib/outils/nombres'
-import { pgcd } from '../../lib/outils/primalite'
-import Exercice from '../Exercice'
-import { listeQuestionsToContenu, randint } from '../../modules/outils'
-import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
-import { context } from '../../modules/context'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import {
   miseEnEvidence,
   texteEnCouleurEtGras,
 } from '../../lib/outils/embellissements'
-import FractionEtendue from '../../modules/FractionEtendue'
+import { unSiPositifMoinsUnSinon } from '../../lib/outils/nombres'
+import { pgcd } from '../../lib/outils/primalite'
 import { getLang } from '../../lib/stores/languagesStore'
-import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { context } from '../../modules/context'
+import FractionEtendue from '../../modules/FractionEtendue'
+import { listeQuestionsToContenu, randint } from '../../modules/outils'
+import Exercice from '../Exercice'
 
 export const titre = "Déterminer le coefficient directeur d'une droite"
 export const dateDeModifImportante = '27/04/2024'
@@ -122,7 +122,7 @@ export default class CoefficientDirecteurDeDroite extends Exercice {
                 unSiPositifMoinsUnSinon(d) *
                 Math.abs(n)
               d = Math.abs(d)
-              this.autoCorrection[i] = {
+              this.autoCorrectionAMC[i] = {
                 enonce: `Soit $\\big(O ; \\vec \\imath,\\vec \\jmath\\big)$ un repère orthogonal. Soit $A(${xA};${yA})$ et $B(${xB};${yB})$.<br>Déterminer, s'il existe, le coefficient directeur de la droite $\\bm{(AB)}$ sous la forme d'une fraction irréductible (coder deux fois zéro si le coefficient n'existe pas).<br>`,
                 propositions: [
                   {
@@ -201,7 +201,7 @@ export default class CoefficientDirecteurDeDroite extends Exercice {
           })
 
           if (context.isAmc) {
-            this.autoCorrection[i] = {
+            this.autoCorrectionAMC[i] = {
               enonce: `Soit $\\big(O ; \\vec \\imath,\\vec \\jmath\\big)$ un repère orthogonal. Soit $A(${xA};${yA})$ et $B(${xB};${yB})$.<br>Déterminer, s'il existe, le coefficient directeur de la droite $\\bm{(AB)}$ sous la forme d'une fraction irréductible (coder deux fois zéro si le coefficient n'existe pas).<br>`,
               propositions: [
                 {

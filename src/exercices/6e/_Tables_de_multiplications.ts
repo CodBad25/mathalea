@@ -76,7 +76,6 @@ export default class TablesDeMultiplications extends Exercice {
     for (
       let i = 0, reponse, cpt = 0, texte, texteCorr;
       i < this.nbQuestions && cpt < 80;
-
     ) {
       const typeDeQuestion = listeTypeDeQuestions[i]
       const a: number = couples[cpt][0]
@@ -119,11 +118,7 @@ export default class TablesDeMultiplications extends Exercice {
           } else {
             texte =
               this.interactif && context.isHtml
-                ? ajouteChampTexteMathLive(
-                    this,
-                    i,
-                    KeyboardType.clavierNumbers,
-                  )
+                ? ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers)
                 : '$\\ldots\\ldots$'
             texte += `$ = ${texNombre(b, 0)}\\times ${texNombre(a, 0)}$`
             texteCorr = `$ ${miseEnEvidence(texNombre(reponse, 0))} = ${texNombre(b, 0)}\\times ${texNombre(a, 0)}$`
@@ -239,7 +234,7 @@ export default class TablesDeMultiplications extends Exercice {
         })
       }
       if (context.isAmc) {
-        this.autoCorrection[i] = {
+        this.autoCorrectionAMC[i] = {
           enonce: texte, // Si vide, l'énoncé est celui de l'exercice.
           propositions: [
             {
@@ -247,8 +242,7 @@ export default class TablesDeMultiplications extends Exercice {
             },
           ],
           reponse: {
-            // @ts-expect-error l'objet reponse pour AMC n'a pas du tout les mêmes attributs que pour interactif
-            valeur: [reponse], // obligatoire (la réponse numérique à comparer à celle de l'élève), NE PAS METTRE DE STRING à virgule ! 4.9 et non pas 4,9. Cette valeur doit être passée dans un tableau d'où la nécessité des crochets.
+            valeur: reponse, // obligatoire (la réponse numérique à comparer à celle de l'élève), NE PAS METTRE DE STRING à virgule ! 4.9 et non pas 4,9. Cette valeur doit être passée dans un tableau d'où la nécessité des crochets.
             param: {
               digits: 2,
               decimals: 0,

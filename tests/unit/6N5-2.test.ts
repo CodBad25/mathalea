@@ -32,7 +32,7 @@ describe('QuestionsMasses', () => {
   test('nouvelleVersion 6C12-1 should generate correct questions and corrections', () => {
     exercice.nouvelleVersion()
 
-    // console.log(exercice.autoCorrection[1].reponse?.valeur?.reponse?.value)
+    // console.log(exercice.autoCorrection[1].valeur?.reponse?.value)
 
     // Simuler un champ texte dans le DOM
     document.body.innerHTML = `

@@ -136,7 +136,6 @@ export default class RecomposerEntierC3 extends Exercice {
         texte,
         texteCorr;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       texte = ''
       texteCorr = ''
@@ -731,8 +730,8 @@ export default class RecomposerEntierC3 extends Exercice {
         Number.parseInt(saisies[k]) ===
           Number.parseInt(
             String(
-              this.autoCorrection[this.premierChamp[i] + k]?.reponse?.valeur
-                ?.reponse?.value,
+              this.autoCorrection[this.premierChamp[i] + k]?.valeur?.reponse
+                ?.value,
             ) ?? '',
           )
     }

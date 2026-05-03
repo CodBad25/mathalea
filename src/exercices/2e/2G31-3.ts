@@ -17,9 +17,9 @@ import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
 import { pointAbstrait } from '../../lib/2d/PointAbstrait'
+import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { choice } from '../../lib/outils/arrayOutils'
-import { bleuMathalea } from '../../lib/colors'
 
 export const titre =
   'Déterminer une équation réduite à partir de sa représentation graphique'
@@ -186,7 +186,7 @@ export default class Lecturegraphiquedeaetb extends Exercice {
         }
 
         if (context.isAmc) {
-          this.autoCorrection[i] = {
+          this.autoCorrectionAMC[i] = {
             enonce: texte + '<br>',
             propositions: [
               {

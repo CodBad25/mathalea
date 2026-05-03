@@ -416,7 +416,7 @@ export default class EngrenagesAnimes extends Exercice {
           texteCorr += `Il faudra attendre que la roue de gauche tourne de $${nbToursAbc * nbDentsRoueA}$ dents soit $${miseEnEvidence(nbToursAbc)}$ tours, la roue du milieu en fera $${(nbToursAbc * nbDentsRoueA) / nbDentsRoueB}$ et la roue de droite en fera $${(nbToursAbc * nbDentsRoueA) / nbDentsRoueC}$.<br>`
       }
       if (context.isAmc) {
-        this.autoCorrection[0] = {
+        this.autoCorrectionAMC[0] = {
           enonce: 'Dans un engrenage, il y a deux roues. ' + texte,
           propositions: [
             {

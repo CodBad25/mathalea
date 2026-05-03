@@ -7,7 +7,6 @@ import type { Language } from './types/languages'
 import type { IFractionEtendue } from '../modules/FractionEtendue.type'
 // import Grandeur from '../modules/Grandeur'
 import type Decimal from 'decimal.js'
-import type FractionEtendue from '../modules/FractionEtendue'
 import Hms from '../modules/Hms'
 import type { VueType } from './VueType'
 import type { AutoCorrectionAMC } from './amc/amcTypes'
@@ -608,29 +607,6 @@ export interface IGrandeur {
   toHHMMSS(): string
 }
 
-export interface ReponseParams {
-  digits?: number
-  decimals?: number
-  signe?: boolean
-  exposantNbChiffres?: number
-  exposantSigne?: boolean
-  approx?: number | 'intervalleStrict'
-  aussiCorrect?: number | IFractionEtendue
-  digitsNum?: number
-  digitsDen?: number
-  basePuissance?: number
-  exposantPuissance?: number
-  baseNbChiffres?: number
-  milieuIntervalle?: number
-  formatInteractif?: InteractivityType | OldFormatInteractifType
-  precision?: number
-  scoreapprox?: number
-  vertical?: boolean
-  strict?: boolean
-  vhead?: boolean
-  tpoint?: string
-}
-
 export type AnswerValueType =
   | string
   | string[]
@@ -674,102 +650,13 @@ export function isReponseComplexe(value: unknown): value is ReponseComplexe {
   return isAnswerValueType(value) || isValeur(value)
 }
 
-export type AutoCorrectionInteractifQuestion = {
-  // Contrat cible interactif
-  valeur?: Valeur
-  formatInteractif?: InteractivityType
-  param?: ParamForQcmInteractif
-  propositions?: UneProposition[]
-  // Compatibilite transitoire avec l'ancien schema
-  enonce?: string
-  enonceAvant?: boolean
-  melange?: boolean
-  enonceAGauche?: boolean | [number, number]
-  enonceAvantUneFois?: boolean
-  enonceCentre?: boolean
-  enonceApresNumQuestion?: boolean
-  options?: AutoCorrectionOptions
-  reponse?: {
-    valeur?: ValeurNormalized
-    param?: ReponseParams
-    textePosition?: string
-    texte?: string
-  }
-}
-
 export type ParamForQcmInteractif = {
   radio?: boolean
   ordered?: boolean
   vertical?: boolean
   lastChoice?: number
   format?: 'lettre' | 'case'
-}
-// Ajout d'un type dédié pour les choix de QCM
-export type ChoixQcm = {
-  texte: string
-  statut?: boolean | string | number
-  // Ci-dessous, utile que pour AMC
-  sanscadre?: boolean
-  enonce?: string
-  feedback?: string
-  multicolsBegin?: boolean
-  multicolsEnd?: boolean
-  numQuestionVisible?: boolean
-  pointilles?: boolean
-  reponse?: {
-    texte?: string
-    valeur?: number | number[] | FractionEtendue
-    alignement?: string
-    display?: ReponseDisplay
-    param?: {
-      digits?: number
-      decimals?: number
-      signe?: boolean
-      digitsNum?: number
-      digitsDen?: number
-      approx?: number
-      aussiCorrect?: number
-      exposantNbChiffres?: number
-      exposantSigne?: boolean
-    }
-  }
-}
-
-type StatutProposition = number | boolean | string
-
-type UnePropositionBase = {
-  texte?: string
-  statut?: StatutProposition
-  sanscadre?: boolean | number
-  multicolsBegin?: boolean
-  multicolsEnd?: boolean
-  numQuestionVisible?: boolean
-  type?: string
-  feedback?: string
-  pointilles?: boolean | number
-  enonce?: string
-  propositions?: ChoixQcm[]
-}
-
-export type UnePropositionOptionsInteractif = {
-  ordered?: boolean
-  vertical?: boolean
-  lastChoice?: number
-  barreseparation?: boolean
-  multicols?: boolean
   nbCols?: number
-  multicolsAll?: boolean
-  numerotationEnonce?: boolean
-  avecSymboleMult?: boolean
-}
-
-export type UnePropositionOptionsAMC = UnePropositionOptionsInteractif & {
-  digits?: number
-  decimals?: number
-  signe?: boolean
-  exposantNbChiffres?: number
-  exposantSigne?: boolean
-  approx?: number
 }
 
 export type ReponseDisplay = {
@@ -778,50 +665,23 @@ export type ReponseDisplay = {
   align?: 'flushleft' | 'center' | 'flushright'
 }
 
-export type ReponseUnePropositionAMC = {
-  value: number | number[] | FractionEtendue
-  params?: ReponseParams
-  display?: ReponseDisplay
-  textePosition?: string
-  texte?: string
-  alignement?: string
-}
-
-export type UnePropositionInteractif = UnePropositionBase & {
-  options?: UnePropositionOptionsInteractif
-  reponse?: never
-}
-
-export type UnePropositionAMC = UnePropositionBase & {
-  options?: UnePropositionOptionsAMC
-  reponse?: ReponseUnePropositionAMC
-}
-
 // Compatibilite historique progressive: garder `UneProposition`
 // comme union tant que le code n'est pas migre partout.
-export type UneProposition = UnePropositionInteractif | UnePropositionAMC
-
-export interface AutoCorrectionOptions {
-  radio?: boolean
-  ordered?: boolean
-  vertical?: boolean
-  lastChoice?: number
-  barreseparation?: boolean
-  multicols?: boolean
-  nbCols?: number
-  digits?: number
-  decimals?: number
-  signe?: boolean
-  exposantNbChiffres?: number
-  exposantSigne?: boolean
-  approx?: number
-  multicolsAll?: boolean
-  numerotationEnonce?: boolean
-  avecSymboleMult?: boolean
+export type UneProposition = {
+  texte: string
+  statut?: boolean | string | number
+  feedback?: string
 }
 
 // Alias de compatibilite.
-export type AutoCorrection = AutoCorrectionInteractifQuestion
+export type AutoCorrection = {
+  enonce?: string
+  // Contrat cible interactif
+  valeur?: Valeur
+  formatInteractif?: InteractivityType
+  options?: ParamForQcmInteractif
+  propositions?: UneProposition[]
+}
 
 export type LegacyReponse =
   | string

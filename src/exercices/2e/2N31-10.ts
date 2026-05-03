@@ -223,14 +223,7 @@ export default class PuissancesDUnRelatif2 extends Exercice {
           { texteAvant: ' $=$' },
         )
       }
-      // Pour moi, cela ne peut pas fonctionner : base est une chaine de caractère alors qu'AMC va attendre un nombre ! (JCL le 22/01/2025 lors du typage en typescript)
-      /* if (context.isAmc) {
-        setReponse(this, i, reponseInteractive, {
-          formatInteractif: 'puissance',
-          basePuissance: base,
-          exposantPuissance: // exposantInteractif
-        })
-      } */
+
       // Uniformisation : Mise en place de la réponse attendue en interactif en orange et gras
       const textCorrSplit = texteCorr.split('=')
       let aRemplacer = textCorrSplit[textCorrSplit.length - 1]

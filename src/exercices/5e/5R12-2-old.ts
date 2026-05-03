@@ -110,7 +110,12 @@ export default class ReperagePointDuPlan extends Exercice {
     }
     for (let j = 0; j < nbPoints; j++) {
       points.push(
-        pointAbstrait(listePoints[j][0], listePoints[j][1], nom[j], 'above left'),
+        pointAbstrait(
+          listePoints[j][0],
+          listePoints[j][1],
+          nom[j],
+          'above left',
+        ),
       )
       if (points[j].x === 0) {
         X0 = true
@@ -128,7 +133,7 @@ export default class ReperagePointDuPlan extends Exercice {
     shuffle2tableaux(points, nom)
 
     if (context.isAmc) {
-      this.autoCorrection[0] = {
+      this.autoCorrectionAMC[0] = {
         enonce: '',
         enonceAvant: false,
         enonceApresNumQuestion: true,
@@ -149,8 +154,7 @@ export default class ReperagePointDuPlan extends Exercice {
       texte += ` $${nom[i]}$, `
       texteCorr += ` $${nom[i]}(${miseEnEvidence(texNombre(points[i].x))};${miseEnEvidence(texNombre(points[i].y))})$,`
       if (context.isAmc) {
-        // @ts-expect-error
-        this.autoCorrection[0].propositions.push(
+        this.autoCorrectionAMC[0].propositions!.push(
           {
             type: 'AMCNum',
             propositions: [

@@ -406,7 +406,7 @@ export default class ProblemeCourse extends Exercice {
       setReponse(this, i, reponse)
       if (context.isAmc) {
         // @ts-ignore this.autoCorrection[i] est bien défini
-        this.autoCorrection[i].reponse.valeur[0] = arrondi(prixTotal, 2)
+        this.autoCorrection[i].valeur[0] = arrondi(prixTotal, 2)
         // @ts-ignore this.autoCorrection[i] est bien défini
         this.autoCorrection[i].reponse.param.digits = 5
         // @ts-ignore this.autoCorrection[i] est bien défini

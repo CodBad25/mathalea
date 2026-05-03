@@ -1,8 +1,8 @@
 import FractionEtendue from '../../modules/FractionEtendue'
 import { generateCleaner } from '../interactif/cleaners'
-import { isValeur, type IExercice, type ReponseParams } from '../types'
+import { isValeur, type IExercice } from '../types'
 import { countDecimals, countDigits, isFractionValue } from './amcHelpers'
-import type { IExerciceAMC } from './amcTypes'
+import type { IExerciceAMC, ReponseParams } from './amcTypes'
 
 const mathliveNumericCleaner = generateCleaner(['latex', 'virgules', 'espaces'])
 

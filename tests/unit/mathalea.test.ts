@@ -214,9 +214,7 @@ describe('mathaleaHandleExerciceSimple', () => {
     mathaleaHandleExerciceSimple(exercice, false, 0, 'seed')
 
     expect(exercice.autoCorrection[0]).toBeDefined()
-    expect(exercice.autoCorrection[0].reponse?.valeur?.reponse?.value).toBe(
-      '12',
-    )
+    expect(exercice.autoCorrection[0].valeur?.reponse?.value).toBe('12')
   })
 
   it("genere une autoCorrection AMCOpen via le moteur d'inference", () => {

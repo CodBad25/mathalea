@@ -1,7 +1,11 @@
 import FractionEtendue from '../../modules/FractionEtendue'
 import { lettreDepuisChiffre } from '../outils/outilString'
-import type { IExercice, ReponseParams } from '../types'
-import type { AMCFractionValue, AMCReponseValue } from './amcTypes'
+import type { IExercice } from '../types'
+import type {
+  AMCFractionValue,
+  AMCReponseValue,
+  ReponseParams,
+} from './amcTypes'
 
 export function ensureAmcParam(exerciseAny: IExercice, i: number) {
   let autoCorrectionAMC = exerciseAny.autoCorrectionAMC

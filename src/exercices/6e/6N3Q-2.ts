@@ -16,6 +16,7 @@ import { addMultiMathfield } from '../../lib/interactif/MultiMathfield/MultiMath
 import { egalOuApprox } from '../../lib/outils/ecritures'
 import { arrondi } from '../../lib/outils/nombres'
 import { texNombre } from '../../lib/outils/texNombre'
+import type { UnePropositionAMC } from '../../lib/types'
 
 export const titre = "Augmenter ou diminuer d'un pourcentage"
 export const interactifReady = true
@@ -184,7 +185,7 @@ export default class AugmenterEtReduireDunPourcentage extends Exercice {
       const prenom1 = prenomM()
       const prenom2 = prenomF()
       let prixIntial, prixFinal
-      let propositionsAMC: unknown[] = []
+      let propositionsAMC: UnePropositionAMC[] = []
       let texte = ''
       let enonceInit = ''
       let enonceAMC = ''
@@ -386,10 +387,9 @@ export default class AugmenterEtReduireDunPourcentage extends Exercice {
       if (this.questionJamaisPosee(i, prixIntial, prixFinal)) {
         // Si la question n'a jamais été posée, on en crée une autre
         if (context.isAmc) {
-          this.autoCorrection[i] = {
+          this.autoCorrectionAMC[i] = {
             enonce: '',
             options: { multicols: true, barreseparation: true }, // facultatif. Par défaut, multicols est à false. Ce paramètre provoque un multicolonnage (sur 2 colonnes par défaut) : pratique quand on met plusieurs AMCNum. !!! Attention, cela ne fonctionne pas, nativement, pour AMCOpen. !!!
-            // @ts-expect-error
             propositions: propositionsAMC,
           }
         } else {

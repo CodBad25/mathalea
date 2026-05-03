@@ -1,4 +1,4 @@
-import { type IExercice, type ReponseParams } from '../types'
+import { type IExercice } from '../types'
 import {
   ensureAMCOpenAutoCorrection,
   extractAMCValue,
@@ -7,7 +7,7 @@ import {
   mergeNumericParamsFromOptions,
 } from './amcInferenceHelpers'
 import { normalizeAMCNumBlocks } from './amcNormalize'
-import type { IExerciceAMC } from './amcTypes'
+import type { IExerciceAMC, ReponseParams } from './amcTypes'
 
 /**
  * Applique une compatibilité AMC par défaut quand un exercice n'est pas paramétré finement.

@@ -4,6 +4,7 @@ import { polyline } from '../../lib/2d/Polyline'
 import { repere } from '../../lib/2d/reperes'
 import { latexParPoint, texteParPoint } from '../../lib/2d/textes'
 import { tracePoint } from '../../lib/2d/TracePoint'
+import type { AutoCorrectionAMC } from '../../lib/amc/amcTypes'
 import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
@@ -17,7 +18,6 @@ import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { rangeMinMax } from '../../lib/outils/nombres'
 import { pgcd, premierAvec } from '../../lib/outils/primalite'
 import { stringNombre, texNombre } from '../../lib/outils/texNombre'
-import type { AutoCorrection } from '../../lib/types'
 import { context } from '../../modules/context'
 import FractionEtendue from '../../modules/FractionEtendue'
 import { fraction } from '../../modules/fractions'
@@ -132,7 +132,7 @@ Le choix a été fait d'un antécédent primaire entier positif, le coefficient 
       texte2AMC = ''
       texte3AMC = ''
       valeur2AMC = 0
-      const elementAmc: AutoCorrection = {}
+      const elementAmc: AutoCorrectionAMC = {}
       const nomFonction = String.fromCharCode(102 + i)
       let texte = ''
       let texteCorr = ''
@@ -917,7 +917,7 @@ Le choix a été fait d'un antécédent primaire entier positif, le coefficient 
           elementAmc.enonceApresNumQuestion = true
           elementAmc.propositions![0].propositions![0].texte = texteCorr
           elementAmc.options = { multicolsAll: true }
-          this.autoCorrection[i] = elementAmc
+          this.autoCorrectionAMC[i] = elementAmc
         }
         // Uniformisation : Mise en place de la réponse attendue en interactif en orange et gras
         const textCorrSplit = texteCorr.split('=')

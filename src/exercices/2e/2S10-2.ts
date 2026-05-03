@@ -372,7 +372,7 @@ export default class Proportions extends Exercice {
         if (!Array.isArray(exerciseAny.autoCorrectionAMC)) {
           exerciseAny.autoCorrectionAMC = []
         }
-        const interactiveEntry = this.autoCorrection[i] ?? {}
+        const interactiveEntry = this.autoCorrectionAMC[i] ?? {}
         const interactiveReponse = interactiveEntry.reponse ?? {}
         exerciseAny.autoCorrectionAMC[i] = {
           ...interactiveEntry,

@@ -200,7 +200,7 @@ export default class EnsembleDeNombres extends Exercice {
           break
       }
       if (context.isAmc) {
-        this.autoCorrection[i].propositions = [
+        this.autoCorrectionAMC[i].propositions = [
           { texte: this.listeCorrections[i], statut: '1' },
         ]
       }

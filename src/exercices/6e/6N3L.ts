@@ -1,3 +1,5 @@
+import { ensureAmcParam } from '../../lib/amc/amcHelpers'
+import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { setReponse } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -13,7 +15,6 @@ import { texNombre } from '../../lib/outils/texNombre'
 import { context } from '../../modules/context'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { bleuMathalea } from '../../lib/colors'
 
 export const titre = "Calculer la fraction d'un nombre"
 export const interactifReady = true
@@ -207,14 +208,13 @@ export default class FractionDUnNombre extends Exercice {
         { texteAvant: sp() + '$=$' },
       )
       if (context.isAmc) {
-        this.autoCorrection[i].enonce = texte
-        this.autoCorrection[i].propositions = [
+        this.autoCorrectionAMC[i].enonce = texte
+        this.autoCorrectionAMC[i].propositions = [
           { texte: texteCorr, statut: false },
         ]
-        // @ts-expect-error
-        this.autoCorrection[i].reponse.param.digits = 2
-        // @ts-expect-error
-        this.autoCorrection[i].reponse.param.decimals = 0
+        const amcParam = ensureAmcParam(this, i)
+        amcParam.digits = 2
+        amcParam.decimals = 0
       }
 
       // Uniformisation : Mise en place de la réponse attendue en interactif en orange et gras

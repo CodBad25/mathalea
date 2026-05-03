@@ -132,9 +132,7 @@ export default class FractionVersPourcentage extends Exercice {
   }
 
   correctionInteractive = (i: number) => {
-    const reponseAttendue = String(
-      this.autoCorrection[i].reponse?.valeur?.champ4?.value,
-    )
+    const reponseAttendue = String(this.autoCorrection[i].valeur?.champ4?.value)
     if (this.answers === undefined) this.answers = {}
     let result = 'KO'
     let feedback = ''

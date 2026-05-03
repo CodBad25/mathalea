@@ -1,5 +1,31 @@
-import type { IExercice, ReponseParams } from '../types'
-
+import type { IFractionEtendue } from '../../modules/FractionEtendue.type'
+import type {
+  IExercice,
+  InteractivityType,
+  OldFormatInteractifType,
+} from '../types'
+export interface ReponseParams {
+  digits?: number
+  decimals?: number
+  signe?: boolean
+  exposantNbChiffres?: number
+  exposantSigne?: boolean
+  approx?: number | 'intervalleStrict'
+  aussiCorrect?: number | IFractionEtendue
+  digitsNum?: number
+  digitsDen?: number
+  basePuissance?: number
+  exposantPuissance?: number
+  baseNbChiffres?: number
+  milieuIntervalle?: number
+  formatInteractif?: InteractivityType | OldFormatInteractifType
+  precision?: number
+  scoreapprox?: number
+  vertical?: boolean
+  strict?: boolean
+  vhead?: boolean
+  tpoint?: string
+}
 export type AMCExportType =
   | 'qcmMono'
   | 'qcmMult'

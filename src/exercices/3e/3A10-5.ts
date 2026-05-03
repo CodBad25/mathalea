@@ -399,7 +399,7 @@ export default class RecourirDecompositionFacteursPremiers extends Exercice {
         this.listeCorrections[i] = texteCorr
 
         if (context.isAmc) {
-          this.autoCorrection[i] = {
+          this.autoCorrectionAMC[i] = {
             enonce:
               this.consigne.substring(0, this.consigne.length - 1) +
               ' : ' +
