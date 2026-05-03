@@ -213,7 +213,7 @@ export default class PuissancesEncadrementCoefficients extends Exercice {
       texteCorr += ` car $${borneInfExpr} = ${texNombre(encadrement.borneInf, 4)}$ et $${borneSupExpr} = ${texNombre(encadrement.borneSup, 4)}.$`
 
       if (context.isAmc) {
-        this.autoCorrection[i] = {
+        this.autoCorrectionAMC[i] = {
           enonce:
             'Encadrer le nombre suivant par deux expressions de la forme $k\\times10^n$ et $(k+1)\\times10^n$ où $k$ est un entier non nul : ' +
             consigneAMC,

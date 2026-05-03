@@ -1,3 +1,4 @@
+import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { setReponse } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -15,7 +16,6 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { bleuMathalea } from '../../lib/colors'
 
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -103,7 +103,6 @@ export default class ProblemesEvenementsRecurrents extends Exercice {
         decompositionB,
         cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       indicesFacteursCommuns = []
       switch (this.sup) {
@@ -470,7 +469,7 @@ export default class ProblemesEvenementsRecurrents extends Exercice {
         }
       }
       if (context.isAmc) {
-        this.autoCorrection[i] = {
+        this.autoCorrectionAMC[i] = {
           enonce: '',
           enonceAvant: false,
           propositions: [

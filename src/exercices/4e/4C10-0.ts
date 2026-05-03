@@ -12,7 +12,8 @@ export const interactifReady = true
 export const interactifType = 'qcm'
 export const amcReady = true
 export const amcType = 'qcmMono'
-export const titre = "Travailler sur le signe d'un produit ou d'un quotient de nombres relatifs"
+export const titre =
+  "Travailler sur le signe d'un produit ou d'un quotient de nombres relatifs"
 
 /**
  * Signe d'un produit ou d'on quotient de relatifs
@@ -97,7 +98,7 @@ export default class SigneProduitQuotientRelatifs extends Exercice {
       let i = 0, texte, texteCorr, reponse, cpt = 0;
       i < this.nbQuestions && cpt < 50;
     ) {
-      this.autoCorrection[i] = {}
+      this.autoCorrectionAMC[i] = {}
       // on ne choisit que des nombres compris entre 1 et 20
       const nbMax = 20
       // Le tableau des relatifs nécessaires, il m'en faut max 4 !
@@ -327,7 +328,7 @@ export default class SigneProduitQuotientRelatifs extends Exercice {
           )
           break
       }
-      this.autoCorrection[i] = {
+      this.autoCorrectionAMC[i] = {
         enonce: texte,
         options: { ordered: true },
         propositions: [

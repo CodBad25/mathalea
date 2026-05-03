@@ -1,3 +1,4 @@
+import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { setReponse } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -12,7 +13,6 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { bleuMathalea } from '../../lib/colors'
 
 export const titre =
   'Effectuer des calculs avec des puissances de 10 uniquement'
@@ -99,7 +99,6 @@ export default class PuissancesDeDix extends Exercice {
         exposantAMC,
         cpt = 0;
       i < this.nbQuestions && cpt < 100;
-
     ) {
       typesDeQuestions = listeTypeDeQuestions[i]
 
@@ -509,12 +508,12 @@ export default class PuissancesDeDix extends Exercice {
       }
       if (context.isAmc) {
         // setReponse(this, i, reponseInteractive, { formatInteractif: 'puissance', basePuissance: 10, exposantPuissance: exposantInteractif })
-        this.autoCorrection[i] = {}
-        this.autoCorrection[i].enonce = `${texte}\n`
-        this.autoCorrection[i].options = {
+        this.autoCorrectionAMC[i] = {}
+        this.autoCorrectionAMC[i].enonce = `${texte}\n`
+        this.autoCorrectionAMC[i].options = {
           ordered: false,
         }
-        this.autoCorrection[i].propositions = [
+        this.autoCorrectionAMC[i].propositions = [
           {
             texte: `$10^{${exposantAMC[0]}}$`,
             statut: true,

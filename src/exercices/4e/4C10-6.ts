@@ -1,3 +1,4 @@
+import { bleuMathalea } from '../../lib/colors'
 import { propositionsQcm } from '../../lib/interactif/qcm'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import { ecritureNombreRelatif } from '../../lib/outils/ecritures'
@@ -6,13 +7,12 @@ import { lettreDepuisChiffre } from '../../lib/outils/outilString'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import { Relatif } from '../../modules/Relatif'
 import Exercice from '../Exercice'
-import { bleuMathalea } from '../../lib/colors'
 export const interactifReady = true
 export const interactifType = 'qcm'
 export const amcReady = true
 export const amcType = 'qcmMono'
 export const titre =
-  'Déterminer le signe d\'un facteur dans une multiplication ou un quotient de relatifs'
+  "Déterminer le signe d'un facteur dans une multiplication ou un quotient de relatifs"
 export const dateDeModifImportante = '18/09/2024'
 
 /**
@@ -75,9 +75,8 @@ export default class ExerciceTableauMultiplicationsRelatifs extends Exercice {
         reponse,
         cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
-      this.autoCorrection[i] = {}
+      this.autoCorrectionAMC[i] = {}
       // on ne choisit que des nombres compris entre 1 et 20
       const nbMax = 20
       // Le tableau des relatifs nécessaires, il m'en faut max 5 !
@@ -126,7 +125,7 @@ export default class ExerciceTableauMultiplicationsRelatifs extends Exercice {
             texteCorr += `<br><br> Donc si ${texteEnCouleurEtGras(lettre + ' est négatif', 'black')} $ ${calcul} $ est ${texteEnCouleurEtGras(num.getSigneProduitString(...listeNombres), 'black')}.`
             texteCorr +=
               `<br><br> ${texteEnCouleurEtGras('Conclusion :', bleuMathalea)} <br>` +
-                `Il faut donc que $ ${lettre} $ soit ${texteEnCouleurEtGras(signeExpression === num.getSigneProduitNumber(...listeNombres) ? 'négatif' : 'positif')} pour que $${nomExpression}$ soit ${signeExpression === -1 ? 'négatif' : 'positif'}.`
+              `Il faut donc que $ ${lettre} $ soit ${texteEnCouleurEtGras(signeExpression === num.getSigneProduitNumber(...listeNombres) ? 'négatif' : 'positif')} pour que $${nomExpression}$ soit ${signeExpression === -1 ? 'négatif' : 'positif'}.`
           } else {
             texteCorr = `Il faut que $ ${lettre} $ soit ${signeExpression === num.getSigneProduitNumber(...listeNombres) ? 'positif' : 'négatif'} pour que $${nomExpression}$ soit ${signeExpression === -1 ? 'négatif' : 'positif'}.`
           }
@@ -156,7 +155,7 @@ export default class ExerciceTableauMultiplicationsRelatifs extends Exercice {
             texteCorr += `<br><br> Donc si ${texteEnCouleurEtGras(lettre + ' est négatif', 'black')} $ ${calcul} $ est ${texteEnCouleurEtGras(num.getSigneProduitString(...listeNombres), 'black')}.`
             texteCorr +=
               `<br><br> ${texteEnCouleurEtGras('Conclusion :', bleuMathalea)} <br>` +
-                `Il faut donc que $ ${lettre} $ soit ${texteEnCouleurEtGras(signeExpression === num.getSigneProduitNumber(...listeNombres) ? 'négatif' : 'positif')} pour que $${nomExpression}$ soit ${signeExpression === -1 ? 'négatif' : 'positif'}.`
+              `Il faut donc que $ ${lettre} $ soit ${texteEnCouleurEtGras(signeExpression === num.getSigneProduitNumber(...listeNombres) ? 'négatif' : 'positif')} pour que $${nomExpression}$ soit ${signeExpression === -1 ? 'négatif' : 'positif'}.`
           } else {
             texteCorr = `Il faut que $ ${lettre} $ soit ${signeExpression === num.getSigneProduitNumber(...listeNombres) ? 'positif' : 'négatif'} pour que $${nomExpression}$ soit ${signeExpression === -1 ? 'négatif' : 'positif'}.`
           }
@@ -187,7 +186,7 @@ export default class ExerciceTableauMultiplicationsRelatifs extends Exercice {
               texteCorr += `<br><br> ${num.setRegleSigneProduit(...listeNombres)}`
               texteCorr +=
                 '<br><br>' +
-                  `Donc ${nomExpression} est ${texteEnCouleurEtGras(num.getSigneProduitString(...listeNombres))} quel que soit le signe de $ ${lettre} $.`
+                `Donc ${nomExpression} est ${texteEnCouleurEtGras(num.getSigneProduitString(...listeNombres))} quel que soit le signe de $ ${lettre} $.`
             } else {
               texteCorr += `On trouve ${nbLettres + 1} fois le facteur $ ${lettre} $. <br> Or ${nbLettres + 1} est impair donc leur produit est du signe de $ ${lettre} $ soit ${signeLettre === -1 ? 'négatif' : 'positif'}.`
               if (signeLettre === -1) {
@@ -196,28 +195,25 @@ export default class ExerciceTableauMultiplicationsRelatifs extends Exercice {
                 listeNombres.push(-1)
                 texteCorr +=
                   '<br><br>' +
-                    `Donc ${nomExpression} est ${texteEnCouleurEtGras(num.getSigneProduitString(...listeNombres))} quand $ ${lettre} $ est ${signeLettre === -1 ? 'négatif' : 'positif'}.`
+                  `Donc ${nomExpression} est ${texteEnCouleurEtGras(num.getSigneProduitString(...listeNombres))} quand $ ${lettre} $ est ${signeLettre === -1 ? 'négatif' : 'positif'}.`
               } else {
                 texteCorr += `<br>Le signe de l'expression a donc le signe opposé à : $ ${calculNombres} $`
                 texteCorr += `<br><br> ${num.setRegleSigneProduit(...listeNombres)}`
                 texteCorr +=
                   '<br><br>' +
-                    `Donc ${nomExpression} est ${texteEnCouleurEtGras(num.getSigneProduitString(...listeNombres))} quand $ ${lettre} $ est ${signeLettre === -1 ? 'négatif' : 'positif'}.`
+                  `Donc ${nomExpression} est ${texteEnCouleurEtGras(num.getSigneProduitString(...listeNombres))} quand $ ${lettre} $ est ${signeLettre === -1 ? 'négatif' : 'positif'}.`
               }
             }
             reponse = num.getSigneProduitString(...listeNombres)
           } else {
             if (nbLettres === 1 || nbLettres === 3) {
-              texteCorr =
-                `Donc ${nomExpression} est ${texteEnCouleurEtGras(num.getSigneProduitString(...listeNombres))} quel que soit le signe de $ ${lettre} $.`
+              texteCorr = `Donc ${nomExpression} est ${texteEnCouleurEtGras(num.getSigneProduitString(...listeNombres))} quel que soit le signe de $ ${lettre} $.`
             } else {
               if (signeLettre === -1) {
                 listeNombres.push(-1)
-                texteCorr =
-                  `Donc ${nomExpression} est ${texteEnCouleurEtGras(num.getSigneProduitString(...listeNombres))} quand $ ${lettre} $ est ${signeLettre === -1 ? 'négatif' : 'positif'}.`
+                texteCorr = `Donc ${nomExpression} est ${texteEnCouleurEtGras(num.getSigneProduitString(...listeNombres))} quand $ ${lettre} $ est ${signeLettre === -1 ? 'négatif' : 'positif'}.`
               } else {
-                texteCorr =
-                  `Donc ${nomExpression} est ${texteEnCouleurEtGras(num.getSigneProduitString(...listeNombres))} quand $ ${lettre} $ est ${signeLettre === -1 ? 'négatif' : 'positif'}.`
+                texteCorr = `Donc ${nomExpression} est ${texteEnCouleurEtGras(num.getSigneProduitString(...listeNombres))} quand $ ${lettre} $ est ${signeLettre === -1 ? 'négatif' : 'positif'}.`
               }
             }
             reponse = num.getSigneProduitString(...listeNombres)
@@ -252,7 +248,7 @@ export default class ExerciceTableauMultiplicationsRelatifs extends Exercice {
               texteCorr += `<br><br> ${num.setRegleSigneProduit(...listeNombres)}`
               texteCorr +=
                 '<br><br>' +
-                  `Donc ${nomExpression} est ${texteEnCouleurEtGras(num.getSigneProduitString(...listeNombres))} quel que soit le signe de $ ${lettre} $.`
+                `Donc ${nomExpression} est ${texteEnCouleurEtGras(num.getSigneProduitString(...listeNombres))} quel que soit le signe de $ ${lettre} $.`
               reponse = num.getSigneProduitString(...listeNombres)
             } else {
               texteCorr += `On trouve ${expLettre} fois le facteur $ ${lettre} $. <br> Or ${expLettre} est impair donc leur produit est du signe de $ ${lettre} $ soit ${signeLettre === -1 ? 'négatif' : 'positif'}.`
@@ -262,20 +258,19 @@ export default class ExerciceTableauMultiplicationsRelatifs extends Exercice {
                 listeNombres.push(-1)
                 texteCorr +=
                   '<br><br>' +
-                    `Donc ${nomExpression} est ${texteEnCouleurEtGras(num.getSigneProduitString(...listeNombres))} quand $ ${lettre} $ est ${signeLettre === -1 ? 'négatif' : 'positif'}.`
+                  `Donc ${nomExpression} est ${texteEnCouleurEtGras(num.getSigneProduitString(...listeNombres))} quand $ ${lettre} $ est ${signeLettre === -1 ? 'négatif' : 'positif'}.`
               } else {
                 texteCorr += `<br>Le signe de l'expression a donc le signe opposé à : $ ${calculNombres} $`
                 texteCorr += `<br><br> ${num.setRegleSigneProduit(...listeNombres)}`
                 texteCorr +=
                   '<br><br>' +
-                    `Donc ${nomExpression} est ${texteEnCouleurEtGras(num.getSigneProduitString(...listeNombres))} quand $ ${lettre} $ est ${signeLettre === -1 ? 'négatif' : 'positif'}.`
+                  `Donc ${nomExpression} est ${texteEnCouleurEtGras(num.getSigneProduitString(...listeNombres))} quand $ ${lettre} $ est ${signeLettre === -1 ? 'négatif' : 'positif'}.`
               }
               reponse = num.getSigneProduitString(...listeNombres)
             }
           } else {
             if (expLettre % 2 === 0) {
-              texteCorr +=
-                `Donc ${nomExpression} est ${texteEnCouleurEtGras(num.getSigneProduitString(...listeNombres))} quel que soit le signe de $ ${lettre} $.`
+              texteCorr += `Donc ${nomExpression} est ${texteEnCouleurEtGras(num.getSigneProduitString(...listeNombres))} quel que soit le signe de $ ${lettre} $.`
             } else {
               if (signeLettre === -1) {
                 listeNombres.push(-1)
@@ -288,7 +283,7 @@ export default class ExerciceTableauMultiplicationsRelatifs extends Exercice {
           }
           break
       }
-      this.autoCorrection[i] = {
+      this.autoCorrectionAMC[i] = {
         enonce: texte,
         options: { ordered: true },
         propositions: [

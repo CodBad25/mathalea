@@ -1,3 +1,4 @@
+import { orangeMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { setReponse } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -21,7 +22,6 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { orangeMathalea } from '../../lib/colors'
 
 export const titre = 'Opérations avec deux entiers relatifs'
 export const interactifReady = true
@@ -79,7 +79,6 @@ export default class ExerciceOperationsRelatifs extends Exercice {
     for (
       let i = 0, a, b, texte, texteCorr, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       // On limite le nombre d'essais pour chercher des valeurs nouvelles
       switch (listeTypeDeQuestions[i]) {
@@ -193,10 +192,10 @@ export default class ExerciceOperationsRelatifs extends Exercice {
         this.listeCorrections[i] = texteCorr
 
         if (context.isAmc) {
-          this.autoCorrection[i].propositions = [
+          this.autoCorrectionAMC[i].propositions = [
             { statut: 0, sanscadre: false, texte: texteCorr },
           ]
-          this.autoCorrection[i].enonce = 'Calculer.\\\\' + texte
+          this.autoCorrectionAMC[i].enonce = 'Calculer.\\\\' + texte
         }
         i++
       }
