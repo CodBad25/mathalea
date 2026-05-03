@@ -37,6 +37,7 @@ import { decrypt, isCrypted } from './components/urls'
 import { checkForServerUpdate } from './components/version'
 import { createURL } from './createURL'
 import { sendToCapytaleMathaleaHasChanged } from './handleCapytale'
+import { isHtmlDocumentText } from './httpResponses'
 import { fonctionComparaison } from './interactif/comparisonFunctions'
 import { handleAnswers, setReponse } from './interactif/gestionInteractif'
 import { buildSimpleVersionQcm } from './interactif/qcmBuilder'
@@ -389,7 +390,7 @@ export async function mathaleaGetExercicesFromParams(
           )
           if (response.status === 200) {
             const text = await response.clone().text()
-            if (!text.trim().startsWith('<!DOCTYPE html>')) {
+            if (!isHtmlDocumentText(text)) {
               content = text
             } else {
               content = '\n\n\t%Exercice non disponible\n\n'
@@ -400,7 +401,7 @@ export async function mathaleaGetExercicesFromParams(
           )
           if (response.status === 200) {
             const text = await response.clone().text()
-            if (!text.trim().startsWith('<!DOCTYPE html>')) {
+            if (!isHtmlDocumentText(text)) {
               contentCorr = text
             } else {
               contentCorr = '\n\n\t%Pas de correction disponible\n\n'
@@ -414,7 +415,7 @@ export async function mathaleaGetExercicesFromParams(
           )
           if (response.status === 200) {
             const text = await response.clone().text()
-            if (!text.trim().startsWith('<!DOCTYPE html>')) {
+            if (!isHtmlDocumentText(text)) {
               content = text
             } else {
               content = '\n\n\t%Exercice non disponible\n\n'
@@ -427,7 +428,7 @@ export async function mathaleaGetExercicesFromParams(
           )
           if (response.status === 200) {
             const text = await response.clone().text()
-            if (!text.trim().startsWith('<!DOCTYPE html>')) {
+            if (!isHtmlDocumentText(text)) {
               contentCorr = text
             } else {
               contentCorr = '\n\n\t%Pas de correction disponible\n\n'
