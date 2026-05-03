@@ -5,6 +5,7 @@ import { repere } from '../../lib/2d/reperes'
 import { segment } from '../../lib/2d/segmentsVecteurs'
 import { labelPoint } from '../../lib/2d/textes'
 import { tracePoint } from '../../lib/2d/TracePoint'
+import { bleuMathalea, orangeMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -16,7 +17,6 @@ import { imagePointParTransformation } from '../../modules/imagePointParTransfor
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { orangeMathalea, bleuMathalea } from '../../lib/colors'
 
 export const titre =
   "Trouver les coordonnées de l'image d'un point par une symétrie centrale (quart de plan)"
@@ -261,7 +261,7 @@ export default class DemiTourEtCoordonnees extends Exercice {
         }),
       )
       if (context.isAmc) {
-        this.autoCorrection.push({
+        this.autoCorrectionAMC.push({
           enonce:
             '\\begin{center}' +
             mathalea2d(

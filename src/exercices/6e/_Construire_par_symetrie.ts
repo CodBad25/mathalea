@@ -1354,7 +1354,7 @@ export default class ConstruireParSymetrie extends Exercice {
       correction = mathalea2d(params, g, carreaux, ...objetsCorrection)
 
       if (context.isAmc) {
-        this.autoCorrection[i] = {
+        this.autoCorrectionAMC[i] = {
           enonce,
           propositions: [
             {

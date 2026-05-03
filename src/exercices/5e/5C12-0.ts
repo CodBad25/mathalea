@@ -428,18 +428,20 @@ export default class Priorites extends Exercice {
           ajouteChampTexteMathLive(this, i, KeyboardType.clavierDeBase)
       if (this.questionJamaisPosee(i, a, b, c)) {
         if (context.isAmc) {
-          this.autoCorrection[i].enonce =
+          this.autoCorrectionAMC[i].enonce =
             texte.substring(0, texte.length - 1) + '~=$'
-          this.autoCorrection[i].propositions = [{ texte: texteCorr }]
-          const reponse = this.autoCorrection[i].reponse
+          this.autoCorrectionAMC[i].propositions = [{ texte: texteCorr }]
+          const reponse = this.autoCorrection[i].valeur?.reponse?.value
           const amcParam = ensureAmcParam(this, i)
           if (reponse != null) {
-            if (Array.isArray(reponse.valeur)) {
+            if (Array.isArray(reponse)) {
               amcParam.digits =
-                nombreDeChiffresDansLaPartieEntiere(reponse.valeur[0]) + 1
+                nombreDeChiffresDansLaPartieEntiere(Number(reponse[0])) + 1
+            } else {
+              amcParam.digits =
+                nombreDeChiffresDansLaPartieEntiere(Number(reponse)) + 1
             }
           }
-
           amcParam.decimals = 0
         }
         // Si la question n'a jamais été posée, on en crée une autre

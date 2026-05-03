@@ -4,13 +4,13 @@ import { labelPoint } from '../../lib/2d/textes'
 import { tracePoint } from '../../lib/2d/TracePoint'
 import { rotation } from '../../lib/2d/transformations'
 import { longueur } from '../../lib/2d/utilitairesGeometriques'
+import { bleuMathalea } from '../../lib/colors'
 import { choice, shuffle } from '../../lib/outils/arrayOutils'
 import { PointCliquable, pointCliquable } from '../../modules/2dinteractif'
 import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { bleuMathalea } from '../../lib/colors'
 export const titre = 'Compléter un nuage de points symétriques'
 export const dateDePublication = '18/12/2021'
 export const interactifReady = false
@@ -73,7 +73,6 @@ export default class CompleterParSymetrie5e extends Exercice {
         nbCouplesComplets,
         objetsCorrection;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       typeDePapier[0] = typeDePapier[1 + (i % 3)]
       // on remet à vide tous les tableaux utilisés pour la question suivante
@@ -163,13 +162,17 @@ export default class CompleterParSymetrie5e extends Exercice {
       for (let p = 0; p < pointsChoisis.length; p += 2) {
         if (p < nbCouplesComplets) {
           // On affiche un certains nombre de couples
-          pointsAffiches.push(pointAbstrait(pointsChoisis[p][0], pointsChoisis[p][1]))
+          pointsAffiches.push(
+            pointAbstrait(pointsChoisis[p][0], pointsChoisis[p][1]),
+          )
           pointsAffiches.push(
             pointAbstrait(pointsChoisis[p + 1][0], pointsChoisis[p + 1][1]),
           )
         } else {
           // et on affiche un seul des points pour les couples restants
-          pointsAffiches.push(pointAbstrait(pointsChoisis[p][0], pointsChoisis[p][1]))
+          pointsAffiches.push(
+            pointAbstrait(pointsChoisis[p][0], pointsChoisis[p][1]),
+          )
           pointsEnPlusCorr.push(
             pointAbstrait(pointsChoisis[p + 1][0], pointsChoisis[p + 1][1]),
           )
@@ -229,7 +232,7 @@ export default class CompleterParSymetrie5e extends Exercice {
         )
       ) {
         if (context.isAmc) {
-          this.autoCorrection[i] = {
+          this.autoCorrectionAMC[i] = {
             enonce: '',
             enonceAvant: false,
             propositions: [

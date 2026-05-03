@@ -7,6 +7,7 @@ import { labelPoint } from '../../lib/2d/textes'
 import { TexteSurArc, texteSurArc } from '../../lib/2d/TexteSurArc'
 import { homothetie, rotation, translation } from '../../lib/2d/transformations'
 import { vecteur } from '../../lib/2d/Vecteur'
+import { bleuMathalea, orangeMathalea } from '../../lib/colors'
 import { propositionsQcm } from '../../lib/interactif/qcm'
 import { choice, shuffle } from '../../lib/outils/arrayOutils'
 import {
@@ -23,7 +24,6 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { orangeMathalea, bleuMathalea } from '../../lib/colors'
 export const titre = 'Effectuer des liens entre angles et parallélisme'
 export const dateDePublication = '15/01/2022'
 export const dateDeModifImportante = '24/12/2025'
@@ -226,7 +226,11 @@ export default class ExercicesAnglesAIC extends Exercice {
             { O: param.O, A: param.A },
           )
           const anglesB = anglesSecantes(
-            homothetie(rotation(pointAbstrait(1, 0), O, param.O + 180), O, param.r2),
+            homothetie(
+              rotation(pointAbstrait(1, 0), O, param.O + 180),
+              O,
+              param.r2,
+            ),
             { O: param.O, A: param.B },
           )
           const secante = droite(anglesA.A, anglesB.A)
@@ -359,7 +363,11 @@ export default class ExercicesAnglesAIC extends Exercice {
             { O: param.O, A: param.A },
           )
           const anglesB = anglesSecantes(
-            homothetie(rotation(pointAbstrait(1, 0), O, param.O + 180), O, param.r2),
+            homothetie(
+              rotation(pointAbstrait(1, 0), O, param.O + 180),
+              O,
+              param.r2,
+            ),
             { O: param.O, A: param.B },
           )
           const secante = droite(anglesA.A, anglesB.A)
@@ -637,7 +645,11 @@ export default class ExercicesAnglesAIC extends Exercice {
             { O: param.O, A: param.A },
           )
           const anglesB = anglesSecantes(
-            homothetie(rotation(pointAbstrait(1, 0), O, param.O + 180), O, param.r2),
+            homothetie(
+              rotation(pointAbstrait(1, 0), O, param.O + 180),
+              O,
+              param.r2,
+            ),
             { O: param.O, A: param.B },
           )
           const secante = droite(anglesA.A, anglesB.A)
@@ -944,7 +956,11 @@ export default class ExercicesAnglesAIC extends Exercice {
             { O: param.O, A: param.A },
           )
           const anglesB = anglesSecantes(
-            homothetie(rotation(pointAbstrait(1, 0), O, param.O + 180), O, param.r2),
+            homothetie(
+              rotation(pointAbstrait(1, 0), O, param.O + 180),
+              O,
+              param.r2,
+            ),
             { O: param.O, A: param.B },
           )
           const secante = droite(anglesA.A, anglesB.A)
@@ -1175,7 +1191,11 @@ export default class ExercicesAnglesAIC extends Exercice {
             { O: param.O, A: param.A },
           )
           const anglesB = anglesSecantes(
-            homothetie(rotation(pointAbstrait(1, 0), O, param.O + 180), O, param.r2),
+            homothetie(
+              rotation(pointAbstrait(1, 0), O, param.O + 180),
+              O,
+              param.r2,
+            ),
             { O: param.O, A: param.B },
           )
           const secante = droite(anglesA.A, anglesB.A)
@@ -1359,7 +1379,11 @@ export default class ExercicesAnglesAIC extends Exercice {
             { O: param.O, A: param.A },
           )
           const anglesB = anglesSecantes(
-            homothetie(rotation(pointAbstrait(1, 0), O, param.O + 180), O, param.r2),
+            homothetie(
+              rotation(pointAbstrait(1, 0), O, param.O + 180),
+              O,
+              param.r2,
+            ),
             { O: param.O, A: param.B },
           )
           const secante = droite(anglesA.A, anglesB.A)
@@ -1686,7 +1710,11 @@ export default class ExercicesAnglesAIC extends Exercice {
             { O: param.O, A: param.A },
           )
           const anglesB = anglesSecantes(
-            homothetie(rotation(pointAbstrait(1, 0), O, param.O + 180), O, param.r2),
+            homothetie(
+              rotation(pointAbstrait(1, 0), O, param.O + 180),
+              O,
+              param.r2,
+            ),
             { O: param.O, A: param.B },
           )
           const secante = droite(anglesA.A, anglesB.A)
@@ -2001,7 +2029,7 @@ export default class ExercicesAnglesAIC extends Exercice {
       // Les lignes ci-dessous permettent d'avoir un affichage aux dimensions optimisées
       if (this.questionJamaisPosee(i, exercice.texte)) {
         if (context.isAmc) {
-          this.autoCorrection[i] = {
+          this.autoCorrectionAMC[i] = {
             enonce: '',
             options: { barreseparation: true, numerotationEnonce: true }, // facultatif.
             propositions: [
@@ -2024,7 +2052,7 @@ export default class ExercicesAnglesAIC extends Exercice {
             ],
           }
         } else {
-          this.autoCorrection[i] = {
+          this.autoCorrectionAMC[i] = {
             enonce: exercice.texte,
             propositions,
             options,

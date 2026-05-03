@@ -768,14 +768,14 @@ export default class ConstructionsParallelogrammesParticuliers extends Exercice 
         })
       }
 
-      this.autoCorrection[0] = {}
-      this.autoCorrection[0].options = {
+      this.autoCorrectionAMC[0] = {}
+      this.autoCorrectionAMC[0].options = {
         ordered: true,
         barreseparation: true,
         multicolsAll: true,
       }
-      this.autoCorrection[0].enonce = '' // texte
-      this.autoCorrection[0].propositions = [
+      this.autoCorrectionAMC[0].enonce = '' // texte
+      this.autoCorrectionAMC[0].propositions = [
         {
           type: 'AMCOpen',
           propositions: [
@@ -830,7 +830,7 @@ export default class ConstructionsParallelogrammesParticuliers extends Exercice 
             statut: cellule1[1] === reponseChiffres[ee],
           })
         }
-        this.autoCorrection[0].propositions.push(
+        this.autoCorrectionAMC[0].propositions.push(
           {
             type: 'qcmMono',
             propositions: propositionsQcm3,
