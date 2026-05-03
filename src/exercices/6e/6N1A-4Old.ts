@@ -268,7 +268,7 @@ export default class ExerciceLabyrintheNumerationOld extends Exercice {
     texteCorr = `Voici le chemin en couleur ($${miseEnEvidence(laby.chemin2d.length - 1)}$ nombres rencontrés avant la sortie) et la sortie est le numéro $${miseEnEvidence(nbL - monchemin[monchemin.length - 1][1])}$.<br>`
     texteCorr += mathalea2d(params, laby.murs2d, laby.nombres2d, laby.chemin2d)
     if (context.isAmc) {
-      this.autoCorrection = [
+      this.autoCorrectionAMC = [
         {
           enonce: texte,
           propositions: [

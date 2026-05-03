@@ -277,7 +277,7 @@ export default class FractionsCalculsSimples extends Exercice {
       }
       setReponse(this, i, reponseAMC, { formatInteractif: 'fractionEgale' })
       if (context.isAmc) {
-        this.autoCorrection[i] = {
+        this.autoCorrectionAMC[i] = {
           enonce: texte, // Si vide, l'énoncé est celui de l'exercice.
           propositions: [
             {
@@ -287,7 +287,6 @@ export default class FractionsCalculsSimples extends Exercice {
           reponse: {
             texte:
               'le texte affiché au dessus du formulaire numerique dans AMC', // facultatif
-            // @ts-expect-error
             valeur: [reponseAMC], // obligatoire (la réponse numérique à comparer à celle de l'élève), NE PAS METTRE DE STRING à virgule ! 4.9 et non pas 4,9
             alignement: 'flushleft', // EE : ce champ est facultatif et n'est fonctionnel que pour l'hybride. Il permet de choisir où les cases sont disposées sur la feuille. Par défaut, c'est comme le texte qui le précède. Pour mettre à gauche, au centre ou à droite, choisir parmi ('flushleft', 'center', 'flushright').
             param: {

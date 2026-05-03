@@ -15,8 +15,8 @@ import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
 import { droiteGraduee } from '../../lib/2d/DroiteGraduee'
-import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { orangeMathalea } from '../../lib/colors'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 
 export const titre = "Lire l'abscisse entière d'un point (grands nombres)"
 export const interactifReady = true
@@ -84,7 +84,6 @@ export default class LireAbscisseEntiere2d extends Exercice {
         texteCorr = '',
         cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       // La ligne suivante ne doit pas être mise après les setReponses car sinon elle les efface
       this.autoCorrection[3 * i] = {
@@ -205,7 +204,7 @@ export default class LireAbscisseEntiere2d extends Exercice {
         texte += `<br>${ajouteChampTexteMathLive(this, 3 * i + 1, KeyboardType.numbersSpace, { texteAvant: `${l2}(`, texteApres: ')' })}`
         texte += `<br>${ajouteChampTexteMathLive(this, 3 * i + 2, KeyboardType.numbersSpace, { texteAvant: `${l3}(`, texteApres: ')' })}`
       } else if (context.isAmc) {
-        this.autoCorrection[i] = {
+        this.autoCorrectionAMC[i] = {
           enonce: texte,
           enonceAvant: false,
           propositions: [

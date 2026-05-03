@@ -1,3 +1,4 @@
+import { ensureAmcParam } from '../../lib/amc/amcHelpers'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import {
   handleAnswers,
@@ -64,7 +65,6 @@ export default class ExerciceTablesAdditions extends Exercice {
     for (
       let i = 0, a, b, texte, texteCorr, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       a = randint(2, this.sup)
       b = randint(2, this.sup)
@@ -112,15 +112,19 @@ export default class ExerciceTablesAdditions extends Exercice {
           i,
           String(listeTypeDeQuestions[i] === 'somme' ? a + b : b),
         )
-        this.autoCorrection[i].enonce = texte
-        this.autoCorrection[i].propositions = [{ texte: texteCorr, statut: '' }]
-        this.autoCorrection[i].reponse!.param = {
-          digits: Math.max(2, nombreDeChiffresDansLaPartieEntiere(a + b)),
-          decimals: 0,
-          exposantNbChiffres: 0,
-          exposantSigne: false,
-          signe: false,
-        }
+        this.autoCorrectionAMC[i].enonce = texte
+        this.autoCorrectionAMC[i].propositions = [
+          { texte: texteCorr, statut: '' },
+        ]
+        const amcParam = ensureAmcParam(this, i)
+        amcParam.digits = Math.max(
+          2,
+          nombreDeChiffresDansLaPartieEntiere(a + b),
+        )
+        amcParam.decimals = 0
+        amcParam.exposantNbChiffres = 0
+        amcParam.exposantSigne = false
+        amcParam.signe = false
       }
       if (this.questionJamaisPosee(i, a, b)) {
         // Si la question n'a jamais été posée, on en crée une autre

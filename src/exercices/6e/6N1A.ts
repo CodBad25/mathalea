@@ -1,4 +1,5 @@
 import { ensureAmcParam } from '../../lib/amc/amcHelpers'
+import type { ReponseParams } from '../../lib/amc/amcTypes'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { setReponse } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -6,7 +7,6 @@ import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { arrondi } from '../../lib/outils/nombres'
 import { texNombre } from '../../lib/outils/texNombre'
-import type { ReponseParams } from '../../lib/types'
 import {
   contraindreValeur,
   listeQuestionsToContenu,
