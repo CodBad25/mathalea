@@ -24,6 +24,7 @@ import { pyramide3d } from '../../lib/3d/3dProjectionMathalea2d/Pyramide3dPerspe
 import { sphere3d } from '../../lib/3d/3dProjectionMathalea2d/Sphere3dPerspectiveCavaliere'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 
+import { bleuMathalea, orangeMathalea } from '../../lib/colors'
 import { setReponse } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choisitLettresDifferentes } from '../../lib/outils/aleatoires'
@@ -49,7 +50,6 @@ import {
 } from '../../modules/outils'
 import { RedactionPythagore } from '../4e/_pythagore'
 import Exercice from '../Exercice'
-import { orangeMathalea, bleuMathalea } from '../../lib/colors'
 
 export const titre = "Déterminer des longueurs dans la géométrie dans l'espace"
 export const amcReady = true
@@ -144,7 +144,7 @@ export default class CalculPythagoreEspace extends Exercice {
         cpt = 0;
       i < this.nbQuestions && cpt < 50;
     ) {
-      this.autoCorrection[i] = {}
+      this.autoCorrectionAMC[i] = {}
       texte = ''
       texteCorr = ''
       objetsEnonce = []
@@ -1105,16 +1105,16 @@ export default class CalculPythagoreEspace extends Exercice {
           })
 
       if (context.isAmc) {
-        this.autoCorrection[i] = {
+        this.autoCorrectionAMC[i] = {
           enonce: texte,
           enonceAvant: this.sup2 === 2,
           options: {
             ordered: false,
           },
         }
-        this.autoCorrection[i].propositions = []
+        this.autoCorrectionAMC[i].propositions = []
         if (this.sup2 === 1) {
-          this.autoCorrection[i].propositions.push({
+          this.autoCorrectionAMC[i].propositions.push({
             type: 'AMCNum',
             propositions: [
               {
@@ -1133,7 +1133,7 @@ export default class CalculPythagoreEspace extends Exercice {
             ],
           })
         } else {
-          this.autoCorrection[i].propositions.push({
+          this.autoCorrectionAMC[i].propositions.push({
             type: 'AMCOpen',
             propositions: [
               {

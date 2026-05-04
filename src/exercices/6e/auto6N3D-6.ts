@@ -45,13 +45,13 @@ export default class nomExercice extends Exercice {
   nouvelleVersion() {
     this.consigne = 'Compléter avec deux nombres entiers différents de 1.'
 
-    // @ts-expect-error Il faut typer gestionnaireFormulaireTexte
     const tables = gestionnaireFormulaireTexte({
       nbQuestions: this.nbQuestions,
       saisie: this.sup,
       defaut: 9,
       max: 99,
       min: 2,
+      melange: 0,
       enleveDoublons: true,
     }) as number[]
     const facteurMax = Number(this.sup2) > 5 ? Number(this.sup2) : 5

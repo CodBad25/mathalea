@@ -1,12 +1,12 @@
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { choice } from '../../lib/outils/arrayOutils'
 import { texNombre } from '../../lib/outils/texNombre'
-import Exercice from '../Exercice'
 import { context } from '../../modules/context'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import Exercice from '../Exercice'
 
-import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 export const titre = 'Écrire correctement les grands nombres entiers'
 
 export const interactifReady = true
@@ -55,7 +55,6 @@ export default class ÉcrireNombresEntiersFormates extends Exercice {
         nombrestring,
         cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       nombre = 0
       tranche = []
@@ -96,7 +95,7 @@ export default class ÉcrireNombresEntiersFormates extends Exercice {
         texteCorr = `$${nombrestring}$ s'écrit plus lisiblement $${texNombre(nombre, 0)}$.`
       else texteCorr = `${texNombre(nombre, 0)}`
       if (context.isAmc) {
-        this.autoCorrection[i] = {
+        this.autoCorrectionAMC[i] = {
           enonce: texte + '<br>',
           propositions: [
             {

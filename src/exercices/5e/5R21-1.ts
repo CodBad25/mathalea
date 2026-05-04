@@ -2,20 +2,20 @@
  * ⚠️ Cet exercice est utilisé dans le test : tests/e2e/tests/interactivity/mathLive.fillInTheBlanks.test.ts ⚠️
  */
 
-import { randint } from '../../modules/outils'
-import Exercice from '../Exercice'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { remplisLesBlancs } from '../../lib/interactif/questionMathLive'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import {
   ecritureNombreRelatif,
   ecritureParentheseSiNegatif,
 } from '../../lib/outils/ecritures'
-import { context } from '../../modules/context'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
-import { texNombre } from '../../lib/outils/texNombre'
-import { remplisLesBlancs } from '../../lib/interactif/questionMathLive'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { sp } from '../../lib/outils/outilString'
-import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { texNombre } from '../../lib/outils/texNombre'
+import { context } from '../../modules/context'
+import { randint } from '../../modules/outils'
+import Exercice from '../Exercice'
 
 export const titre = 'Transformer une soustraction en addition puis calculer'
 export const dateDePublication = '13/11/2023'
@@ -126,7 +126,7 @@ export default class SoustractionRelatifs extends Exercice {
         this.listeCorrections[i] = texteCorr
 
         if (context.isAmc) {
-          this.autoCorrection[i] = {
+          this.autoCorrectionAMC[i] = {
             enonce: '',
             enonceAvant: false,
             propositions: [

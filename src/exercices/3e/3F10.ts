@@ -68,7 +68,7 @@ export default class ImageAntecedentDepuisTableauOuFleche extends Exercice {
           "<br><br> <em>S'il y a plusieurs réponses, les séparer avec le point-virgule</em>.<br>"
 
       if (context.isAmc) {
-        this.autoCorrection[i] = {
+        this.autoCorrectionAMC[i] = {
           enonce: texte,
           enonceAvant: true, // EE : ce champ est facultatif et permet (si false) de supprimer l'énoncé ci-dessus avant la numérotation de chaque question.
           enonceAvantUneFois: false, // EE : ce champ est facultatif et permet (si true) d'afficher l'énoncé ci-dessus une seule fois avant la numérotation de la première question de l'exercice. Ne fonctionne correctement que si l'option melange est à false.
@@ -131,7 +131,7 @@ f) Compléter $f($%{champ6}$)=${c}$`,
           ? `L'image de $${a}$ par la fonction $f$ est $${miseEnEvidence(b)}$, on note $f(${a})=${miseEnEvidence(b)}$.<br>`
           : `Le nombre $${a}$ a pour image $${miseEnEvidence(b)}$ par la fonction $f$, on note $f(${a})=${miseEnEvidence(b)}$.<br>`)
       if (context.isAmc) {
-        this.autoCorrection[i].propositions?.push(
+        this.autoCorrectionAMC[i].propositions?.push(
           ajouteProposition(texteAMC, b),
         )
       }
@@ -147,7 +147,7 @@ f) Compléter $f($%{champ6}$)=${c}$`,
           ? `L'image de $${c}$ par la fonction $f$ est $${miseEnEvidence(d)}$, on note $f(${c})=${miseEnEvidence(d)}$.`
           : `Le nombre $${c}$ a pour image $${miseEnEvidence(d)}$ par la fonction $f$, on note $f(${c})=${miseEnEvidence(d)}$.`)
       if (context.isAmc) {
-        this.autoCorrection[i].propositions?.push(
+        this.autoCorrectionAMC[i].propositions?.push(
           ajouteProposition(texteAMC, d),
         )
       }
@@ -156,7 +156,7 @@ f) Compléter $f($%{champ6}$)=${c}$`,
         ? `$${a}$ a ${lang === 'fr-CH' ? 'un seul élément dans la préimage' : 'un seul antécédent'} par la fonction $f$ qui est $${miseEnEvidence(d)}$, on note $f(${miseEnEvidence(d)})=${a}$.`
         : `Le nombre $${miseEnEvidence(d)}$ a pour image $${a}$ par la fonction $f$, donc $f(${miseEnEvidence(d)})=${a}$.`
       if (context.isAmc) {
-        this.autoCorrection[i].propositions?.push(
+        this.autoCorrectionAMC[i].propositions?.push(
           ajouteProposition(
             numAlpha(2) +
               `Déterminer un antécédent de $${a}$ par la fonction $f$.`,
@@ -171,7 +171,7 @@ f) Compléter $f($%{champ6}$)=${c}$`,
           : `$${d}$ a deux antécédents : $${miseEnEvidence(c)}$ et $${miseEnEvidence(e)}$, on note $f(${miseEnEvidence(c)})=f(${miseEnEvidence(e)})=${d}$.`
         : `$${miseEnEvidence(c)}$ et $${miseEnEvidence(e)}$ ont pour image $${d}$ par la fonction $f$, on note $f(${miseEnEvidence(c)})=f(${miseEnEvidence(e)})=${d}$.`
       if (context.isAmc) {
-        this.autoCorrection[i].propositions?.push(
+        this.autoCorrectionAMC[i].propositions?.push(
           ajouteProposition(
             numAlpha(3) +
               `Déterminer un antécédent de $${d}$ par la fonction $f$.`,
@@ -191,7 +191,7 @@ f) Compléter $f($%{champ6}$)=${c}$`,
 
       texteCorr += '<br>' + numAlpha(4) + `$f(${c})=${miseEnEvidence(d)}$`
       if (context.isAmc) {
-        this.autoCorrection[i].propositions?.push(
+        this.autoCorrectionAMC[i].propositions?.push(
           ajouteProposition(numAlpha(4) + `Compléter : $f(${c})=\\ldots$`, d),
         )
       }
@@ -218,7 +218,7 @@ f) Compléter $f($%{champ6}$)=${c}$`,
         },
       )
       if (context.isAmc) {
-        this.autoCorrection[i].propositions?.push(
+        this.autoCorrectionAMC[i].propositions?.push(
           ajouteProposition(numAlpha(5) + `Compléter : $f(\\ldots)=${c}$`, f),
         )
       }

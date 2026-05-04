@@ -191,7 +191,7 @@ export function verifQuestionTableur(
   feedback: string
   score: { nbBonnesReponses: number; nbReponses: number }
 } {
-  if (exercice.autoCorrection[questionIndex]?.reponse == null) {
+  if (exercice.autoCorrection[questionIndex]?.valeur == null) {
     throw Error(
       `verifQuestionMathlive appelé sur une question sans réponse: ${JSON.stringify(
         {
@@ -202,21 +202,9 @@ export function verifQuestionTableur(
       )}`,
     )
   }
-  if (exercice.autoCorrection[questionIndex].reponse.param == null) {
-    window.notify(
-      `verifQuestionTableur appelé sur une question sans param : ${JSON.stringify(
-        {
-          exercice,
-          question: questionIndex,
-          param: exercice.autoCorrection[questionIndex].reponse,
-        },
-      )}`,
-      { exercice, questionIndex },
-    )
-  }
 
   if (exercice.answers === undefined) exercice.answers = {}
-  const reponses = exercice.autoCorrection[questionIndex].reponse.valeur
+  const reponses = exercice.autoCorrection[questionIndex].valeur
   if (reponses == null) {
     window.notify(
       `verifQuestionTableur: reponses est null pour la question ${questionIndex} de l'exercice ${exercice.id}`,

@@ -100,7 +100,6 @@ export default class ConstructibiliteDesTriangles extends Exercice {
     for (
       let i = 0, texte, texteCorr, l1, l2, l3, a1, a2, a3, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       // on fixe longueur min et max en cm
       const lMin = 2
@@ -471,7 +470,7 @@ export default class ConstructibiliteDesTriangles extends Exercice {
           },
         }
         if (context.isAmc) {
-          this.autoCorrection[i] = {
+          this.autoCorrectionAMC[i] = {
             enonce: consigneAMC + ' :<br>' + texte,
             options: { numerotationEnonce: true }, // facultatif.
             propositions: [

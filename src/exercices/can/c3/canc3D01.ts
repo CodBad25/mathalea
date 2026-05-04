@@ -92,7 +92,7 @@ export default class LireHeure extends ExerciceSimple {
     this.reponse = { reponse: { value: `${h}h ${m}`, options: { HMS: true } } }
     this.correction = `$${miseEnEvidence(h)}$ ${texteEnCouleurEtGras('h')} $${miseEnEvidence(m === 0 ? '' : m === 5 ? '0' + m : m)}$`
     if (context.isAmc) {
-      this.autoCorrection = [
+      this.autoCorrectionAMC = [
         {
           enonce: this.question,
           propositions: [

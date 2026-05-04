@@ -338,7 +338,7 @@ export default class CalculEffectifFrequence extends Exercice {
       setReponse(this, 4 * ee + 3, arrondi((100 * NTotalOiseaux) / Ntotal, 1))
 
       if (context.isAmc) {
-        this.autoCorrection[ee] = {
+        this.autoCorrectionAMC[ee] = {
           enonce: texteAMC,
           enonceAvant: false,
           enonceApresNumQuestion: true,

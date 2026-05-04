@@ -117,7 +117,7 @@ Ainsi $${d} = ${Math.floor(d / 60) * 60} + ${d % 60}$ donc $${d}\\text{~min~}= $
 
         if (context.isAmc) {
           if (listeTypeQuestions[i] === 'min vers h et min') {
-            this.autoCorrection[i] = {
+            this.autoCorrectionAMC[i] = {
               enonce: texte,
               options: { multicols: true },
               propositions: [
@@ -162,7 +162,7 @@ Ainsi $${d} = ${Math.floor(d / 60) * 60} + ${d % 60}$ donc $${d}\\text{~min~}= $
               ],
             }
           } else {
-            this.autoCorrection[i] = {
+            this.autoCorrectionAMC[i] = {
               enonce: texte,
               options: { multicols: true },
               propositions: [

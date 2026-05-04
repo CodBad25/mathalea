@@ -227,7 +227,7 @@ export default class FactoriserParNombreOux extends Exercice {
           reponse: { value: reponse, options: { factorisation: true } },
         })
       } else {
-        this.autoCorrection[i] = {
+        this.autoCorrectionAMC[i] = {
           enonce: texte,
           propositions: [{ texte: texteCorr, statut: 3, feedback: '' }],
         }

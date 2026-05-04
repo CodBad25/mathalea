@@ -136,7 +136,6 @@ export default class ReciproquePythagore extends Exercice {
         ordreDesCotes,
         cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       if (!context.isAmc) {
         this.autoCorrection[i] = {}
@@ -229,7 +228,7 @@ export default class ReciproquePythagore extends Exercice {
         }^2$, l'égalité de Pythagore n'est pas vérifiée.<br> D'après ${this.sup2 ? 'la contraposée du' : 'le'} théorème de Pythagore, le triangle  $${nomTriangle}$ n'est pas rectangle.`
       }
       if (context.isAmc) {
-        this.autoCorrection[i] = {
+        this.autoCorrectionAMC[i] = {
           enonce: '',
           enonceAvant: false,
           propositions: [

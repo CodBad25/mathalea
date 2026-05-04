@@ -5,6 +5,7 @@ import Exercice from '../../Exercice'
 
 import { droiteGraduee } from '../../../lib/2d/DroiteGraduee'
 import { latex2d } from '../../../lib/2d/textes'
+import { bleuMathalea } from '../../../lib/colors'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { texFractionReduite } from '../../../lib/outils/deprecatedFractions'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
@@ -14,7 +15,6 @@ import { texNombre } from '../../../lib/outils/texNombre'
 import { context } from '../../../modules/context'
 import FractionEtendue from '../../../modules/FractionEtendue'
 import { mathalea2d } from '../../../modules/mathalea2d'
-import { bleuMathalea } from '../../../lib/colors'
 
 export const titre = 'Lire une abscisse sur une droite graduée'
 export const interactifReady = true
@@ -121,7 +121,7 @@ export default class AbscisseFractionnaire extends Exercice {
 
         if (context.isAmc) {
           if (this.version === '6e')
-            this.autoCorrection[i] = {
+            this.autoCorrectionAMC[i] = {
               enonce: this.question,
               options: { multicols: true },
               propositions: [
@@ -166,7 +166,7 @@ export default class AbscisseFractionnaire extends Exercice {
               ],
             }
           else
-            this.autoCorrection[i] = {
+            this.autoCorrectionAMC[i] = {
               enonce: this.question,
               propositions: [
                 {

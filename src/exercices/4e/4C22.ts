@@ -225,7 +225,7 @@ export default class ExerciceMultiplierFractions extends Exercice {
           texte =
             'Calculer et donner le résultat sous forme irréductible\\\\\n' +
             texte
-          this.autoCorrection[i] = {
+          this.autoCorrectionAMC[i] = {
             enonce: texte, // Si vide, l'énoncé est celui de l'exercice.
             propositions: [
               {
@@ -233,8 +233,7 @@ export default class ExerciceMultiplierFractions extends Exercice {
               },
             ],
             reponse: {
-              // @ts-expect-error
-              valeur: [reponse], // obligatoire (la réponse numérique à comparer à celle de l'élève), NE PAS METTRE DE STRING à virgule ! 4.9 et non pas 4,9. Cette valeur doit être passée dans un tableau d'où la nécessité des crochets.
+              valeur: reponse, // obligatoire (la réponse numérique à comparer à celle de l'élève), NE PAS METTRE DE STRING à virgule ! 4.9 et non pas 4,9. Cette valeur doit être passée dans un tableau d'où la nécessité des crochets.
               param: {
                 digits: 5,
                 digitsNum: 3,

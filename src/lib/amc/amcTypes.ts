@@ -1,5 +1,31 @@
-import type { IExercice, ReponseParams } from '../types'
-
+import type { IFractionEtendue } from '../../modules/FractionEtendue.type'
+import type {
+  IExercice,
+  InteractivityType,
+  OldFormatInteractifType,
+} from '../types'
+export interface ReponseParams {
+  digits?: number
+  decimals?: number
+  signe?: boolean
+  exposantNbChiffres?: number
+  exposantSigne?: boolean
+  approx?: number | 'intervalleStrict'
+  aussiCorrect?: number | IFractionEtendue
+  digitsNum?: number
+  digitsDen?: number
+  basePuissance?: number
+  exposantPuissance?: number
+  baseNbChiffres?: number
+  milieuIntervalle?: number
+  formatInteractif?: InteractivityType | OldFormatInteractifType
+  precision?: number
+  scoreapprox?: number
+  vertical?: boolean
+  strict?: boolean
+  vhead?: boolean
+  tpoint?: string
+}
 export type AMCExportType =
   | 'qcmMono'
   | 'qcmMult'
@@ -24,6 +50,14 @@ export type AMCReponseValue =
       [key: string]: unknown
     }
 
+export type AMCDisplayAlignment = 'flushleft' | 'center' | 'flushright'
+
+export type AMCReponseDisplay = {
+  label?: string
+  labelPosition?: 'left' | 'right'
+  align?: AMCDisplayAlignment
+}
+
 export type AMCQcmChoice = {
   texte?: string
   statut?: AMCStatut
@@ -39,7 +73,21 @@ export type AMCQcmChoice = {
     valeur?: AMCReponseValue | AMCReponseValue[]
     alignement?: string
     param?: ReponseParams
+    display?: AMCReponseDisplay
   }
+}
+
+export type AMCLayoutOptions = {
+  radio?: boolean
+  ordered?: boolean
+  vertical?: boolean
+  lastChoice?: number
+  barreseparation?: boolean
+  multicols?: boolean
+  nbCols?: number
+  multicolsAll?: boolean
+  numerotationEnonce?: boolean
+  avecSymboleMult?: boolean
 }
 
 export type AMCUneProposition = {
@@ -54,26 +102,12 @@ export type AMCUneProposition = {
   pointilles?: boolean | number
   enonce?: string
   propositions?: AMCQcmChoice[]
-  options?: {
-    ordered?: boolean
-    vertical?: boolean
-    lastChoice?: number
-    barreseparation?: boolean
-    multicols?: boolean
-    nbCols?: number
-    digits?: number
-    decimals?: number
-    signe?: boolean
-    exposantNbChiffres?: number
-    exposantSigne?: boolean
-    approx?: number
-    multicolsAll?: boolean
-    numerotationEnonce?: boolean
-    avecSymboleMult?: boolean
-  }
+  options?: AMCLayoutOptions
   reponse?: {
     valeur?: AMCReponseValue | AMCReponseValue[]
     param?: ReponseParams
+    display?: AMCReponseDisplay
+    // Compat legacy
     textePosition?: string
     texte?: string
     alignement?: string
@@ -92,35 +126,17 @@ export interface AutoCorrectionAMC {
   reponse?: {
     valeur?: AMCReponseValue | AMCReponseValue[]
     param?: ReponseParams
+    display?: AMCReponseDisplay
+    // Compat legacy
     textePosition?: string
     texte?: string
+    alignement?: string
   }
-  options?: {
-    radio?: boolean
-    ordered?: boolean
-    vertical?: boolean
-    lastChoice?: number
-    barreseparation?: boolean
-    multicols?: boolean
-    nbCols?: number
-    digits?: number
-    decimals?: number
-    signe?: boolean
-    exposantNbChiffres?: number
-    exposantSigne?: boolean
-    approx?: number
-    multicolsAll?: boolean
-    numerotationEnonce?: boolean
-    avecSymboleMult?: boolean
-  }
+  options?: AMCLayoutOptions
 }
 
-export type IExerciceAMC = Omit<
-  IExercice,
-  'autoCorrection' | 'autoCorrectionAMC'
-> & {
-  autoCorrection: AutoCorrectionAMC[]
-  autoCorrectionAMC?: AutoCorrectionAMC[]
+export type IExerciceAMC = Omit<IExercice, 'autoCorrectionAMC'> & {
+  autoCorrectionAMC: AutoCorrectionAMC[]
   amcType?: AMCExportType | string
 }
 
@@ -176,6 +192,7 @@ export type AMCNumNormalized = {
   id: string
   enonce: string
   multicols?: boolean
+  display?: AMCReponseDisplay
   blocks: AMCNumBlock[]
 }
 

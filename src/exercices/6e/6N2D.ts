@@ -1,3 +1,4 @@
+import { ensureAmcParam } from '../../lib/amc/amcHelpers'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { setReponse } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -148,18 +149,18 @@ export default class ProduitDeDecimauxAPartirProduitConnu extends Exercice {
         texte += ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers)
       setReponse(this, i, reponse)
       if (context.isAmc) {
-        this.autoCorrection[i].enonce = texte
-        this.autoCorrection[i].propositions = [{ texte: texteCorr }]
-        // @ts-expect-error : autoCorrection[i] est bien défini
-        this.autoCorrection[i].reponse.param = {
-          digits:
-            nombreDeChiffresDansLaPartieEntiere(reponse) +
-            nombreDeChiffresDansLaPartieDecimale(reponse) +
-            2,
-          decimals: nombreDeChiffresDansLaPartieDecimale(reponse) + 1,
-          signe: false,
-          exposantNbChiffres: 0,
+        this.autoCorrectionAMC[i] = {
+          enonce: texte,
+          propositions: [{ texte: texteCorr }],
         }
+        const amcParam = ensureAmcParam(this, i)
+        amcParam.digits =
+          nombreDeChiffresDansLaPartieEntiere(reponse) +
+          nombreDeChiffresDansLaPartieDecimale(reponse) +
+          2
+        amcParam.decimals = nombreDeChiffresDansLaPartieDecimale(reponse) + 1
+        amcParam.signe = false
+        amcParam.exposantNbChiffres = 0
       }
       if (this.questionJamaisPosee(i, reponse)) {
         // Si la question n'a jamais été posée, on en crée une autre

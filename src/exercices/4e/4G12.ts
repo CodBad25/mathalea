@@ -631,7 +631,7 @@ export default class SerieDeTransformations extends Exercice {
         leurre0;
       i < this.nbQuestions && cpt < 10;
     ) {
-      this.autoCorrection[i] = {}
+      this.autoCorrectionAMC[i] = {}
       let chemin: number[]
 
       const polys: (Polygone | Vide2d)[] = []
@@ -873,7 +873,7 @@ export default class SerieDeTransformations extends Exercice {
           '.'
         : ''
       if (context.isAmc) {
-        this.autoCorrection = [
+        this.autoCorrectionAMC = [
           {
             enonce: texte,
             propositions: [

@@ -179,7 +179,7 @@ export default class LireAbscisseRelative extends Exercice {
           champ3: { value: String(abs3) },
         })
       } else {
-        this.autoCorrection[i] = {
+        this.autoCorrectionAMC[i] = {
           enonce: '',
           options: { barreseparation: false },
           propositions: [

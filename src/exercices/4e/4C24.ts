@@ -138,7 +138,7 @@ export default class SimplifierFractions extends Exercice {
 
       if (context.isAmc) {
         if (this.sup3 === 1) {
-          this.autoCorrection[i] = {
+          this.autoCorrectionAMC[i] = {
             enonce: '',
             enonceAvant: false,
             propositions: [
@@ -160,7 +160,7 @@ export default class SimplifierFractions extends Exercice {
             ],
           }
         } else {
-          this.autoCorrection[i] = {
+          this.autoCorrectionAMC[i] = {
             enonce: '',
             enonceAvant: false,
             propositions: [

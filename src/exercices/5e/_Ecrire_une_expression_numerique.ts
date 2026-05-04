@@ -144,7 +144,7 @@ export default class EcrireUneExpressionNumerique extends Exercice {
             String(resultats[4]),
           ))
       ) {
-        this.autoCorrection[i] = {}
+        this.autoCorrectionAMC[i] = {}
         switch (this.version) {
           case 1:
             this.consigne =
@@ -281,7 +281,7 @@ export default class EcrireUneExpressionNumerique extends Exercice {
           if (context.isAmc) {
             texte +=
               '<br>Détailler les calculs dans le cadre et coder le résultat ci-dessous.'
-            this.autoCorrection[i] = {
+            this.autoCorrectionAMC[i] = {
               enonce: '',
               enonceAvant: false,
               propositions: [
@@ -344,7 +344,7 @@ export default class EcrireUneExpressionNumerique extends Exercice {
         if (this.version === 2) {
           if (context.isAmc) {
             // AMCOpen pour 5C11, 5C11-1, 5L10-1, 5L10-3
-            this.autoCorrection[i] = {
+            this.autoCorrectionAMC[i] = {
               enonce: this.consigne + '<br>' + texte,
               propositions: [
                 {
@@ -384,7 +384,7 @@ export default class EcrireUneExpressionNumerique extends Exercice {
         if (this.version === 1) {
           if (context.isAmc) {
             // AMCOpen pour 5C11, 5C11-1, 5L10-1, 5L10-3
-            this.autoCorrection[i] = {
+            this.autoCorrectionAMC[i] = {
               enonce: this.consigne + '<br>' + texte,
               propositions: [
                 {

@@ -473,8 +473,8 @@ export default class LireUnDiagramme extends Exercice {
           monQcm3.texteCorr
       } else {
         // en AMC
-        this.autoCorrection[q].enonce = ''
-        this.autoCorrection[q].propositions = [
+        this.autoCorrectionAMC[q].enonce = ''
+        this.autoCorrectionAMC[q].propositions = [
           {
             type: 'qcmMono',
             propositions: propositionsQcm1,

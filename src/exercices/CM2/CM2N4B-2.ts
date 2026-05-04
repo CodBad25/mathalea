@@ -44,9 +44,8 @@ export default class LeCompteEstBonV3 extends Exercice {
     for (
       let i = 0, texte, texteCorr, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
-      this.autoCorrection[i] = {}
+      this.autoCorrectionAMC[i] = {}
       solutionMathador = TrouverSolutionMathador(
         minSolution,
         maxSolution ?? 100,
@@ -67,7 +66,7 @@ export default class LeCompteEstBonV3 extends Exercice {
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr
 
-        this.autoCorrection[i] = {
+        this.autoCorrectionAMC[i] = {
           enonce: texte,
           propositions: [{ texte: texteCorr, statut: 4, feedback: '' }],
         }

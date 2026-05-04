@@ -112,7 +112,6 @@ export default class AireDeTriangles extends Exercice {
     for (
       let i = 0, texte, texteCorr, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       objetsEnonce.length = 0
       objetsCorrection.length = 0
@@ -217,7 +216,7 @@ export default class AireDeTriangles extends Exercice {
         texteApres: '<em class="ml-2">(Une unité est attendue.)</em>',
       })
       if (context.isAmc) {
-        this.autoCorrection[i] = {
+        this.autoCorrectionAMC[i] = {
           enonce:
             texte + `<br>Aire de ${A.nom}${B.nom}${C.nom} en $\\text{cm}^2$ :`, // Si vide, l'énoncé est celui de l'exercice.
           propositions: [
@@ -226,8 +225,7 @@ export default class AireDeTriangles extends Exercice {
             },
           ],
           reponse: {
-            // @ts-expect-error
-            valeur: [arrondi((cotes[i] * hauteurs[i]) / 2)], // obligatoire (la réponse numérique à comparer à celle de l'élève), NE PAS METTRE DE STRING à virgule ! 4.9 et non pas 4,9. Cette valeur doit être passée dans un tableau d'où la nécessité des crochets.
+            valeur: arrondi((cotes[i] * hauteurs[i]) / 2), // obligatoire (la réponse numérique à comparer à celle de l'élève), NE PAS METTRE DE STRING à virgule ! 4.9 et non pas 4,9. Cette valeur doit être passée dans un tableau d'où la nécessité des crochets.
             param: {
               signe: false,
               decimals: 1,

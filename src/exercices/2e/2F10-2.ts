@@ -7,6 +7,7 @@ import { Latex2d, latexParPoint, texteParPosition } from '../../lib/2d/textes'
 import { tracePoint } from '../../lib/2d/TracePoint'
 import { homothetie, translation } from '../../lib/2d/transformations'
 import { vecteur } from '../../lib/2d/Vecteur'
+import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -23,7 +24,6 @@ import FractionEtendue from '../../modules/FractionEtendue'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { bleuMathalea } from '../../lib/colors'
 
 export const titre =
   "Déterminer graphiquement l'expression d'une fonction affine"
@@ -151,7 +151,7 @@ export default class Lecturefonctionaffine extends Exercice {
               o,
             ) // On trace le graphique
             if (context.isAmc) {
-              this.autoCorrection[i] = {
+              this.autoCorrectionAMC[i] = {
                 enonce: texte,
                 propositions: [
                   {
@@ -399,7 +399,7 @@ export default class Lecturefonctionaffine extends Exercice {
             // Fin de cette uniformisation
 
             if (context.isAmc) {
-              this.autoCorrection[i] = {
+              this.autoCorrectionAMC[i] = {
                 enonce: texte,
                 propositions: [
                   {

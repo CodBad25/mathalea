@@ -375,7 +375,9 @@ export default class NoteLaCouleurC3 extends Exercice {
         }
       } while (retour_a_la_case_depart)
       if (this.sup2) {
-        objetsEnonce.push(tracePoint(pointAbstrait(xdepart * 0.075, ydepart * 0.075)))
+        objetsEnonce.push(
+          tracePoint(pointAbstrait(xdepart * 0.075, ydepart * 0.075)),
+        )
         for (let i = 1; i < 10; i++) {
           if (i !== 1) {
             objetsEnonce.push(
@@ -496,6 +498,7 @@ export default class NoteLaCouleurC3 extends Exercice {
           ],
           reponseCouleur[0],
           { ordered: false, vertical: false },
+          '',
         )
         const leQcm = propositionsQcm(this, q * couleurs.length)
 
@@ -558,6 +561,7 @@ export default class NoteLaCouleurC3 extends Exercice {
             ],
             couleurs[i],
             { ordered: false, vertical: false },
+            '',
           )
           const leQcm = propositionsQcm(this, q * couleurs.length + i)
           texte += 'Couleur n°' + (i + 1) + ' : ' + leQcm.texte + '<br>'
@@ -572,12 +576,17 @@ export default class NoteLaCouleurC3 extends Exercice {
     <animateMotion path="M ${lutin.listeTraces[0][0] * context.pixelsParCm} ${-lutin.listeTraces[0][1] * context.pixelsParCm} L`
 
       for (let i = 0; i < lutin.listeTraces.length; i++) {
-        const B = pointAbstrait(lutin.listeTraces[i][2], lutin.listeTraces[i][3])
+        const B = pointAbstrait(
+          lutin.listeTraces[i][2],
+          lutin.listeTraces[i][3],
+        )
         lutin.animation += ` ${B.xSVG(context.pixelsParCm)} ${B.ySVG(context.pixelsParCm)} `
       }
       lutin.animation +=
         '" begin="10s" dur="10s" repeatCount="indefinite" />; </circle>'
-      objetsCorrection.push(tracePoint(pointAbstrait(xdepart * 0.075, ydepart * 0.075)))
+      objetsCorrection.push(
+        tracePoint(pointAbstrait(xdepart * 0.075, ydepart * 0.075)),
+      )
       if (this.sup2) {
         for (let i = 1; i < 10; i++) {
           if (i !== 1) {

@@ -1,5 +1,6 @@
 import { droiteGraduee } from '../../lib/2d/DroiteGraduee'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
+import { orangeMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { setReponse } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -11,7 +12,6 @@ import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { orangeMathalea } from '../../lib/colors'
 
 export const titre = "Lire l'abscisse décimale d'un point"
 export const interactifReady = true
@@ -227,11 +227,17 @@ export default class LireAbscisseDecimale extends Exercice {
           ajouteChampTexteMathLive(this, 3 * i + 2, KeyboardType.clavierNumbers)
       } else {
         if (context.isAmc) {
-          this.autoCorrection[i].enonce = texte
-          // @ts-expect-error
-          this.autoCorrection[i].propositions[0].texte = texteCorr
-          // @ts-expect-error
-          this.autoCorrection[i].propositions[0].statut = 1
+          this.autoCorrectionAMC[i] = {
+            enonce: texte,
+            propositions: [
+              {
+                texte: texteCorr,
+                statut: 1,
+                sanscadre: false,
+                pointilles: true,
+              },
+            ],
+          }
         }
       }
       if (this.questionJamaisPosee(i, texte)) {

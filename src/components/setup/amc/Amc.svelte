@@ -346,12 +346,7 @@
     ex.interactiveAutoCorrectionForAMC = exercice.autoCorrection.map(
       (item) => ({
         ...item,
-        reponse: item?.reponse
-          ? {
-              ...item.reponse,
-              valeur: item.reponse.valeur,
-            }
-          : undefined,
+        valeur: item?.valeur,
       }),
     )
 

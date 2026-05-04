@@ -17,10 +17,10 @@ import Exercice from '../Exercice'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { grille } from '../../lib/2d/Grille'
 import { vide2d } from '../../lib/2d/Vide2d'
+import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { sp } from '../../lib/outils/outilString'
-import { bleuMathalea } from '../../lib/colors'
 
 export const titre =
   "Résoudre un problème s'appuyant sur la lecture d'une représentation graphique"
@@ -179,7 +179,7 @@ export default class ExploiterRepresentationGraphique extends Exercice {
             for (let i = 0; i < this.listeQuestions.length; i++) {
               enonceAMC += `${i + 1}) ${this.listeQuestions[i]}<br>`
             }
-            this.autoCorrection[0] = {
+            this.autoCorrectionAMC[0] = {
               enonce: enonceAMC,
               propositions: [
                 {
@@ -321,7 +321,7 @@ export default class ExploiterRepresentationGraphique extends Exercice {
             for (let i = 0; i < this.listeQuestions.length; i++) {
               enonceAMC += `${i + 1}) ${this.listeQuestions[i]}<br>`
             }
-            this.autoCorrection[0] = {
+            this.autoCorrectionAMC[0] = {
               enonce: enonceAMC,
               propositions: [
                 {
@@ -491,7 +491,7 @@ export default class ExploiterRepresentationGraphique extends Exercice {
             for (let i = 0; i < this.listeQuestions.length; i++) {
               enonceAMC += `${i + 1}) ${this.listeQuestions[i]}<br>`
             }
-            this.autoCorrection[0] = {
+            this.autoCorrectionAMC[0] = {
               enonce: enonceAMC,
               propositions: [
                 {
@@ -615,7 +615,9 @@ export default class ExploiterRepresentationGraphique extends Exercice {
                 this,
                 indiceQuestion,
                 KeyboardType.nombresEtDegreCelsius,
-                { texteApres: '<em class="ml-2">(Une unité est attendue.)</em>' },
+                {
+                  texteApres: '<em class="ml-2">(Une unité est attendue.)</em>',
+                },
               ),
           )
           handleAnswers(this, indiceQuestion, {
@@ -636,7 +638,9 @@ export default class ExploiterRepresentationGraphique extends Exercice {
                 this,
                 indiceQuestion,
                 KeyboardType.nombresEtDegreCelsius,
-                { texteApres: '<em class="ml-2">(Une unité est attendue.)</em>' },
+                {
+                  texteApres: '<em class="ml-2">(Une unité est attendue.)</em>',
+                },
               ),
           )
           handleAnswers(this, indiceQuestion, {
@@ -687,7 +691,7 @@ export default class ExploiterRepresentationGraphique extends Exercice {
             for (let i = 0; i < this.listeQuestions.length; i++) {
               enonceAMC += `${i + 1}) ${this.listeQuestions[i]}<br>`
             }
-            this.autoCorrection[0] = {
+            this.autoCorrectionAMC[0] = {
               enonce: enonceAMC,
               propositions: [
                 {

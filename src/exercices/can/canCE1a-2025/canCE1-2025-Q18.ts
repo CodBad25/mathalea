@@ -117,8 +117,7 @@ export default class Can2025CE1Q18 extends Exercice {
         .replace(/\((\+?-?\d+)\)/, '$1')
       resultatOK =
         resultatOK &&
-        saisies[k] ===
-          (this.autoCorrection[k]?.reponse?.valeur?.reponse?.value ?? '')
+        saisies[k] === (this.autoCorrection[k]?.valeur?.reponse?.value ?? '')
     }
     const spanResultat = document.querySelector(
       `#resultatCheckEx${this.numeroExercice}Q${2}`,

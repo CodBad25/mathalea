@@ -286,7 +286,7 @@ export default class TableauDeValeurs extends Exercice {
       texteCorr += '\\begin{array}{|l|c|c|c|}\n'
 
       if (context.isAmc) {
-        this.autoCorrection[i] = {
+        this.autoCorrectionAMC[i] = {
           enonce: `On considère la fonction $${nomdef}$ définie par $${nomdef}:x\\mapsto ${expression}$.\\\\ \n
           Calculer :\\\\ \na) $f(${listeDeX[i][0]})$\\\\ \nb) $f(${listeDeX[i][1]})$\\\\ \nc) $f(${listeDeX[i][2]})$\\\\ \n
           Utiliser le cadre pour les calculs si besoin puis coder les réponses.\\\\`,

@@ -138,8 +138,17 @@ export default class MultiplierDecimauxParametres extends Exercice {
 
       if (context.isAmc) {
         setReponse(this, i, reponse)
-
-        this.autoCorrection[i].options = {
+        const exerciseAny = this as any
+        if (!Array.isArray(exerciseAny.autoCorrectionAMC)) {
+          exerciseAny.autoCorrectionAMC = []
+        }
+        if (exerciseAny.autoCorrectionAMC[i] == null) {
+          exerciseAny.autoCorrectionAMC[i] = {}
+        }
+        if (exerciseAny.autoCorrectionAMC[i].reponse == null) {
+          exerciseAny.autoCorrectionAMC[i].reponse = {}
+        }
+        exerciseAny.autoCorrectionAMC[i].reponse.param = {
           digits: 0,
           decimals: 0,
           signe: false,

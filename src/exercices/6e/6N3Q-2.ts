@@ -8,6 +8,7 @@ import { context } from '../../modules/context'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
+import type { AMCUneProposition } from '../../lib/amc/amcTypes'
 import { createList } from '../../lib/format/lists'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
@@ -184,7 +185,7 @@ export default class AugmenterEtReduireDunPourcentage extends Exercice {
       const prenom1 = prenomM()
       const prenom2 = prenomF()
       let prixIntial, prixFinal
-      let propositionsAMC: unknown[] = []
+      let propositionsAMC: AMCUneProposition[] = []
       let texte = ''
       let enonceInit = ''
       let enonceAMC = ''
@@ -386,10 +387,9 @@ export default class AugmenterEtReduireDunPourcentage extends Exercice {
       if (this.questionJamaisPosee(i, prixIntial, prixFinal)) {
         // Si la question n'a jamais été posée, on en crée une autre
         if (context.isAmc) {
-          this.autoCorrection[i] = {
+          this.autoCorrectionAMC[i] = {
             enonce: '',
             options: { multicols: true, barreseparation: true }, // facultatif. Par défaut, multicols est à false. Ce paramètre provoque un multicolonnage (sur 2 colonnes par défaut) : pratique quand on met plusieurs AMCNum. !!! Attention, cela ne fonctionne pas, nativement, pour AMCOpen. !!!
-            // @ts-expect-error
             propositions: propositionsAMC,
           }
         } else {

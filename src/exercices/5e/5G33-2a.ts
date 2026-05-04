@@ -9,7 +9,7 @@ import {
 import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { rotation } from '../../lib/2d/transformations'
 import { pointIntersectionDD } from '../../lib/2d/utilitairesPoint'
-import { orangeMathalea, bleuMathalea } from '../../lib/colors'
+import { bleuMathalea, orangeMathalea } from '../../lib/colors'
 import { enleveDoublonNum, shuffle } from '../../lib/outils/arrayOutils'
 import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
@@ -728,10 +728,10 @@ export default class ProprietesParallelesPerpendiculaires extends Exercice {
       }
 
       /** ********************** AMC Open *****************************/
-      this.autoCorrection[i] = {}
-      this.autoCorrection[i].options = { ordered: false }
-      this.autoCorrection[i].enonce = texte + '<br>'
-      this.autoCorrection[i].propositions = [
+      this.autoCorrectionAMC[i] = {}
+      this.autoCorrectionAMC[i].options = { ordered: false }
+      this.autoCorrectionAMC[i].enonce = texte + '<br>'
+      this.autoCorrectionAMC[i].propositions = [
         {
           texte: texteCorr,
           statut: 3,

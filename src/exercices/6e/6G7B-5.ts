@@ -10,6 +10,7 @@ import {
 } from '../../lib/2d/transformations'
 import { centreGraviteTriangle } from '../../lib/2d/utilitairesTriangle'
 import { vecteur } from '../../lib/2d/Vecteur'
+import { bleuMathalea } from '../../lib/colors'
 import { propositionsQcm } from '../../lib/interactif/qcm'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import { texteEnCouleur } from '../../lib/outils/embellissements'
@@ -21,7 +22,6 @@ import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
-import { bleuMathalea } from '../../lib/colors'
 
 export const titre = 'Utiliser des symétries axiales en pavage triangulaire'
 export const interactifReady = true
@@ -527,7 +527,7 @@ export default class SymetrieAxialePavageTriangulaire extends Exercice {
       texteCorr = `${texteEnCouleur("L'image de la figure " + question[i].antecedent + " par la symétrie axiale d'axe " + `$${dLatex[i][1].latex}$` + ' est la figure ' + question[i].image + '.', couleurs[i])}`
       if (context.isAmc) {
         if (i === 0) {
-          this.autoCorrection[0] = {
+          this.autoCorrectionAMC[0] = {
             enonce:
               this.introduction + '\\\\\n' + numAlpha(0) + texte + '\\\\\n',
             propositions: [
@@ -535,8 +535,7 @@ export default class SymetrieAxialePavageTriangulaire extends Exercice {
                 type: 'qcmMono',
                 propositions: [
                   {
-                    // @ts-expect-error
-                    texte: question[i].image,
+                    texte: String(question[i].image),
                     statut: true,
                     feedback: '',
                   },
@@ -545,14 +544,12 @@ export default class SymetrieAxialePavageTriangulaire extends Exercice {
             ],
           }
         } else {
-          this.autoCorrection[0].enonce += `${numAlpha(i)} ${texte} \\\\\n`
-          // @ts-expect-error
-          this.autoCorrection[0].propositions.push({
+          this.autoCorrectionAMC[0].enonce += `${numAlpha(i)} ${texte} \\\\\n`
+          this.autoCorrectionAMC[0].propositions!.push({
             type: 'qcmMono',
             propositions: [
               {
-                // @ts-expect-error
-                texte: question[i].image,
+                texte: String(question[i].image),
                 statut: true,
                 feedback: '',
               },
@@ -561,10 +558,8 @@ export default class SymetrieAxialePavageTriangulaire extends Exercice {
         }
 
         for (let j = 0; j < question[i].distracteurs.length; j++) {
-          // @ts-expect-error
-          this.autoCorrection[0].propositions[i].propositions.push({
-            // @ts-expect-error
-            texte: question[i].distracteurs[j],
+          this.autoCorrectionAMC[0].propositions![i].propositions!.push({
+            texte: String(question[i].distracteurs[j]),
             statut: false,
             feedback: '',
           })
@@ -574,18 +569,15 @@ export default class SymetrieAxialePavageTriangulaire extends Exercice {
           enonce: context.isAmc ? this.introduction + '\\\\' + texte : texte,
           propositions: [
             {
-              // @ts-expect-error
-              texte: question[i].image,
+              texte: String(question[i].image),
               statut: true,
               feedback: '',
             },
           ],
         }
         for (let j = 0; j < question[i].distracteurs.length; j++) {
-          // @ts-expect-error
-          this.autoCorrection[i].propositions.push({
-            // @ts-expect-error
-            texte: question[i].distracteurs[j],
+          this.autoCorrection[i].propositions!.push({
+            texte: String(question[i].distracteurs[j]),
             statut: false,
             feedback: '',
           })

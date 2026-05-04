@@ -218,15 +218,28 @@ export default class MultiplierDecimaux extends Exercice {
         texteAvant: '$~=$',
       })
 
-      if (context.isAmc) setReponse(this, i, reponse)
-      else handleAnswers(this, i, { reponse: { value: reponse } })
-      this.autoCorrection[i].options = {
-        digits: 0,
-        decimals: 0,
-        signe: false,
-        exposantNbChiffres: 0,
-        exposantSigne: false,
-        approx: 0,
+      if (context.isAmc) {
+        setReponse(this, i, reponse)
+        const exerciseAny = this as any
+        if (!Array.isArray(exerciseAny.autoCorrectionAMC)) {
+          exerciseAny.autoCorrectionAMC = []
+        }
+        if (exerciseAny.autoCorrectionAMC[i] == null) {
+          exerciseAny.autoCorrectionAMC[i] = {}
+        }
+        if (exerciseAny.autoCorrectionAMC[i].reponse == null) {
+          exerciseAny.autoCorrectionAMC[i].reponse = {}
+        }
+        exerciseAny.autoCorrectionAMC[i].reponse.param = {
+          digits: 0,
+          decimals: 0,
+          signe: false,
+          exposantNbChiffres: 0,
+          exposantSigne: false,
+          approx: 0,
+        }
+      } else {
+        handleAnswers(this, i, { reponse: { value: reponse } })
       }
 
       if (this.questionJamaisPosee(i, a, b)) {

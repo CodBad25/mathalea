@@ -6,6 +6,7 @@ import { segment } from '../../lib/2d/segmentsVecteurs'
 import { labelPoint, texteParPosition } from '../../lib/2d/textes'
 import { tracePoint } from '../../lib/2d/TracePoint'
 import { rotation } from '../../lib/2d/transformations'
+import { bleuMathalea } from '../../lib/colors'
 import { arcenciel, texcolors } from '../../lib/format/style'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { setReponse } from '../../lib/interactif/gestionInteractif'
@@ -25,7 +26,6 @@ import {
 import { Pavage, pavage } from '../../modules/Pavage'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
-import { bleuMathalea } from '../../lib/colors'
 
 export const titre =
   "Trouver l'image d'une figure par une rotation dans un pavage"
@@ -452,7 +452,7 @@ export default class PavageEtRotation2D extends Exercice {
         texteCorr += mathalea2d(fenetre, objets, objetsCorrection, texteGris)
       }
       if (context.isAmc) {
-        this.autoCorrection[0] = {
+        this.autoCorrectionAMC[0] = {
           options: { multicols: true },
           enonce: consigneAMC,
           propositions: propositionsAMC,

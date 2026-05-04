@@ -482,8 +482,8 @@ export default class ScratchMultiScript extends Exercice {
           }
         }
       } else {
-        this.autoCorrection[i] = {}
-        this.autoCorrection[i].enonce = `${deuxColonnes(
+        this.autoCorrectionAMC[i] = {}
+        this.autoCorrectionAMC[i].enonce = `${deuxColonnes(
           scratchblock(texteScratch),
           mathalea2d(
             Object.assign({}, fixeBordures(lePlateau.objets), {
@@ -494,8 +494,8 @@ export default class ScratchMultiScript extends Exercice {
           ),
           35,
         )}`
-        this.autoCorrection[i].propositions = []
-        this.autoCorrection[i].propositions.push({
+        this.autoCorrectionAMC[i].propositions = []
+        this.autoCorrectionAMC[i].propositions.push({
           type: 'AMCOpen',
           propositions: [
             {
@@ -507,16 +507,16 @@ export default class ScratchMultiScript extends Exercice {
           ],
         })
         for (let k = 0; k < couleurs[i].length; k++) {
-          this.autoCorrection[i].propositions.push({
+          this.autoCorrectionAMC[i].propositions.push({
             type: 'qcmMono',
             propositions: [],
             options: { ordered: true },
           })
         }
         for (let k = 0; k < couleurs[i].length; k++) {
-          this.autoCorrection[i].propositions[k + 1].propositions = []
+          this.autoCorrectionAMC[i].propositions[k + 1].propositions = []
           for (let j = 0; j < listeCouleurs.length; j++) {
-            this.autoCorrection[i].propositions[k + 1].propositions.push({
+            this.autoCorrectionAMC[i].propositions[k + 1].propositions.push({
               texte: listeCouleurs[j],
               statut: listeCouleurs[j] === couleurs[i][k],
               reponse: j === 0 ? { texte: `couleur N° ${k + 1} : ` } : {},

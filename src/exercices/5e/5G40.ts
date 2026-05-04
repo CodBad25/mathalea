@@ -381,19 +381,19 @@ export default class ConstructionsParallelogrammes extends Exercice {
         const propositionsQcm2 = []
         for (let ee = 0; ee < 5; ee++) {
           propositionsQcm2.push({
-            texte: ee + 1,
+            texte: String(ee + 1),
             statut: cellule[1] === reponseChiffres[ee],
           })
         }
 
-        this.autoCorrection[i] = {}
-        this.autoCorrection[i].options = {
+        this.autoCorrectionAMC[i] = {}
+        this.autoCorrectionAMC[i].options = {
           ordered: true,
           barreseparation: true,
           multicolsAll: true,
         }
-        this.autoCorrection[i].enonce = '' // texte
-        this.autoCorrection[i].propositions = [
+        this.autoCorrectionAMC[i].enonce = '' // texte
+        this.autoCorrectionAMC[i].propositions = [
           {
             type: 'AMCOpen',
             propositions: [
@@ -430,7 +430,6 @@ export default class ConstructionsParallelogrammes extends Exercice {
           },
           {
             type: 'qcmMono',
-            // @ts-expect-error
             propositions: propositionsQcm2,
             enonce:
               'Chiffre de la case du sommet construit, dans la cible' +
@@ -450,12 +449,11 @@ export default class ConstructionsParallelogrammes extends Exercice {
           const propositionsQcm4 = []
           for (let ee = 0; ee < 5; ee++) {
             propositionsQcm4.push({
-              texte: (ee + 1).toString(),
+              texte: String(ee + 1),
               statut: cellule2[1] === reponseChiffres[ee],
             })
           }
-          // @ts-expect-error
-          this.autoCorrection[i].propositions.push(
+          this.autoCorrectionAMC[i].propositions!.push(
             {
               type: 'qcmMono',
               propositions: propositionsQcm3,
@@ -487,8 +485,7 @@ export default class ConstructionsParallelogrammes extends Exercice {
               statut: cellule3[1] === reponseChiffres[ee],
             })
           }
-          // @ts-expect-error
-          this.autoCorrection[i].propositions.push(
+          this.autoCorrectionAMC[i].propositions!.push(
             {
               type: 'qcmMono',
               propositions: propositionsQcm5,

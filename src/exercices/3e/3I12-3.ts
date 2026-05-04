@@ -114,10 +114,9 @@ export default class CompleterScriptDiviseurs extends Exercice {
       melange: 11,
       nbQuestions: 0,
       saisie: this.sup,
-    })
+    }).map(Number)
 
     briquesATrouver.push(...range1(10))
-    // @ts-expect-error
     briquesATrouver = enleveDoublonNum(briquesATrouver).slice(
       0,
       nbBriquesATrouver,
@@ -301,7 +300,7 @@ export default class CompleterScriptDiviseurs extends Exercice {
           : 'problème avec texteCorr'
 
       if (context.isAmc) {
-        this.autoCorrection = [
+        this.autoCorrectionAMC = [
           {
             enonce: this.consigne + '<br>' + texte + '<br>',
             propositions: [{ statut: 3, sanscadre: true }],

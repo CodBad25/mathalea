@@ -17,9 +17,9 @@ import {
 import Exercice from '../Exercice'
 
 import { tableauColonneLigne } from '../../lib/2d/tableau'
+import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { setReponse } from '../../lib/interactif/gestionInteractif'
-import { bleuMathalea } from '../../lib/colors'
 
 export const titre = 'Calculer des fréquences statistiques'
 export const interactifReady = true
@@ -507,7 +507,7 @@ function questionsEtCorrections(
       ]
     } else {
       // Pour AMC, on ne peut pas doubler les questions, il faut les intégrer dans un seul AMCHybride.
-      exercice.autoCorrection[numero] = {
+      exercice.autoCorrectionAMC[numero] = {
         options: { multicols: true },
         enonce:
           preambule +

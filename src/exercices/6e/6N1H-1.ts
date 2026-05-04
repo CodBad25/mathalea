@@ -109,7 +109,9 @@ export default class LireAbscisseDecimaleBis2d extends Exercice {
       l2 = lettreIndiceeDepuisChiffre(i * 3 + 2)
       l3 = lettreIndiceeDepuisChiffre(i * 3 + 3)
       if (context.isAmc) {
-        this.autoCorrection[i] = { propositions: [{ statut: 4, feedback: '' }] }
+        this.autoCorrectionAMC[i] = {
+          propositions: [{ statut: 4, feedback: '' }],
+        }
       }
       switch (typesDeQuestions[i]) {
         case 3:
@@ -245,7 +247,7 @@ export default class LireAbscisseDecimaleBis2d extends Exercice {
         })
       } else {
         if (context.isAmc) {
-          this.autoCorrection[i] = {
+          this.autoCorrectionAMC[i] = {
             enonce: texte,
             propositions: [
               { texte: texteCorr, statut: 0, feedback: '', sanscadre: true },

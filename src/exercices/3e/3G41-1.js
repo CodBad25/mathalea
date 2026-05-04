@@ -8,13 +8,13 @@ import { pointSurSegment } from '../../lib/2d/utilitairesPoint'
 import { vecteur } from '../../lib/2d/Vecteur'
 import { point3d } from '../../lib/3d/3dProjectionMathalea2d/elementsEtTransformations3d'
 import { pave3d } from '../../lib/3d/3dProjectionMathalea2d/PaveEtPaveLPH3dPerspectiveCavaliere'
+import { bleuMathalea, orangeMathalea } from '../../lib/colors'
 import { choisitLettresDifferentes } from '../../lib/outils/aleatoires'
 import { choice } from '../../lib/outils/arrayOutils'
 import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { orangeMathalea, bleuMathalea } from '../../lib/colors'
 export const titre = "Construire la section d'un plan dans un un pavé droit"
 export const amcReady = true
 export const amcType = 'AMCOpen'
@@ -289,7 +289,7 @@ export default class ConstruireSectionPaveDroit extends Exercice {
         this.listeCorrections[i] = texteCorr
 
         if (context.isAmc) {
-          this.autoCorrection[i] = {
+          this.autoCorrectionAMC[i] = {
             enonce: texte,
             propositions: [
               {

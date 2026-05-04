@@ -491,7 +491,7 @@ export default class MetaExercice extends Exercice {
 
             // fin d'alimentation des listes de question et de correction pour cette question
             const formatInteractif =
-              Question.autoCorrection[0]?.reponse?.param?.formatInteractif
+              Question.autoCorrection[0]?.formatInteractif
             if (formatInteractif === 'custom') {
               Question.reinit()
               Question.nouvelleVersionWrapper(
@@ -517,7 +517,7 @@ export default class MetaExercice extends Exercice {
             } else if (formatInteractif === 'qcm') {
               this.autoCorrection[indexQuestion] = Question.autoCorrection[0]
             } else {
-              const reponse = Question.autoCorrection[0]?.reponse?.valeur
+              const reponse = Question.autoCorrection[0]?.valeur
               if (reponse != null)
                 handleAnswers(this, indexQuestion, reponse as Valeur, {
                   formatInteractif,

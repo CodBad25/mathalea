@@ -9,6 +9,7 @@ import { repere } from '../../lib/2d/reperes'
 import { labelPoint, texteParPosition } from '../../lib/2d/textes'
 import type { TracePoint } from '../../lib/2d/TracePoint'
 import { tracePoint } from '../../lib/2d/TracePoint'
+import { bleuMathalea } from '../../lib/colors'
 import figureApigeom, { isFigureArray } from '../../lib/figureApigeom'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import {
@@ -24,7 +25,6 @@ import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
 import Exercice from '../Exercice'
-import { bleuMathalea } from '../../lib/colors'
 
 export const titre = 'Représenter graphiquement une fonction affine'
 export const dateDeModifImportante = '06/04/2024'
@@ -104,7 +104,13 @@ export default class Representerfonctionaffine extends Exercice {
         tB: TracePoint,
         lA: NestedObjetMathalea2dArray,
         lB: NestedObjetMathalea2dArray,
-        cadreFenetreSvg: unknown,
+        cadreFenetreSvg: {
+          xmin: number
+          ymin: number
+          xmax: number
+          ymax: number
+          scale: number
+        },
         f: (x: number) => number,
         texte,
         texteCorr: string
@@ -266,7 +272,6 @@ export default class Representerfonctionaffine extends Exercice {
 
             monRepere = repere(cadre) // On définit le repère
             texteCorr += mathalea2d(
-              // @ts-expect-error mathalea2d n'est pas typé
               cadreFenetreSvg,
               monRepere,
               droiteAB,

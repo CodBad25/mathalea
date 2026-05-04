@@ -4,6 +4,8 @@ import { polyline } from '../../lib/2d/Polyline'
 import { repere } from '../../lib/2d/reperes'
 import { latexParPoint, texteParPoint } from '../../lib/2d/textes'
 import { tracePoint } from '../../lib/2d/TracePoint'
+import type { AutoCorrectionAMC } from '../../lib/amc/amcTypes'
+import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -16,7 +18,6 @@ import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { rangeMinMax } from '../../lib/outils/nombres'
 import { pgcd, premierAvec } from '../../lib/outils/primalite'
 import { stringNombre, texNombre } from '../../lib/outils/texNombre'
-import type { AutoCorrection } from '../../lib/types'
 import { context } from '../../modules/context'
 import FractionEtendue from '../../modules/FractionEtendue'
 import { fraction } from '../../modules/fractions'
@@ -28,7 +29,6 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { bleuMathalea } from '../../lib/colors'
 
 export const titre = 'Étudier des fonctions affines'
 export const interactifType = 'mathLive'
@@ -132,7 +132,7 @@ Le choix a été fait d'un antécédent primaire entier positif, le coefficient 
       texte2AMC = ''
       texte3AMC = ''
       valeur2AMC = 0
-      const elementAmc: AutoCorrection = {}
+      const elementAmc: AutoCorrectionAMC = {}
       const nomFonction = String.fromCharCode(102 + i)
       let texte = ''
       let texteCorr = ''
@@ -689,7 +689,10 @@ Le choix a été fait d'un antécédent primaire entier positif, le coefficient 
               grille: false,
             })
             const origine = pointAbstrait(0, ordonneeOrigine * yUnite)
-            const M = pointAbstrait(antecedent0 * xUnite, (image0 as number) * yUnite)
+            const M = pointAbstrait(
+              antecedent0 * xUnite,
+              (image0 as number) * yUnite,
+            )
             const d = droite(origine, M)
             const t = tracePoint(M)
             const projeteX = pointAbstrait(M.x, 0)
@@ -715,7 +718,10 @@ Le choix a été fait d'un antécédent primaire entier positif, le coefficient 
             const u = tracePoint(N)
             const projeteNX = pointAbstrait(N.x, 0)
             const projeteNY = pointAbstrait(0, N.y)
-            const pointillesN = polyline([projeteNY, N, projeteNX], bleuMathalea)
+            const pointillesN = polyline(
+              [projeteNY, N, projeteNX],
+              bleuMathalea,
+            )
             pointilles.pointilles = 2
             pointilles.epaisseur = 1
             const positionCoord = antecedent2 < 0 ? N.x - 0.5 : N.x + 0.5
@@ -859,7 +865,10 @@ Le choix a été fait d'un antécédent primaire entier positif, le coefficient 
                 {
                   texte: '',
                   reponse: {
-                    texte: JCAMC ? texteAMC : '',
+                    display: {
+                      label: JCAMC ? texteAMC : '',
+                      labelPosition: 'left',
+                    },
                     valeur: valeurAMC,
                     param: {
                       signe: true,
@@ -870,7 +879,7 @@ Le choix a été fait d'un antécédent primaire entier positif, le coefficient 
               ],
             },
           ]
-          if (texte2AMC !== '') {
+          if (texte2AMC !== '' && elementAmc.propositions != null) {
             elementAmc.propositions.push(
               {
                 type: 'AMCNum',
@@ -878,7 +887,10 @@ Le choix a été fait d'un antécédent primaire entier positif, le coefficient 
                   {
                     texte: '',
                     reponse: {
-                      texte: texte2AMC,
+                      display: {
+                        label: texte2AMC,
+                        labelPosition: 'left',
+                      },
                       valeur: valeur2AMC,
                       param: {
                         signe: true,
@@ -903,10 +915,9 @@ Le choix a été fait d'un antécédent primaire entier positif, le coefficient 
           elementAmc.enonce = texte + '\\\\'
           elementAmc.enonceAvant = false
           elementAmc.enonceApresNumQuestion = true
-          //  @ts-expect-error : pourquoi cette erreur ?
-          elementAmc.propositions[0].propositions[0].texte = texteCorr
+          elementAmc.propositions![0].propositions![0].texte = texteCorr
           elementAmc.options = { multicolsAll: true }
-          this.autoCorrection[i] = elementAmc
+          this.autoCorrectionAMC[i] = elementAmc
         }
         // Uniformisation : Mise en place de la réponse attendue en interactif en orange et gras
         const textCorrSplit = texteCorr.split('=')

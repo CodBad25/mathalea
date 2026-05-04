@@ -316,7 +316,7 @@ export default class ColorierDeplacement extends Exercice {
       : (texteCorr += '\\end{minipage}')
 
     if (context.isAmc) {
-      this.autoCorrection = [
+      this.autoCorrectionAMC = [
         { propositions: [{ texte: '', statut: 3, sanscadre: true }] },
       ]
     }

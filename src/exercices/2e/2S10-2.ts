@@ -366,13 +366,40 @@ export default class Proportions extends Exercice {
           }
           break
       }
-      if (context.isAmc) setReponse(this, i, reponse, paramAMC)
-      else handleAnswers(this, i, { reponse: { value: reponse.toString() } })
-      if (context.isAmc && listeTypeDeQuestions[i] === 'proportion') {
-        // @ts-expect-error
-        this.autoCorrection[i].reponse.textePosition = 'left'
-        // @ts-expect-error
-        this.autoCorrection[i].reponse.texte = '\\\\En \\% : '
+      if (context.isAmc) {
+        setReponse(this, i, reponse, paramAMC)
+        const exerciseAny = this as any
+        if (!Array.isArray(exerciseAny.autoCorrectionAMC)) {
+          exerciseAny.autoCorrectionAMC = []
+        }
+        const interactiveEntry = this.autoCorrectionAMC[i] ?? {}
+        const interactiveReponse = interactiveEntry.reponse ?? {}
+        exerciseAny.autoCorrectionAMC[i] = {
+          ...interactiveEntry,
+          reponse: {
+            ...interactiveReponse,
+          },
+        }
+      } else {
+        handleAnswers(this, i, { reponse: { value: reponse.toString() } })
+      }
+      if (listeTypeDeQuestions[i] === 'proportion') {
+        if (context.isAmc) {
+          const exerciseAny = this as any
+          if (!Array.isArray(exerciseAny.autoCorrectionAMC)) {
+            exerciseAny.autoCorrectionAMC = []
+          }
+          if (exerciseAny.autoCorrectionAMC[i] == null) {
+            exerciseAny.autoCorrectionAMC[i] = {}
+          }
+          if (exerciseAny.autoCorrectionAMC[i].reponse == null) {
+            exerciseAny.autoCorrectionAMC[i].reponse = {}
+          }
+          exerciseAny.autoCorrectionAMC[i].reponse.display = {
+            labelPosition: 'left',
+            label: '\\\\En \\% : ',
+          }
+        }
       }
       texte += ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers, {
         texteApres:

@@ -273,7 +273,7 @@ export default class DecompositionFacteursPremiers extends Exercice {
         },
       )
       if (context.isAmc) {
-        this.autoCorrection[i] = {
+        this.autoCorrectionAMC[i] = {
           enonce: texte,
           propositions: [{ statut: 3, sanscadre: false, pointilles: false }],
         }

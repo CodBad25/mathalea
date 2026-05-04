@@ -2,14 +2,14 @@
  * ⚠️ Cet exercice est utilisé dans le test : tests/e2e/tests/interactivity/mathLive.fonctionComparaisonPuissance.test.ts ⚠️
  */
 
-import { combinaisonListes } from '../../lib/outils/arrayOutils'
-import Exercice from '../Exercice'
-import { listeQuestionsToContenu, randint } from '../../modules/outils'
-import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
-import { context } from '../../modules/context'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
+import { combinaisonListes } from '../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { context } from '../../modules/context'
+import { listeQuestionsToContenu, randint } from '../../modules/outils'
+import Exercice from '../Exercice'
 
 export const titre = 'Utiliser la notation puissance'
 export const interactifReady = true
@@ -123,7 +123,7 @@ export default class NotationPuissance extends Exercice {
         listeSignesMantisse = ['', '-']
         break
     }
-    const alternance2Et3 = combinaisonListes([2,3], this.nbQuestions)
+    const alternance2Et3 = combinaisonListes([2, 3], this.nbQuestions)
     listeSignesMantisse = combinaisonListes(
       listeSignesMantisse,
       this.nbQuestions,
@@ -148,7 +148,7 @@ export default class NotationPuissance extends Exercice {
         cpt = 0;
       i < this.nbQuestions && cpt < 50;
     ) {
-      this.autoCorrection[i] = {}
+      this.autoCorrectionAMC[i] = {}
       mantisse = randint(2, 10)
       if (listeSignesMantisse[i] === '-') mantisse = -mantisse
       if (this.sup5 === 1) {
@@ -306,11 +306,11 @@ export default class NotationPuissance extends Exercice {
 
       if (context.isAmc) {
         if (this.sup !== 3) this.titre = this.consigne
-        this.autoCorrection[i].enonce =
+        this.autoCorrectionAMC[i].enonce =
           this.sup === 3
             ? texte + ' $=\\ldots$<br>'
             : 'Compléter : ' + texte + ' $=\\ldots$'
-        this.autoCorrection[i].propositions = [
+        this.autoCorrectionAMC[i].propositions = [
           { statut: 1, sanscadre: true, texte: texteCorr },
         ]
       }

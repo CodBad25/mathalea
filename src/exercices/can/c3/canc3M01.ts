@@ -65,7 +65,7 @@ export default class TrouverLaBonneUnite extends ExerciceSimple {
     this.canEnonce = "Compléter avec l'unité qui convient. "
 
     if (context.isAmc) {
-      this.autoCorrection = [
+      this.autoCorrectionAMC = [
         {
           enonce: this.question,
           propositions: [

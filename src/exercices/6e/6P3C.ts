@@ -230,7 +230,7 @@ function questionAchat(exo: Exercice, i: number): QuestionReturn {
     setReponse(exo, i, ((y * x) / n).toFixed(2))
     setReponse(exo, i + 1, ((z * n) / x).toFixed(2))
   } else {
-    exo.autoCorrection[i] = {
+    exo.autoCorrectionAMC[i] = {
       enonce: '',
       enonceAvant: false,
       options: { multicols: true, barreseparation: true },
@@ -356,7 +356,7 @@ function questionRecette(exo: Exercice, i: number): QuestionReturn {
     setReponse(exo, i, quantiteReponse)
     setReponse(exo, i + 1, ((nbPersonneInit * quantite2) / quantite).toFixed(3))
   } else {
-    exo.autoCorrection[i] = {
+    exo.autoCorrectionAMC[i] = {
       enonce: '',
       enonceAvant: false,
       options: { multicols: true, barreseparation: true },
@@ -414,101 +414,7 @@ function questionRecette(exo: Exercice, i: number): QuestionReturn {
     incrementAMC: 1,
   }
 }
-/*
-function questionDillution (exo:Exercice, i:number) { // questions de mélange de volumes
-  let uniteSolvantVolumeFinal
-  const liste = [
-    {
-      solute: 'sirop',
-      volumeUnitaire: [12, 15, 18, 20],
-      unite_solute: 'cL',
-      unite_solvant: ['L', 'L'] // liste pour [0] singulier [1] pluriel
-    },
-    {
-      solute: 'nettoyant pour sol',
-      volumeUnitaire: [5, 8, 10, 12],
-      unite_solute: 'cL',
-      unite_solvant: ['L', 'L']
-    },
-    {
-      solute: 'médicament',
-      volumeUnitaire: [3, 3.5, 4, 4.5, 5, 7.5],
-      unite_solute: 'mL',
-      unite_solvant: ['dL', 'dL']
-    },
-    {
-      solute: 'produit pour piscine',
-      volumeUnitaire: [1, 1.2, 0.8, 1.5],
-      unite_solute: 'L',
-      unite_solvant: ['dizaine de mètres cubes', 'dizaines de mètres cubes']
-    }
-  ]
-  const alea1 = randint(0, 3) // pour le choix du soluté
-  const alea2 = randint(0, liste[alea1].volumeUnitaire.length - 1) // pour le choix du volume pour une unité de solvant
-  let volumeInitial, quantite
-  if (versionSimplifiee) {
-    volumeInitial = couplePremiersEntreEux[indexN][0]
-    quantite = couplePremiersEntreEux[indexN][1]
-  } else {
-    volumeInitial = randint(1, 5) + (randint(1, 5)) * 0.1 * randint(-1, 1, [0]) // volume d'eau pour la préparation
-    quantite = liste[alea1].volumeUnitaire[alea2] * volumeInitial
-  }
-  const volumeFinal = volumeInitial * randint(2, 5)
-  if (volumeFinal < 2) {
-    uniteSolvantVolumeFinal = liste[alea1].unite_solvant[0]
-  } else {
-    uniteSolvantVolumeFinal = liste[alea1].unite_solvant[1]
-  }
-  const volumeFinalAff = texNombre(volumeFinal) // pour affichage avec bon séparateur.
-  const volumeInitialAff = texNombre(volumeInitial) // pour affichage avec bon séparateur.
-  let enonceAMC = `Il est indiqué sur la bouteille de ${liste[alea1].solute}  qu'il faut ` +
-        ` ${texNombre(quantite)}${sp()}${liste[alea1].unite_solute} de  ${liste[alea1].solute} pour $${volumeInitialAff}$ `
-  enonceAMC += volumeInitial < 2 ? `${liste[alea1].unite_solvant[0]} d'eau.<br> ` : `${liste[alea1].unite_solvant[1]} d'eau.<br>`
-  enonceAMC += `On veut utiliser $${volumeFinalAff}$ ${uniteSolvantVolumeFinal} d'eau. `
-  let texte = enonceAMC
-  enonceAMC += `Quel volume, en${sp()}${liste[alea1].unite_solute}, de ${liste[alea1].solute} doit-on prévoir${sp()}? `
-  texte += `Quel volume de ${liste[alea1].solute} doit-on prévoir${sp()}? `
-  texte += ajouteChampTexteMathLive(exo, i, KeyboardType.clavierNumbers, { texteApres: ' ' + liste[alea1].unite_solute })
-  const texteCorr = `Le volume de ${liste[alea1].solute} est proportionnel au volume d'eau. <br> ` +
-        ` ${miseEnEvidence(volumeFinalAff)} ${uniteSolvantVolumeFinal} d'eau, c'est ${miseEnEvidence(texNombre(volumeFinal / volumeInitial))} fois ${volumeInitialAff} ${liste[alea1].unite_solvant[0]} d'eau. <br> ` +
-        `Il faut donc ${miseEnEvidence(texNombre(volumeFinal / volumeInitial))} fois plus que ${miseEnEvidence(texNombre(quantite), bleuMathalea)}${sp()}${liste[alea1].unite_solute} de ${liste[alea1].solute}. <br>` +
-        `${miseEnEvidence(texNombre(quantite), bleuMathalea)}${sp()}${liste[alea1].unite_solute} $\\times $ ${miseEnEvidence(texNombre(volumeFinal / volumeInitial))} = ${texNombre(quantite * volumeFinal / volumeInitial)}${sp()}${liste[alea1].unite_solute}  <br>` +
-        `Conclusion : Il faut donc prévoir ${miseEnEvidence(texNombre(quantite * volumeFinal / volumeInitial))}${sp()}${liste[alea1].unite_solute} de ${liste[alea1].solute}.`
-  if (!context.isAmc) {
-    setReponse(exo, i, (quantite * volumeFinal / volumeInitial).toFixed(3))
-  } else {
-    exo.autoCorrection[i] = {
-      enonce: '',
-      enonceAvant: false,
-      // options: { multicols: true, barreseparation: true },
-      propositions: [
-        {
-          type: 'AMCNum',
 
-          propositions: [{
-            texte: texteCorr,
-            statut: '',
-            reponse: {
-              texte: enonceAMC,
-              valeur: [(quantite * volumeFinal / volumeInitial).toFixed(3)],
-              param: {
-                digits: nombreDeChiffresDe(arrondi(quantite * volumeFinal / volumeInitial, 3)),
-                decimals: nombreDeChiffresDansLaPartieDecimale((quantite * volumeFinal / volumeInitial).toFixed(3)),
-                signe: false,
-                approx: 0
-              }
-            }
-          }]
-        }
-      ]
-    }
-  }
-  return {
-    qtexte: texte,
-    qtexteCorr: texteCorr
-  }
-}
-*/
 function questionDistance(exo: Exercice, i: number): QuestionReturn {
   // questions de distance parcourue à une vitesse moyenne donnée
   let texte, texteCorr
@@ -652,7 +558,7 @@ function questionDistance(exo: Exercice, i: number): QuestionReturn {
     setReponse(exo, i, reponseQ1)
     setReponse(exo, i + 1, (rapportQuestion2[alea3] * 60).toFixed(2))
   } else {
-    exo.autoCorrection[i] = {
+    exo.autoCorrectionAMC[i] = {
       enonce: '',
       enonceAvant: false,
       options: { multicols: true, barreseparation: true },
@@ -762,7 +668,7 @@ Or $${distanceReel}\\text{ km}$ est représenté par $${miseEnEvidence(texNombre
     setReponse(exo, i, (rapport[alea1] * distanceReel).toFixed(2))
     setReponse(exo, i + 1, (rapport[alea2] * distanceCarte).toFixed(2))
   } else {
-    exo.autoCorrection[i] = {
+    exo.autoCorrectionAMC[i] = {
       enonce: '',
       enonceAvant: false,
       options: { multicols: true, barreseparation: true },
@@ -850,51 +756,7 @@ function questionRecouvrirSurface(exo: Exercice, i: number): QuestionReturn {
     },
   ]
   const prenoms = [prenomF(), prenomM()]
-  /* if (versionSimplifiee) {
-    const alea1 = 2 // Pour avoir un coef entier, qtt_matiere_unitaire doit être plus grand que qtt_surface, ce qui n'est possible qu'avec les carreaux
-    const quantiteD = couplePremiersEntreEux[indexN][1]
-    const surfaceD = couplePremiersEntreEux[indexN][0]
-    const coef = randint(2, 5)
-    const quantiteF = quantiteD * coef
-    const surfaceF = surfaceD * coef
-    const enonceAMC = `${prenoms[0]} doit acheter ${liste[alea1].matiere}. ` +
-            `Sur la notice, il est indiqué de prévoir ${quantiteD}${sp()}${liste[alea1].unite} pour ${surfaceD}\\text{ m}^2$. <br> ` +
-            `Combien de${sp()}${liste[alea1].unite} doit-elle en acheter pour une surface de ${surfaceF}\\text{ m}^2$${sp()}?`
-    texte = enonceAMC + ajouteChampTexteMathLive(exo, i, KeyboardType.clavierNumbers, { texteApres: ' ' + liste[alea1].unite })
-    texteCorr = `${texNombre(surfaceF)}\\text{ m}^2$, c'est ${miseEnEvidence(texNombre(coef))} fois ${surfaceD}\\text{ m}^2$ <br>` +
-            `Il va donc falloir ${miseEnEvidence(texNombre(coef))} fois ${miseEnEvidence(texNombre(quantiteD), bleuMathalea)}${sp()}${liste[alea1].unite} pour ${texNombre(surfaceF)}\\text{ m}^2$. <br>` +
-            `${miseEnEvidence(texNombre(coef))} $\\times$ ${miseEnEvidence(texNombre(quantiteD), bleuMathalea)}${sp()}${liste[alea1].unite} = ${texNombre(quantiteF)}${sp()}${liste[alea1].unite}<br>` +
-            `Conclusion : ${prenoms[0]} doit en acheter ${miseEnEvidence(quantiteF)}${sp()}${liste[alea1].unite}.` + '<br>  '
-    if (!context.isAmc) {
-      setReponse(exo, i, quantiteF)
-    } else {
-      exo.autoCorrection[i] = {
-        enonce: '',
-        enonceAvant: false,
-        propositions: [
-          {
-            type: 'AMCNum',
 
-            propositions: [{
-              texte: texteCorr,
-              statut: '',
-              reponse: {
-                texte: enonceAMC,
-                valeur: [quantiteF],
-                param: {
-                  digits: nombreDeChiffresDe(quantiteF),
-                  decimals: nombreDeChiffresDansLaPartieDecimale(quantiteF),
-                  signe: false,
-                  approx: 0
-                }
-              }
-            }]
-          }
-        ]
-      }
-    }
-  } else {
-   */
   const alea1 = randint(0, liste.length - 1)
   const alea2 = randint(0, liste[alea1].qtt_matiere_unitaire.length - 1)
   const alea3 = randint(0, liste[alea1].qtt_surface.length - 1)
@@ -957,7 +819,7 @@ fois $${miseEnEvidence(texNombre(liste[alea1].qtt_surface[alea3]), bleuMathalea)
       { formatInteractif: 'ignorerCasse' },
     )
   } else {
-    exo.autoCorrection[i] = {
+    exo.autoCorrectionAMC[i] = {
       enonce: '',
       enonceAvant: false,
       propositions: [

@@ -900,7 +900,10 @@ export default class ProblemesEnEquation extends Exercice {
             ? KeyboardType.longueur
             : KeyboardType.clavierDeBase,
           {
-            texteApres: uniteOptions[0] !== '' ? '<em class="ml-2">(Une unité est attendue.)</em>' : sp(2) + uniteOptions[2],
+            texteApres:
+              uniteOptions[0] !== ''
+                ? '<em class="ml-2">(Une unité est attendue.)</em>'
+                : sp(2) + uniteOptions[2],
           },
         )
       let texteCorr = intro
@@ -910,7 +913,7 @@ export default class ProblemesEnEquation extends Exercice {
       texteCorr += conclusion
 
       if (context.isAmc) {
-        this.autoCorrection[i] = {
+        this.autoCorrectionAMC[i] = {
           enonce: texte + '\\\\',
           enonceAvant: false,
           propositions: [

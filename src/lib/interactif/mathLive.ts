@@ -18,37 +18,27 @@ export function verifQuestionMathLive(
 ) {
   let noFeedback = false
   let champTexte: HTMLInputElement | MathfieldElement | null = null
-  const getCustomFeedback =
-    exercice.autoCorrection[i]?.reponse?.valeur?.feedback
-  if (exercice.autoCorrection[i]?.reponse == null) {
+  const questionAutoCorrection = exercice.autoCorrection[i]
+  const reponses = questionAutoCorrection?.valeur
+  const getCustomFeedback = reponses?.feedback
+
+  if (questionAutoCorrection == null) {
     throw Error(
       `verifQuestionMathlive appelé sur une question sans réponse: ${JSON.stringify(
         {
           exercice,
           question: i,
-          autoCorrection: exercice.autoCorrection[i],
+          autoCorrection: questionAutoCorrection,
         },
       )}`,
     )
   }
-  if (exercice.autoCorrection[i].reponse.param == null) {
-    throw Error(
-      `verifQuestionMathlive appelé sur une question sans param : ${JSON.stringify(
-        {
-          exercice,
-          question: i,
-          param: exercice.autoCorrection[i].reponse,
-        },
-      )}`,
-    )
-  }
-  const formatInteractif =
-    exercice.autoCorrection[i].reponse.param.formatInteractif ?? 'mathlive'
+
+  const formatInteractif = questionAutoCorrection.formatInteractif ?? 'mathlive'
   const spanReponseLigne = document.querySelector(
     `#resultatCheckEx${exercice.numeroExercice}Q${i}`,
   ) as HTMLSpanElement
   // On compare le texte avec la réponse attendue en supprimant les espaces pour les deux
-  const reponses = exercice.autoCorrection[i].reponse.valeur
   if (reponses == null) {
     window.notify(
       `verifQuestionMathlive: reponses est null pour la question ${i} de l'exercice ${exercice.id}`,

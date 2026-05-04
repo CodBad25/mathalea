@@ -1,3 +1,4 @@
+import { ensureAmcParam } from '../../lib/amc/amcHelpers'
 import { glisseNombreInteractif } from '../../lib/apps/glisse_nombre_interactif'
 import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
@@ -447,18 +448,16 @@ export default class MultiplierDecimauxPar101001000 extends Exercice {
         }
 
         if (context.isAmc) {
-          this.autoCorrection[i].enonce = texte
-          this.autoCorrection[i].propositions = [{ texte: texteCorr }]
-          // @ts-expect-error trop compliqué à typer
-          this.autoCorrection[i].reponse.param = {
-            digits:
-              nombreDeChiffresDansLaPartieEntiere(reponse) +
-              nombreDeChiffresDansLaPartieDecimale(reponse) +
-              2,
-            decimals: nombreDeChiffresDansLaPartieDecimale(reponse) + 1,
-            signe: false,
-            exposantNbChiffres: 0,
-          }
+          this.autoCorrectionAMC[i].enonce = texte
+          this.autoCorrectionAMC[i].propositions = [{ texte: texteCorr }]
+          const amcParam = ensureAmcParam(this, i)
+          amcParam.digits =
+            nombreDeChiffresDansLaPartieEntiere(reponse) +
+            nombreDeChiffresDansLaPartieDecimale(reponse) +
+            2
+          amcParam.decimals = nombreDeChiffresDansLaPartieDecimale(reponse) + 1
+          amcParam.signe = false
+          amcParam.exposantNbChiffres = 0
         }
         this.listeQuestions[i] = texte.replaceAll('$$', '')
         this.listeCorrections[i] = texteCorr

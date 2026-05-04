@@ -384,7 +384,7 @@ export default class EcrirePetitsNombresEntiers extends Exercice {
       if (typeDeConsigne[i] === 1) {
         let leDragAndDrop
         if (context.isAmc) {
-          this.autoCorrection[i] = {
+          this.autoCorrectionAMC[i] = {
             enonce: texte + '<br>',
             propositions: [
               {

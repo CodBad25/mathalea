@@ -8,6 +8,7 @@ import { rotation } from '../../lib/2d/transformations'
 import { triangle2points2longueurs } from '../../lib/2d/triangles'
 import { angleOriente } from '../../lib/2d/utilitairesGeometriques'
 import { pointAdistance } from '../../lib/2d/utilitairesPoint'
+import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -29,7 +30,6 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { bleuMathalea } from '../../lib/colors'
 
 export const titre =
   "Agrandir ou réduire des figures, d'après une situation de proportionnalité"
@@ -1471,8 +1471,12 @@ class AgrandirReduireFigure extends Exercice {
               texteCorr += `<br>Le rectangle issu d'un${texteAgrandissementOuReduction[0][choixAgrandissementOuReduction < 4 ? 0 : 1]} du rectangle ${nom} de coefficient $${texNombre(coefAgrandissement[choixAgrandissementOuReduction])}$ possède donc des côtés de longueur respective $${miseEnEvidence(texNombre(reponse))}$ et $${miseEnEvidence(texNombre(reponse1))}$.`
               texteCorr += '<br>En voici, une réalisation ci-dessous.'
               objets.push(polygoneCorr, nommePolygone(polygoneCorr, nomCorr))
-              objets.push(codageSegments('|||', bleuMathalea, A, BCorr, CCorr, DCorr))
-              objets.push(codageSegments('XX', bleuMathalea, BCorr, CCorr, DCorr, A))
+              objets.push(
+                codageSegments('|||', bleuMathalea, A, BCorr, CCorr, DCorr),
+              )
+              objets.push(
+                codageSegments('XX', bleuMathalea, BCorr, CCorr, DCorr, A),
+              )
               objets.push(
                 afficheLongueurSegment(
                   angleOriente(CCorr, A, BCorr) > 0 ? A : BCorr,
@@ -1749,8 +1753,12 @@ class AgrandirReduireFigure extends Exercice {
               texteCorr += `<br>Le rectangle issu d'un${texteAgrandissementOuReduction[0][choixAgrandissementOuReduction < 4 ? 0 : 1]} du rectangle ${nom} de coefficient $${texNombre(coefAgrandissement[choixAgrandissementOuReduction])}$ possède donc des côtés de longueur respective $${miseEnEvidence(texNombre(reponse))}$ et $${miseEnEvidence(texNombre(reponse1))}$.`
               texteCorr += '<br>En voici, une réalisation ci-dessous.'
               objets.push(polygoneCorr, nommePolygone(polygoneCorr, nomCorr))
-              objets.push(codageSegments('|||', bleuMathalea, A, BCorr, CCorr, DCorr))
-              objets.push(codageSegments('XX', bleuMathalea, BCorr, CCorr, DCorr, A))
+              objets.push(
+                codageSegments('|||', bleuMathalea, A, BCorr, CCorr, DCorr),
+              )
+              objets.push(
+                codageSegments('XX', bleuMathalea, BCorr, CCorr, DCorr, A),
+              )
               objets.push(
                 afficheLongueurSegment(
                   angleOriente(CCorr, A, BCorr) > 0 ? A : BCorr,
@@ -1791,7 +1799,7 @@ class AgrandirReduireFigure extends Exercice {
             break
         }
         if (context.isAmc) {
-          this.autoCorrection[i] = {
+          this.autoCorrectionAMC[i] = {
             enonce: '',
             options: { multicols: true, barreseparation: false },
             enonceCentre: true,

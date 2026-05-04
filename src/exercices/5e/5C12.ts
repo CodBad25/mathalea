@@ -143,7 +143,7 @@ export default class CalculerUneExpressionNumerique extends Exercice {
         } else if (context.isAmc) {
           texte +=
             '<br>Détailler les calculs dans le cadre et coder le résultat.<br>'
-          this.autoCorrection[i] = {
+          this.autoCorrectionAMC[i] = {
             enonce: '',
             enonceAvant: false,
             propositions: [

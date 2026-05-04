@@ -2,6 +2,7 @@ import { choice } from '../../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { context } from '../../../modules/context'
 
+import { ensureAmcParam } from '../../../lib/amc/amcHelpers'
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { setReponse } from '../../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../../lib/interactif/questionMathLive'
@@ -40,6 +41,8 @@ export default class CalculPuissanceSimple extends Exercice {
       i++
     ) {
       this.autoCorrection[i] = {}
+      this.autoCorrectionAMC[i] = {}
+
       index = randint(0, 3)
       a = bases[index]
       b = randint(20, 50)
@@ -68,14 +71,11 @@ export default class CalculPuissanceSimple extends Exercice {
        $${a}\\times ${a}^{${b}}=${a}^{${b} + 1}=${a}^{${miseEnEvidence(b + 1)}}$`
           if (context.isAmc) {
             setReponse(this, i, a ** (b + 1), { formatInteractif: 'calcul' })
-            // @ts-expect-error
-            this.autoCorrection[i].reponse.param.basePuissance = a
-            // @ts-expect-error
-            this.autoCorrection[i].reponse.param.exposantPuissance = b + 1
-            // @ts-expect-error
-            this.autoCorrection[i].reponse.param.baseNbChiffres = 1
-            // @ts-expect-error
-            this.autoCorrection[i].reponse.param.exposantNbChiffres = 2
+            const amcParam = ensureAmcParam(this, i)
+            amcParam.basePuissance = a
+            amcParam.exposantPuissance = b + 1
+            amcParam.baseNbChiffres = 1
+            amcParam.exposantNbChiffres = 2
           }
           this.canEnonce = texte
           break
@@ -96,14 +96,11 @@ export default class CalculPuissanceSimple extends Exercice {
       $ ${a}^{${b}}\\div ${a}=\\dfrac{${a}^{${b}}}{${a}}=${a}^{${b} - 1}=${a}^{${miseEnEvidence(b - 1)}}$`
           if (context.isAmc) {
             setReponse(this, i, a ** (b - 1), { formatInteractif: 'calcul' })
-            // @ts-expect-error
-            this.autoCorrection[i].reponse.param.basePuissance = a
-            // @ts-expect-error
-            this.autoCorrection[i].reponse.param.exposantPuissance = b - 1
-            // @ts-expect-error
-            this.autoCorrection[i].reponse.param.baseNbChiffres = 1
-            // @ts-expect-error
-            this.autoCorrection[i].reponse.param.exposantNbChiffres = 2
+            const amcParam = ensureAmcParam(this, i)
+            amcParam.basePuissance = a
+            amcParam.exposantPuissance = b - 1
+            amcParam.baseNbChiffres = 1
+            amcParam.exposantNbChiffres = 2
           }
           this.canEnonce = texte
           break
@@ -125,14 +122,11 @@ export default class CalculPuissanceSimple extends Exercice {
           texteCorr = ` Comme $${a ** 2}=${a}^2$, alors $${a ** 2}\\times ${a}^{${b}}=${a}^2\\times ${a}^{${b}}=${a}^{${b}+2}=${a}^{${miseEnEvidence(2 + b)}}$`
           if (context.isAmc) {
             setReponse(this, i, a ** (b + 2), { formatInteractif: 'calcul' })
-            // @ts-expect-error
-            this.autoCorrection[i].reponse.param.basePuissance = a
-            // @ts-expect-error
-            this.autoCorrection[i].reponse.param.exposantPuissance = b + 2
-            // @ts-expect-error
-            this.autoCorrection[i].reponse.param.baseNbChiffres = 1
-            // @ts-expect-error
-            this.autoCorrection[i].reponse.param.exposantNbChiffres = 2
+            const amcParam = ensureAmcParam(this, i)
+            amcParam.basePuissance = a
+            amcParam.exposantPuissance = b + 2
+            amcParam.baseNbChiffres = 1
+            amcParam.exposantNbChiffres = 2
           }
           this.canEnonce = texte
           break
@@ -156,14 +150,11 @@ export default class CalculPuissanceSimple extends Exercice {
         \\dfrac{${a}^{${b}}}{${a}^2}=${a}^{${b}-2}=${a}^{${miseEnEvidence(b - 2)}}$`
           if (context.isAmc) {
             setReponse(this, i, a ** (b - 2), { formatInteractif: 'calcul' })
-            // @ts-expect-error
-            this.autoCorrection[i].reponse.param.basePuissance = a
-            // @ts-expect-error
-            this.autoCorrection[i].reponse.param.exposantPuissance = b - 2
-            // @ts-expect-error
-            this.autoCorrection[i].reponse.param.baseNbChiffres = 1
-            // @ts-expect-error
-            this.autoCorrection[i].reponse.param.exposantNbChiffres = 2
+            const amcParam = ensureAmcParam(this, i)
+            amcParam.basePuissance = a
+            amcParam.exposantPuissance = b - 2
+            amcParam.baseNbChiffres = 1
+            amcParam.exposantNbChiffres = 2
           }
           this.canEnonce = texte
           break

@@ -66,19 +66,19 @@ export default class InequationCasParticuliers extends Exercice {
 
             propositions: [
               {
-                texte: solution1,
+                texte: String(solution1),
                 statut: true,
               },
               {
-                texte: solution2,
+                texte: String(solution2),
                 statut: false,
               },
               {
-                texte: solution3,
+                texte: String(solution3),
                 statut: false,
               },
               {
-                texte: solution4,
+                texte: String(solution4),
                 statut: false,
               },
             ],
@@ -167,19 +167,19 @@ export default class InequationCasParticuliers extends Exercice {
 
             propositions: [
               {
-                texte: solution1,
+                texte: String(solution1),
                 statut: true,
               },
               {
-                texte: solution2,
+                texte: String(solution2),
                 statut: false,
               },
               {
-                texte: solution3,
+                texte: String(solution3),
                 statut: false,
               },
               {
-                texte: solution4,
+                texte: String(solution4),
                 statut: false,
               },
             ],
@@ -269,19 +269,19 @@ export default class InequationCasParticuliers extends Exercice {
 
             propositions: [
               {
-                texte: solution1,
+                texte: String(solution1),
                 statut: true,
               },
               {
-                texte: solution2,
+                texte: String(solution2),
                 statut: false,
               },
               {
-                texte: solution3,
+                texte: String(solution3),
                 statut: false,
               },
               {
-                texte: solution4,
+                texte: String(solution4),
                 statut: false,
               },
             ],

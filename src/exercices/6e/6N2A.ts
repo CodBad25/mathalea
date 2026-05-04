@@ -1,5 +1,6 @@
 import { grille, seyes } from '../../lib/2d/Grille'
 import { vide2d } from '../../lib/2d/Vide2d'
+import { ensureAmcParam } from '../../lib/amc/amcHelpers'
 import { orangeMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { setReponse } from '../../lib/interactif/gestionInteractif'
@@ -296,18 +297,19 @@ export default class AdditionnerSoustrairesDecimaux extends Exercice {
           '$~=$' +
           ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers)
       if (context.isAmc) {
-        this.autoCorrection[i].enonce = texte
-        this.autoCorrection[i].propositions = [{ texte: texteCorr }]
-        // @ts-expect-error Trop compliqué à typer
-        this.autoCorrection[i].reponse.param = {
-          digits:
-            nombreDeChiffresDansLaPartieEntiere(reponse) +
-            nombreDeChiffresDansLaPartieDecimale(reponse) +
-            2,
-          decimals: nombreDeChiffresDansLaPartieDecimale(reponse) + 1,
-          signe: false,
-          exposantNbChiffres: 0,
+        this.autoCorrectionAMC[i] = {
+          enonce: texte,
+          propositions: [{ texte: texteCorr }],
         }
+        const amcParam = ensureAmcParam(this, i)
+        amcParam.digits =
+          nombreDeChiffresDansLaPartieEntiere(reponse) +
+          nombreDeChiffresDansLaPartieDecimale(reponse) +
+          2
+
+        amcParam.decimals = nombreDeChiffresDansLaPartieDecimale(reponse) + 1
+        amcParam.signe = false
+        amcParam.exposantNbChiffres = 0
       }
       if (this.questionJamaisPosee(i, a, b)) {
         // Si la question n'a jamais été posée, on en crée une autre

@@ -1,3 +1,4 @@
+import { ensureAmcParam } from '../../lib/amc/amcHelpers'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import {
@@ -297,16 +298,16 @@ export default class EgaliteATrousMultiplicatives extends Exercice {
       }
 
       if (context.isAmc) {
-        this.autoCorrection[i].enonce = texte
-        this.autoCorrection[i].propositions = [{ texte: texteCorr }]
-        // @ts-expect-error trop compliqué à typer
-        this.autoCorrection[i].reponse.param = {
-          // @ts-expect-error trop compliqué à typer
-          digits: nombreDeChiffresDansLaPartieEntiere(reponse) + randint(0, 1),
-          decimals: nombreDeChiffresDansLaPartieDecimale(reponse),
-          signe: false,
-          exposantNbChiffres: 0,
-        }
+        this.autoCorrectionAMC[i].enonce = texte
+        this.autoCorrectionAMC[i].propositions = [{ texte: texteCorr }]
+        const amcParam = ensureAmcParam(this, i)
+        amcParam.digits =
+          nombreDeChiffresDansLaPartieEntiere(Number(reponse)) + randint(0, 1)
+        amcParam.decimals = nombreDeChiffresDansLaPartieDecimale(
+          Number(reponse),
+        )
+        amcParam.signe = false
+        amcParam.exposantNbChiffres = 0
       }
       if (this.questionJamaisPosee(i, numerateur, denominateur)) {
         // Si la question n'a jamais été posée, on en crée une autre

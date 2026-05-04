@@ -307,7 +307,7 @@ export default class ProblemesPuissancesDe10EtConversions extends Exercice {
         })
 
         if (context.isAmc) {
-          this.autoCorrection[i] = {
+          this.autoCorrectionAMC[i] = {
             enonce:
               texte +
               '<br>Indiquer votre raisonnement, vos calculs et votre réponse ci-dessous.',

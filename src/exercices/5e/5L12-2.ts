@@ -184,7 +184,7 @@ export default class ReduireUneExpressionLitterale extends Exercice {
         this.listeCorrections[i] = texteCorr
 
         if (context.isAmc) {
-          this.autoCorrection[i] = {
+          this.autoCorrectionAMC[i] = {
             enonce:
               "Réduire l'expression " +
               texte +

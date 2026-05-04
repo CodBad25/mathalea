@@ -115,13 +115,48 @@ export function normalizeAMCNum(
   const enonce = autoCorrectionItem.enonce ?? exercice.listeQuestions[index]
   const rep = autoCorrectionItem.reponse
   const blocks = normalizeAMCNumBlocks(rep)
+  const display = extractReponseDisplay(rep)
 
   return {
     id,
     ref,
     enonce,
     multicols: !!(autoCorrectionItem as any)?.options?.multicols,
+    display,
     blocks,
+  }
+}
+
+function extractReponseDisplay(rep?: AutoCorrectionAMC['reponse']) {
+  const display = rep?.display
+  if (display != null) return display
+
+  if (rep == null) return undefined
+
+  const legacyLabel = typeof rep.texte === 'string' ? rep.texte : undefined
+  const legacyLabelPosition: 'left' | 'right' | undefined =
+    rep.textePosition === 'left' || rep.textePosition === 'right'
+      ? rep.textePosition
+      : undefined
+  const legacyAlign: 'flushleft' | 'center' | 'flushright' | undefined =
+    rep.alignement === 'flushleft' ||
+    rep.alignement === 'center' ||
+    rep.alignement === 'flushright'
+      ? rep.alignement
+      : undefined
+
+  if (
+    legacyLabel == null &&
+    legacyLabelPosition == null &&
+    legacyAlign == null
+  ) {
+    return undefined
+  }
+
+  return {
+    label: legacyLabel,
+    labelPosition: legacyLabelPosition,
+    align: legacyAlign,
   }
 }
 

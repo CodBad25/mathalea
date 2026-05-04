@@ -612,7 +612,7 @@ export default class ProportionnaliteParCoefDeProportionnalite extends Exercice 
         this.listeQuestions[i] = question.qtexte
         this.listeCorrections[i] = question.qtexteCorr
         if (context.isAmc) {
-          this.autoCorrection[i] = {
+          this.autoCorrectionAMC[i] = {
             enonce: question.qtexte + '<br>' + question.qreponseAMC,
             propositions: [
               {
@@ -622,8 +622,7 @@ export default class ProportionnaliteParCoefDeProportionnalite extends Exercice 
             reponse: {
               texte:
                 'le texte affiché au dessus du formulaire numerique dans AMC', // facultatif
-              // @ts-expect-error
-              valeur: [question.qreponse], // obligatoire (la réponse numérique à comparer à celle de l'élève), NE PAS METTRE DE STRING à virgule ! 4.9 et non pas 4,9. Cette valeur doit être passée dans un tableau d'où la nécessité des crochets.
+              valeur: question.qreponse, // obligatoire (la réponse numérique à comparer à celle de l'élève), NE PAS METTRE DE STRING à virgule ! 4.9 et non pas 4,9. Cette valeur doit être passée dans un tableau d'où la nécessité des crochets.
               param: {
                 // digits: 3, // obligatoire pour AMC (le nombre de chiffres pour AMC, si digits est mis à 0, alors il sera déterminé pour coller au nombre décimal demandé)
                 // decimals: 0, // facultatif. S'il n'est pas mis, il sera mis à 0 et sera déterminé automatiquement comme décrit ci-dessus

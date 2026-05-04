@@ -63,7 +63,7 @@ Il existe une version CAN de cet exercice avec une seule question en 'can3F16'.`
           "<br><br> <em>S'il y a plusieurs réponses, les séparer avec le point-virgule</em>.<br>"
 
       if (context.isAmc) {
-        this.autoCorrection[i] = {
+        this.autoCorrectionAMC[i] = {
           enonce: texte,
           enonceAvant: true, // EE : ce champ est facultatif et permet (si false) de supprimer l'énoncé ci-dessus avant la numérotation de chaque question.
           enonceAvantUneFois: false, // EE : ce champ est facultatif et permet (si true) d'afficher l'énoncé ci-dessus une seule fois avant la numérotation de la première question de l'exercice. Ne fonctionne correctement que si l'option melange est à false.
@@ -85,7 +85,7 @@ Il existe une version CAN de cet exercice avec une seule question en 'can3F16'.`
       setReponse(this, 6 * i, b)
       texte += ajouteChampTexteMathLive(this, 6 * i, KeyboardType.clavierDeBase)
       if (context.isAmc) {
-        this.autoCorrection[i].propositions?.push(
+        this.autoCorrectionAMC[i].propositions?.push(
           ajouteProposition(texteAMC, b),
         )
       }
@@ -103,7 +103,7 @@ Il existe une version CAN de cet exercice avec une seule question en 'can3F16'.`
       )
       setReponse(this, i * 6 + 1, d)
       if (context.isAmc) {
-        this.autoCorrection[i].propositions?.push(
+        this.autoCorrectionAMC[i].propositions?.push(
           ajouteProposition(texteAMC, d),
         )
       }
@@ -117,7 +117,7 @@ Il existe une version CAN de cet exercice avec une seule question en 'can3F16'.`
         KeyboardType.clavierDeBase,
       )
       if (context.isAmc) {
-        this.autoCorrection[i].propositions?.push(
+        this.autoCorrectionAMC[i].propositions?.push(
           ajouteProposition(
             numAlpha(2) +
               `Déterminer un antécédent de $${a}$ par la fonction $f$.`,
@@ -137,7 +137,7 @@ Il existe une version CAN de cet exercice avec une seule question en 'can3F16'.`
         KeyboardType.clavierDeBase,
       )
       if (context.isAmc) {
-        this.autoCorrection[i].propositions?.push(
+        this.autoCorrectionAMC[i].propositions?.push(
           ajouteProposition(
             numAlpha(3) +
               `Déterminer un antécédent de $${d}$ par la fonction $f$.`,
@@ -171,7 +171,7 @@ Il existe une version CAN de cet exercice avec une seule question en 'can3F16'.`
         formatInteractif: 'texte',
       })
       if (context.isAmc) {
-        this.autoCorrection[i].propositions?.push(
+        this.autoCorrectionAMC[i].propositions?.push(
           ajouteProposition(numAlpha(4) + `Compléter : $f(${c})=\\ldots$`, d),
         )
       }
@@ -191,7 +191,7 @@ Il existe une version CAN de cet exercice avec une seule question en 'can3F16'.`
         formatInteractif: 'texte',
       })
       if (context.isAmc) {
-        this.autoCorrection[i].propositions?.push(
+        this.autoCorrectionAMC[i].propositions?.push(
           ajouteProposition(numAlpha(5) + `Compléter : $f(\\ldots)=${c}$`, f),
         )
       }

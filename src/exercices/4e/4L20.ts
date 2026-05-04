@@ -370,7 +370,7 @@ export default class ExerciceEquation1 extends Exercice {
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr
         if (context.isAmc) {
-          this.autoCorrection[i] = {
+          this.autoCorrectionAMC[i] = {
             enonce: '', // `Résoudre ${texte} et donner la solution sous la forme d'une fraction irréductible`,
             propositions: [
               {

@@ -247,8 +247,7 @@ export default class Exercice_fractions_simplifier extends Exercice {
           const choixDiviseurDek = choice(tabDiviseursDek, [1, k])
           const denSimplifie = (a * k) / choixDiviseurDek
           const numSimplifie = (b * k) / choixDiviseurDek
-          // @ts-expect-error
-          this.autoCorrection[i].propositions[3] = {
+          this.autoCorrection[i].propositions![3] = {
             texte:
               '$' +
               new FractionEtendue(denSimplifie, numSimplifie).toLatex() +
@@ -265,8 +264,7 @@ export default class Exercice_fractions_simplifier extends Exercice {
             [denSimplifie, numSimplifie - 1],
           )
           fractionsFaussesSimplifiees = shuffle(fractionsFaussesSimplifiees)
-          // @ts-expect-error
-          this.autoCorrection[i].propositions[4] = {
+          this.autoCorrection[i].propositions![4] = {
             texte:
               '$' +
               new FractionEtendue(
@@ -277,8 +275,7 @@ export default class Exercice_fractions_simplifier extends Exercice {
             statut: false,
             feedback: '',
           }
-          // @ts-expect-error
-          this.autoCorrection[i].propositions[5] = {
+          this.autoCorrection[i].propositions![5] = {
             texte:
               '$' +
               new FractionEtendue(
@@ -331,7 +328,7 @@ export default class Exercice_fractions_simplifier extends Exercice {
           })
           if (context.isAmc) {
             texte = 'Simplifier la fraction suivante au maximum.\\\\\n' + texte
-            this.autoCorrection[i] = {
+            this.autoCorrectionAMC[i] = {
               enonce: texte, // Si vide, l'énoncé est celui de l'exercice.
               propositions: [
                 {
@@ -339,8 +336,7 @@ export default class Exercice_fractions_simplifier extends Exercice {
                 },
               ],
               reponse: {
-                // @ts-expect-error
-                valeur: [reponse.simplifie().toLatex()], // obligatoire (la réponse numérique à comparer à celle de l'élève), NE PAS METTRE DE STRING à virgule ! 4.9 et non pas 4,9. Cette valeur doit être passée dans un tableau d'où la nécessité des crochets.
+                valeur: reponse.simplifie(), // obligatoire (la réponse numérique à comparer à celle de l'élève), NE PAS METTRE DE STRING à virgule ! 4.9 et non pas 4,9. Cette valeur doit être passée dans un tableau d'où la nécessité des crochets.
                 param: {
                   digits: 4,
                   digitsNum: 2,

@@ -75,7 +75,6 @@ export default class PuissancesEtPrefixe extends Exercice {
     for (
       let i = 0, texte, texteCorr, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       const exposant = listeExposants[i][0]
       const prefixe = listeExposants[i][1]
@@ -120,11 +119,11 @@ export default class PuissancesEtPrefixe extends Exercice {
         texteCorr = `Le préfixe ${prefixe} est associé à ${description}, soit $${miseEnEvidence(`10^{${exposant}}`)}$ ou $${miseEnEvidence(texNombre(reponseDecimale, 9))}$.`
       }
       if (context.isAmc) {
-        this.autoCorrection[i].enonce =
+        this.autoCorrectionAMC[i].enonce =
           this.sup === 1
             ? `Quel est le préfixe correspondant à $10^{${exposant}}$ ? $\\ldots$ `
             : `Quelle est la puissance de 10 correspondant au préfixe ${prefixe} ? $\\ldots$ `
-        this.autoCorrection[i].propositions = [
+        this.autoCorrectionAMC[i].propositions = [
           { statut: 1, sanscadre: true, texte: texteCorr },
         ]
       }

@@ -161,10 +161,10 @@ export default class DivisionDecimaleCM2 extends Exercice {
       if (context.isHtml && this.interactif)
         texte += ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers)
       if (context.isAmc) {
-        this.autoCorrection[i].enonce = texte
-        this.autoCorrection[i].propositions = [{ texte: texteCorr }]
+        this.autoCorrectionAMC[i].enonce = texte
+        this.autoCorrectionAMC[i].propositions = [{ texte: texteCorr }]
         // @ts-expect-error trop compliqué à typer
-        this.autoCorrection[i].reponse.param = {
+        this.autoCorrectionAMC[i].reponse.param = {
           digits:
             nombreDeChiffresDansLaPartieEntiere(q) +
             nombreDeChiffresDansLaPartieDecimale(q) +

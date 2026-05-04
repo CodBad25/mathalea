@@ -263,7 +263,7 @@ export default class LectureDiagrammeBaton extends Exercice {
       lstAnimauxExo[numAnimal] +
       '.<br>'
     if (context.isAmc) {
-      this.autoCorrection[0] = {
+      this.autoCorrectionAMC[0] = {
         enonce: '',
         propositions: [
           {
@@ -290,20 +290,14 @@ export default class LectureDiagrammeBaton extends Exercice {
       }
     } else {
       this.autoCorrection[0] = {
-        // @ts-expect-error
-        type: 'qcmMono',
         propositions: propa,
         options: { ordered: false, vertical: nbAnimaux > 5 },
       }
       this.autoCorrection[1] = {
-        // @ts-expect-error
-        type: 'qcmMono',
         propositions: propb,
         options: { ordered: false, vertical: nbAnimaux > 5 },
       }
       this.autoCorrection[2] = {
-        // @ts-expect-error
-        type: 'qcmMono',
         propositions: propc,
         options: { ordered: false, vertical: true },
       }

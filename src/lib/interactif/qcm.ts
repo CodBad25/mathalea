@@ -275,6 +275,25 @@ export function propositionsQcm(
   i: number,
   options: { style: string; format: string } = { style: '', format: 'case' },
 ) {
+  const syncQcmAutoCorrectionToAmc = () => {
+    const source = exercice.autoCorrection[i]
+    if (source == null) return
+
+    const exerciseAny = exercice as IExercice & { autoCorrectionAMC?: any[] }
+    if (!Array.isArray(exerciseAny.autoCorrectionAMC)) {
+      exerciseAny.autoCorrectionAMC = []
+    }
+
+    exerciseAny.autoCorrectionAMC[i] = {
+      ...exerciseAny.autoCorrectionAMC[i],
+      enonce: source.enonce,
+      options: source.options != null ? { ...source.options } : undefined,
+      propositions: (source.propositions ?? []).map((proposition) => ({
+        ...proposition,
+      })),
+    }
+  }
+
   /**
    * Mélange les éléments d'un tableau jusqu'à un certain index et laisse les suivants inchangés.
    * @param {Array} array - Le tableau à mélanger.
@@ -325,13 +344,7 @@ export function propositionsQcm(
   elimineDoublons(exercice.autoCorrection[i].propositions)
   if (context.isHtml) {
     espace = '&emsp;'
-    if (exercice?.autoCorrection[i].reponse == null) {
-      exercice.autoCorrection[i].reponse = {}
-    }
-    if (exercice.autoCorrection[i].reponse.param == null) {
-      exercice.autoCorrection[i].reponse.param = {}
-    }
-    exercice.autoCorrection[i].reponse.param.formatInteractif = 'qcm'
+    exercice.autoCorrection[i].formatInteractif = 'qcm'
   } else {
     espace = '\\qquad '
   }
@@ -475,6 +488,7 @@ export function propositionsQcm(
     texte = '\n' + texte
     texteCorr = '\n' + texteCorr
   }
+  syncQcmAutoCorrectionToAmc()
   return { texte, texteCorr, indexes }
 }
 

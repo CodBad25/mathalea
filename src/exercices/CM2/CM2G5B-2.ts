@@ -1,6 +1,7 @@
 import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { point3d } from '../../lib/3d/3dProjectionMathalea2d/elementsEtTransformations3d'
 import { pave3d } from '../../lib/3d/3dProjectionMathalea2d/PaveEtPaveLPH3dPerspectiveCavaliere'
+import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { setReponse } from '../../lib/interactif/gestionInteractif'
 import { propositionsQcm } from '../../lib/interactif/qcm'
@@ -19,7 +20,6 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { bleuMathalea } from '../../lib/colors'
 
 export const titre = 'Nommer des faces dans un pavé droit'
 export const amcReady = true
@@ -188,7 +188,7 @@ export default class LireFacePaveDroit extends Exercice {
       ]
 
       if (context.isAmc) {
-        this.autoCorrection[i] = {
+        this.autoCorrectionAMC[i] = {
           enonce: enonceFigure,
           enonceCentre: false,
           options: {
@@ -275,8 +275,7 @@ export default class LireFacePaveDroit extends Exercice {
             ) + '<br>'
         }
         if (context.isAmc) {
-          // @ts-expect-error
-          this.autoCorrection[i].propositions.push({
+          this.autoCorrectionAMC[i].propositions!.push({
             type: 'qcmMono',
             enonce: enonceAMC,
             propositions: [
@@ -291,7 +290,7 @@ export default class LireFacePaveDroit extends Exercice {
             j < Math.min(resultatsImpossibles.length, this.sup4 - 1);
             j++
           ) {
-            const props = this.autoCorrection[i].propositions
+            const props = this.autoCorrectionAMC[i].propositions
             if (props) {
               const props2 = props[ee].propositions
               props2!.push({

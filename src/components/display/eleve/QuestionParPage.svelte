@@ -109,8 +109,7 @@
   async function checkQuestion(i: number) {
     const exercice = exercices[indiceExercice[i]]
     let type: InteractivityType | OldFormatInteractifType | undefined =
-      exercice.autoCorrection[indiceQuestionInExercice[i]]?.reponse?.param
-        ?.formatInteractif
+      exercice.autoCorrection[indiceQuestionInExercice[i]]?.formatInteractif
     if (type === undefined || type === null) {
       const interactifType = exercice.interactifType
       if (

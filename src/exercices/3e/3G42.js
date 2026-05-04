@@ -5,6 +5,7 @@ import {
   vecteur3d,
 } from '../../lib/3d/3dProjectionMathalea2d/elementsEtTransformations3d'
 import { sphere3d } from '../../lib/3d/3dProjectionMathalea2d/Sphere3dPerspectiveCavaliere'
+import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { setReponse } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -25,7 +26,6 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { bleuMathalea } from '../../lib/colors'
 
 export const interactifReady = true
 export const interactifType = 'mathLive'
@@ -179,7 +179,16 @@ export default class VolumeBoule extends Exercice {
           OO = point3d(0, 0, 5)
           o = point3d(0, 0, 2.5)
           R = vecteur3d(O, B)
-          s = sphere3d(o, 2.5, bleuMathalea, bleuMathalea, 4, 'gray', 10, 'gray')
+          s = sphere3d(
+            o,
+            2.5,
+            bleuMathalea,
+            bleuMathalea,
+            4,
+            'gray',
+            10,
+            'gray',
+          )
           c = cylindre3d(O, OO, R, R, 'black', false)
           reponse = Decimal.acos(-1)
             .mul(2 * rayon ** 3)
@@ -234,7 +243,7 @@ export default class VolumeBoule extends Exercice {
         },
       )
       if (context.isAmc) {
-        this.autoCorrection[i] = {
+        this.autoCorrectionAMC[i] = {
           enonce: texte,
           propositions: [{ texte: texteCorr, statut: 0 }],
           reponse: {

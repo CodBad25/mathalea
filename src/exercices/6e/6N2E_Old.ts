@@ -1,6 +1,6 @@
 import { orangeMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { arrondi } from '../../lib/outils/nombres'
 import { texNombre } from '../../lib/outils/texNombre'
@@ -114,18 +114,20 @@ export default class MultiplierDecimaux extends Exercice {
           style: 'display: inline',
           options: { solution: true, colore: orangeMathalea },
         })
-      if (context.isHtml && this.interactif)
+      if (context.isHtml && this.interactif) {
         texte +=
           '$~=$' +
           ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers)
-      setReponse(this, i, reponse)
-      this.autoCorrection[i].options = {
-        digits: 0,
-        decimals: 0,
-        signe: false,
-        exposantNbChiffres: 0,
-        exposantSigne: false,
-        approx: 0,
+        handleAnswers(this, i, { reponse: { value: reponse } })
+      } else if (context.isAmc) {
+        this.autoCorrectionAMC[i] = {
+          enonce: texte,
+          enonceAvant: false,
+          reponse: {
+            texte: texteCorr,
+            valeur: reponse,
+          },
+        }
       }
 
       if (this.listeQuestions.indexOf(texte) === -1) {

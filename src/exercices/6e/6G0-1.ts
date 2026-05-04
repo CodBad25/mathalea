@@ -47,7 +47,6 @@ export default class NotationSegmentDroiteDemiDroite extends Exercice {
     for (
       let i = 0, texte, texteCorr, figure, enonceAMC, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       if (i % 5 === 0) listeDeNomsDePolygones = ['PQD']
       const p = creerNomDePolygone(3, listeDeNomsDePolygones)
@@ -125,7 +124,7 @@ export default class NotationSegmentDroiteDemiDroite extends Exercice {
       texte += figure
       texteCorr = `Placer 3 points $${p[0]}$, $${p[1]}$ et $${p[2]}$ non alignés puis tracer ${typeLigneAB} ${dABCorr}, ${typeLigneBC} ${dBCCorr} et ${typeLigneAC} ${dACCorr}.`
       if (context.isAmc) {
-        this.autoCorrection[i] = {
+        this.autoCorrectionAMC[i] = {
           enonce: this.consigne + '<br>' + enonceAMC,
           propositions: [
             {

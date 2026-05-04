@@ -9,6 +9,7 @@ import { segment } from '../../lib/2d/segmentsVecteurs'
 import { labelPoint, texteParPosition } from '../../lib/2d/textes'
 import { tracePoint } from '../../lib/2d/TracePoint'
 import { pointEstSur } from '../../lib/2d/utilitairesGeometriques'
+import { bleuMathalea } from '../../lib/colors'
 import { texcolors, texteGras } from '../../lib/format/style'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { generateCleaner } from '../../lib/interactif/cleaners'
@@ -25,7 +26,6 @@ import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { bleuMathalea } from '../../lib/colors'
 const cleaner = generateCleaner(['parentheses', 'espaces'])
 export const titre =
   'Appliquer les propriétés de conservation de la symétrie axiale'
@@ -190,17 +190,26 @@ export default class SymetrieAxialeConservation1 extends Exercice {
       }
       for (let ii = 0; ii < 24; ii++) {
         if (ii < 12)
-          points.push(pointAbstrait(coords[ii][0], coords[ii][1], noms[ii], labelPos))
+          points.push(
+            pointAbstrait(coords[ii][0], coords[ii][1], noms[ii], labelPos),
+          )
         else if (
           coords[ii][0] === coords[ii - 12][0] &&
           coords[ii][1] === coords[ii - 12][1]
         ) {
           points.push(
-            pointAbstrait(coords[ii][0], coords[ii][1], noms[ii - 12], labelPos),
+            pointAbstrait(
+              coords[ii][0],
+              coords[ii][1],
+              noms[ii - 12],
+              labelPos,
+            ),
           )
           noms[ii] = noms[ii - 12]
         } else
-          points.push(pointAbstrait(coords[ii][0], coords[ii][1], noms[ii], labelPos))
+          points.push(
+            pointAbstrait(coords[ii][0], coords[ii][1], noms[ii], labelPos),
+          )
         traces.push(tracePoint(points[ii]))
       }
       // On rédige les questions et les réponses
@@ -212,7 +221,7 @@ export default class SymetrieAxialeConservation1 extends Exercice {
       objetsCorrection.length = 0
 
       if (context.isAmc) {
-        this.autoCorrection[i] = {
+        this.autoCorrectionAMC[i] = {
           propositions: [],
           options: { numerotationEnonce: true },
         }
@@ -559,7 +568,7 @@ export default class SymetrieAxialeConservation1 extends Exercice {
           })
         }
         if (context.isAmc) {
-          this.autoCorrection[i].propositions!.push({
+          this.autoCorrectionAMC[i].propositions!.push({
             type: 'AMCOpen',
             propositions: [
               {
@@ -596,12 +605,12 @@ export default class SymetrieAxialeConservation1 extends Exercice {
         objetsEnonce,
       )
       if (context.isAmc) {
-        this.autoCorrection[i].enonce =
+        this.autoCorrectionAMC[i].enonce =
           "Pour chaque question ci-dessous, placer sur cette figure, l'objet mathématique cité puis tracer son symétrique. Répondre ensuite à la question.<br>" +
           enonceAMC +
           '<br>'
-        this.autoCorrection[i].enonceAvant = false
-        this.autoCorrection[i].enonceAvantUneFois = true
+        this.autoCorrectionAMC[i].enonceAvant = false
+        this.autoCorrectionAMC[i].enonceAvantUneFois = true
       }
 
       texte += enonceAMC

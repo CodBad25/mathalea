@@ -729,7 +729,7 @@ export default class CalculerCaracteristiques extends Exercice {
       }
 
       if (context.isAmc) {
-        this.autoCorrection[i] = {
+        this.autoCorrectionAMC[i] = {
           enonce: initAMC,
           options: {
             multicols: true,
@@ -739,7 +739,7 @@ export default class CalculerCaracteristiques extends Exercice {
           propositions: [],
         }
         for (let ee = 0; ee < nbReponse; ee++) {
-          this.autoCorrection[i].propositions!.push({
+          this.autoCorrectionAMC[i].propositions!.push({
             type: 'AMCNum',
             propositions: [
               {

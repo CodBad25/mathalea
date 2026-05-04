@@ -19,7 +19,7 @@ import { pointEstSur } from '../../lib/2d/utilitairesGeometriques'
 import { milieu, pointSurDroite } from '../../lib/2d/utilitairesPoint'
 import { vecteur } from '../../lib/2d/Vecteur'
 import { vide2d } from '../../lib/2d/Vide2d'
-import { orangeMathalea, bleuMathalea } from '../../lib/colors'
+import { bleuMathalea, orangeMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -1409,7 +1409,7 @@ export default class TransformationsDuPlanEtCoordonnees extends Exercice {
         }),
       )
       if (context.isAmc) {
-        this.autoCorrection.push({
+        this.autoCorrectionAMC.push({
           enonce:
             '\\begin{center}' +
             mathalea2d(

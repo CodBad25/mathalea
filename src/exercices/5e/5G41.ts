@@ -741,7 +741,7 @@ export default class ConstructionsParallelogrammesParticuliers extends Exercice 
       const propositionsQcm2 = []
       for (let ee = 0; ee < 5; ee++) {
         propositionsQcm2.push({
-          texte: ee + 1,
+          texte: String(ee + 1),
           statut: cellule3[1] === reponseChiffres[ee],
         })
       }
@@ -760,7 +760,7 @@ export default class ConstructionsParallelogrammesParticuliers extends Exercice 
       const propositionsQcm4 = []
       for (let ee = 0; ee < 5; ee++) {
         propositionsQcm4.push({
-          texte: ee + 1,
+          texte: String(ee + 1),
           statut:
             typeDeQuestion === 7
               ? cellule1[1] === reponseChiffres[ee]
@@ -768,14 +768,14 @@ export default class ConstructionsParallelogrammesParticuliers extends Exercice 
         })
       }
 
-      this.autoCorrection[0] = {}
-      this.autoCorrection[0].options = {
+      this.autoCorrectionAMC[0] = {}
+      this.autoCorrectionAMC[0].options = {
         ordered: true,
         barreseparation: true,
         multicolsAll: true,
       }
-      this.autoCorrection[0].enonce = '' // texte
-      this.autoCorrection[0].propositions = [
+      this.autoCorrectionAMC[0].enonce = '' // texte
+      this.autoCorrectionAMC[0].propositions = [
         {
           type: 'AMCOpen',
           propositions: [
@@ -796,7 +796,6 @@ export default class ConstructionsParallelogrammesParticuliers extends Exercice 
         },
         {
           type: 'qcmMono',
-          // @ts-expect-error
           propositions: propositionsQcm2,
           enonce: 'Chiffre de la case du sommet construit, dans la cible 1',
         },
@@ -810,7 +809,6 @@ export default class ConstructionsParallelogrammesParticuliers extends Exercice 
         },
         {
           type: 'qcmMono',
-          // @ts-expect-error
           propositions: propositionsQcm4,
           enonce: 'Chiffre de la case du sommet construit, dans la cible 2',
         },
@@ -832,8 +830,7 @@ export default class ConstructionsParallelogrammesParticuliers extends Exercice 
             statut: cellule1[1] === reponseChiffres[ee],
           })
         }
-        // @ts-expect-error
-        this.autoCorrection[0].propositions.push(
+        this.autoCorrectionAMC[0].propositions.push(
           {
             type: 'qcmMono',
             propositions: propositionsQcm3,
@@ -844,7 +841,6 @@ export default class ConstructionsParallelogrammesParticuliers extends Exercice 
           },
           {
             type: 'qcmMono',
-            // @ts-expect-error
             propositions: propositionsQcm4,
             enonce: 'Chiffre de la case du sommet construit, dans la cible 3',
           },

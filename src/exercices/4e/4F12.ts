@@ -169,7 +169,7 @@ export default class ExploiterRepresentationGraphique extends Exercice {
               for (let i = 0; i < this.listeQuestions.length; i++) {
                 enonceAMC += `${i + 1}) ${this.listeQuestions[i]}<br>`
               }
-              this.autoCorrection[0] = {
+              this.autoCorrectionAMC[0] = {
                 enonce: enonceAMC,
                 propositions: [
                   {
@@ -294,7 +294,7 @@ export default class ExploiterRepresentationGraphique extends Exercice {
               for (let i = 0; i < this.listeQuestions.length; i++) {
                 enonceAMC += `${i + 1}) ${this.listeQuestions[i]}<br>`
               }
-              this.autoCorrection[0] = {
+              this.autoCorrectionAMC[0] = {
                 enonce: enonceAMC,
                 propositions: [
                   {
@@ -469,7 +469,7 @@ c) Quelle distance a-t-elle parcourue au total ? %{champ3}`,
               for (let i = 0; i < this.listeQuestions.length; i++) {
                 enonceAMC += `${i + 1}) ${this.listeQuestions[i]}<br>`
               }
-              this.autoCorrection[0] = {
+              this.autoCorrectionAMC[0] = {
                 enonce: enonceAMC,
                 propositions: [
                   {
@@ -589,8 +589,14 @@ c) Quelle distance a-t-elle parcourue au total ? %{champ3}`,
   c) À quelle heure fait-il le plus chaud ? %{champ3}\n
   d) À quelle heure fait-il le plus froid ? %{champ4}`,
               dataOptions: {
-                champ1: { keyboard: KeyboardType.nombresEtDegreCelsius, texteApres: '<em class="ml-2">(Une unité est attendue.)</em>' },
-                champ2: { keyboard: KeyboardType.nombresEtDegreCelsius, texteApres: '<em class="ml-2">(Une unité est attendue.)</em>' },
+                champ1: {
+                  keyboard: KeyboardType.nombresEtDegreCelsius,
+                  texteApres: '<em class="ml-2">(Une unité est attendue.)</em>',
+                },
+                champ2: {
+                  keyboard: KeyboardType.nombresEtDegreCelsius,
+                  texteApres: '<em class="ml-2">(Une unité est attendue.)</em>',
+                },
                 champ3: { keyboard: KeyboardType.clavierHms },
                 champ4: { keyboard: KeyboardType.clavierHms },
               },
@@ -630,7 +636,7 @@ c) Quelle distance a-t-elle parcourue au total ? %{champ3}`,
               for (let i = 0; i < this.listeQuestions.length; i++) {
                 enonceAMC += `${i + 1}) ${this.listeQuestions[i]}<br>`
               }
-              this.autoCorrection[0] = {
+              this.autoCorrectionAMC[0] = {
                 enonce: enonceAMC,
                 propositions: [
                   {

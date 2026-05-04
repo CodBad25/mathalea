@@ -1,3 +1,4 @@
+import { ensureAmcParam } from '../../lib/amc/amcHelpers'
 import { orangeMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
@@ -184,18 +185,18 @@ export default class DivisionDecimale extends Exercice {
       if (context.isHtml && this.interactif)
         texte += ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers)
       if (context.isAmc) {
-        this.autoCorrection[i].enonce = texte
-        this.autoCorrection[i].propositions = [{ texte: texteCorr }]
-        // @ts-expect-error trop compliqué à typer
-        this.autoCorrection[i].reponse.param = {
-          digits:
-            nombreDeChiffresDansLaPartieEntiere(q) +
-            nombreDeChiffresDansLaPartieDecimale(q) +
-            2,
-          decimals: nombreDeChiffresDansLaPartieDecimale(q) + 1,
-          signe: false,
-          exposantNbChiffres: 0,
+        this.autoCorrectionAMC[i] = {
+          enonce: texte,
+          propositions: [{ texte: texteCorr }],
         }
+        const amcParam = ensureAmcParam(this, i)
+        amcParam.digits =
+          nombreDeChiffresDansLaPartieEntiere(q) +
+          nombreDeChiffresDansLaPartieDecimale(q) +
+          2
+        amcParam.decimals = nombreDeChiffresDansLaPartieDecimale(q) + 1
+        amcParam.signe = false
+        amcParam.exposantNbChiffres = 0
       }
       if (this.questionJamaisPosee(i, a, b)) {
         // Si la question n'a jamais été posée, on en crée une autre

@@ -105,10 +105,8 @@ export default class VecteurNormEqCart extends Exercice {
       let saisie2 = String(champTexte2.value).replace(',', '.')
       saisie1 = saisie1.replace(/\((\+?-?\d+)\)/, '$1') // Pour les nombres négatifs, supprime les parenthèses
       saisie2 = saisie2.replace(/\((\+?-?\d+)\)/, '$1') // Pour les nombres négatifs, supprime les parenthèses
-      const reponse1 =
-        this.autoCorrection[2 * i]?.reponse?.valeur?.reponse?.value
-      const reponse2 =
-        this.autoCorrection[2 * i + 1]?.reponse?.valeur?.reponse?.value
+      const reponse1 = this.autoCorrection[2 * i]?.valeur?.reponse?.value
+      const reponse2 = this.autoCorrection[2 * i + 1]?.valeur?.reponse?.value
       if (reponse1 !== undefined || reponse2 !== undefined) {
         const x0 = reponse1
         const y0 = reponse2

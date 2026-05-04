@@ -170,7 +170,7 @@ export default class CalculValeurApprocheeRacineCarree extends Exercice {
       if (this.questionJamaisPosee(i, a)) {
         if (context.isAmc) {
           if (listeAvecOuSansCalculatrice[i] === 'avec') {
-            this.autoCorrection[i] = {
+            this.autoCorrectionAMC[i] = {
               enonce: '',
               enonceAvant: false,
               propositions: [
@@ -209,7 +209,7 @@ export default class CalculValeurApprocheeRacineCarree extends Exercice {
               ],
             }
           } else {
-            this.autoCorrection[i] = {
+            this.autoCorrectionAMC[i] = {
               enonce: '',
               enonceAvant: false,
               propositions: [

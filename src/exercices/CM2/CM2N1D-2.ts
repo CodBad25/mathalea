@@ -349,7 +349,7 @@ export default class RecomposerEntierC3 extends Exercice {
           break
       }
       if (context.isAmc) {
-        this.autoCorrection[i] = {
+        this.autoCorrectionAMC[i] = {
           enonce: '$texte<br>',
           propositions: [
             {
@@ -394,7 +394,7 @@ export default class RecomposerEntierC3 extends Exercice {
         Number.parseInt(saisies[k]) ===
           Number.parseInt(
             // @ts-expect-error
-            this.autoCorrection[this.premierChamp[i] + k].reponse.valeur.reponse
+            this.autoCorrection[this.premierChamp[i] + k].valeur.reponse
               .value as string,
           )
     }

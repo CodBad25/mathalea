@@ -185,8 +185,13 @@ export function renderAMCHybride(params: AMCHybrideRenderParams): {
           : typeof p0.texte === 'string'
             ? p0.texte
             : ''
+      const displayLabel =
+        typeof p0.reponse?.display?.label === 'string'
+          ? p0.reponse.display.label
+          : undefined
       const subQuestionText =
-        typeof p0.reponse?.texte === 'string' ? p0.reponse.texte : ''
+        displayLabel ??
+        (typeof p0.reponse?.texte === 'string' ? p0.reponse.texte : '')
 
       const delegatedNum = {
         enonce: p0.enonce ?? prop.enonce ?? '',

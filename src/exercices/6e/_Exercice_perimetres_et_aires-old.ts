@@ -740,7 +740,7 @@ export default class ExercicePerimetresEtAires extends Exercice {
               },
             })
         } else {
-          this.autoCorrection[i] = {
+          this.autoCorrectionAMC[i] = {
             enonce: texte,
             options: { barreseparation: true, numerotationEnonce: true },
             propositions: [

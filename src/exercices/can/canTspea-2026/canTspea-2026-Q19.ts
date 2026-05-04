@@ -82,13 +82,13 @@ export const refs = {
         }
       } else {
         const a = Number(
-          exercice.autoCorrection[question].reponse?.valeur?.champ1?.value,
+          exercice.autoCorrection[question].valeur?.champ1?.value,
         )
         const b = Number(
-          exercice.autoCorrection[question].reponse?.valeur?.champ2?.value,
+          exercice.autoCorrection[question].valeur?.champ2?.value,
         )
         const c = Number(
-          exercice.autoCorrection[question].reponse?.valeur?.champ3?.value,
+          exercice.autoCorrection[question].valeur?.champ3?.value,
         )
         isOk =
           a * bSaisi - b * aSaisi === 0 &&

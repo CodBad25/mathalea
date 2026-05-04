@@ -107,7 +107,7 @@ export default class ÉcrireUneExpressionMathador extends Exercice {
         })
       }
       if (context.isAmc) {
-        this.autoCorrection[i] = {
+        this.autoCorrectionAMC[i] = {
           enonce: texte,
           propositions: [
             {

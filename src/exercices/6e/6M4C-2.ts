@@ -87,7 +87,7 @@ export default class HeuresDecimales extends Exercice {
           },
         })
       } else {
-        this.autoCorrection[i] = {
+        this.autoCorrectionAMC[i] = {
           enonce: texte,
           propositions: [
             {

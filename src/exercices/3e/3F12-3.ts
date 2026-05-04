@@ -372,7 +372,7 @@ export default class TableauDeValeurs extends Exercice {
       texteCorr = context.isHtml ? tableauValeur.output : tabValeurTex
 
       if (context.isAmc) {
-        this.autoCorrection[i] = {
+        this.autoCorrectionAMC[i] = {
           enonce: `On considère la fonction $${nomdef}$ définie par $${nomdef}:x\\mapsto ${expression}$.\\\\ \n
           Calculer :\\\\ \na) $f(${x1})$\\\\ \nb) $f(${x2})$\\\\ \nc) $f(${x3})$\\\\ \n
           Utiliser le cadre pour les calculs si besoin puis coder les réponses.\\\\`,

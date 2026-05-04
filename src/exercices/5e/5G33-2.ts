@@ -9,6 +9,7 @@ import {
 import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import { rotation } from '../../lib/2d/transformations'
 import { pointIntersectionDD } from '../../lib/2d/utilitairesPoint'
+import { bleuMathalea, orangeMathalea } from '../../lib/colors'
 import {
   choice,
   combinaisonListesSansChangerOrdre,
@@ -24,7 +25,6 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { orangeMathalea, bleuMathalea } from '../../lib/colors'
 
 export const dateDePublication = '22/11/2020'
 export const amcReady = true
@@ -131,7 +131,6 @@ export default class ProprietesParallelesPerpendiculaires extends Exercice {
     for (
       let i = 0, texte, texteCorr, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       texte = ''
       texteCorr = ''
@@ -571,10 +570,10 @@ export default class ProprietesParallelesPerpendiculaires extends Exercice {
       }
 
       /** ********************** AMC Open *****************************/
-      this.autoCorrection[i] = {}
-      this.autoCorrection[i].options = { ordered: false }
-      this.autoCorrection[i].enonce = texte + '<br>'
-      this.autoCorrection[i].propositions = [
+      this.autoCorrectionAMC[i] = {}
+      this.autoCorrectionAMC[i].options = { ordered: false }
+      this.autoCorrectionAMC[i].enonce = texte + '<br>'
+      this.autoCorrectionAMC[i].propositions = [
         {
           texte: texteCorr,
           statut: 3,

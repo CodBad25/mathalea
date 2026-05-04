@@ -380,7 +380,7 @@ export default class TesterUneEgalite extends Exercice {
 
       if (context.isAmc) {
         if (this.sup3 === 1) {
-          this.autoCorrection[i] = {
+          this.autoCorrectionAMC[i] = {
             enonce: '',
             enonceAvant: false,
             enonceAvantUneFois: true,
@@ -415,7 +415,7 @@ export default class TesterUneEgalite extends Exercice {
             ],
           }
         } else {
-          this.autoCorrection.push({
+          this.autoCorrectionAMC.push({
             enonce: texte,
             enonceAvant: false,
             enonceApresNumQuestion: true,

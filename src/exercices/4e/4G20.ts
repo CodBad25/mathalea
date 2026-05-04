@@ -390,8 +390,7 @@ export default class Pythagore2D extends Exercice {
         texte += this.interactif
           ? `$${nomCote} ${redaction[1]}$` +
             ajouteChampTexteMathLive(this, i, KeyboardType.longueur, {
-              texteApres:
-                '<em class="ml-2">(Une unité est attendue.)</em>',
+              texteApres: '<em class="ml-2">(Une unité est attendue.)</em>',
             })
           : ''
         handleAnswers(this, i, {
@@ -402,7 +401,7 @@ export default class Pythagore2D extends Exercice {
         })
 
         if (context.isAmc) {
-          this.autoCorrection[i] = {
+          this.autoCorrectionAMC[i] = {
             enonce: texte,
             enonceAvant: false,
             propositions: [

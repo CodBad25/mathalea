@@ -12,6 +12,7 @@ import Exercice from '../Exercice'
 
 import Figure from 'apigeom/src/Figure'
 import handleApigeomFigureElement from '../../lib/apigeom/apigeom-figure'
+import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleEntiersConsecutifs } from '../../lib/interactif/comparisonFunctions'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
@@ -20,7 +21,6 @@ import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { ajouterAide } from '../../lib/outils/enrichissements'
 import { fraction } from '../../modules/fractions'
 import { representationFraction } from '../../modules/representationsFractions'
-import { bleuMathalea } from '../../lib/colors'
 
 export const titre =
   'Encadrer une fraction entre deux nombres entiers consécutifs'
@@ -155,7 +155,7 @@ export default class EncadrerFractionEntre2Entiers extends Exercice {
 
       if (this.questionJamaisPosee(i, d, n)) {
         if (context.isAmc) {
-          this.autoCorrection[i] = {
+          this.autoCorrectionAMC[i] = {
             enonce: texte,
             options: { multicols: true, numerotationEnonce: true },
             propositions: [

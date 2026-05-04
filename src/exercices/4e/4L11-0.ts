@@ -1,3 +1,4 @@
+import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -14,7 +15,6 @@ import {
   listeQuestionsToContenuSansNumero,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { bleuMathalea } from '../../lib/colors'
 
 export const titre = 'Factoriser une expression littérale (Niveau 1)'
 export const dateDePublication = '20/04/2025'
@@ -216,7 +216,7 @@ export default class FactoriserExpressionsNiv1 extends Exercice {
           reponse: { value: reponse, options: { factorisation: true } },
         })
       } else {
-        this.autoCorrection[i] = {
+        this.autoCorrectionAMC[i] = {
           enonce: texte,
           propositions: [{ texte: texteCorr, statut: 3, feedback: '' }],
         }

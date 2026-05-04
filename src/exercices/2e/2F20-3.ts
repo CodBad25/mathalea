@@ -9,6 +9,7 @@ import { segment } from '../../lib/2d/segmentsVecteurs'
 import { texteParPosition } from '../../lib/2d/textes'
 import { tracePoint } from '../../lib/2d/TracePoint'
 import { vide2d } from '../../lib/2d/Vide2d'
+import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -31,7 +32,6 @@ import {
   superieurouegal,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { bleuMathalea } from '../../lib/colors'
 
 export const titre = 'Déterminer graphiquement les extremums'
 export const interactifReady = true
@@ -218,7 +218,10 @@ export default class LecturesGraphiques extends Exercice {
                   )
                 : vide2d()
             s[1].pointilles = 5
-            s[2] = tracePoint(pointAbstrait(minimum[0] * 2, minimum[1] * 2), 'red')
+            s[2] = tracePoint(
+              pointAbstrait(minimum[0] * 2, minimum[1] * 2),
+              'red',
+            )
             texteCorr += mathalea2d(
               {
                 xmin: -13.5,
@@ -271,7 +274,10 @@ export default class LecturesGraphiques extends Exercice {
                   )
                 : vide2d()
             s[1].pointilles = 5
-            s[2] = tracePoint(pointAbstrait(maximum[0] * 2, maximum[1] * 2), 'red')
+            s[2] = tracePoint(
+              pointAbstrait(maximum[0] * 2, maximum[1] * 2),
+              'red',
+            )
             texteCorr += mathalea2d(
               {
                 xmin: -13.5,
@@ -330,7 +336,9 @@ export default class LecturesGraphiques extends Exercice {
               : `L'image de ${texNombre(x0, 1)} par la fonction $f$ est ${lesReponsesEnCouleur(y0)}.<br>`
           if (this.correctionDetaillee) {
             s[0] =
-              x0 !== 0 ? segment(0, y0 * 2, x0 * 2, y0 * 2, bleuMathalea) : vide2d()
+              x0 !== 0
+                ? segment(0, y0 * 2, x0 * 2, y0 * 2, bleuMathalea)
+                : vide2d()
             s[0].pointilles = 5
             s[1] =
               y0 !== 0 ? segment(x0 * 2, y0 * 2, x0 * 2, 0, 'red') : vide2d()
@@ -583,13 +591,13 @@ export default class LecturesGraphiques extends Exercice {
       for (let i = 0; i < this.nbQuestions; i++) {
         enonceAMC += `${i + 1}) ${this.listeQuestions[i]}<br>`
       }
-      this.autoCorrection[0] = {
+      this.autoCorrectionAMC[0] = {
         enonce: enonceAMC,
         propositions: [],
       }
       for (let i = 0; i < this.nbQuestions; i++) {
         if (listeTypeQuestions[i] === 'nombreAntécédents') {
-          this.autoCorrection[0].propositions![i] = {
+          this.autoCorrectionAMC[0].propositions![i] = {
             type: 'AMCNum',
             propositions: [
               {
@@ -609,7 +617,7 @@ export default class LecturesGraphiques extends Exercice {
             ],
           }
         } else {
-          this.autoCorrection[0].propositions![i] = {
+          this.autoCorrectionAMC[0].propositions![i] = {
             type: 'AMCNum',
             propositions: [
               {

@@ -109,7 +109,7 @@ This is the **preferred modern function** for defining expected answers:
    - `Decimal`, `Grandeur`, `Hms`, `number` → `.toString()`
    - Sets default `compare` to `fonctionComparaison`
    - Auto-detects if answer is a valid number and sets `nombreDecimalSeulement: true`
-5. Stores in `exercice.autoCorrection[question].reponse.valeur` and `.param`.
+5. Stores in `exercice.autoCorrection[question].valeur` and `.param`.
 
 ### The `Valeur` interface
 

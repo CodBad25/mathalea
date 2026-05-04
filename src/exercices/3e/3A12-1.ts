@@ -238,7 +238,7 @@ export default class ResoudreDesProblemesDiviseursCommuns extends Exercice {
 
       if (this.questionJamaisPosee(i, var1, var2, objet)) {
         if (context.isAmc) {
-          this.autoCorrection[i] = {
+          this.autoCorrectionAMC[i] = {
             enonce: '',
             enonceAvant: false,
             propositions: [

@@ -1,4 +1,5 @@
 import Decimal from 'decimal.js'
+import { bleuMathalea } from '../../lib/colors'
 import { texPrix } from '../../lib/format/style'
 import { propositionsQcm } from '../../lib/interactif/qcm'
 import {
@@ -17,7 +18,6 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { bleuMathalea } from '../../lib/colors'
 
 export const titre = 'Reconnaitre une situation de proportionnalité'
 export const interactifReady = true
@@ -180,7 +180,6 @@ export default class ProportionnalitePasProportionnalite extends Exercice {
         texteCorr,
         cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       x = 0
       y = 0
@@ -358,8 +357,7 @@ export default class ProportionnalitePasProportionnalite extends Exercice {
             },
           ]
           if (this.sup2) {
-            // @ts-expect-error
-            this.autoCorrection[i].propositions.push({
+            this.autoCorrection[i].propositions!.push({
               texte: 'je ne sais pas',
               statut: false,
             })

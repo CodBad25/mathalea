@@ -118,7 +118,7 @@ export default class FabriqueAYohaku extends Exercice {
         this.listeCorrections[i] = texteCorr
 
         if (context.isAmc) {
-          this.autoCorrection[i] = {
+          this.autoCorrectionAMC[i] = {
             enonce: this.introduction + texte,
             propositions: [
               {

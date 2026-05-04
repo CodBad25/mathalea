@@ -1,22 +1,24 @@
 import type Figure from 'apigeom/src/Figure'
 import Decimal from 'decimal.js'
 import type { MathfieldElement } from 'mathlive'
-import type {
-  AutoCorrection,
-  ClickFigures,
-  IExercice,
-  LegacyReponse,
-  LegacyReponses,
-  MathaleaSVG,
-  ReponseParams,
-  ResultOfExerciceInteractif,
-  Valeur,
-  ValeurNormalized,
+import {
+  isInteractivityType,
+  type AnswerValueType,
+  type AutoCorrection,
+  type ClickFigures,
+  type IExercice,
+  type LegacyReponse,
+  type LegacyReponses,
+  type MathaleaSVG,
+  type ResultOfExerciceInteractif,
+  type Valeur,
+  type ValeurNormalized,
 } from '../../lib/types'
 import { context } from '../../modules/context'
 import FractionEtendue from '../../modules/FractionEtendue'
 import Grandeur from '../../modules/Grandeur'
 import Hms from '../../modules/Hms'
+import type { AutoCorrectionAMC, ReponseParams } from '../amc/amcTypes'
 import { addElement, get, setStyles } from '../html/dom'
 import { Complexe } from '../mathFonctions/Complexe'
 import { verifQuestionTableur } from '../tableur/outilsTableur'
@@ -45,10 +47,7 @@ export function isClickFiguresArray(
  * @param objetReponse
  */
 export function setCliqueFigure(objetReponse: AutoCorrection) {
-  objetReponse.reponse = {
-    ...objetReponse.reponse,
-    param: { formatInteractif: 'cliqueFigure' },
-  }
+  objetReponse.formatInteractif = 'cliqueFigure'
 }
 /**
  * Pour positionner le formatInteractif d'une question sur 'qcm'
@@ -57,10 +56,7 @@ export function setCliqueFigure(objetReponse: AutoCorrection) {
  * @param objetReponse
  */
 export function setQcm(objetReponse: AutoCorrection) {
-  objetReponse.reponse = {
-    ...objetReponse.reponse,
-    param: { formatInteractif: 'qcm' },
-  }
+  objetReponse.formatInteractif = 'qcm'
 }
 /**
  * Pour positionner le formatInteractif d'une question sur 'listeDeroulante'
@@ -69,10 +65,7 @@ export function setQcm(objetReponse: AutoCorrection) {
  * @param objetReponse
  */
 export function setListeDeroulante(objetReponse: AutoCorrection) {
-  objetReponse.reponse = {
-    ...objetReponse.reponse,
-    param: { formatInteractif: 'listeDeroulante' },
-  }
+  objetReponse.formatInteractif = 'listeDeroulante'
 }
 // Garde structurel pour éviter d'importer MetaExercice et créer un cycle
 const isMetaExercice = (
@@ -106,7 +99,7 @@ export function exerciceInteractif(
   }
 
   for (let i = 0; i < exercice.autoCorrection.length; i++) {
-    const format = exercice.autoCorrection[i]?.reponse?.param?.formatInteractif
+    const format = exercice.autoCorrection[i]?.formatInteractif
     let resultat: string
     switch (format) {
       case 'svgSelection':
@@ -569,14 +562,8 @@ export function setReponse(
   // en contexte d'export AMC, on ne touche pas à l'existant
   if (context.isAmc) {
     let laReponseDemandee: LegacyReponse
+    if (exercice.autoCorrectionAMC == null) exercice.autoCorrectionAMC = []
     switch (formatInteractif) {
-      case 'tableauMathlive':
-        //   if (reponses.filter((cellule) => Object.keys(cellule)[0].match(/L\dC\d/).length === 0).length !== 0) {
-        //    window.notify('setReponse : type "tableauMathlive" les objets proposés n\'ont pas tous une clé de la forme L$C$', { reponses, exercice: exercice.uuid })
-        //  }
-        break
-      case 'fillInTheBlank':
-        break
       case 'Num':
         if (!(reponse instanceof FractionEtendue)) {
           window.notify('setReponse : type "Num" une fraction est attendue !', {
@@ -613,23 +600,6 @@ export function setReponse(
             .replace(',', '.')
         }
         break
-      /* case 'nombreDecimal':
-        if (!(reponse instanceof Decimal)) {
-          window.notify(
-            'setReponse : type "nombreDecimal" un nombre est attendu !',
-            { reponses, exercice: exercice.uuid }
-          )
-        }
-        break */
-      /* case 'ecritureScientifique':
-        if (!(typeof reponse === 'string')) {
-          window.notify(
-            'setReponse : type "ecritureScientifique" la réponse n\'est pas un string !',
-            { reponses, exercice: exercice.uuid }
-          )
-        }
-        // ToFix : vérifier que la chaine est au bon format
-        break */
 
       case 'texte':
         if (!(typeof reponse === 'string')) {
@@ -670,31 +640,22 @@ export function setReponse(
           )
         }
         break
-      case 'intervalleStrict': // Pour les exercice où la saisie doit être dans un intervalle
-        // ToFix : vérifier que la réponse est bien un intervalle valide
-        break
-      case 'intervalle':
-        // ToFix : vérifier que la réponse est bien un intervalle valide
-        break
-      case 'puissance':
-        // ToFix : vérifier que la réponse est bien l'écriture d'une puissance ou en tout cas une réponse acceptable pour ce format
-        break
-      case 'canonicalAdd':
-        // à priori ce format ne concerne pas AMC
-        break
     }
 
-    if (exercice.autoCorrection[i] === undefined) {
+    if (exercice.autoCorrectionAMC[i] === undefined) {
       exercice.autoCorrection[i] = {}
     }
-    if (exercice.autoCorrection[i].reponse === undefined) {
-      exercice.autoCorrection[i].reponse = {}
-    }
-    const rep = exercice.autoCorrection[i].reponse
+
+    const valeur = Array.isArray(valeurs) ? valeurs[0] : valeurs
+    const autoCorrectioAMC: AutoCorrectionAMC = exercice.autoCorrectionAMC[
+      i
+    ] as AutoCorrectionAMC
+    const rep = autoCorrectioAMC ? (autoCorrectioAMC.reponse ?? {}) : {}
+
     if (rep != null) {
       rep.param = params
       // @ts-expect-error Pour AMC on ne change pas le format de réponse
-      rep.valeur = reponses // On n'a rien changé pour AMC, on continue de passer un array dont seule la première valeur est utile
+      rep.valeur = valeur // On n'a rien changé pour AMC, on continue de passer un array dont seule la première valeur est utile
     }
     return // La réponse est prête pour AMC
   }
@@ -707,16 +668,16 @@ export function setReponse(
       case 'listeDeroulante': {
         if (exercice.autoCorrection == null) exercice.autoCorrection = []
         if (exercice.autoCorrection[i] == null) exercice.autoCorrection[i] = {}
-        if (exercice.autoCorrection[i].reponse == null) {
-          exercice.autoCorrection[i].reponse = {}
-        }
-        const rep = exercice.autoCorrection[i].reponse
-        if (rep != null) {
-          if (rep.valeur == null) rep.valeur = {}
-          if (rep.valeur.reponse == null) rep.valeur.reponse = { value: '' }
-          if (rep.param == null) rep.param = {}
-          rep.param.formatInteractif = 'listeDeroulante'
-          Object.assign(rep.valeur.reponse.value, reponses)
+
+        const questionAutoCorrection = exercice.autoCorrection[i]
+        questionAutoCorrection.formatInteractif = 'listeDeroulante'
+        questionAutoCorrection.options = undefined
+        questionAutoCorrection.valeur = {
+          reponse: {
+            value: Array.isArray(reponses)
+              ? reponses.map((value) => String(value))
+              : String(reponses),
+          },
         }
         return
       }
@@ -770,17 +731,7 @@ export function setReponse(
               .replace(/\s/g, '')
               .replace(',', '.')
           }
-          // Ceci n'est plus nécessaire avec le wrapper de hanfleAnswer
-          /* else if (typeof laReponseDemandee === 'number') {
-            laReponseDemandee = String(laReponseDemandee)
-          } else if (laReponseDemandee instanceof FractionEtendue) {
-            laReponseDemandee = laReponseDemandee.texFraction.replaceAll(
-              'dfrac',
-              'frac'
-            )
-          } else if (laReponseDemandee instanceof Decimal) {
-            laReponseDemandee = laReponseDemandee.toString()
-          } */
+
           return handleAnswers(
             exercice,
             i,
@@ -984,14 +935,12 @@ export function setReponse(
   if (exercice.autoCorrection[i] === undefined) {
     exercice.autoCorrection[i] = {}
   }
-  if (exercice.autoCorrection[i].reponse === undefined) {
-    exercice.autoCorrection[i].reponse = {}
+  if (exercice.autoCorrection[i].valeur === undefined) {
+    exercice.autoCorrection[i].valeur = {}
   }
-  const rep = exercice.autoCorrection[i].reponse
-  if (rep != null) {
-    rep.param = params
-    rep.valeur = reponses as unknown as ValeurNormalized
-  }
+  exercice.autoCorrection[i].valeur = handleDefaultValeur({
+    reponse: { value: reponses as unknown as AnswerValueType },
+  }) as ValeurNormalized
 }
 
 // La solution est-elle un nombre ? Si oui, on force l'option nombreDecimalSeulement.
@@ -1103,8 +1052,7 @@ export function handleAnswers(
       : typeof reponses === 'object' &&
           Object.keys(reponses).some((key) => key.match(/^L\d+C\d+$/))
         ? 'tableauMathlive'
-        : (exercice.autoCorrection[question]?.reponse?.param
-            ?.formatInteractif ?? 'mathlive'))
+        : (exercice.autoCorrection[question]?.formatInteractif ?? 'mathlive'))
 
   if (exercice.autoCorrection == null) exercice.autoCorrection = []
   if (!(reponses instanceof Object)) {
@@ -1117,22 +1065,29 @@ export function handleAnswers(
   if (exercice.autoCorrection[question] === undefined) {
     exercice.autoCorrection[question] = {}
   }
-  if (exercice.autoCorrection[question].reponse === undefined) {
-    exercice.autoCorrection[question].reponse = {}
-  }
-  const rep = exercice.autoCorrection[question].reponse
-  if (rep != null) {
-    rep.param = params ?? { formatInteractif }
-    if (formatInteractif === undefined) formatInteractif = 'mathlive'
-    rep.param.formatInteractif = formatInteractif
-    rep.valeur = handleDefaultValeur(reponses)
-  }
+
+  if (formatInteractif === undefined) formatInteractif = 'mathlive'
+
+  const questionAutoCorrection = exercice.autoCorrection[question]
+  const param = { ...(params ?? {}) }
+  delete param.formatInteractif
+  const normalizedFormatInteractif = isInteractivityType(formatInteractif)
+    ? formatInteractif
+    : 'mathlive'
+
+  questionAutoCorrection.formatInteractif = normalizedFormatInteractif
+  questionAutoCorrection.options =
+    Object.keys(param).length > 0 ? param : undefined
+  questionAutoCorrection.valeur = handleDefaultValeur(
+    reponses,
+  ) as unknown as ValeurNormalized
+
   const url = new URL(window.location.href)
 
   if (url.hostname === 'localhost' && url.searchParams.has('triche')) {
     console.info(
       `Réponses de l'exercice ${(exercice.numeroExercice ?? 0) + 1} - question ${question + 1} : `,
-      rep.valeur,
+      questionAutoCorrection.valeur,
     )
   }
 }
@@ -1152,7 +1107,7 @@ export function verifQuestionMetaInteractif2d(
     setStyles(eltFeedback, 'marginBottom: 20px')
     eltFeedback.innerHTML = ''
   }
-  if (exercice.autoCorrection[i]?.reponse == null) {
+  if (exercice.autoCorrection[i]?.valeur == null) {
     throw Error(
       `verifQuestionMetaInteractif2d appelé sur une question sans réponse: ${JSON.stringify(
         {
@@ -1163,7 +1118,7 @@ export function verifQuestionMetaInteractif2d(
       )}`,
     )
   }
-  const reponses = exercice.autoCorrection[i].reponse.valeur
+  const reponses = exercice.autoCorrection[i].valeur
   if (reponses == null) {
     window.notify(
       `verifQuestionMetaInteractif2d: reponses est null pour la question ${i} de l'exercice ${exercice.id}`,
@@ -1270,7 +1225,7 @@ export function verifQuestionMultiMathfield(
   feedback: string
   score: { nbBonnesReponses: number; nbReponses: number }
 } {
-  if (exercice.autoCorrection[i]?.reponse == null) {
+  if (exercice.autoCorrection[i]?.valeur == null) {
     throw Error(
       `verifQuestionMultiMathfield appelé sur une question sans réponse: ${JSON.stringify(
         {
@@ -1285,7 +1240,7 @@ export function verifQuestionMultiMathfield(
     `multiMathfieldEx${exercice.numeroExercice}Q${i}`,
   ) as HTMLElement
   const template = multi?.getAttribute('data-template')
-  const reponses = exercice.autoCorrection[i].reponse.valeur
+  const reponses = exercice.autoCorrection[i].valeur
   if (reponses == null) {
     window.notify(
       `verifQuestionMultiMathfield: reponses est null pour la question ${i} de l'exercice ${exercice.id}`,

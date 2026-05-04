@@ -259,7 +259,7 @@ export default class PerimetreAireDisques extends Exercice {
         let reponses = {}
         if (this.sup === 1) {
           if (context.isAmc) {
-            this.autoCorrection[i] = {
+            this.autoCorrectionAMC[i] = {
               enonce: '',
               options: { multicolsAll: true, barreseparation: true },
               propositions: [
@@ -353,7 +353,7 @@ export default class PerimetreAireDisques extends Exercice {
           }
         } else if (this.sup === 2) {
           if (context.isAmc) {
-            this.autoCorrection[i] = {
+            this.autoCorrectionAMC[i] = {
               enonce: '',
               options: { multicolsAll: true, barreseparation: true },
               propositions: [
@@ -449,7 +449,7 @@ export default class PerimetreAireDisques extends Exercice {
           }
         } else {
           if (context.isAmc) {
-            this.autoCorrection[i] = {
+            this.autoCorrectionAMC[i] = {
               enonce: '',
               options: { multicolsAll: true, barreseparation: true },
               propositions: [

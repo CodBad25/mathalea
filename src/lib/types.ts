@@ -7,9 +7,9 @@ import type { Language } from './types/languages'
 import type { IFractionEtendue } from '../modules/FractionEtendue.type'
 // import Grandeur from '../modules/Grandeur'
 import type Decimal from 'decimal.js'
-import type FractionEtendue from '../modules/FractionEtendue'
 import Hms from '../modules/Hms'
 import type { VueType } from './VueType'
+import type { AutoCorrectionAMC } from './amc/amcTypes'
 import { Complexe } from './mathFonctions/Complexe'
 
 /**
@@ -408,47 +408,6 @@ export type AnswerNormalizedType = {
   options?: OptionsComparaisonType
 }
 
-export type ValeurNames =
-  | 'reponse'
-  | 'champ1'
-  | 'champ2'
-  | 'champ3'
-  | 'champ4'
-  | 'champ5'
-  | 'champ6'
-  | 'rectangle1'
-  | 'rectangle2'
-  | 'rectangle3'
-  | 'rectangle4'
-  | 'rectangle5'
-  | 'rectangle6'
-  | 'rectangle7'
-  | 'rectangle8'
-  | 'field0'
-  | 'field1'
-  | 'field2'
-  | 'field3'
-  | 'field4'
-  | 'field5'
-  | 'field6'
-  | 'field7'
-  | 'field8'
-  | 'L1C1'
-  | 'L1C2'
-  | 'L1C3'
-  | 'L1C4'
-  | 'L1C5'
-  | 'L2C1'
-  | 'L2C2'
-  | 'L2C3'
-  | 'L2C4'
-  | 'L2C5'
-  | 'L3C1'
-  | 'L3C2'
-  | 'L3C3'
-  | 'L3C4'
-  | 'L3C5'
-
 /**
  * Type pour une valeur de réponse avec ses options
  */
@@ -510,6 +469,20 @@ export interface Valeur {
     score: { nbBonnesReponses: number; nbReponses: number }
   }
 }
+
+export type ValeurNames = keyof Valeur
+export type ValeurNamesWithoutFunctions = Exclude<
+  ValeurNames,
+  'bareme' | 'feedback' | 'callback'
+>
+export type ValeurFunctionNames = Extract<
+  ValeurNames,
+  'bareme' | 'feedback' | 'callback'
+>
+export type ValeurFieldNames = Exclude<
+  ValeurNamesWithoutFunctions,
+  'sheetAnswer'
+>
 
 export interface ValeurNormalized {
   bareme?: (listePoints: number[]) => [number, number]
@@ -634,29 +607,6 @@ export interface IGrandeur {
   toHHMMSS(): string
 }
 
-export interface ReponseParams {
-  digits?: number
-  decimals?: number
-  signe?: boolean
-  exposantNbChiffres?: number
-  exposantSigne?: boolean
-  approx?: number | 'intervalleStrict'
-  aussiCorrect?: number | IFractionEtendue
-  digitsNum?: number
-  digitsDen?: number
-  basePuissance?: number
-  exposantPuissance?: number
-  baseNbChiffres?: number
-  milieuIntervalle?: number
-  formatInteractif?: InteractivityType | OldFormatInteractifType
-  precision?: number
-  scoreapprox?: number
-  vertical?: boolean
-  strict?: boolean
-  vhead?: boolean
-  tpoint?: string
-}
-
 export type AnswerValueType =
   | string
   | string[]
@@ -700,82 +650,37 @@ export function isReponseComplexe(value: unknown): value is ReponseComplexe {
   return isAnswerValueType(value) || isValeur(value)
 }
 
-// Ajout d'un type dédié pour les choix de QCM
-export type ChoixQcm = {
-  texte: string // obligatoire pour les QCM interactif mais facultatif pour les QCM AMC (le forcer à vide si besoin)
-  statut?: boolean | string | number // boolean pour les QCM interacif et string | number pour les QCM AMC
-  // Ci-dessous, utile que pour AMC
-  sanscadre?: boolean
-  enonce?: string
-  feedback?: string
-  multicolsBegin?: boolean
-  multicolsEnd?: boolean
-  numQuestionVisible?: boolean
-  pointilles?: boolean
-  reponse?: {
-    texte?: string
-    valeur?: number | number[] | FractionEtendue
-    alignement?: string
-    param?: {
-      digits?: number
-      decimals?: number
-      signe?: boolean
-      digitsNum?: number
-      digitsDen?: number
-      approx?: number
-      aussiCorrect?: number
-      exposantNbChiffres?: number
-      exposantSigne?: boolean
-    }
-  }
+export type ParamForQcmInteractif = {
+  radio?: boolean
+  ordered?: boolean
+  vertical?: boolean
+  lastChoice?: number
+  format?: 'lettre' | 'case'
+  nbCols?: number
 }
 
+export type ReponseDisplay = {
+  label?: string
+  labelPosition?: 'left' | 'right'
+  align?: 'flushleft' | 'center' | 'flushright'
+}
+
+// Compatibilite historique progressive: garder `UneProposition`
+// comme union tant que le code n'est pas migre partout.
 export type UneProposition = {
-  texte?: string
-  statut?: number | boolean | string
-  sanscadre?: boolean | number
-  multicolsBegin?: boolean
-  multicolsEnd?: boolean
-  numQuestionVisible?: boolean
-  type?: string
+  texte: string
+  statut?: boolean | string | number
   feedback?: string
-  pointilles?: boolean | number
+}
+
+// Alias de compatibilite.
+export type AutoCorrection = {
   enonce?: string
-  propositions?: ChoixQcm[]
-  options?: {
-    ordered?: boolean
-    vertical?: boolean
-    lastChoice?: number
-    barreseparation?: boolean
-    multicols?: boolean
-    nbCols?: number
-    digits?: number
-    decimals?: number
-    signe?: boolean
-    exposantNbChiffres?: number
-    exposantSigne?: boolean
-    approx?: number
-    multicolsAll?: boolean
-    numerotationEnonce?: boolean
-    avecSymboleMult?: boolean
-  }
-  reponse?: {
-    valeur?:
-      | ValeurNormalized
-      | ValeurNormalized[]
-      | number
-      | number[]
-      | IFractionEtendue
-      | Decimal
-      | IFractionEtendue[]
-      | Decimal[]
-      | string
-      | string[]
-    param?: ReponseParams
-    textePosition?: string
-    texte?: string
-    alignement?: string
-  }
+  // Contrat cible interactif
+  valeur?: ValeurNormalized
+  formatInteractif?: InteractivityType
+  options?: ParamForQcmInteractif
+  propositions?: UneProposition[]
 }
 
 export type LegacyReponse =
@@ -785,41 +690,6 @@ export type LegacyReponse =
   | number
   | IGrandeur
 export type LegacyReponses = LegacyReponse[] | LegacyReponse
-
-export interface AutoCorrection {
-  enonce?: string
-  enonceAvant?: boolean
-  melange?: boolean
-  enonceAGauche?: boolean | [number, number]
-  enonceAvantUneFois?: boolean
-  enonceCentre?: boolean
-  enonceApresNumQuestion?: boolean
-  propositions?: UneProposition[]
-  reponse?: {
-    valeur?: ValeurNormalized
-    param?: ReponseParams
-    textePosition?: string
-    texte?: string
-  }
-  options?: {
-    radio?: boolean
-    ordered?: boolean
-    vertical?: boolean
-    lastChoice?: number
-    barreseparation?: boolean
-    multicols?: boolean
-    nbCols?: number
-    digits?: number
-    decimals?: number
-    signe?: boolean
-    exposantNbChiffres?: number
-    exposantSigne?: boolean
-    approx?: number
-    multicolsAll?: boolean
-    numerotationEnonce?: boolean
-    avecSymboleMult?: boolean
-  }
-}
 
 export interface MathaleaSVG extends SVGSVGElement {
   etat: boolean
@@ -914,7 +784,7 @@ export interface IExercice {
   contenu?: string
   contenuCorrection?: string
   autoCorrection: AutoCorrection[]
-  autoCorrectionAMC?: AutoCorrection[]
+  autoCorrectionAMC?: AutoCorrectionAMC[]
   figures?: Figure[] | ClickFigures[]
   amcReady?: boolean
   amcType?: string

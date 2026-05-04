@@ -12,6 +12,7 @@ import {
   pointAdistance,
   pointIntersectionLC,
 } from '../../lib/2d/utilitairesPoint'
+import type { AMCUneProposition } from '../../lib/amc/amcTypes'
 import { bleuMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
@@ -161,7 +162,7 @@ export default class VocabulaireDuCercle extends Exercice {
       i < this.nbQuestions && cpt < 50;
     ) {
       const objetsEnonce = [] // on initialise le tableau des objets Mathalea2d de l'enoncé
-      const propositionsAMC: UneProposition[] = []
+      const propositionsAMC: AMCUneProposition[] = []
 
       texte = ''
       texteCorr = ''
@@ -468,7 +469,7 @@ export default class VocabulaireDuCercle extends Exercice {
         this.listeCorrections[i] = texteCorr
 
         if (context.isAmc) {
-          this.autoCorrection[i] = {
+          this.autoCorrectionAMC[i] = {
             enonce:
               figure +
               'À partir de la figure ci-dessus, compléter les phrases suivantes.',

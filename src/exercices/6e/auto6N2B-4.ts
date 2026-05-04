@@ -1,3 +1,4 @@
+import { ensureAmcParam } from '../../lib/amc/amcHelpers'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { setReponse } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -59,10 +60,10 @@ export default class ExerciceEcritureDecimaleApartirDeFractionDecimale extends E
       // X, XX, X0X, X00X,XXX
       b = choice([10, 100, 1000])
       setReponse(this, i, arrondi(a / b))
-      // @ts-expect-error
-      this.autoCorrection[i].reponse.param.digits = 6
-      // @ts-expect-error
-      this.autoCorrection[i].reponse.param.decimals = 3
+      const amcParam = ensureAmcParam(this, i)
+      amcParam.digits = 6
+      amcParam.decimals = b === 10 ? 1 : b === 100 ? 2 : 3
+
       texte = context.isAmc ? "Donner l'écriture décimale de " : ''
       texte += `$${texFractionFromString(texNombre(a), texNombre(b))}$`
       texte += context.isAmc

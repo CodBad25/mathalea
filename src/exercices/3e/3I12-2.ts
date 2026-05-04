@@ -287,7 +287,7 @@ export default class ComprendreScriptMultiples extends Exercice {
         couleur: 'nombres',
       })
       if (context.isAmc) {
-        this.autoCorrection[0] = {
+        this.autoCorrectionAMC[0] = {
           enonce: '',
           enonceAvant: false, // EE : ce champ est facultatif et permet (si false) de supprimer l'énoncé ci-dessus avant la numérotation de chaque question.
           propositions: [],
@@ -315,8 +315,7 @@ export default class ComprendreScriptMultiples extends Exercice {
           texteCorr += numAlpha(i) + choixQuestions[i][1] + '<br>'
         }
         if (context.isAmc) {
-          // @ts-expect-error
-          this.autoCorrection[0].propositions[i] = {
+          this.autoCorrectionAMC![0].propositions![i] = {
             type: 'AMCOpen',
             propositions: [
               {

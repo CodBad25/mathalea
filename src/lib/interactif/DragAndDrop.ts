@@ -397,7 +397,7 @@ export function verifDragAndDrop(
   }
   // fin de suppression des listeners
   const numeroExercice = exercice.numeroExercice
-  const objetReponses = exercice.autoCorrection[question].reponse?.valeur
+  const objetReponses = exercice.autoCorrection[question].valeur
   let nbBonnesReponses = 0
   let etiquettesAbsentes = 0
   let etiquettesMalPlacees = 0

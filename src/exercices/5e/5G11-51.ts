@@ -11,6 +11,7 @@ import { rotation, translation } from '../../lib/2d/transformations'
 import { pointEstSur } from '../../lib/2d/utilitairesGeometriques'
 import { milieu } from '../../lib/2d/utilitairesPoint'
 import { vecteur } from '../../lib/2d/Vecteur'
+import { bleuMathalea, orangeMathalea } from '../../lib/colors'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -29,7 +30,6 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { orangeMathalea, bleuMathalea } from '../../lib/colors'
 
 export const titre =
   "Trouver les coordonnées de l'image d'un point par une symétrie axiale (quart de plan)"
@@ -305,7 +305,7 @@ export default class SymAxeEtCoordonnees extends Exercice {
         }),
       )
       if (context.isAmc) {
-        this.autoCorrection.push({
+        this.autoCorrectionAMC.push({
           enonce:
             '\\begin{center}' +
             mathalea2d(

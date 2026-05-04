@@ -175,7 +175,7 @@ class PlacerPointsSurAxeRelatifs extends Exercice {
           break
       }
       if (context.isAmc) {
-        this.autoCorrection[i] = {
+        this.autoCorrectionAMC[i] = {
           enonce: this.consigne + '<br>' + texte + '<br>',
           propositions: [{ statut: 3, sanscadre: true }],
         }

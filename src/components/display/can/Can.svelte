@@ -190,7 +190,7 @@
     for (let i = 0; i < questions.length; i++) {
       const exercice = exercises[indiceExercice[i]]
       const type =
-        exercice.autoCorrection?.[indiceQuestionInExercice[i]]?.reponse?.param
+        exercice.autoCorrection?.[indiceQuestionInExercice[i]]
           ?.formatInteractif ?? exercice.interactifType
 
       if (

@@ -287,7 +287,7 @@ export default class DevelopperReduireExprComplexe extends Exercice {
             )
           : ''
       } else {
-        this.autoCorrection[i] = {
+        this.autoCorrectionAMC[i] = {
           enonce: '',
           enonceAvant: false,
           options: {

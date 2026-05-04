@@ -7,13 +7,13 @@ import { segment } from '../../lib/2d/segmentsVecteurs'
 import { labelPoint } from '../../lib/2d/textes'
 import { similitude, translation2Points } from '../../lib/2d/transformations'
 import { milieu } from '../../lib/2d/utilitairesPoint'
+import { bleuMathalea } from '../../lib/colors'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import { creerNomDePolygone } from '../../lib/outils/outilString'
 import { context } from '../../modules/context'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { bleuMathalea } from '../../lib/colors'
 
 export const amcReady = true
 export const amcType = 'AMCOpen'
@@ -484,7 +484,7 @@ export default class RepresenterUnSolide extends Exercice {
         this.listeQuestions[i] = enonce ?? ''
         this.listeCorrections[i] = correction
         // Pour AMC question AmcOpen
-        this.autoCorrection[i] = {
+        this.autoCorrectionAMC[i] = {
           enonce,
           propositions: [
             { texte: correction, statut: 3, feedback: '', sanscadre: true },

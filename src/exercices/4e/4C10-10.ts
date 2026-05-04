@@ -1,18 +1,19 @@
+import { propositionsQcm } from '../../lib/interactif/qcm'
 import { choice } from '../../lib/outils/arrayOutils'
 import {
   ecritureNombreRelatif,
   ecritureNombreRelatifc,
   ecritureParentheseSiNegatif,
 } from '../../lib/outils/ecritures'
-import Exercice from '../Exercice'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
-import { propositionsQcm } from '../../lib/interactif/qcm'
+import Exercice from '../Exercice'
 export const amcReady = true
 export const amcType = 'qcmMono'
 export const interactifReady = true
 export const interactifType = 'qcm'
 
-export const titre = 'Compléter une multiplication à trou de deux entiers relatifs'
+export const titre =
+  'Compléter une multiplication à trou de deux entiers relatifs'
 
 export const dateDePublication = '26/08/2022'
 
@@ -50,7 +51,6 @@ export default class ExerciceMultiplicationsRelatifsATrou extends Exercice {
     for (
       let i = 0, a, b, k, texte, texteCorr, cpt = 0;
       i < this.nbQuestions && cpt < 50;
-
     ) {
       // On limite le nombre d'essais pour chercher des valeurs nouvelles
       a = randint(1, this.sup)
