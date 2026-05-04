@@ -169,7 +169,7 @@ export default class AiresCalculMental extends Exercice {
           const r = randint(2, 9)
           texte = `Disque de diamètre $${texNombre(2 * r)}\\text{ cm}$`
           texteCorr = '$\\mathcal{A}_\\text{disque} = r \\times r \\times \\pi$'
-          texteCorr += `<br>$\\mathcal{A}_\\text{disque} = ${texNombre(r)}\\text{ cm} \\times ${texNombre(r)}\\text{ cm} $`
+          texteCorr += `<br>$\\mathcal{A}_\\text{disque} = ${texNombre(r)}\\text{ cm} \\times ${texNombre(r)}\\text{ cm} \\times \\pi $`
           texteCorr += `<br>$\\mathcal{A}_\\text{disque} = ${miseEnEvidence(`${texNombre(r * r)}\\pi`)}\\text{ cm}^2$`
           texteInteractif += ajouteChampTexteMathLive(
             this,
