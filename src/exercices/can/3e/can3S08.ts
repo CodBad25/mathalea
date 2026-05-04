@@ -146,8 +146,8 @@ export default class CalculsProbabilite3 extends ExerciceSimple {
       this.correction += `${fraction(a, denom).estIrreductible ? miseEnEvidence(reponsepossible) : reponsepossible}  ${choix ? fraction(a, denom).texSimplificationAvecEtapes(false, orangeMathalea) : fraction(b, denom).texSimplificationAvecEtapes(false, orangeMathalea)}$`
 
       this.reponse = choix
-        ? `$${fraction(a, denom).texFractionSimplifiee}$`
-        : `$${fraction(b, denom).texFractionSimplifiee}$`
+        ? `${fraction(a, denom).texFractionSimplifiee}`
+        : `${fraction(b, denom).texFractionSimplifiee}`
     } else {
       // décimal
       this.correction += `${choix ? fraction(a, denom).texFraction : fraction(b, denom).texFraction} =${miseEnEvidence(choix ? texNombre(a / denom) : texNombre(b / denom))}$`
@@ -156,6 +156,7 @@ export default class CalculsProbabilite3 extends ExerciceSimple {
     this.correction += '.'
     // Version QCM : proposer des distracteurs plausibles
     if (this.versionQcm) {
+      this.reponse = `$${this.reponse}$`
       const numCorrect = choix ? a : b
       const correctTex = formatDecimal
         ? texNombre(numCorrect / denom)
