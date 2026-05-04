@@ -1,13 +1,13 @@
 import { courbe } from '../../lib/2d/Courbe'
 import { repere } from '../../lib/2d/reperes'
 import { latex2d } from '../../lib/2d/textes'
+import { bleuMathalea } from '../../lib/colors'
 import { deuxColonnes } from '../../lib/format/miseEnPage'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 import { texNombre } from '../../lib/outils/texNombre'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { randint } from '../../modules/outils'
 import ExerciceQcmA from '../ExerciceQcmA'
-import { bleuMathalea } from '../../lib/colors'
 export const dateDePublication = '15/09/2025'
 export const uuid = '11090'
 
@@ -66,7 +66,7 @@ export default class AutoF2f extends ExerciceQcmA {
         o,
         courbe(F, { repere: r, color: bleuMathalea, epaisseur: 2 }),
       ),
-    )}<br>`
+    )}`
   }
 
   private casFormeFactorisee(

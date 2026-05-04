@@ -77,6 +77,7 @@ export function normalizeQcm(
     ordered: !!options.ordered,
     lastChoice: options.lastChoice ?? null,
     multicols: !!options.multicols,
+    explain: options.explain ?? '',
     propositions,
   })
 }

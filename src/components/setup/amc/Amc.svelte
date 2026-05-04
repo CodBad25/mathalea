@@ -559,6 +559,13 @@
         copyLatexTextsOnPropositions(targetProps[j], sourceProps[j])
       }
 
+      // Copie options.explain depuis la passe LaTeX (isAmc=true, isHtml=false)
+      // pour s'assurer que le texte de correction est en LaTeX et non en HTML.
+      if (typeof sourceItem?.options?.explain === 'string') {
+        if (!targetItem.options) targetItem.options = {}
+        targetItem.options.explain = sourceItem.options.explain
+      }
+
       if (targetProps.length === 0 && sourceProps.length > 0) {
         targetItem.propositions = cloneDeep(sourceProps)
       }

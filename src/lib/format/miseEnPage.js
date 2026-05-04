@@ -27,8 +27,7 @@ export function deuxColonnes(cont1, cont2, largeur1 = 50) {
     ${cont1.replaceAll('<br><br>', '\\medskip').replaceAll('<br>', '\\\\\n')}
 
     ${cont2.replaceAll('<br><br>', '\\medskip').replaceAll('<br>', '\\\\\n')}
-    \\end{multicols}
-`
+    \\end{multicols}`
   }
 }
 

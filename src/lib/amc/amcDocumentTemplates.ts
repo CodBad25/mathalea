@@ -332,10 +332,12 @@ export const AMCGroupSectionTemplate = `
   \\end{center}
 {% if not isMixed %}\\setgroupmode{ {{- groupName -}} }{cyclic}
 
+{% endif %}{% if multicols %}\\begin{multicols}{2}
 {% endif %}{% if questionsToRestore > 0 %}\\restituegroupe[{{ questionsToRestore }}]{ {{- groupName -}} }
 
 {% else %}\\restituegroupe{ {{- groupName -}} }
 
+{% endif %}{% if multicols %}\\end{multicols}
 {% endif %}`
 
 export function renderAMCPreamble(data: AMCPreambleRenderData) {

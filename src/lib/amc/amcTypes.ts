@@ -88,6 +88,7 @@ export type AMCLayoutOptions = {
   multicolsAll?: boolean
   numerotationEnonce?: boolean
   avecSymboleMult?: boolean
+  explain?: string
 }
 
 export type AMCUneProposition = {
@@ -166,6 +167,7 @@ export type QCMNormalized = {
   ordered: boolean
   lastChoice: number | null
   multicols?: boolean
+  explain?: string
   propositions: QCMProposition[]
 }
 
