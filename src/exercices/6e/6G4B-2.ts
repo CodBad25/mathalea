@@ -34,6 +34,7 @@ export default class MesureAnglesParticuliers extends Exercice {
     this.consigne = 'Compléter.'
     this.sup = '1-2-3-4-5-6'
     this.spacing = 1
+    this.nbQuestions = 6
     this.comment =
       "Par le peu d'angles disponibles, cet exerice ne possède que 8 questions au maximum."
 
