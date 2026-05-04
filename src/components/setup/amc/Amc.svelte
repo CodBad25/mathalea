@@ -220,7 +220,9 @@
         candidate.trim().length === 0
           ? fallback
           : replaceFigureEnvsWithSvg(candidate, fallback)
-      return previewSource.replaceAll('\\\\', '<br>')
+      return previewSource
+        .replaceAll('\\\\', '<br>')
+        .replaceAll('\\medskip', '<br><br>')
     }
 
     return autoCorrection.map((item: any, i: number) => {
@@ -1171,7 +1173,9 @@
             // Si le texte contient encore une figure LaTeX, on garde le fallback HTML
             // (qui contient déjà le SVG substitué).
             const source = figureEnvRegex.test(raw) ? htmlContent : raw
-            return source.replaceAll('\\\\', '<br>')
+            return source
+              .replaceAll('\\\\', '<br>')
+              .replaceAll('\\medskip', '<br><br>')
           })()
           if (propType === 'qcmMono' || propType === 'qcmMult') {
             blocks.push({
