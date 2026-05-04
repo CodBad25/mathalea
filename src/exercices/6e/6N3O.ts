@@ -324,15 +324,15 @@ export default class ComprendreSensPourcentage extends Exercice {
         texNombre(arrondi(pourcentage / diviseurPour100[i])),
       ]
 
-      const texte = `<br>${addMultiMathfield(this, i, {
+      const texte = `Compléter.<br>${addMultiMathfield(this, i, {
         dataTemplate: `a) ${texteAvant[0]} %{champ1} ${texteApres}
                    b) ${texteAvant[1]} %{champ2} ${texteApres}
                    c) ${texteAvant[2]} %{champ3} ${texteApres}
                   `,
         dataOptions: {
-          champ1: { keyboard: KeyboardType.clavierNumbers },
-          champ2: { keyboard: KeyboardType.clavierNumbers },
-          champ3: { keyboard: KeyboardType.clavierNumbers },
+          champ1: { keyboard: KeyboardType.clavierNumbers, ldots: true },
+          champ2: { keyboard: KeyboardType.clavierNumbers, ldots: true },
+          champ3: { keyboard: KeyboardType.clavierNumbers, ldots: true },
         },
       })}`
       handleAnswers(
