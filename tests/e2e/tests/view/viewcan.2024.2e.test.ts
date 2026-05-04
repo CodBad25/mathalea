@@ -30,20 +30,23 @@ async function testCanView(page: Page) {
   log('Configuration de la can (2024 2e)')
   await page.getByRole('tab', { name: 'Course aux nombres' }).click()
   log('tab->Course aux nombres')
-  // await page.getByLabel('Accès aux solutions', { exact: true }).click()
-  await page
+  const solutionsAccessToggle = page
     .locator('input#input-config-eleve-solutions-can-toggle')
     .first()
-    .click()
+  if (!(await solutionsAccessToggle.isChecked())) {
+    await solutionsAccessToggle.click()
+  }
   log('Accès aux solutions->à la fin')
-  await page.locator('#config-eleve-can-duration-input').fill('10')
+  await page
+    .locator('input#config-eleve-can-duration-input[type="number"]')
+    .fill('10')
   log('Les questions seront posées->10min')
 
   const page1Promise = page.waitForEvent('popup')
   await page.getByRole('button', { name: 'Visualiser' }).click()
   const page1 = await page1Promise
   await page1.setDefaultTimeout(100000) // Set timeout to 60 seconds
-  // await page1.goto('http://localhost:5173/alea/?uuid=94d21&v=can&canD=10&canT=2024&canSA=1&canSM=gathered&canI=1')
+  // await page1.goto('http://localhost:5173/alea/?uuid=94d21&v=can&canD=10&canT=2024&canSA=true&canSM=gathered&canI=true')
   log('clique sur démarrer')
   await page1.getByRole('button', { name: ' Démarrer' }).click()
   log('On attend le time-display-1')
