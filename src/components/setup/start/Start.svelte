@@ -160,6 +160,7 @@
       if ($canOptions.subTitle !== '') {
         url.searchParams.append('canT', $canOptions.subTitle)
       }
+      url.searchParams.append('canSA', $canOptions.solutionsAccess ? '1' : '0')
       if ($canOptions.solutionsAccess) {
         url.searchParams.append('canSM', $canOptions.solutionsMode)
       }
