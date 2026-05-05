@@ -5,7 +5,6 @@ import {
   reduirePolynomeDegre3,
 } from '../../../lib/outils/ecritures'
 import { texNombre } from '../../../lib/outils/texNombre'
-import { context } from '../../../modules/context'
 import { listeQuestionsToContenu, randint } from '../../../modules/outils'
 import Exercice from '../../Exercice'
 
@@ -56,7 +55,7 @@ export default class ResoudreEquationSecondDegre extends Exercice {
         d = b * b - 4 * a * c
       }
 
-      texte = `$${reduirePolynomeDegre3(0, a, b, c)}=0$.<br>
+      texte = `$${reduirePolynomeDegre3(0, a, b, c)}=0$<br>
        Sachant que  $\\Delta=${d}$, donner les solutions de cette équation`
       handleAnswers(this, i, {
         reponse: {
@@ -83,10 +82,7 @@ export default class ResoudreEquationSecondDegre extends Exercice {
         }
         ) */
       }
-      texteCorr = context.isHtml
-        ? '<br>'
-        : '' +
-          "$\\Delta>0$ donc l'équation admet deux solutions : $x_1 = \\dfrac{-b-\\sqrt{\\Delta}}{2a}$ et $x_2 = \\dfrac{-b+\\sqrt{\\Delta}}{2a}$"
+      texteCorr = `$\\Delta>0$ donc l'équation admet deux solutions : $x_1 = \\dfrac{-b-\\sqrt{\\Delta}}{2a}$ et $x_2 = \\dfrac{-b+\\sqrt{\\Delta}}{2a}$. `
       texteCorr += `<br>$x_1 = \\dfrac{${-b} -\\sqrt{${d}}}{2\\times ${ecritureParentheseSiNegatif(a)}}=${miseEnEvidence(texNombre((-b - Math.sqrt(d)) / (2 * a), 0))}$ et
        $x_2 = \\dfrac{${-b} +\\sqrt{${d}}}{2\\times ${ecritureParentheseSiNegatif(a)}}=${miseEnEvidence(texNombre((-b + Math.sqrt(d)) / (2 * a), 0))}$`
       if (this.questionJamaisPosee(i, a, x1, x2)) {
