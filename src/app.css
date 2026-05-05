@@ -255,94 +255,6 @@ dialog.modal.modal-top:has(#code-display) > .modal-box {
 }
 /* scratch-simulator-only:end */
 
-/* Cache le menu toggle de MathLive */
-math-field {
-  @apply bg-coopmaths-canvas dark:bg-coopmathsdark-canvas
-  text-coopmaths-corpus dark:text-coopmathsdark-corpus;
-  /* Override MathLive highlight colors to match our class-based dark mode (not prefers-color-scheme) */
-  --caret-color: hsl(212, 40%, 49%);
-  --selection-color: #000;
-  --selection-background-color: hsl(212, 70%, 85%);
-  --contains-highlight-color: hsl(212, 40%, 49%);
-  --contains-highlight-background-color: hsl(212, 40%, 95%);
-  --highlight-text: hsla(212, 40%, 50%, 0.1);
-}
-.dark math-field {
-  --caret-color: hsl(212, 65%, 55%);
-  --selection-color: #fff;
-  --selection-background-color: hsl(212, 65%, 55%);
-  --contains-highlight-color: hsl(212, 85%, 75%);
-  --contains-highlight-background-color: hsl(212, 30%, 40%);
-  --highlight-text: hsla(212, 40%, 50%, 0.6);
-}
-math-field::part(menu-toggle) {
-  display: none;
-}
-math-field::part(virtual-keyboard-toggle) {
-  display: none;
-}
-
-math-field:not(.fillInTheBlanks):not(.metaInteractif2d) {
-  font-size: 1em;
-  margin-left: 5px;
-  display: inline-block;
-  vertical-align: middle;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-radius: 4px;
-  min-width: 80px;
-  @apply border border-[#ACACAC];
-}
-math-field.fillInTheBlanks {
-  /* @apply bg-coopmaths-canvas dark:bg-coopmathsdark-canvas text-coopmaths-corpus dark:text-coopmathsdark-corpus; */
-  border: none;
-  box-shadow: none;
-  font-size: 1em;
-  margin-top: 1px;
-  padding: 2px;
-  background-color: transparent;
-}
-math-field.fillInTheBlanks::part(prompt) {
-  font-size: 1em; /* levier principal: réduit la boîte calculée */
-  line-height: 1;
-  min-height: 1em;
-  height: auto;
-  padding: 2px;
-  margin: 0;
-  border: none;
-  outline: solid;
-  outline-width: thin;
-  outline-color: var(--color-coopmathsdark-corpus-light);
-}
-
-math-field.metaInteractif2d {
-  border: none;
-  box-shadow: none;
-  font-size: 1em;
-  margin-top: 1px;
-  padding: 2px;
-  background-color: transparent;
-}
-math-field.metaInteractif2d::part(prompt) {
-  min-height: 1.1em;
-}
-math-field.schemaEnBoite {
-  margin: 0;
-  display: inline-block;
-  vertical-align: middle;
-  padding: 0px 0px;
-  border-radius: 4px;
-  border: 1px solid rgba(0, 0, 0, 0.3);
-  min-width: 30px;
-}
-
-math-field.tableauMathlive::part(container) {
-  justify-content: center !important;
-}
-math-field.tableauMathlive::part(content) {
-  justify-content: center !important;
-}
-
 @media print {
   body {
     font-size: 10pt !important;
@@ -871,8 +783,14 @@ div[id^='title-lampeMessage'] {
   @apply dark:bg-coopmathsdark-canvas-light;
 }
 
+input[type='checkbox'] {
+  @apply cursor-pointer border-coopmaths-action text-coopmaths-action dark:border-coopmathsdark-action dark:text-coopmathsdark-action focus:ring-coopmaths-action dark:focus:ring-coopmathsdark-action h-4 w-4 rounded;
+}
 input[type='checkbox'][id^='checkEx'] {
   @apply cursor-pointer border-coopmaths-action text-coopmaths-action dark:border-coopmathsdark-action dark:text-coopmathsdark-action focus:ring-coopmaths-action dark:focus:ring-coopmathsdark-action h-4 w-4 rounded;
+}
+input[type='radio'] {
+  @apply cursor-pointer border-coopmaths-action text-coopmaths-action dark:border-coopmathsdark-action dark:text-coopmathsdark-action focus:ring-coopmaths-action dark:focus:ring-coopmathsdark-action h-4 w-4 rounded-full;
 }
 input[type='radio'][id^='checkEx'] {
   @apply cursor-pointer border-coopmaths-action text-coopmaths-action dark:border-coopmathsdark-action dark:text-coopmathsdark-action focus:ring-coopmaths-action dark:focus:ring-coopmathsdark-action h-4 w-4 rounded-full;
@@ -1024,14 +942,19 @@ table.tableauMathlive {
   tbody {
     tr {
       td {
+        @apply border border-coopmaths-corpus dark:border-coopmathsdark-corpus p-2 text-center;
         min-width: 50px;
         math-field {
-          min-width: 60px;
+          min-width: 30px;
           margin-top: 2px;
-          padding: 2px;
-          border: transparent;
         }
-        @apply border border-coopmaths-corpus dark:border-coopmathsdark-corpus p-2 text-center;
+        math-field.tableauMathlive::part(container) {
+          justify-content: center !important;
+          min-width: 30px;
+          border-radius: 4px;
+          border: 1px solid rgba(0, 0, 0, 0.3);
+          background-color: transparent;
+        }
       }
     }
     th {
@@ -1040,6 +963,148 @@ table.tableauMathlive {
     @apply border border-coopmaths-corpus dark:border-coopmathsdark-corpus p-2 m-0.75 text-center;
   }
   @apply mx-auto mt-2 border-collapse text-center border-2 border-coopmaths-corpus dark:border-coopmathsdark-corpus;
+}
+
+/* Cache le menu toggle de MathLive */
+math-field {
+  @apply text-coopmaths-corpus dark:text-coopmathsdark-corpus border border-coopmaths-corpus dark:border-coopmathsdark-corpus;
+  /* Override MathLive highlight colors to match our class-based dark mode (not prefers-color-scheme) */
+  --caret-color: hsl(212, 40%, 49%);
+  --selection-color: #000;
+  --selection-background-color: hsl(212, 70%, 85%);
+  --contains-highlight-color: hsl(212, 40%, 49%);
+  --contains-highlight-background-color: hsl(212, 40%, 95%);
+  --highlight-text: hsla(212, 40%, 50%, 0.1);
+  line-height: 1;
+  border-radius: 4px;
+  border: none;
+  background-color: transparent;
+}
+
+math-field:not(.metaInteractif2d):not(.fillInTheBlanks):not(
+    .tableauMathlive
+  )::part(container) {
+  border-radius: 4px;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  min-width: 50px;
+}
+
+.dark
+  math-field:not(.metaInteractif2d):not(.fillInTheBlanks):not(
+    .tableauMathlive
+  )::part(container) {
+  border-radius: 4px;
+  border: 1px solid rgba(213, 206, 206, 0.917);
+  min-width: 50px;
+}
+
+.dark
+  table.tableauMathlive
+  tbody
+  tr
+  td
+  math-field.tableauMathlive::part(container) {
+  border: 1px solid rgba(213, 206, 206, 0.917);
+}
+math-field::part(content) {
+  padding: 0;
+}
+
+.dark math-field {
+  --caret-color: hsl(212, 65%, 55%);
+  --selection-color: #fff;
+  --selection-background-color: hsl(212, 65%, 55%);
+  --contains-highlight-color: hsl(212, 85%, 75%);
+  --contains-highlight-background-color: hsl(212, 30%, 40%);
+  --highlight-text: hsla(212, 40%, 50%, 0.6);
+}
+math-field::part(menu-toggle) {
+  display: none;
+}
+math-field::part(virtual-keyboard-toggle) {
+  display: none;
+}
+
+math-field:not(.fillInTheBlanks):not(.metaInteractif2d):not(.tableauMathlive) {
+  font-size: 1em;
+  margin-left: 5px;
+  display: inline-block;
+  vertical-align: middle;
+  /* padding-left: 5px;
+  padding-right: 5px;*/
+  /* border-radius: 4px;*/
+  min-width: 50px;
+  /*  @apply border border-[#ACACAC];*/
+}
+
+math-field:not(.fillInTheBlanks):not(.metaInteractif2d):not(
+    .tableauMathlive
+  )::part(container) {
+  display: inline-block;
+  justify-content: center;
+}
+math-field:not(.fillInTheBlanks):not(.metaInteractif2d)::part(content) {
+  justify-content: center;
+}
+math-field.fillInTheBlanks,
+math-field.metaInteractif2d {
+  /* @apply bg-coopmaths-canvas dark:bg-coopmathsdark-canvas text-coopmaths-corpus dark:text-coopmathsdark-corpus; */
+  box-shadow: none;
+  font-size: 1em;
+  margin-top: 1px;
+  background-color: transparent;
+  outline: none;
+}
+math-field.metaInteractif2d:focus {
+  outline: 2px solid #3b82f6;
+}
+math-field.fillInTheBlanks::part(prompt),
+math-field.metaInteractif2d::part(prompt) {
+  font-size: 1em; /* levier principal: réduit la boîte calculée */
+  line-height: 1;
+  min-height: 1em;
+  min-width: 0px;
+  height: auto;
+  border: none;
+  outline: solid;
+  outline-width: thin;
+  outline-color: var(--color-coopmathsdark-corpus-light);
+}
+
+math-field.metaInteractif2d:focus::part(prompt),
+math-field.fillInTheBlanks:focus::part(prompt) {
+  outline: none;
+}
+math-field.fillInTheBlanks::part(container) {
+  border: none;
+  border-radius: 4px;
+}
+math-field.fillInTheBlanks:focus::part(container) {
+  outline: 2px solid #3b82f6;
+}
+
+math-field.schemaEnBoite {
+  margin: 0;
+  display: inline-block;
+  vertical-align: middle;
+  padding: 0px 0px;
+  /* border-radius: 4px;
+  border: 1px solid rgba(0, 0, 0, 0.3); */
+  outline: solid;
+  outline-width: thin;
+  outline-color: var(--color-coopmathsdark-corpus-light);
+  min-width: 30px;
+}
+
+span.feedback-smiley {
+  padding-right: 1em;
+}
+
+@media (prefers-color-scheme: dark) {
+  /* custom css */
+  table.tableauMathlive {
+    border: 2px solid rgb(100, 100, 100);
+  }
 }
 
 div.rectangleDND {

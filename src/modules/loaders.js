@@ -65,16 +65,59 @@ export function loadScratchblocks() {
   return load('scratchblocks')
 }
 
-export function injectFontInMetaInteractif2d(mf) {
+export function injectStyleForCells(mf) {
+  if (!mf.classList.contains('tableauMathlive')) return
   const shadow = mf.shadowRoot
-  if (shadow && !shadow.getElementById('katex-main-font')) {
+  const container = shadow.querySelector('.ML__container')
+  if (container) {
+    const span = container.parentElement
+    span.style.display = 'flex'
+    span.style.flexDirection = 'row'
+  }
+  if (shadow && !shadow.getElementById('ml-cell-style')) {
+    const style = document.createElement('style')
+    style.id = 'ml-cell-style'
+    style.textContent = `
+      .ML__container {
+        display: inline-block;
+        width: 100%;
+        justify-content: center !important;
+      }
+      .ML__content {
+        justify-content: center !important;
+        padding: 0;
+      }
+    `
+    shadow.appendChild(style)
+  }
+}
+
+export function injectFontInMetaInteractif2d(mf) {
+  if (!mf.classList.contains('metaInteractif2d')) return
+  const shadow = mf.shadowRoot
+  if (shadow && !shadow.getElementById('prompt-for-2d')) {
     // Crée une balise style
     const style = document.createElement('style')
-    style.id = 'katex-main-font'
+    style.id = 'prompt-for-2d'
     style.textContent = `
         .ML__text {
           font-family: 'KaTeX_Main', serif !important;
         }
+          .ML__content {
+          "justify-content": center !important;
+          padding: 0;
+          }
+          .ML__latex {
+          line-height: 0.9em !important;
+          }
+        .ML__prompt-atom {
+    line-height: 0.9 !important;
+     vertical-align: 0.1em !important;
+    }
+      .ML__prompt:not(.ML__lockedPromptBox) {
+    min-height: 0.9em !important;
+   
+    }
       `
     shadow.appendChild(style)
   }
@@ -83,20 +126,7 @@ export function injectFontInMetaInteractif2d(mf) {
 function injectPromptStyles(mf) {
   if (!mf.classList.contains('fillInTheBlanks')) {
     if (mf.classList.contains('tableauMathlive')) {
-      const shadow = mf.shadowRoot
-      if (shadow && !shadow.getElementById('ml-cell-style')) {
-        const style = document.createElement('style')
-        style.id = 'ml-cell-style'
-        style.textContent = `
-        .ML__container {
-          "justify-content": center !important;
-        }
-          .ML__content {
-          "justify-content": center !important;
-          }
-    `
-        shadow.appendChild(style)
-      }
+      injectStyleForCells(mf)
     }
     return
   }
@@ -105,17 +135,14 @@ function injectPromptStyles(mf) {
     const style = document.createElement('style')
     style.id = 'ml-prompt-styles'
     style.textContent = `
-    .ML__prompt {
+    .ML__prompt:not(.ML__lockedPromptBox) {
     min-height: 0.9em !important;
+   
     }
     .ML__prompt-atom {
     line-height: 0.9 !important;
-     vertical-align: 0.1em !important;
+     vertical-align: -0.1em !important;
     }
-      /* Prompt actif uniquement */
-      .ML__focused .ML__focusedPromptBox {
-        outline: 2px solid #3b82f6 !important;
-      }
     `
     shadow.appendChild(style)
   }
@@ -141,7 +168,7 @@ export async function loadMathLive(divExercice) {
         ) {
           mf.classList.remove('invisible')
         }
-        mf.classList.add('ml-1')
+        //   mf.classList.add('ml-1')
         mf.addEventListener('focus', handleFocusMathField)
         mf.addEventListener('focusout', handleFocusOutMathField)
         mf.addEventListener('input', () => {

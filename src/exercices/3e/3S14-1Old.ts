@@ -3,7 +3,10 @@
  */
 
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import {
+  handleAnswers,
+  setReponse,
+} from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import {
   listeDeNotes,
@@ -768,12 +771,12 @@ export default class CalculerCaracteristiques extends Exercice {
                   reponsesAMC[questind] = repMediane
                 } else {
                   repMediane = [...scoresMedians]
-                  setReponse(
-                    this,
-                    i * nbReponse + questind,
-                    [repMediane[0], repMediane[1]],
-                    { formatInteractif: 'intervalleStrict' },
-                  )
+                  handleAnswers(this, i * nbReponse + questind, {
+                    reponse: {
+                      value: `]${repMediane[0]};${repMediane[1]}[`,
+                      options: { estDansIntervalle: true },
+                    },
+                  })
                   reponsesAMC[questind] = arrondi(
                     (repMediane[0] + repMediane[1]) / 2,
                     1,
