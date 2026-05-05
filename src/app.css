@@ -783,15 +783,10 @@ div[id^='title-lampeMessage'] {
   @apply dark:bg-coopmathsdark-canvas-light;
 }
 
-input[type='checkbox'] {
-  @apply cursor-pointer border-coopmaths-action text-coopmaths-action dark:border-coopmathsdark-action dark:text-coopmathsdark-action focus:ring-coopmaths-action dark:focus:ring-coopmathsdark-action h-4 w-4 rounded;
-}
 input[type='checkbox'][id^='checkEx'] {
   @apply cursor-pointer border-coopmaths-action text-coopmaths-action dark:border-coopmathsdark-action dark:text-coopmathsdark-action focus:ring-coopmaths-action dark:focus:ring-coopmathsdark-action h-4 w-4 rounded;
 }
-input[type='radio'] {
-  @apply cursor-pointer border-coopmaths-action text-coopmaths-action dark:border-coopmathsdark-action dark:text-coopmathsdark-action focus:ring-coopmaths-action dark:focus:ring-coopmathsdark-action h-4 w-4 rounded-full;
-}
+
 input[type='radio'][id^='checkEx'] {
   @apply cursor-pointer border-coopmaths-action text-coopmaths-action dark:border-coopmathsdark-action dark:text-coopmathsdark-action focus:ring-coopmaths-action dark:focus:ring-coopmathsdark-action h-4 w-4 rounded-full;
 }
@@ -1030,13 +1025,22 @@ math-field:not(.fillInTheBlanks):not(.metaInteractif2d):not(.tableauMathlive) {
   margin-left: 5px;
   display: inline-block;
   vertical-align: middle;
-  /* padding-left: 5px;
-  padding-right: 5px;*/
-  /* border-radius: 4px;*/
   min-width: 50px;
-  /*  @apply border border-[#ACACAC];*/
 }
-
+math-field:not(.fillInTheBlanks):not(.metaInteractif2d):not(
+    .tableauMathlive
+  ):focus-within {
+  outline: solid;
+  outline-width: 2px;
+  outline-color: var(--color-coopmaths-struct);
+  border: none;
+}
+math-field:not(.fillInTheBlanks):not(.metaInteractif2d):not(
+    .tableauMathlive
+  ):focus-within::part(container) {
+  outline: none;
+  border: none;
+}
 math-field:not(.fillInTheBlanks):not(.metaInteractif2d):not(
     .tableauMathlive
   )::part(container) {
@@ -1055,7 +1059,7 @@ math-field.metaInteractif2d {
   background-color: transparent;
   outline: none;
 }
-math-field.metaInteractif2d:focus {
+math-field.metaInteractif2d:focus-within {
   outline: 2px solid #3b82f6;
 }
 math-field.fillInTheBlanks::part(prompt),
@@ -1071,16 +1075,24 @@ math-field.metaInteractif2d::part(prompt) {
   outline-color: var(--color-coopmathsdark-corpus-light);
 }
 
-math-field.metaInteractif2d:focus::part(prompt),
-math-field.fillInTheBlanks:focus::part(prompt) {
-  outline: none;
-}
 math-field.fillInTheBlanks::part(container) {
   border: none;
   border-radius: 4px;
 }
-math-field.fillInTheBlanks:focus::part(container) {
-  outline: 2px solid #3b82f6;
+math-field.fillInTheBlanks:focus-within::part(container),
+math-field.ml-1:focus-within::part(container) {
+  outline: solid;
+  outline-width: 2px;
+  outline-color: var(--color-coopmaths-struct);
+}
+math-field.fillInTheBlanks:not(:focus-within)::part(container) {
+  border: none;
+}
+
+.dark math-field.fillInTheBlanks:focus-within::part(container) {
+  outline: solid;
+  outline-width: 2px;
+  outline-color: var(--color-coopmathsdark-corpus-light);
 }
 
 math-field.schemaEnBoite {
