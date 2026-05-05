@@ -289,7 +289,7 @@ export default class ReciproqueThales extends Exercice {
         const boutonAideMathalea2d = ajouterBoutonMathalea2d(
           `${numeroExercice}_Q${i}`,
           `if (document.getElementById('M2D_${numeroExercice}_Q${i}_t1').dataset.colorie == undefined || (document.getElementById('M2D_${numeroExercice}_Q${i}_t1').dataset.colorie == 'false')){
-          document.getElementById('M2D_${numeroExercice}_Q${i}_t1').style.stroke = bleuMathalea;
+          document.getElementById('M2D_${numeroExercice}_Q${i}_t1').style.stroke = 'blue';
           document.getElementById('M2D_${numeroExercice}_Q${i}_t2').style.stroke = 'red';
           document.getElementById('M2D_${numeroExercice}_Q${i}_t1').style.opacity = .5;
           document.getElementById('M2D_${numeroExercice}_Q${i}_t1').style.strokeWidth = ${epaisseurTriangle};
