@@ -4,7 +4,7 @@
 
 import { infoMessage } from '../../lib/format/message'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { setReponse } from '../../lib/interactif/gestionInteractif'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { sp } from '../../lib/outils/outilString'
 import { texNombre } from '../../lib/outils/texNombre'
@@ -172,7 +172,12 @@ export default class IntercalerDecimalEntre2Decimaux extends Exercice {
           `$${texNombre(a)}<$` +
           ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers) +
           `$\\quad<${texNombre(b)}$`
-        setReponse(this, i, [a, b], { formatInteractif: 'intervalleStrict' })
+        handleAnswers(this, i, {
+          reponse: {
+            value: `]${a};${b}[`,
+            options: { estDansIntervalle: true },
+          },
+        })
       } else {
         texte = `$${texNombre(a)}<${sp(3)}\\ldots\\ldots\\ldots\\ldots\\ldots${sp(3)}<${texNombre(b)}$`
       }
