@@ -81,8 +81,8 @@ export default class auto1AP3 extends ExerciceQcmA {
     // Génère distracteur2 différent de distracteur1 et de la bonne réponse
 
     this.enonce = `${deuxColonnes(
-      `On considère l'arbre de probabilités ci-contre.<br><br>
-      On cherche la probabilité de l'événement $B$.<br><br>
+      `On considère l'arbre de probabilités ci-contre.<br>
+      On cherche la probabilité de l'événement $B$.<br>
       On a :`,
       context.isHtml
         ? mathalea2d(
@@ -113,7 +113,7 @@ export default class auto1AP3 extends ExerciceQcmA {
             }	
 
 `,
-    )}<br>`
+    )}`
 
     this.correction = `
     On applique la formule de probabilité totale :<br> $\\begin{aligned}
@@ -193,8 +193,8 @@ export default class auto1AP3 extends ExerciceQcmA {
     // Génère distracteur2 différent de distracteur1 et de la bonne réponse
 
     this.enonce = `${deuxColonnes(
-      `On considère l'arbre de probabilités ci-contre.<br><br>
-      On cherche la probabilité de l'événement $B$.<br><br>
+      `On considère l'arbre de probabilités ci-contre.<br>
+      On cherche la probabilité de l'événement $B$.<br>
       On a :`,
       context.isHtml
         ? mathalea2d(
@@ -225,7 +225,7 @@ export default class auto1AP3 extends ExerciceQcmA {
             }	
 
 `,
-    )}<br>`
+    )}`
 
     this.correction = `
     On applique la formule de probabilité totale :<br> $\\begin{aligned}
@@ -244,5 +244,6 @@ export default class auto1AP3 extends ExerciceQcmA {
   constructor() {
     super()
     this.versionAleatoire()
+    
   }
 }
