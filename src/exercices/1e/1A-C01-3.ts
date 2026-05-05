@@ -331,6 +331,19 @@ export default class AutoC1c extends ExerciceQcmA {
 
   constructor() {
     super()
+    this.tip = `
+  <p style="margin: 0 0 10px 0;">
+    Pour comparer des nombres, selon les situations, il est souvent plus pratique de tous les écrire  :
+  </p>
+  <ul style="list-style-type: disc; padding-left: 1.5em; margin: 0 0 14px 0; line-height: 2;">
+    <li>sous forme de fractions de même dénominateur,</li>
+    <li>sous forme décimale,</li>
+    <li>en notation scientifique.</li>
+  </ul>
+   <p style="margin: 0 0 10px 0;">
+   Le plus simple dans cet exercice est de les écrire en notation scientifique.
+  </p>
+ `
     this.versionAleatoire()
     this.spacing = 1.5
     this.spacingCorr = 1.5
