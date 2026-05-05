@@ -28,7 +28,7 @@ import FractionEtendue from '../../modules/FractionEtendue'
 
 export const titre = 'Effectuer des calculs liés aux homothéties'
 export const dateDePublication = '28/11/2021'
-export const dateDeModifImportante = '15/04/2024'
+export const dateDeModifImportante = '05/05/2026'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 
@@ -811,7 +811,7 @@ export default class CalculsHomothetie extends Exercice {
             texteCorr += `Soit $k=${signek}\\dfrac{${O}${hA}}{${O}${A}}=${signek}\\dfrac{${texNombre(OhADecimale)}}{${texNombre(OA.valeurDecimale)}}=${this.sup3 === 1 ? texNombre(k.valeurDecimale) : k.texFSD}$.
             <br><br>`
           }
-          texteCorr += `$${O}${hB}= ${this.sup3 === 1 ? texNombre(absk.valeurDecimale) : absk.texFSD} \\times ${texNombre(OB.valeurDecimale)} = ${miseEnEvidence(texNombre(OhB))}\\text{ cm}$.`
+          texteCorr += `$${O}${hB}= ${this.sup3 === 1 ? texNombre(absk.valeurDecimale) : absk.texFSD} \\times ${texNombre(OB.valeurDecimale)} = ${miseEnEvidence(texNombre(OhB.valeurAbsolue()))}\\text{ cm}$.`
           break
 
         case 'antecendent2etapes': // cas 5
