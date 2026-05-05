@@ -28,8 +28,8 @@
   import ConfigEleve from './setup/configEleve/ConfigEleve.svelte'
   import Diaporama from './setup/diaporama/Diaporama.svelte'
   import Latex from './setup/latex/Latex.svelte'
-  import RawLatex from './setup/latex/RawLatex.svelte'
   import Pdf from './setup/latex/Pdf.svelte'
+  import RawLatex from './setup/latex/RawLatex.svelte'
   import Moodle from './setup/moodle/Moodle.svelte'
   import Start from './setup/start/Start.svelte'
   import Tools from './setup/tools/Tools.svelte'
@@ -103,7 +103,7 @@
   }
   const canSolAccess = url.searchParams.get('canSA')
   if (canSolAccess !== null) {
-    $canOptions.solutionsAccess = canSolAccess === 'true'
+    $canOptions.solutionsAccess = canSolAccess === '1'
   }
   const canSolMode = url.searchParams.get('canSM')
   if (canSolMode !== null) {
@@ -111,7 +111,7 @@
   }
   const canIsInteractive = url.searchParams.get('canI')
   if (canIsInteractive !== null) {
-    $canOptions.isInteractive = canIsInteractive === 'true'
+    $canOptions.isInteractive = canIsInteractive === '1'
   }
 
   function updateParams() {
