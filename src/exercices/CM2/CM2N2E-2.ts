@@ -127,6 +127,7 @@ class PlacerPointsAbscissesFractionnaires extends Exercice {
         stepBis: 1 / den1,
       })
       figure.options.labelAutomaticBeginsWith = label1
+      figure.options.labelAutomaticForPoints = true
       figure.options.pointDescriptionWithCoordinates = false
       this.figuresApiGeom[i] = figure
       const { figure: figureCorr, latex: latexCorr } = apigeomGraduatedLine({
