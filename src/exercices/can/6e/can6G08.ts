@@ -4,9 +4,11 @@ import { pointAbstrait } from '../../../lib/2d/PointAbstrait'
 import { latex2d, type Latex2d } from '../../../lib/2d/textes'
 import { TracePoint } from '../../../lib/2d/TracePoint'
 import { symetrieAxiale } from '../../../lib/2d/transformations'
+import { bleuMathalea } from '../../../lib/colors'
 import { ajouteQuestionMathlive } from '../../../lib/interactif/questionMathLive'
 import { choisitNombresEntreMetN } from '../../../lib/outils/aleatoires'
 import { shuffle } from '../../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { range } from '../../../lib/outils/nombres'
 import { context } from '../../../modules/context'
 import { mathalea2d } from '../../../modules/mathalea2d'
@@ -16,7 +18,6 @@ import {
 } from '../../../modules/outils'
 import type { NestedObjetMathalea2dArray } from '../../../types/2d'
 import Exercice from '../../Exercice'
-import { bleuMathalea } from '../../../lib/colors'
 
 export const titre = 'Trouver le symétrique'
 export const dateDePublication = '03/05/2025'
@@ -147,7 +148,8 @@ export default class TrouverLeSym extends Exercice {
       }
       let questionInteractive = ''
       for (let j = 0; j < this.sup2; j++) {
-        questionInteractive += `Quel est le numéro du symétrique du point ${numerosChoisis[j]} par rapport à $(d)$ ? ${ajouteQuestionMathlive({ exercice: this, question: this.sup * i + j, typeInteractivite: 'mathlive', objetReponse: { reponse: { value: numerosSymChoisis[j] } } })}<br>`
+        questionInteractive += `Quel est le numéro du symétrique du point ${numerosChoisis[j]} par rapport à $(d)$ ?
+         ${ajouteQuestionMathlive({ exercice: this, question: this.sup * i + j, typeInteractivite: 'mathlive', objetReponse: { reponse: { value: numerosSymChoisis[j] } } })}<br>`
       }
       let texte = this.interactif
         ? questionInteractive
@@ -185,7 +187,7 @@ export default class TrouverLeSym extends Exercice {
         },
         ...objetsEnonce,
       )
-      let texteCorr = `${this.sup2 > 1 ? 'Les' : 'Le'} symétrique${this.sup2 > 1 ? 's' : ''} ${this.sup2 > 1 ? 'des' : 'du'} point${this.sup2 > 1 ? 's' : ''} ${numerosChoisis.map(String).join(', ')} par rapport à $(d)$ ${this.sup2 > 1 ? 'sont' : 'est'} ${numerosSymChoisis.map((el) => String(numeros[el])).join(', ')}.<br>`
+      let texteCorr = `${this.sup2 > 1 ? 'Les' : 'Le'} symétrique${this.sup2 > 1 ? 's' : ''} ${this.sup2 > 1 ? 'des' : 'du'} point${this.sup2 > 1 ? 's' : ''} ${numerosChoisis.map(String).join(', ')} par rapport à $(d)$ ${this.sup2 > 1 ? 'sont' : 'est'} ${numerosSymChoisis.map((el) => `$${miseEnEvidence(`${numeros[el]}`)}$`).join(', ')}.<br>`
       texteCorr += mathalea2d(
         {
           xmin: -0.5,
