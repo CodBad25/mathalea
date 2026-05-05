@@ -294,8 +294,13 @@ async function fillMathField(
   if (Array.isArray(answer)) {
     for (let i = 0; i < answer.length; i++) {
       if (i === 0) {
-        await champTexteMathlive.click()
-        await champTexteMathlive.press('Shift+Tab')
+        if (champTexteMathlive.locator('.ML__prompt').nth(0) !== undefined) {
+          await champTexteMathlive.locator('.ML__prompt').nth(0).click()
+        } else {
+          await champTexteMathlive.click()
+        }
+        //    await champTexteMathlive.press('Shift+Tab') plus de problème de focus : il n'y a pas à changer de champ
+        //    await champTexteMathlive.press('Shift+Tab') plus de problème de focus : il n'y a pas à changer de champ
       } else {
         await champTexteMathlive.press('Tab')
       }
