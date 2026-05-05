@@ -16,8 +16,6 @@ async function testCM2N2D1(page: Page) {
 
   for (const question of questions) {
     const mathField = question.mathField
-    const signe = '<'
-    // mathField.includes('&lt') || mathField.includes('<') ? '<' : '>'
     const cleanMathField = mathField.replaceAll('\\,', '')
     const regex = /(\d+)/g
     const [, numString, denString] = cleanMathField.match(regex) as [
@@ -35,10 +33,7 @@ async function testCM2N2D1(page: Page) {
       a = Math.floor(num / den) - 1
       b = Math.floor(num / den) + 1
     }
-    const reponse =
-      signe === '<'
-        ? [a.toString(), b.toString()]
-        : [b.toString(), a.toString()] // J'ai inversé l'ordre parce que le focus se place automatiquement sur le deuxième placeholder !
+    const reponse = [a.toString(), b.toString()] // CM2N2D-1 demande des entiers consécutifs, donc pas de virgule dans l'ordre croissant exclusivement
     await inputAnswer(page, question, reponse)
   }
   await checkFeedback(page, questions)
