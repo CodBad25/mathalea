@@ -326,10 +326,12 @@ export default class ExerciceEquations extends Exercice {
           )
           break
         case '(ax+b)(cx+d)=acx2':
-          a = this.sup2 ? randint(1, 5) : randint(-5, 5, [0])
-          b = this.sup2 ? randint(1, 5) : randint(-5, 5, [0])
-          c = this.sup2 ? randint(1, 5) : randint(-5, 5, [0])
-          d = this.sup2 ? randint(1, 5) : randint(-5, 5, [0])
+          do {
+            a = this.sup2 ? randint(1, 5) : randint(-5, 5, [0])
+            b = this.sup2 ? randint(1, 5) : randint(-5, 5, [0])
+            c = this.sup2 ? randint(1, 5) : randint(-5, 5, [0])
+            d = this.sup2 ? randint(1, 5) : randint(-5, 5, [0])
+          } while (a * d + b * c === 0)
           fracReponse = new FractionEtendue(-b * d, a * d + b * c)
           texte = `$ (${rienSi1(a)}x ${ecritureAlgebrique(b)})(${rienSi1(c)}x ${ecritureAlgebrique(d)}) = ${rienSi1(a * c)}x^2 $`
           texteCorr = `$ (${rienSi1(a)}x ${ecritureAlgebrique(b)})(${rienSi1(c)}x ${ecritureAlgebrique(d)}) = ${rienSi1(a * c)}x^2 $`
