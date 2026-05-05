@@ -441,11 +441,8 @@ export function exportQcmAmc(
       }
     }
   }
-  texQr = texQr.replaceAll(
-    /(<br *\/?>[\n\t ]*)+<br *\/?>/gim,
-    '\n\n\\medskip\n',
-  )
-  texQr = texQr.replaceAll('<br>', '\\\\\n')
+
+  texQr = texQr.replaceAll('<br><br>', '\\medskip').replaceAll('<br>', '\\\\')
   return [texQr, ref, exercise.nbQuestions, title, isShuffled]
 }
 

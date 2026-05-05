@@ -99,6 +99,9 @@ export function buildQcmForExercise(
   }: BuildQcmForExerciseParams,
 ): { question: string; correction: string } {
   const autoCorrectionOptions = { ...(options ?? {}) }
+  if (correction && !autoCorrectionOptions.explain) {
+    autoCorrectionOptions.explain = correction
+  }
   const qcmPropositions: QcmAutoCorrectionProposition[] = propositions.map(
     (proposition) => ({
       texte: proposition.texte,

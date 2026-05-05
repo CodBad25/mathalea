@@ -8,13 +8,23 @@
   }> = []
   export let mode: 'qcmMono' | 'qcmMult' = 'qcmMono'
 
-  const htmlContainsEmbeddedChoices = (value: string): boolean => {
-    if (value.trim().length === 0) return false
-    return /id="checkEx|type="checkbox"|type="radio"/i.test(value)
+  const stripEmbeddedQcmMarkup = (value: string): string => {
+    if (value.trim().length === 0) return ''
+    return value
+      .replace(
+        /<div[^>]*class="[^"]*my-3[^"]*"[^>]*>[\s\S]*?<\/div>\s*<div[^>]*id="resultatCheckEx[^"]*"[^>]*><\/div>/gi,
+        '',
+      )
+      .replace(/<div[^>]*id="resultatCheckEx[^"]*"[^>]*><\/div>/gi, '')
+      .replace(/(<br\s*\/?>\s*){2,}$/gi, '')
+      .trim()
   }
 
-  $: shouldRenderAmcChoices =
-    choix.length > 0 && !htmlContainsEmbeddedChoices(htmlContent)
+  // En preview AMC, on garde un rendu stable: énoncé + liste de choix stylée AMC.
+  // On garde l'énoncé HTML lorsqu'il est disponible, mais en retirant le bloc
+  // QCM interactif/non-interactif injecté à la fin de `htmlContent`.
+  $: htmlStatement = stripEmbeddedQcmMarkup(htmlContent)
+  $: previewContent = htmlStatement || htmlContent || enonce
 </script>
 
 <div
@@ -27,17 +37,18 @@
   </p>
   {#if htmlContent || enonce}
     <div class="mt-2">
-      <AmcEnonceHtml content={htmlContent || enonce} />
+      <AmcEnonceHtml content={previewContent} />
     </div>
   {/if}
-  {#if shouldRenderAmcChoices}
+  {#if choix.length > 0}
     <ul class="mt-3 space-y-2">
       {#each choix as option}
         <li
           class="flex items-start gap-2 text-sm text-coopmaths-corpus dark:text-coopmathsdark-corpus"
         >
           <span
-            class="mt-1 inline-block h-3 w-3 rounded-full border border-coopmaths-struct-light dark:border-coopmathsdark-struct-light"
+            aria-hidden="true"
+            class="mt-1 inline-block h-3 w-3 rounded-none border border-coopmaths-struct dark:border-coopmathsdark-struct"
           ></span>
           <AmcEnonceHtml content={option.texte ?? ''} />
         </li>

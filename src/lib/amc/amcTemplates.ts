@@ -71,7 +71,7 @@ export const qcmTemplate = `\\element{ {{ ref }} }{
 {% endif %}
   \\begin{ {{ "questionmult" if mode == "mult" else "question" }} }{ {{ id }} }
     {{ enonce | safe }}
-    {% if propositions[0] is defined and propositions[0].feedback is defined and propositions[0].feedback %}\\explain{ {{ propositions[0].feedback | safe }} }{% endif %}
+    {% if explain %}\\explain{ {{ explain | safe }} }{% endif %}
     \\begin{ {{ layout }} }{% if ordered %}[o]{% endif %}
 {%- for p in propositions %}
       {% if lastChoice is defined and lastChoice is not none and loop.index0 == lastChoice %}\\lastchoices{% endif %}{% if p.correct %}\\bonne{ {{- p.texte | safe -}} }{% else %}\\mauvaise{ {{- p.texte | safe -}} }{% endif %}

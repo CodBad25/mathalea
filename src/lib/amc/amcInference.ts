@@ -160,10 +160,6 @@ export function mathaleaEnsureAMCCompatibility(
   if (exercice.interactifType === 'listeDeroulante') {
     exercice.amcType = 'qcmMono'
     exercice.amcReady = true
-    window.notify(
-      "Cet exercice utilise une liste déroulante interactive, il est donc compatible avec AMC, veuillez modifier l'exo avec listeDeroulanteToQcm pour avoir un export AMC opérationnel.",
-      { uuidExercice: JSON.stringify(exercice.uuid), titre: exercice.titre },
-    )
     // En attendant, on infère en amcOpen pour éviter de bloquer l'exercice.
     exercice.amcType = 'AMCOpen'
     exercice.amcReady = true
@@ -189,18 +185,6 @@ export function mathaleaEnsureAMCCompatibility(
   // à priori, les données pour AMC n'ont pas été renseignées sinon on peut espérer que amcReady serait true et amcType défini
   // On va essayer d'inférer un type AMCNum à partir des réponses numériques présentes dans les autoCorrections ou les réponses interactives mises en cache.
 
-  const cachedInteractiveAutoCorrection = autoCorrectionSource.filter(
-    (item: InferenceAutoCorrectionItem) => item?.reponse?.valeur !== undefined,
-  )
-  if (cachedInteractiveAutoCorrection.length === 0) {
-    window.notify(
-      "amcInference n'a pas de réponse interactive valide pour cet exercice 'mathLive', l'exercice sera considéré comme un AMCOpen.",
-      {
-        uuidExercice: JSON.stringify(exercice.uuid),
-        titre: exercice.titre,
-      },
-    )
-  }
   const autoCorrectionAmc = []
   let canInferAMCNum = autoCorrectionSource.length > 0
 
@@ -251,13 +235,6 @@ export function mathaleaEnsureAMCCompatibility(
     return exercice as IExerciceAMC
   }
 
-  window.notify(
-    "amcInference n'a pas pu inférer un AMCNum fiable pour cet exercice 'mathLive', fallback AMCOpen.",
-    {
-      uuidExercice: JSON.stringify(exercice.uuid),
-      titre: exercice.titre,
-    },
-  )
   exercice.amcType = 'AMCOpen'
   exercice.amcReady = true
   ensureAMCOpenAutoCorrection(exercice)

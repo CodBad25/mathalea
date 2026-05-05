@@ -10,6 +10,7 @@
  * - expressions : { egaliteExpression: true }
  */
 import ExerciceQcm from '../../exercices/ExerciceQcm'
+import ExerciceSimple from '../../exercices/ExerciceSimple'
 import type {
   IExercice,
   OptionsComparaisonType,
@@ -277,6 +278,12 @@ export function propositionsQcm(
 ) {
   const syncQcmAutoCorrectionToAmc = () => {
     const source = exercice.autoCorrection[i]
+    const texteCorr =
+      exercice.typeExercice === 'simple' || exercice instanceof ExerciceSimple
+        ? exercice.correction
+        : exercice.listeCorrections[i] != null
+          ? exercice.listeCorrections[i]
+          : ''
     if (source == null) return
 
     const exerciseAny = exercice as IExercice & { autoCorrectionAMC?: any[] }
@@ -288,9 +295,14 @@ export function propositionsQcm(
       ...exerciseAny.autoCorrectionAMC[i],
       enonce: source.enonce,
       options: source.options != null ? { ...source.options } : undefined,
-      propositions: (source.propositions ?? []).map((proposition) => ({
-        ...proposition,
-      })),
+      propositions: (source.propositions ?? [])
+        .map((proposition) => ({
+          ...proposition,
+        }))
+        .map((prop, index) => {
+          if (index === 0 && prop.feedback == null) prop.feedback = texteCorr
+          return { ...prop }
+        }),
     }
   }
 

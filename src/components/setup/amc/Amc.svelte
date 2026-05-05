@@ -220,7 +220,9 @@
         candidate.trim().length === 0
           ? fallback
           : replaceFigureEnvsWithSvg(candidate, fallback)
-      return previewSource.replaceAll('\\\\', '<br>')
+      return previewSource
+        .replaceAll('\\\\', '<br>')
+        .replaceAll('\\medskip', '<br><br>')
     }
 
     return autoCorrection.map((item: any, i: number) => {
@@ -555,6 +557,13 @@
       const min = Math.min(targetProps.length, sourceProps.length)
       for (let j = 0; j < min; j++) {
         copyLatexTextsOnPropositions(targetProps[j], sourceProps[j])
+      }
+
+      // Copie options.explain depuis la passe LaTeX (isAmc=true, isHtml=false)
+      // pour s'assurer que le texte de correction est en LaTeX et non en HTML.
+      if (typeof sourceItem?.options?.explain === 'string') {
+        if (!targetItem.options) targetItem.options = {}
+        targetItem.options.explain = sourceItem.options.explain
       }
 
       if (targetProps.length === 0 && sourceProps.length > 0) {
@@ -1171,7 +1180,9 @@
             // Si le texte contient encore une figure LaTeX, on garde le fallback HTML
             // (qui contient déjà le SVG substitué).
             const source = figureEnvRegex.test(raw) ? htmlContent : raw
-            return source.replaceAll('\\\\', '<br>')
+            return source
+              .replaceAll('\\\\', '<br>')
+              .replaceAll('\\medskip', '<br><br>')
           })()
           if (propType === 'qcmMono' || propType === 'qcmMult') {
             blocks.push({
