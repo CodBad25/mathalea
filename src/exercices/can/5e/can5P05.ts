@@ -40,8 +40,8 @@ export default class PoucentageP2 extends ExerciceSimple {
         if (!this.interactif) {
           this.question += '.... '
         }
-        this.correction = `$${texNombre(a, 0)}\\,\\%=\\dfrac{${a}}{100}=${texNombre(this.reponse, 2)}$ <br>
-    Donc prendre $${texNombre(a, 0)}\\,\\%$ d'une quantité revient à la multiplier par $${miseEnEvidence(texNombre(this.reponse, 2))}$.`
+        this.correction = `$${texNombre(a, 0)}\\,\\%=\\dfrac{${texNombre(a,2)}}{100}=${texNombre(this.reponse, 2)}$ <br>
+    Donc prendre $${texNombre(a, 2)}\\,\\%$ d'une quantité revient à la multiplier par $${miseEnEvidence(texNombre(this.reponse, 2))}$.`
 
         break
       case 'b':
@@ -51,8 +51,8 @@ export default class PoucentageP2 extends ExerciceSimple {
         if (!this.interactif) {
           this.question += '.... '
         }
-        this.correction = `$${a}\\,\\%=\\dfrac{${a}}{100}=${texNombre(this.reponse, 2)}$ <br>
-       Donc prendre $${texNombre(a, 0)}\\,\\%$ d'une quantité revient à la multiplier par $${miseEnEvidence(texNombre(this.reponse, 2))}$.`
+        this.correction = `$${a}\\,\\%=\\dfrac{${texNombre(a,2)}}{100}=${texNombre(this.reponse, 2)}$ <br>
+       Donc prendre $${texNombre(a, 2)}\\,\\%$ d'une quantité revient à la multiplier par $${miseEnEvidence(texNombre(this.reponse, 2))}$.`
         this.reponse = a / 100
         break
       case 'c':
@@ -77,8 +77,8 @@ export default class PoucentageP2 extends ExerciceSimple {
         if (!this.interactif) {
           this.question += '.... '
         }
-        this.correction = `$${texNombre(a, 1)}\\,\\%=\\dfrac{${a}}{100}=${texNombre(this.reponse, 3)}$ <br>
-      Donc prendre $${texNombre(a, 0)}\\,\\%$ d'une quantité revient à la multiplier par $${miseEnEvidence(texNombre(this.reponse, 3))}$.`
+        this.correction = `$${texNombre(a, 1)}\\,\\%=\\dfrac{${texNombre(a,2)}}{100}=${texNombre(this.reponse, 3)}$ <br>
+      Donc prendre $${texNombre(a,2)}\\,\\%$ d'une quantité revient à la multiplier par $${miseEnEvidence(texNombre(this.reponse, 3))}$.`
     }
     this.reponse = this.reponse.toFixed(3)
     this.canEnonce = 'Compléter.'
