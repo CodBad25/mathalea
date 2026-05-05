@@ -4,6 +4,7 @@ import { lectureAntecedent } from '../../lib/2d/LectureAntecedent'
 import { pointAbstrait } from '../../lib/2d/PointAbstrait'
 import RepereBuilder from '../../lib/2d/RepereBuilder'
 import { latex2d, texteParPosition } from '../../lib/2d/textes'
+import { bleuMathalea } from '../../lib/colors'
 import { createList } from '../../lib/format/lists'
 import { shuffle } from '../../lib/outils/arrayOutils'
 import { texteGras, texteItalique } from '../../lib/outils/embellissements'
@@ -14,14 +15,14 @@ import { mathalea2d } from '../../modules/mathalea2d'
 import { nombreEnLettres } from '../../modules/nombreEnLettres'
 import { randint } from '../../modules/outils'
 import ExerciceBrevetA from '../ExerciceBrevetA'
-import { bleuMathalea } from '../../lib/colors'
 
 export const uuid = 'fb6ad'
 export const refs = {
   'fr-fr': ['3Z1DNB-12'],
   'fr-ch': ['11FA8-22', '1mF1-15'],
 }
-export const titre = 'Se préparer au DNB  : fonctions affines et lecture graphique'
+export const titre =
+  'Se préparer au DNB  : fonctions affines et lecture graphique'
 export const dateDePublication = '12/04/2025'
 
 /**
@@ -77,7 +78,7 @@ export default class ExerciceAmeriqueNord392024 extends ExerciceBrevetA {
     const n2 = latex2d('(d_2)', pointF2D.x - 1, pointF2D.y + 0.4, {
       color: 'green',
     })
-    const n3 = latex2d('(d_3)', pointF3D.x, pointF3D.y - 0.5, { color: bleuMathalea })
+    const n3 = latex2d('(d_3)', pointF3D.x, pointF3D.y - 0.5, { color: 'blue' }) // bleuMathalea ne passe pas, ici, en Latex
     const legendY = texteParPosition('Prix à payer en €', 4.5, yMax / 10)
     const legendX = texteParPosition("Nombre d'entrees", xMax - 2, 1)
 
