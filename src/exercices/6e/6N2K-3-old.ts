@@ -29,7 +29,7 @@ export const refs = {
   'fr-2016': [],
   'fr-ch': [],
 }
-export default class DivisionsEuclidiennesEgalite2 extends Exercice {
+export default class DivisionsEuclidiennesEgalite2Old extends Exercice {
   constructor() {
     super()
     this.besoinFormulaireNumerique = [
