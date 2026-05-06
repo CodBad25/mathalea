@@ -165,7 +165,7 @@ export default class Auto1AF075 extends ExerciceQcmA {
 
     // ===== Énoncé =====
     this.enonce = `${deuxColonnes(
-      'On a représenté ci-contre une droite $\\mathcal{D}$ dans un repère orthonormé.<br><br>' +
+      'On a représenté ci-contre une droite $\\mathcal{D}$ dans un repère orthonormé.<br>' +
       'Une équation de la droite $\\mathcal{D}$ est :',
       `${objet}`,
     )}`
@@ -285,7 +285,7 @@ export default class Auto1AF075 extends ExerciceQcmA {
     )
 
     this.enonce = `${deuxColonnes(
-      'On a représenté ci-contre une droite $\\mathcal{D}$ dans un repère orthonormé.<br><br>' +
+      'On a représenté ci-contre une droite $\\mathcal{D}$ dans un repère orthonormé.<br>' +
       'Une équation de la droite $\\mathcal{D}$ est :',
       `${objet}`,
     )}`
