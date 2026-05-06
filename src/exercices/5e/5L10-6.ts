@@ -146,7 +146,7 @@ export default class perimetreVersFormule extends Exercice {
       const espaceEntreFigures = 1
 
       // choix aléatoire des lettres de l'exo
-      const listeLettres = 'abcdefghmnqsuvwxyz'
+      const listeLettres = 'abcdfghmnqsuvwxyz' // 5L10-6 : Éric Elter supprime le e pour éviter la confusion avec exponentielle dans la comparaison
       const idLettre0 = randint(0, listeLettres.length - 1)
       const idLettre1 = randint(0, listeLettres.length - 1, [idLettre0])
       const coteLettre = [listeLettres[idLettre0], listeLettres[idLettre1]]
