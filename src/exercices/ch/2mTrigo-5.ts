@@ -38,7 +38,7 @@ export const interactifType = 'mathLive'
 export const uuid = 'a3f7b'
 export const refs = {
   'fr-fr': [],
-  'fr-ch': ['2mTrigo-5'],
+  'fr-ch': ['2mTrigoTri-5'],
 }
 
 function texDeg(value: string) {

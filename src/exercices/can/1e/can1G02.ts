@@ -12,7 +12,7 @@ export const uuid = '2dd6a'
 
 export const refs = {
   'fr-fr': ['can1G02'],
-  'fr-ch': ['2mTrigo-3'],
+  'fr-ch': ['2mTrigoTri-3'],
 }
 export default class CosEtsinsCAN extends CosEtsin {
   constructor() {
