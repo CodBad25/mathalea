@@ -557,7 +557,7 @@ export default class ÉcrireUneExpressionLitterale extends Exercice {
         this.autoCorrection[i].propositions = [
           {
             texte: `$${k}-${x}$`,
-            statut: true,
+            statut: false,
             feedback: "L'ordre des termes a de l'importance dans une différence.",
           },
           {
