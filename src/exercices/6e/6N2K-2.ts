@@ -20,7 +20,7 @@ export const titre =
 export const dateDePublication = '11/12/2023'
 export const dateDeModifImportante = '09/01/2025'
 export const interactifReady = true
-export const interactifType = 'multiMathField'
+export const interactifType = 'multiMathfield'
 
 /**
  * Résolution de problèmes utilisant la division Euclidienne

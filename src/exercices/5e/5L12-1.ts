@@ -17,7 +17,7 @@ import Exercice from '../Exercice'
 export const titre =
   'Réduire et simplifier, si possible, un produit et une somme à partir des mêmes éléments algébriques pour distinguer la différence'
 export const interactifReady = true
-export const interactifType = 'multiMathField'
+export const interactifType = 'multiMathfield'
 export const amcReady = true
 export const amcType = 'AMCOpen'
 export const dateDeModifImportante = '19/11/2023'

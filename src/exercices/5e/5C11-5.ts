@@ -16,7 +16,7 @@ import Exercice from '../Exercice'
 
 export const titre = "Écrire un enchaînement de calculs à partir d'un problème"
 export const interactifReady = true
-export const interactifType = 'multiMathField'
+export const interactifType = 'multiMathfield'
 
 export const dateDePublication = '10/09/2025'
 

@@ -17,7 +17,7 @@ import Exercice from '../Exercice'
 export const titre = 'Tester une égalité'
 export const dateDeModifImportante = '18/11/2023'
 export const interactifReady = true
-export const interactifType = 'multiMathField'
+export const interactifType = 'multiMathfield'
 export const amcReady = true
 export const amcType = 'AMCHybride'
 

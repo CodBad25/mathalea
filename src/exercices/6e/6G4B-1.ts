@@ -27,7 +27,7 @@ import {
 import Exercice from '../Exercice'
 
 export const titre = 'Mesurer un angle avec rapporteur intégré'
-export const interactifType = 'multiMathField'
+export const interactifType = 'multiMathfield'
 export const interactifReady = true
 export const amcReady = true
 export const amcType = 'AMCHybride'
@@ -36,7 +36,7 @@ export const dateDePublication = '26/04/2022'
 /**
  * Mesurer un angle avec rapporteur déjà en place
  * @author Éric Elter
- * Passage en multiMathField par Éric Elter le 13/04/2026
+ * Passage en multiMathfield par Éric Elter le 13/04/2026
  */
 export const uuid = 'ff2ce'
 

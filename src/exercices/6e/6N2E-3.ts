@@ -14,7 +14,7 @@ import Exercice from '../Exercice'
 export const titre = 'Effectuer produit et somme ou différence de décimaux'
 
 export const interactifReady = true
-export const interactifType = 'multiMathField'
+export const interactifType = 'multiMathfield'
 export const dateDeModifImportante = '14/01/2026'
 export const dateDePublication = '20/12/2022'
 

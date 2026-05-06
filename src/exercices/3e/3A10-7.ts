@@ -19,7 +19,7 @@ export const dateDePublication = '12/10/2022'
 export const dateDeModifImportante = '29/10/2024'
 export const titre = 'Explorer un labyrinthe de nombres premiers'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+export const interactifType = 'multiMathfield'
 export const amcReady = true
 export const amcType = 'AMCOpen'
 

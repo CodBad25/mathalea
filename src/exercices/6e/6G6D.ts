@@ -32,7 +32,7 @@ import Exercice from '../Exercice'
 export const titre =
   "Déterminer la valeur d'un angle en utilisant la somme des mesures des angles dans un triangle"
 export const interactifReady = true
-export const interactifType = 'multiMathField'
+export const interactifType = 'multiMathfield'
 export const amcReady = true
 export const amcType = 'AMCHybride'
 export const dateDeModifImportante = '06/04/2025'
@@ -61,7 +61,7 @@ Correction de quelques coquilles
  * * Un triangle a 3 angles égaux.
  * * Dans un triangle rectangle, un angle mesure le tiers de l'autre.
  * @author Jean-claude Lhote
- * Passage en multiMathField par Éric Elter le 13/04/2026
+ * Passage en multiMathfield par Éric Elter le 13/04/2026
  * Ajout de schémas aux questions "faciles" par Guillaume Valmont le 04/03/2023
 
  */
