@@ -10,6 +10,8 @@ import { checkEachCombinationOfParams } from '../../helpers/testAllViews.js'
 
 const logConsole = getFileLogger('exportConsole', { append: true })
 
+class ConsoleErrorsTestFailure extends Error {}
+
 function log(...args: unknown[]) {
   lg(args)
   logConsole(args)
@@ -30,6 +32,43 @@ function logDebug(...args: unknown[]) {
       log(args)
     }
   }
+}
+
+function formatFailureDetails(
+  urlExercice: string,
+  page: Page,
+  messages: string[],
+) {
+  const details = messages.slice(0, 5).join('\n')
+  const suffix =
+    messages.length > 5
+      ? `\n... ${messages.length - 5} autre(s) erreur(s) dans tests/e2e/logs/exportConsole.log`
+      : ''
+  return [
+    `Console errors test failed.`,
+    messages[0] == null ? '' : `First error: ${messages[0]}`,
+    `Initial URL: ${urlExercice}`,
+    `Current URL: ${page.url()}`,
+    `Unique errors (${messages.length}):`,
+    details,
+    suffix,
+    `Full logs: tests/e2e/logs/exportConsole.log`,
+  ]
+    .filter((line) => line !== '')
+    .join('\n')
+}
+
+function compactBrowserMessage(message: string) {
+  return message
+    .split('\n')
+    .map((line) => line.trim())
+    .find((line) => line !== '')
+    ?.replace(/\s+/g, ' ')
+}
+
+function addUniqueMessage(messages: string[], message: string | undefined) {
+  if (message == null || message === '') return
+  if (!messages.includes(message)) messages.push(message)
 }
 
 async function waitForExercicesAffiches(page: Page, buttonZoom: Locator) {
@@ -135,14 +174,14 @@ async function getConsoleTest(page: Page, urlExercice: string) {
       page.on('pageerror', (msg) => {
         if (msg.message !== 'Erreur de chargement de Mathgraph') {
           // mtgLoad : 3G22
-          messages.push('error:' + page.url() + ' ' + msg.stack)
+          addUniqueMessage(messages, `pageerror:${page.url()} ${msg.message}`)
           log(msg.message)
           log(msg.stack)
           logError(msg)
         }
       })
       page.on('crash', (msg) => {
-        messages.push('crach:' + page.url() + ' ' + msg)
+        addUniqueMessage(messages, 'crash:' + page.url() + ' ' + msg)
         logError(msg)
       })
       // Listen for all console events and handle errors
@@ -187,7 +226,10 @@ async function getConsoleTest(page: Page, urlExercice: string) {
           !msg.text().includes('placeholderMetrics 0.7 0.2')
         ) {
           if (!msg.text().includes('<HeaderExercice>')) {
-            messages.push('console:' + page.url() + ' ' + msg.text())
+            addUniqueMessage(
+              messages,
+              `console:${page.url()} ${compactBrowserMessage(msg.text())}`,
+            )
           }
         }
         // }
@@ -218,15 +260,18 @@ async function getConsoleTest(page: Page, urlExercice: string) {
         logError(`Il y a ${messages.length} erreurs : ${messages.join('\n')}`)
         log('url:' + page.url())
         await createIssue(urlExercice, messages, ['console'], log)
-        return 'KO'
+        throw new ConsoleErrorsTestFailure(
+          formatFailureDetails(urlExercice, page, messages),
+        )
       } else {
         return 'OK'
       }
     } catch (error) {
+      if (error instanceof ConsoleErrorsTestFailure) throw error
       // si une exception comme timeout: on récupère la requete
       let message = 'Unknown Error'
       if (error instanceof Error) message = error.message
-      messages.push('erreur:url' + page.url() + ': ' + message)
+      addUniqueMessage(messages, 'exception:' + page.url() + ': ' + message)
       log('url:' + page.url())
       logError(messages)
       logError(`Il y a ${messages.length} erreurs : ${messages.join('\n')}`)
@@ -235,7 +280,9 @@ async function getConsoleTest(page: Page, urlExercice: string) {
           // le serveur ne répond pas... si net::ERR_CONNECTION_REFUSED
           await createIssue(urlExercice, messages, ['console'], log)
         }
-        return 'KO'
+        throw new ConsoleErrorsTestFailure(
+          formatFailureDetails(urlExercice, page, messages),
+        )
       }
     }
   }
