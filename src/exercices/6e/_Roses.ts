@@ -2,6 +2,7 @@ import type { Expression } from '@cortex-js/compute-engine'
 import type { MathfieldElement } from 'mathlive'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { generateCleaner } from '../../lib/interactif/cleaners'
 import ce from '../../lib/interactif/comparisonFunctions'
 import {
   ajouteChampTexteMathLive,
@@ -218,6 +219,7 @@ export default class ExoRose extends Exercice {
   }
 
   correctionInteractive = (i: number) => {
+    const cleaner = generateCleaner(['virgules', 'fractions', 'espaces'])
     if (this.answers === undefined) {
       this.answers = {}
     }
@@ -235,9 +237,7 @@ export default class ExoRose extends Exercice {
         this.answers[champsTexte[0].id] = champsTexte[0].value
       }
       if (champsTexte[0] != null) {
-        saisies[0] = champsTexte[0].value
-          .replace(',', '.')
-          .replace(/\((\+?-?\d+)\)/, '$1')
+        saisies[0] = cleaner(champsTexte[0].value)
       }
     } else {
       const mfe = document.querySelector(
@@ -248,18 +248,19 @@ export default class ExoRose extends Exercice {
       }
       for (let k = 0; k < taille; k++) {
         champsTexte[k] = mfe.getPromptValue(`champ${k + 1}`)
-        saisies[k] = champsTexte[k]
-          .replace(',', '.')
-          .replace(/\((\+?-?\d+)\)/, '$1')
+        saisies[k] = cleaner(champsTexte[k])
       }
     }
     let resultat
-    if (this.saisieCoherente(saisies, taille, i)) {
-      spanResultat.innerHTML = '😎'
-      resultat = 'OK'
-    } else {
+    if (
+      saisies.some((s) => s === '') ||
+      !this.saisieCoherente(saisies, taille, i)
+    ) {
       spanResultat.innerHTML = '☹️'
       resultat = 'KO'
+    } else {
+      spanResultat.innerHTML = '😎'
+      resultat = 'OK'
     }
     return resultat
   }

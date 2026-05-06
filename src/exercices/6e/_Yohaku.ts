@@ -1,4 +1,5 @@
 import type { MathfieldElement } from 'mathlive'
+import { generateCleaner } from '../../lib/interactif/cleaners'
 import ce from '../../lib/interactif/comparisonFunctions'
 import { Yohaku } from '../../lib/outils/Yohaku'
 import { saveAnswersFromTable } from '../../lib/saveAnswers'
@@ -137,6 +138,7 @@ export default class FabriqueAYohaku extends Exercice {
   }
 
   correctionInteractive = (i: number) => {
+    const cleaner = generateCleaner(['virgules', 'fractions', 'espaces'])
     const taille = parseInt(this.sup3)
     let cell
     const spanResultat: HTMLSpanElement[][] = []
@@ -158,18 +160,17 @@ export default class FabriqueAYohaku extends Exercice {
           if (this.yohaku[i].type === 'littéraux') {
             // on ne parse pas si c'est du littéral. On blinde pour les champs vide.
             if (cell.value != null)
-              saisies[l * taille + c] = cell.value.replace(',', '.') ?? '0'
+              saisies[l * taille + c] = cleaner(cell.value) ?? '0'
           } else {
             if (cell.value != null)
-              saisies[l * taille + c] =
-                cell.value.replace(',', '.').replace(/\((\+?-?\d+)\)/, '$1') ??
-                '0'
+              saisies[l * taille + c] = cleaner(cell.value) ?? '0'
             // on peut taper des entiers dans les Yohaku fraction, mais ils doivent être modifiés en fraction pour le calcul
             if (
               !isNaN(Number(saisies[l * taille + c])) &&
               this.yohaku[i].type.includes('frac')
             ) {
-              saisies[l * taille + c] = `\\frac{${saisies[l * taille + c]}}{1}`
+              saisies[l * taille + c] =
+                `\\frac{${cleaner(saisies[l * taille + c])}}{1}`
             }
           }
         } else if (cell == null && l * taille + c !== this.yohaku[i].Case) {
@@ -179,8 +180,9 @@ export default class FabriqueAYohaku extends Exercice {
           )
         } else {
           if (this.yohaku[i].Case != null) {
-            saisies[l * taille + c] =
-              this.yohaku[i].cellules[this.yohaku[i].Case]
+            saisies[l * taille + c] = cleaner(
+              this.yohaku[i].cellules[this.yohaku[i].Case],
+            )
           }
         }
       }
@@ -193,7 +195,7 @@ export default class FabriqueAYohaku extends Exercice {
       resultat = value ? resultat : 'KO'
     }
 
-    if (resultat === 'OK') {
+    if (resultat === 'OK' && !saisies.includes('')) {
       for (let l = 0; l < taille; l++) {
         for (let c = 0; c < taille; c++) {
           if (spanResultat[l][c] != null) {

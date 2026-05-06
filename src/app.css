@@ -1079,7 +1079,6 @@ math-field.fillInTheBlanks::part(container) {
   border: none;
   border-radius: 4px;
 }
-math-field.fillInTheBlanks:focus-within::part(container),
 math-field.ml-1:focus-within::part(container) {
   outline: solid;
   outline-width: 2px;
