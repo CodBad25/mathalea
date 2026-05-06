@@ -18,7 +18,7 @@ export const uuid = '18b46'
 
 export const refs = {
   'fr-fr': ['can1G11'],
-  'fr-ch': ['2mTrigo-1'],
+  'fr-ch': ['2mTrigoTri-1'],
 }
 export default class mesureAngleCosSin extends ExerciceSimple {
   constructor() {

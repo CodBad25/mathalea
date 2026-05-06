@@ -1,4 +1,5 @@
 import FractionEtendue from '../../modules/FractionEtendue'
+import type { IFractionEtendue } from '../../modules/FractionEtendue.type'
 import {
   ecritureAlgebrique,
   ecritureAlgebriqueSauf1,
@@ -108,4 +109,36 @@ export function addCombLin(
       return 0
     }
   })
+}
+
+export function texSystemeEquations(equations: string[]) {
+  return `\\begin{cases}\\begin{aligned}${equations.join('\\\\')}\\end{aligned}\\end{cases}`
+}
+
+export function texMembreGauche(coefficients: number[], variables: string[]) {
+  let expression = ''
+  for (let index = 0; index < coefficients.length; index++) {
+    const coefficient = coefficients[index]
+    if (coefficient === 0) continue
+    expression +=
+      expression === ''
+        ? `${rienSi1(coefficient)}${variables[index]}`
+        : `${ecritureAlgebriqueSauf1(coefficient)}${variables[index]}`
+  }
+  return expression === '' ? '0' : expression
+}
+
+export function expressionLineaire(
+  constante: IFractionEtendue,
+  coefficient: IFractionEtendue,
+  variable = 't',
+) {
+  const constanteSimplifiee = constante.simplifie()
+  const coefficientSimplifie = coefficient.simplifie()
+  if (coefficientSimplifie.num === 0)
+    return constanteSimplifiee.texFractionSimplifiee
+  if (constanteSimplifiee.num === 0) {
+    return `${ecritureAlgebriqueSauf1(coefficientSimplifie).replace(/^\+/, '')}${variable}`
+  }
+  return `${constanteSimplifiee.texFractionSimplifiee}${ecritureAlgebriqueSauf1(coefficientSimplifie)}${variable}`
 }

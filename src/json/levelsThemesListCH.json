@@ -287,8 +287,11 @@
   "2mLogExp": {
     "titre": "Logarithmes et exponentielles"
   },
-  "2mTrigo": {
+  "2mTrigoTri": {
     "titre": "Trigonométrie dans le triangle quelconque"
+  },
+  "2mTrigoFct": {
+    "titre": "Fonctions trigonométriques"
   },
   "3mA1": {
     "titre": "Limites"
