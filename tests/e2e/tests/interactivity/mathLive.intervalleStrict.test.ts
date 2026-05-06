@@ -1,12 +1,12 @@
+import type { Page } from 'playwright'
 import { arrondi } from '../../../../src/lib/outils/nombres'
+import prefs from '../../helpers/prefs.js'
 import {
   checkFeedback,
   getQuestions,
   inputAnswer,
   runTest,
 } from '../../helpers/run'
-import type { Page } from 'playwright'
-import prefs from '../../helpers/prefs.js'
 
 async function testSalaires(page: Page) {
   const hostname = local
@@ -134,6 +134,7 @@ if (process.env.CI) {
   runTest(testNotes, import.meta.url, { pauseOnError: false })
   runTest(test6N314, import.meta.url, { pauseOnError: false })
 } else {
+  prefs.headless = false
   runTest(testSalaires, import.meta.url)
   runTest(testNotes, import.meta.url)
   runTest(test6N314, import.meta.url)

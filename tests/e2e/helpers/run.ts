@@ -291,24 +291,22 @@ async function fillMathField(
 ) {
   await page.waitForSelector(selector) // Les champs MathLive mettent un peu plus de temps à se charger que le reste
   const champTexteMathlive = page.locator(selector)
-  if (Array.isArray(answer)) {
-    for (let i = 0; i < answer.length; i++) {
-      if (i === 0) {
-        if (champTexteMathlive.locator('.ML__prompt').nth(0) !== undefined) {
-          await champTexteMathlive.locator('.ML__prompt').nth(0).click()
-        } else {
-          await champTexteMathlive.click()
-        }
-        //    await champTexteMathlive.press('Shift+Tab') plus de problème de focus : il n'y a pas à changer de champ
-        //    await champTexteMathlive.press('Shift+Tab') plus de problème de focus : il n'y a pas à changer de champ
-      } else {
-        await champTexteMathlive.press('Tab')
-      }
+  const prompts = Array.from(
+    await champTexteMathlive.locator('.ML__prompt').all(),
+  )
+
+  const promptCount = prompts.length
+
+  if (promptCount > 1 && Array.isArray(answer)) {
+    for (let i = 0; i < answer.length && i < promptCount; i++) {
+      await prompts[i].click()
       await champTexteMathlive.pressSequentially(answer[i].toString())
     }
   } else {
     await champTexteMathlive.click()
-    await champTexteMathlive.pressSequentially(answer.toString())
+    await champTexteMathlive.pressSequentially(
+      Array.isArray(answer) ? (answer[0]?.toString() ?? '') : answer.toString(),
+    )
   }
 }
 

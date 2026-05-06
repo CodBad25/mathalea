@@ -20,6 +20,33 @@ const apps = {
   ],
 }
 
+let hasGlobalTabTracker = false
+let lastTabDirection = null
+let lastTabTimestamp = 0
+
+function handleGlobalTabKeydown(event) {
+  if (event.key !== 'Tab') return
+  lastTabDirection = event.shiftKey ? 'backward' : 'forward'
+  lastTabTimestamp = Date.now()
+}
+
+function consumeRecentTabDirection() {
+  if (lastTabDirection == null) return null
+  if (Date.now() - lastTabTimestamp > 250) {
+    lastTabDirection = null
+    return null
+  }
+  const direction = lastTabDirection
+  lastTabDirection = null
+  return direction
+}
+
+function ensureGlobalTabTracker() {
+  if (hasGlobalTabTracker) return
+  document.addEventListener('keydown', handleGlobalTabKeydown, true)
+  hasGlobalTabTracker = true
+}
+
 /**
  * Charge une appli listée dans apps (pour mutualiser l'appel de loadjs)
  * @private
@@ -135,10 +162,24 @@ function injectPromptStyles(mf) {
     const style = document.createElement('style')
     style.id = 'ml-prompt-styles'
     style.textContent = `
-    .ML__prompt:not(.ML__lockedPromptBox) {
+    .ML__prompt:not(.ML__lockedPromptBox):not(.ML__focusedPromptBox) {
     min-height: 0.9em !important;
-   
+     outline: solid !important;
+  outline-width: thin !important;
+  outline-color: var(--color-coopmathsdark-corpus-light) !important;
     }
+    :host(:focus-within) .ML__prompt:not(.ML__lockedPromptBox).ML__focusedPromptBox {
+      outline: solid !important;
+  outline-width: 2px !important;
+  outline-color: var(--color-coopmaths-struct) !important;
+    min-height: 0.9em !important;
+    }
+    :host(:not(:focus-within)) .ML__prompt:not(.ML__lockedPromptBox).ML__focusedPromptBox {
+      outline: solid !important;
+      outline-width: thin !important;
+      outline-color: var(--color-coopmathsdark-corpus-light) !important;
+    }
+    
     .ML__prompt-atom {
     line-height: 0.9 !important;
      vertical-align: -0.1em !important;
@@ -147,12 +188,14 @@ function injectPromptStyles(mf) {
     shadow.appendChild(style)
   }
 }
+
 /**
  * Charge MathLive et personnalise les réglages
  * MathLive est chargé dès qu'un tag math-field est créé
  */
 export async function loadMathLive(divExercice) {
   await import('mathlive')
+  ensureGlobalTabTracker()
   let champs
   if (divExercice) {
     champs = divExercice.getElementsByTagName('math-field')
@@ -217,6 +260,25 @@ function handleFocusMathField(event) {
   const isFillInTheBlanks =
     mf.classList.contains('fillInTheBlanks') ||
     mf.classList.contains('metaInteractif2d')
+
+  if (mf.classList.contains('fillInTheBlanks')) {
+    const tabDirection = consumeRecentTabDirection()
+    if (tabDirection != null) {
+      // En entrée par TAB dans un nouveau mathfield, on force un prompt cohérent
+      // pour éviter la reprise sur un ancien prompt mémorisé par le navigateur.
+      setTimeout(() => {
+        if (!mf.matches(':focus-within')) return
+        if (tabDirection === 'backward') {
+          mf.executeCommand('moveToMathfieldEnd')
+          mf.executeCommand('moveToPreviousPlaceholder')
+        } else {
+          mf.executeCommand('moveToMathfieldStart')
+          mf.executeCommand('moveToNextPlaceholder')
+        }
+      }, 0)
+    }
+  }
+
   const isNotFillInTheBlanksAndReadOnly = !isFillInTheBlanks && mf.readOnly
   const isCorrected =
     isNotFillInTheBlanksAndReadOnly || mf.classList.contains('corrected')
@@ -235,7 +297,7 @@ function handleFocusMathField(event) {
   })
 }
 
-function handleFocusOutMathField() {
+function handleFocusOutMathField(event) {
   // Si le focus est sur un autre élément que mathfield, on cache le clavier
   // On utilise setTimeout pour être sûr que le focus soit bien sur le nouvel élément
   // car au focusout, le focus est sur body

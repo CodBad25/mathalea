@@ -79,6 +79,7 @@ if (process.env.CI) {
   runTest(testCM2N2D1, import.meta.url, { pauseOnError: false }) // true pendant le développement, false ensuite
   runTest(test5R211, import.meta.url, { pauseOnError: false }) // true pendant le développement, false ensuite
 } else {
+  prefs.headless = false
   runTest(testCM2N2D1, import.meta.url)
   runTest(test5R211, import.meta.url)
 }
