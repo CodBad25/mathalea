@@ -52,7 +52,7 @@ export default class auto1AF4c extends ExerciceQcmA {
 
     this.enonce = `${deuxColonnes(
       `On donne ci-contre la courbe représentative $\\mathscr{C}$ d'une fonction $f$ définie sur $[-3\\,;\\,2]$.<br>
-   On s'intéresse à l'équation $f(x)=0$.<br><br>Une seule de ces propositions est exacte :`,
+   On s'intéresse à l'équation $f(x)=0$.<br>Une seule de ces propositions est exacte :`,
       mathalea2d(
         Object.assign(
           { pixelsParCm: 30, scale: 0.7, style: 'margin: auto' },
@@ -74,7 +74,7 @@ export default class auto1AF4c extends ExerciceQcmA {
           epaisseur: 2,
         }),
       ),
-    )}<br>`
+    )}`
 
     this.correction = `Il y a deux points d'intersection entre la courbe et l'axe des abscisses.<br>
     Les abscisses de ces points sont les solutions de l'équation. Ces abscisses sont négatives. <br>
@@ -122,7 +122,7 @@ export default class auto1AF4c extends ExerciceQcmA {
 
           this.enonce = `${deuxColonnes(
             `On donne ci-contre la courbe représentative $\\mathscr{C}$ d'une fonction $f$ définie sur $[-3\\,;\\,2]$.<br>
-         On s'intéresse à l'équation $f(x)=0$.<br><br>Une seule de ces propositions est exacte :`,
+         On s'intéresse à l'équation $f(x)=0$.<br>Une seule de ces propositions est exacte :`,
             mathalea2d(
               Object.assign(
                 { pixelsParCm: 30, scale: 0.7, style: 'margin: auto' },
@@ -144,7 +144,7 @@ export default class auto1AF4c extends ExerciceQcmA {
                 epaisseur: 2,
               }),
             ),
-          )}<br>`
+          )}`
 
           this.correction = `Il y a deux points d'intersection entre la courbe et l'axe des abscisses.<br>
     Les abscisses de ces points sont les solutions de l'équation. Ces abscisses sont négatives. <br>
@@ -189,7 +189,7 @@ export default class auto1AF4c extends ExerciceQcmA {
 
           this.enonce = `${deuxColonnes(
             `On donne ci-contre la courbe représentative $\\mathscr{C}$ d'une fonction $f$ définie sur $[-3\\,;\\,2]$.<br>
-         On s'intéresse à l'équation $f(x)=0$.<br><br>Une seule de ces propositions est exacte :`,
+         On s'intéresse à l'équation $f(x)=0$.<br>Une seule de ces propositions est exacte :`,
             mathalea2d(
               Object.assign(
                 { pixelsParCm: 30, scale: 0.7, style: 'margin: auto' },
@@ -211,7 +211,7 @@ export default class auto1AF4c extends ExerciceQcmA {
                 epaisseur: 2,
               }),
             ),
-          )}<br>`
+          )}`
 
           this.correction = `Il y a deux points d'intersection entre la courbe et l'axe des abscisses.<br>
     Les abscisses de ces points sont les solutions de l'équation. Ces abscisses sont de signes contraires. <br>
@@ -256,7 +256,7 @@ export default class auto1AF4c extends ExerciceQcmA {
 
           this.enonce = `${deuxColonnes(
             `On donne ci-contre la courbe représentative $\\mathscr{C}$ d'une fonction $f$ définie sur $[-3\\,;\\,2]$.<br>
-         On s'intéresse à l'équation $f(x)=0$.<br><br>Une seule de ces propositions est exacte :`,
+         On s'intéresse à l'équation $f(x)=0$.<br>Une seule de ces propositions est exacte :`,
             mathalea2d(
               Object.assign(
                 { pixelsParCm: 30, scale: 0.7, style: 'margin: auto' },
@@ -278,7 +278,7 @@ export default class auto1AF4c extends ExerciceQcmA {
                 epaisseur: 2,
               }),
             ),
-          )}<br>`
+          )}`
 
           this.correction = `Il y a un point d'intersection entre la courbe et l'axe des abscisses.<br>
     Par conséquent,   ${texteEnCouleurEtGras("l'équation $f(x)=0$ admet exactement une solution.")}.`
@@ -322,7 +322,7 @@ export default class auto1AF4c extends ExerciceQcmA {
 
           this.enonce = `${deuxColonnes(
             `On donne ci-contre la courbe représentative $\\mathscr{C}$ d'une fonction $f$ définie sur $[-3\\,;\\,2]$.<br>
-         On s'intéresse à l'équation $f(x)=0$.<br><br>Une seule de ces propositions est exacte :`,
+         On s'intéresse à l'équation $f(x)=0$.<br>Une seule de ces propositions est exacte :`,
             mathalea2d(
               Object.assign(
                 { pixelsParCm: 30, scale: 0.7, style: 'margin: auto' },
@@ -344,7 +344,7 @@ export default class auto1AF4c extends ExerciceQcmA {
                 epaisseur: 2,
               }),
             ),
-          )}<br>`
+          )}`
 
           this.correction = `Il n'y a aucun point d'intersection entre la courbe et l'axe des abscisses.<br>
     Par conséquent,   ${texteEnCouleurEtGras("l'équation $f(x)=0$ n'admet aucune solution")}.`
