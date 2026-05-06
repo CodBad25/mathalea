@@ -31,19 +31,25 @@
     Gestions des exercices via la liste
    --------------------------------------------------------------- */
   /**
-   * Compare un code à UUID courante
-   * @param {string} code le code de l'UUID à comparer à l'UUID courante
-   * @returns {boolean} `true` si les deux chaînes sont égales
+   * Compare les paramètres d'un exercice à la ressource courante.
+   * Les exercices MathALÉA et les outils sont distingués par `id` car
+   * plusieurs références peuvent partager un même `uuid`.
+   * @param {InterfaceParams} item l'exercice sélectionné à comparer à la ressource courante
+   * @returns {boolean} `true` si les deux ressources sont égales
    */
-  const compareCodes = (code: string): boolean => {
-    return code === ending.uuid
+  const isMatchingEnding = (item: InterfaceParams): boolean => {
+    if (item.uuid !== ending.uuid) return false
+    if (isExerciceItemInReferentiel(ending) || isTool(ending)) {
+      return item.id === ending.id
+    }
+    return true
   }
   /**
    * Compte le nombre de fois où la ressource a été sélectionnée
    * @returns {number} nb d'occurences
    */
   const countOccurences = (): number => {
-    return $exercicesParams.map((item) => item.uuid).filter(compareCodes).length
+    return $exercicesParams.filter(isMatchingEnding).length
   }
   // on compte réactivement le nombre d'occurences
   // de l'exercice dans la liste des sélectionnés
@@ -100,9 +106,8 @@
    * la première est retirée)
    */
   function removeFromList() {
-    const matchingIndex = $exercicesParams
-      .map((item) => item.uuid)
-      .findIndex(compareCodes)
+    const matchingIndex = $exercicesParams.findIndex(isMatchingEnding)
+    if (matchingIndex === -1) return
     exercicesParams.update((list) => [
       ...list.slice(0, matchingIndex),
       ...list.slice(matchingIndex + 1),
