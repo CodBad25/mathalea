@@ -34,7 +34,7 @@ import {
 import Exercice from '../Exercice'
 
 export const interactifReady = true
-export const interactifType = 'multiMathField'
+export const interactifType = 'multiMathfield'
 export const dateDeModificationImportante = '12/04/2026'
 export const titre = 'Résoudre un problème en utilisant des fractions'
 

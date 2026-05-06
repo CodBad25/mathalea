@@ -18,7 +18,7 @@ import Exercice from '../Exercice'
 
 export const titre = 'Tirer des boules avec remise dans une urne.'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+export const interactifType = 'multiMathfield'
 export const dateDePublication = '18/11/2024'
 export const dateDeModifImportante = '10/12/2025'
 export const uuid = 'daabf'

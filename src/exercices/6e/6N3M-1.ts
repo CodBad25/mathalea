@@ -38,7 +38,7 @@ export const dateDeModifImportante = '01/04/2026'
 /**
  * Calculer la fraction d'une quantité avec ou sans dessin.
  * @author Jean-claude Lhote
- *  Olivier Mimeau : Passage en multiMathField le 15/04/2026
+ *  Olivier Mimeau : Passage en multiMathfield le 15/04/2026
  */
 export const uuid = 'a6deb'
 

@@ -21,7 +21,7 @@ import {
 import type { OptionsComparaisonType } from '../../lib/types'
 
 export const interactifReady = true
-export const interactifType = 'multiMathField'
+export const interactifType = 'multiMathfield'
 export const titre = 'Résoudre des problèmes (plus complexes)'
 export const dateDePublication = '27/11/2022'
 export const dateDeModifImportante = '17/02/2025'
@@ -29,7 +29,7 @@ export const dateDeModifImportante = '17/02/2025'
 /**
  * Résoudre des problèmes (plus complexes)
  * @author Mickael Guironnet
- * Passage en multiMathField par Éric Elter le 22/04/2026
+ * Passage en multiMathfield par Éric Elter le 22/04/2026
  * Relecture typographique par Rémi Angot
  */
 export const uuid = 'e90ee'

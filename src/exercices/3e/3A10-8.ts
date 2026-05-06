@@ -35,7 +35,7 @@ export const refs = {
 /**
  * @author Jean-Claude LHOTE
  * Ajout de this.sup 7 et 8 par Guillaume Valmont le 12/04/2025
- * Refactorisation des paramètres et passage en multiMathField par Éric Elter le 12/04/2026
+ * Refactorisation des paramètres et passage en multiMathfield par Éric Elter le 12/04/2026
  */
 
 type OptionsComparaisonAvecClavier = OptionsComparaisonType & {

@@ -22,7 +22,7 @@ import Exercice from '../Exercice'
 
 export const titre = "Lire l'image d'un nombre à partir d'un graphique"
 export const interactifReady = true
-export const interactifType = 'multimathfield'
+export const interactifType = 'multiMathfield'
 export const amcReady = true
 export const amcType = 'AMCHybride'
 

@@ -26,7 +26,7 @@ export const dateDeModifImportante = '11/04/2026'
 export const titre =
   "Trouver l'intersection des droites représentant des fonctions affines"
 export const interactifReady = true
-export const interactifType = 'multimathfield'
+export const interactifType = 'multiMathfield'
 
 /**
  * Trouver les coordonnées du point d'intersection des droites représentant des fonctions affines

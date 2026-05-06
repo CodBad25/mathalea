@@ -44,7 +44,7 @@ import Exercice from '../Exercice'
 
 export const titre = 'Calculer périmètre et aire de figures composées'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+export const interactifType = 'multiMathfield'
 export const amcReady = true
 export const amcType = 'AMCHybride'
 export const dateDeModifImportante = '31/03/2026'
@@ -743,9 +743,15 @@ export default class PerimetreOuAireDeFiguresComposees extends Exercice {
               "La figure est composée d'un rectangle et d'un demi-disque."
           } else {
             const perimetreValMin = arrondi(perimetreValue, this.sup3 - 1)
-            const perimetreValMax = troncature(perimetreValue + 10 ** (-this.sup3 + 1), this.sup3 - 1)
+            const perimetreValMax = troncature(
+              perimetreValue + 10 ** (-this.sup3 + 1),
+              this.sup3 - 1,
+            )
             const aireValMin = arrondi(aireValue, this.sup3 - 1)
-            const aireValMax = troncature(aireValue + 10 ** (-this.sup3 + 1), this.sup3 - 1)
+            const aireValMax = troncature(
+              aireValue + 10 ** (-this.sup3 + 1),
+              this.sup3 - 1,
+            )
 
             texteCorr = `La figure est composée d'un rectangle de ${stringNombre(L1, 1)} cm par ${stringNombre(L2, 1)} cm`
             texteCorr += ` et d'un demi-disque de rayon ${stringNombre(L2 / 2, 1)} cm.<br>`
@@ -771,10 +777,23 @@ export default class PerimetreOuAireDeFiguresComposees extends Exercice {
                 : ''
           }
 
-          const perimetreValuesApp = valeursApprochees(perimetreValue, this.sup3)
+          const perimetreValuesApp = valeursApprochees(
+            perimetreValue,
+            this.sup3,
+          )
           const aireValuesApp = valeursApprochees(aireValue, this.sup3)
-          perimetreReponses = this.sup5 ? perimetreValuesApp : [arrondi(perimetreValue, this.sup3 - 1), arrondi(perimetreValue, this.sup3 - 1)]
-          aireReponses = this.sup5 ? aireValuesApp : [arrondi(aireValue, this.sup3 - 1), arrondi(aireValue, this.sup3 - 1)]
+          perimetreReponses = this.sup5
+            ? perimetreValuesApp
+            : [
+                arrondi(perimetreValue, this.sup3 - 1),
+                arrondi(perimetreValue, this.sup3 - 1),
+              ]
+          aireReponses = this.sup5
+            ? aireValuesApp
+            : [
+                arrondi(aireValue, this.sup3 - 1),
+                arrondi(aireValue, this.sup3 - 1),
+              ]
           break
         }
         case 5: {
@@ -910,9 +929,15 @@ export default class PerimetreOuAireDeFiguresComposees extends Exercice {
             et de deux demi-disques.<br>`
           } else {
             const perimetreValMin = arrondi(perimetreValue, this.sup3 - 1)
-            const perimetreValMax = troncature(perimetreValue + 10 ** (-this.sup3 + 1), this.sup3 - 1)
+            const perimetreValMax = troncature(
+              perimetreValue + 10 ** (-this.sup3 + 1),
+              this.sup3 - 1,
+            )
             const aireValMin = arrondi(aireValue, this.sup3 - 1)
-            const aireValMax = troncature(aireValue + 10 ** (-this.sup3 + 1), this.sup3 - 1)
+            const aireValMax = troncature(
+              aireValue + 10 ** (-this.sup3 + 1),
+              this.sup3 - 1,
+            )
 
             texteCorr = `La figure est composée d'un rectangle de ${stringNombre(L1, 1)} cm par ${stringNombre(L2, 1)} cm`
             texteCorr += ` et de deux demi-disques de rayon ${stringNombre(L2 / 2, 1)} cm.<br>`
@@ -937,10 +962,23 @@ export default class PerimetreOuAireDeFiguresComposees extends Exercice {
                   : `La valeur approchée ${this.sup3 === 1 ? 'au cm$^2$' : 'au dixième de cm$^2$'} est donc $\\mathcal{A}\\approx ${miseEnEvidence(texNombre(aireValMin, 1))}${sp()}${texTexte('cm')}^2$.<br>`
                 : ''
           }
-          const perimetreValuesApp = valeursApprochees(perimetreValue, this.sup3)
+          const perimetreValuesApp = valeursApprochees(
+            perimetreValue,
+            this.sup3,
+          )
           const aireValuesApp = valeursApprochees(aireValue, this.sup3)
-          perimetreReponses = this.sup5 ? perimetreValuesApp : [arrondi(perimetreValue, this.sup3 - 1), arrondi(perimetreValue, this.sup3 - 1)]
-          aireReponses = this.sup5 ? aireValuesApp : [arrondi(aireValue, this.sup3 - 1), arrondi(aireValue, this.sup3 - 1)]
+          perimetreReponses = this.sup5
+            ? perimetreValuesApp
+            : [
+                arrondi(perimetreValue, this.sup3 - 1),
+                arrondi(perimetreValue, this.sup3 - 1),
+              ]
+          aireReponses = this.sup5
+            ? aireValuesApp
+            : [
+                arrondi(aireValue, this.sup3 - 1),
+                arrondi(aireValue, this.sup3 - 1),
+              ]
           break
         }
         case 6: {
@@ -958,7 +996,8 @@ export default class PerimetreOuAireDeFiguresComposees extends Exercice {
           const L1 =
             randint(Math.ceil(l1) + 1, Math.ceil(l1) + 4) + randint(1, 9) / 10
           const perimetreValue = L1 + L2 + hyp + L1 + (l1 * Math.PI) / 2
-          const aireValue = L1 * l1 + (L2 * l1) / 2 + ((l1 / 2) * (l1 / 2) * Math.PI) / 2
+          const aireValue =
+            L1 * l1 + (L2 * l1) / 2 + ((l1 / 2) * (l1 / 2) * Math.PI) / 2
           const zoom = randint(14, 18) / (L1 + L2)
           const A = pointAbstrait(0, 0, 'A')
           const B = pointAbstrait(0, l1 * zoom, 'B')
@@ -1067,9 +1106,15 @@ export default class PerimetreOuAireDeFiguresComposees extends Exercice {
             La figure est composée d'un rectangle, d'un triangle rectangle et d'un demi-disque.<br>`
           } else {
             const perimetreValMin = arrondi(perimetreValue, this.sup3 - 1)
-            const perimetreValMax = troncature(perimetreValue + 10 ** (-this.sup3 + 1), this.sup3 - 1)
+            const perimetreValMax = troncature(
+              perimetreValue + 10 ** (-this.sup3 + 1),
+              this.sup3 - 1,
+            )
             const aireValMin = arrondi(aireValue, this.sup3 - 1)
-            const aireValMax = troncature(aireValue + 10 ** (-this.sup3 + 1), this.sup3 - 1)
+            const aireValMax = troncature(
+              aireValue + 10 ** (-this.sup3 + 1),
+              this.sup3 - 1,
+            )
 
             texteCorr = `La figure est composée d'un rectangle de ${stringNombre(L1, 1)} cm par ${stringNombre(l1, 1)} cm, `
             texteCorr += `d'un triangle rectangle dont les côtés de l'angle droit mesurent respectivement ${stringNombre(L2, 1)} cm et ${stringNombre(l1, 1)} cm `
@@ -1095,10 +1140,23 @@ export default class PerimetreOuAireDeFiguresComposees extends Exercice {
                   : `L'aire de la figure, arrondie au ${this.sup3 === 1 ? 'cm$^2$' : 'dixième de cm$^2$'} près, est donc $\\mathcal{A}\\approx ${miseEnEvidence(texNombre(aireValMin, 2))}${sp()}${texTexte('cm')}^2$.<br>`
                 : ''
           }
-          const perimetreValuesApp = valeursApprochees(perimetreValue, this.sup3)
+          const perimetreValuesApp = valeursApprochees(
+            perimetreValue,
+            this.sup3,
+          )
           const aireValuesApp = valeursApprochees(aireValue, this.sup3)
-          perimetreReponses = this.sup5 ? perimetreValuesApp : [arrondi(perimetreValue, this.sup3 - 1), arrondi(perimetreValue, this.sup3 - 1)]
-          aireReponses = this.sup5 ? aireValuesApp : [arrondi(aireValue, this.sup3 - 1), arrondi(aireValue, this.sup3 - 1)]
+          perimetreReponses = this.sup5
+            ? perimetreValuesApp
+            : [
+                arrondi(perimetreValue, this.sup3 - 1),
+                arrondi(perimetreValue, this.sup3 - 1),
+              ]
+          aireReponses = this.sup5
+            ? aireValuesApp
+            : [
+                arrondi(aireValue, this.sup3 - 1),
+                arrondi(aireValue, this.sup3 - 1),
+              ]
           break
         }
         case 7:
@@ -1239,9 +1297,15 @@ export default class PerimetreOuAireDeFiguresComposees extends Exercice {
               "La figure est composée d'un rectangle privé d'un demi-disque dans sa largeur que l'on a ajouté dans sa longueur."
           } else {
             const perimetreValMin = arrondi(perimetreValue, this.sup3 - 1)
-            const perimetreValMax = troncature(perimetreValue + 10 ** (-this.sup3 + 1), this.sup3 - 1)
+            const perimetreValMax = troncature(
+              perimetreValue + 10 ** (-this.sup3 + 1),
+              this.sup3 - 1,
+            )
             const aireValMin = arrondi(aireValue, this.sup3 - 1)
-            const aireValMax = troncature(aireValue + 10 ** (-this.sup3 + 1), this.sup3 - 1)
+            const aireValMax = troncature(
+              aireValue + 10 ** (-this.sup3 + 1),
+              this.sup3 - 1,
+            )
 
             texteCorr = `La figure est composée d'un rectangle de $${texNombre(L1, 1)}\\text{ cm}$ par $${texNombre(L2, 1)}\\text{ cm}$`
             texteCorr += ` duquel on a découpé un demi-disque de rayon $${texNombre(L2 / 2, 1)}\\text{ cm}$ dans sa largeur pour le recoller sur sa longueur.<br>`
@@ -1267,10 +1331,23 @@ export default class PerimetreOuAireDeFiguresComposees extends Exercice {
                 : ''
           }
 
-          const perimetreValuesApp = valeursApprochees(perimetreValue, this.sup3)
+          const perimetreValuesApp = valeursApprochees(
+            perimetreValue,
+            this.sup3,
+          )
           const aireValuesApp = valeursApprochees(aireValue, this.sup3)
-          perimetreReponses = this.sup5 ? perimetreValuesApp : [arrondi(perimetreValue, this.sup3 - 1), arrondi(perimetreValue, this.sup3 - 1)]
-          aireReponses = this.sup5 ? aireValuesApp : [arrondi(aireValue, this.sup3 - 1), arrondi(aireValue, this.sup3 - 1)]
+          perimetreReponses = this.sup5
+            ? perimetreValuesApp
+            : [
+                arrondi(perimetreValue, this.sup3 - 1),
+                arrondi(perimetreValue, this.sup3 - 1),
+              ]
+          aireReponses = this.sup5
+            ? aireValuesApp
+            : [
+                arrondi(aireValue, this.sup3 - 1),
+                arrondi(aireValue, this.sup3 - 1),
+              ]
           break
         }
       }

@@ -20,7 +20,7 @@ export const amcType = 'AMCOpen'
 export const titre = 'Programmer des déplacements absolus (Scratch)'
 export const dateDeModifImportante = '09/06/2025'
 export const interactifReady = true
-export const interactifType = 'multiMathField'
+export const interactifType = 'multiMathfield'
 
 /**
  * * Colorier le déplacement d'un lutin
@@ -28,7 +28,7 @@ export const interactifType = 'multiMathField'
  *  Ajout paramètre 3 par Éric Elter
  * Ajout AMC : Janvier 2022 par Éric Elter
  * Ajout interactivité : Juin 2025 par Guillaume Valmont
- * Passage en multiMathField par Éric Elter le 13/04/2026
+ * Passage en multiMathfield par Éric Elter le 13/04/2026
  */
 export const uuid = 'c8fee'
 

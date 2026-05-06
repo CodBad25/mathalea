@@ -14,7 +14,7 @@ import FractionEtendue from '../../modules/FractionEtendue'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 export const interactifReady = true
-export const interactifType = 'mathfield'
+export const interactifType = 'multiMathfield'
 export const dateDePublication = '02/05/2023'
 export const dateDeModifImportante = '06/04/2026'
 export const titre = 'Résoudre des équations avec un quotient'
@@ -335,9 +335,10 @@ ${rienSi1(-e * c + f * a)}x&= ${e * d - f * b}${-e * c + f * a === 1 ? '' : '\\\
           }
           break
       }
-      texte+='<br>'
+      texte += '<br>'
       texte += `${addMultiMathfield(this, i, {
-        dataTemplate: 'Ensemble des valeurs interdites : %{champ1}\nEnsemble des solutions : %{champ2}',
+        dataTemplate:
+          'Ensemble des valeurs interdites : %{champ1}\nEnsemble des solutions : %{champ2}',
         dataOptions: {
           champ1: {
             keyboard: KeyboardType.clavierEnsemble,
@@ -347,16 +348,21 @@ ${rienSi1(-e * c + f * a)}x&= ${e * d - f * b}${-e * c + f * a === 1 ? '' : '\\\
           },
         },
       })}`
-      handleAnswers(this,  i, {
-        champ1: {
-          value: ensValeursInterdites,
-          options: { ensembleDeNombres: true },
+      handleAnswers(
+        this,
+        i,
+        {
+          champ1: {
+            value: ensValeursInterdites,
+            options: { ensembleDeNombres: true },
+          },
+          champ2: {
+            value: ensSolutions,
+            options: { ensembleDeNombres: true },
+          },
         },
-        champ2: {
-          value: ensSolutions,
-          options: { ensembleDeNombres: true },
-        },
-      }, { formatInteractif: 'multiMathfield' })
+        { formatInteractif: 'multiMathfield' },
+      )
       if (this.questionJamaisPosee(i, a, b, c, d)) {
         // Si la question n'a jamais été posée, on en créé une autre
         this.listeQuestions[i] = texte

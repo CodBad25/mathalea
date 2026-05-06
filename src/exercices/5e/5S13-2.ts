@@ -25,7 +25,7 @@ import { miseEnEvidence } from '../../lib/outils/embellissements'
 
 export const titre = 'Calculer des fréquences statistiques'
 export const interactifReady = true
-export const interactifType = 'multiMathField'
+export const interactifType = 'multiMathfield'
 export const amcReady = true
 export const amcType = 'AMCHybride'
 

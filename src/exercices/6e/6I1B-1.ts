@@ -34,14 +34,14 @@ export const titre = 'Programmer des déplacements relatifs (Scratch)'
 export const dateDePublication = '05/02/2023'
 export const dateDeModifImportante = '09/06/2025'
 export const interactifReady = true
-export const interactifType = 'multiMathField'
+export const interactifType = 'multiMathfield'
 
 /**
  * * Colorier le déplacement d'un lutin
  * @author Guillaume Valmont
  * // d'après 6I1B de Erwan Duplessy
  * Ajout interactivité : Juin 2025 par Guillaume Valmont
- * Passage en multiMathField par Éric Elter le 13/04/2026
+ * Passage en multiMathfield par Éric Elter le 13/04/2026
  */
 export const uuid = '594ee'
 

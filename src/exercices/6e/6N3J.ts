@@ -15,7 +15,7 @@ import Exercice from '../Exercice'
 export const titre =
   'Ordonner une liste de nombres écrits sous forme de fractions ou de nombres mixtes'
 export const interactifReady = true
-export const interactifType = 'multiMathField'
+export const interactifType = 'multiMathfield'
 export const dateDePublication = '21/07/2025'
 export const dateDeModificationImportante = '02/04/2026'
 
@@ -158,27 +158,27 @@ export default class ComparerFractionsNombresMixtes extends Exercice {
               champ1: {
                 keyboard: KeyboardType.clavierDeBaseAvecFraction,
                 minWidth: 50,
-                ldots: true
+                ldots: true,
               },
               champ2: {
                 keyboard: KeyboardType.clavierDeBaseAvecFraction,
                 minWidth: 50,
-                ldots: true
+                ldots: true,
               },
               champ3: {
                 keyboard: KeyboardType.clavierDeBaseAvecFraction,
                 minWidth: 50,
-                ldots: true
+                ldots: true,
               },
               champ4: {
                 keyboard: KeyboardType.clavierDeBaseAvecFraction,
                 minWidth: 50,
-                ldots: true
+                ldots: true,
               },
               champ5: {
                 keyboard: KeyboardType.clavierDeBaseAvecFraction,
                 minWidth: 50,
-                ldots: true
+                ldots: true,
               },
             },
           })

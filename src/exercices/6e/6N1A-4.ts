@@ -10,7 +10,7 @@ import Exercice from '../Exercice'
 
 export const titre = 'Parcourir un labyrinthe de numération décimale'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+export const interactifType = 'multiMathfield'
 export const amcReady = true
 export const amcType = 'AMCOpen'
 export const dateDePublication = '9/12/2020'
