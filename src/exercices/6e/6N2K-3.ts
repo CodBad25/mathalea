@@ -16,7 +16,7 @@ export const titre =
 export const amcReady = true
 export const amcType = 'AMCHybride'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+export const interactifType = 'multiMathfield'
 /**
  * Détermination du reste et quotient à partir de l'égalité découlant de la division euclidienne
  * @author Cédric GROLLEAU

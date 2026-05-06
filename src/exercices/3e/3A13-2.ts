@@ -4,7 +4,7 @@ export const titre =
 export const amcReady = true
 export const amcType = 'AMCHybride'
 export const interactifReady = true
-export const interactifType = 'mathLive'
+export const interactifType = 'multiMathfield'
 
 export const dateDePublication = '14/09/2022'
 
@@ -17,7 +17,7 @@ export const dateDePublication = '14/09/2022'
 export const uuid = 'd8bf2'
 
 export const refs = {
-  'fr-fr': ['3A13-2Old'],
+  'fr-fr': ['3A13-2'],
   'fr-ch': [],
 }
 export default class DivisionsEuclidiennesEgalite3e extends DivisionsEuclidiennesEgalite2 {
