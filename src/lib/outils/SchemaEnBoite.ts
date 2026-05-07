@@ -2,6 +2,39 @@ import { context } from '../../modules/context'
 import { range } from './nombres'
 import './ShemasEnBoite.css'
 import { texNombre } from './texNombre'
+import { colours } from '../2d/colorToLatexOrHtml'
+import type { ColourNames } from '../2d/colorToLatexOrHtml'
+
+const standardLatexColors = new Set([
+  'black', 'white', 'red', 'green', 'blue', 'cyan', 'magenta', 'yellow',
+  'gray', 'darkgray', 'lightgray', 'orange', 'violet', 'purple', 'brown',
+  'lime', 'olive', 'pink', 'teal',
+])
+
+function hexToRgb(hex: string): [number, number, number] {
+  const h = hex.replace('#', '')
+  return [parseInt(h.slice(0, 2), 16), parseInt(h.slice(2, 4), 16), parseInt(h.slice(4, 6), 16)]
+}
+
+function colorForTikz(color: string): string {
+  if (standardLatexColors.has(color)) return color
+  const hex = color.startsWith('#') ? color : colours[color as ColourNames]
+  if (hex) {
+    const [r, g, b] = hexToRgb(hex)
+    return `{rgb,255:red,${r};green,${g};blue,${b}}`
+  }
+  return color
+}
+
+function colorForTextcolor(color: string): string {
+  if (standardLatexColors.has(color)) return `{${color}}`
+  const hex = color.startsWith('#') ? color : colours[color as ColourNames]
+  if (hex) {
+    const [r, g, b] = hexToRgb(hex)
+    return `[RGB]{${r},${g},${b}}`
+  }
+  return `{${color}}`
+}
 
 /**
  * @author Jean-claude Lhote
@@ -365,7 +398,7 @@ export default class SchemaEnBoite {
           if (start != null && end != null && texte != null) {
             let styleTexte = ''
             if (color && !texte.includes('tikzpicture'))
-              styleTexte += `\\textcolor{${color}}{`
+              styleTexte += `\\textcolor${colorForTextcolor(color)}{`
             let fontSizeCmd = ''
             if (fontSize) {
               if (fontSize === 'small') fontSizeCmd = '\\small '
@@ -378,9 +411,9 @@ export default class SchemaEnBoite {
             if (fontWeight === 'bold') fontWeightCmd = '\\textbf{'
             const texteLatex = `${styleTexte}${fontSizeCmd}${fontWeightCmd}${texte}${fontWeight === 'bold' ? '}' : ''}${color && !texte.includes('tikzpicture') ? '}' : ''}`
             if (type === 'flèche') {
-              latex += `\\draw[<->,thick, draw=${color}] (${start.toFixed(1)},3.2) -- (${end.toFixed(1)},3.2) node[above, pos=0.5] {${texteLatex}};\n`
+              latex += `\\draw[<->,thick, draw=${colorForTikz(color)}] (${start.toFixed(1)},3.2) -- (${end.toFixed(1)},3.2) node[above, pos=0.5] {${texteLatex}};\n`
             } else {
-              latex += `\\draw[decorate,decoration={brace,amplitude=10pt},xshift=0pt,yshift=0pt,draw=${color}] (${start.toFixed(1)},3) -- node[above=10pt, pos=0.5] {${texteLatex}} (${end.toFixed(1)},3);\n`
+              latex += `\\draw[decorate,decoration={brace,amplitude=10pt},xshift=0pt,yshift=0pt,draw=${colorForTikz(color)}] (${start.toFixed(1)},3) -- node[above=10pt, pos=0.5] {${texteLatex}} (${end.toFixed(1)},3);\n`
             }
           }
         }
@@ -444,7 +477,7 @@ export default class SchemaEnBoite {
 
           let styleTexte = ''
           if (color && !barre.content.includes('tikzpicture'))
-            styleTexte += `\\textcolor{${color}}{`
+            styleTexte += `\\textcolor${colorForTextcolor(color)}{`
           let fontSizeCmd = ''
           if (fontSize) {
             if (fontSize === 'small') fontSizeCmd = '\\small '
@@ -460,9 +493,9 @@ export default class SchemaEnBoite {
             : `${styleTexte}${fontSizeCmd}${fontWeightCmd}${barre.content}${fontWeight === 'bold' ? '}' : ''}${color ? '}' : ''}`
           if (barre.type === 'boite') {
             if (barre.options?.style === 'borderless') {
-              latex += `\\draw[fill=${barre.color}, draw=none] (${(start * texScale).toFixed(1)},${y.toFixed(1)}) rectangle (${((start + barre.length) * texScale).toFixed(1)},${(rectHeight * texScale + y).toFixed(1)});\n`
+              latex += `\\draw[fill=${colorForTikz(barre.color)}, draw=none] (${(start * texScale).toFixed(1)},${y.toFixed(1)}) rectangle (${((start + barre.length) * texScale).toFixed(1)},${(rectHeight * texScale + y).toFixed(1)});\n`
             } else {
-              latex += `\\draw[fill=${barre.color}] (${(start * texScale).toFixed(1)},${y.toFixed(1)}) rectangle (${((start + barre.length) * texScale).toFixed(1)},${(rectHeight * texScale + y).toFixed(1)});\n`
+              latex += `\\draw[fill=${colorForTikz(barre.color)}] (${(start * texScale).toFixed(1)},${y.toFixed(1)}) rectangle (${((start + barre.length) * texScale).toFixed(1)},${(rectHeight * texScale + y).toFixed(1)});\n`
             }
             let anchor = 'center'
             let align = 'center'
@@ -478,11 +511,11 @@ export default class SchemaEnBoite {
             }
             latex += `\\node[anchor=${anchor}, align=${align}] at (${x},${(y + rectHeight / 2).toFixed(1)}) {${texteLatex}};\n`
           } else if (barre.type === 'flèche') {
-            latex += `\\draw[<->,thick, draw=${color}] (${(start * texScale).toFixed(1)},${(y + 0.56).toFixed(1)}) -- (${((start + barre.length) * texScale).toFixed(1)},${(y + 0.56).toFixed(1)}) node[pos=0.5, below] {${texteLatex}};\n`
+            latex += `\\draw[<->,thick, draw=${colorForTikz(color)}] (${(start * texScale).toFixed(1)},${(y + 0.56).toFixed(1)}) -- (${((start + barre.length) * texScale).toFixed(1)},${(y + 0.56).toFixed(1)}) node[pos=0.5, below] {${texteLatex}};\n`
             // Ligne verticale à l'extrémité droite de la flèche
-            latex += `\\draw[dashed, thick, draw=${color}] (${((start + barre.length) * texScale).toFixed(1)},${y}) -- (${((start + barre.length) * texScale).toFixed(1)},${(y + rectHeight * texScale).toFixed(1)});\n`
+            latex += `\\draw[dashed, thick, draw=${colorForTikz(color)}] (${((start + barre.length) * texScale).toFixed(1)},${y}) -- (${((start + barre.length) * texScale).toFixed(1)},${(y + rectHeight * texScale).toFixed(1)});\n`
           } else {
-            latex += `\\draw[fill=${barre.color}] (${(start * texScale).toFixed(1)},${y.toFixed(1)}) rectangle (${((start + barre.length) * texScale).toFixed(1)},${(rectHeight * texScale + y).toFixed(1)}) node[pos=0.5] {${texteLatex}};\n`
+            latex += `\\draw[fill=${colorForTikz(barre.color)}] (${(start * texScale).toFixed(1)},${y.toFixed(1)}) rectangle (${((start + barre.length) * texScale).toFixed(1)},${(rectHeight * texScale + y).toFixed(1)}) node[pos=0.5] {${texteLatex}};\n`
           }
 
           // On met à jour le start pour le prochain élément
@@ -506,7 +539,7 @@ export default class SchemaEnBoite {
           if (start != null && end != null && texte != null) {
             let styleTexte = ''
             if (color && !texte.includes('tikzpicture'))
-              styleTexte += `\\textcolor{${color}}{`
+              styleTexte += `\\textcolor${colorForTextcolor(color)}{`
             let fontSizeCmd = ''
             if (fontSize) {
               if (fontSize === 'small') fontSizeCmd = '\\small '
@@ -521,9 +554,9 @@ export default class SchemaEnBoite {
               ? `${styleTexte}${fontSizeCmd}${fontWeightCmd}\\shortstack{${texte.replaceAll('<br>', '\\\\')}}${fontWeight === 'bold' ? '}' : ''}${color && !texte.includes('tikzpicture') ? '}' : ''}`
               : `${styleTexte}${fontSizeCmd}${fontWeightCmd}${texte}${fontWeight === 'bold' ? '}' : ''}${color ? '}' : ''}`
             if (type === 'flèche') {
-              latex += `\\draw[<->,thick, draw=${color}] (${start.toFixed(1)},${y - 0.2}) -- (${end.toFixed(1)},${y - 0.2}) node[below, pos=0.5] {${texteLatex}};\n`
+              latex += `\\draw[<->,thick, draw=${colorForTikz(color)}] (${start.toFixed(1)},${y - 0.2}) -- (${end.toFixed(1)},${y - 0.2}) node[below, pos=0.5] {${texteLatex}};\n`
             } else {
-              latex += `\\draw[decorate,decoration={brace,amplitude=10pt},xshift=0pt,yshift=0pt, draw=${color}] (${end.toFixed(1)},${y}) -- node[below=10pt, pos=0.5] {${texteLatex}} (${start.toFixed(1)},${y});\n`
+              latex += `\\draw[decorate,decoration={brace,amplitude=10pt},xshift=0pt,yshift=0pt, draw=${colorForTikz(color)}] (${end.toFixed(1)},${y}) -- node[below=10pt, pos=0.5] {${texteLatex}} (${start.toFixed(1)},${y});\n`
             }
           }
         }
@@ -554,7 +587,7 @@ export default class SchemaEnBoite {
           if (start != null && end != null && texte != null) {
             let styleTexte = ''
             if (color && !texte.includes('tikzpicture'))
-              styleTexte += `\\textcolor{${color}}{`
+              styleTexte += `\\textcolor${colorForTextcolor(color)}{`
             let fontSizeCmd = ''
             if (fontSize) {
               if (fontSize === 'small') fontSizeCmd = '\\small '
@@ -569,7 +602,7 @@ export default class SchemaEnBoite {
               ? `${styleTexte}${fontSizeCmd}${fontWeightCmd}\\shortstack{${texte.replaceAll('<br>', '\\\\')}}${fontWeight === 'bold' ? '}' : ''}${color && !texte.includes('tikzpicture') ? '}' : ''}`
               : `${styleTexte}${fontSizeCmd}${fontWeightCmd}${texte}${fontWeight === 'bold' ? '}' : ''}${color ? '}' : ''}`
 
-            latex += `\\draw[decorate,decoration={brace,amplitude=10pt},xshift=0pt,yshift=0pt, draw=${color}]  (${((gridLength + 0.3) * texScale).toFixed(1)},${start.toFixed(1)}) -- (${((gridLength + 0.3) * texScale).toFixed(1)},${end.toFixed(1)});\n`
+            latex += `\\draw[decorate,decoration={brace,amplitude=10pt},xshift=0pt,yshift=0pt, draw=${colorForTikz(color)}]  (${((gridLength + 0.3) * texScale).toFixed(1)},${start.toFixed(1)}) -- (${((gridLength + 0.3) * texScale).toFixed(1)},${end.toFixed(1)});\n`
             // Ajoute un petit espace horizontal (par exemple 0.3) entre l'accolade et le texte
             latex += `\\node[anchor=west, align=left] at (${(gridLength * texScale + 0.8).toFixed(1)},${((start + end) / 2).toFixed(1)}) {${texteLatex}};\n`
           }
