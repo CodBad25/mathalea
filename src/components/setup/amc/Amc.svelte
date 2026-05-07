@@ -1,6 +1,7 @@
 <script lang="ts">
   import seedrandom from 'seedrandom'
   import { onDestroy, onMount } from 'svelte'
+  import { mergeLatexTextsOnPropositions } from '../../../lib/amc/amcAutoCorrectionMerge'
   import { mathaleaEnsureAMCCompatibility } from '../../../lib/amc/amcInference'
   import { normalizeAMCNumBlocks } from '../../../lib/amc/amcNormalize'
   import type { IExerciceAMC } from '../../../lib/amc/amcTypes'
@@ -425,36 +426,6 @@
     return snapshot
   }
 
-  function copyLatexTextsOnPropositions(target: any, source: any): void {
-    if (!target || !source) return
-
-    if (typeof source.enonce === 'string') target.enonce = source.enonce
-    if (typeof source.texte === 'string') target.texte = source.texte
-    if (typeof source.feedback === 'string') target.feedback = source.feedback
-
-    if (target.reponse == null && source.reponse != null) {
-      target.reponse = {}
-    }
-    if (
-      target.reponse != null &&
-      source.reponse != null &&
-      typeof source.reponse.texte === 'string'
-    ) {
-      target.reponse.texte = source.reponse.texte
-    }
-
-    const targetSubProps = Array.isArray(target.propositions)
-      ? target.propositions
-      : []
-    const sourceSubProps = Array.isArray(source.propositions)
-      ? source.propositions
-      : []
-    const length = Math.min(targetSubProps.length, sourceSubProps.length)
-    for (let i = 0; i < length; i++) {
-      copyLatexTextsOnPropositions(targetSubProps[i], sourceSubProps[i])
-    }
-  }
-
   function populateAmcAutoCorrectionTextsFromLatex(
     exercice: IExercice,
     seed: string,
@@ -553,11 +524,7 @@
       const sourceProps = Array.isArray(sourceItem?.propositions)
         ? sourceItem.propositions
         : []
-
-      const min = Math.min(targetProps.length, sourceProps.length)
-      for (let j = 0; j < min; j++) {
-        copyLatexTextsOnPropositions(targetProps[j], sourceProps[j])
-      }
+      mergeLatexTextsOnPropositions(targetProps, sourceProps)
 
       // Copie options.explain depuis la passe LaTeX (isAmc=true, isHtml=false)
       // pour s'assurer que le texte de correction est en LaTeX et non en HTML.
