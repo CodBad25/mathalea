@@ -1,8 +1,14 @@
 import { MathfieldElement } from 'mathlive'
 import type { IExercice } from '../../lib/types'
+import type { CompareResult } from './checks/types'
 import { fonctionComparaison } from './comparisonFunctions'
 import { toutPourUnPoint } from './fonctionsBaremes'
 export { toutAUnPoint, toutPourUnPoint } from './fonctionsBaremes'
+
+function scoreFromResult(result: { isOk: boolean }): number {
+  const score = (result as Partial<CompareResult>).score
+  return typeof score === 'number' ? score : result.isOk ? 1 : 0
+}
 
 /**
  * fonction générale de vérification qui utilise le contenu de exercice.autoCorrection pour comparer la saisie utilisateur avec la réponse attendue
@@ -139,10 +145,10 @@ export function verifQuestionMathLive(
           }
           // On ne nettoie plus les input et les réponses, c'est la fonction de comparaison qui doit s'en charger !
           if (result.isOk) {
-            points.push(1)
+            points.push(scoreFromResult(result))
             if (spanFeedback != null) spanFeedback.innerHTML = '😎'
           } else {
-            points.push(0)
+            points.push(scoreFromResult(result))
             resultat = 'KO'
             if (spanFeedback != null) spanFeedback.innerHTML = '☹️'
           }
@@ -213,10 +219,10 @@ export function verifQuestionMathLive(
           }
           if (result.isOk) {
             compteurBonnesReponses++
-            points.push(1)
+            points.push(scoreFromResult(result))
             mfe.setPromptState(key, 'correct', true)
           } else {
-            points.push(0)
+            points.push(scoreFromResult(result))
             mfe.setPromptState(key, 'incorrect', true)
             if (result.feedback === 'saisieVide') result.feedback = null
             else {
@@ -347,14 +353,18 @@ export function verifQuestionMathLive(
     let ii = 0
     let reponse
     let feedback = ''
+    let bestScore = 0
     const compareFunction = objetReponse.compare ?? fonctionComparaison
 
     if (Array.isArray(objetReponse.value)) {
       while (!isOk && ii < objetReponse.value.length) {
         reponse = objetReponse.value[ii]
         const check = compareFunction(saisie, reponse, options)
+        const checkScore = scoreFromResult(check)
+        bestScore = Math.max(bestScore, checkScore)
         if (check.isOk) {
           isOk = true
+          bestScore = 1
           feedback = ''
           break
         }
@@ -366,6 +376,7 @@ export function verifQuestionMathLive(
     } else {
       reponse = objetReponse.value
       const check = compareFunction(saisie, reponse, options)
+      bestScore = scoreFromResult(check)
       if (check.isOk) {
         isOk = true
         feedback = check.feedback ?? ''
@@ -386,7 +397,7 @@ export function verifQuestionMathLive(
         return {
           isOk,
           feedback: noFeedback ? '' : feedback,
-          score: { nbBonnesReponses: 1, nbReponses: 1 },
+          score: { nbBonnesReponses: bestScore, nbReponses: 1 },
         }
       }
       if (writeResult) {
@@ -396,13 +407,13 @@ export function verifQuestionMathLive(
         return {
           isOk,
           feedback: noFeedback ? '' : feedback,
-          score: { nbBonnesReponses: 0, nbReponses: 1 },
+          score: { nbBonnesReponses: bestScore, nbReponses: 1 },
         }
       }
       return {
         isOk,
         feedback: noFeedback ? '' : feedback,
-        score: { nbBonnesReponses: isOk ? 1 : 0, nbReponses: 1 },
+        score: { nbBonnesReponses: bestScore, nbReponses: 1 },
       } // ce code n'est jamais exécuté vu que writeResult est toujours true
     }
   } catch (error) {

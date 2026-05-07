@@ -23,6 +23,7 @@ import { addElement, get, setStyles } from '../html/dom'
 import { Complexe } from '../mathFonctions/Complexe'
 import { verifQuestionTableur } from '../tableur/outilsTableur'
 import { afficheScore } from './afficheScore'
+import type { CompareResult } from './checks/types'
 import { fonctionComparaison } from './comparisonFunctions'
 import { verifDragAndDrop } from './DragAndDrop'
 import {
@@ -33,6 +34,11 @@ import {
 import { verifQuestionQcm } from './qcm'
 import { verifQuestionListeDeroulante } from './questionListeDeroulante'
 import { verifQuestionSvgSelection } from './questionSvgSelection/questionSvgSelection'
+
+function scoreFromResult(result: { isOk: boolean }): number {
+  const score = (result as Partial<CompareResult>).score
+  return typeof score === 'number' ? score : result.isOk ? 1 : 0
+}
 
 export function isClickFiguresArray(
   figures: Figure[] | ClickFigures[],
@@ -1170,10 +1176,10 @@ export function verifQuestionMetaInteractif2d(
     }
     if (result.isOk) {
       compteurBonnesReponses++
-      points.push(1)
+      points.push(scoreFromResult(result))
       mf.setPromptState('champ1', 'correct', true)
     } else {
-      points.push(0)
+      points.push(scoreFromResult(result))
       mf.setPromptState('champ1', 'incorrect', true)
       if (result.feedback === 'saisieVide') result.feedback = null
       else {
@@ -1317,10 +1323,10 @@ export function verifQuestionMultiMathfield(
 
     if (result.isOk) {
       compteurBonnesReponses++
-      points.push(1)
+      points.push(scoreFromResult(result))
       eltFeedback.innerHTML = '😎'
     } else {
-      points.push(0)
+      points.push(scoreFromResult(result))
       eltFeedback.innerHTML = '☹️'
       if (result.feedback === 'saisieVide') result.feedback = ''
       else {
