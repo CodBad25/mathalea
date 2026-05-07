@@ -5,8 +5,12 @@
   export let htmlContent = ''
   export let choix: Array<{
     texte?: string
+    statut?: unknown
   }> = []
   export let mode: 'qcmMono' | 'qcmMult' = 'qcmMono'
+
+  const isCorrectChoice = (statut: unknown): boolean =>
+    statut === true || statut === 1 || statut === '1' || statut === 'true'
 
   const stripEmbeddedQcmMarkup = (value: string): string => {
     if (value.trim().length === 0) return ''
@@ -48,7 +52,11 @@
         >
           <span
             aria-hidden="true"
-            class="mt-1 inline-block h-3 w-3 rounded-none border border-coopmaths-struct dark:border-coopmathsdark-struct"
+            class="mt-1 inline-block h-3 w-3 rounded-none border border-black {isCorrectChoice(
+              option.statut,
+            )
+              ? 'bg-black'
+              : 'bg-white'}"
           ></span>
           <AmcEnonceHtml content={option.texte ?? ''} />
         </li>

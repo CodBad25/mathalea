@@ -88,7 +88,7 @@ export type AMCLayoutOptions = {
   multicolsAll?: boolean
   numerotationEnonce?: boolean
   avecSymboleMult?: boolean
-  explain?: string
+  correction?: string
 }
 
 export type AMCUneProposition = {

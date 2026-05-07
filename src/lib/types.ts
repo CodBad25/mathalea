@@ -360,6 +360,38 @@ export function isInteractivityType(
   )
 }
 
+export type SharedQcmProposition = {
+  texte: string
+  statut: boolean
+  correction?: string
+  feedback?: string
+}
+
+export type QcmAutoCorrectionProposition = {
+  texte: string
+  statut: boolean
+  feedback?: string
+}
+
+export type MessageMode = 'single' | 'multiple'
+
+export type BuildQcmForExerciseParams = {
+  question: string
+  correction?: string
+  propositions: SharedQcmProposition[]
+  options?: IExerciceQcmOptions
+  ajouteQcmCorr?: boolean
+  messageMode?: MessageMode
+}
+
+export type BuildSimpleVersionQcmParams = {
+  question: string
+  correction?: string
+  reponse: AnswerValueType
+  distracteurs: (string | number)[]
+  options?: IExerciceQcmOptions
+}
+
 export type TableauMathliveType = 'doubleEntree' | 'proportionnalite'
 
 /**
@@ -657,6 +689,7 @@ export type ParamForQcmInteractif = {
   lastChoice?: number
   format?: 'lettre' | 'case'
   nbCols?: number
+  correction?: string
 }
 
 export type ReponseDisplay = {

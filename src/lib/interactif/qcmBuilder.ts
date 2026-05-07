@@ -2,40 +2,16 @@ import { context } from '../../modules/context'
 import { createList } from '../format/lists'
 import { formaterReponse } from '../outils/ecritures'
 import { texteEnCouleurEtGras } from '../outils/embellissements'
-import type { AnswerValueType, IExercice, IExerciceQcmOptions } from '../types'
+import type {
+  AnswerValueType,
+  BuildQcmForExerciseParams,
+  BuildSimpleVersionQcmParams,
+  IExercice,
+  MessageMode,
+  QcmAutoCorrectionProposition,
+  SharedQcmProposition,
+} from '../types'
 import { propositionsQcm } from './qcm'
-
-type SharedQcmProposition = {
-  texte: string
-  statut: boolean
-  correction?: string
-  feedback?: string
-}
-
-type QcmAutoCorrectionProposition = {
-  texte: string
-  statut: boolean
-  feedback?: string
-}
-
-type MessageMode = 'single' | 'multiple'
-
-type BuildQcmForExerciseParams = {
-  question: string
-  correction?: string
-  propositions: SharedQcmProposition[]
-  options?: IExerciceQcmOptions
-  ajouteQcmCorr?: boolean
-  messageMode?: MessageMode
-}
-
-type BuildSimpleVersionQcmParams = {
-  question: string
-  correction?: string
-  reponse: AnswerValueType
-  distracteurs: (string | number)[]
-  options?: IExerciceQcmOptions
-}
 
 const QCM_LETTERS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J']
 
@@ -99,9 +75,7 @@ export function buildQcmForExercise(
   }: BuildQcmForExerciseParams,
 ): { question: string; correction: string } {
   const autoCorrectionOptions = { ...(options ?? {}) }
-  if (correction && !autoCorrectionOptions.explain) {
-    autoCorrectionOptions.explain = correction
-  }
+
   const qcmPropositions: QcmAutoCorrectionProposition[] = propositions.map(
     (proposition) => ({
       texte: proposition.texte,
@@ -121,6 +95,12 @@ export function buildQcmForExercise(
   exercice.autoCorrection[questionIndex] = {
     enonce: question,
     options: autoCorrectionOptions,
+    propositions: qcmPropositions,
+  }
+  exercice.autoCorrectionAMC = exercice.autoCorrectionAMC ?? []
+  exercice.autoCorrectionAMC[questionIndex] = {
+    enonce: question,
+    options: { ...autoCorrectionOptions, correction },
     propositions: qcmPropositions,
   }
 
