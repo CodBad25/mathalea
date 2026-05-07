@@ -20,6 +20,7 @@ const VueTypeArray = <const>[
   'myriade',
   'indices',
   'tools',
+  'check-test',
   '',
 ]
 type VueTypeArrayType = typeof VueTypeArray
