@@ -4,6 +4,7 @@ import { labelPoint } from '../../lib/2d/textes'
 import { tracePoint } from '../../lib/2d/TracePoint'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { addMultiMathfield } from '../../lib/interactif/MultiMathfield/MultiMathfield'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { creerCouples, shuffle2tableaux } from '../../lib/outils/arrayOutils'
 import { enumeration } from '../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
@@ -266,9 +267,11 @@ export default class ReperagePointDuPlan extends Exercice {
             `$${nom[i]}($%{champ${2 * i + 1}}$;$%{champ${2 * i + 2}}$)$${i % 3 === 2 ? '\n' : ''}`,
         )
         .join(', ')
-      const dataOptions = {}
+      const dataOptions: Record<string, any> = {}
       const reponses: Record<string, any> = {}
       for (let i = 0; i < nbPoints; i++) {
+        dataOptions[`champ${2 * i + 1}`] = { keyboard: KeyboardType.clavierDeBaseAvecFraction }
+        dataOptions[`champ${2 * i + 2}`] = { keyboard: KeyboardType.clavierDeBaseAvecFraction }
         reponses[`champ${2 * i + 1}`] = { value: points[i].x }
         reponses[`champ${2 * i + 2}`] = { value: points[i].y }
       }
