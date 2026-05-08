@@ -1,6 +1,5 @@
 import type { AllChoicesType } from '../../lib/interactif/listeDeroulante/ListeDeroulante'
 import { choixDeroulant } from '../../lib/interactif/questionListeDeroulante'
-import { ajouteFeedback } from '../../lib/interactif/questionMathLive'
 import { shuffle } from '../../lib/outils/arrayOutils'
 import {
   miseEnEvidence,
@@ -94,7 +93,6 @@ export default class FormulesAireCarreRectangle extends Exercice {
       ],
       [
         { latex: 'c', value: 'cote' },
-        { latex: 'p', value: 'perimetre' },
         { latex: 'L', value: 'longueur' },
         { latex: 'l', value: 'largeur' },
       ],
@@ -149,7 +147,7 @@ export default class FormulesAireCarreRectangle extends Exercice {
             texteCorr = `Aire d'un carré =  ${texteEnCouleurEtGras('son côté')} $${miseEnEvidence('\\times')}$ ${texteEnCouleurEtGras('son côté')}`
             break
           case 3:
-            texteFixe.push(`On a un carré dont on connaît la longueur d'un de ses côtés (notée $c$) et dont on peut trouver le périmètre $p$.<br>
+            texteFixe.push(`On a un carré dont on connaît la longueur d'un de ses côtés (notée $c$).<br>
             On peut alors donner l'aire du carré ainsi : `)
             texteFixe.push('')
             texteFixe.push('')
@@ -210,7 +208,7 @@ export default class FormulesAireCarreRectangle extends Exercice {
             texteCorr = `Aire d'un rectangle =  ${texteEnCouleurEtGras('sa longueur')} $${miseEnEvidence('\\times')}$ ${texteEnCouleurEtGras('sa largeur')}`
             break
           case 6:
-            texteFixe.push(`On a un rectangle dont on connaît la longueur et la largeur (notée respectivement $L$ et $l$) et dont on peut trouver le périmètre $p$.<br>
+            texteFixe.push(`On a un rectangle dont on connaît la longueur et la largeur (notée respectivement $L$ et $l$).<br>
             On peut alors donner l'aire du rectangle ainsi : `)
             texteFixe.push('')
             texteFixe.push('')
@@ -245,7 +243,6 @@ export default class FormulesAireCarreRectangle extends Exercice {
           ? choixDeroulant(this, 3 * i + 2, choixListeDeroulantePourCeCas[2]) +
             '.'
           : '$\\ldots\\ldots\\ldots$'
-        texte += ajouteFeedback(this, i)
         this.listeQuestions.push(texte)
         this.listeCorrections.push(texteCorr)
         if (i < 5) i++
