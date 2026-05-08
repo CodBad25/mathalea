@@ -455,6 +455,12 @@ const createFiles = (
       ...referentiel['1e']['1A'],
     }
   }
+  if (codePays === 'FR' && referentiel['3e']?.['3Auto'] && exercices['3a-auto']) {
+    referentiel['3e']['3Auto'] = {
+      '3a-auto': exercices['3a-auto'],
+      ...referentiel['3e']['3Auto'],
+    }
+  }
   if (codePays === 'FR') {
     fs.writeFile(
       'src/json/referentielGeometrieDynamique.json',
