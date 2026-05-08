@@ -163,7 +163,7 @@ function injectPromptStyles(mf) {
     style.id = 'ml-prompt-styles'
     style.textContent = `
     .ML__prompt:not(.ML__lockedPromptBox):not(.ML__focusedPromptBox) {
-    min-height: 0.9em !important;
+    min-height: 1em !important;
      outline: solid !important;
   outline-width: thin !important;
   outline-color: var(--color-coopmathsdark-corpus-light) !important;
@@ -172,7 +172,7 @@ function injectPromptStyles(mf) {
       outline: solid !important;
   outline-width: 2px !important;
   outline-color: var(--color-coopmaths-struct) !important;
-    min-height: 0.9em !important;
+    min-height: 1em !important;
     }
     :host(:not(:focus-within)) .ML__prompt:not(.ML__lockedPromptBox).ML__focusedPromptBox {
       outline: solid !important;
@@ -180,10 +180,6 @@ function injectPromptStyles(mf) {
       outline-color: var(--color-coopmathsdark-corpus-light) !important;
     }
     
-    .ML__prompt-atom {
-    line-height: 0.9 !important;
-     vertical-align: -0.1em !important;
-    }
     `
     shadow.appendChild(style)
   }
@@ -214,6 +210,17 @@ export async function loadMathLive(divExercice) {
         //   mf.classList.add('ml-1')
         mf.addEventListener('focus', handleFocusMathField)
         mf.addEventListener('focusout', handleFocusOutMathField)
+        if (mf.classList.contains('fillInTheBlanks')) {
+          let redirecting = false
+          mf.addEventListener('selection-change', () => {
+            if (redirecting || mf.classList.contains('corrected')) return
+            if (mf.matches(':focus-within') && !mf.isSelectionEditable) {
+              redirecting = true
+              mf.executeCommand('moveToNextPlaceholder')
+              requestAnimationFrame(() => { redirecting = false })
+            }
+          })
+        }
         mf.addEventListener('input', () => {
           const content = mf.getValue()
           // Remplace les espaces consécutifs par un seul espace
@@ -263,20 +270,18 @@ function handleFocusMathField(event) {
 
   if (mf.classList.contains('fillInTheBlanks')) {
     const tabDirection = consumeRecentTabDirection()
-    if (tabDirection != null) {
-      // En entrée par TAB dans un nouveau mathfield, on force un prompt cohérent
-      // pour éviter la reprise sur un ancien prompt mémorisé par le navigateur.
-      setTimeout(() => {
-        if (!mf.matches(':focus-within')) return
-        if (tabDirection === 'backward') {
-          mf.executeCommand('moveToMathfieldEnd')
-          mf.executeCommand('moveToPreviousPlaceholder')
-        } else {
-          mf.executeCommand('moveToMathfieldStart')
-          mf.executeCommand('moveToNextPlaceholder')
-        }
-      }, 0)
-    }
+    setTimeout(() => {
+      if (!mf.matches(':focus-within')) return
+      if (tabDirection === 'backward') {
+        // En entrée par TAB dans un nouveau mathfield, on force un prompt cohérent
+        // pour éviter la reprise sur un ancien prompt mémorisé par le navigateur.
+        mf.executeCommand('moveToMathfieldEnd')
+        mf.executeCommand('moveToPreviousPlaceholder')
+      } else if (tabDirection === 'forward') {
+        mf.executeCommand('moveToMathfieldStart')
+        mf.executeCommand('moveToNextPlaceholder')
+      }
+    }, 0)
   }
 
   const isNotFillInTheBlanksAndReadOnly = !isFillInTheBlanks && mf.readOnly

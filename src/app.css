@@ -1058,6 +1058,7 @@ math-field.metaInteractif2d {
   margin-top: 1px;
   background-color: transparent;
   outline: none;
+  vertical-align: middle;
 }
 math-field.metaInteractif2d:focus-within {
   outline: 2px solid #3b82f6;
