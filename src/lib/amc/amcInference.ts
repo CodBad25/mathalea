@@ -48,6 +48,7 @@ export function mathaleaEnsureAMCCompatibility(
   if (exercice.amcReady) {
     // L'exercice est déjà prêt pour AMC, on suppose que tout est en ordre, mais c'est faux.
     // On doit pour les AMCNum s'assurer que les données dans autoCorrectionAMC comme digits, decimals, signe, etc sont bien renseignées
+    // On doit aussi s'assurer que pour les qcm la propriété 'correction' de options est bien renseignée pour l'afficher à l'lélève dans le détail de correction AMC.
     if (exercice.amcType === 'AMCNum') {
       const autoCorrectionAmc = []
       for (const [index, item] of autoCorrectionSource.entries()) {
@@ -82,6 +83,29 @@ export function mathaleaEnsureAMCCompatibility(
         })
       }
       exercice.autoCorrection = autoCorrectionAmc as any
+      exerciseAny.autoCorrectionAMC = autoCorrectionAmc as any
+    } else if (
+      exercice.amcType === 'qcmMono' ||
+      exercice.amcType === 'qcmMult'
+    ) {
+      const autoCorrectionAmc = autoCorrectionSource.map(
+        (item: InferenceAutoCorrectionItem, index) => {
+          if (item == null) return item
+
+          const propositions = Array.isArray(item.propositions)
+            ? item.propositions.map((p) => ({
+                ...p,
+                statut: Boolean(p.statut),
+              }))
+            : item.propositions
+
+          return {
+            ...item,
+            enonce: item.enonce ?? exercice.listeQuestions[index],
+            propositions,
+          }
+        },
+      )
       exerciseAny.autoCorrectionAMC = autoCorrectionAmc as any
     }
     return exercice as IExerciceAMC

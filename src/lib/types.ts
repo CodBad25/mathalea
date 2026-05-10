@@ -972,7 +972,6 @@ export interface IExerciceQcmOptions {
   vertical?: boolean
   lastChoice?: number
   dontKnow?: boolean
-  explain?: string
 }
 
 export interface IExerciceQcm extends IExercice {

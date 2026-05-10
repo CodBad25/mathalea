@@ -97,18 +97,18 @@ export function renderAMCHybride(params: AMCHybrideRenderParams): {
 
   const enrichAMCNumBlock = (
     latex: string,
-    options: { explain?: string; subQuestionText?: string },
+    options: { correction?: string; subQuestionText?: string },
   ): string => {
     let content = latex
-    const explain = options.explain?.trim()
+    const correction = options.correction?.trim()
     const subQuestionText = options.subQuestionText
       ?.replace(/^undefined\s*(<br\s*\/?>|\\\\)\s*/i, '')
       .trim()
 
-    if (explain && !content.includes('\\explain{')) {
+    if (correction && !content.includes('\\explain{')) {
       content = content.replace(
         /(\\begin\{questionmultx\}\{[^}]*\}\s*)/,
-        (match) => `${match}\\explain{${explain}}\n`,
+        (match) => `${match}\\explain{${correction}}\n`,
       )
     }
 
@@ -179,7 +179,7 @@ export function renderAMCHybride(params: AMCHybrideRenderParams): {
       const p0 = prop.propositions?.[0] ?? {}
       const disableNumber =
         qr > 0 || (qr === 0 && item.enonceApresNumQuestion === true)
-      const explain =
+      const correction =
         typeof prop.texte === 'string'
           ? prop.texte
           : typeof p0.texte === 'string'
@@ -208,7 +208,7 @@ export function renderAMCHybride(params: AMCHybrideRenderParams): {
       blocks.push(
         withQuestionNumberDisabled(
           enrichAMCNumBlock(stripElementWrapper(blockLatex), {
-            explain,
+            correction,
             subQuestionText,
           }),
           disableNumber,

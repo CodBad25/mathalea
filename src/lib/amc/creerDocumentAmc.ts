@@ -147,7 +147,7 @@ function rewriteExplainToDeferred(latexCode: string): string {
   while ((match = beginRegex.exec(latexCode)) !== null) {
     const fullMatch = match[0]
     const env = match[1]
-    const questionId = match[2].trim()
+    const questionId = match[2]
     const blockStart = match.index
     const contentStart = blockStart + fullMatch.length
     const endToken = `\\end{${env}}`
@@ -365,8 +365,10 @@ export function exportQcmAmc(
   exercise: IExerciceAMC,
   exerciseIndex: number,
 ): ExportQcmAmcResult {
-  let ref = `${exercise.id}/${exercise.sup ? 'S:' + exercise.sup : ''}${exercise.sup2 ? 'S2:' + exercise.sup2 : ''}${exercise.sup3 ? 'S3:' + exercise.sup3 : ''}${exercise.sup4 ? 'S4:' + exercise.sup4 : ''}${exercise.sup5 ? 'S5:' + exercise.sup5 : ''}`
-  if (ref[ref.length - 1] === '/') ref = ref.slice(0, -1)
+  const ref =
+    `${exercise.id}${exercise.sup ? 'S' + exercise.sup : ''}${exercise.sup2 ? 'S2' + exercise.sup2 : ''}${exercise.sup3 ? 'S3' + exercise.sup3 : ''}${exercise.sup4 ? 'S4' + exercise.sup4 : ''}${exercise.sup5 ? 'S5' + exercise.sup5 : ''}`
+      .replaceAll('-', '')
+      .replaceAll('_', '')
   // Compatibilité transitoire : priorité à la structure AMC dédiée quand disponible.
   const exerciseAny = exercise as IExerciceAMC & {
     autoCorrectionAMC?: any[]
@@ -391,7 +393,7 @@ export function exportQcmAmc(
           { type: 'qcm', data: autoCorrection[j] },
           {
             ref,
-            id: `${ref}/${lettreDepuisChiffre(exerciseIndex + 1)}${id + 10}`,
+            id: `${ref}${lettreDepuisChiffre(exerciseIndex + 1)}${id + 10}`,
             exercice: exercise,
             index: j,
           },
@@ -403,7 +405,7 @@ export function exportQcmAmc(
           { type: 'open', data: autoCorrection[j] },
           {
             ref,
-            id: `${ref}/${lettreDepuisChiffre(exerciseIndex + 1)}${id + 10}`,
+            id: `${ref}${lettreDepuisChiffre(exerciseIndex + 1)}${id + 10}`,
             exercice: exercise,
             index: j,
           },
@@ -415,7 +417,7 @@ export function exportQcmAmc(
           { type: 'num', data: autoCorrection[j] },
           {
             ref,
-            id: `${ref}/${lettreDepuisChiffre(exerciseIndex + 1)}${id + 10}`,
+            id: `${ref}${lettreDepuisChiffre(exerciseIndex + 1)}${id + 10}`,
             exercice: exercise,
             index: j,
           },
@@ -442,7 +444,7 @@ export function exportQcmAmc(
     }
   }
 
-  texQr = texQr.replaceAll('<br><br>', '\\medskip').replaceAll('<br>', '\\\\')
+  texQr = texQr.replaceAll('<br><br>', '\\medskip\n').replaceAll('<br>', '\\\\')
   return [texQr, ref, exercise.nbQuestions, title, isShuffled]
 }
 

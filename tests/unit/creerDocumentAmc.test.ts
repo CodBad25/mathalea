@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from 'vitest'
 
+import * as exercice2N40_1 from '../../src/exercices/2e/2N40-1'
 import {
   renderAMCCopyContent,
   renderAMCDocumentStart,
@@ -7,10 +8,38 @@ import {
   renderAMCHeader,
   renderAMCPreamble,
 } from '../../src/lib/amc/amcDocumentTemplates'
+import { mathaleaEnsureAMCCompatibility } from '../../src/lib/amc/amcInference'
 import {
   checkAMCGroupConsistency,
   creerDocumentAmc,
 } from '../../src/lib/amc/creerDocumentAmc'
+import { mathaleaHandleExerciceSimple } from '../../src/lib/mathalea'
+
+function prepareExercise(
+  module: { default: new () => any; amcType?: string; amcReady?: boolean },
+  seed: string,
+) {
+  const exercice = new module.default()
+  if (module.amcType != null) exercice.amcType = module.amcType
+  if (module.amcReady != null) exercice.amcReady = module.amcReady
+  mathaleaHandleExerciceSimple(exercice, true, 0, seed)
+  mathaleaEnsureAMCCompatibility(exercice)
+  return exercice
+}
+
+function inferQcmType(exercice: any) {
+  const autoCorrection = Array.isArray(exercice.autoCorrectionAMC)
+    ? exercice.autoCorrectionAMC
+    : exercice.autoCorrection
+  const firstItem = autoCorrection?.find((item: any) => item != null)
+  const goodAnswersCount = Array.isArray(firstItem?.propositions)
+    ? firstItem.propositions.filter((proposition: any) =>
+        Boolean(proposition.statut),
+      ).length
+    : 0
+
+  return goodAnswersCount > 1 ? 'qcmMult' : 'qcmMono'
+}
 
 describe('creerDocumentAmc templates', () => {
   it('rend un preambule AMC parametrable', () => {
@@ -37,8 +66,8 @@ describe('creerDocumentAmc templates', () => {
       nbExemplaires: 2,
     })
 
-    expect(entete).toContain('\\exemplaire{ 2 }{')
-    expect(entete).toContain('\\textbf{ Mathématiques }')
+    expect(entete).toContain('\\exemplaire{2}{')
+    expect(entete).toContain('\\textbf{Mathématiques}')
     expect(entete).toContain('\\AMCcodeGrid[h]{ID}{ABCDEFGHIJKLMNOPQRSTUVWXYZ,')
   })
 
@@ -64,10 +93,10 @@ describe('creerDocumentAmc templates', () => {
     })
 
     expect(documentStart).toContain('\\begin{document}')
-    expect(documentStart).toContain('\\AMCrandomseed{ 12345 }')
+    expect(documentStart).toContain('\\AMCrandomseed{12345}')
     expect(documentStart).toContain('\\FPseed=12345')
     expect(documentStart).toContain(
-      '\\element{G}{\\begin{question}{Q}X\\end{question}}',
+      '\\element{G}{\\begin{question}{Q}\\AMClabel{Q}X\\end{question}}',
     )
   })
 
@@ -333,6 +362,96 @@ describe('creerDocumentAmc templates', () => {
     expect(latex).toContain('\\newcommand{\\AMCSpec}{ok}')
 
     vi.unstubAllGlobals()
+  })
+
+  it('infere les types AMC avant de generer un document LaTeX AMC', () => {
+    const exerciseExplicitQcm = prepareExercise(exercice2N40_1, 'amc-seed-1')
+    const exerciseInferredQcm = {
+      titre: 'QCM a inferer',
+      nbQuestions: 1,
+      interactifType: 'qcm',
+      autoCorrection: [
+        {
+          propositions: [
+            { texte: 'A', statut: false },
+            { texte: 'B', statut: true },
+            { texte: 'C', statut: true },
+          ],
+        },
+      ],
+      listeQuestions: ['Question QCM'],
+      listeCorrections: ['Correction QCM'],
+      questionJamaisPosee: () => true,
+      reinit: () => {},
+      nouvelleVersion: () => {},
+    } as any
+    mathaleaEnsureAMCCompatibility(exerciseInferredQcm)
+    const exerciseInferredMathLive = {
+      titre: 'MathLive a inferer',
+      nbQuestions: 1,
+      interactifType: 'mathlive',
+      autoCorrection: [
+        {
+          reponse: {
+            reponse: {
+              value: 42,
+              options: { nombreDecimalSeulement: true },
+            },
+          },
+        },
+      ],
+      listeQuestions: ['Question MathLive'],
+      listeCorrections: ['Correction MathLive'],
+      questionJamaisPosee: () => true,
+      reinit: () => {},
+      nouvelleVersion: () => {},
+    } as any
+    mathaleaEnsureAMCCompatibility(exerciseInferredMathLive)
+    const exerciseExplicitlyBlocked = {
+      titre: 'AMC refuse',
+      nbQuestions: 1,
+      interactifType: 'mathLive',
+      amcReady: false,
+      amcType: 'AMCOpen',
+      autoCorrection: [],
+      listeQuestions: ['Question bloquee'],
+      listeCorrections: ['Correction bloquee'],
+      questionJamaisPosee: () => true,
+      reinit: () => {},
+      nouvelleVersion: () => {},
+    } as any
+    mathaleaEnsureAMCCompatibility(exerciseExplicitlyBlocked)
+
+    expect(exerciseExplicitQcm.amcType).toBe(exercice2N40_1.amcType)
+    expect(exerciseInferredQcm.amcType).toBe(inferQcmType(exerciseInferredQcm))
+    expect(exerciseInferredMathLive.amcType).toBe('AMCNum')
+    expect(exerciseExplicitlyBlocked.amcReady).toBe(false)
+    expect(exerciseExplicitlyBlocked.amcType).toBe('AMCOpen')
+
+    const getElementByIdSpy = vi
+      .spyOn(document, 'getElementById')
+      .mockReturnValue({ checked: false } as any)
+
+    const latex = creerDocumentAmc({
+      exercices: [
+        exerciseExplicitQcm,
+        exerciseInferredQcm,
+        exerciseInferredMathLive,
+        exerciseExplicitlyBlocked,
+      ],
+      matiere: 'Mathématiques',
+      titre: 'Test AMC',
+      typeEntete: 'AMCcodeGrid',
+    })
+
+    expect(latex).toContain('\\documentclass')
+    expect(latex).toContain('\\begin{question}')
+    expect(latex).toContain('\\begin{questionmultx}')
+    expect(latex).toContain('\\AMCnumericChoices')
+    expect(latex).toContain('\\bonne')
+    expect(latex).not.toContain('Question bloquee')
+
+    getElementByIdSpy.mockRestore()
   })
 
   it('nettoie les collisions de packages pour eviter les option clash dans le preambule AMC dynamique', () => {

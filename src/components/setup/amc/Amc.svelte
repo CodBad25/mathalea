@@ -6,17 +6,17 @@
   import { normalizeAMCNumBlocks } from '../../../lib/amc/amcNormalize'
   import type { IExerciceAMC } from '../../../lib/amc/amcTypes'
   import {
-    checkAMCGroupConsistency,
-    creerDocumentAmc,
-    type AMCGroupConsistencyReport,
+      checkAMCGroupConsistency,
+      creerDocumentAmc,
+      type AMCGroupConsistencyReport,
   } from '../../../lib/amc/creerDocumentAmc'
   import {
-    mathaleaGenerateSeed,
-    mathaleaGetExercicesFromParams,
-    mathaleaHandleExerciceSimple,
-    mathaleaHandleSup,
-    mathaleaUpdateExercicesParamsFromUrl,
-    mathaleaUpdateUrlFromExercicesParams,
+      mathaleaGenerateSeed,
+      mathaleaGetExercicesFromParams,
+      mathaleaHandleExerciceSimple,
+      mathaleaHandleSup,
+      mathaleaUpdateExercicesParamsFromUrl,
+      mathaleaUpdateUrlFromExercicesParams,
   } from '../../../lib/mathalea'
   import { darkMode, exercicesParams } from '../../../lib/stores/generalStore'
   import { referentielLocale } from '../../../lib/stores/languagesStore'
@@ -139,6 +139,11 @@
     let ref = `${exercise.id}/${ex.sup ? 'S:' + ex.sup : ''}${ex.sup2 ? 'S2:' + ex.sup2 : ''}${ex.sup3 ? 'S3:' + ex.sup3 : ''}${ex.sup4 ? 'S4:' + ex.sup4 : ''}${ex.sup5 ? 'S5:' + ex.sup5 : ''}`
     if (ref.endsWith('/')) ref = ref.slice(0, -1)
     return ref
+  }
+
+  function getExerciseSettingsKey(exercise: IExercice | undefined): string {
+    if (!exercise) return ''
+    return `${exercise.uuid ?? ''}::${exercise.id ?? ''}::${exercise.seed ?? ''}`
   }
 
   async function regenerateExercise(index: number, forcedSeed?: string) {
@@ -526,11 +531,15 @@
         : []
       mergeLatexTextsOnPropositions(targetProps, sourceProps)
 
-      // Copie options.explain depuis la passe LaTeX (isAmc=true, isHtml=false)
+      // Copie options.correction depuis la passe LaTeX (isAmc=true, isHtml=false)
       // pour s'assurer que le texte de correction est en LaTeX et non en HTML.
-      if (typeof sourceItem?.options?.explain === 'string') {
+      const latexCorrectionOption =
+        typeof sourceItem?.options?.correction === 'string'
+          ? sourceItem.options.correction
+          : undefined
+      if (typeof latexCorrectionOption === 'string') {
         if (!targetItem.options) targetItem.options = {}
-        targetItem.options.explain = sourceItem.options.explain
+        targetItem.options.correction = latexCorrectionOption
       }
 
       if (targetProps.length === 0 && sourceProps.length > 0) {
@@ -560,6 +569,21 @@
             ...targetItem.propositions[0],
             texte: sourceCorrection,
           }
+        }
+      }
+    }
+
+    // Injection de la correction dans les items qui n'en ont pas encore
+    for (let i = 0; i < merged.length; i++) {
+      const item = merged[i]
+      if (!item.options?.correction) {
+        const corrText =
+          latexCorrections[i] ??
+          latexCorrections[0] ??
+          (i === 0 ? (exercice.correction ?? '') : '')
+        if (corrText) {
+          if (!item.options) item.options = {}
+          item.options.correction = corrText
         }
       }
     }
@@ -607,6 +631,17 @@
     }
 
     const previousSettings = groupSettings
+    const previousExercices = exercices
+    const previousSettingsByKey = new Map<string, GroupSetting[]>()
+    previousExercices.forEach((exercise, index) => {
+      const setting = previousSettings[index]
+      if (!setting) return
+      const key = getExerciseSettingsKey(exercise)
+      if (key === '') return
+      const bucket = previousSettingsByKey.get(key) ?? []
+      bucket.push(setting)
+      previousSettingsByKey.set(key, bucket)
+    })
     exercices = amcReadyExercices
 
     // Détecte quand un nouvel exercice est ajouté (depuis ReferentielEnding ou ailleurs)
@@ -618,17 +653,21 @@
     }
     previousExercicesCount = exercices.length
 
-    groupSettings = exercices.map((exercice, index) => ({
-      seed: previousSettings[index]?.seed ?? exercice.seed,
-      questionCount:
-        previousSettings[index]?.questionCount ??
-        Math.max(1, exercice.nbQuestions),
-      restitueCount:
-        previousSettings[index]?.restitueCount ??
-        Math.max(1, exercice.nbQuestions),
-      pageBreakBefore: previousSettings[index]?.pageBreakBefore ?? index > 0,
-      multicols: previousSettings[index]?.multicols ?? false,
-    }))
+    groupSettings = exercices.map((exercice, index) => {
+      const key = getExerciseSettingsKey(exercice)
+      const preservedByKey =
+        key === '' ? undefined : previousSettingsByKey.get(key)?.shift()
+      const preserved = preservedByKey ?? previousSettings[index]
+
+      return {
+        seed: preserved?.seed ?? exercice.seed,
+        questionCount:
+          preserved?.questionCount ?? Math.max(1, exercice.nbQuestions),
+        restitueCount: preserved?.restitueCount ?? 1,
+        pageBreakBefore: preserved?.pageBreakBefore ?? false,
+        multicols: preserved?.multicols ?? false,
+      }
+    })
 
     if (
       selectedExerciseIndex != null &&
@@ -2312,9 +2351,21 @@
                   ),
                 }
                 groupSettings = [...groupSettings]
-                const exercice = exercices[idx] as any
+                const exercice = exercices[idx]
                 if (exercice) {
                   exercice.nbQuestions = value
+                  const paramsIndex = findParamsIndexForExercise(exercice)
+                  if (paramsIndex >= 0) {
+                    exercicesParams.update((list) => {
+                      const next = [...list]
+                      next[paramsIndex] = {
+                        ...next[paramsIndex],
+                        nbQuestions: value,
+                      }
+                      return next
+                    })
+                    mathaleaUpdateUrlFromExercicesParams()
+                  }
                 }
                 await regenerateExercise(idx, groupSettings[idx]?.seed)
               }}

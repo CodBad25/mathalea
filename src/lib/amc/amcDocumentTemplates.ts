@@ -143,6 +143,13 @@ export const AMCPreambleTemplate = `%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   
   %%%%% PERSONNALISATION %%%%%
 
+   %%%%% PERSONNALISATION %%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%% Pour compiler la correction sans AMC décommenter les lignes suivantes
+%%%%%%%%%%%%%%%%%%%%%%%%%%%% ne pas oublier de les commenter à nouveaupour finaliser les copies dans AMC
+% \\makeatletter \\def\\AMCforcecorrect{\\AMC@correctrue} \\makeatother
+% \\AMCforcecorrect
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 %%% Explications %%%
   \\ExplSyntaxOn
 \\tl_new:N \\explicatons
@@ -166,8 +173,8 @@ export const AMCPreambleTemplate = `%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \\def\\laquestion#1{
   \\par\\noindent\\textbf{Question \\AMCref{#1}}
 }
-\\long\\def\\expliqueplustard#1#2{
-  \\AMCexpliqueAjoute{\\laquestion{#1} #2 \\bigskip}
+\\long\\def\\expliqueplustard#1#2{%
+  \\AMCexpliqueAjoute{\\laquestion{#1} #2 \\bigskip}%
 }
 {% endraw %}
   %%% Fin des explications %%%
@@ -231,7 +238,7 @@ export const AMCHeaderTemplate = `{% if isAssociation %}\\newcommand{\\sujet}{
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  \\exemplaire{ {{ nbExemplaires }} }{   % <======  /!\\ PENSER À ADAPTER /!\\  ===  %
+  \\exemplaire{ {{- nbExemplaires -}} }{   % <======  /!\\ PENSER À ADAPTER /!\\  ===  %
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 {% if collectCorrectionsAtEnd %}
   \\AMCexpliqueNouvelleCopie
@@ -249,9 +256,9 @@ export const AMCHeaderTemplate = `{% if isAssociation %}\\newcommand{\\sujet}{
   %\\noindent\\AMCcodeH{num.etud}{8}	 % version "horizontale"
   \\begin{minipage}{7cm}
   \\begin{center}
-    \\textbf{ {{ matiere }} }
+    \\textbf{ {{- matiere -}} }
     
-    \\textbf{ {{ titre }} }
+    \\textbf{ {{- titre -}} }
   \\end{center}
   \\end{minipage}
   \\hfill
@@ -289,7 +296,7 @@ export const AMCHeaderTemplate = `{% if isAssociation %}\\newcommand{\\sujet}{
   %\\\\
   \\vspace{2mm}
 {% endif %}
-{% if showWarningMessage %}{\\footnotesize {{ warningMessage | safe }} }
+{% if showWarningMessage %}{\\footnotesize {{ warningMessage | safe -}} }
 {% endif %}
   
 `
@@ -298,8 +305,8 @@ export const AMCDocumentStartTemplate = `%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%% -II-DOCUMENT %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \\begin{document}
-\\AMCrandomseed{ {{ seed }} }   % On choisit les "graines" pour initialiser le "hasard"
-\\FPseed={{ seed }}
+\\AMCrandomseed{ {{- seed -}} }   % On choisit les "graines" pour initialiser le "hasard"
+\\FPseed={{- seed -}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%% -II-a. CONCEPTION DU QCM %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -326,14 +333,14 @@ export const AMCGroupSectionTemplate = `
   \\begin{center}
     \\hrule
     \\vspace{2mm}
-    \\bf\\Large {{ groupTitle }}
+    \\bf\\Large {{ groupTitle -}}
     \\vspace{1mm}
     \\hrule
   \\end{center}
 {% if not isMixed %}\\setgroupmode{ {{- groupName -}} }{cyclic}
 
 {% endif %}{% if multicols %}\\begin{multicols}{2}
-{% endif %}{% if questionsToRestore > 0 %}\\restituegroupe[{{ questionsToRestore }}]{ {{- groupName -}} }
+{% endif %}{% if questionsToRestore > 0 %}\\restituegroupe[{{- questionsToRestore -}}]{ {{- groupName -}} }
 
 {% else %}\\restituegroupe{ {{- groupName -}} }
 

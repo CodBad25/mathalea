@@ -167,7 +167,7 @@ export type QCMNormalized = {
   ordered: boolean
   lastChoice: number | null
   multicols?: boolean
-  explain?: string
+  correction?: string
   propositions: QCMProposition[]
 }
 
