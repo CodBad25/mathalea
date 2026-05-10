@@ -129,7 +129,7 @@ export default class AutoTheoremeThales extends ExerciceSimple {
       this.consigne = // this.consigne n'admet pas de figure en LaTeX
         figure +
         `Sur la figure ci-dessus, les droites $(${nomPara1})$ et $(${nomPara2})$ sont parallèles.<br><br>
-      Écrire une égalité de rapports permettant de déterminer la longueur$${nomTriangle.slice(0, 2)}$.<br>`
+      Écrire une égalité de rapports permettant de déterminer la longueur $${nomTriangle.slice(0, 2)}$.<br>`
       this.question =
         '\\dfrac{%{champ1}}{%{champ2}} = \\dfrac{%{champ3}}{%{champ4}}'
       this.canEnonce = this.consigne
