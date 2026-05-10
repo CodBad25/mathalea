@@ -1,4 +1,4 @@
-import EqCartDroite from '../1e/1G13'
+import EqCartDroite from '../1e/1G21-1'
 export const titre =
   "Déterminer une équation cartésienne de droite à partir d'un point et d'un vecteur directeur"
 
