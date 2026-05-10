@@ -106,7 +106,7 @@ function questionDeuxPoints(i: number = 0): [string, string] {
   const [, details] = construireDroite(A, { B }) as [Droite, string]
 
   return [
-    `Soient les points $${pointVersTex(A)}$, et $${pointVersTex(B)}$. Donner l'équation de la droite $(AB)$.`,
+    `Dans un repère orthonormé du plan on considère les points $${pointVersTex(A)}$, et $${pointVersTex(B)}$. Donner l'équation de la droite $(AB)$.`,
     details,
   ]
 }
@@ -119,7 +119,7 @@ function questionPointvDir(i: number = 0): [string, string] {
   const [, details] = construireDroite(A, { u }) as [Droite, string]
 
   return [
-    `Soient le point $${pointVersTex(A)}$, et le vecteur $${vecteurVersTex(u)}$. Donner l'équation de la droite $(d)$ passant par le point $${A.nom}$ et de vecteur directeur $\\vec{${u.nom}}$.`,
+    `Dans un repère orthonormé du plan on considère le point $${pointVersTex(A)}$ et le vecteur $${vecteurVersTex(u)}$. Donner l'équation de la droite $(d)$ passant par le point $${A.nom}$ et de vecteur directeur $\\vec{${u.nom}}$.`,
     details,
   ]
 }
@@ -131,7 +131,7 @@ function questionPointvNorm(i: number = 0): [string, string] {
   const n = new Vecteur(ux, uy, 'n')
   const [, details] = construireDroite(A, { n }) as [Droite, string]
   return [
-    `Soient le point $${pointVersTex(A)}$, et le vecteur $${vecteurVersTex(n)}$. Donner l'équation de la droite $(d)$ passant par le point $${A.nom}$ et de vecteur normal $\\vec{${n.nom}}$.`,
+    `Dans un repère orthonormé du plan on considère le point $${pointVersTex(A)}$ et le vecteur $${vecteurVersTex(n)}$. Donner l'équation de la droite $(d)$ passant par le point $${A.nom}$ et de vecteur normal $\\vec{${n.nom}}$.`,
     details,
   ]
 }
@@ -146,7 +146,7 @@ function questionHauteur(i: number = 0): [string, string] {
   )
   const [, details] = hauteur(A, B, C)
   return [
-    `Soient les trois points $${pointVersTex(A)}$, $${pointVersTex(B)}$, et $${pointVersTex(C)}$. Déterminer l'équation cartésienne de la hauteur issue de $${A.nom}$ dans le triangle $${A.nom}${B.nom}${C.nom}$.`,
+    `Dans un repère orthonormé du plan on considère les trois points $${pointVersTex(A)}$, $${pointVersTex(B)}$, et $${pointVersTex(C)}$. Déterminer l'équation cartésienne de la hauteur issue de $${A.nom}$ dans le triangle $${A.nom}${B.nom}${C.nom}$.`,
     details,
   ]
 }
@@ -156,7 +156,7 @@ function questionMediatrice(i: number = 0): [string, string] {
   const B = new PointAbstrait(randint(-5, 5, [A.x]), randint(-5, 5, [A.y]), 'B')
   const [, details] = mediatrice(A, B)
   return [
-    `Soient les points $${pointVersTex(A)}$ et $${pointVersTex(B)}$. Déterminer une équation cartésienne de la médiatrice du segment $[${A.nom}${B.nom}$].`,
+    `Dans un repère orthonormé du plan on considère les points $${pointVersTex(A)}$ et $${pointVersTex(B)}$. Déterminer une équation cartésienne de la médiatrice du segment $[${A.nom}${B.nom}$].`,
     details,
   ]
 }
