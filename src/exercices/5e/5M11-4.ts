@@ -112,7 +112,7 @@ export default class PerimetreAireEtPortionsDeDisques extends Exercice {
             reponseL1 =
               this.sup === 2
                 ? 0
-                : arrondi(Math.trunc(((r * Math.PI) / 2 + 2 * r) * 10) / 10)
+                : arrondi((r * Math.PI) / 2 + 2 * r, 1)
             reponseL1bis = this.sup === 2 ? 0 : arrondi(reponseL1 + 0.1)
           }
 
