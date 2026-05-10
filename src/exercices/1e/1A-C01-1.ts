@@ -44,8 +44,23 @@ export default class AutoC1a extends ExerciceQcmA {
     const fausseReponse4 = `$\\left(\\dfrac{1}{${texNombre(f1, 4)}}\\right)^2>\\left(\\dfrac{1}{${texNombre(e1, 4)}}\\right)^2$ est fausse car la fonction carré est strictement croissante sur $]0\\,;\\,+\\infty[$, donc $\\left(\\dfrac{1}{${texNombre(f1, 4)}}\\right)^2<\\left(\\dfrac{1}{${texNombre(e1, 4)}}\\right)^2$ car $\\dfrac{1}{${texNombre(f1, 4)}} < \\dfrac{1}{${texNombre(e1, 4)}}$.<br>`
 
     this.enonce = `La seule inégalité vraie est : `
+this.tip = `
+  <p style="margin: 0 0 10px 0;">
+    Il faut penser aux fonctions de références, en particulier :
+  </p>
+  <ul style="list-style-type: disc; padding-left: 1.5em; margin: 0 0 14px 0; line-height: 2;">
+    <li>les variations de la <strong>fonction carré</strong>,</li>
+    <li>les variations de la <strong>fonction inverse</strong>.</li>
+  </ul>
+  <a href="https://podeduc.apps.education.fr/video/143477-indice-automatisme-1-c01-1mp4/?is_iframe=true&autoplay=true" target="_blank"
+     style="display:inline-flex; align-items:center; gap:6px;
+            padding:6px 14px; border:1px solid #b3cde8; border-radius:6px;
+            font-size:13px; font-weight:500; color:#1a5fa8;
+            background:#e8f1fb; text-decoration:none;">
+    ▶ Voir la vidéo explicative
+  </a>`;
 
-    switch (choixType) {
+      switch (choixType) {
       case 1: // Fonction carré (nombres négatifs)
         this.correction = `La seule inégalité vraie est : $${miseEnEvidence(`(${aStr1})^2 < (${bStr1})^2`)}$.<br>
         En effet, la fonction carré étant strictement décroissante sur $]-\\infty\\,;\\,0]$, 
