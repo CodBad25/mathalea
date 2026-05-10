@@ -6,17 +6,17 @@
   import { normalizeAMCNumBlocks } from '../../../lib/amc/amcNormalize'
   import type { IExerciceAMC } from '../../../lib/amc/amcTypes'
   import {
-      checkAMCGroupConsistency,
-      creerDocumentAmc,
-      type AMCGroupConsistencyReport,
+    checkAMCGroupConsistency,
+    creerDocumentAmc,
+    type AMCGroupConsistencyReport,
   } from '../../../lib/amc/creerDocumentAmc'
   import {
-      mathaleaGenerateSeed,
-      mathaleaGetExercicesFromParams,
-      mathaleaHandleExerciceSimple,
-      mathaleaHandleSup,
-      mathaleaUpdateExercicesParamsFromUrl,
-      mathaleaUpdateUrlFromExercicesParams,
+    mathaleaGenerateSeed,
+    mathaleaGetExercicesFromParams,
+    mathaleaHandleExerciceSimple,
+    mathaleaHandleSup,
+    mathaleaUpdateExercicesParamsFromUrl,
+    mathaleaUpdateUrlFromExercicesParams,
   } from '../../../lib/mathalea'
   import { darkMode, exercicesParams } from '../../../lib/stores/generalStore'
   import { referentielLocale } from '../../../lib/stores/languagesStore'
@@ -76,6 +76,7 @@
     correctionsDisplayMode: 'per-question' as 'per-question' | 'end-of-copy',
     nbExemplaires: 1,
     format: 'A4' as 'A4' | 'A3',
+    titleOn: true,
     identificationMode: 'AMCcodeGrid' as
       | 'AMCcodeGrid'
       | 'AMCassociation'
@@ -228,6 +229,7 @@
           : replaceFigureEnvsWithSvg(candidate, fallback)
       return previewSource
         .replaceAll('\\\\', '<br>')
+        .replaceAll('\n\n', '<br>')
         .replaceAll('\\medskip', '<br><br>')
     }
 
@@ -836,6 +838,7 @@
       showWarningMessage: documentSettings.showWarningMessage,
       warningMessage: documentSettings.warningMessage,
       associationRoster: documentSettings.associationRoster,
+      titleOn: documentSettings.titleOn,
       collectCorrectionsAtEnd:
         documentSettings.correctionsDisplayMode === 'end-of-copy',
     })
@@ -2241,6 +2244,20 @@
                 }}
               />
               Afficher le message d'avertissement
+            </label>
+            <label class="inline-flex items-center gap-2 text-xs">
+              <input
+                type="checkbox"
+                checked={documentSettings.titleOn}
+                on:change={(event) => {
+                  documentSettings = {
+                    ...documentSettings,
+                    titleOn: (event.currentTarget as HTMLInputElement).checked,
+                  }
+                  updateLatexPreview()
+                }}
+              />
+              Afficher les titres de groupes
             </label>
             {#if documentSettings.showWarningMessage}
               <label for="amc-doc-warning" class="block text-xs"

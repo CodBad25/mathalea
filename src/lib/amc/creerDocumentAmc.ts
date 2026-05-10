@@ -34,6 +34,7 @@ export type CreerDocumentAmcOptions = {
   warningMessage?: string
   associationRoster?: string
   collectCorrectionsAtEnd?: boolean
+  titleOn?: boolean
   assumeAmcPrepared?: boolean
 }
 
@@ -444,7 +445,9 @@ export function exportQcmAmc(
     }
   }
 
-  texQr = texQr.replaceAll('<br><br>', '\\medskip\n').replaceAll('<br>', '\\\\')
+  texQr = texQr
+    .replaceAll('<br><br>', '\n\n\\medskip\n')
+    .replaceAll('<br>', '\n\n')
   return [texQr, ref, exercise.nbQuestions, title, isShuffled]
 }
 
@@ -483,6 +486,7 @@ export function creerDocumentAmc(options: CreerDocumentAmcOptions): string {
     warningMessage = DEFAULT_WARNING_MESSAGE,
     associationRoster = '',
     collectCorrectionsAtEnd = false,
+    titleOn = true,
     assumeAmcPrepared = false,
   } = options
   // Attention exercises est maintenant un tableau de tous les exercices.
@@ -606,7 +610,7 @@ export function creerDocumentAmc(options: CreerDocumentAmcOptions): string {
   for (const i of activeGroupIndexes) {
     const groupName = groupRefs[i]
     groupsSections += renderAMCGroupSection({
-      groupTitle: groupTitles[i],
+      groupTitle: titleOn ? groupTitles[i] : '',
       groupName,
       isMixed: groupShuffleFlags[i],
       questionsToRestore: nbQuestions[i],
