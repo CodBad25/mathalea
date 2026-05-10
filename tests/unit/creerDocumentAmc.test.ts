@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from 'vitest'
 
+// eslint-disable-next-line camelcase
 import * as exercice2N40_1 from '../../src/exercices/2e/2N40-1'
 import {
   renderAMCCopyContent,
@@ -19,6 +20,7 @@ function prepareExercise(
   module: { default: new () => any; amcType?: string; amcReady?: boolean },
   seed: string,
 ) {
+  // eslint-disable-next-line new-cap
   const exercice = new module.default()
   if (module.amcType != null) exercice.amcType = module.amcType
   if (module.amcReady != null) exercice.amcReady = module.amcReady
@@ -89,7 +91,8 @@ describe('creerDocumentAmc templates', () => {
   it('rend un debut de document AMC parametrable', () => {
     const documentStart = renderAMCDocumentStart({
       seed: 12345,
-      groupsContent: '\\element{G}{\\begin{question}{Q}X\\end{question}}',
+      groupsContent:
+        '\\element{G}{\\begin{question}{Q}\\AMClabel{Q}X\\end{question}}',
     })
 
     expect(documentStart).toContain('\\begin{document}')
@@ -127,6 +130,20 @@ describe('creerDocumentAmc templates', () => {
     expect(groupSection).toContain('\\setgroupmode{G1}{cyclic}')
     expect(groupSection).toContain('\\restituegroupe[2]{G1}')
     expect(groupSection).not.toContain('\\restituegroupe[2]{ G1 }')
+  })
+
+  it('rend une section de groupe sans titre avec hrule simple', () => {
+    const groupSection = renderAMCGroupSection({
+      groupTitle: '',
+      groupName: 'G1',
+      isMixed: false,
+      questionsToRestore: 2,
+    })
+
+    expect(groupSection).toContain('\\hrule')
+    expect(groupSection).not.toContain('\\bf\\Large')
+    expect(groupSection).not.toContain('\\begin{center}')
+    expect(groupSection).toContain('\\restituegroupe[2]{G1}')
   })
 
   it('propage les options de format et recto-verso au preambule du document', () => {
@@ -221,6 +238,42 @@ describe('creerDocumentAmc templates', () => {
     expect(latex).toContain('READY')
     expect(latex).not.toContain('\\element{NOT_READY}')
     expect(latex).not.toContain('\\restituegroupe{NOT_READY}')
+
+    vi.unstubAllGlobals()
+  })
+
+  it('masque les titres de groupes quand titleOn est false', () => {
+    vi.stubGlobal('document', {
+      getElementById: vi.fn(() => ({ checked: false })),
+    })
+
+    const latex = creerDocumentAmc({
+      exercices: [
+        {
+          amcReady: true,
+          amcType: 'AMCNum',
+          autoCorrection: [
+            {
+              enonce: 'Question valide',
+              reponse: {
+                valeur: 7,
+                param: { digits: 1, decimals: 0, tpoint: ',' },
+              },
+            },
+          ],
+          id: 'READY',
+          nbQuestions: 1,
+          titre: 'Titre visible normalement',
+          listeQuestions: ['Question valide'],
+          listeCorrections: ['Correction valide'],
+        } as any,
+      ],
+      titleOn: false,
+    })
+
+    expect(latex).not.toContain('\\bf\\Large Titre visible normalement')
+    expect(latex).toContain('\\hrule')
+    expect(latex).toContain('\\restituegroupe')
 
     vi.unstubAllGlobals()
   })
@@ -422,6 +475,7 @@ describe('creerDocumentAmc templates', () => {
     } as any
     mathaleaEnsureAMCCompatibility(exerciseExplicitlyBlocked)
 
+    // eslint-disable-next-line camelcase
     expect(exerciseExplicitQcm.amcType).toBe(exercice2N40_1.amcType)
     expect(exerciseInferredQcm.amcType).toBe(inferQcmType(exerciseInferredQcm))
     expect(exerciseInferredMathLive.amcType).toBe('AMCNum')

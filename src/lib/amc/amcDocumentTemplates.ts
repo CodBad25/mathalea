@@ -318,9 +318,8 @@ export const AMCDocumentStartTemplate = `%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 `
 
 export const AMCCopyContentTemplate = `{% if isCodeGrid %}	 \\def\\AMCchoiceLabel##1{}{% endif %}
-{{ groupsSections | safe }}{% if isA3 %}\\end{multicols}
-{% endif %}
-{% if collectCorrectionsAtEnd %}\\explaincontext{\\AMCexpliqueTout}
+{{ groupsSections | safe }}{% if collectCorrectionsAtEnd %}\\explaincontext{\\AMCexpliqueTout}
+{% endif %}{% if isA3 %}\\end{multicols}
 {% endif %}{% if isAssociation %}\\AMCassociation{\\id}
     }
   }
@@ -330,6 +329,7 @@ export const AMCCopyContentTemplate = `{% if isCodeGrid %}	 \\def\\AMCchoiceLabe
 export const AMCGroupSectionTemplate = `
 {% if pageBreakBefore %}\\clearpage
 {% endif %}
+{% if groupTitle and (groupTitle | trim | length) > 0 %}
   \\begin{center}
     \\hrule
     \\vspace{2mm}
@@ -337,6 +337,9 @@ export const AMCGroupSectionTemplate = `
     \\vspace{1mm}
     \\hrule
   \\end{center}
+{% else %}
+  \\hrule
+{% endif %}
 {% if not isMixed %}\\setgroupmode{ {{- groupName -}} }{cyclic}
 
 {% endif %}{% if multicols %}\\begin{multicols}{2}

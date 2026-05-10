@@ -5,7 +5,7 @@ nunjucks.configure('templates', { autoescape: false })
 export const AMCOpenTemplate = `\\element{ {{- ref -}} }{
 {% if multicols %}\\begin{multicols}{2}
 {% endif %}
-  \\begin{question}{ {{- id -}} }
+  \\begin{question}{ {{- id -}} }\\AMClabel{ {{- id -}} }
     {{ enonce }}
     \\explain{ {{- correction -}} }
     \\notation{ {{- notation -}} }[{{ sanscadre }}][{{ pointilles }}]
@@ -17,7 +17,7 @@ export const AMCOpenTemplate = `\\element{ {{- ref -}} }{
 export const AMCNumTemplate = `\\element{ {{- ref -}} }{
 {% if multicols %}\\begin{multicols}{2}
 {% endif %}
-  \\begin{questionmultx}{ {{- id -}} }
+  \\begin{questionmultx}{ {{- id -}} }\\AMClabel{ {{- id -}} }
     {{ enonce }}
 {%- if display and display.align %}
   \\begin{ {{- display.align -}} }
@@ -69,7 +69,7 @@ export const AMCNumTemplate = `\\element{ {{- ref -}} }{
 export const qcmTemplate = `\\element{ {{- ref -}} }{
 {% if multicols %}\\begin{multicols}{2}
 {% endif %}
-  \\begin{ {{- "questionmult" if mode == "mult" else "question" -}} }{ {{- id -}} }
+  \\begin{ {{- "questionmult" if mode == "mult" else "question" -}} }{ {{- id -}} }\\AMClabel{ {{- id -}} }
     {{ enonce | safe }}
     {% if correction %}\\explain{ {{- correction | safe -}} }{% endif %}
     \\begin{ {{- layout -}} }{% if ordered %}[o]{% endif %}
@@ -112,7 +112,7 @@ export const AMCHybrideContainerTemplate = `\\element{ {{- ref -}} }{
 }`
 
 export const AMCHybrideQcmTemplate = `{% if disableNumber %}\\def\\AMCbeginQuestion#1#2{}\\AMCquestionNumberfalse{% endif %}
-\\begin{ {{- "question" if mode == "mono" else "questionmult" -}} }{ {{- id -}} }
+\\begin{ {{- "question" if mode == "mono" else "questionmult" -}} }{ {{- id -}} }\\AMClabel{ {{- id -}} }
 {% if enonce %}{{ enonce | safe }}
 {% endif %}
 \\begin{ {{- layout -}} }{% if ordered %}[o]{% endif %}
@@ -128,7 +128,7 @@ export const AMCHybrideQcmTemplate = `{% if disableNumber %}\\def\\AMCbeginQuest
 
 export const AMCHybrideOpenTemplate = `{% if multicolsBegin %}\\setlength{\\columnseprule}{ {{ "0.5" if barreseparation else "0" }}0pt}\\begin{multicols}{2}
 {% endif %}
-{% if disableNumber %}\\def\\AMCbeginQuestion#1#2{}\\AMCquestionNumberfalse {% endif %}\\begin{question}{ {{- id -}} }{% if questionIndicative %}\\QuestionIndicative{% endif %}
+{% if disableNumber %}\\def\\AMCbeginQuestion#1#2{}\\AMCquestionNumberfalse {% endif %}\\begin{question}{ {{- id -}} }{% if not disableNumber %}\\AMClabel{ {{- id -}} }{% endif %}{% if questionIndicative %}\\QuestionIndicative{% endif %}
 {% if enonce %}{{ enonce | safe }}
 {% endif %}\\explain{ {{- correction | safe -}} }
 \\notation{ {{- notation -}} }[{{ sanscadre }}][{{ pointilles }}]
@@ -136,11 +136,11 @@ export const AMCHybrideOpenTemplate = `{% if multicolsBegin %}\\setlength{\\colu
 {% if multicolsEnd %}\\end{multicols}
 {% endif %}`
 
-export const AMCHybrideNumPowerTemplate = `{% if enonceApresNumQuestion %}\\begin{questionmultx}{ {{- enonceId -}} }
+export const AMCHybrideNumPowerTemplate = `{% if enonceApresNumQuestion %}\\begin{questionmultx}{ {{- enonceId -}} }\\AMClabel{ {{- enonceId -}} }
 {{ enonce | safe }}
 \\end{questionmultx}{% endif %}
 \\begin{multicols}{2}
-{% if disableNumber %}\\def\\AMCbeginQuestion#1#2{}\\AMCquestionNumberfalse{% endif %}\\begin{questionmultx}{ {{- id -}} }
+{% if disableNumber %}\\def\\AMCbeginQuestion#1#2{}\\AMCquestionNumberfalse{% endif %}\\begin{questionmultx}{ {{- id -}} }\\AMClabel{ {{- id -}} }
 {% if explain %}\\explain{ {{- explain | safe -}} }{% endif %}
 {{ texte | safe }}
 \\vspace{0.25cm}
@@ -148,7 +148,7 @@ Base
 \\AMCnumericChoices{ {{ baseValue }} }{digits={{ digitsBase }},decimals=0,sign={{ baseSign }},approx=0,borderwidth=0pt,backgroundcol=lightgray,scoreapprox={{ scoreapprox }},scoreexact=1,Tpoint={,}}
 \\end{questionmultx}
 \\AMCquestionNumberfalse\\def\\AMCbeginQuestion#1#2{}
-\\begin{questionmultx}{ {{- exponentId -}} }
+\\begin{questionmultx}{ {{- exponentId -}} }\\AMClabel{ {{- exponentId -}} }
 \\vspace{18pt}
 Exposant
 \\AMCnumericChoices{ {{ exponentValue }} }{digits={{ digitsExponent }},decimals=0,sign=true,approx=0,borderwidth=0pt,backgroundcol=lightgray,scoreapprox={{ scoreapprox }},scoreexact=1,Tpoint={,}}
@@ -156,10 +156,10 @@ Exposant
 \\end{multicols}
 `
 
-export const AMCHybrideNumFractionTemplate = `{% if enonceApresNumQuestion %}\\begin{questionmultx}{ {{- enonceId -}} }
+export const AMCHybrideNumFractionTemplate = `{% if enonceApresNumQuestion %}\\begin{questionmultx}{ {{- enonceId -}} }\\AMClabel{ {{- enonceId -}} }
 {{ enonce | safe }}
 \\end{questionmultx}{% endif %}
-{% if disableNumber %}\\def\\AMCbeginQuestion#1#2{}\\AMCquestionNumberfalse{% endif %}\\begin{questionmultx}{ {{- id -}} }
+{% if disableNumber %}\\def\\AMCbeginQuestion#1#2{}\\AMCquestionNumberfalse{% endif %}\\begin{questionmultx}{ {{- id -}} }\\AMClabel{ {{- id -}} }
 {% if alignement %}\\begin{ {{- alignement -}} }{% endif %}
 {% if showEnonce %}{{ enonce | safe }}
 {% endif %}
@@ -170,13 +170,13 @@ export const AMCHybrideNumFractionTemplate = `{% if enonceApresNumQuestion %}\\b
 \\end{questionmultx}
 `
 
-export const AMCHybrideNumDecimalTemplate = `{% if enonceApresNumQuestion %}\\begin{questionmultx}{ {{- enonceId -}} }
+export const AMCHybrideNumDecimalTemplate = `{% if enonceApresNumQuestion %}\\begin{questionmultx}{ {{- enonceId -}} }\\AMClabel{ {{- enonceId -}} }
 {{ enonce | safe }}
 \\end{questionmultx}{% endif %}
 {% if multicolsBegin %}\\setlength{\\columnseprule}{ {{ "0.5" if barreseparation else "0" }}pt}\\begin{multicols}{2}
 {% endif %}
 {% if disableNumber %}\\def\\AMCbeginQuestion#1#2{}\\AMCquestionNumberfalse{% endif %}
-\\begin{questionmultx}{ {{- id -}} }
+\\begin{questionmultx}{ {{- id -}} }\\AMClabel{ {{- id -}} }
 {% if explain %}\\explain{ {{- explain | safe -}} }{% endif %}
 {{ texte | safe }}
 {% if alignement %}\\begin{ {{- alignement -}} }{% endif %}
@@ -201,10 +201,6 @@ export function renderTemplate(
     .replace(
       /\\begin\{\s*([^}]+?)\s*\}\s*\{\s*([^}]+?)\s*\}/g,
       '\\begin{$1}{$2}',
-    )
-    .replace(
-      /\\begin\{(question|questionmult|questionmultx)\}\{([^}]+)\}/g,
-      '\\begin{$1}{$2}\\AMClabel{$2}',
     )
     .replace(/\\begin\{\s*([^}]+?)\s*\}/g, '\\begin{$1}')
     .replace(/\\end\{\s*([^}]+?)\s*\}/g, '\\end{$1}')
