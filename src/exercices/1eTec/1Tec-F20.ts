@@ -1,6 +1,7 @@
 import Decimal from 'decimal.js'
 import { courbe } from '../../lib/2d/Courbe'
 import { repere } from '../../lib/2d/reperes'
+import { bleuMathalea } from '../../lib/colors'
 import { setCliqueFigure } from '../../lib/interactif/gestionInteractif'
 import { Polynome } from '../../lib/mathFonctions/Polynome'
 import { choice, shuffle } from '../../lib/outils/arrayOutils'
@@ -16,7 +17,6 @@ import {
   randint,
 } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { bleuMathalea } from '../../lib/colors'
 
 export const dateDePublication = '28/02/2026'
 export const dateDeModifImportante = '25/03/2025'
@@ -591,13 +591,13 @@ export default class ExpressionAParabole extends Exercice {
         break
       }
       case 'vertical': {
-        coeffs[0] += decalage
+        coeffs[0] += randint(-3, 3, [0])
         erreurPolynome = new Polynome({ coeffs, letter: polynome.letter })
         graphe = avecGraphe
           ? this.genererGraphique(
               Object.assign(
                 { fonction: erreurPolynome.fonction, id },
-                this.reglerFenetrePoly2(coefDominant, 0, decalage),
+                this.reglerFenetrePoly2(coefDominant, 0, coeffs[0]),
               ),
             )
           : ''
