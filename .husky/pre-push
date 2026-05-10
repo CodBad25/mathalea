@@ -1,0 +1,5 @@
+#!/bin/sh
+set -e
+
+echo 'Lancement des tests unitaires avant push...'
+pnpm prebuild-unit-tests

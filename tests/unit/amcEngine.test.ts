@@ -308,7 +308,7 @@ describe('amcEngine', () => {
 
     expect(hybride.texQr).toContain('\\QuestionIndicative')
     expect(hybride.texQr).toContain('Correction open hybride')
-    expect(hybride.texQr).toContain('\\notation{ 2 }[0][1]')
+    expect(hybride.texQr).toContain('\\notation{2}[0][1]')
     expect(hybride.nextId).toBe(1)
   })
 
