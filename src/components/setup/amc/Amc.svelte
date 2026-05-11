@@ -6,17 +6,17 @@
   import { normalizeAMCNumBlocks } from '../../../lib/amc/amcNormalize'
   import type { IExerciceAMC } from '../../../lib/amc/amcTypes'
   import {
-      checkAMCGroupConsistency,
-      creerDocumentAmc,
-      type AMCGroupConsistencyReport,
+    checkAMCGroupConsistency,
+    creerDocumentAmc,
+    type AMCGroupConsistencyReport,
   } from '../../../lib/amc/creerDocumentAmc'
   import {
-      mathaleaGenerateSeed,
-      mathaleaGetExercicesFromParams,
-      mathaleaHandleExerciceSimple,
-      mathaleaHandleSup,
-      mathaleaUpdateExercicesParamsFromUrl,
-      mathaleaUpdateUrlFromExercicesParams,
+    mathaleaGenerateSeed,
+    mathaleaGetExercicesFromParams,
+    mathaleaHandleExerciceSimple,
+    mathaleaHandleSup,
+    mathaleaUpdateExercicesParamsFromUrl,
+    mathaleaUpdateUrlFromExercicesParams,
   } from '../../../lib/mathalea'
   import { darkMode, exercicesParams } from '../../../lib/stores/generalStore'
   import { referentielLocale } from '../../../lib/stores/languagesStore'
@@ -147,6 +147,30 @@
     return `${exercise.uuid ?? ''}::${exercise.id ?? ''}::${exercise.seed ?? ''}`
   }
 
+  function prepareExerciseForAmc(exercice: IExercice, seed: string): void {
+    // 1. Passe HTML : génère les SVG dans listeQuestions
+    generateHtmlQuestionsForExercise(exercice, seed)
+
+    // 2. Passe AMC : génère autoCorrectionAMC
+    const ex = exercice as any
+    ex.lastCallback = ''
+    context.isHtml = false
+    context.isAmc = true
+    exercice.interactif = false
+    seedrandom(seed, { global: true })
+
+    if (exercice.typeExercice === 'simple') {
+      mathaleaHandleExerciceSimple(exercice, false)
+    } else if (typeof exercice.nouvelleVersionWrapper === 'function') {
+      exercice.nouvelleVersionWrapper()
+    }
+
+    mathaleaEnsureAMCCompatibility(exercice)
+    populateAmcAutoCorrectionTextsFromLatex(exercice, seed)
+    ;(exercice as any).amcHtmlQuestions =
+      extractAMCQuestionsFromAutoCorrection(exercice)
+  }
+
   async function regenerateExercise(index: number, forcedSeed?: string) {
     const exercice = exercices[index]
     if (!exercice) return
@@ -157,31 +181,7 @@
       ...groupSettings[index],
       seed: nextSeed,
     }
-    if (exercice.typeExercice === 'simple') {
-      mathaleaHandleExerciceSimple(exercice, false)
-    } else if (typeof exercice.nouvelleVersionWrapper === 'function') {
-      exercice.nouvelleVersionWrapper()
-    }
-    // 1. Passe HTML : génère les SVG dans listeQuestions
-    generateHtmlQuestionsForExercise(exercice, nextSeed)
-
-    // 2. Passe AMC : génère autoCorrection
-    const ex = exercice as any
-    ex.lastCallback = ''
-    context.isHtml = false
-    context.isAmc = true
-    seedrandom(nextSeed, { global: true })
-
-    if (exercice.typeExercice === 'simple') {
-      mathaleaHandleExerciceSimple(exercice, false)
-    } else if (typeof exercice.nouvelleVersionWrapper === 'function') {
-      exercice.nouvelleVersionWrapper()
-    }
-
-    mathaleaEnsureAMCCompatibility(exercice)
-    populateAmcAutoCorrectionTextsFromLatex(exercice, nextSeed)
-    ;(exercice as any).amcHtmlQuestions =
-      extractAMCQuestionsFromAutoCorrection(exercice)
+    prepareExerciseForAmc(exercice, nextSeed)
     exercices = [...exercices]
     updateLatexPreview()
   }
@@ -608,36 +608,8 @@
 
     for (const exercice of loaded) {
       try {
-        context.isHtml = true
-        exercice.interactif = true
         const seed = exercice.seed ?? ''
-        if (exercice.typeExercice === 'simple') {
-          mathaleaHandleExerciceSimple(exercice, false)
-        } else if (typeof exercice.nouvelleVersionWrapper === 'function') {
-          exercice.nouvelleVersionWrapper()
-        }
-
-        // 1. Passe HTML : génère les SVG dans listeQuestions
-        generateHtmlQuestionsForExercise(exercice, seed)
-
-        // 2. Passe AMC : génère autoCorrection
-        const ex = exercice as any
-        ex.lastCallback = ''
-        context.isHtml = false
-        context.isAmc = true
-        exercice.interactif = false
-        seedrandom(seed, { global: true })
-
-        if (exercice.typeExercice === 'simple') {
-          mathaleaHandleExerciceSimple(exercice, false)
-        } else if (typeof exercice.nouvelleVersionWrapper === 'function') {
-          exercice.nouvelleVersionWrapper()
-        }
-
-        mathaleaEnsureAMCCompatibility(exercice)
-        populateAmcAutoCorrectionTextsFromLatex(exercice, seed)
-        ;(exercice as any).amcHtmlQuestions =
-          extractAMCQuestionsFromAutoCorrection(exercice)
+        prepareExerciseForAmc(exercice, seed)
         if (exercice.amcType != null) {
           amcReadyExercices.push(exercice)
         }
