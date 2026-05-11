@@ -6,17 +6,17 @@
   import { normalizeAMCNumBlocks } from '../../../lib/amc/amcNormalize'
   import type { IExerciceAMC } from '../../../lib/amc/amcTypes'
   import {
-    checkAMCGroupConsistency,
-    creerDocumentAmc,
-    type AMCGroupConsistencyReport,
+      checkAMCGroupConsistency,
+      creerDocumentAmc,
+      type AMCGroupConsistencyReport,
   } from '../../../lib/amc/creerDocumentAmc'
   import {
-    mathaleaGenerateSeed,
-    mathaleaGetExercicesFromParams,
-    mathaleaHandleExerciceSimple,
-    mathaleaHandleSup,
-    mathaleaUpdateExercicesParamsFromUrl,
-    mathaleaUpdateUrlFromExercicesParams,
+      mathaleaGenerateSeed,
+      mathaleaGetExercicesFromParams,
+      mathaleaHandleExerciceSimple,
+      mathaleaHandleSup,
+      mathaleaUpdateExercicesParamsFromUrl,
+      mathaleaUpdateUrlFromExercicesParams,
   } from '../../../lib/mathalea'
   import { darkMode, exercicesParams } from '../../../lib/stores/generalStore'
   import { referentielLocale } from '../../../lib/stores/languagesStore'
@@ -608,6 +608,8 @@
 
     for (const exercice of loaded) {
       try {
+        context.isHtml = true
+        exercice.interactif = true
         const seed = exercice.seed ?? ''
         if (exercice.typeExercice === 'simple') {
           mathaleaHandleExerciceSimple(exercice, false)
@@ -623,6 +625,7 @@
         ex.lastCallback = ''
         context.isHtml = false
         context.isAmc = true
+        exercice.interactif = false
         seedrandom(seed, { global: true })
 
         if (exercice.typeExercice === 'simple') {
