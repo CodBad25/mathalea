@@ -1432,6 +1432,12 @@
     isDocumentSettingsOpen = false
   }
 
+  function isSelectedExerciseQuestionCountModifiable(): boolean {
+    if (selectedExerciseIndex == null) return true
+    const exercise = exercices[selectedExerciseIndex] as any
+    return exercise?.nbQuestionsModifiable !== false
+  }
+
   function isQuestionHybrid(
     exercise: IExercice,
     questionIndex: number,
@@ -2517,7 +2523,9 @@
               min="1"
               class="w-full rounded border px-2 py-1 text-sm"
               value={groupSettings[selectedExerciseIndex]?.questionCount}
+              disabled={!isSelectedExerciseQuestionCountModifiable()}
               on:input={async (event) => {
+                if (!isSelectedExerciseQuestionCountModifiable()) return
                 const value = Math.max(
                   1,
                   Number((event.currentTarget as HTMLInputElement).value) || 1,
@@ -2551,6 +2559,13 @@
                 await regenerateExercise(idx, groupSettings[idx]?.seed)
               }}
             />
+            {#if !isSelectedExerciseQuestionCountModifiable()}
+              <p
+                class="text-[11px] text-coopmaths-corpus/70 dark:text-coopmathsdark-corpus/70"
+              >
+                Verrouillé par l'exercice (nbQuestionsModifiable=false).
+              </p>
+            {/if}
 
             <label for="amc-group-restitue-count" class="block text-xs"
               >Nombre de questions a restituer (\restituegroupe)</label
