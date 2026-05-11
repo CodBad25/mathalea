@@ -409,7 +409,15 @@ export default class CalculsImagesFonctions extends Exercice {
           `$f(${miseEnEvidence(reponses[i] instanceof FractionEtendue ? (reponses[i] as FractionEtendue).simplifie().texFSD : texNombre(reponses[i], 5))})=${img}$`
       }
       if (
-        this.questionJamaisPosee(i, listeTypeDeQuestions[i], x, y, sousChoix[i])
+        this.questionJamaisPosee(
+          i,
+          listeTypeDeQuestions[i],
+          x,
+          y,
+          sousChoix[i],
+          m,
+          n,
+        )
       ) {
         // Si la question n'a jamais été posée, on en créé une autre
         this.listeQuestions[i] = texte ?? ''
