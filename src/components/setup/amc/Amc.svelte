@@ -285,6 +285,12 @@
     return []
   }
 
+  function getEffectiveQuestionCount(exercise: IExercice): number {
+    const autoCorrection = getAmcAutoCorrection(exercise)
+    if (autoCorrection.length > 0) return autoCorrection.length
+    return Math.max(1, Number((exercise as any)?.nbQuestions) || 1)
+  }
+
   function ensureAmcAutoCorrectionFallback(exercice: IExercice): void {
     const ex = exercice as any
     const current = getAmcAutoCorrection(exercice)
@@ -651,24 +657,29 @@
       const preservedByKey =
         key === '' ? undefined : previousSettingsByKey.get(key)?.shift()
       const preserved = preservedByKey ?? previousSettings[index]
+      const effectiveQuestionCount = getEffectiveQuestionCount(exercice)
       const lockedQuestionCount =
         (exercice as any)?.nbQuestionsModifiable === false
-          ? Math.max(1, Number(exercice.nbQuestions) || 1)
+          ? effectiveQuestionCount
           : null
+
+      const resolvedQuestionCount =
+        lockedQuestionCount ??
+        preserved?.questionCount ??
+        effectiveQuestionCount
+
+      const resolvedRestitueCount =
+        lockedQuestionCount != null
+          ? Math.min(
+              lockedQuestionCount,
+              preserved?.restitueCount ?? lockedQuestionCount,
+            )
+          : Math.min(resolvedQuestionCount, preserved?.restitueCount ?? 1)
 
       return {
         seed: preserved?.seed ?? exercice.seed,
-        questionCount:
-          lockedQuestionCount ??
-          preserved?.questionCount ??
-          Math.max(1, exercice.nbQuestions),
-        restitueCount:
-          lockedQuestionCount != null
-            ? Math.min(
-                lockedQuestionCount,
-                preserved?.restitueCount ?? lockedQuestionCount,
-              )
-            : (preserved?.restitueCount ?? 1),
+        questionCount: resolvedQuestionCount,
+        restitueCount: resolvedRestitueCount,
         pageBreakBefore: preserved?.pageBreakBefore ?? false,
         multicols: preserved?.multicols ?? false,
       }
