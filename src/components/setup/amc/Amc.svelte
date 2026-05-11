@@ -1175,6 +1175,36 @@
     }
   }
 
+  /**
+   * Convertit les commandes LaTeX textuelles (produites lors de la passe isAmc)
+   * en HTML pour l'affichage dans la preview.
+   * Gère les patterns générés par texteEnCouleurEtGras(), numAlpha(), etc.
+   */
+  function latexTextToHtml(latex: string): string {
+    let html = latex
+    // \textbf {text} ou \textbf{text} → <strong>text</strong> (ex: numAlpha en mode LaTeX)
+    html = html.replace(/\\textbf\s*\{([^}]*)\}/g, '<strong>$1</strong>')
+    // {\bfseries \color[HTML]{hexcolor}text} → <strong style="color:#hex">text</strong>
+    html = html.replace(
+      /\{\\bfseries\s+\\color\[HTML\]\{([0-9a-fA-F]{6})\}([^{}]*)\}/g,
+      (_, hex, text) =>
+        hex === '000000'
+          ? `<strong>${text}</strong>`
+          : `<strong style="color:#${hex}">${text}</strong>`,
+    )
+    // {\bfseries \color{colorname}text} → <strong style="color:colorname">text</strong>
+    html = html.replace(
+      /\{\\bfseries\s+\\color\{([^}]+)\}([^{}]*)\}/g,
+      (_, color, text) =>
+        color === 'black'
+          ? `<strong>${text}</strong>`
+          : `<strong style="color:${color}">${text}</strong>`,
+    )
+    // Sauts de ligne LaTeX
+    html = html.replace(/\\\\/g, '<br>').replace(/\\medskip/g, '<br><br>')
+    return html
+  }
+
   function getBlocks(exercise: IExercice, exerciseIndex: number) {
     const blocks: PreviewBlock[] = []
 
@@ -1232,7 +1262,11 @@
             if (figureEnvRegex.test(raw)) {
               return htmlContent
             }
-            // Si le texte spécifique n'a pas de figures, on peut l'utiliser
+            // Si le texte spécifique n'a pas de figures, on peut l'utiliser.
+            // Pour AMCNum, le texte vient de la passe isAmc (LaTeX pur) : on le convertit en HTML.
+            if (propType === 'AMCNum') {
+              return latexTextToHtml(raw)
+            }
             return raw
               .replaceAll('\\\\', '<br>')
               .replaceAll('\\medskip', '<br><br>')
