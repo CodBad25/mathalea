@@ -2807,6 +2807,7 @@
                 id="amc-open-lines"
                 type="number"
                 min="1"
+                value="3"
                 class="w-full rounded border px-2 py-1 text-sm"
                 on:input={(event) =>
                   updateSelectedOpenParam(
