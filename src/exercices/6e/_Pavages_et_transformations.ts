@@ -338,7 +338,10 @@ export default class PavagesEtTransformations extends Exercice {
 
     // context.fenetreMathalea2d = [Xmin, Ymin, Xmax, Ymax]
     let trace, label, pt1, pt2
-    let texteAMC1, texteAMC2, texteAMC3, consigneAMC
+    let texteAMC1 = ''
+    let texteAMC2 = ''
+    let texteAMC3 = ''
+    let consigneAMC = ''
     switch (parseInt(this.sup)) {
       case 1: // symétrie axiale
         // Première question : une figure type A par symétrie d'axe // à [BD] est une figure type A. le symétrique du sommet A est le sommet C
@@ -2060,7 +2063,10 @@ export default class PavagesEtTransformations extends Exercice {
     listeQuestionsToContenuSansNumero(this)
     if (context.isAmc) {
       this.autoCorrectionAMC[0] = {
-        enonce: consigneAMC,
+        enonce: consigneAMC
+          ?.replace(texteAMC1, '')
+          .replace(texteAMC2, '')
+          .replace(texteAMC3, ''),
         options: { multicols: true },
         propositions: [
           {

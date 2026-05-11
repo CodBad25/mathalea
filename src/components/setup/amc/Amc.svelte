@@ -419,7 +419,11 @@
 
     const snapshot = {
       autoCorrection: cloneDeep(
-        Array.isArray(exercice.autoCorrection) ? exercice.autoCorrection : [],
+        Array.isArray(exercice.autoCorrectionAMC)
+          ? exercice.autoCorrectionAMC
+          : Array.isArray(exercice.autoCorrection)
+            ? exercice.autoCorrection
+            : [],
       ),
       listeQuestions: [...exercice.listeQuestions],
       listeCorrections: [...exercice.listeCorrections],
@@ -1620,13 +1624,23 @@
     const item = exercise.autoCorrectionAMC?.[selectedRef.questionIndex]
     if (!item) return
 
-    if (exercise.amcType === 'AMCHybride') {
-      item.options = item.options ?? {}
-      item.options.multicols = value
-    } else {
-      item.options = item.options ?? {}
-      item.options.multicols = value
-    }
+    item.options = item.options ?? {}
+    item.options.multicols = value
+
+    exercices = [...exercices]
+    updateLatexPreview()
+  }
+
+  function updateSelectedBlockMulticolsAll(value: boolean) {
+    if (!selectedRef) return
+
+    const exercise = exercices[selectedRef.exerciseIndex] as any
+    if (!exercise) return
+    const item = exercise.autoCorrectionAMC?.[selectedRef.questionIndex]
+    if (!item) return
+
+    item.options = item.options ?? {}
+    item.options.multicolsAll = value
 
     exercices = [...exercices]
     updateLatexPreview()
@@ -1637,6 +1651,13 @@
     const exercise = exercices[selectedRef.exerciseIndex] as any
     const item = exercise?.autoCorrectionAMC?.[selectedRef.questionIndex]
     return Boolean(item?.options?.multicols)
+  }
+
+  function isSelectedBlockMulticolsAllEnabled(): boolean {
+    if (!selectedRef) return false
+    const exercise = exercices[selectedRef.exerciseIndex] as any
+    const item = exercise?.autoCorrectionAMC?.[selectedRef.questionIndex]
+    return Boolean(item?.options?.multicolsAll)
   }
 
   function appliquerParametresQuestionAuGroupe() {
@@ -1651,6 +1672,22 @@
     const isHybrid =
       exercise.amcType === 'AMCHybride' ||
       isQuestionHybrid(exercise, selectedRef.questionIndex)
+
+    // En mode hybride, les options de colonnes du container (multicols / multicolsAll)
+    // doivent etre appliquees a toutes les questions du groupe.
+    if (isHybrid) {
+      const sourceContainerOptions =
+        autoCorrection[selectedRef.questionIndex]?.options ?? {}
+      const sourceMulticols = Boolean(sourceContainerOptions.multicols)
+      const sourceMulticolsAll = Boolean(sourceContainerOptions.multicolsAll)
+
+      for (const item of autoCorrection) {
+        if (!item) continue
+        item.options = item.options ?? {}
+        item.options.multicols = sourceMulticols
+        item.options.multicolsAll = sourceMulticolsAll
+      }
+    }
 
     if (selectedRef.kind === 'num') {
       if (isHybrid) {
@@ -2867,9 +2904,22 @@
                     )}
                 />
                 {exercices[selectedRef.exerciseIndex]?.amcType === 'AMCHybride'
-                  ? 'Bloc hybride en multicolonnes (2)'
+                  ? 'Elements de reponses en multicolonnes (2)'
                   : 'Question en multicolonnes (2)'}
               </label>
+              {#if exercices[selectedRef.exerciseIndex]?.amcType === 'AMCHybride'}
+                <label class="mt-2 inline-flex items-center gap-2 text-xs">
+                  <input
+                    type="checkbox"
+                    checked={isSelectedBlockMulticolsAllEnabled()}
+                    on:change={(event) =>
+                      updateSelectedBlockMulticolsAll(
+                        (event.currentTarget as HTMLInputElement).checked,
+                      )}
+                  />
+                  Bloc hybride complet en multicolonnes (2)
+                </label>
+              {/if}
               <button
                 type="button"
                 class="mt-2 w-full rounded border px-3 py-1 text-xs"
@@ -2933,9 +2983,22 @@
                     )}
                 />
                 {exercices[selectedRef.exerciseIndex]?.amcType === 'AMCHybride'
-                  ? 'Bloc hybride en multicolonnes (2)'
+                  ? 'Elements de reponses en multicolonnes (2)'
                   : 'Question en multicolonnes (2)'}
               </label>
+              {#if exercices[selectedRef.exerciseIndex]?.amcType === 'AMCHybride'}
+                <label class="mt-2 inline-flex items-center gap-2 text-xs">
+                  <input
+                    type="checkbox"
+                    checked={isSelectedBlockMulticolsAllEnabled()}
+                    on:change={(event) =>
+                      updateSelectedBlockMulticolsAll(
+                        (event.currentTarget as HTMLInputElement).checked,
+                      )}
+                  />
+                  Bloc hybride complet en multicolonnes (2)
+                </label>
+              {/if}
               <button
                 type="button"
                 class="mt-2 w-full rounded border px-3 py-1 text-xs"
@@ -2997,9 +3060,22 @@
                     )}
                 />
                 {exercices[selectedRef.exerciseIndex]?.amcType === 'AMCHybride'
-                  ? 'Bloc hybride en multicolonnes (2)'
+                  ? 'Elements de reponses en multicolonnes (2)'
                   : 'Question en multicolonnes (2)'}
               </label>
+              {#if exercices[selectedRef.exerciseIndex]?.amcType === 'AMCHybride'}
+                <label class="mt-2 inline-flex items-center gap-2 text-xs">
+                  <input
+                    type="checkbox"
+                    checked={isSelectedBlockMulticolsAllEnabled()}
+                    on:change={(event) =>
+                      updateSelectedBlockMulticolsAll(
+                        (event.currentTarget as HTMLInputElement).checked,
+                      )}
+                  />
+                  Bloc hybride complet en multicolonnes (2)
+                </label>
+              {/if}
               <button
                 type="button"
                 class="mt-2 w-full rounded border px-3 py-1 text-xs"
