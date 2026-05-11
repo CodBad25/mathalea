@@ -49,9 +49,15 @@ export const AMCPreambleTemplate = `%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   \\RequirePackage{etex}	  % pour avoir plus de "registres" mémoires / tikz...
   %%%%% PACKAGES LANGUE %%%%%
   \\usepackage{babel} % sans option => langue définie dans la classe du document
-   \\usepackage[T1]{fontenc} % pour de la compilation en luaLaTex, faudra changer : voir alacarte.ts
-   \\usepackage[utf8x]{inputenc} % pour de la compilation en luaLaTex, faudra changer : voir alacarte.ts
-   \\usepackage{lmodern}	        	% Choix de la fonte (Latin Modern de D. Knuth)
+   \\usepackage{iftex}
+   \\ifPDFTeX
+     \\usepackage[T1]{fontenc}
+     \\usepackage[utf8]{inputenc}
+     \\usepackage{lmodern}
+   \\else
+     \\usepackage{fontspec}
+     \\setmainfont{Latin Modern Roman}
+   \\fi
    \\usepackage{fp}
    \\usepackage{ProfCollege}
 

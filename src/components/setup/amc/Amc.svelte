@@ -1086,13 +1086,20 @@
   async function copyLatexToClipboard() {
     if (!latexContent.trim()) return
 
+    const { text: sanitizedLatexContent, hadInvalidChars } =
+      sanitizeLatexForExport(latexContent)
+
     try {
-      await navigator.clipboard.writeText(latexContent)
-      setLatexExportStatus('LaTeX copié dans le presse-papier.')
+      await navigator.clipboard.writeText(sanitizedLatexContent)
+      setLatexExportStatus(
+        hadInvalidChars
+          ? 'LaTeX copié. Des caractères invalides ont été remplacés.'
+          : 'LaTeX copié dans le presse-papier.',
+      )
     } catch {
       // Fallback pour navigateurs sans permission clipboard.
       const textarea = document.createElement('textarea')
-      textarea.value = latexContent
+      textarea.value = sanitizedLatexContent
       textarea.style.position = 'fixed'
       textarea.style.opacity = '0'
       document.body.appendChild(textarea)
@@ -1102,7 +1109,9 @@
       document.body.removeChild(textarea)
       setLatexExportStatus(
         copied
-          ? 'LaTeX copié dans le presse-papier.'
+          ? hadInvalidChars
+            ? 'LaTeX copié. Des caractères invalides ont été remplacés.'
+            : 'LaTeX copié dans le presse-papier.'
           : 'Impossible de copier automatiquement le LaTeX.',
       )
     }
@@ -1111,7 +1120,12 @@
   function downloadLatexFile() {
     if (!latexContent.trim()) return
 
-    const blob = new Blob([latexContent], { type: 'text/x-tex;charset=utf-8' })
+    const { text: sanitizedLatexContent, hadInvalidChars } =
+      sanitizeLatexForExport(latexContent)
+
+    const blob = new Blob([new TextEncoder().encode(sanitizedLatexContent)], {
+      type: 'text/x-tex;charset=utf-8',
+    })
     const url = URL.createObjectURL(blob)
     const link = document.createElement('a')
     const seed = exercices[0]?.seed ?? 'amc'
@@ -1124,8 +1138,23 @@
     URL.revokeObjectURL(url)
 
     setLatexExportStatus(
-      'Téléchargement lancé (dossier selon les réglages du navigateur).',
+      hadInvalidChars
+        ? 'Téléchargement lancé. Des caractères invalides ont été remplacés.'
+        : 'Téléchargement lancé (dossier selon les réglages du navigateur).',
     )
+  }
+
+  function sanitizeLatexForExport(content: string): {
+    text: string
+    hadInvalidChars: boolean
+  } {
+    const normalized = content.replace(/\uFEFF/g, '').normalize('NFC')
+    const hadInvalidChars = /\uFFFD/.test(normalized)
+
+    return {
+      text: hadInvalidChars ? normalized.replace(/\uFFFD/g, '?') : normalized,
+      hadInvalidChars,
+    }
   }
 
   function getBlocks(exercise: IExercice, exerciseIndex: number) {
