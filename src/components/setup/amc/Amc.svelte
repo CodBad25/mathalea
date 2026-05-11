@@ -1494,7 +1494,7 @@
 
     const exercise = exercices[selectedRef.exerciseIndex] as any
     if (!exercise) return
-    const item = exercise.autoCorrection?.[selectedRef.questionIndex]
+    const item = exercise.autoCorrectionAMC?.[selectedRef.questionIndex]
     if (!item) return
 
     const isHybrid = exercise.amcType === 'AMCHybride'
@@ -1564,8 +1564,8 @@
     const exercise = exercices[selectedRef.exerciseIndex] as any
     if (!exercise) return
 
-    const autoCorrection = Array.isArray(exercise.autoCorrection)
-      ? exercise.autoCorrection
+    const autoCorrection = Array.isArray(exercise.autoCorrectionAMC)
+      ? exercise.autoCorrectionAMC
       : []
     const isHybrid =
       exercise.amcType === 'AMCHybride' ||
