@@ -27,7 +27,7 @@ import Exercice from '../Exercice'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const amcReady = true
-export const amcType = 'AMCHybride'
+export const amcType = 'AMCOpen'
 export const dateDeModifImportante = '14/01/2025'
 
 export const titre =
