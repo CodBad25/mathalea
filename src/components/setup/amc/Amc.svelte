@@ -651,12 +651,24 @@
       const preservedByKey =
         key === '' ? undefined : previousSettingsByKey.get(key)?.shift()
       const preserved = preservedByKey ?? previousSettings[index]
+      const lockedQuestionCount =
+        (exercice as any)?.nbQuestionsModifiable === false
+          ? Math.max(1, Number(exercice.nbQuestions) || 1)
+          : null
 
       return {
         seed: preserved?.seed ?? exercice.seed,
         questionCount:
-          preserved?.questionCount ?? Math.max(1, exercice.nbQuestions),
-        restitueCount: preserved?.restitueCount ?? 1,
+          lockedQuestionCount ??
+          preserved?.questionCount ??
+          Math.max(1, exercice.nbQuestions),
+        restitueCount:
+          lockedQuestionCount != null
+            ? Math.min(
+                lockedQuestionCount,
+                preserved?.restitueCount ?? lockedQuestionCount,
+              )
+            : (preserved?.restitueCount ?? 1),
         pageBreakBefore: preserved?.pageBreakBefore ?? false,
         multicols: preserved?.multicols ?? false,
       }
@@ -733,7 +745,10 @@
       const next = [...list]
       const current = { ...next[paramsIndex] }
 
-      if (detail.nbQuestions != null) {
+      if (
+        detail.nbQuestions != null &&
+        (exercise as any)?.nbQuestionsModifiable !== false
+      ) {
         const nbQuestions = Math.max(1, Number(detail.nbQuestions) || 1)
         exercise.nbQuestions = nbQuestions
         current.nbQuestions = nbQuestions
