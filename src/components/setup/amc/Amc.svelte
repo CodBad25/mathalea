@@ -1516,7 +1516,7 @@
 
     const exercise = exercices[selectedRef.exerciseIndex] as any
     if (!exercise) return
-    const item = exercise.autoCorrection?.[selectedRef.questionIndex]
+    const item = exercise.autoCorrectionAMC?.[selectedRef.questionIndex]
     if (!item) return
 
     const isHybrid = exercise.amcType === 'AMCHybride'
@@ -1536,7 +1536,7 @@
 
     const exercise = exercices[selectedRef.exerciseIndex] as any
     if (!exercise) return
-    const item = exercise.autoCorrection?.[selectedRef.questionIndex]
+    const item = exercise.autoCorrectionAMC?.[selectedRef.questionIndex]
     if (!item) return
 
     if (exercise.amcType === 'AMCHybride') {
@@ -1554,7 +1554,7 @@
   function isSelectedBlockMulticolsEnabled(): boolean {
     if (!selectedRef) return false
     const exercise = exercices[selectedRef.exerciseIndex] as any
-    const item = exercise?.autoCorrection?.[selectedRef.questionIndex]
+    const item = exercise?.autoCorrectionAMC?.[selectedRef.questionIndex]
     return Boolean(item?.options?.multicols)
   }
 
@@ -1668,7 +1668,10 @@
 
   function deleteQuestion(exerciseIndex: number, questionIndex: number) {
     const exercice = exercices[exerciseIndex] as any
-    if (!exercice?.autoCorrection) return
+    if (!exercice?.autoCorrectionAMC || !exercice?.autoCorrection) return
+    exercice.autoCorrectionAMC = (exercice.autoCorrectionAMC as any[]).filter(
+      (_: any, i: number) => i !== questionIndex,
+    )
     exercice.autoCorrection = (exercice.autoCorrection as any[]).filter(
       (_: any, i: number) => i !== questionIndex,
     )
