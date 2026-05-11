@@ -209,12 +209,12 @@ export default class PenteEtOrdonneeOrigineDroite extends Exercice {
       dataOptions =
         vocabulaire === 'affine'
           ? {
-              champ1: { keyboard: KeyboardType.clavierNumbers },
-              champ2: { keyboard: KeyboardType.clavierNumbers },
+              champ1: { keyboard: KeyboardType.college6eme },
+              champ2: { keyboard: KeyboardType.college6eme },
               champ3: { keyboard: KeyboardType.clavierDeBaseAvecX },
             }
           : {
-              champ1: { keyboard: KeyboardType.clavierNumbers },
+              champ1: { keyboard: KeyboardType.college6eme },
               champ2: { keyboard: KeyboardType.clavierDeBaseAvecX },
             }
 
