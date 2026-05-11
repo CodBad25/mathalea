@@ -999,10 +999,28 @@
   function extractClipDimensionsCmFromText(
     latex: string,
   ): { widthCm: number; heightCm: number } | null {
+    const extractTikzScale = (latexText: string): number => {
+      const beginRegex =
+        /\\begin\s*\{\s*(?:tikzpicture|circuitikz)\s*\}\s*(?:\[([^\]]*)\])?/i
+      const beginMatch = latexText.match(beginRegex)
+      const options = beginMatch?.[1]
+      if (!options) return 1
+
+      const scaleRegex =
+        /(?:^|,)\s*scale\s*=\s*\{?\s*([+-]?\d*\.?\d+(?:[eE][+-]?\d+)?)\s*\}?\s*(?=,|$)/i
+      const scaleMatch = options.match(scaleRegex)
+      if (!scaleMatch) return 1
+
+      const parsedScale = Number(scaleMatch[1])
+      return Number.isFinite(parsedScale) ? Math.abs(parsedScale) : 1
+    }
+
     const clipRegex =
       /\\clip\s*\(\s*([+-]?\d*\.?\d+)\s*(cm|mm|pt|in)?\s*,\s*([+-]?\d*\.?\d+)\s*(cm|mm|pt|in)?\s*\)\s*rectangle\s*\(\s*([+-]?\d*\.?\d+)\s*(cm|mm|pt|in)?\s*,\s*([+-]?\d*\.?\d+)\s*(cm|mm|pt|in)?\s*\)\s*;/i
     const match = latex.match(clipRegex)
     if (!match) return null
+
+    const tikzScale = extractTikzScale(latex)
 
     const x1 = toCm(Number(match[1]), match[2])
     const y1 = toCm(Number(match[3]), match[4])
@@ -1012,8 +1030,8 @@
     if (![x1, y1, x2, y2].every((v) => Number.isFinite(v))) return null
 
     return {
-      widthCm: Math.abs(x2 - x1),
-      heightCm: Math.abs(y2 - y1),
+      widthCm: Math.abs(x2 - x1) * tikzScale,
+      heightCm: Math.abs(y2 - y1) * tikzScale,
     }
   }
 
