@@ -172,6 +172,12 @@
     context.isAmc = true
     seedrandom(nextSeed, { global: true })
 
+    if (exercice.typeExercice === 'simple') {
+      mathaleaHandleExerciceSimple(exercice, false)
+    } else if (typeof exercice.nouvelleVersionWrapper === 'function') {
+      exercice.nouvelleVersionWrapper()
+    }
+
     mathaleaEnsureAMCCompatibility(exercice)
     populateAmcAutoCorrectionTextsFromLatex(exercice, nextSeed)
     ;(exercice as any).amcHtmlQuestions =
@@ -618,6 +624,12 @@
         context.isHtml = false
         context.isAmc = true
         seedrandom(seed, { global: true })
+
+        if (exercice.typeExercice === 'simple') {
+          mathaleaHandleExerciceSimple(exercice, false)
+        } else if (typeof exercice.nouvelleVersionWrapper === 'function') {
+          exercice.nouvelleVersionWrapper()
+        }
 
         mathaleaEnsureAMCCompatibility(exercice)
         populateAmcAutoCorrectionTextsFromLatex(exercice, seed)
