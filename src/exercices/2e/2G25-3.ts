@@ -12,16 +12,13 @@ export const titre =
 export const interactifReady = true
 export const interactifType = 'qcm'
 
-// Les exports suivants sont optionnels mais au moins la date de publication semble essentielle
-export const dateDePublication = '18/04/26' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
+export const dateDePublication = '18/04/26'
 
 /**
- * Modèle d'exercice très simple pour la course aux nombres
  * @author Stéphane Guyon
-
 */
-export const uuid = '2ba44'
 
+export const uuid = '2ba44'
 export const refs = {
   'fr-fr': ['2G25-3'],
   'fr-ch': ['3G93-8'],
@@ -29,7 +26,6 @@ export const refs = {
 export default class DroitesParallelesVF extends Exercice {
   constructor() {
     super()
-
     this.nbQuestions = 1
   }
 
@@ -40,7 +36,6 @@ export default class DroitesParallelesVF extends Exercice {
       let i = 0, texte, texteCorr, monQcm, cpt = 0;
       i < this.nbQuestions && cpt < 50;
     ) {
-     
           xa = randint(-5, 5)
           ya = randint(-5, 5)
           xb = randint(-5, 5, xa)
@@ -64,11 +59,11 @@ export default class DroitesParallelesVF extends Exercice {
             propositions: [
               {
                 texte: 'Vrai',
-                statut: xc-xa  === k*abx && yc-ya === k*aby,
+                statut: aligne === 'true',
               },
               {
                 texte: 'Faux',
-                statut: xa === 50,
+                statut: aligne !== 'true',
               },
             ],
             options: { ordered: true, radio: true },
