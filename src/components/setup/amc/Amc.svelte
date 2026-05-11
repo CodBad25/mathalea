@@ -147,6 +147,30 @@
     return `${exercise.uuid ?? ''}::${exercise.id ?? ''}::${exercise.seed ?? ''}`
   }
 
+  function prepareExerciseForAmc(exercice: IExercice, seed: string): void {
+    // 1. Passe HTML : génère les SVG dans listeQuestions
+    generateHtmlQuestionsForExercise(exercice, seed)
+
+    // 2. Passe AMC : génère autoCorrectionAMC
+    const ex = exercice as any
+    ex.lastCallback = ''
+    context.isHtml = false
+    context.isAmc = true
+    exercice.interactif = false
+    seedrandom(seed, { global: true })
+
+    if (exercice.typeExercice === 'simple') {
+      mathaleaHandleExerciceSimple(exercice, false)
+    } else if (typeof exercice.nouvelleVersionWrapper === 'function') {
+      exercice.nouvelleVersionWrapper()
+    }
+
+    mathaleaEnsureAMCCompatibility(exercice)
+    populateAmcAutoCorrectionTextsFromLatex(exercice, seed)
+    ;(exercice as any).amcHtmlQuestions =
+      extractAMCQuestionsFromAutoCorrection(exercice)
+  }
+
   async function regenerateExercise(index: number, forcedSeed?: string) {
     const exercice = exercices[index]
     if (!exercice) return
@@ -157,25 +181,7 @@
       ...groupSettings[index],
       seed: nextSeed,
     }
-    if (exercice.typeExercice === 'simple') {
-      mathaleaHandleExerciceSimple(exercice, false)
-    } else if (typeof exercice.nouvelleVersionWrapper === 'function') {
-      exercice.nouvelleVersionWrapper()
-    }
-    // 1. Passe HTML : génère les SVG dans listeQuestions
-    generateHtmlQuestionsForExercise(exercice, nextSeed)
-
-    // 2. Passe AMC : génère autoCorrection
-    const ex = exercice as any
-    ex.lastCallback = ''
-    context.isHtml = false
-    context.isAmc = true
-    seedrandom(nextSeed, { global: true })
-
-    mathaleaEnsureAMCCompatibility(exercice)
-    populateAmcAutoCorrectionTextsFromLatex(exercice, nextSeed)
-    ;(exercice as any).amcHtmlQuestions =
-      extractAMCQuestionsFromAutoCorrection(exercice)
+    prepareExerciseForAmc(exercice, nextSeed)
     exercices = [...exercices]
     updateLatexPreview()
   }
@@ -603,26 +609,7 @@
     for (const exercice of loaded) {
       try {
         const seed = exercice.seed ?? ''
-        if (exercice.typeExercice === 'simple') {
-          mathaleaHandleExerciceSimple(exercice, false)
-        } else if (typeof exercice.nouvelleVersionWrapper === 'function') {
-          exercice.nouvelleVersionWrapper()
-        }
-
-        // 1. Passe HTML : génère les SVG dans listeQuestions
-        generateHtmlQuestionsForExercise(exercice, seed)
-
-        // 2. Passe AMC : génère autoCorrection
-        const ex = exercice as any
-        ex.lastCallback = ''
-        context.isHtml = false
-        context.isAmc = true
-        seedrandom(seed, { global: true })
-
-        mathaleaEnsureAMCCompatibility(exercice)
-        populateAmcAutoCorrectionTextsFromLatex(exercice, seed)
-        ;(exercice as any).amcHtmlQuestions =
-          extractAMCQuestionsFromAutoCorrection(exercice)
+        prepareExerciseForAmc(exercice, seed)
         if (exercice.amcType != null) {
           amcReadyExercices.push(exercice)
         }
@@ -1151,8 +1138,14 @@
 
     autoCorrection.forEach((item, questionIndex) => {
       const type = (exercise as any).amcType
+      // Pour les blocs hybrides enfants, utiliser htmlQuestions (contexte HTML)
+      // et non amcHtmlQuestions (contexte LaTeX) pour éviter du LaTeX brut dans la preview
       const htmlContent =
-        amcHtmlQuestions[questionIndex] ?? htmlQuestions[questionIndex] ?? ''
+        type === 'AMCHybride'
+          ? (htmlQuestions[questionIndex] ?? '')
+          : (amcHtmlQuestions[questionIndex] ??
+            htmlQuestions[questionIndex] ??
+            '')
 
       if (type === 'AMCHybride') {
         const propositions = Array.isArray(item?.propositions)
@@ -1178,18 +1171,22 @@
             propType === 'AMCNum'
               ? prop?.propositions?.[0]?.reponse?.texte
               : propType === 'AMCOpen'
-                ? prop?.propositions?.[0]?.texte
+                ? (prop?.propositions?.[0]?.enonce ?? propEnonce)
                 : propEnonce
           const propHtmlContent = (() => {
             const raw =
               typeof propSpecificText === 'string'
                 ? propSpecificText.trim()
                 : ''
-            if (raw.length === 0) return ''
-            // Si le texte contient encore une figure LaTeX, on garde le fallback HTML
-            // (qui contient déjà le SVG substitué).
-            const source = figureEnvRegex.test(raw) ? htmlContent : raw
-            return source
+            if (raw.length === 0) return htmlContent
+            // Pour les blocs hybrides, utiliser le contenu HTML rendu de la question entière
+            // car il contient les SVG substitués pour les figures LaTeX
+            // sauf si le texte spécifique a un contenu pertinent et pas de figures
+            if (figureEnvRegex.test(raw)) {
+              return htmlContent
+            }
+            // Si le texte spécifique n'a pas de figures, on peut l'utiliser
+            return raw
               .replaceAll('\\\\', '<br>')
               .replaceAll('\\medskip', '<br><br>')
           })()
@@ -1350,6 +1347,25 @@
     isDocumentSettingsOpen = false
   }
 
+  function isQuestionHybrid(
+    exercise: IExercice,
+    questionIndex: number,
+  ): boolean {
+    const exercise_ = exercise as any
+    const autoCorrection = Array.isArray(exercise_.autoCorrectionAMC)
+      ? exercise_.autoCorrectionAMC
+      : exercise_.autoCorrection
+    const item = autoCorrection?.[questionIndex]
+    if (!item || !Array.isArray(item.propositions)) return false
+
+    // Compte les types de propositions différents
+    const types = new Set<string>()
+    for (const prop of item.propositions) {
+      if (prop?.type) types.add(prop.type)
+    }
+    return types.size > 1
+  }
+
   function getSelectedNumericResponseTarget(): any | null {
     if (!selectedRef || selectedRef.kind !== 'num') return null
 
@@ -1436,6 +1452,17 @@
     return Object.prototype.hasOwnProperty.call(param, key)
   }
 
+  const AMC_TPOINT_COMMA = ','
+  const AMC_TPOINT_FRACTION =
+    '\\vspace{0.5cm} \\vrule height 0.4pt width 5.5cm '
+
+  function getSelectedNumericTpointUiValue(): 'comma' | 'fraction' {
+    const raw = String(
+      getSelectedNumericParamValue('tpoint') ?? AMC_TPOINT_COMMA,
+    )
+    return raw.includes('\\vrule') ? 'fraction' : 'comma'
+  }
+
   function updateSelectedNumericParam(
     key:
       | 'digits'
@@ -1467,7 +1494,7 @@
 
     const exercise = exercices[selectedRef.exerciseIndex] as any
     if (!exercise) return
-    const item = exercise.autoCorrection?.[selectedRef.questionIndex]
+    const item = exercise.autoCorrectionAMC?.[selectedRef.questionIndex]
     if (!item) return
 
     const isHybrid = exercise.amcType === 'AMCHybride'
@@ -1489,7 +1516,7 @@
 
     const exercise = exercices[selectedRef.exerciseIndex] as any
     if (!exercise) return
-    const item = exercise.autoCorrection?.[selectedRef.questionIndex]
+    const item = exercise.autoCorrectionAMC?.[selectedRef.questionIndex]
     if (!item) return
 
     const isHybrid = exercise.amcType === 'AMCHybride'
@@ -1509,7 +1536,7 @@
 
     const exercise = exercices[selectedRef.exerciseIndex] as any
     if (!exercise) return
-    const item = exercise.autoCorrection?.[selectedRef.questionIndex]
+    const item = exercise.autoCorrectionAMC?.[selectedRef.questionIndex]
     if (!item) return
 
     if (exercise.amcType === 'AMCHybride') {
@@ -1527,7 +1554,7 @@
   function isSelectedBlockMulticolsEnabled(): boolean {
     if (!selectedRef) return false
     const exercise = exercices[selectedRef.exerciseIndex] as any
-    const item = exercise?.autoCorrection?.[selectedRef.questionIndex]
+    const item = exercise?.autoCorrectionAMC?.[selectedRef.questionIndex]
     return Boolean(item?.options?.multicols)
   }
 
@@ -1537,10 +1564,12 @@
     const exercise = exercices[selectedRef.exerciseIndex] as any
     if (!exercise) return
 
-    const autoCorrection = Array.isArray(exercise.autoCorrection)
-      ? exercise.autoCorrection
+    const autoCorrection = Array.isArray(exercise.autoCorrectionAMC)
+      ? exercise.autoCorrectionAMC
       : []
-    const isHybrid = exercise.amcType === 'AMCHybride'
+    const isHybrid =
+      exercise.amcType === 'AMCHybride' ||
+      isQuestionHybrid(exercise, selectedRef.questionIndex)
 
     if (selectedRef.kind === 'num') {
       if (isHybrid) {
@@ -1639,7 +1668,10 @@
 
   function deleteQuestion(exerciseIndex: number, questionIndex: number) {
     const exercice = exercices[exerciseIndex] as any
-    if (!exercice?.autoCorrection) return
+    if (!exercice?.autoCorrectionAMC || !exercice?.autoCorrection) return
+    exercice.autoCorrectionAMC = (exercice.autoCorrectionAMC as any[]).filter(
+      (_: any, i: number) => i !== questionIndex,
+    )
     exercice.autoCorrection = (exercice.autoCorrection as any[]).filter(
       (_: any, i: number) => i !== questionIndex,
     )
@@ -1829,13 +1861,13 @@
               </header>
 
               <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-3">
-                {#each getPreviewDisplayItems(exercice, exerciseIndex) as item}
+                {#each getPreviewDisplayItems(exercice, exerciseIndex) as item (item.kind === 'hybridContainer' ? `hybrid-${item.header.key}` : item.block.key)}
                   {#if item.kind === 'hybridContainer'}
                     {@const hasCommonHeader = hasHybridHeaderContent(
                       item.header,
                     )}
                     <div
-                      class="md:col-span-2 rounded-xl border-2 border-coopmaths-action/50 bg-coopmaths-canvas/25 p-3 dark:bg-coopmathsdark-canvas/25"
+                      class="md:col-span-2 rounded-xl border-2 border-coopmaths-struct-light/70 bg-coopmaths-canvas/25 p-3 dark:border-coopmathsdark-struct-light/50 dark:bg-coopmathsdark-canvas/25"
                     >
                       <div class="mb-1 flex items-center justify-between gap-1">
                         <p
@@ -1867,14 +1899,21 @@
                         class="amc-hybrid-children grid grid-cols-1 md:grid-cols-2 gap-3"
                         class:mt-3={hasCommonHeader}
                       >
-                        {#each item.children as block}
+                        {#each item.children as block (block.key)}
                           <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
                           <div
                             role={block.ref ? 'button' : undefined}
                             tabindex={block.ref ? 0 : undefined}
                             class="amc-hybrid-child rounded-xl p-1 text-left transition-colors {block.ref
                               ? `cursor-pointer ${
-                                  isSelected(block.ref)
+                                  selectedRef &&
+                                  selectedRef.exerciseIndex ===
+                                    block.ref.exerciseIndex &&
+                                  selectedRef.questionIndex ===
+                                    block.ref.questionIndex &&
+                                  selectedRef.propositionIndex ===
+                                    block.ref.propositionIndex &&
+                                  selectedRef.kind === block.ref.kind
                                     ? 'ring-2 ring-coopmaths-action'
                                     : 'hover:bg-coopmaths-canvas/40 dark:hover:bg-coopmathsdark-canvas/40'
                                 }`
@@ -1958,7 +1997,14 @@
                       tabindex={block.ref ? 0 : undefined}
                       class="rounded-xl p-1 text-left transition-colors {block.ref
                         ? `cursor-pointer ${
-                            isSelected(block.ref)
+                            selectedRef &&
+                            selectedRef.exerciseIndex ===
+                              block.ref.exerciseIndex &&
+                            selectedRef.questionIndex ===
+                              block.ref.questionIndex &&
+                            selectedRef.propositionIndex ===
+                              block.ref.propositionIndex &&
+                            selectedRef.kind === block.ref.kind
                               ? 'ring-2 ring-coopmaths-action'
                               : 'hover:bg-coopmaths-canvas/40 dark:hover:bg-coopmathsdark-canvas/40'
                           }`
@@ -2716,15 +2762,18 @@
               <select
                 id="amc-num-dec-sep"
                 class="w-full rounded border px-2 py-1 text-sm"
-                value={String(getSelectedNumericParamValue('tpoint') ?? ',')}
+                value={getSelectedNumericTpointUiValue()}
                 on:change={(event) =>
                   updateSelectedNumericParam(
                     'tpoint',
-                    (event.currentTarget as HTMLSelectElement).value,
+                    (event.currentTarget as HTMLSelectElement).value ===
+                      'fraction'
+                      ? AMC_TPOINT_FRACTION
+                      : AMC_TPOINT_COMMA,
                   )}
               >
-                <option value=",">Virgule (,)</option>
-                <option value=".">Point (.)</option>
+                <option value="comma">Virgule (,)</option>
+                <option value="fraction">Barre de fraction</option>
               </select>
 
               <label class="mt-2 inline-flex items-center gap-2 text-xs">
@@ -2758,6 +2807,7 @@
                 id="amc-open-lines"
                 type="number"
                 min="1"
+                value="3"
                 class="w-full rounded border px-2 py-1 text-sm"
                 on:input={(event) =>
                   updateSelectedOpenParam(
