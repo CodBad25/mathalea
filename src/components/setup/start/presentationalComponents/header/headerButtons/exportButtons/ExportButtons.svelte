@@ -8,6 +8,9 @@
   import ButtonIconTooltip from '../../../../../../shared/forms/ButtonIconTooltip.svelte'
   import { exportKutsum } from '../../../../../../../lib/kutsum'
   import QcmCamIcon from '../../../../../../shared/icons/QcmCamIcon.svelte'
+  import { downloadFile } from '../../../../../../../lib/files'
+  import { buildMathAleaURL } from '../../../../../../../lib/components/urls'
+  import BasicInfoModal from '../../../../../../shared/modal/BasicInfoModal.svelte'
 
   export let handleExport: (vue: VueType) => void
   export let exportQcmCam: () => Promise<void>
@@ -17,6 +20,14 @@
 
   let showMoreModal = false
   let moreDialog: HTMLDialogElement
+  let downloadContentDisplayed: 'success' | 'error' | 'none' = 'none'
+
+  function downloadRedirectFile() {
+    const text = `<html><head><meta http-equiv="refresh" content="0;URL=${encodeURI(buildMathAleaURL({}).toString())}"></head></html>`
+    downloadFile(text, 'mathAlea.html').then((returnString) => {
+      downloadContentDisplayed = returnString
+    })
+  }
 
   $: if (moreDialog && showMoreModal) moreDialog.showModal()
   $: if (moreDialog && !showMoreModal) moreDialog.close()
@@ -152,7 +163,7 @@
           class="flex items-start gap-4 p-4 rounded-lg hover:bg-coopmaths-canvas-dark dark:hover:bg-coopmathsdark-canvas-dark transition-colors"
           on:click={option.action}
         >
-          <div class="flex-shrink-0 pt-1">
+          <div class="shrink-0 pt-1">
             {#if option.component}
               <svelte:component
                 this={option.component}
@@ -176,7 +187,7 @@
               {option.description}
             </p>
           </div>
-          <div class="flex-shrink-0 pt-1">
+          <div class="shrink-0 pt-1">
             <i
               class="bx bx-chevron-right text-2xl text-coopmaths-action dark:text-coopmathsdark-action opacity-50"
             ></i>
@@ -186,9 +197,9 @@
 
       <button
         class="flex items-start gap-4 p-4 rounded-lg hover:bg-coopmaths-canvas-dark dark:hover:bg-coopmathsdark-canvas-dark transition-colors"
-        on:click={() => (showMoreModal = false)}
+        on:click={() => { showMoreModal = false; downloadRedirectFile() }}
       >
-        <div class="flex-shrink-0 pt-1">
+        <div class="shrink-0 pt-1">
           <i
             class="bx bxs-file-export text-3xl text-coopmaths-action dark:text-coopmathsdark-action"
           ></i>
@@ -205,18 +216,17 @@
             Téléchargez un fichier pour partager facilement cette configuration
           </p>
         </div>
-        <div class="flex-shrink-0 pt-1">
-          <ButtonActionInfo
-            action="download"
-            useCurrentUrl={true}
-            fileName="mathAlea"
-            successMessage="Téléchargement en cours"
-            errorMessage="Erreur lors du téléchargement"
-            icon="bx bx-download text-2xl"
-            tooltip="Télécharger"
-          />
+        <div class="shrink-0 pt-1">
+          <i class="bx bx-download text-2xl text-coopmaths-action dark:text-coopmathsdark-action"></i>
         </div>
       </button>
     </div>
   </div>
 </dialog>
+
+<BasicInfoModal
+  bind:contentDisplayed={downloadContentDisplayed}
+  successMessage="Téléchargement en cours"
+  errorMessage="Erreur lors du téléchargement"
+  displayDuration={3000}
+/>
