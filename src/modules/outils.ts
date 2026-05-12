@@ -269,7 +269,7 @@ export function gestionnaireFormulaireTexte(
   if (enleveDoublons) listeIndex = enleveDoublonNum(listeIndex)
   if (Array.isArray(listeOfCase)) {
     // si une listeOfCase est fournie, on retourne la liste des valeurs construites avec listeIndex
-    if (listeOfCase.length < Max)
+    if (listeOfCase.length < Max - min)
       throw Error(
         'La liste de cas fournie ne contient pas assez de valeurs par rapport à max',
       )
