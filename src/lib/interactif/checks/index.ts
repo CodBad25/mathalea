@@ -13,6 +13,7 @@ export {
   noTrivialFactor,
   termsGrouped,
 } from './reductionAtoms'
+export { sameCartesianEquation } from './sameCartesianEquation'
 export { sameDescribedSet } from './sameDescribedSet'
 export { sameParametricLine } from './sameParametricLine'
 export { setEquality } from './setEquality'

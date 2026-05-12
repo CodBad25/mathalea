@@ -17,6 +17,7 @@
     noNumericComputation,
     noTrivialFactor,
     noDecimal,
+    sameCartesianEquation,
     sameDescribedSet,
     sameParametricLine,
     setEquality,
@@ -38,6 +39,7 @@
     | 'irreducibleFractions'
     | 'noDecimal'
     | 'extractedRadicands'
+    | 'sameCartesianEquation'
     | 'sameDescribedSet'
     | 'sameParametricLine'
     | 'setEquality'
@@ -80,6 +82,7 @@
     irreducibleFractions: 'irreducibleFractions',
     noDecimal: 'noDecimal',
     extractedRadicands: 'extractedRadicands',
+    sameCartesianEquation: 'sameCartesianEquation',
     sameDescribedSet: 'sameDescribedSet',
     sameParametricLine: 'sameParametricLine',
     setEquality: 'setEquality',
@@ -102,6 +105,8 @@
     noDecimal: 'Refuse les écritures décimales non entières dans la saisie',
     extractedRadicands:
       'Vérifie que les facteurs carrés sont extraits des racines carrées',
+    sameCartesianEquation:
+      'Vérifie que deux équations cartésiennes décrivent la même droite',
     sameDescribedSet:
       'Vérifie que deux expressions décrivent le même ensemble quand la variable parcourt Z',
     sameParametricLine:
@@ -436,6 +441,8 @@
         return noDecimal(overrides)
       case 'extractedRadicands':
         return extractedRadicands(overrides)
+      case 'sameCartesianEquation':
+        return sameCartesianEquation(overrides)
       case 'sameDescribedSet':
         return sameDescribedSet({
           ...overrides,
