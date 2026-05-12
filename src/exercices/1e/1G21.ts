@@ -1,22 +1,39 @@
-import { droite, Droite } from '../../lib/2d/droites'
+import { droite, type Droite } from '../../lib/2d/droites'
 import { PointAbstrait } from '../../lib/2d/PointAbstrait'
 import { milieu } from '../../lib/2d/utilitairesPoint'
 import { Vecteur } from '../../lib/2d/Vecteur'
-import ce from '../../lib/interactif/comparisonFunctions'
+import {
+  all,
+  irreducibleFractions,
+  sameCartesianEquation,
+} from '../../lib/interactif/checks'
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
+import {
+  ecritureAlgebrique,
+  ecritureParentheseSiNegatif,
+  reduireAxPlusByPlusC,
+} from '../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
-import { gestionnaireFormulaireTexte, listeQuestionsToContenu, randint } from '../../modules/outils'
+import {
+  gestionnaireFormulaireTexte,
+  listeQuestionsToContenu,
+  randint,
+} from '../../modules/outils'
 import Exercice from '../Exercice'
 
-export const titre = "Déterminer l'équation cartésienne d'une droite remarquable"
+export const titre =
+  "Déterminer une équation cartésienne d'une droite remarquable"
 export const dateDePublication = '24/06/2024'
 export const dateDeModificationImportante = '10/01/2026'
+export const interactifReady = true
+export const interactifType = 'mathLive'
 
 /**
  * Calcul d'équations cartésiennes de droites
- * Beaucoup trop de fonctions... Comment les intégrer à la base
- * de code déjà existante ?
- * @author : florianpicard
+ * @author : florianpicard revu par Stéphane Guyon et Nathan Scheinmann
  */
 
 export const uuid = '8472d'
@@ -35,101 +52,118 @@ function vecteurVersTex(u: Vecteur): string {
   return `\\${fonctionLatex}{${u.nom}} \\begin{pmatrix} ${u.x} \\\\ ${u.y} \\end{pmatrix}`
 }
 
-function vecteurNormal(u: Vecteur, nom: string = 'n'): Vecteur {
-  return new Vecteur(-u.y, u.x, nom)
+type QuestionData = {
+  reponse: string
+  signature: string
+  texte: string
+  texteCorr: string
 }
 
-function construireDroite(
+function equationDepuisPointEtVecteurNormal(
   A: PointAbstrait,
-  { B, u, n }: { B?: PointAbstrait; u?: Vecteur; n?: Vecteur },
-): [Droite, string] | undefined {
-  if (B instanceof PointAbstrait) {
-    const u = new Vecteur(A, B, `${A.nom}${B.nom}`)
-    const [d, details] = construireDroite(A, { u }) as [Droite, string]
-    return [
-      d,
-      `Un vecteur directeur de la droite $(${A.nom}${B.nom})$ est $${vecteurVersTex(u)}$. ` +
-        details,
-    ]
-  }
-  if (u instanceof Vecteur) {
-    const n = vecteurNormal(u)
-    const [d, details] = construireDroite(A, { n }) as [Droite, string]
-    return [
-      d,
-      `Un vecteur normal à la droite $(d)$ est $${vecteurVersTex(n)}$. ` +
-        details,
-    ]
-  }
-  if (n != null && n instanceof Vecteur) {
-    const c = -(Number(A.x) * Number(n.x) + Number(A.y) * Number(n.y))
-    const partial = ce.parse(`${n.x}x + ${n.y}y + c = 0`).simplify()
-    const Aind = ce.parse(`${n.x}*(${A.x}) + ${n.y}* (${A.y}) + c = 0`)
-    const equa = ce.parse(`${n.x}x + ${n.y}y + ${c} = 0`).simplify()
-    return [
-      droite(n.x, n.y, c),
-      `La droite de vecteur normal $${vecteurVersTex(n)}$ admet pour équation cartésienne $${partial.latex}$, pour un certain nombre réel $c$. Comme $${A.nom}$ appartient à la droite, $${Aind.latex}$. Ainsi, $c = ${c}$, l'équation cartésienne de la droite est donc $${miseEnEvidence(equa.latex)}$.`,
-    ]
-  }
+  n: Vecteur,
+): Droite {
+  return droite(n.x, n.y, -A.x * n.x - A.y * n.y)
 }
 
-function hauteur(
-  A: PointAbstrait,
-  B: PointAbstrait,
-  C: PointAbstrait,
-): [Droite, string] {
-  const n = new Vecteur(B, C, 'BC')
-  const [d, details] = construireDroite(A, { n }) as [Droite, string]
-  return [
-    d,
-    `La hauteur $(h)$ issue de $${A.nom}$ dans le triangle $${A.nom}${B.nom}${C.nom}$ passe par le point $${A.nom}$ et est perpendiculaire à la droite $(${B.nom}${C.nom}$). Ainsi le vecteur $${vecteurVersTex(n)}$ est un vecteur normal à la droite $(h)$. ` +
-      details,
-  ]
+function equationVersTex(d: Droite): string {
+  return `${reduireAxPlusByPlusC(d.a, d.b, d.c)}=0`
 }
 
-function mediatrice(A: PointAbstrait, B: PointAbstrait): [Droite, string] {
+function distanceCarree(A: PointAbstrait, B: PointAbstrait): number {
+  return (B.x - A.x) ** 2 + (B.y - A.y) ** 2
+}
+
+function questionMediatrice(): QuestionData {
+  let A: PointAbstrait
+  let B: PointAbstrait
+  do {
+    A = new PointAbstrait(randint(-5, 5), randint(-5, 5), 'A')
+    B = new PointAbstrait(randint(-5, 5), randint(-5, 5), 'B')
+  } while (
+    (A.x === B.x && A.y === B.y) ||
+    (A.x + B.x) % 2 !== 0 ||
+    (A.y + B.y) % 2 !== 0 ||
+    distanceCarree(A, B) < 8
+  )
+
   const I = milieu(A, B, 'I')
   const n = new Vecteur(A, B, 'AB')
+  const d = equationDepuisPointEtVecteurNormal(I, n)
+  const reponse = equationVersTex(d)
 
-  const [d, details] = construireDroite(I, { n }) as [Droite, string]
+  const texte =
+    `Dans un repère orthonormé du plan, on considère les points $${pointVersTex(A)}$ et $${pointVersTex(B)}$.` +
+    `<br>Déterminer une équation cartésienne de la médiatrice du segment $[${A.nom}${B.nom}]$.`
 
-  return [
-    d,
-    `La médiatrice du segment $[${A.nom}${B.nom}]$ coupe perpendiculairement $[${A.nom}${B.nom}]$ en son milieu $${pointVersTex(I)}$. Ainsi, $${vecteurVersTex(n)}$ est un vecteur normal à la médiatrice du segment $[${A.nom}${B.nom}]$. ` +
-      details,
-  ]
+  const texteCorr =
+    `La médiatrice de $[${A.nom}${B.nom}]$ est la droite perpendiculaire à $(${A.nom}${B.nom})$ passant par le milieu de $[${A.nom}${B.nom}]$.` +
+    `<br>Le milieu de $[${A.nom}${B.nom}]$ est $${pointVersTex(I)}$.` +
+    `<br>Le vecteur $${vecteurVersTex(n)}$ est un vecteur normal à la médiatrice.` +
+    `<br>Une équation cartésienne de cette médiatrice est donc de la forme où $c$ reste à déterminer:` +
+    `<br>$${reduireAxPlusByPlusC(n.x, n.y, 0)}+c=0$.` +
+    `<br>Comme $I$ appartient à la médiatrice, ses coordonnées vérifient cette équation, ce qui nous permet de déterminer $c$:` +
+    `<br>$${n.x}\\times ${ecritureParentheseSiNegatif(I.x)}${ecritureAlgebrique(n.y)}\\times ${ecritureParentheseSiNegatif(I.y)}+c=0$.` +
+    `<br>On a $c=${d.c}$.` +
+    `<br>On obtient ainsi : $${miseEnEvidence(reponse)}$.`
+
+  return {
+    reponse,
+    signature: `mediatrice:${A.x},${A.y}:${B.x},${B.y}`,
+    texte,
+    texteCorr,
+  }
 }
 
-function questionHauteur(i: number = 0): [string, string] {
-  const A = new PointAbstrait(randint(-5, 5), randint(-5, 5), 'A')
-  const B = new PointAbstrait(randint(-5, 5, [A.x]), randint(-5, 5, [A.y]), 'B')
-  const C = new PointAbstrait(
-    randint(-5, 5, [A.x, B.x]),
-    randint(-5, 5, [A.y, B.y]),
-    'C',
+function questionHauteur(): QuestionData {
+  let A: PointAbstrait
+  let B: PointAbstrait
+  let C: PointAbstrait
+  do {
+    A = new PointAbstrait(randint(-5, 5), randint(-5, 5), 'A')
+    B = new PointAbstrait(randint(-5, 5), randint(-5, 5), 'B')
+    C = new PointAbstrait(randint(-5, 5), randint(-5, 5), 'C')
+  } while (
+    (B.x === C.x && B.y === C.y) ||
+    (A.x === B.x && A.y === B.y) ||
+    (A.x === C.x && A.y === C.y) ||
+    distanceCarree(B, C) < 8 ||
+    distanceCarree(A, B) < 8 ||
+    distanceCarree(A, C) < 8 ||
+    Math.abs((B.x - A.x) * (C.y - A.y) - (B.y - A.y) * (C.x - A.x)) < 8
   )
-  const [, details] = hauteur(A, B, C)
-  return [
-    `Dans un repère orthonormé du plan on considère les trois points $${pointVersTex(A)}$, $${pointVersTex(B)}$, et $${pointVersTex(C)}$. Déterminer l'équation cartésienne de la hauteur issue de $${A.nom}$ dans le triangle $${A.nom}${B.nom}${C.nom}$.`,
-    details,
-  ]
-}
 
-function questionMediatrice(i: number = 0): [string, string] {
-  const A = new PointAbstrait(randint(-5, 5), randint(-5, 5), 'A')
-  const B = new PointAbstrait(randint(-5, 5, [A.x]), randint(-5, 5, [A.y]), 'B')
-  const [, details] = mediatrice(A, B)
-  return [
-    `Dans un repère orthonormé du plan on considère les points $${pointVersTex(A)}$ et $${pointVersTex(B)}$. Déterminer une équation cartésienne de la médiatrice du segment $[${A.nom}${B.nom}$].`,
-    details,
-  ]
+  const n = new Vecteur(B, C, 'BC')
+  const h = equationDepuisPointEtVecteurNormal(A, n)
+  const reponse = equationVersTex(h)
+
+  const texte =
+    `Dans un repère orthonormé du plan, on considère les trois points $${pointVersTex(A)}$, $${pointVersTex(B)}$ et $${pointVersTex(C)}$.` +
+    `<br>Déterminer une équation cartésienne de la hauteur issue de $${A.nom}$ dans le triangle $${A.nom}${B.nom}${C.nom}$.`
+
+  const texteCorr =
+    `La hauteur issue de $${A.nom}$ est la droite qui passe par $${A.nom}$ et qui est perpendiculaire à $(${B.nom}${C.nom})$.` +
+    `<br>Le vecteur $${vecteurVersTex(n)}$ est donc un vecteur normal à cette hauteur.` +
+    `<br>Une équation cartésienne de cette hauteur est de la forme, où $c$ reste à déterminer :` +
+    `<br>$${reduireAxPlusByPlusC(n.x, n.y, 0)}+c=0$.` +
+    `<br>Comme $A$ appartient à la hauteur, ses coordonnées vérifient cette équation, ce qui nous permet de déterminer $c$ :` +
+    `<br>$${n.x}\\times ${ecritureParentheseSiNegatif(A.x)}${ecritureAlgebrique(n.y)}\\times ${ecritureParentheseSiNegatif(A.y)}+c=0$.` +
+    `<br>On a $c=${h.c}$.` +
+    `<br>On obtient ainsi : $${miseEnEvidence(reponse)}$.`
+
+  return {
+    reponse,
+    signature: `hauteur:${A.x},${A.y}:${B.x},${B.y}:${C.x},${C.y}`,
+    texte,
+    texteCorr,
+  }
 }
 
 export default class nomExercice extends Exercice {
   constructor() {
     super()
     this.nbQuestions = 2
-     this.sup = '3'
+    this.sup = '3'
     this.besoinFormulaireTexte = [
       'Type de questions',
       [
@@ -158,9 +192,21 @@ export default class nomExercice extends Exercice {
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; cpt++) {
       const question =
         listeTypeDeQuestions[i] === 1 ? questionMediatrice : questionHauteur
-      const [texte, texteCorr] = question(i)
-      if (this.questionJamaisPosee(i, texte)) {
-        this.listeQuestions[i] = texte
+      const { reponse, signature, texte, texteCorr } = question()
+      const texteInteractif =
+        texte +
+        ajouteChampTexteMathLive(this, i, KeyboardType.equationsTerminale, {
+          texteAvant: '<br>Une équation cartésienne : ',
+          texteApres: '.',
+        })
+      if (this.questionJamaisPosee(i, signature)) {
+        handleAnswers(this, i, {
+          reponse: {
+            value: reponse,
+            compare: all([sameCartesianEquation(), irreducibleFractions()]),
+          },
+        })
+        this.listeQuestions[i] = texteInteractif
         this.listeCorrections[i] = texteCorr.replace(
           /\b(\d+)\.(\d+)\b/g,
           '$1{,}$2',

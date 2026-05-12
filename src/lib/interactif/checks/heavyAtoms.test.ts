@@ -5,6 +5,7 @@ import { equals } from './equals'
 import { extractedRadicands } from './extractedRadicands'
 import { irreducibleFractions } from './irreducibleFractions'
 import { noDecimal } from './noDecimal'
+import { sameCartesianEquation } from './sameCartesianEquation'
 import { setEquality } from './setEquality'
 import { sameDescribedSet } from './sameDescribedSet'
 import { stringEquals } from './stringEquals'
@@ -195,6 +196,36 @@ describe('checks heavy atoms', () => {
       ).toMatchObject({
         isOk: true,
         score: 1,
+      })
+    })
+  })
+
+  describe('sameCartesianEquation', () => {
+    it('accepts equivalent cartesian equations of the same line', () => {
+      expect(
+        all([sameCartesianEquation()])('4x+6y-10=0', '2x+3y-5=0'),
+      ).toMatchObject({
+        isOk: true,
+        score: 1,
+      })
+    })
+
+    it('refuses equations not written with zero as right-hand side', () => {
+      expect(
+        all([sameCartesianEquation()])('2x+3y=5', '2x+3y-5=0'),
+      ).toMatchObject({
+        isOk: false,
+        score: 0,
+      })
+    })
+
+    it('refuses a different cartesian equation', () => {
+      expect(
+        all([sameCartesianEquation()])('2x+3y-4=0', '2x+3y-5=0'),
+      ).toMatchObject({
+        isOk: false,
+        score: 0,
+        feedback: "L'équation saisie ne décrit pas la droite attendue.",
       })
     })
   })
