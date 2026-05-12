@@ -8,6 +8,7 @@ import {
   sendFlowmathReady,
   sendFlowmathReplayCompleted,
 } from './flowmathRpc'
+import { mathaleaWriteStudentPreviousAnswers } from './mathaleaUtils'
 import { globalOptions } from './stores/globalOptions'
 import type { InterfaceGlobalOptions } from './types'
 
@@ -194,10 +195,6 @@ export function handleFlowmath(
 
       // Wait for initial render
       await new Promise((resolve) => setTimeout(resolve, 500))
-
-      // Import the necessary functions
-      const { mathaleaWriteStudentPreviousAnswers } =
-        await import('./mathaleaUtils')
 
       // Reinject answers for each exercise
       for (const exercice of exercicesData) {
