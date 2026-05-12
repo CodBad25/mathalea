@@ -156,6 +156,7 @@ export function verifQuestionMathLive(
             exercice.answers[`Ex${exercice.numeroExercice}Q${i}${key}`] =
               input.value
           }
+          input.readOnly = true
         }
         const [nbBonnesReponses, nbReponses] = bareme(points)
         return {
@@ -343,6 +344,7 @@ export function verifQuestionMathLive(
     const options = objetReponse.options ?? {}
     noFeedback = options.noFeedback ?? false
     if (saisie == null || saisie === '') {
+      champTexte.readOnly = true
       return {
         isOk: false,
         feedback: noFeedback ? '' : 'Vous devez saisir une réponse.',
