@@ -1,4 +1,10 @@
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import {
+  all,
+  equals,
+  irreducibleFractions,
+  isReduced,
+} from '../../lib/interactif/checks'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import MonomePlusieursVariables from '../../lib/mathFonctions/MonomePlusieursVariables'
@@ -188,7 +194,12 @@ export default class NomExercice extends Exercice {
       }
       const solution = texteCorr.split('=')[1]
       if (this.questionJamaisPosee(i, solution)) {
-        handleAnswers(this, i, { reponse: { value: rep.toString() } })
+        handleAnswers(this, i, {
+          reponse: {
+            value: rep.toString(),
+            compare: all([equals(), isReduced(), irreducibleFractions()]),
+          },
+        })
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr
         i++

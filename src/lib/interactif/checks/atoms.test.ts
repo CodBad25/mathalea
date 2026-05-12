@@ -65,12 +65,10 @@ describe('checks atoms', () => {
     })
 
     it('applies tolerance to simple fractions', () => {
-      expect(
-        all([equals({ tolerance: -1 })])(
-          '0.45',
-          '1/2',
-        ),
-      ).toMatchObject({ isOk: true, score: 1 })
+      expect(all([equals({ tolerance: -1 })])('0.45', '1/2')).toMatchObject({
+        isOk: true,
+        score: 1,
+      })
       expect(
         all([equals({ tolerance: -2 })])('0.49', '\\dfrac{1}{2}'),
       ).toMatchObject({ isOk: true, score: 1 })

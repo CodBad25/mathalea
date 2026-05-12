@@ -38,6 +38,7 @@ export function irreducibleFractions(options: CheckOverrides = {}): Check {
     name: options.name ?? 'irreducibleFractions',
     weight: options.weight,
     feedbackEnabled: options.feedbackEnabled,
+    feedbackOnSuccess: options.feedbackOnSuccess,
     run: (saisie) => {
       const passed = !hasReducibleFraction(saisie)
       return {

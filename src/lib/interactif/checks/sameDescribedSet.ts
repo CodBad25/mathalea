@@ -1,4 +1,5 @@
 import type { Check, CheckOverrides } from './types'
+import { evaluateArithmeticExpression } from './evaluateArithmeticExpression'
 
 type SameDescribedSetOptions = CheckOverrides & {
   variable?: string
@@ -43,12 +44,7 @@ function safeEvaluateNumber(expression: string): number | undefined {
     .replace(/(\d|\))(?=PI|\()/g, '$1*')
     .replace(/PI(?=\d|\()/g, 'PI*')
   if (!/^[\d.()+\-*/PI]+$/.test(withProducts)) return undefined
-  try {
-    const value = Function('PI', `return ${withProducts}`)(Math.PI)
-    return Number.isFinite(value) ? value : undefined
-  } catch {
-    return undefined
-  }
+  return evaluateArithmeticExpression(withProducts)
 }
 
 function coefficientFromTerm(
@@ -117,6 +113,7 @@ export function sameDescribedSet(options: SameDescribedSetOptions = {}): Check {
     name: options.name ?? 'sameDescribedSet',
     weight: options.weight,
     feedbackEnabled: options.feedbackEnabled,
+    feedbackOnSuccess: options.feedbackOnSuccess,
     run: (saisie, answer) => {
       const variable = options.variable ?? inferVariable(saisie, answer)
       const inputProgression = progressionOf(saisie, variable)

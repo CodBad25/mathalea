@@ -1,4 +1,10 @@
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import {
+  all,
+  equals,
+  irreducibleFractions,
+  isReduced,
+} from '../../lib/interactif/checks'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import MonomePlusieursVariables from '../../lib/mathFonctions/MonomePlusieursVariables'
@@ -136,7 +142,7 @@ export default class nomExercice extends Exercice {
             handleAnswers(this, i, {
               reponse: {
                 value: p.toString(),
-                options: { expressionsForcementReduites: true },
+                compare: all([equals(), isReduced(), irreducibleFractions()]),
               },
             })
 

@@ -62,6 +62,25 @@ describe('checks combinators', () => {
       })
     })
 
+    it('can include successful feedback when the answer is globally correct', () => {
+      const compare = all([
+        {
+          ...passingCheck('value', { feedbackOnSuccess: true }),
+          run: () => ({
+            passed: true,
+            feedbackKo: '',
+            feedbackOk: 'value ok',
+          }),
+        },
+      ])
+
+      expect(compare('1/2', '1/2')).toMatchObject({
+        isOk: true,
+        score: 1,
+        feedback: 'value ok',
+      })
+    })
+
     it('computes partial weighted score', () => {
       const compare = all([
         {
@@ -171,7 +190,11 @@ describe('checks combinators', () => {
       const compare = all([
         {
           ...passingCheck('value', { feedbackEnabled: false }),
-          run: () => ({ passed: true, feedbackKo: '', feedbackOk: 'valeur ok' }),
+          run: () => ({
+            passed: true,
+            feedbackKo: '',
+            feedbackOk: 'valeur ok',
+          }),
         },
         failingCheck('shape'),
       ])
@@ -249,15 +272,24 @@ describe('checks combinators', () => {
       const executed: string[] = []
       const first: Check = {
         name: 'first',
-        run: () => { executed.push('first'); return { passed: true, feedbackKo: '' } },
+        run: () => {
+          executed.push('first')
+          return { passed: true, feedbackKo: '' }
+        },
       }
       const second: Check = {
         name: 'second',
-        run: () => { executed.push('second'); return { passed: false, feedbackKo: 'second ko' } },
+        run: () => {
+          executed.push('second')
+          return { passed: false, feedbackKo: 'second ko' }
+        },
       }
       const third: Check = {
         name: 'third',
-        run: () => { executed.push('third'); return { passed: true, feedbackKo: '' } },
+        run: () => {
+          executed.push('third')
+          return { passed: true, feedbackKo: '' }
+        },
       }
 
       const result = seq([first, second, third])('x', 'x')
@@ -271,9 +303,7 @@ describe('checks combinators', () => {
     })
 
     it('feedbackEnabled: false on failing check — its feedback not in result', () => {
-      const compare = seq([
-        failingCheck('syntax', { feedbackEnabled: false }),
-      ])
+      const compare = seq([failingCheck('syntax', { feedbackEnabled: false })])
 
       const result = compare('x+', 'x')
       expect(result.isOk).toBe(false)

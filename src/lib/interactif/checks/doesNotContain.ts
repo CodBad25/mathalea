@@ -22,6 +22,7 @@ export function doesNotContain(
     name: options.name ?? 'doesNotContain',
     weight: options.weight,
     feedbackEnabled: options.feedbackEnabled,
+    feedbackOnSuccess: options.feedbackOnSuccess,
     run: (saisie) => {
       const passed = !testPattern(options.pattern, saisie)
       return {

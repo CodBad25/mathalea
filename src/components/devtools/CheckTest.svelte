@@ -18,7 +18,9 @@
     noTrivialFactor,
     noDecimal,
     sameDescribedSet,
+    sameParametricLine,
     setEquality,
+    singleParameterVariable,
     stringEquals,
     termsGrouped,
   } from '../../lib/interactif/checks'
@@ -37,7 +39,9 @@
     | 'noDecimal'
     | 'extractedRadicands'
     | 'sameDescribedSet'
+    | 'sameParametricLine'
     | 'setEquality'
+    | 'singleParameterVariable'
     | 'stringEquals'
 
   type CheckConfig = {
@@ -46,6 +50,7 @@
     name: string
     weight: string | number
     feedbackEnabled: boolean
+    feedbackOnSuccess: boolean
     feedbackKo: string
     feedbackOk: string
     // equals
@@ -55,6 +60,9 @@
     pattern: string
     // setEquality / sameDescribedSet
     variable: string
+    // singleParameterVariable
+    expectedParameter: string
+    strictExpectedParameter: boolean
     // stringEquals
     trim: boolean
     ignoreCase: boolean
@@ -73,7 +81,9 @@
     noDecimal: 'noDecimal',
     extractedRadicands: 'extractedRadicands',
     sameDescribedSet: 'sameDescribedSet',
+    sameParametricLine: 'sameParametricLine',
     setEquality: 'setEquality',
+    singleParameterVariable: 'singleParameterVariable',
     stringEquals: 'stringEquals',
   }
 
@@ -94,8 +104,13 @@
       'Vérifie que les facteurs carrés sont extraits des racines carrées',
     sameDescribedSet:
       'Vérifie que deux expressions décrivent le même ensemble quand la variable parcourt Z',
+    sameParametricLine:
+      'Vérifie que deux systèmes paramétriques décrivent la même droite de l’espace',
     setEquality: "Vérifie l'égalité de deux ensembles en extension",
-    stringEquals: 'Compare directement la saisie textuelle à la réponse attendue',
+    singleParameterVariable:
+      'Vérifie que le système paramétrique utilise une seule variable de paramétrage',
+    stringEquals:
+      'Compare directement la saisie textuelle à la réponse attendue',
   }
 
   const ALL_BLOCKS: BlockForKeyboard[] = [
@@ -234,7 +249,9 @@
     // would read an empty .value and silently wipe the URL-loaded answer.
     // Solution: attach the input listener only on the first focus (user intent),
     // never during initialisation.
-    const af = document.getElementById(ANSWER_FIELD_ID) as MathfieldElement | null
+    const af = document.getElementById(
+      ANSWER_FIELD_ID,
+    ) as MathfieldElement | null
     if (af) {
       let answerListenerAttached = false
       af.addEventListener('focus', () => {
@@ -292,12 +309,15 @@
       name: defaultName(kind),
       weight: '',
       feedbackEnabled: true,
+      feedbackOnSuccess: false,
       feedbackKo: '',
       feedbackOk: '',
       equalsMode: 'exact',
       tolerance: '',
       pattern: '',
       variable: '',
+      expectedParameter: '',
+      strictExpectedParameter: false,
       trim: false,
       ignoreCase: false,
     }
@@ -379,6 +399,7 @@
       name: cfg.name.trim() || cfg.kind,
       weight,
       feedbackEnabled: cfg.feedbackEnabled,
+      feedbackOnSuccess: cfg.feedbackOnSuccess,
       feedbackKo: cfg.feedbackKo.trim() || undefined,
       feedbackOk: cfg.feedbackOk.trim() || undefined,
     }
@@ -420,10 +441,18 @@
           ...overrides,
           variable: cfg.variable.trim() || undefined,
         })
+      case 'sameParametricLine':
+        return sameParametricLine(overrides)
       case 'setEquality':
         return setEquality({
           ...overrides,
           variable: cfg.variable.trim() || undefined,
+        })
+      case 'singleParameterVariable':
+        return singleParameterVariable({
+          ...overrides,
+          expectedParameter: cfg.expectedParameter.trim() || undefined,
+          strictExpectedParameter: cfg.strictExpectedParameter,
         })
       case 'stringEquals':
         return stringEquals({
@@ -499,6 +528,15 @@
         opts.push(`tolerance: ${tol}`)
       }
     }
+    if (cfg.kind === 'singleParameterVariable') {
+      if (cfg.expectedParameter.trim()) {
+        opts.push(
+          `expectedParameter: ${JSON.stringify(cfg.expectedParameter.trim())}`,
+        )
+      }
+      if (cfg.strictExpectedParameter)
+        opts.push('strictExpectedParameter: true')
+    }
     if (cfg.kind === 'stringEquals') {
       if (cfg.trim) opts.push('trim: true')
       if (cfg.ignoreCase) opts.push('ignoreCase: true')
@@ -511,6 +549,7 @@
     const weight = parseOptionalNumber(cfg.weight)
     if (weight !== undefined) opts.push(`weight: ${weight}`)
     if (!cfg.feedbackEnabled) opts.push('feedbackEnabled: false')
+    if (cfg.feedbackOnSuccess) opts.push('feedbackOnSuccess: true')
     if (cfg.feedbackKo.trim())
       opts.push(`feedbackKo: ${JSON.stringify(cfg.feedbackKo.trim())}`)
     if (cfg.feedbackOk.trim())
@@ -774,26 +813,26 @@
                             </select>
                           </div>
                           {#if cfg.equalsMode === 'tolerance'}
-                          <div>
-                            <label
-                              class="block text-xs font-semibold mb-1 opacity-70"
-                              >Exposant de tolérance</label
-                            >
-                            <input
-                              type="number"
-                              step="any"
-                              placeholder="vide ou 0 : 10^0 = 1 ; -2 : 10^-2"
-                              value={cfg.tolerance}
-                              on:input={(event) =>
-                                updateCheckConfig(
-                                  cfg.id,
-                                  'tolerance',
-                                  (event.currentTarget as HTMLInputElement)
-                                    .value,
-                                )}
-                              class="w-full px-2 py-1.5 rounded border border-coopmaths-canvas-dark dark:border-coopmathsdark-canvas-dark bg-coopmaths-canvas-darkest dark:bg-coopmathsdark-canvas-darkest font-mono text-sm focus:outline-none focus:ring-1 focus:ring-coopmaths-action"
-                            />
-                          </div>
+                            <div>
+                              <label
+                                class="block text-xs font-semibold mb-1 opacity-70"
+                                >Exposant de tolérance</label
+                              >
+                              <input
+                                type="number"
+                                step="any"
+                                placeholder="vide ou 0 : 10^0 = 1 ; -2 : 10^-2"
+                                value={cfg.tolerance}
+                                on:input={(event) =>
+                                  updateCheckConfig(
+                                    cfg.id,
+                                    'tolerance',
+                                    (event.currentTarget as HTMLInputElement)
+                                      .value,
+                                  )}
+                                class="w-full px-2 py-1.5 rounded border border-coopmaths-canvas-dark dark:border-coopmathsdark-canvas-dark bg-coopmaths-canvas-darkest dark:bg-coopmathsdark-canvas-darkest font-mono text-sm focus:outline-none focus:ring-1 focus:ring-coopmaths-action"
+                              />
+                            </div>
                           {/if}
                           <p
                             class="text-xs text-coopmaths-corpus-light dark:text-coopmathsdark-corpus-light"
@@ -834,6 +873,37 @@
                             bind:value={cfg.variable}
                             class="w-full px-2 py-1.5 rounded border border-coopmaths-canvas-dark dark:border-coopmathsdark-canvas-dark bg-coopmaths-canvas-darkest dark:bg-coopmathsdark-canvas-darkest font-mono text-sm focus:outline-none focus:ring-1 focus:ring-coopmaths-action"
                           />
+                        </div>
+                      {/if}
+
+                      {#if cfg.kind === 'singleParameterVariable'}
+                        <div class="space-y-3">
+                          <div>
+                            <label
+                              class="block text-xs font-semibold mb-1 opacity-70"
+                              >Variable attendue <span
+                                class="font-normal opacity-60">(optionnel)</span
+                              ></label
+                            >
+                            <input
+                              type="text"
+                              placeholder="k"
+                              bind:value={cfg.expectedParameter}
+                              class="w-full px-2 py-1.5 rounded border border-coopmaths-canvas-dark dark:border-coopmathsdark-canvas-dark bg-coopmaths-canvas-darkest dark:bg-coopmathsdark-canvas-darkest font-mono text-sm focus:outline-none focus:ring-1 focus:ring-coopmaths-action"
+                            />
+                          </div>
+                          <label
+                            class="flex items-center gap-2 cursor-pointer select-none"
+                          >
+                            <input
+                              type="checkbox"
+                              bind:checked={cfg.strictExpectedParameter}
+                              class="rounded"
+                            />
+                            <span class="text-xs font-semibold opacity-70"
+                              >Rendre cette variable obligatoire</span
+                            >
+                          </label>
                         </div>
                       {/if}
 
@@ -912,6 +982,19 @@
                           />
                           <span class="text-xs font-semibold opacity-70"
                             >Feedback activé</span
+                          >
+                        </label>
+
+                        <label
+                          class="flex items-center gap-2 cursor-pointer select-none"
+                        >
+                          <input
+                            type="checkbox"
+                            bind:checked={cfg.feedbackOnSuccess}
+                            class="rounded"
+                          />
+                          <span class="text-xs font-semibold opacity-70"
+                            >Afficher le feedback si la réponse est correcte</span
                           >
                         </label>
 
@@ -1301,9 +1384,7 @@
                   }
                 }}
               >
-                <p class="font-mono text-sm font-bold mb-1">
-                  Tolérance 10^n
-                </p>
+                <p class="font-mono text-sm font-bold mb-1">Tolérance 10^n</p>
                 <p class="text-xs opacity-60">
                   equals avec tolerance=-2 pour π ≈ 3.14
                 </p>

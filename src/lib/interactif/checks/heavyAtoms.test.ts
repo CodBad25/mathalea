@@ -127,7 +127,8 @@ describe('checks heavy atoms', () => {
       ).toMatchObject({
         isOk: false,
         score: 0,
-        feedback: 'Résultat incorrect car une fraction irréductible est attendue.',
+        feedback:
+          'Résultat incorrect car une fraction irréductible est attendue.',
       })
     })
 
@@ -165,21 +166,26 @@ describe('checks heavy atoms', () => {
       ).toMatchObject({
         isOk: false,
         score: 0,
-        feedback: 'Résultat incorrect car une fraction irréductible est attendue.',
+        feedback:
+          'Résultat incorrect car une fraction irréductible est attendue.',
       })
     })
   })
 
   describe('stringEquals', () => {
     it('accepts identical strings', () => {
-      expect(all([stringEquals()])('Triangle ABC', 'Triangle ABC')).toMatchObject({
+      expect(
+        all([stringEquals()])('Triangle ABC', 'Triangle ABC'),
+      ).toMatchObject({
         isOk: true,
         score: 1,
       })
     })
 
     it('refuses different strings', () => {
-      expect(all([stringEquals()])('Triangle ABC', 'triangle ABC')).toMatchObject({
+      expect(
+        all([stringEquals()])('Triangle ABC', 'triangle ABC'),
+      ).toMatchObject({
         isOk: false,
         score: 0,
         feedback: 'Le texte saisi ne correspond pas à la réponse attendue.',
@@ -239,16 +245,25 @@ describe('checks heavy atoms', () => {
 
     it('0.0 passes — Number("0.0") = 0 which is an integer', () => {
       // The pattern matches "0.0" but Number('0.0') === 0, which IS an integer → passes
-      expect(all([noDecimal()])('0.0', '0')).toMatchObject({ isOk: true, score: 1 })
+      expect(all([noDecimal()])('0.0', '0')).toMatchObject({
+        isOk: true,
+        score: 1,
+      })
     })
 
     it('3. (trailing dot) passes — Number("3.") = 3 which is an integer', () => {
       // The pattern \d+[.,] matches "3." but Number('3.') === 3 → passes
-      expect(all([noDecimal()])('3.', '0')).toMatchObject({ isOk: true, score: 1 })
+      expect(all([noDecimal()])('3.', '0')).toMatchObject({
+        isOk: true,
+        score: 1,
+      })
     })
 
     it('large integer 1000 passes', () => {
-      expect(all([noDecimal()])('1000', '0')).toMatchObject({ isOk: true, score: 1 })
+      expect(all([noDecimal()])('1000', '0')).toMatchObject({
+        isOk: true,
+        score: 1,
+      })
     })
 
     it('3.14159 fails', () => {
@@ -315,7 +330,9 @@ describe('checks heavy atoms', () => {
 
     it('\\sqrt{1} — extraireRacineCarree(1)=[1,1], outside=1 → passes', () => {
       // outside === 1 means no perfect square factor was found → not unextracted → passes
-      expect(all([extractedRadicands()])('\\sqrt{1}', '\\sqrt{1}')).toMatchObject({
+      expect(
+        all([extractedRadicands()])('\\sqrt{1}', '\\sqrt{1}'),
+      ).toMatchObject({
         isOk: true,
         score: 1,
       })
@@ -323,10 +340,13 @@ describe('checks heavy atoms', () => {
 
     it('\\sqrt{100} — extraireRacineCarree(100)=[10,1], outside=10 ≠ 1 → fails', () => {
       // 100 = 10², so outside=10 ≠ 1 → unextracted square factor → fails
-      expect(all([extractedRadicands()])('\\sqrt{100}', '\\sqrt{100}')).toMatchObject({
+      expect(
+        all([extractedRadicands()])('\\sqrt{100}', '\\sqrt{100}'),
+      ).toMatchObject({
         isOk: false,
         score: 0,
-        feedback: 'Les facteurs carrés doivent être extraits des racines carrées.',
+        feedback:
+          'Les facteurs carrés doivent être extraits des racines carrées.',
       })
     })
 
@@ -335,11 +355,15 @@ describe('checks heavy atoms', () => {
       // sqrt(8): extraireRacineCarree(8)=[2,2], outside=2 ≠ 1 → unextracted
       // 2√3 + √8 = 2√3 + 2√2 numerically
       expect(
-        all([extractedRadicands()])('2\\sqrt{3}+\\sqrt{8}', '2\\sqrt{3}+2\\sqrt{2}'),
+        all([extractedRadicands()])(
+          '2\\sqrt{3}+\\sqrt{8}',
+          '2\\sqrt{3}+2\\sqrt{2}',
+        ),
       ).toMatchObject({
         isOk: false,
         score: 0,
-        feedback: 'Les facteurs carrés doivent être extraits des racines carrées.',
+        feedback:
+          'Les facteurs carrés doivent être extraits des racines carrées.',
       })
     })
   })
@@ -433,10 +457,12 @@ describe('checks heavy atoms', () => {
     })
 
     it('accepts equivalent progressions with pi', () => {
-      expect(all([sameDescribedSet()])('2k\\pi', '2k\\pi-2\\pi')).toMatchObject({
-        isOk: true,
-        score: 1,
-      })
+      expect(all([sameDescribedSet()])('2k\\pi', '2k\\pi-2\\pi')).toMatchObject(
+        {
+          isOk: true,
+          score: 1,
+        },
+      )
     })
 
     it('refuses progressions with different step', () => {
@@ -467,12 +493,12 @@ describe('checks heavy atoms', () => {
 
     it('custom feedbackKo appears when failing', () => {
       const compare = all([
-        sameDescribedSet({ feedbackKo: "Les ensembles ne coïncident pas." }),
+        sameDescribedSet({ feedbackKo: 'Les ensembles ne coïncident pas.' }),
       ])
 
       const result = compare('2x+1', '2x+2')
       expect(result.isOk).toBe(false)
-      expect(result.feedback).toBe("Les ensembles ne coïncident pas.")
+      expect(result.feedback).toBe('Les ensembles ne coïncident pas.')
     })
   })
 

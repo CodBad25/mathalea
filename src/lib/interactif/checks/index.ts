@@ -14,7 +14,9 @@ export {
   termsGrouped,
 } from './reductionAtoms'
 export { sameDescribedSet } from './sameDescribedSet'
+export { sameParametricLine } from './sameParametricLine'
 export { setEquality } from './setEquality'
+export { singleParameterVariable } from './singleParameterVariable'
 export { stringComparison, stringEquals } from './stringEquals'
 export type {
   Check,

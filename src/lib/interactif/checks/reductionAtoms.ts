@@ -35,6 +35,7 @@ function createReductionCheck(
     name: options.name ?? name,
     weight: options.weight,
     feedbackEnabled: options.feedbackEnabled,
+    feedbackOnSuccess: options.feedbackOnSuccess,
     run: (saisie) => ({
       passed: predicate(parseRaw(saisie)),
       feedbackKo: options.feedbackKo ?? defaultFeedbackKo,
@@ -60,14 +61,20 @@ function hasTrivialFactor(expr: Expression): boolean {
 
   if (current.operator === 'Negate') {
     const operand = unwrapDelimiter(current.ops[0])
-    return isFunction(operand, 'Multiply') || isFunction(operand, 'InvisibleOperator')
+    return (
+      isFunction(operand, 'Multiply') ||
+      isFunction(operand, 'InvisibleOperator')
+    )
   }
 
   if (current.operator === 'Add' || current.operator === 'Subtract') {
     if (current.ops.some((op) => unwrapDelimiter(op).is(0))) return true
   }
 
-  if (current.operator === 'Multiply' || current.operator === 'InvisibleOperator') {
+  if (
+    current.operator === 'Multiply' ||
+    current.operator === 'InvisibleOperator'
+  ) {
     if (current.ops.some((op) => unwrapDelimiter(op).is(1))) return true
     if (current.ops.some((op) => unwrapDelimiter(op).is(-1))) return true
     if (current.ops.some(hasSignedFactor)) return true
@@ -152,7 +159,10 @@ function hasNumericComputation(expr: Expression): boolean {
     if (current.ops.filter(isNumericLiteral).length > 1) return true
   }
 
-  if (current.operator === 'Multiply' || current.operator === 'InvisibleOperator') {
+  if (
+    current.operator === 'Multiply' ||
+    current.operator === 'InvisibleOperator'
+  ) {
     if (current.ops.every(isNumericLiteral)) return true
     if (current.ops.filter(isNumericLiteral).length > 1) return true
   }
@@ -181,7 +191,10 @@ function termKey(expr: Expression): string {
     return termKey(current.ops[0])
   }
 
-  if (isFunction(current, 'Multiply') || isFunction(current, 'InvisibleOperator')) {
+  if (
+    isFunction(current, 'Multiply') ||
+    isFunction(current, 'InvisibleOperator')
+  ) {
     const factors = current.ops
       .map(unwrapDelimiter)
       .filter((op) => !isNumber(op))
@@ -206,7 +219,10 @@ function hasGroupedFactors(expr: Expression): boolean {
   const current = unwrapDelimiter(expr)
   if (!isFunction(current)) return true
 
-  if (current.operator === 'Multiply' || current.operator === 'InvisibleOperator') {
+  if (
+    current.operator === 'Multiply' ||
+    current.operator === 'InvisibleOperator'
+  ) {
     const seen = new Set<string>()
     for (const factor of current.ops) {
       const key = factorKey(factor)
@@ -258,7 +274,10 @@ function isDistributedExpression(expr: Expression): boolean {
     }
   }
 
-  if (current.operator === 'Multiply' || current.operator === 'InvisibleOperator') {
+  if (
+    current.operator === 'Multiply' ||
+    current.operator === 'InvisibleOperator'
+  ) {
     if (current.ops.some(isAdditive)) return false
   }
 

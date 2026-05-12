@@ -12,6 +12,7 @@ export function stringEquals(options: StringEqualsOptions = {}): Check {
     name: options.name ?? 'stringEquals',
     weight: options.weight,
     feedbackEnabled: options.feedbackEnabled,
+    feedbackOnSuccess: options.feedbackOnSuccess,
     run: (saisie, answer) => {
       const passed = normalize(saisie, options) === normalize(answer, options)
       return {
