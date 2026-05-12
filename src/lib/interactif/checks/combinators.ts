@@ -33,8 +33,8 @@ function feedbackFor(
   isOk: boolean,
   results: Array<{ check: Check; passed: boolean; feedback?: string }>,
 ): string {
-  if (isOk) return ''
   return results
+    .filter(({ check, passed }) => !isOk || !passed || check.feedbackOnSuccess)
     .filter(({ check }) => check.feedbackEnabled !== false)
     .map(({ feedback }) => feedback)
     .filter((message): message is string => message != null && message !== '')

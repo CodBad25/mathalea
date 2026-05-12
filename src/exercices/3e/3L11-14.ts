@@ -1,3 +1,12 @@
+import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import {
+  all,
+  equals,
+  irreducibleFractions,
+  isReduced,
+} from '../../lib/interactif/checks'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import PolynomePlusieursVariables from '../../lib/mathFonctions/PolynomePlusieursVariables'
 import {
   choice,
@@ -13,6 +22,8 @@ import Exercice from '../Exercice'
 export const titre =
   "Développer une expression à l'aide de la distributivité simple et double"
 export const dateDePublication = '04/09/2024'
+export const interactifReady = true
+export const interactifType = 'mathLive'
 
 /**
  * Réduire une expression littérale
@@ -96,6 +107,7 @@ export default class nomExercice extends Exercice {
       let typeofCoeff = []
       let p1: PolynomePlusieursVariables
       let p2: PolynomePlusieursVariables
+      let solution: PolynomePlusieursVariables
       if (this.sup2 === 1) {
         typeofCoeff = ['entier']
       } else if (this.sup2 === 2) {
@@ -156,6 +168,7 @@ export default class nomExercice extends Exercice {
           }
           texte = `$${lettreDepuisChiffre(i + 1)}=${p1.toString() === '-1' ? '-' : `${p1.toString()}`}\\left(${p2.toString()}\\right)$`
           texteCorr = `$${lettreDepuisChiffre(i + 1)}=${p1.produit(p2).toString()}=${miseEnEvidence(p1.produit(p2).reduire().toString())}$`
+          solution = p1.produit(p2).reduire()
           break
         }
         case 'double': {
@@ -216,12 +229,22 @@ export default class nomExercice extends Exercice {
           }
           texte = `$${lettreDepuisChiffre(i + 1)}=${avecSigne ? '-' : ''}\\left(${p1.toString()}\\right)\\left(${p2.toString()}\\right)$`
           texteCorr = `$\\begin{aligned}${lettreDepuisChiffre(i + 1)}&=${avecSigne ? `\\left(${p1.oppose().toString()}\\right)\\left(${p2.toString()}\\right)\\\\&=` : ''}${p3.produit(p2).toString()}\\\\&=${miseEnEvidence(p3.produit(p2).reduire().toString())}\\end{aligned}$`
+          solution = p3.produit(p2).reduire()
           break
         }
       }
+      texte += ajouteChampTexteMathLive(this, i, KeyboardType.lyceeClassique, {
+        texteAvant: '$=$',
+      })
       if (this.questionJamaisPosee(i, texte)) {
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr
+        handleAnswers(this, i, {
+          reponse: {
+            value: solution.toString(),
+            compare: all([equals(), isReduced(), irreducibleFractions()]),
+          },
+        })
         i++
       }
       cpt++

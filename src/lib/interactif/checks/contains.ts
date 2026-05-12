@@ -22,6 +22,7 @@ export function contains(
     name: options.name ?? 'contains',
     weight: options.weight,
     feedbackEnabled: options.feedbackEnabled,
+    feedbackOnSuccess: options.feedbackOnSuccess,
     run: (saisie) => {
       const passed = testPattern(options.pattern, saisie)
       return {

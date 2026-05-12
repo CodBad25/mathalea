@@ -1280,6 +1280,7 @@ export function verifQuestionMultiMathfield(
   let compteurBonnesReponses = 0
   let noFeedback = false
   let feedback = ''
+  const feedbackMessages = new Set<string>()
   for (const [field, reponse] of variables) {
     const options = reponse.options
     noFeedback = noFeedback || Boolean(options?.noFeedback)
@@ -1338,12 +1339,19 @@ export function verifQuestionMultiMathfield(
     }
     mf.classList.add('corrected')
 
-    if (result.feedback != null)
-      feedback += `${result.feedback !== '' ? `${result.feedback}<br>` : ''}`
+    if (result.feedback != null && result.feedback !== '') {
+      for (const message of result.feedback.split('\n')) {
+        if (message !== '') feedbackMessages.add(message)
+      }
+    }
   }
 
+  feedback = Array.from(feedbackMessages)
+    .map((message) => `${message}<br>`)
+    .join('')
+
   if (compteurBonnesReponses === variables.length) {
-    feedback = ''
+    feedback = feedback ?? ''
   } else {
     if (compteurSaisiesVides > 0) {
       feedback = `Il manque ${compteurSaisiesVides} réponse${compteurSaisiesVides > 1 ? 's' : ''}.`

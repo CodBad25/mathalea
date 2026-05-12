@@ -114,6 +114,7 @@ export function equals(options: EqualsOptions = {}): Check {
     name: options.name ?? 'equals',
     weight: options.weight,
     feedbackEnabled: options.feedbackEnabled,
+    feedbackOnSuccess: options.feedbackOnSuccess,
     run: (saisie, answer) => {
       const toleranceResult = compareWithTolerance(saisie, answer, options)
       const result =

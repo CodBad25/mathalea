@@ -23,6 +23,7 @@ export function noDecimal(options: CheckOverrides = {}): Check {
     name: options.name ?? 'noDecimal',
     weight: options.weight,
     feedbackEnabled: options.feedbackEnabled,
+    feedbackOnSuccess: options.feedbackOnSuccess,
     run: (saisie) => {
       const passed = !hasForbiddenDecimal(saisie)
       return {

@@ -10,6 +10,7 @@ export type CheckOverrides = {
   name?: string
   weight?: number
   feedbackEnabled?: boolean
+  feedbackOnSuccess?: boolean
   feedbackKo?: string
   feedbackOk?: string
 }
@@ -18,6 +19,7 @@ export type Check = {
   name: string
   weight?: number
   feedbackEnabled?: boolean
+  feedbackOnSuccess?: boolean
   run: (saisie: string, answer: string) => CheckResult
 }
 

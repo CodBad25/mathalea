@@ -19,6 +19,7 @@ export function extractedRadicands(options: CheckOverrides = {}): Check {
     name: options.name ?? 'extractedRadicands',
     weight: options.weight,
     feedbackEnabled: options.feedbackEnabled,
+    feedbackOnSuccess: options.feedbackOnSuccess,
     run: (saisie, answer) => {
       const equality = fonctionComparaison(saisie, answer)
       if (!equality.isOk) {

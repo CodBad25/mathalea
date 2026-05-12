@@ -19,6 +19,7 @@ export function isReduced(options: CheckOverrides = {}): Check {
     name: options.name ?? 'isReduced',
     weight: options.weight,
     feedbackEnabled: options.feedbackEnabled,
+    feedbackOnSuccess: options.feedbackOnSuccess,
     run: (saisie) => {
       const result = compare(saisie, saisie)
       return {

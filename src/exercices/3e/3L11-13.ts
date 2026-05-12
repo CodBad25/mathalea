@@ -1,4 +1,10 @@
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import {
+  all,
+  equals,
+  irreducibleFractions,
+  isReduced,
+} from '../../lib/interactif/checks'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import PolynomePlusieursVariables from '../../lib/mathFonctions/PolynomePlusieursVariables'
@@ -186,7 +192,12 @@ export default class nomExercice extends Exercice {
       if (this.questionJamaisPosee(i, texte)) {
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr
-        handleAnswers(this, i, { reponse: { value: solution.toString() } })
+        handleAnswers(this, i, {
+          reponse: {
+            value: solution.toString(),
+            compare: all([equals(), isReduced(), irreducibleFractions()]),
+          },
+        })
         i++
       }
       cpt++

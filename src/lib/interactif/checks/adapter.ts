@@ -10,6 +10,7 @@ export function fromOptions(
     name: overrides.name ?? 'fromOptions',
     weight: overrides.weight,
     feedbackEnabled: overrides.feedbackEnabled,
+    feedbackOnSuccess: overrides.feedbackOnSuccess,
     run: (saisie, answer) => {
       const result = fonctionComparaison(saisie, answer, opts)
       return {
