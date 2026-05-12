@@ -3,12 +3,11 @@ import { PointAbstrait } from '../../lib/2d/PointAbstrait'
 import { milieu } from '../../lib/2d/utilitairesPoint'
 import { Vecteur } from '../../lib/2d/Vecteur'
 import ce from '../../lib/interactif/comparisonFunctions'
-import { combinaisonListes } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
-import { gestionnaireFormulaireTexte, listeQuestionsToContenu, randint } from '../../modules/outils'
+import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-export const titre = "Déterminer l'équation cartésienne d'une droite remarquable"
+export const titre = "Trouver l'équation cartésienne d'une droite"
 export const dateDePublication = '24/06/2024'
 export const dateDeModificationImportante = '10/01/2026'
 
@@ -19,11 +18,11 @@ export const dateDeModificationImportante = '10/01/2026'
  * @author : florianpicard
  */
 
-export const uuid = '8472d'
+export const uuid = '8472c'
 
 export const refs = {
-  'fr-fr': ['1G21'],
-  'fr-ch': ['3G97-3'],
+  'fr-fr': [''],
+  'fr-ch': [''],
 }
 
 function pointVersTex(A: PointAbstrait): string {
@@ -92,11 +91,48 @@ function mediatrice(A: PointAbstrait, B: PointAbstrait): [Droite, string] {
   const n = new Vecteur(A, B, 'AB')
 
   const [d, details] = construireDroite(I, { n }) as [Droite, string]
+  // const equa = equationCartesienne(d)
 
   return [
     d,
     `La médiatrice du segment $[${A.nom}${B.nom}]$ coupe perpendiculairement $[${A.nom}${B.nom}]$ en son milieu $${pointVersTex(I)}$. Ainsi, $${vecteurVersTex(n)}$ est un vecteur normal à la médiatrice du segment $[${A.nom}${B.nom}]$. ` +
       details,
+  ]
+}
+
+function questionDeuxPoints(i: number = 0): [string, string] {
+  const A = new PointAbstrait(randint(-5, 5), randint(-5, 5), 'A')
+  const B = new PointAbstrait(randint(-5, 5, [A.x]), randint(-5, 5, [A.y]), 'B')
+  const [, details] = construireDroite(A, { B }) as [Droite, string]
+
+  return [
+    `Dans un repère orthonormé du plan on considère les points $${pointVersTex(A)}$, et $${pointVersTex(B)}$. Donner l'équation de la droite $(AB)$.`,
+    details,
+  ]
+}
+
+function questionPointvDir(i: number = 0): [string, string] {
+  const A = new PointAbstrait(randint(-5, 5), randint(-5, 5), 'A')
+  const ux = randint(-5, 5)
+  const uy = randint(-5, 5, ux)
+  const u = new Vecteur(ux, uy, 'u')
+  const [, details] = construireDroite(A, { u }) as [Droite, string]
+
+  return [
+    `Dans un repère orthonormé du plan on considère le point $${pointVersTex(A)}$ et le vecteur $${vecteurVersTex(u)}$. Donner l'équation de la droite $(d)$ passant par le point $${A.nom}$ et de vecteur directeur $\\vec{${u.nom}}$.`,
+    details,
+  ]
+}
+
+function questionPointvNorm(i: number = 0): [string, string] {
+  const A = new PointAbstrait(randint(-5, 5), randint(-5, 5), 'A')
+  const ux = randint(-5, 5)
+  const uy = randint(-5, 5, ux)
+  const n = new Vecteur(ux, uy, 'n')
+  const [, details] = construireDroite(A, { n }) as [Droite, string]
+  return [
+    `Dans un repère orthonormé du plan on considère le point $${pointVersTex(A)}$ et le vecteur $${vecteurVersTex(n)}$. Donner l'équation de la droite $(d)$ passant par le point $${A.nom}$ et de vecteur normal $\\vec{${n.nom}}$.`,
+    details,
   ]
 }
 
@@ -128,37 +164,20 @@ function questionMediatrice(i: number = 0): [string, string] {
 export default class nomExercice extends Exercice {
   constructor() {
     super()
-    this.nbQuestions = 2
-     this.sup = '3'
-    this.besoinFormulaireTexte = [
-      'Type de questions',
-      [
-        'Nombres séparés par des tirets  :',
-        '1 : Médiatrice',
-        '2 : Hauteur',
-        '3 : Mélange',
-      ].join('\n'),
-    ]
+    this.nbQuestions = 5
   }
 
   nouvelleVersion() {
-    const typesDeQuestionsDisponibles = gestionnaireFormulaireTexte({
-      saisie: this.sup,
-      min: 1,
-      max: 2,
-      melange: 3,
-      defaut: 3,
-      nbQuestions: this.nbQuestions,
-    })
-    const listeTypeDeQuestions = combinaisonListes(
-      typesDeQuestionsDisponibles,
-      this.nbQuestions,
-    )
+    const questions = [
+      questionPointvNorm,
+      questionPointvDir,
+      questionDeuxPoints,
+      questionHauteur,
+      questionMediatrice,
+    ]
 
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; cpt++) {
-      const question =
-        listeTypeDeQuestions[i] === 1 ? questionMediatrice : questionHauteur
-      const [texte, texteCorr] = question(i)
+      const [texte, texteCorr] = questions[i % questions.length](i)
       if (this.questionJamaisPosee(i, texte)) {
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr.replace(
