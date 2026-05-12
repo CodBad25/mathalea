@@ -6,6 +6,7 @@ import {
   reduireAxPlusB,
   reduirePolynomeDegre3,
 } from '../../../lib/outils/ecritures'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { sp } from '../../../lib/outils/outilString'
 import { fraction } from '../../../modules/fractions'
 import { listeQuestionsToContenu, randint } from '../../../modules/outils'
@@ -104,11 +105,11 @@ export default class SecondDegreVariations extends Exercice {
           if (a > 0) {
             texteCorr = `Comme le coefficient $${a}$ devant $x^2$ est strictement positif, la fonction est d'abord décroissante puis croissante (la parabole est "tournée vers le haut").
             <br> $-\\dfrac{b}{2a}=-\\dfrac{${b}}{2\\times ${ecritureParentheseSiNegatif(a)}}=${maFraction.texFractionSimplifiee}$.
-            <br>Ainsi, $f$ est croissante sur $\\bigg[${maFraction.texFractionSimplifiee}${sp(1)} ;${sp(1)} +\\infty\\bigg[$.    `
+            <br>Ainsi, $f$ est croissante sur $${miseEnEvidence(`\\bigg[${maFraction.texFractionSimplifiee}${sp(1)} ;${sp(1)} +\\infty\\bigg[`)}$.    `
           } else {
             texteCorr = `Comme le coefficient $${a}$ devant $x^2$ est strictement négatif, la fonction est d'abord croissante puis décroissante (la parabole est "tournée vers le bas").
             <br>$-\\dfrac{b}{2a}=-\\dfrac{${b}}{2\\times ${ecritureParentheseSiNegatif(a)}}=${maFraction.texFractionSimplifiee}$.
-            <br>Ainsi, $f$ est croissante sur $\\bigg]-\\infty${sp(1)} ;${sp(1)}${maFraction.texFractionSimplifiee} \\bigg]$.    `
+            <br>Ainsi, $f$ est croissante sur $${miseEnEvidence(`\\bigg]-\\infty${sp(1)} ;${sp(1)}${maFraction.texFractionSimplifiee} \\bigg]`)}$.    `
           }
           break
 
@@ -167,7 +168,7 @@ export default class SecondDegreVariations extends Exercice {
          ${reduireAxPlusB(0, a)}(x-(\\underbrace{-${b}}_{\\alpha}))^2${ecritureAlgebrique(c)}$, d'où $\\alpha=-${b}$.
          <br> Le coefficient $${a}$ devant la parenthèse est strictement positif, la fonction est donc
          d'abord décroissante puis croissante (la parabole est "tournée vers le haut").
-         <br>  Ainsi, $f$ est croissante sur $\\bigg[-${b} ${sp(1)} ;${sp(1)} +\\infty\\bigg[$.    `
+         <br>  Ainsi, $f$ est croissante sur $${miseEnEvidence(`\\bigg[-${b} ${sp(1)} ;${sp(1)} +\\infty\\bigg[`)}$.    `
             } else {
               texteCorr = `On reconnaît la forme canonique d'une fonction polynôme du second degré :
               <br>$f(x)=a(x-\\alpha)^2+\\beta$
@@ -176,7 +177,7 @@ export default class SecondDegreVariations extends Exercice {
            Ici,  $f(x)=${reduireAxPlusB(0, a)}(${reduireAxPlusB(1, b)})^2${ecritureAlgebrique(c)}$, d'où $\\alpha=${-b}$.
            <br>  Le coefficient $${a}$ devant la parenthèse est strictement positif, la fonction est donc
           d'abord décroissante puis croissante (la parabole est "tournée vers le haut").
-          <br>  Ainsi, $f$ est croissante sur $\\bigg[${-b} ${sp(1)} ;${sp(1)} +\\infty\\bigg[$.    `
+          <br>  Ainsi, $f$ est croissante sur $${miseEnEvidence(`\\bigg[${-b} ${sp(1)} ;${sp(1)} +\\infty\\bigg[`)}$.    `
             }
           } else {
             if (b > 0) {
@@ -186,14 +187,14 @@ export default class SecondDegreVariations extends Exercice {
           <br> Ici,  $f(x)=${reduireAxPlusB(0, a)}(${reduireAxPlusB(1, b)})^2${ecritureAlgebrique(c)}=
          ${reduireAxPlusB(0, a)}(x-(\\underbrace{-${b}}_{\\alpha}))^2${ecritureAlgebrique(c)}$, d'où $\\alpha=-${b}$.
          <br> Comme le coefficient $${a}$ devant la parenthèse est strictement négatif, la fonction est d'abord croissante puis décroissante (la parabole est "tournée vers le bas").
-         <br>    Ainsi, $f$ est croissante sur $\\bigg]-\\infty ${sp(1)} ;${sp(1)} -${b}  \\bigg]$.    `
+         <br>    Ainsi, $f$ est croissante sur $${miseEnEvidence(`\\bigg]-\\infty ${sp(1)} ;${sp(1)} -${b}  \\bigg]`)}$.    `
             } else {
               texteCorr = `On reconnaît la forme canonique d'une fonction polynôme du second degré :
               <br>  $f(x)=a(x-\\alpha)^2+\\beta$
               <br> Comme $\\alpha=-\\dfrac{b}{2a}$, le changement de variation de la fonction $f$ se fait en $\\alpha$.
            <br> Ici,  $f(x)=${reduireAxPlusB(0, a)}(${reduireAxPlusB(1, b)})^2${ecritureAlgebrique(c)}$, d'où $\\alpha=${-b}$.
            <br> Comme le coefficient $${a}$ devant la parenthèse est strictement négatif, la fonction est d'abord croissante puis décroissante (la parabole est "tournée vers le bas").
-           Ainsi, $f$ est croissante sur $\\bigg]-\\infty ${sp(1)} ;${sp(1)} ${-b}  \\bigg]$.    `
+           Ainsi, $f$ est croissante sur $${miseEnEvidence(`\\bigg]-\\infty ${sp(1)} ;${sp(1)} ${-b}  \\bigg]`)}$.    `
             }
           }
           break
@@ -253,13 +254,13 @@ export default class SecondDegreVariations extends Exercice {
             <br>       $f(x)=a(x-x_1)(x-x_2)$ où $x_1$ et $x_2$ sont les racines du polynôme.
             <br>         L'abscisse du sommet de la parabole est donné par la moyenne des racines soit par : $\\dfrac{x_1+x_2}{2}=\\dfrac{${-b}+${ecritureParentheseSiNegatif(-c)}}{2}= ${maFraction.texFractionSimplifiee}$.
             <br>           Comme le coefficient $${a}$ devant les parenthèses est strictement négatif, la fonction est d'abord croissante puis décroissante (la parabole est "tournée vers le bas").
-                <br>           Ainsi, $f$ est croissante sur $\\bigg]-\\infty ${sp(1)} ;${sp(1)} ${maFraction.texFractionSimplifiee}  \\bigg]$.    `
+                <br>           Ainsi, $f$ est croissante sur $${miseEnEvidence(`\\bigg]-\\infty ${sp(1)} ;${sp(1)} ${maFraction.texFractionSimplifiee}  \\bigg]`)}$.    `
           } else {
             texteCorr = `On reconnaît une forme factorisée d'une fonction polynôme du second degré :
             <br>      $f(x)=a(x-x_1)(x-x_2)$ où $x_1$ et $x_2$ sont les racines du polynôme.
             <br>    L'abscisse du sommet de la parabole est donné par la moyenne des racines soit par : $\\dfrac{x_1+x_2}{2}=\\dfrac{${-b}+${ecritureParentheseSiNegatif(-c)}}{2}= ${maFraction.texFractionSimplifiee}$.
             <br>            Comme le coefficient $${a}$ devant les parenthèses est strictement positif, la fonction est d'abord décroissante puis croissante (la parabole est "tournée vers le haut").
-              <br>     Ainsi, $f$ est croissante sur $\\bigg[${maFraction.texFractionSimplifiee} ${sp(1)} ;${sp(1)} +\\infty\\bigg[$.    `
+              <br>     Ainsi, $f$ est croissante sur $${miseEnEvidence(`\\bigg[${maFraction.texFractionSimplifiee} ${sp(1)} ;${sp(1)} +\\infty\\bigg[`)}$.    `
           }
           break
 
@@ -326,11 +327,11 @@ export default class SecondDegreVariations extends Exercice {
           if (a > 0) {
             texteCorr = `Comme le coefficient $${a}$ devant $x^2$ est strictement positif, la fonction est d'abord décroissante puis croissante (la parabole est "tournée vers le haut").
             <br>         $-\\dfrac{b}{2a}=-\\dfrac{${b}}{2\\times ${ecritureParentheseSiNegatif(a)}}=${maFraction.texFractionSimplifiee}$.
-           <br>          Ainsi, $f$ est décroissante sur $\\bigg]-\\infty${sp(1)} ;${sp(1)}${maFraction.texFractionSimplifiee} \\bigg]$.    `
+           <br>          Ainsi, $f$ est décroissante sur $${miseEnEvidence(`\\bigg]-\\infty${sp(1)} ;${sp(1)}${maFraction.texFractionSimplifiee} \\bigg]`)}$.    `
           } else {
             texteCorr = `Comme le coefficient $${a}$ devant $x^2$ est strictement négatif, la fonction est d'abord croissante puis décroissante (la parabole est "tournée vers le bas").
             <br>  $-\\dfrac{b}{2a}=-\\dfrac{${b}}{2\\times ${ecritureParentheseSiNegatif(a)}}=${maFraction.texFractionSimplifiee}$.
-    <br>   Ainsi, $f$ est décroissante sur $\\bigg[${maFraction.texFractionSimplifiee}${sp(1)} ;${sp(1)} +\\infty\\bigg[$.    `
+    <br>   Ainsi, $f$ est décroissante sur $${miseEnEvidence(`\\bigg[${maFraction.texFractionSimplifiee}${sp(1)} ;${sp(1)} +\\infty\\bigg[`)}$.    `
           }
           break
 
@@ -391,7 +392,7 @@ export default class SecondDegreVariations extends Exercice {
          ${reduireAxPlusB(0, a)}(x-(\\underbrace{-${b}}_{\\alpha}))^2${ecritureAlgebrique(c)}$, d'où $\\alpha=-${b}$.
          <br>       Le coefficient $${a}$ devant la parenthèse est strictement positif, la fonction est donc
          d'abord décroissante puis croissante (la parabole est "tournée vers le haut").
-         <br>    Ainsi, $f$ est décroissante sur $\\bigg]-\\infty${sp(1)} ;${sp(1)}${-b} \\bigg]$.    `
+         <br>    Ainsi, $f$ est décroissante sur $${miseEnEvidence(`\\bigg]-\\infty${sp(1)} ;${sp(1)}${-b} \\bigg]`)}$.    `
             } else {
               texteCorr = `On reconnaît la forme canonique d'une fonction polynôme du second degré :
               <br>         $f(x)=a(x-\\alpha)^2+\\beta$
@@ -399,7 +400,7 @@ export default class SecondDegreVariations extends Exercice {
               <br>         Ici,  $f(x)=${reduireAxPlusB(0, a)}(${reduireAxPlusB(1, b)})^2${ecritureAlgebrique(c)}$, d'où $\\alpha=${-b}$.
               <br>        Le coefficient $${a}$ devant la parenthèse est strictement positif, la fonction est donc
           d'abord décroissante puis croissante (la parabole est "tournée vers le haut").
-          <br>           Ainsi, $f$ est décroissante sur $\\bigg]-\\infty${sp(1)} ;${sp(1)}${-b} \\bigg]$.    `
+          <br>           Ainsi, $f$ est décroissante sur $${miseEnEvidence(`\\bigg]-\\infty${sp(1)} ;${sp(1)}${-b} \\bigg]`)}$.    `
             }
           } else {
             if (b > 0) {
@@ -409,14 +410,14 @@ export default class SecondDegreVariations extends Exercice {
           <br>       Ici,  $f(x)=${reduireAxPlusB(0, a)}(${reduireAxPlusB(1, b)})^2${ecritureAlgebrique(c)}=
          ${reduireAxPlusB(0, a)}(x-(\\underbrace{-${b}}_{\\alpha}))^2${ecritureAlgebrique(c)}$, d'où $\\alpha=-${b}$.
          <br>       Comme le coefficient $${a}$ devant la parenthèse est strictement négatif, la fonction est d'abord croissante puis décroissante (la parabole est "tournée vers le bas").
-         <br>         Ainsi, $f$ est décroissante sur $\\bigg[${-b}${sp(1)} ;${sp(1)} +\\infty\\bigg[$.    `
+         <br>         Ainsi, $f$ est décroissante sur $${miseEnEvidence(`\\bigg[${-b}${sp(1)} ;${sp(1)} +\\infty\\bigg[`)}$.    `
             } else {
               texteCorr = `On reconnaît la forme canonique d'une fonction polynôme du second degré :
               <br>         $f(x)=a(x-\\alpha)^2+\\beta$
            <br>         Comme $\\alpha=-\\dfrac{b}{2a}$, le changement de variation de la fonction $f$ se fait en $\\alpha$.
            <br>         Ici,  $f(x)=${reduireAxPlusB(0, a)}(${reduireAxPlusB(1, b)})^2${ecritureAlgebrique(c)}$, d'où $\\alpha=${-b}$.
            <br>         Comme le coefficient $${a}$ devant la parenthèse est strictement négatif, la fonction est d'abord croissante puis décroissante (la parabole est "tournée vers le bas").
-           <br>         Ainsi, $f$ est décroissante sur $\\bigg[${-b}${sp(1)} ;${sp(1)} +\\infty\\bigg[$.    `
+           <br>         Ainsi, $f$ est décroissante sur $${miseEnEvidence(`\\bigg[${-b}${sp(1)} ;${sp(1)} +\\infty\\bigg[`)}$.    `
             }
           }
           break
@@ -476,13 +477,13 @@ export default class SecondDegreVariations extends Exercice {
             <br>              $f(x)=a(x-x_1)(x-x_2)$ où $x_1$ et $x_2$ sont les racines du polynôme.
             <br>              L'abscisse du sommet de la parabole est donné par la moyenne des racines soit par : $\\dfrac{x_1+x_2}{2}=\\dfrac{${-b}+${ecritureParentheseSiNegatif(-c)}}{2}= ${maFraction.texFractionSimplifiee}$.
                 <br>              Comme le coefficient $${a}$ devant les parenthèses est strictement négatif, la fonction est d'abord croissante puis décroissante (la parabole est "tournée vers le bas").
-                <br>              Ainsi, $f$ est décroissante sur $\\bigg[${maFraction.texFractionSimplifiee} ${sp(1)} ;${sp(1)} +\\infty\\bigg[$.    `
+                <br>              Ainsi, $f$ est décroissante sur $${miseEnEvidence(`\\bigg[${maFraction.texFractionSimplifiee} ${sp(1)} ;${sp(1)} +\\infty\\bigg[`)}$.    `
           } else {
             texteCorr = `On reconnaît une forme factorisée d'une fonction polynôme du second degré :
             <br>            $f(x)=a(x-x_1)(x-x_2)$ où $x_1$ et $x_2$ sont les racines du polynôme.
             <br> L'abscisse du sommet de la parabole est donné par la moyenne des racines soit par : $\\dfrac{x_1+x_2}{2}=\\dfrac{${-b}+${ecritureParentheseSiNegatif(-c)}}{2}= ${maFraction.texFractionSimplifiee}$.
               <br>            Comme le coefficient $${a}$ devant les parenthèses est strictement positif, la fonction est d'abord décroissante puis croissante (la parabole est "tournée vers le haut").
-              <br> Ainsi, $f$ est croissante sur $\\bigg]-\\infty ${sp(1)} ;${sp(1)} ${maFraction.texFractionSimplifiee} \\bigg]$.    `
+              <br> Ainsi, $f$ est croissante sur $${miseEnEvidence(`\\bigg]-\\infty ${sp(1)} ;${sp(1)} ${maFraction.texFractionSimplifiee} \\bigg]`)}$.    `
           }
           break
       }

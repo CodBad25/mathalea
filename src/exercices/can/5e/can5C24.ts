@@ -1,4 +1,5 @@
 import { choice } from '../../../lib/outils/arrayOutils'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import { arrondi } from '../../../lib/outils/nombres'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { fraction } from '../../../modules/fractions'
@@ -37,7 +38,7 @@ export default class FractionVersDecimal extends ExerciceSimple {
         maFraction = fraction(a, 5)
         resultat = arrondi(a / 5, 1)
         this.question = `Quelle est la valeur décimale de  $${maFraction.texFraction}$ ?`
-        this.correction = `$${maFraction.texFraction}=${texNombre(resultat)}$`
+        this.correction = `$${maFraction.texFraction}=${miseEnEvidence(texNombre(resultat))}$`
         this.reponse = resultat
         break
 
@@ -46,7 +47,7 @@ export default class FractionVersDecimal extends ExerciceSimple {
         maFraction = fraction(b, 4)
         resultat = arrondi(b / 4, 2)
         this.question = `Quelle est la valeur décimale de  $${maFraction.texFraction}$ ?`
-        this.correction = `$${maFraction.texFraction}=${texNombre(resultat)}$`
+        this.correction = `$${maFraction.texFraction}=${miseEnEvidence(texNombre(resultat))}$`
         this.reponse = resultat
 
         break
@@ -56,7 +57,7 @@ export default class FractionVersDecimal extends ExerciceSimple {
         maFraction = fraction(c, 2)
         resultat = arrondi(c / 2, 1)
         this.question = `Quelle est la valeur décimale de  $${maFraction.texFraction}$ ?`
-        this.correction = `$${maFraction.texFraction}=${texNombre(resultat)}$`
+        this.correction = `$${maFraction.texFraction}=${miseEnEvidence(texNombre(resultat))}$`
         this.reponse = resultat
 
         break

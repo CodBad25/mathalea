@@ -1,6 +1,7 @@
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { choice } from '../../../lib/outils/arrayOutils'
 import { obtenirListeFractionsIrreductibles } from '../../../lib/outils/deprecatedFractions'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 import FractionEtendue from '../../../modules/FractionEtendue'
 import { randint } from '../../../modules/outils'
 import ExerciceSimple from '../../ExerciceSimple'
@@ -40,6 +41,6 @@ export default class SommeEntierEtFractionIrred extends ExerciceSimple {
     const d = new FractionEtendue(a * c + b, c).simplifie()
     this.reponse = d
     this.question = `Calculer sous la forme d'une fraction irréductible :  $${a}+${bSurC.texFraction}$.`
-    this.correction = `$${a}+${bSurC.texFraction} = \\dfrac{${a} \\times ${c}}{${c}} + ${bSurC.texFraction} = \\dfrac{${a * c}}{${c}} + ${bSurC.texFraction}  =${d.texFraction}$`
+    this.correction = `$${a}+${bSurC.texFraction} = \\dfrac{${a} \\times ${c}}{${c}} + ${bSurC.texFraction} = \\dfrac{${a * c}}{${c}} + ${bSurC.texFraction}  =${miseEnEvidence(d.texFraction)}$`
   }
 }

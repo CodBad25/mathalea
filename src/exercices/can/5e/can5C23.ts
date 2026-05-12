@@ -1,5 +1,5 @@
 import { choice } from '../../../lib/outils/arrayOutils'
-import { texteEnCouleur } from '../../../lib/outils/embellissements'
+import { miseEnEvidence, texteEnCouleur } from '../../../lib/outils/embellissements'
 import { arrondi } from '../../../lib/outils/nombres'
 import { texNombre } from '../../../lib/outils/texNombre'
 import { randint } from '../../../modules/outils'
@@ -35,7 +35,7 @@ export default class MultiplierPar extends ExerciceSimple {
     const b = choice([15, 25, 35, 45, 55]) / 10
 
     this.question = `Calculer $${a}\\times ${texNombre(b, 1)}$.`
-    this.correction = `$${a}\\times ${texNombre(b, 1)}=${texNombre(a * b, 1)}$`
+    this.correction = `$${a}\\times ${texNombre(b, 1)}=${miseEnEvidence(texNombre(a * b, 1))}$`
     this.reponse = arrondi(a * b, 1)
     this.correction += texteEnCouleur(`
     <br> Mentalement : <br>
