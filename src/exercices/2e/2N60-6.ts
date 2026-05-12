@@ -72,7 +72,7 @@ export default class PositionRelative extends Exercice {
       nbQuestions: this.nbQuestions,
       shuffle: false,
       melange: 0,
-    }).map(Boolean)
+    }).map(v => v === 'true')
     shuffle2tableaux(listeTypeDeQuestions, sousChoix)
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
       let texte = ''

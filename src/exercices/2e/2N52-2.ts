@@ -165,6 +165,12 @@ export default class FactoriserIdentitesRemarquables2 extends Exercice {
             texteCorr += `Ainsi, $S=${miseEnEvidence(`\\{-\\sqrt{${b}}\\,;\\,\\sqrt{${b}}\\}`)}$.`
           } else {
             texteCorr = ''
+            texteCorr+= CorrCarre +
+              ` $x^2=${b}$.<br>  
+        Puisque $${b}$` +
+              CorrPositif
+            texteCorr += ` $-\\sqrt{${b}}$ et $\\sqrt{${b}}$.<br>`
+            texteCorr += `Ainsi, $S=${miseEnEvidence(`\\{-\\sqrt{${b}}\\,;\\,\\sqrt{${b}}\\}`)}$.`
           }
 
           handleAnswers(this, i, {
