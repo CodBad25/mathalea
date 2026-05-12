@@ -285,6 +285,12 @@
     return []
   }
 
+  function getEffectiveQuestionCount(exercise: IExercice): number {
+    const autoCorrection = getAmcAutoCorrection(exercise)
+    if (autoCorrection.length > 0) return autoCorrection.length
+    return Math.max(1, Number((exercise as any)?.nbQuestions) || 1)
+  }
+
   function ensureAmcAutoCorrectionFallback(exercice: IExercice): void {
     const ex = exercice as any
     const current = getAmcAutoCorrection(exercice)
@@ -419,7 +425,11 @@
 
     const snapshot = {
       autoCorrection: cloneDeep(
-        Array.isArray(exercice.autoCorrection) ? exercice.autoCorrection : [],
+        Array.isArray(exercice.autoCorrectionAMC)
+          ? exercice.autoCorrectionAMC
+          : Array.isArray(exercice.autoCorrection)
+            ? exercice.autoCorrection
+            : [],
       ),
       listeQuestions: [...exercice.listeQuestions],
       listeCorrections: [...exercice.listeCorrections],
@@ -647,12 +657,29 @@
       const preservedByKey =
         key === '' ? undefined : previousSettingsByKey.get(key)?.shift()
       const preserved = preservedByKey ?? previousSettings[index]
+      const effectiveQuestionCount = getEffectiveQuestionCount(exercice)
+      const lockedQuestionCount =
+        (exercice as any)?.nbQuestionsModifiable === false
+          ? effectiveQuestionCount
+          : null
+
+      const resolvedQuestionCount =
+        lockedQuestionCount ??
+        preserved?.questionCount ??
+        effectiveQuestionCount
+
+      const resolvedRestitueCount =
+        lockedQuestionCount != null
+          ? Math.min(
+              lockedQuestionCount,
+              preserved?.restitueCount ?? lockedQuestionCount,
+            )
+          : Math.min(resolvedQuestionCount, preserved?.restitueCount ?? 1)
 
       return {
         seed: preserved?.seed ?? exercice.seed,
-        questionCount:
-          preserved?.questionCount ?? Math.max(1, exercice.nbQuestions),
-        restitueCount: preserved?.restitueCount ?? 1,
+        questionCount: resolvedQuestionCount,
+        restitueCount: resolvedRestitueCount,
         pageBreakBefore: preserved?.pageBreakBefore ?? false,
         multicols: preserved?.multicols ?? false,
       }
@@ -729,7 +756,10 @@
       const next = [...list]
       const current = { ...next[paramsIndex] }
 
-      if (detail.nbQuestions != null) {
+      if (
+        detail.nbQuestions != null &&
+        (exercise as any)?.nbQuestionsModifiable !== false
+      ) {
         const nbQuestions = Math.max(1, Number(detail.nbQuestions) || 1)
         exercise.nbQuestions = nbQuestions
         current.nbQuestions = nbQuestions
@@ -999,10 +1029,28 @@
   function extractClipDimensionsCmFromText(
     latex: string,
   ): { widthCm: number; heightCm: number } | null {
+    const extractTikzScale = (latexText: string): number => {
+      const beginRegex =
+        /\\begin\s*\{\s*(?:tikzpicture|circuitikz)\s*\}\s*(?:\[([^\]]*)\])?/i
+      const beginMatch = latexText.match(beginRegex)
+      const options = beginMatch?.[1]
+      if (!options) return 1
+
+      const scaleRegex =
+        /(?:^|,)\s*scale\s*=\s*\{?\s*([+-]?\d*\.?\d+(?:[eE][+-]?\d+)?)\s*\}?\s*(?=,|$)/i
+      const scaleMatch = options.match(scaleRegex)
+      if (!scaleMatch) return 1
+
+      const parsedScale = Number(scaleMatch[1])
+      return Number.isFinite(parsedScale) ? Math.abs(parsedScale) : 1
+    }
+
     const clipRegex =
       /\\clip\s*\(\s*([+-]?\d*\.?\d+)\s*(cm|mm|pt|in)?\s*,\s*([+-]?\d*\.?\d+)\s*(cm|mm|pt|in)?\s*\)\s*rectangle\s*\(\s*([+-]?\d*\.?\d+)\s*(cm|mm|pt|in)?\s*,\s*([+-]?\d*\.?\d+)\s*(cm|mm|pt|in)?\s*\)\s*;/i
     const match = latex.match(clipRegex)
     if (!match) return null
+
+    const tikzScale = extractTikzScale(latex)
 
     const x1 = toCm(Number(match[1]), match[2])
     const y1 = toCm(Number(match[3]), match[4])
@@ -1012,8 +1060,8 @@
     if (![x1, y1, x2, y2].every((v) => Number.isFinite(v))) return null
 
     return {
-      widthCm: Math.abs(x2 - x1),
-      heightCm: Math.abs(y2 - y1),
+      widthCm: Math.abs(x2 - x1) * tikzScale,
+      heightCm: Math.abs(y2 - y1) * tikzScale,
     }
   }
 
@@ -1086,13 +1134,20 @@
   async function copyLatexToClipboard() {
     if (!latexContent.trim()) return
 
+    const { text: sanitizedLatexContent, hadInvalidChars } =
+      sanitizeLatexForExport(latexContent)
+
     try {
-      await navigator.clipboard.writeText(latexContent)
-      setLatexExportStatus('LaTeX copié dans le presse-papier.')
+      await navigator.clipboard.writeText(sanitizedLatexContent)
+      setLatexExportStatus(
+        hadInvalidChars
+          ? 'LaTeX copié. Des caractères invalides ont été remplacés.'
+          : 'LaTeX copié dans le presse-papier.',
+      )
     } catch {
       // Fallback pour navigateurs sans permission clipboard.
       const textarea = document.createElement('textarea')
-      textarea.value = latexContent
+      textarea.value = sanitizedLatexContent
       textarea.style.position = 'fixed'
       textarea.style.opacity = '0'
       document.body.appendChild(textarea)
@@ -1102,7 +1157,9 @@
       document.body.removeChild(textarea)
       setLatexExportStatus(
         copied
-          ? 'LaTeX copié dans le presse-papier.'
+          ? hadInvalidChars
+            ? 'LaTeX copié. Des caractères invalides ont été remplacés.'
+            : 'LaTeX copié dans le presse-papier.'
           : 'Impossible de copier automatiquement le LaTeX.',
       )
     }
@@ -1111,7 +1168,12 @@
   function downloadLatexFile() {
     if (!latexContent.trim()) return
 
-    const blob = new Blob([latexContent], { type: 'text/x-tex;charset=utf-8' })
+    const { text: sanitizedLatexContent, hadInvalidChars } =
+      sanitizeLatexForExport(latexContent)
+
+    const blob = new Blob([new TextEncoder().encode(sanitizedLatexContent)], {
+      type: 'text/x-tex;charset=utf-8',
+    })
     const url = URL.createObjectURL(blob)
     const link = document.createElement('a')
     const seed = exercices[0]?.seed ?? 'amc'
@@ -1124,8 +1186,53 @@
     URL.revokeObjectURL(url)
 
     setLatexExportStatus(
-      'Téléchargement lancé (dossier selon les réglages du navigateur).',
+      hadInvalidChars
+        ? 'Téléchargement lancé. Des caractères invalides ont été remplacés.'
+        : 'Téléchargement lancé (dossier selon les réglages du navigateur).',
     )
+  }
+
+  function sanitizeLatexForExport(content: string): {
+    text: string
+    hadInvalidChars: boolean
+  } {
+    const normalized = content.replace(/\uFEFF/g, '').normalize('NFC')
+    const hadInvalidChars = /\uFFFD/.test(normalized)
+
+    return {
+      text: hadInvalidChars ? normalized.replace(/\uFFFD/g, '?') : normalized,
+      hadInvalidChars,
+    }
+  }
+
+  /**
+   * Convertit les commandes LaTeX textuelles (produites lors de la passe isAmc)
+   * en HTML pour l'affichage dans la preview.
+   * Gère les patterns générés par texteEnCouleurEtGras(), numAlpha(), etc.
+   */
+  function latexTextToHtml(latex: string): string {
+    let html = latex
+    // \textbf {text} ou \textbf{text} → <strong>text</strong> (ex: numAlpha en mode LaTeX)
+    html = html.replace(/\\textbf\s*\{([^}]*)\}/g, '<strong>$1</strong>')
+    // {\bfseries \color[HTML]{hexcolor}text} → <strong style="color:#hex">text</strong>
+    html = html.replace(
+      /\{\\bfseries\s+\\color\[HTML\]\{([0-9a-fA-F]{6})\}([^{}]*)\}/g,
+      (_, hex, text) =>
+        hex === '000000'
+          ? `<strong>${text}</strong>`
+          : `<strong style="color:#${hex}">${text}</strong>`,
+    )
+    // {\bfseries \color{colorname}text} → <strong style="color:colorname">text</strong>
+    html = html.replace(
+      /\{\\bfseries\s+\\color\{([^}]+)\}([^{}]*)\}/g,
+      (_, color, text) =>
+        color === 'black'
+          ? `<strong>${text}</strong>`
+          : `<strong style="color:${color}">${text}</strong>`,
+    )
+    // Sauts de ligne LaTeX
+    html = html.replace(/\\\\/g, '<br>').replace(/\\medskip/g, '<br><br>')
+    return html
   }
 
   function getBlocks(exercise: IExercice, exerciseIndex: number) {
@@ -1185,7 +1292,11 @@
             if (figureEnvRegex.test(raw)) {
               return htmlContent
             }
-            // Si le texte spécifique n'a pas de figures, on peut l'utiliser
+            // Si le texte spécifique n'a pas de figures, on peut l'utiliser.
+            // Pour AMCNum, le texte vient de la passe isAmc (LaTeX pur) : on le convertit en HTML.
+            if (propType === 'AMCNum') {
+              return latexTextToHtml(raw)
+            }
             return raw
               .replaceAll('\\\\', '<br>')
               .replaceAll('\\medskip', '<br><br>')
@@ -1345,6 +1456,12 @@
     selectedRef = ref
     selectedExerciseIndex = ref.exerciseIndex
     isDocumentSettingsOpen = false
+  }
+
+  function isSelectedExerciseQuestionCountModifiable(): boolean {
+    if (selectedExerciseIndex == null) return true
+    const exercise = exercices[selectedExerciseIndex] as any
+    return exercise?.nbQuestionsModifiable !== false
   }
 
   function isQuestionHybrid(
@@ -1539,13 +1656,23 @@
     const item = exercise.autoCorrectionAMC?.[selectedRef.questionIndex]
     if (!item) return
 
-    if (exercise.amcType === 'AMCHybride') {
-      item.options = item.options ?? {}
-      item.options.multicols = value
-    } else {
-      item.options = item.options ?? {}
-      item.options.multicols = value
-    }
+    item.options = item.options ?? {}
+    item.options.multicols = value
+
+    exercices = [...exercices]
+    updateLatexPreview()
+  }
+
+  function updateSelectedBlockMulticolsAll(value: boolean) {
+    if (!selectedRef) return
+
+    const exercise = exercices[selectedRef.exerciseIndex] as any
+    if (!exercise) return
+    const item = exercise.autoCorrectionAMC?.[selectedRef.questionIndex]
+    if (!item) return
+
+    item.options = item.options ?? {}
+    item.options.multicolsAll = value
 
     exercices = [...exercices]
     updateLatexPreview()
@@ -1556,6 +1683,13 @@
     const exercise = exercices[selectedRef.exerciseIndex] as any
     const item = exercise?.autoCorrectionAMC?.[selectedRef.questionIndex]
     return Boolean(item?.options?.multicols)
+  }
+
+  function isSelectedBlockMulticolsAllEnabled(): boolean {
+    if (!selectedRef) return false
+    const exercise = exercices[selectedRef.exerciseIndex] as any
+    const item = exercise?.autoCorrectionAMC?.[selectedRef.questionIndex]
+    return Boolean(item?.options?.multicolsAll)
   }
 
   function appliquerParametresQuestionAuGroupe() {
@@ -1570,6 +1704,22 @@
     const isHybrid =
       exercise.amcType === 'AMCHybride' ||
       isQuestionHybrid(exercise, selectedRef.questionIndex)
+
+    // En mode hybride, les options de colonnes du container (multicols / multicolsAll)
+    // doivent etre appliquees a toutes les questions du groupe.
+    if (isHybrid) {
+      const sourceContainerOptions =
+        autoCorrection[selectedRef.questionIndex]?.options ?? {}
+      const sourceMulticols = Boolean(sourceContainerOptions.multicols)
+      const sourceMulticolsAll = Boolean(sourceContainerOptions.multicolsAll)
+
+      for (const item of autoCorrection) {
+        if (!item) continue
+        item.options = item.options ?? {}
+        item.options.multicols = sourceMulticols
+        item.options.multicolsAll = sourceMulticolsAll
+      }
+    }
 
     if (selectedRef.kind === 'num') {
       if (isHybrid) {
@@ -2399,7 +2549,9 @@
               min="1"
               class="w-full rounded border px-2 py-1 text-sm"
               value={groupSettings[selectedExerciseIndex]?.questionCount}
+              disabled={!isSelectedExerciseQuestionCountModifiable()}
               on:input={async (event) => {
+                if (!isSelectedExerciseQuestionCountModifiable()) return
                 const value = Math.max(
                   1,
                   Number((event.currentTarget as HTMLInputElement).value) || 1,
@@ -2433,6 +2585,13 @@
                 await regenerateExercise(idx, groupSettings[idx]?.seed)
               }}
             />
+            {#if !isSelectedExerciseQuestionCountModifiable()}
+              <p
+                class="text-[11px] text-coopmaths-corpus/70 dark:text-coopmathsdark-corpus/70"
+              >
+                Verrouillé par l'exercice (nbQuestionsModifiable=false).
+              </p>
+            {/if}
 
             <label for="amc-group-restitue-count" class="block text-xs"
               >Nombre de questions a restituer (\restituegroupe)</label
@@ -2786,9 +2945,22 @@
                     )}
                 />
                 {exercices[selectedRef.exerciseIndex]?.amcType === 'AMCHybride'
-                  ? 'Bloc hybride en multicolonnes (2)'
+                  ? 'Elements de reponses en multicolonnes (2)'
                   : 'Question en multicolonnes (2)'}
               </label>
+              {#if exercices[selectedRef.exerciseIndex]?.amcType === 'AMCHybride'}
+                <label class="mt-2 inline-flex items-center gap-2 text-xs">
+                  <input
+                    type="checkbox"
+                    checked={isSelectedBlockMulticolsAllEnabled()}
+                    on:change={(event) =>
+                      updateSelectedBlockMulticolsAll(
+                        (event.currentTarget as HTMLInputElement).checked,
+                      )}
+                  />
+                  Bloc hybride complet en multicolonnes (2)
+                </label>
+              {/if}
               <button
                 type="button"
                 class="mt-2 w-full rounded border px-3 py-1 text-xs"
@@ -2852,9 +3024,22 @@
                     )}
                 />
                 {exercices[selectedRef.exerciseIndex]?.amcType === 'AMCHybride'
-                  ? 'Bloc hybride en multicolonnes (2)'
+                  ? 'Elements de reponses en multicolonnes (2)'
                   : 'Question en multicolonnes (2)'}
               </label>
+              {#if exercices[selectedRef.exerciseIndex]?.amcType === 'AMCHybride'}
+                <label class="mt-2 inline-flex items-center gap-2 text-xs">
+                  <input
+                    type="checkbox"
+                    checked={isSelectedBlockMulticolsAllEnabled()}
+                    on:change={(event) =>
+                      updateSelectedBlockMulticolsAll(
+                        (event.currentTarget as HTMLInputElement).checked,
+                      )}
+                  />
+                  Bloc hybride complet en multicolonnes (2)
+                </label>
+              {/if}
               <button
                 type="button"
                 class="mt-2 w-full rounded border px-3 py-1 text-xs"
@@ -2916,9 +3101,22 @@
                     )}
                 />
                 {exercices[selectedRef.exerciseIndex]?.amcType === 'AMCHybride'
-                  ? 'Bloc hybride en multicolonnes (2)'
+                  ? 'Elements de reponses en multicolonnes (2)'
                   : 'Question en multicolonnes (2)'}
               </label>
+              {#if exercices[selectedRef.exerciseIndex]?.amcType === 'AMCHybride'}
+                <label class="mt-2 inline-flex items-center gap-2 text-xs">
+                  <input
+                    type="checkbox"
+                    checked={isSelectedBlockMulticolsAllEnabled()}
+                    on:change={(event) =>
+                      updateSelectedBlockMulticolsAll(
+                        (event.currentTarget as HTMLInputElement).checked,
+                      )}
+                  />
+                  Bloc hybride complet en multicolonnes (2)
+                </label>
+              {/if}
               <button
                 type="button"
                 class="mt-2 w-full rounded border px-3 py-1 text-xs"

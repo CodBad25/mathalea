@@ -338,7 +338,10 @@ export default class PavagesEtTransformations extends Exercice {
 
     // context.fenetreMathalea2d = [Xmin, Ymin, Xmax, Ymax]
     let trace, label, pt1, pt2
-    let texteAMC1, texteAMC2, texteAMC3, consigneAMC
+    let texteAMC1 = ''
+    let texteAMC2 = ''
+    let texteAMC3 = ''
+    let consigneAMC = ''
     switch (parseInt(this.sup)) {
       case 1: // symétrie axiale
         // Première question : une figure type A par symétrie d'axe // à [BD] est une figure type A. le symétrique du sommet A est le sommet C
@@ -1628,7 +1631,7 @@ export default class PavagesEtTransformations extends Exercice {
         break
 
       case 4: // rotations
-        // première question : centre A, rotation de 90° sens anti-horaire, une figure de tabfigA donne une figure de tabfigD, le point B donne le point D.
+        // première question : centre A, rotation de 90$^\\circ$ sens anti-horaire, une figure de tabfigA donne une figure de tabfigD, le point B donne le point D.
         indexA = randint(0, nx * ny - 1)
         numA = tabfigA[indexA][2]
         indexcentre1 = randint(0, nx * ny - 1, [indexA])
@@ -1677,7 +1680,7 @@ export default class PavagesEtTransformations extends Exercice {
           texteEnCouleurEtGras(`${numA}`, context.isAmc ? 'black' : 'green') +
           ' dans la rotation de centre ' +
           texteEnCouleurEtGras(`${s0}`, context.isAmc ? 'black' : 'green') +
-          " et d'angle 90° dans le sens des aiguilles d'une montre ?" +
+          " et d'angle 90$^\\circ$ dans le sens des aiguilles d'une montre ?" +
           ajouteChampTexteMathLive(this, 0, KeyboardType.clavierNumbers) +
           '<br>'
         texte += texteAMC1
@@ -1687,11 +1690,11 @@ export default class PavagesEtTransformations extends Exercice {
           texteEnCouleurEtGras(`${numA}`, context.isAmc ? 'black' : 'green') +
           ' dans la rotation de centre ' +
           texteEnCouleurEtGras(`${s0}`, context.isAmc ? 'black' : 'green') +
-          " et d'angle 90° dans le sens des aiguilles d'une montre porte le numéro " +
+          " et d'angle 90$^\\circ$ dans le sens des aiguilles d'une montre porte le numéro " +
           texteEnCouleurEtGras(`${num1}`, orangeMathalea) +
           '.<br>'
 
-        // deuxième question : centre B, rotation 90° sens horaire, une figure de tabfigD donne une figure de tabfigC
+        // deuxième question : centre B, rotation 90$^\\circ$ sens horaire, une figure de tabfigD donne une figure de tabfigC
         indexD = randint(0, nx * ny - 1)
         numD = tabfigD[indexD][2]
         indexcentre2 = randint(0, nx * ny - 1, [indexD])
@@ -1740,7 +1743,7 @@ export default class PavagesEtTransformations extends Exercice {
           texteEnCouleurEtGras(`${numD}`, context.isAmc ? 'black' : 'red') +
           ' dans la rotation de centre ' +
           texteEnCouleurEtGras(`${s1}`, context.isAmc ? 'black' : 'red') +
-          " et d'angle 90° dans le sens contraire des aiguilles d'une montre ?" +
+          " et d'angle 90$^\\circ$ dans le sens contraire des aiguilles d'une montre ?" +
           ajouteChampTexteMathLive(this, 1, KeyboardType.clavierNumbers) +
           '<br>'
         texte += '<br>' + texteAMC2
@@ -1751,11 +1754,11 @@ export default class PavagesEtTransformations extends Exercice {
           texteEnCouleurEtGras(`${numD}`, context.isAmc ? 'black' : 'red') +
           ' dans la rotation de centre ' +
           texteEnCouleurEtGras(`${s1}`, context.isAmc ? 'black' : 'red') +
-          " et d'angle 90° dans le sens contraire des aiguilles d'une montre porte le numéro " +
+          " et d'angle 90$^\\circ$ dans le sens contraire des aiguilles d'une montre porte le numéro " +
           texteEnCouleurEtGras(`${num2}`, orangeMathalea) +
           '.<br>'
 
-        // troisième question : centre B, rotation 90° sens anti-horaire, une figure de tabfigC donne une figure de tabfigD
+        // troisième question : centre B, rotation 90$^\\circ$ sens anti-horaire, une figure de tabfigC donne une figure de tabfigD
         indexC = randint(0, nx * ny - 1)
         numC = tabfigC[indexC][2]
         indexcentre3 = randint(0, nx * ny - 1, [indexC])
@@ -1822,7 +1825,7 @@ export default class PavagesEtTransformations extends Exercice {
             `${s2}`,
             context.isAmc ? 'black' : bleuMathalea,
           ) +
-          " et d'angle 90° dans le sens des aiguilles d'une montre ?" +
+          " et d'angle 90$^\\circ$ dans le sens des aiguilles d'une montre ?" +
           ajouteChampTexteMathLive(this, 2, KeyboardType.clavierNumbers) +
           '<br>'
         texte += '<br>' + texteAMC3
@@ -1839,7 +1842,7 @@ export default class PavagesEtTransformations extends Exercice {
             `${s2}`,
             context.isAmc ? 'black' : bleuMathalea,
           ) +
-          " et d'angle 90° dans le sens des aiguilles d'une montre porte le numéro " +
+          " et d'angle 90$^\\circ$ dans le sens des aiguilles d'une montre porte le numéro " +
           texteEnCouleurEtGras(`${num3}`, orangeMathalea) +
           '.<br>'
 
@@ -2060,7 +2063,10 @@ export default class PavagesEtTransformations extends Exercice {
     listeQuestionsToContenuSansNumero(this)
     if (context.isAmc) {
       this.autoCorrectionAMC[0] = {
-        enonce: consigneAMC,
+        enonce: consigneAMC
+          ?.replace(texteAMC1, '')
+          .replace(texteAMC2, '')
+          .replace(texteAMC3, ''),
         options: { multicols: true },
         propositions: [
           {
