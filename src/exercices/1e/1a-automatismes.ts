@@ -6,7 +6,7 @@ export const titre = 'Sélection d\'automatismes'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const uuid = '722e4'
-export const refs = { 'fr-fr': ['1a-auto'], 'fr-ch': [] }
+export const refs = { 'fr-fr': ['1A'], 'fr-ch': [] }
 export const dateDePublication = '30/04/2026'
 
 /**
