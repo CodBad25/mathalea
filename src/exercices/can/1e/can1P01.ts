@@ -6,6 +6,7 @@ import Exercice from '../../Exercice'
 
 import { KeyboardType } from '../../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
+import { miseEnEvidence } from '../../../lib/outils/embellissements'
 
 export const titre = 'Écrire une probabilité avec les notations'
 export const dateDePublication = '21/07/2022'
@@ -29,7 +30,6 @@ export default class ProbabilitesNotation extends Exercice {
   constructor() {
     super()
     this.sup = true
-
     this.nbQuestions = 1
     this.nbCols = 2 // Uniquement pour la sortie LaTeX
 
@@ -78,7 +78,7 @@ export default class ProbabilitesNotation extends Exercice {
             }
             texte += ` $= ${texNombre(p2, 2)}$`
             texteCorr = `Il ne s'agit pas d'une probabilité conditionnelle. Le pourcentage s'applique sur  l'ensemble des élèves du lycée.<br>
-            $P(F\\cap R)=${texNombre(p2, 2)}$.`
+            $${miseEnEvidence(`P(F\\cap R)`)}=${texNombre(p2, 2)}$.`
             handleAnswers(this, i, {
               reponse: {
                 value: [
@@ -116,7 +116,7 @@ export default class ProbabilitesNotation extends Exercice {
             this.canReponseACompleter = ` En utilisant les événements $F$ et $R$, compléter avec une probabilité :<br>
             $\\ldots = ${texNombre(p2, 2)}$`
             texteCorr = `Il s'agit d'une probabilité conditionnelle. Le pourcentage s'applique sur l'ensemble des filles.<br>
-            $P_F(R)=${texNombre(p2, 2)}$.`
+             $${miseEnEvidence(`P_F(R)`)}=${texNombre(p2, 2)}$.`
             handleAnswers(this, i, {
               reponse: {
                 value: ['P_{F}({R})', 'P_{F}(R)', 'p_{F}({R})', 'p_{F}(R)'],
@@ -146,7 +146,7 @@ export default class ProbabilitesNotation extends Exercice {
             this.canReponseACompleter = ` En utilisant les événements $F$ et $R$, compléter avec une probabilité :<br>
             $\\ldots = ${texNombre(p2, 2)}$`
             texteCorr = `Il s'agit d'une probabilité conditionnelle. Le pourcentage s'applique sur l'ensemble des garçons.<br>
-            $P_{\\overline{F}}(R)=${texNombre(p2, 2)}$.`
+             $${miseEnEvidence(`P_{\\overline{F}}(R)`)}=${texNombre(p2, 2)}$.`
             handleAnswers(this, i, {
               reponse: {
                 value: [
@@ -180,7 +180,7 @@ export default class ProbabilitesNotation extends Exercice {
             this.canReponseACompleter = ` En utilisant les événements $F$ et $R$, compléter avec une probabilité :<br>
             $\\ldots = ${texNombre(p2, 2)}$`
             texteCorr = `Il ne s'agit pas d'une probabilité conditionnelle. Le pourcentage s'applique sur  l'ensemble des élèves du lycée.<br>
-            $P(\\overline{F}\\cap R)=${texNombre(p2, 2)}$.`
+             $${miseEnEvidence(`P(\\overline{F}\\cap R)`)}=${texNombre(p2, 2)}$.`
             handleAnswers(this, i, {
               reponse: {
                 value: [
@@ -215,7 +215,7 @@ export default class ProbabilitesNotation extends Exercice {
             this.canReponseACompleter = ` En utilisant les événements $F$ et $R$, compléter avec une probabilité :<br>
             $\\ldots = ${texNombre(p2, 2)}$`
             texteCorr = `Il s'agit d'une probabilité conditionnelle. Le pourcentage s'applique sur l'ensemble des demi-pensionnaires.<br>
-            $P_{R}(\\overline{F})=${texNombre(p2, 2)}$.`
+             $${miseEnEvidence(`P_{R}(\\overline{F})`)}=${texNombre(p2, 2)}$.`
             handleAnswers(this, i, {
               reponse: {
                 value: [
@@ -272,7 +272,7 @@ export default class ProbabilitesNotation extends Exercice {
             this.canReponseACompleter = ` En utilisant les événements $A$ et $C$, compléter avec une probabilité :<br>
             $\\ldots = ${texNombre(p2, 2)}$`
             texteCorr = `Il s'agit d'une probabilité conditionnelle. Le pourcentage s'applique sur  l'ensemble des pommes du fournisseur A.<br>
-              $P_A(C)=${texNombre(p2, 2)}$.`
+               $${miseEnEvidence(`P_A(C)`)}=${texNombre(p2, 2)}$.`
             handleAnswers(this, i, {
               reponse: {
                 value: [
@@ -309,7 +309,7 @@ export default class ProbabilitesNotation extends Exercice {
             }
             texte += ` $ = ${texNombre(p4, 2)}$`
             texteCorr = `Il s'agit d'une probabilité conditionnelle. Le pourcentage s'applique sur  l'ensemble des pommes du fournisseur A.<br>
-              $P_A(\\overline{C})=${texNombre(p4, 2)}$.`
+              $ $${miseEnEvidence(`P_A(\\overline{C})`)}=${texNombre(p4, 2)}$.`
             handleAnswers(this, i, {
               reponse: {
                 value: [
@@ -352,7 +352,7 @@ export default class ProbabilitesNotation extends Exercice {
             }
             texte += ` $ = ${texNombre(p6, 2)}$`
             texteCorr = `Il s'agit d'une probabilité conditionnelle. Le pourcentage s'applique sur  l'ensemble des pommes commercialisables.<br>
-              $P_C(A)=${texNombre(p6, 2)}$.`
+               $${miseEnEvidence(`P_C(A)`)}=${texNombre(p6, 2)}$.`
             handleAnswers(this, i, {
               reponse: {
                 value: [
@@ -391,7 +391,7 @@ export default class ProbabilitesNotation extends Exercice {
             }
             texte += ` $ = ${texNombre(p6, 2)}$`
             texteCorr = `Il s'agit d'une probabilité conditionnelle. Le pourcentage s'applique sur  l'ensemble des pommes non commercialisables.<br>
-              $P_{\\overline{C}}(\\overline{A})=${texNombre(p6, 2)}$.`
+               $${miseEnEvidence(`P_{\\overline{C}}(\\overline{A})`)}=${texNombre(p6, 2)}$.`
             handleAnswers(this, i, {
               reponse: {
                 value: [
@@ -428,7 +428,7 @@ export default class ProbabilitesNotation extends Exercice {
             }
             texte += ` $ = ${texNombre(p6, 2)}$`
             texteCorr = `Il ne s'agit pas  d'une probabilité conditionnelle. Le pourcentage s'applique sur  l'ensemble des pommes.<br>
-              $P(A\\cap C)=${texNombre(p6, 2)}$.`
+               $${miseEnEvidence(`P(A\\cap C)`)}=${texNombre(p6, 2)}$.`
             handleAnswers(this, i, {
               reponse: {
                 value: [
@@ -461,7 +461,7 @@ export default class ProbabilitesNotation extends Exercice {
             }
             texte += ` $ = ${texNombre(p6, 2)}$`
             texteCorr = `Il ne s'agit pas  d'une probabilité conditionnelle. Le pourcentage s'applique sur  l'ensemble des pommes.<br>
-            $P(\\overline{A}\\cap C)=${texNombre(p6, 2)}$.`
+             $${miseEnEvidence(`P(\\overline{A}\\cap C)`)}=${texNombre(p6, 2)}$.`
             handleAnswers(this, i, {
               reponse: {
                 value: [
@@ -492,7 +492,7 @@ export default class ProbabilitesNotation extends Exercice {
             }
             texte += ` $ = ${texNombre(p6, 2)}$`
             texteCorr = `Il ne s'agit pas  d'une probabilité conditionnelle. Le pourcentage s'applique sur  l'ensemble des pommes.<br>
-          $P(A\\cap \\overline{C})=${texNombre(p6, 2)}$.`
+           $${miseEnEvidence(`P(A\\cap \\overline{C})`)}=${texNombre(p6, 2)}$.`
             handleAnswers(this, i, {
               reponse: {
                 value: [
@@ -545,7 +545,7 @@ export default class ProbabilitesNotation extends Exercice {
             }
             texte += ` $ = ${texNombre(p2, 2)}$`
             texteCorr = `Il s'agit d'une probabilité conditionnelle. Le pourcentage s'applique sur  l'ensemble des personnes malades.<br>
-                $P_M(T)=${texNombre(p2, 2)}$.`
+                 $${miseEnEvidence(`P_M(T)`)}=${texNombre(p2, 2)}$.`
             handleAnswers(this, i, {
               reponse: {
                 value: [
@@ -584,7 +584,7 @@ export default class ProbabilitesNotation extends Exercice {
             }
             texte += ` $ = ${texNombre(p2, 2)}$`
             texteCorr = `Il s'agit d'une probabilité conditionnelle. Le pourcentage s'applique sur  l'ensemble des personnes non malades.<br>
-                $P_{\\overline{M}}(\\overline{T})=${texNombre(p2, 2)}$.`
+                 $${miseEnEvidence(`P_{\\overline{M}}(\\overline{T})`)}=${texNombre(p2, 2)}$.`
             handleAnswers(this, i, {
               reponse: {
                 value: [
@@ -623,9 +623,9 @@ export default class ProbabilitesNotation extends Exercice {
             } else {
               texte += '$\\ldots\\ldots $'
             }
-            texte += ` $ = ${texNombre(p2, 2)}$`
+            texte += ` $ = ${texNombre(p4, 2)}$`
             texteCorr = `Il s'agit d'une probabilité conditionnelle. Le pourcentage s'applique sur  l'ensemble des tests positifs.<br>
-                $P_{T}(\\overline{M})=${texNombre(p2, 2)}$.`
+                 $${miseEnEvidence(`P_{T}(\\overline{M})`)}=${texNombre(p4, 2)}$.`
             handleAnswers(this, i, {
               reponse: {
                 value: [
@@ -662,7 +662,7 @@ export default class ProbabilitesNotation extends Exercice {
             }
             texte += ` $ = ${texNombre(p4, 2)}$`
             texteCorr = `Il s'agit d'une probabilité conditionnelle. Le pourcentage s'applique sur  l'ensemble des tests positifs.<br>
-                $P_{\\overline{T}}(M)=${texNombre(p4, 2)}$.`
+                 $${miseEnEvidence(`P_{\\overline{T}}(M)`)}=${texNombre(p4, 2)}$.`
             handleAnswers(this, i, {
               reponse: {
                 value: [
@@ -694,7 +694,7 @@ export default class ProbabilitesNotation extends Exercice {
             }
             texte += ` $ = ${texNombre(p4, 2)}$`
             texteCorr = `Il ne s'agit pas  d'une probabilité conditionnelle. Le pourcentage s'applique sur  l'ensemble des personnes.<br>
-                $P(T\\cap M)=${texNombre(p4, 2)}$.`
+                 $${miseEnEvidence(`P(T\\cap M)`)}=${texNombre(p4, 2)}$.`
             handleAnswers(this, i, {
               reponse: {
                 value: [
@@ -728,7 +728,7 @@ export default class ProbabilitesNotation extends Exercice {
             }
             texte += ` $ = ${texNombre(p4, 2)}$`
             texteCorr = `Il ne s'agit pas  d'une probabilité conditionnelle. Le pourcentage s'applique sur  l'ensemble des personnes.<br>
-                $P(T\\cap \\overline{M})=${texNombre(p4, 2)}$.`
+                 $${miseEnEvidence(`P(T\\cap \\overline{M})`)}=${texNombre(p4, 2)}$.`
             handleAnswers(this, i, {
               reponse: {
                 value: [
