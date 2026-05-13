@@ -4,6 +4,7 @@
   Aires et périmètres
   Algorithmique-programmation
   Arithmétique
+  Automatismes
   Calcul littéral
   Calcul numérique
   Coordonnées terrestres
@@ -6986,5 +6987,21 @@ export const dictionnaireDNB = {
     numeroInitial: '4',
     typeExercice: 'dnb',
     tags: ['Arithmétique'],
+  },
+  dnb_2026_01_sujet0va_automatismes: {
+    annee: '2026',
+    lieu: 'Sujet O Version B',
+    mois: 'Janvier',
+    numeroInitial: 'automatismes',
+    typeExercice: 'dnb',
+    tags: ['Automatismes'],
+  },
+  dnb_2026_01_sujet0vb_automatismes: {
+    annee: '2026',
+    lieu: 'Sujet O Version A',
+    mois: 'Janvier',
+    numeroInitial: 'automatismes',
+    typeExercice: 'dnb',
+    tags: ['Automatismes'],
   },
 }
