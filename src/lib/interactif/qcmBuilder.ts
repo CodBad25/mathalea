@@ -84,11 +84,22 @@ export function buildQcmForExercise(
     }),
   )
 
+  const aucuneIndex = qcmPropositions.findIndex((p) =>
+    /^Aucune de ces propositions\.?$/.test(p.texte?.trim() ?? ''),
+  )
+  const hasAucune = aucuneIndex !== -1
+  if (hasAucune && aucuneIndex !== qcmPropositions.length - 1) {
+    const [aucuneProp] = qcmPropositions.splice(aucuneIndex, 1)
+    qcmPropositions.push(aucuneProp)
+  }
+
   if (autoCorrectionOptions.dontKnow) {
     qcmPropositions.push({
       texte: 'Je ne sais pas',
       statut: false,
     })
+    autoCorrectionOptions.lastChoice = qcmPropositions.length - (hasAucune ? 3 : 2)
+  } else if (hasAucune) {
     autoCorrectionOptions.lastChoice = qcmPropositions.length - 2
   }
 
