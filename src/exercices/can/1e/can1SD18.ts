@@ -6,6 +6,7 @@ import {
   rienSi1,
 } from '../../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../../lib/outils/embellissements'
+import { context } from '../../../modules/context'
 import { listeQuestionsToContenu, randint } from '../../../modules/outils'
 import Exercice from '../../Exercice'
 import { bleuMathalea } from '../../../lib/colors'
@@ -38,6 +39,7 @@ export default class TableauSignesSecondDegre extends Exercice {
 
   nouvelleVersion() {
     const coul0 = bleuMathalea
+    const coul0Cmd = context.isHtml ? `\\color{${coul0}}` : `\\color[HTML]{${coul0.replace('#', '')}}`
     let texte,
       texteCorr,
       a,
@@ -54,9 +56,9 @@ export default class TableauSignesSecondDegre extends Exercice {
       b = randint(1, 9) * choice([-1, 1]) // racine1
       c = randint(1, 9, [b, -b]) * choice([-1, 1]) // racine2
       texteCorr = `$${rienSi1(a)}(x${ecritureAlgebrique(-b)})(x${ecritureAlgebrique(-c)})
-        =\\mathbf{\\color{${coul0}}{${rienSi1(a)}}}\\color{black}(x-\\mathbf{\\color{${coul0}}{${ecritureParentheseSiNegatif(b)}}}\\color{black})(x-\\mathbf{\\color{${coul0}}{${ecritureParentheseSiNegatif(c)}}}\\color{black})$ 
+        =\\mathbf{${coul0Cmd}{${rienSi1(a)}}}\\color{black}(x-\\mathbf{${coul0Cmd}{${ecritureParentheseSiNegatif(b)}}}\\color{black})(x-\\mathbf{${coul0Cmd}{${ecritureParentheseSiNegatif(c)}}}\\color{black})$ 
         est de la forme $${miseEnEvidence('a(x-x_1)(x-x_2)', bleuMathalea)}$
-        avec $a=\\mathbf{\\color{${coul0}}{${a}}}$, $x_1=\\mathbf{\\color{${coul0}}{${b}}}$ et $x_2=\\mathbf{\\color{${coul0}}{${c}}}$.<br>
+        avec $a=\\mathbf{${coul0Cmd}{${a}}}$, $x_1=\\mathbf{${coul0Cmd}{${b}}}$ et $x_2=\\mathbf{${coul0Cmd}{${c}}}$.<br>
         Cette forme est une expression factorisée d'un polynôme du second degré. <br>
         Cette expression est du signe de $a$ sauf entre ses racines.<br>
        `
@@ -123,7 +125,7 @@ export default class TableauSignesSecondDegre extends Exercice {
 
           if (a < 0) {
             texteCorr += `Ici, $a$ est négatif, donc $${rienSi1(a)}(x${ecritureAlgebrique(-b)})(x${ecritureAlgebrique(-c)})$ est négatif sauf entre ses racines 
-            $${b > c ? `\\mathbf{\\color{${coul0}}{${c}}}` : `\\mathbf{\\color{${coul0}}{${b}}}`}$ et  $${b > c ? `\\mathbf{\\color{${coul0}}{${b}}}` : `\\mathbf{\\color{${coul0}}{${c}}}`}$. <br>
+            $${b > c ? `\\mathbf{${coul0Cmd}{${c}}}` : `\\mathbf{${coul0Cmd}{${b}}}`}$ et  $${b > c ? `\\mathbf{${coul0Cmd}{${b}}}` : `\\mathbf{${coul0Cmd}{${c}}}`}$. <br>
             
             
 Il est donc positif entre ses racines. On en déduit que l'ensemble des solutions est `
@@ -133,7 +135,7 @@ Il est donc positif entre ses racines. On en déduit que l'ensemble des solution
               texteCorr += `$${miseEnEvidence('[')}${b > c ? `${miseEnEvidence(c)}` : `${miseEnEvidence(b)}`}\\,${miseEnEvidence(';')}\\,${b > c ? `${miseEnEvidence(b)}` : `${miseEnEvidence(c)}`}${miseEnEvidence(']')}$. `
             }
           } else {
-            texteCorr += `Ici, $a$ est positif, donc $${rienSi1(a)}(x${ecritureAlgebrique(-b)})(x${ecritureAlgebrique(-c)})$ est positif sauf entre ses racines  $${b > c ? `\\mathbf{\\color{${coul0}}{${c}}}` : `\\mathbf{\\color{${coul0}}{${b}}}`}$ et  $${b > c ? `\\mathbf{\\color{${coul0}}{${b}}}` : `\\mathbf{\\color{${coul0}}{${c}}}`}$.<br>
+            texteCorr += `Ici, $a$ est positif, donc $${rienSi1(a)}(x${ecritureAlgebrique(-b)})(x${ecritureAlgebrique(-c)})$ est positif sauf entre ses racines  $${b > c ? `\\mathbf{${coul0Cmd}{${c}}}` : `\\mathbf{${coul0Cmd}{${b}}}`}$ et  $${b > c ? `\\mathbf{${coul0Cmd}{${b}}}` : `\\mathbf{${coul0Cmd}{${c}}}`}$.<br>
 On en déduit que l'ensemble des solutions est `
             if (inegalite === '>') {
               texteCorr += `$${miseEnEvidence(']-\\infty \\,;')}\\,${c < b ? `${miseEnEvidence(c)}` : `${miseEnEvidence(b)}`}${miseEnEvidence('[\\cup ]')}${b > c ? `${miseEnEvidence(b)}` : `${miseEnEvidence(c)}`}\\,${miseEnEvidence(';\\, +\\infty[')}$.`
@@ -207,7 +209,7 @@ On en déduit que l'ensemble des solutions est `
 
           if (a < 0) {
             texteCorr += `Ici, $a$ est négatif, donc $${rienSi1(a)}(x${ecritureAlgebrique(-b)})(x${ecritureAlgebrique(-c)})$ est négatif sauf entre ses racines 
-            $${b > c ? `\\mathbf{\\color{${coul0}}{${c}}}` : `\\mathbf{\\color{${coul0}}{${b}}}`}$ et  $${b > c ? `\\mathbf{\\color{${coul0}}{${b}}}` : `\\mathbf{\\color{${coul0}}{${c}}}`}$. <br>
+            $${b > c ? `\\mathbf{${coul0Cmd}{${c}}}` : `\\mathbf{${coul0Cmd}{${b}}}`}$ et  $${b > c ? `\\mathbf{${coul0Cmd}{${b}}}` : `\\mathbf{${coul0Cmd}{${c}}}`}$. <br>
             
             
  On en déduit que l'ensemble des solutions est `
@@ -217,7 +219,7 @@ On en déduit que l'ensemble des solutions est `
               texteCorr += `$${miseEnEvidence(']-\\infty \\,;')}\\,${c < b ? `${miseEnEvidence(c)}` : `${miseEnEvidence(b)}`}${miseEnEvidence(']\\cup [')}${b > c ? `${miseEnEvidence(b)}` : `${miseEnEvidence(c)}`}\\,${miseEnEvidence(';\\, +\\infty[')}$.`
             }
           } else {
-            texteCorr += `Ici, $a$ est positif, donc $${rienSi1(a)}(x${ecritureAlgebrique(-b)})(x${ecritureAlgebrique(-c)})$ est positif sauf entre ses racines  $${b > c ? `\\mathbf{\\color{${coul0}}{${c}}}` : `\\mathbf{\\color{${coul0}}{${b}}}`}$ et  $${b > c ? `\\mathbf{\\color{${coul0}}{${b}}}` : `\\mathbf{\\color{${coul0}}{${c}}}`}$.<br>
+            texteCorr += `Ici, $a$ est positif, donc $${rienSi1(a)}(x${ecritureAlgebrique(-b)})(x${ecritureAlgebrique(-c)})$ est positif sauf entre ses racines  $${b > c ? `\\mathbf{${coul0Cmd}{${c}}}` : `\\mathbf{${coul0Cmd}{${b}}}`}$ et  $${b > c ? `\\mathbf{${coul0Cmd}{${b}}}` : `\\mathbf{${coul0Cmd}{${c}}}`}$.<br>
 Il est donc négatif entre ses racines. On en déduit que l'ensemble des solutions est `
             if (inegalite === '<') {
               texteCorr += `$${miseEnEvidence(']')}${b > c ? `${miseEnEvidence(c)}` : `${miseEnEvidence(b)}`}\\,${miseEnEvidence(';')}\\,${b > c ? `${miseEnEvidence(b)}` : `${miseEnEvidence(c)}`}${miseEnEvidence('[')}$. `
