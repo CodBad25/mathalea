@@ -311,9 +311,9 @@ export function termsGrouped(options: CheckOverrides = {}): Check {
   )
 }
 
-export function distributed(options: CheckOverrides = {}): Check {
+export function isDistributed(options: CheckOverrides = {}): Check {
   return createReductionCheck(
-    'distributed',
+    'isDistributed',
     "Cette expression n'est pas assez réduite : les produits doivent être développés.",
     isDistributedExpression,
     options,

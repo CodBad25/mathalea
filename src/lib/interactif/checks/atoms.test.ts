@@ -3,19 +3,19 @@ import { describe, expect, it } from 'vitest'
 import { all } from './combinators'
 import { contains } from './contains'
 import { doesNotContain } from './doesNotContain'
-import { equals } from './equals'
+import { isEqual } from './isEqual'
 import { isReduced } from './isReduced'
 import {
-  distributed,
+  isDistributed,
   noNumericComputation,
   noTrivialFactor,
   termsGrouped,
 } from './reductionAtoms'
 
 describe('checks atoms', () => {
-  describe('equals', () => {
+  describe('isEqual', () => {
     it('checks mathematical equality using the current comparator engine', () => {
-      const compare = all([equals()])
+      const compare = all([isEqual()])
 
       expect(compare('\\sqrt{36}', '6').isOk).toBe(true)
       expect(compare('7', '6')).toMatchObject({
@@ -25,32 +25,32 @@ describe('checks atoms', () => {
     })
 
     it('uses exact comparison when tolerance is omitted', () => {
-      expect(all([equals()])('0.1', '1')).toMatchObject({
+      expect(all([isEqual()])('0.1', '1')).toMatchObject({
         isOk: false,
         score: 0,
       })
-      expect(all([equals()])('1', '1')).toMatchObject({
+      expect(all([isEqual()])('1', '1')).toMatchObject({
         isOk: true,
         score: 1,
       })
     })
 
     it('does not parse an empty input as zero in tolerance mode', () => {
-      const compare = all([equals({ tolerance: -2 })])
+      const compare = all([isEqual({ tolerance: -2 })])
 
       expect(compare('', '0')).toMatchObject({ isOk: false, score: 0 })
       expect(compare('   ', '0')).toMatchObject({ isOk: false, score: 0 })
     })
 
     it('accepts tolerance 0 as approximate comparison with tolerance 1', () => {
-      const compare = all([equals({ tolerance: 0 })])
+      const compare = all([isEqual({ tolerance: 0 })])
 
       expect(compare('0.1', '1')).toMatchObject({ isOk: true, score: 1 })
       expect(compare('-0.1', '1')).toMatchObject({ isOk: false, score: 0 })
     })
 
     it('supports power-of-ten tolerance', () => {
-      const compare = all([equals({ tolerance: -2 })])
+      const compare = all([isEqual({ tolerance: -2 })])
 
       expect(compare('1.005', '1')).toMatchObject({ isOk: true, score: 1 })
       expect(compare('1.02', '1')).toMatchObject({ isOk: false, score: 0 })
@@ -58,24 +58,27 @@ describe('checks atoms', () => {
     })
 
     it('uses the tolerance value as an exponent directly', () => {
-      const compare = all([equals({ tolerance: -1 })])
+      const compare = all([isEqual({ tolerance: -1 })])
 
       expect(compare('0.9', '1')).toMatchObject({ isOk: true, score: 1 })
       expect(compare('0.89', '1')).toMatchObject({ isOk: false, score: 0 })
     })
 
     it('applies tolerance to simple fractions', () => {
-      expect(all([equals({ tolerance: -1 })])('0.45', '1/2')).toMatchObject({
+      expect(all([isEqual({ tolerance: -1 })])('0.45', '1/2')).toMatchObject({
         isOk: true,
         score: 1,
       })
       expect(
-        all([equals({ tolerance: -2 })])('0.49', '\\dfrac{1}{2}'),
+        all([isEqual({ tolerance: -2 })])('0.49', '\\dfrac{1}{2}'),
+      ).toMatchObject({ isOk: true, score: 1 })
+      expect(
+        all([isEqual({ tolerance: -2 })])('0.49', '\\dfrac12'),
       ).toMatchObject({ isOk: true, score: 1 })
     })
 
     it('applies tolerance to simple monomial coefficients when requested', () => {
-      const compare = all([equals({ tolerance: -0.05 })])
+      const compare = all([isEqual({ tolerance: -0.05 })])
 
       expect(compare('0.9*z', 'z')).toMatchObject({ isOk: true, score: 1 })
       expect(compare('0.9z', 'z')).toMatchObject({ isOk: true, score: 1 })
@@ -90,12 +93,12 @@ describe('checks atoms', () => {
 
     it('normalizes comma as decimal separator', () => {
       // '1,5' and '1.5' both parse to 1.5, so exact comparison passes
-      const compare = all([equals()])
+      const compare = all([isEqual()])
       expect(compare('1,5', '1.5').isOk).toBe(true)
     })
 
     it('tolerance boundary: exactly at tolerance passes, just outside fails', () => {
-      const compare = all([equals({ tolerance: -1 })])
+      const compare = all([isEqual({ tolerance: -1 })])
 
       // exactly at tolerance → passes (≤)
       expect(compare('1.1', '1')).toMatchObject({ isOk: true, score: 1 })
@@ -104,7 +107,7 @@ describe('checks atoms', () => {
     })
 
     it('negative numbers with tolerance', () => {
-      const compare = all([equals({ tolerance: -1 })])
+      const compare = all([isEqual({ tolerance: -1 })])
 
       expect(compare('-1.02', '-1')).toMatchObject({ isOk: true, score: 1 })
       expect(compare('-1.11', '-1')).toMatchObject({ isOk: false, score: 0 })
@@ -112,7 +115,7 @@ describe('checks atoms', () => {
 
     it('custom feedbackKo overrides the default error message', () => {
       const compare = all([
-        equals({ feedbackKo: 'Mauvaise réponse personnalisée.' }),
+        isEqual({ feedbackKo: 'Mauvaise réponse personnalisée.' }),
       ])
 
       const result = compare('7', '6')
@@ -122,7 +125,7 @@ describe('checks atoms', () => {
 
     it('custom feedbackOk appears in feedback when check passes but answer globally wrong', () => {
       const compare = all([
-        equals({ feedbackOk: 'La valeur numérique est bonne.' }),
+        isEqual({ feedbackOk: 'La valeur numérique est bonne.' }),
         {
           name: 'shape',
           run: () => ({ passed: false, feedbackKo: 'Forme incorrecte.' }),
@@ -138,7 +141,7 @@ describe('checks atoms', () => {
     it('non-numeric inputs with tolerance fall through to fonctionComparaison', () => {
       // When neither input parses as finite number nor as simple monomial,
       // compareWithTolerance returns undefined and fonctionComparaison is called
-      const compare = all([equals({ tolerance: -2 })])
+      const compare = all([isEqual({ tolerance: -2 })])
 
       // '\\frac{1}{2}' parses as 0.5 via asNumber, '0.5' parses as 0.5 → numeric path
       expect(compare('\\frac{1}{2}', '0.5')).toMatchObject({
@@ -293,7 +296,7 @@ describe('checks atoms', () => {
     })
 
     it('composes reduction atoms independently from mathematical equality', () => {
-      const compare = all([equals({ weight: 0.7 }), isReduced({ weight: 0.3 })])
+      const compare = all([isEqual({ weight: 0.7 }), isReduced({ weight: 0.3 })])
 
       expect(compare('2x', 'x+x')).toMatchObject({
         isOk: true,
@@ -491,8 +494,8 @@ describe('checks atoms', () => {
       })
     })
 
-    it('distributed refuses products over sums', () => {
-      const compare = all([distributed()])
+    it('isDistributed refuses products over sums', () => {
+      const compare = all([isDistributed()])
 
       expect(compare('(1+x)y', '0')).toMatchObject({ isOk: false, score: 0 })
       expect(compare('2(x+1)', '0')).toMatchObject({ isOk: false, score: 0 })
@@ -513,8 +516,8 @@ describe('checks atoms', () => {
       '(2*x+1)y',
       '(x+1)(x-1)',
       '-(x+1)y',
-    ])('distributed refuses %s', (saisie) => {
-      expect(all([distributed()])(saisie, '0')).toMatchObject({
+    ])('isDistributed refuses %s', (saisie) => {
+      expect(all([isDistributed()])(saisie, '0')).toMatchObject({
         isOk: false,
         score: 0,
       })
@@ -530,8 +533,8 @@ describe('checks atoms', () => {
       'x*y*z*k*1*k*4',
       '2x^2y^2',
       '-xy-y',
-    ])('distributed accepts %s', (saisie) => {
-      expect(all([distributed()])(saisie, '0')).toMatchObject({
+    ])('isDistributed accepts %s', (saisie) => {
+      expect(all([isDistributed()])(saisie, '0')).toMatchObject({
         isOk: true,
         score: 1,
       })
@@ -548,9 +551,9 @@ describe('checks atoms', () => {
       ['2*3*x', 'noNumericComputation'],
       ['x+0', 'noTrivialFactor'],
       ['x+x', 'termsGrouped'],
-      ['(1+x)y', 'distributed'],
-      ['2(x+1)', 'distributed'],
-      ['(x+y)^2', 'distributed'],
+      ['(1+x)y', 'isDistributed'],
+      ['2(x+1)', 'isDistributed'],
+      ['(x+y)^2', 'isDistributed'],
       ['-1-1+2x', 'noNumericComputation'],
     ])('isReduced refuses %s through %s', (saisie) => {
       expect(all([isReduced()])(saisie, '0')).toMatchObject({

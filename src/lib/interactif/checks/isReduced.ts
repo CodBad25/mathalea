@@ -1,6 +1,6 @@
 import { all } from './combinators'
 import {
-  distributed,
+  isDistributed,
   noNumericComputation,
   noTrivialFactor,
   termsGrouped,
@@ -12,7 +12,7 @@ export function isReduced(options: CheckOverrides = {}): Check {
     noTrivialFactor(),
     noNumericComputation(),
     termsGrouped(),
-    distributed(),
+    isDistributed(),
   ])
 
   return {

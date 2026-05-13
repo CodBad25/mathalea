@@ -33,9 +33,9 @@ function hasReducibleFraction(value: string): boolean {
   return false
 }
 
-export function irreducibleFractions(options: CheckOverrides = {}): Check {
+export function onlyIrreducibleFractions(options: CheckOverrides = {}): Check {
   return {
-    name: options.name ?? 'irreducibleFractions',
+    name: options.name ?? 'onlyIrreducibleFractions',
     weight: options.weight,
     feedbackEnabled: options.feedbackEnabled,
     feedbackOnSuccess: options.feedbackOnSuccess,

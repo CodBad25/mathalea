@@ -1,6 +1,6 @@
 import { bleuMathalea } from '../../lib/colors'
 import { addMultiMathfield } from '../../lib/interactif/MultiMathfield/MultiMathfield'
-import { all, equals, isReduced } from '../../lib/interactif/checks'
+import { all, isEqual, isReduced } from '../../lib/interactif/checks'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnCouleur, miseEnEvidence } from '../../lib/outils/embellissements'
@@ -353,7 +353,7 @@ export default class PeriodeFrequenceFonctionTrigonometrique extends Exercice {
 
     const resultats = this.champsDemandes.map((champ) => {
       const saisie = multi.getValue()[champ] ?? ''
-      const ok = all([equals(), isReduced()])(saisie, reponse[champ]).isOk
+      const ok = all([isEqual(), isReduced()])(saisie, reponse[champ]).isOk
       const mathfield = multi.shadowRoot?.querySelector(
         `#multiMathfieldEx${this.numeroExercice}Q${i}-${champ}`,
       ) as (HTMLElement & { readOnly: boolean; classList: DOMTokenList }) | null

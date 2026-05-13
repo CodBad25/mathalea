@@ -1,33 +1,14 @@
 import { fonctionComparaison } from '../comparisonFunctions'
+import { evaluateArithmeticExpression } from './evaluateArithmeticExpression'
+import { normalizeLatexArithmetic } from './latexArithmetic'
 import type { Check, EqualsOptions } from './types'
 
 function asNumber(value: string): number {
-  const normalized = value
-    .trim()
-    .replaceAll(',', '.')
-    .replaceAll('{,}', '.')
-    .replace(/\s+/g, '')
+  const normalized = normalizeLatexArithmetic(value)
 
   if (normalized === '') return Number.NaN
 
-  const latexFraction = normalized.match(
-    /^(-?)\\d?frac\{([^{}]+)\}\{([^{}]+)\}$/,
-  )
-  if (latexFraction != null) {
-    const sign = latexFraction[1] === '-' ? -1 : 1
-    const numerator = asNumber(latexFraction[2])
-    const denominator = asNumber(latexFraction[3])
-    return sign * (numerator / denominator)
-  }
-
-  const simpleFraction = normalized.match(/^(-?[^/]+)\/(-?[^/]+)$/)
-  if (simpleFraction != null) {
-    const numerator = asNumber(simpleFraction[1])
-    const denominator = asNumber(simpleFraction[2])
-    return numerator / denominator
-  }
-
-  return Number(normalized)
+  return evaluateArithmeticExpression(normalized) ?? Number.NaN
 }
 
 function compareWithTolerance(
@@ -109,9 +90,9 @@ function compareSimpleMonomials(
   )
 }
 
-export function equals(options: EqualsOptions = {}): Check {
+export function isEqual(options: EqualsOptions = {}): Check {
   return {
-    name: options.name ?? 'equals',
+    name: options.name ?? 'isEqual',
     weight: options.weight,
     feedbackEnabled: options.feedbackEnabled,
     feedbackOnSuccess: options.feedbackOnSuccess,

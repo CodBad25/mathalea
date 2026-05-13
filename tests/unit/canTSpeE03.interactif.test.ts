@@ -24,9 +24,11 @@ function texConstante(constante: number): string {
 function installMathfield(values: Record<string, string>) {
   const mathfield = document.createElement('div') as unknown as HTMLElement & {
     getPromptValue: (key: string) => string
+    setPromptState: (key: string, state: string, value: boolean) => void
   }
   mathfield.id = 'champTexteEx0Q0'
   mathfield.getPromptValue = (key: string) => values[key] ?? ''
+  mathfield.setPromptState = vi.fn()
   document.body.appendChild(mathfield)
 }
 
@@ -63,11 +65,18 @@ describe('canTSpeE03 / 3G98-1 interactif', () => {
       champ3: coordinateExpression(expected, 2),
     })
 
-    for (const key of ['champ1', 'champ2', 'champ3']) {
-      const reponse = valeurs[key]
-      const result = reponse.compare('', String(reponse.value), reponse.options)
-      expect(result.isOk).toBe(true)
-    }
+    expect(valeurs.champ1.compare).toBeUndefined()
+    expect(valeurs.champ2.compare).toBeUndefined()
+    expect(valeurs.champ3.compare).toBeUndefined()
+    const result = valeurs.callback(
+      exercice,
+      0,
+      Object.entries(valeurs).filter(([key]) => key.startsWith('champ')),
+      valeurs.bareme,
+    )
+
+    expect(result.isOk).toBe(true)
+    expect(result.score).toEqual({ nbBonnesReponses: 1, nbReponses: 1 })
   })
 
   it('accepte une représentation équivalente utilisant un vecteur directeur proportionnel', () => {
@@ -88,10 +97,11 @@ describe('canTSpeE03 / 3G98-1 interactif', () => {
       champ3: coordinateExpression(expected, 2, 2),
     })
 
-    const result = valeurs.champ1.compare(
-      '',
-      String(valeurs.champ1.value),
-      valeurs.champ1.options,
+    const result = valeurs.callback(
+      exercice,
+      0,
+      Object.entries(valeurs).filter(([key]) => key.startsWith('champ')),
+      valeurs.bareme,
     )
 
     expect(result.isOk).toBe(true)

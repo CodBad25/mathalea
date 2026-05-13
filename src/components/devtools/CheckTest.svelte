@@ -8,41 +8,83 @@
     all,
     seq,
     contains,
+    sameWithUnit,
+    coordinatesReduced,
     doesNotContain,
-    distributed,
-    equals,
+    isDistributed,
+    isEqual,
     extractedRadicands,
-    irreducibleFractions,
+    fractionReducedFromExpected,
+    hasGroupedNumberSpacing,
+    intervalBoundsReduced,
+    noSquareRootInDenominator,
+    onlyIrreducibleFractions,
+    hasZeroMember,
+    isDecimalFraction,
+    onlyDecimalNumbers,
+    isEquation,
+    isEquivalentEquation,
+    isFraction,
+    isPowerForm,
     isReduced,
+    isScientificNotation,
     noNumericComputation,
     noTrivialFactor,
     noDecimal,
-    sameCartesianEquation,
+    noTrigonometry,
+    sameCoordinates,
     sameDescribedSet,
+    sameDuration,
+    sameInterval,
+    sameNumberList,
+    sameNumberTuple,
+    sameOrderedNumberList,
     sameParametricLine,
-    setEquality,
+    sameSet,
     singleParameterVariable,
     stringEquals,
     termsGrouped,
+    valueInInterval,
   } from '../../lib/interactif/checks'
   import type { Check, CompareResult } from '../../lib/interactif/checks'
 
   type CheckKind =
-    | 'equals'
+    | 'isEqual'
     | 'contains'
     | 'doesNotContain'
     | 'isReduced'
     | 'noTrivialFactor'
     | 'noNumericComputation'
     | 'termsGrouped'
-    | 'distributed'
-    | 'irreducibleFractions'
+    | 'isDistributed'
+    | 'onlyIrreducibleFractions'
+    | 'fractionReducedFromExpected'
+    | 'noSquareRootInDenominator'
     | 'noDecimal'
     | 'extractedRadicands'
-    | 'sameCartesianEquation'
+    | 'coordinatesReduced'
+    | 'intervalBoundsReduced'
+    | 'isFraction'
+    | 'isDecimalFraction'
+    | 'onlyDecimalNumbers'
+    | 'isScientificNotation'
+    | 'isPowerForm'
+    | 'noTrigonometry'
+    | 'hasGroupedNumberSpacing'
+    | 'isEquation'
+    | 'isEquivalentEquation'
+    | 'hasZeroMember'
+    | 'sameDuration'
+    | 'sameCoordinates'
+    | 'sameInterval'
+    | 'valueInInterval'
+    | 'sameWithUnit'
+    | 'sameNumberTuple'
+    | 'sameNumberList'
+    | 'sameOrderedNumberList'
     | 'sameDescribedSet'
     | 'sameParametricLine'
-    | 'setEquality'
+    | 'sameSet'
     | 'singleParameterVariable'
     | 'stringEquals'
 
@@ -55,68 +97,418 @@
     feedbackOnSuccess: boolean
     feedbackKo: string
     feedbackOk: string
-    // equals
+    // isEqual
     equalsMode: 'exact' | 'tolerance'
     tolerance: string | number
     // contains / doesNotContain
     pattern: string
-    // setEquality / sameDescribedSet
+    // sameSet / sameDescribedSet
     variable: string
     // singleParameterVariable
     expectedParameter: string
     strictExpectedParameter: boolean
+    // sameWithUnit
+    strictSameUnit: boolean
+    // sameNumberList
+    allowRepeatedNumbers: boolean
     // stringEquals
     trim: boolean
     ignoreCase: boolean
   }
 
   const CHECK_LABELS: Record<CheckKind, string> = {
-    equals: 'equals',
+    isEqual: 'isEqual',
     contains: 'contains',
     doesNotContain: 'doesNotContain',
     isReduced: 'isReduced',
     noTrivialFactor: 'noTrivialFactor',
     noNumericComputation: 'noNumericComputation',
     termsGrouped: 'termsGrouped',
-    distributed: 'distributed',
-    irreducibleFractions: 'irreducibleFractions',
+    isDistributed: 'isDistributed',
+    onlyIrreducibleFractions: 'onlyIrreducibleFractions',
+    fractionReducedFromExpected: 'fractionReducedFromExpected',
+    noSquareRootInDenominator: 'noSquareRootInDenominator',
     noDecimal: 'noDecimal',
     extractedRadicands: 'extractedRadicands',
-    sameCartesianEquation: 'sameCartesianEquation',
+    coordinatesReduced: 'coordinatesReduced',
+    intervalBoundsReduced: 'intervalBoundsReduced',
+    isFraction: 'isFraction',
+    isDecimalFraction: 'isDecimalFraction',
+    onlyDecimalNumbers: 'onlyDecimalNumbers',
+    isScientificNotation: 'isScientificNotation',
+    isPowerForm: 'isPowerForm',
+    noTrigonometry: 'noTrigonometry',
+    hasGroupedNumberSpacing: 'hasGroupedNumberSpacing',
+    isEquation: 'isEquation',
+    isEquivalentEquation: 'isEquivalentEquation',
+    hasZeroMember: 'hasZeroMember',
+    sameDuration: 'sameDuration',
+    sameCoordinates: 'sameCoordinates',
+    sameInterval: 'sameInterval',
+    valueInInterval: 'valueInInterval',
+    sameWithUnit: 'sameWithUnit',
+    sameNumberTuple: 'sameNumberTuple',
+    sameNumberList: 'sameNumberList',
+    sameOrderedNumberList: 'sameOrderedNumberList',
     sameDescribedSet: 'sameDescribedSet',
     sameParametricLine: 'sameParametricLine',
-    setEquality: 'setEquality',
+    sameSet: 'sameSet',
     singleParameterVariable: 'singleParameterVariable',
     stringEquals: 'stringEquals',
   }
 
   const CHECK_DESCRIPTIONS: Record<CheckKind, string> = {
-    equals: "Vérifie l'égalité mathématique (ou avec tolérance numérique)",
-    contains: 'Vérifie que la saisie contient un motif (texte ou /regex/)',
-    doesNotContain: 'Vérifie que la saisie ne contient pas un motif',
+    isEqual: "Vérifie l'égalité mathématique (ou avec tolérance numérique)",
+    contains: "Vérifie que la saisie contient un motif (texte ou /regex/)",
+    doesNotContain: "Vérifie que la saisie ne contient pas un motif",
     isReduced:
-      'Compose noTrivialFactor, noNumericComputation, termsGrouped et distributed',
-    noTrivialFactor: 'Refuse les facteurs triviaux et les termes nuls',
-    noNumericComputation: 'Refuse les calculs numériques non effectués',
-    termsGrouped: 'Vérifie que les termes semblables sont regroupés',
-    distributed: 'Vérifie que les produits sur des sommes sont développés',
-    irreducibleFractions:
-      'Vérifie que toutes les fractions saisies sont irréductibles',
-    noDecimal: 'Refuse les écritures décimales non entières dans la saisie',
+      "Compose noTrivialFactor, noNumericComputation, termsGrouped et isDistributed",
+    noTrivialFactor: "Refuse les facteurs triviaux et les termes nuls",
+    noNumericComputation: "Refuse les calculs numériques non effectués",
+    termsGrouped: "Vérifie que les termes semblables sont regroupés",
+    isDistributed: "Vérifie que les produits sur des sommes sont développés",
+    onlyIrreducibleFractions:
+      "Vérifie que toutes les fractions saisies sont irréductibles",
+    fractionReducedFromExpected:
+      "Vérifie que la fraction est une réduction stricte de la fraction attendue",
+    noSquareRootInDenominator:
+      "Vérifie qu'aucune racine carrée n'apparaît au dénominateur",
+    noDecimal: "Refuse les écritures décimales non entières dans la saisie",
     extractedRadicands:
-      'Vérifie que les facteurs carrés sont extraits des racines carrées',
-    sameCartesianEquation:
-      'Vérifie que deux équations cartésiennes décrivent la même droite',
+      "Vérifie que les facteurs carrés sont extraits des racines carrées",
+    coordinatesReduced:
+      "Vérifie que chaque coordonnée est écrite sous forme réduite",
+    intervalBoundsReduced:
+      "Vérifie que chaque borne d'intervalle est écrite sous forme réduite",
+    isFraction: "Vérifie que la saisie est une fraction",
+    isDecimalFraction: "Vérifie que la saisie est une fraction décimale",
+    onlyDecimalNumbers:
+      "Vérifie que tous les nombres de la saisie sont écrits en décimal ou en entier",
+    isScientificNotation:
+      "Vérifie que la saisie est écrite en notation scientifique",
+    isPowerForm: "Vérifie que la saisie est une puissance",
+    noTrigonometry: "Refuse les fonctions trigonométriques",
+    hasGroupedNumberSpacing:
+      "Vérifie les espaces de regroupement dans un nombre",
+    isEquation: "Vérifie que la saisie contient un unique signe =",
+    isEquivalentEquation:
+      "Vérifie que deux équations sont équivalentes après passage dans un seul membre",
+    hasZeroMember: "Vérifie qu'une équation est écrite avec un membre nul",
+    sameDuration: "Compare deux durées au format HMS",
+    sameCoordinates: "Compare deux listes de coordonnées",
+    sameInterval: "Compare deux intervalles ou réunions d'intervalles",
+    valueInInterval: "Vérifie qu'une valeur appartient à un intervalle",
+    sameWithUnit: "Compare deux grandeurs avec unité",
+    sameNumberTuple: "Compare deux tuples de nombres entre parenthèses",
+    sameNumberList: "Compare deux suites de nombres non ordonnées",
+    sameOrderedNumberList: "Compare deux suites de nombres ordonnées",
     sameDescribedSet:
-      'Vérifie que deux expressions décrivent le même ensemble quand la variable parcourt Z',
+      "Vérifie que deux expressions décrivent le même ensemble quand la variable parcourt Z",
     sameParametricLine:
-      'Vérifie que deux systèmes paramétriques décrivent la même droite de l’espace',
-    setEquality: "Vérifie l'égalité de deux ensembles en extension",
+      "Vérifie que deux systèmes paramétriques décrivent la même droite de l'espace",
+    sameSet: "Vérifie l'égalité de deux ensembles en extension",
     singleParameterVariable:
-      'Vérifie que le système paramétrique utilise une seule variable de paramétrage',
+      "Vérifie que le système paramétrique utilise une seule variable de paramétrage",
     stringEquals:
-      'Compare directement la saisie textuelle à la réponse attendue',
+      "Compare directement la saisie textuelle à la réponse attendue",
   }
+
+  const CHECK_EXAMPLES: Partial<Record<
+    CheckKind,
+    { accepted: string[]; refused: string[]; reference?: string }
+  >> = {
+    isEqual: {
+      accepted: ["\\frac{1}{2}", "0.5", "\\frac{2}{4}"],
+      refused: ["\\frac{1}{3}", "2"],
+      reference: "\\frac{1}{2}",
+    },
+    contains: {
+      accepted: ["\\sin(x)+1", "2\\sin(\\pi)"],
+      refused: ["\\cos(x)", "x^2"],
+    },
+    doesNotContain: {
+      accepted: ["2x", "3a"],
+      refused: ["2\\times x", "3\\times a"],
+    },
+    isReduced: {
+      accepted: ["2x+3", "3x^2-x"],
+      refused: ["2x+x+3", "2(x+1)", "\\frac{4}{2}x"],
+    },
+    noTrivialFactor: {
+      accepted: ["3x", "2x+1"],
+      refused: ["1\\times 3x", "0+3x", "x\\times 1"],
+    },
+    noNumericComputation: {
+      accepted: ["\\sqrt{3}", "\\frac{1}{3}"],
+      refused: ["\\sqrt{9}", "\\frac{6}{3}", "2+1"],
+    },
+    termsGrouped: {
+      accepted: ["5x+3", "3x^2"],
+      refused: ["2x+3x", "x+4x+1"],
+    },
+    isDistributed: {
+      accepted: ["2x+6", "3x-3"],
+      refused: ["2(x+3)", "3(x-1)"],
+    },
+    onlyIrreducibleFractions: {
+      accepted: ["\\frac{1}{3}", "\\frac{3}{7}"],
+      refused: ["\\frac{2}{4}", "\\frac{6}{9}"],
+    },
+    fractionReducedFromExpected: {
+      accepted: ["\\frac{6}{14}", "\\frac{9}{21}", "\\frac{3}{7}"],
+      refused: ["\\frac{18}{42}", "\\frac{2}{7}"],
+      reference: "\\frac{18}{42}",
+    },
+    noSquareRootInDenominator: {
+      accepted: ["\\frac{\\sqrt{2}}{2}", "\\frac{1}{2}"],
+      refused: ["\\frac{1}{\\sqrt{2}}", "1/\\sqrt{2}"],
+    },
+    noDecimal: {
+      accepted: ["\\frac{1}{3}", "\\sqrt{2}"],
+      refused: ["0.333", "1.41"],
+    },
+    extractedRadicands: {
+      accepted: ["2\\sqrt{3}", "3\\sqrt{5}"],
+      refused: ["\\sqrt{12}", "\\sqrt{45}"],
+    },
+    coordinatesReduced: {
+      accepted: ["(1;2)", "(\\frac{1}{2};3)"],
+      refused: ["(1;3-1)", "(\\frac{2}{4};1)"],
+    },
+    intervalBoundsReduced: {
+      accepted: ["[1;2]", "[\\frac{1}{2};3]"],
+      refused: ["[1;3-1]", "[\\frac{2}{4};1]"],
+    },
+    isFraction: {
+      accepted: ["\\frac{1}{2}", "3/4"],
+      refused: ["0.5", "2"],
+    },
+    isDecimalFraction: {
+      accepted: ["\\frac{7}{10}", "\\frac{13}{100}"],
+      refused: ["\\frac{7}{8}", "0.7"],
+    },
+    onlyDecimalNumbers: {
+      accepted: ["3{,}14", "x+2+3{,}14"],
+      refused: ["\\frac{314}{100}", "\\sqrt{2}"],
+    },
+    isScientificNotation: {
+      accepted: ["1{,}357\\times10^3"],
+      refused: ["13{,}57\\times10^2", "1357"],
+    },
+    isPowerForm: {
+      accepted: ["4^2", "x^3"],
+      refused: ["16", "4\\times4"],
+    },
+    noTrigonometry: {
+      accepted: ["x^2+1"],
+      refused: ["\\cos(x)+1"],
+    },
+    hasGroupedNumberSpacing: {
+      accepted: ["1 234 567"],
+      refused: ["1234567"],
+    },
+    isEquation: {
+      accepted: ["x=2", "2x+1=5"],
+      refused: ["x+2", "2x+1"],
+    },
+    isEquivalentEquation: {
+      accepted: ["2x=4", "x-2=0", "3x=6"],
+      refused: ["x=3", "2x=5"],
+      reference: "x=2",
+    },
+    hasZeroMember: {
+      accepted: ["x-2=0", "2x+1=0"],
+      refused: ["x=2", "2x=-1"],
+    },
+    sameDuration: {
+      accepted: ["1h30min", "2min15s"],
+      refused: ["90min", "1h29min"],
+      reference: "1h30min",
+    },
+    sameCoordinates: {
+      accepted: ["(1;2)", "(\\frac12;3)"],
+      refused: ["(1;2;3)", "(1;4)"],
+      reference: "(1;2)",
+    },
+    sameInterval: {
+      accepted: ["[1;2]", "\\emptyset"],
+      refused: ["]1;2]", "1;2"],
+      reference: "[1;2]",
+    },
+    valueInInterval: {
+      accepted: ["\\frac32", "1.5"],
+      refused: ["3", "2"],
+      reference: "[1;2]",
+    },
+    sameWithUnit: {
+      accepted: ["100\\operatorname{cm}", "1\\operatorname{m}"],
+      refused: ["100", "2\\operatorname{kg}"],
+      reference: "1\\operatorname{m}",
+    },
+    sameNumberTuple: {
+      accepted: ["(1;2;3)"],
+      refused: ["\\{1;2;3\\}", "(3;2;1)"],
+      reference: "(1;2;3)",
+    },
+    sameNumberList: {
+      accepted: ["3;1;2", "1;2;1;3 avec l'option répétitions"],
+      refused: ["1;2;2"],
+      reference: "1;2;3",
+    },
+    sameOrderedNumberList: {
+      accepted: ["1;2;3"],
+      refused: ["3;1;2"],
+      reference: "1;2;3",
+    },
+    sameDescribedSet: {
+      accepted: ["2n", "2p"],
+      refused: ["2k+1", "3k"],
+      reference: "2x",
+    },
+    sameParametricLine: {
+      accepted: ["(1+2t,\\ 3+t,\\ t)", "(1+4s,\\ 3+2s,\\ 2s)"],
+      refused: ["(1+t,\\ 3+2t,\\ t)", "(2t,\\ t,\\ t)"],
+      reference: "(1+2t,\\ 3+t,\\ t)",
+    },
+    sameSet: {
+      accepted: ["\\{3,1,2\\}", "\\{1,2,2,3\\}"],
+      refused: ["\\{1,2\\}", "\\{1,2,4\\}"],
+      reference: "\\{1,2,3\\}",
+    },
+    singleParameterVariable: {
+      accepted: ["(1+2t,\\ 3t)", "(s,\\ 2s+1)"],
+      refused: ["(s+t,\\ s)", "(k+m,\\ k-m)"],
+    },
+    stringEquals: {
+      accepted: ["Bonjour", "oui"],
+      refused: ["bonjour", "Bonjour "],
+      reference: "Bonjour",
+    },
+  }
+
+  const DOC_BASE =
+    "https://forge.apps.education.fr/coopmaths/mathalea/-/wikis/Systeme-de-comparaison-interactif"
+
+
+  const CHECK_DOC_ANCHOR: Partial<Record<CheckKind, string>> = {
+    // Egalite
+    isEqual: "#equals--égalité-mathématique",
+    // Meme objet
+    sameWithUnit: "#samewithunit-même-grandeur-avec-unité",
+    sameCoordinates: "#samecoordinates-mêmes-coordonnées",
+    sameInterval: "#sameinterval-même-intervalle",
+    sameDuration: "#sameduration-même-durée",
+    sameNumberTuple: "#samenumbertuple-même-tuple-de-nombres",
+    sameNumberList: "#samenumberlist-même-liste-de-nombres-non-ordonnée",
+    sameOrderedNumberList: "#sameorderednumberlist-même-liste-de-nombres-ordonnée",
+    sameSet: "#setequality--égalité-d’ensembles-en-extension",
+    sameDescribedSet: "#samedescribedset--même-ensemble-décrit-par-une-progression",
+    sameParametricLine: "#sameparametricline--même-droite-en-représentation-paramétrique",
+    // Reduction / forme imposee
+    isReduced: "#isreduced--expression-réduite",
+    noTrivialFactor: "#notrivialfactor--pas-de-facteur-trivial",
+    noNumericComputation: "#nonumericcomputation--pas-de-calcul-non-effectué",
+    termsGrouped: "#termsgrouped--termes-semblables-regroupés",
+    isDistributed: "#distributed--produit-développé",
+    onlyIrreducibleFractions: "#irreduciblefractions--fractions-irréductibles",
+    fractionReducedFromExpected:
+      "#fractionreducedfromexpected--fraction-réduite-par-rapport-à-la-réponse-attendue",
+    noSquareRootInDenominator:
+      "#nosquarerootindenominator--pas-de-racine-carrée-au-dénominateur",
+    noDecimal: "#nodecimal--pas-d’écriture-décimale",
+    extractedRadicands: "#extractedradicands--racines-simplifiées",
+    coordinatesReduced: "#coordinatesreduced-coordonnées-réduites",
+    intervalBoundsReduced: "#intervalboundsreduced-bornes-dintervalle-réduites",
+    // Texte / motif
+    stringEquals: "#stringequals--comparaison-textuelle-exacte",
+    contains: "#containspattern--la-saisie-contient-un-motif",
+    doesNotContain: "#doesnotcontainpattern--la-saisie-ne-contient-pas-un-motif",
+    // Type d’ecriture
+    isFraction: "#isfraction-la-saisie-est-une-fraction",
+    isDecimalFraction: "#isdecimalfraction-la-saisie-est-une-fraction-décimale",
+    onlyDecimalNumbers: "#isdecimalnumber-la-saisie-est-un-nombre-décimal",
+    isScientificNotation: "#isscientificnotation-la-saisie-est-en-notation-scientifique",
+    isPowerForm: "#ispowerform-la-saisie-est-une-puissance",
+    hasGroupedNumberSpacing: "#hasgroupednumberspacing-espacement-des-chiffres-par-groupes-de-3",
+    noTrigonometry: "#notrigonometry-refuse-les-fonctions-trigonométriques",
+    // Equations
+    isEquation: "#isequation-la-saisie-est-une-équation",
+    isEquivalentEquation: "#isequivalentequation-équations-équivalentes",
+    hasZeroMember: "#haszeromember-membre-nul-dans-léquation",
+    // Appartenance / parametrage
+    valueInInterval: "#valueininterval-valeur-dans-un-intervalle",
+    singleParameterVariable: "#singleparametervariable--variable-de-paramétrage-unique",
+  }
+
+  type CheckGroup = {
+    title: string
+    checks: CheckKind[]
+  }
+
+  const CHECK_GROUPS: CheckGroup[] = [
+    {
+      title: 'Égalité mathématique',
+      checks: ['isEqual'],
+    },
+    {
+      title: 'Même objet',
+      checks: [
+        'sameWithUnit',
+        'sameCoordinates',
+        'sameInterval',
+        'sameDuration',
+        'sameNumberTuple',
+        'sameNumberList',
+        'sameOrderedNumberList',
+        'sameSet',
+        'sameDescribedSet',
+        'sameParametricLine',
+      ],
+    },
+    {
+      title: 'Réduction / forme imposée',
+      checks: [
+        'isReduced',
+        'noTrivialFactor',
+        'noNumericComputation',
+        'termsGrouped',
+        'isDistributed',
+        'onlyIrreducibleFractions',
+        'fractionReducedFromExpected',
+        'noSquareRootInDenominator',
+        'noDecimal',
+        'extractedRadicands',
+        'coordinatesReduced',
+        'intervalBoundsReduced',
+      ],
+    },
+    {
+      title: 'Texte / motif',
+      checks: ['stringEquals', 'contains', 'doesNotContain'],
+    },
+    {
+      title: 'Type d’écriture',
+      checks: [
+        'isFraction',
+        'isDecimalFraction',
+        'onlyDecimalNumbers',
+        'isScientificNotation',
+        'isPowerForm',
+        'hasGroupedNumberSpacing',
+        'noTrigonometry',
+      ],
+    },
+    {
+      title: 'Équations',
+      checks: ['isEquation', 'isEquivalentEquation', 'hasZeroMember'],
+    },
+    {
+      title: 'Appartenance / paramétrage',
+      checks: ['valueInInterval', 'singleParameterVariable'],
+    },
+  ]
+
+  let hoveredKind: CheckKind | null = null
 
   const ALL_BLOCKS: BlockForKeyboard[] = [
     'numbers',
@@ -323,6 +715,8 @@
       variable: '',
       expectedParameter: '',
       strictExpectedParameter: false,
+      strictSameUnit: false,
+      allowRepeatedNumbers: false,
       trim: false,
       ignoreCase: false,
     }
@@ -409,8 +803,8 @@
       feedbackOk: cfg.feedbackOk.trim() || undefined,
     }
     switch (cfg.kind) {
-      case 'equals': {
-        return equals({
+      case 'isEqual': {
+        return isEqual({
           ...overrides,
           tolerance:
             cfg.equalsMode === 'tolerance'
@@ -433,16 +827,64 @@
         return noNumericComputation(overrides)
       case 'termsGrouped':
         return termsGrouped(overrides)
-      case 'distributed':
-        return distributed(overrides)
-      case 'irreducibleFractions':
-        return irreducibleFractions(overrides)
+      case 'isDistributed':
+        return isDistributed(overrides)
+      case 'onlyIrreducibleFractions':
+        return onlyIrreducibleFractions(overrides)
+      case 'fractionReducedFromExpected':
+        return fractionReducedFromExpected(overrides)
+      case 'noSquareRootInDenominator':
+        return noSquareRootInDenominator(overrides)
       case 'noDecimal':
         return noDecimal(overrides)
       case 'extractedRadicands':
         return extractedRadicands(overrides)
-      case 'sameCartesianEquation':
-        return sameCartesianEquation(overrides)
+      case 'coordinatesReduced':
+        return coordinatesReduced(overrides)
+      case 'intervalBoundsReduced':
+        return intervalBoundsReduced(overrides)
+      case 'isFraction':
+        return isFraction(overrides)
+      case 'isDecimalFraction':
+        return isDecimalFraction(overrides)
+      case 'onlyDecimalNumbers':
+        return onlyDecimalNumbers(overrides)
+      case 'isScientificNotation':
+        return isScientificNotation(overrides)
+      case 'isPowerForm':
+        return isPowerForm(overrides)
+      case 'noTrigonometry':
+        return noTrigonometry(overrides)
+      case 'hasGroupedNumberSpacing':
+        return hasGroupedNumberSpacing(overrides)
+      case 'isEquation':
+        return isEquation(overrides)
+      case 'isEquivalentEquation':
+        return isEquivalentEquation(overrides)
+      case 'hasZeroMember':
+        return hasZeroMember(overrides)
+      case 'sameDuration':
+        return sameDuration(overrides)
+      case 'sameCoordinates':
+        return sameCoordinates(overrides)
+      case 'sameInterval':
+        return sameInterval(overrides)
+      case 'valueInInterval':
+        return valueInInterval(overrides)
+      case 'sameWithUnit':
+        return sameWithUnit({
+          ...overrides,
+          strictSameUnit: cfg.strictSameUnit,
+        })
+      case 'sameNumberTuple':
+        return sameNumberTuple(overrides)
+      case 'sameNumberList':
+        return sameNumberList({
+          ...overrides,
+          allowRepeatedNumbers: cfg.allowRepeatedNumbers,
+        })
+      case 'sameOrderedNumberList':
+        return sameOrderedNumberList(overrides)
       case 'sameDescribedSet':
         return sameDescribedSet({
           ...overrides,
@@ -450,8 +892,8 @@
         })
       case 'sameParametricLine':
         return sameParametricLine(overrides)
-      case 'setEquality':
-        return setEquality({
+      case 'sameSet':
+        return sameSet({
           ...overrides,
           variable: cfg.variable.trim() || undefined,
         })
@@ -524,12 +966,13 @@
       opts.push(`pattern: ${serializePattern(cfg.pattern)}`)
     }
     if (
-      (cfg.kind === 'setEquality' || cfg.kind === 'sameDescribedSet') &&
+      (cfg.kind === 'sameSet' ||
+        cfg.kind === 'sameDescribedSet') &&
       cfg.variable.trim()
     ) {
       opts.push(`variable: ${JSON.stringify(cfg.variable.trim())}`)
     }
-    if (cfg.kind === 'equals') {
+    if (cfg.kind === 'isEqual') {
       if (cfg.equalsMode === 'tolerance') {
         const tol = parseOptionalNumber(cfg.tolerance) ?? 0
         opts.push(`tolerance: ${tol}`)
@@ -547,6 +990,12 @@
     if (cfg.kind === 'stringEquals') {
       if (cfg.trim) opts.push('trim: true')
       if (cfg.ignoreCase) opts.push('ignoreCase: true')
+    }
+    if (cfg.kind === 'sameWithUnit' && cfg.strictSameUnit) {
+      opts.push('strictSameUnit: true')
+    }
+    if (cfg.kind === 'sameNumberList' && cfg.allowRepeatedNumbers) {
+      opts.push('allowRepeatedNumbers: true')
     }
 
     const effectiveName = cfg.name.trim() || cfg.kind
@@ -624,14 +1073,20 @@
     <div
       class="lg:w-[480px] xl:w-[520px] flex-shrink-0 border-r border-coopmaths-canvas-dark dark:border-coopmathsdark-canvas-dark overflow-y-auto"
     >
-      <div class="p-5 space-y-5">
+      <div
+        class="p-5 space-y-5 {$keyboardState.isVisible
+          ? $keyboardState.isInLine
+            ? 'pb-28'
+            : 'pb-72'
+          : ''}"
+      >
         <!-- Expected answer -->
         <section>
-          <label
+          <p
             class="block text-xs font-bold uppercase tracking-widest text-coopmaths-corpus-light dark:text-coopmathsdark-corpus-light mb-2"
           >
             Réponse attendue
-          </label>
+          </p>
           <div
             class="check-test-field-wrapper rounded-lg border border-coopmaths-canvas-dark dark:border-coopmathsdark-canvas-dark
                    bg-coopmaths-canvas-darkest dark:bg-coopmathsdark-canvas-darkest"
@@ -647,11 +1102,11 @@
 
         <!-- Combinator -->
         <section>
-          <label
+          <p
             class="block text-xs font-bold uppercase tracking-widest text-coopmaths-corpus-light dark:text-coopmathsdark-corpus-light mb-2"
           >
             Combinateur
-          </label>
+          </p>
           <div class="flex gap-2">
             {#each ['all', 'seq'] as const as mode}
               <button
@@ -680,11 +1135,11 @@
         <!-- Checks list -->
         <section>
           <div class="flex items-center justify-between mb-2">
-            <label
+            <p
               class="text-xs font-bold uppercase tracking-widest text-coopmaths-corpus-light dark:text-coopmathsdark-corpus-light"
             >
               Checks ({checks.length})
-            </label>
+            </p>
           </div>
 
           {#if checks.length === 0}
@@ -787,8 +1242,6 @@
                   {#if isExpanded}
                     <div
                       class="p-3 space-y-3 bg-coopmaths-canvas dark:bg-coopmathsdark-canvas text-sm"
-                      on:input={() => (checks = checks)}
-                      on:change={() => (checks = checks)}
                     >
                       <p
                         class="text-xs text-coopmaths-corpus-light dark:text-coopmathsdark-corpus-light italic"
@@ -797,14 +1250,16 @@
                       </p>
 
                       <!-- Kind-specific options -->
-                      {#if cfg.kind === 'equals'}
+                      {#if cfg.kind === 'isEqual'}
                         <div class="space-y-2">
                           <div>
                             <label
+                              for={`check-${cfg.id}-equals-mode`}
                               class="block text-xs font-semibold mb-1 opacity-70"
                               >Mode de comparaison</label
                             >
                             <select
+                              id={`check-${cfg.id}-equals-mode`}
                               value={cfg.equalsMode}
                               on:change={(event) =>
                                 updateCheckConfig(
@@ -822,10 +1277,12 @@
                           {#if cfg.equalsMode === 'tolerance'}
                             <div>
                               <label
+                                for={`check-${cfg.id}-tolerance`}
                                 class="block text-xs font-semibold mb-1 opacity-70"
                                 >Exposant de tolérance</label
                               >
                               <input
+                                id={`check-${cfg.id}-tolerance`}
                                 type="number"
                                 step="any"
                                 placeholder="vide ou 0 : 10^0 = 1 ; -2 : 10^-2"
@@ -852,12 +1309,14 @@
                       {#if cfg.kind === 'contains' || cfg.kind === 'doesNotContain'}
                         <div>
                           <label
+                            for={`check-${cfg.id}-pattern`}
                             class="block text-xs font-semibold mb-1 opacity-70"
                             >Motif <span class="font-normal opacity-60"
                               >(texte ou /regex/flags)</span
                             ></label
                           >
                           <input
+                            id={`check-${cfg.id}-pattern`}
                             type="text"
                             placeholder="ex: \sin ou /x\^2/i"
                             bind:value={cfg.pattern}
@@ -866,15 +1325,17 @@
                         </div>
                       {/if}
 
-                      {#if cfg.kind === 'setEquality' || cfg.kind === 'sameDescribedSet'}
+                      {#if cfg.kind === 'sameSet' || cfg.kind === 'sameDescribedSet'}
                         <div>
                           <label
+                            for={`check-${cfg.id}-variable`}
                             class="block text-xs font-semibold mb-1 opacity-70"
                             >Variable <span class="font-normal opacity-60"
                               >(défaut : x)</span
                             ></label
                           >
                           <input
+                            id={`check-${cfg.id}-variable`}
                             type="text"
                             placeholder="x"
                             bind:value={cfg.variable}
@@ -887,12 +1348,14 @@
                         <div class="space-y-3">
                           <div>
                             <label
+                              for={`check-${cfg.id}-expected-parameter`}
                               class="block text-xs font-semibold mb-1 opacity-70"
                               >Variable attendue <span
                                 class="font-normal opacity-60">(optionnel)</span
                               ></label
                             >
                             <input
+                              id={`check-${cfg.id}-expected-parameter`}
                               type="text"
                               placeholder="k"
                               bind:value={cfg.expectedParameter}
@@ -904,7 +1367,8 @@
                           >
                             <input
                               type="checkbox"
-                              bind:checked={cfg.strictExpectedParameter}
+                              checked={cfg.strictExpectedParameter}
+                              on:change={(e) => updateCheckConfig(cfg.id, "strictExpectedParameter", (e.currentTarget as HTMLInputElement).checked)}
                               class="rounded"
                             />
                             <span class="text-xs font-semibold opacity-70"
@@ -914,6 +1378,38 @@
                         </div>
                       {/if}
 
+                      {#if cfg.kind === 'sameWithUnit'}
+                        <label
+                          class="flex items-center gap-2 cursor-pointer select-none"
+                        >
+                          <input
+                            type="checkbox"
+                            checked={cfg.strictSameUnit}
+                            on:change={(e) => updateCheckConfig(cfg.id, "strictSameUnit", (e.currentTarget as HTMLInputElement).checked)}
+                            class="rounded"
+                          />
+                          <span class="text-xs font-semibold opacity-70"
+                            >Imposer exactement la même unité</span
+                          >
+                        </label>
+                      {/if}
+
+                      {#if cfg.kind === 'sameNumberList'}
+                        <label
+                          class="flex items-center gap-2 cursor-pointer select-none"
+                        >
+                          <input
+                            type="checkbox"
+                            checked={cfg.allowRepeatedNumbers}
+                            on:change={(e) => updateCheckConfig(cfg.id, "allowRepeatedNumbers", (e.currentTarget as HTMLInputElement).checked)}
+                            class="rounded"
+                          />
+                          <span class="text-xs font-semibold opacity-70"
+                            >Accepter les nombres qui se répètent</span
+                          >
+                        </label>
+                      {/if}
+
                       {#if cfg.kind === 'stringEquals'}
                         <div class="grid grid-cols-2 gap-3">
                           <label
@@ -921,7 +1417,8 @@
                           >
                             <input
                               type="checkbox"
-                              bind:checked={cfg.trim}
+                              checked={cfg.trim}
+                              on:change={(e) => updateCheckConfig(cfg.id, "trim", (e.currentTarget as HTMLInputElement).checked)}
                               class="rounded"
                             />
                             <span class="text-xs font-semibold opacity-70"
@@ -933,7 +1430,8 @@
                           >
                             <input
                               type="checkbox"
-                              bind:checked={cfg.ignoreCase}
+                              checked={cfg.ignoreCase}
+                              on:change={(e) => updateCheckConfig(cfg.id, "ignoreCase", (e.currentTarget as HTMLInputElement).checked)}
                               class="rounded"
                             />
                             <span class="text-xs font-semibold opacity-70"
@@ -950,10 +1448,12 @@
                         <div class="grid grid-cols-2 gap-3">
                           <div>
                             <label
+                              for={`check-${cfg.id}-name`}
                               class="block text-xs font-semibold mb-1 opacity-70"
                               >Nom</label
                             >
                             <input
+                              id={`check-${cfg.id}-name`}
                               type="text"
                               placeholder={cfg.kind}
                               bind:value={cfg.name}
@@ -962,12 +1462,14 @@
                           </div>
                           <div>
                             <label
+                              for={`check-${cfg.id}-weight`}
                               class="block text-xs font-semibold mb-1 opacity-70"
                               >Poids <span class="font-normal opacity-60"
                                 >(0–1)</span
                               ></label
                             >
                             <input
+                              id={`check-${cfg.id}-weight`}
                               type="number"
                               step="0.05"
                               min="0"
@@ -984,7 +1486,8 @@
                         >
                           <input
                             type="checkbox"
-                            bind:checked={cfg.feedbackEnabled}
+                            checked={cfg.feedbackEnabled}
+                            on:change={(e) => updateCheckConfig(cfg.id, "feedbackEnabled", (e.currentTarget as HTMLInputElement).checked)}
                             class="rounded"
                           />
                           <span class="text-xs font-semibold opacity-70"
@@ -997,7 +1500,8 @@
                         >
                           <input
                             type="checkbox"
-                            bind:checked={cfg.feedbackOnSuccess}
+                            checked={cfg.feedbackOnSuccess}
+                            on:change={(e) => updateCheckConfig(cfg.id, "feedbackOnSuccess", (e.currentTarget as HTMLInputElement).checked)}
                             class="rounded"
                           />
                           <span class="text-xs font-semibold opacity-70"
@@ -1007,10 +1511,12 @@
 
                         <div>
                           <label
+                            for={`check-${cfg.id}-feedback-ko`}
                             class="block text-xs font-semibold mb-1 opacity-70"
                             >Feedback KO</label
                           >
                           <input
+                            id={`check-${cfg.id}-feedback-ko`}
                             type="text"
                             placeholder="message si raté (défaut selon le check)"
                             bind:value={cfg.feedbackKo}
@@ -1019,10 +1525,12 @@
                         </div>
                         <div>
                           <label
+                            for={`check-${cfg.id}-feedback-ok`}
                             class="block text-xs font-semibold mb-1 opacity-70"
                             >Feedback OK</label
                           >
                           <input
+                            id={`check-${cfg.id}-feedback-ok`}
                             type="text"
                             placeholder="message si réussi (optionnel)"
                             bind:value={cfg.feedbackOk}
@@ -1039,19 +1547,101 @@
 
           <!-- Add check buttons -->
           <div class="mt-3">
-            <p
-              class="text-xs font-bold uppercase tracking-widest text-coopmaths-corpus-light dark:text-coopmathsdark-corpus-light mb-2"
-            >
-              Ajouter un check
-            </p>
-            <div class="flex flex-wrap gap-2">
-              {#each Object.keys(CHECK_LABELS) as kind}
-                <button
-                  class="px-3 py-1.5 rounded-lg text-sm font-mono font-semibold border border-coopmaths-action dark:border-coopmathsdark-action text-coopmaths-action dark:text-coopmathsdark-action hover:bg-coopmaths-action dark:hover:bg-coopmathsdark-action hover:text-white transition"
-                  on:click={() => addCheck(kind as CheckKind)}
-                >
-                  + {kind}
-                </button>
+            <div class="flex items-center justify-between mb-2">
+              <p
+                class="text-xs font-bold uppercase tracking-widest text-coopmaths-corpus-light dark:text-coopmathsdark-corpus-light"
+              >
+                Ajouter un check
+              </p>
+              <a
+                href={DOC_BASE}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="flex items-center justify-center w-5 h-5 rounded-full text-xs font-bold border border-coopmaths-corpus-light dark:border-coopmathsdark-corpus-light text-coopmaths-corpus-light dark:text-coopmathsdark-corpus-light hover:bg-coopmaths-action dark:hover:bg-coopmathsdark-action hover:text-white hover:border-transparent transition"
+                title="Documentation des checks"
+              >
+                ?
+              </a>
+            </div>
+            <div class="space-y-3">
+              {#each CHECK_GROUPS as group}
+                <section>
+                  <p class="text-[11px] font-bold uppercase tracking-widest text-coopmaths-corpus-light dark:text-coopmathsdark-corpus-light mb-1.5">
+                    {group.title}
+                  </p>
+                  <div class="flex flex-wrap gap-2">
+                    {#each group.checks as kind}
+                      {@const anchor = CHECK_DOC_ANCHOR[kind]}
+                      <div
+                        role="group"
+                        class="flex items-stretch rounded-lg border border-coopmaths-action dark:border-coopmathsdark-action overflow-hidden"
+                        on:mouseenter={() => (hoveredKind = kind)}
+                        on:mouseleave={() => (hoveredKind = null)}
+                      >
+                        <button
+                          class="px-3 py-1.5 text-sm font-mono font-semibold text-coopmaths-action dark:text-coopmathsdark-action hover:bg-coopmaths-action dark:hover:bg-coopmathsdark-action hover:text-white transition"
+                          on:click={() => addCheck(kind)}
+                        >
+                          + {CHECK_LABELS[kind]}
+                        </button>
+                        {#if anchor}
+                          <a
+                            href={DOC_BASE + anchor}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="flex items-center px-1.5 border-l border-coopmaths-action dark:border-coopmathsdark-action text-coopmaths-action dark:text-coopmathsdark-action hover:bg-coopmaths-action dark:hover:bg-coopmathsdark-action hover:text-white transition"
+                            title="Documentation"
+                          >
+                            <i class="bx bx-link-external text-xs"></i>
+                          </a>
+                        {/if}
+                      </div>
+                    {/each}
+                  </div>
+                  {#if hoveredKind && group.checks.includes(hoveredKind)}
+                    {@const ex = CHECK_EXAMPLES[hoveredKind]}
+                    <div
+                      class="mt-3 p-3 rounded-lg border border-coopmaths-canvas-dark dark:border-coopmathsdark-canvas-dark bg-coopmaths-canvas-darkest dark:bg-coopmathsdark-canvas-darkest text-xs space-y-2"
+                    >
+                      <p class="font-semibold font-mono text-sm text-coopmaths-action dark:text-coopmathsdark-action">
+                        {hoveredKind}
+                      </p>
+                      <p class="text-coopmaths-corpus-light dark:text-coopmathsdark-corpus-light italic">
+                        {CHECK_DESCRIPTIONS[hoveredKind]}
+                      </p>
+                      {#if ex}
+                        {#if ex.reference}
+                          <p class="text-coopmaths-corpus-light dark:text-coopmathsdark-corpus-light">
+                            Pour la réponse attendue&nbsp;:
+                            <code class="font-mono bg-coopmaths-canvas-dark dark:bg-coopmathsdark-canvas-dark px-1 rounded">{ex.reference}</code>
+                          </p>
+                        {/if}
+                        <div class="grid grid-cols-2 gap-2 pt-1">
+                          <div>
+                            <p class="font-semibold text-green-600 dark:text-green-400 mb-1 flex items-center gap-1">
+                              <i class="bx bx-check"></i> Accepté
+                            </p>
+                            <ul class="space-y-0.5">
+                              {#each ex.accepted as expr}
+                                <li class="font-mono bg-green-50 dark:bg-green-950 border border-green-200 dark:border-green-800 px-2 py-0.5 rounded text-green-800 dark:text-green-200">{expr}</li>
+                              {/each}
+                            </ul>
+                          </div>
+                          <div>
+                            <p class="font-semibold text-red-600 dark:text-red-400 mb-1 flex items-center gap-1">
+                              <i class="bx bx-x"></i> Refusé
+                            </p>
+                            <ul class="space-y-0.5">
+                              {#each ex.refused as expr}
+                                <li class="font-mono bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-800 px-2 py-0.5 rounded text-red-800 dark:text-red-200">{expr}</li>
+                              {/each}
+                            </ul>
+                          </div>
+                        </div>
+                      {/if}
+                    </div>
+                  {/if}
+                </section>
               {/each}
             </div>
           </div>
@@ -1059,11 +1649,11 @@
 
         <!-- Keyboard block selector -->
         <section>
-          <label
+          <p
             class="block text-xs font-bold uppercase tracking-widest text-coopmaths-corpus-light dark:text-coopmathsdark-corpus-light mb-2"
           >
             Clavier virtuel
-          </label>
+          </p>
           <div class="flex flex-wrap gap-1.5">
             {#each ALL_BLOCKS as block}
               <button
@@ -1087,11 +1677,11 @@
         <!-- Code export — toujours visible si au moins un check -->
         <section>
           <div class="flex items-center justify-between mb-2">
-            <label
+            <p
               class="text-xs font-bold uppercase tracking-widest text-coopmaths-corpus-light dark:text-coopmathsdark-corpus-light"
             >
               Code à copier
-            </label>
+            </p>
             {#if generatedCode}
               <button
                 class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-semibold transition-all
@@ -1107,14 +1697,15 @@
             {/if}
           </div>
           {#if generatedCode}
-            <pre
+            <button
+              type="button"
               class="w-full font-mono text-xs leading-relaxed px-4 py-3 rounded-lg overflow-x-auto cursor-pointer
                      bg-coopmaths-canvas-darkest dark:bg-coopmathsdark-canvas-darkest
                      border border-coopmaths-action dark:border-coopmathsdark-action
                      text-coopmaths-corpus dark:text-coopmathsdark-corpus
-                     whitespace-pre select-all hover:opacity-80 transition-opacity"
+                     whitespace-pre select-all hover:opacity-80 transition-opacity text-left"
               on:click={copyCode}
-              title="Cliquez pour copier">{generatedCode}</pre>
+              title="Cliquez pour copier"><code>{generatedCode}</code></button>
           {:else}
             <div
               class="text-xs text-coopmaths-corpus-light dark:text-coopmathsdark-corpus-light italic px-3 py-2 rounded-lg border border-dashed border-coopmaths-canvas-dark dark:border-coopmathsdark-canvas-dark"
@@ -1128,14 +1719,20 @@
 
     <!-- ====== RIGHT PANEL: Test & Results ====== -->
     <div class="flex-1 flex flex-col min-h-0">
-      <div class="p-5 space-y-5 flex-1 overflow-y-auto">
+      <div
+        class="p-5 space-y-5 flex-1 overflow-y-auto {$keyboardState.isVisible
+          ? $keyboardState.isInLine
+            ? 'pb-28'
+            : 'pb-72'
+          : ''}"
+      >
         <!-- User input -->
         <section>
-          <label
+          <p
             class="block text-xs font-bold uppercase tracking-widest text-coopmaths-corpus-light dark:text-coopmathsdark-corpus-light mb-2"
           >
             Saisie de l'élève
-          </label>
+          </p>
           <div
             class="check-test-field-wrapper rounded-lg border-2 transition-colors
                    {result !== null
@@ -1316,9 +1913,9 @@
                 class="text-left p-3 rounded-lg border border-coopmaths-canvas-dark dark:border-coopmathsdark-canvas-dark hover:bg-coopmaths-canvas-dark dark:hover:bg-coopmathsdark-canvas-dark transition"
                 on:click={() => {
                   expectedAnswer = '\\frac{1}{2}'
-                  addCheck('equals')
+                  addCheck('isEqual')
                   addCheck('isReduced')
-                  const e = checks.find((c) => c.kind === 'equals')
+                  const e = checks.find((c) => c.kind === 'isEqual')
                   const r = checks.find((c) => c.kind === 'isReduced')
                   if (e) {
                     e.weight = '0.7'
@@ -1332,7 +1929,7 @@
               >
                 <p class="font-mono text-sm font-bold mb-1">Fraction réduite</p>
                 <p class="text-xs opacity-60">
-                  equals (70%) + isReduced (30%) pour <code
+                  isEqual (70%) + isReduced (30%) pour <code
                     >\frac{`{1}{2}`}</code
                   >
                 </p>
@@ -1342,7 +1939,7 @@
                 class="text-left p-3 rounded-lg border border-coopmaths-canvas-dark dark:border-coopmathsdark-canvas-dark hover:bg-coopmaths-canvas-dark dark:hover:bg-coopmathsdark-canvas-dark transition"
                 on:click={() => {
                   expectedAnswer = 'x'
-                  addCheck('equals')
+                  addCheck('isEqual')
                   addCheck('contains')
                   const c = checks.find((ch) => ch.kind === 'contains')
                   if (c) {
@@ -1353,7 +1950,7 @@
               >
                 <p class="font-mono text-sm font-bold mb-1">Contient sin</p>
                 <p class="text-xs opacity-60">
-                  equals + contains("\sin") pour forcer la forme
+                  isEqual + contains("\sin") pour forcer la forme
                 </p>
               </button>
 
@@ -1362,7 +1959,7 @@
                 on:click={() => {
                   expectedAnswer = '2x'
                   combinator = 'seq'
-                  addCheck('equals')
+                  addCheck('isEqual')
                   addCheck('doesNotContain')
                   const d = checks.find((c) => c.kind === 'doesNotContain')
                   if (d) {
@@ -1374,7 +1971,7 @@
               >
                 <p class="font-mono text-sm font-bold mb-1">Sans ×</p>
                 <p class="text-xs opacity-60">
-                  seq: equals puis doesNotContain("×")
+                  seq: isEqual puis doesNotContain("×")
                 </p>
               </button>
 
@@ -1382,8 +1979,8 @@
                 class="text-left p-3 rounded-lg border border-coopmaths-canvas-dark dark:border-coopmathsdark-canvas-dark hover:bg-coopmaths-canvas-dark dark:hover:bg-coopmathsdark-canvas-dark transition"
                 on:click={() => {
                   expectedAnswer = '3.14'
-                  addCheck('equals')
-                  const e = checks.find((c) => c.kind === 'equals')
+                  addCheck('isEqual')
+                  const e = checks.find((c) => c.kind === 'isEqual')
                   if (e) {
                     e.equalsMode = 'tolerance'
                     e.tolerance = '-2'
@@ -1393,7 +1990,7 @@
               >
                 <p class="font-mono text-sm font-bold mb-1">Tolérance 10^n</p>
                 <p class="text-xs opacity-60">
-                  equals avec tolerance=-2 pour π ≈ 3.14
+                  isEqual avec tolerance=-2 pour π ≈ 3.14
                 </p>
               </button>
             </div>

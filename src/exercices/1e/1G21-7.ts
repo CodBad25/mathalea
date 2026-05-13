@@ -1,7 +1,7 @@
 import {
   all,
-  equals,
-  irreducibleFractions,
+  isEqual,
+  onlyIrreducibleFractions,
   isReduced,
 } from '../../lib/interactif/checks'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
@@ -139,11 +139,11 @@ class EqCartVectNormal extends Exercice {
             ],
             champ1: {
               value: String(xH),
-              compare: all([equals(), isReduced(), irreducibleFractions()]),
+              compare: all([isEqual(), isReduced(), onlyIrreducibleFractions()]),
             },
             champ2: {
               value: String(yH),
-              compare: all([equals(), isReduced(), irreducibleFractions()]),
+              compare: all([isEqual(), isReduced(), onlyIrreducibleFractions()]),
             },
           },
           { formatInteractif: 'fillInTheBlank' },

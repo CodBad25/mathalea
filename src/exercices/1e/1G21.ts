@@ -4,8 +4,10 @@ import { milieu } from '../../lib/2d/utilitairesPoint'
 import { Vecteur } from '../../lib/2d/Vecteur'
 import {
   all,
-  irreducibleFractions,
-  sameCartesianEquation,
+  hasZeroMember,
+  onlyIrreducibleFractions,
+  isEquation,
+  isEquivalentEquation,
 } from '../../lib/interactif/checks'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
@@ -203,7 +205,12 @@ export default class nomExercice extends Exercice {
         handleAnswers(this, i, {
           reponse: {
             value: reponse,
-            compare: all([sameCartesianEquation(), irreducibleFractions()]),
+            compare: all([
+              isEquation(),
+              isEquivalentEquation(),
+              hasZeroMember(),
+              onlyIrreducibleFractions(),
+            ]),
           },
         })
         this.listeQuestions[i] = texteInteractif

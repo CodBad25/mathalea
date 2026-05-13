@@ -17,6 +17,48 @@ describe('sameDescribedSet', () => {
       isOk: true,
       score: 1,
     })
+    expect(all([sameDescribedSet()])('-1/2pi+kpi', '1/2pi+kpi')).toMatchObject(
+      {
+        isOk: true,
+        score: 1,
+      },
+    )
+    expect(
+      all([sameDescribedSet()])('-1/2 pi + k pi', '1/2 pi + k pi'),
+    ).toMatchObject({
+      isOk: true,
+      score: 1,
+    })
+    expect(
+      all([sameDescribedSet()])('-1/2*pi+k*pi', '1/2*pi+k*pi'),
+    ).toMatchObject({
+      isOk: true,
+      score: 1,
+    })
+    expect(
+      all([sameDescribedSet()])(
+        '-\\frac{1}{2}\\pi+k\\pi',
+        '\\frac{1}{2}\\pi+k\\pi',
+      ),
+    ).toMatchObject({
+      isOk: true,
+      score: 1,
+    })
+    expect(
+      all([sameDescribedSet()])('-\\frac12\\pi+k\\pi', '\\frac12\\pi+k\\pi'),
+    ).toMatchObject({
+      isOk: true,
+      score: 1,
+    })
+    expect(
+      all([sameDescribedSet()])(
+        '\\frac{-1}{2}\\pi+k\\pi',
+        '\\frac{1}{2}\\pi+k\\pi',
+      ),
+    ).toMatchObject({
+      isOk: true,
+      score: 1,
+    })
     expect(
       all([sameDescribedSet({ variable: 'n' })])('4n+1', '4n-3'),
     ).toMatchObject({

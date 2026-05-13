@@ -57,6 +57,18 @@ describe('sameParametricLine', () => {
     expect(result.isOk).toBe(true)
   })
 
+  it('accepte les fractions compactes de MathLive dans les coordonnées', () => {
+    const result = comparator(
+      '\\begin{cases}x=\\frac12-3t\\\\y=1\\\\z=-\\frac12+4t\\end{cases}',
+      JSON.stringify({
+        point: [0.5, 1, -0.5],
+        direction: [-3, 0, 4],
+      }),
+    )
+
+    expect(result.isOk).toBe(true)
+  })
+
   it('refuse une représentation avec deux variables de paramétrage', () => {
     const result = comparator(
       '\\begin{cases}x=1-3t\\\\y=1\\\\z=-1+4k\\end{cases}',

@@ -1,17 +1,378 @@
 // @vitest-environment node
 import { describe, expect, it } from 'vitest'
 import { all } from './combinators'
-import { equals } from './equals'
+import {
+  hasZeroMember,
+  isEquation,
+  isEquivalentEquation,
+} from './equationChecks'
+import { isEqual } from './isEqual'
 import { extractedRadicands } from './extractedRadicands'
-import { irreducibleFractions } from './irreducibleFractions'
+import {
+  fractionReducedFromExpected,
+  noSquareRootInDenominator,
+} from './fractionFormChecks'
+import {
+  coordinatesReduced,
+  hasGroupedNumberSpacing,
+  intervalBoundsReduced,
+  isDecimalFraction,
+  onlyDecimalNumbers,
+  isFraction,
+  isPowerForm,
+  isScientificNotation,
+  noTrigonometry,
+} from './formAtoms'
+import { onlyIrreducibleFractions } from './onlyIrreducibleFractions'
+import {
+  sameWithUnit,
+  sameCoordinates,
+  sameDuration,
+  sameInterval,
+  sameNumberList,
+  sameNumberTuple,
+  sameOrderedNumberList,
+  valueInInterval,
+} from './legacyDomainChecks'
 import { noDecimal } from './noDecimal'
-import { sameCartesianEquation } from './sameCartesianEquation'
-import { setEquality } from './setEquality'
+import { sameSet } from './sameSet'
 import { sameDescribedSet } from './sameDescribedSet'
+import { sameParametricZeroSet } from './sameParametricZeroSet'
 import { stringEquals } from './stringEquals'
 
 describe('checks heavy atoms', () => {
-  describe('irreducibleFractions', () => {
+  describe('domain checks migrated from fonctionComparaison', () => {
+    it('compares durations', () => {
+      expect(all([sameDuration()])('90min', '1h30min')).toMatchObject({
+        isOk: true,
+        score: 1,
+      })
+      expect(all([sameDuration({ unit: 'h' })])('90min', '1h30min')).toMatchObject({
+        isOk: false,
+        score: 0,
+      })
+    })
+
+    it('compares coordinates coordinate by coordinate', () => {
+      expect(
+        all([sameCoordinates()])('(\\frac{1}{2};3)', '(0.5;3)'),
+      ).toMatchObject({
+        isOk: true,
+        score: 1,
+      })
+      expect(all([sameCoordinates()])('(1;3-1)', '(1;2)')).toMatchObject({
+        isOk: true,
+        score: 1,
+      })
+      expect(
+        all([sameCoordinates()])('\\left(1;3-1\\right)', '(1;2)'),
+      ).toMatchObject({
+        isOk: true,
+        score: 1,
+      })
+      expect(all([sameCoordinates()])('(1;2;3)', '(1;2)')).toMatchObject({
+        isOk: false,
+        score: 0,
+        feedback: 'Nombre de coordonnées différent',
+      })
+    })
+
+    it('compares intervals and interval membership', () => {
+      expect(all([sameInterval()])('[1;2]', '[1;2]')).toMatchObject({
+        isOk: true,
+        score: 1,
+      })
+      expect(all([sameInterval()])(']1;2]', '[1;2]')).toMatchObject({
+        isOk: false,
+        score: 0,
+      })
+      expect(all([valueInInterval()])('\\frac{3}{2}', '[1;2]')).toMatchObject({
+        isOk: true,
+        score: 1,
+      })
+      expect(all([valueInInterval()])('2', '[1;2[')).toMatchObject({
+        isOk: false,
+        score: 0,
+      })
+    })
+
+    it('compares units with conversions', () => {
+      expect(all([sameWithUnit()])('100\\operatorname{cm}', '1m')).toMatchObject({
+        isOk: true,
+        score: 1,
+      })
+      expect(
+        all([sameWithUnit({ strictSameUnit: true })])(
+          '100\\operatorname{cm}',
+          '1m',
+        ),
+      ).toMatchObject({
+        isOk: false,
+        score: 0,
+      })
+      expect(all([sameWithUnit()])('100', '1m')).toMatchObject({
+        isOk: false,
+        score: 0,
+      })
+    })
+
+    it('compares number tuples and lists', () => {
+      expect(all([sameNumberTuple()])('(1;2;3)', '(1;2;3)')).toMatchObject(
+        {
+          isOk: true,
+          score: 1,
+        },
+      )
+      expect(
+        all([sameNumberTuple()])('\\left(1;2\\right)', '(1;2)'),
+      ).toMatchObject({
+        isOk: true,
+        score: 1,
+      })
+      expect(all([sameNumberTuple()])('\\{1;2;3\\}', '(1;2;3)')).toMatchObject(
+        {
+          isOk: false,
+          score: 0,
+        },
+      )
+      expect(all([sameNumberList()])('3;1;2', '1;2;3')).toMatchObject({
+        isOk: true,
+        score: 1,
+      })
+      expect(all([sameNumberList()])('1;2;1;3', '1;2;3')).toMatchObject({
+        isOk: false,
+        score: 0,
+      })
+      expect(
+        all([sameNumberList({ allowRepeatedNumbers: true })])(
+          '1;2;1;3',
+          '1;2;3',
+        ),
+      ).toMatchObject({
+        isOk: true,
+        score: 1,
+      })
+      expect(all([sameOrderedNumberList()])('1;2;3', '1;2;3')).toMatchObject({
+        isOk: true,
+        score: 1,
+      })
+      expect(all([sameOrderedNumberList()])('3;1;2', '1;2;3')).toMatchObject({
+        isOk: false,
+        score: 0,
+      })
+    })
+
+    it('compares parametric zero sets', () => {
+      const expected = { offset: 0, period: Math.PI }
+      expect(all([sameParametricZeroSet(expected)])('k\\pi', '')).toMatchObject({
+        isOk: true,
+        score: 1,
+      })
+      expect(
+        all([sameParametricZeroSet(expected)])(
+          'S=\\left\\{k\\pi\\mid k\\in\\mathbb{Z}\\right\\}',
+          '',
+        ),
+      ).toMatchObject({
+        isOk: true,
+        score: 1,
+      })
+      expect(all([sameParametricZeroSet(expected)])('2k\\pi', '')).toMatchObject({
+        isOk: false,
+        score: 0,
+      })
+    })
+
+    it('compares parametric zero sets with compact MathLive fractions', () => {
+      const expected = { offset: Math.PI / 2, period: Math.PI }
+      expect(
+        all([sameParametricZeroSet(expected)])('-\\frac12\\pi+k\\pi', ''),
+      ).toMatchObject({
+        isOk: true,
+        score: 1,
+      })
+    })
+  })
+
+  describe('form atoms', () => {
+    it('checks fraction syntax without duplicating equality', () => {
+      expect(all([isFraction()])('\\frac{2}{4}', 'anything')).toMatchObject({
+        isOk: true,
+        score: 1,
+      })
+      expect(all([isFraction()])('0.5', 'anything')).toMatchObject({
+        isOk: false,
+        score: 0,
+        feedback: 'Résultat incorrect car une fraction est attendue.',
+      })
+      expect(all([isEqual(), isFraction()])('\\frac{2}{4}', '0.5')).toMatchObject(
+        {
+          isOk: true,
+          score: 1,
+        },
+      )
+      expect(all([isEqual(), isFraction()])('0.5', '0.5')).toMatchObject({
+        isOk: false,
+        score: 0,
+      })
+    })
+
+    it('checks decimal fraction syntax', () => {
+      expect(all([isDecimalFraction()])('\\frac{7}{10}', 'anything')).toMatchObject(
+        {
+          isOk: true,
+          score: 1,
+        },
+      )
+      expect(all([isDecimalFraction()])('\\frac{7}{8}', 'anything')).toMatchObject(
+        {
+          isOk: false,
+          score: 0,
+        },
+      )
+    })
+
+    it('checks that all numbers are written as decimal numbers', () => {
+      expect(all([onlyDecimalNumbers()])('3{,}14', 'anything')).toMatchObject({
+        isOk: true,
+        score: 1,
+      })
+      expect(all([onlyDecimalNumbers()])('x+2+3{,}14', 'anything')).toMatchObject({
+        isOk: true,
+        score: 1,
+      })
+      expect(all([onlyDecimalNumbers()])('\\frac{314}{100}', 'anything')).toMatchObject(
+        {
+          isOk: false,
+          score: 0,
+        },
+      )
+      expect(all([onlyDecimalNumbers()])('\\sqrt{2}', 'anything')).toMatchObject({
+        isOk: false,
+        score: 0,
+      })
+    })
+
+    it('checks scientific notation shape only', () => {
+      expect(
+        all([isScientificNotation()])('1{,}357\\times10^3', 'anything'),
+      ).toMatchObject({
+        isOk: true,
+        score: 1,
+      })
+      expect(
+        all([isScientificNotation()])('13{,}57\\times10^2', 'anything'),
+      ).toMatchObject({
+        isOk: false,
+        score: 0,
+      })
+      expect(
+        all([isEqual(), isScientificNotation()])(
+          '1{,}357\\times10^3',
+          '1357',
+        ),
+      ).toMatchObject({
+        isOk: true,
+        score: 1,
+      })
+    })
+
+    it('checks power form', () => {
+      expect(all([isPowerForm()])('4^2', '16')).toMatchObject({
+        isOk: true,
+        score: 1,
+      })
+      expect(all([isPowerForm()])('16', '16')).toMatchObject({
+        isOk: false,
+        score: 0,
+      })
+      expect(
+        all([isPowerForm({ forbidExponentOne: true })])('4^1', '4'),
+      ).toMatchObject({
+        isOk: false,
+        score: 0,
+      })
+      expect(
+        all([isPowerForm({ exactExpectedPower: true })])('2^4', '4^2'),
+      ).toMatchObject({
+        isOk: false,
+        score: 0,
+      })
+    })
+
+    it('refuses trigonometry', () => {
+      expect(all([noTrigonometry()])('x^2+1', 'anything')).toMatchObject({
+        isOk: true,
+        score: 1,
+      })
+      expect(all([noTrigonometry()])('\\cos(x)+1', 'anything')).toMatchObject({
+        isOk: false,
+        score: 0,
+        feedback: "Aucune fonction trigonométrique n'est autorisée.",
+      })
+    })
+
+    it('checks grouped number spacing relative to the expected number', () => {
+      expect(
+        all([hasGroupedNumberSpacing()])('1 234 567{,}890 1', '1234567{,}8901'),
+      ).toMatchObject({
+        isOk: true,
+        score: 1,
+      })
+      expect(
+        all([hasGroupedNumberSpacing()])('1234567{,}8901', '1234567{,}8901'),
+      ).toMatchObject({
+        isOk: false,
+        score: 0,
+      })
+    })
+
+    it('checks reduced coordinates coordinate by coordinate', () => {
+      expect(all([coordinatesReduced()])('(1;2)', 'anything')).toMatchObject({
+        isOk: true,
+        score: 1,
+      })
+      expect(
+        all([coordinatesReduced()])('\\left(1;2\\right)', 'anything'),
+      ).toMatchObject({
+        isOk: true,
+        score: 1,
+      })
+      expect(all([coordinatesReduced()])('(1;3-1)', 'anything')).toMatchObject({
+        isOk: false,
+        score: 0,
+        feedback: 'Les coordonnées ne sont pas assez réduites.',
+      })
+      expect(
+        all([sameCoordinates(), coordinatesReduced()])('(1;2)', '(1;2)'),
+      ).toMatchObject({
+        isOk: true,
+        score: 1,
+      })
+    })
+
+    it('checks reduced interval bounds bound by bound', () => {
+      expect(all([intervalBoundsReduced()])('[1;2]', 'anything')).toMatchObject({
+        isOk: true,
+        score: 1,
+      })
+      expect(
+        all([intervalBoundsReduced()])('[1;3-1]', 'anything'),
+      ).toMatchObject({
+        isOk: false,
+        score: 0,
+        feedback: "Les bornes de l'intervalle ne sont pas assez réduites.",
+      })
+      expect(
+        all([sameInterval(), intervalBoundsReduced()])('[1;2]', '[1;2]'),
+      ).toMatchObject({
+        isOk: true,
+        score: 1,
+      })
+    })
+  })
+
+  describe('onlyIrreducibleFractions', () => {
     const accepted: Array<[string, string]> = [
       ['\\dfrac{1}{2}', 'anything'],
       ['-\\dfrac{3}{5}', 'anything'],
@@ -99,14 +460,14 @@ describe('checks heavy atoms', () => {
     ]
 
     it.each(accepted)('accepts %s for %s', (saisie, answer) => {
-      expect(all([irreducibleFractions()])(saisie, answer)).toMatchObject({
+      expect(all([onlyIrreducibleFractions()])(saisie, answer)).toMatchObject({
         isOk: true,
         score: 1,
       })
     })
 
     it.each(refused)('refuses %s for %s', (saisie, answer, feedback) => {
-      expect(all([irreducibleFractions()])(saisie, answer)).toMatchObject({
+      expect(all([onlyIrreducibleFractions()])(saisie, answer)).toMatchObject({
         isOk: false,
         score: 0,
         feedback,
@@ -115,7 +476,7 @@ describe('checks heavy atoms', () => {
 
     it('plain integer 0 (no fraction) passes — nothing to check', () => {
       // No fraction pattern found → hasReducibleFraction returns false → passes
-      expect(all([irreducibleFractions()])('0', 'anything')).toMatchObject({
+      expect(all([onlyIrreducibleFractions()])('0', 'anything')).toMatchObject({
         isOk: true,
         score: 1,
       })
@@ -124,7 +485,7 @@ describe('checks heavy atoms', () => {
     it('\\dfrac{0}{3} fails — gcd(0,3)=3 ≠ 1 (reducible)', () => {
       // gcd(0, 3) = 3, so this fraction is considered reducible
       expect(
-        all([irreducibleFractions()])('\\dfrac{0}{3}', 'anything'),
+        all([onlyIrreducibleFractions()])('\\dfrac{0}{3}', 'anything'),
       ).toMatchObject({
         isOk: false,
         score: 0,
@@ -135,7 +496,7 @@ describe('checks heavy atoms', () => {
 
     it('\\dfrac{1}{1} passes — gcd(1,1)=1', () => {
       expect(
-        all([irreducibleFractions()])('\\dfrac{1}{1}', 'anything'),
+        all([onlyIrreducibleFractions()])('\\dfrac{1}{1}', 'anything'),
       ).toMatchObject({
         isOk: true,
         score: 1,
@@ -144,7 +505,7 @@ describe('checks heavy atoms', () => {
 
     it('large primes \\dfrac{17}{19} pass', () => {
       expect(
-        all([irreducibleFractions()])('\\dfrac{17}{19}', 'anything'),
+        all([onlyIrreducibleFractions()])('\\dfrac{17}{19}', 'anything'),
       ).toMatchObject({
         isOk: true,
         score: 1,
@@ -154,7 +515,7 @@ describe('checks heavy atoms', () => {
     it('expression with both an irreducible and a reducible fraction fails', () => {
       // \\frac{1}{2} is ok but \\frac{2}{4} is reducible
       expect(
-        all([irreducibleFractions()])(
+        all([onlyIrreducibleFractions()])(
           '\\dfrac{1}{2}+\\dfrac{2}{4}',
           'anything',
         ),
@@ -163,12 +524,69 @@ describe('checks heavy atoms', () => {
 
     it('\\dfrac{-6}{9} fails — gcd(6,9)=3 ≠ 1', () => {
       expect(
-        all([irreducibleFractions()])('\\dfrac{-6}{9}', 'anything'),
+        all([onlyIrreducibleFractions()])('\\dfrac{-6}{9}', 'anything'),
       ).toMatchObject({
         isOk: false,
         score: 0,
         feedback:
           'Résultat incorrect car une fraction irréductible est attendue.',
+      })
+    })
+  })
+
+  describe('fraction form checks', () => {
+    it('refuses square roots in denominators', () => {
+      expect(
+        all([noSquareRootInDenominator()])(
+          '\\dfrac{\\sqrt{2}}{2}',
+          'anything',
+        ),
+      ).toMatchObject({
+        isOk: true,
+        score: 1,
+      })
+      expect(
+        all([noSquareRootInDenominator()])(
+          '\\dfrac{1}{\\sqrt{2}}',
+          'anything',
+        ),
+      ).toMatchObject({
+        isOk: false,
+        score: 0,
+        feedback:
+          'Incorrect car la fraction possède une racine carrée au dénominateur.',
+      })
+      expect(
+        all([noSquareRootInDenominator()])('1/\\sqrt{2}', 'anything'),
+      ).toMatchObject({
+        isOk: false,
+        score: 0,
+      })
+    })
+
+    it('accepts fractions reduced from the expected one without requiring irreducibility', () => {
+      const compare = all([fractionReducedFromExpected()])
+
+      expect(compare('\\dfrac{6}{14}', '\\dfrac{18}{42}')).toMatchObject({
+        isOk: true,
+        score: 1,
+      })
+      expect(compare('\\dfrac{9}{21}', '\\dfrac{18}{42}')).toMatchObject({
+        isOk: true,
+        score: 1,
+      })
+      expect(compare('\\dfrac{3}{7}', '\\dfrac{18}{42}')).toMatchObject({
+        isOk: true,
+        score: 1,
+      })
+      expect(compare('\\dfrac{18}{42}', '\\dfrac{18}{42}')).toMatchObject({
+        isOk: false,
+        score: 0,
+        feedback: 'Résultat incorrect car une fraction réduite est attendue.',
+      })
+      expect(compare('\\dfrac{2}{7}', '\\dfrac{18}{42}')).toMatchObject({
+        isOk: false,
+        score: 0,
       })
     })
   })
@@ -206,34 +624,91 @@ describe('checks heavy atoms', () => {
     })
   })
 
-  describe('sameCartesianEquation', () => {
-    it('accepts equivalent cartesian equations of the same line', () => {
+  describe('equation checks', () => {
+    it('checks that the answer is an equation', () => {
+      expect(all([isEquation()])('2x+3y=5', 'anything')).toMatchObject({
+        isOk: true,
+        score: 1,
+      })
+      expect(all([isEquation()])('2x+3y-5', 'anything')).toMatchObject({
+        isOk: false,
+        score: 0,
+        feedback: 'La réponse doit être une équation avec un seul signe =.',
+      })
+    })
+
+    it('accepts equivalent equations', () => {
       expect(
-        all([sameCartesianEquation()])('4x+6y-10=0', '2x+3y-5=0'),
+        all([isEquivalentEquation()])('4x+6y-10=0', '2x+3y-5=0'),
       ).toMatchObject({
         isOk: true,
         score: 1,
       })
     })
 
-    it('refuses equations not written with zero as right-hand side', () => {
+    it('accepts equivalent equations with non-zero right-hand side', () => {
       expect(
-        all([sameCartesianEquation()])('2x+3y=5', '2x+3y-5=0'),
+        all([isEquivalentEquation()])('2x+3y=5', '2x+3y-5=0'),
       ).toMatchObject({
-        isOk: false,
-        score: 0,
+        isOk: true,
+        score: 1,
       })
     })
 
-    it('refuses a different cartesian equation', () => {
+    it('accepts equivalent equations with compact MathLive fractions', () => {
       expect(
-        all([sameCartesianEquation()])('2x+3y-4=0', '2x+3y-5=0'),
+        all([isEquivalentEquation()])(
+          '\\frac12x+y=1',
+          'x+2y=2',
+        ),
+      ).toMatchObject({
+        isOk: true,
+        score: 1,
+      })
+    })
+
+    it('checks that one member is zero', () => {
+      expect(
+        all([hasZeroMember()])('2x+3y-5=0', 'anything'),
+      ).toMatchObject({
+        isOk: true,
+        score: 1,
+      })
+      expect(all([hasZeroMember()])('2x+3y=5', 'anything')).toMatchObject({
+        isOk: false,
+        score: 0,
+        feedback: "L'équation doit être écrite avec un membre égal à 0.",
+      })
+    })
+
+    it('refuses a different equation', () => {
+      expect(
+        all([isEquivalentEquation()])('2x+3y-4=0', '2x+3y-5=0'),
       ).toMatchObject({
         isOk: false,
         score: 0,
-        feedback: "L'équation saisie ne décrit pas la droite attendue.",
+        feedback:
+          "L'équation saisie n'est pas équivalente à l'équation attendue.",
       })
     })
+
+    it('custom feedbackOk appears when another check fails', () => {
+      const compare = all([
+        isEquivalentEquation({
+          feedbackOk: "L'équation est équivalente.",
+        }),
+        {
+          name: 'forme',
+          run: () => ({ passed: false, feedbackKo: 'Forme incorrecte.' }),
+        },
+      ])
+
+      expect(compare('4x+6y-10=0', '2x+3y-5=0')).toMatchObject({
+        isOk: false,
+        feedback: "L'équation est équivalente.\nForme incorrecte.",
+      })
+    })
+
   })
 
   describe('noDecimal', () => {
@@ -399,9 +874,11 @@ describe('checks heavy atoms', () => {
     })
   })
 
-  describe('setEquality', () => {
+  describe('sameSet', () => {
     const accepted: Array<[string, string]> = [
       ['\\{1;2;3\\}', '\\{3;2;1\\}'],
+      ['\\left\\{1;2;3\\right\\}', '\\{3;2;1\\}'],
+      ['\\left\\lbrace1;2;3\\right\\rbrace', '\\{3;2;1\\}'],
       ['\\{-2;0;5\\}', '\\{5;-2;0\\}'],
       ['\\{\\dfrac{1}{2};\\sqrt{2}\\}', '\\{\\sqrt{2};0.5\\}'],
       ['\\emptyset', '\\emptyset'],
@@ -432,14 +909,14 @@ describe('checks heavy atoms', () => {
     ]
 
     it.each(accepted)('accepts %s for %s', (saisie, answer) => {
-      expect(all([setEquality()])(saisie, answer)).toMatchObject({
+      expect(all([sameSet()])(saisie, answer)).toMatchObject({
         isOk: true,
         score: 1,
       })
     })
 
     it.each(refused)('refuses %s for %s', (saisie, answer, feedback) => {
-      expect(all([setEquality()])(saisie, answer)).toMatchObject({
+      expect(all([sameSet()])(saisie, answer)).toMatchObject({
         isOk: false,
         score: 0,
         feedback,
@@ -447,21 +924,21 @@ describe('checks heavy atoms', () => {
     })
 
     it('single element set matches itself', () => {
-      expect(all([setEquality()])('\\{5\\}', '\\{5\\}')).toMatchObject({
+      expect(all([sameSet()])('\\{5\\}', '\\{5\\}')).toMatchObject({
         isOk: true,
         score: 1,
       })
     })
 
     it('extra element in input — fails with count mismatch feedback', () => {
-      expect(all([setEquality()])('\\{1;2;4\\}', '\\{1;2;3\\}')).toMatchObject({
+      expect(all([sameSet()])('\\{1;2;4\\}', '\\{1;2;3\\}')).toMatchObject({
         isOk: false,
         score: 0,
       })
     })
 
-    it('order-independent matching — {3;1;2} equals {1;2;3}', () => {
-      expect(all([setEquality()])('\\{3;1;2\\}', '\\{1;2;3\\}')).toMatchObject({
+    it('order-independent matching — {3;1;2} isEqual {1;2;3}', () => {
+      expect(all([sameSet()])('\\{3;1;2\\}', '\\{1;2;3\\}')).toMatchObject({
         isOk: true,
         score: 1,
       })
@@ -469,7 +946,7 @@ describe('checks heavy atoms', () => {
 
     it('custom feedbackKo overrides the default error message', () => {
       const compare = all([
-        setEquality({ feedbackKo: 'Cet ensemble est incorrect.' }),
+        sameSet({ feedbackKo: 'Cet ensemble est incorrect.' }),
       ])
 
       const result = compare('\\{1;2\\}', '\\{1;2;3\\}')
@@ -535,7 +1012,7 @@ describe('checks heavy atoms', () => {
 
   it('composes the heavy checks with partial scoring', () => {
     const compare = all([
-      equals({ weight: 0.6 }),
+      isEqual({ weight: 0.6 }),
       extractedRadicands({ weight: 0.2 }),
       noDecimal({ weight: 0.2 }),
     ])
@@ -544,7 +1021,7 @@ describe('checks heavy atoms', () => {
       isOk: false,
       score: 0.8,
       details: [
-        { name: 'equals', passed: true },
+        { name: 'isEqual', passed: true },
         { name: 'extractedRadicands', passed: false },
         { name: 'noDecimal', passed: true },
       ],
