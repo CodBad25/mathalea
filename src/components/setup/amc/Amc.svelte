@@ -70,6 +70,8 @@
     multicols: boolean
   }
 
+  const AMC_HIDDEN_TEXT_TOKEN = '[[AMC_HIDDEN]]'
+
   let exercices: IExercice[] = []
   let groupSettings: GroupSetting[] = []
   let documentSettings = {
@@ -134,6 +136,34 @@
     return exos as unknown as IExerciceAMC[]
   }
 
+  function stripAmcHiddenToken(text: string): string {
+    return text.replaceAll(AMC_HIDDEN_TEXT_TOKEN, '')
+  }
+
+  function isAmcHiddenOnlyText(value: unknown): boolean {
+    if (typeof value !== 'string') return false
+    if (!value.includes(AMC_HIDDEN_TEXT_TOKEN)) return false
+    return stripAmcHiddenToken(value).trim().length === 0
+  }
+
+  function sanitizeAmcHiddenTokenDeep<T>(value: T): T {
+    if (typeof value === 'string') {
+      return stripAmcHiddenToken(value) as T
+    }
+    if (Array.isArray(value)) {
+      return value.map((item) => sanitizeAmcHiddenTokenDeep(item)) as T
+    }
+    if (value != null && typeof value === 'object') {
+      return Object.fromEntries(
+        Object.entries(value as Record<string, unknown>).map(([key, item]) => [
+          key,
+          sanitizeAmcHiddenTokenDeep(item),
+        ]),
+      ) as T
+    }
+    return value
+  }
+
   function getAMCGroupName(exercise: IExercice | undefined): string {
     if (!exercise) return ''
     const ex = exercise as any
@@ -190,6 +220,7 @@
     exercice: IExercice,
   ): string[] {
     const ex = exercice as any
+    const amcType = ex?.amcType
     const htmlQuestions: string[] = ex.htmlQuestions ?? []
     const autoCorrection = Array.isArray(ex.autoCorrectionAMC)
       ? ex.autoCorrectionAMC
@@ -229,10 +260,11 @@
     }
 
     const pickPreviewText = (candidate: string, fallback: string): string => {
+      const sanitizedCandidate = stripAmcHiddenToken(candidate)
       const previewSource =
-        candidate.trim().length === 0
+        sanitizedCandidate.trim().length === 0
           ? fallback
-          : replaceFigureEnvsWithSvg(candidate, fallback)
+          : replaceFigureEnvsWithSvg(sanitizedCandidate, fallback)
       return previewSource
         .replaceAll('\\\\', '<br>')
         .replaceAll('\n\n', '<br>')
@@ -249,16 +281,37 @@
         item?.enonceAvant === false && !(showOnlyOnce && i === 0)
       if (shouldHideHeader) return ''
 
-      // La preview doit rester HTML : si on a une version HTML de la question,
-      // on l'utilise prioritairement et on n'affiche pas le LaTeX AMC brut.
-      if (fallback.trim().length > 0) return fallback
-
-      const enonce = typeof item?.enonce === 'string' ? item.enonce.trim() : ''
-      if (enonce.length > 0) return pickPreviewText(enonce, fallback)
-
       const propositions = Array.isArray(item?.propositions)
         ? item.propositions
         : []
+      const hasExplicitHiddenText =
+        isAmcHiddenOnlyText(item?.enonce) ||
+        propositions.some((prop: any) => {
+          if (prop?.type === 'AMCNum') {
+            return isAmcHiddenOnlyText(prop?.propositions?.[0]?.reponse?.texte)
+          }
+          if (prop?.type === 'AMCOpen') {
+            return (
+              isAmcHiddenOnlyText(prop?.propositions?.[0]?.texte) ||
+              isAmcHiddenOnlyText(prop?.propositions?.[0]?.enonce)
+            )
+          }
+          return false
+        })
+      if (hasExplicitHiddenText) return ''
+
+      const enonce = typeof item?.enonce === 'string' ? item.enonce.trim() : ''
+
+      // En AMCHybride, on aligne l'enonce commun sur la source AMC
+      // (avec substitution des figures LaTeX par les SVG de la passe HTML).
+      if (amcType === 'AMCHybride' && enonce.length > 0) {
+        return pickPreviewText(enonce, fallback)
+      }
+
+      // Hors AMCHybride, la preview reste prioritairement HTML.
+      if (fallback.trim().length > 0) return fallback
+
+      if (enonce.length > 0) return pickPreviewText(enonce, fallback)
       for (const prop of propositions) {
         if (prop?.type === 'AMCNum') {
           const texte = prop?.propositions?.[0]?.reponse?.texte
@@ -823,7 +876,9 @@
 
   function updateLatexPreview() {
     const exercicesForLatex = asAMCExercices(
-      exercices.map((exercice) => JSON.parse(JSON.stringify(exercice))),
+      exercices.map((exercice) =>
+        sanitizeAmcHiddenTokenDeep(JSON.parse(JSON.stringify(exercice))),
+      ),
     )
 
     applyTikzScaleFactors(exercicesForLatex)
@@ -1211,7 +1266,7 @@
    * Gère les patterns générés par texteEnCouleurEtGras(), numAlpha(), etc.
    */
   function latexTextToHtml(latex: string): string {
-    let html = latex
+    let html = stripAmcHiddenToken(latex)
     // \textbf {text} ou \textbf{text} → <strong>text</strong> (ex: numAlpha en mode LaTeX)
     html = html.replace(/\\textbf\s*\{([^}]*)\}/g, '<strong>$1</strong>')
     // {\bfseries \color[HTML]{hexcolor}text} → <strong style="color:#hex">text</strong>
@@ -1245,9 +1300,17 @@
 
     autoCorrection.forEach((item, questionIndex) => {
       const type = (exercise as any).amcType
-      // Pour les blocs hybrides enfants, utiliser htmlQuestions (contexte HTML)
-      // et non amcHtmlQuestions (contexte LaTeX) pour éviter du LaTeX brut dans la preview
-      const htmlContent =
+      const headerHtmlContent =
+        type === 'AMCHybride'
+          ? (amcHtmlQuestions[questionIndex] ??
+            htmlQuestions[questionIndex] ??
+            '')
+          : (amcHtmlQuestions[questionIndex] ??
+            htmlQuestions[questionIndex] ??
+            '')
+      // Pour les blocs hybrides enfants, conserver htmlQuestions (contexte HTML)
+      // afin d'éviter du LaTeX brut et de garder les SVG de la passe HTML.
+      const childrenHtmlContent =
         type === 'AMCHybride'
           ? (htmlQuestions[questionIndex] ?? '')
           : (amcHtmlQuestions[questionIndex] ??
@@ -1263,15 +1326,21 @@
           key: `${exerciseIndex}-${questionIndex}-hybrid-header`,
           label: `AMCHybride ${questionIndex + 1}`,
           ref: null,
-          enonce: item?.enonce ?? '',
-          htmlContent,
+          enonce:
+            typeof item?.enonce === 'string'
+              ? stripAmcHiddenToken(item.enonce)
+              : '',
+          htmlContent: headerHtmlContent,
           data: item,
           previewKind: 'hybridHeader',
         })
 
         propositions.forEach((prop: any, propositionIndex: number) => {
           const propType = prop?.type
-          const propEnonce = typeof prop?.enonce === 'string' ? prop.enonce : ''
+          const propEnonce =
+            typeof prop?.enonce === 'string'
+              ? stripAmcHiddenToken(prop.enonce)
+              : ''
           const figureEnvRegex =
             /\\begin\{(?:tikzpicture|pspicture|picture|circuitikz)\}[\s\S]*?\\end\{(?:tikzpicture|pspicture|picture|circuitikz)\}/i
           const propSpecificText =
@@ -1281,20 +1350,31 @@
                 ? (prop?.propositions?.[0]?.enonce ?? propEnonce)
                 : propEnonce
           const propHtmlContent = (() => {
+            const hasExplicitHiddenTextForBlock =
+              typeof propSpecificText === 'string' &&
+              isAmcHiddenOnlyText(propSpecificText)
+            if (hasExplicitHiddenTextForBlock) return ''
+
             const raw =
               typeof propSpecificText === 'string'
-                ? propSpecificText.trim()
+                ? stripAmcHiddenToken(propSpecificText).trim()
                 : ''
-            if (raw.length === 0) return htmlContent
+            if (raw.length === 0) return childrenHtmlContent
             // Pour les blocs hybrides, utiliser le contenu HTML rendu de la question entière
             // car il contient les SVG substitués pour les figures LaTeX
             // sauf si le texte spécifique a un contenu pertinent et pas de figures
             if (figureEnvRegex.test(raw)) {
-              return htmlContent
+              return childrenHtmlContent
             }
             // Si le texte spécifique n'a pas de figures, on peut l'utiliser.
-            // Pour AMCNum, le texte vient de la passe isAmc (LaTeX pur) : on le convertit en HTML.
-            if (propType === 'AMCNum') {
+            // Pour AMCNum, AMCOpen et QCM, le texte vient souvent de la passe isAmc
+            // (LaTeX textuel) : on le convertit en HTML pour la preview.
+            if (
+              propType === 'AMCNum' ||
+              propType === 'AMCOpen' ||
+              propType === 'qcmMono' ||
+              propType === 'qcmMult'
+            ) {
               return latexTextToHtml(raw)
             }
             return raw
@@ -1363,8 +1443,11 @@
             propositionIndex: 0,
             kind: 'qcm',
           },
-          enonce: item?.enonce ?? '',
-          htmlContent,
+          enonce:
+            typeof item?.enonce === 'string'
+              ? stripAmcHiddenToken(item.enonce)
+              : '',
+          htmlContent: childrenHtmlContent,
           data: item,
           previewKind: 'qcm',
         })
@@ -1380,8 +1463,11 @@
             propositionIndex: 0,
             kind: 'num',
           },
-          enonce: item?.enonce ?? '',
-          htmlContent,
+          enonce:
+            typeof item?.enonce === 'string'
+              ? stripAmcHiddenToken(item.enonce)
+              : '',
+          htmlContent: childrenHtmlContent,
           data: item,
           previewKind: 'num',
         })
@@ -1397,8 +1483,11 @@
             propositionIndex: 0,
             kind: 'open',
           },
-          enonce: item?.enonce ?? '',
-          htmlContent,
+          enonce:
+            typeof item?.enonce === 'string'
+              ? stripAmcHiddenToken(item.enonce)
+              : '',
+          htmlContent: childrenHtmlContent,
           data: item,
           previewKind: 'open',
         })

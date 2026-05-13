@@ -91,6 +91,10 @@ export default class CalculPythagoreEspace extends Exercice {
         '1 : Question ouverte\n2 : Réponse numérique',
       ]
 
+    const sup2Numerique = Number.parseInt(String(this.sup2), 10)
+    // 1 = AMCOpen, 2 = AMCNum. Toute autre valeur retombe sur AMCOpen.
+    this.sup2 = sup2Numerique === 2 ? 2 : 1
+
     const listeTypeDeQuestions = gestionnaireFormulaireTexte({
       saisie: this.sup,
       min: 1,
@@ -1105,22 +1109,23 @@ export default class CalculPythagoreEspace extends Exercice {
           })
 
       if (context.isAmc) {
+        const isAmcNum = this.sup2 === 2
         this.autoCorrectionAMC[i] = {
-          enonce: texte,
-          enonceAvant: this.sup2 === 2,
+          enonce: '',
+          enonceAvant: !isAmcNum,
           options: {
             ordered: false,
           },
         }
         this.autoCorrectionAMC[i].propositions = []
-        if (this.sup2 === 1) {
+        if (isAmcNum) {
           this.autoCorrectionAMC[i].propositions.push({
             type: 'AMCNum',
             propositions: [
               {
                 reponse: {
                   // utilisé si type = 'AMCNum'
-                  texte,
+                  texte: '[[AMC_HIDDEN]]',
                   valeur: [reponse], // obligatoire (la réponse numérique à comparer à celle de l'élève). EE : Si une fraction est la réponse, mettre un tableau sous la forme [num,den]
                   alignement: 'center', // EE : ce champ est facultatif et n'est fonctionnel que pour l'hybride. Il permet de choisir où les cases sont disposées sur la feuille. Par défaut, c'est comme le texte qui le précède. Pour mettre à gauche, au centre ou à droite, choisir parmi ('flushleft', 'center', 'flushright').
                   param: {
@@ -1139,7 +1144,7 @@ export default class CalculPythagoreEspace extends Exercice {
               {
                 texte: texteCorr,
                 statut: 4, // OBLIGATOIRE (ici c'est le nombre de lignes du cadre pour la réponse de l'élève sur AMC)
-                enonce: texte,
+                enonce: '[[AMC_HIDDEN]]',
                 sanscadre: false, // EE : ce champ est facultatif et permet (si true) de cacher le cadre et les lignes acceptant la réponse de l'élève
                 pointilles: false, // EE : ce champ est facultatif et permet (si false) d'enlever les pointillés sur chaque ligne.
               },

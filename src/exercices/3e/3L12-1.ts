@@ -175,7 +175,7 @@ export default class DevelopperIdentitesRemarquables3 extends Exercice {
               propositions: [
                 {
                   texte: texteCorr,
-                  enonce: texte + '<br>',
+                  enonce: `Développer et réduire ${texte}\\\\`,
                   statut: 4,
                 },
               ],
