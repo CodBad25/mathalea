@@ -5,13 +5,13 @@ import {
   combinaisonListesSansChangerOrdre,
   shuffle,
 } from '../../lib/outils/arrayOutils'
-import { texteEnCouleurEtGras } from '../../lib/outils/embellissements'
+import { miseEnCouleur, texteEnCouleurEtGras } from '../../lib/outils/embellissements'
+import { bleuMathalea } from '../../lib/colors'
 import { arrondi } from '../../lib/outils/nombres'
 import { texNombre } from '../../lib/outils/texNombre'
 import { context } from '../../modules/context'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
-import { bleuMathalea } from '../../lib/colors'
 
 export const dateDeModifImportante = '01/06/2024'
 export const titre = 'Reconnaitre des tableaux de proportionnalité'
@@ -43,10 +43,10 @@ function justificationsOK(
   let sortie
   switch (sens) {
     case 'L1L2':
-      sortie = `$\\dfrac{\\textcolor{blue}{${n1}}}{\\textcolor{red}{${n1 * coeff}}} = \\dfrac{\\textcolor{blue}{${n2}}}{\\textcolor{red}{${n2 * coeff}}} = \\dfrac{\\textcolor{blue}{${n3}}}{\\textcolor{red}{${n3 * coeff}}}$`
+      sortie = `$\\dfrac{${miseEnCouleur(n1, bleuMathalea)}}{${miseEnCouleur(n1 * coeff, 'red')}} = \\dfrac{${miseEnCouleur(n2, bleuMathalea)}}{${miseEnCouleur(n2 * coeff, 'red')}} = \\dfrac{${miseEnCouleur(n3, bleuMathalea)}}{${miseEnCouleur(n3 * coeff, 'red')}}$`
       break
     case 'L2L1':
-      sortie = `$\\dfrac{\\textcolor{red}{${n1 * coeff}}}{\\textcolor{blue}{${n1}}} = \\dfrac{\\textcolor{red}{${n2 * coeff}}}{\\textcolor{blue}{${n2}}} = \\dfrac{\\textcolor{red}{${n3 * coeff}}}{\\textcolor{blue}{${n3}}}$`
+      sortie = `$\\dfrac{${miseEnCouleur(n1 * coeff, 'red')}}{${miseEnCouleur(n1, bleuMathalea)}} = \\dfrac{${miseEnCouleur(n2 * coeff, 'red')}}{${miseEnCouleur(n2, bleuMathalea)}} = \\dfrac{${miseEnCouleur(n3 * coeff, 'red')}}{${miseEnCouleur(n3, bleuMathalea)}}$`
       break
   }
   return sortie
@@ -69,31 +69,22 @@ function justificationsKO(
       return '\\neq'
     }
   }
-  let color1, color2
-  switch (sens) {
-    case 'L1L2':
-      color1 = 'red'
-      color2 = bleuMathalea
-      break
-    case 'L2L1':
-      color1 = bleuMathalea
-      color2 = 'red'
-      break
-  }
+  const couleurL1 = sens === 'L1L2' ? bleuMathalea : 'red'
+  const couleurL2 = sens === 'L1L2' ? 'red' : bleuMathalea
   switch (operation) {
     case '+':
-      sortie = `$\\dfrac{\\textcolor{${color2}}{${n1}}}{\\textcolor{${color1}}{${n1 + coeff}}}`
+      sortie = `$\\dfrac{${miseEnCouleur(n1, couleurL1)}}{${miseEnCouleur(n1 + coeff, couleurL2)}}`
       sortie += isEq(n1, n2, coeff)
-      sortie += `\\dfrac{\\textcolor{${color2}}{${n2}}}{\\textcolor{${color1}}{${n2 + coeff}}}`
+      sortie += `\\dfrac{${miseEnCouleur(n2, couleurL1)}}{${miseEnCouleur(n2 + coeff, couleurL2)}}`
       sortie += isEq(n2, n3, coeff)
-      sortie += `\\dfrac{\\textcolor{${color2}}{${n3}}}{\\textcolor{${color1}}{${n3 + coeff}}}$`
+      sortie += `\\dfrac{${miseEnCouleur(n3, couleurL1)}}{${miseEnCouleur(n3 + coeff, couleurL2)}}$`
       break
     case '-':
-      sortie = `$\\dfrac{\\textcolor{${color2}}{${n1}}}{\\textcolor{${color1}}{${n1 - coeff}}}`
+      sortie = `$\\dfrac{${miseEnCouleur(n1, couleurL1)}}{${miseEnCouleur(n1 - coeff, couleurL2)}}`
       sortie += isEq(n1, n2, coeff)
-      sortie += `\\dfrac{\\textcolor{${color2}}{${n2}}}{\\textcolor{${color1}}{${n2 - coeff}}}`
+      sortie += `\\dfrac{${miseEnCouleur(n2, couleurL1)}}{${miseEnCouleur(n2 - coeff, couleurL2)}}`
       sortie += isEq(n2, n3, coeff)
-      sortie += `\\dfrac{\\textcolor{${color2}}{${n3}}}{\\textcolor{${color1}}{${n3 - coeff}}}$`
+      sortie += `\\dfrac{${miseEnCouleur(n3, couleurL1)}}{${miseEnCouleur(n3 - coeff, couleurL2)}}$`
       break
   }
   return sortie
