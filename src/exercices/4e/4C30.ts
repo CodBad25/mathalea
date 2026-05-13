@@ -84,6 +84,7 @@ export default class PuissancesDeDix extends Exercice {
     // pour pouvoir adapter les couleurs en cas de besoin
     const coul0 = 'red'
     const coul1 = bleuMathalea
+    const coul1Cmd = context.isHtml ? `\\color{${coul1}}` : `\\color[HTML]{${coul1.replace('#', '')}}`
 
     for (
       let i = 0,
@@ -133,7 +134,7 @@ export default class PuissancesDeDix extends Exercice {
             texteCorr += `Il y a donc $${miseEnEvidence(exp[0], coul0)}~${miseEnEvidence('+', 'black')}~${miseEnEvidence(exp[1], coul1)}$ facteurs tous égaux à $10$.<br>`
             texteCorr += `$${lettre}=10^{${exp[0]} +  ${exp[1]}} = ${miseEnEvidence(reponseInteractive)}$`
           } else if (exp[0] < 0 && exp[1] > 0) {
-            texteCorr += `Il y a donc $${miseEnEvidence(-1 * exp[0], coul0)}$ facteurs tous égaux à $10$ au dénominateur et $\\color{${coul1}}{${exp[1]}}$ facteurs tous égaux à $10$ au numérateur.<br>`
+            texteCorr += `Il y a donc $${miseEnEvidence(-1 * exp[0], coul0)}$ facteurs tous égaux à $10$ au dénominateur et $${coul1Cmd}{${exp[1]}}$ facteurs tous égaux à $10$ au numérateur.<br>`
             if (-1 * exp[0] < exp[1]) {
               // plus grand au numérateur
               if (this.correctionDetaillee) {
@@ -148,7 +149,7 @@ export default class PuissancesDeDix extends Exercice {
               texteCorr += `$${lettre}=\\dfrac{10^{${exp[1]}}}{10^{${-1 * exp[0]}}} = \\dfrac{1}{10^{${-1 * exp[0]} - ${exp[1]}}} = \\dfrac{1}{10^{${-1 * exp[0] - exp[1]}}}= ${miseEnEvidence(reponseInteractive)}$`
             }
           } else if (exp[0] > 0 && exp[1] < 0) {
-            texteCorr += `Il y a donc $${miseEnEvidence(exp[0], coul0)}$ facteurs tous égaux à $10$ au numérateur et $\\color{${coul1}}{${-1 * exp[1]}}$ facteurs tous égaux à $10$ au dénominateur.<br>`
+            texteCorr += `Il y a donc $${miseEnEvidence(exp[0], coul0)}$ facteurs tous égaux à $10$ au numérateur et $${coul1Cmd}{${-1 * exp[1]}}$ facteurs tous égaux à $10$ au dénominateur.<br>`
             if (exp[0] > -1 * exp[1]) {
               // plus grand au numérateur
               if (this.correctionDetaillee) {
@@ -163,7 +164,7 @@ export default class PuissancesDeDix extends Exercice {
               texteCorr += `$${lettre}=\\dfrac{10^{${exp[0]}}}{10^{${-1 * exp[1]}}} = \\dfrac{1}{10^{${-1 * exp[1]} - ${exp[0]}}} = \\dfrac{1}{10^{${-1 * exp[1] - exp[0]}}}= ${miseEnEvidence(reponseInteractive)}$`
             }
           } else if (exp[0] < 0 && exp[1] < 0) {
-            texteCorr += `Il y a donc $${miseEnEvidence(-1 * exp[0], coul0)}$ facteurs tous égaux à $10$ au dénominateur et $\\color{${coul1}}{${-1 * exp[1]}}$ facteurs tous égaux à $10$ au dénominateur.<br>`
+            texteCorr += `Il y a donc $${miseEnEvidence(-1 * exp[0], coul0)}$ facteurs tous égaux à $10$ au dénominateur et $${coul1Cmd}{${-1 * exp[1]}}$ facteurs tous égaux à $10$ au dénominateur.<br>`
             texteCorr += `$${lettre}=\\dfrac{1}{10^{${-1 * exp[0]}+${-1 * exp[1]}}} = \\dfrac{1}{10^{${-1 * exp[0] - 1 * exp[1]}}} = ${miseEnEvidence(reponseInteractive)}$`
           }
           exposantAMC = [
@@ -191,7 +192,7 @@ export default class PuissancesDeDix extends Exercice {
               texteCorr += `$${lettre}=\\dfrac{${eclatePuissance(10, exp[0], couleurExp0)}}{${eclatePuissance(10, exp[1], couleurExp1)}}$<br>`
             }
             nbSimplifications = Math.min(exp[0], exp[1])
-            texteCorr += `Il y a donc $$${miseEnEvidence(nbSimplifications, coul1)}$ simplification${nbSimplifications === 1 ? '' : 's'} par $10$ possible${nbSimplifications === 1 ? '' : 's'}.<br>`
+            texteCorr += `Il y a donc $${miseEnEvidence(nbSimplifications, coul1)}$ simplification${nbSimplifications === 1 ? '' : 's'} par $10$ possible${nbSimplifications === 1 ? '' : 's'}.<br>`
             if (exp[0] - exp[1] < 0) {
               if (this.correctionDetaillee) {
                 texteCorr += `$${lettre}=\\dfrac{${eclatePuissance('\\cancel{10}', exp[0], couleurExp0)}}{${eclatePuissance('\\cancel{10}', exp[0], couleurExp1)}\\times${eclatePuissance(10, exp[1] - exp[0], couleurExp1)}}$<br>`
@@ -210,7 +211,7 @@ export default class PuissancesDeDix extends Exercice {
               texteCorr += `$${lettre}=\\dfrac{${eclatePuissance(10, -1 * exp[1], couleurExp0)}}{${eclatePuissance(10, -1 * exp[0], couleurExp1)}}$<br>`
             }
             nbSimplifications = Math.min(-1 * exp[0], -1 * exp[1])
-            texteCorr += `Il y a donc $$${miseEnEvidence(nbSimplifications, coul1)}$ simplification${nbSimplifications === 1 ? '' : 's'} par $10$ possible${nbSimplifications === 1 ? '' : 's'}.<br>`
+            texteCorr += `Il y a donc $${miseEnEvidence(nbSimplifications, coul1)}$ simplification${nbSimplifications === 1 ? '' : 's'} par $10$ possible${nbSimplifications === 1 ? '' : 's'}.<br>`
             if (-1 * exp[0] < -1 * exp[1]) {
               // plus grand au numérateur
               if (this.correctionDetaillee) {
@@ -269,7 +270,7 @@ export default class PuissancesDeDix extends Exercice {
           if (exp[0] > 0 && exp[1] > 0) {
             if (this.correctionDetaillee) {
               texteCorr += `$${lettre}=\\color{${coul0}}{\\underbrace{${eclatePuissance(`(10^${exp[0]})`, exp[1], coul0)}}_{${exp[1]}\\thickspace\\text{facteurs}}}$<br>`
-              texteCorr += `$${lettre}=\\color{${coul0}}{\\underbrace{${eclatePuissance(`(\\color{${coul1}}{\\underbrace{${eclatePuissance(10, exp[0], coul1)}}_{${exp[0]}\\thickspace\\text{facteurs}}}\\color{${coul0}})`, exp[1], coul0)}}_{${exp[1]}\\times\\color{${coul1}}{${exp[0]}}\\thickspace\\color{black}{\\text{facteurs}}}}$<br>`
+              texteCorr += `$${lettre}=\\color{${coul0}}{\\underbrace{${eclatePuissance(`(${coul1Cmd}{\\underbrace{${eclatePuissance(10, exp[0], coul1)}}_{${exp[0]}\\thickspace\\text{facteurs}}}\\color{${coul0}})`, exp[1], coul0)}}_{${exp[1]}\\times${coul1Cmd}{${exp[0]}}\\thickspace\\color{black}{\\text{facteurs}}}}$<br>`
             }
             texteCorr += `Il y a donc $${miseEnEvidence(exp[1], coul0)}~${miseEnEvidence('\\times', 'black')}~${miseEnEvidence(exp[0], coul1)}$ facteurs tous égaux à $10$.<br>`
             reponseInteractive = `10^{${exp[0] * exp[1]}}`
@@ -277,7 +278,7 @@ export default class PuissancesDeDix extends Exercice {
           } else if (exp[0] < 0 && exp[1] > 0) {
             if (this.correctionDetaillee) {
               texteCorr += `$${lettre}=\\color{${coul0}}{\\underbrace{${eclatePuissance(`(10^{${exp[0]}})`, exp[1], coul0)}}_{${exp[1]}\\thickspace\\text{facteurs}}}$<br>`
-              texteCorr += `$${lettre}=\\color{${coul0}}{\\underbrace{${eclatePuissance(`(\\color{${coul1}}{\\underbrace{\\dfrac{1}{${eclatePuissance(10, -1 * exp[0], coul1)}}}_{${-1 * exp[0]}\\thickspace\\text{facteurs}}}\\color{${coul0}})`, exp[1], coul0)}}_{${exp[1]}\\times\\color{${coul1}}{${-1 * exp[0]}}\\thickspace\\color{black}{\\text{facteurs}}}}$<br>`
+              texteCorr += `$${lettre}=\\color{${coul0}}{\\underbrace{${eclatePuissance(`(${coul1Cmd}{\\underbrace{\\dfrac{1}{${eclatePuissance(10, -1 * exp[0], coul1)}}}_{${-1 * exp[0]}\\thickspace\\text{facteurs}}}\\color{${coul0}})`, exp[1], coul0)}}_{${exp[1]}\\times${coul1Cmd}{${-1 * exp[0]}}\\thickspace\\color{black}{\\text{facteurs}}}}$<br>`
             }
             texteCorr += `Il y a donc $${miseEnEvidence(exp[1], coul0)}~${miseEnEvidence('\\times', 'black')}~${miseEnEvidence(-1 * exp[0], coul1)}$ facteurs tous égaux à $10$ au dénominateur.<br>`
             reponseInteractive = `10^{${exp[0] * exp[1]}}`
@@ -286,7 +287,7 @@ export default class PuissancesDeDix extends Exercice {
             texteCorr += `$${lettre}=\\dfrac{1}{(10^{${exp[0]}})^{${-1 * exp[1]}}}$<br>`
             if (this.correctionDetaillee) {
               texteCorr += `$${lettre}=\\color{${coul0}}{\\underbrace{\\dfrac{1}{${eclatePuissance(`(10^{${exp[0]}})`, -1 * exp[1], coul0)}}}_{${-1 * exp[1]}\\thickspace\\text{facteurs}}}$<br>`
-              texteCorr += `$${lettre}=\\color{${coul0}}{\\underbrace{${eclatePuissance(`(\\color{${coul1}}{\\underbrace{\\dfrac{1}{${eclatePuissance(10, exp[0], coul1)}}}_{${exp[0]}\\thickspace\\text{facteurs}}}\\color{${coul0}})`, -1 * exp[1], coul0)}}_{${-1 * exp[1]}\\times\\color{${coul1}}{${exp[0]}}\\thickspace\\color{black}{\\text{facteurs}}}}$<br>`
+              texteCorr += `$${lettre}=\\color{${coul0}}{\\underbrace{${eclatePuissance(`(${coul1Cmd}{\\underbrace{\\dfrac{1}{${eclatePuissance(10, exp[0], coul1)}}}_{${exp[0]}\\thickspace\\text{facteurs}}}\\color{${coul0}})`, -1 * exp[1], coul0)}}_{${-1 * exp[1]}\\times${coul1Cmd}{${exp[0]}}\\thickspace\\color{black}{\\text{facteurs}}}}$<br>`
             }
             texteCorr += `Il y a donc $${miseEnEvidence(-1 * exp[1], coul0)}~${miseEnEvidence('\\times', 'black')}~${miseEnEvidence(exp[0], coul1)}$ facteurs tous égaux à $10$ au dénominateur.<br>`
             reponseInteractive = `10^{${exp[0] * exp[1]}}`
@@ -295,7 +296,7 @@ export default class PuissancesDeDix extends Exercice {
             texteCorr += `$${lettre}=\\dfrac{1}{(10^{${exp[0]}})^{${-1 * exp[1]}}}$<br>`
             if (this.correctionDetaillee) {
               texteCorr += `$${lettre}=\\color{${coul0}}{\\underbrace{\\dfrac{1}{${eclatePuissance(`(10^{${exp[0]}})`, -1 * exp[1], coul0)}}}_{${-1 * exp[1]}\\thickspace\\text{facteurs}}}$<br>`
-              texteCorr += `$${lettre}=\\color{${coul0}}{\\underbrace{${eclatePuissance(`(\\color{${coul1}}{\\underbrace{${eclatePuissance(10, -1 * exp[0], coul1)}}_{${-1 * exp[0]}\\thickspace\\text{facteurs}}}\\color{${coul0}})`, -1 * exp[1], coul0)}}_{${-1 * exp[1]}\\times\\color{${coul1}}{${-1 * exp[0]}}\\thickspace\\color{black}{\\text{facteurs}}}}$<br>`
+              texteCorr += `$${lettre}=\\color{${coul0}}{\\underbrace{${eclatePuissance(`(${coul1Cmd}{\\underbrace{${eclatePuissance(10, -1 * exp[0], coul1)}}_{${-1 * exp[0]}\\thickspace\\text{facteurs}}}\\color{${coul0}})`, -1 * exp[1], coul0)}}_{${-1 * exp[1]}\\times${coul1Cmd}{${-1 * exp[0]}}\\thickspace\\color{black}{\\text{facteurs}}}}$<br>`
             }
             texteCorr += `Il y a donc $${miseEnEvidence(-1 * exp[1], coul0)}~${miseEnEvidence('\\times', 'black')}~${miseEnEvidence(-1 * exp[0], coul1)}$ facteurs tous égaux à $10$ au dénominateur.<br>`
             reponseInteractive = `10^{${exp[0] * exp[1]}}`
