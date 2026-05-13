@@ -414,10 +414,7 @@ export function loadPackagesFromContent(contents: contentsType) {
 
   testIfLoaded(
     ['[style=python]'],
-    `
-\\tcbuselibrary{listings}
-
-% Style Python
+    `% Style Python
 \\lstdefinestyle{python}{
   language=Python,
   basicstyle=\\ttfamily\\small,
