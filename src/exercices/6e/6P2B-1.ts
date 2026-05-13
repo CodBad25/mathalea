@@ -132,10 +132,10 @@ export default class FonctionsProbabilite6e extends Exercice {
       texte += `${quidam} choisit au hasard l'${article} d'entre ${pronom}.<br>`
       if (this.niveau > 4) {
         texte += addMultiMathfield(this, i, {
-          dataTemplate: `a) Quelle est la probabilité que son choix tombe sur l'${article} des ${objets} ${qualites[index1][m]} ? %{champ1}.
-          b) Quelle est la probabilité que son choix tombe sur l'${article} des ${objets} ${qualites[index1][p]} ? %{champ2}.
-          c) Quelle est la probabilité que son choix ne tombe pas sur l'${article} des ${objets} ${qualites[index1][q]} ? %{champ3}.
-          d) Quelle est la probabilité que son choix tombe sur l'${article} des ${objets} ${qualites[index1][m]} ou ${qualites[index1][p]} ? %{champ4}.`,
+          dataTemplate: `a) Quelle est la probabilité que son choix tombe sur l'${article} des ${objets} ${qualites[index1][m]} ? %{champ1}
+          b) Quelle est la probabilité que son choix tombe sur l'${article} des ${objets} ${qualites[index1][p]} ? %{champ2}
+          c) Quelle est la probabilité que son choix ne tombe pas sur l'${article} des ${objets} ${qualites[index1][q]} ? %{champ3}
+          d) Quelle est la probabilité que son choix tombe sur l'${article} des ${objets} ${qualites[index1][m]} ou ${qualites[index1][p]} ? %{champ4}`,
           dataOptions: {
             champ1: { keyboard: KeyboardType.clavierDeBaseAvecFraction },
             champ2: { keyboard: KeyboardType.clavierDeBaseAvecFraction },
