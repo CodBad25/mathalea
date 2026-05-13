@@ -1,6 +1,10 @@
 import type { Check, CheckOverrides } from './types'
 import { evaluateArithmeticExpression } from './evaluateArithmeticExpression'
 import {
+  insertImplicitProducts,
+  normalizeLatexArithmetic,
+} from './latexArithmetic'
+import {
   expectedCoordinates,
   extractEquations,
   missingCoordinates,
@@ -42,30 +46,11 @@ function normalizeExpression(
   variable: string,
   value: number,
 ): string {
-  let normalized = expression
-    .replaceAll(',', '.')
-    .replaceAll('{,}', '.')
-    .replaceAll('−', '-')
-    .replaceAll('\\times', '*')
-    .replaceAll('\\cdot', '*')
-    .replaceAll('\\left', '')
-    .replaceAll('\\right', '')
-    .replace(/\s/g, '')
-
-  while (/\\d?frac\{([^{}]+)\}\{([^{}]+)\}/.test(normalized)) {
-    normalized = normalized.replace(
-      /\\d?frac\{([^{}]+)\}\{([^{}]+)\}/g,
-      '(($1)/($2))',
-    )
-  }
-
-  normalized = normalized
+  const normalized = normalizeLatexArithmetic(expression)
     .replace(/[{}]/g, '')
     .replace(new RegExp(variable, 'g'), `(${value})`)
-    .replace(/(\d|\))(?=\()/g, '$1*')
-    .replace(/\)(?=\d)/g, ')*')
 
-  return normalized
+  return insertImplicitProducts(normalized)
 }
 
 function evaluateExpression(

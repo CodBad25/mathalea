@@ -1,8 +1,8 @@
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import {
   all,
-  equals,
-  irreducibleFractions,
+  isEqual,
+  onlyIrreducibleFractions,
   isReduced,
 } from '../../lib/interactif/checks'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
@@ -142,7 +142,7 @@ export default class nomExercice extends Exercice {
             handleAnswers(this, i, {
               reponse: {
                 value: p.toString(),
-                compare: all([equals(), isReduced(), irreducibleFractions()]),
+                compare: all([isEqual(), isReduced(), onlyIrreducibleFractions()]),
               },
             })
 

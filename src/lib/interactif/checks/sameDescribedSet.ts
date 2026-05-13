@@ -1,5 +1,9 @@
 import type { Check, CheckOverrides } from './types'
 import { evaluateArithmeticExpression } from './evaluateArithmeticExpression'
+import {
+  normalizeLatexArithmetic,
+  splitTopLevelTerms,
+} from './latexArithmetic'
 
 type SameDescribedSetOptions = CheckOverrides & {
   variable?: string
@@ -13,17 +17,10 @@ type Progression = {
 const TOLERANCE = 1e-9
 
 function normalizeExpression(value: string): string {
-  return value
-    .trim()
-    .replaceAll(',', '.')
-    .replaceAll('−', '-')
-    .replaceAll('\\times', '*')
-    .replaceAll('\\cdot', '*')
-    .replace(/\\d?frac\{([^{}]+)\}\{([^{}]+)\}/g, '(($1)/($2))')
+  return normalizeLatexArithmetic(value)
     .replaceAll('\\pi', 'PI')
     .replaceAll('π', 'PI')
-    .replace(/\bpi\b/gi, 'PI')
-    .replace(/\s+/g, '')
+    .replace(/pi/gi, 'PI')
 }
 
 function inferVariable(saisie: string, answer: string): string {
@@ -32,11 +29,6 @@ function inferVariable(saisie: string, answer: string): string {
     .match(/[A-Za-z]/g)
   const uniqueLetters = Array.from(new Set(letters ?? []))
   return uniqueLetters.length === 1 ? uniqueLetters[0] : 'x'
-}
-
-function splitTerms(expression: string): string[] {
-  const normalized = expression.startsWith('-') ? expression : `+${expression}`
-  return normalized.match(/[+-][^+-]+/g) ?? []
 }
 
 function safeEvaluateNumber(expression: string): number | undefined {
@@ -71,7 +63,7 @@ function progressionOf(
   let step = 0
   let offset = 0
 
-  for (const term of splitTerms(expression)) {
+  for (const term of splitTopLevelTerms(expression)) {
     if (term.includes(variable)) {
       if ((term.match(new RegExp(variable, 'g')) ?? []).length > 1)
         return undefined

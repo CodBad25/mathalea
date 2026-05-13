@@ -1,4 +1,4 @@
-import { all, equals, isReduced } from '../../lib/interactif/checks'
+import { all, isEqual, isReduced } from '../../lib/interactif/checks'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -109,7 +109,7 @@ export default class AngleAiguDeuxDroites extends Exercice {
       handleAnswers(this, i, {
         reponse: {
           value: angleAnswer(angle),
-          compare: all([equals({ tolerance: -1 }), isReduced()]),
+          compare: all([isEqual({ tolerance: -1 }), isReduced()]),
         },
       })
 

@@ -5,12 +5,12 @@ type SetEqualityOptions = CheckOverrides & {
   variable?: string
 }
 
-export function setEquality(options: SetEqualityOptions = {}): Check {
+export function sameSet(options: SetEqualityOptions = {}): Check {
   return fromOptions(
     { ensembleDeNombres: true, variable: options.variable },
     {
       ...options,
-      name: options.name ?? 'setEquality',
+      name: options.name ?? 'sameSet',
     },
   )
 }

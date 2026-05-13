@@ -1,4 +1,4 @@
-import { all, equals, isReduced } from '../../lib/interactif/checks'
+import { all, isEqual, isReduced } from '../../lib/interactif/checks'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { remplisLesBlancs } from '../../lib/interactif/questionMathLive'
@@ -159,15 +159,15 @@ export default class AnglesTriangleEspace extends Exercice {
       handleAnswers(this, i, {
         champ1: {
           value: angleAnswer(angleA),
-          compare: all([equals({ tolerance: -1 }), isReduced()]),
+          compare: all([isEqual({ tolerance: -1 }), isReduced()]),
         },
         champ2: {
           value: angleAnswer(angleB),
-          compare: all([equals({ tolerance: -1 }), isReduced()]),
+          compare: all([isEqual({ tolerance: -1 }), isReduced()]),
         },
         champ3: {
           value: angleAnswer(angleC),
-          compare: all([equals({ tolerance: -1 }), isReduced()]),
+          compare: all([isEqual({ tolerance: -1 }), isReduced()]),
         },
       })
 

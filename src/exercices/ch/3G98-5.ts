@@ -3,7 +3,7 @@ import {
   sameParametricLine,
   singleParameterVariable,
 } from '../../lib/interactif/checks'
-import { compareSameParametricLineFromFields } from '../../lib/interactif/checks/sameParametricLineFromFields'
+import { sameParametricLineFromFieldsCallback } from '../../lib/interactif/checks/sameParametricLineFromFields'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { remplisLesBlancs } from '../../lib/interactif/questionMathLive'
@@ -90,7 +90,7 @@ export default class RepresentationParametriqueDroiteDeuxPoints extends Exercice
           )
       }
 
-      const compare = compareSameParametricLineFromFields({
+      const callback = sameParametricLineFromFieldsCallback({
         compare: all([
           singleParameterVariable({
             dimension: 3,
@@ -99,23 +99,19 @@ export default class RepresentationParametriqueDroiteDeuxPoints extends Exercice
           }),
           sameParametricLine({ dimension: 3 }),
         ]),
-        numeroExercice: this.numeroExercice,
-        question: i,
         dimension: 3,
       })
       handleAnswers(this, i, {
         champ1: {
           value: expected,
-          compare,
         },
         champ2: {
           value: expected,
-          compare,
         },
         champ3: {
           value: expected,
-          compare,
         },
+        callback,
       })
 
       let texteCorr = `Le vecteur $\\overrightarrow{AB}$ est un vecteur directeur de la droite $(AB)$ car ses extrémités $A$ et $B$ sont deux points distincts de cette droite : il en donne donc la direction.<br>`

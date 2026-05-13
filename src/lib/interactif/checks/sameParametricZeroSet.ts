@@ -1,22 +1,22 @@
 import { ComputeEngine } from '@cortex-js/compute-engine'
+import type { Check, CheckOverrides } from './types'
+import { normalizeLatexArithmetic } from './latexArithmetic'
 
 const ce = new ComputeEngine()
 const TOLERANCE = 1e-7
 
-export interface ZeroSetProgression {
+export interface ParametricZeroSetProgression {
   offset: number
   period: number
 }
 
 function cleanLatex(input: string): string {
-  return input
+  return normalizeLatexArithmetic(input)
     .replaceAll('π', '\\pi')
     .replaceAll('ℤ', '\\mathbb{Z}')
-    .replaceAll('\\dfrac', '\\frac')
     .replaceAll('\\left', '')
     .replaceAll('\\right', '')
     .replaceAll('\\,', '')
-    .replace(/\s+/g, '')
     .replace(/^\$/, '')
     .replace(/\$$/, '')
 }
@@ -58,9 +58,9 @@ function nearlyInteger(value: number): boolean {
   return nearlyEqual(value, Math.round(value))
 }
 
-export function compareZeroSetParametrique(
+function compareParametricZeroSet(
   input: string,
-  expected: ZeroSetProgression,
+  expected: ParametricZeroSetProgression,
 ): { isOk: boolean; feedback?: string } {
   const expression = extractExpression(input)
   const values = [0, 1, 2, 3].map((k) => evaluateForK(expression, k))
@@ -103,4 +103,27 @@ export function compareZeroSetParametrique(
   }
 
   return { isOk: true }
+}
+
+export function sameParametricZeroSet(
+  expected: ParametricZeroSetProgression,
+  options: CheckOverrides = {},
+): Check {
+  return {
+    name: options.name ?? 'sameParametricZeroSet',
+    weight: options.weight,
+    feedbackEnabled: options.feedbackEnabled,
+    feedbackOnSuccess: options.feedbackOnSuccess,
+    run: (saisie) => {
+      const result = compareParametricZeroSet(saisie, expected)
+      return {
+        passed: result.isOk,
+        feedbackKo:
+          options.feedbackKo ??
+          result.feedback ??
+          "L'ensemble de zéros saisi ne correspond pas à l'ensemble attendu.",
+        feedbackOk: options.feedbackOk,
+      }
+    },
+  }
 }

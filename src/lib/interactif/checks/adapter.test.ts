@@ -33,7 +33,7 @@ describe('fromOptions', () => {
           feedbackKo: "L'expression peut encore être réduite.",
         },
       ),
-      fromOptions({}, { name: 'equals', weight: 0.6 }),
+      fromOptions({}, { name: 'isEqual', weight: 0.6 }),
     ])
 
     expect(compare('x+x', '2x')).toMatchObject({
@@ -42,7 +42,7 @@ describe('fromOptions', () => {
       feedback: "L'expression peut encore être réduite.",
       details: [
         { name: 'reduced', passed: false },
-        { name: 'equals', passed: true },
+        { name: 'isEqual', passed: true },
       ],
     })
   })

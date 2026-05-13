@@ -1,5 +1,5 @@
 import { bleuMathalea } from '../../lib/colors'
-import { compareZeroSetParametrique } from '../../lib/interactif/checks'
+import { all, sameParametricZeroSet } from '../../lib/interactif/checks'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
@@ -204,7 +204,7 @@ Plusieurs écritures peuvent décrire le même ensemble de solutions.`
       handleAnswers(this, i, {
         reponse: {
           value: answer,
-          compare: (input) => compareZeroSetParametrique(input, expected),
+          compare: all([sameParametricZeroSet(expected)]),
         },
       })
 

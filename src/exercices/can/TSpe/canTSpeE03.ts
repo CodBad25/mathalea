@@ -3,7 +3,7 @@ import {
   sameParametricLine,
   singleParameterVariable,
 } from '../../../lib/interactif/checks'
-import { compareSameParametricLineFromFields } from '../../../lib/interactif/checks/sameParametricLineFromFields'
+import { sameParametricLineFromFieldsCallback } from '../../../lib/interactif/checks/sameParametricLineFromFields'
 import { handleAnswers } from '../../../lib/interactif/gestionInteractif'
 import { remplisLesBlancs } from '../../../lib/interactif/questionMathLive'
 import {
@@ -69,19 +69,18 @@ export default class RepresentationParametrique extends Exercice {
         point: [xA, yA, zA],
         direction: [xV, yV, zV],
       })
-      const compare = compareSameParametricLineFromFields({
+      const callback = sameParametricLineFromFieldsCallback({
         compare: all([
           singleParameterVariable({ dimension: 3 }),
           sameParametricLine({ dimension: 3 }),
         ]),
-        numeroExercice: this.numeroExercice,
-        question: i,
         dimension: 3,
       })
       handleAnswers(this, i, {
-        champ1: { value: expected, compare },
-        champ2: { value: expected, compare },
-        champ3: { value: expected, compare },
+        champ1: { value: expected },
+        champ2: { value: expected },
+        champ3: { value: expected },
+        callback,
       })
       texteCorr = 'Soit $M(x~;~y~;~z)$ un point de la droite $(d)$.<br>'
       texteCorr += `$M\\in (d)$ si et seulement si les vecteurs $\\overrightarrow{${pointA}M}$ et $\\vec v$ sont colinéaires. <br>`

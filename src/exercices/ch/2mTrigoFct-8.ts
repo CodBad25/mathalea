@@ -3,7 +3,7 @@ import { colorToLatexOrHTML } from '../../lib/2d/colorToLatexOrHtml'
 import { repere } from '../../lib/2d/reperes'
 import { bleuMathalea } from '../../lib/colors'
 import { addMultiMathfield } from '../../lib/interactif/MultiMathfield/MultiMathfield'
-import { all, equals, isReduced } from '../../lib/interactif/checks'
+import { all, isEqual, isReduced } from '../../lib/interactif/checks'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
 import { choice } from '../../lib/outils/arrayOutils'
@@ -35,9 +35,9 @@ export const refs = {
 type FormeTrigo = 'sin' | 'cos'
 type ParametreVariable = 'periode' | 'amplitude' | 'dephasage' | 'axe'
 
-const compareReduced = all([equals(), isReduced()])
+const compareReduced = all([isEqual(), isReduced()])
 const compareReducedFunction = all([
-  equals({
+  isEqual({
     comparisonOptions: { fonction: true, variable: 'x', domaine: [-6, 6] },
   }),
 ])
