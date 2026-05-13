@@ -18,6 +18,7 @@ const KEYBOARD_CATEGORIES = [
   'clavierDeBaseAvecVariable',
   'clavierEmvx',
   'clavierEnsemble',
+  'clavierEnsembleAvecPi',
   'clavierEnsemblePredefini',
   'equationsTerminale',
   'clavierFullOperations',
@@ -41,6 +42,7 @@ const KEYBOARD_CATEGORIES = [
   'numeration',
   'vFON',
   'volume',
+  'variableN',
 ] as const
 
 export type KeyboardCategory = (typeof KEYBOARD_CATEGORIES)[number] // on crée le type à partir du tableau de strings comme un union type de toutes les strings
@@ -138,8 +140,12 @@ export const convertKeyboardTypeToBlocks = (
       return ['numbers', 'basicOperations', 'emvxBlock']
     case KeyboardType.clavierEnsemble:
       return ['numbersX', 'ensemble', 'ensembleDefini']
+    case KeyboardType.clavierEnsembleAvecPi:
+      return ['numbers', 'ensemble', 'ensembleDefini']
     case KeyboardType.clavierEnsemblePredefini:
       return ['ensembleDefini']
+    case KeyboardType.variableN:
+      return ['variableN']
     case KeyboardType.equationsTerminale:
       return ['numbersX', 'equationsTerminale']
     case KeyboardType.clavierSuite:

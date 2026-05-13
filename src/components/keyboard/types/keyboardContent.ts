@@ -40,6 +40,7 @@ export type BlockForKeyboard =
   | 'probabilite'
   | 'suite'
   | 'trigo'
+  | 'variableN'
   | 'variables'
   | 'volumes'
   | 'vFON'
