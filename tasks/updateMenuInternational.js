@@ -449,15 +449,15 @@ const createFiles = (
     }
   }
   // Exercices placés directement sous leur niveau parent (sans conteneur intermédiaire), en premier
-  if (codePays === 'FR' && referentiel['1e']?.['1A'] && exercices['1a-auto']) {
+  if (codePays === 'FR' && referentiel['1e']?.['1A'] && exercices['1A']) {
     referentiel['1e']['1A'] = {
-      '1a-auto': exercices['1a-auto'],
+      '1A': exercices['1A'],
       ...referentiel['1e']['1A'],
     }
   }
-  if (codePays === 'FR' && referentiel['3e']?.['3Auto'] && exercices['3a-auto']) {
+  if (codePays === 'FR' && referentiel['3e']?.['3Auto'] && exercices['3A']) {
     referentiel['3e']['3Auto'] = {
-      '3a-auto': exercices['3a-auto'],
+      '3A': exercices['3A'],
       ...referentiel['3e']['3Auto'],
     }
   }
