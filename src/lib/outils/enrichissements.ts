@@ -20,6 +20,7 @@ export function ajouterAide(contenu: string, options: optionsAide = {}) {
     let HTML = ''
     HTML = `<div class="aide group inline
     text-coopmaths-warn-dark dark:text-coopmathsdark-warn-light"
+    tabindex="0"
     >
       ${options.texteAvant ?? ''}
       ${
@@ -27,7 +28,7 @@ export function ajouterAide(contenu: string, options: optionsAide = {}) {
           ? `<i class="bx ${options.iconeBxIcon}"></i>`
           : '<div class="h-[1em] w-[1em] inline-flex justify-center items-center rounded-full font-bold text-coopmaths-canvas dark:text-coopmathsdark-canvas bg-coopmaths-warn-dark dark:bg-coopmathsdark-warn-light">?</div>'
       }
-      <div class="fixed w-5/6 md:w-2/3 lg:w-1/3 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 hidden group-hover:flex flex-col items-start justify-start z-10 bg-coopmaths-canvas-dark dark:bg-coopmathsdark-canvas-dark p-2 md:p-4 rounded-xl shadow-lg">
+      <div class="fixed w-5/6 md:w-2/3 lg:w-1/3 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 hidden group-hover:flex group-focus-within:flex flex-col items-start justify-start z-10 bg-coopmaths-canvas-dark dark:bg-coopmathsdark-canvas-dark p-2 md:p-4 rounded-xl shadow-lg">
       ${
         options.titreAide
           ? `<div class="text-coopmaths-struct dark:text-coopmathsdark-struct font-semibold text-base md:text-lg">${options.titreAide}</div>
