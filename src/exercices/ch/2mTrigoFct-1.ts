@@ -1,9 +1,9 @@
 import { propositionsQcm } from '../../lib/interactif/qcm'
+import { texPiCoefficient } from '../../lib/mathFonctions/trigo'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
-import { ecritureAlgebrique, rienSi1 } from '../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
-import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import FractionEtendue from '../../modules/FractionEtendue'
+import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
 export const titre = "Déterminer le cadran d'un angle"
@@ -16,6 +16,10 @@ export const refs = {
   'fr-ch': ['2mTrigoFct-1'],
 }
 
+/**
+ * Déterminer dans quel cadran se trouve un angle.
+ * @author Nathan Scheinmann
+ */
 export default class DeterminerCadranAngle extends Exercice {
   constructor() {
     super()
@@ -97,18 +101,7 @@ export default class DeterminerCadranAngle extends Exercice {
   }
 
   private texAngle(numerateur: number, denominateur: number) {
-    if (numerateur === 0) return '0'
-    const f = new FractionEtendue(numerateur, denominateur)
-    if (f.denIrred === 1) {
-      return `${rienSi1(f.numIrred)}\\pi`
-    }
-    if (f.numIrred === 1) {
-      return `\\dfrac{\\pi}{${f.denIrred}}`
-    }
-    if (f.numIrred === -1) {
-      return `-\\dfrac{\\pi}{${f.denIrred}}`
-    }
-    return `\\dfrac{${f.numIrred}\\pi}{${f.denIrred}}`
+    return texPiCoefficient({ num: numerateur, den: denominateur })
   }
 
   private cadran(numerateur: number, denominateur: number) {
@@ -131,7 +124,6 @@ export default class DeterminerCadranAngle extends Exercice {
 
   private texMultipleDeuxPi(quotient: number) {
     if (quotient === 0) return ''
-    return `${ecritureAlgebrique(quotient)}\\times 2\\pi`
+    return `${new FractionEtendue(quotient, 1).ecritureAlgebrique}\\times 2\\pi`
   }
 }
-

@@ -19,6 +19,8 @@ export { sameParametricLine } from './sameParametricLine'
 export { setEquality } from './setEquality'
 export { singleParameterVariable } from './singleParameterVariable'
 export { stringComparison, stringEquals } from './stringEquals'
+export { compareZeroSetParametrique } from './zeroSetParametrique'
+export type { ZeroSetProgression } from './zeroSetParametrique'
 export type {
   Check,
   CheckFactory,

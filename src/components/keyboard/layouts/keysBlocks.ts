@@ -267,6 +267,10 @@ const variableCaps: CompleteKeysList = {
     'F',
   ],
 }
+const variableNCaps: CompleteKeysList = {
+  inline: ['nMath'],
+  block: ['nMath'],
+}
 const basicOperationCaps: CompleteKeysList = {
   inline: ['ADD', 'SUB', 'MULT', 'DIV', 'SQ', 'FRAC', '(', ')'],
   block: ['ADD', 'SUB', 'MULT', 'DIV', 'SQ', 'FRAC', '(', ')'],
@@ -942,6 +946,13 @@ export const variables: KeyboardBlock = {
   isUnits: false,
 }
 
+export const variableN: KeyboardBlock = {
+  keycaps: variableNCaps,
+  cols: 1,
+  title: 'Variable',
+  isUnits: false,
+}
+
 export const vFON: KeyboardBlock = {
   keycaps: vFONCaps,
   cols: 1,
@@ -1209,6 +1220,7 @@ export const keyboardBlocks: {
   numeration,
   probabilite,
   trigo,
+  variableN,
   variables,
   volumes,
   vFON,

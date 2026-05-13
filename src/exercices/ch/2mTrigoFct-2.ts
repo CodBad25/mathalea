@@ -2,15 +2,11 @@ import { addMultiMathfield } from '../../lib/interactif/MultiMathfield/MultiMath
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
 import { fonctionComparaison } from '../../lib/interactif/comparisonFunctions'
 import { propositionsQcm, verifQuestionQcm } from '../../lib/interactif/qcm'
+import { texPiCoefficient } from '../../lib/mathFonctions/trigo'
 import { combinaisonListes } from '../../lib/outils/arrayOutils'
-import {
-  ecritureAlgebrique,
-  ecritureParentheseSiNegatif,
-  rienSi1,
-} from '../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
-import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import FractionEtendue from '../../modules/FractionEtendue'
+import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
 export const titre = "Déterminer une mesure d'angle congrue dans $[0;2\\pi[$"
@@ -23,6 +19,10 @@ export const refs = {
   'fr-ch': ['2mTrigoFct-2'],
 }
 
+/**
+ * Déterminer une mesure d'angle congrue dans $[0;2\pi[$.
+ * @author Nathan Scheinmann
+ */
 export default class MesureAngleEntreZeroEtDeuxPi extends Exercice {
   private anglesReduits: string[] = []
 
@@ -115,7 +115,12 @@ export default class MesureAngleEntreZeroEtDeuxPi extends Exercice {
       texteCorr += `On cherche donc la mesure qui diffère d'un facteur $2\\pi$ et qui appartient à $[0;2\\pi[$. On enlève pour cela un multiple de $2\\pi$ à l'angle initial.<br>`
       texteCorr += `Ici, $2\\pi=\\dfrac{${2 * denominateur}\\pi}{${denominateur}}$.<br>`
       texteCorr += `On effectue la division euclidienne du numérateur par $${2 * denominateur}$ :<br>`
-      texteCorr += `$${numerateur}=${2 * denominateur}\\times ${ecritureParentheseSiNegatif(quotient)}${ecritureAlgebrique(reste)}$.<br>`
+      const quotientTex = new FractionEtendue(
+        quotient,
+        1,
+      ).ecritureParentheseSiNegatif
+      const resteTex = new FractionEtendue(reste, 1).ecritureAlgebrique
+      texteCorr += `$${numerateur}=${2 * denominateur}\\times ${quotientTex}${resteTex}$.<br>`
       texteCorr += `Ainsi, $${angle}=${angleReduit}${this.texMultipleDeuxPi(quotient)}$.<br>`
       texteCorr += `La mesure dans $[0;2\\pi[$ qui repère le même point du cercle trigonométrique que $${angle}$ est donc $${miseEnEvidence(angleReduit)}$.`
       if (this.sup) {
@@ -181,18 +186,7 @@ export default class MesureAngleEntreZeroEtDeuxPi extends Exercice {
   }
 
   private texAngle(numerateur: number, denominateur: number) {
-    if (numerateur === 0) return '0'
-    const f = new FractionEtendue(numerateur, denominateur)
-    if (f.denIrred === 1) {
-      return `${rienSi1(f.numIrred)}\\pi`
-    }
-    if (f.numIrred === 1) {
-      return `\\dfrac{\\pi}{${f.denIrred}}`
-    }
-    if (f.numIrred === -1) {
-      return `-\\dfrac{\\pi}{${f.denIrred}}`
-    }
-    return `\\dfrac{${f.numIrred}\\pi}{${f.denIrred}}`
+    return texPiCoefficient({ num: numerateur, den: denominateur })
   }
 
   private cadran(numerateur: number, denominateur: number) {
@@ -229,7 +223,6 @@ export default class MesureAngleEntreZeroEtDeuxPi extends Exercice {
 
   private texMultipleDeuxPi(quotient: number) {
     if (quotient === 0) return ''
-    return `${ecritureAlgebrique(quotient)}\\times 2\\pi`
+    return `${new FractionEtendue(quotient, 1).ecritureAlgebrique}\\times 2\\pi`
   }
 }
-
