@@ -8,21 +8,20 @@ export const interactifType = 'mathLive'
 /**
  *
  * @author Stéphane Guyon  + Jean-claude Lhote (interactif) + Gilles Mora
- * Passage en multiMathfield par Éric Elter le 13/05/2026
  */
-export const uuid = 'd1dae'
+export const uuid = 'd1da4'
 
 export const refs = {
-  'fr-fr': ['2G32-3'],
-  'fr-ch': ['11FA9-6', '1mF2-5'],
+  'fr-fr': [],
+  'fr-ch': [],
 }
-class EqCart1pointVectDir extends EqCartDroite {
+class EqCart1pointVectDirOld extends EqCartDroite {
   constructor() {
     super()
     this.nbQuestions = 1
-    this.sup = '4'
-    this.besoinFormulaireTexte = false
-    this.version = 2
+    this.spacingCorr = 2
+    this.version = 4
+    // this.consigne = 'Déterminer une équation cartésienne de la droite $(AB)$.'
   }
 }
-export default EqCart1pointVectDir
+export default EqCart1pointVectDirOld

@@ -8,19 +8,20 @@ export const interactifType = 'mathLive'
 /**
  *
  * @author Stéphane Guyon  + Jean-claude Lhote (interactif) + Gilles Mora
+ * Passage en multiMathfield par Éric Elter le 13/05/2026
  */
-export const uuid = '1bb30'
+export const uuid = '1bb3e'
 
 export const refs = {
   'fr-fr': ['2G32-1'],
   'fr-ch': ['1mF2-3'],
 }
 class EqCart2points extends EqCartDroite {
-  version: number
   constructor() {
     super()
     this.nbQuestions = 1
-
+    this.sup = '2'
+    this.besoinFormulaireTexte = false
     this.version = 2
   }
 }

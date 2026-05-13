@@ -15,7 +15,7 @@ export const refs = {
   'fr-fr': [],
   'fr-ch': [],
 }
-class EqCart1pointVectDir extends EqCartDroite {
+class EqCart1pointVectDirOld extends EqCartDroite {
   constructor() {
     super()
     this.nbQuestions = 1
@@ -24,4 +24,4 @@ class EqCart1pointVectDir extends EqCartDroite {
     // this.consigne = 'Déterminer une équation cartésienne de la droite $(AB)$.'
   }
 }
-export default EqCart1pointVectDir
+export default EqCart1pointVectDirOld
