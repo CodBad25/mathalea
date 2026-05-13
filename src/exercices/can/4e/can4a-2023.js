@@ -769,13 +769,11 @@ export default class SujetCAN2023Quatrieme extends Exercice {
             if (this.interactif) {
               texte += ajouteChampTexteMathLive(this, index, '') + 'L'
             } else {
-              texte += ' $\\ldots$ L'
               texte += context.isHtml ? ' $\\ldots$ L' : ''
               this.listeCanReponsesACompleter[this.listeCanEnonces.length] =
                 '$\\ldots\\Capa{}$'
             }
-          }
-          if (choix === 'b') {
+          } else {
             reponse = new Decimal(a).mul(1000)
             texte = `$${texNombre(a, 1)}\\text{ m}^3$ $=$`
             texteCorr = `$1\\text{ m}^3= ${texNombre(1000)}$ L, donc $${texNombre(a, 1)}\\text{ m}^3= ${miseEnEvidence(texNombre(a * 1000))}$ L.`
