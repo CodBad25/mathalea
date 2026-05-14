@@ -1,8 +1,5 @@
 import type { NestedObjetMathalea2dArray } from '../../../types/2d'
-import {
-  ajouteCanvas3d,
-  type Elements3DDescription,
-} from '../../3d/3d_dynamique/Canvas3DElement'
+import type { Elements3DDescription } from '../../3d/3d_dynamique/Canvas3DElement'
 import { Shape3D, shapeCubeIso } from '../figures2d/Shape3d'
 import { rangeCubes } from './patternsPreDef'
 
@@ -161,21 +158,19 @@ export class VisualPattern3D {
       },
     )
 
-    // Optionnel : calcul du centre pour centrer la scène
-
     const content = {
       objects,
       backgroundColor: '#ffffff',
       autoCenterZoomMargin: 1.2,
     }
 
-    // Utilise la fonction utilitaire pour générer le HTML
-    return ajouteCanvas3d({
-      id: `${this.prefixId}-motif-${n}`,
-      content,
-      width: 250,
-      height: 250,
-    })
+    // Déclenche le chargement lazy de Canvas3DElement (Three.js) pour que le custom element
+    // soit enregistré avant que le navigateur ne connecte les <canvas-3d> au DOM.
+    import('../../3d/3d_dynamique/Canvas3DElement').catch(() => {})
+
+    const id = `${this.prefixId}-motif-${n}`
+    const contentJson = encodeURIComponent(JSON.stringify(content))
+    return `<canvas-3d id="${id}" content='${contentJson}' width="250" height="250"></canvas-3d>`
   }
 
   render(
