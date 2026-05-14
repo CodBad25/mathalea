@@ -3231,7 +3231,7 @@ export const dictionnaireBAC = {
     jour: 'J1',
     numeroInitial: '1',
     typeExercice: 'bac',
-    tags: [''],
+    tags: ['Affirmations', 'Équations différentielles', 'Convexité', 'TVI', 'Intégration', 'Exponentielle'],
   },
   bac_2025_09_sujet1_asie_2: {
     annee: '2025',
@@ -3240,7 +3240,7 @@ export const dictionnaireBAC = {
     jour: 'J1',
     numeroInitial: '2',
     typeExercice: 'bac',
-    tags: [''],
+    tags: ['Espace'],
   },
   bac_2025_09_sujet1_asie_3: {
     annee: '2025',
@@ -3249,7 +3249,7 @@ export const dictionnaireBAC = {
     jour: 'J1',
     numeroInitial: '3',
     typeExercice: 'bac',
-    tags: [''],
+    tags: ['Loi binomiale', 'Variables aléatoires'],
   },
   bac_2025_09_sujet1_asie_4: {
     annee: '2025',
@@ -3258,7 +3258,7 @@ export const dictionnaireBAC = {
     jour: 'J1',
     numeroInitial: '4',
     typeExercice: 'bac',
-    tags: [''],
+    tags: ['Suites', 'Probabilités conditionnelles'],
   },
   bac_2025_09_sujet1_metropole_1: {
     annee: '2025',
@@ -3267,7 +3267,7 @@ export const dictionnaireBAC = {
     jour: 'J1',
     numeroInitial: '1',
     typeExercice: 'bac',
-    tags: [''],
+    tags: ['Équations différentielles', 'Exponentielle', 'Intégration', 'Primitives'],
   },
   bac_2025_09_sujet1_metropole_2: {
     annee: '2025',
@@ -3276,7 +3276,7 @@ export const dictionnaireBAC = {
     jour: 'J1',
     numeroInitial: '2',
     typeExercice: 'bac',
-    tags: [''],
+    tags: ['Espace'],
   },
   bac_2025_09_sujet1_metropole_3: {
     annee: '2025',
@@ -3285,7 +3285,7 @@ export const dictionnaireBAC = {
     jour: 'J1',
     numeroInitial: '3',
     typeExercice: 'bac',
-    tags: [''],
+    tags: ['Suites', 'Python', 'Logarithme'],
   },
   bac_2025_09_sujet1_metropole_4: {
     annee: '2025',
@@ -3294,7 +3294,7 @@ export const dictionnaireBAC = {
     jour: 'J1',
     numeroInitial: '4',
     typeExercice: 'bac',
-    tags: [''],
+    tags: ['Affirmations', 'Dénombrement', 'Probabilités conditionnelles', 'Loi binomiale', 'Variables aléatoires'],
   },
   bac_2025_09_sujet1_polynesie_1: {
     annee: '2025',
@@ -3303,7 +3303,7 @@ export const dictionnaireBAC = {
     jour: 'J1',
     numeroInitial: '1',
     typeExercice: 'bac',
-    tags: [''],
+    tags: ['Probabilités conditionnelles', 'Loi binomiale', 'Bienaymé-Tchebychev', 'Variables aléatoires'],
   },
   bac_2025_09_sujet1_polynesie_2: {
     annee: '2025',
@@ -3312,7 +3312,7 @@ export const dictionnaireBAC = {
     jour: 'J1',
     numeroInitial: '2',
     typeExercice: 'bac',
-    tags: [''],
+    tags: ['Équations différentielles', 'Convexité', 'Exponentielle'],
   },
   bac_2025_09_sujet1_polynesie_3: {
     annee: '2025',
@@ -3321,7 +3321,7 @@ export const dictionnaireBAC = {
     jour: 'J1',
     numeroInitial: '3',
     typeExercice: 'bac',
-    tags: [''],
+    tags: ['Suites', 'Python', 'Logarithme', 'TVI'],
   },
   bac_2025_09_sujet1_polynesie_4: {
     annee: '2025',
@@ -3330,7 +3330,7 @@ export const dictionnaireBAC = {
     jour: 'J1',
     numeroInitial: '4',
     typeExercice: 'bac',
-    tags: [''],
+    tags: ['Affirmations', 'Intégration', 'Dénombrement', 'Espace', 'Logarithme'],
   },
   bac_2025_09_sujet2_metropole_1: {
     annee: '2025',
@@ -3339,7 +3339,7 @@ export const dictionnaireBAC = {
     jour: 'J2',
     numeroInitial: '1',
     typeExercice: 'bac',
-    tags: [''],
+    tags: ['Loi binomiale', 'Probabilités conditionnelles', 'Suites'],
   },
   bac_2025_09_sujet2_metropole_2: {
     annee: '2025',
@@ -3348,7 +3348,7 @@ export const dictionnaireBAC = {
     jour: 'J2',
     numeroInitial: '2',
     typeExercice: 'bac',
-    tags: [''],
+    tags: ['Affirmations', 'Dénombrement', 'Trigonométrie', 'Équations différentielles', 'Primitives', 'Convexité'],
   },
   bac_2025_09_sujet2_metropole_3: {
     annee: '2025',
@@ -3357,7 +3357,7 @@ export const dictionnaireBAC = {
     jour: 'J2',
     numeroInitial: '3',
     typeExercice: 'bac',
-    tags: [''],
+    tags: ['Logarithme', 'Python'],
   },
   bac_2025_09_sujet2_metropole_4: {
     annee: '2025',
@@ -3366,7 +3366,7 @@ export const dictionnaireBAC = {
     jour: 'J2',
     numeroInitial: '4',
     typeExercice: 'bac',
-    tags: [''],
+    tags: ['Espace'],
   },
   bac_2025_11_sujet1_ameriquesud_1: {
     annee: '2025',
@@ -3375,7 +3375,7 @@ export const dictionnaireBAC = {
     jour: 'J1',
     numeroInitial: '1',
     typeExercice: 'bac',
-    tags: [''],
+    tags: ['Probabilités conditionnelles', 'Suites', 'Python'],
   },
   bac_2025_11_sujet1_ameriquesud_2: {
     annee: '2025',
@@ -3384,7 +3384,7 @@ export const dictionnaireBAC = {
     jour: 'J1',
     numeroInitial: '2',
     typeExercice: 'bac',
-    tags: [''],
+    tags: ['Affirmations', 'Dénombrement', 'Variables aléatoires', 'Loi binomiale', 'Probabilités conditionnelles'],
   },
   bac_2025_11_sujet1_ameriquesud_3: {
     annee: '2025',
@@ -3393,7 +3393,7 @@ export const dictionnaireBAC = {
     jour: 'J1',
     numeroInitial: '3',
     typeExercice: 'bac',
-    tags: [''],
+    tags: ['Équations différentielles', 'Exponentielle', 'Intégration', 'Convexité', 'TVI'],
   },
   bac_2025_11_sujet1_ameriquesud_4: {
     annee: '2025',
@@ -3402,7 +3402,7 @@ export const dictionnaireBAC = {
     jour: 'J1',
     numeroInitial: '4',
     typeExercice: 'bac',
-    tags: [''],
+    tags: ['Espace'],
   },
   bac_2025_11_sujet1_caledonie_1: {
     annee: '2025',
@@ -3411,7 +3411,7 @@ export const dictionnaireBAC = {
     jour: 'J1',
     numeroInitial: '1',
     typeExercice: 'bac',
-    tags: [''],
+    tags: ['Probabilités conditionnelles', 'Variables aléatoires', 'Bienaymé-Tchebychev'],
   },
   bac_2025_11_sujet1_caledonie_2: {
     annee: '2025',
@@ -3420,7 +3420,7 @@ export const dictionnaireBAC = {
     jour: 'J1',
     numeroInitial: '2',
     typeExercice: 'bac',
-    tags: [''],
+    tags: ['Espace'],
   },
   bac_2025_11_sujet1_caledonie_3: {
     annee: '2025',
@@ -3429,7 +3429,7 @@ export const dictionnaireBAC = {
     jour: 'J1',
     numeroInitial: '3',
     typeExercice: 'bac',
-    tags: [''],
+    tags: ['TVI', 'Intégration', 'Suites', 'Python', 'Exponentielle', 'Primitives'],
   },
   bac_2025_11_sujet1_caledonie_4: {
     annee: '2025',
@@ -3438,7 +3438,7 @@ export const dictionnaireBAC = {
     jour: 'J1',
     numeroInitial: '4',
     typeExercice: 'bac',
-    tags: [''],
+    tags: ['Affirmations', 'Logarithme', 'Équations différentielles', 'Trigonométrie', 'Suites', 'Convexité', 'Dénombrement'],
   },
   bac_2025_11_sujet2_ameriquesud_1: {
     annee: '2025',
@@ -3447,7 +3447,7 @@ export const dictionnaireBAC = {
     jour: 'J2',
     numeroInitial: '1',
     typeExercice: 'bac',
-    tags: [''],
+    tags: ['Probabilités conditionnelles', 'Loi binomiale', 'Variables aléatoires', 'Bienaymé-Tchebychev'],
   },
   bac_2025_11_sujet2_ameriquesud_2: {
     annee: '2025',
@@ -3456,7 +3456,7 @@ export const dictionnaireBAC = {
     jour: 'J2',
     numeroInitial: '2',
     typeExercice: 'bac',
-    tags: [''],
+    tags: ['QCM', 'Espace'],
   },
   bac_2025_11_sujet2_ameriquesud_3: {
     annee: '2025',
@@ -3465,7 +3465,7 @@ export const dictionnaireBAC = {
     jour: 'J2',
     numeroInitial: '3',
     typeExercice: 'bac',
-    tags: [''],
+    tags: ['Suites', 'Tableur', 'Logarithme', 'Python', 'Exponentielle'],
   },
   bac_2025_11_sujet2_ameriquesud_4: {
     annee: '2025',
@@ -3474,7 +3474,7 @@ export const dictionnaireBAC = {
     jour: 'J2',
     numeroInitial: '4',
     typeExercice: 'bac',
-    tags: [''],
+    tags: ['Dénombrement', 'Équations différentielles', 'Primitives', 'Intégration', 'Exponentielle', 'Convexité'],
   },
   bac_2025_11_sujet2_caledonie_1: {
     annee: '2025',
@@ -3483,7 +3483,7 @@ export const dictionnaireBAC = {
     jour: 'J2',
     numeroInitial: '1',
     typeExercice: 'bac',
-    tags: [''],
+    tags: ['Affirmations', 'Espace', 'Dénombrement'],
   },
   bac_2025_11_sujet2_caledonie_2: {
     annee: '2025',
@@ -3492,7 +3492,7 @@ export const dictionnaireBAC = {
     jour: 'J2',
     numeroInitial: '2',
     typeExercice: 'bac',
-    tags: [''],
+    tags: ['Probabilités conditionnelles', 'Variables aléatoires', 'Intégration'],
   },
   bac_2025_11_sujet2_caledonie_3: {
     annee: '2025',
@@ -3501,7 +3501,7 @@ export const dictionnaireBAC = {
     jour: 'J2',
     numeroInitial: '3',
     typeExercice: 'bac',
-    tags: [''],
+    tags: ['Logarithme', 'Suites', 'Exponentielle'],
   },
   bac_2025_11_sujet2_caledonie_4: {
     annee: '2025',
@@ -3510,6 +3510,6 @@ export const dictionnaireBAC = {
     jour: 'J2',
     numeroInitial: '4',
     typeExercice: 'bac',
-    tags: [''],
+    tags: ['Logarithme', 'TVI'],
   },
 }
