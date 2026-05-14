@@ -84,7 +84,8 @@
     "prepare": "husky",
     "update:apigeom-snapshots": "node tasks/update-apigeom-snapshots.js",
     "prebuild-unit-tests": "pnpm test:unit && pnpm test:src",
-    "prebuild-e2e-tests": "AUTOTEST=true pnpm test:e2e:views && AUTOTEST=true pnpm test:e2e:interactivity && AUTOTEST=true pnpm test:e2e:consistency"
+    "prebuild-e2e-tests": "AUTOTEST=true pnpm test:e2e:views && AUTOTEST=true pnpm test:e2e:interactivity && AUTOTEST=true pnpm test:e2e:consistency",
+    "test:mr": "pnpm prebuild-unit-tests && pnpm prebuild-e2e-tests"
   },
   "dependencies": {
     "@bugsnag/js": "^8.8.1",
