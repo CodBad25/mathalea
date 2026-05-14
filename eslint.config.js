@@ -1,18 +1,17 @@
+import js from '@eslint/js'
+import tseslint from 'typescript-eslint'
 import prettier from 'eslint-config-prettier'
-import neostandard from 'neostandard'
-export default [
-  ...neostandard({ ts: true }),
+
+export default tseslint.config(
+  js.configs.recommended,
+  tseslint.configs.recommended,
   {
     rules: {
-      // Désactive la règle stylistic qui pose problème
-      '@stylistic/space-before-blocks': 'off',
-      '@stylistic/space-in-parens': 'off',
-      '@stylistic/space-before-function-paren': ['error', 'never'],
-      'space-before-function-paren': ['error', 'never'],
-      'comma-dangle': ['error', 'always-multiline'],
-      '@stylistic/comma-dangle': ['error', 'always-multiline'],
-      'no-multiple-empty-lines': ['error', { max: 1, maxEOF: 1, maxBOF: 1 }],
+      'no-useless-assignment': 'off',
+      '@typescript-eslint/no-unused-expressions': 'warn',
+      '@typescript-eslint/no-explicit-any': 'warn',
+      '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
     },
   },
-  prettier, // à maintenir en dernier pour éviter les conflits entre ESLint et Prettier
-]
+  prettier,
+)
