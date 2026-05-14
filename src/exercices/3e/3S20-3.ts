@@ -516,11 +516,11 @@ Calculer la probabilité de gagner à ce jeu.`
 export const uuid = '7623a'
 
 export const refs = {
-  'fr-fr': ['3S22-1'],
+  'fr-fr': ['3S20-3'],
   'fr-ch': [],
 }
 
-export default class CalculProbaExperience2Epreuves3e extends Exercice {
+export default class CalculProbaExperience2Epreuves extends Exercice {
   constructor() {
     super()
     this.besoinFormulaireTexte = [

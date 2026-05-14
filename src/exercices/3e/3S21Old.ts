@@ -38,7 +38,7 @@ export const refs = {
   'fr-fr': [],
   'fr-ch': [],
 }
-export default class CalculProbaExperience2Epreuves3e extends Exercice {
+export default class CalculProbaExperience2Epreuves3eOld extends Exercice {
   niveau = '3eme'
   constructor() {
     super()

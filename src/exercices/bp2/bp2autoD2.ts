@@ -1,4 +1,4 @@
-import Exercice4S12 from '../4e/4S12'
+import Exercice4S12 from '../4e/4S11-2'
 
 export const titre = "Déterminer la moyenne d'une série de températures"
 export const interactifReady = true

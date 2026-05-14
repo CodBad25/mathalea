@@ -34,7 +34,7 @@ export const dateDeModifImportante = '24/06/2024'
 export const uuid = '7c068'
 
 export const refs = {
-  'fr-fr': ['4S11'],
+  'fr-fr': ['4S11-1'],
   'fr-ch': ['11NO2-9'],
 }
 export default class DeterminerDesMedianes extends Exercice {

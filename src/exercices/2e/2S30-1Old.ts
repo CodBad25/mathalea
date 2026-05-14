@@ -9,7 +9,7 @@ export const refs = {
   'fr-fr': [],
   'fr-ch': [],
 }
-export default class CalculProbaExperience2Epreuves2nde extends CalculProbaExperience2Epreuves3e {
+export default class CalculProbaExperience2Epreuves2ndeOld extends CalculProbaExperience2Epreuves3e {
   constructor() {
     super()
     this.besoinFormulaireTexte = [

@@ -35,7 +35,7 @@ export const interactifType = 'multiMathfield'
 export const uuid = '77231'
 
 export const refs = {
-  'fr-fr': ['3S21'],
+  'fr-fr': ['3S20-1'],
   'fr-ch': ['11NO2-14'],
 }
 export default class CalculProbaExperience2Epreuves3e extends Exercice {
