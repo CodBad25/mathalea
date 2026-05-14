@@ -1,13 +1,15 @@
-import 'blockly/blocks'
-import * as Blockly from 'blockly/core'
-import { javascriptGenerator } from 'blockly/javascript'
-import * as En from 'blockly/msg/en'
-import { ajouteFeedback } from '../../lib/interactif/questionMathLive'
+import type * as BlocklyType from 'blockly/core'
+import type { javascriptGenerator as JsGen } from 'blockly/javascript'
 import { context } from '../../modules/context'
 import { runAStar } from '../../modules/findPath'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 import { bleuMathalea } from '../../lib/colors'
+import { loadBlockly } from '../../lib/blockly/loader'
+
+// Variables locales alimentées par loadBlockly()
+let Blockly!: typeof BlocklyType
+let javascriptGenerator!: typeof JsGen
 
 export const titre = "Programmer le déplacement d'un bus"
 export const dateDePublication = '15/07/2025'
@@ -122,7 +124,6 @@ export default class ExerciceLabyrintheChemin extends Exercice {
       })
       if (this.interactif) {
         texte += `<div class="ml-2 py-2" id="resultatCheckEx${this.numeroExercice}Q${q}"></div>`
-        texte += ajouteFeedback(this, q)
       }
 
       /****************************************************/
@@ -293,7 +294,7 @@ export default class ExerciceLabyrintheChemin extends Exercice {
     return `
     \\begingroup
 \\begin{tikzpicture}[
-    >=Stealth, 
+    >=Stealth,
     every node/.style={
         draw, ellipse, minimum height=10mm, text width=14mm, align=center, font=\\sffamily\\footnotesize
     }
@@ -321,7 +322,7 @@ export default class ExerciceLabyrintheChemin extends Exercice {
     \\fi
     \\xdef\\lastcoord{\\coord}
   }
-  
+
   % Placement des nœuds
   \\foreach \\j in {0,...,\\numexpr\\rows-1} {
     \\foreach \\i in {0,...,\\numexpr\\cols-1} {
@@ -383,18 +384,18 @@ export default class ExerciceLabyrintheChemin extends Exercice {
 
 \\end{tikzpicture}
 \\endgroup\\\\
-   
+
 Les instructions à utiliser sont les suivantes :
 
 \\setscratch{scale=0.8,line width=1pt}
 \\begin{scratch}
 \\blockmove{Avancer}
 \\end{scratch}
-ou 
+ou
 \\begin{scratch}
 \\blockmove{Tourner à gauche}
 \\end{scratch}
-ou 
+ou
 \\begin{scratch}
 \\blockmove{Tourner à droite}
 \\end{scratch}.
@@ -434,7 +435,7 @@ ou
         const blocklyDiv = document.getElementById(`blocklyDiv${id}`)
         if (blocklyDiv) {
           if (blocklyDiv.offsetParent !== null) {
-            Blockly.svgResize(workspace as Blockly.WorkspaceSvg)
+            Blockly.svgResize(workspace as BlocklyType.WorkspaceSvg)
           }
         }
       }
@@ -643,10 +644,10 @@ ou
       }
     }
 
-    let workspace: Blockly.Workspace
+    let workspace: BlocklyType.Workspace
 
-    function createBlockLy() {
-      Blockly.setLocale(En as unknown as { [key: string]: string })
+    async function createBlockLy() {
+      ;({ Blockly, javascriptGenerator } = await loadBlockly())
       Blockly.Msg['CONTROLS_REPEAT_TITLE'] = 'répéter %1 fois'
       Blockly.Msg['CONTROLS_REPEAT_INPUT_DO'] = 'faire'
       if (!Blockly.Blocks['start']) {
@@ -682,22 +683,30 @@ ou
         ])
       }
 
-      javascriptGenerator.forBlock['start'] = function (block) {
+      javascriptGenerator.forBlock['start'] = function (
+        block: BlocklyType.Block,
+      ) {
         const next = javascriptGenerator.statementToCode(block, '')
         return next
       }
       javascriptGenerator.forBlock['move_forward'] = function (
-        block,
-        generator,
+        _block: BlocklyType.Block,
+        _generator: unknown,
       ) {
         return 'avancer();\n'
       }
 
-      javascriptGenerator.forBlock['turn_left'] = function (block, generator) {
+      javascriptGenerator.forBlock['turn_left'] = function (
+        _block: BlocklyType.Block,
+        _generator: unknown,
+      ) {
         return 'tourner(-1);\n'
       }
 
-      javascriptGenerator.forBlock['turn_right'] = function (block, generator) {
+      javascriptGenerator.forBlock['turn_right'] = function (
+        _block: BlocklyType.Block,
+        _generator: unknown,
+      ) {
         return 'tourner(1);\n'
       }
 
@@ -1035,7 +1044,7 @@ ou
       orientation.angle = 0
     }
 
-    const listener = function () {
+    const listener = async function () {
       const btn = document.getElementById(id) as HTMLElement & {
         _eventsBound?: boolean
       }
@@ -1058,7 +1067,7 @@ ou
         btn
           .querySelector('#runCodeWithDelay')
           ?.addEventListener('click', runCodeWithDelay)
-        createBlockLy()
+        await createBlockLy()
         btn._eventsBound = true // marquer comme attaché
       }
       document.removeEventListener('exercicesAffiches', listener) // On retire l'écouteur pour éviter les doublons
@@ -1088,9 +1097,9 @@ ou
     const svgString = serializer.serializeToString(svg) // svgElement est ton <svg>
 
     return `<div id=${id}>
-    <div class="svgContainer" style="display: inline-block"> 
+    <div class="svgContainer" style="display: inline-block">
     ${svgString}<br>
-    
+
   <!-- <button id="btn-av">⇒</button>
   <button id="btn-left" class="px-6 py-2.5 ml-6">↪</button>
   <button id="btn-right" class="px-6 py-2.5 ml-6">↩</button>
@@ -1187,7 +1196,7 @@ function retrieveWorkspace(name: string) {
   return null
 }
 
-function exportBlocklyJSONUltraLight(workspace: Blockly.Workspace): string {
+function exportBlocklyJSONUltraLight(workspace: BlocklyType.Workspace): string {
   const fullJson = Blockly.serialization.workspaces.save(workspace)
 
   // Liste noire des clés à supprimer
