@@ -197,7 +197,7 @@ export default class nomExercice extends Exercice {
       const { reponse, signature, texte, texteCorr } = question()
       const texteInteractif =
         texte +
-        ajouteChampTexteMathLive(this, i, KeyboardType.equationsTerminale, {
+        ajouteChampTexteMathLive(this, i,  KeyboardType.lyceeClassique, {
           texteAvant: '<br>Une équation cartésienne : ',
           texteApres: '.',
         })
