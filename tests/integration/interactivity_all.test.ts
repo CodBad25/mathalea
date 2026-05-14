@@ -295,7 +295,10 @@ for (const [dir, entries] of grouped) {
             let expectedQcmCount = 0
             if (
               Array.isArray((exercice as any).reponses) &&
-              (exercice as any).reponses.length > 1
+              (exercice as any).reponses.length > 1 &&
+              (exercice as any).reponses.every(
+                (r: unknown) => typeof r === 'string' || typeof r === 'number',
+              )
             ) {
               isQcm = true
               expectedQcmCount = (exercice as any).reponses.length
