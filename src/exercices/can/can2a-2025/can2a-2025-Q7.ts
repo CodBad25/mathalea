@@ -45,7 +45,7 @@ export default class SignePuissance extends ExerciceSimple {
     const puiss = valeurs[1]
     const question = `Signe de  $${ecritureParentheseSiNegatif(valeurs[0])}^{-${puiss}}$`
     this.autoCorrection[0] = {
-      options: { ordered: false, vertical: false },
+      options: { ordered: true, vertical: false },
       enonce: question,
       propositions: [
         {
