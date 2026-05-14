@@ -526,6 +526,13 @@ export default class MetaExercice extends Exercice {
           }
           if (Question?.autoCorrection[0]?.propositions != null) {
             // qcm
+            // Les propositions ont déjà été mélangées par buildQcmForExercise et la correction
+            // a été construite avec cet ordre. On empêche un second mélange pour que la lettre
+            // annoncée dans la correction corresponde à ce qui est affiché dans la question.
+            this.autoCorrection[indexQuestion].options = {
+              ...(this.autoCorrection[indexQuestion].options ?? {}),
+              ordered: true,
+            }
             const monQcm = propositionsQcm(this, indexQuestion, {
               style: 'margin:0 3px 0 3px;',
               format: this.interactif ? 'case' : 'lettre',
