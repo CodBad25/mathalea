@@ -846,7 +846,7 @@ ou
       }
       try {
         // eslint-disable-next-line no-eval
-        eval(code)
+        eval(code) // nécessaire : le code Blockly accède aux fonctions de la closure locale
       } catch (e) {
         console.error(e)
       }
@@ -922,7 +922,7 @@ ou
         // console.info('Exécution du code :', asyncWrapper)
 
         // eslint-disable-next-line no-eval
-        await eval(asyncWrapper)
+        await eval(asyncWrapper) // nécessaire : le code Blockly accède aux fonctions de la closure locale
       } catch (e) {
         console.error(e)
       }
