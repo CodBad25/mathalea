@@ -1,4 +1,4 @@
-import DeterminerDesMedianes from '../4e/4S11'
+import DeterminerDesMedianes from '../4e/4S11-1'
 export const titre = 'Déterminer une médiane'
 export const interactifReady = true
 export const interactifType = 'mathLive'

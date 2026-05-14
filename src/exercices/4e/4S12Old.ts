@@ -23,7 +23,7 @@ export const refs = {
 /**
  * @author Rémi Angot
  */
-export default class MoyenneEtMediane extends Exercice {
+export default class MoyenneEtMedianeOld extends Exercice {
   onlyMoyenne = false
   constructor() {
     super()
