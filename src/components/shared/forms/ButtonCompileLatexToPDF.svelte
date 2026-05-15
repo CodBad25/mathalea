@@ -1,8 +1,11 @@
 <script lang="ts">
-  import * as ace from 'brace'
-  import 'brace/ext/searchbox'
-  import 'brace/mode/latex'
-  import 'brace/theme/monokai'
+  import { EditorView, keymap } from '@codemirror/view'
+  import { EditorState } from '@codemirror/state'
+  import { defaultKeymap, history, historyKeymap } from '@codemirror/commands'
+  import { search, searchKeymap } from '@codemirror/search'
+  import { StreamLanguage } from '@codemirror/language'
+  import { stex } from '@codemirror/legacy-modes/mode/stex'
+  import { oneDark } from '@codemirror/theme-one-dark'
 
   import { onDestroy, onMount, tick } from 'svelte'
   import { tweened, type Tweened } from 'svelte/motion'
@@ -21,6 +24,7 @@
   export let id: string
 
   let clockAbled: boolean = false
+  let editorView: EditorView | null = null
 
   let idkey = id || '0'
 
@@ -34,6 +38,8 @@
   })
   onDestroy(() => {
     window.removeEventListener('keydown', handleKeyDown)
+    editorView?.destroy()
+    editorView = null
   })
   function handleKeyDown(event: KeyboardEvent) {
     const isSaveShortcut = (event.ctrlKey || event.metaKey) && event.key === 's'
@@ -41,6 +47,26 @@
       event.preventDefault()
       compileToPDF()
     }
+  }
+
+  function initEditor(content: string) {
+    const container = document.getElementById(`editor${idkey}`)
+    if (!container) return
+    editorView?.destroy()
+    editorView = new EditorView({
+      state: EditorState.create({
+        doc: content,
+        extensions: [
+          history(),
+          StreamLanguage.define(stex),
+          oneDark,
+          search({ top: true }),
+          keymap.of([...defaultKeymap, ...historyKeymap, ...searchKeymap]),
+          EditorView.theme({ '&': { height: '100%' }, '.cm-scroller': { overflow: 'auto' } }),
+        ],
+      }),
+      parent: container,
+    })
   }
 
   // ------ dont need to modify code below
@@ -105,8 +131,8 @@
   }
 
   async function compileToPDF() {
-    const editor = ace.edit(`editor${idkey}`)
-    const t = editor.getValue()
+    if (!editorView) return
+    const t = editorView.state.doc.toString()
 
     const iframe2 = resetIframe()
 
@@ -166,6 +192,8 @@
       clockAbled = false
       dialog.close()
     } else {
+      const { latexWithPreamble } = await latex.getFile(latexFileInfos)
+
       const contents = await latex.getContents(latexFileInfos)
       const picsWanted = doesLatexNeedsPics(contents)
       const exosContentList = getExosContentList(latex.exercices)
@@ -174,30 +202,13 @@
         ? buildImagesUrlsList(exosContentList, picsNames)
         : []
 
-      const { latexWithPreamble } = await latex.getFile(latexFileInfos)
-
-      const editor = ace.edit(`editor${idkey}`)
-      editor.getSession().setMode('ace/mode/latex')
-      editor.getSession().setNewLineMode('unix')
-      editor.setTheme('ace/theme/monokai')
-      // Ouvrir la searchbox avec Ctrl+F
-      editor.commands.addCommand({
-        name: 'showSearchBox',
-        bindKey: { win: 'Ctrl-F', mac: 'Command-F' },
-        exec: function (edite: any) {
-          edite.execCommand('find')
-        },
-      })
-      editor.setShowPrintMargin(false)
-      editor.setValue(latexWithPreamble)
-      editor.gotoLine(1)
-
-      resetIframe()
-
       const imageLatex = document.getElementById('imagesLatex') as HTMLElement
       imageLatex.innerHTML = "Nombre d'images: " + imagesUrls.length
       dialog.showModal()
       await tick()
+
+      initEditor(latexWithPreamble)
+      resetIframe()
       compileToPDF()
     }
   }
@@ -261,7 +272,7 @@
     </div>
     <div class="font-light">
       <div class="flex h-[80vh] flex-row max-md:portrait:flex-col">
-        <div id="editor{idkey}" class="flex flex-grow flex-1"></div>
+        <div id="editor{idkey}" class="flex flex-grow flex-1 text-left overflow-auto"></div>
         <div class="bg-gray-100 flex flex-grow flex-1">
           {#if clockAbled}
             <div class="loader">
