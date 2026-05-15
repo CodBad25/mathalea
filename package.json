@@ -89,7 +89,7 @@
   },
   "dependencies": {
     "@bugsnag/js": "^8.9.0",
-    "@cortex-js/compute-engine": "^0.55.6",
+    "@cortex-js/compute-engine": "^0.58.0",
     "@mixer/postmessage-rpc": "^1.1.4",
     "@scratch2latex/scratch-core": "git+https://forge.apps.education.fr/coopmaths/scratch-core.git#main",
     "@svgdotjs/svg.js": "^3.2.5",
