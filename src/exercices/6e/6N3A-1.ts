@@ -180,19 +180,19 @@ export default class DivisionFraction extends Exercice {
         texte += '$'
       }
       if (context.isAmc) {
-        this.autoCorrection[i].enonce = texte
-        this.autoCorrection[i].propositions = [
-          { texte: texteCorr, statut: false },
-        ]
-        // @ts-expect-error
-        this.autoCorrection[i].reponse.param = {
-          digits:
-            nombreDeChiffresDansLaPartieEntiere(q) +
-            nombreDeChiffresDansLaPartieDecimale(q) +
-            2,
-          decimals: nombreDeChiffresDansLaPartieDecimale(q) + 1,
-          signe: false,
-          exposantNbChiffres: 0,
+        this.autoCorrectionAMC[i].enonce = texte
+        this.autoCorrectionAMC[i].reponse = {
+          texte: texteCorr,
+          valeur: q,
+          param: {
+            digits:
+              nombreDeChiffresDansLaPartieEntiere(q) +
+              nombreDeChiffresDansLaPartieDecimale(q) +
+              2,
+            decimals: nombreDeChiffresDansLaPartieDecimale(q) + 1,
+            signe: false,
+            exposantNbChiffres: 0,
+          },
         }
       }
       if (this.questionJamaisPosee(i, a, b, q)) {

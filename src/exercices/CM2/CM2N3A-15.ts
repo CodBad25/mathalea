@@ -63,13 +63,11 @@ export default class ComplementAUneDizaine extends Exercice {
         ? (texteCorr = `$${texNombre(a)} - ${texNombre(b)} = ${miseEnEvidence(texNombre(a - b))}$`)
         : (texteCorr = `$${texNombre(b)} + ${miseEnEvidence(texNombre(a - b))} = ${texNombre(a)}$`)
 
-      if (this.interactif) {
-        handleAnswers(this, i, {
-          reponse: {
-            value: texNombre(a - b),
-          },
-        })
-      }
+      handleAnswers(this, i, {
+        reponse: {
+          value: texNombre(a - b),
+        },
+      })
 
       if (this.questionJamaisPosee(i, a, b)) {
         this.listeQuestions[i] = texte

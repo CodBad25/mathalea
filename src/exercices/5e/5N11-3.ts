@@ -19,8 +19,6 @@ export const titre =
   "Écrire une fraction sur 100 puis sous la forme d'un pourcentage"
 export const interactifReady = true
 export const interactifType = ['custom', 'mathLive']
-export const amcType = 'AMCNum'
-export const amcReady = true
 export const dateDePublication = '06/02/2021'
 export const dateDeModifImportante = '03/04/2024'
 

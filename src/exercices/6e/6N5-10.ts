@@ -28,8 +28,6 @@ import Exercice from '../Exercice'
 export const dateDePublication = '06/06/2025'
 export const interactifType = 'mathLive'
 export const interactifReady = true
-export const amcType = 'AMCNum'
-export const amcReady = true
 export const uuid = 'b3aa4'
 export const refs = {
   'fr-fr': ['6N5-10'],

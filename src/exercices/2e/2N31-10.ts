@@ -15,8 +15,6 @@ export const titre =
 
 export const interactifReady = true
 export const interactifType = 'mathLive'
-export const amcReady = true
-export const amcType = 'AMCNum'
 /**
  * Puissances littérales avec exposants relatifs
  * * Travailler des résultats automatisés

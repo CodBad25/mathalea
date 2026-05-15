@@ -1,4 +1,4 @@
-import { type IExercice } from '../types'
+import { type AutoCorrection, type IExercice } from '../types'
 import {
   ensureAMCOpenAutoCorrection,
   extractAMCValue,
@@ -36,7 +36,7 @@ export function mathaleaEnsureAMCCompatibility(
   const amcAutoCorrection = Array.isArray(exerciseAny.autoCorrectionAMC)
     ? exerciseAny.autoCorrectionAMC
     : []
-  const autoCorrectionSource: InferenceAutoCorrectionItem[] =
+  const autoCorrectionSource: AutoCorrection[] =
     interactiveAutoCorrection.length > 0
       ? interactiveAutoCorrection
       : exercice.autoCorrection
@@ -51,11 +51,10 @@ export function mathaleaEnsureAMCCompatibility(
     // On doit aussi s'assurer que pour les qcm la propriété 'correction' de options est bien renseignée pour l'afficher à l'lélève dans le détail de correction AMC.
     if (exercice.amcType === 'AMCNum') {
       const autoCorrectionAmc = []
-      for (const [index, item] of autoCorrectionSource.entries()) {
+      for (const [index, item] of amcAutoCorrection.entries()) {
         if (item == null) continue
-
         const valeur = inferNumericValueForAMC(
-          extractAMCValue(item.reponse?.valeur),
+          extractAMCValue(item.reponse.valeur),
         )
         if (valeur === undefined) continue
 
@@ -194,7 +193,7 @@ export function mathaleaEnsureAMCCompatibility(
     return exercice as IExerciceAMC
   }
 
-  if (exercice.interactifType !== 'mathlive') {
+  if (exercice.interactifType !== 'mathLive') {
     // Pour ce qui ne rentre pas dans les cas précédents : fallback AMCOpen.
     exercice.amcType = 'AMCOpen'
     exercice.amcReady = true
@@ -218,7 +217,9 @@ export function mathaleaEnsureAMCCompatibility(
       break
     }
 
-    const valeur = inferNumericValueForAMC(extractAMCValue(item.reponse))
+    const valeur = inferNumericValueForAMC(
+      extractAMCValue(item.valeur?.reponse?.value),
+    )
     if (valeur === undefined) {
       canInferAMCNum = false
       break
@@ -227,8 +228,8 @@ export function mathaleaEnsureAMCCompatibility(
     // On infère des options AMCNum à partir de la réponse interactive
     // ({ value, options, compare }) au lieu de réutiliser directement
     // les options de comparaison interactive.
-    const options = inferAmcOptionsFromAnswerType(item.reponse)
-    const param = mergeNumericParamsFromOptions(item.reponse?.param, options)
+    const options = inferAmcOptionsFromAnswerType(item.valeur?.reponse)
+    const param = mergeNumericParamsFromOptions(item.options, options)
 
     const blocks = normalizeAMCNumBlocks({
       valeur,
@@ -244,7 +245,7 @@ export function mathaleaEnsureAMCCompatibility(
       ...item,
       enonce: item.enonce ?? exercice.listeQuestions[index],
       reponse: {
-        ...item.reponse,
+        ...item.valeur,
         valeur,
         param,
       },

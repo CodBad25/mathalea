@@ -1,8 +1,6 @@
 import N2PlusRacineDeN from '../can/TSpe/canTSpeS06'
-export const titre = 'Calculer la limite de $\dfrac{u_n}{v_n}$'
+export const titre = 'Calculer la limite de $\\dfrac{u_n}{v_n}$'
 export const dateDePublication = '04/08/2025'
-export const amcReady = true
-export const amcType = 'AMCNum'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 

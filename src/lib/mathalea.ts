@@ -22,10 +22,15 @@ import {
   isAnswerValueType,
   isValeur,
 } from '../lib/types'
+import { context } from '../modules/context'
 import FractionEtendue from '../modules/FractionEtendue'
 import Grandeur from '../modules/Grandeur'
 import Hms from '../modules/Hms'
 import { contraindreValeur } from '../modules/outils'
+import {
+  inferAmcOptionsFromAnswerType,
+  inferNumericValueForAMC,
+} from './amc/amcInferenceHelpers'
 import { isStatic, isSvelte } from './components/componentsUtils'
 import {
   showDialogForLimitedTime,
@@ -929,12 +934,12 @@ export function mathaleaHandleExerciceSimple(
       exercice.compare == null ? fonctionComparaison : exercice.compare
     const options =
       exercice.optionsDeComparaison == null ? {} : exercice.optionsDeComparaison
+    let reponse = {}
 
     if (exercice.questionJamaisPosee(i, String(exercice.correction))) {
       if (exercice.reponse != null) {
         if (compare != null) {
           /// DE LA AU PROCHAIN LA, ce sera à supprimer quand il n'y aura plus de this.compare
-          let reponse = {}
           if (
             typeof exercice.reponse !== 'string' &&
             typeof exercice.reponse !== 'number'
@@ -1016,6 +1021,31 @@ export function mathaleaHandleExerciceSimple(
             formatInteractif: exercice.formatInteractif ?? 'calcul',
           })
         }
+        // Handle AMC array
+        if (context.isAmc) {
+          if (exercice.autoCorrectionAMC == null) {
+            exercice.autoCorrectionAMC = []
+          }
+          if (exercice.autoCorrectionAMC[i] == null) {
+            exercice.autoCorrectionAMC[i] = {}
+          }
+          if (exercice.autoCorrectionAMC[i].reponse == null) {
+            exercice.autoCorrectionAMC[i].reponse = {}
+          }
+          const reponseSimple = Array.isArray(exercice.reponse)
+            ? exercice.reponse[0]
+            : exercice.reponse
+          const value = inferNumericValueForAMC(String(reponseSimple))
+          if (value !== null) {
+            const param = inferAmcOptionsFromAnswerType(reponse)
+            if (param) {
+              exercice.autoCorrectionAMC![i].reponse = {
+                valeur: value,
+                param,
+              }
+            }
+          }
+        }
       } else {
         if (exercice.formatInteractif !== 'qcm')
           window.notify(
@@ -1051,22 +1081,6 @@ export function mathaleaHandleExerciceSimple(
                     r instanceof Hms,
                 ))
             ) {
-              /*  if (
-                !compteLesReponsesDifferentes(
-                  exercice,
-                  1 + exercice.distracteurs.length,
-                  false,
-                  {
-                    calculFormel: true,
-                  },
-                )
-              ) {
-                window.notify(
-                  `Un exercice simple de type qcm doit avoir au moins 4 réponses différentes, dans ${(exercice?.numeroExercice ?? 0) + 1} - ${exercice.titre} , reponse: ${JSON.stringify(exercice.reponse)}, distracteurs: ${JSON.stringify(exercice.distracteurs)}`,
-                  { exercice: JSON.stringify(exercice) },
-                )
-              }
-                */
               const qcmData = buildSimpleVersionQcm(exercice, i, {
                 question: exercice.question ?? '',
                 correction: exercice.correction ?? '',

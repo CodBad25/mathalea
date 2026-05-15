@@ -3,6 +3,7 @@
 
   export let enonce = ''
   export let htmlContent = ''
+  export let svgScale = 1
   export let lignes = 3
   export let pointilles: boolean | number | undefined = true
   export let sanscadre: boolean | number | undefined = false
@@ -18,7 +19,7 @@
   </p>
   {#if htmlContent || enonce}
     <div class="mt-2">
-      <AmcEnonceHtml content={htmlContent || enonce} />
+      <AmcEnonceHtml content={htmlContent || enonce} {svgScale} />
     </div>
   {/if}
 

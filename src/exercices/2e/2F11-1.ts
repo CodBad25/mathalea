@@ -1,5 +1,8 @@
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
-import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import {
+  handleAnswers,
+  setReponse,
+} from '../../lib/interactif/gestionInteractif'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import { texFractionFromString } from '../../lib/outils/deprecatedFractions'
@@ -147,8 +150,14 @@ export default class ImageFonctionsRefs extends Exercice {
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr
 
-        // setReponse(this, i, solution, { digits: 6, decimals: listeTypeQuestions[i] === 'inverse' ? 6 : 0, signe: true })
-        handleAnswers(this, i, { reponse: { value: solution.texFraction } })
+        if (context.isAmc)
+          setReponse(this, i, solution, {
+            digits: 6,
+            decimals: listeTypeQuestions[i] === 'inverse' ? 6 : 0,
+            signe: true,
+          })
+        else
+          handleAnswers(this, i, { reponse: { value: solution.texFraction } })
         i++
       }
       cpt++

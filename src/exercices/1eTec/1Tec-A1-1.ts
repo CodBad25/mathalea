@@ -3,8 +3,6 @@ export const titre = 'Écrire avec fraction, écriture décimale, pourcentage'
 export const dateDePublication = '19/06/2022'
 export const interactifReady = true
 export const interactifType = 'mathLive'
-export const amcType = 'AMCNum'
-export const amcReady = true
 
 /**
  * Clone de 5N11-3 pour les 1er

@@ -10,8 +10,6 @@ export const titre =
   'Calculer dans une pyramide additive inverse de nombres complexes'
 export const interactifReady = true
 export const interactifType = 'mathLive'
-export const amcReady = true
-export const amcType = 'AMCNum'
 export const dateDePublication = '28/03/2026'
 /**
  * @author  Jean-claude Lhote

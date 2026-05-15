@@ -3,8 +3,6 @@ export const titre =
   'Résoudre graphiquement une inéquation avec la fonction carrée'
 export const interactifReady = true
 export const interactifType = 'mathLive'
-export const amcReady = true
-export const amcType = 'AMCNum'
 
 export const uuid = '9fbff'
 

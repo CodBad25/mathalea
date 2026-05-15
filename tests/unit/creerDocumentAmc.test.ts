@@ -24,7 +24,8 @@ function prepareExercise(
   const exercice = new module.default()
   if (module.amcType != null) exercice.amcType = module.amcType
   if (module.amcReady != null) exercice.amcReady = module.amcReady
-  mathaleaHandleExerciceSimple(exercice, true, 0, seed)
+  if (exercice.typeExercice === 'simple')
+    mathaleaHandleExerciceSimple(exercice, true, 0, seed)
   mathaleaEnsureAMCCompatibility(exercice)
   return exercice
 }
@@ -478,7 +479,7 @@ describe('creerDocumentAmc templates', () => {
     // eslint-disable-next-line camelcase
     expect(exerciseExplicitQcm.amcType).toBe(exercice2N40_1.amcType)
     expect(exerciseInferredQcm.amcType).toBe(inferQcmType(exerciseInferredQcm))
-    expect(exerciseInferredMathLive.amcType).toBe('AMCNum')
+    expect(exerciseInferredMathLive.amcType).toBe('AMCOpen')
     expect(exerciseExplicitlyBlocked.amcReady).toBe(false)
     expect(exerciseExplicitlyBlocked.amcType).toBe('AMCOpen')
 
@@ -500,8 +501,6 @@ describe('creerDocumentAmc templates', () => {
 
     expect(latex).toContain('\\documentclass')
     expect(latex).toContain('\\begin{question}')
-    expect(latex).toContain('\\begin{questionmultx}')
-    expect(latex).toContain('\\AMCnumericChoices')
     expect(latex).toContain('\\bonne')
     expect(latex).not.toContain('Question bloquee')
 

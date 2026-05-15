@@ -120,6 +120,7 @@ export default class DernierChiffre extends Exercice {
           ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers)
       if (context.isAmc) {
         this.autoCorrectionAMC[i] = {
+          ...this.autoCorrectionAMC[i],
           enonce: texte,
           propositions: [{ texte: texteCorr }],
         }
@@ -127,7 +128,7 @@ export default class DernierChiffre extends Exercice {
         amcParam.digits = 1
         amcParam.decimals = 0
       }
-      if (this.listeQuestions.indexOf(texte) === -1) {
+      if (this.questionJamaisPosee(i, a, b, listeTypeDeQuestions[i])) {
         // Si la question n'a jamais été posée, on la stocke dans la liste des questions
         this.listeQuestions[i] = texte
         this.listeCorrections[i] = texteCorr

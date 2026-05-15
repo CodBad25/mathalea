@@ -226,7 +226,10 @@ export default class DernierChiffreSommeDifférenceDécimaux extends Exercice {
         this.autoCorrectionAMC[i].enonce =
           texte.substring(0, texte.length - 1) +
           '~=$<br>Le chiffre des unités est : '
-        this.autoCorrection[i].propositions = [{ texte: texteCorr }]
+        this.autoCorrectionAMC[i].reponse = {
+          texte: texteCorr,
+          valeur: resultat,
+        }
         const amcParam = ensureAmcParam(this, i)
         amcParam.digits = 1
         amcParam.decimals = 0

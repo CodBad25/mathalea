@@ -21,8 +21,6 @@ export const dateDeModificationImportante = '15/07/2025'
 export const titre = 'Compter les cubes manquants ou pas'
 export const interactifReady = true
 export const interactifType = 'mathLive'
-export const amcType = 'AMCNum'
-export const amcReady = true
 
 /**
  * Compter des cubes dans un empilement de cubes

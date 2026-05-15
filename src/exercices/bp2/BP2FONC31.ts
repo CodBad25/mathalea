@@ -3,8 +3,6 @@ export const titre =
   'Résoudre algébriquement une équation $f(x)=k$ avec la fonction carrée'
 export const interactifReady = true
 export const interactifType = 'mathLive'
-export const amcReady = true
-export const amcType = 'AMCNum'
 
 export const uuid = 'fd10b'
 

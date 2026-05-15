@@ -1,8 +1,6 @@
 import MilieuSegment from '../can/TSpe/canTSpeE01'
 export const titre = "Déterminer le milieu d'un segment dans l'espace"
 export const dateDePublication = '04/08/2025'
-export const amcReady = true
-export const amcType = 'AMCNum'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 

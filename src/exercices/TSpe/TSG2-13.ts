@@ -1,8 +1,6 @@
 import NormeVecteur from '../can/TSpe/canTSpeE06'
 export const titre = "Calculer la norme d'un vecteur"
 export const dateDePublication = '04/08/2025'
-export const amcReady = true
-export const amcType = 'AMCNum'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 

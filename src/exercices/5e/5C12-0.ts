@@ -428,10 +428,11 @@ export default class Priorites extends Exercice {
           ajouteChampTexteMathLive(this, i, KeyboardType.clavierDeBase)
       if (this.questionJamaisPosee(i, a, b, c)) {
         if (context.isAmc) {
+          // On est en context AMC, on est passé par setReponse, pas de this.autoCorrection[i] !
           this.autoCorrectionAMC[i].enonce =
             texte.substring(0, texte.length - 1) + '~=$'
           this.autoCorrectionAMC[i].propositions = [{ texte: texteCorr }]
-          const reponse = this.autoCorrection[i].valeur?.reponse?.value
+          const reponse = this.autoCorrectionAMC[i].reponse?.valeur
           const amcParam = ensureAmcParam(this, i)
           if (reponse != null) {
             if (Array.isArray(reponse)) {
