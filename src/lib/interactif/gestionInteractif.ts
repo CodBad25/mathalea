@@ -18,6 +18,11 @@ import { context } from '../../modules/context'
 import FractionEtendue from '../../modules/FractionEtendue'
 import Grandeur from '../../modules/Grandeur'
 import Hms from '../../modules/Hms'
+import { ensureAmcParam } from '../amc/amcHelpers'
+import {
+  inferAmcOptionsFromAnswerType,
+  inferNumericValueForAMC,
+} from '../amc/amcInferenceHelpers'
 import type { AutoCorrectionAMC, ReponseParams } from '../amc/amcTypes'
 import { addElement, get, setStyles } from '../html/dom'
 import { Complexe } from '../mathFonctions/Complexe'
@@ -649,7 +654,7 @@ export function setReponse(
     }
 
     if (exercice.autoCorrectionAMC[i] === undefined) {
-      exercice.autoCorrection[i] = {}
+      exercice.autoCorrectionAMC[i] = {}
     }
 
     const valeur = Array.isArray(valeurs) ? valeurs[0] : valeurs
@@ -657,12 +662,21 @@ export function setReponse(
       i
     ] as AutoCorrectionAMC
     const rep = autoCorrectioAMC ? (autoCorrectioAMC.reponse ?? {}) : {}
-
+    if (params.digits == null && params.decimals == null) {
+      const paramsAMCFromAnswerType = inferAmcOptionsFromAnswerType({
+        reponse: { value: valeur },
+      })
+      params = {
+        ...params,
+        ...paramsAMCFromAnswerType,
+      }
+    }
     if (rep != null) {
       rep.param = params
       // @ts-expect-error Pour AMC on ne change pas le format de réponse
-      rep.valeur = valeur // On n'a rien changé pour AMC, on continue de passer un array dont seule la première valeur est utile
+      rep.valeur = valeur
     }
+    exercice.autoCorrectionAMC[i].reponse = rep
     return // La réponse est prête pour AMC
   }
   // Ici on est en context non Amc, donc s'il y a un setReponse, c'est pour html interactif.
@@ -1047,10 +1061,6 @@ export function handleAnswers(
   reponses: Valeur,
   params: ReponseParams | undefined = {},
 ) {
-  if (context.isAmc) {
-    // handleAnswer ne s'occupe pas de l'export AMC
-    return
-  }
   let formatInteractif =
     params?.formatInteractif ??
     ('champ1' in reponses
@@ -1059,6 +1069,62 @@ export function handleAnswers(
           Object.keys(reponses).some((key) => key.match(/^L\d+C\d+$/))
         ? 'tableauMathlive'
         : (exercice.autoCorrection[question]?.formatInteractif ?? 'mathlive'))
+  if (context.isAmc) {
+    if (exercice.autoCorrectionAMC == null) exercice.autoCorrectionAMC = []
+    if (exercice.autoCorrectionAMC[question] === undefined) {
+      exercice.autoCorrectionAMC[question] = {}
+    }
+    const autoCorrectioAMC: AutoCorrectionAMC = exercice.autoCorrectionAMC[
+      question
+    ] as AutoCorrectionAMC
+    const normalizeAmcValue = (val: any) => {
+      if (typeof val === 'number') {
+        return val
+      }
+      if (val instanceof FractionEtendue) {
+        return { num: val.num, den: val.den }
+      }
+      if (val instanceof Decimal) {
+        return val.toFixed(3)
+      }
+      if (typeof val === 'string') {
+        return inferNumericValueForAMC(val)
+      }
+      return val
+    }
+    if (formatInteractif === 'mathlive') {
+      const reponseValue =
+        'reponse' in reponses
+          ? reponses.reponse!.value
+          : 'champ1' in reponses
+            ? reponses.champ1!.value
+            : Object.keys(reponses).some((key) => key.match(/^L\d+C\d+$/))
+              ? Object.fromEntries(
+                  Object.entries(reponses)
+                    .filter(([key]) => key.match(/^L\d+C\d+$/))
+                    .map(([key, val]) => [key, val.value]),
+                )
+              : undefined
+      if (
+        typeof reponseValue === 'number' ||
+        typeof reponseValue === 'string' ||
+        reponseValue instanceof FractionEtendue ||
+        reponseValue instanceof Decimal
+      ) {
+        autoCorrectioAMC.reponse = autoCorrectioAMC.reponse ?? {
+          valeur: normalizeAmcValue(reponseValue),
+        }
+        const param = {
+          ...ensureAmcParam(exercice, question),
+          ...inferAmcOptionsFromAnswerType(reponses),
+        }
+
+        autoCorrectioAMC.reponse.param = {
+          ...param,
+        }
+      }
+    }
+  }
 
   if (exercice.autoCorrection == null) exercice.autoCorrection = []
   if (!(reponses instanceof Object)) {

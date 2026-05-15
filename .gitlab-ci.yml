@@ -13,9 +13,6 @@
 # Note that environment variables can be set in several places
 # See https://docs.gitlab.com/ee/ci/variables/#cicd-variable-precedence
 
-variables:
-  FF_USE_POD_ACTIVE_DEADLINE_SECONDS: 'false'
-
 stages:
   - test
   - build-projet
@@ -28,8 +25,9 @@ stages:
   - playwright-pdfBAC
 
 variables:
-  SAST_EXCLUDED_PATHS: "node_modules,.pnpm-store,dist,build,coverage,logs,.cache,.git,tests/e2e,playwright-report"
-  SAST_EXCLUDED_ANALYZERS: "bandit,gosec,flawfinder,brakeman"
+  SAST_EXCLUDED_PATHS: 'node_modules,.pnpm-store,dist,build,coverage,logs,.cache,.git,tests/e2e,playwright-report'
+  SAST_EXCLUDED_ANALYZERS: 'bandit,gosec,flawfinder,brakeman'
+  FF_USE_POD_ACTIVE_DEADLINE_SECONDS: 'false'
 
 semgrep-sast:
   rules:
@@ -362,8 +360,8 @@ build:
   image: node:20-bullseye
   allow_failure: true
   variables:
-    KUBERNETES_MEMORY_REQUEST: "5Gi"
-    KUBERNETES_MEMORY_LIMIT: "6Gi"
+    KUBERNETES_MEMORY_REQUEST: '5Gi'
+    KUBERNETES_MEMORY_LIMIT: '6Gi'
   stage: build-projet
   before_script:
     - npm install -g corepack@latest
@@ -642,6 +640,127 @@ testExosModified:
     # - CHANGED_FILES=$(git diff --name-only HEAD~5..HEAD)
     - echo "$CHANGED_FILES"
     - CHANGED_FILES="$CHANGED_FILES" pnpm test:e2e:console_errors
+  rules:
+    # Se lance uniquement si le pipeline est déclenché par une Merge Request
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      when: always
+    - if: $CI_COMMIT_BRANCH == "main"
+      when: always
+    - if: $CI_COMMIT_BRANCH == "guironne-jobs"
+      when: manual
+    - when: never
+
+testExosModifiedInteractif:
+  extends: .testCI
+  stage: build-projet
+  timeout: 3h
+  script:
+    # - NODE_OPTIONS=--max-old-space-size=4096 pnpm run makeJson && pnpm run prebuild-unit-tests && pnpm vite build
+    # - NODE_OPTIONS=--max-old-space-size=4096 pnpm run makeJson && pnpm vite build
+    # - CHANGED_FILES=$(git diff --name-only $CI_COMMIT_BEFORE_SHA $CI_COMMIT_SHA)
+    - git fetch origin "$CI_COMMIT_REF_NAME" --depth=10
+    - git checkout FETCH_HEAD
+    - |
+      COMMIT_COUNT=$(git rev-list --count HEAD)
+      MAX_COMMITS=5
+
+      if [ "$COMMIT_COUNT" -lt "$MAX_COMMITS" ]; then
+        DIFF_BASE="HEAD~$((COMMIT_COUNT - 1))"
+      else
+        DIFF_BASE="HEAD~$MAX_COMMITS"
+      fi
+      echo "Comparing from $DIFF_BASE to HEAD"
+
+      if git rev-parse --verify "$DIFF_BASE" >/dev/null 2>&1; then
+        echo "Comparing from $DIFF_BASE to HEAD"
+        CHANGED_FILES=$(git diff --name-only "$DIFF_BASE"..HEAD)
+      else
+        echo "⚠️ Le commit $DIFF_BASE n'est pas disponible (clone trop peu profond ?)"
+        CHANGED_FILES=$(git diff --name-only $CI_COMMIT_BEFORE_SHA $CI_COMMIT_SHA)
+      fi
+
+    # -  CHANGED_FILES=$(git diff --name-only "$DIFF_BASE"..HEAD)
+    # - CHANGED_FILES=$(git diff --name-only HEAD~5..HEAD)
+    - echo "$CHANGED_FILES"
+    - INTERACTIF_REPORT=1 CHANGED_FILES="$CHANGED_FILES" pnpm vitest tests/unit/report-interactif.test.ts --run
+  rules:
+    # Se lance uniquement si le pipeline est déclenché par une Merge Request
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      when: always
+    - if: $CI_COMMIT_BRANCH == "main"
+      when: always
+    - if: $CI_COMMIT_BRANCH == "guironne-jobs"
+      when: manual
+    - when: never
+
+testExosModifiedLatex:
+  extends: .testCIPDF
+  timeout: 3h
+  script:
+    - git fetch origin "$CI_COMMIT_REF_NAME" --depth=10
+    - git checkout FETCH_HEAD
+    - |
+      COMMIT_COUNT=$(git rev-list --count HEAD)
+      MAX_COMMITS=5
+
+      if [ "$COMMIT_COUNT" -lt "$MAX_COMMITS" ]; then
+        DIFF_BASE="HEAD~$((COMMIT_COUNT - 1))"
+      else
+        DIFF_BASE="HEAD~$MAX_COMMITS"
+      fi
+      echo "Comparing from $DIFF_BASE to HEAD"
+
+      if git rev-parse --verify "$DIFF_BASE" >/dev/null 2>&1; then
+        echo "Comparing from $DIFF_BASE to HEAD"
+        CHANGED_FILES=$(git diff --name-only "$DIFF_BASE"..HEAD)
+      else
+        echo "⚠️ Le commit $DIFF_BASE n'est pas disponible (clone trop peu profond ?)"
+        CHANGED_FILES=$(git diff --name-only $CI_COMMIT_BEFORE_SHA $CI_COMMIT_SHA)
+      fi
+
+    - echo "$CHANGED_FILES"
+    - CHANGED_FILES="$CHANGED_FILES" pnpm test:e2e:pdfexports
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      when: always
+    - if: $CI_COMMIT_BRANCH == "main"
+      when: always
+    - if: $CI_COMMIT_BRANCH == "guironne-jobs"
+      when: manual
+    - when: never
+
+testExosModifiedAmcnum:
+  extends: .testCI
+  stage: build-projet
+  script:
+    # - NODE_OPTIONS=--max-old-space-size=4096 pnpm run makeJson && pnpm run prebuild-unit-tests && pnpm vite build
+    # - NODE_OPTIONS=--max-old-space-size=4096 pnpm run makeJson && pnpm vite build
+    # - CHANGED_FILES=$(git diff --name-only $CI_COMMIT_BEFORE_SHA $CI_COMMIT_SHA)
+    - git fetch origin "$CI_COMMIT_REF_NAME" --depth=10
+    - git checkout FETCH_HEAD
+    - |
+      COMMIT_COUNT=$(git rev-list --count HEAD)
+      MAX_COMMITS=5
+
+      if [ "$COMMIT_COUNT" -lt "$MAX_COMMITS" ]; then
+        DIFF_BASE="HEAD~$((COMMIT_COUNT - 1))"
+      else
+        DIFF_BASE="HEAD~$MAX_COMMITS"
+      fi
+      echo "Comparing from $DIFF_BASE to HEAD"
+
+      if git rev-parse --verify "$DIFF_BASE" >/dev/null 2>&1; then
+        echo "Comparing from $DIFF_BASE to HEAD"
+        CHANGED_FILES=$(git diff --name-only "$DIFF_BASE"..HEAD)
+      else
+        echo "⚠️ Le commit $DIFF_BASE n'est pas disponible (clone trop peu profond ?)"
+        CHANGED_FILES=$(git diff --name-only $CI_COMMIT_BEFORE_SHA $CI_COMMIT_SHA)
+      fi
+
+    # -  CHANGED_FILES=$(git diff --name-only "$DIFF_BASE"..HEAD)
+    # - CHANGED_FILES=$(git diff --name-only HEAD~5..HEAD)
+    - echo "$CHANGED_FILES"
+    - AMCNUM_REPORT=1 CHANGED_FILES="$CHANGED_FILES" pnpm vitest tests/unit/report-amcnum.test.ts --run
   rules:
     # Se lance uniquement si le pipeline est déclenché par une Merge Request
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'

@@ -1,8 +1,6 @@
 import N2PlusRacineDeN from '../can/TSpe/canTSpeS04'
-export const titre = 'Calculer la limite de $\dfrac{a\pm kn}{n}$'
+export const titre = 'Calculer la limite de $\\dfrac{a\\pm kn}{n}$'
 export const dateDePublication = '04/08/2025'
-export const amcReady = true
-export const amcType = 'AMCNum'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 

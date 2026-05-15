@@ -5,8 +5,6 @@ import ExerciceSimple from '../../ExerciceSimple'
 export const titre = 'Décomposer un nombre en produit avec un carré'
 export const interactifReady = true
 export const interactifType = 'mathLive'
-export const amcReady = true
-export const amcType = 'AMCNum'
 export const dateDePublication = '20/12/2025'
 /**
  * @author  Gilles Mora

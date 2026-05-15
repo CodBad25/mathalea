@@ -1,8 +1,6 @@
 import N2PlusRacineDeN from '../can/TSpe/canTSpeS09'
-export const titre = 'Calculer la limite de $\dfrac{a+n^m}{n^p}$'
+export const titre = 'Calculer la limite de $\\dfrac{a+n^m}{n^p}$'
 export const dateDePublication = '04/08/2025'
-export const amcReady = true
-export const amcType = 'AMCNum'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 

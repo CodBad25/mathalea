@@ -187,7 +187,7 @@ export default class DivisionDecimale extends Exercice {
       if (context.isAmc) {
         this.autoCorrectionAMC[i] = {
           enonce: texte,
-          propositions: [{ texte: texteCorr }],
+          reponse: { texte: texteCorr, valeur: q },
         }
         const amcParam = ensureAmcParam(this, i)
         amcParam.digits =

@@ -503,6 +503,54 @@ export interface Valeur {
 }
 
 export type ValeurNames = keyof Valeur
+export const VALEUR_NAMES = [
+  'bareme',
+  'feedback',
+  'reponse',
+  'champ1',
+  'champ2',
+  'champ3',
+  'champ4',
+  'champ5',
+  'champ6',
+  'rectangle1',
+  'rectangle2',
+  'rectangle3',
+  'rectangle4',
+  'rectangle5',
+  'rectangle6',
+  'rectangle7',
+  'rectangle8',
+  'field0',
+  'field1',
+  'field2',
+  'field3',
+  'field4',
+  'field5',
+  'field6',
+  'field7',
+  'field8',
+  'L1C1',
+  'L1C2',
+  'L1C3',
+  'L1C4',
+  'L1C5',
+  'L2C1',
+  'L2C2',
+  'L2C3',
+  'L2C4',
+  'L2C5',
+  'L3C1',
+  'L3C2',
+  'L3C3',
+  'L3C4',
+  'L3C5',
+  'sheetAnswer',
+  'callback',
+] as const satisfies readonly ValeurNames[]
+
+const VALEUR_NAMES_SET = new Set<string>(VALEUR_NAMES)
+
 export type ValeurNamesWithoutFunctions = Exclude<
   ValeurNames,
   'bareme' | 'feedback' | 'callback'
@@ -580,7 +628,12 @@ export interface ValeurNormalized {
  * Type guard pour vérifier si une valeur est de type Valeur
  */
 export function isValeur(value: unknown): value is Valeur {
-  return typeof value === 'object' && value !== null
+  if (typeof value !== 'object' || value === null) return false
+
+  const keys = Object.keys(value)
+  if (keys.length === 0) return false
+
+  return keys.every((key) => VALEUR_NAMES_SET.has(key))
 }
 
 /**

@@ -1,8 +1,6 @@
 import EquationsLog from '../TT/TTE-7'
 export const titre = 'Résoudre une équation simple avec le logarithme'
 export const dateDePublication = '04/08/2025'
-export const amcReady = true
-export const amcType = 'AMCNum'
 export const interactifReady = true
 export const interactifType = 'multiMathfield'
 

@@ -112,7 +112,7 @@ export default class DernierChiffreProduitDécimaux extends Exercice {
         setReponse(this, i, resultat)
         this.autoCorrectionAMC[i] = {
           enonce: texte,
-          propositions: [{ texte: texteCorr }],
+          reponse: { texte: texteCorr, valeur: resultat },
         }
         const amcParam = ensureAmcParam(this, i)
         amcParam.digits = 1

@@ -41,10 +41,17 @@
     kind: BlockKind
   }
 
+  type QuestionRef = {
+    exerciseIndex: number
+    questionIndex: number
+  }
+
   type PreviewBlock = {
     key: string
     label: string
     ref: BlockRef | null
+    questionRef: QuestionRef
+    previewScaleFactor: number
     enonce: string
     htmlContent: string
     data: any
@@ -90,6 +97,8 @@
     fontSize: '10pt' as '10pt' | '11pt' | '12pt',
   }
   let selectedRef: BlockRef | null = null
+  let selectedHybridHeaderRef: QuestionRef | null = null
+  let activeQuestionRef: QuestionRef | null = null
   let selectedExerciseIndex: number | null = null
   let tikzScaleFactorsByQuestion: Record<string, number> = {}
   let tikzScaleSliderValue = 1
@@ -110,10 +119,20 @@
 
   let unsubscribeExercicesParams: (() => void) | null = null
 
-  $: selectedQuestionKey =
+  $: activeQuestionRef =
     selectedRef == null
+      ? selectedHybridHeaderRef
+      : {
+          exerciseIndex: selectedRef.exerciseIndex,
+          questionIndex: selectedRef.questionIndex,
+        }
+  $: selectedQuestionKey =
+    activeQuestionRef == null
       ? ''
-      : getQuestionKey(selectedRef.exerciseIndex, selectedRef.questionIndex)
+      : getQuestionKey(
+          activeQuestionRef.exerciseIndex,
+          activeQuestionRef.questionIndex,
+        )
   $: selectedQuestionTikzScaleFactor = clampTikzScaleFactor(
     selectedQuestionKey === ''
       ? 1
@@ -744,6 +763,15 @@
     ) {
       selectedExerciseIndex = null
       selectedRef = null
+      selectedHybridHeaderRef = null
+    }
+
+    if (
+      selectedHybridHeaderRef != null &&
+      (selectedHybridHeaderRef.exerciseIndex < 0 ||
+        selectedHybridHeaderRef.exerciseIndex >= exercices.length)
+    ) {
+      selectedHybridHeaderRef = null
     }
 
     if (pendingSettingsSeed != null) {
@@ -925,6 +953,17 @@
     return `${exerciseIndex}:${questionIndex}`
   }
 
+  function getQuestionTikzScaleFactor(
+    exerciseIndex: number,
+    questionIndex: number,
+  ): number {
+    return clampTikzScaleFactor(
+      tikzScaleFactorsByQuestion[
+        getQuestionKey(exerciseIndex, questionIndex)
+      ] ?? 1,
+    )
+  }
+
   function clampTikzScaleFactor(value: number): number {
     return Math.max(0.5, Math.min(1.5, value))
   }
@@ -936,6 +975,9 @@
       ...tikzScaleFactorsByQuestion,
       [selectedQuestionKey]: factor,
     }
+    // Force un rerender immédiat des cartes de preview (dont AMCHybride)
+    // car la liste affichée dépend indirectement du facteur via getBlocks().
+    exercices = [...exercices]
     updateLatexPreview()
   }
 
@@ -1031,12 +1073,12 @@
   }
 
   function selectedQuestionHasTikzPicture(): boolean {
-    if (!selectedRef) return false
-    const exercise = exercices[selectedRef.exerciseIndex] as any
+    if (!activeQuestionRef) return false
+    const exercise = exercices[activeQuestionRef.exerciseIndex] as any
     const autoCorrection = Array.isArray(exercise?.autoCorrectionAMC)
       ? exercise.autoCorrectionAMC
       : exercise?.autoCorrection
-    const item = autoCorrection?.[selectedRef.questionIndex]
+    const item = autoCorrection?.[activeQuestionRef.questionIndex]
     if (!item) return false
 
     const regex = /\\+begin\s*\{\s*(?:tikzpicture|circuitikz)\s*\}/i
@@ -1066,10 +1108,10 @@
   }
 
   function getSelectedQuestionItem(): any | null {
-    if (!selectedRef) return null
-    const exercise = exercices[selectedRef.exerciseIndex]
+    if (!activeQuestionRef) return null
+    const exercise = exercices[activeQuestionRef.exerciseIndex]
     const autoCorrection = getAmcAutoCorrection(exercise)
-    return autoCorrection[selectedRef.questionIndex] ?? null
+    return autoCorrection[activeQuestionRef.questionIndex] ?? null
   }
 
   function toCm(value: number, unit: string | undefined): number {
@@ -1300,6 +1342,14 @@
 
     autoCorrection.forEach((item, questionIndex) => {
       const type = (exercise as any).amcType
+      const questionRef: QuestionRef = {
+        exerciseIndex,
+        questionIndex,
+      }
+      const previewScaleFactor = getQuestionTikzScaleFactor(
+        exerciseIndex,
+        questionIndex,
+      )
       const headerHtmlContent =
         type === 'AMCHybride'
           ? (amcHtmlQuestions[questionIndex] ??
@@ -1326,6 +1376,8 @@
           key: `${exerciseIndex}-${questionIndex}-hybrid-header`,
           label: `AMCHybride ${questionIndex + 1}`,
           ref: null,
+          questionRef,
+          previewScaleFactor,
           enonce:
             typeof item?.enonce === 'string'
               ? stripAmcHiddenToken(item.enonce)
@@ -1391,6 +1443,8 @@
                 propositionIndex,
                 kind: 'qcm',
               },
+              questionRef,
+              previewScaleFactor,
               enonce: propEnonce,
               htmlContent: propHtmlContent,
               data: prop,
@@ -1407,6 +1461,8 @@
                 propositionIndex,
                 kind: 'num',
               },
+              questionRef,
+              previewScaleFactor,
               enonce: propEnonce,
               htmlContent: propHtmlContent,
               data: prop,
@@ -1423,6 +1479,8 @@
                 propositionIndex,
                 kind: 'open',
               },
+              questionRef,
+              previewScaleFactor,
               enonce: propEnonce,
               htmlContent: propHtmlContent,
               data: prop,
@@ -1443,6 +1501,8 @@
             propositionIndex: 0,
             kind: 'qcm',
           },
+          questionRef,
+          previewScaleFactor,
           enonce:
             typeof item?.enonce === 'string'
               ? stripAmcHiddenToken(item.enonce)
@@ -1463,6 +1523,8 @@
             propositionIndex: 0,
             kind: 'num',
           },
+          questionRef,
+          previewScaleFactor,
           enonce:
             typeof item?.enonce === 'string'
               ? stripAmcHiddenToken(item.enonce)
@@ -1483,6 +1545,8 @@
             propositionIndex: 0,
             kind: 'open',
           },
+          questionRef,
+          previewScaleFactor,
           enonce:
             typeof item?.enonce === 'string'
               ? stripAmcHiddenToken(item.enonce)
@@ -1541,8 +1605,23 @@
     )
   }
 
+  function isSelectedHybridHeader(ref: QuestionRef): boolean {
+    return (
+      selectedHybridHeaderRef?.exerciseIndex === ref.exerciseIndex &&
+      selectedHybridHeaderRef?.questionIndex === ref.questionIndex
+    )
+  }
+
   function selectBlock(ref: BlockRef) {
     selectedRef = ref
+    selectedHybridHeaderRef = null
+    selectedExerciseIndex = ref.exerciseIndex
+    isDocumentSettingsOpen = false
+  }
+
+  function selectHybridHeader(ref: QuestionRef) {
+    selectedHybridHeaderRef = ref
+    selectedRef = null
     selectedExerciseIndex = ref.exerciseIndex
     isDocumentSettingsOpen = false
   }
@@ -1920,6 +1999,20 @@
     ) {
       selectedRef = null
     }
+    if (
+      selectedHybridHeaderRef?.exerciseIndex === exerciseIndex &&
+      selectedHybridHeaderRef?.questionIndex === questionIndex
+    ) {
+      selectedHybridHeaderRef = null
+    } else if (
+      selectedHybridHeaderRef?.exerciseIndex === exerciseIndex &&
+      selectedHybridHeaderRef.questionIndex > questionIndex
+    ) {
+      selectedHybridHeaderRef = {
+        ...selectedHybridHeaderRef,
+        questionIndex: selectedHybridHeaderRef.questionIndex - 1,
+      }
+    }
 
     const nextFactors: Record<string, number> = {}
     for (const [key, value] of Object.entries(tikzScaleFactorsByQuestion)) {
@@ -1959,6 +2052,19 @@
     } else if (selectedExerciseIndex != null && selectedExerciseIndex > index) {
       selectedExerciseIndex--
     }
+
+    if (selectedHybridHeaderRef?.exerciseIndex === index) {
+      selectedHybridHeaderRef = null
+    } else if (
+      selectedHybridHeaderRef != null &&
+      selectedHybridHeaderRef.exerciseIndex > index
+    ) {
+      selectedHybridHeaderRef = {
+        ...selectedHybridHeaderRef,
+        exerciseIndex: selectedHybridHeaderRef.exerciseIndex - 1,
+      }
+    }
+
     exercicesParams.update((list) => list.filter((_, i) => i !== index))
 
     const nextFactors: Record<string, number> = {}
@@ -1981,6 +2087,7 @@
     if (exercices.length === 0 || selectedExerciseIndex == null) return
     selectedExerciseIndex = (selectedExerciseIndex + 1) % exercices.length
     selectedRef = null
+    selectedHybridHeaderRef = null
     isDocumentSettingsOpen = false
   }
 
@@ -2091,6 +2198,7 @@
                     class="rounded border px-2 py-1"
                     on:click={() => {
                       selectedExerciseIndex = exerciseIndex
+                      selectedHybridHeaderRef = null
                       isDocumentSettingsOpen = false
                     }}
                   >
@@ -2118,7 +2226,20 @@
 
                       {#if hasCommonHeader}
                         <div
-                          class="amc-hybrid-header-card rounded-xl border border-coopmaths-struct-light/40 bg-white/80 p-4 dark:bg-coopmathsdark-canvas-dark/70 dark:border-coopmathsdark-struct-light/30"
+                          role="button"
+                          tabindex="0"
+                          class="amc-hybrid-header-card rounded-xl border border-coopmaths-struct-light/40 bg-white/80 p-4 transition-colors dark:bg-coopmathsdark-canvas-dark/70 dark:border-coopmathsdark-struct-light/30 {isSelectedHybridHeader(
+                            item.header.questionRef,
+                          )
+                            ? 'ring-2 ring-coopmaths-action cursor-pointer'
+                            : 'cursor-pointer hover:bg-coopmaths-canvas/40 dark:hover:bg-coopmathsdark-canvas/40'}"
+                          on:click={() =>
+                            selectHybridHeader(item.header.questionRef)}
+                          on:keydown={(event) => {
+                            if (event.key === 'Enter' || event.key === ' ') {
+                              selectHybridHeader(item.header.questionRef)
+                            }
+                          }}
                         >
                           <p
                             class="text-base font-semibold text-coopmaths-struct dark:text-coopmathsdark-struct"
@@ -2129,6 +2250,7 @@
                             <AmcEnonceHtml
                               content={item.header.htmlContent ||
                                 item.header.enonce}
+                              svgScale={item.header.previewScaleFactor}
                             />
                           </div>
                         </div>
@@ -2194,6 +2316,7 @@
                               <AmcPreviewQcm
                                 enonce={block.enonce}
                                 htmlContent={block.htmlContent}
+                                svgScale={block.previewScaleFactor}
                                 mode={block.data?.type === 'qcmMult' ||
                                 exercice.amcType === 'qcmMult'
                                   ? 'qcmMult'
@@ -2204,6 +2327,7 @@
                               <AmcPreviewNumeric
                                 enonce={block.enonce}
                                 htmlContent={block.htmlContent}
+                                svgScale={block.previewScaleFactor}
                                 value={block.data?.propositions?.[0]?.reponse
                                   ?.valeur ?? block.data?.reponse?.valeur}
                                 param={block.data?.propositions?.[0]?.reponse
@@ -2215,6 +2339,7 @@
                               <AmcPreviewOpen
                                 enonce={block.enonce}
                                 htmlContent={block.htmlContent}
+                                svgScale={block.previewScaleFactor}
                                 lignes={block.data?.propositions?.[0]?.statut ??
                                   block.data?.propositions?.[0]?.pointilles ??
                                   3}
@@ -2280,6 +2405,7 @@
                         <AmcPreviewQcm
                           enonce={block.enonce}
                           htmlContent={block.htmlContent}
+                          svgScale={block.previewScaleFactor}
                           mode={block.data?.type === 'qcmMult' ||
                           exercice.amcType === 'qcmMult'
                             ? 'qcmMult'
@@ -2290,6 +2416,7 @@
                         <AmcPreviewNumeric
                           enonce={block.enonce}
                           htmlContent={block.htmlContent}
+                          svgScale={block.previewScaleFactor}
                           value={block.data?.propositions?.[0]?.reponse
                             ?.valeur ?? block.data?.reponse?.valeur}
                           param={block.data?.propositions?.[0]?.reponse
@@ -2301,6 +2428,7 @@
                         <AmcPreviewOpen
                           enonce={block.enonce}
                           htmlContent={block.htmlContent}
+                          svgScale={block.previewScaleFactor}
                           lignes={block.data?.propositions?.[0]?.statut ??
                             block.data?.propositions?.[0]?.pointilles ??
                             3}
@@ -2804,7 +2932,7 @@
           </div>
         {/if}
 
-        {#if selectedRef == null}
+        {#if selectedRef == null && selectedHybridHeaderRef == null}
           <p
             class="mt-4 text-sm text-coopmaths-corpus dark:text-coopmathsdark-corpus"
           >
@@ -2816,7 +2944,9 @@
             class="mt-4 space-y-2 rounded-xl border border-coopmaths-struct-light/30 p-3"
           >
             <p class="text-sm font-semibold">
-              Figure TikZ (question sélectionnée)
+              {selectedHybridHeaderRef != null
+                ? 'Figure TikZ (énoncé commun sélectionné)'
+                : 'Figure TikZ (question sélectionnée)'}
             </p>
             <label for="amc-tikz-scale" class="block text-xs"
               >{selectedQuestionClipDimensionsLabel}</label

@@ -1,10 +1,7 @@
 import ModeliserSuites from '../1e/1AL10-1'
-export const titre =
-  "Modéliser une situation avec une suite"
+export const titre = 'Modéliser une situation avec une suite'
 export const dateDePublication = '29/07/2025'
 export const amcReady = true
-export const amcType = 'AMCNum'
-export const interactifReady = true
 export const interactifType = 'mathLive'
 
 /**
@@ -20,10 +17,10 @@ export const refs = {
 }
 export default class ModeliserSuites2 extends ModeliserSuites {
   constructor() {
-    super()  
-      this.nbQuestions = 1
+    super()
+    this.nbQuestions = 1
     this.sup = '11'
-    this.sup2=false
+    this.sup2 = false
     this.spacing = 1.5
     this.spacingCorr = 1.5
     this.besoinFormulaireTexte = [

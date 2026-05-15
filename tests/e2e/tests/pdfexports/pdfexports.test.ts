@@ -188,35 +188,17 @@ async function getLatexFileStyle(
     await fs.mkdir(UPLOAD_FOLDER + '/' + UPLOAD_SUBFOLDER + '/' + startedPath)
   }
 
-  await download.saveAs(
+  const downloadedFilePath =
     UPLOAD_FOLDER +
-      '/' +
-      UPLOAD_SUBFOLDER +
-      '/' +
-      startedPath +
-      '/' +
-      id +
-      style +
-      (id === uuid ? '_' : '_' + uuid + '_') +
-      download.suggestedFilename(),
-  )
-
-  const zip = await fs.open(
-    UPLOAD_FOLDER +
-      '/' +
-      UPLOAD_SUBFOLDER +
-      '/' +
-      startedPath +
-      '/' +
-      id +
-      style +
-      (id === uuid ? '_' : '_' + uuid + '_') +
-      download.suggestedFilename(),
-  )
-
-  const unzipfiles: Map<string, string | ArrayBuffer> = await readZip(zip)
-
-  zip.close()
+    '/' +
+    UPLOAD_SUBFOLDER +
+    '/' +
+    startedPath +
+    '/' +
+    id +
+    style +
+    (id === uuid ? '_' : '_' + uuid + '_') +
+    download.suggestedFilename()
 
   const folder =
     UPLOAD_FOLDER +
@@ -233,34 +215,34 @@ async function getLatexFileStyle(
     Math.round(Math.random() * 1e9)
   await fs.mkdir(folder)
 
-  const filesPromise: Promise<unknown>[] = []
-  unzipfiles.forEach((value, key) => {
-    if (value instanceof ArrayBuffer) {
-      const buffer = Buffer.from(value)
-      filesPromise.push(fs.writeFile(folder + '/' + key, buffer))
-    } else {
-      filesPromise.push(fs.writeFile(folder + '/' + key, value))
-    }
-  })
-  await Promise.all(filesPromise)
+  await download.saveAs(downloadedFilePath)
 
-  await fs.rm(
-    UPLOAD_FOLDER +
-      '/' +
-      UPLOAD_SUBFOLDER +
-      '/' +
-      startedPath +
-      '/' +
-      id +
-      style +
-      (id === uuid ? '_' : '_' + uuid + '_') +
-      download.suggestedFilename(),
-    { recursive: true, force: true },
-  )
+  let file: string | undefined
+  if (download.suggestedFilename().endsWith('.tex')) {
+    file = download.suggestedFilename()
+    await fs.copyFile(downloadedFilePath, folder + '/' + file)
+  } else {
+    const zip = await fs.open(downloadedFilePath)
+    const unzipfiles: Map<string, string | ArrayBuffer> = await readZip(zip)
+    await zip.close()
 
-  const file = Array.from(unzipfiles.keys()).find(
-    (ele) => ele === 'main.tex' || ele === 'test.tex',
-  )
+    const filesPromise: Promise<unknown>[] = []
+    unzipfiles.forEach((value, key) => {
+      if (value instanceof ArrayBuffer) {
+        const buffer = Buffer.from(value)
+        filesPromise.push(fs.writeFile(folder + '/' + key, buffer))
+      } else {
+        filesPromise.push(fs.writeFile(folder + '/' + key, value))
+      }
+    })
+    await Promise.all(filesPromise)
+
+    file = Array.from(unzipfiles.keys()).find(
+      (ele) => ele === 'main.tex' || ele === 'test.tex',
+    )
+  }
+
+  await fs.rm(downloadedFilePath, { recursive: true, force: true })
 
   const controller = new AbortController()
   const signal = controller.signal
@@ -420,18 +402,13 @@ async function testRunAllLots(filter: string) {
 const alea = 'e906e'
 const local = true
 
-if (
-  process.env.CI &&
-  process.env.NIV !== null &&
-  process.env.NIV !== undefined
-) {
+if (process.env.NIV !== null && process.env.NIV !== undefined) {
   // utiliser pour les tests d'intégration
   const filter = (process.env.NIV as string).replaceAll(' ', '')
   prefs.headless = true
   log(filter)
   testRunAllLots(filter)
 } else if (
-  process.env.CI &&
   process.env.CHANGED_FILES !== null &&
   process.env.CHANGED_FILES !== undefined
 ) {

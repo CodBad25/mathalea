@@ -24,8 +24,6 @@ export const titre = 'Trouver le symétrique'
 export const dateDePublication = '03/05/2025'
 export const interactifReady = true
 export const interactifType = 'multiMathfield'
-export const amcReady = true
-export const amcType = 'AMCNum'
 
 /**
  * Symétrie axiale sur papier pointé

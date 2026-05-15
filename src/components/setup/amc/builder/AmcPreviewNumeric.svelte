@@ -5,6 +5,7 @@
 
   export let enonce = ''
   export let htmlContent = ''
+  export let svgScale = 1
   export let value: unknown = undefined
   export let param: ReponseParams = {}
 
@@ -49,7 +50,7 @@
   </p>
   {#if htmlContent || enonce}
     <div class="mt-2">
-      <AmcEnonceHtml content={htmlContent || enonce} />
+      <AmcEnonceHtml content={htmlContent || enonce} {svgScale} />
     </div>
   {/if}
 

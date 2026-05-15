@@ -3,6 +3,7 @@
 
   export let enonce = ''
   export let htmlContent = ''
+  export let svgScale = 1
   export let choix: Array<{
     texte?: string
     statut?: unknown
@@ -41,7 +42,7 @@
   </p>
   {#if htmlContent || enonce}
     <div class="mt-2">
-      <AmcEnonceHtml content={previewContent} />
+      <AmcEnonceHtml content={previewContent} {svgScale} />
     </div>
   {/if}
   {#if choix.length > 0}
@@ -58,7 +59,7 @@
               ? 'bg-black'
               : 'bg-white'}"
           ></span>
-          <AmcEnonceHtml content={option.texte ?? ''} />
+          <AmcEnonceHtml content={option.texte ?? ''} {svgScale} />
         </li>
       {/each}
     </ul>

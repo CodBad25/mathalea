@@ -700,6 +700,8 @@ export default class SimplifierExponentielles extends Exercice {
             texteAvant: ' $=$ ',
           },
         )
+      }
+      if (!this.sup3) {
         handleAnswers(this, i, {
           reponse: {
             value: answer,
@@ -710,7 +712,6 @@ export default class SimplifierExponentielles extends Exercice {
           },
         })
       }
-
       // Uniformisation : Mise en place de la réponse attendue en interactif en orange et gras
       const textCorrSplit = texteCorr.split('=')
       let aRemplacer = textCorrSplit[textCorrSplit.length - 1]

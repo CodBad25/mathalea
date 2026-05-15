@@ -462,7 +462,7 @@ export default class EcrirePetitsNombresEntiers extends Exercice {
       } else {
         if (context.isAmc) {
           setReponse(this, i, NombreAEcrire) // Utile uniquement pour l'AMC
-          this.autoCorrection[i].enonce =
+          this.autoCorrectionAMC[i].enonce =
             this.consigne + '\\\\' + nombreEnLettres(NombreAEcrire) + '\\\\'
         } else {
           handleAnswers(this, i, {

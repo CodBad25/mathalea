@@ -17,8 +17,6 @@ import { setReponse } from '../../lib/interactif/gestionInteractif'
 export const titre = "Calculer le discriminant d'un polynôme du second degré"
 export const interactifReady = true
 export const interactifType = 'mathLive'
-export const amcReady = true
-export const amcType = 'AMCNum'
 export const dateDeModifImportante = '5/11/2023'
 export const uuid = '731f0'
 
@@ -82,8 +80,9 @@ export default class CalculerDiscriminant extends Exercice {
           ajouteChampTexteMathLive(this, i, KeyboardType.clavierNumbers, {
             texteAvant: '$\\Delta = $',
           })
-        setReponse(this, i, p.discriminant)
       }
+      setReponse(this, i, p.discriminant)
+
       texteCorr = `$\\Delta_${lettreDepuisChiffre(i + 1)} = ${p.texCalculDiscriminantSansResultat}$`
       texteCorr += `<br><br>$\\Delta_${lettreDepuisChiffre(i + 1)} = ${miseEnEvidence(p.discriminant.texFractionSimplifiee)}$`
       if (this.questionJamaisPosee(i, a, b, c)) {

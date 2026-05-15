@@ -1,8 +1,7 @@
 import DomaineDefFnLog from '../TT/TTE-11'
-export const titre = "Déterminer le domaine de définition d'une fonction logarithme"
+export const titre =
+  "Déterminer le domaine de définition d'une fonction logarithme"
 export const dateDePublication = '04/08/2025'
-export const amcReady = true
-export const amcType = 'AMCNum'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 

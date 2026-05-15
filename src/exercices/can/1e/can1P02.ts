@@ -18,8 +18,6 @@ export const titre = 'Lire une probabilité  à partir d’un arbre'
 export const dateDePublication = '03/07/2022'
 export const interactifReady = true
 export const interactifType = 'mathLive'
-export const amcReady = true
-export const amcType = 'AMCNum'
 
 /**
  * On donne un arbre de probabilité et lit une probabilité sur l'arbre

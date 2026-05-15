@@ -190,7 +190,10 @@ export default class AdditionnerSoustrairesDecimaux extends Exercice {
       if (context.isAmc) {
         this.autoCorrectionAMC[i] = {
           enonce: texte,
-          propositions: [{ texte: texteCorr }],
+          reponse: {
+            valeur: reponse,
+            texte: texteCorr,
+          },
         }
         const amcParam = ensureAmcParam(this, i)
         amcParam.digits =

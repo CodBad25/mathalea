@@ -31,8 +31,6 @@ export const titre = "Trouver le nombre de faces ou d'arêtes d'un solide"
 export const dateDePublication = '7/11/2021'
 export const interactifReady = true
 export const interactifType = 'mathLive'
-export const amcReady = true
-export const amcType = 'AMCNum'
 /**
  * @author Jean-claude Lhote (Adapté par Éric Elter pour que les nouvelles fonctions 3d soient bien utilisées)
  */

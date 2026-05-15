@@ -1,8 +1,7 @@
 import VecteurNormalPlan from '../can/TSpe/canTSpeE05'
-export const titre = "Déterminer un vecteur normal à un plan donné par une équation cartésienne"
+export const titre =
+  'Déterminer un vecteur normal à un plan donné par une équation cartésienne'
 export const dateDePublication = '05/10/2024'
-export const amcReady = true
-export const amcType = 'AMCNum'
 export const interactifReady = true
 export const interactifType = 'mathLive'
 

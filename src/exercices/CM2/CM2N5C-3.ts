@@ -2,8 +2,6 @@ import ProblemeCourse from '../6e/6N5-9'
 export const titre = 'Résoudre des problèmes : Les courses'
 export const interactifReady = true
 export const interactifType = 'mathLive'
-export const amcReady = true
-export const amcType = 'AMCNum'
 export const uuid = 'b74c6'
 export const refs = {
   'fr-fr': ['CM2N5C-3'],

@@ -131,7 +131,7 @@ u_{${k}}&=${a === 1 ? '' : a === -1 ? '-' : `${a} \\times`} ${k}^2 ${b === 1 ? '
           reponse = new FractionEtendue(a * k + b, c * k + d).simplifie()
           handleAnswers(this, i, {
             reponse: {
-              value: reponse.toLatex(),
+              value: reponse.texFSD,
               options: { fractionIrreductible: true },
             },
           })
