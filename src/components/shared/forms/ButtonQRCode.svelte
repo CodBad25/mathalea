@@ -1,9 +1,4 @@
 <script lang="ts">
-  import {
-    getBlobFromImageElement,
-    copyBlobToClipboard,
-    canCopyImagesToClipboard,
-  } from 'copy-image-clipboard'
   import BasicClassicModal from '../modal/BasicClassicModal.svelte'
   import ButtonIconTooltip from './ButtonIconTooltip.svelte'
   import BasicInfoModal from '../modal/BasicInfoModal.svelte'
@@ -65,15 +60,16 @@
       return
     }
 
-    if (!canCopyImagesToClipboard()) {
+    if (!navigator.clipboard || typeof ClipboardItem === 'undefined') {
       console.error('Copying images to clipboard is not supported.')
       QRCodeCopyState = 'error'
       return
     }
 
     try {
-      const blob = await getBlobFromImageElement(imageElement)
-      await copyBlobToClipboard(blob)
+      const response = await fetch(imageElement.src)
+      const blob = await response.blob()
+      await navigator.clipboard.write([new ClipboardItem({ [blob.type]: blob })])
       QRCodeCopyState = 'success'
     } catch (error) {
       notify('Error copying QR Code to clipboard:', { error })
