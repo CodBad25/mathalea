@@ -1,10 +1,11 @@
 import { createList } from '../../lib/format/lists'
 import {
   contains,
-  equals,
-  irreducibleFractions,
+  
+  isEqual,
+  isEquivalentEquation,
   isReduced,
-  sameCartesianEquation,
+  onlyIrreducibleFractions,
   seq,
 } from '../../lib/interactif/checks'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
@@ -27,7 +28,7 @@ export const interactifReady = true
 export const interactifType = 'mathLive'
 export const titre = 'Résoudre un problème de synthèse en géométrie repérée'
 
-export const dateDePublication = '4/5/2026' // La date de publication initiale au format 'jj/mm/aaaa' pour affichage temporaire d'un tag
+export const dateDePublication = '4/5/2026'
 
 export const uuid = '828cb'
 export const refs = {
@@ -35,16 +36,14 @@ export const refs = {
   'fr-ch': [],
 }
 
-seq([equals(), isReduced(), irreducibleFractions()])
 /**
  *
  * @author Stéphane Guyon
-
+ *
 */
-export default class NomExercice extends Exercice {
+export default class SyntheseGeometrieReperee extends Exercice {
   constructor() {
     super()
-    this.consigne = ''
     this.nbQuestions = 1
   }
 
@@ -107,7 +106,7 @@ export default class NomExercice extends Exercice {
       question3 += ajouteChampTexteMathLive(
         this,
         2,
-        KeyboardType.clavierDeBase,
+        KeyboardType.lyceeClassique,
         {
           texteAvant: '<br>Coordonnées de $H$ : ',
         },
@@ -115,12 +114,12 @@ export default class NomExercice extends Exercice {
 
       const question4a =
         'Calculer la distance $AB$.' +
-        ajouteChampTexteMathLive(this, 3, KeyboardType.clavierDeBase, {
+        ajouteChampTexteMathLive(this, 3, KeyboardType.lyceeClassique, {
           texteAvant: '<br>Distance $AB$ : ',
         })
       const question4b =
         'Déterminer les coordonnées du milieu $\\Omega$ du segment $[AB]$.' +
-        ajouteChampTexteMathLive(this, 4, KeyboardType.equationsTerminale, {
+        ajouteChampTexteMathLive(this, 4, KeyboardType.lyceeClassique, {
           texteAvant: '<br>Coordonnées du milieu $\\Omega$ : ',
         })
       const question4 = createList({
@@ -295,7 +294,7 @@ export default class NomExercice extends Exercice {
                 feedbackKo:
                   "Tu n'as pas écrit une équation cartésienne de la forme ax + by + c = 0.",
               }),
-              sameCartesianEquation(),
+              isEquivalentEquation(),
             ]),
           },
         })
@@ -309,7 +308,7 @@ export default class NomExercice extends Exercice {
                 feedbackKo:
                   "Tu n'as pas écrit une équation cartésienne de la forme ax + by + c = 0.",
               }),
-              sameCartesianEquation(),
+              isEquivalentEquation(),
             ]),
           },
         })
@@ -317,14 +316,14 @@ export default class NomExercice extends Exercice {
           // coordonnées du point H
           reponse: {
             value: reponse3,
-            compare: seq([equals(), isReduced(), irreducibleFractions()]),
+            compare: seq([isEqual(), isReduced(), onlyIrreducibleFractions()]),
           },
         })
         handleAnswers(this, 3, {
           // distance AB
           reponse: {
             value: reponse4a,
-            compare: seq([equals()]),
+            compare: seq([isEqual()]),
           },
         })
 
@@ -332,14 +331,14 @@ export default class NomExercice extends Exercice {
           // coordonnées du point Omega
           reponse: {
             value: reponse4b,
-            compare: seq([equals(), isReduced(), irreducibleFractions()]),
+            compare: seq([isEqual(), isReduced(), onlyIrreducibleFractions()]),
           },
         })
         handleAnswers(this, 5, {
           // équation du cercle
           reponse: {
             value: reponse5,
-             compare: seq([equals()]),
+             compare: seq([isEqual()]),
           },
         })
         // <- laisser le i et ajouter toutes les variables qui rendent les exercices différents (par exemple a, b, c et d)
