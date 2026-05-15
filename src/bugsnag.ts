@@ -1,5 +1,4 @@
 import Bugsnag, { type NotifiableError } from '@bugsnag/js'
-import bigInt from 'big-integer'
 
 import { get } from 'svelte/store'
 import { showDialogForLimitedTime } from './lib/components/dialogs'
@@ -14,12 +13,6 @@ import { globalOptions } from './lib/stores/globalOptions'
 import { tropDeChiffres } from './modules/messages'
 
 type Metadatas = Record<string, unknown>
-
-/* global BigInt */
-if (typeof BigInt === 'undefined') {
-  // @ts-expect-error
-  window.BigInt = bigInt
-}
 
 function handleBugsnag() {
   // const fileName = '../_private/bugsnagApiKey'

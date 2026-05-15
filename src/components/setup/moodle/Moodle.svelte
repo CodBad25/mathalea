@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { saveAs } from 'file-saver'
   import JSZip from 'jszip'
   import {
     mathaleaGetExercicesFromParams,
@@ -71,7 +70,12 @@
     indexHtml += '</html>\n'
     zip.file('index.html', indexHtml)
     zip.generateAsync({ type: 'blob' }).then(function (content) {
-      saveAs(content, 'mathalea.scorm.zip')
+      const url = URL.createObjectURL(content)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = 'mathalea.scorm.zip'
+      a.click()
+      URL.revokeObjectURL(url)
     })
   }
 

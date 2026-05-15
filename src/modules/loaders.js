@@ -1,4 +1,3 @@
-import loadjs from 'loadjs'
 import { MathfieldElement } from 'mathlive'
 import { get } from 'svelte/store'
 import { keyboardState } from '../components/keyboard/stores/keyboardStore'
@@ -7,17 +6,30 @@ import { isMathfieldFocused } from '../lib/interactif/mathfieldFocus'
 import { globalOptions } from '../lib/stores/globalOptions'
 import { context } from './context'
 import { UserFriendlyError } from './messages'
-/**
- * Nos applis prédéterminées avec la liste des fichiers à charger
- * @type {Object}
- */
 const apps = {
-  scratchblocks: 'assets/externalJs/scratchblocks-v3.5-min',
-  slick: [
-    '/assets/externalJs/semantic-ui/semantic.min.css',
-    '/assets/externalJs/semantic-ui/semantic.min',
-    '/assets/externalJs/semantic-ui/components/state.min',
-  ],
+  scratchblocks: ['assets/externalJs/scratchblocks-v3.5-min.js'],
+}
+
+const loadedApps = new Set()
+const pendingApps = new Map()
+
+function loadUrl(url) {
+  return new Promise((resolve, reject) => {
+    if (url.endsWith('.css')) {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      link.onload = resolve
+      link.onerror = () => reject(new Error(`Échec du chargement : ${url}`))
+      document.head.appendChild(link)
+    } else {
+      const script = document.createElement('script')
+      script.src = url
+      script.onload = resolve
+      script.onerror = () => reject(new Error(`Échec du chargement : ${url}`))
+      document.head.appendChild(script)
+    }
+  })
 }
 
 let hasGlobalTabTracker = false
@@ -47,47 +59,25 @@ function ensureGlobalTabTracker() {
   hasGlobalTabTracker = true
 }
 
-/**
- * Charge une appli listée dans apps (pour mutualiser l'appel de loadjs)
- * @private
- * @param {string} name
- * @return {Promise<undefined, Error>} promesse de chargement
- */
 async function load(name) {
-  // on est dans une fct async, si l'une de ces deux lignes plantent ça va retourner une promesse rejetée avec l'erreur
   if (!apps[name]) throw UserFriendlyError(`application ${name} inconnue`)
-  // cf https://github.com/muicss/loadjs
-  try {
-    if (!loadjs.isDefined(name)) {
-      await loadjs(apps[name], name, { returnPromise: true })
-    }
-  } catch (error) {
-    console.error(error)
-    throw new UserFriendlyError(`Le chargement de ${name} a échoué`)
-  }
-  // loadjs.ready veut une callback, on emballe ça dans une promesse
-  return new Promise((resolve, reject) => {
-    loadjs.ready(name, {
-      success: resolve,
-      // si le chargement précédent a réussi on voit pas trop comment on pourrait arriver là, mais ça reste plus prudent de gérer l'erreur éventuelle
-      error: () =>
-        reject(new UserFriendlyError(`Le chargement de ${name} a échoué`)),
+  if (loadedApps.has(name)) return
+  if (pendingApps.has(name)) return pendingApps.get(name)
+  const urls = Array.isArray(apps[name]) ? apps[name] : [apps[name]]
+  const promise = Promise.all(urls.map(loadUrl))
+    .then(() => {
+      loadedApps.add(name)
+      pendingApps.delete(name)
     })
-  })
+    .catch((error) => {
+      pendingApps.delete(name)
+      console.error(error)
+      throw new UserFriendlyError(`Le chargement de ${name} a échoué`)
+    })
+  pendingApps.set(name, promise)
+  return promise
 }
 
-/**
- * Charge prism
- * @return {Promise<undefined>}
- */
-export function loadPrism() {
-  return load('prism')
-}
-
-/**
- * Charge scratchblocks
- * @return {Promise} qui peut échouer…
- */
 export function loadScratchblocks() {
   return load('scratchblocks')
 }

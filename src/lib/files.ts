@@ -1,6 +1,14 @@
-import { saveAs } from 'file-saver'
 import JSZip from 'jszip'
 import JSZipUtils from 'jszip-utils'
+function saveAs(blob: Blob, filename: string) {
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement('a')
+  a.href = url
+  a.download = filename
+  a.click()
+  URL.revokeObjectURL(url)
+}
+
 import {
   buildImagesUrlsList,
   doesLatexNeedsPics,
