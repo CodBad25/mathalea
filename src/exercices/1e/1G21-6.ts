@@ -44,7 +44,7 @@ export const titre = 'Résoudre un problème de synthèse avec produit scalaire'
 
 export const dateDePublication = '14/05/2026'
 
-export const uuid = '828cb'
+export const uuid = 'ec621'
 export const refs = {
   'fr-fr': ['1G21-6'],
   'fr-ch': [],
