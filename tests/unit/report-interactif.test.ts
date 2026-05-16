@@ -111,6 +111,9 @@ vi.mock('apigeom', async (original) => {
   return real
 })
 
+const interactifReadyRegex =
+  /export const interactifReady\s*=\s*(?:true|'true'|"true")/m
+
 function parseChangedFiles(value: string | undefined): string[] {
   if (!value) return []
   return [
@@ -253,7 +256,10 @@ function installNotificationCapture(relativePath: string) {
     }
     restoreWindowNotify = () => {
       if (previousNotify === undefined) {
-        delete globalWindow.notify
+        Reflect.deleteProperty(
+          globalWindow as unknown as Record<string, unknown>,
+          'notify',
+        )
       } else {
         globalWindow.notify = previousNotify
       }
@@ -302,11 +308,16 @@ async function loadAndTestExerciseFast(filePath: string): Promise<{
 } | null> {
   const absolutePath = resolve(filePath)
   const relativePath = relative(rootDir, absolutePath).replaceAll('\\', '/')
+
+  const sourceContent = readFileSync(absolutePath, 'utf8')
+  if (!interactifReadyRegex.test(sourceContent)) return null
+
   const capture = installNotificationCapture(relativePath)
 
   try {
     const module = await import(pathToFileURL(absolutePath).href)
     const ExerciceClass = module.default
+    const moduleInteractifReady: boolean = module.interactifReady === true
 
     if (!isClassExport(ExerciceClass)) return null
 
@@ -348,10 +359,10 @@ async function loadAndTestExerciseFast(filePath: string): Promise<{
     }
 
     const tags: string[] = []
-    if (exercice.interactifReady && !Array.isArray(exercice.autoCorrection)) {
+    if (moduleInteractifReady && !Array.isArray(exercice.autoCorrection)) {
       tags.push('autoCorrection-interactive-absente')
     } else if (
-      exercice.interactifReady &&
+      moduleInteractifReady &&
       Array.isArray(exercice.autoCorrection) &&
       exercice.autoCorrection.length === 0
     ) {

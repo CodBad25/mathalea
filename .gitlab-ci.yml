@@ -19,7 +19,6 @@ stages:
   - playwright-testCanEleve
   - deploy-server
   - playwright-test
-  - playwright-testLycee
   - playwright-pdf
   - playwright-pdfDNB
   - playwright-pdfBAC
@@ -174,187 +173,208 @@ cache:
       junit: tests/e2e/logs/junit-report.xml
     expire_in: 10 day
 
-test6e:
-  extends: .testCI
-  script:
-    - NIV=6e/6 pnpm test:e2e:console_errors
+.testExosModifiedConsolidated:
+  extends: .install_dependencies
+  image: mcr.microsoft.com/playwright:v1.51.0-noble
+  stage: build-projet
+  allow_failure: true
+  timeout: 5h
+  retry:
+    max: 2
+    when:
+      - runner_system_failure
+      - api_failure
+      - unknown_failure
+  artifacts:
+    when: always
+    paths:
+      - tests/e2e/logs
+    reports:
+      junit:
+        - tests/e2e/logs/junit-report.xml
+    expire_in: 10 day
 
-test5e:
+playwright-console-consolidated:
   extends: .testCI
+  stage: playwright-test
+  timeout: 5h
   script:
-    - NIV=5e/5 pnpm test:e2e:console_errors
+    - |
+      FAIL=0
 
-test4e:
-  extends: .testCI
-  script:
-    - NIV=4e/4 pnpm test:e2e:console_errors
+      run_console () {
+        NIV_LABEL="$1"
+        STATUS_VAR="$2"
+        echo "🧪 console_errors NIV=$NIV_LABEL"
+        if NIV="$NIV_LABEL" pnpm test:e2e:console_errors; then
+          eval "$STATUS_VAR=ok"
+        else
+          eval "$STATUS_VAR=ko"
+          FAIL=1
+        fi
+      }
 
-test3e:
-  extends: .testCI
-  script:
-    - NIV=3e/3 pnpm test:e2e:console_errors
+      run_console "6e/6" STATUS_6E
+      run_console "5e/5" STATUS_5E
+      run_console "4e/4" STATUS_4E
+      run_console "3e/3" STATUS_3E
+      run_console "2e/2" STATUS_2E
+      run_console "1e/1" STATUS_1E
+      run_console "TEx^TSpe^techno" STATUS_TEX_TSPE_TECHNO
+      run_console "QCM" STATUS_QCM
+      run_console "can/6e^can/5e" STATUS_CAN_6E_5E
+      run_console "can/4e^can/3e" STATUS_CAN_4E_3E
+      run_console "can/2e^can/1e" STATUS_CAN_2E_1E
+      run_console "can/Ex^can/TSpe" STATUS_CAN_EX_TSPE
 
-test2e:
-  extends: .testCI
-  stage: playwright-testLycee
-  script:
-    - NIV=2e/2 pnpm test:e2e:console_errors
+      echo ""
+      echo "═══════════════════════════════════════════"
+      echo "📊 Résumé console consolidated"
+      echo "═══════════════════════════════════════════"
+      [ "$STATUS_6E" = "ok" ] && echo "✅ 6e/6" || echo "❌ 6e/6"
+      [ "$STATUS_5E" = "ok" ] && echo "✅ 5e/5" || echo "❌ 5e/5"
+      [ "$STATUS_4E" = "ok" ] && echo "✅ 4e/4" || echo "❌ 4e/4"
+      [ "$STATUS_3E" = "ok" ] && echo "✅ 3e/3" || echo "❌ 3e/3"
+      [ "$STATUS_2E" = "ok" ] && echo "✅ 2e/2" || echo "❌ 2e/2"
+      [ "$STATUS_1E" = "ok" ] && echo "✅ 1e/1" || echo "❌ 1e/1"
+      [ "$STATUS_TEX_TSPE_TECHNO" = "ok" ] && echo "✅ TEx^TSpe^techno" || echo "❌ TEx^TSpe^techno"
+      [ "$STATUS_QCM" = "ok" ] && echo "✅ QCM" || echo "❌ QCM"
+      [ "$STATUS_CAN_6E_5E" = "ok" ] && echo "✅ can/6e^can/5e" || echo "❌ can/6e^can/5e"
+      [ "$STATUS_CAN_4E_3E" = "ok" ] && echo "✅ can/4e^can/3e" || echo "❌ can/4e^can/3e"
+      [ "$STATUS_CAN_2E_1E" = "ok" ] && echo "✅ can/2e^can/1e" || echo "❌ can/2e^can/1e"
+      [ "$STATUS_CAN_EX_TSPE" = "ok" ] && echo "✅ can/Ex^can/TSpe" || echo "❌ can/Ex^can/TSpe"
+      echo "═══════════════════════════════════════════"
 
-test1e:
-  extends: .testCI
-  stage: playwright-testLycee
-  script:
-    - NIV=1e/1 pnpm test:e2e:console_errors
+      exit "$FAIL"
 
-testTExOuTSpeOutechno:
-  extends: .testCI
-  stage: playwright-testLycee
-  script:
-    - NIV=TEx^TSpe^techno pnpm test:e2e:console_errors
-
-testQCM:
-  extends: .testCI
-  script:
-    - NIV=QCM pnpm test:e2e:console_errors
-
-testCan6e5e:
-  extends: .testCI
-  script:
-    - NIV=can/6e^can/5e pnpm test:e2e:console_errors
-
-testCan4e3e:
-  extends: .testCI
-  script:
-    - NIV=can/4e^can/3e pnpm test:e2e:console_errors
-
-testCan2e1e:
-  extends: .testCI
-  stage: playwright-testLycee
-  script:
-    - NIV=can/2e^can/1e pnpm test:e2e:console_errors
-
-testCanExTSpe:
-  extends: .testCI
-  stage: playwright-testLycee
-  script:
-    - NIV=can/Ex^can/TSpe pnpm test:e2e:console_errors
-
-testCan2e1ePDF:
+playwright-pdf-consolidated:
   extends: .testCIPDF
+  stage: playwright-pdf
+  timeout: 5h
   script:
-    - NIV=can/2e^can/1e pnpm test:e2e:pdfexports
+    - |
+      FAIL=0
+
+      run_pdf () {
+        NIV_LABEL="$1"
+        STATUS_VAR="$2"
+        echo "🧪 pdfexports NIV=$NIV_LABEL"
+        if NIV="$NIV_LABEL" pnpm test:e2e:pdfexports; then
+          eval "$STATUS_VAR=ok"
+        else
+          eval "$STATUS_VAR=ko"
+          FAIL=1
+        fi
+      }
+
+      run_pdf "can/2e^can/1e" STATUS_CAN_2E_1E
+      run_pdf "can/6e^can/5e" STATUS_CAN_6E_5E
+      run_pdf "can/4e^can/3e" STATUS_CAN_4E_3E
+      run_pdf "6e/6" STATUS_6E
+      run_pdf "5e/5" STATUS_5E
+      run_pdf "4e/4" STATUS_4E
+      run_pdf "3e/3" STATUS_3E
+
+      echo ""
+      echo "═══════════════════════════════════════════"
+      echo "📊 Résumé pdf consolidated"
+      echo "═══════════════════════════════════════════"
+      [ "$STATUS_CAN_2E_1E" = "ok" ] && echo "✅ can/2e^can/1e" || echo "❌ can/2e^can/1e"
+      [ "$STATUS_CAN_6E_5E" = "ok" ] && echo "✅ can/6e^can/5e" || echo "❌ can/6e^can/5e"
+      [ "$STATUS_CAN_4E_3E" = "ok" ] && echo "✅ can/4e^can/3e" || echo "❌ can/4e^can/3e"
+      [ "$STATUS_6E" = "ok" ] && echo "✅ 6e/6" || echo "❌ 6e/6"
+      [ "$STATUS_5E" = "ok" ] && echo "✅ 5e/5" || echo "❌ 5e/5"
+      [ "$STATUS_4E" = "ok" ] && echo "✅ 4e/4" || echo "❌ 4e/4"
+      [ "$STATUS_3E" = "ok" ] && echo "✅ 3e/3" || echo "❌ 3e/3"
+      echo "═══════════════════════════════════════════"
+
+      exit "$FAIL"
   artifacts:
     paths:
       - updatefile/output/can*
+      - updatefile/output/6e*
+      - updatefile/output/5e*
+      - updatefile/output/4e*
+      - updatefile/output/3e*
 
-testCan6e5ePDF:
-  extends: .testCIPDF
+playwright-pdf-dnb-consolidated:
+  extends:
+    - .testCIPDF
+    - .install_dependenciesPDFDNB
+  stage: playwright-pdfDNB
+  timeout: 5h
   script:
-    - NIV=can/6e^can/5e pnpm test:e2e:pdfexports
-    - pnpm -v
+    - |
+      FAIL=0
+
+      run_pdf () {
+        NIV_LABEL="$1"
+        STATUS_VAR="$2"
+        echo "🧪 pdfexports NIV=$NIV_LABEL"
+        if NIV="$NIV_LABEL" pnpm test:e2e:pdfexports; then
+          eval "$STATUS_VAR=ok"
+        else
+          eval "$STATUS_VAR=ko"
+          FAIL=1
+        fi
+      }
+
+      run_pdf "dnb_2013^dnb_2014^dnb_2015" STATUS_DNB_2013_2015
+      run_pdf "dnb_2016^dnb_2017^dnb_2018^dnb_2019" STATUS_DNB_2016_2019
+      run_pdf "dnb_2020^dnb_2021^dnb_2022^dnb_2023^dnb_2024" STATUS_DNB_2020_2024
+
+      echo ""
+      echo "═══════════════════════════════════════════"
+      echo "📊 Résumé pdf dnb consolidated"
+      echo "═══════════════════════════════════════════"
+      [ "$STATUS_DNB_2013_2015" = "ok" ] && echo "✅ dnb_2013^dnb_2014^dnb_2015" || echo "❌ dnb_2013^dnb_2014^dnb_2015"
+      [ "$STATUS_DNB_2016_2019" = "ok" ] && echo "✅ dnb_2016^dnb_2017^dnb_2018^dnb_2019" || echo "❌ dnb_2016^dnb_2017^dnb_2018^dnb_2019"
+      [ "$STATUS_DNB_2020_2024" = "ok" ] && echo "✅ dnb_2020^dnb_2021^dnb_2022^dnb_2023^dnb_2024" || echo "❌ dnb_2020^dnb_2021^dnb_2022^dnb_2023^dnb_2024"
+      echo "═══════════════════════════════════════════"
+
+      exit "$FAIL"
   artifacts:
     paths:
-      - updatefile/output/can*
+      - updatefile/output/dnb*
 
-testCan4e3ePDF:
-  extends: .testCIPDF
-  script:
-    - NIV=can/4e^can/3e pnpm test:e2e:pdfexports
-    - pnpm -v
-  artifacts:
-    paths:
-      - updatefile/output/can*
-
-testE3C20202024PDF:
+playwright-pdf-bac-consolidated:
   extends:
     - .testCIPDF
     - .install_dependenciesPDFBAC
   stage: playwright-pdfBAC
+  timeout: 5h
   script:
-    - NIV=e3c_2024^e3c_2023^e3c_2022^e3c_2021 pnpm test:e2e:pdfexports
+    - |
+      FAIL=0
+
+      run_pdf () {
+        NIV_LABEL="$1"
+        STATUS_VAR="$2"
+        echo "🧪 pdfexports NIV=$NIV_LABEL"
+        if NIV="$NIV_LABEL" pnpm test:e2e:pdfexports; then
+          eval "$STATUS_VAR=ok"
+        else
+          eval "$STATUS_VAR=ko"
+          FAIL=1
+        fi
+      }
+
+      run_pdf "e3c_2024^e3c_2023^e3c_2022^e3c_2021" STATUS_E3C
+      run_pdf "bac_2024^bac_2023^bac_2022^bac_2021" STATUS_BAC
+
+      echo ""
+      echo "═══════════════════════════════════════════"
+      echo "📊 Résumé pdf bac consolidated"
+      echo "═══════════════════════════════════════════"
+      [ "$STATUS_E3C" = "ok" ] && echo "✅ e3c_2024^e3c_2023^e3c_2022^e3c_2021" || echo "❌ e3c_2024^e3c_2023^e3c_2022^e3c_2021"
+      [ "$STATUS_BAC" = "ok" ] && echo "✅ bac_2024^bac_2023^bac_2022^bac_2021" || echo "❌ bac_2024^bac_2023^bac_2022^bac_2021"
+      echo "═══════════════════════════════════════════"
+
+      exit "$FAIL"
   artifacts:
     paths:
       - updatefile/output/e3c*
-
-testBAC20202024PDF:
-  extends:
-    - .testCIPDF
-    - .install_dependenciesPDFBAC
-  stage: playwright-pdfBAC
-  script:
-    - NIV=bac_2024^bac_2023^bac_2022^bac_2021 pnpm test:e2e:pdfexports
-  artifacts:
-    paths:
       - updatefile/output/bac*
-
-testDNB20132015PDF:
-  extends:
-    - .testCIPDF
-    - .install_dependenciesPDFDNB
-  stage: playwright-pdfDNB
-  script:
-    - NIV=dnb_2013^dnb_2014^dnb_2015 pnpm test:e2e:pdfexports
-  artifacts:
-    paths:
-      - updatefile/output/dnb*
-
-testDNB20162019PDF:
-  extends:
-    - .testCIPDF
-    - .install_dependenciesPDFDNB
-  stage: playwright-pdfDNB
-  script:
-    - NIV=dnb_2016^dnb_2017^dnb_2018^dnb_2019 pnpm test:e2e:pdfexports
-  artifacts:
-    paths:
-      - updatefile/output/dnb*
-
-testDNB20202024PDF:
-  extends:
-    - .testCIPDF
-    - .install_dependenciesPDFDNB
-  stage: playwright-pdfDNB
-  script:
-    - NIV=dnb_2020^dnb_2021^dnb_2022^dnb_2023^dnb_2024 pnpm test:e2e:pdfexports
-  artifacts:
-    paths:
-      - updatefile/output/dnb*
-
-test6ePDF:
-  extends: .testCIPDF
-  script:
-    - NIV=6e/6 pnpm test:e2e:pdfexports
-    - pnpm -v
-  artifacts:
-    paths:
-      - updatefile/output/6e*
-
-test5ePDF:
-  extends: .testCIPDF
-  script:
-    - NIV=5e/5 pnpm test:e2e:pdfexports
-    - pnpm -v
-  artifacts:
-    paths:
-      - updatefile/output/5e*
-
-test4ePDF:
-  extends: .testCIPDF
-  script:
-    - NIV=4e/4 pnpm test:e2e:pdfexports
-    - pnpm -v
-  artifacts:
-    paths:
-      - updatefile/output/4e*
-
-test3ePDF:
-  extends: .testCIPDF
-  script:
-    - NIV=3e/3 pnpm test:e2e:pdfexports
-    - pnpm -v
-  artifacts:
-    paths:
-      - updatefile/output/3e*
 
 build:
   image: node:20-bullseye
@@ -491,12 +511,49 @@ deploy:
       - dist
     expire_in: 1 day
 
-playwright-testCanEleve:
+playwright-caneleve-consolidated:
   extends: .testCI
   stage: playwright-testCanEleve
   allow_failure: true
+  timeout: 5h
   script:
-    - pnpm test:e2e:views
+    - |
+      FAIL=0
+
+      echo "🧪 test:e2e:views"
+      if pnpm test:e2e:views; then
+        STATUS_VIEWS=ok
+      else
+        STATUS_VIEWS=ko
+        FAIL=1
+      fi
+
+      echo "🧪 test:e2e:consistency"
+      if pnpm test:e2e:consistency; then
+        STATUS_CONSISTENCY=ok
+      else
+        STATUS_CONSISTENCY=ko
+        FAIL=1
+      fi
+
+      echo "🧪 test:e2e:interactivity"
+      if pnpm test:e2e:interactivity; then
+        STATUS_INTERACTIVITY=ok
+      else
+        STATUS_INTERACTIVITY=ko
+        FAIL=1
+      fi
+
+      echo ""
+      echo "═══════════════════════════════════════════"
+      echo "📊 Résumé caneleve consolidated"
+      echo "═══════════════════════════════════════════"
+      [ "$STATUS_VIEWS" = "ok" ] && echo "✅ test:e2e:views" || echo "❌ test:e2e:views"
+      [ "$STATUS_CONSISTENCY" = "ok" ] && echo "✅ test:e2e:consistency" || echo "❌ test:e2e:consistency"
+      [ "$STATUS_INTERACTIVITY" = "ok" ] && echo "✅ test:e2e:interactivity" || echo "❌ test:e2e:interactivity"
+      echo "═══════════════════════════════════════════"
+
+      exit "$FAIL"
   rules:
     # Se lance uniquement si le pipeline est déclenché par une Merge Request
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
@@ -516,65 +573,23 @@ playwright-testCanEleve:
       - unknown_failure
       - script_failure
 
-playwright-testConsistency:
-  extends: .testCI
-  stage: playwright-testCanEleve
-  allow_failure: true
+# Job consolidé : exécute les tests des exercices modifiés en séquence
+# Cela remplace 4 jobs précédents :
+# - testExosModifiedWithoutPlayWright
+# - testExosModified
+# - testExosModifiedInteractif
+# - testExosModifiedAmcnum
+# Économies : 1 seul runner, 1 seule installation de dépendances, 1 seul démarrage du serveur
+testExosModifiedConsolidated:
+  extends: .testExosModifiedConsolidated
   script:
-    - pnpm test:e2e:consistency
-  rules:
-    # Se lance uniquement si le pipeline est déclenché par une Merge Request
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-      when: always
-    - if: $CI_COMMIT_BRANCH == "main"
-      when: always
-    - if: $CI_COMMIT_BRANCH == "guironne-jobs"
-      when: manual
-    - when: never
-  artifacts:
-    when: on_failure
-  retry:
-    max: 2
-    when:
-      - runner_system_failure
-      - api_failure
-      - unknown_failure
-      - script_failure
-
-playwright-testInteractivity:
-  extends: .testCI
-  stage: playwright-testCanEleve
-  allow_failure: true
-  script:
-    - pnpm test:e2e:interactivity
-  rules:
-    # Se lance uniquement si le pipeline est déclenché par une Merge Request
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-      when: always
-    - if: $CI_COMMIT_BRANCH == "main"
-      when: always
-    - if: $CI_COMMIT_BRANCH == "guironne-jobs"
-    - when: never
-  artifacts:
-    when: on_failure
-  retry:
-    max: 2
-    when:
-      - runner_system_failure
-      - api_failure
-      - unknown_failure
-      - script_failure
-
-testExosModifiedWithoutPlayWright:
-  extends: .testCI
-  stage: build-projet
-  script:
-    # - NODE_OPTIONS=--max-old-space-size=4096 pnpm run makeJson && pnpm run prebuild-unit-tests && pnpm vite build
-    # - NODE_OPTIONS=--max-old-space-size=4096 pnpm run makeJson && pnpm vite build
-    # - CHANGED_FILES=$(git diff --name-only $CI_COMMIT_BEFORE_SHA $CI_COMMIT_SHA)
+    # Récupérer les fichiers modifiés depuis les 5 derniers commits
     - git fetch origin "$CI_COMMIT_REF_NAME" --depth=10
     - git checkout FETCH_HEAD
     - |
+      # ============================================================
+      # PHASE 1: Récupérer les fichiers modifiés
+      # ============================================================
       COMMIT_COUNT=$(git rev-list --count HEAD)
       MAX_COMMITS=5
 
@@ -593,10 +608,72 @@ testExosModifiedWithoutPlayWright:
         CHANGED_FILES=$(git diff --name-only $CI_COMMIT_BEFORE_SHA $CI_COMMIT_SHA)
       fi
 
-    # -  CHANGED_FILES=$(git diff --name-only "$DIFF_BASE"..HEAD)
-    # - CHANGED_FILES=$(git diff --name-only HEAD~5..HEAD)
-    - echo "$CHANGED_FILES"
-    - CHANGED_FILES="$CHANGED_FILES" pnpm vitest --config tests/e2e/vitest.config.all_exercises.js --run
+      echo ""
+      echo "📋 Fichiers modifiés:"
+      echo "$CHANGED_FILES"
+      echo ""
+
+      # ============================================================
+      # PHASE 2: Tests unitaires et e2e
+      # ============================================================
+
+      # Test 1/4 : Console errors (Playwright)
+      echo "🧪 Test 1/4: Console errors..."
+      if CHANGED_FILES="$CHANGED_FILES" pnpm test:e2e:console_errors; then
+        STATUS_CONSOLE=ok
+      else
+        STATUS_CONSOLE=ko
+      fi
+
+      # Test 2/4 : All exercises vitest (sans Playwright)
+      echo "🧪 Test 2/4: All exercises vitest..."
+      if CHANGED_FILES="$CHANGED_FILES" pnpm vitest --config tests/e2e/vitest.config.all_exercises.js --run; then
+        STATUS_VITEST=ok
+      else
+        STATUS_VITEST=ko
+      fi
+
+      # Test 3/4 : Interactivity report
+      echo "🧪 Test 3/4: Interactivity report..."
+      if INTERACTIF_REPORT=1 CHANGED_FILES="$CHANGED_FILES" pnpm vitest tests/unit/report-interactif.test.ts --run; then
+        STATUS_INTERACTIF=ok
+      else
+        STATUS_INTERACTIF=ko
+      fi
+
+      # Test 4/4 : AMCnum report
+      echo "🧪 Test 4/4: AMCnum report..."
+      if AMCNUM_REPORT=1 CHANGED_FILES="$CHANGED_FILES" pnpm vitest tests/unit/report-amcnum.test.ts --run; then
+        STATUS_AMCNUM=ok
+      else
+        STATUS_AMCNUM=ko
+      fi
+
+      # ============================================================
+      # PHASE 3: Résumé final
+      # ============================================================
+      echo ""
+      echo "═══════════════════════════════════════════"
+      echo "📊 Résumé des tests consolidés"
+      echo "═══════════════════════════════════════════"
+      [ "$STATUS_CONSOLE" = "ok" ] && echo "✅ Console errors" || echo "❌ Console errors"
+      [ "$STATUS_VITEST" = "ok" ] && echo "✅ All exercises vitest" || echo "❌ All exercises vitest"
+      [ "$STATUS_INTERACTIF" = "ok" ] && echo "✅ Interactivity report" || echo "❌ Interactivity report"
+      [ "$STATUS_AMCNUM" = "ok" ] && echo "✅ AMCnum report" || echo "❌ AMCnum report"
+
+      OK_COUNT=0
+      [ "$STATUS_CONSOLE" = "ok" ] && OK_COUNT=$((OK_COUNT + 1))
+      [ "$STATUS_VITEST" = "ok" ] && OK_COUNT=$((OK_COUNT + 1))
+      [ "$STATUS_INTERACTIF" = "ok" ] && OK_COUNT=$((OK_COUNT + 1))
+      [ "$STATUS_AMCNUM" = "ok" ] && OK_COUNT=$((OK_COUNT + 1))
+      echo ""
+      echo "Résultat global: $OK_COUNT/4 sous-tests OK"
+      echo "═══════════════════════════════════════════"
+
+      # Fail si au moins un test a échoué
+      if [ "$OK_COUNT" -lt 4 ]; then
+        exit 1
+      fi
   rules:
     # Se lance uniquement si le pipeline est déclenché par une Merge Request
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
@@ -607,14 +684,12 @@ testExosModifiedWithoutPlayWright:
       when: manual
     - when: never
 
-testExosModified:
-  extends: .testCI
-  stage: build-projet
+# Job LaTeX séparé (nécessite une image Docker spéciale)
+# Reste séparé car image guironne/tex-live-nodejs-playwright9 spécifique
+testExosModifiedLatex:
+  extends: .testCIPDF
   timeout: 3h
   script:
-    # - NODE_OPTIONS=--max-old-space-size=4096 pnpm run makeJson && pnpm run prebuild-unit-tests && pnpm vite build
-    # - NODE_OPTIONS=--max-old-space-size=4096 pnpm run makeJson && pnpm vite build
-    # - CHANGED_FILES=$(git diff --name-only $CI_COMMIT_BEFORE_SHA $CI_COMMIT_SHA)
     - git fetch origin "$CI_COMMIT_REF_NAME" --depth=10
     - git checkout FETCH_HEAD
     - |
@@ -636,12 +711,9 @@ testExosModified:
         CHANGED_FILES=$(git diff --name-only $CI_COMMIT_BEFORE_SHA $CI_COMMIT_SHA)
       fi
 
-    # -  CHANGED_FILES=$(git diff --name-only "$DIFF_BASE"..HEAD)
-    # - CHANGED_FILES=$(git diff --name-only HEAD~5..HEAD)
     - echo "$CHANGED_FILES"
-    - CHANGED_FILES="$CHANGED_FILES" pnpm test:e2e:console_errors
+    - CHANGED_FILES="$CHANGED_FILES" pnpm test:e2e:pdfexports
   rules:
-    # Se lance uniquement si le pipeline est déclenché par une Merge Request
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
       when: always
     - if: $CI_COMMIT_BRANCH == "main"
