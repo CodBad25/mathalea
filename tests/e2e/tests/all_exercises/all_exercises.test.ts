@@ -127,6 +127,13 @@ function sampleSup<T extends Record<number, any>>(sup: T): number[] {
   }
 }
 
+function sampleSupWithFallback<T extends Record<number, any>>(
+  sup: T,
+): Array<number | undefined> {
+  const sampled = sampleSup(sup)
+  return sampled.length > 0 ? sampled : [undefined]
+}
+
 /**
  * Extrait les couples { numéro : label } à partir
  * d’un texte de type :
@@ -331,14 +338,26 @@ async function getConsoleTest(uuid: string, urlExercice: string) {
     for (const i of [1, 10]) {
       exercice.nbQuestions = i
       log('nbQuestions=' + exercice.nbQuestions)
-      const keysToUse = sampleSup(sup)
+      const keysToUse = sampleSupWithFallback(sup)
       for (const keySup of keysToUse) {
-        exercice.sup = sup[keySup]
+        if (keySup === undefined) {
+          exercice.sup = undefined
+        } else {
+          exercice.sup = sup[keySup]
+        }
         log('sup=' + exercice.sup)
-        for (const keySup2 of sampleSup(sup2)) {
-          exercice.sup2 = sup2[keySup2]
-          for (const keySup3 of sampleSup(sup3)) {
-            exercice.sup3 = sup3[keySup3]
+        for (const keySup2 of sampleSupWithFallback(sup2)) {
+          if (keySup2 === undefined) {
+            exercice.sup2 = undefined
+          } else {
+            exercice.sup2 = sup2[keySup2]
+          }
+          for (const keySup3 of sampleSupWithFallback(sup3)) {
+            if (keySup3 === undefined) {
+              exercice.sup3 = undefined
+            } else {
+              exercice.sup3 = sup3[keySup3]
+            }
             const signature = [
               'uuuid:' + exercice.uuid,
               'ssed:' + exercice.seed,

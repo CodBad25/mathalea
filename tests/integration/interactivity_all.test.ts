@@ -128,6 +128,7 @@ afterEach(() => {
 
 const SEEDS = ['ePxF1', 'a2b3c', 'z9y8x']
 const filter = process.env.NIV?.replaceAll(' ', '') ?? undefined
+const changedFilesEnv = process.env.CHANGED_FILES
 const paramLevel = resolveParamTestLevel(process.env.TEST_PARAM)
 const skippedQuestions: SkippedQuestion[] = []
 const skippedQuestionKeys = new Set<string>()
@@ -136,6 +137,64 @@ let comparisonSkippedQuestionsCount = 0
 let domTestedQuestionsCount = 0
 let domSkippedQuestionsCount = 0
 const eitherTestedQuestionKeys = new Set<string>()
+
+function parseChangedFiles(value: string | undefined): string[] {
+  if (!value) return []
+  return [
+    ...new Set(
+      value
+        .split('\n')
+        .map((file) => file.trim())
+        .filter(Boolean),
+    ),
+  ]
+}
+
+function isRelevantChangedExerciseFile(filePath: string): boolean {
+  return (
+    filePath.startsWith('src/exercices/') &&
+    !filePath.includes('ressources') &&
+    !filePath.includes('apps') &&
+    filePath.replace('src/exercices/', '').split('/').length >= 2 &&
+    /\.(ts|js)$/.test(filePath)
+  )
+}
+
+function toExercisePrefix(filePath: string): string {
+  return filePath
+    .replace(/^src\/exercices\//, '')
+    .replace(/\.ts$/, '.')
+    .replace(/\.js$/, '.')
+    .replaceAll(' ', '')
+}
+
+function discoverExercisesFromChangedFiles(
+  changedFilesValue: string,
+): ReturnType<typeof discoverExercises> {
+  const filters = [
+    ...new Set(
+      parseChangedFiles(changedFilesValue)
+        .filter(isRelevantChangedExerciseFile)
+        .map(toExercisePrefix),
+    ),
+  ]
+
+  if (filters.length === 0) return []
+
+  const seen = new Set<string>()
+  const merged: ReturnType<typeof discoverExercises> = []
+
+  for (const changedFilter of filters) {
+    for (const entry of discoverExercises(changedFilter)) {
+      const key = `${entry.uuid}|${entry.filePath}`
+      if (seen.has(key)) continue
+      seen.add(key)
+      merged.push(entry)
+    }
+  }
+
+  return merged
+}
 
 function questionKey(
   filePath: string,
@@ -159,7 +218,12 @@ function recordSkippedQuestion(entry: SkippedQuestion) {
   skippedQuestions.push(entry)
 }
 
-const exercises = discoverExercises(filter)
+const exercises =
+  filter !== undefined
+    ? discoverExercises(filter)
+    : changedFilesEnv !== undefined
+      ? discoverExercisesFromChangedFiles(changedFilesEnv)
+      : discoverExercises()
 
 if (exercises.length === 0) {
   describe('no exercises found', () => {
@@ -195,6 +259,7 @@ for (const [dir, entries] of grouped) {
 
         const { ExerciseClass, titre } = loaded
         const failures: string[] = []
+        let autoCorrectionFoundCount = 0
         const scenarioProbe = new ExerciseClass()
         const scenarios = buildParamScenarios(scenarioProbe, paramLevel)
 
@@ -223,6 +288,7 @@ for (const [dir, entries] of grouped) {
             if (exercice.autoCorrection.length === 0) {
               continue
             }
+            autoCorrectionFoundCount++
 
             // Stratégie 1: On passe directement la réponse attendue à la fonction de comparaison (si disponible) sans passer par le DOM.
             const compResults = verifyComparisonOnly(exercice)
@@ -338,6 +404,12 @@ for (const [dir, entries] of grouped) {
             }
             clearDOM()
           }
+        }
+
+        if (autoCorrectionFoundCount === 0) {
+          failures.push(
+            `${entry.filePath} : interactifReady = true mais autoCorrection est restée vide sur toutes les graines et tous les scénarios`,
+          )
         }
 
         if (failures.length > 0) {

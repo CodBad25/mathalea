@@ -1,8 +1,8 @@
 import { createList } from '../../lib/format/lists'
 import { deuxColonnesResp } from '../../lib/format/miseEnPage'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard'
+import { toutAUnPoint } from '../../lib/interactif/fonctionsBaremes'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif'
-import { toutAUnPoint } from '../../lib/interactif/mathLive'
 import { addMultiMathfield } from '../../lib/interactif/MultiMathfield/MultiMathfield'
 import { choice } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
@@ -81,11 +81,13 @@ const situations = [
     id: 'surface du jardin',
     texteATrous:
       '%prénom% a planté des fleurs dans $%frac1%$ de la surface de son jardin. Puis, %pronom% a planté des légumes dans $%frac2%$ de la surface du jardin.<br>',
-    question1: 'Quelle fraction de la surface du jardin a-t-%pronom% plantée ?',
+    question1:
+      '<br>Quelle fraction de la surface du jardin a-t-%pronom% plantée ?',
     question2:
       'Quelle fraction de la surface du jardin lui reste-t-il à planter ?',
     correction1: '%prénom% a planté $%frac3%$ de la surface de son jardin.',
-    correction2: 'Il lui reste $%frac4%$ de la surface du jardin à planter.',
+    correction2:
+      '<br>Il lui reste $%frac4%$ de la surface du jardin à planter.',
   },
   {
     id: 'distance totale',
