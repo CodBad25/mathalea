@@ -37,7 +37,6 @@ import { mathalea2d } from '../../modules/mathalea2d'
 import { listeQuestionsToContenu, randint } from '../../modules/outils'
 import Exercice from '../Exercice'
 
-
 export const interactifReady = true
 export const interactifType = 'mathLive'
 export const titre = 'Résoudre un problème de synthèse avec produit scalaire'
@@ -72,14 +71,17 @@ export default class NomExercice extends Exercice {
       const xA = randint(3, 6)
       const yI = randint(1, xA - 1)
       const cote = randint(xA + 1, xA + 4)
-    let maxi:number= 0
+      let maxi: number = 0
       const xI = xA
-      const diametre = randint(2, xA+3)
+      const diametre = randint(2, xA + 3)
       const produitScalaire = cote * yI
       const longueurOICarree = xA ** 2 + yI ** 2
       const longueurOITex = texRacineCarree(longueurOICarree)
       const longueurOH = Number.isInteger(Math.sqrt(longueurOICarree))
-        ? new FractionEtendue(produitScalaire, Math.sqrt(longueurOICarree)).simplifie().texFractionSimplifiee
+        ? new FractionEtendue(
+            produitScalaire,
+            Math.sqrt(longueurOICarree),
+          ).simplifie().texFractionSimplifiee
         : `\\dfrac{${produitScalaire}}{\\sqrt{${longueurOICarree}}}`
       const xH = (produitScalaire * xI) / longueurOICarree
       const yH = (produitScalaire * yI) / longueurOICarree
@@ -89,7 +91,11 @@ export default class NomExercice extends Exercice {
 
       const rayon = new FractionEtendue(diametre, 2).simplifie()
       const rayonDecimal = diametre / 2
-      if (xA > rayonDecimal){maxi = xA + 2} else {maxi = diametre + 4 }
+      if (xA > rayonDecimal) {
+        maxi = xA + 2
+      } else {
+        maxi = diametre + 4
+      }
       const rayonCarre = new FractionEtendue(diametre ** 2, 4).simplifie()
       const constanteCercle = new FractionEtendue(
         2 * xA ** 2 - diametre ** 2,
@@ -100,9 +106,7 @@ export default class NomExercice extends Exercice {
         const x = -yI * parametre
         const y = cote + xA * parametre
         const valeurCercle =
-          4 * (x ** 2 + y ** 2 - xA * x - xA * y) +
-          2 * xA ** 2 -
-          diametre ** 2
+          4 * (x ** 2 + y ** 2 - xA * x - xA * y) + 2 * xA ** 2 - diametre ** 2
         return { x, y, valeurCercle }
       })
       const pointM =
@@ -115,12 +119,11 @@ export default class NomExercice extends Exercice {
       const xM = new FractionEtendue(pointM.x, 1).simplifie()
       const yM = new FractionEtendue(pointM.y, 1).simplifie()
       const valeurCercleM = new FractionEtendue(
-        4 * (
-          xM.valeurDecimale ** 2 +
-          yM.valeurDecimale ** 2 -
-          xA * xM.valeurDecimale -
-          xA * yM.valeurDecimale
-        ) +
+        4 *
+          (xM.valeurDecimale ** 2 +
+            yM.valeurDecimale ** 2 -
+            xA * xM.valeurDecimale -
+            xA * yM.valeurDecimale) +
           2 * xA ** 2 -
           diametre ** 2,
         4,
@@ -142,9 +145,18 @@ export default class NomExercice extends Exercice {
       const C = pointAbstrait(0, cote, 'C', 'above left')
       const I = pointAbstrait(xI, yI, 'I', 'right')
       const H = pointAbstrait(xH, yH, 'H', 'below')
-      const D = pointAbstrait(xD.valeurDecimale, yD.valeurDecimale, 'D', 'above')
-let reponse3c = ''
-      if (appartientCercle && appartientDroiteCH) {reponse3c = 'O'} else {reponse3c = 'N'}
+      const D = pointAbstrait(
+        xD.valeurDecimale,
+        yD.valeurDecimale,
+        'D',
+        'above',
+      )
+      let reponse3c = ''
+      if (appartientCercle && appartientDroiteCH) {
+        reponse3c = 'O'
+      } else {
+        reponse3c = 'N'
+      }
       const borneMin = -2
       const borneMax = maxi
       const objets = [
@@ -211,7 +223,7 @@ let reponse3c = ''
       })
       const question2 = createList({
         items: [
-          `Exprimer le produit scalaire $\\overrightarrow{OI}\\cdot \\overrightarrow{OC}$ en fonction des longueurs $OH$ et $OI$.<br> ${ajouteChampTexteMathLive(this, 2, KeyboardType.clavierMajuscules  +'  '+ KeyboardType.clavierFullOperations , { texteAvant: '<br>$\\overrightarrow{OI}\\cdot \\overrightarrow{OC}= $' })}`,
+          `Exprimer le produit scalaire $\\overrightarrow{OI}\\cdot \\overrightarrow{OC}$ en fonction des longueurs $OH$ et $OI$.<br> ${ajouteChampTexteMathLive(this, 2, KeyboardType.clavierMajuscules + '  ' + KeyboardType.clavierFullOperations, { texteAvant: '<br>$\\overrightarrow{OI}\\cdot \\overrightarrow{OC}= $' })}`,
           `Calculer la longueur $OI$.${ajouteChampTexteMathLive(this, 3, KeyboardType.equationsTerminale, { texteAvant: '<br>$OI=$ ' })}`,
           `En déduire la longueur $OH$.${ajouteChampTexteMathLive(this, 4, KeyboardType.equationsTerminale, { texteAvant: '<br>$OH=$ ' })}`,
         ],
@@ -242,66 +254,61 @@ let reponse3c = ''
           items: [question1, question2, question3],
           style: 'nombres',
         })
-const correction1a=`On a $I\\left(${xI};${yI}\\right)$ donc \\overrightarrow{OI}$${miseEnEvidence(`\\begin{pmatrix}${xI}\\\\${yI}\\end{pmatrix}`)}$.<br>
-          De même, on a $C\\left(0;${cote}\\right)$ donc \\overrightarrow{OC}$${miseEnEvidence(`\\begin{pmatrix}0\\\\${cote}\\end{pmatrix}`)}$.`
-const correction1b=`On sait que dans un repère orthonormé, si on a $\\vec u\\begin{pmatrix}x\\\\y\\end{pmatrix}$ et $\\vec v\\begin{pmatrix}x'\\\\y'\\end{pmatrix}$, on a : $\\vec u \\cdot \\vec v=xx' + yy'$.<br>
+      const correction1a = `On a $I\\left(${xI};${yI}\\right)$ donc $\\overrightarrow{OI}${miseEnEvidence(`\\begin{pmatrix}${xI}\\\\${yI}\\end{pmatrix}`)}$.<br>
+          De même, on a $C\\left(0;${cote}\\right)$ donc $\\overrightarrow{OC}${miseEnEvidence(`\\begin{pmatrix}0\\\\${cote}\\end{pmatrix}`)}$.`
+      const correction1b = `On sait que dans un repère orthonormé, si on a $\\vec u\\begin{pmatrix}x\\\\y\\end{pmatrix}$ et $\\vec v\\begin{pmatrix}x'\\\\y'\\end{pmatrix}$, on a : $\\vec u \\cdot \\vec v=xx' + yy'$.<br>
 En conséquence,   $\\overrightarrow{OI}\\cdot \\overrightarrow{OC}=${xI}\\times 0+${yI}\\times ${cote}=${miseEnEvidence(`${produitScalaire}`)}$.`
- const correction2a =`Le point $H$ est le projeté orthogonal du point $C$ sur la droite $(OI)$. En utilisant la définition du produit scalaire avec le projeté orthogonal sur la droite $(OI)$, on trouve que :<br>
+      const correction2a = `Le point $H$ est le projeté orthogonal du point $C$ sur la droite $(OI)$. En utilisant la définition du produit scalaire avec le projeté orthogonal sur la droite $(OI)$, on trouve que :<br>
            $\\overrightarrow{OC}\\cdot \\overrightarrow{OI}=\\overrightarrow{OH}\\cdot \\overrightarrow{OI}$.<br>
           Les vecteurs $\\overrightarrow{OH}$ et $\\overrightarrow{OI}$ sont colinéaires et de même sens, donc $\\overrightarrow{OH}\\cdot \\overrightarrow{OI}=${miseEnEvidence('OH\\times OI')}$.<br>
          `
-         const correction2b=    `$\\overrightarrow{OI}\\begin{pmatrix}${xI}\\\\${yI}\\end{pmatrix}$, donc $OI=\\sqrt{${xI}^2+${yI}^2}=${miseEnEvidence(longueurOITex)}$.`
-          const correction2c=     `On a montré précédemment que :`+createList({
-            items: [
-              `$\\overrightarrow{OI}\\cdot \\overrightarrow{OC}=OH\\times OI$`,`$\\overrightarrow{OI}\\cdot \\overrightarrow{OC}=${produitScalaire}$`,`$OI=${longueurOITex}$`
-            ],
-            style: 'fleches',
-          })+`On en déduit que $OH\\times ${longueurOITex}=${produitScalaire}$, d'où $OH=${miseEnEvidence(longueurOH)}$.`
-          const correction3a= `Le point $H$ est le projeté orthogonal de $C$ sur $(OI)$, donc les vecteurs $\\overrightarrow{OI}$ et $\\overrightarrow{CH}$ sont orthogonaux.<br>
+      const correction2b = `$\\overrightarrow{OI}\\begin{pmatrix}${xI}\\\\${yI}\\end{pmatrix}$, donc $OI=\\sqrt{${xI}^2+${yI}^2}=${miseEnEvidence(longueurOITex)}$.`
+      const correction2c =
+        `On a montré précédemment que :` +
+        createList({
+          items: [
+            `$\\overrightarrow{OI}\\cdot \\overrightarrow{OC}=OH\\times OI$`,
+            `$\\overrightarrow{OI}\\cdot \\overrightarrow{OC}=${produitScalaire}$`,
+            `$OI=${longueurOITex}$`,
+          ],
+          style: 'fleches',
+        }) +
+        `On en déduit que $OH\\times ${longueurOITex}=${produitScalaire}$, d'où $OH=${miseEnEvidence(longueurOH)}$.`
+      const correction3a = `Le point $H$ est le projeté orthogonal de $C$ sur $(OI)$, donc les vecteurs $\\overrightarrow{OI}$ et $\\overrightarrow{CH}$ sont orthogonaux.<br>
           Le vecteur $\\overrightarrow{OI}\\begin{pmatrix}${xI}\\\\${yI}\\end{pmatrix}$ est donc un vecteur normal à la droite $(CH)$.<br>
           On sait que si un vecteur $\\vec n\\begin{pmatrix}a\\\\b\\end{pmatrix}$ est un vecteur normal à une droite, alors une équation de cette droite est de la forme $ax+by+c=0$, où $c$ est un nombre réel.
           <br>Une équation de $(CH)$ est donc de la forme $${xI}x+${yI}y+c=0$.<br>
           Le point $C(0\\,;\\,${cote})$ appartient à $(CH)$, donc $${xI}\\times 0+${yI}\\times ${cote}+c=0$, soit $c=${-yI * cote}$.<br>
           ${diviseurEquationDroiteCH === 1 ? '' : `En divisant par ${diviseurEquationDroiteCH}, `}
          Une équation cartésienne de la droite $(CH)$ est donc $${miseEnEvidence(equationDroiteCH)}$.`
-         const correction3b= `On sait qu'un cercle de centre $I(a;b)$ et de rayon $r$ a pour équation : $\\left(x-a\\right)^2+\\left(y-b\\right)^2=r^2$.<br>
+      const correction3b = `On sait qu'un cercle de centre $I(a;b)$ et de rayon $r$ a pour équation : $\\left(x-a\\right)^2+\\left(y-b\\right)^2=r^2$.<br>
           Le cercle $\\varepsilon$ de centre $D\\left(${xD.texFractionSimplifiee}\\,;\\,${yD.texFractionSimplifiee}\\right)$ et de rayon $${rayon.texFractionSimplifiee}$ a donc pour équation :<br>
           $\\left(x-${xD.texFractionSimplifiee}\\right)^2+\\left(y-${yD.texFractionSimplifiee}\\right)^2=\\left(${rayon.texFractionSimplifiee}\\right)^2$.<br>
           En développant, on obtient $x^2${ecritureAlgebriqueSauf1(-xA)}x+${xD.produitFraction(xD).texFractionSimplifiee}+y^2${ecritureAlgebriqueSauf1(-xA)}y+${yD.produitFraction(yD).texFractionSimplifiee}-${rayonCarre.texFractionSimplifiee}=0$,<br>
           c'est-à-dire $${miseEnEvidence(equationCercle)}$.`
-         const correction3c= `Pour vérifier si le point  $M\\left(${xM.texFractionSimplifiee}\\,;\\,${yM.texFractionSimplifiee}\\right)$ appartient à l'intersection de la droite $(CH)$ et du cercle $\\epsilon$, on teste ses coordonénes dans les deux équations:<br>
-             `+createList({
-            items: [
-              ` $${aDroiteCH}\\times ${xM.texFractionSimplifiee}${ecritureAlgebriqueSauf0(bDroiteCH)}\\times ${yM.texFractionSimplifiee}${ecritureAlgebriqueSauf0(cDroiteCH)}=${valeurDroiteCHM.texFractionSimplifiee}$.<br>
+      const correction3c =
+        `Pour vérifier si le point  $M\\left(${xM.texFractionSimplifiee}\\,;\\,${yM.texFractionSimplifiee}\\right)$ appartient à l'intersection de la droite $(CH)$ et du cercle $\\epsilon$, on teste ses coordonénes dans les deux équations:<br>
+             ` +
+        createList({
+          items: [
+            ` $${aDroiteCH}\\times ${xM.texFractionSimplifiee}${ecritureAlgebriqueSauf0(bDroiteCH)}\\times ${yM.texFractionSimplifiee}${ecritureAlgebriqueSauf0(cDroiteCH)}=${valeurDroiteCHM.texFractionSimplifiee}$.<br>
               Donc $M${appartientDroiteCH ? '\\in' : '\\notin'} (CH)$.`,
-              `$${xM.texFractionSimplifiee}+${yM.texFractionSimplifiee}${ecritureAlgebriqueSauf1(-xA)}\\times ${xM.texFractionSimplifiee}${ecritureAlgebriqueSauf1(-xA)}\\times ${yM.texFractionSimplifiee}${constanteCercle.ecritureAlgebrique}=${valeurCercleM.texFractionSimplifiee}$.<br>
-              Donc $M${appartientCercle ? '\\in' : '\\notin'} \\varepsilon$.`
-            ],
-            style: 'fleches',
-          })+
-          `Ainsi, $${miseEnEvidence(`M\\left(${xM.texFractionSimplifiee}\\,;\\,${yM.texFractionSimplifiee}\\right)${appartientCercle && appartientDroiteCH ? '\\in' : '\\notin'} \\varepsilon\\cap (CH)`) }$.`
-         const correction1 = createList({
-        items: [
-          correction1a,
-          correction1b,
-        ],
+            `$${xM.texFractionSimplifiee}+${yM.texFractionSimplifiee}${ecritureAlgebriqueSauf1(-xA)}\\times ${xM.texFractionSimplifiee}${ecritureAlgebriqueSauf1(-xA)}\\times ${yM.texFractionSimplifiee}${constanteCercle.ecritureAlgebrique}=${valeurCercleM.texFractionSimplifiee}$.<br>
+              Donc $M${appartientCercle ? '\\in' : '\\notin'} \\varepsilon$.`,
+          ],
+          style: 'fleches',
+        }) +
+        `Ainsi, $${miseEnEvidence(`M\\left(${xM.texFractionSimplifiee}\\,;\\,${yM.texFractionSimplifiee}\\right)${appartientCercle && appartientDroiteCH ? '\\in' : '\\notin'} \\varepsilon\\cap (CH)`)}$.`
+      const correction1 = createList({
+        items: [correction1a, correction1b],
         style: 'alpha',
       })
       const correction2 = createList({
-        items: [
-          correction2a,
-      correction2b,
-      correction2c
-         ,
-        ],
+        items: [correction2a, correction2b, correction2c],
         style: 'alpha',
       })
       const correction3 = createList({
-        items: [
-         correction3a,
-         correction3b,
-         correction3c,
-        ],
+        items: [correction3a, correction3b, correction3c],
         style: 'alpha',
       })
 
