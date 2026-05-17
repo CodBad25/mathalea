@@ -239,7 +239,7 @@ export default class NomExercice extends Exercice {
       })
 
       const texte =
-        `On considère la figure suivante, représentée dans un repère orthonormé $(O;\\,\\vec{\\imath},\\,\\vec{\\jmath})$.<br>${figure}<br>
+        `On considère la figure suivante, représentée dans un repère orthonormé $(O;\\,\\vec{\\imath},\\,\\vec{\\jmath})$.<br>${figure}<br><br>
         On dispose des données suivantes :` +
         createList({
           items: [
