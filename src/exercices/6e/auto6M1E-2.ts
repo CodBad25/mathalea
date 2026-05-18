@@ -45,14 +45,24 @@ export default class PerimetresCalculMental extends Exercice {
       ].join('\n'),
     ]
     this.sup = 5
+    this.besoinFormulaire2CaseACocher = [
+      'Périmètre du cercle calculé avec pi ≈ 3,14',
+    ]
+    this.sup2 = false
   }
 
   nouvelleVersion() {
-    this.consigne =
-      this.nbQuestions === 1
-        ? 'Calculer le périmètre exact de la figure suivante.'
-        : 'Calculer le périmètre exact des figures suivantes.'
-
+    if (!this.sup2) {
+      this.consigne =
+        this.nbQuestions === 1
+          ? 'Calculer le périmètre exact de la figure suivante.'
+          : 'Calculer le périmètre exact des figures suivantes.'
+    } else {
+      this.consigne =
+        this.nbQuestions === 1
+          ? 'Calculer le périmètre de la figure suivante (On prendra pi $\\approx$ 3,14 le cas échéant.).'
+          : 'Calculer le périmètre des figures suivantes (On prendra pi $\\approx$ 3,14 le cas échéant.).'
+    }
     const listeTypeQuestions = gestionnaireFormulaireTexte({
       saisie: this.sup,
       nbQuestions: this.nbQuestions,
@@ -116,8 +126,13 @@ export default class PerimetresCalculMental extends Exercice {
             texte = `Cercle de rayon $${texNombre(r)}\\text{ cm}$`
             texteCorr =
               '$\\mathcal{P}_\\text{cercle} = 2 \\times r \\times \\pi$'
-            texteCorr += `<br>$\\mathcal{P}_\\text{cercle} = 2 \\times ${texNombre(r)}\\text{ cm} \\times \\pi$`
-            texteCorr += `<br>$\\mathcal{P}_\\text{cercle} = ${miseEnEvidence(`${texNombre(2 * r)}\\pi`)}\\text{ cm}$`
+            texteCorr += this.sup2
+              ? `<br>$\\mathcal{P}_\\text{cercle} \\approx 2 \\times ${texNombre(r)}\\text{ cm} \\times 3,14$`
+              : `<br>$\\mathcal{P}_\\text{cercle} = 2 \\times ${texNombre(r)}\\text{ cm} \\times \\pi$`
+            const perimetre = this.sup2 ? 2 * r * 3.14 : 2 * r
+            texteCorr += this.sup2
+              ? `<br>$\\mathcal{P}_\\text{cercle} \\approx ${miseEnEvidence(`${texNombre(perimetre)}`)}\\text{ cm}$`
+              : `<br>$\\mathcal{P}_\\text{cercle} = ${miseEnEvidence(`${texNombre(perimetre)}\\pi`)}\\text{ cm}$`
             texteInteractif += ajouteChampTexteMathLive(
               this,
               i,
@@ -129,8 +144,8 @@ export default class PerimetresCalculMental extends Exercice {
             )
             handleAnswers(this, i, {
               reponse: {
-                value: `${2 * r}\\pi`,
-                options: { calculFormel: true },
+                value: this.sup2 ? texNombre(perimetre) : `${2 * r}\\pi`,
+                options: { calculFormel: !this.sup2 },
               },
             })
           }
@@ -139,7 +154,13 @@ export default class PerimetresCalculMental extends Exercice {
           const d = randint(2, 9)
           texte = `Cercle de diamètre $${texNombre(d)}\\text{ cm}$`
           texteCorr = '$\\mathcal{P}_\\text{cercle} = d \\times \\pi$'
-          texteCorr += `<br>$\\mathcal{P}_\\text{cercle} = ${miseEnEvidence(`${texNombre(d)}\\pi`)}\\text{ cm}$`
+          texteCorr += this.sup2
+            ? `<br>$\\mathcal{P}_\\text{cercle} \\approx ${texNombre(d)}\\text{ cm} \\times 3,14$`
+            : `<br>$\\mathcal{P}_\\text{cercle} = ${texNombre(d)}\\pi\\text{ cm}$`
+          const perimetre = this.sup2 ? d * 3.14 : d
+          texteCorr += this.sup2
+            ? `<br>$\\mathcal{P}_\\text{cercle} \\approx ${miseEnEvidence(`${texNombre(perimetre)}`)}\\text{ cm}$`
+            : `<br>$\\mathcal{P}_\\text{cercle} = ${miseEnEvidence(`${texNombre(perimetre)}\\pi`)}\\text{ cm}$`
           texteInteractif += ajouteChampTexteMathLive(
             this,
             i,
@@ -151,8 +172,8 @@ export default class PerimetresCalculMental extends Exercice {
           )
           handleAnswers(this, i, {
             reponse: {
-              value: `${d}\\pi`,
-              options: { calculFormel: true },
+              value: this.sup2 ? texNombre(perimetre) : `${d}\\pi`,
+              options: { calculFormel: !this.sup2 },
             },
           })
         }
