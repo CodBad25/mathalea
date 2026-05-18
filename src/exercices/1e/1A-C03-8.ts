@@ -57,6 +57,10 @@ export default class Auto1AC3h extends ExerciceQcmA {
 
   constructor() {
     super()
+    this.nbQuestions = 4
+    this.nbQuestionsModifiable = true
+    const originalQJP = this.questionJamaisPosee.bind(this)
+    this.questionJamaisPosee = (i, ...args) => originalQJP(i, this.enonce, ...args)
     this.versionAleatoire()
   }
 }
