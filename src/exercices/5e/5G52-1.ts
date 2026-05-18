@@ -23,12 +23,12 @@ export const titre = "Identifier les bases d'un prisme"
 export const dateDePublication = '15/05/2026'
 export const uuid = '2d961'
 export const refs = {
-  'fr-fr': ['5G54'],
+  'fr-fr': ['5G52-1'],
   'fr-ch': [],
 }
 /**
- *
- * @author
+ * Identifier les bases d'un prisme à partir de son patron.
+ * @author Olivier Mimeau
  */
 export default class nomExercice extends Exercice {
   constructor() {
@@ -40,7 +40,7 @@ export default class nomExercice extends Exercice {
       [
         'Nombres séparés par des tirets  :',
         '0 : melange',
-        '1 : patrons simples',
+        '1 : patrons simples', //  Les patrons sont en T ou en S.
         '2 : patrons plus complexes',
       ].join('\n'),
     ]
