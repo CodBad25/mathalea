@@ -50,7 +50,7 @@ export default class NombreInverse extends ExerciceSimple {
     if (choice([true, false])) {
       this.reponse = this.versionQcm
         ? `$${Nom}=${new FractionEtendue(a * c + b, c).inverse().texFraction}$`
-        : new FractionEtendue(a * c + b, c).inverse()
+        : new FractionEtendue(a * c + b, c).inverse().texFraction
       this.question = this.versionQcm
         ? `On considère l'égalité $\\dfrac{1}{${Nom}}=${a}+${texFractionFromString(b, c)}$.<br> On a :`
         : `Calculer $${Nom}$  sachant que : <br>
@@ -71,7 +71,7 @@ export default class NombreInverse extends ExerciceSimple {
     } else {
       this.reponse = this.versionQcm
         ? `$${Nom}=${new FractionEtendue(a * c - b, c).inverse().texFraction}$`
-        : new FractionEtendue(a * c - b, c).inverse()
+        : new FractionEtendue(a * c - b, c).inverse().texFraction
       this.question = this.versionQcm
         ? `On considère l'égalité $\\dfrac{1}{${Nom}}=${a}-${texFractionFromString(b, c)}$. <br>On a :`
         : `Calculer $${Nom}$ sachant que : <br>
