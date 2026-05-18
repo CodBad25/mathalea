@@ -18,5 +18,6 @@ export default class ExerciceQcmA extends ExerciceQcm implements IExerciceQcmA {
     this.enonce = ''
     this.reponses = []
     this.correction = ''
+    this.nbQuestionsModifiable = true
   }
 }
