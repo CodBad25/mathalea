@@ -10,6 +10,11 @@ import {
   rienSi1,
 } from '../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
+import {
+  crossProduct,
+  simplifieVector,
+  type Vector3,
+} from '../../lib/outils/geometrieVectorielle'
 import { abs } from '../../lib/outils/nombres'
 import { texNombre } from '../../lib/outils/texNombre'
 import FractionEtendue from '../../modules/FractionEtendue'
@@ -37,9 +42,6 @@ export default class NomExercice extends Exercice {
   }
 
   nouvelleVersion() {
-    const pgcd = (x: number, y: number): number =>
-      y === 0 ? Math.abs(x) : pgcd(y, x % y)
-
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
       let texte = ''
       let texteCorr = ''
@@ -83,15 +85,10 @@ export default class NomExercice extends Exercice {
       const zC = zA + ACz
 
       // Vecteur normal via produit vectoriel AB ^ AC
-      let nx = ABy * ACz - ABz * ACy
-      let ny = ABz * ACx - ABx * ACz
-      let nz = ABx * ACy - ABy * ACx
-
-      // Simplifier le vecteur normal
-      const g = pgcd(pgcd(Math.abs(nx), Math.abs(ny)), Math.abs(nz))
-      nx /= g
-      ny /= g
-      nz /= g
+      const normal: Vector3 = simplifieVector(
+        crossProduct([ABx, ABy, ABz], [ACx, ACy, ACz]),
+      )
+      const [nx, ny, nz] = normal
 
       // Point D quelconque, distinct pour la droite (d)
       const xD = randint(-4, 4, [xA, xB, xC])
@@ -134,7 +131,7 @@ export default class NomExercice extends Exercice {
       })
 
       reponse1 +=
-        '<br>On calcule les coordonnées des vecteurs $\\overrightarrow{AB}$ et $\\overrightarrow{AC}$ : <br>' +
+        'On calcule les coordonnées des vecteurs $\\overrightarrow{AB}$ et $\\overrightarrow{AC}$ : <br>' +
         `$\\overrightarrow{AB}\\begin{pmatrix}${xB}${ecritureAlgebrique(-xA)}\\\\${yB}${ecritureAlgebrique(-yA)}\\\\${zB}${ecritureAlgebrique(-zA)}\\end{pmatrix}$ donc $\\overrightarrow{AB}\\begin{pmatrix}${ABx}\\\\${ABy}\\\\${ABz}\\end{pmatrix}$.<br>` +
         `$\\overrightarrow{AC}\\begin{pmatrix}${xC}${ecritureAlgebrique(-xA)}\\\\${yC}${ecritureAlgebrique(-yA)}\\\\${zC}${ecritureAlgebrique(-zA)}\\end{pmatrix}$ donc $\\overrightarrow{AC}\\begin{pmatrix}${ACx}\\\\${ACy}\\\\${ACz}\\end{pmatrix}$.<br>` +
         'Pour vérifier si ces vecteurs sont orthogonaux, on calcule leur produit scalaire :<br>' +
@@ -149,7 +146,7 @@ export default class NomExercice extends Exercice {
           "Pour montrer qu’un vecteur est orthogonal à un plan, il suffit de vérifier qu'il est orthogonal à deux vecteurs non-colinéaires de ce plan. <br> Il suffit ici de montrer par exemple que $\\vec n \\cdot \\overrightarrow{AB}=0$ et $\\vec n \\cdot \\overrightarrow{AC}=0$ .",
       })
       reponse2 +=
-        `<br>On calcule <br>$\\begin{aligned}\\vec n \\cdot \\overrightarrow{AB} &= ${nx}\\times${ecritureParentheseSiNegatif(
+        `On calcule <br>$\\begin{aligned}\\vec n \\cdot \\overrightarrow{AB} &= ${nx}\\times${ecritureParentheseSiNegatif(
           ABx,
         )} ${ecritureAlgebrique(nx)}\\times ${ecritureParentheseSiNegatif(ABy)} ${ecritureAlgebrique(nx)}\\times ${ecritureParentheseSiNegatif(ABz)} \\\\
         &=${nx * ABx} ${ecritureAlgebrique(ny * ABy)} ${ecritureAlgebrique(nz * ABz)} \\\\
@@ -163,7 +160,7 @@ export default class NomExercice extends Exercice {
         lampeMessage({
           titre: 'Méthode :',
           texte:
-            "Un vecteur  $\\vec{n}\\begin{pmatrix}a\\\\b\\\\c\\end{pmatrix}$ est un vecteur normal aux plans d'équation cartésienne $ax+by+cz+d=0$ où $d$ est un réel. <br>Pour déterminer $d$, on remplace les coordonnées d'un point du plan dans l'équation.",
+            "Un vecteur  $\\vec{n}\\begin{pmatrix}a\\\\b\\\\c\\end{pmatrix}$ est un vecteur normal aux plans d'équation cartésienne $ax+by+cz+d=0$ où $d$ est un réel. <br> Pour déterminer $d$, on remplace les coordonnées d'un point du plan dans l'équation.",
         }) +
         `On vient de montrer que le vecteur $\\vec n \\begin{pmatrix}${nx}\\\\${ny}\\\\${nz}\\end{pmatrix}$ est normal au plan $ABC$.<br>
          Une équation cartésienne de ce plan est donc sous la forme :
@@ -207,7 +204,7 @@ z = ${zD} ${ecritureAlgebriqueSauf1(nz)}t
           texte:
             "Le point $H$ est le projeté orthogonal du point $D$ sur le plan $(ABC)$ donc $H\\in(ABC)$ et $H\\in(d)$. Les coordonnées du point $H$ vérifient donc l'équation cartésienne du plan $(ABC)$ et la représentation paramétrique de la droite $(d)$.",
         }) +
-        `<br>On cherche l'ensemble des $(x_H,y_H,z_H,t)$ qui vérifient le système :  :
+        `On cherche l'ensemble des $(x_H,y_H,z_H,t)$ qui vérifient le système :  :
       $\\begin{cases} 
       x_H = ${xD} ${ecritureAlgebriqueSauf1(nx)}t \\\\
       y_H = ${yD} ${ecritureAlgebriqueSauf1(ny)}t \\\\

@@ -1,8 +1,15 @@
+import { lampeMessage } from '../../lib/format/message'
+import {
+  all,
+  hasZeroMember,
+  isEquation,
+  isEquivalentEquation,
+} from '../../lib/interactif/checks'
 import { KeyboardType } from '../../lib/interactif/claviers/keyboard.js'
 import { handleAnswers } from '../../lib/interactif/gestionInteractif.js'
 import { ajouteChampTexteMathLive } from '../../lib/interactif/questionMathLive'
 import {
-  ecritureAlgebrique,
+  ecritureAlgebriqueSauf0,
   ecritureAlgebriqueSauf1,
   ecritureParentheseSiNegatif,
   rienSi1,
@@ -24,7 +31,7 @@ export const refs = {
 
 /**
  * Déterminer une équation cartésienne d'un plan
- * @author Claire Rousset
+ * @author Claire Rousset modification de l'interactif par Nathan Scheinmann
  */
 export default class EquationsLog extends Exercice {
   constructor() {
@@ -39,9 +46,9 @@ export default class EquationsLog extends Exercice {
     for (let i = 0, cpt = 0; i < this.nbQuestions && cpt < 50; ) {
       let texte = ''
       let texteCorr = ''
-      const xA = randint(-10, 10, 0)
-      const yA = randint(-10, 10, 0)
-      const zA = randint(-10, 10, 0)
+      const xA = randint(-10, 10)
+      const yA = randint(-10, 10)
+      const zA = randint(-10, 10)
       const a = randint(-10, 10, 0)
       const b = randint(-10, 10, 0)
       const c = randint(-10, 10, 0)
@@ -59,9 +66,15 @@ export default class EquationsLog extends Exercice {
 
       texte = `Déterminer une équation cartésienne du plan $P$ passant par le point $A(${xA};${yA};${zA})$ et admettant pour vecteur normal le vecteur $\\overrightarrow{n} \\begin{pmatrix}${a} \\\\${b} \\\\${c} \\end{pmatrix}$.`
       texteCorr =
-        'On sait que si $\\overrightarrow{n} \\begin{pmatrix} a \\\\b  \\\\c \\end{pmatrix}$ est normal à $P$, avec $a$, $b$ et $c$ des réels, alors $P$ admet une équation cartésienne de la forme $ax+by+cz+d=0$ où $d$ est un réel à déterminer.'
-      texteCorr += `<br>Le vecteur $\\overrightarrow{n} \\begin{pmatrix}${a} \\\\${b} \\\\${c} \\end{pmatrix}$ est normal à $P$, donc $P$ admet une équation cartésienne de la forme ${equation}.`
-      texteCorr += '<br>Déterminons $d$.'
+        'On utilise la formule issue de la définition d’un vecteur normal à un plan.<br>'
+      texteCorr += lampeMessage({
+        titre: 'Méthode :',
+        texte:
+          'Si le plan $P$ passe par $A(x_A;y_A;z_A)$ et admet $\\vec n\\begin{pmatrix}a\\\\b\\\\c\\end{pmatrix}$ comme vecteur normal, alors une équation cartésienne de $P$ est $ax+by+cz+d=0$ avec $d=-(ax_A+by_A+cz_A)$.',
+        couleur: 'black',
+      })
+      texteCorr += `Le vecteur $\\overrightarrow{n} \\begin{pmatrix}${a} \\\\${b} \\\\${c} \\end{pmatrix}$ est normal à $P$, donc $P$ admet une équation cartésienne de la forme ${equation}.`
+      texteCorr += '<br>Déterminons $d$ avec les coordonnées du point $A$.'
       texteCorr += `<br>Le point $A(${xA};${yA};${zA})$ est un point du plan $P$ donc ses coordonnées vérifient l'équation cartésienne de $P$. On a donc : `
       texteCorr += `<br>$\\begin{aligned}
       ${rienSi1(a)}x_A ${ecritureAlgebriqueSauf1(b)}y_A ${ecritureAlgebriqueSauf1(c)}z_A+d=0`
@@ -79,7 +92,7 @@ export default class EquationsLog extends Exercice {
 
       texteCorr += `&\\iff d=${-valeur}\\\\
       \\end{aligned}$`
-      resultat = `${rienSi1(a)}x ${ecritureAlgebriqueSauf1(b)}y ${ecritureAlgebriqueSauf1(c)}z ${ecritureAlgebrique(-valeur)}=0`
+      resultat = `${rienSi1(a)}x ${ecritureAlgebriqueSauf1(b)}y ${ecritureAlgebriqueSauf1(c)}z ${ecritureAlgebriqueSauf0(-valeur)}=0`
 
       texteCorr +=
         '<br> Finalement, une équation cartésienne du plan $P$ est : ' + sp()
@@ -89,7 +102,11 @@ export default class EquationsLog extends Exercice {
         handleAnswers(this, i, {
           reponse: {
             value: resultat,
-            options: { egaliteExpression: true },
+            compare: all([
+              isEquation(),
+              hasZeroMember(),
+              isEquivalentEquation(),
+            ]),
           },
         })
         texte += '<br> Équation cartésienne du plan $P$ :'

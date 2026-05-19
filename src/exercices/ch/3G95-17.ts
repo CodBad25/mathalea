@@ -3,6 +3,7 @@ import { remplisLesBlancs } from '../../lib/interactif/questionMathLive'
 import { choice } from '../../lib/outils/arrayOutils'
 import { ecritureAlgebriqueSauf1, rienSi1 } from '../../lib/outils/ecritures'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
+import { crossProduct, type Vector3 } from '../../lib/outils/geometrieVectorielle'
 import {
   expressionLineaire,
   texMembreGauche,
@@ -23,8 +24,8 @@ export const refs = {
 }
 
 type Vecteurs = {
-  u: number[]
-  v: number[]
+  u: Vector3
+  v: Vector3
 }
 
 export default class VecteurNonNulOrthogonalADeuxVecteurs extends Exercice {
@@ -122,13 +123,13 @@ export default class VecteurNonNulOrthogonalADeuxVecteurs extends Exercice {
   }
 
   private genereVecteurs(): Vecteurs {
-    let u: number[]
-    let v: number[]
+    let u: Vector3
+    let v: Vector3
     do {
-      u = Array.from({ length: 3 }, () => randint(-6, 6, [0]))
+      u = Array.from({ length: 3 }, () => randint(-6, 6, [0])) as Vector3
       u[randint(0, 2)] = choice([-1, 1])
-      v = Array.from({ length: 3 }, () => randint(-6, 6, [0]))
-    } while (this.vecteurNul(this.produitVectoriel(u, v)))
+      v = Array.from({ length: 3 }, () => randint(-6, 6, [0])) as Vector3
+    } while (this.vecteurNul(crossProduct(u, v)))
     return { u, v }
   }
 
@@ -325,14 +326,6 @@ export default class VecteurNonNulOrthogonalADeuxVecteurs extends Exercice {
           : `${ecritureAlgebriqueSauf1(coefficient)}${variable}`
     }
     return expression === '' ? '0' : expression
-  }
-
-  private produitVectoriel(u: number[], v: number[]) {
-    return [
-      u[1] * v[2] - u[2] * v[1],
-      u[2] * v[0] - u[0] * v[2],
-      u[0] * v[1] - u[1] * v[0],
-    ]
   }
 
   private vecteurNul(vecteur: number[]) {
