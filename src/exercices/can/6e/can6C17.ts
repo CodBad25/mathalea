@@ -29,7 +29,7 @@ export default class FractionSimpleDeQuantite extends ExerciceSimple {
     this.typeExercice = 'simple'
     this.nbQuestions = 1
     this.formatChampTexte = KeyboardType.clavierNumbers
-    this.optionsChampTexte = { texteApres: ' L' }
+    this.optionsChampTexte = { texteApres: '  $\\text{ L}$' }
     this.optionsDeComparaison = { nombreDecimalSeulement: true }
   }
 
@@ -38,7 +38,7 @@ export default class FractionSimpleDeQuantite extends ExerciceSimple {
     this.reponse = randint(2, 9) * 10
     const b = this.reponse * a
     this.question = `Calculer $\\dfrac{1}{${a}} \\text{ de } ${b} \\text{ L}$.`
-    this.correction = `$\\dfrac{1}{${a}}$ de $${b}$ L = $${miseEnEvidence(this.reponse)}$ L<br>`
+    this.correction = `$\\dfrac{1}{${a}}$ de $${b} \\text{ L}$ = $${miseEnEvidence(this.reponse)} \\text{ L}$<br>`
     this.correction += texteEnCouleur(
       `
     <br> Mentalement : <br>
@@ -48,6 +48,6 @@ export default class FractionSimpleDeQuantite extends ExerciceSimple {
       bleuMathalea,
     )
 
-    this.canReponseACompleter = '$\\dots$ L'
+    this.canReponseACompleter = '$\\dots \\text{ L}$'
   }
 }
