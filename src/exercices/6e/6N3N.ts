@@ -49,7 +49,7 @@ const situations = [
     correction2: 'Il reste $%frac4%$ de gâteau.',
   },
   {
-    id: 'sufrages',
+    id: 'suffrages',
     texteATrous:
       "Au premier tour d'une élection, %prénom1% a obtenu $%frac1%$ des voix  et %prénom2% a obtenu $%frac2%$ des voix.<br>",
     question1:
@@ -193,12 +193,12 @@ export default class ProblemesFractions extends Exercice {
           {
             barres: [
               {
-                content: `${situation.id === 'sufrages' ? personne.prenom : '1e part'}`,
+                content: `${situation.id === 'suffrages' ? personne.prenom : '$1^{re}$ part'}`,
                 length: num1Converti * 2,
                 color: 'lightgray',
               },
               {
-                content: `${situation.id === 'sufrages' ? personne2.prenom : '2e part'}`,
+                content: `${situation.id === 'suffrages' ? personne2.prenom : '$2^e$ part'}`,
                 length: frac2.num * 2,
                 color: 'lightgray',
               },
@@ -241,7 +241,7 @@ export default class ProblemesFractions extends Exercice {
         ],
       })
 
-      if (situation.id === 'sufrages') {
+      if (situation.id === 'suffrages') {
         texte = situation.texteATrous
           .replace('%prénom1%', personne.prenom)
           .replace('%prénom2%', personne2.prenom)
