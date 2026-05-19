@@ -1,4 +1,3 @@
-import { lampeMessage } from '../../lib/format/message'
 import { texPrix } from '../../lib/format/style'
 import { choice, combinaisonListes } from '../../lib/outils/arrayOutils'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
@@ -165,6 +164,7 @@ export default class AugmenterEtReduireDunPourcentage extends Exercice {
   }
 
   nouvelleVersion() {
+    /*
     this.introduction =
       this.sup2 && this.interactif && context.isHtml
         ? lampeMessage({
@@ -174,6 +174,7 @@ export default class AugmenterEtReduireDunPourcentage extends Exercice {
             couleur: 'nombres',
           })
         : ''
+        */
     const typeQuestionsDisponibles = ['augmentation', 'réduction'] // On créé 2 types de questions
     const listeTypeQuestions = combinaisonListes(
       typeQuestionsDisponibles,
@@ -280,14 +281,15 @@ export default class AugmenterEtReduireDunPourcentage extends Exercice {
                 })
                 texte += enonceAMC
               }
-              texteCorr = createList({
-                items: [
-                  `Le montant de la réduction est : $${prixIntial}${sp()}€ \\times ${texNombre(pourcent, 1)} \\div 100${egalOuApprox(montantReduction, 2)}`,
-                  `Finalement, ${prenom1} paiera ${situation.quoiReponse} : $${prixIntial}${sp()}€-${texPrix(montantReduction)}${sp()}€=`,
-                ],
-                style: 'alpha',
-              })
             }
+
+            texteCorr = createList({
+              items: [
+                `Le montant de la réduction est : $${prixIntial}${sp()}€ \\times ${texNombre(pourcent, 1)} \\div 100 ${egalOuApprox(montantReduction, 2)} ${miseEnEvidence(texPrix(montantReduction))}${sp()}€$`,
+                `Finalement, ${prenom1} paiera ${situation.quoiReponse} : $${prixIntial}${sp()}€-${texPrix(montantReduction)}${sp()}€=${miseEnEvidence(texPrix(prixFinal))}${sp()}€$`,
+              ],
+              style: 'alpha',
+            })
           }
           break
         case 'augmentation':
@@ -374,12 +376,17 @@ export default class AugmenterEtReduireDunPourcentage extends Exercice {
                 ],
               })
             }
-            texteCorr = `${numAlpha(0)} Le montant de l'augmentation est :     $${prixIntial}${sp()}€ \\times ${texNombre(pourcent, 1)} \\div 100${egalOuApprox(montantAugmentation, 2)}`
-            texteCorr +=
-              miseEnEvidence(`${texPrix(montantAugmentation)}${sp()}`) +
-              '€$.<br>'
-            texteCorr += `${numAlpha(1)} Finalement, ${prenom2} paiera ${situation.quoiReponse} : $${prixIntial}${sp()}€+${texPrix(montantAugmentation)}${sp()}€ =`
-            texteCorr += miseEnEvidence(`${texPrix(prixFinal)}${sp()}`) + '€$.'
+            texteCorr = createList({
+              items: [
+                `Le montant de l'augmentation est :     $${prixIntial}${sp()}€ \\times ${texNombre(pourcent, 1)} \\div 100${egalOuApprox(montantAugmentation, 2)}` +
+                  miseEnEvidence(`${texPrix(montantAugmentation)}${sp()}`) +
+                  '€$.<br>',
+                `Finalement, ${prenom2} paiera ${situation.quoiReponse} : $${prixIntial}${sp()}€+${texPrix(montantAugmentation)}${sp()}€ =` +
+                  miseEnEvidence(`${texPrix(prixFinal)}${sp()}`) +
+                  '€$.',
+              ],
+              style: 'alpha',
+            })
           }
           break
       }

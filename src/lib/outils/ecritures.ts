@@ -1,4 +1,5 @@
 import Decimal from 'decimal.js'
+import { bleuMathalea } from '../../lib/colors'
 import type { IFractionEtendue } from '../../modules/FractionEtendue.type'
 import { fraction } from '../../modules/fractions'
 import Grandeur from '../../modules/Grandeur'
@@ -10,14 +11,13 @@ import { miseEnEvidence } from './embellissements'
 import { arrondi, round } from './nombres'
 import { lettreDepuisChiffre } from './outilString'
 import { stringNombre, texNombre } from './texNombre'
-import { bleuMathalea } from '../../lib/colors'
 
 // Garde de type structurel pour détecter une FractionEtendue sans import runtime
 const isFractionEtendue = (x: unknown): x is IFractionEtendue =>
   typeof x === 'object' &&
   x !== null &&
   // signature minimale et stable de FractionEtendue
-  typeof (x as any).sommeFraction === 'function'
+  typeof (x as Record<string, unknown>)['sommeFraction'] === 'function'
 
 /**
  * écrit le nombre, mais pas un nombre s'il est égal à 1
@@ -384,7 +384,6 @@ export function egalOuApprox(
   precision: number,
 ) {
   if (isFractionEtendue(a)) {
-    // @ ts-expect-errors
     return egal(a.num / a.den, arrondi(a.num / a.den, precision))
       ? '='
       : '\\approx'
