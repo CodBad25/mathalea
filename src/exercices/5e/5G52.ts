@@ -11,6 +11,7 @@ import { tracePoint } from '../../lib/2d/TracePoint'
 import { vecteur } from '../../lib/2d/Vecteur'
 import { cercle } from '../../lib/2d/cercle'
 import { fixeBordures } from '../../lib/2d/fixeBordures'
+import { MetaInteractif2d } from '../../lib/2d/interactif2d'
 import { placeLatexSurSegment } from '../../lib/2d/placeLatexSurSegment'
 import { polygone } from '../../lib/2d/polygones'
 import { cylindre } from '../../lib/2d/projections3d'
@@ -20,15 +21,21 @@ import { similitude, translation } from '../../lib/2d/transformations'
 import { longueur } from '../../lib/2d/utilitairesGeometriques'
 import { pointAdistance } from '../../lib/2d/utilitairesPoint'
 import { deuxColonnesResp } from '../../lib/format/miseEnPage'
+import { handleAnswers } from '../../lib/interactif/gestionInteractif'
+import { toutPourUnPoint } from '../../lib/interactif/mathLive'
 import { arrondi } from '../../lib/outils/nombres'
 import { sp } from '../../lib/outils/outilString'
 import { texNombre } from '../../lib/outils/texNombre'
 import { mathalea2d } from '../../modules/mathalea2d'
 import type { NestedObjetMathalea2dArray } from '../../types/2d'
 
+export const interactifReady = true
+export const interactifType = 'MetaInteractif2d'
+
 export const titre = 'Calculer des longueurs avec un patron de cylindre'
 
 export const dateDePublication = '27/04/2024'
+export const dateDeModifImportante = '18/05/2026'
 
 export const uuid = 'bc788'
 export const refs = {
@@ -40,7 +47,7 @@ export const refs = {
  * 'problème en  baseCoteCoucheVuDroite avec r=4'
  * @author Olivier Mimeau
  */
-export default class nomExercice extends Exercice {
+export default class longueursPatronsCylindre extends Exercice {
   constructor() {
     super()
     this.consigne = ''
@@ -132,6 +139,9 @@ export default class nomExercice extends Exercice {
       const hAff = hEx
       const cent1 = pointAbstrait(0, 0, 'A', 'left')
 
+      /*
+       * On travaille sur la perspective du cylindre : on crée d'abord le cylindre puis les éléments servant à poser les questions (rayon/diamètre et hauteur) en fonction de la position du cylindre et de la question posée
+       */
       let cylindreEx = cylindre({
         centre: cent1,
         rx: rAff,
@@ -229,15 +239,9 @@ export default class nomExercice extends Exercice {
 
       const segRayon = segment(ext1RayonDiametre, ext2RayonDiametre, 'black')
       segRayon.pointilles = 1
-      // qRayonCylindre = texteSurSegment('\\text{.......}', ext1RayonDiametre, ext2RayonDiametre)
-      segRayon.pointilles = 1
+
       const qRayonCylindre = placeLatexSurSegment(
         '\\text{.......}',
-        ext1RayonDiametre,
-        ext2RayonDiametre,
-      )
-      const rRayonCylindre = placeLatexSurSegment(
-        `${texNombre(listeTypeBaseCylindre[i] === 'rayon' ? rEx : 2 * rEx, 1)}\\text{ cm}`,
         ext1RayonDiametre,
         ext2RayonDiametre,
       )
@@ -246,6 +250,13 @@ export default class nomExercice extends Exercice {
         ext1Hauteur,
         ext2Hauteur,
       )
+
+      const rRayonCylindre = placeLatexSurSegment(
+        `${texNombre(listeTypeBaseCylindre[i] === 'rayon' ? rEx : 2 * rEx, 1)}\\text{ cm}`,
+        ext1RayonDiametre,
+        ext2RayonDiametre,
+      )
+
       const rHauteurCylindre = placeLatexSurSegment(
         `${texNombre(hEx, 1)}\\text{ cm}`,
         ext1Hauteur,
@@ -276,10 +287,69 @@ export default class nomExercice extends Exercice {
           tCent1,
           tCent2,
           segRayon,
-          qRayonCylindre,
-          qHauteurCylindre,
           labelPoint(cent1, cent2),
         )
+        if (this.interactif) {
+          const boolRayonDiametre =
+            ext1RayonDiametre.y - ext2RayonDiametre.y < 1e-6
+
+          const mRayonDiametre = coordMultiMathsFieldSurSegment(
+            ext1RayonDiametre,
+            ext2RayonDiametre,
+            boolRayonDiametre ? 0.7 : 1.3,
+          ) //milieu(ext1RayonDiametre, ext2RayonDiametre)
+          const boolHauteur = ext1Hauteur.y - ext2Hauteur.y < 1e-6
+          const MHauteur = coordMultiMathsFieldSurSegment(
+            ext1Hauteur,
+            ext2Hauteur,
+            boolHauteur ? 0.7 : 1.3,
+          )
+
+          const qMetaInteractif = new MetaInteractif2d(
+            [
+              {
+                content: '%{champ1}\\text{ cm}', // champ1 est à utiliser systématiquement pour tous les inputs
+                x: mRayonDiametre.x,
+                y: mRayonDiametre.y,
+                classe: '', // Ici on pourra mettre le clavier à utiliser
+                blanc: '\\ldots ',
+                opacity: 1,
+                index: 0,
+              },
+              {
+                content: '%{champ1}\\text{ cm}', // On utilise toujours champ1 comme placeholder
+                x: MHauteur.x,
+                y: MHauteur.y,
+                classe: '',
+                blanc: '\\ldots ',
+                opacity: 1,
+                index: 1,
+              },
+            ],
+            {
+              exercice: this,
+              question: i,
+            },
+          )
+          handleAnswers(
+            this,
+            i,
+            {
+              bareme: toutPourUnPoint,
+              field0: {
+                value: texNombre(
+                  listeTypeBaseCylindre[i] === 'rayon' ? rEx : 2 * rEx,
+                  1,
+                ),
+              },
+              field1: { value: texNombre(hEx, 1) },
+            },
+            { formatInteractif: 'MetaInteractif2d' },
+          )
+          objetsPerspective.push(qMetaInteractif)
+        } else {
+          objetsPerspective.push(qRayonCylindre, qHauteurCylindre)
+        }
         objetsPerspectiveReponse.push(
           cylindreEx,
           tCent1,
@@ -290,6 +360,10 @@ export default class nomExercice extends Exercice {
           labelPoint(cent1, cent2),
         )
       }
+
+      /*
+       * On travaille sur le patron du cylindre : on crée d'abord le patron puis les éléments servant à poser les questions (longueur, hauteur, rayon/diamètre) en fonction de la position du cylindre et de la question posée
+       */
 
       const [dimlRect, dimLRect, dimRCercle] = [4, 12, 2] // dimLargeurRectangle
       const A = pointAbstrait(0, 0)
@@ -312,9 +386,6 @@ export default class nomExercice extends Exercice {
       // les quatre éléments suivants : positions à varier ??
       let ALongueurPatron: PointAbstrait
       let BLongueurPatron: PointAbstrait
-      // let coteLongueurPatron:Segment
-      // let qLongueurPatron:Latex2d
-      // let rLongueurPatron:Latex2d
       let coteHauteurPatron: Segment
       let qHauteurPatron: Latex2d
       let rHauteurPatron: Latex2d
@@ -348,7 +419,7 @@ export default class nomExercice extends Exercice {
         { letterSize: 'small', distance: 1 },
       )
 
-      if (choice([0, 1]) === 0) {
+      if (choice([0, 1]) === 0 && !this.interactif) {
         coteHauteurPatron = afficheCoteSegmentSansTexte(
           segment(A, B),
           0.5,
@@ -419,16 +490,17 @@ export default class nomExercice extends Exercice {
         ptExtremite1Rayon,
         ptExtremite2Rayon,
       )
+      let qDiametre = placeLatexSurSegment(
+        '\\text{.......}',
+        ptExtremite1Diametre,
+        ptExtremite2Diametre,
+      )
+
       let rRayon = placeLatexSurSegment(
         `\\text{${rEx} cm}`,
         ptExtremite1Rayon,
         ptExtremite2Rayon,
         { letterSize: 'small', distance: 1 },
-      )
-      let qDiametre = placeLatexSurSegment(
-        '\\text{.......}',
-        ptExtremite1Diametre,
-        ptExtremite2Diametre,
       )
       let rDiametre = placeLatexSurSegment(
         `\\text{${2 * rEx} cm}`,
@@ -436,6 +508,7 @@ export default class nomExercice extends Exercice {
         ptExtremite2Diametre,
         { letterSize: 'small', distance: 1 },
       )
+
       if (listeTypeQuestions[i] === 'CylindreVersPatron') {
         qRayon = placeLatexSurSegment(
           '\\text{.......}',
@@ -464,11 +537,90 @@ export default class nomExercice extends Exercice {
           coteHauteurPatron,
           coteRayon,
           coteDiametre,
-          qLongueurPatron,
-          qHauteurPatron,
-          qRayon,
-          qDiametre,
         )
+        if (this.interactif) {
+          const mLongueurPatron = coordMultiMathsFieldSurSegment(
+            ALongueurPatron,
+            BLongueurPatron,
+            1.2,
+          )
+          const mHauteurPatron = coordMultiMathsFieldSurSegment(C, D, 1.7)
+
+          const mRayon = coordMultiMathsFieldSurSegment(
+            ptExtremite1Rayon,
+            ptExtremite2Rayon,
+            0.7,
+          ) //milieu(ext1RayonDiametre, ext2RayonDiametre)
+
+          const mDiametre = coordMultiMathsFieldSurSegment(
+            ptExtremite1Diametre,
+            ptExtremite2Diametre,
+            0.7,
+          )
+
+          const qMetaInteractif = new MetaInteractif2d(
+            [
+              //qLongueurPatron, qHauteurPatron, qRayon, qDiametre
+              {
+                content: '%{champ1}\\text{ cm}', // champ1 est à utiliser systématiquement pour tous les inputs
+                x: mLongueurPatron.x,
+                y: mLongueurPatron.y,
+                classe: '', // Ici on pourra mettre le clavier à utiliser
+                blanc: '\\ldots ',
+                opacity: 1,
+                index: 0,
+              },
+              {
+                content: '%{champ1}\\text{ cm}', // On utilise toujours champ1 comme placeholder
+                x: mHauteurPatron.x,
+                y: mHauteurPatron.y,
+                classe: '',
+                blanc: '\\ldots ',
+                opacity: 1,
+                index: 1,
+              },
+              {
+                content: '%{champ1}\\text{ cm}', // On utilise toujours champ1 comme placeholder
+                x: mRayon.x,
+                y: mRayon.y,
+                classe: '',
+                blanc: '\\ldots ',
+                opacity: 1,
+                index: 2,
+              },
+              {
+                content: '%{champ1}\\text{ cm}', // On utilise toujours champ1 comme placeholder
+                x: mDiametre.x,
+                y: mDiametre.y,
+                classe: '',
+                blanc: '\\ldots ',
+                opacity: 1,
+                index: 3,
+              },
+            ],
+            {
+              exercice: this,
+              question: i,
+            },
+          )
+          handleAnswers(
+            this,
+            i,
+            {
+              bareme: toutPourUnPoint,
+              field0: {
+                value: texNombre(perimetre, 1),
+              },
+              field1: { value: texNombre(hEx, 1) },
+              field2: { value: texNombre(rEx, 1) },
+              field3: { value: texNombre(2 * rEx, 1) },
+            },
+            { formatInteractif: 'MetaInteractif2d' },
+          )
+          objetsPatron.push(qMetaInteractif)
+        } else {
+          objetsPatron.push(qLongueurPatron, qHauteurPatron, qRayon, qDiametre)
+        }
         objetsPatronReponse.push(
           coteLongueurPatron,
           coteHauteurPatron,
@@ -646,4 +798,24 @@ function definiColonnes(
     objetsAAfficher2,
   )
   return [colonne1, colonne2]
+}
+
+function coordMultiMathsFieldSurSegment(
+  A: PointAbstrait,
+  B: PointAbstrait,
+  distance: number = 0.7,
+): { x: number; y: number } {
+  // code copié de placeLatex2d(A, B, distance)
+  // Milieu de [AB]
+  const Mx = (A.x + B.x) / 2
+  const My = (A.y + B.y) / 2
+  // Vecteur AB
+  const dx = B.x - A.x
+  const dy = B.y - A.y
+  const len = Math.hypot(dx, dy)
+  // Vecteur normal unitaire (perpendiculaire, orientation +90°)
+  const nx = len > 1e-12 ? -dy / len : 0
+  const ny = len > 1e-12 ? dx / len : 1
+  // Point décalé à distance le long de la normale
+  return { x: Mx + nx * distance, y: My + ny * distance }
 }
