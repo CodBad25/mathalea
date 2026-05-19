@@ -58,9 +58,10 @@ export default class PoucentageProportion extends ExerciceSimple {
           n = carac[0]
           d = carac[1]
           this.question = ` Dans un groupe de $${a}$ enfants, $${b}$  sont des ${n}.<br>`
-          this.question += this.versionQcm
-            ? `Le pourcentage de ${n} dans ce groupe est : `
-            : `${d} représentent ..... $\\%$ du groupe.`
+          this.question +=
+            this.versionQcm || this.interactif
+              ? `Le pourcentage de ${n} dans ce groupe est : `
+              : `${d} représentent ..... $\\%$ du groupe.`
 
           this.optionsChampTexte = { texteAvant: '<br>', texteApres: '$\\%$' }
           this.correction = `La proportion de ${n} est donnée par $\\dfrac{${b}}{${a}}=${texFractionReduite(b, a)}=${texNombre(b / a)}$, soit $${miseEnEvidence(texNombre((b / a) * 100))}$ $\\%$.`
@@ -71,9 +72,10 @@ export default class PoucentageProportion extends ExerciceSimple {
           n = carac[0]
           d = carac[1]
           this.question = ` Dans un groupe de $${a}$ enfants, $${b}$  sont des ${n}.<br>`
-          this.question += this.versionQcm
-            ? `Le pourcentage de ${n} dans ce groupe est : `
-            : `${d} représentent ..... $\\%$ du groupe.`
+          this.question +=
+            this.versionQcm || this.interactif
+              ? `Le pourcentage de ${n} dans ce groupe est : `
+              : `${d} représentent ..... $\\%$ du groupe.`
           this.optionsChampTexte = { texteAvant: '<br>', texteApres: '$\\%$' }
           this.correction = `La proportion de ${n} est donnée par $\\dfrac{${b}}{${a}}=${texFractionReduite(b, a)}=${texNombre(b / a)}$, soit $${miseEnEvidence(texNombre((b / a) * 100))}$ $\\%$.`
         }
