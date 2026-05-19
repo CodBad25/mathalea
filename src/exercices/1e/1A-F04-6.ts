@@ -3,11 +3,11 @@ import { latex2d } from '../../lib/2d/textes'
 import { miseEnEvidence } from '../../lib/outils/embellissements'
 
 import { courbe } from '../../lib/2d/Courbe'
+import { bleuMathalea } from '../../lib/colors'
 import { deuxColonnes } from '../../lib/format/miseEnPage'
 import { mathalea2d } from '../../modules/mathalea2d'
 import { randint } from '../../modules/outils'
 import ExerciceQcmA from '../ExerciceQcmA'
-import { bleuMathalea } from '../../lib/colors'
 export const dateDePublication = '04/10/2025'
 export const uuid = '90460'
 /**
@@ -204,7 +204,7 @@ export default class auto1AF4e extends ExerciceQcmA {
           solutionFauxCrochets = `$[-4\\,;\\,${a}[\\cup ]${b}\\,;\\,4]$`
           solutionInverse1 = `$[-4\\,;\\,${a}]\\cup [${b}\\,;\\,4]$`
           solutionInverse2 = `$]${a}\\,;\\,${b}[$`
-          texteSolution = `en dessous ou sur $C_g$, soit $${miseEnEvidence(`[${a}\\,;\\,${b}]`)}`
+          texteSolution = `en dessous ou sur $C_g$, soit $${miseEnEvidence(`[${a}\\,;\\,${b}]`)}$`
         } else {
           // f(x) >= g(x)
           symbole = '\\geqslant'
